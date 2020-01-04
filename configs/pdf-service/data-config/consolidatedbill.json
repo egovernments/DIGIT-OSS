@@ -482,39 +482,60 @@
                   "path": "$.consumerCode"
                 }
               },
-              
-              {
-                "variable": "arrears",
-                "value": {
-                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode =~ /.*_CHARGE/i )].amount"
-                }
-              },
-              
               {
                 "variable": "charge",
                 "value": {
-                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode =~ /.*_TAX/i )].amount"
+                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'PT_TAX')].amount"
                 }
               },
              
               {
                 "variable": "rebate",
                 "value": {
-                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode =~ /.*_REBATE/i )].amount"
+                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'PT_TIME_REBATE')].amount"
                 }
               },
               
               {
                 "variable": "penalty",
                 "value": {
-                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode =~ /.*_PENALTY/i )].amount"
+                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'PT_TIME_PENALTY')].amount"
                 }
               },
-              
               {
-                "variable": "others",
+                "variable": "firecess",
                 "value": {
-                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode =~ /.*_CHARGE/i )].amount"
+                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'PT_FIRE_CESS')].amount"
+                }
+              },
+              {
+                "variable": "usageExemption",
+                "value": {
+                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'PT_UNIT_USAGE_EXEMPTION')].amount"
+                }
+              },
+              {
+                "variable": "roundoff",
+                "value": {
+                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'PT_ROUNDOFF')].amount"
+                }
+              },
+              {
+                "variable": "ownerExemption",
+                "value": {
+                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'PT_OWNER_EXEMPTION')].amount"
+                }
+              },
+              {
+                "variable": "cancerCess",
+                "value": {
+                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'PT_CANCER_CESS')].amount"
+                }
+              },
+              {
+                "variable": "timeInterest",
+                "value": {
+                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'PT_TIME_INTEREST')].amount"
                 }
               },
              
@@ -549,13 +570,21 @@
               {
                 "variable": "variable19",
                 "formula": "{{totalPayment}}-{{totalPayment}}"
+              },
+              {
+                "variable": "others",
+                "formula": "{{cancerCess}}+{{roundoff}}"
+              },
+              {
+                "variable": "arrears",
+                "formula": "{{timeInterest}}+{{ownerExemption}}+{{usageExemption}}+{{firecess}}"
               }
             ]
           },
           {
             "externalAPI": [     
               { 
-                  "path": "http://egov-mdms-service:8080/egov-mdms-service/v1/_get",
+                  "path": "http://localhost:8082/egov-mdms-service/v1/_get",
                   "queryParam": "moduleName=tenant&masterName=tenants&tenantId=pb&filter=%5B?(@.code=='{$.tenantId}')%5D",
                   "apiRequest": null,
                   "responseMapping":[
