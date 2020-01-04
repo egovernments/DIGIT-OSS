@@ -835,7 +835,7 @@
                               "style": "receipt-table2"
                            },  
                            {
-                             "text":"{{uomValue}}",
+                             "text":"{{accessoryUomValue}}",
                              "border":[
                                false,
                                false,

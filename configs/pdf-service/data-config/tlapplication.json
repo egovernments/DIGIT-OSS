@@ -149,6 +149,12 @@
                   }
               },
               {
+                "variable": "accessoryUomValue",
+                "value": {
+                  "path": "$.tradeLicenseDetail.accessories[0].uomValue"
+                }
+            },
+              {
                   "variable": "accesoryType",
                   "value": {
                     "path": "$.tradeLicenseDetail.accessories[0].accessoryCategory"
