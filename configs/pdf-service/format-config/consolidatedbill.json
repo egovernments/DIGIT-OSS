@@ -761,7 +761,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "{{totalPayment}}",
+                "text": "{{total}}",
                 "border": [
                   false,
                   false,
