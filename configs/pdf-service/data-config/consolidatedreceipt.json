@@ -82,13 +82,13 @@
               {
                 "variable": "G8ReceiptNo",
                 "value": {
-                  "path": "$.paymentDetails[0].bill.billDetails[0].manualReceiptNumber"
+                  "path": "$.paymentDetails[0].manualReceiptNumber"
                 }
               },
               {
                 "variable": "G8ReceiptDate",
                 "value": {
-                  "path": "$.paymentDetails[0].bill.billDetails[0].manualReceiptDate"
+                  "path": "$.paymentDetails[0].manualReceiptDate"
                 },
                 "type": "date"
               },
