@@ -3,7 +3,7 @@
   "DataConfigs": {
     "serviceName": "rainmaker-common",
     "version": "1.0.0",
-    "baseKeyPath": "$.Bills.*",
+    "baseKeyPath": "$.Bill.*",
     "entityIdPath":"$.billNumber",
     "isCommonTableBorderRequired": true,
     "mappings": [
