@@ -1,3 +1,5 @@
+import React from "react";
+import { connect } from "react-redux";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -5,20 +7,19 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
+import Hidden from "@material-ui/core/Hidden";
 import { TaskDialog } from "egov-workflow/ui-molecules-local";
 import { addWflowFileUrl, orderWfProcessInstances } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-kit/utils/api";
-import { connect } from "react-redux";
+import { setRoute } from "egov-ui-kit/redux/app/actions";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import Label from "egov-ui-kit/utils/translationNode";
 import { Card } from "components";
 import orderBy from "lodash/orderBy";
 import { getWFConfig } from "./workflowRedirectionConfig";
-import React from "react";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
-import { setRoute } from "egov-ui-kit/redux/app/actions";
 
 
 class InboxData extends React.Component {
@@ -117,6 +118,8 @@ class InboxData extends React.Component {
       data.rows.reverse();
     }
     return (
+      <div>
+    <Hidden only={['xs']}>
       <Table>
         <TableHead>
           <TableRow>
@@ -155,7 +158,6 @@ class InboxData extends React.Component {
                           <TableCell className={classNames}>
                             <span
                               class={this.getSlaColor(item.text, row[2].text.props.label.split('_')[1])}
-                            //class={item.text >= 1 ? "inbox-cell-badge-primary sla--positive-value" : "inbox-cell-badge-primary sla--negative-value"}
                             >
                               {item.text}
                             </span>
@@ -186,6 +188,53 @@ class InboxData extends React.Component {
             </TableBody>
           )}
       </Table>
+    </Hidden>
+    <Hidden only={['sm','md','lg','xl']} implementation="css">
+    {data.rows.length === 0 ? (
+          <Card 
+            textChildren={
+              <Label labelClassName="" label="COMMON_INBOX_NO_DATA" />
+            }        
+          />
+        ) : (
+        <div>
+        {
+          data.rows.map((row, index) => {
+            return (
+              <Card 
+              key={index}
+              textChildren={
+                <div>
+                  <div className="head" onClick={() => getModuleLink(row[0], row, 0)} ><a style={{color:"#FE7A51"}}>{row[0].text}</a></div>
+                  <div className="head"><Label label={`CS_COMMON_INBOX_${row[0].subtext.toUpperCase()}`} color="#000000" /></div>
+              
+              <div className="card-div-style"><Label label={data.headers[1]} labelStyle={{ fontWeight: "500" }}/></div>
+              <div className="card-div-style">{row[1].text}</div>
+                  
+              <div className="card-div-style"><Label label={data.headers[2]} labelStyle={{ fontWeight: "500" }} /></div>
+              <div className="card-div-style">{row[2].text}</div>
+
+                  <div className="card-div-style"><Label label={data.headers[3]} labelStyle={{ fontWeight: "500" }} /></div>
+                  <div className="card-div-style">{row[3].text}</div>
+
+                  <div className="card-div-style"><Label label={data.headers[4]} labelStyle={{ fontWeight: "500" }} /></div>
+                  <div className="card-sladiv-style"><span class={this.getSlaColor(row[4].text, row[2].text.props.label.split('_')[1])}>{row[4].text}</span></div>
+                  
+                  <div className="card-viewHistory-icon" onClick={() => onHistoryClick(row[0])}>
+                      <i class="material-icons">history</i>
+                  </div>
+
+                </div>
+              }
+            />
+            )
+        })
+      }
+      <TaskDialog open={this.state.dialogOpen} onClose={onDialogClose} history={ProcessInstances} />
+      </div>
+    )}
+    </Hidden>
+    </div>
     );
   }
 }

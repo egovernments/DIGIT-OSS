@@ -5,6 +5,7 @@ import { LabelContainer } from "egov-ui-framework/ui-containers";
 import { Dialog, DialogContent } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import { withStyles } from "@material-ui/core/styles";
+import withMobileDialog from '@material-ui/core/withMobileDialog';
 import VerticalStepper from "../Stepper";
 
 const styles = theme => ({
@@ -17,9 +18,10 @@ const styles = theme => ({
 const TaskDialog = props => {
   const { open, onClose, history } = props;
   let fullscreen = false;
-  if (window.innerWidth <= 768) {
-    fullscreen = true;
-  }
+  // Fullscreen covering full mobile screen making it impossible to close dialog. Hence commenting out below line
+  // if (window.innerWidth <= 768) {
+  //   fullscreen = true;
+  // }
   return (
     <Dialog
       fullScreen={fullscreen}
@@ -67,4 +69,4 @@ const TaskDialog = props => {
   );
 };
 
-export default withStyles(styles)(TaskDialog);
+export default withStyles(styles)(withMobileDialog({breakpoint: 'xs'})(TaskDialog));

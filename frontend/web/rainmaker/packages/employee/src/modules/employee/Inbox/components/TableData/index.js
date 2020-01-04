@@ -536,7 +536,7 @@ class TableData extends Component {
           <Filter handleChangeFilter={handleChangeFilter.bind(this)} clearFilter={clearFilter} filter={filter}></Filter>
         </div>
         <Taskboard data={taskboardData} onSlaClick={this.onTaskBoardClick} color={this.state.color} />
-        <div className="col-sm-12 col-xs-12 backgroundWhite">
+        <div className="backgroundWhite">
           <Tabs
             value={value}
             onChange={this.handleChange}

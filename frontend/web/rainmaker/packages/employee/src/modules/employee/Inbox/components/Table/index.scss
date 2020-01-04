@@ -177,16 +177,21 @@
     flex: 50%;
   }
   .inbox-data-table-headcell-0,
+  .inbox-data-table-headcell-1,
   .inbox-data-table-headcell-2,
   .inbox-data-table-headcell-3,
-  .inbox-data-table-headcell-4 {
+  .inbox-data-table-headcell-4,
+  .inbox-data-table-headcell-5 {
     display: none !important;
   }
   .inbox-data-table-bodycell-0,
+  .inbox-data-table-bodycell-1,
   .inbox-data-table-bodycell-2,
   .inbox-data-table-bodycell-3,
-  .inbox-data-table-bodycell-4 {
-    display: none !important;
+  .inbox-data-table-bodycell-4,
+  .inbox-data-table-bodycell-5 {
+    display: block !important;
+    width: 100% !important;
   }
   .inbox-card-top {
     height: 148px;
@@ -218,4 +223,20 @@
   position: absolute;
   top: 60px;
   right: 60px;
+}
+
+.card-div-style {
+  display: inline-block;
+  width: 50%;
+}
+
+.card-viewHistory-icon {
+  cursor: pointer;
+  width: 10%;
+  vertical-align: middle;
+  display: inline-block;
+}
+.card-sladiv-style {
+  display: inline-block;
+  width: 40%;
 }
