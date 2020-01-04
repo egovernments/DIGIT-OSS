@@ -87,35 +87,6 @@ const beforeInitFn = async (action, state, dispatch, connectionNumber) => {
   //Search details for given application Number
   if (connectionNumber) {
     (await searchResults(action, state, dispatch, connectionNumber));
-    let connectionType = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].connectionType")
-    if (service !== "SEWERAGE" && connectionType !== "Metered") {
-      set(
-        action.screenConfig,
-        "components.div.children.connectionDetails.children.cardContent.children.serviceDetails.children.cardContent.children.viewOne.children.editSection.visible",
-        false
-      );
-      set(
-        action.screenConfig,
-        "components.div.children.connectionDetails.children.cardContent.children.serviceDetails.children.cardContent.children.viewOne.children.meterID.visible",
-        false
-      );
-    } else {
-      set(
-        action.screenConfig,
-        "components.div.children.connectionDetails.children.cardContent.children.serviceDetails.children.cardContent.children.viewOne.children.editSection.visible",
-        true
-      );
-      set(
-        action.screenConfig,
-        "components.div.children.connectionDetails.children.cardContent.children.serviceDetails.children.cardContent.children.viewOne.children.meterID.visible",
-        true
-      );
-    }
-
-    //   const footer = footerReview(action, state, dispatch, status, connectionNumber, tenantId);
-    //   process.env.REACT_APP_NAME === "Citizen"
-    //     ? set(action, "screenConfig.components.div.children.footer", footer)
-    //     : set(action, "screenConfig.components.div.children.footer", {});
   }
 };
 
@@ -143,11 +114,6 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "connection-details",
   beforeInitScreen: (action, state, dispatch) => {
-    set(action.screenConfig, "components.div.children.headerDiv.children.header1.children.connectionNumber.props.number", connectionNumber);
-    const tenantId = getQueryArg(window.location.href, "tenantId");
-    connectionNumber = getQueryArg(window.location.href, "connectionNumber");
-    const queryObject = [{ key: "tenantId", value: tenantId }, { key: "businessService", value: "WS" }];
-    setBusinessServiceDataToLocalStorage(queryObject, dispatch);
     beforeInitFn(action, state, dispatch, connectionNumber);
     return action;
   },
@@ -217,16 +183,6 @@ const screenConfig = {
         },
         connectionDetails,
         connectionDetailsFooter
-      }
-    },
-    breakUpDialog: {
-      uiFramework: "custom-containers-local",
-      moduleName: "egov-wns",
-      componentPath: "ViewBreakupContainer",
-      props: {
-        open: false,
-        maxWidth: "md",
-        screenKey: "search-preview"
       }
     }
   }

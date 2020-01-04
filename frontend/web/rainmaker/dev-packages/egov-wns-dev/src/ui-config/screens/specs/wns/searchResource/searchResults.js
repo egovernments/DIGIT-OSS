@@ -96,6 +96,12 @@ export const searchResults = {
         options: {
           display: false
         }
+      },
+      {
+        name: "connectionType",
+        options: {
+          display: false
+        }
       }
     ],
     title: getTextToLocalMapping(
@@ -128,7 +134,10 @@ export const searchResults = {
 };
 
 const getConnectionDetails = data => {
-  window.location.href = `connection-details?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[8]}&service=${data.rowData[0]}`
+  console.log('data')
+  console.log(data)
+  window.location.reload(true);
+  window.location.href = `connection-details?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[8]}&service=${data.rowData[0]}&connectionType=${data.rowData[9]}`
 }
 
 const getViewBillDetails = data => {

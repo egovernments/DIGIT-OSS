@@ -20,7 +20,7 @@ const styles = {
 
 class MyConnections extends React.Component {
   getConnectionDetails = data => {
-    window.location.href = `/citizen/wns/connection-details?connectionNumber=${data.connectionNo}&tenantId=${data.property.tenantId}&service=${data.service.toUpperCase()}`
+    window.location.href = `/citizen/wns/connection-details?connectionNumber=${data.connectionNo}&tenantId=${data.property.tenantId}&service=${data.service.toUpperCase()}&connectionType=${data.connectionType}`
   }
 
   getViewBillDetails = data => {
