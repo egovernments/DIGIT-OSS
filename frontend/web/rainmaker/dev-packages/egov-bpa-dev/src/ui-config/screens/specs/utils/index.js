@@ -2957,7 +2957,7 @@ export const searchBill = async (dispatch, applicationNumber, tenantId) => {
         value: tenantId
       },
       {
-        key: "consumerCode",
+        key: "consumerCodes",
         value: applicationNumber
       }
     ];
@@ -2965,7 +2965,7 @@ export const searchBill = async (dispatch, applicationNumber, tenantId) => {
     // Get Receipt
     let payload = await httpRequest(
       "post",
-      "/collection-services/receipts/_search",
+      "/collection-services/payments/_search",
       "",
       queryObject
     );
