@@ -326,13 +326,10 @@ class WorkFlowContainer extends React.Component {
     } = this;
     let businessId = get(data[data.length - 1], "businessId");
     let filteredActions = [];
-    if (moduleName === "BPA" && data[0] && data[0].state) {
-        filteredActions = data[0].state.actions;
-    } else {
+    
       filteredActions = get(data[data.length - 1], "nextActions", []).filter(
         item => item.action != "ADHOC"
       );
-    }
     let applicationStatus = get(
       data[data.length - 1],
       "state.applicationStatus"

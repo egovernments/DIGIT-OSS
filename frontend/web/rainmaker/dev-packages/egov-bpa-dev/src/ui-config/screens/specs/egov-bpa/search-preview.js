@@ -22,7 +22,7 @@ import set from "lodash/set";
 import { getAppSearchResults } from "../../../../ui-utils/commons";
 import { searchBill } from "../utils/index";
 import generatePdf from "../utils/generatePdfForBpa";
-import { loadPdfGenerationDataForBpa } from "../utils/receiptTransformer";
+// import { loadPdfGenerationDataForBpa } from "../utils/receiptTransformerForBpa";
 import { citizenFooter } from "./searchResource/citizenFooter";
 import { applicantSummary } from "./summaryResource/applicantSummary";
 import { basicSummary } from "./summaryResource/basicSummary"
@@ -322,8 +322,8 @@ const setSearchResponse = async (
   }
 
   prepareDocumentsView(state, dispatch);
-  //prepareUoms(state, dispatch);
-  await loadPdfGenerationDataForBpa(applicationNumber, tenantId);
+  prepareUoms(state, dispatch);
+  // await loadPdfGenerationDataForBpa(applicationNumber, tenantId);
   setDownloadMenu(state, dispatch);
 };
 

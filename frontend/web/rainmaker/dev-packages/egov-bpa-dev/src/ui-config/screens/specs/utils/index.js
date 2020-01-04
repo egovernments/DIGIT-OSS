@@ -2776,7 +2776,7 @@ const riskType = (state, dispatch) => {
 };
 
 export const calculationType = (state, dispatch) => {
-  const calculation = get(
+  const calcType = get(
     state.screenConfiguration.preparedFinalObject,
     "applyScreenMdmsData.BPA.CalculationType"
   );
@@ -2793,26 +2793,33 @@ export const calculationType = (state, dispatch) => {
     "BPA.serviceType"
   );
   let amount;
+  let calcFeeData = [];
   if (serviceType) {
-    let filterOneCalculation = [], filterTwoCalculation = [];
-    calculation.forEach(type => {
-      if( (appType === type.applicationType || type.applicationType === "ALL") && type.feeType === "ApplicationFee"){
-        filterOneCalculation.push(type);
+    calcType.forEach(type => {
+      // if(bpa.action == null || bpa.action == "INITIATE"){
+      // bpa.feeType = "ApplicationFee";
+      // }
+      if ((type.applicationType == appType || type.applicationType === "ALL") && (type.feeType == "ApplicationFee")) {
+        if (type.serviceType == serviceType || type.serviceType === "ALL") {
+          if (type.riskType == riskType || type.riskType === "ALL") {
+            calcFeeData.push(type);
+          }
+        }
       }
-    });
+    })
+    let calcReqData = [];
+    if (calcFeeData.length > 1) {
+      calcFeeData.forEach(type => {
+        if (type.riskType == riskType) {
+          calcReqData.push(type);
+        }
+      })
+      dispatch(prepareFinalObject("BPAs[0].appfee", calcReqData[0].amount));
+    }
+    else {
+      dispatch(prepareFinalObject("BPAs[0].appfee", calcFeeData[0].amount));
 
-    filterTwoCalculation.forEach(type => {
-      if((serviceType === type.serviceType || type.serviceType === "ALL")){
-        filterTwoCalculation.push(type);
-      }
-    });
-
-    filterOneCalculation.forEach(type => {
-      if((riskType === type.riskType || type.riskType === "ALL")){
-        amount = type.amount;
-      }
-    });
-    dispatch(prepareFinalObject("BPAs[0].appfee", amount));
+    }
   }
 }
 
@@ -3294,6 +3301,8 @@ export const getBpaTextToLocalMapping = label => {
       );
       case "INPROGRESS":
       return getLocaleLabels("Inprogress", "NOC_INPROGRESS", localisationLabels);
+      case "PENDING_APPL_FEE":
+      return getLocaleLabels("Pedding Application Fee", "PENDING_APPL_FEE", localisationLabels);
   }
 };
 

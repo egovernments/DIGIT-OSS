@@ -103,7 +103,7 @@ export const searchApiCall = async (state, dispatch) => {
         [getBpaTextToLocalMapping("Owner Name")]:
           get(item, "owners[0].name") || "-",
         [getBpaTextToLocalMapping("Application Date")]:
-          convertEpochToDate(parseInt(get(item,"owners[0].createdDate"))) ||
+          convertEpochToDate(parseInt(get(item,"auditDetails.createdTime"))) ||
           "-",
         tenantId: item.tenantId,
         [getBpaTextToLocalMapping("Status")]: item.status || "-"

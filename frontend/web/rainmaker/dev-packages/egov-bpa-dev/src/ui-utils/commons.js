@@ -143,22 +143,31 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
 
   let documentsUpdalod = get(
     state,
-    "screenConfiguration.preparedFinalObject.documentDetailsUploadRedux"
+    "screenConfiguration.preparedFinalObject.documentDetailsUploadRedux", []
   );
 
+  let documnts = []
+  Object.keys(documentsUpdalod).forEach(function(key) {
+    documnts.push(documentsUpdalod[key])
+  });
+  
   let nocDocumentsUpload = get (
     state,
     "screenConfiguration.preparedFinalObject.nocDocumentsUploadRedux"
   );
+
+  // console.log(documentsUpdalod, "uwteruiweiurwi");
   
   let requiredDocuments = [];
-  if(documentsUpdalod && documentsUpdalod.length > 0){
-  documentsUpdalod.forEach(documents => {
+  if(documnts && documnts.length > 0){
+    documnts.forEach(documents => {
     if(documents && documents.documents){
-      requiredDocuments.push({ "documentType" : documents.dropDownValues.value});
-      requiredDocuments.push({ "fileStore": documents.documents[0].fileStoreId });
-      requiredDocuments.push({ "fileName" : documents.documents[0].fileName});
-      requiredDocuments.push({ "fileUrl" : documents.documents[0].fileUrl});
+      let doc = {};
+      doc.documentType = documents.dropDownValues.value;
+      doc.fileStore = documents.documents[0].fileStoreId;
+      doc.fileName = documents.documents[0].fileName;
+      doc.fileUrl = documents.documents[0].fileUrl;
+      requiredDocuments.push(doc);
     }
   })
 }
@@ -225,10 +234,14 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
           "fileStore": "firestore-01"
         }
       ];
+      documents = requiredDocuments;
+      set(payload, "documents", documents);
       set(payload, "wfDocuments", wfDocuments);
+    } else if( method === 'CREATE') {
+      documents = null;
     }
     
-    set(payload, "documents", documents);
+    payload.documents = documents;
 
     // Set Channel and Financial Year
     process.env.REACT_APP_NAME === "Citizen"

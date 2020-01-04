@@ -53,7 +53,13 @@ const wrapRequestBody = (requestBody, action, customRequestInfo) => {
 const wrapEdcrRequestBody = (requestBody, action, customRequestInfo) => {
   const authToken = getAccessToken();
   const userInfo = JSON.parse(getUserInfo());
-  const uuid = userInfo.uuid;
+  let uuid = userInfo.uuid;
+  let userInfos = {
+    "id": uuid,
+    "tenantId": getTenantId()
+  };
+
+  let Ids = process.env.REACT_APP_NAME === "Citizen" ? userInfos : null;
   let RequestInfo = {
     "apiId": "1",
     "ver": "1",
@@ -64,10 +70,7 @@ const wrapEdcrRequestBody = (requestBody, action, customRequestInfo) => {
     "msgId": "gfcfc",
     "correlationId": "wefiuweiuff897",
     authToken,
-    "userInfo": {
-        "id": uuid,
-        "tenantId": getTenantId()
-    }
+    "userInfo": Ids
   };
 
   RequestInfo = { ...RequestInfo, ...customRequestInfo };
@@ -164,7 +167,7 @@ export const edcrHttpRequest = async (
       );
     const responseStatus = parseInt(response.status, 10);
     store.dispatch(toggleSpinner());
-    if (responseStatus === 200 || responseStatus === 201) {
+    if (responseStatus === 200 || responseStatus === 201) {      
       return response.data;
     }
   } catch (error) {
