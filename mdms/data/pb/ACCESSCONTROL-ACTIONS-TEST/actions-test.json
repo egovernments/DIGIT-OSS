@@ -15950,6 +15950,38 @@
       "serviceCode": "DSS",
       "code": "null",
       "path": ""
+    },
+    {
+      "id": 1938,
+      "name": "rainmaker-citizen-bpahome",
+      "url": "card",
+      "displayName": "Building Plan Approval",
+      "orderNumber": 1,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "",
+      "code": "",
+      "path": "",
+      "navigationURL": "bpastakeholder-citizen/home",
+      "leftIcon": "communication:business",
+      "rightIcon": "",
+      "queryParams": ""
+    },
+    {
+      "id": 1939,
+      "name": "rainmaker-citizen-edcrscrutiny",
+      "url": "card",
+      "displayName": "eDCR Scrutiny",
+      "orderNumber": 1,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "",
+      "code": "",
+      "path": "",
+      "navigationURL": "edcrscrutiny/home",
+      "leftIcon": "action:store",
+      "rightIcon": "",
+      "queryParams": ""
     }
   ]
 }
