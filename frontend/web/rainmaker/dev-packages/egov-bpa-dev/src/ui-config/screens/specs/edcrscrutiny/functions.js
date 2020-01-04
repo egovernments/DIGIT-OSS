@@ -11,16 +11,19 @@ import { httpRequest } from "egov-ui-framework/ui-utils/api.js";
 import get from "lodash/get";
 import set from "lodash/set";
 import { validateFields } from "../utils";
-import {  getTenantId, getUserInfo} from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
 const userTenant = getTenantId();
-const userUUid = get(JSON.parse(getUserInfo()),"uuid");
+const userUUid = get(JSON.parse(getUserInfo()), "uuid");
 export const fetchData = async (
   action,
   state,
   dispatch,
   fromMyApplicationPage = false
 ) => {
+  dispatch(prepareFinalObject("searchResults", []));
+  dispatch(prepareFinalObject("myApplicationsCount", 0));
+
   const response = await getSearchResultsfromEDCR(action, state, dispatch);
   try {
     if (response && response.edcrDetail) {
@@ -214,13 +217,13 @@ export const resetFields = (state, dispatch) => {
         "props.value",
         ""
       )
-    );            
+    );
     dispatch(
       handleField(
         "apply",
         "components.div.children.buildingInfoCard.children.cardContent.children.buildingPlanCardContainer.children.inputdetails.children.dropdown",
         "props.value",
-        {name:'',code:''}
+        { name: "", code: "" }
       )
     );
   }
@@ -290,10 +293,10 @@ export const fetchMDMSData = async (action, state, dispatch) => {
   let TenantList = [];
   if (mdmsRes && mdmsRes.MdmsRes && mdmsRes.MdmsRes.tenant) {
     mdmsRes.MdmsRes.tenant.citymodule.forEach(element => {
-      if (element.code === "BPAREG"){
-        element.tenants.forEach(tenant =>{
-          TenantList.push({code:tenant.code,name:tenant.code});
-        }); 
+      if (element.code === "BPAREG") {
+        element.tenants.forEach(tenant => {
+          TenantList.push({ code: tenant.code, name: tenant.code });
+        });
       }
     });
   }

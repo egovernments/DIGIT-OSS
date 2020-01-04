@@ -343,7 +343,7 @@ const screenConfig = {
             dispatch,
             purpose,
             status,
-            applicationNumber,
+            response.data.edcrDetail[0].applicationNumber,
             tenant,
             response.data.edcrDetail[0].planReport,
             response.data.edcrDetail[0].edcrNumber

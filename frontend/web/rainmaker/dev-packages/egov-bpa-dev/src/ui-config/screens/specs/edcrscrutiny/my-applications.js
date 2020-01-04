@@ -35,7 +35,7 @@ const screenConfig = {
             contents: [
               {
                 label: "EDCR_COMMON_TABLE_APPL_NO",
-                jsonPath: "transactionNumber"
+                jsonPath: "applicationNumber"
               },
               {
                 label: "EDCR_COMMON_TABLE_SCRUTINY_NO",

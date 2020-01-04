@@ -250,6 +250,13 @@ export const callBackForNext = async (state, dispatch) => {
           break;
         case 1:
           errorMessage = {
+            labelName:
+              "Please fill all mandatory fields for Stakeholder Registration, then do next!",
+            labelKey: "ERR_FILL_BPA_FIELDS"
+          };
+          break;
+        case 2:
+          errorMessage = {
             labelName: "Please upload all the required documents!",
             labelKey: "ERR_UPLOAD_REQUIRED_DOCUMENTS"
           };
