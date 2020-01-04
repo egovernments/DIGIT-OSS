@@ -114,7 +114,10 @@ class ActionDialog extends React.Component {
     } else {
       dataPath = `${dataPath}[0]`;
     }
-
+if(buttonLabel=="APPLY"){
+  open=!open;
+  onButtonClick(buttonLabel, isDocRequired);
+}
     return (
       <Dialog
         fullScreen={fullscreen}
