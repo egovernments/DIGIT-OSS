@@ -559,7 +559,7 @@
           "vizArray": [
             {
               "id": 251,
-              "name": "DSS_PT_TOP_3_PERFORMING_ULBS",
+              "name": "DSS_TL_TOP_3_PERFORMING_ULBS",
               "dimensions": {
                 "height": 250,
                 "width": 4
@@ -569,7 +569,7 @@
               "charts": [
                 {
                   "id": "topPerformingUlbsCompletionRate",
-                  "name": "DSS_PT_TOP_3_PERFORMING_ULBS",
+                  "name": "DSS_TL_TOP_3_PERFORMING_ULBS",
                   "code": "",
                   "chartType": "bar",
                   "filter": "",
@@ -579,7 +579,7 @@
             },
             {
               "id": 252,
-              "name": "DSS_PT_BOTTOM_3_PERFORMING_ULBS",
+              "name": "DSS_TL_BOTTOM_3_PERFORMING_ULBS",
               "dimensions": {
                 "height": 250,
                 "width": 4
@@ -588,7 +588,7 @@
               "charts": [
                 {
                   "id": "bottomPerformingUlbsCompletionRate",
-                  "name": "DSS_PT_BOTTOM_3_PERFORMING_ULBS",
+                  "name": "DSS_TL_BOTTOM_3_PERFORMING_ULBS",
                   "code": "",
                   "chartType": "bar",
                   "filter": "",
