@@ -117,7 +117,11 @@ const updateAdhoc = (state, dispatch) => {
            "warning"
          )
        );
-     }     
+     } 
+     if(rebateAmount && rebateAmount > 0){
+      dispatch(prepareFinalObject(
+        "Licenses[0].tradeLicenseDetail.adhocExemption", -rebateAmount));
+     }    
      if (adhocAmount % 1 != 0) {
       dispatch(
         toggleSnackbar(
