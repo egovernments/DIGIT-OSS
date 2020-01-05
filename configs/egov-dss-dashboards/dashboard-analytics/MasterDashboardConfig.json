@@ -297,7 +297,7 @@
               "label": "Overview",
               "charts": [
                 {
-                  "id": "todaysCollectionPT",
+                  "id": "todaysCollection",
                   "name": "DSS_TOTAL_COLLECTION_TODAY",
                   "code": "",
                   "chartType": "metric",
@@ -515,7 +515,7 @@
                   "headers": []
                 },
                 {
-                  "id": "propertiesAssessed",
+                  "id": "totalAssessment",
                   "name": "DSS_PT_TOTAL_ASSESSMENTS",
                   "code": "",
                   "chartType": "metric",
@@ -559,7 +559,7 @@
           "vizArray": [
             {
               "id": 251,
-              "name": "DSS_TL_TOP_3_PERFORMING_ULBS",
+              "name": "DSS_PT_TOP_3_PERFORMING_ULBS",
               "dimensions": {
                 "height": 250,
                 "width": 4
@@ -569,7 +569,7 @@
               "charts": [
                 {
                   "id": "topPerformingUlbsCompletionRate",
-                  "name": "DSS_TL_TOP_3_PERFORMING_ULBS",
+                  "name": "DSS_PT_TOP_3_PERFORMING_ULBS",
                   "code": "",
                   "chartType": "bar",
                   "filter": "",
@@ -579,7 +579,7 @@
             },
             {
               "id": 252,
-              "name": "DSS_TL_BOTTOM_3_PERFORMING_ULBS",
+              "name": "DSS_PT_BOTTOM_3_PERFORMING_ULBS",
               "dimensions": {
                 "height": 250,
                 "width": 4
@@ -588,7 +588,7 @@
               "charts": [
                 {
                   "id": "bottomPerformingUlbsCompletionRate",
-                  "name": "DSS_TL_BOTTOM_3_PERFORMING_ULBS",
+                  "name": "DSS_PT_BOTTOM_3_PERFORMING_ULBS",
                   "code": "",
                   "chartType": "bar",
                   "filter": "",
@@ -640,7 +640,7 @@
               "noUnit": true,
               "charts": [
                 {
-                  "id": "todaysCollectionTL",
+                  "id": "todaysCollection",
                   "name": "DSS_TOTAL_COLLECTION_TODAY",
                   "code": "",
                   "chartType": "metric",
@@ -702,7 +702,7 @@
           "vizArray": [
             {
               "id": 321,
-              "name": "DSS_PT_TOP_3_PERFORMING_ULBS",
+              "name": "DSS_TL_TOP_3_PERFORMING_ULBS",
               "dimensions": {
                 "height": 250,
                 "width": 4
@@ -713,7 +713,7 @@
               "charts": [
                 {
                   "id": "topPerformingUlbs",
-                  "name": "DSS_PT_TOP_3_PERFORMING_ULBS",
+                  "name": "DSS_TL_TOP_3_PERFORMING_ULBS",
                   "code": "",
                   "chartType": "bar",
                   "filter": "",
@@ -723,7 +723,7 @@
             },
             {
               "id": 322,
-              "name": "DSS_PT_BOTTOM_3_PERFORMING_ULBS",
+              "name": "DSS_TL_BOTTOM_3_PERFORMING_ULBS",
               "dimensions": {
                 "height": 250,
                 "width": 4
@@ -734,7 +734,7 @@
               "charts": [
                 {
                   "id": "bottomPerformingUlbs",
-                  "name": "DSS_PT_BOTTOM_3_PERFORMING_ULBS",
+                  "name": "DSS_TL_BOTTOM_3_PERFORMING_ULBS",
                   "code": "",
                   "chartType": "bar",
                   "filter": "",
@@ -947,6 +947,35 @@
               ]
             }
           ]
+        },
+        {
+          "row": 8,
+          "name": "DSS_SERVICE",
+          "vizArray": [
+            {
+              "id": 351,
+              "name": "DSS_TL_STATUS_BOUNDARY",
+              "dimensions": {
+                "height": 250,
+                "width": 4
+              },
+              "vizType": "chart",
+              "label": "",
+              "noUnit": false,
+              "charts": [
+                {
+                  "id": "tlStatusByDDR",
+                  "name": "",
+                  "code": "",
+                  "chartType": "table",
+                  "filter": "",
+                  "headers": [],
+                  "tabName": "Boundary"
+
+                }
+              ]
+            }
+          ]
         }
       ]
     },
@@ -1153,7 +1182,7 @@
               "noUnit": false,
               "charts": [
                 {
-                  "id": "pgrStatusByTenant",
+                  "id": "pgrStatusByDDR",
                   "name": "DSS_PGR_STATUS_BY_TENANT",
                   "code": "",
                   "chartType": "table",
