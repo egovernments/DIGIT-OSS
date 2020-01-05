@@ -24,6 +24,7 @@ import {
   localStorageGet,
   getLocale
 } from "egov-ui-kit/utils/localStorageUtils";
+import { getDateFromEpoch } from "egov-ui-kit/utils/commons";
 import "./index.css";
 
 const PropertySearchFormHOC = formHoc({
@@ -144,12 +145,9 @@ class SearchProperty extends Component {
         propertyDetails,
         tenantId
       } = property;
-      // const { doorNo, buildingName, street, locality } = address;
-      // let displayAddress = doorNo
-      //   ? `${doorNo ? doorNo + "," : ""}` +
-      //   `${buildingName ? buildingName + "," : ""}` +
-      //   `${street ? street + "," : ""}`
-      //   : `${locality.name ? locality.name : ""}`;
+      if(!applicationNo) applicationNo = property.acknowldgementNumber;
+      if(!date) date = getDateFromEpoch(property.auditDetails.createdTime);
+      applicationType = history.location.pathname.includes('property-tax') ? 'PT' : applicationType;
       const latestAssessment = getLatestPropertyDetails(propertyDetails);
       let name = latestAssessment.owners[0].name;
       // const guardianName = latestAssessment.owners[0].fatherOrHusbandName;
@@ -157,7 +155,8 @@ class SearchProperty extends Component {
       // const uuid = get(latestAssessment, "citizenInfo.uuid");
 
       let item = {
-        applicationNo: this.getLink(userType, history, applicationNo, tenantId),
+        // applicationNo: this.getLink(userType, history, applicationNo, tenantId),
+        applicationNo: <a>{applicationNo}</a>,
         propertyId: this.getLink(userType, history, propertyId, tenantId),
         applicationType: applicationType,
         name: name,

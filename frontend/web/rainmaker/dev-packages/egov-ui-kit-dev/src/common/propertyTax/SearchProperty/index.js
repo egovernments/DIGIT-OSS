@@ -17,6 +17,7 @@ import { fetchProperties } from "egov-ui-kit/redux/properties/actions";
 import { getLatestPropertyDetails } from "egov-ui-kit/utils/PTCommon";
 import get from "lodash/get";
 import { getUserInfo, localStorageGet,getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import { getDateFromEpoch } from "egov-ui-kit/utils/commons";
 
 import "./index.css";
 
@@ -122,13 +123,12 @@ class SearchProperty extends Component {
         applicationType,
         date,
         propertyDetails,
-        tenantId
+        tenantId,
       } = property;
-      // const { doorNo, buildingName, street, locality } = address;
-      // let displayAddress = doorNo
-      //   ? `${doorNo ? doorNo + "," : ""}` + `${buildingName ? buildingName + "," : ""}` + `${street ? street + "," : ""}`
-      //   : `${locality.name ? locality.name : ""}`;
-
+      
+      if(!applicationNo) applicationNo = property.acknowldgementNumber;
+      if(!date) date = getDateFromEpoch(property.auditDetails.createdTime);
+      applicationType = history.location.pathname.includes('property-tax') ? 'PT' : applicationType;
       const latestAssessment = getLatestPropertyDetails(propertyDetails);
       let name = latestAssessment.owners[0].name;
       // let guardianName = latestAssessment.owners[0].fatherOrHusbandName || "";
@@ -166,7 +166,8 @@ class SearchProperty extends Component {
       //   </a>);
 
       let item = {
-        applicationNo: this.getLink(userType, history, applicationNo, tenantId),
+        // applicationNo: this.getLink(userType, history, applicationNo, tenantId),
+        applicationNo: <a>{applicationNo}</a>,
         propertyId: this.getLink(userType, history, propertyId, tenantId),
         name: name,
         applicationType: applicationType,
