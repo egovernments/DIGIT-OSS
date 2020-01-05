@@ -20,7 +20,7 @@ import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
 import { getAppSearchResults } from "../../../../ui-utils/commons";
-import { searchBill } from "../utils/index";
+import { searchBill , requiredDocumentsData } from "../utils/index";
 import generatePdf from "../utils/generatePdfForBpa";
 // import { loadPdfGenerationDataForBpa } from "../utils/receiptTransformerForBpa";
 import { citizenFooter } from "./searchResource/citizenFooter";
@@ -293,7 +293,7 @@ const setSearchResponse = async (
   let edcrRes = await edcrHttpRequest(
     "post",
     "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + edcrNumber + "&tenantId=" + tenantId,
-    {}
+    "search", []
     );
  
   dispatch(
@@ -323,6 +323,7 @@ const setSearchResponse = async (
 
   prepareDocumentsView(state, dispatch);
   prepareUoms(state, dispatch);
+  requiredDocumentsData(state, dispatch);
   // await loadPdfGenerationDataForBpa(applicationNumber, tenantId);
   setDownloadMenu(state, dispatch);
 };
@@ -406,7 +407,7 @@ const screenConfig = {
           uiFramework: "custom-containers-local",
           componentPath: "WorkFlowContainer",
           moduleName: "egov-workflow",
-          visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
+          visible: true,
           props: {
             dataPath: "BPA",
             moduleName: "BPA",

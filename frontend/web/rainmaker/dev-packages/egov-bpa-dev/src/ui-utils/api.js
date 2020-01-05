@@ -59,7 +59,7 @@ const wrapEdcrRequestBody = (requestBody, action, customRequestInfo) => {
     "tenantId": getTenantId()
   };
 
-  let Ids = process.env.REACT_APP_NAME === "Citizen" ? userInfos : null;
+  let Ids = process.env.REACT_APP_NAME === "Citizen" && action != "search" ? userInfos : null;
   let RequestInfo = {
     "apiId": "1",
     "ver": "1",

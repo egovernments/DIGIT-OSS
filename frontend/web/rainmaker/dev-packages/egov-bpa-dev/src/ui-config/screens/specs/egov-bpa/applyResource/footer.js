@@ -404,7 +404,7 @@ const callBackForNext = async (state, dispatch) => {
     if (isFormValid) {
       let responseStatus = "success";
       if(activeStep === 1){
-        dispatch(prepareFinalObject("BPA.owners[0].primaryOwner", true));
+        // dispatch(prepareFinalObject("BPA.owners[0].primaryOwner", true));
       }
       if (activeStep === 3) {
         // getMdmsData(state, dispatch);

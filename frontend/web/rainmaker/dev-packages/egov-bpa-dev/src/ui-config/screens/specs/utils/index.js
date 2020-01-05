@@ -2511,10 +2511,16 @@ export const gotoApplyWithStep = (state, dispatch, step) => {
   const applicationNumberQueryString = applicationNumber
     ? `&applicationNumber=${applicationNumber}`
     : ``;
+  const tenantId = getQueryArg(window.location.href, "tenantId") ||
+  get(
+    state.screenConfiguration.preparedFinalObject,
+    "BPA.address.city"
+  );
+  const tenantIdQueryString = tenantId ? `&tenantId=${tenantId}`: ``;
   const applyUrl =
     process.env.REACT_APP_SELF_RUNNING === "true"
-      ? `/egov-ui-framework/egov-bpa/apply?step=${step}${applicationNumberQueryString}`
-      : `/egov-bpa/apply?step=${step}${applicationNumberQueryString}`;
+      ? `/egov-ui-framework/egov-bpa/apply?step=${step}${applicationNumberQueryString}${tenantIdQueryString}`
+      : `/egov-bpa/apply?step=${step}${applicationNumberQueryString}${tenantIdQueryString}`;
   dispatch(setRoute(applyUrl));
 };
 
@@ -3591,3 +3597,86 @@ export const getMdmsDataForBpa = async queryObject => {
     return {};
   }
 };
+
+export const requiredDocumentsData = async (state, dispatch) => {
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: 'pb',
+      moduleDetails: [
+        {
+          moduleName: "common-masters",
+          masterDetails: [
+            {
+              name: "DocumentType"
+            }
+          ]
+        },
+        {
+          moduleName: "BPA",
+          masterDetails: [
+            {
+              name: "DocTypeMapping"
+            }
+          ]
+        }
+      ]
+    }
+  };
+  try {
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+
+    let commonDocTypes = payload.MdmsRes["common-masters"].DocumentType;
+
+    const applicationNumber = getQueryArg(
+      window.location.href,
+      "applicationNumber"
+    );
+    const tenantId = getQueryArg(window.location.href, "tenantId");
+    const queryObject = [
+      { key: "businessIds", value: applicationNumber },
+      { key: "tenantId", value: tenantId }
+    ];
+      const wfPayload = await httpRequest(
+        "post",
+        "egov-workflow-v2/egov-wf/process/_search",
+        "",
+        queryObject
+      );
+    const wfState = wfPayload.ProcessInstances[0];
+     let requiredDocuments = [];
+    if(payload && payload.MdmsRes && payload.MdmsRes.BPA && wfState ) {
+      let documents = payload.MdmsRes.BPA.DocTypeMapping;
+      let requiredDocTypes;
+      documents.forEach( doc => {
+        if(doc.WFState === wfState.state.state){
+          requiredDocTypes = doc.docTypes;
+        }
+      });
+      if(requiredDocTypes) {
+        requiredDocTypes.forEach(docType => {
+          if(docType.required) {
+            commonDocTypes.forEach(cmDocType => {
+             if(cmDocType.code.indexOf(docType.code) !== -1 ) {
+              requiredDocuments.push(cmDocType);
+             }
+            })
+          }
+        })
+      }
+    }
+
+    if(!requiredDocuments.length) {
+      requiredDocuments = commonDocTypes;
+    }
+    dispatch(prepareFinalObject("BPA.requiredDocuments", requiredDocuments));
+  } catch (e) {
+    console.log(e);
+  }
+}

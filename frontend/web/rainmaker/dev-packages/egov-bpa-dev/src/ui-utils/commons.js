@@ -155,8 +155,6 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
     state,
     "screenConfiguration.preparedFinalObject.nocDocumentsUploadRedux"
   );
-
-  // console.log(documentsUpdalod, "uwteruiweiurwi");
   
   let requiredDocuments = [];
   if(documnts && documnts.length > 0){
@@ -348,7 +346,6 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
   Object.keys(tempDoc).forEach(key => {
     documentsContract.push(tempDoc[key]);
   });
-  console.log(documentsContract, "gspdibfiusbdfisdfub");
   let documentDetailsContract = [], nocDetailsContract = []
   documentsContract.forEach(doc => {
     if(doc.code == "NOC"){

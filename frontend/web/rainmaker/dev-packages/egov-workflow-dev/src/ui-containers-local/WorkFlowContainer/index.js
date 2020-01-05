@@ -151,6 +151,17 @@ class WorkFlowContainer extends React.Component {
         );
       }
     }
+    if(dataPath === "BPA") {
+      let requiredDocuments = data.requiredDocuments;
+      let documents = data.wfDocuments;
+      if(requiredDocuments && data.wfDocuments && requiredDocuments.length > 0 && 
+        data.wfDocuments.length > 0 && requiredDocuments.length <= data.wfDocuments.length) {
+        for(let i = 0; i < requiredDocuments.length; i++) {
+            data.wfDocuments[i].documentType = requiredDocuments[i].code;
+            data.wfDocuments[i].fileStore = data.wfDocuments[i].fileStoreId
+        }
+      }
+    }
     const applicationNumber = getQueryArg(
       window.location.href,
       "applicationNumber"
@@ -232,6 +243,15 @@ class WorkFlowContainer extends React.Component {
           return isAlreadyEdited
             ? `/fire-noc/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit&edited=true`
             : `/fire-noc/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit`;
+      }
+    } else if (moduleName === "BPA") {
+      switch (action) {
+        case "PAY":
+          return `/egov-common/pay?consumerCode=${businessId}&tenantId=${tenant}`;
+        case "EDIT":
+          return isAlreadyEdited
+            ? `/egov-bpa/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit&edited=true`
+            : `/egov-bpa/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit`;
       }
     }
   };
@@ -387,7 +407,12 @@ class WorkFlowContainer extends React.Component {
       ProcessInstances.length > 0 &&
       this.prepareWorkflowContract(ProcessInstances, moduleName);
 
-      const showFooter=process.env.REACT_APP_NAME === "Citizen" ? false : true;
+      let showFooter=process.env.REACT_APP_NAME === "Citizen" ? false : true;
+      
+      if(dataPath === "BPA"){
+        showFooter = true;
+      }
+
     return (
       <div>
         {ProcessInstances && ProcessInstances.length > 0 && (
