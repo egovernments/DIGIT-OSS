@@ -57,7 +57,7 @@
             "WFState": "FIELDINSPECTION_PENDING",
             "docTypes": [
                 {
-                    "code": "NOC.AGRIGULTURE",
+                    "code": "NOC.AGRICULTURE",
                     "required": true
                 }
             ]
