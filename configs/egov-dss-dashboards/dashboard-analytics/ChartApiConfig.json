@@ -270,7 +270,7 @@
         "dateRefField": "Data.Bill.billDetails.receiptDate",
         "requestQueryMap": "{\r\n  \"module\" : \"Data.Bill.billDetails.businessService.keyword\", \n\"tenantId\" : \"Data.tenantId\"}",
         "indexName": "collectionsindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"Data.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"Collections\":{\"date_histogram\":{\"field\":\"Data.Bill.billDetails.receiptDate\",\"interval\":\"intervalvalue\"},\"aggs\":{\"Sum\":{\"sum\":{\"field\":\"Data.Bill.billDetails.amountPaid\"}}}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"terms\":{\"Data.Bill.billDetails.businessService.keyword\":[\"PT\",\"TL\"]}},{\"term\":{\"Data.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"Collections\":{\"date_histogram\":{\"field\":\"Data.Bill.billDetails.receiptDate\",\"interval\":\"intervalvalue\"},\"aggs\":{\"Sum\":{\"sum\":{\"field\":\"Data.Bill.billDetails.amountPaid\"}}}}}}}}"
       }
     ],
     "chartType": "line",
