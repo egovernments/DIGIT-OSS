@@ -133,7 +133,19 @@ const prepareDocumentsView = async (state, dispatch) => {
       return doc;
     
   });
-  dispatch(prepareFinalObject("documentDetailsPreview", documentsPreview));
+  let documentDetailsPreview = [], nocDocumentsPreview = [];
+  documentsPreview.forEach(doc => {
+    if(doc && doc.title) {
+      let type = doc.title.split("_")[0];
+      if(type === "NOC") {
+        nocDocumentsPreview.push(doc);
+      }else {
+        documentDetailsPreview.push(doc)
+      }
+    }
+  })
+  dispatch(prepareFinalObject("documentDetailsPreview", documentDetailsPreview));
+  dispatch(prepareFinalObject("nocDocumentsPreview", nocDocumentsPreview));
 };
 
 const prepareUoms = (state, dispatch) => {

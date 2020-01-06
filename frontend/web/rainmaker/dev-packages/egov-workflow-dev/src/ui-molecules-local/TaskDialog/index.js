@@ -28,6 +28,7 @@ const TaskDialog = props => {
       open={open}
       onClose={onClose}
       maxWidth={false}
+      style={{zIndex:2000}}
     >
       <DialogContent
         children={
