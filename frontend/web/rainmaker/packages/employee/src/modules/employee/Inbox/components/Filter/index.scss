@@ -7,3 +7,9 @@
 .dropdown div{
   color:black!important;
 }
+
+@media only screen and (max-width: 768px) {
+.filter-hidden-mob{
+  display: none;
+}
+}

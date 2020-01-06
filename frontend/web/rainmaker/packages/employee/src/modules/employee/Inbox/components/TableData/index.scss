@@ -6,7 +6,7 @@
 }
 
 
-@media only screen and (min-width: 768px) {
+@media only screen and (max-width: 768px) {
   .backgroundWhite{
     background-color: white;
     margin-left: 5px !important;
@@ -17,5 +17,30 @@
     background-color:rgb(31, 8, 241) !important;
     
   }
+  .whiteBackground{
+    background-color: white !important;
+    height: 45px !important;
+    top:10px
+  }
+  .sort-icon{
+     top:20px;
+  }
+  .filter-icon{
+    top:20px;
+  }
+  .search-bar{
+    left: 10px;
+  }
+  
 }
+@media only screen and (min-width: 800px){
+  .icon-hidden{
+      display: none;
+      background-color: white !important;
+  }
+  .whiteBackground {
+    height: 45px !important;
+    top: 10px;
+    }
+  }
 

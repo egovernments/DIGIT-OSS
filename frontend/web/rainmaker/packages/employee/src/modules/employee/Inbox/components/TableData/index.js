@@ -19,8 +19,9 @@ import { getTenantId, localStorageSet, localStorageGet } from "egov-ui-kit/utils
 import "./index.css";
 import Filter from "../Filter";
 import { getLocaleLabels } from "../../../../../ui-utils/commons";
-import TextFieldIcon from "egov-ui-kit/components/TextFieldIcon";
-
+import TextFieldIcon  from  "egov-ui-kit/components/TextFieldIcon";
+import FilterListIcon from '@material-ui/icons/FilterList';
+import Hidden from "@material-ui/core/Hidden";
 
 const getWFstatus = (status) => {
   switch (status) {
@@ -81,6 +82,7 @@ class TableData extends Component {
         ]
       }
     },
+    showFilter:false,
     value: 0,
     tabData: [{ label: "COMMON_INBOX_TAB_ASSIGNED_TO_ME", dynamicArray: [0] }
       , { label: "COMMON_INBOX_TAB_ALL", dynamicArray: [0] }],
@@ -576,20 +578,34 @@ class TableData extends Component {
             <div className="col-md-8 col-sm-8 col-xs-12">
               <Label className="landingPageUser" label={"WF_MY_WORKLIST"} />
             </div>
-            <div className="col-md-4">
+            <div className="col-md-4 col-sm-4 col-xs-10 search-bar">
               <TextFieldIcon
                 //  floatingLabelText={getLocaleLabels("CS_INBOX_SEARCH")}
                 hintText={getLocaleLabels("CS_INBOX_SEARCH")}
                 value={searchFilter.value}
                 iconPosition="before"
-                className="filter-fields"
+                className="whiteBackground"
                 onChange={(e, value) => {
                   handleChangeSearch(value);
                 }}
               />
             </div>
+            {/* <div className="icon-hidden sort-icon col-xs-2">
+              <ImportExportIcon />
+            </div> */}
+            <div className="icon-hidden filter-icon col-xs-2" onClick={()=>{
+              this.setState({showFilter:!this.state.showFilter})
+              //console.log("clicked")}
+              }>
+            <FilterListIcon />
+            </div>
           </div>
-          <Filter handleChangeFilter={handleChangeFilter.bind(this)} clearFilter={clearFilter} filter={filter}></Filter>
+          <Hidden only={["xs"]} implementation="css">
+          <Filter handleChangeFilter={handleChangeFilter.bind(this)} clearFilter={clearFilter} filter={filter}></Filter></Hidden>
+          <Hidden only={["sm", "md", "lg", "xl"]} implementation="css">
+          {this.state.showFilter&&
+          <Filter handleChangeFilter={handleChangeFilter.bind(this)} clearFilter={clearFilter} filter={filter}></Filter>}
+          </Hidden>
         </div>
         <Taskboard data={taskboardData} onSlaClick={this.onTaskBoardClick} color={this.state.color} />
         <div className="backgroundWhite">
