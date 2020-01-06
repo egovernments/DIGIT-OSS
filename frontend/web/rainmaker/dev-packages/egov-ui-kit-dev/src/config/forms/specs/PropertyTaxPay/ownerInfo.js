@@ -3,6 +3,9 @@ import { setDependentFields } from "./utils/enableDependentFields";
 import get from "lodash/get";
 import set from "lodash/set";
 import { setFieldProperty, handleFieldChange } from "egov-ui-kit/redux/form/actions";
+import {getFinalData} from "egov-ui-kit/utils/localStorageUtils";
+
+
 
 const formConfig = {
   name: "ownerInfo",
@@ -88,8 +91,7 @@ const formConfig = {
           state,
           `${process.env.REACT_APP_NAME === "Citizen" ? "citizen" : "employee"}.mdms.document.MdmsRes.PropertyTax.OwnerTypeDocument`,
           []
-        )
-          .filter((docu) => {
+        ).filter((docu) => {
             return docu.ownerTypeCode === value;
           })
           .reduce((acc, curr) => {
@@ -101,7 +103,6 @@ const formConfig = {
             currAcc.push(dropDownData);
             return currAcc;
           }, []);
-
         dispatch(setFieldProperty(formKey, "ownerCategoryIdType", "dropDownData", documentTypes));
         dispatch(setFieldProperty(formKey, "ownerCategoryIdType", "value", get(documentTypes, "[0].value", "")));
         switch (value) {
@@ -227,12 +228,17 @@ const formConfig = {
     },
   },
   beforeInitForm: (action, store, dispatch) => {
+
     try {
       let state = store.getState();
       const OwnerTypes = get(state, `common.generalMDMSDataById.OwnerType`);
-      let financialYearFromQuery = window.location.search.split("FY=")[1];
-      financialYearFromQuery = financialYearFromQuery.split("&")[0];
-      const dropdownData = getOwnerCategoryByYear(Object.values(OwnerTypes), financialYearFromQuery);
+      const finalData=getFinalData();
+      console.log("finalData:",finalData);
+      const finalYear=finalData[0].financialYear;
+      console.log("financialYear:",finalYear);
+      // let financialYearFromQuery = window.location.search.split("FY=")[1];
+      // financialYearFromQuery = financialYearFromQuery.split("&")[0];
+      const dropdownData = getOwnerCategoryByYear(Object.values(OwnerTypes),finalYear);
       set(action, "form.fields.ownerCategory.dropDownData", dropdownData);
       const ownerShipType = get(state, "form.ownershipType.fields.typeOfOwnership.value", "");
       if (ownerShipType === "SINGLEOWNER") {

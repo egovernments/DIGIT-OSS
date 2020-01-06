@@ -12,6 +12,7 @@ import { getTenantId ,getFinalData} from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
+import Label from "egov-ui-kit/utils/translationNode";
 class DemandCollection extends React.Component {
   render() {
     const { prepareFinalObject, preparedFinalObject,Properties = [] } = this.props;
@@ -30,21 +31,25 @@ class DemandCollection extends React.Component {
                     <div className={` col-sm-12`} key={index}>
                       <div className={`col-sm-6`}>
                         <div className={`col-sm-12`} style={{ textAlign: "center" }}>
-                          Demand
+                        <Label
+                          labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.87)", fontWeight: "400", lineHeight: "19px" }}
+                          label={"PT_DEMAND" ? "PT_DEMAND" : "NA"}
+                          fontSize="16px"
+                        />
                         </div>
                         {data.taxHead.map((taxData, index1) => {
                           return (
                             <div className={`col-xs-12`}>
                               <TextField
-                                label={taxData.name}
-                                floatingLabelText={taxData.name}
+                                floatingLabelText={taxData.code}
+                                hintText={taxData.code}
                                 type="number"
-                                value={get(preparedFinalObject,`DemandProperties[0].propertyDetails[0].demand[${index}].demand[${data.financialYear}][${index1}].Demand`)}
+                                value={get(preparedFinalObject,`DemandProperties[0].propertyDetails[0].demand[${index}].demand[${data.financialYear}][${index1}].PT_DEMAND`)}
                                 onChange={(e) => {
                                   let value = "";
                                   value = e.target.value;
-                                  prepareFinalObject(`DemandProperties[0].propertyDetails[0].demand[${index}].demand[${data.financialYear}][${index1}].Demand`, value)
-                                  prepareFinalObject(`DemandProperties[0].propertyDetails[0].demand[${index}].demand[${data.financialYear}][${index1}].taxHead`, data.name)
+                                  prepareFinalObject(`DemandProperties[0].propertyDetails[0].demand[${index}].demand[${data.financialYear}][${index1}].PT_TAXHEAD`,taxData.code)
+                                  prepareFinalObject(`DemandProperties[0].propertyDetails[0].demand[${index}].demand[${data.financialYear}][${index1}].PT_DEMAND`, value)
                                 }}
                               />
                             </div>
@@ -53,20 +58,23 @@ class DemandCollection extends React.Component {
                       </div>
                       <div className={`col-sm-6`}>
                         <div className={`col-sm-12`} style={{ textAlign: "center" }}>
-                          Collected{" "}
+                        <Label
+                          labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.87)", fontWeight: "400", lineHeight: "19px" }}
+                          label={"PT_COLLECTED" ? "PT_COLLECTED" : "NA"}
+                          fontSize="16px"
+                        />
                         </div>
                         {data.taxHead.map((taxData, index1) => {
                           return (
                             <div className={`col-xs-12`} key={index1}>
                               <TextField
                                 key={index1}
-                                label={taxData.name}
                                 type="number"
-                                value={get(preparedFinalObject,`DemandProperties[0].propertyDetails[0].demand[${index}].demand[${data.financialYear}][${index1}].collected`)}
-                                floatingLabelText={data.name}
+                                value={get(preparedFinalObject,`DemandProperties[0].propertyDetails[0].demand[${index}].demand[${data.financialYear}][${index1}].PT_COLLECTED`)}
+                                floatingLabelText={taxData.code}
+                                hintText={taxData.code}
                                 onChange={(e) => {
-                                  prepareFinalObject(`DemandProperties[0].propertyDetails[0].demand[${index}].demand[${data.financialYear}][${index1}].collected`, e.target.value)
-                                  prepareFinalObject(`DemandProperties[0].propertyDetails[0].demand[${index}].demand[${data.financialYear}][${index1}].taxHead`, data.name);
+                                  prepareFinalObject(`DemandProperties[0].propertyDetails[0].demand[${index}].demand[${data.financialYear}][${index1}].PT_COLLECTED`, e.target.value);
                                 }}
                               />
                             </div>
