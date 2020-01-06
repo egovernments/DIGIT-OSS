@@ -33,7 +33,7 @@ const setAutopopulatedvalues = async (state, dispatch) => {
             consumptionDetails['billingPeriod'] = 'Q1-' + prevYear + '-' + presYear.toString().substring(2);
         }
         if (billingFrequency === "monthly") {
-            date.setMonth(0)
+            date.setMonth(new Date().getMonth())
             const month = date.toLocaleString('default', { month: 'short' });
             let prevBillingPeriod = month + ' - ' + presYear
             consumptionDetails['billingPeriod'] = prevBillingPeriod
@@ -62,22 +62,23 @@ const setAutopopulatedvalues = async (state, dispatch) => {
             }
         }
         if (billingFrequency === "monthly") {
-            let presYear = date.getFullYear();
+            let yearOfLastMeter = prevBillingPeriod.trim().split("-")[1];
             let prevDate = prevBillingPeriod.replace(/ .*/, '');
             let getDatefromString = new Date(prevDate + '-1-01').getMonth() + 1
             if (getDatefromString > 11) {
                 date.setMonth(0)
                 const month = date.toLocaleString('default', { month: 'short' });
-                prevBillingPeriod = month + ' - ' + presYear
+                prevBillingPeriod = month + ' - ' + (parseInt(yearOfLastMeter) + 1)
                 consumptionDetails['billingPeriod'] = prevBillingPeriod
                 consumptionDetails['lastReading'] = 0
                 consumptionDetails['consumption'] = 0;
                 consumptionDetails['lastReadingDate'] = '';
+            } else {
+                date.setMonth(getDatefromString)
+                const month = date.toLocaleString('default', { month: 'short' });
+                prevBillingPeriod = month + ' - ' + yearOfLastMeter
+                consumptionDetails['billingPeriod'] = prevBillingPeriod
             }
-            date.setMonth(getDatefromString)
-            const month = date.toLocaleString('default', { month: 'short' });
-            prevBillingPeriod = month + ' - ' + presYear
-            consumptionDetails['billingPeriod'] = prevBillingPeriod
         }
         consumptionDetails['lastReading'] = get(state, `screenConfiguration.preparedFinalObject.consumptionDetails[0].currentReading`);
         consumptionDetails['consumption'] = ''
