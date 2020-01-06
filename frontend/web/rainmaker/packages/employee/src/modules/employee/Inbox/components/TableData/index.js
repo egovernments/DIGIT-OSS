@@ -139,7 +139,7 @@ class TableData extends Component {
     }
   }
   checkRow = (row, filter, searchFilter, taskboardLabel) => {
-    if (this.checkSLA(taskboardLabel, row) && (filter.localityFilter.selectedValue.includes('ALL') || filter.localityFilter.selectedValue.includes(row[1].text.props.label)) &&
+    if ( (filter.localityFilter.selectedValue.includes('ALL') || filter.localityFilter.selectedValue.includes(row[1].text.props.label)) &&
       (filter.moduleFilter.selectedValue.includes('ALL') || filter.moduleFilter.selectedValue.includes(row[2].text.props.label.split('_')[1])) &&
       (filter.statusFilter.selectedValue.includes('ALL') || filter.statusFilter.selectedValue.includes(row[2].text.props.label.split('_')[2])) &&
       (searchFilter.value == '' || this.checkMatch(row, searchFilter.value)
@@ -179,9 +179,19 @@ class TableData extends Component {
         )
       })
     }
+    const totalRows=initialInboxData[1].rows.length;
+    if (initialInboxData.length == 2) {
+      initialInboxData.map((row, ind) => {
+        row.rows = row.rows.filter((eachRow) => {
+          let isValid = this.checkSLA(taskboardLabel,eachRow);
+          return isValid;
+        }
+        )
+      })
+    }
 
     let { taskboardData, tabData } = this.state;
-    taskboardData[0].head = initialInboxData[1].rows.length;
+    taskboardData[0].head = totalRows;
     taskboardData[1].head = NEARING_SLA.length;
     taskboardData[2].head = ESCALATED_SLA.length;
     tabData[0].dynamicArray = [initialInboxData[0].rows.length];
