@@ -68,9 +68,9 @@ public class PropertyQueryBuilder {
 		StringBuilder builder = new StringBuilder(LIKE_QUERY);	
 		
 		if(!StringUtils.isEmpty(criteria.getTenantId())) {
-			if(criteria.getTenantId().equals("pb")) {
+			if(criteria.getTenantId().split("\\.").length == 1) {
 				builder.append("pt.tenantid LIKE ? ");
-				preparedStmtList.add("pb%");
+				preparedStmtList.add(criteria.getTenantId().split("\\.")[0] + "%");
 			}else {
 				builder.append("pt.tenantid = ? ");
 				preparedStmtList.add(criteria.getTenantId());

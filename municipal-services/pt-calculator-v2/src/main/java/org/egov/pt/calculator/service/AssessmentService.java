@@ -10,8 +10,11 @@ import org.egov.pt.calculator.repository.AssessmentRepository;
 import org.egov.pt.calculator.util.CalculatorConstants;
 import org.egov.pt.calculator.util.CalculatorUtils;
 import org.egov.pt.calculator.web.models.Assessment;
+import org.egov.pt.calculator.web.models.CalculationReq;
 import org.egov.pt.calculator.web.models.demand.Demand;
 import org.egov.pt.calculator.web.models.property.AuditDetails;
+import org.egov.pt.calculator.web.models.registry.CalculationCriteriaV2;
+import org.egov.pt.calculator.web.models.registry.CalculationRequestV2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -79,4 +82,5 @@ public class AssessmentService {
 		String query = utils.getAssessmentQuery(assessment, preparedStatementList);
 		return repository.getAssessments(query, preparedStatementList.toArray());
 	}
+	
 }

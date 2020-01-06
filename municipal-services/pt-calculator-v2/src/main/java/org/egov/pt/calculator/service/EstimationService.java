@@ -22,6 +22,7 @@ import org.egov.pt.calculator.web.models.demand.Bill;
 import org.egov.pt.calculator.web.models.demand.Category;
 import org.egov.pt.calculator.web.models.demand.TaxHeadMaster;
 import org.egov.pt.calculator.web.models.property.*;
+import org.egov.pt.calculator.web.models.registry.CalculationRequestV2;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -709,4 +710,5 @@ public class EstimationService {
 		return !(null != applicableUsageMasterExemption
 				&& null != applicableUsageMasterExemption.get(EXEMPTION_FIELD_NAME));
 	}
+		
 }

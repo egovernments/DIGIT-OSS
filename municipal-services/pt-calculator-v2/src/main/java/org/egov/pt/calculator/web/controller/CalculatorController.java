@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.egov.pt.calculator.service.DemandService;
 import org.egov.pt.calculator.service.EstimationService;
 import org.egov.pt.calculator.service.PayService;
+import org.egov.pt.calculator.service.RegistryService;
 import org.egov.pt.calculator.web.models.Calculation;
 import org.egov.pt.calculator.web.models.CalculationReq;
 import org.egov.pt.calculator.web.models.CalculationRes;
@@ -14,6 +15,7 @@ import org.egov.pt.calculator.web.models.GetBillCriteria;
 import org.egov.pt.calculator.web.models.demand.BillResponse;
 import org.egov.pt.calculator.web.models.demand.DemandResponse;
 import org.egov.pt.calculator.web.models.property.RequestInfoWrapper;
+import org.egov.pt.calculator.web.models.registry.CalculationRequestV2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +34,9 @@ public class CalculatorController {
 
 	@Autowired
 	private EstimationService calculatorService;
+	
+	@Autowired
+	private RegistryService registryService;
 	
 	@Autowired
 	private PayService payService;
@@ -56,6 +61,12 @@ public class CalculatorController {
 	public ResponseEntity<DemandResponse> updateDemand(@RequestBody @Valid RequestInfoWrapper requestInfoWrapper,
 			@ModelAttribute @Valid GetBillCriteria getBillCriteria) {
 		return new ResponseEntity<>(demandService.updateDemands(getBillCriteria, requestInfoWrapper), HttpStatus.OK);
+	}
+	
+	@PostMapping("/v2/_calculate")
+	public ResponseEntity<Map<String, Calculation>> caculateV2(@RequestBody @Valid CalculationRequestV2 calculationRequestV2) {
+		CalculationReq calculationReq = registryService.calculationWrapper(calculationRequestV2);
+		return new ResponseEntity<>(demandService.generateDemands(calculationReq), HttpStatus.OK);
 	}
 
 }
