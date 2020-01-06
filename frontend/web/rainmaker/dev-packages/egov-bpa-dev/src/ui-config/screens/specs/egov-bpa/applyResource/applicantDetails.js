@@ -324,7 +324,7 @@ const commonApplicantInformation = () => {
             name : "Is Primary Owner ?",
             key : "Is Primary Owner ?",
           },
-          jsonPath: "BPA.owners[0].primaryOwner"
+          jsonPath: "BPA.owners[0].isPrimaryOwner"
         },
         type: "array"
       }
@@ -584,13 +584,13 @@ export const applicantDetails = getCommonCard({
             showComponent(dispatch, multipleApplicantContainerJsonPath, false);
             showComponent(dispatch, institutionContainerJsonPath, false);
             showComponent(dispatch, primaryOwnerJsonPath, false);
-            dispatch(prepareFinalObject("BPA.owners[0].primaryOwner", true));
+            // dispatch(prepareFinalObject("BPA.owners[0].isPrimaryOwner", true));
           } else if (action.value.includes("MULTIPLEOWNERS")) {
             showComponent(dispatch, singleApplicantContainerJsonPath, false);
             showComponent(dispatch, multipleApplicantContainerJsonPath, true);
             showComponent(dispatch, institutionContainerJsonPath, false);
             showComponent(dispatch, primaryOwnerJsonPath, true);
-            dispatch(prepareFinalObject("BPA.owners[0].primaryOwner", false));
+            // dispatch(prepareFinalObject("BPA.owners[0].isPrimaryOwner", false));
           } else if (action.value.includes("INSTITUTIONAL")) {
             showComponent(dispatch, singleApplicantContainerJsonPath, false);
             showComponent(dispatch, multipleApplicantContainerJsonPath, false);
