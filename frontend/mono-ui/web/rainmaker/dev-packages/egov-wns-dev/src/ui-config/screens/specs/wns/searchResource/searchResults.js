@@ -134,9 +134,6 @@ export const searchResults = {
 };
 
 const getConnectionDetails = data => {
-  console.log('data')
-  console.log(data)
-  window.location.reload(true);
   window.location.href = `connection-details?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[8]}&service=${data.rowData[0]}&connectionType=${data.rowData[9]}`
 }
 

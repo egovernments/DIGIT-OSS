@@ -373,8 +373,8 @@ const getAcknowledgementCard = (
               labelKey: "NOC_FORWARD_SUCCESS_MESSAGE_MAIN"
             },
             body: {
-              labelName: "Application has been marked successfully",
-              labelKey: "NOC_APPLICATION_FORWARD_SUCCESS"
+              labelName: "Application has been forward successfully",
+              labelKey: "BPA_APPLICATION_FORWARD_SUCCESSFULLY"
             },
             tailText: {
               labelName: "Application No.",

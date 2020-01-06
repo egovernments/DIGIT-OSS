@@ -20,7 +20,8 @@ import "./index.css";
 import Filter from "../Filter";
 import { getLocaleLabels } from "../../../../../ui-utils/commons";
 import TextFieldIcon  from  "egov-ui-kit/components/TextFieldIcon";
-
+import FilterListIcon from '@material-ui/icons/FilterList';
+import Hidden from "@material-ui/core/Hidden";
 
 const getWFstatus = (status) => {
   switch (status) {
@@ -81,6 +82,7 @@ class TableData extends Component {
         ]
       }
     },
+    showFilter:false,
     value: 0,
     tabData: [{ label: "COMMON_INBOX_TAB_ASSIGNED_TO_ME", dynamicArray: [0] }
       , { label: "COMMON_INBOX_TAB_ALL", dynamicArray: [0] }],
@@ -106,15 +108,30 @@ class TableData extends Component {
     return newList;
   }
   checkMatch = (row, value) => {
-    if(value.length<=2){
+    if (value.length <= 2) {
       return true;
     }
-    if (row[0].text.toLowerCase().includes(value.toLowerCase()) ||
-      row[3].text.props.label.toLowerCase().includes(value.toLowerCase()) ||
-      String(row[4].text).toLowerCase().includes(value.toLowerCase()) ||
-      getLocaleLabels(`CS_COMMON_INBOX_${row[2].text.props.label.split('_')[1]}`).toLowerCase().includes(value.toLowerCase()) ||
-      getLocaleLabels(row[1].text.props.label).toLowerCase().includes(value.toLowerCase()) ||
-      getLocaleLabels(row[2].text.props.label).toLowerCase().includes(value.toLowerCase())
+    if (row[5].hiddenField.length !== 6) {
+      if (row[0].text.toLowerCase().includes(value.toLowerCase()) ||
+        row[3].text.props.label.toLowerCase().includes(value.toLowerCase()) ||
+        String(row[4].text).toLowerCase().includes(value.toLowerCase()) ||
+        getLocaleLabels(`CS_COMMON_INBOX_${row[2].text.props.label.split('_')[1]}`).toLowerCase().includes(value.toLowerCase()) ||
+        getLocaleLabels(row[1].text.props.label).toLowerCase().includes(value.toLowerCase()) ||
+        getLocaleLabels(row[2].text.props.label).toLowerCase().includes(value.toLowerCase())
+      ) {
+        return true;
+      }
+
+
+    }
+    if (
+      row[5].hiddenField[0].includes(value.toLowerCase()) ||
+      row[5].hiddenField[1].includes(value.toLowerCase()) ||
+      row[5].hiddenField[2].includes(value.toLowerCase()) ||
+      row[5].hiddenField[3].includes(value.toLowerCase()) ||
+      row[5].hiddenField[4].includes(value.toLowerCase()) ||
+      row[5].hiddenField[5].includes(value.toLowerCase())
+
     ) {
       return true;
     }
@@ -139,7 +156,7 @@ class TableData extends Component {
     }
   }
   checkRow = (row, filter, searchFilter, taskboardLabel) => {
-    if ( (filter.localityFilter.selectedValue.includes('ALL') || filter.localityFilter.selectedValue.includes(row[1].text.props.label)) &&
+    if ((filter.localityFilter.selectedValue.includes('ALL') || filter.localityFilter.selectedValue.includes(row[1].text.props.label)) &&
       (filter.moduleFilter.selectedValue.includes('ALL') || filter.moduleFilter.selectedValue.includes(row[2].text.props.label.split('_')[1])) &&
       (filter.statusFilter.selectedValue.includes('ALL') || filter.statusFilter.selectedValue.includes(row[2].text.props.label.split('_')[2])) &&
       (searchFilter.value == '' || this.checkMatch(row, searchFilter.value)
@@ -153,13 +170,12 @@ class TableData extends Component {
     return (milliseconds / (1000 * 60 * 60 * 24));
   }
   applyFilter = (inboxData) => {
-    
     this.showLoading();
     let initialInboxData = inboxData ? cloneDeep(inboxData) : cloneDeep(this.state.initialInboxData);
     const { filter, searchFilter, taskboardLabel } = this.state;
     let ESCALATED_SLA = [];
     let NEARING_SLA = [];
-
+    let totalRows = []
     if (initialInboxData.length == 2) {
       initialInboxData.map((row, ind) => {
         row.rows = row.rows.filter((eachRow) => {
@@ -172,6 +188,10 @@ class TableData extends Component {
             if (eachRow[4].text > 0 && eachRow[4].text <= (MAX_SLA - MAX_SLA / 3)) {
               NEARING_SLA.push(eachRow[4].text);
             }
+            totalRows.push(1);
+          }
+          if (isValid) {
+            return this.checkSLA(taskboardLabel, eachRow);
           }
           return isValid;
         }
@@ -179,7 +199,7 @@ class TableData extends Component {
         )
       })
     }
-    const totalRows=initialInboxData[1].rows.length;
+    
     if (initialInboxData.length == 2) {
       initialInboxData.map((row, ind) => {
         row.rows = row.rows.filter((eachRow) => {
@@ -190,8 +210,10 @@ class TableData extends Component {
       })
     }
 
+
+
     let { taskboardData, tabData } = this.state;
-    taskboardData[0].head = totalRows;
+    taskboardData[0].head = totalRows.length;
     taskboardData[1].head = NEARING_SLA.length;
     taskboardData[2].head = ESCALATED_SLA.length;
     tabData[0].dynamicArray = [initialInboxData[0].rows.length];
@@ -285,23 +307,48 @@ class TableData extends Component {
         return locality.referencenumber === item.businessId;
       })
       var sla = item.businesssServiceSla && item.businesssServiceSla / (1000 * 60 * 60 * 24);
+
+      let row0 = { text: item.businessId, subtext: item.businessService, hiddenText: item.moduleName };
+      let row1 = { text: locality ? <Label label={`${item.tenantId.toUpperCase().replace(/[.]/g, "_")}_REVENUE_${locality.locality}`} color="#000000" /> : <Label label={"NA"} color="#000000" /> };
+      let row2 = {
+        text: item.state ? (
+          <Label
+            label={`WF_${item.businessService.toUpperCase()}_${item.state.state}`}
+            defaultLabel={getWFstatus(item.state.state)}
+            color="#000000"
+          />
+        ) : (
+            "NA"
+          ),
+      };
+      let row3 = { text: item.assigner ? <Label label={item.assigner.name} color="#000000" /> : <Label label={"NA"} color="#000000" /> };
+      let row4 = { text: Math.round(sla), badge: true };
+      let row5 = { historyButton: true };
+
+      // f (row[0].text.toLowerCase().includes(value.toLowerCase()) ||
+      //       row[3].text.props.label.toLowerCase().includes(value.toLowerCase()) ||
+      //       String(row[4].text).toLowerCase().includes(value.toLowerCase()) ||
+      //       getLocaleLabels(`CS_COMMON_INBOX_${row[2].text.props.label.split('_')[1]}`).toLowerCase().includes(value.toLowerCase()) ||
+      //       getLocaleLabels(row[1].text.props.label).toLowerCase().includes(value.toLowerCase()) ||
+      //       getLocaleLabels(row[2].text.props.label).toLowerCase().includes(value.toLowerCase())
+
+
+
       let dataRows = [
-        { text: item.businessId, subtext: item.businessService, hiddenText: item.moduleName },
-        { text: locality ? <Label label={`${item.tenantId.toUpperCase().replace(/[.]/g, "_")}_REVENUE_${locality.locality}`} color="#000000" /> : <Label label={"NA"} color="#000000" /> },
+
+        row0,
+        row1,
+        row2,
+        row3,
+        row4,
         {
-          text: item.state ? (
-            <Label
-              label={`WF_${item.businessService.toUpperCase()}_${item.state.state}`}
-              defaultLabel={getWFstatus(item.state.state)}
-              color="#000000"
-            />
-          ) : (
-              "NA"
-            ),
-        },
-        { text: item.assigner ? <Label label={item.assigner.name} color="#000000" /> : <Label label={"NA"} color="#000000" /> },
-        { text: Math.round(sla), badge: true },
-        { historyButton: true },
+          ...row5, hiddenField: [row0.text.toLowerCase(),
+          String(row4.text),
+          getLocaleLabels(`CS_COMMON_INBOX_${row2.text.props.label.split('_')[1]}`).toLowerCase(),
+          getLocaleLabels(row1.text.props.label).toLowerCase(),
+          getLocaleLabels(row2.text.props.label).toLowerCase(),
+          row3.text.props.label.toLowerCase()]
+        }
       ];
       return dataRows;
     });
@@ -477,20 +524,19 @@ class TableData extends Component {
       color: baseColor,
     });
   };
-  showLoading(){
-    const {prepareFinalObject}=this.props;
-    prepareFinalObject('Loading.isLoading',true);
+  showLoading() {
+    const { prepareFinalObject } = this.props;
+    prepareFinalObject('Loading.isLoading', true);
   }
-  hideLoading(){
-    const {prepareFinalObject}=this.props;
-    prepareFinalObject('Loading.isLoading',false);
+  hideLoading() {
+    const { prepareFinalObject } = this.props;
+    prepareFinalObject('Loading.isLoading', false);
   }
   render() {
     const { value, moduleName, filter, searchFilter, businessServiceSla } = this.state;
     const { classes, onPopupOpen } = this.props;
     const { handleChangeFilter, clearFilter, handleChangeSearch, resetTyping } = this;
     let { taskboardData, tabData, inboxData } = this.state;
-    
 
     if (this.state.loaded) {
       if (searchFilter.typing) {
@@ -504,7 +550,7 @@ class TableData extends Component {
             this.setState({ state });
             ({ ...state })
           })
-        }, 3000);
+        }, 2000);
 
       } else {
         const filteredData = this.applyFilter();
@@ -530,20 +576,34 @@ class TableData extends Component {
             <div className="col-md-8 col-sm-8 col-xs-12">
               <Label className="landingPageUser" label={"WF_MY_WORKLIST"} />
             </div>
-            <div className="col-md-4">
+            <div className="col-md-4 col-sm-4 col-xs-10 search-bar">
               <TextFieldIcon
-              //  floatingLabelText={getLocaleLabels("CS_INBOX_SEARCH")}
+                //  floatingLabelText={getLocaleLabels("CS_INBOX_SEARCH")}
                 hintText={getLocaleLabels("CS_INBOX_SEARCH")}
                 value={searchFilter.value}
                 iconPosition="before"
-                className="filter-fields"
+                className="whiteBackground"
                 onChange={(e, value) => {
                   handleChangeSearch(value);
                 }}
               />
             </div>
+            {/* <div className="icon-hidden sort-icon col-xs-2">
+              <ImportExportIcon />
+            </div> */}
+            <div className="icon-hidden filter-icon col-xs-2" onClick={()=>{
+              this.setState({showFilter:!this.state.showFilter})
+              //console.log("clicked")}
+            }}>
+            <FilterListIcon />
+            </div>
           </div>
-          <Filter handleChangeFilter={handleChangeFilter.bind(this)} clearFilter={clearFilter} filter={filter}></Filter>
+          <Hidden only={["xs"]} implementation="css">
+          <Filter handleChangeFilter={handleChangeFilter.bind(this)} clearFilter={clearFilter} filter={filter}></Filter></Hidden>
+          <Hidden only={["sm", "md", "lg", "xl"]} implementation="css">
+          {this.state.showFilter&&
+          <Filter handleChangeFilter={handleChangeFilter.bind(this)} clearFilter={clearFilter} filter={filter}></Filter>}
+          </Hidden>
         </div>
         <Taskboard data={taskboardData} onSlaClick={this.onTaskBoardClick} color={this.state.color} />
         <div className="backgroundWhite">
@@ -572,7 +632,7 @@ const mapStateToProps = (state) => {
   const { screenConfiguration, auth } = state;
   const { userInfo } = auth;
   const { preparedFinalObject } = screenConfiguration;
-  const { InboxData ,isLoading} = preparedFinalObject;
+  const { InboxData, isLoading } = preparedFinalObject;
 
   return { InboxData, userInfo };
 };

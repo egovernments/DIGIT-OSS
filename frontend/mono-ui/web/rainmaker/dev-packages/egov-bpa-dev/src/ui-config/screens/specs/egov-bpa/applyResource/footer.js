@@ -30,60 +30,60 @@ const setReviewPageRoute = (state, dispatch) => {
   dispatch(setRoute(reviewUrl));
 };
 const moveToReview = (state, dispatch) => {
-  // const documentsFormat = Object.values(
-  //   get(state.screenConfiguration.preparedFinalObject, "nocDocumentsUploadRedux")
-  // );
+  const documentsFormat = Object.values(
+    get(state.screenConfiguration.preparedFinalObject, "nocDocumentsUploadRedux")
+  );
 
-  // let validateDocumentField = false;
+  let validateDocumentField = false;
 
-  // for (let i = 0; i < documentsFormat.length; i++) {
-  //   let isDocumentRequired = get(documentsFormat[i], "isDocumentRequired");
-  //   let isDocumentTypeRequired = get(
-  //     documentsFormat[i],
-  //     "isDocumentTypeRequired"
-  //   );
+  for (let i = 0; i < documentsFormat.length; i++) {
+    let isDocumentRequired = get(documentsFormat[i], "isDocumentRequired");
+    let isDocumentTypeRequired = get(
+      documentsFormat[i],
+      "isDocumentTypeRequired"
+    );
 
-  //   let documents = get(documentsFormat[i], "documents");
-  //   if (isDocumentRequired) {
-  //     if (documents && documents.length > 0) {
-  //       if (isDocumentTypeRequired) {
-  //         if (get(documentsFormat[i], "natureOfNoc.value")) {
-  //           validateDocumentField = true;
-  //         }else if (get(documentsFormat[i], "remarks.value")) {
-  //           validateDocumentField = true;
-  //         } else {
-  //           dispatch(
-  //             toggleSnackbar(
-  //               true,
-  //               { labelName: "Please select type of Document!", labelKey: "" },
-  //               "warning"
-  //             )
-  //           );
-  //           validateDocumentField = false;
-  //           break;
-  //         }
-  //       } else {
-  //         validateDocumentField = true;
-  //       }
-  //     } else {
-  //       dispatch(
-  //         toggleSnackbar(
-  //           true,
-  //           { labelName: "Please uplaod mandatory documents!", labelKey: "" },
-  //           "warning"
-  //         )
-  //       );
-  //       validateDocumentField = false;
-  //       break;
-  //     }
-  //   } else {
-  //     validateDocumentField = true;
-  //   }
-  // }
+    let documents = get(documentsFormat[i], "documents");
+    if (isDocumentRequired) {
+      if (documents && documents.length > 0) {
+        if (isDocumentTypeRequired) {
+          if (get(documentsFormat[i], "natureOfNoc.value")) {
+            validateDocumentField = true;
+          }else if (get(documentsFormat[i], "remarks.value")) {
+            validateDocumentField = true;
+          } else {
+            dispatch(
+              toggleSnackbar(
+                true,
+                { labelName: "Please select type of Document!", labelKey: "" },
+                "warning"
+              )
+            );
+            validateDocumentField = false;
+            break;
+          }
+        } else {
+          validateDocumentField = true;
+        }
+      } else {
+        dispatch(
+          toggleSnackbar(
+            true,
+            { labelName: "Please uplaod mandatory documents!", labelKey: "" },
+            "warning"
+          )
+        );
+        validateDocumentField = false;
+        break;
+      }
+    } else {
+      validateDocumentField = true;
+    }
+  }
 
-  // if (validateDocumentField) {
+  if (validateDocumentField) {
     setReviewPageRoute(state, dispatch);
-  // }
+  }
 };
 
 const getMdmsData = async (state, dispatch) => {
@@ -423,7 +423,7 @@ const callBackForNext = async (state, dispatch) => {
         if (checkingOwner && checkingOwner === "INDIVIDUAL.SINGLEOWNER") {
           let primaryOwner = get(
             state.screenConfiguration.preparedFinalObject,
-            "BPA.owners[0].primaryOwner"
+            "BPA.owners[0].isPrimaryOwner"
           );
           if (primaryOwner && primaryOwner === true) {
             let response = await createUpdateBpaApplication(
@@ -445,7 +445,7 @@ const callBackForNext = async (state, dispatch) => {
           ownerDetails.forEach((owner, index) => {
             let primaryOwner = get(
               state.screenConfiguration.preparedFinalObject,
-              `BPA.owners[${index}].primaryOwner`
+              `BPA.owners[${index}].isPrimaryOwner`
             );
             if (primaryOwner && primaryOwner === true) {
               ownerPrimaryArray.push(primaryOwner)

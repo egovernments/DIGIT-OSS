@@ -2426,6 +2426,19 @@ export const getTextToLocalMapping = label => {
         "BPA_HOME_SEARCH_RESULTS_TABLE_HEADING",
         localisationLabels
       );
+    case "DOC_VERIFICATION_PENDING":
+      return getLocaleLabels(
+        "Pending for Document Verification",
+        "WF_BPA_DOC_VERIFICATION_PENDING",
+        localisationLabels
+    );
+
+    case "PENDING_APPL_FEE_PAYMENT":
+    return getLocaleLabels(
+      "Pending for Document Verification",
+      "WF_BPA_PENDING_APPL_FEE_PAYMENT",
+      localisationLabels
+  );
       
     default:
       return getLocaleLabels(label, label, localisationLabels);

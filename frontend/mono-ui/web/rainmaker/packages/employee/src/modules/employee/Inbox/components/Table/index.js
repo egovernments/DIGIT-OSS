@@ -20,6 +20,7 @@ import orderBy from "lodash/orderBy";
 import { getWFConfig } from "./workflowRedirectionConfig";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
+import ImportExportIcon from '@material-ui/icons/ImportExport';
 
 class InboxData extends React.Component {
   state = {
@@ -201,6 +202,19 @@ class InboxData extends React.Component {
           </Table>
         </Hidden>
         <Hidden only={["sm", "md", "lg", "xl"]} implementation="css">
+        <div className="sort-btn-mob">
+        {sortOrder === "asc" && (
+                    <div onClick={() => this.sortingTable("desc")}>
+                      <ImportExportIcon/>
+                    </div>
+        )}  
+        {sortOrder === "desc" && (
+                    <div onClick={() => this.sortingTable("asc")}>
+                      <ImportExportIcon/>
+                    </div>
+        )}  
+        
+          </div>
           {data.rows.length === 0 ? (
             <Card textChildren={<Label labelClassName="" label="COMMON_INBOX_NO_DATA" />} />
           ) : (
