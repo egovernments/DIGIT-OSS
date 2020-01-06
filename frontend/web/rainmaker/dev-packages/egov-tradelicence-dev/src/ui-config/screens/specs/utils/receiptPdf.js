@@ -873,7 +873,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
                       ) +" : "+
                       validateNull(transformedData.corporationEmail),
                     style: "receipt-logo-sub-text",
-                    margin: [0, 8, 0, 0]
+                    margin: [0, 2, 0, 0]
                   },
                   {
                     text: getLocaleLabels(
@@ -881,7 +881,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
                       "TL_LOCALIZATION_TRADE_LICENSE_CERTIFICATE"
                     ),
                     style: "receipt-logo-sub-header",
-                    margin: [0, 30, 0, 0]
+                    margin: [0, 15, 0, 0]
                   }
                 ],
                 alignment: "center",
@@ -907,7 +907,23 @@ const getCertificateData = (transformedData, ulbLogo) => {
             text: transformedData.licenseNumber
           }
         ]
-      },
+      },  
+      {
+        style: "tl-certificate-data-2",
+        columns: [
+          {
+            width: 160,
+            text: getLocaleLabels(
+              "Trade License Number",
+              "TL_LOCALIZATION_OLD_LICENSE_NO"
+            )+":"
+          },
+          {
+            width: "*",
+            text: transformedData.oldLicenseNumber
+          }
+        ]
+      },    
       {
         style: "tl-certificate-data-2",
         columns: [
@@ -921,6 +937,22 @@ const getCertificateData = (transformedData, ulbLogo) => {
           {
             width: "*",
             text: transformedData.applicationNumber
+          }
+        ]
+      },
+      {
+        style: "tl-certificate-data-2",
+        columns: [
+          {
+            width: 160,
+            text: getLocaleLabels(
+              "Application Type",
+              "TL_LOCALIZATION_APPLICATION_TYPE"
+            )+":"
+          },
+          {
+            width: "*",
+            text: getLocaleLabels("NA", "TRADELICENSE_APPLICATIONTYPE_"+transformedData.applicationType.replace(".","_").toUpperCase())
           }
         ]
       },
@@ -1179,7 +1211,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
       },
       "tl-certificate-data-2": {
         fontSize: 12,
-        margin: [0, 5, 0, 0], //left top right bottom
+        margin: [0, 3, 0, 0], //left top right bottom
         color: "#1E1E1E"
       },
 
@@ -1238,7 +1270,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
       "receipt-footer": {
         color: "#484848",
         fontSize: 8,
-        margin: [10, -35, 5, 5]
+        margin: [10, -20, 5, 5]
       },
       "receipt-no": {
         color: "#484848",
@@ -1246,12 +1278,12 @@ const getCertificateData = (transformedData, ulbLogo) => {
       },
       "tl-certificate-footer": {
         fontSize: 14,
-        margin: [0, 30, 0, 0], //left top right bottom
+        margin: [0,15, 0, 0], //left top right bottom
         color: "#1E1E1E"
       },
 
       "tl-certificate-footer1": {
-        fontSize: 14,
+        fontSize: 12,
         margin: [0, 10, 0, 0], //left top right bottom
         color: "#1E1E1E"
       }
@@ -1348,6 +1380,22 @@ const getACKData = (transformedData, ulbLogo) => {
           {
             width: "*",
             text: transformedData.applicationNumber
+          }
+        ]
+      },
+      {
+        style: "tl-certificate-data-2",
+        columns: [
+          {
+            width: 160,
+            text: getLocaleLabels(
+              "Application Type",
+              "TL_LOCALIZATION_APPLICATION_TYPE"
+            )+":"
+          },
+          {
+            width: "*",
+            text: getLocaleLabels("NA", "TRADELICENSE_APPLICATIONTYPE_"+transformedData.applicationType.replace(".","_").toUpperCase())
           }
         ]
       },
@@ -1529,7 +1577,7 @@ const getACKData = (transformedData, ulbLogo) => {
       },
       "tl-certificate-data-2": {
         fontSize: 12,
-        margin: [0, 5, 0, 0], //left top right bottom
+        margin: [0, 3, 0, 0], //left top right bottom
         color: "#1E1E1E"
       },
 

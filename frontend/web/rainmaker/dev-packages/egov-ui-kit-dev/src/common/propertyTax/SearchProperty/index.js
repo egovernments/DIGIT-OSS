@@ -258,7 +258,6 @@ class SearchProperty extends Component {
             labelStyle={{ marginTop: "20px" }}
           />
 
-          {/* Commenting add and assess property for 10 dec release
           <div
             className="rainmaker-displayInline"  >
             <Button
@@ -284,7 +283,7 @@ class SearchProperty extends Component {
               primary={true}
               fullWidth={true}
             />
-            </div> */}
+            </div>
         </div>
         <PropertySearchFormHOC history={this.props.history} onSearchClick={this.onSearchClick} onResetClick={this.onResetClick} />
         <Hidden xsDown>
@@ -321,7 +320,6 @@ class SearchProperty extends Component {
               <Label label="PT_NO_PROPERTY_RECORD" />
             </div>
 
-            {/* Commenting add and assess property for 10 dec release
             <div className="new-assess-btn">
               <Button
                 label={<Label label="PT_ADD_ASSESS_PROPERTY" buttonLabel={true} />}
@@ -331,7 +329,7 @@ class SearchProperty extends Component {
                 primary={true}
                 fullWidth={true}
               />
-               </div> */}
+               </div>
           </div>
         )}
         <YearDialogue open={this.state.dialogueOpen} history={history} urlToAppend={urlToAppend} closeDialogue={closeYearRangeDialogue} />

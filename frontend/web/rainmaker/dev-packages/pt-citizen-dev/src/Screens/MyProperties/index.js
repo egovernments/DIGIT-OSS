@@ -114,7 +114,7 @@ class MyProperties extends Component {
             items={transformedPropertiesWeb}
             history={this.props.history}
             noAssessmentMessage="PT_NO_ASSESSMENT_MESSAGE3"
-            // button={true}   Commenting add and assess property for 10 dec release
+            button={true}
             yearDialogue={this.state.dialogueOpen}
             closeDialogue={this.closeYearRangeDialogue}
             onNewPropertyButtonClick={this.onNewPropertyButtonClick}

@@ -53,7 +53,8 @@ const styles = {
 
 function totalAmount(arr) {
   return arr
-    .map(item => (item.value ? item.value : 0))
+    .map(item => 
+      ((item.value ?  item.value : 0)))
     .reduce((prev, next) => prev + next, 0);
 }
 
@@ -88,8 +89,8 @@ function FeesEstimateCard(props) {
               let textRight = fee.value ? (
                 <Grid xs={4} align="right">
                   <LabelContainer
-                    labelName={fee.value}
-                    labelKey={fee.value}
+                    labelName={Math.abs(fee.value)}
+                    labelKey={Math.abs(fee.value)}
                     style={styles.taxStyles}
                   />
                 </Grid>

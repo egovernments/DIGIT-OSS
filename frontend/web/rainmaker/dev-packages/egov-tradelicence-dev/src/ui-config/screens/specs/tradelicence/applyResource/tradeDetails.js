@@ -28,6 +28,10 @@ import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-fra
 import get from "lodash/get";
 import filter from "lodash/filter";
 import { convertEpochToDate } from "../../utils";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getAllDataFromBillingSlab } from "../../utils";
+
+
 const tradeUnitCard = {
   uiFramework: "custom-containers",
   componentPath: "MultiItem",
@@ -798,6 +802,9 @@ export const tradeDetails = getCommonCard(
           }
         }),
         beforeFieldChange: (action, state, dispatch) => {
+          getAllDataFromBillingSlab(getTenantId(), dispatch,[{
+            key:"applicationType",value:action.value
+          }]);
           if (action.value === "APPLICATIONTYPE.RENEWAL") {
             dispatch(
               handleField(
