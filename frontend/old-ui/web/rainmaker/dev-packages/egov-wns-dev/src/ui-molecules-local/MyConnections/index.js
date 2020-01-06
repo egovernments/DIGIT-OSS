@@ -39,14 +39,14 @@ class MyConnections extends React.Component {
                   <CardContent>
                     <div>
                       <Grid container style={{ marginBottom: 12 }}>
-                        <Grid item xs={6}>
+                        <Grid item md={4} xs={6}>
                           <LabelContainer
                             labelKey="WS_MYCONNECTIONS_SERVICE"
                             fontSize={14}
                             style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
                           />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item md={8} xs={6}>
                           <LabelContainer
                             labelName={item.service}
                             fontSize={14}
@@ -54,31 +54,31 @@ class MyConnections extends React.Component {
                           />
                         </Grid>
                       </Grid>
-                      <Grid container style={{ marginBottom: 12 }}>
-                        <Grid item xs={6}>
+                      {/* <Grid container style={{ marginBottom: 12 }}>
+                        <Grid item md={4} xs={6}>
                           <LabelContainer
                             labelKey="WS_MYCONNECTIONS_APPLICATION_NO"
                             fontSize={14}
                             style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
                           />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item md={8} xs={6}>
                           <LabelContainer
                             labelName={item.applicationNo}
                             fontSize={14}
                             style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
                           />
                         </Grid>
-                      </Grid>
+                      </Grid> */}
                       <Grid container style={{ marginBottom: 12 }}>
-                        <Grid item xs={6}>
+                        <Grid item md={4} xs={6}>
                           <LabelContainer
                             labelKey="WS_MYCONNECTIONS_CONSUMER_NO"
                             fontSize={14}
                             style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
                           />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item md={8} xs={6}>
                           <div className="linkStyle" onClick={() => this.getConnectionDetails(item)}>
                             <a> <Label
                               labelName={item.connectionNo}
@@ -90,14 +90,14 @@ class MyConnections extends React.Component {
                         </Grid>
                       </Grid>
                       <Grid container style={{ marginBottom: 12 }}>
-                        <Grid item xs={6}>
+                        <Grid item md={4} xs={6}>
                           <LabelContainer
                             labelKey="WS_MYCONNECTIONS_STATUS"
                             fontSize={14}
                             style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
                           />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item md={8} xs={6}>
                           <Label
                             labelName={item.status}
                             fontSize={14}
@@ -106,14 +106,14 @@ class MyConnections extends React.Component {
                         </Grid>
                       </Grid>
                       <Grid container style={{ marginBottom: 12 }}>
-                        <Grid item xs={6}>
+                        <Grid item md={4} xs={6}>
                           <LabelContainer
                             labelKey="WS_MYCONNECTIONS_OWNER_NAME"
                             fontSize={14}
                             style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
                           />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item md={8} xs={6}>
                           <LabelContainer
                             labelName={item.property.owners.map(owner => owner.name)}
                             fontSize={14}
@@ -122,14 +122,14 @@ class MyConnections extends React.Component {
                         </Grid>
                       </Grid>
                       <Grid container style={{ marginBottom: 12 }}>
-                        <Grid item xs={6}>
+                        <Grid item md={4} xs={6}>
                           <LabelContainer
                             labelKey="WS_MYCONNECTION_ADDRESS"
                             fontSize={14}
                             style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
                           />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item md={8} xs={6}>
                           <Label
                             labelName={item.property.address.street}
                             fontSize={14}
@@ -138,14 +138,14 @@ class MyConnections extends React.Component {
                         </Grid>
                       </Grid>
                       <Grid container style={{ marginBottom: 12 }}>
-                        <Grid item xs={6}>
+                        <Grid item md={4} xs={6}>
                           <LabelContainer
                             labelKey="WS_MYCONNECTIONS_DUE"
                             fontSize={14}
                             style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
                           />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item md={8} xs={6}>
                           <Label
                             labelName={item.due} onClick={() => this.getViewBillDetails(item)}
                             fontSize={14}

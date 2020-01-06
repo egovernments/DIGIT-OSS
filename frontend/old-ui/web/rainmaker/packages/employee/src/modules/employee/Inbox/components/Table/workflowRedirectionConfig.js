@@ -14,7 +14,7 @@ export const getWFConfig = (module) => {
       case "BPA-SERVICES":
         return {
           INITIATED: "/egov-bpa/search-preview",
-          DEFAULT: "egov-bpa/search-preview",
+          DEFAULT: "/egov-bpa/search-preview",
         };  
     case "BPAREG":
       return {

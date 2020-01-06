@@ -143,3 +143,9 @@
     margin-right: 50px;
   }
 }
+
+.userSettingsContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
