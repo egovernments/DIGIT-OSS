@@ -170,7 +170,6 @@ class TableData extends Component {
     return (milliseconds / (1000 * 60 * 60 * 24));
   }
   applyFilter = (inboxData) => {
-
     this.showLoading();
     let initialInboxData = inboxData ? cloneDeep(inboxData) : cloneDeep(this.state.initialInboxData);
     const { filter, searchFilter, taskboardLabel } = this.state;
@@ -538,7 +537,6 @@ class TableData extends Component {
     const { classes, onPopupOpen } = this.props;
     const { handleChangeFilter, clearFilter, handleChangeSearch, resetTyping } = this;
     let { taskboardData, tabData, inboxData } = this.state;
-
 
     if (this.state.loaded) {
       if (searchFilter.typing) {

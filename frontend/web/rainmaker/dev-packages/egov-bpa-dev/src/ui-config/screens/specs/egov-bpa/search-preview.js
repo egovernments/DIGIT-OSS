@@ -35,7 +35,7 @@ import { httpRequest, edcrHttpRequest } from "../../../../ui-utils/api";
 const titlebar = getCommonContainer({
   header: getCommonHeader({
     labelName: "Task Details",
-    labelKey: "NOC_TASK_DETAILS_HEADER"
+    labelKey: "BPA_TASK_DETAILS_HEADER"
   }),
   applicationNumber: {
     uiFramework: "custom-atoms-local",
