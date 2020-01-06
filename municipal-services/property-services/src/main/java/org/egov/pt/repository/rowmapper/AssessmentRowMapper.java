@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -52,7 +53,7 @@ public class AssessmentRowMapper implements ResultSetExtractor<List<Assessment>>
 						.propertyID(rs.getString("ass_propertyid"))
 						.source(Source.valueOf(rs.getString("ass_source")))
 						.units(new ArrayList<>())
-						.documents(new ArrayList<>()).build();
+						.documents(new HashSet<>()).build();
 				
 				try {
 					PGobject obj = (PGobject) rs.getObject("ass_additionaldetails");
