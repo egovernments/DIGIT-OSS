@@ -15,6 +15,7 @@ class LabelContainer extends React.Component {
       fieldValue,
       localizationLabels,
       dynamicArray,
+      checkValueForNA,
       ...rest
     } = this.props;
 
@@ -42,7 +43,7 @@ class LabelContainer extends React.Component {
     }
 
     if (typeof fieldValue === "boolean") {
-      fieldValue = fieldValue ? "Yes" : "No";
+      fieldValue = fieldValue ? getLocaleLabels("SCORE_YES","SCORE_YES") : getLocaleLabels("SCORE_NO","SCORE_NO");
     }
 
     let fieldLabel =
@@ -56,12 +57,17 @@ class LabelContainer extends React.Component {
             localizationLabels
           )
         : fieldValue;
+    let labelValue = fieldValue ? fieldLabel : translatedLabel;
+    labelValue =
+      checkValueForNA && typeof checkValueForNA === "function"
+        ? checkValueForNA(labelValue)
+        : labelValue;
     return (
       <Label
         data-localization={
           labelKey ? labelKey : labelName ? labelName : fieldLabel
         }
-        label={fieldValue ? fieldLabel : translatedLabel}
+        label={labelValue}
         {...rest}
       />
     );

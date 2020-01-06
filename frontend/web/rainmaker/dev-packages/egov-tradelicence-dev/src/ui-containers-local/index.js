@@ -47,6 +47,11 @@ const ViewBreakupContainer = Loadable({
   loader: () => import("./ViewbreakupDialogContainer"),
   loading: () => <Loading />
 });
+const ResubmitActionContainer = Loadable({
+  loader: () => import("./ResubmitActionContainer"),
+  loading: () => <Loading />
+});
+
 
 export {
   CustomTabContainer,
@@ -58,5 +63,6 @@ export {
   DocumentListContainer,
   PaymentRedirectPage,
   ViewBreakupContainer,
-  DialogContainer
+  DialogContainer,
+  ResubmitActionContainer
 };

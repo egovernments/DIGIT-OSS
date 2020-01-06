@@ -66,6 +66,7 @@
   font-weight: 400;
   line-height: 17px;
   padding-bottom: 5px;
+  cursor: pointer;
 }
 
 .inbox-cell-subtext {
@@ -88,16 +89,27 @@
   line-height: 17px;
 }
 
-.sla--positive-value {
-  background-color: #00b200;
+.sla-positive-value {
+  background-color: #4CAF50;
 }
-.sla--negative-value {
-  background-color: rgba(244, 67, 54, 0.87);
+.sla-negative-value {
+  background-color: #F44336;
+}
+
+.sla-middle-value {
+  background-color: #EEA73A;
 }
 
 .inbox-taskboard {
   display: flex;
 }
+
+
+.inbox-worklist-card:hover{
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0,   0.19);
+  cursor : pointer;
+}
+
 .inbox-worklist-card {
   -webkit-box-shadow: none !important;
   box-shadow: none !important;
@@ -165,16 +177,21 @@
     flex: 50%;
   }
   .inbox-data-table-headcell-0,
+  .inbox-data-table-headcell-1,
   .inbox-data-table-headcell-2,
   .inbox-data-table-headcell-3,
-  .inbox-data-table-headcell-4 {
+  .inbox-data-table-headcell-4,
+  .inbox-data-table-headcell-5 {
     display: none !important;
   }
   .inbox-data-table-bodycell-0,
+  .inbox-data-table-bodycell-1,
   .inbox-data-table-bodycell-2,
   .inbox-data-table-bodycell-3,
-  .inbox-data-table-bodycell-4 {
-    display: none !important;
+  .inbox-data-table-bodycell-4,
+  .inbox-data-table-bodycell-5 {
+    display: block !important;
+    width: 100% !important;
   }
   .inbox-card-top {
     height: 148px;
@@ -192,4 +209,34 @@
     padding: 10px;
     top: 0px;
   }
+}
+
+.arrow-icon-style {
+  display: block;
+  padding: 0;
+  margin: 0;
+  height: 20px;
+  cursor: pointer;
+}
+
+.arrow-icon-container {
+  position: absolute;
+  top: 60px;
+  right: 60px;
+}
+
+.card-div-style {
+  display: inline-block;
+  width: 50%;
+}
+
+.card-viewHistory-icon {
+  cursor: pointer;
+  width: 10%;
+  vertical-align: middle;
+  display: inline-block;
+}
+.card-sladiv-style {
+  display: inline-block;
+  width: 40%;
 }

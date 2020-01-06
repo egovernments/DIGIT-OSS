@@ -205,13 +205,17 @@ export const gotoApplyWithStep = (state, dispatch, step) => {
     window.location.href,
     "applicationNumber"
   );
+  const tenantId = getQueryArg(
+    window.location.href,
+    "tenantId"
+  );
   const applicationNumberQueryString = applicationNumber
-    ? `&applicationNumber=${applicationNumber}`
+    ? `&applicationNumber=${applicationNumber}&tenantId=${tenantId}`
     : ``;
   const applyUrl =
     process.env.REACT_APP_SELF_RUNNING === "true"
-      ? `/egov-ui-framework/fire-noc/apply?step=${step}${applicationNumberQueryString}`
-      : `/fire-noc/apply?step=${step}${applicationNumberQueryString}`;
+      ? `/egov-ui-framework/pt-mutation/apply?step=${step}${applicationNumberQueryString}`
+      : `/pt-mutation/apply?step=${step}${applicationNumberQueryString}`;
   dispatch(setRoute(applyUrl));
 };
 

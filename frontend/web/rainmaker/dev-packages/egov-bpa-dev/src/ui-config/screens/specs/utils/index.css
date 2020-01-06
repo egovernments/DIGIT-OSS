@@ -1,0 +1,54 @@
+.radio-button-group {
+  padding: 0;
+}
+
+.checkbox-root {
+  width: 16px;
+  margin-right: 11px;
+}
+
+.fontSize12 {
+  font-size: 12px;
+}
+
+.city-picker-dialog-style {
+  min-height: 180px;
+  min-width: 365px;
+}
+
+@media only screen and (max-width: 768px) {
+  .city-picker-dialog-style {
+    min-width: 250px;
+  }
+}
+
+/* for text entrable fields */
+.textfield-enterable-selection label {
+  color: black !important; 
+}
+
+.textfield-enterable-selection div div div {
+  color: black !important; 
+}
+
+.textfield-enterable-selection div div div .select-field-placeholder {
+  color: grey !important; 
+}
+
+#custom-containers-local-tradeLocMohalla div label,
+#custom-containers-local-residential div label {
+  color: black !important;
+}
+
+.radio-button-label, .formLabel, .root{
+  color: black !important;
+}
+
+.radio-button-label, .formLabel label, .root{
+  color: black !important;
+}
+
+span[data-localization="NOC_GENDER_LABEL"],
+span[data-localization="NOC_APPLICANT_RELATIONSHIP_LABEL"]{
+  color: black !important;
+};

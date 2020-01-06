@@ -3,6 +3,8 @@ import {
   getTextField,
   getCommonSubHeader
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+
+import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons"
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import "./index.css";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
@@ -28,6 +30,7 @@ import {
   getLocaleLabels,
   getTransformedLocalStorgaeLabels, getFileUrlFromAPI
 } from "egov-ui-framework/ui-utils/commons";
+import axios from 'axios';
 
 export const getCommonApplyFooter = children => {
   return {
@@ -434,6 +437,8 @@ export const showHideAdhocPopup = (state, dispatch) => {
 };
 
 export const getButtonVisibility = (status, button) => {
+  if(status==="CITIZENACTIONREQUIRED" && button ==="RESUBMIT")
+  return true;
   if (status === "pending_payment" && button === "PROCEED TO PAYMENT")
     return true;
   if (status === "pending_approval" && button === "APPROVE") return true;
@@ -921,7 +926,7 @@ const getStatementForDocType = docType => {
 };
 
 
-export const downloadAcknowledgementForm = (Licenses) => {
+export const downloadAcknowledgementForm = (Licenses,mode="download") => {
   const queryStr = [
     { key: "key", value: "tlapplication" },
     { key: "tenantId", value: "pb" }
@@ -938,7 +943,7 @@ export const downloadAcknowledgementForm = (Licenses) => {
         res.filestoreIds[0]
         if (res && res.filestoreIds && res.filestoreIds.length > 0) {
           res.filestoreIds.map(fileStoreId => {
-            downloadReceiptFromFilestoreID(fileStoreId)
+            downloadReceiptFromFilestoreID(fileStoreId,mode)
           })
         } else {
           console.log("Error In Acknowledgement form Download");
@@ -949,14 +954,38 @@ export const downloadAcknowledgementForm = (Licenses) => {
   }
 }
 
-const downloadReceiptFromFilestoreID = (fileStoreId) => {
-  getFileUrlFromAPI(fileStoreId).then((fileRes) => {
-    var win = window.open(fileRes[fileStoreId], '_blank');
-    if (win) {
-      win.focus();
-    }
-  });
+export const downloadCertificateForm = (Licenses,mode='download') => {
+  const queryStr = [
+    { key: "key", value: "tlcertificate" },
+    { key: "tenantId", value: "pb" }
+  ]
+  const DOWNLOADRECEIPT = {
+    GET: {
+      URL: "/pdf-service/v1/_create",
+      ACTION: "_get",
+    },
+  };
+  try {
+    httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Licenses }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+      .then(res => {
+        res.filestoreIds[0]
+        if (res && res.filestoreIds && res.filestoreIds.length > 0) {
+          res.filestoreIds.map(fileStoreId => {
+            downloadReceiptFromFilestoreID(fileStoreId,mode)
+          })
+        } else {
+          console.log("Error In Acknowledgement form Download");
+        }
+      });
+  } catch (exception) {
+    alert('Some Error Occured while downloading Acknowledgement form!');
+  }
 }
+
+
+
+
+
 
 
 export const prepareDocumentTypeObj = documents => {
@@ -1172,7 +1201,9 @@ const getBillingSlabData = async (
 
 const isApplicationPaid = currentStatus => {
   let isPAID = false;
-
+if(currentStatus==="CITIZENACTIONREQUIRED"){
+  return isPAID;
+}
   if (!isEmpty(JSON.parse(localStorageGet("businessServiceData")))) {
     const tlBusinessService = JSON.parse(localStorageGet("businessServiceData")).filter(item => item.businessService === "NewTL")
     const states = tlBusinessService[0].states;
@@ -1182,8 +1213,7 @@ const isApplicationPaid = currentStatus => {
       }
       if (
         states[i].actions &&
-        states[i].actions.filter(item => item.action === "PAY")
-          .length > 0
+        states[i].actions.filter(item => item.action === "PAY").length > 0
       ) {
         isPAID = true;
         break;

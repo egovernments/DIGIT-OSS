@@ -26,62 +26,12 @@ const setReviewPageRoute = (state, dispatch) => {
   );
   const appendUrl =
     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
-  const reviewUrl = `${appendUrl}/fire-noc/summary?applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
+  const reviewUrl = `${appendUrl}/pt-mutation/acknowledgement?purpose=apply&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
   dispatch(setRoute(reviewUrl));
 };
 const moveToReview = (state, dispatch) => {
-  const documentsFormat = Object.values(
-    get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux")
-  );
-
-  let validateDocumentField = false;
-
-  for (let i = 0; i < documentsFormat.length; i++) {
-    let isDocumentRequired = get(documentsFormat[i], "isDocumentRequired");
-    let isDocumentTypeRequired = get(
-      documentsFormat[i],
-      "isDocumentTypeRequired"
-    );
-
-    let documents = get(documentsFormat[i], "documents");
-    if (isDocumentRequired) {
-      if (documents && documents.length > 0) {
-        if (isDocumentTypeRequired) {
-          if (get(documentsFormat[i], "dropdown.value")) {
-            validateDocumentField = true;
-          } else {
-            dispatch(
-              toggleSnackbar(
-                true,
-                { labelName: "Please select type of Document!", labelKey: "" },
-                "warning"
-              )
-            );
-            validateDocumentField = false;
-            break;
-          }
-        } else {
-          validateDocumentField = true;
-        }
-      } else {
-        dispatch(
-          toggleSnackbar(
-            true,
-            { labelName: "Please uplaod mandatory documents!", labelKey: "" },
-            "warning"
-          )
-        );
-        validateDocumentField = false;
-        break;
-      }
-    } else {
-      validateDocumentField = true;
-    }
-  }
-
-  if (validateDocumentField) {
+ 
     setReviewPageRoute(state, dispatch);
-  }
 };
 
 const getMdmsData = async (state, dispatch) => {
@@ -184,74 +134,6 @@ const callBackForNext = async (state, dispatch) => {
   }
 
   if (activeStep === 2) {
-    let isApplicantTypeCardValid = validateFields(
-      "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.applicantTypeSelection.children",
-      state,
-      dispatch
-    );
-    let isSingleApplicantCardValid = validateFields(
-      "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.children.individualApplicantInfo.children.cardContent.children.applicantCard.children",
-      state,
-      dispatch
-    );
-    let isInstitutionCardValid = validateFields(
-      "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer.children.institutionInfo.children.cardContent.children.applicantCard.children",
-      state,
-      dispatch
-    );
-
-    // Multiple applicants cards validations
-    let multipleApplicantCardPath =
-      "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer.children.multipleApplicantInfo.props.items";
-    // "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer.children.multipleApplicantInfo.props.items[0].item0.children.cardContent.children.applicantCard"
-    let multipleApplicantCardItems = get(
-      state.screenConfiguration.screenConfig.apply,
-      multipleApplicantCardPath,
-      []
-    );
-    let isMultipleApplicantCardValid = true;
-    for (var j = 0; j < multipleApplicantCardItems.length; j++) {
-      if (
-        (multipleApplicantCardItems[j].isDeleted === undefined ||
-          multipleApplicantCardItems[j].isDeleted !== false) &&
-        !validateFields(
-          `${multipleApplicantCardPath}[${j}].item${j}.children.cardContent.children.applicantCard.children`,
-          state,
-          dispatch,
-          "apply"
-        )
-      )
-        isMultipleApplicantCardValid = false;
-    }
-
-    let selectedApplicantType = get(
-      state,
-      "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType",
-      "SINGLE"
-    );
-    if (selectedApplicantType.includes("INSTITUTIONAL")) {
-      isSingleApplicantCardValid = true;
-      isMultipleApplicantCardValid = true;
-    } else if (selectedApplicantType.includes("MULTIPLEOWNERS")) {
-      isSingleApplicantCardValid = true;
-      isInstitutionCardValid = true;
-    } else {
-      isMultipleApplicantCardValid = true;
-      isInstitutionCardValid = true;
-    }
-
-    if (
-      !isApplicantTypeCardValid ||
-      !isSingleApplicantCardValid ||
-      !isInstitutionCardValid ||
-      !isMultipleApplicantCardValid
-    ) {
-      isFormValid = false;
-      hasFieldToaster = true;
-    }
-  }
-
-  if (activeStep === 3) {
     moveToReview(state, dispatch);
   }
 
@@ -324,8 +206,8 @@ export const changeStep = (
   }
 
   const isPreviousButtonVisible = activeStep > 0 ? true : false;
-  const isNextButtonVisible = activeStep < 4 ? true : false;
-  const isPayButtonVisible = activeStep === 4 ? true : false;
+  const isNextButtonVisible = activeStep < 3 ? true : false;
+  const isPayButtonVisible = activeStep === 3 ? true : false;
   const actionDefination = [
     {
       path: "components.div.children.stepper.props",

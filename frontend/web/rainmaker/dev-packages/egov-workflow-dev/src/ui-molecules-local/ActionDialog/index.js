@@ -85,6 +85,7 @@ class ActionDialog extends React.Component {
   };
 
   render() {
+        
     let {
       open,
       onClose,
@@ -106,10 +107,17 @@ class ActionDialog extends React.Component {
     if (window.innerWidth <= 768) {
       fullscreen = true;
     }
-    dataPath =
-      dataPath === "FireNOCs"
-        ? `${dataPath}[0].fireNOCDetails`
-        : `${dataPath}[0]`;
+    if (dataPath === "FireNOCs") {
+      dataPath = `${dataPath}[0].fireNOCDetails`
+    } else if (dataPath === "BPA") {
+      dataPath = `${dataPath}`;
+    } else {
+      dataPath = `${dataPath}[0]`;
+    }
+if(buttonLabel=="APPLY"){
+  open=!open;
+  onButtonClick(buttonLabel, isDocRequired);
+}
     return (
       <Dialog
         fullScreen={fullscreen}
@@ -174,10 +182,10 @@ class ActionDialog extends React.Component {
                         onChange={e =>
                           handleFieldChange(
                             `${dataPath}.assignee`,
-                            e.target.value
+                            [e.target.value]
                           )
                         }
-                        jsonPath={`${dataPath}.assignee`}
+                        jsonPath={`${dataPath}.assignee[0]`}
                       />
                     </Grid>
                   )}

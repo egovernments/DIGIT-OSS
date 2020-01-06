@@ -25,6 +25,7 @@ import ProfileSection from "egov-ui-kit/components/ProfileSection";
 import Ratings from "egov-ui-kit/components/Ratings";
 import ButtonGroup from "egov-ui-kit/components/ButtonGroup";
 import DropDown from "egov-ui-kit/components/DropDown";
+import MultiSelectDropdown from "egov-ui-kit/components/MultiSelectDropdown";
 import Icon from "egov-ui-kit/components/Icon";
 import InfoTable from "egov-ui-kit/components/InfoTable";
 import ImageModal from "egov-ui-kit/components/ImageModal";
@@ -69,6 +70,7 @@ export {
   Ratings,
   ButtonGroup,
   DropDown,
+  MultiSelectDropdown,
   Icon,
   InfoTable,
   ImageModal,

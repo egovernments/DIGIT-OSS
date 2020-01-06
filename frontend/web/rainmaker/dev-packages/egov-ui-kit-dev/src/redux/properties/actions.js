@@ -290,7 +290,7 @@ export const fetchProperties = (queryObjectproperty, queryObjectDraft, queryObje
     if (queryObjectproperty) {
       dispatch(propertyFetchPending());
       try {
-        const payloadProperty = await httpRequest(PROPERTY.GET.URL, PROPERTY.GET.ACTION, queryObjectproperty);
+        const payloadProperty = await httpRequest(PROPERTY.GET.URL, PROPERTY.GET.ACTION,queryObjectproperty);
         dispatch(propertyFetchComplete(payloadProperty));
       } catch (error) {
         dispatch(propertyFetchError(error.message));

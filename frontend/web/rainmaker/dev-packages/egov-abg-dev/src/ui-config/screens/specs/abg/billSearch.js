@@ -5,10 +5,10 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { billSearchCard } from "./billSearchResources/billSearchCard";
 import { searchResults } from "./billSearchResources/searchResults";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "../../../../ui-utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
 const header = getCommonHeader({
   labelName: "Universal Bill",
@@ -66,6 +66,29 @@ const billSearchAndResult = {
   name: "billSearch",
   beforeInitScreen: (action, state, dispatch) => {
     getData(action, state, dispatch);
+    const tenantId = process.env.REACT_APP_NAME === "Employee" ?  getTenantId() : JSON.parse(getUserInfo()).permanentCity;
+    if(tenantId){
+      dispatch(prepareFinalObject("searchScreen" , {tenantId: tenantId}));
+      const ulbComponentJsonPath = "components.div.children.billSearchCard.children.cardContent.children.searchContainer.children.ulb";
+      const disableUlb = process.env.REACT_APP_NAME === "Citizen" ? false : true;
+      dispatch(
+        handleField(
+          "billSearch",
+          ulbComponentJsonPath,
+          "props.value",
+          tenantId
+        )
+      );
+      dispatch(
+        handleField(
+          "billSearch",
+          ulbComponentJsonPath,
+          "props.disabled",
+          disableUlb
+        )
+      );
+    }
+    
     return action;
   },
   components: {

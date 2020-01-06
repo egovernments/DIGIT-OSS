@@ -13,6 +13,7 @@ import get from "lodash/get";
 import set from "lodash/set";
 import store from "ui-redux/store";
 import { getTranslatedLabel } from "../ui-config/screens/specs/utils";
+import DATA from "./documents";
 
 const handleDeletedCards = (jsonObject, jsonPath, key) => {
   let originalArray = get(jsonObject, jsonPath, []);
@@ -294,9 +295,8 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
 };
 
 export const prepareDocumentsUploadData = (state, dispatch) => {
-  let documents = get(
-    state,
-    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.FireNoc.Documents",
+  let documents = get(DATA,
+    "Documents",
     []
   );
   documents = documents.filter(item => {
@@ -346,7 +346,7 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
       card["required"] = doc.required ? true : false;
       if (doc.hasDropdown && doc.dropdownData) {
         let dropdown = {};
-        dropdown.label = "NOC_SELECT_DOC_DD_LABEL";
+        dropdown.label = "PT_MUTATION_SELECT_DOC_LABEL";
         dropdown.required = true;
         dropdown.menu = doc.dropdownData.filter(item => {
           return item.active;

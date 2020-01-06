@@ -84,7 +84,8 @@ const onRowClick = rowData => {
     case "INITIATED":
       window.location.href = `apply?applicationNumber=${rowData[0]}&tenantId=${
         rowData[6]
-      }&action=edit`;
+      }`;
+      // }&action=edit`;
       break;
     default:
       window.location.href = `search-preview?applicationNumber=${
