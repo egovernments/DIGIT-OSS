@@ -663,6 +663,7 @@ export const footerReview = (
       ];
       break;
     case "APPLIED":
+    case "CITIZENACTIONREQUIRED":
     case "FIELDINSPECTION":
     case "PENDINGAPPROVAL":
     case "PENDINGPAYMENT":
@@ -862,6 +863,7 @@ export const downloadPrintContainer = (
       ];
       break;
     case "APPLIED":
+    case "CITIZENACTIONREQUIRED":  
     case "FIELDINSPECTION":
     case "PENDINGAPPROVAL":
     case "PENDINGPAYMENT":
