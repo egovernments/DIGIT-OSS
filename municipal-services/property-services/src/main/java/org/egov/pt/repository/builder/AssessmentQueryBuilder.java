@@ -1,10 +1,12 @@
 package org.egov.pt.repository.builder;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.AssessmentSearchCriteria;
+import org.egov.pt.models.PropertyCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
@@ -28,17 +30,22 @@ public class AssessmentQueryBuilder {
 			+ "FROM eg_pt_assessments ass LEFT OUTER JOIN eg_pt_unit unit ON ass.id = unit.assessmentId LEFT OUTER JOIN eg_pt_document doc ON ass.id = doc.entityid ";
 	
 	
+	private final String paginationWrapper = "SELECT * FROM "
+			+ "(SELECT *, DENSE_RANK() OVER (ORDER BY ass_assessmentid) offset_ FROM " + "({})" + " result) result_offset "
+			+ "WHERE offset_ > :offset AND offset_ <= :limit";
+	
+	
     public String getSearchQuery(AssessmentSearchCriteria criteria, Map<String, Object> preparedStatementValues) {
 		String baseQuery = ASSESSMENT_SEARCH_QUERY;
 		StringBuilder finalQuery = new StringBuilder();
 		finalQuery.append(baseQuery);
 		addWhereClause(finalQuery, criteria, preparedStatementValues);
 		
-		return finalQuery.toString();
+		return addWhereClause(finalQuery, criteria, preparedStatementValues);
 	}
 	
 	
-	private void addWhereClause(StringBuilder query, AssessmentSearchCriteria criteria, Map<String, Object> preparedStatementValues) {
+	private String addWhereClause(StringBuilder query, AssessmentSearchCriteria criteria, Map<String, Object> preparedStatementValues) {
 		
 		if(!StringUtils.isEmpty(criteria.getTenantId())) {
 			addClauseIfRequired(preparedStatementValues, query);
@@ -77,10 +84,8 @@ public class AssessmentQueryBuilder {
 		}
 		
 		query.append(" ORDER BY ass.createdtime DESC"); //default ordering on the platform.
-		query.append(" OFFSET :offset");
-		preparedStatementValues.put("offset", null == criteria.getOffset() ? configs.getDefaultOffset() : criteria.getOffset());		
-		query.append(" LIMIT :limit");
-		preparedStatementValues.put("limit", null == criteria.getLimit() ? configs.getDefaultLimit() : criteria.getLimit());
+		
+		return addPaginationWrapper(query.toString(), preparedStatementValues, criteria);
 	}
 	
 	
@@ -91,5 +96,20 @@ public class AssessmentQueryBuilder {
             queryString.append(" AND ");
         }
     }
+    
+	private String addPaginationWrapper(String query, Map<String, Object> preparedStatementValues, AssessmentSearchCriteria criteria) {
+				
+		Long limit = (null == criteria.getLimit()) ? configs.getDefaultLimit() : criteria.getLimit();
+		Long offset = (null == criteria.getOffset()) ? configs.getDefaultOffset() : criteria.getOffset();
+		String finalQuery = paginationWrapper.replace("{}", query);
+
+		if (criteria.getOffset() != null)
+			offset = criteria.getOffset();
+
+		preparedStatementValues.put("offset", offset);
+		preparedStatementValues.put("limit", limit + offset);
+
+		return finalQuery;
+	}
 
 }

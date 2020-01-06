@@ -1,7 +1,9 @@
 package org.egov.pt.models;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -66,7 +68,7 @@ public class Assessment {
 
         @JsonProperty("documents")
         @Valid
-        private List<Document> documents ;
+        private Set<Document> documents ;
 
         @JsonProperty("additionalDetails")
         private JsonNode additionalDetails ;
@@ -117,7 +119,7 @@ public class Assessment {
 
         public Assessment addDocumentsItem(Document documentsItem) {
             if (this.documents == null) {
-            this.documents = new ArrayList<>();
+            this.documents = new HashSet<>();
             }
         this.documents.add(documentsItem);
         return this;
