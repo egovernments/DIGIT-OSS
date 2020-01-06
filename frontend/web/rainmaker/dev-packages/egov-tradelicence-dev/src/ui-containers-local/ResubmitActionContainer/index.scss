@@ -36,6 +36,9 @@
   .wf-footer-container{
   display: flex;
   min-width: 50px !important;
+  div {
+    width: 100%;
+  }
   }
   
 }
