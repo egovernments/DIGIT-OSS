@@ -37,6 +37,8 @@
 .inner-header-style {
   padding: 16px 16px 0px 16px !important;
   justify-content: space-between;
+  display: flex !important;
+  flex-direction: column !important;
   cursor: "pointer"; }
 
 
@@ -46,14 +48,17 @@
 width: fit-content;
  }}
 .inner-header-style {
-padding: 10px 0px 0px 0px !important; } }
+padding: 10px 0px 0px 0px !important;
+flex-direction: column !important;
+} }
 
 .new-property-assessment {
   height: 48px;
 }
 
 .inner-button-style{
-    padding-left: 42% !important;
-    display: flex !important;
-    flex: none !important;
+    flex: inherit !important;
   }
+.button-style{
+  margin-right: 8px !important;
+}

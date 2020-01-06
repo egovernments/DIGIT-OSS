@@ -745,15 +745,16 @@ class FormWizardDataEntry extends Component {
       case 1:
       case 2:
         headerObj.subHeaderValue = propertyId;
-        headerObj.headerValue = "(" + assessmentYear + ")";
+        // headerObj.headerValue = "(" + assessmentYear + ")";
         isAssesment
           ? (headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER")
           : isReassesment
           ? (headerObj.header = "PT_REASSESS_PROPERTY")
-          : ((headerObj.headerValue =
-              headerObj.headerValue + ":" + addNewPropertyLabel),
-            (headerObj.subHeaderValue = ""),
-            (headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER"));
+          // : ((headerObj.headerValue =
+          //     headerObj.headerValue + ":" + addNewPropertyLabel),
+          //   (headerObj.subHeaderValue = ""),
+          //(headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER"));
+          :(headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER");
         break;
       case 3:
         headerObj.subHeaderValue = propertyId;
@@ -761,18 +762,18 @@ class FormWizardDataEntry extends Component {
           ? (headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER")
           : isReassesment
           ? (headerObj.header = "PT_REASSESS_PROPERTY")
-          : ((headerObj.subHeaderValue = ""),
-            (headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER"));
-        headerObj.headerValue = "(" + assessmentYear + ")";
+          // : ((headerObj.subHeaderValue = ""),
+            :(headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER");
+        // headerObj.headerValue = "(" + assessmentYear + ")";
         break;
       case 4:
         headerObj.subHeaderValue = propertyId;
         isAssesment
           ? (headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER")
           : isReassesment
-          ? (headerObj.header = "PT_DEMAND_REASSESS_PROPERTY")
+          ? (headerObj.header = "PT_REASSESS_PROPERTY")
           : (headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER");
-        headerObj.headerValue = "(" + assessmentYear + ")";
+        // headerObj.headerValue = "(" + assessmentYear + ")";
         break;
       case 5:
       headerObj.subHeaderValue = propertyId;
@@ -781,7 +782,7 @@ class FormWizardDataEntry extends Component {
         : isReassesment
         ? (headerObj.header = "PT_DEMAND_REASSESS_PROPERTY")
         : (headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER");
-      headerObj.headerValue = "(" + assessmentYear + ")";
+      // headerObj.headerValue = "(" + assessmentYear + ")";
       break;
       case 6:
         headerObj.headerValue = "(" + assessmentYear + ")";

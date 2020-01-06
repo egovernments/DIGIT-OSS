@@ -257,9 +257,9 @@ class SearchProperty extends Component {
             bold={true}
             labelStyle={{ marginTop: "20px"  }}
           />
-
+<div className="inner-button-style">
           <div
-            className="rainmaker-displayInline inner-button-style"  >
+            className="rainmaker-displayInline button-style" >
             <Button
               Icon={
                 <Icon
@@ -284,8 +284,7 @@ class SearchProperty extends Component {
               fullWidth={true}
             />
             </div>
-          <div
-            className="rainmaker-displayInline"  >
+          <div className="rainmaker-displayInline">
             <Button
               Icon={
                 <Icon
@@ -297,7 +296,7 @@ class SearchProperty extends Component {
               }
               label={
                 <Label
-                  label="PT_ADD_ASSESS_PROPERTY_DATA_ENTRY"
+                  label="PT_ADD_ASSESS_PROPERTY_DATA_ENTRY"                  
                   buttonLabel={true}
                   fontSize="16px"
                   color="white"
@@ -309,6 +308,7 @@ class SearchProperty extends Component {
               primary={true}
               fullWidth={true}
             />
+            </div>
             </div>
         </div>
         <PropertySearchFormHOC history={this.props.history} onSearchClick={this.onSearchClick} onResetClick={this.onResetClick} />

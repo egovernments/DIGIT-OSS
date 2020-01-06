@@ -400,6 +400,7 @@ export const getCalculationScreenData = async (billingSlabs, tenantId, self) => 
 };
 
 export const getHeaderLabel = (selected, role) => {
+  console.log("sle;;;;",selected);
   switch (selected) {
     case 0:
       return (
@@ -434,7 +435,7 @@ export const getHeaderLabel = (selected, role) => {
           containerStyle={{ marginTop: 12 }}
           fontSize="16px"
           color="#484848"
-          label={role === "citizen" ? "PT_FORM4_HEADER_MESSAGE" : "PT_EMP_FORM4_HEADER_MESSAGE"}
+          label={role === "citizen" ? "PT_FORM6_HEADER_MESSAGE" : "PT_EMP_FORM6_HEADER_MESSAGE"}
         />
       );
     case 4:

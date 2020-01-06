@@ -1973,38 +1973,11 @@ const mapStateToProps = state => {
     (propertyAddress && propertyAddress.fields && propertyAddress.fields) || {};
   const currentTenantId = (city && city.value) || commonConfig.tenantId;
   const { generalMDMSDataById } = common;
-  const yeardataInfo =
-    (generalMDMSDataById && generalMDMSDataById.TaxPeriod) || {};
-  const taxDataInfo =
-    (generalMDMSDataById && generalMDMSDataById.TaxHeadMaster) || {};
-  let yeardata = [];
-  let taxData = [];
-  const data = Object.keys(yeardataInfo).map((key, index) => {
-    yeardata.push(yeardataInfo[key]);
-  });
-  const data2 = Object.keys(taxDataInfo).map((key, index) => {
-    taxData.push(taxDataInfo[key]);
-  });
-  let yeardata1 = yeardata.filter(yearKey => yearKey.service === "PT");
-  let taxdata1 = taxData.filter(
-    tax => tax.service === "PT" && tax.legacy == true
-  );
-
-  const finalData = Object.keys(yeardata1).map((data, key) => {
-    yeardata1[data]["taxHead"] = [...taxdata1];
-    return yeardata[data];
-  });
-  {
-    finalData && finalData.length
-      ? localStorage.setItem("finalData", JSON.stringify(finalData))
-      : "error";
-  }
   return {
     form,
     currentTenantId,
     prepareFormData: common.prepareFormData,
-    common,
-    finalData,
+    common,    
     app,
     generalMDMSDataById
   };

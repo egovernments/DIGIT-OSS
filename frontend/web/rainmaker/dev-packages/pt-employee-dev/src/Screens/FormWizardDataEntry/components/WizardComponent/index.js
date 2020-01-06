@@ -56,7 +56,7 @@ const WizardComponent = ({
           );
         })}
       </Stepper></div>}
-      {selected < 3 && <div>{header}</div>}
+      {selected < 4 && <div>{header}</div>}
       <div className="wizard-content clearfix">{content}</div>
       {footer}
       <div id="tax-wizard-buttons" className="wizard-footer col-sm-10" style={{ textAlign: "right" }}>
