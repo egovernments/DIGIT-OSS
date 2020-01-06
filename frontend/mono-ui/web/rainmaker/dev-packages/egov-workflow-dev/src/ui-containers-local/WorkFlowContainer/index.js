@@ -83,8 +83,12 @@ class WorkFlowContainer extends React.Component {
   };
 
   getPurposeString = action => {
+       
     switch (action) {
+      case "APPLY":
+        return "purpose=apply&status=success";
       case "FORWARD":
+      case "RESUBMIT":
         return "purpose=forward&status=success";
       case "MARK":
         return "purpose=mark&status=success";
@@ -98,6 +102,8 @@ class WorkFlowContainer extends React.Component {
         return "purpose=sendback&status=success";
       case "REFER":
         return "purpose=refer&status=success";
+      case "SENDBACKTOCITIZEN":
+        return "purpose=sendbacktocitizen&status=success";
     }
   };
 
@@ -146,6 +152,17 @@ class WorkFlowContainer extends React.Component {
         );
       }
     }
+    if(dataPath === "BPA") {
+      let requiredDocuments = data.requiredDocuments;
+      let documents = data.wfDocuments;
+      if(requiredDocuments && data.wfDocuments && requiredDocuments.length > 0 && 
+        data.wfDocuments.length > 0 && requiredDocuments.length <= data.wfDocuments.length) {
+        for(let i = 0; i < requiredDocuments.length; i++) {
+            data.wfDocuments[i].documentType = requiredDocuments[i].code;
+            data.wfDocuments[i].fileStore = data.wfDocuments[i].fileStoreId
+        }
+      }
+    }
     const applicationNumber = getQueryArg(
       window.location.href,
       "applicationNumber"
@@ -184,12 +201,16 @@ class WorkFlowContainer extends React.Component {
   createWorkFLow = async (label, isDocRequired) => {
     const { toggleSnackbar, dataPath, preparedFinalObject } = this.props;
     let data = get(preparedFinalObject, dataPath, []);
+    
+    if (dataPath !== "BPA") {
+      data = data[0];
+    }
     //setting the action to send in RequestInfo
     let appendToPath = dataPath === "FireNOCs" ? "fireNOCDetails." : "";
-    set(data[0], `${appendToPath}action`, label);
+    set(data, `${appendToPath}action`, label);
 
     if (isDocRequired) {
-      const documents = get(data[0], "wfDocuments");
+      const documents = get(data, "wfDocuments");
       if (documents && documents.length > 0) {
         this.wfUpdate(label);
       } else {
@@ -209,8 +230,7 @@ class WorkFlowContainer extends React.Component {
     if (moduleName === "NewTL") {
       switch (action) {
         case "PAY":
-          return `/egov-common/pay?consumerCode=${businessId}&tenantId=${tenant}&businessService=NewTL`;
-        // return `/tradelicence/pay?applicationNumber=${businessId}&tenantId=${tenant}&businessService=NewTL`;
+          return `/egov-common/pay?consumerCode=${businessId}&tenantId=${tenant}`;
         case "EDIT":
           return isAlreadyEdited
             ? `/tradelicence/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit&edited=true`
@@ -219,12 +239,20 @@ class WorkFlowContainer extends React.Component {
     } else if (moduleName === "FIRENOC") {
       switch (action) {
         case "PAY":
-          return `/egov-common/pay?consumerCode=${businessId}=${tenant}&businessService=FIRENOC`;
-        // return `/fire-noc/pay?applicationNumber=${businessId}&tenantId=${tenant}&businessService=FIRENOC`;
+          return `/egov-common/pay?consumerCode=${businessId}&tenantId=${tenant}`;
         case "EDIT":
           return isAlreadyEdited
             ? `/fire-noc/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit&edited=true`
             : `/fire-noc/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit`;
+      }
+    } else if (moduleName === "BPA") {
+      switch (action) {
+        case "PAY":
+          return `/egov-common/pay?consumerCode=${businessId}&tenantId=${tenant}`;
+        case "EDIT":
+          return isAlreadyEdited
+            ? `/egov-bpa/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit&edited=true`
+            : `/egov-bpa/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit`;
       }
     }
   };
@@ -260,20 +288,15 @@ class WorkFlowContainer extends React.Component {
     }
     roles = [...new Set(roles)];
     roles.indexOf("*") > -1 && roles.splice(roles.indexOf("*"), 1);
-    //return [...new Set(roles)];
     return roles.toString();
   };
 
   checkIfTerminatedState = (nextStateUUID, moduleName) => {
-    console.log("modulename is....", moduleName);
     const businessServiceData = JSON.parse(
       localStorageGet("businessServiceData")
     );
     const data = find(businessServiceData, { businessService: moduleName });
-    console.log("========>2", data);
-    console.log("=======> nextStat is", nextStateUUID);
     const nextState = find(data.states, { uuid: nextStateUUID });
-    console.log("=======> state is", nextState);
     return nextState.isTerminateState;
   };
 
@@ -316,7 +339,6 @@ class WorkFlowContainer extends React.Component {
   };
 
   prepareWorkflowContract = (data, moduleName) => {
-    console.log("========>1", data);
     const {
       getRedirectUrl,
       getHeaderName,
@@ -326,9 +348,11 @@ class WorkFlowContainer extends React.Component {
       getEmployeeRoles
     } = this;
     let businessId = get(data[data.length - 1], "businessId");
-    let filteredActions = get(data[data.length - 1], "nextActions", []).filter(
-      item => item.action != "ADHOC"
-    );
+    let filteredActions = [];
+    
+      filteredActions = get(data[data.length - 1], "nextActions", []).filter(
+        item => item.action != "ADHOC"
+      );
     let applicationStatus = get(
       data[data.length - 1],
       "state.applicationStatus"
@@ -347,6 +371,7 @@ class WorkFlowContainer extends React.Component {
         isDocRequired: checkIfDocumentRequired(item.nextState, moduleName)
       };
     });
+    actions=actions.filter(item=>item.buttonLabel!=='INITIATE');
     let editAction = getActionIfEditable(
       applicationStatus,
       businessId,
@@ -382,11 +407,19 @@ class WorkFlowContainer extends React.Component {
       ProcessInstances &&
       ProcessInstances.length > 0 &&
       this.prepareWorkflowContract(ProcessInstances, moduleName);
+
+      let showFooter=process.env.REACT_APP_NAME === "Citizen" ? false : true;
+      
+      if(dataPath === "BPA"){
+        showFooter = true;
+      }
+
     return (
       <div>
         {ProcessInstances && ProcessInstances.length > 0 && (
           <TaskStatusContainer ProcessInstances={ProcessInstances} />
         )}
+       {showFooter&& 
         <Footer
           handleFieldChange={prepareFinalObject}
           variant={"contained"}
@@ -395,7 +428,7 @@ class WorkFlowContainer extends React.Component {
           contractData={workflowContract}
           dataPath={dataPath}
           moduleName={moduleName}
-        />
+        />}
       </div>
     );
   }

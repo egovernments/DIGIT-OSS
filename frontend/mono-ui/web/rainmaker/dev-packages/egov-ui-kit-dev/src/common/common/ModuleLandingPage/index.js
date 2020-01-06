@@ -34,7 +34,7 @@ class ModuleLandingPage extends React.Component {
       <Grid container>
         {items.map((obj) => {
           return (
-            <Grid className={classes.item} item xs={6} sm={6} align="center">
+            <Grid className={classes.item} item xs={4} sm={4} align="center">
               <Card
                 className={`${classes.paper} module-card-style`}
                 onClick={(e) => {

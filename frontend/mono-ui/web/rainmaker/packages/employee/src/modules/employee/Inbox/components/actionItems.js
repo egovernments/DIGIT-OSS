@@ -3,28 +3,35 @@ import { Card } from "components";
 import Label from "egov-ui-kit/utils/translationNode";
 import Icon from "egov-ui-kit/components/Icon";
 
-export const Taskboard = ({ data }) => {
-  return (
-    <div className="inbox-taskboard">
-      {data.map((item, i) => (
-        <Card
-          className="inbox-card inbox-worklist-card"
-          key={i}
-          textChildren={
-            <div>
-              <div className="head">{item.head}</div>
-              <Label labelClassName="inbox-taskboard-subtext" label={item.body} />
-            </div>
-          }
-        />
-      ))}
-    </div>
-  );
-};
+export class Taskboard extends React.Component{
+  state={
+    color:""
+  }
+
+  render(){
+    const {data ,onSlaClick , color} = this.props
+    return (
+      <div className="inbox-taskboard">
+        {data.map((item, i) => (
+          <Card
+            className="inbox-card inbox-worklist-card"
+            key={i}
+            onClick={() => onSlaClick(item.baseColor,item.body)}
+            style={{backgroundColor : item.color ,borderTop:  item.baseColor === color ?  `4px solid ${color}`  : ""}}
+            textChildren={
+              <div>
+                <div className="head">{item.head}</div>
+                <Label labelClassName="inbox-taskboard-subtext" label={item.body} />
+              </div>
+            }
+          />
+        ))}
+      </div>
+    );
+  }
+}
 
 const onModuleCardClick = (route, setRoute) => {
-  // const url = process.env.NODE_ENV === "production" ? `employee/${route}` : route;
-  // window.location.href = window.origin + "/" + url;
   setRoute("/" + route);
 };
 

@@ -16,16 +16,16 @@
     text-align: left;
   }
 
-.footer-amount {
+  .footer-amount {
     color: rgba(0, 0, 0, 0.87);
     font-family: Roboto;
     font-size: 24px;
-    font-weight: 500;
+    font-weight: 600;
     line-height: 29px;
     text-align: left;
-    padding: 12px;
-    top: 5px;
     position: relative;
+    display: inline-block;
+    top: 2px;
   }
 
 .footer-button {
@@ -45,3 +45,16 @@
     line-height: 19px;
     text-align: center;
   }
+
+  .dialog-content-label {
+    display: inline-block;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.87); }
+
+    .dialog-content-amount {
+      display: inline-block;
+      font-size: 18px;
+      font-weight: 500;
+      position: relative;
+      top: 3px;
+      color: rgba(0, 0, 0, 0.87); }

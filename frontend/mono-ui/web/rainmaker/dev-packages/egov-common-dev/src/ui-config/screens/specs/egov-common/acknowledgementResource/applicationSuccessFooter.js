@@ -52,36 +52,36 @@ export const applicationSuccessFooter = (
                     download(receiptQueryString);
                 }
             }
+        },
+        printFormButton: {
+            componentPath: "Button",
+            props: {
+                variant: "contained",
+                color: "primary",
+                // className: "apply-wizard-footer-right-button",
+                style: {
+                    minWidth: "290px",
+                    height: "48px",
+                    marginRight: "16px"
+                },
+                // disabled: true
+            },
+            children: {
+                printFormButtonLabel: getLabel({
+                    labelName: "PRINT RECEIPT",
+                    labelKey: "COMMON_PRINT_RECEIPT"
+                })
+            },
+            onClickDefination: {
+                action: "condition",
+                callBack: () => {
+                    const receiptQueryString = [
+                        { key: "receiptNumbers", value: applicationNumber },
+                        { key: "tenantId", value: tenant }
+                    ]
+                    download(receiptQueryString,"print");
+                }
+            }
         }
-        // printFormButton: {
-        //     componentPath: "Button",
-        //     props: {
-        //         variant: "contained",
-        //         color: "primary",
-        //         // className: "apply-wizard-footer-right-button",
-        //         style: {
-        //             minWidth: "290px",
-        //             height: "48px",
-        //             marginRight: "16px"
-        //         },
-        //         // disabled: true
-        //     },
-        //     children: {
-        //         printFormButtonLabel: getLabel({
-        //             labelName: "PRINT RECEIPT",
-        //             labelKey: "COMMON_PRINT_RECEIPT"
-        //         })
-        //     },
-        //     onClickDefination: {
-        //         action: "condition",
-        //         callBack: () => {
-        //             const receiptQueryString = [
-        //                 { key: "receiptNumbers", value: applicationNumber },
-        //                 { key: "tenantId", value: tenant }
-        //             ]
-        //             download(receiptQueryString,"print");
-        //         }
-        //     }
-        // }
     });
 };

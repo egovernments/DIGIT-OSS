@@ -12,9 +12,10 @@ import { searchApiCall } from "./function";
 import { handleScreenConfigurationFieldChange as handleField,prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId,getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
-const tenantId = process.env.REACT_APP_NAME === "Employee" ?  getTenantId() : JSON.parse(getUserInfo()).permanentCity;
-
+// const tenantId = process.env.REACT_APP_NAME === "Employee" ?  getTenantId() : JSON.parse(getUserInfo()).permanentCity;
+// console.log("tenantId--- ", tenantId);
 const resetFields = (state, dispatch) => {
+  const tenantId = process.env.REACT_APP_NAME === "Employee" ?  getTenantId() : JSON.parse(getUserInfo()).permanentCity;
   dispatch(
     handleField(
       "billSearch",
@@ -70,10 +71,6 @@ export const billSearchCard = getCommonCard({
       jsonPath: "searchScreen.tenantId",
       required: true,
       disabled: process.env.REACT_APP_NAME === "Citizen" ? false : true,
-      props: {
-        value: tenantId,
-        disabled: process.env.REACT_APP_NAME === "Citizen" ? false : true
-      },
       gridDefination: {
         xs: 12,
         sm: 4

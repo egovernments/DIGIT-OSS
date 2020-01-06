@@ -5,7 +5,7 @@ import {
   getCommonGrayCard,
   getCommonContainer
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { handleScreenConfigurationFieldChange as handleField,prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   getQueryArg,
   setBusinessServiceDataToLocalStorage,
@@ -19,7 +19,7 @@ import {
   getDialogButton
 } from "../utils";
 
-import { footerReview ,downloadPrintContainer} from "./applyResource/footer";
+import { footerReview, downloadPrintContainer } from "./applyResource/footer";
 import {
   getFeesEstimateCard,
   getHeaderSideText,
@@ -112,11 +112,11 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
     get(payload, "Licenses[0].licenseNumber")
   );
   set(payload, "Licenses[0].headerSideText", headerSideText);
-
+  set(payload, "Licenses[0].assignee", []);
   get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory") &&
-  get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory").split(
-    "."
-  )[0] === "INDIVIDUAL"
+    get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory").split(
+      "."
+    )[0] === "INDIVIDUAL"
     ? setMultiOwnerForSV(action, true)
     : setMultiOwnerForSV(action, false);
 
@@ -133,6 +133,7 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
     "LicensesTemp[0].reviewDocData",
     dispatch
   );
+
   let sts = getTransformedStatus(get(payload, "Licenses[0].status"));
   payload && dispatch(prepareFinalObject("Licenses[0]", payload.Licenses[0]));
   payload &&
@@ -187,34 +188,34 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     }
 
     const statusCont = {
-        word1: {
-          ...getCommonTitle(
-            {
-              jsonPath: "Licenses[0].headerSideText.word1"
-            },
-            {
-              style: {
-                marginRight: "10px",
-                color: "rgba(0, 0, 0, 0.6000000238418579)"
-              }
+      word1: {
+        ...getCommonTitle(
+          {
+            jsonPath: "Licenses[0].headerSideText.word1"
+          },
+          {
+            style: {
+              marginRight: "10px",
+              color: "rgba(0, 0, 0, 0.6000000238418579)"
             }
-          )
-        },
-        word2: {
-          ...getCommonTitle({
-            jsonPath: "Licenses[0].headerSideText.word2"
-          })
-        },
-        cancelledLabel: {
-          ...getCommonHeader(
-            {
-              labelName: "Cancelled",
-              labelKey: "TL_COMMON_STATUS_CANC"
-            },
-            { variant: "body1", style: { color: "#E54D42" } }
-          ),
-          visible: false
-        }
+          }
+        )
+      },
+      word2: {
+        ...getCommonTitle({
+          jsonPath: "Licenses[0].headerSideText.word2"
+        })
+      },
+      cancelledLabel: {
+        ...getCommonHeader(
+          {
+            labelName: "Cancelled",
+            labelKey: "TL_COMMON_STATUS_CANC"
+          },
+          { variant: "body1", style: { color: "#E54D42" } }
+        ),
+        visible: false
+      }
     };
 
     const printCont = downloadPrintContainer(
@@ -520,11 +521,35 @@ const screenConfig = {
           uiFramework: "custom-containers-local",
           componentPath: "WorkFlowContainer",
           moduleName: "egov-workflow",
-          visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
+          // visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
           props: {
             dataPath: "Licenses",
             moduleName: "NewTL",
             updateUrl: "/tl-services/v1/_update"
+          }
+        },
+        actionDialog: {
+          uiFramework: "custom-containers-local",
+          componentPath: "ResubmitActionContainer",
+          moduleName: "egov-tradelicence",
+          visible: process.env.REACT_APP_NAME === "Citizen" ? true : false,
+          props: {
+            open: true,
+            dataPath: "Licenses",
+            moduleName: "NewTL",
+            updateUrl: "/tl-services/v1/_update",
+            data: {
+              buttonLabel: "FORWARD",
+              moduleName: "NewTL",
+              isLast: false,
+              dialogHeader: {
+                labelName: "RESUBMIT Application",
+                labelKey: "WF_RESUBMIT_APPLICATION"
+              },
+              showEmployeeList: false,
+              roles: "CITIZEN",
+              isDocRequired: false
+            }
           }
         },
         tradeReviewDetails

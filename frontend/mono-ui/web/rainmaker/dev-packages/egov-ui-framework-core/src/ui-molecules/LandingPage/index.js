@@ -67,8 +67,14 @@ class LandingPage extends React.Component {
     return (
       <Grid container className="landing-page-main-grid">
         {items.map(obj => {
-          return (
-            <Grid className={classes.item} item xs={6} sm={6} align="center">
+          return !obj.hide ? (
+            <Grid
+              className={classes.item}
+              item
+              xs={12 / items.length}
+              sm={12 / items.length}
+              align="center"
+            >
               <Card
                 className={`${classes.paper} module-card-style`}
                 onClick={() => this.onCardCLick(obj.route)}
@@ -89,7 +95,7 @@ class LandingPage extends React.Component {
                 </CardContent>
               </Card>
             </Grid>
-          );
+          ) : null;
         })}
       </Grid>
     );
@@ -103,7 +109,7 @@ const mapStateToProps = state => {
     state.screenConfiguration.preparedFinalObject,
     "myApplicationsCount"
   );
-  return { screenConfig, moduleName,applicationCount };
+  return { screenConfig, moduleName, applicationCount };
 };
 
 const mapDispatchToProps = dispatch => {
