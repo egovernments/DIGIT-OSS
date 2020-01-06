@@ -39,7 +39,6 @@ public class AssessmentQueryBuilder {
 		String baseQuery = ASSESSMENT_SEARCH_QUERY;
 		StringBuilder finalQuery = new StringBuilder();
 		finalQuery.append(baseQuery);
-		addWhereClause(finalQuery, criteria, preparedStatementValues);
 		
 		return addWhereClause(finalQuery, criteria, preparedStatementValues);
 	}
