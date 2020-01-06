@@ -29,8 +29,6 @@ import { httpRequest } from "./api";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import jp from "jsonpath";
 
-
-
 const handleDeletedCards = (jsonObject, jsonPath, key) => {
   let originalArray = get(jsonObject, jsonPath, []);
   let modifiedArray = originalArray.filter(element => {
@@ -143,56 +141,53 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
 
   let documentsUpdalod = get(
     state,
-    "screenConfiguration.preparedFinalObject.documentDetailsUploadRedux", []
+    "screenConfiguration.preparedFinalObject.documentDetailsUploadRedux",
+    []
   );
 
   let documnts = [];
- if(documentsUpdalod) {
-  Object.keys(documentsUpdalod).forEach(function(key) {
-    documnts.push(documentsUpdalod[key])
-  });
- }
-  
-  let nocDocumentsUpload = get (
+  if (documentsUpdalod) {
+    Object.keys(documentsUpdalod).forEach(function(key) {
+      documnts.push(documentsUpdalod[key]);
+    });
+  }
+
+  let nocDocumentsUpload = get(
     state,
     "screenConfiguration.preparedFinalObject.nocDocumentsUploadRedux"
   );
-  
-  if(nocDocumentsUpload) {
+
+  if (nocDocumentsUpload) {
     Object.keys(nocDocumentsUpload).forEach(function(key) {
-      documnts.push(nocDocumentsUpload[key])
+      documnts.push(nocDocumentsUpload[key]);
     });
   }
-  
+
   let requiredDocuments = [];
-  if(documnts && documnts.length > 0){
+  if (documnts && documnts.length > 0) {
     documnts.forEach(documents => {
-    if(documents && documents.documents){
-      let doc = {};
-      if(documents.dropDownValues) {
-      doc.documentType = documents.dropDownValues.value;
+      if (documents && documents.documents) {
+        let doc = {};
+        if (documents.dropDownValues) {
+          doc.documentType = documents.dropDownValues.value;
+        }
+        doc.fileStore = documents.documents[0].fileStoreId;
+        doc.fileName = documents.documents[0].fileName;
+        doc.fileUrl = documents.documents[0].fileUrl;
+        requiredDocuments.push(doc);
       }
-      doc.fileStore = documents.documents[0].fileStoreId;
-      doc.fileName = documents.documents[0].fileName;
-      doc.fileUrl = documents.documents[0].fileUrl;
-      requiredDocuments.push(doc);
-    }
-  })
-}
+    });
+  }
 
   try {
-    let payload = get(
-      state.screenConfiguration.preparedFinalObject,
-      "BPA",
-      []
-    );
-    let tenantId = get(
-      state,
-      "screenConfiguration.preparedFinalObject.BPA.address.city"
-    ) || getQueryArg(window.location.href, "tenantId") || getTenantId();
+    let payload = get(state.screenConfiguration.preparedFinalObject, "BPA", []);
+    let tenantId =
+      get(state, "screenConfiguration.preparedFinalObject.BPA.address.city") ||
+      getQueryArg(window.location.href, "tenantId") ||
+      getTenantId();
     set(payload, "tenantId", tenantId);
     set(payload, "action", status);
-    
+
     set(payload, "additionalDetails", {});
     set(payload, "units", null);
 
@@ -219,36 +214,36 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
     //   })
     // });
     let documents;
-    if(requiredDocuments && requiredDocuments.length >0){
+    if (requiredDocuments && requiredDocuments.length > 0) {
       documents = requiredDocuments;
-    }else{
+    } else {
       documents = null;
     }
 
     let wfDocuments;
-    if (method === 'UPDATE') {
+    if (method === "UPDATE") {
       documents = payload.documents;
       //hard coding these values but time being untill we fix documents capture issue.
       //TODO: remove this block once WF Documents integrated
       wfDocuments = [
         {
-          "documentType": "APPL.LOCALBODY.DTCP_APPROVAL",
-          "id": "wf-doc-01",
-          "fileStore": "firestore-0111"
+          documentType: "APPL.LOCALBODY.DTCP_APPROVAL",
+          id: "wf-doc-01",
+          fileStore: "firestore-0111"
         },
         {
-          "documentType": "APPL.BUILDING_DIAGRAM.SECTION_PLAN",
-          "id": "wf-doc-02",
-          "fileStore": "firestore-01"
+          documentType: "APPL.BUILDING_DIAGRAM.SECTION_PLAN",
+          id: "wf-doc-02",
+          fileStore: "firestore-01"
         }
       ];
       documents = requiredDocuments;
       set(payload, "documents", documents);
       set(payload, "wfDocuments", wfDocuments);
-    } else if( method === 'CREATE') {
+    } else if (method === "CREATE") {
       documents = null;
     }
-    
+
     payload.documents = documents;
 
     // Set Channel and Financial Year
@@ -258,7 +253,7 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
     set(payload[0], "BPA.financialYear", "2019-20");
 
     // Set Dates to Epoch
-    
+
     let owners = get(payload, "owners", []);
     owners.forEach((owner, index) => {
       set(
@@ -274,7 +269,7 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
         "bpa-services/bpa/appl/_create",
         "",
         [],
-        { BPA : payload }
+        { BPA: payload }
       );
       // response = prepareOwnershipType(response);
       dispatch(prepareFinalObject("BPA", response.Bpa[0]));
@@ -325,13 +320,13 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
   const bpaDocuments = documentsList;
   let documentsContract = [];
   let tempDoc = {};
-  
+
   bpaDocuments.forEach(doc => {
     let card = {};
-    card["code"] = doc.code.split('.')[0];
-    card["title"] = doc.code.split('.')[0];
+    card["code"] = doc.code.split(".")[0];
+    card["title"] = doc.code.split(".")[0];
     card["cards"] = [];
-    tempDoc[doc.code.split('.')[0]] = card;
+    tempDoc[doc.code.split(".")[0]] = card;
   });
   bpaDocuments.forEach(doc => {
     let card = {};
@@ -350,24 +345,24 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
       });
       card["dropDownValues"] = dropDownValues;
     }
-    tempDoc[doc.code.split('.')[0]].cards.push(card);
+    tempDoc[doc.code.split(".")[0]].cards.push(card);
   });
-  
+
   Object.keys(tempDoc).forEach(key => {
     documentsContract.push(tempDoc[key]);
   });
-  let documentDetailsContract = [], nocDetailsContract = []
+  let documentDetailsContract = [],
+    nocDetailsContract = [];
   documentsContract.forEach(doc => {
-    if(doc.code == "NOC"){
+    if (doc.code == "NOC") {
       nocDetailsContract.push(doc);
-    }else{
+    } else {
       documentDetailsContract.push(doc);
     }
-  })
+  });
   dispatch(prepareFinalObject("documentsContract", documentDetailsContract));
   dispatch(prepareFinalObject("nocDocumentsContract", nocDetailsContract));
 };
-
 
 export const prepareNOCUploadData = (state, dispatch) => {
   return;
@@ -459,10 +454,7 @@ export const prepareNOCUploadData = (state, dispatch) => {
 export const prepareOwnershipType = response => {
   console.log(response);
   // Handle applicant ownership dependent dropdowns
-  let ownershipCategory = get(
-    response,
-    "BPA.ownerShipType"
-  );
+  let ownershipCategory = get(response, "BPA.ownerShipType");
   set(
     response,
     "BPA.ownershipCategory",
@@ -554,7 +546,7 @@ export const updatePFOforSearchResults = async (
   }
   set(payload, getCheckBoxJsonpath(queryValuePurpose), true);
 
-  setApplicationNumberBox(state, dispatch);
+  setApplicationNumberBoxBPAREG(state, dispatch);
 
   createOwnersBackup(dispatch, payload);
 };
@@ -592,6 +584,39 @@ const userAddressConstruct = address => {
   let landmark = address.landmark ? address.landmark : "";
   let city = address.city ? address.city : "";
   return `${doorNo},${buildingName},${street},${landmark},${city}`;
+};
+
+export const setApplicationNumberBoxBPAREG = (
+  state,
+  dispatch,
+  applicationNo
+) => {
+  if (!applicationNo) {
+    applicationNo = get(
+      state,
+      "screenConfiguration.preparedFinalObject.Licenses[0].applicationNumber",
+      null
+    );
+  }
+
+  if (applicationNo) {
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.headerDiv.children.header.children.applicationNumber",
+        "visible",
+        true
+      )
+    );
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.headerDiv.children.header.children.applicationNumber",
+        "props.number",
+        applicationNo
+      )
+    );
+  }
 };
 
 export const applyTradeLicense = async (state, dispatch, activeIndex) => {
@@ -746,7 +771,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       createOwnersBackup(dispatch, response);
     }
     /** Application no. box setting */
-    setApplicationNumberBox(state, dispatch);
+    setApplicationNumberBoxBPAREG(state, dispatch);
     return true;
   } catch (error) {
     dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
