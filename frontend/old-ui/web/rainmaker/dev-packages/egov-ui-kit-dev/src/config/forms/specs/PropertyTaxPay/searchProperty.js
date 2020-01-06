@@ -61,6 +61,18 @@ const formConfig = {
       value: "",
       pattern: /^[^\$\"'<>?\\\\~`!@$%^+={}*,.:;“”‘’]{1,64}$/i
     },
+    applicationNumber: {
+      id: "application-number",
+      jsonPath: "",
+      type: "textfield",
+      floatingLabelText: "PT_PROPERTY_APPLICATION_NUMBER",
+      errorMessage: "",
+      hintText: "PT_PROPERTY_APPLICATION_NUMBER_PLACEHOLDER",
+      numcols: 4,
+      errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
+      maxLength: 64,
+      value: "",
+    },
   },
   submit: {
     type: "submit",

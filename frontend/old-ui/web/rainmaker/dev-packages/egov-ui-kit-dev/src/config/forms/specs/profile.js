@@ -1,3 +1,4 @@
+import {getLocaleLabels} from "egov-ui-framework/ui-utils/commons.js";
 const formConfig = {
   name: "profile",
   fields: {
@@ -36,7 +37,7 @@ const formConfig = {
     id: "profile-save-action",
     type: "submit",
   },
-  toast: "Profile is Successfully Updated",
+  toast: getLocaleLabels("PROFILE_UPDATED","PROFILE_UPDATED"),
   saveUrl: "/user/profile/_update",
 };
 

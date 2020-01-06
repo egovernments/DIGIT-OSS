@@ -4,6 +4,7 @@ import { withStyles } from "@material-ui/core/styles";
 import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
+import { LabelContainer } from "egov-ui-framework/ui-containers";
 import "./index.scss";
 
 const styles = {
@@ -43,7 +44,10 @@ class CheckboxLabels extends React.Component {
               }}
             />
           }
-          label={content}
+          label={<LabelContainer
+            labelName={content}
+            labelKey={content}
+          />}
         />
       </FormGroup>
     );

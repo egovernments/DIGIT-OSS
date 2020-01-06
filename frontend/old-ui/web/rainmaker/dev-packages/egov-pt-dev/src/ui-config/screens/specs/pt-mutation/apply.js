@@ -1,15 +1,22 @@
+
 import {
+  getCommonCard,
   getCommonContainer,
   getCommonHeader,
   getStepperObject
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getCurrentFinancialYear } from "../utils";
 import { footer } from "./applyResource/footer";
-import { nocDetails } from "./applyResource/nocDetails";
+import {mutationDetails
+   } from "./applyResourceMutation/mutationDetails";
+   import {registrationDetails} from "./applyResourceMutation/registrationDetails";
+   import {transferorDetails} from "./applyResourceMutation/transferorDetails";
+   import {
+    transferorSummary,transferorInstitutionSummary
+  } from "./summaryResource/transferorSummary";
 import { propertyDetails } from "./applyResource/propertyDetails";
 import { propertyLocationDetails } from "./applyResource/propertyLocationDetails";
-import { applicantDetails } from "./applyResource/applicantDetails";
-import { documentDetails } from "./applyResource/documentDetails";
+
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import {
   prepareFinalObject,
@@ -30,7 +37,15 @@ import {
   furnishNocResponse,
   setApplicationNumberBox
 } from "../../../../ui-utils/commons";
+import { propertySummary } from "./summaryResource/propertySummary";
+import { transfereeSummary } from "./summaryResource/transfereeSummary";
+import { registrationSummary } from "./summaryResource/registrationSummary";
+import { declarationSummary } from "./summaryResource/declarationSummary";
 
+import { documentsSummary } from "./summaryResource/documentsSummary";
+import { mutationSummary } from "./applyResourceMutation/mutationSummary";
+import {documentDetails} from "./applyResourceMutation/mutationDocuments";
+import {transfereeDetails} from './applyResourceMutation/transfereeDetails'
 export const stepsData = [
   { labelName: "Transfer Details", labelKey: "PT_MUTATION_TRANSFER_DETAILS" },
   { labelName: "Document Upload", labelKey: "PT_MUTATION_DOCUMENT_UPLOAD" },
@@ -71,11 +86,17 @@ export const header = getCommonContainer({
     moduleName: "egov-pt",
     componentPath: "ApplicationNoContainer",
     props: {
-      number: "NA"
+      number: "NA",
+      label: {
+        labelValue: "Application No.",
+        labelKey: "PT_MUTATION_APPLICATION_NO"
+    }
     },
     visible: false
   }
 });
+
+
 
 export const formwizardFirstStep = {
   uiFramework: "custom-atoms",
@@ -84,7 +105,10 @@ export const formwizardFirstStep = {
     id: "apply_form1"
   },
   children: {
-    nocDetails
+    transferorDetails,
+    transfereeDetails,
+    mutationDetails,
+    registrationDetails
   }
 };
 
@@ -95,8 +119,7 @@ export const formwizardSecondStep = {
     id: "apply_form2"
   },
   children: {
-    propertyDetails,
-    propertyLocationDetails
+    documentDetails:documentDetails
   },
   visible: false
 };
@@ -107,23 +130,23 @@ export const formwizardThirdStep = {
   props: {
     id: "apply_form3"
   },
-  children: {
-    applicantDetails
+  children:{
+    summary:getCommonCard({  
+      transferorSummary: transferorSummary,
+      // transferorInstitutionSummary:transferorInstitutionSummary,
+      transfereeSummary: transfereeSummary,
+      // transfereeInstitutionSummary: transfereeInstitutionSummary,
+      mutationSummary:mutationSummary,
+      registrationSummary:registrationSummary,
+      documentsSummary: documentsSummary ,
+      declarationSummary:declarationSummary
+    }),
+ 
   },
+  
   visible: false
 };
 
-export const formwizardFourthStep = {
-  uiFramework: "custom-atoms",
-  componentPath: "Form",
-  props: {
-    id: "apply_form4"
-  },
-  children: {
-    documentDetails
-  },
-  visible: false
-};
 
 const getMdmsData = async (action, state, dispatch) => {
   let tenantId =
@@ -291,7 +314,7 @@ const screenConfig = {
     const step = getQueryArg(window.location.href, "step");
 
     //Set Module Name
-    set(state, "screenConfiguration.moduleName", "fire-noc");
+    set(state, "screenConfiguration.moduleName", "pt-mutation");
 
     // Set MDMS Data
     getMdmsData(action, state, dispatch).then(response => {
@@ -315,7 +338,7 @@ const screenConfig = {
         "screenConfiguration.preparedFinalObject.applyScreenMdmsData.common-masters.OwnerShipCategory",
         []
       );
-      ownershipCategory = getFirstListFromDotSeparated(ownershipCategory);
+    //  ownershipCategory = getFirstListFromDotSeparated(ownershipCategory);
       dispatch(
         prepareFinalObject(
           "applyScreenMdmsData.DropdownsData.OwnershipCategory",
@@ -330,29 +353,6 @@ const screenConfig = {
     // Search in case of EDIT flow
     prepareEditFlow(state, dispatch, applicationNumber, tenantId);
 
-    // // Set Property City
-    // dispatch(prepareFinalObject("FireNOCs[0].fireNOCDetails.propertyDetails.address.city", getTenantId()));
-
-    // // Handle dependent dropdowns in edit flow
-    // set(
-    //   "apply",
-    //   "components.div.children.formwizardSecondStep.children.propertyDetails.children.cardContent.children.propertyDetailsConatiner.children.buildingDataCard.children.singleBuildingContainer.children.singleBuilding.children.cardContent.children.singleBuildingCard.children.buildingSubUsageType",
-    //   { display: "none" }
-    // );
-
-    // let pfo = {};
-    // if (applicationNumber && !step) {
-    //   pfo = searchSampleResponse();
-    //   dispatch(prepareFinalObject("FireNOCs[0]", get(pfo, "FireNOCs[0]")));
-    // }
-    // if (step && get(state, "screenConfiguration.preparedFinalObject")) {
-    //   pfo = get(
-    //     state,
-    //     "screenConfiguration.preparedFinalObject.FireNOCs[0]",
-    //     {}
-    //   );
-    // }
-
     // Code to goto a specific step through URL
     if (step && step.match(/^\d+$/)) {
       let intStep = parseInt(step);
@@ -364,8 +364,7 @@ const screenConfig = {
       let formWizardNames = [
         "formwizardFirstStep",
         "formwizardSecondStep",
-        "formwizardThirdStep",
-        "formwizardFourthStep"
+        "formwizardThirdStep"
       ];
       for (let i = 0; i < 4; i++) {
         set(
@@ -473,7 +472,17 @@ const screenConfig = {
     //     {}
     //   );
     // }
-
+    set(
+      action.screenConfig,
+      "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.propertySummary.children.cardContent.children.header.children.editSection.visible",
+      false
+    );
+    set(
+      action.screenConfig,
+      "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorSummary.children.cardContent.children.header.children.editSection.visible",
+      false
+    );
+ 
     return action;
   },
   components: {
@@ -501,7 +510,6 @@ const screenConfig = {
         formwizardFirstStep,
         formwizardSecondStep,
         formwizardThirdStep,
-        formwizardFourthStep,
         footer
       }
     }

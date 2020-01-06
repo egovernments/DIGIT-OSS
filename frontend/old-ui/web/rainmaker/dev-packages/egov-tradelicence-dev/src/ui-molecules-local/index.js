@@ -11,6 +11,10 @@ const RadioButtonsGroup = Loadable({
   loader: () => import("./RadioGroup"),
   loading: () => <Loading />
 });
+const ActionDialog = Loadable({
+  loader: () => import("./ActionDialog"),
+  loading: () => <Loading />
+});
 
 const Tooltip = Loadable({
   loader: () => import("./Tooltip"),
@@ -61,5 +65,6 @@ export {
   DocumentList,
   MapLocator,
   FeesEstimateCard,
-  HowItWorks
+  HowItWorks,
+  ActionDialog
 };

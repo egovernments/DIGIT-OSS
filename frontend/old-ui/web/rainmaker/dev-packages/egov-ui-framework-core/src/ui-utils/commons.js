@@ -249,17 +249,19 @@ export const addWflowFileUrl = async (ProcessInstances, prepareFinalObject) => {
   processInstances.map(item => {
     if (item.documents && item.documents.length > 0) {
       item.documents.forEach(i => {
-        i.link = fileUrlPayload[i.fileStoreId].split(",")[0];
-        i.title = `TL_${i.documentType}`;
-        i.name = decodeURIComponent(
-          fileUrlPayload[i.fileStoreId]
-            .split(",")[0]
-            .split("?")[0]
-            .split("/")
-            .pop()
-            .slice(13)
-        );
-        i.linkText = "View";
+        if (i.fileStoreId) {
+          i.link = fileUrlPayload[i.fileStoreId].split(",")[0];
+          i.title = `TL_${i.documentType}`;
+          i.name = decodeURIComponent(
+            fileUrlPayload[i.fileStoreId]
+              .split(",")[0]
+              .split("?")[0]
+              .split("/")
+              .pop()
+              .slice(13)
+          );
+          i.linkText = "View";
+        }
       });
     }
   });
@@ -371,7 +373,7 @@ export const handleFileUpload = (event, handleDocument, props) => {
 
 //localizations
 export const getTransformedLocale = label => {
-  return label.toUpperCase().replace(/[.:-\s\/]/g, "_");
+  return label && label.toUpperCase().replace(/[.:-\s\/]/g, "_");
 };
 
 export const appendModulePrefix = (value, localePrefix) => {
@@ -556,8 +558,7 @@ export const getUserDataFromUuid = async bodyObject => {
   }
 };
 
-export const getCommonPayUrl = (dispatch , applicationNo, tenantId) => {
-    const url = `/egov-common/pay?consumerCode=${applicationNo}&tenantId=${tenantId}`;
-      dispatch(setRoute(url));
+export const getCommonPayUrl = (dispatch, applicationNo, tenantId) => {
+  const url = `/egov-common/pay?consumerCode=${applicationNo}&tenantId=${tenantId}`;
+  dispatch(setRoute(url));
 };
- 

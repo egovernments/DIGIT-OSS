@@ -30,7 +30,7 @@ const PTInformation = ({ items, label, onItemClick, innerDivStyle, hoverColor, p
                         <div className="col-sm-12 col-xs-12" style={{ alignItems: "center" }}>
                             <PropertyAddressInfo properties={properties} generalMDMSDataById={generalMDMSDataById}></PropertyAddressInfo>
                             <AssessmentInfo properties={properties} generalMDMSDataById={generalMDMSDataById} ></AssessmentInfo>
-                            <OwnerInfo properties={properties} generalMDMSDataById={generalMDMSDataById} ownershipTransfer={true} viewHistory={true}></OwnerInfo>
+                            <OwnerInfo properties={properties} generalMDMSDataById={generalMDMSDataById} totalBillAmountDue={totalBillAmountDue} ownershipTransfer={true} viewHistory={true}></OwnerInfo>
                             {/* <Card style={{ backgroundColor: 'rgb(242,242,242)', boxShadow: 'none' }}
                                 textChildren={
                                     <div >

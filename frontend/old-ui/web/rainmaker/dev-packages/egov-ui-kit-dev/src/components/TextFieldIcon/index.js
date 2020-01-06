@@ -23,7 +23,7 @@ const getStyles = (iconPosition, textFieldProps) => {
     color: "#969696",
     zIndex: 2,
     bottom: 0,
-    top: 0,
+    top: 15,
     margin: "auto",
     cursor: "pointer"
   };
