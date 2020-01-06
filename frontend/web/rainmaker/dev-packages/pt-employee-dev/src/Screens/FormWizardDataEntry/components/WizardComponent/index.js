@@ -9,8 +9,8 @@ import "./index.css";
 const ptSteps = [
   "PT_PROPERTY_ADDRESS_SUB_HEADER",
   "PT_ASSESMENT_INFO_SUB_HEADER",
-  "PT_DEMAND_AND_COLLECTION",
   "PT_OWNERSHIP_INFO_SUB_HEADER",
+  "PT_DEMAND_AND_COLLECTION",
   "PT_COMMON_SUMMARY"
 ];
 
@@ -71,7 +71,7 @@ const WizardComponent = ({
             buttonStyle={{ border: "1px solid #fe7a51" }}
             style={{ marginRight: 45, width: "30%" }}
           />}
-          {selected == 5 && <Button
+          {selected == 6 && <Button
             label={<Label buttonLabel={true} label={backLabel} color="#fe7a51" />}
             onClick={() => {
               downloadAcknowledgementForm();

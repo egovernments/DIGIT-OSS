@@ -423,7 +423,7 @@ class FormWizardDataEntry extends Component {
     const titleObject = isReasses
       ? ["PT_REASSESS_PROPERTY"]
       : [
-          "PT_PROPERTY_ASSESSMENT_HEADER",
+          "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER",
           `(${financialYearFromQuery})`,
           ":",
           "PT_ADD_NEW_PROPERTY"
@@ -556,18 +556,7 @@ class FormWizardDataEntry extends Component {
             )}
           </div>
         );
-
       case 2:
-        return (
-          <div>
-            <DemandCollection
-              disabled={fromReviewPage}
-              datas={this.props.finalData}
-            />
-          </div>
-        );
-
-      case 3:
         const ownerType = getSelectedCombination(
           this.props.form,
           "ownershipType",
@@ -579,6 +568,15 @@ class FormWizardDataEntry extends Component {
             {getOwnerDetails(ownerType)}
           </div>
         );
+        case 3:
+          return (
+            <div>
+              <DemandCollection
+                disabled={fromReviewPage}
+                datas={this.props.finalData}
+              />
+            </div>
+          );
 
       case 4:
         return (
@@ -608,11 +606,11 @@ class FormWizardDataEntry extends Component {
               receiptHeader="PT_ASSESSMENT_NO"
               messageHeader={this.getMessageHeader()}
               message={this.getMessage()}
-              receiptNo={
-                assessedPropertyDetails["Properties"][0]["propertyDetails"][0][
-                  "assessmentNumber"
-                ]
-              }
+              // receiptNo={
+              //   assessedPropertyDetails["Properties"][0]["propertyDetails"][0][
+              //     "assessmentNumber"
+              //   ]
+              // }
             />
           </div>
         );
@@ -673,7 +671,7 @@ class FormWizardDataEntry extends Component {
         ? (buttonLabel = "PT_UPDATE_ASSESSMENT")
         : (buttonLabel = "PT_ADD_ASSESS_PROPERTY");
     } else if (index == 5) {
-      buttonLabel = "PT_PROCEED_PAYMENT";
+      buttonLabel = "PT_HOME";
     } else if (index == 6) {
       buttonLabel = "PT_GENERATE_RECEIPT";
     } else if (index == 7) {
@@ -739,7 +737,7 @@ class FormWizardDataEntry extends Component {
       getQueryValue(search, "isAssesment").replace("false", "")
     );
     let headerObj = {};
-    headerObj.header = "PT_PROPERTY_INFORMATION";
+    headerObj.header = "PT_DEMAND_PROPERTY_INFORMATION";
     headerObj.headerValue = "";
     headerObj.subHeaderValue = propertyId;
     switch (selected) {
@@ -749,41 +747,49 @@ class FormWizardDataEntry extends Component {
         headerObj.subHeaderValue = propertyId;
         headerObj.headerValue = "(" + assessmentYear + ")";
         isAssesment
-          ? (headerObj.header = "PT_PROPERTY_ASSESSMENT_HEADER")
+          ? (headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER")
           : isReassesment
           ? (headerObj.header = "PT_REASSESS_PROPERTY")
           : ((headerObj.headerValue =
               headerObj.headerValue + ":" + addNewPropertyLabel),
             (headerObj.subHeaderValue = ""),
-            (headerObj.header = "PT_PROPERTY_ASSESSMENT_HEADER"));
+            (headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER"));
         break;
       case 3:
         headerObj.subHeaderValue = propertyId;
         isAssesment
-          ? (headerObj.header = "PT_PROPERTY_ASSESSMENT_HEADER")
+          ? (headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER")
           : isReassesment
           ? (headerObj.header = "PT_REASSESS_PROPERTY")
           : ((headerObj.subHeaderValue = ""),
-            (headerObj.header = "PT_PROPERTY_ASSESSMENT_HEADER"));
+            (headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER"));
         headerObj.headerValue = "(" + assessmentYear + ")";
         break;
       case 4:
         headerObj.subHeaderValue = propertyId;
         isAssesment
-          ? (headerObj.header = "PT_PROPERTY_ASSESSMENT_HEADER")
+          ? (headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER")
           : isReassesment
-          ? (headerObj.header = "PT_REASSESS_PROPERTY")
-          : (headerObj.header = "PT_PROPERTY_ASSESSMENT_HEADER");
+          ? (headerObj.header = "PT_DEMAND_REASSESS_PROPERTY")
+          : (headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER");
         headerObj.headerValue = "(" + assessmentYear + ")";
         break;
       case 5:
+      headerObj.subHeaderValue = propertyId;
+      isAssesment
+        ? (headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER")
+        : isReassesment
+        ? (headerObj.header = "PT_DEMAND_REASSESS_PROPERTY")
+        : (headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER");
+      headerObj.headerValue = "(" + assessmentYear + ")";
+      break;
       case 6:
         headerObj.headerValue = "(" + assessmentYear + ")";
-        headerObj.header = "PT_PAYMENT_HEADER";
+        headerObj.header = "PT_DEMAND_PAYMENT_HEADER";
         headerObj.subHeaderValue = propertyId;
         break;
       default:
-        headerObj.header = "PT_PROPERTY_INFORMATION";
+        headerObj.header = "PT_DEMAND_PROPERTY_INFORMATION";
         headerObj.subHeaderValue = propertyId;
     }
     return headerObj;
@@ -917,14 +923,8 @@ class FormWizardDataEntry extends Component {
         }
         getImportantDates(this);
         break;
-      case 2:
-        this.setState({
-          selected: index,
-          formValidIndexArray: [...formValidIndexArray, selected]
-        });
-        break;
 
-      case 3:
+      case 2:
         if (
           window.appOverrides &&
           !window.appOverrides.validateForm("ownerInfo", form)
@@ -1038,7 +1038,12 @@ class FormWizardDataEntry extends Component {
           }
         }
         break;
-
+        case 3:
+          this.setState({
+            selected: index,
+            formValidIndexArray: [...formValidIndexArray, selected]
+          });
+          break;
       case 4:
         window.scrollTo(0, 0);
         createAndUpdate(index);
@@ -1053,7 +1058,7 @@ class FormWizardDataEntry extends Component {
           tenantId = pty.tenantId;
         }
         this.props.history.push(
-          `./../egov-common/pay?consumerCode=${propertyId}&tenantId=${tenantId}`
+          `/property-tax/search-property`
         );
         // this.setState(
         //   {

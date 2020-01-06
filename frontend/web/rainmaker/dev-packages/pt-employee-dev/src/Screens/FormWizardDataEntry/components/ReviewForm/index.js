@@ -82,8 +82,8 @@ class ReviewForm extends Component {
             <div className="col-sm-12 col-xs-12" style={{ alignItems: "center" }}>
               <PropertyAddressInfo loadMdmsData={loadMdmsData}  generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={<EditIcon onIconClick={() => onEditButtonClick(0)} />}></PropertyAddressInfo>
               <AssessmentInfo generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={<EditIcon onIconClick={() => onEditButtonClick(1)} />}></AssessmentInfo>
-               <DemandCollectionInfo generalMDMSDataById={generalMDMSDataById} demandProperties={DemandProperties} properties={this.props.properties} editIcon={<EditIcon onIconClick={() => onEditButtonClick(2)} />}></DemandCollectionInfo>
-              <OwnerInfo generalMDMSDataById={generalMDMSDataById} properties={this.props.properties}  editIcon={<EditIcon onIconClick={() => onEditButtonClick(3)} />}></OwnerInfo>
+              <OwnerInfo generalMDMSDataById={generalMDMSDataById} properties={this.props.properties}  editIcon={<EditIcon onIconClick={() => onEditButtonClick(2)} />}></OwnerInfo>
+              <DemandCollectionInfo generalMDMSDataById={generalMDMSDataById} demandProperties={DemandProperties} properties={this.props.properties} editIcon={<EditIcon onIconClick={() => onEditButtonClick(3)} />}></DemandCollectionInfo>
             </div>
           }
         />
