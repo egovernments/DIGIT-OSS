@@ -262,7 +262,7 @@ class TableData extends Component {
       initialInboxData: tempObject
     });
   }
-  prepareInboxDataRows = async (data) => {
+  prepareInboxDataRows = async (data,all) => {
     const { toggleSnackbarAndSetText } = this.props;
     if (isEmpty(data)) return [];
     const businessIds = data.map((item) => {
@@ -301,8 +301,12 @@ class TableData extends Component {
         "error"
       );
     }
+    let localityDropdownList=[];
+    let moduleDropdownList=[];
+    let statusDropdownList=[];
 
-    return data.map((item) => {
+
+    const initialData = data.map((item) => {
       const locality = localitymap.find(locality => {
         return locality.referencenumber === item.businessId;
       })
@@ -325,13 +329,12 @@ class TableData extends Component {
       let row4 = { text: Math.round(sla), badge: true };
       let row5 = { historyButton: true };
 
-      // f (row[0].text.toLowerCase().includes(value.toLowerCase()) ||
-      //       row[3].text.props.label.toLowerCase().includes(value.toLowerCase()) ||
-      //       String(row[4].text).toLowerCase().includes(value.toLowerCase()) ||
-      //       getLocaleLabels(`CS_COMMON_INBOX_${row[2].text.props.label.split('_')[1]}`).toLowerCase().includes(value.toLowerCase()) ||
-      //       getLocaleLabels(row[1].text.props.label).toLowerCase().includes(value.toLowerCase()) ||
-      //       getLocaleLabels(row[2].text.props.label).toLowerCase().includes(value.toLowerCase())
-
+      let localityDropdown = { label: getLocaleLabels(row1.text.props.label), value: row1.text.props.label };
+        localityDropdownList.push(localityDropdown);
+        let moduleDropdown = { label: getLocaleLabels(`CS_COMMON_INBOX_${row2.text.props.label.split('_')[1]}`), value: row2.text.props.label.split('_')[1] };
+        moduleDropdownList.push(moduleDropdown);
+        let statusDropdown = { label: getLocaleLabels(row2.text.props.label), value: row2.text.props.label.split('_')[2] };
+        statusDropdownList.push(statusDropdown);
 
 
       let dataRows = [
@@ -352,6 +355,42 @@ class TableData extends Component {
       ];
       return dataRows;
     });
+
+    if(all){
+      this.setState({
+        filter: {
+          localityFilter: {
+            selectedValue: ['ALL'],
+            dropdownData: this.getUniqueList([
+              {
+                value: "ALL",
+                label: getLocaleLabels("CS_INBOX_SELECT_ALL"),
+              }, ...localityDropdownList
+            ])
+          },
+          moduleFilter: {
+            selectedValue: ['ALL'],
+            dropdownData: this.getUniqueList([
+              {
+                value: "ALL",
+                label: getLocaleLabels("CS_INBOX_SELECT_ALL"),
+              }, ...moduleDropdownList
+            ])
+          },
+          statusFilter: {
+            selectedValue: ['ALL'],
+            dropdownData: this.getUniqueList([
+              {
+                value: "ALL",
+                label: getLocaleLabels("CS_INBOX_SELECT_ALL"),
+              }, ...statusDropdownList
+            ])
+          }
+        }
+      });
+  
+    }
+    return initialData;
   };
 
   handleChange = (event, value) => {
@@ -409,7 +448,9 @@ class TableData extends Component {
       const allData = orderBy(get(responseData, "ProcessInstances", []), ["businesssServiceSla"]);
 
       const assignedDataRows = await this.prepareInboxDataRows(assignedData);
-      const allDataRows = await this.prepareInboxDataRows(allData);
+      const allDataRows = await this.prepareInboxDataRows(allData,true);
+      
+      
       let headersList = [
         "WF_INBOX_HEADER_APPLICATION_NO",
         "WF_INBOX_HEADER_LOCALITY",
@@ -433,21 +474,21 @@ class TableData extends Component {
       let NEARING_SLA = [];
       let ESCALATED_SLA = [];
 
-      allDataRows.map((eachRow) => {
-        const MAX_SLA = this.state.businessServiceSla[eachRow[2].text.props.label.split('_')[1]];
-        if (eachRow[4].text <= 0) {
-          ESCALATED_SLA.push(eachRow[4].text);
-        }
-        if (eachRow[4].text > 0 && eachRow[4].text <= (MAX_SLA - MAX_SLA / 3)) {
-          NEARING_SLA.push(eachRow[4].text);
-        }
-        let localityDropdown = { label: getLocaleLabels(eachRow[1].text.props.label), value: eachRow[1].text.props.label };
-        locality.push(localityDropdown);
-        let moduleDropdown = { label: getLocaleLabels(`CS_COMMON_INBOX_${eachRow[2].text.props.label.split('_')[1]}`), value: eachRow[2].text.props.label.split('_')[1] };
-        moduleDD.push(moduleDropdown);
-        let statusDropdown = { label: getLocaleLabels(eachRow[2].text.props.label), value: eachRow[2].text.props.label.split('_')[2] };
-        statusDD.push(statusDropdown);
-      })
+      // allDataRows.map((eachRow) => {
+      //   const MAX_SLA = this.state.businessServiceSla[eachRow[2].text.props.label.split('_')[1]];
+      //   if (eachRow[4].text <= 0) {
+      //     ESCALATED_SLA.push(eachRow[4].text);
+      //   }
+      //   if (eachRow[4].text > 0 && eachRow[4].text <= (MAX_SLA - MAX_SLA / 3)) {
+      //     NEARING_SLA.push(eachRow[4].text);
+      //   }
+      //   let localityDropdown = { label: getLocaleLabels(eachRow[1].text.props.label), value: eachRow[1].text.props.label };
+      //   locality.push(localityDropdown);
+      //   let moduleDropdown = { label: getLocaleLabels(`CS_COMMON_INBOX_${eachRow[2].text.props.label.split('_')[1]}`), value: eachRow[2].text.props.label.split('_')[1] };
+      //   moduleDD.push(moduleDropdown);
+      //   let statusDropdown = { label: getLocaleLabels(eachRow[2].text.props.label), value: eachRow[2].text.props.label.split('_')[2] };
+      //   statusDD.push(statusDropdown);
+      // })
       const taskCount = allDataRows.length;
       taskboardData[0].head = taskCount;
       taskboardData[1].head = NEARING_SLA.length;
@@ -455,35 +496,7 @@ class TableData extends Component {
 
       this.setState({
         loaded: true,
-        inboxData, taskboardData, tabData, initialInboxData: cloneDeep(inboxData), filter: {
-          localityFilter: {
-            selectedValue: ['ALL'],
-            dropdownData: this.getUniqueList([
-              {
-                value: "ALL",
-                label: getLocaleLabels("CS_INBOX_SELECT_ALL"),
-              }, ...locality
-            ])
-          },
-          moduleFilter: {
-            selectedValue: ['ALL'],
-            dropdownData: this.getUniqueList([
-              {
-                value: "ALL",
-                label: getLocaleLabels("CS_INBOX_SELECT_ALL"),
-              }, ...moduleDD
-            ])
-          },
-          statusFilter: {
-            selectedValue: ['ALL'],
-            dropdownData: this.getUniqueList([
-              {
-                value: "ALL",
-                label: getLocaleLabels("CS_INBOX_SELECT_ALL"),
-              }, ...statusDD
-            ])
-          }
-        }
+        inboxData, taskboardData, tabData, initialInboxData: cloneDeep(inboxData)
       });
       this.hideLoading()
     } catch (e) {
@@ -548,7 +561,7 @@ class TableData extends Component {
       <div className="col-md-12 col-sm-12 col-xs-12">
         <div>
           <div className="row" style={{ marginBottom: '5px', marginLeft: '-20px' }}>
-            <div className="col-md-8 col-sm-8 col-xs-12">
+            <div className="col-md-8 col-sm-8 col-xs-12"  style={{ marginTop: '5px'}}>
               <Label className="landingPageUser" label={"WF_MY_WORKLIST"} />
             </div>
             <div className="col-md-4 col-sm-4 col-xs-10 search-bar">
