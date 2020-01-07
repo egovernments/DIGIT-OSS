@@ -539,7 +539,7 @@ const screenConfig = {
             moduleName: "NewTL",
             updateUrl: "/tl-services/v1/_update",
             data: {
-              buttonLabel: "FORWARD",
+              buttonLabel: "RESUBMIT",
               moduleName: "NewTL",
               isLast: false,
               dialogHeader: {
