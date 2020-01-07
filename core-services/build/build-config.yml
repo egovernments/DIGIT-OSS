@@ -192,7 +192,6 @@ config:
     build:
       - work-dir: "egov-telemetry/egov-telemetry-kafka-streams"
         image-name: "egov-telemetry-kafka-streams"
-        dockerfile: "build/maven/Dockerfile"     
 
   - name: "core-services/telemetry/egov-telemetry-batch-process"
     build:
