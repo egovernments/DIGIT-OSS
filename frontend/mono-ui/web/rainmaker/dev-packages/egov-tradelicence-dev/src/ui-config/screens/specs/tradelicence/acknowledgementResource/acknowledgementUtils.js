@@ -61,7 +61,8 @@ const acknowledgementCard = ({
             )
           },
           props: {
-            style: style.tailBox
+            style: style.tailBox,
+            className: "ack-tail"
           }
         }
       : {};
@@ -87,7 +88,8 @@ const acknowledgementCard = ({
                 style: {
                   fontSize: "50px"
                 },
-                iconSize: "50px"
+                iconSize: "50px",
+                className: "ack-avatar"
               }
             }
           }
@@ -104,7 +106,8 @@ const acknowledgementCard = ({
               : {}
           },
           props: {
-            style: style.bodyBox
+            style: style.bodyBox,
+            className: "ack-body"
           }
         },
         tail: tail

@@ -15,13 +15,13 @@ import orderBy from "lodash/orderBy";
 import uniq from "lodash/uniq";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getTenantId, localStorageSet, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
+import { getLocaleLabels, transformById } from "egov-ui-framework/ui-utils/commons";
+import { getTenantId, localStorageSet, localStorageGet ,getLocalization,getLocale} from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
 import Filter from "../Filter";
-import { getLocaleLabels } from "../../../../../ui-utils/commons";
 import TextFieldIcon  from  "egov-ui-kit/components/TextFieldIcon";
 import FilterListIcon from '@material-ui/icons/FilterList';
-import Hidden from "@material-ui/core/Hidden";
+import Hidden from "@material-ui/core/Hidden"; 
 
 const getWFstatus = (status) => {
   switch (status) {
@@ -45,6 +45,11 @@ const styles = (theme) => ({
     color: "red",
   },
 });
+
+let localizationLabels = transformById(
+  JSON.parse(getLocalization(`localization_${getLocale()}`)),
+  "code"
+);
 
 class TableData extends Component {
   state = {
@@ -115,9 +120,9 @@ class TableData extends Component {
       if (row[0].text.toLowerCase().includes(value.toLowerCase()) ||
         row[3].text.props.label.toLowerCase().includes(value.toLowerCase()) ||
         String(row[4].text).toLowerCase().includes(value.toLowerCase()) ||
-        getLocaleLabels(`CS_COMMON_INBOX_${row[2].text.props.label.split('_')[1]}`).toLowerCase().includes(value.toLowerCase()) ||
-        getLocaleLabels(row[1].text.props.label).toLowerCase().includes(value.toLowerCase()) ||
-        getLocaleLabels(row[2].text.props.label).toLowerCase().includes(value.toLowerCase())
+        getLocaleLabels("",`CS_COMMON_INBOX_${row[2].text.props.label.split('_')[1]}`).toLowerCase().includes(value.toLowerCase(),localizationLabels) ||
+        getLocaleLabels("",row[1].text.props.label).toLowerCase().includes(value.toLowerCase(),localizationLabels) ||
+        getLocaleLabels("",row[2].text.props.label).toLowerCase().includes(value.toLowerCase(),localizationLabels)
       ) {
         return true;
       }
@@ -262,7 +267,7 @@ class TableData extends Component {
       initialInboxData: tempObject
     });
   }
-  prepareInboxDataRows = async (data) => {
+  prepareInboxDataRows = async (data,all) => {
     const { toggleSnackbarAndSetText } = this.props;
     if (isEmpty(data)) return [];
     const businessIds = data.map((item) => {
@@ -301,15 +306,18 @@ class TableData extends Component {
         "error"
       );
     }
+    let localityDropdownList=[];
+    let moduleDropdownList=[];
+    let statusDropdownList=[];
 
-    return data.map((item) => {
+    
+    const initialData = data.map((item) => {
       const locality = localitymap.find(locality => {
         return locality.referencenumber === item.businessId;
       })
       var sla = item.businesssServiceSla && item.businesssServiceSla / (1000 * 60 * 60 * 24);
-
-      let row0 = { text: item.businessId, subtext: item.businessService, hiddenText: item.moduleName };
-      let row1 = { text: locality ? <Label label={`${item.tenantId.toUpperCase().replace(/[.]/g, "_")}_REVENUE_${locality.locality}`} color="#000000" /> : <Label label={"NA"} color="#000000" /> };
+      let row0 = {text: item.businessId, subtext: item.businessService, hiddenText: item.moduleName };
+      let row1 = {text: locality ? <Label label={`${item.tenantId.toUpperCase().replace(/[.]/g, "_")}_REVENUE_${locality.locality}`} color="#000000" /> : <Label label={"NA"} color="#000000" /> };
       let row2 = {
         text: item.state ? (
           <Label
@@ -321,37 +329,71 @@ class TableData extends Component {
             "NA"
           ),
       };
+
       let row3 = { text: item.assigner ? <Label label={item.assigner.name} color="#000000" /> : <Label label={"NA"} color="#000000" /> };
       let row4 = { text: Math.round(sla), badge: true };
       let row5 = { historyButton: true };
 
-      // f (row[0].text.toLowerCase().includes(value.toLowerCase()) ||
-      //       row[3].text.props.label.toLowerCase().includes(value.toLowerCase()) ||
-      //       String(row[4].text).toLowerCase().includes(value.toLowerCase()) ||
-      //       getLocaleLabels(`CS_COMMON_INBOX_${row[2].text.props.label.split('_')[1]}`).toLowerCase().includes(value.toLowerCase()) ||
-      //       getLocaleLabels(row[1].text.props.label).toLowerCase().includes(value.toLowerCase()) ||
-      //       getLocaleLabels(row[2].text.props.label).toLowerCase().includes(value.toLowerCase())
-
-
+      let localityDropdown = { label: getLocaleLabels("",row1.text.props.label,localizationLabels), value: row1.text.props.label };
+      localityDropdownList.push(localityDropdown);
+      let moduleDropdown = { label: getLocaleLabels("",`CS_COMMON_INBOX_${row2.text.props.label.split('_')[1]}`,localizationLabels), value: row2.text.props.label.split('_')[1] };
+      moduleDropdownList.push(moduleDropdown);
+      let statusDropdown = { label:  getLocaleLabels("",row2.text.props.label,localizationLabels), value: row2.text.props.label.split('_')[2] };
+      statusDropdownList.push(statusDropdown);
 
       let dataRows = [
-
         row0,
         row1,
         row2,
         row3,
         row4,
         {
-          ...row5, hiddenField: [row0.text.toLowerCase(),
-          String(row4.text),
-          getLocaleLabels(`CS_COMMON_INBOX_${row2.text.props.label.split('_')[1]}`).toLowerCase(),
-          getLocaleLabels(row1.text.props.label).toLowerCase(),
-          getLocaleLabels(row2.text.props.label).toLowerCase(),
-          row3.text.props.label.toLowerCase()]
+        ...row5, hiddenField: [row0.text.toLowerCase(),
+        String(row4.text),
+        getLocaleLabels("",`CS_COMMON_INBOX_${row2.text.props.label.split('_')[1]}`,localizationLabels).toLowerCase(),
+        getLocaleLabels("",row1.text.props.label , localizationLabels).toLowerCase(),
+        getLocaleLabels("",row2.text.props.label ,localizationLabels).toLowerCase(),
+        row3.text.props.label.toLowerCase()]
         }
       ];
       return dataRows;
     });
+
+    if(all){
+      this.setState({
+        filter: {
+          localityFilter: {
+            selectedValue: ['ALL'],
+            dropdownData: this.getUniqueList([
+              {
+                value: "ALL",
+                label: getLocaleLabels("","CS_INBOX_SELECT_ALL",localizationLabels),
+              }, ...localityDropdownList
+            ])
+          },
+          moduleFilter: {
+            selectedValue: ['ALL'],
+            dropdownData: this.getUniqueList([
+              {
+                value: "ALL",
+                label: getLocaleLabels("","CS_INBOX_SELECT_ALL",localizationLabels),
+              }, ...moduleDropdownList
+            ])
+          },
+          statusFilter: {
+            selectedValue: ['ALL'],
+            dropdownData: this.getUniqueList([
+              {
+                value: "ALL",
+                label: getLocaleLabels("","CS_INBOX_SELECT_ALL",localizationLabels),
+              }, ...statusDropdownList
+            ])
+          }
+        }
+      });
+  
+    }
+    return initialData;
   };
 
   handleChange = (event, value) => {
@@ -408,13 +450,18 @@ class TableData extends Component {
       );
       const allData = orderBy(get(responseData, "ProcessInstances", []), ["businesssServiceSla"]);
 
+
+      // const assignedDataRows = []
+      // const allDataRows = []
+
       const assignedDataRows = await this.prepareInboxDataRows(assignedData);
-      const allDataRows = await this.prepareInboxDataRows(allData);
+      const allDataRows = await this.prepareInboxDataRows(allData,true);
+      
+      
       let headersList = [
         "WF_INBOX_HEADER_APPLICATION_NO",
         "WF_INBOX_HEADER_LOCALITY",
         "WF_INBOX_HEADER_STATUS",
-        // "WF_INBOX_HEADER_ASSIGNED_BY",
         "WF_INBOX_HEADER_CURRENT_OWNER",
         "WF_INBOX_HEADER_SLA_DAYS_REMAINING",
       ];
@@ -427,27 +474,8 @@ class TableData extends Component {
         headers: headersList,
         rows: allDataRows,
       });
-      let locality = [];
-      let moduleDD = [];
-      let statusDD = [];
       let NEARING_SLA = [];
       let ESCALATED_SLA = [];
-
-      allDataRows.map((eachRow) => {
-        const MAX_SLA = this.state.businessServiceSla[eachRow[2].text.props.label.split('_')[1]];
-        if (eachRow[4].text <= 0) {
-          ESCALATED_SLA.push(eachRow[4].text);
-        }
-        if (eachRow[4].text > 0 && eachRow[4].text <= (MAX_SLA - MAX_SLA / 3)) {
-          NEARING_SLA.push(eachRow[4].text);
-        }
-        let localityDropdown = { label: getLocaleLabels(eachRow[1].text.props.label), value: eachRow[1].text.props.label };
-        locality.push(localityDropdown);
-        let moduleDropdown = { label: getLocaleLabels(`CS_COMMON_INBOX_${eachRow[2].text.props.label.split('_')[1]}`), value: eachRow[2].text.props.label.split('_')[1] };
-        moduleDD.push(moduleDropdown);
-        let statusDropdown = { label: getLocaleLabels(eachRow[2].text.props.label), value: eachRow[2].text.props.label.split('_')[2] };
-        statusDD.push(statusDropdown);
-      })
       const taskCount = allDataRows.length;
       taskboardData[0].head = taskCount;
       taskboardData[1].head = NEARING_SLA.length;
@@ -455,35 +483,7 @@ class TableData extends Component {
 
       this.setState({
         loaded: true,
-        inboxData, taskboardData, tabData, initialInboxData: cloneDeep(inboxData), filter: {
-          localityFilter: {
-            selectedValue: ['ALL'],
-            dropdownData: this.getUniqueList([
-              {
-                value: "ALL",
-                label: getLocaleLabels("CS_INBOX_SELECT_ALL"),
-              }, ...locality
-            ])
-          },
-          moduleFilter: {
-            selectedValue: ['ALL'],
-            dropdownData: this.getUniqueList([
-              {
-                value: "ALL",
-                label: getLocaleLabels("CS_INBOX_SELECT_ALL"),
-              }, ...moduleDD
-            ])
-          },
-          statusFilter: {
-            selectedValue: ['ALL'],
-            dropdownData: this.getUniqueList([
-              {
-                value: "ALL",
-                label: getLocaleLabels("CS_INBOX_SELECT_ALL"),
-              }, ...statusDD
-            ])
-          }
-        }
+        inboxData, taskboardData, tabData, initialInboxData: cloneDeep(inboxData)
       });
       this.hideLoading()
     } catch (e) {
@@ -548,13 +548,12 @@ class TableData extends Component {
       <div className="col-md-12 col-sm-12 col-xs-12">
         <div>
           <div className="row" style={{ marginBottom: '5px', marginLeft: '-20px' }}>
-            <div className="col-md-8 col-sm-8 col-xs-12">
+            <div className="col-md-8 col-sm-8 col-xs-12"  style={{ marginTop: '5px'}}>
               <Label className="landingPageUser" label={"WF_MY_WORKLIST"} />
             </div>
             <div className="col-md-4 col-sm-4 col-xs-10 search-bar">
               <TextFieldIcon
-                //  floatingLabelText={getLocaleLabels("CS_INBOX_SEARCH")}
-                hintText={getLocaleLabels("CS_INBOX_SEARCH")}
+                hintText={getLocaleLabels("","CS_INBOX_SEARCH",localizationLabels)}
                 value={searchFilter.value}
                 iconPosition="before"
                 className="whiteBackground"
@@ -563,12 +562,8 @@ class TableData extends Component {
                 }}
               />
             </div>
-            {/* <div className="icon-hidden sort-icon col-xs-2">
-              <ImportExportIcon />
-            </div> */}
             <div className="icon-hidden filter-icon col-xs-2" onClick={()=>{
               this.setState({showFilter:!this.state.showFilter})
-              //console.log("clicked")}
             }}>
             <FilterListIcon />
             </div>

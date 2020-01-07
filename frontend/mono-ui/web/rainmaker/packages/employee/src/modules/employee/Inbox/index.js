@@ -72,7 +72,7 @@ class Inbox extends Component {
         <div className="rainmaker-topHeader" style={{ marginTop: 30, justifyContent: "space-between" }}>
         {Loading&&isLoading&&<LoadingIndicator></LoadingIndicator>}
           <div className="rainmaker-topHeader flex">
-            <Label className="landingPageUser" label={"CS_LANDING_PAGE_WELCOME_TEXT"} />
+            <Label className="landingPageHeader" label={"CS_LANDING_PAGE_WELCOME_TEXT"} />
             <Label className="landingPageUser" label={name} />
           </div>
           <div className="quick-action-button">
