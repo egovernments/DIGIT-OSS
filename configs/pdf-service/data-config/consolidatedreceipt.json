@@ -117,23 +117,6 @@
                   "path": "$.paymentDetails[0].totalDue"
                 }
               },
-	           {
-                "variable": "logoImage",                        
-                "url":"https://raw.githubusercontent.com/egovernments/egov-web-app/master/web/rainmaker/dev-packages/egov-ui-kit-dev/src/assets/images/pblogo.png",
-                "type":"image"      
-              },
-              {
-                "variable": "logo-header",
-                "value": {
-                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT.LOGO.HEADER"
-                },
-                "type": "label",
-                "localisation":{
-                  "required":true,
-                  "prefix": "",
-                  "module":"rainmaker-common"
-               }
-              },
               {
                 "variable": "payment_receipt",
                 "value": {
@@ -454,6 +437,15 @@
                     {
                       "variable":"email",
                       "value":"$.MdmsRes.tenant.tenants[0].emailId"
+                    },
+                    {
+                      "variable": "logoImage",                        
+                      "value":"$.MdmsRes.tenant.tenants[0].logoId",
+                      "type":"image"      
+                    },
+                    {
+                      "variable": "logo-header",
+                      "value":"$.MdmsRes.tenant.tenants[0].name"
                     }
                   ]
               }
