@@ -58,15 +58,16 @@ export const searchApiCall = async (state, dispatch) => {
         }
       }
     }
-    let getSearchResult = getSearchResults(queryObject)
-    let getSearchResultForSewerage = getSearchResultsForSewerage(queryObject, dispatch)
-    let finalArray = [];
     try {
-      let searchWaterConnectionResults = await getSearchResult
-      let searcSewerageConnectionResults = await getSearchResultForSewerage
-      const waterConnections = searchWaterConnectionResults.WaterConnection.map(e => { e.service = 'WATER'; return e });
-      const sewerageConnections = searcSewerageConnectionResults.SewerageConnections.map(e => { e.service = 'SEWERAGE'; return e });
-      let combinedSearchResults = searchWaterConnectionResults && searcSewerageConnectionResults ? sewerageConnections.concat(waterConnections) : []
+      let getSearchResult = getSearchResults(queryObject)
+      let getSearchResultForSewerage = getSearchResultsForSewerage(queryObject, dispatch)
+      let finalArray = [];
+      let searchWaterConnectionResults, searcSewerageConnectionResults;
+      try { searchWaterConnectionResults = await getSearchResult } catch (error) { finalArray = []; console.log(error) }
+      try { searcSewerageConnectionResults = await getSearchResultForSewerage } catch (error) { finalArray = []; console.log(error) }
+      const waterConnections = searchWaterConnectionResults ? searchWaterConnectionResults.WaterConnection.map(e => { e.service = 'WATER'; return e }) : []
+      const sewerageConnections = searcSewerageConnectionResults ? searcSewerageConnectionResults.SewerageConnections.map(e => { e.service = 'SEWERAGE'; return e }) : [];
+      let combinedSearchResults = searchWaterConnectionResults || searcSewerageConnectionResults ? sewerageConnections.concat(waterConnections) : []
       for (let i = 0; i < combinedSearchResults.length; i++) {
         let element = combinedSearchResults[i];
         let queryObjectForWaterFetchBill;
@@ -76,38 +77,31 @@ export const searchApiCall = async (state, dispatch) => {
           queryObjectForWaterFetchBill = [{ key: "tenantId", value: JSON.parse(getUserInfo()).tenantId }, { key: "consumerCode", value: element.connectionNo }, { key: "businessService", value: "SW" }];
         }
         let billResults = await fetchBill(queryObjectForWaterFetchBill, dispatch)
-        try {
-          billResults ? billResults.Bill.map(bill => {
-            let obj = {
-              due: bill.totalAmount,
-              dueDate: bill.billDetails[0].expiryDate,
-              service: element.service,
-              connectionNo: element.connectionNo,
-              name: element.property.owners[0].name,
-              status: element.status,
-              address: element.property.address.street,
-              connectionType: element.connectionType
-            }
-            finalArray.push(obj)
-          }) : finalArray.push({
-            due: ' ',
-            dueDate: ' ',
+        billResults ? billResults.Bill.map(bill => {
+          let obj = {
+            due: bill.totalAmount,
+            dueDate: bill.billDetails[0].expiryDate,
             service: element.service,
             connectionNo: element.connectionNo,
             name: element.property.owners[0].name,
             status: element.status,
             address: element.property.address.street,
             connectionType: element.connectionType
-          })
-        } catch (e) {
-          console.error(e)
-        }
+          }
+          finalArray.push(obj)
+        }) : finalArray.push({
+          due: ' ',
+          dueDate: ' ',
+          service: element.service,
+          connectionNo: element.connectionNo,
+          name: element.property.owners[0].name,
+          status: element.status,
+          address: element.property.address.street,
+          connectionType: element.connectionType
+        })
       }
       showResults(finalArray, dispatch)
-    } catch (e) {
-      showResults(finalArray, dispatch)
-      console.error(e)
-    }
+    } catch (err) { console.log(err) }
   }
 }
 const showHideTable = (booleanHideOrShow, dispatch) => {
