@@ -59,6 +59,11 @@
                 "variable": "rainwaterHarvestingFacility",
                 "value": {
                   "path": "$.rainWaterHarvesting"
+                },
+                "localisation": {
+                  "required": true,
+                  "prefix": "HARVESTING",
+                  "module": "rainmaker-common"
                 }
               },
               {
@@ -161,11 +166,12 @@
                 "variable": "gender",
                 "value": {
                   "path": "$.property.owners[0].gender"
-                },"localisation":{
-                  "required":true,
+                },
+                "localisation": {
+                  "required": true,
                   "prefix": "COMMON_GENDER",
                   "module": "rainmaker-common"
-               }
+                }
               },
               {
                 "variable": "guardian",
@@ -236,7 +242,6 @@
                   "required": true,
                   "prefix": null,
                   "module": "rainmaker-common"
-
                 }
               },
               {
