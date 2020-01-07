@@ -157,6 +157,7 @@ export const fetchData = async (
       });
       searchConvertedArray.push({
         applicationNumber: get(element, "applicationNo", null),
+        permitOrderNo : get(element, "permitOrderNo", null),
         ownername: primaryowner,
         businessService: service,
         assignedTo: get(

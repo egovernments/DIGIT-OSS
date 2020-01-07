@@ -190,7 +190,7 @@ export const basicDetails = getCommonCard({
         labelName: "Enter Remarks Here",
         labelKey: "BPA_BASIC_DETAILS_REMARKS_PLACEHOLDER"
       },
-      jsonPath: "BPAs[0].remarks",
+      jsonPath: "BPA.remarks",
       props:{
         className:"textfield-enterable-selection"
       },

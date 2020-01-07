@@ -539,35 +539,10 @@ class TableData extends Component {
     let { taskboardData, tabData, inboxData } = this.state;
 
     if (this.state.loaded) {
-      if (searchFilter.typing) {
-        if (this.state.timeoutForTyping) {
-          clearTimeout(this.state.timeoutForTyping);
-        }
-        this.state.timeoutForTyping = setTimeout(() => {
-          this.setState((state, props) => {
-            let { searchFilter } = state;
-            searchFilter.typing = false;
-            this.setState({ state });
-            ({ ...state })
-          })
-        }, 2000);
-
-      } else {
-        const filteredData = this.applyFilter();
-        taskboardData = filteredData.taskboardData;
-        inboxData = filteredData.inboxData;
-        tabData = filteredData.tabData;
-      }
-    } else {
-      const { InboxData } = this.props;
-      if (InboxData) {
-
-        const filteredData = this.applyFilter(InboxData);
-        taskboardData = filteredData.taskboardData;
-        inboxData = filteredData.inboxData;
-        tabData = filteredData.tabData;
-        this.hideLoading();
-      }
+      const filteredData = this.applyFilter();
+      taskboardData = filteredData.taskboardData;
+      inboxData = filteredData.inboxData;
+      tabData = filteredData.tabData;
     }
     return (
       <div className="col-md-12 col-sm-12 col-xs-12">
