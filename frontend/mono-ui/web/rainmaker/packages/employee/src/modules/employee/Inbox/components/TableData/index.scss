@@ -20,7 +20,12 @@
   .whiteBackground{
     background-color: white !important;
     height: 45px !important;
-    top:10px
+    top:10px;
+      input{
+        padding: 0px 0px 5px !important;
+        margin-top: 0px !important;
+        left:25px;
+      }
   }
   .sort-icon{
      top:20px;
@@ -33,6 +38,9 @@
   }
   
 }
+.whiteBackground div hr{
+  border-bottom: none !important;
+}
 @media only screen and (min-width: 800px){
   .icon-hidden{
       display: none;
@@ -41,6 +49,11 @@
   .whiteBackground {
     height: 45px !important;
     top: 10px;
-    }
+    
+    input{
+      padding: 0px 0px 5px !important;
+      margin-top: 0px !important;
+      left:25px;
+    }}
   }
 

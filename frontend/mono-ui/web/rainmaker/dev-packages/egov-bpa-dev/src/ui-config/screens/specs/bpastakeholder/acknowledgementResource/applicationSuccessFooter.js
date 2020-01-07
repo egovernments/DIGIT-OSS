@@ -132,7 +132,13 @@ export const applicationSuccessFooter = (
   }
   // const redirectionURL = roleExists ? "/tradelicense-citizen/home" : "/inbox";
   /* Mseva 2.0 changes */
-  const redirectionURL = roleExists ? "/" : "/inbox";
+  const redirectionURL = "/";
+  let gotHomeKey = "GO TO HOME";
+  let gotLabelName = "TL_COMMON_BUTTON_HOME";
+  if (window.location.pathname.includes("openlink")) {
+    gotLabelName = "PROCEED TO LOGIN";
+    gotHomeKey = "BPA_COMMON_PROCEED_NEXT";
+  }
   const payURL = `/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenant}`;
   return getCommonApplyFooter({
     gotoHome: {
@@ -148,8 +154,8 @@ export const applicationSuccessFooter = (
       },
       children: {
         downloadReceiptButtonLabel: getLabel({
-          labelName: "GO TO HOME",
-          labelKey: "TL_COMMON_BUTTON_HOME"
+          labelName: gotLabelName,
+          labelKey: gotHomeKey
         })
       },
       onClickDefination: {

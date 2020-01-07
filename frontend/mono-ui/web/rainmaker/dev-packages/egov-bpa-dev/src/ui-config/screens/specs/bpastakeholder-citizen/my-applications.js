@@ -50,7 +50,6 @@ const screenConfig = {
               {
                 label: "TL_COMMON_TABLE_COL_STATUS",
                 jsonPath: "status",
-                prefix: "WF_ARCHITECT_"
               },
               {
                 label: "BPA_COMMON_SLA",

@@ -12,6 +12,9 @@ import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 
+const convertMillisecondsToDays = (milliseconds) => {
+  return  Math.round(milliseconds / (1000 * 60 * 60 * 24));
+}
 export const searchApiCall = async (state, dispatch) => {
   showHideTable(false, dispatch);
   let queryObject = [
@@ -187,8 +190,8 @@ export const getWorkFlowData = async Licenses => {
       record => record.moduleName === "BPAREG"
     ).forEach(item => {
       businessIdToOwnerMapping[item.businessId] = {
-        assignee: item.assignee && item.assignee.name,
-        sla: item.sla
+        assignee: get(item,"assignes[0].name"),
+        sla: item.businesssServiceSla && convertMillisecondsToDays(item.businesssServiceSla)
       };
     });
     return businessIdToOwnerMapping;
@@ -225,8 +228,8 @@ export const getWorkFlowDataForBPA = async Licenses => {
       record => record.moduleName.includes("BPA.")
     ).forEach(item => {
       businessIdToOwnerMapping[item.businessId] = {
-        assignee: item.assignee && item.assignee.name,
-        sla: item.sla
+        assignee: item.assignes && item.assignes.name,
+        sla: item.businesssServiceSla && convertMillisecondsToDays(item.businesssServiceSla)
       };
     });
     return businessIdToOwnerMapping;
