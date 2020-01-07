@@ -151,7 +151,7 @@ export const basicSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-                "BPAs[0].remarks"
+                "BPA.remarks"
             }
           )
         })
