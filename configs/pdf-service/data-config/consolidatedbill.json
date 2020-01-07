@@ -14,23 +14,6 @@
           {
             "direct": [
               {
-                "variable": "logoImage",
-                "url": "https://raw.githubusercontent.com/egovernments/egov-web-app/master/web/rainmaker/dev-packages/egov-ui-kit-dev/src/assets/images/pblogo.png",
-                "type": "image"
-              },
-              {
-                "variable": "logo_header",
-                "value": {
-                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_LOGO_HEADER"
-                },
-                "type": "label",
-                "localisation":{
-                  "required":true,
-                  "prefix": null,
-                  "module":"rainmaker-common"
-               }
-              },
-              {
                 "variable": "total_amount_due",
                 "value": {
                   "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_TOTAL_AMOUNT_DUE"
@@ -603,6 +586,15 @@
                     {
                       "variable":"email",
                       "value":"$.MdmsRes.tenant.tenants[0].emailId"
+                    },
+                    {
+                      "variable": "logoImage",
+                      "value":"$.MdmsRes.tenant.tenants[0].logoId",
+                      "type": "image"
+                    },
+                    {
+                      "variable": "logo_header",
+                      "value":"$.MdmsRes.tenant.tenants[0].name"
                     }
                   ]
               }
