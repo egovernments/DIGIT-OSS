@@ -146,7 +146,7 @@
           "vizArray": [
             {
               "id": 131,
-              "name": "Overview",
+              "name": "DSS_OVERVIEW",
               "dimensions": {
                 "height": 450,
                 "width": 5
@@ -294,7 +294,7 @@
               },
               "vizType": "metric-collection",
               "noUnit": true,
-              "label": "Overview",
+              "label": "DSS_OVERVIEW",
               "charts": [
                 {
                   "id": "todaysCollection",
@@ -498,13 +498,13 @@
           "vizArray": [
             {
               "id": 241,
-              "name": "Overview",
+              "name": "DSS_OVERVIEW",
               "dimensions": {
                 "height": 350,
                 "width": 5
               },
               "vizType": "metric-collection",
-              "label": "Overview",
+              "label": "DSS_OVERVIEW",
               "charts": [
                 {
                   "id": "propertiesAssessed",
@@ -636,7 +636,7 @@
                 "width": 5
               },
               "vizType": "metric-collection",
-              "label": "Overview",
+              "label": "DSS_OVERVIEW",
               "noUnit": true,
               "charts": [
                 {
@@ -827,13 +827,13 @@
           "vizArray": [
             {
               "id": 341,
-              "name": "Overview",
+              "name": "DSS_OVERVIEW",
               "dimensions": {
                 "height": 350,
                 "width": 5
               },
               "vizType": "metric-collection",
-              "label": "Overview",
+              "label": "DSS_OVERVIEW",
               "charts": [
                 {
                   "id": "totalApplication",
@@ -997,7 +997,7 @@
                 "width": 5
               },
               "vizType": "metric-collection",
-              "label": "Overview",
+              "label": "DSS_OVERVIEW",
               "noUnit": true,
               "charts": [
                 {
