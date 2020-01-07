@@ -568,15 +568,15 @@ class FormWizardDataEntry extends Component {
             {getOwnerDetails(ownerType)}
           </div>
         );
-        case 3:
-          return (
-            <div>
-              <DemandCollection
-                disabled={fromReviewPage}
-                datas={this.props.finalData}
-              />
-            </div>
-          );
+      case 3:
+        return (
+          <div>
+            <DemandCollection
+              disabled={fromReviewPage}
+              datas={this.props.finalData}
+            />
+          </div>
+        );
 
       case 4:
         return (
@@ -750,11 +750,11 @@ class FormWizardDataEntry extends Component {
           ? (headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER")
           : isReassesment
           ? (headerObj.header = "PT_REASSESS_PROPERTY")
-          // : ((headerObj.headerValue =
-          //     headerObj.headerValue + ":" + addNewPropertyLabel),
-          //   (headerObj.subHeaderValue = ""),
-          //(headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER"));
-          :(headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER");
+          : // : ((headerObj.headerValue =
+            //     headerObj.headerValue + ":" + addNewPropertyLabel),
+            //   (headerObj.subHeaderValue = ""),
+            //(headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER"));
+            (headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER");
         break;
       case 3:
         headerObj.subHeaderValue = propertyId;
@@ -762,8 +762,8 @@ class FormWizardDataEntry extends Component {
           ? (headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER")
           : isReassesment
           ? (headerObj.header = "PT_REASSESS_PROPERTY")
-          // : ((headerObj.subHeaderValue = ""),
-            :(headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER");
+          : // : ((headerObj.subHeaderValue = ""),
+            (headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER");
         // headerObj.headerValue = "(" + assessmentYear + ")";
         break;
       case 4:
@@ -776,14 +776,14 @@ class FormWizardDataEntry extends Component {
         // headerObj.headerValue = "(" + assessmentYear + ")";
         break;
       case 5:
-      headerObj.subHeaderValue = propertyId;
-      isAssesment
-        ? (headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER")
-        : isReassesment
-        ? (headerObj.header = "PT_DEMAND_REASSESS_PROPERTY")
-        : (headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER");
-      // headerObj.headerValue = "(" + assessmentYear + ")";
-      break;
+        headerObj.subHeaderValue = propertyId;
+        isAssesment
+          ? (headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER")
+          : isReassesment
+          ? (headerObj.header = "PT_DEMAND_REASSESS_PROPERTY")
+          : (headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER");
+        // headerObj.headerValue = "(" + assessmentYear + ")";
+        break;
       case 6:
         headerObj.headerValue = "(" + assessmentYear + ")";
         headerObj.header = "PT_DEMAND_PAYMENT_HEADER";
@@ -940,7 +940,6 @@ class FormWizardDataEntry extends Component {
           );
           break;
         }
-
         const { ownershipType } = form;
         const estimateCall = () => {
           // estimate().then(estimateResponse => {
@@ -1039,13 +1038,83 @@ class FormWizardDataEntry extends Component {
           }
         }
         break;
-        case 3:
+      case 3:
+        const { DemandProperties } = this.props;
+
+        if (!DemandProperties) {
+          this.props.toggleSnackbarAndSetText(
+            true,
+            {
+              labelName:
+                "Please enter at least one year of demand and collection !",
+              labelKey: "ERR01_DEMAND_ENTER_THE_DATA"
+            },
+            "error"
+          );
+          break;
+        }
+        const { demand } = DemandProperties[0].propertyDetails[0];
+        let abc = "";
+        if (demand) {
+          if (!demand[0]) {
+            this.props.toggleSnackbarAndSetText(
+              true,
+              {
+                labelName:
+                  "Please enter the latest year demand and collection !",
+                labelKey: "ERR02_DEMAND_ENTER_THE_DATA"
+              },
+              "error"
+            );
+            break;
+          }
+
+          const currentYear = demand.forEach((data, key) => {
+            return Object.keys(data.demand).forEach((data1, key1) => {
+              return Object.keys(data.demand[data1]).forEach((data2, key2) => {
+                if (
+                  parseInt(data.demand[data1][data2].PT_DEMAND) <
+                  parseInt(data.demand[data1][data2].PT_COLLECTED)
+                ) {
+                  return (abc = abc.concat(
+                    `${key2 + 1}:the taxHead of ${
+                      data.demand[data1][data2].PT_TAXHEAD
+                    } demand ${
+                      data.demand[data1][data2].PT_DEMAND
+                    } of the year ${data1} is must be greater than the collection ${
+                      data.demand[data1][data2].PT_COLLECTED
+                    }.;\n`
+                  ));
+                }
+              });
+            });
+          });
+        }
+        if (abc.length > 0) {
+          this.props.toggleSnackbarAndSetText(
+            true,
+            {
+              labelName: `the error is ${abc}`,
+              labelKey: `ERR03_DEMAND_ENTER_THE_DATA ${abc}`
+            },
+            "error"
+          );
+          break;
+        } else {
           this.setState({
             selected: index,
             formValidIndexArray: [...formValidIndexArray, selected]
           });
-          break;
+        }
+        break;
       case 4:
+        // if (estimation[0].totalAmount < 0) {
+        //   alert("Property Tax amount cannot be Negative!");
+        // } else {
+        // window.scrollTo(0, 0);
+        // createAndUpdate(index);
+        // }
+        // break;
         window.scrollTo(0, 0);
         createAndUpdate(index);
         break;
@@ -1058,9 +1127,7 @@ class FormWizardDataEntry extends Component {
           propertyId = pty.propertyId;
           tenantId = pty.tenantId;
         }
-        this.props.history.push(
-          `/property-tax/search-property`
-        );
+        this.props.history.push(`/property-tax/search-property`);
         // this.setState(
         //   {
         //     selected: index,
@@ -1636,6 +1703,7 @@ class FormWizardDataEntry extends Component {
           Properties: properties
         }
       );
+      <br />;
       const demandData = [];
       const demandDetails = [];
       const demandDetails1 = [];
