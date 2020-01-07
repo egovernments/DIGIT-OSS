@@ -43,6 +43,10 @@
             "routePath": "/dashboard/",
             "isOrigin": true
           },
+          "overview": {
+            "routePath": "/dashboard/overview",
+            "isOrigin": true
+          },
           "propertytax": {
             "routePath": "/dashboard/propertytax",
             "isOrigin": true

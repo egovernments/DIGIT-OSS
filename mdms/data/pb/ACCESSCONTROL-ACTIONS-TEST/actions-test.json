@@ -15300,7 +15300,7 @@
       "id": 1886,
       "name": "Dashboard Home",
       "url": "url",
-      "displayName": "Home",
+      "displayName": "SURE Dashboard",
       "orderNumber": 2,
       "parentModule": "dss-dashboard",
       "enabled": true,
