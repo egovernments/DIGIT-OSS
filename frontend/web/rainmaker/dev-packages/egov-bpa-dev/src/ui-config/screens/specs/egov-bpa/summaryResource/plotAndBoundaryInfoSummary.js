@@ -114,7 +114,7 @@ export const  plotAndBoundaryInfoSummary = getCommonGrayCard({
                             labelKey: "BPA_BOUNDARY_HOLDING_NO_LABEL"
                         },
                         {
-                            jsonPath: "BPAs[0].BPADetails.plotdetails.holdingnumber"
+                            jsonPath: "BPA.holdingNo"
                         }
                     ),
                     plotNo: getLabelWithValue(
@@ -141,7 +141,7 @@ export const  plotAndBoundaryInfoSummary = getCommonGrayCard({
                             labelKey: "BPA_BOUNDARY_LAND_REG_DETAIL_LABEL"
                         },
                         {
-                            jsonPath: "BPAs[0].BPADetails.plotdetails.landregdetails"
+                            jsonPath: "BPA.registrationDetails"
                         }
                     ),
                     whetherGovOrQuasi: getLabelWithValue(
@@ -150,7 +150,7 @@ export const  plotAndBoundaryInfoSummary = getCommonGrayCard({
                             labelKey: "BPA_BOUNDARY_GOVT_QUASI_LABEL"
                         },
                         {
-                            jsonPath: "BPAs[0].BPADetails.plotdetails.govorquasi"
+                            jsonPath: "BPA.govtOrQuasi"
                         }
                     )
                 })

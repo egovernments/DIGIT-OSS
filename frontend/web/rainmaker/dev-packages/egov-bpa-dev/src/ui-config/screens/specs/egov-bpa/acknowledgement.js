@@ -217,7 +217,12 @@ const getAcknowledgementCard = (
               labelName: "Payment Receipt No.",
               labelKey: "BPA_PMT_RCPT_NO"
             },
-            number: secondNumber
+            // number: secondNumber,
+            tailText: {
+              labelName: "Payment Receipt No.",
+              labelKey: "BPA_PMT_RCPT_NO"
+            },
+            // number: secondNumber
           })
         }
       },

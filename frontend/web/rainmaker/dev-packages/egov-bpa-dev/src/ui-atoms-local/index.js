@@ -59,6 +59,11 @@ const TradeLicenseIcon = Loadable({
   loading: () => <Loading />
 });
 
+const PermitNumber = Loadable({
+  loader: () => import("./PermitNumber"),
+  loading: () => <Loading />
+});
+
 export {
   TestAtoms,
   AutoSuggest,
@@ -70,5 +75,6 @@ export {
   MapLocation,
   Asteric,
   MenuButton,
-  TradeLicenseIcon
+  TradeLicenseIcon,
+  PermitNumber
 };

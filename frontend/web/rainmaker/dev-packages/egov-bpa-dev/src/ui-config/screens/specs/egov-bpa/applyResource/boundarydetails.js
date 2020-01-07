@@ -77,7 +77,7 @@ export const detailsofplot = getCommonCard({
                   },
                 // required: true,
                 // // pattern: getPattern("Name") || null,
-                jsonPath: "BPAs[0].BPADetails.plotdetails.holdingnumber",
+                jsonPath: "BPA.holdingNo",
                 gridDefination: {
                     xs: 12,
                     sm: 12,
@@ -148,7 +148,7 @@ export const detailsofplot = getCommonCard({
                     className: "textfield-enterable-selection",
                   },
                 // // pattern: getPattern("Name") || null,
-                jsonPath: "BPAs[0].BPADetails.plotdetails.landregdetails",
+                jsonPath: "BPA.registrationDetails",
                 gridDefination: {
                     xs: 12,
                     sm: 12,
@@ -166,7 +166,7 @@ export const detailsofplot = getCommonCard({
                     labelName: "Select Government",
                     labelKey: "BPA_BOUNDARY_GOVT_QUASI_PLACEHOLDER"
                 },
-                jsonPath: "BPAs[0].BPADetails.plotdetails.govorquasi",
+                jsonPath: "BPA.govtOrQuasi",
                 props: {
                     className: "textfield-enterable-selection",
                     data: [

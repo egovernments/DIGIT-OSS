@@ -54,6 +54,10 @@ const screenConfig = {
               {
                 label: "BPA_COMMON_SLA",
                 jsonPath: "sla",
+              },
+              {
+                label: "BPA_PERMIT_NUMBER",
+                jsonPath: "permitOrderNo",
               }
             ],
             moduleName: "BPAREG",
