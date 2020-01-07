@@ -13,4 +13,12 @@
     width:300px;
     overflow-y: scroll;
     height: 187px;
-    }}
+    }
+    ul{
+      li{
+        white-space: normal;
+    word-wrap: break-word;
+	height:auto;
+      }
+    }
+  }
