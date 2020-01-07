@@ -189,19 +189,10 @@ export const getData = async (action, state, dispatch) => {
         null
       );
   await getMdmsData(action, state, dispatch);
-  // await getAllDataFromBillingSlab(getTenantId(), dispatch);
+  await getAllDataFromBillingSlab(getTenantId(), dispatch);
 
   if (applicationNo) {
     //Edit/Update Flow ----
-    // const applicationType = get(
-    //   state.screenConfiguration.preparedFinalObject,
-    //   "Licenses[0].tradeLicenseDetail.additionalDetail.applicationType",
-    //   null
-    // );
-    // await getAllDataFromBillingSlab(getTenantId(), dispatch,[{
-    //   key:"applicationType",value:applicationType
-    // }]);
-
     getQueryArg(window.location.href, "action") !== "edit" &&
       dispatch(
         prepareFinalObject("Licenses", [
