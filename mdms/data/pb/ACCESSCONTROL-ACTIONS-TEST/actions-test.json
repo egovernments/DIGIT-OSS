@@ -15982,6 +15982,37 @@
       "leftIcon": "custom:edcr",
       "rightIcon": "",
       "queryParams": ""
+    },
+    {
+      "id": 1940,
+      "name": "rainmaker-common-wns",
+      "url": "card",
+      "displayName": "SURE Dashboard",
+      "orderNumber": 2,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "integration",
+      "code": "",
+      "path": "",
+      "navigationURL": "integration/dss/home",
+      "leftIcon": "places:business-center",
+      "rightIcon": "",
+      "queryParams": ""
+    },
+    {
+      "id": 1941,
+      "name": "Dashboard Overview",
+      "url": "url",
+      "displayName": "Overview",
+      "orderNumber": 2,
+      "parentModule": "dss-dashboard",
+      "enabled": true,
+      "serviceCode": "DSS",
+      "code": "null",
+      "path": "Dashboard.Overview",
+      "navigationURL": "integration/dss/overview",
+      "leftIcon": "places:business-center",
+      "rightIcon": ""
     }
   ]
 }
