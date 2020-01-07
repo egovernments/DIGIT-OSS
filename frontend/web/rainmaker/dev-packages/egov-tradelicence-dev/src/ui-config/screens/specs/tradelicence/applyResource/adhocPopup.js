@@ -122,6 +122,34 @@ const updateAdhoc = (state, dispatch) => {
       dispatch(prepareFinalObject(
         "Licenses[0].tradeLicenseDetail.adhocExemption", -rebateAmount));
      }    
+     if (adhocAmount < 0) {
+      dispatch(
+        toggleSnackbar(
+        true,
+          {
+            labelName: "Adhoc Penalty amount should not be a negative value.",
+            labelKey: "ERR_PENALTY_NOT_NEGATIVE"
+          },
+        "warning"
+        )
+      );
+      dispatch(prepareFinalObject(
+        "Licenses[0].tradeLicenseDetail.adhocPenalty", null));
+    }
+    if (rebateAmount < 0) {
+      dispatch(
+        toggleSnackbar(
+        true,
+          {
+            labelName: "Adhoc Rebate amount should not be a negative value.",
+            labelKey: "ERR_REBATE_NOT_NEGATIVE"
+          },
+        "warning"
+        )
+      );
+      dispatch(prepareFinalObject(
+        "Licenses[0].tradeLicenseDetail.adhocExemption", null));
+    }
      if (adhocAmount % 1 != 0) {
       dispatch(
         toggleSnackbar(
