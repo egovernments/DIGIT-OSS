@@ -27,7 +27,7 @@ import {
   showHideAdhocPopup
 } from "../utils";
 
-import { footerReview ,downloadPrintContainer} from "./applyResource/footer";
+import { footerReview, downloadPrintContainer } from "./applyResource/footer";
 import {
   getFeesEstimateCard,
   getHeaderSideText,
@@ -181,13 +181,30 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
       state,
       "screenConfiguration.preparedFinalObject.Licenses[0].status"
     );
+    if (status === "REJECTED"|| status ==="PENDINGAPPROVAL") {
+      console.log("=====status=123======" + status + "============");
+      // set(
+      //   action.screenConfgig,
+      //   "components.div.children.tradeReviewDetails.children.cardContent.children.addPenaltyRebateButton.visible",
+      //   false
+      // );
+
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.tradeReviewDetails.children.cardContent.children.addPenaltyRebateButton",
+          "visible",
+          false
+        )
+      );
+    }
 
     let data = get(state, "screenConfiguration.preparedFinalObject");
 
     get(data, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory") &&
-    get(data, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory").split(
-      "."
-    )[0] === "INDIVIDUAL"
+      get(data, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory").split(
+        "."
+      )[0] === "INDIVIDUAL"
       ? setMultiOwnerForSV(action, true)
       : setMultiOwnerForSV(action, false);
 
@@ -209,34 +226,34 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
     }
 
     const statusCont = {
-        word1: {
-          ...getCommonTitle(
-            {
-              jsonPath: "Licenses[0].headerSideText.word1"
-            },
-            {
-              style: {
-                marginRight: "10px",
-                color: "rgba(0, 0, 0, 0.6000000238418579)"
-              }
+      word1: {
+        ...getCommonTitle(
+          {
+            jsonPath: "Licenses[0].headerSideText.word1"
+          },
+          {
+            style: {
+              marginRight: "10px",
+              color: "rgba(0, 0, 0, 0.6000000238418579)"
             }
-          )
-        },
-        word2: {
-          ...getCommonTitle({
-            jsonPath: "Licenses[0].headerSideText.word2"
-          })
-        },
-        cancelledLabel: {
-          ...getCommonHeader(
-            {
-              labelName: "Cancelled",
-              labelKey: "TL_COMMON_STATUS_CANC"
-            },
-            { variant: "body1", style: { color: "#E54D42" } }
-          ),
-          visible: false
-        }
+          }
+        )
+      },
+      word2: {
+        ...getCommonTitle({
+          jsonPath: "Licenses[0].headerSideText.word2"
+        })
+      },
+      cancelledLabel: {
+        ...getCommonHeader(
+          {
+            labelName: "Cancelled",
+            labelKey: "TL_COMMON_STATUS_CANC"
+          },
+          { variant: "body1", style: { color: "#E54D42" } }
+        ),
+        visible: false
+      }
     };
 
     const printCont = downloadPrintContainer(
@@ -289,7 +306,7 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
         false
       );
     }
-
+    
     const footer = footerReview(
       action,
       state,
@@ -438,7 +455,7 @@ const setActionItems = (action, object) => {
       labelKey: get(object, "titleKey")
     })
   );
-  set(
+  set( 
     action,
     "screenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.title.visible",
     get(object, "titleVisibility")
@@ -476,8 +493,8 @@ export const tradeReviewDetails = getCommonCard({
     },
     roleDefination: {
       rolePath: "user-info.roles",
-       roles: ["TL_APPROVER","TL_DOC_VERIFIER"]
-     }
+      roles: ["TL_APPROVER", "TL_DOC_VERIFIER"]   //roles: ["TL_APPROVER","TL_DOC_VERIFIER"]
+    }
   },
   reviewTradeDetails,
   reviewOwnerDetails,
@@ -507,6 +524,7 @@ const screenConfig = {
         false
       );
     }
+
     const queryObject = [
       { key: "tenantId", value: tenantId },
       { key: "businessService", value: "newTL" }
