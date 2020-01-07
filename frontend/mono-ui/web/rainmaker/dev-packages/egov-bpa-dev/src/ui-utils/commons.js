@@ -223,24 +223,10 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
     let wfDocuments;
     if (method === "UPDATE") {
       documents = payload.documents;
-      //hard coding these values but time being untill we fix documents capture issue.
-      //TODO: remove this block once WF Documents integrated
-      wfDocuments = [
-        {
-          documentType: "APPL.LOCALBODY.DTCP_APPROVAL",
-          id: "wf-doc-01",
-          fileStore: "firestore-0111"
-        },
-        {
-          documentType: "APPL.BUILDING_DIAGRAM.SECTION_PLAN",
-          id: "wf-doc-02",
-          fileStore: "firestore-01"
-        }
-      ];
       documents = requiredDocuments;
       set(payload, "documents", documents);
-      set(payload, "wfDocuments", wfDocuments);
-    } else if (method === "CREATE") {
+      set(payload, "wfDocuments", null);
+    } else if( method === 'CREATE') {
       documents = null;
     }
 

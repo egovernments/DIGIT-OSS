@@ -35,7 +35,7 @@ import { httpRequest, edcrHttpRequest } from "../../../../ui-utils/api";
 const titlebar = getCommonContainer({
   header: getCommonHeader({
     labelName: "Task Details",
-    labelKey: "BPA_TASK_DETAILS_HEADER"
+    labelKey: "NOC_TASK_DETAILS_HEADER"
   }),
   applicationNumber: {
     uiFramework: "custom-atoms-local",
@@ -43,6 +43,14 @@ const titlebar = getCommonContainer({
     componentPath: "ApplicationNoContainer",
     props: {
       number: getQueryArg(window.location.href, "applicationNumber")
+    }
+  },
+  permitNumber: {
+    uiFramework: "custom-atoms-local",
+    moduleName: "egov-bpa",
+    componentPath: "PermitNumber",
+    props: {
+      number: getQueryArg(window.location.href, "permitNumber") 
     }
   },
   downloadMenu: {
