@@ -1054,7 +1054,7 @@ class FormWizardDataEntry extends Component {
           break;
         }
         const { demand } = DemandProperties[0].propertyDetails[0];
-        let abc = "";
+        let errorLine = "";
         if (demand) {
           if (!demand[0]) {
             this.props.toggleSnackbarAndSetText(
@@ -1076,7 +1076,7 @@ class FormWizardDataEntry extends Component {
                   parseInt(data.demand[data1][data2].PT_DEMAND) <
                   parseInt(data.demand[data1][data2].PT_COLLECTED)
                 ) {
-                  return (abc = abc.concat(
+                  return (errorLine = errorLine.concat(
                     `${key2 + 1}:the taxHead of ${
                       data.demand[data1][data2].PT_TAXHEAD
                     } demand ${
@@ -1090,12 +1090,12 @@ class FormWizardDataEntry extends Component {
             });
           });
         }
-        if (abc.length > 0) {
+        if (errorLine.length > 0) {
           this.props.toggleSnackbarAndSetText(
             true,
             {
-              labelName: `the error is ${abc}`,
-              labelKey: `ERR03_DEMAND_ENTER_THE_DATA ${abc}`
+              labelName: `the error is ${errorLine}`,
+              labelKey: `ERR03_DEMAND_ENTER_THE_DATA`
             },
             "error"
           );
