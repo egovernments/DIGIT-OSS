@@ -163,26 +163,16 @@
 		</display:column>
 		<display:caption media="pdf" >
 			<div align="left" style="text-align: left;">
-			 
-				<s:property value="%{generalLedgerReport.heading}" />
-				(
-				<s:property value="%{generalLedgerReport.isConfirmedCount}" />
-				in
-				<s:property value="%{generalLedgerReport.totalCount}" />
-				are unconfirmed)
+				<s:property value="%{titleName}" />
+				<s:property value="%{generalLedgerReportBean.heading}" />
 			</div>
-			 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<s:property value="%{titleName}" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	  General Ledger Report 
 		</display:caption>
 		<display:caption media="excel">
-				   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						  General Ledger Report  
-				</display:caption>
+		<div align="left">
+				<s:property value="%{titleName}" />
+				<s:property value="%{generalLedgerReportBean.heading}" />
+		</div>
+		</display:caption>
 		<display:setProperty name="export.pdf" value="true" />
 		<display:setProperty name="export.pdf.filename"
 			value="General Ledger Report.pdf" />

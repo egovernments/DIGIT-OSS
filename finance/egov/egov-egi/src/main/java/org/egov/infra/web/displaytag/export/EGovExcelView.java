@@ -50,19 +50,36 @@ package org.egov.infra.web.displaytag.export;
 
 import org.apache.commons.lang.StringUtils;
 import org.displaytag.export.BaseExportView;
+import org.displaytag.model.Column;
+import org.displaytag.model.ColumnIterator;
+import org.displaytag.model.Row;
+import org.displaytag.model.RowIterator;
 import org.displaytag.model.TableModel;
 
+import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.io.Writer;
+import java.util.regex.Pattern;
+
+import javax.servlet.jsp.JspException;
 
 public class EGovExcelView extends BaseExportView {
 
-	/**
+    /**
 	 * @see org.displaytag.export.BaseExportView#setParameters(TableModel, boolean, boolean, boolean)
 	 */
+    private TableModel model;
+    private boolean decorated;
+    private boolean exportFull;
+    private boolean header;
 	@Override
 	public void setParameters(final TableModel tableModel, final boolean exportFullList, final boolean includeHeader, final boolean decorateValues) {
 		super.setParameters(tableModel, exportFullList, includeHeader, decorateValues);
+		this.model = tableModel;
+	        this.exportFull = exportFullList;
+	        this.header = includeHeader;
+	        this.decorated = decorateValues;
 	}
 
 	/**
@@ -81,7 +98,7 @@ public class EGovExcelView extends BaseExportView {
 	protected String getRowEnd() {
 		return "\n"; //$NON-NLS-1$
 	}
-
+	
 	/**
 	 * @see org.displaytag.export.BaseExportView#getCellEnd()
 	 */
@@ -92,7 +109,7 @@ public class EGovExcelView extends BaseExportView {
 
 	@Override
 	protected String getDocumentStart() {
-		return escapeColumnValue(super.getDocumentStart());
+		return escapeColumnValue(this.model.getCaption());
 	}
 
 	/**
@@ -152,5 +169,93 @@ public class EGovExcelView extends BaseExportView {
 		}
 		return returnValue;
 	}
+	
+	@Override
+	public void doExport(Writer out) throws IOException, JspException {
+	        final String DOCUMENT_START = getDocumentStart();
+	        final String DOCUMENT_END = getDocumentEnd();
+	        final String ROW_START = getRowStart();
+	        final String ROW_END = getRowEnd();
+	        final String CELL_START = getCellStart();
+	        final String CELL_END = getCellEnd();
+	        final boolean ALWAYS_APPEND_CELL_END = getAlwaysAppendCellEnd();
+	        final boolean ALWAYS_APPEND_ROW_END = getAlwaysAppendRowEnd();
+
+	        // document start
+	        if(DOCUMENT_START != null && DOCUMENT_START.contains("\\n")){
+	            String[] strArr = DOCUMENT_START.split(Pattern.quote("\\n"));
+	            for(String str : strArr){
+	                write(out, str.trim());
+	                write(out, "\n");
+	            }
+	        }else{
+	            write(out, DOCUMENT_START);
+	        }
+	        
+	        if (ROW_END != null)
+	        {
+	            out.write(ROW_END);
+	        }
+
+	        if (this.header)
+	        {
+	            write(out, doHeaders());
+	        }
+
+	        // get the correct iterator (full or partial list according to the exportFull field)
+	        RowIterator rowIterator = this.model.getRowIterator(this.exportFull);
+
+	        // iterator on rows
+	        while (rowIterator.hasNext())
+	        {
+	            Row row = rowIterator.next();
+
+	            if (this.model.getTableDecorator() != null)
+	            {
+
+	                String stringStartRow = this.model.getTableDecorator().startRow();
+	                write(out, stringStartRow);
+	            }
+
+	            // iterator on columns
+	            ColumnIterator columnIterator = row.getColumnIterator(this.model.getHeaderCellList());
+
+	            write(out, ROW_START);
+
+	            while (columnIterator.hasNext())
+	            {
+	                Column column = columnIterator.nextColumn();
+
+	                // Get the value to be displayed for the column
+	                String value = escapeColumnValue(column.getValue(this.decorated));
+
+	                write(out, CELL_START);
+
+	                write(out, value);
+
+	                if (ALWAYS_APPEND_CELL_END || columnIterator.hasNext())
+	                {
+	                    write(out, CELL_END);
+	                }
+
+	            }
+	            if (ALWAYS_APPEND_ROW_END || rowIterator.hasNext())
+	            {
+	                write(out, ROW_END);
+	            }
+	        }
+
+	        // document end
+	        write(out, DOCUMENT_END);
+	}
+	
+	private void write(Writer out, String string) throws IOException
+	    {
+	        if (string != null)
+	        {
+	            out.write(string);
+	        }
+	    }
+
 
 }
