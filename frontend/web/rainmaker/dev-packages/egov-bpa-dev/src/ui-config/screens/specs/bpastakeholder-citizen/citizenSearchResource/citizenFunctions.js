@@ -92,6 +92,10 @@ export const fetchData = async (
         let service = getTextToLocalMapping(
           "MODULE_" + get(element, "businessService")
         );
+
+        let status = getTextToLocalMapping(
+          "WF_ARCHITECT_" + get(element, "status")
+        );
         let licensetypeFull =
           element.tradeLicenseDetail.tradeUnits[0].tradeType;
         if (licensetypeFull.split(".").length > 1) {
@@ -118,7 +122,7 @@ export const fetchData = async (
             "assignee",
             null
           ),
-          status: get(element, "status", null),
+          status,
           sla: get(
             businessIdToOwnerMapping[element.applicationNumber],
             "sla",
@@ -134,11 +138,14 @@ export const fetchData = async (
 
     const businessIdToOwnerMappingForBPA = await getWorkFlowDataForBPA(bpaResponse.Bpa);
     bpaResponse.Bpa.forEach(element => {
+      let status = getTextToLocalMapping(
+        "WF_BPA_" + get(element, "status")
+      );
       let service = getTextToLocalMapping(
         "BPA_APPLICATIONTYPE_" + get(element, "applicationType")
       );
       service += " - "+getTextToLocalMapping(
-        "MODULE_" + get(element, "serviceType")
+        "BPA_SERVICETYPE_" + get(element, "serviceType")
       );
       let primaryowner = "-";
       let owners = get(element, "owners", [])
@@ -157,7 +164,7 @@ export const fetchData = async (
           "assignee",
           null
         ),
-        status: get(element, "status", null),
+        status,
         sla: get(
           businessIdToOwnerMappingForBPA[element.applicationNo],
           "sla",
