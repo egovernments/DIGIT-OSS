@@ -178,6 +178,8 @@ export const updatePFOforSearchResults = async (
   setApplicationNumberBox(state, dispatch);
 
   createOwnersBackup(dispatch, payload);
+
+  return payload;
 };
 
 export const getBoundaryData = async (

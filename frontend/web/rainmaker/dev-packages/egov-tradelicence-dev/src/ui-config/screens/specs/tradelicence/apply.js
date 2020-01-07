@@ -14,7 +14,7 @@ import {
   commonTransform,
   objectToDropdown,
   getCurrentFinancialYear,
-  // getAllDataFromBillingSlab
+  getAllDataFromBillingSlab
 } from "../utils";
 import {
   prepareFinalObject,
@@ -193,11 +193,15 @@ export const getData = async (action, state, dispatch) => {
 
   if (applicationNo) {
     //Edit/Update Flow ----
-    const applicationType = get(
-      state.screenConfiguration.preparedFinalObject,
-      "Licenses[0].tradeLicenseDetail.additionalDetail.applicationType",
-      null
-    );
+    // const applicationType = get(
+    //   state.screenConfiguration.preparedFinalObject,
+    //   "Licenses[0].tradeLicenseDetail.additionalDetail.applicationType",
+    //   null
+    // );
+    // await getAllDataFromBillingSlab(getTenantId(), dispatch,[{
+    //   key:"applicationType",value:applicationType
+    // }]);
+
     getQueryArg(window.location.href, "action") !== "edit" &&
       dispatch(
         prepareFinalObject("Licenses", [
@@ -214,52 +218,62 @@ export const getData = async (action, state, dispatch) => {
       );
     // dispatch(prepareFinalObject("LicensesTemp", []));
 
-    await updatePFOforSearchResults(action, state, dispatch, applicationNo);
-    if (!queryValue) {
-      const oldApplicationNo = get(
-        state.screenConfiguration.preparedFinalObject,
-        "Licenses[0].applicationNumber",
+    updatePFOforSearchResults(action, state, dispatch, applicationNo).then((response)=>{
+      const applicationType = get(
+        response,
+        "Licenses[0].tradeLicenseDetail.additionalDetail.applicationType",
         null
       );
-      dispatch(
-        prepareFinalObject("Licenses[0].oldLicenseNumber", oldApplicationNo)
-      );
-      if (oldApplicationNo !== null) {
-        dispatch(prepareFinalObject("Licenses[0].financialYear", ""));
-        dispatch(
-          prepareFinalObject(
-            "Licenses[0].tradeLicenseDetail.additionalDetail.applicationType",
-            "APPLICATIONTYPE.RENEWAL"
-          )
+      getAllDataFromBillingSlab(getTenantId(1), dispatch,[{
+        key:"applicationType",value:applicationType
+      }]);
+      if (!queryValue) {
+        const oldApplicationNo = get(
+          state.screenConfiguration.preparedFinalObject,
+          "Licenses[0].applicationNumber",
+          null
         );
+        dispatch(
+          prepareFinalObject("Licenses[0].oldLicenseNumber", oldApplicationNo)
+        );
+        if (oldApplicationNo !== null) {
+          dispatch(prepareFinalObject("Licenses[0].financialYear", ""));
+          dispatch(
+            prepareFinalObject(
+              "Licenses[0].tradeLicenseDetail.additionalDetail.applicationType",
+              "APPLICATIONTYPE.RENEWAL"
+            )
+          );
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.financialYear",
+              "props.value",
+              ""
+            )
+          );
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.applicationType",
+              "props.value",
+              "APPLICATIONTYPE.RENEWAL"
+            )
+          );
+        }
+
+        dispatch(prepareFinalObject("Licenses[0].applicationNumber", ""));
         dispatch(
           handleField(
             "apply",
-            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.financialYear",
-            "props.value",
-            ""
-          )
-        );
-        dispatch(
-          handleField(
-            "apply",
-            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.applicationType",
-            "props.value",
-            "APPLICATIONTYPE.RENEWAL"
+            "components.div.children.headerDiv.children.header.children.applicationNumber",
+            "visible",
+            false
           )
         );
       }
+    });
 
-      dispatch(prepareFinalObject("Licenses[0].applicationNumber", ""));
-      dispatch(
-        handleField(
-          "apply",
-          "components.div.children.headerDiv.children.header.children.applicationNumber",
-          "visible",
-          false
-        )
-      );
-    }
   }
 };
 
