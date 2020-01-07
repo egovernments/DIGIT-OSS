@@ -10,7 +10,7 @@ const Filter = ({ filter, handleChangeFilter, clearFilter }) => {
         <div className="row" style={{marginLeft:'-5px'}}>
             <div className="col-md-3">
                 <MultiSelectDropdown
-                multiple
+                    multiple
                     onChange={(e) => { handleChangeFilter('moduleFilter', e.target.value) }}
                     floatingLabelText={<Label label="CS_INBOX_MODULE_FILTER" fontSize="12px" />}//"Module"
                     className="filter-fields"
@@ -23,11 +23,12 @@ const Filter = ({ filter, handleChangeFilter, clearFilter }) => {
                         borderBottom: "1px solid #FE7A51",
                         width: "100%"
                     }}
+                    prefix ={"CS_COMMON_INBOX_"}
                 />
             </div>
             <div className="col-md-3">
                 <MultiSelectDropdown
-                 multiple
+                    multiple
                     onChange={(e, index, value) => {
                         handleChangeFilter('localityFilter', e.target.value)
                     }}
@@ -59,6 +60,7 @@ const Filter = ({ filter, handleChangeFilter, clearFilter }) => {
                         borderBottom: "1px solid #FE7A51",
                         width: "100%"
                     }}
+                    prefix ={"COMMON_"}
                 />
             </div>
             <div className="col-md-3">

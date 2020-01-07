@@ -210,7 +210,18 @@
     top: 0px;
   }
    .sort-btn-mob{
-       margin-left: 90%;
+       //margin-left: 90%;
+       flex-direction: row;
+      
+   }
+   .sort-icon{
+    //margin-left: 70%;
+    flex-direction: row;
+    
+   }
+   .sort-icon-flex{
+     display: flex;
+      justify-content: flex-end;
    }
 }
 

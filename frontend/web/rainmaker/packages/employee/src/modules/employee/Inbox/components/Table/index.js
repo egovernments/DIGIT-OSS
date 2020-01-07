@@ -65,22 +65,16 @@ class InboxData extends React.Component {
   };
 
   getModuleLink = async (item, row, index) => {
-    const { prepareFinalObject } = this.props;
     const status = row[2].text && row[2].text.props.defaultLabel;
     const taskId = index === 0 && item.text;
     const tenantId = getTenantId();
-    const processInstances = await this.getProcessIntanceData(row[0].text);
-
-    if (processInstances && processInstances.length > 0) {
-      await addWflowFileUrl(processInstances, prepareFinalObject);
-    }
-
-    let baseUrl = document.location.origin;
+    // const processInstances = await this.getProcessIntanceData(row[0].text);
+    // if (processInstances && processInstances.length > 0) {
+    //   await addWflowFileUrl(processInstances, prepareFinalObject);
+    // }
     let contextPath = status === "Initiated" ? getWFConfig(row[0].hiddenText).INITIATED : getWFConfig(row[0].hiddenText).DEFAULT;
-
     let queryParams = `applicationNumber=${taskId}&tenantId=${tenantId}`;
     this.props.setRoute(`${contextPath}?${queryParams}`);
-    // window.location.href = `${baseUrl}${contextPath}?${queryParams}`;
   };
 
   getSlaColor = (sla, businessService) => {
@@ -202,7 +196,9 @@ class InboxData extends React.Component {
           </Table>
         </Hidden>
         <Hidden only={["sm", "md", "lg", "xl"]} implementation="css">
+        <div class="sort-icon-flex">
         <div className="sort-btn-mob">
+        
         {sortOrder === "asc" && (
                     <div onClick={() => this.sortingTable("desc")}>
                       <ImportExportIcon/>
@@ -212,9 +208,12 @@ class InboxData extends React.Component {
                     <div onClick={() => this.sortingTable("asc")}>
                       <ImportExportIcon/>
                     </div>
-        )}  
+        )} 
         
-          </div>
+        </div>  
+        <Label className="sort-icon" label={"SORT_ICON"} />
+        
+       </div>
           {data.rows.length === 0 ? (
             <Card textChildren={<Label labelClassName="" label="COMMON_INBOX_NO_DATA" />} />
           ) : (
