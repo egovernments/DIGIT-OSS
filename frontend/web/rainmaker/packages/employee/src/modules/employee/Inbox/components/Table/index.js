@@ -202,7 +202,9 @@ class InboxData extends React.Component {
           </Table>
         </Hidden>
         <Hidden only={["sm", "md", "lg", "xl"]} implementation="css">
+        <div class="flex">
         <div className="sort-btn-mob">
+        
         {sortOrder === "asc" && (
                     <div onClick={() => this.sortingTable("desc")}>
                       <ImportExportIcon/>
@@ -212,9 +214,12 @@ class InboxData extends React.Component {
                     <div onClick={() => this.sortingTable("asc")}>
                       <ImportExportIcon/>
                     </div>
-        )}  
+        )} 
         
-          </div>
+        </div>  
+        <Label className="sort-icon" label={"SORT_ICON"} />
+        
+       </div>
           {data.rows.length === 0 ? (
             <Card textChildren={<Label labelClassName="" label="COMMON_INBOX_NO_DATA" />} />
           ) : (
