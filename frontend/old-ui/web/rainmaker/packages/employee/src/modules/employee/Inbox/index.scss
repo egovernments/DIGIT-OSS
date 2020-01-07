@@ -10,5 +10,22 @@
 .quick-action-button{
     display: none;
 }
-
+.landingPageHeader .label-text {
+     padding-top: 5px  !important;
+    
+  }
+  .landingPageUser .label-text {
+    color: rgba(0, 0, 0, 0.8700000047683716);
+    font-size: 24px !important;
+    padding-top: 5px  !important;
+    padding-left: 8px  !important;
+    padding-bottom: 5px;
+  }
 }
+
+.landingPageHeader .label-text {
+    color: rgba(0, 0, 0, 0.8700000047683716);
+    font-size: 24px !important;
+    padding-top: 20px;
+    
+  }

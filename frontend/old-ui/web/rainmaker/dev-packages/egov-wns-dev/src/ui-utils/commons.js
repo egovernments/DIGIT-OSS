@@ -1057,6 +1057,14 @@ export const wsDownloadConnectionDetails = (receiptQueryString, mode, dispatch) 
                         { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
                     ]
 
+                    if (payloadReceiptDetails.WaterConnection[0].rainWaterHarvesting !== undefined && payloadReceiptDetails.WaterConnection[0].rainWaterHarvesting !== null) {
+                        if (payloadReceiptDetails.WaterConnection[0].rainWaterHarvesting === true) {
+                            payloadReceiptDetails.WaterConnection[0].rainWaterHarvesting = 'SCORE_YES'
+                        } else {
+                            payloadReceiptDetails.WaterConnection[0].rainWaterHarvesting = 'SCORE_NO'
+                        }
+                    }
+
                     if (payloadReceiptDetails.WaterConnection[0].property.propertyType !== null && payloadReceiptDetails.WaterConnection[0].property.propertyType !== undefined) {
                         const propertyTpe = "[?(@.code  == " + JSON.stringify(payloadReceiptDetails.WaterConnection[0].property.propertyType) + ")]"
                         let propertyTypeParams = { MdmsCriteria: { tenantId: "pb", moduleDetails: [{ moduleName: "PropertyTax", masterDetails: [{ name: "PropertyType", filter: `${propertyTpe}` }] }] } }
