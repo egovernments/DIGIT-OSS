@@ -6,12 +6,10 @@ import ServiceList from "egov-ui-kit/common/common/ServiceList";
 import FilterDialog from "./components/FilterDialog";
 import MenuButton from "egov-ui-framework/ui-molecules/MenuButton";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import "./index.css";
+import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
+import { getTenantId, getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import LoadingIndicator from "egov-ui-framework/ui-molecules/LoadingIndicator";
-const iconStyle = {
-  width: "48px",
-  height: "46.02px",
-};
+import "./index.css";
 
 class Inbox extends Component {
   state = {
@@ -19,6 +17,12 @@ class Inbox extends Component {
     hasWorkflow: false,
     filterPopupOpen: false
   };
+
+  componentDidMount = () => {
+    const {fetchLocalizationLabel} = this.props
+    const tenantId = getTenantId();
+    fetchLocalizationLabel(getLocale(), tenantId, tenantId);
+  }
 
  
   componentWillReceiveProps(nextProps) {
@@ -69,11 +73,11 @@ class Inbox extends Component {
         
     return (
       <div>
-        <div className="rainmaker-topHeader" style={{ marginTop: 30, justifyContent: "space-between" }}>
+        <div className="rainmaker-topHeader" style={{ marginTop: 15, justifyContent: "space-between" }}>
         {Loading&&isLoading&&<LoadingIndicator></LoadingIndicator>}
           <div className="rainmaker-topHeader flex">
             <Label className="landingPageHeader" label={"CS_LANDING_PAGE_WELCOME_TEXT"} />
-            <Label className="landingPageUser" label={name} />
+            <Label className="landingPageUser" label={name} />,
           </div>
           <div className="quick-action-button">
             <MenuButton data={buttonItems} />
@@ -103,7 +107,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setRoute: url => dispatch(setRoute(url))
+    setRoute: url => dispatch(setRoute(url)),
+    fetchLocalizationLabel: (locale,tenantId,module) => dispatch(fetchLocalizationLabel(locale,tenantId,module)),
   };
 }
 

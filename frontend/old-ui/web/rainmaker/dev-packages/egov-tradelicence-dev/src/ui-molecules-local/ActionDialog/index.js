@@ -245,15 +245,15 @@ class ActionDialog extends React.Component {
                       jsonPath={`${dataPath}.wfDocuments`}
                       maxFileSize={5000}
                     />
-                    <Grid sm={12} style={{ textAlign: "right" }}>
+                    <Grid sm={12} style={{ textAlign: "right" }} className="bottom-button-container">
                       <Button
                         variant={"contained"}
                         color={"primary"}
                         style={{
                           minWidth: "200px",
-                          height: "48px",
-                          marginRight: "45px"
+                          height: "48px"
                         }}
+                        className="bottom-button"
                         onClick={() =>
                           onButtonClick(buttonLabel, isDocRequired)
                         }

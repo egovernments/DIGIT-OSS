@@ -391,5 +391,11 @@ export const getTextToLocalMapping = label => {
         "BILLINGSERVICE_BUSINESSSERVICE_PT",
         localisationLabels
       );
+    default : 
+    return getLocaleLabels(
+      label,
+      label,
+      localisationLabels
+    );
   }
 };
