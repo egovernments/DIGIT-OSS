@@ -69,11 +69,11 @@ class Inbox extends Component {
         
     return (
       <div>
-        <div className="rainmaker-topHeader" style={{ marginTop: 30, justifyContent: "space-between" }}>
+        <div className="rainmaker-topHeader" style={{ marginTop: 15, justifyContent: "space-between" }}>
         {Loading&&isLoading&&<LoadingIndicator></LoadingIndicator>}
           <div className="rainmaker-topHeader flex">
             <Label className="landingPageHeader" label={"CS_LANDING_PAGE_WELCOME_TEXT"} />
-            <Label className="landingPageUser" label={name} />
+            <Label className="landingPageUser" label={name} />,
           </div>
           <div className="quick-action-button">
             <MenuButton data={buttonItems} />

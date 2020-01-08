@@ -70,7 +70,14 @@ const TextFieldIcon = ({
           </Hidden>
         </div>
       ) : (
-        <TargetIcon onClick={onIconClick} style={{ ...style.iconStyle, ...iconStyle }} />
+        <div onClick={onIconClick} style={{ cursor: "pointer" }}>
+        <Hidden only={['sm', 'lg','xl','md']}>
+        <TargetIcon onClick={onIconClick} style={{ ...style.iconStyle, ...iconStyle , top: 15 }} />
+        </Hidden>
+        <Hidden only='xs'>
+        <TargetIcon onClick={onIconClick} style={{ ...style.iconStyle, ...iconStyle, top: 46  }} />
+        </Hidden>
+      </div>
       )}
       <TextField
         autoFocus={autoFocus}
