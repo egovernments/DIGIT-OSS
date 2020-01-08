@@ -1055,6 +1055,7 @@ class FormWizardDataEntry extends Component {
         }
         const { demand } = DemandProperties[0].propertyDetails[0];
         let errorLine = "";
+        let yearData=false;
         if (demand) {
           if (!demand[0]) {
             this.props.toggleSnackbarAndSetText(
@@ -1068,7 +1069,6 @@ class FormWizardDataEntry extends Component {
             );
             break;
           }
-
           const currentYear = demand.forEach((data, key) => {
             return Object.keys(data.demand).forEach((data1, key1) => {
               return Object.keys(data.demand[data1]).forEach((data2, key2) => {
@@ -1083,24 +1083,37 @@ class FormWizardDataEntry extends Component {
                       data.demand[data1][data2].PT_DEMAND
                     } of the year ${data1} is must be greater than the collection ${
                       data.demand[data1][data2].PT_COLLECTED
-                    }.;\n`
+                    }.\n`
                   ));
                 }
               });
             });
           });
+             yearData=demand.filter(data=>data != undefined).length===demand.length
         }
         if (errorLine.length > 0) {
           this.props.toggleSnackbarAndSetText(
             true,
             {
-              labelName: `the error is ${errorLine}`,
-              labelKey: `ERR03_DEMAND_ENTER_THE_DATA`
+              labelName: `The error is ${errorLine}`,
+              labelKey: "ERR03_DEMAND_ENTER_THE_DATA"
             },
             "error"
           );
           break;
-        } else {
+        }
+        else if(!yearData){
+          this.props.toggleSnackbarAndSetText(
+              true,
+              {
+                labelName: "the demand entry is not sequential",
+                labelKey: "ERR04_DEMAND_ENTER_THE_DATA"
+              },
+              "error"
+            );
+            break;
+        }
+         else {
           this.setState({
             selected: index,
             formValidIndexArray: [...formValidIndexArray, selected]
@@ -1127,7 +1140,7 @@ class FormWizardDataEntry extends Component {
           propertyId = pty.propertyId;
           tenantId = pty.tenantId;
         }
-        this.props.history.push(`/property-tax/search-property`);
+        this.props.history.push(`/property-tax/`);
         // this.setState(
         //   {
         //     selected: index,
@@ -1702,8 +1715,7 @@ class FormWizardDataEntry extends Component {
         {
           Properties: properties
         }
-      );
-      <br />;
+      );    
       const demandData = [];
       const demandDetails = [];
       const demandDetails1 = [];
@@ -1712,11 +1724,13 @@ class FormWizardDataEntry extends Component {
           return Object.keys(demand.demand).map((data, key) => {
             return (
               demand.demand[data].map((d, i) => {
-                demandDetails1.push({
-                  taxHeadMasterCode: d.PT_TAXHEAD,
-                  taxAmount: d.PT_DEMAND,
-                  collectionAmount: d.PT_COLLECTED
-                });
+                if(d.PT_DEMAND !=''&& d.PT_COLLECTED !=''){
+                  demandDetails1.push({
+                    taxHeadMasterCode: d.PT_TAXHEAD,
+                    taxAmount: parseInt(d.PT_DEMAND),
+                    collectionAmount: parseInt(d.PT_COLLECTED)
+                  });
+                }
               }),
               demandData.push({
                 tenantId: getTenantId(),
