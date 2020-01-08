@@ -4,7 +4,9 @@
   letter-spacing: 0.58px;
   line-height: 17px;
 }
-
+.search-bar{
+  padding-left:10%;
+}
 
 @media only screen and (max-width: 768px) {
   .backgroundWhite{
@@ -19,12 +21,14 @@
   }
   .whiteBackground{
     background-color: white !important;
-    height: 30px !important;
+    height: 36px !important;
+    
+    // width:90%!important;
     top: 6px;
       input{
         // padding: 0px 0px 2px !important;
         margin-top: 5px !important;
-        left: 10%;
+        left: 30px;
       }
   }
   .sort-icon{
@@ -34,6 +38,8 @@
     top:10px;
   }
   .search-bar{
+    padding-left: 0%;
+    width:80%;
     left: 10px;
     padding-bottom: 10px!important;
   }
@@ -54,13 +60,14 @@
       background-color: white !important;
   }
   .whiteBackground {
-    height: 30px !important;
+    height: 36px !important;
     top: 26px;
+    // width:80%!important;
     
     input{
       // padding: 0px 0px 2px !important;
       margin-top: 2px !important;
-      left: 10%;
+      left: 27px;
     }}
   }
 

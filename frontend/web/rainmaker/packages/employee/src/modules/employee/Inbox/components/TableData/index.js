@@ -548,10 +548,10 @@ class TableData extends Component {
       <div className="col-md-12 col-sm-12 col-xs-12">
         <div>
           <div className="row" style={{ marginBottom: '5px',marginTop:'5px', marginLeft: '-20px' }}>
-            <div className="col-md-8 col-sm-8 col-xs-12"  style={{ marginTop: '5px'}}>
+            <div className="col-md-9 col-sm-9 col-xs-12"  style={{ marginTop: '5px'}}>
               <Label className="landingPageUser" label={"WF_MY_WORKLIST"} />
             </div>
-            <div className="col-md-4 col-sm-4 col-xs-10 search-bar">
+            <div className="col-md-3 col-sm-3 col-xs-10 search-bar" style={{}}>
               <TextFieldIcon
               hintStyle={{top:'6px'}}
                 hintText={getLocaleLabels("","CS_INBOX_SEARCH",localizationLabels)}
