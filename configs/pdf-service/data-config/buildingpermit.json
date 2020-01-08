@@ -1,0 +1,241 @@
+{
+    "key": "buildingpermit",
+    "DataConfigs": {
+        "serviceName": "rainmaker-common",
+        "version": "1.0.0",
+        "baseKeyPath": "$.Bpa.*",
+        "entityIdPath": "$.applicationNo",
+        "isCommonTableBorderRequired": true,
+        "mappings": [
+            {
+                "mappings": [
+                    {
+                        "direct": [
+                            {
+                                "variable": "logoImage",
+                                "url": "https://raw.githubusercontent.com/egovernments/egov-web-app/master/web/rainmaker/dev-packages/egov-ui-kit-dev/src/assets/images/pblogo.png",
+                                "type": "image"
+                            },
+                            {
+                                "variable": "applicationNo",
+                                "value": {
+                                    "path": "$.applicationNo"
+                                }
+                            },
+                            {
+                                "variable": "planPermissionNo",
+                                "value": {
+                                    "path": "$.permitOrderNo"
+                                }
+                            },
+                            {
+                                "variable": "dated",
+                                "value": {
+                                    "path": "$.auditDetails.createdTime"
+                                },
+                                "type": "date"
+                            },
+                            {
+                                "variable": "favourOf",
+                                "value": {
+                                    "path": "$.owners.*.name"
+                                }
+                            },
+                            {
+                                "variable": "buidlingNearGovt",
+                                "value": {
+                                    "path": "BUILDING_NEAR_GOVT_BLDG"
+                                },
+                                "type": "label",
+                                "localisation": {
+                                    "required": true,
+                                    "prefix": null,
+                                    "module": "rainmaker-common"
+                                }
+                            },
+                            {
+                                "variable": "buidlingNearMonument",
+                                "value": {
+                                    "path": "BUILDING_NEAR_MONUMENT"
+                                },
+                                "type": "label",
+                                "localisation": {
+                                    "required": true,
+                                    "prefix": null,
+                                    "module": "rainmaker-common"
+                                }
+                            },
+                            {
+                                "variable": "constructionNearAirport",
+                                "value": {
+                                    "path": "NOC_FOR_CONSTRUCTION_NEAR_AIRPORT"
+                                },
+                                "type": "label",
+                                "localisation": {
+                                    "required": true,
+                                    "prefix": null,
+                                    "module": "rainmaker-common"
+                                }
+                            },
+                            {
+                                "variable": "constructionNearDefence",
+                                "value": {
+                                    "path": "NOC_FOR_CONSTRUCTION_NEAR_DEFENCE_AERODOMES"
+                                },
+                                "type": "label",
+                                "localisation": {
+                                    "required": true,
+                                    "prefix": null,
+                                    "module": "rainmaker-common"
+                                }
+                            },
+                            {
+                                "variable": "greenBuildingSustainable",
+                                "value": {
+                                    "path": "PROVISION_FOR_GREEN_BUILDINGS_AND_SUSTAINABILITY"
+                                },
+                                "type": "label",
+                                "localisation": {
+                                    "required": true,
+                                    "prefix": null,
+                                    "module": "rainmaker-common"
+                                }
+                            },
+                            {
+                                "variable": "nocRailways",
+                                "value": {
+                                    "path": "nocRailways"
+                                },
+                                "type": "label",
+                                "localisation": {
+                                    "required": true,
+                                    "prefix": null,
+                                    "module": "rainmaker-common"
+                                }
+                            },
+                            {
+                                "variable": "nocIrrigationDept",
+                                "value": {
+                                    "path": "NOC_IRRIGATION_DEPT"
+                                },
+                                "type": "label",
+                                "localisation": {
+                                    "required": true,
+                                    "prefix": null,
+                                    "module": "rainmaker-common"
+                                }
+                            },
+                            {
+                                "variable": "nocCollectorGvtLand",
+                                "value": {
+                                    "path": "NOC_COLLECTOR_GVT_LAND"
+                                },
+                                "type": "label",
+                                "localisation": {
+                                    "required": true,
+                                    "prefix": null,
+                                    "module": "rainmaker-common"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "externalAPI": [
+                    {
+                        "path": "https://egov-dcr-galaxy.egovernments.org/edcr/rest/dcr/scrutinydetails",
+                        "queryParam": "edcrNumber=$.edcrNumber&tenantId=$.tenantId",
+                        "apiRequest": null,
+                        "responseMapping": [
+                            {
+                                "variable": "isBuildingNearGovtBLDG",
+                                "value": "$.planDetail.planInfoProperties.BUILDING_NEAR_GOVT_BLDG"
+                            },
+                            {
+                                "variable": "isBuildingNearMonument",
+                                "value": "$.planDetail.planInfoProperties.BUILDING_NEAR_MONUMENT"
+                            },
+                            {
+                                "variable": "isCostructionNearAirport",
+                                "value": "$.planDetail.planInfoProperties.NOC_FOR_CONSTRUCTION_NEAR_AIRPORT"
+                            },
+                            {
+                                "variable": "isConstructionNearDefence",
+                                "value": "$.planDetail.planInfoProperties.NOC_FOR_CONSTRUCTION_NEAR_DEFENCE_AERODOMES"
+                            },
+                            {
+                                "variable": "isGreenBuildingSustainable",
+                                "value": "$.planDetail.planInfoProperties.PROVISION_FOR_GREEN_BUILDINGS_AND_SUSTAINABILITY"
+                            },
+                            {
+                                "variable": "isNocRailways",
+                                "value": "$.planDetail.planInformation.nocRailways"
+                            },
+                            {
+                                "variable": "isNocIrrigationDept",
+                                "value": "$.planDetail.planInfoProperties.NOC_IRRIGATION_DEPT"
+                            },
+                            {
+                                "variable": "isNocCollectorGvtLand",
+                                "value": "$.planDetail.planInfoProperties.NOC_COLLECTOR_GVT_LAND"
+                            },
+                            {
+                                "variable": "status",
+                                "value": "$.status"
+                            },
+                            {
+                                "variable": "applicantName",
+                                "value": "$.planDetail.planInformation.applicantName"
+                            },
+                            {
+                                "variable": "applicationDate",
+                                "value": "$.planDetail.applicationDate"
+                            },
+                            {
+                                "variable": "occupancyType",
+                                "value": "$.planDetail.planInformation.occupancy"
+                            },
+                            {
+                                "variable": "demolitionArea",
+                                "value": "$.planDetail.planInformation.demolitionArea"
+                            },
+                            {
+                                "variable": "roadWidth",
+                                "value": "$.planDetail.planInformation.roadWidth"
+                            },
+                            {
+                                "variable": "areaType",
+                                "value": "$.planDetail.planInformation.typeOfArea"
+                            },
+                            {
+                                "variable": "plotReserveNo",
+                                "value": "$.planDetail.planInformation.plotNo"
+                            },
+                            {
+                                "variable": "revenueWard",
+                                "value": "$.planDetail.planInformation.revenueWard"
+                            },
+                            {
+                                "variable": "desam",
+                                "value": "$.planDetail.planInformation.desam"
+                            },
+                            {
+                                "variable": "village",
+                                "value": "$.planDetail.planInformation.village"
+                            },
+                            {
+                                "variable": "avgWidthOfPlot",
+                                "value": "$.planDetail.planInformation.widthOfPlot"
+                            },
+                            {
+                                "variable": "avgDepthOfPlot",
+                                "value": "$.planDetail.planInformation.depthOfPlot"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}
