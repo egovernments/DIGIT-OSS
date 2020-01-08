@@ -6,19 +6,22 @@
   width:300px;
   overflow-y: scroll;
   max-height: 40% !important;
+  top :430px !important;
   }
-  }}
+  }
+}
 
   div#menu- { div[role="document"]{
-    width:300px;
+    width:335px;
     overflow-y: scroll;
-    height: 187px;
+    height: 300px;
+    top :422px !important;
     }
     ul{
       li{
         white-space: normal;
-    word-wrap: break-word;
-	height:auto;
+        word-wrap: break-word;
+	      height:auto;
       }
     }
   }

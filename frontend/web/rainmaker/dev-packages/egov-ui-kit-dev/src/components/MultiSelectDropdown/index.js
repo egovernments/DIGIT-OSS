@@ -1,12 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Input, Checkbox, ListItemText } from '@material-ui/core';
+import { withStyles } from "@material-ui/core/styles";
 import Select from '@material-ui/core/Select';
 import MenuItem from "@material-ui/core/MenuItem";
 import Label from "../../utils/translationNode";
 import { connect } from "react-redux";
 import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
-import isEmpty from "lodash/isEmpty";
 import "./index.css";
 
 const floatingLabelStyle = {
@@ -17,36 +17,18 @@ const floatingLabelStyle = {
   top: 30,
 };
 
-const floatingLabelBaseShrinkStyle = {
-  fontSize: "12px",
-  color: "rgba(0, 0, 0, 0.6000000238418579)",
-  transform: "scale(1) translate(0px, -16px)",
-  fontWeight: 500,
-};
-
-const hintBaseStyle = {
-  fontSize: "16px",
-  letterSpacing: "0.7px",
-  color: "rgba(0, 0, 0, 0.3799999952316284)",
-};
-
 const requiredStyle = {
   color: "red",
 };
 
-const underlineFocusBaseStyle = {
-  borderColor: "#e0e0e0",
-};
-
-const underlineDisabledStyle = {
-  borderBottom: "1px solid #e0e0e0",
-};
-
+const styles = theme => ({
+  icon : {
+    right :"-22px"
+  }
+});
 
 
 class MultiSelectDropDown extends React.Component {
- 
-  
   renderSelectMenuItems = (dropDownData, value) => {
     const {localizationLabels} = this.props
     return dropDownData.map((option, index) => {
@@ -59,7 +41,7 @@ class MultiSelectDropDown extends React.Component {
           primaryText={ <Label label={value} />}
           >
           <Checkbox checked={value.indexOf(option.value) > -1} style={{color:'rgb(254, 122, 81)'}}/>
-          <ListItemText primary={option.label}/>
+          <ListItemText primary={ <Label label={option.label} color="rgba(0,0,0,0.87)" /> }/>
         </MenuItem>
       );
     });
@@ -90,14 +72,12 @@ class MultiSelectDropDown extends React.Component {
       jsonPath,
       dataFetchConfig,
       errorMessage,
-      toolTip,
-      iconStyle,
       prefix,
       autoWidth,
-      toolTipMessage,
       updateDependentFields,
       beforeFieldChange,
       localizationLabels,
+      classes,
       ...rest
     } = this.props
     return (
@@ -105,25 +85,18 @@ class MultiSelectDropDown extends React.Component {
        <span style={floatingLabelStyle}> {floatingLabelText}</span>
       <Select
         multiple
-            errorText={errorText}
+        errorText={errorText}
         errorStyle={errorStyle}
         className={`dropdown ${className}`}
         id={id}
         style={style}
-        autoWidth={autoWidth}
-        underlineDisabledStyle={underlineDisabledStyle}
         menuStyle={menuStyle}
         fullWidth={fullWidth}
-        dropDownMenuProps={{
-          targetOrigin: { horizontal: "left", vertical: "top",
-        height:'300px' },
-        }}
         labelStyle={labelStyle}
         onChange={onChange}
         selected="Select"
         value={value}
         hintText={hintText}
-        floatingLabelShrinkStyle={floatingLabelBaseShrinkStyle}
         floatingLabelFixed={true}
         floatingLabelText={[
           floatingLabelText,
@@ -135,9 +108,6 @@ class MultiSelectDropDown extends React.Component {
           ) : null,
         ]}
         floatingLabelStyle={floatingLabelStyle}
-        iconStyle={ iconStyle ? iconStyle : { fill: "#484848" }}
-        underlineStyle={{ ...underlineFocusBaseStyle, ...underlineStyle }}
-        hintStyle={{ ...hintBaseStyle, ...hintStyle }}
         {...rest}
         input={<Input id="select-multiple-checkbox" />}
         renderValue={selected => selected.map((item=>{
@@ -165,4 +135,4 @@ MultiSelectDropDown.propTypes = {
   selected: PropTypes.string,
 };
 
-export default connect(mapStateToProps,null)(MultiSelectDropDown);
+export default withStyles(styles)(connect(mapStateToProps,null)(MultiSelectDropDown));
