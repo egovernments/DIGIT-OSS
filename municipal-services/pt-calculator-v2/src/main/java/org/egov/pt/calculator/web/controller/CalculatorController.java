@@ -68,5 +68,11 @@ public class CalculatorController {
 		CalculationReq calculationReq = registryService.calculationWrapper(calculationRequestV2);
 		return new ResponseEntity<>(demandService.generateDemands(calculationReq), HttpStatus.OK);
 	}
+	
+	@PostMapping("/v2/_estimate")
+	public ResponseEntity<CalculationRes> estimateV2(@RequestBody @Valid CalculationRequestV2 calculationRequestV2) {
+		CalculationReq calculationReq = registryService.calculationWrapper(calculationRequestV2);
+		return new ResponseEntity<>(calculatorService.getTaxCalculation(calculationReq), HttpStatus.OK);
+	}
 
 }
