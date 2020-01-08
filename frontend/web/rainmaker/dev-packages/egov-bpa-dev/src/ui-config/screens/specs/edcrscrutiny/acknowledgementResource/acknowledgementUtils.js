@@ -5,7 +5,6 @@ import {
   getCommonContainer
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import axios from "axios";
-import "./index.css";
 
 const style = {
   bodyBox: {
