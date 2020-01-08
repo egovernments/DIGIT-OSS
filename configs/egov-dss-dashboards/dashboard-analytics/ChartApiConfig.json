@@ -548,7 +548,7 @@
       {
         "module": "PT",
         "indexName": "ptindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Assessed Properties\":{\"cardinality\":{\"field\":\"Data.propertyId.keyword\"}}}}}}",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Assessed Properties\":{\"cardinality\":{\"field\":\"Data.propertyId.keyword\"}}}}}}",
         "requestQueryMap": "{\"tenantId\" : \"Data.tenantId\" ,\"district\" : \"Data.tenantData.city.districtCode\"}",
         "dateRefField": "Data.@timestamp"
       }
@@ -1583,7 +1583,7 @@
       {
         "module": "TL",
         "indexName": "tlindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Total Application\":{\"date_histogram\":{\"field\":\"Data.tradelicense.applicationdate\",\"interval\":\"intervalvalue\"},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.tradelicense.applicationnumber.keyword\"}}}}}}}}",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Total Application\":{\"date_histogram\":{\"field\":\"Data.tradelicense.applicationdate\",\"interval\":\"intervalvalue\"},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.tradelicense.applicationnumber.keyword\"}}}}}}}}",
         "requestQueryMap": "{\"tenantId\" : \"Data.tenantData.code\" ,\"district\" : \"Data.tenantData.city.districtCode\"}",
         "dateRefField": "Data.tradelicense.applicationdate"
       }
@@ -1608,7 +1608,7 @@
     "queries": [
       {
         "module": "TL",
-        "requestQueryMap": "{\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"tenantId\" : \"Data.tenantData.code\", \"district\" : \"dataObject.tenantData.cityDistrictCode\"}",
+        "requestQueryMap": "{\"tenantId\" : \"Data.tenantData.code\", \"district\" : \"Data.tenantData.cityDistrictCode\"}",
         "dateRefField": "Data.tradelicense.issueddate",
         "indexName": "tlindex-v1",
         "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Status\":{\"terms\":{\"field\":\"Data.tradelicense.status.keyword\"},\"aggs\":{\"License Issued\":{\"value_count\":{\"field\":\"Data.tradelicense.status.keyword\"}}}}}}}}"
@@ -1634,14 +1634,14 @@
         "requestQueryMap": "{\r\n  \"module\" : \"businessService.keyword\", \n\"tenantId\" : \"Data.tenantId\"}",
         "dateRefField": "Data.dateOfComplaint",
         "indexName": "pgrindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Total Application\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Total Application\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}}}}"
       },
       {
         "module": "COMMON",
         "requestQueryMap": "{\r\n  \"module\" : \"businessService.keyword\", \n\"tenantId\" : \"Data.tenantId\"}",
         "dateRefField": "Data.dateOfComplaint",
         "indexName": "pgrindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"withinSLA\":{\"range\":{\"script\":{\"lang\":\"painless\",\"source\":\"doc['Data.slaHours'].value\"},\"ranges\":[{\"key\":\"Within SLA\",\"from\":0,\"to\":360}]}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"withinSLA\":{\"range\":{\"script\":{\"lang\":\"painless\",\"source\":\"doc['Data.slaHours'].value\"},\"ranges\":[{\"key\":\"Within SLA\",\"from\":0,\"to\":360}]}}}}}}"
       }
     ],
     "chartType": "metric",
