@@ -36,8 +36,12 @@ body {
 .common-div-css {
   margin: 80px 16px 88px 16px;
 }
+// .common-header-cont {
+//   display: none;
+// }
 .common-header-cont {
-  display: none;
+  display: block;
+  padding: 44px 0px 0px 8px;
 }
 .common-card-css {
   background-color: #ffffff;
@@ -88,9 +92,9 @@ span[class^="MuiFormLabel-asterisk"] {
   display: none;
 }
 
-.common-header-cont {
-  display: none;
-}
+// .common-header-cont {
+//   display: none;
+// }
 
 /* div[class^="MuiGrid-item"]   {
     padding-right: 80px
@@ -135,13 +139,19 @@ span[class^="MuiFormLabel-asterisk"] {
   }}
 
 }
+@media only screen and (max-width: 768px) {
+  .common-header-cont {
+    display: block;
+    padding: 70px 0px 0px 8px;
+  }
+  .landing-page-main-grid{
+    padding-top: 0px!important;
+  }
+}
+
 @media only screen and (min-width: 768px) {
   .common-div-css {
     margin: 30px 16px 88px 16px;
-  }
-  .common-header-cont {
-    display: inherit;
-    padding: 44px 0px 0px 8px;
   }
   .apply-wizard-footer {
     background-color: #ffffff;
