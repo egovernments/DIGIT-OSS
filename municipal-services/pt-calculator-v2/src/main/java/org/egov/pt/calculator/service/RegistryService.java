@@ -10,7 +10,9 @@ import org.egov.pt.calculator.web.models.property.Property;
 import org.egov.pt.calculator.web.models.property.PropertyDetail;
 import org.egov.pt.calculator.web.models.registry.Assessment;
 import org.egov.pt.calculator.web.models.registry.CalculationRequestV2;
+import org.springframework.stereotype.Service;
 
+@Service
 public class RegistryService {
 	
 	public CalculationReq calculationWrapper(CalculationRequestV2 requestV2) {
