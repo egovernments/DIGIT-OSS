@@ -6,22 +6,38 @@
         },
         "content": [
             {
-                "stack": [
+                "columns": [
                     {
-                        "text": "Sonpur Muncipal Council",
-                        "style": "header"
+                        "image": "{{logoImage}}",
+                        "width": 70,
+                        "height": 70,
+                        "alignment": "left"
                     },
                     {
-                        "text": "FORM-VIII A",
-                        "style": "sub-header"
+                        "stack": [
+                            {
+                                "text": "Sonpur Muncipal Council",
+                                "style": "header"
+                            },
+                            {
+                                "text": "FORM-VIII A",
+                                "style": "sub-header"
+                            },
+                            {
+                                "text": "FORM OF APPROVAL OF BUILDING PERMIT",
+                                "style": "header"
+                            },
+                            {
+                                "text": "BYELAWS NO.-8(4)",
+                                "style": "sub-header"
+                            }
+                        ]
                     },
                     {
-                        "text": "FORM OF APPROVAL OF BUILDING PERMIT",
-                        "style": "header"
-                    },
-                    {
-                        "text": "BYELAWS NO.-8(4)",
-                        "style": "sub-header"
+                        "image": "{{logoImage}}",
+                        "width": 70,
+                        "height": 70,
+                        "alignment": "right"
                     }
                 ]
             },
