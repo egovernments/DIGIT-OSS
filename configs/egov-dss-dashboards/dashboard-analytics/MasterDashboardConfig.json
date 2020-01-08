@@ -630,6 +630,7 @@
           "name": "DSS_REVENUE",
           "vizArray": [
             {
+              "id": 311,
               "name": "DSS_OVERVIEW",
               "dimensions": {
                 "height": 350,
