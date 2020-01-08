@@ -1,0 +1,1271 @@
+{
+    "key": "buildingpermit",
+    "config": {
+        "defaultStyle": {
+            "font": "Cambay"
+        },
+        "content": [
+            {
+                "stack": [
+                    {
+                        "text": "Sonpur Muncipal Council",
+                        "style": "header"
+                    },
+                    {
+                        "text": "FORM-VIII A",
+                        "style": "sub-header"
+                    },
+                    {
+                        "text": "FORM OF APPROVAL OF BUILDING PERMIT",
+                        "style": "header"
+                    },
+                    {
+                        "text": "BYELAWS NO.-8(4)",
+                        "style": "sub-header"
+                    }
+                ]
+            },
+            {
+                "columns": [
+                    {
+                        "text": [
+                            {
+                                "text": "Plan Permission No : ",
+                                "bold": true
+                            },
+                            {
+                                "text": "{{planPermissionNo}}",
+                                "bold": true
+                            }
+                        ],
+                        "alignment": "left"
+                    },
+                    {
+                        "text": [
+                            {
+                                "text": "Dated : ",
+                                "bold": true
+                            },
+                            {
+                                "text": "{{dated}}",
+                                "bold": true
+                            }
+                        ],
+                        "alignment": "right"
+                    }
+                ],
+                "margin": [
+                    0,
+                    20,
+                    0,
+                    0
+                ]
+            },
+            {
+                "text": [
+                    {
+                        "text": "With respect to your Application No "
+                    },
+                    {
+                        "text": "{{applicationNo}}"
+                    },
+                    {
+                        "text": " dated "
+                    },
+                    {
+                        "text": "{{dated}}"
+                    },
+                    {
+                        "text": ", permission is hereby granted in favour of:"
+                    }
+                ],
+                "style": "top-margin"
+            },
+            {
+                "text": [
+                    {
+                        "text": "Smt/Sri "
+                    },
+                    {
+                        "text": "{{favourOf}}",
+                        "bold": true
+                    },
+                    {
+                        "text": " for "
+                    }
+                ],
+                "style": "top-margin"
+            },
+            {
+                "text": [
+                    {
+                        "text": "Construction of a Residential building in respect of Plot No (CS) 1  Plot No (MSP) 1 Khata No 1  Holding No. 1 of SonpurMunicipal Council under Ward 1  under Circle 1 subject to the following conditions/restrictions."
+                    }
+                ]
+            },
+            {
+                "separator": ")",
+                "ol": [
+                    "Permit issued based on the Approval Certificate of  PCB as per the Order No.202 Dtd 11/04/2019."
+                ],
+                "style": "top-margin"
+            },
+            {
+                "stack": [
+                    {
+                        "text": "Proposed area is as follows,"
+                    },
+                    {
+                        "text": "Block No 1",
+                        "style": "top-low-margin"
+                    }
+                ],
+                "alignment": "left",
+                "bold": true,
+                "style": "top-margin"
+            },
+            {
+                "table": {
+                    "widths": [
+                        "*",
+                        "*",
+                        "*",
+                        "*",
+                        "*",
+                        "*"
+                    ],
+                    "body": [
+                        [
+                            {
+                                "text": "Floor Description",
+                                "bold": true
+                            },
+                            {
+                                "text": "Level",
+                                "bold": true
+                            },
+                            {
+                                "text": "Occupancy",
+                                "bold": true
+                            },
+                            {
+                                "text": "Builtup Area (m²)",
+                                "bold": true
+                            },
+                            {
+                                "text": "Floor Area (m²)",
+                                "bold": true
+                            },
+                            {
+                                "text": "Carpet Area (m²)",
+                                "bold": true
+                            }
+                        ],
+                        [
+                            {
+                                "text": "Ground Floor"
+                            },
+                            {
+                                "text": "0"
+                            },
+                            {
+                                "text": "sample"
+                            },
+                            {
+                                "text": "sample"
+                            },
+                            {
+                                "text": "sample"
+                            },
+                            {
+                                "text": "sample"
+                            }
+                        ],
+                        [
+                            {
+                                "text": "Upper Floor"
+                            },
+                            {
+                                "text": "1"
+                            },
+                            {
+                                "text": "sample"
+                            },
+                            {
+                                "text": "sample"
+                            },
+                            {
+                                "text": "sample"
+                            },
+                            {
+                                "text": "sample"
+                            }
+                        ],
+                        [
+                            {
+                                "text": "Upper Floor"
+                            },
+                            {
+                                "text": "2"
+                            },
+                            {
+                                "text": "sample"
+                            },
+                            {
+                                "text": "sample"
+                            },
+                            {
+                                "text": "sample"
+                            },
+                            {
+                                "text": "sample"
+                            }
+                        ],
+                        [
+                            {
+                                "text": " "
+                            },
+                            {
+                                "text": " "
+                            },
+                            {
+                                "text": "Total",
+                                "bold": true
+                            },
+                            {
+                                "text": "468",
+                                "bold": true
+                            },
+                            {
+                                "text": "468",
+                                "bold": true
+                            },
+                            {
+                                "text": "375",
+                                "bold": true
+                            }
+                        ]
+                    ]
+                },
+                "style": "top-low-margin"
+            },
+            {
+                "stack": [
+                    {
+                        "text": "Total Proposed Area :"
+                    }
+                ],
+                "bold": true,
+                "style": "top-margin"
+            },
+            {
+                "table": {
+                    "widths": [
+                        "auto",
+                        "auto",
+                        "auto"
+                    ],
+                    "body": [
+                        [
+                            {
+                                "text": "Builtup Area (m²)",
+                                "bold": true
+                            },
+                            {
+                                "text": "Floor Area (m²)",
+                                "bold": true,
+                                "alignment": "right"
+                            },
+                            {
+                                "text": "Carpet Area (m²)",
+                                "bold": true,
+                                "alignment": "right"
+                            }
+                        ],
+                        [
+                            {
+                                "text": "468.88",
+                                "alignment": "right"
+                            },
+                            {
+                                "text": "468.88",
+                                "alignment": "right"
+                            },
+                            {
+                                "text": "375.10",
+                                "alignment": "right"
+                            }
+                        ]
+                    ]
+                },
+                "style": "top-low-margin"
+            },
+            {
+                "stack": [
+                    {
+                        "text": "Permit fee details as follows,"
+                    }
+                ],
+                "bold": true,
+                "style": "top-margin"
+            },
+            {
+                "table": {
+                    "widths": [
+                        "auto",
+                        "auto"
+                    ],
+                    "body": [
+                        [
+                            {
+                                "text": "Builtup Area (m²)",
+                                "bold": true
+                            },
+                            {
+                                "text": "Floor Area (m²)",
+                                "bold": true,
+                                "alignment": "right"
+                            }
+                        ],
+                        [
+                            {
+                                "text": "Scrutiny Fee"
+                            },
+                            {
+                                "text": "5000.0",
+                                "alignment": "right"
+                            }
+                        ],
+                        [
+                            {
+                                "text": "Labour cess"
+                            },
+                            {
+                                "text": "2.0",
+                                "alignment": "right"
+                            }
+                        ],
+                        [
+                            {
+                                "text": "Permit Fees"
+                            },
+                            {
+                                "text": "7033.0",
+                                "alignment": "right"
+                            }
+                        ],
+                        [
+                            {
+                                "text": "Total",
+                                "bold": true
+                            },
+                            {
+                                "text": "12035.0",
+                                "bold": true,
+                                "alignment": "right"
+                            }
+                        ],
+                        [
+                            {
+                                "text": "Amount (in words): Rupees Twelve Thousand Thirty Five Only",
+                                "colSpan": 2
+                            }
+                        ]
+                    ]
+                },
+                "margin": [
+                    0,
+                    5,
+                    0,
+                    0
+                ]
+            },
+            {
+                "stack": [
+                    {
+                        "text": "Sonpur Muncipal Council",
+                        "style": "header"
+                    },
+                    {
+                        "text": "AUTOMATED BUILDING PERMIT APPROVAL SYSTEM",
+                        "style": "header",
+                        "decoration": "underline"
+                    },
+                    {
+                        "text": "PLAN DOCUMENT SCRUTINY REPORT",
+                        "style": "header",
+                        "decoration": "underline"
+                    }
+                ],
+                "margin": [
+                    0,
+                    50,
+                    0,
+                    0
+                ]
+            },
+            {
+                "text": [
+                    {
+                        "text": "STATUS : "
+                    },
+                    {
+                        "text": "Accepted",
+                        "color": "green"
+                    }
+                ],
+                "bold": true,
+                "alignment": "center",
+                "style": "top-margin"
+            },
+            {
+                "table": {
+                    "widths": [
+                        "auto",
+                        "*",
+                        "*",
+                        "auto",
+                        "*",
+                        "*"
+                    ],
+                    "body": [
+                        [
+                            {
+                                "text": "APPLICATION DETAILS",
+                                "bold": true,
+                                "colSpan": 3,
+                                "alignment": "center"
+                            },
+                            " ",
+                            " ",
+                            {
+                                "text": "PLOT DETAILS",
+                                "bold": true,
+                                "colSpan": 3,
+                                "alignment": "center"
+                            },
+                            " ",
+                            " "
+                        ],
+                        [
+                            {
+                                "text": "1"
+                            },
+                            {
+                                "text": "APPLICANT NAME"
+                            },
+                            {
+                                "text": "applicantName"
+                            },
+                            {
+                                "text": "9"
+                            },
+                            {
+                                "text": "PLOT RESURVEY NUMBER"
+                            },
+                            {
+                                "text": "plotReserveNo"
+                            }
+                        ],
+                        [
+                            {
+                                "text": "2"
+                            },
+                            {
+                                "text": "APPLICATION NUMBER"
+                            },
+                            {
+                                "text": "applicationNumber"
+                            },
+                            {
+                                "text": "10"
+                            },
+                            {
+                                "text": " REVENUE WARD"
+                            },
+                            {
+                                "text": "revenueWard"
+                            }
+                        ],
+                        [
+                            {
+                                "text": "3"
+                            },
+                            {
+                                "text": "APPLICATION DATE"
+                            },
+                            {
+                                "text": "applicationDate"
+                            },
+                            {
+                                "text": "11"
+                            },
+                            {
+                                "text": "DESAM"
+                            },
+                            {
+                                "text": "desam"
+                            }
+                        ],
+                        [
+                            {
+                                "text": "4"
+                            },
+                            {
+                                "text": "OCCUPANCY TYPE"
+                            },
+                            {
+                                "text": "occupancyType"
+                            },
+                            {
+                                "text": "12"
+                            },
+                            {
+                                "text": "VILLAGE"
+                            },
+                            {
+                                "text": "village"
+                            }
+                        ],
+                        [
+                            {
+                                "text": "5"
+                            },
+                            {
+                                "text": "LICENSEE"
+                            },
+                            {
+                                "text": "license"
+                            },
+                            {
+                                "text": "13"
+                            },
+                            {
+                                "text": "PLOT AREA in m²"
+                            },
+                            {
+                                "text": "plotArea"
+                            }
+                        ],
+                        [
+                            {
+                                "text": "6"
+                            },
+                            {
+                                "text": "DEMOLITION AREA in m²"
+                            },
+                            {
+                                "text": "demolitionArea"
+                            },
+                            {
+                                "text": "14"
+                            },
+                            {
+                                "text": "AVERAGE WIDTH OF PLOTin m"
+                            },
+                            {
+                                "text": "avgWidthOfPlot"
+                            }
+                        ],
+                        [
+                            {
+                                "text": "7"
+                            },
+                            {
+                                "text": "ROAD WIDTH in m"
+                            },
+                            {
+                                "text": "roadWidth"
+                            },
+                            {
+                                "text": "15"
+                            },
+                            {
+                                "text": "AVERAGE DEPTH OF PLOTin m"
+                            },
+                            {
+                                "text": "avdDepthOfPlot"
+                            }
+                        ],
+                        [
+                            {
+                                "text": "8"
+                            },
+                            {
+                                "text": "AREA TYPE"
+                            },
+                            {
+                                "text": "areaType"
+                            },
+                            {
+                                "text": " "
+                            },
+                            {
+                                "text": " "
+                            },
+                            {
+                                "text": " "
+                            }
+                        ]
+                    ]
+                }
+            },
+            {
+                "text": "Decleration in Drawings",
+                "bold": true,
+                "margin": [
+                    30,
+                    10,
+                    0,
+                    0
+                ],
+                "fontSize": 15
+            },
+            {
+                "table": {
+                    "widths": [
+                        "auto",
+                        "auto",
+                        "auto"
+                    ],
+                    "body": [
+                        [
+                            {
+                                "text": "1"
+                            },
+                            {
+                                "text": "{{buidlingNearGovt}}"
+                            },
+                            {
+                                "text": "isBuildingNearGovtBLDG"
+                            }
+                        ],
+                        [
+                            {
+                                "text": "2"
+                            },
+                            {
+                                "text": "{{buidlingNearMonument}}"
+                            },
+                            {
+                                "text": "isBuildingNearMonument"
+                            }
+                        ],
+                        [
+                            {
+                                "text": "3"
+                            },
+                            {
+                                "text": "{{constructionNearAirport}}"
+                            },
+                            {
+                                "text": "isCostructionNearAirport"
+                            }
+                        ],
+                        [
+                            {
+                                "text": "4"
+                            },
+                            {
+                                "text": "{{constructionNearDefence}}"
+                            },
+                            {
+                                "text": "isConstructionNearDefence"
+                            }
+                        ],
+                        [
+                            {
+                                "text": "5"
+                            },
+                            {
+                                "text": "{{greenBuildingSustainable}}"
+                            },
+                            {
+                                "text": "isGreenBuildingSustainable"
+                            }
+                        ],
+                        [
+                            {
+                                "text": "6"
+                            },
+                            {
+                                "text": "NOC from Heritage Conservation Committee (National MonumentsAuthority) available?"
+                            },
+                            {
+                                "text": "YES"
+                            }
+                        ],
+                        [
+                            {
+                                "text": "7"
+                            },
+                            {
+                                "text": "{{nocRailways}}"
+                            },
+                            {
+                                "text": "isNocRailways"
+                            }
+                        ],
+                        [
+                            {
+                                "text": "8"
+                            },
+                            {
+                                "text": "{{nocIrrigationDept}}"
+                            },
+                            {
+                                "text": "isNocIrrigationDept"
+                            }
+                        ],
+                        [
+                            {
+                                "text": "9"
+                            },
+                            {
+                                "text": "{{nocCollectorGvtLand}}"
+                            },
+                            {
+                                "text": "isNocCollectorGvtLand"
+                            }
+                        ]
+                    ]
+                }
+            },
+            {
+                "text": "Block No 1 - Proposed Details",
+                "margin": [
+                    0,
+                    30,
+                    0,
+                    0
+                ],
+                "fontSize": 15
+            },
+            {
+                "table": {
+                    "widths": [
+                        "*",
+                        "*",
+                        "*",
+                        "*",
+                        "*"
+                    ],
+                    "body": [
+                        [
+                            "Floor",
+                            "Occupancy",
+                            "Built Up Area in m²",
+                            "Floor Area in m²",
+                            "Carpet Area in m²"
+                        ],
+                        [
+                            {
+                                "ol": [
+                                    "Covered Area is 194.51 m²",
+                                    "Height of building is 9.75 m"
+                                ],
+                                "colSpan": 5,
+                                "margin": 5
+                            }
+                        ]
+                    ]
+                }
+            },
+            {
+                "table": {
+                    "widths": [
+                        "*",
+                        "*",
+                        "*",
+                        "*",
+                        "*"
+                    ],
+                    "body": [
+                        [
+                            "Floor",
+                            "Occupancy",
+                            "Built Up Area in m²",
+                            "Floor Area in m²",
+                            "Carpet Area in m²"
+                        ],
+                        [
+                            "0",
+                            "Individual Residential",
+                            "154.6050",
+                            "154.6050",
+                            "123.68400"
+                        ],
+                        [
+                            "1",
+                            "Individual Residential",
+                            "154.6050",
+                            "154.6050",
+                            "123.68400"
+                        ],
+                        [
+                            "2",
+                            "Individual Residential",
+                            "154.6050",
+                            "154.6050",
+                            "123.68400"
+                        ],
+                        [
+                            {
+                                "text": "Total",
+                                "alignment": "right",
+                                "colSpan": 2
+                            },
+                            " ",
+                            "154.6050",
+                            "154.6050",
+                            "123.68400"
+                        ],
+                        [
+                            {
+                                "ol": [
+                                    "Covered Area is 194.51 m²",
+                                    "Height of building is 9.75 m"
+                                ],
+                                "colSpan": 5,
+                                "margin": 5
+                            }
+                        ]
+                    ]
+                },
+                "margin": [
+                    0,
+                    50,
+                    0,
+                    0
+                ]
+            },
+            {
+                "text": "Total Area",
+                "style": "top-margin",
+                "fontSize": 15
+            },
+            {
+                "table": {
+                    "widths": [
+                        "*",
+                        "*",
+                        "*",
+                        "*"
+                    ],
+                    "body": [
+                        [
+                            "Built Up Area in m²",
+                            "Floor Area in m²",
+                            "Carpet Area in m²",
+                            "Covered Area in m²"
+                        ],
+                        [
+                            "468.88",
+                            "468.88",
+                            "375.11",
+                            "194.51"
+                        ]
+                    ]
+                },
+                "alignment": "center"
+            },
+            {
+                "text": "1.Far",
+                "style": "top-margin",
+                "fontSize": 15
+            },
+            {
+                "table": {
+                    "widths": [
+                        "*",
+                        "*",
+                        "*",
+                        "*",
+                        "*",
+                        "*"
+                    ],
+                    "body": [
+                        [
+                            "Bye Law",
+                            "Area Type",
+                            "Road Width",
+                            "Required",
+                            "Provided",
+                            "Status"
+                        ],
+                        [
+                            "38",
+                            "OLD",
+                            "6.1",
+                            "<= 1.8",
+                            "1.34",
+                            "Accepted"
+                        ]
+                    ]
+                },
+                "alignment": "center"
+            },
+            {
+                "text": "2.Monument Distance",
+                "style": "top-margin",
+                "fontSize": 15
+            },
+            {
+                "table": {
+                    "widths": [
+                        "*",
+                        "*",
+                        "*",
+                        "*",
+                        "*",
+                        "*"
+                    ],
+                    "body": [
+                        [
+                            "Bye Law",
+                            "Description",
+                            "Distance",
+                            "Permitted",
+                            "Provided",
+                            "Status"
+                        ],
+                        [
+                            "20",
+                            "Distance from monument",
+                            ">300",
+                            "Permitted with NOC",
+                            "100.0 with NOC",
+                            "Accepted"
+                        ]
+                    ]
+                },
+                "alignment": "center"
+            },
+            {
+                "text": "Block 1 - Scrutiny Details",
+                "margin": [
+                    0,
+                    15,
+                    0,
+                    0
+                ],
+                "fontSize": 15,
+                "color": "blue"
+            },
+            {
+                "text": "1.Front Setback",
+                "style": "top-margin",
+                "fontSize": 15
+            },
+            {
+                "table": {
+                    "widths": [
+                        "*",
+                        "*",
+                        "*",
+                        "*",
+                        "*",
+                        "*",
+                        "*"
+                    ],
+                    "body": [
+                        [
+                            "Bye Law",
+                            "Level",
+                            "Occupancy",
+                            "Field Verified",
+                            "Required",
+                            "Provided",
+                            "Status"
+                        ],
+                        [
+                            "35",
+                            "0",
+                            "Individual Residential",
+                            "Minimum distance",
+                            "2.5",
+                            "2.50",
+                            "Accepted"
+                        ]
+                    ]
+                },
+                "alignment": "center"
+            },
+            {
+                "text": "2.Maximum Height of Building Allowed",
+                "style": "top-margin",
+                "fontSize": 15
+            },
+            {
+                "table": {
+                    "widths": [
+                        "*",
+                        "*",
+                        "*",
+                        "*",
+                        "*",
+                        "*",
+                        "*"
+                    ],
+                    "body": [
+                        [
+                            "Bye Law",
+                            "Description",
+                            "Area Type",
+                            "Road width",
+                            "Required",
+                            "Provided",
+                            "Status"
+                        ],
+                        [
+                            "38",
+                            "Maximum height ofbuilding allowed",
+                            "OLD",
+                            "6.1",
+                            "<= 10",
+                            "9.75",
+                            "Accepted"
+                        ]
+                    ]
+                },
+                "alignment": "center"
+            },
+            {
+                "text": "3.Number of Floors Allowed",
+                "style": "top-margin",
+                "fontSize": 15
+            },
+            {
+                "table": {
+                    "widths": [
+                        "*",
+                        "*",
+                        "*",
+                        "*",
+                        "*",
+                        "*",
+                        "*"
+                    ],
+                    "body": [
+                        [
+                            "Bye Law",
+                            "Description",
+                            "Area Type",
+                            "Road width",
+                            "Required",
+                            "Provided",
+                            "Status"
+                        ],
+                        [
+                            "38",
+                            "Maximum number offloors allowed",
+                            "OLD",
+                            "6.1",
+                            "<= 10",
+                            "9.75",
+                            "Accepted"
+                        ]
+                    ]
+                },
+                "alignment": "center"
+            },
+            {
+                "text": "4.Plinth",
+                "style": "top-margin",
+                "fontSize": 15
+            },
+            {
+                "table": {
+                    "widths": [
+                        "*",
+                        "*",
+                        "*",
+                        "*",
+                        "*"
+                    ],
+                    "body": [
+                        [
+                            "Bye Law",
+                            "Description",
+                            "Required",
+                            "Provided",
+                            "Status"
+                        ],
+                        [
+                            "41(i)(a)",
+                            "Minimum plinth height",
+                            "> 0.45",
+                            "0.45",
+                            "Accepted"
+                        ]
+                    ]
+                },
+                "alignment": "center"
+            },
+            {
+                "text": "5.Rear Setback",
+                "style": "top-margin",
+                "fontSize": 15
+            },
+            {
+                "table": {
+                    "widths": [
+                        "*",
+                        "*",
+                        "*",
+                        "*",
+                        "*",
+                        "*",
+                        "*"
+                    ],
+                    "body": [
+                        [
+                            "Bye Law",
+                            "Level",
+                            "Occupancy",
+                            "Field Verified",
+                            "Required",
+                            "Provided",
+                            "Status"
+                        ],
+                        [
+                            "35",
+                            "0",
+                            "Individual Residential",
+                            "Minimum Distance",
+                            "1.8",
+                            "1.83",
+                            "Accepted"
+                        ]
+                    ]
+                },
+                "alignment": "center"
+            },
+            {
+                "text": "6.Side Setback",
+                "style": "top-margin",
+                "fontSize": 15
+            },
+            {
+                "table": {
+                    "widths": [
+                        "*",
+                        "*",
+                        "*",
+                        "*",
+                        "*",
+                        "*",
+                        "*",
+                        "*"
+                    ],
+                    "body": [
+                        [
+                            "Bye Law",
+                            "Level",
+                            "Occupancy",
+                            "Side Number",
+                            "Field Verified",
+                            "Required",
+                            "Provided",
+                            "Status"
+                        ],
+                        [
+                            "35",
+                            "0",
+                            "Individual Residential",
+                            "Side Setback 1",
+                            "Minimum Distance",
+                            "0.75",
+                            "0.95",
+                            "Accepted"
+                        ],
+                        [
+                            "35",
+                            "0",
+                            "Individual Residential",
+                            "Side Setback 2",
+                            "Minimum Distance",
+                            "0.75",
+                            "0.75",
+                            "Accepted"
+                        ]
+                    ]
+                },
+                "alignment": "center"
+            },
+            {
+                "stack": [
+                    {
+                        "text": "By Order",
+                        "style": "top-low-margin"
+                    },
+                    {
+                        "text": "Authorised Officer",
+                        "margin": 2
+                    },
+                    {
+                        "text": "TPASSTEXEENG1",
+                        "margin": 2
+                    }
+                ],
+                "alignment": "right",
+                "style": "top-low-margin"
+            },
+            {
+                "text": [
+                    {
+                        "text": "Validity : This certificate is valid upto "
+                    },
+                    {
+                        "text": "validityDate"
+                    },
+                    {
+                        "text": " Only. "
+                    }
+                ],
+                "style": "top-margin",
+                "bold": true
+            },
+            {
+                "text": "Note : ",
+                "bold": true,
+                "style": "top-low-margin"
+            },
+            {
+                "text": "The owner as well as the architect/licensed engineer are fully responsible for adhering to the provisions of the bye laws inboth the building plan as well as in the actual construction.In case it is found that the permission has been secured through misrepresentation or fraud, the permission may besuspended or revoked by the Authority under Section 363 (3) of the Bihar Municipal Act 2007 and/or cancelled under byelaw 14 of the bye laws.",
+                "style": "top-low-margin"
+            }
+        ],
+        "styles": {
+            "header": {
+                "bold": true,
+                "alignment": "center"
+            },
+            "sub-header": {
+                "alignment": "center",
+                "margin": [
+                    0,
+                    5,
+                    0,
+                    5
+                ]
+            },
+            "top-margin": {
+                "margin": [
+                    0,
+                    20,
+                    0,
+                    0
+                ]
+            },
+            "top-low-margin": {
+                "margin": [
+                    0,
+                    10,
+                    0,
+                    0
+                ]
+            }
+        }
+    }
+}
