@@ -13,199 +13,7 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
 import axios from "axios";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSearchResultsfromEDCRWithApplcationNo } from "./functions";
-
-const getPDFbuttons = (
-  state,
-  dispatch,
-  applicationNumber,
-  tenant,
-  reporturl
-) => {
-  return {
-    uiFramework: "custom-atoms",
-    componentPath: "Div",
-    children: {
-      downloadFormButton: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        children: {
-          div1: {
-            uiFramework: "custom-atoms",
-            componentPath: "Icon",
-
-            props: {
-              iconName: "cloud_download",
-              style: {
-                marginTop: "7px",
-                marginRight: "8px",
-                cursor: "pointer"
-              }
-            },
-            onClick: {
-              action: "condition",
-              callBack: () => {
-                generatePdfAndDownload(
-                  state,
-                  dispatch,
-                  "download",
-                  applicationNumber,
-                  tenant,
-                  reporturl
-                );
-              }
-            }
-          },
-          div2: getLabel({
-            labelName: "Scrutiny Report",
-            labelKey: "EDCR_SCUTINY_REPORT",
-            style: {
-              cursor: "pointer"
-            }
-          })
-        },
-        onClickDefination: {
-          action: "condition",
-          callBack: () => {
-            generatePdfAndDownload(
-              state,
-              dispatch,
-              "download",
-              applicationNumber,
-              tenant,
-              reporturl
-            );
-          }
-        }
-      },
-      PrintFormButton: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        children: {
-          div1: {
-            uiFramework: "custom-atoms",
-            componentPath: "Icon",
-
-            props: {
-              iconName: "local_printshop",
-              style: {
-                marginTop: "7px",
-                marginRight: "8px",
-                marginLeft: "10px",
-                cursor: "pointer"
-              }
-            },
-            onClick: {
-              action: "condition",
-              callBack: () => {
-                generatePdfAndDownload(
-                  state,
-                  dispatch,
-                  "print",
-                  applicationNumber,
-                  tenant,
-                  reporturl
-                );
-              }
-            }
-          },
-          div2: getLabel({
-            labelName: "Scrutiny Report",
-            labelKey: "EDCR_SCUTINY_REPORT",
-            style: {
-              cursor: "pointer"
-            }
-          })
-        },
-        onClickDefination: {
-          action: "condition",
-          callBack: () => {
-            generatePdfAndDownload(
-              state,
-              dispatch,
-              "print",
-              applicationNumber,
-              tenant,
-              reporturl
-            );
-          }
-        }
-      }
-    },
-    props: {
-      style: {
-        display: "flex"
-      }
-    }
-  };
-};
-const generatePdfAndDownload = async (
-  state,
-  dispatch,
-  action,
-  applicationNumber,
-  tenant,
-  reporturl
-) => {
-  dispatch(
-    toggleSnackbar(
-      true,
-      {
-        labelName: "Preparing confirmation form, please wait...",
-        labelKey: "ERR_PREPARING_CONFIRMATION_FORM"
-      },
-      "info"
-    )
-  );
-
-  if (action === "print") {
-    var response = await axios.get(reporturl, {
-      responseType: "arraybuffer",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/pdf"
-      }
-    });
-    const file = new Blob([response.data], { type: "application/pdf" });
-    const fileURL = URL.createObjectURL(file);
-    var myWindow = window.open(fileURL);
-    if (myWindow != undefined) {
-      myWindow.addEventListener("load", event => {
-        myWindow.focus();
-        myWindow.print();
-      });
-    }
-  } else if (action === "download") {
-    var iframe = document.createElement("iframe");
-    iframe.src = reporturl;
-    var hasIframeLoaded = false,
-      hasEstimateLoaded = false;
-    iframe.onload = function(e) {
-      hasIframeLoaded = true;
-      if (hasEstimateLoaded) {
-        downloadConfirmationForm();
-      }
-    };
-    window.document.addEventListener("estimateLoaded", handleEvent, false);
-    function handleEvent(e) {
-      if (e.detail && iframe.contentDocument) {
-        hasEstimateLoaded = true;
-        if (hasIframeLoaded) {
-          downloadConfirmationForm();
-        }
-      }
-    }
-    function downloadConfirmationForm() {
-      let target = iframe.contentDocument.querySelector(
-        "#material-ui-tradeReviewDetails"
-      );
-    }
-
-    // To hide the iframe
-    iframe.style.cssText =
-      "position: absolute; opacity:0; z-index: -9999; width: 900px; height: 100%";
-    document.querySelector("#custom-atoms-iframeForPdf").appendChild(iframe);
-  }
-};
+import { downloadPrintContainer } from "./acknowledgementResource/acknowledgementUtils";
 
 const getAcknowledgementCard = (
   state,
@@ -217,22 +25,38 @@ const getAcknowledgementCard = (
   reporturl,
   edcrnumber
 ) => {
+  const headerrow = {
+    uiFramework: "custom-atoms",
+    componentPath: "Div",
+    props: {
+      style: { display: "flex", alignItems: "flex-start" }
+    },
+    children: {
+      header1: getCommonContainer(
+        {
+          header: getCommonHeader({
+            labelName: "New Building Plan Scrutiny",
+            labelKey: "EDCR_ACKNOWLEDGEMENT_COMMON_CARD"
+          }),
+          applicationNumber: {
+            uiFramework: "custom-atoms-local",
+            moduleName: "egov-tradelicence",
+            componentPath: "ApplicationNoContainer",
+            props: {
+              number: applicationNumber
+            }
+          }
+        },
+        {
+          style: { display: "flex" }
+        }
+      ),
+      buttons: downloadPrintContainer(reporturl)
+    }
+  };
   if (purpose === "apply" && status === "success") {
     return {
-      header: getCommonContainer({
-        header: getCommonHeader({
-          labelName: "New Building Plan Scrutiny",
-          labelKey: "EDCR_ACKNOWLEDGEMENT_COMMON_CARD"
-        }),
-        applicationNumber: {
-          uiFramework: "custom-atoms-local",
-          moduleName: "egov-tradelicence",
-          componentPath: "ApplicationNoContainer",
-          props: {
-            number: applicationNumber
-          }
-        }
-      }),
+      headerrow,
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -263,29 +87,11 @@ const getAcknowledgementCard = (
           })
         }
       },
-      abs: getPDFbuttons(state, dispatch, applicationNumber, tenant, reporturl),
-      iframeForPdf: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div"
-      },
       gotoHomeFooter
     };
   } else if (purpose === "apply" && status === "rejected") {
     return {
-      header: getCommonContainer({
-        header: getCommonHeader({
-          labelName: "New Building Plan Scrutiny",
-          labelKey: "EDCR_ACKNOWLEDGEMENT_COMMON_CARD"
-        }),
-        applicationNumber: {
-          uiFramework: "custom-atoms-local",
-          moduleName: "egov-tradelicence",
-          componentPath: "ApplicationNoContainer",
-          props: {
-            number: applicationNumber
-          }
-        }
-      }),
+      headerrow,
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -303,11 +109,6 @@ const getAcknowledgementCard = (
             }
           })
         }
-      },
-      abs: getPDFbuttons(state, dispatch, applicationNumber, tenant, reporturl),
-      iframeForPdf: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div"
       },
       gotoHomeFooter
     };
@@ -348,7 +149,7 @@ const screenConfig = {
             response.data.edcrDetail[0].planReport,
             response.data.edcrDetail[0].edcrNumber
           );
-          // set(action, "screenConfig.components.div.children", data);
+          set(action, "screenConfig.components.div.children", data);
           dispatch(
             handleField("acknowledgement", "components.div", "children", data)
           );
