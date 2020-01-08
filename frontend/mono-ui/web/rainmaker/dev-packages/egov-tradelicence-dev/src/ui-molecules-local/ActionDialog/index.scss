@@ -2,8 +2,29 @@
   display: flex;
   align-items: center;
 }
+
+div[class^="MuiModal-root"] {
+  z-index: 2000;
+}
+
 @media only screen and (max-width: 768px) {
   .action-container {
     display: block;
+  }
+  .bottom-button-container {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+  }
+  .bottom-button {
+    width: 100%;
+    border-radius: 0;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .bottom-button {
+    margin-right: 45px;
   }
 }

@@ -7,7 +7,7 @@ import "./index.css";
 
 const Filter = ({ filter, handleChangeFilter, clearFilter }) => {
     return (
-        <div className="row" style={{marginLeft:'-5px'}}>
+        <div className="row" style={{marginLeft:'-5px' ,    marginBottom: '15px'}}>
             <div className="col-md-3">
                 <MultiSelectDropdown
                     multiple
@@ -64,7 +64,7 @@ const Filter = ({ filter, handleChangeFilter, clearFilter }) => {
                 />
             </div>
             <div className="col-md-3">
-                <div className="rainmaker-displayInline" onClick={clearFilter} style={{ cursor: "pointer", marginRight: 5, paddingTop: '30px' }}>
+                <div className="rainmaker-displayInline filter-clear-icon" onClick={clearFilter} >
                     <Label label="CS_INBOX_CLEAR" color="#fe7a51" fontSize="15px" />
                 </div>
             </div>
