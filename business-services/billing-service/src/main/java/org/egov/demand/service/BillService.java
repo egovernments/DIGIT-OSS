@@ -77,6 +77,7 @@ import org.egov.demand.model.GenerateBillCriteria;
 import org.egov.demand.model.TaxAndPayment;
 import org.egov.demand.model.TaxHeadMaster;
 import org.egov.demand.model.TaxHeadMasterCriteria;
+import org.egov.demand.model.enums.DemandStatus;
 import org.egov.demand.repository.BillRepository;
 import org.egov.demand.repository.IdGenRepo;
 import org.egov.demand.repository.ServiceRequestRepository;
