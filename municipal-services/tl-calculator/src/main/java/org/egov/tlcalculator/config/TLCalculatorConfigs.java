@@ -37,9 +37,11 @@ public class TLCalculatorConfigs {
     @Value("${egov.demand.minimum.payable.amount}")
     private BigDecimal minimumPayableAmount;
 
-    @Value("${egov.demand.businessservice}")
-    private String businessService;
+    @Value("${egov.demand.businessserviceTL}")
+    private String businessServiceTL;
 
+    @Value("${egov.demand.businessserviceBPA}")
+    private String businessServiceBPA;
 
     //tradelicense Registry
     @Value("${egov.tradelicense.host}")
@@ -61,6 +63,10 @@ public class TLCalculatorConfigs {
     //TaxHeads
     @Value("${egov.taxhead.basetax}")
     private String baseTaxHead;
+
+    //TaxHeads
+    @Value("${egov.taxhead.BPAbasetax}")
+    private String bpabaseTaxHead;
 
     @Value("${egov.taxhead.adhoc.penalty}")
     private String adhocPenaltyTaxHead;

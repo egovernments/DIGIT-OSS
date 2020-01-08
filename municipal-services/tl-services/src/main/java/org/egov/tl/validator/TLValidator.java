@@ -1,19 +1,29 @@
 package org.egov.tl.validator;
 
+import com.jayway.jsonpath.JsonPath;
 import org.apache.commons.lang.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.contract.request.Role;
 import org.egov.tl.config.TLConfiguration;
 import org.egov.tl.repository.TLRepository;
 import org.egov.tl.service.TradeLicenseService;
+import org.egov.tl.service.UserService;
+import org.egov.tl.util.BPAConstants;
 import org.egov.tl.util.TLConstants;
 import org.egov.tl.util.TradeUtil;
 import org.egov.tl.web.models.*;
+import org.egov.tl.web.models.user.UserDetailResponse;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
+import java.util.stream.Collectors;
+
+import static org.egov.tl.util.TLConstants.businessService_BPA;
+import static org.egov.tl.util.TLConstants.businessService_TL;
 
 @Component
 public class TLValidator {
@@ -29,15 +39,23 @@ public class TLValidator {
 
     private TradeUtil tradeUtil;
 
+    private UserService userService;
+
+    @Value("${egov.allowed.businessServices}")
+    private String allowedBusinessService;
+
+    @Value("${egov.receipt.businessserviceTL}")
+    private String businessServiceTL;
 
     @Autowired
     public TLValidator(TLRepository tlRepository, TLConfiguration config, PropertyValidator propertyValidator,
-                       MDMSValidator mdmsValidator, TradeUtil tradeUtil) {
+                       MDMSValidator mdmsValidator, TradeUtil tradeUtil,UserService userService) {
         this.tlRepository = tlRepository;
         this.config = config;
         this.propertyValidator = propertyValidator;
         this.mdmsValidator = mdmsValidator;
         this.tradeUtil = tradeUtil;
+        this.userService=userService;
     }
 
 
@@ -45,15 +63,94 @@ public class TLValidator {
      *  Validate the create Requesr
      * @param request The input TradeLicenseRequest Object
      */
-    public void validateCreate(TradeLicenseRequest request,Object mdmsData){
-        valideDates(request,mdmsData);
+    public void validateCreate(TradeLicenseRequest request, Object mdmsData) {
+        String businessService = request.getLicenses().isEmpty()?null:request.getLicenses().get(0).getBusinessService();
+        if (businessService == null)
+            businessService = businessService_TL;
+        switch (businessService) {
+            case businessService_TL:
+                valideDates(request, mdmsData);
+                propertyValidator.validateProperty(request);
+                validateTLSpecificNotNullFields(request);
+                break;
+
+            case businessService_BPA:
+                validateBPASpecificValidations(request);
+                break;
+        }
+        mdmsValidator.validateMdmsData(request, mdmsData);
         validateInstitution(request);
         validateDuplicateDocuments(request);
-        propertyValidator.validateProperty(request);
-        mdmsValidator.validateMdmsData(request,mdmsData);
     }
 
+    public void validateBusinessService(TradeLicenseRequest request, String businessServiceFromPath) {
+        List<String> allowedservices = Arrays.asList(allowedBusinessService.split(","));
+        if (!allowedservices.contains(businessServiceFromPath)) {
+            throw new CustomException("BUSINESSSERVICE_NOTALLOWED", " The business service is not allowed in this module");
+        }
+        for (TradeLicense license : request.getLicenses()) {
+            String licenseBusinessService = license.getBusinessService()==null?businessService_TL:license.getBusinessService();
+            if (!StringUtils.equals(businessServiceFromPath, licenseBusinessService)) {
+                throw new CustomException("BUSINESSSERVICE_NOTMATCHING", " The business service inside license not matching with the one sent in path variable");
+            }
+        }
+    }
 
+    private void validateTLSpecificNotNullFields(TradeLicenseRequest request) {
+        request.getLicenses().forEach(license -> {
+            Map<String, String> errorMap = new HashMap<>();
+            if (license.getFinancialYear() == null)
+                errorMap.put("NULL_FINANCIALYEAR", " Financial Year cannot be null");
+            if (license.getTradeLicenseDetail().getStructureType() == null)
+                errorMap.put("NULL_STRUCTURETYPE", " Structure Type cannot be null");
+            if (license.getTradeLicenseDetail().getSubOwnerShipCategory() == null)
+                errorMap.put("NULL_SUBOWNERSHIPCATEGORY", " SubOwnership Category cannot be null");
+            if ((license.getTradeLicenseDetail().getAddress().getLocality() == null)||(license.getTradeLicenseDetail().getAddress().getLocality().getCode() == null))
+                errorMap.put("NULL_LOCALITY", " Locality cannot be null");
+
+            if (!errorMap.isEmpty())
+                throw new CustomException(errorMap);
+        });
+    }
+
+    private void validateBPASpecificValidations(TradeLicenseRequest request) {
+
+        request.getLicenses().forEach(license -> {
+            Map<String, String> errorMap = new HashMap<>();
+            if (license.getTradeLicenseDetail().getSubOwnerShipCategory().contains("INSTITUTION")) {
+                if (license.getTradeLicenseDetail().getInstitution().getContactNo() == null)
+                    errorMap.put("NULL_INSTITUTIONCONTACTNO", " Institution Contact No cannot be null");
+                if (license.getTradeLicenseDetail().getInstitution().getName() == null)
+                    errorMap.put("NULL_AUTHORISEDPERSONNAME", " Authorised person name can not be null");
+                if (license.getTradeLicenseDetail().getInstitution().getInstituionName() == null)
+                    errorMap.put("NULL_INSTITUTIONNAME", " Institute name can not be null");
+                if (license.getTradeLicenseDetail().getInstitution().getAddress() == null)
+                    errorMap.put("NULL_ADDRESS", " Institute address can not be null");
+                if (license.getTradeLicenseDetail().getTradeUnits().size()>1)
+                    errorMap.put("NOTALLOWED_TRADEUNITS", " More than one tradeunit not supported in BPA");
+                if (!errorMap.isEmpty())
+                    throw new CustomException(errorMap);
+            }
+        });
+
+        request.getLicenses().forEach(license -> {
+            license.getTradeLicenseDetail().getOwners().forEach(
+                    owner -> {
+                        if (owner.getGender() == null)
+                            throw new CustomException("NULL_USERGENDER", " User gender cannot be null");
+
+                        if (owner.getEmailId() == null)
+                            throw new CustomException("NULL_USEREMAIL", " User EmailId cannot be null");
+
+                        if (owner.getPermanentAddress() == null)
+                            throw new CustomException("NULL_PERMANENTADDRESS", " User Permanent Address cannot be null");
+//
+//                        if (owner.getCorrespondenceAddress() == null)
+//                            throw new CustomException("NULL_CORRESPONDANCEADDRESS", " User Correspondance address cannot be null");
+                    }
+            );
+        });
+    }
     /**
      *  Validates the fromDate and toDate of the request
      * @param request The input TradeLicenseRequest Object
@@ -117,27 +214,38 @@ public class TLValidator {
      *  Validates the update request
      * @param request The input TradeLicenseRequest Object
      */
-    public void validateUpdate(TradeLicenseRequest request,List<TradeLicense> searchResult,Object mdmsData){
-      List<TradeLicense> licenses = request.getLicenses();
+    public void validateUpdate(TradeLicenseRequest request, List<TradeLicense> searchResult, Object mdmsData) {
+        List<TradeLicense> licenses = request.getLicenses();
+        if (searchResult.size() != licenses.size())
+            throw new CustomException("INVALID UPDATE", "The license to be updated is not in database");
+        validateAllIds(searchResult, licenses);
+        String businessService = request.getLicenses().isEmpty()?null:request.getLicenses().get(0).getBusinessService();
+        if (businessService == null)
+            businessService = businessService_TL;
+        switch (businessService) {
+            case businessService_TL:
+                valideDates(request, mdmsData);
+                propertyValidator.validateProperty(request);
+                validateTLSpecificNotNullFields(request);
+                break;
 
-      if(searchResult.size()!=licenses.size())
-          throw new CustomException("INVALID UPDATE","The license to be updated is not in database");
-
-      validateAllIds(searchResult,licenses);
-      mdmsValidator.validateMdmsData(request,mdmsData);
-      validateTradeUnits(request);
-      valideDates(request,mdmsData);
-      validateDuplicateDocuments(request);
-      setFieldsFromSearch(request,searchResult,mdmsData);
-      validateOwnerActiveStatus(request);
-   }
+            case businessService_BPA:
+                validateBPASpecificValidations(request);
+                break;
+        }
+        mdmsValidator.validateMdmsData(request, mdmsData);
+        validateTradeUnits(request);
+        validateDuplicateDocuments(request);
+        setFieldsFromSearch(request, searchResult, mdmsData);
+        validateOwnerActiveStatus(request);
+    }
 
 
     /**
      * Validates that atleast one tradeUnit is active equal true or new tradeUnit
      * @param request The input TradeLicenseRequest Object
      */
-   private void validateTradeUnits(TradeLicenseRequest request){
+    private void validateTradeUnits(TradeLicenseRequest request){
         Map<String,String> errorMap = new HashMap<>();
         List<TradeLicense> licenses = request.getLicenses();
 
@@ -157,7 +265,7 @@ public class TLValidator {
 
         if(!errorMap.isEmpty())
             throw new CustomException(errorMap);
-   }
+    }
 
 
 
@@ -264,7 +372,7 @@ public class TLValidator {
      * @param request The input TradeLicenseRequest
      * @param searchResult The list of searched licenses
      */
-    private void setFieldsFromSearch(TradeLicenseRequest request,List<TradeLicense> searchResult,Object mdmsData){
+    private void setFieldsFromSearch(TradeLicenseRequest request, List<TradeLicense> searchResult, Object mdmsData) {
         Map<String,TradeLicense> idToTradeLicenseFromSearch = new HashMap<>();
         searchResult.forEach(tradeLicense -> {
             idToTradeLicenseFromSearch.put(tradeLicense.getId(),tradeLicense);
@@ -274,10 +382,17 @@ public class TLValidator {
             license.getAuditDetails().setCreatedTime(idToTradeLicenseFromSearch.get(license.getId()).getAuditDetails().getCreatedTime());
             license.setStatus(idToTradeLicenseFromSearch.get(license.getId()).getStatus());
             license.setLicenseNumber(idToTradeLicenseFromSearch.get(license.getId()).getLicenseNumber());
-            if(!idToTradeLicenseFromSearch.get(license.getId()).getFinancialYear().equalsIgnoreCase(license.getFinancialYear())
-                    && license.getLicenseType().equals(TradeLicense.LicenseTypeEnum.PERMANENT)){
-                Map<String,Long> taxPeriods = tradeUtil.getTaxPeriods(license,mdmsData);
-                license.setValidTo(taxPeriods.get(TLConstants.MDMS_ENDDATE));
+            String businessService = license.getBusinessService();
+            if (businessService == null)
+                businessService = businessService_TL;
+            switch (businessService) {
+                case businessService_TL:
+                    if (!idToTradeLicenseFromSearch.get(license.getId()).getFinancialYear().equalsIgnoreCase(license.getFinancialYear())
+                            && license.getLicenseType().equals(TradeLicense.LicenseTypeEnum.PERMANENT)) {
+                        Map<String, Long> taxPeriods = tradeUtil.getTaxPeriods(license, mdmsData);
+                        license.setValidTo(taxPeriods.get(TLConstants.MDMS_ENDDATE));
+                    }
+                    break;
             }
         });
     }
@@ -343,7 +458,17 @@ public class TLValidator {
      * @param requestInfo The requestInfo of the incoming request
      * @param criteria The TradeLicenseSearch Criteria
      */
-    public void validateSearch(RequestInfo requestInfo,TradeLicenseSearchCriteria criteria){
+    public void validateSearch(RequestInfo requestInfo, TradeLicenseSearchCriteria criteria, String serviceFromPath) {
+        String serviceInSearchCriteria = criteria.getBusinessService();
+        if ((serviceInSearchCriteria != null) && (!StringUtils.equals(serviceFromPath, serviceInSearchCriteria))) {
+            throw new CustomException("INVALID SEARCH", "Business service in Path param and requestbody not matching");
+        }
+
+        List<String> allowedservices = Arrays.asList(allowedBusinessService.split(","));
+        if ((serviceFromPath != null) && (!allowedservices.contains(serviceFromPath))) {
+            throw new CustomException("INVALID SEARCH", "Search not allowed on this business service");
+        }
+
         if(!requestInfo.getUserInfo().getType().equalsIgnoreCase("CITIZEN" )&& criteria.isEmpty())
             throw new CustomException("INVALID SEARCH","Search without any paramters is not allowed");
 
@@ -431,11 +556,11 @@ public class TLValidator {
         request.getLicenses().forEach(license -> {
             if(license.getTradeLicenseDetail().getApplicationDocuments()!=null){
                 license.getTradeLicenseDetail().getApplicationDocuments().forEach(
-                    document -> {
-                        if(documentFileStoreIds.contains(document.getFileStoreId()))
-                            throw new CustomException("DUPLICATE_DOCUMENT ERROR","Same document cannot be used multiple times");
-                        else documentFileStoreIds.add(document.getFileStoreId());
-                    }
+                        document -> {
+                            if(documentFileStoreIds.contains(document.getFileStoreId()))
+                                throw new CustomException("DUPLICATE_DOCUMENT ERROR","Same document cannot be used multiple times");
+                            else documentFileStoreIds.add(document.getFileStoreId());
+                        }
                 );
             }
         });
@@ -446,7 +571,7 @@ public class TLValidator {
      * Checks if atleast one owner is active in TL
      * @param request The update request
      */
-   private void validateOwnerActiveStatus(TradeLicenseRequest request){
+    private void validateOwnerActiveStatus(TradeLicenseRequest request){
         Map<String,String> errorMap = new HashMap<>();
         request.getLicenses().forEach(license -> {
             Boolean flag = false;
@@ -461,7 +586,7 @@ public class TLValidator {
         });
         if(!errorMap.isEmpty())
             throw new CustomException(errorMap);
-   }
+    }
 
 
 

@@ -46,6 +46,8 @@ public class TradeLicenseSearchCriteria {
     @JsonProperty("toDate")
     private Long toDate = null;
 
+    @JsonProperty("businessService")
+    private String businessService = null;
 
     @JsonProperty("offset")
     private Integer offset;

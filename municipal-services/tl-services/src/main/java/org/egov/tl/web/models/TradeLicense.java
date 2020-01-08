@@ -69,6 +69,9 @@ public class  TradeLicense   {
     }
   }
 
+        @JsonProperty("businessService")
+        private String businessService = "TL";
+
         @JsonProperty("licenseType")
         private LicenseTypeEnum licenseType = null;
 
@@ -110,7 +113,6 @@ public class  TradeLicense   {
         @JsonProperty("issuedDate")
         private Long issuedDate = null;
 
-        @NotNull
         @Size(max=64)
         @JsonProperty("financialYear")
         private String financialYear = null;
@@ -130,9 +132,8 @@ public class  TradeLicense   {
         @JsonProperty("action")
         private String action = null;
 
-        @Size(max=64)
         @JsonProperty("assignee")
-        private String assignee = null;
+        private List<String> assignee = null;
 
         @Valid
         @JsonProperty("wfDocuments")

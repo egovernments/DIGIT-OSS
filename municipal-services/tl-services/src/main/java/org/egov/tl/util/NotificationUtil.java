@@ -87,6 +87,16 @@ public class NotificationUtil {
 			message = getFieldInspectionMsg(license, messageTemplate);
 			break;
 
+		case ACTION_SENDBACKTOCITIZEN_FIELDINSPECTION:
+			messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_SENDBACK_CITIZEN, localizationMessage);
+			message = getCitizenSendBack(license, messageTemplate);
+			break;
+
+		case ACTION_FORWARD_CITIZENACTIONREQUIRED:
+			messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_FORWARD_CITIZEN, localizationMessage);
+			message = getCitizenForward(license, messageTemplate);
+			break;
+
 		case ACTION_CANCEL_CANCELLED:
 			messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_CANCELLED, localizationMessage);
 			message = getCancelledMsg(license, messageTemplate);
@@ -254,8 +264,40 @@ public class NotificationUtil {
 	}
 
 	/**
-	 * Creates customized message for cancelled
+	 * Creates customized message for citizen sendback
 	 * 
+	 * @param license
+	 *            tenantId of the tradeLicense
+	 * @param message
+	 *            Message from localization for cancelled
+	 * @return customized message for cancelled
+	 */
+	private String getCitizenSendBack(TradeLicense license, String message) {
+		message = message.replace("<2>", license.getApplicationNumber());
+		message = message.replace("<3>", license.getTradeName());
+
+		return message;
+	}
+
+	/**
+	 * Creates customized message for citizen forward
+	 *
+	 * @param license
+	 *            tenantId of the tradeLicense
+	 * @param message
+	 *            Message from localization for cancelled
+	 * @return customized message for cancelled
+	 */
+	private String getCitizenForward(TradeLicense license, String message) {
+		message = message.replace("<2>", license.getApplicationNumber());
+		message = message.replace("<3>", license.getTradeName());
+
+		return message;
+	}
+
+	/**
+	 * Creates customized message for cancelled
+	 *
 	 * @param license
 	 *            tenantId of the tradeLicense
 	 * @param message
@@ -309,8 +351,8 @@ public class NotificationUtil {
 	 * @param smsRequestList
 	 *            The list of SMSRequest to be sent
 	 */
-	public void sendSMS(List<SMSRequest> smsRequestList) {
-		if (config.getIsSMSEnabled()) {
+	public void sendSMS(List<SMSRequest> smsRequestList, boolean isSMSEnabled) {
+		if (isSMSEnabled) {
 			if (CollectionUtils.isEmpty(smsRequestList))
 				log.info("Messages from localization couldn't be fetched!");
 			for (SMSRequest smsRequest : smsRequestList) {
@@ -354,7 +396,10 @@ public class NotificationUtil {
 	 * @return The uri for the getBill
 	 */
 	private StringBuilder getBillUri(TradeLicense license) {
-		StringBuilder builder = new StringBuilder(config.getCalculatorHost());
+		StringBuilder builder = new StringBuilder();
+
+
+		builder.append(config.getCalculatorHost());
 		builder.append(config.getGetBillEndpoint());
 		builder.append("?tenantId=");
 		builder.append(license.getTenantId());

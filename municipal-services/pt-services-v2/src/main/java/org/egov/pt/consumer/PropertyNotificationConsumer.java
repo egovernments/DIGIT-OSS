@@ -51,7 +51,7 @@ public class PropertyNotificationConsumer {
     }
 
 
-    @KafkaListener(topics = {"${kafka.topics.notification.fullpayment}","${kafka.topics.notification.pg.save.txns}"})
+    @KafkaListener(topics = {"${kafka.topics.notification.payment}","${kafka.topics.notification.pg.save.txns}"})
     public void listenPayments(final HashMap<String, Object> record, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
         paymentNotificationService.process(record,topic);
     }

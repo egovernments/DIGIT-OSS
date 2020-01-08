@@ -25,6 +25,8 @@ import org.springframework.util.CollectionUtils;
 import java.math.BigDecimal;
 import java.util.*;
 
+import static org.egov.tlcalculator.utils.TLCalculatorConstants.businessService_TL;
+
 
 @Service
 @Slf4j
@@ -66,7 +68,7 @@ public class CalculationService {
        Object mdmsData = mdmsService.mDMSCall(calculationReq.getRequestInfo(),tenantId);
        List<Calculation> calculations = getCalculation(calculationReq.getRequestInfo(),
                calculationReq.getCalulationCriteria(),mdmsData);
-       demandService.generateDemand(calculationReq.getRequestInfo(),calculations,mdmsData);
+       demandService.generateDemand(calculationReq.getRequestInfo(),calculations,mdmsData,businessService_TL);
        CalculationRes calculationRes = CalculationRes.builder().calculations(calculations).build();
        producer.push(config.getSaveTopic(),calculationRes);
        return calculations;
@@ -87,15 +89,12 @@ public class CalculationService {
               license = utils.getTradeLicense(requestInfo, criteria.getApplicationNumber(), criteria.getTenantId());
               criteria.setTradelicense(license);
           }
-
           EstimatesAndSlabs estimatesAndSlabs = getTaxHeadEstimates(criteria,requestInfo,mdmsData);
           List<TaxHeadEstimate> taxHeadEstimates = estimatesAndSlabs.getEstimates();
           FeeAndBillingSlabIds tradeTypeFeeAndBillingSlabIds = estimatesAndSlabs.getTradeTypeFeeAndBillingSlabIds();
           FeeAndBillingSlabIds accessoryFeeAndBillingSlabIds = null;
           if(estimatesAndSlabs.getAccessoryFeeAndBillingSlabIds()!=null)
               accessoryFeeAndBillingSlabIds = estimatesAndSlabs.getAccessoryFeeAndBillingSlabIds();
-
-
           Calculation calculation = new Calculation();
           calculation.setTradeLicense(criteria.getTradelicense());
           calculation.setTenantId(criteria.getTenantId());

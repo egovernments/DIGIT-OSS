@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.egov.pt.repository.ServiceRequestRepository;
 import org.egov.pt.web.models.Boundary;
 import org.egov.pt.web.models.PropertyRequest;
+import org.egov.pt.web.models.RequestInfoWrapper;
 import org.egov.tracer.model.CustomException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,7 +71,8 @@ public class BoundaryService {
                     uri.append(",");
             }
         }
-        LinkedHashMap responseMap = (LinkedHashMap)serviceRequestRepository.fetchResult(uri, request.getRequestInfo());
+        RequestInfoWrapper requestInfoWrapper = RequestInfoWrapper.builder().requestInfo(request.getRequestInfo()).build();
+        LinkedHashMap responseMap = (LinkedHashMap)serviceRequestRepository.fetchResult(uri, requestInfoWrapper);
         if(CollectionUtils.isEmpty(responseMap))
             throw new CustomException("BOUNDARY ERROR","The response from location service is empty or null");
         String jsonString = new JSONObject(responseMap).toString();

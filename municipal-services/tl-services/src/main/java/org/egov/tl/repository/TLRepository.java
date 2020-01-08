@@ -70,7 +70,6 @@ public class TLRepository {
     public void save(TradeLicenseRequest tradeLicenseRequest) {
         producer.push(config.getSaveTopic(), tradeLicenseRequest);
     }
-
     /**
      * Pushes the update request to update topic or on workflow topic depending on the status
      *
