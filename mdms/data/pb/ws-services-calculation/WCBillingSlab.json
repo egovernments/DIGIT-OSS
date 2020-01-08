@@ -4,7 +4,7 @@
   "WCBillingSlab": [
     {
       "id": "1",
-      "BuildingType": "Domestic",
+      "BuildingType": "RESIDENTIAL",
       "ConnectionType": "Metered",
       "CalculationAttribute": "Water consumption",
       "UOM": "kL",
@@ -48,6 +48,50 @@
     },
     {
       "id": 2,
+      "BuildingType": "NONRESIDENTIAL",
+      "CalculationAttribute": "Water consumption",
+      "ConnectionType": "Metered",
+      "UOM": "kL",
+      "slabs": [
+        {
+          "from": 0,
+          "to": 10,
+          "charge": 13.31,
+          "meterCharge": 532.4,
+          "minimumCharge": 200
+        },
+        {
+          "from": 10,
+          "to": 25,
+          "charge": 26.62,
+          "meterCharge": 798.6,
+          "minimumCharge": 200
+        },
+        {
+          "from": 25,
+          "to": 50,
+          "charge": 66.55,
+          "meterCharge": 931.7,
+          "minimumCharge": 200
+        },
+        {
+          "from": 50,
+          "to": 100,
+          "charge": 106.48,
+          "meterCharge": 1064.8,
+          "minimumCharge": 200
+        },
+        {
+          "from": 100,
+          "to": 1000000000,
+          "charge": 133.1,
+          "meterCharge": 1197.9,
+          "minimumCharge": 200
+        }
+      ]
+    },
+    {
+      "id": 3,
       "BuildingType": "Commercial and Government",
       "CalculationAttribute": "Water consumption",
       "ConnectionType": "Metered",
@@ -91,7 +135,7 @@
       ]
     },
     {
-      "id": "3",
+      "id": "4",
       "BuildingType": "Partly Commercial",
       "CalculationAttribute": "Water consumption",
       "ConnectionType": "Metered",
@@ -121,8 +165,8 @@
       ]
     },
     {
-      "id": "4",
-      "BuildingType": "Domestic",
+      "id": "5",
+      "BuildingType": "RESIDENTIAL",
       "CalculationAttribute": "No. of taps",
       "ConnectionType": "Non Metered",
       "UOM": "Number",
@@ -136,8 +180,8 @@
       ]
     },
     {
-      "id": "5",
-      "BuildingType": "Domestic",
+      "id": "6",
+      "BuildingType": "RESIDENTIAL",
       "CalculationAttribute": "Pipe Size",
       "ConnectionType": "Non Metered",
       "UOM": "Inches",
@@ -150,8 +194,38 @@
         }
       ]
     },
+       {
+      "id": "7",
+      "BuildingType": "NONRESIDENTIAL",
+      "CalculationAttribute": "Pipe Size",
+      "ConnectionType": "Non Metered",
+      "UOM": "Inches",
+      "slabs": [
+        {
+          "from": 0,
+          "to": 1000000000,
+          "charge": 250,
+          "minimumCharge": 200
+        }
+      ]
+    },
+       {
+      "id": "8",
+      "BuildingType": "NONRESIDENTIAL",
+      "CalculationAttribute": "No. of taps",
+      "ConnectionType": "Non Metered",
+      "UOM": "Number",
+      "slabs": [
+        {
+          "from": 0,
+          "to": 1000000000,
+          "charge": 300,
+          "minimumCharge": 200
+        }
+      ]
+    },
     {
-      "id": "6",
+      "id": "9",
       "BuildingType": "Commercial",
       "CalculationAttribute": "Pipe Size",
       "ConnectionType": "Non Metered",
@@ -166,7 +240,7 @@
       ]
     },
     {
-      "id": "7",
+      "id": "10",
       "BuildingType": "Commercial",
       "CalculationAttribute": "No. of taps",
       "ConnectionType": "Non Metered",
@@ -181,7 +255,7 @@
       ]
     },
     {
-      "id": "8",
+      "id": "11",
       "BuildingType": "Government",
       "CalculationAttribute": "No. of taps",
       "ConnectionType": "Non Metered",
@@ -196,7 +270,7 @@
       ]
     },
     {
-      "id": "9",
+      "id": "12",
       "BuildingType": "Government",
       "CalculationAttribute": "Pipe Size",
       "ConnectionType": "Non Metered",
@@ -211,7 +285,7 @@
       ]
     },
     {
-      "id": "10",
+      "id": "13",
       "BuildingType": "Partly Commercial",
       "CalculationAttribute": "No. of taps",
       "ConnectionType": "Non Metered",
@@ -226,7 +300,7 @@
       ]
     },
     {
-      "id": "11",
+      "id": "14",
       "BuildingType": "Partly Commercial",
       "CalculationAttribute": "Pipe Size",
       "ConnectionType": "Non Metered",
@@ -241,8 +315,8 @@
       ]
     },
     {
-      "id": "12",
-      "BuildingType": "Domestic",
+      "id": "15",
+      "BuildingType": "RESIDENTIAL",
       "CalculationAttribute": "Flat",
       "ConnectionType": "Non Metered",
       "UOM": "Flat",
@@ -256,7 +330,22 @@
       ]
     },
     {
-      "id": "13",
+      "id": "16",
+      "BuildingType": "NONRESIDENTIAL",
+      "CalculationAttribute": "Flat",
+      "ConnectionType": "Non Metered",
+      "UOM": "Flat",
+      "slabs": [
+        {
+          "from": 0,
+          "to": 1000000000,
+          "charge": 550,
+          "minimumCharge": 0
+        }
+      ]
+    },
+    {
+      "id": "17",
       "BuildingType": "Commercial",
       "CalculationAttribute": "Flat",
       "ConnectionType": "Non Metered",
@@ -271,7 +360,7 @@
       ]
     },
     {
-      "id": "14",
+      "id": "18",
       "BuildingType": "Government",
       "CalculationAttribute": "Flat",
       "ConnectionType": "Non Metered",
@@ -286,7 +375,7 @@
       ]
     },
     {
-      "id": "15",
+      "id": "19",
       "BuildingType": "Partly commercial",
       "CalculationAttribute": "Flat",
       "ConnectionType": "Non Metered",
