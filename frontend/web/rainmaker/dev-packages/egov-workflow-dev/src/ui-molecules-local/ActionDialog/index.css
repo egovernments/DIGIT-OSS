@@ -1,6 +1,10 @@
 .action-container {
   display: flex;
   align-items: center; }
+  
+  div[class^="MuiModal-root"] {
+    z-index: 2000;
+  }
 
   @media only screen and (max-width: 768px) {
     .action-container {
