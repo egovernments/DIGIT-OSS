@@ -248,18 +248,17 @@ class SearchProperty extends Component {
     return (
       <Screen loading={loading}>
         {/* {userType === "CITIZEN" ? <BreadCrumbs url={urls.length > 0 ? urls : urlArray} history={history} /> : []} */}
-        <div className="rainmaker-displayInline inner-header-style"   >
+        <div className="rainmaker-displayInline inner-header-style">
           <Label
             label="PT_PROPERTY_TAX"
             dark={true}
             fontSize={18}
             fontWeight={500}
             bold={true}
-            labelStyle={{ marginTop: "20px"  }}
+            labelStyle={{ marginTop: "20px" }}
           />
-<div className="inner-button-style">
           <div
-            className="rainmaker-displayInline button-style" >
+            className="rainmaker-displayInline"  >
             <Button
               Icon={
                 <Icon
@@ -283,33 +282,7 @@ class SearchProperty extends Component {
               primary={true}
               fullWidth={true}
             />
-            </div>
-          <div className="rainmaker-displayInline">
-            <Button
-              Icon={
-                <Icon
-                  action="content"
-                  name="add"
-                  color="#fe7a51"
-                  style={{ height: 22 }}
-                />
-              }
-              label={
-                <Label
-                  label="PT_ADD_ASSESS_PROPERTY_DATA_ENTRY"                  
-                  buttonLabel={true}
-                  fontSize="16px"
-                  color="white"
-                />
-              }
-              labelStyle={{ fontSize: 12 }}
-              className="new-property-assessment"
-              onClick={() => history.push(`/property-tax/assessment-form-dataentry`)}
-              primary={true}
-              fullWidth={true}
-            />
-            </div>
-            </div>
+          </div>
         </div>
         <PropertySearchFormHOC history={this.props.history} onSearchClick={this.onSearchClick} onResetClick={this.onResetClick} />
         <Hidden xsDown>
