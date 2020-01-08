@@ -3,7 +3,7 @@
   "dashboards": [
     {
       "name": "DSS_HOME_DASHBOARD",
-      "id": "home",
+      "id": "overview",
       "isActive": "",
       "style": "",
       "visualizations": [
@@ -1208,7 +1208,7 @@
     },
     {
       "name": "DSS_OVERVIEW_DASHBOARD",
-      "id": "overview",
+      "id": "home",
       "isActive": "",
       "style": "",
       "title": "title",
