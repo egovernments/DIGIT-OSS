@@ -13,7 +13,7 @@ import {
   setBusinessServiceDataToLocalStorage,
   getFileUrlFromAPI
 } from "egov-ui-framework/ui-utils/commons";
-import { downloadPrintContainer } from "./applyResource/footer";
+import { updateDownloadandPrintMenu } from "./applyResource/footer";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import {
@@ -39,7 +39,7 @@ import {
   getCommunicactionDetails
 } from "./applyResource/review-location";
 import { getReviewDocuments } from "./applyResource/review-documents";
-
+import "./index.css";
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 let headerSideText = { word1: "", word2: "" };
@@ -340,7 +340,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     "screenConfiguration.preparedFinalObject.Licenses[0].status"
   );
 
-  const printCont = downloadPrintContainer(action, state, dispatch, status);
+  updateDownloadandPrintMenu(action, state, dispatch, status);
   switch (status) {
     case "PENDINGDOCVERIFICATION":
     case "PENDINGAPPROVAL":
@@ -496,31 +496,31 @@ const rightdiv = {
       componentPath: "MenuButton",
       props: {
         data: {
-          label: {
-            labelName: "DOWNLOAD",
-            labelKey: "DOWNLOAD"
-          },
-          // leftIcon: "cloud_download",
+          label: {labelName : "DOWNLOAD" , labelKey :"TL_DOWNLOAD"},
+           leftIcon: "cloud_download",
           rightIcon: "arrow_drop_down",
-          props: {
-            variant: "outlined",
-            style: {
-              marginLeft: 10,
-              height: "60px",
-              width: "200px",
-              color: "#FE7A51"
-            }
-          }
+          props: { variant: "outlined", style: { height: "60px", color : "#FE7A51" }, className: "tl-download-button" },
           // menu: downloadMenu
+        }
+      }
+    },
+    printMenu: {
+      uiFramework: "custom-atoms-local",
+      moduleName: "egov-tradelicence",
+      componentPath: "MenuButton",
+      props: {
+        data: {
+          label: {labelName : "PRINT" , labelKey :"TL_PRINT"},
+          leftIcon: "print",
+          rightIcon: "arrow_drop_down",
+          props: { variant: "outlined", style: { height: "60px", color : "#FE7A51" }, className: "tl-print-button" },
+          // menu: printMenu
         }
       }
     }
   }
-  // gridDefination: {
-  //   xs: 12,
-  //   sm: 6
-  // }
 };
+
 const screenConfig = {
   uiFramework: "material-ui",
   name: "search-preview",

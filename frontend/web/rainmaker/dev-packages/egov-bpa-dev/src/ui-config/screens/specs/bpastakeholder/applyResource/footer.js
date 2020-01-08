@@ -756,44 +756,63 @@ export const footerReview = (
   });
 };
 
-export const downloadPrintContainer = (action, state, dispatch, status) => {
+export const updateDownloadandPrintMenu = (action, state, dispatch, status) => {
   /** MenuButton data based on status */
   let downloadMenu = [];
+  let printMenu = [];
+  const receiptQueryString = [
+    {
+      key: "consumerCodes",
+      value: get(
+        state.screenConfiguration.preparedFinalObject.Licenses[0],
+        "applicationNumber"
+      )
+    },
+    {
+      key: "tenantId",
+      value: get(
+        state.screenConfiguration.preparedFinalObject.Licenses[0],
+        "tenantId"
+      )
+    }
+  ];
   let receiptDownloadObject = {
     label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
     link: () => {
-      const receiptQueryString = [
-        {
-          key: "consumerCodes",
-          value: get(
-            state.screenConfiguration.preparedFinalObject.Licenses[0],
-            "applicationNumber"
-          )
-        },
-        {
-          key: "tenantId",
-          value: get(
-            state.screenConfiguration.preparedFinalObject.Licenses[0],
-            "tenantId"
-          )
-        }
-      ];
-      download(receiptQueryString);
+      download(receiptQueryString,"download");
     },
     leftIcon: "receipt"
   };
+
+  let receiptPrintObject = {
+    label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
+    link: () => {
+      download(receiptQueryString,"print");
+    },
+    leftIcon: "receipt"
+  };
+
   switch (status) {
     case "PENDINGDOCVERIFICATION":
     case "PENDINGAPPROVAL":
     case "REJECTED":
     case "APPROVED":
       downloadMenu = [receiptDownloadObject];
+      printMenu = [receiptPrintObject];
       dispatch(
         handleField(
           "search-preview",
           "components.div.children.headerDiv.children.helpSection.children.rightdiv.children.downloadMenu.props",
           "data.menu",
           downloadMenu
+        )
+      );
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.headerDiv.children.helpSection.children.rightdiv.children.printMenu.props",
+          "data.menu",
+          printMenu
         )
       );
       break;
