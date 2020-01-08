@@ -1062,7 +1062,7 @@ class FormWizardDataEntry extends Component {
               true,
               {
                 labelName:
-                  "Please enter the latest year demand and collection !",
+                  "Please enter the latest year of demand and collection !",
                 labelKey: "ERR02_DEMAND_ENTER_THE_DATA"
               },
               "error"
@@ -1106,7 +1106,7 @@ class FormWizardDataEntry extends Component {
           this.props.toggleSnackbarAndSetText(
               true,
               {
-                labelName: "the demand entry is not sequential",
+                labelName: "The demand entry is not sequential",
                 labelKey: "ERR04_DEMAND_ENTER_THE_DATA"
               },
               "error"
@@ -1140,7 +1140,9 @@ class FormWizardDataEntry extends Component {
           propertyId = pty.propertyId;
           tenantId = pty.tenantId;
         }
-        this.props.history.push(`/property-tax/`);
+        let url1='property-tax/search-property';
+        window.location.href = `${window.origin}/${url1}`;
+        // this.props.history.push(`/property-tax/`);
         // this.setState(
         //   {
         //     selected: index,
@@ -1715,7 +1717,7 @@ class FormWizardDataEntry extends Component {
         {
           Properties: properties
         }
-      );    
+      );
       const demandData = [];
       const demandDetails = [];
       const demandDetails1 = [];
@@ -1723,12 +1725,12 @@ class FormWizardDataEntry extends Component {
         (demand, index) => {
           return Object.keys(demand.demand).map((data, key) => {
             return (
-              demand.demand[data].map((d, i) => {
-                if(d.PT_DEMAND !=''&& d.PT_COLLECTED !=''){
+              demand.demand[data].map((demandValue, ind) => {
+                if(demandValue.PT_DEMAND != ''){
                   demandDetails1.push({
-                    taxHeadMasterCode: d.PT_TAXHEAD,
-                    taxAmount: parseInt(d.PT_DEMAND),
-                    collectionAmount: parseInt(d.PT_COLLECTED)
+                    taxHeadMasterCode: demandValue.PT_TAXHEAD,
+                    taxAmount:parseInt(demandValue.PT_DEMAND != ''? demandValue.PT_DEMAND : 0),
+                    collectionAmount: parseInt(demandValue.PT_COLLECTED == undefined || demandValue.PT_COLLECTED =='' ? 0: demandValue.PT_COLLECTED)
                   });
                 }
               }),

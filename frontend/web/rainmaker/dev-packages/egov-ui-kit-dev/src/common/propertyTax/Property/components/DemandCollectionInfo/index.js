@@ -34,7 +34,7 @@ class DemandCollectionInfo extends React.Component {
                         {demand.demand[datas].map((data, ind) => {
                           return (
                             <div>
-                              {Object.keys(data).map((d, i) => {
+                              {Object.keys(data).map((d, i) => {                                
                                 return (
                                   <div className="col-sm-4 col-xs-12" style={{ marginBottom: 10, marginTop: 5 }}>
                                     <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>
@@ -52,7 +52,7 @@ class DemandCollectionInfo extends React.Component {
                                     <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>
                                       <Label
                                         labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.87)", fontWeight: "400", lineHeight: "19px" }}
-                                        label={data[d] !='' ? data[d] : 0}
+                                        label={data[d] !='' ? data[d] : "0"}
                                         fontSize="16px"
                                       />
                                     </div>
