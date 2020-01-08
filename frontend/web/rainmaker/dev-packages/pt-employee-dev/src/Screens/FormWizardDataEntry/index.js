@@ -1055,7 +1055,8 @@ class FormWizardDataEntry extends Component {
         }
         const { demand } = DemandProperties[0].propertyDetails[0];
         let errorLine = "";
-        let yearData=false;
+        let lastDemand;
+        let yearData = true;
         if (demand) {
           if (!demand[0]) {
             this.props.toggleSnackbarAndSetText(
@@ -1072,6 +1073,7 @@ class FormWizardDataEntry extends Component {
           const currentYear = demand.forEach((data, key) => {
             return Object.keys(data.demand).forEach((data1, key1) => {
               return Object.keys(data.demand[data1]).forEach((data2, key2) => {
+                lastDemand = data.demand[data1][data2].PT_DEMAND;
                 if (
                   parseInt(data.demand[data1][data2].PT_DEMAND) <
                   parseInt(data.demand[data1][data2].PT_COLLECTED)
@@ -1089,7 +1091,10 @@ class FormWizardDataEntry extends Component {
               });
             });
           });
-             yearData=demand.filter(data=>data != undefined).length===demand.length
+          if (lastDemand != "") {
+            yearData =
+              demand.filter(data => data != undefined).length === demand.length;
+          }
         }
         if (errorLine.length > 0) {
           this.props.toggleSnackbarAndSetText(
@@ -1101,19 +1106,17 @@ class FormWizardDataEntry extends Component {
             "error"
           );
           break;
-        }
-        else if(!yearData){
+        } else if (!yearData) {
           this.props.toggleSnackbarAndSetText(
-              true,
-              {
-                labelName: "The demand entry is not sequential",
-                labelKey: "ERR04_DEMAND_ENTER_THE_DATA"
-              },
-              "error"
-            );
-            break;
-        }
-         else {
+            true,
+            {
+              labelName: "The demand entry is not sequential",
+              labelKey: "ERR04_DEMAND_ENTER_THE_DATA"
+            },
+            "error"
+          );
+          break;
+        } else {
           this.setState({
             selected: index,
             formValidIndexArray: [...formValidIndexArray, selected]
@@ -1140,7 +1143,7 @@ class FormWizardDataEntry extends Component {
           propertyId = pty.propertyId;
           tenantId = pty.tenantId;
         }
-        let url1='property-tax/search-property';
+        let url1 = "property-tax/search-property";
         window.location.href = `${window.origin}/${url1}`;
         // this.props.history.push(`/property-tax/`);
         // this.setState(
@@ -1726,13 +1729,18 @@ class FormWizardDataEntry extends Component {
           return Object.keys(demand.demand).map((data, key) => {
             return (
               demand.demand[data].map((demandValue, ind) => {
-                if(demandValue.PT_DEMAND != ''){
-                  demandDetails1.push({
-                    taxHeadMasterCode: demandValue.PT_TAXHEAD,
-                    taxAmount:parseInt(demandValue.PT_DEMAND != ''? demandValue.PT_DEMAND : 0),
-                    collectionAmount: parseInt(demandValue.PT_COLLECTED == undefined || demandValue.PT_COLLECTED =='' ? 0: demandValue.PT_COLLECTED)
-                  });
-                }
+                demandDetails1.push({
+                  taxHeadMasterCode: demandValue.PT_TAXHEAD,
+                  taxAmount: parseInt(
+                    demandValue.PT_DEMAND != "" ? demandValue.PT_DEMAND : 0
+                  ),
+                  collectionAmount: parseInt(
+                    demandValue.PT_COLLECTED == undefined ||
+                      demandValue.PT_COLLECTED == ""
+                      ? 0
+                      : demandValue.PT_COLLECTED
+                  )
+                });
               }),
               demandData.push({
                 tenantId: getTenantId(),
