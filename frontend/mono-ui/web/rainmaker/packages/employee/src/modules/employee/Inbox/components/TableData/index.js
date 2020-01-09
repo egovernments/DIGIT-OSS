@@ -99,7 +99,7 @@ class TableData extends Component {
     initialInboxData: [{ headers: [], rows: [] }],
     moduleName: "",
     loaded: false,
-    color: "",
+    color: "rgb(53,152,219)",
     timeoutForTyping: false
   };
 
