@@ -17,6 +17,7 @@ const styles = (theme) => ({
   },
   mobileRoot: {
     flexGrow: 1,
+    padding:'1%',
     width: "25%",
   },
   mobileRoot1: {

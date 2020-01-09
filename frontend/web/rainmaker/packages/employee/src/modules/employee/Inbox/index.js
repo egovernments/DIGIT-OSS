@@ -83,7 +83,7 @@ class Inbox extends Component {
             <MenuButton data={buttonItems} />
           </div>
         </div>
-        <div style={{ margin: "16px 16px 0px 16px" }}>
+        <div style={{ margin: "16px 5px 0px 11px" }}>
           <ServiceList history={history} />
         </div>
 
