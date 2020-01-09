@@ -146,38 +146,38 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
   );
 
   let documnts = [];
-  if (documentsUpdalod) {
-    Object.keys(documentsUpdalod).forEach(function(key) {
-      documnts.push(documentsUpdalod[key]);
-    });
-  }
-
-  let nocDocumentsUpload = get(
+ if(documentsUpdalod) {
+  Object.keys(documentsUpdalod).forEach(function(key) {
+    documnts.push(documentsUpdalod[key])
+  });
+ }
+  
+  let nocDocumentsUpload = get (
     state,
     "screenConfiguration.preparedFinalObject.nocDocumentsUploadRedux"
   );
-
-  if (nocDocumentsUpload) {
+  
+  if(nocDocumentsUpload) {
     Object.keys(nocDocumentsUpload).forEach(function(key) {
-      documnts.push(nocDocumentsUpload[key]);
+      documnts.push(nocDocumentsUpload[key])
     });
   }
-
+  
   let requiredDocuments = [];
   if (documnts && documnts.length > 0) {
     documnts.forEach(documents => {
-      if (documents && documents.documents) {
-        let doc = {};
-        if (documents.dropDownValues) {
-          doc.documentType = documents.dropDownValues.value;
-        }
-        doc.fileStore = documents.documents[0].fileStoreId;
-        doc.fileName = documents.documents[0].fileName;
-        doc.fileUrl = documents.documents[0].fileUrl;
-        requiredDocuments.push(doc);
+    if(documents && documents.documents){
+      let doc = {};
+      if(documents.dropDownValues) {
+      doc.documentType = documents.dropDownValues.value;
       }
-    });
-  }
+      doc.fileStore = documents.documents[0].fileStoreId;
+      doc.fileName = documents.documents[0].fileName;
+      doc.fileUrl = documents.documents[0].fileUrl;
+      requiredDocuments.push(doc);
+    }
+  })
+}
 
   try {
     let payload = get(state.screenConfiguration.preparedFinalObject, "BPA", []);
