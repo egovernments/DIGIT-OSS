@@ -228,11 +228,15 @@
 }
 
 .arrow-icon-style {
-  display: block;
+  display: flex;
   padding: 0;
   margin: 0;
   height: 20px;
   cursor: pointer;
+}
+
+.arrow-icon-style > svg{
+  margin-top : 3px
 }
 
 .arrow-icon-container {
