@@ -457,10 +457,10 @@
                     },
                     {
                       "variable": "logo-header",
-                      "value":"$.MdmsRes.tenant.tenants[0].name",
+                      "value":"$.MdmsRes.tenant.tenants[0].code",
                       "localisation":{
                         "required":true,
-                        "prefix": null,
+                        "prefix": "TENANT_TENANTS",
                         "module":"rainmaker-common"
                         }
                     }
