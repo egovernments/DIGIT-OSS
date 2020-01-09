@@ -115,7 +115,7 @@ export const occupancy = {
     numcols: 4,
     dropDownData: [],
     updateDependentFields: ({ formKey, field: sourceField, dispatch, state }) => {
-      let consturctType = Object.values(get(state, `common.loadMdmsData.PropertyTax.ConstructionType`)).map((item, index) => {
+      let consturctType = Object.values(get(state, `common.loadMdmsData.PropertyTax.ConstructionType`,[])).map((item, index) => {
         return { value: item.code, label: item.name };
       });
       dispatch(setFieldProperty(formKey, "constructionType", "dropDownData", consturctType));
