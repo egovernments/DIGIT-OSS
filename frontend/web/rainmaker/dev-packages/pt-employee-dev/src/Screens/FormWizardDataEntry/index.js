@@ -367,6 +367,7 @@ class FormWizardDataEntry extends Component {
           "Floor",
           "OccupancyType",
           "OwnerShipCategory",
+          "ConstructionType",
           "OwnerType",
           "PropertySubType",
           "PropertyType",
@@ -378,7 +379,9 @@ class FormWizardDataEntry extends Component {
           "Rebate",
           "Penalty",
           "Interest",
-          "FireCess"
+          "FireCess",
+          "RoadType",
+          "Thana"
         ],
         "",
         tenantId
