@@ -38,6 +38,18 @@
                }
               },
               {
+                "variable": "Municipal_Corporation",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_MDMS_MUNICIPAL_CORPORATION"
+                },
+                "type": "label",
+                "localisation":{
+                  "required":true,
+                  "prefix": null,
+                  "module":"rainmaker-common"
+               }
+              },
+              {
                 "variable": "bill_no",
                 "value": {
                   "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_BILL_NO"
@@ -466,23 +478,34 @@
                 }
               },
               {
-                "variable": "charge",
+                "variable": "taxCharge",
                 "value": {
-                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'PT_TAX')].amount"
+                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'PT_TAX' || @.taxHeadCode == 'TL_TAX' || @.taxHeadCode == 'FIRENOC_TAXES' )].amount"
                 }
               },
-             
               {
-                "variable": "rebate",
+                "variable": "timeRebate",
                 "value": {
                   "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'PT_TIME_REBATE')].amount"
                 }
               },
+              {
+                "variable": "adhocRebate",
+                "value": {
+                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'PT_ADHOC_REBATE' || @.taxHeadCode == 'TL_ADHOC_REBATE' || @.taxHeadCode == 'FIRENOC_ADHOC_REBATE')].amount"
+                }
+              },
               
               {
-                "variable": "penalty",
+                "variable": "timePenalty",
                 "value": {
                   "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'PT_TIME_PENALTY')].amount"
+                }
+              },
+              {
+                "variable": "adhocPenalty",
+                "value": {
+                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'PT_ADHOC_PENALTY' || @.taxHeadCode == 'TL_ADHOC_PENALTY' || @.taxHeadCode == 'FIRENOC_ADHOC_PENALTY')].amount"
                 }
               },
               {
@@ -500,7 +523,13 @@
               {
                 "variable": "roundoff",
                 "value": {
-                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'PT_ROUNDOFF')].amount"
+                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'PT_ROUNDOFF' || @.taxHeadCode == 'TL_ROUNDOFF' || @.taxHeadCode == 'FIRENOC_ROUNDOFF')].amount"
+                }
+              },
+              {
+                "variable": "fees",
+                "value": {
+                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'FIRENOC_FEES')].amount"
                 }
               },
               {
@@ -519,6 +548,24 @@
                 "variable": "timeInterest",
                 "value": {
                   "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'PT_TIME_INTEREST')].amount"
+                }
+              },
+              {
+                "variable": "ceilingDebit",
+                "value": {
+                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'PT_DECIMAL_CEILING_DEBIT')].amount"
+                }
+              },
+              {
+                "variable": "ceilingCredit",
+                "value": {
+                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'PT_DECIMAL_CEILING_CREDIT')].amount"
+                }
+              },
+              {
+                "variable": "carryForward",
+                "value": {
+                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'PT_ADVANCE_CARRYFORWARD')].amount"
                 }
               },
              
@@ -551,16 +598,24 @@
           {
             "derived": [
               {
-                "variable": "variable19",
-                "formula": "{{totalPayment}}-{{totalPayment}}"
+                "variable": "charge",
+                "formula": "{{taxCharge}}"
+              },
+              {
+                "variable": "penalty",
+                "formula": "{{timePenalty}}+{{adhocPenalty}}"
+              },
+              {
+                "variable": "rebate",
+                "formula": "{{timeRebate}}+{{adhocRebate}}"
               },
               {
                 "variable": "others",
-                "formula": "{{cancerCess}}+{{roundoff}}"
+                "formula": "{{cancerCess}}+{{roundoff}}+{{ceilingDebit}}+{{ceilingCredit}}+{{fees}}"
               },
               {
                 "variable": "arrears",
-                "formula": "{{timeInterest}}+{{ownerExemption}}+{{usageExemption}}+{{firecess}}"
+                "formula": "{{carryForward}}+{{timeInterest}}+{{ownerExemption}}+{{usageExemption}}+{{firecess}}"
               }
             ]
           },
@@ -594,7 +649,12 @@
                     },
                     {
                       "variable": "logo_header",
-                      "value":"$.MdmsRes.tenant.tenants[0].name"
+                      "value":"$.MdmsRes.tenant.tenants[0].name",
+                      "localisation":{
+                      "required":true,
+                      "prefix": null,
+                      "module":"rainmaker-common"
+                      }
                     }
                   ]
               }
