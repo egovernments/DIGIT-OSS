@@ -1094,9 +1094,13 @@ class FormWizardDataEntry extends Component {
               });
             });
           });
-          if (lastDemand != "") {
+          let errorLine1=demand.filter(data => data != undefined).length === demand.length;
+          if (lastDemand != "" ) {
             yearData =
               demand.filter(data => data != undefined).length === demand.length;
+          }
+          else if(lastDemand == '' && !errorLine1){
+            yearData = demand.filter(data => data != undefined).length != demand.length;
           }
         }
         if (errorLine.length > 0) {
