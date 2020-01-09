@@ -115,6 +115,7 @@
   box-shadow: none !important;
   flex: 33%;
   margin: 5px;
+  height:6em;
   align-items: center;
   justify-content: center;
   /* .rainmaker-card {
@@ -202,6 +203,7 @@
     font-size: 3vw;
   }
   .inbox-worklist-card {
+    height: auto;
     font-size: 3vw;
   }
   .inbox-filter {
