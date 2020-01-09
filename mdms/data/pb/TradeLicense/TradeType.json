@@ -5,7 +5,7 @@
     {
       "code": "GOODS.MANUFACTURE.TST-1",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -13,7 +13,7 @@
     {
       "code": "GOODS.MANUFACTURE.TST-2",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -21,7 +21,7 @@
     {
       "code": "GOODS.MANUFACTURE.TST-3",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -29,7 +29,7 @@
     {
       "code": "GOODS.MANUFACTURE.TST-4",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -37,7 +37,7 @@
     {
       "code": "GOODS.MANUFACTURE.TST-5",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -45,7 +45,7 @@
     {
       "code": "GOODS.MANUFACTURE.TST-6",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -53,7 +53,7 @@
     {
       "code": "GOODS.MANUFACTURE.TST-7",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -61,7 +61,7 @@
     {
       "code": "GOODS.MANUFACTURE.TST-8",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -69,7 +69,7 @@
     {
       "code": "GOODS.MANUFACTURE.TST-9",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -77,7 +77,7 @@
     {
       "code": "GOODS.MANUFACTURE.TST-10",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -85,7 +85,7 @@
     {
       "code": "GOODS.MANUFACTURE.TST-11",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -93,7 +93,7 @@
     {
       "code": "GOODS.MANUFACTURE.TST-12",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -101,7 +101,7 @@
     {
       "code": "GOODS.MANUFACTURE.TST-13",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -109,7 +109,7 @@
     {
       "code": "GOODS.MANUFACTURE.TST-14",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -117,7 +117,7 @@
     {
       "code": "GOODS.MANUFACTURE.TST-15",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -125,7 +125,7 @@
     {
       "code": "GOODS.MANUFACTURE.TST-16",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -133,7 +133,7 @@
     {
       "code": "GOODS.MANUFACTURE.TST-17",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -141,7 +141,7 @@
     {
       "code": "GOODS.MANUFACTURE.TST-18",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -149,7 +149,7 @@
     {
       "code": "GOODS.MANUFACTURE.TST-19",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -157,7 +157,7 @@
     {
       "code": "GOODS.MANUFACTURE.TST-20",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -165,7 +165,7 @@
     {
       "code": "GOODS.MANUFACTURE.TST-21",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -173,7 +173,7 @@
     {
       "code": "GOODS.MANUFACTURE.TST-22",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -181,7 +181,7 @@
     {
       "code": "GOODS.MANUFACTURE.TST-23",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -189,7 +189,7 @@
     {
       "code": "GOODS.MANUFACTURE.TST-24",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -197,7 +197,7 @@
     {
       "code": "GOODS.MANUFACTURE.TST-25",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -205,7 +205,7 @@
     {
       "code": "GOODS.MANUFACTURE.TST-26",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -213,7 +213,7 @@
     {
       "code": "GOODS.MANUFACTURE.TST-27",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -221,7 +221,7 @@
     {
       "code": "GOODS.MANUFACTURE.TST-28",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -229,7 +229,7 @@
     {
       "code": "GOODS.RETAIL.TST-29",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -237,7 +237,7 @@
     {
       "code": "GOODS.RETAIL.TST-30",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -245,7 +245,7 @@
     {
       "code": "GOODS.RETAIL.TST-31",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -253,7 +253,7 @@
     {
       "code": "GOODS.RETAIL.TST-32",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -261,7 +261,7 @@
     {
       "code": "GOODS.RETAIL.TST-33",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -269,7 +269,7 @@
     {
       "code": "GOODS.RETAIL.TST-34",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -277,7 +277,7 @@
     {
       "code": "GOODS.RETAIL.TST-35",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -285,7 +285,7 @@
     {
       "code": "GOODS.RETAIL.TST-36",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -293,7 +293,7 @@
     {
       "code": "GOODS.RETAIL.TST-37",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -301,7 +301,7 @@
     {
       "code": "GOODS.RETAIL.TST-38",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -309,7 +309,7 @@
     {
       "code": "GOODS.RETAIL.TST-39",
       "uom": "GROSSUNITS",
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -317,7 +317,7 @@
     {
       "code": "GOODS.RETAIL.TST-40",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -325,7 +325,7 @@
     {
       "code": "GOODS.RETAIL.TST-41",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -333,7 +333,7 @@
     {
       "code": "GOODS.RETAIL.TST-42",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -341,7 +341,7 @@
     {
       "code": "GOODS.RETAIL.TST-43",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -349,7 +349,7 @@
     {
       "code": "GOODS.RETAIL.TST-44",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -357,7 +357,7 @@
     {
       "code": "GOODS.RETAIL.TST-45",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -365,7 +365,7 @@
     {
       "code": "GOODS.RETAIL.TST-46",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -373,7 +373,7 @@
     {
       "code": "GOODS.RETAIL.TST-47",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -381,7 +381,7 @@
     {
       "code": "GOODS.RETAIL.TST-48",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -389,7 +389,7 @@
     {
       "code": "GOODS.RETAIL.TST-49",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -397,7 +397,7 @@
     {
       "code": "GOODS.RETAIL.TST-50",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -405,7 +405,7 @@
     {
       "code": "GOODS.RETAIL.TST-51",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -413,7 +413,7 @@
     {
       "code": "GOODS.RETAIL.TST-52",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -421,7 +421,7 @@
     {
       "code": "GOODS.RETAIL.TST-53",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -429,7 +429,7 @@
     {
       "code": "GOODS.RETAIL.TST-54",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -437,7 +437,7 @@
     {
       "code": "GOODS.RETAIL.TST-55",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -445,7 +445,7 @@
     {
       "code": "GOODS.RETAIL.TST-56",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -453,7 +453,7 @@
     {
       "code": "GOODS.RETAIL.TST-57",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -461,7 +461,7 @@
     {
       "code": "GOODS.RETAIL.TST-58",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -469,7 +469,7 @@
     {
       "code": "GOODS.RETAIL.TST-59",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -477,7 +477,7 @@
     {
       "code": "GOODS.RETAIL.TST-60",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -485,7 +485,7 @@
     {
       "code": "GOODS.RETAIL.TST-61",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -493,7 +493,7 @@
     {
       "code": "GOODS.RETAIL.TST-62",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -501,7 +501,7 @@
     {
       "code": "GOODS.RETAIL.TST-63",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -509,7 +509,7 @@
     {
       "code": "GOODS.RETAIL.TST-64",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -517,7 +517,7 @@
     {
       "code": "GOODS.RETAIL.TST-65",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -525,7 +525,7 @@
     {
       "code": "GOODS.RETAIL.TST-66",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -533,7 +533,7 @@
     {
       "code": "GOODS.RETAIL.TST-67",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -541,7 +541,7 @@
     {
       "code": "GOODS.RETAIL.TST-68",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -549,7 +549,7 @@
     {
       "code": "GOODS.RETAIL.TST-69",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -557,7 +557,7 @@
     {
       "code": "GOODS.RETAIL.TST-70",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -565,7 +565,7 @@
     {
       "code": "GOODS.RETAIL.TST-71",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -573,7 +573,7 @@
     {
       "code": "GOODS.RETAIL.TST-72",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -581,7 +581,7 @@
     {
       "code": "GOODS.RETAIL.TST-73",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -589,7 +589,7 @@
     {
       "code": "GOODS.RETAIL.TST-74",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -597,7 +597,7 @@
     {
       "code": "GOODS.RETAIL.TST-75",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -605,7 +605,7 @@
     {
       "code": "GOODS.RETAIL.TST-76",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -613,7 +613,7 @@
     {
       "code": "GOODS.RETAIL.TST-77",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -621,7 +621,7 @@
     {
       "code": "GOODS.RETAIL.TST-78",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -629,7 +629,7 @@
     {
       "code": "GOODS.RETAIL.TST-79",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -637,7 +637,7 @@
     {
       "code": "GOODS.RETAIL.TST-80",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -645,7 +645,7 @@
     {
       "code": "GOODS.RETAIL.TST-81",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -653,7 +653,7 @@
     {
       "code": "GOODS.RETAIL.TST-82",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -661,7 +661,7 @@
     {
       "code": "GOODS.RETAIL.TST-83",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -669,7 +669,7 @@
     {
       "code": "GOODS.RETAIL.TST-84",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -677,7 +677,7 @@
     {
       "code": "GOODS.RETAIL.TST-85",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -685,7 +685,7 @@
     {
       "code": "GOODS.RETAIL.TST-86",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -693,7 +693,7 @@
     {
       "code": "GOODS.RETAIL.TST-87",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -701,7 +701,7 @@
     {
       "code": "GOODS.RETAIL.TST-88",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -709,7 +709,7 @@
     {
       "code": "GOODS.RETAIL.TST-89",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -717,7 +717,7 @@
     {
       "code": "GOODS.RETAIL.TST-90",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -725,7 +725,7 @@
     {
       "code": "GOODS.RETAIL.TST-91",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -733,7 +733,7 @@
     {
       "code": "GOODS.RETAIL.TST-92",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -741,7 +741,7 @@
     {
       "code": "GOODS.RETAIL.TST-93",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -749,7 +749,7 @@
     {
       "code": "GOODS.RETAIL.TST-94",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -757,7 +757,7 @@
     {
       "code": "GOODS.RETAIL.TST-95",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -765,7 +765,7 @@
     {
       "code": "GOODS.RETAIL.TST-96",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -773,7 +773,7 @@
     {
       "code": "GOODS.RETAIL.TST-97",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -781,7 +781,7 @@
     {
       "code": "GOODS.RETAIL.TST-98",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -789,7 +789,7 @@
     {
       "code": "GOODS.RETAIL.TST-99",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -797,7 +797,7 @@
     {
       "code": "GOODS.RETAIL.TST-100",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -805,7 +805,7 @@
     {
       "code": "GOODS.RETAIL.TST-101",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -813,7 +813,7 @@
     {
       "code": "GOODS.RETAIL.TST-102",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -821,7 +821,7 @@
     {
       "code": "GOODS.RETAIL.TST-103",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -829,7 +829,7 @@
     {
       "code": "GOODS.RETAIL.TST-104",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -837,7 +837,7 @@
     {
       "code": "GOODS.RETAIL.TST-105",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -845,7 +845,7 @@
     {
       "code": "GOODS.RETAIL.TST-106",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -853,7 +853,7 @@
     {
       "code": "GOODS.RETAIL.TST-107",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -861,7 +861,7 @@
     {
       "code": "GOODS.RETAIL.TST-108",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -869,7 +869,7 @@
     {
       "code": "GOODS.RETAIL.TST-109",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -877,7 +877,7 @@
     {
       "code": "GOODS.RETAIL.TST-110",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -885,7 +885,7 @@
     {
       "code": "GOODS.RETAIL.TST-111",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -893,7 +893,7 @@
     {
       "code": "GOODS.RETAIL.TST-112",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -901,7 +901,7 @@
     {
       "code": "GOODS.RETAIL.TST-113",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -909,7 +909,7 @@
     {
       "code": "GOODS.RETAIL.TST-114",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -917,7 +917,7 @@
     {
       "code": "GOODS.RETAIL.TST-115",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -925,7 +925,7 @@
     {
       "code": "GOODS.RETAIL.TST-116",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -933,7 +933,7 @@
     {
       "code": "GOODS.RETAIL.TST-117",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -941,7 +941,7 @@
     {
       "code": "GOODS.RETAIL.TST-118",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -949,7 +949,7 @@
     {
       "code": "GOODS.RETAIL.TST-221",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -957,7 +957,7 @@
     {
       "code": "GOODS.RETAIL.TST-222",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -965,7 +965,7 @@
     {
       "code": "GOODS.RETAIL.TST-223",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -973,7 +973,7 @@
     {
       "code": "GOODS.RETAIL.TST-224",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -981,7 +981,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-119",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -989,7 +989,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-120",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -997,7 +997,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-121",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1005,7 +1005,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-122",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1013,7 +1013,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-123",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1021,7 +1021,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-124",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1029,7 +1029,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-125",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1037,7 +1037,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-126",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1045,7 +1045,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-127",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1053,7 +1053,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-128",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1061,7 +1061,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-129",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1069,7 +1069,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-130",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1077,7 +1077,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-131",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1085,7 +1085,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-132",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1093,7 +1093,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-133",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1101,7 +1101,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-134",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1109,7 +1109,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-135",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1117,7 +1117,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-136",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1125,7 +1125,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-137",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1133,7 +1133,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-138",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1141,7 +1141,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-139",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1149,7 +1149,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-140",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1157,7 +1157,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-141",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1165,7 +1165,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-142",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1173,7 +1173,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-143",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1181,7 +1181,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-144",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1189,7 +1189,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-145",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1197,7 +1197,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-146",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1205,7 +1205,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-147",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1213,7 +1213,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-148",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1221,7 +1221,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-149",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1229,7 +1229,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-150",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1237,7 +1237,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-151",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1245,7 +1245,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-152",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1253,7 +1253,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-153",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1261,7 +1261,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-154",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1269,7 +1269,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-155",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1277,7 +1277,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-156",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1285,7 +1285,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-157",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1293,7 +1293,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-158",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1301,7 +1301,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-159",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1309,7 +1309,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-160",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1317,7 +1317,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-161",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1325,7 +1325,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-162",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1333,7 +1333,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-163",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1341,7 +1341,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-164",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1349,7 +1349,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-165",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1357,7 +1357,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-166",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1365,7 +1365,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-167",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1373,7 +1373,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-168",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1381,7 +1381,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-169",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1389,7 +1389,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-170",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1397,7 +1397,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-171",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1405,7 +1405,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-172",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1413,7 +1413,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-173",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1421,7 +1421,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-174",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1429,7 +1429,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-175",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1437,7 +1437,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-176",
       "uom": "GALLONS",
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1445,7 +1445,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-177",
       "uom": "GALLONS",
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1453,7 +1453,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-178",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1461,7 +1461,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-179",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1469,7 +1469,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-180",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1477,7 +1477,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-181",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1485,7 +1485,7 @@
     {
       "code": "GOODS.WHOLESALE.TST-182",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1493,7 +1493,7 @@
     {
       "code": "SERVICES.GBS.TST-183",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1501,7 +1501,7 @@
     {
       "code": "SERVICES.GBS.TST-184",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1509,7 +1509,7 @@
     {
       "code": "SERVICES.GBS.TST-185",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1517,7 +1517,7 @@
     {
       "code": "SERVICES.GBS.TST-186",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1525,7 +1525,7 @@
     {
       "code": "SERVICES.GBS.TST-187",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1533,7 +1533,7 @@
     {
       "code": "SERVICES.GBS.TST-188",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1541,7 +1541,7 @@
     {
       "code": "SERVICES.GBS.TST-189",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1549,7 +1549,7 @@
     {
       "code": "SERVICES.GBS.TST-190",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1557,7 +1557,7 @@
     {
       "code": "SERVICES.GBS.TST-191",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1565,7 +1565,7 @@
     {
       "code": "SERVICES.GBS.TST-192",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1573,7 +1573,7 @@
     {
       "code": "SERVICES.GBS.TST-193",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1581,7 +1581,7 @@
     {
       "code": "SERVICES.GBS.TST-194",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1589,7 +1589,7 @@
     {
       "code": "SERVICES.GBS.TST-195",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1597,7 +1597,7 @@
     {
       "code": "SERVICES.GBS.TST-196",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1605,7 +1605,7 @@
     {
       "code": "SERVICES.GBS.TST-197",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1613,7 +1613,7 @@
     {
       "code": "SERVICES.GBS.TST-198",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1621,7 +1621,7 @@
     {
       "code": "SERVICES.GBS.TST-199",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1629,7 +1629,7 @@
     {
       "code": "SERVICES.GBS.TST-200",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1637,7 +1637,7 @@
     {
       "code": "SERVICES.GBS.TST-201",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1645,7 +1645,7 @@
     {
       "code": "SERVICES.GBS.TST-202",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1653,7 +1653,7 @@
     {
       "code": "SERVICES.NGBS.TST-203",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1661,7 +1661,7 @@
     {
       "code": "SERVICES.NGBS.TST-204",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1669,7 +1669,7 @@
     {
       "code": "SERVICES.NGBS.TST-205",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1677,7 +1677,7 @@
     {
       "code": "SERVICES.NGBS.TST-206",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1685,7 +1685,7 @@
     {
       "code": "SERVICES.NGBS.TST-207",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1693,7 +1693,7 @@
     {
       "code": "SERVICES.NGBS.TST-208",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1701,7 +1701,7 @@
     {
       "code": "SERVICES.NGBS.TST-209",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1709,7 +1709,7 @@
     {
       "code": "SERVICES.NGBS.TST-210",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1717,7 +1717,7 @@
     {
       "code": "SERVICES.NGBS.TST-211",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1725,7 +1725,7 @@
     {
       "code": "SERVICES.NGBS.TST-212",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1733,7 +1733,7 @@
     {
       "code": "SERVICES.NGBS.TST-213",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1741,7 +1741,7 @@
     {
       "code": "SERVICES.NGBS.TST-214",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1749,7 +1749,7 @@
     {
       "code": "SERVICES.NGBS.TST-215",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1757,7 +1757,7 @@
     {
       "code": "SERVICES.NGBS.TST-216",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1765,7 +1765,7 @@
     {
       "code": "SERVICES.NGBS.TST-217",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1773,7 +1773,7 @@
     {
       "code": "SERVICES.NGBS.TST-218",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1781,7 +1781,7 @@
     {
       "code": "SERVICES.NGBS.TST-219",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
@@ -1789,7 +1789,7 @@
     {
       "code": "SERVICES.NGBS.TST-220",
       "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF"],
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","OWNERPHOTO"],
       "verificationDocument":[],
       "active": true,
       "type": "TL"
