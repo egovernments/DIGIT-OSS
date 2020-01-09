@@ -23,7 +23,7 @@
               {
                 "stack": [
                   {
-                    "text": "{{logo-header}} Muncipal Corporation",
+                    "text": "{{logo-header}} {{Municipal_Corporation}}",
                     "style": "receipt-logo-header"
                   },
                   {

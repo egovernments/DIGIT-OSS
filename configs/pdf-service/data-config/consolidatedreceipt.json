@@ -404,6 +404,18 @@
                   "prefix": null,
                   "module":"rainmaker-common"
                }
+              },
+              {
+                "variable": "Municipal_Corporation",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_MDMS_MUNICIPAL_CORPORATION"
+                },
+                "type": "label",
+                "localisation":{
+                  "required":true,
+                  "prefix": null,
+                  "module":"rainmaker-common"
+               }
               }
             ]
           },
@@ -445,7 +457,12 @@
                     },
                     {
                       "variable": "logo-header",
-                      "value":"$.MdmsRes.tenant.tenants[0].name"
+                      "value":"$.MdmsRes.tenant.tenants[0].name",
+                      "localisation":{
+                        "required":true,
+                        "prefix": null,
+                        "module":"rainmaker-common"
+                        }
                     }
                   ]
               }
