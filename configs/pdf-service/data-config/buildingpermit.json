@@ -1,241 +1,653 @@
 {
-    "key": "buildingpermit",
-    "DataConfigs": {
-        "serviceName": "rainmaker-common",
-        "version": "1.0.0",
-        "baseKeyPath": "$.Bpa.*",
-        "entityIdPath": "$.applicationNo",
-        "isCommonTableBorderRequired": true,
+  "key": "buildingpermit",
+  "DataConfigs": {
+    "serviceName": "rainmaker-common",
+    "version": "1.0.0",
+    "baseKeyPath": "$.Bpa.*",
+    "entityIdPath": "$.applicationNo",
+    "isCommonTableBorderRequired": true,
+    "mappings": [
+      {
         "mappings": [
-            {
-                "mappings": [
+          {
+            "direct": [
+              {
+                "variable": "logoImage",
+                "url": "https://raw.githubusercontent.com/egovernments/egov-web-app/master/web/rainmaker/dev-packages/egov-ui-kit-dev/src/assets/images/pblogo.png",
+                "type": "image"
+              },
+              {
+                "variable": "applicationNo",
+                "value": {
+                  "path": "$.applicationNo"
+                }
+              },
+              {
+                "variable": "planPermissionNo",
+                "value": {
+                  "path": "$.permitOrderNo"
+                }
+              },
+              {
+                "variable": "dated",
+                "value": {
+                  "path": "$.auditDetails.createdTime"
+                },
+                "type": "date"
+              },
+              {
+                "variable": "favourOf",
+                "value": {
+                  "path": "$.owners.*.name"
+                }
+              },
+              {
+                "variable": "buidlingNearGovt",
+                "value": {
+                  "path": "BUILDING_NEAR_GOVT_BLDG"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "buidlingNearMonument",
+                "value": {
+                  "path": "BUILDING_NEAR_MONUMENT"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "constructionNearAirport",
+                "value": {
+                  "path": "NOC_FOR_CONSTRUCTION_NEAR_AIRPORT"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "constructionNearDefence",
+                "value": {
+                  "path": "NOC_FOR_CONSTRUCTION_NEAR_DEFENCE_AERODOMES"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "greenBuildingSustainable",
+                "value": {
+                  "path": "PROVISION_FOR_GREEN_BUILDINGS_AND_SUSTAINABILITY"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "nocRailways",
+                "value": {
+                  "path": "nocRailways"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "nocIrrigationDept",
+                "value": {
+                  "path": "NOC_IRRIGATION_DEPT"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "nocCollectorGvtLand",
+                "value": {
+                  "path": "NOC_COLLECTOR_GVT_LAND"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "isBuildingNearGovtBLDG",
+                "value": {
+                  "path": "$.edcrDetail[0].planDetail.planInfoProperties.BUILDING_NEAR_GOVT_BLDG"
+                }
+              },
+              {
+                "variable": "isBuildingNearMonument",
+                "value": {
+                  "path": "$.edcrDetail[0].planDetail.planInfoProperties.BUILDING_NEAR_MONUMENT"
+                }
+              },
+              {
+                "variable": "isCostructionNearAirport",
+                "value": {
+                  "path": "$.edcrDetail[0].planDetail.planInfoProperties.NOC_FOR_CONSTRUCTION_NEAR_AIRPORT"
+                }
+              },
+              {
+                "variable": "isConstructionNearDefence",
+                "value": {
+                  "path": "$.edcrDetail[0].planDetail.planInfoProperties.NOC_FOR_CONSTRUCTION_NEAR_DEFENCE_AERODOMES"
+                }
+              },
+              {
+                "variable": "isGreenBuildingSustainable",
+                "value": {
+                  "path": "$.edcrDetail[0].planDetail.planInfoProperties.PROVISION_FOR_GREEN_BUILDINGS_AND_SUSTAINABILITY"
+                }
+              },
+              {
+                "variable": "isNocRailways",
+                "value": {
+                  "path": "$.edcrDetail[0].planDetail.planInformation.nocRailways"
+                }
+              },
+              {
+                "variable": "isNocIrrigationDept",
+                "value": {
+                  "path": "$.edcrDetail[0].planDetail.planInfoProperties.NOC_IRRIGATION_DEPT"
+                }
+              },
+              {
+                "variable": "isNocCollectorGvtLand",
+                "value": {
+                  "path": "$.edcrDetail[0].planDetail.planInfoProperties.NOC_COLLECTOR_GVT_LAND"
+                }
+              },
+              {
+                "variable": "status",
+                "value": {
+                  "path": "$.edcrDetail[0].status"
+                }
+              },
+              {
+                "variable": "applicantName",
+                "value": {
+                  "path": "$.edcrDetail[0].planDetail.planInformation.applicantName"
+                }
+              },
+              {
+                "variable": "applicationDate",
+                "value": {
+                  "path": "$.edcrDetail[0].planDetail.applicationDate"
+                },
+                "type": "date"
+              },
+              {
+                "variable": "occupancyType",
+                "value": {
+                  "path": "$.edcrDetail[0].planDetail.planInformation.occupancy"
+                }
+              },
+              {
+                "variable": "demolitionArea",
+                "value": {
+                  "path": "$.edcrDetail[0].planDetail.planInformation.demolitionArea"
+                }
+              },
+              {
+                "variable": "roadWidth",
+                "value": {
+                  "path": "$.edcrDetail[0].planDetail.planInformation.roadWidth"
+                }
+              },
+              {
+                "variable": "areaType",
+                "value": {
+                  "path": "$.edcrDetail[0].planDetail.planInformation.typeOfArea"
+                }
+              },
+              {
+                "variable": "plotArea",
+                "value": {
+                  "path": "$.edcrDetail[0].planDetail.planInformation.plotArea"
+                }
+              },
+              {
+                "variable": "plotReserveNo",
+                "value": {
+                  "path": "$.edcrDetail[0].planDetail.planInformation.plotNo"
+                }
+              },
+              {
+                "variable": "revenueWard",
+                "value": {
+                  "path": "$.edcrDetail[0].planDetail.planInformation.revenueWard"
+                }
+              },
+              {
+                "variable": "desam",
+                "value": {
+                  "path": "$.edcrDetail[0].planDetail.planInformation.desam"
+                }
+              },
+              {
+                "variable": "village",
+                "value": {
+                  "path": "$.edcrDetail[0].planDetail.planInformation.village"
+                }
+              },
+              {
+                "variable": "avgWidthOfPlot",
+                "value": {
+                  "path": "$.edcrDetail[0].planDetail.planInformation.widthOfPlot"
+                }
+              },
+              {
+                "variable": "avgDepthOfPlot",
+                "value": {
+                  "path": "$.edcrDetail[0].planDetail.planInformation.depthOfPlot"
+                }
+              },
+              {
+                "variable": "frontSetBack",
+                "value": {
+                  "path": "$.edcrDetail[0].planDetail.reportOutput.scrutinyDetails[?(@.key=='Block_1_Front Setback')].detail.*"
+                },
+                "type": "array-column",
+                "format": {
+                  "type": "string",
+                  "scema": [
                     {
-                        "direct": [
-                            {
-                                "variable": "logoImage",
-                                "url": "https://raw.githubusercontent.com/egovernments/egov-web-app/master/web/rainmaker/dev-packages/egov-ui-kit-dev/src/assets/images/pblogo.png",
-                                "type": "image"
-                            },
-                            {
-                                "variable": "applicationNo",
-                                "value": {
-                                    "path": "$.applicationNo"
-                                }
-                            },
-                            {
-                                "variable": "planPermissionNo",
-                                "value": {
-                                    "path": "$.permitOrderNo"
-                                }
-                            },
-                            {
-                                "variable": "dated",
-                                "value": {
-                                    "path": "$.auditDetails.createdTime"
-                                },
-                                "type": "date"
-                            },
-                            {
-                                "variable": "favourOf",
-                                "value": {
-                                    "path": "$.owners.*.name"
-                                }
-                            },
-                            {
-                                "variable": "buidlingNearGovt",
-                                "value": {
-                                    "path": "BUILDING_NEAR_GOVT_BLDG"
-                                },
-                                "type": "label",
-                                "localisation": {
-                                    "required": true,
-                                    "prefix": null,
-                                    "module": "rainmaker-common"
-                                }
-                            },
-                            {
-                                "variable": "buidlingNearMonument",
-                                "value": {
-                                    "path": "BUILDING_NEAR_MONUMENT"
-                                },
-                                "type": "label",
-                                "localisation": {
-                                    "required": true,
-                                    "prefix": null,
-                                    "module": "rainmaker-common"
-                                }
-                            },
-                            {
-                                "variable": "constructionNearAirport",
-                                "value": {
-                                    "path": "NOC_FOR_CONSTRUCTION_NEAR_AIRPORT"
-                                },
-                                "type": "label",
-                                "localisation": {
-                                    "required": true,
-                                    "prefix": null,
-                                    "module": "rainmaker-common"
-                                }
-                            },
-                            {
-                                "variable": "constructionNearDefence",
-                                "value": {
-                                    "path": "NOC_FOR_CONSTRUCTION_NEAR_DEFENCE_AERODOMES"
-                                },
-                                "type": "label",
-                                "localisation": {
-                                    "required": true,
-                                    "prefix": null,
-                                    "module": "rainmaker-common"
-                                }
-                            },
-                            {
-                                "variable": "greenBuildingSustainable",
-                                "value": {
-                                    "path": "PROVISION_FOR_GREEN_BUILDINGS_AND_SUSTAINABILITY"
-                                },
-                                "type": "label",
-                                "localisation": {
-                                    "required": true,
-                                    "prefix": null,
-                                    "module": "rainmaker-common"
-                                }
-                            },
-                            {
-                                "variable": "nocRailways",
-                                "value": {
-                                    "path": "nocRailways"
-                                },
-                                "type": "label",
-                                "localisation": {
-                                    "required": true,
-                                    "prefix": null,
-                                    "module": "rainmaker-common"
-                                }
-                            },
-                            {
-                                "variable": "nocIrrigationDept",
-                                "value": {
-                                    "path": "NOC_IRRIGATION_DEPT"
-                                },
-                                "type": "label",
-                                "localisation": {
-                                    "required": true,
-                                    "prefix": null,
-                                    "module": "rainmaker-common"
-                                }
-                            },
-                            {
-                                "variable": "nocCollectorGvtLand",
-                                "value": {
-                                    "path": "NOC_COLLECTOR_GVT_LAND"
-                                },
-                                "type": "label",
-                                "localisation": {
-                                    "required": true,
-                                    "prefix": null,
-                                    "module": "rainmaker-common"
-                                }
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                "externalAPI": [
+                      "key": "Byelaw"
+                    },
                     {
-                        "path": "https://egov-dcr-galaxy.egovernments.org/edcr/rest/dcr/scrutinydetails",
-                        "queryParam": "edcrNumber=$.edcrNumber&tenantId=$.tenantId",
-                        "apiRequest": null,
-                        "responseMapping": [
-                            {
-                                "variable": "isBuildingNearGovtBLDG",
-                                "value": "$.planDetail.planInfoProperties.BUILDING_NEAR_GOVT_BLDG"
-                            },
-                            {
-                                "variable": "isBuildingNearMonument",
-                                "value": "$.planDetail.planInfoProperties.BUILDING_NEAR_MONUMENT"
-                            },
-                            {
-                                "variable": "isCostructionNearAirport",
-                                "value": "$.planDetail.planInfoProperties.NOC_FOR_CONSTRUCTION_NEAR_AIRPORT"
-                            },
-                            {
-                                "variable": "isConstructionNearDefence",
-                                "value": "$.planDetail.planInfoProperties.NOC_FOR_CONSTRUCTION_NEAR_DEFENCE_AERODOMES"
-                            },
-                            {
-                                "variable": "isGreenBuildingSustainable",
-                                "value": "$.planDetail.planInfoProperties.PROVISION_FOR_GREEN_BUILDINGS_AND_SUSTAINABILITY"
-                            },
-                            {
-                                "variable": "isNocRailways",
-                                "value": "$.planDetail.planInformation.nocRailways"
-                            },
-                            {
-                                "variable": "isNocIrrigationDept",
-                                "value": "$.planDetail.planInfoProperties.NOC_IRRIGATION_DEPT"
-                            },
-                            {
-                                "variable": "isNocCollectorGvtLand",
-                                "value": "$.planDetail.planInfoProperties.NOC_COLLECTOR_GVT_LAND"
-                            },
-                            {
-                                "variable": "status",
-                                "value": "$.status"
-                            },
-                            {
-                                "variable": "applicantName",
-                                "value": "$.planDetail.planInformation.applicantName"
-                            },
-                            {
-                                "variable": "applicationDate",
-                                "value": "$.planDetail.applicationDate"
-                            },
-                            {
-                                "variable": "occupancyType",
-                                "value": "$.planDetail.planInformation.occupancy"
-                            },
-                            {
-                                "variable": "demolitionArea",
-                                "value": "$.planDetail.planInformation.demolitionArea"
-                            },
-                            {
-                                "variable": "roadWidth",
-                                "value": "$.planDetail.planInformation.roadWidth"
-                            },
-                            {
-                                "variable": "areaType",
-                                "value": "$.planDetail.planInformation.typeOfArea"
-                            },
-                            {
-                                "variable": "plotReserveNo",
-                                "value": "$.planDetail.planInformation.plotNo"
-                            },
-                            {
-                                "variable": "revenueWard",
-                                "value": "$.planDetail.planInformation.revenueWard"
-                            },
-                            {
-                                "variable": "desam",
-                                "value": "$.planDetail.planInformation.desam"
-                            },
-                            {
-                                "variable": "village",
-                                "value": "$.planDetail.planInformation.village"
-                            },
-                            {
-                                "variable": "avgWidthOfPlot",
-                                "value": "$.planDetail.planInformation.widthOfPlot"
-                            },
-                            {
-                                "variable": "avgDepthOfPlot",
-                                "value": "$.planDetail.planInformation.depthOfPlot"
-                            }
-                        ]
+                      "key": "Level"
+                    },
+                    {
+                      "key": "Occupancy"
+                    },
+                    {
+                      "key": "Field Verified"
+                    },
+                    {
+                      "key": "Permissible"
+                    },
+                    {
+                      "key": "Provided"
+                    },
+                    {
+                      "key": "Status"
                     }
-                ]
-            }
+                  ]
+                }
+              },
+              {
+                "variable": "rearSetBack",
+                "value": {
+                  "path": "$.edcrDetail[0].planDetail.reportOutput.scrutinyDetails[?(@.key=='Block_1_Rear Setback')].detail.*"
+                },
+                "type": "array-column",
+                "format": {
+                  "type": "string",
+                  "scema": [
+                    {
+                      "key": "Byelaw"
+                    },
+                    {
+                      "key": "Level"
+                    },
+                    {
+                      "key": "Occupancy"
+                    },
+                    {
+                      "key": "Field Verified"
+                    },
+                    {
+                      "key": "Permissible"
+                    },
+                    {
+                      "key": "Provided"
+                    },
+                    {
+                      "key": "Status"
+                    }
+                  ]
+                }
+              },
+              {
+                "variable": "sideSetBack",
+                "value": {
+                  "path": "$.edcrDetail[0].planDetail.reportOutput.scrutinyDetails[?(@.key=='Block_1_Side Setback')].detail.*"
+                },
+                "type": "array-column",
+                "format": {
+                  "type": "string",
+                  "scema": [
+                    {
+                      "key": "Byelaw"
+                    },
+                    {
+                      "key": "Level"
+                    },
+                    {
+                      "key": "Occupancy"
+                    },
+                    {
+                      "key": "Setback"
+                    },
+                    {
+                      "key": "Field Verified"
+                    },
+                    {
+                      "key": "Permissible"
+                    },
+                    {
+                      "key": "Provided"
+                    },
+                    {
+                      "key": "Status"
+                    }
+                  ]
+                }
+              },
+              {
+                "variable": "plinth",
+                "value": {
+                  "path": "$.edcrDetail[0].planDetail.reportOutput.scrutinyDetails[?(@.key=='Block_1_Plinth')].detail.*"
+                },
+                "type": "array-column",
+                "format": {
+                  "type": "string",
+                  "scema": [
+                    {
+                      "key": "Byelaw"
+                    },
+                    {
+                      "key": "Description"
+                    },
+                    {
+                      "key": "Permissible"
+                    },
+                    {
+                      "key": "Provided"
+                    },
+                    {
+                      "key": "Status"
+                    }
+                  ]
+                }
+              },
+              {
+                "variable": "maxHeightBuildingAlwd",
+                "value": {
+                  "path": "$.edcrDetail[0].planDetail.reportOutput.scrutinyDetails[?(@.key=='Block_1_Height of Building')].detail.*"
+                },
+                "type": "array-column",
+                "format": {
+                  "type": "string",
+                  "scema": [
+                    {
+                      "key": "Byelaw"
+                    },
+                    {
+                      "key": "Description"
+                    },
+                    {
+                      "key": "Area Type"
+                    },
+                    {
+                      "key": "Road Width"
+                    },
+                    {
+                      "key": "Permissible"
+                    },
+                    {
+                      "key": "Provided"
+                    },
+                    {
+                      "key": "Status"
+                    }
+                  ]
+                }
+              },
+              {
+                "variable": "numOfFloorsAlwd",
+                "value": {
+                  "path": "$.edcrDetail[0].planDetail.reportOutput.scrutinyDetails[?(@.key=='Block_1_Number of Floors')].detail.*"
+                },
+                "type": "array-column",
+                "format": {
+                  "type": "string",
+                  "scema": [
+                    {
+                      "key": "Byelaw"
+                    },
+                    {
+                      "key": "Description"
+                    },
+                    {
+                      "key": "Area Type"
+                    },
+                    {
+                      "key": "Road Width"
+                    },
+                    {
+                      "key": "Permissible"
+                    },
+                    {
+                      "key": "Provided"
+                    },
+                    {
+                      "key": "Status"
+                    }
+                  ]
+                }
+              },
+              {
+                "variable": "commonMonument",
+                "value": {
+                  "path": "$.edcrDetail[0].planDetail.reportOutput.scrutinyDetails[?(@.key=='Common_Monument Distance')].detail.*"
+                },
+                "type": "array-column",
+                "format": {
+                  "type": "string",
+                  "scema": [
+                    {
+                      "key": "Byelaw"
+                    },
+                    {
+                      "key": "Description"
+                    },
+                    {
+                      "key": "Distance"
+                    },
+                    {
+                      "key": "Permitted"
+                    },
+                    {
+                      "key": "Provided"
+                    },
+                    {
+                      "key": "Status"
+                    }
+                  ]
+                }
+              },
+              {
+                "variable": "commonFar",
+                "value": {
+                  "path": "$.edcrDetail[0].planDetail.reportOutput.scrutinyDetails[?(@.key=='Common_FAR')].detail.*"
+                },
+                "type": "array-column",
+                "format": {
+                  "type": "string",
+                  "scema": [
+                    {
+                      "key": "Byelaw"
+                    },
+                    {
+                      "key": "Area Type"
+                    },
+                    {
+                      "key": "Road Width"
+                    },
+                    {
+                      "key": "Permissible"
+                    },
+                    {
+                      "key": "Provided"
+                    },
+                    {
+                      "key": "Status"
+                    }
+                  ]
+                }
+              },
+              {
+                "variable": "floorWiseProposedArea",
+                "value": {
+                  "path": "$.edcrDetail[0].planDetail.blocks.*.building.floors.*"
+                },
+                "type": "array-column",
+                "format": {
+                  "type": "string",
+                  "scema": [
+                    {
+                      "key": "name"
+                    },
+                    {
+                      "key": "number"
+                    },
+                    {
+                      "key": "occupancies[0].type"
+                    },
+                    {
+                      "key": "occupancies[0].builtUpArea"
+                    },
+                    {
+                      "key": "occupancies[0].floorArea"
+                    },
+                    {
+                      "key": "occupancies[0].carpetArea"
+                    }
+                  ]
+                }
+              },
+              {
+                "variable": "blockWiseProposedArea",
+                "value": {
+                  "path": "$.edcrDetail[0].planDetail.blocks.*.building.floors.*"
+                },
+                "type": "array-column",
+                "format": {
+                  "type": "string",
+                  "scema": [
+                    {
+                      "key": "number"
+                    },
+                    {
+                      "key": "occupancies[0].type"
+                    },
+                    {
+                      "key": "occupancies[0].builtUpArea"
+                    },
+                    {
+                      "key": "occupancies[0].floorArea"
+                    },
+                    {
+                      "key": "occupancies[0].carpetArea"
+                    }
+                  ]
+                }
+              },
+              {
+                "variable": "totalBuitUpArea",
+                "value": {
+                  "path": "$.edcrDetail[0].planDetail.virtualBuilding.totalBuitUpArea"
+                }
+              },
+              {
+                "variable": "totalFloorArea",
+                "value": {
+                  "path": "$.edcrDetail[0].planDetail.virtualBuilding.totalFloorArea"
+                }
+              },
+              {
+                "variable": "totalCarpetArea",
+                "value": {
+                  "path": "$.edcrDetail[0].planDetail.virtualBuilding.totalCarpetArea"
+                }
+              },
+              {
+                "variable": "totalCoverageArea",
+                "value": {
+                  "path": "$.edcrDetail[0].planDetail.virtualBuilding.totalCoverageArea"
+                }
+              },
+              {
+                "variable": "coveredArea",
+                "value": {
+                  "path": "$.edcrDetail[0].planDetail.blocks.*.building.coverageArea"
+                }
+              },
+              {
+                "variable": "buildingHeight",
+                "value": {
+                  "path": "$.edcrDetail[0].planDetail.blocks.*.building.buildingHeight"
+                }
+              },
+              {
+                "variable": "sumOfBuildupArea",
+                "value": {
+                  "path": "$.edcrDetail[0].planDetail.blocks.*.building.totalArea[0].builtUpArea"
+                }
+              },
+              {
+                "variable": "sumOfFloorArea",
+                "value": {
+                  "path": "$.edcrDetail[0].planDetail.blocks.*.building.totalArea[0].floorArea"
+                }
+              },
+              {
+                "variable": "sumOfCarpetArea",
+                "value": {
+                  "path": "$.edcrDetail[0].planDetail.blocks.*.building.totalArea[0].carpetArea"
+                }
+              }
+            ]
+          },
+          {
+            "qrcodeConfig": [
+              {
+                "variable": "qrCode",
+                "value": "Application: {{applicationNo}}, PlanPermission: {{planPermissionNo}}, Date of payment: {{dated}}"
+              }
+            ]
+          }
         ]
-    }
+      }
+    ]
+  }
 }
