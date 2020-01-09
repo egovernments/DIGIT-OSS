@@ -1731,22 +1731,22 @@ class FormWizardDataEntry extends Component {
       const demandData = [];
       const demandDetails = [];
       const demandDetails1 = [];
+      let datas=getFinalData() || [];
+      let currentYearData=[]
+      let fromDate;
+      let toDate;
       const finaldemand = DemandProperties[0].propertyDetails[0].demand.map(
         (demand, index) => {
-          return Object.keys(demand.demand).map((data, key) => {
+          return Object.keys(demand.demand).map((dataYear, key) => {
             return (
-              demand.demand[data].map((demandValue, ind) => {
+              demand.demand[dataYear].map((demandValue, ind) => {
+                  currentYearData=datas.filter(data=>data.financialYear == dataYear);
+                  fromDate=currentYearData.length > 0 ? currentYearData[0].fromDate:0
+                  toDate=currentYearData.length > 0 ? currentYearData[0].toDate:0
                 demandDetails1.push({
                   taxHeadMasterCode: demandValue.PT_TAXHEAD,
-                  taxAmount: parseInt(
-                    demandValue.PT_DEMAND != "" ? demandValue.PT_DEMAND : 0
-                  ),
-                  collectionAmount: parseInt(
-                    demandValue.PT_COLLECTED == undefined ||
-                      demandValue.PT_COLLECTED == ""
-                      ? 0
-                      : demandValue.PT_COLLECTED
-                  )
+                  taxAmount: parseInt(demandValue.PT_DEMAND != "" ? demandValue.PT_DEMAND : 0),
+                  collectionAmount: parseInt(demandValue.PT_COLLECTED == undefined || demandValue.PT_COLLECTED == ""? 0: demandValue.PT_COLLECTED)
                 });
               }),
               demandData.push({
@@ -1757,8 +1757,8 @@ class FormWizardDataEntry extends Component {
                 ),
                 consumerType: "BUILTUP",
                 businessService: "PT",
-                taxPeriodFrom: new Date().getTime(),
-                taxPeriodTo: new Date().getTime(),
+                taxPeriodFrom: fromDate,
+                taxPeriodTo: toDate,
                 payer: {
                   uuid: get(
                     createPropertyResponse,
