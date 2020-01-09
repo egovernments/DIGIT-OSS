@@ -355,37 +355,12 @@ class FormWizardDataEntry extends Component {
     );
     const tenantId = getQueryValue(search, "tenantId");
     const draftUuid = getQueryValue(search, "uuid");
-    const tenantId1 = getTenantId() || "uk";
+    // const tenantId1 = getTenantId() || "uk";
     const assessmentId =
       getQueryValue(search, "assessmentId") || fetchFromLocalStorage("draftId");
 
     if (assessmentId) {
-      fetchGeneralMDMSData(
-        null,
-        "PropertyTax",
-        [
-          "Floor",
-          "OccupancyType",
-          "OwnerShipCategory",
-          "ConstructionType",
-          "OwnerType",
-          "PropertySubType",
-          "PropertyType",
-          "SubOwnerShipCategory",
-          "UsageCategoryDetail",
-          "UsageCategoryMajor",
-          "UsageCategoryMinor",
-          "UsageCategorySubMinor",
-          "Rebate",
-          "Penalty",
-          "Interest",
-          "FireCess",
-          "RoadType",
-          "Thana"
-        ],
-        "",
-        tenantId
-      );
+
       await this.fetchDraftDetails(assessmentId, isReassesment, draftUuid);
 
       if (selected > 2) {
@@ -404,10 +379,36 @@ class FormWizardDataEntry extends Component {
     }
     fetchGeneralMDMSData(
       null,
+      "PropertyTax",
+      [
+        "Floor",
+        "OccupancyType",
+        "OwnerShipCategory",
+        "ConstructionType",
+        "OwnerType",
+        "PropertySubType",
+        "PropertyType",
+        "SubOwnerShipCategory",
+        "UsageCategoryDetail",
+        "UsageCategoryMajor",
+        "UsageCategoryMinor",
+        "UsageCategorySubMinor",
+        "Rebate",
+        "Penalty",
+        "Interest",
+        "FireCess",
+        "RoadType",
+        "Thana"
+      ],
+      "",
+      tenantId
+    );
+    fetchGeneralMDMSData(
+      null,
       "BillingService",
       ["TaxPeriod", "TaxHeadMaster"],
       "",
-      tenantId1
+      tenantId
     );
     const { ownerInfoArr } = this.state;
 
