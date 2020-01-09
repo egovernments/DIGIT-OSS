@@ -2,7 +2,7 @@
   display: flex;
   align-items: center; }
   
-  div[class^="MuiModal-root"] {
+  div#menu- {
     z-index: 2001;
   }
 
