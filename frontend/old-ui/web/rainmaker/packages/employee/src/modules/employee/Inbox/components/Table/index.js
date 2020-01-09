@@ -20,7 +20,7 @@ import orderBy from "lodash/orderBy";
 import { getWFConfig } from "./workflowRedirectionConfig";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
-import ImportExportIcon from '@material-ui/icons/ImportExport';
+import ImportExportIcon from "@material-ui/icons/ImportExport";
 
 class InboxData extends React.Component {
   state = {
@@ -125,22 +125,27 @@ class InboxData extends React.Component {
                   let classNames = `inbox-data-table-headcell inbox-data-table-headcell-${index}`;
                   return (
                     <TableCell className={classNames}>
-                      {<Label label={item} labelStyle={{ fontWeight: "500" }} color="#000000" />}
+                      {index === 4 ? (
+                        <div className = "rainmaker-displayInline">
+                          {sortOrder === "desc" && (
+                            <div className="arrow-icon-style" onClick={() => this.sortingTable("asc")}>
+                              <Label label={item} labelStyle={{ fontWeight: "500" }} color="#000000" />
+                              <ArrowDropUpIcon />
+                            </div>
+                          )}
+                          {sortOrder === "asc" && (
+                            <div className="arrow-icon-style" onClick={() => this.sortingTable("desc")}>
+                              <Label label={item} labelStyle={{ fontWeight: "500" }} color="#000000" />
+                              <ArrowDropDownIcon />
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <Label label={item} labelStyle={{ fontWeight: "500" }} color="#000000" />
+                      )}
                     </TableCell>
                   );
                 })}
-                <TableCell className="inbox-data-table-headcell inbox-data-table-headcell-4">
-                  {sortOrder === "desc" && (
-                    <div className="arrow-icon-style" onClick={() => this.sortingTable("asc")}>
-                      <ArrowDropUpIcon />
-                    </div>
-                  )}
-                  {sortOrder === "asc" && (
-                    <div className="arrow-icon-style" onClick={() => this.sortingTable("desc")}>
-                      <ArrowDropDownIcon />
-                    </div>
-                  )}
-                </TableCell>
               </TableRow>
             </TableHead>
             {data.rows.length === 0 ? (
@@ -196,24 +201,20 @@ class InboxData extends React.Component {
           </Table>
         </Hidden>
         <Hidden only={["sm", "md", "lg", "xl"]} implementation="css">
-        <div class="sort-icon-flex">
-        <div className="sort-btn-mob">
-        
-        {sortOrder === "asc" && (
-                    <div onClick={() => this.sortingTable("desc")}>
-                      <ImportExportIcon/>
-                    </div>
-        )}  
-        {sortOrder === "desc" && (
-                    <div onClick={() => this.sortingTable("asc")}>
-                      <ImportExportIcon/>
-                    </div>
-        )} 
-        
-        </div>  
-        <Label className="sort-icon" label={"SORT_ICON"} />
-        
-       </div>
+          <div class="sort-icon-flex">
+              {sortOrder === "asc" && (
+                <div className = "rainmaker-displayInline" onClick={() => this.sortingTable("desc")}>
+                  <ImportExportIcon />
+                  <Label className="sort-icon" label={"INBOX_SORT_ICON"} />
+                </div>
+              )}
+              {sortOrder === "desc" && (
+                <div className = "rainmaker-displayInline" onClick={() => this.sortingTable("asc")}>
+                  <ImportExportIcon />
+                  <Label className="sort-icon" label={"INBOX_SORT_ICON"} />
+                </div>
+              )}            
+          </div>
           {data.rows.length === 0 ? (
             <Card textChildren={<Label labelClassName="" label="COMMON_INBOX_NO_DATA" />} />
           ) : (
