@@ -181,7 +181,7 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
       state,
       "screenConfiguration.preparedFinalObject.Licenses[0].status"
     );
-    if (status === "REJECTED"|| status ==="PENDINGAPPROVAL") {
+    if (status === "REJECTED"|| status ==="PENDINGPAYMENT") {
       console.log("=====status=123======" + status + "============");
       // set(
       //   action.screenConfgig,
@@ -493,7 +493,7 @@ export const tradeReviewDetails = getCommonCard({
     },
     roleDefination: {
       rolePath: "user-info.roles",
-      roles: ["TL_APPROVER", "TL_DOC_VERIFIER"]   //roles: ["TL_APPROVER","TL_DOC_VERIFIER"]
+      roles: ["TL_APPROVER","TL_DOC_VERIFIER"]
     }
   },
   reviewTradeDetails,

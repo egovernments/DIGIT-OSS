@@ -18,13 +18,13 @@ import {
   stepper,
   getMdmsData
 } from "../tradelicence/apply";
-// import { getAllDataFromBillingSlab } from "../utils";
+import { getAllDataFromBillingSlab } from "../utils";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 
 const getData = async (action, state, dispatch, tenantId) => {
   await getMdmsData(action, state, dispatch);
-  // await getAllDataFromBillingSlab(tenantId, dispatch);
+  await getAllDataFromBillingSlab(tenantId, dispatch);
   await getBoundaryData(action, state, dispatch, [
     { key: "tenantId", value: tenantId }
   ]);
@@ -46,39 +46,53 @@ const updateSearchResults = async (
   tenantId
 ) => {
   await getData(action, state, dispatch, tenantId);
-  await updatePFOforSearchResults(
+  updatePFOforSearchResults(
     action,
     state,
     dispatch,
     queryValue,
     "",
     tenantId
-  );
-  const queryValueFromUrl = getQueryArg(
-    window.location.href,
-    "applicationNumber"
-  );
-  if (!queryValueFromUrl) {
-    dispatch(
-      prepareFinalObject(
-        "Licenses[0].oldLicenseNumber",
-        get(
-          state.screenConfiguration.preparedFinalObject,
-          "Licenses[0].applicationNumber",
-          ""
+  ).then((response)=>{
+
+    const queryValueFromUrl = getQueryArg(
+      window.location.href,
+      "applicationNumber"
+    );
+    if (!queryValueFromUrl) {
+      dispatch(
+        prepareFinalObject(
+          "Licenses[0].oldLicenseNumber",
+          get(
+            state.screenConfiguration.preparedFinalObject,
+            "Licenses[0].applicationNumber",
+            ""
+          )
         )
-      )
-    );
-    dispatch(prepareFinalObject("Licenses[0].applicationNumber", ""));
-    dispatch(
-      handleField(
-        "apply",
-        "components.div.children.headerDiv.children.header.children.applicationNumber",
-        "visible",
-        false
-      )
-    );
-  }
+      );
+      dispatch(prepareFinalObject("Licenses[0].applicationNumber", ""));
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.headerDiv.children.header.children.applicationNumber",
+          "visible",
+          false
+        )
+      );
+    }
+    else {
+      const applicationType = get(
+        response,
+        "Licenses[0].tradeLicenseDetail.additionalDetail.applicationType",
+        null
+      );
+      getAllDataFromBillingSlab(tenantId, dispatch,[{
+        key:"applicationType",value:applicationType
+      }]);
+    }
+  });
+
+
 };
 const screenConfig = {
   uiFramework: "material-ui",
