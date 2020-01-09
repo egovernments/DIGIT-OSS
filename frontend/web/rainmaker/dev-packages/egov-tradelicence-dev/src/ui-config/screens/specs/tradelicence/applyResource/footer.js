@@ -2,7 +2,7 @@ import {
   getLabel,
   dispatchMultipleFieldChangeAction
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { download } from "egov-common/ui-utils/commons"
+import { download } from "egov-common/ui-utils/commons";
 import { applyTradeLicense } from "../../../../../ui-utils/commons";
 import {
   getButtonVisibility,
