@@ -1512,6 +1512,25 @@ const getACKData = (transformedData, ulbLogo) => {
             text: transformedData.tradeTypeCertificate
           }
         ]
+      },
+      {
+        style: "tl-certificate-data-2",
+        columns: [
+          {
+            width: 160,
+            text: getLocaleLabels(
+              "Trade License Fee",
+              "TL_LOCALIZATION_TRADE_LICENSE_FEE"
+            )+":"
+          },
+          {
+            width: "*",
+            text:
+              getLocaleLabels("Rs.", "TL_LOCALIZATION_TRADE_LICENSE_RS") +
+              transformedData.totalAmount
+            //     font: "Roboto"
+          }
+        ]
       }
       // {
       //   style: "tl-certificate-data-2",
