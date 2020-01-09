@@ -70,12 +70,7 @@
                         "alignment": "right"
                     }
                 ],
-                "margin": [
-                    0,
-                    20,
-                    0,
-                    0
-                ]
+                "style": "top-margin"
             },
             {
                 "text": [
@@ -133,7 +128,7 @@
                     },
                     {
                         "text": "Block No 1",
-                        "style": "top-low-margin"
+                        "style": "top-margin"
                     }
                 ],
                 "alignment": "left",
@@ -177,66 +172,7 @@
                                 "bold": true
                             }
                         ],
-                        [
-                            {
-                                "text": "Ground Floor"
-                            },
-                            {
-                                "text": "0"
-                            },
-                            {
-                                "text": "sample"
-                            },
-                            {
-                                "text": "sample"
-                            },
-                            {
-                                "text": "sample"
-                            },
-                            {
-                                "text": "sample"
-                            }
-                        ],
-                        [
-                            {
-                                "text": "Upper Floor"
-                            },
-                            {
-                                "text": "1"
-                            },
-                            {
-                                "text": "sample"
-                            },
-                            {
-                                "text": "sample"
-                            },
-                            {
-                                "text": "sample"
-                            },
-                            {
-                                "text": "sample"
-                            }
-                        ],
-                        [
-                            {
-                                "text": "Upper Floor"
-                            },
-                            {
-                                "text": "2"
-                            },
-                            {
-                                "text": "sample"
-                            },
-                            {
-                                "text": "sample"
-                            },
-                            {
-                                "text": "sample"
-                            },
-                            {
-                                "text": "sample"
-                            }
-                        ],
+                        "{{floorWiseProposedArea}}",
                         [
                             {
                                 "text": " "
@@ -249,21 +185,21 @@
                                 "bold": true
                             },
                             {
-                                "text": "468",
+                                "text": "{{sumOfBuildupArea}}",
                                 "bold": true
                             },
                             {
-                                "text": "468",
+                                "text": "{{sumOfFloorArea}}",
                                 "bold": true
                             },
                             {
-                                "text": "375",
+                                "text": "{{sumOfCarpetArea}}",
                                 "bold": true
                             }
                         ]
                     ]
                 },
-                "style": "top-low-margin"
+                "style": "top-margin"
             },
             {
                 "stack": [
@@ -300,21 +236,21 @@
                         ],
                         [
                             {
-                                "text": "468.88",
+                                "text": "{{totalBuitUpArea}}",
                                 "alignment": "right"
                             },
                             {
-                                "text": "468.88",
+                                "text": "{{totalFloorArea}}",
                                 "alignment": "right"
                             },
                             {
-                                "text": "375.10",
+                                "text": "{{totalCarpetArea}}",
                                 "alignment": "right"
                             }
                         ]
                     ]
                 },
-                "style": "top-low-margin"
+                "style": "top-margin"
             },
             {
                 "stack": [
@@ -397,28 +333,39 @@
                 ]
             },
             {
-                "stack": [
+                "columns": [
                     {
-                        "text": "Sonpur Muncipal Council",
-                        "style": "header"
+                        "image": "{{logoImage}}",
+                        "width": 50,
+                        "height": 50,
+                        "alignment": "left"
                     },
                     {
-                        "text": "AUTOMATED BUILDING PERMIT APPROVAL SYSTEM",
-                        "style": "header",
-                        "decoration": "underline"
+                        "stack": [
+                            {
+                                "text": "Sonpur Muncipal Council",
+                                "style": "header"
+                            },
+                            {
+                                "text": "AUTOMATED BUILDING PERMIT APPROVAL SYSTEM",
+                                "style": "header",
+                                "decoration": "underline"
+                            },
+                            {
+                                "text": "PLAN DOCUMENT SCRUTINY REPORT",
+                                "style": "header",
+                                "decoration": "underline"
+                            }
+                        ]
                     },
                     {
-                        "text": "PLAN DOCUMENT SCRUTINY REPORT",
-                        "style": "header",
-                        "decoration": "underline"
+                        "image": "{{logoImage}}",
+                        "width": 50,
+                        "height": 50,
+                        "alignment": "right"
                     }
                 ],
-                "margin": [
-                    0,
-                    50,
-                    0,
-                    0
-                ]
+                "style": "top-high-margin"
             },
             {
                 "text": [
@@ -471,7 +418,7 @@
                                 "text": "APPLICANT NAME"
                             },
                             {
-                                "text": "applicantName"
+                                "text": "{{applicantName}}"
                             },
                             {
                                 "text": "9"
@@ -480,7 +427,7 @@
                                 "text": "PLOT RESURVEY NUMBER"
                             },
                             {
-                                "text": "plotReserveNo"
+                                "text": "{{plotReserveNo}}"
                             }
                         ],
                         [
@@ -491,7 +438,7 @@
                                 "text": "APPLICATION NUMBER"
                             },
                             {
-                                "text": "applicationNumber"
+                                "text": "{{applicationNo}}"
                             },
                             {
                                 "text": "10"
@@ -500,7 +447,7 @@
                                 "text": " REVENUE WARD"
                             },
                             {
-                                "text": "revenueWard"
+                                "text": "{{revenueWard}}"
                             }
                         ],
                         [
@@ -511,7 +458,7 @@
                                 "text": "APPLICATION DATE"
                             },
                             {
-                                "text": "applicationDate"
+                                "text": "{{applicationDate}}"
                             },
                             {
                                 "text": "11"
@@ -520,7 +467,7 @@
                                 "text": "DESAM"
                             },
                             {
-                                "text": "desam"
+                                "text": "{{desam}}"
                             }
                         ],
                         [
@@ -531,7 +478,7 @@
                                 "text": "OCCUPANCY TYPE"
                             },
                             {
-                                "text": "occupancyType"
+                                "text": "{{occupancyType}}"
                             },
                             {
                                 "text": "12"
@@ -540,7 +487,7 @@
                                 "text": "VILLAGE"
                             },
                             {
-                                "text": "village"
+                                "text": "{{village}}"
                             }
                         ],
                         [
@@ -560,7 +507,7 @@
                                 "text": "PLOT AREA in m²"
                             },
                             {
-                                "text": "plotArea"
+                                "text": "{{plotArea}}"
                             }
                         ],
                         [
@@ -571,7 +518,7 @@
                                 "text": "DEMOLITION AREA in m²"
                             },
                             {
-                                "text": "demolitionArea"
+                                "text": "{{demolitionArea}}"
                             },
                             {
                                 "text": "14"
@@ -580,7 +527,7 @@
                                 "text": "AVERAGE WIDTH OF PLOTin m"
                             },
                             {
-                                "text": "avgWidthOfPlot"
+                                "text": "{{avgWidthOfPlot}}"
                             }
                         ],
                         [
@@ -591,7 +538,7 @@
                                 "text": "ROAD WIDTH in m"
                             },
                             {
-                                "text": "roadWidth"
+                                "text": "{{roadWidth}}"
                             },
                             {
                                 "text": "15"
@@ -600,7 +547,7 @@
                                 "text": "AVERAGE DEPTH OF PLOTin m"
                             },
                             {
-                                "text": "avdDepthOfPlot"
+                                "text": "{{avgDepthOfPlot}}"
                             }
                         ],
                         [
@@ -611,7 +558,7 @@
                                 "text": "AREA TYPE"
                             },
                             {
-                                "text": "areaType"
+                                "text": "{{areaType}}"
                             },
                             {
                                 "text": " "
@@ -629,12 +576,7 @@
             {
                 "text": "Decleration in Drawings",
                 "bold": true,
-                "margin": [
-                    30,
-                    10,
-                    0,
-                    0
-                ],
+                "style": "top-high-margin",
                 "fontSize": 15
             },
             {
@@ -653,7 +595,7 @@
                                 "text": "{{buidlingNearGovt}}"
                             },
                             {
-                                "text": "isBuildingNearGovtBLDG"
+                                "text": "{{isBuildingNearGovtBLDG}}"
                             }
                         ],
                         [
@@ -664,7 +606,7 @@
                                 "text": "{{buidlingNearMonument}}"
                             },
                             {
-                                "text": "isBuildingNearMonument"
+                                "text": "{{isBuildingNearMonument}}"
                             }
                         ],
                         [
@@ -675,7 +617,7 @@
                                 "text": "{{constructionNearAirport}}"
                             },
                             {
-                                "text": "isCostructionNearAirport"
+                                "text": "{{isCostructionNearAirport}}"
                             }
                         ],
                         [
@@ -686,7 +628,7 @@
                                 "text": "{{constructionNearDefence}}"
                             },
                             {
-                                "text": "isConstructionNearDefence"
+                                "text": "{{isConstructionNearDefence}}"
                             }
                         ],
                         [
@@ -697,7 +639,7 @@
                                 "text": "{{greenBuildingSustainable}}"
                             },
                             {
-                                "text": "isGreenBuildingSustainable"
+                                "text": "{{isGreenBuildingSustainable}}"
                             }
                         ],
                         [
@@ -719,7 +661,7 @@
                                 "text": "{{nocRailways}}"
                             },
                             {
-                                "text": "isNocRailways"
+                                "text": "{{isNocRailways}}"
                             }
                         ],
                         [
@@ -730,7 +672,7 @@
                                 "text": "{{nocIrrigationDept}}"
                             },
                             {
-                                "text": "isNocIrrigationDept"
+                                "text": "{{isNocIrrigationDept}}"
                             }
                         ],
                         [
@@ -741,7 +683,7 @@
                                 "text": "{{nocCollectorGvtLand}}"
                             },
                             {
-                                "text": "isNocCollectorGvtLand"
+                                "text": "{{isNocCollectorGvtLand}}"
                             }
                         ]
                     ]
@@ -749,12 +691,7 @@
             },
             {
                 "text": "Block No 1 - Proposed Details",
-                "margin": [
-                    0,
-                    30,
-                    0,
-                    0
-                ],
+                "style": "top-high-margin",
                 "fontSize": 15
             },
             {
@@ -777,8 +714,8 @@
                         [
                             {
                                 "ol": [
-                                    "Covered Area is 194.51 m²",
-                                    "Height of building is 9.75 m"
+                                    "Covered Area is {{coveredArea}} m²",
+                                    "Height of building is {{buildingHeight}} m"
                                 ],
                                 "colSpan": 5,
                                 "margin": 5
@@ -804,27 +741,7 @@
                             "Floor Area in m²",
                             "Carpet Area in m²"
                         ],
-                        [
-                            "0",
-                            "Individual Residential",
-                            "154.6050",
-                            "154.6050",
-                            "123.68400"
-                        ],
-                        [
-                            "1",
-                            "Individual Residential",
-                            "154.6050",
-                            "154.6050",
-                            "123.68400"
-                        ],
-                        [
-                            "2",
-                            "Individual Residential",
-                            "154.6050",
-                            "154.6050",
-                            "123.68400"
-                        ],
+                        "{{blockWiseProposedArea}}",
                         [
                             {
                                 "text": "Total",
@@ -832,15 +749,15 @@
                                 "colSpan": 2
                             },
                             " ",
-                            "154.6050",
-                            "154.6050",
-                            "123.68400"
+                            "{{sumOfBuildupArea}}",
+                            "{{sumOfFloorArea}}",
+                            "{{sumOfCarpetArea}}"
                         ],
                         [
                             {
                                 "ol": [
-                                    "Covered Area is 194.51 m²",
-                                    "Height of building is 9.75 m"
+                                    "Covered Area is {{coveredArea}}  m²",
+                                    "Height of building is {{buildingHeight}} m"
                                 ],
                                 "colSpan": 5,
                                 "margin": 5
@@ -848,12 +765,7 @@
                         ]
                     ]
                 },
-                "margin": [
-                    0,
-                    50,
-                    0,
-                    0
-                ]
+                "style": "top-high-margin"
             },
             {
                 "text": "Total Area",
@@ -876,10 +788,11 @@
                             "Covered Area in m²"
                         ],
                         [
-                            "468.88",
-                            "468.88",
-                            "375.11",
-                            "194.51"
+                            "{{totalBuitUpArea}}",
+                            "{{totalFloorArea}}",
+                            "{{totalCarpetArea}}",
+                            "{{totalCoverageArea}}"
+
                         ]
                     ]
                 },
@@ -909,14 +822,7 @@
                             "Provided",
                             "Status"
                         ],
-                        [
-                            "38",
-                            "OLD",
-                            "6.1",
-                            "<= 1.8",
-                            "1.34",
-                            "Accepted"
-                        ]
+                        "{{commonFar}}"
                     ]
                 },
                 "alignment": "center"
@@ -945,26 +851,14 @@
                             "Provided",
                             "Status"
                         ],
-                        [
-                            "20",
-                            "Distance from monument",
-                            ">300",
-                            "Permitted with NOC",
-                            "100.0 with NOC",
-                            "Accepted"
-                        ]
+                        "{{commonMonument}}"
                     ]
                 },
                 "alignment": "center"
             },
             {
                 "text": "Block 1 - Scrutiny Details",
-                "margin": [
-                    0,
-                    15,
-                    0,
-                    0
-                ],
+                "style": "top-margin",
                 "fontSize": 15,
                 "color": "blue"
             },
@@ -994,15 +888,7 @@
                             "Provided",
                             "Status"
                         ],
-                        [
-                            "35",
-                            "0",
-                            "Individual Residential",
-                            "Minimum distance",
-                            "2.5",
-                            "2.50",
-                            "Accepted"
-                        ]
+                        "{{frontSetBack}}"
                     ]
                 },
                 "alignment": "center"
@@ -1033,15 +919,7 @@
                             "Provided",
                             "Status"
                         ],
-                        [
-                            "38",
-                            "Maximum height ofbuilding allowed",
-                            "OLD",
-                            "6.1",
-                            "<= 10",
-                            "9.75",
-                            "Accepted"
-                        ]
+                        "{{maxHeightBuildingAlwd}}"
                     ]
                 },
                 "alignment": "center"
@@ -1072,15 +950,7 @@
                             "Provided",
                             "Status"
                         ],
-                        [
-                            "38",
-                            "Maximum number offloors allowed",
-                            "OLD",
-                            "6.1",
-                            "<= 10",
-                            "9.75",
-                            "Accepted"
-                        ]
+                        "{{numOfFloorsAlwd}}"
                     ]
                 },
                 "alignment": "center"
@@ -1107,13 +977,7 @@
                             "Provided",
                             "Status"
                         ],
-                        [
-                            "41(i)(a)",
-                            "Minimum plinth height",
-                            "> 0.45",
-                            "0.45",
-                            "Accepted"
-                        ]
+                        "{{plinth}}"
                     ]
                 },
                 "alignment": "center"
@@ -1144,15 +1008,7 @@
                             "Provided",
                             "Status"
                         ],
-                        [
-                            "35",
-                            "0",
-                            "Individual Residential",
-                            "Minimum Distance",
-                            "1.8",
-                            "1.83",
-                            "Accepted"
-                        ]
+                        "{{rearSetBack}}"
                     ]
                 },
                 "alignment": "center"
@@ -1185,26 +1041,7 @@
                             "Provided",
                             "Status"
                         ],
-                        [
-                            "35",
-                            "0",
-                            "Individual Residential",
-                            "Side Setback 1",
-                            "Minimum Distance",
-                            "0.75",
-                            "0.95",
-                            "Accepted"
-                        ],
-                        [
-                            "35",
-                            "0",
-                            "Individual Residential",
-                            "Side Setback 2",
-                            "Minimum Distance",
-                            "0.75",
-                            "0.75",
-                            "Accepted"
-                        ]
+                        "{{sideSetBack}}"
                     ]
                 },
                 "alignment": "center"
@@ -1213,7 +1050,7 @@
                 "stack": [
                     {
                         "text": "By Order",
-                        "style": "top-low-margin"
+                        "style": "top-margin"
                     },
                     {
                         "text": "Authorised Officer",
@@ -1225,7 +1062,7 @@
                     }
                 ],
                 "alignment": "right",
-                "style": "top-low-margin"
+                "style": "top-margin"
             },
             {
                 "text": [
@@ -1245,11 +1082,11 @@
             {
                 "text": "Note : ",
                 "bold": true,
-                "style": "top-low-margin"
+                "style": "top-margin"
             },
             {
                 "text": "The owner as well as the architect/licensed engineer are fully responsible for adhering to the provisions of the bye laws inboth the building plan as well as in the actual construction.In case it is found that the permission has been secured through misrepresentation or fraud, the permission may besuspended or revoked by the Authority under Section 363 (3) of the Bihar Municipal Act 2007 and/or cancelled under byelaw 14 of the bye laws.",
-                "style": "top-low-margin"
+                "style": "top-margin"
             }
         ],
         "styles": {
@@ -1269,19 +1106,24 @@
             "top-margin": {
                 "margin": [
                     0,
-                    20,
-                    0,
-                    0
-                ]
-            },
-            "top-low-margin": {
-                "margin": [
-                    0,
                     10,
                     0,
                     0
                 ]
+            },
+            "top-high-margin": {
+                "margin": [
+                    0,
+                    30,
+                    0,
+                    0
+                ]
             }
-        }
+        },
+        "footer": [
+            {
+              "text": "pageNo."
+            }
+          ]
     }
 }
