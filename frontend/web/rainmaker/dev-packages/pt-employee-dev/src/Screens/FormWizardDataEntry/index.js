@@ -353,30 +353,9 @@ class FormWizardDataEntry extends Component {
     const isReassesment = Boolean(
       getQueryValue(search, "isReassesment").replace("false", "")
     );
-    const tenantId = getQueryValue(search, "tenantId");
+    const tenantId = getQueryValue(search, "tenantId") || getTenantId();
     const draftUuid = getQueryValue(search, "uuid");
     // const tenantId1 = getTenantId() || "uk";
-    const assessmentId =
-      getQueryValue(search, "assessmentId") || fetchFromLocalStorage("draftId");
-
-    if (assessmentId) {
-
-      await this.fetchDraftDetails(assessmentId, isReassesment, draftUuid);
-
-      if (selected > 2) {
-        const {
-          tenantId: id
-        } = this.state.assessedPropertyDetails.Properties[0].propertyDetails[0];
-
-        let receiptImageUrl = `https://s3.ap-south-1.amazonaws.com/pb-egov-assets/${id}/logo.png`;
-        this.convertImgToDataURLviaCanvas(
-          receiptImageUrl,
-          function(data) {
-            this.setState({ imageUrl: data });
-          }.bind(this)
-        );
-      }
-    }
     fetchGeneralMDMSData(
       null,
       "PropertyTax",
@@ -410,6 +389,29 @@ class FormWizardDataEntry extends Component {
       "",
       tenantId
     );
+
+    const assessmentId =
+      getQueryValue(search, "assessmentId") || fetchFromLocalStorage("draftId");
+
+    if (assessmentId) {
+
+      await this.fetchDraftDetails(assessmentId, isReassesment, draftUuid);
+
+      if (selected > 2) {
+        const {
+          tenantId: id
+        } = this.state.assessedPropertyDetails.Properties[0].propertyDetails[0];
+
+        let receiptImageUrl = `https://s3.ap-south-1.amazonaws.com/pb-egov-assets/${id}/logo.png`;
+        this.convertImgToDataURLviaCanvas(
+          receiptImageUrl,
+          function(data) {
+            this.setState({ imageUrl: data });
+          }.bind(this)
+        );
+      }
+    }
+
     const { ownerInfoArr } = this.state;
 
     if (ownerInfoArr.length < 2) {
