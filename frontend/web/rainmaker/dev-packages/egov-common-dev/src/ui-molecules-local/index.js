@@ -28,11 +28,6 @@ const UploadSingleFile = Loadable({
   loading: () => <Loading />
 });
 
-const DocumentList = Loadable({
-  loader: () => import("./DocumentList"),
-  loading: () => <Loading />
-});
-
 const DividerWithLabel = Loadable({
   loader: () => import("./DividerWithLabel"),
   loading: () => <Loading />
@@ -55,7 +50,6 @@ export {
   Tooltip,
   CustomTab,
   UploadSingleFile,
-  DocumentList,
   FeesEstimateCard,
   DividerWithLabel,
   HowItWorks
