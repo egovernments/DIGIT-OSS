@@ -206,7 +206,7 @@
               {
                 "variable": "Municipal_Corporation",
                 "value": {
-                  "path": "PDF_STATIC_LABEL_WS_MDMS_MUNICIPAL_CORPORATION_LOGO_HEADER"
+                  "path": "PDF_STATIC_LABEL_MDMS_MUNICIPAL_CORPORATION"
                 },
                 "type": "label",
                 "localisation":{
@@ -634,31 +634,31 @@
                   "prefix": null,
                   "module": "rainmaker-common"
                 }
-              },
-              {
-                "externalAPI": [     
-                  { 
-                      "path": "http://egov-mdms-service:8080/egov-mdms-service/v1/_get",
-                      "queryParam": "moduleName=tenant&masterName=tenants&tenantId=pb&filter=%5B?(@.code=='{$.tenantId}')%5D",
-                      "apiRequest": null,
-                      "responseMapping":[
-                        {
-                          "variable": "logoImage",
-                          "value":"$.MdmsRes.tenant.tenants[0].logoId",
-                          "type": "image"
-                        },
-                        {
-                          "variable": "logo_header",
-                          "value":"$.MdmsRes.tenant.tenants[0].code",
-                          "localisation":{
-                          "required":true,
-                          "prefix": "TENANT_TENANTS",
-                          "module":"rainmaker-common"
-                          }
-                        }
-                      ]
-                  }
-                ]
+              }
+            ]
+          },
+          {
+            "externalAPI": [     
+              { 
+                  "path": "http://egov-mdms-service:8080/egov-mdms-service/v1/_get",
+                  "queryParam": "moduleName=tenant&masterName=tenants&tenantId=pb&filter=%5B?(@.code=='{$.property.tenantId}')%5D",
+                  "apiRequest": null,
+                  "responseMapping":[
+                    {
+                      "variable": "logoImage",
+                      "value":"$.MdmsRes.tenant.tenants[0].logoId",
+                      "type": "image"
+                    },
+                    {
+                      "variable": "logo_header",
+                      "value":"$.MdmsRes.tenant.tenants[0].code",
+                      "localisation":{
+                      "required":true,
+                      "prefix": "TENANT_TENANTS",
+                      "module":"rainmaker-common"
+                      }
+                    }
+                  ]
               }
             ]
           }
