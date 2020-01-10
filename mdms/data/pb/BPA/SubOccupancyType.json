@@ -1,0 +1,54 @@
+{
+  "tenantId": "pb",
+  "moduleName": "BPA",
+  "SubOccupancyType": [
+    {
+      "name": "Residential",
+      "code": "RESIDENTIAL",
+      "active": true,
+      "occupancyType": "Residential"
+    },
+    {
+      "name": "Special Residential",
+      "code": "SPECIAL_RESIDENTIAL",
+      "active": true,
+      "occupancyType": "Residential"
+    },
+    {
+      "name": "Hostel Educational",
+      "code": "HOSTEL_EDUCATIONAL",
+      "active": true,
+      "occupancyType": "Residential"
+    },
+    {
+      "name": "Apartment/Flat",
+      "code": "APPARTMENT/FLAT",
+      "active": true,
+      "occupancyType": "Residential"
+    },
+    {
+      "name": "Professional Office",
+      "code": "PROFESSIONAL_OFFICE",
+      "active": true,
+      "occupancyType": "Residential"
+    },
+    {
+      "name": "Farm House",
+      "code": "FARM_HOUSE",
+      "active": true,
+      "occupancyType": "Residential"
+    },
+    {
+      "name": "Old Age Home",
+      "code": "OLD_AGE_HOME",
+      "active": true,
+      "occupancyType": "Residential"
+    },
+    {
+      "name": "Service Apartment",
+      "code": "SERVICE_APARTMENT",
+      "active": true,
+      "occupancyType": "Residential"
+    }
+  ]
+}

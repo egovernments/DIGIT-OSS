@@ -1,0 +1,167 @@
+{
+  "tenantId": "pb",
+  "moduleName": "BPA",
+  "Usages": [
+    {
+      "name": "Single family",
+      "code": "SINGLE_FAMILY",
+      "active": true,
+      "occupancyType": "Residential",
+      "subOccupancyType": "Residential"
+    },
+    {
+      "name": "Lodging house",
+      "code": "LODGING_HOUSE",
+      "active": true,
+      "occupancyType": "Residential",
+      "subOccupancyType": "Special Residential"
+    },
+    {
+      "name": "Rooming house",
+      "code": "ROOMING_HOUSE",
+      "active": true,
+      "occupancyType": "Residential",
+      "subOccupancyType": "Special Residential"
+    },
+    {
+      "name": "Dormitory",
+      "code": "DORMITORY",
+      "active": true,
+      "occupancyType": "Residential",
+      "subOccupancyType": "Special Residential"
+    },
+    {
+      "name": "Tourist Home",
+      "code": "TOURIST_HOME",
+      "active": true,
+      "occupancyType": "Residential",
+      "subOccupancyType": "Special Residential"
+    },
+    {
+      "name": "Tourist Resort",
+      "code": "TOURIST_RESORT",
+      "active": true,
+      "occupancyType": "Residential",
+      "subOccupancyType": "Special Residential"
+    },
+    {
+      "name": "Hostel",
+      "code": "HOSTEL",
+      "active": true,
+      "occupancyType": "Residential",
+      "subOccupancyType": "Special Residential"
+    },
+    {
+      "name": "Hotel",
+      "code": "HOTEL",
+      "active": true,
+      "occupancyType": "Residential",
+      "subOccupancyType": "Special Residential"
+    },
+    {
+      "name": "Hotel with conference room",
+      "code": "HOTEL_WITH_CONFERENCE_ROOM",
+      "active": true,
+      "occupancyType": "Residential",
+      "subOccupancyType": "Special Residential"
+    },
+    {
+      "name": "Hotel with Community hall room",
+      "code": "HOTEL_WITH_COMMUNITY_HALL_ROOM",
+      "active": true,
+      "occupancyType": "Residential",
+      "subOccupancyType": "Special Residential"
+    },
+    {
+      "name": "Hotel with dining room",
+      "code": "HOTEL_WITH_DINING_ROOM",
+      "active": true,
+      "occupancyType": "Residential",
+      "subOccupancyType": "Special Residential"
+    },
+    {
+      "name": "Hotel with assembly room",
+      "code": "HOTEL_WITH_ASSEMBLY_ROOM",
+      "active": true,
+      "occupancyType": "Residential",
+      "subOccupancyType": "Special Residential"
+    },
+    {
+      "name": "Creches",
+      "code": "CRECHES",
+      "active": true,
+      "occupancyType": "Residential",
+      "subOccupancyType": "Special Residential"
+    },
+    {
+      "name": "Day care centres",
+      "code": "DAY_CARE_CENTRES",
+      "active": true,
+      "occupancyType": "Residential",
+      "subOccupancyType": "Special Residential"
+    },
+    {
+      "name": "Childrens nursary",
+      "code": "CHILDRENS_NURSARY",
+      "active": true,
+      "occupancyType": "Residential",
+      "subOccupancyType": "Special Residential"
+    },
+    {
+      "name": "reading rooms",
+      "code": "READING_ROOMS",
+      "active": true,
+      "occupancyType": "Residential",
+      "subOccupancyType": "Special Residential"
+    },
+    {
+      "name": "Libraries",
+      "code": "LIBRARIES",
+      "active": true,
+      "occupancyType": "Residential",
+      "subOccupancyType": "Special Residential"
+    },
+    {
+      "name": "Educational institution",
+      "code": "EDUCATIONAL_INSTITUTION",
+      "active": true,
+      "occupancyType": "Residential",
+      "subOccupancyType": "Special Residential"
+    },
+    {
+      "name": "Family residential",
+      "code": "FAMILY_RESIDENTIAL",
+      "active": true,
+      "occupancyType": "Residential",
+      "subOccupancyType": "Apartment/Flat"
+    },
+    {
+      "name": "Apartment house",
+      "code": "APARTMENT_HOUSE",
+      "active": true,
+      "occupancyType": "Residential",
+      "subOccupancyType": "Apartment/Flat"
+    },
+    {
+      "name": "Residential flats",
+      "code": "RESIDENTIAL_FLATS",
+      "active": true,
+      "occupancyType": "Residential",
+      "subOccupancyType": "Apartment/Flat"
+    },
+    {
+      "name": "Small proffessional offices or spaces",
+      "code": "SMALL_pROFFESSIONAL_OFFICES_OR_SPACES",
+      "active": true,
+      "occupancyType": "Residential",
+      "subOccupancyType": "Apartment/Flat"
+    },
+    {
+      "name": "Proffessional offices part of residential",
+      "code": "PROFFESSIONAL_OFFICES_PART_OF_RESIDENTIAL",
+      "active": true,
+      "occupancyType": "Residential",
+      "subOccupancyType": "Professional Office"
+    }
+  ]
+}
