@@ -840,17 +840,17 @@ export const tradeDetails = getCommonCard(
           xs: 12,
           sm: 6
         },
-        iconObj: {
-          iconName: "search",
-          position: "end",
-          color: "#FE7A51",
-          onClickDefination: {
-            action: "condition",
-            callBack: (state, dispatch) => {
-              fillOldLicenseData(state, dispatch);
-            }
-          }
-        },
+        // iconObj: {
+        //   iconName: "search",
+        //   position: "end",
+        //   color: "#FE7A51",
+        //   onClickDefination: {
+        //     action: "condition",
+        //     callBack: (state, dispatch) => {
+        //       fillOldLicenseData(state, dispatch);
+        //     }
+        //   }
+        // },
         title: {
           value: "Fill the form by searching your old approved trade license",
           key: "TL_OLD_TL_NO"
@@ -1126,7 +1126,45 @@ export const tradeDetails = getCommonCard(
             sm: 6
           }
         })
-      }
+      },
+      // MarketType: {
+      //   ...getSelectField({
+      //     label: {
+      //       labelName: "Market Type",
+      //       labelKey: "TL_MARKET_TYPE_LABEL"
+      //     },
+      //     placeholder: {
+      //       labelName: "Select Market Type",
+      //       labelKey: "TL_MARKET_TYPE_PLACEHOLDER"
+      //     },
+      //     localePrefix: {
+      //       moduleName: "TradeLicense",
+      //       masterName: "MarketType"
+      //     },
+      //     // required: true,
+      //     jsonPath:
+      //       "Licenses[0].tradeLicenseDetail.additionalDetail.marketType",
+      //     sourceJsonPath: "applyScreenMdmsData.TradeLicense.MarketType",
+      //     gridDefination: {
+      //       xs: 12,
+      //       sm: 6
+      //     }
+      //   })
+      // },
+      // OrganizationName: getTextField({
+      //   label: {
+      //     labelName: "Organization Name",
+      //     labelKey: "TL_NEW_TRADE_DETAILS_ORGANISATION_NAME_LABEL"
+      //   },
+      //   placeholder: {
+      //     labelName: "Organization Name",
+      //     labelKey: "TL_NEW_TRADE_DETAILS_ORG_NAME_PLACEHOLDER"
+      //   },
+      //   // required: true,
+      //   // pattern: getPattern("OrganizationName"),
+      //   jsonPath:
+      //       "Licenses[0].tradeLicenseDetail.additionalDetail.organizationName"
+      // }),
     }),
 
     tradeUnitCard
