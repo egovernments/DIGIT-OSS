@@ -303,7 +303,7 @@
           "body": [
             [
               {
-                "text": "{{billing_summary_property_tax}}",
+                "text": "{{billing_summary_property_tax}}{{serviceType}}",
                 "border": [
                   true,
                   true,
