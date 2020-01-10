@@ -616,7 +616,7 @@
             "derived": [
               {
                 "variable": "charge",
-                "formula": "{{taxCharge}}"
+                "formula": "{{taxCharge}}+{{fees}}"
               },
               {
                 "variable": "penalty",
@@ -628,11 +628,11 @@
               },
               {
                 "variable": "others",
-                "formula": "{{cancerCess}}+{{roundoff}}+{{ceilingDebit}}+{{ceilingCredit}}+{{fees}}"
+                "formula": "{{cancerCess}}+{{roundoff}}+{{timeInterest}}+{{ceilingDebit}}+{{ceilingCredit}}+{{firecess}}+{{waterCess}}"
               },
               {
                 "variable": "arrears",
-                "formula": "{{carryForward}}+{{timeInterest}}+{{ownerExemption}}+{{usageExemption}}+{{firecess}}+{{waterCess}}"
+                "formula": "{{carryForward}}+{{ownerExemption}}+{{usageExemption}}"
               }
             ]
           },
