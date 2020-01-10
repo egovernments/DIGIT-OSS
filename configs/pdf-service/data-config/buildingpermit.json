@@ -29,7 +29,7 @@
                 }
               },
               {
-                "variable": "dated",
+                "variable": "createdDate",
                 "value": {
                   "path": "$.auditDetails.createdTime"
                 },
@@ -134,6 +134,17 @@
                 "localisation": {
                   "required": true,
                   "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "tenantName",
+                "value": {
+                  "path": "$.tenantId"
+                },
+                "localisation": {
+                  "required": true,
+                  "prefix": "TENANT_TENANTS",
                   "module": "rainmaker-common"
                 }
               },
@@ -635,6 +646,18 @@
                 "value": {
                   "path": "$.edcrDetail[0].planDetail.blocks.*.building.totalArea[0].carpetArea"
                 }
+              },
+              {
+                "variable": "plotNo",
+                "value": {
+                  "path": "$.edcrDetail[0].planDetail.planInformation.plotNo"
+                }
+              },
+              {
+                "variable": "khataNo",
+                "value": {
+                  "path": "$.edcrDetail[0].planDetail.planInformation.khataNo"
+                }
               }
             ]
           },
@@ -642,7 +665,7 @@
             "qrcodeConfig": [
               {
                 "variable": "qrCode",
-                "value": "Application: {{applicationNo}}, PlanPermission: {{planPermissionNo}}, Date of payment: {{dated}}"
+                "value": "Application: {{applicationNo}}, PlanPermission: {{planPermissionNo}}, Date of payment: {{applicationDate}}"
               }
             ]
           }

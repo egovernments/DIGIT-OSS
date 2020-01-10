@@ -16,7 +16,7 @@
                     {
                         "stack": [
                             {
-                                "text": "Sonpur Muncipal Council",
+                                "text": "{{tenantName}} Muncipal Council",
                                 "style": "header"
                             },
                             {
@@ -63,7 +63,7 @@
                                 "bold": true
                             },
                             {
-                                "text": "{{dated}}",
+                                "text": "{{applicationDate}}",
                                 "bold": true
                             }
                         ],
@@ -84,7 +84,7 @@
                         "text": " dated "
                     },
                     {
-                        "text": "{{dated}}"
+                        "text": "{{applicationDate}}"
                     },
                     {
                         "text": ", permission is hereby granted in favour of:"
@@ -110,14 +110,42 @@
             {
                 "text": [
                     {
-                        "text": "Construction of a Residential building in respect of Plot No (CS) 1  Plot No (MSP) 1 Khata No 1  Holding No. 1 of SonpurMunicipal Council under Ward 1  under Circle 1 subject to the following conditions/restrictions."
+                        "text": "Construction of a Residential building in respect of Plot No (CS) "
+                    },
+                    {
+                        "text" : "{{plotNo}}",
+                        "bold": true
+                    },
+                    {
+                        "text" : "  Plot No (MSP) "
+                    },
+                    {
+                        "text" : "{{plotNo}}",
+                        "bold": true
+                    },
+                    {
+                        "text" : " Khata No " 
+                    },
+                    {
+                        "text" : "{{khataNo}}",
+                        "bold": true
+                    },
+                    {
+                        "text" : " Holding No. 1 of "
+                    },
+                    {
+                        "text" : "{{tenantName}} Municipal Council",
+                        "bold" : true
+                    },
+                    {
+                        "text" : " under Ward 1 under Circle 1 subject to the following conditions/restrictions."
                     }
                 ]
             },
             {
                 "separator": ")",
                 "ol": [
-                    "Permit issued based on the Approval Certificate of  PCB as per the Order No.202 Dtd 11/04/2019."
+                    "Permit issued based on the Approval Certificate of  PCB as per the Order No.202 Dtd {{createdDate}}."
                 ],
                 "style": "top-margin"
             },
