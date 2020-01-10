@@ -1325,6 +1325,22 @@ export const getTodaysDateInYYYMMDD = () => {
   return date;
 };
 
+export const getEighteenYearOldDateForDOB = () => {
+  let date = new Date();
+  let month = date.getMonth() < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
+  let day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
+  date = `${date.getFullYear()-18}-${month}-${day}`;
+  return date;
+};
+
+export const getHundredYearOldDateForDOB = () => {
+  let date = new Date();
+  let month = date.getMonth() < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
+  let day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
+  date = `${date.getFullYear()-100}-${month}-${day}`;
+  return date;
+};
+
 export const getNextMonthDateInYMD = () => {
   //For getting date of same day but of next month
   let date = getTodaysDateInYMD();
