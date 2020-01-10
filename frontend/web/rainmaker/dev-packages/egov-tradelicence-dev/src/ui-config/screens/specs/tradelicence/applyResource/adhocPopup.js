@@ -135,13 +135,13 @@ const updateAdhoc = (state, dispatch) => {
   if (adhocAmount || rebateAmount) {
     let flag = true;
     const totalAmt = totalAmount(get(state.screenConfiguration.preparedFinalObject, "LicensesTemp[0].estimateCardData"));
-    if (rebateAmount && rebateAmount > totalAmt) {
+    if (rebateAmount && rebateAmount >= totalAmt) {
       flag=false;
       dispatch(
         toggleSnackbar(
           true,
           {
-            labelName: "Rebate should be less than or equal to total amount!",
+            labelName: "Rebate should be greater than or equal to total amount!",
             labelKey: "ERR_REBATE_GREATER_THAN_AMOUNT"
           },
           "warning"
