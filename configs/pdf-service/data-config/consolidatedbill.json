@@ -491,13 +491,13 @@
               {
                 "variable": "taxCharge",
                 "value": {
-                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'PT_TAX' || @.taxHeadCode == 'TL_TAX' || @.taxHeadCode == 'FIRENOC_TAXES' )].amount"
+                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'PT_TAX' || @.taxHeadCode == 'TL_TAX' || @.taxHeadCode == 'FIRENOC_TAXES' || @.taxHeadCode == 'WS_CHARGE' || @.taxHeadCode == 'SW_CHARGE' )].amount"
                 }
               },
               {
                 "variable": "timeRebate",
                 "value": {
-                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'PT_TIME_REBATE')].amount"
+                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'PT_TIME_REBATE' || @.taxHeadCode == 'WS_TIME_REBATE' || @.taxHeadCode == 'SW_TIME_REBATE')].amount"
                 }
               },
               {
@@ -510,7 +510,7 @@
               {
                 "variable": "timePenalty",
                 "value": {
-                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'PT_TIME_PENALTY')].amount"
+                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'PT_TIME_PENALTY' || @.taxHeadCode == 'WS_TIME_PENALTY' || @.taxHeadCode == 'SW_TIME_PENALTY')].amount"
                 }
               },
               {
@@ -534,7 +534,7 @@
               {
                 "variable": "roundoff",
                 "value": {
-                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'PT_ROUNDOFF' || @.taxHeadCode == 'TL_ROUNDOFF' || @.taxHeadCode == 'FIRENOC_ROUNDOFF')].amount"
+                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'PT_ROUNDOFF' || @.taxHeadCode == 'TL_ROUNDOFF' || @.taxHeadCode == 'FIRENOC_ROUNDOFF' || @.taxHeadCode == 'WS_Round_Off' || @.taxHeadCode == 'SW_Round_Off')].amount"
                 }
               },
               {
@@ -556,9 +556,15 @@
                 }
               },
               {
+                "variable": "waterCess",
+                "value": {
+                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'WS_WATER_CESS')].amount"
+                }
+              },
+              {
                 "variable": "timeInterest",
                 "value": {
-                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'PT_TIME_INTEREST')].amount"
+                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'PT_TIME_INTEREST' || @.taxHeadCode == 'WS_TIME_INTEREST' || @.taxHeadCode == 'SW_TIME_INTEREST')].amount"
                 }
               },
               {
@@ -626,7 +632,7 @@
               },
               {
                 "variable": "arrears",
-                "formula": "{{carryForward}}+{{timeInterest}}+{{ownerExemption}}+{{usageExemption}}+{{firecess}}"
+                "formula": "{{carryForward}}+{{timeInterest}}+{{ownerExemption}}+{{usageExemption}}+{{firecess}}+{{waterCess}}"
               }
             ]
           },
