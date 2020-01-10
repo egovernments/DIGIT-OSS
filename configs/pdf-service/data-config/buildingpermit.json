@@ -42,7 +42,7 @@
                 }
               },
               {
-                "variable": "buidlingNearGovt",
+                "variable": "buildingNearGovt",
                 "value": {
                   "path": "BUILDING_NEAR_GOVT_BLDG"
                 },
@@ -54,7 +54,7 @@
                 }
               },
               {
-                "variable": "buidlingNearMonument",
+                "variable": "buildingNearMonument",
                 "value": {
                   "path": "BUILDING_NEAR_MONUMENT"
                 },
