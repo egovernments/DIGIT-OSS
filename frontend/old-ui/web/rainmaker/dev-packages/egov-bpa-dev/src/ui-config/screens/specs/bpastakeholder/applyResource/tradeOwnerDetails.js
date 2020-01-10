@@ -14,6 +14,8 @@ import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-fra
 import {
   getDetailsForOwner,
   getTodaysDateInYMD,
+  getHundredYearOldDateForDOB,
+  getEighteenYearOldDateForDOB,
   getRadioGroupWithLabel
 } from "../../utils";
 
@@ -158,6 +160,8 @@ export const OwnerInfoCard = getCommonCard({
         isDOB: true,
         errorMessage: "TL_DOB_ERROR_MESSAGE",
         jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].dob",
+        minValue : getHundredYearOldDateForDOB(),
+        maxValue : getEighteenYearOldDateForDOB(),
         props: {
           inputProps: {
             max: getTodaysDateInYMD()
