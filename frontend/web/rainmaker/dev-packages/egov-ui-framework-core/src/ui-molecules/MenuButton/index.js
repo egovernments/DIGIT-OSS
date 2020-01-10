@@ -86,10 +86,10 @@ class MenuListComposition extends React.Component {
                         const { labelName, labelKey } = item;
                         return (
                           <MenuItem key={key} onClick={item.link} className={classes.button}>
-                            <Icon
+                            {item.leftIcon && <Icon
                               className={classes.leftIcon}
                               iconName={item.leftIcon}
-                            />
+                            />}
                             <LabelContainer
                               labelName={labelName}
                               labelKey={labelKey}

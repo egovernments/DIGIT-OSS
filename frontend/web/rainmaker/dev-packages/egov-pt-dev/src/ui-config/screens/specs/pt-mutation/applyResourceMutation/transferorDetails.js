@@ -39,7 +39,7 @@ export const transferorDetails = getCommonCard(
             labelKey: "PT_MUTATION_TRANSFEROR_NAME"
           },
           {
-            jsonPath: "FireNOCs[0].fireNOCDetails.fireNOCType"
+            jsonPath: "Properties[0].propertyDetails[0].owners[0].name"
             // callBack: value => {
             //   return value.split(".")[0];
             // }
@@ -51,7 +51,7 @@ export const transferorDetails = getCommonCard(
             labelKey: "PT_MUTATION_TRANSFEROR_GUARDIAN_NAME"
           },
           {
-            jsonPath: "FireNOCs[0].provisionFireNOCNumber"
+            jsonPath: "Properties[0].propertyDetails[0].owners[0].fatherOrHusbandName"
             // callBack: value => {
             //   return value.split(".")[1];
             // }
@@ -63,7 +63,7 @@ export const transferorDetails = getCommonCard(
             labelKey: "PT_MUTATION_TRANSFEROR_GENDER"
           },
           {
-            jsonPath: "FireNOCs[0].provisionFireNOCNumber"
+            jsonPath: "Properties[0].propertyDetails[0].owners[0].gender"
             // callBack: value => {
             //   return value.split(".")[1];
             // }
@@ -75,7 +75,8 @@ export const transferorDetails = getCommonCard(
             labelKey: "PT_MUTATION_TRANSFEROR_DOB"
           },
           {
-            jsonPath: "FireNOCs[0].provisionFireNOCNumber"
+           // jsonPath: "Properties[0].propertyDetails[0].owners[0].dob"
+           jsonPath: "NA"
             // callBack: value => {
             //   return value.split(".")[1];
             // }
@@ -87,7 +88,7 @@ export const transferorDetails = getCommonCard(
             labelKey: "PT_MUTATION_TRANSFEROR_MOBILE"
           },
           {
-            jsonPath: "FireNOCs[0].provisionFireNOCNumber"
+            jsonPath: "Properties[0].propertyDetails[0].owners[0].mobileNumber"
             // callBack: value => {
             //   return value.split(".")[1];
             // }
@@ -99,7 +100,7 @@ export const transferorDetails = getCommonCard(
             labelKey: "PT_MUTATION_TRANSFEROR_EMAIL"
           },
           {
-            jsonPath: "FireNOCs[0].provisionFireNOCNumber"
+            jsonPath: "Properties[0].propertyDetails[0].owners[0].emailId"
             // callBack: value => {
             //   return value.split(".")[1];
             // }
@@ -111,7 +112,7 @@ export const transferorDetails = getCommonCard(
             labelKey: "PT_MUTATION_TRANSFEROR_SPECIAL_CATEGORY"
           },
           {
-            jsonPath: "FireNOCs[0].provisionFireNOCNumber"
+            jsonPath: "Properties[0].propertyDetails[0].owners[0].ownerType"
             // callBack: value => {
             //   return value.split(".")[1];
             // }
@@ -123,7 +124,7 @@ export const transferorDetails = getCommonCard(
             labelKey: "PT_MUTATION_TRANSFEROR_CORRESPONDENCE_ADDRESS"
           },
           {
-            jsonPath: "FireNOCs[0].provisionFireNOCNumber"
+            jsonPath: "Properties[0].propertyDetails[0].owners[0].permanentAddress"
             // callBack: value => {
             //   return value.split(".")[1];
             // }
