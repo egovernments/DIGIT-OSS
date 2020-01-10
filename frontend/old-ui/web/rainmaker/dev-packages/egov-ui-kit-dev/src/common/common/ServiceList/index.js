@@ -22,6 +22,7 @@ const styles = (theme) => ({
   },
   mobileRoot1: {
     flexGrow: 1,
+    padding:'1%',
     width: "33%",
   },
   paper: {
