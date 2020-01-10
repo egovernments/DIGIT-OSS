@@ -39,7 +39,7 @@ export const documentList = {
         formatProps :{
           accept: "image/*, .png, .jpeg",
         },        
-        maxFileSize: 5000
+        maxFileSize: 3000
       }
     ],
     documentTypePrefix: "TL_",
