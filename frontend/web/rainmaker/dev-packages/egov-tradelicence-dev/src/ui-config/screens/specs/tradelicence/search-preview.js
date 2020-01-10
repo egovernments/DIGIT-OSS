@@ -470,11 +470,11 @@ const setActionItems = (action, object) => {
 export const tradeReviewDetails = getCommonCard({
   title,
   estimate,
-  viewBreakupButton: getDialogButton(
-    "VIEW BREAKUP",
-    "TL_PAYMENT_VIEW_BREAKUP",
-    "search-preview"
-  ),
+  // viewBreakupButton: getDialogButton(
+  //   "VIEW BREAKUP",
+  //   "TL_PAYMENT_VIEW_BREAKUP",
+  //   "search-preview"
+  // ),
   addPenaltyRebateButton: {
     componentPath: "Button",
     props: {
