@@ -147,6 +147,17 @@
                }
               },
               {
+                "variable": "serviceType", 
+                "value": {
+                  "path": "$.businessService"
+                },
+                "localisation":{
+                  "required":true,
+                  "prefix":"MODULE",   
+                  "module":"rainmaker-common"
+               }
+              },
+              {
                 "variable": "property_id",
                 "value": {
                   "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_PROPERTY_ID"
