@@ -353,9 +353,10 @@ class FormWizardDataEntry extends Component {
     const isReassesment = Boolean(
       getQueryValue(search, "isReassesment").replace("false", "")
     );
-    const tenantId = getQueryValue(search, "tenantId");
+    const tenantId = getQueryValue(search, "tenantId") || getTenantId();
     const draftUuid = getQueryValue(search, "uuid");
-    const tenantId1 = getTenantId() || "uk";
+    // const tenantId1 = getTenantId() || "uk";
+
     const assessmentId =
       getQueryValue(search, "assessmentId") || fetchFromLocalStorage("draftId");
 
@@ -386,6 +387,14 @@ class FormWizardDataEntry extends Component {
         "",
         tenantId
       );
+      fetchGeneralMDMSData(
+        null,
+        "BillingService",
+        ["TaxPeriod", "TaxHeadMaster"],
+        "",
+        tenantId
+      );
+
       await this.fetchDraftDetails(assessmentId, isReassesment, draftUuid);
 
       if (selected > 2) {
@@ -402,13 +411,7 @@ class FormWizardDataEntry extends Component {
         );
       }
     }
-    fetchGeneralMDMSData(
-      null,
-      "BillingService",
-      ["TaxPeriod", "TaxHeadMaster"],
-      "",
-      tenantId1
-    );
+
     const { ownerInfoArr } = this.state;
 
     if (ownerInfoArr.length < 2) {
@@ -1731,22 +1734,22 @@ class FormWizardDataEntry extends Component {
       const demandData = [];
       const demandDetails = [];
       const demandDetails1 = [];
+      let datas=getFinalData() || [];
+      let currentYearData=[]
+      let fromDate;
+      let toDate;
       const finaldemand = DemandProperties[0].propertyDetails[0].demand.map(
         (demand, index) => {
-          return Object.keys(demand.demand).map((data, key) => {
+          return Object.keys(demand.demand).map((dataYear, key) => {
             return (
-              demand.demand[data].map((demandValue, ind) => {
+              demand.demand[dataYear].map((demandValue, ind) => {
+                  currentYearData=datas.filter(data=>data.financialYear == dataYear);
+                  fromDate=currentYearData.length > 0 ? currentYearData[0].fromDate:0
+                  toDate=currentYearData.length > 0 ? currentYearData[0].toDate:0
                 demandDetails1.push({
                   taxHeadMasterCode: demandValue.PT_TAXHEAD,
-                  taxAmount: parseInt(
-                    demandValue.PT_DEMAND != "" ? demandValue.PT_DEMAND : 0
-                  ),
-                  collectionAmount: parseInt(
-                    demandValue.PT_COLLECTED == undefined ||
-                      demandValue.PT_COLLECTED == ""
-                      ? 0
-                      : demandValue.PT_COLLECTED
-                  )
+                  taxAmount: parseInt(demandValue.PT_DEMAND != "" ? demandValue.PT_DEMAND : 0),
+                  collectionAmount: parseInt(demandValue.PT_COLLECTED == undefined || demandValue.PT_COLLECTED == ""? 0: demandValue.PT_COLLECTED)
                 });
               }),
               demandData.push({
@@ -1757,8 +1760,8 @@ class FormWizardDataEntry extends Component {
                 ),
                 consumerType: "BUILTUP",
                 businessService: "PT",
-                taxPeriodFrom: new Date().getTime(),
-                taxPeriodTo: new Date().getTime(),
+                taxPeriodFrom: fromDate,
+                taxPeriodTo: toDate,
                 payer: {
                   uuid: get(
                     createPropertyResponse,
@@ -2248,28 +2251,3 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(FormWizardDataEntry);
-
-// getGeneralData=()=>{
-//   let {fetchGeneralMDMSData,location,finalData}=this.props;
-//   let { search } = location;
-//   const {tenantId}=this.state;
-//   console.log("location:",location);
-//     const tenantId1 =getTenantId() || "uk";
-//     console.log("tenantId:;",tenantId,"tenantId1:",tenantId1);
-//   fetchGeneralMDMSData(
-//     null,
-//     "BillingService",
-//     ["TaxPeriod", "TaxHeadMaster"],
-//     "",
-//     tenantId1
-//   );
-// }
-// //
-// case 4:
-//   if (estimation[0].totalAmount < 0) {
-//     alert("Property Tax amount cannot be Negative!");
-//   } else {
-//     window.scrollTo(0, 0);
-//     createAndUpdate(index);
-//   }
-//   break;

@@ -257,7 +257,7 @@ class SearchProperty extends Component {
             bold={true}
             labelStyle={{ marginTop: "20px" }}
           />
-          <div
+          {/* <div
             className="rainmaker-displayInline"  >
             <Button
               Icon={
@@ -282,7 +282,7 @@ class SearchProperty extends Component {
               primary={true}
               fullWidth={true}
             />
-          </div>
+          </div> */}
         </div>
         <PropertySearchFormHOC history={this.props.history} onSearchClick={this.onSearchClick} onResetClick={this.onResetClick} />
         <Hidden xsDown>

@@ -201,6 +201,7 @@ export const fetchGeneralMDMSData = (requestBody, moduleName, masterArray, key, 
     try {
       const payload = await httpRequest(MDMS.GET.URL, MDMS.GET.ACTION, [], requestBody || genRequestBody);
       dispatch(generalMDMSFetchSuccess(payload, moduleName, masterArray, key));
+      dispatch(loadMDMSFetchSuccess(payload, requestBody || genRequestBody));
     } catch (error) {
       dispatch(generalMDMSFetchError(error.message));
     }

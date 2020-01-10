@@ -92,6 +92,24 @@ class Property extends Component {
               },
               {
                 name: "SubOwnerShipCategory"
+              },
+              {
+                name: "ConstructionType",
+              },
+              {
+                name: "Rebate",
+              },
+              {
+                name: "Interest",
+              },
+              {
+                name: "FireCess",
+              },
+              {
+                name: "RoadType",
+              },
+              {
+                name: "Thana",
               }
             ]
           }
@@ -108,8 +126,22 @@ class Property extends Component {
       "PropertySubType",
       "OwnerType",
       "UsageCategoryDetail",
-      "SubOwnerShipCategory"
+      "SubOwnerShipCategory",
+      "ConstructionType",
+      "Rebate",
+      "Penalty",
+      "Interest",
+      "FireCess",
+      "RoadType",
+      "Thana"
     ]);
+    fetchGeneralMDMSData(
+      null,
+      "BillingService",
+      ["TaxPeriod", "TaxHeadMaster"],
+      "",
+      commonConfig.tenantId
+    );
     fetchProperties([
       { key: "ids", value: this.props.match.params.propertyId },
       { key: "tenantId", value: this.props.match.params.tenantId }
@@ -570,8 +602,16 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = dispatch => {
   return {
     // addBreadCrumbs: (url) => dispatch(addBreadCrumbs(url)),
-    fetchGeneralMDMSData: (requestBody, moduleName, masterName) =>
-      dispatch(fetchGeneralMDMSData(requestBody, moduleName, masterName)),
+    fetchGeneralMDMSData: (
+      requestBody,
+      moduleName,
+      masterName,
+      key,
+      tenantId
+    ) =>
+      dispatch(
+        fetchGeneralMDMSData(requestBody, moduleName, masterName, key, tenantId)
+      ),
     fetchProperties: queryObjectProperty =>
       dispatch(fetchProperties(queryObjectProperty)),
     getSingleAssesmentandStatus: queryObj =>
