@@ -664,7 +664,7 @@
           {
             "externalAPI": [
               {
-                "path": "http://localhost:8099/collection-services/payments/_search",
+                "path": "http://collection-services:8080/collection-services/payments/_search",
                 "queryParam": "tenantId=$.tenantId,consumerCode=$.applicationNo,businessServices=BPA.NC_SAN_FEE",
                 "apiRequest": null,
                 "responseMapping": [
