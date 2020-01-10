@@ -248,7 +248,7 @@ class SearchProperty extends Component {
             labelStyle={{ marginTop: "20px" }}
           />
 
-          <div
+          {/*<div
             className="rainmaker-displayInline"  >
             <Button
               Icon={
@@ -273,7 +273,7 @@ class SearchProperty extends Component {
               primary={true}
               fullWidth={true}
             />
-          </div>
+          </div>*/}
         </div>
 
         <PropertySearchFormHOC
@@ -322,7 +322,7 @@ class SearchProperty extends Component {
               <Label label="PT_NO_PROPERTY_RECORD" />
             </div>
 
-            <div className="new-assess-btn">
+          {/*  <div className="new-assess-btn">
               <Button
                 label={<Label label="PT_ADD_ASSESS_PROPERTY" buttonLabel={true} />}
                 labelStyle={{ fontSize: 12 }}
@@ -331,15 +331,15 @@ class SearchProperty extends Component {
                 primary={true}
                 fullWidth={true}
               />
-            </div>
+            </div>*/}
           </div>
         )}
-        <YearDialogue
+        {/*<YearDialogue
           open={this.state.dialogueOpen}
           history={history}
           urlToAppend={urlToAppend}
           closeDialogue={closeYearRangeDialogue}
-        />
+        />*/}
       </Screen>
     );
   }

@@ -330,7 +330,7 @@ class Property extends Component {
             loadMdmsData={loadMdmsData}
           />
         }
-        <div
+      {/*  <div
           id="tax-wizard-buttons"
           className="wizard-footer col-sm-12"
           style={{ textAlign: "right" }}
@@ -344,7 +344,7 @@ class Property extends Component {
             />
             </div>
         </div>
-        {dialogueOpen && <YearDialogue open={dialogueOpen} history={history} urlToAppend={urlToAppend} closeDialogue={closeYearRangeDialogue} />}
+        {dialogueOpen && <YearDialogue open={dialogueOpen} history={history} urlToAppend={urlToAppend} closeDialogue={closeYearRangeDialogue} />}*/}
       </Screen>
     );
   }
