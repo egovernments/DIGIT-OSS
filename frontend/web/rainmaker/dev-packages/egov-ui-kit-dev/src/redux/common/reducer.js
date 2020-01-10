@@ -144,7 +144,10 @@ const commonReducer = (state = intialState, action) => {
       return {
         ...state,
         loading: false,
-        generalMDMSDataById,
+        generalMDMSDataById:{
+          ...state.generalMDMSDataById,
+          ...generalMDMSDataById
+        }
       };
 
     case commonTypes.GENERAL_MDMS_FETCH_ERROR:
@@ -169,7 +172,10 @@ const commonReducer = (state = intialState, action) => {
       return {
         ...state,
         loading: false,
-        loadMdmsData,
+        loadMdmsData:{
+          ...state.loadMdmsData,
+          ...loadMdmsData
+        }
       };
 
     case commonTypes.LOAD_MDMS_FETCH_ERROR:

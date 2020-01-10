@@ -646,6 +646,24 @@ export const city = {
                 {
                   name: "UsageCategorySubMinor",
                 },
+                {
+                  name: "ConstructionType",
+                },
+                {
+                  name: "Rebate",
+                },
+                {
+                  name: "Interest",
+                },
+                {
+                  name: "FireCess",
+                },
+                {
+                  name: "RoadType",
+                },
+                {
+                  name: "Thana",
+                }
               ],
             },
           ],
@@ -665,8 +683,22 @@ export const city = {
           "UsageCategoryMajor",
           "UsageCategoryMinor",
           "UsageCategorySubMinor",
+          "ConstructionType",
+          "Rebate",
+          "Penalty",
+          "Interest",
+          "FireCess",
+          "RoadType",
+          "Thana"
         ])
       );
+      dispatch(fetchGeneralMDMSData(
+        null,
+        "BillingService",
+        ["TaxPeriod", "TaxHeadMaster"],
+        "",
+        field.value
+      ));
     },
   },
 };
@@ -690,6 +722,7 @@ export const houseNumber = {
     errorMessage: "PT_PROPERTY_DETAILS_DOOR_NUMBER_ERRORMSG",
     errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
     maxLength: 64,
+    required:true
   },
 };
 

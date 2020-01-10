@@ -85,6 +85,24 @@ const formConfig = {
                   {
                     name: "UsageCategorySubMinor",
                   },
+                  {
+                    name: "ConstructionType",
+                  },
+                  {
+                    name: "Rebate",
+                  },
+                  {
+                    name: "Interest",
+                  },
+                  {
+                    name: "FireCess",
+                  },
+                  {
+                    name: "RoadType",
+                  },
+                  {
+                    name: "Thana",
+                  }
                 ],
               },
             ],
@@ -104,8 +122,23 @@ const formConfig = {
             "UsageCategoryMajor",
             "UsageCategoryMinor",
             "UsageCategorySubMinor",
+            "ConstructionType",
+            "Rebate",
+            "Penalty",
+            "Interest",
+            "FireCess",
+            "RoadType",
+            "Thana"
           ])
         );
+
+        dispatch(fetchGeneralMDMSData(
+          null,
+          "BillingService",
+          ["TaxPeriod", "TaxHeadMaster"],
+          "",
+          field.value
+        ));
       },
     },
     dummy: {
@@ -137,7 +170,7 @@ const formConfig = {
     },
     street: {
       id: "property-street",
-      jsonPath: "Properties[0].address.street",      
+      jsonPath: "Properties[0].address.street",
       type: "textfield",
       floatingLabelText: "PT_PROPERTY_DETAILS_STREET_NAME",
       hintText: "PT_PROPERTY_DETAILS_STREET_NAME_PLACEHOLDER",

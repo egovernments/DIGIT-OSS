@@ -62,42 +62,60 @@ const formConfig = {
                 moduleName: "PropertyTax",
                 masterDetails: [
                   {
-                    name: "Floor",
+                    name: "Floor"
                   },
                   {
-                    name: "OccupancyType",
+                    name: "OccupancyType"
                   },
                   {
-                    name: "OwnerShipCategory",
+                    name: "OwnerShipCategory"
                   },
                   {
-                    name: "OwnerType",
+                    name: "OwnerType"
                   },
                   {
-                    name: "PropertySubType",
+                    name: "PropertySubType"
                   },
                   {
-                    name: "PropertyType",
+                    name: "PropertyType"
                   },
                   {
-                    name: "SubOwnerShipCategory",
+                    name: "SubOwnerShipCategory"
                   },
                   {
-                    name: "UsageCategoryDetail",
+                    name: "UsageCategoryDetail"
                   },
                   {
-                    name: "UsageCategoryMajor",
+                    name: "UsageCategoryMajor"
                   },
                   {
-                    name: "UsageCategoryMinor",
+                    name: "UsageCategoryMinor"
                   },
                   {
-                    name: "UsageCategorySubMinor",
+                    name: "UsageCategorySubMinor"
                   },
-                ],
-              },
-            ],
-          },
+                  {
+                    name: "ConstructionType",
+                  },
+                  {
+                    name: "Rebate",
+                  },
+                  {
+                    name: "Interest",
+                  },
+                  {
+                    name: "FireCess",
+                  },
+                  {
+                    name: "RoadType",
+                  },
+                  {
+                    name: "Thana",
+                  }
+                ]
+              }
+            ]
+          }
         };
 
         dispatch(
@@ -113,8 +131,22 @@ const formConfig = {
             "UsageCategoryMajor",
             "UsageCategoryMinor",
             "UsageCategorySubMinor",
+            "ConstructionType",
+            "Rebate",
+            "Penalty",
+            "Interest",
+            "FireCess",
+            "RoadType",
+            "Thana"
           ])
         );
+        dispatch(fetchGeneralMDMSData(
+          null,
+          "BillingService",
+          ["TaxPeriod", "TaxHeadMaster"],
+          "",
+          field.value
+        ));
       },
       beforeFieldChange: ({ action, dispatch, state }) => {
         if (get(state, "common.prepareFormData.PropertiesTemp[0].address.city") !== action.value) {

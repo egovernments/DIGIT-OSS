@@ -356,44 +356,44 @@ class FormWizardDataEntry extends Component {
     const tenantId = getQueryValue(search, "tenantId") || getTenantId();
     const draftUuid = getQueryValue(search, "uuid");
     // const tenantId1 = getTenantId() || "uk";
-    fetchGeneralMDMSData(
-      null,
-      "PropertyTax",
-      [
-        "Floor",
-        "OccupancyType",
-        "OwnerShipCategory",
-        "ConstructionType",
-        "OwnerType",
-        "PropertySubType",
-        "PropertyType",
-        "SubOwnerShipCategory",
-        "UsageCategoryDetail",
-        "UsageCategoryMajor",
-        "UsageCategoryMinor",
-        "UsageCategorySubMinor",
-        "Rebate",
-        "Penalty",
-        "Interest",
-        "FireCess",
-        "RoadType",
-        "Thana"
-      ],
-      "",
-      tenantId
-    );
-    fetchGeneralMDMSData(
-      null,
-      "BillingService",
-      ["TaxPeriod", "TaxHeadMaster"],
-      "",
-      tenantId
-    );
 
     const assessmentId =
       getQueryValue(search, "assessmentId") || fetchFromLocalStorage("draftId");
 
     if (assessmentId) {
+      fetchGeneralMDMSData(
+        null,
+        "PropertyTax",
+        [
+          "Floor",
+          "OccupancyType",
+          "OwnerShipCategory",
+          "ConstructionType",
+          "OwnerType",
+          "PropertySubType",
+          "PropertyType",
+          "SubOwnerShipCategory",
+          "UsageCategoryDetail",
+          "UsageCategoryMajor",
+          "UsageCategoryMinor",
+          "UsageCategorySubMinor",
+          "Rebate",
+          "Penalty",
+          "Interest",
+          "FireCess",
+          "RoadType",
+          "Thana"
+        ],
+        "",
+        tenantId
+      );
+      fetchGeneralMDMSData(
+        null,
+        "BillingService",
+        ["TaxPeriod", "TaxHeadMaster"],
+        "",
+        tenantId
+      );
 
       await this.fetchDraftDetails(assessmentId, isReassesment, draftUuid);
 
@@ -2251,28 +2251,3 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(FormWizardDataEntry);
-
-// getGeneralData=()=>{
-//   let {fetchGeneralMDMSData,location,finalData}=this.props;
-//   let { search } = location;
-//   const {tenantId}=this.state;
-//   console.log("location:",location);
-//     const tenantId1 =getTenantId() || "uk";
-//     console.log("tenantId:;",tenantId,"tenantId1:",tenantId1);
-//   fetchGeneralMDMSData(
-//     null,
-//     "BillingService",
-//     ["TaxPeriod", "TaxHeadMaster"],
-//     "",
-//     tenantId1
-//   );
-// }
-// //
-// case 4:
-//   if (estimation[0].totalAmount < 0) {
-//     alert("Property Tax amount cannot be Negative!");
-//   } else {
-//     window.scrollTo(0, 0);
-//     createAndUpdate(index);
-//   }
-//   break;

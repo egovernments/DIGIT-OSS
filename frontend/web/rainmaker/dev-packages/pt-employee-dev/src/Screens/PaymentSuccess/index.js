@@ -119,6 +119,24 @@ class PaymentSuccess extends Component {
               },
               {
                 name: "UsageCategoryDetail"
+              },
+              {
+                name: "ConstructionType",
+              },
+              {
+                name: "Rebate",
+              },
+              {
+                name: "Interest",
+              },
+              {
+                name: "FireCess",
+              },
+              {
+                name: "RoadType",
+              },
+              {
+                name: "Thana",
               }
             ]
           }
@@ -133,8 +151,22 @@ class PaymentSuccess extends Component {
       "OccupancyType",
       "PropertyType",
       "PropertySubType",
-      "UsageCategoryDetail"
+      "UsageCategoryDetail",
+      "ConstructionType",
+      "Rebate",
+      "Penalty",
+      "Interest",
+      "FireCess",
+      "RoadType",
+      "Thana"
     ]);
+    fetchGeneralMDMSData(
+      null,
+      "BillingService",
+      ["TaxPeriod", "TaxHeadMaster"],
+      "",
+      commonConfig.tenantId
+    );
     fetchProperties([
       { key: "ids", value: match.params.propertyId },
       { key: "tenantId", value: match.params.tenantId }
@@ -294,8 +326,16 @@ const mapDispatchToProps = dispatch => {
   return {
     fetchProperties: queryObject => dispatch(fetchProperties(queryObject)),
     fetchReceipts: queryObject => dispatch(fetchReceipts(queryObject)),
-    fetchGeneralMDMSData: (requestBody, moduleName, masterName, key) =>
-      dispatch(fetchGeneralMDMSData(requestBody, moduleName, masterName, key)),
+    fetchGeneralMDMSData: (
+      requestBody,
+      moduleName,
+      masterName,
+      key,
+      tenantId
+    ) =>
+      dispatch(
+        fetchGeneralMDMSData(requestBody, moduleName, masterName, key, tenantId)
+      ),
     updatePrepareFormDataFromDraft: prepareFormData =>
       dispatch(updatePrepareFormDataFromDraft(prepareFormData)),
     clearForms: () => dispatch(clearForms())
