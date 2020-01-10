@@ -121,6 +121,12 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
   );
   set(payload, "Licenses[0].headerSideText", headerSideText);
 
+  let rebateAmount = get(payload, "Licenses[0].tradeLicenseDetail.adhocExemption");
+  
+  if(rebateAmount && rebateAmount < 0){
+    set(payload, "Licenses[0].tradeLicenseDetail.adhocExemption", -rebateAmount);
+  }
+
   // get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory") &&
   // get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory").split(
   //   "."
@@ -611,7 +617,16 @@ const screenConfig = {
           props: {
             dataPath: "Licenses",
             moduleName: "NewTL",
-            updateUrl: "/tl-services/v1/_update"
+            updateUrl: "/tl-services/v1/_update",
+            beforeSubmitHook: 
+              (data) =>{
+                 let rebateAmount = data[0].tradeLicenseDetail.adhocExemption;
+                 if(rebateAmount && rebateAmount > 0){
+                   data = set(data, "[0].tradeLicenseDetail.adhocExemption", -rebateAmount);
+                 }
+                 return data; 
+              }
+            
           }
         },
         tradeReviewDetails
