@@ -1,6 +1,7 @@
 package org.egov.demand.helper;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.egov.demand.config.ApplicationProperties;
 import org.egov.demand.model.BillAccountDetailV2;
@@ -38,35 +39,32 @@ public class BillHelperV2 {
 			}
 		}
 		
-		List<String> billIds = sequenceGenService.getIds(totalNoOfBills,applicationProperties.getBillSeqName());
 		List<String> billNumber = sequenceGenService.getIds(totalNoOfBills,applicationProperties.getBillNumSeqName());
 		
-		List<String> billDetailIds = sequenceGenService.getIds(totalNoOfBillDetails,applicationProperties.getBillDetailSeqName());
-		List<String> billAccIds = sequenceGenService.getIds(totalNoOfAccountDetails,applicationProperties.getBillAccDetailSeqName());
-		
-		
 		int billIndex = 0;
-		int billDetailIndex = 0;
-		int billAccIndex = 0;
-		
+
 		for (BillV2 bill : bills) {
-			bill.setId(billIds.get(billIndex));
+			bill.setId(getUUID());
 			bill.setBillNumber(billNumber.get(billIndex++));
 			List<BillDetailV2> billDetails = bill.getBillDetails();
 
 			for (BillDetailV2 billDetail : billDetails) {
-				billDetail.setId(billDetailIds.get(billDetailIndex++));
+				billDetail.setId(getUUID());
 				billDetail.setBillId(bill.getId());
 				billDetail.setTenantId(bill.getTenantId());
 				List<BillAccountDetailV2> accountDetails = billDetail.getBillAccountDetails();
 
 				for (BillAccountDetailV2 billAccountDetail : accountDetails) {
-					billAccountDetail.setId(billAccIds.get(billAccIndex++));
+					billAccountDetail.setId(getUUID());
 					billAccountDetail.setBillDetailId(billDetail.getId());
 					billAccountDetail.setTenantId(billDetail.getTenantId());
 				}
 
 			}
 		}
+	}
+
+	private String getUUID() {
+		return UUID.randomUUID().toString();
 	}
 }

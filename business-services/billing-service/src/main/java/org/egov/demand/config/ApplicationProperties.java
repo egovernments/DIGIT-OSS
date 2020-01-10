@@ -42,35 +42,18 @@ package org.egov.demand.config;
 
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
 
 import lombok.Getter;
 import lombok.ToString;
 
 @Configuration
 @Getter
-@PropertySource(value = { "classpath:config/application-config.properties" }, ignoreResourceNotFound = true)
 @ToString
 public class ApplicationProperties {
 
-	@Value("${bs.collected.receipt.seq.name}")
-	private String collectedReceiptSequence;
 	
-	@Value("${kafka.topics.receipt.update.collecteReceipt}")
-	private String saveCollectedReceipts;
-	
-	@Value("${kafka.topics.updateMIS.demand}")
-	private String updateMISTopicName;
-	
-	private static final String SEARCH_PAGESIZE_DEFAULT = "search.pagesize.default";
-
-	@Autowired
-	private Environment environment;
-
 	@Value("${kafka.topics.save.bill}")
 	private String createBillTopic;
 
@@ -154,12 +137,6 @@ public class ApplicationProperties {
 	@Value("${user.service.searchpath}")
 	private String userServiceSearchPath;
 
-	@Value("${bs.demand.audit.seq.name}")
-	private String demandAuditSeqName;
-
-	@Value("${bs.demanddetail.audit.seq.name}")
-	private String demandDetailAuditSeqName;
-	
 	@Value("#{${bs.businesscode.demand.updateurl}}")
 	private Map<String, String> businessCodeAndDemandUpdateUrlMap;
 	
@@ -171,7 +148,7 @@ public class ApplicationProperties {
 	@Value("${kafka.topics.receipt.cancel.name.v2}")
 	private String receiptCancellationTopicV2;
 	
-	public String commonsSearchPageSizeDefault() {
-		return environment.getProperty(SEARCH_PAGESIZE_DEFAULT);
-	}
+	@Value("S{search.pagesize.default}")
+	private String commonSearchDefaultLimit;
+
 }

@@ -42,7 +42,6 @@ package org.egov.demand.repository;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,27 +49,19 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import org.egov.common.contract.request.RequestInfo;
-import org.egov.demand.config.ApplicationProperties;
 import org.egov.demand.model.AuditDetails;
-import org.egov.demand.model.BillDetail;
-import org.egov.demand.model.CollectedReceipt;
 import org.egov.demand.model.Demand;
 import org.egov.demand.model.DemandCriteria;
 import org.egov.demand.model.DemandDetail;
 import org.egov.demand.model.DemandDetailCriteria;
-import org.egov.demand.model.DemandUpdateMisRequest;
 import org.egov.demand.repository.querybuilder.DemandQueryBuilder;
-import org.egov.demand.repository.rowmapper.CollectedReceiptsRowMapper;
 import org.egov.demand.repository.rowmapper.DemandDetailRowMapper;
 import org.egov.demand.repository.rowmapper.DemandRowMapper;
-import org.egov.demand.util.SequenceGenService;
 import org.egov.demand.util.Util;
 import org.egov.demand.web.contract.DemandRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -85,12 +76,6 @@ public class DemandRepository {
 	
 	@Autowired
 	private DemandQueryBuilder demandQueryBuilder;
-	
-	@Autowired
-	private SequenceGenService sequenceGenService;
-	
-	@Autowired
-	private ApplicationProperties applicationProperties;
 	
 	@Autowired
 	private DemandRowMapper demandRowMapper;
@@ -371,54 +356,4 @@ public class DemandRepository {
 				});
 	}
 	
-	//update mis method for updating consumer code
-	@Deprecated
-	public void updateMIS(DemandUpdateMisRequest demandRequest) {
-
-		jdbcTemplate.update(demandQueryBuilder.getDemandUpdateMisQuery(demandRequest), new PreparedStatementSetter() {
-			@Override
-			public void setValues(PreparedStatement ps) throws SQLException {
-				ps.setString(1, demandRequest.getConsumerCode());
-				ps.setString(2, demandRequest.getRequestInfo().getDid());
-				ps.setLong(3, new Date().getTime());
-				ps.setString(4, demandRequest.getTenantId());
-			}
-		});
-	}
-	
-	@Deprecated
-	public void saveCollectedReceipts(List<BillDetail> billDetails,RequestInfo requestInfo) {
-		List<String> ids=sequenceGenService.getIds(billDetails.size(), applicationProperties.getCollectedReceiptSequence());
-		
-		jdbcTemplate.batchUpdate(DemandQueryBuilder.COLLECTED_RECEIPT_INSERT_QUERY, new BatchPreparedStatementSetter() {
-
-			@Override
-			public void setValues(PreparedStatement ps, int rowNum) throws SQLException {
-				BillDetail billDetail = billDetails.get(rowNum);
-				ps.setString(1, ids.get(rowNum));
-				ps.setString(2, billDetail.getBusinessService());
-				ps.setString(3, billDetail.getConsumerCode());
-				ps.setString(4, null);
-				ps.setBigDecimal(5, billDetail.getTotalAmount());
-				ps.setObject(6, null);
-				ps.setString(7, billDetail.getStatus().toString());
-				ps.setString(8, billDetail.getTenantId());
-				ps.setString(9, requestInfo.getUserInfo().getId().toString());
-				ps.setLong(10, new Date().getTime());
-				ps.setString(11, requestInfo.getUserInfo().getId().toString());
-				ps.setLong(12, new Date().getTime());
-			}
-
-			@Override
-			public int getBatchSize() {
-				return billDetails.size();
-			}
-		});
-	}
-	
-	@Deprecated
-	public List<CollectedReceipt> getCollectedReceipts(DemandCriteria demandCriteria){
-		return jdbcTemplate.query(demandQueryBuilder.getCollectedReceiptsQuery(demandCriteria), new CollectedReceiptsRowMapper());
-	}
-
 }

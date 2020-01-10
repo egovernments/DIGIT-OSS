@@ -111,7 +111,7 @@ public class BillQueryBuilder {
 			selectQuery.append(" ORDER BY b.createddate desc");
 
 		selectQuery.append(" LIMIT ?");
-		long pageSize = Integer.parseInt(applicationProperties.commonsSearchPageSizeDefault());
+		long pageSize = Integer.parseInt(applicationProperties.getCommonSearchDefaultLimit());
 		if (searchBillCriteria.getSize() != null)
 			pageSize = searchBillCriteria.getSize();
 		preparedStatementValues.add(pageSize); // Set limit to pageSize

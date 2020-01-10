@@ -113,20 +113,7 @@ public class DemandQueryBuilder {
 	public static final String DEMAND_UPDATE_CONSUMERCODE_QUERY="UPDATE egbs_demand_v1 SET consumercode=?, lastmodifiedby=?, lastmodifiedtime=? "
 			+ " WHERE tenantid=? AND id IN (";
 	
-	public static final String COLLECTED_RECEIPT_INSERT_QUERY="INSERT INTO egbs_collectedreceipts(id, businessservice, consumercode, receiptnumber,"
-			+ " receiptamount, receiptdate, status, tenantid, createdby, createddate, lastmodifiedby, lastmodifieddate)"
-			+ " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
-	
-	public  final String Collected_Receipt_search_Query="select * from egbs_collectedreceipts where ";
-	
-	public String getCollectedReceiptsQuery(DemandCriteria demandCriteria){
-		StringBuilder query = new StringBuilder(Collected_Receipt_search_Query);
-		query.append(" tenantid = '" + demandCriteria.getTenantId() + "' AND businessservice='"
-				+ demandCriteria.getBusinessService() + "' AND consumercode IN ("
-				+ getIdQueryForStrings(demandCriteria.getConsumerCode())+" order by consumercode desc");
-		log.info("query::"+query);
-		return query.toString();
-	}
+
 	public String getDemandQueryForConsumerCodes(Map<String,Set<String>> businessConsumercodeMap,List<Object> preparedStmtList, String tenantId){
 		
 		StringBuilder query = new StringBuilder(BASE_DEMAND_QUERY);
