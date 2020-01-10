@@ -8,15 +8,10 @@ import javax.validation.Valid;
 import org.egov.common.contract.response.ResponseInfo;
 import org.egov.pt.models.Assessment;
 import org.egov.pt.models.AssessmentSearchCriteria;
-import org.egov.pt.models.Property;
-import org.egov.pt.models.PropertyCriteria;
 import org.egov.pt.service.AssessmentService;
-import org.egov.pt.service.PropertyService;
 import org.egov.pt.util.ResponseInfoFactory;
 import org.egov.pt.web.contracts.AssessmentRequest;
 import org.egov.pt.web.contracts.AssessmentResponse;
-import org.egov.pt.web.contracts.PropertyRequest;
-import org.egov.pt.web.contracts.PropertyResponse;
 import org.egov.pt.web.contracts.RequestInfoWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -61,6 +56,7 @@ public class AssessmentController {
 				.build();
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
+	
 
 	@PostMapping("/_search")
 	public ResponseEntity<AssessmentResponse> search(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
