@@ -149,7 +149,7 @@ class AssessmentHistory extends Component {
                     {getFullRow("PT_ASSESSMENT_NO", propertyDetail.assessmentNumber ? propertyDetail.assessmentNumber : "NA", 12)}
                     {getFullRow("PT_ASSESSMENT_YEAR", propertyDetail.financialYear ? propertyDetail.financialYear : "NA", 12)}
                     {/*getFullRow("PT_ASSESSMENT_AMOUNT", taxAmount, 6) */}
-                    <div className="col-sm-6 col-xs-12" style={{ marginBottom: 1, marginTop: 1 }}>
+                    {/* <div className="col-sm-6 col-xs-12" style={{ marginBottom: 1, marginTop: 1 }}>
                         <div className="assess-history" style={{ float: "right" }}>
                             <Button
                                 label={<Label buttonLabel={true} label='PT_RE_ASSESS' color="rgb(254, 122, 81)" fontSize="16px" height="40px" labelStyle={labelStyle} />}
@@ -164,9 +164,9 @@ class AssessmentHistory extends Component {
                                     // lastElement.onClick();
                                 }}
                             ></Button>
-                        </div>
+                        </div> 
 
-                    </div >
+                     </div > */}
 
                 </div>)
 
