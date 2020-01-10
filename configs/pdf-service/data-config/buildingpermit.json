@@ -29,7 +29,7 @@
                 }
               },
               {
-                "variable": "dated",
+                "variable": "createdDate",
                 "value": {
                   "path": "$.auditDetails.createdTime"
                 },
@@ -42,7 +42,7 @@
                 }
               },
               {
-                "variable": "buidlingNearGovt",
+                "variable": "buildingNearGovt",
                 "value": {
                   "path": "BUILDING_NEAR_GOVT_BLDG"
                 },
@@ -54,7 +54,7 @@
                 }
               },
               {
-                "variable": "buidlingNearMonument",
+                "variable": "buildingNearMonument",
                 "value": {
                   "path": "BUILDING_NEAR_MONUMENT"
                 },
@@ -90,9 +90,9 @@
                 }
               },
               {
-                "variable": "greenBuildingSustainable",
+                "variable": "stateEnvImpact",
                 "value": {
-                  "path": "PROVISION_FOR_GREEN_BUILDINGS_AND_SUSTAINABILITY"
+                  "path": "NOC_STATE_ENV_IMPACT"
                 },
                 "type": "label",
                 "localisation": {
@@ -138,6 +138,17 @@
                 }
               },
               {
+                "variable": "tenantName",
+                "value": {
+                  "path": "$.tenantId"
+                },
+                "localisation": {
+                  "required": true,
+                  "prefix": "TENANT_TENANTS",
+                  "module": "rainmaker-common"
+                }
+              },
+              {
                 "variable": "isBuildingNearGovtBLDG",
                 "value": {
                   "path": "$.edcrDetail[0].planDetail.planInfoProperties.BUILDING_NEAR_GOVT_BLDG"
@@ -162,9 +173,9 @@
                 }
               },
               {
-                "variable": "isGreenBuildingSustainable",
+                "variable": "isStateEnvImpact",
                 "value": {
-                  "path": "$.edcrDetail[0].planDetail.planInfoProperties.PROVISION_FOR_GREEN_BUILDINGS_AND_SUSTAINABILITY"
+                  "path": "$.edcrDetail[0].planDetail.planInfoProperties.NOC_STATE_ENV_IMPACT"
                 }
               },
               {
@@ -635,6 +646,41 @@
                 "value": {
                   "path": "$.edcrDetail[0].planDetail.blocks.*.building.totalArea[0].carpetArea"
                 }
+              },
+              {
+                "variable": "plotNo",
+                "value": {
+                  "path": "$.edcrDetail[0].planDetail.planInformation.plotNo"
+                }
+              },
+              {
+                "variable": "khataNo",
+                "value": {
+                  "path": "$.edcrDetail[0].planDetail.planInformation.khataNo"
+                }
+              }
+            ]
+          },
+          {
+            "externalAPI": [
+              {
+                "path": "http://collection-services:8080/collection-services/payments/_search",
+                "queryParam": "tenantId=$.tenantId,consumerCode=$.applicationNo,businessServices=BPA.NC_SAN_FEE",
+                "apiRequest": null,
+                "responseMapping": [
+                  {
+                    "variable": "totalDue",
+                    "value": "$.Payments[0].totalDue"
+                  },
+                  {
+                    "variable": "headCode",
+                    "value": "$.Payments[0].paymentDetails[0].bill.billDetails[0].billAccountDetails[0].taxHeadCode"
+                  },
+                  {
+                    "variable": "fee",
+                    "value": "$.Payments[0].paymentDetails[0].bill.billDetails[0].billAccountDetails[0].amount"
+                  }
+                ]
               }
             ]
           },
@@ -642,7 +688,7 @@
             "qrcodeConfig": [
               {
                 "variable": "qrCode",
-                "value": "Application: {{applicationNo}}, PlanPermission: {{planPermissionNo}}, Date of payment: {{dated}}"
+                "value": "Application: {{applicationNo}}, PlanPermission: {{planPermissionNo}}, Date of payment: {{applicationDate}}"
               }
             ]
           }

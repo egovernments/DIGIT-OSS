@@ -16,7 +16,7 @@
                     {
                         "stack": [
                             {
-                                "text": "Sonpur Muncipal Council",
+                                "text": "{{tenantName}} Muncipal Council",
                                 "style": "header"
                             },
                             {
@@ -63,7 +63,7 @@
                                 "bold": true
                             },
                             {
-                                "text": "{{dated}}",
+                                "text": "{{applicationDate}}",
                                 "bold": true
                             }
                         ],
@@ -84,7 +84,7 @@
                         "text": " dated "
                     },
                     {
-                        "text": "{{dated}}"
+                        "text": "{{applicationDate}}"
                     },
                     {
                         "text": ", permission is hereby granted in favour of:"
@@ -110,14 +110,42 @@
             {
                 "text": [
                     {
-                        "text": "Construction of a Residential building in respect of Plot No (CS) 1  Plot No (MSP) 1 Khata No 1  Holding No. 1 of SonpurMunicipal Council under Ward 1  under Circle 1 subject to the following conditions/restrictions."
+                        "text": "Construction of a Residential building in respect of Plot No (CS) "
+                    },
+                    {
+                        "text" : "{{plotNo}}",
+                        "bold": true
+                    },
+                    {
+                        "text" : "  Plot No (MSP) "
+                    },
+                    {
+                        "text" : "{{plotNo}}",
+                        "bold": true
+                    },
+                    {
+                        "text" : " Khata No " 
+                    },
+                    {
+                        "text" : "{{khataNo}}",
+                        "bold": true
+                    },
+                    {
+                        "text" : " Holding No. 1 of "
+                    },
+                    {
+                        "text" : "{{tenantName}} Municipal Council",
+                        "bold" : true
+                    },
+                    {
+                        "text" : " under Ward 1 under Circle 1 subject to the following conditions/restrictions."
                     }
                 ]
             },
             {
                 "separator": ")",
                 "ol": [
-                    "Permit issued based on the Approval Certificate of  PCB as per the Order No.202 Dtd 11/04/2019."
+                    "Permit issued based on the Approval Certificate of  PCB as per the Order No.202 Dtd {{createdDate}}."
                 ],
                 "style": "top-margin"
             },
@@ -270,39 +298,21 @@
                     "body": [
                         [
                             {
-                                "text": "Builtup Area (m²)",
+                                "text": "Fee Description",
                                 "bold": true
                             },
                             {
-                                "text": "Floor Area (m²)",
+                                "text": "Amount (Rs)",
                                 "bold": true,
                                 "alignment": "right"
                             }
                         ],
                         [
                             {
-                                "text": "Scrutiny Fee"
+                                "text": "{{headCode}}"
                             },
                             {
-                                "text": "5000.0",
-                                "alignment": "right"
-                            }
-                        ],
-                        [
-                            {
-                                "text": "Labour cess"
-                            },
-                            {
-                                "text": "2.0",
-                                "alignment": "right"
-                            }
-                        ],
-                        [
-                            {
-                                "text": "Permit Fees"
-                            },
-                            {
-                                "text": "7033.0",
+                                "text": "{{fee}}",
                                 "alignment": "right"
                             }
                         ],
@@ -312,7 +322,7 @@
                                 "bold": true
                             },
                             {
-                                "text": "12035.0",
+                                "text": "{{totalDue}}",
                                 "bold": true,
                                 "alignment": "right"
                             }
@@ -373,7 +383,7 @@
                         "text": "STATUS : "
                     },
                     {
-                        "text": "Accepted",
+                        "text": "{{status}}",
                         "color": "green"
                     }
                 ],
@@ -592,7 +602,7 @@
                                 "text": "1"
                             },
                             {
-                                "text": "{{buidlingNearGovt}}"
+                                "text": "{{buildingNearGovt}}"
                             },
                             {
                                 "text": "{{isBuildingNearGovtBLDG}}"
@@ -603,7 +613,7 @@
                                 "text": "2"
                             },
                             {
-                                "text": "{{buidlingNearMonument}}"
+                                "text": "{{buildingNearMonument}}"
                             },
                             {
                                 "text": "{{isBuildingNearMonument}}"
@@ -636,10 +646,10 @@
                                 "text": "5"
                             },
                             {
-                                "text": "{{greenBuildingSustainable}}"
+                                "text": "{{stateEnvImpact}}"
                             },
                             {
-                                "text": "{{isGreenBuildingSustainable}}"
+                                "text": "{{isStateEnvImpact}}"
                             }
                         ],
                         [
@@ -1070,7 +1080,7 @@
                         "text": "Validity : This certificate is valid upto "
                     },
                     {
-                        "text": "validityDate"
+                        "text": "{{applicationDate}}"
                     },
                     {
                         "text": " Only. "
@@ -1085,8 +1095,14 @@
                 "style": "top-margin"
             },
             {
-                "text": "The owner as well as the architect/licensed engineer are fully responsible for adhering to the provisions of the bye laws inboth the building plan as well as in the actual construction.In case it is found that the permission has been secured through misrepresentation or fraud, the permission may besuspended or revoked by the Authority under Section 363 (3) of the Bihar Municipal Act 2007 and/or cancelled under byelaw 14 of the bye laws.",
+                "text": "The owner as well as the architect/licensed engineer are fully responsible for adhering to the provisions of the bye laws in both the building plan as well as in the actual construction.In case it is found that the permission has been secured through misrepresentation or fraud, the permission may be suspended or revoked by the Authority under Section 363 (3) of the Bihar Municipal Act 2007 and/or cancelled under byelaw 14 of the bye laws.",
                 "style": "top-margin"
+            },
+            {
+                "image" : "{{qrCode}}",
+                "alignment" : "right",
+                "width" : 150,
+                "height" : 50
             }
         ],
         "styles": {
@@ -1119,11 +1135,6 @@
                     0
                 ]
             }
-        },
-        "footer": [
-            {
-              "text": "pageNo."
-            }
-          ]
+        }
     }
 }
