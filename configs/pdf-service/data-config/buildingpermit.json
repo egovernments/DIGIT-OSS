@@ -90,9 +90,9 @@
                 }
               },
               {
-                "variable": "greenBuildingSustainable",
+                "variable": "stateEnvImpact",
                 "value": {
-                  "path": "PROVISION_FOR_GREEN_BUILDINGS_AND_SUSTAINABILITY"
+                  "path": "NOC_STATE_ENV_IMPACT"
                 },
                 "type": "label",
                 "localisation": {
@@ -173,9 +173,9 @@
                 }
               },
               {
-                "variable": "isGreenBuildingSustainable",
+                "variable": "isStateEnvImpact",
                 "value": {
-                  "path": "$.edcrDetail[0].planDetail.planInfoProperties.PROVISION_FOR_GREEN_BUILDINGS_AND_SUSTAINABILITY"
+                  "path": "$.edcrDetail[0].planDetail.planInfoProperties.NOC_STATE_ENV_IMPACT"
                 }
               },
               {

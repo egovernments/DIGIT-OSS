@@ -646,10 +646,10 @@
                                 "text": "5"
                             },
                             {
-                                "text": "{{greenBuildingSustainable}}"
+                                "text": "{{stateEnvImpact}}"
                             },
                             {
-                                "text": "{{isGreenBuildingSustainable}}"
+                                "text": "{{isStateEnvImpact}}"
                             }
                         ],
                         [
