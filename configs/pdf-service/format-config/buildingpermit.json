@@ -298,39 +298,21 @@
                     "body": [
                         [
                             {
-                                "text": "Builtup Area (m²)",
+                                "text": "Fee Description",
                                 "bold": true
                             },
                             {
-                                "text": "Floor Area (m²)",
+                                "text": "Amount (Rs)",
                                 "bold": true,
                                 "alignment": "right"
                             }
                         ],
                         [
                             {
-                                "text": "Scrutiny Fee"
+                                "text": "{{headCode}}"
                             },
                             {
-                                "text": "5000.0",
-                                "alignment": "right"
-                            }
-                        ],
-                        [
-                            {
-                                "text": "Labour cess"
-                            },
-                            {
-                                "text": "2.0",
-                                "alignment": "right"
-                            }
-                        ],
-                        [
-                            {
-                                "text": "Permit Fees"
-                            },
-                            {
-                                "text": "7033.0",
+                                "text": "{{fee}}",
                                 "alignment": "right"
                             }
                         ],
@@ -340,7 +322,7 @@
                                 "bold": true
                             },
                             {
-                                "text": "12035.0",
+                                "text": "{{totalDue}}",
                                 "bold": true,
                                 "alignment": "right"
                             }
@@ -1098,7 +1080,7 @@
                         "text": "Validity : This certificate is valid upto "
                     },
                     {
-                        "text": "validityDate"
+                        "text": "{{applicationDate}}"
                     },
                     {
                         "text": " Only. "

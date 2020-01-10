@@ -662,6 +662,29 @@
             ]
           },
           {
+            "externalAPI": [
+              {
+                "path": "http://localhost:8099/collection-services/payments/_search",
+                "queryParam": "tenantId=$.tenantId,consumerCode=$.applicationNo,businessServices=BPA.NC_SAN_FEE",
+                "apiRequest": null,
+                "responseMapping": [
+                  {
+                    "variable": "totalDue",
+                    "value": "$.Payments[0].totalDue"
+                  },
+                  {
+                    "variable": "headCode",
+                    "value": "$.Payments[0].paymentDetails[0].bill.billDetails[0].billAccountDetails[0].taxHeadCode"
+                  },
+                  {
+                    "variable": "fee",
+                    "value": "$.Payments[0].paymentDetails[0].bill.billDetails[0].billAccountDetails[0].amount"
+                  }
+                ]
+              }
+            ]
+          },
+          {
             "qrcodeConfig": [
               {
                 "variable": "qrCode",
