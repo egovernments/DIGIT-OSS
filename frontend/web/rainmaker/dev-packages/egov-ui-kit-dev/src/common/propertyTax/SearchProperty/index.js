@@ -313,13 +313,13 @@ class SearchProperty extends Component {
             onActionClick={this.onAddButtonClick}
           />
         </Hidden>
-        {/*!loading && showTable && !tableData.length && (
+        {!loading && showTable && !tableData.length && (
           <div className="search-no-property-found">
             <div className="no-search-text">
               <Label label="PT_NO_PROPERTY_RECORD" />
             </div>
 
-            <div className="new-assess-btn">
+          {/*  <div className="new-assess-btn">
               <Button
                 label={<Label label="PT_ADD_ASSESS_PROPERTY" buttonLabel={true} />}
                 labelStyle={{ fontSize: 12 }}
@@ -328,9 +328,9 @@ class SearchProperty extends Component {
                 primary={true}
                 fullWidth={true}
               />
-            </div>
+            </div>*/}
           </div>
-        )*/}
+        )}
         {/*<YearDialogue open={this.state.dialogueOpen} history={history} urlToAppend={urlToAppend} closeDialogue={closeYearRangeDialogue} />*/}
       </Screen>
     );
