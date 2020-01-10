@@ -356,44 +356,44 @@ class FormWizardDataEntry extends Component {
     const tenantId = getQueryValue(search, "tenantId") || getTenantId();
     const draftUuid = getQueryValue(search, "uuid");
     // const tenantId1 = getTenantId() || "uk";
+    fetchGeneralMDMSData(
+      null,
+      "PropertyTax",
+      [
+        "Floor",
+        "OccupancyType",
+        "OwnerShipCategory",
+        "ConstructionType",
+        "OwnerType",
+        "PropertySubType",
+        "PropertyType",
+        "SubOwnerShipCategory",
+        "UsageCategoryDetail",
+        "UsageCategoryMajor",
+        "UsageCategoryMinor",
+        "UsageCategorySubMinor",
+        "Rebate",
+        "Penalty",
+        "Interest",
+        "FireCess",
+        "RoadType",
+        "Thana"
+      ],
+      "",
+      tenantId
+    );
+    fetchGeneralMDMSData(
+      null,
+      "BillingService",
+      ["TaxPeriod", "TaxHeadMaster"],
+      "",
+      tenantId
+    );
 
     const assessmentId =
       getQueryValue(search, "assessmentId") || fetchFromLocalStorage("draftId");
 
     if (assessmentId) {
-      fetchGeneralMDMSData(
-        null,
-        "PropertyTax",
-        [
-          "Floor",
-          "OccupancyType",
-          "OwnerShipCategory",
-          "ConstructionType",
-          "OwnerType",
-          "PropertySubType",
-          "PropertyType",
-          "SubOwnerShipCategory",
-          "UsageCategoryDetail",
-          "UsageCategoryMajor",
-          "UsageCategoryMinor",
-          "UsageCategorySubMinor",
-          "Rebate",
-          "Penalty",
-          "Interest",
-          "FireCess",
-          "RoadType",
-          "Thana"
-        ],
-        "",
-        tenantId
-      );
-      fetchGeneralMDMSData(
-        null,
-        "BillingService",
-        ["TaxPeriod", "TaxHeadMaster"],
-        "",
-        tenantId
-      );
 
       await this.fetchDraftDetails(assessmentId, isReassesment, draftUuid);
 
@@ -1051,25 +1051,26 @@ class FormWizardDataEntry extends Component {
           this.props.toggleSnackbarAndSetText(
             true,
             {
-              labelName:
-                "Please enter at least one year of demand and collection !",
+              labelName:"Please enter at least one year of demand and collection !",
               labelKey: "ERR01_DEMAND_ENTER_THE_DATA"
             },
             "error"
           );
           break;
         }
+        
         const { demand } = DemandProperties[0].propertyDetails[0];
         let errorLine = "";
+        let errorLine2=true;
         let lastDemand;
+        let lastCollection;
         let yearData = true;
         if (demand) {
           if (!demand[0]) {
             this.props.toggleSnackbarAndSetText(
               true,
               {
-                labelName:
-                  "Please enter the latest year of demand and collection !",
+                labelName:"Please enter the latest year of demand and collection !",
                 labelKey: "ERR02_DEMAND_ENTER_THE_DATA"
               },
               "error"
@@ -1080,7 +1081,11 @@ class FormWizardDataEntry extends Component {
             return Object.keys(data.demand).forEach((data1, key1) => {
               return Object.keys(data.demand[data1]).forEach((data2, key2) => {
                 lastDemand = data.demand[data1][data2].PT_DEMAND;
-                if (
+                lastCollection=data.demand[data1][data2].PT_COLLECTED;
+                if(!data.demand[data1][data2].PT_DEMAND){
+                  errorLine2=false
+                }
+                else if (
                   parseInt(data.demand[data1][data2].PT_DEMAND) <
                   parseInt(data.demand[data1][data2].PT_COLLECTED)
                 ) {
@@ -1098,19 +1103,30 @@ class FormWizardDataEntry extends Component {
             });
           });
           let errorLine1=demand.filter(data => data != undefined).length === demand.length;
-          if (lastDemand != "" ) {
+          if (lastDemand != '' || lastCollection !='' ) {
             yearData =
               demand.filter(data => data != undefined).length === demand.length;
           }
-          else if(lastDemand == '' && !errorLine1){
+          else if(lastDemand == '' || lastCollection =='' && !errorLine1){
             yearData = demand.filter(data => data != undefined).length != demand.length;
           }
+        }
+        if(!errorLine2){
+          this.props.toggleSnackbarAndSetText(
+            true,
+            {
+              labelName: "The entered collection should not greater than demand amount for any year !",
+              labelKey: "ERR03_DEMAND_ENTER_THE_DATA"
+            },
+            "error"
+          );
+          break;
         }
         if (errorLine.length > 0) {
           this.props.toggleSnackbarAndSetText(
             true,
             {
-              labelName: `The error is ${errorLine}`,
+              labelName: "The entered collection should not greater than demand amount for any year !",
               labelKey: "ERR03_DEMAND_ENTER_THE_DATA"
             },
             "error"
@@ -1749,7 +1765,7 @@ class FormWizardDataEntry extends Component {
                 demandDetails1.push({
                   taxHeadMasterCode: demandValue.PT_TAXHEAD,
                   taxAmount: parseInt(demandValue.PT_DEMAND != "" ? demandValue.PT_DEMAND : 0),
-                  collectionAmount: parseInt(demandValue.PT_COLLECTED == undefined || demandValue.PT_COLLECTED == ""? 0: demandValue.PT_COLLECTED)
+                  collectionAmount: parseInt( demandValue.PT_COLLECTED != ""? demandValue.PT_COLLECTED:0 )
                 });
               }),
               demandData.push({
@@ -2251,3 +2267,28 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(FormWizardDataEntry);
+
+// getGeneralData=()=>{
+//   let {fetchGeneralMDMSData,location,finalData}=this.props;
+//   let { search } = location;
+//   const {tenantId}=this.state;
+//   console.log("location:",location);
+//     const tenantId1 =getTenantId() || "uk";
+//     console.log("tenantId:;",tenantId,"tenantId1:",tenantId1);
+//   fetchGeneralMDMSData(
+//     null,
+//     "BillingService",
+//     ["TaxPeriod", "TaxHeadMaster"],
+//     "",
+//     tenantId1
+//   );
+// }
+// //
+// case 4:
+//   if (estimation[0].totalAmount < 0) {
+//     alert("Property Tax amount cannot be Negative!");
+//   } else {
+//     window.scrollTo(0, 0);
+//     createAndUpdate(index);
+//   }
+//   break;

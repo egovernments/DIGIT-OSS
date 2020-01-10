@@ -147,8 +147,7 @@ const formConfig = {
     },
     houseNumber: {
       id: "house-number",
-      jsonPath: "Properties[0].address.doorNo",
-      required: true,
+      jsonPath: "Properties[0].address.doorNo",    
       type: "textfield",
       floatingLabelText: "PT_PROPERTY_DETAILS_DOOR_NUMBER",
       hintText: "PT_PROPERTY_DETAILS_DOOR_NUMBER_PLACEHOLDER",

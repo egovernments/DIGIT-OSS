@@ -497,7 +497,6 @@ class FormWizard extends Component {
       assessedPropertyDetails
     } = this.state;
     const { form, currentTenantId, search } = this.props;
-    console.log(this.props, 'this.props');
     let { search: searchQuery } = this.props.location;
     let isAssesment = Boolean(getQueryValue(searchQuery, "isAssesment").replace('false', ''));
     const isCompletePayment = getQueryValue(search, "isCompletePayment");
@@ -771,9 +770,6 @@ class FormWizard extends Component {
           Properties: properties
         }
       );
-      console.log(createPropertyResponse, 'createPropertyResponse');
-
-
       this.setState(
         {
           assessedPropertyDetails: createPropertyResponse,
@@ -1584,7 +1580,6 @@ class FormWizard extends Component {
         headerObj.header = 'PT_PROPERTY_INFORMATION';
         headerObj.subHeaderValue = propertyId;
     }
-    console.log(headerObj, 'headerObj');
     return headerObj;
   }
 

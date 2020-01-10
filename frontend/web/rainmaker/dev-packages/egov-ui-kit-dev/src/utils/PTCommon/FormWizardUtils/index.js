@@ -400,7 +400,6 @@ export const getCalculationScreenData = async (billingSlabs, tenantId, self) => 
 };
 
 export const getHeaderLabel = (selected, role) => {
-  console.log("sle;;;;",selected);
   switch (selected) {
     case 0:
       return (
