@@ -202,6 +202,24 @@
                   }
               },
               {
+                "variable": "ownershipProof",
+                "value": {
+                  "path": "$.tradeLicenseDetail.address.pincode"
+                }
+            },
+            {
+              "variable": "ownersIdProof",
+              "value": {
+                "path": "$.tradeLicenseDetail.address.pincode"
+              }
+          },
+          {
+            "variable": "ownerPhoto",
+            "value": {
+              "path": "$.tradeLicenseDetail.address.pincode"
+            }
+        },
+              {
                   "variable": "electricityConnectionNo",
                   "value": {
                     "path": "$.tradeLicenseDetail.additionalDetail.electricityConnectionNo"
@@ -910,6 +928,18 @@
                  }
               },
               {
+                "variable": "owner_photo",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_TLAPP_OWNERSHIP_PHOTO"
+                },
+                "type": "label",
+                "localisation":{
+                  "required":true,
+                  "prefix": null,
+                  "module":"rainmaker-common"
+               }
+            },
+              {
                 "variable": "variable13",                        
                 "value":{
                      "path":"$.tradeLicenseDetail.tradeUnits.*"                          
@@ -1002,8 +1032,8 @@
           {
             "externalAPI": [    
               {
-                  "path": "http://billing-service:8080/billing-service/bill/v2/_fetchbill",
-                  "queryParam": "tenantId=$.tenantId,consumerCode=$.applicationNumber,service=TL",
+                "path": "http://billing-service:8080/billing-service/bill/v2/_fetchbill",
+                "queryParam": "tenantId=$.tenantId,consumerCode=$.applicationNumber,service=TL",
                   "apiRequest": null,
                   "responseMapping":[
                     {            
