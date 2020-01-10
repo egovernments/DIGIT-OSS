@@ -409,7 +409,7 @@
           },
           { 
             "path": "http://egov-filestore:8080/filestore/v1/files/url",
-            "queryParam": "tenantId=pb,fileStoreIds=$.tradeLicenseDetail.applicationDocuments[?(@.documentType== 'OWNERIDPROOF')].fileStoreId",
+            "queryParam": "tenantId=pb,fileStoreIds=$.tradeLicenseDetail.applicationDocuments[?(@.documentType== 'OWNERPHOTO')].fileStoreId",
             "apiRequest": null,
             "requesttype": "GET",
             "responseMapping":[
