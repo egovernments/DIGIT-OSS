@@ -42,21 +42,6 @@ export const documentList = {
         maxFileSize: 5000
       }
     ],
-    // description: {
-    //   labelName: "Only .jpg and .pdf files. 6MB max file size.",
-    //   labelKey: "TL_UPLOAD_RESTRICTIONS"
-    // },
-    // inputProps: {
-    //   accept: "image/*, .pdf, .png, .jpeg"
-    // },
-    // imageDescription: {
-    //   labelName: "Only .png and .jpeg 6MB max file size.",
-    //   labelKey: "TL_UPLOAD_IMAGE_RESTRICTIONS"
-    // },
-    // imageInputProps: {
-    //   accept: "image/*, .png, .jpeg",
-    // },
     documentTypePrefix: "TL_",
-    //maxFileSize: 6000
   }
 };
