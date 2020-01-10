@@ -29,10 +29,7 @@ const AutosuggestContainer = Loadable({
   loader: () => import("./AutosuggestContainer"),
   loading: () => <Loading />
 });
-const DocumentListContainer = Loadable({
-  loader: () => import("./DocumentListContainer"),
-  loading: () => <Loading />
-});
+
 const PaymentRedirectPage = Loadable({
   loader: () => import("./PaymentRedirectPage"),
   loading: () => <Loading />
@@ -59,7 +56,6 @@ export {
   DownloadFileContainer,
   EstimateCardContainer,
   AutosuggestContainer,
-  DocumentListContainer,
   PaymentRedirectPage,
   ViewBreakupContainer,
   DialogContainer,
