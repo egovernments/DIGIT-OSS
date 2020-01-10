@@ -107,7 +107,8 @@ class WorkFlowContainer extends React.Component {
       preparedFinalObject,
       dataPath,
       moduleName,
-      updateUrl
+      updateUrl,
+      beforeSubmitHook
     } = this.props;
     let data = get(preparedFinalObject, dataPath, []);
     if (moduleName === "NewTL") {
@@ -151,6 +152,9 @@ class WorkFlowContainer extends React.Component {
       "applicationNumber"
     );
     try {
+      if(beforeSubmitHook){
+        data=beforeSubmitHook(data);
+      }
       const payload = await httpRequest("post", updateUrl, "", [], {
         [dataPath]: data
       });
