@@ -76,6 +76,12 @@ import AcknowledgementCard from "egov-ui-kit/common/propertyTax/AcknowledgementC
 import generateAcknowledgementForm from "egov-ui-kit/common/propertyTax/PaymentStatus/Components/acknowledgementFormPDF";
 import { getHeaderDetails } from "egov-ui-kit/common/propertyTax/PaymentStatus/Components/createReceipt";
 import DemandCollection from "egov-ui-kit/common/propertyTax/DemandCollection";
+import { resetFormWizard } from "egov-ui-kit/utils/PTCommon";
+import { removeForm } from "egov-ui-kit/redux/form/actions";
+import { prepareFormData as prepareFormDataAction } from "egov-ui-kit/redux/common/actions";
+
+
+
 
 class FormWizardDataEntry extends Component {
   state = {
@@ -342,6 +348,7 @@ class FormWizardDataEntry extends Component {
       fetchGeneralMDMSData
     } = this.props;
     let { search } = location;
+    let {resetForm}=this;
 
     showSpinner();
     const { selected, finlYear } = this.state;
@@ -356,44 +363,44 @@ class FormWizardDataEntry extends Component {
     const tenantId = getQueryValue(search, "tenantId") || getTenantId();
     const draftUuid = getQueryValue(search, "uuid");
     // const tenantId1 = getTenantId() || "uk";
-    fetchGeneralMDMSData(
-      null,
-      "PropertyTax",
-      [
-        "Floor",
-        "OccupancyType",
-        "OwnerShipCategory",
-        "ConstructionType",
-        "OwnerType",
-        "PropertySubType",
-        "PropertyType",
-        "SubOwnerShipCategory",
-        "UsageCategoryDetail",
-        "UsageCategoryMajor",
-        "UsageCategoryMinor",
-        "UsageCategorySubMinor",
-        "Rebate",
-        "Penalty",
-        "Interest",
-        "FireCess",
-        "RoadType",
-        "Thana"
-      ],
-      "",
-      tenantId
-    );
-    fetchGeneralMDMSData(
-      null,
-      "BillingService",
-      ["TaxPeriod", "TaxHeadMaster"],
-      "",
-      tenantId
-    );
 
     const assessmentId =
       getQueryValue(search, "assessmentId") || fetchFromLocalStorage("draftId");
 
     if (assessmentId) {
+      fetchGeneralMDMSData(
+        null,
+        "PropertyTax",
+        [
+          "Floor",
+          "OccupancyType",
+          "OwnerShipCategory",
+          "ConstructionType",
+          "OwnerType",
+          "PropertySubType",
+          "PropertyType",
+          "SubOwnerShipCategory",
+          "UsageCategoryDetail",
+          "UsageCategoryMajor",
+          "UsageCategoryMinor",
+          "UsageCategorySubMinor",
+          "Rebate",
+          "Penalty",
+          "Interest",
+          "FireCess",
+          "RoadType",
+          "Thana"
+        ],
+        "",
+        tenantId
+      );
+      fetchGeneralMDMSData(
+        null,
+        "BillingService",
+        ["TaxPeriod", "TaxHeadMaster"],
+        "",
+        tenantId
+      );
 
       await this.fetchDraftDetails(assessmentId, isReassesment, draftUuid);
 
@@ -410,6 +417,9 @@ class FormWizardDataEntry extends Component {
           }.bind(this)
         );
       }
+    }
+    else {
+      resetForm()
     }
 
     const { ownerInfoArr } = this.state;
@@ -588,7 +598,7 @@ class FormWizardDataEntry extends Component {
         return (
           <div className="review-pay-tab">
             <ReviewForm
-              properties={this.props["prepareFormData"]["Properties"][0]}
+              properties={get(this.props["prepareFormData"],"Properties[0]",[])}
               onTabClick={this.onTabClick}
               updateIndex={this.updateIndex}
               stepZero={this.renderStepperContent(0, fromReviewPage)}
@@ -2123,6 +2133,12 @@ class FormWizardDataEntry extends Component {
     );
   };
 
+  resetForm = () => {
+    const { form, removeForm, prepareFormDataAction } = this.props;
+    resetFormWizard(form, removeForm);
+    prepareFormDataAction("Properties", []);
+  };
+
   render() {
     const {
       renderStepperContent,
@@ -2259,7 +2275,9 @@ const mapDispatchToProps = dispatch => {
     updatePrepareFormDataFromDraft: prepareFormData =>
       dispatch(updatePrepareFormDataFromDraft(prepareFormData)),
     handleFieldChange: (formKey, fieldKey, value) =>
-      dispatch(handleFieldChange(formKey, fieldKey, value))
+      dispatch(handleFieldChange(formKey, fieldKey, value)),
+    removeForm: (formkey) => dispatch(removeForm(formkey)),
+    prepareFormDataAction: (path, value) => dispatch(prepareFormDataAction(path, value))
   };
 };
 
