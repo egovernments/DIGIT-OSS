@@ -2,7 +2,8 @@ import {
   getCommonCard,
   getCommonContainer,
   getCommonHeader,
-  getLabelWithValue
+  getLabelWithValue,
+  getCommonTitle
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
   handleScreenConfigurationFieldChange as handleField,
@@ -20,7 +21,7 @@ import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
 import { getAppSearchResults } from "../../../../ui-utils/commons";
-import { searchBill , requiredDocumentsData } from "../utils/index";
+import { searchBill , requiredDocumentsData, setNocDocuments } from "../utils/index";
 import generatePdf from "../utils/generatePdfForBpa";
 // import { loadPdfGenerationDataForBpa } from "../utils/receiptTransformerForBpa";
 import { citizenFooter } from "./searchResource/citizenFooter";
@@ -31,55 +32,71 @@ import { scrutinySummary } from "./summaryResource/scrutinySummary";
 import { nocSummary } from "./summaryResource/nocSummary";
 import { plotAndBoundaryInfoSummary } from "./summaryResource/plotAndBoundaryInfoSummary";
 import { httpRequest, edcrHttpRequest } from "../../../../ui-utils/api";
+import { statusOfNocDetails } from "../egov-bpa/applyResource/updateNocDetails";
+import { nocVerificationDetails } from "../egov-bpa/nocVerificationDetails";
+import { permitOrderNoDownload, downloadFeeReceipt } from "../utils/index";
+import "../egov-bpa/applyResource/index.css";
+import "../egov-bpa/applyResource/index.scss"
 
 const titlebar = getCommonContainer({
-  header: getCommonHeader({
-    labelName: "Task Details",
-    labelKey: "NOC_TASK_DETAILS_HEADER"
-  }),
-  applicationNumber: {
-    uiFramework: "custom-atoms-local",
-    moduleName: "egov-bpa",
-    componentPath: "ApplicationNoContainer",
-    props: {
-      number: getQueryArg(window.location.href, "applicationNumber")
-    }
-  },
-  permitNumber: {
-    uiFramework: "custom-atoms-local",
-    moduleName: "egov-bpa",
-    componentPath: "PermitNumber",
-    props: {
-      number: getQueryArg(window.location.href, "permitNumber") 
-    }
-  },
-  downloadMenu: {
-    uiFramework: "custom-atoms",
-    componentPath: "MenuButton",
-    props: {
-      data: {
-        label: "Download",
-        leftIcon: "cloud_download",
-        rightIcon: "arrow_drop_down",
-        props: { variant: "outlined", style: { marginLeft: 10 } },
-        menu: []
+    header: getCommonHeader({
+      labelName: "Task Details",
+      labelKey: "NOC_TASK_DETAILS_HEADER"
+    }),
+    applicationNumber: {
+      uiFramework: "custom-atoms-local",
+      moduleName: "egov-bpa",
+      componentPath: "ApplicationNoContainer",
+      props: {
+        number: getQueryArg(window.location.href, "applicationNumber")
       }
-    }
-  },
-  printMenu: {
-    uiFramework: "custom-atoms",
-    componentPath: "MenuButton",
-    props: {
-      data: {
-        label: "Print",
-        leftIcon: "print",
-        rightIcon: "arrow_drop_down",
-        props: { variant: "outlined", style: { marginLeft: 10 } },
-        menu: []
-      }
-    }
-  }
+    },
 });
+const titlebar2 = {
+  uiFramework: "custom-atoms",
+  componentPath: "Div",
+  // visible: false,
+  props: {
+    style: { textAlign: "right", display: "flex" }
+  },
+  children: {
+    permitNumber: {
+      uiFramework: "custom-atoms-local",
+      moduleName: "egov-bpa",
+      componentPath: "PermitNumber",
+      gridDefination: {},
+      props: {}
+    },
+    rightContainer:getCommonContainer({
+      downloadMenu: {
+        uiFramework: "custom-atoms",
+        componentPath: "MenuButton",
+        props: {
+          data: {
+            label: "Download",
+            leftIcon: "cloud_download",
+            rightIcon: "arrow_drop_down",
+            props: { variant: "outlined", style: { marginLeft: 10 } },
+            menu: []
+          }
+        }
+      },
+      printMenu: {
+        uiFramework: "custom-atoms",
+        componentPath: "MenuButton",
+        props: {
+          data: {
+            label: "Print",
+            leftIcon: "print",
+            rightIcon: "arrow_drop_down",
+            props: { variant: "outlined", style: { marginLeft: 10 } },
+            menu: []
+          }
+        }
+      }
+    })
+  }
+}
 
 const prepareDocumentsView = async (state, dispatch) => {
   let documentsPreview = [];
@@ -90,10 +107,6 @@ const prepareDocumentsView = async (state, dispatch) => {
     "screenConfiguration.preparedFinalObject.BPA",
     {}
   );
-  // let buildingDocuments = jp.query(
-  //   firenoc,
-  //   "$.fireNOCDetails.buildings.*.applicationDocuments.*"
-  // );
   let applicantDocuments = jp.query(
     BPA,
     "$.documents.*"
@@ -104,7 +117,6 @@ const prepareDocumentsView = async (state, dispatch) => {
     "$.additionalDetail.documents.*"
   );
   let allDocuments = [
-   // ...buildingDocuments,
     ...applicantDocuments,
     ...otherDocuments
   ];
@@ -156,47 +168,11 @@ const prepareDocumentsView = async (state, dispatch) => {
   dispatch(prepareFinalObject("nocDocumentsPreview", nocDocumentsPreview));
 };
 
-const prepareUoms = (state, dispatch) => {
-  let buildings = get(
-    state,
-    "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.buildings",
-    []
-  );
-  buildings.forEach((building, index) => {
-    let uoms = get(building, "uoms", []);
-    let uomsMap = {};
-    uoms.forEach(uom => {
-      uomsMap[uom.code] = uom.value;
-    });
-    dispatch(
-      prepareFinalObject(
-        `FireNOCs[0].fireNOCDetails.buildings[${index}].uomsMap`,
-        uomsMap
-      )
-    );
-
-    // Display UOMS on search preview page
-    uoms.forEach(item => {
-      let labelElement = getLabelWithValue(
-        {
-          labelName: item.code,
-          labelKey: `NOC_PROPERTY_DETAILS_${item.code}_LABEL`
-        },
-        {
-          jsonPath: `FireNOCs[0].fireNOCDetails.buildings[0].uomsMap.${
-            item.code
-          }`
-        }
-      );
-    });
-  });
-};
-
 // const prepareDocumentsUploadRedux = (state, dispatch) => {
 //   dispatch(prepareFinalObject("documentsUploadRedux", documentsUploadRedux));
 // };
 
-const setDownloadMenu = (state, dispatch) => {
+const setDownloadMenu = (action, state, dispatch) => {
   /** MenuButton data based on status */
   let status = get(
     state,
@@ -205,42 +181,43 @@ const setDownloadMenu = (state, dispatch) => {
   let downloadMenu = [];
   let printMenu = [];
   let certificateDownloadObject = {
-    label: { labelName: "BPA Certificate", labelKey: "BPA_CERTIFICATE" },
+    label: { labelName: "Payment Receipt", labelKey: "BPA_APP_FEE_RECEIPT" },
     link: () => {
-      generatePdf(state, dispatch, "certificate_download");
+      downloadFeeReceipt(state, dispatch, status, "BPA.NC_APP_FEE");
     },
     leftIcon: "book"
   };
   let certificatePrintObject = {
-    label: { labelName: "BPA Certificate", labelKey: "BPA_CERTIFICATE" },
+    label: { labelName: "Payment Receipt", labelKey: "BPA_APP_FEE_RECEIPT" },
     link: () => {
       generatePdf(state, dispatch, "certificate_print");
     },
     leftIcon: "book"
   };
   let receiptDownloadObject = {
-    label: { labelName: "Receipt", labelKey: "BPA_RECEIPT" },
+    label: { labelName: "Sanction Fee Receipt", labelKey: "BPA_SAN_FEE_RECEIPT" },
     link: () => {
-      generatePdf(state, dispatch, "receipt_download");
+      downloadFeeReceipt(state, dispatch, status, "BPA.NC_SAN_FEE");
     },
     leftIcon: "receipt"
   };
   let receiptPrintObject = {
-    label: { labelName: "Receipt", labelKey: "NOC_RECEIPT" },
+    label: { labelName: "Sanction Fee Receipt", labelKey: "BPA_SAN_FEE_RECEIPT" },
     link: () => {
       generatePdf(state, dispatch, "receipt_print");
     },
     leftIcon: "receipt"
   };
   let applicationDownloadObject = {
-    label: { labelName: "Application", labelKey: "NOC_APPLICATION" },
+    label: { labelName: "Permit Order Receipt", labelKey: "BPA_PERMIT_ORDER" },
     link: () => {
+      permitOrderNoDownload(action, state, dispatch);
       generatePdf(state, dispatch, "application_download");
     },
     leftIcon: "assignment"
   };
   let applicationPrintObject = {
-    label: { labelName: "Application", labelKey: "NOC_APPLICATION" },
+    label: { labelName: "Permit Order Receipt", labelKey: "BPA_PERMIT_ORDER" },
     link: () => {
       generatePdf(state, dispatch, "application_print");
     },
@@ -253,23 +230,35 @@ const setDownloadMenu = (state, dispatch) => {
         receiptDownloadObject,
         applicationDownloadObject
       ];
-      printMenu = [
-        certificatePrintObject,
-        receiptPrintObject,
-        applicationPrintObject
-      ];
+      printMenu = [];
       break;
+    case "DOC_VERIFICATION_INPROGRESS" :
+    downloadMenu = [certificateDownloadObject];
+      break;
+    case "FIELDINSPECTION_INPROGRESS" :
+    downloadMenu = [certificateDownloadObject];
+      break;
+    case "NOC_VERIFICATION_INPROGRESS" :
+    downloadMenu = [certificateDownloadObject];
+      break;
+    case "APPROVAL_INPROGRESS" : 
+    downloadMenu = [certificateDownloadObject];
+     break;
+    case "PENDING_SANC_FEE_PAYMENT" :
+    downloadMenu = [certificateDownloadObject];
+    break;
+    printMenu = [];
     case "DOCUMENTVERIFY":
     case "FIELDINSPECTION":
     case "PENDINGAPPROVAL":
     case "REJECTED":
       downloadMenu = [receiptDownloadObject, applicationDownloadObject];
-      printMenu = [receiptPrintObject, applicationPrintObject];
+      printMenu = [];
       break;
     case "CANCELLED":
     case "PENDINGPAYMENT":
       downloadMenu = [applicationDownloadObject];
-      printMenu = [applicationPrintObject];
+      printMenu = [];
       break;
     default:
       break;
@@ -277,7 +266,7 @@ const setDownloadMenu = (state, dispatch) => {
   dispatch(
     handleField(
       "search-preview",
-      "components.div.children.headerDiv.children.header.children.downloadMenu",
+      "components.div.children.headerDiv.children.header2.children.titlebar2.children.rightContainer.children.downloadMenu",
       "props.data.menu",
       downloadMenu
     )
@@ -285,7 +274,7 @@ const setDownloadMenu = (state, dispatch) => {
   dispatch(
     handleField(
       "search-preview",
-      "components.div.children.headerDiv.children.header.children.printMenu",
+      "components.div.children.headerDiv.children.header2.children.titlebar2.children.rightContainer.children.printMenu",
       "props.data.menu",
       printMenu
     )
@@ -297,7 +286,7 @@ const setSearchResponse = async (
   state,
   dispatch,
   applicationNumber,
-  tenantId
+  tenantId, action
 ) => {
   const response = await getAppSearchResults([
     {
@@ -322,6 +311,33 @@ const setSearchResponse = async (
       edcrRes.edcrDetail[0]
     )
   );
+  if(response && response.Bpa["0"] && response.Bpa["0"].status !== "NOC_VERIFICATION_INPROGRESS") {
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.nocVerificationDetails.visible",
+      false
+    );
+  }
+  if ( response && response.Bpa["0"] && response.Bpa["0"].permitOrderNo ) {
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.headerDiv.children.header2.children.titlebar2.children.permitNumber",
+        "props.number",
+        response.Bpa["0"].permitOrderNo
+      )
+    );
+  } else {
+
+    dispatch(
+      handleField(
+      "search-preview",
+      "components.div.children.headerDiv.children.header2.children.titlebar2.children.permitNumber",
+      "visible",
+      false
+    )
+  )
+  }
 
   // Set Institution/Applicant info card visibility
   if (
@@ -339,13 +355,13 @@ const setSearchResponse = async (
         false
       )
     );
-  }
+  };
 
-  prepareDocumentsView(state, dispatch);
-  prepareUoms(state, dispatch);
-  requiredDocumentsData(state, dispatch);
+  // prepareDocumentsView(state, dispatch);
+  await requiredDocumentsData(state, dispatch);
+     
   // await loadPdfGenerationDataForBpa(applicationNumber, tenantId);
-  setDownloadMenu(state, dispatch);
+  setDownloadMenu(action, state, dispatch);
 };
 
 const screenConfig = {
@@ -360,15 +376,15 @@ const screenConfig = {
     // dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     searchBill(dispatch, applicationNumber, tenantId);
 
-    setSearchResponse(state, dispatch, applicationNumber, tenantId);
+    setSearchResponse(state, dispatch, applicationNumber, tenantId, action);
 
     const queryObject = [
       { key: "tenantId", value: tenantId },
       { key: "businessServices", value: "BPA" }
     ];
     setBusinessServiceDataToLocalStorage(queryObject, dispatch);
-
     // Hide edit buttons
+
     set(
       action,
       "screenConfig.components.div.children.body.children.cardContent.children.nocSummary.children.cardContent.children.header.children.editSection.visible",
@@ -407,7 +423,7 @@ const screenConfig = {
       uiFramework: "custom-atoms",
       componentPath: "Div",
       props: {
-        className: "common-div-css"
+        className: "common-div-css bpa-searchpview"
       },
       children: {
         headerDiv: {
@@ -417,12 +433,29 @@ const screenConfig = {
             header: {
               gridDefination: {
                 xs: 12,
-                sm: 10
+                sm: 8,
               },
               ...titlebar
+            },
+            header2: {
+              uiFramework: "custom-atoms",
+              componentPath: "Container",
+              props: {
+                color: "primary",
+                style: { justifyContent: "flex-end" }
+              },
+              gridDefination: {
+                xs: 12,
+                sm: 4,
+                align: "right"
+              },
+              children: {
+                  titlebar2
+                    }
             }
           }
         },
+        
         taskStatus: {
           uiFramework: "custom-containers-local",
           componentPath: "WorkFlowContainer",
@@ -441,7 +474,9 @@ const screenConfig = {
           applicantSummary: applicantSummary,
           plotAndBoundaryInfoSummary: plotAndBoundaryInfoSummary,
           documentsSummary: documentsSummary,
-          nocSummary: nocSummary
+          nocSummary: nocSummary,
+          nocVerificationDetails : nocVerificationDetails
+
         }),
         citizenFooter:
           process.env.REACT_APP_NAME === "Citizen" ? citizenFooter : {}

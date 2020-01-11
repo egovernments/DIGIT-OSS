@@ -28,3 +28,20 @@ span[data-localization="NOC_GENDER_LABEL"],
 span[data-localization="NOC_APPLICANT_RELATIONSHIP_LABEL"]{
   color: black !important;
 };
+
+#material-ui-header {
+  display: flex !important;
+  // justify-content: space-between !important;
+}
+.bpa-searchpview #material-ui-header #material-ui-rightContainer {
+  width: 50% !important;
+  }
+  .bpa-searchpview #material-ui-header #material-ui-leftContainer {
+  width: 50% !important;
+  }
+  #custom-atoms-titlebar2 {
+    display: block !important;
+  }
+  #custom-atoms-titlebar2 div:nth-child(0) {
+    padding: 10px 0 !important
+  }

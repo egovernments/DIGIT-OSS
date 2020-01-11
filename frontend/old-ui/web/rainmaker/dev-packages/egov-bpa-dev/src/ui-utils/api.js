@@ -151,7 +151,7 @@ export const edcrHttpRequest = async (
   customRequestInfo = {}
 ) => {
   store.dispatch(toggleSpinner());
-  let apiError = "Api Error";
+  let apiError = "No Record Found";
 
   if (headers)
     edcrInstance.defaults = Object.assign(edcrInstance.defaults, {

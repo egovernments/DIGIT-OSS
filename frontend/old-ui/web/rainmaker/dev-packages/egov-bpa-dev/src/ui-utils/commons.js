@@ -174,10 +174,32 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
       doc.fileStore = documents.documents[0].fileStoreId;
       doc.fileName = documents.documents[0].fileName;
       doc.fileUrl = documents.documents[0].fileUrl;
+      if(doc.id) {
+        doc.id = documents.documents[0].id;
+      }
       requiredDocuments.push(doc);
     }
   })
 }
+
+  let comparingPreviuosDoc = [];
+  let BPAUploadeddocuments = get(
+    state.screenConfiguration.preparedFinalObject,
+    "BPA.documents",
+    []
+  );
+
+  let bpaComparingDocuments = []
+  if (BPAUploadeddocuments && BPAUploadeddocuments.length > 0) {
+    BPAUploadeddocuments.forEach(upDoc => {
+      requiredDocuments.forEach(doc => {
+        if(upDoc && doc && upDoc.documentType && doc.documentType && upDoc.documentType === doc.documentType) {
+          doc.id = upDoc.id;
+          bpaComparingDocuments.push(doc);
+        }
+      })
+    })
+  }
 
   try {
     let payload = get(state.screenConfiguration.preparedFinalObject, "BPA", []);
@@ -191,28 +213,7 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
     set(payload, "additionalDetails", {});
     set(payload, "units", null);
 
-    // Get uploaded documents from redux
-    // let reduxDocuments = get(
-    //   state,
-    //   "screenConfiguration.preparedFinalObject.documentsContract",
-    //   {}
-    // );
-    // handleDeletedCards(
-    //   payload[0],
-    //   "BPA.owners",
-    //   "id"
-    // );
 
-    // let documents = [];
-    // jp.query(reduxDocuments, "$.*").forEach(doc => {
-    //   doc.cards.forEach(card => {
-    //     if(card.required && card.dropDownValues && card.dropDownValues.menu ){
-    //       card.dropDownValues.menu.forEach(item => {
-    //         documents.push({documentType: item.code})
-    //       })
-    //     }
-    //   })
-    // });
     let documents;
     if (requiredDocuments && requiredDocuments.length > 0) {
       documents = requiredDocuments;
