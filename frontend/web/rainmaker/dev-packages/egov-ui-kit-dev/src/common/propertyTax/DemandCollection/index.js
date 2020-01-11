@@ -42,7 +42,7 @@ class DemandCollection extends React.Component {
                             <div className={`col-xs-12`}>
                               <TextField
                                 floatingLabelText={<Label label={taxData.code}/>}
-                                hintText={<Label label={taxData.code} />}
+                                hintText={<Label label="PT_ENTER_AN_AMOUNT" />}
                                 type="number"
                                 value={get(preparedFinalObject,`DemandProperties[0].propertyDetails[0].demand[${index}].demand[${data.financialYear}][${index1}].PT_DEMAND`)}
                                 onChange={(e) => {
@@ -72,7 +72,7 @@ class DemandCollection extends React.Component {
                                 type="number"
                                 value={get(preparedFinalObject,`DemandProperties[0].propertyDetails[0].demand[${index}].demand[${data.financialYear}][${index1}].PT_COLLECTED`)}
                                 floatingLabelText={<Label label={taxData.code}/>}
-                                hintText={<Label label={taxData.code}/>}
+                                hintText={<Label label="PT_ENTER_AN_AMOUNT"/>}
                                 onChange={(e) => {
                                   prepareFinalObject(`DemandProperties[0].propertyDetails[0].demand[${index}].demand[${data.financialYear}][${index1}].PT_COLLECTED`, e.target.value);
                                 }}
