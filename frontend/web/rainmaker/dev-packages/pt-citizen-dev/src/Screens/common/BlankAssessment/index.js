@@ -9,7 +9,7 @@ const BlankAssessment = ({ noAssessmentMessage, button, dialogueOpen, closeDialo
     <div className="no-assessment-message-cont">
       <Label label={noAssessmentMessage} dark={true} fontSize={"16px"} />
 
-      {button && (
+      {/*{button && (
         <Button
           className="assessment-button"
           primary={true}
@@ -24,7 +24,7 @@ const BlankAssessment = ({ noAssessmentMessage, button, dialogueOpen, closeDialo
           onClick={onButtonClick}
         />
       )}
-      <YearDialogue open={dialogueOpen} history={history} closeDialogue={closeDialogue} />
+      <YearDialogue open={dialogueOpen} history={history} closeDialogue={closeDialogue} />*/}
     </div>
   );
 };

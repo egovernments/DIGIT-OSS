@@ -14,6 +14,7 @@ import {
   beforeInitFormForPlot,
   superArea,
   floorName,
+  annualRent
 } from "../utils/reusableFields";
 import filter from "lodash/filter";
 import get from "lodash/get";
@@ -65,8 +66,8 @@ const formConfig = {
     ...occupancy,
     ...superArea,
     ...measuringUnit,
-    // ...annualRent,
-    ...floorName,
+    ...annualRent,
+    ...floorName
   },
   isFormValid: false,
   ...beforeInitFormForPlot,
