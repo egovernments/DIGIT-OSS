@@ -136,6 +136,9 @@
                     {
                         "text" : "{{tenantName}} Municipal Council",
                         "bold" : true
+                    },
+                    {
+                        "text" : "  subject to the following conditions/restrictions."
                     }
                 ]
             },
