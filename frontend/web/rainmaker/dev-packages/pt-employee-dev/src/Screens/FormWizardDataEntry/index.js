@@ -1058,7 +1058,7 @@ class FormWizardDataEntry extends Component {
           );
           break;
         }
-        
+
         const { demand } = DemandProperties[0].propertyDetails[0];
         let errorLine = "";
         let errorLine2=true;
@@ -1749,7 +1749,6 @@ class FormWizardDataEntry extends Component {
       );
       const demandData = [];
       const demandDetails = [];
-      const demandDetails1 = [];
       let datas=getFinalData() || [];
       let currentYearData=[]
       let fromDate;
@@ -1757,6 +1756,7 @@ class FormWizardDataEntry extends Component {
       const finaldemand = DemandProperties[0].propertyDetails[0].demand.map(
         (demand, index) => {
           return Object.keys(demand.demand).map((dataYear, key) => {
+            const demandDetails1 = [];
             return (
               demand.demand[dataYear].map((demandValue, ind) => {
                   currentYearData=datas.filter(data=>data.financialYear == dataYear);
