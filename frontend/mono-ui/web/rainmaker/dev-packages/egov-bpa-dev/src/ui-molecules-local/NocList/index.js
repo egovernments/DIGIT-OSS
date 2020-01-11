@@ -187,16 +187,60 @@ class NocList extends Component {
     prepareFinalObject("nocDocumentsUploadRedux", nocDocumentsUploadRedux);
   };
 
+  prepareForNocVerification = async (nocDocuments, bpaDetails) => {
+    let documnts = [];
+    if (nocDocuments) {
+      Object.keys(nocDocuments).forEach(function (key) {
+        if (nocDocuments && nocDocuments[key]) {
+          documnts.push(nocDocuments[key]);
+        }
+      });
+    }
+
+    prepareFinalObject("nocDocumentsUploadRedux", {});
+    let requiredDocuments = [];
+    if (documnts && documnts.length > 0) {
+      documnts.forEach(documents => {
+        if (documents && documents.documents && documents.dropDownValues && documents.dropDownValues.value) {
+          let doc = {};
+          doc.documentType = documents.dropDownValues.value;
+          doc.fileStore = documents.documents[0].fileStoreId;
+          doc.fileName = documents.documents[0].fileName;
+          doc.fileUrl = documents.documents[0].fileUrl;
+          if (doc.id) {
+            doc.id = documents.documents[0].id;
+          }
+          bpaDetails.documents.push(doc);
+        }
+      });
+
+      var resArr = [];
+      bpaDetails.documents.forEach(function (item) {
+        var i = resArr.findIndex(x => x.documentType == item.documentType);
+        if (i <= -1) {
+          resArr.push(item);
+        }
+      });
+      bpaDetails.documents = resArr;
+      prepareFinalObject("BPA",  bpaDetails.documents);
+    }
+  }
+
+  distinct = (value, index, self) => {
+    console.log(value, index, self, "ljkewjlkwelkewlkrjwlkej")
+    return self.indexOf(value) === index
+ };
+
   onUploadClick = uploadedDocIndex => {
     this.setState({ uploadedDocIndex });
   };
 
   handleDocument = async (file, fileStoreId) => {
     let { uploadedDocIndex } = this.state;
-    const { prepareFinalObject, nocDocumentsUploadRedux } = this.props;
+    const { prepareFinalObject, nocDocumentsUploadRedux, bpaDetails } = this.props;
     const fileUrl = await getFileUrlFromAPI(fileStoreId);
 
-    prepareFinalObject("nocDocumentsUploadRedux", {
+    let nocDocuments = {
       ...nocDocumentsUploadRedux,
       [uploadedDocIndex]: {
         ...nocDocumentsUploadRedux[uploadedDocIndex],
@@ -208,7 +252,19 @@ class NocList extends Component {
           }
         ]
       }
-    });
+    }
+    prepareFinalObject("nocDocumentsUploadRedux", nocDocuments);
+    if (bpaDetails && bpaDetails.status && bpaDetails.status === "NOC_VERIFICATION_INPROGRESS") {
+      let documnts = [];
+      if (nocDocuments) {
+        Object.keys(nocDocuments).forEach(function (key) {
+          documnts.push(nocDocuments[key])
+        });
+      }
+      if (nocDocuments[0] && nocDocuments[0].documents && nocDocuments[0].dropDownValues) {
+        this.prepareForNocVerification(nocDocuments, bpaDetails);
+      }
+    }
   };
 
   removeDocument = remDocIndex => {
@@ -221,14 +277,28 @@ class NocList extends Component {
   };
 
   handleChange = (key, event) => {
-    const { nocDocumentsUploadRedux, prepareFinalObject } = this.props;
-    prepareFinalObject(`nocDocumentsUploadRedux`, {
+    const { nocDocumentsUploadRedux, prepareFinalObject, bpaDetails } = this.props;
+    let nocDocuments = {
       ...nocDocumentsUploadRedux,
       [key]: {
         ...nocDocumentsUploadRedux[key],
         dropDownValues: { value: event.target.value }
       }
-    });
+    };
+    prepareFinalObject(`nocDocumentsUploadRedux`, nocDocuments);
+
+    if (bpaDetails && bpaDetails.status && bpaDetails.status === "NOC_VERIFICATION_INPROGRESS") {
+      let documnts = [];
+      if (nocDocuments) {
+        Object.keys(nocDocuments).forEach(function (key) {
+          documnts.push(nocDocuments[key])
+        });
+      }
+      console.log(documnts, "nocDocumentsnocDocumentsnocDocuments");
+      if (nocDocuments[0] && nocDocuments[0].documents && nocDocuments[0].dropDownValues) {
+        this.prepareForNocVerification(nocDocuments, bpaDetails);
+      }
+    }
   };
 
   getUploadCard = (card, key) => {
@@ -244,10 +314,10 @@ class NocList extends Component {
               </Icon>
             </div>
           ) : (
-            <div className={classes.documentIcon}>
-              <span>{key + 1}</span>
-            </div>
-          )}
+              <div className={classes.documentIcon}>
+                <span>{key + 1}</span>
+              </div>
+            )}
         </Grid>
         <Grid
           item={true}
@@ -364,7 +434,12 @@ const mapStateToProps = state => {
     "nocDocumentsUploadRedux",
     {}
   );
-  return { nocDocumentsUploadRedux, moduleName };
+  const bpaDetails = get(
+    screenConfiguration.preparedFinalObject,
+    "BPA",
+    {}
+  )
+  return { nocDocumentsUploadRedux, moduleName, bpaDetails };
 };
 
 const mapDispatchToProps = dispatch => {

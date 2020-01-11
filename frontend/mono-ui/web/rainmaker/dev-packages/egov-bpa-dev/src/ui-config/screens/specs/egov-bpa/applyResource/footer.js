@@ -6,7 +6,7 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import get from "lodash/get";
 import { getCommonApplyFooter, validateFields, getBpaTextToLocalMapping } from "../../utils";
-// import "./index.css";
+import "./index.css";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "../../../../../ui-utils";
 import {
@@ -169,7 +169,9 @@ const getMdmsData = async (state, dispatch) => {
 
 const getFloorDetail = (index) => {
   let floorNo = ['Ground', 'First', 'Second', 'Third', 'Forth', 'Fifth', 'Sixth', 'Seventh', 'Eighth', 'Ninth', 'Tenth']
-  return `${floorNo[index]} floor`;
+  if(index) {
+    return `${floorNo[index]} floor`;
+  }
 };
 
 const callBackForNext = async (state, dispatch) => {
@@ -205,14 +207,14 @@ const callBackForNext = async (state, dispatch) => {
       "screenConfiguration.preparedFinalObject.scrutinyDetails.planDetail.blocks[0].building.floors",
       []
   );
-
-    let tableData = response.map((item, index) => ({
-      [getBpaTextToLocalMapping("Floor Description")]: getFloorDetail(index),
-      [getBpaTextToLocalMapping("Level")]: index,
+    let tableData = response.map((item, index) => (
+      {
+      [getBpaTextToLocalMapping("Floor Description")]: getFloorDetail((item.number).toString()) || '-',
+      [getBpaTextToLocalMapping("Level")]:item.number,     
       [getBpaTextToLocalMapping("Occupancy/Sub Occupancy")]: item.occupancies[0].type || "-",
-      [getBpaTextToLocalMapping("Buildup Area")]: item.occupancies[0].builtUpArea || "-",
-      [getBpaTextToLocalMapping("Floor Area")]: item.occupancies[0].floorArea || "-",
-      [getBpaTextToLocalMapping("Carpet Area")]: item.occupancies[0].carpetArea || "-"
+      [getBpaTextToLocalMapping("Buildup Area")]: item.occupancies[0].builtUpArea || "0",
+      [getBpaTextToLocalMapping("Floor Area")]: item.occupancies[0].floorArea || "0",
+      [getBpaTextToLocalMapping("Carpet Area")]: item.occupancies[0].carpetArea || "0"
     }));
     dispatch(
       handleField(
@@ -405,6 +407,7 @@ const callBackForNext = async (state, dispatch) => {
       let responseStatus = "success";
       if(activeStep === 1){
         // dispatch(prepareFinalObject("BPA.owners[0].primaryOwner", true));
+        // dispatch(prepareFinalObject("BPA.owners[0].ownerType", "NONE"));
       }
       if (activeStep === 3) {
         // getMdmsData(state, dispatch);

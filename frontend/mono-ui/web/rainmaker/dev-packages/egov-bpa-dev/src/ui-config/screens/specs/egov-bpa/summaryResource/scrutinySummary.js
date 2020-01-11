@@ -7,7 +7,7 @@ import {
     getLabelWithValue,
     convertEpochToDate
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { gotoApplyWithStep } from "../../utils/index";
+import { gotoApplyWithStep, checkValueForNA } from "../../utils/index";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 
 const getHeader = label => {
@@ -97,9 +97,7 @@ export const scrutinySummary = getCommonGrayCard({
                         },
                         {
                             jsonPath: "bpa.summary.residential",
-                            callBack: value => {
-                                return value;
-                            }
+                            callBack: checkValueForNA
                         }
                     )
                 })
@@ -133,9 +131,7 @@ export const scrutinySummary = getCommonGrayCard({
                         },
                         {
                             jsonPath: "scrutinyDetails.planDetail.planInformation.demolitionArea",
-                            callBack: value => {
-                                return value;
-                            }
+                            callBack: checkValueForNA
                         }
                     )
                 })
@@ -162,6 +158,38 @@ export const scrutinySummary = getCommonGrayCard({
           className: "building-summary",
           scheama: getCommonGrayCard({
             buildingContainer: getCommonContainer({
+                floorDescription: getLabelWithValue(
+                    {
+                      labelName: "Floor Description",
+                      labelKey: "Floor Description"
+                    },
+                    {
+                      jsonPath:
+                        "scrutinyDetails.planDetail.blocks[0].building.floors[0]",
+                        callBack: value => {
+                        let floorNo = ['', 'Ground', 'First', 'Second', 'Third', 'Forth', 'Fifth', 'Sixth', 'Seventh', 'Eighth', 'Ninth', 'Tenth']
+                        if(value) {
+                            return `${floorNo[value.number+1]} floor` || "NA";
+                        }
+                        else {
+                            return "NA"
+                            }
+                        }
+                    }
+                ),
+                level: getLabelWithValue(
+                    {
+                      labelName: "Level",
+                      labelKey: "Level"
+                    },
+                    {
+                      jsonPath:
+                        "scrutinyDetails.planDetail.blocks[0].building.floors[0]",
+                      callBack: value => {
+                        return value && (value.number).toString() || "NA";
+                    }
+                }
+              ),
               occupancySubOccupancy: getLabelWithValue(
                 {
                   labelName: "Occupancy/Sub Occupancy",
@@ -171,7 +199,7 @@ export const scrutinySummary = getCommonGrayCard({
                   jsonPath:
                     "scrutinyDetails.planDetail.blocks[0].building.floors[0]",
                     callBack: value => {
-                      return value && value.occupancies[0] && value.occupancies[0].type || "";
+                      return value && value.occupancies[0] && value.occupancies[0].type || "NA";
                     }
                 }
               ),
@@ -184,7 +212,7 @@ export const scrutinySummary = getCommonGrayCard({
                     jsonPath:
                       "scrutinyDetails.planDetail.blocks[0].building.floors[0]",
                       callBack: value => {
-                        return value && value.occupancies[0] && value.occupancies[0].builtUpArea || "";
+                        return value && value.occupancies[0] && value.occupancies[0].builtUpArea || "NA";
                       }
                   }
                 ),
@@ -197,7 +225,7 @@ export const scrutinySummary = getCommonGrayCard({
                     jsonPath:
                       "scrutinyDetails.planDetail.blocks[0].building.floors[0]",
                       callBack: value => {
-                          return value && value.occupancies[0] && value.occupancies[0].floorArea || "";
+                          return value && (value.occupancies[0] && value.occupancies[0].floorArea).toString() || "NA";
                         }
                   }
                 ),
@@ -210,7 +238,7 @@ export const scrutinySummary = getCommonGrayCard({
                     jsonPath:
                       "scrutinyDetails.planDetail.blocks[0].building.floors[0]",
                       callBack: value => {
-                          return value && value.occupancies[0] && value.occupancies[0].carpetArea || "";
+                          return (value && value.occupancies[0] && (value.occupancies[0].carpetArea).toString()) || "NA";
                         }
                   }
                 )
@@ -239,7 +267,8 @@ export const scrutinySummary = getCommonGrayCard({
                             labelKey: "BPA_APPLICATION_TOTAL_BUILDUP_AREA"
                         },
                         {
-                            jsonPath: "scrutinyDetails.planDetail.blocks[0].building.totalBuitUpArea"
+                            jsonPath: "scrutinyDetails.planDetail.blocks[0].building.totalBuitUpArea",
+                            callBack: checkValueForNA
                         }
                     ),
                     uploadedfile: getLabelWithValue(
@@ -249,7 +278,8 @@ export const scrutinySummary = getCommonGrayCard({
                         },
                         {
                             jsonPath:
-                                "scrutinyDetails.planDetail.blocks[0].building.totalFloors"
+                                "scrutinyDetails.planDetail.blocks[0].building.totalFloors",
+                                callBack: checkValueForNA
                         }
                     ),
                     scrutinyreport: getLabelWithValue(
@@ -259,7 +289,8 @@ export const scrutinySummary = getCommonGrayCard({
                         },
                         {
                             jsonPath:
-                                "scrutinyDetails.planDetail.blocks[0].building.buildingHeight"
+                                "scrutinyDetails.planDetail.blocks[0].building.buildingHeight",
+                                callBack: checkValueForNA
                         }
                     )
                 })

@@ -6,7 +6,7 @@ import {
   getLabelWithValue,
   convertEpochToDate
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { gotoApplyWithStep } from "../../utils/index";
+import { gotoApplyWithStep, checkValueForNA } from "../../utils/index";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 
 export const applicantSummary = getCommonGrayCard({
@@ -75,7 +75,8 @@ export const applicantSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-                "BPA.owners[0].mobileNumber"
+                "BPA.owners[0].mobileNumber",
+                callBack: checkValueForNA
             }
           ),
           applicantName: getLabelWithValue(
@@ -84,7 +85,8 @@ export const applicantSummary = getCommonGrayCard({
               labelKey: "BPA_OWNER_NAME_LABEL"
             },
             {
-              jsonPath: "BPA.owners[0].name"
+              jsonPath: "BPA.owners[0].name",
+              callBack: checkValueForNA
             }
           ),
           applicantGender: getLabelWithValue(
@@ -93,7 +95,8 @@ export const applicantSummary = getCommonGrayCard({
               labelKey: "BPA_GENDER_LABEL"
             },
             {
-              jsonPath: "BPA.owners[0].gender"
+              jsonPath: "BPA.owners[0].gender",
+              callBack: checkValueForNA
             }
           ),
           applicantFatherHusbandName: getLabelWithValue(
@@ -103,7 +106,8 @@ export const applicantSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-                "BPA.owners[0].fatherOrHusbandName"
+                "BPA.owners[0].fatherOrHusbandName",
+                callBack: checkValueForNA
             }
           ),
           applicantRelation: getLabelWithValue(
@@ -113,7 +117,8 @@ export const applicantSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-                "BPA.owners[0].relationship"
+                "BPA.owners[0].relationship",
+                callBack: checkValueForNA
             }
           ),
           applicantDob: getLabelWithValue(
@@ -124,7 +129,7 @@ export const applicantSummary = getCommonGrayCard({
             {
               jsonPath: "BPA.owners[0].dob",
               callBack: value => {
-                return convertEpochToDate(value);
+                return convertEpochToDate(value) || checkValueForNA;
               }
             }
           ),
@@ -134,7 +139,8 @@ export const applicantSummary = getCommonGrayCard({
               labelKey: "BPA_APPLICANT_EMAIL_LABEL"
             },
             {
-              jsonPath: "BPA.owners[0].emailId"
+              jsonPath: "BPA.owners[0].emailId",
+              callBack: checkValueForNA
             }
           ),
           applicantPan: getLabelWithValue(
@@ -143,7 +149,8 @@ export const applicantSummary = getCommonGrayCard({
               labelKey: "BPA_APPLICANT_PAN_LABEL"
             },
             {
-              jsonPath: "BPA.owners[0].pan"
+              jsonPath: "BPA.owners[0].pan",
+              callBack: checkValueForNA
             }
           ),
           applicantAddress: getLabelWithValue(
@@ -153,7 +160,8 @@ export const applicantSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-                "BPA.owners[0].correspondenceAddress"
+                "BPA.owners[0].correspondenceAddress",
+                callBack: checkValueForNA
             }
           )
         })
@@ -233,7 +241,7 @@ export const institutionSummary = getCommonGrayCard({
         callBack: value => {
           return `COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(
             value
-          )}`;
+          )}` || checkValueForNA;
         }
       }
     ),
@@ -244,7 +252,8 @@ export const institutionSummary = getCommonGrayCard({
       },
       {
         jsonPath:
-          "BPA.additionalDetail.institutionName"
+          "BPA.additionalDetail.institutionName",
+          callBack: checkValueForNA
       }
     ),
     telephoneNumber: getLabelWithValue(
@@ -254,7 +263,8 @@ export const institutionSummary = getCommonGrayCard({
       },
       {
         jsonPath:
-          "BPA.additionalDetail.telephoneNumber"
+          "BPA.additionalDetail.telephoneNumber",
+          callBack: checkValueForNA
       }
     ),
     authorizedPersonName: getLabelWithValue(
@@ -263,7 +273,8 @@ export const institutionSummary = getCommonGrayCard({
         labelKey: "BPA_AUTHORIZED_PERSON_LABEL"
       },
       {
-        jsonPath: "BPA.owners[0].name"
+        jsonPath: "BPA.owners[0].name",
+        callBack: checkValueForNA
       }
     ),
     designation: getLabelWithValue(
@@ -273,7 +284,8 @@ export const institutionSummary = getCommonGrayCard({
       },
       {
         jsonPath:
-          "BPA.additionalDetail.institutionDesignation"
+          "BPA.additionalDetail.institutionDesignation",
+          callBack: checkValueForNA
       }
     ),
     mobileNumber: getLabelWithValue(
@@ -282,7 +294,8 @@ export const institutionSummary = getCommonGrayCard({
         labelKey: "BPA_AUTHORIZED_PERSON_MOBILE_LABEL"
       },
       {
-        jsonPath: "BPA.owners[0].mobileNumber"
+        jsonPath: "BPA.owners[0].mobileNumber",
+        callBack: checkValueForNA
       }
     ),
     authorizedEmail: getLabelWithValue(
@@ -291,7 +304,8 @@ export const institutionSummary = getCommonGrayCard({
         labelKey: "BPA_AUTHORIZED_PERSON_EMAIL_LABEL"
       },
       {
-        jsonPath: "BPA.owners[0].emailId"
+        jsonPath: "BPA.owners[0].emailId",
+        callBack: checkValueForNA
       }
     ),
     officialAddress: getLabelWithValue(
@@ -301,7 +315,8 @@ export const institutionSummary = getCommonGrayCard({
       },
       {
         jsonPath:
-          "BPA.owners[0].correspondenceAddress"
+          "BPA.owners[0].correspondenceAddress",
+          callBack: checkValueForNA
       }
     )
   })

@@ -26,7 +26,9 @@ import commonConfig from "config/common.js";
 import {
   getQueryArg,
   getLocaleLabels,
-  getTransformedLocalStorgaeLabels
+  getTransformedLocalStorgaeLabels,
+  getTransformedLocale,
+  getFileUrlFromAPI
 } from "egov-ui-framework/ui-utils/commons";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import {
@@ -35,6 +37,8 @@ import {
   getCommonCaption,
   getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import jp from "jsonpath";
+import { download } from "egov-common/ui-utils/commons";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -2454,7 +2458,7 @@ export const getTextToLocalMapping = label => {
       "Pending for Document Verification",
       "WF_BPA_PENDING_APPL_FEE_PAYMENT",
       localisationLabels
-  );
+  ); 
       
     default:
       return getLocaleLabels(label, label, localisationLabels);
@@ -2545,6 +2549,18 @@ export const gotoApplyWithStep = (state, dispatch, step) => {
     state.screenConfiguration.preparedFinalObject,
     "BPA.address.city"
   );
+  const ownershipCategory = get(
+    state.screenConfiguration.preparedFinalObject,
+    "BPA.ownershipCategory"
+  );
+  if(ownershipCategory) {
+    let ownerShipMajorType =  dispatch(
+      prepareFinalObject(
+        "BPA.ownerShipMajorType",
+        ownershipCategory.split('.')[0]
+      )
+    );
+  }
   const tenantIdQueryString = tenantId ? `&tenantId=${tenantId}`: ``;
   const applyUrl =
     process.env.REACT_APP_SELF_RUNNING === "true"
@@ -2891,7 +2907,37 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
         "&tenantId=" + tenantId,
       {}
     );
-    console.log(payload, "shdfjhsgfjhsgdhfg")
+    let queryObject = [
+      {
+        key: "tenantId",
+        value: tenantId,
+      },
+      {
+        key: "edcrNumbers",
+        value: scrutinyNo,
+      }
+    ];
+    const bpaSearch = await httpRequest(
+      "post",
+      "bpa-services/bpa/appl/_search",
+      "",
+      queryObject
+    );
+    let data = bpaSearch.Bpa.map((data, index) => {
+      if(data.edcrNumber === scrutinyNo) {
+        dispatch(
+          toggleSnackbar(
+            true,
+            {
+              labelName: "Application Number already exists",
+              labelKey: "APPLICATION_NUMBER_ALREADY_EXISTS"
+            },
+            "error"
+          )
+        );
+      }
+    })
+
     payload = payload.edcrDetail;
     if (payload && payload.hasOwnProperty("length")) {
       if (payload.length === 0) {
@@ -3222,6 +3268,13 @@ export const getBpaTextToLocalMapping = label => {
         "BPA_COMMON_TABLE_COL_FLOOR_DES",
         localisationLabels
       );
+    case "Level":
+      return getLocaleLabels(
+        "Level",
+        "Level",
+        // "BPA_COMMON_TABLE_COL_LEVEL",
+        localisationLabels
+      );
     case "Occupancy/Sub Occupancy":
       return getLocaleLabels(
         "Occupancy/Sub Occupancy",
@@ -3253,15 +3306,6 @@ export const getBpaTextToLocalMapping = label => {
         localisationLabels
       );
 
-    case "NOC No":
-      return getLocaleLabels(
-        "NOC No",
-        "NOC_COMMON_TABLE_COL_NOC_NO_LABEL",
-        localisationLabels
-      );
-
-    case "NOC Type":
-      return getLocaleLabels("NOC Type", "NOC_TYPE_LABEL", localisationLabels);
     case "Owner Name":
       return getLocaleLabels(
         "Owner Name",
@@ -3299,25 +3343,25 @@ export const getBpaTextToLocalMapping = label => {
     case "PENDINGAPPROVAL ":
       return getLocaleLabels(
         "Pending for Approval",
-        "WF_FIRENOC_PENDINGAPPROVAL",
+        "WF_BPA_PENDINGAPPROVAL",
         localisationLabels
       );
     case "PENDINGPAYMENT":
       return getLocaleLabels(
         "Pending payment",
-        "WF_FIRENOC_PENDINGPAYMENT",
+        "WF_BPA_PENDINGPAYMENT",
         localisationLabels
       );
     case "DOCUMENTVERIFY":
       return getLocaleLabels(
         "Pending for Document Verification",
-        "WF_FIRENOC_DOCUMENTVERIFY",
+        "WF_BPA_DOCUMENTVERIFY",
         localisationLabels
       );
     case "FIELDINSPECTION":
       return getLocaleLabels(
         "Pending for Field Inspection",
-        "WF_FIRENOC_FIELDINSPECTION",
+        "WF_BPA_FIELDINSPECTION",
         localisationLabels
       );
 
@@ -3334,9 +3378,39 @@ export const getBpaTextToLocalMapping = label => {
         "TL_MY_APPLICATIONS",
         localisationLabels
       );
-      case "INPROGRESS":
-      return getLocaleLabels("Inprogress", "NOC_INPROGRESS", localisationLabels);
-      case "PENDING_APPL_FEE":
+    case "DOC_VERIFICATION_INPROGRESS":
+      return getLocaleLabels(
+        "Doc Verification Inprogress",
+        "WF_BPA_DOC_VERIFICATION_INPROGRESS",
+        localisationLabels
+      );
+    case "FIELDINSPECTION_INPROGRESS":
+      return getLocaleLabels(
+        "Field Inspection Inprogress",
+        "WF_BPA_FIELDINSPECTION_INPROGRESS",
+        localisationLabels
+      );
+    case "NOC_VERIFICATION_INPROGRESS":
+      return getLocaleLabels(
+        "Noc Verification Inprogress",
+        "WF_BPA_NOC_VERIFICATION_INPROGRESS",
+        localisationLabels
+      );
+    case "APPROVAL_INPROGRESS":
+      return getLocaleLabels(
+        "Approval Inprogress",
+        "WF_BPA_APPROVAL_INPROGRESS",
+        localisationLabels
+      );
+    case "PENDING_SANC_FEE_PAYMENT":
+      return getLocaleLabels(
+        "Pending Sanc Fee Payment",
+        "WF_BPA_PENDING_SANC_FEE_PAYMENT",
+        localisationLabels
+      );
+    case "INPROGRESS":
+      return getLocaleLabels("Inprogress", "BPA_INPROGRESS", localisationLabels);
+    case "PENDING_APPL_FEE":
       return getLocaleLabels("Pedding Application Fee", "PENDING_APPL_FEE", localisationLabels);
   }
 };
@@ -3660,7 +3734,7 @@ export const requiredDocumentsData = async (state, dispatch) => {
       [],
       mdmsBody
     );
-
+    dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
     let commonDocTypes = payload.MdmsRes["common-masters"].DocumentType;
 
     const applicationNumber = getQueryArg(
@@ -3705,7 +3779,260 @@ export const requiredDocumentsData = async (state, dispatch) => {
       requiredDocuments = commonDocTypes;
     }
     dispatch(prepareFinalObject("BPA.requiredDocuments", requiredDocuments));
+    prepareDocumentsView(state, dispatch)
   } catch (e) {
     console.log(e);
   }
+}
+
+const prepareDocumentsView = async (state, dispatch) => {
+  let documentsPreview = [];
+
+  // Get all documents from response
+  let BPA = get(
+    state,
+    "screenConfiguration.preparedFinalObject.BPA",
+    {}
+  );
+
+  let applicantDocuments = jp.query(
+    BPA,
+    "$.documents.*"
+  );
+  console.log(applicantDocuments, "yutewuyruyeryweruyewtry")
+
+  let otherDocuments = jp.query(
+    BPA,
+    "$.additionalDetail.documents.*"
+  );
+  let allDocuments = [
+   // ...buildingDocuments,
+    ...applicantDocuments,
+    ...otherDocuments
+  ];
+  let nocDocuments = [];
+
+  allDocuments.forEach(doc => {
+    
+    if (doc.documentType && (doc.documentType).split('.')[0] === "NOC") {
+      nocDocuments.push(doc)
+    }
+    documentsPreview.push({
+      title: getTransformedLocale(doc.documentType),
+      //title: doc.documentType,
+      fileStoreId: doc.fileStore,
+      linkText: "View"
+    });
+  });
+  let fileStoreIds = jp.query(documentsPreview, "$.*.fileStoreId");
+  let fileUrls =
+    fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
+  documentsPreview = documentsPreview.map((doc, index) => {
+    doc["link"] =
+      (fileUrls &&
+        fileUrls[doc.fileStoreId] &&
+        fileUrls[doc.fileStoreId].split(",")[0]) ||
+      "";
+    doc["name"] =
+      (fileUrls[doc.fileStoreId] &&
+        decodeURIComponent(
+          fileUrls[doc.fileStoreId]
+            .split(",")[0]
+            .split("?")[0]
+            .split("/")
+            .pop()
+            .slice(13)
+        )) ||
+      `Document - ${index + 1}`;
+      return doc;
+    
+  });
+  let documentDetailsPreview = [], nocDocumentsPreview = [];
+  documentsPreview.forEach(doc => {
+    if(doc && doc.title) {
+      let type = doc.title.split("_")[0];
+      if(type === "NOC") {
+        nocDocumentsPreview.push(doc);
+      }else {
+        documentDetailsPreview.push(doc)
+      }
+    }
+  });
+  dispatch(prepareFinalObject("documentDetailsPreview", documentDetailsPreview));
+  dispatch(prepareFinalObject("nocDocumentsPreview", nocDocumentsPreview));
+  await setNocDocuments(state, dispatch, "NOC_VERIFICATION_PENDING",documentDetailsPreview, nocDocumentsPreview, nocDocuments);
+};
+
+export const setNocDocuments = (state, dispatch, action, documentDetailsPreview, nocDocumentsPreview, nocDocuments) => {
+  let bpaNocdocuments = get(
+    state,
+    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.DocTypeMapping",
+    []
+  );
+  let documentsDropDownValues = get(
+    state,
+    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.common-masters.DocumentType",
+    []
+  );
+
+  let documents = []
+  bpaNocdocuments.forEach(doc => {
+    if(doc.WFState === action) {
+      documents.push(doc.docTypes)
+    }
+  })
+
+  let documentsList = [];
+  documents[0].forEach(doc => {
+    let code = doc.code;
+    doc.dropDownValues = [];
+    documentsDropDownValues.forEach(value => {
+      let values = value.code.slice(0, code.length);
+      if (code === values) {
+        doc.hasDropdown = true;
+        doc.dropDownValues.push(value);
+      }
+    });
+    documentsList.push(doc);
+  });
+  const bpaDocuments = documentsList;
+  let documentsContract = [];
+  let tempDoc = {};
+
+  bpaDocuments.forEach(doc => {
+    let card = {};
+    card["code"] = doc.code.split(".")[0];
+    card["title"] = doc.code.split(".")[0];
+    card["cards"] = [];
+    tempDoc[doc.code.split(".")[0]] = card;
+  });
+  bpaDocuments.forEach(doc => {
+    let card = {};
+    card["name"] = doc.code;
+    card["code"] = doc.code;
+    card["required"] = doc.required ? true : false;
+    if (doc.hasDropdown && doc.dropDownValues) {
+      let dropDownValues = {};
+      dropDownValues.label = "Select Documents";
+      dropDownValues.required = doc.required;
+      dropDownValues.menu = doc.dropDownValues.filter(item => {
+        return item.active;
+      });
+      dropDownValues.menu = dropDownValues.menu.map(item => {
+        return { code: item.code, label: item.code };
+      });
+      card["dropDownValues"] = dropDownValues;
+    }
+    tempDoc[doc.code.split(".")[0]].cards.push(card);
+  });
+
+  Object.keys(tempDoc).forEach(key => {
+    documentsContract.push(tempDoc[key]);
+  });
+  let documentDetailsContract = [],
+    nocDetailsContract = [];
+  documentsContract.forEach(doc => {
+    if (doc.code == "NOC") {
+      nocDetailsContract.push(doc);
+    } else {
+      documentDetailsContract.push(doc);
+    }
+  });
+
+  let nocDetailsContractCodes = [], nocBpaDocuments = [];
+  nocDetailsContract[0].cards.forEach(doc => {
+    doc.dropDownValues.menu.forEach(menuItem => { 
+      nocDetailsContractCodes.push(menuItem.code)
+    })
+  });
+  
+  let nocDocTypes = [];
+  nocDocuments.forEach(nocDoc => nocDocTypes.push(nocDoc.documentType));
+
+  function comparer(otherArray) {
+    return function (current) {
+      return otherArray.filter(function (other) {
+        return other == current
+      }).length == 0;
+    }
+  }
+
+  var onlyInA = nocDetailsContractCodes.filter(comparer(nocDocTypes));
+  var onlyInB = nocDocTypes.filter(comparer(nocDetailsContractCodes));
+
+  let result = onlyInA.concat(onlyInB);
+
+  for(let i = 0; i < result.length; i++) {
+    let code = result[i];
+    nocDetailsContract[0].cards.forEach(doc => {
+      doc.dropDownValues.menu.forEach(menuItem => {
+        if(code === menuItem.code) {
+          nocBpaDocuments.push({
+              cards: [doc],
+              code: "NOC",
+              title: "NOC"
+            });
+        }
+      })
+    });
+  }
+  console.log(nocBpaDocuments, "yrtiueyriutyeiurytiyeriuy")
+  dispatch(prepareFinalObject("nocDocumentsContract", nocBpaDocuments));
+};
+
+export const permitOrderNoDownload = async(action, state, dispatch) => {
+  let bpaDetails = get (
+    state.screenConfiguration.preparedFinalObject, "BPA"
+  );
+
+  let payload = await edcrHttpRequest(
+    "post",
+    "/edcr/rest/dcr/scrutinydetails?edcrNumber=" +
+    bpaDetails.edcrNumber +
+      "&tenantId=" + bpaDetails.tenantId,
+    {}
+  );
+
+  bpaDetails.edcrDetail = payload.edcrDetail;
+  let Bpa = bpaDetails;
+  let res = await httpRequest(
+    "post",
+    `pdf-service/v1/_create?key=buildingpermit&tenantId=${bpaDetails.tenantId}`,
+    "",
+    [],
+    { Bpa: [Bpa] }
+  );
+
+  let fileStoreId = res.filestoreIds[0];
+  let pdfDownload = await httpRequest (
+    "get",
+    `filestore/v1/files/url?tenantId=${bpaDetails.tenantId}&fileStoreIds=${fileStoreId}`,[]
+  );
+  window.open(pdfDownload[fileStoreId]);
+}
+
+export const downloadFeeReceipt = async(state, dispatch, status, serviceCode) => {
+  let bpaDetails = get (
+    state.screenConfiguration.preparedFinalObject, "BPA"
+  );
+
+  let paymentPayload = await httpRequest(
+    "post",
+    `collection-services/payments/_search?tenantId=${bpaDetails.tenantId}&consumerCode=${bpaDetails.applicationNo}&businessServices=${serviceCode}`
+  );
+
+  let res = await httpRequest(
+    "post",
+    `pdf-service/v1/_create?key=consolidatedreceipt&tenantId=${bpaDetails.tenantId}`,
+    "",
+    [],
+    { Payments : paymentPayload.Payments }
+  );
+
+  let fileStoreId = res.filestoreIds[0];
+  let pdfDownload = await httpRequest (
+    "get",
+    `filestore/v1/files/url?tenantId=${bpaDetails.tenantId}&fileStoreIds=${fileStoreId}`,[]
+  );
+  window.open(pdfDownload[fileStoreId]);
 }
