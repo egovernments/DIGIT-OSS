@@ -217,7 +217,7 @@ export const approvalSuccessFooter = getCommonApplyFooter({
       //downloadReceiptButtonLabel: getLabel
       goToHomeButtonLabel: getLabel({
         labelName: "GO TO HOME",
-        labelKey: "BPA_COMMON_BUTTON_HOME"
+        labelKey: "TL_COMMON_BUTTON_HOME"
       })
     },
     // Check this onClickDefinition later again
@@ -226,54 +226,54 @@ export const approvalSuccessFooter = getCommonApplyFooter({
       path: `${getRedirectionURL()}`
     }
   },
-  downloadLicenseButton: {
-    componentPath: "Button",
-    props: {
-      variant: "outlined",
-      color: "primary",
-      style: {
-        width: "250px",
-        height: "48px",
-        marginRight: "16px"
-      }
-    },
-    children: {
-      downloadLicenseButtonLabel: getLabel({
-        labelName: "DOWNLOAD BPA",
-        labelKey: "BPA_APPROVAL_CHECKLIST_BUTTON_DOWN_LIC"
-      })
-    },
-    onClickDefination: {
-      action: "condition",
-      callBack: (state, dispatch) => {
-        generatePdf(state, dispatch, "certificate_download");
-      }
-    }
-  },
-  printNOCButton: {
-    componentPath: "Button",
-    props: {
-      variant: "contained",
-      color: "primary",
-      style: {
-        width: "250px",
-        height: "48px",
-        marginRight: "40px"
-      }
-    },
-    children: {
-      printLicenseButtonLabel: getLabel({
-        labelName: "PRINT BPA",
-        labelKey: "BPA_APPROVAL_CHECKLIST_PRINT_LIC"
-      })
-    },
-    onClickDefination: {
-      action: "condition",
-      callBack: (state, dispatch) => {
-        generatePdf(state, dispatch, "certificate_print");
-      }
-    }
-  }
+  // downloadLicenseButton: {
+  //   componentPath: "Button",
+  //   props: {
+  //     variant: "outlined",
+  //     color: "primary",
+  //     style: {
+  //       width: "250px",
+  //       height: "48px",
+  //       marginRight: "16px"
+  //     }
+  //   },
+  //   children: {
+  //     downloadLicenseButtonLabel: getLabel({
+  //       labelName: "DOWNLOAD BPA",
+  //       labelKey: "BPA_APPROVAL_CHECKLIST_BUTTON_DOWN_LIC"
+  //     })
+  //   },
+  //   onClickDefination: {
+  //     action: "condition",
+  //     callBack: (state, dispatch) => {
+  //       generatePdf(state, dispatch, "certificate_download");
+  //     }
+  //   }
+  // },
+  // printNOCButton: {
+  //   componentPath: "Button",
+  //   props: {
+  //     variant: "contained",
+  //     color: "primary",
+  //     style: {
+  //       width: "250px",
+  //       height: "48px",
+  //       marginRight: "40px"
+  //     }
+  //   },
+  //   children: {
+  //     printLicenseButtonLabel: getLabel({
+  //       labelName: "PRINT BPA",
+  //       labelKey: "BPA_APPROVAL_CHECKLIST_PRINT_LIC"
+  //     })
+  //   },
+  //   onClickDefination: {
+  //     action: "condition",
+  //     callBack: (state, dispatch) => {
+  //       generatePdf(state, dispatch, "certificate_print");
+  //     }
+  //   }
+  // }
 });
 
 //Function for payment failure(retry button)
