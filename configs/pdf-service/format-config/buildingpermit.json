@@ -136,9 +136,6 @@
                     {
                         "text" : "{{tenantName}} Municipal Council",
                         "bold" : true
-                    },
-                    {
-                        "text" : " under Ward 1 under Circle 1 subject to the following conditions/restrictions."
                     }
                 ]
             },
@@ -326,12 +323,6 @@
                                 "bold": true,
                                 "alignment": "right"
                             }
-                        ],
-                        [
-                            {
-                                "text": "Amount (in words): Rupees Twelve Thousand Thirty Five Only",
-                                "colSpan": 2
-                            }
                         ]
                     ]
                 },
@@ -353,7 +344,7 @@
                     {
                         "stack": [
                             {
-                                "text": "Sonpur Muncipal Council",
+                                "text": "{{tenantName}} Muncipal Council",
                                 "style": "header"
                             },
                             {
