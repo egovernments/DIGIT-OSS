@@ -3989,8 +3989,7 @@ export const permitOrderNoDownload = async(action, state, dispatch) => {
     "post",
     "/edcr/rest/dcr/scrutinydetails?edcrNumber=" +
     bpaDetails.edcrNumber +
-      "&tenantId=" + bpaDetails.tenantId,
-    {}
+      "&tenantId=" + bpaDetails.tenantId,"search", []
   );
 
   bpaDetails.edcrDetail = payload.edcrDetail;
@@ -4018,15 +4017,30 @@ export const downloadFeeReceipt = async(state, dispatch, status, serviceCode) =>
 
   let paymentPayload = await httpRequest(
     "post",
-    `collection-services/payments/_search?tenantId=${bpaDetails.tenantId}&consumerCode=${bpaDetails.applicationNo}&businessServices=${serviceCode}`
+    `collection-services/payments/_search?tenantId=${bpaDetails.tenantId}&consumerCodes=${bpaDetails.applicationNo}`
   );
+
+  let payments = [];
+
+  if (paymentPayload.Payments && (paymentPayload.Payments).length > 1) {
+    if ( serviceCode === "BPA.NC_APP_FEE") {
+      payments.push(paymentPayload.Payments[1]);
+    }
+  
+    if (serviceCode === "BPA.NC_SAN_FEE" ) {
+      payments.push(paymentPayload.Payments[0]);
+    }
+  } else {
+    payments.push(paymentPayload.Payments[0]);
+  }
+ 
 
   let res = await httpRequest(
     "post",
     `pdf-service/v1/_create?key=consolidatedreceipt&tenantId=${bpaDetails.tenantId}`,
     "",
     [],
-    { Payments : paymentPayload.Payments }
+    { Payments : payments }
   );
 
   let fileStoreId = res.filestoreIds[0];
