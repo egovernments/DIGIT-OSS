@@ -42,11 +42,11 @@
             "docTypes": [
                 {
                     "code": "APPL.BUILDING_DIAGRAM",
-                    "required": true
+                    "required": false
                 },
                 {
                     "code": "APPL.LOCALBODY",
-                    "required": true
+                    "required": false
                 }
             ]
         },
@@ -58,7 +58,7 @@
             "docTypes": [
                 {
                     "code": "NOC.AGRICULTURE",
-                    "required": true
+                    "required": false
                 }
             ]
         },
