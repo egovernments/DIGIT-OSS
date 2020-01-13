@@ -1,5 +1,10 @@
 package org.egov.web.notification.sms.service.impl;
 
+import java.net.URI;
+import java.net.URL;
+import java.util.List;
+import java.util.Map;
+
 import org.egov.web.notification.sms.config.SMSProperties;
 import org.egov.web.notification.sms.models.Sms;
 import org.egov.web.notification.sms.service.SMSBodyBuilder;
@@ -13,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,6 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SMSCountrySMSServiceImpl implements SMSService {
 
+	@Autowired
 	private SMSProperties smsProperties;
 
 	@Autowired
@@ -40,9 +47,13 @@ public class SMSCountrySMSServiceImpl implements SMSService {
 
 	private void submitToExternalSmsService(Sms sms) {
 		try {
-			String url = smsProperties.getUrl();
-            HttpEntity<HttpEntity<MultiValueMap<String, String>>> request = new HttpEntity<>(getRequest(sms), getHttpHeaders());
-			String response = restTemplate.postForObject(url, request, String.class);
+			String baseURL = smsProperties.getUrl();
+			MultiValueMap<String, String> params = getRequest(sms).getBody();
+			URI uri = UriComponentsBuilder
+			           .fromUriString(baseURL)
+			           .queryParams(params)
+			           .build().encode().toUri();
+			String response = restTemplate.postForObject(uri, "{}", String.class);
 			log.info("response: "+response);
 		} catch (RestClientException e) {
 			log.error("Error occurred while sending SMS to " + sms.getMobileNumber(), e);
