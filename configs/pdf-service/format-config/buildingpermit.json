@@ -51,8 +51,7 @@
                             },
                             {
                                 "text": "{{planPermissionNo}}",
-                                "bold": false,
-                                "fontSize":22
+                                "bold": true
                             }
                         ],
                         "alignment": "left"
@@ -80,8 +79,7 @@
                     },
                     {
                         "text": "{{applicationNo}}",
-                        "bold": false,
-                        "fontSize":22
+                        "bold": true
                     },
                     {
                         "text": " dated "
