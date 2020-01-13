@@ -55,16 +55,10 @@ public class Assessment {
         @JsonProperty("source")
         @NotNull
         private Source source ;
-
-        @JsonProperty("buildUpArea")
-        private Double buildUpArea ;
-
-        @JsonProperty("auditDetails")
-        private AuditDetails auditDetails ;
-
-        @JsonProperty("units")
+        
+        @JsonProperty("unitUsageList")
         @Valid
-        private List<Unit> units ;
+        private List<UnitUsage> unitUsageList ;
 
         @JsonProperty("documents")
         @Valid
@@ -75,6 +69,11 @@ public class Assessment {
 
         @JsonProperty("channel")
         private Channel channel ;
+
+
+        @JsonProperty("auditDetails")
+        private AuditDetails auditDetails ;
+
         
         public enum Source {
         	  
@@ -108,14 +107,6 @@ public class Assessment {
         	    return null;
         	  }
         	}
-
-        public Assessment addUnitsItem(Unit unitsItem) {
-            if (this.units == null) {
-            this.units = new ArrayList<>();
-            }
-        this.units.add(unitsItem);
-        return this;
-        }
 
         public Assessment addDocumentsItem(Document documentsItem) {
             if (this.documents == null) {
