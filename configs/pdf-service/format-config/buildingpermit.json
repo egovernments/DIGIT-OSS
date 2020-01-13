@@ -51,7 +51,8 @@
                             },
                             {
                                 "text": "{{planPermissionNo}}",
-                                "bold": true
+                                "bold": false,
+                                "fontSize":22
                             }
                         ],
                         "alignment": "left"
@@ -78,7 +79,9 @@
                         "text": "With respect to your Application No "
                     },
                     {
-                        "text": "{{applicationNo}}"
+                        "text": "{{applicationNo}}",
+                        "bold": false,
+                        "fontSize":22
                     },
                     {
                         "text": " dated "
@@ -337,6 +340,7 @@
                 ]
             },
             {
+                "pageBreak": "before",
                 "columns": [
                     {
                         "image": "{{logoImage}}",
