@@ -27,6 +27,7 @@ import generateReceipt from "../../utils/receiptPdf";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import get from "lodash/get";
+import set from "lodash/set";
 import some from "lodash/some";
 
 const moveToSuccess = (LicenseData, dispatch) => {
@@ -635,7 +636,9 @@ export const footerReview = (
   let applicationDownloadObject = {
     label: { labelName: "Application", labelKey: "TL_APPLICATION" },
     link: () => {
-      const { Licenses } = state.screenConfiguration.preparedFinalObject;
+      const { Licenses ,LicensesTemp} = state.screenConfiguration.preparedFinalObject;
+      const documents = LicensesTemp[0].reviewDocData;
+      set(Licenses[0],"additionalDetails.documents",documents)
       downloadAcknowledgementForm(Licenses);
     },
     leftIcon: "assignment"
@@ -643,7 +646,9 @@ export const footerReview = (
   let applicationPrintObject = {
     label: { labelName: "Application", labelKey: "TL_APPLICATION" },
     link: () => {
-      const { Licenses } = state.screenConfiguration.preparedFinalObject;
+      const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
+      const documents = LicensesTemp[0].reviewDocData;
+      set(Licenses[0],"additionalDetails.documents",documents)
       downloadAcknowledgementForm(Licenses,'print');
     },
     leftIcon: "assignment"
@@ -835,7 +840,9 @@ export const downloadPrintContainer = (
   let applicationDownloadObject = {
     label: { labelName: "Application", labelKey: "TL_APPLICATION" },
     link: () => {
-      const { Licenses } = state.screenConfiguration.preparedFinalObject;
+      const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
+      const documents = LicensesTemp[0].reviewDocData;
+      set(Licenses[0],"additionalDetails.documents",documents)
       downloadAcknowledgementForm(Licenses);
     },
     leftIcon: "assignment"
@@ -843,7 +850,9 @@ export const downloadPrintContainer = (
   let applicationPrintObject = {
     label: { labelName: "Application", labelKey: "TL_APPLICATION" },
     link: () => {
-      const { Licenses } = state.screenConfiguration.preparedFinalObject;
+      const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
+      const documents = LicensesTemp[0].reviewDocData;
+      set(Licenses[0],"additionalDetails.documents",documents)
       downloadAcknowledgementForm(Licenses,'print');
     },
     leftIcon: "assignment"
