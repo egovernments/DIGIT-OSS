@@ -210,11 +210,16 @@ class NocList extends Component {
           if (doc.id) {
             doc.id = documents.documents[0].id;
           }
-          bpaDetails.documents.push(doc);
+          if (bpaDetails.documents) {
+            bpaDetails.documents.push(doc);
+          } else {
+            bpaDetails.documents = [doc];
+          }
         }
       });
 
-      var resArr = [];
+      if(bpaDetails.documents && bpaDetails.documents.length > 0) {
+        var resArr = [];
       bpaDetails.documents.forEach(function (item) {
         var i = resArr.findIndex(x => x.documentType == item.documentType);
         if (i <= -1) {
@@ -223,6 +228,7 @@ class NocList extends Component {
       });
       bpaDetails.documents = resArr;
       prepareFinalObject("BPA",  bpaDetails.documents);
+      }
     }
   }
 

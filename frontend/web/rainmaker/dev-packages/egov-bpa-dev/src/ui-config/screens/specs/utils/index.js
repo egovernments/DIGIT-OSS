@@ -3976,7 +3976,6 @@ export const setNocDocuments = (state, dispatch, action, documentDetailsPreview,
       })
     });
   }
-  console.log(nocBpaDocuments, "yrtiueyriutyeiurytiyeriuy")
   dispatch(prepareFinalObject("nocDocumentsContract", nocBpaDocuments));
 };
 

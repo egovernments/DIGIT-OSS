@@ -153,14 +153,18 @@ class WorkFlowContainer extends React.Component {
       }
     }
     if(dataPath === "BPA") {
-      let requiredDocuments = data.requiredDocuments;
-      let documents = data.wfDocuments;
-      if(requiredDocuments && data.wfDocuments && requiredDocuments.length > 0 && 
-        data.wfDocuments.length > 0 && requiredDocuments.length <= data.wfDocuments.length) {
-        for(let i = 0; i < requiredDocuments.length; i++) {
-            data.wfDocuments[i].documentType = requiredDocuments[i].code;
-            data.wfDocuments[i].fileStore = data.wfDocuments[i].fileStoreId
-        }
+      data.assignees = [];
+      if(data.assignee) {
+        data.assignee.forEach(assigne => {
+          data.assignees.push({
+            uuid : assigne
+          });
+        });
+      }
+      if(data.wfDocuments) {
+        for(let i = 0; i < data.wfDocuments.length; i++) {
+          data.wfDocuments[i].fileStore = data.wfDocuments[i].fileStoreId
+      }
       }
     }
     const applicationNumber = getQueryArg(

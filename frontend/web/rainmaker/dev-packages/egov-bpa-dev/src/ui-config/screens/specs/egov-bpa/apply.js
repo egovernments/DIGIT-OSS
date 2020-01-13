@@ -184,6 +184,15 @@ const getMdmsData = async (action, state, dispatch) => {
             },
             {
               name: "CalculationType"
+            },
+            {
+              name: "OccupancyType"
+            },
+            {
+              name: "SubOccupancyType"
+            },
+            {
+              name: "Usages"
             }
           ]
         }

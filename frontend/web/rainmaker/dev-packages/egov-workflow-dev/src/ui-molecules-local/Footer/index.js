@@ -58,7 +58,7 @@ class Footer extends React.Component {
 
     if (dataPath === "BPA") {
       handleFieldChange(`${dataPath}.comment`, "");
-      handleFieldChange(`${dataPath}.assignee`, "");
+      handleFieldChange(`${dataPath}.assignees`, "");
     } else {
       handleFieldChange(`${dataPath}[0].comment`, "");
       handleFieldChange(`${dataPath}[0].assignee`, []);

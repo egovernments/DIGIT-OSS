@@ -7,8 +7,11 @@ import {
   getCommonGrayCard,
   getCommonSubHeader,
   getLabelWithValue,
-  getBreak
+  getBreak,
+  getSelectField
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import get from "lodash/get";
 import "./index.css";
 
 export const buildingPlanScrutinyDetails = getCommonCard({
@@ -93,45 +96,160 @@ export const blockWiseOccupancyAndUsageDetails = getCommonCard({
         }
       }
     ),
-    blockWiseContainer: getCommonContainer({
-      residential: {
-        uiFramework: "custom-containers-local",
-        moduleName: "egov-bpa",
-        componentPath: "AutosuggestContainer",
-        jsonPath: "BPAs[0].BPADetails.blockwiseusagedetails.residential",
-        required: true,
-        gridDefination: {
-          xs: 12,
-          sm: 12,
-          md: 3
-        },
-        props: {
-          style: {
-            width: "100%",
-            cursor: "pointer"
+    applicantTypeSelection: getCommonContainer({
+      occupancyType: {
+        ...getSelectField({
+          label: {
+            labelName: "Occupancy Type",
+            labelKey: "BPA_OCCUPANCY_TYPE"
           },
-          localePrefix: {
-            moduleName: "BPA",
-            masterName: "BLOCK"
-          },
-          className: "citizen-city-picker",
-          label: { labelName: "Residential", labelKey: "BPA_APPLICATION_RESIDENTIAL_LABEL" },
           placeholder: {
-          labelName: "Select Occupancy",
-          labelKey: "BPA_APPLICATION_OCCUPANCY_PLACEHOLDER"
+            labelName: "Select Occupancy Type",
+            labelKey: "BPA_OCCUPANCY_TYPE_PLACEHOLDER"
           },
-          jsonPath: "BPAs[0].BPADetails.blockwiseusagedetails.residential",
-          sourceJsonPath:
-            "BPA.blocks",
-          labelsFromLocalisation: true,
-          fullwidth: true,
+          jsonPath: "BPA.occupancyType",
+          // localePrefix: {
+          //   moduleName: "common-masters",
+          //   masterName: "OwnerShipCategory"
+          // },
           required: true,
-          inputLabelProps: {
-            shrink: true
+          sourceJsonPath: "applyScreenMdmsData.BPA.OccupancyType",
+          gridDefination: {
+            xs: 12,
+            sm: 12,
+            md: 6
+          },
+          props: {
+            className: "applicant-details-error textfield-enterable-selection"
           }
+        }),
+        beforeFieldChange: (action, state, dispatch) => {
+          let path = action.componentJsonpath.replace(
+            /.occupancyType$/,
+            ".subOccupancyType"
+          );
+          let occupancyType = get(
+            state,
+            "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.SubOccupancyType",
+            []
+          );
+          let subOccupancyType = occupancyType.filter(item => {
+            return item.active && (item.occupancyType).toUpperCase() === (action.value).toUpperCase();
+          });
+          dispatch(handleField("apply", path, "props.data", subOccupancyType));
         }
       },
+      subOccupancyType: {
+        ...getSelectField({
+          label: {
+            labelName: "Sub Occupancy Type",
+            labelKey: "BPA_SUB_OCCUP_TYPE_LABEL"
+          },
+          placeholder: {
+            labelName: "Select Sub Occupancy Type",
+            labelKey: "BPA_SUB_OCCUP_TYPE_PLACEHOLDER"
+          },
+          jsonPath: "BPA.subOccupancyType",
+          // localePrefix: {
+          //   moduleName: "common-masters",
+          //   masterName: "OwnerShipCategory"
+          // },
+          required: true,
+          gridDefination: {
+            xs: 12,
+            sm: 12,
+            md: 6
+          },
+          props: {
+            className: "applicant-details-error textfield-enterable-selection"
+          }
+        }),
+        beforeFieldChange: (action, state, dispatch) => {
+          let path = action.componentJsonpath.replace(
+            /.subOccupancyType$/,
+            ".usages"
+          );
+          let subOccupancyType = get(
+            state,
+            "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.Usages",
+            []
+          );
+          let occupancyType = get(
+            state,
+            "screenConfiguration.preparedFinalObject.BPA.occupancyType"
+          )
+          let usages = subOccupancyType.filter(item => {
+            return item.active && (item.subOccupancyType).toUpperCase() === (action.value).toUpperCase() && (occupancyType).toUpperCase() === (action.value).toUpperCase();
+          });
+          dispatch(handleField("apply", path, "props.data", usages));
+        }
+      },
+      usages: {
+        ...getSelectField({
+          label: {
+            labelName: "Usages",
+            labelKey: "BPA_USAGES_TYPE"
+          },
+          placeholder: {
+            labelName: "Select usages",
+            labelKey: "BPA_USAGES_TYPE_PLACEHOLDER"
+          },
+          jsonPath: "BPA.usages",
+          // localePrefix: {
+          //   moduleName: "common-masters",
+          //   masterName: "OwnerShipCategory"
+          // },
+          required: true,
+          gridDefination: {
+            xs: 12,
+            sm: 12,
+            md: 6
+          },
+          props: {
+            className: "applicant-details-error textfield-enterable-selection"
+          }
+        })
+      },
     }),
+    // blockWiseContainer: getCommonContainer({
+    //   residential: {
+    //     uiFramework: "custom-containers-local",
+    //     moduleName: "egov-bpa",
+    //     componentPath: "AutosuggestContainer",
+    //     jsonPath: "BPAs[0].BPADetails.blockwiseusagedetails.residential",
+    //     required: true,
+    //     gridDefination: {
+    //       xs: 12,
+    //       sm: 12,
+    //       md: 3
+    //     },
+    //     props: {
+    //       style: {
+    //         width: "100%",
+    //         cursor: "pointer"
+    //       },
+    //       localePrefix: {
+    //         moduleName: "BPA",
+    //         masterName: "BLOCK"
+    //       },
+    //       className: "citizen-city-picker",
+    //       label: { labelName: "Residential", labelKey: "BPA_APPLICATION_RESIDENTIAL_LABEL" },
+    //       placeholder: {
+    //       labelName: "Select Occupancy",
+    //       labelKey: "BPA_APPLICATION_OCCUPANCY_PLACEHOLDER"
+    //       },
+    //       jsonPath: "BPAs[0].BPADetails.blockwiseusagedetails.residential",
+    //       sourceJsonPath:
+    //         "BPA.blocks",
+    //       labelsFromLocalisation: true,
+    //       fullwidth: true,
+    //       required: true,
+    //       inputLabelProps: {
+    //         shrink: true
+    //       }
+    //     }
+    //   },
+    // }),
     break: getBreak()
   })
 });

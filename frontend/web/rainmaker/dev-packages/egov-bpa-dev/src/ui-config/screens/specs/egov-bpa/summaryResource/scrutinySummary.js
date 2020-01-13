@@ -90,13 +90,44 @@ export const scrutinySummary = getCommonGrayCard({
             scheama: getCommonGrayCard({
                 blockWiseOccupancyAndUsageDetailscontainer: getCommonContainer({
 
-                    buildingplanscrutinyapplicationnumber: getLabelWithValue(
+                    // buildingplanscrutinyapplicationnumber: getLabelWithValue(
+                    //     {
+                    //         labelName: "Residential",
+                    //         labelKey: "BPA_APPLICATION_RESIDENTIAL_LABEL"
+                    //     },
+                    //     {
+                    //         jsonPath: "bpa.summary.residential",
+                    //         callBack: checkValueForNA
+                    //     }
+                    // ),
+
+                    occupancyType: getLabelWithValue(
                         {
-                            labelName: "Residential",
-                            labelKey: "BPA_APPLICATION_RESIDENTIAL_LABEL"
+                            labelName: "Occupancy Type",
+                            labelKey: "BPA_OCCUPANCY_TYPE"
                         },
                         {
-                            jsonPath: "bpa.summary.residential",
+                            jsonPath: "BPA.occupancyType",
+                            callBack: checkValueForNA
+                        }
+                    ),
+                    subOccupancyType: getLabelWithValue(
+                        {
+                            labelName: "Sub Occupancy Type",
+                            labelKey: "BPA_SUB_OCCUP_TYPE_LABEL"
+                        },
+                        {
+                            jsonPath: "BPA.subOccupancyType",
+                            callBack: checkValueForNA
+                        }
+                    ),
+                    usages: getLabelWithValue(
+                        {
+                            labelName: "Usages",
+                            labelKey: "BPA_USAGES_TYPE"
+                        },
+                        {
+                            jsonPath: "BPA.usages",
                             callBack: checkValueForNA
                         }
                     )
@@ -105,7 +136,8 @@ export const scrutinySummary = getCommonGrayCard({
             items: [],
             hasAddItem: false,
             isReviewPage: true,
-            sourceJsonPath: "BPAs[0].BPADetails.blockwiseusagedetails",
+            // sourceJsonPath: "BPAs[0].BPADetails.blockwiseusagedetails",
+            sourceJsonPath: "BPA",            
             prefixSourceJsonPath:
                 "children.cardContent.children.applicantContainer.children",
             afterPrefixJsonPath: "children.value.children.key"
