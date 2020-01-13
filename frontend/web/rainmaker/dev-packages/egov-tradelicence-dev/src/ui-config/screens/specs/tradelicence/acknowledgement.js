@@ -45,8 +45,10 @@ const abc=(  state,
             onClick: {
               action: "condition",
               callBack: () => {
-                const { Licenses } = state.screenConfiguration.preparedFinalObject;
-                    downloadAcknowledgementForm(Licenses);
+                const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
+                const documents = LicensesTemp[0].reviewDocData;
+                set(Licenses[0],"additionalDetails.documents", documents)
+                downloadAcknowledgementForm(Licenses);
               }
             },
           },
@@ -59,7 +61,9 @@ const abc=(  state,
         onClickDefination: {
           action: "condition",
           callBack: () => {
-            const { Licenses } = state.screenConfiguration.preparedFinalObject;
+            const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
+            const documents = LicensesTemp[0].reviewDocData;
+            set(Licenses[0],"additionalDetails.documents", documents)
             downloadAcknowledgementForm(Licenses);
           }
         },
@@ -83,8 +87,10 @@ const abc=(  state,
            onClick: {
             action: "condition",
             callBack: () => {
-              const { Licenses } = state.screenConfiguration.preparedFinalObject;
-                      downloadAcknowledgementForm(Licenses,'print');
+              const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
+              const documents = LicensesTemp[0].reviewDocData;
+              set(Licenses[0],"additionalDetails.documents", documents)
+              downloadAcknowledgementForm(Licenses,'print');
             }
           },
 
@@ -98,8 +104,10 @@ const abc=(  state,
         onClickDefination: {
           action: "condition",
           callBack: () => {
-            const { Licenses } = state.screenConfiguration.preparedFinalObject;
-                      downloadAcknowledgementForm(Licenses,'print');
+            const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
+            const documents = LicensesTemp[0].reviewDocData;
+            set(Licenses[0],"additionalDetails.documents", documents)
+            downloadAcknowledgementForm(Licenses,'print');
           }
         },
       }
@@ -185,9 +193,10 @@ const getAcknowledgementCard = (
                 onClick: {
                   action: "condition",
                   callBack: () => {
-                    
-                    const { Licenses } = state.screenConfiguration.preparedFinalObject;
-                     downloadAcknowledgementForm(Licenses);
+                    const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
+                    const documents = LicensesTemp[0].reviewDocData;
+                    set(Licenses[0],"additionalDetails.documents",documents)
+                    downloadAcknowledgementForm(Licenses);
                   }
                 },
               },
@@ -200,8 +209,9 @@ const getAcknowledgementCard = (
             onClickDefination: {
               action: "condition",
               callBack: () => {
-               
-                const { Licenses } = state.screenConfiguration.preparedFinalObject;
+                const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
+                const documents = LicensesTemp[0].reviewDocData;
+                set(Licenses[0],"additionalDetails.documents",documents)
                 downloadAcknowledgementForm(Licenses);
               }
             },
@@ -225,9 +235,10 @@ const getAcknowledgementCard = (
                onClick: {
                 action: "condition",
                 callBack: () => {
-                 
-                  const { Licenses } = state.screenConfiguration.preparedFinalObject;
-                      downloadAcknowledgementForm(Licenses,'print');
+                  const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
+                  const documents = LicensesTemp[0].reviewDocData;
+                  set(Licenses[0],"additionalDetails.documents",documents)
+                  downloadAcknowledgementForm(Licenses,'print');
                 }
               },
 
@@ -241,9 +252,10 @@ const getAcknowledgementCard = (
             onClickDefination: {
               action: "condition",
               callBack: () => {
-                
-                const { Licenses } = state.screenConfiguration.preparedFinalObject;
-                      downloadAcknowledgementForm(Licenses,'print');
+                const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
+                const documents = LicensesTemp[0].reviewDocData;
+                set(Licenses[0],"additionalDetails.documents",documents)
+                downloadAcknowledgementForm(Licenses,'print');
               }
             },
           }
