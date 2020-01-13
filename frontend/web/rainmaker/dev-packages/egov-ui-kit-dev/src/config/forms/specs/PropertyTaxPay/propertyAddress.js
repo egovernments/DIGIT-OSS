@@ -147,7 +147,7 @@ const formConfig = {
     },
     houseNumber: {
       id: "house-number",
-      jsonPath: "Properties[0].address.doorNo",    
+      jsonPath: "Properties[0].address.doorNo",
       type: "textfield",
       floatingLabelText: "PT_PROPERTY_DETAILS_DOOR_NUMBER",
       hintText: "PT_PROPERTY_DETAILS_DOOR_NUMBER_PLACEHOLDER",
@@ -193,10 +193,10 @@ const formConfig = {
     },
     oldPID: {
       id: "oldpid",
-      type: "textFieldIcon",
+      type: "textfield",
       className: "pt-old-pid-text-field",
       text: "PT_SEARCH_BUTTON",
-      iconRedirectionURL: "https://pmidc.punjab.gov.in/propertymis/search.php",
+      // iconRedirectionURL: "https://pmidc.punjab.gov.in/propertymis/search.php",
       jsonPath: "Properties[0].oldPropertyId",
       floatingLabelText: "PT_PROPERTY_ADDRESS_EXISTING_PID",
       hintText: "PT_PROPERTY_ADDRESS_EXISTING_PID_PLACEHOLDER",

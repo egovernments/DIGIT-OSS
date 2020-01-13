@@ -325,6 +325,9 @@ class FormWizardDataEntry extends Component {
   };
 
   componentWillReceiveProps = nextprops => {
+    // if (nextProps.match.params.reportName !== this.props.match.params.reportName) {
+    //   this.resetForm();
+    // }
     if (!isEqual(nextprops, this.props)) {
       let inputType = document.getElementsByTagName("input");
       for (let input in inputType) {
@@ -2137,6 +2140,7 @@ class FormWizardDataEntry extends Component {
     const { form, removeForm, prepareFormDataAction } = this.props;
     resetFormWizard(form, removeForm);
     prepareFormDataAction("Properties", []);
+    this.onTabClick(0);
   };
 
   render() {

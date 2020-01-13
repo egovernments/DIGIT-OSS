@@ -20,7 +20,7 @@ const getAddressItems = (properties, loadMdmsData) => {
 
       {
         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_CITY", localizationLabelsData),
-        value: address.city || "NA",
+        value: address.city && getTranslatedLabel(("TENANT_TENANTS_" + address.city.replace('-', '_')).toUpperCase(), localizationLabelsData) || "NA",
       },
       {
         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_HOUSE_NO", localizationLabelsData),
@@ -52,7 +52,11 @@ const getAddressItems = (properties, loadMdmsData) => {
       },
       {
         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_MOHALLA", localizationLabelsData),
-        value: address.locality.name || "NA",
+        value: getTranslatedLabel((
+          address.city.replace(".", "_") +
+          "_REVENUE_" +
+          address.locality.code
+        ).toUpperCase(), localizationLabelsData) || "NA",
       }
     ]
   );
