@@ -674,7 +674,13 @@
                   },
                   {
                     "variable": "headCode",
-                    "value": "$.Payments[0].paymentDetails[0].bill.billDetails[0].billAccountDetails[0].taxHeadCode"
+                    "value": "$.Payments[0].paymentDetails[0].bill.billDetails[0].billAccountDetails[0].taxHeadCode",
+                  "localisation": {
+                    "required": true,
+                    "prefix": null,
+                    "module": "rainmaker-bpa"
+                  }
+
                   },
                   {
                     "variable": "fee",
