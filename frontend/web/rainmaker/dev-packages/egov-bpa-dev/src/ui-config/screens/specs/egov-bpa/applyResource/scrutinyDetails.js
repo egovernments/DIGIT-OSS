@@ -98,7 +98,7 @@ export const blockWiseOccupancyAndUsageDetails = getCommonCard({
     ),
     applicantTypeSelection: getCommonContainer({
       occupancyType: {
-        ...getSelectField({
+        ...getTextField({
           label: {
             labelName: "Occupancy Type",
             labelKey: "BPA_OCCUPANCY_TYPE"
@@ -108,19 +108,14 @@ export const blockWiseOccupancyAndUsageDetails = getCommonCard({
             labelKey: "BPA_OCCUPANCY_TYPE_PLACEHOLDER"
           },
           jsonPath: "BPA.occupancyType",
-          // localePrefix: {
-          //   moduleName: "common-masters",
-          //   masterName: "OwnerShipCategory"
-          // },
           required: true,
-          sourceJsonPath: "applyScreenMdmsData.BPA.OccupancyType",
           gridDefination: {
             xs: 12,
             sm: 12,
             md: 6
           },
           props: {
-            className: "applicant-details-error textfield-enterable-selection"
+            disabled: true
           }
         }),
         beforeFieldChange: (action, state, dispatch) => {
@@ -150,10 +145,10 @@ export const blockWiseOccupancyAndUsageDetails = getCommonCard({
             labelKey: "BPA_SUB_OCCUP_TYPE_PLACEHOLDER"
           },
           jsonPath: "BPA.subOccupancyType",
-          // localePrefix: {
-          //   moduleName: "common-masters",
-          //   masterName: "OwnerShipCategory"
-          // },
+          localePrefix: {
+            moduleName: "BPA",
+            masterName: "SUBOCCUPANCYTYPE"
+          },
           required: true,
           gridDefination: {
             xs: 12,
@@ -164,51 +159,6 @@ export const blockWiseOccupancyAndUsageDetails = getCommonCard({
             className: "applicant-details-error textfield-enterable-selection"
           }
         }),
-        beforeFieldChange: (action, state, dispatch) => {
-          let path = action.componentJsonpath.replace(
-            /.subOccupancyType$/,
-            ".usages"
-          );
-          let subOccupancyType = get(
-            state,
-            "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.Usages",
-            []
-          );
-          let occupancyType = get(
-            state,
-            "screenConfiguration.preparedFinalObject.BPA.occupancyType"
-          )
-          let usages = subOccupancyType.filter(item => {
-            return item.active && (item.subOccupancyType).toUpperCase() === (action.value).toUpperCase() && (occupancyType).toUpperCase() === (action.value).toUpperCase();
-          });
-          dispatch(handleField("apply", path, "props.data", usages));
-        }
-      },
-      usages: {
-        ...getSelectField({
-          label: {
-            labelName: "Usages",
-            labelKey: "BPA_USAGES_TYPE"
-          },
-          placeholder: {
-            labelName: "Select usages",
-            labelKey: "BPA_USAGES_TYPE_PLACEHOLDER"
-          },
-          jsonPath: "BPA.usages",
-          // localePrefix: {
-          //   moduleName: "common-masters",
-          //   masterName: "OwnerShipCategory"
-          // },
-          required: true,
-          gridDefination: {
-            xs: 12,
-            sm: 12,
-            md: 6
-          },
-          props: {
-            className: "applicant-details-error textfield-enterable-selection"
-          }
-        })
       },
     }),
     // blockWiseContainer: getCommonContainer({

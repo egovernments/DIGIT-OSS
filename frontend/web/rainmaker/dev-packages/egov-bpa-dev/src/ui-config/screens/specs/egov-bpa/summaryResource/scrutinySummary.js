@@ -120,16 +120,6 @@ export const scrutinySummary = getCommonGrayCard({
                             jsonPath: "BPA.subOccupancyType",
                             callBack: checkValueForNA
                         }
-                    ),
-                    usages: getLabelWithValue(
-                        {
-                            labelName: "Usages",
-                            labelKey: "BPA_USAGES_TYPE"
-                        },
-                        {
-                            jsonPath: "BPA.usages",
-                            callBack: checkValueForNA
-                        }
                     )
                 })
             }),

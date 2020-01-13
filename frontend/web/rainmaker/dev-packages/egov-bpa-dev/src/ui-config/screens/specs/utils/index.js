@@ -2874,6 +2874,16 @@ export const calculationType = (state, dispatch) => {
   }
 }
 
+export const residentialType = (state, dispatch) => {
+  let resType = get(
+    state.screenConfiguration.preparedFinalObject,
+    "scrutinyDetails.planDetail.virtualBuilding.occupancyTypes[0].type.name"
+  );
+  if(resType) {
+    dispatch(prepareFinalObject("BPA.occupancyType", (resType).toUpperCase()));
+  }
+}
+
 export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
   try {
     const scrutinyNo = get(
@@ -2988,6 +2998,7 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
           dispatch(prepareFinalObject(`scrutinyDetails`, currOwnersArr));
           await riskType(state, dispatch);
           await calculationType(state, dispatch);
+          await residentialType(state, dispatch);
         } else {
           dispatch(
             toggleSnackbar(
