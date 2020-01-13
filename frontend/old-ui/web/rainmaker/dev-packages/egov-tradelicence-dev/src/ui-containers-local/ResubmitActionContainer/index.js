@@ -120,6 +120,7 @@ class ResubmitActionContainer extends React.Component {
     if (dataPath !== "BPA") {
       data = data[0];
     }
+  
     //setting the action to send in RequestInfo
     let appendToPath = dataPath === "FireNOCs" ? "fireNOCDetails." : "";
     set(data, `${appendToPath}action`, label);

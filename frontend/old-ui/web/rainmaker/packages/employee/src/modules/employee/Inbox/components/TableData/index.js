@@ -445,7 +445,10 @@ class TableData extends Component {
       const requestBody = [{ key: "tenantId", value: tenantId }];
       const responseData = await httpRequest("egov-workflow-v2/egov-wf/process/_search", "_search", requestBody);
       const assignedData = orderBy(
-        filter(responseData.ProcessInstances, (item) => get(item.assigner, "uuid") === uuid),
+        filter(responseData.ProcessInstances, (item) =>{
+          let assignes=get(item,'assignes');
+          return get(assignes?assignes[0]:{}, "uuid") === uuid
+      }),
         ["businesssServiceSla"]
       );
       const allData = orderBy(get(responseData, "ProcessInstances", []), ["businesssServiceSla"]);
