@@ -255,7 +255,7 @@ class ActionDialog extends React.Component {
                         }}
                         className="bottom-button"
                         onClick={() =>
-                          onButtonClick(buttonLabel, isDocRequired)
+                          onButtonClick('FORWARD', isDocRequired)
                         }
                       >
                         <LabelContainer
