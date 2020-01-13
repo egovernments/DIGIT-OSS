@@ -23,7 +23,7 @@ const getStyles = (iconPosition, textFieldProps) => {
     color: "#969696",
     zIndex: 2,
     bottom: 0,
-    top: 15,
+    top: 0,
     margin: "auto",
     cursor: "pointer"
   };
@@ -72,10 +72,10 @@ const TextFieldIcon = ({
       ) : (
         <div onClick={onIconClick} style={{ cursor: "pointer" }}>
         <Hidden only={['sm', 'lg','xl','md']}>
-        <TargetIcon onClick={onIconClick} style={{ ...style.iconStyle, ...iconStyle , top: 15 }} />
+        <TargetIcon onClick={onIconClick} style={{ ...style.iconStyle, ...iconStyle  }} />
         </Hidden>
         <Hidden only='xs'>
-        <TargetIcon onClick={onIconClick} style={{ ...style.iconStyle, ...iconStyle, top: 46  }} />
+        <TargetIcon onClick={onIconClick} style={{ ...style.iconStyle, ...iconStyle }} />
         </Hidden>
       </div>
       )}
