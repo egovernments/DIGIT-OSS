@@ -46,10 +46,10 @@ const saveData = async (state, dispatch) => {
     data.billingPeriod = get(state, "screenConfiguration.preparedFinalObject.autoPopulatedValues.billingPeriod");
     let lastReadingDate = get(state, "screenConfiguration.preparedFinalObject.consumptionDetails[0].lastReadingDate")
     console.log(lastReadingDate, "lastReadingDate")
-    if (lastReadingDate !== 0 && lastReadingDate !== undefined && lastReadingDate !== null && lastReadingDate !== '') {
+    if (lastReadingDate !== undefined && lastReadingDate !== null && lastReadingDate !== '') {
         data.lastReadingDate = get(state, "screenConfiguration.preparedFinalObject.consumptionDetails[0].currentReadingDate");
     } else {
-        data.lastReadingDate = new Date().getTime()
+        data.lastReadingDate = new Date().setMonth(new Date().getMonth() - 1);
     }
     if (data.meterStatus === 'Working') {
         const isCurrentMeterValid = validateFields(

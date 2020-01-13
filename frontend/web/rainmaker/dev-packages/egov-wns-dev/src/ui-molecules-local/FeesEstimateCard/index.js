@@ -16,7 +16,7 @@ const styles = {
     },
     whiteCard: {
         padding: 18,
-        marginTop: 24,
+        marginTop: 2,
         // boxShadow: "none",
         borderRadius: 0,
         backgroundColor: "#ffffff"
@@ -53,6 +53,11 @@ const styles = {
     }
 };
 
+const date = (to) => {
+    let toDate = new Date(to);
+    return toDate.toLocaleString('default', { month: 'short' }) + ' - ' + toDate.getFullYear().toString().substring(2)
+}
+
 function FeesEstimateCard(props) {
     const { classes, estimate } = props;
     let sortedArray = [], totalAmount, dueDate;
@@ -72,13 +77,14 @@ function FeesEstimateCard(props) {
             <Grid xs={12} sm={12}>
                 <Typography variant="body2"
                     align="right"
-                    className="tl-total-amount-text" >
+                    style={{ marginTop: -20 }}
+                    className="tl-total-amount-text">
                     <LabelContainer labelName="Total Amount" labelKey="WS_COMMON_TOTAL_AMT" />
                 </Typography>
                 <Typography className={totalHeadClassName} align="right" >Rs {totalAmount}</Typography>
             </Grid>
             <Grid xs={12} sm={7}>
-                <div style={{ marginTop: 48, maxWidth: 600 }}>
+                <div style={{ maxWidth: 600 }}>
                     {
                         sortedArray.length > 0 && sortedArray.map(fee =>
                             <div>
@@ -93,7 +99,7 @@ function FeesEstimateCard(props) {
                                         style={styles.taxStyles}
                                         className="tl-application-table-total-value" >
                                         <Typography variant="body2">
-                                            {convertEpochToDate(fee.fromPeriod) + " - " + convertEpochToDate(fee.toPeriod)}
+                                            {date(fee.toPeriod)}
                                         </Typography>
                                     </Grid>
                                 </Grid>
@@ -130,7 +136,7 @@ function FeesEstimateCard(props) {
                                 </Grid>
                             </div>
                         )}
-                    < Divider style={{ marginBottom: 16 }} />
+                    < Divider />
                     <Grid container >
                         <Grid item xs={6}>
                             <Typography variant="body2" >

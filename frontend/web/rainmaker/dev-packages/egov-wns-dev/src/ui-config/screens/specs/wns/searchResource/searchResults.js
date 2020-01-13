@@ -86,7 +86,7 @@ export const searchResults = {
               )
             }
             else {
-              return ("")
+              return ("NA")
             }
           }
         }
@@ -138,5 +138,5 @@ const getConnectionDetails = data => {
 }
 
 const getViewBillDetails = data => {
-  window.location.href = `viewBill?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[8]}&service=${data.rowData[0]}`
+  window.location.href = `viewBill?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[8]}&service=${data.rowData[0]}&connectionType=${data.rowData[9]}`
 }

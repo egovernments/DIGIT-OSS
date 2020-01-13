@@ -90,14 +90,14 @@ export const searchApiCall = async (state, dispatch) => {
           }
           finalArray.push(obj)
         }) : finalArray.push({
-          due: ' ',
-          dueDate: ' ',
+          due: 'NA',
+          dueDate: 'NA',
           service: element.service,
           connectionNo: element.connectionNo,
           name: element.property.owners[0].name,
           status: element.status,
           address: element.property.address.street,
-          connectionType: element.connectionType
+        connectionType: element.connectionType
         })
       }
       showResults(finalArray, dispatch)
@@ -111,17 +111,15 @@ const showHideTable = (booleanHideOrShow, dispatch) => {
 const showResults = (connections, dispatch) => {
   let data = connections.map(item => ({
     [getTextToLocalMapping("Service")]: item.service,
-    [getTextToLocalMapping("Consumer No")]: item.connectionNo || " ",
-    [getTextToLocalMapping("Owner Name")]: item.name !== undefined ? item.name : " " || " ",
-    [getTextToLocalMapping("Status")]: item.status || " ",
-    [getTextToLocalMapping("Due")]: (item.due !== undefined || item.due !== null) ? item.due : " " || " ",
-    [getTextToLocalMapping("Address")]: item.address || " ",
-    [getTextToLocalMapping("Due Date")]: (item.dueDate !== undefined && item.dueDate !== ' ') ? convertEpochToDate(item.dueDate) : " " || " ",
+    [getTextToLocalMapping("Consumer No")]: item.connectionNo,
+    [getTextToLocalMapping("Owner Name")]: item.name,
+    [getTextToLocalMapping("Status")]: item.status,
+    [getTextToLocalMapping("Due")]: item.due,
+    [getTextToLocalMapping("Address")]: item.address,
+    [getTextToLocalMapping("Due Date")]: (item.dueDate !== undefined && item.dueDate !== "NA") ? convertEpochToDate(item.dueDate) : item.dueDate,
     ["tenantId"]: JSON.parse(getUserInfo()).tenantId,
     ["connectionType"]: item.connectionType
   }));
-  console.log('data')
-  console.log(data)
   dispatch(handleField("search", "components.div.children.searchResults", "props.data", data));
   dispatch(handleField("search", "components.div.children.searchResults", "props.title",
     `${getTextToLocalMapping(

@@ -40,7 +40,7 @@ const setAutopopulatedvalues = async (state, dispatch) => {
         }
         consumptionDetails['lastReading'] = 0;
         consumptionDetails['consumption'] = 0;
-        consumptionDetails['lastReadingDate'] = 0;
+        consumptionDetails['lastReadingDate'] = convertEpochToDate(new Date().setMonth(new Date().getMonth() - 1));
     } else {
         let prevBillingPeriod = get(state, `screenConfiguration.preparedFinalObject.consumptionDetails[0].billingPeriod`);
         let date = new Date();
