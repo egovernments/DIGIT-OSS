@@ -204,19 +204,19 @@
               {
                 "variable": "ownershipProof",
                 "value": {
-                  "path": "$.tradeLicenseDetail.address.pincode"
+                  "path": "$.additionalDetails.documents[?(@.title == 'TL_OWNERSHIPPROOF')].name"
                 }
             },
             {
               "variable": "ownersIdProof",
               "value": {
-                "path": "$.tradeLicenseDetail.address.pincode"
+                "path": "$.additionalDetails.documents[?(@.title == 'TL_OWNERIDPROOF')].name"
               }
           },
           {
             "variable": "ownerPhoto",
             "value": {
-              "path": "$.tradeLicenseDetail.address.pincode"
+              "path": "$.additionalDetails.documents[?(@.title == 'TL_OWNERPHOTO')].name"
             }
         },
               {
