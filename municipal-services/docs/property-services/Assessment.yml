@@ -37,6 +37,8 @@ paths:
               $ref: '#/components/schemas/AssessmentRequest'
         description: Details for the new assessment + RequestHeader meta data.
         required: true
+        
+        
   /assessment/_update:
     post:
       summary: Updates existing assessment.
@@ -64,6 +66,8 @@ paths:
               $ref: '#/components/schemas/AssessmentRequest'
         description: Request header for the assessment Request.
         required: true
+        
+        
   /assessment/_search:
     post:
       summary: Get the list of assessment defined in the system.
@@ -79,16 +83,6 @@ paths:
           schema:
             type: string
             format: varchar
-        - name: constructionDetailNumbers
-          in: query
-          required: false
-          description: List of constructionDetailNumbers to search.
-          schema:
-            type: string
-            exclusiveMinimum: true
-            exclusiveMaximum: false
-            minLength: 4
-            maxLength: 128
         - name: assessmentNumbers
           in: query
           description: List of system assessment ids of properties.
@@ -115,6 +109,14 @@ paths:
           required: false
           schema:
             type: number
+        - name: status
+          in: query
+          description: List of system assessment ids of properties.
+          required: false
+          schema:
+            type: string
+            format: varchar
+            
       responses:
         '200':
           description: Successful response
@@ -137,6 +139,8 @@ paths:
               $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/PT_APPLY_PAY/docs/common/contracts/v1-1-1.yml#/components/schemas/RequestHeader'
         description: RequestHeader meta data.
         required: true
+        
+        
   /assessment/_delete:
     post:
       summary: Delete existing assessment details
@@ -164,6 +168,8 @@ paths:
               $ref: '#/components/schemas/AssessmentRequest'
         description: Request header for the assessment Request.
         required: true
+        
+        
   /assessment/_cancel:
     post:
       summary: Deactivates/Cancels existing assessment.
@@ -191,6 +197,7 @@ paths:
               $ref: '#/components/schemas/AssessmentRequest'
         description: Request header for the assessment cancel/deactivate Request.
         required: true
+        
 servers:
   - description: SwaggerHub API Auto Mocking
     url: 'https://virtserver.swaggerhub.com/egovernmets-faoundat/PT-2.0/1.0.0'
@@ -213,28 +220,54 @@ components:
         financialYear:
           type: string
           description: The financialYear of the assessmnet
-        totalAmount:
-          description: Total taxable amount for that assessment year.
+        assessmentDate:
           type: number
-          format: float
-        demandId:
+          description: epoch date of the assessment
+        source:
           type: string
-          description: Id of the demand, against which bill will be generated.
-        additionalDetails:
-          type: object
-          description: Json object to capture any extra information which is not accommodated of model
+          enum:
+            - MUNICIPAL_RECORDS
+            - WEBAPP
+            - MOBILEAPP
+            - FIELD_SURVEY
+        channel:
+          type: string
+          enum:
+            - SYSTEM
+            - CFC_COUNTER
+            - CITIZEN
+            - DATA_ENTRY
+            - MIGRATION
         status:
           type: string
           enum:
             - ACTIVE
             - INACTIVE
             - CANCELED
+        documents:
+          description: The documents attached by owner for exemption.
+          type: array
+          items:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/PT_APPLY_PAY/docs/common/contracts/v1-1-1.yml#/components/schemas/Document'
+        unitUsageList:
+          description: The documents attached by owner for exemption.
+          type: array
+          items:
+           $ref: '#/components/schemas/UnitUsage'
+        additionalDetails:
+          type: object
+          description: Json object to capture any extra information which is not accommodated of model
         auditDetails:
           $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/PT_APPLY_PAY/docs/common/contracts/v1-1-1.yml#/components/schemas/AuditDetails'
       required:
         - tenantId
         - constructionDetailNumber
         - financialYear
+        - propertyId
+        - assessmentDate
+        - source
+        - channel
+        
     AssessmentRequest:
       description: The request to create or update an assessment. Contains the RequestHeader and the assessment details
       properties:
@@ -242,6 +275,7 @@ components:
           $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/PT_APPLY_PAY/docs/common/contracts/v1-1-1.yml#/components/schemas/RequestHeader'
         Assessment:
           $ref: '#/components/schemas/Assessment'
+          
     AssessmentResponse:
       description: The response of create or update of assessment. Contains the ResponseHeader and created/updated assessment
       properties:
@@ -249,3 +283,39 @@ components:
           $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/PT_APPLY_PAY/docs/common/contracts/v1-1-1.yml#/components/schemas/ResponseHeader'
         Assessment:
           $ref: '#/components/schemas/Assessment'
+          
+    UnitUsage:
+      type: object
+      properties:
+        unitId:
+          type: string
+          description: Unique Identifier of the Unit(UUID).
+        usageCategory:
+          type: string
+          description: 'This is about the usage of the property like Residential, Non-residential, Mixed(Property witch is gettiong used for Residential, Non-residential purpose)'
+          maxLength: 64
+          minLength: 1
+        occupancyType:
+          type: string
+          description: Value denoting if the unit is rented or occupied by owner
+          enum:
+            - OWNER
+            - TENANT
+          maxLength: 64
+          minLength: 1
+        occupancyDate:
+          type: number
+          format: int64
+          description: Date on which unit is occupied.
+        tenantId:
+          type: string
+          description: tenant id of the Property
+          maxLength: 256
+          minLength: 2
+        additionalDetails:
+          type: object
+          description: Json object to capture any extra information which is not accommodated by model
+      required:
+        - tenantId
+        - occupancyType
+        - occupancyDate
