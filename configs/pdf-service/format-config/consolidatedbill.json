@@ -619,11 +619,11 @@
       },
       {
         "image": "{{scissorImage}}",
-        "width": 14,
-        "height": 14,
+        "width": 24,
+        "height": 24,
         "margin": [
           -30,
-          -7,
+          -11.2,
           0,
           0
         ]

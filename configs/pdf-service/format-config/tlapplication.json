@@ -1142,10 +1142,10 @@
                   {
                      "table": {
                       "widths": [
-                      "35%",
-                      "25%",
-                      "30%",
-                      "10%"
+                      "33%",
+                      "33%",
+                      "33%",
+                      "1%"
                        ],
                      "body": [ 
                           [
@@ -1185,7 +1185,7 @@
                        ],
                        [
                          {
-                           "text":"ForwardAndUploadFiles.png",
+                           "text":"{{ownershipProof}}",
                            "border":[
                              false,
                              false,
@@ -1195,7 +1195,7 @@
                             "style": "receipt-table2"
                          },  
                          {
-                           "text":"CitizenInbox.png",
+                           "text":"{{ownersIdProof}}",
                            "border":[
                              false,
                              false,
@@ -1205,7 +1205,7 @@
                             "style": "receipt-table2"
                          },
                          {
-                          "text":"OwnerImage-Inbox.png",
+                          "text":"{{ownerPhoto}}",
                           "border":[
                             false,
                             false,
