@@ -445,7 +445,10 @@ class TableData extends Component {
       const requestBody = [{ key: "tenantId", value: tenantId }];
       const responseData = await httpRequest("egov-workflow-v2/egov-wf/process/_search", "_search", requestBody);
       const assignedData = orderBy(
-        filter(responseData.ProcessInstances, (item) => get(item.assigner, "uuid") === uuid),
+        filter(responseData.ProcessInstances, (item) =>{
+          let assignes=get(item,'assignes');
+          return get(assignes?assignes[0]:{}, "uuid") === uuid
+      }),
         ["businesssServiceSla"]
       );
       const allData = orderBy(get(responseData, "ProcessInstances", []), ["businesssServiceSla"]);
@@ -554,6 +557,7 @@ class TableData extends Component {
             <div className="col-md-3 col-sm-3 col-xs-10 search-bar" style={{}}>
               <TextFieldIcon
               hintStyle={{top:'6px'}}
+              iconStyle={{top: 46}}
                 hintText={getLocaleLabels("","CS_INBOX_SEARCH",localizationLabels)}
                 value={searchFilter.value}
                 iconPosition="before"

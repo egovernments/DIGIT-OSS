@@ -9,6 +9,9 @@
 }
 
 @media only screen and (max-width: 768px) {
+  .search-bar div div svg{
+    top:15px !important;
+  }
   .backgroundWhite{
     background-color: white;
     margin-left: 5px !important;
@@ -28,7 +31,7 @@
       input{
         // padding: 0px 0px 2px !important;
         margin-top: 5px !important;
-        left: 30px;
+        left: 25px;
       }
   }
   .sort-icon{
@@ -67,7 +70,10 @@
     input{
       // padding: 0px 0px 2px !important;
       margin-top: 2px !important;
-      //left: 27px;
+      left: 27px;
     }}
   }
 
+.search-bar div div svg{
+  top:46px;
+}
