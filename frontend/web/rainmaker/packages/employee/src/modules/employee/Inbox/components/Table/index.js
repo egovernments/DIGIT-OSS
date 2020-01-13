@@ -119,7 +119,7 @@ class InboxData extends React.Component {
       <div>
         <Hidden only={["xs"]}>
           <Table>
-            <TableHead>
+            <TableHead style={{backgroundColor: "white", borderBottom: "1px solid rgb(211, 211, 211)"}}>
               <TableRow>
                 {data.headers.map((item, index) => {
                   let classNames = `inbox-data-table-headcell inbox-data-table-headcell-${index}`;
@@ -146,6 +146,7 @@ class InboxData extends React.Component {
                     </TableCell>
                   );
                 })}
+                <TableCell></TableCell>
               </TableRow>
             </TableHead>
             {data.rows.length === 0 ? (
@@ -163,7 +164,7 @@ class InboxData extends React.Component {
                           return (
                             <TableCell className={classNames}>
                               <div onClick={() => getModuleLink(item, row, index)} className="inbox-cell-text">
-                                {<a>{item.text} </a>}
+                                {<a style={{color: "#FE7A51"}}>{item.text} </a>}
                               </div>
                               <div className="inbox-cell-subtext">
                                 {<Label label={`CS_COMMON_INBOX_${item.subtext.toUpperCase()}`} color="#000000" />}
