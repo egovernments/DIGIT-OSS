@@ -1,0 +1,83 @@
+{
+  "tenantId": "pb",
+  "moduleName": "common-masters",
+  "wfSlaConfig":[
+    {
+      "code" : "NEWTL" ,
+      "slotPercentage" :   "1/3",
+      "positiveSlabColor" : "#4CAF50",
+      "negativeSlabColor" : "#F44336",
+      "middleSlabColor" : "#EEA73A"
+    },
+    {
+      "code" : "FIRENOC" ,
+      "slotPercentage" :   "1/3",
+      "positiveSlabColor" : "#4CAF50",
+      "negativeSlabColor" : "#F44336",
+      "middleSlabColor" : "#EEA73A"
+    },
+    {
+      "code" : "ARCHITECT" ,
+      "slotPercentage" :   "1/3",
+      "positiveSlabColor" : "#4CAF50",
+      "negativeSlabColor" : "#F44336",
+      "middleSlabColor" : "#EEA73A"
+    },
+    {
+      "code" : "BPA" ,
+      "slotPercentage" :   "1/3",
+      "positiveSlabColor" : "#4CAF50",
+      "negativeSlabColor" : "#F44336",
+      "middleSlabColor" : "#EEA73A"
+    },
+    {
+      "code" : "BUILDER" ,
+      "slotPercentage" :   "1/3",
+      "positiveSlabColor" : "#4CAF50",
+      "negativeSlabColor" : "#F44336",
+      "middleSlabColor" : "#EEA73A"
+    },
+    {
+      "code" : "CREATEPROPERTY" ,
+      "slotPercentage" :   "1/3",
+      "positiveSlabColor" : "#4CAF50",
+      "negativeSlabColor" : "#F44336",
+      "middleSlabColor" : "#EEA73A"
+    },
+    {
+      "code" : "CREATEPT" ,
+      "slotPercentage" :   "1/3",
+      "positiveSlabColor" : "#4CAF50",
+      "negativeSlabColor" : "#F44336",
+      "middleSlabColor" : "#EEA73A"
+    },
+    {
+      "code" : "ENGINEER" ,
+      "slotPercentage" :   "1/3",
+      "positiveSlabColor" : "#4CAF50",
+      "negativeSlabColor" : "#F44336",
+      "middleSlabColor" : "#EEA73A"
+    },
+    {
+      "code" : "STRUCTURALENGINEER" ,
+      "slotPercentage" :   "1/3",
+      "positiveSlabColor" : "#4CAF50",
+      "negativeSlabColor" : "#F44336",
+      "middleSlabColor" : "#EEA73A"
+    },
+    {
+      "code" : "STRUCTURALENGINEER_REJECTED" ,
+      "slotPercentage" :   "1/3",
+      "positiveSlabColor" : "#4CAF50",
+      "negativeSlabColor" : "#F44336",
+      "middleSlabColor" : "#EEA73A"
+    },
+    {
+      "code" : "TOWNPLANNER" ,
+      "slotPercentage" :   "1/3",
+      "positiveSlabColor" : "#4CAF50",
+      "negativeSlabColor" : "#F44336",
+      "middleSlabColor" : "#EEA73A"
+    }
+  ]
+}
