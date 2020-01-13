@@ -108,6 +108,18 @@
 .inbox-worklist-card:hover{
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0,   0.19);
   cursor : pointer;
+  
+}
+.inbox-worklist-card-hover-0:hover{
+  border-top: 5px solid #6b98ca;
+}
+
+.inbox-worklist-card-hover-1:hover{
+  border-top: 5px solid #daa034;
+}
+
+.inbox-worklist-card-hover-2:hover{
+  border-top: 5px solid  #F44336;
 }
 
 .inbox-worklist-card {
