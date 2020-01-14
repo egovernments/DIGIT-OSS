@@ -348,10 +348,16 @@ class FormWizardDataEntry extends Component {
       renderCustomTitleForPt,
       showSpinner,
       hideSpinner,
-      fetchGeneralMDMSData
+      fetchGeneralMDMSData,
+      history
     } = this.props;
     let { search } = location;
     let {resetForm}=this;
+
+    this.unlisten = history.listen((location, action) => {
+      console.log("on route change");
+      resetForm()
+    });
 
     showSpinner();
     const { selected, finlYear } = this.state;
@@ -451,6 +457,11 @@ class FormWizardDataEntry extends Component {
     renderCustomTitleForPt({ titleObject });
     hideSpinner();
   };
+
+  componentWillUnmount() {
+      this.unlisten();
+  }
+
 
   handleRemoveOwner = (index, formKey) => {
     const { ownerInfoArr } = this.state;
@@ -1742,10 +1753,10 @@ class FormWizardDataEntry extends Component {
             (yeardata, ind) => yeardata
           )[0];
           finalPropertyData.push({
-            financialYear: yeardatas,
             ...properties[0].propertyDetails[0],
-            additionalDetails: null,
-            institution: null,
+            financialYear: yeardatas,
+            // additionalDetails: properties[0].propertyDetails[0].additionalDetails?properties[0].propertyDetails[0].additionalDetails:null,
+            // institution: properties[0].propertyDetails[0].institution?properties[0].propertyDetails[0].institution:null,
             source: "LEGACY_RECORD",
             assessmentDate: new Date().getTime()
           });
@@ -2289,28 +2300,3 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(FormWizardDataEntry);
-
-// getGeneralData=()=>{
-//   let {fetchGeneralMDMSData,location,finalData}=this.props;
-//   let { search } = location;
-//   const {tenantId}=this.state;
-//   console.log("location:",location);
-//     const tenantId1 =getTenantId() || "uk";
-//     console.log("tenantId:;",tenantId,"tenantId1:",tenantId1);
-//   fetchGeneralMDMSData(
-//     null,
-//     "BillingService",
-//     ["TaxPeriod", "TaxHeadMaster"],
-//     "",
-//     tenantId1
-//   );
-// }
-// //
-// case 4:
-//   if (estimation[0].totalAmount < 0) {
-//     alert("Property Tax amount cannot be Negative!");
-//   } else {
-//     window.scrollTo(0, 0);
-//     createAndUpdate(index);
-//   }
-//   break;

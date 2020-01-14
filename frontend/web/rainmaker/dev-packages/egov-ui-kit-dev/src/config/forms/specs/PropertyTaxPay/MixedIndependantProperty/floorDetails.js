@@ -11,7 +11,8 @@ import {
   getPresentMasterObj,
   getAbsentMasterObj,
   floorName,
-  annualRent
+  annualRent,
+  constructionType
 } from "../utils/reusableFields";
 import filter from "lodash/filter";
 import get from "lodash/get";
@@ -64,6 +65,7 @@ const formConfig = {
     },
     ...subUsageType,
     ...occupancy,
+    ...constructionType,
     ...builtArea,
     ...floorName,
     ...annualRent

@@ -206,7 +206,7 @@ const getUnitInfo = (units = []) => {
     },
     {
       key: getTranslatedLabel("PT_ASSESMENT_INFO_CONSTRUCTION_TYPE", localizationLabelsData),
-      value: unit.ConstructionType ? 'PROPERTYTAX_CONSTRUCTIONTYPE_' + unit.ConstructionType : "NA",
+      value: unit.constructionType ? 'PROPERTYTAX_CONSTRUCTIONTYPE_' + unit.constructionType : "NA",
     },
     {
       key: getTranslatedLabel("PT_ASSESMENT_INFO_INNER_DIMENSION", localizationLabelsData),
