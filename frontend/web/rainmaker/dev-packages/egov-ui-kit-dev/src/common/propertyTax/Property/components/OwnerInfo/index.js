@@ -10,6 +10,7 @@ import PropertyInfoCard from "../PropertyInfoCard";
 const locale = getLocale() || "en_IN";
 const localizationLabelsData = initLocalizationLabels(locale);
 
+
 const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
   const isInstitution =
     latestPropertyDetails.ownershipCategory === "INSTITUTIONALPRIVATE" || latestPropertyDetails.ownershipCategory === "INSTITUTIONALGOVERNMENT";
@@ -21,6 +22,11 @@ const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
   if(!owner.gender){
     owner['gender']='COMMON_GENDER_MALE';
   }
+  const specialCategory=`COMMON_MASTERS_OWNERTYPE_${(owner &&
+    owner.ownerType &&
+    generalMDMSDataById &&
+    generalMDMSDataById["OwnerType"] &&
+    generalMDMSDataById["OwnerType"][owner.ownerType].code)}`;
   return (
     ownerDetails && ownerDetails.map((owner) => {
       return ({
@@ -62,13 +68,12 @@ const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
           isInstitution
             ? {
               key: getTranslatedLabel('PT_FORM3_OWNERSHIP_TYPE', localizationLabelsData),
-              value: (institution &&
+              value:(institution &&
                 institution.type &&
                 generalMDMSDataById &&
                 generalMDMSDataById["OwnerShipCategory"] &&
                 generalMDMSDataById["OwnerShipCategory"][latestPropertyDetails.ownershipCategory] &&
-                generalMDMSDataById["OwnerShipCategory"][latestPropertyDetails.ownershipCategory].name) ||
-                "NA",
+                generalMDMSDataById["OwnerShipCategory"][latestPropertyDetails.ownershipCategory].name)  ||"NA",
             }
             : {
               key: getTranslatedLabel('PT_FORM3_OWNERSHIP_TYPE', localizationLabelsData),
@@ -104,13 +109,9 @@ const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
             }
             : {
               key: getTranslatedLabel("PT_OWNERSHIP_INFO_USER_CATEGORY", localizationLabelsData),
-              value: (owner &&
-                owner.ownerType &&
-                generalMDMSDataById &&
-                generalMDMSDataById["OwnerType"] &&
-                generalMDMSDataById["OwnerType"][owner.ownerType].name) ||
-                "NA",
-            }, isInstitution
+              value: specialCategory || "NA",
+            },
+             isInstitution
             ? {
               key: getTranslatedLabel("PT_OWNERSHIP_INFO_CORR_ADDR", localizationLabelsData),
               value: owner.correspondenceAddress || "NA",
