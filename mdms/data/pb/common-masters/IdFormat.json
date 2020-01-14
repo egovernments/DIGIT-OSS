@@ -479,11 +479,11 @@
     },
     {
       "format": "BPA_APPL_FEE/[fy:yyyy-yy]/[SEQ_EGOV_COMMON]",
-      "idname": "BPA.NC_APP_FEE.receipt.id"
+      "idname": "bpa.nc_app_fee.receipt.id"
     },
     {
       "format": "BPA_SANC_FEE/[fy:yyyy-yy]/[SEQ_EGOV_COMMON]",
-      "idname": "BPA.NC_SAN_FEE.receipt.id"
+      "idname": "bpa.nc_san_fee.receipt.id"
     },
     {
       "format": "WS/[fy:yyyy-yy]/[SEQ_EGOV_COMMON]",
