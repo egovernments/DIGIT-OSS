@@ -12,11 +12,7 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
-import org.egov.pt.models.Assessment;
-import org.egov.pt.models.AssessmentSearchCriteria;
-import org.egov.pt.models.Document;
-import org.egov.pt.models.Property;
-import org.egov.pt.models.PropertyCriteria;
+import org.egov.pt.models.*;
 import org.egov.pt.service.AssessmentService;
 import org.egov.pt.service.PropertyService;
 import org.egov.pt.util.AssessmentUtils;
@@ -28,20 +24,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class AssessmentValidator {
 
 	@Autowired
 	private AssessmentService assessmentService;
-	
+
 	@Autowired
 	private PropertyService propertyService;
-	
-    @Autowired
-    private PropertyValidator propertyValidator;
-    
-    @Autowired
-    private AssessmentUtils utils;
+
+	@Autowired
+	private PropertyValidator propertyValidator;
+
+	@Autowired
+	private AssessmentUtils utils;
 
 	public void validateAssessmentCreate(AssessmentRequest assessmentRequest) {
 		Map<String, String> errorMap = new HashMap<>();
@@ -60,13 +59,13 @@ public class AssessmentValidator {
 
 	/**
 	 * Method to validate the necessary RI details.
-	 * 
+	 *
 	 * @param requestInfo
 	 * @param errorMap
 	 */
 	private void validateRI(RequestInfo requestInfo, Map<String, String> errorMap) {
-		if (null != requestInfo) {
-			if (null != requestInfo.getUserInfo()) {
+		if (requestInfo != null) {
+			if (requestInfo.getUserInfo() != null) {
 				if ((StringUtils.isEmpty(requestInfo.getUserInfo().getUuid()))
 						|| (CollectionUtils.isEmpty(requestInfo.getUserInfo().getRoles()))
 						|| (StringUtils.isEmpty(requestInfo.getUserInfo().getTenantId()))) {
@@ -102,10 +101,23 @@ public class AssessmentValidator {
 			if (assessmentFromDB.getDocuments().size() > assessment.getDocuments().size()) {
 				errorMap.put("MISSING_DOCUMENTS", "Please send all the documents belonging to this assessment");
 			}
-			
-	
+			if (assessmentFromDB.getUnitUsageList().size() > assessment.getUnitUsageList().size()) {
+				errorMap.put("MISSING_UNITS", "Please send all the units belonging to this assessment");
+			}
+			Set<String> existingUnitUsages = assessmentFromDB.getUnitUsageList().stream().map(UnitUsage::getId)
+					.collect(Collectors.toSet());
 			Set<String> existingDocs = assessmentFromDB.getDocuments().stream().map(Document::getId)
 					.collect(Collectors.toSet());
+			if (!CollectionUtils.isEmpty(assessment.getUnitUsageList())) {
+				for (UnitUsage unitUsage : assessment.getUnitUsageList()) {
+					if (!StringUtils.isEmpty(unitUsage.getId())) {
+						if (!existingUnitUsages.contains(unitUsage.getId())) {
+							errorMap.put("UNITUSAGE_NOT_FOUND",
+									"You're trying to update a non-existent unitUsage: " + unitUsage.getId());
+						}
+					}
+				}
+			}
 			if (!CollectionUtils.isEmpty(assessment.getDocuments())) {
 				for (Document doc : assessment.getDocuments()) {
 					if (!StringUtils.isEmpty(doc.getId())) {
@@ -116,9 +128,9 @@ public class AssessmentValidator {
 					}
 				}
 			}
-			
-		//assessment.setAdditionalDetails(utils.jsonMerge(assessmentFromDB.getAdditionalDetails(), assessment.getAdditionalDetails()));
-			
+
+			assessment.setAdditionalDetails(utils.jsonMerge(assessmentFromDB.getAdditionalDetails(), assessment.getAdditionalDetails()));
+
 		}
 
 		if (!CollectionUtils.isEmpty(errorMap.keySet())) {
@@ -128,7 +140,7 @@ public class AssessmentValidator {
 
 	private void commonValidations(AssessmentRequest assessmentReq, Map<String, String> errorMap, boolean isUpdate) {
 		Assessment assessment = assessmentReq.getAssessment();
-		if(!checkIfPropertyExists(assessmentReq.getRequestInfo(), assessment.getPropertyId(), assessment.getTenantId())) {
+		if(!checkIfPropertyExists(assessmentReq.getRequestInfo(), assessment.getPropertyID(), assessment.getTenantId())) {
 			throw new CustomException("PROPERTY_NOT_FOUND", "You're trying to assess a non-existing property.");
 		}
 		if (assessment.getAssessmentDate() > new Date().getTime()) {
@@ -150,7 +162,7 @@ public class AssessmentValidator {
 		}
 
 	}
-	
+
 	private Boolean checkIfPropertyExists(RequestInfo requestInfo, String propertyId, String tenantId) {
 		Boolean propertyExists = false;
 		Set<String> propertyIds = new HashSet<>(); propertyIds.add(propertyId);
@@ -158,15 +170,27 @@ public class AssessmentValidator {
 		List<Property> properties = propertyService.searchProperty(criteria, requestInfo);
 		if(!CollectionUtils.isEmpty(properties))
 			propertyExists = true;
-		
+
 		return propertyExists;
 	}
 
 	private void validateMDMSData(RequestInfo requestInfo, Assessment assessment, Map<String, String> errorMap) {
 		Map<String, List<String>> masters = fetchMaster(requestInfo, assessment.getTenantId());
 		if(CollectionUtils.isEmpty(masters.keySet()))
-        	throw new CustomException("MASTER_FETCH_FAILED", "Couldn't fetch master data for validation");
-		
+			throw new CustomException("MASTER_FETCH_FAILED", "Couldn't fetch master data for validation");
+
+		for(UnitUsage unitUsage: assessment.getUnitUsageList()) {
+
+			if(!CollectionUtils.isEmpty(masters.get(PTConstants.MDMS_PT_USAGECATEGORY))) {
+				if(!masters.get(PTConstants.MDMS_PT_USAGECATEGORY).contains(unitUsage.getUsageCategory()))
+					errorMap.put("USAGE_CATEGORY_INVALID", "The usage category provided is invalid");
+			}
+
+			if(CollectionUtils.isEmpty(masters.get(PTConstants.MDMS_PT_OCCUPANCYTYPE))) {
+				if(!masters.get(PTConstants.MDMS_PT_OCCUPANCYTYPE).contains(unitUsage.getOccupancyType().toString()))
+					errorMap.put("OCCUPANCY_TYPE_INVALID", "The occupancy type provided is invalid");
+			}
+		}
 
 		if (!CollectionUtils.isEmpty(errorMap.keySet())) {
 			throw new CustomException(errorMap);
@@ -178,11 +202,11 @@ public class AssessmentValidator {
 		String[] masterNames = {PTConstants.MDMS_PT_CONSTRUCTIONTYPE, PTConstants.MDMS_PT_OCCUPANCYTYPE,PTConstants.MDMS_PT_USAGEMAJOR };
 		Map<String, List<String>> codes = propertyValidator.getAttributeValues(tenantId, PTConstants.MDMS_PT_MOD_NAME, new ArrayList<>(Arrays.asList(masterNames)), "$.*.code",
 				PTConstants.JSONPATH_CODES, requestInfo);
-        if(null != codes) {
-        	return codes;
-        }else {
-        	throw new CustomException("MASTER_FETCH_FAILED", "Couldn't fetch master data for validation");
-        }
+		if(null != codes) {
+			return codes;
+		}else {
+			throw new CustomException("MASTER_FETCH_FAILED", "Couldn't fetch master data for validation");
+		}
 	}
 
 }

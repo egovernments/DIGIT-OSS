@@ -1,74 +1,120 @@
 package org.egov.pt.models;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import org.egov.pt.models.enums.Channel;
-import org.egov.pt.models.enums.Source;
 import org.egov.pt.models.enums.Status;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.JsonNode;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
-/**
- * Contains the assessment details of a constructionDetail. Assessment refers to
- * the calculation of property tax for the given constructionDetail number and
- * financial year
- */
-
-@ToString
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class Assessment {
 
-	@JsonProperty("id")
-	private String id;
-	
-	@JsonProperty("tenantId")
-	private String tenantId;
+	@JsonProperty("financialYear")
+	@NotNull
+	private String financialYear ;
 
 	@JsonProperty("assessmentNumber")
-	private String assessmentNumber;
+	private String assessmentNumber ;
 
-	@JsonProperty("propertyId")
-	private String propertyId;
+	@JsonProperty("id")
+	private String id ;
 
-	@JsonProperty("financialYear")
-	private String financialYear;
+	@JsonProperty("tenantId")
+	@NotNull
+	private String tenantId ;
+
+	@JsonProperty("propertyID")
+	@NotNull
+	private String propertyID;
 
 	@JsonProperty("assessmentDate")
-	private Long assessmentDate;
-
-	@JsonProperty("source")
-	private Source source;
-
-	@JsonProperty("channel")
-	private Channel channel;
+	@NotNull
+	private Long assessmentDate ;
 
 	@JsonProperty("status")
-	private Status status;
+	private Status status ;
 
-	@JsonProperty("documents")
-	@Valid
-	private List<Document> documents;
+	@JsonProperty("source")
+	@NotNull
+	private Source source ;
 
 	@JsonProperty("unitUsageList")
 	@Valid
-	private List<UnitUsage> unitUsageList;
+	private List<UnitUsage> unitUsageList ;
+
+	@JsonProperty("documents")
+	@Valid
+	private Set<Document> documents ;
 
 	@JsonProperty("additionalDetails")
-	private Object additionalDetails;
+	private JsonNode additionalDetails ;
+
+	@JsonProperty("channel")
+	private Channel channel ;
+
 
 	@JsonProperty("auditDetails")
-	private AuditDetails auditDetails;
+	private AuditDetails auditDetails ;
+
+
+	public enum Source {
+
+		MUNICIPAL_RECORDS("MUNICIPAL_RECORDS"),
+
+		WEBAPP("WEBAPP"),
+
+		MOBILEAPP("MOBILEAPP"),
+
+		FIELD_SURVEY("FIELD_SURVEY");
+
+		private String value;
+
+		Source(String value) {
+			this.value = value;
+		}
+
+		@Override
+		@JsonValue
+		public String toString() {
+			return String.valueOf(value);
+		}
+
+		@JsonCreator
+		public static Source fromValue(String text) {
+			for (Source b : Source.values()) {
+				if (String.valueOf(b.value).equalsIgnoreCase(text)) {
+					return b;
+				}
+			}
+			return null;
+		}
+	}
+
+	public Assessment addDocumentsItem(Document documentsItem) {
+		if (this.documents == null) {
+			this.documents = new HashSet<>();
+		}
+		this.documents.add(documentsItem);
+		return this;
+	}
+
 }
+

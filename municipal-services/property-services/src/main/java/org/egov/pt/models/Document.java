@@ -1,44 +1,43 @@
 package org.egov.pt.models;
 
+import javax.validation.constraints.NotNull;
+
 import org.egov.pt.models.enums.Status;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
-
-/**
- * This object holds list of documents attached during the transaction for a property
- */
-
-@ToString
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class Document   {
-	
+@EqualsAndHashCode(of= {"fileStore","documentUid","id"})
+public class Document {
+
   @JsonProperty("id")
-  private String id;
-  
-  @JsonProperty("status")
-  private Status status;
+  private String id ;
 
   @JsonProperty("documentType")
-  private String documentType;
+  @NotNull
+  private String documentType ;
 
   @JsonProperty("fileStore")
-  private String fileStore;
+  @NotNull
+  private String fileStore ;
 
   @JsonProperty("documentUid")
-  private String documentUid;
+  @NotNull
+  private String documentUid ;
 
-  @JsonProperty("additionalDetails")
-  private Object additionalDetails;
+  @JsonProperty("auditDetails")
+  private AuditDetails auditDetails;
+
+  @JsonProperty("status")
+  private Status status;
 }
+

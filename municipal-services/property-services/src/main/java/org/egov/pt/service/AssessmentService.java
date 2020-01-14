@@ -6,10 +6,7 @@ import java.util.UUID;
 
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.config.PropertyConfiguration;
-import org.egov.pt.models.Assessment;
-import org.egov.pt.models.AssessmentSearchCriteria;
-import org.egov.pt.models.AuditDetails;
-import org.egov.pt.models.Document;
+import org.egov.pt.models.*;
 import org.egov.pt.models.enums.Status;
 import org.egov.pt.producer.Producer;
 import org.egov.pt.repository.AssessmentRepository;
@@ -20,28 +17,31 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class AssessmentService {
-	
+
 	@Autowired
 	private AssessmentValidator validator;
-	
+
 	@Autowired
 	private Producer producer;
-	
+
 	@Autowired
 	private PropertyConfiguration props;
-	
+
 	@Autowired
 	private AssessmentRepository repository;
-	
+
 	@Autowired
 	private EnrichmentService enrichmentService;
-	
-	
+
+
 	/**
 	 * Method to create an assessment asynchronously.
-	 * 
+	 *
 	 * @param request
 	 * @return
 	 */
@@ -49,14 +49,14 @@ public class AssessmentService {
 		validator.validateAssessmentCreate(request);
 		enrichAssessmentCreate(request);
 		producer.push(props.getCreateAssessmentTopic(), request);
-		
+
 		return request.getAssessment();
 	}
-	
-	
+
+
 	/**
 	 * Method to update an assessment asynchronously.
-	 * 
+	 *
 	 * @param request
 	 * @return
 	 */
@@ -67,18 +67,18 @@ public class AssessmentService {
 
 		return request.getAssessment();
 	}
-	
-	
+
+
 	/**
 	 * Service layer to enrich assessment object in create flow
-	 * 
+	 *
 	 * @param request
 	 */
 	private void enrichAssessmentCreate(AssessmentRequest request) {
 		Assessment assessment = request.getAssessment();
 		assessment.setId(String.valueOf(UUID.randomUUID()));
 		assessment.setAssessmentNumber(getAssessmentNo(request));
-		if(null == assessment.getStatus()) 
+		if(null == assessment.getStatus())
 			assessment.setStatus(Status.ACTIVE);
 
 		AuditDetails auditDetails = AuditDetails.builder()
@@ -86,48 +86,64 @@ public class AssessmentService {
 				.createdTime(new Date().getTime())
 				.lastModifiedBy(request.getRequestInfo().getUserInfo().getUuid())
 				.lastModifiedTime(new Date().getTime()).build();
-		
-		
+
+		if(!CollectionUtils.isEmpty(assessment.getUnitUsageList())) {
+			for(UnitUsage unitUsage: assessment.getUnitUsageList()) {
+				unitUsage.setId(String.valueOf(UUID.randomUUID()));
+				unitUsage.setActive(true);
+				unitUsage.setAuditDetails(auditDetails);
+			}
+		}
 		if(!CollectionUtils.isEmpty(assessment.getDocuments())) {
 			for(Document doc: assessment.getDocuments()) {
 				doc.setId(String.valueOf(UUID.randomUUID()));
+				doc.setAuditDetails(auditDetails);
 				doc.setStatus(Status.ACTIVE);
 			}
-		}		
+		}
 		assessment.setAuditDetails(auditDetails);
 	}
-	
-	
+
+
 	/**
 	 * Service layer to enrich assessment object in update flow
-	 * 
+	 *
 	 * @param request
 	 */
 	private void enrichAssessmentUpdate(AssessmentRequest request) {
 		Assessment assessment = request.getAssessment();
-		
+
 		AuditDetails auditDetails = AuditDetails.builder()
 				.createdBy(request.getRequestInfo().getUserInfo().getUuid())
 				.createdTime(new Date().getTime())
 				.lastModifiedBy(request.getRequestInfo().getUserInfo().getUuid())
 				.lastModifiedTime(new Date().getTime()).build();
-		
 
+		if(!CollectionUtils.isEmpty(assessment.getUnitUsageList())) {
+			for(UnitUsage unitUsage: assessment.getUnitUsageList()) {
+				if(StringUtils.isEmpty(unitUsage.getId())) {
+					unitUsage.setId(String.valueOf(UUID.randomUUID()));
+					unitUsage.setActive(true);
+					unitUsage.setAuditDetails(auditDetails);
+				}
+			}
+		}
 		if(!CollectionUtils.isEmpty(assessment.getDocuments())) {
 			for(Document doc: assessment.getDocuments()) {
 				if(StringUtils.isEmpty(doc.getId())) {
 					doc.setId(String.valueOf(UUID.randomUUID()));
+					doc.setAuditDetails(auditDetails);
 					doc.setStatus(Status.ACTIVE);
 				}
 			}
 		}
 		assessment.getAuditDetails().setLastModifiedBy(auditDetails.getLastModifiedBy());
-		assessment.getAuditDetails().setLastModifiedTime(auditDetails.getLastModifiedTime());	
+		assessment.getAuditDetails().setLastModifiedTime(auditDetails.getLastModifiedTime());
 	}
-	
+
 	/**
 	 * Service layer to search assessments.
-	 * 
+	 *
 	 * @param requestInfo
 	 * @param criteria
 	 * @return
@@ -136,10 +152,10 @@ public class AssessmentService {
 		List<Assessment> assessments = repository.getAssessments(criteria);
 		return assessments;
 	}
-	
-	
+
+
 	private String getAssessmentNo(AssessmentRequest request) {
-		return enrichmentService.getIdList(request.getRequestInfo(), request.getAssessment().getTenantId(), 
+		return enrichmentService.getIdList(request.getRequestInfo(), request.getAssessment().getTenantId(),
 				props.getAssessmentIdGenName(), props.getAssessmentIdGenFormat(), 1).get(0);
 	}
 }
