@@ -46,7 +46,7 @@ class PastPayments extends Component {
     let name = JSON.parse(getUserInfo()).name ? JSON.parse(getUserInfo()).name : "-"
     const date = (to) => {
       let toDate = new Date(to);
-      return toDate.toLocaleString('default', { month: 'short' }) + ' - ' + toDate.getFullYear().toString().substring(2)
+      return toDate.toLocaleString('default', { month: 'short' }) + ' - ' + toDate.getFullYear().toString()
     }
     const data = pastPaymentsDetails.map((element) =>
       <div style={{ marginLeft: '0px', padding: '0px', position: 'relative', borderBottom: '1px solid  rgb(224, 224, 224)', flexgrow: 1 }}>

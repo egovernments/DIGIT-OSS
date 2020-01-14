@@ -41,7 +41,7 @@ const waterAndSewerageSearchAndResult = {
             uiFramework: "custom-atoms",
             componentPath: "Div",
             props: {
-                className: "common-div-css"
+                // className: "common-div-css"
             },
             children: {
                 header: header,

@@ -97,7 +97,7 @@ export const searchApiCall = async (state, dispatch) => {
           name: element.property.owners[0].name,
           status: element.status,
           address: element.property.address.street,
-        connectionType: element.connectionType
+          connectionType: element.connectionType
         })
       }
       showResults(finalArray, dispatch)

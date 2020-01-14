@@ -55,7 +55,7 @@ const styles = {
 
 const date = (to) => {
     let toDate = new Date(to);
-    return toDate.toLocaleString('default', { month: 'short' }) + ' - ' + toDate.getFullYear().toString().substring(2)
+    return toDate.toLocaleString('default', { month: 'short' }) + ' - ' + toDate.getFullYear().toString()
 }
 
 function FeesEstimateCard(props) {

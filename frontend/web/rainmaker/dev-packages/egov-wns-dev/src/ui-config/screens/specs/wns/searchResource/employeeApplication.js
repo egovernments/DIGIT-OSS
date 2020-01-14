@@ -189,16 +189,18 @@ export const wnsApplication = getCommonCard({
         componentPath: "Button",
         gridDefination: {
           xs: 6,
-          sm: 6,
-          align: "center"
+          sm: 6
+          // align: "center"
         },
         props: {
           variant: "outlined",
           style: {
-            color: "#FE7A51",
-            borderColor: "#FE7A51",
-            width: "85%",
-            height: "48px"
+            color: "rgba(0, 0, 0, 0.6000000238418579)",
+            borderColor: "rgba(0, 0, 0, 0.6000000238418579)",
+            width: "70%",
+            height: "48px",
+            margin: "8px",
+            float: "right"
           }
         },
         children: {
@@ -216,15 +218,16 @@ export const wnsApplication = getCommonCard({
         gridDefination: {
           xs: 6,
           sm: 6,
-          align: "center"
+          // align: "center"
         },
         props: {
           variant: "contained",
           style: {
             color: "white",
+            margin: "8px",
             backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
             borderRadius: "2px",
-            width: "85%",
+            width: "70%",
             height: "48px"
           }
         },
