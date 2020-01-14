@@ -148,7 +148,7 @@
               {
                 "variable": "email",
                 "value": {
-                  "path": "$.property.owners[0].email"
+                  "path": "$.property.owners[0].emailId"
                 }
               },
               {
