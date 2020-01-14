@@ -18,6 +18,9 @@ const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
   if (ownerDetails && (ownerDetails.length > 0)) {
     owner = ownerDetails[0];
   }
+  if(!owner.gender){
+    owner['gender']='COMMON_GENDER_MALE';
+  }
   return (
     ownerDetails && ownerDetails.map((owner) => {
       return ({
@@ -54,6 +57,7 @@ const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
             : {
               key: getTranslatedLabel("PT_OWNERSHIP_INFO_GENDER", localizationLabelsData),
               value: owner.gender || "NA",
+              // value:gendervalue || "NA",
             },
           isInstitution
             ? {
@@ -189,6 +193,7 @@ const OwnerInfo = ({ properties, editIcon, generalMDMSDataById, ownershipTransfe
                       </div>
                       {ownerItem.items.map(
                         (item) => {
+                          console.log("item:",item);
                           return (<div>
                             <div className="col-sm-3 col-xs-12" style={{ marginBottom: 10, marginTop: 5 }}>
                               <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>
