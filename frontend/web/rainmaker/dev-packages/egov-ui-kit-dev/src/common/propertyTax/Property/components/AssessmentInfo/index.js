@@ -157,10 +157,10 @@ const getAssessmentInfo = (propertyDetails, generalMDMSDataById) => {
         value: generalMDMSDataById
           ? propertyDetails.propertySubType
             ? generalMDMSDataById["PropertySubType"]
-              ? generalMDMSDataById["PropertySubType"][propertyDetails.propertySubType].name
+              ? `PROPERTYTAX_BILLING_SLAB_${generalMDMSDataById["PropertySubType"][propertyDetails.propertySubType].code}`
               : "NA"
             : generalMDMSDataById["PropertyType"]
-              ? generalMDMSDataById["PropertyType"][propertyDetails.propertyType].name
+              ? `PROPERTYTAX_BILLING_SLAB_${generalMDMSDataById["PropertyType"][propertyDetails.propertyType].code}`
               : "NA"
           : "NA",
       },
