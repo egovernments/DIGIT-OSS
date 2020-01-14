@@ -5,7 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import org.egov.pt.models.Boundary;
+import org.egov.pt.models.Locality;
 import org.egov.pt.models.Property;
 import org.egov.pt.repository.ServiceRequestRepository;
 import org.egov.pt.web.contracts.PropertyRequest;
@@ -22,10 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 
-import lombok.extern.slf4j.Slf4j;
-
 @Service
-@Slf4j
 public class BoundaryService {
 
 	@Value("${egov.location.host}")
@@ -88,8 +85,8 @@ public class BoundaryService {
 				throw new CustomException("BOUNDARY MDMS DATA ERROR", "The boundary data was not found");
 
 			ArrayList boundaryResponse = context.read(propertyIdToJsonPath.get(property.getPropertyId()));
-			Boundary boundary = mapper.convertValue(boundaryResponse.get(0), Boundary.class);
-			if (boundary.getArea() == null || boundary.getName() == null)
+			Locality boundary = mapper.convertValue(boundaryResponse.get(0), Locality.class);
+			if (boundary.getName() == null)
 				throw new CustomException("INVALID BOUNDARY DATA", "The boundary data for the code "
 						+ property.getAddress().getLocality().getCode() + " is not available");
 			property.getAddress().setLocality(boundary);

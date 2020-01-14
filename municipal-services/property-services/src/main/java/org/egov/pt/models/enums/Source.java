@@ -4,18 +4,17 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * New property comes into system either property is newly constructed or existing property got sub divided. Here the reason for creation will be captured.
+ * Source of a constructionDetail data. The constructionDetail will be created in a system based on the data avaialble in their manual records or during field survey. There can be more from client to client.
  */
-
-public enum CreationReason {
+public enum Source {
 	
-  NEWPROPERTY("NEWPROPERTY"),
+  MUNICIPAL_RECORDS("MUNICIPAL_RECORDS"),
     
-  SUBDIVISION("SUBDIVISION");
+  FIELD_SURVEY("FIELD_SURVEY");
 
   private String value;
 
-  CreationReason(String value) {
+  Source(String value) {
     this.value = value;
   }
 
@@ -26,8 +25,8 @@ public enum CreationReason {
   }
 
   @JsonCreator
-  public static CreationReason fromValue(String text) {
-    for (CreationReason b : CreationReason.values()) {
+  public static Source fromValue(String text) {
+    for (Source b : Source.values()) {
       if (String.valueOf(b.value).equalsIgnoreCase(text)) {
         return b;
       }

@@ -5,16 +5,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
 import org.egov.pt.models.Assessment;
+import org.egov.pt.models.AuditDetails;
 import org.egov.pt.models.Document;
 import org.egov.pt.models.Unit;
-import org.egov.pt.models.Assessment.Source;
-import org.egov.pt.models.AuditDetails;
 import org.egov.pt.models.enums.OccupancyType;
+import org.egov.pt.models.enums.Source;
 import org.egov.pt.models.enums.Status;
 import org.egov.tracer.model.CustomException;
 import org.postgresql.util.PGobject;
@@ -48,12 +47,10 @@ public class AssessmentRowMapper implements ResultSetExtractor<List<Assessment>>
 						.status(Status.valueOf(rs.getString("ass_status")))
 						.tenantId(rs.getString("ass_tenantid"))
 						.assessmentDate(rs.getLong("ass_assessmentdate"))
-						.buildUpArea(rs.getDouble("ass_builduparea"))
 						.financialYear(rs.getString("ass_financialyear"))
-						.propertyID(rs.getString("ass_propertyid"))
+						.propertyId(rs.getString("ass_propertyid"))
 						.source(Source.valueOf(rs.getString("ass_source")))
-						.units(new ArrayList<>())
-						.documents(new HashSet<>()).build();
+						.documents(new ArrayList<>()).build();
 				
 				try {
 					PGobject obj = (PGobject) rs.getObject("ass_additionaldetails");
@@ -64,7 +61,6 @@ public class AssessmentRowMapper implements ResultSetExtractor<List<Assessment>>
 				} catch (IOException e) {
 					throw new CustomException("PARSING ERROR", "The assessment additionaldetails json cannot be parsed");
 				}
-				assessment.getUnits().add(getUnit(rs));
 				assessment.getDocuments().add(getDocument(rs));
 				
 				AuditDetails auditDetails = AuditDetails.builder().createdBy(rs.getString("ass_createdby"))
@@ -74,7 +70,6 @@ public class AssessmentRowMapper implements ResultSetExtractor<List<Assessment>>
 				
 				assessmentMap.put(assessment.getId(), assessment);
 			}else {
-				assessment.getUnits().add(getUnit(rs));
 				assessment.getDocuments().add(getDocument(rs));
 			}
 		}
@@ -94,14 +89,10 @@ public class AssessmentRowMapper implements ResultSetExtractor<List<Assessment>>
 				
 		
 		return Unit.builder().id(rs.getString("unit_id"))
-				.active(rs.getBoolean("unit_active"))
-				.arv(rs.getDouble("unit_arv"))
-				.constructionType(rs.getString("unit_constructiontype"))
 				.floorNo(rs.getString("unit_floorno"))
 				.occupancyDate(rs.getLong("unit_occupancydate"))
 				.occupancyType((OccupancyType.valueOf(rs.getString("unit_occupancytype"))))
 				.usageCategory(rs.getString("unit_usagecategory"))
-				.unitArea(rs.getDouble("unit_unitarea"))
 				.auditDetails(auditDetails)
 				.build();
 	}
@@ -121,7 +112,6 @@ public class AssessmentRowMapper implements ResultSetExtractor<List<Assessment>>
 				.documentType(rs.getString("doc_documenttype"))
 				.documentUid(rs.getString("doc_documentuid"))
 				.fileStore(rs.getString("doc_filestore"))
-				.auditDetails(auditDetails)
 				.build();
 	}
 	

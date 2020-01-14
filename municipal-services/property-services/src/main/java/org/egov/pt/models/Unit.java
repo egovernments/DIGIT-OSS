@@ -1,61 +1,55 @@
 package org.egov.pt.models;
 
-import javax.validation.constraints.NotNull;
-
 import org.egov.pt.models.enums.OccupancyType;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * Unit
  */
 
-@Data
-@AllArgsConstructor
+@ToString
+@Getter
+@Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class Unit   {
 	
-        @JsonProperty("id")
-        private String id;
+  @JsonProperty("id")
+  private String id;
 
-        @JsonProperty("floorNo")
-        private String floorNo;
+  @JsonProperty("tenantId")
+  private String tenantId;
 
-        @JsonProperty("unitArea")
-        @NotNull
-        private Double unitArea;
+  @JsonProperty("floorNo")
+  private String floorNo;
 
-        @JsonProperty("usageCategory")
-        @NotNull
-        private String usageCategory;
+  @JsonProperty("unitType")
+  private String unitType;
 
-        @JsonProperty("occupancyType")
-        @NotNull
-        private OccupancyType occupancyType;
+  @JsonProperty("usageCategory")
+  private String usageCategory;
 
-        @JsonProperty("occupancyDate")
-        @NotNull
-        private Long occupancyDate;
+  @JsonProperty("occupancyType")
+  private OccupancyType occupancyType;
 
-        @JsonProperty("constructionType")
-        @NotNull
-        private String constructionType;
-        
-        @JsonProperty("active")
-        private Boolean active;
+  @JsonProperty("occupancyDate")
+  private Long occupancyDate;
 
-        @JsonProperty("arv")
-        private Double arv;
-        
-        @JsonProperty("auditDetails")
-        private AuditDetails auditDetails;
+  @JsonProperty("constructionDetail")
+  private ConstructionDetail constructionDetail;
 
-
+  @JsonProperty("additionalDetails")
+  private Object additionalDetails;
+  
+  @JsonProperty("auditDetails")
+  private AuditDetails auditDetails;
 }
-

@@ -10,7 +10,6 @@ import org.egov.pt.models.Assessment;
 import org.egov.pt.models.AssessmentSearchCriteria;
 import org.egov.pt.models.AuditDetails;
 import org.egov.pt.models.Document;
-import org.egov.pt.models.Unit;
 import org.egov.pt.models.enums.Status;
 import org.egov.pt.producer.Producer;
 import org.egov.pt.repository.AssessmentRepository;
@@ -21,10 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import lombok.extern.slf4j.Slf4j;
-
 @Service
-@Slf4j
 public class AssessmentService {
 	
 	@Autowired
@@ -91,17 +87,10 @@ public class AssessmentService {
 				.lastModifiedBy(request.getRequestInfo().getUserInfo().getUuid())
 				.lastModifiedTime(new Date().getTime()).build();
 		
-		if(!CollectionUtils.isEmpty(assessment.getUnits())) {
-			for(Unit unit: assessment.getUnits()) {
-				unit.setId(String.valueOf(UUID.randomUUID()));
-				unit.setActive(true);
-				unit.setAuditDetails(auditDetails);
-			}
-		}		
+		
 		if(!CollectionUtils.isEmpty(assessment.getDocuments())) {
 			for(Document doc: assessment.getDocuments()) {
 				doc.setId(String.valueOf(UUID.randomUUID()));
-				doc.setAuditDetails(auditDetails);
 				doc.setStatus(Status.ACTIVE);
 			}
 		}		
@@ -123,20 +112,11 @@ public class AssessmentService {
 				.lastModifiedBy(request.getRequestInfo().getUserInfo().getUuid())
 				.lastModifiedTime(new Date().getTime()).build();
 		
-		if(!CollectionUtils.isEmpty(assessment.getUnits())) {
-			for(Unit unit: assessment.getUnits()) {
-				if(StringUtils.isEmpty(unit.getId())) {
-					unit.setId(String.valueOf(UUID.randomUUID()));
-					unit.setActive(true);
-					unit.setAuditDetails(auditDetails);
-				}
-			}
-		}
+
 		if(!CollectionUtils.isEmpty(assessment.getDocuments())) {
 			for(Document doc: assessment.getDocuments()) {
 				if(StringUtils.isEmpty(doc.getId())) {
 					doc.setId(String.valueOf(UUID.randomUUID()));
-					doc.setAuditDetails(auditDetails);
 					doc.setStatus(Status.ACTIVE);
 				}
 			}

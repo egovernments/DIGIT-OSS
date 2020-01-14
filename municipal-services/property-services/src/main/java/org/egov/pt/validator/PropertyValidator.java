@@ -166,18 +166,6 @@ public class PropertyValidator {
 //    	if(configs.getIsWorkflowEnabled() && null == property.getWorkflow())
 //    		errorMap.put("EG_PR_WF_NOT_NULL", "Wokflow is enabled for create please provide the necessary info in workflow field in property");
    	
-    	Long constructionDate = property.getConstructionDate();
-    	Long occupancyDate = property.getOccupancyDate();
-    			
-    	if(constructionDate != null && occupancyDate  != null && occupancyDate.compareTo(constructionDate) < 0 )
-    		errorMap.put("EG_PT_DATE_ERROR", "Occuopancy date cannot be lesser than construction date ");
-    	
-    	if(constructionDate != null && constructionDate.compareTo(System.currentTimeMillis()) >= 0)
-    		errorMap.put("EG_PT_CONSDATE_ERROR", "Construction date cannot be a future date ");
-    	
-    	if(occupancyDate != null && occupancyDate.compareTo(System.currentTimeMillis()) >= 0)
-    		errorMap.put("EG_PT_OCCUPANCYDATE_ERROR", "Occupancy date cannot be a future date ");
-    	
     	if(property.getLandArea().compareTo(configs.getMinumumLandArea()) < 0 )
     		errorMap.put("EG_PT_ERROR", "Land Area cannot be lesser than minimum value : " + configs.getMinumumLandArea() + " " + configs.getLandAreaUnit());
     	
@@ -315,26 +303,18 @@ public class PropertyValidator {
     	
 		log.debug("contains check: " + property.getOwnershipCategory().contains("INSTITUTIONAL"));
 		
-		List<Institution> institutions = property.getInstitution();
+		Institution institution = property.getInstitution();
 		
-		if(CollectionUtils.isEmpty(institutions))
+		if(ObjectUtils.isEmpty(institution))
 			return;
-		if(institutions.contains(null))
-			errorMap.put("INVALID ENTRY IN INSTITUTIONS LIST", " The Institution list cannot contain null values");
-
 		
-		Boolean isOwnerCategoryInstitution = property.getOwnershipCategory().contains("INSTITUTIONAL");
-		
-		if (!property.getOwnershipCategory().contains("INSTITUTIONAL")
-				&& !CollectionUtils.isEmpty(property.getInstitution())) {
+		if (!property.getOwnershipCategory().contains("INSTITUTIONAL")) {
 
 			errorMap.put("INVALID INSTITUTION OBJECT",
 					"The institution object should be null. OwnershipCategory does not contain Institutional");
 			return;
 		}
 
-		institutions.forEach(institution -> {
-			if (institution != null && isOwnerCategoryInstitution) {
 
 				if (institution.getType() == null)
 					errorMap.put(" INVALID INSTITUTION OBJECT ", "The institutionType cannot be null ");
@@ -342,8 +322,6 @@ public class PropertyValidator {
 					errorMap.put("INVALID INSTITUTION OBJECT", "Institution name cannot be null");
 				if (institution.getDesignation() == null)
 					errorMap.put("INVALID INSTITUTION OBJECT", "Designation cannot be null");
-			}
-		});
 	}
 
     /**

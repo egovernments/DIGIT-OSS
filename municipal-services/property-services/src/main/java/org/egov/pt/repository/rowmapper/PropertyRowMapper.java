@@ -11,16 +11,14 @@ import java.util.Map;
 
 import org.egov.pt.models.Address;
 import org.egov.pt.models.AuditDetails;
-import org.egov.pt.models.Boundary;
 import org.egov.pt.models.Document;
 import org.egov.pt.models.Institution;
+import org.egov.pt.models.Locality;
 import org.egov.pt.models.OwnerInfo;
 import org.egov.pt.models.Property;
-import org.egov.pt.models.Property.Source;
 import org.egov.pt.models.enums.CreationReason;
 import org.egov.pt.models.enums.Relationship;
 import org.egov.pt.models.enums.Status;
-import org.egov.pt.models.enums.Type;
 import org.egov.tracer.model.CustomException;
 import org.postgresql.util.PGobject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,29 +52,35 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 
 				AuditDetails auditdetails = getAuditDetail(rs, "proeprty");
 
-				Long occupancyDate = rs.getLong("occupancyDate");
-				if (rs.wasNull()) {
-					occupancyDate = null;
-				}
-
 				Double landArea = rs.getDouble("landArea");
 				if (rs.wasNull()) {
 					landArea = null;
 				}
+				
+				String institutionId = rs.getString("institutionid");
+				
+
+					 Institution institute = Institution.builder()
+							.tenantId(rs.getString("institutiontenantid"))
+							.designation(rs.getString("designation"))
+							.name(rs.getString("institutionName"))
+							.type(rs.getString("institutionType"))
+							.id(institutionId)
+							.build();
 
 				currentProperty = Property.builder()
 						.creationReason(CreationReason.fromValue(rs.getString("creationReason")))
 						.acknowldgementNumber(rs.getString("acknowldgementNumber"))
 						.status(Status.fromValue(rs.getString("propertystatus")))
 						.ownershipCategory(rs.getString("ownershipcategory"))
-						.source(Source.fromValue(rs.getString("source")))
+						.source(org.egov.pt.models.enums.Source.fromValue(rs.getString("source")))
 						.usageCategory(rs.getString("pusagecategory"))
 						.oldPropertyId(rs.getString("oldPropertyId"))
 						.propertyType(rs.getString("propertytype"))
 						.propertyId(rs.getString("propertyid"))
 						.accountId(rs.getString("accountid"))
-						.occupancyDate(occupancyDate)
 						.auditDetails(auditdetails)
+						.institution(institute)
 						.landArea(landArea)
 						.tenantId(tenanId)
 						.id(propertyUuId)
@@ -107,7 +111,6 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 	private void addChildrenToProperty(ResultSet rs, Property currentProperty)
 			throws SQLException {
 
-		addInstitutionToProperty(rs, currentProperty);
 		addOwnerToProperty(rs, currentProperty);
 		addDocToProperty(rs, currentProperty);
 	}
@@ -223,39 +226,6 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 		
 		owner.addDocumentsItem(doc);
 	}
-	
-		
-	/**
-	 * Creates and add institution to Property 
-	 * @param rs
-	 * @throws SQLException
-	 */
-	private void addInstitutionToProperty(ResultSet rs, Property property) throws SQLException {
-
-		
-		String institutionId = rs.getString("institutionid");
-		List<Institution> institutions = property.getInstitution();
-		
-		if(institutionId == null)
-			return;
-
-		if (!CollectionUtils.isEmpty(institutions))
-			for (Institution institute : institutions) {
-
-				if (institute.getId().equals(institutionId))
-					return;
-			}
-
-			 Institution institute = Institution.builder()
-					.tenantId(rs.getString("institutiontenantid"))
-					.designation(rs.getString("designation"))
-					.name(rs.getString("institutionName"))
-					.type(rs.getString("institutionType"))
-					.id(institutionId)
-					.build();
-			 
-			property.addInstitutionItem(institute);
-	}
 
 	
 	/**
@@ -268,38 +238,17 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 	 */
 	private Address getAddress(ResultSet rs, String tenanId) throws SQLException {
 		
-		Boundary locality = Boundary.builder().code(rs.getString("locality")).build();
-
-		/*
-		 * id of the address table is being fetched as address key to avoid confusion
-		 * with addressId field
-		 */
-		Double latitude = rs.getDouble("latitude");
-		if (rs.wasNull()) {
-			latitude = null;
-		}
-		
-		Double longitude = rs.getDouble("longitude");
-		if (rs.wasNull()) {
-			longitude = null;
-		}
+		Locality locality = Locality.builder().code(rs.getString("locality")).build();
 
 		Address address = Address.builder()
-				.type(Type.fromValue(rs.getString("addresstype")))
-				.addressNumber(rs.getString("addressNumber"))
-				.addressLine1(rs.getString("addressLine1"))
-				.addressLine2(rs.getString("addressLine2"))
 				.buildingName(rs.getString("buildingName"))
-				.detail(rs.getString("addressdetail"))
 				.landmark(rs.getString("landmark"))
 				.pincode(rs.getString("pincode"))
 				.doorNo(rs.getString("doorno"))
 				.street(rs.getString("street"))
 				.id(rs.getString("addressId"))
 				.city(rs.getString("city"))
-				.latitude(latitude)
 				.locality(locality)
-				.longitude(longitude)
 				.tenantId(tenanId)
 				.build();
 		return address;

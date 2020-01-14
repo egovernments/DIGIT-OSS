@@ -17,7 +17,6 @@ import org.egov.pt.models.AssessmentSearchCriteria;
 import org.egov.pt.models.Document;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.PropertyCriteria;
-import org.egov.pt.models.Unit;
 import org.egov.pt.service.AssessmentService;
 import org.egov.pt.service.PropertyService;
 import org.egov.pt.util.AssessmentUtils;
@@ -29,10 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import lombok.extern.slf4j.Slf4j;
-
 @Service
-@Slf4j
 public class AssessmentValidator {
 
 	@Autowired
@@ -106,23 +102,10 @@ public class AssessmentValidator {
 			if (assessmentFromDB.getDocuments().size() > assessment.getDocuments().size()) {
 				errorMap.put("MISSING_DOCUMENTS", "Please send all the documents belonging to this assessment");
 			}
-			if (assessmentFromDB.getUnits().size() > assessment.getUnits().size()) {
-				errorMap.put("MISSING_UNITS", "Please send all the units belonging to this assessment");
-			}
-			Set<String> existingUnits = assessmentFromDB.getUnits().stream().map(Unit::getId)
-					.collect(Collectors.toSet());
+			
+	
 			Set<String> existingDocs = assessmentFromDB.getDocuments().stream().map(Document::getId)
 					.collect(Collectors.toSet());
-			if (!CollectionUtils.isEmpty(assessment.getUnits())) {
-				for (Unit unit : assessment.getUnits()) {
-					if (!StringUtils.isEmpty(unit.getId())) {
-						if (!existingUnits.contains(unit.getId())) {
-							errorMap.put("UNIT_NOT_FOUND",
-									"You're trying to update a non-existent unit: " + unit.getId());
-						}
-					}
-				}
-			}
 			if (!CollectionUtils.isEmpty(assessment.getDocuments())) {
 				for (Document doc : assessment.getDocuments()) {
 					if (!StringUtils.isEmpty(doc.getId())) {
@@ -134,7 +117,7 @@ public class AssessmentValidator {
 				}
 			}
 			
-		assessment.setAdditionalDetails(utils.jsonMerge(assessmentFromDB.getAdditionalDetails(), assessment.getAdditionalDetails()));
+		//assessment.setAdditionalDetails(utils.jsonMerge(assessmentFromDB.getAdditionalDetails(), assessment.getAdditionalDetails()));
 			
 		}
 
@@ -145,7 +128,7 @@ public class AssessmentValidator {
 
 	private void commonValidations(AssessmentRequest assessmentReq, Map<String, String> errorMap, boolean isUpdate) {
 		Assessment assessment = assessmentReq.getAssessment();
-		if(!checkIfPropertyExists(assessmentReq.getRequestInfo(), assessment.getPropertyID(), assessment.getTenantId())) {
+		if(!checkIfPropertyExists(assessmentReq.getRequestInfo(), assessment.getPropertyId(), assessment.getTenantId())) {
 			throw new CustomException("PROPERTY_NOT_FOUND", "You're trying to assess a non-existing property.");
 		}
 		if (assessment.getAssessmentDate() > new Date().getTime()) {
@@ -184,22 +167,6 @@ public class AssessmentValidator {
 		if(CollectionUtils.isEmpty(masters.keySet()))
         	throw new CustomException("MASTER_FETCH_FAILED", "Couldn't fetch master data for validation");
 		
-		for(Unit unit: assessment.getUnits()) {
-			if(!CollectionUtils.isEmpty(masters.get(PTConstants.MDMS_PT_CONSTRUCTIONTYPE))) {
-				if(!masters.get(PTConstants.MDMS_PT_CONSTRUCTIONTYPE).contains(unit.getConstructionType()))
-					errorMap.put("CONSTRUCTION_TYPE_INVALID", "The construction type provided is invalid");
-			}
-
-			if(!CollectionUtils.isEmpty(masters.get(PTConstants.MDMS_PT_USAGECATEGORY))) {
-				if(!masters.get(PTConstants.MDMS_PT_USAGECATEGORY).contains(unit.getUsageCategory()))
-					errorMap.put("USAGE_CATEGORY_INVALID", "The usage category provided is invalid");
-			}
-			
-			if(CollectionUtils.isEmpty(masters.get(PTConstants.MDMS_PT_OCCUPANCYTYPE))) {
-				if(!masters.get(PTConstants.MDMS_PT_OCCUPANCYTYPE).contains(unit.getOccupancyType().toString()))
-					errorMap.put("OCCUPANCY_TYPE_INVALID", "The occupancy type provided is invalid");
-			}
-		}
 
 		if (!CollectionUtils.isEmpty(errorMap.keySet())) {
 			throw new CustomException(errorMap);

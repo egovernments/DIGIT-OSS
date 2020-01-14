@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.AuditDetails;
+import org.egov.pt.models.Institution;
 import org.egov.pt.models.OwnerInfo;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.PropertyCriteria;
@@ -25,6 +26,7 @@ import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 
 @Service
 public class EnrichmentService {
@@ -77,8 +79,8 @@ public class EnrichmentService {
 			owner.setStatus(Status.ACTIVE);
 		});
 
-		if (!CollectionUtils.isEmpty(property.getInstitution()))
-			property.getInstitution().forEach(institute -> institute.setId(UUID.randomUUID().toString()));
+		if (!ObjectUtils.isEmpty(property.getInstitution()))
+			property.getInstitution().setId(UUID.randomUUID().toString());
 
 		property.setAuditDetails(propertyAuditDetails);
 
@@ -119,14 +121,10 @@ public class EnrichmentService {
 			owner.setStatus(Status.ACTIVE);
 		});
 		
-		if (!CollectionUtils.isEmpty(property.getInstitution()))
-			property.getInstitution().forEach(institute -> {
+		Institution institute = property.getInstitution();
+		if (!ObjectUtils.isEmpty(institute) && null == institute.getId())
+			property.getInstitution().setId(UUID.randomUUID().toString());
 
-				if (null == institute.getId())
-					institute.setId(UUID.randomUUID().toString());
-			});
-		
-		
             property.setAuditDetails(auditDetails);
             property.setAccountId(propertyFromDb.getAccountId());
             property.getAddress().setId(propertyFromDb.getAddress().getId());

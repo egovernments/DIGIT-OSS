@@ -1,9 +1,6 @@
 package org.egov.pt.web.contracts;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import javax.validation.Valid;
 
 import org.egov.common.contract.response.ResponseInfo;
 import org.egov.pt.models.Property;
@@ -12,31 +9,26 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
+/**
+ * Contains the ResponseHeader and the created/updated property
+ */
 
-@Data
-@AllArgsConstructor
+@ToString
+@Getter
+@Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class PropertyResponse   {
-	
-        @JsonProperty("ResponseInfo")
-        private ResponseInfo responseInfo;
 
-        @JsonProperty("Properties")
-        @Valid
-        private List<Property> properties;
+	@JsonProperty("ResponseInfo")
+  private ResponseInfo responseInfo;
 
-
-        public PropertyResponse addPropertiesItem(Property propertiesItem) {
-            if (this.properties == null) {
-            this.properties = new ArrayList<>();
-            }
-        this.properties.add(propertiesItem);
-        return this;
-        }
-
+  @JsonProperty("Properties")
+  private List<Property> properties;
 }
-

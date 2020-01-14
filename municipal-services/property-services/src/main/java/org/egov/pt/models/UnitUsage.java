@@ -1,6 +1,6 @@
 package org.egov.pt.models;
 
-import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 import org.egov.pt.models.enums.OccupancyType;
 
@@ -8,37 +8,38 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
+/**
+ * UnitUsage
+ */
 
-@Data
-@AllArgsConstructor
+@ToString
+@Getter
+@Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class UnitUsage {
-	
-    @JsonProperty("id")
-    @NotNull
-    private String id;
-    
-    @JsonProperty("tenantId")
-    @NotNull
-    private String tenantId;
 
-    @JsonProperty("usageCategory")
-    private String usageCategory;
+	@JsonProperty("unitId")
+	private String unitId;
 
-    @JsonProperty("occupancyType")
-    @NotNull
-    private OccupancyType occupancyType;
+	@JsonProperty("usageCategory")
+	private String usageCategory;
 
-    @JsonProperty("occupancyDate")
-    @NotNull
-    private Long occupancyDate;
+	@JsonProperty("occupancyType")
+	private OccupancyType occupancyType;
 
-    @JsonProperty("constructionType")
-    @NotNull
-    private String constructionType;
+	@JsonProperty("occupancyDate")
+	private BigDecimal occupancyDate;
 
+	@JsonProperty("tenantId")
+	private String tenantId;
+
+	@JsonProperty("additionalDetails")
+	private Object additionalDetails;
 }

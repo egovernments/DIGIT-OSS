@@ -1,8 +1,13 @@
 package org.egov.pt.service;
 
+import static org.egov.pt.util.PTConstants.FIELDS_TO_IGNORE;
+import static org.egov.pt.util.PTConstants.VARIABLE_ACTIVE;
+import static org.egov.pt.util.PTConstants.VARIABLE_USERACTIVE;
+
+import java.util.LinkedList;
+import java.util.List;
+
 import org.egov.pt.models.Property;
-import org.egov.pt.web.contracts.PropertyRequest;
-import org.egov.pt.models.Difference;
 import org.egov.tracer.model.CustomException;
 import org.javers.core.Javers;
 import org.javers.core.JaversBuilder;
@@ -11,10 +16,6 @@ import org.javers.core.diff.changetype.NewObject;
 import org.javers.core.diff.changetype.ValueChange;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-
-import java.util.*;
-
-import static org.egov.pt.util.PTConstants.*;
 
 @Service
 public class DiffService {
@@ -27,19 +28,19 @@ public class DiffService {
      * @param searchResult The searched licenses corresponding to the request
      * @return List of Difference object
      */
-    public Difference getDifference(PropertyRequest request, Property searchResult) {
-
-        Property property = request.getProperty();
-
-        Difference diff = new Difference();
-        diff.setId(property.getId());
-        diff.setFieldsChanged(getUpdatedFields(property, searchResult));
-        diff.setClassesAdded(getObjectsAdded(property, searchResult));
-        diff.setClassesRemoved(getObjectsRemoved(property, searchResult));
-
-        return diff;
-    }
-
+//    public Difference getDifference(PropertyRequest request, Property searchResult) {
+//
+//        Property property = request.getProperty();
+//
+//        Difference diff = new Difference();
+//        diff.setId(property.getId());
+//        diff.setFieldsChanged(getUpdatedFields(property, searchResult));
+//        diff.setClassesAdded(getObjectsAdded(property, searchResult));
+//        diff.setClassesRemoved(getObjectsRemoved(property, searchResult));
+//
+//        return diff;
+//    }
+//
 
     /**
      * Gives the field names whose values are different in the two classes

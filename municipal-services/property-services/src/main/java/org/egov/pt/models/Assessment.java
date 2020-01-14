@@ -1,120 +1,74 @@
 package org.egov.pt.models;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 import org.egov.pt.models.enums.Channel;
+import org.egov.pt.models.enums.Source;
 import org.egov.pt.models.enums.Status;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.databind.JsonNode;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-@Data
-@AllArgsConstructor
+/**
+ * Contains the assessment details of a constructionDetail. Assessment refers to
+ * the calculation of property tax for the given constructionDetail number and
+ * financial year
+ */
+
+@ToString
+@Getter
+@Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class Assessment {
+
+	@JsonProperty("id")
+	private String id;
 	
-        @JsonProperty("financialYear")
-        @NotNull
-        private String financialYear ;
+	@JsonProperty("tenantId")
+	private String tenantId;
 
-        @JsonProperty("assessmentNumber")
-        private String assessmentNumber ;
+	@JsonProperty("assessmentNumber")
+	private String assessmentNumber;
 
-        @JsonProperty("id")
-        private String id ;
-        
-        @JsonProperty("tenantId")
-        @NotNull
-        private String tenantId ;
-        
-        @JsonProperty("propertyID")
-        @NotNull
-        private String propertyID;
+	@JsonProperty("propertyId")
+	private String propertyId;
 
-        @JsonProperty("assessmentDate")
-        @NotNull
-        private Long assessmentDate ;
+	@JsonProperty("financialYear")
+	private String financialYear;
 
-        @JsonProperty("status")
-        private Status status ;
+	@JsonProperty("assessmentDate")
+	private Long assessmentDate;
 
-        @JsonProperty("source")
-        @NotNull
-        private Source source ;
-        
-        @JsonProperty("unitUsageList")
-        @Valid
-        private List<UnitUsage> unitUsageList ;
+	@JsonProperty("source")
+	private Source source;
 
-        @JsonProperty("documents")
-        @Valid
-        private Set<Document> documents ;
+	@JsonProperty("channel")
+	private Channel channel;
 
-        @JsonProperty("additionalDetails")
-        private JsonNode additionalDetails ;
+	@JsonProperty("status")
+	private Status status;
 
-        @JsonProperty("channel")
-        private Channel channel ;
+	@JsonProperty("documents")
+	@Valid
+	private List<Document> documents;
 
+	@JsonProperty("unitUsageList")
+	@Valid
+	private List<UnitUsage> unitUsageList;
 
-        @JsonProperty("auditDetails")
-        private AuditDetails auditDetails ;
+	@JsonProperty("additionalDetails")
+	private Object additionalDetails;
 
-        
-        public enum Source {
-        	  
-        	  MUNICIPAL_RECORDS("MUNICIPAL_RECORDS"),
-        	  
-        	  WEBAPP("WEBAPP"),
-
-        	  MOBILEAPP("MOBILEAPP"),
-
-        	  FIELD_SURVEY("FIELD_SURVEY");
-
-        	  private String value;
-
-        	  Source(String value) {
-        	    this.value = value;
-        	  }
-
-        	  @Override
-        	  @JsonValue
-        	  public String toString() {
-        	    return String.valueOf(value);
-        	  }
-
-        	  @JsonCreator
-        	  public static Source fromValue(String text) {
-        	    for (Source b : Source.values()) {
-        	      if (String.valueOf(b.value).equalsIgnoreCase(text)) {
-        	        return b;
-        	      }
-        	    }
-        	    return null;
-        	  }
-        	}
-
-        public Assessment addDocumentsItem(Document documentsItem) {
-            if (this.documents == null) {
-            this.documents = new HashSet<>();
-            }
-        this.documents.add(documentsItem);
-        return this;
-        }
-
+	@JsonProperty("auditDetails")
+	private AuditDetails auditDetails;
 }
-

@@ -1,25 +1,26 @@
 package org.egov.pt.models;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-
-import org.egov.pt.models.enums.Type;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-@Data
-@AllArgsConstructor
+/**
+ * Representation of a address. Individual APIs may choose to extend from this
+ * using allOf if more details needed to be added in their case.
+ */
+
+@ToString
+@Getter
+@Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class Address {
-
-	@JsonProperty("id")
-	private String id;
 
 	@JsonProperty("tenantId")
 	private String tenantId;
@@ -27,24 +28,11 @@ public class Address {
 	@JsonProperty("doorNo")
 	private String doorNo;
 
-	@JsonProperty("latitude")
-	private Double latitude;
+	@JsonProperty("plotNo")
+	private String plotNo;
 
-	@JsonProperty("longitude")
-	private Double longitude;
-
-	@JsonProperty("addressNumber")
-	private String addressNumber;
-
-	@JsonProperty("type")
-	@NotNull
-	private Type type;
-
-	@JsonProperty("addressLine1")
-	private String addressLine1;
-
-	@JsonProperty("addressLine2")
-	private String addressLine2;
+	@JsonProperty("id")
+	private String id;
 
 	@JsonProperty("landmark")
 	private String landmark;
@@ -52,12 +40,23 @@ public class Address {
 	@JsonProperty("city")
 	private String city;
 
+	@JsonProperty("district")
+	private String district;
+
+	@JsonProperty("region")
+	private String region;
+
+	@JsonProperty("state")
+	private String state;
+
+	@JsonProperty("country")
+	private String country;
+
 	@JsonProperty("pincode")
-	@NotNull
 	private String pincode;
 
-	@JsonProperty("detail")
-	private String detail;
+	@JsonProperty("additionDetails")
+	private String additionDetails;
 
 	@JsonProperty("buildingName")
 	private String buildingName;
@@ -66,7 +65,8 @@ public class Address {
 	private String street;
 
 	@JsonProperty("locality")
-	@NotNull
-	@Valid
-	private Boundary locality;
+	private Locality locality;
+
+	@JsonProperty("geoLocation")
+	private GeoLocation geoLocation;
 }
