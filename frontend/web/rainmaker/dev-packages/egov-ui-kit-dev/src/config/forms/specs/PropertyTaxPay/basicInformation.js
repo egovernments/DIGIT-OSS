@@ -69,7 +69,7 @@ const formConfig = {
 
     datePicker:{
       id:"constructionyear",
-      jsonPath: "Properties[0].propertyDetails[0].units[0].constructionYear",
+      jsonPath: "Properties[0].propertyDetails[0].additionalDetails.constructionYear",
       type:"date",
       className:"constructionYearLabel",
       floatingLabelText: "PT_ASSESMENT_INFO_CONSTRUCTION_DATE",

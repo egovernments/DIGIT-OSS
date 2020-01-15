@@ -144,34 +144,41 @@ export const innerDimensions = {
   //  pattern: /^([1-9]\d{0,7})(\.\d+)?$/,
     numcols: 4,
     dropDownData: innerDimensionsData,
+    required:true,
     updateDependentFields: ({ formKey, field: sourceField, dispatch }) => {
       const { value } = sourceField;
-      const dependentFields1 = ["roomArea", "subUsageType", "balconyArea", "garageArea", "bathroomArea"];
-      const dependentFields2 = ["coveredArea"];
-      // switch (value) {
-      //   case "no":
-      //     setDependentFields(dependentFields1, dispatch, formKey, true);
-      //     setDependentFields(dependentFields2, dispatch, formKey, false);
+      innnerDimentionUtilFucntion(value,dispatch,formKey);
 
-      //     break;
-      //   case "yes":
-      //     setDependentFields(dependentFields2, dispatch, formKey,true);
-      //     break;
-      //   default:
-      //     setDependentFields(dependentFields1, dispatch, formKey, false);
-      //     break;
-      // }
-      if (value === "false") {
-        setDependentFields(dependentFields1, dispatch, formKey, true);
-        setDependentFields(dependentFields2, dispatch, formKey, false);
-      }
-      else {
-        setDependentFields(dependentFields1, dispatch, formKey, false);
-        setDependentFields(dependentFields2, dispatch, formKey, true);
-      }
     },
   },
 };
+
+const innnerDimentionUtilFucntion=(value,dispatch,formKey)=>{
+  const dependentFields1 = ["roomArea", "subUsageType", "balconyArea", "garageArea", "bathroomArea"];
+  const dependentFields2 = ["builtArea"];
+  // switch (value) {
+  //   case "no":
+  //     setDependentFields(dependentFields1, dispatch, formKey, true);
+  //     setDependentFields(dependentFields2, dispatch, formKey, false);
+
+  //     break;
+  //   case "yes":
+  //     setDependentFields(dependentFields2, dispatch, formKey,true);
+  //     break;
+  //   default:
+  //     setDependentFields(dependentFields1, dispatch, formKey, false);
+  //     break;
+  // }
+  if (value == "false") {
+    setDependentFields(dependentFields1, dispatch, formKey, true);
+    setDependentFields(dependentFields2, dispatch, formKey, false);
+  }
+  else {
+    setDependentFields(dependentFields1, dispatch, formKey, false);
+    setDependentFields(dependentFields2, dispatch, formKey, true);
+  }
+}
+
 export const roomArea = {
   roomArea: {
     id: "roomArea",
@@ -183,6 +190,7 @@ export const roomArea = {
     fullWidth: true,
     pattern: /^([1-9]\d{0,7})(\.\d+)?$/,
     numcols: 4,
+    required:true
     // updateDependentFields: ({ formKey, field, dispatch, state }) => {
     //   let propertyType = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].propertyType");
     //   let propertySubType = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].propertySubType");
@@ -204,6 +212,7 @@ export const balconyArea = {
     fullWidth: true,
     pattern: /^([1-9]\d{0,7})(\.\d+)?$/,
     numcols: 4,
+    required:true
     // updateDependentFields: ({ formKey, field, dispatch, state }) => {
     //   let propertyType = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].propertyType");
     //   let propertySubType = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].propertySubType");
@@ -226,6 +235,7 @@ export const garageArea = {
     fullWidth: true,
     pattern: /^([1-9]\d{0,7})(\.\d+)?$/,
     numcols: 4,
+    required:true
     // updateDependentFields: ({ formKey, field, dispatch, state }) => {
     //   let propertyType = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].propertyType");
     //   let propertySubType = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].propertySubType");
@@ -249,6 +259,7 @@ export const bathroomArea = {
     fullWidth: true,
     pattern: /^([1-9]\d{0,7})(\.\d+)?$/,
     numcols: 4,
+    required:true
   },
 };
 
@@ -490,6 +501,30 @@ export const beforeInitForm = {
     } else {
       set(action, "form.fields.annualRent.hideField", true);
     }
+    if (!get(state, `common.prepareFormData.${get(action, "form.fields.innerDimensions.jsonPath")}`)) {
+      set(action, "form.fields.innerDimensions.value", "false");
+      set(action, "form.fields.builtArea.hideField", false);
+      set(action, "form.fields.roomArea.hideField", true);
+      set(action, "form.fields.balconyArea.hideField", true);
+      set(action, "form.fields.garageArea.hideField", true);
+      set(action, "form.fields.bathroomArea.hideField", true);
+    }
+    else if (get(state, `common.prepareFormData.${get(action, "form.fields.innerDimensions.jsonPath")}`=="false")) {
+      set(action, "form.fields.innerDimensions.value", "false");
+      set(action, "form.fields.builtArea.hideField", false);
+      set(action, "form.fields.roomArea.hideField", true);
+      set(action, "form.fields.balconyArea.hideField", true);
+      set(action, "form.fields.garageArea.hideField", true);
+      set(action, "form.fields.bathroomArea.hideField", true);
+    }
+    else {
+      set(action, "form.fields.innerDimensions.value", "false");
+      set(action, "form.fields.builtArea.hideField", true);
+      set(action, "form.fields.roomArea.hideField", false);
+      set(action, "form.fields.balconyArea.hideField", false);
+      set(action, "form.fields.garageArea.hideField", false);
+      set(action, "form.fields.bathroomArea.hideField", false);
+    }
     return action;
   },
 };
@@ -579,6 +614,30 @@ export const beforeInitFormForPlot = {
       set(action, "form.fields.annualRent.hideField", false);
     } else {
       set(action, "form.fields.annualRent.hideField", true);
+    }
+    if (!get(state, `common.prepareFormData.${get(action, "form.fields.innerDimensions.jsonPath")}`)) {
+      set(action, "form.fields.innerDimensions.value", "false");
+      set(action, "form.fields.builtArea.hideField", false);
+      set(action, "form.fields.roomArea.hideField", true);
+      set(action, "form.fields.balconyArea.hideField", true);
+      set(action, "form.fields.garageArea.hideField", true);
+      set(action, "form.fields.bathroomArea.hideField", true);
+    }
+    else if (get(state, `common.prepareFormData.${get(action, "form.fields.innerDimensions.jsonPath")}`=="false")) {
+      set(action, "form.fields.innerDimensions.value", "false");
+      set(action, "form.fields.builtArea.hideField", false);
+      set(action, "form.fields.roomArea.hideField", true);
+      set(action, "form.fields.balconyArea.hideField", true);
+      set(action, "form.fields.garageArea.hideField", true);
+      set(action, "form.fields.bathroomArea.hideField", true);
+    }
+    else {
+      set(action, "form.fields.innerDimensions.value", "false");
+      set(action, "form.fields.builtArea.hideField", true);
+      set(action, "form.fields.roomArea.hideField", false);
+      set(action, "form.fields.balconyArea.hideField", false);
+      set(action, "form.fields.garageArea.hideField", false);
+      set(action, "form.fields.bathroomArea.hideField", false);
     }
     return action;
   },

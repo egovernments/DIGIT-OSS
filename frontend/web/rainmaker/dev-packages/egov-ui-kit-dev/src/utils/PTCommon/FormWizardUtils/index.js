@@ -482,6 +482,12 @@ export const normalizePropertyDetails = (properties, self) => {
   }
   var sumOfUnitArea = 0;
   units.forEach((unit) => {
+    if (unit.additionalDetails && unit.additionalDetails.innerDimensionsKnown=="true") {
+      unit.unitArea=parseInt(unit.additionalDetails.roomsArea)+parseInt(unit.additionalDetails.commonArea)+parseInt(unit.additionalDetails.garageArea)+parseInt(unit.additionalDetails.bathroomArea)
+    }
+    // if (unit.constructionYear) {
+    //   unit.constructionYear=new Date(unit.constructionYear).getTime();
+    // }
     let unitAreaInSqYd = parseFloat(unit.unitArea) / 9;
     unit.unitArea = Math.round(unitAreaInSqYd * 1000) / 1000;
     sumOfUnitArea += unit.unitArea;
