@@ -20,7 +20,7 @@ const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
     owner = ownerDetails[0];
   }
   if(!owner.gender){
-    owner['gender']='COMMON_GENDER_MALE';
+    owner['gender']=`Male`;
   }
   const specialCategory=`COMMON_MASTERS_OWNERTYPE_${(owner &&
     owner.ownerType &&
@@ -62,8 +62,7 @@ const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
             }
             : {
               key: getTranslatedLabel("PT_OWNERSHIP_INFO_GENDER", localizationLabelsData),
-              value: owner.gender || "NA",
-              // value:gendervalue || "NA",
+              value: `COMMON_GENDER_${owner.gender.toUpperCase()}`|| "NA",
             },
           isInstitution
             ? {
