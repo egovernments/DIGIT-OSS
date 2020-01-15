@@ -8,9 +8,9 @@ import get from "lodash/get";
 import "./index.css";
 
 const options = [
-  { value: "Male", label: <Label label="COMMON_GENDER_MALE" /> },
-  { value: "COMMON_GENDER_FEMALE", label: <Label label="PT_FORM3_FEMALE" /> },
-  { value: "COMMON_GENDER_TRANSGENDER", label: <Label label="PT_FORM3_TRANSGENDER" /> },
+  { value: "Male", label: <Label label="PT_FORM3_MALE" /> },
+  { value: "Female", label: <Label label="PT_FORM3_FEMALE" /> },
+  { value: "Transgender", label: <Label label="PT_FORM3_TRANSGENDER" /> },
 ];
 
 // const guardianOptions = [{ value: "Husband", label: <Label label="Husband" /> }, { value: "Father ", label: <Label label="Father" /> }];
@@ -55,7 +55,7 @@ const OwnerInformation = ({
   checkBox,
 }) => {
   const fields = form.fields || {};
-  const genderSelected = get(fields, "ownerGender.value", "COMMON_GENDER_MALE");
+  const genderSelected = get(fields, "ownerGender.value", "Male");
   return (
     <Card
       textChildren={
