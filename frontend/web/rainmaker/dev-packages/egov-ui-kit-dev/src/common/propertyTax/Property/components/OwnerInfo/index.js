@@ -22,6 +22,9 @@ const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
   if(!owner.gender){
     owner['gender']=`Male`;
   }
+  if(owner.ownerType=='WIDOW' && owner.gender=='Male'){
+    owner.gender=owner.gender.replace('Male','Female');
+  }
   const specialCategory=`COMMON_MASTERS_OWNERTYPE_${(owner &&
     owner.ownerType &&
     generalMDMSDataById &&
@@ -166,7 +169,7 @@ const OwnerInfo = ({ properties, editIcon, generalMDMSDataById, ownershipTransfe
       {multipleOwner && <div>
         {ownerInfo && <Card style={{ backgroundColor: 'rgb(242, 242, 242)', boxShadow: 'none' }}
           textChildren={
-            <div >
+            <div>
               <div className="pt-rf-title rainmaker-displayInline" style={{ justifyContent: "space-between", margin: '5px 0px 5px 0px' }}>
                 <div className="rainmaker-displayInline" style={{ alignItems: "center", marginLeft: '13px' }}>
                   {header && <Label
@@ -193,7 +196,6 @@ const OwnerInfo = ({ properties, editIcon, generalMDMSDataById, ownershipTransfe
                       </div>
                       {ownerItem.items.map(
                         (item) => {
-                          console.log("item:",item);
                           return (<div>
                             <div className="col-sm-3 col-xs-12" style={{ marginBottom: 10, marginTop: 5 }}>
                               <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>
