@@ -191,7 +191,7 @@ const getAssessmentInfo = (propertyDetails, generalMDMSDataById) => {
   );
 };
 
-const getUnitInfo = (units = [],usageCategoryMajor) => {
+const getUnitInfo = (units = [],usageCategoryMajor,buildUpArea) => {
   units = units || [];
   let floors = [];
   units.map((unit, index) => {
@@ -199,8 +199,8 @@ const getUnitInfo = (units = [],usageCategoryMajor) => {
       key: getTranslatedLabel("PT_ASSESSMENT_UNIT_USAGE_TYPE", localizationLabelsData),
       value: unit && unit.usageCategoryMinor ? 'PROPERTYTAX_BILLING_SLAB_' + unit.usageCategoryMinor :
         (unit.usageCategoryMajor||usageCategoryMajor) ? 'PROPERTYTAX_BILLING_SLAB_' + (unit.usageCategoryMajor||usageCategoryMajor) : "NA",
-    }, {
-
+    }
+    ,{
       key: getTranslatedLabel("PT_ASSESMENT_INFO_OCCUPLANCY", localizationLabelsData),
       value: unit.occupancyType ? 'PROPERTYTAX_OCCUPANCYTYPE_' + unit.occupancyType : "NA",
     },
@@ -230,20 +230,37 @@ const getUnitInfo = (units = [],usageCategoryMajor) => {
           value: unit.additionalDetails && unit.additionalDetails.bathroomArea ? unit.additionalDetails.bathroomArea + '' : "NA",
         })
     }
-    else {
+    // else {
       floor.push(
         {
           key: getTranslatedLabel("PT_FORM2_BUILT_AREA", localizationLabelsData),
           value: unit.unitArea ? unit.unitArea + '' : "NA",
         })
+    // }
+    if (usageCategoryMajor=="RESIDENTIAL") {
+      floor.push(
+        {
+          key: getTranslatedLabel("PT_FORM2_TOTAL_BUILT_AREA", localizationLabelsData),
+          value: buildUpArea ? buildUpArea + '' : "NA",
+        })
     }
 
-    if (unit.occupancyType === "RENTED") {
+    if (usageCategoryMajor!="RESIDENTIAL") {
+      floor.push(
+        {
+          key: getTranslatedLabel("PT_FORM2_SUB_USAGE_TYPE", localizationLabelsData),
+          value: unit && unit.usageCategoryMinor ? 'PROPERTYTAX_BILLING_SLAB_' + unit.usageCategorySubMinor :
+            (unit.usageCategorySubMinor||unit.usageCategoryDetail) ? 'PROPERTYTAX_BILLING_SLAB_' + (unit.usageCategorySubMinor||unit.usageCategoryDetail) : "NA",
+        })
+    }
+
+
+    // if (unit.occupancyType === "RENTED") {
       floor.push({
         key: getTranslatedLabel("PT_FORM2_TOTAL_ANNUAL_RENT", localizationLabelsData),
         value: unit.arv ? unit.arv + '' : "NA",
       })
-    }
+    // }
     if (!floors[unit['floorNo']]) {
       floors[unit['floorNo']] = [floor];
     } else {
@@ -266,7 +283,7 @@ const AssessmentInfo = ({ properties, editIcon, generalMDMSDataById }) => {
   if (properties) {
     const { propertyDetails } = properties;
     if (propertyDetails && propertyDetails.length > 0) {
-      subUnitItems = getUnitInfo(propertyDetails[0]['units'],propertyDetails[0]['usageCategoryMajor']);
+      subUnitItems = getUnitInfo(propertyDetails[0]['units'],propertyDetails[0]['usageCategoryMajor'],propertyDetails[0]['buildUpArea']);
       assessmentItems = getAssessmentInfo(propertyDetails[0], generalMDMSDataById);
       if (propertyDetails[0].propertySubType === "SHAREDPROPERTY") {
         hideSubsectionLabel = true;
