@@ -15,8 +15,6 @@ let floorDropDownData = [];
 let innerDimensionsData = [{ value: "true", label: "Yes" }, { value: "false", label: "No" }];
 let constructiontypes = [{ value: "road1", label: "rd1" }];
 
-
-
 for (var i = 1; i <= 25; i++) {
   floorDropDownData.push({ label: i, value: i });
 }
@@ -132,6 +130,7 @@ export const occupancy = {
     },
   },
 };
+
 export const innerDimensions = {
   innerDimensions: {
     id: "innerDimensions",
@@ -185,7 +184,7 @@ export const roomArea = {
      jsonPath: "Properties[0].propertyDetails[0].units[0].additionalDetails.roomsArea",
     type: "number",
     floatingLabelText: "PROPERTYTAX_BILLING_SLAB_SUBMNR26",
-    hintText: "Enter Room Area",
+    hintText: "PT_FORM2_ROOM_AREA_PLACEHOLDER",
     errorMessage: "PT_PLOT_SIZE_ERROR_MESSAGE",
     fullWidth: true,
     pattern: /^([1-9]\d{0,7})(\.\d+)?$/,
@@ -201,13 +200,14 @@ export const roomArea = {
     // },
   },
 };
+
 export const balconyArea = {
   balconyArea: {
     id: "balconyArea",
      jsonPath: "Properties[0].propertyDetails[0].units[0].additionalDetails.commonArea",
     type: "number",
     floatingLabelText: "PROPERTYTAX_BILLING_SLAB_SUBMNR27",
-    hintText: "Enter Balcony Area",
+    hintText: "PT_FORM2_BALCONY_AREA_PLACEHOLDER",
     errorMessage: "PT_PLOT_SIZE_ERROR_MESSAGE",
     fullWidth: true,
     pattern: /^([1-9]\d{0,7})(\.\d+)?$/,
@@ -230,7 +230,7 @@ export const garageArea = {
     jsonPath: "Properties[0].propertyDetails[0].units[0].additionalDetails.garageArea",
     type: "number",
     floatingLabelText: "PROPERTYTAX_BILLING_SLAB_SUBMNR28",
-    hintText: "Enter Garage Area",
+    hintText: "PT_FORM2_GARAGE_AREA_PLACEHOLDER",
     errorMessage: "PT_PLOT_SIZE_ERROR_MESSAGE",
     fullWidth: true,
     pattern: /^([1-9]\d{0,7})(\.\d+)?$/,
@@ -247,14 +247,13 @@ export const garageArea = {
   },
 };
 
-
 export const bathroomArea = {
   bathroomArea: {
     id: "bathroomArea",
      jsonPath: "Properties[0].propertyDetails[0].units[0].additionalDetails.bathroomArea",
     type: "number",
     floatingLabelText: "PROPERTYTAX_BILLING_SLAB_SUBMNR29",
-    hintText: "PT_FORM2_PLOT_SIZE_PLACEHOLDER",
+    hintText: "PT_FORM2_BATHROOM_AREA_PLACEHOLDER",
     errorMessage: "PT_PLOT_SIZE_ERROR_MESSAGE",
     fullWidth: true,
     pattern: /^([1-9]\d{0,7})(\.\d+)?$/,
@@ -293,6 +292,7 @@ export const builtArea = {
     pattern: /^([1-9]\d{0,7})(\.\d+)?$/,
   },
 };
+
 export const constructionType = {
   constructionType: {
     id: "constructiontype",
@@ -315,10 +315,10 @@ export const superArea = {
     type: "number",
     floatingLabelText: "PT_FORM2_TOTAL_BUILT_AREA",
     hintText: "PT_FORM2_TOTAL_BUILT_AREA_PLACEHOLDER",
-    ErrorText: "Enter a valid super area size",
+    ErrorText: "PT_SUPER_AREA_ERROR_MESSAGE",
     errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
     toolTip: true,
-    toolTipMessage: "Total Carpet Area + Total balcony area + Total thickness of outer walls + Total common area (lift, stairs, lobby etc.)",
+    toolTipMessage: "PT_SUPER_AREA_TOOLTIP_MESSAGE",
     required: true,
     numcols: 4,
     hideField: false,
@@ -330,6 +330,7 @@ export const superArea = {
   },
 };
 
+
 export const annualRent = {
   annualRent: {
     id: "assessment-annual-rent",
@@ -337,7 +338,7 @@ export const annualRent = {
     type: "number",
     floatingLabelText: "PT_FORM2_TOTAL_ANNUAL_RENT",
     hintText: "PT_FORM2_TOTAL_ANNUAL_RENT_PLACEHOLDER",
-    ErrorText: "Enter a valid amount",
+    ErrorText: "PT_ANNUAL_RENT_ERROR_MESSAGE",
     errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
     toolTip: true,
     toolTipMessage: "PT_TOTAL_ANNUAL_RENT_TOOLTIP_MESSAGE",
@@ -501,29 +502,32 @@ export const beforeInitForm = {
     } else {
       set(action, "form.fields.annualRent.hideField", true);
     }
-    if (!get(state, `common.prepareFormData.${get(action, "form.fields.innerDimensions.jsonPath")}`)) {
-      set(action, "form.fields.innerDimensions.value", "false");
-      set(action, "form.fields.builtArea.hideField", false);
-      set(action, "form.fields.roomArea.hideField", true);
-      set(action, "form.fields.balconyArea.hideField", true);
-      set(action, "form.fields.garageArea.hideField", true);
-      set(action, "form.fields.bathroomArea.hideField", true);
-    }
-    else if (get(state, `common.prepareFormData.${get(action, "form.fields.innerDimensions.jsonPath")}`=="false")) {
-      set(action, "form.fields.innerDimensions.value", "false");
-      set(action, "form.fields.builtArea.hideField", false);
-      set(action, "form.fields.roomArea.hideField", true);
-      set(action, "form.fields.balconyArea.hideField", true);
-      set(action, "form.fields.garageArea.hideField", true);
-      set(action, "form.fields.bathroomArea.hideField", true);
-    }
-    else {
-      set(action, "form.fields.innerDimensions.value", "false");
-      set(action, "form.fields.builtArea.hideField", true);
-      set(action, "form.fields.roomArea.hideField", false);
-      set(action, "form.fields.balconyArea.hideField", false);
-      set(action, "form.fields.garageArea.hideField", false);
-      set(action, "form.fields.bathroomArea.hideField", false);
+
+    if (get(state, `common.prepareFormData.Properties[0].propertyDetails[0].usageCategoryMajor`)==="RESIDENTIAL") {
+      if (!get(state, `common.prepareFormData.${get(action, "form.fields.innerDimensions.jsonPath")}`)) {
+        set(action, "form.fields.innerDimensions.value", "false");
+        set(action, "form.fields.builtArea.hideField", false);
+        set(action, "form.fields.roomArea.hideField", true);
+        set(action, "form.fields.balconyArea.hideField", true);
+        set(action, "form.fields.garageArea.hideField", true);
+        set(action, "form.fields.bathroomArea.hideField", true);
+      }
+      else if (get(state, `common.prepareFormData.${get(action, "form.fields.innerDimensions.jsonPath")}`=="false")) {
+        set(action, "form.fields.innerDimensions.value", "false");
+        set(action, "form.fields.builtArea.hideField", false);
+        set(action, "form.fields.roomArea.hideField", true);
+        set(action, "form.fields.balconyArea.hideField", true);
+        set(action, "form.fields.garageArea.hideField", true);
+        set(action, "form.fields.bathroomArea.hideField", true);
+      }
+      else {
+        set(action, "form.fields.innerDimensions.value", "false");
+        set(action, "form.fields.builtArea.hideField", true);
+        set(action, "form.fields.roomArea.hideField", false);
+        set(action, "form.fields.balconyArea.hideField", false);
+        set(action, "form.fields.garageArea.hideField", false);
+        set(action, "form.fields.bathroomArea.hideField", false);
+      }
     }
     return action;
   },
@@ -615,29 +619,31 @@ export const beforeInitFormForPlot = {
     } else {
       set(action, "form.fields.annualRent.hideField", true);
     }
-    if (!get(state, `common.prepareFormData.${get(action, "form.fields.innerDimensions.jsonPath")}`)) {
-      set(action, "form.fields.innerDimensions.value", "false");
-      set(action, "form.fields.builtArea.hideField", false);
-      set(action, "form.fields.roomArea.hideField", true);
-      set(action, "form.fields.balconyArea.hideField", true);
-      set(action, "form.fields.garageArea.hideField", true);
-      set(action, "form.fields.bathroomArea.hideField", true);
-    }
-    else if (get(state, `common.prepareFormData.${get(action, "form.fields.innerDimensions.jsonPath")}`=="false")) {
-      set(action, "form.fields.innerDimensions.value", "false");
-      set(action, "form.fields.builtArea.hideField", false);
-      set(action, "form.fields.roomArea.hideField", true);
-      set(action, "form.fields.balconyArea.hideField", true);
-      set(action, "form.fields.garageArea.hideField", true);
-      set(action, "form.fields.bathroomArea.hideField", true);
-    }
-    else {
-      set(action, "form.fields.innerDimensions.value", "false");
-      set(action, "form.fields.builtArea.hideField", true);
-      set(action, "form.fields.roomArea.hideField", false);
-      set(action, "form.fields.balconyArea.hideField", false);
-      set(action, "form.fields.garageArea.hideField", false);
-      set(action, "form.fields.bathroomArea.hideField", false);
+    if (get(state, `common.prepareFormData.Properties[0].propertyDetails[0].usageCategoryMajor`)==="RESIDENTIAL") {
+      if (!get(state, `common.prepareFormData.${get(action, "form.fields.innerDimensions.jsonPath")}`)) {
+        set(action, "form.fields.innerDimensions.value", "false");
+        set(action, "form.fields.builtArea.hideField", false);
+        set(action, "form.fields.roomArea.hideField", true);
+        set(action, "form.fields.balconyArea.hideField", true);
+        set(action, "form.fields.garageArea.hideField", true);
+        set(action, "form.fields.bathroomArea.hideField", true);
+      }
+      else if (get(state, `common.prepareFormData.${get(action, "form.fields.innerDimensions.jsonPath")}`=="false")) {
+        set(action, "form.fields.innerDimensions.value", "false");
+        set(action, "form.fields.builtArea.hideField", false);
+        set(action, "form.fields.roomArea.hideField", true);
+        set(action, "form.fields.balconyArea.hideField", true);
+        set(action, "form.fields.garageArea.hideField", true);
+        set(action, "form.fields.bathroomArea.hideField", true);
+      }
+      else {
+        set(action, "form.fields.innerDimensions.value", "false");
+        set(action, "form.fields.builtArea.hideField", true);
+        set(action, "form.fields.roomArea.hideField", false);
+        set(action, "form.fields.balconyArea.hideField", false);
+        set(action, "form.fields.garageArea.hideField", false);
+        set(action, "form.fields.bathroomArea.hideField", false);
+      }
     }
     return action;
   },
@@ -863,6 +869,7 @@ export const pincode = {
     pattern: "^([0-9]){6}$",
   },
 };
+
 export const thana = {
   thana: {
     id: "thana",
@@ -873,6 +880,7 @@ export const thana = {
     errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
   },
 };
+
 export const roadType = {
   roadType: {
     id: "road-type",
