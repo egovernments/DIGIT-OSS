@@ -616,6 +616,34 @@
               ]
             }
           ]
+        },
+        {
+          "row": 7,
+          "name": "DSS_SERVICE",
+          "vizArray": [
+            {
+              "id": 231,
+              "name": "DSS_PT_PROPERTIES_BY_FINANCIAL_YEAR",
+              "dimensions": {
+                "height": 350,
+                "width": 12
+              },
+              "vizType": "chart",
+              "label": "",
+              "noUnit": false,
+              "charts": [
+                {
+                  "id": "xptFyByDDR",
+                  "name": "",
+                  "code": "",
+                  "chartType": "table",
+                  "filter": "",
+                  "headers": [],
+                  "tabName": "Boundary"
+                }
+              ]
+            }
+          ]
         }
       ]
     },
@@ -1183,7 +1211,7 @@
               "noUnit": false,
               "charts": [
                 {
-                  "id": "pgrStatusByDDR",
+                  "id": "xpgrStatusByDDR",
                   "name": "DSS_PGR_STATUS_BY_TENANT",
                   "code": "",
                   "chartType": "table",
@@ -1192,7 +1220,7 @@
                   "tabName": "Boundary"
                 },
                 {
-                  "id": "pgrStatusByDepartment",
+                  "id": "xpgrStatusByDept",
                   "name": "DSS_PGR_STATUS_BY_DEPARTMENT",
                   "code": "",
                   "chartType": "table",
