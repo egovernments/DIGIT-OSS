@@ -14,7 +14,7 @@ const localizationLabelsData = initLocalizationLabels(locale);
 const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
   const isInstitution =
     latestPropertyDetails.ownershipCategory === "INSTITUTIONALPRIVATE" || latestPropertyDetails.ownershipCategory === "INSTITUTIONALGOVERNMENT";
-  const { institution, owners: ownerDetails = [] } = latestPropertyDetails || {};
+  const { institution={}, owners: ownerDetails = [] } = latestPropertyDetails || {};
   let owner = [];
   if (ownerDetails && (ownerDetails.length > 0)) {
     owner = ownerDetails[0];
@@ -79,8 +79,8 @@ const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
             }
             : {
               key: getTranslatedLabel('PT_FORM3_OWNERSHIP_TYPE', localizationLabelsData),
-              value: (institution &&
-                institution.type &&
+              value: (
+                latestPropertyDetails.subOwnershipCategory &&
                 generalMDMSDataById &&
                 generalMDMSDataById["SubOwnerShipCategory"] &&
                 generalMDMSDataById["SubOwnerShipCategory"][latestPropertyDetails.subOwnershipCategory] &&
