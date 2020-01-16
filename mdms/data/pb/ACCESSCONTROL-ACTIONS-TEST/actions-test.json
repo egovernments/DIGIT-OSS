@@ -16013,6 +16013,28 @@
       "navigationURL": "integration/dss/overview",
       "leftIcon": "places:business-center",
       "rightIcon": ""
+    },
+    {
+      "id": 1942,
+      "name": "Search Water Bill",
+      "url": "/egov-searcher/bill-genie/waterbills/_get",
+      "displayName": "Search Water Bill",
+      "orderNumber": 1,
+      "enabled": false,
+      "serviceCode": "Searcher",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1943,
+      "name": "Search Sewerage Bill",
+      "url": "/egov-searcher/bill-genie/seweragebills/_get",
+      "displayName": "Search Sewerage Bill",
+      "orderNumber": 2,
+      "enabled": false,
+      "serviceCode": "Searcher",
+      "code": "null",
+      "path": ""
     }
   ]
 }
