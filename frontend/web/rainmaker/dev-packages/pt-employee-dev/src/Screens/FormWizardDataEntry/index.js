@@ -79,6 +79,8 @@ import DemandCollection from "egov-ui-kit/common/propertyTax/DemandCollection";
 import { resetFormWizard } from "egov-ui-kit/utils/PTCommon";
 import { removeForm } from "egov-ui-kit/redux/form/actions";
 import { prepareFormData as prepareFormDataAction } from "egov-ui-kit/redux/common/actions";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+
 
 
 
@@ -855,7 +857,7 @@ class FormWizardDataEntry extends Component {
       financialYearFromQuery,
       estimation
     } = this.state;
-    const { setRoute, displayFormErrorsAction, form } = this.props;
+    const { setRoute, displayFormErrorsAction, form ,history} = this.props;
     switch (selected) {
       //validating property address is validated
       case 0:
@@ -1193,9 +1195,9 @@ class FormWizardDataEntry extends Component {
           propertyId = pty.propertyId;
           tenantId = pty.tenantId;
         }
-        let url1 = "property-tax/search-property";
-        window.location.href = `${window.origin}/${url1}`;
-        // this.props.history.push(`/property-tax/`);
+        // let url1 = "property-tax/search-property";
+        // window.location.href = `${window.origin}/${url1}`;
+        history.push(`/`);
         // this.setState(
         //   {
         //     selected: index,
@@ -2148,9 +2150,10 @@ class FormWizardDataEntry extends Component {
   };
 
   resetForm = () => {
-    const { form, removeForm, prepareFormDataAction } = this.props;
+    const { form, removeForm, prepareFormDataAction,prepareFinalObject } = this.props;
     resetFormWizard(form, removeForm);
     prepareFormDataAction("Properties", []);
+    prepareFinalObject("DemandProperties",[]);
     this.onTabClick(0);
   };
 
@@ -2292,7 +2295,8 @@ const mapDispatchToProps = dispatch => {
     handleFieldChange: (formKey, fieldKey, value) =>
       dispatch(handleFieldChange(formKey, fieldKey, value)),
     removeForm: (formkey) => dispatch(removeForm(formkey)),
-    prepareFormDataAction: (path, value) => dispatch(prepareFormDataAction(path, value))
+    prepareFormDataAction: (path, value) => dispatch(prepareFormDataAction(path, value)),
+      prepareFinalObject: (jsonPath, value) => dispatch(prepareFinalObject(jsonPath, value))
   };
 };
 
