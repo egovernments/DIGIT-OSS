@@ -60,7 +60,7 @@ const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
                   institution.type &&
                   generalMDMSDataById &&
                   generalMDMSDataById["SubOwnerShipCategory"] &&
-                  generalMDMSDataById["SubOwnerShipCategory"][institution.type].name) ||
+                  generalMDMSDataById["SubOwnerShipCategory"][institution.type].code) ||
                 "NA",
             }
             : {
@@ -75,7 +75,7 @@ const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
                 generalMDMSDataById &&
                 generalMDMSDataById["OwnerShipCategory"] &&
                 generalMDMSDataById["OwnerShipCategory"][latestPropertyDetails.ownershipCategory] &&
-                generalMDMSDataById["OwnerShipCategory"][latestPropertyDetails.ownershipCategory].name)  ||"NA",
+                generalMDMSDataById["OwnerShipCategory"][latestPropertyDetails.ownershipCategory].code)  ||"NA",
             }
             : {
               key: getTranslatedLabel('PT_FORM3_OWNERSHIP_TYPE', localizationLabelsData),
@@ -83,7 +83,8 @@ const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
                 institution.type &&
                 generalMDMSDataById &&
                 generalMDMSDataById["SubOwnerShipCategory"] &&
-                generalMDMSDataById["SubOwnerShipCategory"][latestPropertyDetails.ownershipCategory].name) ||
+                generalMDMSDataById["SubOwnerShipCategory"][latestPropertyDetails.subOwnershipCategory] &&
+                generalMDMSDataById["SubOwnerShipCategory"][latestPropertyDetails.subOwnershipCategory].code) ||
                 "NA",
             },
           isInstitution
