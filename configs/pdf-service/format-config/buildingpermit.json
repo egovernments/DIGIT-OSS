@@ -132,7 +132,14 @@
                         "bold": true
                     },
                     {
-                        "text" : " Holding No. 1 of "
+                        "text" : " Holding No. "
+                    },
+                    {
+                        "text" : "{{holdingNo}}",
+                        "bold" : true
+                    },
+                    {
+                        "text" : " of "
                     },
                     {
                         "text" : "{{tenantName}} Municipal Council",
