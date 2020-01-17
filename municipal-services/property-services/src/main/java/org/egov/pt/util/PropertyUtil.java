@@ -2,14 +2,12 @@ package org.egov.pt.util;
 
 import static org.egov.pt.util.PTConstants.NOTIFICATION_LOCALE;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.contract.request.User;
 import org.egov.mdms.model.MasterDetail;
 import org.egov.mdms.model.MdmsCriteria;
 import org.egov.mdms.model.MdmsCriteriaReq;
@@ -103,7 +101,7 @@ public class PropertyUtil {
 				.businessService(config.getPropertyRegistryWf())
 				.businessId(property.getAcknowldgementNumber())
 				.comment("Payment for property processed")
-				.assignee(property.getOwners().get(0))
+				.assignes(getUserForWorkflow(property))
 				.moduleName("PT")
 				.action("PAY")
 				.build();
@@ -123,8 +121,8 @@ public class PropertyUtil {
 		wf.setTenantId(property.getTenantId());
 		
 		if (isCreate) {
-			
-			wf.setAssignee(property.getOwners().get(0));
+			List<User> owners = getUserForWorkflow(property);
+			wf.setAssignes(owners);
 			wf.setBusinessService(config.getPropertyRegistryWf());
 			wf.setModuleName(config.getPropertyModuleName());
 			wf.setAction("OPEN");
@@ -135,5 +133,26 @@ public class PropertyUtil {
 				.requestInfo(request.getRequestInfo())
 				.build();
 	}
+
+
+	/**
+	 *
+	 * @param property Property whose owners are to be returned
+	 * @return Owners of the property
+	 */
+	public List<User> getUserForWorkflow(Property property){
+		List<User> owners = new LinkedList<>();
+
+		property.getOwners().forEach(ownerInfo -> {
+			owners.add(User.builder().uuid(ownerInfo.getUuid()).build());
+		});
+
+		owners.add(User.builder().uuid(property.getAccountId()).build());
+		return owners;
+	}
+
+
+
+
 
 }

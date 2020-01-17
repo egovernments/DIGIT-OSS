@@ -7,8 +7,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.egov.common.contract.request.User;
 import org.egov.pt.models.Document;
-import org.egov.pt.models.user.User;
 import org.springframework.validation.annotation.Validated;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -77,8 +77,8 @@ public class ProcessInstance {
 	@Valid
 	private List<Document> documents;
 
-	@JsonProperty("assignee")
-	private User assignee;
+	@JsonProperty("assignes")
+	private List<User> assignes;
 
 	public ProcessInstance addDocumentsItem(Document documentsItem) {
 		if (this.documents == null) {

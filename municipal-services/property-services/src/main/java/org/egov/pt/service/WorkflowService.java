@@ -3,10 +3,7 @@ package org.egov.pt.service;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.Property;
-import org.egov.pt.models.workflow.BusinessService;
-import org.egov.pt.models.workflow.BusinessServiceResponse;
-import org.egov.pt.models.workflow.ProcessInstanceRequest;
-import org.egov.pt.models.workflow.ProcessInstanceResponse;
+import org.egov.pt.models.workflow.*;
 import org.egov.pt.repository.ServiceRequestRepository;
 import org.egov.pt.web.contracts.PropertyRequest;
 import org.egov.pt.web.contracts.RequestInfoWrapper;
@@ -127,6 +124,21 @@ public class WorkflowService {
 
 
     }
+
+
+	/**
+	 * Returns boolean value to specifying if the state is updatable
+	 * @param stateCode The stateCode of the license
+	 * @param businessService The BusinessService of the application flow
+	 * @return State object to be fetched
+	 */
+	public Boolean isStateUpdatable(String stateCode, BusinessService businessService){
+		for(State state : businessService.getStates()){
+			if(state.getApplicationStatus()!=null && state.getApplicationStatus().equalsIgnoreCase(stateCode))
+				return state.getIsStateUpdatable();
+		}
+		return null;
+	}
 
 
 }

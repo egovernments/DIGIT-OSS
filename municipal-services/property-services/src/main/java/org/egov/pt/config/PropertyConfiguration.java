@@ -196,4 +196,15 @@ public class PropertyConfiguration {
     @Value("${property.module.name}")
 	private String propertyModuleName;    
 
+
+
+    // Assessment Workflow
+
+    @Value("${assessment.workflow.enabled}")
+    private Boolean isAssessmentWorkflowEnabled;
+
+
+    @Value("${assessment.workflow.trigger.param}")
+    private String assessmentWorkflowTriggerParams;
+
 }

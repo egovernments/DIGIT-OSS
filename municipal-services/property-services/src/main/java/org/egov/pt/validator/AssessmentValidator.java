@@ -35,19 +35,17 @@ public class AssessmentValidator {
 	@Autowired
 	private AssessmentUtils utils;
 
-	public void validateAssessmentCreate(AssessmentRequest assessmentRequest) {
+	public void validateAssessmentCreate(AssessmentRequest assessmentRequest, Property property) {
 		Map<String, String> errorMap = new HashMap<>();
-		Property property = getPropertyForAssessment(assessmentRequest);
 		validateRI(assessmentRequest.getRequestInfo(), errorMap);
 		validateUnitIds(assessmentRequest.getAssessment(),property);
 		commonValidations(assessmentRequest, errorMap, false);
 		validateMDMSData(assessmentRequest.getRequestInfo(), assessmentRequest.getAssessment(), errorMap);
 	}
 
-	public void validateAssessmentUpdate(AssessmentRequest assessmentRequest) {
+	public void validateAssessmentUpdate(AssessmentRequest assessmentRequest, Property property) {
 		Map<String, String> errorMap = new HashMap<>();
 		validateRI(assessmentRequest.getRequestInfo(), errorMap);
-		Property property = getPropertyForAssessment(assessmentRequest);
 		validateUnitIds(assessmentRequest.getAssessment(),property);
 		validateUpdateRequest(assessmentRequest, errorMap);
 		commonValidations(assessmentRequest, errorMap, true);
@@ -231,20 +229,7 @@ public class AssessmentValidator {
 	}
 
 
-	private Property getPropertyForAssessment(AssessmentRequest assessmentRequest){
-		RequestInfo requestInfo = assessmentRequest.getRequestInfo();
-		Assessment assessment = assessmentRequest.getAssessment();
-		PropertyCriteria criteria = PropertyCriteria.builder()
-									.tenantId(assessment.getTenantId())
-									.propertyIds(Collections.singleton(assessment.getPropertyID()))
-									.build();
-		List<Property> properties = propertyService.searchProperty(criteria, requestInfo);
 
-		if(CollectionUtils.isEmpty(properties))
-			throw new CustomException("PROPERTY_NOT_FOUND","The property with id: "+assessment.getPropertyID()+" is not found");
-
-		return properties.get(0);
-	}
 
 
 	/**

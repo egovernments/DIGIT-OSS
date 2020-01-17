@@ -1,7 +1,9 @@
 package org.egov.pt.models.workflow;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Size;
 
+import org.egov.pt.models.AuditDetails;
 import org.springframework.validation.annotation.Validated;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -14,6 +16,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A Object holds the basic data for a Trade License
@@ -53,5 +58,33 @@ public class State   {
         @Size(max=256)
         @JsonProperty("applicationStatus")
         private String applicationStatus;
+
+        @JsonProperty("docUploadRequired")
+        private Boolean docUploadRequired;
+
+        @JsonProperty("isStartState")
+        private Boolean isStartState;
+
+        @JsonProperty("isTerminateState")
+        private Boolean isTerminateState;
+
+        @JsonProperty("isStateUpdatable")
+        private Boolean isStateUpdatable;
+
+        @JsonProperty("actions")
+        @Valid
+        private List<Action> actions;
+
+        private AuditDetails auditDetails;
+
+
+        public State addActionsItem(Action actionsItem) {
+                if (this.actions == null) {
+                        this.actions = new ArrayList<>();
+                }
+                this.actions.add(actionsItem);
+                return this;
+        }
+
 }
 
