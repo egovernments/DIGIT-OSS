@@ -12,7 +12,7 @@ import routes from "./Routes";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import isEmpty from "lodash/isEmpty";
 import { LoadingIndicator, CommonShareContainer } from "components";
-
+import "./app.css";
 class App extends Component {
   constructor(props) {
     super(props);
