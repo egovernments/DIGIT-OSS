@@ -16035,6 +16035,87 @@
       "serviceCode": "Searcher",
       "code": "null",
       "path": ""
+    },
+    {
+      "id": 1944,
+      "name": "Dashboard ULB Tradelicense",
+      "url": "url",
+      "displayName": "ULB TradeLicense",
+      "orderNumber": 6,
+      "parentModule": "dss-dashboard",
+      "enabled": true,
+      "serviceCode": "DSS",
+      "code": "null",
+      "path": "Dashboard.TradeLicense",
+      "navigationURL": "integration/dss/ulb-tradeLicense",
+      "leftIcon": "places:business-center",
+      "rightIcon": ""
+    },
+    {
+      "id": 1945,
+      "name": "Dashboard ULD Property Tax",
+      "url": "url",
+      "displayName": "ULB PropertyTax",
+      "orderNumber": 7,
+      "parentModule": "dss-dashboard",
+      "enabled": true,
+      "serviceCode": "DSS",
+      "code": "null",
+      "path": "Dashboard.PropertyTax",
+      "navigationURL": "integration/dss/ulb-propertyTax",
+      "leftIcon": "places:business-center",
+      "rightIcon": ""
+    },
+    {
+      "id": 1946,
+      "name": "Dashboard ULB PGR",
+      "url": "url",
+      "displayName": "ULB PGR",
+      "orderNumber": 8,
+      "parentModule": "dss-dashboard",
+      "enabled": true,
+      "serviceCode": "DSS",
+      "code": "null",
+      "path": "Dashboard.TradeLicense",
+      "navigationURL": "integration/dss/ulb-pgr",
+      "leftIcon": "places:business-center",
+      "rightIcon": ""
+    },
+    {
+      "id": 1947,
+      "name": "Dashboard ULB TradeLicense",
+      "url": "/dashboard-analytics/dashboard/getDashboardConfig/ulb-tradeLicense",
+      "parentModule": "",
+      "displayName": "DSS",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "DSS",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1948,
+      "name": "Dashboard ULB Property Tax",
+      "url": "/dashboard-analytics/dashboard/getDashboardConfig/ulb-propertyTax",
+      "parentModule": "",
+      "displayName": "DSS",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "DSS",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1949,
+      "name": "Dashboard ULB PGR",
+      "url": "/dashboard-analytics/dashboard/getDashboardConfig/ulb-pgr",
+      "parentModule": "",
+      "displayName": "DSS",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "DSS",
+      "code": "null",
+      "path": ""
     }
   ]
 }
