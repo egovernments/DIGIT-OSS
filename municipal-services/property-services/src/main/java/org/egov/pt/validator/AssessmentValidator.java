@@ -1,13 +1,6 @@
 package org.egov.pt.validator;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
@@ -44,7 +37,9 @@ public class AssessmentValidator {
 
 	public void validateAssessmentCreate(AssessmentRequest assessmentRequest) {
 		Map<String, String> errorMap = new HashMap<>();
+		Property property = getPropertyForAssessment(assessmentRequest);
 		validateRI(assessmentRequest.getRequestInfo(), errorMap);
+		validateUnitIds(assessmentRequest.getAssessment(),property);
 		commonValidations(assessmentRequest, errorMap, false);
 		validateMDMSData(assessmentRequest.getRequestInfo(), assessmentRequest.getAssessment(), errorMap);
 	}
@@ -52,6 +47,8 @@ public class AssessmentValidator {
 	public void validateAssessmentUpdate(AssessmentRequest assessmentRequest) {
 		Map<String, String> errorMap = new HashMap<>();
 		validateRI(assessmentRequest.getRequestInfo(), errorMap);
+		Property property = getPropertyForAssessment(assessmentRequest);
+		validateUnitIds(assessmentRequest.getAssessment(),property);
 		validateUpdateRequest(assessmentRequest, errorMap);
 		commonValidations(assessmentRequest, errorMap, true);
 		validateMDMSData(assessmentRequest.getRequestInfo(), assessmentRequest.getAssessment(), errorMap);
@@ -92,8 +89,7 @@ public class AssessmentValidator {
 		Set<String> ids = new HashSet<>();
 		ids.add(assessment.getId());
 		AssessmentSearchCriteria criteria = AssessmentSearchCriteria.builder().ids(ids).build();
-		List<Assessment> assessments = assessmentService.searchAssessments(assessmentRequest.getRequestInfo(),
-				criteria);
+		List<Assessment> assessments = assessmentService.searchAssessments(criteria);
 		if (CollectionUtils.isEmpty(assessments)) {
 			errorMap.put(ErrorConstants.NO_ASSESSMENTS_FOUND_CODE, ErrorConstants.NO_ASSESSMENTS_FOUND_MSG);
 		} else {
@@ -207,6 +203,59 @@ public class AssessmentValidator {
 		}else {
 			throw new CustomException("MASTER_FETCH_FAILED", "Couldn't fetch master data for validation");
 		}
+	}
+
+
+	private void validateUnitIds(Assessment assessment, Property property){
+
+		List<String> activeUnitIdsInAssessment = new LinkedList<>();
+		List<String> activeUnitIdsInProperty = new LinkedList<>();
+
+		if(!CollectionUtils.isEmpty(assessment.getUnitUsageList())){
+			assessment.getUnitUsageList().forEach(unitUsage -> {
+					activeUnitIdsInAssessment.add(unitUsage.getUnitId());
+			});
+		}
+
+		if(!CollectionUtils.isEmpty(property.getUnits())){
+			property.getUnits().forEach(unit -> {
+				if(unit.getActive())
+					activeUnitIdsInProperty.add(unit.getId());
+			});
+		}
+
+		if(!listEqualsIgnoreOrder(activeUnitIdsInAssessment, activeUnitIdsInProperty))
+			throw new CustomException("INVALID_UNITIDS","The unitIds are not matching in property and assessment");
+
+
+	}
+
+
+	private Property getPropertyForAssessment(AssessmentRequest assessmentRequest){
+		RequestInfo requestInfo = assessmentRequest.getRequestInfo();
+		Assessment assessment = assessmentRequest.getAssessment();
+		PropertyCriteria criteria = PropertyCriteria.builder()
+									.tenantId(assessment.getTenantId())
+									.propertyIds(Collections.singleton(assessment.getPropertyID()))
+									.build();
+		List<Property> properties = propertyService.searchProperty(criteria, requestInfo);
+
+		if(CollectionUtils.isEmpty(properties))
+			throw new CustomException("PROPERTY_NOT_FOUND","The property with id: "+assessment.getPropertyID()+" is not found");
+
+		return properties.get(0);
+	}
+
+
+	/**
+	 * Compares if two list contains same elements
+	 * @param list1
+	 * @param list2
+	 * @param <T>
+	 * @return Boolean true if both list contains the same elements irrespective of order
+	 */
+	private static <T> boolean listEqualsIgnoreOrder(List<T> list1, List<T> list2) {
+		return new HashSet<>(list1).equals(new HashSet<>(list2));
 	}
 
 }

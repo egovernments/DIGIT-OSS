@@ -49,7 +49,7 @@ public class DiffService {
      * @param propertyFromSearch License from db on which update is called
      * @return List of variable names which are changed
      */
-    private List<String> getUpdatedFields(Property propertyFromUpdate, Property propertyFromSearch) {
+    public List<String> getUpdatedFields(Object propertyFromUpdate, Object propertyFromSearch) {
 
         Javers javers = JaversBuilder.javers().build();
 

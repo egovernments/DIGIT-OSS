@@ -26,6 +26,10 @@ public class UnitUsage {
 	@NotNull
 	private String tenantId;
 
+	@JsonProperty("unitId")
+	@NotNull
+	private String unitId;
+
 	@JsonProperty("usageCategory")
 	private String usageCategory;
 
@@ -36,9 +40,6 @@ public class UnitUsage {
 	@JsonProperty("occupancyDate")
 	@NotNull
 	private Long occupancyDate;
-
-	@JsonProperty("active")
-	private Boolean active;
 
 	@JsonProperty("auditDetails")
 	private AuditDetails auditDetails;

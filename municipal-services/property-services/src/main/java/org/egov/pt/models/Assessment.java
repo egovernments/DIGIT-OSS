@@ -20,6 +20,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.egov.pt.models.workflow.ProcessInstance;
 
 @Data
 @AllArgsConstructor
@@ -73,6 +74,9 @@ public class Assessment {
 
 	@JsonProperty("auditDetails")
 	private AuditDetails auditDetails ;
+
+	@JsonProperty("workflow")
+	private ProcessInstance workflow;
 
 
 	public enum Source {

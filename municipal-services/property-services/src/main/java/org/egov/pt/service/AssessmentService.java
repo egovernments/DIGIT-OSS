@@ -1,5 +1,6 @@
 package org.egov.pt.service;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -12,6 +13,7 @@ import org.egov.pt.producer.Producer;
 import org.egov.pt.repository.AssessmentRepository;
 import org.egov.pt.validator.AssessmentValidator;
 import org.egov.pt.web.contracts.AssessmentRequest;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -38,6 +40,12 @@ public class AssessmentService {
 	@Autowired
 	private EnrichmentService enrichmentService;
 
+	@Autowired
+	private PropertyConfiguration config;
+
+	@Autowired
+	private DiffService diffService;
+
 
 	/**
 	 * Method to create an assessment asynchronously.
@@ -63,8 +71,15 @@ public class AssessmentService {
 	public Assessment updateAssessment(AssessmentRequest request) {
 		validator.validateAssessmentUpdate(request);
 		enrichAssessmentUpdate(request);
-		producer.push(props.getUpdateAssessmentTopic(), request);
+		Assessment assessmentFromSearch = getAssessmentFromDB(request.getAssessment());
+		List<String> fieldsUpdated = diffService.getUpdatedFields(request.getAssessment(),assessmentFromSearch);
+		if (config.getIsWorkflowEnabled()){
 
+
+		}
+		else {
+			producer.push(props.getUpdateAssessmentTopic(), request);
+		}
 		return request.getAssessment();
 	}
 
@@ -90,7 +105,6 @@ public class AssessmentService {
 		if(!CollectionUtils.isEmpty(assessment.getUnitUsageList())) {
 			for(UnitUsage unitUsage: assessment.getUnitUsageList()) {
 				unitUsage.setId(String.valueOf(UUID.randomUUID()));
-				unitUsage.setActive(true);
 				unitUsage.setAuditDetails(auditDetails);
 			}
 		}
@@ -123,7 +137,6 @@ public class AssessmentService {
 			for(UnitUsage unitUsage: assessment.getUnitUsageList()) {
 				if(StringUtils.isEmpty(unitUsage.getId())) {
 					unitUsage.setId(String.valueOf(UUID.randomUUID()));
-					unitUsage.setActive(true);
 					unitUsage.setAuditDetails(auditDetails);
 				}
 			}
@@ -144,11 +157,10 @@ public class AssessmentService {
 	/**
 	 * Service layer to search assessments.
 	 *
-	 * @param requestInfo
 	 * @param criteria
 	 * @return
 	 */
-	public List<Assessment> searchAssessments(RequestInfo requestInfo, AssessmentSearchCriteria criteria) {
+	public List<Assessment> searchAssessments(AssessmentSearchCriteria criteria) {
 		List<Assessment> assessments = repository.getAssessments(criteria);
 		return assessments;
 	}
@@ -158,4 +170,27 @@ public class AssessmentService {
 		return enrichmentService.getIdList(request.getRequestInfo(), request.getAssessment().getTenantId(),
 				props.getAssessmentIdGenName(), props.getAssessmentIdGenFormat(), 1).get(0);
 	}
+
+
+	/**
+	 * Fetches the assessment from DB corresponding to given assessment for update
+	 * @param assessment THe Assessment to be updated
+	 * @return Assessment from DB
+	 */
+	private Assessment getAssessmentFromDB(Assessment assessment){
+
+		AssessmentSearchCriteria criteria = AssessmentSearchCriteria.builder()
+											.ids(Collections.singleton(assessment.getId()))
+											.tenantId(assessment.getTenantId())
+											.build();
+
+		List<Assessment> assessments = searchAssessments(criteria);
+
+		if(CollectionUtils.isEmpty(assessments))
+			throw new CustomException("ASSESSMENT_NOT_FOUND","The assessment with id: "+assessment.getId()+" is not found in DB");
+
+		return assessments.get(0);
+	}
+
+
 }

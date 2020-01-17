@@ -41,6 +41,9 @@ public class Unit   {
   @JsonProperty("occupancyType")
   private OccupancyType occupancyType;
 
+  @JsonProperty("active")
+  private Boolean active;
+
   @JsonProperty("occupancyDate")
   private Long occupancyDate;
 
