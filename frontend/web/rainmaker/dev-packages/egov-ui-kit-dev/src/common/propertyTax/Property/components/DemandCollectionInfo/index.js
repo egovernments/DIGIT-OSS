@@ -5,7 +5,7 @@ import Label from "egov-ui-kit/utils/translationNode";
 class DemandCollectionInfo extends React.Component {
   render() {
     const { editIcon,demandProperties=[] } = this.props;
-    const header = "PT_DEMAND_AND_COLLECTION";    
+    const header = "PT_DEMAND_AND_COLLECTION";
     return (
       <Card
         style={{ backgroundColor: "rgb(242, 242, 242)", boxShadow: "none" }}
@@ -24,7 +24,8 @@ class DemandCollectionInfo extends React.Component {
               {{ editIcon } && <span style={{ alignItems: "right" }}>{editIcon}</span>}
             </div>
             {demandProperties[0].propertyDetails[0].demand.map((demand, index) => {
-              return (
+
+              return demand? (
                 <div>
                 {Object.keys(demand.demand).map((datas, ind) => {
                     return (
@@ -75,7 +76,7 @@ class DemandCollectionInfo extends React.Component {
                   })}
                   </div>
 
-              );
+              ):null;
             })}
           </div>
         }

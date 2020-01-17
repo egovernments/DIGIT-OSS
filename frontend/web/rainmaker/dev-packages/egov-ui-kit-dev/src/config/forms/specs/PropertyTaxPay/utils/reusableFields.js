@@ -12,7 +12,7 @@ import { localStorageSet, localStorageGet } from "egov-ui-kit/utils/localStorage
 import { setFieldProperty } from "egov-ui-kit/redux/form/actions";
 
 let floorDropDownData = [];
-let innerDimensionsData = [{ value: "true", label: "Yes" }, { value: "false", label: "No" }];
+let innerDimensionsData = [{ value: "true", label: "YES" }, { value: "false", label: "NO" }];
 let constructiontypes = [{ value: "road1", label: "rd1" }];
 
 for (var i = 1; i <= 25; i++) {
@@ -137,13 +137,14 @@ export const innerDimensions = {
      jsonPath: "Properties[0].propertyDetails[0].units[0].additionalDetails.innerDimensionsKnown",
     type: "singleValueList",
     floatingLabelText: "PT_ASSESMENT_INFO_INNER_DIMENSION",
-    hintText: "Enter Inner Dimensions",
+    hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
     // errorMessage: "PT_PLOT_SIZE_ERROR_MESSAGE",
     fullWidth: true,
   //  pattern: /^([1-9]\d{0,7})(\.\d+)?$/,
     numcols: 4,
     dropDownData: innerDimensionsData,
     required:true,
+    localePrefix: "COMMON_MASTER",
     updateDependentFields: ({ formKey, field: sourceField, dispatch }) => {
       const { value } = sourceField;
       innnerDimentionUtilFucntion(value,dispatch,formKey);

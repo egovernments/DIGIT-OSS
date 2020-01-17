@@ -81,10 +81,6 @@ import { removeForm } from "egov-ui-kit/redux/form/actions";
 import { prepareFormData as prepareFormDataAction } from "egov-ui-kit/redux/common/actions";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
-
-
-
-
 class FormWizardDataEntry extends Component {
   state = {
     dialogueOpen: false,
@@ -354,11 +350,11 @@ class FormWizardDataEntry extends Component {
       history
     } = this.props;
     let { search } = location;
-    let {resetForm}=this;
+    let { resetForm } = this;
 
     this.unlisten = history.listen((location, action) => {
       console.log("on route change");
-      resetForm()
+      resetForm();
     });
 
     showSpinner();
@@ -428,9 +424,8 @@ class FormWizardDataEntry extends Component {
           }.bind(this)
         );
       }
-    }
-    else {
-      resetForm()
+    } else {
+      resetForm();
     }
 
     const { ownerInfoArr } = this.state;
@@ -461,9 +456,8 @@ class FormWizardDataEntry extends Component {
   };
 
   componentWillUnmount() {
-      this.unlisten();
+    this.unlisten();
   }
-
 
   handleRemoveOwner = (index, formKey) => {
     const { ownerInfoArr } = this.state;
@@ -614,7 +608,11 @@ class FormWizardDataEntry extends Component {
         return (
           <div className="review-pay-tab">
             <ReviewForm
-              properties={get(this.props["prepareFormData"],"Properties[0]",[])}
+              properties={get(
+                this.props["prepareFormData"],
+                "Properties[0]",
+                []
+              )}
               onTabClick={this.onTabClick}
               updateIndex={this.updateIndex}
               stepZero={this.renderStepperContent(0, fromReviewPage)}
@@ -857,7 +855,7 @@ class FormWizardDataEntry extends Component {
       financialYearFromQuery,
       estimation
     } = this.state;
-    const { setRoute, displayFormErrorsAction, form ,history} = this.props;
+    const { setRoute, displayFormErrorsAction, form, history } = this.props;
     switch (selected) {
       //validating property address is validated
       case 0:
@@ -1071,108 +1069,108 @@ class FormWizardDataEntry extends Component {
         }
         break;
       case 3:
-        const { DemandProperties } = this.props;
+        let { DemandProperties = [], prepareFinalObject } = this.props;
+        const demand = get(
+          DemandProperties,
+          "[0].propertyDetails[0].demand",
+          []
+        );
+        let errorCode = "FINE";
+        let previousKey = -1;
+        let demandLength = demand.length;
+        let arrayOfEmptyYears = [];
 
-        if (!DemandProperties) {
+        const callToggleSnackbar = (labelKey, labelName) => {
           this.props.toggleSnackbarAndSetText(
             true,
             {
-              labelName:"Please enter at least one year of demand and collection !",
-              labelKey: "ERR01_DEMAND_ENTER_THE_DATA"
+              labelName,
+              labelKey
             },
             "error"
           );
-          break;
-        }
+        };
 
-        const { demand } = DemandProperties[0].propertyDetails[0];
-        let errorLine = "";
-        let errorLine2=true;
-        let lastDemand;
-        let lastCollection;
-        let yearData = true;
-        if (demand) {
+        if (!demandLength) {
+          errorCode = "ERR01_DEMAND_ENTER_THE_DATA";
+        } else {
           if (!demand[0]) {
-            this.props.toggleSnackbarAndSetText(
-              true,
-              {
-                labelName:"Please enter the latest year of demand and collection !",
-                labelKey: "ERR02_DEMAND_ENTER_THE_DATA"
-              },
-              "error"
-            );
-            break;
+            errorCode = "ERR02_DEMAND_ENTER_THE_DATA";
           }
-          const currentYear = demand.forEach((data, key) => {
-            return Object.keys(data.demand).forEach((data1, key1) => {
-              return Object.keys(data.demand[data1]).forEach((data2, key2) => {
-                lastDemand = data.demand[data1][data2].PT_DEMAND;
-                lastCollection=data.demand[data1][data2].PT_COLLECTED;
-                if(!data.demand[data1][data2].PT_DEMAND){
-                  errorLine2=false
-                }
-                else if (
-                  parseInt(data.demand[data1][data2].PT_DEMAND) <
-                  parseInt(data.demand[data1][data2].PT_COLLECTED)
-                ) {
-                  return (errorLine = errorLine.concat(
-                    `${key2 + 1}:the taxHead of ${
-                      data.demand[data1][data2].PT_TAXHEAD
-                    } demand ${
-                      data.demand[data1][data2].PT_DEMAND
-                    } of the year ${data1} is must be greater than the collection ${
-                      data.demand[data1][data2].PT_COLLECTED
-                    }.\n`
-                  ));
+          demand.forEach((data, key) => {
+            Object.keys(data.demand).forEach((data1, key1) => {
+              // let currentYearTaxHeadLength=Object.keys(data.demand[data1]).length;
+              let currentYearEnteredValueLength = 0;
+              Object.keys(data.demand[data1]).forEach((data2, key2) => {
+                if (data.demand[data1][data2].PT_DEMAND) {
+                  currentYearEnteredValueLength++;
+                  if (previousKey != -1) {
+                    if (key - previousKey != 1) {
+                      errorCode = "ERR04_DEMAND_ENTER_THE_DATA";
+                    }
+                  }
+                  if (
+                    data.demand[data1][data2].PT_COLLECTED &&
+                    parseInt(data.demand[data1][data2].PT_DEMAND) <
+                      parseInt(data.demand[data1][data2].PT_COLLECTED)
+                  ) {
+                    errorCode = "ERR03_DEMAND_ENTER_THE_DATA";
+                  }
+                  previousKey = key;
                 }
               });
+              if (!currentYearEnteredValueLength) {
+                arrayOfEmptyYears.push(key);
+              }
             });
           });
-          let errorLine1=demand.filter(data => data != undefined).length === demand.length;
-          if (lastDemand != '' || lastCollection !='' ) {
-            yearData =
-              demand.filter(data => data != undefined).length === demand.length;
-          }
-          else if(lastDemand == '' || lastCollection =='' && !errorLine1){
-            yearData = demand.filter(data => data != undefined).length != demand.length;
-          }
         }
-        if(!errorLine2){
-          this.props.toggleSnackbarAndSetText(
-            true,
-            {
-              labelName: "The entered collection should not greater than demand amount for any year !",
-              labelKey: "ERR03_DEMAND_ENTER_THE_DATA"
-            },
-            "error"
-          );
-          break;
+
+        arrayOfEmptyYears.forEach((item, i) => {
+          set(DemandProperties, `[0].propertyDetails[0].demand[${item}]`, null);
+        });
+
+        if (arrayOfEmptyYears.length === demand.length) {
+          errorCode = "ERR01_DEMAND_ENTER_THE_DATA";
         }
-        if (errorLine.length > 0) {
-          this.props.toggleSnackbarAndSetText(
-            true,
-            {
-              labelName: "The entered collection should not greater than demand amount for any year !",
-              labelKey: "ERR03_DEMAND_ENTER_THE_DATA"
-            },
-            "error"
-          );
-          break;
-        } else if (!yearData) {
-          this.props.toggleSnackbarAndSetText(
-            true,
-            {
-              labelName: "The demand entry is not sequential",
-              labelKey: "ERR04_DEMAND_ENTER_THE_DATA"
-            },
-            "error"
-          );
-          break;
-        } else {
-          this.setState({
-            selected: index,
-            formValidIndexArray: [...formValidIndexArray, selected]
-          });
+
+        if (arrayOfEmptyYears.indexOf(0) != -1) {
+          errorCode = "ERR02_DEMAND_ENTER_THE_DATA";
+        }
+
+        switch (errorCode) {
+          case "ERR01_DEMAND_ENTER_THE_DATA":
+            callToggleSnackbar(
+              "ERR01_DEMAND_ENTER_THE_DATA",
+              "Please enter at least one year of demand and collection !"
+            );
+            break;
+          case "ERR02_DEMAND_ENTER_THE_DATA":
+            callToggleSnackbar(
+              "ERR02_DEMAND_ENTER_THE_DATA",
+              "Please enter the latest year of demand and collection !"
+            );
+            break;
+          case "ERR04_DEMAND_ENTER_THE_DATA":
+            callToggleSnackbar(
+              "ERR04_DEMAND_ENTER_THE_DATA",
+              "The demand entry is not sequential !"
+            );
+            break;
+          case "ERR03_DEMAND_ENTER_THE_DATA":
+            callToggleSnackbar(
+              "ERR03_DEMAND_ENTER_THE_DATA",
+              "The entered collection should not greater than demand amount for any year !"
+            );
+            break;
+          default:
+            if (arrayOfEmptyYears.length > 0) {
+              prepareFinalObject("DemandProperties", DemandProperties);
+            }
+            this.setState({
+              selected: index,
+              formValidIndexArray: [...formValidIndexArray, selected]
+            });
         }
         break;
       case 4:
@@ -1612,7 +1610,14 @@ class FormWizardDataEntry extends Component {
   createAndUpdate = async index => {
     const { selected, formValidIndexArray } = this.state;
     const financialYearFromQuery = getFinancialYearFromQuery();
-    let { form, common, location, hideSpinner, DemandProperties } = this.props;
+    let {
+      form,
+      common,
+      location,
+      showSpinner,
+      hideSpinner,
+      DemandProperties
+    } = this.props;
     const { search } = location;
     const propertyId = getQueryValue(search, "propertyId");
     const assessmentId = getQueryValue(search, "assessmentId");
@@ -1737,6 +1742,7 @@ class FormWizardDataEntry extends Component {
       );
     }
     try {
+      showSpinner();
       set(
         prepareFormData,
         "Properties[0].propertyDetails[0].citizenInfo.name",
@@ -1749,19 +1755,21 @@ class FormWizardDataEntry extends Component {
 
       const finalyears = getFinalData();
       const finalPropertyData = [];
-      const financialYer = DemandProperties[0].propertyDetails[0].demand.map(
+      DemandProperties[0].propertyDetails[0].demand.forEach(
         (propertyData, index) => {
-          let yeardatas = Object.keys(propertyData.demand).map(
-            (yeardata, ind) => yeardata
-          )[0];
-          finalPropertyData.push({
-            ...properties[0].propertyDetails[0],
-            financialYear: yeardatas,
-            // additionalDetails: properties[0].propertyDetails[0].additionalDetails?properties[0].propertyDetails[0].additionalDetails:null,
-            // institution: properties[0].propertyDetails[0].institution?properties[0].propertyDetails[0].institution:null,
-            source: "LEGACY_RECORD",
-            assessmentDate: new Date().getTime()
-          });
+          if (propertyData) {
+            let yeardatas = Object.keys(propertyData.demand).map(
+              (yeardata, ind) => yeardata
+            )[0];
+            finalPropertyData.push({
+              ...properties[0].propertyDetails[0],
+              financialYear: yeardatas,
+              // additionalDetails: properties[0].propertyDetails[0].additionalDetails?properties[0].propertyDetails[0].additionalDetails:null,
+              // institution: properties[0].propertyDetails[0].institution?properties[0].propertyDetails[0].institution:null,
+              source: "LEGACY_RECORD",
+              assessmentDate: new Date().getTime()
+            });
+          }
         }
       );
       properties[0].propertyDetails = finalPropertyData;
@@ -1775,25 +1783,32 @@ class FormWizardDataEntry extends Component {
       );
       const demandData = [];
       const demandDetails = [];
-      let datas=getFinalData() || [];
-      let currentYearData=[]
+      let datas = getFinalData() || [];
+      let currentYearData = [];
       let fromDate;
       let toDate;
-      const finaldemand = DemandProperties[0].propertyDetails[0].demand.map(
-        (demand, index) => {
-          return Object.keys(demand.demand).map((dataYear, key) => {
+      DemandProperties[0].propertyDetails[0].demand.forEach((demand, index) => {
+        demand &&
+          Object.keys(demand.demand).forEach((dataYear, key) => {
             const demandDetails1 = [];
-            return (
-              demand.demand[dataYear].map((demandValue, ind) => {
-                  currentYearData=datas.filter(data=>data.financialYear == dataYear);
-                  fromDate=currentYearData.length > 0 ? currentYearData[0].fromDate:0
-                  toDate=currentYearData.length > 0 ? currentYearData[0].toDate:0
-                demandDetails1.push({
-                  taxHeadMasterCode: demandValue.PT_TAXHEAD,
-                  taxAmount: parseInt(demandValue.PT_DEMAND != "" ? demandValue.PT_DEMAND : 0),
-                  collectionAmount: parseInt( demandValue.PT_COLLECTED != ""? demandValue.PT_COLLECTED:0 )
-                });
-              }),
+            demand.demand[dataYear].map((demandValue, ind) => {
+              currentYearData = datas.filter(
+                data => data.financialYear == dataYear
+              );
+              fromDate =
+                currentYearData.length > 0 ? currentYearData[0].fromDate : 0;
+              toDate =
+                currentYearData.length > 0 ? currentYearData[0].toDate : 0;
+              demandDetails1.push({
+                taxHeadMasterCode: demandValue.PT_TAXHEAD,
+                taxAmount: parseInt(
+                  demandValue.PT_DEMAND != "" ? demandValue.PT_DEMAND : 0
+                ),
+                collectionAmount: parseInt(
+                  demandValue.PT_COLLECTED != "" ? demandValue.PT_COLLECTED : 0
+                )
+              });
+            }),
               demandData.push({
                 tenantId: getTenantId(),
                 consumerCode: get(
@@ -1811,11 +1826,10 @@ class FormWizardDataEntry extends Component {
                   )
                 },
                 demandDetails: demandDetails1
-              })
-            );
+              });
           });
-        }
-      );
+      });
+
       let createDemandResponse = await httpRequest(
         `billing-service/demand/${propertyMethodAction}`,
         `${propertyMethodAction}`,
@@ -1830,6 +1844,7 @@ class FormWizardDataEntry extends Component {
         selected: index,
         formValidIndexArray: [...formValidIndexArray, selected]
       });
+      hideSpinner();
     } catch (e) {
       hideSpinner();
       this.setState({ nextButtonEnabled: true });
@@ -2150,10 +2165,15 @@ class FormWizardDataEntry extends Component {
   };
 
   resetForm = () => {
-    const { form, removeForm, prepareFormDataAction,prepareFinalObject } = this.props;
+    const {
+      form,
+      removeForm,
+      prepareFormDataAction,
+      prepareFinalObject
+    } = this.props;
     resetFormWizard(form, removeForm);
     prepareFormDataAction("Properties", []);
-    prepareFinalObject("DemandProperties",[]);
+    prepareFinalObject("DemandProperties", []);
     this.onTabClick(0);
   };
 
@@ -2294,9 +2314,11 @@ const mapDispatchToProps = dispatch => {
       dispatch(updatePrepareFormDataFromDraft(prepareFormData)),
     handleFieldChange: (formKey, fieldKey, value) =>
       dispatch(handleFieldChange(formKey, fieldKey, value)),
-    removeForm: (formkey) => dispatch(removeForm(formkey)),
-    prepareFormDataAction: (path, value) => dispatch(prepareFormDataAction(path, value)),
-      prepareFinalObject: (jsonPath, value) => dispatch(prepareFinalObject(jsonPath, value))
+    removeForm: formkey => dispatch(removeForm(formkey)),
+    prepareFormDataAction: (path, value) =>
+      dispatch(prepareFormDataAction(path, value)),
+    prepareFinalObject: (jsonPath, value) =>
+      dispatch(prepareFinalObject(jsonPath, value))
   };
 };
 

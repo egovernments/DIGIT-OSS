@@ -231,6 +231,8 @@ const formConfig = {
 
     try {
       let state = store.getState();
+      const {common={}}=state;
+      const {prepareFormData={}}=common;
       const OwnerTypes = get(state, `common.generalMDMSDataById.OwnerType`);
       const finalData=getFinalData();
       console.log("finalData:",finalData);
@@ -243,6 +245,9 @@ const formConfig = {
       const ownerShipType = get(state, "form.ownershipType.fields.typeOfOwnership.value", "");
       if (ownerShipType === "SINGLEOWNER") {
         set(action, "form.fields.ownerGender.value", get(state, "form.ownerInfo.fields.ownerGender.value", "Male"));
+      }
+      if (!get(prepareFormData,"Properties[0].propertyDetails[0].owners[0].ownerType")) {
+          set(action, "form.fields.ownerCategory.value", "NONE");
       }
       return action;
     } catch (e) {

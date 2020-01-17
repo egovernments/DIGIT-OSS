@@ -210,9 +210,9 @@ const getUnitInfo = (units = [],usageCategoryMajor,buildUpArea) => {
     },
     {
       key: getTranslatedLabel("PT_ASSESMENT_INFO_INNER_DIMENSION", localizationLabelsData),
-      value: unit.additionalDetails && unit.additionalDetails.innerDimensionsKnown ? unit.additionalDetails.innerDimensionsKnown === "true" ? "Yes" : "No" : "No",
+      value: unit.additionalDetails && unit.additionalDetails.innerDimensionsKnown ? unit.additionalDetails.innerDimensionsKnown == "true" ? "COMMON_MASTER_TRUE" : "COMMON_MASTER_FALSE" : "COMMON_MASTER_FALSE",
     }];
-    if (unit.additionalDetails && unit.additionalDetails.innerDimensionsKnown === "true") {
+    if (unit.additionalDetails && unit.additionalDetails.innerDimensionsKnown == "true") {
       floor.push({
         key: getTranslatedLabel("PROPERTYTAX_BILLING_SLAB_SUBMNR26", localizationLabelsData),
         value: unit.additionalDetails && unit.additionalDetails.roomsArea ? unit.additionalDetails.roomsArea + '' : "NA",
