@@ -11,7 +11,8 @@
       "partPaymentAllowed": true,
       "isAdvanceAllowed": false,
       "demandUpdateTime": 86400000,
-      "isVoucherCreationEnabled": true
+      "isVoucherCreationEnabled": true,
+      "billGineiURL" : "egov-searcher/bill-genie/billswithaddranduser/_get"
     },
     {
       "businessService": "WaterCharges",
@@ -1025,7 +1026,8 @@
       "partPaymentAllowed": true,
       "isAdvanceAllowed": true,
       "demandUpdateTime": 86400000,
-      "isVoucherCreationEnabled": false
+      "isVoucherCreationEnabled": false,
+      "billGineiURL" : "egov-searcher/bill-genie/waterbills/_get"
     },
       {
       "businessService": "sw-services-calculation",
@@ -1036,7 +1038,8 @@
       "partPaymentAllowed": true,
       "isAdvanceAllowed": true,
       "demandUpdateTime": 86400000,
-      "isVoucherCreationEnabled": false
+      "isVoucherCreationEnabled": false,
+      "billGineiURL" : "egov-searcher/bill-genie/seweragebills/_get"
     },
     {
       "businessService": "BPA.NEWCONSTRUCTION_APP_FEE",
