@@ -34,6 +34,13 @@
       "Total Application"
     ],
     "insight": {
+      "chartResponseMap" : "totalApplication",
+      "action" : "differenceOfNumbers",
+      "upwardIndicator" : "positive",
+      "downwardIndicator" : "negative",
+      "textMessage" : "$indicator$value% than last $insightInterval",
+      "colorCode" : "#228B22",
+      "insightInterval" : "month"
     },
     "_comment": " totalApplication is the chartId"
   },
@@ -151,7 +158,7 @@
         "dateRefField": "Data.@timestamp",
         "requestQueryMap": "{\r\n  \"district\" : \"Data.tenantData.city.districtCode\", \r\n\"tenantId\" : \"Data.tenantId\" \r\n}",
         "indexName": "tlindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Total Application\":{\"date_histogram\":{\"field\":\"Data.tradelicense.applicationDate\",\"interval\":\"intervalvalue\"},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.tradelicense.applicationNumber.keyword\"}}}},\"Closed Application\":{\"date_histogram\":{\"field\":\"Data.tradelicense.@timestamp\",\"interval\":\"intervalvalue\"},\"aggs\":{\"Applications Closed\":{\"filters\":{\"filters\":{\"closed\":{\"match\":{\"Data.status.keyword\":\"closed\"}},\"resolved\":{\"match\":{\"Data.status.keyword\":\"resolved\"}}}},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.tradelicense.applicationNumber.keyword\"}}}}}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Total Application\":{\"date_histogram\":{\"field\":\"Data.tradelicense.applicationDate\",\"interval\":\"intervalvalue\"},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.tradelicense.applicationnumber.keyword\"}}}},\"Closed Application\":{\"date_histogram\":{\"field\":\"Data.tradelicense.@timestamp\",\"interval\":\"intervalvalue\"},\"aggs\":{\"Applications Closed\":{\"filters\":{\"filters\":{\"closed\":{\"match\":{\"Data.status.keyword\":\"closed\"}},\"resolved\":{\"match\":{\"Data.status.keyword\":\"resolved\"}}}},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.tradelicense.applicationnumber.keyword\"}}}}}}}}}}"
 
       },
       {
@@ -371,6 +378,13 @@
       "Total Collection"
     ],
     "insight": {
+        "chartResponseMap" : "totalCollection", 
+    	"action" : "differenceOfNumbers", 
+    	"upwardIndicator" : "positive", 
+    	"downwardIndicator" : "negative", 
+    	"textMessage" : "$indicator$value% than last $insightInterval",
+    	"colorCode" : "#228B22", 
+    	"insightInterval" : "month"
     },
     "_comment": " "
   },
@@ -523,7 +537,7 @@
     "queries": [
       {
         "module": "PT",
-        "requestQueryMap": "{\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"tenantId\" : \"Data.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\"}",
+        "requestQueryMap": "{\"module\" : \"Data.Bill.billDetails.businessService.keyword\", \"tenantId\" : \"Data.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\"}",
         "dateRefField": "Data.@timestamp",
         "indexName": "ptindex-v1",
         "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Usage Type\":{\"terms\":{\"field\":\"Data.propertyDetails.units.usageCategoryMajor.keyword\"},\"aggs\":{\"Assessed Properties\":{\"value_count\":{\"field\":\"Data.propertyDetails.assessmentNumber.keyword\"}}}}}}}}"
@@ -1583,7 +1597,7 @@
       {
         "module": "TL",
         "indexName": "tlindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Total Application\":{\"date_histogram\":{\"field\":\"Data.tradelicense.applicationdate\",\"interval\":\"intervalvalue\"},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.tradelicense.applicationnumber.keyword\"}}}}}}}}",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Total Application\":{\"date_histogram\":{\"field\":\"Data.tradelicense.applicationdate\",\"interval\":\"intervalvalue\"},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.tradelicense.applicationnumber.keyword\"}}}}}}}}",
         "requestQueryMap": "{\"tenantId\" : \"Data.tenantData.code\" ,\"district\" : \"Data.tenantData.city.districtCode\"}",
         "dateRefField": "Data.tradelicense.applicationdate"
       }
@@ -1608,7 +1622,7 @@
     "queries": [
       {
         "module": "TL",
-        "requestQueryMap": "{\"tenantId\" : \"Data.tenantData.code\", \"district\" : \"Data.tenantData.cityDistrictCode\"}",
+        "requestQueryMap": "{\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"tenantId\" : \"Data.tenantData.code\", \"district\" : \"Data.tenantData.cityDistrictCode\"}",
         "dateRefField": "Data.tradelicense.issueddate",
         "indexName": "tlindex-v1",
         "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Status\":{\"terms\":{\"field\":\"Data.tradelicense.status.keyword\"},\"aggs\":{\"License Issued\":{\"value_count\":{\"field\":\"Data.tradelicense.status.keyword\"}}}}}}}}"
@@ -1634,14 +1648,7 @@
         "requestQueryMap": "{\r\n  \"module\" : \"businessService.keyword\", \n\"tenantId\" : \"Data.tenantId\"}",
         "dateRefField": "Data.dateOfComplaint",
         "indexName": "pgrindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Total Application\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}}}}"
-      },
-      {
-        "module": "PGR",
-        "requestQueryMap": "{\r\n  \"module\" : \"businessService.keyword\", \n\"tenantId\" : \"Data.tenantId\"}",
-        "dateRefField": "Data.dateOfComplaint",
-        "indexName": "pgrindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"withinSLA\":{\"range\":{\"script\":{\"lang\":\"painless\",\"source\":\"doc['Data.slaHours'].value\"},\"ranges\":[{\"key\":\"Within SLA\",\"from\":0,\"to\":360}]}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Total Application\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}, \"withinSLA\":{\"range\":{\"script\":{\"lang\":\"painless\",\"source\":\"doc['Data.slaHours'].value\"},\"ranges\":[{\"key\":\"Within SLA\",\"from\":0,\"to\":360}]}}}}}}"
       }
     ],
     "chartType": "metric",
@@ -1852,6 +1859,351 @@
       },
       {
         "Paid": "number"
+      }
+    ],
+    "insight": {
+    },
+    "_comment": ""
+  },
+
+  "_comment": "Enhanced table charts..TODO: refactor to remove xtable type ",
+  "xlicenseIssuedBoundaryRevenue": {
+    "chartName": "DSS_TL_DEMAND_COLLECTION_BOUNDARY",
+    "queries": [
+      {
+        "module": "COMMON",
+        "requestQueryMap": "{\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\" }",
+        "dateRefField": "dataObject.Bill.billDetails.receiptDate",
+        "indexName": "dss-collection_v1",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"dataObject.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"ULBs \":{\"terms\":{\"field\":\"dataObject.tenantId.keyword\",\"size\":200,\"min_doc_count\":0},\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.amountPaid\"}},\"Transactions\":{\"value_count\":{\"field\":\"dataObject.transactionId.keyword\"}},\"Total Licence Issued\":{\"value_count\":{\"field\":\"domainObject.tradelicense.licensenumber.keyword\"}}}}}}}}"
+      },
+      {
+        "module": "COMMON",
+        "requestQueryMap": "{\"module\" : \"businessService.keyword\", \"tenantId\" : \"tenantIdForMunicipalCorporation.keyword\"}",
+        "dateRefField": "",
+        "indexName": "dss-target_v1",
+        "aggrQuery": "{\"aggs\":{\"ULBs \":{\"terms\":{\"field\":\"tenantIdForMunicipalCorporation.keyword\",\"size\":1000,\"min_doc_count\":0},\"aggs\":{\"Target Collection\":{\"sum\":{\"field\":\"budgetProposedForMunicipalCorporation\"}}}}}}"
+      }
+    ],
+    "filterKeys": [
+      {"key": "tenantId", "column": "Boundary"}
+    ],
+    "postAggregationTheory" : "repsonseToDifferenceOfDates",
+    "chartType": "xtable",
+    "valueType": "number",
+    "drillChart": "",
+    "plotLabel": "Boundary",
+    "aggregationPaths": [
+    ],
+    "computedFields": [
+      {
+        "postAggregationTheory" : "repsonseToDifferenceOfDates",
+        "actionName": "PercentageComputedField",
+        "fields" : ["Target Collection", "Total Collection"],
+        "newField" : "Target Achieved",
+        "_comments": "fields are field names picked from its aggregation query to use post aggregation newField value with given new field name  "
+      },
+      {
+        "postAggregationTheory" : "repsonseToDifferenceOfDates",
+        "actionName": "PercentageComputedField",
+        "fields" : ["Target Collection", "Total Collection"],
+        "newField" : "Target Achieved",
+        "_comments": "fields are field names picked from its aggregation query to use post aggregation newField value with given new field name  "
+      }
+    ],
+    "pathDataTypeMapping": [
+    ],
+    "insight": {
+    },
+    "_comment": ""
+  },
+  "xptFyByDDR": {
+    "chartName": "DSS_TL_STATUS_BY_TENANT",
+    "queries": [
+      {
+        "module": "PT",
+        "requestQueryMap": "{\"tenantId\" : \"Data.tenantId.keyword\" }",
+        "dateRefField": "Data.@timestamp",
+        "indexName": "ptindex-v1",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Fys\":{\"terms\":{\"field\":\"Data.propertyDetails.financialYear.keyword\",\"min_doc_count\":0}}}}}}"
+      },
+      {
+        "module": "PT",
+        "requestQueryMap": "{\"tenantId\" : \"Data.tenantId.keyword\" }",
+        "dateRefField": "Data.@timestamp",
+        "indexName": "ptindex-v1",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Total\":{\"value_count\":{\"field\":\"Data.propertyDetails.assessmentNumber.keyword\"}}}}}}}}"
+      }
+    ],
+    "isMdmsEnabled": true,
+    "filterKeys": [
+      {"key": "tenantId", "column": "DDRs"}
+    ],
+    "chartType": "xtable",
+    "valueType": "number",
+    "drillChart": "xptFyByTenant",
+    "plotLabel": "DDRs",
+    "insight": {
+    },
+    "_comment": ""
+  },
+  "xptFyByTenant": {
+    "chartName": "DSS_TL_STATUS_BY_TENANT",
+    "queries": [
+      {
+        "module": "PT",
+        "requestQueryMap": "{\"tenantId\" : \"Data.tenantId.keyword\" }",
+        "dateRefField": "Data.@timestamp",
+        "indexName": "ptindex-v1",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"ULBS \":{\"terms\":{\"field\":\"Data.tenantId.keyword\"},\"aggs\":{\"Fys\":{\"terms\":{\"field\":\"Data.propertyDetails.financialYear.keyword\",\"min_doc_count\":0}}}}}}}}"
+      },
+      {
+        "module": "PT",
+        "requestQueryMap": "{\"tenantId\" : \"Data.tenantId.keyword\" }",
+        "dateRefField": "Data.@timestamp",
+        "indexName": "ptindex-v1",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"ULBS \":{\"terms\":{\"field\":\"Data.tenantId.keyword\"},\"aggs\":{\"Total\":{\"value_count\":{\"field\":\"Data.propertyDetails.assessmentNumber.keyword\"}}}}}}}}"
+      }
+    ],
+    "filterKeys": [
+      {"key": "tenantId", "column": "Boundary"}
+    ],
+    "chartType": "xtable",
+    "valueType": "number",
+    "drillChart": "xptFyByWard",
+    "plotLabel": "Boundary",
+    "insight": {
+    },
+    "_comment": ""
+  },
+  "xptFyByWard": {
+    "chartName": "DSS_TL_STATUS_BY_TENANT",
+    "queries": [
+      {
+        "module": "PT",
+        "requestQueryMap": "{\"tenantId\" : \"Data.tenantId.keyword\" }",
+        "dateRefField": "Data.@timestamp",
+        "indexName": "ptindex-v1",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Ward \":{\"terms\":{\"field\":\"Data.ward.name.keyword\"},\"aggs\":{\"Fys\":{\"terms\":{\"field\":\"Data.propertyDetails.financialYear.keyword\",\"min_doc_count\":0}}}}}}}}"
+      },
+      {
+        "module": "PT",
+        "requestQueryMap": "{\"tenantId\" : \"Data.tenantId.keyword\" }",
+        "dateRefField": "Data.@timestamp",
+        "indexName": "ptindex-v1",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Ward \":{\"terms\":{\"field\":\"Data.ward.name.keyword\"},\"aggs\":{\"Total\":{\"value_count\":{\"field\":\"Data.propertyDetails.assessmentNumber.keyword\"}}}}}}}}"
+      }
+    ],
+    "filterKeys": [
+    ],
+    "chartType": "xtable",
+    "valueType": "number",
+    "drillChart": "none",
+    "plotLabel": "Wards",
+    "insight": {
+    },
+    "_comment": ""
+  },
+
+  "xpgrStatusByDDR": {
+    "chartName": "DSS_PGR_STATUS_BY_TENANT",
+    "queries": [
+      {
+        "module": "PGR",
+        "requestQueryMap": "{\"tenantId\" : \"Data.tenantId.keyword\" , \"departmentId\" : \"Data.department.keyword\"}",
+        "dateRefField": "Data.dateOfComplaint",
+        "indexName": "pgrindex-v1",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"withinSLA\":{\"range\":{\"script\":{\"lang\":\"painless\",\"source\":\"doc['Data.slaHours'].value\"},\"ranges\":[{\"key\":\"withinSLA\",\"from\":0,\"to\":360}]}},\"Total Complaints\":{\"value_count\":{\"field\":\"Data.dateOfComplaint\"}},\"Closed_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"closed\",\"rejected\",\"resolved\"]}},\"aggs\":{\"Closed Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}},\"Open_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"open\"]}},\"aggs\":{\"Open Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}},\"Reopened_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"reopen\"]}},\"aggs\":{\"Reopened Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}}}}}}"
+      }
+    ],
+    "isMdmsEnabled": true,
+    "filterKeys": [
+      {"key": "tenantId", "column": "DDRs"}
+    ],
+    "chartType": "xtable",
+    "valueType": "number",
+    "drillChart": "xpgrStatusByTenant",
+    "plotLabel": "DDRs",
+    "excludedColumns": ["withinSLA"],
+    "computedFields": [
+      {
+        "postAggregationTheory" : "",
+        "actionName": "PercentageComputedField",
+        "fields" : ["Closed Complaints", "Total Complaints"],
+        "newField" : "Completion Rate",
+        "_comments": "fields are field names picked from its aggregation query to use post aggregation newField value with given new field name  "
+      },
+      {
+        "postAggregationTheory" : "",
+        "actionName": "PercentageComputedField",
+        "fields" : ["Total Complaints", "withinSLA"],
+        "newField" : "Sla Achieved",
+        "_comments": "fields are field names picked from its aggregation query to use post aggregation newField value with given new field name  "
+      }
+    ],
+    "insight": {
+    },
+    "_comment": ""
+  },
+  "xpgrStatusByTenant": {
+    "chartName": "DSS_PGR_STATUS_BY_TENANT",
+    "queries": [
+      {
+        "module": "PGR",
+        "requestQueryMap": "{\"tenantId\" : \"Data.tenantId.keyword\" , \"departmentId\" : \"Data.department.keyword\"}",
+        "dateRefField": "Data.dateOfComplaint",
+        "indexName": "pgrindex-v1",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"ULBs \":{\"terms\":{\"field\":\"Data.tenantId.keyword\",\"size\":1000},\"aggs\":{\"withinSLA\":{\"range\":{\"script\":{\"lang\":\"painless\",\"source\":\"doc['Data.slaHours'].value\"},\"ranges\":[{\"key\":\"withinSLA\",\"from\":0,\"to\":360}]}},\"Total Complaints\":{\"value_count\":{\"field\":\"Data.dateOfComplaint\"}},\"Closed_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"closed\",\"rejected\",\"resolved\"]}},\"aggs\":{\"Closed Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}},\"Open_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"open\"]}},\"aggs\":{\"Open Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}},\"Reopened_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"reopen\"]}},\"aggs\":{\"Reopened Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}}}}}}}}"
+      }
+    ],
+    "filterKeys": [
+      {"key": "tenantId", "column": "Boundary"}
+    ],
+    "chartType": "xtable",
+    "valueType": "number",
+    "drillChart": "xpgrStatusByWard",
+    "plotLabel": "Boundary",
+    "excludedColumns": ["withinSLA"],
+    "computedFields": [
+      {
+        "postAggregationTheory" : "",
+        "actionName": "PercentageComputedField",
+        "fields" : ["Closed Complaints", "Total Complaints"],
+        "newField" : "Completion Rate",
+        "_comments": "fields are field names picked from its aggregation query to use post aggregation newField value with given new field name  "
+      },
+      {
+        "postAggregationTheory" : "",
+        "actionName": "PercentageComputedField",
+        "fields" : ["Total Complaints", "withinSLA"],
+        "newField" : "Sla Achieved",
+        "_comments": "fields are field names picked from its aggregation query to use post aggregation newField value with given new field name  "
+      }
+    ],
+    "insight": {
+    },
+    "_comment": ""
+  },
+  "xpgrStatusByWard": {
+    "chartName": "DSS_PGR_STATUS_BY_TENANT",
+    "queries": [
+      {
+        "module": "PGR",
+        "requestQueryMap": "{\"tenantId\" : \"Data.tenantId.keyword\" , \"departmentId\" : \"Data.department.keyword\"}",
+        "dateRefField": "Data.dateOfComplaint",
+        "indexName": "pgrindex-v1",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Ward \":{\"terms\":{\"field\":\"Data.complaintWard.name.keyword\",\"size\":1000},\"aggs\":{\"withinSLA\":{\"range\":{\"script\":{\"lang\":\"painless\",\"source\":\"doc['Data.slaHours'].value\"},\"ranges\":[{\"key\":\"withinSLA\",\"from\":0,\"to\":360}]}},\"Total Complaints\":{\"value_count\":{\"field\":\"Data.dateOfComplaint\"}},\"Closed_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"closed\",\"rejected\",\"resolved\"]}},\"aggs\":{\"Closed Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}},\"Open_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"open\"]}},\"aggs\":{\"Open Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}},\"Reopened_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"reopen\"]}},\"aggs\":{\"Reopened Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}}}}}}}}"
+      }
+    ],
+    "filterKeys": [
+      {"key": "tenantId", "column": "Boundary"}
+    ],
+    "chartType": "xtable",
+    "valueType": "number",
+    "drillChart": "none",
+
+    "documentType": "_doc",
+    "action": "",
+    "plotLabel": "Ward",
+    "excludedColumns": ["withinSLA"],
+    "computedFields": [
+      {
+        "postAggregationTheory" : "",
+        "actionName": "PercentageComputedField",
+        "fields" : ["Closed Complaints", "Total Complaints"],
+        "newField" : "Completion Rate",
+        "_comments": "fields are field names picked from its aggregation query to use post aggregation newField value with given new field name  "
+      },
+      {
+        "postAggregationTheory" : "",
+        "actionName": "PercentageComputedField",
+        "fields" : ["Total Complaints", "withinSLA"],
+        "newField" : "Sla Achieved",
+        "_comments": "fields are field names picked from its aggregation query to use post aggregation newField value with given new field name  "
+      }
+    ],
+    "insight": {
+    },
+    "_comment": ""
+  },
+  "xpgrStatusByDept": {
+    "chartName": "DSS_PGR_STATUS_BY_TENANT",
+    "queries": [
+      {
+        "module": "PGR",
+        "requestQueryMap": "{\"tenantId\" : \"Data.tenantId.keyword\" , \"departmentId\" : \"Data.department.keyword\"}",
+        "dateRefField": "Data.dateOfComplaint",
+        "indexName": "pgrindex-v1",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Department \":{\"terms\":{\"field\":\"Data.department.keyword\",\"size\":1000},\"aggs\":{\"withinSLA\":{\"range\":{\"script\":{\"lang\":\"painless\",\"source\":\"doc['Data.slaHours'].value\"},\"ranges\":[{\"key\":\"withinSLA\",\"from\":0,\"to\":360}]}},\"Total Complaints\":{\"value_count\":{\"field\":\"Data.dateOfComplaint\"}},\"Closed_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"closed\",\"rejected\",\"resolved\"]}},\"aggs\":{\"Closed Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}},\"Open_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"open\"]}},\"aggs\":{\"Open Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}},\"Reopened_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"reopen\"]}},\"aggs\":{\"Reopened Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}}}}}}}}"
+      }
+    ],
+    "filterKeys": [
+      {"key": "departmentId", "column": "Department"}
+    ],
+    "chartType": "xtable",
+    "valueType": "number",
+    "drillChart": "xpgrStatusByCatagory",
+
+    "documentType": "_doc",
+    "action": "",
+    "plotLabel": "Department",
+    "excludedColumns": ["withinSLA"],
+    "computedFields": [
+      {
+        "postAggregationTheory" : "",
+        "actionName": "PercentageComputedField",
+        "fields" : ["Closed Complaints", "Total Complaints"],
+        "newField" : "Completion Rate",
+        "_comments": "fields are field names picked from its aggregation query to use post aggregation newField value with given new field name  "
+      },
+      {
+        "postAggregationTheory" : "",
+        "actionName": "PercentageComputedField",
+        "fields" : ["Total Complaints", "withinSLA"],
+        "newField" : "Sla Achieved",
+        "_comments": "fields are field names picked from its aggregation query to use post aggregation newField value with given new field name  "
+      }
+    ],
+    "insight": {
+    },
+    "_comment": ""
+  },
+  "xpgrStatusByCatagory": {
+    "chartName": "DSS_PGR_STATUS_BY_TENANT",
+    "queries": [
+      {
+        "module": "PGR",
+        "requestQueryMap": "{\"tenantId\" : \"Data.tenantId.keyword\" , \"departmentId\" : \"Data.department.keyword\"}",
+        "dateRefField": "Data.dateOfComplaint",
+        "indexName": "pgrindex-v1",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Category \":{\"terms\":{\"field\":\"Data.complainCategory.keyword\",\"size\":1000},\"aggs\":{\"withinSLA\":{\"range\":{\"script\":{\"lang\":\"painless\",\"source\":\"doc['Data.slaHours'].value\"},\"ranges\":[{\"key\":\"withinSLA\",\"from\":0,\"to\":360}]}},\"Total Complaints\":{\"value_count\":{\"field\":\"Data.dateOfComplaint\"}},\"Closed_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"closed\",\"rejected\",\"resolved\"]}},\"aggs\":{\"Closed Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}},\"Open_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"open\"]}},\"aggs\":{\"Open Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}},\"Reopened_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"reopen\"]}},\"aggs\":{\"Reopened Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}}}}}}}}"
+      }
+    ],
+    "filterKeys": [
+      {"key": "departmentId", "column": "Department"}
+    ],
+    "chartType": "xtable",
+    "valueType": "number",
+    "drillChart": "none",
+
+    "documentType": "_doc",
+    "action": "",
+    "plotLabel": "Complaint Category",
+    "excludedColumns": ["withinSLA"],
+    "computedFields": [
+      {
+        "postAggregationTheory" : "",
+        "actionName": "PercentageComputedField",
+        "fields" : ["Closed Complaints", "Total Complaints"],
+        "newField" : "Completion Rate",
+        "_comments": "fields are field names picked from its aggregation query to use post aggregation newField value with given new field name  "
+      },
+      {
+        "postAggregationTheory" : "",
+        "actionName": "PercentageComputedField",
+        "fields" : ["Total Complaints", "withinSLA"],
+        "newField" : "Sla Achieved",
+        "_comments": "fields are field names picked from its aggregation query to use post aggregation newField value with given new field name  "
       }
     ],
     "insight": {
@@ -2168,7 +2520,7 @@
     ],
     "chartType": "table",
     "valueType": "number",
-    "drillChart": "pgrStatusWardDrillDown",
+    "drillChart": "pgrStatusByTenant",
     "drillFields": [
       ""
     ],
@@ -2442,300 +2794,27 @@
     },
     "_comment": ""
   },
-  
-    "xptFyByDDR": {
-    "chartName": "DSS_TL_STATUS_BY_TENANT",
-    "queries": [
-      {
-        "module": "PT",
-        "requestQueryMap": "{\"tenantId\" : \"Data.tenantId.keyword\" }",
-        "dateRefField": "Data.@timestamp",
-        "indexName": "ptindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Fys\":{\"terms\":{\"field\":\"Data.propertyDetails.financialYear.keyword\",\"min_doc_count\":0}}}}}}"
-      },
-      {
-        "module": "PT",
-        "requestQueryMap": "{\"tenantId\" : \"Data.tenantId.keyword\" }",
-        "dateRefField": "Data.@timestamp",
-        "indexName": "ptindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Total\":{\"value_count\":{\"field\":\"Data.propertyDetails.assessmentNumber.keyword\"}}}}}}}}"
-      }
-    ],
-    "isMdmsEnabled": true,
-    "filterKeys": [
-      {"key": "tenantId", "column": "DDRs"}
-    ],
-    "chartType": "xtable",
-    "valueType": "number",
-    "drillChart": "xptFyByTenant",
-    "plotLabel": "DDRs",
-    "insight": {
-    },
-    "_comment": ""
-  },
-  "xptFyByTenant": {
-    "chartName": "DSS_TL_STATUS_BY_TENANT",
-    "queries": [
-      {
-        "module": "PT",
-        "requestQueryMap": "{\"tenantId\" : \"Data.tenantId.keyword\" }",
-        "dateRefField": "Data.@timestamp",
-        "indexName": "ptindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"ULBS \":{\"terms\":{\"field\":\"Data.tenantId.keyword\"},\"aggs\":{\"Fys\":{\"terms\":{\"field\":\"Data.propertyDetails.financialYear.keyword\",\"min_doc_count\":0}}}}}}}}"
-      },
-      {
-        "module": "PT",
-        "requestQueryMap": "{\"tenantId\" : \"Data.tenantId.keyword\" }",
-        "dateRefField": "Data.@timestamp",
-        "indexName": "ptindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"ULBS \":{\"terms\":{\"field\":\"Data.tenantId.keyword\"},\"aggs\":{\"Total\":{\"value_count\":{\"field\":\"Data.propertyDetails.assessmentNumber.keyword\"}}}}}}}}"
-      }
-    ],
-    "filterKeys": [
-      {"key": "tenantId", "column": "Boundary"}
-    ],
-    "chartType": "xtable",
-    "valueType": "number",
-    "drillChart": "xptFyByWard",
-    "plotLabel": "Boundary",
-    "insight": {
-    },
-    "_comment": ""
-  },
-  "xptFyByWard": {
-    "chartName": "DSS_TL_STATUS_BY_TENANT",
-    "queries": [
-      {
-        "module": "PT",
-        "requestQueryMap": "{\"tenantId\" : \"Data.tenantId.keyword\" }",
-        "dateRefField": "Data.@timestamp",
-        "indexName": "ptindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Ward \":{\"terms\":{\"field\":\"Data.ward.name.keyword\"},\"aggs\":{\"Fys\":{\"terms\":{\"field\":\"Data.propertyDetails.financialYear.keyword\",\"min_doc_count\":0}}}}}}}}"
-      },
-      {
-        "module": "PT",
-        "requestQueryMap": "{\"tenantId\" : \"Data.tenantId.keyword\" }",
-        "dateRefField": "Data.@timestamp",
-        "indexName": "ptindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Ward \":{\"terms\":{\"field\":\"Data.ward.name.keyword\"},\"aggs\":{\"Total\":{\"value_count\":{\"field\":\"Data.propertyDetails.assessmentNumber.keyword\"}}}}}}}}"
-      }
-    ],
-    "filterKeys": [
-    ],
-    "chartType": "xtable",
-    "valueType": "number",
-    "drillChart": "none",
-    "plotLabel": "Wards",
-    "insight": {
-    },
-    "_comment": ""
-  },
-
-  "xpgrStatusByDDR": {
-    "chartName": "DSS_PGR_STATUS_BY_TENANT",
+  "topFiveComplaints": {
+    "chartName": "DSS_PGR_TOP_COMPLAINTS",
     "queries": [
       {
         "module": "PGR",
-        "requestQueryMap": "{\"tenantId\" : \"Data.tenantId.keyword\" , \"departmentId\" : \"Data.department.keyword\"}",
+        "requestQueryMap": "{\"tenantId\" : \"Data.tenantId\"}",
         "dateRefField": "Data.dateOfComplaint",
         "indexName": "pgrindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"withinSLA\":{\"range\":{\"script\":{\"lang\":\"painless\",\"source\":\"doc['Data.slaHours'].value\"},\"ranges\":[{\"key\":\"withinSLA\",\"from\":0,\"to\":360}]}},\"Total Complaints\":{\"value_count\":{\"field\":\"Data.dateOfComplaint\"}},\"Closed_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"closed\",\"rejected\",\"resolved\"]}},\"aggs\":{\"Closed Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}},\"Open_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"open\"]}},\"aggs\":{\"Open Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}},\"Reopened_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"reopen\"]}},\"aggs\":{\"Reopened Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Complain Category\":{\"terms\":{\"field\":\"Data.complainCategory.keyword\",\"size\":5,\"order\":{\"Count\":\"desc\"}},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.complainCategory.keyword\"}}}}}}}}"
       }
     ],
-    "isMdmsEnabled": true,
-    "filterKeys": [
-      {"key": "tenantId", "column": "DDRs"}
-    ],
-    "chartType": "xtable",
+    "chartType": "pie",
     "valueType": "number",
-    "drillChart": "xpgrStatusByTenant",
-    "plotLabel": "DDRs",
-    "excludedColumns": ["withinSLA"],
-    "computedFields": [
-      {
-        "postAggregationTheory" : "",
-        "actionName": "PercentageComputedField",
-        "fields" : ["Closed Complaints", "Total Complaints"],
-        "newField" : "Completion Rate",
-        "_comments": "fields are field names picked from its aggregation query to use post aggregation newField value with given new field name  "
-      },
-      {
-        "postAggregationTheory" : "",
-        "actionName": "PercentageComputedField",
-        "fields" : ["Total Complaints", "withinSLA"],
-        "newField" : "Sla Achieved",
-        "_comments": "fields are field names picked from its aggregation query to use post aggregation newField value with given new field name  "
-      }
-    ],
-    "insight": {
-    },
-    "_comment": ""
-  },
-  "xpgrStatusByTenant": {
-    "chartName": "DSS_PGR_STATUS_BY_TENANT",
-    "queries": [
-      {
-        "module": "PGR",
-        "requestQueryMap": "{\"tenantId\" : \"Data.tenantId.keyword\" , \"departmentId\" : \"Data.department.keyword\"}",
-        "dateRefField": "Data.dateOfComplaint",
-        "indexName": "pgrindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"ULBs \":{\"terms\":{\"field\":\"Data.tenantId.keyword\",\"size\":1000},\"aggs\":{\"withinSLA\":{\"range\":{\"script\":{\"lang\":\"painless\",\"source\":\"doc['Data.slaHours'].value\"},\"ranges\":[{\"key\":\"withinSLA\",\"from\":0,\"to\":360}]}},\"Total Complaints\":{\"value_count\":{\"field\":\"Data.dateOfComplaint\"}},\"Closed_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"closed\",\"rejected\",\"resolved\"]}},\"aggs\":{\"Closed Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}},\"Open_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"open\"]}},\"aggs\":{\"Open Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}},\"Reopened_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"reopen\"]}},\"aggs\":{\"Reopened Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}}}}}}}}"
-      }
-    ],
-    "filterKeys": [
-      {"key": "tenantId", "column": "Boundary"}
-    ],
-    "chartType": "xtable",
-    "valueType": "number",
-    "drillChart": "xpgrStatusByWard",
-    "plotLabel": "Boundary",
-    "excludedColumns": ["withinSLA"],
-    "computedFields": [
-      {
-        "postAggregationTheory" : "",
-        "actionName": "PercentageComputedField",
-        "fields" : ["Closed Complaints", "Total Complaints"],
-        "newField" : "Completion Rate",
-        "_comments": "fields are field names picked from its aggregation query to use post aggregation newField value with given new field name  "
-      },
-      {
-        "postAggregationTheory" : "",
-        "actionName": "PercentageComputedField",
-        "fields" : ["Total Complaints", "withinSLA"],
-        "newField" : "Sla Achieved",
-        "_comments": "fields are field names picked from its aggregation query to use post aggregation newField value with given new field name  "
-      }
-    ],
-    "insight": {
-    },
-    "_comment": ""
-  },
-  "xpgrStatusByWard": {
-    "chartName": "DSS_PGR_STATUS_BY_TENANT",
-    "queries": [
-      {
-        "module": "PGR",
-        "requestQueryMap": "{\"tenantId\" : \"Data.tenantId.keyword\" , \"departmentId\" : \"Data.department.keyword\"}",
-        "dateRefField": "Data.dateOfComplaint",
-        "indexName": "pgrindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Ward \":{\"terms\":{\"field\":\"Data.complaintWard.name.keyword\",\"size\":1000},\"aggs\":{\"withinSLA\":{\"range\":{\"script\":{\"lang\":\"painless\",\"source\":\"doc['Data.slaHours'].value\"},\"ranges\":[{\"key\":\"withinSLA\",\"from\":0,\"to\":360}]}},\"Total Complaints\":{\"value_count\":{\"field\":\"Data.dateOfComplaint\"}},\"Closed_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"closed\",\"rejected\",\"resolved\"]}},\"aggs\":{\"Closed Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}},\"Open_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"open\"]}},\"aggs\":{\"Open Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}},\"Reopened_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"reopen\"]}},\"aggs\":{\"Reopened Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}}}}}}}}"
-      }
-    ],
-    "filterKeys": [
-      {"key": "tenantId", "column": "Boundary"}
-    ],
-    "chartType": "xtable",
-    "valueType": "number",
-    "drillChart": "none",
-
-    "documentType": "_doc",
     "action": "",
-    "plotLabel": "Ward",
-    "excludedColumns": ["withinSLA"],
-    "computedFields": [
-      {
-        "postAggregationTheory" : "",
-        "actionName": "PercentageComputedField",
-        "fields" : ["Closed Complaints", "Total Complaints"],
-        "newField" : "Completion Rate",
-        "_comments": "fields are field names picked from its aggregation query to use post aggregation newField value with given new field name  "
-      },
-      {
-        "postAggregationTheory" : "",
-        "actionName": "PercentageComputedField",
-        "fields" : ["Total Complaints", "withinSLA"],
-        "newField" : "Sla Achieved",
-        "_comments": "fields are field names picked from its aggregation query to use post aggregation newField value with given new field name  "
-      }
-    ],
-    "insight": {
-    },
-    "_comment": ""
-  },
-  "xpgrStatusByDept": {
-    "chartName": "DSS_PGR_STATUS_BY_TENANT",
-    "queries": [
-      {
-        "module": "PGR",
-        "requestQueryMap": "{\"tenantId\" : \"Data.tenantId.keyword\" , \"departmentId\" : \"Data.department.keyword\"}",
-        "dateRefField": "Data.dateOfComplaint",
-        "indexName": "pgrindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Department \":{\"terms\":{\"field\":\"Data.department.keyword\",\"size\":1000},\"aggs\":{\"withinSLA\":{\"range\":{\"script\":{\"lang\":\"painless\",\"source\":\"doc['Data.slaHours'].value\"},\"ranges\":[{\"key\":\"withinSLA\",\"from\":0,\"to\":360}]}},\"Total Complaints\":{\"value_count\":{\"field\":\"Data.dateOfComplaint\"}},\"Closed_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"closed\",\"rejected\",\"resolved\"]}},\"aggs\":{\"Closed Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}},\"Open_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"open\"]}},\"aggs\":{\"Open Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}},\"Reopened_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"reopen\"]}},\"aggs\":{\"Reopened Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}}}}}}}}"
-      }
-    ],
-    "filterKeys": [
-      {"key": "departmentId", "column": "Department"}
-    ],
-    "chartType": "xtable",
-    "valueType": "number",
-    "drillChart": "xpgrStatusByCatagory",
-
     "documentType": "_doc",
-    "action": "",
-    "plotLabel": "Department",
-    "excludedColumns": ["withinSLA"],
-    "computedFields": [
-      {
-        "postAggregationTheory" : "",
-        "actionName": "PercentageComputedField",
-        "fields" : ["Closed Complaints", "Total Complaints"],
-        "newField" : "Completion Rate",
-        "_comments": "fields are field names picked from its aggregation query to use post aggregation newField value with given new field name  "
-      },
-      {
-        "postAggregationTheory" : "",
-        "actionName": "PercentageComputedField",
-        "fields" : ["Total Complaints", "withinSLA"],
-        "newField" : "Sla Achieved",
-        "_comments": "fields are field names picked from its aggregation query to use post aggregation newField value with given new field name  "
-      }
-    ],
-    "insight": {
-    },
-    "_comment": ""
-  },
-  "xpgrStatusByCatagory": {
-    "chartName": "DSS_PGR_STATUS_BY_TENANT",
-    "queries": [
-      {
-        "module": "PGR",
-        "requestQueryMap": "{\"tenantId\" : \"Data.tenantId.keyword\" , \"departmentId\" : \"Data.department.keyword\"}",
-        "dateRefField": "Data.dateOfComplaint",
-        "indexName": "pgrindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Category \":{\"terms\":{\"field\":\"Data.complainCategory.keyword\",\"size\":1000},\"aggs\":{\"withinSLA\":{\"range\":{\"script\":{\"lang\":\"painless\",\"source\":\"doc['Data.slaHours'].value\"},\"ranges\":[{\"key\":\"withinSLA\",\"from\":0,\"to\":360}]}},\"Total Complaints\":{\"value_count\":{\"field\":\"Data.dateOfComplaint\"}},\"Closed_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"closed\",\"rejected\",\"resolved\"]}},\"aggs\":{\"Closed Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}},\"Open_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"open\"]}},\"aggs\":{\"Open Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}},\"Reopened_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"reopen\"]}},\"aggs\":{\"Reopened Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}}}}}}}}"
-      }
-    ],
-    "filterKeys": [
-      {"key": "departmentId", "column": "Department"}
-    ],
-    "chartType": "xtable",
-    "valueType": "number",
     "drillChart": "none",
-
-    "documentType": "_doc",
-    "action": "",
-    "plotLabel": "Complaint Category",
-    "excludedColumns": ["withinSLA"],
-    "computedFields": [
-      {
-        "postAggregationTheory" : "",
-        "actionName": "PercentageComputedField",
-        "fields" : ["Closed Complaints", "Total Complaints"],
-        "newField" : "Completion Rate",
-        "_comments": "fields are field names picked from its aggregation query to use post aggregation newField value with given new field name  "
-      },
-      {
-        "postAggregationTheory" : "",
-        "actionName": "PercentageComputedField",
-        "fields" : ["Total Complaints", "withinSLA"],
-        "newField" : "Sla Achieved",
-        "_comments": "fields are field names picked from its aggregation query to use post aggregation newField value with given new field name  "
-      }
+    "aggregationPaths": [
+      "Complain Category"
     ],
     "insight": {
     },
-    "_comment": ""
+    "_comment": " Complaints By Their Statuses"
   }
-
-
 }
