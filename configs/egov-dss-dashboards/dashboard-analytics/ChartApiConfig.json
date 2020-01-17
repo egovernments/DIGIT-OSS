@@ -78,6 +78,13 @@
       "Closed Application"
     ],
     "insight": {
+      "chartResponseMap" : "closedApplication",
+      "action" : "differenceOfNumbers",
+      "upwardIndicator" : "positive",
+      "downwardIndicator" : "negative",
+      "textMessage" : "$indicator$value% than last $insightInterval",
+      "colorCode" : "#228B22",
+      "insightInterval" : "month"
     },
     "_comment": " totalApplication is the chartId"
   },
@@ -101,6 +108,13 @@
       "Citizen Registered"
     ],
     "insight": {
+      "chartResponseMap" : "citizenRegistered",
+      "action" : "differenceOfNumbers",
+      "upwardIndicator" : "positive",
+      "downwardIndicator" : "negative",
+      "textMessage" : "$indicator$value% than last $insightInterval",
+      "colorCode" : "#228B22",
+      "insightInterval" : "month"
     },
     "_comment": " totalApplication is the chartId"
   },
@@ -348,6 +362,13 @@
       "Actual collection"
     ],
     "insight": {
+      "chartResponseMap" : "targetAchieved",
+      "action" : "differenceOfNumbers",
+      "upwardIndicator" : "positive",
+      "downwardIndicator" : "negative",
+      "textMessage" : "$indicator$value% than last $insightInterval",
+      "colorCode" : "#228B22",
+      "insightInterval" : "month"
     },
     "_comment": " "
   },
@@ -378,13 +399,13 @@
       "Total Collection"
     ],
     "insight": {
-        "chartResponseMap" : "totalCollection", 
-    	"action" : "differenceOfNumbers", 
-    	"upwardIndicator" : "positive", 
-    	"downwardIndicator" : "negative", 
-    	"textMessage" : "$indicator$value% than last $insightInterval",
-    	"colorCode" : "#228B22", 
-    	"insightInterval" : "month"
+      "chartResponseMap" : "totalCollection",
+      "action" : "differenceOfNumbers",
+      "upwardIndicator" : "positive",
+      "downwardIndicator" : "negative",
+      "textMessage" : "$indicator$value% than last $insightInterval",
+      "colorCode" : "#228B22",
+      "insightInterval" : "month"
     },
     "_comment": " "
   },
@@ -415,6 +436,13 @@
       "Total Collection"
     ],
     "insight": {
+      "chartResponseMap" : "todaysCollection",
+      "action" : "differenceOfNumbers",
+      "upwardIndicator" : "positive",
+      "downwardIndicator" : "negative",
+      "textMessage" : "$indicator$value% than last $insightInterval",
+      "colorCode" : "#228B22",
+      "insightInterval" : "month"
     },
     "_comment": " "
   },
@@ -576,6 +604,13 @@
       "Assessed Properties"
     ],
     "insight": {
+      "chartResponseMap" : "propertiesAssessed",
+      "action" : "differenceOfNumbers",
+      "upwardIndicator" : "positive",
+      "downwardIndicator" : "negative",
+      "textMessage" : "$indicator$value% than last $insightInterval",
+      "colorCode" : "#228B22",
+      "insightInterval" : "month"
     },
     "_comment": " totol properties having assessmentNumber "
   },
@@ -600,6 +635,13 @@
       "Assessed Properties"
     ],
     "insight": {
+      "chartResponseMap" : "totalAssessment",
+      "action" : "differenceOfNumbers",
+      "upwardIndicator" : "positive",
+      "downwardIndicator" : "negative",
+      "textMessage" : "$indicator$value% than last $insightInterval",
+      "colorCode" : "#228B22",
+      "insightInterval" : "month"
     },
     "_comment": " totol properties having assessmentNumber "
   },
@@ -655,6 +697,13 @@
       "Active ULBs"
     ],
     "insight": {
+      "chartResponseMap" : "activeUlbs",
+      "action" : "differenceOfNumbers",
+      "upwardIndicator" : "positive",
+      "downwardIndicator" : "negative",
+      "textMessage" : "$indicator$value% than last $insightInterval",
+      "colorCode" : "#228B22",
+      "insightInterval" : "month"
     },
     "_comment": " total ULBs count"
   },
@@ -1581,6 +1630,13 @@
       "License Issued"
     ],
     "insight": {
+      "chartResponseMap" : "licenseIssued",
+      "action" : "differenceOfNumbers",
+      "upwardIndicator" : "positive",
+      "downwardIndicator" : "negative",
+      "textMessage" : "$indicator$value% than last $insightInterval",
+      "colorCode" : "#228B22",
+      "insightInterval" : "month"
     },
     "_comment": " licenseIssued is the Chart ID"
   },
@@ -1661,6 +1717,13 @@
       "withinSLA"
     ],
     "insight": {
+      "chartResponseMap" : "slaAchieved",
+      "action" : "differenceOfNumbers",
+      "upwardIndicator" : "positive",
+      "downwardIndicator" : "negative",
+      "textMessage" : "$indicator$value% than last $insightInterval",
+      "colorCode" : "#228B22",
+      "insightInterval" : "month"
     },
     "_comment": " SLA Achieved Percentage "
   },
@@ -2211,6 +2274,10 @@
     "_comment": ""
   },
 
+
+
+
+
   "_comment": "PGR NON-COLLECTION CHARTS",
   "completionRate": {
     "chartName": "DSS_PGR_COMPLETION_RATE",
@@ -2233,6 +2300,13 @@
       "Total Complaints"
     ],
     "insight": {
+      "chartResponseMap" : "completionRate",
+      "action" : "differenceOfNumbers",
+      "upwardIndicator" : "positive",
+      "downwardIndicator" : "negative",
+      "textMessage" : "$indicator$value% than last $insightInterval",
+      "colorCode" : "#228B22",
+      "insightInterval" : "month"
     },
     "_comment": " Total Number of Complaints "
   },
@@ -2256,6 +2330,13 @@
       "Total Complaints"
     ],
     "insight": {
+      "chartResponseMap" : "totalComplaints",
+      "action" : "differenceOfNumbers",
+      "upwardIndicator" : "positive",
+      "downwardIndicator" : "negative",
+      "textMessage" : "$indicator$value% than last $insightInterval",
+      "colorCode" : "#228B22",
+      "insightInterval" : "month"
     },
     "_comment": " Total Number of Complaints "
   },
@@ -2279,6 +2360,13 @@
       "Closed Complaints"
     ],
     "insight": {
+      "chartResponseMap" : "closedComplaints",
+      "action" : "differenceOfNumbers",
+      "upwardIndicator" : "positive",
+      "downwardIndicator" : "negative",
+      "textMessage" : "$indicator$value% than last $insightInterval",
+      "colorCode" : "#228B22",
+      "insightInterval" : "month"
     },
     "_comment": " Total Number of Closed Complaints "
   },
@@ -2339,32 +2427,32 @@
     "_comment": " "
   },
   "totalComplaintsbyStatus": {
-  "chartName": "DSS_PGR_TOTAL_COMPLAINTS_BY_STATUS",
-  "queries": [
-    {
-      "module": "PGR",
-      "dateRefField": "Data.dateOfComplaint",
-      "requestQueryMap": "{\"tenantId\" : \"Data.tenantId\"}",
-      "indexName": "pgrindex-v1",
-      "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Resolved\":{\"date_histogram\":{\"field\":\"Data.dateOfComplaint\",\"interval\":\"intervalvalue\"},\"aggs\":{\"resolved\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"resolved\"]}},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.dateOfComplaint\"}}}}}},\"Open\":{\"date_histogram\":{\"field\":\"Data.dateOfComplaint\",\"interval\":\"intervalvalue\"},\"aggs\":{\"open\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"open\"]}},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.dateOfComplaint\"}}}}}},\"Closed\":{\"date_histogram\":{\"field\":\"Data.dateOfComplaint\",\"interval\":\"intervalvalue\"},\"aggs\":{\"closed\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"closed\"]}},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.dateOfComplaint\"}}}}}}}}}}"
-    }
-  ],
-  "chartType": "line",
-  "valueType": "number",
-  "action": "",
-  "drillChart": "none",
-  "documentType": "_doc",
-  "aggregationPaths": [
-    "Resolved",
-    "Open",
-    "Closed"
-  ],
-  "isCumulative": false,
-  "interval": "month",
-  "insight": {
+    "chartName": "DSS_PGR_TOTAL_COMPLAINTS_BY_STATUS",
+    "queries": [
+      {
+        "module": "PGR",
+        "dateRefField": "Data.dateOfComplaint",
+        "requestQueryMap": "{\"tenantId\" : \"Data.tenantId\"}",
+        "indexName": "pgrindex-v1",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Resolved\":{\"date_histogram\":{\"field\":\"Data.dateOfComplaint\",\"interval\":\"intervalvalue\"},\"aggs\":{\"resolved\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"resolved\"]}},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.dateOfComplaint\"}}}}}},\"Open\":{\"date_histogram\":{\"field\":\"Data.dateOfComplaint\",\"interval\":\"intervalvalue\"},\"aggs\":{\"open\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"open\"]}},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.dateOfComplaint\"}}}}}},\"Closed\":{\"date_histogram\":{\"field\":\"Data.dateOfComplaint\",\"interval\":\"intervalvalue\"},\"aggs\":{\"closed\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"closed\"]}},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.dateOfComplaint\"}}}}}}}}}}"
+      }
+    ],
+    "chartType": "line",
+    "valueType": "number",
+    "action": "",
+    "drillChart": "none",
+    "documentType": "_doc",
+    "aggregationPaths": [
+      "Resolved",
+      "Open",
+      "Closed"
+    ],
+    "isCumulative": false,
+    "interval": "month",
+    "insight": {
+    },
+    "_comment": " "
   },
-  "_comment": " "
-},
   "complaintsByStatus": {
     "chartName": "DSS_PGR_COMPLAINTS_BY_STATUS",
     "queries": [
