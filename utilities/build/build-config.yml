@@ -13,3 +13,9 @@ config:
       - work-dir: "egov-weekly-impact-notifier"
         image-name: "egov-weekly-impact-notifier"
         dockerfile: "build/maven/Dockerfile"
+        
+  - name: "utilities/hello"
+    build:
+      - work-dir: "hello"
+        image-name: "hello"
+        dockerfile: "build/maven/Dockerfile"        
