@@ -1098,7 +1098,7 @@ class FormWizardDataEntry extends Component {
             errorCode = "ERR02_DEMAND_ENTER_THE_DATA";
           }
           demand.forEach((data, key) => {
-            Object.keys(data.demand).forEach((data1, key1) => {
+            data && Object.keys(data.demand).forEach((data1, key1) => {
               // let currentYearTaxHeadLength=Object.keys(data.demand[data1]).length;
               let currentYearEnteredValueLength = 0;
               Object.keys(data.demand[data1]).forEach((data2, key2) => {
