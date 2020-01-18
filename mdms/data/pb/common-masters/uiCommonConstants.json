@@ -55,6 +55,10 @@
             "routePath": "/dashboard/tradelicense",
             "isOrigin": true
           },
+          "pgr": {
+            "routePath": "/dashboard/pgr",
+            "isOrigin": true
+          },
           "ulb-pgr": {
             "routePath": "/dashboard/ulb-pgr",
             "isOrigin": true
