@@ -6,49 +6,49 @@
       "name": "Residential",
       "code": "RESIDENTIAL",
       "active": true,
-      "occupancyType": "Residential"
+      "occupancyType": "RESIDENTIAL"
     },
     {
       "name": "Special Residential",
       "code": "SPECIAL_RESIDENTIAL",
       "active": true,
-      "occupancyType": "Residential"
+      "occupancyType": "RESIDENTIAL"
     },
     {
       "name": "Hostel Educational",
       "code": "HOSTEL_EDUCATIONAL",
       "active": true,
-      "occupancyType": "Residential"
+      "occupancyType": "RESIDENTIAL"
     },
     {
       "name": "Apartment/Flat",
-      "code": "APPARTMENT/FLAT",
+      "code": "APARTMENT_FLAT",
       "active": true,
-      "occupancyType": "Residential"
+      "occupancyType": "RESIDENTIAL"
     },
     {
       "name": "Professional Office",
       "code": "PROFESSIONAL_OFFICE",
       "active": true,
-      "occupancyType": "Residential"
+      "occupancyType": "RESIDENTIAL"
     },
     {
       "name": "Farm House",
       "code": "FARM_HOUSE",
       "active": true,
-      "occupancyType": "Residential"
+      "occupancyType": "RESIDENTIAL"
     },
     {
       "name": "Old Age Home",
       "code": "OLD_AGE_HOME",
       "active": true,
-      "occupancyType": "Residential"
+      "occupancyType": "RESIDENTIAL"
     },
     {
       "name": "Service Apartment",
       "code": "SERVICE_APARTMENT",
       "active": true,
-      "occupancyType": "Residential"
+      "occupancyType": "RESIDENTIAL"
     }
   ]
 }
