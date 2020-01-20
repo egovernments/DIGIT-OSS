@@ -42,6 +42,12 @@
                 }
               },
               {
+                "variable": "holdingNo",
+                "value": {
+                  "path": "$.holdingNo"
+                }
+              },
+              {
                 "variable": "buildingNearGovt",
                 "value": {
                   "path": "BUILDING_NEAR_GOVT_BLDG"
@@ -665,7 +671,7 @@
             "externalAPI": [
               {
                 "path": "http://collection-services:8080/collection-services/payments/_search",
-                "queryParam": "tenantId=$.tenantId,consumerCode=$.applicationNo,businessServices=BPA.NC_SAN_FEE",
+                "queryParam": "tenantId=$.tenantId,consumerCodes=$.applicationNo,businessServices=BPA.NC_SAN_FEE",
                 "apiRequest": null,
                 "responseMapping": [
                   {
