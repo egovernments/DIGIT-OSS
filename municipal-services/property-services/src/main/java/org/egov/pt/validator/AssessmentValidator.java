@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.models.*;
+import org.egov.pt.repository.AssessmentRepository;
 import org.egov.pt.service.AssessmentService;
 import org.egov.pt.service.PropertyService;
 import org.egov.pt.util.AssessmentUtils;
@@ -24,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 public class AssessmentValidator {
 
 	@Autowired
-	private AssessmentService assessmentService;
+	private AssessmentRepository assessmentRepository;
 
 	@Autowired
 	private PropertyService propertyService;
@@ -87,7 +88,7 @@ public class AssessmentValidator {
 		Set<String> ids = new HashSet<>();
 		ids.add(assessment.getId());
 		AssessmentSearchCriteria criteria = AssessmentSearchCriteria.builder().ids(ids).build();
-		List<Assessment> assessments = assessmentService.searchAssessments(criteria);
+		List<Assessment> assessments = assessmentRepository.getAssessments(criteria);
 		if (CollectionUtils.isEmpty(assessments)) {
 			errorMap.put(ErrorConstants.NO_ASSESSMENTS_FOUND_CODE, ErrorConstants.NO_ASSESSMENTS_FOUND_MSG);
 		} else {

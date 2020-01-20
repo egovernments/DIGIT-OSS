@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.math.BigDecimal;
+
 /**
  * Unit
  */
@@ -55,4 +57,9 @@ public class Unit   {
   
   @JsonProperty("auditDetails")
   private AuditDetails auditDetails;
+
+
+  @JsonProperty("arv")
+  private BigDecimal arv;
+
 }

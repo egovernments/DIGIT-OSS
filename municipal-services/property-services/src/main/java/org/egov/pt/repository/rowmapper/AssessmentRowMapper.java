@@ -93,7 +93,6 @@ public class AssessmentRowMapper implements ResultSetExtractor<List<Assessment>>
 				.occupancyDate(rs.getLong("uus_occupancydate"))
 				.occupancyType((OccupancyType.valueOf(rs.getString("uus_occupancytype"))))
 				.usageCategory(rs.getString("uus_usagecategory"))
-				.active(rs.getBoolean("uus_active"))
 				.auditDetails(auditDetails)
 				.build();
 	}
