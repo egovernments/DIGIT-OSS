@@ -143,8 +143,8 @@ const transform = (floor, key, generalMDMSDataById, propertyDetails) => {
 //     );
 //   };
 const getAssessmentInfo = (propertyDetails, generalMDMSDataById) => {
-  const { units = [], noOfFloors,additionalDetails } = propertyDetails || {};
-  var construction_date = new Date(additionalDetails.constructionYear).toLocaleDateString();
+  const { units = [], noOfFloors,additionalDetails={} } = propertyDetails || {};
+  var construction_date =(additionalDetails && additionalDetails.constructionYear)? new Date(additionalDetails.constructionYear).toLocaleDateString():null;
 
   return (
     propertyDetails && [
@@ -184,7 +184,7 @@ const getAssessmentInfo = (propertyDetails, generalMDMSDataById) => {
         },
       {
         key: getTranslatedLabel("PT_ASSESMENT_INFO_CONSTRUCTION_DATE", localizationLabelsData),
-        value: additionalDetails.constructionYear ? `${construction_date}` : "NA",
+        value: construction_date ? `${construction_date}` : "NA",
 
       }
     ]
