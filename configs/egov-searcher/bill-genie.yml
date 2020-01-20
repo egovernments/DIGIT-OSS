@@ -70,6 +70,17 @@ SearchDefinitions:
     - name: ptdet.financialyear
       isMandatory: false
       jsonPath: $.searchCriteria.financialYear
+    - name: fromperiod
+      isMandatory: false
+      jsonPath: $.searchCriteria.fromPeriod
+      operator: LE
+    - name: toperiod
+      isMandatory: false
+      jsonPath: $.searchCriteria.toPeriod
+      operator: GE
+    - name: b_status
+      isMandatory: false
+      jsonPath: $.searchCriteria.billStatus
 
    output:
     jsonFormat: {"ResponseInfo": {},"Bills": []}
