@@ -4,6 +4,8 @@ import get from "lodash/get";
 import set from "lodash/set";
 import { setFieldProperty, handleFieldChange } from "egov-ui-kit/redux/form/actions";
 import {getFinalData} from "egov-ui-kit/utils/localStorageUtils";
+import { prepareFormData as setData } from "egov-ui-kit/redux/common/actions";
+
 
 
 
@@ -247,6 +249,7 @@ const formConfig = {
         set(action, "form.fields.ownerGender.value", get(state, "form.ownerInfo.fields.ownerGender.value", "Male"));
       }
       if (!get(prepareFormData,"Properties[0].propertyDetails[0].owners[0].ownerType")) {
+          dispatch(setData("Properties[0].propertyDetails[0].owners[0].ownerType", "NONE"));
           set(action, "form.fields.ownerCategory.value", "NONE");
       }
       return action;

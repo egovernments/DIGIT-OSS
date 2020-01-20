@@ -544,9 +544,9 @@ const getAssessmentInfo = (propertyDetails, keys, generalMDMSDataById) => {
 };
 
 const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
-  const isInstitution =
-    latestPropertyDetails.ownershipCategory === "INSTITUTIONALPRIVATE" || latestPropertyDetails.ownershipCategory === "INSTITUTIONALGOVERNMENT";
-  const { institution, owners: ownerDetails } = latestPropertyDetails || {};
+  const isInstitution =latestPropertyDetails.ownershipCategory!="INDIVIDUAL";
+    // latestPropertyDetails.ownershipCategory === "INSTITUTIONALPRIVATE" || latestPropertyDetails.ownershipCategory === "INSTITUTIONALGOVERNMENT";
+  const { institution={}, owners: ownerDetails } = latestPropertyDetails || {};
   return (
     ownerDetails && [
       {
@@ -570,7 +570,7 @@ const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
               isInstitution
                 ? {
                   key: getTranslatedLabel("PT_OWNERSHIP_INFO_DESIGNATION", localizationLabelsData),
-                  value: institution.designation || "NA",
+                  value: institution && institution.designation || "NA",
                 }
                 : {
                   key: getTranslatedLabel("PT_SEARCHPROPERTY_TABEL_GUARDIANNAME", localizationLabelsData),

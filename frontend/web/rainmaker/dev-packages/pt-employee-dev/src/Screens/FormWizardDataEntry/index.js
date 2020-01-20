@@ -494,9 +494,24 @@ class FormWizardDataEntry extends Component {
             disabled={isReviewPage}
           />
         );
-      case "INSTITUTIONALPRIVATE":
-      case "INSTITUTIONALGOVERNMENT":
-        return (
+      // case "INSTITUTIONALPRIVATE":
+      // case "INSTITUTIONALGOVERNMENT":
+      //   return (
+      //     <div>
+      //       <InstitutionHOC disabled={isReviewPage} />
+      //       <InstitutionAuthorityHOC
+      //         cardTitle={
+      //           <Label
+      //             label="PT_DETAILS_OF_AUTHORISED_PERSON"
+      //             defaultLabel="Details of authorised person"
+      //           />
+      //         }
+      //         disabled={isReviewPage}
+      //       />
+      //     </div>
+      //   );
+      default:
+         return (
           <div>
             <InstitutionHOC disabled={isReviewPage} />
             <InstitutionAuthorityHOC
@@ -509,9 +524,7 @@ class FormWizardDataEntry extends Component {
               disabled={isReviewPage}
             />
           </div>
-        );
-      default:
-        return null;
+        );;
     }
   };
 
@@ -855,7 +868,7 @@ class FormWizardDataEntry extends Component {
       financialYearFromQuery,
       estimation
     } = this.state;
-    const { setRoute, displayFormErrorsAction, form, history } = this.props;
+    const { setRoute, displayFormErrorsAction, form, history ,prepareFormData={}} = this.props;
     switch (selected) {
       //validating property address is validated
       case 0:
@@ -970,6 +983,8 @@ class FormWizardDataEntry extends Component {
           );
           break;
         }
+        let {Properties:finalProperty}=prepareFormData;
+        const ownershipCategory=get(finalProperty,"[0]propertyDetails[0].ownershipCategory");
         const { ownershipType } = form;
         const estimateCall = () => {
           // estimate().then(estimateResponse => {
@@ -1032,8 +1047,7 @@ class FormWizardDataEntry extends Component {
                 );
               }
             } else if (
-              ownershipTypeSelected.toUpperCase().indexOf("INSTITUTIONAL") !==
-              -1
+              ownershipCategory==="COMPANY"
             ) {
               const { institutionDetails, institutionAuthority } = form;
               const isInstitutionDetailsFormValid = validateForm(
@@ -1186,7 +1200,7 @@ class FormWizardDataEntry extends Component {
         break;
       case 5:
         const { assessedPropertyDetails = {} } = this.state;
-        const { Properties = [] } = assessedPropertyDetails;
+        let { Properties = [] } = assessedPropertyDetails;
         let propertyId = "";
         let tenantId = "";
         for (let pty of Properties) {
@@ -1675,7 +1689,7 @@ class FormWizardDataEntry extends Component {
       );
     }
 
-    if (selectedownerShipCategoryType === "MULTIPLEOWNERS") {
+    else if (selectedownerShipCategoryType === "MULTIPLEOWNERS") {
       set(
         prepareFormData,
         "Properties[0].propertyDetails[0].owners",
@@ -1696,20 +1710,7 @@ class FormWizardDataEntry extends Component {
         selectedownerShipCategoryType
       );
     }
-
-    set(
-      prepareFormData,
-      "Properties[0].propertyDetails[0].citizenInfo.mobileNumber",
-      get(
-        prepareFormData,
-        "Properties[0].propertyDetails[0].owners[0].mobileNumber"
-      )
-    );
-
-    if (
-      selectedownerShipCategoryType.toLowerCase().indexOf("institutional") !==
-      -1
-    ) {
+    else {
       const { instiObj, ownerArray } = getInstituteInfo(this);
       set(
         prepareFormData,
@@ -1741,6 +1742,17 @@ class FormWizardDataEntry extends Component {
         )
       );
     }
+
+    set(
+      prepareFormData,
+      "Properties[0].propertyDetails[0].citizenInfo.mobileNumber",
+      get(
+        prepareFormData,
+        "Properties[0].propertyDetails[0].owners[0].mobileNumber"
+      )
+    );
+
+
     try {
       showSpinner();
       set(

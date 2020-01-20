@@ -8,7 +8,7 @@ const formConfig = {
   fields: {
     name: {
       id: "institution-name",
-      jsonPath: "propertyDetails[0].institution.name",
+      jsonPath: "Properties[0].propertyDetails[0].institution.name",
       type: "textfield",
       floatingLabelText: "PT_INSTITUTION_NAME",
       hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
@@ -18,7 +18,7 @@ const formConfig = {
     },
     type: {
       id: "institution-type",
-      jsonPath: "propertyDetails[0].institution.type",
+      jsonPath: "Properties[0].propertyDetails[0].institution.type",
       type: "singleValueList",
       localePrefix: "PROPERTYTAX_BILLING_SLAB",
       floatingLabelText: "PT_INSTITUTION_TYPE",

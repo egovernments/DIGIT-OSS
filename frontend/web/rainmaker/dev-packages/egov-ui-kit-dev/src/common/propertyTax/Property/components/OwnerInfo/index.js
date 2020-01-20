@@ -10,8 +10,8 @@ const locale = getLocale() || "en_IN";
 const localizationLabelsData = initLocalizationLabels(locale);
 
 const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
-  const isInstitution =
-    latestPropertyDetails.ownershipCategory === "INSTITUTIONALPRIVATE" || latestPropertyDetails.ownershipCategory === "INSTITUTIONALGOVERNMENT";
+  const isInstitution =latestPropertyDetails.ownershipCategory!="INDIVIDUAL";
+    // latestPropertyDetails.ownershipCategory === "INSTITUTIONALPRIVATE" || latestPropertyDetails.ownershipCategory === "INSTITUTIONALGOVERNMENT";
   const { institution = {}, owners: ownerDetails = [] } = latestPropertyDetails || {};
   let owner = [];
   if (ownerDetails && ownerDetails.length > 0) {
@@ -45,7 +45,7 @@ const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
           isInstitution
             ? {
                 key: getTranslatedLabel("PT_OWNERSHIP_INFO_DESIGNATION", localizationLabelsData),
-                value: institution.designation || "NA",
+                value: institution && institution.designation || "NA",
               }
             : {
                 key: getTranslatedLabel("PT_SEARCHPROPERTY_TABEL_GUARDIANNAME", localizationLabelsData),

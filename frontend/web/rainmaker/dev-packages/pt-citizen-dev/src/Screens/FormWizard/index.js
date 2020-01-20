@@ -456,9 +456,25 @@ class FormWizard extends Component {
             disabled={isReviewPage}
           />
         );
-      case "INSTITUTIONALPRIVATE":
-      case "INSTITUTIONALGOVERNMENT":
-        return (
+      // case "INSTITUTIONALPRIVATE":
+      // case "INSTITUTIONALGOVERNMENT":
+      //   return (
+      //     <div>
+      //       <InstitutionHOC disabled={isReviewPage} />
+      //       <InstitutionAuthorityHOC
+      //         cardTitle={
+      //           <Label
+      //             label="PT_DETAILS_OF_AUTHORISED_PERSON"
+      //             defaultLabel="Details of authorised person"
+      //             label="New"
+      //           />
+      //         }
+      //         disabled={isReviewPage}
+      //       />
+      //     </div>
+      //   );
+      default:
+      return (
           <div>
             <InstitutionHOC disabled={isReviewPage} />
             <InstitutionAuthorityHOC
@@ -473,8 +489,6 @@ class FormWizard extends Component {
             />
           </div>
         );
-      default:
-        return null;
     }
   };
 

@@ -283,7 +283,7 @@ const AssessmentInfo = ({ properties, editIcon, generalMDMSDataById }) => {
   if (properties) {
     const { propertyDetails } = properties;
     if (propertyDetails && propertyDetails.length > 0) {
-      subUnitItems = getUnitInfo(propertyDetails[0]['units'],propertyDetails[0]['usageCategoryMajor'],propertyDetails[0]['buildUpArea']);
+      subUnitItems = getUnitInfo(propertyDetails[0]['units'],propertyDetails[0]['usageCategoryMajor']?propertyDetails[0]['usageCategoryMajor']:"",propertyDetails[0]['buildUpArea']);
       assessmentItems = getAssessmentInfo(propertyDetails[0], generalMDMSDataById);
       if (propertyDetails[0].propertySubType === "SHAREDPROPERTY") {
         hideSubsectionLabel = true;
