@@ -139,7 +139,7 @@ const setAutopopulatedvalues = async (state, dispatch) => {
 }
 
 const queryValueAN = getQueryArg(window.location.href, "connectionNos");
-console.log('123', queryValueAN)
+// console.log('123', queryValueAN)
 const showHideCard = (booleanHideOrShow, dispatch) => {
     dispatch(
         handleField(

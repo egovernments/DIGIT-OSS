@@ -154,7 +154,7 @@ export const getMyConnectionResults = async (queryObject, dispatch) => {
 
                 } catch (err) {
                     console.log(err)
-                    response.WaterConnection[i].due = "-"
+                    response.WaterConnection[i].due = "NA"
                 }
             }
             // });
@@ -698,7 +698,7 @@ export const getMdmsDataForMeterStatus = async (dispatch) => {
             [],
             mdmsBody
         );
-        console.log(payload.MdmsRes)
+        // console.log(payload.MdmsRes)
         let data = payload.MdmsRes['ws-services-calculation'].MeterStatus.map(ele => {
             return { code: ele }
         })
@@ -1128,7 +1128,7 @@ export const getSWMyConnectionResults = async (queryObject, dispatch) => {
 
                 } catch (err) {
                     console.log(err)
-                    response.SewerageConnections[i].due = "-"
+                    response.SewerageConnections[i].due = "NA"
                 }
             }
             // });

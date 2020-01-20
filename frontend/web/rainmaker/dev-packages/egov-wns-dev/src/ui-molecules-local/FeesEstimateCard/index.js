@@ -53,9 +53,9 @@ const styles = {
     }
 };
 
-const date = (to) => {
-    let toDate = new Date(to);
-    return toDate.toLocaleString('default', { month: 'short' }) + ' - ' + toDate.getFullYear().toString()
+const date = (from, to) => {
+    if (from !== undefined && to !== 'NA') { return convertEpochToDate(from) + " - " + convertEpochToDate(to); }
+    else { return "NA" }
 }
 
 function FeesEstimateCard(props) {
@@ -99,7 +99,7 @@ function FeesEstimateCard(props) {
                                         style={styles.taxStyles}
                                         className="tl-application-table-total-value" >
                                         <Typography variant="body2">
-                                            {date(fee.toPeriod)}
+                                            {date(fee.fromPeriod, fee.toPeriod)}
                                         </Typography>
                                     </Grid>
                                 </Grid>
