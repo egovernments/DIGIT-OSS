@@ -61,7 +61,7 @@ public class AssessmentController {
 	@PostMapping("/_search")
 	public ResponseEntity<AssessmentResponse> search(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
 			@Valid @ModelAttribute AssessmentSearchCriteria assessmentSearchCriteria) {
-		List<Assessment> assessments = assessmentService.searchAssessments(requestInfoWrapper.getRequestInfo(), assessmentSearchCriteria);
+		List<Assessment> assessments = assessmentService.searchAssessments(assessmentSearchCriteria);
 		ResponseInfo resInfo = responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true);
 		AssessmentResponse response = AssessmentResponse.builder()
 				.assessments(assessments)

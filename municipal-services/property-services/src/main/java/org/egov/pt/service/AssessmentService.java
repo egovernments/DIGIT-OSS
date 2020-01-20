@@ -116,6 +116,9 @@ public class AssessmentService {
 		return request.getAssessment();
 	}
 
+	public List<Assessment> searchAssessments(AssessmentSearchCriteria criteria){
+		return repository.getAssessments(criteria);
+	}
 
 	/**
 	 * Checks if the fields modified can trigger a workflow

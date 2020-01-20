@@ -25,7 +25,7 @@ public class TranslationService {
     }
 
 
-    public Object translate(RequestInfo requestInfo, Property property, Assessment assessment){
+    public Map<String, Object> translate(RequestInfo requestInfo, Property property, Assessment assessment){
 
         Map<String, Object> propertyMap = new HashMap();
         Map<String, Object> propertyDetail = new HashMap<>();
@@ -69,6 +69,7 @@ public class TranslationService {
         propertyDetail.put("usageCategoryMinor", usageCategoryMinor);
         propertyDetail.put("ownershipCategory", ownershipCategory);
         propertyDetail.put("subOwnershipCategory", subOwnershipCategory);
+
        // propertyDetail.put("adhocExemption", );
         // propertyDetail.put("adhocPenalty",);
 
@@ -107,11 +108,22 @@ public class TranslationService {
 
         });
 
+        propertyDetail.put("owners", owners);
+        propertyDetail.put("units", units);
+
         propertyMap.put("propertyDetails", Collections.singletonList(propertyDetail));
 
+        Map<String, Object> calculationRequest = new HashMap<>();
 
+        Map<String, Object> calculationCriteria = new HashMap<>();
+        calculationCriteria.put("property", propertyMap);
+        calculationCriteria.put("tenantId", property.getTenantId());
 
-        return propertyMap;
+        Map<String, Object> calculationReq = new HashMap<>();
+        calculationReq.put("RequestInfo", requestInfo);
+        calculationReq.put("CalculationCriteria", Collections.singletonList(calculationCriteria));
+
+        return calculationReq;
 
     }
 
