@@ -67,7 +67,6 @@ public class EnrichmentService {
 
 		property.getAddress().setTenantId(property.getTenantId());
 		property.getAddress().setId(UUID.randomUUID().toString());
-
 		property.getOwners().forEach(owner -> {
 
 			if (!CollectionUtils.isEmpty(owner.getDocuments()))
@@ -83,6 +82,12 @@ public class EnrichmentService {
 			property.getInstitution().setId(UUID.randomUUID().toString());
 
 		property.setAuditDetails(propertyAuditDetails);
+		
+		property.getUnits().forEach(unit -> {
+			
+			unit.setId(UUID.randomUUID().toString());
+			unit.setActive(true);
+		});
 
 		setIdgenIds(request);
 		enrichBoundary(request);

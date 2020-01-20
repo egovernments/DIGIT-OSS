@@ -1,32 +1,25 @@
 package org.egov.pt.service;
 
-import java.util.*;
+import static org.egov.pt.util.AssessmentConstants.ASSESSMENT_BUSINESSSERVICE;
 
-import org.egov.common.contract.request.RequestInfo;
-import org.egov.common.contract.request.User;
+import java.util.Arrays;
+import java.util.List;
+
 import org.egov.pt.config.PropertyConfiguration;
-import org.egov.pt.models.*;
+import org.egov.pt.models.Assessment;
+import org.egov.pt.models.Property;
 import org.egov.pt.models.enums.Status;
 import org.egov.pt.models.workflow.BusinessService;
-import org.egov.pt.models.workflow.ProcessInstance;
 import org.egov.pt.producer.Producer;
 import org.egov.pt.repository.AssessmentRepository;
 import org.egov.pt.util.AssessmentUtils;
 import org.egov.pt.validator.AssessmentValidator;
 import org.egov.pt.web.contracts.AssessmentRequest;
-import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
-
-import lombok.extern.slf4j.Slf4j;
-
-import static org.egov.pt.util.AssessmentConstants.ASSESSMENT_BUSINESSSERVICE;
-import static org.egov.pt.util.AssessmentConstants.WORKFLOW_SENDBACK_CITIZEN;
 
 @Service
-@Slf4j
 public class AssessmentService {
 
 	@Autowired

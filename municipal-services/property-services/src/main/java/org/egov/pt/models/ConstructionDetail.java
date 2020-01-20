@@ -2,6 +2,8 @@ package org.egov.pt.models;
 
 import java.math.BigDecimal;
 
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
@@ -24,9 +26,6 @@ import lombok.ToString;
 @Builder
 public class ConstructionDetail   {
 	
-  @JsonProperty("id")
-  private String id;
-
   @JsonProperty("carpetArea")
   private BigDecimal carpetArea;
 
@@ -47,8 +46,5 @@ public class ConstructionDetail   {
 
   @JsonProperty("dimensions")
   private Object dimensions;
-
-  @JsonProperty("additionalDetails")
-  private Object additionalDetails;
 
 }

@@ -1,5 +1,8 @@
 package org.egov.pt.models;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 import org.egov.pt.models.enums.OccupancyType;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -32,12 +35,13 @@ public class Unit   {
   private String tenantId;
 
   @JsonProperty("floorNo")
-  private String floorNo;
+  private Integer floorNo;
 
   @JsonProperty("unitType")
   private String unitType;
 
   @JsonProperty("usageCategory")
+  @NotNull
   private String usageCategory;
 
   @JsonProperty("occupancyType")
@@ -49,6 +53,8 @@ public class Unit   {
   @JsonProperty("occupancyDate")
   private Long occupancyDate;
 
+  @Valid
+  @NotNull
   @JsonProperty("constructionDetail")
   private ConstructionDetail constructionDetail;
 

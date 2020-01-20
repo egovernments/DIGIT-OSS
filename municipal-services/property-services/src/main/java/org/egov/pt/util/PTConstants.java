@@ -9,6 +9,10 @@ public class PTConstants {
     private PTConstants() {}
 
 
+    public static final String PT_TYPE_VACANT = "VACANT";
+    
+    public static final String PT_TYPE_SHAREDPROPERTY = "SHAREDPROPERTY";
+    
     public static final String JSONPATH_CODES = "$.MdmsRes.PropertyTax";
 
     public static final String MDMS_PT_MOD_NAME = "PropertyTax";
@@ -25,7 +29,7 @@ public class PTConstants {
 
     public static final String MDMS_PT_CONSTRUCTIONSUBTYPE = "ConstructionSubType";
 
-    public static final String MDMS_PT_OWNERSHIP = "OwnerShipCategory";
+    public static final String MDMS_PT_OWNERSHIPCATEGORY = "OwnerShipCategory";
 
     public static final String MDMS_PT_SUBOWNERSHIP = "SubOwnerShipCategory";
 

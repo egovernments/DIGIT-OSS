@@ -162,9 +162,11 @@ CREATE TABLE eg_pt_unit (
   builtUpArea       NUMERIC (10,2),
   plinthArea        NUMERIC (10,2),
   superBuiltUpArea  NUMERIC (10,2),
+  arv  				NUMERIC (10,2),
   constructionType  CHARACTER VARYING(1024),
   constructionDate  BIGINT,
   dimensions        JSON,
+  active			BOOLEAN,
   createdby        	CHARACTER VARYING(128) NOT NULL,
   createdtime      	BIGINT NOT NULL,
   lastmodifiedby   	CHARACTER VARYING(128),
@@ -207,7 +209,7 @@ CREATE TABLE eg_pt_property_audit (
    
    );
    
- CREATE TABLE eg_pt_unit (
+ CREATE TABLE eg_pt_unit_audit (
 
   id               	CHARACTER VARYING(128) 	NOT NULL, 
   tenantId         	CHARACTER VARYING(256) 	NOT NULL,
@@ -221,9 +223,11 @@ CREATE TABLE eg_pt_property_audit (
   builtUpArea       NUMERIC (10,2),
   plinthArea        NUMERIC (10,2),
   superBuiltUpArea  NUMERIC (10,2),
+  arv  				NUMERIC (10,2),
   constructionType  CHARACTER VARYING(1024),
   constructionDate  BIGINT,
   dimensions        JSON,
+  active			BOOLEAN,
   createdby        	CHARACTER VARYING(128) NOT NULL,
   createdtime      	BIGINT NOT NULL,
   lastmodifiedby   	CHARACTER VARYING(128),

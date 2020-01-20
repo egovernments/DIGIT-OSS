@@ -13,10 +13,12 @@ import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.User;
 import org.egov.mdms.model.MdmsCriteriaReq;
 import org.egov.pt.config.PropertyConfiguration;
+import org.egov.pt.models.ConstructionDetail;
 import org.egov.pt.models.Institution;
 import org.egov.pt.models.OwnerInfo;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.PropertyCriteria;
+import org.egov.pt.models.Unit;
 import org.egov.pt.repository.PropertyRepository;
 import org.egov.pt.repository.ServiceRequestRepository;
 import org.egov.pt.util.ErrorConstants;
@@ -62,14 +64,42 @@ public class PropertyValidator {
 	public void validateCreateRequest(PropertyRequest request) {
 
 		Map<String, String> errorMap = new HashMap<>();
+		
+		List<Unit> units 		=	request.getProperty().getUnits();
+		List<OwnerInfo> owners 	=	request.getProperty().getOwners();
+		
+		units.removeIf(null);
+		owners.removeIf(null);
+		
+		if(CollectionUtils.isEmpty(request.getProperty().getOwners()))
+			throw new CustomException("OWNER INFO ERROR","Owners cannot be empty, please provide at least one owner information");
+		
+		if (!errorMap.isEmpty())
+			throw new CustomException(errorMap);
 
 		validateMasterData(request, errorMap);
 		validateMobileNumber(request, errorMap);
 		validateFields(request, errorMap);
-		
+		if (!CollectionUtils.isEmpty(owners))
+			validateUnits(request, errorMap);
 
 		if (!errorMap.isEmpty())
 			throw new CustomException(errorMap);
+	}
+
+	private void validateUnits(PropertyRequest request, Map<String, String> errorMap) {
+
+		Property property = request.getProperty();
+		List<Unit> units = property.getUnits();
+
+		for (Unit unit : units) {
+			
+			ConstructionDetail consDtl = unit.getConstructionDetail();
+			
+			if (consDtl.getCarpetArea() != null && !property.getPropertyType().contains(PTConstants.PT_TYPE_VACANT)
+					&& consDtl.getCarpetArea().compareTo(consDtl.getBuiltUpArea()) >= 0)
+				errorMap.put("UNIT INFO ERROR ", "Carpet area cannot be greater or equal than builtUp area");
+		}
 	}
 
 	/**
@@ -113,8 +143,14 @@ public class PropertyValidator {
         Property property = request.getProperty();
         String tenantId = property.getTenantId();
 
-		List<String> masterNames = new ArrayList<>(Arrays.asList(PTConstants.MDMS_PT_PROPERTYTYPE,
-				PTConstants.MDMS_PT_OWNERSHIP, PTConstants.MDMS_PT_OWNERTYPE, PTConstants.MDMS_PT_USAGECATEGORY));
+		List<String> masterNames = new ArrayList<>(
+				Arrays.asList(
+				PTConstants.MDMS_PT_PROPERTYTYPE,
+				PTConstants.MDMS_PT_OWNERSHIPCATEGORY,
+				PTConstants.MDMS_PT_OWNERTYPE,
+				PTConstants.MDMS_PT_USAGECATEGORY,
+				PTConstants.MDMS_PT_OCCUPANCYTYPE,
+				PTConstants.MDMS_PT_CONSTRUCTIONTYPE));
 
 		validateInstitution(property, errorMap);
 		
@@ -166,8 +202,12 @@ public class PropertyValidator {
 //    	if(configs.getIsWorkflowEnabled() && null == property.getWorkflow())
 //    		errorMap.put("EG_PR_WF_NOT_NULL", "Wokflow is enabled for create please provide the necessary info in workflow field in property");
    	
-    	if(property.getLandArea().compareTo(configs.getMinumumLandArea()) < 0 )
-    		errorMap.put("EG_PT_ERROR", "Land Area cannot be lesser than minimum value : " + configs.getMinumumLandArea() + " " + configs.getLandAreaUnit());
+    	if(!property.getPropertyType().contains(PTConstants.PT_TYPE_SHAREDPROPERTY) 
+    			&& property.getLandArea().compareTo(configs.getMinumumLandArea()) < 0 ) {
+    		
+			errorMap.put("EG_PT_ERROR", "Land Area cannot be lesser than minimum value : "
+					+ configs.getMinumumLandArea() + " " + configs.getLandAreaUnit());
+		}
     	
 	}
 
@@ -186,16 +226,30 @@ public class PropertyValidator {
 			errorMap.put("Invalid PROPERTYTYPE", "The PropertyType '" + property.getPropertyType() + "' does not exists");
 		}
 
-		if (property.getOwnershipCategory() != null && !codes.get(PTConstants.MDMS_PT_OWNERSHIP).contains(property.getOwnershipCategory())) {
+		if (property.getOwnershipCategory() != null && !codes.get(PTConstants.MDMS_PT_OWNERSHIPCATEGORY).contains(property.getOwnershipCategory())) {
 			errorMap.put("Invalid OWNERSHIPCATEGORY", "The OwnershipCategory '" + property.getOwnershipCategory() + "' does not exists");
 		}
 
 		if (property.getUsageCategory() != null && !codes.get(PTConstants.MDMS_PT_USAGECATEGORY).contains(property.getUsageCategory())) {
 			errorMap.put("Invalid USageCategory", "The USageCategory '" + property.getUsageCategory() + "' does not exists");
 		}
+		
 
-		if(property.getOwners().contains(null))
-			errorMap.put("INVALID ENTRY IN OWNER LIST", " The Owner list cannot contain null values");
+		for(Unit unit : property.getUnits()) {
+			
+			if (ObjectUtils.isEmpty(unit.getUsageCategory()) || unit.getUsageCategory() != null && !codes.get(PTConstants.MDMS_PT_USAGECATEGORY).contains(unit.getUsageCategory())) {
+				errorMap.put("INVALID USAGE CATEGORY ", "The Usage CATEGORY '" + unit.getUsageCategory()
+						+ "' does not exists for unit of index : " + property.getUnits().indexOf(unit));
+			}
+			
+			String constructionType = unit.getConstructionDetail().getConstructionType();
+
+			if (ObjectUtils.isEmpty(constructionType) || constructionType != null && !codes.get(PTConstants.MDMS_PT_USAGECATEGORY).contains(constructionType)) {
+				errorMap.put("INVALID CONSTRUCTION TYPE ", "The CONSTRUCTION TYPE '" + constructionType
+						+ "' does not exists for unit of index : " + property.getUnits().indexOf(unit));
+			}
+			
+		}
 
 		if (!CollectionUtils.isEmpty(errorMap))
 			throw new CustomException(errorMap);
@@ -353,7 +407,7 @@ public class PropertyValidator {
 
 		Property property = request.getProperty();
 		List<OwnerInfo> owners = property.getOwners();
-
+		
 		if (!property.getOwnershipCategory().contains("INSTITUTIONAL")) {
 
 			owners.forEach(owner -> {
