@@ -1640,7 +1640,7 @@
               "label": "",
               "charts": [
                 {
-                  "id": "",
+                  "id": "averageTurnAroundTime",
                   "name": "DSS_PGR_AVARAGE_TURN_AROUND",
                   "code": "",
                   "chartType": "line",
