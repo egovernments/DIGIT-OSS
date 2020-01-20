@@ -1,3 +1,14 @@
 /* body{
-    background: linear-gradient(rgba(255,255,255,.5), rgba(255,255,255,.5)), url("/assets/Punjab-bg-QA.jpg");
+    background: linear-gradient(rgba(255,255,255,.5), 
+    rgba(255,255,255,.5));
 } */
+/* .common-background{
+    background: linear-gradient(rgba(255,255,255,.5), rgba(255,255,255,.5)), url("/assets/Punjab-bg-QA.jpg"));
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+} */
+
+.common-background{
+    background-size: cover!important;
+}

@@ -89,9 +89,9 @@ class LandingPage extends React.Component {
         console.log("state", this.state)
 
         return (
-            <div style={{
+            <div className="common-background" style={{
                 height: '100%',
-                background: `linear-gradient(rgba(255,255,255,.5), rgba(255,255,255,.5)), url(${backgroundUrl})`,
+                background: `linear-gradient(rgba(255,255,255,.5), rgba(255,255,255,.5)), url(${backgroundUrl}) no-repeat center`,
             }}>
                 <Grid container className={classes.root}>
 
