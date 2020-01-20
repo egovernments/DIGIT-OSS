@@ -6,7 +6,7 @@ import cloneDeep from "lodash/cloneDeep";
 import get from "lodash/get";
 import set from "lodash/set";
 import { httpRequest } from "../../../../../ui-utils/api";
-import { getBpaSearchResults } from "../../../../../ui-utils/commons";
+import { getAppSearchResults } from "../../../../../ui-utils/commons";
 import { convertDateToEpoch, getBill, validateFields } from "../../utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
@@ -151,7 +151,7 @@ const updatePayAction = async (
   receiptNumber
 ) => {
   try {
-    let response = await getBpaSearchResults([
+    let response = await getAppSearchResults([
       {
         key: "tenantId",
         value: tenantId

@@ -169,7 +169,7 @@ export const scrutinySummary = getCommonGrayCard({
         type: "array"
     },
     proposedBuildingDetails:getHeader({
-        labelName: "Demolition Details",
+        labelName: "Proposed Building Details",
         labelKey: "BPA_APP_DETAILS_PROPOSED_BUILDING_DETAILS_LABEL"
     }),
     break3: getBreak(),

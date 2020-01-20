@@ -67,7 +67,7 @@ export const getBpaSearchResults = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      "/bpa-services/bpa/appl/_search",
+      "/bpa-services/bpa/appl/_search?offset=0&limit=-1",
       "",
       queryObject
     );
@@ -115,7 +115,7 @@ export const getAppSearchResults = async (queryObject, dispatch) => {
   try {
     const response = await httpRequest(
       "post",
-      "bpa-services/bpa/appl/_search",
+      "/bpa-services/bpa/appl/_search",
       "",
       queryObject
     );
@@ -171,6 +171,7 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
       if(documents.dropDownValues) {
       doc.documentType = documents.dropDownValues.value;
       }
+      doc.fileStoreId = documents.documents[0].fileStoreId;
       doc.fileStore = documents.documents[0].fileStoreId;
       doc.fileName = documents.documents[0].fileName;
       doc.fileUrl = documents.documents[0].fileUrl;
@@ -280,9 +281,9 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
 };
 
 export const prepareDocumentsUploadData = (state, dispatch) => {
-  let documents = get(
+  let applicationDocuments = get(
     state,
-    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.DocTypeMapping[0].docTypes",
+    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.DocTypeMapping", //[0].docTypes
     []
   );
   let documentsDropDownValues = get(
@@ -291,8 +292,22 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
     []
   );
 
-  let documentsList = [];
-  documents.forEach(doc => {
+  let bpaDetails = get (
+    state,
+    "screenConfiguration.preparedFinalObject.BPA", {}
+  );
+
+  let documents = []
+  applicationDocuments.forEach(doc => {
+    if(doc.WFState == "INITIATED" && doc.RiskType === bpaDetails.riskType && doc.ServiceType === bpaDetails.serviceType && doc.applicationType === bpaDetails.applicationType) { 
+      documents.push(doc.docTypes);
+    }
+  });
+
+console.log(documents, "ieuriuyeituyeiurytieuryt");
+  if(documents[0] && documents[0].length > 0) {
+    let documentsList = [];
+  documents[0].forEach(doc => {
     let code = doc.code;
     doc.dropDownValues = [];
     documentsDropDownValues.forEach(value => {
@@ -349,6 +364,7 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
   });
   dispatch(prepareFinalObject("documentsContract", documentDetailsContract));
   dispatch(prepareFinalObject("nocDocumentsContract", nocDetailsContract));
+  }
 };
 
 export const prepareNOCUploadData = (state, dispatch) => {

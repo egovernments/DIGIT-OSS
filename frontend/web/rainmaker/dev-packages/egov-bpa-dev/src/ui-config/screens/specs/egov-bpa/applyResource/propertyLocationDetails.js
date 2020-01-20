@@ -254,7 +254,7 @@ export const bpaLocationDetails = getCommonCard(
             cursor: "pointer"
           }
         },
-        jsonPath: "BPA.address.latitude",
+        jsonPath: "BPA.address.geoLocation.latitude",
         onClickDefination: {
           action: "condition",
           callBack: showHideBpaMapPopup
@@ -274,7 +274,7 @@ export const bpaLocationDetails = getCommonCard(
                 labelName: "Select your trade location on map",
                 labelKey: "TL_NEW_TRADE_DETAILS_GIS_CORD_PLACEHOLDER"
               },
-              jsonPath: "BPA.address.latitude",
+              jsonPath: "BPA.address.geoLocation.latitude",
               iconObj: {
                 iconName: "gps_fixed",
                 position: "end"

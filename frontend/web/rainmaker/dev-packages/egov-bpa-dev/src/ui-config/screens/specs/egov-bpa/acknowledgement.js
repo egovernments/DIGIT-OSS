@@ -13,7 +13,7 @@ import {
 } from "./acknowledgementResource/footers";
 import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { getBpaSearchResults } from "../../../../ui-utils/commons";
+import { getAppSearchResults } from "../../../../ui-utils/commons";
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import generatePdf from "../utils/generatePdfForBpa";
 import { Icon } from "egov-ui-framework/ui-atoms";
@@ -461,7 +461,7 @@ const setApplicationData = async (dispatch, applicationNumber, tenant) => {
       value: applicationNumber
     }
   ];
-  const response = await getBpaSearchResults(queryObject);
+  const response = await getAppSearchResults(queryObject);
   dispatch(prepareFinalObject("BPA", get(response, "Bpa", [])));
 };
 

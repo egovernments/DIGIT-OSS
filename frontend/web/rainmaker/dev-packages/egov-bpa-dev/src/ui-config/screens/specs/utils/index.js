@@ -2963,8 +2963,6 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
         );
       } else {
         const scrutinyData = payload && JSON.parse(JSON.stringify(payload));
-        console.log(scrutinyData , "kjsdfkjsdkjf")
-
         if (
           scrutinyData &&
           scrutinyData.planDetail &&
@@ -3124,7 +3122,6 @@ export const generateBillForBPA = async (dispatch, applicationNumber, tenantId) 
         { key: "services", value: "BPA" }
       ];
       const payload = await createBill(queryObj,dispatch);
-      console.log(payload, "payload ksdbvjhfvsdf")
       if (payload && payload.Bill[0]) {
         dispatch(prepareFinalObject("ReceiptTemp[0].Bill", payload.Bill));
         const estimateData = createBpaEstimateData(payload.Bill[0]);
@@ -3712,7 +3709,7 @@ export const getMdmsDataForBpa = async queryObject => {
   }
 };
 
-export const requiredDocumentsData = async (state, dispatch) => {
+export const requiredDocumentsData = async (state, dispatch, action) => {
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: 'pb',
@@ -3764,39 +3761,25 @@ export const requiredDocumentsData = async (state, dispatch) => {
         queryObject
       );
     const wfState = wfPayload.ProcessInstances[0];
-     let requiredDocuments = [];
+    let appState;
+
+     let requiredDocuments, appDocuments = [];
     if(payload && payload.MdmsRes && payload.MdmsRes.BPA && wfState ) {
       let documents = payload.MdmsRes.BPA.DocTypeMapping;
       let requiredDocTypes;
       documents.forEach( doc => {
         if(doc.WFState === wfState.state.state){
-          requiredDocTypes = doc.docTypes;
+          appState =  wfState.state.state;
         }
       });
-      if(requiredDocTypes) {
-        requiredDocTypes.forEach(docType => {
-          if(docType.required) {
-            commonDocTypes.forEach(cmDocType => {
-             if(cmDocType.code.indexOf(docType.code) !== -1 ) {
-              requiredDocuments.push(cmDocType);
-             }
-            })
-          }
-        })
-      }
-    }
-
-    if(!requiredDocuments.length) {
-      requiredDocuments = commonDocTypes;
-    }
-    dispatch(prepareFinalObject("BPA.requiredDocuments", requiredDocuments));
-    prepareDocumentsView(state, dispatch)
+    };
+    prepareDocumentsView(state, dispatch, action, appState)
   } catch (e) {
     console.log(e);
   }
 }
 
-const prepareDocumentsView = async (state, dispatch) => {
+const prepareDocumentsView = async (state, dispatch, action, appState) => {
   let documentsPreview = [];
 
   // Get all documents from response
@@ -3810,8 +3793,8 @@ const prepareDocumentsView = async (state, dispatch) => {
     BPA,
     "$.documents.*"
   );
-  console.log(applicantDocuments, "yutewuyruyeryweruyewtry")
 
+  let uploadedAppDocuments = [];
   let otherDocuments = jp.query(
     BPA,
     "$.additionalDetail.documents.*"
@@ -3821,13 +3804,10 @@ const prepareDocumentsView = async (state, dispatch) => {
     ...applicantDocuments,
     ...otherDocuments
   ];
-  let nocDocuments = [];
 
   allDocuments.forEach(doc => {
-    
-    if (doc.documentType && (doc.documentType).split('.')[0] === "NOC") {
-      nocDocuments.push(doc)
-    }
+    uploadedAppDocuments.push(doc);
+
     documentsPreview.push({
       title: getTransformedLocale(doc.documentType),
       //title: doc.documentType,
@@ -3871,11 +3851,14 @@ const prepareDocumentsView = async (state, dispatch) => {
   });
   dispatch(prepareFinalObject("documentDetailsPreview", documentDetailsPreview));
   dispatch(prepareFinalObject("nocDocumentsPreview", nocDocumentsPreview));
-  await setNocDocuments(state, dispatch, "NOC_VERIFICATION_PENDING",documentDetailsPreview, nocDocumentsPreview, nocDocuments);
+  let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
+  if(isEmployee) {
+    prepareDocsInEmployee(state, dispatch, action, appState, uploadedAppDocuments);
+  }  
 };
 
-export const setNocDocuments = (state, dispatch, action, documentDetailsPreview, nocDocumentsPreview, nocDocuments) => {
-  let bpaNocdocuments = get(
+export const prepareDocsInEmployee = (state, dispatch, action, appState, uploadedAppDocuments) => {
+  let applicationDocuments = get(
     state,
     "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.DocTypeMapping",
     []
@@ -3885,15 +3868,21 @@ export const setNocDocuments = (state, dispatch, action, documentDetailsPreview,
     "screenConfiguration.preparedFinalObject.applyScreenMdmsData.common-masters.DocumentType",
     []
   );
+  let bpaAppDetails = get(
+    state,
+    "screenConfiguration.preparedFinalObject.BPA",
+    {}
+  );
 
   let documents = []
-  bpaNocdocuments.forEach(doc => {
-    if(doc.WFState === action) {
+  applicationDocuments.forEach(doc => {
+    if(doc.WFState == appState && doc.RiskType === bpaAppDetails.riskType && doc.ServiceType === bpaAppDetails.serviceType && doc.applicationType === bpaAppDetails.applicationType) { 
       documents.push(doc.docTypes)
     }
-  })
+  });
 
   let documentsList = [];
+if (documents[0] && documents[0].length > 0) {
   documents[0].forEach(doc => {
     let code = doc.code;
     doc.dropDownValues = [];
@@ -3906,10 +3895,12 @@ export const setNocDocuments = (state, dispatch, action, documentDetailsPreview,
     });
     documentsList.push(doc);
   });
+}
   const bpaDocuments = documentsList;
   let documentsContract = [];
   let tempDoc = {};
 
+  if ( bpaDocuments && bpaDocuments.length > 0) {
   bpaDocuments.forEach(doc => {
     let card = {};
     card["code"] = doc.code.split(".")[0];
@@ -3936,58 +3927,107 @@ export const setNocDocuments = (state, dispatch, action, documentDetailsPreview,
     }
     tempDoc[doc.code.split(".")[0]].cards.push(card);
   });
+}
 
+if(tempDoc) {
   Object.keys(tempDoc).forEach(key => {
     documentsContract.push(tempDoc[key]);
   });
-  let documentDetailsContract = [],
-    nocDetailsContract = [];
-  documentsContract.forEach(doc => {
-    if (doc.code == "NOC") {
-      nocDetailsContract.push(doc);
+}
+
+
+  if (documentsContract && documentsContract.length > 0) {
+
+    let documentsCodes = [], nocBpaDocuments = [];
+
+    documentsContract.forEach(documents => {
+      documents.cards.forEach(cardDoc => {
+        documentsCodes.push(cardDoc.code);
+      });
+    });
+
+    let documentsDocTypes = [];
+    uploadedAppDocuments.forEach(appDoc => {
+      if (appDoc && appDoc.documentType) {
+        let code = (appDoc.documentType).split('.')[0] + '.' + (appDoc.documentType).split('.')[1]
+        documentsDocTypes.push(code);
+      }
+    });
+
+    function comparer(otherArray) {
+      return function (current) {
+        return otherArray.filter(function (other) {
+          return other == current
+        }).length == 0;
+      }
+    }
+
+    let result;
+    if (documentsDocTypes && documentsDocTypes.length > 0) {
+      result = documentsCodes.filter(comparer(documentsDocTypes));
     } else {
-      documentDetailsContract.push(doc);
+      result = documentsCodes;
     }
-  });
 
-  let nocDetailsContractCodes = [], nocBpaDocuments = [];
-  nocDetailsContract[0].cards.forEach(doc => {
-    doc.dropDownValues.menu.forEach(menuItem => { 
-      nocDetailsContractCodes.push(menuItem.code)
-    })
-  });
-  
-  let nocDocTypes = [];
-  nocDocuments.forEach(nocDoc => nocDocTypes.push(nocDoc.documentType));
+    let finalDocs = [];
 
-  function comparer(otherArray) {
-    return function (current) {
-      return otherArray.filter(function (other) {
-        return other == current
-      }).length == 0;
-    }
-  }
+    documentsContract.forEach(doc => {
+      let cards = [];
+      for (let i = 0; i < result.length > 0; i++) {
+        let codes = result[i];
+        doc.cards.forEach(docCards => {
+          if (docCards.code === codes) {
+            cards.push(docCards);
+          }
+        })
+      }
+      finalDocs.push({
+        cards: cards,
+        code: doc.code,
+        title: doc.code
+      });
+    });
 
-  var onlyInA = nocDetailsContractCodes.filter(comparer(nocDocTypes));
-  var onlyInB = nocDocTypes.filter(comparer(nocDetailsContractCodes));
-
-  let result = onlyInA.concat(onlyInB);
-
-  for(let i = 0; i < result.length; i++) {
-    let code = result[i];
-    nocDetailsContract[0].cards.forEach(doc => {
-      doc.dropDownValues.menu.forEach(menuItem => {
-        if(code === menuItem.code) {
-          nocBpaDocuments.push({
-              cards: [doc],
-              code: "NOC",
-              title: "NOC"
-            });
+    let finalDocuments = [];
+    if(finalDocs && finalDocs.length > 0) {
+      finalDocs.forEach(fDoc => {
+        if(fDoc && fDoc.cards && fDoc.cards.length > 0) {
+          finalDocuments.push(fDoc);
         }
       })
-    });
+    };
+
+    let nocDocs = [], appDocs = [];
+    if(finalDocuments && finalDocuments.length > 0) {
+      finalDocuments.forEach(finalDoc => {
+        if(finalDoc.code == "NOC") {
+          nocDocs.push(finalDoc);
+        } else {
+          appDocs.push(finalDoc);
+        }
+      })
+    }
+
+    let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
+
+    if (nocDocs && nocDocs.length > 0 && isEmployee) {
+      set(
+        action,
+        "screenConfig.components.div.children.body.children.cardContent.children.nocSummary.children.cardContent.children.uploadedNocDocumentDetailsCard.visible",
+        true
+      );
+      dispatch(prepareFinalObject("nocDocumentsContract", nocDocs));
+    }
+
+    if (appDocs && appDocs.length > 0 && isEmployee) {
+      set(
+        action,
+        "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.uploadedDocumentDetailsCard.visible",
+        true
+      );
+      dispatch(prepareFinalObject("documentsContract", appDocs));
+    }
   }
-  dispatch(prepareFinalObject("nocDocumentsContract", nocBpaDocuments));
 };
 
 export const permitOrderNoDownload = async(action, state, dispatch) => {

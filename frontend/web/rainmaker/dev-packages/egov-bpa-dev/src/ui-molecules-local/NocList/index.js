@@ -187,7 +187,7 @@ class NocList extends Component {
     prepareFinalObject("nocDocumentsUploadRedux", nocDocumentsUploadRedux);
   };
 
-  prepareForNocVerification = async (nocDocuments, bpaDetails) => {
+  prepareDocumentsInEmployee = async (nocDocuments, bpaDetails) => {
     let documnts = [];
     if (nocDocuments) {
       Object.keys(nocDocuments).forEach(function (key) {
@@ -204,6 +204,7 @@ class NocList extends Component {
         if (documents && documents.documents && documents.dropDownValues && documents.dropDownValues.value) {
           let doc = {};
           doc.documentType = documents.dropDownValues.value;
+          doc.fileStoreId = documents.documents[0].fileStoreId;
           doc.fileStore = documents.documents[0].fileStoreId;
           doc.fileName = documents.documents[0].fileName;
           doc.fileUrl = documents.documents[0].fileUrl;
@@ -260,17 +261,13 @@ class NocList extends Component {
       }
     }
     prepareFinalObject("nocDocumentsUploadRedux", nocDocuments);
-    if (bpaDetails && bpaDetails.status && bpaDetails.status === "NOC_VERIFICATION_INPROGRESS") {
-      let documnts = [];
-      if (nocDocuments) {
-        Object.keys(nocDocuments).forEach(function (key) {
-          documnts.push(nocDocuments[key])
-        });
+  
+    let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true
+
+    if(isEmployee) {
+      this.prepareDocumentsInEmployee(nocDocuments, bpaDetails);
       }
-      if (nocDocuments[0] && nocDocuments[0].documents && nocDocuments[0].dropDownValues) {
-        this.prepareForNocVerification(nocDocuments, bpaDetails);
-      }
-    }
+
   };
 
   removeDocument = remDocIndex => {
@@ -293,18 +290,12 @@ class NocList extends Component {
     };
     prepareFinalObject(`nocDocumentsUploadRedux`, nocDocuments);
 
-    if (bpaDetails && bpaDetails.status && bpaDetails.status === "NOC_VERIFICATION_INPROGRESS") {
-      let documnts = [];
-      if (nocDocuments) {
-        Object.keys(nocDocuments).forEach(function (key) {
-          documnts.push(nocDocuments[key])
-        });
-      }
-      console.log(documnts, "nocDocumentsnocDocumentsnocDocuments");
-      if (nocDocuments[0] && nocDocuments[0].documents && nocDocuments[0].dropDownValues) {
-        this.prepareForNocVerification(nocDocuments, bpaDetails);
-      }
+    let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true
+
+    if(isEmployee) {
+      this.prepareDocumentsInEmployee(nocDocuments, bpaDetails);
     }
+       
   };
 
   getUploadCard = (card, key) => {
@@ -378,6 +369,7 @@ class NocList extends Component {
             onButtonClick={() => this.onUploadClick(key)}
             inputProps={this.props.inputProps}
             buttonLabel={this.props.buttonLabel}
+            id={`noc-${key+1}`}
           />
         </Grid>
       </Grid>
