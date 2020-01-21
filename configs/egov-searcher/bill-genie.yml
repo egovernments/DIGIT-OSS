@@ -78,9 +78,9 @@ SearchDefinitions:
       isMandatory: false
       jsonPath: $.searchCriteria.toPeriod
       operator: GE
-    - name: b_status
+    - name: b_isactive
       isMandatory: false
-      jsonPath: $.searchCriteria.billStatus
+      jsonPath: $.searchCriteria.billActive
 
    output:
     jsonFormat: {"ResponseInfo": {},"Bills": []}
@@ -152,6 +152,17 @@ SearchDefinitions:
     - name: ptadd.locality
       isMandatory: false
       jsonPath: $.searchCriteria.locality
+    - name: fromperiod
+      isMandatory: false
+      jsonPath: $.searchCriteria.fromPeriod
+      operator: LE
+    - name: toperiod
+      isMandatory: false
+      jsonPath: $.searchCriteria.toPeriod
+      operator: GE
+    - name: b_isactive
+      isMandatory: false
+      jsonPath: $.searchCriteria.billActive
 
    output:
     jsonFormat: {"ResponseInfo": {},"Bills": []}
@@ -225,6 +236,17 @@ SearchDefinitions:
     - name: ptadd.locality
       isMandatory: false
       jsonPath: $.searchCriteria.locality
+    - name: fromperiod
+      isMandatory: false
+      jsonPath: $.searchCriteria.fromPeriod
+      operator: LE
+    - name: toperiod
+      isMandatory: false
+      jsonPath: $.searchCriteria.toPeriod
+      operator: GE
+    - name: b_isactive
+      isMandatory: false
+      jsonPath: $.searchCriteria.billActive
 
    output:
     jsonFormat: {"ResponseInfo": {},"Bills": []}
