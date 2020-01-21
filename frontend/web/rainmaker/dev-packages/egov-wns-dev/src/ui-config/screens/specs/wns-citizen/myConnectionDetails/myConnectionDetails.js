@@ -34,7 +34,16 @@ export const fetchData = async (action, state, dispatch) => {
         /*Mseva 2.0 */
         if (finalResponse && finalResponse.length > 0) {
             dispatch(prepareFinalObject("myConnectionResults", finalResponse));
-            // dispatch(prepareFinalObject("myConnectionCount", response.WaterConnection.length));
+            dispatch(prepareFinalObject("myApplicationsCount", finalResponse.length));
+            const myApplicationsCount = finalResponse.length;
+            dispatch(
+                handleField(
+                    "my-connections",
+                    "components.div.children.header.children.key",
+                    "props.dynamicArray",
+                    myApplicationsCount ? [myApplicationsCount] : [0]
+                )
+            );
         }
     } catch (error) {
         console.log(error);

@@ -11,7 +11,7 @@ import {
   getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getBpaDetailsForOwner } from "../../utils";
+import { getBpaDetailsForOwner, getTodaysDateInYMD } from "../../utils";
 import get from "lodash/get";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import "./index.css";
@@ -145,28 +145,34 @@ const commonApplicantInformation = () => {
         },
         type: "array"
       },
-      applicantDob: getDateField({
-        label: {
-          labelName: "Date Of Birth",
-          labelKey: "NOC_APPLICANT_DOB_LABEL"
-        },
-        placeholder: {
-          labelName: "DD/MM/YYYY",
-          labelKey: "NOC_ENTER_APPLICANT_DOB_PLACEHOLDER"
-        },
-        required: true,
-        pattern: getPattern("Date"),
-        errorMessage: "Invalid Date",
-        jsonPath: "BPA.owners[0].dob",
-        gridDefination: {
-          xs: 12,
-          sm: 12,
-          md: 6
-        },
-        props: {
-          className: "applicant-details-error textfield-enterable-selection"
-        }
-      }),
+      applicantDob: {
+        ...getDateField({
+          label: {
+            labelName: "Date Of Birth",
+            labelKey: "NOC_APPLICANT_DOB_LABEL"
+          },
+          placeholder: {
+            labelName: "DD/MM/YYYY",
+            labelKey: "NOC_ENTER_APPLICANT_DOB_PLACEHOLDER"
+          },
+          required: true,
+          pattern: getPattern("Date"),
+          isDOB: true,
+          errorMessage: "TL_DOB_ERROR_MESSAGE",
+          jsonPath: "BPA.owners[0].dob",
+          props: {
+            className: "applicant-details-error textfield-enterable-selection",
+            inputProps: {
+              max: getTodaysDateInYMD()
+            }
+          },
+          gridDefination: {
+            xs: 12,
+            sm: 12,
+            md: 6
+          },
+        })
+      },
       applicantEmail: getTextField({
         label: {
           labelName: "Email",

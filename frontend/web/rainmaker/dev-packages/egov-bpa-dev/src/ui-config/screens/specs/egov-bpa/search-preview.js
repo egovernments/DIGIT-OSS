@@ -70,27 +70,27 @@ const titlebar2 = {
     },
     rightContainer:getCommonContainer({
       downloadMenu: {
-        uiFramework: "custom-atoms",
-        componentPath: "MenuButton",
+        uiFramework: "custom-molecules",
+        componentPath: "DownloadPrintButton",
         props: {
           data: {
-            label: "Download",
+            label: {labelName : "DOWNLOAD" , labelKey :"TL_DOWNLOAD"},
             leftIcon: "cloud_download",
             rightIcon: "arrow_drop_down",
-            props: { variant: "outlined", style: { marginLeft: 10 } },
+            props: { variant: "outlined", style: { height: "60px", color : "#FE7A51", marginRight : 10 }, className: "tl-download-button" },
             menu: []
           }
         }
       },
       printMenu: {
-        uiFramework: "custom-atoms",
-        componentPath: "MenuButton",
+        uiFramework: "custom-molecules",
+        componentPath: "DownloadPrintButton",
         props: {
           data: {
-            label: "Print",
+            label: {labelName : "PRINT" , labelKey :"TL_PRINT"},
             leftIcon: "print",
             rightIcon: "arrow_drop_down",
-            props: { variant: "outlined", style: { marginLeft: 10 } },
+            props: { variant: "outlined", style: { height: "60px", color : "#FE7A51" }, className: "tl-download-button" },            
             menu: []
           }
         }

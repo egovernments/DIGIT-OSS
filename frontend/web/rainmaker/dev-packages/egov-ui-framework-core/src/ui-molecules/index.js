@@ -153,6 +153,13 @@ const MenuButton = Loadable({
   loading: () => <Loading />
 });
 
+const DownloadPrintButton = Loadable({
+  loader: () => import("./DownloadPrintButton"),
+  loading: () => <Loading />
+});
+
+
+
 export {
   RenderRoutes,
   Map,
@@ -185,5 +192,6 @@ export {
   UploadMultipleFiles,
   LandingPage,
   SingleApplication,
-  MenuButton
+  MenuButton,
+  DownloadPrintButton
 };

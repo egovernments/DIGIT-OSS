@@ -248,6 +248,8 @@ const setSearchResponse = async (
   const edcrNumber = response.Bpa["0"].edcrNumber;
   const ownershipCategory = response.Bpa["0"].ownershipCategory;
   const appDate = response.Bpa["0"].auditDetails.createdTime;
+  const latitude = response.Bpa["0"].address.geoLocation.latitude;
+  const longitude = response.Bpa["0"].address.geoLocation.longitude;
   
   dispatch(prepareFinalObject("BPA", response.Bpa[0]));
   let edcrRes = await edcrHttpRequest(
@@ -262,14 +264,27 @@ const setSearchResponse = async (
     let ownerShipMajorType =  dispatch(
       prepareFinalObject( "BPA.ownerShipMajorType", ownershipCategory.split('.')[0] ));
   }
-  // dispatch(
-  //   handleField(
-  //     "apply",
-  //     "components.div.children.formwizardFirstStep.children.bpaLocationDetails.children.cardContent.children.bpaDetailsConatiner.children.tradeLocGISCoord.children.gisTextField",
-  //     "props.value",
-  //     // `${add.lat}, ${add.lng}`
-  //   )
-  // );
+  console.log(latitude, longitude, "erytuierytuerytuy")
+  
+
+ if(latitude && longitude) {
+  dispatch(
+    handleField(
+      "apply",
+      "components.div.children.formwizardFirstStep.children.bpaLocationDetails.children.cardContent.children.bpaDetailsConatiner.children.tradeLocGISCoord.children.gisTextField",
+      "props.value",
+      `${latitude}, ${longitude}`
+    )
+  );
+  dispatch(prepareFinalObject(
+    "BPA.address.geoLocation.latitude",
+    latitude
+  ));
+  dispatch(prepareFinalObject(
+    "BPA.address.geoLocation.longitude",
+    longitude
+  ));
+ }
   dispatch(prepareFinalObject("BPA.appdate", appDate));
   calculationType(state, dispatch)
 };
