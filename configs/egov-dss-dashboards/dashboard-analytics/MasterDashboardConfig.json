@@ -15,7 +15,7 @@
               "name": "DSS_OVERVIEW",
               "vizType": "metric-collection",
               "noUnit": true,
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "todaysCollection",
@@ -61,7 +61,7 @@
               "vizType": "chart",
               "label": "",
               "noUnit": true,
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "cumulativeCollection",
@@ -88,7 +88,7 @@
               },
               "vizType": "performing-metric",
               "noUnit": false,
-              "isCollapsible": true,
+              "isCollapsible": false,
               "label": "",
               "charts": [
                 {
@@ -110,7 +110,7 @@
               },
               "vizType": "performing-metric",
               "noUnit": false,
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "bottomPerformingUlbs",
@@ -131,7 +131,7 @@
               },
               "vizType": "chart",
               "noUnit": true,
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "totalCollectionDeptWise",
@@ -157,7 +157,7 @@
                 "width": 5
               },
               "vizType": "metric-collection",
-              "isCollapsible": true,
+              "isCollapsible": false,
               "label": "",
               "charts": [
                 {
@@ -202,7 +202,7 @@
                 "width": 7
               },
               "vizType": "chart",
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "totalApplication&ClosedApplication",
@@ -228,7 +228,7 @@
                 "width": 4
               },
               "vizType": "performing-metric",
-              "isCollapsible": true,
+              "isCollapsible": false,
               "label": "",
               "charts": [
                 {
@@ -249,7 +249,7 @@
                 "width": 4
               },
               "vizType": "performing-metric",
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "bottomPerformingUlbsCompletionRate",
@@ -269,7 +269,7 @@
                 "width": 4
               },
               "vizType": "chart",
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "totalApplicationDeptWise",
@@ -304,7 +304,7 @@
               },
               "vizType": "metric-collection",
               "noUnit": true,
-              "isCollapsible": true,
+              "isCollapsible": false,
               "label": "DSS_OVERVIEW",
               "charts": [
                 {
@@ -350,7 +350,7 @@
               },
               "vizType": "chart",
               "noUnit": true,
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "cumulativeCollection",
@@ -377,7 +377,7 @@
               },
               "vizType": "performing-metric",
               "noUnit": false,
-              "isCollapsible": true,
+              "isCollapsible": false,
               "label": "",
               "charts": [
                 {
@@ -399,7 +399,7 @@
               },
               "vizType": "performing-metric",
               "noUnit": false,
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "bottomPerformingUlbs",
@@ -420,7 +420,7 @@
               },
               "vizType": "chart",
               "noUnit": true,
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "collectionByUsageType",
@@ -447,7 +447,7 @@
               },
               "vizType": "chart",
               "noUnit": false,
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "demandCollectionIndexDDRRevenue",
@@ -521,7 +521,7 @@
                 "width": 5
               },
               "vizType": "metric-collection",
-              "isCollapsible": true,
+              "isCollapsible": false,
               "label": "DSS_OVERVIEW",
               "charts": [
                 {
@@ -558,7 +558,7 @@
                 "width": 7
               },
               "vizType": "chart",
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "cumulativePropertiesAssessed",
@@ -584,7 +584,7 @@
                 "width": 4
               },
               "vizType": "performing-metric",
-              "isCollapsible": true,
+              "isCollapsible": false,
               "label": "",
               "charts": [
                 {
@@ -605,7 +605,7 @@
                 "width": 4
               },
               "vizType": "performing-metric",
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "bottomPerformingUlbsCompletionRate",
@@ -625,7 +625,7 @@
                 "width": 4
               },
               "vizType": "chart",
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "propertiesByUsageType",
@@ -690,7 +690,7 @@
               "vizType": "metric-collection",
               "label": "DSS_OVERVIEW",
               "noUnit": true,
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "todaysCollection",
@@ -736,7 +736,7 @@
               "vizType": "chart",
               "label": "",
               "noUnit": true,
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "cumulativeCollection",
@@ -764,7 +764,7 @@
               "vizType": "performing-metric",
               "label": "",
               "noUnit": false,
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "topPerformingUlbs",
@@ -786,7 +786,7 @@
               "vizType": "performing-metric",
               "label": "",
               "noUnit": false,
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "bottomPerformingUlbs",
@@ -808,7 +808,7 @@
               "vizType": "chart",
               "label": "",
               "noUnit": false,
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "licenseByLicenseType",
@@ -836,7 +836,7 @@
               "vizType": "chart",
               "label": "",
               "noUnit": false,
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "licenseIssuedDDRRevenue",
@@ -892,7 +892,7 @@
                 "width": 5
               },
               "vizType": "metric-collection",
-              "isCollapsible": true,
+              "isCollapsible": false,
               "label": "DSS_OVERVIEW",
               "charts": [
                 {
@@ -929,7 +929,7 @@
                 "width": 7
               },
               "vizType": "chart",
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "cumulativeLicenseIssued",
@@ -957,7 +957,7 @@
               "vizType": "performing-metric",
               "label": "",
               "noUnit": false,
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "topPerformingUlbsCompletionRate",
@@ -978,7 +978,7 @@
               },
               "vizType": "performing-metric",
               "noUnit": false,
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "bottomPerformingUlbsCompletionRate",
@@ -998,7 +998,7 @@
                 "width": 4
               },
               "vizType": "chart",
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "licenseApplicationByStatus",
@@ -1064,7 +1064,7 @@
               "vizType": "metric-collection",
               "label": "DSS_OVERVIEW",
               "noUnit": true,
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "totalComplaints",
@@ -1108,7 +1108,7 @@
                 "width": 7
               },
               "vizType": "chart",
-              "isCollapsible": true,
+              "isCollapsible": false,
               "label": "",
               "charts": [
                 {
@@ -1135,7 +1135,7 @@
                 "width": 7
               },
               "vizType": "chart",
-              "isCollapsible": true,
+              "isCollapsible": false,
               "label": "",
               "charts": [
                 {
@@ -1156,7 +1156,7 @@
                 "width": 7
               },
               "vizType": "chart",
-              "isCollapsible": true,
+              "isCollapsible": false,
               "label": "",
               "charts": [
                 {
@@ -1183,7 +1183,7 @@
                 "width": 4
               },
               "vizType": "chart",
-              "isCollapsible": true,
+              "isCollapsible": false,
               "label": "",
               "charts": [
                 {
@@ -1204,7 +1204,7 @@
                 "width": 4
               },
               "vizType": "chart",
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "complaintsByChannel",
@@ -1224,7 +1224,7 @@
                 "width": 4
               },
               "vizType": "chart",
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "complaintsByDepartment",
@@ -1251,7 +1251,7 @@
                 "width": 4
               },
               "vizType": "chart",
-              "isCollapsible": true,
+              "isCollapsible": false,
               "label": "",
               "charts": [
                 {
@@ -1272,7 +1272,7 @@
                 "width": 4
               },
               "vizType": "chart",
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "topFiveComplaints",
@@ -1504,7 +1504,7 @@
               "vizType": "metric-collection",
               "label": "DSS_OVERVIEW",
               "noUnit": true,
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "totalComplaints",
@@ -1548,7 +1548,7 @@
                 "width": 7
               },
               "vizType": "chart",
-              "isCollapsible": true,
+              "isCollapsible": false,
               "label": "",
               "charts": [
                 {
@@ -1575,7 +1575,7 @@
                 "width": 7
               },
               "vizType": "chart",
-              "isCollapsible": true,
+              "isCollapsible": false,
               "label": "",
               "charts": [
                 {
@@ -1596,7 +1596,7 @@
                 "width": 7
               },
               "vizType": "chart",
-              "isCollapsible": true,
+              "isCollapsible": false,
               "label": "",
               "charts": [
                 {
@@ -1623,7 +1623,7 @@
                 "width": 4
               },
               "vizType": "chart",
-              "isCollapsible": true,
+              "isCollapsible": false,
               "label": "",
               "charts": [
                 {
@@ -1644,7 +1644,7 @@
                 "width": 4
               },
               "vizType": "chart",
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "complaintsByChannel",
@@ -1664,7 +1664,7 @@
                 "width": 4
               },
               "vizType": "chart",
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "complaintsByDepartment",
@@ -1691,7 +1691,7 @@
                 "width": 4
               },
               "vizType": "chart",
-              "isCollapsible": true,
+              "isCollapsible": false,
               "label": "",
               "charts": [
                 {
@@ -1712,7 +1712,7 @@
                 "width": 4
               },
               "vizType": "chart",
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "topFiveComplaints",
@@ -1740,7 +1740,7 @@
               "vizType": "chart",
               "label": "",
               "noUnit": false,
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "xpgrStatusByDDR",
@@ -1785,7 +1785,7 @@
               },
               "vizType": "metric-collection",
               "noUnit": true,
-              "isCollapsible": true,
+              "isCollapsible": false,
               "label": "DSS_OVERVIEW",
               "charts": [
                 {
@@ -1831,7 +1831,7 @@
               },
               "vizType": "chart",
               "noUnit": true,
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "cumulativeCollection",
@@ -1858,7 +1858,7 @@
               },
               "vizType": "performing-metric",
               "noUnit": false,
-              "isCollapsible": true,
+              "isCollapsible": false,
               "label": "",
               "charts": [
                 {
@@ -1880,7 +1880,7 @@
               },
               "vizType": "performing-metric",
               "noUnit": false,
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "bottomPerformingUlbs",
@@ -1901,7 +1901,7 @@
               },
               "vizType": "chart",
               "noUnit": true,
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "collectionByUsageType",
@@ -1965,8 +1965,8 @@
               },
               "vizType": "chart",
               "label": "",
-              "noUnit": false,
-              "isCollapsible": true,
+              "noUnit": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "taxHeadsBreakupDDRRevenue",
@@ -2002,7 +2002,7 @@
                 "width": 5
               },
               "vizType": "metric-collection",
-              "isCollapsible": true,
+              "isCollapsible": false,
               "label": "DSS_OVERVIEW",
               "charts": [
                 {
@@ -2039,7 +2039,7 @@
                 "width": 7
               },
               "vizType": "chart",
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "cumulativePropertiesAssessed",
@@ -2065,7 +2065,7 @@
                 "width": 4
               },
               "vizType": "performing-metric",
-              "isCollapsible": true,
+              "isCollapsible": false,
               "label": "",
               "charts": [
                 {
@@ -2086,7 +2086,7 @@
                 "width": 4
               },
               "vizType": "performing-metric",
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "bottomPerformingUlbsCompletionRate",
@@ -2106,7 +2106,7 @@
                 "width": 4
               },
               "vizType": "chart",
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "propertiesByUsageType",
@@ -2171,7 +2171,7 @@
               "vizType": "metric-collection",
               "label": "DSS_OVERVIEW",
               "noUnit": true,
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "todaysCollection",
@@ -2217,7 +2217,7 @@
               "vizType": "chart",
               "label": "",
               "noUnit": true,
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "cumulativeCollection",
@@ -2245,7 +2245,7 @@
               "vizType": "performing-metric",
               "label": "",
               "noUnit": false,
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "topPerformingUlbs",
@@ -2267,7 +2267,7 @@
               "vizType": "performing-metric",
               "label": "",
               "noUnit": false,
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "bottomPerformingUlbs",
@@ -2289,7 +2289,7 @@
               "vizType": "chart",
               "label": "",
               "noUnit": false,
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "licenseByLicenseType",
@@ -2373,7 +2373,7 @@
                 "width": 5
               },
               "vizType": "metric-collection",
-              "isCollapsible": true,
+              "isCollapsible": false,
               "label": "DSS_OVERVIEW",
               "charts": [
                 {
@@ -2410,7 +2410,7 @@
                 "width": 7
               },
               "vizType": "chart",
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "cumulativeLicenseIssued",
@@ -2438,7 +2438,7 @@
               "vizType": "performing-metric",
               "label": "",
               "noUnit": false,
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "topPerformingUlbsCompletionRate",
@@ -2459,7 +2459,7 @@
               },
               "vizType": "performing-metric",
               "noUnit": false,
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "bottomPerformingUlbsCompletionRate",
@@ -2479,7 +2479,7 @@
                 "width": 4
               },
               "vizType": "chart",
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "licenseApplicationByStatus",
@@ -2539,7 +2539,7 @@
               "name": "DSS_OVERVIEW",
               "vizType": "metric-collection",
               "noUnit": true,
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "todaysCollection",
@@ -2585,7 +2585,7 @@
               "vizType": "chart",
               "label": "",
               "noUnit": true,
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "cumulativeCollection",
@@ -2612,7 +2612,7 @@
               },
               "vizType": "performing-metric",
               "noUnit": false,
-              "isCollapsible": true,
+              "isCollapsible": false,
               "label": "",
               "charts": [
                 {
@@ -2634,7 +2634,7 @@
               },
               "vizType": "performing-metric",
               "noUnit": false,
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "bottomPerformingUlbs",
@@ -2655,7 +2655,7 @@
               },
               "vizType": "chart",
               "noUnit": true,
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "totalCollectionDeptWise",
@@ -2681,7 +2681,7 @@
                 "width": 5
               },
               "vizType": "metric-collection",
-              "isCollapsible": true,
+              "isCollapsible": false,
               "label": "",
               "charts": [
                 {
@@ -2726,7 +2726,7 @@
                 "width": 7
               },
               "vizType": "chart",
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "totalApplication&ClosedApplication",
@@ -2752,7 +2752,7 @@
                 "width": 4
               },
               "vizType": "performing-metric",
-              "isCollapsible": true,
+              "isCollapsible": false,
               "label": "",
               "charts": [
                 {
@@ -2773,7 +2773,7 @@
                 "width": 4
               },
               "vizType": "performing-metric",
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "bottomPerformingUlbsCompletionRate",
@@ -2793,7 +2793,7 @@
                 "width": 4
               },
               "vizType": "chart",
-              "isCollapsible": true,
+              "isCollapsible": false,
               "charts": [
                 {
                   "id": "totalApplicationDeptWise",
