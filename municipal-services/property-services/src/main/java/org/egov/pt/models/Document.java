@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@EqualsAndHashCode(of= {"fileStore","documentUid","id"})
+@EqualsAndHashCode(of= {"fileStoreId","documentUid","id"})
 public class Document {
 
   @JsonProperty("id")
