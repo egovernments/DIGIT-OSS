@@ -2827,7 +2827,7 @@
               "noUnit": true,
               "isCollapsible": false,
               "ref": {
-                "url": "overview",
+                "url": "ulb-overview",
                 "logoUrl": "",
                 "type": "internal"
               },
@@ -2880,7 +2880,7 @@
               "noUnit": false,
               "isCollapsible": false,
               "ref": {
-                "url": "propertytax",
+                "url": "ulb-propertyTax",
                 "logoUrl": "",
                 "type": "internal"
               },
@@ -2909,7 +2909,7 @@
               "name": "DSS_TRADE_LICENCE",
               "vizType": "module",
               "ref": {
-                "url": "tradelicense",
+                "url": "ulb-tradeLicense",
                 "logoUrl": "",
                 "type": "internal"
               },
@@ -2938,7 +2938,7 @@
               "name": "DSS_COMPLAINS",
               "vizType": "module",
               "ref": {
-                "url": "pgr",
+                "url": "ulb-pgr",
                 "logoUrl": "",
                 "type": "internal"
               },
