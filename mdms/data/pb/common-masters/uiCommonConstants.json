@@ -70,6 +70,13 @@
           "ulb-propertyTax": {
             "routePath": "/dashboard/ulb-propertyTax",
             "isOrigin": true
+          },
+          "ulb-home": {
+            "routePath": "/dashboard/ulb-home",
+            "isOrigin": true
+          },"ulb-overview": {
+            "routePath": "/dashboard/ulb-overview",
+            "isOrigin": true
           }
         }
       }
