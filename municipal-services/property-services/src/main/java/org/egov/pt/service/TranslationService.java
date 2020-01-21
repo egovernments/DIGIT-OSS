@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.models.Assessment;
 import org.egov.pt.models.Property;
+import org.egov.pt.web.contracts.AssessmentRequest;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,10 @@ public class TranslationService {
     }
 
 
-    public Map<String, Object> translate(RequestInfo requestInfo, Property property, Assessment assessment){
+    public Map<String, Object> translate(AssessmentRequest assessmentRequest, Property property){
+
+        RequestInfo requestInfo = assessmentRequest.getRequestInfo();
+        Assessment assessment = assessmentRequest.getAssessment();
 
         Map<String, Object> propertyMap = new HashMap();
         Map<String, Object> propertyDetail = new HashMap<>();
@@ -112,8 +116,6 @@ public class TranslationService {
         propertyDetail.put("units", units);
 
         propertyMap.put("propertyDetails", Collections.singletonList(propertyDetail));
-
-        Map<String, Object> calculationRequest = new HashMap<>();
 
         Map<String, Object> calculationCriteria = new HashMap<>();
         calculationCriteria.put("property", propertyMap);

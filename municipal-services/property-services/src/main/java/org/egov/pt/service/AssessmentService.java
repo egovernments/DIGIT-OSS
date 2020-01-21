@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.Assessment;
+import org.egov.pt.models.AssessmentSearchCriteria;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.enums.Status;
 import org.egov.pt.models.workflow.BusinessService;
@@ -48,6 +49,9 @@ public class AssessmentService {
 
 	@Autowired
 	private WorkflowService workflowService;
+
+	@Autowired
+	private CalculationService calculationService;
 
 	/**
 	 * Method to create an assessment asynchronously.
@@ -92,12 +96,17 @@ public class AssessmentService {
 
 			if(isStateUpdatable){
 
+				/*enrichAssessment();
+				calculationService.getMutationFee();
+				producer.push(topic1,request);*/
+
 			}
+
 				/*
 				*
 				* if(stateIsUpdatable){
-				* 	enrichAssessment();
-				* 	producer.push(topic1,request);
+				*
+				*
 				*  }
 				*
 				*  else {
@@ -111,6 +120,7 @@ public class AssessmentService {
 
 		}
 		else {
+			calculationService.calculateTax(request, property);
 			producer.push(props.getUpdateAssessmentTopic(), request);
 		}
 		return request.getAssessment();

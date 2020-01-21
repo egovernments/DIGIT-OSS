@@ -1,6 +1,11 @@
 package org.egov.pt.service;
 
+import org.egov.pt.config.PropertyConfiguration;
+import org.egov.pt.models.Assessment;
+import org.egov.pt.models.Property;
 import org.egov.pt.repository.ServiceRequestRepository;
+import org.egov.pt.web.contracts.AssessmentRequest;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -8,6 +13,9 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -19,37 +27,31 @@ public class CalculationService {
     @Autowired
     private ServiceRequestRepository serviceRequestRepository;
 
-   @Value("${egov.calculation.host}")
-   private String calculationHost;
+    @Autowired
+    private PropertyConfiguration config;
 
-    @Value("${egov.calculation.context.path}")
-    private String calculationContextPath;
-
-    @Value("${egov.calculation.endpoint}")
-   private String calculationEndpoint;
+    @Autowired
+    private TranslationService translationService;
 
 
-//     public void calculateTax(PropertyRequest request){
-//         StringBuilder uri = new StringBuilder();
-//         uri.append(calculationHost).append(calculationContextPath).append(calculationEndpoint);
-//
-//         CalculationReq calculationReq = createCalculationReq(request);
-//
-//         Map<String,Calculation> responseMap = ((Map<String, Calculation>)serviceRequestRepository.fetchResult(uri, calculationReq));
-//
-//         log.debug("responsemap-> "+responseMap);
-//         request.getProperties().forEach(property -> {
-//             property.getPropertyDetails().forEach(propertyDetail -> {
-//                 if(responseMap.get(propertyDetail.getAssessmentNumber())==null)
-//                     throw new CustomException("CALCULATION_ERROR","The calculation object is coming null from calculation service");
-//                 else
-//                 propertyDetail.setCalculation(mapper.convertValue(responseMap.get(propertyDetail.getAssessmentNumber()), Calculation.class));
-//             });
-//         });
-//
-//     }
-//
-//
+     public void calculateTax(AssessmentRequest assessmentRequest, Property property){
+         StringBuilder uri = new StringBuilder();
+         uri.append(config.getCalculationHost()).append(config.getCalculationContextPath())
+                 .append(config.getCalculationEndpoint());
+
+         Map<String, Object> oldPropertyObject = translationService.translate(assessmentRequest, property);
+
+         Object response = serviceRequestRepository.fetchResult(uri, oldPropertyObject);
+
+         log.debug("response-> "+response);
+         if(response == null)
+             throw new CustomException("CALCULATION_ERROR","The calculation object is coming null from calculation service");
+
+
+
+     }
+
+
 //     private CalculationReq createCalculationReq(PropertyRequest request){
 //         CalculationReq calculationReq = new CalculationReq();
 //         calculationReq.setRequestInfo(request.getRequestInfo());
@@ -63,9 +65,9 @@ public class CalculationService {
 //         });
 //       return calculationReq;
 //     }
-//
-//
-//
+
+
+
 
 
 }

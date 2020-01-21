@@ -207,4 +207,17 @@ public class PropertyConfiguration {
     @Value("${assessment.workflow.trigger.param}")
     private String assessmentWorkflowTriggerParams;
 
+
+    // Calculation
+
+    @Value("${egov.calculation.host}")
+    private String calculationHost;
+
+    @Value("${egov.calculation.context.path}")
+    private String calculationContextPath;
+
+
+    @Value("${egov.calculation.endpoint}")
+    private String calculationEndpoint;
+
 }
