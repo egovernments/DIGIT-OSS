@@ -65,11 +65,24 @@ const waterAndSewerageSearchAndResult = {
                     }
 
                 },
-                // listCard2: {
-                //     uiFramework: "custom-molecules-local",
-                //     moduleName: "egov-wns",
-                //     componentPath: "HowItWorks",
-                // }
+                listCard3: {
+                    uiFramework: "custom-molecules-local",
+                    moduleName: "egov-wns",
+                    componentPath: "NewConnection",
+                    props: {
+                        route: "apply"
+                    }
+                },
+                listCard1: {
+                    uiFramework: "custom-molecules-local",
+                    moduleName: "egov-wns",
+                    componentPath: "MyApplications",
+                },
+                listCard2: {
+                    uiFramework: "custom-molecules-local",
+                    moduleName: "egov-wns",
+                    componentPath: "HowItWorks",
+                }
             }
         },
         // div: {

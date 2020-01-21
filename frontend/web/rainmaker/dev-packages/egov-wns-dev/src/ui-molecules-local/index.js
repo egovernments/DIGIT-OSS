@@ -51,6 +51,18 @@ const HowItWorks = Loadable({
   loader: () => import("./HowItWorks"),
   loading: () => <Loading />
 });
+const NewConnection = Loadable({
+  loader: () => import("./NewConnection"),
+  loading: () => <Loading />
+});
+const MyApplications = Loadable({
+  loader: () => import("./MyApplications"),
+  loading: () => <Loading />
+});
+const Applications = Loadable({
+  loader: () => import("./Applications"),
+  loading: () => <Loading />
+});
 
 const MyConnections = Loadable({
   loader: () => import("./MyConnections"),
@@ -103,5 +115,9 @@ export {
   PastPaymentsDetails,
   MeterReading,
   MeterReadingEditable,
+  NewConnection,
+  MyApplications,
+  Applications
+
   // PropertyTaxDetails
 };
