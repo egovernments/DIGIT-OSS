@@ -377,7 +377,7 @@
     "queries": [
       {
         "module": "PT",
-        "dateRefField": "dataObject.Bill.billDetails.receiptDate",
+        "dateRefField": "Data.Bill.billDetails.receiptDate",
         "requestQueryMap": "{\"module\" : \"Data.Bill.billDetails.businessService.keyword\", \"tenantId\" : \"Data.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\"}",
         "indexName": "collectionsindex-v1",
         "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"Data.Bill.billDetails.businessService.keyword\":\"PT\"}},{\"term\":{\"Data.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"Data.Bill.billDetails.amountPaid\"}}}}}}"
