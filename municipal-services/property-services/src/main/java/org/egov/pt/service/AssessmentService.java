@@ -3,14 +3,18 @@ package org.egov.pt.service;
 import static org.egov.pt.util.AssessmentConstants.ASSESSMENT_BUSINESSSERVICE;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
+import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.Assessment;
 import org.egov.pt.models.AssessmentSearchCriteria;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.enums.Status;
 import org.egov.pt.models.workflow.BusinessService;
+import org.egov.pt.models.workflow.ProcessInstance;
+import org.egov.pt.models.workflow.ProcessInstanceRequest;
 import org.egov.pt.producer.Producer;
 import org.egov.pt.repository.AssessmentRepository;
 import org.egov.pt.util.AssessmentUtils;
@@ -63,6 +67,7 @@ public class AssessmentService {
 		Property property = utils.getPropertyForAssessment(request);
 		validator.validateAssessmentCreate(request, property);
 		assessmentEnrichmentService.enrichAssessmentCreate(request);
+		calculationService.calculateTax(request, property);
 		producer.push(props.getCreateAssessmentTopic(), request);
 
 		return request.getAssessment();
@@ -77,6 +82,8 @@ public class AssessmentService {
 	 */
 	public Assessment updateAssessment(AssessmentRequest request) {
 
+		Assessment assessment = request.getAssessment();
+		RequestInfo requestInfo = request.getRequestInfo();
 		Property property = utils.getPropertyForAssessment(request);
 		validator.validateAssessmentUpdate(request, property);
 		assessmentEnrichmentService.enrichAssessmentUpdate(request);
@@ -87,22 +94,26 @@ public class AssessmentService {
 		if ((request.getAssessment().getStatus().equals(Status.INWORKFLOW) || workflowTriggered)
 				&& config.getIsWorkflowEnabled()){
 
-			assessmentEnrichmentService.enrichAssessmentProcessInstance(request, property);
 			BusinessService businessService = workflowService.getBusinessService(request.getAssessment().getTenantId(),
 												ASSESSMENT_BUSINESSSERVICE,request.getRequestInfo());
 
+			assessmentEnrichmentService.enrichAssessmentProcessInstance(request, property);
 
 			Boolean isStateUpdatable = workflowService.isStateUpdatable(assessmentFromSearch.getWorkflow().getState().getState(),businessService);
 
 			if(isStateUpdatable){
 
-				/*enrichAssessment();
+				assessmentEnrichmentService.enrichAssessmentUpdate(request);
+				/*
 				calculationService.getMutationFee();
 				producer.push(topic1,request);*/
-
 			}
+			ProcessInstanceRequest workflowRequest = new ProcessInstanceRequest(requestInfo, Collections.singletonList(assessment.getWorkflow()));
+			String state = workflowService.callWorkFlow(workflowRequest);
+			assessmentEnrichmentService.enrichStatus(state, assessment, businessService);
 
-				/*
+
+			/*
 				*
 				* if(stateIsUpdatable){
 				*

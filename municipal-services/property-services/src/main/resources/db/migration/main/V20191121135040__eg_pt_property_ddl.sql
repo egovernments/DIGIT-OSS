@@ -102,7 +102,7 @@ CREATE TABLE eg_pt_document (
   tenantId         CHARACTER VARYING (256) NOT NULL,
   entityid         CHARACTER VARYING (128) NOT NULL,
   documentType     CHARACTER VARYING (128) NOT NULL,
-  fileStore        CHARACTER VARYING (128) NOT NULL,
+  fileStoreid        CHARACTER VARYING (128) NOT NULL,
   documentuid      CHARACTER VARYING (128) NOT NULL,
   status           CHARACTER VARYING (128) NOT NULL,
   createdBy        CHARACTER VARYING (128) NOT NULL,

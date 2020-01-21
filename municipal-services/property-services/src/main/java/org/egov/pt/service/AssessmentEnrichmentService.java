@@ -5,6 +5,8 @@ import org.egov.common.contract.request.User;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.*;
 import org.egov.pt.models.enums.Status;
+import org.egov.pt.models.workflow.BusinessService;
+import org.egov.pt.models.workflow.State;
 import org.egov.pt.util.AssessmentUtils;
 import org.egov.pt.util.PropertyUtil;
 import org.egov.pt.web.contracts.AssessmentRequest;
@@ -127,6 +129,28 @@ public class AssessmentEnrichmentService {
            request.getAssessment().getWorkflow().setAssignes(owners);
         }
 
+    }
+
+
+    /**\
+     *
+     * @param state
+     * @param assessment
+     * @param businessService
+     */
+    public void enrichStatus(String state, Assessment assessment, BusinessService businessService){
+
+        Boolean isTerminateState = false;
+        for(State stateObj : businessService.getStates()){
+            if(stateObj.getApplicationStatus().equalsIgnoreCase(state)){
+                isTerminateState = stateObj.getIsTerminateState();
+                break;
+            }
+        }
+        if(!isTerminateState){
+            assessment.setStatus(Status.INWORKFLOW);
+        }
+        else assessment.setStatus(Status.ACTIVE);
     }
 
 

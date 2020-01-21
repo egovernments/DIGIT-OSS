@@ -99,12 +99,12 @@ public class AssessmentUtils {
         Assessment assessment = assessmentRequest.getAssessment();
         PropertyCriteria criteria = PropertyCriteria.builder()
                 .tenantId(assessment.getTenantId())
-                .propertyIds(Collections.singleton(assessment.getPropertyID()))
+                .propertyIds(Collections.singleton(assessment.getPropertyId()))
                 .build();
         List<Property> properties = propertyService.searchProperty(criteria, requestInfo);
 
         if(CollectionUtils.isEmpty(properties))
-            throw new CustomException("PROPERTY_NOT_FOUND","The property with id: "+assessment.getPropertyID()+" is not found");
+            throw new CustomException("PROPERTY_NOT_FOUND","The property with id: "+assessment.getPropertyId()+" is not found");
 
         return properties.get(0);
     }

@@ -1,1 +1,0 @@
-ALTER TABLE eg_pt_assessments DROP CONSTRAINT fk_eg_pt_assessments; 

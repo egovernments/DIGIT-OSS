@@ -135,7 +135,7 @@ public class AssessmentValidator {
 
 	private void commonValidations(AssessmentRequest assessmentReq, Map<String, String> errorMap, boolean isUpdate) {
 		Assessment assessment = assessmentReq.getAssessment();
-		if(!checkIfPropertyExists(assessmentReq.getRequestInfo(), assessment.getPropertyID(), assessment.getTenantId())) {
+		if(!checkIfPropertyExists(assessmentReq.getRequestInfo(), assessment.getPropertyId(), assessment.getTenantId())) {
 			throw new CustomException("PROPERTY_NOT_FOUND", "You're trying to assess a non-existing property.");
 		}
 		if (assessment.getAssessmentDate() > new Date().getTime()) {

@@ -9,7 +9,6 @@ import org.egov.pt.web.contracts.AssessmentRequest;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import java.util.*;
 
@@ -45,19 +44,19 @@ public class TranslationService {
         String[] propertyTypeMasterData = property.getPropertyType().split("\\.");
         String propertyType = null,propertySubType = null;
         propertyType = propertyTypeMasterData[0];
-        if(propertyTypeMasterData.length!=1)
+        if(propertyTypeMasterData.length > 1)
             propertySubType = propertyTypeMasterData[1];
 
         String[] usageCategoryMasterData = property.getUsageCategory().split("\\.");
         String usageCategoryMajor = null,usageCategoryMinor = null;
         usageCategoryMajor = usageCategoryMasterData[0];
-        if(usageCategoryMasterData.length!=1)
+        if(usageCategoryMasterData.length > 1)
             usageCategoryMinor = usageCategoryMasterData[1];
 
         String[] ownershipCategoryMasterData  = property.getOwnershipCategory().split("\\.");
         String ownershipCategory = null,subOwnershipCategory = null;
         ownershipCategory = ownershipCategoryMasterData[0];
-        if(ownershipCategoryMasterData.length!=1)
+        if(ownershipCategoryMasterData.length > 1)
             subOwnershipCategory = ownershipCategoryMasterData[1];
 
 

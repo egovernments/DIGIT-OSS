@@ -89,7 +89,7 @@ serviceMaps:
       - jsonPath: $.Property.auditDetails.lastModifiedTime
 
 
-    - query: INSERT INTO eg_pt_document (id, tenantid, entityid, documenttype, filestore, documentuid, status, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+    - query: INSERT INTO eg_pt_document (id, tenantid, entityid, documenttype, fileStoreId, documentuid, status, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
       basePath: $.Property.documents.*
       jsonMaps:
 
@@ -101,7 +101,7 @@ serviceMaps:
 
       - jsonPath: $.Property.documents.*.documentType
 
-      - jsonPath: $.Property.documents.*.fileStore
+      - jsonPath: $.Property.documents.*.fileStoreId
 
       - jsonPath: $.Property.documents.*.documentUid
 
@@ -116,7 +116,7 @@ serviceMaps:
       - jsonPath: $.Property.auditDetails.lastModifiedTime
 
 
-    - query: INSERT INTO eg_pt_document (id, tenantid, entityid, documenttype, filestore, documentuid, status, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+    - query: INSERT INTO eg_pt_document (id, tenantid, entityid, documenttype, fileStoreId, documentuid, status, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
       basePath: $.Property.owners.*.documents.*
       jsonMaps:
 
@@ -128,7 +128,7 @@ serviceMaps:
 
       - jsonPath: $.Property.owners.*.documents.*.documentType
 
-      - jsonPath: $.Property.owners.*.documents.*.fileStore
+      - jsonPath: $.Property.owners.*.documents.*.fileStoreId
 
       - jsonPath: $.Property.owners.*.documents.*.documentUid
 
@@ -306,7 +306,7 @@ serviceMaps:
 
       - jsonPath: $.Property.auditDetails.lastModifiedTime
 
-    - query: INSERT INTO eg_pt_document (id, tenantid, entityid, documenttype, filestore, documentuid, status, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET documenttype = EXCLUDED.documenttype,fileStore = EXCLUDED.filestore, documentuid=EXCLUDED.documentuid, status=EXCLUDED.status, lastmodifiedby = EXCLUDED.lastModifiedby, lastmodifiedtime = EXCLUDED.lastmodifiedtime;
+    - query: INSERT INTO eg_pt_document (id, tenantid, entityid, documenttype, fileStoreId, documentuid, status, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET documenttype = EXCLUDED.documenttype,fileStoreId = EXCLUDED.fileStoreId, documentuid=EXCLUDED.documentuid, status=EXCLUDED.status, lastmodifiedby = EXCLUDED.lastModifiedby, lastmodifiedtime = EXCLUDED.lastmodifiedtime;
       basePath: $.Property.documents.*
       jsonMaps:
 
@@ -318,7 +318,7 @@ serviceMaps:
 
       - jsonPath: $.Property.documents.*.documentType
 
-      - jsonPath: $.Property.documents.*.fileStore
+      - jsonPath: $.Property.documents.*.fileStoreId
 
       - jsonPath: $.Property.documents.*.documentUid
 
@@ -332,7 +332,7 @@ serviceMaps:
 
       - jsonPath: $.Property.auditDetails.lastModifiedTime
 
-    - query: INSERT INTO eg_pt_document (id, tenantid, entityid, documenttype, filestore, documentuid, status, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET documenttype = EXCLUDED.documenttype,fileStore = EXCLUDED.filestore, documentuid=EXCLUDED.documentuid, status=EXCLUDED.status, lastmodifiedby = EXCLUDED.lastModifiedby, lastmodifiedtime = EXCLUDED.lastmodifiedtime;
+    - query: INSERT INTO eg_pt_document (id, tenantid, entityid, documenttype, fileStoreId, documentuid, status, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET documenttype = EXCLUDED.documenttype,fileStoreId = EXCLUDED.fileStoreId, documentuid=EXCLUDED.documentuid, status=EXCLUDED.status, lastmodifiedby = EXCLUDED.lastModifiedby, lastmodifiedtime = EXCLUDED.lastmodifiedtime;
       basePath: $.Property.owners.*.documents.*
       jsonMaps:
 
@@ -344,7 +344,7 @@ serviceMaps:
 
       - jsonPath: $.Property.documents.*.documentType
 
-      - jsonPath: $.Property.documents.*.fileStore
+      - jsonPath: $.Property.documents.*.fileStoreId
 
       - jsonPath: $.Property.documents.*.documentUid
 

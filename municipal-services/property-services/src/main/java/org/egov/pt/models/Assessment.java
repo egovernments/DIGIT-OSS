@@ -28,12 +28,6 @@ import org.egov.pt.models.workflow.ProcessInstance;
 @Builder
 public class Assessment {
 
-	@JsonProperty("financialYear")
-	@NotNull
-	private String financialYear ;
-
-	@JsonProperty("assessmentNumber")
-	private String assessmentNumber ;
 
 	@JsonProperty("id")
 	private String id ;
@@ -42,9 +36,16 @@ public class Assessment {
 	@NotNull
 	private String tenantId ;
 
-	@JsonProperty("propertyID")
+	@JsonProperty("assessmentNumber")
+	private String assessmentNumber ;
+
+	@JsonProperty("financialYear")
 	@NotNull
-	private String propertyID;
+	private String financialYear ;
+
+	@JsonProperty("propertyId")
+	@NotNull
+	private String propertyId;
 
 	@JsonProperty("assessmentDate")
 	@NotNull

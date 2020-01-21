@@ -104,7 +104,6 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 	 * Adding children elements to Property
 	 * 
 	 * @param rs
-	 * @param propertyUuId
 	 * @param currentProperty
 	 * @throws SQLException
 	 */
@@ -141,7 +140,7 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 		Document doc =  Document.builder()
 			.status(Status.fromValue(rs.getString("pdocstatus")))
 			.documentType(rs.getString("pdoctype"))
-			.fileStore(rs.getString("pdocfileStore"))
+			.fileStoreId(rs.getString("pdocfileStore"))
 			.documentUid(rs.getString("pdocuid"))
 			.id(docId)
 			.build();
@@ -218,7 +217,7 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 	
 		Document doc = Document.builder()
 			.status(Status.fromValue(rs.getString("owndocstatus")))
-			.fileStore(rs.getString("owndocfileStore"))
+			.fileStoreId(rs.getString("owndocfileStore"))
 			.documentType(rs.getString("owndoctype"))
 			.documentUid(rs.getString("owndocuid"))
 			.id(docId)
