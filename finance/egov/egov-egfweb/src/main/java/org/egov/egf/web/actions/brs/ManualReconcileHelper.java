@@ -278,7 +278,7 @@ public class ManualReconcileHelper {
 		" to_char(ih.transactiondate,'dd/mm/yyyy') as \"chequedate\" ,ih.instrumentAmount as \"chequeamount\",rec.transactiontype as \"txnType\", case when rec.transactionType= 'Cr' then 'Payment' else 'Receipt' end    as \"type\" " +
 		" FROM BANKRECONCILIATION rec, BANKACCOUNT BANK,"
 		+" VOUCHERHEADER v ,egf_instrumentheader ih, egf_instrumentotherdetails io, egf_instrumentVoucher iv	WHERE   ih.bankAccountId = BANK.ID AND bank.id = :bankAccId "
-		+"   AND IH.INSTRUMENTDATE <= :toDate " +instrumentCondition 
+		+"   AND IH.transactiondate <= :toDate " +instrumentCondition 
 		+" AND v.ID= iv.voucherheaderid and v.STATUS not in  ("+voucherExcludeStatuses+") AND ((ih.id_status=(select id from egw_status where moduletype='Instrument'  and description='Deposited') and ih.ispaycheque='0')or (ih.ispaycheque='1' and  ih.id_status=(select id from egw_status where moduletype='Instrument'  and description='New'))) "
 		+" AND rec.instrumentHeaderId=cast(ih.id as varchar(100)) and iv.instrumentHeaderid=ih.id and io.instrumentheaderid=ih.id and ih.transactionnumber is not null"
 		+"   group by ih.id,rec.transactiontype order by 4 " );
@@ -316,7 +316,11 @@ public class ManualReconcileHelper {
 		createSQLQuery.addScalar("type",StringType.INSTANCE);
 		createSQLQuery.setResultTransformer(Transformers.aliasToBean(ReconcileBean.class));
 	        list = (List<ReconcileBean>)createSQLQuery.list();
-	        this.getUnreconsiledReceiptInstruments(reconBean,list);
+	        try {
+	            this.getUnreconsiledReceiptInstruments(reconBean,list);
+                } catch (Exception e) {
+                    LOGGER.error("ERROR occurred while fetching the unrconciled receipt instruments : "+e.getMessage());
+                }
 		}
 		catch(Exception e)
 		{
@@ -389,14 +393,16 @@ public class ManualReconcileHelper {
 			}
 			i++;
 		}
-		List<Instrument> instruments = microserviceUtils.getInstruments(StringUtils.join(instrumentIdAndDateMap.keySet(),","));
-		FinancialStatus finStatus = new FinancialStatus();
-		finStatus.setCode("Reconciled");
-		finStatus.setName("Reconciled");
-		instruments.stream().forEach(ins-> {
-		    ins.setReconciledOn(instrumentIdAndDateMap.get(ins.getId()));
-		});
-                microserviceUtils.updateInstruments(instruments, null, finStatus);
+		if(!instrumentIdAndDateMap.isEmpty()){
+		    List<Instrument> instruments = microserviceUtils.getInstruments(StringUtils.join(instrumentIdAndDateMap.keySet(),","));
+		    FinancialStatus finStatus = new FinancialStatus();
+		    finStatus.setCode("Reconciled");
+		    finStatus.setName("Reconciled");
+		    instruments.stream().forEach(ins-> {
+		        ins.setReconciledOn(instrumentIdAndDateMap.get(ins.getId()));
+		    });
+		    microserviceUtils.updateInstruments(instruments, null, finStatus);
+		}
 	}
 	
 }

@@ -88,6 +88,7 @@ import java.util.Map;
 public class ContraBTBActionHelper {
 	final private static Logger LOGGER = Logger.getLogger(ContraBTBActionHelper.class);
 	private static final String MDC_CHEQUE = "cheque";
+	private static final String MDC_OTHER = "RTGS/NEFT";
 	private static final String EXCEPTION_WHILE_SAVING_DATA = "Exception while saving Data";
 	private static final String TRANSACTION_FAILED = "Transaction failed";
 	private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Constants.LOCALE);
@@ -192,7 +193,19 @@ public class ContraBTBActionHelper {
 
 				iMap.put("Instrument type", FinancialConstants.INSTRUMENT_TYPE_CHEQUE);
 
-			} else {
+			} else if(cBean.getModeOfCollection().equalsIgnoreCase(MDC_OTHER)){
+
+                            iMap.put("Transaction number", cBean.getChequeNumber());
+                            try {
+                                    dt = sdf.parse(cBean.getChequeDate());
+                            } catch (final ParseException e) {
+                                    throw new ValidationException(Arrays.asList(
+                                                    new ValidationError("Exception while formatting ChequeDate ", "TRANSACTION_FAILED")));
+                            }
+                            iMap.put("Transaction date", dt);
+                            // change this to advice type later
+                            iMap.put("Instrument type", FinancialConstants.INSTRUMENT_TYPE_BANK_TO_BANK);
+                    } else {
 
 				iMap.put("Transaction number", cBean.getChequeNumber());
 				try {

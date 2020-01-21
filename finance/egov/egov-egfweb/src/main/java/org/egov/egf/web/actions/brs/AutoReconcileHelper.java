@@ -61,7 +61,6 @@ import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.struts2.convention.annotation.Action;
 import org.egov.commons.Bank;
 import org.egov.commons.Bankaccount;
-import org.egov.commons.Bankbranch;
 import org.egov.commons.CFinancialYear;
 import org.egov.commons.dao.FinancialYearDAO;
 import org.egov.egf.expensebill.repository.DocumentUploadRepository;
@@ -82,7 +81,6 @@ import org.egov.model.bills.DocumentUpload;
 import org.egov.model.brs.AutoReconcileBean;
 import org.egov.model.brs.BankStatementUploadFile;
 import org.egov.utils.FinancialConstants;
-import org.egov.utils.ReportHelper;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
@@ -96,28 +94,22 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.HttpClientErrorException;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.math.BigDecimal;
-import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import javax.persistence.TemporalType;
 
 @Service
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -138,13 +130,11 @@ public class AutoReconcileHelper {
     private static final int CSLNO_INDEX = 8;
     private static final String BRS_TRANSACTION_TYPE_BANK = "TRF";
     private final String BRS_TRANSACTION_TYPE_CHEQUE = "CLG";
-    private final List<Bankaccount> accountList = Collections.EMPTY_LIST;
     private final String successMessage = "BankStatement upload completed Successfully # rows processed";
     private final String TABLENAME = "egf_brs_bankstatements";
     private final String BRS_ACTION_TO_BE_PROCESSED = "to be processed";
     private final String BRS_ACTION_TO_BE_PROCESSED_MANUALLY = "to be processed manually";
     private final String BRS_ACTION_PROCESSED = "processed";
-    private final String jasperpath = "/reports/templates/AutoReconcileReport.jasper";
     private final String BRS_MESSAGE_MORE_THAN_ONE_MATCH = "found more than one match in instruments";
     private final String BRS_MESSAGE_DUPPLICATE_IN_BANKSTATEMENT = "duplicate instrument number within the bankstament";
     private final String dateInDotFormat = "dd.mm.yyyy";
@@ -156,9 +146,9 @@ public class AutoReconcileHelper {
             + dateInDotFormat + "'),:type,:instrumentNo,:debit" +
             ",:credit,:balance,:narration,:cslNo,CURRENT_DATE)";
     private String file_already_uploaded = "This file (#name) already uploaded ";
+    private String recordAlreadyUploadMessage = "Record of Row : %1$s is already %2$s. please try to upload unique records.";
     private String bank_account_not_match_msg = "Selected Bank account and spreadsheet ( #name ) account does not match";
     private String bankStatementFormat = "Upload the Bank Statement as shown in the Download Template format.";
-    private List<Bankbranch> branchList = Collections.EMPTY_LIST;
     private Integer accountId;
     private Date reconciliationDate;
     private Date fromDate;
@@ -169,8 +159,6 @@ public class AutoReconcileHelper {
     private Bank bank;
     private String failureMessage = "Invalid data in  the  following row(s), please correct and upload again\n";
     private boolean isFailed;
-    private ReportHelper reportHelper;
-    private InputStream inputStream;
     private String message = "";
     private SQLQuery insertQuery;
     private int count;
@@ -258,23 +246,25 @@ public class AutoReconcileHelper {
             String dateStr = null;
             rowIndex = STARTOF_DETAIL_ROW_INDEX;
             count = 0;
+            validateUploadedRecords(sheet);
             do {
                 try {
 
                     ab = new AutoReconcileBean();
+                    detailRow = sheet.getRow(rowIndex);
                     if (rowIndex == STARTOF_DETAIL_ROW_INDEX) {
-                        detailRow = sheet.getRow(rowIndex);
                         if (rowIndex >= 9290)
                             if (LOGGER.isDebugEnabled())
                                 LOGGER.debug(String.valueOf(detailRow.getRowNum()));
                         dateStr = getStrValue(detailRow.getCell(TXNDT_INDEX));
-                        if (alreadyUploaded(dateStr)) {
-                            file_already_uploaded = file_already_uploaded.replace("#name", bankStatmentInXlsFileName);
-                            throw new ValidationException(Arrays.asList(new ValidationError(file_already_uploaded,
-                                    file_already_uploaded)));
-                        }
+//                        if (alreadyUploaded(dateStr)) {
+//                            file_already_uploaded = file_already_uploaded.replace("#name", bankStatmentInXlsFileName);
+//                            throw new ValidationException(Arrays.asList(new ValidationError(file_already_uploaded,
+//                                    file_already_uploaded)));
+//                        }
                         ab.setTxDateStr(dateStr);
                     }
+                    
                     ab.setTxDateStr(dateStr);
                     ab.setInstrumentNo(getStrValue(detailRow.getCell(CHEQUENO_INDEX)));
                     // if(strValue!=null)
@@ -357,6 +347,59 @@ public class AutoReconcileHelper {
         }
 
         return "upload";
+    }
+
+    private void validateUploadedRecords(HSSFSheet sheet) {
+        int rowIndex = STARTOF_DETAIL_ROW_INDEX;
+        HSSFRow row = sheet.getRow(rowIndex);
+        String txnDate = null;
+        do {
+            if(isRecordsExists(row)){
+                recordAlreadyUploadMessage = String.format(recordAlreadyUploadMessage, ++rowIndex, "Uploaded");
+                throw new ValidationException(Arrays.asList(new ValidationError(recordAlreadyUploadMessage,recordAlreadyUploadMessage)));
+            }else if(isRecordReconciled(row)){
+                recordAlreadyUploadMessage = String.format(recordAlreadyUploadMessage, ++rowIndex, "Reconciled");
+                throw new ValidationException(Arrays.asList(new ValidationError(recordAlreadyUploadMessage,recordAlreadyUploadMessage)));
+            }else{
+                rowIndex++;
+                row = sheet.getRow(rowIndex);
+                txnDate = getStrValue(row.getCell(TXNDT_INDEX));
+            }
+        } while (txnDate != null && !txnDate.isEmpty());
+    }
+
+    private boolean isRecordReconciled(HSSFRow detailRow) {
+        String txnDate = getStrValue(detailRow.getCell(TXNDT_INDEX));
+        String chequeNumber = getStrValue(detailRow.getCell(CHEQUENO_INDEX));
+        BigDecimal debitAmnt = getNumericValue(detailRow.getCell(DEBIT_INDEX));
+        String query = "select id from egf_brs_bankstatements where accountid=:accountId and instrumentno=:instrumentno  and txdate=to_date(:txnDate,:dateInFormat) and action='processed'";
+        final List list = persistenceService.getSession().createSQLQuery(query)
+                .setInteger("accountId", accountId)
+                .setString("instrumentno", chequeNumber)
+                .setString("txnDate", txnDate)
+                .setString("dateInFormat", dateInDotFormat)
+                .list();
+        if (list.size() >= 1)
+            return true;
+        else
+            return false;
+    }
+
+    private boolean isRecordsExists(HSSFRow detailRow) {
+        String txnDate = getStrValue(detailRow.getCell(TXNDT_INDEX));
+        String chequeNumber = getStrValue(detailRow.getCell(CHEQUENO_INDEX));
+        BigDecimal debitAmnt = getNumericValue(detailRow.getCell(DEBIT_INDEX));
+        String query = "select id from egf_brs_bankstatements where accountid=:accountId and instrumentno=:instrumentno and txdate=to_date(:txnDate,:dateInFormat) and (action is null or action!='processed') ";
+        final List list = persistenceService.getSession().createSQLQuery(query)
+                .setInteger("accountId", accountId)
+                .setString("instrumentno", chequeNumber)
+                .setString("txnDate", txnDate)
+                .setString("dateInFormat", dateInDotFormat)
+                .list();
+        if (list.size() >= 1)
+            return true;
+        else
+            return false;
     }
 
     private void validateBankAccountInfo(HSSFSheet sheet) {
@@ -512,7 +555,12 @@ public class AutoReconcileHelper {
         findandUpdateDuplicates();
 
         // step3 : get all the instruments from collections
-        List<Instrument> instLists = this.getRecieptInstruments(accountId,fromDate,toDate);
+        List<Instrument> instLists = null;
+        try {
+            instLists = this.getRecieptInstruments(accountId,fromDate,toDate);
+        } catch (Exception e) {
+            LOGGER.error(String.format("ERROR occurred while fetching the Receipt Instruments for accountId : %1$s and for date range from %2$s to %3$s", accountId,fromDate,toDate));
+        }
         Map<String, Instrument> instChequeMap = new HashMap<String, Instrument>();
         if(!CollectionUtils.isEmpty(instLists)){
             instLists.stream().forEach(ins -> {
@@ -720,18 +768,20 @@ public class AutoReconcileHelper {
     private void processCSL() {
         markForProcessing(BRS_TRANSACTION_TYPE_BANK);
         final List<AutoReconcileBean> CSLList = getStatmentsForProcessing(BRS_TRANSACTION_TYPE_BANK);
-        final Long instrumentTypeId = getInstrumentType(FinancialConstants.INSTRUMENT_TYPE_BANK_TO_BANK);
+        HashSet<Long> instTypeIds = new HashSet<Long>();
+        instTypeIds.add(getInstrumentType(FinancialConstants.INSTRUMENT_TYPE_BANK_TO_BANK));
+        instTypeIds.add(getInstrumentType(FinancialConstants.INSTRUMENT_TYPE_ADVICE));
         final String recociliationQuery = "update EGF_InstrumentHeader set id_status=:statusId,  lastmodifiedby=:userId,lastmodifieddate=CURRENT_DATE"
                 +
                 " where id = (select ih.id from egf_instrumentheader ih,egf_instrumentvoucher iv,voucherheader vh where  "
                 +
                 " instrumentAmount=:amount and bankaccountid=:accountId and ispaycheque=:ispaycheque and instrumentType in ("
-                + instrumentTypeId
+                + StringUtils.join(instTypeIds,",")
                 + ")"
                 +
                 " and id_status=(select id from Egw_Status where upper(moduletype)=upper('instrument') and  upper(description)="
                 +
-                " upper(:instrumentStatus)) and iv.instrumentheaderid=ih.id and iv.voucherheaderid=ih.id and vh.vouchernumber=:cslNo )  ";
+                " upper(:instrumentStatus)) and iv.instrumentheaderid=ih.id and iv.voucherheaderid=vh.id and vh.vouchernumber=:cslNo )  ";
 
         final String recociliationAmountQuery = "update egf_instrumentOtherdetails set reconciledamount=:amount,instrumentstatusdate=:txDate "
                 +
@@ -740,18 +790,18 @@ public class AutoReconcileHelper {
                 " where instrumentheaderid =  (select ih.id from egf_instrumentheader ih,egf_instrumentvoucher iv,voucherheader vh where  "
                 +
                 " instrumentAmount=:amount and bankaccountid=:accountId and ispaycheque=:ispaycheque and instrumentType in ("
-                + instrumentTypeId
+                + StringUtils.join(instTypeIds,",")
                 + ")"
                 +
                 " and id_status=(select id from Egw_Status where upper(moduletype)=upper('instrument') and  upper(description)="
                 +
-                " upper(:instrumentStatus)) and iv.instrumentheaderid=ih.id and iv.voucherheaderid=ih.id and vh.vouchernumber=:cslNo ) ";
+                " upper(:instrumentStatus)) and iv.instrumentheaderid=ih.id and iv.voucherheaderid=vh.id and vh.vouchernumber=:cslNo ) ";
 
         final SQLQuery updateQuery = persistenceService.getSession().createSQLQuery(recociliationQuery);
         final SQLQuery updateQuery2 = persistenceService.getSession().createSQLQuery(recociliationAmountQuery);
 
         final String backUpdateBankStmtquery = "update " + TABLENAME + " set action='" + BRS_ACTION_PROCESSED
-                + "' ,reconciliationDate=:reconciliationDate where id=:id";
+                + "' ,reconciliationDate=:reconciliationDate, errormessage=null where id=:id";
 
         final String backUpdateFailureBRSquery = "update " + TABLENAME + " set action='" + BRS_ACTION_TO_BE_PROCESSED_MANUALLY
                 + "',errormessage=:e where id=:id";
@@ -848,8 +898,12 @@ public class AutoReconcileHelper {
     private List<AutoReconcileBean> getStatmentsForProcessing(final String type) {
         final SQLQuery detailQuery = persistenceService.getSession().createSQLQuery(
                 "select id,txDate,instrumentNo,debit,credit,CSLno  from " + TABLENAME +
-                        " where accountId=:accountId  and type='" + type + "' and action='" + BRS_ACTION_TO_BE_PROCESSED + "'");
+                        " where accountId=:accountId  and type=:type and action=:action and txdate>=:fromDate and txDate<=:toDate");
         detailQuery.setLong("accountId", accountId);
+        detailQuery.setString("type", type);
+        detailQuery.setString("action", BRS_ACTION_TO_BE_PROCESSED);
+        detailQuery.setDate("fromDate", fromDate);
+        detailQuery.setDate("toDate", toDate);
         detailQuery.addScalar("id", LongType.INSTANCE).addScalar("txDate").addScalar("instrumentNo").addScalar("debit")
                 .addScalar("credit").addScalar("CSLno")
                 .setResultTransformer(Transformers.aliasToBean(AutoReconcileBean.class));
