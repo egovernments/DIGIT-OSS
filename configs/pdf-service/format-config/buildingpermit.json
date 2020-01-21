@@ -153,13 +153,6 @@
                 ]
             },
             {
-                "separator": ")",
-                "ol": [
-                    "Permit issued based on the Approval Certificate of  PCB as per the Order No.202 Dtd {{createdDate}}."
-                ],
-                "style": "top-margin"
-            },
-            {
                 "stack": [
                     {
                         "text": "Proposed area is as follows,"
