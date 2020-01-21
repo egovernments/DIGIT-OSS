@@ -78,7 +78,7 @@ SearchDefinitions:
       isMandatory: false
       jsonPath: $.searchCriteria.toPeriod
       operator: GE
-    - name: b_isactive
+    - name: b.isactive
       isMandatory: false
       jsonPath: $.searchCriteria.billActive
 
@@ -160,7 +160,7 @@ SearchDefinitions:
       isMandatory: false
       jsonPath: $.searchCriteria.toPeriod
       operator: GE
-    - name: b_isactive
+    - name: b.isactive
       isMandatory: false
       jsonPath: $.searchCriteria.billActive
 
@@ -244,7 +244,7 @@ SearchDefinitions:
       isMandatory: false
       jsonPath: $.searchCriteria.toPeriod
       operator: GE
-    - name: b_isactive
+    - name: b.isactive
       isMandatory: false
       jsonPath: $.searchCriteria.billActive
 
