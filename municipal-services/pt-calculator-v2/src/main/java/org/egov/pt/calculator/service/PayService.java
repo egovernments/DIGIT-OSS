@@ -82,7 +82,7 @@ public class PayService {
 			}
 		}
 
-		rebateAmt = taxAmt.multiply(BigDecimal.valueOf(10));
+		rebateAmt = taxAmt.multiply(BigDecimal.valueOf(10)).divide(HUNDRED);
 
 		// int currentYear = Calendar.getInstance().get(Calendar.YEAR);
 		// int currentMonth = Calendar.getInstance().get(Calendar.MONTH) + 1;
