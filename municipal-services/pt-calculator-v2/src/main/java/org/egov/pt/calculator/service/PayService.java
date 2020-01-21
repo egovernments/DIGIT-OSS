@@ -48,7 +48,7 @@ public class PayService {
 			Map<String, BigDecimal> estimates = new HashMap<>();
 	
 			BigDecimal rebate = BigDecimal.ZERO; 
-			//rebate= getRebate(demand, jsonMasterMap.get(REBATE_MASTER));
+			rebate= getRebate(demand, jsonMasterMap.get(REBATE_MASTER));
 	
 			BigDecimal penalty = BigDecimal.ZERO;
 			BigDecimal interest = BigDecimal.ZERO;
@@ -72,20 +72,40 @@ public class PayService {
 	 * @param assessmentYear
 	 * @return
 	 */
-	public BigDecimal getRebate(BigDecimal taxAmt, String assessmentYear, JSONArray rebateMasterList) {
+	public BigDecimal getRebate(Demand demand, List<Object> rebateMasterList) {
 
 		BigDecimal rebateAmt = BigDecimal.ZERO;
-		Map<String, Object> rebate = mDService.getApplicableMaster(assessmentYear, rebateMasterList);
+		BigDecimal taxAmt= BigDecimal.ZERO;
+		for ( DemandDetail demandDetail: demand.getDemandDetails()){
+			if(demandDetail.getTaxHeadMasterCode().equalsIgnoreCase("PT_TAX")){
+				taxAmt = demandDetail.getTaxAmount();
+			}
+		}
 
-		if (null == rebate) return rebateAmt;
+		rebateAmt = taxAmt.multiply(BigDecimal.valueOf(10));
 
-		String[] time = ((String) rebate.get(ENDING_DATE_APPLICABLES)).split("/");
-		Calendar cal = Calendar.getInstance();
-		setDateToCalendar(assessmentYear, time, cal);
+		// int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+		// int currentMonth = Calendar.getInstance().get(Calendar.MONTH) + 1;
+		// String currentFinancialYear = currentMonth < 3 ? (currentYear - 1) + "-" + currentYear : currentYear + "-" + (currentYear + 1);
 
-		if (cal.getTimeInMillis() > System.currentTimeMillis())
-			rebateAmt = mDService.calculateApplicables(taxAmt, rebate);
+		// Calendar fromCalendar = Calendar.getInstance();
+		// fromCalendar.setTimeInMillis(demand.getTaxPeriodFrom());
+		// int fromYear = fromCalendar.get(Calendar.YEAR);
+		// Calendar toCalendar = Calendar.getInstance();
+		// toCalendar.setTimeInMillis(demand.getTaxPeriodTo());
+		// int toYear = fromCalendar.get(Calendar.YEAR);
+		// String demandFinancialYear = fromYear+"-"+toYear;
 		
+
+		// if(currentFinancialYear.equals(demandFinancialYear)){
+
+		// 	for (Object rebate : rebateMasterList){
+		// 		Map<String, Object> rebateMap = (Map<String, Object>) rebate;
+		// 		if((long)rebateMap.get("startDate") < Calendar.getInstance().getTimeInMillis() && Calendar.getInstance().getTimeInMillis() < (long)rebateMap.get("endDate"))
+		// 			rebateAmt = ((BigDecimal)rebateMap.get("rate")).multiply() 
+		// 	}
+			
+		// }
 		return rebateAmt;
 	}
 
