@@ -26,7 +26,7 @@ const formConfig = {
             get(state, `common.generalMDMSDataById.SubOwnerShipCategory[${sourceField.value}].ownerShipCategory`, value)
           )
         );
-        if (value.toUpperCase().indexOf("INSTITUTIONAL") !== -1 || value.toUpperCase().indexOf("COMPANY") !== -1) {
+        if (value.toUpperCase().includes("INSTITUTIONAL")) {
           dispatch(prepareFormData("Properties[0].propertyDetails[0].subOwnershipCategory", null));
         }
         dispatch(setFieldProperty("institutionDetails", "type", "dropDownData", institutedropDown));
@@ -50,7 +50,7 @@ const formConfig = {
     );
     dispatch(prepareFormData("Properties[0].propertyDetails[0].subOwnershipCategory", currentOwnershipType));
 
-    if (currentOwnershipType.toUpperCase().indexOf("INSTITUTIONAL") !== -1 || currentOwnershipType.toUpperCase().indexOf("COMPANY") !== -1) {
+    if (currentOwnershipType.toUpperCase().includes("INSTITUTIONAL")) {
       dispatch(prepareFormData("Properties[0].propertyDetails[0].subOwnershipCategory", null));
     }
 

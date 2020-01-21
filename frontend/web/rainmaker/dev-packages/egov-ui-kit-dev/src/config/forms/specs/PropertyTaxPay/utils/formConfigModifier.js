@@ -1,6 +1,6 @@
 import get from "lodash/get"
 
-const subCategoriesInOwnersType = ["INDIVIDUAL" ,"GOVERNMENT","COMPANY"]
+const subCategoriesInOwnersType = ["INDIVIDUAL"]
 
 const formDropdown = category => {
   const { name, code } = category
@@ -32,7 +32,7 @@ export const updateInstituteType = (state, value) => {
   const { SubOwnerShipCategory } = get(state, "common.generalMDMSDataById", {})
   const institutedropDown = []
   Object.keys(SubOwnerShipCategory)
-    .filter(subCategory => SubOwnerShipCategory[subCategory].code === value)
+    .filter(subCategory => SubOwnerShipCategory[subCategory].ownerShipCategory === value)
     .forEach(linkedCategory => {
       institutedropDown.push(formDropdown(SubOwnerShipCategory[linkedCategory]))
     })

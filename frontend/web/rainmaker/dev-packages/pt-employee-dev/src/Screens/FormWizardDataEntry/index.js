@@ -480,52 +480,81 @@ class FormWizardDataEntry extends Component {
   getOwnerDetails = ownerType => {
     const { selected } = this.state;
     const isReviewPage = selected === 4;
-    switch (ownerType) {
-      case "SINGLEOWNER":
-        return <OwnerInfoHOC disabled={isReviewPage} />;
-      case "MULTIPLEOWNERS":
-        return (
-          <MultipleOwnerInfoHOC
-            addOwner={() => {
-              addOwner(false, OwnerInformation, this);
-            }}
-            handleRemoveOwner={this.handleRemoveOwner}
-            ownerDetails={this.state.ownerInfoArr}
+    if (ownerType && ownerType.includes("SINGLEOWNER")) {
+      return <OwnerInfoHOC disabled={isReviewPage} />;
+    } else if (ownerType && ownerType.includes("MULTIPLEOWNERS")) {
+      return (
+        <MultipleOwnerInfoHOC
+          addOwner={() => {
+            addOwner(false, OwnerInformation, this);
+          }}
+          handleRemoveOwner={this.handleRemoveOwner}
+          ownerDetails={this.state.ownerInfoArr}
+          disabled={isReviewPage}
+        />
+      );
+    } else {
+      return (
+        <div>
+          <InstitutionHOC disabled={isReviewPage} />
+          <InstitutionAuthorityHOC
+            cardTitle={
+              <Label
+                label="PT_DETAILS_OF_AUTHORISED_PERSON"
+                defaultLabel="Details of authorised person"
+              />
+            }
             disabled={isReviewPage}
           />
-        );
-      // case "INSTITUTIONALPRIVATE":
-      // case "INSTITUTIONALGOVERNMENT":
-      //   return (
-      //     <div>
-      //       <InstitutionHOC disabled={isReviewPage} />
-      //       <InstitutionAuthorityHOC
-      //         cardTitle={
-      //           <Label
-      //             label="PT_DETAILS_OF_AUTHORISED_PERSON"
-      //             defaultLabel="Details of authorised person"
-      //           />
-      //         }
-      //         disabled={isReviewPage}
-      //       />
-      //     </div>
-      //   );
-      default:
-         return (
-          <div>
-            <InstitutionHOC disabled={isReviewPage} />
-            <InstitutionAuthorityHOC
-              cardTitle={
-                <Label
-                  label="PT_DETAILS_OF_AUTHORISED_PERSON"
-                  defaultLabel="Details of authorised person"
-                />
-              }
-              disabled={isReviewPage}
-            />
-          </div>
-        );;
+        </div>
+      );
     }
+    // switch (ownerType) {
+    //   case "SINGLEOWNER":
+    //     return <OwnerInfoHOC disabled={isReviewPage} />;
+    //   case "MULTIPLEOWNERS":
+    //     return (
+    //       <MultipleOwnerInfoHOC
+    //         addOwner={() => {
+    //           addOwner(false, OwnerInformation, this);
+    //         }}
+    //         handleRemoveOwner={this.handleRemoveOwner}
+    //         ownerDetails={this.state.ownerInfoArr}
+    //         disabled={isReviewPage}
+    //       />
+    //     );
+    //   // case "INSTITUTIONALPRIVATE":
+    //   // case "INSTITUTIONALGOVERNMENT":
+    //   //   return (
+    //   //     <div>
+    //   //       <InstitutionHOC disabled={isReviewPage} />
+    //   //       <InstitutionAuthorityHOC
+    //   //         cardTitle={
+    //   //           <Label
+    //   //             label="PT_DETAILS_OF_AUTHORISED_PERSON"
+    //   //             defaultLabel="Details of authorised person"
+    //   //           />
+    //   //         }
+    //   //         disabled={isReviewPage}
+    //   //       />
+    //   //     </div>
+    //   //   );
+    //   default:
+    //      return (
+    //       <div>
+    //         <InstitutionHOC disabled={isReviewPage} />
+    //         <InstitutionAuthorityHOC
+    //           cardTitle={
+    //             <Label
+    //               label="PT_DETAILS_OF_AUTHORISED_PERSON"
+    //               defaultLabel="Details of authorised person"
+    //             />
+    //           }
+    //           disabled={isReviewPage}
+    //         />
+    //       </div>
+    //     );;
+    // }
   };
 
   updateEstimate = () => {
@@ -868,7 +897,13 @@ class FormWizardDataEntry extends Component {
       financialYearFromQuery,
       estimation
     } = this.state;
-    const { setRoute, displayFormErrorsAction, form, history ,prepareFormData={}} = this.props;
+    const {
+      setRoute,
+      displayFormErrorsAction,
+      form,
+      history,
+      prepareFormData = {}
+    } = this.props;
     switch (selected) {
       //validating property address is validated
       case 0:
@@ -983,8 +1018,11 @@ class FormWizardDataEntry extends Component {
           );
           break;
         }
-        let {Properties:finalProperty}=prepareFormData;
-        const ownershipCategory=get(finalProperty,"[0]propertyDetails[0].ownershipCategory");
+        let { Properties: finalProperty } = prepareFormData;
+        const ownershipCategory = get(
+          finalProperty,
+          "[0]propertyDetails[0].ownershipCategory"
+        );
         const { ownershipType } = form;
         const estimateCall = () => {
           // estimate().then(estimateResponse => {
@@ -1008,7 +1046,7 @@ class FormWizardDataEntry extends Component {
               ownershipType,
               "fields.typeOfOwnership.value"
             );
-            if (ownershipTypeSelected === "SINGLEOWNER") {
+            if (ownershipTypeSelected.includes("SINGLEOWNER")) {
               const { ownerInfo } = form;
               const isOwnerInfoFormValid = validateForm(ownerInfo);
               if (isOwnerInfoFormValid) {
@@ -1024,7 +1062,7 @@ class FormWizardDataEntry extends Component {
               } else {
                 displayFormErrorsAction("ownerInfo");
               }
-            } else if (ownershipTypeSelected === "MULTIPLEOWNERS") {
+            } else if (ownershipTypeSelected.includes("MULTIPLEOWNERS")) {
               let ownerValidation = true;
               for (const variable in form) {
                 if (variable.search("ownerInfo_") !== -1) {
@@ -1047,7 +1085,7 @@ class FormWizardDataEntry extends Component {
                 );
               }
             } else if (
-              ownershipCategory==="COMPANY"
+              ownershipTypeSelected.toUpperCase().includes("INSTITUTIONAL")
             ) {
               const { institutionDetails, institutionAuthority } = form;
               const isInstitutionDetailsFormValid = validateForm(
@@ -1091,6 +1129,7 @@ class FormWizardDataEntry extends Component {
         );
         let errorCode = "FINE";
         let previousKey = -1;
+        let previousYear="";
         let demandLength = demand.length;
         let arrayOfEmptyYears = [];
 
@@ -1112,31 +1151,39 @@ class FormWizardDataEntry extends Component {
             errorCode = "ERR02_DEMAND_ENTER_THE_DATA";
           }
           demand.forEach((data, key) => {
-            data && Object.keys(data.demand).forEach((data1, key1) => {
-              // let currentYearTaxHeadLength=Object.keys(data.demand[data1]).length;
-              let currentYearEnteredValueLength = 0;
-              Object.keys(data.demand[data1]).forEach((data2, key2) => {
-                if (data.demand[data1][data2].PT_DEMAND) {
-                  currentYearEnteredValueLength++;
-                  if (previousKey != -1) {
-                    if (key - previousKey != 1) {
-                      errorCode = "ERR04_DEMAND_ENTER_THE_DATA";
+            data &&
+              Object.keys(data.demand).forEach((data1, key1) => {
+                // let currentYearTaxHeadLength=Object.keys(data.demand[data1]).length;
+                let currentYearEnteredValueLength = 0;
+                // let previousYear=data1;
+                Object.keys(data.demand[data1]).forEach((data2, key2) => {
+                  if (data.demand[data1][data2].PT_DEMAND) {
+                    currentYearEnteredValueLength++;
+                    if (previousKey != -1) {
+                      if (key - previousKey > 1) {
+                        errorCode = "ERR04_DEMAND_ENTER_THE_DATA";
+                      }
                     }
+                    if (
+                      data.demand[data1][data2].PT_COLLECTED &&
+                      parseInt(data.demand[data1][data2].PT_DEMAND) <
+                        parseInt(data.demand[data1][data2].PT_COLLECTED)
+                    ) {
+                      errorCode = "ERR03_DEMAND_ENTER_THE_DATA";
+                    }
+                    // if (!previousYear ||previousYear!=data1) {
+                    if (key2==0) {
+                        previousKey = key;
+                    }
+
+                    // }
+
                   }
-                  if (
-                    data.demand[data1][data2].PT_COLLECTED &&
-                    parseInt(data.demand[data1][data2].PT_DEMAND) <
-                      parseInt(data.demand[data1][data2].PT_COLLECTED)
-                  ) {
-                    errorCode = "ERR03_DEMAND_ENTER_THE_DATA";
-                  }
-                  previousKey = key;
+                });
+                if (!currentYearEnteredValueLength) {
+                  arrayOfEmptyYears.push(key);
                 }
               });
-              if (!currentYearEnteredValueLength) {
-                arrayOfEmptyYears.push(key);
-              }
-            });
           });
         }
 
@@ -1667,7 +1714,7 @@ class FormWizardDataEntry extends Component {
         assessmentId
       );
     }
-    if (selectedownerShipCategoryType === "SINGLEOWNER") {
+    if (selectedownerShipCategoryType.includes("SINGLEOWNER")) {
       set(
         prepareFormData,
         "Properties[0].propertyDetails[0].owners",
@@ -1687,9 +1734,7 @@ class FormWizardDataEntry extends Component {
         "Properties[0].propertyDetails[0].subOwnershipCategory",
         selectedownerShipCategoryType
       );
-    }
-
-    else if (selectedownerShipCategoryType === "MULTIPLEOWNERS") {
+    } else if (selectedownerShipCategoryType.includes("MULTIPLEOWNERS")) {
       set(
         prepareFormData,
         "Properties[0].propertyDetails[0].owners",
@@ -1709,8 +1754,7 @@ class FormWizardDataEntry extends Component {
         "Properties[0].propertyDetails[0].subOwnershipCategory",
         selectedownerShipCategoryType
       );
-    }
-    else {
+    } else {
       const { instiObj, ownerArray } = getInstituteInfo(this);
       set(
         prepareFormData,
@@ -1751,7 +1795,6 @@ class FormWizardDataEntry extends Component {
         "Properties[0].propertyDetails[0].owners[0].mobileNumber"
       )
     );
-
 
     try {
       showSpinner();
@@ -1965,10 +2008,7 @@ class FormWizardDataEntry extends Component {
       )
     );
 
-    if (
-      selectedownerShipCategoryType.toLowerCase().indexOf("institutional") !==
-      -1
-    ) {
+    if (selectedownerShipCategoryType.toLowerCase().includes("institutional")) {
       const { instiObj, ownerArray } = getInstituteInfo(this);
       set(
         prepareFormData,

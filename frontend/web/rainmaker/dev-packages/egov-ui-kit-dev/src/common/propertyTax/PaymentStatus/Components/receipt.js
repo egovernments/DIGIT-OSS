@@ -87,7 +87,7 @@ const generateReceipt = (role, details, generalMDMSDataById, receiptImageUrl, is
         const { institution } = propertyDetails[0] || {};
         const isInstitution =
           propertyDetails && propertyDetails.length
-            ? propertyDetails[0].ownershipCategory!="INDIVIDUAL"
+            ? propertyDetails[0].ownershipCategory && !propertyDetails[0].ownershipCategory.includes("INDIVIDUAL")
             // propertyDetails[0].ownershipCategory === "INSTITUTIONALPRIVATE" || propertyDetails[0].ownershipCategory === "INSTITUTIONALGOVERNMENT"
             : false;
         const transformedArray = ownerArray.map((item, index) => {

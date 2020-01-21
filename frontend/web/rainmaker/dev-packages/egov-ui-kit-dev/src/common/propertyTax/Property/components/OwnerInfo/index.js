@@ -10,9 +10,10 @@ const locale = getLocale() || "en_IN";
 const localizationLabelsData = initLocalizationLabels(locale);
 
 const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
-  const isInstitution =latestPropertyDetails.ownershipCategory!="INDIVIDUAL";
+  const isInstitution =latestPropertyDetails.ownershipCategory && !latestPropertyDetails.ownershipCategory.includes("INDIVIDUAL");
     // latestPropertyDetails.ownershipCategory === "INSTITUTIONALPRIVATE" || latestPropertyDetails.ownershipCategory === "INSTITUTIONALGOVERNMENT";
   const { institution = {}, owners: ownerDetails = [] } = latestPropertyDetails || {};
+
   let owner = [];
   if (ownerDetails && ownerDetails.length > 0) {
     owner = ownerDetails[0];
@@ -59,7 +60,7 @@ const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
                     institution.type &&
                     generalMDMSDataById &&
                     generalMDMSDataById["SubOwnerShipCategory"] &&
-                    `PROPERTYTAX_BILLING_SLAB_${generalMDMSDataById["SubOwnerShipCategory"][institution.type].code}`) ||
+                    `PROPERTYTAX_BILLING_SLAB_${generalMDMSDataById["SubOwnerShipCategory"][institution.type].code.replace(".","_")}`) ||
                   "NA",
               }
             : {
@@ -75,7 +76,7 @@ const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
                     generalMDMSDataById &&
                     generalMDMSDataById["OwnerShipCategory"] &&
                     generalMDMSDataById["OwnerShipCategory"][latestPropertyDetails.ownershipCategory] &&
-                    `PROPERTYTAX_BILLING_SLAB_${generalMDMSDataById["OwnerShipCategory"][latestPropertyDetails.ownershipCategory].code}`) ||
+                    `PROPERTYTAX_BILLING_SLAB_${generalMDMSDataById["OwnerShipCategory"][latestPropertyDetails.ownershipCategory].code.replace(".","_")}`) ||
                   "NA",
               }
             : {
@@ -85,7 +86,7 @@ const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
                     generalMDMSDataById &&
                     generalMDMSDataById["SubOwnerShipCategory"] &&
                     generalMDMSDataById["SubOwnerShipCategory"][latestPropertyDetails.subOwnershipCategory] &&
-                    `PROPERTYTAX_BILLING_SLAB_${generalMDMSDataById["SubOwnerShipCategory"][latestPropertyDetails.subOwnershipCategory].code}`) ||
+                    `PROPERTYTAX_BILLING_SLAB_${generalMDMSDataById["SubOwnerShipCategory"][latestPropertyDetails.subOwnershipCategory].code.replace(".","_")}`) ||
                   "NA",
               },
           isInstitution

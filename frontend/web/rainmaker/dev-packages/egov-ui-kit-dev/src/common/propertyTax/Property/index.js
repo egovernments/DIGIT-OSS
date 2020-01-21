@@ -544,7 +544,7 @@ const getAssessmentInfo = (propertyDetails, keys, generalMDMSDataById) => {
 };
 
 const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
-  const isInstitution =latestPropertyDetails.ownershipCategory!="INDIVIDUAL";
+  const isInstitution =latestPropertyDetails.ownershipCategory && !latestPropertyDetails.ownershipCategory.includes("INDIVIDUAL");
     // latestPropertyDetails.ownershipCategory === "INSTITUTIONALPRIVATE" || latestPropertyDetails.ownershipCategory === "INSTITUTIONALGOVERNMENT";
   const { institution={}, owners: ownerDetails } = latestPropertyDetails || {};
   return (
