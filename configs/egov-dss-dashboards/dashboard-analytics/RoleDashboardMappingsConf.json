@@ -45,6 +45,9 @@
         },
         {
           "id": "ulb-tradeLicense"
+        },
+        {
+          "id": "ulb-overview"
         }
       ]
     }
