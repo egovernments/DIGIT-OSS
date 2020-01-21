@@ -2,8 +2,10 @@ DROP TABLE IF EXISTS eg_pt_document;
 DROP TABLE IF EXISTS eg_pt_address;
 DROP TABLE IF EXISTS eg_pt_owner;
 DROP TABLE IF EXISTS eg_pt_institution;
+DROP TABLE IF EXISTS eg_pt_unit;
 DROP TABLE IF EXISTS eg_pt_property;
 DROP TABLE IF EXISTS eg_pt_property_audit;
+DROP TABLE IF EXISTS eg_pt_unit_audit;
 DROP TABLE IF EXISTS eg_pt_address_audit;
 
 --> Property table
@@ -86,7 +88,7 @@ CREATE TABLE eg_pt_owner (
 
 
   CONSTRAINT pk_eg_pt_owner PRIMARY KEY (ownerifnouuid),
-  CONSTRAINT pk_eg_pt_owner UNIQUE (userid, propertyid),
+  CONSTRAINT UK_eg_pt_owner UNIQUE (userid, propertyid),
   CONSTRAINT fk_eg_pt_owner FOREIGN KEY (propertyid) REFERENCES eg_pt_property (id)
   );
 
@@ -145,7 +147,7 @@ CREATE TABLE eg_pt_address (
   CONSTRAINT fk_eg_pt_address FOREIGN KEY (propertyid) REFERENCES eg_pt_property (id)
 );
 
-CREATE INDEX IF NOT EXISTS index_eg_pt_address_tenantid   ON eg_pt_address (tenantid);
+CREATE INDEX IF NOT EXISTS index_eg_pt_address_tenantid  ON eg_pt_address (tenantid);
 
 
 CREATE TABLE eg_pt_unit (
@@ -156,7 +158,7 @@ CREATE TABLE eg_pt_unit (
   floorNo           BIGINT,
   unitType          CHARACTER VARYING(256),
   usageCategory     CHARACTER VARYING(2048) NOT NULL,
-  occupancyType     CHARACTER VARYING(256)  NOT NULL,,
+  occupancyType     CHARACTER VARYING(256)  NOT NULL,
   occupancyDate     BIGINT,
   carpetArea        NUMERIC (10,2),
   builtUpArea       NUMERIC (10,2),
@@ -174,7 +176,7 @@ CREATE TABLE eg_pt_unit (
 
   CONSTRAINT pk_eg_pt_unit PRIMARY KEY (id),
   CONSTRAINT fk_eg_pt_address FOREIGN KEY (propertyid) REFERENCES eg_pt_property (id) 
-)
+);
 
   CREATE INDEX IF NOT EXISTS index_eg_pt_unit_tenantId ON  eg_pt_unit (tenantId);
 
@@ -217,7 +219,7 @@ CREATE TABLE eg_pt_property_audit (
   floorNo           BIGINT,
   unitType          CHARACTER VARYING(256),
   usageCategory     CHARACTER VARYING(2048) NOT NULL,
-  occupancyType     CHARACTER VARYING(256)  NOT NULL,,
+  occupancyType     CHARACTER VARYING(256)  NOT NULL,
   occupancyDate     BIGINT,
   carpetArea        NUMERIC (10,2),
   builtUpArea       NUMERIC (10,2),
@@ -233,7 +235,8 @@ CREATE TABLE eg_pt_property_audit (
   lastmodifiedby   	CHARACTER VARYING(128),
   lastmodifiedtime 	BIGINT,
   auditcreatedtime	BIGINT
-   
+  );
+  
 CREATE TABLE eg_pt_address_audit (
 
   tenantId          CHARACTER VARYING(256)  NOT NULL,
@@ -261,4 +264,3 @@ CREATE TABLE eg_pt_address_audit (
   auditcreatedtime 	BIGINT
   
 );
-
