@@ -68,7 +68,8 @@ public class EnrichmentService {
 		property.getAddress().setTenantId(property.getTenantId());
 		property.getAddress().setId(UUID.randomUUID().toString());
 		property.getOwners().forEach(owner -> {
-
+			
+			owner.setOwnerInfoUuid(UUID.randomUUID().toString());
 			if (!CollectionUtils.isEmpty(owner.getDocuments()))
 				owner.getDocuments().forEach(doc -> {
 					doc.setId(UUID.randomUUID().toString());
@@ -114,6 +115,9 @@ public class EnrichmentService {
 			});
 		
 		property.getOwners().forEach(owner -> {
+
+			if (owner.getOwnerInfoUuid() == null)
+				owner.setOwnerInfoUuid(UUID.randomUUID().toString());
 
 			if (!CollectionUtils.isEmpty(owner.getDocuments()))
 				owner.getDocuments().forEach(doc -> {

@@ -117,6 +117,16 @@ public class Property extends PropertyInfo {
 			this.owners.add(ownersItem);
 		return this;
 	}
+	
+	public Property addUnitsItem(Unit unit) {
+		if (this.owners == null) {
+			this.owners = new ArrayList<>();
+		}
+
+		if (null != unit)
+			this.units.add(unit);
+		return this;
+	}
 
 	public Property addDocumentsItem(Document documentsItem) {
 		if (this.documents == null) {

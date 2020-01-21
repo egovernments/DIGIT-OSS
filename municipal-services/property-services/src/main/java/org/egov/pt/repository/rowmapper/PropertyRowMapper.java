@@ -5,18 +5,23 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.egov.pt.models.Address;
 import org.egov.pt.models.AuditDetails;
+import org.egov.pt.models.ConstructionDetail;
 import org.egov.pt.models.Document;
 import org.egov.pt.models.Institution;
 import org.egov.pt.models.Locality;
 import org.egov.pt.models.OwnerInfo;
 import org.egov.pt.models.Property;
+import org.egov.pt.models.Unit;
+import org.egov.pt.models.enums.Channel;
 import org.egov.pt.models.enums.CreationReason;
+import org.egov.pt.models.enums.OccupancyType;
 import org.egov.pt.models.enums.Relationship;
 import org.egov.pt.models.enums.Status;
 import org.egov.tracer.model.CustomException;
@@ -26,6 +31,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -50,35 +56,46 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 
 				Address address = getAddress(rs, tenanId);
 
-				AuditDetails auditdetails = getAuditDetail(rs, "proeprty");
+				AuditDetails auditdetails = getAuditDetail(rs, "property");
+
+				String institutionId = rs.getString("institutionid");
+				
+				Institution institute = Institution.builder()
+						.nameOfAuthorizedPerson(rs.getString("nameOfAuthorizedPerson"))
+						.tenantId(rs.getString("institutiontenantid"))
+						.designation(rs.getString("designation"))
+						.name(rs.getString("institutionName"))
+						.type(rs.getString("institutionType"))
+						.id(institutionId)
+						.build();
 
 				Double landArea = rs.getDouble("landArea");
 				if (rs.wasNull()) {
 					landArea = null;
 				}
-				
-				String institutionId = rs.getString("institutionid");
-				
 
-					 Institution institute = Institution.builder()
-							.tenantId(rs.getString("institutiontenantid"))
-							.designation(rs.getString("designation"))
-							.name(rs.getString("institutionName"))
-							.type(rs.getString("institutionType"))
-							.id(institutionId)
-							.build();
-
+				List<String> linkedProperties = null;
+				String linkIdString = rs.getString("linkedProperties");
+				if (!StringUtils.isEmpty(linkIdString))
+					linkedProperties = Arrays.asList(linkIdString.split(","));
+				
 				currentProperty = Property.builder()
+						.source(org.egov.pt.models.enums.Source.fromValue(rs.getString("source")))
 						.creationReason(CreationReason.fromValue(rs.getString("creationReason")))
+						.additionalDetails(getadditionalDetail(rs, "padditionalDetails"))
 						.acknowldgementNumber(rs.getString("acknowldgementNumber"))
 						.status(Status.fromValue(rs.getString("propertystatus")))
+						.superBuiltUpArea(rs.getBigDecimal("superBuiltUpArea"))
 						.ownershipCategory(rs.getString("ownershipcategory"))
-						.source(org.egov.pt.models.enums.Source.fromValue(rs.getString("source")))
+						.channel(Channel.fromValue(rs.getString("channel")))						
 						.usageCategory(rs.getString("pusagecategory"))
 						.oldPropertyId(rs.getString("oldPropertyId"))
 						.propertyType(rs.getString("propertytype"))
 						.propertyId(rs.getString("propertyid"))
 						.accountId(rs.getString("accountid"))
+						.noOfFloors(rs.getLong("noOfFloors"))
+						.surveyId(rs.getString("surveyId"))
+						.linkedProperties(linkedProperties)
 						.auditDetails(auditdetails)
 						.institution(institute)
 						.landArea(landArea)
@@ -87,7 +104,6 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 						.address(address)
 						.build();
 
-				currentProperty.setAdditionalDetails(getadditionalDetail(rs, "padditionalDetails"));
 				
 				addChildrenToProperty(rs, currentProperty);
 				propertyMap.put(propertyUuId, currentProperty);
@@ -112,11 +128,60 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 
 		addOwnerToProperty(rs, currentProperty);
 		addDocToProperty(rs, currentProperty);
+		addUnitsToProperty(rs, currentProperty);
 	}
 
 
 	/**
+	 * Adds units to property
+	 * @param rs
+	 * @param currentProperty
+	 * @throws SQLException 
+	 */
+	private void addUnitsToProperty(ResultSet rs, Property currentProperty) throws SQLException {
+		
+		List<Unit> units = currentProperty.getUnits();
+		
+		String unitId = rs.getString("unitid");
+		
+		if (!CollectionUtils.isEmpty(units))
+			for (Unit unit : units) {
+				if (unit.getId().equals(unitId))
+					return;
+			}
+		
+		ConstructionDetail consDetail = ConstructionDetail.builder()
+				.superBuiltUpArea(rs.getBigDecimal("superBuiltUpArea"))
+				.constructionType(rs.getString("constructionType"))
+				.dimensions(getadditionalDetail(rs, "dimensions"))
+				.constructionDate(rs.getLong("constructionDate"))
+				.builtUpArea(rs.getBigDecimal("builtUpArea"))
+				.carpetArea(rs.getBigDecimal("carpetArea"))
+				.plinthArea(rs.getBigDecimal("plinthArea"))
+				.build();
+				
+				
+				
+		Unit unit = Unit.builder()
+				.occupancyType(OccupancyType.fromValue(rs.getString("occupancyType")))
+				.usageCategory(rs.getString("usageCategory"))
+				.occupancyDate(rs.getLong("occupancyDate"))
+				.active(rs.getBoolean("isunitactive"))
+				.unitType(rs.getString("unitType"))
+				.constructionDetail(consDetail)
+				.floorNo(rs.getInt("floorno"))
+				.arv(rs.getBigDecimal("arv"))
+				.id(unitId)
+				.build();
+		
+		currentProperty.addUnitsItem(unit);
+	}
+
+	
+	/**
 	 * Adds document to Property
+	 * 
+	 * Same document table is being used by both property and owner table, so id check is mandatory
 	 * 
 	 * @param rs
 	 * @param property
@@ -180,6 +245,7 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 				.relationship(Relationship.fromValue(rs.getString("relationship")))
 				.status(Status.fromValue(rs.getString("ownstatus")))
 				.institutionId(rs.getString("owninstitutionid"))
+				.ownerInfoUuid(rs.getString("ownerInfoUuid"))
 				.ownerShipPercentage(ownerShipPercentage)
 				.tenantId(rs.getString("owntenantid"))
 				.ownerType(rs.getString("ownerType"))
@@ -195,6 +261,8 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 	/**
 	 * Method to add documents to Owner
 	 * 
+	 * Same document table is being used by both property and owner table, so id check is mandatory
+	 * 
 	 * @param rs
 	 * @param OwnerId
 	 * @param owner
@@ -206,7 +274,7 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 		String 	entityId = rs.getString("owndocentityId");
 		List<Document> docs = owner.getDocuments();
 
-		if (!(null != docId && entityId.equals(owner.getUuid())))
+		if (!(null != docId && entityId.equals(owner.getOwnerInfoUuid())))
 			return;
 
 		if (!CollectionUtils.isEmpty(docs))
