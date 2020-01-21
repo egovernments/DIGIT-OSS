@@ -1,4 +1,4 @@
-CREATE TABLE eg_pt_assessments (
+CREATE TABLE eg_pt_asmt_assessments (
 
   id character varying(256) NOT NULL,
   tenantId character varying(256) NOT NULL,
@@ -24,7 +24,7 @@ CREATE INDEX IF NOT EXISTS index_eg_pt_assessments_assessmentNumber ON  eg_pt_as
 CREATE INDEX IF NOT EXISTS index_eg_pt_assessments_propertyId ON  eg_pt_assessments (propertyId);
 
 
-CREATE TABLE eg_pt_unitusage (
+CREATE TABLE eg_pt_asmt_unitusage (
 
   tenantId character varying(256) NOT NULL,
   id character varying(256) NOT NULL,
@@ -47,7 +47,7 @@ CREATE TABLE eg_pt_unitusage (
 );
 
 
-CREATE TABLE eg_pt_assessments_audit (
+CREATE TABLE eg_pt_asmt_assessments_audit (
 
    id character varying(256) NOT NULL,
    tenantId character varying(256) NOT NULL,
@@ -68,7 +68,7 @@ CREATE TABLE eg_pt_assessments_audit (
 
 
 
-CREATE TABLE eg_pt_unitusage_audit (
+CREATE TABLE eg_pt_asmt_unitusage_audit (
 
     tenantId character varying(256) NOT NULL,
     id character varying(256) NOT NULL,

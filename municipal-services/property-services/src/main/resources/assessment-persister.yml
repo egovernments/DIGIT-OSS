@@ -2,12 +2,12 @@ serviceMaps:
   serviceName: property-services
   mappings:
   - version: 1.0
-    description: Persists assessment details to eg_pt_assessment table
+    description: Persists assessment details to eg_pt_asmt_assessments table
     fromTopic: save-pt-assessment
     isTransaction: true
     queryMaps:
 
-    - query: INSERT INTO eg_pt_assessments(id, tenantid, assessmentnumber, financialyear, propertyid, status, source, channel, assessmentdate, additionaldetails, createdby, createdtime, lastmodifiedby, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+    - query: INSERT INTO eg_pt_asmt_assessments(id, tenantid, assessmentnumber, financialyear, propertyid, status, source, channel, assessmentdate, additionaldetails, createdby, createdtime, lastmodifiedby, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
       basePath: Assessments
       jsonMaps:
 
@@ -43,7 +43,7 @@ serviceMaps:
 
 
 
-    - query: INSERT INTO eg_pt_unitusage (tenantid, id, assessmentid, unitid, usagecategory, occupancytype, occupancydate, active, createdby, createdtime, lastmodifiedby, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+    - query: INSERT INTO eg_pt_asmt_unitusage (tenantid, id, assessmentid, unitid, usagecategory, occupancytype, occupancydate, active, createdby, createdtime, lastmodifiedby, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
       basePath: Assessment.units.*
       jsonMaps:
 
@@ -73,7 +73,7 @@ serviceMaps:
 
 
 
-    - query: INSERT INTO eg_pt_document (id, tenantid, entityid, documenttype, filestoreid, documentuid, status, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+    - query: INSERT INTO eg_pt_asmt_document (id, tenantid, entityid, documenttype, filestoreid, documentuid, status, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
       basePath: $.Assessments.documents.*
       jsonMaps:
 
@@ -102,26 +102,26 @@ serviceMaps:
       
       
   - version: 1.0
-    description: Updates assessment details to eg_pt_assessment table
+    description: Updates assessment details to eg_pt_asmt_assessments table
     fromTopic: update-pt-assessment
     isTransaction: true
     queryMaps:
 
-    - query: INSERT INTO eg_pt_assessment_audit SELECT *, (SELECT extract(epoch from now())) FROM eg_pt_assessment WHERE id = ?;
+    - query: INSERT INTO eg_pt_asmt_assessments_audit SELECT *, (SELECT extract(epoch from now())) FROM eg_pt_asmt_assessments WHERE id = ?;
       basePath: Assessment
       jsonMaps:
 
       - jsonPath: $.Assessments.id
       
       
-    - query: INSERT INTO eg_pt_unit_audit SELECT *, (SELECT extract(epoch from now())) FROM eg_pt_unit WHERE id = ?;
+    - query: INSERT INTO eg_pt_asmt_unitusage_audit SELECT *, (SELECT extract(epoch from now())) FROM eg_pt_unit WHERE id = ?;
       basePath: Assessment.units.*
       jsonMaps:
 
       - jsonPath: $.Assessments.unitUsageList.*.id
       
       
-    - query: UPDATE eg_pt_assessment SET financialyear = ?, status = ?, source = ?, assessmentDate = ?, additionaldetails = ?, lastmodifiedby = ?, lastmodifiedtime = ? WHERE id = ?;
+    - query: UPDATE eg_pt_asmt_assessments SET financialyear = ?, status = ?, source = ?, assessmentDate = ?, additionaldetails = ?, lastmodifiedby = ?, lastmodifiedtime = ? WHERE id = ?;
       basePath: Assessment
       jsonMaps:
 
@@ -146,7 +146,7 @@ serviceMaps:
 
 
 
-    - query: INSERT INTO eg_pt_unitusage (tenantid, id, assessmentId,  usageCategory, occupancyType, occupancyDate, active, createdby, createdtime, lastmodifiedby, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE  usageCategory = ?, occupancyType = ?, occupancyDate = ?, active = ?, lastmodifiedby = ?, lastmodifiedtime = ?;
+    - query: INSERT INTO eg_pt_asmt_unitusage (tenantid, id, assessmentId,  usageCategory, occupancyType, occupancyDate, active, createdby, createdtime, lastmodifiedby, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE  usageCategory = ?, occupancyType = ?, occupancyDate = ?, active = ?, lastmodifiedby = ?, lastmodifiedtime = ?;
       basePath: Assessment.units.*
       jsonMaps:
 

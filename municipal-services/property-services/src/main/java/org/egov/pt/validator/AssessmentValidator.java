@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.models.*;
+import org.egov.pt.models.enums.Status;
 import org.egov.pt.repository.AssessmentRepository;
 import org.egov.pt.service.AssessmentService;
 import org.egov.pt.service.PropertyService;
@@ -46,11 +47,14 @@ public class AssessmentValidator {
 
 	public void validateAssessmentUpdate(AssessmentRequest assessmentRequest, Property property) {
 		Map<String, String> errorMap = new HashMap<>();
+		Assessment assessmentFromDB = assessmentRepository.getAssessmentFromDB(assessmentRequest.getAssessment());
 		validateRI(assessmentRequest.getRequestInfo(), errorMap);
 		validateUnitIds(assessmentRequest.getAssessment(),property);
-		validateUpdateRequest(assessmentRequest, errorMap);
+		validateUpdateRequest(assessmentRequest, assessmentFromDB, errorMap);
 		commonValidations(assessmentRequest, errorMap, true);
 		validateMDMSData(assessmentRequest.getRequestInfo(), assessmentRequest.getAssessment(), errorMap);
+		validateProcessInstance(assessmentRequest, assessmentFromDB);
+
 	}
 
 	/**
@@ -80,53 +84,45 @@ public class AssessmentValidator {
 
 	}
 
-	private void validateUpdateRequest(AssessmentRequest assessmentRequest, Map<String, String> errorMap) {
+	private void validateUpdateRequest(AssessmentRequest assessmentRequest, Assessment assessmentFromDB, Map<String, String> errorMap) {
 		Assessment assessment = assessmentRequest.getAssessment();
 		if (StringUtils.isEmpty(assessment.getId())) {
 			errorMap.put("ASSMNT_ID_EMPTY", "Assessment ID cannot be empty");
 		}
-		Set<String> ids = new HashSet<>();
-		ids.add(assessment.getId());
-		AssessmentSearchCriteria criteria = AssessmentSearchCriteria.builder().ids(ids).build();
-		List<Assessment> assessments = assessmentRepository.getAssessments(criteria);
-		if (CollectionUtils.isEmpty(assessments)) {
-			errorMap.put(ErrorConstants.NO_ASSESSMENTS_FOUND_CODE, ErrorConstants.NO_ASSESSMENTS_FOUND_MSG);
-		} else {
-			Assessment assessmentFromDB = assessments.get(0);
-			if (assessmentFromDB.getDocuments().size() > assessment.getDocuments().size()) {
-				errorMap.put("MISSING_DOCUMENTS", "Please send all the documents belonging to this assessment");
-			}
-			if (assessmentFromDB.getUnitUsageList().size() > assessment.getUnitUsageList().size()) {
-				errorMap.put("MISSING_UNITS", "Please send all the units belonging to this assessment");
-			}
-			Set<String> existingUnitUsages = assessmentFromDB.getUnitUsageList().stream().map(UnitUsage::getId)
-					.collect(Collectors.toSet());
-			Set<String> existingDocs = assessmentFromDB.getDocuments().stream().map(Document::getId)
-					.collect(Collectors.toSet());
-			if (!CollectionUtils.isEmpty(assessment.getUnitUsageList())) {
-				for (UnitUsage unitUsage : assessment.getUnitUsageList()) {
-					if (!StringUtils.isEmpty(unitUsage.getId())) {
-						if (!existingUnitUsages.contains(unitUsage.getId())) {
-							errorMap.put("UNITUSAGE_NOT_FOUND",
-									"You're trying to update a non-existent unitUsage: " + unitUsage.getId());
-						}
-					}
-				}
-			}
-			if (!CollectionUtils.isEmpty(assessment.getDocuments())) {
-				for (Document doc : assessment.getDocuments()) {
-					if (!StringUtils.isEmpty(doc.getId())) {
-						if (!existingDocs.contains(doc.getId())) {
-							errorMap.put("DOC_NOT_FOUND",
-									"You're trying to update a non-existent document: " + doc.getId());
-						}
-					}
-				}
-			}
 
-			assessment.setAdditionalDetails(utils.jsonMerge(assessmentFromDB.getAdditionalDetails(), assessment.getAdditionalDetails()));
-
+		if (assessmentFromDB.getDocuments().size() > assessment.getDocuments().size()) {
+			errorMap.put("MISSING_DOCUMENTS", "Please send all the documents belonging to this assessment");
 		}
+		if (assessmentFromDB.getUnitUsageList().size() > assessment.getUnitUsageList().size()) {
+			errorMap.put("MISSING_UNITS", "Please send all the units belonging to this assessment");
+		}
+		Set<String> existingUnitUsages = assessmentFromDB.getUnitUsageList().stream().map(UnitUsage::getId)
+				.collect(Collectors.toSet());
+		Set<String> existingDocs = assessmentFromDB.getDocuments().stream().map(Document::getId)
+				.collect(Collectors.toSet());
+		if (!CollectionUtils.isEmpty(assessment.getUnitUsageList())) {
+			for (UnitUsage unitUsage : assessment.getUnitUsageList()) {
+				if (!StringUtils.isEmpty(unitUsage.getId())) {
+					if (!existingUnitUsages.contains(unitUsage.getId())) {
+						errorMap.put("UNITUSAGE_NOT_FOUND",
+								"You're trying to update a non-existent unitUsage: " + unitUsage.getId());
+					}
+				}
+			}
+		}
+		if (!CollectionUtils.isEmpty(assessment.getDocuments())) {
+			for (Document doc : assessment.getDocuments()) {
+				if (!StringUtils.isEmpty(doc.getId())) {
+					if (!existingDocs.contains(doc.getId())) {
+						errorMap.put("DOC_NOT_FOUND",
+								"You're trying to update a non-existent document: " + doc.getId());
+					}
+				}
+			}
+		}
+		assessment.setAdditionalDetails(utils.jsonMerge(assessmentFromDB.getAdditionalDetails(), assessment.getAdditionalDetails()));
+
+
 
 		if (!CollectionUtils.isEmpty(errorMap.keySet())) {
 			throw new CustomException(errorMap);
@@ -229,6 +225,26 @@ public class AssessmentValidator {
 
 	}
 
+
+	/**
+	 * Validates the workflow object and the status
+	 * @param assessmentRequest The assessment request for update or create
+	 * @param assessmentFromDB The assessment from db
+	 */
+	public void validateProcessInstance(AssessmentRequest assessmentRequest, Assessment assessmentFromDB){
+
+		Assessment assessment = assessmentRequest.getAssessment();
+
+		if(assessmentFromDB!=null && assessmentFromDB.getStatus().equals(Status.INWORKFLOW)){
+			if(!assessment.getStatus().equals(Status.INWORKFLOW))
+				throw new CustomException("INVALID_STATUS","The status of the assessment is incorrect");
+		}
+
+		if(assessment.getStatus().equals(Status.INWORKFLOW) && assessment.getWorkflow()==null){
+			throw new CustomException("INVALID_REQUEST","Workflow cannot be null");
+		}
+
+	}
 
 
 
