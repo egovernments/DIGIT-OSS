@@ -71,7 +71,7 @@ CREATE INDEX IF NOT EXISTS index_eg_pt_institution_tenantid ON eg_pt_property (t
 
 CREATE TABLE eg_pt_owner (
 
-  ownerifnouuid		  	CHARACTER VARYING (256) NOT NULL,
+  ownerinfouuid		  	CHARACTER VARYING (256) NOT NULL,
   tenantid            	CHARACTER VARYING (256) NOT NULL,
   propertyid          	CHARACTER VARYING (128) NOT NULL,
   userid              	CHARACTER VARYING (128) NOT NULL,
