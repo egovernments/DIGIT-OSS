@@ -2376,8 +2376,7 @@ const mapStateToProps = state => {
     finalData,
     app,
     generalMDMSDataById,
-    DemandProperties,
-    yeardataInfo
+    DemandProperties
   };
 };
 
