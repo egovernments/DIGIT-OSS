@@ -117,7 +117,8 @@ public class CalculatorUtils {
 		details.add(MasterDetail.builder().name(CalculatorConstants.USAGE_SUB_MINOR_MASTER).build());
 		details.add(MasterDetail.builder().name(CalculatorConstants.ROAD_TYPE).build());
 		details.add(MasterDetail.builder().name(CalculatorConstants.TAX_RATE).build());
-		details.add(MasterDetail.builder().name(CalculatorConstants.REBATE_MASTER).build());
+        details.add(MasterDetail.builder().name(CalculatorConstants.REBATE_MASTER).build());
+        details.add(MasterDetail.builder().name(CalculatorConstants.PROMOTIONAL_REBATE_MASTER).build());
 		details.add(MasterDetail.builder().name(CalculatorConstants.PENANLTY_MASTER).build());
 		details.add(MasterDetail.builder().name(CalculatorConstants.DEPRECIATION_APPRECIATION).build());
 		details.add(MasterDetail.builder().name(CalculatorConstants.INTEREST_MASTER).build());

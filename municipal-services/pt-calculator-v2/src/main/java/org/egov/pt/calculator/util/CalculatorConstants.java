@@ -33,6 +33,8 @@ public class CalculatorConstants {
 
 	public static final String PT_TIME_REBATE = "PT_TIME_REBATE";
 
+	public static final String PT_PROMOTIONAL_REBATE = "PT_PROMOTIONAL_REBATE";
+
 	public static final String PT_TIME_PENALTY = "PT_TIME_PENALTY";
 
 	public static final String PT_TIME_INTEREST = "PT_TIME_INTEREST";
@@ -106,8 +108,12 @@ public class CalculatorConstants {
 
 	public static final String REBATE_MASTER = "Rebate";
 
+	public static final String PROMOTIONAL_REBATE_MASTER = "PromotionalRebate";
+
 	public static final String TAX_RATE = "TaxRate";
+
 	public static final String ROAD_TYPE = "RoadType";
+
 	public static final String DEPRECIATION_APPRECIATION = "DepreciationAppreciation";
 
 	public static final String PENANLTY_MASTER = "Penalty";

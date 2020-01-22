@@ -48,7 +48,9 @@ public class PayService {
 			Map<String, BigDecimal> estimates = new HashMap<>();
 	
 			BigDecimal rebate = BigDecimal.ZERO; 
-			rebate= getRebate(demand, jsonMasterMap.get(REBATE_MASTER));
+			BigDecimal promotionalRebate = BigDecimal.ZERO;
+			rebate= getRebate(demand, jsonMasterMap.get(REBATE_MASTER), payments);
+			promotionalRebate = getRebate(demand, jsonMasterMap.get(PROMOTIONAL_REBATE_MASTER), payments);
 	
 			BigDecimal penalty = BigDecimal.ZERO;
 			BigDecimal interest = BigDecimal.ZERO;
@@ -58,6 +60,7 @@ public class PayService {
 			}
 	
 			estimates.put(PT_TIME_REBATE, rebate.setScale(2, 2).negate());
+			estimates.put(PT_PROMOTIONAL_REBATE, promotionalRebate.setScale(2, 2).negate());
 			estimates.put(PT_TIME_PENALTY, penalty.setScale(2, 2));
 			estimates.put(PT_TIME_INTEREST, interest.setScale(2, 2));
 			return estimates;
@@ -72,40 +75,35 @@ public class PayService {
 	 * @param assessmentYear
 	 * @return
 	 */
-	public BigDecimal getRebate(Demand demand, List<Object> rebateMasterList) {
+	public BigDecimal getRebate(Demand demand, List<Object> rebateMasterList, List<Payment> payments) {
 
 		BigDecimal rebateAmt = BigDecimal.ZERO;
-		BigDecimal taxAmt= BigDecimal.ZERO;
-		for ( DemandDetail demandDetail: demand.getDemandDetails()){
-			if(demandDetail.getTaxHeadMasterCode().equalsIgnoreCase("PT_TAX")){
-				taxAmt = demandDetail.getTaxAmount();
+		BigDecimal taxAmt = getTaxAmountToCalculateRebateOnApplicables(demand, payments);
+		long currentTime = Calendar.getInstance().getTimeInMillis();
+		int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+		int currentMonth = Calendar.getInstance().get(Calendar.MONTH) + 1;
+		String currentFinancialYear = currentMonth < 3 ? (currentYear - 1) + "-" + currentYear
+				: currentYear + "-" + (currentYear + 1);
+
+		Calendar fromCalendar = Calendar.getInstance();
+		fromCalendar.setTimeInMillis(demand.getTaxPeriodFrom());
+		int fromYear = fromCalendar.get(Calendar.YEAR);
+		Calendar toCalendar = Calendar.getInstance();
+		toCalendar.setTimeInMillis(demand.getTaxPeriodTo());
+		int toYear = toCalendar.get(Calendar.YEAR);
+		String demandFinancialYear = fromYear + "-" + toYear;
+		
+		if (currentFinancialYear.equals(demandFinancialYear)) {
+
+			for (Object rebate : rebateMasterList) {
+				Map<String, Object> rebateMap = (Map<String, Object>) rebate;
+				if ( (long)rebateMap.get("startingDay") < currentTime
+						&& currentTime < (long)rebateMap.get("endingDay")) {
+					
+					rebateAmt = taxAmt.multiply(BigDecimal.valueOf((int) rebateMap.get("rate"))).divide(HUNDRED);
+				}
 			}
 		}
-
-		rebateAmt = taxAmt.multiply(BigDecimal.valueOf(10)).divide(HUNDRED);
-
-		// int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-		// int currentMonth = Calendar.getInstance().get(Calendar.MONTH) + 1;
-		// String currentFinancialYear = currentMonth < 3 ? (currentYear - 1) + "-" + currentYear : currentYear + "-" + (currentYear + 1);
-
-		// Calendar fromCalendar = Calendar.getInstance();
-		// fromCalendar.setTimeInMillis(demand.getTaxPeriodFrom());
-		// int fromYear = fromCalendar.get(Calendar.YEAR);
-		// Calendar toCalendar = Calendar.getInstance();
-		// toCalendar.setTimeInMillis(demand.getTaxPeriodTo());
-		// int toYear = fromCalendar.get(Calendar.YEAR);
-		// String demandFinancialYear = fromYear+"-"+toYear;
-		
-
-		// if(currentFinancialYear.equals(demandFinancialYear)){
-
-		// 	for (Object rebate : rebateMasterList){
-		// 		Map<String, Object> rebateMap = (Map<String, Object>) rebate;
-		// 		if((long)rebateMap.get("startDate") < Calendar.getInstance().getTimeInMillis() && Calendar.getInstance().getTimeInMillis() < (long)rebateMap.get("endDate"))
-		// 			rebateAmt = ((BigDecimal)rebateMap.get("rate")).multiply() 
-		// 	}
-			
-		// }
 		return rebateAmt;
 	}
 
@@ -195,6 +193,37 @@ public class PayService {
 			}
 			return taxAmt.subtract(amtPaid);
 		}
+	}
+
+	private BigDecimal getTaxAmountToCalculateRebateOnApplicables(Demand demand, List<Payment> payments) {
+
+		List<BigDecimal> taxAmt = new ArrayList<BigDecimal>();
+
+		for (DemandDetail demandDetail : demand.getDemandDetails()) {
+			if (demandDetail.getTaxHeadMasterCode().equalsIgnoreCase("PT_TAX")) {
+				// if (payments != null) {
+				// 	payments.forEach(payment -> {
+				// 		payment.getPaymentDetails().forEach(paymentDetail -> {
+				// 			paymentDetail.getBill().getBillDetails().forEach(billDetail -> {
+				// 				billDetail.getBillAccountDetails().forEach(billAccountDetail -> {
+				// 					if (billAccountDetail.getDemandDetailId().equals(demandDetail.getId())) {
+				// 						taxAmt.add(billAccountDetail.getAmount()
+				// 								.subtract(billAccountDetail.getAdjustedAmount()));
+				// 					}
+				// 				});
+				// 			});
+				// 		});
+				// 	});
+				// }
+				//if (CollectionUtils.isEmpty(taxAmt)) {
+					if(demandDetail.getCollectionAmount().compareTo(BigDecimal.ZERO)==1){
+						taxAmt.add(BigDecimal.ZERO);
+					}
+					taxAmt.add(demandDetail.getTaxAmount());
+				//}
+			}
+		}
+		return taxAmt.get(0);
 	}
 
 	/**
@@ -388,8 +417,5 @@ public class PayService {
 		interestAmt = mDService.calculateApplicables(applicableAmount, interestMap);
 		return interestAmt.multiply(noOfDays.divide(BigDecimal.valueOf(365), 6, 5));
 	}
-
-
-
 
 }

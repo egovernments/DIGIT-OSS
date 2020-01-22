@@ -398,77 +398,90 @@ public class DemandService {
 	 * @param demand
 	 * @return
 	 */
-	private boolean applytimeBasedApplicables(Demand demand,RequestInfoWrapper requestInfoWrapper,
+	private boolean applytimeBasedApplicables(Demand demand, RequestInfoWrapper requestInfoWrapper,
 			List<TaxPeriod> taxPeriods, Map<String, JSONArray> jsonMasterMap) {
 
 		boolean isCurrentDemand = false;
 		String tenantId = demand.getTenantId();
 		String demandId = demand.getId();
 		List<DemandDetail> details = demand.getDemandDetails();
-		TaxPeriod taxPeriod = taxPeriods.stream()
-				.filter(t -> demand.getTaxPeriodFrom().compareTo(t.getFromDate()) >= 0
-				&& demand.getTaxPeriodTo().compareTo(t.getToDate()) <= 0)
-		.findAny().orElse(null);
-		
-		if(!(taxPeriod.getFromDate()<= System.currentTimeMillis() && taxPeriod.getToDate() >= System.currentTimeMillis()))
+		TaxPeriod taxPeriod = taxPeriods.stream().filter(t -> demand.getTaxPeriodFrom().compareTo(t.getFromDate()) >= 0
+				&& demand.getTaxPeriodTo().compareTo(t.getToDate()) <= 0).findAny().orElse(null);
+
+		if (!(taxPeriod.getFromDate() <= System.currentTimeMillis()
+				&& taxPeriod.getToDate() >= System.currentTimeMillis()))
 			isCurrentDemand = true;
 		/*
 		 * get the payments done agianst this demand
 		 */
 		List<Payment> payments = paymentService.getPaymentsFromDemand(demand, requestInfoWrapper);
 
-		boolean isPenaltyUpdated = false;
+		// boolean isPenaltyUpdated = false;
 		boolean isInterestUpdated = false;
-				
-		Map<String, BigDecimal> rebatePenaltyEstimates = payService.applyPenaltyRebateAndInterest(demand, payments, taxPeriods, jsonMasterMap);
-		
-		if(null == rebatePenaltyEstimates) return isCurrentDemand;
-		
+
+		Map<String, BigDecimal> rebatePenaltyEstimates = payService.applyPenaltyRebateAndInterest(demand, payments,
+				taxPeriods, jsonMasterMap);
+
+		if (null == rebatePenaltyEstimates)
+			return isCurrentDemand;
+
 		BigDecimal rebate = rebatePenaltyEstimates.get(PT_TIME_REBATE);
-		BigDecimal penalty = rebatePenaltyEstimates.get(PT_TIME_PENALTY);
+		BigDecimal promotionalRebate = rebatePenaltyEstimates.get(PT_PROMOTIONAL_REBATE);
+		// BigDecimal penalty = rebatePenaltyEstimates.get(PT_TIME_PENALTY);
 		BigDecimal interest = rebatePenaltyEstimates.get(PT_TIME_INTEREST);
+		DemandDetailAndCollection latestPenaltyDemandDetail, latestInterestDemandDetail;
 
-		DemandDetailAndCollection latestPenaltyDemandDetail,latestInterestDemandDetail;
-
-
-		BigDecimal oldRebate = BigDecimal.ZERO;
+		BigDecimal oldRebate = null;
 		for (DemandDetail demandDetail : details) {
-			if(demandDetail.getTaxHeadMasterCode().equalsIgnoreCase(PT_TIME_REBATE)){
-				oldRebate = oldRebate.add(demandDetail.getTaxAmount());
+			if (demandDetail.getTaxHeadMasterCode().equalsIgnoreCase(PT_TIME_REBATE)) {
+				oldRebate = demandDetail.getTaxAmount();
 			}
 		}
-		if(rebate.compareTo(oldRebate)!=0){
-				details.add(DemandDetail.builder().taxAmount(rebate.subtract(oldRebate))
-						.taxHeadMasterCode(PT_TIME_REBATE).demandId(demandId).tenantId(tenantId)
-						.build());
+		if (oldRebate == null) {
+			details.add(DemandDetail.builder().taxAmount(rebate).taxHeadMasterCode(PT_TIME_REBATE)
+					.demandId(demandId).tenantId(tenantId).build());
+		} else if (rebate.compareTo(oldRebate) != 0 ) {
+			utils.getLatestDemandDetailByTaxHead(PT_TIME_REBATE, details).getLatestDemandDetail().setTaxAmount(rebate);
 		}
 
+		BigDecimal oldPromotionalRebate = null;
+		for (DemandDetail demandDetail : details) {
+			if (demandDetail.getTaxHeadMasterCode().equalsIgnoreCase(PT_PROMOTIONAL_REBATE)) {
+				oldPromotionalRebate = demandDetail.getTaxAmount();
+			}
+		}
+		if (oldPromotionalRebate == null) {
+			details.add(DemandDetail.builder().taxAmount(promotionalRebate)
+					.taxHeadMasterCode(PT_PROMOTIONAL_REBATE).demandId(demandId).tenantId(tenantId).build());
+		} else if (promotionalRebate.compareTo(oldPromotionalRebate) != 0) {
+			utils.getLatestDemandDetailByTaxHead(PT_PROMOTIONAL_REBATE, details).getLatestDemandDetail()
+					.setTaxAmount(promotionalRebate);
+		}
 
-		if(interest.compareTo(BigDecimal.ZERO)!=0){
-			latestInterestDemandDetail = utils.getLatestDemandDetailByTaxHead(PT_TIME_INTEREST,details);
-			if(latestInterestDemandDetail!=null){
-				updateTaxAmount(interest,latestInterestDemandDetail);
+		if (interest.compareTo(BigDecimal.ZERO) != 0) {
+			latestInterestDemandDetail = utils.getLatestDemandDetailByTaxHead(PT_TIME_INTEREST, details);
+			if (latestInterestDemandDetail != null) {
+				updateTaxAmount(interest, latestInterestDemandDetail);
 				isInterestUpdated = true;
 			}
 		}
 
 		// if(penalty.compareTo(BigDecimal.ZERO)!=0){
-		// 	latestPenaltyDemandDetail = utils.getLatestDemandDetailByTaxHead(PT_TIME_PENALTY,details);
-		// 	if(latestPenaltyDemandDetail!=null){
-		// 		updateTaxAmount(penalty,latestPenaltyDemandDetail);
-		// 		isPenaltyUpdated = true;
-		// 	}
+		// latestPenaltyDemandDetail =
+		// utils.getLatestDemandDetailByTaxHead(PT_TIME_PENALTY,details);
+		// if(latestPenaltyDemandDetail!=null){
+		// updateTaxAmount(penalty,latestPenaltyDemandDetail);
+		// isPenaltyUpdated = true;
+		// }
 		// }
 
-		
 		// if (!isPenaltyUpdated && penalty.compareTo(BigDecimal.ZERO) > 0)
-		// 	details.add(DemandDetail.builder().taxAmount(penalty).taxHeadMasterCode(PT_TIME_PENALTY)
-		// 			.demandId(demandId).tenantId(tenantId).build());
+		// details.add(DemandDetail.builder().taxAmount(penalty).taxHeadMasterCode(PT_TIME_PENALTY)
+		// .demandId(demandId).tenantId(tenantId).build());
 		if (!isInterestUpdated && interest.compareTo(BigDecimal.ZERO) > 0)
-			details.add(
-					DemandDetail.builder().taxAmount(interest).taxHeadMasterCode(PT_TIME_INTEREST)
-							.demandId(demandId).tenantId(tenantId).build());
-		
+			details.add(DemandDetail.builder().taxAmount(interest).taxHeadMasterCode(PT_TIME_INTEREST)
+					.demandId(demandId).tenantId(tenantId).build());
+
 		return isCurrentDemand;
 	}
 
