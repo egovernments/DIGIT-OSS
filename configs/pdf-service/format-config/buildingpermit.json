@@ -55,7 +55,8 @@
                                 "font":"Roboto"
                             }
                         ],
-                        "alignment": "left"
+                        "alignment": "left",
+                        "width" : "*"
                     },
                     {
                         "text": [
@@ -68,7 +69,8 @@
                                 "bold": true
                             }
                         ],
-                        "alignment": "right"
+                        "alignment": "right",
+                        "width" : "auto"
                     }
                 ],
                 "style": "top-margin"
@@ -151,13 +153,6 @@
                         "text" : "  subject to the following conditions/restrictions."
                     }
                 ]
-            },
-            {
-                "separator": ")",
-                "ol": [
-                    "Permit issued based on the Approval Certificate of  PCB as per the Order No.202 Dtd {{createdDate}}."
-                ],
-                "style": "top-margin"
             },
             {
                 "stack": [
@@ -1085,7 +1080,7 @@
                         "text": "Validity : This certificate is valid upto "
                     },
                     {
-                        "text": "{{applicationDate}}"
+                        "text": "{{validityDate}}"
                     },
                     {
                         "text": " Only. "
@@ -1100,7 +1095,7 @@
                 "style": "top-margin"
             },
             {
-                "text": "The owner as well as the architect/licensed engineer are fully responsible for adhering to the provisions of the bye laws in both the building plan as well as in the actual construction.In case it is found that the permission has been secured through misrepresentation or fraud, the permission may be suspended or revoked by the Authority under Section 363 (3) of the Bihar Municipal Act 2007 and/or cancelled under byelaw 14 of the bye laws.",
+                "text": "The owner as well as the architect/licensed engineer are fully responsible for adhering to the provisions of the bye laws in both the building plan as well as in the actual construction.In case it is found that the permission has been secured through misrepresentation or fraud, the permission may be suspended or revoked by the Authority under Section 363 (3) of the {{tenantName}} Municipal Act 2007 and/or cancelled under byelaw 14 of the bye laws.",
                 "style": "top-margin"
             },
             {

@@ -48,6 +48,12 @@
                 }
               },
               {
+                "variable": "validityDate",
+                "value": {
+                  "path": "$.validityDate"
+                }
+              },
+              {
                 "variable": "buildingNearGovt",
                 "value": {
                   "path": "BUILDING_NEAR_GOVT_BLDG"
