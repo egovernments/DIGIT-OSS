@@ -1512,9 +1512,7 @@
                   "code": "",
                   "chartType": "metric",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 },
                 {
                   "id": "closedComplaints",
@@ -1522,9 +1520,7 @@
                   "code": "",
                   "chartType": "metric",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 },
                 {
                   "id": "slaAchieved",
@@ -1532,9 +1528,7 @@
                   "code": "",
                   "chartType": "metric",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 },
                 {
                   "id": "completionRate",
@@ -1542,9 +1536,7 @@
                   "code": "",
                   "chartType": "metric",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 }
               ]
             },
@@ -1565,9 +1557,7 @@
                   "code": "",
                   "chartType": "line",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 }
               ]
             }
@@ -1594,9 +1584,7 @@
                   "code": "",
                   "chartType": "line",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 }
               ]
             },
@@ -1617,9 +1605,7 @@
                   "code": "",
                   "chartType": "line",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 }
               ]
             }
@@ -1646,9 +1632,7 @@
                   "code": "",
                   "chartType": "donut",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 }
               ]
             },
@@ -1668,9 +1652,7 @@
                   "code": "",
                   "chartType": "donut",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 }
               ]
             },
@@ -1690,12 +1672,11 @@
                   "code": "",
                   "chartType": "donut",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 }
               ]
             }
+
           ]
         },
         {
@@ -1719,9 +1700,7 @@
                   "code": "",
                   "chartType": "line",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 }
               ]
             },
@@ -1741,9 +1720,7 @@
                   "code": "",
                   "chartType": "horizontalBar",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 }
               ]
             }
@@ -1771,9 +1748,7 @@
                   "code": "",
                   "chartType": "table",
                   "filter": "",
-                  "headers": [
-
-                  ],
+                  "headers": [],
                   "tabName": "Boundary"
                 },
                 {
@@ -1782,9 +1757,7 @@
                   "code": "",
                   "chartType": "table",
                   "filter": "",
-                  "headers": [
-
-                  ],
+                  "headers": [],
                   "tabName": "Department"
                 }
               ]
@@ -1821,9 +1794,7 @@
                   "code": "",
                   "chartType": "metric",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 },
                 {
                   "id": "totalCollection",
@@ -1831,9 +1802,7 @@
                   "code": "",
                   "chartType": "metric",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 },
                 {
                   "id": "targetCollection",
@@ -1841,9 +1810,7 @@
                   "code": "",
                   "chartType": "metric",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 },
                 {
                   "id": "targetAchieved",
@@ -1851,9 +1818,7 @@
                   "code": "",
                   "chartType": "metric",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 }
               ]
             },
@@ -1874,9 +1839,7 @@
                   "code": "",
                   "chartType": "line",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 }
               ]
             }
@@ -1899,14 +1862,12 @@
               "label": "",
               "charts": [
                 {
-                  "id": "topPerformingUlbsWithoutFilter",
+                  "id": "topPerformingUlbs",
                   "name": "DSS_PT_TOP_3_PERFORMING_ULBS",
                   "code": "",
                   "chartType": "bar",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 }
               ]
             },
@@ -1922,14 +1883,12 @@
               "isCollapsible": false,
               "charts": [
                 {
-                  "id": "bottomPerformingUlbsWithoutFilter",
+                  "id": "bottomPerformingUlbs",
                   "name": "DSS_PT_BOTTOM_3_PERFORMING_ULBS",
                   "code": "",
                   "chartType": "bar",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 }
               ]
             },
@@ -1950,9 +1909,7 @@
                   "code": "",
                   "chartType": "donut",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 }
               ]
             }
@@ -1979,9 +1936,7 @@
                   "code": "",
                   "chartType": "table",
                   "filter": "",
-                  "headers": [
-
-                  ],
+                  "headers": [],
                   "tabName": "Boundary"
                 },
                 {
@@ -1990,9 +1945,7 @@
                   "code": "",
                   "chartType": "table",
                   "filter": "",
-                  "headers": [
-
-                  ],
+                  "headers": [],
                   "tabName": "Usage"
                 }
               ]
@@ -2021,9 +1974,7 @@
                   "code": "",
                   "chartType": "table",
                   "filter": "",
-                  "headers": [
-
-                  ],
+                  "headers": [],
                   "tabName": "Boundary"
                 },
                 {
@@ -2032,9 +1983,7 @@
                   "code": "",
                   "chartType": "table",
                   "filter": "",
-                  "headers": [
-
-                  ],
+                  "headers": [],
                   "tabName": "Usage"
                 }
               ]
@@ -2062,9 +2011,7 @@
                   "code": "",
                   "chartType": "metric",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 },
                 {
                   "id": "totalAssessment",
@@ -2072,9 +2019,7 @@
                   "code": "",
                   "chartType": "metric",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 },
                 {
                   "id": "activeUlbs",
@@ -2082,9 +2027,7 @@
                   "code": "",
                   "chartType": "metric",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 }
               ]
             },
@@ -2104,9 +2047,7 @@
                   "code": "",
                   "chartType": "line",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 }
               ]
             }
@@ -2128,14 +2069,12 @@
               "label": "",
               "charts": [
                 {
-                  "id": "topPerformingUlbsCompletionRateWithoutFilter",
+                  "id": "topPerformingUlbsCompletionRate",
                   "name": "DSS_PT_TOP_3_PERFORMING_ULBS",
                   "code": "",
                   "chartType": "bar",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 }
               ]
             },
@@ -2150,14 +2089,12 @@
               "isCollapsible": false,
               "charts": [
                 {
-                  "id": "bottomPerformingUlbsCompletionRateWithoutFilter",
+                  "id": "bottomPerformingUlbsCompletionRate",
                   "name": "DSS_PT_BOTTOM_3_PERFORMING_ULBS",
                   "code": "",
                   "chartType": "bar",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 }
               ]
             },
@@ -2177,9 +2114,7 @@
                   "code": "",
                   "chartType": "donut",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 }
               ]
             }
@@ -2207,9 +2142,7 @@
                   "code": "",
                   "chartType": "table",
                   "filter": "",
-                  "headers": [
-
-                  ],
+                  "headers": [],
                   "tabName": "Boundary"
                 }
               ]
@@ -2246,9 +2179,7 @@
                   "code": "",
                   "chartType": "metric",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 },
                 {
                   "id": "totalCollection",
@@ -2256,9 +2187,7 @@
                   "code": "",
                   "chartType": "metric",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 },
                 {
                   "id": "targetCollection",
@@ -2266,9 +2195,7 @@
                   "code": "",
                   "chartType": "metric",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 },
                 {
                   "id": "targetAchieved",
@@ -2276,9 +2203,7 @@
                   "code": "",
                   "chartType": "metric",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 }
               ]
             },
@@ -2300,9 +2225,7 @@
                   "code": "",
                   "chartType": "line",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 }
               ]
             }
@@ -2325,14 +2248,12 @@
               "isCollapsible": false,
               "charts": [
                 {
-                  "id": "topPerformingUlbsWithoutFilter",
+                  "id": "topPerformingUlbs",
                   "name": "DSS_TL_TOP_3_PERFORMING_ULBS",
                   "code": "",
                   "chartType": "bar",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 }
               ]
             },
@@ -2349,14 +2270,12 @@
               "isCollapsible": false,
               "charts": [
                 {
-                  "id": "bottomPerformingUlbsWithoutFilter",
+                  "id": "bottomPerformingUlbs",
                   "name": "DSS_TL_BOTTOM_3_PERFORMING_ULBS",
                   "code": "",
                   "chartType": "bar",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 }
               ]
             },
@@ -2378,9 +2297,7 @@
                   "code": "",
                   "chartType": "donut",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 }
               ]
             }
@@ -2408,9 +2325,7 @@
                   "code": "",
                   "chartType": "table",
                   "filter": "",
-                  "headers": [
-
-                  ],
+                  "headers": [],
                   "tabName": "Boundary"
                 }
               ]
@@ -2439,9 +2354,7 @@
                   "code": "",
                   "chartType": "table",
                   "filter": "",
-                  "headers": [
-
-                  ],
+                  "headers": [],
                   "tabName": "Boundary"
                 }
               ]
@@ -2469,9 +2382,7 @@
                   "code": "",
                   "chartType": "metric",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 },
                 {
                   "id": "licenseIssued",
@@ -2479,9 +2390,7 @@
                   "code": "",
                   "chartType": "metric",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 },
                 {
                   "id": "activeUlbs",
@@ -2489,9 +2398,7 @@
                   "code": "",
                   "chartType": "metric",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 }
               ]
             },
@@ -2511,9 +2418,7 @@
                   "code": "",
                   "chartType": "line",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 }
               ]
             }
@@ -2536,14 +2441,12 @@
               "isCollapsible": false,
               "charts": [
                 {
-                  "id": "topPerformingUlbsCompletionRateWithoutFilter",
+                  "id": "topPerformingUlbsCompletionRate",
                   "name": "DSS_PT_TOP_3_PERFORMING_ULBS",
                   "code": "",
                   "chartType": "bar",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 }
               ]
             },
@@ -2559,14 +2462,12 @@
               "isCollapsible": false,
               "charts": [
                 {
-                  "id": "bottomPerformingUlbsCompletionRateWithoutFilter",
+                  "id": "bottomPerformingUlbsCompletionRate",
                   "name": "DSS_PT_BOTTOM_3_PERFORMING_ULBS",
                   "code": "",
                   "chartType": "bar",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 }
               ]
             },
@@ -2586,9 +2487,7 @@
                   "code": "",
                   "chartType": "donut",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 }
               ]
             }
@@ -2616,10 +2515,9 @@
                   "code": "",
                   "chartType": "table",
                   "filter": "",
-                  "headers": [
-
-                  ],
+                  "headers": [],
                   "tabName": "Boundary"
+
                 }
               ]
             }
@@ -2649,9 +2547,7 @@
                   "code": "",
                   "chartType": "",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 },
                 {
                   "id": "totalCollection",
@@ -2659,9 +2555,7 @@
                   "code": "",
                   "chartType": "metric",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 },
                 {
                   "id": "targetCollection",
@@ -2669,9 +2563,7 @@
                   "code": "",
                   "chartType": "metric",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 },
                 {
                   "id": "targetAchieved",
@@ -2679,9 +2571,7 @@
                   "code": "",
                   "chartType": "metric",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 }
               ]
             },
@@ -2703,9 +2593,7 @@
                   "code": "",
                   "chartType": "line",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 }
               ]
             }
@@ -2728,14 +2616,12 @@
               "label": "",
               "charts": [
                 {
-                  "id": "topPerformingUlbsWithoutFilter",
+                  "id": "topPerformingUlbs",
                   "name": "DSS_TOP_PERFORMING_ULBS",
                   "code": "",
                   "chartType": "bar",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 }
               ]
             },
@@ -2751,14 +2637,12 @@
               "isCollapsible": false,
               "charts": [
                 {
-                  "id": "bottomPerformingUlbsWithoutFilter",
+                  "id": "bottomPerformingUlbs",
                   "name": "DSS_BOTTOM_PERFORMING_ULBS",
                   "code": "",
                   "chartType": "bar",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 }
               ]
             },
@@ -2779,9 +2663,7 @@
                   "code": "",
                   "chartType": "donut",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 }
               ]
             }
@@ -2808,9 +2690,7 @@
                   "code": "",
                   "chartType": "metric",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 },
                 {
                   "id": "closedApplication",
@@ -2818,9 +2698,7 @@
                   "code": "",
                   "chartType": "metric",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 },
                 {
                   "id": "slaAchieved",
@@ -2828,9 +2706,7 @@
                   "code": "",
                   "chartType": "metric",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 },
                 {
                   "id": "citizenRegistered",
@@ -2838,9 +2714,7 @@
                   "code": "",
                   "chartType": "metric",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 }
               ]
             },
@@ -2860,9 +2734,7 @@
                   "code": "",
                   "chartType": "line",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 }
               ]
             }
@@ -2884,14 +2756,12 @@
               "label": "",
               "charts": [
                 {
-                  "id": "topPerformingUlbsCompletionRateWithoutFilter",
+                  "id": "topPerformingUlbsCompletionRate",
                   "name": "DSS_TOP_PERFORMING_ULBS",
                   "code": "",
                   "chartType": "bar",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 }
               ]
             },
@@ -2906,14 +2776,12 @@
               "isCollapsible": false,
               "charts": [
                 {
-                  "id": "bottomPerformingUlbsCompletionRateWithoutFilter",
+                  "id": "bottomPerformingUlbsCompletionRate",
                   "name": "DSS_BOTTOM_PERFORMING_ULBS",
                   "code": "",
                   "chartType": "bar",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 }
               ]
             },
@@ -2933,9 +2801,7 @@
                   "code": "",
                   "chartType": "donut",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 }
               ]
             }
@@ -2972,9 +2838,7 @@
                   "code": "",
                   "chartType": "metric",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 },
                 {
                   "id": "targetAchieved",
@@ -2982,9 +2846,7 @@
                   "code": "",
                   "chartType": "metric",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 },
                 {
                   "id": "totalApplication",
@@ -2992,9 +2854,7 @@
                   "code": "",
                   "chartType": "metric",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 },
                 {
                   "id": "slaAchieved",
@@ -3002,9 +2862,7 @@
                   "code": "",
                   "chartType": "metric",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 }
               ]
             }
@@ -3034,9 +2892,7 @@
                   "code": "",
                   "chartType": "metric",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 },
                 {
                   "id": "propertiesAssessed",
@@ -3044,9 +2900,7 @@
                   "code": "",
                   "chartType": "metric",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 }
               ]
             },
@@ -3067,9 +2921,7 @@
                   "code": "",
                   "chartType": "metric",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 },
                 {
                   "id": "totalApplication",
@@ -3077,9 +2929,7 @@
                   "code": "",
                   "chartType": "metric",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 }
               ]
             },
@@ -3100,9 +2950,7 @@
                   "code": "",
                   "chartType": "metric",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 },
                 {
                   "id": "slaAchieved",
@@ -3110,9 +2958,7 @@
                   "code": "",
                   "chartType": "metric",
                   "filter": "",
-                  "headers": [
-
-                  ]
+                  "headers": []
                 }
               ]
             }
