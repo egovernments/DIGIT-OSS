@@ -58,7 +58,6 @@ serviceMaps:
 
           - jsonPath: $.BPA.auditDetails.lastModifiedTime
 
-
        - query: INSERT INTO eg_bpa_document( id, documenttype, filestoreid, buildingplanid, documentuid, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
          basePath: BPA.documents.*
          jsonMaps:
@@ -93,7 +92,7 @@ serviceMaps:
           - jsonPath: $.BPA.address.plotNo
 
           - jsonPath: $.BPA.address.district
-          
+
           - jsonPath: $.BPA.address.street
 
           - jsonPath: $.BPA.address.region
@@ -260,7 +259,7 @@ serviceMaps:
    isTransaction: true
    queryMaps:
 
-       - query: UPDATE eg_bpa_buildingplan SET applicationno=?, remarks=?,permitOrderNo=?, edcrnumber=?,  action=?, servicetype=?, riskType=?, status=?, ownershipcategory=?, additionaldetails=?, lastmodifiedby=?, lastmodifiedtime=? WHERE id=?;
+       - query: UPDATE eg_bpa_buildingplan SET applicationno=?, remarks=?,permitOrderNo=?, edcrnumber=?,  action=?, servicetype=?, riskType=?, status=?, ownershipcategory=?, additionaldetails=?, lastmodifiedby=?, lastmodifiedtime=?, validityDate=? WHERE id=?;
          basePath: BPA
          jsonMaps:
           - jsonPath: $.BPA.applicationNo
@@ -288,6 +287,8 @@ serviceMaps:
           - jsonPath: $.BPA.auditDetails.lastModifiedBy
 
           - jsonPath: $.BPA.auditDetails.lastModifiedTime
+
+          - jsonPath: $.BPA.validityDate
 
           - jsonPath: $.BPA.id
 
@@ -483,3 +484,4 @@ serviceMaps:
            - jsonPath: $.BPA.permitOrderNo
            
            - jsonPath: $.BPA.id
+
