@@ -9,8 +9,6 @@ import lombok.NoArgsConstructor;
 
 /**
  * This class describe the set of fields contained in RequestInfoWrapper
- *
- * 
  */
 @Data
 @AllArgsConstructor

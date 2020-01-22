@@ -143,32 +143,31 @@ public class ExternalSMSService implements SMSService {
 
     private void submitToExternalSmsService(Sms sms) {
         try {
-            
+
             String url = smsProperties.getSmsProviderURL();
             ResponseEntity<String> response = new ResponseEntity<String>(HttpStatus.OK);
-            if (requestType.equals("POST"))
-            {
+            if (requestType.equals("POST")) {
                 HttpEntity<MultiValueMap<String, String>> request = getRequest(sms);
                 response = restTemplate.postForEntity(url, request, String.class);
                 if (isResponseCodeInKnownErrorCodeList(response)) {
                     throw new RuntimeException(SMS_RESPONSE_NOT_SUCCESSFUL);
                 }
             } else {
-               final MultiValueMap<String, String> requestBody = smsProperties.getSmsRequestBody(sms);
+                final MultiValueMap<String, String> requestBody = smsProperties.getSmsRequestBody(sms);
 
 
-               String final_url = UriComponentsBuilder.fromHttpUrl(url).queryParams(requestBody).toUriString();
+                String final_url = UriComponentsBuilder.fromHttpUrl(url).queryParams(requestBody).toUriString();
 
-               if (dontEncodeURL) {
-                   final_url = final_url.replace("%20", " ").replace("%2B", "+");
-               }
+                if (dontEncodeURL) {
+                    final_url = final_url.replace("%20", " ").replace("%2B", "+");
+                }
 
-               String responseString = restTemplate.getForObject(final_url, String.class);
-               
-               if (verifyResponse && !responseString.contains(verifyResponseContains)) {
-                   LOGGER.error("Response from API - " + responseString);
-                   throw new RuntimeException(SMS_RESPONSE_NOT_SUCCESSFUL);
-               }
+                String responseString = restTemplate.getForObject(final_url, String.class);
+
+                if (verifyResponse && !responseString.contains(verifyResponseContains)) {
+                    LOGGER.error("Response from API - " + responseString);
+                    throw new RuntimeException(SMS_RESPONSE_NOT_SUCCESSFUL);
+                }
             }
 
         } catch (RestClientException e) {

@@ -22,55 +22,55 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class TokenService {
 
-	private TokenRepository tokenRepository;
-	private static final int TTL_IN_SECONDS = 300;
+    private TokenRepository tokenRepository;
+    private static final int TTL_IN_SECONDS = 300;
 
-	@Value("${egov.otp.length}")
-	private int otpLength;
+    @Value("${egov.otp.length}")
+    private int otpLength;
 
-	@Autowired
-	public TokenService(TokenRepository tokenRepository) {
-		this.tokenRepository = tokenRepository;
-	}
+    @Autowired
+    public TokenService(TokenRepository tokenRepository) {
+        this.tokenRepository = tokenRepository;
+    }
 
-	public Token create(TokenRequest tokenRequest) {
-		tokenRequest.validate();
-		Token token = Token.builder().uuid(UUID.randomUUID().toString()).tenantId(tokenRequest.getTenantId())
-				.identity(tokenRequest.getIdentity()).number(randomNumeric(otpLength))
-				.timeToLiveInSeconds(tokenRequest.getTimeToLive()).build();
-		return tokenRepository.save(token);
-	}
+    public Token create(TokenRequest tokenRequest) {
+        tokenRequest.validate();
+        Token token = Token.builder().uuid(UUID.randomUUID().toString()).tenantId(tokenRequest.getTenantId())
+                .identity(tokenRequest.getIdentity()).number(randomNumeric(otpLength))
+                .timeToLiveInSeconds(tokenRequest.getTimeToLive()).build();
+        return tokenRepository.save(token);
+    }
 
-	public Token validate(ValidateRequest validateRequest) {
-		validateRequest.validate();
-		Tokens tokens = tokenRepository.findByNumberAndIdentityAndTenantId(validateRequest);
+    public Token validate(ValidateRequest validateRequest) {
+        validateRequest.validate();
+        Tokens tokens = tokenRepository.findByNumberAndIdentityAndTenantId(validateRequest);
 
-		if (tokens != null && tokens.getTokens().isEmpty())
-			tokens = tokenRepository.findByNumberAndIdentityAndTenantIdLike(validateRequest);
+        if (tokens != null && tokens.getTokens().isEmpty())
+            tokens = tokenRepository.findByNumberAndIdentityAndTenantIdLike(validateRequest);
 
-		Long currentTime = System.currentTimeMillis() / 1000;
-		Long createdTime = 0l;
+        Long currentTime = System.currentTimeMillis() / 1000;
+        Long createdTime = 0l;
 
-		if (tokens != null && tokens.getTokens() != null && !tokens.getTokens().isEmpty()) {
-			Token token = tokens.getTokens().get(0);
-			if (token.isValidated()) {
-				throw new TokenAlreadyUsedException();
-			}
-			createdTime = token.getCreatedTime() / 1000;
-		} else if (tokens.getTokens().isEmpty()) {
-			throw new TokenValidationFailureException();
-		}
+        if (tokens != null && tokens.getTokens() != null && !tokens.getTokens().isEmpty()) {
+            Token token = tokens.getTokens().get(0);
+            if (token.isValidated()) {
+                throw new TokenAlreadyUsedException();
+            }
+            createdTime = token.getCreatedTime() / 1000;
+        } else if (tokens.getTokens().isEmpty()) {
+            throw new TokenValidationFailureException();
+        }
 
-		if (!((currentTime - createdTime) <= TTL_IN_SECONDS)) {
-			log.info("Token validation failure for otp #", validateRequest.getOtp());
-			throw new TokenValidationFailureException();
-		}
-		final Token matchingToken = tokens.getTokens().get(0);
-		tokenRepository.markAsValidated(matchingToken);
-		return matchingToken;
-	}
+        if (!((currentTime - createdTime) <= TTL_IN_SECONDS)) {
+            log.info("Token validation failure for otp #", validateRequest.getOtp());
+            throw new TokenValidationFailureException();
+        }
+        final Token matchingToken = tokens.getTokens().get(0);
+        tokenRepository.markAsValidated(matchingToken);
+        return matchingToken;
+    }
 
-	public Token search(TokenSearchCriteria searchCriteria) {
-		return tokenRepository.findBy(searchCriteria);
-	}
+    public Token search(TokenSearchCriteria searchCriteria) {
+        return tokenRepository.findBy(searchCriteria);
+    }
 }

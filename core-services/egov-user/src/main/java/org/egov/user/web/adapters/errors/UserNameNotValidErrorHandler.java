@@ -14,29 +14,29 @@ public class UserNameNotValidErrorHandler implements ErrorAdapter<Void> {
     private static final String INVALID_USER_NAME_MESSAGE = "User Name Should be Mobile Number";
     private static final String INVALID_USER_NAME_FIELD = "User.userName";
 
-	@Override
-	public ErrorResponse adapt(Void model) {
-		final Error error = getError();
-		return new ErrorResponse(null, error);
-	}
+    @Override
+    public ErrorResponse adapt(Void model) {
+        final Error error = getError();
+        return new ErrorResponse(null, error);
+    }
 
-	private Error getError() {
-		return Error.builder()
-				.code(HttpStatus.BAD_REQUEST.value())
-				.message(INVALID_USER_NAME_MESSAGE)
-				.fields(getErrorField())
-				.build();
-	}
+    private Error getError() {
+        return Error.builder()
+                .code(HttpStatus.BAD_REQUEST.value())
+                .message(INVALID_USER_NAME_MESSAGE)
+                .fields(getErrorField())
+                .build();
+    }
 
-	private List<ErrorField> getErrorField() {
-		return Collections.singletonList(
-				ErrorField.builder()
-						.message(INVALID_USER_NAME_MESSAGE)
-						.code(INVALID_USER_NAME_CODE)
-						.field(INVALID_USER_NAME_FIELD)
-						.build()
-		);
-	}
+    private List<ErrorField> getErrorField() {
+        return Collections.singletonList(
+                ErrorField.builder()
+                        .message(INVALID_USER_NAME_MESSAGE)
+                        .code(INVALID_USER_NAME_CODE)
+                        .field(INVALID_USER_NAME_FIELD)
+                        .build()
+        );
+    }
 
 
 }

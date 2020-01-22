@@ -24,7 +24,7 @@ public class UserResultSetExtractor implements ResultSetExtractor<List<User>> {
     private ObjectMapper objectMapper;
 
     @Autowired
-    UserResultSetExtractor(ObjectMapper objectMapper){
+    UserResultSetExtractor(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
     }
 
@@ -33,12 +33,12 @@ public class UserResultSetExtractor implements ResultSetExtractor<List<User>> {
 
         Map<Long, User> usersMap = new LinkedHashMap<>();
 
-        while(rs.next()){
+        while (rs.next()) {
 
             Long userId = rs.getLong("id");
             User user;
 
-            if(!usersMap.containsKey(userId)){
+            if (!usersMap.containsKey(userId)) {
 
                 user = User.builder().id(rs.getLong("id")).tenantId(rs.getString("tenantid")).title(rs.getString("title"))
                         .salutation(rs.getString("salutation"))
@@ -67,11 +67,11 @@ public class UserResultSetExtractor implements ResultSetExtractor<List<User>> {
                     }
                 }
 
-                if(rs.getInt("gender") == 1) {
+                if (rs.getInt("gender") == 1) {
                     user.setGender(Gender.FEMALE);
-                }else if(rs.getInt("gender") == 2){
+                } else if (rs.getInt("gender") == 2) {
                     user.setGender(Gender.MALE);
-                }else if(rs.getInt("gender") == 3){
+                } else if (rs.getInt("gender") == 3) {
                     user.setGender(Gender.OTHERS);
                 }
                 for (GuardianRelation guardianRelation : GuardianRelation.values()) {
@@ -81,28 +81,28 @@ public class UserResultSetExtractor implements ResultSetExtractor<List<User>> {
                 }
 
                 usersMap.put(userId, user);
-                
-            } else{
+
+            } else {
                 user = usersMap.get(userId);
             }
 
             Role role = populateRole(rs);
             Address address = populateAddress(rs, user);
 
-            if(!isNull(role))
+            if (!isNull(role))
                 user.addRolesItem(role);
 
-            if(!isNull(address))
+            if (!isNull(address))
                 user.addAddressItem(address);
 
         }
 
-        return new ArrayList<> (usersMap.values());
+        return new ArrayList<>(usersMap.values());
     }
 
     private Role populateRole(ResultSet rs) throws SQLException {
-        String code= rs.getString("role_code");
-        if(code == null){
+        String code = rs.getString("role_code");
+        if (code == null) {
             return null;
         }
         return Role.builder()
@@ -113,7 +113,7 @@ public class UserResultSetExtractor implements ResultSetExtractor<List<User>> {
 
     private Address populateAddress(ResultSet rs, User user) throws SQLException {
         long id = rs.getLong("addr_id");
-        if(id == 0L){
+        if (id == 0L) {
             return null;
         }
 
@@ -128,9 +128,9 @@ public class UserResultSetExtractor implements ResultSetExtractor<List<User>> {
                 .tenantId(rs.getString("addr_tenantid"))
                 .build();
 
-        if( address.getType().equals(PERMANENT) && isNull(user.getPermanentAddress()))
+        if (address.getType().equals(PERMANENT) && isNull(user.getPermanentAddress()))
             user.setPermanentAddress(address);
-        if(address.getType().equals(CORRESPONDENCE) && isNull(user.getCorrespondenceAddress()))
+        if (address.getType().equals(CORRESPONDENCE) && isNull(user.getCorrespondenceAddress()))
             user.setCorrespondenceAddress(address);
 
         return address;

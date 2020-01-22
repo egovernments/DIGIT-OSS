@@ -10,10 +10,9 @@ public class UserNotFoundException extends RuntimeException {
     private UserSearchCriteria userSearchCriteria;
 
     public UserNotFoundException(final UserSearchCriteria userSearchCriteria) {
-        super("User not found for given criteria: "+userSearchCriteria.toString());
+        super("User not found for given criteria: " + userSearchCriteria.toString());
         this.userSearchCriteria = userSearchCriteria;
     }
-
 
 
 }

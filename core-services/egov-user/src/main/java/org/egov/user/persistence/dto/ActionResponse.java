@@ -10,11 +10,11 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class ActionResponse {
 
-	List<Action> actions;
+    List<Action> actions;
 
-	public List<org.egov.user.domain.model.Action> toDomainActions(){
-		return actions.stream()
-				.map(Action::toDomain)
-				.collect(Collectors.toList());
-	}
+    public List<org.egov.user.domain.model.Action> toDomainActions() {
+        return actions.stream()
+                .map(Action::toDomain)
+                .collect(Collectors.toList());
+    }
 }

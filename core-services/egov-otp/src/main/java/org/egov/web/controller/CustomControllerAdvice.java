@@ -37,16 +37,16 @@ public class CustomControllerAdvice {
         return new TokenSearchErrorAdapter().adapt(ex.getTokenSearchCriteria());
     }
 
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	@ExceptionHandler(TokenValidationFailureException.class)
-	public ErrorResponse handleTokenValidationFailureException() {
-		return new TokenValidationFailureAdapter().adapt(null);
-	}
-	
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	@ExceptionHandler(TokenAlreadyUsedException.class)
-	public ErrorResponse handleTokenTokenAlreadyUsedException() {
-		return new TokenAlreadyUsedFailureAdapter().adapt(null);
-	}
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(TokenValidationFailureException.class)
+    public ErrorResponse handleTokenValidationFailureException() {
+        return new TokenValidationFailureAdapter().adapt(null);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(TokenAlreadyUsedException.class)
+    public ErrorResponse handleTokenTokenAlreadyUsedException() {
+        return new TokenAlreadyUsedFailureAdapter().adapt(null);
+    }
 
 }

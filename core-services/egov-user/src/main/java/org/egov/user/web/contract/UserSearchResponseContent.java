@@ -94,31 +94,31 @@ public class UserSearchResponseContent {
         this.lastModifiedDate = user.getLastModifiedDate();
         this.tenantId = user.getTenantId();
         this.roles = convertDomainRolesToContract(user.getRoles());
-		this.fatherOrHusbandName = user.getGuardian();
-		this.uuid = user.getUuid();
-		this.addresses = user.getAddresses();
-		mapPermanentAddress(user);
-		mapCorrespondenceAddress(user);
+        this.fatherOrHusbandName = user.getGuardian();
+        this.uuid = user.getUuid();
+        this.addresses = user.getAddresses();
+        mapPermanentAddress(user);
+        mapCorrespondenceAddress(user);
     }
 
-	private void mapCorrespondenceAddress(User user) {
-		if (user.getCorrespondenceAddress() != null) {
-			this.correspondenceAddress = user.getCorrespondenceAddress().getAddress();
-			this.correspondenceCity = user.getCorrespondenceAddress().getCity();
-			this.correspondencePinCode = user.getCorrespondenceAddress().getPinCode();
-		}
-	}
+    private void mapCorrespondenceAddress(User user) {
+        if (user.getCorrespondenceAddress() != null) {
+            this.correspondenceAddress = user.getCorrespondenceAddress().getAddress();
+            this.correspondenceCity = user.getCorrespondenceAddress().getCity();
+            this.correspondencePinCode = user.getCorrespondenceAddress().getPinCode();
+        }
+    }
 
-	private void mapPermanentAddress(User user) {
-		if (user.getPermanentAddress() != null) {
-			this.permanentAddress = user.getPermanentAddress().getAddress();
-			this.permanentCity = user.getPermanentAddress().getCity();
-			this.permanentPinCode = user.getPermanentAddress().getPinCode();
-		}
-	}
+    private void mapPermanentAddress(User user) {
+        if (user.getPermanentAddress() != null) {
+            this.permanentAddress = user.getPermanentAddress().getAddress();
+            this.permanentCity = user.getPermanentAddress().getCity();
+            this.permanentPinCode = user.getPermanentAddress().getPinCode();
+        }
+    }
 
 
-	private Set<RoleRequest> convertDomainRolesToContract(Set<Role> roleEntities) {
+    private Set<RoleRequest> convertDomainRolesToContract(Set<Role> roleEntities) {
         if (roleEntities == null) return new HashSet<>();
         return roleEntities.stream().map(RoleRequest::new).collect(Collectors.toSet());
     }

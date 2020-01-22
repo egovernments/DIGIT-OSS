@@ -10,11 +10,11 @@ import java.util.Collections;
 
 public class TokenValidationFailureAdapter implements ErrorAdapter<Token> {
 
-	private static final String OTP_VALIDATION_FAILED_MESSAGE = "OTP validation unsuccessful";
+    private static final String OTP_VALIDATION_FAILED_MESSAGE = "OTP validation unsuccessful";
     private static final String OTP_VALIDATION_FAILED_CODE = "OTP.VALIDATION_UNSUCCESSFUL";
-	public static final String OTP_FIELD = "otp.otp";
+    public static final String OTP_FIELD = "otp.otp";
 
-	@Override
+    @Override
     public ErrorResponse adapt(Token model) {
         final Error error = Error.builder()
                 .code(HttpStatus.BAD_REQUEST.value())
@@ -24,11 +24,11 @@ public class TokenValidationFailureAdapter implements ErrorAdapter<Token> {
         return new ErrorResponse(null, error);
     }
 
-	private ErrorField getError() {
-		return ErrorField.builder()
-				.code(OTP_VALIDATION_FAILED_CODE)
-				.message(OTP_VALIDATION_FAILED_MESSAGE)
-				.field(OTP_FIELD)
-				.build();
-	}
+    private ErrorField getError() {
+        return ErrorField.builder()
+                .code(OTP_VALIDATION_FAILED_CODE)
+                .message(OTP_VALIDATION_FAILED_MESSAGE)
+                .field(OTP_FIELD)
+                .build();
+    }
 }

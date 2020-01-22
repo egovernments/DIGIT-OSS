@@ -10,30 +10,30 @@ import java.util.List;
 
 public class AtleastOneRoleCodeErrorHandler {
 
-	private static final String ATLEAST_ONE_ROLE_CODE = "CORE.USER.ATLEAST ONE ROLE IS REQUIRED.";
-	private static final String ATLEAST_ONE_ROLE_MESSAGE = "Roles is Required.";
-	private static final String ROLE_FIELD = "roles";
+    private static final String ATLEAST_ONE_ROLE_CODE = "CORE.USER.ATLEAST ONE ROLE IS REQUIRED.";
+    private static final String ATLEAST_ONE_ROLE_MESSAGE = "Roles is Required.";
+    private static final String ROLE_FIELD = "roles";
 
-	public ErrorResponse adapt() {
-		final Error error = getError();
-		return new ErrorResponse(null, error);
-	}
+    public ErrorResponse adapt() {
+        final Error error = getError();
+        return new ErrorResponse(null, error);
+    }
 
-	private Error getError() {
-		return Error.builder()
-				.code(HttpStatus.BAD_REQUEST.value())
-				.message(ATLEAST_ONE_ROLE_MESSAGE)
-				.fields(getUserNameFieldError())
-				.build();
-	}
+    private Error getError() {
+        return Error.builder()
+                .code(HttpStatus.BAD_REQUEST.value())
+                .message(ATLEAST_ONE_ROLE_MESSAGE)
+                .fields(getUserNameFieldError())
+                .build();
+    }
 
-	private List<ErrorField> getUserNameFieldError() {
-		return Collections.singletonList(
-				ErrorField.builder()
-						.field(ROLE_FIELD)
-						.code(ATLEAST_ONE_ROLE_CODE)
-						.message(ATLEAST_ONE_ROLE_MESSAGE)
-						.build()
-		);
-	}
+    private List<ErrorField> getUserNameFieldError() {
+        return Collections.singletonList(
+                ErrorField.builder()
+                        .field(ROLE_FIELD)
+                        .code(ATLEAST_ONE_ROLE_CODE)
+                        .message(ATLEAST_ONE_ROLE_MESSAGE)
+                        .build()
+        );
+    }
 }

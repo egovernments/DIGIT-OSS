@@ -22,37 +22,37 @@ import static org.egov.user.config.UserServiceConstants.USER_CLIENT_ID;
 @EnableAuthorizationServer
 public class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
 
-	@Value("${spring.redis.host}")
-	private String host;
+    @Value("${spring.redis.host}")
+    private String host;
 
-	@Value("${access.token.validity.in.minutes}")
-	private int accessTokenValidityInMinutes;
+    @Value("${access.token.validity.in.minutes}")
+    private int accessTokenValidityInMinutes;
 
-	@Value("${refresh.token.validity.in.minutes}")
-	private int refreshTokenValidityInMinutes;
+    @Value("${refresh.token.validity.in.minutes}")
+    private int refreshTokenValidityInMinutes;
 
-	@Autowired
-	private AuthenticationManager customAuthenticationManager;
+    @Autowired
+    private AuthenticationManager customAuthenticationManager;
 
-	@Autowired
-	private CustomTokenEnhancer customTokenEnhancer;
+    @Autowired
+    private CustomTokenEnhancer customTokenEnhancer;
 
     @Autowired
     private ClientDetailsService clientDetailsService;
 
-	@Autowired
-	private TokenStore tokenStore;
+    @Autowired
+    private TokenStore tokenStore;
 
-	@Override
-	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-		final int accessTokenValidityInSeconds = accessTokenValidityInMinutes * 60;
-		final int refreshTokenValidityInSeconds = refreshTokenValidityInMinutes * 60;
-		clients.inMemory().withClient(USER_CLIENT_ID).secret("egov-user-secret")
-				.authorizedGrantTypes("authorization_code", "refresh_token", "password")
-				.authorities("ROLE_APP", "ROLE_CITIZEN", "ROLE_ADMIN", "ROLE_EMPLOYEE").scopes("read", "write")
-				.refreshTokenValiditySeconds(refreshTokenValidityInSeconds)
-				.accessTokenValiditySeconds(accessTokenValidityInSeconds);
-	}
+    @Override
+    public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+        final int accessTokenValidityInSeconds = accessTokenValidityInMinutes * 60;
+        final int refreshTokenValidityInSeconds = refreshTokenValidityInMinutes * 60;
+        clients.inMemory().withClient(USER_CLIENT_ID).secret("egov-user-secret")
+                .authorizedGrantTypes("authorization_code", "refresh_token", "password")
+                .authorities("ROLE_APP", "ROLE_CITIZEN", "ROLE_ADMIN", "ROLE_EMPLOYEE").scopes("read", "write")
+                .refreshTokenValiditySeconds(refreshTokenValidityInSeconds)
+                .accessTokenValiditySeconds(accessTokenValidityInSeconds);
+    }
 
 
     @Override

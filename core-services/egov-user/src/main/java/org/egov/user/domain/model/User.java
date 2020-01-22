@@ -22,187 +22,187 @@ import static org.springframework.util.ObjectUtils.isEmpty;
 @Setter
 @Builder(toBuilder = true)
 public class User {
-	
-	private Long id;
-	private String uuid;
-	private String tenantId;
-	private String username;
-	private String title;
-	private String password;
-	private String salutation;
-	private String guardian;
-	private GuardianRelation guardianRelation;
-	private String name;
-	private Gender gender;
-	private String mobileNumber;
-	private String emailId;
-	private String altContactNumber;
-	private String pan;
-	private String aadhaarNumber;
-	private Address permanentAddress;
-	private Address correspondenceAddress;
-	private Set<Address> addresses;
-	private Boolean active;
-	private Set<Role> roles;
-	private Date dob;
-	private Date passwordExpiryDate;
-	private String locale = "en_IN";
-	private UserType type;
-	private BloodGroup bloodGroup;
-	private String identificationMark;
-	private String signature;
-	private String photo;
-	private Boolean accountLocked;
-	private Long accountLockedDate;
-	private Date lastModifiedDate;
-	private Date createdDate;
-	private String otpReference;
-	private Long createdBy;
-	private Long lastModifiedBy;
-	private Long loggedInUserId;
-	private boolean otpValidationMandatory;
-	private boolean mobileValidationMandatory = true;
 
-	public User addAddressItem(Address addressItem) {
-		if (this.addresses == null) {
-			this.addresses = new HashSet<>();
-		}
-		this.addresses.add(addressItem);
-		return this;
-	}
+    private Long id;
+    private String uuid;
+    private String tenantId;
+    private String username;
+    private String title;
+    private String password;
+    private String salutation;
+    private String guardian;
+    private GuardianRelation guardianRelation;
+    private String name;
+    private Gender gender;
+    private String mobileNumber;
+    private String emailId;
+    private String altContactNumber;
+    private String pan;
+    private String aadhaarNumber;
+    private Address permanentAddress;
+    private Address correspondenceAddress;
+    private Set<Address> addresses;
+    private Boolean active;
+    private Set<Role> roles;
+    private Date dob;
+    private Date passwordExpiryDate;
+    private String locale = "en_IN";
+    private UserType type;
+    private BloodGroup bloodGroup;
+    private String identificationMark;
+    private String signature;
+    private String photo;
+    private Boolean accountLocked;
+    private Long accountLockedDate;
+    private Date lastModifiedDate;
+    private Date createdDate;
+    private String otpReference;
+    private Long createdBy;
+    private Long lastModifiedBy;
+    private Long loggedInUserId;
+    private boolean otpValidationMandatory;
+    private boolean mobileValidationMandatory = true;
 
-	public User addRolesItem(Role roleItem) {
-		if (this.roles == null) {
-			this.roles = new HashSet<>();
-		}
-		this.roles.add(roleItem);
-		return this;
-	}
+    public User addAddressItem(Address addressItem) {
+        if (this.addresses == null) {
+            this.addresses = new HashSet<>();
+        }
+        this.addresses.add(addressItem);
+        return this;
+    }
 
-	public void validateNewUser() {
-		if (isUsernameAbsent()
-				|| isNameAbsent()
-				|| isMobileNumberAbsent()
-				|| isActiveIndicatorAbsent()
-				|| isTypeAbsent()
-				|| isPermanentAddressInvalid()
-				|| isCorrespondenceAddressInvalid()
-				|| isRolesAbsent()
-				|| isOtpReferenceAbsent()
-				|| isTenantIdAbsent()){
-			throw new InvalidUserCreateException(this);
-		}
-	}
+    public User addRolesItem(Role roleItem) {
+        if (this.roles == null) {
+            this.roles = new HashSet<>();
+        }
+        this.roles.add(roleItem);
+        return this;
+    }
 
-	public void validateUserModification() {
-		if (isPermanentAddressInvalid()
-				|| isCorrespondenceAddressInvalid()
-				|| isTenantIdAbsent()
-				) {
-			throw new InvalidUserUpdateException(this);
-		}
-	}
+    public void validateNewUser() {
+        if (isUsernameAbsent()
+                || isNameAbsent()
+                || isMobileNumberAbsent()
+                || isActiveIndicatorAbsent()
+                || isTypeAbsent()
+                || isPermanentAddressInvalid()
+                || isCorrespondenceAddressInvalid()
+                || isRolesAbsent()
+                || isOtpReferenceAbsent()
+                || isTenantIdAbsent()) {
+            throw new InvalidUserCreateException(this);
+        }
+    }
 
-	public boolean isCorrespondenceAddressInvalid() {
-		return correspondenceAddress != null && correspondenceAddress.isInvalid();
-	}
+    public void validateUserModification() {
+        if (isPermanentAddressInvalid()
+                || isCorrespondenceAddressInvalid()
+                || isTenantIdAbsent()
+        ) {
+            throw new InvalidUserUpdateException(this);
+        }
+    }
 
-	public boolean isPermanentAddressInvalid() {
-		return permanentAddress != null && permanentAddress.isInvalid();
-	}
+    public boolean isCorrespondenceAddressInvalid() {
+        return correspondenceAddress != null && correspondenceAddress.isInvalid();
+    }
 
-	public boolean isOtpReferenceAbsent() {
-		return otpValidationMandatory && isEmpty(otpReference);
-	}
+    public boolean isPermanentAddressInvalid() {
+        return permanentAddress != null && permanentAddress.isInvalid();
+    }
 
-	public boolean isTypeAbsent() {
-		return isEmpty(type);
-	}
+    public boolean isOtpReferenceAbsent() {
+        return otpValidationMandatory && isEmpty(otpReference);
+    }
 
-	public boolean isActiveIndicatorAbsent() {
-		return isEmpty(active);
-	}
+    public boolean isTypeAbsent() {
+        return isEmpty(type);
+    }
 
-	public boolean isMobileNumberAbsent() {
-		return mobileValidationMandatory && isEmpty(mobileNumber);
-	}
+    public boolean isActiveIndicatorAbsent() {
+        return isEmpty(active);
+    }
 
-	public boolean isNameAbsent() {
-		return isEmpty(name);
-	}
+    public boolean isMobileNumberAbsent() {
+        return mobileValidationMandatory && isEmpty(mobileNumber);
+    }
 
-	public boolean isUsernameAbsent() {
-		return isEmpty(username);
-	}
+    public boolean isNameAbsent() {
+        return isEmpty(name);
+    }
 
-	public boolean isTenantIdAbsent() {
-		return isEmpty(tenantId);
-	}	
-	
-	public boolean isPasswordAbsent(){
-		return isEmpty(password);
-	}
+    public boolean isUsernameAbsent() {
+        return isEmpty(username);
+    }
 
-	public boolean isRolesAbsent() {
-		return CollectionUtils.isEmpty(roles) || roles.stream().anyMatch(r -> isEmpty(r.getCode()));
-	}
+    public boolean isTenantIdAbsent() {
+        return isEmpty(tenantId);
+    }
 
-	public boolean isIdAbsent() {
-		return id == null;
-	}
+    public boolean isPasswordAbsent() {
+        return isEmpty(password);
+    }
 
-	public void nullifySensitiveFields() {
-		username = null;
-		type = null;
-		mobileNumber = null;
-		password = null;
-		passwordExpiryDate = null;
-		roles = null;
-		accountLocked = null;
-		accountLockedDate = null;
-	}
+    public boolean isRolesAbsent() {
+        return CollectionUtils.isEmpty(roles) || roles.stream().anyMatch(r -> isEmpty(r.getCode()));
+    }
 
-	public boolean isLoggedInUserDifferentFromUpdatedUser() {
-		return !id.equals(loggedInUserId);
-	}
+    public boolean isIdAbsent() {
+        return id == null;
+    }
 
-	public void setRoleToCitizen() {
-		type = UserType.CITIZEN;
-		roles = Collections.singleton(Role.getCitizenRole());
-	}
+    public void nullifySensitiveFields() {
+        username = null;
+        type = null;
+        mobileNumber = null;
+        password = null;
+        passwordExpiryDate = null;
+        roles = null;
+        accountLocked = null;
+        accountLockedDate = null;
+    }
 
-	public void updatePassword(String newPassword) {
-		password = newPassword;
-	}
+    public boolean isLoggedInUserDifferentFromUpdatedUser() {
+        return !id.equals(loggedInUserId);
+    }
 
-	public OtpValidationRequest getOtpValidationRequest() {
-		return OtpValidationRequest.builder()
-				.mobileNumber(mobileNumber)
-				.tenantId(tenantId)
-				.otpReference(otpReference)
-				.build();
-	}
+    public void setRoleToCitizen() {
+        type = UserType.CITIZEN;
+        roles = Collections.singleton(Role.getCitizenRole());
+    }
 
-	public List<Address> getPermanentAndCorrespondenceAddresses() {
-		final ArrayList<Address> addresses = new ArrayList<>();
-		if (correspondenceAddress != null && correspondenceAddress.isNotEmpty()) {
-			addresses.add(correspondenceAddress);
-		}
-		if (permanentAddress != null && permanentAddress.isNotEmpty()) {
-			addresses.add(permanentAddress);
-		}
-		return addresses;
-	}
+    public void updatePassword(String newPassword) {
+        password = newPassword;
+    }
 
-	public void setDefaultPasswordExpiry(int expiryInDays) {
-		if (passwordExpiryDate == null) {
-			passwordExpiryDate = DateUtils.addDays(new Date(), expiryInDays);
-		}
-	}
+    public OtpValidationRequest getOtpValidationRequest() {
+        return OtpValidationRequest.builder()
+                .mobileNumber(mobileNumber)
+                .tenantId(tenantId)
+                .otpReference(otpReference)
+                .build();
+    }
 
-	public void setActive(boolean isActive) {
-		active = isActive;
-	}
+    public List<Address> getPermanentAndCorrespondenceAddresses() {
+        final ArrayList<Address> addresses = new ArrayList<>();
+        if (correspondenceAddress != null && correspondenceAddress.isNotEmpty()) {
+            addresses.add(correspondenceAddress);
+        }
+        if (permanentAddress != null && permanentAddress.isNotEmpty()) {
+            addresses.add(permanentAddress);
+        }
+        return addresses;
+    }
+
+    public void setDefaultPasswordExpiry(int expiryInDays) {
+        if (passwordExpiryDate == null) {
+            passwordExpiryDate = DateUtils.addDays(new Date(), expiryInDays);
+        }
+    }
+
+    public void setActive(boolean isActive) {
+        active = isActive;
+    }
 }
 
 

@@ -37,20 +37,20 @@ public class UserSearchCriteria {
         }
     }
 
-    private boolean validateIfEmptySearch(boolean isInterServiceCall){
-        if(isInterServiceCall)
+    private boolean validateIfEmptySearch(boolean isInterServiceCall) {
+        if (isInterServiceCall)
             return isEmpty(userName) && isEmpty(name) && isEmpty(mobileNumber) && isEmpty(emailId) &&
-                CollectionUtils.isEmpty(uuid) && CollectionUtils.isEmpty(id)  && CollectionUtils.isEmpty(roleCodes);
+                    CollectionUtils.isEmpty(uuid) && CollectionUtils.isEmpty(id) && CollectionUtils.isEmpty(roleCodes);
         else
             return isEmpty(userName) && isEmpty(name) && isEmpty(mobileNumber) && isEmpty(emailId) &&
                     CollectionUtils.isEmpty(uuid) && CollectionUtils.isEmpty(id);
     }
 
-    private boolean validateIfTenantIdExists(boolean isInterServiceCall){
-        if(isInterServiceCall)
-            return (!isEmpty(userName) || !isEmpty(name) || !isEmpty(mobileNumber)  ||
+    private boolean validateIfTenantIdExists(boolean isInterServiceCall) {
+        if (isInterServiceCall)
+            return (!isEmpty(userName) || !isEmpty(name) || !isEmpty(mobileNumber) ||
                     !CollectionUtils.isEmpty(roleCodes))
-                && isEmpty(tenantId);
+                    && isEmpty(tenantId);
         else
             return (!isEmpty(userName) || !isEmpty(name) || !isEmpty(mobileNumber))
                     && isEmpty(tenantId);

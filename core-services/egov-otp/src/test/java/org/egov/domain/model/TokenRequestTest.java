@@ -11,13 +11,13 @@ public class TokenRequestTest {
 
     @Test
     public void test_should_not_throw_validation_exception_when_mandatory_fields_are_present() {
-        final TokenRequest token = new TokenRequest("identity","tenant");
+        final TokenRequest token = new TokenRequest("identity", "tenant");
         token.validate();
     }
 
     @Test(expected = InvalidTokenRequestException.class)
     public void test_should_throw_validation_exception_when_identity_not_present() {
-        final TokenRequest token = new TokenRequest(null,"tenant");
+        final TokenRequest token = new TokenRequest(null, "tenant");
 
         assertTrue(token.isIdentityAbsent());
         token.validate();
@@ -25,7 +25,7 @@ public class TokenRequestTest {
 
     @Test(expected = InvalidTokenRequestException.class)
     public void test_should_throw_validation_exception_when_tenant_not_present() {
-        final TokenRequest token = new TokenRequest("identity",null);
+        final TokenRequest token = new TokenRequest("identity", null);
 
         assertTrue(token.isTenantIdAbsent());
         token.validate();
@@ -33,7 +33,7 @@ public class TokenRequestTest {
 
     @Test
     public void test_should_generate_5_digit_token() {
-        final TokenRequest token = new TokenRequest("identity","tenant");
+        final TokenRequest token = new TokenRequest("identity", "tenant");
 
         assertNotNull(token.generateToken());
         assertEquals(5, token.generateToken().length());
@@ -41,7 +41,7 @@ public class TokenRequestTest {
 
     @Test
     public void test_should_300_second_ttl() {
-        final TokenRequest token = new TokenRequest("identity","tenant");
+        final TokenRequest token = new TokenRequest("identity", "tenant");
 
         assertEquals(300, token.getTimeToLive());
     }

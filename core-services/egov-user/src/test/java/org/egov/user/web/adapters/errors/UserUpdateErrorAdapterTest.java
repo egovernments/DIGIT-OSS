@@ -18,37 +18,37 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class UserUpdateErrorAdapterTest {
 
-	@Mock
-	private User user;
+    @Mock
+    private User user;
 
-	private UserUpdateErrorAdapter errorAdapter;
+    private UserUpdateErrorAdapter errorAdapter;
 
-	@Before
-	public void before() {
-		errorAdapter = new UserUpdateErrorAdapter();
-	}
+    @Before
+    public void before() {
+        errorAdapter = new UserUpdateErrorAdapter();
+    }
 
-	@Test
-	public void test_should_set_error_when_roles_missing() {
-		when(user.isTenantIdAbsent()).thenReturn(true);
+    @Test
+    public void test_should_set_error_when_roles_missing() {
+        when(user.isTenantIdAbsent()).thenReturn(true);
 
-		final ErrorResponse errorResponse = errorAdapter.adapt(user);
+        final ErrorResponse errorResponse = errorAdapter.adapt(user);
 
-		assertNotNull(errorResponse);
-		final List<ErrorField> errorFields = errorResponse.getError().getFields();
-		assertEquals(1, errorFields.size());
-		assertEquals("core-user.TENANT_MANDATORY", errorFields.get(0).getCode());
-		assertEquals("tenantId", errorFields.get(0).getField());
-		assertEquals("Tenant is required", errorFields.get(0).getMessage());
-	}
+        assertNotNull(errorResponse);
+        final List<ErrorField> errorFields = errorResponse.getError().getFields();
+        assertEquals(1, errorFields.size());
+        assertEquals("core-user.TENANT_MANDATORY", errorFields.get(0).getCode());
+        assertEquals("tenantId", errorFields.get(0).getField());
+        assertEquals("Tenant is required", errorFields.get(0).getMessage());
+    }
 
-	@Test
-	public void test_should_not_set_errors_when_model_is_valid() {
-		final ErrorResponse errorResponse = errorAdapter.adapt(user);
+    @Test
+    public void test_should_not_set_errors_when_model_is_valid() {
+        final ErrorResponse errorResponse = errorAdapter.adapt(user);
 
-		assertNotNull(errorResponse);
-		final List<ErrorField> errorFields = errorResponse.getError().getFields();
-		assertEquals(0, errorFields.size());
-	}
+        assertNotNull(errorResponse);
+        final List<ErrorField> errorFields = errorResponse.getError().getFields();
+        assertEquals(0, errorFields.size());
+    }
 
 }

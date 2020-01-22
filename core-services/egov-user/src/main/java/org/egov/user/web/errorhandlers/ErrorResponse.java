@@ -63,15 +63,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @EqualsAndHashCode
 public class ErrorResponse {
 
-	@JsonProperty("ResponseInfo")
-	private ResponseInfo responseInfo;
+    @JsonProperty("ResponseInfo")
+    private ResponseInfo responseInfo;
 
-	@JsonProperty("Error")
-	private Error error;
-	
-	@JsonIgnore
-	public List<ErrorField> getErrorFields() {
-		return error.getErrorFields();
-	}
+    @JsonProperty("Error")
+    private Error error;
+
+    @JsonIgnore
+    public List<ErrorField> getErrorFields() {
+        return error.getErrorFields();
+    }
 
 }

@@ -7,8 +7,8 @@
     "did": null,
     "key": null,
     "msgId": "8c11c5ca-03bd-11e7-93ae-92361f002671",
-    "userInfo" :{
-    "id" : 1
+    "userInfo": {
+      "id": 1
     },
     "requesterId": "62",
     "authToken": "96a70a9a-03bd-11e7-93ae-92361f002671"

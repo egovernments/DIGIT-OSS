@@ -33,74 +33,73 @@ import java.util.TimeZone;
 public class EgovUserApplication {
 
 
+    private static final String DATE_FORMAT = "dd-MM-yyyy HH:mm:ss";
 
-	private static final String DATE_FORMAT = "dd-MM-yyyy HH:mm:ss";
+    @Value("${app.timezone}")
+    private String timeZone;
 
-	@Value("${app.timezone}")
-	private String timeZone;
+    @Value("${spring.redis.host}")
+    private String host;
 
-	@Value("${spring.redis.host}")
-	private String host;
-	
-	@Autowired
-	private CustomAuthenticationKeyGenerator customAuthenticationKeyGenerator;
+    @Autowired
+    private CustomAuthenticationKeyGenerator customAuthenticationKeyGenerator;
 
 
-	@PostConstruct
-	public void initialize() {
-		TimeZone.setDefault(TimeZone.getTimeZone(timeZone));
-	}
+    @PostConstruct
+    public void initialize() {
+        TimeZone.setDefault(TimeZone.getTimeZone(timeZone));
+    }
 
-	@Bean
-	public WebMvcConfigurerAdapter webMvcConfigurerAdapter() {
-		return new WebMvcConfigurerAdapter() {
+    @Bean
+    public WebMvcConfigurerAdapter webMvcConfigurerAdapter() {
+        return new WebMvcConfigurerAdapter() {
 
-			@Override
-			public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
-				configurer.defaultContentType(MediaType.APPLICATION_JSON_UTF8);
-			}
-		};
-	}
+            @Override
+            public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
+                configurer.defaultContentType(MediaType.APPLICATION_JSON_UTF8);
+            }
+        };
+    }
 
-	@Bean
-	public MappingJackson2HttpMessageConverter jacksonConverter() {
-		MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-		mapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
-		mapper.setDateFormat(new SimpleDateFormat(DATE_FORMAT, Locale.ENGLISH));
-		mapper.setTimeZone(TimeZone.getTimeZone(timeZone));
-		converter.setObjectMapper(mapper);
-		return converter;
-	}
-	
-	@Bean
-	public ObjectMapper objectMapper(){
-		
-		ObjectMapper objectMapper = new ObjectMapper();
-		objectMapper.setTimeZone(TimeZone.getTimeZone(timeZone));
-		return objectMapper;
-	}
+    @Bean
+    public MappingJackson2HttpMessageConverter jacksonConverter() {
+        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        mapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
+        mapper.setDateFormat(new SimpleDateFormat(DATE_FORMAT, Locale.ENGLISH));
+        mapper.setTimeZone(TimeZone.getTimeZone(timeZone));
+        converter.setObjectMapper(mapper);
+        return converter;
+    }
 
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+    @Bean
+    public ObjectMapper objectMapper() {
 
-	@Bean
-	public TokenStore tokenStore() {
-		RedisTokenStore redisTokenStore =  new RedisTokenStore(connectionFactory());
-		redisTokenStore.setAuthenticationKeyGenerator(customAuthenticationKeyGenerator);
-		return redisTokenStore;
-	}
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.setTimeZone(TimeZone.getTimeZone(timeZone));
+        return objectMapper;
+    }
 
-	@Bean
-	public JedisConnectionFactory connectionFactory() {
-		return new JedisConnectionFactory(new JedisShardInfo(host));
-	}
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
-	public static void main(String[] args) {
-		SpringApplication.run(EgovUserApplication.class, args);
-	}
+    @Bean
+    public TokenStore tokenStore() {
+        RedisTokenStore redisTokenStore = new RedisTokenStore(connectionFactory());
+        redisTokenStore.setAuthenticationKeyGenerator(customAuthenticationKeyGenerator);
+        return redisTokenStore;
+    }
+
+    @Bean
+    public JedisConnectionFactory connectionFactory() {
+        return new JedisConnectionFactory(new JedisShardInfo(host));
+    }
+
+    public static void main(String[] args) {
+        SpringApplication.run(EgovUserApplication.class, args);
+    }
 
 }

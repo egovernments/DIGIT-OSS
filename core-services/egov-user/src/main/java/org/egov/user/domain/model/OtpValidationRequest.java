@@ -10,7 +10,7 @@ import lombok.Getter;
 @Getter
 @EqualsAndHashCode
 public class OtpValidationRequest {
-	private String otpReference;
-	private String mobileNumber;
-	protected String tenantId;
+    private String otpReference;
+    private String mobileNumber;
+    protected String tenantId;
 }

@@ -18,34 +18,34 @@ public class Address {
     private String city;
     private String address;
     private AddressType type;
-	private Long id;
-	private String tenantId;
-	private Long userId;
-	private String addressType;
-	private Long LastModifiedBy;
-	private Date LastModifiedDate;
+    private Long id;
+    private String tenantId;
+    private Long userId;
+    private String addressType;
+    private Long LastModifiedBy;
+    private Date LastModifiedDate;
 
     boolean isInvalid() {
-    	return isPinCodeInvalid()
-				|| isCityInvalid()
-				|| isAddressInvalid();
-	}
+        return isPinCodeInvalid()
+                || isCityInvalid()
+                || isAddressInvalid();
+    }
 
-	boolean isNotEmpty() {
-    	return StringUtils.isNotEmpty(pinCode)
-				|| StringUtils.isNotEmpty(city)
-				|| StringUtils.isNotEmpty(address) ;
-	}
+    boolean isNotEmpty() {
+        return StringUtils.isNotEmpty(pinCode)
+                || StringUtils.isNotEmpty(city)
+                || StringUtils.isNotEmpty(address);
+    }
 
-	boolean isPinCodeInvalid() {
-    	return pinCode != null && pinCode.length() > 10;
-	}
+    boolean isPinCodeInvalid() {
+        return pinCode != null && pinCode.length() > 10;
+    }
 
-	boolean isCityInvalid() {
-    	return city != null && city.length() > 300;
-	}
+    boolean isCityInvalid() {
+        return city != null && city.length() > 300;
+    }
 
-	boolean isAddressInvalid() {
-    	return address != null && address.length() > 300;
-	}
+    boolean isAddressInvalid() {
+        return address != null && address.length() > 300;
+    }
 }

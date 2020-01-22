@@ -8,6 +8,6 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 public class UserDetail {
-	private SecureUser secureUser;
-	private List<Action> actions;
+    private SecureUser secureUser;
+    private List<Action> actions;
 }

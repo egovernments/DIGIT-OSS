@@ -20,19 +20,19 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 
 public class ActionRestRepositoryTest {
 
-	private static final String HOST = "http://host";
-	private static final String ROLE_ACTION = "/access/v1/actions/_search";
-	private final Resources resources = new Resources();
+    private static final String HOST = "http://host";
+    private static final String ROLE_ACTION = "/access/v1/actions/_search";
+    private final Resources resources = new Resources();
 
-	private ActionRestRepository actionRestRepository;
-	private MockRestServiceServer server;
+    private ActionRestRepository actionRestRepository;
+    private MockRestServiceServer server;
 
-	@Before
-	public void before() {
-		final RestTemplate restTemplate = new RestTemplate();
-		actionRestRepository = new ActionRestRepository(restTemplate, HOST, ROLE_ACTION);
-		server = MockRestServiceServer.bindTo(restTemplate).build();
-	}
+    @Before
+    public void before() {
+        final RestTemplate restTemplate = new RestTemplate();
+        actionRestRepository = new ActionRestRepository(restTemplate, HOST, ROLE_ACTION);
+        server = MockRestServiceServer.bindTo(restTemplate).build();
+    }
 
 	/*@Test
 	public void testShouldGetActionByRole() {
@@ -56,10 +56,10 @@ public class ActionRestRepositoryTest {
 		assertEquals("PGR", actions.get(0).getServiceCode());
 	}*/
 
-	public List<String> getRoles() {
-		List<String> roleCodes = new ArrayList<String>();
-		roleCodes.add("EMPLOYEE");
-		return roleCodes;
-	}
+    public List<String> getRoles() {
+        List<String> roleCodes = new ArrayList<String>();
+        roleCodes.add("EMPLOYEE");
+        return roleCodes;
+    }
 
 }

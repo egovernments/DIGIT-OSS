@@ -8,12 +8,12 @@ import org.springframework.web.client.RestTemplate;
 @SpringBootApplication
 public class EgovNotificationSmsApplication {
 
-	@Bean
-	public RestTemplate getRestTemplate() {
-		return new RestTemplate();
-	}
+    @Bean
+    public RestTemplate getRestTemplate() {
+        return new RestTemplate();
+    }
 
-	public static void main(String[] args) {
-		SpringApplication.run(EgovNotificationSmsApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(EgovNotificationSmsApplication.class, args);
+    }
 }

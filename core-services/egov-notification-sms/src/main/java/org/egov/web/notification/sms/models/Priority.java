@@ -41,10 +41,10 @@
 package org.egov.web.notification.sms.models;
 
 public enum Priority {
-	HIGH, MEDIUM, LOW;
+    HIGH, MEDIUM, LOW;
 
-	@Override
-	public String toString() {
-		return this.name().toLowerCase();
-	}
+    @Override
+    public String toString() {
+        return this.name().toLowerCase();
+    }
 }

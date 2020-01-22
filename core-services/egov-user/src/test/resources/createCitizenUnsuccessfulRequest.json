@@ -41,8 +41,10 @@
     "photo": null,
     "otpReference": null,
     "tenantId": "default",
-    "roles": [{
-      "code": "foo"
-    }]
+    "roles": [
+      {
+        "code": "foo"
+      }
+    ]
   }
 }

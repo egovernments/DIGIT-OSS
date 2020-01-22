@@ -21,13 +21,13 @@ import lombok.ToString;
 @ToString
 public class MetaDataRequest {
 
-	@NotNull
+    @NotNull
     @JsonProperty("RequestInfo")
     private RequestInfo requestInfo;
-	
-	private String tenantId;
-	
-	private String reportName;
+
+    private String tenantId;
+
+    private String reportName;
 
 }
 

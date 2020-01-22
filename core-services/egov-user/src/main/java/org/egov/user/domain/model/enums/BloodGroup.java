@@ -20,14 +20,14 @@ public enum BloodGroup {
     BloodGroup(String value) {
         this.value = value;
     }
-    
+
     @JsonCreator
-	public static BloodGroup fromValue(String text) {
-		for (BloodGroup b : BloodGroup.values()) {
-			if (String.valueOf(b.value).equalsIgnoreCase(text)) {
-				return b;
-			}
-		}
-		return null;
-	}
+    public static BloodGroup fromValue(String text) {
+        for (BloodGroup b : BloodGroup.values()) {
+            if (String.valueOf(b.value).equalsIgnoreCase(text)) {
+                return b;
+            }
+        }
+        return null;
+    }
 }

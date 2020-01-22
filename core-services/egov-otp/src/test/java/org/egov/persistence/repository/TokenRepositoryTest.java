@@ -28,75 +28,75 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 public class TokenRepositoryTest {
 
-	@InjectMocks
-	private TokenRepository tokenRepository;
-	
-	@Autowired
-	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-	
-	@Before
-	public void before() {
-		tokenRepository = new TokenRepository(namedParameterJdbcTemplate);
-	}
+    @InjectMocks
+    private TokenRepository tokenRepository;
 
-	@Test
-	public void test_should_save_entity_token() {
+    @Autowired
+    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-		final Token token = Token.builder().uuid(UUID.randomUUID().toString()).number("99999").identity("someIdentity")
-				.timeToLiveInSeconds(400l).createdDate(new Date()).tenantId("test").build();
-		Token savedToken = tokenRepository.save(token);
-		assertNotNull(savedToken);
-		assertEquals(token.getTenantId(), savedToken.getTenantId());
-		assertEquals(token.getUuid(), savedToken.getUuid());
+    @Before
+    public void before() {
+        tokenRepository = new TokenRepository(namedParameterJdbcTemplate);
+    }
 
-	}
+    @Test
+    public void test_should_save_entity_token() {
 
-	@Test
-	@Sql(scripts = { "/sql/clearTokens.sql", "/sql/createTokens.sql" })
-	public void test_should_retrieve_otp_for_given_token_number_and_identity() {
-		ValidateRequest validateRequest = ValidateRequest.builder().otp("token2").identity("identity2")
-				.tenantId("tenant2").build();
+        final Token token = Token.builder().uuid(UUID.randomUUID().toString()).number("99999").identity("someIdentity")
+                .timeToLiveInSeconds(400l).createdDate(new Date()).tenantId("test").build();
+        Token savedToken = tokenRepository.save(token);
+        assertNotNull(savedToken);
+        assertEquals(token.getTenantId(), savedToken.getTenantId());
+        assertEquals(token.getUuid(), savedToken.getUuid());
 
-		final Tokens actualTokens = tokenRepository.findByNumberAndIdentityAndTenantId(validateRequest);
+    }
 
-		assertNotNull(actualTokens);
-		final Token firstToken = actualTokens.getTokens().get(0);
-		assertEquals("id2", firstToken.getUuid());
-		assertEquals("identity2", firstToken.getIdentity());
-		assertEquals("tenant2", firstToken.getTenantId());
-		assertEquals("token2", firstToken.getNumber());
-		assertEquals(Long.valueOf(200), firstToken.getTimeToLiveInSeconds());
-		assertFalse(firstToken.isValidated());
-		assertNotNull(firstToken.getCreatedDate());
-	}
+    @Test
+    @Sql(scripts = {"/sql/clearTokens.sql", "/sql/createTokens.sql"})
+    public void test_should_retrieve_otp_for_given_token_number_and_identity() {
+        ValidateRequest validateRequest = ValidateRequest.builder().otp("token2").identity("identity2")
+                .tenantId("tenant2").build();
 
-	@Test
-	@Sql(scripts = { "/sql/clearTokens.sql", "/sql/createTokens.sql" })
-	public void test_should_fetch_token_by_id() {
-		TokenSearchCriteria searchCriteria = new TokenSearchCriteria("id1", "tenant1");
-		final Token token = tokenRepository.findBy(searchCriteria);
-		assertTrue(token.isValidated());
-	}
+        final Tokens actualTokens = tokenRepository.findByNumberAndIdentityAndTenantId(validateRequest);
 
-	@Test
-	@Sql(scripts = { "/sql/clearTokens.sql", "/sql/createTokens.sql" })
-	public void test_should_return_null_when_token_not_present_for_given_id() {
-		TokenSearchCriteria searchCriteria = new TokenSearchCriteria("id5", "tenant6");
-		final Token token = tokenRepository.findBy(searchCriteria);
-		assertNull(token);
-	}
+        assertNotNull(actualTokens);
+        final Token firstToken = actualTokens.getTokens().get(0);
+        assertEquals("id2", firstToken.getUuid());
+        assertEquals("identity2", firstToken.getIdentity());
+        assertEquals("tenant2", firstToken.getTenantId());
+        assertEquals("token2", firstToken.getNumber());
+        assertEquals(Long.valueOf(200), firstToken.getTimeToLiveInSeconds());
+        assertFalse(firstToken.isValidated());
+        assertNotNull(firstToken.getCreatedDate());
+    }
 
-	@Test
-	@Sql(scripts = { "/sql/clearTokens.sql", "/sql/createTokens.sql" })
-	public void test_should_return_true_when_token_is_updated_to_validated() {
-		final Token token = Token.builder().uuid("id1").build();
-		tokenRepository.markAsValidated(token);
-		assertTrue(token.isValidated());
-	}
+    @Test
+    @Sql(scripts = {"/sql/clearTokens.sql", "/sql/createTokens.sql"})
+    public void test_should_fetch_token_by_id() {
+        TokenSearchCriteria searchCriteria = new TokenSearchCriteria("id1", "tenant1");
+        final Token token = tokenRepository.findBy(searchCriteria);
+        assertTrue(token.isValidated());
+    }
 
-	@Test(expected = TokenUpdateException.class)
-	public void test_should_return_false_when_token_is_not_updated_successfully() {
-		final Token token = Token.builder().uuid("uuid").build();
-		tokenRepository.markAsValidated(token);
-	}
+    @Test
+    @Sql(scripts = {"/sql/clearTokens.sql", "/sql/createTokens.sql"})
+    public void test_should_return_null_when_token_not_present_for_given_id() {
+        TokenSearchCriteria searchCriteria = new TokenSearchCriteria("id5", "tenant6");
+        final Token token = tokenRepository.findBy(searchCriteria);
+        assertNull(token);
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/clearTokens.sql", "/sql/createTokens.sql"})
+    public void test_should_return_true_when_token_is_updated_to_validated() {
+        final Token token = Token.builder().uuid("id1").build();
+        tokenRepository.markAsValidated(token);
+        assertTrue(token.isValidated());
+    }
+
+    @Test(expected = TokenUpdateException.class)
+    public void test_should_return_false_when_token_is_not_updated_successfully() {
+        final Token token = Token.builder().uuid("uuid").build();
+        tokenRepository.markAsValidated(token);
+    }
 }

@@ -127,36 +127,36 @@ public class OtpControllerTest {
                 .andExpect(content().json(resources.getFileContents("otpUpdateErrorResponse.json")));
     }
 
-	@Test
-	public void test_should_return_error_response_when_otp_validate_is_not_successful() throws Exception {
-		final ValidateRequest validateRequest = ValidateRequest.builder()
-				.otp(OTP_NUMBER)
-				.tenantId(TENANT_ID)
-				.identity(IDENTITY)
-				.build();
-		when(tokenService.validate(validateRequest))
-				.thenThrow(new TokenValidationFailureException());
+    @Test
+    public void test_should_return_error_response_when_otp_validate_is_not_successful() throws Exception {
+        final ValidateRequest validateRequest = ValidateRequest.builder()
+                .otp(OTP_NUMBER)
+                .tenantId(TENANT_ID)
+                .identity(IDENTITY)
+                .build();
+        when(tokenService.validate(validateRequest))
+                .thenThrow(new TokenValidationFailureException());
 
-		mockMvc.perform(post("/v1/_validate").contentType(MediaType.APPLICATION_JSON_UTF8)
-				.content(resources.getFileContents("validateOtpRequest.json")))
-				.andExpect(status().isBadRequest())
-				.andExpect(content().json(resources.getFileContents("otpValidateFailureErrorResponse.json")));
-	}
-	
-	@Test
-	public void test_should_return_error_response_when_otp_validate() throws Exception {
-		final ValidateRequest validateRequest = ValidateRequest.builder()
-				.otp(OTP_NUMBER)
-				.tenantId(TENANT_ID)
-				.identity(IDENTITY)
-				.build();
-		when(tokenService.validate(validateRequest))
-				.thenThrow(new TokenAlreadyUsedException());
+        mockMvc.perform(post("/v1/_validate").contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(resources.getFileContents("validateOtpRequest.json")))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().json(resources.getFileContents("otpValidateFailureErrorResponse.json")));
+    }
 
-		mockMvc.perform(post("/v1/_validate").contentType(MediaType.APPLICATION_JSON_UTF8)
-				.content(resources.getFileContents("validateOtpRequest.json")))
-				.andExpect(status().isBadRequest());
-	}
+    @Test
+    public void test_should_return_error_response_when_otp_validate() throws Exception {
+        final ValidateRequest validateRequest = ValidateRequest.builder()
+                .otp(OTP_NUMBER)
+                .tenantId(TENANT_ID)
+                .identity(IDENTITY)
+                .build();
+        when(tokenService.validate(validateRequest))
+                .thenThrow(new TokenAlreadyUsedException());
+
+        mockMvc.perform(post("/v1/_validate").contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(resources.getFileContents("validateOtpRequest.json")))
+                .andExpect(status().isBadRequest());
+    }
 
     @Test
     public void test_should_return_error_response_when_token_request_is_not_valid() throws Exception {

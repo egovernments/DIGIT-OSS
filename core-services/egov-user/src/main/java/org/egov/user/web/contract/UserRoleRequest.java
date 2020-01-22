@@ -14,5 +14,5 @@ public class UserRoleRequest {
     private Date createdDate;
     private Long lastModifiedBy;
     private Date lastModifiedDate;
-    
+
 }

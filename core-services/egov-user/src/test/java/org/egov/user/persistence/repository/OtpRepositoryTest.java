@@ -23,100 +23,100 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 @RunWith(MockitoJUnitRunner.class)
 public class OtpRepositoryTest {
 
-	private OtpRepository otpRepository;
-	private MockRestServiceServer server;
+    private OtpRepository otpRepository;
+    private MockRestServiceServer server;
 
-	@Before
-	public void setUp() throws Exception {
-		RestTemplate restTemplate = new RestTemplate();
-		server = MockRestServiceServer.bindTo(restTemplate).build();
-		final String otpSearchContext = "otp/_search";
-		final String otpValidateContext = "otp/_validate";
-		final String otpHost = "http://otp-host.com/";
-		this.otpRepository = new OtpRepository(otpHost, otpSearchContext, otpValidateContext, restTemplate);
-	}
+    @Before
+    public void setUp() throws Exception {
+        RestTemplate restTemplate = new RestTemplate();
+        server = MockRestServiceServer.bindTo(restTemplate).build();
+        final String otpSearchContext = "otp/_search";
+        final String otpValidateContext = "otp/_validate";
+        final String otpHost = "http://otp-host.com/";
+        this.otpRepository = new OtpRepository(otpHost, otpSearchContext, otpValidateContext, restTemplate);
+    }
 
-	@Test
-	public void testShouldReturnTrueWhenOtpHasBeenValidated() throws Exception {
-		server.expect(once(), requestTo("http://otp-host.com/otp/_search")).andExpect(method(HttpMethod.POST))
-				.andExpect(content().string(new Resources().getFileContents("otpSearchSuccessRequest.json")))
-				.andRespond(withSuccess(new Resources().getFileContents("otpSearchValidatedResponse.json"),
-						MediaType.APPLICATION_JSON_UTF8));
-		final OtpValidationRequest request = buildRequest();
+    @Test
+    public void testShouldReturnTrueWhenOtpHasBeenValidated() throws Exception {
+        server.expect(once(), requestTo("http://otp-host.com/otp/_search")).andExpect(method(HttpMethod.POST))
+                .andExpect(content().string(new Resources().getFileContents("otpSearchSuccessRequest.json")))
+                .andRespond(withSuccess(new Resources().getFileContents("otpSearchValidatedResponse.json"),
+                        MediaType.APPLICATION_JSON_UTF8));
+        final OtpValidationRequest request = buildRequest();
 
-		boolean isOtpValidated = otpRepository.isOtpValidationComplete(request);
+        boolean isOtpValidated = otpRepository.isOtpValidationComplete(request);
 
-		server.verify();
-		assertEquals(Boolean.TRUE, isOtpValidated);
-	}
+        server.verify();
+        assertEquals(Boolean.TRUE, isOtpValidated);
+    }
 
-	@Test
-	@Ignore
-	public void testShouldReturnTrueWhenOtpInValidated() throws Exception {
-		server.expect(once(), requestTo("http://otp-host.com/otp/_validate")).andExpect(method(HttpMethod.POST))
-				.andExpect(content().string(new Resources().getFileContents("otpValidationRequest.json")))
-				.andRespond(withSuccess(new Resources().getFileContents("otpNonValidateResponse.json"),
-						MediaType.APPLICATION_JSON_UTF8)); 
-		final OtpValidateRequest request = buildValidateRequest();
+    @Test
+    @Ignore
+    public void testShouldReturnTrueWhenOtpInValidated() throws Exception {
+        server.expect(once(), requestTo("http://otp-host.com/otp/_validate")).andExpect(method(HttpMethod.POST))
+                .andExpect(content().string(new Resources().getFileContents("otpValidationRequest.json")))
+                .andRespond(withSuccess(new Resources().getFileContents("otpNonValidateResponse.json"),
+                        MediaType.APPLICATION_JSON_UTF8));
+        final OtpValidateRequest request = buildValidateRequest();
 
-		boolean isOtpValidated = otpRepository.validateOtp(request);
+        boolean isOtpValidated = otpRepository.validateOtp(request);
 
-		server.verify();
-		assertEquals(Boolean.FALSE, isOtpValidated);
-	}
+        server.verify();
+        assertEquals(Boolean.FALSE, isOtpValidated);
+    }
 
-	@Test
-	@Ignore
-	public void testShouldReturnTrueWhenOtpValidated() throws Exception {
-		server.expect(once(), requestTo("http://otp-host.com/otp/_validate")).andExpect(method(HttpMethod.POST))
-				.andExpect(content().string(new Resources().getFileContents("otpValidationRequest.json")))
-				.andRespond(withSuccess(new Resources().getFileContents("otpValidateResponse.json"),
-						MediaType.APPLICATION_JSON_UTF8)); 
-		final OtpValidateRequest request = buildValidateRequest();
+    @Test
+    @Ignore
+    public void testShouldReturnTrueWhenOtpValidated() throws Exception {
+        server.expect(once(), requestTo("http://otp-host.com/otp/_validate")).andExpect(method(HttpMethod.POST))
+                .andExpect(content().string(new Resources().getFileContents("otpValidationRequest.json")))
+                .andRespond(withSuccess(new Resources().getFileContents("otpValidateResponse.json"),
+                        MediaType.APPLICATION_JSON_UTF8));
+        final OtpValidateRequest request = buildValidateRequest();
 
-		boolean isOtpValidated = otpRepository.validateOtp(request);
+        boolean isOtpValidated = otpRepository.validateOtp(request);
 
-		server.verify();
-		assertEquals(Boolean.TRUE, isOtpValidated);
-	}
-	
-	
-	@Test
-	public void testShouldReturnFalseWhenOtpHasNotBeenValidated() throws Exception {
-		server.expect(once(), requestTo("http://otp-host.com/otp/_search")).andExpect(method(HttpMethod.POST))
-				.andExpect(content().string(new Resources().getFileContents("otpSearchSuccessRequest.json")))
-				.andRespond(withSuccess(new Resources().getFileContents("otpSearchNonValidatedResponse.json"),
-						MediaType.APPLICATION_JSON_UTF8));
-		final OtpValidationRequest request = buildRequest();
+        server.verify();
+        assertEquals(Boolean.TRUE, isOtpValidated);
+    }
 
-		boolean isOtpValidated = otpRepository.isOtpValidationComplete(request);
-		server.verify();
-		assertFalse(isOtpValidated);
-	}
 
-	@Test
-	public void testShouldReturnFalseWhenOtpIdentityDoesNotMatch() throws Exception {
-		server.expect(once(), requestTo("http://otp-host.com/otp/_search")).andExpect(method(HttpMethod.POST))
-				.andExpect(content().string(new Resources().getFileContents("otpSearchSuccessRequest.json")))
-				.andRespond(withSuccess(new Resources().getFileContents("otpSearchIdentityDifferentResponse.json"),
-						MediaType.APPLICATION_JSON_UTF8));
-		final OtpValidationRequest request = buildRequest();
+    @Test
+    public void testShouldReturnFalseWhenOtpHasNotBeenValidated() throws Exception {
+        server.expect(once(), requestTo("http://otp-host.com/otp/_search")).andExpect(method(HttpMethod.POST))
+                .andExpect(content().string(new Resources().getFileContents("otpSearchSuccessRequest.json")))
+                .andRespond(withSuccess(new Resources().getFileContents("otpSearchNonValidatedResponse.json"),
+                        MediaType.APPLICATION_JSON_UTF8));
+        final OtpValidationRequest request = buildRequest();
 
-		boolean isOtpValidated = otpRepository.isOtpValidationComplete(request);
+        boolean isOtpValidated = otpRepository.isOtpValidationComplete(request);
+        server.verify();
+        assertFalse(isOtpValidated);
+    }
 
-		server.verify();
-		assertFalse(isOtpValidated);
-	}
+    @Test
+    public void testShouldReturnFalseWhenOtpIdentityDoesNotMatch() throws Exception {
+        server.expect(once(), requestTo("http://otp-host.com/otp/_search")).andExpect(method(HttpMethod.POST))
+                .andExpect(content().string(new Resources().getFileContents("otpSearchSuccessRequest.json")))
+                .andRespond(withSuccess(new Resources().getFileContents("otpSearchIdentityDifferentResponse.json"),
+                        MediaType.APPLICATION_JSON_UTF8));
+        final OtpValidationRequest request = buildRequest();
 
-	private OtpValidationRequest buildRequest() {
-		return OtpValidationRequest.builder().otpReference("2b936aae-c3b6-4c89-b3b3-a098cdcbb706")
-				.mobileNumber("9988776655").tenantId("tenantId").build();
-	}
+        boolean isOtpValidated = otpRepository.isOtpValidationComplete(request);
 
-	private OtpValidateRequest buildValidateRequest() {
-		Otp otp = Otp.builder().otp("1234").tenantId("default").identity("9988776655").build();
+        server.verify();
+        assertFalse(isOtpValidated);
+    }
 
-		return OtpValidateRequest.builder().otp(otp).build();
-	}
+    private OtpValidationRequest buildRequest() {
+        return OtpValidationRequest.builder().otpReference("2b936aae-c3b6-4c89-b3b3-a098cdcbb706")
+                .mobileNumber("9988776655").tenantId("tenantId").build();
+    }
+
+    private OtpValidateRequest buildValidateRequest() {
+        Otp otp = Otp.builder().otp("1234").tenantId("default").identity("9988776655").build();
+
+        return OtpValidateRequest.builder().otp(otp).build();
+    }
 
 }

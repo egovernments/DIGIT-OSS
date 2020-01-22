@@ -79,7 +79,7 @@ public class UserTypeQueryBuilder {
 
     public static final String SELECT_FAILED_ATTEMPTS_BY_USER_SQL = "select user_uuid, ip, attempt_date, active from " +
             "eg_user_login_failed_attempts WHERE user_uuid = :user_uuid AND attempt_date >= :attempt_date AND active " +
-            "= 'true' " ;
+            "= 'true' ";
 
     public static final String INSERT_FAILED_ATTEMPTS_SQL = " INSERT INTO eg_user_login_failed_attempts (user_uuid, " +
             "ip, attempt_date, active) VALUES ( :user_uuid, :ip , :attempt_date, :active ) ";
@@ -183,7 +183,7 @@ public class UserTypeQueryBuilder {
                     preparedStatementValues)).append(" )");
         }
 
-        if(!isEmpty(userSearchCriteria.getRoleCodes())){
+        if (!isEmpty(userSearchCriteria.getRoleCodes())) {
             isAppendAndClause = addAndClauseIfRequired(isAppendAndClause, selectQuery);
             selectQuery.append(" ur.role_code IN (").append(getQueryForCollection(userSearchCriteria.getRoleCodes(),
                     preparedStatementValues)).append(" )");
@@ -198,15 +198,15 @@ public class UserTypeQueryBuilder {
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     private String addPagingClause(final StringBuilder selectQuery, final List preparedStatementValues,
-                                 final UserSearchCriteria criteria) {
+                                   final UserSearchCriteria criteria) {
 
-        if(isNull(criteria.getOffset()))
+        if (isNull(criteria.getOffset()))
             criteria.setOffset(0);
 
-        if (criteria.getLimit()!=null && criteria.getLimit() != 0) {
+        if (criteria.getLimit() != null && criteria.getLimit() != 0) {
             String finalQuery = PAGINATION_WRAPPER.replace("{baseQuery}", selectQuery);
             preparedStatementValues.add(criteria.getOffset());
-            preparedStatementValues.add( criteria.getOffset() + criteria.getLimit());
+            preparedStatementValues.add(criteria.getOffset() + criteria.getLimit());
 
             return finalQuery;
         } else
@@ -217,11 +217,11 @@ public class UserTypeQueryBuilder {
     private String getQueryForCollection(List<?> ids, List<Object> preparedStmtList) {
         StringBuilder builder = new StringBuilder();
         Iterator<?> iterator = ids.iterator();
-        while (iterator.hasNext()){
+        while (iterator.hasNext()) {
             builder.append(" ?");
             preparedStmtList.add(iterator.next());
 
-            if(iterator.hasNext())
+            if (iterator.hasNext())
                 builder.append(",");
         }
         return builder.toString();
@@ -259,7 +259,7 @@ public class UserTypeQueryBuilder {
 
 
     public String getUserPresentByUserNameAndTenant() {
-        return "select count(*) from eg_user where username =:userName and tenantId =:tenantId and type = :userType " ;
+        return "select count(*) from eg_user where username =:userName and tenantId =:tenantId and type = :userType ";
     }
 
 }

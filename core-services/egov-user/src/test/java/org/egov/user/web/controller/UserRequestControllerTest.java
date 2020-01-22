@@ -55,7 +55,7 @@ public class UserRequestControllerTest {
 
     @MockBean
     private TokenService tokenService;
-    
+
     @MockBean
     private CustomAuthenticationKeyGenerator authenticationKeyGenerator;
 
@@ -94,17 +94,17 @@ public class UserRequestControllerTest {
                 .andExpect(content().json(getFileContents("createCitizenOtpFailureResponse.json")));
     }
 
-	private Date toDate(LocalDateTime localDateTime) {
-		final ZonedDateTime expectedDateTime = ZonedDateTime.of(localDateTime, ZoneId.of("Asia/Calcutta"));
-		return Date.from(expectedDateTime.toInstant());
-	}
+    private Date toDate(LocalDateTime localDateTime) {
+        final ZonedDateTime expectedDateTime = ZonedDateTime.of(localDateTime, ZoneId.of("Asia/Calcutta"));
+        return Date.from(expectedDateTime.toInstant());
+    }
 
     private User buildUser() {
         Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
         c.set(1917, Calendar.MARCH, 8, 11, 15, 36);
-		final Date expectedDOB = toDate(LocalDateTime.of(1986, 8, 4, 5, 30));
+        final Date expectedDOB = toDate(LocalDateTime.of(1986, 8, 4, 5, 30));
 
-		c.set(2017, Calendar.FEBRUARY, 8, 11, 15, 36);
+        c.set(2017, Calendar.FEBRUARY, 8, 11, 15, 36);
         Date createdDate = c.getTime();
         c.set(2018, Calendar.FEBRUARY, 8, 11, 15, 36);
         Date pwdExpiryDate = c.getTime();
@@ -169,7 +169,7 @@ public class UserRequestControllerTest {
     public void testShouldThrowErrorWhileUpdatingWithDuplicateCitizen() throws Exception {
         DuplicateUserNameException exception = new DuplicateUserNameException(UserSearchCriteria.builder().userName
                 ("test").build());
-        when(userService.updateWithoutOtpValidation( any(org.egov.user.domain.model.User.class))).thenThrow(exception);
+        when(userService.updateWithoutOtpValidation(any(org.egov.user.domain.model.User.class))).thenThrow(exception);
 
         String fileContents = getFileContents("updateCitizenUnsuccessfulRequest.json");
         mockMvc.perform(post("/users/1/_updatenovalidate")

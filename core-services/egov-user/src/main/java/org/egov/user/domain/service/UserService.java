@@ -96,16 +96,16 @@ public class UserService {
                 .type(userType)
                 .build();
 
-        if(isEmpty(userName) || isEmpty(tenantId) || isNull(userType)){
+        if (isEmpty(userName) || isEmpty(tenantId) || isNull(userType)) {
             log.error("Invalid lookup, mandatory fields are absent");
             throw new UserNotFoundException(userSearchCriteria);
         }
 
         List<User> users = userRepository.findAll(userSearchCriteria);
 
-        if(users.isEmpty())
+        if (users.isEmpty())
             throw new UserNotFoundException(userSearchCriteria);
-        if(users.size() > 1)
+        if (users.size() > 1)
             throw new DuplicateUserNameException(userSearchCriteria);
 
         return users.get(0);
@@ -117,18 +117,17 @@ public class UserService {
                 .uuid(Collections.singletonList(uuid))
                 .build();
 
-        if(isEmpty(uuid)){
+        if (isEmpty(uuid)) {
             log.error("UUID is mandatory");
             throw new UserNotFoundException(userSearchCriteria);
         }
 
         List<User> users = userRepository.findAll(userSearchCriteria);
 
-        if(users.isEmpty())
+        if (users.isEmpty())
             throw new UserNotFoundException(userSearchCriteria);
         return users.get(0);
     }
-
 
 
     /**
@@ -175,7 +174,7 @@ public class UserService {
                     .getType()).tenantId(user.getTenantId()).build());
     }
 
-    private String getStateLevelTenantForCitizen(String tenantId, UserType userType){
+    private String getStateLevelTenantForCitizen(String tenantId, UserType userType) {
         if (!isNull(userType) && userType.equals(UserType.CITIZEN) && !isEmpty(tenantId) && tenantId.contains("."))
             return tenantId.split("\\.")[0];
         else
@@ -240,7 +239,7 @@ public class UserService {
             return restTemplate.postForEntity(userHost + "/user/oauth/token", request, Map.class).getBody();
 
         } catch (Exception e) {
-            log.error("Error occurred while logging-in via register flow",e);
+            log.error("Error occurred while logging-in via register flow", e);
             throw e;
         }
     }
@@ -252,7 +251,7 @@ public class UserService {
      */
     private void conditionallyValidateOtp(User user) {
         if (user.isOtpValidationMandatory()) {
-            if(!validateOtp(user))
+            if (!validateOtp(user))
                 throw new OtpValidationPendingException();
         }
     }
@@ -269,7 +268,7 @@ public class UserService {
         RequestInfo requestInfo = RequestInfo.builder().action("validate").ts(new Date()).build();
         OtpValidateRequest otpValidationRequest = OtpValidateRequest.builder().requestInfo(requestInfo).otp(otp)
                 .build();
-            return otpRepository.validateOtp(otpValidationRequest);
+        return otpRepository.validateOtp(otpValidationRequest);
 
     }
 
@@ -291,23 +290,23 @@ public class UserService {
 
 
         // If user is being unlocked via update, reset failed login attempts
-        if(user.getAccountLocked()!=null && !user.getAccountLocked() && existingUser.getAccountLocked())
+        if (user.getAccountLocked() != null && !user.getAccountLocked() && existingUser.getAccountLocked())
             resetFailedLoginAttempts(user);
 
-        return  getUserByUuid(user.getUuid());
+        return getUserByUuid(user.getUuid());
     }
 
-    public void removeTokensByUser(User user){
-        Collection<OAuth2AccessToken> tokens =tokenStore.findTokensByClientIdAndUserName(USER_CLIENT_ID,
+    public void removeTokensByUser(User user) {
+        Collection<OAuth2AccessToken> tokens = tokenStore.findTokensByClientIdAndUserName(USER_CLIENT_ID,
                 user.getUsername());
 
-        for(OAuth2AccessToken token : tokens){
-            if(token.getAdditionalInformation() != null && token.getAdditionalInformation().containsKey("UserRequest")){
-                if(token.getAdditionalInformation().get("UserRequest") instanceof org.egov.user.web.contract.auth.User) {
+        for (OAuth2AccessToken token : tokens) {
+            if (token.getAdditionalInformation() != null && token.getAdditionalInformation().containsKey("UserRequest")) {
+                if (token.getAdditionalInformation().get("UserRequest") instanceof org.egov.user.web.contract.auth.User) {
                     org.egov.user.web.contract.auth.User userInfo =
                             (org.egov.user.web.contract.auth.User) token.getAdditionalInformation().get(
                                     "UserRequest");
-                    if(user.getUsername().equalsIgnoreCase(userInfo.getUserName()) && user.getTenantId().equalsIgnoreCase(userInfo.getTenantId())
+                    if (user.getUsername().equalsIgnoreCase(userInfo.getUserName()) && user.getTenantId().equalsIgnoreCase(userInfo.getTenantId())
                             && user.getType().equals(UserType.fromValue(userInfo.getType())))
                         tokenStore.removeAccessToken(token);
                 }
@@ -374,11 +373,11 @@ public class UserService {
         // validateOtp(request.getOtpValidationRequest());
         final User user = getUniqueUser(request.getUserName(), request.getTenantId(), request.getType());
         if (user.getType().toString().equals(UserType.CITIZEN.toString()) && isCitizenLoginOtpBased) {
-        	log.info("CITIZEN forgot password flow is disabled");
+            log.info("CITIZEN forgot password flow is disabled");
             throw new InvalidUpdatePasswordRequestException();
         }
         if (user.getType().toString().equals(UserType.EMPLOYEE.toString()) && isEmployeeLoginOtpBased) {
-        	log.info("EMPLOYEE forgot password flow is disabled");
+            log.info("EMPLOYEE forgot password flow is disabled");
             throw new InvalidUpdatePasswordRequestException();
         }
         user.setOtpReference(request.getOtpReference());
@@ -393,68 +392,67 @@ public class UserService {
      *
      * @param user whose failed login attempts are to be reset
      */
-    public void resetFailedLoginAttempts(User user){
-        if(user.getUuid() != null)
+    public void resetFailedLoginAttempts(User user) {
+        if (user.getUuid() != null)
             userRepository.resetFailedLoginAttemptsForUser(user.getUuid());
     }
 
     /**
      * Checks if user is eligible for unlock
-     *  returns true,
-     *      - If configured cool down period has passed since last lock
-     *  else false
+     * returns true,
+     * - If configured cool down period has passed since last lock
+     * else false
      *
      * @param user to be checked for eligibility for unlock
      * @return if unlock able
      */
     public boolean isAccountUnlockAble(User user) {
-        if (user.getAccountLocked()){
+        if (user.getAccountLocked()) {
             boolean unlockAble =
                     System.currentTimeMillis() - user.getAccountLockedDate() > TimeUnit.MINUTES.toMillis(accountUnlockCoolDownPeriod);
 
-            log.info("Account eligible for unlock - "+ unlockAble);
+            log.info("Account eligible for unlock - " + unlockAble);
             log.info("Current time {}, last lock time {} , cool down period {} ", System.currentTimeMillis(),
                     user.getAccountLockedDate(), TimeUnit.MINUTES.toMillis(accountUnlockCoolDownPeriod));
             return unlockAble;
-        }
-        else
+        } else
             return true;
     }
 
     /**
      * Perform actions where a user login fails
-     *  - Fetch existing failed login attempts within configured time
-     *  period{@link UserService#maxInvalidLoginAttemptsPeriod}
-     *  - If failed login attempts exceeds configured {@link UserService#maxInvalidLoginAttempts}
-     *     - then lock account
-     *  - Add failed login attempt entry to repository
+     * - Fetch existing failed login attempts within configured time
+     * period{@link UserService#maxInvalidLoginAttemptsPeriod}
+     * - If failed login attempts exceeds configured {@link UserService#maxInvalidLoginAttempts}
+     * - then lock account
+     * - Add failed login attempt entry to repository
      *
-     * @param user user whose failed login attempt to be handled
+     * @param user      user whose failed login attempt to be handled
      * @param ipAddress IP address of remote
      */
-    public void handleFailedLogin(User user, String ipAddress){
-        if(!Objects.isNull(user.getUuid())) {
-        List<FailedLoginAttempt> failedLoginAttempts =
-                userRepository.fetchFailedAttemptsByUserAndTime(user.getUuid(),
-                        System.currentTimeMillis() - TimeUnit.MINUTES.toMillis(maxInvalidLoginAttemptsPeriod));
+    public void handleFailedLogin(User user, String ipAddress) {
+        if (!Objects.isNull(user.getUuid())) {
+            List<FailedLoginAttempt> failedLoginAttempts =
+                    userRepository.fetchFailedAttemptsByUserAndTime(user.getUuid(),
+                            System.currentTimeMillis() - TimeUnit.MINUTES.toMillis(maxInvalidLoginAttemptsPeriod));
 
-        if(failedLoginAttempts.size() + 1 >= maxInvalidLoginAttempts){
-            User userToBeUpdated = user.toBuilder()
-                    .accountLocked(true)
-                    .password(null)
-                    .accountLockedDate(System.currentTimeMillis())
-                    .build();
+            if (failedLoginAttempts.size() + 1 >= maxInvalidLoginAttempts) {
+                User userToBeUpdated = user.toBuilder()
+                        .accountLocked(true)
+                        .password(null)
+                        .accountLockedDate(System.currentTimeMillis())
+                        .build();
 
-            user = updateWithoutOtpValidation(userToBeUpdated);
-            removeTokensByUser(user);
-            log.info("Locked account with uuid {} for {} minutes as exceeded max allowed attempts of {} within {} " +
-                            "minutes",
-                    user.getUuid(), accountUnlockCoolDownPeriod, maxInvalidLoginAttempts, maxInvalidLoginAttemptsPeriod);
-            throw new OAuth2Exception("Account locked");
-        }
+                user = updateWithoutOtpValidation(userToBeUpdated);
+                removeTokensByUser(user);
+                log.info("Locked account with uuid {} for {} minutes as exceeded max allowed attempts of {} within {} " +
+                                "minutes",
+                        user.getUuid(), accountUnlockCoolDownPeriod, maxInvalidLoginAttempts, maxInvalidLoginAttemptsPeriod);
+                throw new OAuth2Exception("Account locked");
+            }
 
-        userRepository.insertFailedLoginAttempt(new FailedLoginAttempt(user.getUuid(), ipAddress,
-                System.currentTimeMillis(), true));
+            userRepository.insertFailedLoginAttempt(new FailedLoginAttempt(user.getUuid(), ipAddress,
+                    System.currentTimeMillis(), true));
         }
     }
 
@@ -498,7 +496,7 @@ public class UserService {
 
 
     String encryptPwd(String pwd) {
-        if(!isNull(pwd))
+        if (!isNull(pwd))
             return passwordEncoder.encode(pwd);
         else
             return null;
@@ -524,7 +522,7 @@ public class UserService {
     private void setFileStoreUrlsByFileStoreIds(List<User> userList) {
         List<String> fileStoreIds = userList.parallelStream().filter(p -> p.getPhoto() != null).map(User::getPhoto)
                 .collect(Collectors.toList());
-        if ( !isEmpty(fileStoreIds)) {
+        if (!isEmpty(fileStoreIds)) {
             Map<String, String> fileStoreUrlList = null;
             try {
                 fileStoreUrlList = fileRepository.getUrlByFileStoreId(userList.get(0).getTenantId(), fileStoreIds);

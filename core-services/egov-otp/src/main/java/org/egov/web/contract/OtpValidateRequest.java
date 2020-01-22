@@ -13,7 +13,7 @@ import org.egov.domain.model.ValidateRequest;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OtpValidateRequest {
-	@JsonProperty("RequestInfo")
+    @JsonProperty("RequestInfo")
     private RequestInfo requestInfo;
     private Otp otp;
 
