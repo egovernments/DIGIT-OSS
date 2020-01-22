@@ -2198,7 +2198,7 @@ class FormWizardDataEntry extends Component {
       this.setState({
         editDemand:true,
         selected: 4,
-        formValidIndexArray: [...formValidIndexArray, 4]
+        formValidIndexArray: [...formValidIndexArray, 3]
       });
     }
     let proceedToPayment = Boolean(
