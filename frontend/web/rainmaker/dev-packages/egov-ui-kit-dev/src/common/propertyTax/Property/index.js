@@ -192,7 +192,7 @@ class Property extends Component {
   
     const { latestPropertyDetails, propertyId,setRoute, tenantId } = this.props;
     const assessmentNo = latestPropertyDetails && latestPropertyDetails.assessmentNumber;
-    setRoute(`/property-tax/assessment-form-dataentry?assessmentId=${assessmentNo}&isReassesment=true&isAssesment=true&propertyId=${propertyId}&tenantId=${tenantId}`);
+    setRoute(`/property-tax/assessment-form-dataentry?assessmentId=${assessmentNo}&isReassesment=true&isAssesment=false&mode=editDemand&propertyId=${propertyId}&tenantId=${tenantId}`);
     // this.setState({
     //   dialogueOpen: true,
     //   urlToAppend: `/property-tax/assessment-form?assessmentId=${assessmentNo}&isReassesment=true&isAssesment=true&propertyId=${propertyId}&tenantId=${tenantId}`,
@@ -340,6 +340,20 @@ class Property extends Component {
             loadMdmsData={loadMdmsData}
           />
         }
+        {/* <div
+          id="tax-wizard-buttons"
+          className="wizard-footer col-sm-12"
+          style={{ textAlign: "right" }}
+        >
+          <div className="button-container col-xs-6 property-info-access-btn" style={{ float: "right" }}>
+            <Button
+              onClick={() => this.onAssessPayClick()}
+              label={<Label buttonLabel={true} label="PT_ASSESS_PROPERTY" fontSize="16px" />}
+              primary={true}
+              style={{ lineHeight: "auto", minWidth: "inherit" }}
+            />
+            </div>
+        </div> */}
        <div
           id="tax-wizard-buttons"
           className="wizard-footer col-sm-12"
