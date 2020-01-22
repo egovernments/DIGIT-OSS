@@ -126,7 +126,7 @@ class FormWizardDataEntry extends Component {
     const {
       fetchMDMDDocumentTypeSuccess,
       updatePrepareFormDataFromDraft,
-      location,generalMDMSDataById
+      location,generalMDMSDataById,prepareFinalObject
     } = this.props;
     const { search } = location;
     const financialYearFromQuery = getFinancialYearFromQuery();
@@ -187,6 +187,7 @@ class FormWizardDataEntry extends Component {
             }
           ]
         );
+        {demandPropertyResponse.length !=[] ? prepareFinalObject("DemandPropertiesResponse",demandPropertyResponse): []}
         const {generalMDMSDataById}=this.props;
         let finalYear='';
         const demands=demandPropertyResponse.Demands.reverse();
@@ -199,9 +200,9 @@ class FormWizardDataEntry extends Component {
             }
           });
           return(
-            this.props.prepareFinalObject(`DemandProperties[0].propertyDetails[0].demand[${yearKey}].demand[${finalYear}][${demandKey}].PT_TAXHEAD`,demandData.taxHeadMasterCode),
-            this.props.prepareFinalObject(`DemandProperties[0].propertyDetails[0].demand[${yearKey}].demand[${finalYear}][${demandKey}].PT_DEMAND`,`${demandData.taxAmount}`),
-            this.props.prepareFinalObject(`DemandProperties[0].propertyDetails[0].demand[${yearKey}].demand[${finalYear}][${demandKey}].PT_COLLECTED`,`${demandData.collectionAmount}`)
+          prepareFinalObject(`DemandProperties[0].propertyDetails[0].demand[${yearKey}].demand[${finalYear}][${demandKey}].PT_TAXHEAD`,demandData.taxHeadMasterCode),
+          prepareFinalObject(`DemandProperties[0].propertyDetails[0].demand[${yearKey}].demand[${finalYear}][${demandKey}].PT_DEMAND`,`${demandData.taxAmount}`),
+          prepareFinalObject(`DemandProperties[0].propertyDetails[0].demand[${yearKey}].demand[${finalYear}][${demandKey}].PT_COLLECTED`,`${demandData.collectionAmount}`)
           )
         })
       )
@@ -1711,7 +1712,7 @@ class FormWizardDataEntry extends Component {
       location,
       showSpinner,
       hideSpinner,
-      DemandProperties
+      DemandProperties,DemandPropertiesResponse,generalMDMSDataById
     } = this.props;
     const { search } = location;
     const propertyId = getQueryValue(search, "propertyId");
@@ -1876,19 +1877,41 @@ class FormWizardDataEntry extends Component {
       let currentYearData = [];
       let fromDate;
       let toDate;
+      let demandResponse=DemandPropertiesResponse.Demands.reverse();
+      const demandObject={}
+      let finaYr='';
+      const dmdObj={};
+      demandResponse.map(obj=>{
+
+
+
+        let generalmdms=Object.keys(generalMDMSDataById.TaxPeriod).map((years,keys)=>{
+
+            if(generalMDMSDataById.TaxPeriod[years].fromDate ===   obj.taxPeriodFrom){
+              finaYr=generalMDMSDataById.TaxPeriod[years].financialYear
+            }
+        })
+        // demandObject[finaYr]={...obj};
+         demandObject[obj.taxPeriodFrom]={...obj};
+         dmdObj[finaYr]={...obj};
+      })
+
+
       DemandProperties[0].propertyDetails[0].demand.forEach((demand, index) => {
         demand &&
           Object.keys(demand.demand).forEach((dataYear, key) => {
             const demandDetails1 = [];
+            const dR=dmdObj[dataYear]||{demandDetails:
+              [{},{},{}],payer:{},};
             demand.demand[dataYear].map((demandValue, ind) => {
-              currentYearData = datas.filter(
-                data => data.financialYear == dataYear
-              );
-              fromDate =
-                currentYearData.length > 0 ? currentYearData[0].fromDate : 0;
-              toDate =
-                currentYearData.length > 0 ? currentYearData[0].toDate : 0;
+              currentYearData = datas.filter(data => data.financialYear == dataYear);
+              fromDate =currentYearData.length > 0 ? currentYearData[0].fromDate : 0;
+              toDate = currentYearData.length > 0 ? currentYearData[0].toDate : 0;
+              // const demandResponse=demandResponse.map((demandResponse,responseKey)=>{
+              //   demandResponse.
+              // })
               demandDetails1.push({
+                ...dR.demandDetails[ind],
                 taxHeadMasterCode: demandValue.PT_TAXHEAD,
                 taxAmount: parseInt(
                   demandValue.PT_DEMAND != "" ? demandValue.PT_DEMAND : 0
@@ -1899,6 +1922,7 @@ class FormWizardDataEntry extends Component {
               });
             }),
               demandData.push({
+...dR,
                 tenantId: getTenantId(),
                 consumerCode: get(
                   createPropertyResponse,
@@ -1909,6 +1933,7 @@ class FormWizardDataEntry extends Component {
                 taxPeriodFrom: fromDate,
                 taxPeriodTo: toDate,
                 payer: {
+...dR.payer,
                   uuid: get(
                     createPropertyResponse,
                     "Properties[0].propertyDetails[0].owners[0].uuid"
@@ -1919,10 +1944,26 @@ class FormWizardDataEntry extends Component {
           });
       });
 
+if(propertyMethodAction=== "_update"){
+  demandData.map(obj=>{
+
+    if(demandObject[obj.taxPeriodFrom]!={}){
+      obj={...demandObject[obj.taxPeriodFrom],...obj}
+    }
+  })
+}
+
       let createDemandResponse = await httpRequest(
         `billing-service/demand/${propertyMethodAction}`,
         `${propertyMethodAction}`,
-        [],
+        propertyMethodAction=='create'?[]:[{
+          key:"tenantId",
+          value:getTenantId()
+        },
+        {
+          key:"consumerCode",
+          value:getQueryValue(search,"propertyId")
+        }],
         {
           Demands: demandData
         }
@@ -2366,7 +2407,7 @@ const mapStateToProps = state => {
   }
   let { preparedFinalObject = {} } = screenConfiguration;
   preparedFinalObject = { ...preparedFinalObject };
-  const { DemandProperties } = preparedFinalObject || {};
+  const { DemandProperties,DemandPropertiesResponse} = preparedFinalObject || {};
   return {
     form,
     currentTenantId,
@@ -2375,7 +2416,7 @@ const mapStateToProps = state => {
     finalData,
     app,
     generalMDMSDataById,
-    DemandProperties
+    DemandProperties,DemandPropertiesResponse
   };
 };
 
