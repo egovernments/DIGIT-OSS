@@ -205,9 +205,6 @@ class FormWizardDataEntry extends Component {
         })
       )
     });
-
-        const demandReassedData=`DemandProperties[0].propertyDetails[0].demand[${12}].demand[${2015}]`;
-        // this.props.prepareFinalObject("demandReassedData",demandReassedData);
         if (
           searchPropertyResponse.Properties[0].propertyDetails &&
           searchPropertyResponse.Properties[0].propertyDetails.length > 0
