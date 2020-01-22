@@ -1393,6 +1393,7 @@
               "id": 121,
               "name": "DSS_PROPERTY_TAX",
               "vizType": "module",
+              "moduleLevel": "PT",
               "type": "",
               "noUnit": false,
               "isCollapsible": false,
@@ -1425,6 +1426,7 @@
               "id": 131,
               "name": "DSS_TRADE_LICENCE",
               "vizType": "module",
+              "moduleLevel": "TL",
               "ref": {
                 "url": "tradelicense",
                 "logoUrl": "",
@@ -1454,6 +1456,7 @@
               "id": 141,
               "name": "DSS_COMPLAINS",
               "vizType": "module",
+              "moduleLevel": "PGR",
               "ref": {
                 "url": "pgr",
                 "logoUrl": "",
@@ -2876,6 +2879,7 @@
               "id": 121,
               "name": "DSS_PROPERTY_TAX",
               "vizType": "module",
+              "moduleLevel": "PT",
               "type": "",
               "noUnit": false,
               "isCollapsible": false,
@@ -2908,6 +2912,7 @@
               "id": 131,
               "name": "DSS_TRADE_LICENCE",
               "vizType": "module",
+              "moduleLevel": "TL",
               "ref": {
                 "url": "ulb-tradeLicense",
                 "logoUrl": "",
@@ -2937,6 +2942,7 @@
               "id": 141,
               "name": "DSS_COMPLAINS",
               "vizType": "module",
+              "moduleLevel": "PGR",
               "ref": {
                 "url": "ulb-pgr",
                 "logoUrl": "",
