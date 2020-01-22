@@ -21,7 +21,7 @@ import { Button, Card } from "components";
 import "./index.css";
 import PTHeader from "../../common/PTHeader";
 
-
+import { setRoute } from "egov-ui-kit/redux/app/actions";
 const innerDivStyle = {
   padding: "0",
   // borderBottom: "1px solid #e0e0e0",
@@ -188,6 +188,16 @@ class Property extends Component {
       urlToAppend: `/property-tax/assessment-form?assessmentId=${assessmentNo}&isReassesment=true&isAssesment=true&propertyId=${propertyId}&tenantId=${tenantId}`,
     });
   };
+  editDemand= () =>{
+  
+    const { latestPropertyDetails, propertyId,setRoute, tenantId } = this.props;
+    const assessmentNo = latestPropertyDetails && latestPropertyDetails.assessmentNumber;
+    setRoute(`/property-tax/assessment-form-dataentry?assessmentId=${assessmentNo}&isReassesment=true&isAssesment=true&propertyId=${propertyId}&tenantId=${tenantId}`);
+    // this.setState({
+    //   dialogueOpen: true,
+    //   urlToAppend: `/property-tax/assessment-form?assessmentId=${assessmentNo}&isReassesment=true&isAssesment=true&propertyId=${propertyId}&tenantId=${tenantId}`,
+    // });
+  }
 
   getAssessmentHistory = (selPropertyDetails, receiptsByYr = []) => {
     let assessmentList = [];
@@ -330,21 +340,21 @@ class Property extends Component {
             loadMdmsData={loadMdmsData}
           />
         }
-      {/*  <div
+       <div
           id="tax-wizard-buttons"
           className="wizard-footer col-sm-12"
           style={{ textAlign: "right" }}
         >
           <div className="button-container col-xs-6 property-info-access-btn" style={{ float: "right" }}>
             <Button
-              onClick={() => this.onAssessPayClick()}
-              label={<Label buttonLabel={true} label="PT_ASSESS_PROPERTY" fontSize="16px" />}
+              onClick={() => this.editDemand()}
+              label={<Label buttonLabel={true} label="PT_EDIT_DEMAND" fontSize="16px" />}
               primary={true}
               style={{ lineHeight: "auto", minWidth: "inherit" }}
             />
             </div>
         </div>
-        {dialogueOpen && <YearDialogue open={dialogueOpen} history={history} urlToAppend={urlToAppend} closeDialogue={closeYearRangeDialogue} />}*/}
+        {/* {dialogueOpen && <YearDialogue open={dialogueOpen} history={history} urlToAppend={urlToAppend} closeDialogue={closeYearRangeDialogue} />} */}
       </Screen>
     );
   }
@@ -718,6 +728,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(
         fetchGeneralMDMSData(requestBody, moduleName, masterName, key, tenantId)
       ),
+      setRoute: route => dispatch(setRoute(route)),
     fetchProperties: (queryObjectProperty) => dispatch(fetchProperties(queryObjectProperty)),
     getSingleAssesmentandStatus: (queryObj) => dispatch(getSingleAssesmentandStatus(queryObj)),
     fetchTotalBillAmount: (fetchBillQueryObject) => dispatch(fetchTotalBillAmount(fetchBillQueryObject)),

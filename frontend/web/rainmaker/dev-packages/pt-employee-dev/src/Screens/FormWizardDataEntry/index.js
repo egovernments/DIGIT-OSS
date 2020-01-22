@@ -298,21 +298,21 @@ class FormWizardDataEntry extends Component {
         },
         () => {
           {
-            if (activeTab >= 3 && !isCompletePayment) {
-              this.estimate().then(estimateResponse => {
-                if (estimateResponse) {
-                  this.setState({
-                    estimation:
-                      estimateResponse && estimateResponse.Calculation,
-                    totalAmountToBePaid: get(
-                      estimateResponse,
-                      "Calculation[0].totalAmount",
-                      0
-                    )
-                  });
-                }
-              });
-            }
+            // if (activeTab >= 3 && !isCompletePayment) {
+            //   this.estimate().then(estimateResponse => {
+            //     if (estimateResponse) {
+            //       this.setState({
+            //         estimation:
+            //           estimateResponse && estimateResponse.Calculation,
+            //         totalAmountToBePaid: get(
+            //           estimateResponse,
+            //           "Calculation[0].totalAmount",
+            //           0
+            //         )
+            //       });
+            //     }
+            //   });
+            // }
             if (activeTab === 4) this.pay();
           }
         }
