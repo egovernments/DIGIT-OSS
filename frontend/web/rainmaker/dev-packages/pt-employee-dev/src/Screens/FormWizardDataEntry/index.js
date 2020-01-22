@@ -109,7 +109,8 @@ class FormWizardDataEntry extends Component {
     calculationScreenData: [],
     assessedPropertyDetails: {},
     imageUrl: "",
-    finlYear: ""
+    finlYear: "",
+    editDemand:false
   };
 
   updateTotalAmount = (value, isFullPayment, errorText) => {
@@ -2192,12 +2193,13 @@ class FormWizardDataEntry extends Component {
     }
   };
   componentDidUpdate() {
-    const { selected, formValidIndexArray } = this.state;
+    const { selected, formValidIndexArray,editDemand } = this.state;
     const { location } = this.props;
     const { search } = location;
     const mode = getQueryValue(search, "mode");
-    if (mode == 'editDemand' && selected == 3) {
+    if (mode == 'editDemand' && selected == 3&&editDemand==false) {
       this.setState({
+        editDemand:true,
         selected: 4,
         formValidIndexArray: [...formValidIndexArray, 4]
       });
