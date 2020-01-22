@@ -190,7 +190,7 @@ class FormWizardDataEntry extends Component {
         {demandPropertyResponse.length !=[] ? prepareFinalObject("DemandPropertiesResponse",demandPropertyResponse): []}
         const {generalMDMSDataById}=this.props;
         let finalYear='';
-        const demands=demandPropertyResponse.Demands.reverse();
+        const demands=demandPropertyResponse && demandPropertyResponse.Demands.reverse();
         let demandResponse=demands.forEach((demand,yearKey)=>{
           return(
             demand.demandDetails.forEach((demandData,demandKey)=>{
@@ -1955,14 +1955,14 @@ class FormWizardDataEntry extends Component {
       let createDemandResponse = await httpRequest(
         `billing-service/demand/${propertyMethodAction}`,
         `${propertyMethodAction}`,
-        propertyMethodAction=='create'?[]:[{
-          key:"tenantId",
-          value:getTenantId()
-        },
-        {
-          key:"consumerCode",
-          value:getQueryValue(search,"propertyId")
-        }],
+          propertyMethodAction=='create'?[]:[{
+            key:"tenantId",
+            value:getTenantId()
+          },
+          {
+            key:"consumerCode",
+            value:getQueryValue(search,"propertyId")
+          }],
         {
           Demands: demandData
         }
