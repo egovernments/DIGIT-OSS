@@ -160,17 +160,17 @@ export const basicSummary = getCommonGrayCard({
                 }
             }
           ),
-          applicationFee: getLabelWithValue(
-            {
-              labelName: "Application Fee",
-              labelKey: "BPA_BASIC_DETAILS_APP_FEE_LABEL"
-            },
-            {
-              jsonPath:
-                "ReceiptTemp[0].Bill[0].totalAmount",
-                callBack: checkValueForNA
-            }
-          ),
+          // applicationFee: getLabelWithValue(
+          //   {
+          //     labelName: "Application Fee",
+          //     labelKey: "BPA_BASIC_DETAILS_APP_FEE_LABEL"
+          //   },
+          //   {
+          //     jsonPath:
+          //       "ReceiptTemp[0].Bill[0].totalAmount",
+          //       callBack: checkValueForNA
+          //   }
+          // ),
           remarks: getLabelWithValue(
             {
               labelName: "Remarks",

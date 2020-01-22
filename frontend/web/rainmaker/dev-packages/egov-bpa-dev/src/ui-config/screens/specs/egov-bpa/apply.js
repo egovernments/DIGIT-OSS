@@ -257,16 +257,14 @@ const setSearchResponse = async (
     "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + edcrNumber + "&tenantId=" + tenantId,
     "search", []
     );
- 
+
   dispatch(prepareFinalObject(`scrutinyDetails`, edcrRes.edcrDetail[0] ));
 
   if(ownershipCategory) {
     let ownerShipMajorType =  dispatch(
       prepareFinalObject( "BPA.ownerShipMajorType", ownershipCategory.split('.')[0] ));
   }
-  console.log(latitude, longitude, "erytuierytuerytuy")
   
-
  if(latitude && longitude) {
   dispatch(
     handleField(
@@ -306,7 +304,11 @@ const screenConfig = {
       dispatch(prepareFinalObject("BPA.address.city", tenantId));
     });
 
-    if (applicationNumber) {
+    let isEdit = true;
+    if(step || step == 0) {
+      isEdit = false
+    }
+    if (applicationNumber && isEdit) {
       setSearchResponse(state, dispatch, applicationNumber, tenantId, action);
     } else {
       getTodaysDate(action, state, dispatch);

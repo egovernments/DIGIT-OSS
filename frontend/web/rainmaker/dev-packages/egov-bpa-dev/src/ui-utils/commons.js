@@ -250,6 +250,17 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
         convertDateToEpoch(get(owner, "dob"))
       );
     });
+
+    let authOwners = [];
+    let multiOwners = get (payload, "owners", []);
+    if(multiOwners && multiOwners.length > 0) {
+      multiOwners.forEach(owner => {
+        if(owner && owner.isDeleted != false) {
+          authOwners.push(owner);
+        }
+      })
+    }
+    payload.owners = authOwners;
     let response;
     if (method === "CREATE") {
       response = await httpRequest(
@@ -304,7 +315,6 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
     }
   });
 
-console.log(documents, "ieuriuyeituyeiurytieuryt");
   if(documents[0] && documents[0].length > 0) {
     let documentsList = [];
   documents[0].forEach(doc => {

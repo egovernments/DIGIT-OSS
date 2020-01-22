@@ -51,7 +51,7 @@ export const detailsofplot = getCommonCard({
                 },
                 required: true,
                 props: {
-                    className: "textfield-enterable-selection",
+                    disabled: 'true'
                   },
                 // // pattern: getPattern("Name") || null,
                 jsonPath: "scrutinyDetails.planDetail.planInformation.khataNo",
@@ -97,7 +97,7 @@ export const detailsofplot = getCommonCard({
                 },
                 required: true,
                 props: {
-                    className: "textfield-enterable-selection",
+                    disabled: 'true'
                   },
                 // // pattern: getPattern("Name") || null,
                 jsonPath: "scrutinyDetails.planDetail.planInformation.plotNo",
@@ -146,6 +146,8 @@ export const detailsofplot = getCommonCard({
                 },
                 props: {
                     className: "textfield-enterable-selection",
+                    multiline: true,
+                    rows: "4"
                   },
                 // // pattern: getPattern("Name") || null,
                 jsonPath: "BPA.registrationDetails",
