@@ -81,7 +81,7 @@ export const getQueryValue = (query, key) =>
     query.replace(new RegExp("^(?:.*[&\\?]" + encodeURIComponent(key).replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"), "$1")
   );
 
-export const findCorrectDateObj = (financialYear, category) => {
+export const findCorrectDateObj = (financialYear, category=[]) => {
   category.sort((a, b) => {
     let yearOne = a.fromFY && a.fromFY.slice(0, 4);
     let yearTwo = b.fromFY && b.fromFY.slice(0, 4);
@@ -126,7 +126,7 @@ export const findCorrectDateObj = (financialYear, category) => {
   return chosenDateObj;
 };
 
-export const findCorrectDateObjPenaltyIntrest = (financialYear, category) => {
+export const findCorrectDateObjPenaltyIntrest = (financialYear, category=[]) => {
   category.sort((a, b) => {
     let yearOne = a.fromFY && a.fromFY.slice(0, 4);
     let yearTwo = b.fromFY && b.fromFY.slice(0, 4);
@@ -168,7 +168,7 @@ const getMonth = (date) => {
   return parseInt(date.split("/")[1]);
 };
 
-export const sortDropdown = (data, sortBy, isAscending) => {
+export const sortDropdown = (data=[], sortBy, isAscending) => {
   const sortedData = data.slice().sort((a, b) => {
     var textA = a[sortBy].toUpperCase();
     var textB = b[sortBy].toUpperCase();
@@ -177,7 +177,7 @@ export const sortDropdown = (data, sortBy, isAscending) => {
   return sortedData;
 };
 
-export const getOwnerCategoryByYear = (data, financialYear) => {
+export const getOwnerCategoryByYear = (data=[], financialYear) => {
   data.sort((a, b) => {
     let yearOne = a.fromFY && a.fromFY.slice(0, 4);
     let yearTwo = b.fromFY && b.fromFY.slice(0, 4);
@@ -313,7 +313,7 @@ export const transformPropertyDataToAssessInfo = (data) => {
       configFloor = cloneDeep(configFloor);
       Object.keys(configFloor["fields"]).forEach((item) => {
         let jsonPath = configFloor["fields"][item]["jsonPath"];
-        jsonPath = jsonPath.replace(/units\[[0-9]\]/g, "units[" + unitIndex + "]");
+        jsonPath =jsonPath && jsonPath.replace(/units\[[0-9]\]/g, "units[" + unitIndex + "]");
         configFloor["fields"][item].jsonPath = jsonPath;
         let valueInJSON = get(data, jsonPath);
         if (valueInJSON === null) {
@@ -348,8 +348,8 @@ export const transformPropertyDataToAssessInfo = (data) => {
 };
 
 const prepareUniqueFloorIndexObj = (units) => {
-  units = sortBy(uniqBy(units, "floorNo"), (unit) => parseInt(unit.floorNo) || -99999);
-  let floorIndexObj = units.reduce((floorIndexObj, item, index) => {
+  units = units && sortBy(uniqBy(units, "floorNo"), (unit) => parseInt(unit.floorNo) || -99999);
+  let floorIndexObj = units && units.reduce((floorIndexObj, item, index) => {
     if (isUndefined(floorIndexObj[item.floorNo])) {
       floorIndexObj[item.floorNo] = index;
     }
@@ -373,4 +373,3 @@ const modifyEndOfJsonPath = (jsonpath, toReplaceWith) => {
   jP.pop();
   return jP.join(".") + "." + toReplaceWith;
 };
-

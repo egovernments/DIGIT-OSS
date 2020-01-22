@@ -275,11 +275,11 @@ export const getSelectedCombination = (form, formKey, fieldKeys) => {
 };
 
 export const getSingleOwnerInfo = (self) => {
-  const { ownerInfo } = self.props.form;
+  const { ownerInfo={} } = self.props.form;
   const ownerObj = {
     documents: [{}],
   };
-  Object.keys(ownerInfo.fields).map((field) => {
+  ownerInfo && Object.keys(ownerInfo.fields).map((field) => {
     const jsonPath = ownerInfo.fields[field].jsonPath;
     if (jsonPath.toLowerCase().indexOf("document") !== -1) {
       ownerObj.documents[0][jsonPath.substring(jsonPath.lastIndexOf(".") + 1, jsonPath.length)] =

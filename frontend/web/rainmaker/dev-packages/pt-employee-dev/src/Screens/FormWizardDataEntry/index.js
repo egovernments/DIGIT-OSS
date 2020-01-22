@@ -212,7 +212,7 @@ class FormWizardDataEntry extends Component {
           searchPropertyResponse.Properties[0].propertyDetails.length > 0
         ) {
           searchPropertyResponse.Properties[0].propertyDetails.forEach(item => {
-            item.units = sortBy(
+            item.units =item.units && sortBy(
               item.units,
               unit => parseInt(unit.floorNo) || -99999
             );
@@ -1712,7 +1712,7 @@ class FormWizardDataEntry extends Component {
       location,
       showSpinner,
       hideSpinner,
-      DemandProperties,DemandPropertiesResponse,generalMDMSDataById
+      DemandProperties,DemandPropertiesResponse=[],generalMDMSDataById
     } = this.props;
     const { search } = location;
     const propertyId = getQueryValue(search, "propertyId");
@@ -1877,7 +1877,7 @@ class FormWizardDataEntry extends Component {
       let currentYearData = [];
       let fromDate;
       let toDate;
-      let demandResponse=DemandPropertiesResponse.Demands.reverse();
+      let demandResponse=DemandPropertiesResponse?DemandPropertiesResponse.Demands?DemandPropertiesResponse.Demands.reverse():[]:[];
       const demandObject={}
       let finaYr='';
       const dmdObj={};
@@ -1901,9 +1901,8 @@ class FormWizardDataEntry extends Component {
         demand &&
           Object.keys(demand.demand).forEach((dataYear, key) => {
             const demandDetails1 = [];
-            const dR=dmdObj[dataYear]||{demandDetails:
-              [{},{},{}],payer:{},};
-            demand.demand[dataYear].map((demandValue, ind) => {
+            const dR=dmdObj[dataYear] ||{};
+            demand.demand && demand.demand[dataYear].map((demandValue, ind) => {
               currentYearData = datas.filter(data => data.financialYear == dataYear);
               fromDate =currentYearData.length > 0 ? currentYearData[0].fromDate : 0;
               toDate = currentYearData.length > 0 ? currentYearData[0].toDate : 0;
@@ -1911,7 +1910,7 @@ class FormWizardDataEntry extends Component {
               //   demandResponse.
               // })
               demandDetails1.push({
-                ...dR.demandDetails[ind],
+                ...get(dR,`demandDetails[${ind}]`,{}),
                 taxHeadMasterCode: demandValue.PT_TAXHEAD,
                 taxAmount: parseInt(
                   demandValue.PT_DEMAND != "" ? demandValue.PT_DEMAND : 0
@@ -1922,7 +1921,7 @@ class FormWizardDataEntry extends Component {
               });
             }),
               demandData.push({
-...dR,
+                ...dR,
                 tenantId: getTenantId(),
                 consumerCode: get(
                   createPropertyResponse,
@@ -1933,7 +1932,7 @@ class FormWizardDataEntry extends Component {
                 taxPeriodFrom: fromDate,
                 taxPeriodTo: toDate,
                 payer: {
-...dR.payer,
+                  ...get(dR,"payer",{}),
                   uuid: get(
                     createPropertyResponse,
                     "Properties[0].propertyDetails[0].owners[0].uuid"
@@ -1944,14 +1943,14 @@ class FormWizardDataEntry extends Component {
           });
       });
 
-if(propertyMethodAction=== "_update"){
-  demandData.map(obj=>{
-
-    if(demandObject[obj.taxPeriodFrom]!={}){
-      obj={...demandObject[obj.taxPeriodFrom],...obj}
-    }
-  })
-}
+// if(propertyMethodAction=== "_update"){
+//   demandData.map(obj=>{
+//
+//     if(demandObject[obj.taxPeriodFrom]!={}){
+//       obj={...demandObject[obj.taxPeriodFrom],...obj}
+//     }
+//   })
+// }
 
       let createDemandResponse = await httpRequest(
         `billing-service/demand/${propertyMethodAction}`,
