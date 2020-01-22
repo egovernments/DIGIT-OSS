@@ -3079,7 +3079,7 @@
         "_comments": "fields are field names picked from its aggregation query to use post aggregation newField value with given new field name  "
       }
     ],
-    "isCumulative": true,
+    "isCumulative": false,
     "interval": "month",
     "insight": {
     },
