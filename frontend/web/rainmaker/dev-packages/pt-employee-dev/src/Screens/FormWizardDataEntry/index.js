@@ -125,7 +125,7 @@ class FormWizardDataEntry extends Component {
     const {
       fetchMDMDDocumentTypeSuccess,
       updatePrepareFormDataFromDraft,
-      location
+      location,generalMDMSDataById
     } = this.props;
     const { search } = location;
     const financialYearFromQuery = getFinancialYearFromQuery();
@@ -172,6 +172,42 @@ class FormWizardDataEntry extends Component {
             }
           ]
         );
+        const  demandPropertyResponse= await httpRequest(
+          "billing-service/demand/_search",
+          "_get",
+          [
+            {
+              key:"tenantId",
+              value:tenantId
+            },
+            {
+              key:"consumerCode",
+              value:getQueryValue(search,"propertyId")
+            }
+          ]
+        );
+        const {generalMDMSDataById}=this.props;
+        let finalYear='';
+        const demands=demandPropertyResponse.Demands.reverse();
+        let demandResponse=demands.forEach((demand,yearKey)=>{
+          return(
+            demand.demandDetails.forEach((demandData,demandKey)=>{
+          let yearkeys=Object.keys(generalMDMSDataById.TaxPeriod).forEach((item, i) => {
+            if(generalMDMSDataById.TaxPeriod[item].fromDate=== demand.taxPeriodFrom){
+              finalYear= generalMDMSDataById.TaxPeriod[item].financialYear
+            }
+          });
+          return(
+            this.props.prepareFinalObject(`DemandProperties[0].propertyDetails[0].demand[${yearKey}].demand[${finalYear}][${demandKey}].PT_TAXHEAD`,demandData.taxHeadMasterCode),
+            this.props.prepareFinalObject(`DemandProperties[0].propertyDetails[0].demand[${yearKey}].demand[${finalYear}][${demandKey}].PT_DEMAND`,`${demandData.taxAmount}`),
+            this.props.prepareFinalObject(`DemandProperties[0].propertyDetails[0].demand[${yearKey}].demand[${finalYear}][${demandKey}].PT_COLLECTED`,`${demandData.collectionAmount}`)
+          )
+        })
+      )
+    });
+
+        const demandReassedData=`DemandProperties[0].propertyDetails[0].demand[${12}].demand[${2015}]`;
+        // this.props.prepareFinalObject("demandReassedData",demandReassedData);
         if (
           searchPropertyResponse.Properties[0].propertyDetails &&
           searchPropertyResponse.Properties[0].propertyDetails.length > 0
@@ -204,6 +240,7 @@ class FormWizardDataEntry extends Component {
             prepareFormData: propertyResponse //prepareFormData2,
           }
         };
+
       }
 
       if (!currentDraft) {
@@ -353,7 +390,6 @@ class FormWizardDataEntry extends Component {
     let { resetForm } = this;
 
     this.unlisten = history.listen((location, action) => {
-      console.log("on route change");
       resetForm();
     });
 
@@ -2334,7 +2370,8 @@ const mapStateToProps = state => {
     finalData,
     app,
     generalMDMSDataById,
-    DemandProperties
+    DemandProperties,
+    yeardataInfo
   };
 };
 
