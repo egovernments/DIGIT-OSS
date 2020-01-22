@@ -55,7 +55,8 @@
                                 "font":"Roboto"
                             }
                         ],
-                        "alignment": "left"
+                        "alignment": "left",
+                        "width" : "*"
                     },
                     {
                         "text": [
@@ -68,7 +69,8 @@
                                 "bold": true
                             }
                         ],
-                        "alignment": "right"
+                        "alignment": "right",
+                        "width" : "auto"
                     }
                 ],
                 "style": "top-margin"
@@ -1078,7 +1080,7 @@
                         "text": "Validity : This certificate is valid upto "
                     },
                     {
-                        "text": "{{applicationDate}}"
+                        "text": "{{validityDate}}"
                     },
                     {
                         "text": " Only. "
