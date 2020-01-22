@@ -367,7 +367,7 @@ class FormWizardDataEntry extends Component {
       let inputType = document.getElementsByTagName("input");
       for (let input in inputType) {
         if (inputType[input].type === "number") {
-          inputType[input].addEventListener("mousewheel", function() {
+          inputType[input].addEventListener("mousewheel", function () {
             this.blur();
           });
         }
@@ -455,7 +455,7 @@ class FormWizardDataEntry extends Component {
         let receiptImageUrl = `https://s3.ap-south-1.amazonaws.com/pb-egov-assets/${id}/logo.png`;
         this.convertImgToDataURLviaCanvas(
           receiptImageUrl,
-          function(data) {
+          function (data) {
             this.setState({ imageUrl: data });
           }.bind(this)
         );
@@ -481,11 +481,11 @@ class FormWizardDataEntry extends Component {
     const titleObject = isReasses
       ? ["PT_REASSESS_PROPERTY"]
       : [
-          "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER",
-          `(${financialYearFromQuery})`,
-          ":",
-          "PT_ADD_NEW_PROPERTY"
-        ];
+        "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER",
+        `(${financialYearFromQuery})`,
+        ":",
+        "PT_ADD_NEW_PROPERTY"
+      ];
 
     renderCustomTitleForPt({ titleObject });
     hideSpinner();
@@ -714,11 +714,11 @@ class FormWizardDataEntry extends Component {
               receiptHeader="PT_ASSESSMENT_NO"
               messageHeader={this.getMessageHeader()}
               message={this.getMessage()}
-              // receiptNo={
-              //   assessedPropertyDetails["Properties"][0]["propertyDetails"][0][
-              //     "assessmentNumber"
-              //   ]
-              // }
+            // receiptNo={
+            //   assessedPropertyDetails["Properties"][0]["propertyDetails"][0][
+            //     "assessmentNumber"
+            //   ]
+            // }
             />
           </div>
         );
@@ -776,8 +776,8 @@ class FormWizardDataEntry extends Component {
       isAssesment
         ? (buttonLabel = "PT_ASSESS_PROPERTY")
         : isReassesment
-        ? (buttonLabel = "PT_UPDATE_ASSESSMENT")
-        : (buttonLabel = "PT_ADD_ASSESS_PROPERTY");
+          ? (buttonLabel = "PT_UPDATE_ASSESSMENT")
+          : (buttonLabel = "PT_ADD_ASSESS_PROPERTY");
     } else if (index == 5) {
       buttonLabel = "PT_HOME";
     } else if (index == 6) {
@@ -803,8 +803,8 @@ class FormWizardDataEntry extends Component {
     isAssesment
       ? (buttonLabel = "PT_PROPERTY_ASSESS_SUCCESS")
       : isReassesment
-      ? (buttonLabel = "PT_PROPERTY_REASSESS_SUCCESS")
-      : (buttonLabel = "PT_PROPERTY_ADD_SUCCESS");
+        ? (buttonLabel = "PT_PROPERTY_REASSESS_SUCCESS")
+        : (buttonLabel = "PT_PROPERTY_ADD_SUCCESS");
 
     return buttonLabel;
   }
@@ -824,8 +824,8 @@ class FormWizardDataEntry extends Component {
     isAssesment
       ? (buttonLabel = "PT_PROPERTY_ASSESS_NOTIFICATION")
       : isReassesment
-      ? (buttonLabel = "PT_PROPERTY_REASSESS_NOTIFICATION")
-      : (buttonLabel = "PT_PROPERTY_ADD_NOTIFICATION");
+        ? (buttonLabel = "PT_PROPERTY_REASSESS_NOTIFICATION")
+        : (buttonLabel = "PT_PROPERTY_ADD_NOTIFICATION");
 
     return buttonLabel;
   }
@@ -857,8 +857,8 @@ class FormWizardDataEntry extends Component {
         isAssesment
           ? (headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER")
           : isReassesment
-          ? (headerObj.header = "PT_REASSESS_PROPERTY")
-          : // : ((headerObj.headerValue =
+            ? (headerObj.header = "PT_REASSESS_PROPERTY")
+            : // : ((headerObj.headerValue =
             //     headerObj.headerValue + ":" + addNewPropertyLabel),
             //   (headerObj.subHeaderValue = ""),
             //(headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER"));
@@ -869,8 +869,8 @@ class FormWizardDataEntry extends Component {
         isAssesment
           ? (headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER")
           : isReassesment
-          ? (headerObj.header = "PT_REASSESS_PROPERTY")
-          : // : ((headerObj.subHeaderValue = ""),
+            ? (headerObj.header = "PT_REASSESS_PROPERTY")
+            : // : ((headerObj.subHeaderValue = ""),
             (headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER");
         // headerObj.headerValue = "(" + assessmentYear + ")";
         break;
@@ -879,8 +879,8 @@ class FormWizardDataEntry extends Component {
         isAssesment
           ? (headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER")
           : isReassesment
-          ? (headerObj.header = "PT_REASSESS_PROPERTY")
-          : (headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER");
+            ? (headerObj.header = "PT_REASSESS_PROPERTY")
+            : (headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER");
         // headerObj.headerValue = "(" + assessmentYear + ")";
         break;
       case 5:
@@ -888,8 +888,8 @@ class FormWizardDataEntry extends Component {
         isAssesment
           ? (headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER")
           : isReassesment
-          ? (headerObj.header = "PT_DEMAND_REASSESS_PROPERTY")
-          : (headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER");
+            ? (headerObj.header = "PT_DEMAND_REASSESS_PROPERTY")
+            : (headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER");
         // headerObj.headerValue = "(" + assessmentYear + ")";
         break;
       case 6:
@@ -912,9 +912,9 @@ class FormWizardDataEntry extends Component {
     if (formValidIndexArray.indexOf(index) !== -1 && selected >= index) {
       !isCompletePayment
         ? this.setState({
-            selected: index,
-            formValidIndexArray: range(0, index)
-          })
+          selected: index,
+          formValidIndexArray: range(0, index)
+        })
         : alert("Not authorized to edit this property details");
     }
   };
@@ -1165,7 +1165,7 @@ class FormWizardDataEntry extends Component {
         );
         let errorCode = "FINE";
         let previousKey = -1;
-        let previousYear="";
+        let previousYear = "";
         let demandLength = demand.length;
         let arrayOfEmptyYears = [];
 
@@ -1203,13 +1203,13 @@ class FormWizardDataEntry extends Component {
                     if (
                       data.demand[data1][data2].PT_COLLECTED &&
                       parseInt(data.demand[data1][data2].PT_DEMAND) <
-                        parseInt(data.demand[data1][data2].PT_COLLECTED)
+                      parseInt(data.demand[data1][data2].PT_COLLECTED)
                     ) {
                       errorCode = "ERR03_DEMAND_ENTER_THE_DATA";
                     }
                     // if (!previousYear ||previousYear!=data1) {
-                    if (key2==0) {
-                        previousKey = key;
+                    if (key2 == 0) {
+                      previousKey = key;
                     }
 
                     // }
@@ -1496,7 +1496,7 @@ class FormWizardDataEntry extends Component {
       get(prepareFormData, "Receipt[0].instrument.transactionNumber") &&
       get(prepareFormData, "Receipt[0].instrument.transactionNumberConfirm") &&
       get(prepareFormData, "Receipt[0].instrument.transactionNumber") !==
-        get(prepareFormData, "Receipt[0].instrument.transactionNumberConfirm")
+      get(prepareFormData, "Receipt[0].instrument.transactionNumberConfirm")
     ) {
       this.props.toggleSnackbarAndSetText(
         true,
@@ -2195,6 +2195,13 @@ class FormWizardDataEntry extends Component {
     const { selected, formValidIndexArray } = this.state;
     const { location } = this.props;
     const { search } = location;
+    const mode = getQueryValue(search, "mode");
+    if (mode == 'editDemand' && selected == 3) {
+      this.setState({
+        selected: 4,
+        formValidIndexArray: [...formValidIndexArray, 4]
+      });
+    }
     let proceedToPayment = Boolean(
       getQueryValue(search, "proceedToPayment").replace("false", "")
     );
@@ -2208,7 +2215,7 @@ class FormWizardDataEntry extends Component {
   convertImgToDataURLviaCanvas = (url, callback, outputFormat) => {
     var img = new Image();
     img.crossOrigin = "Anonymous";
-    img.onload = function() {
+    img.onload = function () {
       var canvas = document.createElement("CANVAS");
       var ctx = canvas.getContext("2d");
       var dataURL;
@@ -2349,7 +2356,6 @@ const mapStateToProps = state => {
   let taxdata1 = taxData.filter(
     tax => tax.service === "PT" && tax.legacy == true
   );
-
   const finalData = Object.keys(yeardata1).map((data, key) => {
     yeardata1[data]["taxHead"] = [...taxdata1];
     return yeardata[data];
