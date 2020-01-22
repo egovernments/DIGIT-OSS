@@ -36,7 +36,7 @@ import {
   prepareNOCUploadData,
   getAppSearchResults
 } from "../../../../ui-utils/commons";
-import { getTodaysDateInYYYMMDD, getTenantMdmsData, calculationType } from "../utils";
+import { getTodaysDateInYYYMMDD, getTenantMdmsData, calculationType, setProposedBuildingData } from "../utils";
 
 export const stepsData = [
   { labelName: "Basic Details", labelKey: "" },
@@ -311,6 +311,7 @@ const screenConfig = {
     if (applicationNumber && isEdit) {
       setSearchResponse(state, dispatch, applicationNumber, tenantId, action);
     } else {
+      setProposedBuildingData(state, dispatch);
       getTodaysDate(action, state, dispatch);
     }
 

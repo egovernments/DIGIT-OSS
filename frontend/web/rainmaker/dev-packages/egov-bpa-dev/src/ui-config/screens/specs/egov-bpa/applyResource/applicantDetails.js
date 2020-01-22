@@ -295,31 +295,31 @@ const commonApplicantInformation = () => {
           className: "applicant-details-error textfield-enterable-selection"
         }
       }),
-      specialApplicantCategory: getSelectField({
-        label: {
-          labelName: "Special Applicant Category",
-          labelKey: "NOC_SPECIAL_APPLICANT_CATEGORY_LABEL"
-        },
-        placeholder: {
-          labelName: "Select Special Applicant Category",
-          labelKey: "NOC_SPECIAL_APPLICANT_CATEGORY_PLACEHOLDER"
-        },
-        props: {
-          className: "textfield-enterable-selection"
-        },
-        required: true,
-        jsonPath: "BPA.owners[0].ownerType",
-        localePrefix: {
-          moduleName: "common-masters",
-          masterName: "OwnerType"
-        },
-        sourceJsonPath: "applyScreenMdmsData.common-masters.OwnerType",
-        gridDefination: {
-          xs: 12,
-          sm: 12,
-          md: 6
-        }
-      }),
+      // specialApplicantCategory: getSelectField({
+      //   label: {
+      //     labelName: "Special Applicant Category",
+      //     labelKey: "NOC_SPECIAL_APPLICANT_CATEGORY_LABEL"
+      //   },
+      //   placeholder: {
+      //     labelName: "Select Special Applicant Category",
+      //     labelKey: "NOC_SPECIAL_APPLICANT_CATEGORY_PLACEHOLDER"
+      //   },
+      //   props: {
+      //     className: "textfield-enterable-selection"
+      //   },
+      //   required: true,
+      //   jsonPath: "BPA.owners[0].ownerType",
+      //   localePrefix: {
+      //     moduleName: "common-masters",
+      //     masterName: "OwnerType"
+      //   },
+      //   sourceJsonPath: "applyScreenMdmsData.common-masters.OwnerType",
+      //   gridDefination: {
+      //     xs: 12,
+      //     sm: 12,
+      //     md: 6
+      //   }
+      // }),
       primaryOwner: {
         uiFramework: "custom-containers-local",
         moduleName: "egov-bpa",

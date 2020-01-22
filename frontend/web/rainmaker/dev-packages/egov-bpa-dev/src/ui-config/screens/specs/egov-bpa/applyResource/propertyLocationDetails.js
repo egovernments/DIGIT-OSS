@@ -19,7 +19,7 @@ export const bpaLocationDetails = getCommonCard(
   {
     header: getCommonTitle(
       {
-        labelName: "BPA Location Details",
+        labelName: "Location Details",
         labelKey: "BPA_NEW_TRADE_DETAILS_HEADER_DETAILS"
       },
       {
@@ -46,7 +46,8 @@ export const bpaLocationDetails = getCommonCard(
           required: true,
           props: {
             required: true,
-            disabled: true
+            disabled: true,
+            className : "tl-trade-type"
           }
         }),
         beforeFieldChange: async (action, state, dispatch) => {
@@ -285,7 +286,8 @@ export const bpaLocationDetails = getCommonCard(
               },
               props: {
                 disabled: true,
-                cursor: "pointer"
+                cursor: "pointer",
+                className : "tl-trade-type"
               }
             })
           }

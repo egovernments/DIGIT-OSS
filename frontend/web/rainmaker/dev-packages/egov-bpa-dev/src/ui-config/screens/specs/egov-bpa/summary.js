@@ -30,7 +30,15 @@ const header = getCommonContainer({
   header: getCommonHeader({
     labelName: "BPA - Application Summary",
     labelKey: "BPA_SUMMARY_HEADER"
-  })
+  }),
+  applicationNumber: {
+    uiFramework: "custom-atoms-local",
+    moduleName: "egov-bpa",
+    componentPath: "ApplicationNoContainer",
+    props: {
+      number: getQueryArg(window.location.href, "applicationNumber")
+    }
+  },
 });
 
 const prepareDocumentsDetailsView = async (state, dispatch) => {

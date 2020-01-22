@@ -13,6 +13,7 @@ import {
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 import "./index.css";
+import { setProposedBuildingData } from "../../utils/index.js";
 
 export const buildingPlanScrutinyDetails = getCommonCard({
   header: getCommonTitle(
@@ -115,7 +116,8 @@ export const blockWiseOccupancyAndUsageDetails = getCommonCard({
             md: 6
           },
           props: {
-            disabled: true
+            disabled: true,
+            className : "tl-trade-type"
           }
         }),
         beforeFieldChange: (action, state, dispatch) => {
@@ -149,7 +151,6 @@ export const blockWiseOccupancyAndUsageDetails = getCommonCard({
             moduleName: "BPA",
             masterName: "SUBOCCUPANCYTYPE"
           },
-          required: true,
           gridDefination: {
             xs: 12,
             sm: 12,
@@ -225,7 +226,8 @@ export const demolitiondetails = getCommonCard({
         },
         jsonPath: "scrutinyDetails.planDetail.planInformation.demolitionArea",
         props: {
-          disabled: 'true'
+          disabled: 'true',
+          className : "tl-trade-type"
         }
       })
     }
@@ -255,24 +257,7 @@ export const proposedBuildingDetails = getCommonCard({
         moduleName: "egov-bpa",
         componentPath: "Table",
         props: {
-          data: [
-            {
-              "Floor Description": "Ground Floor",
-              "Level": 0,
-              "Occupancy/Sub Occupancy": "Individual residential",
-              "Buildup Area": 52.22,
-              "Floor Area": 51,
-              "Carpet Area": 49
-            },
-            {
-              "Floor Description": "First Floor",
-              "Level": 0,
-              "Occupancy/Sub Occupancy": "Individual residential",
-              "Buildup Area": 52.22,
-              "Floor Area": 51,
-              "Carpet Area": 49
-            }
-          ],
+          data : setProposedBuildingData,
           columns: {
             "Floor Description": {},
             "Level": {},
@@ -311,7 +296,8 @@ export const proposedBuildingDetails = getCommonCard({
             jsonPath:
               "scrutinyDetails.planDetail.blocks[0].building.totalBuitUpArea",
             props: {
-              disabled: 'true'
+              disabled: 'true',
+              className : "tl-trade-type"
             },
             gridDefination: {
               xs: 12,
@@ -329,7 +315,8 @@ export const proposedBuildingDetails = getCommonCard({
             required: true,
             jsonPath: "scrutinyDetails.planDetail.blocks[0].building.totalFloors",
             props: {
-              disabled: 'true'
+              disabled: 'true',
+              className : "tl-trade-type"
             },
             gridDefination: {
               xs: 12,
@@ -348,7 +335,8 @@ export const proposedBuildingDetails = getCommonCard({
             jsonPath:
               "scrutinyDetails.planDetail.blocks[0].building.buildingHeight",
             props: {
-              disabled: 'true'
+              disabled: 'true',
+              className : "tl-trade-type"
             },
             gridDefination: {
               xs: 12,

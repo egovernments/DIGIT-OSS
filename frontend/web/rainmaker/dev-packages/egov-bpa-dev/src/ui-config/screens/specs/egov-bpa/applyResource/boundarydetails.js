@@ -30,7 +30,8 @@ export const detailsofplot = getCommonCard({
                 required: true,
                 jsonPath: "scrutinyDetails.planDetail.plot.area",
                 props: {
-                    disabled: 'true'
+                    disabled: 'true',
+                    className : "tl-trade-type"
                   },
                   gridDefination: {
                     xs: 12,
@@ -51,7 +52,8 @@ export const detailsofplot = getCommonCard({
                 },
                 required: true,
                 props: {
-                    disabled: 'true'
+                    disabled: 'true',
+                    className : "tl-trade-type"
                   },
                 // // pattern: getPattern("Name") || null,
                 jsonPath: "scrutinyDetails.planDetail.planInformation.khataNo",
@@ -97,7 +99,8 @@ export const detailsofplot = getCommonCard({
                 },
                 required: true,
                 props: {
-                    disabled: 'true'
+                    disabled: 'true',
+                    className : "tl-trade-type"
                   },
                 // // pattern: getPattern("Name") || null,
                 jsonPath: "scrutinyDetails.planDetail.planInformation.plotNo",
@@ -125,7 +128,8 @@ export const detailsofplot = getCommonCard({
                 required: true,
                 props: {
                   required: true,
-                  disabled: true
+                  disabled: true,
+                  className : "tl-trade-type"
                 },
                 gridDefination: {
                     xs: 12,

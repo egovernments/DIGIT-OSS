@@ -73,7 +73,8 @@ export const basicDetails = getCommonCard({
         md: 6
       },
       props: {
-        disabled: true
+        disabled: true,
+        className : "tl-trade-type"
       }
     }),
     applicationType: getSelectField({
@@ -90,7 +91,8 @@ export const basicDetails = getCommonCard({
         masterName: "BPA"
       },
       props: {
-        disabled: true
+        disabled: true,
+        className : "tl-trade-type"
       },
       jsonPath: "BPA.applicationType",
       sourceJsonPath: "applyScreenMdmsData.BPA.ApplicationType",
@@ -118,7 +120,8 @@ export const basicDetails = getCommonCard({
         md: 6
       },
       props: {
-        disabled: true
+        disabled: true,
+        className : "tl-trade-type"
       }
     }),
     servicetype: getSelectField({
@@ -156,7 +159,8 @@ export const basicDetails = getCommonCard({
       },
       jsonPath: "BPA.appdate",
       props: {
-        disabled: true
+        disabled: true,
+        className : "tl-trade-type"
       },
       gridDefination: {
         xs: 12,

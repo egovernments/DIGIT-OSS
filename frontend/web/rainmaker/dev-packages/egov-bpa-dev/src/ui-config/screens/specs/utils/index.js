@@ -2765,7 +2765,7 @@ export const getBpaDetailsForOwner = async (state, dispatch, fieldInfo) => {
             "BPA.owners",
             []
           );
-
+          
           currOwnersArr[cardIndex] = userInfo;
           dispatch(prepareFinalObject(`BPA.owners`, currOwnersArr));
         }
@@ -4099,4 +4099,40 @@ export const downloadFeeReceipt = async(state, dispatch, status, serviceCode) =>
     `filestore/v1/files/url?tenantId=${bpaDetails.tenantId}&fileStoreIds=${fileStoreId}`,[]
   );
   window.open(pdfDownload[fileStoreId]);
+}
+
+const getFloorDetails = (index) => {
+  let floorNo = ['Ground', 'First', 'Second', 'Third', 'Forth', 'Fifth', 'Sixth', 'Seventh', 'Eighth', 'Ninth', 'Tenth']
+  if (index) {
+    return `${floorNo[index]} floor`;
+  }
+};
+
+export const setProposedBuildingData = async (state, dispatch) => {
+  const response = get(
+    state,
+    "screenConfiguration.preparedFinalObject.scrutinyDetails.planDetail.blocks[0].building.floors",
+    []
+  );
+  if (response && response.length > 0) {
+    let tableData = await response.map((item, index) => (
+      {
+        [getBpaTextToLocalMapping("Floor Description")]: getFloorDetails((item.number).toString()) || '-',
+        [getBpaTextToLocalMapping("Level")]: item.number,
+        [getBpaTextToLocalMapping("Occupancy/Sub Occupancy")]: item.occupancies[0].type || "-",
+        [getBpaTextToLocalMapping("Buildup Area")]: item.occupancies[0].builtUpArea || "0",
+        [getBpaTextToLocalMapping("Floor Area")]: item.occupancies[0].floorArea || "0",
+        [getBpaTextToLocalMapping("Carpet Area")]: item.occupancies[0].carpetArea || "0"
+      }));
+      
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardSecondStep.children.proposedBuildingDetails.children.cardContent.children.proposedContainer.children.proposedBuildingDetailsContainer",
+        "props.data",
+        tableData
+      )
+    );
+    return tableData;
+  }
 }
