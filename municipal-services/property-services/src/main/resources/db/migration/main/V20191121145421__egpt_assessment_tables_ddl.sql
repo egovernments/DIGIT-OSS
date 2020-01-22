@@ -1,4 +1,4 @@
-CREATE TABLE eg_pt_asmt_assessments (
+CREATE TABLE eg_pt_asmt_assessment (
 
   id character varying(256) NOT NULL,
   tenantId character varying(256) NOT NULL,
@@ -20,8 +20,8 @@ CREATE TABLE eg_pt_asmt_assessments (
 
 );
 
-CREATE INDEX IF NOT EXISTS index_eg_pt_assessments_assessmentNumber ON  eg_pt_assessments (assessmentNumber);
-CREATE INDEX IF NOT EXISTS index_eg_pt_assessments_propertyId ON  eg_pt_assessments (propertyId);
+CREATE INDEX IF NOT EXISTS index_eg_pt_assessments_assessmentNumber ON  eg_pt_asmt_assessment (assessmentNumber);
+CREATE INDEX IF NOT EXISTS index_eg_pt_assessments_propertyId ON  eg_pt_asmt_assessment (propertyId);
 
 
 CREATE TABLE eg_pt_asmt_unitusage (
@@ -40,14 +40,14 @@ CREATE TABLE eg_pt_asmt_unitusage (
   lastmodifiedtime bigint NOT NULL,
 
   CONSTRAINT pk_eg_pt_unitusage PRIMARY KEY (id),
-  CONSTRAINT fk_eg_pt_unitusage FOREIGN KEY (assessmentId) REFERENCES eg_pt_assessments (id)
+  CONSTRAINT fk_eg_pt_unitusage FOREIGN KEY (assessmentId) REFERENCES eg_pt_asmt_unitusage (id)
   
   ON UPDATE CASCADE
   ON DELETE CASCADE
 );
 
 
-CREATE TABLE eg_pt_asmt_assessments_audit (
+CREATE TABLE eg_pt_asmt_assessment_audit (
 
    id character varying(256) NOT NULL,
    tenantId character varying(256) NOT NULL,
@@ -101,5 +101,7 @@ CREATE TABLE eg_pt_asmt_document (
   createdTime      BIGINT NOT NULL,
   lastModifiedTime BIGINT  NOT NULL,
 
-CONSTRAINT pk_eg_pt_asmt_document_id PRIMARY KEY(id)
+  CONSTRAINT pk_eg_pt_asmt_document_id PRIMARY KEY(id),
+  CONSTRAINT fk_eg_pt_asmt_document_entityid FOREIGN KEY (entityid) REFERENCES eg_pt_asmt_unitusage (id)
+
 );
