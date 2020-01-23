@@ -69,4 +69,7 @@ public class Address {
 
 	@JsonProperty("geoLocation")
 	private GeoLocation geoLocation;
+	
+	@JsonProperty("additionalDetails")
+	private Object additionalDetails;
 }

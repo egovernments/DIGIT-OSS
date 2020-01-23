@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import lombok.*;
 import org.egov.pt.models.enums.Channel;
 import org.egov.pt.models.enums.CreationReason;
 import org.egov.pt.models.enums.Source;
@@ -14,6 +13,13 @@ import org.egov.pt.models.enums.Status;
 import org.egov.pt.models.workflow.ProcessInstance;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * Property
@@ -117,8 +123,8 @@ public class Property extends PropertyInfo {
 	}
 	
 	public Property addUnitsItem(Unit unit) {
-		if (this.owners == null) {
-			this.owners = new ArrayList<>();
+		if (this.units == null) {
+			this.units = new ArrayList<>();
 		}
 
 		if (null != unit)

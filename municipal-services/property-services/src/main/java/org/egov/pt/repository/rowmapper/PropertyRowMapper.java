@@ -85,9 +85,9 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 						.additionalDetails(getadditionalDetail(rs, "padditionalDetails"))
 						.acknowldgementNumber(rs.getString("acknowldgementNumber"))
 						.status(Status.fromValue(rs.getString("propertystatus")))
-						.superBuiltUpArea(rs.getBigDecimal("superBuiltUpArea"))
 						.ownershipCategory(rs.getString("ownershipcategory"))
-						.channel(Channel.fromValue(rs.getString("channel")))						
+						.channel(Channel.fromValue(rs.getString("channel")))
+						.superBuiltUpArea(rs.getBigDecimal("propertysbpa"))
 						.usageCategory(rs.getString("pusagecategory"))
 						.oldPropertyId(rs.getString("oldPropertyId"))
 						.propertyType(rs.getString("propertytype"))
@@ -141,9 +141,11 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 	private void addUnitsToProperty(ResultSet rs, Property currentProperty) throws SQLException {
 		
 		List<Unit> units = currentProperty.getUnits();
-		
+
 		String unitId = rs.getString("unitid");
-		
+		if (null == unitId)
+			return;
+
 		if (!CollectionUtils.isEmpty(units))
 			for (Unit unit : units) {
 				if (unit.getId().equals(unitId))
@@ -151,10 +153,10 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 			}
 		
 		ConstructionDetail consDetail = ConstructionDetail.builder()
-				.superBuiltUpArea(rs.getBigDecimal("superBuiltUpArea"))
 				.constructionType(rs.getString("constructionType"))
 				.dimensions(getadditionalDetail(rs, "dimensions"))
 				.constructionDate(rs.getLong("constructionDate"))
+				.superBuiltUpArea(rs.getBigDecimal("unitspba"))
 				.builtUpArea(rs.getBigDecimal("builtUpArea"))
 				.carpetArea(rs.getBigDecimal("carpetArea"))
 				.plinthArea(rs.getBigDecimal("plinthArea"))
@@ -164,7 +166,7 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 				
 		Unit unit = Unit.builder()
 				.occupancyType(OccupancyType.fromValue(rs.getString("occupancyType")))
-				.usageCategory(rs.getString("usageCategory"))
+				.usageCategory(rs.getString("unitusageCategory"))
 				.occupancyDate(rs.getLong("occupancyDate"))
 				.active(rs.getBoolean("isunitactive"))
 				.unitType(rs.getString("unitType"))

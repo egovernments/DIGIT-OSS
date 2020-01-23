@@ -67,10 +67,11 @@ public class PropertyValidator {
 		
 		List<Unit> units 		=	request.getProperty().getUnits();
 		List<OwnerInfo> owners 	=	request.getProperty().getOwners();
-		
-		units.removeIf(null);
-		owners.removeIf(null);
-		
+
+		if (!CollectionUtils.isEmpty(units))
+			while (units.remove(null));
+		while (owners.remove(null));
+
 		if(CollectionUtils.isEmpty(request.getProperty().getOwners()))
 			throw new CustomException("OWNER INFO ERROR","Owners cannot be empty, please provide at least one owner information");
 		
@@ -80,7 +81,7 @@ public class PropertyValidator {
 		validateMasterData(request, errorMap);
 		validateMobileNumber(request, errorMap);
 		validateFields(request, errorMap);
-		if (!CollectionUtils.isEmpty(owners))
+		if (!CollectionUtils.isEmpty(units))
 			validateUnits(request, errorMap);
 
 		if (!errorMap.isEmpty())
@@ -234,22 +235,24 @@ public class PropertyValidator {
 			errorMap.put("Invalid USageCategory", "The USageCategory '" + property.getUsageCategory() + "' does not exists");
 		}
 		
+		if (!CollectionUtils.isEmpty(property.getUnits()))
+			for (Unit unit : property.getUnits()) {
 
-		for(Unit unit : property.getUnits()) {
-			
-			if (ObjectUtils.isEmpty(unit.getUsageCategory()) || unit.getUsageCategory() != null && !codes.get(PTConstants.MDMS_PT_USAGECATEGORY).contains(unit.getUsageCategory())) {
-				errorMap.put("INVALID USAGE CATEGORY ", "The Usage CATEGORY '" + unit.getUsageCategory()
-						+ "' does not exists for unit of index : " + property.getUnits().indexOf(unit));
-			}
-			
-			String constructionType = unit.getConstructionDetail().getConstructionType();
+				if (ObjectUtils.isEmpty(unit.getUsageCategory()) || unit.getUsageCategory() != null
+						&& !codes.get(PTConstants.MDMS_PT_USAGECATEGORY).contains(unit.getUsageCategory())) {
+					errorMap.put("INVALID USAGE CATEGORY ", "The Usage CATEGORY '" + unit.getUsageCategory()
+							+ "' does not exists for unit of index : " + property.getUnits().indexOf(unit));
+				}
 
-			if (ObjectUtils.isEmpty(constructionType) || constructionType != null && !codes.get(PTConstants.MDMS_PT_USAGECATEGORY).contains(constructionType)) {
-				errorMap.put("INVALID CONSTRUCTION TYPE ", "The CONSTRUCTION TYPE '" + constructionType
-						+ "' does not exists for unit of index : " + property.getUnits().indexOf(unit));
+				String constructionType = unit.getConstructionDetail().getConstructionType();
+				
+				if (!ObjectUtils.isEmpty(constructionType)
+						&& !codes.get(PTConstants.MDMS_PT_CONSTRUCTIONTYPE).contains(constructionType)) {
+					errorMap.put("INVALID CONSTRUCTION TYPE ", "The CONSTRUCTION TYPE '" + constructionType
+							+ "' does not exists for unit of index : " + property.getUnits().indexOf(unit));
+				}
+
 			}
-			
-		}
 
 		if (!CollectionUtils.isEmpty(errorMap))
 			throw new CustomException(errorMap);

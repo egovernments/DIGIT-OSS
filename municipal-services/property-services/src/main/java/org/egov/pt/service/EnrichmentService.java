@@ -84,11 +84,12 @@ public class EnrichmentService {
 
 		property.setAuditDetails(propertyAuditDetails);
 		
-		property.getUnits().forEach(unit -> {
-			
-			unit.setId(UUID.randomUUID().toString());
-			unit.setActive(true);
-		});
+		if (!CollectionUtils.isEmpty(property.getUnits()))
+			property.getUnits().forEach(unit -> {
+
+				unit.setId(UUID.randomUUID().toString());
+				unit.setActive(true);
+			});
 
 		setIdgenIds(request);
 		enrichBoundary(request);

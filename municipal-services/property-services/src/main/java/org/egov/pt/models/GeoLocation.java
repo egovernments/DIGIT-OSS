@@ -29,7 +29,4 @@ public class GeoLocation   {
   @JsonProperty("longitude")
   private BigDecimal longitude;
 
-  @JsonProperty("additionalDetails")
-  private Object additionalDetails;
-  
-}
+  }
