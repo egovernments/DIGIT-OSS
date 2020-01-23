@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import lombok.*;
 import org.egov.pt.models.enums.Channel;
 import org.egov.pt.models.enums.CreationReason;
 import org.egov.pt.models.enums.Source;
@@ -14,11 +15,6 @@ import org.egov.pt.models.workflow.ProcessInstance;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-
 /**
  * Property
  */
@@ -26,6 +22,8 @@ import lombok.ToString;
 @ToString
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Property extends PropertyInfo {
 
 	@JsonProperty("acknowldgementNumber")

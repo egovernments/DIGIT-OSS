@@ -10,6 +10,8 @@ public enum OccupancyType {
 
 	OWNER("OWNER"),
 
+	SELFOCCUPIED("SELFOCCUPIED"),
+
 	TENANT("TENANT");
 
 	private String value;

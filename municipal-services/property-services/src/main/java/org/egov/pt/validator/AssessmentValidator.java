@@ -43,6 +43,7 @@ public class AssessmentValidator {
 		validateUnitIds(assessmentRequest.getAssessment(),property);
 		commonValidations(assessmentRequest, errorMap, false);
 		validateMDMSData(assessmentRequest.getRequestInfo(), assessmentRequest.getAssessment(), errorMap);
+		validateProcessInstance(assessmentRequest, null);
 	}
 
 	public void validateAssessmentUpdate(AssessmentRequest assessmentRequest, Property property) {

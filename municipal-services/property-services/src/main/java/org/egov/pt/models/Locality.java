@@ -40,6 +40,9 @@ public class Locality {
 	@JsonProperty("longitude")
 	private String longitude;
 
+	@JsonProperty("areaType")
+	private String areaType;
+
 	@JsonProperty("children")
 	@Valid
 	private List<Locality> children;

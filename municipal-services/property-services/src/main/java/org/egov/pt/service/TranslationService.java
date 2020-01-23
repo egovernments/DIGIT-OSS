@@ -33,6 +33,13 @@ public class TranslationService {
         Map<String, Object> propertyMap = new HashMap();
         Map<String, Object> propertyDetail = new HashMap<>();
 
+        Map<String, Object> addressMap = new HashMap();
+        Map<String, Object> localityMap = new HashMap();
+        localityMap.put("area",property.getAddress().getLocality().getAreaType());
+        localityMap.put("code",property.getAddress().getLocality().getCode());
+        addressMap.put("locality",localityMap);
+
+        propertyMap.put("address", addressMap);
         propertyMap.put("propertyId",property.getPropertyId());
         propertyMap.put("tenantId", property.getTenantId());
         propertyMap.put("acknowldgementNumber", property.getAcknowldgementNumber());
@@ -108,6 +115,7 @@ public class TranslationService {
             unitMap.put("usageCategoryDetail",masterData[3]);
 
             unitMap.put("additionalDetails", unit.getAdditionalDetails());
+            units.add(unitMap);
 
         });
 
