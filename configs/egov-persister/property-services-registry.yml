@@ -64,7 +64,7 @@ serviceMaps:
       basePath: Property.owners.*
       jsonMaps:
 
-      - jsonPath: $.Property.ownerInfoUuid
+      - jsonPath: $.Property.*.ownerInfoUuid
 
       - jsonPath: $.Property.tenantId
 
@@ -147,7 +147,7 @@ serviceMaps:
       - jsonPath: $.Property.auditDetails.lastModifiedTime
 
 
-    - query: INSERT INTO eg_pt_institution (id, propertyid, tenantid, name, nameofauthorizedperson, type, designation, createdby, createdtime, lastmodifiedby, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+    - query: INSERT INTO eg_pt_institution (id, propertyid, tenantid, name, nameofauthorizedperson, type, designation, createdby, createdtime, lastmodifiedby, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
       basePath: $.Property.institution
       jsonMaps:
 
@@ -184,8 +184,6 @@ serviceMaps:
 
       - jsonPath: $.Property.id
 
-      - jsonPath: $.Property.address.addressNumber
-
       - jsonPath: $.Property.address.doorNo
 
       - jsonPath: $.Property.address.plotNo      
@@ -210,9 +208,9 @@ serviceMaps:
       
       - jsonPath: $.Property.address.country
 
-      - jsonPath: $.Property.address.latitude
+      - jsonPath: $.Property.address.geoLocation.latitude
 
-      - jsonPath: $.Property.address.longitude
+      - jsonPath: $.Property.address.geoLocation.longitude
 
       - jsonPath: $.Property.auditDetails.createdBy
 
@@ -222,7 +220,7 @@ serviceMaps:
 
       - jsonPath: $.Property.auditDetails.lastModifiedTime
 
-      - jsonPath: $.Property.additionalDetails
+      - jsonPath: $.Property.address.additionalDetails
         type: JSON
         dbType: JSONB     
 
@@ -247,21 +245,21 @@ serviceMaps:
 
       - jsonPath: $.Property.units.*.occupancyDate
 
-      - jsonPath: $.Property.units.*.carpetArea
+      - jsonPath: $.Property.units.*.constructionDetail.carpetArea
 
-      - jsonPath: $.Property.units.*.builtUpArea
+      - jsonPath: $.Property.units.*.constructionDetail.builtUpArea
 
-      - jsonPath: $.Property.units.*.plinthArea
+      - jsonPath: $.Property.units.*.constructionDetail.plinthArea
 
-      - jsonPath: $.Property.units.*.superBuiltUpArea
+      - jsonPath: $.Property.units.*.constructionDetail.superBuiltUpArea
 
       - jsonPath: $.Property.units.*.arv
 
-      - jsonPath: $.Property.units.*.constructionType
+      - jsonPath: $.Property.units.*.constructionDetail.constructionType
 
-      - jsonPath: $.Property.units.*.constructionDate
+      - jsonPath: $.Property.units.*.constructionDetail.constructionDate
 
-      - jsonPath: $.Property.units.*.dimensions
+      - jsonPath: $.Property.units.*.constructionDetail.dimensions
         type: JSON
         dbType: JSONB         
 
@@ -346,7 +344,7 @@ serviceMaps:
       basePath: Property.owners.*
       jsonMaps:
 
-      - jsonPath: $.Property.ownerInfoUuid
+      - jsonPath: $.Property.*.ownerInfoUuid
 
       - jsonPath: $.Property.tenantId
 
@@ -427,7 +425,6 @@ serviceMaps:
       - jsonPath: $.Property.auditDetails.lastModifiedTime
 
     - query: UPDATE eg_pt_address SET doorno=?, plotno=?, buildingname=?, street=?, landmark=?, city=?, pincode=?, locality=?, district=?, region=?, state=?, country=?, latitude=?, longitude=?, lastmodifiedby=?, lastmodifiedtime=?, additionaldetails=? WHERE id=?;
-     
       basePath: Property.address
       jsonMaps:
 
@@ -455,15 +452,15 @@ serviceMaps:
 
       - jsonPath: $.Property.address.country
 
-      - jsonPath: $.Property.address.latitude
+      - jsonPath: $.Property.address.geoLocation.latitude
 
-      - jsonPath: $.Property.address.longitude
+      - jsonPath: $.Property.address.geoLocation.longitude
 
       - jsonPath: $.Property.auditDetails.lastModifiedBy
 
       - jsonPath: $.Property.auditDetails.lastModifiedTime
 
-      - jsonPath: $.Property.additionalDetails
+      - jsonPath: $.Property.address.additionalDetails
         type: JSON
         dbType: JSONB      
 
@@ -510,21 +507,21 @@ serviceMaps:
 
       - jsonPath: $.Property.units.*.occupancyDate
 
-      - jsonPath: $.Property.units.*.carpetArea
+      - jsonPath: $.Property.units.*.constructionDetail.carpetArea
 
-      - jsonPath: $.Property.units.*.builtUpArea
+      - jsonPath: $.Property.units.*.constructionDetail.builtUpArea
 
-      - jsonPath: $.Property.units.*.plinthArea
+      - jsonPath: $.Property.units.*.constructionDetail.plinthArea
 
-      - jsonPath: $.Property.units.*.superBuiltUpArea
+      - jsonPath: $.Property.units.*.constructionDetail.superBuiltUpArea
 
       - jsonPath: $.Property.units.*.arv
 
-      - jsonPath: $.Property.units.*.constructionType
+      - jsonPath: $.Property.units.*.constructionDetail.constructionType
 
-      - jsonPath: $.Property.units.*.constructionDate
+      - jsonPath: $.Property.units.*.constructionDetail.constructionDate
 
-      - jsonPath: $.Property.units.*.dimensions
+      - jsonPath: $.Property.units.*.constructionDetail.dimensions
         type: JSON
         dbType: JSONB         
 
