@@ -231,7 +231,7 @@ serviceMaps:
  
       - jsonPath: $.Property.units.*.id
 
-      - jsonPath: $.Property.units.*.tenantId
+      - jsonPath: $.Property.tenantId
 
       - jsonPath: $.Property.id
 
