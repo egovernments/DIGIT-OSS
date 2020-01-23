@@ -492,6 +492,15 @@
     {
       "format": "SW/[fy:yyyy-yy]/[SEQ_EGOV_COMMON]",
       "idname": "sw.receipt.id"
+    },
+    {
+      "format": "WS_AP/[CITY.CODE]/[fy:yyyy-yy]/[SEQ_EGOV_COMMON]",
+      "idname": "waterservice.application.id"
+    },
+    {
+      "format": "SW_AP/[CITY.CODE]/[fy:yyyy-yy]/[SEQ_EGOV_COMMON]",
+      "idname": "sewerageservice.application.id"
     }
+
   ]
 }
