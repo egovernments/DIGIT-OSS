@@ -65,7 +65,6 @@ class ServiceList extends React.Component {
     }else{
       list = menu && menu.filter((item) => item.url === "card");
     }
-    
     this.setState({
       actionList: list,
     });

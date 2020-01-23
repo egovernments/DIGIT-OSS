@@ -47,7 +47,8 @@ const routes = [
   // property tax routes
   {
     path: "property-tax",
-    component: PTHome,
+    // component: PTHome,
+    component: SearchProperty,
     needsAuthentication: true,
     options: {
       title: "PT_HOME_PROPERTY_TAX",
