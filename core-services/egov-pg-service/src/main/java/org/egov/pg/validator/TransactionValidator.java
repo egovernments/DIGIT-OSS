@@ -142,7 +142,7 @@ public class TransactionValidator {
         for (Transaction curr : existingTxnsForBill) {
             if (curr.getTxnStatus().equals(Transaction.TxnStatusEnum.PENDING)) {
                 errorMap.put("TXN_ABRUPTLY_DISCARDED", 
-                		"A transaction for this bill has been abruptly discarded, please retry after "+props.getEarlyReconcileJobRunInterval()+" mins");
+                		"A transaction for this bill has been abruptly discarded, please retry after "+(props.getEarlyReconcileJobRunInterval() * 2)+" mins");
             }
             if(curr.getTxnStatus().equals(Transaction.TxnStatusEnum.SUCCESS)) {
                 errorMap.put("TXN_CREATE_BILL_ALREADY_PAID", "Bill has already been paid or is in pending state");
