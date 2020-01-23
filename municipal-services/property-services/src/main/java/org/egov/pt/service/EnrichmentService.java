@@ -104,7 +104,7 @@ public class EnrichmentService {
     	
     	Property property = request.getProperty();
         RequestInfo requestInfo = request.getRequestInfo();
-        AuditDetails auditDetails = propertyutil.getAuditDetails(requestInfo.getUserInfo().getId().toString(), true);
+        AuditDetails auditDetails = propertyutil.getAuditDetails(requestInfo.getUserInfo().getUuid().toString(), true);
 
 		if (!CollectionUtils.isEmpty(property.getDocuments()))
 			property.getDocuments().forEach(doc -> {

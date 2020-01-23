@@ -1,3 +1,9 @@
+DROP TABLE IF EXISTS eg_pt_asmt_document;
+DROP TABLE IF EXISTS eg_pt_asmt_unitusage;
+DROP TABLE IF EXISTS eg_pt_asmt_assessment;
+DROP TABLE IF EXISTS eg_pt_asmt_unitusage_audit;
+DROP TABLE IF EXISTS eg_pt_asmt_assessment_audit;
+
 CREATE TABLE eg_pt_asmt_assessment (
 
   id character varying(256) NOT NULL,

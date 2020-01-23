@@ -14,6 +14,7 @@ import org.egov.pt.models.Address;
 import org.egov.pt.models.AuditDetails;
 import org.egov.pt.models.ConstructionDetail;
 import org.egov.pt.models.Document;
+import org.egov.pt.models.GeoLocation;
 import org.egov.pt.models.Institution;
 import org.egov.pt.models.Locality;
 import org.egov.pt.models.OwnerInfo;
@@ -309,18 +310,29 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 		
 		Locality locality = Locality.builder().code(rs.getString("locality")).build();
 
-		Address address = Address.builder()
-				.buildingName(rs.getString("buildingName"))
-				.landmark(rs.getString("landmark"))
-				.pincode(rs.getString("pincode"))
-				.doorNo(rs.getString("doorno"))
-				.street(rs.getString("street"))
-				.id(rs.getString("addressId"))
-				.city(rs.getString("city"))
-				.locality(locality)
-				.tenantId(tenanId)
+		GeoLocation geoLocation = GeoLocation.builder()
+				.longitude(rs.getDouble("longitude"))
+				.latitude(rs.getDouble("latitude"))
 				.build();
-		return address;
+
+		return Address.builder()
+		.additionalDetails(getadditionalDetail(rs, "addressadditionaldetails"))
+		.buildingName(rs.getString("buildingname"))
+		.landmark(rs.getString("landmark"))
+		.district(rs.getString("district"))
+		.country(rs.getString("country"))
+		.pincode(rs.getString("pincode"))
+		.doorNo(rs.getString("doorNo"))
+		.plotNo(rs.getString("plotNo"))
+		.region(rs.getString("region"))
+		.street(rs.getString("street"))
+		.id(rs.getString("addressid"))
+		.state(rs.getString("state"))
+		.city(rs.getString("city"))
+		.geoLocation(geoLocation)
+		.locality(locality)
+		.tenantId(tenanId)
+		.build();
 	}
 	
 	/**

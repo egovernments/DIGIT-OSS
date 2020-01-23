@@ -1,7 +1,5 @@
 package org.egov.pt.models;
 
-import java.math.BigDecimal;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
@@ -24,9 +22,9 @@ import lombok.ToString;
 public class GeoLocation   {
 	
   @JsonProperty("latitude")
-  private BigDecimal latitude;
+  private Double latitude;
 
   @JsonProperty("longitude")
-  private BigDecimal longitude;
+  private Double longitude;
 
   }

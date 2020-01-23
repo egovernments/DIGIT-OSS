@@ -55,9 +55,6 @@ public class Address {
 	@JsonProperty("pincode")
 	private String pincode;
 
-	@JsonProperty("additionDetails")
-	private String additionDetails;
-
 	@JsonProperty("buildingName")
 	private String buildingName;
 
