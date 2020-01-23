@@ -439,6 +439,7 @@ export const beforeInitForm = {
     }
 
     var occupancy = get(state, "common.generalMDMSDataById.OccupancyType");
+    var constructionType = get(state, "common.generalMDMSDataById.ConstructionType");
     var usageCategoryMinor = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].usageCategoryMinor");
     var usageCategoryMajor = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].usageCategoryMajor");
     set(action, "form.fields.subUsageType.hideField", false);
@@ -490,6 +491,9 @@ export const beforeInitForm = {
       }
     }
     set(action, "form.fields.occupancy.dropDownData", prepareDropDownData(occupancy));
+    if( get(state, "form.basicInformation.fields.typeOfBuilding.value")){
+      set(action, "form.fields.constructionType.dropDownData", prepareDropDownData(constructionType));
+    }
     if (get(action, "form.fields.subUsageType.jsonPath") && usageCategoryMajor !== "MIXED") {
       dispatch(
         prepareFormData(
@@ -599,6 +603,9 @@ export const beforeInitFormForPlot = {
         set(action, "form.fields.subUsageType.hideField", true);
       }
       set(action, "form.fields.occupancy.dropDownData", prepareDropDownData(occupancy));
+      if( get(state, "form.basicInformation.fields.typeOfBuilding.value")){
+        set(action, "form.fields.constructionType.dropDownData", prepareDropDownData(constructionType));
+      }
       if (get(action, "form.fields.subUsageType.jsonPath") && usageCategoryMajor !== "MIXED") {
         dispatch(
           prepareFormData(

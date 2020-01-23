@@ -532,12 +532,27 @@ export const validateUnitandPlotSize = (plotDetails, form) => {
 };
 
 export const renderPlotAndFloorDetails = (fromReviewPage, PlotComp, FloorComp, self) => {
-  let { basicInformation, plotDetails, floorDetails_0 } = self.props.form;
+  let { basicInformation, plotDetails, floorDetails_0 ,prepareFormData={}} = self.props.form;
   if (plotDetails && floorDetails_0 && floorDetails_0.fields.builtArea) {
     let uom = plotDetails.fields && plotDetails.fields.measuringUnit && plotDetails.fields.measuringUnit.value;
     floorDetails_0.fields.builtArea.floatingLabelText = `Built Area(${uom})`;
   }
-
+if(basicInformation&&!basicInformation.fields.datePicker.value){
+if(prepareFormData.Properties&&prepareFormData.Properties.length>0&&prepareFormData.Properties[0].propertyDetails[0].additionalDetails.constructionYear){
+  basicInformation.fields.datePicker.value=prepareFormData.Properties[0].propertyDetails[0].additionalDetails.constructionYear;
+}
+}
+if(plotDetails){
+  for(let i=0;i<get(plotDetails,'fields.floorCount.value',0);i++){
+   for(let j=0;j<get(self.props.prepareFormData,`Properties[0].propertyDetails[0].units.length`,0);j++){
+    let floorDetails_0_unit_0=get(self.props,`form.floorDetails_${i}_unit_${j}.fields.constructionType`,null);
+    if(floorDetails_0_unit_0&&!floorDetails_0_unit_0.value){
+      let val=get(self.props.prepareFormData,`Properties[0].propertyDetails[0].units[${j}].constructionType`,'');
+      set(self.props.form, `floorDetails_${i}_unit_${j}.fields.constructionType.value`,val );
+    }
+   }
+  }
+}
   if (basicInformation && basicInformation.fields.typeOfUsage.value && basicInformation.fields.typeOfBuilding.value) {
     let pathFormKeyObject = getPlotAndFloorFormConfigPath(basicInformation.fields.typeOfUsage.value, basicInformation.fields.typeOfBuilding.value);
     return !isEmpty(pathFormKeyObject) ? (
