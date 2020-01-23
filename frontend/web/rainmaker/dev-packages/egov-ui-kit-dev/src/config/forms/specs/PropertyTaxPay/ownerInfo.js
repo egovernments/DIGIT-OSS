@@ -237,9 +237,8 @@ const formConfig = {
       const {prepareFormData={}}=common;
       const OwnerTypes = get(state, `common.generalMDMSDataById.OwnerType`);
       const finalData=getFinalData();
-      console.log("finalData:",finalData);
       const finalYear=finalData[0].financialYear;
-      console.log("financialYear:",finalYear);
+
       // let financialYearFromQuery = window.location.search.split("FY=")[1];
       // financialYearFromQuery = financialYearFromQuery.split("&")[0];
       const dropdownData = getOwnerCategoryByYear(Object.values(OwnerTypes),finalYear);

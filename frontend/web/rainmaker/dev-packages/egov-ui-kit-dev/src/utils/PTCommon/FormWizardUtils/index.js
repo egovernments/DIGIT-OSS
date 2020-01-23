@@ -279,7 +279,7 @@ export const getSingleOwnerInfo = (self) => {
   const ownerObj = {
     documents: [{}],
   };
-  ownerInfo && Object.keys(ownerInfo.fields).map((field) => {
+  ownerInfo && ownerInfo.fields && Object.keys(ownerInfo.fields).map((field) => {
     const jsonPath = ownerInfo.fields[field].jsonPath;
     if (jsonPath.toLowerCase().indexOf("document") !== -1) {
       ownerObj.documents[0][jsonPath.substring(jsonPath.lastIndexOf(".") + 1, jsonPath.length)] =
