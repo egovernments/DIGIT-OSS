@@ -222,6 +222,8 @@ const formConfig = {
       });
       console.log("thanaData------->>>",thanaData)
       dispatch(setFieldProperty("propertyAddress", "thanaType", "dropDownData", thanaData));
+      dispatch(setFieldProperty("propertyAddress", "thanaType", "value", get(state.form.prepareFormData,'Properties[0].propertyDetails[0].additionalDetails.thana','')));
+      dispatch(setFieldProperty("propertyAddress", "roadType", "value", get(state.form.prepareFormData,'Properties[0].propertyDetails[0].additionalDetails.roadType','')));
 
     const { PT } = citiesByModule || {};
     if (PT) {
