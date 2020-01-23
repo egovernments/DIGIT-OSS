@@ -181,6 +181,7 @@ const getFloorDetail = (index) => {
 };
 
 const callBackForNext = async (state, dispatch) => {
+  window.scrollTo(0,0);
   let activeStep = get(
     state.screenConfiguration.screenConfig["apply"],
     "components.div.children.stepper.props.activeStep",

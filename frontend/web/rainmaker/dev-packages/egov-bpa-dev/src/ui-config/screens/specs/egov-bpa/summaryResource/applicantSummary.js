@@ -101,8 +101,8 @@ export const applicantSummary = getCommonGrayCard({
           ),
           applicantFatherHusbandName: getLabelWithValue(
             {
-              labelName: "Father/Husband's Name",
-              labelKey: "BPA_APPLICANT_FATHER_HUSBAND_NAME_LABEL"
+              labelName: "Guardian Name",
+              labelKey: "BPA_APPLICANT_GUARDIAN_NAME_LABEL"
             },
             {
               jsonPath:

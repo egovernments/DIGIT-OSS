@@ -25,3 +25,6 @@
 .tl-trade-type div {
  color: rgba(0, 0, 0, 0.87) !important; 
 }
+
+div[class^="MuiPaper-root"] svg text, .stepper-container svg text {
+  font-size: 15px !important }

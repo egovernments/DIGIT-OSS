@@ -196,12 +196,12 @@ const commonApplicantInformation = () => {
       }),
       fatherHusbandName: getTextField({
         label: {
-          labelName: "Father/Husband's Name",
-          labelKey: "NOC_APPLICANT_FATHER_HUSBAND_NAME_LABEL"
+          labelName: "Guardian Name",
+          labelKey: "BPA_APPLICANT_GUARDIAN_NAME_LABEL"
         },
         placeholder: {
-          labelName: "Enter Father/Husband's Name",
-          labelKey: "NOC_APPLICANT_FATHER_HUSBAND_NAME_PLACEHOLDER"
+          labelName: "Enter Guardian Name",
+          labelKey: "BPA_APPLICANT_GUARDIAN_NAME_PLACEHOLDER"
         },
         required: true,
         pattern: getPattern("Name"),
