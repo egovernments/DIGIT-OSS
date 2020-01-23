@@ -538,7 +538,7 @@ export const renderPlotAndFloorDetails = (fromReviewPage, PlotComp, FloorComp, s
     floorDetails_0.fields.builtArea.floatingLabelText = `Built Area(${uom})`;
   }
 if(basicInformation&&!basicInformation.fields.datePicker.value){
-if(prepareFormData.Properties&&prepareFormData.Properties.length>0&&prepareFormData.Properties[0].propertyDetails[0].additionalDetails.constructionYear){
+if(prepareFormData.Properties&&prepareFormData.Properties.length>0&&get(prepareFormData,'Properties[0].propertyDetails[0].additionalDetails.constructionYear',null)){
   basicInformation.fields.datePicker.value=prepareFormData.Properties[0].propertyDetails[0].additionalDetails.constructionYear;
 }
 }

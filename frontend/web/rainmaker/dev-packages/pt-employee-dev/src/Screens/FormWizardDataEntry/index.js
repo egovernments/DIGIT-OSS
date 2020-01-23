@@ -211,7 +211,7 @@ class FormWizardDataEntry extends Component {
           searchPropertyResponse.Properties[0].propertyDetails &&
           searchPropertyResponse.Properties[0].propertyDetails.length > 0
         ) {
-          if(searchPropertyResponse.Properties[0].propertyDetails[0].additionalDetails.constructionYear){
+          if(get(searchPropertyResponse,'Properties[0].propertyDetails[0].additionalDetails.constructionYear',null)){
             searchPropertyResponse.Properties[0].propertyDetails[0].additionalDetails.constructionYear=new Date(searchPropertyResponse.Properties[0].propertyDetails[0].additionalDetails.constructionYear);
           }
           searchPropertyResponse.Properties[0].propertyDetails.forEach(item => {
