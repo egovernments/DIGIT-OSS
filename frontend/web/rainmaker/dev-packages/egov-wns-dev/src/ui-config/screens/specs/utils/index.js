@@ -2344,6 +2344,12 @@ export const getTextToLocalMapping = label => {
         "WS_COMMON_TABLE_COL_ADDRESS",
         localisationLabels
       );
+    
+    case "Application Status":
+      return getLocaleLabels(
+        "Application Status",
+        "WS_COMMON_TABLE_COL_APPLICATION_STATUS"
+      ) 
     // case "Connection Type":
     //   return getLocaleLabels(
     //     "Connection Type",
@@ -2387,6 +2393,13 @@ export const getTextToLocalMapping = label => {
       return getLocaleLabels(
         "Search Results for Water & Sewerage Connections",
         "WS_HOME_SEARCH_RESULTS_TABLE_HEADING",
+        localisationLabels
+      );
+
+    case "Search Results for Water & Sewerage Application":
+      return getLocaleLabels(
+        "Search Results for Water & Sewerage Application",
+        "WS_HOME_SEARCH_APPLICATION_RESULTS_TABLE_HEADING",
         localisationLabels
       );
 
