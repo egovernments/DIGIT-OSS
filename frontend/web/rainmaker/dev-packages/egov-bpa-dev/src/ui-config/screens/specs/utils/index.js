@@ -3417,7 +3417,7 @@ export const getBpaTextToLocalMapping = label => {
         localisationLabels
       );
     case "INPROGRESS":
-      return getLocaleLabels("Inprogress", "BPA_INPROGRESS", localisationLabels);
+      return getLocaleLabels("Inprogress", "WF_BPA_INPROGRESS", localisationLabels);
     case "PENDING_APPL_FEE":
       return getLocaleLabels("Pedding Application Fee", "WF_BPA_PENDING_APPL_FEE", localisationLabels);
   }

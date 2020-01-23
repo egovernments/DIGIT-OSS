@@ -32,6 +32,7 @@ export const basicDetails = getCommonCard({
         labelName: "Enter Scrutiny Number",
         labelKey: "BPA_BASIC_DETAILS_SCRUTINY_NUMBER_PLACEHOLDER"
       },
+      required: true,
       title: {
         value: "Please search scrutiny details linked to the scrutiny number",
         key: "BPA_BASIC_DETAILS_SCRUTINY_NUMBER_SEARCH_TITLE"

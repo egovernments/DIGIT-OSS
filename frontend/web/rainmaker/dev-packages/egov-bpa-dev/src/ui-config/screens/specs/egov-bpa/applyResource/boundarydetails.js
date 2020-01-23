@@ -138,30 +138,6 @@ export const detailsofplot = getCommonCard({
                   }
               }),
         },
-        landRegDetails: {
-            ...getTextField({
-                label: {
-                    labelName: "Land Registration Details",
-                    labelKey: "BPA_BOUNDARY_LAND_REG_DETAIL_LABEL"
-                },
-                placeholder: {
-                    labelName: "Enter Land Registration Details",
-                    labelKey: "BPA_BOUNDARY_LAND_REG_DETAIL_PLACEHOLDER"
-                },
-                props: {
-                    className: "textfield-enterable-selection",
-                    multiline: true,
-                    rows: "4"
-                  },
-                // // pattern: getPattern("Name") || null,
-                jsonPath: "BPA.registrationDetails",
-                gridDefination: {
-                    xs: 12,
-                    sm: 12,
-                    md: 6
-                  }
-            })
-        },
         whetherGovOrQuasi: {
             ...getSelectField({
                 label: {
@@ -198,6 +174,29 @@ export const detailsofplot = getCommonCard({
                     md: 6
                   }
             })
-        }
+        },
+        landRegDetails: {
+            ...getTextField({
+                label: {
+                    labelName: "Land Registration Details",
+                    labelKey: "BPA_BOUNDARY_LAND_REG_DETAIL_LABEL"
+                },
+                placeholder: {
+                    labelName: "Enter Land Registration Details",
+                    labelKey: "BPA_BOUNDARY_LAND_REG_DETAIL_PLACEHOLDER"
+                },
+                props: {
+                    className: "textfield-enterable-selection",
+                    multiline: true,
+                    rows: "4"
+                  },
+                jsonPath: "BPA.registrationDetails",
+                gridDefination: {
+                    xs: 12,
+                    sm: 12,
+                    md: 6
+                  }
+            })
+        },
     })
 });

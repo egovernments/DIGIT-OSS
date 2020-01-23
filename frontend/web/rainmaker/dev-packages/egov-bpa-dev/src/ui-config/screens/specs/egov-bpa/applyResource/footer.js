@@ -309,7 +309,7 @@ const callBackForNext = async (state, dispatch) => {
 
     let selectedApplicantType = get(
       state,
-      "screenConfiguration.preparedFinalObject.BPA.ownerShipType",
+      "screenConfiguration.preparedFinalObject.BPA.ownershipCategory",
       "SINGLE"
     );
     if (selectedApplicantType.includes("INSTITUTIONAL")) {
