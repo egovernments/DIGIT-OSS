@@ -51,7 +51,8 @@
                 "variable": "validityDate",
                 "value": {
                   "path": "$.validityDate"
-                }
+                },
+                "type": "date"
               },
               {
                 "variable": "buildingNearGovt",
