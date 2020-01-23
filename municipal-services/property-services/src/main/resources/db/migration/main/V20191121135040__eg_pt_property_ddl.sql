@@ -87,7 +87,7 @@ CREATE TABLE eg_pt_owner (
   lastmodifiedtime    	BIGINT,
 
 
-  CONSTRAINT pk_eg_pt_owner PRIMARY KEY (ownerifnouuid),
+  CONSTRAINT pk_eg_pt_owner PRIMARY KEY (ownerinfouuid),
   CONSTRAINT UK_eg_pt_owner UNIQUE (userid, propertyid),
   CONSTRAINT fk_eg_pt_owner FOREIGN KEY (propertyid) REFERENCES eg_pt_property (id)
   );
@@ -102,7 +102,7 @@ CREATE TABLE eg_pt_document (
   tenantId         CHARACTER VARYING (256) NOT NULL,
   entityid         CHARACTER VARYING (128) NOT NULL,
   documentType     CHARACTER VARYING (128) NOT NULL,
-  fileStoreid        CHARACTER VARYING (128) NOT NULL,
+  fileStoreid      CHARACTER VARYING (128) NOT NULL,
   documentuid      CHARACTER VARYING (128) NOT NULL,
   status           CHARACTER VARYING (128) NOT NULL,
   createdBy        CHARACTER VARYING (128) NOT NULL,
