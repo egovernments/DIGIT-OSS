@@ -41,7 +41,9 @@ serviceMaps:
 
       - jsonPath: $.Property.superBuiltUpArea      
 
-      - jsonPath: $.Property.linkedProperties   
+      - jsonPath: $.Property.linkedProperties
+        type: ARRAY
+        dbType: STRING         
 
       - jsonPath: $.Property.source
 
@@ -323,7 +325,7 @@ serviceMaps:
 
       - jsonPath: $.Property.landArea
 
-      - jsonPath: $.Property.superbuiltuparea
+      - jsonPath: $.Property.superBuiltUpArea
 
       - jsonPath: $.Property.linkedProperties
 
@@ -478,7 +480,7 @@ serviceMaps:
 
       - jsonPath: $.Property.institution.name
 
-      - jsonPath: $.Property.institution.nameofauthorizedperson
+      - jsonPath: $.Property.institution.nameOfAuthorizedPerson
 
       - jsonPath: $.Property.institution.type
 
