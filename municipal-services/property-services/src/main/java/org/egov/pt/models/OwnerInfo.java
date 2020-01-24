@@ -63,7 +63,6 @@ public class OwnerInfo extends User {
 	@Valid
 	private List<Document> documents;
 
-	@NotNull
 	@JsonProperty("relationship")
 	private Relationship relationship;
 
