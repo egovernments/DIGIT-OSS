@@ -1,11 +1,17 @@
 package org.egov.infra.persist.repository;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jayway.jsonpath.Configuration;
-import com.jayway.jsonpath.JsonPath;
-import lombok.extern.slf4j.Slf4j;
-import net.minidev.json.JSONArray;
+import static java.util.Objects.isNull;
+
+import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.egov.infra.persist.web.contract.JsonMap;
 import org.egov.infra.persist.web.contract.TypeEnum;
@@ -13,14 +19,16 @@ import org.postgresql.util.PGobject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 
-import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.Configuration;
+import com.jayway.jsonpath.JsonPath;
 
-import static java.util.Objects.isNull;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
+import net.minidev.json.JSONArray;
 
 @Repository
 @Slf4j
@@ -84,10 +92,14 @@ public class PersistRepository {
                 }
 
                 else if ((type.equals(TypeEnum.ARRAY)) && dbType.equals(TypeEnum.STRING)) {
-                    List<Object> list1 = JsonPath.read(document, jsonPath);
-                    value = StringUtils.join(list1.get(i), ",");
-                    value = value.toString().substring(2, value.toString().lastIndexOf("]") - 1).replace("\"", "");
-                }
+					List<Object> list1 = JsonPath.read(document, jsonPath);
+					if (CollectionUtils.isEmpty(list1)) {
+						value = null;
+					} else {
+						value = StringUtils.join(list1.get(i), ",");
+						value = value.toString().substring(2, value.toString().lastIndexOf("]") - 1).replace("\"", "");
+					}
+				}
 
                 else if (jsonPath.contains("*.")) {
                     jsonPath = jsonPath.substring(jsonPath.lastIndexOf("*.") + 2);
