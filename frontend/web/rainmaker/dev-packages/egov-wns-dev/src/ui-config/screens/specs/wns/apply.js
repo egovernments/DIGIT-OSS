@@ -23,9 +23,14 @@ import {
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { footer } from "./applyResource/footer";
 import { tradeReviewDetails } from "./applyResource/tradeReviewDetails";
-import { tradeDetails } from "./applyResource/tradeDetails";
-import { tradeLocationDetails } from "./applyResource/tradeLocationDetails";
+// import { tradeDetails } from "./applyResource/tradeDetails";
+// import { tradeLocationDetails } from "./applyResource/tradeLocationDetails";
+// import { connectionDetails } from "./applyResource/connectionDetails";
+import {getPropertyIDDetails,propertyID,propertyHeader} from "./applyResource/propertyDetails";
+import {getPropertyDetails} from "./applyResource/property-locationDetails";
+import {ownerDetailsHeader,getOwnerDetails,ownershipType} from "./applyResource/ownerDetails";
 import { tradeOwnerDetails } from "./applyResource/tradeOwnerDetails";
+import { OwnerInfoCard } from "./applyResource/connectionDetails";
 import { documentList } from "./applyResource/documentList";
 import { httpRequest } from "../../../../ui-utils";
 import {
@@ -37,10 +42,10 @@ import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import commonConfig from "config/common.js";
 
 export const stepsData = [
-  { labelName: "Trade Details", labelKey: "TL_COMMON_TR_DETAILS" },
-  { labelName: "Owner Details", labelKey: "TL_COMMON_OWN_DETAILS" },
-  { labelName: "Documents", labelKey: "TL_COMMON_DOCS" },
-  { labelName: "Summary", labelKey: "TL_COMMON_SUMMARY" }
+  { labelKey:"WS_COMMON_CONNECTION_DETAILS"},
+  { labelKey: "WS_COMMON_DOCS" },
+  { labelKey:"WS_COMMON_ADDN_DETAILS" },
+  {  labelKey: "WS_COMMON_SUMMARY" }
 ];
 export const stepper = getStepperObject(
   { props: { activeStep: 0 } },
@@ -51,7 +56,7 @@ export const header = getCommonContainer({
   header:
     getQueryArg(window.location.href, "action") !== "edit"
       ? getCommonHeader({
-          labelName: `Apply for New Trade License ${
+          labelKey: `WS_APPLY_NEW_CONNECTION_HEADER ${
             process.env.REACT_APP_NAME === "Citizen"
               ? "(" + getCurrentFinancialYear() + ")"
               : ""
@@ -59,13 +64,13 @@ export const header = getCommonContainer({
           dynamicArray: [getCurrentFinancialYear()],
           labelKey:
             process.env.REACT_APP_NAME === "Citizen"
-              ? "TL_COMMON_APPL_NEW_LICENSE"
+              ? "WS_APPLY_NEW_CONNECTION_HEADER"
               : "TL_COMMON_APPL_NEW_LICENSE_YEAR"
         })
       : {},
   applicationNumber: {
     uiFramework: "custom-atoms-local",
-    moduleName: "egov-tradelicence",
+    moduleName: "egov-wns",
     componentPath: "ApplicationNoContainer",
     props: {
       number: "NA"
@@ -100,7 +105,7 @@ export const getMdmsData = async (action, state, dispatch) => {
       tenantId: commonConfig.tenantId,
       moduleDetails: [
         {
-          moduleName: "TradeLicense",
+          moduleName: "egov-wns",
           masterDetails: [
             { name: "TradeType" },
             { name: "AccessoriesCategory" },
@@ -260,6 +265,12 @@ export const getData = async (action, state, dispatch) => {
     }
   }
 };
+const propertyDetail = getPropertyDetails();
+const propertyIDDetails=getPropertyIDDetails();
+const ownerDetail=getOwnerDetails();
+export const ownerDetails=getCommonCard({ownerDetailsHeader,ownershipType,ownerDetail});
+export const IDDetails = getCommonCard({propertyHeader,propertyID, propertyIDDetails });
+export const Details = getCommonCard({propertyDetail });
 
 export const formwizardFirstStep = {
   uiFramework: "custom-atoms",
@@ -268,8 +279,18 @@ export const formwizardFirstStep = {
     id: "apply_form1"
   },
   children: {
-    tradeDetails,
-    tradeLocationDetails
+    // tradeDetails,
+    // tradeLocationDetails
+    
+    // getGenderRadioButton,
+    //  connectionDetails,
+     
+     OwnerInfoCard,
+    //  PropertyDetails,
+    
+    // propertyLocationDetails
+
+
   }
 };
 
@@ -280,9 +301,11 @@ export const formwizardSecondStep = {
     id: "apply_form2"
   },
   children: {
-    tradeOwnerDetails
+    // tradeOwnerDetails
+    // propertyDetails,
+    
   },
-  visible: false
+  visible: true
 };
 
 export const formwizardThirdStep = {
@@ -381,6 +404,9 @@ const screenConfig = {
         stepper,
         formwizardFirstStep,
         formwizardSecondStep,
+        IDDetails,
+        Details,
+        ownerDetails,
         formwizardThirdStep,
         formwizardFourthStep,
         footer
@@ -388,7 +414,7 @@ const screenConfig = {
     },
     breakUpDialog: {
       uiFramework: "custom-containers-local",
-      moduleName: "egov-tradelicence",
+      moduleName: "egov-wns",
       componentPath: "ViewBreakupContainer",
       props: {
         open: false,
