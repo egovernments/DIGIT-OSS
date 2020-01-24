@@ -121,7 +121,7 @@
             "WFState": "FIELDINSPECTION_PENDING",
             "docTypes": [
                 {
-                    "code": "NOC.AGRICULTURE",
+                    "code": "FI.AGRICULTURE",
                     "required": false
                 }
             ]
@@ -165,7 +165,7 @@
             "WFState": "FIELDINSPECTION_PENDING",
             "docTypes": [
                 {
-                    "code": "NOC.AGRICULTURE",
+                    "code": "FI.AGRICULTURE",
                     "required": false
                 }
             ]
@@ -209,7 +209,7 @@
             "WFState": "FIELDINSPECTION_PENDING",
             "docTypes": [
                 {
-                    "code": "NOC.AGRICULTURE",
+                    "code": "FI.AGRICULTURE",
                     "required": false
                 }
             ]
