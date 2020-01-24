@@ -84,6 +84,11 @@ const BpaEstimateCardContainer = Loadable({
   loading: () => <Loading />
 });
 
+const BpaCheckboxContainer =  Loadable({
+  loader: () => import("./BpaCheckboxContainer"),
+  loading: () => <Loading />
+});
+
 export {
   CustomTabContainer,
   LabelContainer,
@@ -99,5 +104,6 @@ export {
   RadioGroupWithLabelContainer,
   EDCRUploadCard,
   NocListContainer,
-  BpaEstimateCardContainer
+  BpaEstimateCardContainer,
+  BpaCheckboxContainer
 };

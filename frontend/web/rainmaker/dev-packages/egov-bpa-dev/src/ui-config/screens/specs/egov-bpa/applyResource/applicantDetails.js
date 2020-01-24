@@ -323,12 +323,12 @@ const commonApplicantInformation = () => {
       primaryOwner: {
         uiFramework: "custom-containers-local",
         moduleName: "egov-bpa",
-        componentPath: "CheckboxContainer",
-        jsonPath: "BPA.owners[0].primaryOwner",
+        componentPath: "BpaCheckboxContainer",
+        jsonPath: "BPA.owners[0].isPrimaryOwner",
         props: {
-          label : {
-            name : "Is Primary Owner ?",
-            key : "Is Primary Owner ?",
+          label: {
+            labelName: "Is Primary Owner ?",
+            labelKey: "BPA_IS_PRIMARY_OWNER_LABEL"
           },
           jsonPath: "BPA.owners[0].isPrimaryOwner"
         },
@@ -589,14 +589,12 @@ export const applicantDetails = getCommonCard({
             showComponent(dispatch, singleApplicantContainerJsonPath, true);
             showComponent(dispatch, multipleApplicantContainerJsonPath, false);
             showComponent(dispatch, institutionContainerJsonPath, false);
-            showComponent(dispatch, primaryOwnerJsonPath, false);
-            // dispatch(prepareFinalObject("BPA.owners[0].isPrimaryOwner", true));
+            dispatch(prepareFinalObject("BPA.owners[0].isPrimaryOwner", true));
           } else if (action.value.includes("MULTIPLEOWNERS")) {
             showComponent(dispatch, singleApplicantContainerJsonPath, false);
             showComponent(dispatch, multipleApplicantContainerJsonPath, true);
             showComponent(dispatch, institutionContainerJsonPath, false);
-            showComponent(dispatch, primaryOwnerJsonPath, true);
-            // dispatch(prepareFinalObject("BPA.owners[0].isPrimaryOwner", false));
+            dispatch(prepareFinalObject("BPA.owners[0].isPrimaryOwner", false));
           } else if (action.value.includes("INSTITUTIONAL")) {
             showComponent(dispatch, singleApplicantContainerJsonPath, false);
             showComponent(dispatch, multipleApplicantContainerJsonPath, false);
