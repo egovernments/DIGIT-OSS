@@ -43,7 +43,8 @@ class DemandCollection extends React.Component {
                               <TextField
                                 floatingLabelText={<Label label={taxData.code}/>}
                                 hintText={<Label label="PT_ENTER_AN_AMOUNT" />}
-                                InputProps={{ inputProps: { min: 0 } }}
+                                min={0}
+                                max={0}
                                 type="number"
                                 value={get(preparedFinalObject,`DemandProperties[0].propertyDetails[0].demand[${index}].demand[${data.financialYear}][${index1}].PT_DEMAND`)}
                                 onChange={(e) => {
@@ -71,7 +72,8 @@ class DemandCollection extends React.Component {
                               <TextField
                                 key={index1}
                                 type="number"
-                                InputProps={{ inputProps: { min: 0 } }}
+                                min={0}
+                                max={0}
                                 value={get(preparedFinalObject,`DemandProperties[0].propertyDetails[0].demand[${index}].demand[${data.financialYear}][${index1}].PT_COLLECTED`)}
                                 floatingLabelText={<Label label={taxData.code}/>}
                                 hintText={<Label label="PT_ENTER_AN_AMOUNT"/>}

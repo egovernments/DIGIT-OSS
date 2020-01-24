@@ -24,16 +24,15 @@ class DemandCollectionInfo extends React.Component {
               {{ editIcon } && <span style={{ alignItems: "right" }}>{editIcon}</span>}
             </div>
             {demandProperties[0].propertyDetails[0].demand.map((demand, index) => {
-
-              return demand && demand.demand ? (
+              return demand ? (
                 <div>
                 {Object.keys(demand.demand).map((datas, ind) => {
                     return (
                       <div>
                       <div>
                       <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 15px" }}>
-                        <b>{datas}</b>
-                        </div>
+                       <b>{datas}</b>
+                       </div>
                         {demand.demand[datas].map((data, ind) => {
                           if(Object.keys(data).length==2){
                             data['PT_COLLECTED']='';
