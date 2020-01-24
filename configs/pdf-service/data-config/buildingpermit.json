@@ -699,6 +699,18 @@
                     "value": "$.Payments[0].paymentDetails[0].bill.billDetails[0].billAccountDetails[0].amount"
                   }
                 ]
+              },
+              {
+                "path": "http://egov-workflow-v2.egov:8080/egov-workflow-v2/egov-wf/process/_search",
+                "queryParam": "tenantId=$.tenantId,businessIds=$.applicationNo,history=true",
+                "apiRequest": null,
+                "responseMapping": [
+                  {
+                    "variable": "approvedBy",
+                    "value": "$.ProcessInstances[?(@.action=='APPROVE')].assigner.name",
+                    "isUpperCaseRequired": true
+                  }
+                ]
               }
             ]
           },
