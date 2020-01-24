@@ -203,11 +203,18 @@ public class PropertyValidator {
 //    	if(configs.getIsWorkflowEnabled() && null == property.getWorkflow())
 //    		errorMap.put("EG_PR_WF_NOT_NULL", "Wokflow is enabled for create please provide the necessary info in workflow field in property");
    	
-    	if(!property.getPropertyType().contains(PTConstants.PT_TYPE_SHAREDPROPERTY) 
-    			&& property.getLandArea().compareTo(configs.getMinumumLandArea()) < 0 ) {
-    		
-			errorMap.put("EG_PT_ERROR", "Land Area cannot be lesser than minimum value : "
-					+ configs.getMinumumLandArea() + " " + configs.getLandAreaUnit());
+		if (!property.getPropertyType().contains(PTConstants.PT_TYPE_SHAREDPROPERTY)) {
+
+			if (property.getLandArea() == null) {
+
+				errorMap.put("EG_PT_ERROR_LAND_AREA",
+						"Land Area cannot be null for the property of type  : " + property.getPropertyType());
+
+			} else if (property.getLandArea().compareTo(configs.getMinumumLandArea()) < 0) {
+
+				errorMap.put("EG_PT_ERROR", "Land Area cannot be lesser than minimum value : "
+						+ configs.getMinumumLandArea() + " " + configs.getLandAreaUnit());
+			}
 		}
     	
 	}
@@ -256,27 +263,15 @@ public class PropertyValidator {
 
 		if (!CollectionUtils.isEmpty(errorMap))
 			throw new CustomException(errorMap);
-		
-		Integer primaryOwnerCount = 0;
 
-		for(OwnerInfo owner : property.getOwners()) {
-
-			if (!CollectionUtils.isEmpty(owner.getDocuments()) && owner.getDocuments().contains(null))
-				errorMap.put("INVALID ENTRY IN OWNER DOCS", " The OwnerType documents cannot contain null values");
+		for (OwnerInfo owner : property.getOwners()) {
 
 			if (ObjectUtils.isEmpty(owner.getOwnerType()) || owner.getOwnerType() != null
 					&& !codes.get(PTConstants.MDMS_PT_OWNERTYPE).contains(owner.getOwnerType())) {
-				
+
 				errorMap.put("INVALID OWNERTYPE", "The OwnerType '" + owner.getOwnerType() + "' does not exists");
 			}
-			
-			if(owner.getIsPrimaryOwner() == true)
-				primaryOwnerCount++;
-
 		}
-		
-		if(primaryOwnerCount != 1)
-			errorMap.put("EG_PT_PRIMARY OWNER MISMATCH"," A property should always have one primary owner");
 
 		if(!CollectionUtils.isEmpty(property.getDocuments()) && property.getDocuments().contains(null))
 			errorMap.put("INVALID ENTRY IN PROPERTY DOCS", " The proeprty documents cannot contain null values");
