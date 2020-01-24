@@ -1,5 +1,7 @@
 package org.egov.pt.web.contracts;
 
+import javax.validation.Valid;
+
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.models.Property;
 
@@ -28,5 +30,6 @@ public class PropertyRequest   {
   private RequestInfo requestInfo;
 
   @JsonProperty("Property")
+  @Valid
   private Property property;
 }

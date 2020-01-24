@@ -266,7 +266,7 @@ public class PropertyValidator {
 
 		for (OwnerInfo owner : property.getOwners()) {
 
-			if (ObjectUtils.isEmpty(owner.getOwnerType()) || owner.getOwnerType() != null
+			if (owner.getOwnerType() != null
 					&& !codes.get(PTConstants.MDMS_PT_OWNERTYPE).contains(owner.getOwnerType())) {
 
 				errorMap.put("INVALID OWNERTYPE", "The OwnerType '" + owner.getOwnerType() + "' does not exists");

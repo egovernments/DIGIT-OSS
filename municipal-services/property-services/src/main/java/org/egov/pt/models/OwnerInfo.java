@@ -44,14 +44,13 @@ public class OwnerInfo extends User {
 	private String correspondenceAddress;
 
 	@JsonProperty("isPrimaryOwner")
-	@NotNull
 	private Boolean isPrimaryOwner;
 
 	@JsonProperty("ownerShipPercentage")
 	private Double ownerShipPercentage;
 
-	@JsonProperty("ownerType")
 	@NotNull
+	@JsonProperty("ownerType")
 	private String ownerType;
 
 	@JsonProperty("institutionId")
