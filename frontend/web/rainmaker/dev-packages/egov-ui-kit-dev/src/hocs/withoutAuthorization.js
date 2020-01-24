@@ -146,7 +146,6 @@ const withoutAuthorization = (redirectionUrl) => (Component) => {
           ) : (
             <Component {...this.props} />
           )}
-          )
         </div>
       );
     }
