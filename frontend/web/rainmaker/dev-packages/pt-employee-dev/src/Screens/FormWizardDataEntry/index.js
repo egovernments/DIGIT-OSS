@@ -1838,8 +1838,7 @@ class FormWizardDataEntry extends Component {
           get(form, "institutionAuthority.fields.telephone.value", null)
         )
       );
-      let phoneNo=get(prepareFormData,"Properties[0].propertyDetails[0].citizenInfo.mobileNumber");
-      console.log("phoneNo:",phoneNo);
+      let phoneNo=get(prepareFormData,"Properties[0].propertyDetails[0].citizenInfo.mobileNumber");    
       if(!phoneNo){
           set(
             prepareFormData,
