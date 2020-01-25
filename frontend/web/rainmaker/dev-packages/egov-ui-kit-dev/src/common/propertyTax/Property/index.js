@@ -189,7 +189,7 @@ class Property extends Component {
     });
   };
   editDemand= () =>{
-  
+
     const { latestPropertyDetails, propertyId,setRoute, tenantId } = this.props;
     const assessmentNo = latestPropertyDetails && latestPropertyDetails.assessmentNumber;
     setRoute(`/property-tax/assessment-form-dataentry?assessmentId=${assessmentNo}&isReassesment=true&isAssesment=false&mode=editDemand&propertyId=${propertyId}&tenantId=${tenantId}`);
@@ -310,7 +310,7 @@ class Property extends Component {
   };
 
   render() {
-    const { urls, location, history, generalMDMSDataById, latestPropertyDetails, propertyId, selPropertyDetails, receiptsByYr, totalBillAmountDue, loadMdmsData } = this.props;
+    const { urls, location, history, generalMDMSDataById, latestPropertyDetails, propertyId, selPropertyDetails, receiptsByYr, totalBillAmountDue, loadMdmsData,propertyDetails} = this.props;
     const { closeYearRangeDialogue } = this;
     const { dialogueOpen, urlToAppend, showAssessmentHistory } = this.state;
     let urlArray = [];
@@ -322,6 +322,15 @@ class Property extends Component {
     let clsName = appName === "Citizen" ? "screen-with-bredcrumb" : "";
     if (receiptsByYr) {
       assessmentHistory = this.getAssessmentHistory(selPropertyDetails, receiptsByYr.receiptDetailsArray);
+    }
+    let button;
+    if(propertyDetails && propertyDetails[0] && propertyDetails[0].source ==='LEGACY_RECORD'){
+      button=  <Button
+          onClick={() => this.editDemand()}
+          label={<Label buttonLabel={true} label="PT_EDIT_DEMAND" fontSize="16px" />}
+          primary={true}
+          style={{ lineHeight: "auto", minWidth: "inherit" }}
+        />
     }
     return (
       <Screen className={clsName}>
@@ -360,14 +369,10 @@ class Property extends Component {
           style={{ textAlign: "right" }}
         >
           <div className="button-container col-xs-6 property-info-access-btn" style={{ float: "right" }}>
-            <Button
-              onClick={() => this.editDemand()}
-              label={<Label buttonLabel={true} label="PT_EDIT_DEMAND" fontSize="16px" />}
-              primary={true}
-              style={{ lineHeight: "auto", minWidth: "inherit" }}
-            />
+          {button}
             </div>
         </div>
+      }
         {/* {dialogueOpen && <YearDialogue open={dialogueOpen} history={history} urlToAppend={urlToAppend} closeDialogue={closeYearRangeDialogue} />} */}
       </Screen>
     );
@@ -712,6 +717,8 @@ const mapStateToProps = (state, ownProps) => {
   const completedAssessments = getCompletedTransformedItems(pendingAssessments, cities, localizationLabels, propertyId);
   // const completedAssessments = getCompletedTransformedItems(singleAssessmentByStatus, cities, localizationLabels);
   const sortedAssessments = completedAssessments && orderby(completedAssessments, ["epocDate"], ["desc"]);
+  const properties= !propertiesById[propertyId] ? {}: propertiesById[propertyId];
+  const propertyDetails=properties.propertyDetails;
   return {
     urls,
     propertyItems,
@@ -725,7 +732,8 @@ const mapStateToProps = (state, ownProps) => {
     receiptsByYr,
     localization,
     totalBillAmountDue,
-    loadMdmsData
+    loadMdmsData,
+    propertyDetails
   };
 };
 
