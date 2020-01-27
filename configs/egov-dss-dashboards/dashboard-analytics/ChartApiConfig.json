@@ -165,8 +165,8 @@
       {
         "module": "TL",
         "indexName": "tlindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Total Application\":{\"value_count\":{\"field\":\"Data.tradelicense.applicationnumber.keyword\"}}}}}}",
-        "requestQueryMap": "{\"wardId\" : \"Data.ward.name.keyword\", \r\n  \"district\" : \"Data.tenantData.city.districtCode\", \r\n\"tenantId\" : \"Data.tradelicense.tenantId\" \r\n}",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantid.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Total Application\":{\"cardinality\":{\"field\":\"Data.tradelicense.applicationnumber.keyword\"}}}}}}",
+        "requestQueryMap": "{\"wardId\" : \"Data.ward.name.keyword\", \r\n  \"district\" : \"Data.tenantData.city.districtCode\", \r\n\"tenantId\" : \"Data.tradelicense.tenantid\" \r\n}",
         "dateRefField": "Data.tradelicense.applicationdate"
       },
       {
@@ -829,9 +829,9 @@
       {
         "module": "TL",
         "requestQueryMap": "{\"wardId\" : \"Data.ward.name.keyword\", \"tenantId\" : \"Data.tenantData.code\"}",
-        "dateRefField": "Data.tradelicense.applicationdate",
+        "dateRefField": "Data.tradelicense.@timestamp",
         "indexName": "tlindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Active ULBs\":{\"terms\":{\"field\":\"Data.tenantData.code.keyword\"},\"aggs\":{\"type_count\":{\"cardinality\":{\"field\":\"Data.tenantData.code.keyword\"}}}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantData.code.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Active ULBs\":{\"terms\":{\"field\":\"Data.tenantData.code.keyword\"},\"aggs\":{\"type_count\":{\"cardinality\":{\"field\":\"Data.tenantData.code.keyword\"}}}}}}}}"
       }
     ],
     "chartType": "metric",
@@ -1762,7 +1762,7 @@
       {
         "module": "TL",
         "indexName": "tlindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\": {\"License Issued\": {\"value_count\": {\"field\": \"Data.tradelicense.licensenumber.keyword\"}}}}}}",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantid.keyword\":\"pb.testing\"}}]}},\"aggs\": {\"License Issued\": {\"cardinality\": {\"field\": \"Data.tradelicense.licensenumber.keyword\"}}}}}}",
         "requestQueryMap": "{\"wardId\" : \"Data.ward.name.keyword\", \r\n  \"district\" : \"Data.tenantData.city.districtCode\", \r\n\"tenantId\" : \"Data.tradelicense.tenantid\" \r\n, \r\n\"businessService\" : \"dataObject.Bill.billDetails.businessServices\" \r\n}",
         "dateRefField": "Data.tradelicense.applicationdate"
       }
@@ -1827,7 +1827,8 @@
         "requestQueryMap": "{\"wardId\" : \"Data.ward.name.keyword\", \"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"tenantId\" : \"Data.tenantData.code\", \"district\" : \"Data.tenantData.cityDistrictCode\"}",
         "dateRefField": "Data.tradelicense.issueddate",
         "indexName": "tlindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Status\":{\"terms\":{\"field\":\"Data.tradelicense.status.keyword\"},\"aggs\":{\"License Issued\":{\"value_count\":{\"field\":\"Data.tradelicense.status.keyword\"}}}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantid.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Status\":{\"terms\":{\"field\":\"Data.tradelicense.status.keyword\",\"size\":1000,\"min_doc_count\":0},\"aggs\":{\"License Issued\":{\"cardinality\":{\"field\":\"Data.tradelicense.licensenumber.keyword\"}}}}}}}}"
+        "aggrQueryBc": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Status\":{\"terms\":{\"field\":\"Data.tradelicense.status.keyword\"},\"aggs\":{\"License Issued\":{\"value_count\":{\"field\":\"Data.tradelicense.status.keyword\"}}}}}}}}"
       }
     ],
     "chartType": "pie",
