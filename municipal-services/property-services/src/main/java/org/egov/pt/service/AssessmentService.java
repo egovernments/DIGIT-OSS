@@ -85,8 +85,8 @@ public class AssessmentService {
 		Assessment assessment = request.getAssessment();
 		RequestInfo requestInfo = request.getRequestInfo();
 		Property property = utils.getPropertyForAssessment(request);
-		validator.validateAssessmentUpdate(request, property);
 		assessmentEnrichmentService.enrichAssessmentUpdate(request);
+		validator.validateAssessmentUpdate(request, property);
 		Assessment assessmentFromSearch = repository.getAssessmentFromDB(request.getAssessment());
 		List<String> fieldsUpdated = diffService.getUpdatedFields(request.getAssessment(),assessmentFromSearch);
 		Boolean workflowTriggered = isWorkflowTriggered(fieldsUpdated);
@@ -111,6 +111,8 @@ public class AssessmentService {
 			ProcessInstanceRequest workflowRequest = new ProcessInstanceRequest(requestInfo, Collections.singletonList(assessment.getWorkflow()));
 			String state = workflowService.callWorkFlow(workflowRequest);
 			assessmentEnrichmentService.enrichStatus(state, assessment, businessService);
+			calculationService.calculateTax(request, property);
+			producer.push(props.getUpdateAssessmentTopic(), request);
 
 
 			/*

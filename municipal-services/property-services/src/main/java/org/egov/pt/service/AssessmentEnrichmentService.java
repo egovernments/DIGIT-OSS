@@ -15,10 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static org.egov.pt.util.AssessmentConstants.WORKFLOW_SENDBACK_CITIZEN;
 
@@ -83,7 +82,7 @@ public class AssessmentEnrichmentService {
      *
      * @param request
      */
-    public void enrichAssessmentUpdate(AssessmentRequest request) {
+    public void enrichAssessmentUpdate(AssessmentRequest request, Property property) {
         Assessment assessment = request.getAssessment();
 
         AuditDetails auditDetails = AuditDetails.builder()
@@ -98,6 +97,7 @@ public class AssessmentEnrichmentService {
                     unitUsage.setId(String.valueOf(UUID.randomUUID()));
                     unitUsage.setAuditDetails(auditDetails);
                 }
+                enrichPropertyFromAssessment(property, request.getAssessment());
             }
         }
         if(!CollectionUtils.isEmpty(assessment.getDocuments())) {
@@ -157,6 +157,27 @@ public class AssessmentEnrichmentService {
     public String getAssessmentNo(AssessmentRequest request) {
         return assessmentUtils.getIdList(request.getRequestInfo(), request.getAssessment().getTenantId(),
                 config.getAssessmentIdGenName(), config.getAssessmentIdGenFormat(), 1).get(0);
+    }
+
+    /**
+     * Enriches Units from unitUsages from assessment
+     * @param property Property for which assessment is done
+     * @param assessment
+     */
+    private void enrichPropertyFromAssessment(Property property, Assessment assessment){
+
+        Map<String, UnitUsage> unitIdInUnitUsage = assessment.getUnitUsageList().stream().collect(Collectors.toMap(UnitUsage::getUnitId, Function.identity()));
+
+        List<Unit> units  = property.getUnits();
+
+        for(Unit unit : units){
+            if(unitIdInUnitUsage.containsKey(unit.getId())){
+                unit.setOccupancyDate(unitIdInUnitUsage.get(unit.getId()).getOccupancyDate());
+                unit.setOccupancyType(unitIdInUnitUsage.get(unit.getId()).getOccupancyType());
+                unit.setUsageCategory(unitIdInUnitUsage.get(unit.getId()).getUsageCategory());
+            }
+        }
+
     }
 
 
