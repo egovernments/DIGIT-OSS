@@ -35,7 +35,7 @@ public class TranslationService {
 
         Map<String, Object> addressMap = new HashMap();
         Map<String, Object> localityMap = new HashMap();
-        localityMap.put("area",property.getAddress().getLocality().getAreaType());
+        localityMap.put("area",property.getAddress().getLocality().getArea());
         localityMap.put("code",property.getAddress().getLocality().getCode());
         addressMap.put("locality",localityMap);
 

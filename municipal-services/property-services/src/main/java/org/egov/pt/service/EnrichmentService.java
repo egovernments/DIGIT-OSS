@@ -92,7 +92,7 @@ public class EnrichmentService {
 			});
 
 		setIdgenIds(request);
-		enrichBoundary(request);
+		enrichBoundary(property, requestInfo);
 	}
 
     /**
@@ -233,8 +233,8 @@ public class EnrichmentService {
      *  Enriches the locality object
      * @param request The propertyRequest received for create or update
      */
-    public void enrichBoundary(PropertyRequest request){
+    public void enrichBoundary(Property property, RequestInfo requestInfo){
     	
-        boundaryService.getAreaType(request,PTConstants.BOUNDARY_HEIRARCHY_CODE);
+        boundaryService.getAreaType(property, requestInfo, PTConstants.BOUNDARY_HEIRARCHY_CODE);
     }
 }

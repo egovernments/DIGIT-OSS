@@ -135,6 +135,10 @@ public class PropertyService {
 		} else {
 			properties = getPropertiesWithOwnerInfo(criteria, requestInfo);
 		}
+
+		properties.forEach(property -> {
+			enrichmentService.enrichBoundary(property, requestInfo);
+		});
 		return properties;
 	}
 	

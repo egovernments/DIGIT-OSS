@@ -40,8 +40,8 @@ public class Locality {
 	@JsonProperty("longitude")
 	private String longitude;
 
-	@JsonProperty("areaType")
-	private String areaType;
+	@JsonProperty("area")
+	private String area;
 
 	@JsonProperty("children")
 	@Valid
