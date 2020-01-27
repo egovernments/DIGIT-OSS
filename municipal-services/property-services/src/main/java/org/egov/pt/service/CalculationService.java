@@ -41,6 +41,14 @@ public class CalculationService {
 
          Map<String, Object> oldPropertyObject = translationService.translate(assessmentRequest, property);
 
+         // For Debugging should be removed latter
+         try{
+            log.info("Calculation Request: "+mapper.writeValueAsString(oldPropertyObject));
+         }
+         catch (Exception e){
+             e.printStackTrace();
+         }
+
          Object response = serviceRequestRepository.fetchResult(uri, oldPropertyObject);
 
          log.debug("response-> "+response);

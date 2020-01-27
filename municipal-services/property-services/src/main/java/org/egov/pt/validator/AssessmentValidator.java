@@ -226,7 +226,7 @@ public class AssessmentValidator {
 			});
 		}
 
-		if(!listEqualsIgnoreOrder(activeUnitIdsInAssessment, activeUnitIdsInProperty))
+		if(!CollectionUtils.isEmpty(assessment.getUnitUsageList()) && !listEqualsIgnoreOrder(activeUnitIdsInAssessment, activeUnitIdsInProperty))
 			throw new CustomException("INVALID_UNITIDS","The unitIds are not matching in property and assessment");
 
 
