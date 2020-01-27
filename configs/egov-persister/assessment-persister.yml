@@ -35,9 +35,9 @@ serviceMaps:
 
       - jsonPath: $.Assessment.auditDetails.createdBy
 
-      - jsonPath: $.Assessment.auditDetails.lastModifiedBy
-
       - jsonPath: $.Assessment.auditDetails.createdTime
+
+      - jsonPath: $.Assessment.auditDetails.lastModifiedBy
 
       - jsonPath: $.Assessment.auditDetails.lastModifiedTime
 
