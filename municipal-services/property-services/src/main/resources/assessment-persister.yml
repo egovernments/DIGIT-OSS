@@ -8,38 +8,38 @@ serviceMaps:
     queryMaps:
 
     - query: INSERT INTO eg_pt_asmt_assessment(id, tenantid, assessmentnumber, financialyear, propertyid, status, source, channel, assessmentdate, additionaldetails, createdby, createdtime, lastmodifiedby, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
-      basePath: Assessments
+      basePath: Assessment
       jsonMaps:
 
-      - jsonPath: $.Assessments.id
+      - jsonPath: $.Assessment.id
 
-      - jsonPath: $.Assessments.tenantId
+      - jsonPath: $.Assessment.tenantId
 
-      - jsonPath: $.Assessments.assessmentNumber
+      - jsonPath: $.Assessment.assessmentNumber
 
-      - jsonPath: $.Assessments.financialYear
+      - jsonPath: $.Assessment.financialYear
 
-      - jsonPath: $.Assessments.propertyId
+      - jsonPath: $.Assessment.propertyId
 
-      - jsonPath: $.Assessments.status
+      - jsonPath: $.Assessment.status
 
-      - jsonPath: $.Assessments.source
+      - jsonPath: $.Assessment.source
 
-      - jsonPath: $.Assessments.channel
+      - jsonPath: $.Assessment.channel
 
-      - jsonPath: $.Assessments.assessmentDate
+      - jsonPath: $.Assessment.assessmentDate
 
-      - jsonPath: $.Assessments.additionalDetails
+      - jsonPath: $.Assessment.additionalDetails
         type: JSON
         dbType: JSONB
 
-      - jsonPath: $.Assessments.auditDetails.createdBy
+      - jsonPath: $.Assessment.auditDetails.createdBy
 
-      - jsonPath: $.Assessments.auditDetails.lastModifiedBy
+      - jsonPath: $.Assessment.auditDetails.lastModifiedBy
 
-      - jsonPath: $.Assessments.auditDetails.createdTime
+      - jsonPath: $.Assessment.auditDetails.createdTime
 
-      - jsonPath: $.Assessments.auditDetails.lastModifiedTime
+      - jsonPath: $.Assessment.auditDetails.lastModifiedTime
 
 
 
@@ -47,57 +47,57 @@ serviceMaps:
       basePath: Assessment.units.*
       jsonMaps:
 
-      - jsonPath: $.Assessments.unitUsageList.*.tenantId
+      - jsonPath: $.Assessment.unitUsageList.*.tenantId
 
-      - jsonPath: $.Assessments.unitUsageList.*.id
+      - jsonPath: $.Assessment.unitUsageList.*.id
 
-      - jsonPath: $.Assessments.[*][?({id} in @.unitUsageList[*].id)].assessmentNumber
+      - jsonPath: $.Assessment.[*][?({id} in @.unitUsageList[*].id)].assessmentNumber
 
-      - jsonPath: $.Assessments.unitUsageList.*.unitid
+      - jsonPath: $.Assessment.unitUsageList.*.unitid
 
-      - jsonPath: $.Assessments.unitUsageList.*.usageCategory
+      - jsonPath: $.Assessment.unitUsageList.*.usageCategory
 
-      - jsonPath: $.Assessments.unitUsageList.*.occupancyType
+      - jsonPath: $.Assessment.unitUsageList.*.occupancyType
 
-      - jsonPath: $.Assessments.unitUsageList.*.occupancyDate
+      - jsonPath: $.Assessment.unitUsageList.*.occupancyDate
 
-      - jsonPath: $.Assessments.unitUsageList.*.active
+      - jsonPath: $.Assessment.unitUsageList.*.active
 
-      - jsonPath: $.Assessments.unitUsageList.*.auditDetails.createdBy
+      - jsonPath: $.Assessment.unitUsageList.*.auditDetails.createdBy
 
-      - jsonPath: $.Assessments.unitUsageList.*.auditDetails.createdTime
+      - jsonPath: $.Assessment.unitUsageList.*.auditDetails.createdTime
 
-      - jsonPath: $.Assessments.unitUsageList.*.auditDetails.lastModifiedBy
+      - jsonPath: $.Assessment.unitUsageList.*.auditDetails.lastModifiedBy
 
-      - jsonPath: $.Assessments.unitUsageList.*.auditDetails.lastModifiedTime
+      - jsonPath: $.Assessment.unitUsageList.*.auditDetails.lastModifiedTime
 
 
 
     - query: INSERT INTO eg_pt_asmt_document (id, tenantid, entityid, documenttype, filestoreid, documentuid, status, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
-      basePath: $.Assessments.documents.*
+      basePath: $.Assessment.documents.*
       jsonMaps:
 
-      - jsonPath: $.Assessments.documents.*.id
+      - jsonPath: $.Assessment.documents.*.id
 
-      - jsonPath: $.Assessments.tenantId
+      - jsonPath: $.Assessment.tenantId
 
-      - jsonPath: $.Assessments.id
+      - jsonPath: $.Assessment.id
 
-      - jsonPath: $.Assessments.documents.*.documentType
+      - jsonPath: $.Assessment.documents.*.documentType
 
-      - jsonPath: $.Assessments.documents.*.fileStoreId
+      - jsonPath: $.Assessment.documents.*.fileStoreId
 
-      - jsonPath: $.Assessments.documents.*.documentUid
+      - jsonPath: $.Assessment.documents.*.documentUid
 
-      - jsonPath: $.Assessments.documents.*.status
+      - jsonPath: $.Assessment.documents.*.status
 
-      - jsonPath: $.Assessments.documents.*.auditDetails.createdBy
+      - jsonPath: $.Assessment.documents.*.auditDetails.createdBy
 
-      - jsonPath: $.Assessments.documents.*.auditDetails.lastModifiedBy
+      - jsonPath: $.Assessment.documents.*.auditDetails.lastModifiedBy
 
-      - jsonPath: $.Assessments.documents.*.auditDetails.createdTime
+      - jsonPath: $.Assessment.documents.*.auditDetails.createdTime
 
-      - jsonPath: $.Assessments.documents.*.auditDetails.lastModifiedTime
+      - jsonPath: $.Assessment.documents.*.auditDetails.lastModifiedTime
       
       
       
@@ -111,37 +111,37 @@ serviceMaps:
       basePath: Assessment
       jsonMaps:
 
-      - jsonPath: $.Assessments.id
+      - jsonPath: $.Assessment.id
       
       
     - query: INSERT INTO eg_pt_asmt_unitusage_audit SELECT *, (SELECT extract(epoch from now())) FROM eg_pt_unit WHERE id = ?;
       basePath: Assessment.units.*
       jsonMaps:
 
-      - jsonPath: $.Assessments.unitUsageList.*.id
+      - jsonPath: $.Assessment.unitUsageList.*.id
       
       
     - query: UPDATE eg_pt_asmt_assessment SET financialyear = ?, status = ?, source = ?, assessmentDate = ?, additionaldetails = ?, lastmodifiedby = ?, lastmodifiedtime = ? WHERE id = ?;
       basePath: Assessment
       jsonMaps:
 
-      - jsonPath: $.Assessments.financialYear
+      - jsonPath: $.Assessment.financialYear
 
-      - jsonPath: $.Assessments.status
+      - jsonPath: $.Assessment.status
 
-      - jsonPath: $.Assessments.source
+      - jsonPath: $.Assessment.source
 
-      - jsonPath: $.Assessments.assessmentDate
+      - jsonPath: $.Assessment.assessmentDate
 
-      - jsonPath: $.Assessments.additionalDetails
+      - jsonPath: $.Assessment.additionalDetails
         type: JSON
         dbType: JSONB
 
-      - jsonPath: $.Assessments.auditDetails.lastModifiedBy
+      - jsonPath: $.Assessment.auditDetails.lastModifiedBy
 
-      - jsonPath: $.Assessments.auditDetails.lastModifiedTime
+      - jsonPath: $.Assessment.auditDetails.lastModifiedTime
       
-      - jsonPath: $.Assessments.id
+      - jsonPath: $.Assessment.id
 
 
 
@@ -150,78 +150,78 @@ serviceMaps:
       basePath: Assessment.units.*
       jsonMaps:
 
-      - jsonPath: $.Assessments.unitUsageList.*.tenantId
+      - jsonPath: $.Assessment.unitUsageList.*.tenantId
 
-      - jsonPath: $.Assessments.unitUsageList.*.id
+      - jsonPath: $.Assessment.unitUsageList.*.id
 
-      - jsonPath: $.Assessments.[*][?({id} in @.unitUsageList[*].id)].assessmentNumber
+      - jsonPath: $.Assessment.[*][?({id} in @.unitUsageList[*].id)].assessmentNumber
 
-      - jsonPath: $.Assessments.unitUsageList.*.usageCategory
+      - jsonPath: $.Assessment.unitUsageList.*.usageCategory
 
-      - jsonPath: $.Assessments.unitUsageList.*.occupancyType
+      - jsonPath: $.Assessment.unitUsageList.*.occupancyType
 
-      - jsonPath: $.Assessments.unitUsageList.*.occupancyDate
+      - jsonPath: $.Assessment.unitUsageList.*.occupancyDate
 
-      - jsonPath: $.Assessments.unitUsageList.*.active
+      - jsonPath: $.Assessment.unitUsageList.*.active
 
-      - jsonPath: $.Assessments.unitUsageList.*.auditDetails.createdBy
+      - jsonPath: $.Assessment.unitUsageList.*.auditDetails.createdBy
 
-      - jsonPath: $.Assessments.unitUsageList.*.auditDetails.createdTime
+      - jsonPath: $.Assessment.unitUsageList.*.auditDetails.createdTime
 
-      - jsonPath: $.Assessments.unitUsageList.*.auditDetails.lastModifiedBy
+      - jsonPath: $.Assessment.unitUsageList.*.auditDetails.lastModifiedBy
 
-      - jsonPath: $.Assessments.unitUsageList.*.auditDetails.lastModifiedTime
+      - jsonPath: $.Assessment.unitUsageList.*.auditDetails.lastModifiedTime
 
-      - jsonPath: $.Assessments.unitUsageList.*.usageCategory
+      - jsonPath: $.Assessment.unitUsageList.*.usageCategory
 
-      - jsonPath: $.Assessments.unitUsageList.*.occupancyType
+      - jsonPath: $.Assessment.unitUsageList.*.occupancyType
 
-      - jsonPath: $.Assessments.unitUsageList.*.occupancyDate
+      - jsonPath: $.Assessment.unitUsageList.*.occupancyDate
 
-      - jsonPath: $.Assessments.unitUsageList.*.active
+      - jsonPath: $.Assessment.unitUsageList.*.active
 
-      - jsonPath: $.Assessments.unitUsageList.*.auditDetails.lastModifiedBy
+      - jsonPath: $.Assessment.unitUsageList.*.auditDetails.lastModifiedBy
 
-      - jsonPath: $.Assessments.unitUsageList.*.auditDetails.lastModifiedTime
+      - jsonPath: $.Assessment.unitUsageList.*.auditDetails.lastModifiedTime
 
 
 
 
     - query: INSERT INTO eg_pt_asmt_document (id, tenantid, entityid, documenttype, filestoreid, documentuid, status, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE documenttype = ?, documentuid = ?, status = ?, lastmodifiedby = ?, lastmodifiedtime = ?;
-      basePath: $.Assessments.documents.*
+      basePath: $.Assessment.documents.*
       jsonMaps:
 
-      - jsonPath: $.Assessments.documents.*.id
+      - jsonPath: $.Assessment.documents.*.id
 
-      - jsonPath: $.Assessments.documents.*.tenantId
+      - jsonPath: $.Assessment.documents.*.tenantId
 
-      - jsonPath: $.Assessments.id
+      - jsonPath: $.Assessment.id
 
-      - jsonPath: $.Assessments.documents.*.documentType
+      - jsonPath: $.Assessment.documents.*.documentType
 
-      - jsonPath: $.Assessments.documents.*.fileStoreId
+      - jsonPath: $.Assessment.documents.*.fileStoreId
 
-      - jsonPath: $.Assessments.documents.*.documentUid
+      - jsonPath: $.Assessment.documents.*.documentUid
 
-      - jsonPath: $.Assessments.documents.*.status
+      - jsonPath: $.Assessment.documents.*.status
 
-      - jsonPath: $.Assessments.documents.*.auditDetails.createdBy
+      - jsonPath: $.Assessment.documents.*.auditDetails.createdBy
 
-      - jsonPath: $.Assessments.documents.*.auditDetails.lastModifiedBy
+      - jsonPath: $.Assessment.documents.*.auditDetails.lastModifiedBy
 
-      - jsonPath: $.Assessments.documents.*.auditDetails.createdTime
+      - jsonPath: $.Assessment.documents.*.auditDetails.createdTime
 
-      - jsonPath: $.Assessments.documents.*.auditDetails.lastModifiedTime
+      - jsonPath: $.Assessment.documents.*.auditDetails.lastModifiedTime
       
-      - jsonPath: $.Assessments.documents.*.documentType
+      - jsonPath: $.Assessment.documents.*.documentType
 
-      - jsonPath: $.Assessments.documents.*.documentUid
+      - jsonPath: $.Assessment.documents.*.documentUid
 
-      - jsonPath: $.Assessments.documents.*.status
+      - jsonPath: $.Assessment.documents.*.status
 
-      - jsonPath: $.Assessments.documents.*.auditDetails.lastModifiedBy
+      - jsonPath: $.Assessment.documents.*.auditDetails.lastModifiedBy
 
-      - jsonPath: $.Assessments.documents.*.auditDetails.lastModifiedTime
+      - jsonPath: $.Assessment.documents.*.auditDetails.lastModifiedTime
       
       
       
