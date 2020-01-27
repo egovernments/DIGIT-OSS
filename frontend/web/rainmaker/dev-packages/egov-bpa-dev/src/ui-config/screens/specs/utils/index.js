@@ -2884,10 +2884,10 @@ export const calculationType = (state, dispatch) => {
 export const residentialType = (state, dispatch) => {
   let resType = get(
     state.screenConfiguration.preparedFinalObject,
-    "scrutinyDetails.planDetail.virtualBuilding.occupancyTypes[0].type.name"
+    "applyScreenMdmsData.BPA.OccupancyType[0].code"
   );
   if(resType) {
-    dispatch(prepareFinalObject("BPA.occupancyType", (resType).toUpperCase()));
+    dispatch(prepareFinalObject("BPA.occupancyType", resType));
   }
 }
 

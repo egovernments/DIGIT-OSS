@@ -99,7 +99,7 @@ export const blockWiseOccupancyAndUsageDetails = getCommonCard({
     ),
     applicantTypeSelection: getCommonContainer({
       occupancyType: {
-        ...getTextField({
+        ...getSelectField({
           label: {
             labelName: "Occupancy Type",
             labelKey: "BPA_OCCUPANCY_TYPE"
@@ -108,7 +108,12 @@ export const blockWiseOccupancyAndUsageDetails = getCommonCard({
             labelName: "Select Occupancy Type",
             labelKey: "BPA_OCCUPANCY_TYPE_PLACEHOLDER"
           },
+          localePrefix: {
+            moduleName: "BPA",
+            masterName: "OCCUPANCYTYPE"
+          },
           jsonPath: "BPA.occupancyType",
+          sourceJsonPath: "applyScreenMdmsData.BPA.OccupancyType",
           required: true,
           gridDefination: {
             xs: 12,

@@ -28,3 +28,9 @@
 
 div[class^="MuiPaper-root"] svg text, .stepper-container svg text {
   font-size: 15px !important }
+
+.bpacheckbox-label {
+  letter-spacing: 0.58px;
+  margin-bottom: 0 !important;
+  color: rgba(0, 0, 0, 0.87);
+}
