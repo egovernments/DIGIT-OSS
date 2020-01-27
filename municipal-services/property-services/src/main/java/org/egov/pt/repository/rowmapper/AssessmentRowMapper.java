@@ -60,8 +60,15 @@ public class AssessmentRowMapper implements ResultSetExtractor<List<Assessment>>
 				} catch (IOException e) {
 					throw new CustomException("PARSING ERROR", "The assessment additionaldetails json cannot be parsed");
 				}
-				assessment.getUnitUsageList().add(getUnitUsage(rs));
-				assessment.getDocuments().add(getDocument(rs));
+
+				UnitUsage unitUsage = getUnitUsage(rs);
+				if(unitUsage!=null)
+					assessment.getUnitUsageList().add(unitUsage);
+
+				Document document = getDocument(rs);
+				if(document!=null)
+					assessment.getDocuments().add(document);
+
 
 				AuditDetails auditDetails = AuditDetails.builder().createdBy(rs.getString("ass_createdby"))
 						.createdTime(rs.getLong("ass_createdtime")).lastModifiedBy(rs.getString("ass_lastmodifiedby"))
