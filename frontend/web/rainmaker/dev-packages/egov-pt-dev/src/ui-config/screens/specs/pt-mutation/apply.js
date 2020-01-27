@@ -96,8 +96,8 @@ export const header = getCommonContainer({
     props: {
       number: getQueryArg(window.location.href, "consumerCode"),
       label: {
-        labelValue: "Application No.",
-        labelKey: "PT_MUTATION_APPLICATION_NO"
+        labelValue: "Property Tax Unique ID.",
+        labelKey: "PT_PROPERTY_TAX_UNIQUE_ID"
     }
     },
     visible: true

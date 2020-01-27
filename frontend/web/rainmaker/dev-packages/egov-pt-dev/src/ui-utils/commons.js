@@ -55,7 +55,7 @@ export const getSearchResults = async (queryObject, dispatch) => {
     store.dispatch(toggleSpinner());
     const response = await httpRequest(
       "post",
-      "/firenoc-services/v1/_search",
+      "/pt-services-v2/property/_search",
       "",
       queryObject
     );

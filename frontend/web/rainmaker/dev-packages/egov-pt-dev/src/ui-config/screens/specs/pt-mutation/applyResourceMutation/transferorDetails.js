@@ -19,6 +19,11 @@ import {
     } from "../../utils";
     import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
     import get from "lodash/get";
+
+    const checkValueForNA = value => {
+      return "NA";
+    };
+
 export const transferorDetails = getCommonCard(
     {
       header: getCommonTitle(
@@ -69,17 +74,26 @@ export const transferorDetails = getCommonCard(
             // }
           }
         ),
-        transferorDOB: getLabelWithValue(
+        // transferorDOB: getLabelWithValue(
+        //   {
+        //     labelName: "Date Of Birth",
+        //     labelKey: "PT_MUTATION_TRANSFEROR_DOB"
+        //   },
+        //   {
+        //    // jsonPath: "Properties[0].propertyDetails[0].owners[0].dob"
+        //    jsonPath: "Properties[0].propertyDetails[0].owners[0].dob",
+        //     callBack: checkValueForNA
+        //     }
+          
+        // ),
+        transferorOwnerType: getLabelWithValue(
           {
-            labelName: "Date Of Birth",
-            labelKey: "PT_MUTATION_TRANSFEROR_DOB"
+            labelName: "Type of Ownership",
+            labelKey: "PT_FORM3_OWNERSHIP_TYPE"
           },
           {
-           // jsonPath: "Properties[0].propertyDetails[0].owners[0].dob"
-           jsonPath: "NA"
-            // callBack: value => {
-            //   return value.split(".")[1];
-            // }
+            jsonPath:
+            "Properties[0].propertyDetails[0].ownershipCategory"
           }
         ),
         transferorMobile: getLabelWithValue(

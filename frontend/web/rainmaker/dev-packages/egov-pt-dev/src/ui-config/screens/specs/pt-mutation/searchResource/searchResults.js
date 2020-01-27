@@ -1,6 +1,5 @@
+
 import React from "react";
-import { Link } from "react-router-dom";
-import get from "lodash/get";
 import {
   sortByEpoch,
   getEpochForDate,
@@ -22,89 +21,99 @@ const getLocalTextFromCode = localCode => {
 };
 
 export const textToLocalMapping = {
-  "Application No": getLocaleLabels(
-    "Application No",
-    "NOC_COMMON_TABLE_COL_APP_NO_LABEL",
-    getTransformedLocalStorgaeLabels()
-  ),
-  "NOC No": getLocaleLabels(
-    "NOC No",
-    "NOC_COMMON_TABLE_COL_NOC_NO_LABEL",
-    getTransformedLocalStorgaeLabels()
-  ),
-  "NOC Type": getLocaleLabels(
-    "NOC Type",
-    "NOC_TYPE_LABEL",
+  "Property Tax Unique Id": getLocaleLabels(
+    "Property Tax Unique Id",
+    "PT_COMMON_TABLE_COL_PT_ID",
     getTransformedLocalStorgaeLabels()
   ),
   "Owner Name": getLocaleLabels(
     "Owner Name",
-    "NOC_COMMON_TABLE_COL_OWN_NAME_LABEL",
+    "PT_COMMON_TABLE_COL_OWNER_NAME",
     getTransformedLocalStorgaeLabels()
   ),
-  "Application Date": getLocaleLabels(
-    "Application Date",
-    "NOC_COMMON_TABLE_COL_APP_DATE_LABEL",
+  "Guardian Name": getLocaleLabels(
+    "Guardian Name",
+    "PT_GUARDIAN_NAME",
+    getTransformedLocalStorgaeLabels()
+  ),
+  "Existing Property Id": getLocaleLabels(
+    "Existing Property Id",
+    "PT_COMMON_COL_EXISTING_PROP_ID",
+    getTransformedLocalStorgaeLabels()
+  ),
+  "Address": getLocaleLabels(
+    "Address",
+    "PT_COMMON_COL_ADDRESS",
+    getTransformedLocalStorgaeLabels()
+  ),
+  "Application No": getLocaleLabels(
+    "Application No.",
+    "PT_COMMON_COL_APPLICATION_NO",
+    getTransformedLocalStorgaeLabels()
+  ),
+  "Application Type": getLocaleLabels(
+    "Application Type",
+    "PT_COMMON_COL_APPLICATION_TYPE",
     getTransformedLocalStorgaeLabels()
   ),
   Status: getLocaleLabels(
     "Status",
-    "NOC_COMMON_TABLE_COL_STATUS_LABEL",
+    "PT_COMMON_TABLE_COL_STATUS_LABEL",
     getTransformedLocalStorgaeLabels()
   ),
   INITIATED: getLocaleLabels(
     "Initiated,",
-    "NOC_INITIATED",
+    "PT_INITIATED",
     getTransformedLocalStorgaeLabels()
   ),
   APPLIED: getLocaleLabels(
     "Applied",
-    "NOC_APPLIED",
+    "PT_APPLIED",
     getTransformedLocalStorgaeLabels()
   ),
   DOCUMENTVERIFY: getLocaleLabels(
     "Pending for Document Verification",
-    "WF_FIRENOC_DOCUMENTVERIFY",
+    "WF_PT_DOCUMENTVERIFY",
     getTransformedLocalStorgaeLabels()
   ),
   APPROVED: getLocaleLabels(
     "Approved",
-    "NOC_APPROVED",
+    "PT_APPROVED",
     getTransformedLocalStorgaeLabels()
   ),
   REJECTED: getLocaleLabels(
     "Rejected",
-    "NOC_REJECTED",
+    "PT_REJECTED",
     getTransformedLocalStorgaeLabels()
   ),
   CANCELLED: getLocaleLabels(
     "Cancelled",
-    "NOC_CANCELLED",
+    "PT_CANCELLED",
     getTransformedLocalStorgaeLabels()
   ),
   PENDINGAPPROVAL: getLocaleLabels(
     "Pending for Approval",
-    "WF_FIRENOC_PENDINGAPPROVAL",
+    "WF_PT_PENDINGAPPROVAL",
     getTransformedLocalStorgaeLabels()
   ),
   PENDINGPAYMENT: getLocaleLabels(
     "Pending payment",
-    "WF_FIRENOC_PENDINGPAYMENT",
+    "WF_PT_PENDINGPAYMENT",
     getTransformedLocalStorgaeLabels()
   ),
   FIELDINSPECTION: getLocaleLabels(
     "Pending for Field Inspection",
-    "WF_FIRENOC_FIELDINSPECTION",
+    "WF_PT_FIELDINSPECTION",
     getTransformedLocalStorgaeLabels()
   ),
-  "Search Results for Fire-NOC Applications": getLocaleLabels(
-    "Search Results for Fire-NOC Applications",
-    "NOC_HOME_SEARCH_RESULTS_TABLE_HEADING",
+  "Search Results for PT Applications": getLocaleLabels(
+    "Search Results for PT Applications",
+    "PT_HOME_SEARCH_RESULTS_TABLE_HEADING",
     getTransformedLocalStorgaeLabels()
   )
 };
 
-export const searchResults = {
+export const searchPropertyTable = {
   uiFramework: "custom-molecules",
   // moduleName: "egov-tradelicence",
   componentPath: "Table",
@@ -112,11 +121,11 @@ export const searchResults = {
   props: {
     // data: [],
     columns: [
-      getTextToLocalMapping("Application No"),
-      getTextToLocalMapping("NOC No"),
-      getTextToLocalMapping("NOC Type"),
+      getTextToLocalMapping("Property Tax Unique Id"),
       getTextToLocalMapping("Owner Name"),
-      getTextToLocalMapping("Application Date"),
+      getTextToLocalMapping("Guardian Name"),
+      getTextToLocalMapping("Existing Property Id"),
+      getTextToLocalMapping("Address"),
       {
         name: getTextToLocalMapping("Status"),
         options: {
@@ -124,7 +133,7 @@ export const searchResults = {
           customBodyRender: value => (
             <span
               style={
-                value === "APPROVED" ? { color: "green" } : { color: "red" }
+                value === "ACTIVE" ? { color: "green" } : { color: "red" }
               }
             >
               {getTextToLocalMapping(value)}
@@ -139,7 +148,7 @@ export const searchResults = {
         }
       }
     ],
-    title: getTextToLocalMapping("Search Results for Fire-NOC Applications"),
+    title: getTextToLocalMapping("Search Results for PT Applications"),
     options: {
       filter: false,
       download: false,
@@ -147,8 +156,8 @@ export const searchResults = {
       selectableRows: false,
       hover: true,
       rowsPerPageOptions: [10, 15, 20],
-      onRowClick: (row, index) => {
-        onRowClick(row);
+      onRowClick: (row, index,dispatch) => {
+        onPropertyTabClick(row,dispatch);
       }
     },
     customSortColumn: {
@@ -169,7 +178,74 @@ export const searchResults = {
   }
 };
 
-const onRowClick = rowData => {
+export const searchApplicationTable = {
+  uiFramework: "custom-molecules",
+  // moduleName: "egov-tradelicence",
+  componentPath: "Table",
+  visible: false,
+  props: {
+    // data: [],
+    columns: [
+      getTextToLocalMapping("Application No"),
+      getTextToLocalMapping("Property Tax Unique Id"),
+      getTextToLocalMapping("Application Type"),
+      getTextToLocalMapping("Owner Name"),
+      getTextToLocalMapping("Address"),
+      {
+        name: getTextToLocalMapping("Status"),
+        options: {
+          filter: false,
+          customBodyRender: value => (
+            <span
+              style={
+                value === "ACTIVE" ? { color: "green" } : { color: "red" }
+              }
+            >
+              {getTextToLocalMapping(value)}
+            </span>
+          )
+        }
+      },
+      {
+        name: "tenantId",
+        options: {
+          display: false
+        }
+      }
+    ],
+    title: getTextToLocalMapping("Search Results for PT Applications"),
+    options: {
+      filter: false,
+      download: false,
+      responsive: "stacked",
+      selectableRows: false,
+      hover: true,
+      rowsPerPageOptions: [10, 15, 20],
+      onRowClick: (row, index,dispatch) => {
+        onApplicationTabClick(row,dispatch);
+      }
+    },
+    customSortColumn: {
+      column: "Application Date",
+      sortingFn: (data, i, sortDateOrder) => {
+        const epochDates = data.reduce((acc, curr) => {
+          acc.push([...curr, getEpochForDate(curr[4], "dayend")]);
+          return acc;
+        }, []);
+        const order = sortDateOrder === "asc" ? true : false;
+        const finalData = sortByEpoch(epochDates, !order).map(item => {
+          item.pop();
+          return item;
+        });
+        return { data: finalData, currentOrder: !order ? "asc" : "desc" };
+      }
+    }
+  }
+};
+
+
+
+const onPropertyTabClick = (rowData,dispatch) => {
   switch (rowData[5]) {
     case "INITIATED":
       window.location.href = `apply?applicationNumber=${rowData[0]}&tenantId=${
@@ -177,35 +253,26 @@ const onRowClick = rowData => {
       }`;
       break;
     default:
-      window.location.href = `search-preview?applicationNumber=${
-        rowData[0]
-      }&tenantId=${rowData[6]}`;
+     // window.location.href = `search-preview?applicationNumber=${
+      window.location.pathname=`property-tax/property/${rowData[0]}/${rowData[6]}`;
+      //dispatch(setRoute(`/property-tax/property/${rowData[0]}/${rowData[6]}`));
+    //   rowData[0]
+    // }&tenantId=${rowData[6]}`; 
       break;
   }
 };
 
-// const onRowClick = rowData => {
-//   let appendUrl =
-//     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
-//   switch (rowData[get(textToLocalMapping, "Status")]) {
-//     case get(textToLocalMapping, "APPLIED"):
-//     case get(textToLocalMapping, "PENDINGPAYMENT"):
-//     case get(textToLocalMapping, "APPROVED"):
-//     case get(textToLocalMapping, "PENDINGAPPROVAL"):
-//     case get(textToLocalMapping, "FIELDINSPECTION"):
-//     case get(textToLocalMapping, "REJECTED"):
-//     case get(textToLocalMapping, "CANCELLED"):
-//     case get(textToLocalMapping, "DOCUMENTVERIFY"):
-//       return `${appendUrl}/fire-noc/search-preview?applicationNumber=${
-//         rowData[get(textToLocalMapping, "Application No")]
-//       }&tenantId=${rowData["tenantId"]}`;
-
-//     case get(textToLocalMapping, "INITIATED"):
-//       return `${appendUrl}/fire-noc/apply?applicationNumber=${
-//         rowData[get(textToLocalMapping, "Application No")]
-//       }&tenantId=${rowData.tenantId}`;
-
-//     default:
-//       return `${appendUrl}/fire-noc/search`;
-//   }
-// };
+const onApplicationTabClick = (rowData,dispatch) => {
+  if (rowData[5]==="INITIATED") {
+      window.location.href = `apply?applicationNumber=${rowData[0]}&tenantId=${
+        rowData[6]
+      }`;
+  }
+    else{
+     // window.location.href = `search-preview?applicationNumber=${
+      window.location.pathname=`property-tax/property/${rowData[1]}/${rowData[6]}`;
+      //dispatch(setRoute(`/property-tax/property/${rowData[0]}/${rowData[6]}`));
+    //   rowData[0]
+    // }&tenantId=${rowData[6]}`; 
+  }
+};
