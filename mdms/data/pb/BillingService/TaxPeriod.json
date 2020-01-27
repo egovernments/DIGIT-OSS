@@ -305,6 +305,38 @@
       "service": "BPA.NC_SAN_FEE",
       "code": "BPA10YRS2018",
       "financialYear": "2018-28"
+    },
+    {
+      "fromDate": 1554076799000,
+      "toDate": 1585679399000,
+      "periodCycle": "ANNUAL",
+      "service": "PT.MUTATION",
+      "code": "PTMUTAN2019",
+      "financialYear": "2019-20"
+    },
+    {
+      "fromDate": 1522540800000,
+      "toDate": 1554076799000,
+      "periodCycle": "ANNUAL",
+      "service": "PT.MUTATION",
+      "code": "PTMUTAN2018",
+      "financialYear": "2018-19"
+    },
+    {
+      "fromDate": 1491004800000,
+      "toDate": 1522540798000,
+      "periodCycle": "ANNUAL",
+      "service": "PT.MUTATION",
+      "code": "PTMUTAN2017",
+      "financialYear": "2017-18"
+    },
+    {
+      "fromDate": 1459468800000,
+      "toDate": 1491004799000,
+      "periodCycle": "ANNUAL",
+      "service": "PT.MUTATION",
+      "code": "PTMUTAN2016",
+      "financialYear": "2016-17"
     }
   ]
 }
