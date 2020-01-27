@@ -3,7 +3,7 @@ import {
     getLabel,
     getBreak
   } from "egov-ui-framework/ui-config/screens/specs/utils";
-  import propertySearchTabs from "./capture-mutation-details";
+  import propertySearchTabs from "./property-search-tabs";
   import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
   import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   // import { progressStatus } from "./searchResource/progressStatus";
