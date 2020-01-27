@@ -35,16 +35,16 @@ serviceMaps:
 
       - jsonPath: $.Assessment.auditDetails.createdBy
 
-      - jsonPath: $.Assessment.auditDetails.lastModifiedBy
-
       - jsonPath: $.Assessment.auditDetails.createdTime
+
+      - jsonPath: $.Assessment.auditDetails.lastModifiedBy
 
       - jsonPath: $.Assessment.auditDetails.lastModifiedTime
 
 
 
     - query: INSERT INTO eg_pt_asmt_unitusage (tenantid, id, assessmentid, unitid, usagecategory, occupancytype, occupancydate, active, createdby, createdtime, lastmodifiedby, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
-      basePath: Assessment.units.*
+      basePath: Assessment.unitUsageList.*
       jsonMaps:
 
       - jsonPath: $.Assessment.unitUsageList.*.tenantId
@@ -98,9 +98,9 @@ serviceMaps:
       - jsonPath: $.Assessment.documents.*.auditDetails.createdTime
 
       - jsonPath: $.Assessment.documents.*.auditDetails.lastModifiedTime
-      
-      
-      
+
+
+
   - version: 1.0
     description: Updates assessment details to eg_pt_asmt_assessment table
     fromTopic: update-pt-assessment
@@ -112,15 +112,15 @@ serviceMaps:
       jsonMaps:
 
       - jsonPath: $.Assessment.id
-      
-      
+
+
     - query: INSERT INTO eg_pt_asmt_unitusage_audit SELECT *, (SELECT extract(epoch from now())) FROM eg_pt_unit WHERE id = ?;
       basePath: Assessment.units.*
       jsonMaps:
 
       - jsonPath: $.Assessment.unitUsageList.*.id
-      
-      
+
+
     - query: UPDATE eg_pt_asmt_assessment SET financialyear = ?, status = ?, source = ?, assessmentDate = ?, additionaldetails = ?, lastmodifiedby = ?, lastmodifiedtime = ? WHERE id = ?;
       basePath: Assessment
       jsonMaps:
@@ -140,7 +140,7 @@ serviceMaps:
       - jsonPath: $.Assessment.auditDetails.lastModifiedBy
 
       - jsonPath: $.Assessment.auditDetails.lastModifiedTime
-      
+
       - jsonPath: $.Assessment.id
 
 
@@ -212,7 +212,7 @@ serviceMaps:
       - jsonPath: $.Assessment.documents.*.auditDetails.createdTime
 
       - jsonPath: $.Assessment.documents.*.auditDetails.lastModifiedTime
-      
+
       - jsonPath: $.Assessment.documents.*.documentType
 
       - jsonPath: $.Assessment.documents.*.documentUid
@@ -222,7 +222,6 @@ serviceMaps:
       - jsonPath: $.Assessment.documents.*.auditDetails.lastModifiedBy
 
       - jsonPath: $.Assessment.documents.*.auditDetails.lastModifiedTime
-      
       
       
       

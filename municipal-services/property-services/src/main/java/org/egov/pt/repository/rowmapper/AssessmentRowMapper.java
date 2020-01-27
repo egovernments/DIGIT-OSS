@@ -81,18 +81,18 @@ public class AssessmentRowMapper implements ResultSetExtractor<List<Assessment>>
 
 
 	private UnitUsage getUnitUsage(ResultSet rs) throws SQLException {
-		if(null == rs.getString("uus_id"))
+		if(null == rs.getString("us_id"))
 			return null;
 
-		AuditDetails auditDetails = AuditDetails.builder().createdBy(rs.getString("uus_createdby"))
-				.createdTime(rs.getLong("uus_createdtime")).lastModifiedBy(rs.getString("uus_lastmodifiedby"))
-				.lastModifiedTime(rs.getLong("uus_lastmodifiedtime")).build();
+		AuditDetails auditDetails = AuditDetails.builder().createdBy(rs.getString("us_createdby"))
+				.createdTime(rs.getLong("us_createdtime")).lastModifiedBy(rs.getString("us_lastmodifiedby"))
+				.lastModifiedTime(rs.getLong("us_lastmodifiedtime")).build();
 
 
-		return UnitUsage.builder().id(rs.getString("uus_id"))
-				.occupancyDate(rs.getLong("uus_occupancydate"))
-				.occupancyType((OccupancyType.valueOf(rs.getString("uus_occupancytype"))))
-				.usageCategory(rs.getString("uus_usagecategory"))
+		return UnitUsage.builder().id(rs.getString("us_id"))
+				.occupancyDate(rs.getLong("us_occupancydate"))
+				.occupancyType((OccupancyType.valueOf(rs.getString("us_occupancytype"))))
+				.usageCategory(rs.getString("us_usagecategory"))
 				.auditDetails(auditDetails)
 				.build();
 	}
