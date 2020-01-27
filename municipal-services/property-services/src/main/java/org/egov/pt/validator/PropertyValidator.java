@@ -14,6 +14,7 @@ import org.egov.common.contract.request.User;
 import org.egov.mdms.model.MdmsCriteriaReq;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.ConstructionDetail;
+import org.egov.pt.models.GeoLocation;
 import org.egov.pt.models.Institution;
 import org.egov.pt.models.OwnerInfo;
 import org.egov.pt.models.Property;
@@ -203,6 +204,15 @@ public class PropertyValidator {
 //    	if(configs.getIsWorkflowEnabled() && null == property.getWorkflow())
 //    		errorMap.put("EG_PR_WF_NOT_NULL", "Wokflow is enabled for create please provide the necessary info in workflow field in property");
    	
+		if (property.getAddress().getGeoLocation() == null)
+			property.getAddress().setGeoLocation(new GeoLocation());
+
+		if (property.getSource() == null)
+			errorMap.put("EG_PT_ERROR_SOURCE", "The value given for Source field is either invalid or null");
+
+		if (property.getChannel() == null)
+			errorMap.put("EG_PT_ERROR_CHANNEL", "The value given for Channel field is either invalid or null");
+
 		if (!property.getPropertyType().contains(PTConstants.PT_TYPE_SHAREDPROPERTY)) {
 
 			if (property.getLandArea() == null) {
