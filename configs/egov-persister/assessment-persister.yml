@@ -44,7 +44,7 @@ serviceMaps:
 
 
     - query: INSERT INTO eg_pt_asmt_unitusage (tenantid, id, assessmentid, unitid, usagecategory, occupancytype, occupancydate, active, createdby, createdtime, lastmodifiedby, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
-      basePath: Assessment.units.*
+      basePath: Assessment.unitUsageList.*
       jsonMaps:
 
       - jsonPath: $.Assessment.unitUsageList.*.tenantId
