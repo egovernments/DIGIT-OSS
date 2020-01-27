@@ -76,7 +76,7 @@ CREATE TABLE eg_pt_owner (
   propertyid          	CHARACTER VARYING (128) NOT NULL,
   userid              	CHARACTER VARYING (128) NOT NULL,
   status              	CHARACTER VARYING (128) NOT NULL,
-  isprimaryowner      	BOOLEAN  NOT NULL,
+  isprimaryowner      	BOOLEAN,
   ownertype           	CHARACTER VARYING (256) NOT NULL,
   ownershippercentage	CHARACTER VARYING (128),
   institutionid       	CHARACTER VARYING (128),
