@@ -207,6 +207,9 @@ public class PropertyConfiguration {
     @Value("${assessment.workflow.trigger.param}")
     private String assessmentWorkflowTriggerParams;
 
+    @Value("${assessment.workflow.trigger.object}")
+    private String assessmentWorkflowObjectTriggers;
+
 
     // Calculation
 

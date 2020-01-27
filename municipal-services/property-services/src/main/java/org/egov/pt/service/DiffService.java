@@ -77,7 +77,7 @@ public class DiffService {
      * @param propertyFromSearch Property from db on which update is called
      * @return Names of Classes added or removed during update
      */
-    private List<String> getObjectsAdded(Property propertyFromUpdate, Property propertyFromSearch) {
+    public List<String> getObjectsAdded(Object propertyFromUpdate, Object propertyFromSearch) {
 
         Javers javers = JaversBuilder.javers().build();
         Diff diff = javers.compare(propertyFromSearch, propertyFromUpdate);
