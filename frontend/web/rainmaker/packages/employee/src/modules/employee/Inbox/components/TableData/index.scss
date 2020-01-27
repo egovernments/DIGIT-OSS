@@ -7,7 +7,23 @@
 .search-bar{
   padding-left:10%;
 }
-
+.whiteBackground {
+  height: 36px !important;
+  top: 26px;
+  input{
+    margin-top: 2px !important;
+    left: 27px;
+  }}
+.search-bar div div svg{
+top:46px;
+}
+// @media only screen and (max-width: 768px)and (min-width: 720px) {
+//   .whiteBackground{
+//       input{
+//         left: 0px!important;
+//       }
+//   }
+// }
 @media only screen and (max-width: 768px) {
   .search-bar div div svg{
     top:15px !important;
@@ -20,16 +36,13 @@
   .abcd .selected{ 
     color:green !important;
     background-color:rgb(31, 8, 241) !important;
-    
   }
   .whiteBackground{
     background-color: white !important;
     height: 36px !important;
-    
-    // width:90%!important;
-    top: 6px;
+    top: 6px!important;
       input{
-        // padding: 0px 0px 2px !important;
+        width:100%!important;
         margin-top: 5px !important;
         left: 25px;
       }
@@ -52,7 +65,6 @@
   .inbox-card {
     padding: 2px!important;
 }
-  
 }
 .whiteBackground div hr{
   border-bottom: none !important;
@@ -62,18 +74,5 @@
       display: none;
       background-color: white !important;
   }
-  .whiteBackground {
-    height: 36px !important;
-    top: 26px;
-    // width:80%!important;
-    
-    input{
-      // padding: 0px 0px 2px !important;
-      margin-top: 2px !important;
-      left: 27px;
-    }}
   }
-
-.search-bar div div svg{
-  top:46px;
-}
+ 
