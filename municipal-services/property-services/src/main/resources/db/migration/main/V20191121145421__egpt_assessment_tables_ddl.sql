@@ -21,13 +21,13 @@ CREATE TABLE eg_pt_asmt_assessment (
   lastmodifiedby character varying(64) NOT NULL,
   lastmodifiedtime bigint NOT NULL,
 
-  CONSTRAINT pk_eg_pt_assessments PRIMARY KEY (id),
-  CONSTRAINT uk_eg_pt_assessments UNIQUE (assessmentNumber, tenantId)
+  CONSTRAINT pk_eg_pt_asmt_assessment PRIMARY KEY (id),
+  CONSTRAINT uk_eg_pt_asmt_assessment UNIQUE (assessmentNumber, tenantId)
 
 );
 
-CREATE INDEX IF NOT EXISTS index_eg_pt_assessments_assessmentNumber ON  eg_pt_asmt_assessment (assessmentNumber);
-CREATE INDEX IF NOT EXISTS index_eg_pt_assessments_propertyId ON  eg_pt_asmt_assessment (propertyId);
+CREATE INDEX IF NOT EXISTS index_eg_pt_asmt_assessment_assessmentNumber ON  eg_pt_asmt_assessment (assessmentNumber);
+CREATE INDEX IF NOT EXISTS index_eg_pt_asmt_assessment_propertyId ON  eg_pt_asmt_assessment (propertyId);
 
 
 CREATE TABLE eg_pt_asmt_unitusage (
@@ -45,8 +45,8 @@ CREATE TABLE eg_pt_asmt_unitusage (
   lastmodifiedby character varying(64) NOT NULL,
   lastmodifiedtime bigint NOT NULL,
 
-  CONSTRAINT pk_eg_pt_unitusage PRIMARY KEY (id),
-  CONSTRAINT fk_eg_pt_unitusage FOREIGN KEY (assessmentId) REFERENCES eg_pt_asmt_unitusage (id)
+  CONSTRAINT pk_eg_pt_asmt_unitusage PRIMARY KEY (id),
+  CONSTRAINT fk_eg_pt_asmt_unitusage FOREIGN KEY (assessmentId) REFERENCES eg_pt_asmt_unitusage (id)
   
   ON UPDATE CASCADE
   ON DELETE CASCADE
