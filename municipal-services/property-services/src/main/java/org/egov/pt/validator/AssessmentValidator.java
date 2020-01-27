@@ -91,16 +91,21 @@ public class AssessmentValidator {
 			errorMap.put("ASSMNT_ID_EMPTY", "Assessment ID cannot be empty");
 		}
 
-		if (assessmentFromDB.getDocuments().size() > assessment.getDocuments().size()) {
+		if (assessmentFromDB!=null && !CollectionUtils.isEmpty(assessmentFromDB.getDocuments()) && assessmentFromDB.getDocuments().size() > assessment.getDocuments().size()) {
 			errorMap.put("MISSING_DOCUMENTS", "Please send all the documents belonging to this assessment");
 		}
-		if (assessmentFromDB.getUnitUsageList().size() > assessment.getUnitUsageList().size()) {
+		if (assessmentFromDB!=null && assessmentFromDB.getUnitUsageList().size() > assessment.getUnitUsageList().size()) {
 			errorMap.put("MISSING_UNITS", "Please send all the units belonging to this assessment");
 		}
-		Set<String> existingUnitUsages = assessmentFromDB.getUnitUsageList().stream().map(UnitUsage::getId)
-				.collect(Collectors.toSet());
-		Set<String> existingDocs = assessmentFromDB.getDocuments().stream().map(Document::getId)
-				.collect(Collectors.toSet());
+		Set<String> existingUnitUsages = new HashSet<>();
+		Set<String> existingDocs = new HashSet<>();
+
+		if(assessmentFromDB!=null)
+			existingUnitUsages = assessmentFromDB.getUnitUsageList().stream().map(UnitUsage::getId).collect(Collectors.toSet());
+
+		if(assessmentFromDB!=null && !CollectionUtils.isEmpty(assessmentFromDB.getDocuments()))
+			existingDocs = assessmentFromDB.getDocuments().stream().map(Document::getId).collect(Collectors.toSet());
+
 		if (!CollectionUtils.isEmpty(assessment.getUnitUsageList())) {
 			for (UnitUsage unitUsage : assessment.getUnitUsageList()) {
 				if (!StringUtils.isEmpty(unitUsage.getId())) {
@@ -171,19 +176,20 @@ public class AssessmentValidator {
 		if(CollectionUtils.isEmpty(masters.keySet()))
 			throw new CustomException("MASTER_FETCH_FAILED", "Couldn't fetch master data for validation");
 
-		for(UnitUsage unitUsage: assessment.getUnitUsageList()) {
+		if(!CollectionUtils.isEmpty(assessment.getUnitUsageList())) {
+			for (UnitUsage unitUsage : assessment.getUnitUsageList()) {
 
-			if(!CollectionUtils.isEmpty(masters.get(PTConstants.MDMS_PT_USAGECATEGORY))) {
-				if(!masters.get(PTConstants.MDMS_PT_USAGECATEGORY).contains(unitUsage.getUsageCategory()))
-					errorMap.put("USAGE_CATEGORY_INVALID", "The usage category provided is invalid");
-			}
+				if (!CollectionUtils.isEmpty(masters.get(PTConstants.MDMS_PT_USAGECATEGORY))) {
+					if (!masters.get(PTConstants.MDMS_PT_USAGECATEGORY).contains(unitUsage.getUsageCategory()))
+						errorMap.put("USAGE_CATEGORY_INVALID", "The usage category provided is invalid");
+				}
 
-			if(CollectionUtils.isEmpty(masters.get(PTConstants.MDMS_PT_OCCUPANCYTYPE))) {
-				if(!masters.get(PTConstants.MDMS_PT_OCCUPANCYTYPE).contains(unitUsage.getOccupancyType().toString()))
-					errorMap.put("OCCUPANCY_TYPE_INVALID", "The occupancy type provided is invalid");
+				if (CollectionUtils.isEmpty(masters.get(PTConstants.MDMS_PT_OCCUPANCYTYPE))) {
+					if (!masters.get(PTConstants.MDMS_PT_OCCUPANCYTYPE).contains(unitUsage.getOccupancyType().toString()))
+						errorMap.put("OCCUPANCY_TYPE_INVALID", "The occupancy type provided is invalid");
+				}
 			}
 		}
-
 		if (!CollectionUtils.isEmpty(errorMap.keySet())) {
 			throw new CustomException(errorMap);
 		}
