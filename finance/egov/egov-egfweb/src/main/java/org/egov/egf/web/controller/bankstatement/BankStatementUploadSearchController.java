@@ -75,7 +75,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/bankstatement")
@@ -109,8 +111,11 @@ public class BankStatementUploadSearchController {
     public String ajaxsearch(final Model model, @ModelAttribute final BankStatementUploadFile bankStatementUploadFile) {
 
         List<DocumentUpload> list = autoReconcileHelper.getUploadedFiles(bankStatementUploadFile);
+        List<DocumentUpload> sortedList = list.stream()
+        .sorted(Comparator.comparing(DocumentUpload::getCreatedDate).reversed())
+        .collect(Collectors.toList());
         return new StringBuilder("{ \"data\":")
-                .append(toSearchResultJson(list)).append("}")
+                .append(toSearchResultJson(sortedList)).append("}")
                 .toString();
     }
 

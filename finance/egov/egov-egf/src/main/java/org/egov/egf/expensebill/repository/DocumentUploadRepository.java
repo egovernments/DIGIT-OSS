@@ -65,13 +65,19 @@ public interface DocumentUploadRepository extends JpaRepository<DocumentUpload, 
 
     List<DocumentUpload> findByObjectType(String objectType);
 
-    @Query("from DocumentUpload where uploadedDate <= :uploadedDate and objectType=:objectType")
-    List<DocumentUpload> findByUploadedDateAndObjectType(@Param("uploadedDate") Date uploadedDate, @Param("objectType") String objectType);
+    @Query("from DocumentUpload where uploadedDate <= :uploadedDate and objectType=:objectType and fileStore.fileName like %:fileName%")
+    List<DocumentUpload> findByUploadedDateObjectTypeAndFileName(@Param("uploadedDate") Date uploadedDate, @Param("objectType") String objectType, @Param("fileName") String fileName);
 
-    @Query("from DocumentUpload where uploadedDate <=:uploadedDate and objectId =:objectId")
-    List<DocumentUpload> findByUploadedDateAndObjectId(@Param("uploadedDate") Date uploadedDate, @Param("objectId") Long objectId);
+    @Query("from DocumentUpload where uploadedDate <=:uploadedDate and objectId =:objectId  and fileStore.fileName like %:fileName%")
+    List<DocumentUpload> findByUploadedDateObjectIdAndFileName(@Param("uploadedDate") Date uploadedDate, @Param("objectId") Long objectId, @Param("fileName") String fileName);
 
     @Query("from DocumentUpload where fileStore.fileStoreId = :fileStore")
     DocumentUpload findByFileStore(@Param("fileStore") String fileStore);
+    
+    @Query("from DocumentUpload where fileStore.fileName like %:fileName% and objectType=:objectType")
+    List<DocumentUpload> findByFileNameAndObjectType(@Param("fileName") String fileName, @Param("objectType") String objectType);
+    
+    @Query("from DocumentUpload where fileStore.fileName like %:fileName% and objectId =:objectId")
+    List<DocumentUpload> findByFileNameAndObjectId(@Param("fileName") String fileName, @Param("objectId") Long objectId);
 
 }

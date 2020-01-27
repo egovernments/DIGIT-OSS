@@ -162,4 +162,9 @@ public class DocumentUpload implements Serializable {
     public void setUploadedDate(Date uploadedDate) {
         this.uploadedDate = uploadedDate;
     }
+    
+    public Date getCreatedDate(){
+        return fileStore.getCreatedDate();
+    }
+    
 }

@@ -71,7 +71,25 @@ public class AutoReconcileBean extends BaseModel {
     private String errorCode;
     private String errorMessage;
     private String noDetailsFound;
+    private int srNo;
+    private String uploadStatus;
 
+    public AutoReconcileBean() {
+        // TODO Auto-generated constructor stub
+    }
+    
+    public AutoReconcileBean(String txDateStr, String type, String instrumentNo, BigDecimal debit, BigDecimal credit,
+            BigDecimal balance, String narration, String cSLno, int srNo) {
+        this.txDateStr = txDateStr;
+        Type = type;
+        this.instrumentNo = instrumentNo;
+        this.debit = debit;
+        this.credit = credit;
+        this.balance = balance;
+        this.narration = narration;
+        CSLno = cSLno;
+        this.srNo = srNo;
+    }
     public void setAccountId(final Long accountId) {
         this.accountId = accountId;
     }
@@ -223,6 +241,22 @@ public class AutoReconcileBean extends BaseModel {
 
     public void setNoDetailsFound(final String noDetailsFound) {
         this.noDetailsFound = noDetailsFound;
+    }
+
+    public int getSrNo() {
+        return srNo;
+    }
+
+    public void setSrNo(int srNo) {
+        this.srNo = srNo;
+    }
+
+    public String getUploadStatus() {
+        return uploadStatus;
+    }
+
+    public void setUploadStatus(String uploadStatus) {
+        this.uploadStatus = uploadStatus;
     }
 
 }

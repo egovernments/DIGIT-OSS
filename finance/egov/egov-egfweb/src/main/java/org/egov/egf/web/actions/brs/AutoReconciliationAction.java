@@ -57,7 +57,7 @@ import org.egov.commons.Bankaccount;
 import org.egov.commons.Bankbranch;
 import org.egov.commons.Bankreconciliation;
 import org.egov.commons.dao.BankHibernateDAO;
-import org.egov.commons.dao.FinancialYearDAO;
+import org.egov.infra.filestore.entity.FileStoreMapper;
 import org.egov.infra.web.struts.actions.BaseFormAction;
 import org.egov.infra.web.struts.annotation.ValidationErrorPage;
 import org.egov.model.brs.AutoReconcileBean;
@@ -103,36 +103,14 @@ public class AutoReconciliationAction extends BaseFormAction {
     private String accNo;
     private File bankStatmentInXls;
     private String bankStatmentInXlsFileName;
-    private String failureMessage = "Invalid data in  the  following row(s), please correct and upload again\n";
-    private final String successMessage = "BankStatement upload completed Successfully # rows processed";
-    private boolean isFailed;
-   
+    private String errorXlsFileName;
 
     private final String jasperpath = "/reports/templates/AutoReconcileReport.jasper";
     private ReportHelper reportHelper;
     private InputStream inputStream;
-    private final String BRS_MESSAGE_MORE_THAN_ONE_MATCH = "found more than one match in instruments";
-    private final String BRS_MESSAGE_DUPPLICATE_IN_BANKSTATEMENT = "duplicate instrument number within the bankstament";
-   
-  
-    private List<AutoReconcileBean> statementsNotInBankBookList;
-    private List<AutoReconcileBean> statementsFoundButNotProcessed;
-    private FinancialYearDAO financialYearDAO;
-    private Date finYearStartDate;
-    private List<AutoReconcileBean> entriesNotInBankStament;
-    private Bankaccount bankAccount;
-    private BigDecimal notInBooktotalDebit;
-    private BigDecimal notInBooktotalCredit;
-    private BigDecimal notprocessedCredit;
     
-    private BigDecimal notprocessedDebit;
-    private BigDecimal notprocessedNet;
-    private BigDecimal notInBookNet;
-    private String notInBookNetBal;
-    private BigDecimal notInStatementTotalDebit;
-    private BigDecimal notInStatementTotalCredit;
-    private BigDecimal notInStatementNet;
-    private BigDecimal bankBookBalance;
+    private List<FileStoreMapper> originalFiles = new ArrayList<FileStoreMapper>();
+    private List<FileStoreMapper> outPutFiles = new ArrayList<FileStoreMapper>();
     @Autowired
     private AutoReconcileHelper autoReconcileHelper;
     
@@ -144,30 +122,14 @@ public class AutoReconciliationAction extends BaseFormAction {
     public BigDecimal getBankBookBalance() {
         return autoReconcileHelper.getBankBookBalance();
     }
-
-    public void setBankBookBalance(final BigDecimal bankBookBalance) {
-        this.bankBookBalance = bankBookBalance;
-    }
-
-    private BigDecimal brsBalance;
-    private BigDecimal totalNotReconciledAmount;
-    private Integer statusId;
     private List<Bank> allBankHavingAccounts;
 
     public BigDecimal getBrsBalance() {
         return autoReconcileHelper.getBrsBalance();
     }
 
-    public void setBrsBalance(final BigDecimal brsBalance) {
-        this.brsBalance = brsBalance;
-    }
-
     public Bankaccount getBankAccount() {
         return autoReconcileHelper.getBankAccount();
-    }
-
-    public void setBankAccount(final Bankaccount bankAccount) {
-        this.bankAccount = bankAccount;
     }
 
     @Override
@@ -220,7 +182,10 @@ public class AutoReconciliationAction extends BaseFormAction {
     @Action(value = "/brs/autoReconciliation-beforeUpload")
     public String beforeUpload()
     {
-    	
+        originalFiles = (List<FileStoreMapper>) persistenceService.getSession().createQuery(
+                "from FileStoreMapper where fileName like '%brs_original_%' order by id desc ").setMaxResults(5).list();
+        outPutFiles = (List<FileStoreMapper>) persistenceService.getSession().createQuery(
+                "from FileStoreMapper where fileName like '%_brs_uploaded_%' order by id desc ").setMaxResults(5).list();
         return "upload";
     }
 
@@ -230,7 +195,7 @@ public class AutoReconciliationAction extends BaseFormAction {
     {
     	setup() ;
     	autoReconcileHelper.upload();
-         return "upload";
+        return "upload";
     }
 
    
@@ -240,20 +205,6 @@ public class AutoReconciliationAction extends BaseFormAction {
     {
 
     }
-
-    public String getMessage() {
-        return autoReconcileHelper.getMessage();
-    }
-
-   
-
-    public String getFailureMessage() {
-        return autoReconcileHelper.getFailureMessage();
-    }
-
-    
-
-   
 
     /**
      * Step1: mark which are all we are going to process step2 :find duplicate and mark to be processed manually step3: process
@@ -270,7 +221,6 @@ public class AutoReconciliationAction extends BaseFormAction {
     	autoReconcileHelper.schedule();  
         return "result";
     }
-
      
     public int getRowCount() {
         return autoReconcileHelper.getRowCount();
@@ -279,10 +229,6 @@ public class AutoReconciliationAction extends BaseFormAction {
     public int getCount() {
         return autoReconcileHelper.getCount();
     }
-   
-
-     
-
     
     @Action(value = "/brs/autoReconciliation-generateReport")
     @SuppressWarnings({ "unchecked", "deprecation" })
@@ -296,8 +242,6 @@ public class AutoReconciliationAction extends BaseFormAction {
     public BigDecimal getTotalNotReconciledAmount() {
         return autoReconcileHelper.getTotalNotReconciledAmount();
     }
-
-    
 
     public BigDecimal getNotInBooktotalDebit() {
         return autoReconcileHelper.getNotInBooktotalDebit();
@@ -322,14 +266,6 @@ public class AutoReconciliationAction extends BaseFormAction {
     public BigDecimal getNotInStatementNet() {
         return autoReconcileHelper.getNotInStatementNet();
     }
-
-    
-
-    
-
-     
-
-    
 
     public Date getReconciliationDate() {
         return reconciliationDate;
@@ -402,26 +338,12 @@ public class AutoReconciliationAction extends BaseFormAction {
         this.branchId = branchId;
     }
 
-     
-
     public List<AutoReconcileBean> getStatementsNotInBankBookList() {
         return autoReconcileHelper.getStatementsNotInBankBookList();
     }
 
-    public void setStatementsNotInBankBookList(final List<AutoReconcileBean> statementsNotInBankBookList) {
-        this.statementsNotInBankBookList = statementsNotInBankBookList;
-    }
-
-    public void setFinancialYearDAO(final FinancialYearDAO financialYearDAO) {
-        this.financialYearDAO = financialYearDAO;
-    }
-
     public List<AutoReconcileBean> getEntriesNotInBankStament() {
         return autoReconcileHelper.getEntriesNotInBankStament();
-    }
-
-    public void setEntriesNotInBankStament(final List<AutoReconcileBean> entriesNotInBankStament) {
-        this.entriesNotInBankStament = entriesNotInBankStament;
     }
 
     public List<AutoReconcileBean> getStatementsFoundButNotProcessed() {
@@ -432,14 +354,6 @@ public class AutoReconciliationAction extends BaseFormAction {
         return autoReconcileHelper.getNotprocessedNet();
     }
 
-    public void setStatementsFoundButNotProcessed(final List<AutoReconcileBean> statementsFoundButNotProcessed) {
-        this.statementsFoundButNotProcessed = statementsFoundButNotProcessed;
-    }
-
-    public void setNotprocessedNet(final BigDecimal notprocessedNet) {
-        this.notprocessedNet = notprocessedNet;
-    }
-    
     @Action(value = "/brs/autoReconciliation-generatePDF")
     public String generatePDF() throws Exception {
         final List<Object> dataSource = new ArrayList<Object>();
@@ -535,8 +449,48 @@ public class AutoReconciliationAction extends BaseFormAction {
         return autoReconcileHelper.getNotInBookNetBal();
     }
 
-    public void setNotInBookNetBal(final String notInBookNetBal) {
-        this.notInBookNetBal = notInBookNetBal;
+    public List<FileStoreMapper> getOriginalFiles() {
+        return originalFiles;
+    }
+    
+    public void setOriginalFiles(List<FileStoreMapper> originalFiles) {
+        this.originalFiles = originalFiles;
+    }
+    
+    public List<FileStoreMapper> getOutPutFiles() {
+        return outPutFiles;
+    }
+    
+    public void setOutPutFiles(List<FileStoreMapper> outPutFiles) {
+        this.outPutFiles = outPutFiles;
+    }
+
+    public String getErrorFileStoreId() {
+        return autoReconcileHelper.getErrorFileStoreId();
+    }
+
+    public String getUploadedFileStoreId() {
+        return autoReconcileHelper.getUploadedFileStoreId();
+    }
+
+    public String getOriginalFileStoreId() {
+        return autoReconcileHelper.getOriginalFileStoreId();
+    }
+    
+    public String getMessage() {
+        return autoReconcileHelper.getMessage();
+    }
+
+    public String getFailureMessage() {
+        return autoReconcileHelper.getFailureMessage();
+    }
+    
+    public String getErrorXlsFileName() {
+        return autoReconcileHelper.getErrorXlsFileName();
+    }
+    
+    public String getUploadedXlsFileName() {
+        return autoReconcileHelper.getUploadedXlsFileName();
     }
 
 }

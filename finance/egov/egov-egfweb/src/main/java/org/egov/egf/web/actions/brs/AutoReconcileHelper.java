@@ -50,14 +50,21 @@ package org.egov.egf.web.actions.brs;
 
 import com.exilant.eGov.src.common.EGovernCommon;
 import com.exilant.exility.common.TaskFailedException;
+import com.opensymphony.xwork2.ActionSupport;
+
+import ar.com.fdvs.dj.domain.constants.Border;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.struts2.convention.annotation.Action;
 import org.egov.commons.Bank;
 import org.egov.commons.Bankaccount;
@@ -98,8 +105,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -108,18 +117,20 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 
 @Service
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class AutoReconcileHelper {
+public class AutoReconcileHelper{
 
     private static final String DID_NOT_FIND_MATCH_IN_BANKBOOK = "did not find match in Bank Book  (InstrumentHeader)";
     private static final Logger LOGGER = LoggerFactory.getLogger(AutoReconciliationAction.class);
     private static final int BANKNAME_ROW_INDEX = 0;
     private static final int ACCOUNTNUMBER_ROW_INDEX = 2;
     private static final int STARTOF_DETAIL_ROW_INDEX = 8;
+    private static final int SR_NO_INDEX = 0;
     private static final int TXNDT_INDEX = 1;
     private static final int NARRATION_INDEX = 2;
     private static final int CHEQUENO_INDEX = 4;
@@ -128,9 +139,11 @@ public class AutoReconcileHelper {
     private static final int CREDIT_INDEX = 6;
     private static final int BALANCE_INDEX = 7;
     private static final int CSLNO_INDEX = 8;
+    private static final int ROW_INDEX = 7;
+    private static final int CELL_INDEX = 9;
     private static final String BRS_TRANSACTION_TYPE_BANK = "TRF";
-    private final String BRS_TRANSACTION_TYPE_CHEQUE = "CLG";
-    private final String successMessage = "BankStatement upload completed Successfully # rows processed";
+    private static final String BRS_TRANSACTION_TYPE_CHEQUE = "CLG";
+    private final String successMessage = "BankStatement upload completed Successfully. Out of %1$s records %2$s records processed and %3$s records failed!";
     private final String TABLENAME = "egf_brs_bankstatements";
     private final String BRS_ACTION_TO_BE_PROCESSED = "to be processed";
     private final String BRS_ACTION_TO_BE_PROCESSED_MANUALLY = "to be processed manually";
@@ -162,6 +175,9 @@ public class AutoReconcileHelper {
     private String message = "";
     private SQLQuery insertQuery;
     private int count;
+    private int validRecords;
+    private int inValidRecords;
+    private int totalRecords;
     private int rowIndex;
     private int rowCount;
     private List<AutoReconcileBean> statementsNotInBankBookList;
@@ -200,8 +216,20 @@ public class AutoReconcileHelper {
     private Integer statusId;
     @Autowired
     private MicroserviceUtils microserviceUtils;
+    private String missingDataInRecords = "%1$s is Empty %2$s";
+    private String alreadyReconciledMessage = "This row is already reconciled. You must delete the records while reUploading.";
+    private String RECORD_IS_EMPTY_MESSAGE = "At least one record should contains!";
+    private String timeStamp;
+    private String bankStatementOriginalFileName;
+    private String errorFileStoreId;
+    private String originalFileStoreId;
     private static final String INSTRUMENTTYPE_NAME_CHEQUE = "Cheque";
     private static final String INSTRUMENT_NEW_STATUS = "Deposited";
+    List< AutoReconcileBean> invalidRecordList = new ArrayList<>();
+    List< AutoReconcileBean> validRecordsList = new ArrayList<>();
+    private String uploadedFileStoreId;
+    private String errorXlsFileName;
+    private String uploadedXlsFileName;
 
     public BigDecimal getBankBookBalance() {
         return bankBookBalance;
@@ -231,8 +259,7 @@ public class AutoReconcileHelper {
     public String upload() {
         try {
             insertQuery = persistenceService.getSession().createSQLQuery(insertsql);
-            final Bankaccount ba = (Bankaccount) persistenceService.find("from Bankaccount ba where id=?",
-                    Long.valueOf(accountId));
+            final Bankaccount ba = (Bankaccount) persistenceService.find("from Bankaccount ba where id=?",Long.valueOf(accountId));
             accNo = ba.getAccountnumber();
             final POIFSFileSystem fs = new POIFSFileSystem(new FileInputStream(bankStatmentInXls));
             final HSSFWorkbook wb = new HSSFWorkbook(fs);
@@ -243,105 +270,73 @@ public class AutoReconcileHelper {
             this.validateBankAccountInfo(sheet);
             AutoReconcileBean ab = null;
             HSSFRow detailRow = null;
-            String dateStr = null;
             rowIndex = STARTOF_DETAIL_ROW_INDEX;
             count = 0;
-            validateUploadedRecords(sheet);
-            do {
-                try {
+            removeEmptyRow(sheet);
+            validateUploadedRecords(wb, sheet);
+            if(!validRecordsList.isEmpty()){
+                ListIterator<AutoReconcileBean> listIterator = validRecordsList.listIterator();
+                while(listIterator.hasNext()){
+                    AutoReconcileBean arb = listIterator.next();
+                    try {
+                        ab = new AutoReconcileBean();
+                        ab.setTxDateStr(arb.getTxDateStr());
+                        ab.setInstrumentNo(arb.getInstrumentNo());
+                        ab.setDebit(arb.getDebit());
+                        ab.setCredit(arb.getCredit());
+                        ab.setBalance(arb.getBalance());
+                        String strValue = arb.getNarration();
+                        if (strValue != null) {
+                            if (strValue.length() > 125)
+                                strValue = strValue.substring(0, 125);
+                            ab.setNarration(strValue);
+                        }
+                        ab.setType(arb.getType());
+                        ab.setCSLno(arb.getCSLno());
+                        insert(ab);
+                        if (validRecords % 20 == 0)
+                            persistenceService.getSession().flush();
+                        validRecords++;
+                        arb.setUploadStatus("Record uploaded successfully.");
 
-                    ab = new AutoReconcileBean();
-                    detailRow = sheet.getRow(rowIndex);
-                    if (rowIndex == STARTOF_DETAIL_ROW_INDEX) {
-                        if (rowIndex >= 9290)
-                            if (LOGGER.isDebugEnabled())
-                                LOGGER.debug(String.valueOf(detailRow.getRowNum()));
-                        dateStr = getStrValue(detailRow.getCell(TXNDT_INDEX));
-//                        if (alreadyUploaded(dateStr)) {
-//                            file_already_uploaded = file_already_uploaded.replace("#name", bankStatmentInXlsFileName);
-//                            throw new ValidationException(Arrays.asList(new ValidationError(file_already_uploaded,
-//                                    file_already_uploaded)));
-//                        }
-                        ab.setTxDateStr(dateStr);
+                    } catch (ValidationException ve) {
+                        arb.setErrorMessage(ve.getMessage());
+                        invalidRecordList.add(arb);
+                        inValidRecords++;
+                        listIterator.remove();
+                    } catch (final NumberFormatException e) {
+                        arb.setErrorMessage(e.getMessage());
+                        invalidRecordList.add(arb);
+                        inValidRecords++;
+                        listIterator.remove();
                     }
-                    
-                    ab.setTxDateStr(dateStr);
-                    ab.setInstrumentNo(getStrValue(detailRow.getCell(CHEQUENO_INDEX)));
-                    // if(strValue!=null)
-                    // ab.setInstrumentNo(strValue.replaceFirst(".0", ""));
-                    ab.setDebit(getNumericValue(detailRow.getCell(DEBIT_INDEX)));
-                    ab.setCredit(getNumericValue(detailRow.getCell(CREDIT_INDEX)));
-                    ab.setBalance(getNumericValue(detailRow.getCell(BALANCE_INDEX)));
-                    String strValue = getStrValue(detailRow.getCell(NARRATION_INDEX));
-                    if (strValue != null) {
-                        if (strValue.length() > 125)
-                            strValue = strValue.substring(0, 125);
-                        // strValue=strValue.replaceFirst(".0", "");
-                        ab.setNarration(strValue);
-                    }
-                    ab.setType(getStrValue(detailRow.getCell(TYPE_INDEX)));
-                    ab.setCSLno(getStrValue(detailRow.getCell(CSLNO_INDEX)));
-                    // if(ab.getType()==null)
-                    // ab.setType("CLG");
-                    if (LOGGER.isInfoEnabled())
-                        LOGGER.info(detailRow.getRowNum() + "   " + ab.toString());
-                    insert(ab);
-                    if (count % 20 == 0)
-                        persistenceService.getSession().flush();
-
-                } catch (ValidationException ve) {
-                    throw ve;
-                } catch (final NumberFormatException e) {
-                    if (!isFailed)
-                        failureMessage += detailRow.getRowNum() + 1;
-                    else
-                        failureMessage += " , " + detailRow.getRowNum() + 1;
-                    isFailed = true;
-
-                    throw new ValidationException(Arrays.asList(new ValidationError(failureMessage, failureMessage)));
                 }
-                rowIndex++;
-                count++;
-                detailRow = sheet.getRow(rowIndex);
-                if (detailRow != null)
-                    dateStr = getStrValue(detailRow.getCell(TXNDT_INDEX));
-                else
-                    dateStr = null;
-                // ab.setTxDateStr(detailRow.getRowNum()+"-->" + dateStr);
-
-            } while (dateStr != null && !dateStr.isEmpty());
-
-            if (isFailed)
-                throw new ValidationException(Arrays.asList(new ValidationError(failureMessage, failureMessage)));
-            else {
-                final FileStoreMapper fileStore = fileStoreService.store(getBankStatmentInXls(),
-                        bankStatmentInXlsFileName,
-                        "application/vnd.ms-excel", FinancialConstants.MODULE_NAME_APPCONFIG, false);
-
-                persistenceService.persist(fileStore);
-                String fileStoreId = fileStore.getFileStoreId();
-                DocumentUpload upload = new DocumentUpload();
-                upload.setFileStore(fileStore);
-                upload.setObjectId(accountId.longValue());
-                upload.setObjectType(FinancialConstants.BANK_STATEMET_OBJECT);
-                upload.setUploadedDate(new Date());
-                documentUploadRepository.save(upload);
-                message = successMessage.replace("#", "" + count);
             }
+//            storeOriginalFile();
+            if(!invalidRecordList.isEmpty()){
+                prepareErrorFile(wb, sheet, invalidRecordList);
+            }
+            if(!validRecordsList.isEmpty()){
+                prepareUplaodedFile(wb, sheet, validRecordsList);
+            }
+
+            message = String.format(successMessage, totalRecords, validRecords, inValidRecords);
 
         } catch (final FileNotFoundException e) {
             throw new ValidationException(
-                    Arrays.asList(new ValidationError("File cannot be uploaded", "File cannot be uploaded")));
+                    Arrays.asList(new ValidationError("file.can.not.uploaded", "File cannot be uploaded")));
 
         } catch (final IOException e) {
-            throw new ValidationException(Arrays.asList(new ValidationError("Unable to read uploaded file",
+            throw new ValidationException(Arrays.asList(new ValidationError("unable.to.read.uploaded.file",
                     "Unable to read uploaded file")));
         } catch (final ValidationException ve) {
             throw ve;
         } catch (final NullPointerException npe) {
+            LOGGER.error("ERROR occurred while doing upload for bank reconciliation : ",npe);
             throw new ValidationException(Arrays.asList(new ValidationError(bankStatementFormat,
                     bankStatementFormat)));
         } catch (final Exception e) {
+            LOGGER.error("ERROR occurred while doing upload for bank reconciliation : ",e);
             throw new ValidationException(Arrays.asList(new ValidationError(bankStatementFormat,
                     bankStatementFormat)));
         }
@@ -349,61 +344,301 @@ public class AutoReconcileHelper {
         return "upload";
     }
 
-    private void validateUploadedRecords(HSSFSheet sheet) {
+    private void removeEmptyRow(HSSFSheet sheet) {
         int rowIndex = STARTOF_DETAIL_ROW_INDEX;
-        HSSFRow row = sheet.getRow(rowIndex);
-        String txnDate = null;
-        do {
-            if(isRecordsExists(row)){
-                recordAlreadyUploadMessage = String.format(recordAlreadyUploadMessage, ++rowIndex, "Uploaded");
-                throw new ValidationException(Arrays.asList(new ValidationError(recordAlreadyUploadMessage,recordAlreadyUploadMessage)));
-            }else if(isRecordReconciled(row)){
-                recordAlreadyUploadMessage = String.format(recordAlreadyUploadMessage, ++rowIndex, "Reconciled");
-                throw new ValidationException(Arrays.asList(new ValidationError(recordAlreadyUploadMessage,recordAlreadyUploadMessage)));
-            }else{
-                rowIndex++;
-                row = sheet.getRow(rowIndex);
-                txnDate = getStrValue(row.getCell(TXNDT_INDEX));
+        while(rowIndex <= sheet.getLastRowNum()){
+            HSSFRow row = sheet.getRow(rowIndex);
+            if(isRowEmpty(row)){
+                sheet.removeRow(row);
             }
-        } while (txnDate != null && !txnDate.isEmpty());
+            rowIndex++;
+        }
+    }
+    
+    public static boolean isRowEmpty(HSSFRow row) {
+        for (int c = row.getFirstCellNum(); c < row.getLastCellNum(); c++) {
+            HSSFCell cell = row.getCell(c);
+            if (cell != null && cell.getCellType() != HSSFCell.CELL_TYPE_BLANK)
+                return false;
+        }
+        return true;
     }
 
-    private boolean isRecordReconciled(HSSFRow detailRow) {
-        String txnDate = getStrValue(detailRow.getCell(TXNDT_INDEX));
-        String chequeNumber = getStrValue(detailRow.getCell(CHEQUENO_INDEX));
-        BigDecimal debitAmnt = getNumericValue(detailRow.getCell(DEBIT_INDEX));
-        String query = "select id from egf_brs_bankstatements where accountid=:accountId and instrumentno=:instrumentno  and txdate=to_date(:txnDate,:dateInFormat) and action='processed'";
-        final List list = persistenceService.getSession().createSQLQuery(query)
-                .setInteger("accountId", accountId)
-                .setString("instrumentno", chequeNumber)
-                .setString("txnDate", txnDate)
-                .setString("dateInFormat", dateInDotFormat)
-                .list();
-        if (list.size() >= 1)
-            return true;
-        else
-            return false;
+    private void validateUploadedRecords(HSSFWorkbook wb, HSSFSheet sheet) throws FileNotFoundException, IOException {
+        HSSFRow row = null;
+        int rowIndex = STARTOF_DETAIL_ROW_INDEX;
+        while(rowIndex <= sheet.getLastRowNum()){
+            totalRecords++;
+            row = sheet.getRow(rowIndex);
+            isRecordsExists(row, sheet, invalidRecordList, validRecordsList);
+            rowIndex++;
+        }
+        if(totalRecords == 0){
+            throw new ValidationException(Arrays.asList(new ValidationError(RECORD_IS_EMPTY_MESSAGE,RECORD_IS_EMPTY_MESSAGE)));
+        }
     }
 
-    private boolean isRecordsExists(HSSFRow detailRow) {
+    private void prepareUplaodedFile(HSSFWorkbook wb, HSSFSheet sheet, List<AutoReconcileBean> validRecordsList) throws IOException {
+        removeRows(sheet,STARTOF_DETAIL_ROW_INDEX, sheet.getLastRowNum());
+        short fontSize = 10;
+        appendExtraCoulmn(wb, sheet, "STATUS", CELL_INDEX, ROW_INDEX, HSSFColor.GREEN.index, fontSize);
+        addRows(sheet ,validRecordsList);
+        FileOutputStream output_file = new FileOutputStream(bankStatmentInXls);
+        wb.write(output_file);
+        output_file.close();
+        uploadedXlsFileName = getFileName("_brs_uploaded_");
+        final FileStoreMapper uploadedFile = fileStoreService.store(bankStatmentInXls,
+                uploadedXlsFileName,
+                "application/vnd.ms-excel", FinancialConstants.MODULE_NAME_APPCONFIG, false);
+        persistenceService.persist(uploadedFile);
+        uploadedFileStoreId = uploadedFile.getFileStoreId();
+        uploadDocument(uploadedFile);
+    }
+    
+    private void storeOriginalFile() throws IOException {
+        final FileStoreMapper originalFileStore = fileStoreService.store(bankStatmentInXls,
+                getFileName("_brs_original_"),
+                "application/vnd.ms-excel", FinancialConstants.MODULE_NAME_APPCONFIG, false);
+        persistenceService.persist(originalFileStore);
+        originalFileStoreId = originalFileStore.getFileStoreId();
+        uploadDocument(originalFileStore);
+    }
+    
+    private void prepareErrorFile(HSSFWorkbook wb, HSSFSheet sheet, List<AutoReconcileBean> errorList) throws FileNotFoundException, IOException {
+        removeRows(sheet,STARTOF_DETAIL_ROW_INDEX, sheet.getLastRowNum());
+        short fontSize = 10;
+        appendExtraCoulmn(wb, sheet, "ERROR REASON", CELL_INDEX, ROW_INDEX, HSSFColor.RED.index, fontSize);
+        addRows(sheet ,errorList);
+        FileOutputStream output_file = new FileOutputStream(bankStatmentInXls);
+        wb.write(output_file);
+        output_file.close();
+        errorXlsFileName = getFileName("_brs_error_");
+        final FileStoreMapper errorFileStore = fileStoreService.store(bankStatmentInXls,
+                errorXlsFileName,
+                "application/vnd.ms-excel", FinancialConstants.MODULE_NAME_APPCONFIG, false);
+
+        persistenceService.persist(errorFileStore);
+        errorFileStoreId = errorFileStore.getFileStoreId();
+        uploadDocument(errorFileStore);
+    }
+    
+    private void uploadDocument(FileStoreMapper fileStore){
+        DocumentUpload upload = new DocumentUpload();
+        upload.setFileStore(fileStore);
+        upload.setObjectId(accountId.longValue());
+        upload.setObjectType(FinancialConstants.BANK_STATEMET_OBJECT);
+        upload.setUploadedDate(new Date());
+        documentUploadRepository.save(upload);
+    }
+    
+    private String getFileName(String fileType){
+        timeStamp = new Timestamp((new Date()).getTime()).toString().replace(".", "_");
+        StringBuilder fileName = new StringBuilder();
+        if (bankStatmentInXlsFileName.contains("_brs_original_")) {
+            fileName.append(bankStatmentInXlsFileName.split("_brs_original_")[0]).append(fileType).append(timeStamp).append(".").append(bankStatmentInXlsFileName.split("\\.")[1]);
+        } else if (bankStatmentInXlsFileName.contains("_brs_uploaded_")) {
+            fileName.append(bankStatmentInXlsFileName.split("_brs_uploaded_")[0]).append(fileType).append(timeStamp).append(".").append(bankStatmentInXlsFileName.split("\\.")[1]);
+        }  else if (bankStatmentInXlsFileName.contains("_brs_error_")) {
+            fileName.append(bankStatmentInXlsFileName.split("_brs_error_")[0]).append(fileType).append(timeStamp).append(".").append(bankStatmentInXlsFileName.split("\\.")[1]);
+        } else {
+                fileName.append(bankStatmentInXlsFileName.split("\\.")[0]).append(fileType).append(timeStamp).append(".").append(bankStatmentInXlsFileName.split("\\.")[1]);
+        }
+        return fileName.toString();
+    }
+    
+    private void appendExtraCoulmn(HSSFWorkbook wb, HSSFSheet sheet, String columnName, int cellIndexPos, int rowIndexPos, short colorIndex, short fontSize) {
+        HSSFRow row = sheet.getRow(rowIndexPos);
+        HSSFCell cell = row.createCell(cellIndexPos);
+        HSSFFont fontBold = wb.createFont();
+        fontBold.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+        fontBold.setFontHeightInPoints(fontSize);
+        cell.setCellValue(columnName);
+        cell.setAsActiveCell();
+        HSSFCellStyle cellStyle = wb.createCellStyle();
+        cellStyle.setFillForegroundColor(colorIndex);
+        cellStyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+        cellStyle.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+        cellStyle.setBorderTop(HSSFCellStyle.BORDER_THIN);
+        cellStyle.setBorderRight(HSSFCellStyle.BORDER_THIN);
+        cellStyle.setBorderLeft(HSSFCellStyle.BORDER_MEDIUM);
+        cellStyle.setFont(fontBold);
+        cell.setCellStyle(cellStyle);
+    }
+
+    private void addRows(HSSFSheet sheet, List<AutoReconcileBean> list) {
+        int beginRowIndex = STARTOF_DETAIL_ROW_INDEX;
+        for(AutoReconcileBean arb : list){
+            HSSFRow newRow = sheet.createRow(beginRowIndex);
+            HSSFCell srNoCell = newRow.createCell(SR_NO_INDEX);
+            HSSFCell txDateCell = newRow.createCell(TXNDT_INDEX);
+            HSSFCell narrationCell = newRow.createCell(NARRATION_INDEX);
+            HSSFCell typeCell = newRow.createCell(TYPE_INDEX);
+            HSSFCell chequeNoCell = newRow.createCell(CHEQUENO_INDEX);
+            HSSFCell debitAmntCell = newRow.createCell(DEBIT_INDEX);
+            HSSFCell creditAmntCell = newRow.createCell(CREDIT_INDEX);
+            HSSFCell balanceCell = newRow.createCell(BALANCE_INDEX);
+            HSSFCell cslNoCell = newRow.createCell(CSLNO_INDEX);
+            srNoCell.setCellValue(arb.getSrNo());
+            txDateCell.setCellValue(arb.getTxDateStr());
+            narrationCell.setCellValue(arb.getNarration());
+            typeCell.setCellValue(arb.getType());
+            chequeNoCell.setCellValue(arb.getInstrumentNo());
+            debitAmntCell.setCellValue(arb.getDebit() != null ? arb.getDebit().doubleValue() : null);
+            creditAmntCell.setCellValue(arb.getCredit() != null ? arb.getCredit().doubleValue() : null);
+            balanceCell.setCellValue(arb.getBalance() != null ? arb.getBalance().doubleValue() : null);
+            cslNoCell.setCellValue(arb.getCSLno());
+            if(StringUtils.isNotBlank(arb.getErrorMessage())){
+                HSSFCell errMsgCell = newRow.createCell(CELL_INDEX);
+                errMsgCell.setCellValue(arb.getErrorMessage());
+            }
+            if(StringUtils.isNotBlank(arb.getUploadStatus())){
+                HSSFCell errMsgCell = newRow.createCell(CELL_INDEX);
+                errMsgCell.setCellValue(arb.getUploadStatus());
+            }
+            beginRowIndex++;
+        }
+    }
+
+    public static void removeRows(HSSFSheet sheet, int fromRowIdx, int toRowIndex) {
+        while(toRowIndex>=fromRowIdx){
+            HSSFRow removingRow = sheet.getRow(fromRowIdx);
+            if (removingRow != null) {
+                sheet.removeRow(removingRow);
+            }
+            fromRowIdx++;
+        }
+    }
+    
+    public static void removeSingleRow(HSSFSheet sheet, int rowIndex) {
+        int lastRowNum = sheet.getLastRowNum();
+        if (rowIndex >= 0 && rowIndex < lastRowNum) {
+            sheet.shiftRows(rowIndex, lastRowNum, -1);
+        }
+        if (rowIndex == lastRowNum) {
+            HSSFRow removingRow = sheet.getRow(rowIndex);
+            if (removingRow != null) {
+                sheet.removeRow(removingRow);
+            }
+        }
+    }
+
+    private void isRecordsExists(HSSFRow detailRow,HSSFSheet sheet, List<AutoReconcileBean> errorList, List<AutoReconcileBean> validRecordsList) {
+        if(validateRows(detailRow,errorList)){
+            String srNo = getStrValue(detailRow.getCell(SR_NO_INDEX));
+            String txnDate = getStrValue(detailRow.getCell(TXNDT_INDEX));
+            String narration = getStrValue(detailRow.getCell(NARRATION_INDEX));
+            String type = getStrValue(detailRow.getCell(TYPE_INDEX));
+            String chequeNumber = getStrValue(detailRow.getCell(CHEQUENO_INDEX));
+            BigDecimal debitAmount = getNumericValue(detailRow.getCell(DEBIT_INDEX));
+            BigDecimal creditAmount = getNumericValue(detailRow.getCell(CREDIT_INDEX));
+            BigDecimal balance = getNumericValue(detailRow.getCell(BALANCE_INDEX));
+            String cslNo = getStrValue(detailRow.getCell(CSLNO_INDEX));
+            StringBuilder errorMessage = new StringBuilder();
+            StringBuilder query = new StringBuilder("select id from egf_brs_bankstatements where accountid=:accountId");;
+            if(BRS_TRANSACTION_TYPE_BANK.equals(type)){
+                query.append(" and cslno=:cslNo");
+            }else if(BRS_TRANSACTION_TYPE_CHEQUE.equals(type)){
+                query.append(" and instrumentno=:instrumentno");
+            }
+            query.append(" and type=:type and txdate=to_date(:txnDate,:dateInFormat) and action='processed' ");
+            Query createSqlQuery = persistenceService.getSession().createSQLQuery(query.toString())
+                    .setInteger("accountId", accountId)
+                    .setString("type", type)
+                    .setString("txnDate", txnDate)
+                    .setString("dateInFormat", dateInDotFormat);
+            if(BRS_TRANSACTION_TYPE_BANK.equals(type)){
+                createSqlQuery.setString("cslNo", cslNo);
+            }else if(BRS_TRANSACTION_TYPE_CHEQUE.equals(type)){
+                createSqlQuery.setString("instrumentno", chequeNumber);
+            }
+            List list = createSqlQuery.list();
+            if (list.size() >= 1){
+                errorMessage.append(alreadyReconciledMessage);
+                AutoReconcileBean arb = new AutoReconcileBean(txnDate, type, chequeNumber, debitAmount, creditAmount, balance, narration, cslNo, srNo != null ? Integer.parseInt(srNo) : 0);
+                arb.setErrorMessage(errorMessage.toString());
+                errorList.add(arb);
+                inValidRecords++;
+            }else{
+                AutoReconcileBean arb = new AutoReconcileBean(txnDate, type, chequeNumber, debitAmount, creditAmount, balance, narration, cslNo, srNo != null ? Integer.parseInt(srNo) : 0);
+                validRecordsList.add(arb);
+            }
+        }
+    }
+
+    private boolean validateRows(HSSFRow detailRow, List<AutoReconcileBean> errorList) {
+        boolean isValidated = false;
+        String srNo = getStrValue(detailRow.getCell(SR_NO_INDEX));
         String txnDate = getStrValue(detailRow.getCell(TXNDT_INDEX));
+        String narration = getStrValue(detailRow.getCell(NARRATION_INDEX));
+        String type = getStrValue(detailRow.getCell(TYPE_INDEX));
         String chequeNumber = getStrValue(detailRow.getCell(CHEQUENO_INDEX));
-        BigDecimal debitAmnt = getNumericValue(detailRow.getCell(DEBIT_INDEX));
-        String query = "select id from egf_brs_bankstatements where accountid=:accountId and instrumentno=:instrumentno and txdate=to_date(:txnDate,:dateInFormat) and (action is null or action!='processed') ";
-        final List list = persistenceService.getSession().createSQLQuery(query)
-                .setInteger("accountId", accountId)
-                .setString("instrumentno", chequeNumber)
-                .setString("txnDate", txnDate)
-                .setString("dateInFormat", dateInDotFormat)
-                .list();
-        if (list.size() >= 1)
-            return true;
-        else
-            return false;
+        BigDecimal debitAmount = getNumericValue(detailRow.getCell(DEBIT_INDEX));
+        BigDecimal creditAmount = getNumericValue(detailRow.getCell(CREDIT_INDEX));
+        BigDecimal balance = getNumericValue(detailRow.getCell(BALANCE_INDEX));
+        String cslNo = getStrValue(detailRow.getCell(CSLNO_INDEX));
+        StringBuilder errorMessage = new StringBuilder();
+        if(StringUtils.isBlank(txnDate)){
+            String missingDataInRecords1  = String.format(missingDataInRecords, "Txn Dt", "");
+            errorMessage.append(missingDataInRecords1);
+        }
+        
+        if(StringUtils.isBlank(type)){
+            String missingDataInRecords2  = String.format(missingDataInRecords, "Type", "");
+            if(StringUtils.isNotBlank(errorMessage.toString())){
+                errorMessage.append(", ").append(missingDataInRecords2);
+            }else{
+                errorMessage.append(missingDataInRecords2);
+            }
+        }else if(BRS_TRANSACTION_TYPE_BANK.equals(type)){
+            if(StringUtils.isBlank(cslNo)){
+                String missingDataInRecords3  = String.format(missingDataInRecords, "CSLNo", "");
+                if(StringUtils.isNotBlank(errorMessage.toString())){
+                    errorMessage.append(", ").append(missingDataInRecords3);
+                }else{
+                    errorMessage.append(missingDataInRecords3);
+                }
+            }
+        }else if(BRS_TRANSACTION_TYPE_CHEQUE.equals(type)){
+            if(StringUtils.isBlank(chequeNumber)){
+                String missingDataInRecords4  = String.format(missingDataInRecords, "Cheque No", "");
+                if(StringUtils.isNotBlank(errorMessage.toString())){
+                    errorMessage.append(", ").append(missingDataInRecords4);
+                }else{
+                    errorMessage.append(missingDataInRecords4);
+                }
+            }
+        }else{
+            String missingDataInRecords5 = String.format(missingDataInRecords, "Type", "Please add the type(CLG/TRF)");
+            if(StringUtils.isNotBlank(errorMessage.toString())){
+                errorMessage.append(", ").append(missingDataInRecords5);
+            }else{
+                errorMessage.append(missingDataInRecords5);
+            }
+        }
+        
+        if((debitAmount == null || debitAmount.compareTo(BigDecimal.ZERO)==0) && (creditAmount == null || creditAmount.compareTo(BigDecimal.ZERO) == 0)){
+            String missingDataInRecords2  = String.format(missingDataInRecords, "Debit/Credit Amount", "");
+            if(StringUtils.isNotBlank(errorMessage.toString())){
+                errorMessage.append(", ").append(missingDataInRecords2);
+            }else{
+                errorMessage.append(missingDataInRecords2);
+            }
+        }
+        
+        if(errorMessage.toString().isEmpty()){
+            isValidated = true;
+        }else{
+            errorMessage.append("!");
+            AutoReconcileBean arb = new AutoReconcileBean(txnDate, type, chequeNumber, debitAmount, creditAmount, balance, narration, cslNo, srNo != null ? Integer.parseInt(srNo) : 0);
+            arb.setErrorMessage(errorMessage.toString());
+            errorList.add(arb);
+            isValidated = false;
+            inValidRecords++;
+        }
+        return isValidated;
     }
 
     private void validateBankAccountInfo(HSSFSheet sheet) {
-        // TODO Auto-generated method stub
         final HSSFRow bankNameRow = sheet.getRow(BANKNAME_ROW_INDEX);
         String bankName = getStrValue(bankNameRow.getCell(0));
         if(bankNameRow == null || StringUtils.isBlank(bankName) || !bankName.trim().equalsIgnoreCase(bank.getName())){
@@ -434,7 +669,7 @@ public class AutoReconcileHelper {
     }
 
     private void insert(final AutoReconcileBean ab) {
-
+        deleteTobeProcessedManualRecords(ab);
         insertQuery.setString("accNo", accNo)
                 .setInteger("accountId", accountId)
                 .setString("txDate", ab.getTxDateStr())
@@ -449,14 +684,27 @@ public class AutoReconcileHelper {
 
     }
 
-    private boolean alreadyUploaded(final String dateStr) {
-        final List list = persistenceService.getSession()
-                .createSQLQuery("select id from egf_brs_bankstatements where accountid=" + accountId
-                        + " and txdate=to_date('" + dateStr + "','" + dateInDotFormat + "')").list();
-        if (list.size() >= 1)
-            return true;
-        else
-            return false;
+    private void deleteTobeProcessedManualRecords(AutoReconcileBean ab) {
+        StringBuilder builderQuery = new StringBuilder();
+        builderQuery.append("delete from egf_brs_bankstatements where txdate=to_date(:txnDate,:dateInFormat) and accountid=:accountId");
+        if(BRS_TRANSACTION_TYPE_BANK.equals(ab.getType())){
+            builderQuery.append(" and cslno=:cslNo");
+        }else if(BRS_TRANSACTION_TYPE_CHEQUE.equals(ab.getType())){
+            builderQuery.append(" and instrumentno=:instrumentNo");
+        }
+        builderQuery.append(" and type=:type and (action in (:actions) or action is null)");
+        SQLQuery createSQLQuery = persistenceService.getSession().createSQLQuery(builderQuery.toString());
+        createSQLQuery.setInteger("accountId", accountId)
+        .setString("txnDate", ab.getTxDateStr())
+        .setString("dateInFormat", dateInDotFormat)
+        .setString("type", ab.getType())
+        .setParameterList("actions", new String[]{BRS_ACTION_TO_BE_PROCESSED, BRS_ACTION_TO_BE_PROCESSED_MANUALLY});
+        if(BRS_TRANSACTION_TYPE_BANK.equals(ab.getType())){
+            createSQLQuery.setString("cslNo", ab.getCSLno());
+        }else if(BRS_TRANSACTION_TYPE_CHEQUE.equals(ab.getType())){
+            createSQLQuery.setString("instrumentNo", ab.getInstrumentNo());
+        }
+        createSQLQuery.executeUpdate();
     }
 
     public String getMessage() {
@@ -484,10 +732,10 @@ public class AutoReconcileHelper {
             case HSSFCell.CELL_TYPE_NUMERIC:
                 numericCellValue = cell.getNumericCellValue();
                 final DecimalFormat decimalFormat = new DecimalFormat("#");
-                strValue = decimalFormat.format(numericCellValue);
+                strValue = decimalFormat.format(numericCellValue).trim();
                 break;
             case HSSFCell.CELL_TYPE_STRING:
-                strValue = cell.getStringCellValue();
+                strValue = cell.getStringCellValue().trim();
                 break;
         }
         return strValue;
@@ -585,7 +833,7 @@ public class AutoReconcileHelper {
 
         final String recociliationQuery = "update EGF_InstrumentHeader set id_status=:statusId,  lastmodifiedby=:userId,lastmodifieddate=CURRENT_DATE"
                 +
-                " where id= (select id from egf_instrumentheader where instrumentNumber=:instrumentNo and "
+                " where id in (select id from egf_instrumentheader where instrumentNumber=:instrumentNo and "
                 +
                 " instrumentAmount=:amount and bankaccountid=:accountId and ispaycheque=:ispaycheque and instrumentType in ("
                 + instrumentTypeId
@@ -599,7 +847,7 @@ public class AutoReconcileHelper {
                 +
                 " ,lastmodifiedby=:userId,lastmodifieddate=CURRENT_DATE,reconciledOn=:reconciliationDate "
                 +
-                " where instrumentheaderid= (select id from egf_instrumentheader where instrumentNumber=:instrumentNo and "
+                " where instrumentheaderid in (select id from egf_instrumentheader where instrumentNumber=:instrumentNo and "
                 +
                 " instrumentAmount=:amount and bankaccountid=:accountId and ispaycheque=:ispaycheque and instrumentType in ("
                 + instrumentTypeId
@@ -1255,13 +1503,13 @@ public class AutoReconcileHelper {
     public List<DocumentUpload> getUploadedFiles(BankStatementUploadFile bankStatementUploadFile) {
         List<DocumentUpload> uploadedFileList = new ArrayList<>();
         if (bankStatementUploadFile.getBankAccount() == null && bankStatementUploadFile.getAsOnDate() == null) {
-            uploadedFileList = documentUploadRepository.findByObjectType(FinancialConstants.BANK_STATEMET_OBJECT);
+            uploadedFileList = documentUploadRepository.findByFileNameAndObjectType("_brs_uploaded_", FinancialConstants.BANK_STATEMET_OBJECT);
         } else if (bankStatementUploadFile.getBankAccount() != null && bankStatementUploadFile.getAsOnDate() == null) {
-            uploadedFileList = documentUploadRepository.findByObjectId(bankStatementUploadFile.getBankAccount().getId());
+            uploadedFileList = documentUploadRepository.findByFileNameAndObjectId("_brs_uploaded_", bankStatementUploadFile.getBankAccount().getId());
         } else if (bankStatementUploadFile.getBankAccount() == null && bankStatementUploadFile.getAsOnDate() != null) {
-            uploadedFileList = documentUploadRepository.findByUploadedDateAndObjectType(bankStatementUploadFile.getAsOnDate(), FinancialConstants.BANK_STATEMET_OBJECT);
+            uploadedFileList = documentUploadRepository.findByUploadedDateObjectTypeAndFileName(bankStatementUploadFile.getAsOnDate(), FinancialConstants.BANK_STATEMET_OBJECT, "_brs_uploaded_");
         } else {
-            uploadedFileList = documentUploadRepository.findByUploadedDateAndObjectId(bankStatementUploadFile.getAsOnDate(), bankStatementUploadFile.getBankAccount().getId());
+            uploadedFileList = documentUploadRepository.findByUploadedDateObjectIdAndFileName(bankStatementUploadFile.getAsOnDate(), bankStatementUploadFile.getBankAccount().getId(), "_brs_uploaded_");
         }
         return uploadedFileList;
     }
@@ -1412,5 +1660,47 @@ public class AutoReconcileHelper {
     public void setBank(Bank bank) {
         this.bank = bank;
     }
+
+    public String getErrorFileStoreId() {
+        return errorFileStoreId;
+    }
+
+    public void setErrorFileStoreId(String errorFileStoreId) {
+        this.errorFileStoreId = errorFileStoreId;
+    }
+
+    public String getOriginalFileStoreId() {
+        return originalFileStoreId;
+    }
+
+    public void setOriginalFileStoreId(String originalFileStoreId) {
+        this.originalFileStoreId = originalFileStoreId;
+    }
+
+    public String getUploadedFileStoreId() {
+        return uploadedFileStoreId;
+    }
+
+    public void setUploadedFileStoreId(String uploadedFileStoreId) {
+        this.uploadedFileStoreId = uploadedFileStoreId;
+    }
+
+    public String getErrorXlsFileName() {
+        return errorXlsFileName;
+    }
+
+    public void setErrorXlsFileName(String errorXlsFileName) {
+        this.errorXlsFileName = errorXlsFileName;
+    }
+
+    public String getUploadedXlsFileName() {
+        return uploadedXlsFileName;
+    }
+
+    public void setUploadedXlsFileName(String uploadedXlsFileName) {
+        this.uploadedXlsFileName = uploadedXlsFileName;
+    }
+    
+    
 
 }

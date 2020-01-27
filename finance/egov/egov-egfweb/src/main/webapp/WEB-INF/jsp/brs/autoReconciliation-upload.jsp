@@ -55,7 +55,22 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title><s:text name="bankreconciliation" /></title>
 <script type="text/javascript">
+jQuery(document).ready(function() {
+	var fileformats = [ 'xls' ];
 
+	jQuery('#bankStatmentInXls').on('change.bs.fileinput', function(e) {
+		/*validation for file upload*/
+		myfile = jQuery(this).val();
+		var ext = myfile.split('.').pop();
+		if (jQuery.inArray(ext, fileformats) > -1) {
+			//do something    
+		} else {
+			bootbox.alert(ext + " file format is not allowed");
+			jQuery(this).val("");
+			return;
+		}
+	});
+});
 
 	function validate() {
 	document.getElementById("msg").innerHTML="";  
@@ -96,6 +111,12 @@
 			branchId : bid
 		})
 	}
+
+	function urlLoad(fileStoreId) {
+		var sUrl = "/services/egi/downloadfile?fileStoreId=" + fileStoreId
+				+ "&moduleName=EGF";
+		window.location = sUrl;
+	}
 </script>
 </head>
 <body>
@@ -111,7 +132,7 @@
 			</div>
 		
 		<div align="center">
-			<font style='color: green;'>
+			<font style='color: blue;'>
 				<div id="msg">
 					<s:property value="message" />
 				</div>
@@ -188,6 +209,47 @@
 		</center>
     </div>
 	</s:form>
+	<div>
+	<center>
+			<s:if test="%{(uploadedFileStoreId neq null) or (errorFileStoreId neq null)}">
+				<table width="100%">
+					<tr>
+						<th style="text-align: center" align="center"
+							colspan="2"><s:text name="uplaoded.status.label"/></th>
+					</tr>
+					<tr>
+						<th class="bluebgheadtd" style="text-align: center"
+							align="center"><s:text name="successfully.uploaded.file"/></th>
+						<th class="bluebgheadtd" style="text-align: center"
+							align="center"><s:text name="error.records.file"/></th>
+					</tr>
+					<tr>
+					<s:if test="%{uploadedFileStoreId neq null}">
+						<td style="text-align: center" align="center"><a href="#"
+							onclick="urlLoad('<s:property value="%{uploadedFileStoreId}" />');"
+							id="originalFileId"> <s:property value="%{uploadedXlsFileName}"/>
+						</a>
+						</td>
+					</s:if>
+					<s:else>
+					<td style="text-align: center" align="center"><s:text name="no.records.uploaded"/> </td>
+					</s:else>
+					<s:if test="%{errorFileStoreId neq null}">
+						<td style="text-align: center" align="center"><a href="#"
+							onclick="urlLoad('<s:property value="%{errorFileStoreId}" />');"
+							id="outputFileId"> <s:property value="%{errorXlsFileName}" />
+						</a></td>
+					</s:if>
+					<s:else>
+					<td style="text-align: center" align="center"><s:text name="no.error.recorded"/> </td>
+					</s:else>
+					</tr>
+
+				</table>
+			</s:if>
+			
+	</center>
+	</div>
    <div class="mandatory1">
   Note:
   <ol>
