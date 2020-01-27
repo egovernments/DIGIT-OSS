@@ -1898,46 +1898,6 @@
     "documentType": "_doc",
     "action": "",
     "plotLabel": "DDRs",
-    "aggregationPaths": [
-      "Approved",
-      "Initiated",
-      "Applied",
-      "Rejected",
-      "Pending Approval",
-      "Field Inspection",
-      "Cancelled",
-      "Pending Payment",
-      "Paid"
-    ],
-    "pathDataTypeMapping": [
-      {
-        "Approved": "number"
-      },
-      {
-        "Initiated": "number"
-      },
-      {
-        "Applied": "number"
-      },
-      {
-        "Rejected": "number"
-      },
-      {
-        "Pending Approval": "number"
-      },
-      {
-        "Field Inspection": "number"
-      },
-      {
-        "Cancelled": "number"
-      },
-      {
-        "Pending Payment": "number"
-      },
-      {
-        "Paid": "number"
-      }
-    ],
     "insight": {
     },
     "_comment": ""
@@ -1947,7 +1907,7 @@
     "queries": [
       {
         "module": "TL",
-        "requestQueryMap": "{\"wardId\" : \"Data.ward.name.keyword\", \"tenantId\" : \"Data.tradelicense.tenantId.keyword\" }",
+        "requestQueryMap": "{\"wardId\" : \"Data.ward.name.keyword\", \"tenantId\" : \"Data.tradelicense.tenantid.keyword\" }",
         "dateRefField": "Data.tradelicense.issueddate",
         "indexName": "tlindex-v1",
         "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantid.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"ULBs \":{\"terms\":{\"field\":\"Data.tradelicense.tenantid.keyword\",\"size\":1000},\"aggs\":{\"Status\":{\"terms\":{\"field\":\"Data.tradelicense.status.keyword\",\"size\":1000,\"min_doc_count\":0},\"aggs\":{\"License Issued\":{\"cardinality\":{\"field\":\"Data.tradelicense.licensenumber.keyword\"}}}}}}}}}}",
@@ -1966,46 +1926,6 @@
     "documentType": "_doc",
     "action": "",
     "plotLabel": "ULBs",
-    "aggregationPaths": [
-      "Approved",
-      "Initiated",
-      "Applied",
-      "Rejected",
-      "Pending Approval",
-      "Field Inspection",
-      "Cancelled",
-      "Pending Payment",
-      "Paid"
-    ],
-    "pathDataTypeMapping": [
-      {
-        "Approved": "number"
-      },
-      {
-        "Initiated": "number"
-      },
-      {
-        "Applied": "number"
-      },
-      {
-        "Rejected": "number"
-      },
-      {
-        "Pending Approval": "number"
-      },
-      {
-        "Field Inspection": "number"
-      },
-      {
-        "Cancelled": "number"
-      },
-      {
-        "Pending Payment": "number"
-      },
-      {
-        "Paid": "number"
-      }
-    ],
     "insight": {
     },
     "_comment": ""
@@ -2015,8 +1935,8 @@
     "queries": [
       {
         "module": "TL",
-        "requestQueryMap": "{\"wardId\" : \"Data.ward.name.keyword\", \"tenantId\" : \"Data.tradelicense.tenantId.keyword\" }",
-        "dateRefField": "Data.tradelicense.applicationDate",
+        "requestQueryMap": "{\"wardId\" : \"Data.ward.name.keyword\", \"tenantId\" : \"Data.tradelicense.tenantid.keyword\" }",
+        "dateRefField": "Data.tradelicense.issueddate",
         "indexName": "tlindex-v1",
         "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantid.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Ward \":{\"terms\":{\"field\":\"Data.ward.name.keyword\",\"size\":1000},\"aggs\":{\"Status\":{\"terms\":{\"field\":\"Data.tradelicense.status.keyword\",\"size\":1000,\"min_doc_count\":0},\"aggs\":{\"License Issued\":{\"cardinality\":{\"field\":\"Data.tradelicense.licensenumber.keyword\"}}}}}}}}}}",
         "aggrQuerybc": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Ward \":{\"terms\":{\"field\":\"Data.ward.name.keyword\",\"size\":1000},\"aggs\":{\"Status\":{\"filters\":{\"filters\":{\"Approved\":{\"match\":{\"Data.tradelicense.status.keyword\":\"APPROVED\"}},\"Initiated\":{\"match\":{\"Data.tradelicense.status.keyword\":\"INITIATED\"}},\"Applied\":{\"match\":{\"Data.tradelicense.status.keyword\":\"APPLIED\"}},\"Rejected\":{\"match\":{\"Data.tradelicense.status.keyword\":\"REJECTED\"}},\"Pending Approval\":{\"match\":{\"Data.tradelicense.status.keyword\":\"PENDINGAPPROVAL\"}},\"Field Inspection\":{\"match\":{\"Data.tradelicense.status.keyword\":\"FIELDINSPECTION\"}},\"Cancelled\":{\"match\":{\"Data.tradelicense.status.keyword\":\"CANCELLED\"}},\"Pending Payment\":{\"match\":{\"Data.tradelicense.status.keyword\":\"PENDINGPAYMENT\"}},\"Paid\":{\"match\":{\"Data.tradelicense.status.keyword\":\"PAID\"}}}}}}}}}}}"
@@ -2033,46 +1953,6 @@
     "documentType": "_doc",
     "action": "",
     "plotLabel": "Ward",
-    "aggregationPaths": [
-      "Approved",
-      "Initiated",
-      "Applied",
-      "Rejected",
-      "Pending Approval",
-      "Field Inspection",
-      "Cancelled",
-      "Pending Payment",
-      "Paid"
-    ],
-    "pathDataTypeMapping": [
-      {
-        "Approved": "number"
-      },
-      {
-        "Initiated": "number"
-      },
-      {
-        "Applied": "number"
-      },
-      {
-        "Rejected": "number"
-      },
-      {
-        "Pending Approval": "number"
-      },
-      {
-        "Field Inspection": "number"
-      },
-      {
-        "Cancelled": "number"
-      },
-      {
-        "Pending Payment": "number"
-      },
-      {
-        "Paid": "number"
-      }
-    ],
     "insight": {
     },
     "_comment": ""
