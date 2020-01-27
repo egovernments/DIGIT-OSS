@@ -1991,6 +1991,36 @@
       "isActualDemand": true,
       "order": "2",
       "isRequired": false
-     }
+     },
+     {
+      "category": "FEE",
+      "service": "PT.MUTATION",
+      "name": "PT Mutation Fees",
+      "code": "PT_MUTATION_FEE",
+      "isDebit": false,
+      "isActualDemand": true,
+      "order": "0",
+      "isRequired": false
+     },
+     {
+      "category": "REBATE",
+      "service": "PT.MUTATION",
+      "name": "PT Mutation Rebate",
+      "code": "PT_MUTATION_REBATE",
+      "isDebit": true,
+      "isActualDemand": false,
+      "order": "1",
+      "isRequired": false
+    },
+    {
+      "category": "PENALTY",
+      "service": "PT.MUTATION",
+      "name": "PT Mutation Penalty",
+      "code": "PT_MUTATION_PENALTY",
+      "isDebit": false,
+      "isActualDemand": false,
+      "order": "2",
+      "isRequired": false
+    }
   ]
 }
