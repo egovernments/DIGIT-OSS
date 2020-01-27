@@ -13,9 +13,11 @@ class MultiItem extends React.Component {
   setInstrumentType = (value, dispatch) => {
     dispatch(prepareFinalObject("currentTab", value));
     if (value === "PT_SEARCH_PROPERTY") {
-      dispatch(handleField("propertySearch", "components.div.children.searchPropertyTable", "visible", false));
-    } else {
+      dispatch(handleField("propertySearch", "components.div.children.searchPropertyTable", "visible", true));
       dispatch(handleField("propertySearch", "components.div.children.searchApplicationTable", "visible", false));
+    } else {
+      dispatch(handleField("propertySearch", "components.div.children.searchApplicationTable", "visible", true));
+      dispatch(handleField("propertySearch", "components.div.children.searchPropertyTable", "visible", false));
     }
   };
 
