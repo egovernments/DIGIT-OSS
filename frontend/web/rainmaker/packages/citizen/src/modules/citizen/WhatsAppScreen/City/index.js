@@ -151,7 +151,7 @@ class WhatsAppCity extends React.Component {
           <div className={`${classes.root} dashboard-search-main-cont`}>
             <Icon action="action" name="search" style={{ marginLeft: 12 }} />
             <Input
-              placeholder="WHATSAPP_SEARCH_CITY"
+              placeholder={get(this.getLocalTextFromCode("WHATSAPP_SEARCH_CITY"),"message","Search City")}
               disableUnderline={true}
               fullWidth={true}
               //className={classes.input}

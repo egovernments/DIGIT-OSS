@@ -158,7 +158,7 @@ class WhatsAppLocality extends React.Component {
           <div className="header-iconText">
             <Icon id="back-navigator" action="navigation" name="arrow-back" />
             <Label
-              label="WHATSAPP_CHOOSE_LOCALITY "
+              label="WHATSAPP_CHOOSE_LOCALITY"
               color="white"
               fontSize={18}
               bold={true}
@@ -170,7 +170,7 @@ class WhatsAppLocality extends React.Component {
           <div className={`${classes.root} dashboard-search-main-cont`}>
             <Icon action="action" name="search" style={{ marginLeft: 12 }} />
             <Input
-              placeholder="WHATSAPP_SEARCH_LOCALITY"
+              placeholder={get(this.getLocalTextFromCode("WHATSAPP_SEARCH_LOCALITY"),"message","Search Locality")}
               disableUnderline={true}
               fullWidth={true}
               //className={classes.input}
