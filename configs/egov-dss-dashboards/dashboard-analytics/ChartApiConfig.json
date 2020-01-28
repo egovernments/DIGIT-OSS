@@ -1216,7 +1216,8 @@
         "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\",\"usageId\" : \"domainObject.propertyDetails.units.usageCategoryMajor.keyword\",\"minorUsageId\" : \"domainObject.propertyDetails.units.usageCategoryMinor.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\" }",
         "dateRefField": "dataObject.Bill.billDetails.receiptDate",
         "indexName": "dss-collection_v2",
-        "aggrQuery": "{\"aggs\":{\"attrs_root\":{\"nested\":{\"path\":\"domainObject.propertyDetails.units\"},\"aggs\":{\"UsageType \":{\"terms\":{\"field\":\"domainObject.propertyDetails.units.usageCategoryMajor.keyword\",\"size\":200},\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.amountPaid\"}},\"Transactions\":{\"value_count\":{\"field\":\"dataObject.transactionId.keyword\"}},\"Assessed Properties\":{\"nested\":{\"path\":\"Data.propertyDetails\"},\"aggs\":{\"attr\":{\"cardinality\":{\"field\":\"Data.propertyDetails.assessmentNumber.keyword\"}}}}}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"dataObject.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"root\":{\"nested\":{\"path\":\"domainObject.propertyDetails.units\"},\"aggs\":{\"UsageType \":{\"terms\":{\"field\":\"domainObject.propertyDetails.units.usageCategoryMajor.keyword\",\"size\":200},\"aggs\":{\"Total Collection\":{\"reverse_nested\":{},\"aggs\":{\"top_tags_per_comment\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.amountPaid\"}}}},\"Transactions\":{\"reverse_nested\":{},\"aggs\":{\"top_tags_per_comment\":{\"cardinality\":{\"field\":\"dataObject.transactionId.keyword\"}}}},\"Assessed Properties\":{\"nested\":{\"path\":\"domainObject.propertyDetails\"},\"aggs\":{\"attr\":{\"cardinality\":{\"field\":\"domainObject.propertyDetails.assessmentNumber.keyword\"}}}}}}}}}}}}",
+        "aggrQuerybc": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"dataObject.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"attrs_root\":{\"nested\":{\"path\":\"domainObject.propertyDetails.units\"},\"aggs\":{\"UsageType \":{\"terms\":{\"field\":\"domainObject.propertyDetails.units.usageCategoryMajor.keyword\",\"size\":200},\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.amountPaid\"}},\"Transactions\":{\"value_count\":{\"field\":\"dataObject.transactionId.keyword\"}},\"Assessed Properties\":{\"nested\":{\"path\":\"Data.propertyDetails\"},\"aggs\":{\"attr\":{\"cardinality\":{\"field\":\"Data.propertyDetails.assessmentNumber.keyword\"}}}}}}}}}}}}"
       }
     ],
     "filterKeys": [
@@ -1235,8 +1236,8 @@
     "aggregationPaths": [
       "Total Collection",
       "Transactions",
-      "Assessed Properties",
-      "Target Collection"
+      "Assessed Properties"
+
     ],
     "pathDataTypeMapping": [
       {
@@ -1247,9 +1248,6 @@
       },
       {
         "Assessed Properties": "number"
-      },
-      {
-        "Target Collection": "amount"
       }
     ],
     "insight": {
@@ -1264,7 +1262,8 @@
         "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\"usageId\" : \"domainObject.propertyDetails.units.usageCategoryMajor.keyword\",\"minorUsageId\" : \"domainObject.propertyDetails.units.usageCategoryMinor.keyword\",\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\" }",
         "dateRefField": "dataObject.Bill.billDetails.receiptDate",
         "indexName": "dss-collection_v2",
-        "aggrQuery": "{\"aggs\":{\"attrs_root\":{\"nested\":{\"path\":\"domainObject.propertyDetails.units\"},\"aggs\":{\"UsageType \":{\"terms\":{\"field\":\"domainObject.propertyDetails.units.usageCategoryMinor.keyword\",\"size\":200},\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.amountPaid\"}},\"Transactions\":{\"value_count\":{\"field\":\"dataObject.transactionId.keyword\"}},\"Assessed Properties\":{\"nested\":{\"path\":\"Data.propertyDetails\"},\"aggs\":{\"attr\":{\"cardinality\":{\"field\":\"Data.propertyDetails.assessmentNumber.keyword\"}}}}}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"dataObject.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"root\":{\"nested\":{\"path\":\"domainObject.propertyDetails.units\"},\"aggs\":{\"UsageType \":{\"terms\":{\"field\":\"domainObject.propertyDetails.units.usageCategoryMinor.keyword\",\"size\":200},\"aggs\":{\"Total Collection\":{\"reverse_nested\":{},\"aggs\":{\"top_tags_per_comment\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.amountPaid\"}}}},\"Transactions\":{\"reverse_nested\":{},\"aggs\":{\"top_tags_per_comment\":{\"cardinality\":{\"field\":\"dataObject.transactionId.keyword\"}}}},\"Assessed Properties\":{\"nested\":{\"path\":\"domainObject.propertyDetails\"},\"aggs\":{\"attr\":{\"cardinality\":{\"field\":\"domainObject.propertyDetails.assessmentNumber.keyword\"}}}}}}}}}}}}",
+        "aggrQuerybc": "{\"aggs\":{\"attrs_root\":{\"nested\":{\"path\":\"domainObject.propertyDetails.units\"},\"aggs\":{\"UsageType \":{\"terms\":{\"field\":\"domainObject.propertyDetails.units.usageCategoryMinor.keyword\",\"size\":200},\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.amountPaid\"}},\"Transactions\":{\"value_count\":{\"field\":\"dataObject.transactionId.keyword\"}},\"Assessed Properties\":{\"nested\":{\"path\":\"Data.propertyDetails\"},\"aggs\":{\"attr\":{\"cardinality\":{\"field\":\"Data.propertyDetails.assessmentNumber.keyword\"}}}}}}}}}}"
       }
     ],
     "filterKeys": [
@@ -1304,7 +1303,8 @@
         "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\"usageId\" : \"domainObject.propertyDetails.units.usageCategoryMajor.keyword\",\"minorUsageId\" : \"domainObject.propertyDetails.units.usageCategoryMinor.keyword\",\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\" }",
         "dateRefField": "dataObject.Bill.billDetails.receiptDate",
         "indexName": "dss-collection_v2",
-        "aggrQuery": "{\"aggs\":{\"attrs_root\":{\"nested\":{\"path\":\"domainObject.propertyDetails.units\"},\"aggs\":{\"UsageType \":{\"terms\":{\"field\":\"domainObject.propertyDetails.units.usageCategorySubMinor.keyword\",\"size\":200},\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.amountPaid\"}},\"Transactions\":{\"value_count\":{\"field\":\"dataObject.transactionId.keyword\"}},\"Assessed Properties\":{\"nested\":{\"path\":\"Data.propertyDetails\"},\"aggs\":{\"attr\":{\"cardinality\":{\"field\":\"Data.propertyDetails.assessmentNumber.keyword\"}}}}}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"dataObject.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"root\":{\"nested\":{\"path\":\"domainObject.propertyDetails.units\"},\"aggs\":{\"UsageType \":{\"terms\":{\"field\":\"domainObject.propertyDetails.units.usageCategorySubMinor.keyword\",\"size\":200},\"aggs\":{\"Total Collection\":{\"reverse_nested\":{},\"aggs\":{\"top_tags_per_comment\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.amountPaid\"}}}},\"Transactions\":{\"reverse_nested\":{},\"aggs\":{\"top_tags_per_comment\":{\"cardinality\":{\"field\":\"dataObject.transactionId.keyword\"}}}},\"Assessed Properties\":{\"nested\":{\"path\":\"domainObject.propertyDetails\"},\"aggs\":{\"attr\":{\"cardinality\":{\"field\":\"domainObject.propertyDetails.assessmentNumber.keyword\"}}}}}}}}}}}}",
+        "aggrQuerybc": "{\"aggs\":{\"attrs_root\":{\"nested\":{\"path\":\"domainObject.propertyDetails.units\"},\"aggs\":{\"UsageType \":{\"terms\":{\"field\":\"domainObject.propertyDetails.units.usageCategorySubMinor.keyword\",\"size\":200},\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.amountPaid\"}},\"Transactions\":{\"value_count\":{\"field\":\"dataObject.transactionId.keyword\"}},\"Assessed Properties\":{\"nested\":{\"path\":\"Data.propertyDetails\"},\"aggs\":{\"attr\":{\"cardinality\":{\"field\":\"Data.propertyDetails.assessmentNumber.keyword\"}}}}}}}}}}"
       }
     ],
     "filterKeys": [
