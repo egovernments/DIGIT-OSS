@@ -150,7 +150,10 @@ public class AssessmentService {
 
 		Boolean isWorkflowTriggeredByFieldChange = false;
 		List<String> fieldsUpdated = diffService.getUpdatedFields(assessment, assessmentFromSearch);
-		isWorkflowTriggeredByFieldChange = intersection(Arrays.asList(config.getAssessmentWorkflowTriggerParams().split(",")), fieldsUpdated);
+
+		if(!CollectionUtils.isEmpty(fieldsUpdated))
+			isWorkflowTriggeredByFieldChange = intersection(Arrays.asList(config.getAssessmentWorkflowTriggerParams().split(",")), fieldsUpdated);
+
 
 		List<String> objectsAdded = diffService.getObjectsAdded(assessment, assessmentFromSearch);
 
