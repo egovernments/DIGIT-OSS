@@ -3114,7 +3114,7 @@ export const searchBill = async (dispatch, applicationNumber, tenantId) => {
 //   return fees;
 // };
 
-export const generateBillForBPA = async (dispatch, applicationNumber, tenantId) => {
+export const generateBillForBPA = async (dispatch, applicationNumber, tenantId, businessService) => {
   try {
     if (applicationNumber && tenantId) {
       const queryObj = [
@@ -3126,7 +3126,7 @@ export const generateBillForBPA = async (dispatch, applicationNumber, tenantId) 
           key: "consumerCode",
           value: applicationNumber
         },
-        { key: "services", value: "BPA" }
+        { key: "services", value: businessService }
       ];
       const payload = await createBill(queryObj,dispatch);
       if (payload && payload.Bill[0]) {

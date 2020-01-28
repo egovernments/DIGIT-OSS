@@ -15,8 +15,8 @@ import {
   getTransformedLocale,
   setBusinessServiceDataToLocalStorage
 } from "egov-ui-framework/ui-utils/commons";
-// import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
-// import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
+import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
@@ -365,6 +365,7 @@ const screenConfig = {
       "applicationNumber"
     );
     const tenantId = getQueryArg(window.location.href, "tenantId");
+    dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));    
     setSearchResponse(state, dispatch, applicationNumber, tenantId, action);
 
     const queryObject = [

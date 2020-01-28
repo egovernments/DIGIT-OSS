@@ -115,6 +115,7 @@ class WorkFlowContainer extends React.Component {
       moduleName,
       updateUrl
     } = this.props;
+    const tenant = getQueryArg(window.location.href, "tenantId");
     let data = get(preparedFinalObject, dataPath, []);
     if (moduleName === "NewTL") {
       if (getQueryArg(window.location.href, "edited")) {
@@ -191,14 +192,25 @@ class WorkFlowContainer extends React.Component {
         )}&applicationNumber=${applicationNumber}&tenantId=${tenant}&secondNumber=${licenseNumber}`;
       }
     } catch (e) {
-      toggleSnackbar(
-        true,
-        {
-          labelName: "Workflow update error!",
-          labelKey: "ERR_WF_UPDATE_ERROR"
-        },
-        "error"
-      );
+      if(moduleName === "BPA") {
+        toggleSnackbar(
+          true,
+          {
+            labelName: "Documents Required",
+            labelKey: e.message
+          },
+          "error"
+        );
+      } else {
+        toggleSnackbar(
+          true,
+          {
+            labelName: "Workflow update error!",
+            labelKey: "ERR_WF_UPDATE_ERROR"
+          },
+          "error"
+        );
+      }
     }
   };
 
@@ -231,6 +243,8 @@ class WorkFlowContainer extends React.Component {
 
   getRedirectUrl = (action, businessId, moduleName) => {
     const isAlreadyEdited = getQueryArg(window.location.href, "edited");
+    const tenant = getQueryArg(window.location.href, "tenantId");
+
     if (moduleName === "NewTL") {
       switch (action) {
         case "PAY":
@@ -250,9 +264,15 @@ class WorkFlowContainer extends React.Component {
             : `/fire-noc/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit`;
       }
     } else if (moduleName === "BPA") {
+      const { ProcessInstances } = this.props;
+      let applicationStatus;
+      if ( ProcessInstances && ProcessInstances.length > 0 ) {
+          applicationStatus = get( ProcessInstances[ProcessInstances.length - 1], "state.applicationStatus" );
+      }
       switch (action) {
         case "PAY":
-          return `/egov-common/pay?consumerCode=${businessId}&tenantId=${tenant}`;
+          let bservice = ((applicationStatus =="PENDING_APPL_FEE") ? "BPA.NC_APP_FEE" :"BPA.NC_SAN_FEE");
+          return `/egov-common/pay?consumerCode=${businessId}&tenantId=${tenant}&businessService=${bservice}`;
         case "EDIT":
           return isAlreadyEdited
             ? `/egov-bpa/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit&edited=true`
