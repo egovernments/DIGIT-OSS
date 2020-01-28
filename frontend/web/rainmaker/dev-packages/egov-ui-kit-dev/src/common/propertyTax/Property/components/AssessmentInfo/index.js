@@ -144,8 +144,7 @@ const transform = (floor, key, generalMDMSDataById, propertyDetails) => {
 //   };
 const getAssessmentInfo = (propertyDetails, generalMDMSDataById) => {
   const { units = [], noOfFloors,additionalDetails={} } = propertyDetails || {};
-  var construction_date =(additionalDetails && additionalDetails.constructionYear)? new Date(additionalDetails.constructionYear).toLocaleDateString():null;
-
+  var construction_date =(additionalDetails && additionalDetails.constructionYear)? new Date(additionalDetails.constructionYear).toJSON().slice(0,10).split('-').reverse().join('-'):null;
   return (
     propertyDetails && [
       {
