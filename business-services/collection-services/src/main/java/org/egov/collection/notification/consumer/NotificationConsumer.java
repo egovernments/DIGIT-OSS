@@ -232,7 +232,7 @@ public class NotificationConsumer {
 		List<String> masterData = new ArrayList<>();
 		StringBuilder uri = new StringBuilder();
 		uri.append(mdmsHost).append(mdmsUrl);
-		MdmsCriteriaReq request = getRequestForEvents(requestInfo, tenantId.split(".")[0]);
+		MdmsCriteriaReq request = getRequestForEvents(requestInfo, tenantId.split("\\.")[0]);
 		try {
 			Object response = restTemplate.postForObject(uri.toString(), request, Map.class);
 			masterData = JsonPath.read(response, BUSINESSSERVICE_CODES_JSONPATH);
