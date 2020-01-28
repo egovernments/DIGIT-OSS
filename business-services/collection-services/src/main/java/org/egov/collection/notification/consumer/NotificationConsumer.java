@@ -125,7 +125,7 @@ public class NotificationConsumer {
 	 */
 	private void sendNotification(PaymentRequest receiptReq){
 		Payment receipt = receiptReq.getPayment();
-		List<String> businessServiceAllowed = fetchBusinessServiceFromMDMS(receiptReq.getRequestInfo());
+		List<String> businessServiceAllowed = fetchBusinessServiceFromMDMS(receiptReq.getRequestInfo(), receiptReq.getPayment().getTenantId());
 		if(!CollectionUtils.isEmpty(businessServiceAllowed)) {
 			for(PaymentDetail detail: receipt.getPaymentDetails()) {
 				Bill bill = detail.getBill();
@@ -228,11 +228,11 @@ public class NotificationConsumer {
 	 * @param requestInfo
 	 * @return
 	 */
-	private List<String> fetchBusinessServiceFromMDMS(RequestInfo requestInfo){
+	private List<String> fetchBusinessServiceFromMDMS(RequestInfo requestInfo, String tenantId){
 		List<String> masterData = new ArrayList<>();
 		StringBuilder uri = new StringBuilder();
 		uri.append(mdmsHost).append(mdmsUrl);
-		MdmsCriteriaReq request = getRequestForEvents(requestInfo, "pb");
+		MdmsCriteriaReq request = getRequestForEvents(requestInfo, tenantId.split(".")[0]);
 		try {
 			Object response = restTemplate.postForObject(uri.toString(), request, Map.class);
 			masterData = JsonPath.read(response, BUSINESSSERVICE_CODES_JSONPATH);
