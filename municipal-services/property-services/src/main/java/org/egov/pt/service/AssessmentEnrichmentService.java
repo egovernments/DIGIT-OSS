@@ -166,15 +166,22 @@ public class AssessmentEnrichmentService {
      */
     private void enrichPropertyFromAssessment(Property property, Assessment assessment){
 
-        Map<String, UnitUsage> unitIdInUnitUsage = assessment.getUnitUsageList().stream().collect(Collectors.toMap(UnitUsage::getUnitId, Function.identity()));
+        Map<String, UnitUsage> unitIdToUnitUsage = assessment.getUnitUsageList().stream().collect(Collectors.toMap(UnitUsage::getUnitId, Function.identity()));
 
         List<Unit> units  = property.getUnits();
 
         for(Unit unit : units){
-            if(unitIdInUnitUsage.containsKey(unit.getId())){
-                unit.setOccupancyDate(unitIdInUnitUsage.get(unit.getId()).getOccupancyDate());
-                unit.setOccupancyType(unitIdInUnitUsage.get(unit.getId()).getOccupancyType());
-                unit.setUsageCategory(unitIdInUnitUsage.get(unit.getId()).getUsageCategory());
+
+            if(unitIdToUnitUsage.containsKey(unit.getId())){
+                UnitUsage unitUsage = unitIdToUnitUsage.get(unit.getId());
+                if(unitUsage.getOccupancyDate()!=null)
+                    unit.setOccupancyDate(unitUsage.getOccupancyDate());
+
+                if(unitUsage.getOccupancyType()!=null)
+                    unit.setOccupancyType(unitUsage.getOccupancyType());
+
+                if(unitUsage.getUsageCategory()!=null)
+                 unit.setUsageCategory(unitUsage.getUsageCategory());
             }
         }
 
