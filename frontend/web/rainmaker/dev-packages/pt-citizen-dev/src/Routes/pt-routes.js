@@ -23,6 +23,12 @@ const Property = asyncComponent(() =>
     module => module.default
   )
 );
+const ApplicationPreview = asyncComponent(() =>
+  import("egov-ui-kit/common/propertyTax/ApplicationPreview").then(
+    module => module.default
+  )
+);
+
 const MyReceipts = asyncComponent(() =>
   import("../Screens/MyReceipts").then(module => module.default)
 );
@@ -111,6 +117,17 @@ const routes = [
   {
     path: "property-tax/my-properties/property/:propertyId/:tenantId",
     component: Property,
+    needsAuthentication: true,
+    options: {
+      // hideTitle:true,
+      hideFooter: true,
+      hideTitle: true
+      // hideBackButton: true,
+    }
+  },
+  {
+    path: "property-tax/application-preview",
+    component: ApplicationPreview,
     needsAuthentication: true,
     options: {
       // hideTitle:true,

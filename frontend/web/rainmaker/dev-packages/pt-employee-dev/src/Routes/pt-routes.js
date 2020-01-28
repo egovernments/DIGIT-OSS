@@ -7,7 +7,10 @@ const PTHome = Loadable({
   loader: () => import("../Screens/PTHome"),
   loading: Loading
 });
-
+const ApplicationPreview = Loadable({
+  loader: () => import("egov-ui-kit/common/propertyTax/ApplicationPreview"),
+  loading: Loading
+});
 const HowItWorks = Loadable({
   loader: () => import("egov-ui-kit/common/propertyTax/HowItWorks"),
   loading: Loading
@@ -79,7 +82,17 @@ const routes = [
       // hideBackButton: true,
     }
   },
-
+  {
+    path: "property-tax/application-preview",
+    component: ApplicationPreview,
+    needsAuthentication: true,
+    options: {
+      // hideTitle:true,
+      hideFooter: true,
+      hideTitle: true
+      // hideBackButton: true,
+    }
+  },
   {
     path: "property-tax/assessment-form",
     component: FormWizard,
