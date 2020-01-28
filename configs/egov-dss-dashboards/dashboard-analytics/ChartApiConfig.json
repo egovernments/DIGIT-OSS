@@ -1,7 +1,162 @@
 {
 
+  "_comment": "dss-collectionindex new queries ",
+  "totalCollection": {
+    "chartName": "DSS_TOTAL_COLLECTION",
+    "queries": [
+      {
+        "module": "PT",
+        "dateRefField": "dataObject.Bill.billDetails.receiptDate",
+        "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\"}",
+        "indexName": "dss-collection_v2",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"dataObject.Bill.billDetails.businessService.keyword\":\"PT\"}},{\"term\":{\"dataObject.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.amountPaid\"}}}}}}"
+      },
+      {
+        "module": "TL",
+        "dateRefField": "dataObject.Bill.billDetails.receiptDate",
+        "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\"}",
+        "indexName": "dss-collection_v2",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"dataObject.Bill.billDetails.businessService.keyword\":\"TL\"}},{\"term\":{\"dataObject.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.amountPaid\"}}}}}}"
+      }
+    ],
+    "chartType": "metric",
+    "valueType": "Amount",
+    "drillChart": "none",
+    "documentType": "_doc",
+    "action": "",
+    "aggregationPaths": [
+      "Total Collection"
+    ],
+    "insight": {
+      "chartResponseMap" : "totalCollection",
+      "action" : "differenceOfNumbers",
+      "upwardIndicator" : "positive",
+      "downwardIndicator" : "negative",
+      "textMessage" : "$indicator$value% than last $insightInterval",
+      "colorCode" : "#228B22",
+      "insightInterval" : "month"
+    },
+    "_comment": " "
+  },
+  "cumulativeCollection": {
+    "chartName": "DSS_TOTAL_CUMULATIVE_COLLECTION",
+    "queries": [
+      {
+        "module": "COMMON",
+        "dateRefField": "dataObject.Bill.billDetails.receiptDate",
+        "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\r\n  \"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \n\"tenantId\" : \"dataObject.tenantId\"}",
+        "indexName": "dss-collection_v2",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"terms\":{\"dataObject.Bill.billDetails.businessService.keyword\":[\"PT\",\"TL\"]}},{\"term\":{\"dataObject.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"Collections\":{\"date_histogram\":{\"field\":\"dataObject.Bill.billDetails.receiptDate\",\"interval\":\"intervalvalue\"},\"aggs\":{\"Sum\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.amountPaid\"}}}}}}}}"
+      }
+    ],
+    "chartType": "line",
+    "valueType": "amount",
+    "action": "",
+    "drillChart": "none",
+    "documentType": "_doc",
+    "aggregationPaths": [
+      "Collections"
+    ],
+    "isCumulative": true,
+    "interval": "month",
+    "insight": {
+    },
+    "_comment": " "
+  },
+  "targetAchieved": {
+    "chartName": "DSS_TARGET_ACHIEVED",
+    "queries": [
+      {
+        "module": "COMMON",
+        "requestQueryMap": "{\r\n  \"module\" : \"businessService.keyword\", \n\"tenantId\" : \"tenantIdForMunicipalCorporation\"}",
+        "dateRefField": "",
+        "indexName": "dss-target_v1",
+        "aggrQuery": "{\"aggs\":{\"Actual collection\":{\"sum\":{\"field\":\"budgetProposedForMunicipalCorporation\"}}}}"
+      },
+      {
+        "module": "COMMON",
+        "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\r\n  \"district\" : \"dataObject.tenantData.cityDistrictCode\", \"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \n\"tenantId\" : \"dataObject.tenantId\"}",
+        "dateRefField": "dataObject.Bill.billDetails.receiptDate",
+        "indexName": "dss-collection_v2",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"dataObject.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.amountPaid\"}}}}}}"
+      }
 
-  "topPerformingUlbsWithoutFilter": {
+    ],
+    "chartType": "metric",
+    "valueType": "percentage",
+    "drillChart": "none",
+    "documentType": "_doc",
+    "action": "percentage",
+    "aggregationPaths": [
+      "Total Collection",
+      "Actual collection"
+    ],
+    "insight": {
+      "chartResponseMap" : "targetAchieved",
+      "action" : "differenceOfNumbers",
+      "upwardIndicator" : "positive",
+      "downwardIndicator" : "negative",
+      "textMessage" : "$indicator$value% than last $insightInterval",
+      "colorCode" : "#228B22",
+      "insightInterval" : "month"
+    },
+    "_comment": " "
+  },
+  "todaysCollection": {
+    "chartName": "DSS_TOTAL_COLLECTION_TODAY",
+    "queries": [
+      {
+        "module": "PT",
+        "dateRefField": "",
+        "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\"}",
+        "indexName": "dss-collection_v2",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"dataObject.Bill.billDetails.status.keyword\":\"Approved\"}},{\"term\":{\"dataObject.Bill.billDetails.businessService.keyword\":\"PT\"}},{\"range\":{\"dataObject.@timestamp\":{\"gte\":\"now-24h\",\"lte\":\"now\"}}}]}},\"aggs\":{\"Total collection\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.amountPaid\"}}}}}}"
+      },
+      {
+        "module": "TL",
+        "dateRefField": "",
+        "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\"}",
+        "indexName": "dss-collection_v2",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"dataObject.Bill.billDetails.status.keyword\":\"Approved\"}},{\"term\":{\"dataObject.Bill.billDetails.businessService.keyword\":\"TL\"}},{\"range\":{\"dataObject.@timestamp\":{\"gte\":\"now-24h\",\"lte\":\"now\"}}}]}},\"aggs\":{\"Total collection\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.amountPaid\"}}}}}}"
+      }
+    ],
+    "chartType": "metric",
+    "valueType": "Amount",
+    "drillChart": "none",
+    "documentType": "_doc",
+    "action": "",
+    "aggregationPaths": [
+      "Total Collection"
+    ],
+    "insight": {
+
+    },
+    "_comment": " "
+  },
+  "totalCollectionDeptWise": {
+    "chartName": "DSS_TOTAL_CUMULATIVE_COLLECTION:_DEPARTMENT_WISE",
+    "queries": [
+      {
+        "module": "COMMON",
+        "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\"}",
+        "dateRefField": "dataObject.Bill.billDetails.receiptDate",
+        "indexName": "dss-collection_v2",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"dataObject.Bill.billDetails.status.keyword\":\"Approved\"}},{\"terms\":{\"dataObject.Bill.billDetails.businessService.keyword\":[\"PT\",\"TL\"]}}]}},\"aggs\":{\"Business Service\":{\"terms\":{\"field\":\"dataObject.Bill.billDetails.businessService.keyword\"},\"aggs\":{\"total\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.amountPaid\"}}}}}}}}"
+      }
+    ],
+    "chartType": "pie",
+    "valueType": "Amount",
+    "drillChart": "none",
+    "documentType": "_doc",
+    "action": "",
+    "aggregationPaths": [
+      "Business Service"
+    ],
+    "insight": {
+    },
+    "_comment": " "
+  },
+  "topPerformingUlbs": {
     "chartName": "DSS_PT_TOP_3_PERFORMING_ULBS",
     "queries": [
       {
@@ -13,10 +168,10 @@
       },
       {
         "module": "COMMON",
-        "requestQueryMap": "{\r\n  \"module\" : \"Data.Bill.billDetails.businessService.keyword\"}",
-        "dateRefField": "Data.Bill.billDetails.receiptDate",
-        "indexName": "collectionsindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"Data.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"Total Collection\":{\"terms\":{\"field\":\"Data.tenantId.keyword\",\"size\":\"200\",\"order\":{\"Sum\":\"desc\"}},\"aggs\":{\"Sum\":{\"sum\":{\"field\":\"Data.Bill.billDetails.amountPaid\"}}}}}}}}"
+        "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\r\n  \"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \n\"tenantId\" : \"dataObject.tenantId\"}",
+        "dateRefField": "dataObject.Bill.billDetails.receiptDate",
+        "indexName": "dss-collection_v2",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"dataObject.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"Total Collection\":{\"terms\":{\"field\":\"dataObject.tenantId.keyword\",\"size\":\"200\",\"order\":{\"Sum\":\"desc\"}},\"aggs\":{\"Sum\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.amountPaid\"}}}}}}}}"
       }
     ],
     "chartType": "perform",
@@ -34,7 +189,7 @@
     },
     "_comment": " Top Performing Ulbs for target achieved"
   },
-  "bottomPerformingUlbsWithoutFilter": {
+  "bottomPerformingUlbs": {
     "chartName": "DSS_PT_BOTTOM_3_PERFORMING_ULBS",
     "queries": [
       {
@@ -46,10 +201,10 @@
       },
       {
         "module": "COMMON",
-        "requestQueryMap": "{\"module\" : \"Data.Bill.billDetails.businessService.keyword\" }",
-        "dateRefField": "Data.Bill.billDetails.receiptDate",
-        "indexName": "collectionsindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"Data.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"Total Collection\":{\"terms\":{\"field\":\"Data.tenantId.keyword\",\"size\":\"200\",\"order\":{\"Sum\":\"asc\"}},\"aggs\":{\"Sum\":{\"sum\":{\"field\":\"Data.Bill.billDetails.amountPaid\"}}}}}}}}"
+        "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"tenantId\" : \"dataObject.tenantId\" }",
+        "dateRefField": "dataObject.Bill.billDetails.receiptDate",
+        "indexName": "dss-collection_v2",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"dataObject.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"Total Collection\":{\"terms\":{\"field\":\"dataObject.tenantId.keyword\",\"size\":\"200\",\"order\":{\"Sum\":\"asc\"}},\"aggs\":{\"Sum\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.amountPaid\"}}}}}}}}"
       }
     ],
     "chartType": "perform",
@@ -67,89 +222,29 @@
     },
     "_comment": " Bottom Performing Ulbs for target achieved"
   },
-  "topPerformingUlbsCompletionRateWithoutFilter": {
-    "chartName": "DSS_PT_TOP_3_PERFORMING_ULBS",
+  "licenseByLicenseType": {
+    "chartName": "DSS_TL_LICENSE_BY_TYPE",
     "queries": [
       {
-        "module": "PGR",
-        "requestQueryMap": "{\"wardId\" : \"Data.complaintWard.name.keyword\", \"module\" : \"businessService.keyword\" , \"district\" : \"Data.tenantData.city.districtCode\"}",
-        "dateRefField": "Data.@timestamp",
-        "indexName": "pgrindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Closed Application\":{\"filter\":{\"term\":{\"Data.status.keyword\":\"resolved\"}},\"aggs\":{\"count\":{\"terms\":{\"field\":\"Data.tenantId.keyword\",\"order\":{\"_key\":\"asc\"},\"size\":100},\"aggs\":{\"tenant_count\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}}}},\"Total Application\":{\"terms\":{\"field\":\"Data.tenantId.keyword\",\"order\":{\"_key\":\"asc\"},\"size\":100},\"aggs\":{\"tenant_count\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}}}}}}"
-      },
-      {
-        "module": "PT",
-        "requestQueryMap": "{\"wardId\" : \"Data.ward.name.keyword\", \"module\" : \"businessService.keyword\",  \"district\" : \"Data.tenantData.city.districtCode\"}",
-        "dateRefField": "Data.@timestamp",
-        "indexName": "ptindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Closed Application\":{\"filter\":{\"exists\":{\"field\":\"Data.propertyId.keyword\"}},\"aggs\":{\"count\":{\"terms\":{\"field\":\"Data.tenantId.keyword\"},\"aggs\":{\"tenant_count\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}}}},\"Total Application\":{\"terms\":{\"field\":\"Data.tenantId.keyword\"},\"aggs\":{\"tenant_count\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}}}}}}"
-      },
-      {
-        "module": "TL",
-        "requestQueryMap": "{\"wardId\" : \"Data.ward.name.keyword\", \"module\" : \"businessService.keyword\",  \"district\" : \"Data.tenantData.city.districtCode\"}",
-        "dateRefField": "Data.tradelicense.applicationdate",
-        "indexName": "tlindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Closed Application\":{\"filter\":{\"exists\":{\"field\":\"Data.tradelicense.issueddate\"}},\"aggs\":{\"count\":{\"terms\":{\"field\":\"Data.tenantData.code.keyword\"},\"aggs\":{\"tenant_count\":{\"value_count\":{\"field\":\"Data.tenantData.code.keyword\"}}}}}},\"Total Application\":{\"filter\":{\"exists\":{\"field\":\"Data.tradelicense.applicationdate\"}},\"aggs\":{\"count\":{\"terms\":{\"field\":\"Data.tenantData.code.keyword\"},\"aggs\":{\"tenant_count\":{\"value_count\":{\"field\":\"Data.tenantData.code.keyword\"}}}}}}}}}}"
+        "module": "COMMON",
+        "requestQueryMap": "{\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"tenantId\" : \"dataObject.tenantData.code\", \"district\" : \"dataObject.tenantData.cityDistrictCode\"}",
+        "dateRefField": "dataObject.Bill.billDetails.receiptDate",
+        "indexName": "dss-collection_v2",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"dataObject.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"License Instrument Type\":{\"terms\":{\"field\":\"dataObject.instrument.typeName.keyword\"},\"aggs\":{\"Licens Issued\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.amountPaid\"}}}}}}}}"
       }
     ],
-    "chartType": "perform",
-    "valueType": "percentage",
-    "drillChart": "none",
+    "chartType": "pie",
+    "valueType": "number",
+    "action": "",
     "documentType": "_doc",
-    "action": "percentage",
-    "plotLabel": "DSS_COMPLETION_RATE",
-    "order": "desc",
-    "limit": 3,
+    "drillChart": "none",
     "aggregationPaths": [
-      "Closed Application",
-      "Total Application"
+      "License Instrument Type"
     ],
     "insight": {
     },
-    "_comment": " Top Performing Ulbs for Completion rate"
+    "_comment": " License Application which are issued by License Type"
   },
-  "bottomPerformingUlbsCompletionRateWithoutFilter": {
-    "chartName": "DSS_PT_BOTTOM_3_PERFORMING_ULBS",
-    "queries": [
-      {
-        "module": "PGR",
-        "requestQueryMap": "{\"wardId\" : \"Data.complaintWard.name.keyword\", \"module\" : \"businessService.keyword\", \"district\" : \"Data.tenantData.city.districtCode\"}",
-        "dateRefField": "Data.@timestamp",
-        "indexName": "pgrindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Closed Application\":{\"filter\":{\"term\":{\"Data.status.keyword\":\"resolved\"}},\"aggs\":{\"count\":{\"terms\":{\"field\":\"Data.tenantId.keyword\"},\"aggs\":{\"tenant_count\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}}}},\"Total Application\":{\"terms\":{\"field\":\"Data.tenantId.keyword\"},\"aggs\":{\"tenant_count\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}}}}}}"
-      },
-      {
-        "module": "PT",
-        "requestQueryMap": "{\"wardId\" : \"Data.ward.name.keyword\", \"module\" : \"businessService.keyword\",\"district\" : \"Data.tenantData.city.districtCode\"}",
-        "dateRefField": "Data.@timestamp",
-        "indexName": "ptindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Closed Application\":{\"filter\":{\"exists\":{\"field\":\"Data.propertyId.keyword\"}},\"aggs\":{\"count\":{\"terms\":{\"field\":\"Data.tenantId.keyword\"},\"aggs\":{\"tenant_count\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}}}},\"Total Application\":{\"terms\":{\"field\":\"Data.tenantId.keyword\"},\"aggs\":{\"tenant_count\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}}}}}}"
-      },
-      {
-        "module": "TL",
-        "requestQueryMap": "{\"wardId\" : \"Data.ward.name.keyword\", \"module\" : \"businessService.keyword\", \"district\" : \"Data.tenantData.city.districtCode\"}",
-        "dateRefField": "Data.tradelicense.applicationdate",
-        "indexName": "tlindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Closed Application\":{\"filter\":{\"exists\":{\"field\":\"Data.tradelicense.issueddate\"}},\"aggs\":{\"count\":{\"terms\":{\"field\":\"Data.tenantData.code.keyword\"},\"aggs\":{\"tenant_count\":{\"value_count\":{\"field\":\"Data.tenantData.code.keyword\"}}}}}},\"Total Application\":{\"filter\":{\"exists\":{\"field\":\"Data.tradelicense.applicationdate\"}},\"aggs\":{\"count\":{\"terms\":{\"field\":\"Data.tenantData.code.keyword\"},\"aggs\":{\"tenant_count\":{\"value_count\":{\"field\":\"Data.tenantData.code.keyword\"}}}}}}}}}}"
-      }
-    ],
-    "chartType": "perform",
-    "valueType": "percentage",
-    "drillChart": "none",
-    "documentType": "_doc",
-    "action": "percentage",
-    "plotLabel": "DSS_COMPLETION_RATE",
-    "order": "asc",
-    "limit": 3,
-    "aggregationPaths": [
-      "Closed Application",
-      "Total Application"
-    ],
-    "insight": {
-    },
-    "_comment": " Bottom Performing Ulbs for Completion rate"
-  },
-
 
   "_comment": "COMMON NON-COLLECTION CHARTS",
   "totalApplication": {
@@ -166,7 +261,7 @@
         "module": "TL",
         "indexName": "tlindex-v1",
         "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantid.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Total Application\":{\"cardinality\":{\"field\":\"Data.tradelicense.applicationnumber.keyword\"}}}}}}",
-        "requestQueryMap": "{\"wardId\" : \"Data.ward.name.keyword\", \r\n  \"district\" : \"Data.tenantData.city.districtCode\", \r\n\"tenantId\" : \"Data.tradelicense.tenantid\" \r\n}",
+        "requestQueryMap": "{\"wardId\" : \"Data.ward.name.keyword\", \r\n  \"district\" : \"Data.tenantData.city.districtCode\", \r\n\"tenantId\" : \"Data.tradelicense.tenaniId\" \r\n}",
         "dateRefField": "Data.tradelicense.applicationdate"
       },
       {
@@ -435,31 +530,6 @@
   },
 
   "_comment": "COMMON COLLECTION CHARTS",
-  "cumulativeCollection": {
-    "chartName": "DSS_TOTAL_CUMULATIVE_COLLECTION",
-    "queries": [
-      {
-        "module": "COMMON",
-        "dateRefField": "Data.Bill.billDetails.receiptDate",
-        "requestQueryMap": "{\r\n  \"module\" : \"Data.Bill.billDetails.businessService.keyword\", \n\"tenantId\" : \"Data.tenantId\"}",
-        "indexName": "collectionsindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"terms\":{\"Data.Bill.billDetails.businessService.keyword\":[\"PT\",\"TL\"]}},{\"term\":{\"Data.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"Collections\":{\"date_histogram\":{\"field\":\"Data.Bill.billDetails.receiptDate\",\"interval\":\"intervalvalue\"},\"aggs\":{\"Sum\":{\"sum\":{\"field\":\"Data.Bill.billDetails.amountPaid\"}}}}}}}}"
-      }
-    ],
-    "chartType": "line",
-    "valueType": "amount",
-    "action": "",
-    "drillChart": "none",
-    "documentType": "_doc",
-    "aggregationPaths": [
-      "Collections"
-    ],
-    "isCumulative": true,
-    "interval": "month",
-    "insight": {
-    },
-    "_comment": " "
-  },
   "targetCollection": {
     "chartName": "DSS_TARGET_COLLECTION",
     "queries": [
@@ -485,202 +555,6 @@
     },
     "_comment": " "
   },
-  "targetAchieved": {
-    "chartName": "DSS_TARGET_ACHIEVED",
-    "queries": [
-      {
-        "module": "COMMON",
-        "requestQueryMap": "{\r\n  \"module\" : \"businessService.keyword\", \n\"tenantId\" : \"tenantIdForMunicipalCorporation\"}",
-        "dateRefField": "",
-        "indexName": "dss-target_v1",
-        "aggrQuery": "{\"aggs\":{\"Actual collection\":{\"sum\":{\"field\":\"budgetProposedForMunicipalCorporation\"}}}}"
-      },
-      {
-        "module": "COMMON",
-        "requestQueryMap": "{\r\n  \"district\" : \"dataObject.tenantData.cityDistrictCode\", \"module\" : \"Data.Bill.billDetails.businessService.keyword\", \n\"tenantId\" : \"Data.tenantId\"}",
-        "dateRefField": "Data.Bill.billDetails.receiptDate",
-        "indexName": "collectionsindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"Data.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"Data.Bill.billDetails.amountPaid\"}}}}}}"
-      }
-
-    ],
-    "chartType": "metric",
-    "valueType": "percentage",
-    "drillChart": "none",
-    "documentType": "_doc",
-    "action": "percentage",
-    "aggregationPaths": [
-      "Total Collection",
-      "Actual collection"
-    ],
-    "insight": {
-      "chartResponseMap" : "targetAchieved",
-      "action" : "differenceOfNumbers",
-      "upwardIndicator" : "positive",
-      "downwardIndicator" : "negative",
-      "textMessage" : "$indicator$value% than last $insightInterval",
-      "colorCode" : "#228B22",
-      "insightInterval" : "month"
-    },
-    "_comment": " "
-  },
-  "totalCollection": {
-    "chartName": "DSS_TOTAL_COLLECTION",
-    "queries": [
-      {
-        "module": "PT",
-        "dateRefField": "Data.Bill.billDetails.receiptDate",
-        "requestQueryMap": "{\"module\" : \"Data.Bill.billDetails.businessService.keyword\", \"tenantId\" : \"Data.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\"}",
-        "indexName": "collectionsindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"Data.Bill.billDetails.businessService.keyword\":\"PT\"}},{\"term\":{\"Data.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"Data.Bill.billDetails.amountPaid\"}}}}}}"
-      },
-      {
-        "module": "TL",
-        "dateRefField": "Data.Bill.billDetails.receiptDate",
-        "requestQueryMap": "{\"module\" : \"Data.Bill.billDetails.businessService.keyword\", \"tenantId\" : \"Data.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\"}",
-        "indexName": "collectionsindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"Data.Bill.billDetails.businessService.keyword\":\"TL\"}},{\"term\":{\"Data.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"Data.Bill.billDetails.amountPaid\"}}}}}}"
-      }
-    ],
-    "chartType": "metric",
-    "valueType": "Amount",
-    "drillChart": "none",
-    "documentType": "_doc",
-    "action": "",
-    "aggregationPaths": [
-      "Total Collection"
-    ],
-    "insight": {
-      "chartResponseMap" : "totalCollection",
-      "action" : "differenceOfNumbers",
-      "upwardIndicator" : "positive",
-      "downwardIndicator" : "negative",
-      "textMessage" : "$indicator$value% than last $insightInterval",
-      "colorCode" : "#228B22",
-      "insightInterval" : "month"
-    },
-    "_comment": " "
-  },
-  "todaysCollection": {
-    "chartName": "DSS_TOTAL_COLLECTION_TODAY",
-    "queries": [
-      {
-        "module": "PT",
-        "dateRefField": "",
-        "requestQueryMap": "{\"module\" : \"Data.Bill.billDetails.businessService.keyword\", \"tenantId\" : \"Data.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\"}",
-        "indexName": "collectionsindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"Data.Bill.billDetails.status.keyword\":\"Approved\"}},{\"term\":{\"Data.Bill.billDetails.businessService.keyword\":\"PT\"}},{\"range\":{\"Date.@timestamp\":{\"gte\":\"now-24h\",\"lte\":\"now\"}}}]}},\"aggs\":{\"Total collection\":{\"sum\":{\"field\":\"Data.Bill.billDetails.amountPaid\"}}}}}}"
-      },
-      {
-        "module": "TL",
-        "dateRefField": "",
-        "requestQueryMap": "{\"module\" : \"Data.Bill.billDetails.businessService.keyword\", \"tenantId\" : \"Data.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\"}",
-        "indexName": "collectionsindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"Data.Bill.billDetails.status.keyword\":\"Approved\"}},{\"term\":{\"Data.Bill.billDetails.businessService.keyword\":\"TL\"}},{\"range\":{\"Date.@timestamp\":{\"gte\":\"now-24h\",\"lte\":\"now\"}}}]}},\"aggs\":{\"Total collection\":{\"sum\":{\"field\":\"Data.Bill.billDetails.amountPaid\"}}}}}}"
-      }
-    ],
-    "chartType": "metric",
-    "valueType": "Amount",
-    "drillChart": "none",
-    "documentType": "_doc",
-    "action": "",
-    "aggregationPaths": [
-      "Total Collection"
-    ],
-    "insight": {
-
-    },
-    "_comment": " "
-  },
-  "totalCollectionDeptWise": {
-    "chartName": "DSS_TOTAL_CUMULATIVE_COLLECTION:_DEPARTMENT_WISE",
-    "queries": [
-      {
-        "module": "COMMON",
-        "requestQueryMap": "{\"module\" : \"Data.Bill.billDetails.businessService.keyword\", \"tenantId\" : \"Data.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\"}",
-        "dateRefField": "Data.Bill.billDetails.receiptDate",
-        "indexName": "collectionsindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"Data.Bill.billDetails.status.keyword\":\"Approved\"}},{\"terms\":{\"Data.Bill.billDetails.businessService.keyword\":[\"PT\",\"TL\"]}}]}},\"aggs\":{\"Business Service\":{\"terms\":{\"field\":\"Data.Bill.billDetails.businessService.keyword\"},\"aggs\":{\"total\":{\"sum\":{\"field\":\"Data.Bill.billDetails.amountPaid\"}}}}}}}}"
-      }
-    ],
-    "chartType": "pie",
-    "valueType": "Amount",
-    "drillChart": "none",
-    "documentType": "_doc",
-    "action": "",
-    "aggregationPaths": [
-      "Business Service"
-    ],
-    "insight": {
-    },
-    "_comment": " "
-  },
-  "topPerformingUlbs": {
-    "chartName": "DSS_PT_TOP_3_PERFORMING_ULBS",
-    "queries": [
-      {
-        "module": "COMMON",
-        "requestQueryMap": "{\r\n  \"module\" : \"businessService.keyword\", \n\"tenantId\" : \"tenantIdForMunicipalCorporation\"}",
-        "dateRefField": "",
-        "indexName": "dss-target_v1",
-        "aggrQuery": "{\"aggs\":{\"Target Collection\":{\"terms\":{\"field\":\"tenantIdForMunicipalCorporation.keyword\",\"size\":\"200\",\"order\":{\"Sum\":\"desc\"}},\"aggs\":{\"Sum\":{\"sum\":{\"field\":\"budgetProposedForMunicipalCorporation\"}}}}}}"
-      },
-      {
-        "module": "COMMON",
-        "requestQueryMap": "{\r\n  \"module\" : \"Data.Bill.billDetails.businessService.keyword\", \n\"tenantId\" : \"Data.tenantId\"}",
-        "dateRefField": "Data.Bill.billDetails.receiptDate",
-        "indexName": "collectionsindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"Data.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"Total Collection\":{\"terms\":{\"field\":\"Data.tenantId.keyword\",\"size\":\"200\",\"order\":{\"Sum\":\"desc\"}},\"aggs\":{\"Sum\":{\"sum\":{\"field\":\"Data.Bill.billDetails.amountPaid\"}}}}}}}}"
-      }
-    ],
-    "chartType": "perform",
-    "valueType": "percentage",
-    "drillChart": "none",
-    "documentType": "_doc",
-    "action": "percentage",
-    "plotLabel": "DSS_TARGET_ACHIEVED",
-    "order": "desc",
-    "limit": 3,
-    "aggregationPaths": [
-      "Total Collection","Target Collection"
-    ],
-    "insight": {
-    },
-    "_comment": " Top Performing Ulbs for target achieved"
-  },
-  "bottomPerformingUlbs": {
-    "chartName": "DSS_PT_BOTTOM_3_PERFORMING_ULBS",
-    "queries": [
-      {
-        "module": "COMMON",
-        "requestQueryMap": "{\"module\" : \"businessService.keyword\",\"tenantId\" : \"tenantIdForMunicipalCorporation\" }",
-        "dateRefField": "",
-        "indexName": "dss-target_v1",
-        "aggrQuery": "{\"aggs\":{\"Target Collection\":{\"terms\":{\"field\":\"tenantIdForMunicipalCorporation.keyword\",\"size\":\"200\",\"order\":{\"Sum\":\"asc\"}},\"aggs\":{\"Sum\":{\"sum\":{\"field\":\"budgetProposedForMunicipalCorporation\"}}}}}}"
-      },
-      {
-        "module": "COMMON",
-        "requestQueryMap": "{\"module\" : \"Data.Bill.billDetails.businessService.keyword\", \"tenantId\" : \"Data.tenantId\" }",
-        "dateRefField": "Data.Bill.billDetails.receiptDate",
-        "indexName": "collectionsindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"Data.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"Total Collection\":{\"terms\":{\"field\":\"Data.tenantId.keyword\",\"size\":\"200\",\"order\":{\"Sum\":\"asc\"}},\"aggs\":{\"Sum\":{\"sum\":{\"field\":\"Data.Bill.billDetails.amountPaid\"}}}}}}}}"
-      }
-    ],
-    "chartType": "perform",
-    "valueType": "percentage",
-    "drillChart": "none",
-    "documentType": "_doc",
-    "action": "percentage",
-    "plotLabel": "DSS_TARGET_ACHIEVED",
-    "order": "asc",
-    "limit": 3,
-    "aggregationPaths": [
-      "Total Collection", "Target Collection"
-    ],
-    "insight": {
-    },
-    "_comment": " Bottom Performing Ulbs for target achieved"
-  },
   "collectionByUsageType": {
     "chartName": "DSS_PT_COLLECTION_BY_USAGE_TYPE",
     "queries": [
@@ -688,7 +562,7 @@
         "module": "COMMON",
         "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\" }",
         "dateRefField": "dataObject.Bill.billDetails.receiptDate",
-        "indexName": "dss-collection_v1",
+        "indexName": "dss-collection_v2",
         "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"dataObject.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"Usage Type\":{\"terms\":{\"field\":\"domainObject.propertyDetails.units.usageCategoryMajor.keyword\"},\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.amountPaid\"}}}}}}}}"
       }
     ],
@@ -855,330 +729,7 @@
   },
 
   "_comment": "PT COLLECTION CHARTS (Tax heads)",
-  "taxHeadsBreakupDDRRevenue": {
-    "chartName": "DSS_PT_TAX_HEAD_BREAKUP_REVENUE",
-    "queries": [
-      {
-        "module": "COMMON",
-        "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"usageId\" : \"domainObject.propertyDetails.usageCategoryMajor.keyword\",\"minorUsageId\" : \"domainObject.propertyDetails.usageCategoryMinor.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\" }",
-        "dateRefField": "dataObject.Bill.billDetails.receiptDate",
-        "indexName": "dss-collection_v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"dataObject.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"Total Amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.taxAndPayments.taxAmount\"}},\"PT Tax\":{\"filter\":{\"term\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":\"PT_TAX\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.amount\"}}}},\"Fire Cess\":{\"filter\":{\"term\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":\"PT_FIRE_CESS\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}},\"Cancer Cess\":{\"filter\":{\"term\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":\"PT_CANCER_CESS\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}},\"Rebate\":{\"filter\":{\"term\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":\"PT_TIME_REBATE\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}},\"Penalty\":{\"filter\":{\"term\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":\"PT_TIME_PENALTY\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}}}}}}"
-      }
-    ],
-    "isMdmsEnabled": true,
-    "filterKeys": [
-      {"key": "tenantId", "column": "DDRs"}
 
-    ],
-    "chartType": "table",
-    "valueType": "number",
-    "drillChart": "taxHeadsBreakupRevenue",
-    "isPostResponseHandler": true,
-    "documentType": "_doc",
-    "action": "",
-    "plotLabel": "DDRs",
-    "aggregationPaths": [
-      "Total Amount",
-      "PT Tax",
-      "Fire Cess",
-      "Cancer Cess",
-      "Rebate",
-      "Penalty"
-    ],
-    "pathDataTypeMapping": [
-      {
-        "Total Amount": "amount"
-      },
-      {
-        "PT Tax": "amount"
-      },
-      {
-        "Fire Cess": "amount"
-      },
-      {
-        "Cancer Cess": "amount"
-      },
-      {
-        "Rebate": "amount"
-      },
-      {
-        "Penalty": "amount"
-      }
-    ],
-    "insight": {
-    },
-    "_comment": ""
-  },
-  "taxHeadsBreakupRevenue": {
-    "chartName": "DSS_PT_TAX_HEAD_BREAKUP_REVENUE",
-    "queries": [
-      {
-        "module": "COMMON",
-        "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"usageId\" : \"domainObject.propertyDetails.usageCategoryMajor.keyword\",\"minorUsageId\" : \"domainObject.propertyDetails.usageCategoryMinor.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\" }",
-        "dateRefField": "dataObject.Bill.billDetails.receiptDate",
-        "indexName": "dss-collection_v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"dataObject.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"ULBs \":{\"terms\":{\"field\":\"dataObject.tenantId.keyword\",\"size\":200},\"aggs\":{\"Total Amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.taxAndPayments.taxAmount\"}},\"PT Tax\":{\"filter\":{\"term\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":\"PT_TAX\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.amount\"}}}},\"Fire Cess\":{\"filter\":{\"term\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":\"PT_FIRE_CESS\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}},\"Cancer Cess\":{\"filter\":{\"term\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":\"PT_CANCER_CESS\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}},\"Rebate\":{\"filter\":{\"term\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":\"PT_TIME_REBATE\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}},\"Penalty\":{\"filter\":{\"term\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":\"PT_TIME_PENALTY\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}}}}}}}}"
-      }
-    ],
-    "filterKeys": [
-      {"key": "tenantId", "column": "Boundary"}
-
-    ],
-    "chartType": "table",
-    "valueType": "number",
-    "drillChart": "taxHeadsBreakupBoundaryDrill",
-    "drillFields": [
-      "Ward",
-      ""
-    ],
-    "documentType": "_doc",
-    "action": "",
-    "plotLabel": "Boundary",
-    "aggregationPaths": [
-      "Total Amount",
-      "PT Tax",
-      "Fire Cess",
-      "Cancer Cess",
-      "Rebate",
-      "Penalty"
-    ],
-    "pathDataTypeMapping": [
-      {
-        "Total Amount": "amount"
-      },
-      {
-        "PT Tax": "amount"
-      },
-      {
-        "Fire Cess": "amount"
-      },
-      {
-        "Cancer Cess": "amount"
-      },
-      {
-        "Rebate": "amount"
-      },
-      {
-        "Penalty": "amount"
-      }
-    ],
-    "insight": {
-    },
-    "_comment": ""
-  },
-  "taxHeadsBreakupBoundaryDrill": {
-    "chartName": "Tax head Breakup boundary",
-    "queries": [
-      {
-        "module": "COMMON",
-        "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"usageId\" : \"domainObject.propertyDetails.usageCategoryMajor.keyword\",\"minorUsageId\" : \"domainObject.propertyDetails.usageCategoryMinor.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\" }",
-        "dateRefField": "dataObject.Bill.billDetails.receiptDate",
-        "indexName": "dss-collection_v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"dataObject.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"Ward \":{\"terms\":{\"field\":\"domainObject.ward.name.keyword\",\"size\":200},\"aggs\":{\"Total Amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.taxAndPayments.taxAmount\"}},\"PT Tax\":{\"filter\":{\"term\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":\"PT_TAX\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.amount\"}}}},\"Fire Cess\":{\"filter\":{\"term\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":\"PT_FIRE_CESS\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}},\"Cancer Cess\":{\"filter\":{\"term\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":\"PT_CANCER_CESS\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}},\"Rebate\":{\"filter\":{\"term\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":\"PT_TIME_REBATE\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}},\"Penalty\":{\"filter\":{\"term\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":\"PT_TIME_PENALTY\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}}}}}}}}"
-      }
-    ],
-    "filterKeys": [
-      {"key": "tenantId", "column": "Boundary"}
-    ],
-    "chartType": "table",
-    "valueType": "number",
-    "drillChart": "boundaryDrillDown",
-    "drillFields": [
-      "Ward",
-      ""
-    ],
-    "documentType": "_doc",
-    "action": "",
-    "plotLabel": "Boundary",
-    "aggregationPaths": [
-      "Total Amount",
-      "PT Tax",
-      "Fire Cess",
-      "Cancer Cess",
-      "Rebate",
-      "Penalty"
-    ],
-    "pathDataTypeMapping": [
-      {
-        "Total Amount": "amount"
-      },
-      {
-        "PT Tax": "amount"
-      },
-      {
-        "Fire Cess": "amount"
-      },
-      {
-        "Cancer Cess": "amount"
-      },
-      {
-        "Rebate": "amount"
-      },
-      {
-        "Penalty": "amount"
-      }
-    ],
-    "insight": {
-    },
-    "_comment": ""
-  },
-  "taxHeadsBreakupUsage": {
-    "chartName": "DSS_PT_TAX_HEAD_BREAKUP_USAGE",
-    "queries": [
-      {
-        "module": "COMMON",
-        "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\" }",
-        "dateRefField": "dataObject.Bill.billDetails.receiptDate",
-        "indexName": "dss-collection_v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"dataObject.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"Usage \":{\"terms\":{\"field\":\"domainObject.propertyDetails.units.usageCategoryMajor.keyword\",\"size\":200},\"aggs\":{\"Total Amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.taxAndPayments.taxAmount\"}},\"PT Tax\":{\"filter\":{\"term\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":\"PT_TAX\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.amount\"}}}},\"Fire Cess\":{\"filter\":{\"term\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":\"PT_FIRE_CESS\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}},\"Cancer Cess\":{\"filter\":{\"term\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":\"PT_CANCER_CESS\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}},\"Rebate\":{\"filter\":{\"term\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":\"PT_TIME_REBATE\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}},\"Penalty\":{\"filter\":{\"term\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":\"PT_TIME_PENALTY\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}}}}}}}}"
-      }
-    ],
-    "filterKeys": [
-      {"key": "usageId", "column": "Usage Type"}
-    ],
-    "chartType": "table",
-    "valueType": "number",
-    "drillChart": "taxHeadsBreakupUsageMinor",
-    "documentType": "_doc",
-    "action": "",
-    "plotLabel": "Usage Type",
-    "aggregationPaths": [
-      "Total Amount",
-      "PT Tax",
-      "Fire Cess",
-      "Cancer Cess",
-      "Rebate",
-      "Penalty"
-    ],
-    "pathDataTypeMapping": [
-      {
-        "Total Amount": "amount"
-      },
-      {
-        "PT Tax": "amount"
-      },
-      {
-        "Fire Cess": "amount"
-      },
-      {
-        "Cancer Cess": "amount"
-      },
-      {
-        "Rebate": "amount"
-      },
-      {
-        "Penalty": "amount"
-      }
-    ],
-    "insight": {
-    },
-    "_comment": ""
-  },
-  "taxHeadsBreakupUsageMinor": {
-    "chartName": "",
-    "queries": [
-      {
-        "module": "COMMON",
-        "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\"usageId\" : \"domainObject.propertyDetails.usageCategoryMajor.keyword\",\"minorUsageId\" : \"domainObject.propertyDetails.usageCategoryMinor.keyword\",\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\" }",
-        "dateRefField": "dataObject.Bill.billDetails.receiptDate",
-        "indexName": "dss-collection_v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"dataObject.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"Usage \":{\"terms\":{\"field\":\"domainObject.propertyDetails.usageCategoryMinor.keyword\",\"size\":200},\"aggs\":{\"Total Amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.taxAndPayments.taxAmount\"}},\"PT Tax\":{\"filter\":{\"term\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":\"PT_TAX\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.amount\"}}}},\"Fire Cess\":{\"filter\":{\"term\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":\"PT_FIRE_CESS\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}},\"Cancer Cess\":{\"filter\":{\"term\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":\"PT_CANCER_CESS\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}},\"Rebate\":{\"filter\":{\"term\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":\"PT_TIME_REBATE\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}},\"Penalty\":{\"filter\":{\"term\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":\"PT_TIME_PENALTY\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}}}}}}}}"
-      }
-    ],
-    "filterKeys": [
-      {"key": "minorUsageId", "column": "Minor Usage Type"}
-    ],
-    "chartType": "table",
-    "valueType": "number",
-    "drillChart": "taxHeadsBreakupUsageSubMinor",
-    "documentType": "_doc",
-    "action": "",
-    "plotLabel": "Minor Usage Type",
-    "aggregationPaths": [
-      "Total Amount",
-      "PT Tax",
-      "Fire Cess",
-      "Cancer Cess",
-      "Rebate",
-      "Penalty"
-    ],
-    "pathDataTypeMapping": [
-      {
-        "Total Amount": "amount"
-      },
-      {
-        "PT Tax": "amount"
-      },
-      {
-        "Fire Cess": "amount"
-      },
-      {
-        "Cancer Cess": "amount"
-      },
-      {
-        "Rebate": "amount"
-      },
-      {
-        "Penalty": "amount"
-      }
-    ],
-    "insight": {
-    },
-    "_comment": ""
-  },
-  "taxHeadsBreakupUsageSubMinor": {
-    "chartName": "",
-    "queries": [
-      {
-        "module": "COMMON",
-        "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\"usageId\" : \"domainObject.propertyDetails.usageCategoryMajor.keyword\",\"minorUsageId\" : \"domainObject.propertyDetails.usageCategoryMinor.keyword\",\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\" }",
-        "dateRefField": "dataObject.Bill.billDetails.receiptDate",
-        "indexName": "dss-collection_v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"dataObject.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"Usage \":{\"terms\":{\"field\":\"domainObject.propertyDetails.units.usageCategorySubMinor.keyword\",\"size\":200},\"aggs\":{\"Total Amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.taxAndPayments.taxAmount\"}},\"PT Tax\":{\"filter\":{\"term\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":\"PT_TAX\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.amount\"}}}},\"Fire Cess\":{\"filter\":{\"term\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":\"PT_FIRE_CESS\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}},\"Cancer Cess\":{\"filter\":{\"term\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":\"PT_CANCER_CESS\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}},\"Rebate\":{\"filter\":{\"term\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":\"PT_TIME_REBATE\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}},\"Penalty\":{\"filter\":{\"term\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":\"PT_TIME_PENALTY\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}}}}}}}}"
-      }
-    ],
-    "filterKeys": [
-      ""
-    ],
-    "chartType": "table",
-    "valueType": "number",
-    "drillChart": "",
-    "documentType": "_doc",
-    "action": "",
-    "plotLabel": "Sub Minor Usage Type",
-    "aggregationPaths": [
-      "Total Amount",
-      "PT Tax",
-      "Fire Cess",
-      "Cancer Cess",
-      "Rebate",
-      "Penalty"
-    ],
-    "pathDataTypeMapping": [
-      {
-        "Total Amount": "amount"
-      },
-      {
-        "PT Tax": "amount"
-      },
-      {
-        "Fire Cess": "amount"
-      },
-      {
-        "Cancer Cess": "amount"
-      },
-      {
-        "Rebate": "amount"
-      },
-      {
-        "Penalty": "amount"
-      }
-    ],
-    "insight": {
-    },
-    "_comment": ""
-  },
   "_comment": "PT COLLECTION CHARTS (Demands) ",
   "demandCollectionIndexDDRRevenue": {
     "chartName": "DSS_PT_DEMAND_COLLECTION_BOUNDARY",
@@ -1187,7 +738,7 @@
         "module": "COMMON",
         "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"usageId\" : \"domainObject.propertyDetails.usageCategoryMajor.keyword\",\"minorUsageId\" : \"domainObject.propertyDetails.usageCategoryMinor.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\" }",
         "dateRefField": "dataObject.Bill.billDetails.receiptDate",
-        "indexName": "dss-collection_v1",
+        "indexName": "dss-collection_v2",
         "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"dataObject.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.amountPaid\"}},\"Transactions\":{\"value_count\":{\"field\":\"dataObject.transactionId.keyword\"}},\"Assessed Properties\":{\"value_count\":{\"field\":\"domainObject.propertyDetails.assessmentNumber.keyword\"}}}}}}"
       },
       {
@@ -1240,7 +791,7 @@
         "module": "COMMON",
         "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"usageId\" : \"domainObject.propertyDetails.usageCategoryMajor.keyword\",\"minorUsageId\" : \"domainObject.propertyDetails.usageCategoryMinor.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\" }",
         "dateRefField": "dataObject.Bill.billDetails.receiptDate",
-        "indexName": "dss-collection_v1",
+        "indexName": "dss-collection_v2",
         "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"dataObject.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"ULBs \":{\"terms\":{\"field\":\"domainObject.tenantId.keyword\",\"size\":200},\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.amountPaid\"}},\"Transactions\":{\"value_count\":{\"field\":\"dataObject.transactionId.keyword\"}},\"Assessed Properties\":{\"value_count\":{\"field\":\"domainObject.propertyDetails.assessmentNumber.keyword\"}}}}}}}}"
       },
       {
@@ -1296,7 +847,7 @@
         "module": "COMMON",
         "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"usageId\" : \"domainObject.propertyDetails.usageCategoryMajor.keyword\",\"minorUsageId\" : \"domainObject.propertyDetails.usageCategoryMinor.keyword\",\"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\" }",
         "dateRefField": "dataObject.Bill.billDetails.receiptDate",
-        "indexName": "dss-collection_v1",
+        "indexName": "dss-collection_v2",
         "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"dataObject.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"Ward \":{\"terms\":{\"field\":\"domainObject.ward.name.keyword\",\"size\":200},\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.amountPaid\"}},\"Transactions\":{\"value_count\":{\"field\":\"dataObject.transactionId.keyword\"}},\"Assessed Properties\":{\"value_count\":{\"field\":\"domainObject.propertyDetails.assessmentNumber.keyword\"}}}}}}}}"
       }
     ],
@@ -1330,6 +881,333 @@
     },
     "_comment": ""
   },
+
+
+  "_comment": " PT Nested Array related new queries",
+  "taxHeadsBreakupDDRRevenue": {
+    "chartName": "DSS_PT_TAX_HEAD_BREAKUP_REVENUE",
+    "queries": [
+      {
+        "module": "COMMON",
+        "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"usageId\" : \"domainObject.propertyDetails.usageCategoryMajor.keyword\",\"minorUsageId\" : \"domainObject.propertyDetails.usageCategoryMinor.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\" }",
+        "dateRefField": "dataObject.Bill.billDetails.receiptDate",
+        "indexName": "dss-collection_v2",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"dataObject.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"Total Amount\":{\"nested\":{\"path\":\"dataObject.Bill.taxAndPayments\"},\"aggs\":{\"aggrFilter\":{\"filter\":{\"terms\":{\"dataObject.Bill.taxAndPayments.businessService.keyword\":[\"PT\"]}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.taxAndPayments.taxAmount\"}}}}}},\"PT Tax\":{\"nested\":{\"path\":\"dataObject.Bill.billDetails.billAccountDetails\"},\"aggs\":{\"aggrFilter\":{\"filter\":{\"terms\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":[\"PT_TAX\"]}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}}}},\"Fire Cess\":{\"nested\":{\"path\":\"dataObject.Bill.billDetails.billAccountDetails\"},\"aggs\":{\"aggrFilter\":{\"filter\":{\"terms\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":[\"PT_FIRE_CESS\"]}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}}}},\"Cancer Cess\":{\"nested\":{\"path\":\"dataObject.Bill.billDetails.billAccountDetails\"},\"aggs\":{\"aggrFilter\":{\"filter\":{\"terms\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":[\"PT_CANCER_CESS\"]}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}}}},\"Rebate\":{\"nested\":{\"path\":\"dataObject.Bill.billDetails.billAccountDetails\"},\"aggs\":{\"aggrFilter\":{\"filter\":{\"terms\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":[\"PT_TIME_REBATE\"]}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}}}},\"Penalty\":{\"nested\":{\"path\":\"dataObject.Bill.billDetails.billAccountDetails\"},\"aggs\":{\"aggrFilter\":{\"filter\":{\"terms\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":[\"PT_TIME_PENALTY\"]}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}}}}}}}}"
+      }
+    ],
+    "isMdmsEnabled": true,
+    "filterKeys": [
+      {"key": "tenantId", "column": "DDRs"}
+
+    ],
+    "chartType": "table",
+    "valueType": "number",
+    "drillChart": "taxHeadsBreakupRevenue",
+    "isPostResponseHandler": true,
+    "documentType": "_doc",
+    "action": "",
+    "plotLabel": "DDRs",
+    "aggregationPaths": [
+      "Total Amount",
+      "PT Tax",
+      "Fire Cess",
+      "Cancer Cess",
+      "Rebate",
+      "Penalty"
+    ],
+    "pathDataTypeMapping": [
+      {
+        "Total Amount": "amount"
+      },
+      {
+        "PT Tax": "amount"
+      },
+      {
+        "Fire Cess": "amount"
+      },
+      {
+        "Cancer Cess": "amount"
+      },
+      {
+        "Rebate": "amount"
+      },
+      {
+        "Penalty": "amount"
+      }
+    ],
+    "insight": {
+    },
+    "_comment": ""
+  },
+  "taxHeadsBreakupRevenue": {
+    "chartName": "DSS_PT_TAX_HEAD_BREAKUP_REVENUE",
+    "queries": [
+      {
+        "module": "COMMON",
+        "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"usageId\" : \"domainObject.propertyDetails.usageCategoryMajor.keyword\",\"minorUsageId\" : \"domainObject.propertyDetails.usageCategoryMinor.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\" }",
+        "dateRefField": "dataObject.Bill.billDetails.receiptDate",
+        "indexName": "dss-collection_v2",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"dataObject.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"ULBs \":{\"terms\":{\"field\":\"dataObject.tenantId.keyword\",\"size\":200},\"aggs\":{\"Total Amount\":{\"nested\":{\"path\":\"dataObject.Bill.taxAndPayments\"},\"aggs\":{\"aggrFilter\":{\"filter\":{\"terms\":{\"dataObject.Bill.taxAndPayments.businessService.keyword\":[\"PT\"]}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.taxAndPayments.taxAmount\"}}}}}},\"PT Tax\":{\"nested\":{\"path\":\"dataObject.Bill.billDetails.billAccountDetails\"},\"aggs\":{\"aggrFilter\":{\"filter\":{\"terms\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":[\"PT_TAX\"]}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}}}},\"Fire Cess\":{\"nested\":{\"path\":\"dataObject.Bill.billDetails.billAccountDetails\"},\"aggs\":{\"aggrFilter\":{\"filter\":{\"terms\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":[\"PT_FIRE_CESS\"]}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}}}},\"Cancer Cess\":{\"nested\":{\"path\":\"dataObject.Bill.billDetails.billAccountDetails\"},\"aggs\":{\"aggrFilter\":{\"filter\":{\"terms\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":[\"PT_CANCER_CESS\"]}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}}}},\"Rebate\":{\"nested\":{\"path\":\"dataObject.Bill.billDetails.billAccountDetails\"},\"aggs\":{\"aggrFilter\":{\"filter\":{\"terms\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":[\"PT_TIME_REBATE\"]}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}}}},\"Penalty\":{\"nested\":{\"path\":\"dataObject.Bill.billDetails.billAccountDetails\"},\"aggs\":{\"aggrFilter\":{\"filter\":{\"terms\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":[\"PT_TIME_PENALTY\"]}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}}}}}}}}}}"
+      }
+    ],
+    "filterKeys": [
+      {"key": "tenantId", "column": "Boundary"}
+
+    ],
+    "chartType": "table",
+    "valueType": "number",
+    "drillChart": "taxHeadsBreakupBoundaryDrill",
+    "drillFields": [
+      "Ward",
+      ""
+    ],
+    "documentType": "_doc",
+    "action": "",
+    "plotLabel": "Boundary",
+    "aggregationPaths": [
+      "Total Amount",
+      "PT Tax",
+      "Fire Cess",
+      "Cancer Cess",
+      "Rebate",
+      "Penalty"
+    ],
+    "pathDataTypeMapping": [
+      {
+        "Total Amount": "amount"
+      },
+      {
+        "PT Tax": "amount"
+      },
+      {
+        "Fire Cess": "amount"
+      },
+      {
+        "Cancer Cess": "amount"
+      },
+      {
+        "Rebate": "amount"
+      },
+      {
+        "Penalty": "amount"
+      }
+    ],
+    "insight": {
+    },
+    "_comment": ""
+  },
+  "taxHeadsBreakupBoundaryDrill": {
+    "chartName": "Tax head Breakup boundary",
+    "queries": [
+      {
+        "module": "COMMON",
+        "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"usageId\" : \"domainObject.propertyDetails.usageCategoryMajor.keyword\",\"minorUsageId\" : \"domainObject.propertyDetails.usageCategoryMinor.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\" }",
+        "dateRefField": "dataObject.Bill.billDetails.receiptDate",
+        "indexName": "dss-collection_v2",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"dataObject.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"Ward \":{\"terms\":{\"field\":\"domainObject.ward.name.keyword\",\"size\":200},\"aggs\":{\"Total Amount\":{\"nested\":{\"path\":\"dataObject.Bill.taxAndPayments\"},\"aggs\":{\"aggrFilter\":{\"filter\":{\"terms\":{\"dataObject.Bill.taxAndPayments.businessService.keyword\":[\"PT\"]}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.taxAndPayments.taxAmount\"}}}}}},\"PT Tax\":{\"nested\":{\"path\":\"dataObject.Bill.billDetails.billAccountDetails\"},\"aggs\":{\"aggrFilter\":{\"filter\":{\"terms\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":[\"PT_TAX\"]}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}}}},\"Fire Cess\":{\"nested\":{\"path\":\"dataObject.Bill.billDetails.billAccountDetails\"},\"aggs\":{\"aggrFilter\":{\"filter\":{\"terms\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":[\"PT_FIRE_CESS\"]}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}}}},\"Cancer Cess\":{\"nested\":{\"path\":\"dataObject.Bill.billDetails.billAccountDetails\"},\"aggs\":{\"aggrFilter\":{\"filter\":{\"terms\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":[\"PT_CANCER_CESS\"]}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}}}},\"Rebate\":{\"nested\":{\"path\":\"dataObject.Bill.billDetails.billAccountDetails\"},\"aggs\":{\"aggrFilter\":{\"filter\":{\"terms\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":[\"PT_TIME_REBATE\"]}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}}}},\"Penalty\":{\"nested\":{\"path\":\"dataObject.Bill.billDetails.billAccountDetails\"},\"aggs\":{\"aggrFilter\":{\"filter\":{\"terms\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":[\"PT_TIME_PENALTY\"]}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}}}}}}}}}}"
+      }
+    ],
+    "filterKeys": [
+      {"key": "tenantId", "column": "Boundary"}
+    ],
+    "chartType": "table",
+    "valueType": "number",
+    "drillChart": "boundaryDrillDown",
+    "drillFields": [
+      "Ward",
+      ""
+    ],
+    "documentType": "_doc",
+    "action": "",
+    "plotLabel": "Boundary",
+    "aggregationPaths": [
+      "Total Amount",
+      "PT Tax",
+      "Fire Cess",
+      "Cancer Cess",
+      "Rebate",
+      "Penalty"
+    ],
+    "pathDataTypeMapping": [
+      {
+        "Total Amount": "amount"
+      },
+      {
+        "PT Tax": "amount"
+      },
+      {
+        "Fire Cess": "amount"
+      },
+      {
+        "Cancer Cess": "amount"
+      },
+      {
+        "Rebate": "amount"
+      },
+      {
+        "Penalty": "amount"
+      }
+    ],
+    "insight": {
+    },
+    "_comment": ""
+  },
+  "taxHeadsBreakupUsage": {
+    "chartName": "DSS_PT_TAX_HEAD_BREAKUP_USAGE",
+    "queries": [
+      {
+        "module": "COMMON",
+        "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\" }",
+        "dateRefField": "dataObject.Bill.billDetails.receiptDate",
+        "indexName": "dss-collection_v2",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"dataObject.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"attrs_root\":{\"nested\":{\"path\":\"domainObject.propertyDetails.units\"},\"aggs\":{\"Usage \":{\"terms\":{\"field\":\"domainObject.propertyDetails.units.usageCategoryMajor.keyword\",\"size\":200},\"aggs\":{\"Total Amount\":{\"nested\":{\"path\":\"dataObject.Bill.taxAndPayments\"},\"aggs\":{\"aggrFilter\":{\"filter\":{\"terms\":{\"dataObject.Bill.taxAndPayments.businessService.keyword\":[\"PT\"]}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.taxAndPayments.taxAmount\"}}}}}},\"PT Tax\":{\"nested\":{\"path\":\"dataObject.Bill.billDetails.billAccountDetails\"},\"aggs\":{\"aggrFilter\":{\"filter\":{\"terms\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":[\"PT_TAX\"]}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}}}},\"Fire Cess\":{\"nested\":{\"path\":\"dataObject.Bill.billDetails.billAccountDetails\"},\"aggs\":{\"aggrFilter\":{\"filter\":{\"terms\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":[\"PT_FIRE_CESS\"]}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}}}},\"Cancer Cess\":{\"nested\":{\"path\":\"dataObject.Bill.billDetails.billAccountDetails\"},\"aggs\":{\"aggrFilter\":{\"filter\":{\"terms\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":[\"PT_CANCER_CESS\"]}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}}}},\"Rebate\":{\"nested\":{\"path\":\"dataObject.Bill.billDetails.billAccountDetails\"},\"aggs\":{\"aggrFilter\":{\"filter\":{\"terms\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":[\"PT_TIME_REBATE\"]}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}}}},\"Penalty\":{\"nested\":{\"path\":\"dataObject.Bill.billDetails.billAccountDetails\"},\"aggs\":{\"aggrFilter\":{\"filter\":{\"terms\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":[\"PT_TIME_PENALTY\"]}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}}}}}}}}}}}}"
+      }
+    ],
+    "filterKeys": [
+      {"key": "usageId", "column": "Usage Type"}
+    ],
+    "chartType": "table",
+    "valueType": "number",
+    "drillChart": "taxHeadsBreakupUsageMinor",
+    "documentType": "_doc",
+    "action": "",
+    "plotLabel": "Usage Type",
+    "aggregationPaths": [
+      "Total Amount",
+      "PT Tax",
+      "Fire Cess",
+      "Cancer Cess",
+      "Rebate",
+      "Penalty"
+    ],
+    "pathDataTypeMapping": [
+      {
+        "Total Amount": "amount"
+      },
+      {
+        "PT Tax": "amount"
+      },
+      {
+        "Fire Cess": "amount"
+      },
+      {
+        "Cancer Cess": "amount"
+      },
+      {
+        "Rebate": "amount"
+      },
+      {
+        "Penalty": "amount"
+      }
+    ],
+    "insight": {
+    },
+    "_comment": ""
+  },
+  "taxHeadsBreakupUsageMinor": {
+    "chartName": "",
+    "queries": [
+      {
+        "module": "COMMON",
+        "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\"usageId\" : \"domainObject.propertyDetails.usageCategoryMajor.keyword\",\"minorUsageId\" : \"domainObject.propertyDetails.usageCategoryMinor.keyword\",\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\" }",
+        "dateRefField": "dataObject.Bill.billDetails.receiptDate",
+        "indexName": "dss-collection_v2",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"dataObject.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"attrs_root\":{\"nested\":{\"path\":\"domainObject.propertyDetails.units\"},\"aggs\":{\"Usage \":{\"terms\":{\"field\":\"domainObject.propertyDetails.units.usageCategoryMinor.keyword\",\"size\":200},\"aggs\":{\"Total Amount\":{\"nested\":{\"path\":\"dataObject.Bill.taxAndPayments\"},\"aggs\":{\"aggrFilter\":{\"filter\":{\"terms\":{\"dataObject.Bill.taxAndPayments.businessService.keyword\":[\"PT\"]}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.taxAndPayments.taxAmount\"}}}}}},\"PT Tax\":{\"nested\":{\"path\":\"dataObject.Bill.billDetails.billAccountDetails\"},\"aggs\":{\"aggrFilter\":{\"filter\":{\"terms\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":[\"PT_TAX\"]}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}}}},\"Fire Cess\":{\"nested\":{\"path\":\"dataObject.Bill.billDetails.billAccountDetails\"},\"aggs\":{\"aggrFilter\":{\"filter\":{\"terms\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":[\"PT_FIRE_CESS\"]}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}}}},\"Cancer Cess\":{\"nested\":{\"path\":\"dataObject.Bill.billDetails.billAccountDetails\"},\"aggs\":{\"aggrFilter\":{\"filter\":{\"terms\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":[\"PT_CANCER_CESS\"]}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}}}},\"Rebate\":{\"nested\":{\"path\":\"dataObject.Bill.billDetails.billAccountDetails\"},\"aggs\":{\"aggrFilter\":{\"filter\":{\"terms\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":[\"PT_TIME_REBATE\"]}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}}}},\"Penalty\":{\"nested\":{\"path\":\"dataObject.Bill.billDetails.billAccountDetails\"},\"aggs\":{\"aggrFilter\":{\"filter\":{\"terms\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":[\"PT_TIME_PENALTY\"]}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}}}}}}}}}}}}"
+      }
+    ],
+    "filterKeys": [
+      {"key": "minorUsageId", "column": "Minor Usage Type"}
+    ],
+    "chartType": "table",
+    "valueType": "number",
+    "drillChart": "taxHeadsBreakupUsageSubMinor",
+    "documentType": "_doc",
+    "action": "",
+    "plotLabel": "Minor Usage Type",
+    "aggregationPaths": [
+      "Total Amount",
+      "PT Tax",
+      "Fire Cess",
+      "Cancer Cess",
+      "Rebate",
+      "Penalty"
+    ],
+    "pathDataTypeMapping": [
+      {
+        "Total Amount": "amount"
+      },
+      {
+        "PT Tax": "amount"
+      },
+      {
+        "Fire Cess": "amount"
+      },
+      {
+        "Cancer Cess": "amount"
+      },
+      {
+        "Rebate": "amount"
+      },
+      {
+        "Penalty": "amount"
+      }
+    ],
+    "insight": {
+    },
+    "_comment": ""
+  },
+  "taxHeadsBreakupUsageSubMinor": {
+    "chartName": "",
+    "queries": [
+      {
+        "module": "COMMON",
+        "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\"usageId\" : \"domainObject.propertyDetails.usageCategoryMajor.keyword\",\"minorUsageId\" : \"domainObject.propertyDetails.usageCategoryMinor.keyword\",\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\" }",
+        "dateRefField": "dataObject.Bill.billDetails.receiptDate",
+        "indexName": "dss-collection_v2",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"dataObject.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"attrs_root\":{\"nested\":{\"path\":\"domainObject.propertyDetails.units\"},\"aggs\":{\"Usage \":{\"terms\":{\"field\":\"domainObject.propertyDetails.units.usageCategorySubMinor.keyword\",\"size\":200},\"aggs\":{\"Total Amount\":{\"nested\":{\"path\":\"dataObject.Bill.taxAndPayments\"},\"aggs\":{\"aggrFilter\":{\"filter\":{\"terms\":{\"dataObject.Bill.taxAndPayments.businessService.keyword\":[\"PT\"]}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.taxAndPayments.taxAmount\"}}}}}},\"PT Tax\":{\"nested\":{\"path\":\"dataObject.Bill.billDetails.billAccountDetails\"},\"aggs\":{\"aggrFilter\":{\"filter\":{\"terms\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":[\"PT_TAX\"]}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}}}},\"Fire Cess\":{\"nested\":{\"path\":\"dataObject.Bill.billDetails.billAccountDetails\"},\"aggs\":{\"aggrFilter\":{\"filter\":{\"terms\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":[\"PT_FIRE_CESS\"]}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}}}},\"Cancer Cess\":{\"nested\":{\"path\":\"dataObject.Bill.billDetails.billAccountDetails\"},\"aggs\":{\"aggrFilter\":{\"filter\":{\"terms\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":[\"PT_CANCER_CESS\"]}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}}}},\"Rebate\":{\"nested\":{\"path\":\"dataObject.Bill.billDetails.billAccountDetails\"},\"aggs\":{\"aggrFilter\":{\"filter\":{\"terms\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":[\"PT_TIME_REBATE\"]}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}}}},\"Penalty\":{\"nested\":{\"path\":\"dataObject.Bill.billDetails.billAccountDetails\"},\"aggs\":{\"aggrFilter\":{\"filter\":{\"terms\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":[\"PT_TIME_PENALTY\"]}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}}}}}}}}}}}}"
+      }
+    ],
+    "filterKeys": [
+      ""
+    ],
+    "chartType": "table",
+    "valueType": "number",
+    "drillChart": "",
+    "documentType": "_doc",
+    "action": "",
+    "plotLabel": "Sub Minor Usage Type",
+    "aggregationPaths": [
+      "Total Amount",
+      "PT Tax",
+      "Fire Cess",
+      "Cancer Cess",
+      "Rebate",
+      "Penalty"
+    ],
+    "pathDataTypeMapping": [
+      {
+        "Total Amount": "amount"
+      },
+      {
+        "PT Tax": "amount"
+      },
+      {
+        "Fire Cess": "amount"
+      },
+      {
+        "Cancer Cess": "amount"
+      },
+      {
+        "Rebate": "amount"
+      },
+      {
+        "Penalty": "amount"
+      }
+    ],
+    "insight": {
+    },
+    "_comment": ""
+  },
   "demandCollectionIndexUsageRevenue": {
     "chartName": "DSS_PT_DEMAND_COLLECTION_USAGETYPE",
     "queries": [
@@ -1337,8 +1215,8 @@
         "module": "COMMON",
         "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\",\"usageId\" : \"domainObject.propertyDetails.usageCategoryMajor.keyword\",\"minorUsageId\" : \"domainObject.propertyDetails.usageCategoryMinor.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\" }",
         "dateRefField": "dataObject.Bill.billDetails.receiptDate",
-        "indexName": "dss-collection_v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"dataObject.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"UsageType \":{\"terms\":{\"field\":\"domainObject.propertyDetails.units.usageCategoryMajor.keyword\",\"size\":200},\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.amountPaid\"}},\"Transactions\":{\"value_count\":{\"field\":\"dataObject.transactionId.keyword\"}},\"Assessed Properties\":{\"value_count\":{\"field\":\"domainObject.propertyDetails.assessmentNumber.keyword\"}}}}}}}}"
+        "indexName": "dss-collection_v2",
+        "aggrQuery": "{\"aggs\":{\"attrs_root\":{\"nested\":{\"path\":\"domainObject.propertyDetails.units\"},\"aggs\":{\"UsageType \":{\"terms\":{\"field\":\"domainObject.propertyDetails.units.usageCategoryMajor.keyword\",\"size\":200},\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.amountPaid\"}},\"Transactions\":{\"value_count\":{\"field\":\"dataObject.transactionId.keyword\"}},\"Assessed Properties\":{\"nested\":{\"path\":\"Data.propertyDetails\"},\"aggs\":{\"attr\":{\"cardinality\":{\"field\":\"Data.propertyDetails.assessmentNumber.keyword\"}}}}}}}}}}"
       }
     ],
     "filterKeys": [
@@ -1385,8 +1263,8 @@
         "module": "COMMON",
         "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\"usageId\" : \"domainObject.propertyDetails.usageCategoryMajor.keyword\",\"minorUsageId\" : \"domainObject.propertyDetails.usageCategoryMinor.keyword\",\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\" }",
         "dateRefField": "dataObject.Bill.billDetails.receiptDate",
-        "indexName": "dss-collection_v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"dataObject.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"UsageType \":{\"terms\":{\"field\":\"domainObject.propertyDetails.usageCategoryMinor.keyword\",\"size\":200},\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.amountPaid\"}},\"Transactions\":{\"value_count\":{\"field\":\"dataObject.transactionId.keyword\"}},\"Assessed Properties\":{\"value_count\":{\"field\":\"domainObject.propertyDetails.assessmentNumber.keyword\"}}}}}}}}"
+        "indexName": "dss-collection_v2",
+        "aggrQuery": "{\"aggs\":{\"attrs_root\":{\"nested\":{\"path\":\"domainObject.propertyDetails.units\"},\"aggs\":{\"UsageType \":{\"terms\":{\"field\":\"domainObject.propertyDetails.units.usageCategoryMinor.keyword\",\"size\":200},\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.amountPaid\"}},\"Transactions\":{\"value_count\":{\"field\":\"dataObject.transactionId.keyword\"}},\"Assessed Properties\":{\"nested\":{\"path\":\"Data.propertyDetails\"},\"aggs\":{\"attr\":{\"cardinality\":{\"field\":\"Data.propertyDetails.assessmentNumber.keyword\"}}}}}}}}}}"
       }
     ],
     "filterKeys": [
@@ -1425,8 +1303,8 @@
         "module": "COMMON",
         "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\"usageId\" : \"domainObject.propertyDetails.usageCategoryMajor.keyword\",\"minorUsageId\" : \"domainObject.propertyDetails.usageCategoryMinor.keyword\",\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\" }",
         "dateRefField": "dataObject.Bill.billDetails.receiptDate",
-        "indexName": "dss-collection_v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"dataObject.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"UsageType \":{\"terms\":{\"field\":\"domainObject.propertyDetails.units.usageCategorySubMinor.keyword\",\"size\":200},\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.amountPaid\"}},\"Transactions\":{\"value_count\":{\"field\":\"dataObject.transactionId.keyword\"}},\"Assessed Properties\":{\"value_count\":{\"field\":\"domainObject.propertyDetails.assessmentNumber.keyword\"}}}}}}}}"
+        "indexName": "dss-collection_v2",
+        "aggrQuery": "{\"aggs\":{\"attrs_root\":{\"nested\":{\"path\":\"domainObject.propertyDetails.units\"},\"aggs\":{\"UsageType \":{\"terms\":{\"field\":\"domainObject.propertyDetails.units.usageCategorySubMinor.keyword\",\"size\":200},\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.amountPaid\"}},\"Transactions\":{\"value_count\":{\"field\":\"dataObject.transactionId.keyword\"}},\"Assessed Properties\":{\"nested\":{\"path\":\"Data.propertyDetails\"},\"aggs\":{\"attr\":{\"cardinality\":{\"field\":\"Data.propertyDetails.assessmentNumber.keyword\"}}}}}}}}}}"
       }
     ],
     "filterKeys": [
@@ -1462,29 +1340,7 @@
 
 
   "_comment": "TL COLLECTION CHARTS",
-  "licenseByLicenseType": {
-    "chartName": "DSS_TL_LICENSE_BY_TYPE",
-    "queries": [
-      {
-        "module": "COMMON",
-        "requestQueryMap": "{\"module\" : \"Data.Bill.billDetails.businessService.keyword\", \"tenantId\" : \"Data.tenantData.code\", \"district\" : \"Data.tenantData.cityDistrictCode\"}",
-        "dateRefField": "Data.Bill.billDetails.receiptDate",
-        "indexName": "collectionsindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"Data.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"License Instrument Type\":{\"terms\":{\"field\":\"Data.instrument.instrumentType.name.keyword\"},\"aggs\":{\"Licens Issued\":{\"sum\":{\"field\":\"Data.Bill.billDetails.amountPaid\"}}}}}}}}"
-      }
-    ],
-    "chartType": "pie",
-    "valueType": "number",
-    "action": "",
-    "documentType": "_doc",
-    "drillChart": "none",
-    "aggregationPaths": [
-      "License Instrument Type"
-    ],
-    "insight": {
-    },
-    "_comment": " License Application which are issued by License Type"
-  },
+
   "licenseIssuedDDRRevenue": {
     "chartName": "DSS_TL_DEMAND_COLLECTION_BOUNDARY",
     "queries": [
@@ -1492,7 +1348,7 @@
         "module": "COMMON",
         "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\" }",
         "dateRefField": "dataObject.Bill.billDetails.receiptDate",
-        "indexName": "dss-collection_v1",
+        "indexName": "dss-collection_v2",
         "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"dataObject.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.amountPaid\"}},\"Transactions\":{\"value_count\":{\"field\":\"dataObject.transactionId.keyword\"}},\"Total Licence Issued\":{\"value_count\":{\"field\":\"domainObject.tradelicense.licensenumber.keyword\"}}}}}}"
       },
       {
@@ -1546,7 +1402,7 @@
         "module": "COMMON",
         "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\" }",
         "dateRefField": "dataObject.Bill.billDetails.receiptDate",
-        "indexName": "dss-collection_v1",
+        "indexName": "dss-collection_v2",
         "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"dataObject.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"ULBs \":{\"terms\":{\"field\":\"dataObject.tenantId.keyword\",\"size\":200},\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.amountPaid\"}},\"Transactions\":{\"value_count\":{\"field\":\"dataObject.transactionId.keyword\"}},\"Total Licence Issued\":{\"value_count\":{\"field\":\"domainObject.tradelicense.licensenumber.keyword\"}}}}}}}}"
       },
       {
@@ -1598,7 +1454,7 @@
         "module": "COMMON",
         "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\" }",
         "dateRefField": "dataObject.Bill.billDetails.receiptDate",
-        "indexName": "dss-collection_v1",
+        "indexName": "dss-collection_v2",
         "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"dataObject.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"Ward \":{\"terms\":{\"field\":\"domainObject.ward.name.keyword\",\"size\":200},\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.amountPaid\"}},\"Transactions\":{\"value_count\":{\"field\":\"dataObject.transactionId.keyword\"}},\"Total Licence Issued\":{\"value_count\":{\"field\":\"domainObject.tradelicense.licensenumber.keyword\"}}}}}}}}"
       }
     ],
@@ -1633,6 +1489,8 @@
     },
     "_comment": ""
   },
+
+  "_comment": " TL Nested Array related newer queries",
   "licenceTaxHeadsBreakupDDR": {
     "chartName": "DSS_TL_TAX_HEAD_BREAKUP_BOUNDARY",
     "queries": [
@@ -1640,8 +1498,8 @@
         "module": "COMMON",
         "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\" }",
         "dateRefField": "dataObject.Bill.billDetails.receiptDate",
-        "indexName": "dss-collection_v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"dataObject.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"Tax\":{\"filter\":{\"term\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":\"TL_TAX\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}},\"Adhoc Penalty\":{\"filter\":{\"term\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":\"TL_ADHOC_PENALTY\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}},\"Adhoc Rebate\":{\"filter\":{\"term\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":\"TL_ADHOC_REBATE\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}}}}}}"
+        "indexName": "dss-collection_v2",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"dataObject.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"TL Tax\":{\"nested\":{\"path\":\"dataObject.Bill.billDetails.billAccountDetails\"},\"aggs\":{\"aggrFilter\":{\"filter\":{\"terms\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":[\"TL_TAX\"]}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}}}},\"Adhoc Penalty\":{\"nested\":{\"path\":\"dataObject.Bill.billDetails.billAccountDetails\"},\"aggs\":{\"aggrFilter\":{\"filter\":{\"terms\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":[\"TL_ADHOC_PENALTY\"]}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}}}},\"Adhoc Rebate\":{\"nested\":{\"path\":\"dataObject.Bill.billDetails.billAccountDetails\"},\"aggs\":{\"aggrFilter\":{\"filter\":{\"terms\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":[\"TL_ADHOC_REBATE\"]}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}}}}}}}}"
       }
     ],
     "isMdmsEnabled": true,
@@ -1656,13 +1514,13 @@
     "action": "",
     "plotLabel": "DDRs",
     "aggregationPaths": [
-      "Tax",
+      "TL Tax",
       "Adhoc Penalty",
       "Adhoc Rebate"
     ],
     "pathDataTypeMapping": [
       {
-        "Tax": "amount"
+        "TL Tax": "amount"
       },
       {
         "Adhoc Penalty": "amount"
@@ -1682,8 +1540,8 @@
         "module": "COMMON",
         "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\" }",
         "dateRefField": "dataObject.Bill.billDetails.receiptDate",
-        "indexName": "dss-collection_v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"dataObject.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"ULBs \":{\"terms\":{\"field\":\"dataObject.tenantId.keyword\",\"size\":200},\"aggs\":{\"Tax\":{\"filter\":{\"term\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":\"TL_TAX\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}},\"Adhoc Penalty\":{\"filter\":{\"term\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":\"TL_ADHOC_PENALTY\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}},\"Adhoc Rebate\":{\"filter\":{\"term\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":\"TL_ADHOC_REBATE\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}}}}}}}}"
+        "indexName": "dss-collection_v2",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"dataObject.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"ULBs \":{\"terms\":{\"field\":\"dataObject.tenantId.keyword\",\"size\":200},\"aggs\":{\"TL Tax\":{\"nested\":{\"path\":\"dataObject.Bill.billDetails.billAccountDetails\"},\"aggs\":{\"aggrFilter\":{\"filter\":{\"terms\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":[\"TL_TAX\"]}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}}}},\"Adhoc Penalty\":{\"nested\":{\"path\":\"dataObject.Bill.billDetails.billAccountDetails\"},\"aggs\":{\"aggrFilter\":{\"filter\":{\"terms\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":[\"TL_ADHOC_PENALTY\"]}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}}}},\"Adhoc Rebate\":{\"nested\":{\"path\":\"dataObject.Bill.billDetails.billAccountDetails\"},\"aggs\":{\"aggrFilter\":{\"filter\":{\"terms\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":[\"TL_ADHOC_REBATE\"]}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}}}}}}}}}}"
       }
     ],
     "filterKeys": [
@@ -1696,13 +1554,13 @@
     "action": "",
     "plotLabel": "Boundary",
     "aggregationPaths": [
-      "Tax",
+      "TL Tax",
       "Adhoc Penalty",
       "Adhoc Rebate"
     ],
     "pathDataTypeMapping": [
       {
-        "Tax": "amount"
+        "TL Tax": "amount"
       },
       {
         "Adhoc Penalty": "amount"
@@ -1722,8 +1580,8 @@
         "module": "COMMON",
         "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\" }",
         "dateRefField": "dataObject.Bill.billDetails.receiptDate",
-        "indexName": "dss-collection_v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"dataObject.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"ULBs \":{\"terms\":{\"field\":\"dataObject.ward.name.keyword\",\"size\":200},\"aggs\":{\"Tax\":{\"filter\":{\"term\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":\"TL_TAX\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}},\"Adhoc Penalty\":{\"filter\":{\"term\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":\"TL_ADHOC_PENALTY\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}},\"Adhoc Rebate\":{\"filter\":{\"term\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":\"TL_ADHOC_REBATE\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}}}}}}}}"
+        "indexName": "dss-collection_v2",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"dataObject.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"ULBs \":{\"terms\":{\"field\":\"dataObject.ward.name.keyword\",\"size\":200},\"aggs\":{\"TL Tax\":{\"nested\":{\"path\":\"dataObject.Bill.billDetails.billAccountDetails\"},\"aggs\":{\"aggrFilter\":{\"filter\":{\"terms\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":[\"TL_TAX\"]}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}}}},\"Adhoc Penalty\":{\"nested\":{\"path\":\"dataObject.Bill.billDetails.billAccountDetails\"},\"aggs\":{\"aggrFilter\":{\"filter\":{\"terms\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":[\"TL_ADHOC_PENALTY\"]}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}}}},\"Adhoc Rebate\":{\"nested\":{\"path\":\"dataObject.Bill.billDetails.billAccountDetails\"},\"aggs\":{\"aggrFilter\":{\"filter\":{\"terms\":{\"dataObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":[\"TL_ADHOC_REBATE\"]}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.billAccountDetails.amount\"}}}}}}}}}}}}"
       }
     ],
     "filterKeys": [
@@ -1735,7 +1593,7 @@
     "action": "",
     "plotLabel": "Boundary",
     "aggregationPaths": [
-      "Tax",
+      "TL Tax",
       "Adhoc Penalty",
       "Adhoc Rebate"
     ],
@@ -1755,6 +1613,7 @@
     "_comment": ""
   },
 
+
   "_comment": "TL NON-COLLECTION CHARTS",
   "licenseIssued": {
     "chartName": "DSS_TL_LICENSE_ISSUED",
@@ -1764,7 +1623,7 @@
         "indexName": "tlindex-v1",
         "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantid.keyword\":\"pb.testing\"}}]}},\"aggs\": {\"License Issued\": {\"cardinality\": {\"field\": \"Data.tradelicense.licensenumber.keyword\"}}}}}}",
         "requestQueryMap": "{\"wardId\" : \"Data.ward.name.keyword\", \r\n  \"district\" : \"Data.tenantData.city.districtCode\", \r\n\"tenantId\" : \"Data.tradelicense.tenantid\" \r\n, \r\n\"businessService\" : \"dataObject.Bill.billDetails.businessServices\" \r\n}",
-        "dateRefField": "Data.tradelicense.applicationdate"
+        "dateRefField": "Data.tradelicense.issueddate"
       }
     ],
     "chartType": "metric",
@@ -1792,15 +1651,15 @@
       {
         "module": "TL",
         "indexName": "tlindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantData.code.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Trade Licence Issued\":{\"date_histogram\":{\"field\":\"Data.tradelicense.issueddate\",\"interval\":\"intervalvalue\"},\"aggs\":{\"Count\":{\"cardinality\":{\"field\":\"Data.tradelicense.licensenumber.keyword\"}}}}}}}}",
-        "requestQueryMap": "{\"wardId\" : \"Data.ward.name.keyword\", \"tenantId\" : \"Data.tenantData.code.keyword\" ,\"district\" : \"Data.tenantData.city.districtCode\"}",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantid.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Trade Licence Issued\":{\"date_histogram\":{\"field\":\"Data.tradelicense.issueddate\",\"interval\":\"intervalvalue\"},\"aggs\":{\"Count\":{\"cardinality\":{\"field\":\"Data.tradelicense.licensenumber.keyword\"}}}}}}}}",
+        "requestQueryMap": "{\"wardId\" : \"Data.ward.name.keyword\", \"tenantId\" : \"Data.tenantData.code\" ,\"district\" : \"Data.tenantData.city.districtCode\"}",
         "dateRefField": "Data.tradelicense.issueddate"
       },
       {
         "module": "TL",
         "indexName": "tlindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantData.code.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Total Application\":{\"date_histogram\":{\"field\":\"Data.tradelicense.applicationdate\",\"interval\":\"intervalvalue\"},\"aggs\":{\"Count\":{\"cardinality\":{\"field\":\"Data.tradelicense.applicationnumber.keyword\"}}}}}}}}",
-        "requestQueryMap": "{\"wardId\" : \"Data.ward.name.keyword\", \"tenantId\" : \"Data.tenantData.code.keyword\" ,\"district\" : \"Data.tenantData.city.districtCode\"}",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantid.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Total Application\":{\"date_histogram\":{\"field\":\"Data.tradelicense.applicationdate\",\"interval\":\"intervalvalue\"},\"aggs\":{\"Count\":{\"cardinality\":{\"field\":\"Data.tradelicense.applicationnumber.keyword\"}}}}}}}}",
+        "requestQueryMap": "{\"wardId\" : \"Data.ward.name.keyword\", \"tenantId\" : \"Data.tenantData.code\" ,\"district\" : \"Data.tenantData.city.districtCode\"}",
         "dateRefField": "Data.tradelicense.applicationdate"
       }
     ],
@@ -1824,9 +1683,10 @@
     "queries": [
       {
         "module": "TL",
-        "requestQueryMap": "{\"wardId\" : \"Data.ward.name.keyword\", \"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"tenantId\" : \"Data.tenantData.code\", \"district\" : \"Data.tenantData.cityDistrictCode\"}",
+        "requestQueryMap": "{\"wardId\" : \"Data.ward.name.keyword\",  \"tenantId\" : \"Data.tenantData.code\", \"district\" : \"Data.tenantData.cityDistrictCode\"}",
         "dateRefField": "Data.tradelicense.issueddate",
         "indexName": "tlindex-v1",
+        "aggrQueryBc": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantid.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Status\":{\"terms\":{\"field\":\"Data.tradelicense.status.keyword\"},\"aggs\":{\"License Issued\":{\"value_count\":{\"field\":\"Data.tradelicense.status.keyword\"}}}}}}}}",
         "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantid.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Status\":{\"terms\":{\"field\":\"Data.tradelicense.status.keyword\",\"size\":1000,\"min_doc_count\":0},\"aggs\":{\"License Issued\":{\"cardinality\":{\"field\":\"Data.tradelicense.licensenumber.keyword\"}}}}}}}}"
       }
     ],
@@ -1882,7 +1742,7 @@
         "dateRefField": "Data.tradelicense.issueddate",
         "indexName": "tlindex-v1",
         "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantid.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Status\":{\"terms\":{\"field\":\"Data.tradelicense.status.keyword\",\"size\":1000,\"min_doc_count\":0},\"aggs\":{\"License Issued\":{\"cardinality\":{\"field\":\"Data.tradelicense.licensenumber.keyword\"}}}}}}}}",
-        "aggrQuerybc": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Status\":{\"filters\":{\"filters\":{\"Approved\":{\"match\":{\"Data.tradelicense.status.keyword\":\"APPROVED\"}},\"Initiated\":{\"match\":{\"Data.tradelicense.status.keyword\":\"INITIATED\"}},\"Applied\":{\"match\":{\"Data.tradelicense.status.keyword\":\"APPLIED\"}},\"Rejected\":{\"match\":{\"Data.tradelicense.status.keyword\":\"REJECTED\"}},\"Pending Approval\":{\"match\":{\"Data.tradelicense.status.keyword\":\"PENDINGAPPROVAL\"}},\"Field Inspection\":{\"match\":{\"Data.tradelicense.status.keyword\":\"FIELDINSPECTION\"}},\"Cancelled\":{\"match\":{\"Data.tradelicense.status.keyword\":\"CANCELLED\"}},\"Pending Payment\":{\"match\":{\"Data.tradelicense.status.keyword\":\"PENDINGPAYMENT\"}},\"Paid\":{\"match\":{\"Data.tradelicense.status.keyword\":\"PAID\"}}}}}}}}}"
+        "aggrQueryBC": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantid.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Status\":{\"filters\":{\"filters\":{\"Approved\":{\"match\":{\"Data.tradelicense.status.keyword\":\"APPROVED\"}},\"Initiated\":{\"match\":{\"Data.tradelicense.status.keyword\":\"INITIATED\"}},\"Applied\":{\"match\":{\"Data.tradelicense.status.keyword\":\"APPLIED\"}},\"Rejected\":{\"match\":{\"Data.tradelicense.status.keyword\":\"REJECTED\"}},\"Pending Approval\":{\"match\":{\"Data.tradelicense.status.keyword\":\"PENDINGAPPROVAL\"}},\"Field Inspection\":{\"match\":{\"Data.tradelicense.status.keyword\":\"FIELDINSPECTION\"}},\"Cancelled\":{\"match\":{\"Data.tradelicense.status.keyword\":\"CANCELLED\"}},\"Pending Payment\":{\"match\":{\"Data.tradelicense.status.keyword\":\"PENDINGPAYMENT\"}},\"Paid\":{\"match\":{\"Data.tradelicense.status.keyword\":\"PAID\"}}}}}}}}}"
       }
     ],
     "isMdmsEnabled": true,
@@ -1898,6 +1758,46 @@
     "documentType": "_doc",
     "action": "",
     "plotLabel": "DDRs",
+    "aggregationPathsA": [
+      "Approved",
+      "Initiated",
+      "Applied",
+      "Rejected",
+      "Pending Approval",
+      "Field Inspection",
+      "Cancelled",
+      "Pending Payment",
+      "Paid"
+    ],
+    "pathDataTypeMappingA": [
+      {
+        "Approved": "number"
+      },
+      {
+        "Initiated": "number"
+      },
+      {
+        "Applied": "number"
+      },
+      {
+        "Rejected": "number"
+      },
+      {
+        "Pending Approval": "number"
+      },
+      {
+        "Field Inspection": "number"
+      },
+      {
+        "Cancelled": "number"
+      },
+      {
+        "Pending Payment": "number"
+      },
+      {
+        "Paid": "number"
+      }
+    ],
     "insight": {
     },
     "_comment": ""
@@ -1911,7 +1811,7 @@
         "dateRefField": "Data.tradelicense.issueddate",
         "indexName": "tlindex-v1",
         "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantid.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"ULBs \":{\"terms\":{\"field\":\"Data.tradelicense.tenantid.keyword\",\"size\":1000},\"aggs\":{\"Status\":{\"terms\":{\"field\":\"Data.tradelicense.status.keyword\",\"size\":1000,\"min_doc_count\":0},\"aggs\":{\"License Issued\":{\"cardinality\":{\"field\":\"Data.tradelicense.licensenumber.keyword\"}}}}}}}}}}",
-        "aggrQuerybc": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"ULBs \":{\"terms\":{\"field\":\"Data.tradelicense.tenantId.keyword\",\"size\":1000},\"aggs\":{\"Status\":{\"filters\":{\"filters\":{\"Approved\":{\"match\":{\"Data.tradelicense.status.keyword\":\"APPROVED\"}},\"Initiated\":{\"match\":{\"Data.tradelicense.status.keyword\":\"INITIATED\"}},\"Applied\":{\"match\":{\"Data.tradelicense.status.keyword\":\"APPLIED\"}},\"Rejected\":{\"match\":{\"Data.tradelicense.status.keyword\":\"REJECTED\"}},\"Pending Approval\":{\"match\":{\"Data.tradelicense.status.keyword\":\"PENDINGAPPROVAL\"}},\"Field Inspection\":{\"match\":{\"Data.tradelicense.status.keyword\":\"FIELDINSPECTION\"}},\"Cancelled\":{\"match\":{\"Data.tradelicense.status.keyword\":\"CANCELLED\"}},\"Pending Payment\":{\"match\":{\"Data.tradelicense.status.keyword\":\"PENDINGPAYMENT\"}},\"Paid\":{\"match\":{\"Data.tradelicense.status.keyword\":\"PAID\"}}}}}}}}}}}"
+        "aggrQueryBc": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"ULBs \":{\"terms\":{\"field\":\"Data.tradelicense.tenantId.keyword\",\"size\":1000},\"aggs\":{\"Status\":{\"filters\":{\"filters\":{\"Approved\":{\"match\":{\"Data.tradelicense.status.keyword\":\"APPROVED\"}},\"Initiated\":{\"match\":{\"Data.tradelicense.status.keyword\":\"INITIATED\"}},\"Applied\":{\"match\":{\"Data.tradelicense.status.keyword\":\"APPLIED\"}},\"Rejected\":{\"match\":{\"Data.tradelicense.status.keyword\":\"REJECTED\"}},\"Pending Approval\":{\"match\":{\"Data.tradelicense.status.keyword\":\"PENDINGAPPROVAL\"}},\"Field Inspection\":{\"match\":{\"Data.tradelicense.status.keyword\":\"FIELDINSPECTION\"}},\"Cancelled\":{\"match\":{\"Data.tradelicense.status.keyword\":\"CANCELLED\"}},\"Pending Payment\":{\"match\":{\"Data.tradelicense.status.keyword\":\"PENDINGPAYMENT\"}},\"Paid\":{\"match\":{\"Data.tradelicense.status.keyword\":\"PAID\"}}}}}}}}}}}"
       }
     ],
     "filterKeys": [
@@ -1926,6 +1826,12 @@
     "documentType": "_doc",
     "action": "",
     "plotLabel": "ULBs",
+    "aggregationPaths": [
+
+    ],
+    "pathDataTypeMapping": [
+
+    ],
     "insight": {
     },
     "_comment": ""
@@ -1939,7 +1845,7 @@
         "dateRefField": "Data.tradelicense.issueddate",
         "indexName": "tlindex-v1",
         "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantid.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Ward \":{\"terms\":{\"field\":\"Data.ward.name.keyword\",\"size\":1000},\"aggs\":{\"Status\":{\"terms\":{\"field\":\"Data.tradelicense.status.keyword\",\"size\":1000,\"min_doc_count\":0},\"aggs\":{\"License Issued\":{\"cardinality\":{\"field\":\"Data.tradelicense.licensenumber.keyword\"}}}}}}}}}}",
-        "aggrQuerybc": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Ward \":{\"terms\":{\"field\":\"Data.ward.name.keyword\",\"size\":1000},\"aggs\":{\"Status\":{\"filters\":{\"filters\":{\"Approved\":{\"match\":{\"Data.tradelicense.status.keyword\":\"APPROVED\"}},\"Initiated\":{\"match\":{\"Data.tradelicense.status.keyword\":\"INITIATED\"}},\"Applied\":{\"match\":{\"Data.tradelicense.status.keyword\":\"APPLIED\"}},\"Rejected\":{\"match\":{\"Data.tradelicense.status.keyword\":\"REJECTED\"}},\"Pending Approval\":{\"match\":{\"Data.tradelicense.status.keyword\":\"PENDINGAPPROVAL\"}},\"Field Inspection\":{\"match\":{\"Data.tradelicense.status.keyword\":\"FIELDINSPECTION\"}},\"Cancelled\":{\"match\":{\"Data.tradelicense.status.keyword\":\"CANCELLED\"}},\"Pending Payment\":{\"match\":{\"Data.tradelicense.status.keyword\":\"PENDINGPAYMENT\"}},\"Paid\":{\"match\":{\"Data.tradelicense.status.keyword\":\"PAID\"}}}}}}}}}}}"
+        "aggrQueryBc": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Ward \":{\"terms\":{\"field\":\"Data.ward.name.keyword\",\"size\":1000},\"aggs\":{\"Status\":{\"filters\":{\"filters\":{\"Approved\":{\"match\":{\"Data.tradelicense.status.keyword\":\"APPROVED\"}},\"Initiated\":{\"match\":{\"Data.tradelicense.status.keyword\":\"INITIATED\"}},\"Applied\":{\"match\":{\"Data.tradelicense.status.keyword\":\"APPLIED\"}},\"Rejected\":{\"match\":{\"Data.tradelicense.status.keyword\":\"REJECTED\"}},\"Pending Approval\":{\"match\":{\"Data.tradelicense.status.keyword\":\"PENDINGAPPROVAL\"}},\"Field Inspection\":{\"match\":{\"Data.tradelicense.status.keyword\":\"FIELDINSPECTION\"}},\"Cancelled\":{\"match\":{\"Data.tradelicense.status.keyword\":\"CANCELLED\"}},\"Pending Payment\":{\"match\":{\"Data.tradelicense.status.keyword\":\"PENDINGPAYMENT\"}},\"Paid\":{\"match\":{\"Data.tradelicense.status.keyword\":\"PAID\"}}}}}}}}}}}"
       }
     ],
     "filterKeys": [
@@ -1953,6 +1859,46 @@
     "documentType": "_doc",
     "action": "",
     "plotLabel": "Ward",
+    "aggregationPathsA": [
+      "Approved",
+      "Initiated",
+      "Applied",
+      "Rejected",
+      "Pending Approval",
+      "Field Inspection",
+      "Cancelled",
+      "Pending Payment",
+      "Paid"
+    ],
+    "pathDataTypeMappingA": [
+      {
+        "Approved": "number"
+      },
+      {
+        "Initiated": "number"
+      },
+      {
+        "Applied": "number"
+      },
+      {
+        "Rejected": "number"
+      },
+      {
+        "Pending Approval": "number"
+      },
+      {
+        "Field Inspection": "number"
+      },
+      {
+        "Cancelled": "number"
+      },
+      {
+        "Pending Payment": "number"
+      },
+      {
+        "Paid": "number"
+      }
+    ],
     "insight": {
     },
     "_comment": ""
@@ -1966,7 +1912,7 @@
         "module": "COMMON",
         "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\" }",
         "dateRefField": "dataObject.Bill.billDetails.receiptDate",
-        "indexName": "dss-collection_v1",
+        "indexName": "dss-collection_v2",
         "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"dataObject.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"ULBs \":{\"terms\":{\"field\":\"dataObject.tenantId.keyword\",\"size\":200,\"min_doc_count\":0},\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.amountPaid\"}},\"Transactions\":{\"value_count\":{\"field\":\"dataObject.transactionId.keyword\"}},\"Total Licence Issued\":{\"value_count\":{\"field\":\"domainObject.tradelicense.licensenumber.keyword\"}}}}}}}}"
       },
       {
@@ -2302,10 +2248,6 @@
     },
     "_comment": ""
   },
-
-
-
-
 
   "_comment": "PGR NON-COLLECTION CHARTS",
   "completionRate": {
@@ -2919,7 +2861,7 @@
         "requestQueryMap": "{\"wardId\" : \"Data.complaintWard.name.keyword\", \"tenantId\" : \"Data.tenantId\"}",
         "dateRefField": "Data.dateOfComplaint",
         "indexName": "pgrindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Complain Category\":{\"terms\":{\"field\":\"Data.complainCategory.keyword\",\"size\":7,\"order\":{\"Count\":\"desc\"}},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.complainCategory.keyword\"}}}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Complain Category\":{\"terms\":{\"field\":\"Data.complainCategory.keyword\",\"size\":6,\"order\":{\"Count\":\"desc\"}},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.complainCategory.keyword\"}}}}}}}}"
       }
     ],
     "chartType": "pie",
@@ -2962,12 +2904,11 @@
         "_comments": "fields are field names picked from its aggregation query to use post aggregation newField value with given new field name  "
       }
     ],
-    "isCumulative": false,
+    "isCumulative": true,
     "interval": "month",
     "insight": {
     },
     "_comment": " "
   }
-
 
 }
