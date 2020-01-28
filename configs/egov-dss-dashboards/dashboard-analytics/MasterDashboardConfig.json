@@ -2,7 +2,7 @@
   "_comment": "Master dashboard which holds all the possible visualisation. Note new dashboards/visualisations can be added",
   "dashboards": [
     {
-      "name": "DSS_HOME_DASHBOARD",
+      "name": "DSS_OVERVIEW_DASHBOARD",
       "id": "overview",
       "isActive": "",
       "style": "",
@@ -868,7 +868,7 @@
               "isCollapsible": true,
               "charts": [
                 {
-                  "id": "licenceTaxHeadsBreakupDDR",
+                  "id": "licenceTaxHeadsBreakupBoundary",
                   "name": "DSS_TL_TAX_HEAD_BREAKUP_BOUNDARY",
                   "code": "",
                   "chartType": "table",
@@ -1327,7 +1327,7 @@
       ]
     },
     {
-      "name": "DSS_OVERVIEW_DASHBOARD",
+      "name": "DSS_HOME_DASHBOARD",
       "id": "home",
       "isActive": "",
       "style": "",
@@ -2529,7 +2529,7 @@
       ]
     },
     {
-      "name": "DSS_HOME_DASHBOARD",
+      "name": "DSS_OVERVIEW_DASHBOARD",
       "id": "ulb-overview",
       "isActive": "",
       "style": "",
@@ -2813,7 +2813,7 @@
       ]
     },
     {
-      "name": "DSS_OVERVIEW_DASHBOARD",
+      "name": "DSS_HOME_DASHBOARD",
       "id": "ulb-home",
       "isActive": "",
       "style": "",
