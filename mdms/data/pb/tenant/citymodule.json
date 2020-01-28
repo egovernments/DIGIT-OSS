@@ -109,6 +109,18 @@
           "code": "pb.jalandhar"
         }
       ]
+    },
+    {
+      "module": "PGR.WHATSAPP",
+      "code": "PGR.WHATSAPP",
+      "tenants": [
+        {
+          "code": "pb.jalandhar"
+        },
+        {
+          "code": "pb.phagwara"
+        }
+      ]
     }
   ]
 }

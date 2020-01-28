@@ -8,7 +8,8 @@
       "department": "Streetlights",
       "slaHours": 336,
       "menuPath": "StreetLights",
-      "active": false
+      "active": false,
+      "order": 1
     },
     {
       "serviceCode": "StreetLightNotWorking",
@@ -16,7 +17,8 @@
       "department": "DEPT_1",
       "slaHours": 336,
       "menuPath": "StreetLights",
-      "active": true
+      "active": true,
+      "order": 2
     },
     {
       "serviceCode": "GarbageNeedsTobeCleared",
@@ -24,7 +26,8 @@
       "department": "DEPT_3",
       "slaHours": 336,
       "menuPath": "Garbage",
-      "active": true
+      "active": true,
+      "order": 3
     },
     {
       "serviceCode": "DamagedGarbageBin",
@@ -32,7 +35,8 @@
       "department": "DEPT_3",
       "slaHours": 336,
       "menuPath": "Garbage",
-      "active": true
+      "active": true,
+      "order": 4
     },
     {
       "serviceCode": "BurningOfGarbage",
@@ -40,7 +44,8 @@
       "department": "DEPT_3",
       "slaHours": 336,
       "menuPath": "Garbage",
-      "active": true
+      "active": true,
+      "order": 5
     },
     {
       "serviceCode": "OverflowingOrBlockedDrain",
@@ -48,7 +53,8 @@
       "department": "DEPT_4",
       "slaHours": 336,
       "menuPath": "Drains",
-      "active": true
+      "active": true,
+      "order": 6
     },
     {
       "serviceCode": "illegalDischargeOfSewage",
