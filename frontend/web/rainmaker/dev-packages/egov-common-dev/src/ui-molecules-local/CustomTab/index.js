@@ -58,19 +58,13 @@ class NavPills extends React.Component {
     );
     const tabContent = (
       <div className={classes.contentWrapper}>
-        <SwipeableViews
-          axis={direction === "rtl" ? "x-reverse" : "x"}
-          index={this.state.active}
-          onChangeIndex={this.handleChangeIndex}
-        >
-          {tabs.map((prop, key) => {
-            return (
-              <div className={classes.tabContent} key={key}>
-                {prop.tabContent}
-              </div>
-            );
-          })}
-        </SwipeableViews>
+         {tabs.map((prop, key) => {
+          return this.state.active===key? (
+            <div className={classes.tabContent} key={key} >
+              {prop.tabContent}
+            </div>
+          ):null;
+        })}
       </div>
     );
     return horizontal !== undefined ? (
