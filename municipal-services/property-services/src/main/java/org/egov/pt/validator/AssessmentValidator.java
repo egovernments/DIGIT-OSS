@@ -97,7 +97,8 @@ public class AssessmentValidator {
 		if (assessmentFromDB!=null && assessmentFromDB.getUnitUsageList().size() > assessment.getUnitUsageList().size()) {
 			errorMap.put("MISSING_UNITS", "Please send all the units belonging to this assessment");
 		}
-		Set<String> existingUnitUsages = new HashSet<>();
+
+		/*Set<String> existingUnitUsages = new HashSet<>();
 		Set<String> existingDocs = new HashSet<>();
 
 		if(assessmentFromDB!=null)
@@ -125,7 +126,7 @@ public class AssessmentValidator {
 					}
 				}
 			}
-		}
+		}*/
 		assessment.setAdditionalDetails(utils.jsonMerge(assessmentFromDB.getAdditionalDetails(), assessment.getAdditionalDetails()));
 
 
