@@ -11336,7 +11336,7 @@
       "lastModifiedDate": null,
       "lastModifiedBy": null,
       "path": "Property Tax.Assess New Property",
-      "navigationURL": "property-tax",
+      "navigationURL": "pt-mutation/property-search",
       "leftIcon": "communication:business",
       "rightIcon": ""
     },
@@ -11356,7 +11356,7 @@
       "lastModifiedDate": null,
       "lastModifiedBy": null,
       "path": "Property Tax.Assess And Search Properties",
-      "navigationURL": "property-tax/search-property",
+      "navigationURL": "pt-mutation/property-search",
       "leftIcon": "communication:business",
       "rightIcon": ""
     },
@@ -13948,7 +13948,7 @@
       "serviceCode": "",
       "code": "",
       "path": "",
-      "navigationURL": "property-tax",
+      "navigationURL": "pt-mutation/property-search",
       "leftIcon": "action:store",
       "rightIcon": "",
       "queryParams": ""
@@ -15798,7 +15798,7 @@
       "lastModifiedDate": null,
       "lastModifiedBy": null,
       "path": "Property Tax.Assess And Search Properties",
-      "navigationURL": "property-tax/search-property",
+      "navigationURL": "pt-mutation/property-search",
       "quickAction": true,
       "leftIcon": "communication:business",
       "rightIcon": ""
