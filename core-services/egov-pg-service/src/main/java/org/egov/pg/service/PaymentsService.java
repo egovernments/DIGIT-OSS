@@ -33,6 +33,9 @@ public class PaymentsService {
 	@Autowired
 	private AppProperties props;
 	
+	@Autowired
+	private ObjectMapper mapper;
+	
 	public CollectionPayment registerPayment(TransactionRequest request) {
 		CollectionPayment payment = getPaymentFromTransaction(request);
 		payment.setInstrumentDate(request.getTransaction().getAuditDetails().getCreatedTime());
@@ -46,7 +49,6 @@ public class PaymentsService {
 		Optional<Object> response =  repository.fetchResult(builder, paymentRequest);
 		if(response.isPresent()) {
 			try {
-				ObjectMapper mapper = new ObjectMapper();
 				CollectionPaymentResponse paymentResponse = mapper.convertValue(response.get(), CollectionPaymentResponse.class);
 				if(!CollectionUtils.isEmpty(paymentResponse.getPayments()))
 					return paymentResponse.getPayments().get(0);
@@ -73,7 +75,6 @@ public class PaymentsService {
 		Optional<Object> response =  repository.fetchResult(builder, paymentRequest);
 		if(response.isPresent()) {
 			try {
-				ObjectMapper mapper = new ObjectMapper();
 				CollectionPaymentResponse paymentResponse = mapper.convertValue(response.get(), CollectionPaymentResponse.class);
 				if(!CollectionUtils.isEmpty(paymentResponse.getPayments()))
 					return paymentResponse.getPayments().get(0);
