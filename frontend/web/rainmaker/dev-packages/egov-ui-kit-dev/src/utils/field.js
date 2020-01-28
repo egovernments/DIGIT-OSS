@@ -1,6 +1,6 @@
 import React from "react";
 import { TextField, MobileNumberField, SingleCheckbox, DropDown,DatePicker, Label, TextFieldIcon, AutoSuggestDropdown } from "components";
-
+import moment from "moment";
 const Field = ({ fieldKey, handleFieldChange, field = {}, onTextFieldIconClick, ...rest }) => {
   const renderField = () => {
     const { type, tooltip, label, hideField, Icon, iconRedirectionURL, ...fieldProps } = field;
@@ -35,6 +35,7 @@ const Field = ({ fieldKey, handleFieldChange, field = {}, onTextFieldIconClick, 
             <DatePicker
             {...rest}
             {...fieldProps}
+          formatDate={() => moment().format('DD-MM-YYYY')}
             onChange={(e, value) => handleFieldChange(fieldKey,value)}
             />
           )

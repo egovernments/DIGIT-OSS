@@ -173,6 +173,7 @@ class FormWizardDataEntry extends Component {
             }
           ]
         );
+
         const  demandPropertyResponse= await httpRequest(
           "billing-service/demand/_search",
           "_get",
@@ -1772,6 +1773,15 @@ class FormWizardDataEntry extends Component {
         "Properties[0].propertyDetails[0].subOwnershipCategory",
         selectedownerShipCategoryType
       );
+      set(
+        prepareFormData,
+        "Properties[0].propertyDetails[0].citizenInfo.mobileNumber",
+        get(
+          prepareFormData,
+          "Properties[0].propertyDetails[0].owners[0].mobileNumber"
+        )
+      );
+
     } else if (selectedownerShipCategoryType.includes("MULTIPLEOWNERS")) {
       set(
         prepareFormData,
@@ -1791,6 +1801,14 @@ class FormWizardDataEntry extends Component {
         prepareFormData,
         "Properties[0].propertyDetails[0].subOwnershipCategory",
         selectedownerShipCategoryType
+      );
+      set(
+        prepareFormData,
+        "Properties[0].propertyDetails[0].citizenInfo.mobileNumber",
+        get(
+          prepareFormData,
+          "Properties[0].propertyDetails[0].owners[0].mobileNumber"
+        )
       );
     } else {
       const { instiObj, ownerArray } = getInstituteInfo(this);
@@ -1823,17 +1841,18 @@ class FormWizardDataEntry extends Component {
           get(form, "institutionAuthority.fields.telephone.value", null)
         )
       );
+      let phoneNo=get(prepareFormData,"Properties[0].propertyDetails[0].citizenInfo.mobileNumber");    
+      if(!phoneNo){
+          set(
+            prepareFormData,
+            "Properties[0].propertyDetails[0].citizenInfo.mobileNumber",
+            get(
+              prepareFormData,
+              "Properties[0].propertyDetails[0].owners[0].mobileNumber"
+            )
+          );
+        }
     }
-
-    set(
-      prepareFormData,
-      "Properties[0].propertyDetails[0].citizenInfo.mobileNumber",
-      get(
-        prepareFormData,
-        "Properties[0].propertyDetails[0].owners[0].mobileNumber"
-      )
-    );
-
     try {
       showSpinner();
       set(
@@ -1866,6 +1885,7 @@ class FormWizardDataEntry extends Component {
         }
       );
       properties[0].propertyDetails = finalPropertyData;
+
       let createPropertyResponse = await httpRequest(
         `pt-services-v2/property/${propertyMethodAction}`,
         `${propertyMethodAction}`,
@@ -1885,11 +1905,7 @@ class FormWizardDataEntry extends Component {
       let finaYr='';
       const dmdObj={};
       demandResponse.map(obj=>{
-
-
-
         let generalmdms=Object.keys(generalMDMSDataById.TaxPeriod).map((years,keys)=>{
-
             if(generalMDMSDataById.TaxPeriod[years].fromDate ===   obj.taxPeriodFrom){
               finaYr=generalMDMSDataById.TaxPeriod[years].financialYear
             }
@@ -1954,6 +1970,7 @@ class FormWizardDataEntry extends Component {
 //     }
 //   })
 // }
+
 
       let createDemandResponse = await httpRequest(
         `billing-service/demand/${propertyMethodAction}`,

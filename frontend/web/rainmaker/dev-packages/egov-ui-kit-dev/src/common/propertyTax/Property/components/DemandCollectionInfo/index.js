@@ -4,7 +4,7 @@ import Label from "egov-ui-kit/utils/translationNode";
 
 class DemandCollectionInfo extends React.Component {
   render() {
-    const { editIcon, demandProperties = [] } = this.props;
+    const { editIcon,demandProperties=[] } = this.props;
     const header = "PT_DEMAND_AND_COLLECTION";
     return (
       <Card
@@ -23,57 +23,61 @@ class DemandCollectionInfo extends React.Component {
               </div>
               {{ editIcon } && <span style={{ alignItems: "right" }}>{editIcon}</span>}
             </div>
-            {demandProperties.length > 0 && demandProperties[0].propertyDetails[0].demand.map((demand, index) => {
+            {demandProperties[0].propertyDetails[0].demand.map((demand, index) => {
               return demand ? (
                 <div>
-                  {Object.keys(demand.demand).map((datas, ind) => {
+                {Object.keys(demand.demand).map((datas, ind) => {
                     return (
                       <div>
-                        <div>
-                          <b>{datas}</b>
-                          {demand.demand[datas].map((data, ind) => {
-                            if (Object.keys(data).length == 2) {
-                              data['PT_COLLECTED'] = '';
-                            }
-                            return (
-                              <div>
-                                {Object.keys(data).map((d, i) => {
-                                  return (
-                                    <div className="col-sm-4 col-xs-12" style={{ marginBottom: 10, marginTop: 5 }}>
-                                      <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>
-                                        <Label
-                                          labelStyle={{
-                                            letterSpacing: "0.67px",
-                                            color: "rgba(0, 0, 0, 0.54)",
-                                            fontWeight: "400",
-                                            lineHeight: "1.375em",
-                                          }}
-                                          label={d != '' ? d : "NA"}
-                                          fontSize="12px"
-                                        />
-                                      </div>
-                                      <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>
-                                        <Label
-                                          labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.87)", fontWeight: "400", lineHeight: "19px" }}
-                                          label={data[d] != '' ? data[d] : "0"}
-                                          fontSize="16px"
-                                        />
-                                      </div>
-
+                      <div>
+                      <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 15px" }}>
+                       <b>{datas}</b>
+                       </div>
+                        {demand.demand[datas].map((data, ind) => {
+                          if(Object.keys(data).length==2){
+                            data['PT_COLLECTED']='';
+                          }
+                          return (
+                            <div>
+                              {Object.keys(data).map((d, i) => {
+                                return (
+                                  <div className="col-sm-4 col-xs-12" style={{ marginBottom: 10, marginTop: 5 }}>
+                                    <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>
+                                      <Label
+                                        labelStyle={{
+                                          letterSpacing: "0.67px",
+                                          color: "rgba(0, 0, 0, 0.54)",
+                                          fontWeight: "400",
+                                          lineHeight: "1.375em",
+                                        }}
+                                        label={d !='' ? d : "NA"}
+                                        fontSize="12px"
+                                      />
                                     </div>
-                                  );
-                                })}
-                              </div>
-                            );
-                          })}
+                                    <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>
+                                      <Label
+                                        labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.87)", fontWeight: "400", lineHeight: "19px" }}
+                                        label={data[d] !='' ? data[d] : "0"}
+                                        fontSize="16px"
+                                      />
+                                    </div>
+
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          );
+                        })}
                         </div>
                         <br />
                         <br />
                       </div>
+
                     );
                   })}
-                </div>
-              ) : null;
+                  </div>
+
+              ):null;
             })}
           </div>
         }
