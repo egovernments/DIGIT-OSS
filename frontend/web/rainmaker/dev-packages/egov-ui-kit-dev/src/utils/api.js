@@ -81,8 +81,10 @@ export const httpRequest = async (
         value: tenantId,
       });
   }
-
-  endPoint = addQueryArg(endPoint, queryObject);
+  if (queryObject && queryObject.length) {
+    endPoint = addQueryArg(endPoint, queryObject);
+  }
+  
   try {
 if(isGetMethod){
   const getResponse = await instance.get(endPoint, wrapRequestBody(requestBody, action, customRequestInfo));

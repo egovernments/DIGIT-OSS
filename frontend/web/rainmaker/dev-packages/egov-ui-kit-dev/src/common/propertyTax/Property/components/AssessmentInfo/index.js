@@ -189,29 +189,31 @@ const getUnitInfo = (units = []) => {
   units = units || [];
   let floors = [];
   units.map((unit, index) => {
-    let floor = [{
-      key: getTranslatedLabel("PT_ASSESSMENT_UNIT_USAGE_TYPE", localizationLabelsData),
-      value: unit.usageCategoryMinor ? 'PROPERTYTAX_BILLING_SLAB_' + unit.usageCategoryMinor :
-        unit.usageCategoryMajor ? 'PROPERTYTAX_BILLING_SLAB_' + unit.usageCategoryMajor : "NA",
-    }, {
-
-      key: getTranslatedLabel("PT_ASSESMENT_INFO_OCCUPLANCY", localizationLabelsData),
-      value: unit.occupancyType ? 'PROPERTYTAX_OCCUPANCYTYPE_' + unit.occupancyType : "NA",
-    }, {
-
-      key: getTranslatedLabel("PT_FORM2_BUILT_AREA", localizationLabelsData),
-      value: unit.unitArea ? unit.unitArea + '' : "NA",
-    }];
-    if (unit.occupancyType === "RENTED") {
-      floor.push({
-        key: getTranslatedLabel("PT_FORM2_TOTAL_ANNUAL_RENT", localizationLabelsData),
-        value: unit.arv ? unit.arv + '' : "NA",
-      })
-    }
-    if (!floors[unit['floorNo']]) {
-      floors[unit['floorNo']] = [floor];
-    } else {
-      floors[unit['floorNo']].push(floor);
+    if(unit){
+      let floor = [{
+        key: getTranslatedLabel("PT_ASSESSMENT_UNIT_USAGE_TYPE", localizationLabelsData),
+        value: unit.usageCategoryMinor ? 'PROPERTYTAX_BILLING_SLAB_' + unit.usageCategoryMinor :
+          unit.usageCategoryMajor ? 'PROPERTYTAX_BILLING_SLAB_' + unit.usageCategoryMajor : "NA",
+      }, {
+  
+        key: getTranslatedLabel("PT_ASSESMENT_INFO_OCCUPLANCY", localizationLabelsData),
+        value: unit.occupancyType ? 'PROPERTYTAX_OCCUPANCYTYPE_' + unit.occupancyType : "NA",
+      }, {
+  
+        key: getTranslatedLabel("PT_FORM2_BUILT_AREA", localizationLabelsData),
+        value: unit.unitArea ? unit.unitArea + '' : "NA",
+      }];
+      if (unit.occupancyType === "RENTED") {
+        floor.push({
+          key: getTranslatedLabel("PT_FORM2_TOTAL_ANNUAL_RENT", localizationLabelsData),
+          value: unit.arv ? unit.arv + '' : "NA",
+        })
+      }
+      if (!floors[unit['floorNo']]) {
+        floors[unit['floorNo']] = [floor];
+      } else {
+        floors[unit['floorNo']].push(floor);
+      }
     }
   }
   )
