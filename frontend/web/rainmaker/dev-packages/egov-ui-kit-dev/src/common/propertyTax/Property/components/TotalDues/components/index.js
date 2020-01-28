@@ -23,7 +23,7 @@ const buttonStyle = {
 export const TotalDuesButton = ({ labelText,onClickAction }) => {
   return (
     <Button
-      label={<Label buttonLabel={true} label={labelText} color="rgb(254, 122, 81)" fontSize="16px" height="40px" labelStyle={labelStyle} />}
+      label={<Label buttonLabel={true} label={labelText} color="rgb(254, 122, 81)" fontSize="16px" height="35px" labelStyle={labelStyle} />}
       buttonStyle={buttonStyle}
       onClick={() => {
         onClickAction();

@@ -6,7 +6,7 @@
   }
 
 .flex-child {
- 
+ background-color: transparent !important;
 }
 
 .value {
@@ -24,7 +24,7 @@
 
 .bottom-line {
     background-color: rgba(0, 0, 0, 0.12);
-    width: 878px;
+    width: auto;
     height: 1px;
     margin-left: 16px;
   }

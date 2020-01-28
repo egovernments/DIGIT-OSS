@@ -42,4 +42,19 @@
     margin-bottom: -15px;
     cursor: pointer;
   }
+
+  .view-history-dialog {
+    width: 100% !important;
+  }
+
+  @media only screen and (max-width: 768px) {
+    .view-history-dialog {
+      max-width: 90% !important;
+    }
+  }
+  @media only screen and (min-width: 768px) {
+    .view-history-dialog {
+      max-width: 75% !important;
+    }
+  }
   

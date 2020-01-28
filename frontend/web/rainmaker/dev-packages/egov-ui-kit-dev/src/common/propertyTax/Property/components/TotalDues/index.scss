@@ -6,20 +6,25 @@
 }
 
 .flex-child {
- 
- 
-
-}
-
-.flex-child {
   div {
     min-width: 100px !important;
-    button {
-      div {
+    div {
+      button {
         div {
-          height: 33px !important;
+          div {
+            span {
+              padding-left: 0px;
+              padding-right: 0px;
+            }
+          }
         }
       }
     }
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .totaldues-tooltip-icon {
+    padding-top: 0px !important;
   }
 }
