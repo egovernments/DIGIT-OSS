@@ -7,7 +7,7 @@ serviceMaps:
    fromTopic: save-pt-mutation-billingslab
    isTransaction: true
    queryMaps:
-    - query: INSERT INTO eg_pt_mutation_billingslab(id, tenantid, propertyType, propertySubType, usageCategoryMajor, usageCategoryMinor, usageCategorySubMinor, usageCategoryDetail, ownershipCategory, subOwnershipCategory, minMarketValue, maxMarketValue, fixedAmount, rate, type) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, cast(? as double precision), cast(? as double precision), cast(? as double precision), cast(? as double precision), ?);
+    - query: INSERT INTO eg_pt_mutation_billingslab(id, tenantid, propertyType, propertySubType, usageCategoryMajor, usageCategoryMinor, usageCategorySubMinor, usageCategoryDetail, ownershipCategory, subOwnershipCategory, minMarketValue, maxMarketValue, fixedAmount, rate, method) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, cast(? as double precision), cast(? as double precision), cast(? as double precision), cast(? as double precision), ?);
 
       basePath: MutationBillingSlab.*
       jsonMaps:
@@ -51,7 +51,7 @@ serviceMaps:
    isTransaction: true
    queryMaps:
 
-    - query: UPDATE eg_pt_mutation_billingslab SET propertyType=?, propertySubType=?, usageCategoryMajor=?, usageCategoryMinor=?, usageCategorySubMinor=?, usageCategoryDetail=?, ownershipCategory=?, subOwnershipCategory=?, minMarketValue=cast(? as double precision), maxMarketValue=cast(? as double precision), fixedAmount=cast(? as double precision), rate=cast(? as double precision), type=? WHERE tenantid=? AND id=?;
+    - query: UPDATE eg_pt_mutation_billingslab SET propertyType=?, propertySubType=?, usageCategoryMajor=?, usageCategoryMinor=?, usageCategorySubMinor=?, usageCategoryDetail=?, ownershipCategory=?, subOwnershipCategory=?, minMarketValue=cast(? as double precision), maxMarketValue=cast(? as double precision), fixedAmount=cast(? as double precision), rate=cast(? as double precision), method=? WHERE tenantid=? AND id=?;
 
       basePath: MutationBillingSlab.*
       jsonMaps:
