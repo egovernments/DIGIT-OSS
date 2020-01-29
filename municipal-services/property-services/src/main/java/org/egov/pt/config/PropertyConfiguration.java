@@ -161,7 +161,7 @@ public class PropertyConfiguration {
     @Value("${pt.business.codes}")
     private List<String> businessServiceList;
 
-    @Value("${workflow.context.path}")
+    @Value("${workflow.host}")
     private String wfHost;
 
     @Value("${workflow.transition.path}")

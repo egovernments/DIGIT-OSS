@@ -38,7 +38,6 @@ public class WorkflowService {
 	 *
 	 * and sets the resultant status from wf-response back to trade-license object
 	 *
-	 * @param PropertyRequest
 	 */
 	public String callWorkFlow(ProcessInstanceRequest workflowReq) {
 
