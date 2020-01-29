@@ -123,7 +123,7 @@ serviceMaps:
 
           - jsonPath: $.BPA.auditDetails.lastModifiedTime
 
-       - query: INSERT INTO eg_bpa_owner( id, name, tenantid, mobilenumber, gender, fatherorhusbandname, correspondenceaddress, institutionid, isprimaryowner, ownertype, ownershippercentage, relationship, buildingplanid, createdby,lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+       - query: INSERT INTO eg_bpa_owner( id, name, tenantid, mobilenumber, gender, fatherorhusbandname, correspondenceaddress, institutionid, isprimaryowner, ownertype, ownershippercentage, relationship, buildingplanid, active, createdby,lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
          basePath: BPA.owners.*
          jsonMaps:
           - jsonPath: $.BPA.owners.*.uuid
@@ -151,6 +151,8 @@ serviceMaps:
           - jsonPath: $.BPA.owners.*.relationship
 
           - jsonPath: $.BPA.id
+          
+          - jsonPath: $.BPA.owners.*.active
 
           - jsonPath: $.BPA.owners.*.auditDetails.createdBy
 
@@ -332,10 +334,14 @@ serviceMaps:
 
           - jsonPath: $.BPA.address.id
 
-       - query: UPDATE eg_bpa_owner SET name=?, mobilenumber=?, gender=?, fatherorhusbandname=?, correspondenceaddress=?, institutionid=?, isprimaryowner=?, ownertype=?, ownershippercentage=?, relationship=?, lastmodifiedby=?, lastmodifiedtime=? WHERE id=?;
+       - query: INSERT INTO eg_bpa_owner( id, name, tenantid, mobilenumber, gender, fatherorhusbandname, correspondenceaddress, institutionid, isprimaryowner, ownertype, ownershippercentage, relationship, buildingplanid, active, createdby,lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id, buildingplanid) WHERE id IS NOT NULL DO UPDATE SET name=?, mobilenumber=?, gender=?, fatherorhusbandname=?, correspondenceaddress=?, institutionid=?, isprimaryowner=?, ownertype=?, ownershippercentage=?, relationship=?, active=?, lastmodifiedby=?, lastmodifiedtime=?;
          basePath: BPA.owners.*
          jsonMaps:
+          - jsonPath: $.BPA.owners.*.uuid
+
           - jsonPath: $.BPA.owners.*.name
+
+          - jsonPath: $.BPA.owners.*.tenantId
 
           - jsonPath: $.BPA.owners.*.mobileNumber
 
@@ -355,12 +361,43 @@ serviceMaps:
 
           - jsonPath: $.BPA.owners.*.relationship
 
+          - jsonPath: $.BPA.id
+          
+          - jsonPath: $.BPA.owners.*.active
+
+          - jsonPath: $.BPA.owners.*.auditDetails.createdBy
+
+          - jsonPath: $.BPA.owners.*.auditDetails.lastModifiedBy
+
+          - jsonPath: $.BPA.owners.*.auditDetails.createdTime
+
+          - jsonPath: $.BPA.owners.*.auditDetails.lastModifiedTime
+          
+          - jsonPath: $.BPA.owners.*.name
+
+          - jsonPath: $.BPA.owners.*.mobileNumber
+
+          - jsonPath: $.BPA.owners.*.gender
+
+          - jsonPath: $.BPA.owners.*.fatherOrHusbandName
+
+          - jsonPath: $.BPA.owners.*.correspondenceAddress
+
+          - jsonPath: $.BPA.owners.*.institutionId
+
+          - jsonPath: $.BPA.owners.*.isPrimaryOwner
+
+          - jsonPath: $.BPA.owners.*.ownerType
+
+          - jsonPath: $.BPA.owners.*.ownerShipPercentage
+
+          - jsonPath: $.BPA.owners.*.relationship
+          
+          - jsonPath: $.BPA.owners.*.active
+
           - jsonPath: $.BPA.owners.*.auditDetails.lastModifiedBy
 
           - jsonPath: $.BPA.owners.*.auditDetails.lastModifiedTime
-
-          - jsonPath: $.BPA.owners.*.uuid
-
 
        - query: UPDATE eg_bpa_unit SET usageCategory=?, additionaldetails=?, lastmodifiedby=?, lastmodifiedtime=? WHERE id=?
          basePath: BPA.units.*
@@ -492,4 +529,69 @@ serviceMaps:
            - jsonPath: $.BPA.govtOrQuasi
            
            - jsonPath: $.BPA.id
+           
+       - query: INSERT INTO eg_bpa_owner( id, name, tenantid, mobilenumber, gender, fatherorhusbandname, correspondenceaddress, institutionid, isprimaryowner, ownertype, ownershippercentage, relationship, buildingplanid, active, createdby,lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id, buildingplanid) WHERE id IS NOT NULL DO UPDATE SET name=?, mobilenumber=?, gender=?, fatherorhusbandname=?, correspondenceaddress=?, institutionid=?, isprimaryowner=?, ownertype=?, ownershippercentage=?, relationship=?, active=?, lastmodifiedby=?, lastmodifiedtime=?;
+         basePath: BPA.owners.*
+         jsonMaps:
+          - jsonPath: $.BPA.owners.*.uuid
+
+          - jsonPath: $.BPA.owners.*.name
+
+          - jsonPath: $.BPA.owners.*.tenantId
+
+          - jsonPath: $.BPA.owners.*.mobileNumber
+
+          - jsonPath: $.BPA.owners.*.gender
+
+          - jsonPath: $.BPA.owners.*.fatherOrHusbandName
+
+          - jsonPath: $.BPA.owners.*.correspondenceAddress
+
+          - jsonPath: $.BPA.owners.*.institutionId
+
+          - jsonPath: $.BPA.owners.*.isPrimaryOwner
+
+          - jsonPath: $.BPA.owners.*.ownerType
+
+          - jsonPath: $.BPA.owners.*.ownerShipPercentage
+
+          - jsonPath: $.BPA.owners.*.relationship
+
+          - jsonPath: $.BPA.id
+          
+          - jsonPath: $.BPA.owners.*.active
+
+          - jsonPath: $.BPA.owners.*.auditDetails.createdBy
+
+          - jsonPath: $.BPA.owners.*.auditDetails.lastModifiedBy
+
+          - jsonPath: $.BPA.owners.*.auditDetails.createdTime
+
+          - jsonPath: $.BPA.owners.*.auditDetails.lastModifiedTime
+          
+          - jsonPath: $.BPA.owners.*.name
+
+          - jsonPath: $.BPA.owners.*.mobileNumber
+
+          - jsonPath: $.BPA.owners.*.gender
+
+          - jsonPath: $.BPA.owners.*.fatherOrHusbandName
+
+          - jsonPath: $.BPA.owners.*.correspondenceAddress
+
+          - jsonPath: $.BPA.owners.*.institutionId
+
+          - jsonPath: $.BPA.owners.*.isPrimaryOwner
+
+          - jsonPath: $.BPA.owners.*.ownerType
+
+          - jsonPath: $.BPA.owners.*.ownerShipPercentage
+
+          - jsonPath: $.BPA.owners.*.relationship
+          
+          - jsonPath: $.BPA.owners.*.active
+
+          - jsonPath: $.BPA.owners.*.auditDetails.lastModifiedBy
+
+          - jsonPath: $.BPA.owners.*.auditDetails.lastModifiedTime
 
