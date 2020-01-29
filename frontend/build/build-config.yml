@@ -9,30 +9,30 @@
 # - 
 
 config:
--   name: frontend/citizen
+-   name: builds/frontend/citizen
     build:
     - work-dir: web/rainmaker/
       dockerfile: web/rainmaker/docker/citizen/Dockerfile
       image-name: citizen
 
--   name: frontend/employee
+-   name: builds/frontend/employee
     build:
     - work-dir: web/rainmaker/
       dockerfile: web/rainmaker/docker/employee/Dockerfile
       image-name: employee
 
--   name: frontend/ui-uploader
+-   name: builds/frontend/ui-uploader
     build:
     - work-dir: web/ui-uploader/
       image-name: ui-uploader
 
--   name: frontend/dss-dashboard
+-   name: builds/frontend/dss-dashboard
     build:
     - work-dir: web/dss-dashboard/
       dockerfile: web/dss-dashboard/docker/Dockerfile
       image-name: dss-dashboard
       
--   name: frontend/common-screen
+-   name: builds/frontend/common-screen
     build:
     - work-dir: web/egov-common-screen/
       dockerfile: web/egov-common-screen/docker/Dockerfile
