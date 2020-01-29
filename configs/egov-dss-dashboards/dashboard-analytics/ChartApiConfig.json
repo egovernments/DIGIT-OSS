@@ -698,14 +698,14 @@
         "requestQueryMap": "{\"wardId\" : \"Data.ward.name.keyword\", \"tenantId\" : \"Data.tenantId\"}",
         "dateRefField": "Data.@timestamp",
         "indexName": "ptindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Active ULBs\":{\"terms\":{\"field\":\"Data.tenantId.keyword\"},\"aggs\":{\"type_count\":{\"cardinality\":{\"field\":\"Data.tenantId.keyword\"}}}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Active ULBs\":{\"cardinality\":{\"field\":\"Data.tenantId.keyword\"}}}}}}"
       },
       {
         "module": "TL",
         "requestQueryMap": "{\"wardId\" : \"Data.ward.name.keyword\", \"tenantId\" : \"Data.tenantData.code\"}",
         "dateRefField": "Data.tradelicense.@timestamp",
         "indexName": "tlindex-v1",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantData.code.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Active ULBs\":{\"terms\":{\"field\":\"Data.tenantData.code.keyword\"},\"aggs\":{\"type_count\":{\"cardinality\":{\"field\":\"Data.tenantData.code.keyword\"}}}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantData.code.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Active ULBs\":{\"cardinality\":{\"field\":\"Data.tenantData.code.keyword\"}}}}}}"
       }
     ],
     "chartType": "metric",
