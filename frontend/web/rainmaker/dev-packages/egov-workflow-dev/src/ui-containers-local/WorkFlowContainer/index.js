@@ -434,10 +434,6 @@ class WorkFlowContainer extends React.Component {
 
       let showFooter=process.env.REACT_APP_NAME === "Citizen" ? false : true;
       
-      if(dataPath === "BPA"){
-        showFooter = true;
-      }
-
     return (
       <div>
         {ProcessInstances && ProcessInstances.length > 0 && (

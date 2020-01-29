@@ -253,7 +253,7 @@ const setDownloadMenu = (action, state, dispatch) => {
     case "FIELDINSPECTION":
     case "PENDINGAPPROVAL":
     case "REJECTED":
-      downloadMenu = [receiptDownloadObject, applicationDownloadObject];
+      downloadMenu = [certificateDownloadObject];
       printMenu = [];
       break;
     case "CANCELLED":
@@ -298,14 +298,35 @@ const setSearchResponse = async (
   ]);
 
   const edcrNumber = response.Bpa["0"].edcrNumber;
+  const status = response.Bpa["0"].status;
+
+  if((status && status === "PENDING_APPL_FEE") || (status && status === "PENDING_SANC_FEE_PAYMENT") ) {
+    dispatch(
+      handleField(
+      "search-preview",
+      "components.div.children.citizenFooter",
+      "visible",
+       true
+    )
+  )
+  }else {
+    dispatch(
+      handleField(
+      "search-preview",
+      "components.div.children.citizenFooter",
+      "visible",
+       false
+    )
+  )
+  }
 
   dispatch(prepareFinalObject("BPA", response.Bpa[0]));
-  let edcrRes = await edcrHttpRequest(
-    "post",
-    "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + edcrNumber + "&tenantId=" + tenantId,
-    "search", []
-    );
- 
+    let edcrRes = await edcrHttpRequest(
+      "post",
+      "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + edcrNumber + "&tenantId=" + tenantId,
+      "search", []
+      );
+
   dispatch(
     prepareFinalObject(
       `scrutinyDetails`,
@@ -477,8 +498,7 @@ const screenConfig = {
           nocSummary: nocSummary
 
         }),
-        citizenFooter:
-          process.env.REACT_APP_NAME === "Citizen" ? citizenFooter : {}
+        citizenFooter: process.env.REACT_APP_NAME === "Citizen" ? citizenFooter : {}
       }
     }
   }

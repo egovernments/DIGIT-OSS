@@ -2192,6 +2192,11 @@ export const setLicenseeSubTypeDropdownData = async (
   //     null
   //   )
   // );
+  const licenceType = get(
+    state.screenConfiguration.preparedFinalObject,
+    "LicensesTemp[0].tradeLicenseDetail.tradeUnits[0].tradeType",
+  );
+  if(licenceType){
   dispatch(
     handleField(
       "apply",
@@ -2200,6 +2205,7 @@ export const setLicenseeSubTypeDropdownData = async (
       null
     )
   );
+}
 
   const selectedTradeType = actionValue;
   let filterdTradeTypes = [];

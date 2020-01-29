@@ -1,5 +1,7 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import get from "lodash/get";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 let tenant = getQueryArg(window.location.href, "tenantId");
@@ -15,6 +17,14 @@ const getCommonApplyFooter = children => {
   };
 };
 
+export const bpaMakePayment = async (state, dispatch) => {
+  let status = get(state.screenConfiguration.preparedFinalObject, "BPA.status");
+  let billbService = ((status == "PENDING_APPL_FEE") ? "BPA.NC_APP_FEE" : "BPA.NC_SAN_FEE");
+  const makePaymentUrl = process.env.REACT_APP_SELF_RUNNING === "true"
+    ? `/egov-ui-framework/egov-bpa/citizen-pay?applicationNumber=${applicationNumber}&tenantId=${tenant}&businessService=${billbService}`
+    : `/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenant}&businessService=${billbService}`;
+  dispatch(setRoute(makePaymentUrl));
+}
 export const citizenFooter = getCommonApplyFooter({
   makePayment: {
     componentPath: "Button",
@@ -22,10 +32,9 @@ export const citizenFooter = getCommonApplyFooter({
       variant: "contained",
       color: "primary",
       style: {
-        minWidth: "200px",
         height: "48px",
-        marginRight: "45px"
-      }
+          marginRight: "45px"
+        }
     },
     children: {
       submitButtonLabel: getLabel({
@@ -34,16 +43,14 @@ export const citizenFooter = getCommonApplyFooter({
       })
     },
     onClickDefination: {
-      action: "page_change",
-      path:
-        process.env.REACT_APP_SELF_RUNNING === "true"
-          ? `/egov-ui-framework/egov-bpa/citizen-pay?applicationNumber=${applicationNumber}&tenantId=${tenant}`
-          : `/egov-bpa/citizen-pay?applicationNumber=${applicationNumber}&tenantId=${tenant}`
+      action: "condition",
+      callBack: bpaMakePayment
     },
     roleDefination: {
       rolePath: "user-info.roles",
-      action: "PAY"
+      action: "PAY",
+      roles: ["CITIZEN"]
     },
     visible: process.env.REACT_APP_NAME === "Citizen" ? true : false
-  }
+  }  
 });
