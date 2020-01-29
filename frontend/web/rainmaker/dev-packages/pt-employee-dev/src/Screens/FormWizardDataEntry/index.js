@@ -192,7 +192,7 @@ class FormWizardDataEntry extends Component {
         const {generalMDMSDataById}=this.props;
         let finalYear='';
         const demands=demandPropertyResponse.Demands.reverse();
-        let demandResponse=demands.forEach((demand,yearKey)=>{
+            let demandResponse=demands.forEach((demand,yearKey)=>{
           return(
             demand.demandDetails.forEach((demandData,demandKey)=>{
           let yearkeys=Object.keys(generalMDMSDataById.TaxPeriod).forEach((item, i) => {
@@ -1838,7 +1838,7 @@ class FormWizardDataEntry extends Component {
           get(form, "institutionAuthority.fields.telephone.value", null)
         )
       );
-      let phoneNo=get(prepareFormData,"Properties[0].propertyDetails[0].citizenInfo.mobileNumber");    
+      let phoneNo=get(prepareFormData,"Properties[0].propertyDetails[0].citizenInfo.mobileNumber");
       if(!phoneNo){
           set(
             prepareFormData,
@@ -1864,7 +1864,9 @@ class FormWizardDataEntry extends Component {
 
       const finalyears = getFinalData();
       const finalPropertyData = [];
-      DemandProperties[0].propertyDetails[0].demand.forEach(
+      const propertyDetails=DemandProperties[0].propertyDetails;
+      const demandsData=propertyDetails[0].demand;
+demandsData.forEach(
         (propertyData, index) => {
           if (propertyData) {
             let yeardatas = Object.keys(propertyData.demand).map(
@@ -1873,8 +1875,6 @@ class FormWizardDataEntry extends Component {
             finalPropertyData.push({
               ...properties[0].propertyDetails[0],
               financialYear: yeardatas,
-              // additionalDetails: properties[0].propertyDetails[0].additionalDetails?properties[0].propertyDetails[0].additionalDetails:null,
-              // institution: properties[0].propertyDetails[0].institution?properties[0].propertyDetails[0].institution:null,
               source: "LEGACY_RECORD",
               assessmentDate: new Date().getTime()
             });
@@ -1911,9 +1911,7 @@ class FormWizardDataEntry extends Component {
          demandObject[obj.taxPeriodFrom]={...obj};
          dmdObj[finaYr]={...obj};
       })
-
-
-      DemandProperties[0].propertyDetails[0].demand.forEach((demand, index) => {
+  demandsData.forEach((demand, index) => {
         demand &&
           Object.keys(demand.demand).forEach((dataYear, key) => {
             const demandDetails1 = [];
