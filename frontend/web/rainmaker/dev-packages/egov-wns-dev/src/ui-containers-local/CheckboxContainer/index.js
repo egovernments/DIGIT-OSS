@@ -1,11 +1,15 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
-import FormGroup from "@material-ui/core/FormGroup";
 import { connect } from "react-redux";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
+import FormGroup from '@material-ui/core/FormGroup';
+import LabelContainer from "egov-ui-framework/ui-containers/LabelContainer";
+import FormControl from "@material-ui/core/FormControl";
+import FormLabel from "@material-ui/core/FormLabel";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import get from "lodash/get";
 import "./index.css";
 
 const styles = {
@@ -15,59 +19,72 @@ const styles = {
       color: "#FE7A51"
     }
   },
-  checked: {}
+  formControl: {
+    marginTop: 0,
+    paddingBottom: 0
+  },
+  group: {
+    display: "inline-block",
+    margin: 0
+  },
+  checked: {},
+  radioRoot: {
+    marginBottom: 12
+  },
+  formLabel: {
+    fontSize: 12,
+    fontWeight: 400,
+    letterSpacing: 0.56
+  }
 };
 
 class CheckboxLabels extends React.Component {
-  state = {
-    checkedG: true
-  };
-
-  handleChange = name => event => {
-    const { jsonPath, approveCheck } = this.props;
-    this.setState({ [name]: event.target.checked }, () =>
-      approveCheck(jsonPath, this.state.checkedG)
-    );
+  handleChange = event => {
+    const { screenKey, componentJsonpath, onFieldChange, onChange } = this.props;
+    onChange ? onChange(event) : onFieldChange(screenKey, componentJsonpath, "props.value", event.target.value);
   };
 
   render() {
-    const { classes, content } = this.props;
+    const { classes, label, buttons, defaultValue, value, fieldValue, required } = this.props;
 
     return (
-      <FormGroup row>
-        <FormControlLabel
-          classes={{ label: "checkbox-label" }}
-          control={
-            <Checkbox
-              checked={this.state.checkedG}
-              onChange={this.handleChange("checkedG")}
-              value={this.state.checkedG}
-              classes={{
-                root: classes.root,
-                checked: classes.checked
-              }}
-            />
-          }
-          label={content}
-        />
-      </FormGroup>
-    );
+      <div className={classes.root}>
+        <FormControl component="fieldset" className={classes.formControl} required={required}>
+          <FormLabel className={classes.formLabel}>
+            {label && label.key && (<LabelContainer className={classes.formLabel} labelName={label.name} labelKey={label.key} />)}
+          </FormLabel>
+          <FormGroup aria-label="Gender" name="gender1" className={classes.group} value={value || fieldValue || defaultValue} onChange={this.handleChange}>
+            {buttons && buttons.map((button, index) => {
+              return (
+                <FormControlLabel
+                  disabled={button.disabled ? true : false}
+                  key={index}
+                  classes={{ label: "checkbox-button-label" }}
+                  value={button.value}
+                  control={<Checkbox classes={{ root: classes.radioRoot, checked: classes.checked }} color="primary" />}
+                  label={<LabelContainer labelName={button.labelName} labelKey={button.labelKey} />}
+                />
+              );
+            })
+            }
+          </FormGroup>
+        </FormControl>
+      </div>
+    )
   }
 }
 
 const mapStateToProps = (state, ownprops) => {
+  let fieldValue = "";
   const { screenConfiguration } = state;
   const { jsonPath } = ownprops;
   const { preparedFinalObject } = screenConfiguration;
-  return { preparedFinalObject, jsonPath };
+  if (jsonPath) fieldValue = get(preparedFinalObject, jsonPath);
+  return { preparedFinalObject, jsonPath, fieldValue };
 };
 
 const mapDispatchToProps = dispatch => {
-  return {
-    approveCheck: (jsonPath, value) => {
-      dispatch(prepareFinalObject(jsonPath, value));
-    }
-  };
+  return { approveCheck: (jsonPath, value) => { dispatch(prepareFinalObject(jsonPath, value)); } };
 };
 
 CheckboxLabels.propTypes = {
@@ -75,8 +92,5 @@ CheckboxLabels.propTypes = {
 };
 
 export default withStyles(styles)(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(CheckboxLabels)
+  connect(mapStateToProps, mapDispatchToProps)(CheckboxLabels)
 );

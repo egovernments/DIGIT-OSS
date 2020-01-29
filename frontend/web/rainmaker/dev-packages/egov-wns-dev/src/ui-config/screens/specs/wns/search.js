@@ -5,10 +5,18 @@ import { searchResults } from "./searchResource/searchResults";
 import { searchApplicationResults } from "./searchResource/searchApplicationResults";
 import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 import find from "lodash/find";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 
 const header = getCommonHeader({
   labelKey: "WS_SEARCH_CONNECTION_HEADER"
 });
+
+const pageResetAndChange = (state, dispatch) => {
+  dispatch(prepareFinalObject("Licenses", [{ licenseType: "PERMANENT" }]));
+  dispatch(prepareFinalObject("LicensesTemp", []));
+  dispatch(setRoute("/wns/apply"));
+};
+
 const employeeSearchResults = {
   uiFramework: "material-ui",
   name: "search",
@@ -86,15 +94,16 @@ const employeeSearchResults = {
                   }
                 },
                 buttonLabel: getLabel({
-                  labelName: "NEW APPLICATION"
+                  labelName: "NEW APPLICATION",
+                  labelKey: "WNS_SEARCH_NEW_APPLICATION"
                 })
               },
-              // onClickDefination: {
-              //   action: "condition",
-              //   callBack: (state, dispatch) => {
-              //     pageResetAndChange(state, dispatch);
-              //   }
-              // }
+              onClickDefination: {
+                action: "condition",
+                callBack: (state, dispatch) => {
+                  pageResetAndChange(state, dispatch);
+                }
+              }
             }
           }
         },

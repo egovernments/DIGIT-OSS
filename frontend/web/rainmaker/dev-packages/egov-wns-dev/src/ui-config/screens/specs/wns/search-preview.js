@@ -8,11 +8,7 @@ import {
 import get from "lodash/get";
 import set from "lodash/set";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import {
-  getQueryArg,
-  setBusinessServiceDataToLocalStorage,
-  getFileUrlFromAPI
-} from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg, setBusinessServiceDataToLocalStorage, getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import {
@@ -28,7 +24,7 @@ import {
   getHeaderSideText,
   getTransformedStatus
 } from "../utils";
-import { getReviewTrade } from "./applyResource/review-trade";
+import { getReviewConnectionDetails } from "./applyResource/review-trade";
 import { getReviewOwner } from "./applyResource/review-owner";
 import { getReviewDocuments } from "./applyResource/review-documents";
 import { loadReceiptGenerationData } from "../utils/receiptTransformer";
@@ -115,9 +111,9 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
   set(payload, "Licenses[0].headerSideText", headerSideText);
 
   get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory") &&
-  get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory").split(
-    "."
-  )[0] === "INDIVIDUAL"
+    get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory").split(
+      "."
+    )[0] === "INDIVIDUAL"
     ? setMultiOwnerForSV(action, true)
     : setMultiOwnerForSV(action, false);
 
@@ -188,7 +184,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     ) {
       set(
         action,
-        "screenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.approvalDetails.visible",
+        "screenConfig.components.div.children.taskDetails.children.cardContent.children.approvalDetails.visible",
         true
       );
 
@@ -203,7 +199,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         dispatch(
           handleField(
             "search-preview",
-            "components.div.children.tradeReviewDetails.children.cardContent.children.approvalDetails.children.cardContent.children.viewTow.children.lbl",
+            "components.div.children.taskDetails.children.cardContent.children.approvalDetails.children.cardContent.children.viewTow.children.lbl",
             "visible",
             false
           )
@@ -212,7 +208,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     } else {
       set(
         action,
-        "screenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.approvalDetails.visible",
+        "screenConfig.components.div.children.taskDetails.children.cardContent.children.approvalDetails.visible",
         false
       );
     }
@@ -248,31 +244,31 @@ const setStatusBasedValue = status => {
     case "approved":
       return {
         titleText: "Review the Trade License",
-        titleKey: "TL_REVIEW_TRADE_LICENSE",
+        titleKey: "WS_REVIEW_TRADE_LICENSE",
         titleVisibility: true,
         roleDefination: {
           rolePath: "user-info.roles",
-          roles: ["TL_APPROVER"]
+          roles: ["WS_APPROVER"]
         }
       };
     case "pending_payment":
       return {
         titleText: "Review the Application and Proceed",
-        titleKey: "TL_REVIEW_APPLICATION_AND_PROCEED",
+        titleKey: "WS_REVIEW_APPLICATION_AND_PROCEED",
         titleVisibility: true,
         roleDefination: {
           rolePath: "user-info.roles",
-          roles: ["TL_CEMP"]
+          roles: ["WS_CEMP"]
         }
       };
     case "pending_approval":
       return {
         titleText: "Review the Application and Proceed",
-        titleKey: "TL_REVIEW_APPLICATION_AND_PROCEED",
+        titleKey: "WS_REVIEW_APPLICATION_AND_PROCEED",
         titleVisibility: true,
         roleDefination: {
           rolePath: "user-info.roles",
-          roles: ["TL_APPROVER"]
+          roles: ["WS_APPROVER"]
         }
       };
     case "cancelled":
@@ -299,12 +295,12 @@ const setStatusBasedValue = status => {
 
 const headerrow = getCommonContainer({
   header: getCommonHeader({
-    labelName: "Trade License Application (2018-2019)",
-    labelKey: "TL_TRADE_APPLICATION"
+    labelName: "Task Details",
+    labelKey: "WNS_TASK_DETAILS"
   }),
   applicationNumber: {
     uiFramework: "custom-atoms-local",
-    moduleName: "egov-tradelicence",
+    moduleName: "egov-wns",
     componentPath: "ApplicationNoContainer",
     props: {
       number: applicationNumber
@@ -318,7 +314,7 @@ const estimate = getCommonGrayCard({
   })
 });
 
-const reviewTradeDetails = getReviewTrade(false);
+const reviewConnectionDetails = getReviewConnectionDetails(false);
 
 const reviewOwnerDetails = getReviewOwner(false);
 
@@ -330,7 +326,7 @@ let title = getCommonTitle({ labelName: titleText });
 const setActionItems = (action, object) => {
   set(
     action,
-    "screenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.title",
+    "screenConfig.components.div.children.taskDetails.children.cardContent.children.title",
     getCommonTitle({
       labelName: get(object, "titleText"),
       labelKey: get(object, "titleKey")
@@ -338,27 +334,23 @@ const setActionItems = (action, object) => {
   );
   set(
     action,
-    "screenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.title.visible",
+    "screenConfig.components.div.children.taskDetails.children.cardContent.children.title.visible",
     get(object, "titleVisibility")
   );
   set(
     action,
-    "screenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.title.roleDefination",
+    "screenConfig.components.div.children.taskDetails.children.cardContent.children.title.roleDefination",
     get(object, "roleDefination")
   );
 };
 
-export const tradeReviewDetails = getCommonCard({
+export const taskDetails = getCommonCard({
   title,
   estimate,
-  viewBreakupButton: getDialogButton(
-    "VIEW BREAKUP",
-    "TL_PAYMENT_VIEW_BREAKUP",
-    "search-preview"
-  ),
-  reviewTradeDetails,
+  viewBreakupButton: getDialogButton("VIEW BREAKUP", "WS_PAYMENT_VIEW_BREAKUP"),
+  reviewConnectionDetails,
+  reviewDocumentDetails,
   reviewOwnerDetails,
-  reviewDocumentDetails
 });
 
 const screenConfig = {
@@ -369,21 +361,13 @@ const screenConfig = {
     const tenantId = getQueryArg(window.location.href, "tenantId");
     applicationNumber = getQueryArg(window.location.href, "applicationNumber");
     //To set the application no. at the  top
-    set(
-      action.screenConfig,
-      "components.div.children.headerDiv.children.header1.children.applicationNumber.props.number",
-      applicationNumber
-    );
+    set(action.screenConfig, "components.div.children.headerDiv.children.header1.children.applicationNumber.props.number", "WS/1013/2019-20/060956");
     if (status !== "pending_payment") {
-      set(
-        action.screenConfig,
-        "components.div.children.tradeReviewDetails.children.cardContent.children.viewBreakupButton.visible",
-        false
-      );
+      set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.viewBreakupButton.visible", false);
     }
     // const queryObject = [
     //   { key: "tenantId", value: tenantId },
-    //   { key: "businessService", value: "newTL" }
+    //   { key: "businessService", value: "newWS" }
     // ];
     // setBusinessServiceDataToLocalStorage(queryObject, dispatch);
     beforeInitFn(action, state, dispatch, applicationNumber);
@@ -425,35 +409,35 @@ const screenConfig = {
                 process.env.REACT_APP_NAME === "Employee"
                   ? {}
                   : {
-                      word1: {
-                        ...getCommonTitle(
-                          {
-                            jsonPath: "Licenses[0].headerSideText.word1"
-                          },
-                          {
-                            style: {
-                              marginRight: "10px",
-                              color: "rgba(0, 0, 0, 0.6000000238418579)"
-                            }
+                    word1: {
+                      ...getCommonTitle(
+                        {
+                          jsonPath: "Licenses[0].headerSideText.word1"
+                        },
+                        {
+                          style: {
+                            marginRight: "10px",
+                            color: "rgba(0, 0, 0, 0.6000000238418579)"
                           }
-                        )
-                      },
-                      word2: {
-                        ...getCommonTitle({
-                          jsonPath: "Licenses[0].headerSideText.word2"
-                        })
-                      },
-                      cancelledLabel: {
-                        ...getCommonHeader(
-                          {
-                            labelName: "Cancelled",
-                            labelKey: "TL_COMMON_STATUS_CANC"
-                          },
-                          { variant: "body1", style: { color: "#E54D42" } }
-                        ),
-                        visible: false
-                      }
+                        }
+                      )
+                    },
+                    word2: {
+                      ...getCommonTitle({
+                        jsonPath: "Licenses[0].headerSideText.word2"
+                      })
+                    },
+                    cancelledLabel: {
+                      ...getCommonHeader(
+                        {
+                          labelName: "Cancelled",
+                          labelKey: "WS_COMMON_STATUS_CANC"
+                        },
+                        { variant: "body1", style: { color: "#E54D42" } }
+                      ),
+                      visible: false
                     }
+                  }
             }
           }
         },
@@ -463,13 +447,13 @@ const screenConfig = {
           moduleName: "egov-workflow",
           visible: process.env.REACT_APP_NAME === "Citizen" ? false : true
         },
-        tradeReviewDetails
+        taskDetails
         //footer
       }
     },
     breakUpDialog: {
       uiFramework: "custom-containers-local",
-      moduleName: "egov-tradelicence",
+      moduleName: "egov-wns",
       componentPath: "ViewBreakupContainer",
       props: {
         open: false,

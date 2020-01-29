@@ -48,9 +48,9 @@ export const getReviewDocuments = (isEditable = true) => {
           },
           onClickDefination: {
             action: "condition",
-            callBack: (state, dispatch) => {
-              changeStep(state, dispatch, "", 2);
-            }
+            // callBack: (state, dispatch) => {
+            //   changeStep(state, dispatch, "", 2);
+            // }
           }
         },
         documents: {
