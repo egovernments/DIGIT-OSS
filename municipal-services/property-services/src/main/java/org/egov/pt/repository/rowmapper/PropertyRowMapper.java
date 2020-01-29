@@ -60,8 +60,11 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 				AuditDetails auditdetails = getAuditDetail(rs, "property");
 
 				String institutionId = rs.getString("institutionid");
+				Institution institute = null;
 				
-				Institution institute = Institution.builder()
+				if (null != institutionId) {
+					
+					institute = Institution.builder()
 						.nameOfAuthorizedPerson(rs.getString("nameOfAuthorizedPerson"))
 						.tenantId(rs.getString("institutiontenantid"))
 						.designation(rs.getString("designation"))
@@ -69,6 +72,7 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 						.type(rs.getString("institutionType"))
 						.id(institutionId)
 						.build();
+				}
 
 				Double landArea = rs.getDouble("landArea");
 				if (rs.wasNull()) {

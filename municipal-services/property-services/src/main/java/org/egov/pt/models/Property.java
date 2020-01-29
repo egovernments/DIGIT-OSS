@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Max;
 
 import org.egov.pt.models.enums.Channel;
 import org.egov.pt.models.enums.CreationReason;
@@ -54,12 +56,15 @@ public class Property extends PropertyInfo {
 	@JsonProperty("usageCategory")
 	private String usageCategory;
 
+	@Max(value = 500)
 	@JsonProperty("noOfFloors")
 	private Long noOfFloors;
 
+	@Digits(integer = 10, fraction = 2)
 	@JsonProperty("landArea")
 	private Double landArea;
 
+	@Digits(integer = 10, fraction = 2)
 	@JsonProperty("superBuiltUpArea")
 	private BigDecimal superBuiltUpArea;
 
@@ -74,6 +79,7 @@ public class Property extends PropertyInfo {
 	private List<Document> documents;
 
 	@JsonProperty("units")
+	@Valid
 	private List<Unit> units;
 
 	@JsonProperty("additionalDetails")

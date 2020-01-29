@@ -1,6 +1,8 @@
 package org.egov.pt.models;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 
 import org.egov.pt.models.enums.OccupancyType;
@@ -27,47 +29,48 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@EqualsAndHashCode(of= {"id"})
-public class Unit   {
-	
-  @JsonProperty("id")
-  private String id;
+@EqualsAndHashCode(of = { "id" })
+public class Unit {
 
-  @JsonProperty("tenantId")
-  private String tenantId;
+	@JsonProperty("id")
+	private String id;
 
-  @JsonProperty("floorNo")
-  private Integer floorNo;
+	@JsonProperty("tenantId")
+	private String tenantId;
 
-  @JsonProperty("unitType")
-  private String unitType;
+	@Max(value = 500)
+	@JsonProperty("floorNo")
+	private Integer floorNo;
 
-  @JsonProperty("usageCategory")
-  @NotNull
-  private String usageCategory;
+	@JsonProperty("unitType")
+	private String unitType;
 
-  @JsonProperty("occupancyType")
-  private OccupancyType occupancyType;
+	@JsonProperty("usageCategory")
+	@NotNull
+	private String usageCategory;
 
-  @JsonProperty("active")
-  private Boolean active;
+	@JsonProperty("occupancyType")
+	private OccupancyType occupancyType;
 
-  @JsonProperty("occupancyDate")
-  private Long occupancyDate;
+	@JsonProperty("active")
+	private Boolean active;
 
-  @Valid
-  @NotNull
-  @JsonProperty("constructionDetail")
-  private ConstructionDetail constructionDetail;
+	@JsonProperty("occupancyDate")
+	private Long occupancyDate;
 
-  @JsonProperty("additionalDetails")
-  private Object additionalDetails;
-  
-  @JsonProperty("auditDetails")
-  private AuditDetails auditDetails;
+	@Valid
+	@NotNull
+	@JsonProperty("constructionDetail")
+	private ConstructionDetail constructionDetail;
 
+	@JsonProperty("additionalDetails")
+	private Object additionalDetails;
 
-  @JsonProperty("arv")
-  private BigDecimal arv;
+	@JsonProperty("auditDetails")
+	private AuditDetails auditDetails;
+
+	@Digits(integer = 10, fraction = 2)
+	@JsonProperty("arv")
+	private BigDecimal arv;
 
 }
