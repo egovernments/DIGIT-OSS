@@ -53,6 +53,7 @@ class DemandCollection extends React.Component {
                                   prepareFinalObject(`DemandProperties[0].propertyDetails[0].demand[${index}].demand[${data.financialYear}][${index1}].PT_TAXHEAD`,taxData.code)
                                   prepareFinalObject(`DemandProperties[0].propertyDetails[0].demand[${index}].demand[${data.financialYear}][${index1}].PT_DEMAND`, value)
                                 }}
+                                onWheel={event => { event.preventDefault(); }}
                               />
                             </div>
                           );
@@ -80,6 +81,7 @@ class DemandCollection extends React.Component {
                                 onChange={(e) => {
                                   prepareFinalObject(`DemandProperties[0].propertyDetails[0].demand[${index}].demand[${data.financialYear}][${index1}].PT_COLLECTED`, e.target.value);
                                 }}
+                                onWheel={event => { event.preventDefault(); }}
                               />
                             </div>
                           );
