@@ -16168,6 +16168,54 @@
       "navigationURL": "integration/dss/ulb-overview",
       "leftIcon": "places:business-center",
       "rightIcon": ""
+    },
+    {
+      "id": 1954,
+      "name": "MutationBillingSlabCreate",
+      "url": "/pt-calculator-v2/billingslab/mutation/_create",
+      "displayName": "Draft Search",
+      "orderNumber": 1,
+      "parentModule": "",
+      "enabled": false,
+      "serviceCode": "pt-calculator-v2",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1955,
+      "name": "MutationBillingSlabSearch",
+      "url": "/pt-calculator-v2/billingslab/mutation/_search",
+      "displayName": "Draft Search",
+      "orderNumber": 1,
+      "parentModule": "",
+      "enabled": false,
+      "serviceCode": "pt-calculator-v2",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1956,
+      "name": "MutationBillingSlabUpdate",
+      "url": "/pt-calculator-v2/billingslab/mutation/_update",
+      "displayName": "Mutation Billing Slab Update",
+      "orderNumber": 1,
+      "parentModule": "",
+      "enabled": false,
+      "serviceCode": "pt-calculator-v2",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1957,
+      "name": "Mutation fees Calculation",
+      "url": "/pt-calculator-v2/propertytax/mutation/_calculate",
+      "displayName": "Mutation fees Calculation",
+      "orderNumber": 0,
+      "parentModule": null,
+      "enabled": false,
+      "serviceCode": "PropertytaxCalculatorV2",
+      "code": "null",
+      "path": "null"
     }
   ]
 }
