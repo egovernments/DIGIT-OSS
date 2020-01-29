@@ -133,7 +133,7 @@ class ApplicationPreview extends Component {
     const { generalMDMSDataById, properties } = this.props;
     return <div>
        <Screen className={""}>
-        <PTHeader header='PT_APPLICATION_TITLE' subHeaderTitle='PT_PROPERTY_PTUID' subHeaderValue={propertyId} />
+        <PTHeader header='PT_APPLICATION_TITLE' subHeaderTitle='PT_PROPERTY_APPLICATION_NO' subHeaderValue={propertyId} />
       <div className="form-without-button-cont-generic" >
         <div>
         <WorkFlowContainer  dataPath={"FireNOCs"}
