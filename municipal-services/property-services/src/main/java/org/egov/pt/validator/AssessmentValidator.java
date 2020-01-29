@@ -43,18 +43,16 @@ public class AssessmentValidator {
 		validateUnitIds(assessmentRequest.getAssessment(),property);
 		commonValidations(assessmentRequest, errorMap, false);
 		validateMDMSData(assessmentRequest.getRequestInfo(), assessmentRequest.getAssessment(), errorMap);
-		validateProcessInstance(assessmentRequest, null);
 	}
 
-	public void validateAssessmentUpdate(AssessmentRequest assessmentRequest, Property property) {
+	public void validateAssessmentUpdate(AssessmentRequest assessmentRequest, Assessment assessmentFromDB, Property property , Boolean isWorkflowTriggered) {
 		Map<String, String> errorMap = new HashMap<>();
-		Assessment assessmentFromDB = assessmentRepository.getAssessmentFromDB(assessmentRequest.getAssessment());
 		validateRI(assessmentRequest.getRequestInfo(), errorMap);
 		validateUnitIds(assessmentRequest.getAssessment(),property);
 		validateUpdateRequest(assessmentRequest, assessmentFromDB, errorMap);
 		commonValidations(assessmentRequest, errorMap, true);
 		validateMDMSData(assessmentRequest.getRequestInfo(), assessmentRequest.getAssessment(), errorMap);
-		validateProcessInstance(assessmentRequest, assessmentFromDB);
+		validateProcessInstance(assessmentRequest, assessmentFromDB, isWorkflowTriggered);
 
 	}
 
@@ -239,18 +237,35 @@ public class AssessmentValidator {
 	 * @param assessmentRequest The assessment request for update or create
 	 * @param assessmentFromDB The assessment from db
 	 */
-	public void validateProcessInstance(AssessmentRequest assessmentRequest, Assessment assessmentFromDB){
+	public void validateProcessInstance(AssessmentRequest assessmentRequest, Assessment assessmentFromDB, Boolean isWorkflowTriggered){
 
 		Assessment assessment = assessmentRequest.getAssessment();
+		Map<String, String> errorMap = new HashMap<>();
+
+		if(isWorkflowTriggered && assessment.getWorkflow()==null)
+			errorMap.put("INVALID_REQUEST","Workflow object is invalid");
+
+		if(isWorkflowTriggered && assessment.getWorkflow()!=null && assessment.getWorkflow().getAction()==null)
+			errorMap.put("INVALID_REQUEST","Workflow object is invalid");
 
 		if(assessmentFromDB!=null && assessmentFromDB.getStatus().equals(Status.INWORKFLOW)){
 			if(!assessment.getStatus().equals(Status.INWORKFLOW))
 				throw new CustomException("INVALID_STATUS","The status of the assessment is incorrect");
+
+			if(assessment.getWorkflow()==null)
+				errorMap.put("INVALID_REQUEST","The workflow object is not valid");
+			else {
+				if(assessment.getWorkflow().getAction()==null)
+					errorMap.put("INVALID_REQUEST","Action cannot be null");
+			}
 		}
 
 		if(assessment.getStatus().equals(Status.INWORKFLOW) && assessment.getWorkflow()==null){
-			throw new CustomException("INVALID_REQUEST","Workflow cannot be null");
+			errorMap.put("INVALID_REQUEST","Workflow cannot be null");
 		}
+
+		if(!CollectionUtils.isEmpty(errorMap))
+			throw new CustomException(errorMap);
 
 	}
 

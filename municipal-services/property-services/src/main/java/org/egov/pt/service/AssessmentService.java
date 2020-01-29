@@ -68,6 +68,14 @@ public class AssessmentService {
 		validator.validateAssessmentCreate(request, property);
 		assessmentEnrichmentService.enrichAssessmentCreate(request);
 		calculationService.calculateTax(request, property);
+
+		if(config.getIsAssessmentWorkflowEnabled()){
+			assessmentEnrichmentService.enrichWorkflowForInitiation(request);
+			ProcessInstanceRequest workflowRequest = new ProcessInstanceRequest(request.getRequestInfo(),
+					Collections.singletonList(request.getAssessment().getWorkflow()));
+			workflowService.callWorkFlow(workflowRequest);
+		}
+
 		producer.push(props.getCreateAssessmentTopic(), request);
 
 		return request.getAssessment();
@@ -86,11 +94,11 @@ public class AssessmentService {
 		RequestInfo requestInfo = request.getRequestInfo();
 		Property property = utils.getPropertyForAssessment(request);
 		assessmentEnrichmentService.enrichAssessmentUpdate(request, property);
-		validator.validateAssessmentUpdate(request, property);
 		Assessment assessmentFromSearch = repository.getAssessmentFromDB(request.getAssessment());
-		Boolean workflowTriggered = isWorkflowTriggered(request.getAssessment(),assessmentFromSearch);
+		Boolean isWorkflowTriggered = isWorkflowTriggered(request.getAssessment(),assessmentFromSearch);
+		validator.validateAssessmentUpdate(request, assessmentFromSearch, property, isWorkflowTriggered);
 
-		if ((request.getAssessment().getStatus().equals(Status.INWORKFLOW) || workflowTriggered)
+		if ((request.getAssessment().getStatus().equals(Status.INWORKFLOW) || isWorkflowTriggered)
 				&& config.getIsWorkflowEnabled()){
 
 			BusinessService businessService = workflowService.getBusinessService(request.getAssessment().getTenantId(),

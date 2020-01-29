@@ -6,6 +6,7 @@ import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.*;
 import org.egov.pt.models.enums.Status;
 import org.egov.pt.models.workflow.BusinessService;
+import org.egov.pt.models.workflow.ProcessInstance;
 import org.egov.pt.models.workflow.State;
 import org.egov.pt.util.AssessmentUtils;
 import org.egov.pt.util.PropertyUtil;
@@ -20,6 +21,9 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static org.egov.pt.util.AssessmentConstants.WORKFLOW_SENDBACK_CITIZEN;
+import static org.egov.pt.util.PTConstants.ASMT_MODULENAME;
+import static org.egov.pt.util.PTConstants.ASMT_WORKFLOW_CODE;
+import static org.egov.pt.util.PTConstants.WORKFLOW_START_ACTION;
 
 @Service
 public class AssessmentEnrichmentService {
@@ -129,6 +133,12 @@ public class AssessmentEnrichmentService {
            request.getAssessment().getWorkflow().setAssignes(owners);
         }
 
+        ProcessInstance processInstance = request.getAssessment().getWorkflow();
+        processInstance.setBusinessId(request.getAssessment().getAssessmentNumber());
+        processInstance.setModuleName(ASMT_MODULENAME);
+        processInstance.setTenantId(request.getAssessment().getTenantId());
+        processInstance.setBusinessService(ASMT_WORKFLOW_CODE);
+
     }
 
 
@@ -184,6 +194,26 @@ public class AssessmentEnrichmentService {
                  unit.setUsageCategory(unitUsage.getUsageCategory());
             }
         }
+
+    }
+
+
+    /**
+     * Enriches workflow object for new assessments
+     * @param assessmentRequest
+     */
+    public void enrichWorkflowForInitiation(AssessmentRequest assessmentRequest){
+
+        Assessment assessment = assessmentRequest.getAssessment();
+
+        ProcessInstance processInstance = new ProcessInstance();
+        processInstance.setBusinessId(assessment.getAssessmentNumber());
+        processInstance.setAction(WORKFLOW_START_ACTION);
+        processInstance.setModuleName(ASMT_MODULENAME);
+        processInstance.setTenantId(assessment.getTenantId());
+        processInstance.setBusinessService(ASMT_WORKFLOW_CODE);
+
+        assessment.setWorkflow(processInstance);
 
     }
 
