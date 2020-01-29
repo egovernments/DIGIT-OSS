@@ -8,13 +8,13 @@
 # -
 # - 
 config:
-  - name: "utilities/egov-weekly-impact-notifier"
+  - name: "builds/utilities/egov-weekly-impact-notifier"
     build:
       - work-dir: "egov-weekly-impact-notifier"
         image-name: "egov-weekly-impact-notifier"
         dockerfile: "build/maven/Dockerfile"
         
-  - name: "utilities/hello"
+  - name: "builds/utilities/hello"
     build:
       - work-dir: "hello"
         image-name: "hello"
