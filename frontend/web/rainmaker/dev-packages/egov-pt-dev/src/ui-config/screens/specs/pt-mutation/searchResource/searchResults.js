@@ -271,11 +271,7 @@ const onApplicationTabClick = (rowData,dispatch) => {
       }`;
   }
     else{
-     // window.location.href = `search-preview?applicationNumber=${
-    //  window.location.pathname=`property-tax/property/${rowData[1]}/${rowData[6]}`;
-      store.dispatch(setRoute(`/property-tax/property/${rowData[1]}/${rowData[6]}`));
-      // store.dispatch(setRoute(`property-tax/application-preview?propertyId=${rowData[1]}&applicationNumber=PB-FN-2019-07-11-002180&tenantId=${rowData[6]}`));
-    //   rowData[0]  
-    // }&tenantId=${rowData[6]}`; 
+      // store.dispatch(setRoute(`/property-tax/property/${rowData[1]}/${rowData[6]}`));
+      store.dispatch(setRoute(`/property-tax/application-preview?propertyId=${rowData[1]}&applicationNumber=PB-FN-2019-07-11-002180&tenantId=${rowData[6]}`));
   }
 };
