@@ -8,7 +8,7 @@
 # -
 # -
 config:
-  - name: "municipal-services/egov-user-event"
+  - name: "builds/municipal-services/egov-user-event"
     build:
       - work-dir: "egov-user-event"
         image-name: "egov-user-event"
@@ -16,7 +16,7 @@ config:
       - work-dir: "egov-user-event/src/main/resources/db"
         image-name: "egov-user-event-db"
 
-  - name: "municipal-services/pt-calculator-v2"
+  - name: "builds/municipal-services/pt-calculator-v2"
     build:
       - work-dir: "pt-calculator-v2"
         image-name: "pt-calculator-v2"
@@ -24,7 +24,7 @@ config:
       - work-dir: "pt-calculator-v2/src/main/resources/db"
         image-name: "pt-calculator-v2-db"
 
-  - name: "municipal-services/pt-services-v2"
+  - name: "builds/municipal-services/pt-services-v2"
     build:
       - work-dir: "pt-services-v2"
         image-name: "pt-services-v2"
@@ -32,7 +32,7 @@ config:
       - work-dir: "pt-services-v2/src/main/resources/db"
         image-name: "pt-services-v2-db"
 
-  - name: "municipal-services/rainmaker-pgr"
+  - name: "builds/municipal-services/rainmaker-pgr"
     build:
       - work-dir: "rainmaker-pgr"
         image-name: "rainmaker-pgr"
@@ -40,7 +40,7 @@ config:
       - work-dir: "rainmaker-pgr/src/main/resources/db"
         image-name: "rainmaker-pgr-db"
 
-  - name: "municipal-services/tl-calculator"
+  - name: "builds/municipal-services/tl-calculator"
     build:
       - work-dir: "tl-calculator"
         image-name: "tl-calculator"
@@ -48,7 +48,7 @@ config:
       - work-dir: "tl-calculator/src/main/resources/db"
         image-name: "tl-calculator-db"
         
-  - name: "municipal-services/tl-services"
+  - name: "builds/municipal-services/tl-services"
     build:
       - work-dir: "tl-services"
         image-name: "tl-services"
@@ -56,28 +56,28 @@ config:
       - work-dir: "tl-services/src/main/resources/db"
         image-name: "tl-services-db"
 
-  - name: "municipal-services/firenoc-services"
+  - name: "builds/municipal-services/firenoc-services"
     build:
       - work-dir: "firenoc-services"
         image-name: "firenoc-services"
       - work-dir: "firenoc-services/migration"
         image-name: "firenoc-services-db"
 
-  - name: "municipal-services/firenoc-calculator"
+  - name: "builds/municipal-services/firenoc-calculator"
     build:
       - work-dir: "firenoc-calculator"
         image-name: "firenoc-calculator"
       - work-dir: "firenoc-calculator/migration"
         image-name: "firenoc-calculator-db"
 
-  - name: "municipal-services/ws-services"
+  - name: "builds/municipal-services/ws-services"
     build:
       - work-dir: "ws-services"
         image-name: "ws-services"
       - work-dir: "ws-services/src/main/resources/db"
         image-name: "ws-services-db"
         
-  - name: "municipal-services/property-services"
+  - name: "builds/municipal-services/property-services"
     build:
       - work-dir: "property-services"
         image-name: "property-services"
@@ -85,7 +85,7 @@ config:
       - work-dir: "property-services/src/main/resources/db"
         image-name: "property-services-db"
 
-  - name: "municipal-services/ws-calculator"
+  - name: "builds/municipal-services/ws-calculator"
     build:
       - work-dir: "ws-calculator"
         image-name: "ws-calculator"
@@ -93,7 +93,7 @@ config:
       - work-dir: "ws-calculator/src/main/resources/db"
         image-name: "ws-calculator-db"
 
-  - name: "municipal-services/sw-services"
+  - name: "builds/municipal-services/sw-services"
     build:
       - work-dir: "sw-services"
         image-name: "sw-services"
@@ -101,7 +101,7 @@ config:
       - work-dir: "sw-services/src/main/resources/db"
         image-name: "sw-services-db"
 
-  - name: "municipal-services/sw-calculator"
+  - name: "builds/municipal-services/sw-calculator"
     build:
       - work-dir: "sw-calculator"
         image-name: "sw-calculator"
@@ -109,7 +109,7 @@ config:
       - work-dir: "sw-calculator/src/main/resources/db"
         image-name: "sw-calculator-db"     
 
-  - name: "municipal-services/bpa-services"
+  - name: "builds/municipal-services/bpa-services"
     build:
       - work-dir: "bpa-services"
         image-name: "bpa-services"
@@ -117,7 +117,7 @@ config:
       - work-dir: "bpa-services/src/main/resources/db"
         image-name: "bpa-services-db"         
 
-  - name: "municipal-services/bpa-calculator"
+  - name: "builds/municipal-services/bpa-calculator"
     build:
       - work-dir: "bpa-calculator"
         image-name: "bpa-calculator"
