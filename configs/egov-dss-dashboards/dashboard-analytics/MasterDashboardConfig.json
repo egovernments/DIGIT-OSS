@@ -868,7 +868,7 @@
               "isCollapsible": true,
               "charts": [
                 {
-                  "id": "licenceTaxHeadsBreakupBoundary",
+                  "id": "licenceTaxHeadsBreakupDDR",
                   "name": "DSS_TL_TAX_HEAD_BREAKUP_BOUNDARY",
                   "code": "",
                   "chartType": "table",
