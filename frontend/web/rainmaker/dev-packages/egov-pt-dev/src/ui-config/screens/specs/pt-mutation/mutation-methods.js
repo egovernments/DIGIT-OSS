@@ -184,8 +184,8 @@ import {
             props: {
               variant: "outlined",
               style: {
-                color: "#FE7A51",
-                borderColor: "#FE7A51",
+                color: "black",
+                borderColor: "black",
                 width: "220px",
                 height: "48px",
                 margin: "8px",
@@ -323,8 +323,8 @@ import {
             props: {
               variant: "outlined",
               style: {
-                color: "#FE7A51",
-                borderColor: "#FE7A51",
+                color: "black",
+                borderColor: "black",
                 width: "220px",
                 height: "48px",
                 margin: "8px",

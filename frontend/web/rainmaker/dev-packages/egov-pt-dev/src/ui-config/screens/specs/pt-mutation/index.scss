@@ -1,13 +1,13 @@
-// #material-ui-propertySearchTabs{
-//     background: none !important;
-//     box-shadow: 0px 0px 0px 0px !important;
-//     margin-top:0px !important;
-//       div{
-//           div{
-//               background: none !important;
-//           }
-//       }
-// }
+#material-ui-propertySearchTabs{
+    background: none !important;
+    box-shadow: 0px 0px 0px 0px !important;
+    margin-top:0px !important;
+      div{
+          div{
+              background: none !important;
+          }
+      }
+}
 
 // #material-ui-propertySearchTabs{
 //     div{
@@ -31,3 +31,27 @@
 #material-ui-yearDetailsContainer{div{div{fieldset{label{
     padding-bottom: 10px;
 }}}}}
+
+// button[role=tab]{
+//     span{
+//         span{
+//             span{
+//                 span{
+//                     color:black;
+//                     font-weight:800;
+//                 }
+//             }
+//         }
+//     }
+// }
+#material-ui-searchPropertyDetails{
+    margin-right: -20px;
+    margin-left: -20px;
+    margin-top: 10px;
+   }
+
+   #material-ui-searchApplicationDetails{
+    margin-right: -20px;
+    margin-left: -20px;
+    margin-top: 10px;
+   }

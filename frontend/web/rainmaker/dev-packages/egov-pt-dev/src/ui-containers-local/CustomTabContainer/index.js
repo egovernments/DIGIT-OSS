@@ -14,13 +14,15 @@ class MultiItem extends React.Component {
     dispatch(prepareFinalObject("currentTab", value));
     if (value === "PT_SEARCH_PROPERTY") {
       dispatch(handleField("propertySearch", "components.div.children.searchPropertyTable", "visible", false));
-     
+      dispatch(handleField("propertySearch", "components.div.children.searchApplicationTable", "visible", false));
       } 
       else {
       dispatch(handleField("propertySearch", "components.div.children.searchApplicationTable", "visible", false));
+      dispatch(handleField("propertySearch", "components.div.children.searchPropertyTable", "visible", false));
       }
       dispatch(prepareFinalObject("searchScreen.mobileNumber", ""));
       dispatch(prepareFinalObject("searchScreen.ids", ""));
+      
   };
 
   onTabChange = (tabIndex, dispatch, state) => {

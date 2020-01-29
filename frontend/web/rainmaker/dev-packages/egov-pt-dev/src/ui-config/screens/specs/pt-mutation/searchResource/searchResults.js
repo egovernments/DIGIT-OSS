@@ -121,6 +121,7 @@ export const searchPropertyTable = {
   componentPath: "Table",
   visible: false,
   props: {
+    className:"propertyTab",
     // data: [],
     columns: [
       getTextToLocalMapping("Property Tax Unique Id"),
@@ -186,6 +187,7 @@ export const searchApplicationTable = {
   componentPath: "Table",
   visible: false,
   props: {
+    className:"appTab",
     // data: [],
     columns: [
       getTextToLocalMapping("Application No"),

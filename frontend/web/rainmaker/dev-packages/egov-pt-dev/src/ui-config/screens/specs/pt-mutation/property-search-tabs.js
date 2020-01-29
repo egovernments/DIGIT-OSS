@@ -19,6 +19,7 @@ import {
       moduleName: "egov-pt",
       componentPath: "CustomTabContainer",
       props: {
+        className:"ptTabs",
         tabs: [
           {
             tabButton: {labelName:"Search Property", labelKey:"PT_SEARCH_PROPERTY"},
