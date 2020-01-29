@@ -261,7 +261,7 @@
         "module": "TL",
         "indexName": "tlindex-v1",
         "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tradelicense.tenantid.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Total Application\":{\"cardinality\":{\"field\":\"Data.tradelicense.applicationnumber.keyword\"}}}}}}",
-        "requestQueryMap": "{\"wardId\" : \"Data.ward.name.keyword\", \r\n  \"district\" : \"Data.tenantData.city.districtCode\", \r\n\"tenantId\" : \"Data.tradelicense.tenaniId\" \r\n}",
+        "requestQueryMap": "{\"wardId\" : \"Data.ward.name.keyword\", \r\n  \"district\" : \"Data.tenantData.city.districtCode\", \r\n\"tenantId\" : \"Data.tradelicense.tenantid\" \r\n}",
         "dateRefField": "Data.tradelicense.applicationdate"
       },
       {
