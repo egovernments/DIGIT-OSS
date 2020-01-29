@@ -20,7 +20,6 @@ import commonConfig from "config/common.js";
 import { Button, Card } from "components";
 import "./index.css";
 import PTHeader from "../../common/PTHeader";
-
 import { setRoute } from "egov-ui-kit/redux/app/actions";
 const innerDivStyle = {
   padding: "0",
@@ -192,7 +191,9 @@ class Property extends Component {
 
     const { latestPropertyDetails, propertyId,setRoute, tenantId } = this.props;
     const assessmentNo = latestPropertyDetails && latestPropertyDetails.assessmentNumber;
+    if(process.env.REACT_APP_NAME !='citizen'){
     setRoute(`/property-tax/assessment-form-dataentry?assessmentId=${assessmentNo}&isReassesment=true&isAssesment=false&mode=editDemand&propertyId=${propertyId}&tenantId=${tenantId}`);
+  }
     // this.setState({
     //   dialogueOpen: true,
     //   urlToAppend: `/property-tax/assessment-form?assessmentId=${assessmentNo}&isReassesment=true&isAssesment=true&propertyId=${propertyId}&tenantId=${tenantId}`,
@@ -324,7 +325,7 @@ class Property extends Component {
       assessmentHistory = this.getAssessmentHistory(selPropertyDetails, receiptsByYr.receiptDetailsArray);
     }
     let button;
-    if(propertyDetails && propertyDetails[0] && propertyDetails[0].source ==='LEGACY_RECORD' && Payments.length <=0){
+    if(process.env.REACT_APP_NAME !='Citizen' && propertyDetails && propertyDetails[0] && propertyDetails[0].source ==='LEGACY_RECORD' && Payments.length <= 0){
     button =
     <Button
       onClick={() => this.editDemand()}
@@ -332,7 +333,7 @@ class Property extends Component {
       primary={true}
       style={{ lineHeight: "auto", minWidth: "inherit" }}
     />
-  }
+    }
     return (
       <Screen className={clsName}>
         <PTHeader header='PT_PROPERTY_INFORMATION' subHeaderTitle='PT_PROPERTY_PTUID' subHeaderValue={propertyId} />
