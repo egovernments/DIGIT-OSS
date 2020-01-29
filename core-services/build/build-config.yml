@@ -8,13 +8,13 @@
 # -
 # -
 config:
-  - name: "core-services/egov-accesscontrol"
+  - name: "builds/core-services/egov-accesscontrol"
     build:
       - work-dir: "egov-accesscontrol"
         image-name: "egov-accesscontrol"
         dockerfile: "build/maven/Dockerfile"
 
-  - name: "core-services/egov-common-masters"
+  - name: "builds/core-services/egov-common-masters"
     build:
       - work-dir: "egov-common-masters"
         image-name: "egov-common-masters"
@@ -22,7 +22,7 @@ config:
       - work-dir: "egov-common-masters/src/main/resources/db"
         image-name: "egov-common-masters-db"
 
-  - name: "core-services/egov-data-uploader"
+  - name: "builds/core-services/egov-data-uploader"
     build:
       - work-dir: "egov-data-uploader"
         image-name: "egov-data-uploader"
@@ -30,7 +30,7 @@ config:
       - work-dir: "egov-data-uploader/src/main/resources/db"
         image-name: "egov-data-uploader-db"
 
-  - name: "core-services/egov-enc-service"
+  - name: "builds/core-services/egov-enc-service"
     build:
       - work-dir: "egov-enc-service"
         image-name: "egov-enc-service"
@@ -38,7 +38,7 @@ config:
       - work-dir: "egov-enc-service/src/main/resources/db"
         image-name: "egov-enc-service-db"
 
-  - name: "core-services/egov-filestore"
+  - name: "builds/core-services/egov-filestore"
     build:
       - work-dir: "egov-filestore"
         image-name: "egov-filestore"
@@ -46,7 +46,7 @@ config:
       - work-dir: "egov-filestore/src/main/resources/db"
         image-name: "egov-filestore-db"
 
-  - name: "core-services/egov-idgen"
+  - name: "builds/core-services/egov-idgen"
     build:
       - work-dir: "egov-idgen"
         image-name: "egov-idgen"
@@ -54,7 +54,7 @@ config:
       - work-dir: "egov-idgen/src/main/resources/db"
         image-name: "egov-idgen-db"
 
-  - name: "core-services/egov-indexer"
+  - name: "builds/core-services/egov-indexer"
     build:
       - work-dir: "egov-indexer"
         image-name: "egov-indexer"
@@ -62,7 +62,7 @@ config:
       - work-dir: "egov-indexer/src/main/resources/db"
         image-name: "egov-indexer-db"
 
-  - name: "core-services/egov-localization"
+  - name: "builds/core-services/egov-localization"
     build:
       - work-dir: "egov-localization"
         image-name: "egov-localization"
@@ -70,7 +70,7 @@ config:
       - work-dir: "egov-localization/src/main/resources/db"
         image-name: "egov-localization-db"
 
-  - name: "core-services/egov-location"
+  - name: "builds/core-services/egov-location"
     build:
       - work-dir: "egov-location"
         image-name: "egov-location"
@@ -78,25 +78,25 @@ config:
       - work-dir: "egov-location/src/main/resources/db"
         image-name: "egov-location-db"
 
-  - name: "core-services/egov-mdms-service"
+  - name: "builds/core-services/egov-mdms-service"
     build:
       - work-dir: "egov-mdms-service"
         image-name: "egov-mdms-service"
         dockerfile: "build/maven/Dockerfile"
 
-  - name: "core-services/egov-notification-mail"
+  - name: "builds/core-services/egov-notification-mail"
     build:
       - work-dir: "egov-notification-mail"
         image-name: "egov-notification-mail"
         dockerfile: "build/maven/Dockerfile"
 
-  - name: "core-services/egov-notification-sms"
+  - name: "builds/core-services/egov-notification-sms"
     build:
       - work-dir: "egov-notification-sms"
         image-name: "egov-notification-sms"
         dockerfile: "build/maven/Dockerfile"
 
-  - name: "core-services/egov-otp"
+  - name: "builds/core-services/egov-otp"
     build:
       - work-dir: "egov-otp"
         image-name: "egov-otp"
@@ -104,13 +104,13 @@ config:
       - work-dir: "egov-otp/src/main/resources/db"
         image-name: "egov-otp-db"
 
-  - name: "core-services/egov-persister"
+  - name: "builds/core-services/egov-persister"
     build:
       - work-dir: "egov-persister"
         image-name: "egov-persister"
         dockerfile: "build/maven/Dockerfile"
 
-  - name: "core-services/egov-pg-service"
+  - name: "builds/core-services/egov-pg-service"
     build:
       - work-dir: "egov-pg-service"
         image-name: "egov-pg-service"
@@ -118,19 +118,19 @@ config:
       - work-dir: "egov-pg-service/src/main/resources/db"
         image-name: "egov-pg-service-db"
 
-  - name: "core-services/egov-searcher"
+  - name: "builds/core-services/egov-searcher"
     build:
       - work-dir: "egov-searcher"
         image-name: "egov-searcher"
         dockerfile: "build/maven/Dockerfile"
 
-  - name: "core-services/egov-telemetry"
+  - name: "builds/core-services/egov-telemetry"
     build:
       - work-dir: "egov-telemetry"
         image-name: "egov-telemetry"
         dockerfile: "build/maven/Dockerfile"
 
-  - name: "core-services/egov-user"
+  - name: "builds/core-services/egov-user"
     build:
       - work-dir: "egov-user"
         image-name: "egov-user"
@@ -138,7 +138,7 @@ config:
       - work-dir: "egov-user/src/main/resources/db"
         image-name: "egov-user-db"
 
-  - name: "core-services/egov-workflow-v2"
+  - name: "builds/core-services/egov-workflow-v2"
     build:
       - work-dir: "egov-workflow-v2"
         image-name: "egov-workflow-v2"
@@ -146,13 +146,13 @@ config:
       - work-dir: "egov-workflow-v2/src/main/resources/db"
         image-name: "egov-workflow-v2-db"
 
-  - name: "core-services/report"
+  - name: "builds/core-services/report"
     build:
       - work-dir: "report"
         image-name: "report"
         dockerfile: "build/maven/Dockerfile"   
 
-  - name: "core-services/tenant"
+  - name: "builds/core-services/tenant"
     build:
       - work-dir: "tenant"
         image-name: "tenant"
@@ -160,19 +160,19 @@ config:
       - work-dir: "tenant/src/main/resources/db"
         image-name: "tenant-db"
 
-  - name: "core-services/user-otp"
+  - name: "builds/core-services/user-otp"
     build:
       - work-dir: "user-otp"
         image-name: "user-otp"
         dockerfile: "build/maven/Dockerfile"
 
-  - name: "core-services/zuul"
+  - name: "builds/core-services/zuul"
     build:
       - work-dir: "zuul"
         image-name: "zuul"
         dockerfile: "build/maven/Dockerfile"
         
-  - name: "core-services/egov-user-event"
+  - name: "builds/core-services/egov-user-event"
     build:
       - work-dir: "egov-user-event"
         image-name: "egov-user-event"
@@ -181,25 +181,25 @@ config:
         image-name: "egov-user-event-db"
         dockerfile: "build/maven/Dockerfile"       
 
-  - name: "core-services/pdf-service"
+  - name: "builds/core-services/pdf-service"
     build:
       - work-dir: "pdf-service"
         image-name: "pdf-service"
       - work-dir: "pdf-service/migration"
         image-name: "pdf-service-db"
         
-  - name: "core-services/telemetry/egov-telemetry-kafka-streams"
+  - name: "builds/core-services/telemetry/egov-telemetry-kafka-streams"
     build:
       - work-dir: "egov-telemetry/egov-telemetry-kafka-streams"
         image-name: "egov-telemetry-kafka-streams"
 
-  - name: "core-services/telemetry/egov-telemetry-batch-process"
+  - name: "builds/core-services/telemetry/egov-telemetry-batch-process"
     build:
       - work-dir: "egov-telemetry/egov-telemetry-batch-process"
         image-name: "egov-telemetry-batch-process"
         dockerfile: "build/maven/Dockerfile"
   
-  - name: "core-services/egov-url-shortening"
+  - name: "builds/core-services/egov-url-shortening"
     build:
       - work-dir: "egov-url-shortening"
         image-name: "egov-url-shortening"
