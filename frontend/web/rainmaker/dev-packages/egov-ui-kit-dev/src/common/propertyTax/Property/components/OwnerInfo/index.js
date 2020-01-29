@@ -21,7 +21,7 @@ class OwnerInfo extends Component {
   };
 
   openDialog = (dialogName) => {
-    if(this.props.totalBillAmountDue === 0){
+    if(this.props.totalBillAmountDue === 0 && dialogName !== "viewHistory"){
       this.props.history.push(`/pt-mutation/apply?consumerCode=${this.props.properties.propertyId}&tenantId=${this.props.properties.tenantId}`);
     } else {
       this.setState({ [dialogName]: true });
