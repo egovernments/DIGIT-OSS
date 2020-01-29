@@ -1,10 +1,10 @@
 #material-ui-propertySearchTabs{
-    background: none !important;
-    box-shadow: 0px 0px 0px 0px !important;
-    margin-top:0px !important;
+    background-color: transparent !important;
+  box-shadow: none !important;
+  margin-top: 0px !important; 
       div{
-          div{
-              background: none !important;
+          div[class^="NavPills-root-"]{
+            background-color: transparent !important;
           }
       }
 }
@@ -55,3 +55,14 @@
     margin-left: -20px;
     margin-top: 10px;
    }
+
+   @media only screen and (max-width: 768px) {
+    #material-ui-resetButton{
+        float:none !important;
+        margin-left: 38px !important; 
+    }
+    #material-ui-searchButton{
+      margin-left: 38px !important; 
+    }
+    
+  }
