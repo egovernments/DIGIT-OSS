@@ -44,7 +44,7 @@ class PendingAmountDialog extends Component {
             </p>
             
             <div className="text-right" style={{ marginTop: 10 }}>
-              <Label className="footer-amount" labelClassName="footer-amount" label="PT_MUTATION_RS" fontSize="24px" /><b style={{fontSize: "24px", color: "rgba(0, 0, 0, 0.87)", position: "relative", top: "5px"}}> {amount}</b>&nbsp;&nbsp;&nbsp;&nbsp;
+              <Label className="footer-amount" labelClassName="footer-amount" label="PT_MUTATION_RS" fontSize="24px" /><span className="footer-amount-no" > {amount}</span>&nbsp;&nbsp;&nbsp;&nbsp;
               <Button
                 label={<Label buttonLabel={true} label="PT_PROCEED_TO_PAY" fontSize="16px" labelClassName="footer-button-label" />}
                 primary={true}

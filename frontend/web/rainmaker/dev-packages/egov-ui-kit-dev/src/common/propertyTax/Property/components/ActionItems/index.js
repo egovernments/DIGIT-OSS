@@ -6,7 +6,7 @@ import "./index.css";
 
 const labelStyle = {
   letterSpacing: 1.2,
-  fontWeight: "600",
+  fontWeight: "500",
   lineHeight: "40px",
 };
 const buttonStyle = {
