@@ -5,8 +5,9 @@
     min-width: 225px !important;
     button {
         div {
-            div {
+            div, div:hover {
                 height: auto !important;
+                background-color: transparent !important;
                 span {
                     padding-left: 5px !important;
                     padding-right: 5px !important;
