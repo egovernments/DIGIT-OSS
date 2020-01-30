@@ -2,6 +2,7 @@
     border: 1px solid rgb(254, 122, 81);
     background-color: transparent;
     box-shadow: none;
+    min-width: 225px !important;
     button {
         div {
             div {
@@ -17,6 +18,9 @@
 
 @media only screen and (max-width: 768px) {
     .transfer-ownership {
+        position: absolute;
+        top: 52.5%;
+        left: 38px;
         button {
             div {
                 div {
@@ -26,5 +30,8 @@
                 }
             }
         }
+    }
+    .view-history-button {
+        margin-top: -5px;
     }
   }

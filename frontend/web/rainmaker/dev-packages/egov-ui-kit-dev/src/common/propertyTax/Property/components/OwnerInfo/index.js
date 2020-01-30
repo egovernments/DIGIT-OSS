@@ -9,6 +9,7 @@ import PropertyInfoCard from "../PropertyInfoCard";
 import PendingAmountDialog from "../PendingAmountDue";
 import ViewHistoryDialog from "../ViewHistory";
 import { ViewHistory, TransferOwnership } from "../ActionItems";
+import "./index.css";
 
 const locale = getLocale() || "en_IN";
 const localizationLabelsData = initLocalizationLabels(locale);
@@ -205,7 +206,7 @@ class OwnerInfo extends Component {
                 <div>
                   {ownerInfo.map((ownerItem, ind) => {
                     return (
-                      <div className="col-sm-12 col-xs-12" style={{ marginBottom: 10, marginTop: 5 }}>
+                      <div className="col-sm-12 col-xs-12 owner-info-card">
                         {multipleOwner && (
                           <div className="pt-rf-title rainmaker-displayInline" style={{ justifyContent: "space-between", margin: "5px 0px 5px 0px" }}>
                             <div className="rainmaker-displayInline" style={{ alignItems: "center", marginLeft: "13px" }}>

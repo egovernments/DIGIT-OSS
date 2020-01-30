@@ -35,7 +35,7 @@ const viewHistoryLabel = {
 export const ViewHistory = ({ viewHistory, openDialog }) => {
   return (
     viewHistory && (
-      <div
+      <div className="view-history-button"
         onClick={() => {
           openDialog("viewHistory");
         }}
