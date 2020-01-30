@@ -22,6 +22,7 @@ import { ownerDetailsHeader, getOwnerDetails, ownershipType } from "./applyResou
 import { tradeOwnerDetails } from "./applyResource/tradeOwnerDetails";
 import { OwnerInfoCard } from "./applyResource/connectionDetails";
 import { documentList } from "./applyResource/documentList";
+import { summaryScreen } from "./search-preview";
 import { httpRequest } from "../../../../ui-utils";
 import { updatePFOforSearchResults, getBoundaryData } from "../../../../ui-utils/commons";
 import { getTenantId, getLocale } from "egov-ui-kit/utils/localStorageUtils";
@@ -35,9 +36,9 @@ export const header = getCommonContainer({
   header:
     getQueryArg(window.location.href, "action") !== "edit"
       ? getCommonHeader({
-        labelKey: `WS_APPLY_NEW_CONNECTION_HEADER ${process.env.REACT_APP_NAME === "Citizen" ? "(" + getCurrentFinancialYear() + ")" : ""}`,
-        dynamicArray: [getCurrentFinancialYear()],
-        labelKey: process.env.REACT_APP_NAME === "Citizen" ? "WS_APPLY_NEW_CONNECTION_HEADER" : "TL_COMMON_APPL_NEW_LICENSE_YEAR"
+        // labelKey: `WS_APPLY_NEW_CONNECTION_HEADER ${process.env.REACT_APP_NAME === "Citizen" ? "(" + getCurrentFinancialYear() + ")" : ""}`,
+        // dynamicArray: [getCurrentFinancialYear()],
+        labelKey: process.env.REACT_APP_NAME === "Citizen" ? "WS_APPLY_NEW_CONNECTION_HEADER" : "WS_APPLICATION_NEW_CONNECTION_HEADER"
       })
       :
       {},
@@ -170,7 +171,7 @@ export const formwizardSecondStep = {
   uiFramework: "custom-atoms",
   componentPath: "Form",
   props: { id: "apply_form2" },
-  children: { tradeDocumentDetails },
+  children: { summaryScreen },
   visible: true
 };
 
@@ -186,7 +187,7 @@ export const formwizardFourthStep = {
   uiFramework: "custom-atoms",
   componentPath: "Form",
   props: { id: "apply_form4" },
-  children: { connectionDetails },
+  children: { summaryScreen },
   visible: false
 };
 
@@ -234,7 +235,7 @@ const screenConfig = {
     div: {
       uiFramework: "custom-atoms",
       componentPath: "Div",
-      props: { className: "common-div-css" },
+      props: { className: "common-div-css search-preview" },
       children: {
         headerDiv: {
           uiFramework: "custom-atoms",

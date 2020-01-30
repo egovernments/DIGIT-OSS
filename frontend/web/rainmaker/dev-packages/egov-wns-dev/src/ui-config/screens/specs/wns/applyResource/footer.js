@@ -162,7 +162,8 @@ export const callBackForNext = async (state, dispatch) => {
       return false; // to show the above message
     }
     if (isFormValid && isOwnerShipValid) {
-      isFormValid = await applyTradeLicense(state, dispatch, activeStep);
+      // isFormValid = await applyTradeLicense(state, dispatch, activeStep);
+      isFormValid = true;
       if (!isFormValid) { hasFieldToaster = false; }
     } else { isFormValid = true; }
   }
@@ -211,7 +212,8 @@ export const callBackForNext = async (state, dispatch) => {
   }
   if (activeStep === 3) {
     const LicenseData = get(state.screenConfiguration.preparedFinalObject, "Licenses[0]");
-    isFormValid = await applyTradeLicense(state, dispatch);
+    // isFormValid = await applyTradeLicense(state, dispatch);
+    isFormValid = true;
     if (isFormValid) { moveToSuccess(LicenseData, dispatch); }
   }
   if (activeStep !== 3) {

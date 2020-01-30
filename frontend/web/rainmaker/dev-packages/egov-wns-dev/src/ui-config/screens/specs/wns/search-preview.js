@@ -314,11 +314,11 @@ const estimate = getCommonGrayCard({
   })
 });
 
-const reviewConnectionDetails = getReviewConnectionDetails(false);
+export const reviewConnectionDetails = getReviewConnectionDetails(false);
 
-const reviewOwnerDetails = getReviewOwner(false);
+export const reviewOwnerDetails = getReviewOwner(false);
 
-const reviewDocumentDetails = getReviewDocuments(false, false);
+export const reviewDocumentDetails = getReviewDocuments(false, false);
 
 // let approvalDetails = getApprovalDetails(status);
 let title = getCommonTitle({ labelName: titleText });
@@ -352,6 +352,8 @@ export const taskDetails = getCommonCard({
   reviewDocumentDetails,
   reviewOwnerDetails,
 });
+
+export const summaryScreen = getCommonCard({ reviewConnectionDetails, reviewDocumentDetails, reviewOwnerDetails, })
 
 const screenConfig = {
   uiFramework: "material-ui",

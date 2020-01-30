@@ -27,37 +27,50 @@ import { changeStep } from "../viewBillResource/footer";
 // const properyDetailsHeader = getCommonSubHeader({
 //   labelKey: "WS_COMMON_PROP_DETAIL_HEADER"
 // });
-export const propertyHeader= getCommonSubHeader({
+export const propertyHeader = getCommonSubHeader({
   labelKey: "WS_COMMON_PROP_DETAIL",
-  labelName:"Property Details"
+  labelName: "Property Details"
 })
 
-export const propertyID= getTextField({
-  label: {
-      // labelKey: "WS_SEARCH_CONNNECTION_OLD_CONSUMER_LABEL"
-      labelName:"Property ID"
-  },
-  placeholder: {
-      // labelKey: "WS_SEARCH_CONNNECTION_OLD_CONSUMER_PLACEHOLDER"
-      labelName:"Enter Property ID"
-  },
-  gridDefination: {
-      xs: 12,
-      sm: 6
-  },
-  required: true,
-  title: {
-    value: "Fill the form by searching your old approved trade license",
-    // key: "TL_OLD_TL_NO"
-  },
-  infoIcon: "info_circle",
-  pattern: /^[a-zA-Z0-9-]*$/i,
-  errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-  jsonPath: "searchScreen.oldConnectionNumber",
-  
-  
- 
-});
+export const propertyID = getCommonContainer({
+  propertyID: getTextField({
+    label: { labelKey: "WS_PROPERTY_ID_LABEL" },
+    placeholder: { labelKey: "WS_PROPERTY_ID_PLACEHOLDER" },
+    gridDefination: { xs: 12, sm: 6, md: 6 },
+    required: true,
+    title: {
+      value: "Fill the form by searching your old approved trade license",
+      // key: "TL_OLD_TL_NO"
+    },
+    pattern: /^[a-zA-Z0-9-]*$/i,
+    errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+    jsonPath: "searchScreen.oldConnectionNumber",
+  }),
+  searchButton: {
+    componentPath: "Button",
+    gridDefination: { xs: 12, sm: 6, md: 6 },
+    props: {
+      variant: "contained",
+    style: {
+        color: "white",
+        margin: "8px",
+        backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
+        borderRadius: "2px",
+        width: "30%",
+        height: "32px"
+      }
+    },
+    children: {
+      buttonLabel: getLabel({
+        labelKey: "WS_SEARCH_CONNECTION_SEARCH_BUTTON"
+      })
+    },
+    // onClickDefination: {
+    //   action: "condition",
+    //   callBack: searchApiCall
+    // }
+  }
+})
 
 const propertyDetails = getCommonContainer({
   propertyType: getLabelWithValue(
@@ -66,7 +79,7 @@ const propertyDetails = getCommonContainer({
     },
     {
       jsonPath:
-      "WaterConnection[0].property.propertyTypeData"
+        "WaterConnection[0].property.propertyTypeData"
     }
   ),
   propertyUsageType: getLabelWithValue(
@@ -78,7 +91,7 @@ const propertyDetails = getCommonContainer({
   propertySubUsageType: getLabelWithValue(
     {
       labelKey: "WS_PROPERTY_SUB_USAGE_TYPE_LABEL",
-      labelName:"Property Sub Usage Type"
+      labelName: "Property Sub Usage Type"
     },
     { jsonPath: "WaterConnection[0].property.usageCategory" }
   ),
@@ -93,7 +106,7 @@ const propertyDetails = getCommonContainer({
   numberOfFloors: getLabelWithValue(
     {
       labelKey: "WS_PROPERTY_NO_OF_FLOOR_LABEL",
-      labelName:"Number Of Floors"
+      labelName: "Number Of Floors"
     },
     { jsonPath: "WaterConnection[0].property.usageCategory" }
   ),

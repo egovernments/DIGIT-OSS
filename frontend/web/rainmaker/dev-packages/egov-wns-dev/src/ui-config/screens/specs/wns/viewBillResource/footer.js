@@ -43,7 +43,7 @@ const moveToSuccess = (LicenseData, dispatch) => {
 export const generatePdfFromDiv = (action, applicationNumber) => {
   let target = document.querySelector("#custom-atoms-div");
   html2canvas(target, {
-    onclone: function(clonedDoc) {
+    onclone: function (clonedDoc) {
       // clonedDoc.getElementById("custom-atoms-footer")[
       //   "data-html2canvas-ignore"
       // ] = "true";
@@ -229,7 +229,8 @@ export const callBackForNext = async (state, dispatch) => {
       return false; // to show the above message
     }
     if (isFormValid && isOwnerShipValid) {
-      isFormValid = await applyTradeLicense(state, dispatch, activeStep);
+      // isFormValid = await applyTradeLicense(state, dispatch, activeStep);
+      isFormValid = true;
       if (!isFormValid) {
         hasFieldToaster = false;
       }
@@ -245,9 +246,9 @@ export const callBackForNext = async (state, dispatch) => {
     );
 
     get(LicenseData, "tradeLicenseDetail.subOwnerShipCategory") &&
-    get(LicenseData, "tradeLicenseDetail.subOwnerShipCategory").split(
-      "."
-    )[0] === "INDIVIDUAL"
+      get(LicenseData, "tradeLicenseDetail.subOwnerShipCategory").split(
+        "."
+      )[0] === "INDIVIDUAL"
       ? setMultiOwnerForApply(state, true)
       : setMultiOwnerForApply(state, false);
 
@@ -320,7 +321,8 @@ export const callBackForNext = async (state, dispatch) => {
       state.screenConfiguration.preparedFinalObject,
       "Licenses[0]"
     );
-    isFormValid = await applyTradeLicense(state, dispatch);
+    // isFormValid = await applyTradeLicense(state, dispatch);
+    isFormValid = true;
     if (isFormValid) {
       moveToSuccess(LicenseData, dispatch);
     }
