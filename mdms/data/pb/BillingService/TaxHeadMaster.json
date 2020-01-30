@@ -1981,8 +1981,8 @@
       "isActualDemand": true,
       "order": "1",
       "isRequired": false
-     },  
-     {
+    },
+    {
       "category": "FEE",
       "service": "BPA.NC_SAN_FEE",
       "name": "BPA Sanction fees",
@@ -1991,8 +1991,8 @@
       "isActualDemand": true,
       "order": "2",
       "isRequired": false
-     },
-     {
+    },
+    {
       "category": "FEE",
       "service": "PT.MUTATION",
       "name": "PT Mutation Fees",
@@ -2001,8 +2001,8 @@
       "isActualDemand": true,
       "order": "2",
       "isRequired": false
-     },
-     {
+    },
+    {
       "category": "REBATE",
       "service": "PT.MUTATION",
       "name": "PT Mutation Rebate",
@@ -2037,6 +2037,56 @@
       "service": "PT.MUTATION",
       "name": "Pt mutation adhoc penalty",
       "code": "PT_MUTATION_ADHOC_PENALTY",
+      "isDebit": false,
+      "isActualDemand": false,
+      "order": "1",
+      "isRequired": false
+    },
+    {
+      "category": "FEE",
+      "service": "TL.RENEWAL",
+      "name": "TL Renewal Fees",
+      "code": "TL_RENEWAL_FEE",
+      "isDebit": false,
+      "isActualDemand": true,
+      "order": "2",
+      "isRequired": false
+    },
+    {
+      "category": "REBATE",
+      "service": "TL.RENEWAL",
+      "name": "TL Renewal Rebate",
+      "code": "TL_RENEWAL_REBATE",
+      "isDebit": true,
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
+    },
+    {
+      "category": "PENALTY",
+      "service": "TL.RENEWAL",
+      "name": "TL Renewal Penalty",
+      "code": "TL_RENEWAL_PENALTY",
+      "isDebit": false,
+      "isActualDemand": false,
+      "order": "1",
+      "isRequired": false
+    },
+    {
+      "category": "TAX",
+      "service": "TL.RENEWAL",
+      "name": "TL Renewal adhoc rebate",
+      "code": "TL_RENEWAL_ADHOC_REBATE",
+      "isDebit": true,
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
+    },
+    {
+      "category": "TAX",
+      "service": "TL.RENEWAL",
+      "name": "TL Renewal adhoc penalty",
+      "code": "TL_RENEWAL_ADHOC_PENALTY",
       "isDebit": false,
       "isActualDemand": false,
       "order": "1",
