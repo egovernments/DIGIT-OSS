@@ -2946,6 +2946,7 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
       "",
       queryObject
     );
+    let isData = true;
     let data = bpaSearch.Bpa.map((data, index) => {
       if(data.edcrNumber === scrutinyNo) {
         dispatch(
@@ -2958,9 +2959,11 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
             "error"
           )
         );
+        isData = false;
       }
     })
 
+    if (isData) {
     payload = payload.edcrDetail;
     if (payload && payload.hasOwnProperty("length")) {
       if (payload.length === 0) {
@@ -3023,6 +3026,7 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
           );
         }
       }
+    }
     }
   } catch (e) {
     dispatch(

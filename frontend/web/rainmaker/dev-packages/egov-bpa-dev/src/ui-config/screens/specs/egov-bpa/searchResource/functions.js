@@ -1,6 +1,6 @@
 import get from "lodash/get";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getAppSearchResults } from "../../../../../ui-utils/commons";
+import { getAppSearchResults, getBpaSearchResults } from "../../../../../ui-utils/commons";
 import { convertEpochToDate, convertDateToEpoch } from "../../utils/index";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { textToLocalMapping } from "./searchResults";
@@ -92,7 +92,7 @@ export const searchApiCall = async (state, dispatch) => {
       }
     }
     try {
-      const response = await getAppSearchResults(queryObject);
+      const response = await getBpaSearchResults(queryObject);
       // const response = searchSampleResponse();
 
       let data = response.Bpa.map(item => ({

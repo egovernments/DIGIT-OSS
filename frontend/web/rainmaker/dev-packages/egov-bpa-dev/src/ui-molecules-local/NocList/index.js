@@ -16,6 +16,7 @@ import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { UploadSingleFile } from "../../ui-molecules-local";
+import Typography from "@material-ui/core/Typography";
 
 const themeStyles = theme => ({
   documentContainer: {
@@ -76,8 +77,9 @@ const themeStyles = theme => ({
     alignItems: "center"
   },
   descriptionDiv: {
-    display: "flex",
-    alignItems: "center"
+    alignItems: "center",
+    display: "block",
+    marginTop: "20px",
   },
   formControl: {
     minWidth: 250,
@@ -329,6 +331,11 @@ class NocList extends Component {
             style={styles.documentName}
           />
           {card.required && requiredIcon}
+          <Typography variant="caption">
+            <LabelContainer
+              labelKey={getTransformedLocale("TL_UPLOAD_RESTRICTIONS")}
+            />
+          </Typography>
         </Grid>
         <Grid item={true} xs={12} sm={6} md={4}>
           {card.dropDownValues && (
