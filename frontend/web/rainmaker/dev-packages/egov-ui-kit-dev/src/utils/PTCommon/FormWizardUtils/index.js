@@ -523,7 +523,7 @@ export const validateUnitandPlotSize = (plotDetails, form) => {
       }, 0);
       const plotSizeInFt = parseFloat(plotDetails.fields.plotSize.value) * 9;
       if (unitTotal > plotSizeInFt) {
-        alert(`Total area of floor ${floorNo} has exceeded the plot size`);
+        alert(`Total area/Covered area of floor ${floorNo} has exceeded the plot size`);
         isValid = false;
       }
     }
