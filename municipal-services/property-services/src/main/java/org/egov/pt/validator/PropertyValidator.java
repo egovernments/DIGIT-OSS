@@ -226,6 +226,18 @@ public class PropertyValidator {
 						+ configs.getMinumumLandArea() + " " + configs.getLandAreaUnit());
 			}
 		}
+		
+		if (property.getPropertyType().contains(PTConstants.PT_TYPE_BUILTUP)) {
+
+			Long floors = property.getNoOfFloors();
+
+			if (floors == null || (floors != null && floors < 1)) {
+				errorMap.put("EG_PT_ERROR_FLOOR_COUNT",
+						"No of floors cannot be null or lesser than value one in count for property of type : "
+								+ PTConstants.PT_TYPE_BUILTUP);
+			}
+			
+		}
     	
 	}
 
