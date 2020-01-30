@@ -337,6 +337,38 @@
       "service": "PT.MUTATION",
       "code": "PTMUTAN2016",
       "financialYear": "2016-17"
+    },
+    {
+      "fromDate": 1554076799000,
+      "toDate": 1585679399000,
+      "periodCycle": "ANNUAL",
+      "service": "TL.RENEWAL",
+      "code": "TLRENEWAL2019",
+      "financialYear": "2019-20"
+    },
+    {
+      "fromDate": 1522540800000,
+      "toDate": 1554076799000,
+      "periodCycle": "ANNUAL",
+      "service": "TL.RENEWAL",
+      "code": "TLRENEWAL2018",
+      "financialYear": "2018-19"
+    },
+    {
+      "fromDate": 1491004800000,
+      "toDate": 1522540798000,
+      "periodCycle": "ANNUAL",
+      "service": "TL.RENEWAL",
+      "code": "TLRENEWAL2017",
+      "financialYear": "2017-18"
+    },
+    {
+      "fromDate": 1459468800000,
+      "toDate": 1491004799000,
+      "periodCycle": "ANNUAL",
+      "service": "TL.RENEWAL",
+      "code": "TLRENEWAL2016",
+      "financialYear": "2016-17"
     }
   ]
 }
