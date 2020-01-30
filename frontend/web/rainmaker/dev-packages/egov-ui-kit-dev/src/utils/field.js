@@ -33,10 +33,13 @@ const Field = ({ fieldKey, handleFieldChange, field = {}, onTextFieldIconClick, 
         case "date":
           return (
             <DatePicker
+            formatDate={(date) => moment(date).format('DD-MM-YYYY')}
+            onChange={(e, value) => handleFieldChange(fieldKey,value)}
+            autoOk={true}
             {...rest}
             {...fieldProps}
-          formatDate={() => moment().format('DD-MM-YYYY')}
-            onChange={(e, value) => handleFieldChange(fieldKey,value)}
+
+
             />
           )
       case "textFieldIcon":
