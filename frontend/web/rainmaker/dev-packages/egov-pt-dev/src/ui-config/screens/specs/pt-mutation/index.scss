@@ -4,7 +4,7 @@
   margin-top: 0px !important; 
       div{
           div{
-            background-color: transparent !important;
+            background-color: transparent;
           }
       }
 }
@@ -48,12 +48,14 @@
     margin-right: -20px;
     margin-left: -20px;
     margin-top: 10px;
+    background-color: white !important;
    }
 
    #material-ui-searchApplicationDetails{
     margin-right: -20px;
     margin-left: -20px;
     margin-top: 10px;
+    background-color: white !important;
    }
 
    @media only screen and (max-width: 768px) {
