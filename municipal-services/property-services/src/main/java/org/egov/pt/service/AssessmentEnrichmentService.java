@@ -55,7 +55,10 @@ public class AssessmentEnrichmentService {
         Assessment assessment = request.getAssessment();
         assessment.setId(String.valueOf(UUID.randomUUID()));
         assessment.setAssessmentNumber(getAssessmentNo(request));
-        if(null == assessment.getStatus())
+
+        if(config.getIsAssessmentWorkflowEnabled())
+            assessment.setStatus(Status.INWORKFLOW);
+        else
             assessment.setStatus(Status.ACTIVE);
 
         AuditDetails auditDetails = AuditDetails.builder()
@@ -78,6 +81,7 @@ public class AssessmentEnrichmentService {
             }
         }
         assessment.setAuditDetails(auditDetails);
+
     }
 
 
