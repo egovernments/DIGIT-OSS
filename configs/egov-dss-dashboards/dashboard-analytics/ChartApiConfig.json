@@ -2910,15 +2910,18 @@
     },
     "_comment": " "
   },
-    "_comment": "W&S charts below-----------------------------------------------------------------------",
+
+
+
+  "_comment": "W&S charts below-----------------------------------------------------------------------",
   "wstodaysCollection": {
-    "chartName": "DSS_W&S_TOTAL_COLLECTION",
+    "chartName": "DSS_W&S_TODAYS_COLLECTION",
     "queries": [
       {
         "module": "W&S",
         "indexName": "receipts-consumers",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"status\":\"Approved\"}},{\"range\":{\"@timestamp\":{\"gte\":\"now-24h\",\"lte\":\"now\"}}}]}},\"aggs\":{\"Total collection\":{\"sum\":{\"field\":\"totalamount\"}}}}}}",
-        "requestQueryMap": "{\r\n  \"district\" : \"districtname\", \r\n\"city\" : \"cityname\" \r\n}",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must\":[{\"term\":{\"status\":\"Approved\"}},{\"range\":{\"@timestamp\":{\"gte\":\"now-24h\",\"lte\":\"now\"}}}]}},\"aggs\":{\"Total collection\":{\"sum\":{\"field\":\"totalamount\"}}}}}}",
+        "requestQueryMap": "{\"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\"}",
         "dateRefField": ""
       }
     ],
@@ -2933,14 +2936,14 @@
     },
     "_comment": "W&S total collections "
   },
-  "wsTotalCollection": {
+  "wstotalCollection": {
     "chartName": "DSS_W&S_TOTAL_COLLECTION",
     "queries": [
       {
         "module": "W&S",
         "indexName": "receipts-consumers",
         "aggrQuery": "{\"aggs\":{\"Total Collection\":{\"filter\":{\"term\":{\"status\":\"Approved\"}},\"aggs\":{\"approved\":{\"sum\":{\"field\":\"totalamount\"}}}}}}",
-        "requestQueryMap": "{\r\n  \"district\" : \"districtname\", \r\n\"city\" : \"cityname\" \r\n}",
+        "requestQueryMap": "{\"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\"}",
         "dateRefField": "@timestamp"
       }
     ],
@@ -2992,7 +2995,7 @@
       },
       {
         "module": "W&S",
-        "requestQueryMap": "{\"district\" : \"districtname\", \"city\" : \"cityname\"}",
+        "requestQueryMap": "{\"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\"}",
         "dateRefField": "@timestamp",
         "indexName": "receipts-consumers",
         "aggrQuery": "{\"aggs\":{\"Total Collection\":{\"filter\":{\"term\":{\"status\":\"Approved\"}},\"aggs\":{\"approved\":{\"sum\":{\"field\":\"totalamount\"}}}}}}"
@@ -3019,19 +3022,19 @@
     },
     "_comment": " "
   },
-  "wsCumulativeCollections": {
+  "wscumulativeCollections": {
     "chartName": "DSS_W&S_TOTAL_CUMULATIVE_COLLECTION",
     "queries": [
       {
         "module": "W&S",
         "dateRefField": "@timestamp",
-        "requestQueryMap": "{\"city\" : \"cityname\"}",
+        "requestQueryMap": "{\"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\"}",
         "indexName": "receipts-consumers",
         "aggrQuery": "{\"aggs\":{\"Water Sewerage Collections\":{\"date_histogram\":{\"field\":\"@timestamp\",\"interval\":\"intervalvalue\"},\"aggs\":{\"AGGR\":{\"filter\":{\"term\":{\"status\":\"Approved\"}},\"aggs\":{\"approved\":{\"sum\":{\"field\":\"totalamount\"}}}}}}}}"
       }
     ],
     "chartType": "line",
-    "valueType": "number",
+    "valueType": "amount",
     "action": "",
     "drillChart": "none",
     "documentType": "_doc",
@@ -3057,7 +3060,7 @@
       },
       {
         "module": "W&S",
-        "requestQueryMap": "{\"district\" : \"districtname\", \"city\" : \"cityname\"}",
+        "requestQueryMap": "{\"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\"}",
         "dateRefField": "@timestamp",
         "indexName": "receipts-consumers",
         "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"status\":\"Approved\"}}]}},\"aggs\":{\"Total Collection\":{\"terms\":{\"field\":\"cityname.keyword\",\"size\":\"200\",\"order\":{\"Sum\":\"desc\"}},\"aggs\":{\"Sum\":{\"sum\":{\"field\":\"totalamount\"}}}}}}}}"
@@ -3090,7 +3093,7 @@
       },
       {
         "module": "W&S",
-        "requestQueryMap": "{\"district\" : \"districtname\", \"city\" : \"cityname\"}",
+        "requestQueryMap": "{\"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\"}",
         "dateRefField": "@timestamp",
         "indexName": "receipts-consumers",
         "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"status\":\"Approved\"}}]}},\"aggs\":{\"Total Collection\":{\"terms\":{\"field\":\"cityname.keyword\",\"size\":\"200\",\"order\":{\"Sum\":\"asc\"}},\"aggs\":{\"Sum\":{\"sum\":{\"field\":\"totalamount\"}}}}}}}}"
@@ -3111,13 +3114,13 @@
     },
     "_comment": " Bottom Performing Ulbs for target achieved"
   },
-  "wsCollectionByUsage": {
+  "wscollectionByUsage": {
     "chartName": "DSS_W&S_COLLECTION_BY_USAGE",
     "queries": [
       {
         "module": "W&S",
         "dateRefField": "@timestamp",
-        "requestQueryMap": "{\r\n  \"district\" : \"districtname\", \r\n\"city\" : \"cityname\" \r\n}",
+        "requestQueryMap": "{\"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\"}",
         "indexName": "receipts-consumers",
         "aggrQuery": "{\"aggs\":{\"Usage Type\":{\"terms\":{\"field\":\"consumertype.keyword\"},\"aggs\":{\"AGGR\":{\"filter\":{\"term\":{\"status\":\"Approved\"}},\"aggs\":{\"approved\":{\"sum\":{\"field\":\"totalamount\"}}}}}}}}"
       }
@@ -3140,21 +3143,21 @@
     "queries": [
       {
         "module": "W&S",
-        "requestQueryMap": "{ \"usageId\" : \".keyword\",\"minorUsageId\" : \".keyword\", \"tenantId\" : \"cityname.keyword\", \"district\" : \"districtname.keyword\" }",
+        "requestQueryMap": "{ \"usageId\" : \".keyword\",\"minorUsageId\" : \".keyword\", \"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\" }",
         "dateRefField": "@timestamp",
         "indexName": "receipts-consumers",
         "aggrQuery": "{\"aggs\":{\"ULB\":{\"terms\":{\"field\":\"cityname.keyword\"},\"aggs\":{\"Total Collection\":{\"filter\":{\"term\":{\"status\":\"Approved\"}},\"aggs\":{\"collection\":{\"sum\":{\"field\":\"totalamount\"}}}},\"Total Receipt\":{\"filter\":{\"term\":{\"status\":\"Approved\"}},\"aggs\":{\"receipt\":{\"value_count\":{\"field\":\"receiptnumber.keyword\"}}}}}}}}"
       },
       {
         "module": "W&S",
-        "requestQueryMap": "{ \"tenantId\" : \"cityname.keyword\"}",
+        "requestQueryMap": "{ \"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\"}",
         "dateRefField": "@timestamp",
         "indexName": "demandbillconsumers",
         "aggrQuery": "{\"aggs\":{\"ULB\":{\"terms\":{\"field\":\"cityname.keyword\"},\"aggs\":{\"No of Bill\":{\"filter\":{\"term\":{\"billgenerated\":true}},\"aggs\":{\"approved\":{\"value_count\":{\"field\":\"installmentfrom.keyword\"}}}}}}}}"
       },
       {
         "module": "W&S",
-        "requestQueryMap": "{ \"tenantId\" : \"cityname.keyword\"}",
+        "requestQueryMap": "{ \"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\"}",
         "dateRefField": "@timestamp",
         "indexName": "projecteddemand-consumers",
         "aggrQuery": "{\"aggs\":{\"ULB\":{\"terms\":{\"field\":\"cityname.keyword\"},\"aggs\":{\"Project Demand\":{\"sum\":{\"field\":\"projecteddemand\"}}}}}}"
@@ -3168,7 +3171,7 @@
     "valueType": "number",
     "drillChart": "wsFinancialIndicatorWard",
     "action": "",
-    "plotLabel": "DDRs",
+    "plotLabel": "ULB",
     "isPostResponseHandler": true,
     "postAggregationTheory" : "",
     "aggregationPaths": [
@@ -3201,21 +3204,21 @@
     "queries": [
       {
         "module": "W&S",
-        "requestQueryMap": "{ \"tenantId\" : \"cityname.keyword\", \"district\" : \"districtname.keyword\" }",
+        "requestQueryMap": "{ \"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\" }",
         "dateRefField": "@timestamp",
         "indexName": "receipts-consumers",
         "aggrQuery": "{\"aggs\":{\"Ward\":{\"terms\":{\"field\":\"block\"},\"aggs\":{\"Total Collection\":{\"filter\":{\"term\":{\"status\":\"Approved\"}},\"aggs\":{\"collection\":{\"sum\":{\"field\":\"totalamount\"}}}},\"Total Receipt\":{\"filter\":{\"term\":{\"status\":\"Approved\"}},\"aggs\":{\"receipt\":{\"value_count\":{\"field\":\"receiptnumber.keyword\"}}}}}}}}"
       },
       {
         "module": "W&S",
-        "requestQueryMap": "{ \"tenantId\" : \"cityname.keyword\"}",
+        "requestQueryMap": "{ \"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\" }",
         "dateRefField": "@timestamp",
         "indexName": "demandbillconsumers",
         "aggrQuery": "{\"aggs\":{\"Ward\":{\"terms\":{\"field\":\"block.keyword\"},\"aggs\":{\"No of Bill\":{\"filter\":{\"term\":{\"billgenerated\":true}},\"aggs\":{\"approved\":{\"value_count\":{\"field\":\"installmentfrom.keyword\"}}}}}}}}"
       },
       {
         "module": "W&S",
-        "requestQueryMap": "{ \"tenantId\" : \"cityname.keyword\"}",
+        "requestQueryMap": "{ \"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\" }",
         "dateRefField": "@timestamp",
         "indexName": "projecteddemand-consumers",
         "aggrQuery": "{\"aggs\":{\"Ward\":{\"terms\":{\"field\":\"block.keyword\"},\"aggs\":{\"Project Demand\":{\"sum\":{\"field\":\"projecteddemand\"}}}}}}"
@@ -3263,14 +3266,14 @@
     "queries": [
       {
         "module": "W&S",
-        "requestQueryMap": "{\"tenantId\" : \"cityname.keyword\", \"district\" : \"districtname.keyword\" }",
+        "requestQueryMap": "{\"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\" }",
         "dateRefField": "@timestamp",
         "indexName": "receipts-consumers",
         "aggrQuery": "{\"aggs\":{\"ULB\":{\"terms\":{\"field\":\"cityname.keyword\"},\"aggs\":{\"Total Collection\":{\"filter\":{\"term\":{\"status\":\"Approved\"}},\"aggs\":{\"collection\":{\"sum\":{\"field\":\"totalamount\"}}}},\"Total Reciept\":{\"filter\":{\"term\":{\"status\":\"Approved\"}},\"aggs\":{\"reciept\":{\"value_count\":{\"field\":\"receiptnumber.keyword\"}}}}}}}}"
       },
       {
         "module": "W&S",
-        "requestQueryMap": "{ \"tenantId\" : \"cityname.keyword\"}",
+        "requestQueryMap": "{\"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\" }",
         "dateRefField": "@timestamp",
         "indexName": "demandbillconsumers",
         "aggrQuery": "{\"aggs\":{\"ULB\":{\"terms\":{\"field\":\"cityname.keyword\"},\"aggs\":{\"No of Bill\":{\"filter\":{\"term\":{\"billgenerated\":true}},\"aggs\":{\"approved\":{\"value_count\":{\"field\":\"installmentfrom.keyword\"}}}},\"Late charges\":{\"filter\":{\"term\":{\"billgenerated\":true}},\"aggs\":{\"penalty\":{\"sum\":{\"field\":\"penaltycollection\"}}}},\"Interest\":{\"filter\":{\"term\":{\"billgenerated\":true}},\"aggs\":{\"interest\":{\"sum\":{\"field\":\"interestcollection\"}}}},\"Advance\":{\"filter\":{\"term\":{\"billgenerated\":true}},\"aggs\":{\"advance\":{\"sum\":{\"field\":\"advancecollection\"}}}},\"Current Charges\":{\"filter\":{\"term\":{\"billgenerated\":true}},\"aggs\":{\"advance\":{\"sum\":{\"field\":\"currentcharges\"}}}},\"Arrear Charges\":{\"filter\":{\"term\":{\"billgenerated\":true}},\"aggs\":{\"advance\":{\"sum\":{\"field\":\"arrearcharges\"}}}}}}}}"
@@ -3332,14 +3335,14 @@
     "queries": [
       {
         "module": "W&S",
-        "requestQueryMap": "{\"tenantId\" : \"cityname.keyword\", \"district\" : \"districtname.keyword\" }",
+        "requestQueryMap": "{\"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\" }",
         "dateRefField": "@timestamp",
         "indexName": "receipts-consumers",
         "aggrQuery": "{\"aggs\":{\"Ward\":{\"terms\":{\"field\":\"block\"},\"aggs\":{\"Total Collection\":{\"filter\":{\"term\":{\"status\":\"Approved\"}},\"aggs\":{\"collection\":{\"sum\":{\"field\":\"totalamount\"}}}},\"Total Reciept\":{\"filter\":{\"term\":{\"status\":\"Approved\"}},\"aggs\":{\"reciept\":{\"value_count\":{\"field\":\"receiptnumber.keyword\"}}}}}}}}"
       },
       {
         "module": "W&S",
-        "requestQueryMap": "{ \"tenantId\" : \"cityname.keyword\"}",
+        "requestQueryMap": "{\"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\" }",
         "dateRefField": "@timestamp",
         "indexName": "demandbillconsumers",
         "aggrQuery": "{\"aggs\":{\"Ward\":{\"terms\":{\"field\":\"block.keyword\"},\"aggs\":{\"No of Bill\":{\"filter\":{\"term\":{\"billgenerated\":true}},\"aggs\":{\"approved\":{\"value_count\":{\"field\":\"installmentfrom.keyword\"}}}},\"Late charges\":{\"filter\":{\"term\":{\"billgenerated\":true}},\"aggs\":{\"penalty\":{\"sum\":{\"field\":\"penaltycollection\"}}}},\"Interest\":{\"filter\":{\"term\":{\"billgenerated\":true}},\"aggs\":{\"interest\":{\"sum\":{\"field\":\"interestcollection\"}}}},\"Advance\":{\"filter\":{\"term\":{\"billgenerated\":true}},\"aggs\":{\"advance\":{\"sum\":{\"field\":\"advancecollection\"}}}},\"Current Charges\":{\"filter\":{\"term\":{\"billgenerated\":true}},\"aggs\":{\"advance\":{\"sum\":{\"field\":\"currentcharges\"}}}},\"Arrear Charges\":{\"filter\":{\"term\":{\"billgenerated\":true}},\"aggs\":{\"advance\":{\"sum\":{\"field\":\"arrearcharges\"}}}}}}}}"
