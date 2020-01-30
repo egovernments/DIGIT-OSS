@@ -35,6 +35,13 @@ type Route struct {
 }
 
 const sAnnotation string = "zuul/route-path"
+const routesTemplate string = `
+{{- range . }}  
+zuul.routes.{{ .Path }}.path=/{{ .Path }}/**
+zuul.routes.{{ .Path }}.stripPrefix=false
+zuul.routes.{{ .Path }}.url={{ .ServiceURL }}
+{{ end -}}
+`
 
 func getKubeConnection() (clientset *kubernetes.Clientset) {
 
@@ -50,8 +57,8 @@ func getKubeConnection() (clientset *kubernetes.Clientset) {
 	return clientset
 }
 
-func listAllServices(clientset *kubernetes.Clientset) (s *v1.ServiceList) {
-	sc := clientset.CoreV1().Services("")
+func listAllServices(clientset *kubernetes.Clientset, namespace string) (s *v1.ServiceList) {
+	sc := clientset.CoreV1().Services(namespace)
 
 	s, err := sc.List(metav1.ListOptions{})
 	if err != nil {
@@ -86,7 +93,7 @@ func writeTemplate(r *[]Route) {
 		panic(err)
 	}
 
-	tmpl, err := template.ParseFiles("routes.tpl")
+	tmpl, err := template.New("test").Parse(routesTemplate)
 	if err != nil {
 		panic(err)
 	}
@@ -107,9 +114,13 @@ func main() {
 	if _, ok := os.LookupEnv("OUTPUT_FILE_PATH"); !ok {
 		log.Panicln("OUTPUT_FILE_PATH environment variable not set! Exiting!")
 	}
+	n, ok := os.LookupEnv("NAMESPACE")
+	if !ok {
+		log.Println("NAMESPACE environment vairable not set, defaulting to cluster wide")
+	}
 
 	clientset := getKubeConnection()
-	s := listAllServices(clientset)
+	s := listAllServices(clientset, n)
 	r := getZuulRoutes(s)
 	writeTemplate(r)
 }

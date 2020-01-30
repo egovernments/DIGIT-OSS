@@ -27,4 +27,5 @@ COPY --chown=egov:egov --from=build /app/zuul-kubernetes-discovery /opt/egov/
 
 RUN chmod +x /opt/egov/zuul-kubernetes-discovery 
 
+CMD ["/opt/egov/zuul-kubernetes-discovery"]
 # USER egov
