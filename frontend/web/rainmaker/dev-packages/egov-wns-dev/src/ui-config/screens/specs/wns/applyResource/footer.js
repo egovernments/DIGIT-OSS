@@ -370,7 +370,7 @@ export const footer = getCommonApplyFooter({
         componentPath: "Icon",
         props: { iconName: "keyboard_arrow_left" }
       },
-      previousButtonLabel: getLabel({ labelName: "Previous Step", labelKey: "TL_COMMON_BUTTON_PREV_STEP" })
+      previousButtonLabel: getLabel({ labelName: "Previous Step", labelKey: "WS_COMMON_BUTTON_PREV_STEP" })
     },
     onClickDefination: { action: "condition", callBack: callBackForPrevious },
     visible: false

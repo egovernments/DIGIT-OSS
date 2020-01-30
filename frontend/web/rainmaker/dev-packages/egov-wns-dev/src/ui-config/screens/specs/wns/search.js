@@ -95,7 +95,7 @@ const employeeSearchResults = {
                 },
                 buttonLabel: getLabel({
                   labelName: "NEW APPLICATION",
-                  labelKey: "WNS_SEARCH_NEW_APPLICATION"
+                  labelKey: "WS_HOME_SEARCH_RESULTS_NEW_APP_BUTTON"
                 })
               },
               onClickDefination: {

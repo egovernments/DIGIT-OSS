@@ -51,7 +51,7 @@ export const propertyID = getCommonContainer({
     gridDefination: { xs: 12, sm: 6, md: 6 },
     props: {
       variant: "contained",
-    style: {
+      style: {
         color: "white",
         margin: "8px",
         backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",

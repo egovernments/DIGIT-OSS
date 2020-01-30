@@ -8,8 +8,8 @@ export const getGenderRadioButton = {
   props: {
     label: { key: "WS_SERV_DETAIL_CONN_RAIN_WATER_HARVESTING_FAC" },
     buttons: [
-      { labelName: "Yes", value: "MALE" },
-      { labelName: "No", value: "FEMALE" },
+      { labelKey:"HARVESTING_SCORE_YES", value: "Yes" },
+      { labelKey:"HARVESTING_SCORE_NO", value: "No" },
     ],
     jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].gender",
     required: true
@@ -55,14 +55,14 @@ export const OwnerInfoCard = getCommonCard({
 
     numberOfTaps: getTextField({
       label: { labelKey: "WS_SERV_DETAIL_NO_OF_TAPS" },
-      placeholder: { labelName: "Number of taps" },
+      placeholder: { labelKey:"WS_SERV_DETAIL_NO_OF_TAPS_PLACEHOLDER"},
       gridDefination: { xs: 12, sm: 6 },
       jsonPath: "WaterConnection[0].noOfTaps"
     }),
 
     pipeSize: getSelectField({
       label: { labelKey: "WS_SERV_DETAIL_PIPE_SIZE" },
-      placeholder: { labelName: "select size" },
+      placeholder: { labelKey:"WS_SERV_DETAIL_PIPE_SIZE_PLACEHOLDER"},
       gridDefination: { xs: 12, sm: 6 },
       jsonPath: "WaterConnection[0].pipeSize"
     }),

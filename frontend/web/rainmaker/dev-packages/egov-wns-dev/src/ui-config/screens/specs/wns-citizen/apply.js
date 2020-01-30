@@ -13,12 +13,12 @@ import {
     header,
     formwizardFirstStep,
     formwizardSecondStep,
-    IDDetails,
-    Details,
-    ownerDetails,
     formwizardThirdStep,
     formwizardFourthStep,
     stepper,
+    IDDetails,
+    Details,
+    ownerDetails,
     getMdmsData
   } from "../wns/apply";
   import { getAllDataFromBillingSlab } from "../utils";
@@ -129,10 +129,11 @@ import {
           stepper,
           formwizardFirstStep,
           formwizardSecondStep,
-          IDDetails,
-          Details, 
-          ownerDetails,         // formwizardThirdStep,
-          // formwizardFourthStep,
+          // IDDetails,
+          // Details, 
+          // ownerDetails,    
+          formwizardThirdStep,
+          formwizardFourthStep,
           footer
         }
       },
