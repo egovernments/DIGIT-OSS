@@ -825,4 +825,9 @@
         <put-attribute name="body" value="/WEB-INF/views/coareport.jsp"/>
     </definition>
     
+    <definition name="surrendered_cheque" extends="base_layout">
+        <put-attribute name="page-title" value="title.coa.report" cascade="true"/>
+        <put-attribute name="body" value="/WEB-INF/views/cheque/surrender_cheque.jsp"/>
+    </definition>
+    
 </tiles-definitions>
