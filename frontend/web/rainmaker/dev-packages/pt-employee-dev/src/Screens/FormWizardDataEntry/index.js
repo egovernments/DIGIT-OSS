@@ -714,11 +714,11 @@ class FormWizardDataEntry extends Component {
               receiptHeader="PT_ASSESSMENT_NO"
               messageHeader={this.getMessageHeader()}
               message={this.getMessage()}
-            // receiptNo={
-            //   assessedPropertyDetails["Properties"][0]["propertyDetails"][0][
-            //     "assessmentNumber"
-            //   ]
-            // }
+            receiptNo={
+              assessedPropertyDetails["Properties"][0]["propertyDetails"][0][
+                "assessmentNumber"
+              ]
+            }
             />
           </div>
         );
@@ -852,7 +852,7 @@ class FormWizardDataEntry extends Component {
       case 0:
       case 1:
       case 2:
-        headerObj.subHeaderValue = propertyId;
+        headerObj.subHeaderValue = '';
         // headerObj.headerValue = "(" + assessmentYear + ")";
         isAssesment
           ? (headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER")
@@ -865,7 +865,7 @@ class FormWizardDataEntry extends Component {
             (headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER");
         break;
       case 3:
-        headerObj.subHeaderValue = propertyId;
+        headerObj.subHeaderValue = '';
         isAssesment
           ? (headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER")
           : isReassesment
@@ -875,7 +875,7 @@ class FormWizardDataEntry extends Component {
         // headerObj.headerValue = "(" + assessmentYear + ")";
         break;
       case 4:
-        headerObj.subHeaderValue = propertyId;
+        headerObj.subHeaderValue = '';
         isAssesment
           ? (headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER")
           : isReassesment
@@ -1280,6 +1280,7 @@ class FormWizardDataEntry extends Component {
         // break;
         window.scrollTo(0, 0);
         createAndUpdate(index);
+        this.resetForm();
         break;
       case 5:
         const { assessedPropertyDetails = {} } = this.state;
@@ -1982,10 +1983,35 @@ demandsData.forEach(
           Demands: demandData
         }
       );
+      const  callToggleBarSnackbar = (labelKey, labelName) => {
+        this.props.toggleSnackbarAndSetText(
+          true,
+          {
+            labelName,
+            labelKey
+          },
+          "error"
+        );
+      };
+      switch(propertyMethodAction){
+        case "_create":
+        callToggleBarSnackbar(
+          "PT_PROPERTY_CREATED_SUCCESSFULLY",
+          "PropertyTax Created Successfully"
+        );
+        break;
+        case "_update":
+        callToggleBarSnackbar(
+          "PT_PROPERTY_UPDATED_SUCCESSFULLY",
+          "PropertyTax Updated Successfully"
+        );
+        break;
+        default:
+      }
       this.setState({
         assessedPropertyDetails: createPropertyResponse,
         assessedDemandDetails: createDemandResponse,
-        selected: index,
+        // selected: index,
         formValidIndexArray: [...formValidIndexArray, selected]
       });
       hideSpinner();
