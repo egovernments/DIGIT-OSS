@@ -117,10 +117,10 @@ serviceMaps:
  - version: 1.0
    name: WaterConnection
    description: update ConnectionDetails in connection and water_service_connection
-   fromTopic: save-ws-connection
+   fromTopic: update-ws-connection
    isTransaction: true
    queryMaps: 
-    - query: UPDATE connection SET applicationstatus=?, status=?, connectionno=?, oldconnectionno=? WHERE id=?;
+    - query: UPDATE connection SET applicationstatus=?, status=?, connectionno=?, oldconnectionno=?, action=?, roadCuttingArea=?, roadType=? WHERE id=?;
       basePath: $.WaterConnection
       jsonMaps:
 
@@ -132,9 +132,15 @@ serviceMaps:
 
        - jsonPath: $.WaterConnection.oldConnectionNo
 
-       - jsonPath: $.WaterConnection.id     
+       - jsonPath: $.WaterConnection.action
 
-    - query: UPDATE water_service_connection SET connectionCategory=?,rainWaterHarvesting=?,connectionType=?,waterSource=?,meterId=?,meterInstallationDate=?,pipeSize=?,noOfTaps=?,waterSubSource=?,calculationAttribute=? WHERE connection_id=?;
+       - jsonPath: $.WaterConnection.roadCuttingArea
+
+       - jsonPath: $.WaterConnection.roadType 
+
+       - jsonPath: $.WaterConnection.id    
+
+    - query: UPDATE water_service_connection SET connectionCategory=?,rainWaterHarvesting=?,connectionType=?,waterSource=?,meterId=?,meterInstallationDate=?,pipeSize=?,noOfTaps=?,waterSubSource=?,calculationAttribute=?,uom=? WHERE connection_id=?;
       basePath: $.WaterConnection
       jsonMaps:
        
@@ -159,6 +165,8 @@ serviceMaps:
        - jsonPath: $.WaterConnection.waterSubSource
 
        - jsonPath: $.WaterConnection.calculationAttribute
+
+       - jsonPath: $.WaterConnection.uom
 
        - jsonPath: $.WaterConnection.id
 
@@ -198,14 +206,13 @@ serviceMaps:
 
 
 
-
  - version: 1.0
    name: WaterConnection
    description: update ConnectionDetails in connection and water_service_connection
    fromTopic: update-ws-workflow
    isTransaction: true
    queryMaps: 
-    - query: UPDATE connection SET applicationstatus=?, status=?, connectionno=?, oldconnectionno=? WHERE id=?;
+    - query: UPDATE connection SET applicationstatus=?, status=?, connectionno=?, oldconnectionno=?, action=?, roadCuttingArea=?, roadType=? WHERE id=?;
       basePath: $.WaterConnection
       jsonMaps:
 
@@ -215,38 +222,16 @@ serviceMaps:
 
        - jsonPath: $.WaterConnection.connectionNo
 
-       - jsonPath: $.WaterConnection.oldConnectionNo 
+       - jsonPath: $.WaterConnection.oldConnectionNo
+
+       - jsonPath: $.WaterConnection.action 
+
+       - jsonPath: $.WaterConnection.roadCuttingArea
+
+       - jsonPath: $.WaterConnection.roadType
 
        - jsonPath: $.WaterConnection.id     
 
-    - query: UPDATE water_service_connection SET connectionCategory=?,rainWaterHarvesting=?,connectionType=?,waterSource=?,meterId=?,meterInstallationDate=?,pipeSize=?,noOfTaps=?,waterSubSource=?,calculationAttribute=? WHERE connection_id=?;
-      basePath: $.WaterConnection
-      jsonMaps:
-       
-       - jsonPath: $.WaterConnection.connectionCategory
-         
-
-       - jsonPath: $.WaterConnection.rainWaterHarvesting
-         type: BOOLEAN 
-         dbType: BOOLEAN
-         
-       - jsonPath: $.WaterConnection.connectionType
-         
-       - jsonPath: $.WaterConnection.waterSource
-         
-       - jsonPath: $.WaterConnection.meterId
-         
-       - jsonPath: $.WaterConnection.meterInstallationDate
-
-       - jsonPath: $.WaterConnection.pipeSize
-
-       - jsonPath: $.WaterConnection.noOfTaps
-
-       - jsonPath: $.WaterConnection.waterSubSource
-
-       - jsonPath: $.WaterConnection.calculationAttribute
-
-       - jsonPath: $.WaterConnection.id
 
 
     - query: INSERT INTO eg_ws_applicationDocument(id, tenantId, documenttype, filestoreid, wsid, active, createdBy, lastModifiedBy, createdTime, lastModifiedTime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET active = ?, documenttype =?, filestoreid =?,lastmodifiedby =?, lastmodifiedtime =?;
