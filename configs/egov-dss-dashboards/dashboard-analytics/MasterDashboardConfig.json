@@ -2996,7 +2996,7 @@
               "charts": [
                 {
                   "id": "wstodaysCollection",
-                  "name": "DSS_TOTAL_COLLECTION_TODAY",
+                  "name": "DSS_W&S_TODAYS_COLLECTION",
                   "code": "",
                   "chartType": "metric",
                   "filter": "",
@@ -3004,7 +3004,7 @@
                 },
                 {
                   "id": "wstotalCollection",
-                  "name": "DSS_TOTAL_COLLECTION",
+                  "name": "DSS_W&S_TOTAL_COLLECTION",
                   "code": "",
                   "chartType": "metric",
                   "filter": "",
@@ -3012,7 +3012,7 @@
                 },
                 {
                   "id": "wstargetCollection",
-                  "name": "DSS_TARGET_COLLECTION",
+                  "name": "DSS_W&S_TARGET_COLLECTION",
                   "code": "",
                   "chartType": "metric",
                   "filter": "",
@@ -3020,7 +3020,7 @@
                 },
                 {
                   "id": "wstargetAchieved",
-                  "name": "DSS_TARGET_ACHIEVED",
+                  "name": "DSS_W&S_TARGET_ACHIEVED",
                   "code": "",
                   "chartType": "metric",
                   "filter": "",
@@ -3040,7 +3040,7 @@
               "isCollapsible": false,
               "charts": [
                 {
-                  "id": "wscumulativeCollection",
+                  "id": "wscumulativeCollections",
                   "name": "Monthly",
                   "code": "",
                   "chartType": "line",
@@ -3110,7 +3110,7 @@
               "isCollapsible": false,
               "charts": [
                 {
-                  "id": "collectionByUsageType",
+                  "id": "wscollectionByUsage",
                   "name": "DSS_W&S_COLLECTION_BY_USAGE",
                   "code": "",
                   "chartType": "donut",
@@ -3127,7 +3127,7 @@
           "vizArray": [
             {
               "id": 231,
-              "name": "DSS_W&S_DEMAND_COLLECTION",
+              "name": "DSS_W&S_DEMAND_COLLECTION_BOUNDARY",
               "dimensions": {
                 "height": 350,
                 "width": 12
@@ -3155,7 +3155,7 @@
           "vizArray": [
             {
               "id": 231,
-              "name": "DSS_W&S_TAX_HEAD",
+              "name": "DSS_W&S_TAX_HEAD_BOUNDARY",
               "dimensions": {
                 "height": 350,
                 "width": 12
@@ -3167,7 +3167,7 @@
               "charts": [
                 {
                   "id": "wsTaxHeadUlb",
-                  "name": "DSS_W&S_TAX_HEAD_BREAKUP_REVENUE",
+                  "name": "DSS_W&S_TAX_HEAD_BOUNDARY",
                   "code": "",
                   "chartType": "table",
                   "filter": "",
