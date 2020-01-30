@@ -6,6 +6,8 @@ import Label from "egov-ui-kit/utils/translationNode";
 import { initLocalizationLabels } from "egov-ui-kit/redux/app/utils";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import PropertyInfoCard from "../PropertyInfoCard";
+import moment from "moment";
+
 
 const locale = getLocale() || "en_IN";
 const localizationLabelsData = initLocalizationLabels(locale);
@@ -144,7 +146,7 @@ const transform = (floor, key, generalMDMSDataById, propertyDetails) => {
 //   };
 const getAssessmentInfo = (propertyDetails, generalMDMSDataById) => {
   const { units = [], noOfFloors,additionalDetails={} } = propertyDetails || {};
-  var construction_date =(additionalDetails && additionalDetails.constructionYear)? new Date(additionalDetails.constructionYear).toJSON().slice(0,10).split('-').reverse().join('-'):null;
+  var construction_date =(additionalDetails && additionalDetails.constructionYear)? moment(additionalDetails.constructionYear).format('DD-MM-YYYY'):null;
   return (
     propertyDetails && [
       {
