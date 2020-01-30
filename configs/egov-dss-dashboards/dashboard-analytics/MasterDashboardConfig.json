@@ -2974,7 +2974,7 @@
     },
     {
       "name": "DSS_W&S_DASHBOARD",
-      "id": "w&s",
+      "id": "ws",
       "isActive": "",
       "style": "linear",
       "visualizations": [
