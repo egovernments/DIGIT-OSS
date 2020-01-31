@@ -4,6 +4,7 @@ import static org.egov.pt.util.AssessmentConstants.ASSESSMENT_BUSINESSSERVICE;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.egov.common.contract.request.RequestInfo;
@@ -160,14 +161,14 @@ public class AssessmentService {
 		List<String> fieldsUpdated = diffService.getUpdatedFields(assessment, assessmentFromSearch);
 
 		if(!CollectionUtils.isEmpty(fieldsUpdated))
-			isWorkflowTriggeredByFieldChange = intersection(Arrays.asList(config.getAssessmentWorkflowTriggerParams().split(",")), fieldsUpdated);
+			isWorkflowTriggeredByFieldChange = intersection(new LinkedList<>(Arrays.asList(config.getAssessmentWorkflowTriggerParams().split(","))), fieldsUpdated);
 
 
 		List<String> objectsAdded = diffService.getObjectsAdded(assessment, assessmentFromSearch);
 
 		Boolean isWorkflowTriggeredByObjectAddition = false;
 		if(!CollectionUtils.isEmpty(objectsAdded))
-			isWorkflowTriggeredByObjectAddition = intersection(Arrays.asList(config.getAssessmentWorkflowObjectTriggers().split(",")), objectsAdded);
+			isWorkflowTriggeredByObjectAddition = intersection(new LinkedList<>(Arrays.asList(config.getAssessmentWorkflowObjectTriggers().split(","))), objectsAdded);
 
 		return (isWorkflowTriggeredByFieldChange || isWorkflowTriggeredByObjectAddition);
 	}
