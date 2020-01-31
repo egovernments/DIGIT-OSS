@@ -513,6 +513,7 @@ let getModifiedPayment = (payments) =>{
   let interest=0
   let rebate=0;
   let roundOff=0;
+  let swatchatha=0;
   let currentDate=convertDateToEpoch(new Date());
   payments[0].paymentDetails[0].bill.billDetails.forEach(billdetail =>{
     if(billdetail.fromPeriod<= currentDate && billdetail.toPeriod >= currentDate){
@@ -532,6 +533,12 @@ let getModifiedPayment = (payments) =>{
             break;
           case "PT_TIME_INTEREST":
             interest = interest+(billAccountDetail.amount);
+            break;
+          case "PT_PROMOTIONAL_REBATE":
+            rebate = rebate+(billAccountDetail.amount);
+            break;
+          case "SWATCHATHA_TAX":
+            swatchatha = swatchatha+(billAccountDetail.amount);
             break;
           default:
             break;
@@ -555,17 +562,25 @@ let getModifiedPayment = (payments) =>{
           case "PT_TIME_INTEREST":
             interest = interest+(billAccountDetail.amount);
             break;
+          case "PT_PROMOTIONAL_REBATE":
+            rebate = rebate + (billAccountDetail.amount);
+            break;
+          case "SWATCHATHA_TAX":
+            swatchatha = swatchatha + (billAccountDetail.amount);
+            break;
           default:
             break;
         }
       })
     }
   })
-  set(payments, `[0].paymentDetails[0].bill.additionalDetaisl.tax`, tax);
-  set(payments, `[0].paymentDetails[0].bill.additionalDetaisl.penalty`, penalty);
-  set(payments, `[0].paymentDetails[0].bill.additionalDetaisl.rebate`, rebate);
-  set(payments, `[0].paymentDetails[0].bill.additionalDetaisl.interest`, interest);
-  set(payments, `[0].paymentDetails[0].bill.additionalDetaisl.roundOff`, roundOff);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.tax`, tax);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.arrear`, arrear);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.penalty`, penalty);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.swatchatha`, swatchatha);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.rebate`, rebate);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.interest`, interest);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.roundOff`, roundOff);
 
   return payments;
 }
