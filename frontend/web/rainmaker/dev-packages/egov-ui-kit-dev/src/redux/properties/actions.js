@@ -4,10 +4,13 @@ import { httpRequest } from "egov-ui-kit/utils/api";
 import { transformById } from "egov-ui-kit/utils/commons";
 import orderby from "lodash/orderBy";
 import get from "lodash/get";
+import set from "lodash/set";
 import FileSaver from "file-saver";
 import cloneDeep from "lodash/cloneDeep";
 import { getLatestPropertyDetails } from "egov-ui-kit/utils/PTCommon";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
+import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/utils";
+
 const FileDownload = require("js-file-download");
 const reset_property_reset = () => {
   return {
@@ -621,6 +624,71 @@ const getFileUrlFromAPI = async (fileStoreId, tenantId) => {
   }
 };
 
+let getModifiedPayment = (payments) =>{
+  let tax=0;
+  let arrear=0;
+  let penalty=0;
+  let interest=0
+  let rebate=0;
+  let roundOff=0;
+  let currentDate=convertDateToEpoch(new Date());
+  payments[0].paymentDetails[0].bill.billDetails.forEach(billdetail =>{
+    if(billdetail.fromPeriod<= currentDate && billdetail.toPeriod >= currentDate){
+      billdetail.billAccountDetails.forEach(billAccountDetail =>{
+        switch (billAccountDetail.taxHeadCode) {
+          case "PT_TAX":
+            tax = tax+(billAccountDetail.amount);
+            break;
+          case "PT_LATE_ASSESSMENT_PENALTY":
+            penalty = penalty+(billAccountDetail.amount);
+            break;
+          case "PT_TIME_REBATE":
+            rebate = rebate+(billAccountDetail.amount);
+            break;
+          case "PT_ROUNDOFF":
+            roundOff = roundOff+(billAccountDetail.amount);
+            break;
+          case "PT_TIME_INTEREST":
+            interest = interest+(billAccountDetail.amount);
+            break;
+          default:
+            break;
+        }
+      })
+    }else if(!(billdetail.fromPeriod > currentDate && billdetail.toPeriod > currentDate)){
+      billdetail.billAccountDetails.forEach(billAccountDetail =>{
+        switch (billAccountDetail.taxHeadCode) {
+          case "PT_TAX":
+            arrear = arrear+(billAccountDetail.amount);
+            break;
+          case "PT_LATE_ASSESSMENT_PENALTY":
+            penalty = penalty+(billAccountDetail.amount);
+            break;
+          case "PT_TIME_REBATE":
+            rebate = rebate+(billAccountDetail.amount);
+            break;
+          case "PT_ROUNDOFF":
+            roundOff = roundOff+(billAccountDetail.amount);
+            break;
+          case "PT_TIME_INTEREST":
+            interest = interest+(billAccountDetail.amount);
+            break;
+          default:
+            break;
+        }
+      })
+    }
+  })
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.tax`, tax);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.arrear`, arrear);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.penalty`, penalty);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.rebate`, rebate);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.interest`, interest);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.roundOff`, roundOff);
+
+  return payments;
+}
+
 export const downloadReceipt = (receiptQueryString) => {
   return async (dispatch) => {
     if (receiptQueryString) {
@@ -629,6 +697,7 @@ export const downloadReceipt = (receiptQueryString) => {
         const payloadReceiptDetails = await httpRequest(FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString);
         let queryStr = {};
         if (payloadReceiptDetails.Payments[0].paymentDetails[0].businessService === "PT") {
+          payloadReceiptDetails.Payments=getModifiedPayment(payloadReceiptDetails.Payments);
           queryStr = [{ key: "key", value: "consolidatedreceipt" }, { key: "tenantId", value: receiptQueryString[1].value.split(".")[0] }];
         }
         if (payloadReceiptDetails.Payments[0].paymentDetails[0].businessService === "TL") {

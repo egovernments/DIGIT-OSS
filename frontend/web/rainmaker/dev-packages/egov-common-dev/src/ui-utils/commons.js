@@ -506,6 +506,69 @@ const downloadReceiptFromFilestoreID=(fileStoreId,mode)=>{
   });
 }
 
+let getModifiedPayment = (payments) =>{
+  let tax=0;
+  let arrear=0;
+  let penalty=0;
+  let interest=0
+  let rebate=0;
+  let roundOff=0;
+  let currentDate=convertDateToEpoch(new Date());
+  payments[0].paymentDetails[0].bill.billDetails.forEach(billdetail =>{
+    if(billdetail.fromPeriod<= currentDate && billdetail.toPeriod >= currentDate){
+      billdetail.billAccountDetails.forEach(billAccountDetail =>{
+        switch (billAccountDetail.taxHeadCode) {
+          case "PT_TAX":
+            tax = tax+(billAccountDetail.amount);
+            break;
+          case "PT_LATE_ASSESSMENT_PENALTY":
+            penalty = penalty+(billAccountDetail.amount);
+            break;
+          case "PT_TIME_REBATE":
+            rebate = rebate+(billAccountDetail.amount);
+            break;
+          case "PT_ROUNDOFF":
+            roundOff = roundOff+(billAccountDetail.amount);
+            break;
+          case "PT_TIME_INTEREST":
+            interest = interest+(billAccountDetail.amount);
+            break;
+          default:
+            break;
+        }
+      })
+    }else if(!(billdetail.fromPeriod > currentDate && billdetail.toPeriod > currentDate)){
+      billdetail.billAccountDetails.forEach(billAccountDetail =>{
+        switch (billAccountDetail.taxHeadCode) {
+          case "PT_TAX":
+            arrear = arrear+(billAccountDetail.amount);
+            break;
+          case "PT_LATE_ASSESSMENT_PENALTY":
+            penalty = penalty+(billAccountDetail.amount);
+            break;
+          case "PT_TIME_REBATE":
+            rebate = rebate+(billAccountDetail.amount);
+            break;
+          case "PT_ROUNDOFF":
+            roundOff = roundOff+(billAccountDetail.amount);
+            break;
+          case "PT_TIME_INTEREST":
+            interest = interest+(billAccountDetail.amount);
+            break;
+          default:
+            break;
+        }
+      })
+    }
+  })
+  set(payments, `[0].paymentDetails[0].bill.additionalDetaisl.tax`, tax);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetaisl.penalty`, penalty);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetaisl.rebate`, rebate);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetaisl.interest`, interest);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetaisl.roundOff`, roundOff);
+
+  return payments;
+}
 
 export const download = (receiptQueryString, mode = "download") => {
   const FETCHRECEIPT = {
@@ -524,6 +587,7 @@ export const download = (receiptQueryString, mode = "download") => {
     httpRequest("post", FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
       let queryStr = {};
       if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService === 'PT'){
+       payloadReceiptDetails.Payments=getModifiedPayment(payloadReceiptDetails.Payments);
        queryStr = [
         { key: "key", value: "consolidatedreceipt" },
         { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
