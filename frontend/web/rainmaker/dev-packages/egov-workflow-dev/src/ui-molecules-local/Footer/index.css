@@ -43,4 +43,14 @@
   .wf-footer-button{
     min-width: 200px;
     }
+    .wf-footer-container{
+      display: block!important;
+      margin-right: 50px!;
+      }
+}
+@media only screen and (max-width: 768px) {
+    .wf-footer-container{
+      display: block!important;
+      margin-right: 50px!;
+      }
 }
