@@ -15,6 +15,14 @@ export const applicationSearch= async (state,dispatch)=>{
   searchApiCall(state,dispatch,1)
 }
 
+const getAddress=(item)=>{
+  let doorNo=item.address.doorNo!=null? (item.address.doorNo+","):'';
+  let buildingName=item.address.buildingName!=null?(item.address.buildingName+"," ) :'';
+  let street=item.address.street!=null ? (item.address.street+","):'';
+  let city=item.address.city!=null? (item.address.city):'';
+  return (doorNo + buildingName + street + city);
+}
+
  const searchApiCall = async (state, dispatch,index) => {
   showHideTable(false, dispatch,0);
   showHideTable(false, dispatch,1);
@@ -171,7 +179,7 @@ export const applicationSearch= async (state,dispatch)=>{
         [getTextToLocalMapping("Existing Property Id")]:  
         item.oldPropertyId || "-",
         [getTextToLocalMapping("Address")]:
-        item.propertyDetails[0].owners[0].permanentAddress || "-",
+        getAddress(item) || "-",
         tenantId: item.tenantId,
         [getTextToLocalMapping("Status")]: item.status || "-"
       }));
@@ -187,7 +195,7 @@ export const applicationSearch= async (state,dispatch)=>{
         [getTextToLocalMapping("Owner Name")]:  
         item.propertyDetails[0].owners[0].name || "-",
         [getTextToLocalMapping("Address")]:
-        item.propertyDetails[0].owners[0].permanentAddress || "-",
+        getAddress(item) || "-",
         tenantId: item.tenantId,
         [getTextToLocalMapping("Status")]: item.status || "-"
       }));
