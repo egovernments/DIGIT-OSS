@@ -12,7 +12,6 @@ import org.egov.pt.calculator.util.CalculatorUtils;
 import org.egov.pt.calculator.util.Configurations;
 import org.egov.pt.calculator.validator.CalculationValidator;
 import org.egov.pt.calculator.web.models.*;
-import org.egov.pt.calculator.web.models.collections.Payment;
 import org.egov.pt.calculator.web.models.demand.*;
 import org.egov.pt.calculator.web.models.property.OwnerInfo;
 import org.egov.pt.calculator.web.models.property.Property;
@@ -328,36 +327,6 @@ public class DemandService {
 		return carryForward;
 	}
 
-/*	*//**
-	 * @param requestInfo
-	 * @param property
-	 * @return
-	 *//*
-	@Deprecated
-	public Demand getLatestDemandForCurrentFinancialYear(RequestInfo requestInfo, Property property) {
-		
-		Assessment assessment = Assessment.builder().propertyId(property.getPropertyId())
-				.tenantId(property.getTenantId())
-				.assessmentYear(property.getPropertyDetails().get(0).getFinancialYear()).build();
-
-		List<Assessment> assessments = assessmentService.getMaxAssessment(assessment);
-
-		if (CollectionUtils.isEmpty(assessments))
-			return null;
-
-		Assessment latestAssessment = assessments.get(0);
-		log.debug(" the latest assessment : " + latestAssessment);
-
-		DemandResponse res = mapper.convertValue(
-				repository.fetchResult(utils.getDemandSearchUrl(latestAssessment), new RequestInfoWrapper(requestInfo)),
-				DemandResponse.class);
-		return res.getDemands().get(0);
-	}*/
-
-
-
-
-
 	/**
 	 * Prepares Demand object based on the incoming calculation object and property
 	 * 
@@ -402,6 +371,7 @@ public class DemandService {
 			List<TaxPeriod> taxPeriods, Map<String, JSONArray> jsonMasterMap) {
 
 		boolean isCurrentDemand = false;
+		boolean isInterestUpdated = false;
 		String tenantId = demand.getTenantId();
 		String demandId = demand.getId();
 		List<DemandDetail> details = demand.getDemandDetails();
@@ -409,17 +379,17 @@ public class DemandService {
 				&& demand.getTaxPeriodTo().compareTo(t.getToDate()) <= 0).findAny().orElse(null);
 
 		if (!(taxPeriod.getFromDate() <= System.currentTimeMillis()
-				&& taxPeriod.getToDate() >= System.currentTimeMillis()))
+				&& taxPeriod.getToDate() >= System.currentTimeMillis())) {
 			isCurrentDemand = true;
-		/*
-		 * get the payments done agianst this demand
+		}
+
+		/**
+		 * Commenting the below as Partial payment is disabled and sending null to
+		 * applyPenaltyRebateAndInterest get the payments done agianst this demand
+		 * List<Payment> payments = paymentService.getPaymentsFromDemand(demand,
+		 * requestInfoWrapper);
 		 */
-		List<Payment> payments = paymentService.getPaymentsFromDemand(demand, requestInfoWrapper);
-
-		// boolean isPenaltyUpdated = false;
-		boolean isInterestUpdated = false;
-
-		Map<String, BigDecimal> rebatePenaltyEstimates = payService.applyPenaltyRebateAndInterest(demand, payments,
+		Map<String, BigDecimal> rebatePenaltyEstimates = payService.applyPenaltyRebateAndInterest(demand, null,
 				taxPeriods, jsonMasterMap);
 
 		if (null == rebatePenaltyEstimates)
@@ -427,9 +397,8 @@ public class DemandService {
 
 		BigDecimal rebate = rebatePenaltyEstimates.get(PT_TIME_REBATE);
 		BigDecimal promotionalRebate = rebatePenaltyEstimates.get(PT_PROMOTIONAL_REBATE);
-		// BigDecimal penalty = rebatePenaltyEstimates.get(PT_TIME_PENALTY);
 		BigDecimal interest = rebatePenaltyEstimates.get(PT_TIME_INTEREST);
-		DemandDetailAndCollection latestPenaltyDemandDetail, latestInterestDemandDetail;
+		DemandDetailAndCollection latestInterestDemandDetail;
 
 		BigDecimal oldRebate = null;
 		for (DemandDetail demandDetail : details) {
@@ -437,11 +406,14 @@ public class DemandService {
 				oldRebate = demandDetail.getTaxAmount();
 			}
 		}
-		if (oldRebate == null) {
-			details.add(DemandDetail.builder().taxAmount(rebate).taxHeadMasterCode(PT_TIME_REBATE)
-					.demandId(demandId).tenantId(tenantId).build());
-		} else if (rebate.compareTo(oldRebate) != 0 ) {
-			utils.getLatestDemandDetailByTaxHead(PT_TIME_REBATE, details).getLatestDemandDetail().setTaxAmount(rebate);
+		if (rebate != null) {
+			if (oldRebate == null) {
+				details.add(DemandDetail.builder().taxAmount(rebate).taxHeadMasterCode(PT_TIME_REBATE)
+						.demandId(demandId).tenantId(tenantId).build());
+			} else if (rebate.compareTo(oldRebate) != 0) {
+				utils.getLatestDemandDetailByTaxHead(PT_TIME_REBATE, details).getLatestDemandDetail()
+						.setTaxAmount(rebate);
+			}
 		}
 
 		BigDecimal oldPromotionalRebate = null;
@@ -450,15 +422,17 @@ public class DemandService {
 				oldPromotionalRebate = demandDetail.getTaxAmount();
 			}
 		}
-		if (oldPromotionalRebate == null) {
-			details.add(DemandDetail.builder().taxAmount(promotionalRebate)
-					.taxHeadMasterCode(PT_PROMOTIONAL_REBATE).demandId(demandId).tenantId(tenantId).build());
-		} else if (promotionalRebate.compareTo(oldPromotionalRebate) != 0) {
-			utils.getLatestDemandDetailByTaxHead(PT_PROMOTIONAL_REBATE, details).getLatestDemandDetail()
-					.setTaxAmount(promotionalRebate);
+		if (promotionalRebate != null) {
+			if (oldPromotionalRebate == null) {
+				details.add(DemandDetail.builder().taxAmount(promotionalRebate).taxHeadMasterCode(PT_PROMOTIONAL_REBATE)
+						.demandId(demandId).tenantId(tenantId).build());
+			} else if (promotionalRebate.compareTo(oldPromotionalRebate) != 0) {
+				utils.getLatestDemandDetailByTaxHead(PT_PROMOTIONAL_REBATE, details).getLatestDemandDetail()
+						.setTaxAmount(promotionalRebate);
+			}
 		}
 
-		if (interest.compareTo(BigDecimal.ZERO) != 0) {
+		if (interest!=null && interest.compareTo(BigDecimal.ZERO) != 0) {
 			latestInterestDemandDetail = utils.getLatestDemandDetailByTaxHead(PT_TIME_INTEREST, details);
 			if (latestInterestDemandDetail != null) {
 				updateTaxAmount(interest, latestInterestDemandDetail);
@@ -466,19 +440,7 @@ public class DemandService {
 			}
 		}
 
-		// if(penalty.compareTo(BigDecimal.ZERO)!=0){
-		// latestPenaltyDemandDetail =
-		// utils.getLatestDemandDetailByTaxHead(PT_TIME_PENALTY,details);
-		// if(latestPenaltyDemandDetail!=null){
-		// updateTaxAmount(penalty,latestPenaltyDemandDetail);
-		// isPenaltyUpdated = true;
-		// }
-		// }
-
-		// if (!isPenaltyUpdated && penalty.compareTo(BigDecimal.ZERO) > 0)
-		// details.add(DemandDetail.builder().taxAmount(penalty).taxHeadMasterCode(PT_TIME_PENALTY)
-		// .demandId(demandId).tenantId(tenantId).build());
-		if (!isInterestUpdated && interest.compareTo(BigDecimal.ZERO) > 0)
+		if (!isInterestUpdated && interest!=null   && interest.compareTo(BigDecimal.ZERO) > 0)
 			details.add(DemandDetail.builder().taxAmount(interest).taxHeadMasterCode(PT_TIME_INTEREST)
 					.demandId(demandId).tenantId(tenantId).build());
 
