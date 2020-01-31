@@ -100,7 +100,7 @@ public class AssessmentService {
 		validator.validateAssessmentUpdate(request, assessmentFromSearch, property, isWorkflowTriggered);
 
 		if ((request.getAssessment().getStatus().equals(Status.INWORKFLOW) || isWorkflowTriggered)
-				&& config.getIsWorkflowEnabled()){
+				&& config.getIsAssessmentWorkflowEnabled()){
 
 			BusinessService businessService = workflowService.getBusinessService(request.getAssessment().getTenantId(),
 												ASSESSMENT_BUSINESSSERVICE,request.getRequestInfo());
