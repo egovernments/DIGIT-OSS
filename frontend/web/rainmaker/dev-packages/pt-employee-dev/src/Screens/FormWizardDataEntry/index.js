@@ -714,11 +714,11 @@ class FormWizardDataEntry extends Component {
               receiptHeader="PT_ASSESSMENT_NO"
               messageHeader={this.getMessageHeader()}
               message={this.getMessage()}
-            receiptNo={
-              assessedPropertyDetails["Properties"][0]["propertyDetails"][0][
-                "assessmentNumber"
-              ]
-            }
+            // receiptNo={
+            //   assessedPropertyDetails["Properties"][0]["propertyDetails"][0][
+            //     "assessmentNumber"
+            //   ]
+            // }
             />
           </div>
         );
@@ -1280,7 +1280,6 @@ class FormWizardDataEntry extends Component {
         // break;
         window.scrollTo(0, 0);
         createAndUpdate(index);
-        this.resetForm();
         break;
       case 5:
         const { assessedPropertyDetails = {} } = this.state;
@@ -2001,10 +2000,9 @@ demandsData.forEach(
         );
         break;
         case "_update":
-        callToggleBarSnackbar(
-          "PT_PROPERTY_UPDATED_SUCCESSFULLY",
-          "PropertyTax Updated Successfully"
-        );
+        this.setState({
+          selected: index
+        });
         break;
         default:
       }
