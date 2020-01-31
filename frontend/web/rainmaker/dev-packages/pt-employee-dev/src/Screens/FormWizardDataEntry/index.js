@@ -1948,8 +1948,7 @@ class FormWizardDataEntry extends Component {
                   createPropertyResponse,
                   "Properties[0].propertyId"
                 ),
-                consumerType: get(createPropertyResponse, "Properties[0].propertyDetails[0].propertyType");
-,
+                consumerType: get(createPropertyResponse, "Properties[0].propertyDetails[0].propertyType"),
                 businessService: "PT",
                 taxPeriodFrom: fromDate,
                 taxPeriodTo: toDate,
