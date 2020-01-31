@@ -1606,7 +1606,7 @@
                   "id": "totalComplaintsbyStatus",
                   "name": "",
                   "code": "",
-                  "chartType": "line",
+                  "chartType": "bar",
                   "filter": "",
                   "headers": []
                 }
