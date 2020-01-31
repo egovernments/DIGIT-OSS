@@ -2956,6 +2956,13 @@
       "Total Collection"
     ],
     "insight": {
+      "chartResponseMap" : "wstotalCollection",
+      "action" : "differenceOfNumbers",
+      "upwardIndicator" : "positive",
+      "downwardIndicator" : "negative",
+      "textMessage" : "$indicator$value% than last $insightInterval",
+      "colorCode" : "#228B22",
+      "insightInterval" : "month"
     },
     "_comment": "W&S total collections "
   },
@@ -3014,7 +3021,7 @@
       "Actual collection"
     ],
     "insight": {
-      "chartResponseMap" : "targetAchieved",
+      "chartResponseMap" : "wstargetAchieved",
       "action" : "differenceOfNumbers",
       "upwardIndicator" : "positive",
       "downwardIndicator" : "negative",
