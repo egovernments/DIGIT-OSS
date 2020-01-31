@@ -472,16 +472,16 @@ export const normalizePropertyDetails = (properties, self) => {
   const isReassesment = !!getQueryValue(search, "isReassesment");
   const propertyId = getQueryValue(search, "propertyId");
   const units =
-    propertyDetails[0] && propertyDetails[0].units
+    propertyDetails[0] && propertyDetails[0].propertyType==="VACANT"?null:(propertyDetails[0].units
       ? propertyDetails[0].units.filter((item, ind) => {
           return item !== null;
         })
-      : [];
+      : []);
   if (isReassesment && propertyId) {
     property.propertyId = propertyId;
   }
   var sumOfUnitArea = 0;
-  units.forEach((unit) => {
+  units && units.forEach((unit) => {
     if (unit.additionalDetails && unit.additionalDetails.innerDimensionsKnown=="true") {
       unit.unitArea=parseInt(unit.additionalDetails.roomsArea)+parseInt(unit.additionalDetails.commonArea)+parseInt(unit.additionalDetails.garageArea)+parseInt(unit.additionalDetails.bathroomArea)
     }

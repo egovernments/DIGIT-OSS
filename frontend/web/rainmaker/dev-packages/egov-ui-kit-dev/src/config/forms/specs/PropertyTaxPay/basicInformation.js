@@ -63,6 +63,12 @@ const formConfig = {
           dispatch(prepareFormData("Properties[0].propertyDetails[0].propertyType", field.value));
           dispatch(prepareFormData("Properties[0].propertyDetails[0].propertySubType", null));
         }
+        if (field.value==="VACANT") {
+          dispatch(setFieldProperty("basicInformation", "datePicker", "hideField", true));
+        }
+        else {
+          dispatch(setFieldProperty("basicInformation", "datePicker", "hideField", false));
+        }
       },
       dropDownData: [],
     },
@@ -97,6 +103,13 @@ const formConfig = {
       masterOne = get(state, "common.generalMDMSDataById.PropertyType");
       masterTwo = get(state, "common.generalMDMSDataById.PropertySubType");
       set(action, "form.fields.typeOfBuilding.dropDownData", mergeMaster(masterOne, masterTwo, "propertyType"));
+      const propertyType=get(state,"common.prepareFormData.Properties[0].propertyDetails[0].propertyType");
+      if (propertyType && propertyType==="VACANT") {
+        set(action, "form.fields.datePicker.hideField", true);
+      }
+      else {
+        set(action, "form.fields.datePicker.hideField", false);
+      }
       return action;
     } catch (e) {
       console.log(e);

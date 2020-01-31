@@ -192,10 +192,10 @@ const getAssessmentInfo = (propertyDetails, generalMDMSDataById) => {
   );
 };
 
-const getUnitInfo = (units = [],usageCategoryMajor,buildUpArea) => {
+const getUnitInfo = (units = [],usageCategoryMajor="",buildUpArea) => {
   units = units || [];
   let floors = [];
-  units.map((unit, index) => {
+  units.map((unit={}, index) => {
     let floor = [{
       key: getTranslatedLabel("PT_ASSESSMENT_UNIT_USAGE_TYPE", localizationLabelsData),
       value: unit && unit.usageCategoryMinor ? 'PROPERTYTAX_BILLING_SLAB_' + unit.usageCategoryMinor :

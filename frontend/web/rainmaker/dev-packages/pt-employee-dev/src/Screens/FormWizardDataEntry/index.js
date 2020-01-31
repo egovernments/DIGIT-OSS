@@ -1183,6 +1183,10 @@ class FormWizardDataEntry extends Component {
           );
         };
 
+        // checkPtTaxWithRebate=(object)=>{
+        //
+        // }
+
         if (!demandLength) {
           errorCode = "ERR01_DEMAND_ENTER_THE_DATA";
         } else {
@@ -1869,7 +1873,7 @@ class FormWizardDataEntry extends Component {
       const finalPropertyData = [];
       const propertyDetails=DemandProperties[0].propertyDetails;
       const demandsData=propertyDetails[0].demand;
-demandsData.forEach(
+      demandsData.forEach(
         (propertyData, index) => {
           if (propertyData) {
             let yeardatas = Object.keys(propertyData.demand).map(
@@ -1914,7 +1918,7 @@ demandsData.forEach(
          demandObject[obj.taxPeriodFrom]={...obj};
          dmdObj[finaYr]={...obj};
       })
-  demandsData.forEach((demand, index) => {
+      demandsData.forEach((demand, index) => {
         demand &&
           Object.keys(demand.demand).forEach((dataYear, key) => {
             const demandDetails1 = [];
@@ -1944,7 +1948,8 @@ demandsData.forEach(
                   createPropertyResponse,
                   "Properties[0].propertyId"
                 ),
-                consumerType: "BUILTUP",
+                consumerType: get(createPropertyResponse, "Properties[0].propertyDetails[0].propertyType");
+,
                 businessService: "PT",
                 taxPeriodFrom: fromDate,
                 taxPeriodTo: toDate,
@@ -2412,7 +2417,8 @@ const mapStateToProps = state => {
   let yeardata1 = yeardata.filter(yearKey => yearKey.service === "PT");
   let taxdata1 = taxData.filter(
     tax => tax.service === "PT" && tax.legacy == true
-  );
+  ) ||[];
+  taxdata1.length>0 && taxdata1.sort(function(a, b){return a.order-b.order});
   const finalData = Object.keys(yeardata1).map((data, key) => {
     yeardata1[data]["taxHead"] = [...taxdata1];
     return yeardata[data];

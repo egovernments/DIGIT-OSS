@@ -43,15 +43,15 @@ class DemandCollection extends React.Component {
                               <TextField
                                 floatingLabelText={<Label label={taxData.code}/>}
                                 hintText={<Label label="PT_ENTER_AN_AMOUNT" />}
-                                min={0}
-                                max={0}
+                                min={taxData.isDebit?-99999:0}
+                                max={taxData.isDebit?-1:0}
                                 type="number"
                                 value={get(preparedFinalObject,`DemandProperties[0].propertyDetails[0].demand[${index}].demand[${data.financialYear}][${index1}].PT_DEMAND`)}
                                 onChange={(e) => {
                                   let value = "";
                                   value = e.target.value;
                                   prepareFinalObject(`DemandProperties[0].propertyDetails[0].demand[${index}].demand[${data.financialYear}][${index1}].PT_TAXHEAD`,taxData.code)
-                                  prepareFinalObject(`DemandProperties[0].propertyDetails[0].demand[${index}].demand[${data.financialYear}][${index1}].PT_DEMAND`, value)
+                                  prepareFinalObject(`DemandProperties[0].propertyDetails[0].demand[${index}].demand[${data.financialYear}][${index1}].PT_DEMAND`, taxData.isDebit?(Math.sign(value)===-1?value:-value):value)
                                 }}
                                 onWheel={event => { event.preventDefault(); }}
                               />
@@ -82,6 +82,7 @@ class DemandCollection extends React.Component {
                                   prepareFinalObject(`DemandProperties[0].propertyDetails[0].demand[${index}].demand[${data.financialYear}][${index1}].PT_COLLECTED`, e.target.value);
                                 }}
                                 onWheel={event => { event.preventDefault(); }}
+                                disabled={taxData.isDebit}
                               />
                             </div>
                           );
