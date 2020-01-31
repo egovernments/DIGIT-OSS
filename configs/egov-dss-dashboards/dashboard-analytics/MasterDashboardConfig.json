@@ -2972,7 +2972,7 @@
         }
       ]
     },
-    {
+     {
       "name": "DSS_W&S_DASHBOARD",
       "id": "ws",
       "isActive": "",
@@ -3137,9 +3137,9 @@
               "isCollapsible": false,
               "charts": [
                 {
-                  "id": "",
+                  "id": "wsFinancialIndicatorDDR",
                   "name": "DSS_W&S_DEMAND_COLLECTION_BOUNDARY",
-                  "code": "wsFinancialIndicatorUlb",
+                  "code": "",
                   "chartType": "table",
                   "filter": "",
                   "headers": [],
@@ -3166,7 +3166,7 @@
               "isCollapsible": true,
               "charts": [
                 {
-                  "id": "wsTaxHeadUlb",
+                  "id": "wsTaxHeadDDR",
                   "name": "DSS_W&S_TAX_HEAD_BOUNDARY",
                   "code": "",
                   "chartType": "table",
