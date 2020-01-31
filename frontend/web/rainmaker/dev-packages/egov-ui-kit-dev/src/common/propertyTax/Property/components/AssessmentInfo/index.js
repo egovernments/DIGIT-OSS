@@ -145,8 +145,11 @@ const transform = (floor, key, generalMDMSDataById, propertyDetails) => {
 const getAssessmentInfo = (propertyDetails, generalMDMSDataById) => {
   const { units = [], noOfFloors,additionalDetails={} } = propertyDetails || {};
   var construction_date =(additionalDetails && additionalDetails.constructionYear)? new Date(additionalDetails.constructionYear).toJSON().slice(0,10).split('-').reverse().join('-'):null;
-  return (
-    propertyDetails && [
+
+    if(!propertyDetails){
+      return []
+    }
+    let properties= [
       {
         key: getTranslatedLabel("PT_ASSESMENT_INFO_USAGE_TYPE", localizationLabelsData),
         value: propertyDetails.usageCategoryMajor ? 'PROPERTYTAX_BILLING_SLAB_' + propertyDetails.usageCategoryMajor : "NA", //noOfFloors
@@ -171,23 +174,27 @@ const getAssessmentInfo = (propertyDetails, generalMDMSDataById) => {
             : propertyDetails.uom
               ? `${propertyDetails.landArea} ${propertyDetails.uom}`
               : `${Math.round(propertyDetails.landArea * 100) / 100}  ${getTranslatedLabel("PT_LABEL_SQFT", localizationLabelsData)}`,
-      },
-      propertyDetails.propertySubType === "SHAREDPROPERTY"
-        ? {
-          key: getTranslatedLabel("PT_FLOOR_NO", localizationLabelsData),
-          value: units.length > 0 ? `${units[0].floorNo}` : "NA",
-        } :
-        {
-          key: getTranslatedLabel("PT_ASSESMENT_INFO_NO_OF_FLOOR", localizationLabelsData),
-          value: noOfFloors ? `${noOfFloors}` : "NA", //noOfFloors
-        },
-      {
-        key: getTranslatedLabel("PT_ASSESMENT_INFO_CONSTRUCTION_DATE", localizationLabelsData),
-        value: construction_date ? `${construction_date}` : "NA",
-
       }
     ]
+    if (propertyDetails.propertyType != "VACANT") {
+  properties.push(
+    propertyDetails.propertySubType === "SHAREDPROPERTY"
+      ? {
+          key: getTranslatedLabel("PT_FLOOR_NO", localizationLabelsData),
+          value: units.length > 0 ? `${units[0].floorNo}` : "NA",
+        }
+      : {
+          key: getTranslatedLabel("PT_ASSESMENT_INFO_NO_OF_FLOOR", localizationLabelsData),
+          value: noOfFloors ? `${noOfFloors}` : "NA", //noOfFloors
+        }
   );
+}
+properties.push({
+  key: getTranslatedLabel("PT_ASSESMENT_INFO_CONSTRUCTION_DATE", localizationLabelsData),
+  value: construction_date ? `${construction_date}` : "NA",
+});
+
+  return properties;
 };
 
 const getUnitInfo = (units = [],usageCategoryMajor,buildUpArea) => {
