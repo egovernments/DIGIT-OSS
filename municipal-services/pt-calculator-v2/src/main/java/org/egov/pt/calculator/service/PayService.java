@@ -90,7 +90,7 @@ public class PayService {
 		//Assumtion: Partial payment is not allowed 
 		for (DemandDetail demandDetail : demand.getDemandDetails()) {
 			if (demandDetail.getTaxHeadMasterCode().equalsIgnoreCase("PT_TAX")) {
-					taxAmt.add(demandDetail.getTaxAmount());
+					taxAmt = demandDetail.getTaxAmount();
 			}
 		}
 
