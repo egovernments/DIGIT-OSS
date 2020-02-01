@@ -432,18 +432,17 @@ public class DemandService {
 			}
 		}
 
-		if (interest!=null && interest.compareTo(BigDecimal.ZERO) != 0) {
+		if (interest != null) {
 			latestInterestDemandDetail = utils.getLatestDemandDetailByTaxHead(PT_TIME_INTEREST, details);
 			if (latestInterestDemandDetail != null) {
 				updateTaxAmount(interest, latestInterestDemandDetail);
 				isInterestUpdated = true;
 			}
+
+			if (!isInterestUpdated)
+				details.add(DemandDetail.builder().taxAmount(interest).taxHeadMasterCode(PT_TIME_INTEREST)
+						.demandId(demandId).tenantId(tenantId).build());
 		}
-
-		if (!isInterestUpdated && interest!=null   && interest.compareTo(BigDecimal.ZERO) > 0)
-			details.add(DemandDetail.builder().taxAmount(interest).taxHeadMasterCode(PT_TIME_INTEREST)
-					.demandId(demandId).tenantId(tenantId).build());
-
 		return isCurrentDemand;
 	}
 
