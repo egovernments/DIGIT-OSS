@@ -9,6 +9,7 @@ import org.egov.pt.web.contracts.AssessmentRequest;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.*;
 
@@ -92,32 +93,34 @@ public class TranslationService {
 
         List<Map<String, Object>> units = new LinkedList<>();
 
-        property.getUnits().forEach(unit -> {
-            Map<String, Object> unitMap = new HashMap<>();
-            unitMap.put("id",unit.getId());
-            unitMap.put("floorNo", unit.getFloorNo());
-            unitMap.put("unitArea", unit.getConstructionDetail().getBuiltUpArea());
-            unitMap.put("arv", unit.getArv());
-            unitMap.put("occupancyType", unit.getOccupancyType());
+        if(!CollectionUtils.isEmpty(property.getUnits())){
+            property.getUnits().forEach(unit -> {
+                Map<String, Object> unitMap = new HashMap<>();
+                unitMap.put("id",unit.getId());
+                unitMap.put("floorNo", unit.getFloorNo());
+                unitMap.put("unitArea", unit.getConstructionDetail().getBuiltUpArea());
+                unitMap.put("arv", unit.getArv());
+                unitMap.put("occupancyType", unit.getOccupancyType());
 
-            String[] masterData = unit.getUsageCategory().split("\\.");
+                String[] masterData = unit.getUsageCategory().split("\\.");
 
-            if(masterData.length >= 1)
-                unitMap.put("usageCategoryMajor", masterData[0]);
+                if(masterData.length >= 1)
+                    unitMap.put("usageCategoryMajor", masterData[0]);
 
-            if(masterData.length >= 2)
-              unitMap.put("usageCategoryMinor", masterData[1]);
+                if(masterData.length >= 2)
+                    unitMap.put("usageCategoryMinor", masterData[1]);
 
-            if(masterData.length >= 3)
-            unitMap.put("usageCategorySubMinor", masterData[2]);
+                if(masterData.length >= 3)
+                    unitMap.put("usageCategorySubMinor", masterData[2]);
 
-            if(masterData.length >= 4)
-            unitMap.put("usageCategoryDetail",masterData[3]);
+                if(masterData.length >= 4)
+                    unitMap.put("usageCategoryDetail",masterData[3]);
 
-            unitMap.put("additionalDetails", unit.getAdditionalDetails());
-            units.add(unitMap);
+                unitMap.put("additionalDetails", unit.getAdditionalDetails());
+                units.add(unitMap);
 
-        });
+            });
+        }
 
         propertyDetail.put("owners", owners);
         propertyDetail.put("units", units);
