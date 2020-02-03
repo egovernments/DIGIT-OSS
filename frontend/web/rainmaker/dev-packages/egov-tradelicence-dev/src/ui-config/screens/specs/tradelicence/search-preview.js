@@ -36,7 +36,7 @@ import {
 import { getReviewTrade } from "./applyResource/review-trade";
 import { getReviewOwner } from "./applyResource/review-owner";
 import { getReviewDocuments } from "./applyResource/review-documents";
-import { loadReceiptGenerationData } from "../utils/receiptTransformer";
+import { loadReceiptGenerationData, getOwnerPhoto } from "../utils/receiptTransformer";
 import { adhocPopup } from "./applyResource/adhocPopup";
 
 
@@ -64,6 +64,9 @@ const setDocuments = async (
   const reviewDocData =
     uploadedDocData &&
     uploadedDocData.map((item, index) => {
+      if(item.documentType == "OWNERPHOTO"){
+          getOwnerPhoto(fileUrlPayload[item.fileStoreId].split(",")[0])
+      }
       return {
         title: `TL_${item.documentType}` || "",
         link:
