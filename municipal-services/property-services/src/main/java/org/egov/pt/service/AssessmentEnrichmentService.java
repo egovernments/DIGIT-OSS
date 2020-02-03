@@ -35,12 +35,17 @@ public class AssessmentEnrichmentService {
 
     private PropertyUtil propertyUtil;
 
+    private WorkflowService workflowService;
+
     @Autowired
-    public AssessmentEnrichmentService(AssessmentUtils assessmentUtils, PropertyConfiguration config, PropertyUtil propertyUtil) {
+    public AssessmentEnrichmentService(AssessmentUtils assessmentUtils, PropertyConfiguration config, PropertyUtil propertyUtil, WorkflowService workflowService) {
         this.assessmentUtils = assessmentUtils;
         this.config = config;
         this.propertyUtil = propertyUtil;
+        this.workflowService = workflowService;
     }
+
+
 
 
 
@@ -137,11 +142,14 @@ public class AssessmentEnrichmentService {
            request.getAssessment().getWorkflow().setAssignes(owners);
         }
 
+        String state = workflowService.getCurrentState(request.getRequestInfo(), request.getAssessment());
+
         ProcessInstance processInstance = request.getAssessment().getWorkflow();
         processInstance.setBusinessId(request.getAssessment().getAssessmentNumber());
         processInstance.setModuleName(ASMT_MODULENAME);
         processInstance.setTenantId(request.getAssessment().getTenantId());
         processInstance.setBusinessService(ASMT_WORKFLOW_CODE);
+        processInstance.getState().setState(state);
 
     }
 

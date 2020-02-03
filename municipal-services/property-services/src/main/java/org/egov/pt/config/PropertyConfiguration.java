@@ -170,6 +170,9 @@ public class PropertyConfiguration {
     @Value("${workflow.businessservice.search.path}")
     private String wfBusinessServiceSearchPath;
 
+    @Value("${workflow.processinstance.search.path}")
+    private String wfProcessInstanceSearchPath;
+
     @Value("${is.workflow.enabled}")
     private Boolean isWorkflowEnabled;
     

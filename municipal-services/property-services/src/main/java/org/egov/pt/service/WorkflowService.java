@@ -2,6 +2,7 @@ package org.egov.pt.service;
 
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.config.PropertyConfiguration;
+import org.egov.pt.models.Assessment;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.workflow.*;
 import org.egov.pt.repository.ServiceRequestRepository;
@@ -11,10 +12,14 @@ import org.egov.tracer.model.CustomException;
 import org.egov.tracer.model.ServiceCallException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.util.Collections;
+import java.util.Optional;
 
 @Service
 public class WorkflowService {
@@ -72,10 +77,10 @@ public class WorkflowService {
 
 		StringBuilder url = getSearchURLWithParams(tenantId, businessService);
 		RequestInfoWrapper requestInfoWrapper = RequestInfoWrapper.builder().requestInfo(requestInfo).build();
-		Object result = restRepo.fetchResult(url, requestInfoWrapper);
+		Optional<Object> result = restRepo.fetchResult(url, requestInfoWrapper);
 		BusinessServiceResponse response = null;
 		try {
-			response = mapper.convertValue(result, BusinessServiceResponse.class);
+			response = mapper.convertValue(result.get(), BusinessServiceResponse.class);
 		} catch (IllegalArgumentException e) {
 			throw new CustomException("PARSING ERROR", "Failed to parse response of calculate");
 		}
@@ -136,6 +141,51 @@ public class WorkflowService {
 			if(state.getApplicationStatus()!=null && state.getApplicationStatus().equalsIgnoreCase(stateCode))
 				return state.getIsStateUpdatable();
 		}
+		return null;
+	}
+
+
+
+	/**
+	 * Creates url for searching processInstance
+	 *
+	 * @return The search url
+	 */
+	private StringBuilder getWorkflowSearchURLWithParams(String tenantId, String businessId) {
+
+		StringBuilder url = new StringBuilder(configs.getWfHost());
+		url.append(configs.getWfProcessInstanceSearchPath());
+		url.append("?tenantId=");
+		url.append(tenantId);
+		url.append("&businessIds=");
+		url.append(businessId);
+		return url;
+	}
+
+
+	/**
+	 * Fetches the workflow object for the given assessment
+	 * @return
+	 */
+	public String getCurrentState(RequestInfo requestInfo, Assessment assessment){
+
+		RequestInfoWrapper requestInfoWrapper = RequestInfoWrapper.builder().requestInfo(requestInfo).build();
+
+		StringBuilder url = getWorkflowSearchURLWithParams(assessment.getTenantId(), assessment.getAssessmentNumber());
+
+		Optional<Object> res = restRepo.fetchResult(url, requestInfoWrapper);
+		ProcessInstanceResponse response = null;
+
+		try{
+			response = mapper.convertValue(res.get(), ProcessInstanceResponse.class);
+		}
+		catch (Exception e){
+			throw new CustomException("PARSING_ERROR","Failed to parse workflow search response");
+		}
+
+		if(response!=null && !CollectionUtils.isEmpty(response.getProcessInstances()) && response.getProcessInstances().get(0)!=null)
+			return response.getProcessInstances().get(0).getState().getState();
+
 		return null;
 	}
 

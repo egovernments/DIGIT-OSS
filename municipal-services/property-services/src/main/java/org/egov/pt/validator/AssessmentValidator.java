@@ -49,7 +49,7 @@ public class AssessmentValidator {
 		Map<String, String> errorMap = new HashMap<>();
 		validateRI(assessmentRequest.getRequestInfo(), errorMap);
 		validateUnitIds(assessmentRequest.getAssessment(),property);
-		validateUpdateRequest(assessmentRequest, assessmentFromDB, errorMap);
+		//validateUpdateRequest(assessmentRequest, assessmentFromDB, errorMap);
 		commonValidations(assessmentRequest, errorMap, true);
 		validateMDMSData(assessmentRequest.getRequestInfo(), assessmentRequest.getAssessment(), errorMap);
 		validateProcessInstance(assessmentRequest, assessmentFromDB, isWorkflowTriggered);
