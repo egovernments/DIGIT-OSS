@@ -2044,7 +2044,7 @@
     },
     {
       "category": "FEE",
-      "service": "TL.RENEWAL",
+      "service": "TL",
       "name": "TL Renewal Tax",
       "code": "TL_RENEWAL_TAX",
       "isDebit": false,
@@ -2054,7 +2054,7 @@
     },
     {
       "category": "REBATE",
-      "service": "TL.RENEWAL",
+      "service": "TL",
       "name": "TL Renewal Rebate",
       "code": "TL_RENEWAL_REBATE",
       "isDebit": true,
@@ -2064,7 +2064,7 @@
     },
     {
       "category": "PENALTY",
-      "service": "TL.RENEWAL",
+      "service": "TL",
       "name": "TL Renewal Penalty",
       "code": "TL_RENEWAL_PENALTY",
       "isDebit": false,
@@ -2074,7 +2074,7 @@
     },
     {
       "category": "TAX",
-      "service": "TL.RENEWAL",
+      "service": "TL",
       "name": "TL Renewal adhoc rebate",
       "code": "TL_RENEWAL_ADHOC_REBATE",
       "isDebit": true,
@@ -2084,7 +2084,7 @@
     },
     {
       "category": "TAX",
-      "service": "TL.RENEWAL",
+      "service": "TL",
       "name": "TL Renewal adhoc penalty",
       "code": "TL_RENEWAL_ADHOC_PENALTY",
       "isDebit": false,
