@@ -5,8 +5,15 @@
     padding-right: 0px !important;
 }
 
+.header-button-container {
+    display: flex;
+}
+
 @media only screen and (max-width: 768px) {
-    .owner-info-card {
-        margin-top: 50px;
+    .header-button-container {
+        padding-top: 12px;
+    }
+    .ownerinfo-header {
+        display: block !important;
     }
   }

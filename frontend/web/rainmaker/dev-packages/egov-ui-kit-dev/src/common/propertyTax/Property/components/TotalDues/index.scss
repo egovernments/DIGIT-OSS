@@ -28,3 +28,16 @@
     padding-top: 0px !important;
   }
 }
+
+.dues-button-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.button-style {
+  div, div:hover {
+    box-shadow: none !important;
+    min-width: 100px !important;
+    background-color: transparent !important;
+  }
+}

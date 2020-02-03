@@ -29,17 +29,17 @@ class TotalDues extends React.Component {
     const envURL = "/egov-common/pay";
     const data = { value: "PT_TOTALDUES_TOOLTIP", key: "PT_TOTALDUES_TOOLTIP" };
     return (
-      <div className="">
-        <div className="col-xs-6 col-sm-3 flex-child" style={{minHeight: "35px"}}>
+      <div className="dues-button-container">
+        <div className="col-xs-6 col-sm-3" style={{minHeight: "35px"}}>
           <Label buttonLabel={false} label="PT_TOTAL_DUES" color="rgb(0, 0, 0, 0.87)" height="35px" labelStyle={labelStyle} fontSize="18px" />
-        </div>
-        <Tooltip
+          <Tooltip
           className="totaldues-tooltip-icon"
           val={data}
           icon={"info_circle"}
-          style={{ position: "absolute", left: "135px", padding: "4px", width: "30px", display: "inline-flex" }}
+          style={{ position: "absolute", left: "75%", padding: "4px", width: "30px", display: "inline-flex", top: "0px" }}
         />
-        <div className="col-xs-6 col-sm-3 flex-child" style={{minHeight: "35px"}}>
+        </div>
+        <div className="col-xs-6 col-sm-3" style={{minHeight: "35px"}}>
           <Label
             label="Rs "
             secondaryText={totalBillAmountDue}
@@ -50,7 +50,7 @@ class TotalDues extends React.Component {
           ></Label>
         </div>
         {totalBillAmountDue > 0 && (
-          <div className="col-xs-6 col-sm-3 flex-child">
+          <div className="col-xs-6 col-sm-3 button-style">
             <TotalDuesButton
               labelText="PT_TOTALDUES_VIEW"
               onClickAction={() => {
@@ -61,8 +61,8 @@ class TotalDues extends React.Component {
           </div>
         )}
         {totalBillAmountDue > 0 && (
-          <div className="col-xs-6 col-sm-3 flex-child ">
-            <div style={{ float: "right" }}>
+          <div className="col-xs-6 col-sm-3">
+            <div style={{ float: "right" }} className="button-style">
               <TotalDuesButton
                 labelText="PT_TOTALDUES_PAY"
                 onClickAction={() => {
