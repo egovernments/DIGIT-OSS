@@ -15,7 +15,7 @@ import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-fra
 import store from "redux/store";
 import get from "lodash/get";
 import set from "lodash/set";
-import { getQueryArg, getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg, getFileUrlFromAPI ,getFileUrl} from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import {
     setBusinessServiceDataToLocalStorage,
@@ -209,8 +209,7 @@ const setDocsForEditFlow = async (state, dispatch) => {
                     (fileUrlPayload &&
                         fileUrlPayload[item.fileStoreId] &&
                         decodeURIComponent(
-                            fileUrlPayload[item.fileStoreId]
-                                .split(",")[0]
+                            getFileUrl(fileUrlPayload[item.fileStoreId])
                                 .split("?")[0]
                                 .split("/")
                                 .pop()

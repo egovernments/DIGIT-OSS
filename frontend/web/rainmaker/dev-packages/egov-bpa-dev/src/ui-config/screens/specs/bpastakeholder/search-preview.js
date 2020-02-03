@@ -11,7 +11,8 @@ import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-fra
 import {
   getQueryArg,
   setBusinessServiceDataToLocalStorage,
-  getFileUrlFromAPI
+  getFileUrlFromAPI,
+  setDocuments
 } from "egov-ui-framework/ui-utils/commons";
 import { updateDownloadandPrintMenu } from "./applyResource/footer";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -43,51 +44,6 @@ import "./index.css";
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 let headerSideText = { word1: "", word2: "" };
-
-const setDocuments = async (
-  payload,
-  sourceJsonPath,
-  destJsonPath,
-  dispatch
-) => {
-  const uploadedDocData = get(payload, sourceJsonPath);
-
-  const fileStoreIds =
-    uploadedDocData &&
-    uploadedDocData
-      .map(item => {
-        return item.fileStoreId;
-      })
-      .join(",");
-  const fileUrlPayload =
-    fileStoreIds && (await getFileUrlFromAPI(fileStoreIds));
-  const reviewDocData =
-    uploadedDocData &&
-    uploadedDocData.map((item, index) => {
-      return {
-        title: `BPA_${item.documentType}` || "",
-        link:
-          (fileUrlPayload &&
-            fileUrlPayload[item.fileStoreId] &&
-            fileUrlPayload[item.fileStoreId].split(",")[0]) ||
-          "",
-        linkText: "View",
-        name:
-          (fileUrlPayload &&
-            fileUrlPayload[item.fileStoreId] &&
-            decodeURIComponent(
-              fileUrlPayload[item.fileStoreId]
-                .split(",")[0]
-                .split("?")[0]
-                .split("/")
-                .pop()
-                .slice(13)
-            )) ||
-          `Document - ${index + 1}`
-      };
-    });
-  reviewDocData && dispatch(prepareFinalObject(destJsonPath, reviewDocData));
-};
 
 const getTradeTypeSubtypeDetails = payload => {
   const tradeUnitsFromApi = get(
@@ -150,7 +106,7 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
     payload,
     "Licenses[0].tradeLicenseDetail.applicationDocuments",
     "LicensesTemp[0].reviewDocData",
-    dispatch
+    dispatch,'BPA'
   );
   let sts = getTransformedStatus(get(payload, "Licenses[0].status"));
   payload && dispatch(prepareFinalObject("Licenses[0]", payload.Licenses[0]));
@@ -277,7 +233,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         data,
         "Licenses[0].tradeLicenseDetail.applicationDocuments",
         "LicensesTemp[0].reviewDocData",
-        dispatch
+        dispatch,'BPA'
       );
     }
     // Get approval details based on status and set it in screenconfig
@@ -298,7 +254,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
           data,
           "Licenses[0].tradeLicenseDetail.verificationDocuments",
           "LicensesTemp[0].verifyDocData",
-          dispatch
+          dispatch,'BPA'
         );
       } else {
         dispatch(

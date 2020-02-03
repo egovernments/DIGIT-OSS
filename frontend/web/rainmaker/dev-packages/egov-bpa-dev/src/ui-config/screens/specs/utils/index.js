@@ -28,6 +28,7 @@ import {
   getLocaleLabels,
   getTransformedLocalStorgaeLabels,
   getTransformedLocale,
+  getFileUrl,
   getFileUrlFromAPI
 } from "egov-ui-framework/ui-utils/commons";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
@@ -3838,13 +3839,12 @@ const prepareDocumentsView = async (state, dispatch, action, appState) => {
     doc["link"] =
       (fileUrls &&
         fileUrls[doc.fileStoreId] &&
-        fileUrls[doc.fileStoreId].split(",")[0]) ||
+        getFileUrl(fileUrls[doc.fileStoreId])) ||
       "";
     doc["name"] =
       (fileUrls[doc.fileStoreId] &&
         decodeURIComponent(
-          fileUrls[doc.fileStoreId]
-            .split(",")[0]
+          getFileUrl(fileUrls[doc.fileStoreId])
             .split("?")[0]
             .split("/")
             .pop()

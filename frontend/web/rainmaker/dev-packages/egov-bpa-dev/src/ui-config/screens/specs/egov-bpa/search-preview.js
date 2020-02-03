@@ -11,6 +11,7 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   getFileUrlFromAPI,
+  getFileUrl,
   getQueryArg,
   getTransformedLocale,
   setBusinessServiceDataToLocalStorage
@@ -138,13 +139,12 @@ const prepareDocumentsView = async (state, dispatch) => {
     doc["link"] =
       (fileUrls &&
         fileUrls[doc.fileStoreId] &&
-        fileUrls[doc.fileStoreId].split(",")[0]) ||
+        getFileUrl(fileUrls[doc.fileStoreId])) ||
       "";
     doc["name"] =
       (fileUrls[doc.fileStoreId] &&
         decodeURIComponent(
-          fileUrls[doc.fileStoreId]
-            .split(",")[0]
+          getFileUrl(fileUrls[doc.fileStoreId])
             .split("?")[0]
             .split("/")
             .pop()

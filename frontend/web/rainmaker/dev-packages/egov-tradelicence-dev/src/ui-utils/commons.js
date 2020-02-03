@@ -24,6 +24,7 @@ import get from "lodash/get";
 import set from "lodash/set";
 import {
   getQueryArg,
+  getFileUrl,
   getFileUrlFromAPI
 } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
@@ -103,8 +104,7 @@ const setDocsForEditFlow = async (state, dispatch) => {
             (fileUrlPayload &&
               fileUrlPayload[item.fileStoreId] &&
               decodeURIComponent(
-                fileUrlPayload[item.fileStoreId]
-                  .split(",")[0]
+                getFileUrl( fileUrlPayload[item.fileStoreId])
                   .split("?")[0]
                   .split("/")
                   .pop()

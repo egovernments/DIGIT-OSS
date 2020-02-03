@@ -7,6 +7,7 @@ import {
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   getFileUrlFromAPI,
+  getFileUrl,
   getQueryArg,
   getTransformedLocale
 } from "egov-ui-framework/ui-utils/commons";
