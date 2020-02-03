@@ -412,7 +412,7 @@ export const footer = getCommonApplyFooter({
     children: {
       submitButtonLabel: getLabel({
         labelName: "Submit",
-        labelKey: "TL_COMMON_BUTTON_SUBMIT"
+        labelKey: "WS_COMMON_BUTTON_SUBMIT"
       }),
       submitButtonIcon: {
         uiFramework: "custom-atoms",
@@ -426,7 +426,7 @@ export const footer = getCommonApplyFooter({
       action: "condition",
       callBack: callBackForNext
     },
-    visible: false
+    visible: true
   }
 });
 

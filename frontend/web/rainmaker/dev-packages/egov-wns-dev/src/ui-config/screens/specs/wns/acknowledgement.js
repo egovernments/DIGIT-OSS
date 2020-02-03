@@ -23,13 +23,13 @@ const getAcknowledgementCard = (
   financialYear,
   tenant
 ) => {
-  const financialYearText = financialYear ? financialYear : "";
-  if (purpose === "apply" && status === "success") {
+  // const financialYearText = financialYear ? financialYear : "";
+  if ("apply" === "apply" && status === "success") {
     return {
       header: getCommonHeader({
-        labelName: `Application for New Trade License (${financialYearText})`,
-        labelKey: "TL_COMMON_APPLICATION_NEW_LICENSE",
-        dynamicArray: [financialYearText]
+        // labelName: `Application for New Trade License (${financialYearText})`,
+        labelKey: "WS_APPLICATION_NEW_CONNECTION_HEADER",
+        // dynamicArray: [financialYearText]
       }),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
@@ -45,19 +45,24 @@ const getAcknowledgementCard = (
             icon: "done",
             backgroundColor: "#39CB74",
             header: {
-              labelName: "Application Submitted Successfully",
-              labelKey: "TL_APPLICATION_SUCCESS_MESSAGE_MAIN"
+              labelName: "Thank you for submitting the Application",
+              labelKey: "WS_APPLICATION_SUCCESS_MESSAGE_MAIN"
             },
             body: {
               labelName:
-                "A notification regarding Application Submission has been sent to trade owner at registered Mobile No.",
-              labelKey: "TL_APPLICATION_SUCCESS_MESSAGE_SUB"
+                " A notification regarding Application Submission has been sent to trade owner at registered Mobile No. Please note your application No. for future reference ",
+              labelKey: "WS_APPLICATION_SUCCESS_MESSAGE_SUB"
             },
             tailText: {
-              labelName: "Application No.",
-              labelKey: "TL_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+              labelName: "Water Application No.",
+              labelKey: "WS_HOME_SEARCH_RESULTS_APP_NO_LABEL"
             },
-            number: applicationNumber
+            number: applicationNumber,
+            tailText: {
+              labelName: "Sewerage Application No.",
+              labelKey: "WS_HOME_SEARCH_RESULTS_SW_APP_NO_LABEL"
+            },
+            number: applicationNumber,
           })
         }
       },

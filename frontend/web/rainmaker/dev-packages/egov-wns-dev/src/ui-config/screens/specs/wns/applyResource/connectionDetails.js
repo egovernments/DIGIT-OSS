@@ -50,7 +50,21 @@ export const OwnerInfoCard = getCommonCard({
       required: false,
       pattern: /^[a-zA-Z0-9-]*$/i,
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      jsonPath: "searchScreen.oldConnectionNumber"
+      jsonPath: "searchScreen.oldConnectionNumber",
+      props:{
+        className:"textfield-enterable-selection"
+      },
+      iconObj: {
+        iconName: "search",
+        position: "end",
+        color: "#FE7A51",
+        // onClickDefination: {
+        //   action: "condition",
+        //   callBack: (state, dispatch, fieldInfo) => {
+        //     getScrutinyDetails(state, dispatch, fieldInfo);
+        //   }
+        // }
+      },
     }),
 
     numberOfTaps: getTextField({

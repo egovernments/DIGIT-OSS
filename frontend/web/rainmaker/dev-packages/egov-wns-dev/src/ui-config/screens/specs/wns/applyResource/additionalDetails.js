@@ -91,7 +91,7 @@ labelKey:"WS_COMMON_ADDN_DETAILS"
     subHeader: getCommonTitle({
       labelKey: "WS_COMMON_CONNECTION_DETAILS"
     }),
-    wnsApplicationSearch: getCommonContainer({
+    connectionDetails: getCommonContainer({
       connectionType: getSelectField({
         label: {
           labelKey: "WS_SERV_DETAIL_CONN_TYPE"
@@ -176,14 +176,20 @@ labelKey:"WS_COMMON_ADDN_DETAILS"
         errorMessage: "ERR_INVALID_BILLING_PERIOD",
         jsonPath: "searchScreen.status"
       }),
+      waterClosets: getTextField({
+        label: { labelKey: "WS_ADDN_DETAILS_NO_OF_WATER_CLOSETS" },
+        placeholder: { labelKey: "WS_ADDN_DETAILS_NO_OF_WATER_CLOSETS_PLACEHOLDER" },
+        gridDefination: { xs: 12, sm: 6 },
+        jsonPath: "WaterConnection[0].noOfTaps"
+      }),
 
     }),
   }),
-  connectionchargeContainer: getCommonGrayCard({
+  plumberDetailsContainer: getCommonGrayCard({
     subHeader: getCommonTitle({
-      labelKey: "WS_CONNCTION_CHARGE_DETAILS"
+      labelKey: "WS_COMMON_PLUMBER_DETAILS"
     }),
-    chargeDetails: getCommonContainer({
+    plumberDetails: getCommonContainer({
       getPlumberRadioButton,
       plumberLicenceNo: getTextField({
         label: {
@@ -332,6 +338,22 @@ labelKey:"WS_COMMON_ADDN_DETAILS"
         pattern: getPattern("Date"),
         errorMessage: "ERR_INVALID_DATE",
         jsonPath: "searchScreen.billingPeriodValue"
+      }),
+      initialMeterReading: getTextField({
+        label: {
+          labelKey: "WS_ADDN_DETAILS_INITIAL_METER_READING"
+        },
+        placeholder: {
+          labelKey: "WS_ADDN_DETAILS_INITIAL_METER_READING_PLACEHOLDER"
+        },
+        gridDefination: {
+          xs: 12,
+          sm: 6
+        },
+        required: false,
+        pattern: getPattern("consumerNo"),
+        errorMessage: "ERR_INVALID_CONSUMER_NO",
+        jsonPath: "searchScreen.connectionNumber"
       }),
     }),
   })

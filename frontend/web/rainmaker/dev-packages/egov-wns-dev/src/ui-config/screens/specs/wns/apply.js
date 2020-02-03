@@ -161,10 +161,10 @@ export const formwizardFirstStep = {
   componentPath: "Form",
   props: { id: "apply_form1" },
   children: {
-    OwnerInfoCard,
     IDDetails,
     Details,
     ownerDetails,
+    OwnerInfoCard,
   }
 };
 
