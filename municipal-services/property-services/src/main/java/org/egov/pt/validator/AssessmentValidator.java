@@ -49,7 +49,7 @@ public class AssessmentValidator {
 		Map<String, String> errorMap = new HashMap<>();
 		validateRI(assessmentRequest.getRequestInfo(), errorMap);
 		validateUnitIds(assessmentRequest.getAssessment(),property);
-		//validateUpdateRequest(assessmentRequest, assessmentFromDB, errorMap);
+		validateUpdateRequest(assessmentRequest, assessmentFromDB, property, errorMap);
 		commonValidations(assessmentRequest, errorMap, true);
 		validateMDMSData(assessmentRequest.getRequestInfo(), assessmentRequest.getAssessment(), errorMap);
 		validateProcessInstance(assessmentRequest, assessmentFromDB, isWorkflowTriggered);
@@ -83,7 +83,7 @@ public class AssessmentValidator {
 
 	}
 
-	private void validateUpdateRequest(AssessmentRequest assessmentRequest, Assessment assessmentFromDB, Map<String, String> errorMap) {
+	private void validateUpdateRequest(AssessmentRequest assessmentRequest, Assessment assessmentFromDB, Property property, Map<String, String> errorMap) {
 		Assessment assessment = assessmentRequest.getAssessment();
 		if (StringUtils.isEmpty(assessment.getId())) {
 			errorMap.put("ASSMNT_ID_EMPTY", "Assessment ID cannot be empty");
@@ -92,9 +92,12 @@ public class AssessmentValidator {
 		if (assessmentFromDB!=null && !CollectionUtils.isEmpty(assessmentFromDB.getDocuments()) && assessmentFromDB.getDocuments().size() > assessment.getDocuments().size()) {
 			errorMap.put("MISSING_DOCUMENTS", "Please send all the documents belonging to this assessment");
 		}
-		if (assessmentFromDB!=null && assessmentFromDB.getUnitUsageList().size() > assessment.getUnitUsageList().size()) {
+		if (assessmentFromDB!=null && !CollectionUtils.isEmpty(assessmentFromDB.getUnitUsageList()) && assessmentFromDB.getUnitUsageList().size() > assessment.getUnitUsageList().size()) {
 			errorMap.put("MISSING_UNITS", "Please send all the units belonging to this assessment");
 		}
+
+		if(!property.getStatus().equals(Status.ACTIVE))
+			errorMap.put("INVALID_REQUEST","Assessment cannot be done on inactive or property in workflow");
 
 		/*Set<String> existingUnitUsages = new HashSet<>();
 		Set<String> existingDocs = new HashSet<>();
