@@ -373,6 +373,10 @@ serviceMaps:
       - jsonPath: $.Licenses.*.auditDetails.lastModifiedTime
 
       - jsonPath: $.Licenses.*.businessService
+      
+      - jsonPath: $.Licenses.*.applicationtype
+      
+      - jsonPath: $.Licenses.*.workflowcode
 
       - jsonPath: $.Licenses.*.id
 
