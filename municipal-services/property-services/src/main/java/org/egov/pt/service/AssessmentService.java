@@ -107,7 +107,7 @@ public class AssessmentService {
 
 			assessmentEnrichmentService.enrichAssessmentProcessInstance(request, property);
 
-			Boolean isStateUpdatable = workflowService.isStateUpdatable(assessmentFromSearch.getWorkflow().getState().getState(),businessService);
+			Boolean isStateUpdatable = workflowService.isStateUpdatable(request.getAssessment().getWorkflow().getState().getState(),businessService);
 
 			if(isStateUpdatable){
 
