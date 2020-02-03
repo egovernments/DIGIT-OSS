@@ -1,0 +1,11 @@
+ServiceMaps:
+  serviceName: chatbot-messages
+  version: 1.0.0
+  mappings:
+    - topic: send-message-localized
+      configKey: INDEX
+      indexes:
+        - name: chatbot-messages
+          type: general
+          id: $.timestamp
+          timeStampField: $.timestamp
