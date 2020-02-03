@@ -19671,10 +19671,10 @@
       "tenantId": "pb"
     },
     {
-     "rolecode": "CEMP",
-     "actionid": 1930,
-     "actioncode": "",
-     "tenantId": "pb"
+      "rolecode": "CEMP",
+      "actionid": 1930,
+      "actioncode": "",
+      "tenantId": "pb"
     },
     {
       "rolecode": "BPA_VERIFIER",
@@ -19885,7 +19885,8 @@
       "actionid": 1948,
       "actioncode": "",
       "tenantId": "pb"
-    },{
+    },
+    {
       "rolecode": "EMPLOYEE",
       "actionid": 1949,
       "actioncode": "",
@@ -19998,8 +19999,24 @@
       "actionid": 1958,
       "actioncode": "",
       "tenantId": "pb"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 1962,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "CITIZEN",
+      "actionid": 1962,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 1962,
+      "actioncode": "",
+      "tenantId": "pb"
     }
-
-
   ]
 }
