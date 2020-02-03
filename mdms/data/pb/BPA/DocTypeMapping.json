@@ -9,19 +9,52 @@
             "WFState": "INITIATED",
             "docTypes": [
                 {
-                    "code": "OWNER.IDENTITYPROOF",
+                    "code": "APPL.IDENTITYPROOF",
+                    "required": true
+                },
+                {
+                    "code": "APPL.ADDRESSPROOF",
+                    "required": true
+                },
+                {
+                    "code": "APPL.LTR",
+                    "required": true
+                },
+                {
+                    "code": "APPL.TDP",
+                    "required": true
+                }, 
+                {
+                    "code": "APPL.LAC",
                     "required": false
                 },
                 {
-                    "code": "OWNER.ADDRESSPROOF",
+                    "code": "APPL.SSC",
                     "required": false
                 },
                 {
-                    "code": "APPL.BUILDING_DIAGRAM",
+                    "code": "APPL.LSVS",
                     "required": false
-                },
-                {
-                    "code": "APPL.LOCALBODY",
+                },{
+                    "code": "BPD.SP",
+                    "required": true
+                },{
+                    "code": "BPD.FP",
+                    "required": false
+                },{
+                    "code": "BPD.SCP",
+                    "required": false
+                },{
+                    "code": "BPD.EP",
+                    "required": false
+                },{
+                    "code": "BPD.SECP",
+                    "required": false
+                },{
+                    "code": "BPD.PP",
+                    "required": false
+                },{
+                    "code": "BPD.RP",
                     "required": false
                 }, 
                 {
@@ -41,19 +74,52 @@
             "WFState": "INITIATED",
             "docTypes": [
                 {
-                    "code": "OWNER.IDENTITYPROOF",
+                    "code": "APPL.IDENTITYPROOF",
+                    "required": true
+                },
+                {
+                    "code": "APPL.ADDRESSPROOF",
+                    "required": true
+                },
+                {
+                    "code": "APPL.LTR",
+                    "required": true
+                },
+                {
+                    "code": "APPL.TDP",
+                    "required": true
+                }, 
+                {
+                    "code": "APPL.LAC",
                     "required": false
                 },
                 {
-                    "code": "OWNER.ADDRESSPROOF",
+                    "code": "APPL.SSC",
                     "required": false
                 },
                 {
-                    "code": "APPL.BUILDING_DIAGRAM",
+                    "code": "APPL.LSVS",
                     "required": false
-                },
-                {
-                    "code": "APPL.LOCALBODY",
+                },{
+                    "code": "BPD.SP",
+                    "required": true
+                },{
+                    "code": "BPD.FP",
+                    "required": false
+                },{
+                    "code": "BPD.SCP",
+                    "required": false
+                },{
+                    "code": "BPD.EP",
+                    "required": false
+                },{
+                    "code": "BPD.SECP",
+                    "required": false
+                },{
+                    "code": "BPD.PP",
+                    "required": false
+                },{
+                    "code": "BPD.RP",
                     "required": false
                 }, 
                 {
@@ -73,19 +139,52 @@
             "WFState": "INITIATED",
             "docTypes": [
                 {
-                    "code": "OWNER.IDENTITYPROOF",
+                    "code": "APPL.IDENTITYPROOF",
+                    "required": true
+                },
+                {
+                    "code": "APPL.ADDRESSPROOF",
+                    "required": true
+                },
+                {
+                    "code": "APPL.LTR",
+                    "required": true
+                },
+                {
+                    "code": "APPL.TDP",
+                    "required": true
+                }, 
+                {
+                    "code": "APPL.LAC",
                     "required": false
                 },
                 {
-                    "code": "OWNER.ADDRESSPROOF",
+                    "code": "APPL.SSC",
                     "required": false
                 },
                 {
-                    "code": "APPL.BUILDING_DIAGRAM",
+                    "code": "APPL.LSVS",
                     "required": false
-                },
-                {
-                    "code": "APPL.LOCALBODY",
+                },{
+                    "code": "BPD.SP",
+                    "required": true
+                },{
+                    "code": "BPD.FP",
+                    "required": false
+                },{
+                    "code": "BPD.SCP",
+                    "required": false
+                },{
+                    "code": "BPD.EP",
+                    "required": false
+                },{
+                    "code": "BPD.SECP",
+                    "required": false
+                },{
+                    "code": "BPD.PP",
+                    "required": false
+                },{
+                    "code": "BPD.RP",
                     "required": false
                 }, 
                 {
@@ -121,7 +220,19 @@
             "WFState": "FIELDINSPECTION_PENDING",
             "docTypes": [
                 {
-                    "code": "FI.AGRICULTURE",
+                    "code": "FI.FIR",
+                    "required": false
+                }, {
+                    "code": "FI.SINS",
+                    "required": false
+                }, {
+                    "code": "FI.SISS",
+                    "required": false
+                }, {
+                    "code": "FI.SIES",
+                    "required": false
+                }, {
+                    "code": "FI.SIWS",
                     "required": false
                 }
             ]
@@ -165,7 +276,19 @@
             "WFState": "FIELDINSPECTION_PENDING",
             "docTypes": [
                 {
-                    "code": "FI.AGRICULTURE",
+                    "code": "FI.FIR",
+                    "required": false
+                }, {
+                    "code": "FI.SINS",
+                    "required": false
+                }, {
+                    "code": "FI.SISS",
+                    "required": false
+                }, {
+                    "code": "FI.SIES",
+                    "required": false
+                }, {
+                    "code": "FI.SIWS",
                     "required": false
                 }
             ]
@@ -209,7 +332,19 @@
             "WFState": "FIELDINSPECTION_PENDING",
             "docTypes": [
                 {
-                    "code": "FI.AGRICULTURE",
+                    "code": "FI.FIR",
+                    "required": false
+                }, {
+                    "code": "FI.SINS",
+                    "required": false
+                }, {
+                    "code": "FI.SISS",
+                    "required": false
+                }, {
+                    "code": "FI.SIES",
+                    "required": false
+                }, {
+                    "code": "FI.SIWS",
                     "required": false
                 }
             ]
