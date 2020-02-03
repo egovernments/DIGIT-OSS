@@ -16128,7 +16128,8 @@
       "serviceCode": "DSS",
       "code": "null",
       "path": ""
-    },{
+    },
+    {
       "id": 1951,
       "name": "Dashboard ULB Overview",
       "url": "/dashboard-analytics/dashboard/getDashboardConfig/ulb-overview",
@@ -16154,7 +16155,8 @@
       "navigationURL": "integration/dss/ulb-home",
       "leftIcon": "places:business-center",
       "rightIcon": ""
-    },{
+    },
+    {
       "id": 1953,
       "name": "Dashboard ULB Overview",
       "url": "url",
@@ -16270,6 +16272,18 @@
       "serviceCode": "DSS",
       "code": "null",
       "path": ""
+    },
+    {
+      "id": 1962,
+      "name": "propertytax Estimate v2",
+      "url": "/pt-calculator-v2/propertytax/v2/_estimate",
+      "displayName": "PropertyTaxEstimatesV2",
+      "orderNumber": 0,
+      "parentModule": null,
+      "enabled": false,
+      "serviceCode": "PropertytaxCalculatorV2",
+      "code": "null",
+      "path": "null"
     }
   ]
 }
