@@ -142,14 +142,14 @@ public class AssessmentEnrichmentService {
            request.getAssessment().getWorkflow().setAssignes(owners);
         }
 
-        String state = workflowService.getCurrentState(request.getRequestInfo(), request.getAssessment());
+        State state = workflowService.getCurrentState(request.getRequestInfo(), request.getAssessment());
 
         ProcessInstance processInstance = request.getAssessment().getWorkflow();
         processInstance.setBusinessId(request.getAssessment().getAssessmentNumber());
         processInstance.setModuleName(ASMT_MODULENAME);
         processInstance.setTenantId(request.getAssessment().getTenantId());
         processInstance.setBusinessService(ASMT_WORKFLOW_CODE);
-        processInstance.getState().setState(state);
+        processInstance.setState(state);
 
     }
 
