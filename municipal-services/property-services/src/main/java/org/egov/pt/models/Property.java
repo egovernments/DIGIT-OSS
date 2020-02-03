@@ -15,6 +15,7 @@ import org.egov.pt.models.enums.Status;
 import org.egov.pt.models.workflow.ProcessInstance;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.JsonNode;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -83,13 +84,15 @@ public class Property extends PropertyInfo {
 	private List<Unit> units;
 
 	@JsonProperty("additionalDetails")
-	private Object additionalDetails;
+	private JsonNode additionalDetails;
 	
 	@JsonProperty("auditDetails")
 	private AuditDetails auditDetails;
 
 	@JsonProperty("workflow")
 	private ProcessInstance workflow;
+	
+	private String auditId;
 
 	@Builder
 	public Property(String id, String propertyId, String surveyId, List<String> linkedProperties, String tenantId,
@@ -97,7 +100,7 @@ public class Property extends PropertyInfo {
 			String propertyType, String ownershipCategory, List<OwnerInfo> owners, Institution institution,
 			CreationReason creationReason, String usageCategory, Long noOfFloors, Double landArea,
 			BigDecimal superBuiltUpArea, Source source, Channel channel, List<Document> documents, List<Unit> units,
-			Object additionalDetails, AuditDetails auditDetails, ProcessInstance workflow) {
+			JsonNode additionalDetails, AuditDetails auditDetails, ProcessInstance workflow) {
 		super(id, propertyId, surveyId, linkedProperties, tenantId, accountId, oldPropertyId, status, address);
 		this.acknowldgementNumber = acknowldgementNumber;
 		this.propertyType = propertyType;

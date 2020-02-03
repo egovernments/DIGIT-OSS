@@ -1,6 +1,5 @@
 package org.egov.pt.models;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -10,6 +9,7 @@ import javax.validation.constraints.NotNull;
 
 import org.egov.pt.models.enums.Channel;
 import org.egov.pt.models.enums.Status;
+import org.egov.pt.models.workflow.ProcessInstance;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -20,7 +20,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.egov.pt.models.workflow.ProcessInstance;
 
 @Data
 @AllArgsConstructor

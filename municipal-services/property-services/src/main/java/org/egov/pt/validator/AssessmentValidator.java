@@ -1,32 +1,34 @@
 package org.egov.pt.validator;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
-import org.egov.pt.models.*;
+import org.egov.pt.models.Assessment;
+import org.egov.pt.models.Property;
+import org.egov.pt.models.PropertyCriteria;
+import org.egov.pt.models.UnitUsage;
 import org.egov.pt.models.enums.Status;
-import org.egov.pt.repository.AssessmentRepository;
-import org.egov.pt.service.AssessmentService;
 import org.egov.pt.service.PropertyService;
-import org.egov.pt.util.AssessmentUtils;
 import org.egov.pt.util.ErrorConstants;
 import org.egov.pt.util.PTConstants;
+import org.egov.pt.util.PropertyUtil;
 import org.egov.pt.web.contracts.AssessmentRequest;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import lombok.extern.slf4j.Slf4j;
-
 @Service
-@Slf4j
 public class AssessmentValidator {
-
-	@Autowired
-	private AssessmentRepository assessmentRepository;
 
 	@Autowired
 	private PropertyService propertyService;
@@ -35,7 +37,7 @@ public class AssessmentValidator {
 	private PropertyValidator propertyValidator;
 
 	@Autowired
-	private AssessmentUtils utils;
+	private PropertyUtil propertyUtils;
 
 	public void validateAssessmentCreate(AssessmentRequest assessmentRequest, Property property) {
 		Map<String, String> errorMap = new HashMap<>();
@@ -128,8 +130,8 @@ public class AssessmentValidator {
 				}
 			}
 		}*/
-		assessment.setAdditionalDetails(utils.jsonMerge(assessmentFromDB.getAdditionalDetails(), assessment.getAdditionalDetails()));
-
+		assessment.setAdditionalDetails(
+				propertyUtils.jsonMerge(assessmentFromDB.getAdditionalDetails(), assessment.getAdditionalDetails()));
 
 
 		if (!CollectionUtils.isEmpty(errorMap.keySet())) {

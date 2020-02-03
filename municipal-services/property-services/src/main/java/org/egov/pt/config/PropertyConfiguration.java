@@ -18,7 +18,6 @@ import java.util.TimeZone;
 
 @Import({TracerConfiguration.class})
 @Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -175,6 +174,15 @@ public class PropertyConfiguration {
 
     @Value("${is.workflow.enabled}")
     private Boolean isWorkflowEnabled;
+    
+    @Value("${is.update.workflow.enabled}")
+    private Boolean isUpdateWorkflowEnabled;
+    
+    @Value("${is.mutation.workflow.enabled}")
+    private Boolean isMutationWorkflowEnabled;
+    
+    @Value("${mutation.workflow.name}")
+    private String mutationWfName;
     
     @Value("${workflow.status.active}")
     private String wfStatusActive;

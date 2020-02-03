@@ -96,9 +96,10 @@ public class EnrichmentService {
 	}
 
     /**
-     * Assigns UUID for new fields that are added and sets propertyDetail and address ids from propertyId
+     * Assigns UUID for new fields that are added and sets propertyDetail and address id from propertyId
+     * 
      * @param request  PropertyRequest received for property update
-     * @param propertiesFromResponse Properties returned by calling search based on ids in PropertyRequest
+     * @param propertiesFromResponse Properties returned by calling search based on id in PropertyRequest
      */
     public void enrichUpdateRequest(PropertyRequest request,Property propertyFromDb) {
     	
@@ -114,23 +115,7 @@ public class EnrichmentService {
 					doc.setStatus(Status.ACTIVE);
 				}
 			});
-		
-		property.getOwners().forEach(owner -> {
-
-			if (owner.getOwnerInfoUuid() == null)
-				owner.setOwnerInfoUuid(UUID.randomUUID().toString());
-
-			if (!CollectionUtils.isEmpty(owner.getDocuments()))
-				owner.getDocuments().forEach(doc -> {
-					if (doc.getId() == null) {
-						doc.setId(UUID.randomUUID().toString());
-						doc.setStatus(Status.ACTIVE);
-					}
-				});
-
-			owner.setStatus(Status.ACTIVE);
-		});
-		
+				
 		Institution institute = property.getInstitution();
 		if (!ObjectUtils.isEmpty(institute) && null == institute.getId())
 			property.getInstitution().setId(UUID.randomUUID().toString());
@@ -138,6 +123,9 @@ public class EnrichmentService {
             property.setAuditDetails(auditDetails);
             property.setAccountId(propertyFromDb.getAccountId());
             property.getAddress().setId(propertyFromDb.getAddress().getId());
+       
+		property.setAdditionalDetails(
+				propertyutil.jsonMerge(propertyFromDb.getAdditionalDetails(), property.getAdditionalDetails()));
     }
 
 
@@ -237,4 +225,48 @@ public class EnrichmentService {
     	
         boundaryService.getAreaType(property, requestInfo, PTConstants.BOUNDARY_HEIRARCHY_CODE);
     }
+    
+    /**
+     * 
+     * Enrichment method for mutation request
+     * 
+     * @param request
+     */
+	public void enrichMutationRequest(PropertyRequest request, Boolean isStart) {
+
+		Property property = request.getProperty();
+		
+		if (isStart) {
+			
+			String ackNo = getIdList(request.getRequestInfo(), property.getTenantId(), config.getAcknowldgementIdGenName(), config.getAcknowldgementIdGenFormat(), 1).get(0);
+			
+			property.setId(UUID.randomUUID().toString());
+			property.setAcknowldgementNumber(ackNo);
+
+			if (!config.getIsMutationWorkflowEnabled())
+				property.setStatus(Status.ACTIVE);
+			else {
+				request.getProperty().getOwners()
+						.forEach(owner -> owner.setOwnerInfoUuid(UUID.randomUUID().toString()));
+			}
+		}
+		
+
+		property.getOwners().forEach(owner -> {
+
+			if (owner.getUuid() == null && owner.getOwnerInfoUuid() == null) {
+				
+				owner.setOwnerInfoUuid(UUID.randomUUID().toString());
+				owner.setStatus(Status.ACTIVE);
+			}
+
+			if (!CollectionUtils.isEmpty(owner.getDocuments()))
+				owner.getDocuments().forEach(doc -> {
+					if (doc.getId() == null) {
+						doc.setId(UUID.randomUUID().toString());
+						doc.setStatus(Status.ACTIVE);
+					}
+				});
+		});
+	}
 }

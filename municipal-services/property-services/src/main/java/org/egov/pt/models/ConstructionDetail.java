@@ -3,7 +3,6 @@ package org.egov.pt.models;
 import java.math.BigDecimal;
 
 import javax.validation.constraints.Digits;
-import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

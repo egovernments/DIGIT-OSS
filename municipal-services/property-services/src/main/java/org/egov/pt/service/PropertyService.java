@@ -1,9 +1,15 @@
 package org.egov.pt.service;
 
+import static org.egov.pt.util.PTConstants.CREATE_PROCESS_CONSTANT;
+import static org.egov.pt.util.PTConstants.MUTATION_PROCESS_CONSTANT;
+import static org.egov.pt.util.PTConstants.UPDATE_PROCESS_CONSTANT;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.egov.common.contract.request.RequestInfo;
@@ -15,16 +21,20 @@ import org.egov.pt.models.enums.Status;
 import org.egov.pt.models.user.User;
 import org.egov.pt.models.user.UserDetailResponse;
 import org.egov.pt.models.user.UserSearchRequest;
+import org.egov.pt.models.workflow.ProcessInstance;
 import org.egov.pt.models.workflow.ProcessInstanceRequest;
 import org.egov.pt.producer.Producer;
 import org.egov.pt.repository.PropertyRepository;
+import org.egov.pt.util.PTConstants;
 import org.egov.pt.util.PropertyUtil;
 import org.egov.pt.validator.PropertyValidator;
 import org.egov.pt.web.contracts.PropertyRequest;
-import org.javers.common.collections.Sets;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Sets;
 
 @Service
 public class PropertyService {
@@ -52,6 +62,9 @@ public class PropertyService {
     
     @Autowired
     private PropertyUtil util;
+    
+    @Autowired
+    private ObjectMapper mapper;
 
 
     
@@ -67,30 +80,181 @@ public class PropertyService {
 		enrichmentService.enrichCreateRequest(request);
 		userService.createUser(request);
 		if (config.getIsWorkflowEnabled())
-			updateWorkflow(request, true);
+			updateWorkflow(request, CREATE_PROCESS_CONSTANT);
 		producer.push(config.getSavePropertyTopic(), request);
 		return request.getProperty();
 	}
 	
 	/**
 	 * Updates the property
+	 * 
+	 * handles multiple processes 
+	 * 
+	 * Update
+	 * 
+	 * Mutation
 	 *
 	 * @param request PropertyRequest containing list of properties to be update
 	 * @return List of updated properties
 	 */
 	public Property updateProperty(PropertyRequest request) {
 
-		Property propertyFromSearch = propertyValidator.validateUpdateRequest(request);
-		enrichmentService.enrichUpdateRequest(request, propertyFromSearch);
-		userService.createUser(request);
-		if (config.getIsWorkflowEnabled()){
-		}
+		Property propertyFromSearch = propertyValidator.validateCommonUpdateInformation(request);
+		ProcessInstance workFlow = request.getProperty().getWorkflow();
+		
+		boolean isRequestForOwnerMutation = workFlow != null
+				&& workFlow.getBusinessService().equalsIgnoreCase(config.getMutationWfName());
+		
+		// ID for audit and history search 
+		request.getProperty().setAuditId(UUID.randomUUID().toString());
+
+		if (isRequestForOwnerMutation)
+			processOwnerMutation(request, propertyFromSearch);
 		else
-			producer.push(config.getUpdatePropertyTopic(), request);
+			processPropertyUpdate(request, propertyFromSearch);
+
 		return request.getProperty();
 	}
-	
 
+	/**
+	 * Method to process Property update 
+	 * 
+	 * @param request
+	 * @param propertyFromSearch
+	 */
+	private void processPropertyUpdate(PropertyRequest request, Property propertyFromSearch) {
+		
+
+		propertyValidator.validateUpdateRequestForOwnerFields(request, propertyFromSearch);
+		enrichmentService.enrichUpdateRequest(request, propertyFromSearch);
+		
+		request.getProperty().setOwners(propertyFromSearch.getOwners());
+		PropertyRequest OldPropertyRequest = PropertyRequest.builder()
+				.requestInfo(request.getRequestInfo())
+				.property(propertyFromSearch)
+				.build();
+		
+		mergeAdditionalDetails(request, propertyFromSearch);
+		
+		if(config.getIsUpdateWorkflowEnabled()) {
+			
+			String status = updateWorkflow(request, UPDATE_PROCESS_CONSTANT);
+					
+			if (propertyFromSearch.getStatus().equals(Status.ACTIVE)) {
+				
+				propertyFromSearch.setStatus(Status.INACTIVE);
+				producer.push(config.getUpdatePropertyTopic(), OldPropertyRequest);
+				util.saveOldUuidToRequest(request, propertyFromSearch.getId());
+				producer.push(config.getSavePropertyTopic(), request);
+				
+			} else if (status.equalsIgnoreCase(Status.CANCELLED.toString())
+					|| status.equalsIgnoreCase(Status.REJECTED.toString())
+					|| status.equalsIgnoreCase(Status.INACTIVE.toString())) {
+				
+				producer.push(config.getUpdatePropertyTopic(), request);
+				
+				/* search and set previous property to ACTIVE and update it */
+				request.setProperty(getPreviousPropertyActivated(request.getRequestInfo(), propertyFromSearch));
+				producer.push(config.getUpdatePropertyTopic(), request);
+			}
+		}
+		
+		producer.push(config.getUpdatePropertyTopic(), request);
+	}
+
+	/**
+	 * 
+	 * @param requestInfo
+	 * @param propertyFromSearch
+	 */
+	private Property getPreviousPropertyActivated(RequestInfo requestInfo, Property propertyFromSearch) {
+
+		@SuppressWarnings("unchecked")
+		Map<String, Object> additionalDetails = mapper.convertValue(propertyFromSearch.getAdditionalDetails(), Map.class);
+		String propertyUuId = (String) additionalDetails.get(PTConstants.PREVIOUS_PROPERTY_PREVIOUD_UUID);
+		PropertyCriteria criteria = PropertyCriteria.builder()
+				.uuids(Sets.newHashSet(propertyUuId))
+				.build();
+		Property property = searchProperty(criteria, requestInfo).get(0);
+		property.setStatus(Status.ACTIVE);
+		return property;
+	}
+
+	/**
+	 * method to process owner mutation
+	 * 
+	 * @param request
+	 * @param propertyFromSearch
+	 */
+	private void processOwnerMutation(PropertyRequest request, Property propertyFromSearch) {
+		
+		propertyValidator.validateMutation(request, propertyFromSearch);
+		enrichmentService.enrichMutationRequest(request, true);
+		// TODO FIX ME block property changes FIXME
+		userService.createUser(request);
+		
+
+		mergeAdditionalDetails(request, propertyFromSearch);
+		PropertyRequest oldPropertyRequest = PropertyRequest.builder()
+				.requestInfo(request.getRequestInfo())
+				.property(propertyFromSearch)
+				.build();
+		
+		if (config.getIsMutationWorkflowEnabled()) {
+
+			String status = updateWorkflow(request, MUTATION_PROCESS_CONSTANT);
+
+			/*
+			 * updating property from search to INACTIVE status
+			 * 
+			 * to create new entry for new Mutation
+			 */
+			if (propertyFromSearch.getStatus().equals(Status.ACTIVE)) {
+
+				propertyFromSearch.setStatus(Status.INACTIVE);
+				producer.push(config.getUpdatePropertyTopic(), oldPropertyRequest);
+				
+				util.saveOldUuidToRequest(request, propertyFromSearch.getId());
+				/* save new record */
+				producer.push(config.getSavePropertyTopic(), request);
+
+			} else if (status.equalsIgnoreCase(Status.CANCELLED.toString())
+					|| status.equalsIgnoreCase(Status.REJECTED.toString())
+					|| status.equalsIgnoreCase(Status.INACTIVE.toString())) {
+
+				/* current record being rejected */
+				producer.push(config.getUpdatePropertyTopic(), request);
+				
+				/* Previous record set to ACTIVE */
+				request.setProperty(getPreviousPropertyActivated(request.getRequestInfo(), propertyFromSearch));
+				producer.push(config.getUpdatePropertyTopic(), request);
+
+			} else {
+				/*
+				 * If property is In Workflow then continue
+				 */
+				producer.push(config.getUpdatePropertyTopic(), request);
+			}
+
+		} else {
+
+			/*
+			 * If no workflow then update property directly with mutation information
+			 */
+			producer.push(config.getUpdatePropertyTopic(), request);
+		}
+	}
+
+	/**
+	 * 
+	 * @param request
+	 * @param propertyFromSearch
+	 */
+	private void mergeAdditionalDetails(PropertyRequest request, Property propertyFromSearch) {
+
+		request.getProperty().setAdditionalDetails(util.jsonMerge(propertyFromSearch.getAdditionalDetails(),
+				request.getProperty().getAdditionalDetails()));
+	}
 
 
 	/**
@@ -99,11 +263,11 @@ public class PropertyService {
 	 * 
 	 * @param request
 	 */
-	private void updateWorkflow(PropertyRequest request, Boolean isCreate) {
+	private String updateWorkflow(PropertyRequest request, String process) {
 
 		Property property = request.getProperty();
 
-		ProcessInstanceRequest workflowReq = util.getWfForPropertyRegistry(request, isCreate);
+		ProcessInstanceRequest workflowReq = util.getWfForPropertyRegistry(request, process);
 		String status = wfService.callWorkFlow(workflowReq);
 		if (status.equalsIgnoreCase(config.getWfStatusActive()) && property.getPropertyId() == null) {
 			
@@ -111,6 +275,7 @@ public class PropertyService {
 			request.getProperty().setPropertyId(pId);
 		}
 		request.getProperty().setStatus(Status.fromValue(status));
+		return status;
 	}
 	
     /**
@@ -201,7 +366,7 @@ public class PropertyService {
 				return true;
 		} else {
 
-			criteria.setPropertyIds(Sets.asSet(propertyIds));
+			criteria.setPropertyIds(Sets.newHashSet(propertyIds));
 		}
 		
 		return false;

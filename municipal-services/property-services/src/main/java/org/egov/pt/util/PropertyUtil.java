@@ -1,8 +1,18 @@
 package org.egov.pt.util;
 
+import static java.util.Objects.isNull;
+import static org.egov.pt.util.PTConstants.CREATE_PROCESS_CONSTANT;
+import static org.egov.pt.util.PTConstants.MODULE;
+import static org.egov.pt.util.PTConstants.MUTATION_PROCESS_CONSTANT;
 import static org.egov.pt.util.PTConstants.NOTIFICATION_LOCALE;
+import static org.egov.pt.util.PTConstants.UPDATE_PROCESS_CONSTANT;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
@@ -20,6 +30,9 @@ import org.egov.pt.models.workflow.ProcessInstanceRequest;
 import org.egov.pt.web.contracts.PropertyRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 @Component
 public class PropertyUtil {
@@ -89,7 +102,7 @@ public class PropertyUtil {
                 .append(config.getLocalizationContextPath()).append(config.getLocalizationSearchEndpoint());
         uri.append("?").append("locale=").append(locale)
                 .append("&tenantId=").append(tenantId)
-                .append("&module=").append(PTConstants.MODULE);
+                .append("&module=").append(MODULE);
         return uri;
     }
 
@@ -112,20 +125,33 @@ public class PropertyUtil {
 					.build();
 	}
 	
-	public ProcessInstanceRequest getWfForPropertyRegistry(PropertyRequest request, Boolean isCreate) {
+	public ProcessInstanceRequest getWfForPropertyRegistry(PropertyRequest request, String process) {
 		
 		Property property = request.getProperty();
 		ProcessInstance wf = null != property.getWorkflow() ? property.getWorkflow() : new ProcessInstance();
 		
 		wf.setBusinessId(property.getAcknowldgementNumber());
 		wf.setTenantId(property.getTenantId());
+	
 		
-		if (isCreate) {
+		switch (process) {
+		
+		case CREATE_PROCESS_CONSTANT :
 			List<User> owners = getUserForWorkflow(property);
 			wf.setAssignes(owners);
 			wf.setBusinessService(config.getPropertyRegistryWf());
 			wf.setModuleName(config.getPropertyModuleName());
 			wf.setAction("OPEN");
+			break;
+
+		case MUTATION_PROCESS_CONSTANT:
+			break;
+
+		case UPDATE_PROCESS_CONSTANT:
+			break;
+			
+		default:
+			break;
 		}
 		
 		return ProcessInstanceRequest.builder()
@@ -151,8 +177,44 @@ public class PropertyUtil {
 		return owners;
 	}
 
+	/**
+	 * Method to merge additional details during update 
+	 * 
+	 * @param mainNode
+	 * @param updateNode
+	 * @return
+	 */
+	public JsonNode jsonMerge(JsonNode mainNode, JsonNode updateNode) {
 
+		if (isNull(mainNode) || mainNode.isNull())
+			return updateNode;
+		if (isNull(updateNode) || updateNode.isNull())
+			return mainNode;
 
+		Iterator<String> fieldNames = updateNode.fieldNames();
+		while (fieldNames.hasNext()) {
 
+			String fieldName = fieldNames.next();
+			JsonNode jsonNode = mainNode.get(fieldName);
+			// if field exists and is an embedded object
+			if (jsonNode != null && jsonNode.isObject()) {
+				jsonMerge(jsonNode, updateNode.get(fieldName));
+			} else {
+				if (mainNode instanceof ObjectNode) {
+					// Overwrite field
+					JsonNode value = updateNode.get(fieldName);
+					((ObjectNode) mainNode).set(fieldName, value);
+				}
+			}
 
+		}
+		return mainNode;
+	}
+
+	public JsonNode saveOldUuidToRequest(PropertyRequest request, String uuid) {
+
+		ObjectNode additionalDetail = (ObjectNode) request.getProperty().getAdditionalDetails();
+		return additionalDetail.put(PTConstants.PREVIOUS_PROPERTY_PREVIOUD_UUID, uuid);
+	}
+	
 }

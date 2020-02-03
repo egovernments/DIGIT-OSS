@@ -114,4 +114,12 @@ public class PTConstants {
 
     public static final String ASMT_MODULENAME = "PT";
 
+	public static final String CREATE_PROCESS_CONSTANT = "CREATE";
+	
+	public static final String UPDATE_PROCESS_CONSTANT = "UPDATE";
+	
+	public static final String MUTATION_PROCESS_CONSTANT = "MUTATION";
+	
+	public static final String PREVIOUS_PROPERTY_PREVIOUD_UUID = "previousPropertyUuid";
+
 }

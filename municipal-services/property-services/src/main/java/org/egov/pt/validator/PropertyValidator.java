@@ -20,6 +20,8 @@ import org.egov.pt.models.OwnerInfo;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.PropertyCriteria;
 import org.egov.pt.models.Unit;
+import org.egov.pt.models.enums.Status;
+import org.egov.pt.models.workflow.ProcessInstance;
 import org.egov.pt.repository.PropertyRepository;
 import org.egov.pt.repository.ServiceRequestRepository;
 import org.egov.pt.util.ErrorConstants;
@@ -31,9 +33,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
 import com.jayway.jsonpath.JsonPath;
+import com.jayway.jsonpath.PathNotFoundException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -56,6 +61,9 @@ public class PropertyValidator {
     
     @Autowired
     private PropertyConfiguration configs;
+    
+    @Autowired
+    private ObjectMapper mapper;
     
 
     /**
@@ -108,31 +116,76 @@ public class PropertyValidator {
      * Validates the masterData,CitizenInfo and the authorization of the assessee for update
      * @param request PropertyRequest for update
      */
-    public Property validateUpdateRequest(PropertyRequest request){ 
+    public void validateUpdateRequestForOwnerFields(PropertyRequest request, Property propertyFromSearch){ 
     	
     	Map<String, String> errorMap = new HashMap<>();
     	
-        validateIds(request, errorMap);
+        /*
+         * Blocking owner changes in update flow
+         */
+		Boolean isNewOWnerAdded = false;
+		Boolean isOwnerCancelled = false;
+		List<String> searchOwnerUuids = propertyFromSearch.getOwners().stream().map(OwnerInfo::getUuid).collect(Collectors.toList());
+		List<String> uuidsNotFound = new ArrayList<>();
+
+		for (OwnerInfo owner : request.getProperty().getOwners()) {
+
+			if (owner.getUuid() == null && owner.getStatus().equals(Status.ACTIVE))
+				isNewOWnerAdded = true;
+			else if (owner.getStatus().equals(Status.INACTIVE))
+				isOwnerCancelled = true;
+
+			if (!searchOwnerUuids.contains(owner.getUuid()))
+				uuidsNotFound.add(owner.getUuid());
+		}
+
+		if (!CollectionUtils.isEmpty(uuidsNotFound))
+			errorMap.put("EG_PT_UPDATE_OWNER_UUID_ERROR", "Invalid owners found in request : " + uuidsNotFound);
+
+		if (isNewOWnerAdded || isOwnerCancelled)
+			errorMap.put("EG_PT_UPDATE_OWNER_ERROR", "Update request cannot change owner Information please use mutation process");
+
+		if(searchOwnerUuids.size() != request.getProperty().getOwners().size())
+			errorMap.put("EG_PT_UPDATE_OWNER_SIZE_ERROR", "Update request cannot change owner Information please use mutation process");
+		
+		if (!errorMap.isEmpty())
+			throw new CustomException(errorMap);
+    }
+
+    /**
+     * Validates common criteria of update and mutation
+     * 
+     * @param request
+     * @return
+     */
+	public Property validateCommonUpdateInformation(PropertyRequest request) {
+		
+		Map<String, String> errorMap = new HashMap<>();
+		
+		
+		validateIds(request, errorMap);
         validateMobileNumber(request, errorMap);
         
         PropertyCriteria criteria = getPropertyCriteriaForSearch(request);
         List<Property> propertiesFromSearchResponse = propertyRepository.getProperties(criteria);
         boolean ifPropertyExists=PropertyExists(propertiesFromSearchResponse);
-        if(!ifPropertyExists)
-        {
-        	throw new CustomException("PROPERTY NOT FOUND","The property to be updated does not exist");
-        	}
+		if (!ifPropertyExists) {
+			throw new CustomException("EG_PT_PROPERTY_NOT_FOUND", "The property to be updated does not exist in the system");
+		}
         propertyUtil.addAddressIds(propertiesFromSearchResponse, request.getProperty());
         
         validateMasterData(request, errorMap);
         if(request.getRequestInfo().getUserInfo().getType().equalsIgnoreCase("CITIZEN"))
             validateAssessees(request, errorMap);
-        
+
+		if (configs.getIsUpdateWorkflowEnabled() && request.getProperty().getWorkflow() == null)
+			throw new CustomException("EG_PT_UPDATE_WF_ERROR", "Workflow information is mandatory for update");
+
 		if (!errorMap.isEmpty())
 			throw new CustomException(errorMap);
 		
 		return propertiesFromSearchResponse.get(0);
-    }
+	}
 
     /**
      * Validates if the fields in PropertyRequest are present in the MDMS master Data
@@ -520,11 +573,84 @@ public class PropertyValidator {
 		else
 			return true;
 	}
+/*
+ * 
+ * Mutation methods
+ */
+	
 
+	public void validateMutation(PropertyRequest request, Property propertyFromSearch) {
 
+		Map<String, String> errorMap = new HashMap<>();
+		Property property = request.getProperty();
+		ProcessInstance workFlow = property.getWorkflow();	
 
+		String reasonForTransfer = null;
+		String docNo = null;
+		Long docDate = null;
+		Double docVal = null;
+		
+		@SuppressWarnings("unchecked")
+		Map<String, Object> additionalDetails = mapper.convertValue(property.getAdditionalDetails(), Map.class);
+		try {
+			
+			reasonForTransfer = (String) additionalDetails.get("reasonForTransfer");
+			docNo = (String) additionalDetails.get("documentNumber");
+			docDate = Long.valueOf(String.valueOf(additionalDetails.get("documentDate")));
+			docVal = Double.valueOf(String.valueOf(additionalDetails.get("documentValue")));
 
+		} catch (PathNotFoundException e) {
+			throw new CustomException("EG_PT_MUTATION_FIELDS_ERROR", "Mandatory fields Missing for mutation, please provide the following information in additionalDetails : "
+							+ "reasonForTransfer, documentNumber, documentDate and documentValue");
+		} catch (Exception e) {
+			throw new CustomException("EG_PT_ADDITIONALDETAILS_PARSING_ERROR", e.getMessage());
+		}
 
+		Boolean isNewOWnerAdded = false;
+		Boolean isOwnerCancelled = false;
+		Set<String> searchOwnerUuids = propertyFromSearch.getOwners().stream().map(OwnerInfo::getUuid).collect(Collectors.toSet());
+		List<String> uuidsNotFound = new ArrayList<String>();
+		
+		if(property.getOwners().size() != property.getOwners().stream().map(OwnerInfo::getUuid).collect(Collectors.toSet()).size())
+				errorMap.put("EG_PT_MUTATION_DUPLICATE_OWNER_ERROR", "Same Owner object is repated in the update Request");
+		
+		if(!property.getOwners().stream().map(OwnerInfo::getStatus).collect(Collectors.toSet()).contains(Status.ACTIVE))
+			errorMap.put("EG_PT_MUTATION_ALL_INACTIVE_OWNER_ERROR", "At the least one owner object should be ACTIVE ");
+			
+		for (OwnerInfo owner : property.getOwners()) {
 
+			if (owner.getUuid() == null && owner.getStatus().equals(Status.ACTIVE))
+				isNewOWnerAdded = true;
+			else if (owner.getStatus().equals(Status.INACTIVE))
+				isOwnerCancelled = true;
+			
+			if (owner.getUuid() != null && !searchOwnerUuids.contains(owner.getUuid()))
+				uuidsNotFound.add(owner.getUuid());
+		}
+
+		if (!CollectionUtils.isEmpty(uuidsNotFound))
+			errorMap.put("EG_PT_UPDATE_OWNER_ERROR", "Invalid owners found in request : " + uuidsNotFound);
+		
+
+		if (!isNewOWnerAdded && !isOwnerCancelled)
+			errorMap.put("EG_PT_MUTATION_OWNER_ERROR",
+					"Mutation request should either add a new owner object or make an existing object INACTIVE in the request");
+
+		if (isOwnerCancelled && property.getOwners().size() == 1)
+			errorMap.put("EG_PT_MUTATION_OWNER_REMOVAL_ERROR", "Single owner of a property cannot be deactivated or removed in a mutation request");
+
+		if (StringUtils.isEmpty(reasonForTransfer) || StringUtils.isEmpty(docNo) || ObjectUtils.isEmpty(docDate) || ObjectUtils.isEmpty(docVal) ) {
+			errorMap.put("EG_PT_MUTATION_FIELDS_ERROR", "mandatory fields Missing for mutation, please provide the following information : "
+							+ "reasonForTransfer, documentNumber, documentDate and documentValue");
+		}
+		
+		if(configs.getIsMutationWorkflowEnabled() && (ObjectUtils.isEmpty(workFlow.getAction()) || ObjectUtils.isEmpty(workFlow.getModuleName()) ||
+				ObjectUtils.isEmpty(workFlow.getBusinessService()) || ObjectUtils.isEmpty(workFlow.getDocuments())))
+			errorMap.put("EG_PT_MUTATION_WF_FIELDS_ERROR", "mandatory fields Missing in workflow Object for Mutation please provide the following information : "
+					+ "action, documents, moduleName and BusinessService");
+		
+		if(!CollectionUtils.isEmpty(errorMap))
+			throw new CustomException(errorMap);
+	}
 
 }

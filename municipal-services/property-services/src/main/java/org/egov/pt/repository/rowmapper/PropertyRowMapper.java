@@ -378,7 +378,7 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 	 * @return
 	 * @throws SQLException
 	 */
-	private Object getadditionalDetail(ResultSet rs, String key) throws SQLException {
+	private JsonNode getadditionalDetail(ResultSet rs, String key) throws SQLException {
 
 		JsonNode propertyAdditionalDetails = null;
 
