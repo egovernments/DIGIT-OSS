@@ -3,19 +3,60 @@
   "moduleName": "common-masters",
   "DocumentType": [
     {
-      "code": "OWNER.IDENTITYPROOF.AADHAAR",
+      "code": "APPL.IDENTITYPROOF.AADHAAR",
       "active": true
     },
     {
-      "code": "OWNER.IDENTITYPROOF.VOTERID",
+      "code": "APPL.IDENTITYPROOF.PASSPORT",
       "active": true
     },
     {
-      "code": "OWNER.IDENTITYPROOF.DRIVINGLICENSE",
+      "code": "APPL.IDENTITYPROOF.DRIVINGLICENSE",
       "active": true
     },
     {
-      "code": "OWNER.ADDRESSPROOF.ELECTRICITYBILL",
+      "code": "APPL.ADDRESSPROOF.ELECTRICITYBILL",
+      "active": true
+    },{
+      "code": "APPL.ADDRESSPROOF.PASSPORT",
+      "active": true
+    },
+    {
+      "code": "APPL.LTR.LTR",
+      "active": true
+    },
+     {
+      "code": "APPL.TDP.TDP",
+      "active": true
+    },{
+      "code": "APPL.LAC.LAC",
+      "active": true
+    },{
+      "code": "APPL.SSC.SSC",
+      "active": true
+    },{
+      "code": "APPL.LSVS.LSVS",
+      "active": true
+    },{
+      "code": "BPD.SP.SP",
+      "active": true
+    },{
+      "code": "BPD.RP.RP",
+      "active": true
+    },{
+      "code": "BPD.FP.FP",
+      "active": true
+    },{
+      "code": "BPD.SCP.SCP",
+      "active": true
+    },{
+      "code": "BPD.EP.EP",
+      "active": true
+    },{
+      "code": "BPD.SECP.SECP",
+      "active": true
+    },{
+      "code": "BPD.PP.PP",
       "active": true
     },
     {
@@ -30,11 +71,21 @@
       "code": "NOC.AGRICULTURE_WATERBODY.FTL",
       "active": true
     },{
-      "code": "FI.AGRICULTURE.LANDUSE",
+      "code": "FI.FIR.FIR",
       "active": true
     },
     {
-      "code": "FI.AGRICULTURE_WATERBODY.FTL",
+      "code": "FI.SINS.SINS",
+      "active": true
+    },{
+      "code": "FI.SISS.SISS",
+      "active": true
+    },
+    {
+      "code": "FI.SIES.SIES",
+      "active": true
+    },{
+      "code": "FI.SIWS.SIWS",
       "active": true
     },
     {
