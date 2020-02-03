@@ -23,7 +23,7 @@ class DemandCollectionInfo extends React.Component {
               </div>
               {{ editIcon } && <span style={{ alignItems: "right" }}>{editIcon}</span>}
             </div>
-            {demandProperties[0].propertyDetails[0].demand.map((demand, index) => {
+            {demandProperties && demandProperties.length >0 && demandProperties[0] ? (demandProperties[0].propertyDetails[0].demand.map((demand, index) => {
               return demand ? (
                 <div>
                 {Object.keys(demand.demand).map((datas, ind) => {
@@ -78,7 +78,7 @@ class DemandCollectionInfo extends React.Component {
                   </div>
 
               ):null;
-            })}
+            })):[]}
           </div>
         }
       />

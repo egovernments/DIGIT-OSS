@@ -181,7 +181,7 @@ const getAssessmentInfo = (propertyDetails, generalMDMSDataById) => {
     propertyDetails.propertySubType === "SHAREDPROPERTY"
       ? {
           key: getTranslatedLabel("PT_FLOOR_NO", localizationLabelsData),
-          value: units.length > 0 ? `${units[0].floorNo}` : "NA",
+          value: units.length > 0  ? `${units[0] !=null ? units[0].floorNo : 0}` : "NA",
         }
       : {
           key: getTranslatedLabel("PT_ASSESMENT_INFO_NO_OF_FLOOR", localizationLabelsData),
