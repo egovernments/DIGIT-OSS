@@ -50,10 +50,11 @@ public class ActionValidator {
             switch(businessService)
             {
                 case businessService_TL:
-                    if (ACTION_INITIATE.equalsIgnoreCase(license.getAction())) {
-                        if (license.getTradeLicenseDetail().getApplicationDocuments() != null)
-                            errorMap.put("INVALID ACTION", "Action should be APPLY when application document are provided");
-                    }
+                //TLR Changes
+//                    if (ACTION_INITIATE.equalsIgnoreCase(license.getAction())) {
+//                        if (license.getTradeLicenseDetail().getApplicationDocuments() != null)
+//                            errorMap.put("INVALID ACTION", "Action should be APPLY when application document are provided");
+//                    }
                     if (ACTION_APPLY.equalsIgnoreCase(license.getAction())) {
                         if (license.getTradeLicenseDetail().getApplicationDocuments() == null)
                             errorMap.put("INVALID ACTION", "Action cannot be changed to APPLY. Application document are not provided");

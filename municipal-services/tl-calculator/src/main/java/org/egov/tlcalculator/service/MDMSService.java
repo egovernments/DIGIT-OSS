@@ -50,9 +50,9 @@ public class MDMSService {
         // filter to only get code field from master data
 
         final String filterCodeForUom = "$.[?(@.active==true)]";
+        final String serviceCode = "$.[?(@.service=='TL.RENEWAL')]";
 
         fyMasterDetails.add(MasterDetail.builder().name(TLCalculatorConstants.MDMS_FINANCIALYEAR).filter(filterCodeForUom).build());
-
         ModuleDetail fyModuleDtls = ModuleDetail.builder().masterDetails(fyMasterDetails)
                 .moduleName(TLCalculatorConstants.MDMS_EGF_MASTER).build();
 
@@ -61,10 +61,16 @@ public class MDMSService {
                 .filter(filterCodeForUom).build());
         ModuleDetail tlModuleDtls = ModuleDetail.builder().masterDetails(tlMasterDetails)
                 .moduleName(TLCalculatorConstants.MDMS_TRADELICENSE).build();
+                
+        List<MasterDetail> taxPeriodMasterDetails = new ArrayList<>();
+        taxPeriodMasterDetails.add(MasterDetail.builder().name(TLCalculatorConstants.MDMS_TAXPERIOD).filter(serviceCode).build());
+        ModuleDetail taxPeriodModuleDetails = ModuleDetail.builder().masterDetails(taxPeriodMasterDetails)
+                .moduleName(TLCalculatorConstants.MDMS_BILLINGSERVICE).build();        
 
         List<ModuleDetail> moduleDetails = new ArrayList<>();
         moduleDetails.add(fyModuleDtls);
         moduleDetails.add(tlModuleDtls);
+        moduleDetails.add(taxPeriodModuleDetails);
 
         MdmsCriteria mdmsCriteria = MdmsCriteria.builder().moduleDetails(moduleDetails).tenantId(tenantId)
                 .build();
@@ -83,6 +89,32 @@ public class MDMSService {
         Map<String,Long> taxPeriods = new HashMap<>();
         try {
             String jsonPath = TLCalculatorConstants.MDMS_FINACIALYEAR_PATH.replace("{}",license.getFinancialYear());
+            List<Map<String,Object>> jsonOutput =  JsonPath.read(mdmsData, jsonPath);
+            Map<String,Object> financialYearProperties = jsonOutput.get(0);
+            Object startDate = financialYearProperties.get(TLCalculatorConstants.MDMS_STARTDATE);
+            Object endDate = financialYearProperties.get(TLCalculatorConstants.MDMS_ENDDATE);
+            taxPeriods.put(TLCalculatorConstants.MDMS_STARTDATE,(Long) startDate);
+            taxPeriods.put(TLCalculatorConstants.MDMS_ENDDATE,(Long) endDate);
+
+        } catch (Exception e) {
+            log.error("Error while fetvhing MDMS data", e);
+            throw new CustomException("INVALID FINANCIALYEAR", "No data found for the financialYear: "+license.getFinancialYear());
+        }
+        return taxPeriods;
+    }
+
+
+    /**
+     * Gets the startDate and the endDate of the financialYear of Renewal Application
+     * @param requestInfo The RequestInfo of the calculationRequest
+     * @param license The tradeLicense for which calculation is done
+     * @return Map containing the startDate and endDate
+     */
+
+    public Map<String,Long> getTaxPeriodsforRenewal(RequestInfo requestInfo,TradeLicense license,Object mdmsData){
+        Map<String,Long> taxPeriods = new HashMap<>();
+        try {
+            String jsonPath = TLCalculatorConstants.MDMS_TL_RENEWAL_TAX_PERIODS.replace("{}",license.getFinancialYear());
             List<Map<String,Object>> jsonOutput =  JsonPath.read(mdmsData, jsonPath);
             Map<String,Object> financialYearProperties = jsonOutput.get(0);
             Object startDate = financialYearProperties.get(TLCalculatorConstants.MDMS_STARTDATE);
