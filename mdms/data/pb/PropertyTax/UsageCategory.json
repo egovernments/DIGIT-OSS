@@ -131,6 +131,12 @@
       "code": "NONRESIDENTIAL.COMMERCIAL.FOODJOINTS.NONACRESTAURANT",
       "active": true,
       "fromFY": "2015-16"
+    },
+    {
+      "name": "Colleges",
+      "code": "NONRESIDENTIAL.INSTITUTIONAL.EDUCATIONAL.COLLEGES",
+      "active": true,
+      "fromFY": "2015-16"
     }
   ]
 }

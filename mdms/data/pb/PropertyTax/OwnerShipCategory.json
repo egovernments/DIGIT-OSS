@@ -17,6 +17,11 @@
       "name": "Institutional - Government",
       "code": "INSTITUTIONALGOVERNMENT",
       "active": true
+    },
+    {
+      "name": "Individual - SingleOwner",
+      "code": "INDIVIDUAL.SINGLEOWNER",
+      "active": true
     }
   ]
 }
