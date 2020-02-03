@@ -426,7 +426,7 @@ export const footer = getCommonApplyFooter({
       action: "condition",
       callBack: callBackForNext
     },
-    visible: true
+    visible: false
   }
 });
 

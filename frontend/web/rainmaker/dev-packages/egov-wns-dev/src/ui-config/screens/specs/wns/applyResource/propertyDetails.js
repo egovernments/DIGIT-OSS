@@ -110,6 +110,11 @@ const propertyDetails = getCommonContainer({
     },
     { jsonPath: "WaterConnection[0].property.usageCategory" }
   ),
+  rainwaterHarvestingFacility: getLabelWithValue(
+    { labelKey: "WS_SERV_DETAIL_CONN_RAIN_WATER_HARVESTING_FAC",
+    labelName: "Rainwater Harvesting Facility"
+   },
+   { jsonPath: "WaterConnection[0].rainWaterHarvesting" })
 })
 
 

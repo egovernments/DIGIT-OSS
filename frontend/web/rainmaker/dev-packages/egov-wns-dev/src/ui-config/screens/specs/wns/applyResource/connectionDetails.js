@@ -1,21 +1,21 @@
 import { getCommonCard, getCommonSubHeader, getTextField, getSelectField, getCommonContainer } from "egov-ui-framework/ui-config/screens/specs/utils";
 
-export const getGenderRadioButton = {
-  uiFramework: "custom-containers",
-  componentPath: "RadioGroupContainer",
-  gridDefination: { xs: 12, sm: 12, md: 6 },
-  jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].gender",
-  props: {
-    label: { key: "WS_SERV_DETAIL_CONN_RAIN_WATER_HARVESTING_FAC" },
-    buttons: [
-      { labelKey:"HARVESTING_SCORE_YES", value: "Yes" },
-      { labelKey:"HARVESTING_SCORE_NO", value: "No" },
-    ],
-    jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].gender",
-    required: true
-  },
-  type: "array"
-};
+// export const getGenderRadioButton = {
+//   uiFramework: "custom-containers",
+//   componentPath: "RadioGroupContainer",
+//   gridDefination: { xs: 12, sm: 12, md: 6 },
+//   jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].gender",
+//   props: {
+//     label: { key: "WS_SERV_DETAIL_CONN_RAIN_WATER_HARVESTING_FAC" },
+//     buttons: [
+//       { labelKey:"HARVESTING_SCORE_YES", value: "Yes" },
+//       { labelKey:"HARVESTING_SCORE_NO", value: "No" },
+//     ],
+//     jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].gender",
+//     required: true
+//   },
+//   type: "array"
+// };
 
 export const getCheckboxContainer = {
   uiFramework: "custom-containers-local",
@@ -24,6 +24,7 @@ export const getCheckboxContainer = {
   gridDefination: { xs: 12, sm: 12, md: 12 },
   props: {
     label: { key: "WS_APPLY_FOR" },
+
     buttons: [
       { labelName: "Water", labelKey: "WS_APPLY_WATER", value: "WS" },
       { labelName: "Sewerage", labelKey: "WS_APPLY_SEWERAGE", value: "SW" },
@@ -43,44 +44,44 @@ export const OwnerInfoCard = getCommonCard({
 
   tradeUnitCardContainer: getCommonContainer({
     getCheckboxContainer,
-    oldConsumerNo: getTextField({
-      label: { labelKey: "WS_SEARCH_CONNNECTION_OLD_CONSUMER_LABEL" },
-      placeholder: { labelKey: "WS_SEARCH_CONNNECTION_OLD_CONSUMER_PLACEHOLDER" },
-      gridDefination: { xs: 12, sm: 6 },
-      required: false,
-      pattern: /^[a-zA-Z0-9-]*$/i,
-      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      jsonPath: "searchScreen.oldConnectionNumber",
-      props:{
-        className:"textfield-enterable-selection"
-      },
-      iconObj: {
-        iconName: "search",
-        position: "end",
-        color: "#FE7A51",
-        // onClickDefination: {
-        //   action: "condition",
-        //   callBack: (state, dispatch, fieldInfo) => {
-        //     getScrutinyDetails(state, dispatch, fieldInfo);
-        //   }
-        // }
-      },
-    }),
+    // oldConsumerNo: getTextField({
+    //   label: { labelKey: "WS_SEARCH_CONNNECTION_OLD_CONSUMER_LABEL" },
+    //   placeholder: { labelKey: "WS_SEARCH_CONNNECTION_OLD_CONSUMER_PLACEHOLDER" },
+    //   gridDefination: { xs: 12, sm: 6 },
+    //   required: false,
+    //   pattern: /^[a-zA-Z0-9-]*$/i,
+    //   errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+    //   jsonPath: "searchScreen.oldConnectionNumber",
+    //   props:{
+    //     className:"textfield-enterable-selection"
+    //   },
+    //   iconObj: {
+    //     iconName: "search",
+    //     position: "end",
+    //     color: "#FE7A51",
+    //     // onClickDefination: {
+    //     //   action: "condition",
+    //     //   callBack: (state, dispatch, fieldInfo) => {
+    //     //     getScrutinyDetails(state, dispatch, fieldInfo);
+    //     //   }
+    //     // }
+    //   },
+    // }),
 
     numberOfTaps: getTextField({
-      label: { labelKey: "WS_SERV_DETAIL_NO_OF_TAPS" },
+      label: { labelKey: "WS_CONN_DETAIL_NO_OF_TAPS" },
       placeholder: { labelKey:"WS_SERV_DETAIL_NO_OF_TAPS_PLACEHOLDER"},
       gridDefination: { xs: 12, sm: 6 },
       jsonPath: "WaterConnection[0].noOfTaps"
     }),
 
     pipeSize: getSelectField({
-      label: { labelKey: "WS_SERV_DETAIL_PIPE_SIZE" },
+      label: { labelKey: "WS_CONN_DETAIL_PIPE_SIZE" },
       placeholder: { labelKey:"WS_SERV_DETAIL_PIPE_SIZE_PLACEHOLDER"},
       gridDefination: { xs: 12, sm: 6 },
       jsonPath: "WaterConnection[0].pipeSize"
     }),
 
-    getGenderRadioButton
+    // getGenderRadioButton
   })
 });
