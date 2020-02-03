@@ -2045,8 +2045,8 @@
     {
       "category": "FEE",
       "service": "TL.RENEWAL",
-      "name": "TL Renewal Fees",
-      "code": "TL_RENEWAL_FEE",
+      "name": "TL Renewal Tax",
+      "code": "TL_RENEWAL_TAX",
       "isDebit": false,
       "isActualDemand": true,
       "order": "2",
