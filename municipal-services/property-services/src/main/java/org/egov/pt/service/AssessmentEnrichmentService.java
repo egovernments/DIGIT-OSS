@@ -164,7 +164,7 @@ public class AssessmentEnrichmentService {
 
         Boolean isTerminateState = false;
         for(State stateObj : businessService.getStates()){
-            if(stateObj.getApplicationStatus().equalsIgnoreCase(state)){
+            if(stateObj.getApplicationStatus()!=null && stateObj.getApplicationStatus().equalsIgnoreCase(state)){
                 isTerminateState = stateObj.getIsTerminateState();
                 break;
             }
