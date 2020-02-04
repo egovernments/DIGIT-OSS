@@ -201,34 +201,46 @@ class FormWizardDataEntry extends Component {
         const { generalMDMSDataById } = this.props;
         let finalYear = "";
         const demands =
-          demandPropertyResponse && demandPropertyResponse.Demands.reverse() || [];
+          demandPropertyResponse && demandPropertyResponse.Demands.sort(function(a, b){return b.taxPeriodFrom-a.taxPeriodFrom}) || [];
         let demandResponse = demands.forEach((demand, yearKey) => {
-          demand.demandDetails=demand.demandDetails && demand.demandDetails.reverse() || [];
-          return demand.demandDetails.forEach((demandData, demandKey) => {
-            let yearkeys = Object.keys(generalMDMSDataById.TaxPeriod).forEach(
-              (item, i) => {
-                if (
-                  generalMDMSDataById.TaxPeriod[item].fromDate ===
-                  demand.taxPeriodFrom
-                ) {
-                  finalYear = generalMDMSDataById.TaxPeriod[item].financialYear;
-                }
+          //add order for the taxt head and do the oerdering
+          if (demand.demandDetails) {
+            demand.demandDetails=demand.demandDetails.map((demandDetail)=>{
+              return {
+                ...demandDetail,
+                order:get(generalMDMSDataById,`TaxHeadMaster.${demandDetail.taxHeadMasterCode}.order`,-1)
               }
-            );
-            return (
-              prepareFinalObject(
-                `DemandProperties[0].propertyDetails[0].demand[${yearKey}].demand[${finalYear}][${demandKey}].PT_TAXHEAD`,
-                demandData.taxHeadMasterCode
-              ),
-              prepareFinalObject(
-                `DemandProperties[0].propertyDetails[0].demand[${yearKey}].demand[${finalYear}][${demandKey}].PT_DEMAND`,
-                `${demandData.taxAmount}`
-              ),
-              prepareFinalObject(
-                `DemandProperties[0].propertyDetails[0].demand[${yearKey}].demand[${finalYear}][${demandKey}].PT_COLLECTED`,
-                `${demandData.collectionAmount}`
-              )
-            );
+            }).sort(function(a, b){return a.order-b.order})
+          }
+          else {
+            demand.demandDetails=[]
+          }
+          return demand.demandDetails.forEach((demandData, demandKey) => {
+            if (demandData.order>-1) {
+              let yearkeys = Object.keys(generalMDMSDataById.TaxPeriod).forEach(
+                (item, i) => {
+                  if (
+                    generalMDMSDataById.TaxPeriod[item].fromDate ===
+                    demand.taxPeriodFrom
+                  ) {
+                    finalYear = generalMDMSDataById.TaxPeriod[item].financialYear;
+                  }
+                }
+              );
+                prepareFinalObject(
+                  `DemandProperties[0].propertyDetails[0].demand[${yearKey}].demand[${finalYear}][${demandData.order}].PT_TAXHEAD`,
+                  demandData.taxHeadMasterCode
+                ),
+                prepareFinalObject(
+                  `DemandProperties[0].propertyDetails[0].demand[${yearKey}].demand[${finalYear}][${demandData.order}].PT_DEMAND`,
+                  `${demandData.taxAmount}`
+                ),
+                prepareFinalObject(
+                  `DemandProperties[0].propertyDetails[0].demand[${yearKey}].demand[${finalYear}][${demandData.order}].PT_COLLECTED`,
+                  `${demandData.collectionAmount}`
+                )
+            }
+
           });
         });
         if (
