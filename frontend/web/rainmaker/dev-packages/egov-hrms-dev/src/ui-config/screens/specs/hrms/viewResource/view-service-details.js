@@ -28,7 +28,11 @@ const assignmentCard = {
             labelName: "Status",
             labelKey: "HR_STATUS_LABEL"
           },
-          { jsonPath: "Employee[0].serviceHistory[0].serviceStatus" }
+          { jsonPath: "Employee[0].serviceHistory[0].serviceStatus",
+          localePrefix: {
+            moduleName: "egov-hrms",
+            masterName: "EmployeeStatus"
+          } }
         ),
         reviewServiceFrom: getLabelWithValue(
           {

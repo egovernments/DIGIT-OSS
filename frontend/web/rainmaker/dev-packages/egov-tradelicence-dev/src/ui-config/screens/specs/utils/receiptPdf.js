@@ -405,7 +405,9 @@ const getReceiptData = (transformedData, ulbLogo) => {
                 border: borderKey,
                 style: "receipt-table-key"
               },
-              { text: transformedData.doorNo, border: borderValue },
+              { text: transformedData.doorNo, 
+                border: borderValue 
+              },
               {
                 text: getLocaleLabels(
                   "Building Name",

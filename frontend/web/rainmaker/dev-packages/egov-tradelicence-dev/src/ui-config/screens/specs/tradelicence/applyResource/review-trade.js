@@ -7,6 +7,9 @@ import {
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { changeStep } from "./footer";
+import {
+  getQueryArg
+} from "egov-ui-framework/ui-utils/commons";
 
 import { convertEpochToDate, checkValueForNA } from "../../utils";
 
@@ -241,23 +244,21 @@ export const getReviewTrade = (isEditable = true) => {
         { jsonPath: "Licenses[0].tradeName"}
       ),
       reviewFromDate: getLabelWithValue(
-        { labelName: "From Date" },
+        { labelName: "From Date",labelKey : "TL_COMMON_FROM_DATE_LABEL" },
         {
           jsonPath: "Licenses[0].validFrom",
           callBack: convertEpochToDate
         }
       ),
       reviewToDate: getLabelWithValue(
-        { labelName: "To Date" },
+        { labelName: "To Date",labelKey : "TL_COMMON_TO_DATE_LABEL" },
         {
           jsonPath: "Licenses[0].validTo",
           callBack: convertEpochToDate
         }
       ),
       reviewStructureType: getLabelWithValue(
-        { labelName: "Structure Type",
-          labelKey: "TL_NEW_TRADE_DETAILS_STRUCT_TYPE_LABEL"
-      },
+        { labelName: "Structure Type" ,labelKey : "TL_STRUCTURE_TYPE"},
         {
           jsonPath: "Licenses[0].tradeLicenseDetail.structureType",
           localePrefix: {
@@ -270,9 +271,7 @@ export const getReviewTrade = (isEditable = true) => {
         }
       ),
       reviewSubStructureType: getLabelWithValue(
-        { labelName: "Structure Sub Type",
-          labelKey: "TL_NEW_TRADE_DETAILS_STRUCT_SUB_TYPE_LABEL"
-      },
+        { labelName: "Structure Sub Type", labelKey : "TL_STRUCTURE_SUB_TYPE" },
         {
           jsonPath: "Licenses[0].tradeLicenseDetail.structureType",
           localePrefix: {
@@ -387,14 +386,20 @@ export const getReviewTrade = (isEditable = true) => {
           labelKey: "TL_NEW_TRADE_DETAILS_MOHALLA_LABEL"
         },
         {
-          jsonPath: "Licenses[0].tradeLicenseDetail.address.locality.name",
-          callBack: checkValueForNA,
-        /*localePrefix:{
-          isJsonPath:true,
-          moduleName: "Licenses[0].tradeLicenseDetail.address.city",
-          masterName: "REVENUE"
-        }*/
-      }
+      //     jsonPath: "Licenses[0].tradeLicenseDetail.address.locality.name",
+      //     callBack: checkValueForNA,
+      //   /*localePrefix:{
+      //     isJsonPath:true,
+      //     moduleName: "Licenses[0].tradeLicenseDetail.address.city",
+      //     masterName: "REVENUE"
+      //   }*/
+      // }
+          jsonPath:"Licenses[0].tradeLicenseDetail.address.locality.code",
+          localePrefix: {
+            moduleName: getQueryArg(window.location.href, "tenantId") ? getQueryArg(window.location.href, "tenantId").replace('.','_').toUpperCase():"",
+            masterName: "REVENUE"
+          }, callBack: checkValueForNA
+        }
       ),
       reviewPincode: getLabelWithValue(
         {

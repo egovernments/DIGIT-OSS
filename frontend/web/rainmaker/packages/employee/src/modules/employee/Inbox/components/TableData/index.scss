@@ -4,9 +4,11 @@
   letter-spacing: 0.58px;
   line-height: 17px;
 }
+.search-bar{
+  padding-left:10%;
+}
 
-
-@media only screen and (min-width: 768px) {
+@media only screen and (max-width: 768px) {
   .backgroundWhite{
     background-color: white;
     margin-left: 5px !important;
@@ -17,5 +19,55 @@
     background-color:rgb(31, 8, 241) !important;
     
   }
+  .whiteBackground{
+    background-color: white !important;
+    height: 36px !important;
+    
+    // width:90%!important;
+    top: 6px;
+      input{
+        // padding: 0px 0px 2px !important;
+        margin-top: 5px !important;
+        left: 30px;
+      }
+  }
+  .sort-icon{
+     top:20px;
+  }
+  .filter-icon{
+    top:10px;
+  }
+  .search-bar{
+    padding-left: 0%;
+    width:80%;
+    left: 10px;
+    padding-bottom: 10px!important;
+  }
+  .label-text{
+    line-height: 18px!important;
+  }
+  .inbox-card {
+    padding: 2px!important;
 }
+  
+}
+.whiteBackground div hr{
+  border-bottom: none !important;
+}
+@media only screen and (min-width: 800px){
+  .icon-hidden{
+      display: none;
+      background-color: white !important;
+  }
+  .whiteBackground {
+    height: 36px !important;
+    top: 26px;
+    // width:80%!important;
+    
+    input{
+      // padding: 0px 0px 2px !important;
+      margin-top: 2px !important;
+      left: 27px;
+    }}
+  }
 

@@ -2,6 +2,11 @@
     .home-footer {
      min-width: 360px !important;
     }
+
+    .ack-body, .ack-tail {
+      display: contents;
+      text-align: center;
+    }
   
    
   }

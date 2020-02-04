@@ -1,10 +1,13 @@
 import { Card } from "components";
+import { withRouter } from "react-router-dom";
 import Label from "egov-ui-kit/utils/translationNode";
-import React from "react";
 import { getTranslatedLabel } from "egov-ui-kit/utils/commons";
 import { initLocalizationLabels } from "egov-ui-kit/redux/app/utils";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import PropertyInfoCard from "../PropertyInfoCard";
+import PendingAmountDialog from "../PendingAmountDue";
+import ViewHistoryDialog from "../ViewHistory";
+import { ViewHistory, TransferOwnership } from "../ActionItems";
 
 const locale = getLocale() || "en_IN";
 const localizationLabelsData = initLocalizationLabels(locale);
@@ -246,4 +249,4 @@ const OwnerInfo = ({ properties, editIcon, generalMDMSDataById, ownershipTransfe
   );
 };
 
-export default OwnerInfo;
+export default withRouter(OwnerInfo);

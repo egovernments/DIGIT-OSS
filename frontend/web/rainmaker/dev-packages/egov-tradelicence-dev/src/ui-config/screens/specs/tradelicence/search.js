@@ -10,17 +10,17 @@ import { pendingApprovals } from "./searchResource/pendingApprovals";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 // import { progressStatus } from "./searchResource/progressStatus";
 import { searchResults } from "./searchResource/searchResults";
-import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
+import { localStorageGet,getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import find from "lodash/find";
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
 enableButton = hasButton && hasButton === "false" ? false : true;
-
+const tenant= getTenantId();
 const pageResetAndChange = (state, dispatch) => {
   dispatch(prepareFinalObject("Licenses", [{ licenseType: "PERMANENT" }]));
   dispatch(prepareFinalObject("LicensesTemp", []));
-  dispatch(setRoute("/tradelicence/apply"));
+  dispatch(setRoute(`/tradelicence/apply?tenantId=${tenant}`));
 };
 
 const header = getCommonHeader({

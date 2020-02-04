@@ -47,6 +47,11 @@ const ViewBreakupContainer = Loadable({
   loader: () => import("./ViewbreakupDialogContainer"),
   loading: () => <Loading />
 });
+const ResubmitActionContainer = Loadable({
+  loader: () => import("./ResubmitActionContainer"),
+  loading: () => <Loading />
+});
+
 
 const ULBSummaryCard = Loadable({
   loader: () => import("./ULBSummaryCard"),
@@ -65,4 +70,5 @@ export {
   ViewBreakupContainer,
   DialogContainer,
   ULBSummaryCard
+  ResubmitActionContainer
 };

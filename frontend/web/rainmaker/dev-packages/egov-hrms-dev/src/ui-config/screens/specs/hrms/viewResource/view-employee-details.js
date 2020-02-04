@@ -108,7 +108,11 @@ export const getEmployeeDetailsView = (isReview = true) => {
       reviewGender: getLabelWithValue(
         { labelName: "Gender", labelKey: "HR_GENDER_LABEL" },
         {
-          jsonPath: "Employee[0].user.gender"
+          jsonPath: "Employee[0].user.gender",
+          localePrefix: {
+            moduleName: "COMMON",
+            masterName: "GENDER"
+          },
         }
       ),
       reviewDob: getLabelWithValue(
@@ -157,19 +161,27 @@ export const getEmployeeDetailsView = (isReview = true) => {
       reviewEmpType: getLabelWithValue(
         { labelName: "Employee Type", labelKey: "HR_EMP_TYPE_LABEL" },
         {
-          jsonPath: "Employee[0].employeeType"
+          jsonPath: "Employee[0].employeeType",
+          localePrefix: {
+            moduleName: "egov-hrms",
+            masterName: "EmployeeType"
+          }
         }
       ),
       reviewStatus: getLabelWithValue(
         { labelName: "Status", labelKey: "HR_STATUS_LABEL" },
         {
-          jsonPath: "Employee[0].employeeStatus"
+          jsonPath: "Employee[0].employeeStatus",
+          localePrefix: {
+            moduleName: "egov-hrms",
+            masterName: "EmployeeStatus"
+          }
         }
       ),
       reviewRole: getLabelWithValue(
         { labelName: "Role", labelKey: "HR_ROLE_LABEL" },
         {
-          jsonPath: "hrms.reviewScreen.furnishedRolesList"
+          jsonPath: "hrms.reviewScreen.furnishedRolesList",
         }
       )
     })

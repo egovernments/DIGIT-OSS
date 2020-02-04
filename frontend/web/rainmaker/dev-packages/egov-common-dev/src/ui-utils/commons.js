@@ -14,6 +14,7 @@ import set from "lodash/set";
 import store from "ui-redux/store";
 import { getTranslatedLabel } from "../ui-config/screens/specs/utils";
 import printJS from 'print-js';
+import axios from 'axios';
 
 
 const handleDeletedCards = (jsonObject, jsonPath, key) => {
@@ -492,8 +493,8 @@ export const setApplicationNumberBox = (state, dispatch, applicationNo) => {
   }
 };
 
-const downloadReceiptFromFilestoreID=(fileStoreId,mode)=>{
-  getFileUrlFromAPI(fileStoreId).then((fileRes) => {
+export const downloadReceiptFromFilestoreID=(fileStoreId,mode)=>{
+  getFileUrlFromAPI(fileStoreId).then(async(fileRes) => {
     if (mode === 'download') {
       var win = window.open(fileRes[fileStoreId], '_blank');
       if(win){
@@ -501,7 +502,26 @@ const downloadReceiptFromFilestoreID=(fileStoreId,mode)=>{
       }
     }
     else {
-      printJS(fileRes[fileStoreId])
+     // printJS(fileRes[fileStoreId])
+      var response =await axios.get(fileRes[fileStoreId], {
+        //responseType: "blob",
+        responseType: "arraybuffer",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/pdf"
+        }
+      });
+      console.log("responseData---",response);
+      const file = new Blob([response.data], { type: "application/pdf" });
+      const fileURL = URL.createObjectURL(file);
+      var myWindow = window.open(fileURL);
+      if (myWindow != undefined) {
+        myWindow.addEventListener("load", event => {
+          myWindow.focus();
+          myWindow.print();
+        });
+      }
+
     }
   });
 }
@@ -633,4 +653,31 @@ export const download = (receiptQueryString, mode = "download") => {
   } catch (exception) {
     alert('Some Error Occured while downloading Receipt!');
   }
+}
+
+
+export const downloadBill = async (consumerCode ,tenantId) => {
+  const searchCriteria = {
+    consumerCode ,
+    tenantId
+  }
+  const FETCHBILL={
+    GET:{
+      URL:"egov-searcher/bill-genie/billswithaddranduser/_get",
+      ACTION: "_get",
+    }
+  }
+  const DOWNLOADRECEIPT = {
+      GET: {
+          URL: "/pdf-service/v1/_create",
+          ACTION: "_get",
+      },
+  };
+  const billResponse = await httpRequest("post", FETCHBILL.GET.URL, FETCHBILL.GET.ACTION, [],{searchCriteria});
+  const queryStr = [
+            { key: "key", value: "consolidatedbill" },
+            { key: "tenantId", value: "pb" }
+        ]
+  const pfResponse = await httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Bill: billResponse.Bills }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
+  downloadReceiptFromFilestoreID(pfResponse.filestoreIds[0],'download');
 }

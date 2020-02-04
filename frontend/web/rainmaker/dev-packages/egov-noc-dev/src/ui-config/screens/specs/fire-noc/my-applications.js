@@ -31,28 +31,31 @@ const screenConfig = {
           componentPath: "SingleApplication",
           visible: true,
           props: {
-            applicationName: {
-              label: "NOC_COMMON_TABLE_COL_BUILDING_NAME_LABEL",
-              jsonPath: "fireNOCDetails.buildings[0].name"
-            },
-            applicationNumber: {
-              label: "NOC_COMMON_TABLE_COL_APP_NO_LABEL",
-              jsonPath: "fireNOCDetails.applicationNumber"
-            },
-            ownerName: {
-              label: "NOC_COMMON_TABLE_COL_OWN_NAME_LABEL",
-              jsonPath: "fireNOCDetails.applicantDetails.owners[0].name"
-            },
-            moduleNumber: {
-              label: "NOC_COMMON_TABLE_COL_NOC_NO_LABEL",
-              jsonPath: "fireNOCNumber"
-            },
-            status: {
-              label: "NOC_COMMON_TABLE_COL_STATUS_LABEL",
-              jsonPath: "fireNOCDetails.status"
-            },
+            contents: [
+              {
+                label: "NOC_COMMON_TABLE_COL_BUILDING_NAME_LABEL",
+                jsonPath: "fireNOCDetails.buildings[0].name"
+              },
+              {
+                label: "NOC_COMMON_TABLE_COL_APP_NO_LABEL",
+                jsonPath: "fireNOCDetails.applicationNumber"
+              },
+              {
+                label: "NOC_COMMON_TABLE_COL_OWN_NAME_LABEL",
+                jsonPath: "fireNOCDetails.applicantDetails.owners[0].name"
+              },
+              {
+                label: "NOC_COMMON_TABLE_COL_NOC_NO_LABEL",
+                jsonPath: "fireNOCNumber"
+              },
+              {
+                label: "NOC_COMMON_TABLE_COL_STATUS_LABEL",
+                jsonPath: "fireNOCDetails.status",
+                prefix: "WF_FIRENOC_"
+              }
+            ],
             moduleName: "FIRENOC",
-            statusPrefix: "WF_FIRENOC_"
+            homeURL: "/fire-noc/home"
           }
         }
       }

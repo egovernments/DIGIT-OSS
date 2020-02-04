@@ -236,3 +236,19 @@ span[class^="MuiFormLabel-asterisk"] {
         border-radius: inherit;
     }
 }
+@media (max-width: 768px) {
+    .app-container-iframe {
+        border-width: 0;
+        width: 100vw;
+        height: 100vh;
+        margin: 32px 0 0 0;
+    }
+ }
+ @media (max-width: 375px) {
+ .app-container-iframe {
+        border-width: 0;
+        width: 100vw;
+        height: 100vh;
+        margin: 32px 0 0 0;
+    }
+ }

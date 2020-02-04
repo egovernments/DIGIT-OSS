@@ -5,10 +5,8 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import get from "lodash/get";
 import set from "lodash/set";
 import { httpRequest } from "../../../../ui-utils";
-import { pendingApprovals } from "./searchResource/pendingApprovals";
 import { searchForm } from "./searchResource/searchForm";
 import { searchResults } from "./searchResource/searchResults";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
@@ -16,9 +14,7 @@ import { showCityPicker, getAdminRole, createEmployee } from "../utils";
 import { cityPicker } from "./createResource/cityPicker";
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
-//const hasApproval = getQueryArg(window.location.href, "hasApproval");
 let enableButton = true;
-//enableInbox = hasApproval && hasApproval === "false" ? false : true;
 enableButton = hasButton && hasButton === "false" ? false : true;
 
 const header = getCommonHeader({
@@ -195,10 +191,8 @@ const employeeSearchAndResult = {
             }
           }
         },
-        pendingApprovals,
         searchForm,
         breakAfterSearch: getBreak(),
-        // progressStatus,
         searchResults
       }
     },
@@ -214,8 +208,6 @@ const employeeSearchAndResult = {
           componentPath: "DialogContent",
           props: {
             style: {
-              //     minHeight: "180px",
-              //     minWidth: "365px",
               overflow: "visible"
             }
           },

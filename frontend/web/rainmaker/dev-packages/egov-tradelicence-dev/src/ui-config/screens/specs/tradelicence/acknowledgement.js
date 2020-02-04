@@ -18,6 +18,7 @@ import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { generatePdfAndDownload } from "./acknowledgementResource/applicationSuccessFooter";
 import generateReceipt from "../utils/receiptPdf";
 import { beforeInitFn } from "../../specs/tradelicence/search-preview";
+import {downloadAcknowledgementForm} from "../utils";
 
 const abc = (state,
   dispatch,
@@ -46,6 +47,7 @@ const abc = (state,
             onClick: {
               action: "condition",
               callBack: () => {
+
                 generatePdfAndDownload(
                   state,
                   dispatch,
@@ -54,12 +56,16 @@ const abc = (state,
                   tenant
                 );
 
+
+                // const { Licenses } = state.screenConfiguration.preparedFinalObject;
+                //     downloadAcknowledgementForm(Licenses);
+
               }
             },
           },
           div2: getLabel({
             labelName: "DOWNLOAD CONFIRMATION FORM",
-            labelKey: "NOC_APPLICATION_BUTTON_DOWN_CONF"
+            labelKey: "TL_APPLICATION_BUTTON_DOWN_CONF"
           })
 
         },
@@ -73,6 +79,8 @@ const abc = (state,
               applicationNumber,
               tenant
             );
+            // const { Licenses } = state.screenConfiguration.preparedFinalObject;
+            // downloadAcknowledgementForm(Licenses);
           }
         },
       },
@@ -102,13 +110,15 @@ const abc = (state,
                 applicationNumber,
                 tenant
               );
+              // const { Licenses } = state.screenConfiguration.preparedFinalObject;
+              //         downloadAcknowledgementForm(Licenses,'print');
             }
           },
 
           },
           div2: getLabel({
             labelName: "PRINT CONFIRMATION FORM",
-            labelKey: "NOC_APPLICATION_BUTTON_PRINT_CONF"
+            labelKey: "TL_APPLICATION_BUTTON_PRINT_CONF"
           })
 
         },
@@ -122,6 +132,8 @@ const abc = (state,
               applicationNumber,
               tenant
             );
+            // const { Licenses } = state.screenConfiguration.preparedFinalObject;
+            //         downloadAcknowledgementForm(Licenses,'print');
           }
         },
       }
@@ -206,19 +218,15 @@ const getAcknowledgementCard = (
                 onClick: {
                   action: "condition",
                   callBack: () => {
-                    generatePdfAndDownload(
-                      state,
-                      dispatch,
-                      "download",
-                      applicationNumber,
-                      tenant
-                    );
+
+                    const { Licenses } = state.screenConfiguration.preparedFinalObject;
+                     downloadAcknowledgementForm(Licenses);
                   }
                 },
               },
               div2: getLabel({
                 labelName: "DOWNLOAD CONFIRMATION FORM",
-                labelKey: "NOC_APPLICATION_BUTTON_DOWN_CONF"
+                labelKey: "TL_APPLICATION_BUTTON_DOWN_CONF"
               })
 
             },
@@ -233,6 +241,9 @@ const getAcknowledgementCard = (
                 //   tenant
                 // );
                 generateReceipt(state, dispatch, "ack_download");
+
+                // const { Licenses } = state.screenConfiguration.preparedFinalObject;
+                // downloadAcknowledgementForm(Licenses);
               }
             },
           },
@@ -295,12 +306,57 @@ const getAcknowledgementCard = (
           }
         },
       },
-    
-  
+
+
       iframeForPdf: {
         uiFramework: "custom-atoms",
         componentPath: "Div"
       },
+      applicationSuccessFooter: applicationSuccessFooter(
+        state,
+        dispatch,
+        applicationNumber,
+        tenant
+      )
+    };
+  } else if (purpose === "resubmit" && status === "success") {
+    return {
+      header: getCommonHeader({
+        labelName: `Application for New Trade License (${financialYearText})`,
+        labelKey: "TL_COMMON_APPLICATION_NEW_LICENSE",
+        dynamicArray: [financialYearText]
+      }),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        props: {
+          // style: {
+          //   position: "absolute",
+          //   width: "95%"
+          // }
+        },
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "Application Submitted Successfully",
+              labelKey: "TL_APPLICATION_RESUBMIT_SUCCESS_MESSAGE_MAIN"
+            },
+            body: {
+              labelName:
+                "A notification regarding Application Submission has been sent to trade owner at registered Mobile No.",
+              labelKey: "TL_APPLICATION_RESUBMIT_SUCCESS_MESSAGE_SUB"
+            },
+            tailText: {
+              labelName: "Application No.",
+              labelKey: "TL_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+            },
+            number: applicationNumber
+          })
+        }
+      },
+
       applicationSuccessFooter: applicationSuccessFooter(
         state,
         dispatch,
@@ -446,7 +502,51 @@ const getAcknowledgementCard = (
       },
       approvalSuccessFooter
     };
-  } else if (purpose === "application" && status === "rejected") {
+  }else if (purpose === "sendbacktocitizen" && status === "success") {
+    loadReceiptGenerationData(applicationNumber, tenant);
+    return {
+      header: getCommonContainer({
+        header: getCommonHeader({
+          labelName: `Trade License Application ${financialYearText}`,
+          labelKey: "TL_TRADE_APPLICATION",
+          dynamicArray: [financialYearText]
+        }),
+        applicationNumber: {
+          uiFramework: "custom-atoms-local",
+          moduleName: "egov-tradelicence",
+          componentPath: "ApplicationNoContainer",
+          props: {
+            number: applicationNumber
+          }
+        }
+      }),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "Application is sent back to Citizen Successfully",
+              labelKey: "TL_SENDBACK_TOCITIZEN_CHECKLIST_MESSAGE_HEAD"
+            },
+            // body: {
+            //   labelName:
+            //     "A notification regarding above application status has been sent to trade owner at registered Mobile No.",
+            //   labelKey: "TL_SENDBACK_CHECKLIST_MESSAGE_SUB"
+            // },
+            tailText: {
+              labelName: "Trade License No.",
+              labelKey: "TL_HOME_SEARCH_RESULTS_TL_NO_LABEL"
+            },
+            number: secondNumber
+          })
+        }
+      },
+      approvalSuccessFooter
+    };
+  }  else if (purpose === "application" && status === "rejected") {
     return {
       header: getCommonContainer({
         header: getCommonHeader({

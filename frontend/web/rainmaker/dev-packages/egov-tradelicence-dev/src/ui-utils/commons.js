@@ -29,8 +29,11 @@ import {
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import {
   setBusinessServiceDataToLocalStorage,
-  getMultiUnits
+  getMultiUnits,
+  acceptedFiles, 
 } from "egov-ui-framework/ui-utils/commons";
+import { uploadFile } from "egov-ui-framework/ui-utils/api";
+import commonConfig from "config/common.js";
 
 export const updateTradeDetails = async requestBody => {
   try {
@@ -361,7 +364,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     const tenantId = ifUserRoleExists("CITIZEN") ? cityId : getTenantId();
     const BSqueryObject = [
       { key: "tenantId", value: tenantId },
-      { key: "businessService", value: "newTL" }
+      { key: "businessServices", value: "NewTL" }
     ];
     if (process.env.REACT_APP_NAME === "Citizen") {
       let currentFinancialYr = getCurrentFinancialYear();
@@ -570,5 +573,50 @@ export const findItemInArrayOfObject = (arr, conditionCheckerFn) => {
     if (conditionCheckerFn(arr[i])) {
       return arr[i];
     }
+  }
+};
+
+
+export const handleFileUpload = (event, handleDocument, props) => {
+  const S3_BUCKET = {
+    endPoint: "filestore/v1/files"
+  };
+  let uploadDocument = true;
+  const { maxFileSize, formatProps ,  moduleName } = props;
+  const input = event.target;
+  if (input.files && input.files.length > 0) {
+    const files = input.files;
+    Object.keys(files).forEach(async (key, index) => {
+      const file = files[key];
+      const fileValid = isFileValid(file, acceptedFiles(formatProps.accept));
+      const isSizeValid = getFileSize(file) <= maxFileSize;
+      if (!fileValid) {
+        alert(`Only image or pdf files can be uploaded`);
+        uploadDocument = false;
+      }
+      if (!isSizeValid) {
+        alert(`Maximum file size can be ${Math.round(maxFileSize / 1000)} MB`);
+        uploadDocument = false;
+      }
+      if (uploadDocument) {
+        if (file.type.match(/^image\//)) {
+          const fileStoreId = await uploadFile(
+            S3_BUCKET.endPoint,
+            moduleName,
+            file,
+            commonConfig.tenantId
+          );
+          handleDocument(file, fileStoreId);
+        } else {
+          const fileStoreId = await uploadFile(
+            S3_BUCKET.endPoint,
+            moduleName,
+            file,
+            commonConfig.tenantId
+          );
+          handleDocument(file, fileStoreId);
+        }
+      }
+    });
   }
 };

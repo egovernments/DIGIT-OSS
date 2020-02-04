@@ -85,6 +85,7 @@ class ActionDialog extends React.Component {
   };
 
   render() {
+        
     let {
       open,
       onClose,
@@ -106,16 +107,24 @@ class ActionDialog extends React.Component {
     if (window.innerWidth <= 768) {
       // fullscreen = true;
     }
-    dataPath =
-      dataPath === "FireNOCs"
-        ? `${dataPath}[0].fireNOCDetails`
-        : `${dataPath}[0]`;
+    if (dataPath === "FireNOCs") {
+      dataPath = `${dataPath}[0].fireNOCDetails`
+    } else if (dataPath === "BPA") {
+      dataPath = `${dataPath}`;
+    } else {
+      dataPath = `${dataPath}[0]`;
+    }
+if(buttonLabel=="APPLY"){
+  open=!open;
+  onButtonClick(buttonLabel, isDocRequired);
+}
     return (
       <Dialog
         fullScreen={fullscreen}
         open={open}
         onClose={onClose}
         maxWidth={false}
+        style={{zIndex:2000}}
       >
         <DialogContent
           children={
@@ -174,10 +183,10 @@ class ActionDialog extends React.Component {
                         onChange={e =>
                           handleFieldChange(
                             `${dataPath}.assignee`,
-                            e.target.value
+                            [e.target.value]
                           )
                         }
-                        jsonPath={`${dataPath}.assignee`}
+                        jsonPath={`${dataPath}.assignee[0]`}
                       />
                     </Grid>
                   )}
@@ -234,19 +243,19 @@ class ActionDialog extends React.Component {
                       inputProps={{
                         accept: "image/*, .pdf, .png, .jpeg"
                       }}
-                      buttonLabel={{ labelName: "UPLOAD FILES" }}
+                      buttonLabel={{ labelName: "UPLOAD FILES",labelKey : "TL_UPLOAD_FILES_BUTTON" }}
                       jsonPath={`${dataPath}.wfDocuments`}
                       maxFileSize={5000}
                     />
-                    <Grid sm={12} style={{ textAlign: "right" }}>
+                    <Grid sm={12} style={{ textAlign: "right" }} className="bottom-button-container">
                       <Button
                         variant={"contained"}
                         color={"primary"}
                         style={{
                           minWidth: "200px",
-                          height: "48px",
-                          marginRight: "45px"
+                          height: "48px"
                         }}
+                        className="bottom-button"
                         onClick={() =>
                           onButtonClick(buttonLabel, isDocRequired)
                         }

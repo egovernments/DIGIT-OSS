@@ -1,0 +1,39 @@
+@media only screen and (max-width: 768px){
+.flex{
+    display: flex;
+   
+}
+.inbox-service-list{
+  margin:16px 16px 0px 16px!important;
+}
+.rainmaker-topHeader{
+    margin-top: 15px !important;
+    padding-top: 20px !important;
+}
+.quick-action-button{
+    display: none;
+}
+.landingPageHeader .label-text {
+     padding-top: 5px  !important;
+    
+  }
+  .landingPageUser .label-text {
+    color: rgba(0, 0, 0, 0.8700000047683716);
+    font-size: 24px !important;
+    padding-top: 5px  !important;
+    padding-left: 8px  !important;
+    padding-bottom: 5px;
+  }
+}
+
+.landingPageHeader .label-text {
+    color: rgba(0, 0, 0, 0.8700000047683716);
+    font-size: 24px !important;
+    padding-top: 20px;
+    
+  }
+
+  .inbox-service-list{
+    margin: 16px 5px 0px 11px;
+  }
+

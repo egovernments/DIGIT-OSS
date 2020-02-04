@@ -24,6 +24,7 @@ import {
   localStorageGet,
   getLocale
 } from "egov-ui-kit/utils/localStorageUtils";
+import { getDateFromEpoch } from "egov-ui-kit/utils/commons";
 import "./index.css";
 
 const PropertySearchFormHOC = formHoc({
@@ -102,6 +103,8 @@ class SearchProperty extends Component {
       }
       if (houseNumber && houseNumber.value) {
         queryParams.push({ key: "doorNo", value: houseNumber.value });
+      if (applicationNumber.value) {
+        queryParams.push({ key: "applicationNumber", value: applicationNumber.value });
       }
       this.setState({
         searchResult: tableData
@@ -147,59 +150,28 @@ class SearchProperty extends Component {
       let {
         propertyId,
         status,
-        oldPropertyId,
-        address,
+        applicationNo,
+        applicationType,
+        date,
         propertyDetails,
         tenantId
       } = property;
-      const { doorNo, buildingName, street, locality } = address;
-      let displayAddress = doorNo
-        ? `${doorNo ? doorNo + "," : ""}` +
-        `${buildingName ? buildingName + "," : ""}` +
-        `${street ? street + "," : ""}`
-        : `${locality.name ? locality.name : ""}`;
+      if(!applicationNo) applicationNo = property.acknowldgementNumber;
+      if(!date) date = getDateFromEpoch(property.auditDetails.createdTime);
+      applicationType = history.location.pathname.includes('property-tax') ? 'PT' : applicationType;
       const latestAssessment = getLatestPropertyDetails(propertyDetails);
       let name = latestAssessment.owners[0].name;
-      const guardianName = latestAssessment.owners[0].fatherOrHusbandName;
-      let assessmentNo = latestAssessment.assessmentNumber;
-      const uuid = get(latestAssessment, "citizenInfo.uuid");
-      let button = (
-        <a
-          style={{
-            height: 20,
-            lineHeight: "auto",
-            minWidth: "inherit",
-            cursor: "pointer",
-            textDecoration: "underline",
-            fontWeight: '400',
-            fontSize: "14px",
-            color: 'rgba(0, 0, 0, 0.87)',
-            lineHeight: '30px'
-          }}
-          onClick={
-            userType === "CITIZEN"
-              ? e => {
-                history.push(
-                  `/property-tax/my-properties/property/${propertyId}/${tenantId}`
-                );
-              }
-              : e => {
-                history.push(
-                  `/property-tax/property/${propertyId}/${tenantId}`
-                );
-              }
-          }
-        >
-          {propertyId}
-        </a>
-      );
+      // const guardianName = latestAssessment.owners[0].fatherOrHusbandName;
+      // let assessmentNo = latestAssessment.assessmentNumber;
+      // const uuid = get(latestAssessment, "citizenInfo.uuid");
+
       let item = {
-        index: index + 1,
-        propertyId: button,
+        // applicationNo: this.getLink(userType, history, applicationNo, tenantId),
+        applicationNo: <a>{applicationNo}</a>,
+        propertyId: this.getLink(userType, history, propertyId, tenantId),
+        applicationType: applicationType,
         name: name,
-        guardianName: guardianName,
-        oldPropertyId: oldPropertyId,
-        address: displayAddress,
+        date: date,
         status: status
       };
       tableData.push(item);

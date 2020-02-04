@@ -1,0 +1,26 @@
+@media only screen and (max-width: 551px) {
+  .apply-wizard-footer {
+    background-color: #FFFFFF;
+    -webkit-box-shadow: 0 -2px 4px 0 rgba(0, 0, 0, 0.24);
+    box-shadow: 0 -2px 4px 0 rgba(0, 0, 0, 0.24);
+    /* padding: 8px; */
+    position: fixed !important;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+    text-align: right;
+    display: flex;
+    padding: initial;
+    overflow: auto;
+  }
+  .apply-wizard-footer button {
+    width: 100% !important;
+    margin: initial;
+    border: none;
+    margin: 0 !important;
+    border-radius: none !important;
+  }
+}
+.tl-trade-type div {
+  color: rgba(0, 0, 0, 0.87);
+}

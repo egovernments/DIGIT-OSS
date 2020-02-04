@@ -3,6 +3,8 @@ import {
   getTextField,
   getCommonSubHeader
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+
+import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons"
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import "./index.css";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
@@ -26,8 +28,9 @@ import {
 import commonConfig from "config/common.js";
 import {
   getLocaleLabels,
-  getTransformedLocalStorgaeLabels
+  getTransformedLocalStorgaeLabels, getFileUrlFromAPI
 } from "egov-ui-framework/ui-utils/commons";
+import axios from 'axios';
 
 
 export const getCommonApplyFooter = children => {
@@ -105,7 +108,7 @@ export const getUploadFilesMultiple = jsonPath => {
       inputProps: {
         accept: "image/*, .pdf, .png, .jpeg"
       },
-      buttonLabel: "UPLOAD FILES",
+      buttonLabel: {labelName: "UPLOAD FILES",labelKey : "TL_UPLOAD_FILES_BUTTON"},
       maxFileSize: 5000,
       moduleName: "TL"
     }
@@ -435,6 +438,8 @@ export const showHideAdhocPopup = (state, dispatch) => {
 };
 
 export const getButtonVisibility = (status, button) => {
+  if(status==="CITIZENACTIONREQUIRED" && button ==="RESUBMIT")
+  return true;
   if (status === "pending_payment" && button === "PROCEED TO PAYMENT")
     return true;
   if (status === "pending_approval" && button === "APPROVE") return true;
@@ -661,8 +666,9 @@ export const getMdmsData = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      "egov-mdms-service/v1/_get",
+      "egov-mdms-service/v1/_search",
       "",
+      [],
       queryObject
     );
     return response;
@@ -944,13 +950,78 @@ export const getEmployeeDataFromUuid = async queryObject => {
 const getStatementForDocType = docType => {
   switch (docType) {
     case "OWNERIDPROOF":
-      return "Allowed documents are Aadhar Card / Voter ID Card / Driving License";
+      return "TL_OWNERIDPROOF_NOTE";
     case "OWNERSHIPPROOF":
-      return "Allowed documents are Rent Deed / Lease Doc / Property Registry / General or Special Power of Attorney";
+      return "TL_OWNERSHIPPROOF_NOTE";
+    case "OWNERPHOTO":
+      return "TL_OWNERPHOTO_NOTE";
     default:
       return "";
   }
 };
+
+
+export const downloadAcknowledgementForm = (Licenses,mode="download") => {
+  const queryStr = [
+    { key: "key", value: "tlapplication" },
+    { key: "tenantId", value: "pb" }
+  ]
+  const DOWNLOADRECEIPT = {
+    GET: {
+      URL: "/pdf-service/v1/_create",
+      ACTION: "_get",
+    },
+  };
+  try {
+    httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Licenses }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+      .then(res => {
+        res.filestoreIds[0]
+        if (res && res.filestoreIds && res.filestoreIds.length > 0) {
+          res.filestoreIds.map(fileStoreId => {
+            downloadReceiptFromFilestoreID(fileStoreId,mode)
+          })
+        } else {
+          console.log("Error In Acknowledgement form Download");
+        }
+      });
+  } catch (exception) {
+    alert('Some Error Occured while downloading Acknowledgement form!');
+  }
+}
+
+export const downloadCertificateForm = (Licenses,mode='download') => {
+  const queryStr = [
+    { key: "key", value: "tlcertificate" },
+    { key: "tenantId", value: "pb" }
+  ]
+  const DOWNLOADRECEIPT = {
+    GET: {
+      URL: "/pdf-service/v1/_create",
+      ACTION: "_get",
+    },
+  };
+  try {
+    httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Licenses }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+      .then(res => {
+        res.filestoreIds[0]
+        if (res && res.filestoreIds && res.filestoreIds.length > 0) {
+          res.filestoreIds.map(fileStoreId => {
+            downloadReceiptFromFilestoreID(fileStoreId,mode)
+          })
+        } else {
+          console.log("Error In Acknowledgement form Download");
+        }
+      });
+  } catch (exception) {
+    alert('Some Error Occured while downloading Acknowledgement form!');
+  }
+}
+
+
+
+
+
+
 
 export const prepareDocumentTypeObj = documents => {
   let documentsArr =
@@ -994,7 +1065,7 @@ const getToolTipInfo = (taxHead, LicenseData) => {
 };
 
 const getEstimateData = (Bill, getFromReceipt, LicenseData) => {
-  if (Bill ) {
+  if (Bill) {
     const extraData = ["TL_COMMON_REBATE", "TL_COMMON_PEN"].map(item => {
       return {
         name: {
@@ -1165,19 +1236,19 @@ const getBillingSlabData = async (
 
 const isApplicationPaid = currentStatus => {
   let isPAID = false;
-
+if(currentStatus==="CITIZENACTIONREQUIRED"){
+  return isPAID;
+}
   if (!isEmpty(JSON.parse(localStorageGet("businessServiceData")))) {
-    const buisnessSeviceStates = JSON.parse(
-      localStorageGet("businessServiceData")
-    )[0].states;
-    for (var i = 0; i < buisnessSeviceStates.length; i++) {
-      if (buisnessSeviceStates[i].state === currentStatus) {
+    const tlBusinessService = JSON.parse(localStorageGet("businessServiceData")).filter(item => item.businessService === "NewTL")
+    const states = tlBusinessService[0].states;
+    for (var i = 0; i < states.length; i++) {
+      if (states[i].state === currentStatus) {
         break;
       }
       if (
-        buisnessSeviceStates[i].actions &&
-        buisnessSeviceStates[i].actions.filter(item => item.action === "PAY")
-          .length > 0
+        states[i].actions &&
+        states[i].actions.filter(item => item.action === "PAY").length > 0
       ) {
         isPAID = true;
         break;
@@ -1227,35 +1298,36 @@ export const createEstimateData = async (
   ];
   const currentStatus = LicenseData.status;
   const isPAID = isApplicationPaid(currentStatus);
-  // const payload = getFromReceipt
-  //   ? await getReceipt(queryObj.filter(item => item.key !== "businessService"))
-  //   : await getBill(queryObj);
-  // const estimateData = payload
-  //   ? getFromReceipt
-  //     ? getEstimateData(payload.Receipt[0].Bill, getFromReceipt, LicenseData)
-  //     : payload.billResponse &&
-  //       getEstimateData(payload.billResponse.Bill, false, LicenseData)
-  //   : [];
-const fetchBillResponse=await getBill(getBillQueryObj);
+  const fetchBillResponse = await getBill(getBillQueryObj);
   const payload = isPAID
     ? await getReceipt(queryObj.filter(item => item.key !== "businessService"))
-    : fetchBillResponse&&fetchBillResponse.Bill&&fetchBillResponse.Bill[0];
+    : fetchBillResponse && fetchBillResponse.Bill && fetchBillResponse.Bill[0];
   let estimateData = payload
     ? isPAID
-      ?payload&&payload.Payments&&payload.Payments.length>0&& getEstimateData(payload.Payments[0].paymentDetails[0].bill, isPAID, LicenseData)
-      : payload&&
-        getEstimateData(payload, false, LicenseData)
+      ? payload &&
+      payload.Payments &&
+      payload.Payments.length > 0 &&
+      getEstimateData(
+        payload.Payments[0].paymentDetails[0].bill,
+        isPAID,
+        LicenseData
+      )
+      : payload && getEstimateData(payload, false, LicenseData)
     : [];
-    estimateData=estimateData||[];
+  estimateData = estimateData || [];
   dispatch(prepareFinalObject(jsonPath, estimateData));
   const accessories = get(LicenseData, "tradeLicenseDetail.accessories", []);
-  if(payload){
-    const getBillResponse=await calculateBill(getBillQueryObj);
+  if (payload) {
+    const getBillResponse = await calculateBill(getBillQueryObj);
     getBillResponse &&
-    getBillResponse.billingSlabIds &&
-      getBillingSlabData(dispatch, getBillResponse.billingSlabIds, tenantId, accessories);
+      getBillResponse.billingSlabIds &&
+      getBillingSlabData(
+        dispatch,
+        getBillResponse.billingSlabIds,
+        tenantId,
+        accessories
+      );
   }
-
 
   /** Waiting for estimate to load while downloading confirmation form */
   var event = new CustomEvent("estimateLoaded", { detail: true });
@@ -2272,14 +2344,16 @@ export const getTextToLocalMapping = label => {
         "TL_COMMON_TABLE_COL_STATUS",
         localisationLabels
       );
-
     case "INITIATED":
       return getLocaleLabels("Initiated,", "TL_INITIATED", localisationLabels);
     case "APPLIED":
       return getLocaleLabels("Applied", "TL_APPLIED", localisationLabels);
     case "PAID":
-      return getLocaleLabels("Paid", "WF_NEWTL_PENDINGAPPROVAL", localisationLabels);
-
+      return getLocaleLabels(
+        "Paid",
+        "WF_NEWTL_PENDINGAPPROVAL",
+        localisationLabels
+      );
     case "APPROVED":
       return getLocaleLabels("Approved", "TL_APPROVED", localisationLabels);
     case "REJECTED":

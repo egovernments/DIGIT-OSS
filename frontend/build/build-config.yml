@@ -1,12 +1,12 @@
 #
 # config:
 # -   name: < Name of the job, foo/bar would create job named bar inside folder foo >
-#     build: 
+#     build:
 #     - work-dir: < Working directory of the app to be built >
 #       dockerfile: < Path to the dockerfile, optional, assumes dockerfile in working directory if not provided >
 #       image-name: < Docker image name  >
 # -
-# - 
+# -
 
 config:
 -   name: builds/frontend/citizen
@@ -31,11 +31,9 @@ config:
     - work-dir: web/dss-dashboard/
       dockerfile: web/dss-dashboard/docker/Dockerfile
       image-name: dss-dashboard
-      
+
 -   name: builds/frontend/common-screen
     build:
     - work-dir: web/egov-common-screen/
       dockerfile: web/egov-common-screen/docker/Dockerfile
       image-name: common-screen
-      
-      

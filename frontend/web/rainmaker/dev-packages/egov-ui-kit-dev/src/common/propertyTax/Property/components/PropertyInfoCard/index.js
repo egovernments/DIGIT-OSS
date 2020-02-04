@@ -13,21 +13,8 @@ const locale = getLocale() || "en_IN";
 const localizationLabelsData = initLocalizationLabels(locale);
 
 class PropertyInfoCard extends Component {
-  state = {
-    amount: "4500.00",
-    pendingAmountDue: false,
-    viewHistory: false
-  }
-  openDialog = (dialogName) => {
-    this.setState({[dialogName]: true});
-  }
-
-  closeDialogue = (dialogName)=>{
-    this.setState({[dialogName]: false});
-  }
-
-  render(){
-    const { editIcon, header, backgroundColor = 'rgb(242, 242, 242)', items = [], subSection = [] ,hideSubsectionLabel=false, ownershipTransfer=false, viewHistory=false } = this.props;
+  render() {
+    const { ownerInfo, header, editIcon, backgroundColor = "rgb(242, 242, 242)", items = [], subSection = [], hideSubsectionLabel = false } = this.props;
 
     return (
       <div>
@@ -88,18 +75,13 @@ class PropertyInfoCard extends Component {
                       return <PropertyInfoCard backgroundColor='white' items={unit} header={subUnitHeader}></PropertyInfoCard>
                     })}
                   </div>
-                })}
+                )}
               </div>
             }
-          </div>
-        }
-      />}
-      {this.state.pendingAmountDue && (<PendingAmountDialog open={this.state.pendingAmountDue} amount={this.state.amount} closeDialogue={()=>this.closeDialogue("pendingAmountDue")}></PendingAmountDialog>)}
-
-      {this.state.viewHistory && (<ViewHistoryDialog open={this.state.viewHistory} amount={this.state.amount} closeDialogue={()=>this.closeDialogue("viewHistory")}></ViewHistoryDialog>)}
+          />
+        )}
       </div>
     );
-
   }
 }
 

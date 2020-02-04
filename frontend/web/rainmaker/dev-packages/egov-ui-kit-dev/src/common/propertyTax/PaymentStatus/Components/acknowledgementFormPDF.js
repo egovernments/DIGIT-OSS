@@ -282,7 +282,7 @@ const generateAcknowledgementForm = (role, details, generalMDMSDataById, receipt
           {
             style: "pt-reciept-citizen-table",
             table: {
-                widths: ['12.5%','12.5%','25%','25%','12.5%','12.5%'],
+                widths: ['12.5%','12.5%','27%','18%','17.5%','12.5%'],
               body: [
                 [
                   { text: getLocaleLabels("Existing Property ID:","PT_ACK_LOCALIZATION_EXISTING_PROPERTY_ID"), border: borderKey, style: "receipt-table-key" },
@@ -374,7 +374,7 @@ const generateAcknowledgementForm = (role, details, generalMDMSDataById, receipt
             color: "#484848",
           },
           "pt-reciept-citizen-table": {
-            fontSize: 12,
+            fontSize: 10,
             color: "#484848",
           },
           "receipt-assess-table": {

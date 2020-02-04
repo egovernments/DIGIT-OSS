@@ -359,21 +359,36 @@ export const loadMdmsData = async tenantid => {
   );
   let localizationLabels = transformById(localStorageLabels, "code");
   let data = {};
-  let queryObject = [
-    {
-      key: "tenantId",
-      value: `${tenantid}`
-    },
-    {
-      key: "moduleName",
-      value: "tenant"
-    },
-    {
-      key: "masterName",
-      value: "tenants"
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: tenantid,
+      moduleDetails: [
+        {
+          moduleName: "tenant",
+          masterDetails: [
+            {
+              name: "tenants"
+            }
+          ]
+        }
+      ]
     }
-  ];
-  let response = await getMdmsData(queryObject);
+  };
+  // let queryObject = [
+  //   {
+  //     key: "tenantId",
+  //     value: `${tenantid}`
+  //   },
+  //   {
+  //     key: "moduleName",
+  //     value: "tenant"
+  //   },
+  //   {
+  //     key: "masterName",
+  //     value: "tenants"
+  //   }
+  // ];
+  let response = await getMdmsData(mdmsBody);
 
   if (
     response &&

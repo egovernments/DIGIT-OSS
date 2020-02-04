@@ -32,13 +32,19 @@ export const searchResults = {
           )
         }
       },
-
       {
         name: "tenantId",
         options: {
           display: false
         }
-      }
+      },
+      {
+        name:"status1",
+        options: {
+          display: false
+        }
+      },
+
     ],
     title: getTextToLocalMapping(
       "Search Results for Trade License Applications"
@@ -73,11 +79,13 @@ export const searchResults = {
 };
 
 const onRowClick = rowData => {
-  switch (rowData[5]) {
+  //console.log("rowData--",rowData);
+  switch (rowData[7]) {
     case "INITIATED":
       window.location.href = `apply?applicationNumber=${rowData[0]}&tenantId=${
         rowData[6]
       }`;
+      // }&action=edit`;
       break;
     default:
       window.location.href = `search-preview?applicationNumber=${
