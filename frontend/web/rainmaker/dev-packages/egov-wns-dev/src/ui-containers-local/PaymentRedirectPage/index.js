@@ -32,12 +32,12 @@ class PaymentRedirect extends Component {
       if (get(pgUpdateResponse, "Transaction[0].txnStatus") === "FAILURE") {
         window.location.href = `${
           process.env.NODE_ENV === "production" ? "/citizen" : ""
-        }/tradelicence/acknowledgement?purpose=${"pay"}&status=${"failure"}&applicationNumber=${consumerCode}&FY=${financialYear}&tenantId=${tenantId}`;
+        }/wns/acknowledgement?purpose=${"pay"}&status=${"failure"}&applicationNumber=${consumerCode}&FY=${financialYear}&tenantId=${tenantId}`;
       } else {
         let transactionId = get(pgUpdateResponse, "Transaction[0].txnId");
         window.location.href = `${
           process.env.NODE_ENV === "production" ? "/citizen" : ""
-        }/tradelicence/acknowledgement?purpose=${"pay"}&status=${"success"}&applicationNumber=${consumerCode}&FY=${financialYear}&tenantId=${tenantId}&secondNumber=${transactionId}`;
+        }/wns/acknowledgement?purpose=${"pay"}&status=${"success"}&applicationNumber=${consumerCode}&FY=${financialYear}&tenantId=${tenantId}&secondNumber=${transactionId}`;
       }
     } catch (e) {
       alert(e);

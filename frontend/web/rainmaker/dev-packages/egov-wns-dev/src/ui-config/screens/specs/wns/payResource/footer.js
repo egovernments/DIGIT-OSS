@@ -93,7 +93,7 @@ const moveToSuccess = (href, dispatch, receiptNumber) => {
   const status = "success";
   dispatch(
     setRoute(
-      `/tradelicence/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&tenantId=${tenantId}&secondNumber=${receiptNumber}`
+      `/wns/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&tenantId=${tenantId}&secondNumber=${receiptNumber}`
     )
   );
 };

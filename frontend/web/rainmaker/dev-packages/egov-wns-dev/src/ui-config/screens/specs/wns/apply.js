@@ -19,7 +19,7 @@ import { connectionDetails } from "./applyResource/tradeReviewDetails";
 import { getPropertyIDDetails, propertyID, propertyHeader } from "./applyResource/propertyDetails";
 import { getPropertyDetails } from "./applyResource/property-locationDetails";
 import { ownerDetailsHeader, getOwnerDetails, ownershipType } from "./applyResource/ownerDetails";
-import {additionDetails} from "./applyResource/additionalDetails";
+import { additionDetails } from "./applyResource/additionalDetails";
 import { tradeOwnerDetails } from "./applyResource/tradeOwnerDetails";
 import { OwnerInfoCard } from "./applyResource/connectionDetails";
 import { documentList } from "./applyResource/documentList";
@@ -180,7 +180,7 @@ export const formwizardThirdStep = {
   uiFramework: "custom-atoms",
   componentPath: "Form",
   props: { id: "apply_form3" },
-  children: {additionDetails},
+  children: { additionDetails },
   visible: false
 };
 

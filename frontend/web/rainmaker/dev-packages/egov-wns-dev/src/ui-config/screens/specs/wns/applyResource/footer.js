@@ -38,7 +38,7 @@ const moveToSuccess = (LicenseData, dispatch) => {
   const status = "success";
   dispatch(
     setRoute(
-      `/tradelicence/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&FY=${financialYear}&tenantId=${tenantId}`
+      `/wns/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&FY=${financialYear}&tenantId=${tenantId}`
     )
   );
 };
@@ -194,7 +194,7 @@ export const callBackForNext = async (state, dispatch) => {
         //EDIT FLOW
         const businessId = getQueryArg(window.location.href, "applicationNumber");
         const tenantId = getQueryArg(window.location.href, "tenantId");
-        dispatch(setRoute(`/tradelicence/search-preview?applicationNumber=${businessId}&tenantId=${tenantId}&edited=true`));
+        dispatch(setRoute(`/wns/search-preview?applicationNumber=${businessId}&tenantId=${tenantId}&edited=true`));
         const updateMessage = { labelName: "Rates will be updated on submission", labelKey: "TL_COMMON_EDIT_UPDATE_MESSAGE" };
         dispatch(toggleSnackbar(true, updateMessage, "info"));
       }
@@ -555,7 +555,7 @@ export const footerReview = (
           children: {
             downloadMenu: {
               uiFramework: "custom-atoms-local",
-              moduleName: "egov-tradelicence",
+              moduleName: "egov-wns",
               componentPath: "MenuButton",
               props: {
                 data: {
@@ -571,7 +571,7 @@ export const footerReview = (
             },
             printMenu: {
               uiFramework: "custom-atoms-local",
-              moduleName: "egov-tradelicence",
+              moduleName: "egov-wns",
               componentPath: "MenuButton",
               props: {
                 data: {
@@ -753,7 +753,7 @@ export const downloadPrintContainer = (
       children: {
         downloadMenu: {
           uiFramework: "custom-atoms-local",
-          moduleName: "egov-tradelicence",
+          moduleName: "egov-wns",
           componentPath: "MenuButton",
           props: {
             data: {
@@ -767,7 +767,7 @@ export const downloadPrintContainer = (
         },
         printMenu: {
           uiFramework: "custom-atoms-local",
-          moduleName: "egov-tradelicence",
+          moduleName: "egov-wns",
           componentPath: "MenuButton",
           props: {
             data: {

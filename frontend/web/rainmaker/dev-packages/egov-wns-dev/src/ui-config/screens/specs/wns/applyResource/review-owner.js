@@ -27,21 +27,21 @@ const connectionDetailsHeader = getHeader({
 });
 
 const connectionChargeDetailsHeader = getHeader({
-  labelKey: "WS_COMMON_PROP_LOC_DETAIL_HEADER"
+  labelKey: "WS_COMMON_PLUMBER_DETAILS"
 });
 
 const roadCuttingChargesHeader = getHeader({
-  labelKey: "WS_COMMON_PROP_DETAIL_HEADER"
+  labelKey: "WS_ROAD_CUTTING_CHARGE_DETAILS"
 });
 
 const activationDetailsHeader = getHeader({
-  labelKey: "WS_COMMON_PROP_LOC_DETAIL_HEADER"
+  labelKey: "WS_ACTIVATION_DETAILS"
 });
 
 export const reviewConnectionType = getLabelWithValue(
   {
     labelName: "Connection Type",
-    labelKey: "WS_TASK_DETAILS_CONNECTION_TYPE"
+    labelKey: "WS_SERV_DETAIL_CONN_TYPE"
   },
   {
     jsonPath: "Licenses[0].tradeLicenseDetail.subOwnerShipCategory",
@@ -53,7 +53,7 @@ export const reviewConnectionType = getLabelWithValue(
 export const reviewNumberOfTaps = getLabelWithValue(
   {
     labelName: "No. of Taps",
-    labelKey: "WS_TASK_DETAILS_NO_OF_TAPS"
+    labelKey: "WS_SERV_DETAIL_NO_OF_TAPS"
   },
   {
     jsonPath: "Licenses[0].tradeLicenseDetail.subOwnerShipCategory",
@@ -62,7 +62,7 @@ export const reviewNumberOfTaps = getLabelWithValue(
 export const reviewWaterSource = getLabelWithValue(
   {
     labelName: "Water Source",
-    labelKey: "WS_TASK_DETAILS_WATER_SOURCE"
+    labelKey: "WS_SERV_DETAIL_WATER_SOURCE"
   },
   {
     jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].fatherOrHusbandName"
@@ -71,7 +71,7 @@ export const reviewWaterSource = getLabelWithValue(
 export const reviewWaterSubSource = getLabelWithValue(
   {
     labelName: "Water Sub Source",
-    labelKey: "WS_TASK_DETAILS_WATER_SUB_SOURCE"
+    labelKey: "WS_SERV_DETAIL_WATER_SUB_SOURCE"
   },
   {
     jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].relationship",
@@ -80,7 +80,7 @@ export const reviewWaterSubSource = getLabelWithValue(
 export const reviewPipeSize = getLabelWithValue(
   {
     labelName: "Pipe Size (in inches)",
-    labelKey: "WS_TASK_DETAILS_PIPE_SIZE"
+    labelKey: "WS_SERV_DETAIL_PIPE_SIZE"
   },
   {
     jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].gender",
@@ -90,7 +90,18 @@ export const reviewPipeSize = getLabelWithValue(
 export const reviewBillingType = getLabelWithValue(
   {
     labelName: "Billing Type",
-    labelKey: "WS_TASK_DETAILS_BILLING_TYPE"
+    labelKey: "WS_ADDN_DETAILS_BILLING_TYPE"
+  },
+  {
+    jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].dob",
+    // callBack: convertEpochToDate
+  }
+);
+
+export const reviewWaterClosets = getLabelWithValue(
+  {
+    labelName: "No. of Water Closets",
+    labelKey: "WS_ADDN_DETAILS_NO_OF_WATER_CLOSETS"
   },
   {
     jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].dob",
@@ -101,7 +112,7 @@ export const reviewBillingType = getLabelWithValue(
 export const reviewPlumberProvidedBy = getLabelWithValue(
   {
     labelName: "Plumber Provided By",
-    labelKey: "WS_TASK_DETAILS_PLUMBER_PROVIDED_BY"
+    labelKey: "WS_ADDN_DETAILS_PLUMBER_PROVIDED_BY"
   },
   {
     jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].mobileNumber"
@@ -110,7 +121,7 @@ export const reviewPlumberProvidedBy = getLabelWithValue(
 export const reviewPlumberLicenseNo = getLabelWithValue(
   {
     labelName: "Plumber License No.",
-    labelKey: "WS_TASK_DETAILS_PLUMBER_LICENSE_NO"
+    labelKey: "WS_ADDN_DETAILS_PLUMBER_LICENCE_NO_LABEL"
   },
   {
     jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].emailId"
@@ -119,7 +130,7 @@ export const reviewPlumberLicenseNo = getLabelWithValue(
 export const reviewPlumberName = getLabelWithValue(
   {
     labelName: "Plumber Name",
-    labelKey: "WS_TASK_DETAILS_PLUMBER_NAME"
+    labelKey: "WS_ADDN_DETAILS_PLUMBER_NAME_LABEL"
   },
   { jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].pan" }
 );
@@ -127,7 +138,7 @@ export const reviewPlumberName = getLabelWithValue(
 export const reviewPlumberMobileNo = getLabelWithValue(
   {
     labelName: "Plumber Mobile No.",
-    labelKey: "WS_TASK_DETAILS_PLUMBER_MOBILE_NO"
+    labelKey: "WS_ADDN_DETAILS_PLUMBER_MOB_NO_LABEL"
   },
   { jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].pan" }
 );
@@ -135,7 +146,7 @@ export const reviewPlumberMobileNo = getLabelWithValue(
 export const reviewRoadType = getLabelWithValue(
   {
     labelName: "Road Type",
-    labelKey: "WS_TASK_DETAILS_ROAD_TYPE"
+    labelKey: "WS_ADDN_DETAIL_ROAD_TYPE"
   },
   {
     jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].dob",
@@ -146,7 +157,7 @@ export const reviewRoadType = getLabelWithValue(
 export const reviewArea = getLabelWithValue(
   {
     labelName: "Area (in sq ft)",
-    labelKey: "WS_TASK_DETAILS_AREA"
+    labelKey: "WS_ADDN_DETAILS_AREA_LABEL"
   },
   {
     jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].mobileNumber"
@@ -155,7 +166,7 @@ export const reviewArea = getLabelWithValue(
 export const reviewConnectionExecutionDate = getLabelWithValue(
   {
     labelName: "Connection Execution Date",
-    labelKey: "WS_TASK_DETAILS_CONNECTION_EXC_DATE"
+    labelKey: "WS_SERV_DETAIL_CONN_EXECUTION_DATE"
   },
   {
     jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].emailId"
@@ -164,7 +175,7 @@ export const reviewConnectionExecutionDate = getLabelWithValue(
 export const reviewMeterId = getLabelWithValue(
   {
     labelName: "Meter ID",
-    labelKey: "WS_TASK_DETAILS_METER_ID"
+    labelKey: "WS_SERV_DETAIL_METER_ID"
   },
   { jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].pan" }
 );
@@ -172,7 +183,15 @@ export const reviewMeterId = getLabelWithValue(
 export const reviewMeterInstallationDate = getLabelWithValue(
   {
     labelName: "Meter Installation Date",
-    labelKey: "WS_TASK_DETAILS_METER_INST_DATE"
+    labelKey: "WS_ADDN_DETAIL_METER_INSTALL_DATE"
+  },
+  { jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].pan" }
+);
+
+export const reviewInitialMeterReading = getLabelWithValue(
+  {
+    labelName: "Initial Meter Reading",
+    labelKey: "WS_ADDN_DETAILS_INITIAL_METER_READING"
   },
   { jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].pan" }
 );
@@ -193,7 +212,7 @@ export const getReviewOwner = (isEditable = true) => {
           },
           ...getCommonSubHeader({
             labelName: "Additional Details ( To be filled by Municipal Employee)",
-            labelKey: "WS_TASK_DETAILS_ADDITIONAL_DETAILS"
+            labelKey: "WS_COMMON_ADDN_DETAILS"
           })
         },
         editSection: {
@@ -248,7 +267,8 @@ const connectionDetails = getCommonContainer({
   reviewWaterSource,
   reviewWaterSubSource,
   reviewPipeSize,
-  reviewBillingType
+  reviewBillingType,
+  reviewWaterClosets
 });
 
 const connectionChargeDetails = getCommonContainer({
@@ -266,5 +286,6 @@ const roadCuttingCharges = getCommonContainer({
 const activationDetails = getCommonContainer({
   reviewConnectionExecutionDate,
   reviewMeterId,
-  reviewMeterInstallationDate
+  reviewMeterInstallationDate,
+  reviewInitialMeterReading
 });

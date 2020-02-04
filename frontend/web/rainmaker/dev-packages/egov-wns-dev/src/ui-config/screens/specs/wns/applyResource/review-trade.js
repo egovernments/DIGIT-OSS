@@ -22,15 +22,15 @@ const getHeader = label => {
 };
 
 export const propertyDetailsHeader = getHeader({
-  labelKey: "WS_TASK_DETAILS_PROPERTY_DETAILS"
+  labelKey: "WS_COMMON_PROP_DETAIL"
 });
 
 export const propertyLocationDetailsHeader = getHeader({
-  labelKey: "WS_TASK_DETAILS_PROPERTY_LOCATION_DETAILS"
+  labelKey: "WS_COMMON_PROP_LOC_DETAIL_HEADER"
 });
 
 export const propertyOwnerDetailsHeader = getHeader({
-  labelKey: "WS_TASK_DETAILS_PROPERTY_OWNER_DETAILS"
+  labelKey: "WS_COMMON_OWN_DETAIL"
 });
 
 export const getReviewConnectionDetails = (isEditable = true) => {
@@ -49,7 +49,7 @@ export const getReviewConnectionDetails = (isEditable = true) => {
           },
           ...getCommonSubHeader({
             labelName: "Connection Details",
-            labelKey: "WS_TASK_DETAILS_CONNECTION_DETAILS"
+            labelKey: "WS_COMMON_CONNECTION_DETAILS"
           })
         },
         editSection: {
@@ -99,7 +99,7 @@ const propertyLocationDetails = {
         reviewCity: getLabelWithValue(
           {
             labelName: "City",
-            labelKey: "WS_TASK_DETAILS_CITY"
+            labelKey: "WS_PROP_DETAIL_CITY"
           },
           {
             jsonPath:
@@ -109,42 +109,42 @@ const propertyLocationDetails = {
         reviewDoorOrHouseNumber: getLabelWithValue(
           {
             labelName: "Door/House No.",
-            labelKey: "WS_TASK_DETAILS_DOOR_HOUSE_NO"
+            labelKey: "WS_PROP_DETAIL_DHNO"
           },
           { jsonPath: "Licenses[0].tradeLicenseDetail.accessories[0].uom" }
         ),
         reviewBuildingOrColonyName: getLabelWithValue(
           {
             labelName: "Building/Colony Name",
-            labelKey: "WS_TASK_DETAILS_BUILDING_COLONY_NAME"
+            labelKey: "WS_PROP_DETAIL_BUILD_NAME_LABEL"
           },
           { jsonPath: "Licenses[0].tradeLicenseDetail.accessories[0].uomValue" }
         ),
         reviewStreetName: getLabelWithValue(
           {
             labelName: "Street Name",
-            labelKey: "WS_TASK_DETAILS_STREET_NAME"
+            labelKey: "WS_PROP_DETAIL_STREET_NAME"
           },
           { jsonPath: "Licenses[0].tradeLicenseDetail.accessories[0].count" }
         ),
         reviewLocalityOrMohalla: getLabelWithValue(
           {
             labelName: "Locality/Mohalla",
-            labelKey: "WS_TASK_DETAILS_LOCALITY_MOHALLA"
+            labelKey: "WS_PROP_DETAIL_LOCALITY_MOHALLA_LABEL"
           },
           { jsonPath: "Licenses[0].tradeLicenseDetail.accessories[0].uom" }
         ),
         reviewPincode: getLabelWithValue(
           {
             labelName: "Pincode",
-            labelKey: "WS_TASK_DETAILS_PINCODE"
+            labelKey: "WS_PROP_DETAIL_PINCODE"
           },
           { jsonPath: "Licenses[0].tradeLicenseDetail.accessories[0].uomValue" }
         ),
         reviewExistingPropertyId: getLabelWithValue(
           {
             labelName: "Street Name",
-            labelKey: "WS_TASK_DETAILS_EXISTING_PROP_ID"
+            labelKey: "WS_PROPERTY_EXIST_ID_LABEL"
           },
           { jsonPath: "Licenses[0].tradeLicenseDetail.accessories[0].count" }
         )
@@ -173,7 +173,7 @@ const getPropertyDetails = {
         reviewPropertyId: getLabelWithValue(
           {
             labelName: "Property Id",
-            labelKey: "WS_PROPERTY_ID"
+            labelKey: "WS_PROPERTY_ID_LABEL"
           },
           {
             jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType",
@@ -185,7 +185,7 @@ const getPropertyDetails = {
         reviewPropertyType: getLabelWithValue(
           {
             labelName: "Property Type",
-            labelKey: "WS_TASK_DETAILS_PROPERTY_TYPE"
+            labelKey: "WS_PROPERTY_TYPE_LABEL"
           },
           {
             jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType",
@@ -197,7 +197,7 @@ const getPropertyDetails = {
         reviewPropertyUsageType: getLabelWithValue(
           {
             labelName: "Property Usage Type",
-            labelKey: "WS_TASK_DETAILS_PROPERTY_UT"
+            labelKey: "WS_PROPERTY_USAGE_TYPE_LABEL"
           },
           {
             jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType"
@@ -207,23 +207,30 @@ const getPropertyDetails = {
         reviewPropertySubUsageType: getLabelWithValue(
           {
             labelName: "Property Sub usage type",
-            labelKey: "WS_TASK_DETAILS_PROPERTY_SUT"
+            labelKey: "WS_PROPERTY_SUB_USAGE_TYPE_LABEL"
           },
           { jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].uom" }
         ),
         reviewPlotSize: getLabelWithValue(
           {
             labelName: "Plot Size (in sq metres)",
-            labelKey: "WS_TASK_DETAILS_PLOT_SIZE"
+            labelKey: "WS_PROP_DETAIL_PLOT_SIZE_LABEL"
           },
           { jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].uomValue" }
         ),
         reviewNumberOfFloors: getLabelWithValue(
           {
             labelName: "Number Of Floors",
-            labelKey: "WS_TASK_DETAILS_NOF"
+            labelKey: "WS_PROPERTY_NO_OF_FLOOR_LABEL"
           },
           { jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].uomValue" }
+        ),
+        rainwaterHarvestingFacility: getLabelWithValue(
+          {
+            labelKey: "WS_SERV_DETAIL_CONN_RAIN_WATER_HARVESTING_FAC",
+            labelName: "Rain Water Harvesting Facility"
+          },
+          { jsonPath: "Licenses[0].rainWaterHarvesting" }
         )
       })
     }),
@@ -249,14 +256,14 @@ const propertyOwnerDetails = {
         reviewMobileNumber: getLabelWithValue(
           {
             labelName: "Mobile No.",
-            labelKey: "WS_TASK_DETAILS_MOBILE_NO"
+            labelKey: "WS_OWN_DETAIL_MOBILE_NO_LABEL"
           },
           { jsonPath: "Licenses[0].propertyId" }
         ),
         reviewName: getLabelWithValue(
           {
             labelName: "Name",
-            labelKey: "WS_TASK_DETAILS_NAME"
+            labelKey: "WS_OWN_DETAIL_OWN_NAME_LABEL"
           },
           {
             jsonPath: "Licenses[0].tradeLicenseDetail.address.city"
@@ -265,7 +272,7 @@ const propertyOwnerDetails = {
         reviewGender: getLabelWithValue(
           {
             labelName: "Gender",
-            labelKey: "WS_TASK_DETAILS_GENDER"
+            labelKey: "WS_OWN_DETAIL_GENDER_LABEL"
           },
           {
             jsonPath: "Licenses[0].tradeLicenseDetail.address.doorNo",
@@ -278,35 +285,35 @@ const propertyOwnerDetails = {
         reviewDateOfBirth: getLabelWithValue(
           {
             labelName: "Date Of Birth",
-            labelKey: "WS_TASK_DETAILS_DOB"
+            labelKey: "WS_OWN_DETAIL_DOB_LABEL"
           },
           { jsonPath: "Licenses[0].tradeLicenseDetail.address.buildingName" }
         ),
         reviewFatherOrHusbandName: getLabelWithValue(
           {
             labelName: "Father/Husband's Name",
-            labelKey: "WS_TASK_DETAILS_FOH_NAME"
+            labelKey: "WS_OWN_DETAIL_FATHER_OR_HUSBAND_NAME"
           },
           { jsonPath: "Licenses[0].tradeLicenseDetail.address.street" }
         ),
         reviewRelationship: getLabelWithValue(
           {
             labelName: "Relationship",
-            labelKey: "WS_TASK_DETAILS_RSHIP"
+            labelKey: "WS_OWN_DETAIL_RELATION_LABEL"
           },
           { jsonPath: "Licenses[0].tradeLicenseDetail.address.locality.name" }
         ),
         reviewCorrespondenceAddress: getLabelWithValue(
           {
             labelName: "Correspondence Address",
-            labelKey: "WS_TASK_DETAILS_CA"
+            labelKey: "WS_OWN_DETAIL_CROSADD"
           },
           { jsonPath: "Licenses[0].tradeLicenseDetail.address.pincode" }
         ),
         reviewSpecialApplicantCategory: getLabelWithValue(
           {
             labelName: "Special Applicant Category",
-            labelKey: "WS_TASK_DETAILS_SAC"
+            labelKey: "WS_OWN_DETAIL_SPECIAL_APPLICANT_LABEL"
           },
           {
             jsonPath:
@@ -336,17 +343,17 @@ const connectionDetails = getCommonContainer({
       jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.applicationType",
     }
   ),
-  reviewOldConsumerNumber: getLabelWithValue(
-    {
-      labelName: "Old Consumer Number",
-      labelKey: "WS_OLD_CONSUMER_NUMBER"
-    },
-    { jsonPath: "Licenses[0].oldConsumerNumber" }
-  ),
+  // reviewOldConsumerNumber: getLabelWithValue(
+  //   {
+  //     labelName: "Old Consumer Number",
+  //     labelKey: "WS_OLD_CONSUMER_NUMBER"
+  //   },
+  //   { jsonPath: "Licenses[0].oldConsumerNumber" }
+  // ),
   reviewNumberOfTaps: getLabelWithValue(
     {
       labelName: "Number Of Taps",
-      labelKey: "WS_NUMBER_OF_TAPS"
+      labelKey: "WS_CONN_DETAIL_NO_OF_TAPS"
     },
     {
       jsonPath: "Licenses[0].licenseType",
@@ -355,15 +362,8 @@ const connectionDetails = getCommonContainer({
   reviewPipeSize: getLabelWithValue(
     {
       labelName: "Pipe Size (In Inches)",
-      labelKey: "WS_PIPE_SIZE"
+      labelKey: "WS_CONN_DETAIL_PIPE_SIZE"
     },
     { jsonPath: "Licenses[0].tradeName" }
   ),
-  rainwaterHarvestingFacility: getLabelWithValue(
-    {
-      labelKey: "WS_SERV_DETAIL_CONN_RAIN_WATER_HARVESTING_FAC",
-      labelName: "Rain Water Harvesting Facility"
-    },
-    { jsonPath: "Licenses[0].rainWaterHarvesting" }
-  )
 })
