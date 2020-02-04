@@ -22,7 +22,6 @@ import org.egov.pt.models.user.User;
 import org.egov.pt.models.user.UserDetailResponse;
 import org.egov.pt.models.user.UserSearchRequest;
 import org.egov.pt.models.workflow.ProcessInstance;
-import org.egov.pt.models.workflow.ProcessInstanceRequest;
 import org.egov.pt.producer.Producer;
 import org.egov.pt.repository.PropertyRepository;
 import org.egov.pt.util.PTConstants;
@@ -80,7 +79,7 @@ public class PropertyService {
 		enrichmentService.enrichCreateRequest(request);
 		userService.createUser(request);
 		if (config.getIsWorkflowEnabled())
-			updateWorkflow(request, CREATE_PROCESS_CONSTANT);
+			wfService.updateWorkflow(request, CREATE_PROCESS_CONSTANT);
 		producer.push(config.getSavePropertyTopic(), request);
 		return request.getProperty();
 	}
@@ -134,11 +133,11 @@ public class PropertyService {
 				.property(propertyFromSearch)
 				.build();
 		
-		mergeAdditionalDetails(request, propertyFromSearch);
+		util.mergeAdditionalDetails(request, propertyFromSearch);
 		
 		if(config.getIsUpdateWorkflowEnabled()) {
 			
-			String status = updateWorkflow(request, UPDATE_PROCESS_CONSTANT);
+			Boolean isTerminateState = wfService.updateWorkflow(request, UPDATE_PROCESS_CONSTANT).getIsTerminateState();
 					
 			if (propertyFromSearch.getStatus().equals(Status.ACTIVE)) {
 				
@@ -147,37 +146,13 @@ public class PropertyService {
 				util.saveOldUuidToRequest(request, propertyFromSearch.getId());
 				producer.push(config.getSavePropertyTopic(), request);
 				
-			} else if (status.equalsIgnoreCase(Status.CANCELLED.toString())
-					|| status.equalsIgnoreCase(Status.REJECTED.toString())
-					|| status.equalsIgnoreCase(Status.INACTIVE.toString())) {
+			} else if (isTerminateState) {
 				
-				producer.push(config.getUpdatePropertyTopic(), request);
-				
-				/* search and set previous property to ACTIVE and update it */
-				request.setProperty(getPreviousPropertyActivated(request.getRequestInfo(), propertyFromSearch));
-				producer.push(config.getUpdatePropertyTopic(), request);
+				terminateWorkflowAndReInstatePreviousRecord(request, propertyFromSearch);
 			}
 		}
 		
 		producer.push(config.getUpdatePropertyTopic(), request);
-	}
-
-	/**
-	 * 
-	 * @param requestInfo
-	 * @param propertyFromSearch
-	 */
-	private Property getPreviousPropertyActivated(RequestInfo requestInfo, Property propertyFromSearch) {
-
-		@SuppressWarnings("unchecked")
-		Map<String, Object> additionalDetails = mapper.convertValue(propertyFromSearch.getAdditionalDetails(), Map.class);
-		String propertyUuId = (String) additionalDetails.get(PTConstants.PREVIOUS_PROPERTY_PREVIOUD_UUID);
-		PropertyCriteria criteria = PropertyCriteria.builder()
-				.uuids(Sets.newHashSet(propertyUuId))
-				.build();
-		Property property = searchProperty(criteria, requestInfo).get(0);
-		property.setStatus(Status.ACTIVE);
-		return property;
 	}
 
 	/**
@@ -194,7 +169,7 @@ public class PropertyService {
 		userService.createUser(request);
 		
 
-		mergeAdditionalDetails(request, propertyFromSearch);
+		util.mergeAdditionalDetails(request, propertyFromSearch);
 		PropertyRequest oldPropertyRequest = PropertyRequest.builder()
 				.requestInfo(request.getRequestInfo())
 				.property(propertyFromSearch)
@@ -202,7 +177,7 @@ public class PropertyService {
 		
 		if (config.getIsMutationWorkflowEnabled()) {
 
-			String status = updateWorkflow(request, MUTATION_PROCESS_CONSTANT);
+			Boolean isTerminateState = wfService.updateWorkflow(request, MUTATION_PROCESS_CONSTANT).getIsTerminateState();
 
 			/*
 			 * updating property from search to INACTIVE status
@@ -213,22 +188,14 @@ public class PropertyService {
 
 				propertyFromSearch.setStatus(Status.INACTIVE);
 				producer.push(config.getUpdatePropertyTopic(), oldPropertyRequest);
-				
+
 				util.saveOldUuidToRequest(request, propertyFromSearch.getId());
 				/* save new record */
 				producer.push(config.getSavePropertyTopic(), request);
 
-			} else if (status.equalsIgnoreCase(Status.CANCELLED.toString())
-					|| status.equalsIgnoreCase(Status.REJECTED.toString())
-					|| status.equalsIgnoreCase(Status.INACTIVE.toString())) {
+			} else if (isTerminateState) {
 
-				/* current record being rejected */
-				producer.push(config.getUpdatePropertyTopic(), request);
-				
-				/* Previous record set to ACTIVE */
-				request.setProperty(getPreviousPropertyActivated(request.getRequestInfo(), propertyFromSearch));
-				producer.push(config.getUpdatePropertyTopic(), request);
-
+				terminateWorkflowAndReInstatePreviousRecord(request, propertyFromSearch);
 			} else {
 				/*
 				 * If property is In Workflow then continue
@@ -245,39 +212,24 @@ public class PropertyService {
 		}
 	}
 
-	/**
-	 * 
-	 * @param request
-	 * @param propertyFromSearch
-	 */
-	private void mergeAdditionalDetails(PropertyRequest request, Property propertyFromSearch) {
-
-		request.getProperty().setAdditionalDetails(util.jsonMerge(propertyFromSearch.getAdditionalDetails(),
-				request.getProperty().getAdditionalDetails()));
+	private void terminateWorkflowAndReInstatePreviousRecord(PropertyRequest request, Property propertyFromSearch) {
+		
+		/* current record being rejected */
+		producer.push(config.getUpdatePropertyTopic(), request);
+		
+		/* Previous record set to ACTIVE */
+		@SuppressWarnings("unchecked")
+		Map<String, Object> additionalDetails = mapper.convertValue(propertyFromSearch.getAdditionalDetails(), Map.class);
+		String propertyUuId = (String) additionalDetails.get(PTConstants.PREVIOUS_PROPERTY_PREVIOUD_UUID);
+		
+		PropertyCriteria criteria = PropertyCriteria.builder().uuids(Sets.newHashSet(propertyUuId)).build();
+		Property previousPropertyToBeReInstated = searchProperty(criteria, request.getRequestInfo()).get(0);
+		previousPropertyToBeReInstated.setStatus(Status.ACTIVE);
+		request.setProperty(previousPropertyToBeReInstated);
+		
+		producer.push(config.getUpdatePropertyTopic(), request);
 	}
 
-
-	/**
-	 * method to prepare process instance request 
-	 * and assign status back to property
-	 * 
-	 * @param request
-	 */
-	private String updateWorkflow(PropertyRequest request, String process) {
-
-		Property property = request.getProperty();
-
-		ProcessInstanceRequest workflowReq = util.getWfForPropertyRegistry(request, process);
-		String status = wfService.callWorkFlow(workflowReq);
-		if (status.equalsIgnoreCase(config.getWfStatusActive()) && property.getPropertyId() == null) {
-			
-			String pId = enrichmentService.getIdList(request.getRequestInfo(), property.getTenantId(), config.getPropertyIdGenName(), config.getPropertyIdGenFormat(), 1).get(0);
-			request.getProperty().setPropertyId(pId);
-		}
-		request.getProperty().setStatus(Status.fromValue(status));
-		return status;
-	}
-	
     /**
      * Search property with given PropertyCriteria
      *
@@ -368,7 +320,7 @@ public class PropertyService {
 
 			criteria.setPropertyIds(Sets.newHashSet(propertyIds));
 		}
-		
+
 		return false;
 	}
 

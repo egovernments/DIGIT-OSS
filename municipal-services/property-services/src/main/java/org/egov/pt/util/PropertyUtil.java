@@ -210,6 +210,17 @@ public class PropertyUtil {
 		}
 		return mainNode;
 	}
+	
+	/**
+	 * 
+	 * @param request
+	 * @param propertyFromSearch
+	 */
+	public void mergeAdditionalDetails(PropertyRequest request, Property propertyFromSearch) {
+
+		request.getProperty().setAdditionalDetails(jsonMerge(propertyFromSearch.getAdditionalDetails(),
+				request.getProperty().getAdditionalDetails()));
+	}
 
 	public JsonNode saveOldUuidToRequest(PropertyRequest request, String uuid) {
 

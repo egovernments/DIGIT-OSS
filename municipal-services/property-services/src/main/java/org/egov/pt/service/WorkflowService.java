@@ -1,11 +1,19 @@
 package org.egov.pt.service;
 
+import java.util.Optional;
+
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.Assessment;
 import org.egov.pt.models.Property;
-import org.egov.pt.models.workflow.*;
+import org.egov.pt.models.enums.Status;
+import org.egov.pt.models.workflow.BusinessService;
+import org.egov.pt.models.workflow.BusinessServiceResponse;
+import org.egov.pt.models.workflow.ProcessInstanceRequest;
+import org.egov.pt.models.workflow.ProcessInstanceResponse;
+import org.egov.pt.models.workflow.State;
 import org.egov.pt.repository.ServiceRequestRepository;
+import org.egov.pt.util.PropertyUtil;
 import org.egov.pt.web.contracts.PropertyRequest;
 import org.egov.pt.web.contracts.RequestInfoWrapper;
 import org.egov.tracer.model.CustomException;
@@ -17,9 +25,6 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.util.Collections;
-import java.util.Optional;
 
 @Service
 public class WorkflowService {
@@ -35,6 +40,13 @@ public class WorkflowService {
 
 	@Autowired
 	private ObjectMapper mapper;
+	
+	@Autowired
+	private PropertyUtil utils;
+	
+	@Autowired
+	private EnrichmentService enricher;
+	
 
 	/**
 	 * Method to integrate with workflow
@@ -44,7 +56,7 @@ public class WorkflowService {
 	 * and sets the resultant status from wf-response back to trade-license object
 	 *
 	 */
-	public String callWorkFlow(ProcessInstanceRequest workflowReq) {
+	public State callWorkFlow(ProcessInstanceRequest workflowReq) {
 
 		ProcessInstanceResponse response = null;
 
@@ -63,7 +75,7 @@ public class WorkflowService {
 		 * object
 		 */
 
-		return response.getProcessInstances().get(0).getState().getApplicationStatus();
+		return response.getProcessInstances().get(0).getState();
 	}
 	
 	
@@ -104,30 +116,27 @@ public class WorkflowService {
         return url;
     }
     
-    /**
-     * method to process requests for workflow
-     * @param request
-     */
-    public void processWorkflowAndPersistData(PropertyRequest request, Property propertyFromDb) {
+	/**
+	 * method to prepare process instance request 
+	 * and assign status back to property
+	 * 
+	 * @param request
+	 */
+	public State updateWorkflow(PropertyRequest request, String process) {
 
-      //  Boolean isDiffOnWorkflowFields = false;
-
-        /*
-         *
-         * 1. is record active or not
-         *
-         * 2. if inactive get workflow information
-         *
-         * 3. check if update is possible, if yes the do update else throw error
-         *
-         * 4. if record is active and changes are there , then trigger the workflow they are asking for
-         * then persist the record
-         *
-         * 5.
-         */
-
-
-    }
+		Property property = request.getProperty();
+		
+		ProcessInstanceRequest workflowReq = utils.getWfForPropertyRegistry(request, process);
+		State state = callWorkFlow(workflowReq);
+		
+		if (state.getApplicationStatus().equalsIgnoreCase(configs.getWfStatusActive()) && property.getPropertyId() == null) {
+			
+			String pId = enricher.getIdList(request.getRequestInfo(), property.getTenantId(), configs.getPropertyIdGenName(), configs.getPropertyIdGenFormat(), 1).get(0);
+			request.getProperty().setPropertyId(pId);
+		}
+		request.getProperty().setStatus(Status.fromValue(state.getApplicationStatus()));
+		return state;
+	}
 
 
 	/**

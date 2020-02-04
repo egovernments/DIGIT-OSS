@@ -116,7 +116,7 @@ public class AssessmentService {
 				producer.push(topic1,request);*/
 			}
 			ProcessInstanceRequest workflowRequest = new ProcessInstanceRequest(requestInfo, Collections.singletonList(assessment.getWorkflow()));
-			String state = workflowService.callWorkFlow(workflowRequest);
+			String state = workflowService.callWorkFlow(workflowRequest).getApplicationStatus();
 			assessmentEnrichmentService.enrichStatus(state, assessment, businessService);
 			calculationService.calculateTax(request, property);
 			producer.push(props.getUpdateAssessmentTopic(), request);

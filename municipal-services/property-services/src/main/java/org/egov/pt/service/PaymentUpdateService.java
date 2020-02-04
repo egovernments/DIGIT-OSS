@@ -12,6 +12,7 @@ import org.egov.pt.models.collection.Bill;
 import org.egov.pt.models.collection.PaymentDetail;
 import org.egov.pt.models.collection.PaymentRequest;
 import org.egov.pt.models.enums.Status;
+import org.egov.pt.models.workflow.State;
 import org.egov.pt.producer.Producer;
 import org.egov.pt.util.PropertyUtil;
 import org.egov.pt.web.contracts.PropertyRequest;
@@ -102,8 +103,8 @@ public class PaymentUpdateService {
 			PropertyRequest updateRequest = PropertyRequest.builder().requestInfo(requestInfo)
 					.property(property).build();
 			
-			String status = wfIntegrator.callWorkFlow(util.getProcessInstanceForPayment(updateRequest));
-			updateRequest.getProperty().setStatus(Status.fromValue(status));
+			State state = wfIntegrator.callWorkFlow(util.getProcessInstanceForPayment(updateRequest));
+			updateRequest.getProperty().setStatus(Status.fromValue(state.getApplicationStatus()));
 			
 			producer.push(config.getUpdatePropertyTopic(), updateRequest);
 		});
