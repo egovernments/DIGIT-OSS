@@ -206,3 +206,11 @@ config:
         dockerfile: "build/maven/Dockerfile"
       - work-dir: "egov-url-shortening/src/main/resources/db"
         image-name: "egov-url-shortening-db"
+  
+  - name: "builds/core-services/chatbot"
+    build:
+      - work-dir: "chatbot"
+        image-name: "chatbot"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "chatbot/src/main/resources/db"
+        image-name: "chatbot-db"
