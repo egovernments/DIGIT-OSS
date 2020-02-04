@@ -1271,6 +1271,9 @@ class FormWizardDataEntry extends Component {
                 let currentYearEnteredValueLength = 0;
                 // let previousYear=data1;
                 Object.keys(data.demand[data1]).forEach((data2, key2) => {
+                  if (!data.demand[data1][data2].PT_DEMAND && data.demand[data1][data2].PT_COLLECTED) {
+                    errorCode = "ERR03_DEMAND_ENTER_THE_DATA";
+                  }
                   if (data.demand[data1][data2].PT_DEMAND) {
                     currentYearEnteredValueLength++;
                     if (previousKey != -1) {
@@ -1341,6 +1344,12 @@ class FormWizardDataEntry extends Component {
               "The entered collection should not greater than demand amount for any year !"
             );
             break;
+          // case :"ERR05_DEMAND_ENTER_THE_DATA"
+          //   callToggleSnackbar(
+          //     "ERR05_DEMAND_ENTER_THE_DATA",
+          //     "The demand amount is mandatory if you have entered collected amount !"
+          //   );
+          //   break;
           default:
             if (arrayOfEmptyYears.length > 0) {
               prepareFinalObject("DemandProperties", DemandProperties);
