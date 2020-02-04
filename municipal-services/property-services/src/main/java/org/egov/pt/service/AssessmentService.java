@@ -27,35 +27,42 @@ import org.springframework.util.CollectionUtils;
 @Service
 public class AssessmentService {
 
-	@Autowired
 	private AssessmentValidator validator;
 
-	@Autowired
 	private Producer producer;
 
-	@Autowired
 	private PropertyConfiguration props;
 
-	@Autowired
 	private AssessmentRepository repository;
 
-	@Autowired
 	private AssessmentEnrichmentService assessmentEnrichmentService;
 
-	@Autowired
 	private PropertyConfiguration config;
 
-	@Autowired
 	private DiffService diffService;
 
-	@Autowired
 	private AssessmentUtils utils;
 
-	@Autowired
 	private WorkflowService workflowService;
 
-	@Autowired
 	private CalculationService calculationService;
+
+
+	@Autowired
+	public AssessmentService(AssessmentValidator validator, Producer producer, PropertyConfiguration props, AssessmentRepository repository,
+							 AssessmentEnrichmentService assessmentEnrichmentService, PropertyConfiguration config, DiffService diffService,
+							 AssessmentUtils utils, WorkflowService workflowService, CalculationService calculationService) {
+		this.validator = validator;
+		this.producer = producer;
+		this.props = props;
+		this.repository = repository;
+		this.assessmentEnrichmentService = assessmentEnrichmentService;
+		this.config = config;
+		this.diffService = diffService;
+		this.utils = utils;
+		this.workflowService = workflowService;
+		this.calculationService = calculationService;
+	}
 
 	/**
 	 * Method to create an assessment asynchronously.

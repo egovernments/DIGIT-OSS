@@ -234,4 +234,7 @@ public class PropertyConfiguration {
     @Value("${egov.calculation.endpoint}")
     private String calculationEndpoint;
 
+    @Value("${egov.calculation.mutation.endpoint}")
+    private String mutationCalculationEndpoint;
+
 }
