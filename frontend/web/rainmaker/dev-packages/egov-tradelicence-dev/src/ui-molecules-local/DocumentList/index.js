@@ -226,8 +226,8 @@ class DocumentList extends Component {
                     </Typography>
                     <Typography variant="caption">
                       <LabelContainer
-                        labelName={description.labelName}
-                        labelKey={description.labelKey}
+                        labelName={document.name == "OWNERPHOTO" ? this.props.imageDescription.labelName : description.labelName}
+                        labelKey={document.name == "OWNERPHOTO" ? this.props.imageDescription.labelKey : description.labelKey}
                       />
                       {/* {description} */}
                     </Typography>
@@ -243,7 +243,7 @@ class DocumentList extends Component {
                       removeDocument={() => this.removeDocument(key)}
                       documents={this.state.uploadedDocuments[key]}
                       onButtonClick={() => this.onUploadClick(key)}
-                      inputProps={this.props.inputProps}
+                      inputProps={document.name == "OWNERPHOTO" ? this.props.imageProps : this.props.inputProps}
                       buttonLabel={this.props.buttonLabel}
                     />
                   </Grid>
