@@ -431,19 +431,21 @@ public class EnrichmentService {
         String tenantId = request.getLicenses().get(0).getTenantId();
         List<TradeLicense> licenses = request.getLicenses();
         int count=0;
-        for(int i=0;i<licenses.size();i++){ 
-            TradeLicense license = licenses.get(i);
-            if((license.getStatus()!=null) && license.getStatus().equalsIgnoreCase(endstates.get(i)))
-               count++;
-
-            if (licenses.get(0).getApplicationType() != null && licenses.get(0).getApplicationType().toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL)) {
-                    Long time = System.currentTimeMillis();
-                    license.setIssuedDate(time);
-                    license.setValidFrom(time);
+        
+        
+        if (licenses.get(0).getApplicationType() != null && licenses.get(0).getApplicationType().toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL)) {
+            for(int i=0;i<licenses.size();i++){
+                TradeLicense license = licenses.get(i);
+                Long time = System.currentTimeMillis();
+                license.setIssuedDate(time);
+                license.setValidFrom(time);
             }
-            
-        }
-        if (licenses.get(0).getApplicationType() != null && !licenses.get(0).getApplicationType().toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL)) {
+        }else {
+            for (int i = 0; i < licenses.size(); i++) {
+                TradeLicense license = licenses.get(i);
+                if ((license.getStatus() != null) && license.getStatus().equalsIgnoreCase(endstates.get(i)))
+                    count++;
+            }
             if (count != 0) {
                 List<String> licenseNumbers = null;
                 String businessService = licenses.isEmpty() ? null : licenses.get(0).getBusinessService();
@@ -478,6 +480,7 @@ public class EnrichmentService {
                     }
                 }
             }
+
         }
     }
 
