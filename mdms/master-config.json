@@ -915,6 +915,13 @@
       "uniqueKeys": [
         "$.code"
       ]
+    },
+	"CheckList": {
+      "masterName": "CheckList",
+      "isStateLevel": true,
+      "uniqueKeys": [
+        "$.question"
+      ]
     }
   },
   "sw-services-calculation": {

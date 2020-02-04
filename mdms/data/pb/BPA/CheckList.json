@@ -1,0 +1,378 @@
+{
+  "tenantId": "pb",
+  "moduleName": "BPA",
+  "CheckList": [
+    {
+      "applicationType": "BUILDING_PLAN_SCRUTINY",
+      "ServiceType": "NEW_CONSTRUCTION",
+      "RiskType": "LOW",
+      "WFState": "INITIATED",
+      "questions": [
+        {
+          "question": "ROAD_EXISTS",
+          "fieldType": "YES/NO/NA",
+          "active": true
+        },
+        {
+          "question": "ENV_EXISTS",
+          "fieldType": "YES/NO/NA",
+          "active": true
+        }
+      ],
+      "docTypes": [
+        {
+          "code": "APPL.IDENTITYPROOF",
+          "required": false
+        },
+        {
+          "code": "APPL.ADDRESSPROOF",
+          "required": false
+        },
+        {
+          "code": "BPD.SP",
+          "required": false
+        },
+        {
+          "code": "APPL.LOCALBODY",
+          "required": false
+        },
+        {
+          "code": "NOC.FIRE",
+          "required": false
+        },
+        {
+          "code": "NOC.AIRPORT",
+          "required": false
+        }
+      ]
+    },
+    {
+      "applicationType": "BUILDING_PLAN_SCRUTINY",
+      "ServiceType": "NEW_CONSTRUCTION",
+      "RiskType": "HIGH",
+      "WFState": "INITIATED",
+      "questions": [
+        {
+          "question": "ROAD_EXISTS",
+          "fieldType": "YES/NO/NA",
+          "active": true
+        },
+        {
+          "question": "ENV_EXISTS",
+          "fieldType": "YES/NO/NA",
+          "active": true
+        }
+      ],
+      "docTypes": [
+        {
+          "code": "APPL.IDENTITYPROOF",
+          "required": false
+        },
+        {
+          "code": "APPL.ADDRESSPROOF",
+          "required": false
+        },
+        {
+          "code": "BPD.SP",
+          "required": false
+        },
+        {
+          "code": "APPL.LOCALBODY",
+          "required": false
+        },
+        {
+          "code": "NOC.FIRE",
+          "required": false
+        },
+        {
+          "code": "NOC.AIRPORT",
+          "required": false
+        }
+      ]
+    },
+    {
+      "applicationType": "BUILDING_PLAN_SCRUTINY",
+      "ServiceType": "NEW_CONSTRUCTION",
+      "RiskType": "MEDIUM",
+      "WFState": "INITIATED",
+      "questions": [
+        {
+          "question": "ROAD_EXISTS",
+          "fieldType": "YES/NO/NA",
+          "active": true
+        },
+        {
+          "question": "ENV_EXISTS",
+          "fieldType": "YES/NO/NA",
+          "active": true
+        }
+      ],
+      "docTypes": [
+        {
+          "code": "APPL.IDENTITYPROOF",
+          "required": false
+        },
+        {
+          "code": "APPL.ADDRESSPROOF",
+          "required": false
+        },
+        {
+          "code": "BPD.SP",
+          "required": false
+        },
+        {
+          "code": "APPL.LOCALBODY",
+          "required": false
+        },
+        {
+          "code": "NOC.FIRE",
+          "required": false
+        },
+        {
+          "code": "NOC.AIRPORT",
+          "required": false
+        }
+      ]
+    },
+    {
+      "applicationType": "BUILDING_PLAN_SCRUTINY",
+      "ServiceType": "NEW_CONSTRUCTION",
+      "RiskType": "LOW",
+      "WFState": "DOC_VERIFICATION_PENDING",
+      "questions": [
+        {
+          "question": "ROAD_EXISTS",
+          "fieldType": "YES/NO/NA",
+          "active": true
+        },
+        {
+          "question": "ENV_EXISTS",
+          "fieldType": "YES/NO/NA",
+          "active": true
+        }
+      ],
+      "docTypes": [
+        {
+          "code": "BPD.SP",
+          "required": false
+        },
+        {
+          "code": "APPL.LOCALBODY",
+          "required": false
+        }
+      ]
+    },
+    {
+      "applicationType": "BUILDING_PLAN_SCRUTINY",
+      "ServiceType": "NEW_CONSTRUCTION",
+      "RiskType": "LOW",
+      "WFState": "FIELDINSPECTION_PENDING",
+      "questions": [
+        {
+          "question": "ROAD_EXISTS",
+          "fieldType": "YES/NO/NA",
+          "active": true
+        },
+        {
+          "question": "ENV_EXISTS",
+          "fieldType": "YES/NO/NA",
+          "active": true
+        }
+      ],
+      "docTypes": [
+        {
+          "code": "FI.AGRICULTURE",
+          "required": false
+        }
+      ]
+    },
+    {
+      "applicationType": "BUILDING_PLAN_SCRUTINY",
+      "ServiceType": "NEW_CONSTRUCTION",
+      "RiskType": "LOW",
+      "WFState": "NOC_VERIFICATION_PENDING",
+      "questions": [
+        {
+          "question": "ROAD_EXISTS",
+          "fieldType": "YES/NO/NA",
+          "active": true
+        },
+        {
+          "question": "ENV_EXISTS",
+          "fieldType": "YES/NO/NA",
+          "active": true
+        }
+      ],
+      "docTypes": [
+        {
+          "code": "NOC.FIRE",
+          "required": true
+        },
+        {
+          "code": "NOC.AIRPORT",
+          "required": true
+        }
+      ]
+    },
+    {
+      "applicationType": "BUILDING_PLAN_SCRUTINY",
+      "ServiceType": "NEW_CONSTRUCTION",
+      "RiskType": "HIGH",
+      "WFState": "DOC_VERIFICATION_PENDING",
+      "questions": [
+        {
+          "question": "ROAD_EXISTS",
+          "fieldType": "YES/NO/NA",
+          "active": true
+        },
+        {
+          "question": "ENV_EXISTS",
+          "fieldType": "YES/NO/NA",
+          "active": true
+        }
+      ],
+      "docTypes": [
+        {
+          "code": "BPD.SP",
+          "required": false
+        },
+        {
+          "code": "APPL.LOCALBODY",
+          "required": false
+        }
+      ]
+    },
+    {
+      "applicationType": "BUILDING_PLAN_SCRUTINY",
+      "ServiceType": "NEW_CONSTRUCTION",
+      "RiskType": "HIGH",
+      "WFState": "FIELDINSPECTION_PENDING",
+      "questions": [
+        {
+          "question": "ROAD_EXISTS",
+          "fieldType": "YES/NO/NA",
+          "active": true
+        },
+        {
+          "question": "ENV_EXISTS",
+          "fieldType": "YES/NO/NA",
+          "active": true
+        }
+      ],
+      "docTypes": [
+        {
+          "code": "FI.AGRICULTURE",
+          "required": false
+        }
+      ]
+    },
+    {
+      "applicationType": "BUILDING_PLAN_SCRUTINY",
+      "ServiceType": "NEW_CONSTRUCTION",
+      "RiskType": "HIGH",
+      "WFState": "NOC_VERIFICATION_PENDING",
+      "questions": [
+        {
+          "question": "ROAD_EXISTS",
+          "fieldType": "YES/NO/NA",
+          "active": true
+        },
+        {
+          "question": "ENV_EXISTS",
+          "fieldType": "YES/NO/NA",
+          "active": true
+        }
+      ],
+      "docTypes": [
+        {
+          "code": "NOC.FIRE",
+          "required": true
+        },
+        {
+          "code": "NOC.AIRPORT",
+          "required": true
+        }
+      ]
+    },
+    {
+      "applicationType": "BUILDING_PLAN_SCRUTINY",
+      "ServiceType": "NEW_CONSTRUCTION",
+      "RiskType": "MEDIUM",
+      "WFState": "DOC_VERIFICATION_PENDING",
+      "questions": [
+        {
+          "question": "ROAD_EXISTS",
+          "fieldType": "YES/NO/NA",
+          "active": true
+        },
+        {
+          "question": "ENV_EXISTS",
+          "fieldType": "YES/NO/NA",
+          "active": true
+        }
+      ],
+      "docTypes": [
+        {
+          "code": "BPD.SP",
+          "required": false
+        },
+        {
+          "code": "APPL.LOCALBODY",
+          "required": false
+        }
+      ]
+    },
+    {
+      "applicationType": "BUILDING_PLAN_SCRUTINY",
+      "ServiceType": "NEW_CONSTRUCTION",
+      "RiskType": "MEDIUM",
+      "WFState": "FIELDINSPECTION_PENDING",
+      "questions": [
+        {
+          "question": "ROAD_EXISTS",
+          "fieldType": "YES/NO/NA",
+          "active": true
+        },
+        {
+          "question": "ENV_EXISTS",
+          "fieldType": "YES/NO/NA",
+          "active": true
+        }
+      ],
+      "docTypes": [
+        {
+          "code": "FI.AGRICULTURE",
+          "required": false
+        }
+      ]
+    },
+    {
+      "applicationType": "BUILDING_PLAN_SCRUTINY",
+      "ServiceType": "NEW_CONSTRUCTION",
+      "RiskType": "MEDIUM",
+      "WFState": "NOC_VERIFICATION_PENDING",
+      "questions": [
+        {
+          "question": "ROAD_EXISTS",
+          "fieldType": "YES/NO/NA",
+          "active": true
+        },
+        {
+          "question": "ENV_EXISTS",
+          "fieldType": "YES/NO/NA",
+          "active": true
+        }
+      ],
+      "docTypes": [
+        {
+          "code": "NOC.FIRE",
+          "required": true
+        },
+        {
+          "code": "NOC.AIRPORT",
+          "required": true
+        }
+      ]
+    }
+  ]
+}

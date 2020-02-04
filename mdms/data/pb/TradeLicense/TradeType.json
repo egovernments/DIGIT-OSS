@@ -26,7 +26,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.MANUFACTURE.TST-2",
@@ -52,7 +53,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.MANUFACTURE.TST-3",
@@ -78,7 +80,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.MANUFACTURE.TST-4",
@@ -104,7 +107,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.MANUFACTURE.TST-5",
@@ -130,7 +134,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.MANUFACTURE.TST-6",
@@ -156,7 +161,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.MANUFACTURE.TST-7",
@@ -182,7 +188,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.MANUFACTURE.TST-8",
@@ -208,7 +215,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.MANUFACTURE.TST-9",
@@ -234,7 +242,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.MANUFACTURE.TST-10",
@@ -260,7 +269,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.MANUFACTURE.TST-11",
@@ -286,7 +296,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.MANUFACTURE.TST-12",
@@ -312,7 +323,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.MANUFACTURE.TST-13",
@@ -338,7 +350,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.MANUFACTURE.TST-14",
@@ -364,7 +377,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.MANUFACTURE.TST-15",
@@ -390,7 +404,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.MANUFACTURE.TST-16",
@@ -416,7 +431,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.MANUFACTURE.TST-17",
@@ -442,7 +458,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.MANUFACTURE.TST-18",
@@ -468,7 +485,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.MANUFACTURE.TST-19",
@@ -494,7 +512,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.MANUFACTURE.TST-20",
@@ -520,7 +539,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.MANUFACTURE.TST-21",
@@ -546,7 +566,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.MANUFACTURE.TST-22",
@@ -572,7 +593,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.MANUFACTURE.TST-23",
@@ -598,7 +620,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.MANUFACTURE.TST-24",
@@ -624,7 +647,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.MANUFACTURE.TST-25",
@@ -650,7 +674,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.MANUFACTURE.TST-26",
@@ -676,7 +701,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.MANUFACTURE.TST-27",
@@ -702,7 +728,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.MANUFACTURE.TST-28",
@@ -728,7 +755,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-29",
@@ -754,7 +782,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-30",
@@ -780,7 +809,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-31",
@@ -806,7 +836,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-32",
@@ -832,7 +863,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-33",
@@ -858,7 +890,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-34",
@@ -884,7 +917,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-35",
@@ -910,7 +944,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-36",
@@ -936,7 +971,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-37",
@@ -962,7 +998,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-38",
@@ -988,7 +1025,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-39",
@@ -1014,7 +1052,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-40",
@@ -1040,7 +1079,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-41",
@@ -1066,7 +1106,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-42",
@@ -1092,7 +1133,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-43",
@@ -1118,7 +1160,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-44",
@@ -1144,7 +1187,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-45",
@@ -1170,7 +1214,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-46",
@@ -1196,7 +1241,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-47",
@@ -1222,7 +1268,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-48",
@@ -1248,7 +1295,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-49",
@@ -1274,7 +1322,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-50",
@@ -1300,7 +1349,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-51",
@@ -1326,7 +1376,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-52",
@@ -1352,7 +1403,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-53",
@@ -1378,7 +1430,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-54",
@@ -1404,7 +1457,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-55",
@@ -1430,7 +1484,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-56",
@@ -1456,7 +1511,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-57",
@@ -1482,7 +1538,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-58",
@@ -1508,7 +1565,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-59",
@@ -1534,7 +1592,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-60",
@@ -1560,7 +1619,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-61",
@@ -1586,7 +1646,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-62",
@@ -1612,7 +1673,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-63",
@@ -1638,7 +1700,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-64",
@@ -1664,7 +1727,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-65",
@@ -1690,7 +1754,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-66",
@@ -1716,7 +1781,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-67",
@@ -1742,7 +1808,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-68",
@@ -1768,7 +1835,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-69",
@@ -1794,7 +1862,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-70",
@@ -1820,7 +1889,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-71",
@@ -1846,7 +1916,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-72",
@@ -1872,7 +1943,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-73",
@@ -1898,7 +1970,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-74",
@@ -1924,7 +1997,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-75",
@@ -1950,7 +2024,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-76",
@@ -1976,7 +2051,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-77",
@@ -2002,7 +2078,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-78",
@@ -2028,7 +2105,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-79",
@@ -2054,7 +2132,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-80",
@@ -2080,7 +2159,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-81",
@@ -2106,7 +2186,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-82",
@@ -2132,7 +2213,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-83",
@@ -2158,7 +2240,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-84",
@@ -2184,7 +2267,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-85",
@@ -2210,7 +2294,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-86",
@@ -2236,7 +2321,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-87",
@@ -2262,7 +2348,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-88",
@@ -2288,7 +2375,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-89",
@@ -2314,7 +2402,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-90",
@@ -2340,7 +2429,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-91",
@@ -2366,7 +2456,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-92",
@@ -2392,7 +2483,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-93",
@@ -2418,7 +2510,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-94",
@@ -2444,7 +2537,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-95",
@@ -2470,7 +2564,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-96",
@@ -2496,7 +2591,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-97",
@@ -2522,7 +2618,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-98",
@@ -2548,7 +2645,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-99",
@@ -2574,7 +2672,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-100",
@@ -2600,7 +2699,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-101",
@@ -2626,7 +2726,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-102",
@@ -2652,7 +2753,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-103",
@@ -2678,7 +2780,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-104",
@@ -2704,7 +2807,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-105",
@@ -2730,7 +2834,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-106",
@@ -2756,7 +2861,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-107",
@@ -2782,7 +2888,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-108",
@@ -2808,7 +2915,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-109",
@@ -2834,7 +2942,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-110",
@@ -2860,7 +2969,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-111",
@@ -2886,7 +2996,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-112",
@@ -2912,7 +3023,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-113",
@@ -2938,7 +3050,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-114",
@@ -2964,7 +3077,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-115",
@@ -2990,7 +3104,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-116",
@@ -3016,7 +3131,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-117",
@@ -3042,7 +3158,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-118",
@@ -3068,7 +3185,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-221",
@@ -3094,7 +3212,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-222",
@@ -3120,7 +3239,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-223",
@@ -3146,7 +3266,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.RETAIL.TST-224",
@@ -3172,7 +3293,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-119",
@@ -3198,7 +3320,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-120",
@@ -3224,7 +3347,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-121",
@@ -3250,7 +3374,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-122",
@@ -3276,7 +3401,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-123",
@@ -3302,7 +3428,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-124",
@@ -3328,7 +3455,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-125",
@@ -3354,7 +3482,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-126",
@@ -3380,7 +3509,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-127",
@@ -3406,7 +3536,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-128",
@@ -3432,7 +3563,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-129",
@@ -3458,7 +3590,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-130",
@@ -3484,7 +3617,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-131",
@@ -3510,7 +3644,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-132",
@@ -3536,7 +3671,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-133",
@@ -3562,7 +3698,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-134",
@@ -3588,7 +3725,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-135",
@@ -3614,7 +3752,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-136",
@@ -3640,7 +3779,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-137",
@@ -3666,7 +3806,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-138",
@@ -3692,7 +3833,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-139",
@@ -3718,7 +3860,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-140",
@@ -3744,7 +3887,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-141",
@@ -3770,7 +3914,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-142",
@@ -3796,7 +3941,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-143",
@@ -3822,7 +3968,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-144",
@@ -3848,7 +3995,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-145",
@@ -3874,7 +4022,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-146",
@@ -3900,7 +4049,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-147",
@@ -3926,7 +4076,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-148",
@@ -3952,7 +4103,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-149",
@@ -3978,7 +4130,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-150",
@@ -4004,7 +4157,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-151",
@@ -4030,7 +4184,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-152",
@@ -4056,7 +4211,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-153",
@@ -4082,7 +4238,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-154",
@@ -4108,7 +4265,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-155",
@@ -4134,7 +4292,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-156",
@@ -4160,7 +4319,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-157",
@@ -4186,7 +4346,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-158",
@@ -4212,7 +4373,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-159",
@@ -4238,7 +4400,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-160",
@@ -4264,7 +4427,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-161",
@@ -4290,7 +4454,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-162",
@@ -4316,7 +4481,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-163",
@@ -4342,7 +4508,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-164",
@@ -4368,7 +4535,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-165",
@@ -4394,7 +4562,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-166",
@@ -4420,7 +4589,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-167",
@@ -4446,7 +4616,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-168",
@@ -4472,7 +4643,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-169",
@@ -4498,7 +4670,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-170",
@@ -4524,7 +4697,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-171",
@@ -4550,7 +4724,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-172",
@@ -4576,7 +4751,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-173",
@@ -4602,7 +4778,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-174",
@@ -4628,7 +4805,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-175",
@@ -4654,7 +4832,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-176",
@@ -4680,7 +4859,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-177",
@@ -4706,7 +4886,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-178",
@@ -4732,7 +4913,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-179",
@@ -4758,7 +4940,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-180",
@@ -4784,7 +4967,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-181",
@@ -4810,7 +4994,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "GOODS.WHOLESALE.TST-182",
@@ -4836,7 +5021,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "SERVICES.GBS.TST-183",
@@ -4862,7 +5048,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "SERVICES.GBS.TST-184",
@@ -4888,7 +5075,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "SERVICES.GBS.TST-185",
@@ -4914,7 +5102,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "SERVICES.GBS.TST-186",
@@ -4940,7 +5129,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "SERVICES.GBS.TST-187",
@@ -4966,7 +5156,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "SERVICES.GBS.TST-188",
@@ -4992,7 +5183,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "SERVICES.GBS.TST-189",
@@ -5018,7 +5210,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "SERVICES.GBS.TST-190",
@@ -5044,7 +5237,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "SERVICES.GBS.TST-191",
@@ -5070,7 +5264,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "SERVICES.GBS.TST-192",
@@ -5096,7 +5291,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "SERVICES.GBS.TST-193",
@@ -5122,7 +5318,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "SERVICES.GBS.TST-194",
@@ -5148,7 +5345,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "SERVICES.GBS.TST-195",
@@ -5174,7 +5372,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "SERVICES.GBS.TST-196",
@@ -5200,7 +5399,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "SERVICES.GBS.TST-197",
@@ -5226,7 +5426,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "SERVICES.GBS.TST-198",
@@ -5252,7 +5453,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "SERVICES.GBS.TST-199",
@@ -5278,7 +5480,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "SERVICES.GBS.TST-200",
@@ -5304,7 +5507,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "SERVICES.GBS.TST-201",
@@ -5330,7 +5534,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "SERVICES.GBS.TST-202",
@@ -5356,7 +5561,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "SERVICES.NGBS.TST-203",
@@ -5382,7 +5588,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "SERVICES.NGBS.TST-204",
@@ -5408,7 +5615,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "SERVICES.NGBS.TST-205",
@@ -5434,7 +5642,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "SERVICES.NGBS.TST-206",
@@ -5460,7 +5669,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "SERVICES.NGBS.TST-207",
@@ -5486,7 +5696,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "SERVICES.NGBS.TST-208",
@@ -5512,7 +5723,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "SERVICES.NGBS.TST-209",
@@ -5538,7 +5750,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "SERVICES.NGBS.TST-210",
@@ -5564,7 +5777,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "SERVICES.NGBS.TST-211",
@@ -5590,7 +5804,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "SERVICES.NGBS.TST-212",
@@ -5616,7 +5831,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "SERVICES.NGBS.TST-213",
@@ -5642,7 +5858,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "SERVICES.NGBS.TST-214",
@@ -5668,7 +5885,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "SERVICES.NGBS.TST-215",
@@ -5694,7 +5912,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "SERVICES.NGBS.TST-216",
@@ -5720,7 +5939,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "SERVICES.NGBS.TST-217",
@@ -5746,7 +5966,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "SERVICES.NGBS.TST-218",
@@ -5772,7 +5993,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "SERVICES.NGBS.TST-219",
@@ -5798,7 +6020,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "SERVICES.NGBS.TST-220",
@@ -5824,7 +6047,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "TL"
+      "type": "TL",
+      "validityPeriod": null
     },
     {
       "code": "ARCHITECT.CLASSA",
@@ -5836,7 +6060,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "BPA"
+      "type": "BPA",
+      "validityPeriod": 5
     },
     {
       "code": "ARCHITECT.CLASSB",
@@ -5848,7 +6073,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "BPA"
+      "type": "BPA",
+      "validityPeriod": 5
     },
     {
       "code": "ARCHITECT.CLASSC",
@@ -5860,7 +6086,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "BPA"
+      "type": "BPA",
+      "validityPeriod": 5
     },
     {
       "code": "BUILDER.CLASSA",
@@ -5872,7 +6099,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "BPA"
+      "type": "BPA",
+      "validityPeriod": 5
     },
     {
       "code": "BUILDER.CLASSB",
@@ -5884,7 +6112,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "BPA"
+      "type": "BPA",
+      "validityPeriod": 5
     },
     {
       "code": "BUILDER.CLASSC",
@@ -5896,7 +6125,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "BPA"
+      "type": "BPA",
+      "validityPeriod": 5
     },
     {
       "code": "ENGINEER.CLASSA",
@@ -5908,7 +6138,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "BPA"
+      "type": "BPA",
+      "validityPeriod": 5
     },
     {
       "code": "ENGINEER.CLASSB",
@@ -5920,7 +6151,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "BPA"
+      "type": "BPA",
+      "validityPeriod": 5
     },
     {
       "code": "ENGINEER.CLASSC",
@@ -5932,7 +6164,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "BPA"
+      "type": "BPA",
+      "validityPeriod": 5
     },
     {
       "code": "STRUCTURALENGINEER.CLASSA",
@@ -5944,7 +6177,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "BPA"
+      "type": "BPA",
+      "validityPeriod": 5
     },
     {
       "code": "STRUCTURALENGINEER.CLASSB",
@@ -5956,7 +6190,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "BPA"
+      "type": "BPA",
+      "validityPeriod": 5
     },
     {
       "code": "STRUCTURALENGINEER.CLASSC",
@@ -5968,7 +6203,8 @@
       ],
       "verificationDocument": [],
       "active": true,
-      "type": "BPA"
+      "type": "BPA",
+      "validityPeriod": 5
     }
   ]
 }
