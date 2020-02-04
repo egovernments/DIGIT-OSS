@@ -107,7 +107,7 @@ public class TradeLicenseService {
                validateMobileNumberUniqueness(tradeLicenseRequest);
                break;
        }
-       userService.createUser(tradeLicenseRequest, false);
+       //userService.createUser(tradeLicenseRequest, false);
        calculationService.addCalculation(tradeLicenseRequest);
 
         /*
@@ -247,11 +247,12 @@ public class TradeLicenseService {
      * @return Updated TradeLcienses
      */
     public List<TradeLicense> update(TradeLicenseRequest tradeLicenseRequest, String businessServicefromPath){
-        TradeLicense.ApplicationTypeEnum applicationType = tradeLicenseRequest.getLicenses().get(0).getApplicationType();
+        TradeLicense licence = tradeLicenseRequest.getLicenses().get(0);
+        TradeLicense.ApplicationTypeEnum applicationType = licence.getApplicationType();
         List<TradeLicense> licenceResponse = null;
-        if(applicationType != null && (applicationType).toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL)){
-            List<TradeLicense> licenses = create(tradeLicenseRequest, businessServicefromPath);
-            licenceResponse =  licenses;
+        if(applicationType != null && (applicationType).toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL )&& licence.getAction().equalsIgnoreCase(TLConstants.TL_ACTION_INITIATE)){
+            List<TradeLicense> createResponse = create(tradeLicenseRequest, businessServicefromPath);
+            licenceResponse =  createResponse;
         }
         else{
             if (businessServicefromPath == null)
