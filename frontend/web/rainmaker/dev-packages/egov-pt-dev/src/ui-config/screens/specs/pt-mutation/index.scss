@@ -32,6 +32,7 @@
     padding-bottom: 10px;
 }}}}}
 
+
 // button[role=tab]{
 //     span{
 //         span{
@@ -67,4 +68,9 @@
       margin-left: 38px !important; 
     }
     
+    .ack-body, .ack-tail {
+        display: contents;
+        text-align: center;
+    }
+      
   }

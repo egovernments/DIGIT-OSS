@@ -11,7 +11,7 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import generatePdf from "../utils/receiptPdf";
-
+import './index.css';
 import set from "lodash/set";
 import get from "lodash/get";
 
