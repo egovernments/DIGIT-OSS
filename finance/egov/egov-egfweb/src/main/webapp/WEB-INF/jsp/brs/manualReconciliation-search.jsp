@@ -61,6 +61,7 @@
 				<th>Cheque Number</th>
 				<th>Cheque Date</th>
 				<th>Type</th>
+				<th>Ins Type</th>
 				<th>Amount</th>
 				<th>Reconciliation Date</th>
 			</tr>
@@ -75,6 +76,7 @@
 					<td style="text-align: left"><s:property value="chequeNumber" /></td>
 					<td><s:property value="chequeDate" /></td>
 					<td><s:property value="type" /></td>
+					<td  style="text-align: center;"><s:property value="instrumentType" /></td>
 					<td style="text-align: right"><s:property value="chequeAmount" /></td>
 					<td><input type="text"
 						id="reconDates<s:property value="#status.index"/>"

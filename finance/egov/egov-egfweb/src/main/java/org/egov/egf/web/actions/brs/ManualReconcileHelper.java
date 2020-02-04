@@ -264,24 +264,23 @@ public class ManualReconcileHelper {
 		String voucherExcludeStatuses=getExcludeStatuses();
         StringBuffer query=new StringBuffer().append(" select string_agg(distinct v.vouchernumber, ',') as \"voucherNumber\" ,ih.id as \"ihId\", case when ih.instrumentNumber is null then 'Direct' else ih.instrumentNumber  end as \"chequeNumber\", " +
 		" to_char(ih.instrumentdate,'dd/mm/yyyy') as \"chequeDate\" ,ih.instrumentAmount as \"chequeAmount\",rec.transactiontype as \"txnType\" , "
-		+ " case when rec.transactionType='Cr' then  'Payment' else 'Receipt' end as \"type\" " +" FROM BANKRECONCILIATION rec, BANKACCOUNT BANK,"
-		+" VOUCHERHEADER v ,egf_instrumentheader ih, egf_instrumentotherdetails io, egf_instrumentVoucher iv	WHERE "
+		+ " case when rec.transactionType='Cr' then  'Payment' else 'Receipt' end as \"type\"  , insType.type as instrumentType FROM BANKRECONCILIATION rec, BANKACCOUNT BANK,"
+		+" VOUCHERHEADER v ,egf_instrumentheader ih, egf_instrumentotherdetails io, egf_instrumentVoucher iv, egf_instrumenttype insType	WHERE "
 		+ "  ih.bankAccountId = BANK.ID AND bank.id =:bankAccId   AND IH.INSTRUMENTDATE <= :toDate  "
 		+" AND v.ID= iv.voucherheaderid  and v.STATUS not in  ("+voucherExcludeStatuses+")  "  +instrumentCondition 
 		+" AND ((ih.id_status=(select id from egw_status where moduletype='Instrument'  and description='Deposited') and ih.ispaycheque='0') or (ih.ispaycheque='1' and  ih.id_status=(select id from egw_status where moduletype='Instrument'  and description='New'))) "
-		+" AND rec.instrumentHeaderId=cast(ih.id as varchar(100))	 and iv.instrumentHeaderid=ih.id and io.instrumentheaderid=ih.id and ih.instrumentNumber is not null"
-		+ " group by ih.id,rec.transactiontype "
+		+" AND rec.instrumentHeaderId=cast(ih.id as varchar(100))	 and iv.instrumentHeaderid=ih.id and io.instrumentheaderid=ih.id  and insType.id=ih.instrumenttype and ih.instrumentNumber is not null"
+		+ " group by ih.id,rec.transactiontype,insType.type "
 	
 		+ " union  "
 		
 		+" select string_agg(distinct v.vouchernumber, ',') as \"voucherNumber\" , ih.id as \"ihId\", case when ih.transactionnumber is null then 'Direct' else ih.transactionnumber end as \"chequeNumber\", " +
-		" to_char(ih.transactiondate,'dd/mm/yyyy') as \"chequedate\" ,ih.instrumentAmount as \"chequeamount\",rec.transactiontype as \"txnType\", case when rec.transactionType= 'Cr' then 'Payment' else 'Receipt' end    as \"type\" " +
-		" FROM BANKRECONCILIATION rec, BANKACCOUNT BANK,"
-		+" VOUCHERHEADER v ,egf_instrumentheader ih, egf_instrumentotherdetails io, egf_instrumentVoucher iv	WHERE   ih.bankAccountId = BANK.ID AND bank.id = :bankAccId "
+		" to_char(ih.transactiondate,'dd/mm/yyyy') as \"chequedate\" ,ih.instrumentAmount as \"chequeamount\",rec.transactiontype as \"txnType\", case when rec.transactionType= 'Cr' then 'Payment' else 'Receipt' end    as \"type\" , insType.type as instrumentType FROM BANKRECONCILIATION rec, BANKACCOUNT BANK,"
+		+" VOUCHERHEADER v ,egf_instrumentheader ih, egf_instrumentotherdetails io, egf_instrumentVoucher iv, egf_instrumenttype insType	WHERE   ih.bankAccountId = BANK.ID AND bank.id = :bankAccId "
 		+"   AND IH.transactiondate <= :toDate " +instrumentCondition 
 		+" AND v.ID= iv.voucherheaderid and v.STATUS not in  ("+voucherExcludeStatuses+") AND ((ih.id_status=(select id from egw_status where moduletype='Instrument'  and description='Deposited') and ih.ispaycheque='0')or (ih.ispaycheque='1' and  ih.id_status=(select id from egw_status where moduletype='Instrument'  and description='New'))) "
-		+" AND rec.instrumentHeaderId=cast(ih.id as varchar(100)) and iv.instrumentHeaderid=ih.id and io.instrumentheaderid=ih.id and ih.transactionnumber is not null"
-		+"   group by ih.id,rec.transactiontype order by 4 " );
+		+" AND rec.instrumentHeaderId=cast(ih.id as varchar(100)) and iv.instrumentHeaderid=ih.id and io.instrumentheaderid=ih.id and insType.id=ih.instrumenttype  and ih.transactionnumber is not null"
+		+"   group by ih.id,rec.transactiontype,insType.type order by 4 " );
        
         
         
@@ -314,6 +313,7 @@ public class ManualReconcileHelper {
 		createSQLQuery.addScalar("chequeAmount",BigDecimalType.INSTANCE);
 		createSQLQuery.addScalar("txnType",StringType.INSTANCE);
 		createSQLQuery.addScalar("type",StringType.INSTANCE);
+		createSQLQuery.addScalar("instrumentType",StringType.INSTANCE);
 		createSQLQuery.setResultTransformer(Transformers.aliasToBean(ReconcileBean.class));
 	        list = (List<ReconcileBean>)createSQLQuery.list();
 	        try {
@@ -367,6 +367,7 @@ public class ManualReconcileHelper {
 	                reconcileBean.setChequeAmount(ins.getAmount());
 	                reconcileBean.setTxnType(txnType);
 	                reconcileBean.setType(type);
+	                reconBean.setInstrumentType(ins.getInstrumentType().getName());
 	                list.add(reconcileBean);
 	            }
 	        }

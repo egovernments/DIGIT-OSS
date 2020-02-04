@@ -70,7 +70,7 @@ public class ReconcileBean {
 	private String voucherNumber;
 	private Integer limit;
 	private String instrumentNo;
-	
+	private String instrumentType;
 	private BigDecimal creditAmount;
 	private BigDecimal debitAmount;
 	private BigDecimal otherCreditAmount;
@@ -198,5 +198,12 @@ public class ReconcileBean {
     public void setIhId(String ihId) {
         this.ihId = ihId;
     }
+    public String getInstrumentType() {
+        return instrumentType;
+    }
+    public void setInstrumentType(String instrumentType) {
+        this.instrumentType = instrumentType;
+    }
+    
 	
 }
