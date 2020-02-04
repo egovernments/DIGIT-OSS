@@ -1,1 +1,1 @@
-ALTER TABLE eg_tl_billingslab ALTER COLUMN IF NOT EXISTS applicationType character varying(64);
+ALTER TABLE eg_tl_billingslab ADD COLUMN applicationType character varying(64);
