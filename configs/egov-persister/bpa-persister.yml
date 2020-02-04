@@ -513,7 +513,7 @@ serviceMaps:
 
            - jsonPath: $.BPA.id
 
-       - query: UPDATE eg_bpa_buildingplan SET status =?, permitOrderNo=?, validityDate=?, holdingno=?, registrationdetails=?, govtorquasi=?  WHERE id =?;
+       - query: UPDATE eg_bpa_buildingplan SET status =?, permitOrderNo=?, validityDate=?, holdingno=?, registrationdetails=?, govtorquasi=?, additionaldetails=?  WHERE id =?;
          basePath: BPA
          jsonMaps:
            - jsonPath: $.BPA.status
@@ -528,6 +528,10 @@ serviceMaps:
            
            - jsonPath: $.BPA.govtOrQuasi
            
+           - jsonPath: $.BPA.additionalDetails
+             type: JSON
+             dbType: JSONB
+              
            - jsonPath: $.BPA.id
            
        - query: INSERT INTO eg_bpa_owner( id, name, tenantid, mobilenumber, gender, fatherorhusbandname, correspondenceaddress, institutionid, isprimaryowner, ownertype, ownershippercentage, relationship, buildingplanid, active, createdby,lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id, buildingplanid) WHERE id IS NOT NULL DO UPDATE SET name=?, mobilenumber=?, gender=?, fatherorhusbandname=?, correspondenceaddress=?, institutionid=?, isprimaryowner=?, ownertype=?, ownershippercentage=?, relationship=?, active=?, lastmodifiedby=?, lastmodifiedtime=?;
