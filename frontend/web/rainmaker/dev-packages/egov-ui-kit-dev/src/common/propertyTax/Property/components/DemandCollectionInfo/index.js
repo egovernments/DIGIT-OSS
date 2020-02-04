@@ -37,7 +37,7 @@ class DemandCollectionInfo extends React.Component {
                           if(Object.keys(data).length==2){
                             data['PT_COLLECTED']='';
                           }
-                          return (
+                          return data['PT_DEMAND']!=""? (
                             <div>
                               {Object.keys(data).map((d, i) => {
                                 return (
@@ -66,7 +66,7 @@ class DemandCollectionInfo extends React.Component {
                                 );
                               })}
                             </div>
-                          );
+                          ):null;
                         })}
                         </div>
                         <br />

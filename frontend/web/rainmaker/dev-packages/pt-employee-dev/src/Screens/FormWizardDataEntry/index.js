@@ -1283,7 +1283,7 @@ class FormWizardDataEntry extends Component {
                 let currentYearEnteredValueLength = 0;
                 // let previousYear=data1;
                 Object.keys(data.demand[data1]).forEach((data2, key2) => {
-                  if (!data.demand[data1][data2].PT_DEMAND && data.demand[data1][data2].PT_COLLECTED) {
+                  if (!data.demand[data1][data2].PT_DEMAND && data.demand[data1][data2].PT_COLLECTED && parseInt(data.demand[data1][data2].PT_COLLECTED)) {
                     errorCode = "ERR03_DEMAND_ENTER_THE_DATA";
                   }
                   if (data.demand[data1][data2].PT_DEMAND) {
@@ -1295,7 +1295,7 @@ class FormWizardDataEntry extends Component {
                     }
                     if (
                       checkRebate(data.demand[data1][data2].PT_TAXHEAD) &&
-                      data.demand[data1][data2].PT_COLLECTED &&
+                      data.demand[data1][data2].PT_COLLECTED && parseInt(data.demand[data1][data2].PT_COLLECTED) &&
                       checkPtTaxWithRebate(
                         data.demand[data1][data2].PT_TAXHEAD,
                         parseInt(data.demand[data1][data2].PT_DEMAND),
