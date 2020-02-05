@@ -24,7 +24,7 @@ const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
   if (owner.ownerType == "WIDOW" && owner.gender == "Male") {
     owner.gender = owner.gender.replace("Male", "Female");
   }
-  const specialCategory = `COMMON_MASTERS_OWNERTYPE_${owner &&
+  const specialCategory = `PROPERTYTAX_OWNERTYPE_${owner &&
     owner.ownerType &&
     generalMDMSDataById &&
     generalMDMSDataById["OwnerType"] &&

@@ -896,7 +896,8 @@ class FormWizardDataEntry extends Component {
       case 0:
       case 1:
       case 2:
-        headerObj.subHeaderValue = propertyId;
+      isReassesment === false  ?
+        headerObj.subHeaderValue ='': headerObj.subHeaderValue=propertyId;
         // headerObj.headerValue = "(" + assessmentYear + ")";
         isAssesment
           ? (headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER")
@@ -909,7 +910,8 @@ class FormWizardDataEntry extends Component {
             (headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER");
         break;
       case 3:
-        headerObj.subHeaderValue = propertyId;
+      isReassesment === false  ?
+        headerObj.subHeaderValue = '':headerObj.subHeaderValue =propertyId;
         isAssesment
           ? (headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER")
           : isReassesment
@@ -919,7 +921,8 @@ class FormWizardDataEntry extends Component {
         // headerObj.headerValue = "(" + assessmentYear + ")";
         break;
       case 4:
-        headerObj.subHeaderValue = propertyId;
+      isReassesment === false ?
+        headerObj.subHeaderValue = '':headerObj.subHeaderValue =propertyId;
         isAssesment
           ? (headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER")
           : isReassesment
@@ -1820,6 +1823,7 @@ class FormWizardDataEntry extends Component {
       generalMDMSDataById
     } = this.props;
     const { search } = location;
+    let {resetForm}=this;
     const propertyId = getQueryValue(search, "propertyId");
     const assessmentId = getQueryValue(search, "assessmentId");
     const propertyMethodAction = !!propertyId ? "_update" : "_create";
@@ -2111,10 +2115,35 @@ class FormWizardDataEntry extends Component {
       this.setState({
         assessedPropertyDetails: createPropertyResponse,
         assessedDemandDetails: createDemandResponse,
-        selected: index,
+        // selected: index,
         formValidIndexArray: [...formValidIndexArray, selected]
       });
       hideSpinner();
+      const  callToggleBarSnackbar = (labelKey, labelName) => {
+        this.props.toggleSnackbarAndSetText(
+          true,
+          {
+            labelName,
+            labelKey
+          },
+          "error"
+        );
+        resetForm();
+      };
+      switch(propertyMethodAction){
+        case "_update":
+        this.setState({
+          selected: index
+        });
+        break;
+        case "_create":
+        callToggleBarSnackbar(
+          "PT_PROPERTY_CREATED_SUCCESSFULLY",
+          "PropertyTax Created Successfully"
+        );
+        break;
+        default:
+      }
     } catch (e) {
       hideSpinner();
       this.setState({ nextButtonEnabled: true });
