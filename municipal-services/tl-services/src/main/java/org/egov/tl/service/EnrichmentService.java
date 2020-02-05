@@ -66,6 +66,7 @@ public class EnrichmentService {
                 case businessService_TL:
                     //TLR Changes
                     if(tradeLicense.getApplicationType() != null && tradeLicense.getApplicationType().toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL)){
+                        tradeLicense.setLicenseNumber(tradeLicenseRequest.getLicenses().get(0).getLicenseNumber());
                         Map<String, Long> taxPeriods = tradeUtil.getTaxPeriodsforRenewal(tradeLicense, mdmsData);
                         tradeLicense.setValidTo(taxPeriods.get(TLConstants.MDMS_ENDDATE));
                         tradeLicense.setValidFrom(taxPeriods.get(TLConstants.MDMS_STARTDATE));
