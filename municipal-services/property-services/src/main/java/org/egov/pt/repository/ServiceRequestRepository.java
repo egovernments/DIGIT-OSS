@@ -3,6 +3,7 @@ package org.egov.pt.repository;
 import java.util.Map;
 import java.util.Optional;
 
+import org.egov.tracer.model.CustomException;
 import org.egov.tracer.model.ServiceCallException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -27,8 +28,6 @@ public class ServiceRequestRepository {
 	/**
 	 * Fetches results from a REST service using the uri and object
 	 * 
-	 * @param requestInfo
-	 * @param serviceReqSearchCriteria
 	 * @return Object
 	 * @author vishal
 	 */
@@ -43,6 +42,7 @@ public class ServiceRequestRepository {
 			throw new ServiceCallException(e.getResponseBodyAsString());
 		} catch (Exception e) {
 			log.error("Exception while fetching from external service: ", e);
+			throw new CustomException("REST_CALL_EXCEPTION : "+uri.toString(),e.getMessage());
 		}
 
 		return Optional.ofNullable(response);

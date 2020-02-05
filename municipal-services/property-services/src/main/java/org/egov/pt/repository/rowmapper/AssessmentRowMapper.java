@@ -44,12 +44,12 @@ public class AssessmentRowMapper implements ResultSetExtractor<List<Assessment>>
 				assessment = Assessment.builder()
 						.id(rs.getString("ass_assessmentid"))
 						.assessmentNumber(rs.getString("ass_assessmentnumber"))
-						.status(Status.valueOf(rs.getString("ass_status")))
+						.status(Status.fromValue(rs.getString("ass_status")))
 						.tenantId(rs.getString("ass_tenantid"))
 						.assessmentDate(rs.getLong("ass_assessmentdate"))
 						.financialYear(rs.getString("ass_financialyear"))
 						.propertyId(rs.getString("ass_propertyid"))
-						.source(Source.valueOf(rs.getString("ass_source")))
+						.source(Source.fromValue(rs.getString("ass_source")))
 						.unitUsageList(new ArrayList<>())
 						.documents(new HashSet<>()).build();
 
@@ -117,7 +117,7 @@ public class AssessmentRowMapper implements ResultSetExtractor<List<Assessment>>
 				.lastModifiedTime(rs.getLong("doc_lastmodifiedtime")).build();
 
 		return Document.builder().id(rs.getString("doc_id"))
-				.status(Status.valueOf(rs.getString("doc_status")))
+				.status(Status.fromValue(rs.getString("doc_status")))
 				.documentType(rs.getString("doc_documenttype"))
 				.documentUid(rs.getString("doc_documentuid"))
 				.fileStoreId(rs.getString("doc_filestoreid"))

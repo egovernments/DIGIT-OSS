@@ -54,7 +54,6 @@ public class Assessment {
 	private Status status ;
 
 	@JsonProperty("source")
-	@NotNull
 	private Source source ;
 
 	@JsonProperty("unitUsageList")

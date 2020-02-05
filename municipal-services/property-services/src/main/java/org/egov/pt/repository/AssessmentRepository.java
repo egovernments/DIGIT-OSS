@@ -34,11 +34,7 @@ public class AssessmentRepository {
 		String query = queryBuilder.getSearchQuery(criteria, preparedStatementValues);
 		log.info("Query: "+query);
 		log.debug("preparedStatementValues: "+preparedStatementValues);
-		try {
-			assessments = namedParameterJdbcTemplate.query(query, preparedStatementValues, rowMapper);
-		}catch(Exception e) {
-			log.error("Exception while fetching assessments from DB: ",e);
-		}
+		assessments = namedParameterJdbcTemplate.query(query, preparedStatementValues, rowMapper);
 		return assessments;
 	}
 
