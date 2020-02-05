@@ -1542,28 +1542,30 @@ class FormWizard extends Component {
           (headerObj.header = 'PT_PROPERTY_ASSESSMENT_HEADER') :
           (isReassesment ?
             (headerObj.header = "PT_REASSESS_PROPERTY") :
-            (headerObj.headerValue = headerObj.headerValue + ':' + addNewPropertyLabel,
+            (headerObj.headerValue = "",
               headerObj.subHeaderValue = '',
-              headerObj.header = "PT_PROPERTY_ASSESSMENT_HEADER")));
+              headerObj.header = "PT_PROPERTY_CREATE_HEADER")));
         break;
       case 3:
         headerObj.subHeaderValue = propertyId;
+        headerObj.headerValue = '(' + assessmentYear + ')';
         (isAssesment ?
           (headerObj.header = 'PT_PROPERTY_ASSESSMENT_HEADER') :
           (isReassesment ?
             (headerObj.header = "PT_REASSESS_PROPERTY") :
-            (headerObj.subHeaderValue = '',
-              headerObj.header = "PT_PROPERTY_ASSESSMENT_HEADER")));
-        headerObj.headerValue = '(' + assessmentYear + ')';
+            (headerObj.headerValue = "",
+            headerObj.subHeaderValue = '',
+            headerObj.header = "PT_PROPERTY_CREATE_HEADER")));
         break;
       case 4:
         headerObj.subHeaderValue = propertyId;
+        headerObj.headerValue = '(' + assessmentYear + ')';
         (isAssesment ?
           (headerObj.header = 'PT_PROPERTY_ASSESSMENT_HEADER') :
           (isReassesment ?
             (headerObj.header = "PT_REASSESS_PROPERTY") :
-            (headerObj.header = "PT_PROPERTY_ASSESSMENT_HEADER")));
-        headerObj.headerValue = '(' + assessmentYear + ')';
+            (headerObj.headerValue = "",headerObj.header = "PT_PROPERTY_CREATE_HEADER")));
+        // headerObj.headerValue = "";
         break;
       case 5:
       case 6:
@@ -1575,9 +1577,9 @@ class FormWizard extends Component {
         headerObj.header = 'PT_PROPERTY_INFORMATION';
         headerObj.subHeaderValue = propertyId;
     }
-    console.log(headerObj, 'headerObj');
     return headerObj;
   }
+
 
   getMessageHeader() {
     let { search } = this.props.location;
