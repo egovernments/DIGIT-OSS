@@ -128,29 +128,29 @@ class ApplicationPreview extends Component {
   };
   render() {
     const { location } = this.props;
-  const { search } = location;
+    const { search } = location;
     const propertyId = getQueryValue(search, "propertyId");
     const { generalMDMSDataById, properties } = this.props;
     return <div>
-       <Screen className={""}>
+      <Screen className={""}>
         <PTHeader header='PT_APPLICATION_TITLE' subHeaderTitle='PT_PROPERTY_APPLICATION_NO' subHeaderValue={propertyId} />
-      <div className="form-without-button-cont-generic" >
-        <div>
-        <WorkFlowContainer  dataPath={"FireNOCs"}
-            moduleName={"FIRENOC"} 
-            updateUrl={"/firenoc-services/v1/_update"}></WorkFlowContainer>
-          <Card
-            textChildren={
-              <div className="col-sm-12 col-xs-12" style={{ alignItems: "center" }}>
-                <PropertyAddressInfo properties={properties} generalMDMSDataById={generalMDMSDataById}></PropertyAddressInfo>
-                <AssessmentInfo properties={properties} generalMDMSDataById={generalMDMSDataById} ></AssessmentInfo>
-                <OwnerInfo properties={properties} generalMDMSDataById={generalMDMSDataById} ></OwnerInfo>
-              </div>
-            }
-          />
+        <div className="form-without-button-cont-generic" >
+          <div>
+            <WorkFlowContainer dataPath={"FireNOCs"}
+              moduleName={"FIRENOC"}
+              updateUrl={"/firenoc-services/v1/_update"}></WorkFlowContainer>
+            <Card
+              textChildren={
+                <div className="col-sm-12 col-xs-12" style={{ alignItems: "center" }}>
+                  <PropertyAddressInfo properties={properties} generalMDMSDataById={generalMDMSDataById}></PropertyAddressInfo>
+                  <AssessmentInfo properties={properties} generalMDMSDataById={generalMDMSDataById} ></AssessmentInfo>
+                  <OwnerInfo properties={properties} generalMDMSDataById={generalMDMSDataById} ></OwnerInfo>
+                </div>
+              }
+            />
+          </div>
         </div>
-      </div>
-    </Screen>
+      </Screen>
     </div>
   }
 }

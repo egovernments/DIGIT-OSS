@@ -147,14 +147,14 @@ class OwnerInfo extends Component {
                     }
                   : {
                       key: getTranslatedLabel("PT_OWNERSHIP_DOCUMENT_TYPE", localizationLabelsData),
-                      value:owner.documents[0].documentType? getTranslatedLabel("PT_"+(owner.documents[0].documentType).toUpperCase(),localizationLabelsData) || "NA" : "NA",
+                      value:owner&&owner.documents&&owner.documents.length>0&&owner.documents[0].documentType? getTranslatedLabel("PT_"+(owner.documents[0].documentType).toUpperCase(),localizationLabelsData) || "NA" : "NA",
                     },
                     isInstitution
                   ? {
                     }
                   : {
                       key: getTranslatedLabel("PT_OWNERSHIP_DOCUMENT_ID", localizationLabelsData),
-                      value:owner.documents[0].documentType? owner.documents[0].documentUid || "NA":"NA",
+                      value:owner&&owner.documents&&owner.documents.length>0&&owner.documents[0].documentType? owner.documents[0].documentUid || "NA":"NA",
                     },
           ],
         };

@@ -44,6 +44,11 @@ const PropertyInformationForm = Loadable({
   loading: Loading
 });
 
+const ptAcknowledgment = Loadable({
+  loader: () => import("egov-ui-kit/common/propertyTax/PTAcknowledgement"),
+  loading: Loading
+});
+
 // const redirectionUrl = "/user/login";
 
 const routes = [
@@ -153,6 +158,17 @@ const routes = [
       hideFooter: true,
       // hideBackButton: true,
       title: "PT_EXAMPLES"
+    }
+  },
+  {
+    path: "property-tax/pt-acknowledgment",
+    component: ptAcknowledgment,
+    needsAuthentication: true,
+    options: {
+      hideFooter: false,
+      hideTitle: true,
+      // hideBackButton: true,
+      // title: "PT_ACKNOWLEDGEMENT"
     }
   }
 ];

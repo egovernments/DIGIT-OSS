@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Card } from "components";
 import WizardComponent from "./components/WizardComponent";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import {
@@ -6,6 +7,7 @@ import {
   updateForms,
   handleFieldChange
 } from "egov-ui-kit/redux/form/actions";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import PTHeader from "egov-ui-kit/common/common/PTHeader";
 import Label from "egov-ui-kit/utils/translationNode";
 import { getTranslatedLabel } from "egov-ui-kit/utils/commons";
@@ -287,7 +289,7 @@ class FormWizard extends Component {
         },
         () => {
           {
-            if (activeTab >= 3 && !isCompletePayment) {
+            if (activeTab >= 4 && !isCompletePayment) {
               this.estimate().then(estimateResponse => {
                 if (estimateResponse) {
                   this.setState({
@@ -302,7 +304,7 @@ class FormWizard extends Component {
                 }
               });
             }
-            if (activeTab === 4) this.pay();
+            if (activeTab === 5) this.pay();
           }
         }
       );
@@ -549,6 +551,12 @@ class FormWizard extends Component {
           </div>
         );
       case 3:
+        return (<div>
+          <Card  textChildren={ <h2>Document upload Tab</h2>}>
+           
+            </Card>
+          </div>);
+      case 4:
         return (
           <div className="review-pay-tab">
             <ReviewForm
@@ -568,14 +576,14 @@ class FormWizard extends Component {
           </div>
         );
 
-      case 4:
+      case 5:
 
         return (
           <div>
             <AcknowledgementCard acknowledgeType='success' receiptHeader="PT_ASSESSMENT_NO" messageHeader={this.getMessageHeader()} message={this.getMessage()} receiptNo={assessedPropertyDetails['Properties'][0]['propertyDetails'][0]['assessmentNumber']} />
           </div>
         );
-      case 5:
+      case 6:
 
         return (
           <div>
@@ -600,7 +608,7 @@ class FormWizard extends Component {
 
           </div>
         );
-      case 6:
+      case 7:
         return (
           <div>
             <AcknowledgementCard acknowledgeType='success' receiptHeader="PT_PMT_RCPT_NO" messageHeader='PT_PROPERTY_PAYMENT_SUCCESS' message='PT_PROPERTY_PAYMENT_NOTIFICATION' receiptNo='PT-107-017574' />
@@ -617,13 +625,13 @@ class FormWizard extends Component {
     let isAssesment = Boolean(getQueryValue(search, "isAssesment").replace('false', ''));
 
     let buttonLabel = "PT_COMMONS_NEXT";
-    if (index == 3) {
+    if (index == 4) {
       isAssesment ? buttonLabel = 'PT_ASSESS_PROPERTY' : (isReassesment ? buttonLabel = "PT_UPDATE_ASSESSMENT" : buttonLabel = "PT_ADD_ASSESS_PROPERTY");
-    } else if (index == 4) {
-      buttonLabel = 'PT_PROCEED_PAYMENT'
     } else if (index == 5) {
-      buttonLabel = 'PT_GENERATE_RECEIPT'
+      buttonLabel = 'PT_PROCEED_PAYMENT'
     } else if (index == 6) {
+      buttonLabel = 'PT_GENERATE_RECEIPT'
+    } else if (index == 7) {
       buttonLabel = 'PT_DOWNLOAD_RECEIPT'
     }
 
@@ -676,28 +684,30 @@ class FormWizard extends Component {
           (headerObj.header = 'PT_PROPERTY_ASSESSMENT_HEADER') :
           (isReassesment ?
             (headerObj.header = "PT_REASSESS_PROPERTY") :
-            (headerObj.headerValue = headerObj.headerValue + ':' + addNewPropertyLabel,
+            (headerObj.headerValue = "",
               headerObj.subHeaderValue = '',
-              headerObj.header = "PT_PROPERTY_ASSESSMENT_HEADER")));
+              headerObj.header = "PT_PROPERTY_CREATE_HEADER")));
         break;
       case 3:
         headerObj.subHeaderValue = propertyId;
+        headerObj.headerValue = '(' + assessmentYear + ')';
         (isAssesment ?
           (headerObj.header = 'PT_PROPERTY_ASSESSMENT_HEADER') :
           (isReassesment ?
             (headerObj.header = "PT_REASSESS_PROPERTY") :
-            (headerObj.subHeaderValue = '',
-              headerObj.header = "PT_PROPERTY_ASSESSMENT_HEADER")));
-        headerObj.headerValue = '(' + assessmentYear + ')';
+            (headerObj.headerValue = "",
+            headerObj.subHeaderValue = '',
+            headerObj.header = "PT_PROPERTY_CREATE_HEADER")));
         break;
       case 4:
         headerObj.subHeaderValue = propertyId;
+        headerObj.headerValue = '(' + assessmentYear + ')';
         (isAssesment ?
           (headerObj.header = 'PT_PROPERTY_ASSESSMENT_HEADER') :
           (isReassesment ?
             (headerObj.header = "PT_REASSESS_PROPERTY") :
-            (headerObj.header = "PT_PROPERTY_ASSESSMENT_HEADER")));
-        headerObj.headerValue = '(' + assessmentYear + ')';
+            (headerObj.headerValue = "",headerObj.header = "PT_PROPERTY_CREATE_HEADER")));
+        // headerObj.headerValue = "";
         break;
       case 5:
       case 6:
@@ -953,14 +963,43 @@ class FormWizard extends Component {
 
         break;
       case 3:
-        if (estimation[0].totalAmount < 0) {
+        window.scrollTo(0, 0);
+        this.setState({
+          selected: index,
+          formValidIndexArray: [...formValidIndexArray, selected]
+        });
+        break;
+        // createAndUpdate(index);
+      case 4:
+        let { assessedPropertyDetails:asd = {} } = this.state;
+        const { Properties:pts = [] } = asd;
+        let { search:search1 } = this.props.location;
+
+        
+        let isAssesment1 = Boolean(getQueryValue(search1, "isAssesment").replace('false', ''));
+        let propertyId1 = '';
+        let tenantId1 = '';
+        for (let pty of pts) {
+          propertyId1 = pty.propertyId;
+          tenantId1 = pty.tenantId;
+        }
+        if (estimation&&estimation.length&&estimation.length>1&&estimation[0].totalAmount < 0) {
           alert('Property Tax amount cannot be Negative!');
         } else {
           window.scrollTo(0, 0);
-          createAndUpdate(index);
+          if(isAssesment1){
+            this.assessProperty();
+            // this.props.history.push(`pt-acknowledgment?purpose=assessment&consumerCode=${propertyId1}&status=success&tenantId=${tenantId1}&FY=2019-20`);
+          }else{
+            this.props.history.push(`pt-acknowledgment?purpose=apply&consumerCode=${propertyId1}&status=success&tenantId=${tenantId1}&FY=2019-20`);
+          }
+          // createAndUpdate(index);
+          // pt-acknowledgment?purpose=apply&status=success&applicationNumber=PB-TL-2019-12-20-003743&FY=2019-20&tenantId=pb.amritsar
+         // createAndUpdate(index);
+        
         }
         break;
-      case 4:
+      case 5:
           const { assessedPropertyDetails = {} } = this.state;
           const { Properties = [] } = assessedPropertyDetails;
           let propertyId = '';
@@ -977,10 +1016,10 @@ class FormWizard extends Component {
         //     formValidIndexArray: [...formValidIndexArray, selected]
         //   });
         break;
-      case 5:
+      case 6:
         onPayButtonClick();
         break;
-      case 6:
+      case 7:
         pay();
         break;
     }
@@ -1263,6 +1302,8 @@ class FormWizard extends Component {
           "Properties[0].propertyDetails[0].financialYear",
           financialYearFromQuery
         );
+      }else{
+        return;
       }
       if (selectedownerShipCategoryType === "SINGLEOWNER") {
         set(
@@ -1539,6 +1580,49 @@ class FormWizard extends Component {
       alert(e);
     }
   };
+
+  assessProperty=async()=>{
+    let propertyMethodAction= '_create';
+    const propertyId = getQueryArg(
+     window.location.href,
+     "propertyId"
+   );
+   const financialYear = getQueryArg(window.location.href, "FY");
+   const tenant = getQueryArg(window.location.href, "tenantId");
+    let assessment={
+     "tenantId": tenant,
+     "propertyId": propertyId,
+     "financialYear": financialYear,
+     "assessmentDate": new Date().getTime(),
+     "source": "MUNICIPAL_RECORDS",
+     "channel": "CFC_COUNTER",
+     "status": "ACTIVE"
+     
+    }
+   try {
+     
+     
+     let assessPropertyResponse = await httpRequest(
+       `property-services/assessment/${propertyMethodAction}`,
+       `${propertyMethodAction}`,
+       [],
+       {
+         Assessment: assessment
+       }
+     );
+     store.dispatch(
+       setRoute(
+         `/property-tax/pt-acknowledgment?purpose=assessment&status=success&propertyId=${assessment.propertyId}&FY=${assessment.financialYear}&tenantId=${assessment.tenantId}`
+         
+       )
+     );
+ 
+   } catch (e) {
+     hideSpinner();
+     this.setState({ nextButtonEnabled: true });
+     alert(e);
+   }
+  }
 
   pay = async () => {
     const { callPGService, callDraft } = this;

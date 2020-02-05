@@ -176,7 +176,12 @@ export const sortDropdown = (data, sortBy, isAscending) => {
   });
   return sortedData;
 };
-
+export const getOwnerCategory = (data=[]) => {
+  const OwnerCatArray = data.map((item,index) => {
+    return { label: item.name, value: item.code };
+  });
+  return OwnerCatArray;
+}
 export const getOwnerCategoryByYear = (data, financialYear) => {
   data.sort((a, b) => {
     let yearOne = a.fromFY && a.fromFY.slice(0, 4);

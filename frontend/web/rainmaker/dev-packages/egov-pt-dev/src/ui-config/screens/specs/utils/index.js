@@ -220,14 +220,15 @@ export const gotoApplyWithStep = (state, dispatch, step) => {
 };
 
 export const showHideAdhocPopup = (state, dispatch, screenKey) => {
-  let toggle = get(
-    state.screenConfiguration.screenConfig[screenKey],
-    "components.adhocDialog.props.open",
-    false
-  );
-  dispatch(
-    handleField(screenKey, "components.adhocDialog", "props.open", !toggle)
-  );
+  dispatch(setRoute(`/property-tax/assessment-form`));
+  // let toggle = get(
+  //   state.screenConfiguration.screenConfig[screenKey],
+  //   "components.adhocDialog.props.open",
+  //   false
+  // );
+  // dispatch(
+  //   handleField(screenKey, "components.adhocDialog", "props.open", !toggle)
+  // );
 };
 
 export const getCommonGrayCard = children => {

@@ -15,7 +15,7 @@ import PropertyTable from "./components/PropertyTable";
 import { validateForm } from "egov-ui-kit/redux/form/utils";
 import { getLatestPropertyDetails } from "egov-ui-kit/utils/PTCommon";
 import { displayFormErrors, resetForm } from "egov-ui-kit/redux/form/actions";
-import {fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
+import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { connect } from "react-redux";
 import { fetchProperties } from "egov-ui-kit/redux/properties/actions";
 import get from "lodash/get";
@@ -62,7 +62,7 @@ class SearchProperty extends Component {
   };
 
   onSearchClick = (form, formKey) => {
-    const { propertiesFound,fetchLocalizationLabel } = this.props;
+    const { propertiesFound, fetchLocalizationLabel } = this.props;
     const { city, ids, oldpropertyids, mobileNumber, applicationNumber } = form.fields || {};
     const tableData = this.extractTableData(propertiesFound);
     fetchLocalizationLabel(getLocale(), city.value, city.value);
@@ -145,8 +145,8 @@ class SearchProperty extends Component {
         propertyDetails,
         tenantId
       } = property;
-      if(!applicationNo) applicationNo = property.acknowldgementNumber;
-      if(!date) date = getDateFromEpoch(property.auditDetails.createdTime);
+      if (!applicationNo) applicationNo = property.acknowldgementNumber;
+      if (!date) date = getDateFromEpoch(property.auditDetails.createdTime);
       applicationType = history.location.pathname.includes('property-tax') ? 'PT' : applicationType;
       const latestAssessment = getLatestPropertyDetails(propertyDetails);
       let name = latestAssessment.owners[0].name;
@@ -174,10 +174,11 @@ class SearchProperty extends Component {
   };
 
   onAddButtonClick = () => {
-    this.setState({
-      dialogueOpen: true
-    });
-
+    // this.setState({
+    //   dialogueOpen: true
+    // });
+    const { history } = this.props;
+    history.push('/property-tax/assessment-form');
   };
 
   render() {
@@ -319,7 +320,7 @@ const mapDispatchToProps = dispatch => {
     toggleSnackbarAndSetText: (open, message, error) =>
       dispatch(toggleSnackbarAndSetText(open, message, error)),
     resetForm: formKey => dispatch(resetForm(formKey)),
-    fetchLocalizationLabel : (locale, tenantId, moduleValue) => dispatch(fetchLocalizationLabel(locale, tenantId, moduleValue))
+    fetchLocalizationLabel: (locale, tenantId, moduleValue) => dispatch(fetchLocalizationLabel(locale, tenantId, moduleValue))
   };
 };
 

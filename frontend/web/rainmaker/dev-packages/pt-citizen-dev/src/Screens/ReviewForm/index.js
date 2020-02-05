@@ -224,18 +224,24 @@ class ReviewForm extends Component {
         <Card
           textChildren={
             <div className="col-sm-12 col-xs-12" style={{ alignItems: "center" }}>
-              <PropertyTaxDetailsCard
+              <div>
+                <Label
+                  labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.87)", fontWeight: "400", lineHeight: "19px" }}
+                  label={'PT_APPLICATION_SUMMARY'}
+                  fontSize="20px"
+                />
+
+              </div>
+              {estimationDetails && estimationDetails.length > 0 && <PropertyTaxDetailsCard
                 estimationDetails={estimationDetails}
                 importantDates={importantDates}
                 openCalculationDetails={this.openCalculationDetails}
                 optionSelected={valueSelected}
-              />
+              />}
               <PropertyAddressInfo generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={<EditIcon onIconClick={() => onEditButtonClick(0)} />}></PropertyAddressInfo>
               <AssessmentInfo generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={<EditIcon onIconClick={() => onEditButtonClick(1)} />}></AssessmentInfo>
               <OwnerInfo generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={<EditIcon onIconClick={() => onEditButtonClick(2)} />}></OwnerInfo>
-              {/* {isAssesment && */}
               <div>
-
                 {!this.props.isCompletePayment && (
                   <CalculationDetails
                     open={this.state.calculationDetails}
@@ -243,21 +249,6 @@ class ReviewForm extends Component {
                     closeDialogue={() => this.closeCalculationDetails()}
                   />
                 )}
-                {/* {!isPartialPaymentInValid && (
-                  <PaymentAmountDetails
-                    value={
-                      valueSelected === "Partial_Amount"
-                        ? totalAmountToBePaid
-                        : totalAmount
-                    }
-                    onRadioButtonChange={onRadioButtonChange}
-                    handleFieldChange={handleFieldChange}
-                    optionSelected={valueSelected}
-                    totalAmount={totalAmount && totalAmount}
-                    estimationDetails={estimationDetails}
-                    errorText={errorText}
-                  />
-                )} */}
                 <p className="declaration-main-header">DECLARATION</p>
                 <SingleCheckbox
                   id="rcpt"

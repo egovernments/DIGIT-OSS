@@ -242,7 +242,7 @@ class FormWizard extends Component {
       //Get estimate from bill in case of complete payment
       if (isCompletePayment) {
         const billResponse =
-          activeTab === 3 &&
+          activeTab === 4 &&
           (await this.callGetBill(
             propertyId,
             assessmentId,
@@ -283,7 +283,7 @@ class FormWizard extends Component {
         },
         () => {
           {
-            if (activeTab === 3 && !isCompletePayment) {
+            if (activeTab === 4 && !isCompletePayment) {
               this.estimate().then(estimateResponse => {
                 if (estimateResponse) {
                   this.setState({
@@ -535,6 +535,7 @@ class FormWizard extends Component {
       case 3:
         return (
           <div className="review-pay-tab">
+            <h3>Document Upload</h3>
             {/* {console.log(this.props,"location-jk")}
             {console.log(this.props['prepareFormData']['Properties'][0]['propertyId'], 'props =jk   ---')}
             {console.log(this.props['prepareFormData']['Properties'][0]['tenantId'], 'tenantId =jk   ---')}
@@ -543,7 +544,12 @@ class FormWizard extends Component {
             <button onClick={()=>    this.onTabClick(2)  }>3</button> */}
             {/* <Property tenantId={this.props['prepareFormData']['Properties'][0]['tenantId']} propertyId={this.props['prepareFormData']['Properties'][0]['propertyId']}></Property> */}
 
-            <ReviewForm
+            
+          </div>
+        );
+      case 4 :
+        return(<div className="review-pay-tab">
+          <ReviewForm
               onTabClick={this.onTabClick}
               properties={this.props['prepareFormData']['Properties'][0]}
               stepZero={this.renderStepperContent(0, fromReviewPage)}
@@ -569,16 +575,15 @@ class FormWizard extends Component {
               termsError={termsError}
               calculationScreenData={this.state.calculationScreenData}
             />
-          </div>
-        );
-      case 4:
+        </div>)
+      case 5:
 
         return (
           <div>
             <AcknowledgementCard acknowledgeType='success' receiptHeader="PT_ASSESSMENT_NO" messageHeader={this.getMessageHeader()} message={this.getMessage()} receiptNo={assessedPropertyDetails['Properties'][0]['propertyDetails'][0]['assessmentNumber']} />
           </div>
         );
-      case 5:
+      case 6:
 
         return (
           <div>
@@ -606,7 +611,7 @@ class FormWizard extends Component {
             />
           </div>
         );
-      case 6:
+      case 7:
         return (
           <div>
             <AcknowledgementCard acknowledgeType='success' receiptHeader="PT_PMT_RCPT_NO" messageHeader='PT_PROPERTY_PAYMENT_SUCCESS' message='PT_PROPERTY_PAYMENT_NOTIFICATION' receiptNo='PT-107-017574' />
@@ -1011,16 +1016,21 @@ class FormWizard extends Component {
 
         break;
       case 3:
+        this.setState(
+          {
+            selected: index,
+            formValidIndexArray: [...formValidIndexArray, selected]
+          })
+        break;
+      case 4:
         if (estimation[0].totalAmount < 0) {
           alert('Property Tax amount cannot be Negative!');
         } else {
           window.scrollTo(0, 0);
           createAndUpdate(index);
         }
-
-
         break;
-      case 4:
+      case 5:
         const { assessedPropertyDetails = {} } = this.state;
         const { Properties = [] } = assessedPropertyDetails;
         let propertyId = '';
@@ -1031,22 +1041,15 @@ class FormWizard extends Component {
         }
         this.props.history.push(`./../egov-common/pay?consumerCode=${propertyId}&tenantId=${tenantId}`
         )
-        // added tryout
-        // callDraft(this);
-        // this.setState(
-        //   {
-        //     selected: index,
-        //     formValidIndexArray: [...formValidIndexArray, selected]
-        //   });
         break;
-      case 5:
+      case 6:
         if (this.state.partialAmountError.length == 0) {
           pay();
         } else {
           alert(this.state.partialAmountError);
         }
         break;
-      case 6:
+      case 7:
         pay();
         break;
     }
@@ -1063,26 +1066,12 @@ class FormWizard extends Component {
     const { search } = location;
     const isCompletePayment = getQueryValue(search, "isCompletePayment");
     toggleSpinner();
-    // const queryObj = [
-    //   { key: "propertyId", value: propertyId },
-    //   { key: "assessmentNumber", value: assessmentNumber },
-    //   { key: "assessmentYear", value: assessmentYear },
-    //   { key: "tenantId", value: tenantId }
-    // ];
-    // !isCompletePayment &&
-    //   queryObj.push({
-    //     key: "amountExpected",
-    //     value: isFullPayment ? estimation[0].totalAmount : totalAmountToBePaid
-    //   });
+
     const queryObj = [
       { key: "consumerCodes", value: propertyId },
       { key: "tenantId", value: tenantId }
     ];
-    // !isCompletePayment &&
-    //   queryObj.push({
-    //     key: "amountExpected",
-    //     value: isFullPayment ? estimation[0].totalAmount : totalAmountToBePaid
-    //   });
+
 
     try {
       const billResponse = await httpRequest(
@@ -1220,6 +1209,8 @@ class FormWizard extends Component {
           "Properties[0].propertyDetails[0].financialYear",
           financialYearFromQuery
         );
+      }else{
+        return;
       }
       if (selectedownerShipCategoryType === "SINGLEOWNER") {
         set(
@@ -1518,13 +1509,13 @@ class FormWizard extends Component {
     let isReassesment = Boolean(getQueryValue(search, "isReassesment").replace('false', ''));
     let isAssesment = Boolean(getQueryValue(search, "isAssesment").replace('false', ''));
     let buttonLabel = "PT_COMMONS_NEXT";
-    if (index == 3) {
+    if (index == 4) {
       isAssesment ? buttonLabel = 'PT_ASSESS_PROPERTY' : (isReassesment ? buttonLabel = "PT_UPDATE_ASSESSMENT" : buttonLabel = "PT_ADD_ASSESS_PROPERTY");
-    } else if (index == 4) {
-      buttonLabel = 'PT_PROCEED_PAYMENT'
     } else if (index == 5) {
-      buttonLabel = 'PT_MAKE_PAYMENT'
+      buttonLabel = 'PT_PROCEED_PAYMENT'
     } else if (index == 6) {
+      buttonLabel = 'PT_MAKE_PAYMENT'
+    } else if (index == 7) {
       buttonLabel = 'PT_DOWNLOAD_RECEIPT'
     }
     return buttonLabel;
@@ -1634,10 +1625,10 @@ class FormWizard extends Component {
     const { location } = this.props;
     const { search } = location;
     let proceedToPayment = Boolean(getQueryValue(search, "proceedToPayment").replace('false', ''));
-    if (proceedToPayment && selected == 3) {
+    if (proceedToPayment && selected == 4) {
       this.setState({
-        selected: 5,
-        formValidIndexArray: [...formValidIndexArray, 5]
+        selected: 6,
+        formValidIndexArray: [...formValidIndexArray, 6]
       });
     }
   }
@@ -1696,7 +1687,7 @@ class FormWizard extends Component {
     for (let pty of Properties) {
       propertyId = pty.propertyId;
     }
-    const fromReviewPage = selected === 3;
+    const fromReviewPage = selected === 4;
     const { history, location } = this.props;
     const { search } = location;
     // const propertyId = getQueryValue(search, "propertyId");
