@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.tl.config.TLConfiguration;
+import org.egov.tl.producer.Producer;
 import org.egov.tl.repository.TLRepository;
 import org.egov.tl.service.notification.EditNotificationService;
 import org.egov.tl.util.TLConstants;
@@ -59,6 +60,8 @@ public class TradeLicenseService {
 
     private  TradeUtil tradeUtil;
 
+    private Producer producer;
+
     @Value("${workflow.bpa.businessServiceCode.fallback_enabled}")
     private Boolean pickWFServiceNameFromTradeTypeOnly;
 
@@ -67,7 +70,7 @@ public class TradeLicenseService {
                                UserService userService, TLRepository repository, ActionValidator actionValidator,
                                TLValidator tlValidator, TLWorkflowService TLWorkflowService,
                                CalculationService calculationService, TradeUtil util, DiffService diffService,
-                               TLConfiguration config, EditNotificationService editNotificationService, WorkflowService workflowService, TradeUtil tradeUtil) {
+                               TLConfiguration config, EditNotificationService editNotificationService, WorkflowService workflowService, TradeUtil tradeUtil,Producer producer) {
         this.wfIntegrator = wfIntegrator;
         this.enrichmentService = enrichmentService;
         this.userService = userService;
@@ -82,6 +85,7 @@ public class TradeLicenseService {
         this.editNotificationService = editNotificationService;
         this.workflowService = workflowService;
         this.tradeUtil = tradeUtil;
+        this.producer = producer;
     }
 
 
@@ -121,6 +125,12 @@ public class TradeLicenseService {
                break;
        }
         repository.save(tradeLicenseRequest);
+
+       if(tradeLicenseRequest.getLicenses().get(0).getApplicationType() != null && tradeLicenseRequest.getLicenses().get(0).getApplicationType().toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL)){
+
+            producer.push(config.getUpdateTopic(), tradeLicenseRequest);
+        }
+
         return tradeLicenseRequest.getLicenses();
 	}
 
