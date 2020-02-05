@@ -7,6 +7,7 @@ import {
   updateForms,
   handleFieldChange
 } from "egov-ui-kit/redux/form/actions";
+import store from "ui-redux/store";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import PTHeader from "egov-ui-kit/common/common/PTHeader";
 import Label from "egov-ui-kit/utils/translationNode";
@@ -1604,8 +1605,14 @@ class FormWizard extends Component {
  
    } catch (e) {
      hideSpinner();
-     this.setState({ nextButtonEnabled: true });
-     alert(e);
+    //  this.setState({ nextButtonEnabled: true });
+    //  alert(e);
+    store.dispatch(
+      setRoute(
+        `/property-tax/pt-acknowledgment?purpose=assessment&status=failure&propertyId=${assessment.propertyId}&FY=${assessment.financialYear}&tenantId=${assessment.tenantId}`
+        
+      )
+    );
    }
   }
 
@@ -1638,8 +1645,16 @@ class FormWizard extends Component {
       }
     } catch (e) {
       hideSpinner();
-      this.setState({ nextButtonEnabled: true });
-      alert(e);
+      // this.setState({ nextButtonEnabled: true });
+      // alert(e);
+       
+        store.dispatch(
+          setRoute(
+            `/property-tax/pt-acknowledgment?purpose=apply&status=failure`
+            
+          )
+        );
+       
     }
   }
 
