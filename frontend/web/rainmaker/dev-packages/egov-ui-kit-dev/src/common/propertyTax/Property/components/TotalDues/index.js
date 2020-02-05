@@ -62,7 +62,7 @@ class TotalDues extends React.Component {
           </div>
         )}
         {totalBillAmountDue > 0 && (
-          <div className="col-xs-6 col-sm-3 flex-child-button">
+          <div className="col-xs-12 col-sm-3 flex-child-button">
             <div style={{ float: "right" }}>
               <TotalDuesButton
                 primary={true}

@@ -8,7 +8,8 @@ import propertyAddressConfig from "./formConfigs/propertyAddress";
 import { connect } from "react-redux";
 import formHoc from "egov-ui-kit/hocs/form";
 import EditIcon from "./components/EditIcon";
-
+import {getQueryValue,
+  } from "egov-ui-kit/utils/PTCommon";
 import PropertyAddressInfo from 'egov-ui-kit/common/propertyTax/Property/components/PropertyAddressInfo';
 import AssessmentInfo from 'egov-ui-kit/common/propertyTax/Property/components/AssessmentInfo';
 import OwnerInfo from 'egov-ui-kit/common/propertyTax/Property/components/OwnerInfo';
@@ -73,8 +74,10 @@ class ReviewForm extends Component {
     let { addRebateBox, updateCalculation, onEditButtonClick } = this;
     let { showRebateBox } = this.state;
     let { stepZero, stepTwo, stepOne, estimationDetails, importantDates, totalAmount } = this.props;
-    const { generalMDMSDataById = {} } = this.props;
-
+    const { generalMDMSDataById = {},location={} } = this.props;
+    const { search } = location;
+    const isReassess = Boolean(getQueryValue(search, "isReassesment").replace('false', ''));
+    const isAssess = Boolean(getQueryValue(search, "isAssesment").replace('false', ''));
     return (
       <div>
         <Card
@@ -88,7 +91,7 @@ class ReviewForm extends Component {
                 />
 
               </div>
-              {estimationDetails && estimationDetails.length > 0 && <PropertyTaxDetailsCard
+              {(isAssess||isReassess) && <PropertyTaxDetailsCard
                 estimationDetails={estimationDetails}
                 importantDates={importantDates}
                 addRebateBox={addRebateBox}

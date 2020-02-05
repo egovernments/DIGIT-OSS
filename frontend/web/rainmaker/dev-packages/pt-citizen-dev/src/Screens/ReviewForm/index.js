@@ -7,7 +7,7 @@ import { httpRequest } from "egov-ui-kit/utils/api";
 import { connect } from "react-redux";
 import { MDMS } from "egov-ui-kit/utils/endPoints";
 import EditIcon from "./components/EditIcon";
-import {
+import {getQueryValue,
   findCorrectDateObj,
   findCorrectDateObjPenaltyIntrest
 } from "egov-ui-kit/utils/PTCommon";
@@ -218,7 +218,11 @@ class ReviewForm extends Component {
       toggleTerms
     } = this.props;
     let { totalAmount } = estimationDetails[0] || {};
-    const { generalMDMSDataById = {} } = this.props;
+    const { generalMDMSDataById = {} ,location={}} = this.props;
+    
+  const { search } = location;
+    const isReassess = Boolean(getQueryValue(search, "isReassesment").replace('false', ''));
+      const isAssess = Boolean(getQueryValue(search, "isAssesment").replace('false', ''));
     return (
       <div>
         <Card
@@ -232,7 +236,7 @@ class ReviewForm extends Component {
                 />
 
               </div>
-              {estimationDetails && estimationDetails.length > 0 && <PropertyTaxDetailsCard
+              {(isAssess||isReassess)&& <PropertyTaxDetailsCard
                 estimationDetails={estimationDetails}
                 importantDates={importantDates}
                 openCalculationDetails={this.openCalculationDetails}

@@ -571,6 +571,7 @@ class FormWizard extends Component {
               estimationDetails={estimation}
               updateEstimate={updateEstimate}
               importantDates={importantDates}
+              location={this.props.location}
               totalAmount={totalAmountToBePaid}
               isCompletePayment={isCompletePayment}
               calculationScreenData={this.state.calculationScreenData}

@@ -283,7 +283,7 @@ class FormWizard extends Component {
         },
         () => {
           {
-            if (activeTab === 4 && !isCompletePayment) {
+            if (activeTab >= 4 && !isCompletePayment) {
               this.estimate().then(estimateResponse => {
                 if (estimateResponse) {
                   this.setState({
@@ -562,6 +562,7 @@ class FormWizard extends Component {
               isAssesment={isAssesment}
               currentTenantId={currentTenantId}
               isCompletePayment={isCompletePayment}
+              location={this.props.location}
               isPartialPaymentInValid={
                 get(this.state, "estimation[0].totalAmount", 1) < 100 ||
                 get(
