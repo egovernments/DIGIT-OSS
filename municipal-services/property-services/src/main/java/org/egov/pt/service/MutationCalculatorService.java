@@ -54,6 +54,7 @@ public class MutationCalculatorService {
     private StringBuilder getMutationCalculorURL(){
 
         StringBuilder url = new StringBuilder(config.getCalculationHost());
+        url.append(config.getCalculationContextPath());
         url.append(config.getMutationCalculationEndpoint());
 
         return url;
