@@ -87,8 +87,6 @@ const abgSearchAndResult = {
       dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
       getBoundaryData(action, state, dispatch, queryObj, tenantId);
     });
-    //setting service category to PT for now. -- Hardcoding alert!!
-    dispatch(prepareFinalObject("searchCriteria.businessservice", "PT"));
     return action;
   },
   components: {
