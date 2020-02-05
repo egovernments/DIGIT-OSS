@@ -88,7 +88,7 @@ export const getGroupBillSearch = async (dispatch,searchScreenObject) => {
     dispatch(toggleSpinner());
     const response = await httpRequest(
       "post",
-      "egov-searcher/bill-genie/billswithaddranduser/_get",
+      searchScreenObject.url,
       "",
       [],
       { searchCriteria: searchScreenObject }
