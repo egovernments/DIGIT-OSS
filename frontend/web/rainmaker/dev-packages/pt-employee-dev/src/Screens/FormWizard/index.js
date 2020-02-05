@@ -72,6 +72,8 @@ import commonConfig from "config/common.js";
 import AcknowledgementCard from "egov-ui-kit/common/propertyTax/AcknowledgementCard";
 import generateAcknowledgementForm from "egov-ui-kit/common/propertyTax/PaymentStatus/Components/acknowledgementFormPDF";
 import { getHeaderDetails } from "egov-ui-kit/common/propertyTax/PaymentStatus/Components/createReceipt";
+import { createPropertyPayload, createAssessmentPayload, getCreatePropertyResponse } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/propertyCreateUtils";
+
 
 class FormWizard extends Component {
   state = {
@@ -988,10 +990,11 @@ class FormWizard extends Component {
         } else {
           window.scrollTo(0, 0);
           if(isAssesment1){
-            this.assessProperty();
+            // this.assessProperty();
+            createAndUpdate(index, 'assess');
             // this.props.history.push(`pt-acknowledgment?purpose=assessment&consumerCode=${propertyId1}&status=success&tenantId=${tenantId1}&FY=2019-20`);
           }else{
-            this.props.history.push(`pt-acknowledgment?purpose=apply&consumerCode=${propertyId1}&status=success&tenantId=${tenantId1}&FY=2019-20`);
+            createAndUpdate(index, 'create');
           }
           // createAndUpdate(index);
           // pt-acknowledgment?purpose=apply&status=success&applicationNumber=PB-TL-2019-12-20-003743&FY=2019-20&tenantId=pb.amritsar
@@ -1419,7 +1422,7 @@ class FormWizard extends Component {
       hideSpinner();
     }
   };
-  createAndUpdate = async (index) => {
+  createAndUpdate = async (index, action) => {
     const {
       selected,
       formValidIndexArray
@@ -1549,7 +1552,6 @@ class FormWizard extends Component {
         )
       );
     }
-    try {
       set(
         prepareFormData,
         "Properties[0].propertyDetails[0].citizenInfo.name",
@@ -1559,30 +1561,12 @@ class FormWizard extends Component {
         prepareFormData.Properties,
         this
       );
-      let createPropertyResponse = await httpRequest(
-        `pt-services-v2/property/${propertyMethodAction}`,
-        `${propertyMethodAction}`,
-        [],
-        {
-          Properties: properties
-        }
-      );
-      this.setState(
-        {
-          assessedPropertyDetails: createPropertyResponse,
-          selected: index,
-          formValidIndexArray: [...formValidIndexArray, selected]
-        });
-
-    } catch (e) {
-      hideSpinner();
-      this.setState({ nextButtonEnabled: true });
-      alert(e);
-    }
+      // Create/Update property call, action will be either create or update
+      this.createProperty(properties, action);
   };
 
-  assessProperty=async()=>{
-    let propertyMethodAction= '_create';
+  assessProperty = async (action) => {
+    let propertyMethodAction = action === "re-assess" ? "_update" : '_create';
     const propertyId = getQueryArg(
      window.location.href,
      "propertyId"
@@ -1622,6 +1606,40 @@ class FormWizard extends Component {
      this.setState({ nextButtonEnabled: true });
      alert(e);
    }
+  }
+
+  createProperty= async (Properties, action) => {
+    const propertyPayload = createPropertyPayload(Properties);
+    const propertyMethodAction = (action === "assess" || action === "re-assess") ? "_update" : "_create";
+    try {
+      const propertyResponse = await httpRequest(
+        `property-services/property/${propertyMethodAction}`,
+        `${propertyMethodAction}`,
+        [],
+        {
+          Property: propertyPayload
+        },
+        [],
+        {},
+        true
+      );
+      if(propertyResponse && propertyResponse.Properties && propertyResponse.Properties.length){
+        if(propertyResponse.Properties[0].propertyId){
+          const propertyId = propertyResponse.Properties[0].propertyId;
+          const tenantId = propertyResponse.Properties[0].tenantId;
+          // Navigate to success page
+          if((action === "assess") || (action === "re-assess")){
+            this.assessProperty(action);
+          }else{
+            this.props.history.push(`pt-acknowledgment?purpose=apply&propertyId=${propertyId}&status=success&tenantId=${tenantId}&FY=2019-20`);
+          }
+        }
+      }
+    } catch (e) {
+      hideSpinner();
+      this.setState({ nextButtonEnabled: true });
+      alert(e);
+    }
   }
 
   pay = async () => {
