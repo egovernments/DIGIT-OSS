@@ -20,7 +20,9 @@ public class ServiceRequestRepository {
 
 	@Autowired
 	private RestTemplate restTemplate;
-
+	
+	@Autowired
+	private ObjectMapper mapper;
 
 	/**
 	 * Fetches results from a REST service using the uri and object
@@ -31,7 +33,7 @@ public class ServiceRequestRepository {
 	 * @author vishal
 	 */
 	public Optional<Object> fetchResult(StringBuilder uri, Object request) {
-		ObjectMapper mapper = new ObjectMapper();
+
 		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 		Object response = null;
 		try {

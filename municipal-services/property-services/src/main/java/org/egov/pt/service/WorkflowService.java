@@ -17,20 +17,14 @@ import org.egov.pt.util.PropertyUtil;
 import org.egov.pt.web.contracts.PropertyRequest;
 import org.egov.pt.web.contracts.RequestInfoWrapper;
 import org.egov.tracer.model.CustomException;
-import org.egov.tracer.model.ServiceCallException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class WorkflowService {
-
-	@Autowired
-	private RestTemplate rest;
 
 	@Autowired
 	private PropertyConfiguration configs;
@@ -47,6 +41,9 @@ public class WorkflowService {
 	@Autowired
 	private EnrichmentService enricher;
 	
+	@Autowired
+	ServiceRequestRepository serviceRequestRepository;
+	
 
 	/**
 	 * Method to integrate with workflow
@@ -59,22 +56,9 @@ public class WorkflowService {
 	public State callWorkFlow(ProcessInstanceRequest workflowReq) {
 
 		ProcessInstanceResponse response = null;
-
-		try {
-
-			response = rest.postForObject(configs.getWfHost().concat(configs.getWfTransitionPath()), workflowReq, ProcessInstanceResponse.class);
-		} catch (HttpClientErrorException ex) {
-
-			throw new ServiceCallException(ex.getMessage());
-		} catch (Exception e) {
-			throw new CustomException("EG_WF_ERROR", "Exception occured while integrating with workflow : " + e.getMessage());
-		}
-
-		/*
-		 * on success result from work-flow read the data and set the status back to TL
-		 * object
-		 */
-
+		Optional<Object> optional = serviceRequestRepository
+				.fetchResult(new StringBuilder(configs.getWfHost().concat(configs.getWfTransitionPath())), workflowReq);
+		response = mapper.convertValue(optional.get(), ProcessInstanceResponse.class);
 		return response.getProcessInstances().get(0).getState();
 	}
 	
