@@ -75,7 +75,12 @@ export const searchApiCall = async (state, dispatch) => {
         queryObject.push({ key: key, value: searchScreenObject[key].trim() });
       }
     }
-    
+    let serviceObject = get(
+      state.screenConfiguration.preparedFinalObject,
+      "searchScreenMdmsData.BillingService.BusinessService"
+    ).filter(item => item.code === searchScreenObject.businesService);
+
+    searchScreenObject.url = serviceObject[0].billGineiURL;
     searchScreenObject.tenantId = process.env.REACT_APP_NAME === "Citizen" ? tenantId : getTenantId();
     const responseFromAPI = await getGroupBillSearch(dispatch,searchScreenObject)
     const bills = (responseFromAPI && responseFromAPI.Bills) || [];

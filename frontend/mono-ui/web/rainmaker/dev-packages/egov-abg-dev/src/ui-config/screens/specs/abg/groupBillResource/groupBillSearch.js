@@ -10,16 +10,31 @@ import { generateMultipleBill } from "../../utils/receiptPdf";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId ,getUserInfo} from "egov-ui-kit/utils/localStorageUtils";
 
+// const wsBillinData = [
+//   {
+//     code: "JAN 2018 - MAR 2018",
+//     label: "Jan 2018 - Mar 2018"
+//   },
+//   {
+//     code: "APRIL 2018 - JUL 2018",
+//     label: "April 2018 - Jul 2018"
+//   },
+//   {
+//     code: "AUG 2018 - NOV 2018",
+//     label: "Aug 2018 - Nov 2018"
+//   }
+// ]
+
 const tenantId = process.env.REACT_APP_NAME === "Employee" ?  getTenantId() : JSON.parse(getUserInfo()).permanentCity;
 export const resetFields = (state, dispatch) => {
-  dispatch(
-    handleField(
-      "groupBills",
-      "components.div.children.abgSearchCard.children.cardContent.children.searchContainer.children.financialYear",
-      "props.value",
-      ""
-    )
-  );
+  // dispatch(
+  //   handleField(
+  //     "groupBills",
+  //     "components.div.children.abgSearchCard.children.cardContent.children.searchContainer.children.billingPeriod",
+  //     "props.value",
+  //     ""
+  //   )
+  // );
   dispatch(
     handleField(
       "groupBills",
@@ -68,6 +83,68 @@ export const abgSearchCard = getCommonCard({
           sm: 4
         }
       }),
+      serviceCategory: getSelectField({
+        label: {
+          labelName: "Service Category",
+          labelKey: "ABG_SERVICE_CATEGORY_LABEL"
+        },
+        placeholder: {
+          labelName: "Select Service Category",
+          labelKey: "ABG_SERVICE_CATEGORY_PLACEHOLDER"
+        },
+        required: true,
+        jsonPath: "searchCriteria.businesService",
+    
+        gridDefination: {
+          xs: 12,
+          sm: 4
+        },
+        localePrefix : {
+          moduleName : "BillingService",
+          masterName : "BusinessService"
+        },
+        sourceJsonPath: "searchScreenMdmsData.BillingService.BusinessService",
+        // beforeFieldChange :(action, state, dispatch) => {
+        //   if(action.value === "WS"){
+        //     dispatch(
+        //       handleField(
+        //         "groupBills",
+        //         "components.div.children.abgSearchCard.children.cardContent.children.searchContainer.children.billingPeriod",
+        //         "props.data",
+        //         wsBillinData
+        //       )
+        //     );
+        //   }else if(action.value === "PT"){
+        //     dispatch(
+        //       handleField(
+        //         "groupBills",
+        //         "components.div.children.abgSearchCard.children.cardContent.children.searchContainer.children.billingPeriod",
+        //         "props.sourceJsonPath",
+        //         "searchScreenMdmsData.egf-master.FinancialYear"
+        //       )
+        //     );
+        //   }
+         
+        // }
+      }),
+      // billingPeriod: getSelectField({
+      //   label: {
+      //     labelName: "Financial Year",
+      //     labelKey: "ABG_BILLING_PERIOD_LABEL"
+      //   },
+      //   placeholder: {
+      //     labelName: "Select Financial Year",
+      //     labelKey: "ABG_BILLING_PERIOD_PLACEHOLDER"
+      //   },
+      //   required: true,
+      //   visible: true,
+      //   jsonPath: "searchCriteria.billingPeriod",
+      //   gridDefination: {
+      //     xs: 12,
+      //     sm: 4
+      //   },
+      //   visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
+      // }),
       locMohalla: {
         uiFramework: "custom-containers",
         componentPath: "AutosuggestContainer",
@@ -101,46 +178,6 @@ export const abgSearchCard = getCommonCard({
           }
         }
       },
-      financialYear: getSelectField({
-        label: {
-          labelName: "Financial Year",
-          labelKey: "ABG_FINANCIAL_YEAR_LABEL"
-        },
-        placeholder: {
-          labelName: "Select Financial Year",
-          labelKey: "ABG_FINANCIAL_YEAR_PLACEHOLDER"
-        },
-        required: true,
-        visible: true,
-        jsonPath: "searchCriteria.financialYear",
-        gridDefination: {
-          xs: 12,
-          sm: 4
-        },
-        visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
-        sourceJsonPath: "searchScreenMdmsData.egf-master.FinancialYear"
-      }),
-      serviceCategory: getSelectField({
-        label: {
-          labelName: "Service Category",
-          labelKey: "ABG_SERVICE_CATEGORY_LABEL"
-        },
-        placeholder: {
-          labelName: "Select Service Category",
-          labelKey: "ABG_SERVICE_CATEGORY_PLACEHOLDER"
-        },
-        required: true,
-        jsonPath: "searchCriteria.businesService",
-        props: {
-          disabled: true,
-          value: "PT" //Hardcoded!!
-        },
-        gridDefination: {
-          xs: 12,
-          sm: 4
-        },
-        sourceJsonPath: "searchScreenMdmsData.BillingService.BusinessService"
-      }),
       consumerId: getTextField({
         label: {
           labelName: "Consumer ID",
@@ -155,10 +192,38 @@ export const abgSearchCard = getCommonCard({
           sm: 4
         },
         required: false,
-        // pattern: getPattern("PropertyID"),
-        // errorMessage: "Invalid Property ID",
         jsonPath: "searchCriteria.consumerCode"
-      })
+      }),
+      // status: getSelectField({
+      //   label: {
+      //     labelName: "Status",
+      //     labelKey: "ABG_STATUS_LABEL"
+      //   },
+      //   placeholder: {
+      //     labelName: "Enter Status",
+      //     labelKey: "ABG_STATUS_PLACEHOLDER"
+      //   },
+      //   gridDefination: {
+      //     xs: 12,
+      //     sm: 4
+      //   },
+      //   data : [
+      //     {
+      //       code: "ACTIVE",
+      //       label: "BILL_GENIE_ACTIVE_LABEL"
+      //     },
+      //     {
+      //       code: "INACTIVE",
+      //       label: "BILL_GENIE_PAID_LABEL"
+      //     },
+      //     {
+      //       code: "PAID",
+      //       label: "BILL_GENIE_INACTIVE_LABEL"
+      //     }
+      //   ],
+      //   required: false,
+      //   jsonPath: "searchCriteria.status"
+      // })
     },
     {
       style: {
