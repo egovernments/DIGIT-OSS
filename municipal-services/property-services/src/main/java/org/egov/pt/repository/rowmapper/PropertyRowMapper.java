@@ -22,7 +22,6 @@ import org.egov.pt.models.Property;
 import org.egov.pt.models.Unit;
 import org.egov.pt.models.enums.Channel;
 import org.egov.pt.models.enums.CreationReason;
-import org.egov.pt.models.enums.OccupancyType;
 import org.egov.pt.models.enums.Relationship;
 import org.egov.pt.models.enums.Status;
 import org.egov.tracer.model.CustomException;
@@ -170,7 +169,7 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 				
 				
 		Unit unit = Unit.builder()
-				.occupancyType(OccupancyType.fromValue(rs.getString("occupancyType")))
+				.occupancyType(rs.getString("occupancyType"))
 				.usageCategory(rs.getString("unitusageCategory"))
 				.occupancyDate(rs.getLong("occupancyDate"))
 				.active(rs.getBoolean("isunitactive"))

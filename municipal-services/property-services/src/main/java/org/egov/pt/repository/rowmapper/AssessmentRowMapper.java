@@ -9,9 +9,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-import org.egov.pt.models.*;
+import org.egov.pt.models.Assessment;
 import org.egov.pt.models.Assessment.Source;
-import org.egov.pt.models.enums.OccupancyType;
+import org.egov.pt.models.AuditDetails;
+import org.egov.pt.models.Document;
+import org.egov.pt.models.UnitUsage;
 import org.egov.pt.models.enums.Status;
 import org.egov.tracer.model.CustomException;
 import org.postgresql.util.PGobject;
@@ -98,7 +100,7 @@ public class AssessmentRowMapper implements ResultSetExtractor<List<Assessment>>
 
 		return UnitUsage.builder().id(rs.getString("us_id"))
 				.occupancyDate(rs.getLong("us_occupancydate"))
-				.occupancyType((OccupancyType.valueOf(rs.getString("us_occupancytype"))))
+				.occupancyType((rs.getString("us_occupancytype")))
 				.usageCategory(rs.getString("us_usagecategory"))
 				.auditDetails(auditDetails)
 				.build();

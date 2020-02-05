@@ -2,8 +2,6 @@ package org.egov.pt.models;
 
 import javax.validation.constraints.NotNull;
 
-import org.egov.pt.models.enums.OccupancyType;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
@@ -35,7 +33,7 @@ public class UnitUsage {
 
 	@JsonProperty("occupancyType")
 	@NotNull
-	private OccupancyType occupancyType;
+	private String occupancyType;
 
 	@JsonProperty("occupancyDate")
 	@NotNull

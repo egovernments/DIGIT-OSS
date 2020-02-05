@@ -333,6 +333,12 @@ public class PropertyValidator {
 					errorMap.put("INVALID CONSTRUCTION TYPE ", "The CONSTRUCTION TYPE '" + constructionType
 							+ "' does not exists for unit of index : " + property.getUnits().indexOf(unit));
 				}
+				
+				if (!ObjectUtils.isEmpty(unit.getOccupancyType())
+						&& !codes.get(PTConstants.MDMS_PT_OCCUPANCYTYPE).contains(unit.getOccupancyType())) {
+					errorMap.put("INVALID OCCUPANCYTYPE TYPE ", "The OCCUPANCYTYPE TYPE '" + unit.getOccupancyType()
+							+ "' does not exists for unit of index : " + property.getUnits().indexOf(unit));
+				}
 
 			}
 

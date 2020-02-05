@@ -1,11 +1,11 @@
 package org.egov.pt.models;
 
+import java.math.BigDecimal;
+
 import javax.validation.Valid;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
-
-import org.egov.pt.models.enums.OccupancyType;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -16,8 +16,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-
-import java.math.BigDecimal;
 
 /**
  * Unit
@@ -50,7 +48,7 @@ public class Unit {
 	private String usageCategory;
 
 	@JsonProperty("occupancyType")
-	private OccupancyType occupancyType;
+	private String occupancyType;
 
 	@JsonProperty("active")
 	private Boolean active;
