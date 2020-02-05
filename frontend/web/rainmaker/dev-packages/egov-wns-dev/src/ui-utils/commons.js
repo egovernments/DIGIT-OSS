@@ -168,6 +168,100 @@ export const getMyConnectionResults = async (queryObject, dispatch) => {
 
 };
 
+export const getMyApplicationResults = async (dispatch) => {
+    dispatch(toggleSpinner());
+    try {
+        const response = await httpRequest(
+            "post",
+            "http://172.17.25.34:8090/ws-services/wc/_search?applicationNumber=WS_AP/1013/2019-20/000136&tenantId=pb.amritsar",
+            "_search",
+            // queryObject
+        );
+
+        console.log("apiresponse",response)
+
+        // if (response.WaterConnection.length > 0) {
+        //     for (let i = 0; i < response.WaterConnection.length; i++) {
+        //         response.WaterConnection[i].service = "Water"
+        //         try {
+        //             const data = await httpRequest(
+        //                 "post",
+        //                 `billing-service/bill/v2/_fetchbill?consumerCode=${response.WaterConnection[i].connectionNo}&tenantId=${response.WaterConnection[i].property.tenantId}&businessService=WS`,
+        //                 "_fetchbill",
+        //                 // queryObject
+        //             );
+        //             if (data && data !== undefined) {
+        //                 if (data.Bill !== undefined && data.Bill.length > 0) {
+        //                     response.WaterConnection[i].due = data.Bill[0].totalAmount
+        //                 }
+
+        //             } else {
+        //                 response.WaterConnection[i].due = 0
+        //             }
+
+        //         } catch (err) {
+        //             console.log(err)
+        //             response.WaterConnection[i].due = "NA"
+        //         }
+        //     }
+        //     // });
+        // }
+        dispatch(toggleSpinner());
+        return findAndReplace(response, null, "NA");
+    } catch (error) {
+        dispatch(toggleSpinner());
+        console.log(error);
+    }
+
+};
+
+export const getSWMyApplicationResults = async (dispatch) => {
+    dispatch(toggleSpinner());
+    try {
+        const response = await httpRequest(
+            "post",
+            "http://172.17.25.34:8090/ws-services/wc/_search?applicationNumber=WS_AP/1013/2019-20/000136&tenantId=pb.amritsar",
+            // "/sw-services/swc/_search",
+            "_search",
+            // queryObject
+        );
+        // if (response.SewerageConnections.length > 0) {
+        //     for (let i = 0; i < response.SewerageConnections.length; i++) {
+        //         response.SewerageConnections[i].service = "Sewerage"
+        //         try {
+        //             const data = await httpRequest(
+        //                 "post",
+        //                 `billing-service/bill/v2/_fetchbill?consumerCode=${response.SewerageConnections[i].connectionNo}&tenantId=${response.SewerageConnections[i].property.tenantId}&businessService=SW`,
+        //                 "_fetchbill",
+        //                 // queryObject
+        //             );
+        //             if (data && data !== undefined) {
+        //                 if (data.Bill !== undefined && data.Bill.length > 0) {
+        //                     response.SewerageConnections[i].due = data.Bill[0].totalAmount
+        //                 }
+
+        //             } else {
+        //                 response.SewerageConnections[i].due = 0
+        //             }
+
+        //         } catch (err) {
+        //             console.log(err)
+        //             response.SewerageConnections[i].due = "NA"
+        //         }
+        //     }
+        //     // });
+        // }
+        dispatch(toggleSpinner());
+        return findAndReplace(response, null, "NA");
+    } catch (error) {
+        dispatch(toggleSpinner());
+        console.log(error);
+    }
+
+};
+
+
+
 
 export const getConsumptionDetails = async (queryObject, dispatch) => {
     dispatch(toggleSpinner());

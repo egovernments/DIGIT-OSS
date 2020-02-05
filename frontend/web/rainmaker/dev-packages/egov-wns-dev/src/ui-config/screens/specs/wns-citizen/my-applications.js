@@ -1,4 +1,4 @@
-import { fetchData } from "./myConnectionDetails/myConnectionDetails";
+import { fetchData } from "./myApplicationDetails/myApplicationDetails";
 import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
 
 const header = getCommonHeader(

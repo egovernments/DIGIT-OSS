@@ -24,7 +24,7 @@ const getAcknowledgementCard = (
   tenant
 ) => {
   // const financialYearText = financialYear ? financialYear : "";
-  if ("apply" === "apply" && status === "success") {
+  if (purpose === "apply" && status === "success") {
     return {
       header: getCommonHeader({
         // labelName: `Application for New Trade License (${financialYearText})`,

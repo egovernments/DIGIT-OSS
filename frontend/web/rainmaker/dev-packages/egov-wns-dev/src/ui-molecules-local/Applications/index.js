@@ -23,16 +23,17 @@ class Applications extends React.Component {
 //     window.location.href = `/citizen/wns/connection-details?connectionNumber=${data.connectionNo}&tenantId=${data.property.tenantId}&service=${data.service.toUpperCase()}&connectionType=${data.connectionType}`
 //   }
 
-  getViewBillDetails = data => {
-    window.location.href = `/citizen/wns/viewBill?connectionNumber=${data.connectionNo}&tenantId=${data.property.tenantId}&service=${data.service.toUpperCase()}&connectionType=${data.connectionType}`
-  }
+  // getViewBillDetails = data => {
+  //   window.location.href = `/citizen/wns/viewBill?connectionNumber=${data.connectionNo}&tenantId=${data.property.tenantId}&service=${data.service.toUpperCase()}&connectionType=${data.connectionType}`
+  // }
 
   render() {
-    const { myConnectionResults, classes } = this.props;
+    const { myApplicationResults, classes } = this.props;
     return (
       <div className="application-card">
-        {myConnectionResults && myConnectionResults.length > 0 ? (
-          myConnectionResults.map(item => {
+        {myApplicationResults && myApplicationResults.length > 0 ? (
+          myApplicationResults.map(item => {
+            console.log("item",item);
             return (
               <div>
                 <Card className={classes.card}>
@@ -70,25 +71,6 @@ class Applications extends React.Component {
                           />
                         </Grid>
                       </Grid>
-                      {/* <Grid container style={{ marginBottom: 12 }}>
-                        <Grid item md={4} xs={6}>
-                          <LabelContainer
-                            labelKey="WS_MYCONNECTIONS_CONSUMER_NO"
-                            fontSize={14}
-                            style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
-                          />
-                        </Grid>
-                        <Grid item md={8} xs={6}>
-                          <div className="linkStyle" onClick={() => this.getConnectionDetails(item)}>
-                            <a> <Label
-                              labelName={item.connectionNo}
-                              fontSize={14}
-                              style={{ fontSize: 14 }}
-                            />
-                            </a>
-                          </div>
-                        </Grid>
-                      </Grid> */}
                       <Grid container style={{ marginBottom: 12 }}>
                         <Grid item md={4} xs={6}>
                           <LabelContainer
@@ -131,29 +113,12 @@ class Applications extends React.Component {
                         </Grid>
                         <Grid item md={8} xs={6}>
                           <Label
-                            labelName={item.status}
+                            labelName={item.applicationStatus}
                             fontSize={14}
                             style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
                           />
                         </Grid>
                       </Grid>
-                      {/* <Grid container style={{ marginBottom: 12 }}>
-                        <Grid item md={4} xs={6}>
-                          <LabelContainer
-                            labelKey="WS_MYCONNECTION_ADDRESS"
-                            fontSize={14}
-                            style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
-                          />
-                        </Grid>
-                        <Grid item md={8} xs={6}>
-                          <Label
-                            labelName={item.property.address.street}
-                            fontSize={14}
-                            style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
-                          />
-                        </Grid>
-                      </Grid> */}
-                     
                       <div className="linkStyle" onClick={() => this.getViewBillDetails(item)}>
                       <LabelContainer 
                                 labelKey="WS_VIEW_DETAILS"
@@ -209,18 +174,18 @@ class Applications extends React.Component {
 }
 
 const mapStateToProps = state => {
-  const myConnectionResults = get(
+  const myApplicationResults = get(
     state.screenConfiguration.preparedFinalObject,
-    "myConnectionResults",
+    "myApplicationResults",
     []
   );
-  const myConnectionDue = get(
-    state.screenConfiguration.preparedFinalObject,
-    "myConnectionDue",
-    []
-  );
+  // const myConnectionDue = get(
+  //   state.screenConfiguration.preparedFinalObject,
+  //   "myConnectionDue",
+  //   []
+  // );
   const screenConfig = get(state.screenConfiguration, "screenConfig");
-  return { screenConfig, myConnectionResults, myConnectionDue };
+  return { screenConfig, myApplicationResults };
 };
 
 const mapDispatchToProps = dispatch => {
@@ -237,3 +202,41 @@ export default withStyles(styles)(
     mapDispatchToProps
   )(Applications)
 );
+
+
+ {/* <Grid container style={{ marginBottom: 12 }}>
+                        <Grid item md={4} xs={6}>
+                          <LabelContainer
+                            labelKey="WS_MYCONNECTIONS_CONSUMER_NO"
+                            fontSize={14}
+                            style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
+                          />
+                        </Grid>
+                        <Grid item md={8} xs={6}>
+                          <div className="linkStyle" onClick={() => this.getConnectionDetails(item)}>
+                            <a> <Label
+                              labelName={item.connectionNo}
+                              fontSize={14}
+                              style={{ fontSize: 14 }}
+                            />
+                            </a>
+                          </div>
+                        </Grid>
+                      </Grid> */}
+
+{/* <Grid container style={{ marginBottom: 12 }}>
+                        <Grid item md={4} xs={6}>
+                          <LabelContainer
+                            labelKey="WS_MYCONNECTION_ADDRESS"
+                            fontSize={14}
+                            style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
+                          />
+                        </Grid>
+                        <Grid item md={8} xs={6}>
+                          <Label
+                            labelName={item.property.address.street}
+                            fontSize={14}
+                            style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
+                          />
+                        </Grid>
+                      </Grid> */}
