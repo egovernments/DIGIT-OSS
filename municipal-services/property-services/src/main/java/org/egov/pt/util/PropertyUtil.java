@@ -12,8 +12,6 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
@@ -74,15 +72,6 @@ public class PropertyUtil {
         MdmsCriteria mdmsCriteria = MdmsCriteria.builder().tenantId(tenantId).moduleDetails(moduleDetails).build();
         return MdmsCriteriaReq.builder().requestInfo(requestInfo).mdmsCriteria(mdmsCriteria).build();
     }
-
-
-	public void addAddressIds(List<Property> responseProperties, Property requestProperty) {
-
-		Map<String, String> propIdToAddrId = responseProperties.stream()
-				.collect(Collectors.toMap(Property::getId, prop -> prop.getAddress().getId()));
-		requestProperty.getAddress().setId(propIdToAddrId.get(requestProperty.getPropertyId()));
-	}
-
 
     /**
      * Returns the uri for the localization call

@@ -184,6 +184,9 @@ public class PropertyConfiguration {
     @Value("${mutation.workflow.name}")
     private String mutationWfName;
     
+    @Value("${mutation.workflow.open.state}")
+    private String mutationOpenState;
+    
     @Value("${workflow.status.active}")
     private String wfStatusActive;
     

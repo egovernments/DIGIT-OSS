@@ -22,6 +22,7 @@ import org.egov.pt.models.user.User;
 import org.egov.pt.models.user.UserDetailResponse;
 import org.egov.pt.models.user.UserSearchRequest;
 import org.egov.pt.models.workflow.ProcessInstance;
+import org.egov.pt.models.workflow.State;
 import org.egov.pt.producer.Producer;
 import org.egov.pt.repository.PropertyRepository;
 import org.egov.pt.util.PTConstants;
@@ -123,7 +124,6 @@ public class PropertyService {
 	 */
 	private void processPropertyUpdate(PropertyRequest request, Property propertyFromSearch) {
 		
-
 		propertyValidator.validateUpdateRequestForOwnerFields(request, propertyFromSearch);
 		enrichmentService.enrichUpdateRequest(request, propertyFromSearch);
 		
@@ -137,21 +137,23 @@ public class PropertyService {
 		
 		if(config.getIsUpdateWorkflowEnabled()) {
 			
-			Boolean isTerminateState = wfService.updateWorkflow(request, UPDATE_PROCESS_CONSTANT).getIsTerminateState();
+			State state = wfService.updateWorkflow(request, UPDATE_PROCESS_CONSTANT);
+			request.getProperty().getWorkflow().setState(state);
 					
-			if (propertyFromSearch.getStatus().equals(Status.ACTIVE)) {
-				
+			if (state.getIsStartState() == true
+					&& state.getApplicationStatus().equalsIgnoreCase(Status.INWORKFLOW.toString())) {
+
 				propertyFromSearch.setStatus(Status.INACTIVE);
 				producer.push(config.getUpdatePropertyTopic(), OldPropertyRequest);
 				util.saveOldUuidToRequest(request, propertyFromSearch.getId());
 				producer.push(config.getSavePropertyTopic(), request);
-				
-			} else if (isTerminateState) {
-				
+
+			} else if (state.getIsTerminateState()
+					&& !state.getApplicationStatus().equalsIgnoreCase(Status.ACTIVE.toString())) {
+
 				terminateWorkflowAndReInstatePreviousRecord(request, propertyFromSearch);
 			}
 		}
-		
 		producer.push(config.getUpdatePropertyTopic(), request);
 	}
 
@@ -164,10 +166,11 @@ public class PropertyService {
 	private void processOwnerMutation(PropertyRequest request, Property propertyFromSearch) {
 		
 		propertyValidator.validateMutation(request, propertyFromSearch);
-		enrichmentService.enrichMutationRequest(request, true);
-		// TODO FIX ME block property changes FIXME
 		userService.createUser(request);
-		
+		Boolean isMutationSatrting = request.getProperty().getWorkflow().getAction().equalsIgnoreCase(
+				config.getMutationOpenState());
+		enrichmentService.enrichMutationRequest(request, isMutationSatrting);
+		// TODO FIX ME block property changes FIXME
 
 		util.mergeAdditionalDetails(request, propertyFromSearch);
 		PropertyRequest oldPropertyRequest = PropertyRequest.builder()
@@ -177,15 +180,16 @@ public class PropertyService {
 		
 		if (config.getIsMutationWorkflowEnabled()) {
 
-			Boolean isTerminateState = wfService.updateWorkflow(request, MUTATION_PROCESS_CONSTANT).getIsTerminateState();
-
+			State state = wfService.updateWorkflow(request, MUTATION_PROCESS_CONSTANT);
+			request.getProperty().getWorkflow().setState(state);
 			/*
 			 * updating property from search to INACTIVE status
 			 * 
 			 * to create new entry for new Mutation
 			 */
-			if (propertyFromSearch.getStatus().equals(Status.ACTIVE)) {
-
+			if (state.getIsStartState() == true
+					&& state.getApplicationStatus().equalsIgnoreCase(Status.INWORKFLOW.toString())) {
+				
 				propertyFromSearch.setStatus(Status.INACTIVE);
 				producer.push(config.getUpdatePropertyTopic(), oldPropertyRequest);
 
@@ -193,7 +197,8 @@ public class PropertyService {
 				/* save new record */
 				producer.push(config.getSavePropertyTopic(), request);
 
-			} else if (isTerminateState) {
+			} else if (state.getIsTerminateState()
+					&& !state.getApplicationStatus().equalsIgnoreCase(Status.ACTIVE.toString())) {
 
 				terminateWorkflowAndReInstatePreviousRecord(request, propertyFromSearch);
 			} else {

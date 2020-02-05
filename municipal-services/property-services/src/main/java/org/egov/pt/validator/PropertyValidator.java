@@ -172,7 +172,7 @@ public class PropertyValidator {
 		if (!ifPropertyExists) {
 			throw new CustomException("EG_PT_PROPERTY_NOT_FOUND", "The property to be updated does not exist in the system");
 		}
-        propertyUtil.addAddressIds(propertiesFromSearchResponse, request.getProperty());
+		request.getProperty().getAddress().setId(propertiesFromSearchResponse.get(0).getAddress().getId());
         
         validateMasterData(request, errorMap);
         if(request.getRequestInfo().getUserInfo().getType().equalsIgnoreCase("CITIZEN"))
@@ -631,24 +631,33 @@ public class PropertyValidator {
 		if (!CollectionUtils.isEmpty(uuidsNotFound))
 			errorMap.put("EG_PT_UPDATE_OWNER_ERROR", "Invalid owners found in request : " + uuidsNotFound);
 		
+		if (!propertyFromSearch.getStatus().equals(Status.INWORKFLOW)) {
 
-		if (!isNewOWnerAdded && !isOwnerCancelled)
-			errorMap.put("EG_PT_MUTATION_OWNER_ERROR",
-					"Mutation request should either add a new owner object or make an existing object INACTIVE in the request");
+			if (!isNewOWnerAdded && !isOwnerCancelled)
+				errorMap.put("EG_PT_MUTATION_OWNER_ERROR",
+						"Mutation request should either add a new owner object or make an existing object INACTIVE in the request");
 
-		if (isOwnerCancelled && property.getOwners().size() == 1)
-			errorMap.put("EG_PT_MUTATION_OWNER_REMOVAL_ERROR", "Single owner of a property cannot be deactivated or removed in a mutation request");
+			if (isOwnerCancelled && property.getOwners().size() == 1)
+				errorMap.put("EG_PT_MUTATION_OWNER_REMOVAL_ERROR",
+						"Single owner of a property cannot be deactivated or removed in a mutation request");
+		}
 
+		
 		if (StringUtils.isEmpty(reasonForTransfer) || StringUtils.isEmpty(docNo) || ObjectUtils.isEmpty(docDate) || ObjectUtils.isEmpty(docVal) ) {
 			errorMap.put("EG_PT_MUTATION_FIELDS_ERROR", "mandatory fields Missing for mutation, please provide the following information : "
 							+ "reasonForTransfer, documentNumber, documentDate and documentValue");
 		}
 		
 		if(configs.getIsMutationWorkflowEnabled() && (ObjectUtils.isEmpty(workFlow.getAction()) || ObjectUtils.isEmpty(workFlow.getModuleName()) ||
-				ObjectUtils.isEmpty(workFlow.getBusinessService()) || ObjectUtils.isEmpty(workFlow.getDocuments())))
+				ObjectUtils.isEmpty(workFlow.getBusinessService())))
 			errorMap.put("EG_PT_MUTATION_WF_FIELDS_ERROR", "mandatory fields Missing in workflow Object for Mutation please provide the following information : "
-					+ "action, documents, moduleName and BusinessService");
+					+ "action, moduleName and BusinessService");
 		
+		if (propertyFromSearch.getStatus().equals(Status.INWORKFLOW)
+				&& property.getWorkflow().getAction().equalsIgnoreCase(configs.getMutationOpenState()))
+			errorMap.put("EG_PT_MUTATION_WF_ACTION_ERROR",
+					"Invalud action, OPEN action cannot be applied on an active workflow ");
+
 		if(!CollectionUtils.isEmpty(errorMap))
 			throw new CustomException(errorMap);
 	}

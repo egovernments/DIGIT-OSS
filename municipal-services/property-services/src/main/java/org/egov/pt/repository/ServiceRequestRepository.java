@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
@@ -18,9 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 @Repository
 @Slf4j
 public class ServiceRequestRepository {
-
-	@Autowired
-	private ObjectMapper mapper;
 
 	@Autowired
 	private RestTemplate restTemplate;

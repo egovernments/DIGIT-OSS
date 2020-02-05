@@ -54,11 +54,20 @@ public class EnrichmentService {
 	public void enrichCreateRequest(PropertyRequest request) {
 
 		RequestInfo requestInfo = request.getRequestInfo();
-		AuditDetails propertyAuditDetails = propertyutil.getAuditDetails(requestInfo.getUserInfo().getUuid(), true);
 		Property property = request.getProperty();
-
-		property.setId(UUID.randomUUID().toString());
+		
 		property.setAccountId(requestInfo.getUserInfo().getUuid());
+		enrichUuidsForPropertyCreate(requestInfo, property);
+		setIdgenIds(request);
+		enrichBoundary(property, requestInfo);
+	}
+
+	private void enrichUuidsForPropertyCreate(RequestInfo requestInfo, Property property) {
+		
+		AuditDetails propertyAuditDetails = propertyutil.getAuditDetails(requestInfo.getUserInfo().getUuid(), true);
+		
+		property.setId(UUID.randomUUID().toString());
+		
 		if (!CollectionUtils.isEmpty(property.getDocuments()))
 			property.getDocuments().forEach(doc -> {
 				doc.setId(UUID.randomUUID().toString());
@@ -67,17 +76,6 @@ public class EnrichmentService {
 
 		property.getAddress().setTenantId(property.getTenantId());
 		property.getAddress().setId(UUID.randomUUID().toString());
-		property.getOwners().forEach(owner -> {
-			
-			owner.setOwnerInfoUuid(UUID.randomUUID().toString());
-			if (!CollectionUtils.isEmpty(owner.getDocuments()))
-				owner.getDocuments().forEach(doc -> {
-					doc.setId(UUID.randomUUID().toString());
-					doc.setStatus(Status.ACTIVE);
-				});
-			
-			owner.setStatus(Status.ACTIVE);
-		});
 
 		if (!ObjectUtils.isEmpty(property.getInstitution()))
 			property.getInstitution().setId(UUID.randomUUID().toString());
@@ -90,9 +88,18 @@ public class EnrichmentService {
 				unit.setId(UUID.randomUUID().toString());
 				unit.setActive(true);
 			});
-
-		setIdgenIds(request);
-		enrichBoundary(property, requestInfo);
+		
+		property.getOwners().forEach(owner -> {
+			
+			owner.setOwnerInfoUuid(UUID.randomUUID().toString());
+			if (!CollectionUtils.isEmpty(owner.getDocuments()))
+				owner.getDocuments().forEach(doc -> {
+					doc.setId(UUID.randomUUID().toString());
+					doc.setStatus(Status.ACTIVE);
+				});
+			
+			owner.setStatus(Status.ACTIVE);
+		});
 	}
 
     /**
@@ -234,27 +241,33 @@ public class EnrichmentService {
      */
 	public void enrichMutationRequest(PropertyRequest request, Boolean isStart) {
 
+		RequestInfo requestInfo = request.getRequestInfo();
 		Property property = request.getProperty();
 		
 		if (isStart) {
 			
-			String ackNo = getIdList(request.getRequestInfo(), property.getTenantId(), config.getAcknowldgementIdGenName(), config.getAcknowldgementIdGenFormat(), 1).get(0);
+			String ackNo = getIdList(requestInfo, property.getTenantId(), config.getAcknowldgementIdGenName(), config.getAcknowldgementIdGenFormat(), 1).get(0);
 			
 			property.setId(UUID.randomUUID().toString());
 			property.setAcknowldgementNumber(ackNo);
 
-			if (!config.getIsMutationWorkflowEnabled())
+			/*
+			 * if workflow not active then update the record
+			 * 
+			 * else insert a new record with new uuids
+			 */
+			if (!config.getIsMutationWorkflowEnabled()) {
+				
 				property.setStatus(Status.ACTIVE);
-			else {
-				request.getProperty().getOwners()
-						.forEach(owner -> owner.setOwnerInfoUuid(UUID.randomUUID().toString()));
+			} else {
+				enrichUuidsForPropertyCreate(requestInfo, property);
 			}
 		}
 		
 
 		property.getOwners().forEach(owner -> {
 
-			if (owner.getUuid() == null && owner.getOwnerInfoUuid() == null) {
+			if (owner.getOwnerInfoUuid() == null) {
 				
 				owner.setOwnerInfoUuid(UUID.randomUUID().toString());
 				owner.setStatus(Status.ACTIVE);

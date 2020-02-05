@@ -36,14 +36,15 @@ CREATE TABLE eg_pt_property (
    lastModifiedTime     BIGINT,
    additionaldetails    JSONB,
 
-CONSTRAINT pk_eg_pt_property_id PRIMARY KEY(id),
-CONSTRAINT uk_eg_pt_property_propertyId UNIQUE (propertyid, tenantid)
+CONSTRAINT pk_eg_pt_property_id PRIMARY KEY(id)
 );
 
-CREATE INDEX IF NOT EXISTS index_eg_pt_property_linkedproperties ON eg_pt_property (linkedproperties);
-CREATE INDEX IF NOT EXISTS index_eg_pt_property_accountId        ON eg_pt_property (accountId);
-CREATE INDEX IF NOT EXISTS index_eg_pt_property_tenantid         ON eg_pt_property (tenantid);
-CREATE INDEX IF NOT EXISTS index_eg_pt_property_status	         ON eg_pt_property (status);
+CREATE UNIQUE INDEX IF NOT EXISTS index_eg_pt_property_propertyId    ON eg_pt_property (propertyid, tenantid, status) where status='ACTIVE';
+CREATE INDEX IF NOT EXISTS index_eg_pt_property_linkedproperties	 ON eg_pt_property (linkedproperties);
+CREATE INDEX IF NOT EXISTS index_eg_pt_property_accountId        	 ON eg_pt_property (accountId);
+CREATE INDEX IF NOT EXISTS index_eg_pt_property_tenantid        	 ON eg_pt_property (tenantid);
+CREATE INDEX IF NOT EXISTS index_eg_pt_property_status	        	 ON eg_pt_property (status);
+
 
 --> Institution
 
