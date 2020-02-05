@@ -374,9 +374,9 @@ serviceMaps:
 
       - jsonPath: $.Licenses.*.businessService
       
-      - jsonPath: $.Licenses.*.applicationtype
+      - jsonPath: $.Licenses.*.applicationType
       
-      - jsonPath: $.Licenses.*.workflowcode
+      - jsonPath: $.Licenses.*.workflowCode
 
       - jsonPath: $.Licenses.*.id
 
