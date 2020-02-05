@@ -62,7 +62,7 @@ const WizardComponent = ({
       <div id="tax-wizard-buttons" className="wizard-footer col-sm-10" style={{ textAlign: "right" }}>
         <div className="button-container col-xs-10" style={{ float: "right" }}>
 
-           {selected != 5 && selected != 4 && <Button
+           { selected !=0 && selected != 4 && selected != 5  && <Button
             label={<Label buttonLabel={true} label={backLabel} color="#fe7a51" />}
             onClick={() => {
               selected - 1 === -1 ? history.push("/property-tax") : onTabClick(selected - 1);
