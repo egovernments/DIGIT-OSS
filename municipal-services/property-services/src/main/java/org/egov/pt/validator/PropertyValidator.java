@@ -161,6 +161,7 @@ public class PropertyValidator {
 	public Property validateCommonUpdateInformation(PropertyRequest request) {
 		
 		Map<String, String> errorMap = new HashMap<>();
+		Property property = request.getProperty();
 		
 		
 		validateIds(request, errorMap);
@@ -172,7 +173,9 @@ public class PropertyValidator {
 		if (!ifPropertyExists) {
 			throw new CustomException("EG_PT_PROPERTY_NOT_FOUND", "The property to be updated does not exist in the system");
 		}
-		request.getProperty().getAddress().setId(propertiesFromSearchResponse.get(0).getAddress().getId());
+		
+		Property propertyFromSearch = propertiesFromSearchResponse.get(0);
+		property.getAddress().setId(propertiesFromSearchResponse.get(0).getAddress().getId());
         
         validateMasterData(request, errorMap);
         if(request.getRequestInfo().getUserInfo().getType().equalsIgnoreCase("CITIZEN"))
@@ -180,11 +183,17 @@ public class PropertyValidator {
 
 		if (configs.getIsUpdateWorkflowEnabled() && request.getProperty().getWorkflow() == null)
 			throw new CustomException("EG_PT_UPDATE_WF_ERROR", "Workflow information is mandatory for update");
+		
+		
+		if (propertyFromSearch.getStatus().equals(Status.INWORKFLOW) && (property.getAcknowldgementNumber() == null
+				|| (property.getAcknowldgementNumber() != null && propertyFromSearch.getAcknowldgementNumber()
+						.equalsIgnoreCase(property.getAcknowldgementNumber()))))
+			errorMap.put("EG_PT_MUTATION_WF_UPDATE_ERROR", "Acknowledgement Number is Invalid OR NULL, Please provide the valid number");
 
 		if (!errorMap.isEmpty())
 			throw new CustomException(errorMap);
 		
-		return propertiesFromSearchResponse.get(0);
+		return propertyFromSearch;
 	}
 
     /**
@@ -662,7 +671,7 @@ public class PropertyValidator {
 		if (propertyFromSearch.getStatus().equals(Status.INWORKFLOW)
 				&& property.getWorkflow().getAction().equalsIgnoreCase(configs.getMutationOpenState()))
 			errorMap.put("EG_PT_MUTATION_WF_ACTION_ERROR",
-					"Invalud action, OPEN action cannot be applied on an active workflow ");
+					"Invalid action, OPEN action cannot be applied on an active workflow ");
 
 		if(!CollectionUtils.isEmpty(errorMap))
 			throw new CustomException(errorMap);
