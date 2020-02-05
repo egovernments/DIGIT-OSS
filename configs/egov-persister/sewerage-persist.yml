@@ -7,7 +7,7 @@ serviceMaps:
    fromTopic: save-sw-connection
    isTransaction: true
    queryMaps: 
-    - query: INSERT INTO eg_sw_connection (id, tenantid, property_id, applicationNo, applicationStatus, status, connectionNo, oldConnectionNo, documents_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+    - query: INSERT INTO eg_sw_connection (id, tenantid, property_id, applicationno, applicationstatus, status, connectionno, oldconnectionno,roadcuttingarea,action,roadtype) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,?,?);
       basePath: $.SewerageConnection
       jsonMaps:
        - jsonPath: $.SewerageConnection.id 
@@ -26,7 +26,11 @@ serviceMaps:
 
        - jsonPath: $.SewerageConnection.oldConnectionNo
 
-       - jsonPath: $.SewerageConnection.documents.*.id      
+       - jsonPath: $.SewerageConnection.roadCuttingArea
+
+       - jsonPath: $.SewerageConnection.action
+
+       - jsonPath: $.SewerageConnection.roadType     
 
     - query: INSERT INTO eg_sw_service(connection_id,connectionExecutionDate,noOfWaterClosets,noOfToilets,UOM,connectiontype,calculationAttribute) VALUES(?,?,?,?,?,?,?);
       basePath: $.SewerageConnection
@@ -46,19 +50,64 @@ serviceMaps:
          
        - jsonPath: $.SewerageConnection.calculationAttribute
 
+    - query: INSERT INTO eg_sw_applicationdocument(id, tenantId, documenttype, filestoreid, swid,active, createdBy, lastModifiedBy, createdTime, lastModifiedTime,documentUid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?);
+      basePath: $.SewerageConnection.documents.*
+      jsonMaps:
+         
+          - jsonPath: $.SewerageConnection.documents.*.id
+
+          - jsonPath: $.SewerageConnection.documents.*.tenantId
+
+          - jsonPath: $.SewerageConnection.documents.*.documentType
+
+          - jsonPath: $.SewerageConnection.documents.*.fileStoreId
+
+          - jsonPath: $.SewerageConnection.id
+
+          - jsonPath: $.SewerageConnection.documents.*.status
+
+          - jsonPath: $.SewerageConnection.documents.*.auditDetails.createdBy
+
+          - jsonPath: $.SewerageConnection.documents.*.auditDetails.lastModifiedBy
+
+          - jsonPath: $.SewerageConnection.documents.*.auditDetails.createdTime
+
+          - jsonPath: $.SewerageConnection.documents.*.auditDetails.lastModifiedTime
+          
+          - jsonPath: $.SewerageConnection.documents.*.documentUid
+
+
+    - query: INSERT INTO eg_sw_plumberinfo(id, name, licenseno, mobilenumber, gender, fatherorhusbandname, correspondenceaddress, relationship, swid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+      basePath: $.SewerageConnection.plumberInfo.*
+      jsonMaps:
+         
+          - jsonPath: $.SewerageConnection.plumberInfo.*.id
+
+          - jsonPath: $.SewerageConnection.plumberInfo.*.name
+
+          - jsonPath: $.SewerageConnection.plumberInfo.*.licenseNo
+
+          - jsonPath: $.SewerageConnection.plumberInfo.*.mobileNumber
+
+          - jsonPath: $.SewerageConnection.plumberInfo.*.gender
+
+          - jsonPath: $.SewerageConnection.plumberInfo.*.fatherOrHusbandName
+
+          - jsonPath: $.SewerageConnection.plumberInfo.*.correspondenceAddress
+
+          - jsonPath: $.SewerageConnection.plumberInfo.*.relationship
+
+          - jsonPath: $.SewerageConnection.id
+
  - version: 1.0
    name: SewerageConnection
    description: update ConnectionDetails in connection and eg_sw_service
-   fromTopic: update-sw-connection
+   fromTopic: save-sw-connection
    isTransaction: true
    queryMaps: 
-    - query: UPDATE eg_sw_connection SET property_id=?, applicationNo=?, applicationStatus=?, status=?, connectionNo=?, oldConnectionNo=?, documents_id=? WHERE id=?;
+    - query: UPDATE eg_sw_connection SET applicationstatus=?, status=?, connectionno=?, oldconnectionno=?, action=?, roadCuttingArea=?, roadType=? WHERE id=?;
       basePath: $.SewerageConnection
       jsonMaps:
-        
-       - jsonPath: $.SewerageConnection.property.id
-
-       - jsonPath: $.SewerageConnection.applicationNo
         
        - jsonPath: $.SewerageConnection.applicationStatus
 
@@ -68,13 +117,17 @@ serviceMaps:
 
        - jsonPath: $.SewerageConnection.oldConnectionNo
 
-       - jsonPath: $.SewerageConnection.documents.*.id      
+       - jsonPath: $.SewerageConnection.action
+
+       - jsonPath: $.SewerageConnection.roadCuttingArea
+
+       - jsonPath: $.SewerageConnection.roadType 
+
+       - jsonPath: $.SewerageConnection.id       
 
     - query: UPDATE eg_sw_service SET connectionexecutiondate=?,noOfWaterClosets=?,noOfToilets=?,UOM=?,connectiontype=?,calculationAttribute=? WHERE connection_id=?;
       basePath: $.SewerageConnection
       jsonMaps:
-
-       
 
        - jsonPath: $.SewerageConnection.connectionExecutionDate
 
@@ -87,5 +140,104 @@ serviceMaps:
        - jsonPath: $.SewerageConnection.connectionType
          
        - jsonPath: $.SewerageConnection.calculationAttribute
+
+       - jsonPath: $.SewerageConnection.id
+
+
+    - query: INSERT INTO eg_sw_applicationDocument(id, tenantId, documenttype, filestoreid, swid, active, createdBy, lastModifiedBy, createdTime, lastModifiedTime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET active = ?, documenttype =?, filestoreid =?,lastmodifiedby =?, lastmodifiedtime =?;
+      basePath: $.SewerageConnection.documents.*
+      jsonMaps:
+         
+          - jsonPath: $.SewerageConnection.documents.*.id
+
+          - jsonPath: $.SewerageConnection.property.tenantId
+
+          - jsonPath: $.SewerageConnection.documents.*.documentType
+
+          - jsonPath: $.SewerageConnection.documents.*.fileStoreId
+
+          - jsonPath: $.SewerageConnection.id
+
+          - jsonPath: $.SewerageConnection.documents.*.status
+
+          - jsonPath: $.SewerageConnection.documents.*.auditDetails.createdBy
+
+          - jsonPath: $.SewerageConnection.documents.*.auditDetails.lastModifiedBy
+
+          - jsonPath: $.SewerageConnection.documents.*.auditDetails.createdTime
+
+          - jsonPath: $.SewerageConnection.documents.*.auditDetails.lastModifiedTime
+
+          - jsonPath: $.SewerageConnection.documents.*.status
+
+          - jsonPath: $.SewerageConnection.documents.*.documentType
+
+          - jsonPath: $.SewerageConnection.documents.*.fileStoreId
+
+          - jsonPath: $.SewerageConnection.documents.*.auditDetails.lastModifiedBy
+
+          - jsonPath: $.SewerageConnection.documents.*.auditDetails.lastModifiedTime
+
+ - version: 1.0
+   name: SewerageConnection
+   description: update ConnectionDetails in eg_sw_connection and eg_sw_service
+   fromTopic: update-ws-workflow
+   isTransaction: true
+   queryMaps:
+    - query: UPDATE eg_sw_connection SET applicationstatus=?, status=?, connectionno=?, oldconnectionno=?, action=?, roadCuttingArea=?, roadType=? WHERE id=?;
+      basePath: $.SewerageConnection
+      jsonMaps:
+        
+       - jsonPath: $.SewerageConnection.applicationStatus
+
+       - jsonPath: $.SewerageConnection.status
+
+       - jsonPath: $.SewerageConnection.connectionNo
+
+       - jsonPath: $.SewerageConnection.oldConnectionNo
+
+       - jsonPath: $.SewerageConnection.action
+
+       - jsonPath: $.SewerageConnection.roadCuttingArea
+
+       - jsonPath: $.SewerageConnection.roadType 
+
+       - jsonPath: $.SewerageConnection.id       
+
+
+
+    - query: INSERT INTO eg_sw_applicationDocument(id, tenantId, documenttype, filestoreid, swid, active, createdBy, lastModifiedBy, createdTime, lastModifiedTime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET active = ?, documenttype =?, filestoreid =?,lastmodifiedby =?, lastmodifiedtime =?;
+      basePath: $.SewerageConnection.documents.*
+      jsonMaps:
+         
+          - jsonPath: $.SewerageConnection.documents.*.id
+
+          - jsonPath: $.SewerageConnection.property.tenantId
+
+          - jsonPath: $.SewerageConnection.documents.*.documentType
+
+          - jsonPath: $.SewerageConnection.documents.*.fileStoreId
+
+          - jsonPath: $.SewerageConnection.id
+
+          - jsonPath: $.SewerageConnection.documents.*.status
+
+          - jsonPath: $.SewerageConnection.documents.*.auditDetails.createdBy
+
+          - jsonPath: $.SewerageConnection.documents.*.auditDetails.lastModifiedBy
+
+          - jsonPath: $.SewerageConnection.documents.*.auditDetails.createdTime
+
+          - jsonPath: $.SewerageConnection.documents.*.auditDetails.lastModifiedTime
+
+          - jsonPath: $.SewerageConnection.documents.*.status
+
+          - jsonPath: $.SewerageConnection.documents.*.documentType
+
+          - jsonPath: $.SewerageConnection.documents.*.fileStoreId
+
+          - jsonPath: $.SewerageConnection.documents.*.auditDetails.lastModifiedBy
+
+          - jsonPath: $.SewerageConnection.documents.*.auditDetails.lastModifiedTime
 
 
