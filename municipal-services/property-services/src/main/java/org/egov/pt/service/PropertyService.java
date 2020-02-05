@@ -36,7 +36,10 @@ import org.springframework.util.CollectionUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class PropertyService {
 
     @Autowired
@@ -218,7 +221,13 @@ public class PropertyService {
 			 */
 			producer.push(config.getUpdatePropertyTopic(), request);
 		}
-		mutationCalculatorService.calculateMutationFee(request.getRequestInfo(), request.getProperty());
+		try {
+			mutationCalculatorService.calculateMutationFee(request.getRequestInfo(), request.getProperty());
+		} catch (Exception e) {
+
+			log.info(" calculate API failed : " + e.getMessage());
+			// TODO: handle exception
+		}
 	}
 
 	private void terminateWorkflowAndReInstatePreviousRecord(PropertyRequest request, Property propertyFromSearch) {
