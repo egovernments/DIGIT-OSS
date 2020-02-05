@@ -45,11 +45,11 @@ import {
         [],
         mdmsBody
       );
-      console.log("payload--", payload)
+      // console.log("payload--", payload)
       dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
       dispatch(
         prepareFinalObject(
-          "searchScreen.status",
+          "searchScreen.tenantId",
           tenant
         )
       );

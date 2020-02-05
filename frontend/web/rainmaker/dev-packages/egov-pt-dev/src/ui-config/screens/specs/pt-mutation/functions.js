@@ -149,7 +149,21 @@ const getAddress=(item)=>{
             key: key,
             value: convertDateToEpoch(searchScreenObject[key], "daystart")
           });
-        } else if (key === "toDate") {
+        } else if(key === "tenantId") {
+          // queryObject.push({
+          //   key: key,
+          //   value: convertDateToEpoch(searchScreenObject[key], "dayend")
+          // });
+
+        }
+        else if (key === "ids") {
+          queryObject.push({
+            key:"propertyIds",
+            value: searchScreenObject[key].trim()
+          });
+        }
+        
+        else if (key === "toDate") {
           queryObject.push({
             key: key,
             value: convertDateToEpoch(searchScreenObject[key], "dayend")

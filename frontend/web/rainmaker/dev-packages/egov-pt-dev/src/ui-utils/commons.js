@@ -55,7 +55,7 @@ export const getSearchResults = async (queryObject, dispatch) => {
     store.dispatch(toggleSpinner());
     const response = await httpRequest(
       "post",
-      "/pt-services-v2/property/_search",
+      "/property-services/property/_search",
       "",
       queryObject
     );

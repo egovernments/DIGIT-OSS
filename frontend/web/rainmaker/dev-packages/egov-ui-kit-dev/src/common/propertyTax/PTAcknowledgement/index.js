@@ -56,7 +56,7 @@ class PTAcknowledgement extends React.Component {
     let printMenu=[];
     
     let applicationDownloadObject = {
-      label: { labelName: "Application", labelKey: "TL_APPLICATION" },
+      label: { labelName: "Application", labelKey: "PT_APPLICATION" },
       link: () => {
         // const { Licenses ,LicensesTemp} = state.screenConfiguration.preparedFinalObject;
         // const documents = LicensesTemp[0].reviewDocData;
@@ -68,7 +68,7 @@ class PTAcknowledgement extends React.Component {
     };
 
     let tlCertificatePrintObject = {
-      label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
+      label: { labelName: "Application", labelKey: "PT_APPLICATION" },
        link: () => {
       //   const { Licenses } = state.screenConfiguration.preparedFinalObject;
       //   downloadCertificateForm(Licenses,'print');

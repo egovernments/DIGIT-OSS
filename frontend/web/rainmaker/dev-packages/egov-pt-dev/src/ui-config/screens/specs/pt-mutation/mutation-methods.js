@@ -97,7 +97,7 @@ import {
               moduleName: "TENANT",
               masterName: "TENANTS"
             },
-            jsonPath: "searchScreen.status",
+            jsonPath: "searchScreen.tenantId",
             sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
             required: true,
             props:{
