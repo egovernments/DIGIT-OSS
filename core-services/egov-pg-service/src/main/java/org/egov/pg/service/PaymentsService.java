@@ -33,6 +33,9 @@ public class PaymentsService {
 	@Autowired
 	private AppProperties props;
 	
+	@Autowired
+	private ObjectMapper mapper;
+	
 	public CollectionPayment registerPayment(TransactionRequest request) {
 		CollectionPayment payment = getPaymentFromTransaction(request);
 		payment.setInstrumentDate(request.getTransaction().getAuditDetails().getCreatedTime());
@@ -41,12 +44,10 @@ public class PaymentsService {
 		
 		CollectionPaymentRequest paymentRequest = CollectionPaymentRequest.builder()
 				.requestInfo(request.getRequestInfo()).payment(payment).build();
-		StringBuilder builder = new StringBuilder();
-		builder.append(props.getCollectionServiceHost()).append(props.getPaymentCreatePath());
-		Optional<Object> response =  repository.fetchResult(builder, paymentRequest);
+		String uri = props.getCollectionServiceHost() + props.getPaymentCreatePath();
+		Optional<Object> response =  repository.fetchResult(uri, paymentRequest);
 		if(response.isPresent()) {
 			try {
-				ObjectMapper mapper = new ObjectMapper();
 				CollectionPaymentResponse paymentResponse = mapper.convertValue(response.get(), CollectionPaymentResponse.class);
 				if(!CollectionUtils.isEmpty(paymentResponse.getPayments()))
 					return paymentResponse.getPayments().get(0);
@@ -68,12 +69,10 @@ public class PaymentsService {
 		CollectionPayment payment = getPaymentFromTransaction(request);
 		CollectionPaymentRequest paymentRequest = CollectionPaymentRequest.builder()
 				.requestInfo(request.getRequestInfo()).payment(payment).build();
-		StringBuilder builder = new StringBuilder();
-		builder.append(props.getCollectionServiceHost()).append(props.getPaymentValidatePath());
-		Optional<Object> response =  repository.fetchResult(builder, paymentRequest);
+		String uri = props.getCollectionServiceHost() + props.getPaymentValidatePath();
+		Optional<Object> response =  repository.fetchResult(uri, paymentRequest);
 		if(response.isPresent()) {
 			try {
-				ObjectMapper mapper = new ObjectMapper();
 				CollectionPaymentResponse paymentResponse = mapper.convertValue(response.get(), CollectionPaymentResponse.class);
 				if(!CollectionUtils.isEmpty(paymentResponse.getPayments()))
 					return paymentResponse.getPayments().get(0);
