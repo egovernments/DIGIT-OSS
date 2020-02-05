@@ -94,8 +94,12 @@ public class WorkflowService {
 		try {
 			response = mapper.convertValue(result.get(), BusinessServiceResponse.class);
 		} catch (IllegalArgumentException e) {
-			throw new CustomException("PARSING ERROR", "Failed to parse response of calculate");
+			throw new CustomException("PARSING ERROR", "Failed to parse response of workflow business service search");
 		}
+
+		if(CollectionUtils.isEmpty(response.getBusinessServices()))
+			throw new CustomException("BUSINESSSERVICE_NOT_FOUND","The businessService "+businessService+" is not found");
+
 		return response.getBusinessServices().get(0);
 	}
     

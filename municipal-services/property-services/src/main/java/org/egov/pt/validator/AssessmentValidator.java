@@ -1,22 +1,13 @@
 package org.egov.pt.validator;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
-import org.egov.pt.models.Assessment;
-import org.egov.pt.models.Property;
-import org.egov.pt.models.PropertyCriteria;
-import org.egov.pt.models.UnitUsage;
+import org.egov.pt.config.PropertyConfiguration;
+import org.egov.pt.models.*;
 import org.egov.pt.models.enums.Status;
+import org.egov.pt.repository.AssessmentRepository;
 import org.egov.pt.service.PropertyService;
 import org.egov.pt.util.ErrorConstants;
 import org.egov.pt.util.PTConstants;
@@ -39,12 +30,22 @@ public class AssessmentValidator {
 	@Autowired
 	private PropertyUtil propertyUtils;
 
+	@Autowired
+	private AssessmentRepository assessmentRepository;
+
+	@Autowired
+	private PropertyConfiguration config;
+
+
 	public void validateAssessmentCreate(AssessmentRequest assessmentRequest, Property property) {
 		Map<String, String> errorMap = new HashMap<>();
 		validateRI(assessmentRequest.getRequestInfo(), errorMap);
 		validateUnitIds(assessmentRequest.getAssessment(),property);
 		commonValidations(assessmentRequest, errorMap, false);
 		validateMDMSData(assessmentRequest.getRequestInfo(), assessmentRequest.getAssessment(), errorMap);
+		if(config.getIsAssessmentWorkflowEnabled())
+			validateWorkflowOfOtherAssessments(assessmentRequest.getAssessment());
+
 	}
 
 	public void validateAssessmentUpdate(AssessmentRequest assessmentRequest, Assessment assessmentFromDB, Property property , Boolean isWorkflowTriggered) {
@@ -54,7 +55,8 @@ public class AssessmentValidator {
 		validateUpdateRequest(assessmentRequest, assessmentFromDB, property, errorMap);
 		commonValidations(assessmentRequest, errorMap, true);
 		validateMDMSData(assessmentRequest.getRequestInfo(), assessmentRequest.getAssessment(), errorMap);
-		validateProcessInstance(assessmentRequest, assessmentFromDB, isWorkflowTriggered);
+		if(config.getIsAssessmentWorkflowEnabled())
+			validateProcessInstance(assessmentRequest, assessmentFromDB, isWorkflowTriggered);
 
 	}
 
@@ -271,6 +273,26 @@ public class AssessmentValidator {
 
 		if(!CollectionUtils.isEmpty(errorMap))
 			throw new CustomException(errorMap);
+
+	}
+
+
+	/**
+	 * Validates if any other assessments are in workflow for the given property
+	 * @param assessment
+	 */
+	private void validateWorkflowOfOtherAssessments(Assessment assessment){
+
+		AssessmentSearchCriteria criteria = AssessmentSearchCriteria.builder()
+											.tenantId(assessment.getTenantId())
+											.status(Status.INWORKFLOW)
+											.propertyIds(Collections.singleton(assessment.getPropertyId()))
+											.build();
+
+		List<Assessment> assessments = assessmentRepository.getAssessments(criteria);
+
+		if(!CollectionUtils.isEmpty(assessments))
+			throw new CustomException("INVALID_REQUEST","The property has other assessment in workflow");
 
 	}
 
