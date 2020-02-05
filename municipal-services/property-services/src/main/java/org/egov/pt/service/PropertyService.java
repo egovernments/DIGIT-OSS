@@ -66,6 +66,9 @@ public class PropertyService {
     @Autowired
     private ObjectMapper mapper;
 
+    @Autowired
+	private MutationCalculatorService mutationCalculatorService;
+
 
     
 	/**
@@ -215,6 +218,7 @@ public class PropertyService {
 			 */
 			producer.push(config.getUpdatePropertyTopic(), request);
 		}
+		mutationCalculatorService.calculateMutationFee(request.getRequestInfo(), request.getProperty());
 	}
 
 	private void terminateWorkflowAndReInstatePreviousRecord(PropertyRequest request, Property propertyFromSearch) {
