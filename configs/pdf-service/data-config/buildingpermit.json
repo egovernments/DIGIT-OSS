@@ -1,7 +1,7 @@
 {
   "key": "buildingpermit",
   "DataConfigs": {
-    "serviceName": "rainmaker-common",
+    "serviceName": "rainmaker-bpa",
     "version": "1.0.0",
     "baseKeyPath": "$.Bpa.*",
     "entityIdPath": "$.applicationNo",
@@ -63,7 +63,7 @@
                 "localisation": {
                   "required": true,
                   "prefix": null,
-                  "module": "rainmaker-common"
+                  "module": "rainmaker-bpa"
                 }
               },
               {
@@ -75,7 +75,7 @@
                 "localisation": {
                   "required": true,
                   "prefix": null,
-                  "module": "rainmaker-common"
+                  "module": "rainmaker-bpa"
                 }
               },
               {
@@ -87,7 +87,7 @@
                 "localisation": {
                   "required": true,
                   "prefix": null,
-                  "module": "rainmaker-common"
+                  "module": "rainmaker-bpa"
                 }
               },
               {
@@ -99,7 +99,7 @@
                 "localisation": {
                   "required": true,
                   "prefix": null,
-                  "module": "rainmaker-common"
+                  "module": "rainmaker-bpa"
                 }
               },
               {
@@ -111,7 +111,7 @@
                 "localisation": {
                   "required": true,
                   "prefix": null,
-                  "module": "rainmaker-common"
+                  "module": "rainmaker-bpa"
                 }
               },
               {
@@ -123,7 +123,7 @@
                 "localisation": {
                   "required": true,
                   "prefix": null,
-                  "module": "rainmaker-common"
+                  "module": "rainmaker-bpa"
                 }
               },
               {
@@ -135,7 +135,7 @@
                 "localisation": {
                   "required": true,
                   "prefix": null,
-                  "module": "rainmaker-common"
+                  "module": "rainmaker-bpa"
                 }
               },
               {
@@ -147,7 +147,7 @@
                 "localisation": {
                   "required": true,
                   "prefix": null,
-                  "module": "rainmaker-common"
+                  "module": "rainmaker-bpa"
                 }
               },
               {
