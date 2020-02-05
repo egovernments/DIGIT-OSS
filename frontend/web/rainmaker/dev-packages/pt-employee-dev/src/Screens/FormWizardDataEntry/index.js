@@ -193,7 +193,6 @@ class FormWizardDataEntry extends Component {
         let finalYear='';
         const demands=demandPropertyResponse.Demands.reverse();
             let demandResponse=demands.forEach((demand,yearKey)=>{
-          return(
             demand.demandDetails.forEach((demandData,demandKey)=>{
           let yearkeys=Object.keys(generalMDMSDataById.TaxPeriod).forEach((item, i) => {
             if(generalMDMSDataById.TaxPeriod[item].fromDate=== demand.taxPeriodFrom){
@@ -206,7 +205,6 @@ class FormWizardDataEntry extends Component {
           prepareFinalObject(`DemandProperties[0].propertyDetails[0].demand[${yearKey}].demand[${finalYear}][${demandKey}].PT_COLLECTED`,`${demandData.collectionAmount}`)
           )
         })
-      )
     });
         if (
           searchPropertyResponse.Properties[0].propertyDetails &&

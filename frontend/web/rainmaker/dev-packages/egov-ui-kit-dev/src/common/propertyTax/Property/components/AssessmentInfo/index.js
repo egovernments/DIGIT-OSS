@@ -181,7 +181,7 @@ const getAssessmentInfo = (propertyDetails, generalMDMSDataById) => {
     propertyDetails.propertySubType === "SHAREDPROPERTY"
       ? {
           key: getTranslatedLabel("PT_FLOOR_NO", localizationLabelsData),
-          value: units.length > 0  ? `${units[0] !=null ? units[0].floorNo : 0}` : "NA",
+          value: units.length > 0  ? units[0] && `${units[0].floorNo}` : "NA",
         }
       : {
           key: getTranslatedLabel("PT_ASSESMENT_INFO_NO_OF_FLOOR", localizationLabelsData),
@@ -200,7 +200,8 @@ properties.push({
 const getUnitInfo = (units = [],usageCategoryMajor,buildUpArea) => {
   units = units || [];
   let floors = [];
-  units[0] != null ? units.map((unit, index) => {
+  units && units.length>0 ? units.forEach((unit, index) => {
+    if(unit){
     let floor = [{
       key: getTranslatedLabel("PT_ASSESSMENT_UNIT_USAGE_TYPE", localizationLabelsData),
       value: unit && unit.usageCategoryMinor ? 'PROPERTYTAX_BILLING_SLAB_' + unit.usageCategoryMinor :
@@ -272,7 +273,7 @@ const getUnitInfo = (units = [],usageCategoryMajor,buildUpArea) => {
     } else {
       floors[unit['floorNo']].push(floor);
     }
-  }): []
+  }}): []
   return floors;
 }
 
