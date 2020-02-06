@@ -115,10 +115,12 @@
       "code": "PGR.WHATSAPP",
       "tenants": [
         {
-          "code": "pb.jalandhar"
+          "code": "pb.jalandhar",
+	  "name":"Jalandhar"
         },
         {
-          "code": "pb.phagwara"
+          "code": "pb.phagwara",
+          "name": "Phagwara"
         }
       ]
     }
