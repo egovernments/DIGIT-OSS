@@ -7,6 +7,19 @@ serviceMaps:
     isTransaction: true
     queryMaps:
 
+
+    - query: INSERT INTO eg_pt_property_audit (audituuid, propertyid, property, auditcreatedtime) VALUES (?, ?, ?, (SELECT extract(epoch from now())));
+      basePath: Property
+      jsonMaps:
+
+      - jsonPath: $.Property.id
+      
+      - jsonPath: $.Property.propertyId
+      
+      - jsonPath: $.Property
+        type: JSON
+        dbType: JSONB 
+        
     - query: INSERT INTO eg_pt_property (id, propertyid, tenantid, surveyid, accountid, oldpropertyid, status, acknowldgementnumber, propertytype, ownershipcategory, usagecategory, creationreason, nooffloors, landarea, superbuiltuparea, linkedproperties, source,  channel, createdby, createdtime, lastmodifiedby, lastmodifiedtime, additionaldetails) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
       basePath: Property
       jsonMaps:
@@ -275,7 +288,6 @@ serviceMaps:
 
       - jsonPath: $.Property.auditDetails.lastModifiedTime
 
-      
   - version: 1.0
     description: Update property EG_PT_PROPERTY ltable
     fromTopic: update-property-registry
@@ -283,23 +295,17 @@ serviceMaps:
     queryMaps:
 
 
-    - query: INSERT INTO eg_pt_property_audit SELECT *, (SELECT extract(epoch from now())) FROM eg_pt_property WHERE propertyid = ?;
+    - query: INSERT INTO eg_pt_property_audit (audituuid, propertyid, property, auditcreatedtime) VALUES (?, ?, ?, (SELECT extract(epoch from now())));
       basePath: Property
       jsonMaps:
 
+      - jsonPath: $.Property.auditId
+      
       - jsonPath: $.Property.propertyId
-
-    - query: INSERT INTO eg_pt_address_audit SELECT *, (SELECT extract(epoch from now())) FROM eg_pt_address WHERE id = ?;
-      basePath: Property.address
-      jsonMaps:
-
-      - jsonPath: $.Property.address.id
-
-    - query: INSERT INTO eg_pt_unit_audit SELECT *, (SELECT extract(epoch from now())) FROM eg_pt_unit WHERE id = ?;
-      basePath: Property.units.*
-      jsonMaps:
-
-      - jsonPath: $.Property.unit.*.id      
+      
+      - jsonPath: $.Property
+        type: JSON
+        dbType: JSONB 
 
     - query: UPDATE eg_pt_property SET propertyid=?,  surveyid=?, accountid=?, oldpropertyid=?, status=?, propertytype=?, ownershipcategory=?, usagecategory=?, nooffloors=?, landarea=?,   superbuiltuparea=?, linkedproperties=?, lastmodifiedby=?, lastmodifiedtime=?, additionaldetails=? WHERE Id=? AND tenantId=?;
       basePath: Property
@@ -533,4 +539,5 @@ serviceMaps:
 
       - jsonPath: $.Property.auditDetails.lastModifiedTime
 
-      - jsonPath: $.Property.units.*.id      
+      - jsonPath: $.Property.units.*.id
+      
