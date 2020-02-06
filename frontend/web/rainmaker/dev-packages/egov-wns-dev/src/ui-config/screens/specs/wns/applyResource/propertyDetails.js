@@ -9,24 +9,6 @@ import {
 
 import { changeStep } from "../viewBillResource/footer";
 
-// const getHeader = label => {
-//   return {
-//     uiFramework: "custom-molecules-local",
-//     moduleName: "egov-wns",
-//     componentPath: "DividerWithLabel",
-//     props: {
-//       className: "hr-generic-divider-label",
-//       labelProps: {},
-//       dividerProps: {},
-//       label
-//     },
-//     type: "array"
-//   };
-// };
-
-// const properyDetailsHeader = getCommonSubHeader({
-//   labelKey: "WS_COMMON_PROP_DETAIL_HEADER"
-// });
 export const propertyHeader = getCommonSubHeader({
   labelKey: "WS_COMMON_PROP_DETAIL",
   labelName: "Property Details"
@@ -79,14 +61,14 @@ const propertyDetails = getCommonContainer({
     },
     {
       jsonPath:
-        "WaterConnection[0].property.propertyTypeData"
+        "Properties[0].propertyType"
     }
   ),
   propertyUsageType: getLabelWithValue(
     {
       labelKey: "WS_PROPERTY_USAGE_TYPE_LABEL"
     },
-    { jsonPath: "WaterConnection[0].property.usageCategory" }
+    { jsonPath: "Properties[0].usageCategory" }
   ),
   propertySubUsageType: getLabelWithValue(
     {
@@ -100,7 +82,7 @@ const propertyDetails = getCommonContainer({
       labelKey: "WS_PROP_DETAIL_PLOT_SIZE_LABEL"
     },
     {
-      jsonPath: "WaterConnection[0].property.landArea"
+      jsonPath: "Properties[0].landArea"
     }
   ),
   numberOfFloors: getLabelWithValue(
@@ -108,7 +90,7 @@ const propertyDetails = getCommonContainer({
       labelKey: "WS_PROPERTY_NO_OF_FLOOR_LABEL",
       labelName: "Number Of Floors"
     },
-    { jsonPath: "WaterConnection[0].property.usageCategory" }
+    { jsonPath: "Properties[0].noOfFloors" }
   ),
   rainwaterHarvestingFacility: getLabelWithValue(
     { labelKey: "WS_SERV_DETAIL_CONN_RAIN_WATER_HARVESTING_FAC",

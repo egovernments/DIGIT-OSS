@@ -25,7 +25,7 @@ import { OwnerInfoCard } from "./applyResource/connectionDetails";
 import { documentList } from "./applyResource/documentList";
 import { summaryScreen } from "./search-preview";
 import { httpRequest } from "../../../../ui-utils";
-import { updatePFOforSearchResults, getBoundaryData } from "../../../../ui-utils/commons";
+import { updatePFOforSearchResults, getBoundaryData,getPropertyResults } from "../../../../ui-utils/commons";
 import { getTenantId, getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import commonConfig from "config/common.js";
@@ -149,6 +149,7 @@ export const getData = async (action, state, dispatch) => {
     }
   }
 };
+
 const propertyDetail = getPropertyDetails();
 const propertyIDDetails = getPropertyIDDetails();
 const ownerDetail = getOwnerDetails();
@@ -197,6 +198,7 @@ const screenConfig = {
   name: "apply",
   // hasBeforeInitAsync:true,
   beforeInitScreen: (action, state, dispatch) => {
+    getPropertyResults(dispatch).then (response=>dispatch(prepareFinalObject("Properties[0]",response.Properties[0])));
     const tenantId = getTenantId();
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     getData(action, state, dispatch).then(responseAction => {

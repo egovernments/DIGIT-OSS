@@ -64,7 +64,7 @@ import {
         labelKey: "WS_PROP_DETAIL_CITY"
       },
       {
-        jsonPath: "WaterConnection[0].property.address.city",
+        jsonPath: "Properties[0].address.city",
       }
     ),
     plotOrHouseOrSurveyNo: getLabelWithValue(
@@ -73,7 +73,7 @@ import {
         labelName:"Door/House No."
       },
       {
-        jsonPath: "WaterConnection[0].property.address.doorNo",
+        jsonPath: "Properties[0].address.doorNo",
       }
     ),
     buildingOrColonyName: getLabelWithValue(
@@ -81,7 +81,7 @@ import {
         labelKey: "WS_PROP_DETAIL_BUILD_NAME_LABEL"
       },
       {
-        jsonPath: "WaterConnection[0].property.address.buildingName"
+        jsonPath: "Properties[0].address.buildingName"
       }
     ),
     streetName: getLabelWithValue(
@@ -89,7 +89,7 @@ import {
         labelKey: "WS_PROP_DETAIL_STREET_NAME"
       },
       {
-        jsonPath: "WaterConnection[0].property.address.street"
+        jsonPath: "Properties[0].address.street"
       }
     ),
     locality: getLabelWithValue(
@@ -98,22 +98,22 @@ import {
         labelName:"Locality/Mohalla"
       },
       {
-        jsonPath: "WaterConnection[0].property.address.locality.name",
+        jsonPath: "Properties[0].address.locality.name",
       }
     ),
     pincode: getLabelWithValue(
       {
         labelKey: "WS_PROP_DETAIL_PINCODE"
       },
-      { jsonPath: "WaterConnection[0].property.address.pincode" }
+      { jsonPath: "Properties[0].address.pincode" }
     ),
-    ExistingPropertyId: getLabelWithValue(
-      {
-        labelKey: "WS_PROPERTY_EXIST_ID_LABEL",
-        labelName:"Existing Property ID"
-      },
-      { jsonPath: "WaterConnection[0].property.propertyId" }
-    ), 
+    // ExistingPropertyId: getLabelWithValue(
+    //   {
+    //     labelKey: "WS_PROPERTY_EXIST_ID_LABEL",
+    //     labelName:"Existing Property ID"
+    //   },
+    //   { jsonPath: "Properties[0].oldPropertyId" }
+    // ), 
    })
   
   export const getPropertyDetails = (isEditable = true) => {

@@ -17,7 +17,7 @@ const styles = theme => ({
 
 class NewConnection extends React.Component {
   clickHandler = () => {
-    window.location.href = "apply"
+    window.location.href = "/citizen/wns/apply"
   }
   render() {
     const { classes } = this.props;

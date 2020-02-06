@@ -61,7 +61,7 @@ const waterAndSewerageSearchAndResult = {
                     moduleName: "egov-wns",
                     componentPath: "NewConnection",
                     props: {
-                        route: "apply"
+                        route:"/citizen/wns/apply"
                     }
                 },
                 listCard1: {
