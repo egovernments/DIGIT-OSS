@@ -244,42 +244,25 @@ class WorkFlowContainer extends React.Component {
   getRedirectUrl = (action, businessId, moduleName) => {
     const isAlreadyEdited = getQueryArg(window.location.href, "edited");
     const tenant = getQueryArg(window.location.href, "tenantId");
-
-    if (moduleName === "NewTL") {
-      switch (action) {
-        case "PAY":
-          return `/egov-common/pay?consumerCode=${businessId}&tenantId=${tenant}`;
-        case "EDIT":
-          return isAlreadyEdited
-            ? `/tradelicence/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit&edited=true`
-            : `/tradelicence/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit`;
-      }
-    } else if (moduleName === "FIRENOC") {
-      switch (action) {
-        case "PAY":
-          return `/egov-common/pay?consumerCode=${businessId}&tenantId=${tenant}`;
-        case "EDIT":
-          return isAlreadyEdited
-            ? `/fire-noc/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit&edited=true`
-            : `/fire-noc/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit`;
-      }
-    } else if (moduleName === "BPA") {
-      const { ProcessInstances } = this.props;
-      let applicationStatus;
-      if ( ProcessInstances && ProcessInstances.length > 0 ) {
-          applicationStatus = get( ProcessInstances[ProcessInstances.length - 1], "state.applicationStatus" );
-      }
-      switch (action) {
-        case "PAY":
-          let bservice = ((applicationStatus =="PENDING_APPL_FEE") ? "BPA.NC_APP_FEE" :"BPA.NC_SAN_FEE");
-          return `/egov-common/pay?consumerCode=${businessId}&tenantId=${tenant}&businessService=${bservice}`;
-        case "EDIT":
-          return isAlreadyEdited
-            ? `/egov-bpa/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit&edited=true`
-            : `/egov-bpa/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit`;
-      }
+    let baseUrl = "";
+    let bservice = "";
+    if(moduleName === "FIRENOC"){
+      baseUrl = "fire-noc";
+    }else if(moduleName === "BPA"){
+      baseUrl = "egov-bpa";
+      bservice = ((applicationStatus =="PENDING_APPL_FEE") ? "BPA.NC_APP_FEE" :"BPA.NC_SAN_FEE");
+    }else{
+      baseUrl = "tradelicence";
+    }
+    const payUrl = `/egov-common/pay?consumerCode=${businessId}&tenantId=${tenant}`;
+    switch (action) {
+      case "PAY": return bservice ? `${payUrl}&businessService=${bservice}` : payUrl;
+      case "EDIT" : return isAlreadyEdited
+            ? `/${baseUrl}/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit&edited=true`
+            : `/${baseUrl}/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit`;
     }
   };
+
 
   getHeaderName = action => {
     return {
