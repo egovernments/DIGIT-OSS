@@ -80,9 +80,10 @@ const commonApplicantInformation = () => {
             }
           ],
           jsonPath:
-            "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].gender"
-          // required: true
+            "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].gender",
+          required: true
         },
+        required: true,
         type: "array"
       },
       mobileNumber: getTextField({
@@ -217,30 +218,6 @@ const commonApplicantInformation = () => {
           md: 6
         }
       }),
-      
-      applicantAddress: getTextField({
-        label: {
-          labelName: "Correspondence Address",
-          labelKey: "PT_MUTATION_TRANSFEREE_APPLICANT_CORRESPONDENCE_ADDRESS_LABEL"
-        },
-        placeholder: {
-          labelName: "Enter Correspondence Address",
-          labelKey: "PT_MUTATION_TRANSFEREE_APPLICANT_CORRESPONDENCE_ADDRESS_PLACEHOLDER"
-        },
-        required: true,
-        pattern: getPattern("Address"),
-        errorMessage: "Invalid Address",
-        jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].correspondenceAddress",
-        gridDefination: {
-          xs: 12,
-          sm: 12,
-          md: 6
-        },
-        props:{
-          className:"applicant-details-error"
-        }
-      }),
       specialApplicantCategory: getSelectField({
         label: {
           labelName: "Special Applicant Category",
@@ -270,7 +247,30 @@ const commonApplicantInformation = () => {
           sm: 12,
           md: 6
         }
-      })
+      }),
+      applicantAddress: getTextField({
+        label: {
+          labelName: "Correspondence Address",
+          labelKey: "PT_MUTATION_TRANSFEREE_APPLICANT_CORRESPONDENCE_ADDRESS_LABEL"
+        },
+        placeholder: {
+          labelName: "Enter Correspondence Address",
+          labelKey: "PT_MUTATION_TRANSFEREE_APPLICANT_CORRESPONDENCE_ADDRESS_PLACEHOLDER"
+        },
+        required: true,
+        pattern: getPattern("Address"),
+        errorMessage: "Invalid Address",
+        jsonPath:
+          "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].correspondenceAddress",
+        gridDefination: {
+          xs: 12,
+          sm: 12,
+          md: 6
+        },
+        props:{
+          className:"applicant-details-error"
+        }
+      }),
     })
   });
 };
