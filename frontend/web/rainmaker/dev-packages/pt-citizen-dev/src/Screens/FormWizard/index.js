@@ -163,7 +163,7 @@ class FormWizard extends Component {
           }
         };
       } else {
-        const searchPropertyResponse = await httpRequest(
+        let searchPropertyResponse = await httpRequest(
           "pt-services-v2/property/_search",
           "_search",
           [
@@ -177,7 +177,7 @@ class FormWizard extends Component {
             }
           ]
         );
-
+        searchPropertyResponse = getCreatePropertyResponse(searchPropertyResponse);
         let propertyResponse = {
           ...searchPropertyResponse,
           Properties: [

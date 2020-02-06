@@ -153,7 +153,7 @@ class FormWizard extends Component {
             get(res, "id", "") === draftId
         );
       } else {
-        const searchPropertyResponse = await httpRequest(
+        let searchPropertyResponse = await httpRequest(
           "pt-services-v2/property/_search",
           "_search",
           [
@@ -167,6 +167,7 @@ class FormWizard extends Component {
             }
           ]
         );
+        searchPropertyResponse = getCreatePropertyResponse(searchPropertyResponse);
         if (
           searchPropertyResponse.Properties[0].propertyDetails &&
           searchPropertyResponse.Properties[0].propertyDetails.length > 0

@@ -110,8 +110,7 @@ export const createAssessmentPayload = (properties, propertyPayload) => {
   return Assessment;
 };
 
-export const getCreatePropertyResponse = (createPropertyResponse, assessmentResponse) => {
+export const getCreatePropertyResponse = (createPropertyResponse) => {
   createPropertyResponse.Properties[0].propertyDetails = createPropertyResponse.Properties;
-  createPropertyResponse.Properties[0].propertyDetails[0].assessmentNumber = assessmentResponse.Assessments[0].assessmentNumber;
   return createPropertyResponse;
 }
