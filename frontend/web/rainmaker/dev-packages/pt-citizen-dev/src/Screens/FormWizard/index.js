@@ -74,6 +74,9 @@ import "./index.css";
 import AcknowledgementCard from "egov-ui-kit/common/propertyTax/AcknowledgementCard";
 import generateAcknowledgementForm from "egov-ui-kit/common/propertyTax/PaymentStatus/Components/acknowledgementFormPDF";
 import { getHeaderDetails } from "egov-ui-kit/common/propertyTax/PaymentStatus/Components/createReceipt";
+import { createPropertyPayload, createAssessmentPayload, getCreatePropertyResponse } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/propertyCreateUtils";
+import DocumentsUpload from "egov-ui-kit/common/propertyTax/Property/components/DocumentsUpload";
+
 
 
 class FormWizard extends Component {
@@ -533,20 +536,7 @@ class FormWizard extends Component {
           </div>
         );
       case 3:
-        return (
-          <div className="review-pay-tab">
-            <h3>Document Upload</h3>
-            {/* {console.log(this.props,"location-jk")}
-            {console.log(this.props['prepareFormData']['Properties'][0]['propertyId'], 'props =jk   ---')}
-            {console.log(this.props['prepareFormData']['Properties'][0]['tenantId'], 'tenantId =jk   ---')}
-            <button onClick={()=>    this.onTabClick(0)  }>1</button>
-            <button onClick={()=>    this.onTabClick(1)  }>2</button>
-            <button onClick={()=>    this.onTabClick(2)  }>3</button> */}
-            {/* <Property tenantId={this.props['prepareFormData']['Properties'][0]['tenantId']} propertyId={this.props['prepareFormData']['Properties'][0]['propertyId']}></Property> */}
-
-            
-          </div>
-        );
+        return (<Card textChildren={<DocumentsUpload></DocumentsUpload>} />);
       case 4 :
         return(<div className="review-pay-tab">
           <ReviewForm
@@ -622,7 +612,7 @@ class FormWizard extends Component {
         return null;
     }
   };
-  createAndUpdate = async (index) => {
+  createAndUpdate = async (index, action) => {
     // const { callPGService, callDraft } = this;
     const {
       selected,
@@ -757,49 +747,98 @@ class FormWizard extends Component {
       );
     }
 
-    try {
       set(
         prepareFormData,
         "Properties[0].propertyDetails[0].citizenInfo.name",
         get(prepareFormData, "Properties[0].propertyDetails[0].owners[0].name")
       );
 
-
       const properties = normalizePropertyDetails(
         prepareFormData.Properties,
         this
       );
-      let createPropertyResponse = await httpRequest(
-        `pt-services-v2/property/${propertyMethodAction}`,
+      // Create/Update property call, action will be either create or update
+      this.createProperty(properties, action);
+  };
+
+  assessProperty = async (action) => {
+    let propertyMethodAction = action === "re-assess" ? "_update" : '_create';
+    const propertyId = getQueryArg(
+     window.location.href,
+     "propertyId"
+   );
+   const financialYear = getQueryArg(window.location.href, "FY");
+   const tenant = getQueryArg(window.location.href, "tenantId");
+    let assessment={
+     "tenantId": tenant,
+     "propertyId": propertyId,
+     "financialYear": financialYear,
+     "assessmentDate": new Date().getTime(),
+     "source": "MUNICIPAL_RECORDS",
+     "channel": "CFC_COUNTER",
+     "status": "ACTIVE"
+     
+    }
+   try {
+     
+     
+     let assessPropertyResponse = await httpRequest(
+       `property-services/assessment/${propertyMethodAction}`,
+       `${propertyMethodAction}`,
+       [],
+       {
+         Assessment: assessment
+       }
+     );
+     store.dispatch(
+       setRoute(
+         `/property-tax/pt-acknowledgment?purpose=assessment&status=success&propertyId=${assessment.propertyId}&FY=${assessment.financialYear}&tenantId=${assessment.tenantId}`
+         
+       )
+     );
+ 
+   } catch (e) {
+     hideSpinner();
+     this.setState({ nextButtonEnabled: true });
+     alert(e);
+   }
+  }
+
+  createProperty= async (Properties, action) => {
+    const { documentsUploadRedux } = this.props;
+    const propertyPayload = createPropertyPayload(Properties, documentsUploadRedux);
+    const propertyMethodAction = (action === "assess" || action === "re-assess") ? "_update" : "_create";
+    try {
+      const propertyResponse = await httpRequest(
+        `property-services/property/${propertyMethodAction}`,
         `${propertyMethodAction}`,
         [],
         {
-          Properties: properties
-        }
+          Property: propertyPayload
+        },
+        [],
+        {},
+        true
       );
-      console.log(createPropertyResponse, 'createPropertyResponse');
-
-
-      this.setState(
-        {
-          assessedPropertyDetails: createPropertyResponse,
-          selected: index,
-          formValidIndexArray: [...formValidIndexArray, selected]
-        });
-
-    } catch (e) {
-      try {
-        hideSpinner();
-      } catch (e) {
-        console.log('====================================');
-        console.log(e);
-        console.log('====================================');
-
+      if(propertyResponse && propertyResponse.Properties && propertyResponse.Properties.length){
+        if(propertyResponse.Properties[0].propertyId){
+          const propertyId = propertyResponse.Properties[0].propertyId;
+          const tenantId = propertyResponse.Properties[0].tenantId;
+          // Navigate to success page
+          if((action === "assess") || (action === "re-assess")){
+            this.assessProperty(action);
+          }else{
+            this.props.history.push(`pt-acknowledgment?purpose=apply&propertyId=${propertyId}&status=success&tenantId=${tenantId}&FY=2019-20`);
+          }
+        }
       }
+    } catch (e) {
+      hideSpinner();
       this.setState({ nextButtonEnabled: true });
       alert(e);
     }
-  };
+  }
+
 
   updateIndex = index => {
     // utils
@@ -1017,18 +1056,42 @@ class FormWizard extends Component {
 
         break;
       case 3:
+        const uploadedDocs = get(this.props, "documentsUploadRedux");
+        let temp = 0;
+        if(uploadedDocs){
+          let docsArray = [];
+          Object.keys(uploadedDocs).map(key=>{
+            docsArray.push(uploadedDocs[key]);
+          })
+          docsArray.map(docs => {
+            if(docs && docs.isDocumentRequired && docs.documents && docs.dropdown){
+              temp++;
+            }
+          });
+        }
+        if(!uploadedDocs || temp < 3) {
+          alert("Please upload all the required documents and documents type.")
+        } else {
         this.setState(
           {
             selected: index,
             formValidIndexArray: [...formValidIndexArray, selected]
           })
+        }
         break;
       case 4:
-        if (estimation[0].totalAmount < 0) {
+        let { search:search1 } = this.props.location;        
+        let isAssesment1 = Boolean(getQueryValue(search1, "isAssesment").replace('false', ''));
+        if (estimation&&estimation.length&&estimation.length>1&&estimation[0].totalAmount < 0) {
           alert('Property Tax amount cannot be Negative!');
         } else {
           window.scrollTo(0, 0);
-          createAndUpdate(index);
+          if(isAssesment1){
+            createAndUpdate(index, 'assess');
+            // this.props.history.push(`pt-acknowledgment?purpose=assessment&consumerCode=${propertyId1}&status=success&tenantId=${tenantId1}&FY=2019-20`);
+          }else{
+            createAndUpdate(index, 'create');
+          }
         }
         break;
       case 5:
@@ -1725,17 +1788,20 @@ class FormWizard extends Component {
 }
 
 const mapStateToProps = state => {
-  const { form, common, app } = state || {};
+  const { form, common, app, screenConfiguration } = state || {};
   const { propertyAddress } = form;
   const { city } =
     (propertyAddress && propertyAddress.fields && propertyAddress.fields) || {};
   const currentTenantId = (city && city.value) || commonConfig.tenantId;
+  const { preparedFinalObject} = screenConfiguration;
+  const { documentsUploadRedux } = preparedFinalObject;
   return {
     form,
     prepareFormData: common.prepareFormData,
     currentTenantId,
     common,
-    app
+    app,
+    documentsUploadRedux
   };
 };
 

@@ -74,6 +74,7 @@ import AcknowledgementCard from "egov-ui-kit/common/propertyTax/AcknowledgementC
 import generateAcknowledgementForm from "egov-ui-kit/common/propertyTax/PaymentStatus/Components/acknowledgementFormPDF";
 import { getHeaderDetails } from "egov-ui-kit/common/propertyTax/PaymentStatus/Components/createReceipt";
 import { createPropertyPayload, createAssessmentPayload, getCreatePropertyResponse } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/propertyCreateUtils";
+import DocumentsUpload from "egov-ui-kit/common/propertyTax/Property/components/DocumentsUpload";
 
 
 class FormWizard extends Component {
@@ -554,11 +555,7 @@ class FormWizard extends Component {
           </div>
         );
       case 3:
-        return (<div>
-          <Card  textChildren={ <h2>Document upload Tab</h2>}>
-           
-            </Card>
-          </div>);
+        return (<Card textChildren={<DocumentsUpload></DocumentsUpload>} />);
       case 4:
         return (
           <div className="review-pay-tab">
@@ -968,10 +965,28 @@ class FormWizard extends Component {
         break;
       case 3:
         window.scrollTo(0, 0);
-        this.setState({
-          selected: index,
-          formValidIndexArray: [...formValidIndexArray, selected]
-        });
+        const uploadedDocs = get(this.props, "documentsUploadRedux");
+        let temp = 0;
+        if(uploadedDocs){
+          let docsArray = [];
+          Object.keys(uploadedDocs).map(key=>{
+            docsArray.push(uploadedDocs[key]);
+          })
+          docsArray.map(docs => {
+            if(docs && docs.isDocumentRequired && docs.documents && docs.dropdown){
+              temp++;
+            }
+          });
+        }
+        if(!uploadedDocs || temp < 3) {
+          alert("Please upload all the required documents and documents type.")
+        } else {
+          this.setState({
+            selected: index,
+            formValidIndexArray: [...formValidIndexArray, selected]
+          });
+        }
+        
         break;
         // createAndUpdate(index);
       case 4:
@@ -1617,7 +1632,8 @@ class FormWizard extends Component {
   }
 
   createProperty= async (Properties, action) => {
-    const propertyPayload = createPropertyPayload(Properties);
+    const { documentsUploadRedux } = this.props;
+    const propertyPayload = createPropertyPayload(Properties, documentsUploadRedux);
     const propertyMethodAction = (action === "assess" || action === "re-assess") ? "_update" : "_create";
     try {
       const propertyResponse = await httpRequest(
@@ -2016,17 +2032,20 @@ class FormWizard extends Component {
 }
 
 const mapStateToProps = state => {
-  const { form, common, app } = state || {};
+  const { form, common, app, screenConfiguration } = state || {};
   const { propertyAddress } = form;
   const { city } =
     (propertyAddress && propertyAddress.fields && propertyAddress.fields) || {};
   const currentTenantId = (city && city.value) || commonConfig.tenantId;
+  const { preparedFinalObject} = screenConfiguration;
+  const { documentsUploadRedux } = preparedFinalObject;
   return {
     form,
     currentTenantId,
     prepareFormData: common.prepareFormData,
     common,
-    app
+    app,
+    documentsUploadRedux
   };
 };
 

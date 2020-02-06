@@ -64,11 +64,11 @@ function MultiCardDownloadGrid(props) {
               <Grid xs={6} className={classes.subtext}>
                 <Typography className={classes.body2}>{item.name}</Typography>
               </Grid>
-              <Grid xs={6} align="right">
+              {item.link && item.linkText && <Grid xs={6} align="right">
                 <Button href={item.link} color="primary">
                   {item.linkText}
                 </Button>
-              </Grid>
+              </Grid>}
             </Grid>
           </Grid>
         );

@@ -4,7 +4,7 @@
 //     return localStorageGet("isNative") ? "MOBILEAPP" : "SYSTEM";
 // }
 
-export const createPropertyPayload = properties => {
+export const createPropertyPayload = (properties, documentsUploadRedux) => {
   properties[0] = {
     ...properties[0],
     ...properties[0].propertyDetails[0],
@@ -46,6 +46,16 @@ export const createPropertyPayload = properties => {
     delete unit.usageCategorySubMinor;
     delete unit.unitArea;
   });
+
+  if(documentsUploadRedux && Object.keys(documentsUploadRedux) && Object.keys(documentsUploadRedux).length){
+    properties[0].documents = []
+    Object.keys(documentsUploadRedux).map(key=>{
+      properties[0].documents.push({
+        "documentType": documentsUploadRedux[key].documentType,
+        "fileStore": documentsUploadRedux[key].documents[0].fileStoreId,
+      })
+    })
+  }
 
   if (properties[0].institution) {
     properties[0].institution.nameOfAuthorizedPerson =

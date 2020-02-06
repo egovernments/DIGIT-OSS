@@ -13,6 +13,7 @@ import {getQueryValue,
 import PropertyAddressInfo from 'egov-ui-kit/common/propertyTax/Property/components/PropertyAddressInfo';
 import AssessmentInfo from 'egov-ui-kit/common/propertyTax/Property/components/AssessmentInfo';
 import OwnerInfo from 'egov-ui-kit/common/propertyTax/Property/components/OwnerInfo';
+import DocumentsInfo from "egov-ui-kit/common/propertyTax/Property/components/DocumentsInfo";
 
 
 import "./index.css";
@@ -100,6 +101,7 @@ class ReviewForm extends Component {
               <PropertyAddressInfo generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={<EditIcon onIconClick={() => onEditButtonClick(0)} />}></PropertyAddressInfo>
               <AssessmentInfo generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={<EditIcon onIconClick={() => onEditButtonClick(1)} />}></AssessmentInfo>
               <OwnerInfo generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={<EditIcon onIconClick={() => onEditButtonClick(2)} />}></OwnerInfo>
+              <DocumentsInfo generalMDMSDataById={generalMDMSDataById} documentsUploaded={this.props.documentsUploadRedux} editIcon={<EditIcon onIconClick={() => onEditButtonClick(3)} />}></DocumentsInfo>
             </div>
           }
         />
@@ -130,11 +132,14 @@ class ReviewForm extends Component {
   }
 }
 const mapStateToProps = (state, ownProps) => {
-  const { common = {} } = state;
+  const { common = {}, screenConfiguration } = state;
   const { generalMDMSDataById } = common || {};
+  const { preparedFinalObject} = screenConfiguration;
+  const { documentsUploadRedux } = preparedFinalObject;
   return {
     ownProps,
     generalMDMSDataById,
+    documentsUploadRedux
   };
 };
 const mapDispatchToProps = (dispatch) => ({
