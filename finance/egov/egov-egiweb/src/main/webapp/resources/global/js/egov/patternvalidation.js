@@ -93,7 +93,7 @@ var regexp_decimalvalue = /[^0-9.]/g ;
 var regexp_alphanumerichyphenbackslash = /[^a-zA-Z0-9/-]/g ;
 
 //This will allow you to enter alphabets and numbers with specified special characters like  slash(/), hyphen(-),brackets(),comma(,). (eg: data-pattern="address")
-var regexp_address = /[^a-zA-Z0-9/(),- ]/g ;
+var regexp_address = /[^a-zA-Z0-9/(),\- ]/g ;
 
 //username pattern (eg: data-pattern="username")
 var regexp_username = /[^a-zA-Z0-9_.]/g ;
