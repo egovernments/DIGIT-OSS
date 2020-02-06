@@ -1,6 +1,6 @@
 {
   "tenantId": "pb",
-  "moduleName": "ws-services-masters",
+  "moduleName": "sw-services-calculation",
   "connectionCategory": [
     {
       "name": "Temporary",
@@ -16,7 +16,8 @@
         "OWNERPHOTO"
       ],
       "verificationDocument": [],
-      "active": true
+      "active": true,
+      "type": "SW"
     }
   ]
 }

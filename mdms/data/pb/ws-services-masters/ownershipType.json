@@ -1,0 +1,57 @@
+
+{
+  "tenantId": "pb",
+  "moduleName": "ws-services-masters",
+  "ownershipType":[
+    {
+      "name": "Single Owner",
+      "code": "SINGLEOWNER",
+      "active": true,
+      "ownerShipCategory": "INDIVIDUAL",
+      "applicationDocument": [
+        "OWNERIDPROOF",
+        "OWNERSHIPPROOF",
+        "OWNERPHOTO"
+      ],
+      "verificationDocument": [],
+      "type": "WS"
+    },
+    {
+      "name": "Multiple Owners",
+      "code": "MULTIPLEOWNERS",
+      "active": true,
+      "ownerShipCategory": "INDIVIDUAL",
+      "applicationDocument": [
+        "OWNERIDPROOF",
+        "OWNERSHIPPROOF",
+        "OWNERPHOTO"
+      ],
+      "verificationDocument": [],
+      "type": "WS"
+    },
+    {
+      "name": "Institutional - Private ",
+      "code": "INSTITUTIONALPRIVATE",
+      "active": true,
+      "applicationDocument": [
+        "OWNERIDPROOF",
+        "OWNERSHIPPROOF",
+        "OWNERPHOTO"
+      ],
+      "verificationDocument": [],
+      "type": "WS"
+    },
+    {
+      "name": "Institutional - Government",
+      "code": "INSTITUTIONALGOVERNMENT",
+      "active": true,
+      "applicationDocument": [
+        "OWNERIDPROOF",
+        "OWNERSHIPPROOF",
+        "OWNERPHOTO"
+      ],
+      "verificationDocument": [],
+      "type": "WS"
+    }
+  ]
+}

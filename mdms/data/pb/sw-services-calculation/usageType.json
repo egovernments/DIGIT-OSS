@@ -1,0 +1,83 @@
+{
+  "tenantId": "pb",
+  "moduleName": "sw-services-calculation",
+  "usageType":  [
+    {
+      "name": "Commercial",
+      "code": "COMMERCIAL",
+      "active": true,
+      "usageCategoryMajor": "NONRESIDENTIAL",
+      "applicationDocument": [
+        "OWNERIDPROOF",
+        "OWNERSHIPPROOF",
+        "OWNERPHOTO"
+      ],
+      "verificationDocument": [],
+      "type": "SW"
+    },
+    {
+      "name": "Industrial",
+      "code": "INDUSTRIAL",
+      "active": true,
+      "usageCategoryMajor": "NONRESIDENTIAL",
+      "applicationDocument": [
+        "OWNERIDPROOF",
+        "OWNERSHIPPROOF",
+        "OWNERPHOTO"
+      ],
+      "verificationDocument": [],
+      "type": "SW"
+    },
+    {
+      "name": "Institutional",
+      "code": "INSTITUTIONAL",
+      "active": true,
+      "usageCategoryMajor": "NONRESIDENTIAL",
+      "applicationDocument": [
+        "OWNERIDPROOF",
+        "OWNERSHIPPROOF",
+        "OWNERPHOTO"
+      ],
+      "verificationDocument": [],
+      "type": "SW"
+    },
+    {
+      "name": "Other Non-Residential",
+      "code": "OTHERS",
+      "active": true,
+      "usageCategoryMajor": "NONRESIDENTIAL",
+      "applicationDocument": [
+        "OWNERIDPROOF",
+        "OWNERSHIPPROOF",
+        "OWNERPHOTO"
+      ],
+      "verificationDocument": [],
+      "type": "SW"
+    },
+    {
+      "name": "Mixed Non-Residential",
+      "code": "MIXED",
+      "active": true,
+      "usageCategoryMajor": "NONRESIDENTIAL",
+      "applicationDocument": [
+        "OWNERIDPROOF",
+        "OWNERSHIPPROOF",
+        "OWNERPHOTO"
+      ],
+      "verificationDocument": [],
+      "type": "SW"
+    },
+    {
+      "name": "Residential",
+      "code": "RESIDENTIAL",
+      "active": true,
+      "applicationDocument": [
+        "OWNERIDPROOF",
+        "OWNERSHIPPROOF",
+        "OWNERPHOTO"
+      ],
+      "verificationDocument": [],
+      "type": "SW"
+    }
+  ]
+}

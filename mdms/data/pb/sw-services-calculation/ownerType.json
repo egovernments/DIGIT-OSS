@@ -1,0 +1,78 @@
+{
+  "tenantId": "pb",
+  "moduleName": "sw-services-calculation",
+  "OwnerType": [
+    {
+      "name": "Freedom ws-services-mastersFighter",
+      "code": "FREEDOMFIGHTER",
+      "active": true,
+      "applicationDocument": [
+        "OWNERIDPROOF",
+        "OWNERSHIPPROOF",
+        "OWNERPHOTO"
+      ],
+      "verificationDocument": [],
+      "type": "SW"
+    },
+    {
+      "name": "Widow",
+      "code": "WIDOW",
+      "active": true,
+      "applicationDocument": [
+        "OWNERIDPROOF",
+        "OWNERSHIPPROOF",
+        "OWNERPHOTO"
+      ],
+      "verificationDocument": [],
+      "type": "SW"
+    },
+    {
+      "name": "Handicapped Person",
+      "code": "HANDICAPPED",
+      "active": true,
+      "applicationDocument": [
+        "OWNERIDPROOF",
+        "OWNERSHIPPROOF",
+        "OWNERPHOTO"
+      ],
+      "verificationDocument": [],
+      "type": "SW"
+    },
+    {
+      "name": "Below Poverty Line",
+      "code": "BPL",
+      "active": true,
+      "applicationDocument": [
+        "OWNERIDPROOF",
+        "OWNERSHIPPROOF",
+        "OWNERPHOTO"
+      ],
+      "verificationDocument": [],
+      "type": "SW"
+    },
+    {
+      "name": "Defense Personnel",
+      "code": "DEFENSE",
+      "active": true,
+      "applicationDocument": [
+        "OWNERIDPROOF",
+        "OWNERSHIPPROOF",
+        "OWNERPHOTO"
+      ],
+      "verificationDocument": [],
+      "type": "SW"
+    },
+    {
+      "name": "None of the above",
+      "code": "NONE",
+      "active": true,
+      "applicationDocument": [
+        "OWNERIDPROOF",
+        "OWNERSHIPPROOF",
+        "OWNERPHOTO"
+      ],
+      "verificationDocument": [],
+      "type": "SW"
+    }
+  ]
+}
