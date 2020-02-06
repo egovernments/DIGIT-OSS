@@ -14,6 +14,7 @@ import org.egov.pt.models.collection.PaymentRequest;
 import org.egov.pt.models.enums.Status;
 import org.egov.pt.models.workflow.State;
 import org.egov.pt.producer.Producer;
+import org.egov.pt.repository.PropertyRepository;
 import org.egov.pt.util.PropertyUtil;
 import org.egov.pt.web.contracts.PropertyRequest;
 import org.egov.tracer.model.CustomException;
@@ -28,7 +29,7 @@ import com.google.common.collect.Sets;
 public class PaymentUpdateService {
 
 	@Autowired
-	private PropertyService propertyService;
+	private PropertyRepository propertyRepository;
 
 	@Autowired
 	private PropertyConfiguration config;
@@ -89,7 +90,7 @@ public class PaymentUpdateService {
 				.tenantId(tenantId)
 				.build();
 				
-		List<Property> properties = propertyService.getPropertiesWithOwnerInfo(criteria, requestInfo);
+		List<Property> properties = propertyRepository.getPropertiesWithOwnerInfo(criteria, requestInfo);
 
 		if (CollectionUtils.isEmpty(properties))
 			throw new CustomException("INVALID RECEIPT",

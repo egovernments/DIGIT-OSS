@@ -5,22 +5,15 @@ import static org.egov.pt.util.PTConstants.MUTATION_PROCESS_CONSTANT;
 import static org.egov.pt.util.PTConstants.UPDATE_PROCESS_CONSTANT;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.config.PropertyConfiguration;
-import org.egov.pt.models.OwnerInfo;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.PropertyCriteria;
 import org.egov.pt.models.enums.Status;
-import org.egov.pt.models.user.User;
-import org.egov.pt.models.user.UserDetailResponse;
-import org.egov.pt.models.user.UserSearchRequest;
 import org.egov.pt.models.workflow.ProcessInstance;
 import org.egov.pt.models.workflow.State;
 import org.egov.pt.producer.Producer;
@@ -29,6 +22,7 @@ import org.egov.pt.util.PTConstants;
 import org.egov.pt.util.PropertyUtil;
 import org.egov.pt.validator.PropertyValidator;
 import org.egov.pt.web.contracts.PropertyRequest;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -84,6 +78,7 @@ public class PropertyService {
 		userService.createUser(request);
 		if (config.getIsWorkflowEnabled())
 			wfService.updateWorkflow(request, CREATE_PROCESS_CONSTANT);
+		util.clearSensitiveDataForPersistance(request.getProperty());
 		producer.push(config.getSavePropertyTopic(), request);
 		return request.getProperty();
 	}
@@ -108,8 +103,9 @@ public class PropertyService {
 		boolean isRequestForOwnerMutation = workFlow != null
 				&& workFlow.getBusinessService().equalsIgnoreCase(config.getMutationWfName());
 		
-		// ID for audit and history search 
+		// ID for audit and history search
 		request.getProperty().setAuditId(UUID.randomUUID().toString());
+		propertyFromSearch.setAuditId(UUID.randomUUID().toString());
 
 		if (isRequestForOwnerMutation)
 			processOwnerMutation(request, propertyFromSearch);
@@ -129,6 +125,7 @@ public class PropertyService {
 		
 		propertyValidator.validateUpdateRequestForOwnerFields(request, propertyFromSearch);
 		enrichmentService.enrichUpdateRequest(request, propertyFromSearch);
+		util.clearSensitiveDataForPersistance(request.getProperty());
 		
 		request.getProperty().setOwners(propertyFromSearch.getOwners());
 		PropertyRequest OldPropertyRequest = PropertyRequest.builder()
@@ -173,6 +170,7 @@ public class PropertyService {
 		Boolean isMutationSatrting = request.getProperty().getWorkflow().getAction().equalsIgnoreCase(
 				config.getMutationOpenState());
 		enrichmentService.enrichMutationRequest(request, isMutationSatrting);
+		util.clearSensitiveDataForPersistance(request.getProperty());
 		// TODO FIX ME block property changes FIXME
 
 		util.mergeAdditionalDetails(request, propertyFromSearch);
@@ -250,111 +248,32 @@ public class PropertyService {
 		List<Property> properties;
 		propertyValidator.validatePropertyCriteria(criteria, requestInfo);
 
+		/*
+		 * throw error if audit request is with no proeprty id or multiple propertyids
+		 */
+		if (criteria.isAudit() && (CollectionUtils.isEmpty(criteria.getPropertyIds())
+				|| (!CollectionUtils.isEmpty(criteria.getPropertyIds()) && criteria.getPropertyIds().size() > 1))) {
+
+			throw new CustomException("EG_PT_PROPERTY_AUDIT_ERROR", "Audit can only be provided for a single propertyId");
+		}
+
 		if (criteria.getMobileNumber() != null || criteria.getName() != null || criteria.getOwnerIds() != null) {
-			
-			Boolean shouldReturnEmptyList = enrichCriteriaFromUser(criteria, requestInfo);
+
+			/* converts owner information to associated property ids */
+			Boolean shouldReturnEmptyList = repository.enrichCriteriaFromUser(criteria, requestInfo);
 
 			if (shouldReturnEmptyList)
 				return Collections.emptyList();
 
-			properties = getPropertiesWithOwnerInfo(criteria, requestInfo);
+			properties = repository.getPropertiesWithOwnerInfo(criteria, requestInfo);
 		} else {
-			properties = getPropertiesWithOwnerInfo(criteria, requestInfo);
+			properties = repository.getPropertiesWithOwnerInfo(criteria, requestInfo);
 		}
 
 		properties.forEach(property -> {
 			enrichmentService.enrichBoundary(property, requestInfo);
 		});
-		return properties;
-	}
-	
-	/**
-	 * 
-	 * Method to enrich property search criteria with user based criteria info
-	 * 
-	 * If no info found based on user criteria boolean true will be returned so that empty list can be returned 
-	 * 
-	 * else returns false to continue the normal flow
-	 * 
-	 * The enrichment of object is done this way(instead of directly applying in the search query) to fetch multiple owners related to property at once
-	 * 
-	 * @param criteria
-	 * @param requestInfo
-	 * @return
-	 */
-	private Boolean enrichCriteriaFromUser(PropertyCriteria criteria, RequestInfo requestInfo) {
 		
-		Set<String> ownerIds = new HashSet<String>();
-		
-		if(!CollectionUtils.isEmpty(criteria.getOwnerIds()))
-			ownerIds.addAll(criteria.getOwnerIds());
-		criteria.setOwnerIds(null);
-		
-		String userTenant = criteria.getTenantId();
-		if(criteria.getTenantId() == null)
-			userTenant = requestInfo.getUserInfo().getTenantId();
-
-		UserSearchRequest userSearchRequest = userService.getBaseUserSearchRequest(userTenant, requestInfo);
-		userSearchRequest.setMobileNumber(criteria.getMobileNumber());
-		userSearchRequest.setName(criteria.getName());
-		userSearchRequest.setUuid(criteria.getOwnerIds());
-
-		UserDetailResponse userDetailResponse = userService.getUser(userSearchRequest);
-		if (CollectionUtils.isEmpty(userDetailResponse.getUser()))
-			return true;
-
-		// fetching property id from owner table and enriching criteria
-		ownerIds.addAll(userDetailResponse.getUser().stream().map(User::getUuid).collect(Collectors.toSet()));
-		List<String> propertyIds = repository.getPropertyIds(ownerIds);
-
-		// returning empty list if no property id found for user criteria
-		if (CollectionUtils.isEmpty(propertyIds)) {
-
-			return true;
-		} else if (!CollectionUtils.isEmpty(criteria.getPropertyIds())) {
-
-			// eliminating property Ids not matching with Ids found using user data
-
-			Set<String> givenIds = criteria.getPropertyIds();
-
-			givenIds.forEach(id -> {
-
-				if (!propertyIds.contains(id))
-					givenIds.remove(id);
-			});
-
-			if (CollectionUtils.isEmpty(givenIds))
-				return true;
-		} else {
-
-			criteria.setPropertyIds(Sets.newHashSet(propertyIds));
-		}
-
-		return false;
-	}
-
-	/**
-	 * Returns list of properties based on the given propertyCriteria with owner
-	 * fields populated from user service
-	 *
-	 * @param criteria    PropertyCriteria on which to search properties
-	 * @param requestInfo RequestInfo object of the request
-	 * @return properties with owner information added from user service
-	 */
-	List<Property> getPropertiesWithOwnerInfo(PropertyCriteria criteria, RequestInfo requestInfo) {
-
-		List<Property> properties = repository.getProperties(criteria);
-		if (CollectionUtils.isEmpty(properties))
-			return Collections.emptyList();
-
-		Set<String> ownerIds = properties.stream().map(Property::getOwners).flatMap(List::stream)
-				.map(OwnerInfo::getUuid).collect(Collectors.toSet());
-
-		UserSearchRequest userSearchRequest = userService.getBaseUserSearchRequest(criteria.getTenantId(), requestInfo);
-		userSearchRequest.setUuid(ownerIds);
-
-		UserDetailResponse userDetailResponse = userService.getUser(userSearchRequest);
-		enrichmentService.enrichOwner(userDetailResponse, properties);
 		return properties;
 	}
 

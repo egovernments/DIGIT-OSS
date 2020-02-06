@@ -22,8 +22,8 @@ import org.egov.pt.models.PropertyCriteria;
 import org.egov.pt.models.Unit;
 import org.egov.pt.models.enums.Status;
 import org.egov.pt.models.workflow.ProcessInstance;
-import org.egov.pt.repository.PropertyRepository;
 import org.egov.pt.repository.ServiceRequestRepository;
+import org.egov.pt.service.PropertyService;
 import org.egov.pt.util.ErrorConstants;
 import  org.egov.pt.util.PTConstants;
 import org.egov.pt.util.PropertyUtil;
@@ -51,9 +51,6 @@ public class PropertyValidator {
     private PropertyUtil propertyUtil;
 
     @Autowired
-    private PropertyRepository propertyRepository;
-
-    @Autowired
     private PropertyConfiguration propertyConfiguration;
 
     @Autowired
@@ -61,6 +58,9 @@ public class PropertyValidator {
     
     @Autowired
     private PropertyConfiguration configs;
+    
+    @Autowired
+    private PropertyService service;
     
     @Autowired
     private ObjectMapper mapper;
@@ -168,12 +168,12 @@ public class PropertyValidator {
         validateMobileNumber(request, errorMap);
         
         PropertyCriteria criteria = getPropertyCriteriaForSearch(request);
-        List<Property> propertiesFromSearchResponse = propertyRepository.getProperties(criteria);
+        List<Property> propertiesFromSearchResponse = service.searchProperty(criteria, request.getRequestInfo());
         boolean ifPropertyExists=PropertyExists(propertiesFromSearchResponse);
 		if (!ifPropertyExists) {
 			throw new CustomException("EG_PT_PROPERTY_NOT_FOUND", "The property to be updated does not exist in the system");
 		}
-		
+
 		Property propertyFromSearch = propertiesFromSearchResponse.get(0);
 		property.getAddress().setId(propertiesFromSearchResponse.get(0).getAddress().getId());
         

@@ -1,9 +1,7 @@
 package org.egov.pt.service;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -12,11 +10,9 @@ import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.AuditDetails;
 import org.egov.pt.models.Institution;
-import org.egov.pt.models.OwnerInfo;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.PropertyCriteria;
 import org.egov.pt.models.enums.Status;
-import org.egov.pt.models.user.UserDetailResponse;
 import org.egov.pt.repository.IdGenRepository;
 import org.egov.pt.util.PTConstants;
 import org.egov.pt.util.PropertyUtil;
@@ -180,34 +176,6 @@ public class EnrichmentService {
 
 	}
 
-
-    /**
-	 * Populates the owner fields inside of property objects from the response got
-	 * from calling user api
-	 * 
-	 * @param userDetailResponse response from user api which contains list of user
-	 *                           which are used to populate owners in properties
-	 * @param properties         List of property whose owner's are to be populated
-	 *                           from userDetailResponse
-	 */
-	public void enrichOwner(UserDetailResponse userDetailResponse, List<Property> properties) {
-
-		List<OwnerInfo> users = userDetailResponse.getUser();
-		Map<String, OwnerInfo> userIdToOwnerMap = new HashMap<>();
-		users.forEach(user -> userIdToOwnerMap.put(user.getUuid(), user));
-
-		properties.forEach(property -> {
-
-			property.getOwners().forEach(owner -> {
-
-				if (userIdToOwnerMap.get(owner.getUuid()) == null)
-					throw new CustomException("OWNER SEARCH ERROR", "The owner of the propertyDetail "
-							+ property.getPropertyId() + " is not coming in user search");
-				else
-					owner.addUserDetail(userIdToOwnerMap.get(owner.getUuid()));
-			});
-		});
-	}
 
     /**
      * Returns PropertyCriteria with ids populated using propertyids from properties

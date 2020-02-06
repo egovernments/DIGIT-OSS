@@ -9,9 +9,11 @@ import static org.egov.pt.util.PTConstants.UPDATE_PROCESS_CONSTANT;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
@@ -22,7 +24,9 @@ import org.egov.mdms.model.MdmsCriteriaReq;
 import org.egov.mdms.model.ModuleDetail;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.AuditDetails;
+import org.egov.pt.models.OwnerInfo;
 import org.egov.pt.models.Property;
+import org.egov.pt.models.user.UserDetailResponse;
 import org.egov.pt.models.workflow.ProcessInstance;
 import org.egov.pt.models.workflow.ProcessInstanceRequest;
 import org.egov.pt.web.contracts.PropertyRequest;
@@ -32,15 +36,47 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-@Component
-public class PropertyUtil {
+import lombok.extern.slf4j.Slf4j;
 
+@Component
+@Slf4j
+public class PropertyUtil {
 
 
     @Autowired
     private PropertyConfiguration config;
 
 
+    /**
+	 * Populates the owner fields inside of property objects from the response by user api
+	 * 
+	 * Ignoring if now user is not found in user response, no error will be thrown
+	 * 
+	 * @param userDetailResponse response from user api which contains list of user
+	 *                           which are used to populate owners in properties
+	 * @param properties         List of property whose owner's are to be populated
+	 *                           from userDetailResponse
+	 */
+	public void enrichOwner(UserDetailResponse userDetailResponse, List<Property> properties) {
+
+		List<OwnerInfo> users = userDetailResponse.getUser();
+		Map<String, OwnerInfo> userIdToOwnerMap = new HashMap<>();
+		users.forEach(user -> userIdToOwnerMap.put(user.getUuid(), user));
+
+		properties.forEach(property -> {
+
+			property.getOwners().forEach(owner -> {
+
+				if (userIdToOwnerMap.get(owner.getUuid()) == null)
+					log.info("OWNER SEARCH ERROR",
+							"The owner with UUID : \"" + owner.getUuid() + "\" for the property with Id \""
+									+ property.getPropertyId() + "\" is not present in user search response");
+				else
+					owner.addUserDetail(userIdToOwnerMap.get(owner.getUuid()));
+			});
+		});
+	}
+	
     /**
      * Method to return auditDetails for create/update flows
      *
@@ -215,6 +251,10 @@ public class PropertyUtil {
 
 		ObjectNode additionalDetail = (ObjectNode) request.getProperty().getAdditionalDetails();
 		return additionalDetail.put(PTConstants.PREVIOUS_PROPERTY_PREVIOUD_UUID, uuid);
+	}
+
+	public void clearSensitiveDataForPersistance(Property property) {
+		property.getOwners().forEach(owner -> owner.setMobileNumber(null));
 	}
 	
 }

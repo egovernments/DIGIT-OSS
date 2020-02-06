@@ -37,8 +37,12 @@ public class PropertyCriteria {
 	
 	private Set<String> ownerIds;
 	
+	private boolean audit;
+	
 	private Long offset;
 
 	private Long limit;
+	
+	
 	
 }
