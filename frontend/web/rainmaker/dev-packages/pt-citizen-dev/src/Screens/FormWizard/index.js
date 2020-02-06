@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Card } from "components";
 import PTHeader from "egov-ui-kit/common/common/PTHeader";
 import WizardComponent from "./components/WizardComponent";
 import {
