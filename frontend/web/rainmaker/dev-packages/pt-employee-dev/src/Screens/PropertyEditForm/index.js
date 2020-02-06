@@ -24,7 +24,7 @@ const PropertyAddressHOC = formHoc({ formKey: "propertyInformation", path: "Prop
 class PropertyInformation extends Component {
   componentDidMount() {
     const { fetchProperties } = this.props;
-    fetchProperties([{ key: "ids", value: this.props.match.params.propertyId }, { key: "tenantId", value: this.props.match.params.tenantId }]);
+    fetchProperties([{ key: "propertyIds", value: this.props.match.params.propertyId }, { key: "tenantId", value: this.props.match.params.tenantId }]);
   }
   render() {
     return (

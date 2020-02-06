@@ -66,7 +66,7 @@ class SearchProperty extends Component {
         queryParams.push({ key: "tenantId", value: city.value });
       }
       if ( ids && ids.value) {
-        queryParams.push({ key: "ids", value: ids.value });
+        queryParams.push({ key: "propertyIds", value: ids.value });
       }
       if (oldpropertyids && oldpropertyids.value) {
         queryParams.push({ key: "oldpropertyids", value: oldpropertyids.value });

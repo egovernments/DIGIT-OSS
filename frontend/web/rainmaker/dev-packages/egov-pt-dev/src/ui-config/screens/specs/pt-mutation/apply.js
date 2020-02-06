@@ -173,7 +173,7 @@ const getPropertyData = async (action, state, dispatch) => {
     let payload = null;
     payload = await httpRequest(
       "post",
-      "/pt-services-v2/property/_search",
+      "/property-services/property/_search",
       "_search",
       queryObject,
       

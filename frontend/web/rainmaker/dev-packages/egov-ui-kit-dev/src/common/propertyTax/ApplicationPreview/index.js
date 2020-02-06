@@ -122,7 +122,7 @@ class ApplicationPreview extends Component {
     const propertyId = getQueryValue(search, "propertyId");
     const tenantId = getQueryValue(search, "tenantId");
     fetchProperties([
-      { key: "ids", value: propertyId },
+      { key: "propertyIds", value: propertyId },
       { key: "tenantId", value: tenantId },
     ]);
   };

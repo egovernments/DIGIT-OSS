@@ -192,7 +192,7 @@ const convertBuiltUpAreaToSqFt = (builtUpArea) => {
 export const getTargetPropertiesDetails = (propertyDetails, self) => {
   const { search } = self.props.location;
   const assessmentNumber = getQueryValue(search, "assessmentId");
-  const selectedPropertyDetails = propertyDetails.filter((item) => item.assessmentNumber === assessmentNumber);
+  const selectedPropertyDetails = propertyDetails;
   // return the latest proeprty details of the selected year
   const lastIndex = 0;
   if (selectedPropertyDetails[lastIndex].propertySubType === "SHAREDPROPERTY") {

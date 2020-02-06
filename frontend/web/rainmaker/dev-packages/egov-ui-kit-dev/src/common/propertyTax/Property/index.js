@@ -116,7 +116,7 @@ class Property extends Component {
       "SubOwnerShipCategory",
     ]);
     fetchProperties([
-      { key: "ids", value: decodeURIComponent(this.props.match.params.propertyId) },
+      { key: "propertyIds", value: decodeURIComponent(this.props.match.params.propertyId) },
       { key: "tenantId", value: this.props.match.params.tenantId },
     ]);
     const { pathname } = location;
