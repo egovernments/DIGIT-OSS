@@ -258,14 +258,14 @@ export const getSWMyApplicationResults = async (dispatch) => {
 
 };
 
-export const getPropertyResults = async (dispatch) => {
+export const getPropertyResults = async (queryObject, dispatch) => {
     dispatch(toggleSpinner());
     try {
         const response = await httpRequest(
             "post",
-            "/property-services/property/_search?tenantId=pb.amritsar&propertyIds=PB-PT-2020-02-05-019183",
+            "/property-services/property/_search",
             "_search",
-            // queryObject
+            queryObject
         );
 
         console.log("apiresponse",response)
