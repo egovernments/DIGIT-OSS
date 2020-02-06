@@ -181,7 +181,7 @@ serviceMaps:
  - version: 1.0
    name: SewerageConnection
    description: update ConnectionDetails in eg_sw_connection and eg_sw_service
-   fromTopic: update-ws-workflow
+   fromTopic: update-sw-workflow
    isTransaction: true
    queryMaps:
     - query: UPDATE eg_sw_connection SET applicationstatus=?, status=?, connectionno=?, oldconnectionno=?, action=?, roadCuttingArea=?, roadType=? WHERE id=?;
