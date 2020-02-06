@@ -8,6 +8,8 @@ import FileSaver from 'file-saver';
 import cloneDeep from "lodash/cloneDeep";
 import { getLatestPropertyDetails } from "egov-ui-kit/utils/PTCommon";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
+import {  getCreatePropertyResponse } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/propertyCreateUtils";
+
 const FileDownload = require('js-file-download');
 const reset_property_reset = () => {
   return {
@@ -290,7 +292,8 @@ export const fetchProperties = (queryObjectproperty, queryObjectDraft, queryObje
     if (queryObjectproperty) {
       dispatch(propertyFetchPending());
       try {
-        const payloadProperty = await httpRequest(PROPERTY.GET.URL, PROPERTY.GET.ACTION,queryObjectproperty);
+        let payloadProperty = await httpRequest(PROPERTY.GET.URL, PROPERTY.GET.ACTION,queryObjectproperty);
+        payloadProperty=getCreatePropertyResponse(payloadProperty);
         dispatch(propertyFetchComplete(payloadProperty));
       } catch (error) {
         dispatch(propertyFetchError(error.message));
