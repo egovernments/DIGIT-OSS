@@ -391,10 +391,17 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       
       if(activeIndex === 3 && isEditRenewal){
         action="APPLY";
-      }        
+        let renewalSearchQueryObject = [
+          { key: "tenantId", value: queryObject[0].tenantId },
+          { key: "applicationNumber", value: queryObject[0].applicationNumber}
+        ];
+        const renewalResponse = await getSearchResults(renewalSearchQueryObject); 
+        const renewalDocuments = get(renewalResponse,"Licenses[0].tradeLicenseDetail.applicationDocuments");
+        dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.applicationDocuments",renewalDocuments));
+        set(queryObject[0] ,"tradeLicenseDetail.applicationDocuments" , renewalDocuments);
+
+      }     
       set(queryObject[0], "action", action);
-
-
       const isEditFlow = getQueryArg(window.location.href, "action") === "edit";
       let updateResponse = [];
       if(!isEditFlow){
@@ -404,7 +411,6 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       }
       //Renewal flow
 
-      
       let updatedApplicationNo  = "";
       let updatedTenant = "";
       if(isEditRenewal && updateResponse && get(updateResponse , "Licenses[0]")){
@@ -424,7 +430,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         { key: "tenantId", value: updatedTenant },
         { key: "applicationNumber", value: updatedApplicationNo }
       ];
-      let searchResponse = await getSearchResults(searchQueryObject);
+      let searchResponse = await getSearchResults(searchQueryObject);      
       if (isEditFlow) {
         searchResponse = { Licenses: queryObject };
       } else {
@@ -441,7 +447,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         };
       });
       dispatch(prepareFinalObject("LicensesTemp.tradeUnits", tradeTemp));
-      createOwnersBackup(dispatch, searchResponse);
+      createOwnersBackup(dispatch, searchResponse);   
     } else {
       let accessories = get(queryObject[0], "tradeLicenseDetail.accessories");
       let tradeUnits = get(queryObject[0], "tradeLicenseDetail.tradeUnits");
@@ -484,7 +490,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
 
 const convertOwnerDobToEpoch = owners => {
   let updatedOwners =
-    owners &&
+    owners && owners.length > 0 &&
     owners
       .map(owner => {
         return {
