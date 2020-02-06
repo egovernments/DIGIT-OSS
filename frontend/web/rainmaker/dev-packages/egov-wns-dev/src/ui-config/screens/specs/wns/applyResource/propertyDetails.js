@@ -6,8 +6,7 @@ import {
   getTextField,
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-
-import { changeStep } from "../viewBillResource/footer";
+import { propertySearchApiCall } from './functions';
 
 export const propertyHeader = getCommonSubHeader({
   labelKey: "WS_COMMON_PROP_DETAIL",
@@ -26,7 +25,7 @@ export const propertyID = getCommonContainer({
     },
     pattern: /^[a-zA-Z0-9-]*$/i,
     errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-    jsonPath: "searchScreen.oldConnectionNumber",
+    jsonPath: "searchScreen.propertyIds",
   }),
   searchButton: {
     componentPath: "Button",
@@ -47,10 +46,10 @@ export const propertyID = getCommonContainer({
         labelKey: "WS_SEARCH_CONNECTION_SEARCH_BUTTON"
       })
     },
-    // onClickDefination: {
-    //   action: "condition",
-    //   callBack: searchApiCall
-    // }
+    onClickDefination: {
+      action: "condition",
+      callBack: propertySearchApiCall
+    }
   }
 })
 
@@ -93,10 +92,11 @@ const propertyDetails = getCommonContainer({
     { jsonPath: "Properties[0].noOfFloors" }
   ),
   rainwaterHarvestingFacility: getLabelWithValue(
-    { labelKey: "WS_SERV_DETAIL_CONN_RAIN_WATER_HARVESTING_FAC",
-    labelName: "Rainwater Harvesting Facility"
-   },
-   { jsonPath: "WaterConnection[0].rainWaterHarvesting" })
+    {
+      labelKey: "WS_SERV_DETAIL_CONN_RAIN_WATER_HARVESTING_FAC",
+      labelName: "Rainwater Harvesting Facility"
+    },
+    { jsonPath: "WaterConnection[0].rainWaterHarvesting" })
 })
 
 
@@ -114,45 +114,11 @@ export const getPropertyIDDetails = (isEditable = true) => {
           gridDefination: {
             xs: 12,
             sm: 10
-          },
-        },
-        // editSection: {
-        //   componentPath: "Button",
-        //   props: {
-        //     color: "primary"
-        //   },
-        //   visible: isEditable,
-        //   gridDefination: {
-        //     xs: 12,
-        //     sm: 2,
-        //     align: "right"
-        //   },
-        //   children: {
-        //     editIcon: {
-        //       uiFramework: "custom-atoms",
-        //       componentPath: "Icon",
-        //       props: {
-        //         iconName: "edit"
-        //       }
-        //     },
-        //     buttonLabel: getLabel({
-        //       labelName: "Edit",
-        //       labelKey: "TL_SUMMARY_EDIT"
-        //     })
-        //   },
-        //   onClickDefination: {
-        //     action: "condition",
-        //     callBack: (state, dispatch) => {
-        //       changeStep(state, dispatch, "", 1);
-        //     }
-        //   }
-        // }
+          }
+        }
       }
     },
-    // viewOne: properyDetailsHeader,
-    viewTwo: propertyDetails,
-    // viewThree: propertyLocationDetailsHeader,
-    // viewFour: propertyLocationDetails
+    viewTwo: propertyDetails
   });
 };
 

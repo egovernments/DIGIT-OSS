@@ -158,24 +158,25 @@ labelKey:"WS_COMMON_ADDN_DETAILS"
         gridDefination: { xs: 12, sm: 6 },
         jsonPath: "WaterConnection[0].pipeSize"
       }),
-      billingType: getSelectField({
-        label: {
-          labelKey: "WS_ADDN_DETAILS_BILLING_TYPE"
-        },
-        placeholder: {
-          labelKey: "WS_ADDN_DETAILS_BILLING_TYPE_PLACEHOLDER"
-        },
-        required: false,
-        jsonPath: "searchScreen.status",
-        sourceJsonPath: "applyScreenMdmsData.searchScreen.status",
-        gridDefination: {
-          xs: 12,
-          sm: 6
-        },
-        required: false,
-        errorMessage: "ERR_INVALID_BILLING_PERIOD",
-        jsonPath: "searchScreen.status"
-      }),
+      //Removed - Confirmed by Aditya
+      // billingType: getSelectField({
+      //   label: {
+      //     labelKey: "WS_ADDN_DETAILS_BILLING_TYPE"
+      //   },
+      //   placeholder: {
+      //     labelKey: "WS_ADDN_DETAILS_BILLING_TYPE_PLACEHOLDER"
+      //   },
+      //   required: false,
+      //   jsonPath: "searchScreen.status",
+      //   sourceJsonPath: "applyScreenMdmsData.searchScreen.status",
+      //   gridDefination: {
+      //     xs: 12,
+      //     sm: 6
+      //   },
+      //   required: false,
+      //   errorMessage: "ERR_INVALID_BILLING_PERIOD",
+      //   jsonPath: "searchScreen.status"
+      // }),
       waterClosets: getTextField({
         label: { labelKey: "WS_ADDN_DETAILS_NO_OF_WATER_CLOSETS" },
         placeholder: { labelKey: "WS_ADDN_DETAILS_NO_OF_WATER_CLOSETS_PLACEHOLDER" },
