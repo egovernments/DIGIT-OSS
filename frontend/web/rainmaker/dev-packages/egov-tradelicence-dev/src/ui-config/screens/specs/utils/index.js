@@ -444,6 +444,7 @@ export const getButtonVisibility = (status, button) => {
   if (status === "pending_approval" && button === "APPROVE") return true;
   if (status === "pending_approval" && button === "REJECT") return true;
   if (status === "approved" && button === "CANCEL TRADE LICENSE") return true;
+  if (status === "APPROVED" && button === "APPROVED") return true;
   return false;
 };
 
@@ -1201,13 +1202,13 @@ const getBillingSlabData = async (
   }
 };
 
-const isApplicationPaid = currentStatus => {
-  let isPAID = false;
+const isApplicationPaid = (currentStatus,workflowCode) => {
+let isPAID = false;
 if(currentStatus==="CITIZENACTIONREQUIRED"){
   return isPAID;
 }
   if (!isEmpty(JSON.parse(localStorageGet("businessServiceData")))) {
-    const tlBusinessService = JSON.parse(localStorageGet("businessServiceData")).filter(item => item.businessService === "NewTL")
+    const tlBusinessService = JSON.parse(localStorageGet("businessServiceData")).filter(item => item.businessService === workflowCode)
     const states = tlBusinessService[0].states;
     for (var i = 0; i < states.length; i++) {
       if (states[i].state === currentStatus) {
@@ -1235,6 +1236,7 @@ export const createEstimateData = async (
   href = {},
   getFromReceipt
 ) => {
+  const workflowCode = get(LicenseData , "workflowCode") ? get(LicenseData , "workflowCode") : "NewTL"
   const applicationNo =
     get(LicenseData, "applicationNumber") ||
     getQueryArg(href, "applicationNumber");
@@ -1264,7 +1266,7 @@ export const createEstimateData = async (
     }
   ];
   const currentStatus = LicenseData.status;
-  const isPAID = isApplicationPaid(currentStatus);
+  const isPAID = isApplicationPaid(currentStatus,workflowCode);
   const fetchBillResponse = await getBill(getBillQueryObj);
   const payload = isPAID
     ? await getReceipt(queryObj.filter(item => item.key !== "businessService"))
@@ -1782,24 +1784,24 @@ export const getDocList = (state, dispatch) => {
     "applyScreenMdmsData.TradeLicense.MdmsTradeType"
   );
   let selectedTypes = [];
-  tradeSubTypes.forEach(tradeSubType => {
+  tradeSubTypes && tradeSubTypes.forEach(tradeSubType => {
     selectedTypes.push(
       filter(tradeSubCategories, {
         code: tradeSubType.tradeType
       })
     );
   });
-
-  // selectedTypes[0] &&
-  //
+  
   let applicationDocArray = [];
-
-  selectedTypes.forEach(tradeSubTypeDoc => {
+  selectedTypes && selectedTypes.forEach(tradeSubTypeDoc => {
+   const  applicationarrayTemp= getQueryArg(window.location.href , "action") === "editRenewal" ? tradeSubTypeDoc[0].applicationDocument.filter(item => item.applicationType === "RENEWAL")[0].documentList : tradeSubTypeDoc[0].applicationDocument.filter(item => item.applicationType === "NEW")[0].documentList;
+   
     applicationDocArray = [
       ...applicationDocArray,
-      ...tradeSubTypeDoc[0].applicationDocument
+      ...applicationarrayTemp 
     ];
   });
+
   function onlyUnique(value, index, self) {
     return self.indexOf(value) === index;
   }
@@ -1817,17 +1819,20 @@ export const getDocList = (state, dispatch) => {
     state.screenConfiguration.preparedFinalObject,
     "Licenses[0].tradeLicenseDetail.applicationDocuments",
     []
-  );
+  );  
   let applicationDocsReArranged =
     applicationDocs &&
     applicationDocs.length &&
-    applicationDocument.map(item => {
+    applicationDocument.reduce((acc,item) => {
       const index = applicationDocs.findIndex(
         i => i.documentType === item.name
       );
-      return applicationDocs[index];
-    });
-  applicationDocsReArranged &&
+      if(index >- 1){
+        acc.push(applicationDocs[index])
+      }       
+      return acc;
+    },[])
+    applicationDocsReArranged &&
     dispatch(
       prepareFinalObject(
         "Licenses[0].tradeLicenseDetail.applicationDocuments",

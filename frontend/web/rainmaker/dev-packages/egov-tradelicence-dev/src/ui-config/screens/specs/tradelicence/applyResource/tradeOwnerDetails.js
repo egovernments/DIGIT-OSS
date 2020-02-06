@@ -9,6 +9,7 @@ import {
   getDateField,
   getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import {
   getDetailsForOwner,
   getTodaysDateInYMD,
@@ -801,8 +802,12 @@ export const tradeOwnerDetails = getCommonCard({
           );
         }
       }
-    }
-  }),
+    },
+    
+  },
+  {style:getQueryArg(window.location.href, "action") === "editRenewal"? {"pointer-events":"none"}:{}}
+  ),
+  
   OwnerInfoCard,
   ownerInfoInstitutional
 });

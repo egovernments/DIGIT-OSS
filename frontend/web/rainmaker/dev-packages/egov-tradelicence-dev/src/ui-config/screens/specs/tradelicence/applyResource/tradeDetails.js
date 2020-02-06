@@ -24,6 +24,7 @@ import {
   prepareFinalObject as pFO,
   toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 import filter from "lodash/filter";
@@ -775,66 +776,66 @@ export const tradeDetails = getCommonCard({
         }
       })
     },
-    dummyDiv: {
-      uiFramework: "custom-atoms",
-      componentPath: "Div",
-      gridDefination: {
-        xs: 12,
-        sm: 6
-      },
-      visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
-      props: {
-        disabled: true
-      }
-    },
-    applicationType: {
-      ...getSelectField({
-        label: {
-          labelName: "Application Type",
-          labelKey: "TL_APPLICATION_TYPE_LABEL"
-        },
-        placeholder: {
-          labelName: "Select Application Type",
-          labelKey: "TL_APPLICATION_TYPE_PLACEHOLDER"
-        },
-        required: true,
-        localePrefix: {
-          moduleName: "TradeLicense",
-          masterName: "ApplicationType"
-        },
-        jsonPath:
-          "Licenses[0].tradeLicenseDetail.additionalDetail.applicationType",
-        sourceJsonPath: "applyScreenMdmsData.TradeLicense.ApplicationType",
-        gridDefination: {
-          xs: 12,
-          sm: 6
-        },
-        props:{
-          className:"applicant-details-error"
-        }
-      }),
-      beforeFieldChange: (action, state, dispatch) => {
-        if (action.value === "APPLICATIONTYPE.RENEWAL") {
-          dispatch(
-            handleField(
-              "apply",
-              "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.oldLicenseNo",
-              "props.required",
-              true
-            )
-          );
-        } else {
-          dispatch(
-            handleField(
-              "apply",
-              "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.oldLicenseNo",
-              "props.required",
-              false
-            )
-          );
-        }
-      }
-    },
+    // dummyDiv: {
+    //   uiFramework: "custom-atoms",
+    //   componentPath: "Div",
+    //   gridDefination: {
+    //     xs: 12,
+    //     sm: 6
+    //   },
+    //   visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
+    //   props: {
+    //     disabled: true
+    //   }
+    // },
+    // applicationType: {
+    //   ...getSelectField({
+    //     label: {
+    //       labelName: "Application Type",
+    //       labelKey: "TL_APPLICATION_TYPE_LABEL"
+    //     },
+    //     placeholder: {
+    //       labelName: "Select Application Type",
+    //       labelKey: "TL_APPLICATION_TYPE_PLACEHOLDER"
+    //     },
+    //     required: true,
+    //     localePrefix: {
+    //       moduleName: "TradeLicense",
+    //       masterName: "ApplicationType"
+    //     },
+    //     jsonPath:
+    //       "Licenses[0].tradeLicenseDetail.additionalDetail.applicationType",
+    //     sourceJsonPath: "applyScreenMdmsData.TradeLicense.ApplicationType",
+    //     gridDefination: {
+    //       xs: 12,
+    //       sm: 6
+    //     },
+    //     props:{
+    //       className:"applicant-details-error"
+    //     }
+    //   }),
+    //   beforeFieldChange: (action, state, dispatch) => {
+    //     if (action.value === "APPLICATIONTYPE.RENEWAL") {
+    //       dispatch(
+    //         handleField(
+    //           "apply",
+    //           "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.oldLicenseNo",
+    //           "props.required",
+    //           true
+    //         )
+    //       );
+    //     } else {
+    //       dispatch(
+    //         handleField(
+    //           "apply",
+    //           "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.oldLicenseNo",
+    //           "props.required",
+    //           false
+    //         )
+    //       );
+    //     }
+    //   }
+    // },
     oldLicenseNo: getTextField({
       label: {
         labelName: "Old License No",
@@ -1132,7 +1133,9 @@ export const tradeDetails = getCommonCard({
       pattern: getPattern("NoOfEmp"),
       jsonPath: "Licenses[0].tradeLicenseDetail.noOfEmployees"
     })
-  }),
+  },
+  {style:getQueryArg(window.location.href, "action") === "editRenewal"? {"pointer-events":"none"}:{}}
+  ),
   tradeUnitCard,
   accessoriesCard
 });

@@ -40,6 +40,17 @@ export const documentList = {
           accept: "image/*, .png, .jpeg",
         },        
         maxFileSize: 3000
+      },
+      {
+        type : "OLDLICENCENO",
+        description: {
+          labelName: "Only .jpg and .pdf files. 6MB max file size.",
+          labelKey: "TL_UPLOAD_RESTRICTIONS"
+        },
+        formatProps :{
+          accept : "image/*, .pdf, .png, .jpeg",
+        },        
+        maxFileSize: 6000
       }
     ],
     documentTypePrefix: "TL_",

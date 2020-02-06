@@ -11,6 +11,7 @@ import { getMapLocator } from "../../utils";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { showHideMapPopup, getDetailsFromProperty } from "../../utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import "./index.css";
 
 export const tradeLocationDetails = getCommonCard(
@@ -323,6 +324,7 @@ export const tradeLocationDetails = getCommonCard(
     }
   },
   {
-    style: { overflow: "visible" }
+    style:getQueryArg(window.location.href, "action") === "editRenewal"? {"pointer-events":"none",overflow:"visible"}:{overflow: "visible"}
+
   }
 );

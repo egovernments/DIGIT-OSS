@@ -318,7 +318,7 @@ class WorkFlowContainer extends React.Component {
   checkIfTerminatedState = (nextStateUUID, moduleName) => {
     const businessServiceData = JSON.parse(
       localStorageGet("businessServiceData")
-    );
+    );    
     const data = find(businessServiceData, { businessService: moduleName });
     const nextState = find(data.states, { uuid: nextStateUUID });
     return nextState.isTerminateState;
@@ -371,6 +371,7 @@ class WorkFlowContainer extends React.Component {
       checkIfDocumentRequired,
       getEmployeeRoles
     } = this;
+    let businessService = moduleName === data[0].businessService ? moduleName  : data[0].businessService;
     let businessId = get(data[data.length - 1], "businessId");
     let filteredActions = [];
     
@@ -388,18 +389,18 @@ class WorkFlowContainer extends React.Component {
         buttonLabel: item.action,
         moduleName: data[data.length - 1].businessService,
         isLast: item.action === "PAY" ? true : false,
-        buttonUrl: getRedirectUrl(item.action, businessId, moduleName),
+        buttonUrl: getRedirectUrl(item.action, businessId, businessService),
         dialogHeader: getHeaderName(item.action),
-        showEmployeeList: !checkIfTerminatedState(item.nextState, moduleName) && item.action !== "SENDBACKTOCITIZEN",
-        roles: getEmployeeRoles(item.nextState, item.currentState, moduleName),
-        isDocRequired: checkIfDocumentRequired(item.nextState, moduleName)
+        showEmployeeList: !checkIfTerminatedState(item.nextState, businessService) && item.action !== "SENDBACKTOCITIZEN",
+        roles: getEmployeeRoles(item.nextState, item.currentState, businessService),
+        isDocRequired: checkIfDocumentRequired(item.nextState, businessService)
       };
     });
     actions=actions.filter(item=>item.buttonLabel!=='INITIATE');
     let editAction = getActionIfEditable(
       applicationStatus,
       businessId,
-      moduleName
+      businessService
     );
     editAction.buttonLabel && actions.push(editAction);
     return actions;

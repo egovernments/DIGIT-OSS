@@ -271,33 +271,6 @@ const createOwnersBackup = (dispatch, payload) => {
     );
 };
 
-// const getMultipleAccessories = licenses => {
-//   let accessories = get(licenses, "tradeLicenseDetail.accessories");
-//   let mergedAccessories =
-//     accessories &&
-//     accessories.reduce((result, item) => {
-//       if (item && item !== null && item.hasOwnProperty("accessoryCategory")) {
-//         if (item.hasOwnProperty("id")) {
-//           if (item.hasOwnProperty("active") && item.active) {
-//             if (item.hasOwnProperty("isDeleted") && !item.isDeleted) {
-//               set(item, "active", false);
-//               result.push(item);
-//             } else {
-//               result.push(item);
-//             }
-//           }
-//         } else {
-//           if (!item.hasOwnProperty("isDeleted")) {
-//             result.push(item);
-//           }
-//         }
-//       }
-//       return result;
-//     }, []);
-
-//   return mergedAccessories;
-// };
-
 const getMultipleOwners = owners => {
   let mergedOwners =
     owners &&
@@ -353,7 +326,6 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     let owners = get(queryObject[0], "tradeLicenseDetail.owners");
     owners = (owners && convertOwnerDobToEpoch(owners)) || [];
 
-    //set(queryObject[0], "tradeLicenseDetail.owners", getMultipleOwners(owners));
     const cityId = get(
       queryObject[0],
       "tradeLicenseDetail.address.tenantId",
@@ -378,6 +350,11 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
 
     if (queryObject[0].applicationNumber) {
       //call update
+      const isEditRenewal = getQueryArg(window.location.href, "action") === "editRenewal";
+      if(isEditRenewal ){
+        set(queryObject[0], "applicationType", "RENEWAL");
+        set(queryObject[0], "workflowCode", getQueryArg(window.location.href, "action"));
+      }
 
       let accessories = get(queryObject[0], "tradeLicenseDetail.accessories");
       let tradeUnits = get(queryObject[0], "tradeLicenseDetail.tradeUnits");
@@ -398,48 +375,54 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       );
 
       let action = "INITIATE";
+      //Code for edit flow
+
       if (
         queryObject[0].tradeLicenseDetail &&
         queryObject[0].tradeLicenseDetail.applicationDocuments
       ) {
-        if (getQueryArg(window.location.href, "action") === "edit") {
-          // const removedDocs = get(
-          //   state.screenConfiguration.preparedFinalObject,
-          //   "LicensesTemp[0].removedDocs",
-          //   []
-          // );
-          // set(queryObject[0], "tradeLicenseDetail.applicationDocuments", [
-          //   ...get(
-          //     state.screenConfiguration.prepareFinalObject,
-          //     "Licenses[0].tradeLicenseDetail.applicationDocuments",
-          //     []
-          //   ),
-          //   ...removedDocs
-          // ]);
+
+
+        if (getQueryArg(window.location.href, "action") === "edit"|| isEditRenewal) {
         } else if (activeIndex === 1) {
           set(queryObject[0], "tradeLicenseDetail.applicationDocuments", null);
         } else action = "APPLY";
       }
-      // else if (
-      //   queryObject[0].tradeLicenseDetail &&
-      //   queryObject[0].tradeLicenseDetail.applicationDocuments &&
-      //   activeIndex === 1
-      // ) {
-      // } else if (
-      //   queryObject[0].tradeLicenseDetail &&
-      //   queryObject[0].tradeLicenseDetail.applicationDocuments
-      // ) {
-      //   action = "APPLY";
-      // }
+      
+      if(activeIndex === 3 && isEditRenewal){
+        action="APPLY";
+      }        
       set(queryObject[0], "action", action);
+
+
       const isEditFlow = getQueryArg(window.location.href, "action") === "edit";
-      !isEditFlow &&
-        (await httpRequest("post", "/tl-services/v1/_update", "", [], {
+      let updateResponse = [];
+      if(!isEditFlow){
+        updateResponse = await httpRequest("post", "/tl-services/v1/_update", "", [], {
           Licenses: queryObject
-        }));
+        })
+      }
+      //Renewal flow
+
+      
+      let updatedApplicationNo  = "";
+      let updatedTenant = "";
+      if(isEditRenewal && updateResponse && get(updateResponse , "Licenses[0]")){
+        updatedApplicationNo =  get(updateResponse.Licenses[0] , "applicationNumber") ;
+        updatedTenant = get(updateResponse.Licenses[0] , "tenantId");
+        const workflowCode = get(updateResponse.Licenses[0] , "workflowCode");
+        const bsQueryObject = [
+          { key: "tenantId", value: tenantId },
+          { key: "businessServices", value: workflowCode ? workflowCode :  "NewTL" }
+        ];
+        setBusinessServiceDataToLocalStorage(bsQueryObject, dispatch);
+      }else{
+        updatedApplicationNo = queryObject[0].applicationNumber;
+        updatedTenant = queryObject[0].tenantId;
+      }
       let searchQueryObject = [
-        { key: "tenantId", value: queryObject[0].tenantId },
-        { key: "applicationNumber", value: queryObject[0].applicationNumber }
+        { key: "tenantId", value: updatedTenant },
+        { key: "applicationNumber", value: updatedApplicationNo }
       ];
       let searchResponse = await getSearchResults(searchQueryObject);
       if (isEditFlow) {

@@ -18,6 +18,7 @@ import {
 } from "../../utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import {
   toggleSnackbar,
   prepareFinalObject
@@ -253,7 +254,6 @@ export const callBackForNext = async (state, dispatch) => {
       "LicensesTemp[0].applicationDocuments",
       []
     );
-
     for (var y = 0; y < uploadedTempDocData.length; y++) {
       if (
         uploadedTempDocData[y].required &&
@@ -307,7 +307,7 @@ export const callBackForNext = async (state, dispatch) => {
       state.screenConfiguration.preparedFinalObject,
       "Licenses[0]"
     );
-    isFormValid = await applyTradeLicense(state, dispatch);
+    isFormValid = await applyTradeLicense(state, dispatch,activeStep);
     if (isFormValid) {
       moveToSuccess(LicenseData, dispatch);
     }
@@ -368,7 +368,7 @@ export const changeStep = (
       );
       activeStep = isDocsUploaded ? 3 : 2;
     } else {
-      activeStep = mode === "next" ? activeStep + 1 : activeStep - 1;
+        activeStep = mode === "next" ? activeStep + 1 : activeStep - 1;
     }
   } else {
     activeStep = defaultActiveStep;
@@ -579,6 +579,28 @@ export const footer = getCommonApplyFooter({
     visible: false
   }
 });
+export const renewTradelicence = async (applicationNumber, financialYear, tenantId,state,dispatch) => {
+  const licences = get(
+    state.screenConfiguration.preparedFinalObject,
+    `Licenses`
+  );
+  const wfCode = "directRenewal";
+  set(licences[0], "action", "INITIATE");
+  set(licences[0], "workflowCode", wfCode);
+  set(licences[0], "applicationType", "RENEWAL");
+
+const response=  await httpRequest("post", "/tl-services/v1/_update", "", [], {
+    Licenses: licences
+  })
+   const applicationNumberNew = get(
+    response,
+    `Licenses[0].applicationNumber`
+  );
+  dispatch(
+  setRoute(
+    `/tradelicence/acknowledgement?purpose=editRenewal&status=success&applicationNumber=${applicationNumberNew}&FY=${financialYear}&tenantId=${tenantId}&action=${wfCode}`
+  ));
+};
 
 export const footerReview = (
   action,
@@ -586,11 +608,13 @@ export const footerReview = (
   dispatch,
   status,
   applicationNumber,
-  tenantId
+  tenantId,
+  financialYear
 ) => {
   /** MenuButton data based on status */
   let downloadMenu = [];
   let printMenu = [];
+  // let renewalMenu=[];
   let tlCertificateDownloadObject = {
     label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
     link: () => {
@@ -653,6 +677,26 @@ export const footerReview = (
     },
     leftIcon: "assignment"
   };
+  // let editObject = {
+  //   label: { labelName: "Edit", labelKey: "TL_EDIT" },
+  //   link: () => {
+  //     const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
+  //     const documents = LicensesTemp[0].reviewDocData;
+  //     set(Licenses[0],"additionalDetails.documents",documents)
+  //     downloadAcknowledgementForm(Licenses,'print');
+  //   },
+  //   leftIcon: "assignment"
+  // };
+  // let submitObject = {
+  //   label: { labelName: "Submit", labelKey: "TL_SUBMIT" },
+  //   link: () => {
+  //     const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
+  //     const documents = LicensesTemp[0].reviewDocData;
+  //     set(Licenses[0],"additionalDetails.documents",documents)
+  //     downloadAcknowledgementForm(Licenses,'print');
+  //   },
+  //   leftIcon: "assignment"
+  // };
   switch (status) {
     case "APPROVED":
       downloadMenu = [
@@ -731,7 +775,7 @@ export const footerReview = (
                   menu: printMenu
                 }
               }
-            }
+            },
           },
           gridDefination: {
             xs: 12,
@@ -769,14 +813,86 @@ export const footerReview = (
                 rolePath: "user-info.roles",
                 roles: ["TL_CEMP", "CITIZEN"]
               }
+            },  
+            editButton: {
+              componentPath: "Button",
+              props: {
+                variant: "outlined",
+                color: "primary",
+                style: {
+                  minWidth: "180px",
+                  height: "48px",
+                  marginRight: "16px",
+                  borderRadius: "inherit"
+                }
+              },
+              children: {
+                previousButtonIcon: {
+                  uiFramework: "custom-atoms",
+                  componentPath: "Icon",
+                  props: {
+                    iconName: "keyboard_arrow_left"
+                  }
+                },
+                previousButtonLabel: getLabel({
+                  labelName: "Edit for Renewal",
+                  labelKey: "TL_RENEWAL_BUTTON_EDIT"
+                })
+              },
+              onClickDefination: {
+                action: "condition",
+                callBack: () => {
+                  dispatch(
+                    setRoute(
+                     // `/tradelicence/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&FY=${financialYear}&tenantId=${tenantId}`
+                     `/tradelicense-citizen/apply?applicationNumber=${applicationNumber}&tenantId=${tenantId}&action=editRenewal`
+                    )
+                  );
+                },
+
+              },
+              visible:getButtonVisibility(status, "APPROVED"),
             },
-           
+            submitButton: {
+              componentPath: "Button",
+              props: {
+                variant: "contained",
+                color: "primary",
+                style: {
+                  minWidth: "180px",
+                  height: "48px",
+                  marginRight: "45px",
+                  borderRadius: "inherit"
+                }
+              },
+              children: {
+                nextButtonLabel: getLabel({
+                  labelName: "Submit for Renewal",
+                  labelKey: "TL_RENEWAL_BUTTON_SUBMIT"
+                }),
+                nextButtonIcon: {
+                  uiFramework: "custom-atoms",
+                  componentPath: "Icon",
+                  props: {
+                    iconName: "keyboard_arrow_right"
+                  }
+                }
+              },
+              onClickDefination: {
+                action: "condition",
+                callBack: () => {
+                  renewTradelicence(applicationNumber, financialYear, tenantId,state,dispatch);
+                },
+
+              },
+              visible:getButtonVisibility(status, "APPROVED"),
+            },    
           },
           gridDefination: {
             xs: 12,
             sm: 6
           }
-        }
+        },     
       }
     }
   });

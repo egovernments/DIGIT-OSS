@@ -8,7 +8,8 @@ import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import MenuButton from "egov-ui-framework/ui-molecules/MenuButton";
 import { getDownloadItems } from "./downloadItems";
 import get from "lodash/get";
-import isEmpty from "lodash/isEmpty"
+import set from "lodash/set";
+import isEmpty from "lodash/isEmpty";
 import "./index.css";
 
 class Footer extends React.Component {
@@ -63,7 +64,7 @@ class Footer extends React.Component {
       handleFieldChange(`${dataPath}[0].comment`, "");
       handleFieldChange(`${dataPath}[0].assignee`, []);
     }
-    
+
     if (item.isLast) {
       const url =
         process.env.NODE_ENV === "development"
@@ -110,15 +111,62 @@ class Footer extends React.Component {
     });
   };
 
+  renewTradelicence = async (applicationNumber, financialYear, tenantId) => {
+    const {setRoute , state} = this.props;
+    const licences = get(
+      state.screenConfiguration.preparedFinalObject,
+      `Licenses`
+    );
+    
+    const wfCode = "directRenewal";
+    set(licences[0], "action", "INITIATE");
+    set(licences[0], "workflowCode", wfCode);
+    set(licences[0], "applicationType", "RENEWAL");
+
+  const response=  await httpRequest("post", "/tl-services/v1/_update", "", [], {
+      Licenses: licences
+    })
+     const applicationNumberNew = get(
+      response,
+      `Licenses[0].applicationNumber`
+    );
+    setRoute(
+      `/tradelicence/acknowledgement?purpose=editRenewal&status=success&applicationNumber=${applicationNumberNew}&FY=${financialYear}&tenantId=${tenantId}&action=${wfCode}`
+    );
+  };
+
   render() {
     const {
       contractData,
       handleFieldChange,
       onDialogButtonClick,
       dataPath,
-      moduleName
+      moduleName,
+      state,
+      dispatch
     } = this.props;
     const { open, data, employeeList } = this.state;
+    const status = get(
+      state.screenConfiguration.preparedFinalObject,
+      `Licenses[0].status`
+    );
+    const applicationType = get(
+      state.screenConfiguration.preparedFinalObject,
+      `Licenses[0].applicationType`
+    );
+    const applicationNumber = get(
+      state.screenConfiguration.preparedFinalObject,
+      `Licenses[0].applicationNumber`
+    );
+    const tenantId = get(
+      state.screenConfiguration.preparedFinalObject,
+      `Licenses[0].tenantId`
+    );
+    const financialYear = get(
+      state.screenConfiguration.preparedFinalObject,
+      `Licenses[0].financialYear`
+    );
+
     const downloadMenu =
       contractData &&
       contractData.map(item => {
@@ -131,8 +179,31 @@ class Footer extends React.Component {
           }
         };
       });
+    if (status === "APPROVED" && applicationType !=="RENEWAL" &&  moduleName === "NewTL") {
+      const editButton = {
+        label: "Edit",
+        labelKey: "WF_TL_RENEWAL_EDIT_BUTTON",
+        link: () => {
+          this.props.setRoute(
+            `/tradelicence/apply?applicationNumber=${applicationNumber}&tenantId=${tenantId}&action=editRenewal`
+          );
+        }
+      };
+      downloadMenu && downloadMenu.push(editButton);
+      const submitButton = {
+        label: "Submit",
+        labelKey: "WF_TL_RENEWAL_SUBMIT_BUTTON",
+        link: () => {
+          this.renewTradelicence(applicationNumber, financialYear, tenantId);
+        }
+      };
+      downloadMenu && downloadMenu.push(submitButton);
+    }
+
+
+    
     const buttonItems = {
-      label: { labelName : "Take Action", labelKey : "WF_TAKE_ACTION"},
+      label: { labelName: "Take Action", labelKey: "WF_TAKE_ACTION" },
       rightIcon: "arrow_drop_down",
       props: {
         variant: "outlined",
@@ -149,11 +220,13 @@ class Footer extends React.Component {
     };
     return (
       <div className="apply-wizard-footer" id="custom-atoms-footer">
-        {!isEmpty(downloadMenu) && <Container>
-          <Item xs={12} sm={12} className="wf-footer-container">
-            <MenuButton data={buttonItems} />
-          </Item>
-        </Container>}
+        {!isEmpty(downloadMenu) && (
+          <Container>
+            <Item xs={12} sm={12} className="wf-footer-container">
+              <MenuButton data={buttonItems} />
+            </Item>
+          </Container>
+        )}
         <ActionDialog
           open={open}
           onClose={this.onClose}
