@@ -113,6 +113,21 @@ const styles = {
   dropdownLabel: {
     color: "rgba(0, 0, 0, 0.54)",
     fontSize: "12px"
+  },
+  containerTitle: {
+    color: "rgba(0, 0, 0, 0.7)",
+    fontFamily: "Roboto",
+    fontWeight: 500,
+    letterSpacing: "0.83px",
+    lineHeight: "24px",
+    textAlign: "left"
+  },
+  containerSubTitle: {
+    color: "rgb(0, 0, 0, 0.6)",
+    fontFamily: "Roboto",
+    fontWeight: 400,
+    lineHeight: "20px",
+    textAlign: "left"
   }
 };
 
@@ -320,11 +335,11 @@ class DocumentList extends Component {
               <div>
                 <Label fontSize="20px"
                 label={container.code}
-                labelStyle={{fontWeight:500}}
+                labelStyle={styles.containerTitle}
                 />
                 <Label fontSize="14px"
                   label="PT_REQUIRED_DOC_SUB_HEADING"
-                  labelStyle={{fontWeight : 400}}
+                  labelStyle={styles.containerSubTitle}
                 />
                 {container.cards.map(card => {
                   return (
