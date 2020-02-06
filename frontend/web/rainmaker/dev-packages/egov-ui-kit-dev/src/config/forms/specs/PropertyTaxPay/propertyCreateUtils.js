@@ -52,7 +52,7 @@ export const createPropertyPayload = (properties, documentsUploadRedux) => {
     Object.keys(documentsUploadRedux).map(key=>{
       properties[0].documents.push({
         "documentType": documentsUploadRedux[key].documentType,
-        "fileStore": documentsUploadRedux[key].documents[0].fileStoreId,
+        "fileStoreId": documentsUploadRedux[key].documents[0].fileStoreId,
       })
     })
   }

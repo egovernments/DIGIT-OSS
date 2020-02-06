@@ -434,7 +434,6 @@ export const getHeaderLabel = (selected, role) => {
           containerStyle={{ marginTop: 12 }}
           fontSize="16px"
           color="#484848"
-          label={role === "citizen" ? "PT_FORM4_HEADER_MESSAGE" : "PT_EMP_FORM4_HEADER_MESSAGE"}
         />
       );
     case 4:

@@ -11,6 +11,7 @@ import {
   handleFileUpload,
   getTransformedLocale
 } from "egov-ui-framework/ui-utils/commons";
+import Label from "egov-ui-kit/utils/translationNode";
 import get from "lodash/get";
 import PropTypes from "prop-types";
 import React, { Component } from "react";
@@ -317,9 +318,13 @@ class DocumentList extends Component {
           documentsList.map(container => {
             return (
               <div>
-                <LabelContainer
-                  labelKey={getTransformedLocale(container.title)}
-                  style={styles.documentTitle}
+                <Label fontSize="20px"
+                label={container.code}
+                labelStyle={{fontWeight:500}}
+                />
+                <Label fontSize="14px"
+                  label="PT_REQUIRED_DOC_SUB_HEADING"
+                  labelStyle={{fontWeight : 400}}
                 />
                 {container.cards.map(card => {
                   return (
