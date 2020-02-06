@@ -69,6 +69,6 @@ export {
   PaymentRedirectPage,
   ViewBreakupContainer,
   DialogContainer,
-  ULBSummaryCard
+  ULBSummaryCard,
   ResubmitActionContainer
 };

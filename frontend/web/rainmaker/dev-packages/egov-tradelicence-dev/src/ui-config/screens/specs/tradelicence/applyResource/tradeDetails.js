@@ -857,52 +857,6 @@ export const tradeDetails = getCommonCard(
         infoIcon: "info_circle",
         jsonPath: "Licenses[0].oldLicenseNumber"
       }),
-      beforeFieldChange: (action, state, dispatch) => {
-        if (action.value === "APPLICATIONTYPE.RENEWAL") {
-          dispatch(
-            handleField(
-              "apply",
-              "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.oldLicenseNo",
-              "props.required",
-              true
-            )
-          );
-        } else {
-          dispatch(
-            handleField(
-              "apply",
-              "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.oldLicenseNo",
-              "props.required",
-              false
-            )
-          );
-        }
-      }
-    },
-    oldLicenseNo: getTextField({
-      label: {
-        labelName: "Old License No",
-        labelKey: "TL_OLD_LICENSE_NO"
-      },
-      placeholder: {
-        labelName: "Enter Old License No",
-        labelKey: "TL_OLD_LICENSE_NO_PLACEHOLDER"
-      },
-      gridDefination: {
-        xs: 12,
-        sm: 6
-      },
-      iconObj: {
-        iconName: "search",
-        position: "end",
-        color: "#FE7A51",
-        onClickDefination: {
-          action: "condition",
-          callBack: (state, dispatch) => {
-            fillOldLicenseData(state, dispatch);
-          }
-        }
-      },
       tradeName: getTextField({
         label: {
           labelName: "Name of Trade",

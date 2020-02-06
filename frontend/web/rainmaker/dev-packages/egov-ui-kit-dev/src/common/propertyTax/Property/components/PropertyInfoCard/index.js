@@ -18,7 +18,7 @@ class PropertyInfoCard extends Component {
 
     return (
       <div>
-        {items && <Card style={{ backgroundColor ,boxShadow:'none'}}
+        {items && <Card style={{ backgroundColor ,boxShadow:'none'}}>
         textChildren={
           <div >
             <div className="pt-rf-title rainmaker-displayInline" style={{ justifyContent: "space-between", margin: '5px 0px 5px 0px' }}>
@@ -75,11 +75,13 @@ class PropertyInfoCard extends Component {
                       return <PropertyInfoCard backgroundColor='white' items={unit} header={subUnitHeader}></PropertyInfoCard>
                     })}
                   </div>
-                )}
+                })}
               </div>
             }
-          />
-        )}
+          </div>
+        } 
+      </Card>
+        }
       </div>
     );
   }
