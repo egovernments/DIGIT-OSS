@@ -57,7 +57,7 @@ class DemandCollectionInfo extends React.Component {
                                     <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>
                                       <Label
                                         labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.87)", fontWeight: "400", lineHeight: "19px" }}
-                                        label={data[d] !='' ? data[d] : "0"}
+                                        label={data[d] !='' ? data[d].toString() : "0"}
                                         fontSize="16px"
                                       />
                                     </div>

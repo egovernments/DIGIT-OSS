@@ -2119,14 +2119,14 @@ class FormWizardDataEntry extends Component {
         formValidIndexArray: [...formValidIndexArray, selected]
       });
       hideSpinner();
-      const  callToggleBarSnackbar = (labelKey, labelName) => {
+      const  callToggleBarSnackbar = (labelKey, labelName,status="error") => {
         this.props.toggleSnackbarAndSetText(
           true,
           {
             labelName,
             labelKey
           },
-          "error"
+          status
         );
         resetForm();
       };
@@ -2137,9 +2137,13 @@ class FormWizardDataEntry extends Component {
         });
         break;
         case "_create":
+        // this.setState({
+        //   selected: index
+        // });
         callToggleBarSnackbar(
           "PT_PROPERTY_CREATED_SUCCESSFULLY",
-          "PropertyTax Created Successfully"
+          "PropertyTax Created Successfully",
+          "success"
         );
         break;
         default:
