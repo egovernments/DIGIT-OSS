@@ -565,6 +565,8 @@ public class RemittanceServiceImpl extends RemittanceService {
                     receiptIds.add(iv.getReceiptHeaderId());
                 }
         }
+        List<ReceiptBean> resultList = new ArrayList<>();
+        if(!receiptIds.isEmpty()){
         List<Receipt> receipts = Collections.EMPTY_LIST;
         switch (ApplicationThreadLocals.getCollectionVersion().toUpperCase()) {
         case "V2":
@@ -581,7 +583,6 @@ public class RemittanceServiceImpl extends RemittanceService {
         Map<String, List<Receipt>> instrumentWiseMap = new HashMap<>();
         Map<String, List<Receipt>> fundWiseMap = new HashMap<>();
         Map<String, List<Receipt>> departmentWiseMap = new HashMap<>();
-        List<ReceiptBean> resultList = new ArrayList<>();
 
         groupByReceiptDate(receiptDateWiseMap, receipts);
 
@@ -611,7 +612,7 @@ public class RemittanceServiceImpl extends RemittanceService {
         }
 
         populateNames(resultList);
-
+        }
         return resultList;
     }
 
@@ -806,6 +807,7 @@ public class RemittanceServiceImpl extends RemittanceService {
         }
         ReceiptBean rb;
         List<ReceiptBean> finalList = new ArrayList<>();
+        if(!receiptInstrumentMap.isEmpty() && !receiptIds.isEmpty()){
         switch (ApplicationThreadLocals.getCollectionVersion().toUpperCase()) {
         case "V2":
         case "VERSION2":
@@ -880,7 +882,7 @@ public class RemittanceServiceImpl extends RemittanceService {
         }
 
         populateNames(finalList);
-
+        }
         return finalList;
     }
 
