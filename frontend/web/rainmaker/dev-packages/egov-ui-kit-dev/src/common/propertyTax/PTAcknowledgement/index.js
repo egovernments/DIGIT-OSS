@@ -214,6 +214,60 @@ class PTAcknowledgement extends React.Component {
       downloadButton={menu:downloadMenu,visibility:false} ;
       printButton={menu:printMenu,visibility:false} ;
     }
+    else if (purpose === "reassessment" && status === "success") {
+      ptHeader = {
+        // labelName: `Application for New Trade License (${financialYearText})`,
+        labelName: "Re-Assess Property",
+        labelKey: "PT_PROPERTY_RE_ASSESSMENT",
+        dynamicArray: [financialYear]
+      };
+      ptIDLabel={labelName: "Poperty ID",
+      labelKey: "PT_PROPERTY_ID",
+      visibility:true};
+      statusIcon={
+        icon :"close",
+        iconColor :"#E54D42",
+      };
+      ptMsg={
+        labelName: "Assessment Updated Successfully",
+        labelKey: "PT_PROPERTY_ASSESSMENT_SUCCESS_MSG",
+      };
+      ptSubMsg={
+        labelName: "A notification regarding property assessment has been sent to property owner at registered Mobile No.",
+        labelKey: "PT_PROPERTY_RE_ASSESSMENT_SUCCESS_SUB_MSG",
+      };
+      Button1={name:"PT_GOHOME",buttonClick:this.onGoHomeClick,visibility:true} ;
+      Button2={name:"PT_PROCEED_PAYMENT",buttonClick:this.onAssessPayClick,visibility:false} ;
+      downloadButton={menu:downloadMenu,visibility:false} ;
+      printButton={menu:printMenu,visibility:false} ;
+    }
+    else if (purpose === "reassessment" && status === "failure") {
+      ptHeader = {
+        // labelName: `Application for New Trade License (${financialYearText})`,
+        labelName: "Re-Assess Property",
+        labelKey: "PT_PROPERTY_RE_ASSESSMENT",
+        dynamicArray: [financialYear]
+      };
+      ptIDLabel={labelName: "Poperty ID",
+      labelKey: "PT_PROPERTY_ID",
+      visibility:true};
+      statusIcon={
+        icon :"close",
+        iconColor :"#E54D42",
+      };
+      ptMsg={
+        labelName: "Property Assessment Failed",
+        labelKey: "PT_PROPERTY_ASSESSMENT_Failure_MSG",
+      };
+      ptSubMsg={
+        labelName: "A notification regarding property assessment has been sent to property owner at registered Mobile No.",
+        labelKey: "PT_PROPERTY_ASSESSMENT_FAILURE_SUB_MSG",
+      };
+      Button1={name:"PT_GOHOME",buttonClick:this.onGoHomeClick,visibility:true} ;
+      Button2={name:"PT_PROCEED_PAYMENT",buttonClick:this.onAssessPayClick,visibility:false} ;
+      downloadButton={menu:downloadMenu,visibility:false} ;
+      printButton={menu:printMenu,visibility:false} ;
+    }
     return (
       <div >
         <div className="mainContainer ">
