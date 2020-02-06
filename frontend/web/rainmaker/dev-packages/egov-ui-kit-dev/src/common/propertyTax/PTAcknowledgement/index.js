@@ -102,11 +102,7 @@ class PTAcknowledgement extends React.Component {
     let downloadButton={menu:[],onClick:"",visibility:false};
     let printButton={menu:[],onClick:"",visibility:false};
     let statusIcon={};
-    let  ptIDLabel={
-      labelName: "Poperty ID",
-      labelKey: "PT_PROPERTY_ID",
-    }
-
+    let  ptIDLabel={};
     if (purpose === "apply" && status === "success") {
       
         ptHeader = {
@@ -128,6 +124,9 @@ class PTAcknowledgement extends React.Component {
         icon :"done",
         iconColor :"#39CB74",
       };
+      ptIDLabel={labelName: "Poperty ID",
+      labelKey: "PT_PROPERTY_ID",
+      visibility:true};
       Button1={name:"PT_GOHOME",buttonClick:this.onGoHomeClick,visibility:true} ;
       Button2={name:"PT_PROCEED_PAYMENT",buttonClick:this.onAssessPayClick,visibility:false} ;
       downloadButton={menu:downloadMenu,visibility:true} ;
@@ -144,6 +143,9 @@ class PTAcknowledgement extends React.Component {
         labelName: "New Property Application Submission Failed",
         labelKey: "PT_NEW_PROPERTY_FAILURE_MSG",
       };
+      ptIDLabel={labelName: "Poperty ID",
+      labelKey: "PT_PROPERTY_ID",
+      visibility:false};
       statusIcon={
         icon :"close",
         iconColor :"#E54D42",
@@ -165,6 +167,9 @@ class PTAcknowledgement extends React.Component {
         labelKey: "PT_PROPERTY_ASSESSMENT",
         dynamicArray: [financialYear]
       };
+      ptIDLabel={labelName: "Poperty ID",
+      labelKey: "PT_PROPERTY_ID",
+      visibility:true};
       statusIcon={
         icon :"done",
         iconColor :"#39CB74",
@@ -189,6 +194,9 @@ class PTAcknowledgement extends React.Component {
         labelKey: "PT_PROPERTY_ASSESSMENT",
         dynamicArray: [financialYear]
       };
+      ptIDLabel={labelName: "Poperty ID",
+      labelKey: "PT_PROPERTY_ID",
+      visibility:true};
       statusIcon={
         icon :"close",
         iconColor :"#E54D42",
@@ -289,9 +297,9 @@ class PTAcknowledgement extends React.Component {
                     id="material-ui-text"
                     style={{ fontSize: "16px", fontWeight: "400", color: "rgba(0, 0, 0, 0.6)" }}
                   >
-                    <span>
+                   {ptIDLabel.visibility && <span>
                       <Label label={ptIDLabel.labelKey} fontSize="16px" fontWeight="400" color="rgba(0, 0, 0, 0.6)" />
-                    </span>
+                    </span>}
                   </h1>
                   <h1
                     className="MuiTypography-root-8 MuiTypography-headline-13"

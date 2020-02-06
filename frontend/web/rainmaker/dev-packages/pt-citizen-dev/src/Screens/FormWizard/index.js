@@ -17,7 +17,8 @@ import { hideSpinner, showSpinner } from "egov-ui-kit/redux/common/actions";
 import { resetFormWizard } from "egov-ui-kit/utils/PTCommon";
 import { removeForm } from "egov-ui-kit/redux/form/actions";
 import { prepareFormData as prepareFormDataAction } from "egov-ui-kit/redux/common/actions";
-
+import store from "ui-redux/store";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
 import {
   UsageInformationHOC,
@@ -809,8 +810,14 @@ class FormWizard extends Component {
 
     } catch (e) {
       hideSpinner();
-      this.setState({ nextButtonEnabled: true });
-      alert(e);
+      store.dispatch(
+        setRoute(
+          `/property-tax/pt-acknowledgment?purpose=assessment&status=success&propertyId=${assessment.propertyId}&FY=${assessment.financialYear}&tenantId=${assessment.tenantId}`
+
+        )
+      );
+      // this.setState({ nextButtonEnabled: true });
+      // alert(e);
     }
   }
 
@@ -844,8 +851,14 @@ class FormWizard extends Component {
       }
     } catch (e) {
       hideSpinner();
-      this.setState({ nextButtonEnabled: true });
-      alert(e);
+      // this.setState({ nextButtonEnabled: true });
+      // alert(e);
+      store.dispatch(
+        setRoute(
+          `/property-tax/pt-acknowledgment?purpose=apply&status=failure`
+
+        )
+      );
     }
   }
 
