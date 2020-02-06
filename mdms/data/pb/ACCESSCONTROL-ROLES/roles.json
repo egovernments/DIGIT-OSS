@@ -297,7 +297,7 @@
       "name": "Collections Remitter",
       "description": "One who can remit the instruments to bank"
     },
-   {
+    {
       "code": "SYS_INTEGRATOR_FINANCE",
       "name": "System Integrator Finance",
       "description": "Role for allowing system integration of Finance app with rainmaker"
@@ -317,7 +317,7 @@
       "name": "TL Approver",
       "description": "Approver who verifies and approves the TL application"
     },
-   {
+    {
       "code": "EMPLOYEE_FINANCE",
       "name": "Employee Finance",
       "description": "All Employees who use Finance application"
@@ -383,7 +383,6 @@
       "description": "BPA Structural Engineer"
     },
     {
-    
       "code": "BPA_TOWNPLANNER",
       "name": "BPA Town Planner",
       "description": "BPA Town Planner"
@@ -412,7 +411,56 @@
       "code": "BPA_VERIFIER",
       "name": "BPA Services verifier",
       "description": "BPA Services workflow document & field inspection verifier"
+    },
+    {
+      "code": "WS_CEMP",
+      "name": "WS Counter Employee",
+      "description": "WS counter employee can take action as citizen"
+    },
+    {
+      "code": "WS_DOC_VERIFIER",
+      "name": "WS Document Verifier",
+      "description": "WS Document Verifier"
+    },
+    {
+      "code": "WS_FIELD_INSPECTOR",
+      "name": "WS Field Inspector",
+      "description": "WS Inspector can take action like verify and forword, send back to do"
+    },
+    {
+      "code": "WS_APPROVER",
+      "name": "WS Approver",
+      "description": "WS Approver can approve the connection application"
+    },
+    {
+      "code": "WS_CLERK",
+      "name": "WS Clerk",
+      "description": "WS Clerk can activate the connection application"
+    },
+    {
+      "code": "SW_CEMP",
+      "name": "SW Counter Employee",
+      "description": "SW counter employee can take action as citizen"
+    },
+    {
+      "code": "SW_DOC_VERIFIER",
+      "name": "SW Document Verifier",
+      "description": "SW Document Verifier"
+    },
+    {
+      "code": "SW_FIELD_INSPECTOR",
+      "name": "SW Field Inspector",
+      "description": "SW Inspector can take action like verify and forword, send back to do"
+    },
+    {
+      "code": "SW_APPROVER",
+      "name": "SW Approver",
+      "description": "SW Approver can approve the connection application"
+    },
+    {
+      "code": "SW_CLERK",
+      "name": "SW Clerk",
+      "description": "SW Clerk can activate the connection application"
     }
   ]
 }
-
