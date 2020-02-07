@@ -109,42 +109,39 @@ const commonApplicantInformation = () => {
           md: 6
         }
       }),
-      genderRadioGroup: {
-        uiFramework: "custom-containers",
-        componentPath: "RadioGroupContainer",
+      genderRadioGroup: getSelectField({
+        label: {
+          labelName: "Gender",
+          labelKey: "NOC_APPLICANT_DOB_LABEL"
+        },
+        placeholder: {
+          labelName: "Select Gender",
+          labelKey: "TL_NEW_OWNER_DETAILS_GENDER_PLACEHOLDER"
+        },
+        required: true,
+        optionValue: "code",
+        optionLabel: "label",
+        jsonPath: "BPA.owners[0].gender",
+        data: [
+          {
+            code: "MALE",
+            label: "COMMON_GENDER_MALE"
+          },
+          {
+            code: "FEMALE",
+            label: "COMMON_GENDER_FEMALE"
+          },
+          {
+            code: "OTHERS",
+            label: "COMMON_GENDER_TRANSGENDER"
+          }
+        ],
         gridDefination: {
           xs: 12,
           sm: 12,
           md: 6
-        },
-        style : {
-          color: "black"
-        },
-        jsonPath: "BPA.owners[0].gender",
-        props: {
-          label: { name: "Gender", key: "NOC_GENDER_LABEL" },
-          className: "applicant-details-error textfield-enterable-selection radio-button-label formLabel, root",
-          buttons: [
-            {
-              labelName: "Male",
-              labelKey: "NOC_GENDER_MALE_RADIOBUTTON",
-              value: "MALE"
-            },
-            {
-              labelName: "FEMALE",
-              labelKey: "NOC_GENDER_FEMALE_RADIOBUTTON",
-              value: "FEMALE"
-            },
-            {
-              labelName: "Transgender",
-              labelKey: "NOC_GENDER_TRANSGENDER_RADIOBUTTON",
-              value: "TRANSGENDER"
-            }
-          ],
-          jsonPath: "BPA.owners[0].gender"
-        },
-        type: "array"
-      },
+        }
+      }),
       applicantDob: {
         ...getDateField({
           label: {

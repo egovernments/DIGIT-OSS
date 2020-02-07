@@ -68,7 +68,7 @@ const getAcknowledgementCard = (
   secondNumber,
   tenant
 ) => {
-  if (purpose === "apply" && status === "success") {
+  if (purpose === "APPLY" && status === "success") {
     loadPdfGenerationDataForBpa(applicationNumber, tenant);
     return {
       header:getHeader(applicationNumber),
@@ -193,7 +193,109 @@ const getAcknowledgementCard = (
         tenant
       )
     };
-  } else if (purpose === "pay" && status === "success") {
+  } else if (purpose === "SEND_TO_CITIZEN" && status === "success") {
+    loadPdfGenerationDataForBpa(applicationNumber, tenant);
+    return {
+      header:getHeader(applicationNumber),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "Application Successfully Sent To Citizen",
+              labelKey: "BPA_APPLICATION_SENT_TO_CITIZEN_SUCCESS_MESSAGE_MAIN"
+            },
+            tailText: {
+              labelName: "Application No.",
+              labelKey: "NOC_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+            },
+            number: applicationNumber
+          })
+        }
+      },
+      iframeForPdf: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div"
+      },
+      applicationSuccessFooter: applicationSuccessFooter(
+        state,
+        dispatch,
+        applicationNumber,
+        tenant
+      )
+    };
+  } else if (purpose === "APPROVE" && status === "success") {
+    loadPdfGenerationDataForBpa(applicationNumber, tenant);
+    return {
+      header:getHeader(applicationNumber),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "Application Approved Successfully",
+              labelKey: "BPA_APPLICATION_APPROVED_SUCCESS_MESSAGE_MAIN"
+            },
+            tailText: {
+              labelName: "Application No.",
+              labelKey: "NOC_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+            },
+            number: applicationNumber
+          })
+        }
+      },
+      iframeForPdf: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div"
+      },
+      applicationSuccessFooter: applicationSuccessFooter(
+        state,
+        dispatch,
+        applicationNumber,
+        tenant
+      )
+    };
+  } else if (purpose === "SEND_TO_ARCHITECT" && status === "success") {
+    loadPdfGenerationDataForBpa(applicationNumber, tenant);
+    return {
+      header:getHeader(applicationNumber),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "Application Send To Architect Successfully",
+              labelKey: "BPA_APPLICATION_SEND_TO_ARCHITECT_SUCCESS_MESSAGE_MAIN"
+            },
+            tailText: {
+              labelName: "Application No.",
+              labelKey: "NOC_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+            },
+            number: applicationNumber
+          })
+        }
+      },
+      iframeForPdf: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div"
+      },
+      applicationSuccessFooter: applicationSuccessFooter(
+        state,
+        dispatch,
+        applicationNumber,
+        tenant
+      )
+    };
+  }  else if (purpose === "pay" && status === "success") {
     loadPdfGenerationDataForBpa(applicationNumber, tenant);
     return {
       header,

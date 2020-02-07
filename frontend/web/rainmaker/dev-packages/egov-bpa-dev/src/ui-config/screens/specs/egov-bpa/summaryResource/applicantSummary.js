@@ -8,6 +8,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { gotoApplyWithStep, checkValueForNA } from "../../utils/index";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
+import { changeStep } from "../applyResource/footer";
 
 export const applicantSummary = getCommonGrayCard({
   header: {
@@ -55,7 +56,7 @@ export const applicantSummary = getCommonGrayCard({
         onClickDefination: {
           action: "condition",
           callBack: (state, dispatch) => {
-            gotoApplyWithStep(state, dispatch, 2);
+            changeStep(state, dispatch, "", 2);            
           }
         }
       }

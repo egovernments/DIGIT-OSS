@@ -19,7 +19,7 @@ import {
 } from "./applyResource/boundarydetails";
 import { documentDetails } from "./applyResource/documentDetails";
 import { statusOfNocDetails } from "./applyResource/updateNocDetails";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg, getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
 import {
   prepareFinalObject,
   handleScreenConfigurationFieldChange as handleField
@@ -37,14 +37,15 @@ import {
   getAppSearchResults
 } from "../../../../ui-utils/commons";
 import { getTodaysDateInYYYMMDD, getTenantMdmsData, calculationType, setProposedBuildingData } from "../utils";
+import jp from "jsonpath";
+import { bpaSummaryDetails } from "../egov-bpa/summaryDetails";
 
 export const stepsData = [
-  { labelName: "Basic Details", labelKey: "" },
-  { labelName: "Scrutiny Details", labelKey: "" },
-  { labelName: "Owner Info", labelKey: "" },
-  { labelName: "Plot & Boundary Info", labelKey: "" },
-  { labelName: "Document Details", labelKey: "" },
-  { labelName: "NOC Details", labelKey: "" }
+  { labelName: "Basic Details", labelKey: "BPA_STEPPER_BASIC_DETAILS_HEADER" },
+  { labelName: "Scrutiny Details", labelKey: "BPA_STEPPER_SCRUTINY_DETAILS_HEADER" },
+  { labelName: "Owner Info", labelKey: "BPA_STEPPER_OWNER_INFO_HEADER" },
+  { labelName: "Document and NOC details", labelKey: "BPA_STEPPER_DOCUMENT_NOC_DETAILS_HEADER" },
+  { labelName: "Application Summary", labelKey: "BPA_STEPPER_SUMMARY_HEADER" }
 ];
 
 export const stepper = getStepperObject(
@@ -77,7 +78,8 @@ export const formwizardFirstStep = {
   },
   children: {
     basicDetails,
-    bpaLocationDetails
+    bpaLocationDetails,
+    detailsofplot
   }
 };
 
@@ -115,7 +117,7 @@ export const formwizardFourthStep = {
     id: "apply_form4"
   },
   children: {
-    detailsofplot
+    documentDetails
   },
   visible: false
 };
@@ -127,19 +129,7 @@ export const formwizardFifthStep = {
     id: "apply_form4"
   },
   children: {
-    documentDetails
-  },
-  visible: false
-};
-
-export const formwizardSixthStep = {
-  uiFramework: "custom-atoms",
-  componentPath: "Form",
-  props: {
-    id: "apply_form4"
-  },
-  children: {
-    statusOfNocDetails
+    bpaSummaryDetails
   },
   visible: false
 };
@@ -284,8 +274,65 @@ const setSearchResponse = async (
   ));
  }
   dispatch(prepareFinalObject("BPA.appdate", appDate));
-  calculationType(state, dispatch)
+  calculationType(state, dispatch);
+  const docs = await prepareDocumentsUploadData(state, dispatch);
+  const documentDetailsUploadRedux = await prepareDocumentDetailsUploadRedux(state, dispatch);
 };
+
+export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
+  let docs = get (state.screenConfiguration.preparedFinalObject, "documentsContract");
+  let bpaDocs = [];
+
+  if (docs && docs.length > 0) {
+    docs.forEach(section => {
+      section.cards.forEach(doc => {
+        let docObj = {};
+        docObj.documentType = section.code;
+        docObj.documentCode = doc.code;
+        docObj.isDocumentRequired = doc.required;
+        docObj.isDocumentTypeRequired = doc.required;
+        bpaDocs.push(docObj);
+      })
+    });
+  }
+
+  let bpaDetails = get (state.screenConfiguration.preparedFinalObject, "BPA");
+  let uploadedDocs = bpaDetails.documents;
+  
+  if(uploadedDocs && uploadedDocs.length > 0) {
+    let fileStoreIds = jp.query(uploadedDocs, "$.*.fileStoreId");
+    let fileUrls = fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
+    uploadedDocs.forEach(upDoc => {
+      bpaDocs.forEach(bpaDoc => {
+        let bpaDetailsDoc = (upDoc.documentType).split('.')[0]+"."+(upDoc.documentType).split('.')[1];
+        if(bpaDetailsDoc == bpaDoc.documentCode) {
+          let url = (fileUrls && fileUrls[upDoc.fileStoreId] && fileUrls[upDoc.fileStoreId].split(",")[0]) || "";
+          let name = (fileUrls[upDoc.fileStoreId] && 
+            decodeURIComponent(
+              fileUrls[upDoc.fileStoreId]
+                .split(",")[0]
+                .split("?")[0]
+                .split("/")
+                .pop()
+                .slice(13)
+            )) ||
+          `Document - ${index + 1}`;
+          bpaDoc.dropDownValues = {};
+          bpaDoc.dropDownValues.value =  upDoc.documentType;
+          bpaDoc.documents = [
+            {
+              fileName : name,
+              fileStoreId : upDoc.fileStoreId,
+              fileUrl : url,
+              id : upDoc.id
+            }
+          ]
+        }
+      })
+    })
+    dispatch(prepareFinalObject("documentDetailsUploadRedux", bpaDocs));
+  }
+}
 
 const screenConfig = {
   uiFramework: "material-ui",
@@ -353,10 +400,9 @@ const screenConfig = {
         "formwizardSecondStep",
         "formwizardThirdStep",
         "formwizardFourthStep",
-        "formwizardFifthStep",
-        "formwizardSixthStep"
+        "formwizardFifthStep"
       ];
-      for (let i = 0; i < 6; i++) {
+      for (let i = 0; i < 5; i++) {
         set(
           action.screenConfig,
           `components.div.children.${formWizardNames[i]}.visible`,
@@ -398,7 +444,6 @@ const screenConfig = {
         formwizardThirdStep,
         formwizardFourthStep,
         formwizardFifthStep,
-        formwizardSixthStep,
         footer
       }
     }

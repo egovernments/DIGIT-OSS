@@ -30,15 +30,23 @@ import { applicantSummary } from "./summaryResource/applicantSummary";
 import { basicSummary } from "./summaryResource/basicSummary"
 import { documentsSummary } from "./summaryResource/documentsSummary";
 import { scrutinySummary } from "./summaryResource/scrutinySummary";
-import { nocSummary } from "./summaryResource/nocSummary";
-import { plotAndBoundaryInfoSummary } from "./summaryResource/plotAndBoundaryInfoSummary";
 import { estimateSummary } from "./summaryResource/estimateSummary";
 import { httpRequest, edcrHttpRequest } from "../../../../ui-utils/api";
 import { statusOfNocDetails } from "../egov-bpa/applyResource/updateNocDetails";
 import { nocVerificationDetails } from "../egov-bpa/nocVerificationDetails";
 import { permitOrderNoDownload, downloadFeeReceipt } from "../utils/index";
 import "../egov-bpa/applyResource/index.css";
-import "../egov-bpa/applyResource/index.scss"
+import "../egov-bpa/applyResource/index.scss";
+import { getUserInfo, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+
+export const ifUserRoleExists = role => {
+  let userInfo = JSON.parse(getUserInfo());
+  const roles = get(userInfo, "roles");
+  const roleCodes = roles ? roles.map(role => role.code) : [];
+  if (roleCodes.indexOf(role) > -1) {
+    return true;
+  } else return false;
+};
 
 const titlebar = getCommonContainer({
     header: getCommonHeader({
@@ -300,24 +308,57 @@ const setSearchResponse = async (
   const edcrNumber = response.Bpa["0"].edcrNumber;
   const status = response.Bpa["0"].status;
 
-  if((status && status === "PENDING_APPL_FEE") || (status && status === "PENDING_SANC_FEE_PAYMENT") ) {
+  if ((status && status === "PENDING_APPL_FEE") || (status && status === "PENDING_SANC_FEE_PAYMENT")) {
     dispatch(
       handleField(
-      "search-preview",
-      "components.div.children.citizenFooter",
-      "visible",
-       true
-    )
-  )
-  }else {
+        "search-preview",
+        "components.div.children.citizenFooter",
+        "visible",
+        true
+      )
+    ),
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.citizenFooter.children.sendToArch",
+          "visible",
+          false
+        )
+      ),
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.citizenFooter.children.approve",
+          "visible",
+          false
+        )
+      )
+  } else if (status && status === "CITIZEN_APPROVAL_INPROCESS") {
     dispatch(
       handleField(
-      "search-preview",
-      "components.div.children.citizenFooter",
-      "visible",
-       false
+        "search-preview",
+        "components.div.children.citizenFooter",
+        "visible",
+        true
+      )
+    ),
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.citizenFooter.children.makePayment",
+          "visible",
+          false
+        )
+      )
+  } else {
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.citizenFooter",
+        "visible",
+        false
+      )
     )
-  )
   }
 
   dispatch(prepareFinalObject("BPA", response.Bpa[0]));
@@ -493,10 +534,7 @@ const screenConfig = {
           basicSummary: basicSummary,
           scrutinySummary:scrutinySummary,
           applicantSummary: applicantSummary,
-          plotAndBoundaryInfoSummary: plotAndBoundaryInfoSummary,
-          documentsSummary: documentsSummary,
-          nocSummary: nocSummary
-
+          documentsSummary: documentsSummary
         }),
         citizenFooter: process.env.REACT_APP_NAME === "Citizen" ? citizenFooter : {}
       }

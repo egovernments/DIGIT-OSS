@@ -152,6 +152,7 @@ export const bpaLocationDetails = getCommonCard(
       // }),
 
       tradeLocDoorHouseNo: getTextField({
+        visible : false,
         label: {
           labelName: "Door/House No.",
           labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"

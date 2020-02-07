@@ -3,10 +3,12 @@ import { ifUserRoleExists } from "../../utils";
 import generatePdf from "../../utils/generatePdfForBpa";
 import "./index.css";
 import get from "lodash/get";
+import { stat } from "fs";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
 export const getRedirectionURL = () => {
   const redirectionURL = ifUserRoleExists("CITIZEN")
-    ? "/BPA/home"
+    ? "/bpastakeholder-citizen/home"
     : "/inbox";
   return redirectionURL;
 };
@@ -59,6 +61,11 @@ export const applicationSuccessFooter = (
 ) => {
   let status = (get(state.screenConfiguration.preparedFinalObject, "BPA[0].status") ||  get(state.screenConfiguration.preparedFinalObject, "BPA.status"));
   let billbService = (( status=="PENDING_APPL_FEE")?"BPA.NC_APP_FEE":"BPA.NC_SAN_FEE");
+  let purpose = getQueryArg(window.location.href, "purpose");
+  let isTrue = false;
+  if(purpose == "APPLY") {
+    isTrue = true;
+  }
   return getCommonApplyFooter({
     gotoHome: {
       componentPath: "Button",
@@ -197,7 +204,7 @@ export const applicationSuccessFooter = (
         roles: ["CITIZEN"],
         action: "PAY"
       },
-      visible: process.env.REACT_APP_NAME === "Citizen" ? true : false
+      visible: process.env.REACT_APP_NAME === "Citizen" ? isTrue : false
     }
   });
 };

@@ -94,75 +94,128 @@ const prepareNocDocumentsView = async (state, dispatch) => {
     doc["link"] = fileUrls[doc.fileStoreId];
     return doc;
   });
-  dispatch(prepareFinalObject("nocDocumentsPreview", documentsPreview));
-};
-
-const screenConfig = {
-  uiFramework: "material-ui",
-  name: "summary",
-  beforeInitScreen: (action, state, dispatch) => {
-    let applicationNumber =
-      // getQueryArg(window.location.href, "applicationNumber") ||
-      get(
-        state.screenConfiguration.preparedFinalObject,
-        "BPA.applicationNo"
-      );
-    let tenantId =
-      getQueryArg(window.location.href, "tenantId") ||
-      get(
-        state.screenConfiguration.preparedFinalObject,
-        "BPA.address.city"
-      );
-    set(
-      action,
-      "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.uploadedDocumentDetailsCard.visible",
-      false
+  
+  const prepareDocumentsDetailsView = async (state, dispatch) => {
+    let documentsPreview = [];
+    let reduxDocuments = get(
+      state,
+      "screenConfiguration.preparedFinalObject.documentDetailsUploadRedux",
+      {}
     );
-    set(
-      action,
-      "screenConfig.components.div.children.body.children.cardContent.children.nocSummary.children.cardContent.children.uploadedNocDocumentDetailsCard.visible",
-      false
+    jp.query(reduxDocuments, "$.*").forEach(doc => {
+      if (doc.documents && doc.documents.length > 0) {
+        documentsPreview.push({
+          title: getTransformedLocale(doc.documentCode),
+          name: doc.documents[0].fileName,
+          fileStoreId: doc.documents[0].fileStoreId,
+          linkText: "View"
+        });
+      }
+    });
+    let fileStoreIds = jp.query(documentsPreview, "$.*.fileStoreId");
+    let fileUrls =
+      fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : [];
+    documentsPreview = documentsPreview.map(doc => {
+      doc["link"] = fileUrls[doc.fileStoreId];
+      return doc;
+    });
+    dispatch(prepareFinalObject("documentDetailsPreview", documentsPreview));
+  };
+  
+  
+  const prepareNocDocumentsView = async (state, dispatch) => {
+    let documentsPreview = [];
+    let reduxDocuments = get(
+      state,
+      "screenConfiguration.preparedFinalObject.nocDocumentsUploadRedux",
+      {}
     );
-    generateBillForBPA(dispatch, applicationNumber, tenantId, "BPA.NC_APP_FEE");
-    prepareNocDocumentsView(state, dispatch);
-    prepareDocumentsDetailsView(state, dispatch);
-    // setResidentialList(state, dispatch);
-    return action;
-  },
-  components: {
-    div: {
-      uiFramework: "custom-atoms",
-      componentPath: "Div",
-      props: {
-        className: "common-div-css"
-      },
-      children: {
-        headerDiv: {
-          uiFramework: "custom-atoms",
-          componentPath: "Container",
-          children: {
-            header: {
-              gridDefination: {
-                xs: 12,
-                sm: 10
-              },
-              ...header
-            }
-          }
+    jp.query(reduxDocuments, "$.*").forEach(doc => {
+      if (doc.documents && doc.documents.length > 0) {
+        documentsPreview.push({
+          title: getTransformedLocale(doc.documentCode),
+          name: doc.documents[0].fileName,
+          fileStoreId: doc.documents[0].fileStoreId,
+          linkText: "View"
+        });
+      }
+    });
+    let fileStoreIds = jp.query(documentsPreview, "$.*.fileStoreId");
+    let fileUrls =
+      fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : [];
+    documentsPreview = documentsPreview.map(doc => {
+      doc["link"] = fileUrls[doc.fileStoreId];
+      return doc;
+    });
+    dispatch(prepareFinalObject("nocDocumentsPreview", documentsPreview));
+  };
+  
+  const screenConfig = {
+    uiFramework: "material-ui",
+    name: "summary",
+    beforeInitScreen: (action, state, dispatch) => {
+      let applicationNumber =
+        // getQueryArg(window.location.href, "applicationNumber") ||
+        get(
+          state.screenConfiguration.preparedFinalObject,
+          "BPA.applicationNo"
+        );
+      let tenantId =
+        getQueryArg(window.location.href, "tenantId") ||
+        get(
+          state.screenConfiguration.preparedFinalObject,
+          "BPA.address.city"
+        );
+      set(
+        action,
+        "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.uploadedDocumentDetailsCard.visible",
+        false
+      );
+      set(
+        action,
+        "screenConfig.components.div.children.body.children.cardContent.children.nocSummary.children.cardContent.children.uploadedNocDocumentDetailsCard.visible",
+        false
+      );
+      generateBillForBPA(dispatch, applicationNumber, tenantId, "BPA.NC_APP_FEE");
+      prepareNocDocumentsView(state, dispatch);
+      prepareDocumentsDetailsView(state, dispatch);
+      // setResidentialList(state, dispatch);
+      return action;
+    },
+    components: {
+      div: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        props: {
+          className: "common-div-css"
         },
-        body: getCommonCard({
-          estimateSummary: estimateSummary,
-          basicSummary : basicSummary,
-          scrutinySummary : scrutinySummary,
-          applicantSummary: applicantSummary,
-          plotAndBoundaryInfoSummary : plotAndBoundaryInfoSummary,
-          documentsSummary: documentsSummary,          
-          nocSummary: nocSummary
-        }),
-        footer: footer
+        children: {
+          headerDiv: {
+            uiFramework: "custom-atoms",
+            componentPath: "Container",
+            children: {
+              header: {
+                gridDefination: {
+                  xs: 12,
+                  sm: 10
+                },
+                ...header
+              }
+            }
+          },
+          body: getCommonCard({
+            estimateSummary: estimateSummary,
+            basicSummary : basicSummary,
+            scrutinySummary : scrutinySummary,
+            applicantSummary: applicantSummary,
+            plotAndBoundaryInfoSummary : plotAndBoundaryInfoSummary,
+            documentsSummary: documentsSummary,          
+            nocSummary: nocSummary
+          }),
+          footer: footer
+        }
       }
     }
-  }
-};
-
-export default screenConfig;
+  };
+  
+  export default screenConfig;

@@ -29,6 +29,7 @@ import {
 import { httpRequest } from "./api";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import jp from "jsonpath";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 
 const handleDeletedCards = (jsonObject, jsonPath, key) => {
   let originalArray = get(jsonObject, jsonPath, []);
@@ -364,17 +365,8 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
   Object.keys(tempDoc).forEach(key => {
     documentsContract.push(tempDoc[key]);
   });
-  let documentDetailsContract = [],
-    nocDetailsContract = [];
-  documentsContract.forEach(doc => {
-    if (doc.code == "NOC") {
-      nocDetailsContract.push(doc);
-    } else {
-      documentDetailsContract.push(doc);
-    }
-  });
-  dispatch(prepareFinalObject("documentsContract", documentDetailsContract));
-  dispatch(prepareFinalObject("nocDocumentsContract", nocDetailsContract));
+
+  dispatch(prepareFinalObject("documentsContract", documentsContract));
   }
 };
 
@@ -905,5 +897,33 @@ export const handleFileUpload = (event, handleDocument, props) => {
         handleDocument(file);
       }
     });
+  }
+};
+
+export const submitBpaApplication = async (state, dispatch) => {
+  const bpaAction = "APPLY";
+  let response = await createUpdateBpaApplication(state, dispatch, bpaAction);
+  const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.BPA.applicationNo");
+  const tenantId = getQueryArg(window.location.href, "tenantId");
+  if (get(response, "status", "") === "success") {
+    const acknowledgementUrl =
+      process.env.REACT_APP_SELF_RUNNING === "true"
+        ? `/egov-ui-framework/egov-bpa/acknowledgement?purpose=${bpaAction}&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`
+        : `/egov-bpa/acknowledgement?purpose=${bpaAction}&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
+    dispatch(setRoute(acknowledgementUrl));
+  }
+};
+
+export const updateBpaApplication = async (state, dispatch) => {
+  const bpaAction = "SEND_TO_CITIZEN";
+  let response = await createUpdateBpaApplication(state, dispatch, bpaAction);
+  const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.BPA.applicationNo");
+  const tenantId = getQueryArg(window.location.href, "tenantId");
+  if (get(response, "status", "") === "success") {
+    const acknowledgementUrl =
+      process.env.REACT_APP_SELF_RUNNING === "true"
+        ? `/egov-ui-framework/egov-bpa/acknowledgement?purpose=${bpaAction}&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`
+        : `/egov-bpa/acknowledgement?purpose=${bpaAction}&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
+    dispatch(setRoute(acknowledgementUrl));
   }
 };

@@ -5,6 +5,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { gotoApplyWithStep } from "../../utils/index";
 import { documentDetails } from "../applyResource/documentDetails";
+import { changeStep } from "../applyResource/footer";
 
 const getHeader = label => {
   return {
@@ -34,8 +35,8 @@ export const documentsSummary = getCommonGrayCard({
           xs: 8
         },
         ...getCommonSubHeader({
-          labelName: "Document Details",
-          labelKey: "BPA_DOCUMENT_DETAILS_HEADER"
+          labelName: "Document and NOC details",
+          labelKey: "BPA_DOCUMENT_AND_NOC_DETAILS_HEADER"
         })
       },
       editSection: {
@@ -67,7 +68,7 @@ export const documentsSummary = getCommonGrayCard({
         onClickDefination: {
           action: "condition",
           callBack: (state, dispatch) => {
-            gotoApplyWithStep(state, dispatch, 4);
+            changeStep(state, dispatch, "", 3);            
           }
         }
       }

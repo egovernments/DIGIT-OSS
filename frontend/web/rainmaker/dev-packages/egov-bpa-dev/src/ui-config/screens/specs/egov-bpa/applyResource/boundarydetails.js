@@ -113,6 +113,7 @@ export const detailsofplot = getCommonCard({
         },
         cityTown: {
             ...getSelectField({
+                visible : false,
                 label: {
                   labelName: "City",
                   labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
@@ -140,6 +141,7 @@ export const detailsofplot = getCommonCard({
         },
         whetherGovOrQuasi: {
             ...getSelectField({
+                visible : false,
                 label: {
                     labelName: "Whether Government or Quasi Government",
                     labelKey: "BPA_BOUNDARY_GOVT_QUASI_LABEL"

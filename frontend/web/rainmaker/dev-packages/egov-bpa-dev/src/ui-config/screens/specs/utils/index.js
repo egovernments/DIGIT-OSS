@@ -2779,6 +2779,13 @@ export const getBpaDetailsForOwner = async (state, dispatch, fieldInfo) => {
           if(ownershipCategory && ownershipCategory == "INDIVIDUAL.SINGLEOWNER") {
             userInfo.isPrimaryOwner = true;
           }
+          let relationship = get(
+            state.screenConfiguration.preparedFinalObject,
+            `BPA.owners[${cardIndex}].relationship`
+          );
+          if(relationship) {
+            userInfo.relationship = relationship;
+          }
           
           currOwnersArr[cardIndex] = userInfo;
           dispatch(prepareFinalObject(`BPA.owners`, currOwnersArr));
@@ -3854,19 +3861,7 @@ const prepareDocumentsView = async (state, dispatch, action, appState) => {
       return doc;
     
   });
-  let documentDetailsPreview = [], nocDocumentsPreview = [];
-  documentsPreview.forEach(doc => {
-    if(doc && doc.title) {
-      let type = doc.title.split("_")[0];
-      if(type === "NOC") {
-        nocDocumentsPreview.push(doc);
-      }else {
-        documentDetailsPreview.push(doc)
-      }
-    }
-  });
-  dispatch(prepareFinalObject("documentDetailsPreview", documentDetailsPreview));
-  dispatch(prepareFinalObject("nocDocumentsPreview", nocDocumentsPreview));
+  dispatch(prepareFinalObject("documentDetailsPreview", documentsPreview));
   let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
   if(isEmployee) {
     prepareDocsInEmployee(state, dispatch, action, appState, uploadedAppDocuments);
@@ -4025,23 +4020,13 @@ if(tempDoc) {
     }
 
     let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
-
-    if (nocDocs && nocDocs.length > 0 && isEmployee) {
-      set(
-        action,
-        "screenConfig.components.div.children.body.children.cardContent.children.nocSummary.children.cardContent.children.uploadedNocDocumentDetailsCard.visible",
-        true
-      );
-      dispatch(prepareFinalObject("nocDocumentsContract", nocDocs));
-    }
-
-    if (appDocs && appDocs.length > 0 && isEmployee) {
+    if (finalDocuments && finalDocuments.length > 0 && isEmployee) {
       set(
         action,
         "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.uploadedDocumentDetailsCard.visible",
         true
       );
-      dispatch(prepareFinalObject("documentsContract", appDocs));
+      dispatch(prepareFinalObject("documentsContract", finalDocuments));
     }
   }
 };
