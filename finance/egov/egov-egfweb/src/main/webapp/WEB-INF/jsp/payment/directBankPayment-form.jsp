@@ -60,7 +60,7 @@
 		url="/voucher/common-ajaxLoadBanksByFundAndType.action" />
 	<td class="greybox"><s:select name="commonBean.bankId" id="bankId"
 			list="dropdownData.bankList" listKey="bankBranchId"
-			listValue="bankBranchName" headerKey="" headerValue="----Choose----"
+			listValue="bankBranchName" headerKey="" headerValue="%{getText('lbl.choose.options')}"
 			onChange="populateAccNum(this);" /></td>
 	<td class="greybox"><s:text name="amount" /><span
 		class="mandatory1">*</span></td>
@@ -80,7 +80,7 @@
 			name="commonBean.accountNumberId" id="accountNumber"
 			list="dropdownData.accNumList" listKey="id"
 			listValue="accountnumber+'-'+accounttype" headerKey=""
-			headerValue="----Choose----"
+			headerValue="%{getText('lbl.choose.options')}"
 			onChange="populateNarration(this);populateAvailableBalance(this);" />
 		<s:textfield name="accnumnar" id="accnumnar"
 			value="%{commonBean.accnumnar}" readonly="true" tabindex="-1" /></td>
@@ -142,16 +142,16 @@
 	<s:iterator var="p" value="instrumentHeaderList" status="s">
 		<tr>
 			<td class="bluebox"></td>
-			<td class="bluebox">Cheque Number</td>
+			<td class="bluebox"><s:text name="lbl.cheque.number"/> </td>
 			<td class="bluebox"><s:property value="%{instrumentNumber}" />
 			</td>
-			<td class="bluebox">Cheque Date</td>
+			<td class="bluebox"><s:text name="lbl.cheque.date"/></td>
 			<td class="bluebox"><s:date name="%{instrumentDate}"
 					format="dd/MM/yyyy" /></td>
 		</tr>
 		<tr>
 			<td class="greybox"></td>
-			<td class="greybox">Party Name</td>
+			<td class="greybox"><s:text name="lbl.party.name"/></td>
 			<td class="greybox"><s:property value="%{payTo}" /></td>
 		</tr>
 	</s:iterator>
@@ -174,7 +174,7 @@
 					<td colspan="6">
 						<div id="labelAD" align="center">
 							<div class="subheadsmallnew">
-								<strong>Account Details</strong>
+								<strong><s:text name="lbl.account.details"/></strong>
 							</div>
 						</div>
 						<div class="yui-skin-sam" align="center">
@@ -204,7 +204,7 @@
 					<tr>
 						<td colspan="6">
 							<div class="subheadsmallnew">
-								<strong>Sub-Ledger Details</strong>
+								<strong><s:text name="lbl.subledger.details"/></strong>
 							</div>
 							</div>
 

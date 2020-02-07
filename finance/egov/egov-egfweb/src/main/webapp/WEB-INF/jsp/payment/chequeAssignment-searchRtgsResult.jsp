@@ -73,7 +73,7 @@
 			<s:actionmessage />
 		</span>
 		<div class="formmainbox">
-			<div class="subheadnew">RTGS Ref. No Assignment Search</div>
+			<div class="subheadnew"><s:text name="chq.rtgs.assignment.search.heading" /></div>
 			<table align="center" width="100%" cellpadding="0" cellspacing="0"
 				id="paymentTable">
 				<tr>
@@ -181,7 +181,7 @@
 				</s:iterator>
 			</table>
 			<div class="subheadsmallnew" id="noRecordsDiv"
-				style="visibility: hidden">No Records Found</div>
+				style="visibility: hidden"><s:text name="msg.no.record.found"/> </div>
 			<br />
 
 			<div class="buttonbottom">
@@ -193,9 +193,9 @@
 				<s:hidden name="billSubType" id="billSubType" value="%{billSubType}" />
 
 				<s:submit id="assignChequeBtn" method="update"
-					value="Assign RTGS Number" cssClass="buttonsubmit"
+					key="lbl.assign.rtgs.number" cssClass="buttonsubmit"
 					onclick="return validate();" />
-				<input type="button" value="Close"
+				<input type="button" value='<s:text name="lbl.close"/>'
 					onclick="javascript:window.close();window.parent.postMessage('close','*');" class="button" />
 			</div>
 		</div>
@@ -213,13 +213,7 @@
 			}
 			function updateDate(obj)
 			{
-				//bootbox.alert("Before"+obj); 
-				//bootbox.alert("obj.name"+obj.name);
-				//bootbox.alert("obj.value"+obj.value); 
 				document.getElementById(obj).value=obj.value;         
-			//	bootbox.alert("After"+obj);            
-				//bootbox.alert("obj.name"+obj.name);          
-			//	bootbox.alert("obj.value"+obj.value);         
 			}
 			function validate()
 			{
@@ -227,13 +221,13 @@
 				
 				if(document.getElementById('selectedRows').value=='' || document.getElementById('selectedRows').value==0)
 				{
-					bootbox.alert('Please select the payment voucher');
+					bootbox.alert('<s:text name="msg.please.select.the.payment.voucher"/> ');
 					return false;
 				}
 				if(document.getElementById('rtgsdateMapId').value=='')
 					{
 					
-					bootbox.alert('Please select RTGS Date ');
+					bootbox.alert('<s:text name="msg.please.select.rtgs.date"/> ');
 					return false;
 					}
 				<s:if test="%{paymentMode=='rtgs'}">
@@ -246,7 +240,6 @@
 			}
 		function validateForRtgsMode(){
 				var noOfSelectedRows=document.getElementById('selectedRows').value;
-				//bootbox.alert("sizseled"+noOfSelectedRows);      
 				var chkCount=0;     
 				var index;
 				var isSelected=0;
@@ -262,14 +255,11 @@
 					var paymentDate= document.getElementsByName("value["+index+"].tempPaymentDate")[0].value; 
 						if(document.getElementById('isSelected'+index).checked){
 							chkCount++;                 
-							bootbox.alert("cheque Date"+chequeDate +"paymentDate"+paymentDate) ;   
-							bootbox.alert(compareDate(paymentDate,chequeDate))  ;     
 							if( compareDate(paymentDate,chequeDate) == -1){     
-								bootbox.alert('Cheque Date cannot be less than  payment Date');
+								bootbox.alert('<s:text name="msg.cheque.date.cant.be.less.than.payment.date"/>');
 								return false;           
 							 } 
 							if(chkCount==noOfSelectedRows){ 
-								//bootbox.alert("hi"); 
 								return true;}                      
 						}                               
 					<s:set var="listCount" value="%{#listCount+1}"/>                      

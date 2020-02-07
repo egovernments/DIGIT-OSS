@@ -68,7 +68,7 @@
 	    if ((name=="Reject" || name=="reject")) {
 	    	var approverComments = document.getElementById("approverComments").value;
 	    	if (approverComments == null || approverComments == "") {
-	    		bootbox.alert("Please Enter Approver Remarks ");
+	    		bootbox.alert("<s:text name='msg.please.enter.approver.remarks'/> ");
 				return false;
 	    	}
 		}
@@ -76,13 +76,13 @@
 	    if ((name=="Cancel" || name=="cancel")) {
 	    	var approverComments = document.getElementById("approverComments").value;
 	    	if (approverComments == null || approverComments == "") {
-	    		bootbox.alert("Please Enter Approver Remarks ");
+	    		bootbox.alert("<s:text name='msg.please.enter.approver.remarks'/>");
 				return false;
 	    	}
 		}
 		<s:if test="%{getNextAction()!='END'}">
 	    if((name=="Forward" || name=="forward") && approverPosId && (approverPosId.value == -1 || approverPosId.value == "")) {
-	    	bootbox.alert("Please Select the Approver ");
+	    	bootbox.alert("<s:text name='msg.please.select.approver'/>");
 			return false;
 	    }
 	    if((name=="Create And Approve")) {

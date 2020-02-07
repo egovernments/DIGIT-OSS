@@ -54,7 +54,7 @@
 
 <html>
 <head>
-<title>Voucher Search</title>
+<title><s:text name="lbl.voucher.search"/></title>
 <base target="_self" />
 <script type="text/javascript">
 	function disableTypeForEditMode()
@@ -85,10 +85,10 @@
 		</span>
 		<div class="formmainbox">
 			<s:if test="%{showMode=='nonbillPayment'}">
-				<div class="subheadnew">Non Bill Payment Search</div>
+				<div class="subheadnew"><s:text name="msg.no.bill.payment.search"/> </div>
 			</s:if>
 			<s:else>
-				<div class="subheadnew">Voucher Search</div>
+				<div class="subheadnew"><s:text name="lbl.voucher.search"/> </div>
 			</s:else>
 			<table align="center" width="100%" cellpadding="0" cellspacing="0">
 				<tr>
@@ -104,11 +104,11 @@
 					<td class="bluebox"><s:text name="voucher.type" /></td>
 					<td class="bluebox"><s:select name="type" id="type"
 							list="dropdownData.typeList" headerKey="-1"
-							headerValue="----Choose----"
+							headerValue="%{getText('lbl.choose.options')}"
 							onchange="loadVoucherNames(this.value)" /></td>
 					<td class="bluebox"><s:text name="voucher.name" /></td>
 					<td class="bluebox"><s:select name="name" id="name"
-							list="%{nameList}" headerKey="-1" headerValue="----Choose----" /></td>
+							list="%{nameList}" headerKey="-1" headerValue="%{getText('lbl.choose.options')}" /></td>
 				</tr>
 				<tr>
 					<td style="width: 5%"></td>
@@ -147,13 +147,13 @@
 			</table>
 			<br />
 			<div class="subheadsmallnew"></div>
-			<div align="left" class="mandatory1">Either Voucher Number Or Mandatory Fields(*) Are Required</div>
+			<div align="left" class="mandatory1"><s:text name="msg.either.voucher.number.or.mendatory.field.required"/> </div>
 		</div>
 	
 		<div align="center" class="buttonbottom">
-			<s:submit value="Search" onclick="return validateAndSubmit()"
+			<s:submit key="lbl.search" onclick="return validateAndSubmit()"
 				cssClass="buttonsubmit" />
-			<input type="button" value="Close"
+			<input type="button" value='<s:text name="lbl.close"/>'
 				onclick="javascript:window.parent.postMessage('close','*');" class="button" />
 		</div>
 		<br />
@@ -206,15 +206,15 @@
 					<table width="100%" border="0" align="center" cellpadding="0"
 						cellspacing="0" class="tablebottom">
 						<tr>
-							<th class="bluebgheadtd">Sl.No.</th>
-							<th class="bluebgheadtd">Voucher Number</th>
-							<th class="bluebgheadtd">Type</th>
-							<th class="bluebgheadtd">Name</th>
-							<th class="bluebgheadtd">Voucher Date</th>
-							<th class="bluebgheadtd">Fund Name</th>
-							<th class="bluebgheadtd">Department Name</th>
-							<th class="bluebgheadtd">Amount(Rs)</th>
-							<th class="bluebgheadtd">Status</th>
+							<th class="bluebgheadtd"><s:text name="lbl.sr.no"/></th>
+							<th class="bluebgheadtd"><s:text name="lbl.voucher.number"/></th>
+							<th class="bluebgheadtd"><s:text name="lbl.type"/>Type</th>
+							<th class="bluebgheadtd"><s:text name="lbl.name"/></th>
+							<th class="bluebgheadtd"><s:text name="lbl.voucher.date"/></th>
+							<th class="bluebgheadtd"><s:text name="lbl.fund.name"/></th>
+							<th class="bluebgheadtd"><s:text name="lbl.department.name"/></th>
+							<th class="bluebgheadtd"><s:text name="lbl.amount"/></th>
+							<th class="bluebgheadtd"><s:text name="lbl.status"/></th>
 							<!-- <th class="bluebgheadtd">Source</th> -->
 						</tr>
 						<c:set var="trclass" value="greybox" />
@@ -275,14 +275,14 @@
 			if(selected==-1)
 				{
 				document.getElementById('name').options.length=0;
-				document.getElementById('name').options[0]= new Option('--------Choose--------','0');
+				document.getElementById('name').options[0]= new Option('<s:text name="lbl.choose.options"/>','0');
 				}
 		<s:iterator value="voucherTypes" var="obj">
 		  s='<s:property value="#obj"/>';
 		 if(selected==s)
 		 {
 		document.getElementById('name').options.length=0;
-		document.getElementById('name').options[0]= new Option('--------Choose--------','0');
+		document.getElementById('name').options[0]= new Option('<s:text name="lbl.choose.options"/>','0');
 
 		 <s:iterator value="voucherNames[#obj]" status="stat" var="names">
 		 document.getElementById('name').options[<s:property value="#stat.index+1"/>]= new Option('<s:property value="#names"/>','<s:property value="#names"/>');
@@ -349,20 +349,21 @@
 			var toDate=document.getElementById('toDate').value;
 			var fundId=document.getElementById('fundId').value;
 			var voucherNumber=document.getElementById('voucherNumber').value;
+			console.log('fromDate : ',fromDate);
 			if(!DateValidation(fromDate,toDate))
 				return false;
 			if(fromDate == "" && voucherNumber!=""){
-				bootbox.alert("Please select from date");
+				bootbox.alert("<s:text name='msg.please.select.from.date'/>");
 				return false;
 				}
 			
-			if(toDate == "" && voucherNumber!=""){
-				bootbox.alert("Please select to date");
+			if(toDate == "" && voucherNumber==""){
+				bootbox.alert("<s:text name='msg.please.select.to.date'/>");
 				return false;
 				}
 
-			if(fundId == "-1" && voucherNumber!=""){
-				bootbox.alert("Please select fund");
+			if(fundId == "-1" && voucherNumber==""){
+				bootbox.alert("<s:text name='msg.please.select.fund'/>");
 				return false;
 				}
 			
@@ -381,7 +382,7 @@
 			{
 			document.getElementById('type').disabled=true;
 			}
-			document.title="Non Bill Payment Search";
+			document.title="<s:text name='msg.no.bill.payment.search'/>";
 		}
 		
 		function changeField()

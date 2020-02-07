@@ -167,13 +167,13 @@
 </tr>
 <tr id="interFundRow3" style="visibility: hidden">
 	<td class="greybox"></td>
-	<td class="greybox"><s:text name="Source Inter Fund code" />
+	<td class="greybox"><s:text name="lbl.source.inter.fund.code" />
 	<td class="greybox"><span class="mandatory1">*</span> <s:select
 			name="contraBean.sourceGlcode" id="sourceGlcode"
 			list="dropdownData.interFundList" listKey="glcode"
 			listValue="glcode+'-'+name" headerKey="-1"
 			headerValue="----Choose----" /></td>
-	<td class="greybox"><s:text name="Destination Inter Fund code" /></td>
+	<td class="greybox"><s:text name="lbl.destination.inter.fund.code" /></td>
 	<td class="greybox"><span class="mandatory1">*</span> <s:select
 			name="contraBean.destinationGlcode" id="destinationGlcode"
 			list="dropdownData.interFundList" listKey="glcode"

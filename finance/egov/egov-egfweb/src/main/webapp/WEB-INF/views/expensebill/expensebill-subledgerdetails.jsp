@@ -52,16 +52,16 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <div class="panel panel-primary" data-collapsed="0">
 	<div class="panel-heading custom_form_panel_heading">
-		<div class="panel-title"><spring:message  code="lbl.subledger.details"/></div>
+		<div class="panel-title"><spring:message  code="lbl.subledger.details" text="SubLedger Details"/></div>
 	</div>
 	<div  style="padding: 0 15px;">
 		<div class="form-group">
 			<label class="col-sm-3 control-label text-right">
-				<spring:message code="lbl.subledgertype" />
+				<spring:message code="lbl.subledgertype" text="SubLedger Type"/>
 			</label>
 			<div class="col-sm-3 add-margin">
 				<select name="subLedgerType" data-first-option="false" id="subLedgerType" class="form-control" >
-					<option value=""><spring:message code="lbl.select" /></option>
+					<option value=""><spring:message code="lbl.select" text="Select"/></option>
 					<c:forEach items="${subLedgerTypes}" var="subLedgerType">
 						<option value="${subLedgerType.id }">${subLedgerType.name}</option>
 					</c:forEach>
@@ -69,7 +69,7 @@
 			</div>
 			<div id="subLedgerCodeSection" class="display-hide">
 				<label class="col-sm-2 control-label text-right" id="subLedgerNameLabel">
-					<spring:message code="lbl.code" />
+					<spring:message code="lbl.code" text="Code" />
 				</label>
 				<div class="col-sm-3 add-margin">
 					<input type="hidden" name="detailkeyId" id="detailkeyId">
@@ -80,7 +80,7 @@
 		
 		<div class="form-group">
 			<label class="col-sm-3 control-label text-right">
-				<spring:message code="lbl.payto" /> <span class="mandatory"></span>
+				<spring:message code="lbl.payto" text="Pay To"/> <span class="mandatory"></span>
 			</label>
 			<div class="col-sm-3 add-margin">
 				<form:input class="form-control" id="payTo" path="egBillregistermis.payto" maxlength="350" required="required" />

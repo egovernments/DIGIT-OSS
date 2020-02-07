@@ -52,7 +52,7 @@
 <div class="panel panel-primary" data-collapsed="0">
 	<div class="panel-heading custom_form_panel_heading">
 		<div class="panel-title">
-			<spring:message code="lbl.accountdetails" />
+			<spring:message code="lbl.accountdetails" text="Account Details"/>
 		</div>
 	</div>
 	
@@ -60,11 +60,11 @@
 		<table class="table table-bordered" id="tblaccountdetails">
 			<thead>
 				<tr>
-					<th><spring:message code="lbl.account.code"/></th>
-					<th><spring:message code="lbl.account.head"/></th>
-					<th><spring:message code="lbl.debit.amount"/></th>
-					<th><spring:message code="lbl.credit.amount"/></th>
-					<th><spring:message code="lbl.action"/></th> 		
+					<th><spring:message code="lbl.account.code" text="Account Code"/></th>
+					<th><spring:message code="lbl.account.head" text="Account Head"/></th>
+					<th><spring:message code="lbl.debit.amount" text="Debit Amount"/></th>
+					<th><spring:message code="lbl.credit.amount" text="Credit Amount"/></th>
+					<th><spring:message code="lbl.action" text="Action"/></th> 		
 				</tr>
 			</thead>
 			<tbody>

@@ -47,9 +47,8 @@
  */
 
 jQuery(document).ready(function(){
-
+	console.log("******************patternvalidation.js file loaded*********************");
 	patternvalidation(); 
-	
 });
 
 //Add class to input field "patternvalidation" and add custom data attribute(eg: data-pattern="alphabets")
@@ -114,7 +113,7 @@ var regexp_special_name = /[^a-zA-Z0-9 ()/-]/g ;
 var regexp_code = /[^a-zA-Z0-9_-]/g ;
 
 function patternvalidation(){
-	
+	console.log("********************patternvalidation called************************")
 	jQuery('.patternvalidation').on("input", function(){
 		
 		var fn = window[jQuery(this).data('pattern')];

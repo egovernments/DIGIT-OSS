@@ -53,7 +53,7 @@
 
 <div class="panel-heading custom_form_panel_heading">
 	<div class="panel-title">
-		<spring:message code="lbl.netpayable" />
+		<spring:message code="lbl.netpayable" text="Net Payable"/>
 	</div>
 </div>
 
@@ -61,8 +61,8 @@
 	<table class="table table-bordered" id="tblnetpayable">
 		<thead>
 			<tr>
-				<th><spring:message code="lbl.account.code" /></th>
-				<th><spring:message code="lbl.credit.amount" /></th>
+				<th><spring:message code="lbl.account.code" text="Account Code"/></th>
+				<th><spring:message code="lbl.credit.amount" text="Credit Amount"/></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -75,13 +75,13 @@
 							</c:forEach>
 						</c:if>
 						<c:if test="${fn:length(netPayableCodes) > 1}">
-							<form:option value=""> <spring:message code="lbl.select" /> </form:option>
+							<form:option value=""> <spring:message code="lbl.select"  text="Select"/> </form:option>
 							<c:forEach items="${netPayableCodes}" var="coa">
 								<form:option value="${coa.id}"> ${coa.glcode} - ${coa.name } </form:option>
 							</c:forEach>
 						</c:if>
 						<c:if test="${fn:length(netPayableCodes) == 0}">
-							<form:option value=""> <spring:message code="lbl.select" /> </form:option>
+							<form:option value=""> <spring:message code="lbl.select" text="Select"/> </form:option>
 						</c:if>
 					</form:select>
 				</td>

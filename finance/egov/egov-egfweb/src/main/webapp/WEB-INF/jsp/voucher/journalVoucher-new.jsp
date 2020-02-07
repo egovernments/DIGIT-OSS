@@ -81,7 +81,7 @@
 				<s:actionmessage /></font>
 		</span>
 		<div class="formmainbox">
-			<div class="subheadnew">Journal Voucher</div>
+			<div class="subheadnew"><s:text name="lbl.journal.voucher"/></div>
 			<div id="listid" style="display: block">
 				<div align="center">
 					<font style='color: red; font-weight: bold'>
@@ -131,7 +131,7 @@
 				<br />
 				<div id="labelAD" align="center">
 					<table width="80%" border=0 id="labelid">
-						<th>Account Details</th>
+						<th><s:text name="lbl.account.details"/> </th>
 					</table>
 				</div>
 				<div class="yui-skin-sam" align="center">
@@ -145,7 +145,7 @@
 				<br />
 				<div id="labelSL" align="center">
 					<table width="80%" border=0 id="labelid">
-						<th>Sub-Ledger Details</th>
+						<th><s:text name="lbl.subledger.details"/> </th>
 					</table>
 				</div>
 
@@ -274,12 +274,12 @@
 		console.log(vhType);
 		
 		if(vhType =='-1' )	{
-			document.getElementById('lblError').innerHTML = "Please select voucher sub type ";
+			document.getElementById('lblError').innerHTML = "<s:text name='msg.please.select.voucher.sub.type'/> ";
 			document.getElementById('voucherDate').focus();
 			return false;
 		}
 		if(vhDate == '' )	{
-			document.getElementById('lblError').innerHTML = "Please enter the Voucher date ";
+			document.getElementById('lblError').innerHTML = "<s:text name='msg.please.enter.voucher.date'/> ";
 			document.getElementById('voucherDate').focus();
 			return false;
 		}
@@ -290,13 +290,13 @@
 	    var voucherDate = new Date(voucheryear, vouchermonth - 1, voucherdate);
 	    var today = new Date();
 	    if (voucherDate > today) {
-	        bootbox.alert("Voucher date is greater than today's date ");
+	        bootbox.alert("<s:text name='msg.voucher.date.greater.than.today.date'/> ");
 	        return false
 	    }
 		var vVoucherSubType = document.getElementById('vType').value;
 		if(vVoucherSubType != 'JVGeneral' && vVoucherSubType != '-1' )	{
 			if(document.getElementById('voucherTypeBean.partyName').value == '' ) {
-				document.getElementById('lblError').innerHTML = "Please enter a Party Name ";
+				document.getElementById('lblError').innerHTML = "<s:text name='msg.please.enter.party.name'/> ";
 				document.getElementById('voucherTypeBean.partyName').focus();
 				return false;
 			}
@@ -308,7 +308,7 @@
 	    var myBillDate = new Date(year, month - 1, date);
 
 	    if (myBillDate > today) {
-	        bootbox.alert("Bill date is greater than today's date ");
+	        bootbox.alert("<s:text name='msg.bill.date.greater.than.today.date'/> ");
 	        return false
 	    }
 	    var partyBillDate = document.getElementById("partyBillDate").value;
@@ -318,7 +318,7 @@
 	    var myPartyBillDate = new Date(partyyear, partymonth - 1, partydate);
 
 	    if (myPartyBillDate > today) {
-	        bootbox.alert("Party bill date is greater than today's date ");
+	        bootbox.alert("<s:text name='msg.party.bill.date.greater.than.today.date'/> ");
 	        return false
 	    }
 		
@@ -326,76 +326,76 @@
 		<s:if test="%{isFieldMandatory('vouchernumber')}"> 
 			 if(null != document.getElementById('voucherNumber') && document.getElementById('voucherNumber').value.trim().length == 0 ){
 
-				document.getElementById('lblError').innerHTML = "Please enter the Voucher number";
+				document.getElementById('lblError').innerHTML = "<s:text name='msg.please.enter.voucher.number'/>";
 				return false;
 			 }
 		 </s:if>
 		 <s:if test="%{isFieldMandatory('voucherdate')}"> 
 				 if(null != document.getElementById('voucherDate') && document.getElementById('voucherDate').value.trim().length == 0){
 
-					document.getElementById('lblError').innerHTML = "Please enter the Voucher date";
+					document.getElementById('lblError').innerHTML = "<s:text name='msg.please.enter.voucher.date'/>";
 					return false;
 				 }
 			 </s:if>    
 		 	<s:if test="%{isFieldMandatory('fund')}"> 
 				 if(null != document.getElementById('fundId') && document.getElementById('fundId').value == -1){
-					document.getElementById('lblError').innerHTML = "Please select a Fund";
+					document.getElementById('lblError').innerHTML = "<s:text name='msg.please.select.fund'/>";
 					return false;
 				 }    
 			 </s:if>   
 			 <s:if test="%{isFieldMandatory('function')}">                        
 			 if(null != document.getElementById('vouchermis.function') && document.getElementById('vouchermis.function').value == -1){
 
-				document.getElementById('lblError').innerHTML = "Please select a Function";
+				document.getElementById('lblError').innerHTML = "<s:text name='msg.please.select.function'/>";
 				return false;
 			 }
 		 </s:if>
 			<s:if test="%{isFieldMandatory('department')}"> 
 				 if(null!= document.getElementById('vouchermis.departmentid') && document.getElementById('vouchermis.departmentid').value == -1){
 
-					document.getElementById('lblError').innerHTML = "Please select a Department";
+					document.getElementById('lblError').innerHTML = "<s:text name='msg.please.select.department'/>";
 					return false;
 				 }
 			</s:if>
 			<s:if test="%{isFieldMandatory('scheme')}"> 
 				 if(null!=document.getElementById('schemeid') &&  document.getElementById('schemeid').value == -1){
 
-					document.getElementById('lblError').innerHTML = "Please select a Scheme";
+					document.getElementById('lblError').innerHTML = "<s:text name='msg.please.select.scheme'/>";
 					return false;
 				 }
 			</s:if>
 			<s:if test="%{isFieldMandatory('subscheme')}"> 
 				 if(null!= document.getElementById('subschemeid') && document.getElementById('subschemeid').value == -1){
 
-					document.getElementById('lblError').innerHTML = "Please select a Subscheme";
+					document.getElementById('lblError').innerHTML = "<s:text name='msg.please.select.sub.scheme'/>";
 					return false;
 				 }
 			</s:if>
 			<s:if test="%{isFieldMandatory('functionary')}"> 
 				 if(null!=document.getElementById('vouchermis.functionary') &&  document.getElementById('vouchermis.functionary').value == -1){
 
-					document.getElementById('lblError').innerHTML = "Please select a Functionary";
+					document.getElementById('lblError').innerHTML = "<s:text name='msg.please.select.functionary'/>";
 					return false;
 				 }
 			</s:if>
 			<s:if test="%{isFieldMandatory('fundsource')}"> 
 				 if(null !=document.getElementById('fundsourceId') &&  document.getElementById('fundsourceId').value == -1){
 
-					document.getElementById('lblError').innerHTML = "Please select a Fundsource";
+					document.getElementById('lblError').innerHTML = "<s:text name='msg.please.select.fundsource'/>";
 					return false;
 				}
 			</s:if>
 			<s:if test="%{isFieldMandatory('field')}"> 
 				 if(null!= document.getElementById('vouchermis.divisionid') && document.getElementById('vouchermis.divisionid').value == -1){
 
-					document.getElementById('lblError').innerHTML = "Please select a Field";
+					document.getElementById('lblError').innerHTML = "<s:text name='msg.please.select.field'/>";
 					return false;
 				 }
 			</s:if>
 
 			if(null!= document.getElementById('vouchermis.divisionid') && document.getElementById('vouchermis.divisionid').value == -1){
 
-				document.getElementById('lblError').innerHTML = "Please select a Field";
+				document.getElementById('lblError').innerHTML = "<s:text name='msg.please.select.field'/>";
 				return false;
 			 }	
 			

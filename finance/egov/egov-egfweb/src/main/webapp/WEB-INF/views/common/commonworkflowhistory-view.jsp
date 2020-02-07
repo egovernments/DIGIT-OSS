@@ -54,7 +54,7 @@
 <div class="panel panel-primary" data-collapsed="0">
 	<div class="panel-heading slide-history-menu">
 		<div class="panel-title">
-			<spring:message  code="lbl.apphistory"/>
+			<spring:message  code="lbl.apphistory" text="Workflow History"/>
 		</div>
 		<div class="history-icon">
 			<i class="fa fa-angle-up fa-2x" id="toggle-his-icon"></i>
@@ -62,12 +62,12 @@
 	</div>
 <div class="panel-body history-slide display-hide">
 	<div class="row add-margin hidden-xs visible-sm visible-md visible-lg header-color">
-		<div class="col-sm-2 col-xs-6 add-margin"><spring:message code="lbl.date"/></div>
-		<div class="col-sm-2 col-xs-6 add-margin"><spring:message code="lbl.updatedby"/></div>
-		<div class="col-sm-2 col-xs-6 add-margin"><spring:message code="lbl.view.status" /></div>
-		<div class="col-sm-2 col-xs-6 add-margin"><spring:message code="lbl.currentowner"/></div>
-		<div class="col-sm-2 col-xs-6 add-margin"><spring:message code="lbl.department" /></div>
-		<div class="col-sm-2 col-xs-6 add-margin"><spring:message code="lbl.comments" /></div>
+		<div class="col-sm-2 col-xs-6 add-margin"><spring:message code="lbl.date" text="Date"/></div>
+		<div class="col-sm-2 col-xs-6 add-margin"><spring:message code="lbl.updatedby" text="Updated By"/></div>
+		<div class="col-sm-2 col-xs-6 add-margin"><spring:message code="lbl.view.status" text="Status"/></div>
+		<div class="col-sm-2 col-xs-6 add-margin"><spring:message code="lbl.currentowner" text="Current Owner"/></div>
+		<div class="col-sm-2 col-xs-6 add-margin"><spring:message code="lbl.department" text="Department"/></div>
+		<div class="col-sm-2 col-xs-6 add-margin"><spring:message code="lbl.comments" text="Comments" /></div>
 	</div>
 		<c:choose>
 			<c:when test="${!workflowHistory.isEmpty()}">
@@ -97,7 +97,7 @@
 				</c:forEach>
 			</c:when>
 			<c:otherwise>
-				<div class="col-md-3 col-xs-6 add-margin"><spring:message code="lbl.nohistorydetails.code"/></div>
+				<div class="col-md-3 col-xs-6 add-margin"><spring:message code="lbl.nohistorydetails.code" text="No History Details"/></div>
 			</c:otherwise>
 		</c:choose>
 	</div>

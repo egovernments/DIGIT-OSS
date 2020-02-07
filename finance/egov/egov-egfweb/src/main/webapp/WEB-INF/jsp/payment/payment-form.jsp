@@ -77,7 +77,7 @@
 			<span class="mandatory1"> <s:actionerror /> <s:fielderror />
 				<s:actionmessage />
 			</span>
-			<div class="subheadnew">Bill Payment</div>
+			<div class="subheadnew"><s:text name="lbl.bill.payment"/> </div>
 			<div id="budgetSearchGrid" style="display: block; width: 100%; margin-top:-25px">
 				<table width="100%" cellpadding="0" cellspacing="0" border="0">
 					<tr>
@@ -89,13 +89,13 @@
 										<td>
 											<div class="tabber">
 												<div class="tabbertab">
-													<h3 style="margin-left:25px">Payment Details</h3>
+													<h3 style="margin-left:25px"><s:text name="payment.heading"/> </h3>
 													<span>
 														<table width="100%" border="0" cellspacing="0"
 															cellpadding="0">
 															<tr>
 																<td colspan="6"><div class="subheadsmallnew"
-																		style="border: 0;">Payment Details</div></td>
+																		style="border: 0;"><s:text name="payment.heading"/></div></td>
 															</tr>
 															<tr>
 																<td width="9%" class="bluebox"><s:hidden
@@ -138,7 +138,7 @@
 																	<td class="greybox"><s:select name="department"
 																			id="department" list="dropdownData.departmentList"
 																			listKey="code" listValue="name" headerKey="-1"
-																			headerValue="----Choose----"
+																			headerValue="%{getText('lbl.choose.options')}"
 																			value="%{billregister.egBillregistermis.departmentcode}" /></td>
 																	<%-- <s:property
 																	value="%{billregister.egBillregistermis.egDepartment.name}" /> --%>
@@ -201,7 +201,7 @@
 																	<td class="greybox"><s:select name="function"
 																			id="function" list="dropdownData.functionList"
 																			listKey="id" listValue="name" headerKey="-1"
-																			headerValue="----Choose----"
+																			headerValue="%{getText('lbl.choose.options')}"
 																			value="%{billregister.egBillregistermis.function.id}" />
 																		<%--  <s:property
 																		value="%{billregister.egBillregistermis.function.name}" /> --%></td>
@@ -289,7 +289,7 @@
 																	<td class="bluebox"><s:select name="bankbranch"
 																			id="bankbranch" list="dropdownData.bankbranchList"
 																			listKey="id" listValue="bank.name+'-'+branchname"
-																			headerKey="-1" headerValue="----Choose----"
+																			headerKey="-1" headerValue="%{getText('lbl.choose.options')}"
 																			onchange="loadBankAccount(this)"
 																			value="%{bankbranch}" /></td>
 																	<egov:ajaxdropdown id="bankaccount"
@@ -302,7 +302,7 @@
 																			name="bankaccount" id="bankaccount"
 																			list="dropdownData.bankaccountList" listKey="id"
 																			listValue="accountnumber+'---'+accounttype"
-																			headerKey="-1" headerValue="----Choose----"
+																			headerKey="-1" headerValue="%{getText('lbl.choose.options')}"
 																			onChange="populateAvailableBalance(this);"
 																			value="%{bankaccount}" /></td>
 																	<egov:updatevalues id="availableBalance"
@@ -362,13 +362,12 @@
 													</span>
 												</div>
 												<div class="tabbertab">
-													<h3 style="margin-left:25px">Bill Details</h3>
+													<h3 style="margin-left:25px"><s:text name="lbl.bill.details"/> </h3>
 													<span>
 														<table align="center" border="0" cellpadding="0"
 															cellspacing="0" class="newtable">
 															<tr>
-																<td colspan="7"><div class="subheadsmallnew">Bill
-																		Details</div></td>
+																<td colspan="7"><div class="subheadsmallnew"><s:text name="lbl.bill.details"/></div></td>
 															</tr>
 															<tr>
 																<td colspan="7">
@@ -376,16 +375,15 @@
 																		<table id="billdetailsTable" align="center" border="0"
 																			cellpadding="0" cellspacing="0" width="100%">
 																			<tr>
-																				<th class="bluebgheadtdnew">Bill Number</th>
-																				<th class="bluebgheadtdnew">Bill Date</th>
-																				<th class="bluebgheadtdnew">Bill Voucher Number
-																				</th>
-																				<th class="bluebgheadtdnew">Bill Voucher Date</th>
-																				<th class="bluebgheadtdnew">Payee Name</th>
-																				<th class="bluebgheadtdnew">Net Amount</th>
-																				<th class="bluebgheadtdnew">Earlier Payment</th>
-																				<th class="bluebgheadtdnew">Payable Amount</th>
-																				<th class="bluebgheadtdnew">Payment Amount</th>
+																				<th class="bluebgheadtdnew"><s:text name="lbl.bill.number"/></th>
+																				<th class="bluebgheadtdnew"><s:text name="lbl.bill.date"/></th>
+																				<th class="bluebgheadtdnew"><s:text name="lbl.bill.voucher.number"/></th>
+																				<th class="bluebgheadtdnew"><s:text name="lbl.bill.voucher.date"/></th>
+																				<th class="bluebgheadtdnew"><s:text name="lbl.payee.name"/></th>
+																				<th class="bluebgheadtdnew"><s:text name="lbl.net.amount"/></th>
+																				<th class="bluebgheadtdnew"><s:text name="lbl.earlier.amount"/></th>
+																				<th class="bluebgheadtdnew"><s:text name="lbl.payable.amount"/></th>
+																				<th class="bluebgheadtdnew"><s:text name="lbl.payment.amount"/></th>
 																			</tr>
 																			<s:if test="%{billList.size>0}">
 																				<s:iterator var="p" value="billList" status="s">
@@ -482,8 +480,7 @@
 
 																			<tr>
 																				<td style="text-align: right" colspan="8"
-																					class="blueborderfortdnew"><strong>Grand
-																						Total</strong></td>
+																					class="blueborderfortdnew"><strong><s:text name="lbl.grand.total"/> </strong></td>
 																				<td style="text-align: right"
 																					class="blueborderfortdnew"><div align="center">
 																						<input type="text" name="grandTotal"
@@ -574,12 +571,12 @@
 			var putBackAmount = parseFloat(document.getElementById('payableAmt'+index).value);
 			var paymentAmount = obj.value;
 			if(paymentAmount == '' || isNaN(paymentAmount)) {
-				bootbox.alert('Payment amount should be a numeric value.');
+				bootbox.alert('<s:text name="msg.payment.amount.should.be.numeric.value"/> ');
 				obj.value = putBackAmount.toFixed(vFixedDecimal);
 			}
 			
 			if(paymentAmount > parseFloat(document.getElementById('payableAmt'+index).value) ) {
-				bootbox.alert('Payment amount should not be greater than Payable amount');
+				bootbox.alert('<s:text name="msg.payment.should.not.be.greater.than.payable.amount"/>');
 				obj.value = putBackAmount.toFixed(vFixedDecimal);
 			}
 			
@@ -598,7 +595,7 @@
 		function populateAvailableBalance(accnumObj) 
 		{
 					if (document.getElementById('voucherdate').value == '') {
-						bootbox.alert("Please Select the Voucher Date!!");
+						bootbox.alert("<s:text name='msg.please.select.voucher.date'/>");
 						accnumObj.options.value = -1;
 						return;
 					}
@@ -650,26 +647,26 @@
 			var noBalanceCheck='<s:text name="payment.none"/>';
 			if(dom.get('department').value=='-1')
 			{
-				bootbox.alert("Please Select the Department!!");
+				bootbox.alert("<s:text name='msg.please.select.department'/>");
 				undoLoadingMask();
 				return false;
 			}
 			if(dom.get('function').value=='-1')
 			{
-				bootbox.alert("Please Select the Function!!");
+				bootbox.alert("<s:text name='msg.please.select.function'/>");
 				undoLoadingMask();
 				return false;
 			}
 			
 			if(dom.get('vouchernumber') && dom.get('vouchernumber').value=='')
 			{
-				bootbox.alert('Please Enter voucher number');
+				bootbox.alert('<s:text name="msg.please.enter.voucher.number"/>');
 				undoLoadingMask();
 				return false;
 			}
 			if(dom.get('voucherdate').value=='')
 			{
-				bootbox.alert("Please Select the Voucher Date!!");
+				bootbox.alert("<s:text name='msg.please.select.voucher.date'/>");
 				undoLoadingMask();
 				return false;
 			}
@@ -677,13 +674,13 @@
 			{
 				if(dom.get('bankbranch').options[dom.get('bankbranch').selectedIndex].value==-1)
 				{
-					bootbox.alert("Please Select the Bank!!");
+					bootbox.alert("<s:text name='msg.please.select.bank'/>");
 					undoLoadingMask();
 					return false;
 				}
 				if(dom.get('bankaccount').options[dom.get('bankaccount').selectedIndex].value==-1)
 				{
-					bootbox.alert("Please Select the Bank Account");
+					bootbox.alert("<s:text name='msg.please.select.bank.account'/>");
 					undoLoadingMask();
 					return false;
 				}
@@ -691,7 +688,7 @@
 		
 			if(document.getElementById('grandTotal').value==0 || document.getElementById('grandTotal').value=='NaN')
 			{
-				bootbox.alert('Payment Amount should be greater than zero!');
+				bootbox.alert('<s:text name="msg.payment.amount.should.be.greater.than.zero"/>');
 				dom.get('tabber1').onclick();
 				undoLoadingMask();
 				return false;
@@ -701,7 +698,7 @@
 				{
 					if(dom.get("newPartyName").value=='')
 					{
-						bootbox.alert('Enter Party Name to Chnage');
+						bootbox.alert('<s:text name="msg.enter.party.name.to.change"/>');
 						dom.get("newPartyName").focus();
 						undoLoadingMask();
 						return false;
@@ -718,12 +715,12 @@
 			 document.forms[0].submit();
 			}
 			else if(!balanceCheck() && jQuery("#bankBalanceCheck").val()==balanceCheckMandatory){
-					 bootbox.alert("Insufficient Bank Balance.");
+					 bootbox.alert("<s:text name='msg.insufficient.bank.balance'/>");
 					 undoLoadingMask();
 					 return false;
 					}
 			else if(!balanceCheck() && jQuery("#bankBalanceCheck").val()==balanceCheckWarning){
-					 var msg = confirm("Insufficient Bank Balance. Do you want to process ?");
+					 var msg = confirm("<s:text name='msg.insuff.bank.bal.do.you.want.to.process'/>");
 					 if (msg == true) {
 						 billIdsToPaymentAmountsMap('billList','billIdsToPaymentAmountsMapId');
 						 document.forms[0].action='${pageContext.request.contextPath}/payment/payment-create.action';
@@ -765,7 +762,7 @@
 		{
 			if(obj.value.length>250)
 			{
-				bootbox.alert('Max 250 characters are allowed for comments. Remaining characters are truncated.')
+				bootbox.alert('<s:text name="msg.max.250.char.allowed.for.comment"/>')
 				obj.value = obj.value.substring(1,250);
 			}
 		}

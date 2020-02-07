@@ -56,14 +56,14 @@
 	href="/services/EGF/resources/css/ccMenu.css?rnd=${app_release_no}" />
 <s:if
 	test="%{disableExpenditureType == true && enablePensionType == false}">
-	<title>Salary Bill Payment Search</title>
+	<title><s:text name="lbl.salary.bill.payment.search"/> </title>
 </s:if>
 <s:elseif
 	test="%{disableExpenditureType == true && enablePensionType == true}">
-	<title>Pension Bill Payment Search</title>
+	<title><s:text name="lbl.pension.bill.payment.search"/> </title>
 </s:elseif>
 <s:else>
-	<title>Bill Payment Search</title>
+	<title><s:text name="lbl.bill.payment.search"/> </title>
 </s:else>
 </head>
 <body>
@@ -77,10 +77,10 @@
 		<div class="formmainbox">
 			<div class="subheadnew">
 				<s:if
-					test="%{disableExpenditureType == true && enablePensionType == false}">Salary Bill Payment Search</s:if>
+					test="%{disableExpenditureType == true && enablePensionType == false}"><s:text name="lbl.salary.bill.payment.search"/></s:if>
 				<s:elseif
-					test="%{disableExpenditureType == true && enablePensionType == true}">Pension Bill Payment Search</s:elseif>
-				<s:else>Bill Payment Search</s:else>
+					test="%{disableExpenditureType == true && enablePensionType == true}"><s:text name="lbl.pension.bill.payment.search"/></s:elseif>
+				<s:else><s:text name="lbl.bill.payment.search"/></s:else>
 			</div>
 			<table align="center" width="100%" cellpadding="0" cellspacing="0">
 				<tr>
@@ -147,9 +147,9 @@
 			value="%{enablePensionType}" />
 	</s:form>
 	<div align="center" class="buttonbottom">
-		<input type="submit" class="buttonsubmit" value="Search"
+		<input type="submit" class="buttonsubmit" value="<s:text name='lbl.search'/>"
 			id="searchBtn" name="searchBtn" onclick="return search();" /> <input
-			type="button" value="Close" onclick="window.parent.postMessage('close','*');window.close();"
+			type="button" value="<s:text name='lbl.close'/>" onclick="window.parent.postMessage('close','*');window.close();"
 			class="button" />
 	</div>
 	<script>

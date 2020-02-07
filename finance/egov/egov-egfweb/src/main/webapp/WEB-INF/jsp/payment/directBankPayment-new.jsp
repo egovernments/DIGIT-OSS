@@ -51,7 +51,7 @@
 <%@ include file="/includes/taglibs.jsp"%>
 <%@ page language="java"%>
 <head>
-<title>Direct Bank Payment</title>
+<title><s:text name="lbl.direct.bank.payment"/> </title>
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/resources/javascript/voucherHelper.js?rnd=${app_release_no}"></script>
 <script type="text/javascript"
@@ -122,27 +122,27 @@
 			<s:if test='%{isRestrictedtoOneFunctionCenter == true}'>                                   
 			var voucherDetailColumns = [                   
 				{key:"functionid",hidden:true,  formatter:createTextFieldFormatterJV(VOUCHERDETAILLIST,".functionIdDetail","hidden")},
-				{key:"function",hidden:true,label:'Function Name', formatter:createTextFieldFormatterForFunctionJV(VOUCHERDETAILLIST,".functionDetail","hidden")},    
+				{key:"function",hidden:true,label:'<s:text name="lbl.function.name"/>', formatter:createTextFieldFormatterForFunctionJV(VOUCHERDETAILLIST,".functionDetail","hidden")},    
 				{key:"glcodeid",hidden:true, formatter:createTextFieldFormatterJV(VOUCHERDETAILLIST,".glcodeIdDetail","hidden")},
-				{key:"glcode",label:'Account Code <span class="mandatory1">*</span>',   formatter:createTextFieldFormatterJV(VOUCHERDETAILLIST,".glcodeDetail","text")},
-				{key:"accounthead", label:'Account Head',formatter:createLongTextFieldFormatterJV(VOUCHERDETAILLIST,".accounthead")},				
-				{key:"debitamount",label:'Debit Amount', formatter:createAmountFieldFormatterJV(VOUCHERDETAILLIST,".debitAmountDetail","updateDebitAmountJV()")}, 
-				{key:"creditamount",label:'Credit Amount',formatter:createAmountFieldFormatterJV(VOUCHERDETAILLIST,".creditAmountDetail","updateCreditAmountJV()")},
-				{key:'Add',label:'Add',formatter:createAddImageFormatter("${pageContext.request.contextPath}")},
-				{key:'Delete',label:'Delete',formatter:createDeleteImageFormatter("${pageContext.request.contextPath}")}
+				{key:"glcode",label:'<s:text name="lbl.account.code"/> <span class="mandatory1">*</span>',   formatter:createTextFieldFormatterJV(VOUCHERDETAILLIST,".glcodeDetail","text")},
+				{key:"accounthead", label:'<s:text name="lbl.account.head"/>',formatter:createLongTextFieldFormatterJV(VOUCHERDETAILLIST,".accounthead")},				
+				{key:"debitamount",label:'<s:text name="lbl.debit.amount"/>', formatter:createAmountFieldFormatterJV(VOUCHERDETAILLIST,".debitAmountDetail","updateDebitAmountJV()")}, 
+				{key:"creditamount",label:'<s:text name="lbl.credit.amount"/>',formatter:createAmountFieldFormatterJV(VOUCHERDETAILLIST,".creditAmountDetail","updateCreditAmountJV()")},
+				{key:'Add',label:'<s:text name="lbl.add"/>',formatter:createAddImageFormatter("${pageContext.request.contextPath}")},
+				{key:'Delete',label:'<s:text name="lbl.delete"/>',formatter:createDeleteImageFormatter("${pageContext.request.contextPath}")}
 			];
 			</s:if>
 			<s:else>
 			var voucherDetailColumns = [ 
        			{key:"functionid",hidden:true,  formatter:createTextFieldFormatterJV(VOUCHERDETAILLIST,".functionIdDetail","hidden")},
-       			{key:"function",label:'Function Name', formatter:createTextFieldFormatterForFunctionJV(VOUCHERDETAILLIST,".functionDetail","text")},         
+       			{key:"function",label:'<s:text name="lbl.function.name"/>', formatter:createTextFieldFormatterForFunctionJV(VOUCHERDETAILLIST,".functionDetail","text")},         
        			{key:"glcodeid",hidden:true, formatter:createTextFieldFormatterJV(VOUCHERDETAILLIST,".glcodeIdDetail","hidden")},
-       			{key:"glcode",label:'Account Code <span class="mandatory1">*</span>',formatter:createTextFieldFormatterJV(VOUCHERDETAILLIST,".glcodeDetail","text")},
-       			{key:"accounthead", label:'Account Head',formatter:createLongTextFieldFormatterJV(VOUCHERDETAILLIST,".accounthead")},				
-       			{key:"debitamount",label:'Debit Amount', formatter:createAmountFieldFormatterJV(VOUCHERDETAILLIST,".debitAmountDetail","updateDebitAmountJV()")}, 
-       			{key:"creditamount",label:'Credit Amount',formatter:createAmountFieldFormatterJV(VOUCHERDETAILLIST,".creditAmountDetail","updateCreditAmountJV()")},
-       			{key:'Add',label:'Add',formatter:createAddImageFormatter("${pageContext.request.contextPath}")},
-       			{key:'Delete',label:'Delete',formatter:createDeleteImageFormatter("${pageContext.request.contextPath}")}
+       			{key:"glcode",label:'<s:text name="lbl.account.code"/> <span class="mandatory1">*</span>',formatter:createTextFieldFormatterJV(VOUCHERDETAILLIST,".glcodeDetail","text")},
+       			{key:"accounthead", label:'<s:text name="lbl.account.head"/>',formatter:createLongTextFieldFormatterJV(VOUCHERDETAILLIST,".accounthead")},				
+       			{key:"debitamount",label:'<s:text name="lbl.debit.amount"/>', formatter:createAmountFieldFormatterJV(VOUCHERDETAILLIST,".debitAmountDetail","updateDebitAmountJV()")}, 
+       			{key:"creditamount",label:'<s:text name="lbl.credit.amount"/>',formatter:createAmountFieldFormatterJV(VOUCHERDETAILLIST,".creditAmountDetail","updateCreditAmountJV()")},
+       			{key:'Add',label:'<s:text name="lbl.add"/>',formatter:createAddImageFormatter("${pageContext.request.contextPath}")},
+       			{key:'Delete',label:'<s:text name="lbl.delete"/>',formatter:createDeleteImageFormatter("${pageContext.request.contextPath}")}
        		];
 		</s:else>         
 	    var voucherDetailDS = new YAHOO.util.DataSource(); 
@@ -170,7 +170,7 @@
 					check();
 				}
 				else{
-					bootbox.alert("This row can not be deleted");
+					bootbox.alert("<s:text name='msg.this.row.can.not.be.deleted'/>");
 				}
 			}
 			
@@ -217,11 +217,11 @@
 		document.getElementById('totaldbamount').value=totaldbamt.toFixed(2);
 		document.getElementById('totalcramount').value=totalcramt.toFixed(2); 
 		}
-		var glcodeOptions=[{label:"--- Select ---", value:"0"}];
+		var glcodeOptions=[{label:"<s:text name='lbl.select'/>", value:"0"}];
 		<s:iterator value="dropdownData.glcodeList">
 	    glcodeOptions.push({label:'<s:property value="glcode"/>', value:'<s:property value="id"/>'})
 	</s:iterator>
-	var detailtypeOptions=[{label:"--- Select ---", value:"0"}];
+	var detailtypeOptions=[{label:"<s:text name='lbl.select'/>", value:"0"}];
 	<s:iterator value="dropdownData.detailTypeList">
 	    detailtypeOptions.push({label:'<s:property value="name"/>', value:'<s:property value="id"/>'})
 	</s:iterator>
@@ -232,15 +232,15 @@
 	var makeSubLedgerTable = function() {
 		var subledgerColumns = [ 
 			{key:"subledgerCode",hidden:true, formatter:createSLTextFieldFormatterJV(SUBLEDGERLIST,".subledgerCode","hidden")},
-			{key:"glcode.id",label:'Account Code <span class="mandatory1">*</span>', formatter:createDropdownFormatterJV(SUBLEDGERLIST,"loaddropdown(this)"),  dropdownOptions:glcodeOptions},
+			{key:"glcode.id",label:'<s:text name="lbl.account.code"/> <span class="mandatory1">*</span>', formatter:createDropdownFormatterJV(SUBLEDGERLIST,"loaddropdown(this)"),  dropdownOptions:glcodeOptions},
 			{key:"detailTypeName",hidden:true, formatter:createSLTextFieldFormatterJV(SUBLEDGERLIST,".detailTypeName","hidden")},
-			{key:"detailType.id",label:'Type <span class="mandatory1">*</span>', formatter:createDropdownFormatterJV1(SUBLEDGERLIST),dropdownOptions:detailtypeOptions},
-			{key:"detailCode",label:'Code <span class="mandatory1">*</span>', formatter:createSLDetailCodeTextFieldFormatterJV(SUBLEDGERLIST,".detailCode","splitEntitiesDetailCode(this)", ".search", "openSearchWindowFromJV(this)")},
+			{key:"detailType.id",label:'<s:text name="lbl.type"/> <span class="mandatory1">*</span>', formatter:createDropdownFormatterJV1(SUBLEDGERLIST),dropdownOptions:detailtypeOptions},
+			{key:"detailCode",label:'<s:text name="lbl.code"/> <span class="mandatory1">*</span>', formatter:createSLDetailCodeTextFieldFormatterJV(SUBLEDGERLIST,".detailCode","splitEntitiesDetailCode(this)", ".search", "openSearchWindowFromJV(this)")},
 			{key:"detailKeyId",hidden:true, formatter:createSLHiddenFieldFormatterJV(SUBLEDGERLIST,".detailKeyId")},
-			{key:"detailKey",label:'Name', formatter:createSLLongTextFieldFormatterJV(SUBLEDGERLIST,".detailKey","")},
-			{key:"amount",label:'Amount', formatter:createSLAmountFieldFormatterJV(SUBLEDGERLIST,".amount")},
-			{key:'Add',label:'Add',formatter:createAddImageFormatter("${pageContext.request.contextPath}")},
-			{key:'Delete',label:'Delete',formatter:createDeleteImageFormatter("${pageContext.request.contextPath}")}
+			{key:"detailKey",label:'<s:text name="lbl.name"/>', formatter:createSLLongTextFieldFormatterJV(SUBLEDGERLIST,".detailKey","")},
+			{key:"amount",label:'<s:text name="lbl.amount"/>', formatter:createSLAmountFieldFormatterJV(SUBLEDGERLIST,".amount")},
+			{key:'Add',label:'<s:text name="lbl.add"/>',formatter:createAddImageFormatter("${pageContext.request.contextPath}")},
+			{key:'Delete',label:'<s:text name="lbl.delete"/>',formatter:createDeleteImageFormatter("${pageContext.request.contextPath}")}
 		];
 	    var subledgerDS = new YAHOO.util.DataSource(); 
 		subLedgersTable = new YAHOO.widget.DataTable("subLedgerTable",subledgerColumns, subledgerDS);
@@ -266,7 +266,7 @@
 					}
 				}
 				else{
-					bootbox.alert("This row can not be deleted");
+					bootbox.alert("<s:text name='msg.this.row.can.not.be.deleted'/>");
 				}
 			}        
 		});
@@ -311,7 +311,7 @@
 				<jsp:param value="Direct Bank Payment" name="heading" />
 			</jsp:include>
 			<div class="formmainbox">
-				<div class="subheadnew">Create Direct Bank Payment</div>
+				<div class="subheadnew"><s:text name="lbl.create.direct.bank.payment"/> </div>
 
 				<div align="center">
 					<font style='color: red;'>
@@ -353,7 +353,7 @@
 
 
 					<div class="subheadsmallnew"></div>
-					<div align="left" class="mandatory1">* Mandatory Fields</div>
+					<div align="left" class="mandatory1">* <s:text name="lbl.mendatory.fields"/> </div>
 					<s:hidden name="typeOfAccount" id="typeOfAccount"
 						value="%{typeOfAccount}" />
 
@@ -361,10 +361,10 @@
 				</table>
 				<s:hidden name="cutOffDate" id="cutOffDate" />
 				<s:hidden name="bankBalanceCheck" id="bankBalanceCheck" value="%{bankBalanceCheck}" />
-				<%@ include file='../payment/commonWorkflowMatrix.jsp'%>
+            	<jsp:include page="../payment/commonWorkflowMatrix.jsp"/>
 			</div>
 			<div align="center">
-				<%@ include file='../payment/commonWorkflowMatrix-button.jsp'%>
+            	<jsp:include page="../payment/commonWorkflowMatrix-button.jsp"/>
 			</div>
 		</s:push>
 		<s:hidden name="showMode" />
@@ -455,11 +455,11 @@ function onSubmit()
 		return true;
 		}
 	else if(!balanceCheck() && jQuery("#bankBalanceCheck").val()==balanceCheckMandatory){
-			 bootbox.alert("Insufficient Bank Balance.");
+			 bootbox.alert("<s:text name='msg.insufficient.bank.balance'/>");
 			 return false;
 			}
 	else if(!balanceCheck() && jQuery("#bankBalanceCheck").val()==balanceCheckWarning){
-		 var msg = confirm("Insufficient Bank Balance. Do you want to process ?");
+		 var msg = confirm("<s:text name='msg.insuff.bank.bal.do.you.want.to.process'/>");
 		 if (msg == true) {
 			 document.dbpform.action = '/services/EGF/payment/directBankPayment-create.action';
 			 document.dbpform.submit();

@@ -52,7 +52,7 @@
 <div class="panel panel-primary" data-collapsed="0">
 	<div class="panel-heading custom_form_panel_heading">
 		<div class="panel-title">
-			<spring:message code="lbl.checklist" />
+			<spring:message code="lbl.checklist" text="CheckList"/>
 		</div>
 	</div>
 	
@@ -60,8 +60,8 @@
 		<table class="table table-bordered" id="tblchecklist">
 			<thead>
 				<tr>
-					<th><spring:message code="lbl.checklist.name"/></th>
-					<th><spring:message code="lbl.checklist.value"/></th>
+					<th><spring:message code="lbl.checklist.name" text="Check List Name"/></th>
+					<th><spring:message code="lbl.checklist.value" text="Check List Value"/></th>
 				</tr>
 			</thead>
 			<tbody>

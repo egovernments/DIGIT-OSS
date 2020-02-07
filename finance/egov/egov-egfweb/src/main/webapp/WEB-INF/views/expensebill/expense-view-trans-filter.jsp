@@ -53,7 +53,7 @@
 	<c:choose>
 		<c:when test="${headerFields.contains('fund')}">
 			<div class="col-md-3 col-xs-6 add-margin">
-				<spring:message code="lbl.fund" />
+				<spring:message code="lbl.fund" text="Fund"/>
 			</div>
 			<div class="col-md-3 col-xs-6 add-margin view-content" id="ct-mobno">
 				<c:out default="N/A" value="${egBillregister.egBillregistermis.fund.name }" />
@@ -70,7 +70,7 @@
 	<c:choose>
 		<c:when test="${headerFields.contains('fundsource')}">
 			<div class="col-md-3 col-xs-6 add-margin">
-				<spring:message code="lbl.sourcefund" />
+				<spring:message code="lbl.sourcefund" text="Source Fund"/>
 			</div>
 			<div class="col-md-3 col-xs-6 add-margin view-content" id="ct-mobno">
 				<c:out default="N/A" value="${egBillregister.egBillregistermis.fundsource.name }" />
@@ -89,7 +89,7 @@
 	<c:choose>
 		<c:when test="${headerFields.contains('scheme')}">
 			<div class="col-md-3 col-xs-6 add-margin">
-				<spring:message code="lbl.scheme" />
+				<spring:message code="lbl.scheme" text="Scheme"/>
 			</div>
 			<div class="col-md-3 col-xs-6 add-margin view-content" id="ct-mobno">
 				<c:out default="N/A" value="${egBillregister.egBillregistermis.scheme.name }" />
@@ -105,7 +105,7 @@
 	<c:choose>
 		<c:when test="${headerFields.contains('subscheme')}">
 			<div class="col-md-3 col-xs-6 add-margin">
-				<spring:message code="lbl.subscheme" />
+				<spring:message code="lbl.subscheme" text="Sub Scheme"/>
 			</div>
 			<div class="col-md-3 col-xs-6 add-margin view-content" id="ct-mobno">
 				<c:out default="N/A" value="${egBillregister.egBillregistermis.subScheme.name }" />
@@ -123,7 +123,7 @@
 	<c:choose>
 		<c:when test="${headerFields.contains('department')}">
 			<div class="col-md-3 col-xs-6 add-margin">
-				<spring:message code="lbl.department" />
+				<spring:message code="lbl.department" text="Department"/>
 			</div>
 			<div class="col-md-3 col-xs-6 add-margin view-content" id="ct-mobno">
 				<c:out default="N/A" value="${egBillregister.egBillregistermis.departmentName }" />
@@ -139,7 +139,7 @@
 	<c:choose>
 		<c:when test="${headerFields.contains('field')}">
 			<div class="col-md-3 col-xs-6 add-margin">
-				<spring:message code="lbl.field" />
+				<spring:message code="lbl.field" text="Field"/>
 				<span class="mandatory"></span>
 			</div>
 			<div class="col-md-3 col-xs-6 add-margin view-content" id="ct-mobno">
@@ -157,7 +157,7 @@
 	<c:when test="${headerFields.contains('functionary')}">
 		<div class="row add-border">
 			<div class="col-md-3 col-xs-6 add-margin">
-				<spring:message code="lbl.functionaryid" />
+				<spring:message code="lbl.functionaryid" text="Functionary"/>
 			</div>
 			<div class="col-md-3 col-xs-6 add-margin view-content" id="ct-mobno">
 				<c:out default="N/A" value="${egBillregister.egBillregistermis.functionaryid.name }" />

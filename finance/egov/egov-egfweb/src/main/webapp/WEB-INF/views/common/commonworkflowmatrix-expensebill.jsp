@@ -57,7 +57,7 @@
 			
 		<div class="panel-heading">
 			<div class="panel-title">
-				<spring:message code="lbl.approverdetails"/>
+				<spring:message code="lbl.approverdetails" text="Approval Details"/>
 			</div>					
 		</div>
 	</c:if>
@@ -81,33 +81,33 @@
 				<div class="row show-row"  id="approverDetailHeading">
 				<c:if test="${nextAction !='END'}" > 
 					<div class="show-row form-group" >
-						<label class="col-sm-3 control-label text-right"><spring:message code="lbl.approverdepartment"/><span class="mandatory"></span></label>
+						<label class="col-sm-3 control-label text-right"><spring:message code="lbl.approverdepartment" text="Approver Department"/><span class="mandatory"></span></label>
 						<div class="col-sm-3 add-margin">
 							<form:select path="approvalDepartment" data-first-option="false" name="approvalDepartment"
 								id="approvalDepartment" cssClass="form-control"
 								cssErrorClass="form-control error" required="required">
 								<form:option value="">
-									<spring:message code="lbl.select" />
+									<spring:message code="lbl.select" text="Select"/>
 								</form:option>
 								<form:options items="${approvalDepartmentList}" itemValue="code"
 									itemLabel="name" />     
 							</form:select>
 						</div>
-						<label class="col-sm-2 control-label text-right"><spring:message code="lbl.approverdesignation"/><span class="mandatory"></span></label>
+						<label class="col-sm-2 control-label text-right"><spring:message code="lbl.approverdesignation" text="Approver Designation"/><span class="mandatory"></span></label>
 						<div class="col-sm-3 add-margin">
 						<input type="hidden" id="approvalDesignationValue" value="${approvalDesignation }" />
 							<form:select path="" data-first-option="false" name="approvalDesignation"
 								id="approvalDesignation" cssClass="form-control" onfocus="callAlertForDepartment();"
 								cssErrorClass="form-control error" required="required">  
 								<form:option value="">
-									<spring:message code="lbl.select" />
+									<spring:message code="lbl.select" text="Select"/>
 								</form:option>
 								
 							</form:select>					
 						</div>
 					</div>
 					<div class="show-row form-group">
-						<label class="col-sm-3 control-label text-right"><spring:message code="lbl.approver"/><span class="mandatory"></span></label>
+						<label class="col-sm-3 control-label text-right"><spring:message code="lbl.approver" text="Approver"/><span class="mandatory"></span></label>
 						<div class="col-sm-3 add-margin">
 						<input type="hidden" id="approvalPositionValue" value="${approvalPosition }" />
 						<input type="hidden" id="approverName" name="approverName" />
@@ -115,14 +115,14 @@
 							id="approvalPosition" name="approvalPosition" cssClass="form-control" onfocus="callAlertForDesignation();" 
 							cssErrorClass="form-control error" required="required">  
 							<form:option value="">
-									<spring:message code="lbl.select" />
+									<spring:message code="lbl.select" text="Select"/>
 								</form:option>
 						</form:select>		
 						</div> 
 					</div>
 					</c:if>
 					<div class="show-row form-group">
-						<label class="col-sm-3 control-label text-right"><spring:message code="lbl.comments"/></label>
+						<label class="col-sm-3 control-label text-right"><spring:message code="lbl.comments" text="Comments"/></label>
 						<div class="col-sm-8 add-margin">
 							<form:textarea class="form-control" path="approvalComent"  id="approvalComent" name="approvalComent" />
 						</div>
