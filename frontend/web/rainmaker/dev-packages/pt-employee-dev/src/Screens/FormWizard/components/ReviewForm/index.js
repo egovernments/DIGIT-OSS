@@ -135,7 +135,22 @@ const mapStateToProps = (state, ownProps) => {
   const { common = {}, screenConfiguration } = state;
   const { generalMDMSDataById } = common || {};
   const { preparedFinalObject} = screenConfiguration;
-  const { documentsUploadRedux } = preparedFinalObject;
+  let { documentsUploadRedux } = preparedFinalObject;
+  if(documentsUploadRedux && typeof documentsUploadRedux === "object") {
+    if(Object.keys(documentsUploadRedux) && Object.keys(documentsUploadRedux).length) {
+      let documentsData = [];
+      Object.keys(documentsUploadRedux).map(key=>{
+        let docTitleArray = documentsUploadRedux[key].dropdown.value.split(".");
+        documentsData.push({
+            "title":docTitleArray[docTitleArray.length-1],
+            "link" : documentsUploadRedux[key].documents[0].fileUrl,
+            "linkText": "View",
+            "name" : documentsUploadRedux[key].documents[0].fileName
+        });
+    });
+    documentsUploadRedux = documentsData;
+    }
+  }
   return {
     ownProps,
     generalMDMSDataById,

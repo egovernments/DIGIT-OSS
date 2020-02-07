@@ -294,7 +294,32 @@ export const fetchProperties = (queryObjectproperty, queryObjectDraft, queryObje
       try {
         let payloadProperty = await httpRequest(PROPERTY.GET.URL, PROPERTY.GET.ACTION,queryObjectproperty);
         payloadProperty=getCreatePropertyResponse(payloadProperty);
-        dispatch(propertyFetchComplete(payloadProperty));
+        if(payloadProperty.Properties && payloadProperty.Properties[0] &&payloadProperty.Properties[0].documents){
+          let fileStoreId = "";
+          payloadProperty.Properties[0].documentsUploaded = [];
+          payloadProperty.Properties[0].documents.map(doc=>{
+              fileStoreId = fileStoreId + doc.fileStoreId + ","
+          });
+          fileStoreId = fileStoreId.slice(0, fileStoreId.length-1);
+          getFileUrlFromAPI(fileStoreId).then(fileUrl=>{
+            if(fileUrl && fileUrl.fileStoreIds) {
+              fileUrl.fileStoreIds.map((file, key)=>{
+                payloadProperty.Properties[0].documentsUploaded.push({
+                  "title": payloadProperty.Properties[0].documents[key].documentType,
+                  "link" : file.fileUrl,
+                  "linkText": "View",
+                  "name" : payloadProperty.Properties[0].documents[key].documentType
+                })
+              });
+            }
+            console.log("fileUrl", fileUrl);
+            console.log(payloadProperty.Properties[0].documents);
+            dispatch(propertyFetchComplete(payloadProperty));
+          });
+        } else {
+          dispatch(propertyFetchComplete(payloadProperty));
+        }
+        
       } catch (error) {
         dispatch(propertyFetchError(error.message));
       }

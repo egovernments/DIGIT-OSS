@@ -8,18 +8,7 @@ class DocumentsInfo extends Component {
     
     render() {
         const {documentsUploaded, editIcon} = this.props;
-        let documentsData = [];
-        if(documentsUploaded){
-            Object.keys(documentsUploaded).map(key=>{
-                let docTitleArray = documentsUploaded[key].dropdown.value.split(".");
-                documentsData.push({
-                    "title":docTitleArray[docTitleArray.length-1],
-                    "link" : documentsUploaded[key].documents[0].fileUrl,
-                    "linkText": "View",
-                    "name" : documentsUploaded[key].documents[0].fileName
-                })
-            });
-        }
+        
         const header = "PT_COMMON_DOCS";
         return (
               <Card
@@ -39,7 +28,7 @@ class DocumentsInfo extends Component {
                       {{ editIcon } && <span style={{ alignItems: "right" }}>{editIcon}</span>}
                     </div>
                     <div>
-                    <DownloadFileContainer data={documentsData}></DownloadFileContainer>
+                    <DownloadFileContainer data={documentsUploaded}></DownloadFileContainer>
                     </div>
                   </div>
                 }

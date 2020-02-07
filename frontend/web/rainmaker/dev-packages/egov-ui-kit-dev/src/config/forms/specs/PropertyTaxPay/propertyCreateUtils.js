@@ -53,8 +53,9 @@ export const createPropertyPayload = (properties, documentsUploadRedux) => {
       properties[0].documents.push({
         "documentType": documentsUploadRedux[key].documentType,
         "fileStoreId": documentsUploadRedux[key].documents[0].fileStoreId,
-      })
-    })
+        "documentUid":documentsUploadRedux[key].documents[0].fileStoreId,
+      });
+    });
   }
 
   if (properties[0].institution) {

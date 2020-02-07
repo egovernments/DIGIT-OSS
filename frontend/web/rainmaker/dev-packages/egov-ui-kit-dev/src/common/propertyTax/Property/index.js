@@ -268,7 +268,7 @@ class Property extends Component {
   };
 
   render() {
-    const { urls, location, history, generalMDMSDataById, latestPropertyDetails, propertyId, selPropertyDetails, receiptsByYr ,totalBillAmountDue} = this.props;
+    const { urls, location, history, generalMDMSDataById, latestPropertyDetails, propertyId, selPropertyDetails, receiptsByYr ,totalBillAmountDue, documentsUploaded} = this.props;
     const { closeYearRangeDialogue } = this;
     const { dialogueOpen, urlToAppend, showAssessmentHistory } = this.state;
     let urlArray = [];
@@ -295,6 +295,7 @@ class Property extends Component {
             properties={selPropertyDetails}
             generalMDMSDataById={generalMDMSDataById && generalMDMSDataById}
             totalBillAmountDue={totalBillAmountDue}
+            documentsUploaded={documentsUploaded}
           />
         }
         <div
@@ -622,6 +623,7 @@ const mapStateToProps = (state, ownProps) => {
   const tenantId = ownProps.match.params.tenantId;
   const propertyId = decodeURIComponent(ownProps.match.params.propertyId);
   const selPropertyDetails = propertiesById[propertyId] || {};
+  const { documentsUploaded } = selPropertyDetails || [];
   const latestPropertyDetails = getLatestPropertyDetails(selPropertyDetails.propertyDetails);
   const pendingAssessments = getPendingAssessments(selPropertyDetails, singleAssessmentByStatus);
   const localization = {
@@ -662,7 +664,8 @@ const mapStateToProps = (state, ownProps) => {
     generalMDMSDataById,
     receiptsByYr,
     localization,
-    totalBillAmountDue
+    totalBillAmountDue,
+    documentsUploaded
   };
 };
 

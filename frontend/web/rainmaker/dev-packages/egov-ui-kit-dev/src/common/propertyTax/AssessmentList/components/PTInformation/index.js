@@ -10,8 +10,9 @@ import TotalDues from '../../../Property/components/TotalDues';
 import AssessmentHistory from "./components/AssessmentHistory";
 import PaymentHistory from "./components/PaymentHistory";
 import ApplicationHistory from "./components/ApplicationHistory";
+import DocumentsInfo from "../../../Property/components/DocumentsInfo";
 
-const PTInformation = ({ items, label, onItemClick, innerDivStyle, hoverColor, properties, style, generalMDMSDataById, totalBillAmountDue, history }) => {
+const PTInformation = ({ items, label, onItemClick, innerDivStyle, hoverColor, properties, style, generalMDMSDataById, totalBillAmountDue, history, documentsUploaded }) => {
     const items2 = [items[1]];
     return (
         <div className="form-without-button-cont-generic" >
@@ -36,6 +37,7 @@ const PTInformation = ({ items, label, onItemClick, innerDivStyle, hoverColor, p
                             <AssessmentHistory></AssessmentHistory>
                             <PaymentHistory></PaymentHistory>
                             <ApplicationHistory></ApplicationHistory>
+                            <DocumentsInfo documentsUploaded={documentsUploaded}></DocumentsInfo>
                         </div>
                     }
                 />

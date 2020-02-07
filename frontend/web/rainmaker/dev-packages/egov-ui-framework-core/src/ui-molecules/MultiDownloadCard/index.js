@@ -40,7 +40,7 @@ function MultiCardDownloadGrid(props) {
   const { classes, data, ...rest } = props;
   return (
     <Grid container {...rest}>
-      {data.map((item, key) => {
+      {data && data.length && data.map((item, key) => {
         return (
           <Grid
             item
@@ -64,11 +64,11 @@ function MultiCardDownloadGrid(props) {
               <Grid xs={6} className={classes.subtext}>
                 <Typography className={classes.body2}>{item.name}</Typography>
               </Grid>
-              {item.link && item.linkText && <Grid xs={6} align="right">
+              <Grid xs={6} align="right">
                 <Button href={item.link} color="primary">
                   {item.linkText}
                 </Button>
-              </Grid>}
+              </Grid>
             </Grid>
           </Grid>
         );
