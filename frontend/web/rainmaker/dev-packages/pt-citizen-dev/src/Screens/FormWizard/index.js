@@ -19,6 +19,7 @@ import { removeForm } from "egov-ui-kit/redux/form/actions";
 import { prepareFormData as prepareFormDataAction } from "egov-ui-kit/redux/common/actions";
 import store from "ui-redux/store";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 import {
   UsageInformationHOC,
@@ -1577,7 +1578,7 @@ class FormWizard extends Component {
     } = this.props;
     resetFormWizard(form, removeForm);
     prepareFormDataAction("Properties", []);
-
+    prepareFinalObject("documentsUploadRedux",{} );
     this.onTabClick(0);
   };
 
@@ -1872,6 +1873,8 @@ const mapDispatchToProps = dispatch => {
       dispatch(prepareFormDataAction(path, value)),
       hideSpinner: () => dispatch(hideSpinner()),
     removeForm: formkey => dispatch(removeForm(formkey)),
+    prepareFinalObject: (jsonPath, value) =>
+    dispatch(prepareFinalObject(jsonPath, value))   
   };
 };
 

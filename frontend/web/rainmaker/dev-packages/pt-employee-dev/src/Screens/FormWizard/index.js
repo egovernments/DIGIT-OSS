@@ -75,7 +75,7 @@ import generateAcknowledgementForm from "egov-ui-kit/common/propertyTax/PaymentS
 import { getHeaderDetails } from "egov-ui-kit/common/propertyTax/PaymentStatus/Components/createReceipt";
 import { createPropertyPayload, createAssessmentPayload, getCreatePropertyResponse } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/propertyCreateUtils";
 import DocumentsUpload from "egov-ui-kit/common/propertyTax/Property/components/DocumentsUpload";
-
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { resetFormWizard } from "egov-ui-kit/utils/PTCommon";
 import { removeForm } from "egov-ui-kit/redux/form/actions";
 import { prepareFormData as prepareFormDataAction } from "egov-ui-kit/redux/common/actions";
@@ -740,7 +740,7 @@ class FormWizard extends Component {
     } = this.props;
     resetFormWizard(form, removeForm);
     prepareFormDataAction("Properties", []);
-
+    prepareFinalObject("documentsUploadRedux",{} );
     this.onTabClick(0);
   };
 
@@ -1950,6 +1950,13 @@ class FormWizard extends Component {
     } = this.state;
     const { location } = this.props;
     const { search } = location;
+    // let propertyId = getQueryValue(search, "propertyId");
+    // if( propertyId && selected == 3){
+    //   this.setState({
+    //     selected: 4,
+    //     formValidIndexArray: [...formValidIndexArray, 4]
+    //   });
+    // }
     let proceedToPayment = Boolean(getQueryValue(search, "proceedToPayment").replace('false', ''));
     if (proceedToPayment && selected == 3) {
       this.setState({
@@ -2011,9 +2018,6 @@ class FormWizard extends Component {
     const fromReviewPage = selected === 3;
     const { history, location } = this.props;
     const { search } = location;
-
-
-
     const { Properties = [] } = assessedPropertyDetails;
     let propertyId = '';
     for (let pty of Properties) {
@@ -2098,6 +2102,8 @@ const mapDispatchToProps = dispatch => {
     prepareFormDataAction: (path, value) =>
       dispatch(prepareFormDataAction(path, value)),
     removeForm: formkey => dispatch(removeForm(formkey)),
+    prepareFinalObject: (jsonPath, value) =>
+    dispatch(prepareFinalObject(jsonPath, value))    
 
   };
 };
