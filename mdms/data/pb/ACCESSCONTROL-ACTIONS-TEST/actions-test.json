@@ -16284,6 +16284,31 @@
       "serviceCode": "PropertytaxCalculatorV2",
       "code": "null",
       "path": "null"
+    },
+    {
+      "id": 1963,
+      "name": "Dashboard collectionsindex-v1",
+      "url": "/dashboard-ingest/migrate/collectionsindex-v1",
+      "parentModule": "",
+      "displayName": "DSS",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "DSS",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1964,
+      "name": "Dashboard Static Upload",
+      "url": "/dashboard-ingest/upload",
+      "parentModule": "",
+      "displayName": "DSS",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "DSS",
+      "code": "null",
+      "path": ""
     }
+
   ]
 }
