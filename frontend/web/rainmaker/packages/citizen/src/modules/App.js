@@ -14,7 +14,7 @@ import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { handleFieldChange } from "egov-ui-kit/redux/form/actions";
 import { getQueryArg } from "egov-ui-kit/utils/commons";
 import isEmpty from "lodash/isEmpty";
-
+import "./app.css";
 class App extends Component {
   constructor(props) {
     super(props);

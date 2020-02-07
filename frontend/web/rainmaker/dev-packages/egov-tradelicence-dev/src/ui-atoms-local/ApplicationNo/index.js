@@ -1,4 +1,5 @@
 import React from "react";
+import "./index.css"
 
 const styles = {
   backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
@@ -14,7 +15,7 @@ const styles = {
 
 function ApplicationNoContainer(props) {
   const { number } = props;
-  return <div style={styles}>Application No. {number}</div>;
+  return <div className="ApplicationNoContainer" style={styles}>Application No. <span>{number}</span></div>;
 }
 
 export default ApplicationNoContainer;
