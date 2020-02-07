@@ -10,15 +10,11 @@ export const createPropertyPayload = (properties, documentsUploadRedux) => {
     ...properties[0].propertyDetails[0],
     source: "MUNICIPAL_RECORDS",
     channel: "CFC_COUNTER",
-    status: "ACTIVE"
+    status: "ACTIVE",
   };
   if (properties[0].owners && properties[0].owners.length) {
-    properties[0].owners.map(obj => {
-      if (
-        obj.documents &&
-        Array.isArray(obj.documents) &&
-        obj.documents.length
-      ) {
+    properties[0].owners.map((obj) => {
+      if (obj.documents && Array.isArray(obj.documents) && obj.documents.length) {
         if (!obj.documents[0].documentType || !obj.documents[0].documentUid) {
           delete obj.documents;
         }
@@ -27,17 +23,18 @@ export const createPropertyPayload = (properties, documentsUploadRedux) => {
     });
   }
 
-  properties[0].units.map(unit => {
+  properties[0].units.map((unit) => {
     unit.constructionDetail = {
-      builtUpArea: unit.unitArea
+      builtUpArea: unit.unitArea,
     };
     unit.tenantId = properties[0].tenantId;
-    unit.usageCategory = unit.usageCategoryMajor + 
-        (unit.usageCategoryMinor ? "."+unit.usageCategoryMinor : "") + 
-        (unit.usageCategorySubMinor ? "."+unit.usageCategorySubMinor : "")+ 
-        (unit.usageCategoryDetail ? "."+unit.usageCategoryDetail : "");
+    unit.usageCategory =
+      unit.usageCategoryMajor +
+      (unit.usageCategoryMinor ? "." + unit.usageCategoryMinor : "") +
+      (unit.usageCategorySubMinor ? "." + unit.usageCategorySubMinor : "") +
+      (unit.usageCategoryDetail ? "." + unit.usageCategoryDetail : "");
 
-        // unit.usageCategory = unit.usageCategoryMajor+"."+unit.usageCategoryMinor+"."+unit.usageCategorySubMinor+"."+unit.usageCategoryDetail;
+    // unit.usageCategory = unit.usageCategoryMajor+"."+unit.usageCategoryMinor+"."+unit.usageCategorySubMinor+"."+unit.usageCategoryDetail;
 
     unit.unitType = unit.usageCategoryDetail;
     delete unit.usageCategoryMinor;
@@ -47,9 +44,9 @@ export const createPropertyPayload = (properties, documentsUploadRedux) => {
     delete unit.unitArea;
   });
 
-  if(documentsUploadRedux && Object.keys(documentsUploadRedux) && Object.keys(documentsUploadRedux).length){
-    properties[0].documents = []
-    Object.keys(documentsUploadRedux).map(key=>{
+  if (documentsUploadRedux && Object.keys(documentsUploadRedux) && Object.keys(documentsUploadRedux).length) {
+    properties[0].documents = [];
+    Object.keys(documentsUploadRedux).map((key) => {
       properties[0].documents.push({
         "documentType": documentsUploadRedux[key].documentType,
         "fileStoreId": documentsUploadRedux[key].documents[0].fileStoreId,
@@ -59,22 +56,23 @@ export const createPropertyPayload = (properties, documentsUploadRedux) => {
   }
 
   if (properties[0].institution) {
-    properties[0].institution.nameOfAuthorizedPerson =
-      properties[0].owners[0].name;
+    properties[0].institution.nameOfAuthorizedPerson = properties[0].owners[0].name;
     properties[0].institution.tenantId = properties[0].tenantId;
   }
   properties[0].creationReason = "NEWPROPERTY";
   properties[0].superBuiltUpArea = properties[0].buildUpArea;
 
   properties[0].propertyType =
-    (properties[0].propertySubType === "SHAREDPROPERTY" || properties[0].propertySubType ===  "INDEPENDENTPROPERTY") ? properties[0].propertyType + "." + properties[0].propertySubType : properties[0].propertyType;
+    properties[0].propertySubType === "SHAREDPROPERTY" || properties[0].propertySubType === "INDEPENDENTPROPERTY"
+      ? properties[0].propertyType + "." + properties[0].propertySubType
+      : properties[0].propertyType;
   // Changing usageCategoryMajor to usageCategory
   properties[0].usageCategory = properties[0].usageCategoryMajor;
-  properties[0].ownershipCategory = properties[0].ownershipCategory + 
-  (properties[0].subOwnershipCategory ? "."+properties[0].subOwnershipCategory : "");
+  properties[0].ownershipCategory =
+    properties[0].ownershipCategory + (properties[0].subOwnershipCategory ? "." + properties[0].subOwnershipCategory : "");
   // Deleting object keys from request payload which are not required now
-//   delete properties[0].usageCategoryMajor;
-//   delete properties[0].usageCategoryMinor;
+  //   delete properties[0].usageCategoryMajor;
+  //   delete properties[0].usageCategoryMinor;
   delete properties[0].citizenInfo;
   delete properties[0].propertyDetails;
   delete properties[0].subOwnershipCategory;
@@ -93,20 +91,20 @@ export const createAssessmentPayload = (properties, propertyPayload) => {
     // unitUsageList: [],
     source: "MUNICIPAL_RECORDS",
     channel: "CFC_COUNTER",
-    status: "ACTIVE"
+    status: "ACTIVE",
   };
 
-//   properties.units.map( unit => {
-//     const unitObj = {
-//         unitId: unit.id,
-//         usageCategory: unit.usageCategory,
-//         occupancyType: unit.occupancyType,
-//         tenantId: unit.tenantId,
-//         occupancyDate: unit.occupancyDate ? unit.occupancyDate:0,
-//         additionalDetails: unit.additionalDetails
-//     }
-//     Assessment.unitUsageList.push(unitObj);
-//   })
+  //   properties.units.map( unit => {
+  //     const unitObj = {
+  //         unitId: unit.id,
+  //         usageCategory: unit.usageCategory,
+  //         occupancyType: unit.occupancyType,
+  //         tenantId: unit.tenantId,
+  //         occupancyDate: unit.occupancyDate ? unit.occupancyDate:0,
+  //         additionalDetails: unit.additionalDetails
+  //     }
+  //     Assessment.unitUsageList.push(unitObj);
+  //   })
 
   return Assessment;
 };
@@ -114,4 +112,22 @@ export const createAssessmentPayload = (properties, propertyPayload) => {
 export const getCreatePropertyResponse = (createPropertyResponse) => {
   createPropertyResponse.Properties[0].propertyDetails = createPropertyResponse.Properties;
   return createPropertyResponse;
-}
+};
+
+export const convertToArray = (documentsUploadRedux) => {
+  if (documentsUploadRedux && typeof documentsUploadRedux === "object") {
+    if (Object.keys(documentsUploadRedux) && Object.keys(documentsUploadRedux).length) {
+      let documentsData = [];
+      Object.keys(documentsUploadRedux).map((key) => {
+        let docTitleArray = documentsUploadRedux[key].dropdown.value.split(".");
+        return documentsData.push({
+          title: docTitleArray[docTitleArray.length - 1],
+          link: documentsUploadRedux[key].documents[0].fileUrl,
+          linkText: "View",
+          name: documentsUploadRedux[key].documents[0].fileName,
+        });
+      });
+      return documentsData;
+    }
+  }
+};

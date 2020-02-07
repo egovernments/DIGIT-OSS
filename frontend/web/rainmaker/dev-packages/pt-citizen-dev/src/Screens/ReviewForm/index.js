@@ -14,6 +14,7 @@ import {getQueryValue,
 import Label from "egov-ui-kit/utils/translationNode";
 import { SingleCheckbox } from "components";
 import "./index.css";
+import { convertToArray } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/propertyCreateUtils";
 import PropertyAddressInfo from 'egov-ui-kit/common/propertyTax/Property/components/PropertyAddressInfo';
 import AssessmentInfo from 'egov-ui-kit/common/propertyTax/Property/components/AssessmentInfo';
 import OwnerInfo from 'egov-ui-kit/common/propertyTax/Property/components/OwnerInfo';
@@ -294,21 +295,7 @@ const mapStateToProps = (state, ownProps) => {
   const { generalMDMSDataById } = common || {};
   const { preparedFinalObject} = screenConfiguration;
   let { documentsUploadRedux } = preparedFinalObject;
-  if(documentsUploadRedux && typeof documentsUploadRedux === "object") {
-    if(Object.keys(documentsUploadRedux) && Object.keys(documentsUploadRedux).length) {
-      let documentsData = [];
-      Object.keys(documentsUploadRedux).map(key=>{
-        let docTitleArray = documentsUploadRedux[key].dropdown.value.split(".");
-        documentsData.push({
-            "title":docTitleArray[docTitleArray.length-1],
-            "link" : documentsUploadRedux[key].documents[0].fileUrl,
-            "linkText": "View",
-            "name" : documentsUploadRedux[key].documents[0].fileName
-        });
-    });
-    documentsUploadRedux = documentsData;
-    }
-  }
+  documentsUploadRedux = convertToArray(documentsUploadRedux);
   return {
     ownProps,
     generalMDMSDataById,
