@@ -244,6 +244,11 @@ class WorkFlowContainer extends React.Component {
   getRedirectUrl = (action, businessId, moduleName) => {
     const isAlreadyEdited = getQueryArg(window.location.href, "edited");
     const tenant = getQueryArg(window.location.href, "tenantId");
+    const { ProcessInstances } = this.props;
+    let applicationStatus;
+    if ( ProcessInstances && ProcessInstances.length > 0 ) {
+        applicationStatus = get( ProcessInstances[ProcessInstances.length - 1], "state.applicationStatus" );
+    }
     let baseUrl = "";
     let bservice = "";
     if(moduleName === "FIRENOC"){
