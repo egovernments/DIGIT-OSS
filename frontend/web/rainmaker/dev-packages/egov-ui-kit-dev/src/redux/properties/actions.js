@@ -9,6 +9,7 @@ import cloneDeep from "lodash/cloneDeep";
 import { getLatestPropertyDetails } from "egov-ui-kit/utils/PTCommon";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import {  getCreatePropertyResponse } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/propertyCreateUtils";
+import { getFileUrl } from "egov-ui-framework/ui-utils/commons";
 
 const FileDownload = require('js-file-download');
 const reset_property_reset = () => {
@@ -306,7 +307,7 @@ export const fetchProperties = (queryObjectproperty, queryObjectDraft, queryObje
               fileUrl.fileStoreIds.map((file, key)=>{
                 payloadProperty.Properties[0].documentsUploaded.push({
                   "title": payloadProperty.Properties[0].documents[key].documentType,
-                  "link" : file.fileUrl,
+                  "link" : getFileUrl(file.fileUrl),
                   "linkText": "View",
                   "name" : payloadProperty.Properties[0].documents[key].documentType
                 })

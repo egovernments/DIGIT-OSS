@@ -1,5 +1,5 @@
 // import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
-
+import { getFileUrl } from "egov-ui-framework/ui-utils/commons";
 // export const getSource = () => {
 //     return localStorageGet("isNative") ? "MOBILEAPP" : "SYSTEM";
 // }
@@ -48,7 +48,7 @@ export const createPropertyPayload = (properties, documentsUploadRedux) => {
     properties[0].documents = [];
     Object.keys(documentsUploadRedux).map((key) => {
       properties[0].documents.push({
-        "documentType": documentsUploadRedux[key].documentType,
+        "documentType": documentsUploadRedux[key].documentCode,
         "fileStoreId": documentsUploadRedux[key].documents[0].fileStoreId,
         "documentUid":documentsUploadRedux[key].documents[0].fileStoreId,
       });
@@ -122,7 +122,7 @@ export const convertToArray = (documentsUploadRedux) => {
         let docTitleArray = documentsUploadRedux[key].dropdown.value.split(".");
         return documentsData.push({
           title: docTitleArray[docTitleArray.length - 1],
-          link: documentsUploadRedux[key].documents[0].fileUrl,
+          link: getFileUrl(documentsUploadRedux[key].documents[0].fileUrl),
           linkText: "View",
           name: documentsUploadRedux[key].documents[0].fileName,
         });

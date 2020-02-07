@@ -34,10 +34,10 @@ const PTInformation = ({ items, label, onItemClick, innerDivStyle, hoverColor, p
                             <PropertyAddressInfo properties={properties} generalMDMSDataById={generalMDMSDataById}></PropertyAddressInfo>
                             <AssessmentInfo properties={properties} generalMDMSDataById={generalMDMSDataById} ></AssessmentInfo>
                             <OwnerInfo properties={properties} generalMDMSDataById={generalMDMSDataById} totalBillAmountDue={totalBillAmountDue} ownershipTransfer={true} viewHistory={true}></OwnerInfo>
+                            <DocumentsInfo documentsUploaded={documentsUploaded}></DocumentsInfo>
                             <AssessmentHistory></AssessmentHistory>
                             <PaymentHistory></PaymentHistory>
                             <ApplicationHistory></ApplicationHistory>
-                            <DocumentsInfo documentsUploaded={documentsUploaded}></DocumentsInfo>
                         </div>
                     }
                 />
