@@ -304,7 +304,7 @@ const onPropertyTabClick = (rowData,dispatch) => {
     default:
      // window.location.href = `search-preview?applicationNumber=${
      // window.location.pathname=`property-tax/property/${rowData[0]}/${rowData[6]}`;
-      store.dispatch(setRoute(`/property-tax/property/${rowData[0]}/${rowData[6]}`));
+      store.dispatch(setRoute(`/property-tax/property/${rowData[0].props.children}/${rowData[6]}`));
     //   rowData[0]
     // }&tenantId=${rowData[6]}`; 
       break;
