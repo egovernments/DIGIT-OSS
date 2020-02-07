@@ -4,6 +4,10 @@ import { getFileUrl } from "egov-ui-framework/ui-utils/commons";
 //     return localStorageGet("isNative") ? "MOBILEAPP" : "SYSTEM";
 // }
 
+import {convertToOldPTObject} from "egov-ui-kit/utils/PTCommon/FormWizardUtils";
+
+
+
 export const createPropertyPayload = (properties, documentsUploadRedux) => {
   properties[0] = {
     ...properties[0],
@@ -110,8 +114,8 @@ export const createAssessmentPayload = (properties, propertyPayload) => {
 };
 
 export const getCreatePropertyResponse = (createPropertyResponse) => {
-  createPropertyResponse.Properties[0].propertyDetails = createPropertyResponse.Properties;
-  return createPropertyResponse;
+  // createPropertyResponse.Properties[0].propertyDetails = createPropertyResponse.Properties;
+  return {Properties:convertToOldPTObject(createPropertyResponse)};
 };
 
 export const convertToArray = (documentsUploadRedux) => {

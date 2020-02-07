@@ -319,50 +319,51 @@ class Property extends Component {
 }
 const getYearlyAssessments = (propertiesArray = []) => {
   let yearlyAssessments = [];
-  propertiesArray.map((property) => {
-    if (yearlyAssessments.length == 0) {
-      yearlyAssessments[0] = [property];
-    } else {
-      let bool = true;
-      for (let pty of yearlyAssessments) {
-        if (pty[0].financialYear == property.financialYear) {
-          pty.push(property)
-          bool = false;
-        }
-      }
-      if (bool) {
-        yearlyAssessments.push([property]);
-      }
-    }
-  })
-  for (let eachYrAssessments of yearlyAssessments) {
-    eachYrAssessments.sort((x, y) => y.assessmentDate - x.assessmentDate);
-  }
-  yearlyAssessments.sort((x, y) => x[0].financialYear.localeCompare(y[0].financialYear));
   return yearlyAssessments;
+  // propertiesArray.map((property) => {
+  //   if (yearlyAssessments.length == 0) {
+  //     yearlyAssessments[0] = [property];
+  //   } else {
+  //     let bool = true;
+  //     for (let pty of yearlyAssessments) {
+  //       if (pty[0].financialYear == property.financialYear) {
+  //         pty.push(property)
+  //         bool = false;
+  //       }
+  //     }
+  //     if (bool) {
+  //       yearlyAssessments.push([property]);
+  //     }
+  //   }
+  // })
+  // for (let eachYrAssessments of yearlyAssessments) {
+  //   eachYrAssessments.sort((x, y) => y.assessmentDate - x.assessmentDate);
+  // }
+  // yearlyAssessments.sort((x, y) => x[0].financialYear.localeCompare(y[0].financialYear));
+  // return yearlyAssessments;
 }
 const getPendingAssessments = (selPropertyDetails, singleAssessmentByStatus = []) => {
   let pendingAssessments = [];
-  let propertiesArray = selPropertyDetails.propertyDetails || [];
-  let yearlyAssessments = [];
-  yearlyAssessments = getYearlyAssessments(propertiesArray);
-  let paidAssessments = [];
-  paidAssessments = getYearlyAssessments(singleAssessmentByStatus);
-  for (let eachYrAssessments of yearlyAssessments) {
-    let bol = true;
-    for (let paidAssessment of paidAssessments) {
-      if (eachYrAssessments[0].financialYear === paidAssessment[0].financialYear) {
-        bol = false;
-        pendingAssessments.push(paidAssessment[0]);
-        if (eachYrAssessments[0].assessmentNumber !== paidAssessment[0].assessmentNumber) {
-          pendingAssessments.push(eachYrAssessments[0]);
-        }
-      }
-    }
-    if (bol) {
-      pendingAssessments.push(eachYrAssessments[0]);
-    }
-  }
+  // let propertiesArray = selPropertyDetails.propertyDetails || [];
+  // let yearlyAssessments = [];
+  // yearlyAssessments = getYearlyAssessments(propertiesArray);
+  // let paidAssessments = [];
+  // paidAssessments = getYearlyAssessments(singleAssessmentByStatus);
+  // for (let eachYrAssessments of yearlyAssessments) {
+  //   let bol = true;
+  //   for (let paidAssessment of paidAssessments) {
+  //     if (eachYrAssessments[0].financialYear === paidAssessment[0].financialYear) {
+  //       bol = false;
+  //       pendingAssessments.push(paidAssessment[0]);
+  //       if (eachYrAssessments[0].assessmentNumber !== paidAssessment[0].assessmentNumber) {
+  //         pendingAssessments.push(eachYrAssessments[0]);
+  //       }
+  //     }
+  //   }
+  //   if (bol) {
+  //     pendingAssessments.push(eachYrAssessments[0]);
+  //   }
+  // }
   return pendingAssessments;
 }
 const checkPaid = (property, ptList = []) => {
