@@ -1,7 +1,7 @@
 export const getWFConfig = (module) => {
   console.log("module", module);
   switch (module.toUpperCase()) {
-    case "CS_COMMON_INBOX_NEWTL":
+    case "TL-SERVICES":
       return {
         INITIATED: "/tradelicence/apply",
         DEFAULT: "/tradelicence/search-preview",
