@@ -41,6 +41,7 @@ public class AssessmentValidator {
 		Map<String, String> errorMap = new HashMap<>();
 		validateRI(assessmentRequest.getRequestInfo(), errorMap);
 		validateUnitIds(assessmentRequest.getAssessment(),property);
+		validateCreateRequest(assessmentRequest.getAssessment(),property);
 		commonValidations(assessmentRequest, errorMap, false);
 		validateMDMSData(assessmentRequest.getRequestInfo(), assessmentRequest.getAssessment(), errorMap);
 		if(config.getIsAssessmentWorkflowEnabled())
@@ -84,6 +85,19 @@ public class AssessmentValidator {
 		if (!CollectionUtils.isEmpty(errorMap.keySet())) {
 			throw new CustomException(errorMap);
 		}
+
+	}
+
+
+	/**
+	 * Validates the assessment create request
+	 * @param assessment
+	 * @param property
+	 */
+	private void validateCreateRequest(Assessment assessment, Property property){
+
+		if(!property.getStatus().equals(Status.ACTIVE))
+			throw new CustomException("INVALID_REQUEST","Assessment cannot be done on inactive or property in workflow");
 
 	}
 
