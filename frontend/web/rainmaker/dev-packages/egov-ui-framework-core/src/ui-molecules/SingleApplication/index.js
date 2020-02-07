@@ -48,6 +48,7 @@ class SingleApplication extends React.Component {
       } else {
         switch (item.status) {
           case "Inprogress":
+          case "Initiated":
             return `/egov-bpa/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`;
           default:
             return `/egov-bpa/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`;

@@ -19,7 +19,7 @@ import {
 } from "./applyResource/boundarydetails";
 import { documentDetails } from "./applyResource/documentDetails";
 import { statusOfNocDetails } from "./applyResource/updateNocDetails";
-import { getQueryArg, getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg, getFileUrlFromAPI, setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
 import {
   prepareFinalObject,
   handleScreenConfigurationFieldChange as handleField
@@ -361,6 +361,11 @@ const screenConfig = {
       setProposedBuildingData(state, dispatch);
       getTodaysDate(action, state, dispatch);
     }
+    const queryObject = [
+      { key: "tenantId", value: tenantId },
+      { key: "businessServices", value: "BPA" }
+    ];
+    setBusinessServiceDataToLocalStorage(queryObject, dispatch);
 
     // Set MDMS Data
     getMdmsData(action, state, dispatch).then(response => {

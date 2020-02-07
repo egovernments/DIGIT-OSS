@@ -112,7 +112,7 @@ const commonApplicantInformation = () => {
       genderRadioGroup: getSelectField({
         label: {
           labelName: "Gender",
-          labelKey: "NOC_APPLICANT_DOB_LABEL"
+          labelKey: "TL_NEW_OWNER_DETAILS_GENDER_LABEL"
         },
         placeholder: {
           labelName: "Select Gender",
