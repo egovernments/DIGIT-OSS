@@ -64,10 +64,10 @@ public class PropertyConfiguration {
 
     //IDGEN
     @Value("${egov.idgen.ack.name}")
-    private String acknowldgementIdGenName;
+    private String ackIdGenName;
 
     @Value("${egov.idgen.ack.format}")
-    private String acknowldgementIdGenFormat;
+    private String ackIdGenFormat;
 
     @Value("${egov.idgen.assm.name}")
     private String assessmentIdGenName;

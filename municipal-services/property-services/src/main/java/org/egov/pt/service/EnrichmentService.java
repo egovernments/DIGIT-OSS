@@ -164,16 +164,13 @@ public class EnrichmentService {
 		RequestInfo requestInfo = request.getRequestInfo();
 
 		if (!config.getIsWorkflowEnabled()) {
-			
+
 			String pId = getIdList(requestInfo, tenantId, config.getPropertyIdGenName(), config.getPropertyIdGenFormat(), 1).get(0);
 			property.setPropertyId(pId);
 			property.setStatus(Status.ACTIVE);
-		} else {
-			
-			String ackNo = getIdList(requestInfo, tenantId, config.getAcknowldgementIdGenName(), config.getAcknowldgementIdGenFormat(), 1).get(0);
-			property.setAcknowldgementNumber(ackNo);
 		}
-
+		String ackNo = getIdList(requestInfo, tenantId, config.getAckIdGenName(), config.getAckIdGenFormat(), 1).get(0);
+		property.setAcknowldgementNumber(ackNo);
 	}
 
 
@@ -214,7 +211,7 @@ public class EnrichmentService {
 		
 		if (isStart) {
 			
-			String ackNo = getIdList(requestInfo, property.getTenantId(), config.getAcknowldgementIdGenName(), config.getAcknowldgementIdGenFormat(), 1).get(0);
+			String ackNo = getIdList(requestInfo, property.getTenantId(), config.getAckIdGenName(), config.getAckIdGenFormat(), 1).get(0);
 			
 			property.setId(UUID.randomUUID().toString());
 			property.setAcknowldgementNumber(ackNo);
