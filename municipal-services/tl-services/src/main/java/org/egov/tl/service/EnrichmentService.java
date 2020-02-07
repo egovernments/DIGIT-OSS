@@ -102,10 +102,13 @@ public class EnrichmentService {
             }
             
             if(tradeLicense.getApplicationType() !=null && tradeLicense.getApplicationType().toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL)){
-                if(tradeLicense.getAction().equalsIgnoreCase(ACTION_APPLY) || tradeLicense.getAction().equalsIgnoreCase(TLConstants.TL_ACTION_INITIATE))tradeLicense.getTradeLicenseDetail().getApplicationDocuments().forEach(document -> {
-                    document.setId(UUID.randomUUID().toString());
-                    document.setActive(true);
-                });                
+                if(tradeLicense.getAction().equalsIgnoreCase(ACTION_APPLY) || tradeLicense.getAction().equalsIgnoreCase(TLConstants.TL_ACTION_INITIATE)){
+                    tradeLicense.getTradeLicenseDetail().getApplicationDocuments().forEach(document -> {
+                        document.setId(UUID.randomUUID().toString());
+                        document.setActive(true);
+                    });
+                }
+                               
             }
 
             tradeLicense.getTradeLicenseDetail().getOwners().forEach(owner -> {

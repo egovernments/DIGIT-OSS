@@ -142,6 +142,12 @@ public class TLConfiguration {
     @Value("${egov.tl.calculator.getBill.endpoint}")
     private String getBillEndpoint;
 
+    @Value("${egov.billingservice.host}")
+    private String billingHost;
+
+    @Value("${egov.bill.gen.endpoint}")
+    private String fetchBillEndpoint;
+
     //Institutional key word
     @Value("${egov.ownershipcategory.institutional}")
     private String institutional;
