@@ -16288,7 +16288,7 @@
     {
       "id": 1963,
       "name": "Dashboard collectionsindex-v1",
-      "url": "/dashboard-ingest/migrate/collectionsindex-v1",
+      "url": "/dashboard-ingest/ingest/migrate/collectionsindex-v1",
       "parentModule": "",
       "displayName": "DSS",
       "orderNumber": 0,
@@ -16300,7 +16300,7 @@
     {
       "id": 1964,
       "name": "Dashboard Static Upload",
-      "url": "/dashboard-ingest/upload",
+      "url": "/dashboard-ingest/ingest/upload",
       "parentModule": "",
       "displayName": "DSS",
       "orderNumber": 0,
