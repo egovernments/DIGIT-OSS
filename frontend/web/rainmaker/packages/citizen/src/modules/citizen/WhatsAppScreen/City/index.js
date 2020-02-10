@@ -10,7 +10,6 @@ import { List } from "egov-ui-kit/components";
 import Input from '@material-ui/core/Input';
 import get from "lodash/get";
 import queryString from 'query-string';
-import { getLocalization } from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
 
 const styles = (theme) => ({
@@ -41,11 +40,7 @@ class WhatsAppCity extends React.Component {
     data: [],
     citylist: [],
     phone: undefined,
-  };
-  getLocalTextFromCode = localCode => {
-    return JSON.parse(getLocalization("localization_en_IN")).find(
-      item => item.code === localCode
-    );
+    stateId:undefined,
   };
   getListItems = items =>
     items.map((item) => ({
@@ -58,11 +53,11 @@ class WhatsAppCity extends React.Component {
         />
       )
     }));
-  getMDMSData = async () => {
+  getMDMSData = async (stateId) => {
     let mdmsBody = {
 
       MdmsCriteria: {
-        tenantId: "pb",
+        tenantId:stateId || "pb.amritsar",
         moduleDetails: [
           {
             moduleName: "tenant",
@@ -91,16 +86,23 @@ class WhatsAppCity extends React.Component {
   componentDidMount = async () => {
     const values = queryString.parse(this.props.location.search)
     const phone = values.phone;
+    const stateId = values.tenantId;
     this.setState({
       phone: phone,
     })
+    this.setState({
+      stateId: stateId,
+    })
 
-    const citydata = await this.getMDMSData();
-    const citylistCode = get(citydata, "MdmsRes.tenant.citymodule.0.tenants", []);
+
+    const citydata = await this.getMDMSData(stateId);
+    console.log("aa",citydata)
+    const citylistCodeModule = get(citydata, "MdmsRes.tenant.citymodule", []);
+    const citylistCode=citylistCodeModule.filter(item=>item.module==="PGR.WHATSAPP")[0].tenants
     const citylist = citylistCode.map((item) => {
       return {
         code: item.code,
-        label: "TENANT_TENANTS_" + (item.code).toUpperCase().replace(/[.]/g, "_")
+        label: item.name 
       }
     })
 
@@ -114,9 +116,7 @@ class WhatsAppCity extends React.Component {
   onChangeText = (searchText, citylist) => {
     this.setState({ searchText });
     //logic to like search on items    
-    const filterData = citylist.filter(item => get(this.getLocalTextFromCode(item.label),"message",item.label).toLowerCase().includes(searchText.toLowerCase()));
-
-
+    const filterData = citylist.filter(item => item.label.toLowerCase().includes(searchText.toLowerCase()));
     this.setState({
       data: filterData,
     })
@@ -139,7 +139,7 @@ class WhatsAppCity extends React.Component {
           <div className="header-iconText">
             <Icon id="back-navigator" action="navigation" name="arrow-back" />
             <Label
-              label="WHATSAPP_CHOOSE_CITY"
+              label="CHOOSE CITY"
               color="white"
               fontSize={18}
               bold={true}
@@ -151,7 +151,7 @@ class WhatsAppCity extends React.Component {
           <div className={`${classes.root} dashboard-search-main-cont`}>
             <Icon action="action" name="search" style={{ marginLeft: 12 }} />
             <Input
-              placeholder={get(this.getLocalTextFromCode("WHATSAPP_SEARCH_CITY"),"message","Search City")}
+              placeholder="Search City"
               disableUnderline={true}
               fullWidth={true}
               //className={classes.input}
@@ -171,7 +171,7 @@ class WhatsAppCity extends React.Component {
             primaryTogglesNestedList={true}
             onItemClick={(item, index) => {
               const number = this.state.phone || 919987106368;
-              const name=get(this.getLocalTextFromCode(item.primaryText.props.label),"message",item.primaryText.props.label);
+              const name=item.primaryText.props.label;
               const weblink = "https://api.whatsapp.com/send?phone=" + number + "&text=" + name;
               window.location.href = weblink
             }}
