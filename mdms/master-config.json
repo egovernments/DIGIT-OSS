@@ -861,6 +861,26 @@
       "masterName": "WS_Round_Off",
       "isStateLevel": true,
       "uniqueKeys": []
+    },
+    "PlotSizeSlab": {
+      "masterName": "PlotSizeSlab",
+      "isStateLevel": true,
+      "uniqueKeys": []
+    },
+    "PropertyUsageType": {
+      "masterName": "PropertyUsageType",
+      "isStateLevel": true,
+      "uniqueKeys": []
+    },
+    "FeeSlab": {
+      "masterName": "FeeSlab",
+      "isStateLevel": true,
+      "uniqueKeys": []
+    },
+    "RoadType": {
+      "masterName": "RoadType",
+      "isStateLevel": true,
+      "uniqueKeys": []
     }
   },
   "BPA": {
@@ -895,28 +915,28 @@
       "isStateLevel": true,
       "uniqueKeys": []
     },
-     "OccupancyType": {
+    "OccupancyType": {
       "masterName": "OccupancyType",
       "isStateLevel": true,
       "uniqueKeys": [
         "$.code"
       ]
     },
-     "SubOccupancyType": {
+    "SubOccupancyType": {
       "masterName": "SubOccupancyType",
       "isStateLevel": true,
       "uniqueKeys": [
         "$.code"
       ]
     },
-     "Usages": {
+    "Usages": {
       "masterName": "Usages",
       "isStateLevel": true,
       "uniqueKeys": [
         "$.code"
       ]
     },
-	"CheckList": {
+    "CheckList": {
       "masterName": "CheckList",
       "isStateLevel": true,
       "uniqueKeys": [
@@ -968,8 +988,28 @@
       "isStateLevel": true,
       "uniqueKeys": []
     },
-     "SW_Round_Off": {
+    "SW_Round_Off": {
       "masterName": "SW_Round_Off",
+      "isStateLevel": true,
+      "uniqueKeys": []
+    },
+    "PlotSizeSlab": {
+      "masterName": "PlotSizeSlab",
+      "isStateLevel": true,
+      "uniqueKeys": []
+    },
+    "PropertyUsageType": {
+      "masterName": "PropertyUsageType",
+      "isStateLevel": true,
+      "uniqueKeys": []
+    },
+    "FeeSlab": {
+      "masterName": "FeeSlab",
+      "isStateLevel": true,
+      "uniqueKeys": []
+    },
+    "RoadType": {
+      "masterName": "RoadType",
       "isStateLevel": true,
       "uniqueKeys": []
     }

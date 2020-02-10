@@ -2091,6 +2091,165 @@
       "isActualDemand": false,
       "order": "1",
       "isRequired": false
+    },{
+      "category": "FEE",
+      "service": "WS",
+      "name": "Water application form fee",
+      "code": "WS_FORM_FEE",
+      "isDebit": false,
+      "isActualDemand": true,
+      "order": "0",
+      "isRequired": false
+    },
+    {
+      "category": "FEE",
+      "service": "WS",
+      "name": "Water application scrutiny fee",
+      "code": "WS_SCRUTINY_FEE",
+      "isDebit": false,
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": false
+    },
+    {
+      "category": "FEE",
+      "service": "WS",
+      "name": "Water application one time fee",
+      "code": "WS_ONE_TIME_FEE",
+      "isDebit": false,
+      "isActualDemand": true,
+      "order": "2",
+      "isRequired": false
+    },
+    {
+      "category": "CHARGES",
+      "service": "WS",
+      "name": "Water application road cutting charge",
+      "code": "WS_ROAD_CUTTING_CHARGE",
+      "isDebit": false,
+      "isActualDemand": true,
+      "order": "3",
+      "isRequired": false
+    },
+    {
+      "category": "CHARGES",
+      "service": "WS",
+      "name": "Water application meter charge",
+      "code": "WS_METER_CHARGE",
+      "isDebit": false,
+      "isActualDemand": true,
+      "order": "4",
+      "isRequired": false
+    },
+    {
+      "category": "CHARGES",
+      "service": "WS",
+      "name": "Water application security charge",
+      "code": "WS_SECURITY_CHARGE",
+      "isDebit": false,
+      "isActualDemand": true,
+      "order": "5",
+      "isRequired": false
+    },
+    {
+      "category": "CHARGES",
+      "service": "WS",
+      "name": "Water application other charges",
+      "code": "WS_OTHER_CHARGE",
+      "isDebit": false,
+      "isActualDemand": true,
+      "order": "6",
+      "isRequired": false
+    },
+    {
+      "category": "TAX",
+      "service": "WS",
+      "name": "Water application tax and cess",
+      "code": "WS_TAX_AND_CESS",
+      "isDebit": false,
+      "isActualDemand": true,
+      "order": "7",
+      "isRequired": false
+    },
+    {
+      "category": "FEE",
+      "service": "SW",
+      "name": "Sewerage application form fee",
+      "code": "SW_FORM_FEE",
+      "isDebit": false,
+      "isActualDemand": true,
+      "order": "0",
+      "isRequired": false
+    },
+    {
+      "category": "FEE",
+      "service": "SW",
+      "name": "Sewerage application scrutiny fee",
+      "code": "SW_SCRUTINY_FEE",
+      "isDebit": false,
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": false
+    },
+    {
+      "category": "FEE",
+      "service": "SW",
+      "name": "Sewerage application one time fee",
+      "code": "SW_ONE_TIME_FEE",
+      "isDebit": false,
+      "isActualDemand": true,
+      "order": "2",
+      "isRequired": false
+    },
+    {
+      "category": "CHARGES",
+      "service": "SW",
+      "name": "Sewerage application road cutting charge",
+      "code": "SW_ROAD_CUTTING_CHARGE",
+      "isDebit": false,
+      "isActualDemand": true,
+      "order": "3",
+      "isRequired": false
+    },
+    {
+      "category": "CHARGES",
+      "service": "SW",
+      "name": "Sewerage application meter charge",
+      "code": "SW_METER_CHARGE",
+      "isDebit": false,
+      "isActualDemand": true,
+      "order": "4",
+      "isRequired": false
+    },
+    {
+      "category": "CHARGES",
+      "service": "SW",
+      "name": "Sewerage application security charge",
+      "code": "SW_SECURITY_CHARGE",
+      "isDebit": false,
+      "isActualDemand": true,
+      "order": "5",
+      "isRequired": false
+    },
+    {
+      "category": "CHARGES",
+      "service": "SW",
+      "name": "Sewerage application other charges",
+      "code": "SW_OTHER_CHARGE",
+      "isDebit": false,
+      "isActualDemand": true,
+      "order": "6",
+      "isRequired": false
+    },
+    {
+      "category": "TAX",
+      "service": "SW",
+      "name": "Sewerage application tax and cess",
+      "code": "SW_TAX_AND_CESS",
+      "isDebit": false,
+      "isActualDemand": true,
+      "order": "7",
+      "isRequired": false
     }
   ]
 }
