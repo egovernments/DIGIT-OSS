@@ -103,33 +103,6 @@ public class MDMSService {
         return taxPeriods;
     }
 
-
-    /**
-     * Gets the startDate and the endDate of the financialYear of Renewal Application
-     * @param requestInfo The RequestInfo of the calculationRequest
-     * @param license The tradeLicense for which calculation is done
-     * @return Map containing the startDate and endDate
-     */
-
-    public Map<String,Long> getTaxPeriodsforRenewal(RequestInfo requestInfo,TradeLicense license,Object mdmsData){
-        Map<String,Long> taxPeriods = new HashMap<>();
-        try {
-            String jsonPath = TLCalculatorConstants.MDMS_TL_RENEWAL_TAX_PERIODS.replace("{}",license.getFinancialYear());
-            List<Map<String,Object>> jsonOutput =  JsonPath.read(mdmsData, jsonPath);
-            Map<String,Object> financialYearProperties = jsonOutput.get(0);
-            Object startDate = financialYearProperties.get(TLCalculatorConstants.MDMS_STARTDATE);
-            Object endDate = financialYearProperties.get(TLCalculatorConstants.MDMS_ENDDATE);
-            taxPeriods.put(TLCalculatorConstants.MDMS_STARTDATE,(Long) startDate);
-            taxPeriods.put(TLCalculatorConstants.MDMS_ENDDATE,(Long) endDate);
-
-        } catch (Exception e) {
-            log.error("Error while fetvhing MDMS data", e);
-            throw new CustomException("INVALID FINANCIALYEAR", "No data found for the financialYear: "+license.getFinancialYear());
-        }
-        return taxPeriods;
-    }
-
-
     /**
      * Gets the calculationType for the city for a particular financialYear
      * If for particular financialYear entry is not there previous year is taken

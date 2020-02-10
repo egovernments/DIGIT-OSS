@@ -2,6 +2,7 @@ package org.egov.tl.workflow;
 
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
+import org.egov.tl.util.TLConstants;
 import org.egov.tl.web.models.TradeLicense;
 import org.egov.tl.web.models.TradeLicenseRequest;
 import org.egov.tl.web.models.workflow.BusinessService;
@@ -10,10 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.egov.tl.util.TLConstants.*;
 
@@ -41,12 +39,14 @@ public class ActionValidator {
      */
 	public void validateCreateRequest(TradeLicenseRequest request){
         Map<String, String> errorMap = new HashMap<>();
-
+        Set<String> applicationTypes = new HashSet<>();
         request.getLicenses().forEach(license -> {
-
+        
+            applicationTypes.add(license.getApplicationType().toString());
             String businessService = license.getBusinessService();
             if (businessService == null)
                 businessService = businessService_TL;
+                
             switch(businessService)
             {
                 case businessService_TL:
@@ -55,6 +55,7 @@ public class ActionValidator {
 //                        if (license.getTradeLicenseDetail().getApplicationDocuments() != null)
 //                            errorMap.put("INVALID ACTION", "Action should be APPLY when application document are provided");
 //                    }
+                    
                     if (ACTION_APPLY.equalsIgnoreCase(license.getAction())) {
                         if (license.getTradeLicenseDetail().getApplicationDocuments() == null)
                             errorMap.put("INVALID ACTION", "Action cannot be changed to APPLY. Application document are not provided");
@@ -73,6 +74,13 @@ public class ActionValidator {
             }
         });
         //    validateRole(request);
+
+        // Check if all the applicationTypes of bulk request is same.
+        if(request.getLicenses().size() > 1){
+            if(applicationTypes.size() != 1){
+                errorMap.put("INVALID APPLICATION TYPES", "Application Types should be identical for bulk requests");
+            }
+        }
 
         if (!errorMap.isEmpty())
             throw new CustomException(errorMap);

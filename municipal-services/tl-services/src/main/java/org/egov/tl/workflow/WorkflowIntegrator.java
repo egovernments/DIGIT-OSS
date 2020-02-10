@@ -111,11 +111,7 @@ public class WorkflowIntegrator {
 				{
 				//TLR Changes
 					case businessService_TL:
-						if(currentLicense.getApplicationType() != null && currentLicense.getApplicationType().toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL)){
-							obj.put(BUSINESSSERVICEKEY, currentLicense.getWorkflowCode());
-						}else{
-							obj.put(BUSINESSSERVICEKEY, config.getTlBusinessServiceValue());
-						}
+						obj.put(BUSINESSSERVICEKEY, currentLicense.getWorkflowCode());
 						obj.put(MODULENAMEKEY, TLMODULENAMEVALUE);
 						break;
 

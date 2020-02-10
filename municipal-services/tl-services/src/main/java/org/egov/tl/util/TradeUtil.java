@@ -204,7 +204,6 @@ public class TradeUtil {
     public Map<String,Long> getTaxPeriodsforRenewal(TradeLicense license,Object mdmsData){
         Map<String,Long> taxPeriods = new HashMap<>();
         try {
-            List<Map<String,Object>> tlFinancialYears =  JsonPath.read(mdmsData, TLConstants.MDMS_TL_FINACIALYEAR_PATH);
             String currentYearjsonPath = TLConstants.MDMS_FINACIALYEAR_PATH.replace("{}",license.getFinancialYear());
             List<Map<String,Object>> currentFinancialYear = JsonPath.read(mdmsData, currentYearjsonPath);
             Map<String,Object> currentFYObject = currentFinancialYear.get(0);

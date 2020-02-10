@@ -58,9 +58,7 @@ public class TradeLicenseService {
 
     private EditNotificationService  editNotificationService;
 
-    private  TradeUtil tradeUtil;
-
-    private Producer producer;
+    private TradeUtil tradeUtil;
 
     @Value("${workflow.bpa.businessServiceCode.fallback_enabled}")
     private Boolean pickWFServiceNameFromTradeTypeOnly;
@@ -70,7 +68,7 @@ public class TradeLicenseService {
                                UserService userService, TLRepository repository, ActionValidator actionValidator,
                                TLValidator tlValidator, TLWorkflowService TLWorkflowService,
                                CalculationService calculationService, TradeUtil util, DiffService diffService,
-                               TLConfiguration config, EditNotificationService editNotificationService, WorkflowService workflowService, TradeUtil tradeUtil,Producer producer) {
+                               TLConfiguration config, EditNotificationService editNotificationService, WorkflowService workflowService, TradeUtil tradeUtil) {
         this.wfIntegrator = wfIntegrator;
         this.enrichmentService = enrichmentService;
         this.userService = userService;
@@ -85,7 +83,6 @@ public class TradeLicenseService {
         this.editNotificationService = editNotificationService;
         this.workflowService = workflowService;
         this.tradeUtil = tradeUtil;
-        this.producer = producer;
     }
 
 
@@ -111,7 +108,7 @@ public class TradeLicenseService {
                validateMobileNumberUniqueness(tradeLicenseRequest);
                break;
        }
-       //userService.createUser(tradeLicenseRequest, false);
+       userService.createUser(tradeLicenseRequest, false);
        calculationService.addCalculation(tradeLicenseRequest);
 
         /*
@@ -125,11 +122,7 @@ public class TradeLicenseService {
                break;
        }
         repository.save(tradeLicenseRequest);
-
-       if(tradeLicenseRequest.getLicenses().get(0).getApplicationType() != null && tradeLicenseRequest.getLicenses().get(0).getApplicationType().toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL)){
-
-            producer.push(config.getUpdateTopic(), tradeLicenseRequest);
-        }
+       
 
         return tradeLicenseRequest.getLicenses();
 	}

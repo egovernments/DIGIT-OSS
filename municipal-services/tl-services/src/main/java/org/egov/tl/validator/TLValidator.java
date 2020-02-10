@@ -562,12 +562,9 @@ public class TLValidator {
             if(license.getTradeLicenseDetail().getApplicationDocuments()!=null){
                 license.getTradeLicenseDetail().getApplicationDocuments().forEach(
                         document -> {
-                            if(document != null) {
                                 if(documentFileStoreIds.contains(document.getFileStoreId()))
                                     throw new CustomException("DUPLICATE_DOCUMENT ERROR","Same document cannot be used multiple times");
                                 else documentFileStoreIds.add(document.getFileStoreId());
-                                
-                            }
                         }
                 );
             }
