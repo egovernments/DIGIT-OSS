@@ -299,6 +299,9 @@ public class PropertyValidator {
 								+ PTConstants.PT_TYPE_BUILTUP);
 			}
 			
+			if (property.getUsageCategory() == null)
+				errorMap.put("EG_PT_ERROR_USAGE",
+						"Usage Category is mandatory for for property of type : " + PTConstants.PT_TYPE_BUILTUP);
 		}
     	
 	}
