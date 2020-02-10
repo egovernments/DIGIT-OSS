@@ -64,9 +64,20 @@ public class EnrichmentService {
             }
             switch (businessService) {
                 case businessService_TL:
-                    Map<String, Long> taxPeriods = tradeUtil.getTaxPeriods(tradeLicense, mdmsData);
-                    if (tradeLicense.getLicenseType().equals(TradeLicense.LicenseTypeEnum.PERMANENT) || tradeLicense.getValidTo() == null)
+                    //TLR Changes
+                    if(tradeLicense.getApplicationType() != null && tradeLicense.getApplicationType().toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL)){
+                        tradeLicense.setLicenseNumber(tradeLicenseRequest.getLicenses().get(0).getLicenseNumber());
+                        Map<String, Long> taxPeriods = tradeUtil.getTaxPeriodsforRenewal(tradeLicense, mdmsData);
                         tradeLicense.setValidTo(taxPeriods.get(TLConstants.MDMS_ENDDATE));
+                        tradeLicense.setValidFrom(taxPeriods.get(TLConstants.MDMS_STARTDATE));
+                    }else{
+                        Map<String, Long> taxPeriods = tradeUtil.getTaxPeriods(tradeLicense, mdmsData);
+                        if (tradeLicense.getLicenseType().equals(TradeLicense.LicenseTypeEnum.PERMANENT) || tradeLicense.getValidTo() == null)
+                            tradeLicense.setValidTo(taxPeriods.get(TLConstants.MDMS_ENDDATE));
+                    }
+//                    Map<String, Long> taxPeriods = tradeUtil.getTaxPeriods(tradeLicense, mdmsData);
+//                    if (tradeLicense.getLicenseType().equals(TradeLicense.LicenseTypeEnum.PERMANENT) || tradeLicense.getValidTo() == null)
+//                        tradeLicense.setValidTo(taxPeriods.get(TLConstants.MDMS_ENDDATE));
                     if (!CollectionUtils.isEmpty(tradeLicense.getTradeLicenseDetail().getAccessories()))
                         tradeLicense.getTradeLicenseDetail().getAccessories().forEach(accessory -> {
                             accessory.setTenantId(tradeLicense.getTenantId());
@@ -88,6 +99,16 @@ public class EnrichmentService {
                     document.setId(UUID.randomUUID().toString());
                     document.setActive(true);
                 });
+            }
+            
+            if(tradeLicense.getApplicationType() !=null && tradeLicense.getApplicationType().toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL)){
+                if(tradeLicense.getAction().equalsIgnoreCase(ACTION_APPLY) || tradeLicense.getAction().equalsIgnoreCase(TLConstants.TL_ACTION_INITIATE)){
+                    tradeLicense.getTradeLicenseDetail().getApplicationDocuments().forEach(document -> {
+                        document.setId(UUID.randomUUID().toString());
+                        document.setActive(true);
+                    });
+                }
+                               
             }
 
             tradeLicense.getTradeLicenseDetail().getOwners().forEach(owner -> {
@@ -421,44 +442,56 @@ public class EnrichmentService {
         String tenantId = request.getLicenses().get(0).getTenantId();
         List<TradeLicense> licenses = request.getLicenses();
         int count=0;
-        for(int i=0;i<licenses.size();i++){
-            TradeLicense license = licenses.get(i);
-           if((license.getStatus()!=null) && license.getStatus().equalsIgnoreCase(endstates.get(i)))
-               count++;
-        }
-        if(count!=0) {
-            List<String> licenseNumbers = null;
-            String businessService = licenses.isEmpty()?null:licenses.get(0).getBusinessService();
-            if (businessService == null)
-                businessService = businessService_TL;
-            switch (businessService) {
-                case businessService_TL:
-                    licenseNumbers=getIdList(requestInfo, tenantId, config.getLicenseNumberIdgenNameTL(), config.getLicenseNumberIdgenFormatTL(), count);
-                    break;
-
-                case businessService_BPA:
-                    licenseNumbers=getIdList(requestInfo, tenantId, config.getLicenseNumberIdgenNameBPA(), config.getLicenseNumberIdgenFormatBPA(), count);
-                    break;
+        
+        
+        if (licenses.get(0).getApplicationType() != null && licenses.get(0).getApplicationType().toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL)) {
+            for(int i=0;i<licenses.size();i++){
+                TradeLicense license = licenses.get(i);
+                Long time = System.currentTimeMillis();
+                license.setIssuedDate(time);
+//                license.setValidFrom(time);
             }
-            ListIterator<String> itr = licenseNumbers.listIterator();
-
-            Map<String, String> errorMap = new HashMap<>();
-            if (licenseNumbers.size() != count) {
-                errorMap.put("IDGEN ERROR ", "The number of LicenseNumber returned by idgen is not equal to number of TradeLicenses");
-            }
-
-            if (!errorMap.isEmpty())
-                throw new CustomException(errorMap);
-
+        }else {
             for (int i = 0; i < licenses.size(); i++) {
                 TradeLicense license = licenses.get(i);
-                if ((license.getStatus() != null) && license.getStatus().equalsIgnoreCase(endstates.get(i))) {
-                    license.setLicenseNumber(itr.next());
-                    Long time = System.currentTimeMillis();
-                    license.setIssuedDate(time);
-                    license.setValidFrom(time);
+                if ((license.getStatus() != null) && license.getStatus().equalsIgnoreCase(endstates.get(i)))
+                    count++;
+            }
+            if (count != 0) {
+                List<String> licenseNumbers = null;
+                String businessService = licenses.isEmpty() ? null : licenses.get(0).getBusinessService();
+                if (businessService == null)
+                    businessService = businessService_TL;
+                switch (businessService) {
+                    case businessService_TL:
+                        licenseNumbers = getIdList(requestInfo, tenantId, config.getLicenseNumberIdgenNameTL(), config.getLicenseNumberIdgenFormatTL(), count);
+                        break;
+
+                    case businessService_BPA:
+                        licenseNumbers = getIdList(requestInfo, tenantId, config.getLicenseNumberIdgenNameBPA(), config.getLicenseNumberIdgenFormatBPA(), count);
+                        break;
+                }
+                ListIterator<String> itr = licenseNumbers.listIterator();
+
+                Map<String, String> errorMap = new HashMap<>();
+                if (licenseNumbers.size() != count) {
+                    errorMap.put("IDGEN ERROR ", "The number of LicenseNumber returned by idgen is not equal to number of TradeLicenses");
+                }
+
+                if (!errorMap.isEmpty())
+                    throw new CustomException(errorMap);
+
+                for (int i = 0; i < licenses.size(); i++) {
+                    TradeLicense license = licenses.get(i);
+                    if ((license.getStatus() != null) && license.getStatus().equalsIgnoreCase(endstates.get(i))) {
+                        license.setLicenseNumber(itr.next());
+                        Long time = System.currentTimeMillis();
+                        license.setIssuedDate(time);
+                        license.setValidFrom(time);
+                    }
                 }
             }
+
         }
     }
 

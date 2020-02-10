@@ -175,8 +175,11 @@ public class CalculationService {
 
       estimate.setEstimateAmount(totalTax);
       estimate.setCategory(Category.TAX);
-      estimate.setTaxHeadCode(config.getBaseTaxHead());
-
+      if(license.getApplicationType() != null && license.getApplicationType().toString().equals(TLCalculatorConstants.APPLICATION_TYPE_RENEWAL)){
+          estimate.setTaxHeadCode(config.getRenewTaxHead());
+      }else{
+          estimate.setTaxHeadCode(config.getBaseTaxHead());
+      }
       estimatesAndSlabs.setEstimates(Collections.singletonList(estimate));
 
       return estimatesAndSlabs;

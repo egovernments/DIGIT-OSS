@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.egov.tl.config.TLConfiguration;
+import org.egov.tl.util.TLConstants;
 import org.egov.tl.web.models.TradeLicense;
 import org.egov.tl.web.models.TradeLicenseRequest;
 import org.egov.tracer.model.CustomException;
@@ -85,19 +86,16 @@ public class WorkflowIntegrator {
 	 * @param tradeLicenseRequest
 	 */
 	public void callWorkFlow(TradeLicenseRequest tradeLicenseRequest) {
-
-		String wfTenantId = tradeLicenseRequest.getLicenses().get(0).getTenantId();
-		String businessServiceFromMDMS = tradeLicenseRequest.getLicenses().isEmpty()?null:tradeLicenseRequest.getLicenses().get(0).getBusinessService();
+		TradeLicense currentLicense = tradeLicenseRequest.getLicenses().get(0);
+		String wfTenantId = currentLicense.getTenantId();
+		String businessServiceFromMDMS = tradeLicenseRequest.getLicenses().isEmpty()?null:currentLicense.getBusinessService();
 		if (businessServiceFromMDMS == null)
 			businessServiceFromMDMS = businessService_TL;
 		JSONArray array = new JSONArray();
 		for (TradeLicense license : tradeLicenseRequest.getLicenses()) {
 			if((businessServiceFromMDMS.equals(businessService_TL))||(!license.getAction().equalsIgnoreCase(TRIGGER_NOWORKFLOW))) {
 				JSONObject obj = new JSONObject();
-
-
 				List<Map<String, String>> uuidmaps = new LinkedList<>();
-
 				if(!CollectionUtils.isEmpty(license.getAssignee())){
 
 					// Adding assignes to processInstance
@@ -106,15 +104,14 @@ public class WorkflowIntegrator {
 						uuidMap.put(UUIDKEY, assignee);
 						uuidmaps.add(uuidMap);
 					});
-
 				}
-
 				obj.put(BUSINESSIDKEY, license.getApplicationNumber());
 				obj.put(TENANTIDKEY, wfTenantId);
 				switch(businessServiceFromMDMS)
 				{
+				//TLR Changes
 					case businessService_TL:
-						obj.put(BUSINESSSERVICEKEY, config.getTlBusinessServiceValue());
+						obj.put(BUSINESSSERVICEKEY, currentLicense.getWorkflowCode());
 						obj.put(MODULENAMEKEY, TLMODULENAMEVALUE);
 						break;
 

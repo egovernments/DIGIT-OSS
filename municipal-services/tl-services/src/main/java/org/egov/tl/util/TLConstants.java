@@ -13,6 +13,10 @@ public class TLConstants {
 
     public static  final String businessService_TL = "TL";
 
+    public static  final String businessService_DIRECT_RENEWAL = "DIRECTRENEWAL";
+    
+    public static  final String businessService_EDIT_RENEWAL = "EDITRENEWAL";
+
     public static  final String businessService_BPA = "BPAREG";
 
     public static final String PROPERTY_JSONPATH = "$.Properties[0].propertyId";
@@ -99,10 +103,20 @@ public class TLConstants {
 
     public static final String MDMS_FINACIALYEAR_PATH = "$.MdmsRes.egf-master.FinancialYear[?(@.code==\"{}\")]";
 
+    public static final String MDMS_TL_FINACIALYEAR_PATH = "$.MdmsRes.egf-master.FinancialYear";
+
+    public static final String MDMS_TL_FINACIALYEAR_START_DATE = "$.MdmsRes.egf-master.FinancialYear[?(@.startingDate==\"{}\")]";
+
     public static final String MDMS_STARTDATE  = "startingDate";
 
     public static final String MDMS_ENDDATE  = "endingDate";
+    
+    //TL types
 
+    public static final String APPLICATION_TYPE_RENEWAL = "RENEWAL";
+
+    public static final String APPLICATION_TYPE_NEW = "NEW";
+    
     // error constants
 
     public static final String INVALID_TENANT_ID_MDMS_KEY = "INVALID TENANTID";
@@ -190,6 +204,10 @@ public class TLConstants {
 	public static final String  USREVENTS_EVENT_POSTEDBY = "SYSTEM-TL";
 
 	public static final String CITIZEN_SENDBACK_ACTION = "SENDBACKTOCITIZEN";
+	
+	
+	public static final String TL_ACTION_INITIATE = "INITIATE";
+	
 
 
     public static final List<String> FIELDS_TO_IGNORE = Collections.unmodifiableList(Arrays.asList(VARIABLE_ACTION,VARIABLE_WFDOCUMENTS,

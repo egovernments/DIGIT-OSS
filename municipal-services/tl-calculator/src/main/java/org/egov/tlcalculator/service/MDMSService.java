@@ -50,9 +50,9 @@ public class MDMSService {
         // filter to only get code field from master data
 
         final String filterCodeForUom = "$.[?(@.active==true)]";
+        final String serviceCode = "$.[?(@.service=='TL.RENEWAL')]";
 
         fyMasterDetails.add(MasterDetail.builder().name(TLCalculatorConstants.MDMS_FINANCIALYEAR).filter(filterCodeForUom).build());
-
         ModuleDetail fyModuleDtls = ModuleDetail.builder().masterDetails(fyMasterDetails)
                 .moduleName(TLCalculatorConstants.MDMS_EGF_MASTER).build();
 
@@ -61,10 +61,16 @@ public class MDMSService {
                 .filter(filterCodeForUom).build());
         ModuleDetail tlModuleDtls = ModuleDetail.builder().masterDetails(tlMasterDetails)
                 .moduleName(TLCalculatorConstants.MDMS_TRADELICENSE).build();
+                
+        List<MasterDetail> taxPeriodMasterDetails = new ArrayList<>();
+        taxPeriodMasterDetails.add(MasterDetail.builder().name(TLCalculatorConstants.MDMS_TAXPERIOD).filter(serviceCode).build());
+        ModuleDetail taxPeriodModuleDetails = ModuleDetail.builder().masterDetails(taxPeriodMasterDetails)
+                .moduleName(TLCalculatorConstants.MDMS_BILLINGSERVICE).build();        
 
         List<ModuleDetail> moduleDetails = new ArrayList<>();
         moduleDetails.add(fyModuleDtls);
         moduleDetails.add(tlModuleDtls);
+        moduleDetails.add(taxPeriodModuleDetails);
 
         MdmsCriteria mdmsCriteria = MdmsCriteria.builder().moduleDetails(moduleDetails).tenantId(tenantId)
                 .build();
@@ -96,7 +102,6 @@ public class MDMSService {
         }
         return taxPeriods;
     }
-
 
     /**
      * Gets the calculationType for the city for a particular financialYear

@@ -157,9 +157,14 @@ public class TLValidator {
      */
     private void valideDates(TradeLicenseRequest request,Object mdmsData){
         request.getLicenses().forEach(license -> {
+            Map<String,Long> taxPeriods = null;
             if(license.getValidTo()==null)
                 throw new CustomException("INVALID VALIDTO DATE"," Validto cannot be null");
-            Map<String,Long> taxPeriods = tradeUtil.getTaxPeriods(license,mdmsData);
+            if(license.getApplicationType() != null && license.getApplicationType().toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL)){
+                taxPeriods = tradeUtil.getTaxPeriodsforRenewal(license,mdmsData);
+            }else{
+                taxPeriods = tradeUtil.getTaxPeriods(license,mdmsData);
+            }
             if(license.getValidTo()!=null && license.getValidTo()>taxPeriods.get(TLConstants.MDMS_ENDDATE)){
                 Date expiry = new Date(license.getValidTo());
                 throw new CustomException("INVALID TO DATE"," Validto cannot be greater than: "+expiry);
@@ -557,9 +562,9 @@ public class TLValidator {
             if(license.getTradeLicenseDetail().getApplicationDocuments()!=null){
                 license.getTradeLicenseDetail().getApplicationDocuments().forEach(
                         document -> {
-                            if(documentFileStoreIds.contains(document.getFileStoreId()))
-                                throw new CustomException("DUPLICATE_DOCUMENT ERROR","Same document cannot be used multiple times");
-                            else documentFileStoreIds.add(document.getFileStoreId());
+                                if(documentFileStoreIds.contains(document.getFileStoreId()))
+                                    throw new CustomException("DUPLICATE_DOCUMENT ERROR","Same document cannot be used multiple times");
+                                else documentFileStoreIds.add(document.getFileStoreId());
                         }
                 );
             }
