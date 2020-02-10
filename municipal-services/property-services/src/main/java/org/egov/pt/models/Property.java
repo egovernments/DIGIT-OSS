@@ -61,11 +61,11 @@ public class Property extends PropertyInfo {
 	@JsonProperty("noOfFloors")
 	private Long noOfFloors;
 
-	@Digits(integer = 10, fraction = 2)
+	@Digits(integer = 8, fraction = 2)
 	@JsonProperty("landArea")
 	private Double landArea;
 
-	@Digits(integer = 10, fraction = 2)
+	@Digits(integer = 8, fraction = 2)
 	@JsonProperty("superBuiltUpArea")
 	private BigDecimal superBuiltUpArea;
 

@@ -604,6 +604,7 @@ public class PropertyValidator {
 		String docNo = null;
 		Long docDate = null;
 		Double docVal = null;
+		Double marketVal = null;
 		
 		@SuppressWarnings("unchecked")
 		Map<String, Object> additionalDetails = mapper.convertValue(property.getAdditionalDetails(), Map.class);
@@ -613,10 +614,11 @@ public class PropertyValidator {
 			docNo = (String) additionalDetails.get("documentNumber");
 			docDate = Long.valueOf(String.valueOf(additionalDetails.get("documentDate")));
 			docVal = Double.valueOf(String.valueOf(additionalDetails.get("documentValue")));
+			marketVal = Double.valueOf(String.valueOf(additionalDetails.get("marketValue")));
 
 		} catch (PathNotFoundException e) {
 			throw new CustomException("EG_PT_MUTATION_FIELDS_ERROR", "Mandatory fields Missing for mutation, please provide the following information in additionalDetails : "
-							+ "reasonForTransfer, documentNumber, documentDate and documentValue");
+							+ "reasonForTransfer, documentNumber, documentDate, documentValue and marketValue");
 		} catch (Exception e) {
 			throw new CustomException("EG_PT_ADDITIONALDETAILS_PARSING_ERROR", e.getMessage());
 		}
@@ -656,11 +658,10 @@ public class PropertyValidator {
 				errorMap.put("EG_PT_MUTATION_OWNER_REMOVAL_ERROR",
 						"Single owner of a property cannot be deactivated or removed in a mutation request");
 		}
-
 		
-		if (StringUtils.isEmpty(reasonForTransfer) || StringUtils.isEmpty(docNo) || ObjectUtils.isEmpty(docDate) || ObjectUtils.isEmpty(docVal) ) {
+		if (StringUtils.isEmpty(reasonForTransfer) || StringUtils.isEmpty(docNo) || ObjectUtils.isEmpty(docDate) || ObjectUtils.isEmpty(docVal) || ObjectUtils.isEmpty(marketVal)) {
 			errorMap.put("EG_PT_MUTATION_FIELDS_ERROR", "mandatory fields Missing for mutation, please provide the following information : "
-							+ "reasonForTransfer, documentNumber, documentDate and documentValue");
+							+ "reasonForTransfer, documentNumber, documentDate, documentValue and marketValue");
 		}
 		
 		if(configs.getIsMutationWorkflowEnabled() && (ObjectUtils.isEmpty(workFlow.getAction()) || ObjectUtils.isEmpty(workFlow.getModuleName()) ||

@@ -28,19 +28,19 @@ import lombok.ToString;
 @Builder
 public class ConstructionDetail {
 
-	@Digits(integer = 10, fraction = 2)
+	@Digits(integer = 8, fraction = 2)
 	@JsonProperty("carpetArea")
 	private BigDecimal carpetArea;
 
-	@Digits(integer = 10, fraction = 2)
+	@Digits(integer = 8, fraction = 2)
 	@JsonProperty("builtUpArea")
 	private BigDecimal builtUpArea;
 
-	@Digits(integer = 10, fraction = 2)
+	@Digits(integer = 8, fraction = 2)
 	@JsonProperty("plinthArea")
 	private BigDecimal plinthArea;
 
-	@Digits(integer = 10, fraction = 2)
+	@Digits(integer = 8, fraction = 2)
 	@JsonProperty("superBuiltUpArea")
 	private BigDecimal superBuiltUpArea;
 
