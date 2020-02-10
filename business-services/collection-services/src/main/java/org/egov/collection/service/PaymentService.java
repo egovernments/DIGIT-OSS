@@ -67,6 +67,7 @@ public class PaymentService {
      * @return List of matching receipts
      */
     public List<Payment> getPayments(RequestInfo requestInfo, PaymentSearchCriteria paymentSearchCriteria) {
+    	
         Map<String, String> errorMap = new HashMap<>();
         paymentValidator.validateUserInfo(requestInfo, errorMap);
         if (!errorMap.isEmpty())
@@ -101,6 +102,7 @@ public class PaymentService {
      */
     @Transactional
     public Payment createPayment(PaymentRequest paymentRequest) {
+    	
         paymentEnricher.enrichPaymentPreValidate(paymentRequest);
         paymentValidator.validatePaymentForCreate(paymentRequest);
         paymentEnricher.enrichPaymentPostValidate(paymentRequest);
@@ -133,6 +135,7 @@ public class PaymentService {
      * @return
      */
     public String createUser(PaymentRequest paymentRequest) {
+    	
         String id = null;
         if(paymentRequest.getRequestInfo().getUserInfo().getType().equals("CITIZEN")) {
             id = paymentRequest.getRequestInfo().getUserInfo().getUuid();

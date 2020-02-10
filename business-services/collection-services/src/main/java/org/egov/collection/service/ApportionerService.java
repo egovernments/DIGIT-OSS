@@ -21,8 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.client.RestTemplate;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -42,6 +40,7 @@ public class ApportionerService {
 	 * @return
 	 */
 	public Map<String,Bill> apportionBill(PaymentRequest paymentRequest) {
+		
 		RequestInfo requestInfo = paymentRequest.getRequestInfo();
 		Payment payment = paymentRequest.getPayment();
 		List<Bill> bills = payment.getPaymentDetails().stream().map(PaymentDetail::getBill).collect(Collectors.toList());

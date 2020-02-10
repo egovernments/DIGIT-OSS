@@ -1,21 +1,32 @@
 package org.egov.collection.util;
 
 import static java.util.Objects.isNull;
-import static org.egov.collection.config.CollectionServiceConstants.*;
+import static org.egov.collection.config.CollectionServiceConstants.MASTER_BUSINESSSERVICE_KEY;
+import static org.egov.collection.config.CollectionServiceConstants.MASTER_COLLECTIONMODESNOTALLOWED_KEY;
+import static org.egov.collection.config.CollectionServiceConstants.MASTER_ISADVANCEALLOWED_KEY;
+import static org.egov.collection.config.CollectionServiceConstants.MASTER_PARTPAYMENTALLOWED_KEY;
+import static org.egov.collection.config.CollectionServiceConstants.MDMS_BUSINESSSERVICE_PATH;
 import static org.egov.collection.model.enums.InstrumentTypesEnum.CARD;
 import static org.egov.collection.model.enums.InstrumentTypesEnum.CASH;
 import static org.egov.collection.model.enums.InstrumentTypesEnum.ONLINE;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
-import com.jayway.jsonpath.JsonPath;
 import org.egov.collection.model.AuditDetails;
 import org.egov.collection.model.Payment;
 import org.egov.collection.model.PaymentDetail;
 import org.egov.collection.model.PaymentRequest;
-import org.egov.collection.model.enums.*;
+import org.egov.collection.model.enums.InstrumentStatusEnum;
+import org.egov.collection.model.enums.PaymentStatusEnum;
+import org.egov.collection.model.enums.Purpose;
+import org.egov.collection.model.enums.ReceiptType;
 import org.egov.collection.repository.BillingServiceRepository;
 import org.egov.collection.repository.IdGenRepository;
 import org.egov.collection.service.MDMSService;
@@ -25,6 +36,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
+
+import com.jayway.jsonpath.JsonPath;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -45,17 +58,16 @@ public class PaymentEnricher {
 
 		Payment payment = paymentRequest.getPayment();
 		String tenantId = payment.getTenantId();
-		List<String> billIds = payment.getPaymentDetails().stream().map(PaymentDetail::getBillId)
-				.collect(Collectors.toList());
-		if (isNull(paymentRequest.getRequestInfo().getUserInfo())
-				|| isNull(paymentRequest.getRequestInfo().getUserInfo().getUuid())) {
-			throw new CustomException("USER_INFO_INVALID", "Invalid user info in request info, user id is mandatory");
-		}
+		List<String> billIds = payment.getPaymentDetails().stream().map(PaymentDetail::getBillId).collect(Collectors.toList());
 		Set<String> billIdSet = payment.getPaymentDetails().stream().map(PaymentDetail::getBillId)
 				.collect(Collectors.toSet());
+		
+		if (isNull(paymentRequest.getRequestInfo().getUserInfo()) || isNull(paymentRequest.getRequestInfo().getUserInfo().getUuid())) {
+			throw new CustomException("USER_INFO_INVALID", "Invalid user info in request info, user id is mandatory");
+		}
+		
 		if (billIdSet.size() < payment.getPaymentDetails().size())
-			throw new CustomException("DUPLICATE_BILLID",
-					"The Bill ids have been repeated for multiple payment details");
+			throw new CustomException("DUPLICATE_BILLID", "The Bill ids have been repeated for multiple payment details");
 
 		Object mdmsData = mdmsService.mDMSCall(paymentRequest.getRequestInfo(),tenantId);
 

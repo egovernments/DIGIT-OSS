@@ -52,10 +52,8 @@ import org.egov.collection.model.PaymentRequest;
 import org.egov.collection.model.PaymentResponse;
 import org.egov.collection.model.PaymentSearchCriteria;
 import org.egov.collection.model.enums.PaymentStatusEnum;
-import org.egov.collection.model.enums.ReceiptStatus;
 import org.egov.collection.service.PaymentService;
 import org.egov.collection.service.PaymentWorkflowService;
-import org.egov.collection.util.PaymentValidator;
 import org.egov.collection.web.contract.PaymentWorkflowRequest;
 import org.egov.collection.web.contract.factory.RequestInfoWrapper;
 import org.egov.collection.web.contract.factory.ResponseInfoFactory;
@@ -73,11 +71,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import lombok.extern.slf4j.Slf4j;
-
 @RestController
 @RequestMapping("/payments")
-@Slf4j
 public class PaymentController {
 
     @Autowired
@@ -85,9 +80,6 @@ public class PaymentController {
 
     @Autowired
     private PaymentWorkflowService workflowService;
-
-    @Autowired
-    private PaymentValidator paymentValidator;
 
     @Value("#{'${search.ignore.status}'.split(',')}")
     private List<String> searchIgnoreStatus;
@@ -99,10 +91,11 @@ public class PaymentController {
 
         final RequestInfo requestInfo = requestInfoWrapper.getRequestInfo();
 
-        // Only do this if there is no receipt number search
-        // Only do this when search ignore status has been defined in
-        // application.properties
-        // Only do this when status has not been already provided for the search
+		/*
+		 * Only Applicable if there is no receipt number search
+		 * Only Apllicable when search ignore status has been defined in application properties
+		 * Only Applicable when status has not been already provided for the search
+		 */
         if ((CollectionUtils.isEmpty(paymentSearchCriteria.getReceiptNumbers()))
                 && !searchIgnoreStatus.isEmpty()
                 && (CollectionUtils.isEmpty(paymentSearchCriteria.getStatus()))) {
