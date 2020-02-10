@@ -857,6 +857,69 @@ export const tradeDetails = getCommonCard(
         infoIcon: "info_circle",
         jsonPath: "Licenses[0].oldLicenseNumber"
       }),
+      tradeLicenseType: {
+        ...getSelectField({
+          label: {
+            labelName: "License Type",
+            labelKey: "TL_NEW_TRADE_DETAILS_LIC_TYPE_LABEL"
+          },
+          placeholder: {
+            labelName: "Select License Type",
+            labelKey: "TL_NEW_TRADE_DETAILS_LIC_TYPE_PLACEHOLDER"
+          },
+          required: true,
+          jsonPath: "Licenses[0].licenseType",
+          localePrefix: {
+            moduleName: "TRADELICENSE",
+            masterName: "LICENSETYPE"
+          },
+          props: {
+            disabled: true,
+            value: "PERMANENT",
+            className: "tl-trade-type"
+          },
+          sourceJsonPath: "applyScreenMdmsData.TradeLicense.licenseType"
+        }),
+        beforeFieldChange: (action, state, dispatch) => {
+          if (action.value === "TEMPORARY") {
+            dispatch(
+              handleField(
+                "apply",
+                "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeToDate",
+                "visible",
+                true
+              )
+            );
+            dispatch(
+              handleField(
+                "apply",
+                "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeFromDate",
+                "visible",
+                true
+              )
+            );
+          } else {
+            dispatch(
+              handleField(
+                "apply",
+                "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeToDate",
+                "visible",
+                false
+              )
+            );
+            dispatch(
+              handleField(
+                "apply",
+                "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeFromDate",
+                "visible",
+                false
+              )
+            );
+            // dispatch(pFO("Licenses[0].validFrom", null));
+            // dispatch(pFO("Licenses[0].validTo", null));
+          }
+        }
+      },
       tradeName: getTextField({
         label: {
           labelName: "Name of Trade",
