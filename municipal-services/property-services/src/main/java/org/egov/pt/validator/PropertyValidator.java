@@ -186,7 +186,7 @@ public class PropertyValidator {
 		
 		
 		if (propertyFromSearch.getStatus().equals(Status.INWORKFLOW) && (property.getAcknowldgementNumber() == null
-				|| (property.getAcknowldgementNumber() != null && propertyFromSearch.getAcknowldgementNumber()
+				|| (property.getAcknowldgementNumber() != null && !propertyFromSearch.getAcknowldgementNumber()
 						.equalsIgnoreCase(property.getAcknowldgementNumber()))))
 			errorMap.put("EG_PT_MUTATION_WF_UPDATE_ERROR", "Acknowledgement Number is Invalid OR NULL, Please provide the valid number");
 
