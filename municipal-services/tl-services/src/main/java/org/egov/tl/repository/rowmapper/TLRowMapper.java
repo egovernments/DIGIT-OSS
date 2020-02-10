@@ -13,10 +13,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.egov.tl.util.TLConstants.*;
 
@@ -31,8 +28,7 @@ public class TLRowMapper  implements ResultSetExtractor<List<TradeLicense>> {
 
 
     public List<TradeLicense> extractData(ResultSet rs) throws SQLException, DataAccessException {
-
-        Map<String, TradeLicense> tradeLicenseMap = new HashMap<>();
+        Map<String, TradeLicense> tradeLicenseMap = new LinkedHashMap<>();
 
         while (rs.next()) {
             String id = rs.getString("tl_id");
