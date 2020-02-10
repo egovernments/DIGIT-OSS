@@ -16308,6 +16308,18 @@
       "serviceCode": "DSS",
       "code": "null",
       "path": ""
+    },
+    {
+      "id": 1965,
+      "name": "Dashboard Api W&S to update",
+      "url": "/dashboard-ingest/update/publish",
+      "parentModule": "",
+      "displayName": "DSS",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "DSS",
+      "code": "null",
+      "path": ""
     }
 
   ]
