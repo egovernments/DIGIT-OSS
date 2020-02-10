@@ -1,7 +1,7 @@
 {
   "topicContextConfigurations": [
     {
-      "topic": "topicOne",
+      "topic": "incomingData",
       "dataContext": "collection",
       "dataContextVersion": "v1"
     },
