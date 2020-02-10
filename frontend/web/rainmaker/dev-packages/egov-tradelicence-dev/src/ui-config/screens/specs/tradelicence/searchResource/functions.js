@@ -99,8 +99,10 @@ export const searchApiCall = async (state, dispatch) => {
     }
 
     const response = await getSearchResults(queryObject);
+    console.log("ress",response);
     try {
       let data = response.Licenses.map(item => ({
+  
         [getTextToLocalMapping("Application No")]:
           item.applicationNumber || "-",
         [getTextToLocalMapping("License No")]: item.licenseNumber || "-",
@@ -109,6 +111,10 @@ export const searchApiCall = async (state, dispatch) => {
           item.tradeLicenseDetail.owners[0].name || "-",
         [getTextToLocalMapping("Application Date")]:
           convertEpochToDate(item.applicationDate) || "-",
+          [getTextToLocalMapping("Financial Year")]:
+          item.financialYear || "-",
+          [getTextToLocalMapping("Application Type")]:
+          item.applicationType || "TL_TYPE_NEW",
         [getTextToLocalMapping("Status")]: item.status || "-",
         ["tenantId"]: item.tenantId,
         ["status1"]: item.status || "-"

@@ -17,6 +17,8 @@ export const searchResults = {
       getTextToLocalMapping("Trade Name"),
       getTextToLocalMapping("Owner Name"),
       getTextToLocalMapping("Application Date"),
+      getTextToLocalMapping("Financial Year"),
+      getTextToLocalMapping("Application Type"),
       {
         name: getTextToLocalMapping("Status"),
         options: {

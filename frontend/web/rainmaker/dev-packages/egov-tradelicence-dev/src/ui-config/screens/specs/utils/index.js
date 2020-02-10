@@ -2363,6 +2363,18 @@ export const getTextToLocalMapping = label => {
         "TL_MY_APPLICATIONS",
         localisationLabels
       );
+      case "Financial Year":
+      return getLocaleLabels(
+        "Financial Year",
+        "TL_COMMON_TABLE_COL_FIN_YR",
+        localisationLabels
+      );
+      case "Application Type":
+      return getLocaleLabels(
+        "Application Type",
+        "TL_COMMON_TABLE_COL_APP_TP",
+        localisationLabels
+      );
   }
 };
 
