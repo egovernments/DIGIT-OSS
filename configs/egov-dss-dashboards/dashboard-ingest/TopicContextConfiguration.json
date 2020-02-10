@@ -1,7 +1,7 @@
 {
   "topicContextConfigurations": [
     {
-      "topic": "incomingData",
+      "topic": "tarento-dss-collection",
       "dataContext": "collection",
       "dataContextVersion": "v1"
     },
