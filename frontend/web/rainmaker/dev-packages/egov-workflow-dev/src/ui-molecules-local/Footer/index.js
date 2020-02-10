@@ -118,7 +118,7 @@ class Footer extends React.Component {
       `Licenses`
     );
     
-    const wfCode = "directRenewal";
+    const wfCode = "DIRECTRENEWAL";
     set(licences[0], "action", "INITIATE");
     set(licences[0], "workflowCode", wfCode);
     set(licences[0], "applicationType", "RENEWAL");
@@ -131,7 +131,7 @@ class Footer extends React.Component {
       `Licenses[0].applicationNumber`
     );
     setRoute(
-      `/tradelicence/acknowledgement?purpose=editRenewal&status=success&applicationNumber=${applicationNumberNew}&FY=${financialYear}&tenantId=${tenantId}&action=${wfCode}`
+      `/tradelicence/acknowledgement?purpose=DIRECTRENEWAL&status=success&applicationNumber=${applicationNumberNew}&FY=${financialYear}&tenantId=${tenantId}&action=${wfCode}`
     );
   };
 
@@ -185,7 +185,7 @@ class Footer extends React.Component {
         labelKey: "WF_TL_RENEWAL_EDIT_BUTTON",
         link: () => {
           this.props.setRoute(
-            `/tradelicence/apply?applicationNumber=${applicationNumber}&tenantId=${tenantId}&action=editRenewal`
+            `/tradelicence/apply?applicationNumber=${applicationNumber}&tenantId=${tenantId}&action=EDITRENEWAL`
           );
         }
       };

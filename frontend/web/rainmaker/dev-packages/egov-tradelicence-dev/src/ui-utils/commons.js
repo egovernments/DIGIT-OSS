@@ -347,10 +347,12 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     }
 
     set(queryObject[0], "tenantId", tenantId);
+    set(queryObject[0], "workflowCode", "NewTL");
+    set(queryObject[0], "applicationType", "NEW");
 
     if (queryObject[0].applicationNumber) {
       //call update
-      const isEditRenewal = getQueryArg(window.location.href, "action") === "editRenewal";
+      const isEditRenewal = getQueryArg(window.location.href, "action") === "EDITRENEWAL";
       if(isEditRenewal ){
         set(queryObject[0], "applicationType", "RENEWAL");
         set(queryObject[0], "workflowCode", getQueryArg(window.location.href, "action"));

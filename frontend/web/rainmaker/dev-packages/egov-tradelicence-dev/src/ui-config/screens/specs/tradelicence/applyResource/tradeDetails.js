@@ -1134,7 +1134,7 @@ export const tradeDetails = getCommonCard({
       jsonPath: "Licenses[0].tradeLicenseDetail.noOfEmployees"
     })
   },
-  {style:getQueryArg(window.location.href, "action") === "editRenewal"? {"pointer-events":"none"}:{}}
+  {style:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? {"pointer-events":"none"}:{}}
   ),
   tradeUnitCard,
   accessoriesCard

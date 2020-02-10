@@ -584,7 +584,7 @@ export const renewTradelicence = async (applicationNumber, financialYear, tenant
     state.screenConfiguration.preparedFinalObject,
     `Licenses`
   );
-  const wfCode = "directRenewal";
+  const wfCode = "DIRECTRENEWAL";
   set(licences[0], "action", "INITIATE");
   set(licences[0], "workflowCode", wfCode);
   set(licences[0], "applicationType", "RENEWAL");
@@ -598,7 +598,7 @@ const response=  await httpRequest("post", "/tl-services/v1/_update", "", [], {
   );
   dispatch(
   setRoute(
-    `/tradelicence/acknowledgement?purpose=editRenewal&status=success&applicationNumber=${applicationNumberNew}&FY=${financialYear}&tenantId=${tenantId}&action=${wfCode}`
+    `/tradelicence/acknowledgement?purpose=EDITRENEWAL&status=success&applicationNumber=${applicationNumberNew}&FY=${financialYear}&tenantId=${tenantId}&action=${wfCode}`
   ));
 };
 
@@ -845,7 +845,7 @@ export const footerReview = (
                   dispatch(
                     setRoute(
                      // `/tradelicence/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&FY=${financialYear}&tenantId=${tenantId}`
-                     `/tradelicense-citizen/apply?applicationNumber=${applicationNumber}&tenantId=${tenantId}&action=editRenewal`
+                     `/tradelicense-citizen/apply?applicationNumber=${applicationNumber}&tenantId=${tenantId}&action=EDITRENEWAL`
                     )
                   );
                 },

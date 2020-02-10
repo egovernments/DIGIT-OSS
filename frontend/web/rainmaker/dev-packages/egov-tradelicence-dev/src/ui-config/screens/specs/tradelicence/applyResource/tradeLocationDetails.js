@@ -324,7 +324,7 @@ export const tradeLocationDetails = getCommonCard(
     }
   },
   {
-    style:getQueryArg(window.location.href, "action") === "editRenewal"? {"pointer-events":"none",overflow:"visible"}:{overflow: "visible"}
+    style:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? {"pointer-events":"none",overflow:"visible"}:{overflow: "visible"}
 
   }
 );
