@@ -2366,13 +2366,25 @@ export const getTextToLocalMapping = label => {
       case "Financial Year":
       return getLocaleLabels(
         "Financial Year",
-        "TL_COMMON_TABLE_COL_FIN_YR",
+        "TL_COMMON_TABLE_COL_FIN_YEAR",
         localisationLabels
       );
       case "Application Type":
       return getLocaleLabels(
         "Application Type",
-        "TL_COMMON_TABLE_COL_APP_TP",
+        "TL_COMMON_TABLE_COL_APP_TYPE",
+        localisationLabels
+      );
+      case "RENEWAL":
+      return getLocaleLabels(
+        "Renewal",
+        "TL_TYPE_RENEWAL",
+        localisationLabels
+      );
+      case "NEW":
+      return getLocaleLabels(
+        "New",
+        "TL_TYPE_NEW",
         localisationLabels
       );
   }

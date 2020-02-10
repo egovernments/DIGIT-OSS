@@ -114,7 +114,7 @@ export const searchApiCall = async (state, dispatch) => {
           [getTextToLocalMapping("Financial Year")]:
           item.financialYear || "-",
           [getTextToLocalMapping("Application Type")]:
-          item.applicationType || "TL_TYPE_NEW",
+          item.applicationType || "NEW",
         [getTextToLocalMapping("Status")]: item.status || "-",
         ["tenantId"]: item.tenantId,
         ["status1"]: item.status || "-"

@@ -177,23 +177,6 @@ export const getMdmsData = async (action, state, dispatch) => {
   }
 };
 
-export const generateNextFinancialYear = state => {
-  const currentFY = get(
-    state.screenConfiguration.preparedFinalObject,
-    "Licenses.0.financialYear"
-  );
-  const financialYears = get(
-    state.screenConfiguration.preparedFinalObject,
-    "applyScreenMdmsData.egf-master.FinancialYear",
-    []
-  );
-  const currrentFYending = financialYears.filter(item => item.code === currentFY)[0]
-    .endingDate;
-  const nextYear = financialYears.filter(item => item.startingDate === currrentFYending)[0]
-    .code;
-  return nextYear;
-};
-
 export const getData = async (action, state, dispatch) => {
   const queryValue = getQueryArg(window.location.href, "applicationNumber");
   const applicationNo = queryValue
@@ -206,13 +189,7 @@ export const getData = async (action, state, dispatch) => {
   await getMdmsData(action, state, dispatch);
   await getAllDataFromBillingSlab(getTenantId(), dispatch);
 
-  const isEditRenewal = getQueryArg(window.location.href,"action") === "EDITRENEWAL"
-  if(isEditRenewal){
-    const nextYear = generateNextFinancialYear(state);
-    dispatch(
-      prepareFinalObject("Licenses[0].financialYear" ,nextYear));
-  }
-  
+ 
   if (applicationNo) {
     //Edit/Update Flow ----
     const applicationType = get(
@@ -220,6 +197,8 @@ export const getData = async (action, state, dispatch) => {
       "Licenses[0].tradeLicenseDetail.additionalDetail.applicationType",
       null
     );
+    const isEditRenewal = getQueryArg(window.location.href,"action") === "EDITRENEWAL";
+
     if(getQueryArg(window.location.href, "action") !== "edit" && !isEditRenewal ){
       dispatch(
         prepareFinalObject("Licenses", [
@@ -236,9 +215,7 @@ export const getData = async (action, state, dispatch) => {
       );
     }
     // dispatch(prepareFinalObject("LicensesTemp", []));
-    if(!isEditRenewal){
-      await updatePFOforSearchResults(action, state, dispatch, applicationNo);
-    }
+    await updatePFOforSearchResults(action, state, dispatch, applicationNo);
    
     if (!queryValue) {
       const oldApplicationNo = get(

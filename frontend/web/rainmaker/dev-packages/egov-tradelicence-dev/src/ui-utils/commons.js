@@ -124,6 +124,23 @@ const setDocsForEditFlow = async (state, dispatch) => {
   );
 };
 
+const generateNextFinancialYear = state => {
+  const currentFY = get(
+    state.screenConfiguration.preparedFinalObject,
+    "Licenses.0.financialYear"
+  );
+  const financialYears = get(
+    state.screenConfiguration.preparedFinalObject,
+    "applyScreenMdmsData.egf-master.FinancialYear",
+    []
+  );
+  const currrentFYending = financialYears.filter(item => item.code === currentFY)[0]
+    .endingDate;
+  const nextYear = financialYears.filter(item => item.startingDate === currrentFYending)[0]
+    .code;
+  return nextYear;
+};
+
 export const updatePFOforSearchResults = async (
   action,
   state,
@@ -152,6 +169,14 @@ export const updatePFOforSearchResults = async (
   if (payload&&payload.Licenses) {
     dispatch(prepareFinalObject("Licenses[0]", payload.Licenses[0]));
   }
+
+  const isEditRenewal = getQueryArg(window.location.href,"action") === "EDITRENEWAL";
+  if(isEditRenewal){
+    const nextYear = generateNextFinancialYear(state);
+    dispatch(
+      prepareFinalObject("Licenses[0].financialYear" ,nextYear));
+  }
+
   const licenseType = payload && get(payload, "Licenses[0].licenseType");
   const structureSubtype =
     payload && get(payload, "Licenses[0].tradeLicenseDetail.structureType");

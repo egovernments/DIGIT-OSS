@@ -18,7 +18,17 @@ export const searchResults = {
       getTextToLocalMapping("Owner Name"),
       getTextToLocalMapping("Application Date"),
       getTextToLocalMapping("Financial Year"),
-      getTextToLocalMapping("Application Type"),
+      {
+        name: getTextToLocalMapping("Application Type"),
+        options: {
+          filter: false,
+          customBodyRender: value => (
+            <span>
+              {getTextToLocalMapping(value)}
+            </span>
+          )
+        }
+      },
       {
         name: getTextToLocalMapping("Status"),
         options: {
@@ -81,18 +91,16 @@ export const searchResults = {
 };
 
 const onRowClick = rowData => {
-  //console.log("rowData--",rowData);
   switch (rowData[7]) {
     case "INITIATED":
       window.location.href = `apply?applicationNumber=${rowData[0]}&tenantId=${
-        rowData[6]
+        rowData[8]
       }`;
-      // }&action=edit`;
       break;
     default:
       window.location.href = `search-preview?applicationNumber=${
         rowData[0]
-      }&tenantId=${rowData[6]}`;
+      }&tenantId=${rowData[8]}`;
       break;
   }
 };
