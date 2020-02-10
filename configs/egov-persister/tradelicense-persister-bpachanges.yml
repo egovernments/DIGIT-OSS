@@ -7,7 +7,7 @@ serviceMaps:
     isTransaction: true
     queryMaps:
 
-    - query: INSERT INTO eg_tl_tradelicense( id, accountid,tenantid,tradeName, validfrom,validto,licensetype,applicationNumber, licenseNumber, oldlicensenumber, propertyid, oldpropertyid, applicationdate, commencementdate, financialyear, action, status, createdby, lastmodifiedby, createdtime, lastmodifiedtime, businessservice, applicationtype, workflowcode) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+    - query: INSERT INTO eg_tl_tradelicense( id, accountid,tenantid,tradeName, validfrom,validto,licensetype,applicationNumber, licenseNumber, oldlicensenumber, propertyid, oldpropertyid, applicationdate, commencementdate, financialyear, action, status, createdby, lastmodifiedby, createdtime, lastmodifiedtime, businessservice, applicationtype, workflowcode) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
       basePath: Licenses.*
       jsonMaps:
       - jsonPath: $.Licenses.*.id
