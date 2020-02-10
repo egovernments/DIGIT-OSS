@@ -332,7 +332,7 @@ const screenConfig = {
       set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.viewBreakupButton.visible", false);
     }
     const queryObject = [
-      { key: "tenantId", value: "pb" },
+      { key: "tenantId", value: "pb.amritsar" },
       { key: "businessServices", value: "NewWS1" }
     ];
     setBusinessServiceDataToLocalStorage(queryObject, dispatch)
