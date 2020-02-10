@@ -214,3 +214,8 @@ config:
         dockerfile: "build/maven/Dockerfile"
       - work-dir: "chatbot/src/main/resources/db"
         image-name: "chatbot-db"
+        
+  - name: "builds/core-services/http-to-kafka-connector"
+    build:
+      - work-dir: "http-to-kafka-connector"
+        image-name: "http-to-kafka-connector"
