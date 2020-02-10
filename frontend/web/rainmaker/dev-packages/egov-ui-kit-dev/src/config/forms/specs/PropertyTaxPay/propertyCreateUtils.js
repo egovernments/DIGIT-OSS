@@ -8,7 +8,7 @@ import {convertToOldPTObject} from "egov-ui-kit/utils/PTCommon/FormWizardUtils";
 
 
 
-export const createPropertyPayload = (properties, documentsUploadRedux) => {
+export const createPropertyPayload = (properties, documentsUploadRedux,newProperties=[]) => {
   properties[0] = {
     ...properties[0],
     ...properties[0].propertyDetails[0],
@@ -26,7 +26,9 @@ export const createPropertyPayload = (properties, documentsUploadRedux) => {
       obj.ownerType = obj.ownerType || "NONE";
     });
   }
-
+if(newProperties&&newProperties.length>0){
+  properties[0].owners=newProperties[0].owners;
+}
   properties[0].units.map((unit) => {
     unit.constructionDetail = {
       builtUpArea: unit.unitArea,
@@ -90,7 +92,7 @@ export const createPropertyPayload = (properties, documentsUploadRedux) => {
 export const createAssessmentPayload = (properties, propertyPayload) => {
   const Assessment = {
     financialYear: propertyPayload.financialYear,
-    assessmentDate: properties.auditDetails.createdTime,
+    assessmentDate: properties.auditDetails.createdTime-60000,
     tenantId: properties.tenantId,
     propertyID: properties.propertyId,
     // unitUsageList: [],
@@ -116,7 +118,7 @@ export const createAssessmentPayload = (properties, propertyPayload) => {
 
 export const getCreatePropertyResponse = (createPropertyResponse) => {
   // createPropertyResponse.Properties[0].propertyDetails = createPropertyResponse.Properties;
-  return {Properties:convertToOldPTObject(createPropertyResponse)};
+  return {Properties:convertToOldPTObject(createPropertyResponse),newProperties:createPropertyResponse.Properties};
 };
 
 export const convertToArray = (documentsUploadRedux) => {

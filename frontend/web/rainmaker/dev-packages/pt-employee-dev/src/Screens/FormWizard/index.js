@@ -171,6 +171,7 @@ class FormWizard extends Component {
           ]
         );
         searchPropertyResponse = getCreatePropertyResponse(searchPropertyResponse);
+        this.props.prepareFinalObject("newProperties",searchPropertyResponse.newProperties);
         if (
           searchPropertyResponse.Properties[0].propertyDetails &&
           searchPropertyResponse.Properties[0].propertyDetails.length > 0
@@ -1650,8 +1651,8 @@ class FormWizard extends Component {
   }
 
   createProperty = async (Properties, action) => {
-    const { documentsUploadRedux } = this.props;
-    const propertyPayload = createPropertyPayload(Properties, documentsUploadRedux);
+    const { documentsUploadRedux ,newProperties} = this.props;
+    const propertyPayload = createPropertyPayload(Properties, documentsUploadRedux,newProperties);
     const propertyMethodAction = (action === "assess" || action === "re-assess") ? "_update" : "_create";
     try {
       const propertyResponse = await httpRequest(
@@ -2060,14 +2061,15 @@ const mapStateToProps = state => {
     (propertyAddress && propertyAddress.fields && propertyAddress.fields) || {};
   const currentTenantId = (city && city.value) || commonConfig.tenantId;
   const { preparedFinalObject } = screenConfiguration;
-  const { documentsUploadRedux } = preparedFinalObject;
+  const { documentsUploadRedux,newProperties=[] } = preparedFinalObject;
   return {
     form,
     currentTenantId,
     prepareFormData: common.prepareFormData,
     common,
     app,
-    documentsUploadRedux
+    documentsUploadRedux,
+    newProperties
   };
 };
 
