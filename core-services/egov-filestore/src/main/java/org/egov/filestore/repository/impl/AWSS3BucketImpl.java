@@ -121,17 +121,16 @@ public class AWSS3BucketImpl implements CloudFilesManager {
 			String fileNameWithPath = completeName.substring(index + 1, completeName.length());
 			String replaceString = fileNameWithPath.substring(fileNameWithPath.lastIndexOf('.'),
 					fileNameWithPath.length());
-
-			if (util.isFileAnImage(mspOfIdAndFilePath.get(fileStoreId))) {
-				String[] imageFormats = { _small, _medium, _large };
+			if (util.isFileAnImage(mspOfIdAndFilePath.get(fileStoreId))) { //Don't change the order of images within this if, it is index-based and UI will break.
 				StringBuilder url = new StringBuilder();
+				url.append(generateSignedURL(bucketName, fileNameWithPath));
+				String[] imageFormats = {_large, _medium, _small}; 
 				for (String format : Arrays.asList(imageFormats)) {
+					url.append(",");
 					String path = fileNameWithPath;
 					path = path.replaceAll(replaceString, format + replaceString);
 					url.append(generateSignedURL(bucketName, path));
-					url.append(",");
 				}
-				url.append(generateSignedURL(bucketName, fileNameWithPath));
 				urlMap.put(fileStoreId, url.toString());
 			} else {
 				urlMap.put(fileStoreId, generateSignedURL(bucketName, fileNameWithPath));

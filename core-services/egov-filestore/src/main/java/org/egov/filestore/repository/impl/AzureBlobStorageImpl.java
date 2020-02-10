@@ -125,17 +125,19 @@ public class AzureBlobStorageImpl implements CloudFilesManager {
 		Map<String, String> mapOfIdAndSASUrls = new HashMap<>();
 		mapOfIdAndFilePath.keySet().forEach(id -> {
 			if(util.isFileAnImage(mapOfIdAndFilePath.get(id))) {
-				String[] imageFormats = {_small, _medium, _large};
+				
 				StringBuilder url = new StringBuilder();
+				/* Don't change the order of images within this if, it is index-based and UI will break.*/
+				String[] imageFormats = {_large, _medium, _small};
+				url.append(getSASURL(mapOfIdAndFilePath.get(id), util.generateSASToken(azureBlobClient, mapOfIdAndFilePath.get(id))));
 				String replaceString = mapOfIdAndFilePath.get(id).substring(mapOfIdAndFilePath.get(id).lastIndexOf('.'),
 						mapOfIdAndFilePath.get(id).length());
 				for(String format: Arrays.asList(imageFormats)) {
+					url.append(",");
 					String path = mapOfIdAndFilePath.get(id);
 					path = path.replaceAll(replaceString, format + replaceString);
 					url.append(getSASURL(path, util.generateSASToken(azureBlobClient, path)));
-					url.append(",");
 				}
-				url.append(getSASURL(mapOfIdAndFilePath.get(id), util.generateSASToken(azureBlobClient, mapOfIdAndFilePath.get(id))));
 				mapOfIdAndSASUrls.put(id, url.toString());
 			}else {
 				mapOfIdAndSASUrls.put(id, getSASURL(mapOfIdAndFilePath.get(id), util.generateSASToken(azureBlobClient, mapOfIdAndFilePath.get(id))));

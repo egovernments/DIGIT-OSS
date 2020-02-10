@@ -7,10 +7,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.egov.filestore.domain.model.FileInfo;
 import org.egov.filestore.domain.service.StorageService;
 import org.egov.filestore.web.contract.File;
+import org.egov.filestore.web.contract.FileStoreResponse;
 import org.egov.filestore.web.contract.GetFilesByTagResponse;
 import org.egov.filestore.web.contract.ResponseFactory;
 import org.egov.filestore.web.contract.StorageResponse;
@@ -101,11 +103,23 @@ public class StorageController {
 	
 	@GetMapping("/url")
 	@ResponseBody
-	public ResponseEntity<Map<String, String>> getUrls(@RequestParam(value = "tenantId") String tenantId,
+	public ResponseEntity<Map<String, Object>> getUrls(@RequestParam(value = "tenantId") String tenantId,
 			@RequestParam("fileStoreIds") List<String> fileStoreIds) {
+		
+		Map<String, Object> responseMap = new HashMap<>();
 		if (fileStoreIds.isEmpty())
 			return new ResponseEntity<>(new HashMap<>(), HttpStatus.OK);
-		return new ResponseEntity<>(storageService.getUrls(tenantId, fileStoreIds), HttpStatus.OK);
+			Map<String, String> maps= storageService.getUrls(tenantId, fileStoreIds);
+			
+		List<FileStoreResponse> responses = new ArrayList<>();
+		for (Entry<String, String> entry : maps.entrySet()) {
+
+			responses.add(FileStoreResponse.builder().id(entry.getKey()).url(entry.getValue()).build());
+		}
+		responseMap.putAll(maps);
+		responseMap.put("fileStoreIds", responses);
+		
+		return new ResponseEntity<>(responseMap, HttpStatus.OK);
 	}
 	
 }
