@@ -13,7 +13,7 @@ import {
   import commonConfig from "config/common.js";
   import { adhocPopup } from "./adhocPopup";
   import { showHideAdhocPopup} from "../utils";
-
+  import {resetFields} from "./mutation-methods";
   const hasButton = getQueryArg(window.location.href, "hasButton");
   let enableButton = true;
   enableButton = hasButton && hasButton === "false" ? false : true;
@@ -67,6 +67,7 @@ import {
     name: "propertySearch",
 
     beforeInitScreen: (action, state, dispatch) => {
+      resetFields(state,dispatch);
       getMDMSData(dispatch);
     return action;
   },

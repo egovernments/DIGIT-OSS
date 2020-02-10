@@ -191,6 +191,7 @@ export const convertToOldPTObject = (newObject) => {
   propertyDetails.landArea = newProperty.landArea;
   propertyDetails.buildUpArea = newProperty.superBuiltUpArea;
   propertyDetails.units = newProperty.units;
+  
   propertyDetails.documents = newProperty.documents;
   propertyDetails.additionalDetails = newProperty.additionalDetails;
   propertyDetails.financialYear = null;
@@ -256,7 +257,30 @@ export const convertToOldPTObject = (newObject) => {
   propertyDetails.auditDetails = newProperty.auditDetails;
   propertyDetails.calculation = null;
   propertyDetails.channel = newProperty.channel;
+  propertyDetails.units= propertyDetails.units.map(unit=>{
+// unit.usageCategory;
+// propertyDetails.propertyType = extractFromString(newProperty.propertyType, 0);
+// propertyDetails.propertySubType = extractFromString(newProperty.propertyType, 1);
 
+unit.usageCategoryMajor=extractFromString(unit.usageCategory, 0)
+unit.usageCategoryMinor=extractFromString(unit.usageCategory, 1)
+unit.usageCategorySubMinor=extractFromString(unit.usageCategory, 2)
+unit.usageCategoryDetail=extractFromString(unit.usageCategory, 3)
+// unit.constructionDetail = {
+//   builtUpArea: unit.unitArea,
+// };
+
+unit.unitArea=unit.constructionDetail.builtUpArea;
+    return {...unit}
+  })
+
+
+
+
+  // "usageCategoryMajor":"NONRESIDENTIAL",
+  // "usageCategoryMinor":"COMMERCIAL",
+  // "usageCategorySubMinor":"FOODJOINTS",
+  // "usageCategoryDetail":"ACRESTAURANT",
   property["propertyDetails"] = [propertyDetails];
   Properties[0] = {...newProperty,...property};
 

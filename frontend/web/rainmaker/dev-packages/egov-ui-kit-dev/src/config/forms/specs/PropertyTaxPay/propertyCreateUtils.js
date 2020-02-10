@@ -71,7 +71,8 @@ export const createPropertyPayload = (properties, documentsUploadRedux) => {
       ? properties[0].propertyType + "." + properties[0].propertySubType
       : properties[0].propertyType;
   // Changing usageCategoryMajor to usageCategory
-  properties[0].usageCategory = properties[0].usageCategoryMajor;
+  properties[0].usageCategory = properties[0].usageCategoryMajor+
+  (properties[0].usageCategoryMinor ? "." + properties[0].usageCategoryMinor : "") ;
   properties[0].ownershipCategory =
     properties[0].ownershipCategory + (properties[0].subOwnershipCategory ? "." + properties[0].subOwnershipCategory : "");
   // Deleting object keys from request payload which are not required now

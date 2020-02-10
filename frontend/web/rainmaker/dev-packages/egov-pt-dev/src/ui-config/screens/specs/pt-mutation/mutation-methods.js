@@ -12,7 +12,7 @@ import {
   import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   import { propertySearch,applicationSearch } from "./functions";
   
-  const resetFields = (state, dispatch) => {
+  export const resetFields = (state, dispatch) => {
     // dispatch(
     //   handleField(
     //     "propertySearch",
