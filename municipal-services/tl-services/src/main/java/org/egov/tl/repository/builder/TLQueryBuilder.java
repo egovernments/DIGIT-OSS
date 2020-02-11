@@ -140,11 +140,19 @@ public class TLQueryBuilder {
                 preparedStmtList.add(criteria.getStatus());
             }
 
-            if (criteria.getLicenseNumber() != null) {
+
+            List<String> licenseNumbers = criteria.getLicenseNumbers();
+            if (!CollectionUtils.isEmpty(licenseNumbers)) {
                 addClauseIfRequired(preparedStmtList, builder);
-                builder.append("  tl.licensenumber = ? ");
-                preparedStmtList.add(criteria.getLicenseNumber());
+                builder.append(" tl.licensenumber IN (").append(createQuery(licenseNumbers)).append(")");
+                addToPreparedStatement(preparedStmtList, licenseNumbers);
             }
+            
+//            if (criteria.getLicenseNumber() != null) {
+//                addClauseIfRequired(preparedStmtList, builder);
+//                builder.append("  tl.licensenumber = ? ");
+//                preparedStmtList.add(criteria.getLicenseNumber());
+//            }
 
             if (criteria.getOldLicenseNumber() != null) {
                 addClauseIfRequired(preparedStmtList, builder);

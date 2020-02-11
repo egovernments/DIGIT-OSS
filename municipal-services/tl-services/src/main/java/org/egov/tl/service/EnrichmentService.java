@@ -446,7 +446,6 @@ public class EnrichmentService {
                 TradeLicense license = licenses.get(i);
                 Long time = System.currentTimeMillis();
                 license.setIssuedDate(time);
-//                license.setValidFrom(time);
             }
         }else {
             for (int i = 0; i < licenses.size(); i++) {
