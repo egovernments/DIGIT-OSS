@@ -72,6 +72,7 @@ public class TLValidator {
         switch (businessService) {
             case businessService_TL:
                 valideDates(request, mdmsData);
+                valideDatesForRenewal(request);
                 propertyValidator.validateProperty(request);
                 validateTLSpecificNotNullFields(request);
                 break;
@@ -162,11 +163,12 @@ public class TLValidator {
             Map<String,Long> taxPeriods = null;
             if(license.getValidTo()==null)
                 throw new CustomException("INVALID VALIDTO DATE"," Validto cannot be null");
-            if(license.getApplicationType() != null && license.getApplicationType().toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL)){
-                taxPeriods = tradeUtil.getTaxPeriodsforRenewal(license,mdmsData);
-            }else{
-                taxPeriods = tradeUtil.getTaxPeriods(license,mdmsData);
-            }
+//            if(license.getApplicationType() != null && license.getApplicationType().toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL)){
+//                taxPeriods = tradeUtil.getTaxPeriods(license,mdmsData);
+//            }else{
+//                taxPeriods = tradeUtil.getTaxPeriods(license,mdmsData);
+//            }
+            taxPeriods = tradeUtil.getTaxPeriods(license,mdmsData);
             if(license.getValidTo()!=null && license.getValidTo()>taxPeriods.get(TLConstants.MDMS_ENDDATE)){
                 Date expiry = new Date(license.getValidTo());
                 throw new CustomException("INVALID TO DATE"," Validto cannot be greater than: "+expiry);
@@ -233,11 +235,14 @@ public class TLValidator {
                         Long currentToDate = license.getValidTo();
                         Long existingFromDate = searchObj.getValidFrom();
                         Long existingToDate = searchObj.getValidTo();
-                        if((currentFromDate - existingFromDate) <= 0){
+                        if(currentFromDate < existingToDate){
+                            errorMap.put("INVALID FROM DATE","ValidFrom should be greater than the previous applications ValidTo Date");
+                        }
+                        if(currentFromDate  <= existingFromDate){
                             errorMap.put("INVALID FROM DATE","ValidFrom should be greater than the applications ValidFrom Date");
                         }
-                        if((currentToDate - existingToDate) < 0){
-                            errorMap.put("INVALID TO DATE","ValidTo should be greater than the applications ValidTo Date");
+                        if(currentToDate <= existingToDate) {
+                            errorMap.put("INVALID TO DATE", "ValidTo should be greater than the applications ValidTo Date");
                         }
                     }
                 });
@@ -261,6 +266,7 @@ public class TLValidator {
         switch (businessService) {
             case businessService_TL:
                 valideDates(request, mdmsData);
+                valideDatesForRenewal(request);
                 propertyValidator.validateProperty(request);
                 validateTLSpecificNotNullFields(request);
                 break;

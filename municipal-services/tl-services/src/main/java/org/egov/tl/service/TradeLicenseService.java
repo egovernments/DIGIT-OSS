@@ -101,7 +101,6 @@ public class TradeLicenseService {
        Object mdmsData = util.mDMSCall(tradeLicenseRequest);
        actionValidator.validateCreateRequest(tradeLicenseRequest);
        enrichmentService.enrichTLCreateRequest(tradeLicenseRequest, mdmsData);
-       tlValidator.valideDatesForRenewal(tradeLicenseRequest);
        tlValidator.validateCreate(tradeLicenseRequest, mdmsData);
        switch(businessServicefromPath)
        {
