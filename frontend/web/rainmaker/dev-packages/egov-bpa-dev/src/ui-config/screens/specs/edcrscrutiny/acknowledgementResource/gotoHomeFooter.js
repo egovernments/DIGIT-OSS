@@ -42,7 +42,8 @@ export const gotoHomeFooter = getCommonApplyFooter({
     onClickDefination: {
       action: "page_change",
     //  path: `/tradelicence/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit`
-    path:`tradelicence/apply?applicationNumber=PB-TL-2019-12-04-003839&tenantId=pb.nawanshahr&action=edit`
+    // path:`tradelicence/apply?applicationNumber=PB-TL-2019-12-04-003839&tenantId=pb.nawanshahr&action=edit`
+       path: getRedirectionURL()
     }
   }
 });

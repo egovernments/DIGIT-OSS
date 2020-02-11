@@ -130,14 +130,6 @@ export const searchApiCall = async (state, dispatch) => {
       //showHideProgress(false, dispatch);
       showHideTable(true, dispatch);
     } catch (error) {
-      //showHideProgress(false, dispatch);
-      dispatch(
-        toggleSnackbar(
-          true,
-          { labelName: error.message, labelKey: error.message },
-          "error"
-        )
-      );
       console.log(error);
     }
   }
