@@ -110,6 +110,8 @@ public class TLConstants {
     public static final String MDMS_STARTDATE  = "startingDate";
 
     public static final String MDMS_ENDDATE  = "endingDate";
+
+    public static final String FINANCIAL_YEAR  = "finYearRange";
     
     //TL types
 

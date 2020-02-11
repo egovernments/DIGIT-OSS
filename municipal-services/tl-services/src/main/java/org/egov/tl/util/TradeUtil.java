@@ -199,28 +199,30 @@ public class TradeUtil {
      * @param license The create or update TradeLicense request
      * @return Map containing startTime and endTime
      */
-    public Map<String,Long> getTaxPeriodsforRenewal(TradeLicense license,Object mdmsData){
-        Map<String,Long> taxPeriods = new HashMap<>();
+    public Map<String,String> getTaxPeriodsforRenewal(TradeLicense license,Object mdmsData){
+        Map<String,String> taxPeriods = new HashMap<>();
         try {
             String currentYearjsonPath = TLConstants.MDMS_FINACIALYEAR_PATH.replace("{}",license.getFinancialYear());
             List<Map<String,Object>> currentFinancialYear = JsonPath.read(mdmsData, currentYearjsonPath);
             Map<String,Object> currentFYObject = currentFinancialYear.get(0);
 
             String renewalType = license.getWorkflowCode();
-            if(renewalType.equals(TLConstants.businessService_DIRECT_RENEWAL)){
+            if(renewalType.equals(TLConstants.businessService_EDIT_RENEWAL)){
                 Object startDate = currentFYObject.get(TLConstants.MDMS_STARTDATE);
                 Object endDate = currentFYObject.get(TLConstants.MDMS_ENDDATE);
-                taxPeriods.put(TLConstants.MDMS_STARTDATE,(Long) startDate);
-                taxPeriods.put(TLConstants.MDMS_ENDDATE,(Long) endDate);
-            }else if(renewalType.equals(TLConstants.businessService_EDIT_RENEWAL)){
+                taxPeriods.put(TLConstants.MDMS_STARTDATE,(String) startDate);
+                taxPeriods.put(TLConstants.MDMS_ENDDATE,(String) endDate);
+            }else if(renewalType.equals(TLConstants.businessService_DIRECT_RENEWAL)){
                 Long currentEndDate = (Long )currentFYObject.get(TLConstants.MDMS_ENDDATE);
                 String nextFinancialYearJsonPath = TLConstants.MDMS_TL_FINACIALYEAR_START_DATE.replace("{}",currentEndDate.toString());
                 List<Map<String,Object>> nextFinancialYear = JsonPath.read(mdmsData, nextFinancialYearJsonPath);
                 Map<String,Object> nextFYObject = nextFinancialYear.get(0);
                 Object startDate = nextFYObject.get(TLConstants.MDMS_STARTDATE);
                 Object endDate = nextFYObject.get(TLConstants.MDMS_ENDDATE);
-                taxPeriods.put(TLConstants.MDMS_STARTDATE,(Long) startDate);
-                taxPeriods.put(TLConstants.MDMS_ENDDATE,(Long) endDate);
+                Object financialYear = nextFYObject.get(TLConstants.FINANCIAL_YEAR);
+                taxPeriods.put(TLConstants.MDMS_STARTDATE,(String) startDate);
+                taxPeriods.put(TLConstants.MDMS_ENDDATE,(String) endDate);
+                taxPeriods.put(TLConstants.FINANCIAL_YEAR ,(String) financialYear);
             }
         } catch (Exception e) {
             log.error("Error while fetching MDMS data", e);
