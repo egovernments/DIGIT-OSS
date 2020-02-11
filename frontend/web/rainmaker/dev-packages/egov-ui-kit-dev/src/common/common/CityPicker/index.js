@@ -73,7 +73,7 @@ class CityPickerDialog extends Component {
           <TextFieldIcon
             {...field}
             errorStyle={{ bottom: "0px" }}
-            value={getCityNameByCode((field || {}).value, localizationLabels)}
+            value={getCityNameByCode((field || {}).value != 'uk' ? (field || {}).value : "", localizationLabels)}
             id="person-city"
             iconPosition="after"
             Icon={DownArrow}

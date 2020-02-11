@@ -44,7 +44,7 @@ const styles = {
 
 const prepareUserInfo = (userInfo = {}, cities = [],localizationLabels) => {
   const { photo, name, emailId, permanentCity, tenantId } = userInfo;
-  const location = getCityNameByCode(permanentCity, localizationLabels) || getCityNameByCode(tenantId, localizationLabels);
+  const location = getCityNameByCode(permanentCity, localizationLabels);
   return { photo, name, emailId, location };
 };
 
