@@ -127,7 +127,7 @@ const setDocsForEditFlow = async (state, dispatch) => {
 const generateNextFinancialYear = state => {
   const currentFY = get(
     state.screenConfiguration.preparedFinalObject,
-    "Licenses.0.financialYear"
+    "Licenses[0].financialYear"
   );
   const financialYears = get(
     state.screenConfiguration.preparedFinalObject,
