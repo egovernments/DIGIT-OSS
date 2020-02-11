@@ -27,13 +27,15 @@ class Applications extends React.Component {
   //   window.location.href = `/citizen/wns/viewBill?connectionNumber=${data.connectionNo}&tenantId=${data.property.tenantId}&service=${data.service.toUpperCase()}&connectionType=${data.connectionType}`
   // }
 
+  // getTaskDetails=data=>{
+  //   window.location.href = `/wns/search-preview?applicationNumber=${data.applicationNo}&history=${true}&tenantId=${data.property.tenantId}`
+  // }
   render() {
     const { myApplicationResults, classes } = this.props;
     return (
       <div className="application-card">
         {myApplicationResults && myApplicationResults.length > 0 ? (
           myApplicationResults.map(item => {
-            console.log("item",item);
             return (
               <div>
                 <Card className={classes.card}>
@@ -97,7 +99,7 @@ class Applications extends React.Component {
                         </Grid>
                         <Grid item md={8} xs={6}>
                           <Label
-                            labelName={item.due} onClick={() => this.getViewBillDetails(item)}
+                            labelName={item.due}
                             fontSize={14}
                             style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
                           />
@@ -119,7 +121,7 @@ class Applications extends React.Component {
                           />
                         </Grid>
                       </Grid>
-                      <div className="linkStyle" onClick={() => this.getViewBillDetails(item)}>
+                      <div className="linkStyle" onClick={() => this.getTaskDetails(item)}>
                       <LabelContainer 
                                 labelKey="WS_VIEW_DETAILS"
                                 style={{
@@ -201,42 +203,4 @@ export default withStyles(styles)(
     mapStateToProps,
     mapDispatchToProps
   )(Applications)
-);
-
-
- {/* <Grid container style={{ marginBottom: 12 }}>
-                        <Grid item md={4} xs={6}>
-                          <LabelContainer
-                            labelKey="WS_MYCONNECTIONS_CONSUMER_NO"
-                            fontSize={14}
-                            style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
-                          />
-                        </Grid>
-                        <Grid item md={8} xs={6}>
-                          <div className="linkStyle" onClick={() => this.getConnectionDetails(item)}>
-                            <a> <Label
-                              labelName={item.connectionNo}
-                              fontSize={14}
-                              style={{ fontSize: 14 }}
-                            />
-                            </a>
-                          </div>
-                        </Grid>
-                      </Grid> */}
-
-{/* <Grid container style={{ marginBottom: 12 }}>
-                        <Grid item md={4} xs={6}>
-                          <LabelContainer
-                            labelKey="WS_MYCONNECTION_ADDRESS"
-                            fontSize={14}
-                            style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
-                          />
-                        </Grid>
-                        <Grid item md={8} xs={6}>
-                          <Label
-                            labelName={item.property.address.street}
-                            fontSize={14}
-                            style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
-                          />
-                        </Grid>
-                      </Grid> */}
+); 

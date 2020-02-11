@@ -4,7 +4,6 @@ import {
     prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
-console.log("mobilenumber",JSON.parse(getUserInfo()).mobileNumber)
 
 export const fetchData = async (action, state, dispatch) => {
     let finalResponse = [];
@@ -13,16 +12,10 @@ export const fetchData = async (action, state, dispatch) => {
             key: "mobileNumber",
             value: JSON.parse(getUserInfo()).mobileNumber
         }
-        // {
-        //     key: "tenantId",
-        //     value: JSON.parse(getUserInfo()).tenantId
-        // }
     ]
 
-    const response = await getMyApplicationResults(dispatch);
-
-    console.log("myApplication",response)
-    const swResponse = await getSWMyApplicationResults(dispatch);
+    const response = await getMyApplicationResults(queryObject,dispatch);
+    const swResponse = await getSWMyApplicationResults(queryObject, dispatch);
 
     if ((response && response.WaterConnection && response.WaterConnection.length > 0) && (swResponse && swResponse.SewerageConnections && swResponse.SewerageConnections.length > 0)) {
         finalResponse = [...response.WaterConnection, ...swResponse.SewerageConnections];
