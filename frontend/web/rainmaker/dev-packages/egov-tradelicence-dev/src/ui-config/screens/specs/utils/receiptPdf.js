@@ -1004,12 +1004,13 @@ const getCertificateData = (transformedData, ulbLogo) => {
                     
                   ],
                 },
-                {
+                transformedData.ownerPhoto?{
                   image: transformedData.ownerPhoto,
                   width: 100,
                   height: 100,
-                  alignment: "right"
-                }
+                  alignment: "right",
+                  margin: [0, 12, 0, 0]
+                }:{}
               ]   
             ]    
           },
@@ -1227,9 +1228,9 @@ const getCertificateData = (transformedData, ulbLogo) => {
     ], //define all the styles here
     styles: {
       "noctable": {
-        "fontSize": 10,
-        "color": "#000000", 
-        "margin": [
+        fontSize: 10,
+        color: "#000000", 
+        margin: [
           0,
           0,
           0,

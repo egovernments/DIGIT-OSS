@@ -327,24 +327,18 @@ export const acceptedFiles = acceptedExt => {
   return acceptedFileTypes;
 };
 
-export const handleFileUpload = (event, handleDocument, props) => {
+export const handleFileUpload = (event, handleDocument, props, docName="") => {
   const S3_BUCKET = {
     endPoint: "filestore/v1/files"
   };
-  let uploadDocument = true;
-  let docName="";
-  props.documents.forEach(item => {
-    if(item.name == "OWNERPHOTO"){
-      docName=item.name;
-    }
-  })
+  let uploadDocument = true;  
   const { inputProps, maxFileSize, moduleName } = props;
   const input = event.target;
   if (input.files && input.files.length > 0) {
     const files = input.files;
     Object.keys(files).forEach(async (key, index) => {
       const file = files[key];
-      const fileValid = docName == "OWNERPHOTO" ? isFileValid(file, acceptedFiles(props.imageProps.accept)): isFileValid(file, acceptedFiles(inputProps.accept));
+      const fileValid = docName == "OWNERPHOTO" ? isFileValid(file, acceptedFiles(props.imageProps.accept)) : isFileValid(file, acceptedFiles(inputProps.accept));
       const isSizeValid = getFileSize(file) <= maxFileSize;
       if (!fileValid) {
         docName == "OWNERPHOTO"? alert(`Only image files can be uploaded`) : alert(`Only image or pdf files can be uploaded`);

@@ -237,7 +237,8 @@ class DocumentList extends Component {
                       classes={this.props.classes}
                       id={`upload-button-${key}`}
                       handleFileUpload={e =>
-                        handleFileUpload(e, this.handleDocument, this.props.inputProps[key])
+                        // handleFileUpload(e, this.handleDocument, this.props.inputProps[key])
+                        handleFileUpload(e, this.handleDocument, this.props, document.name)
                       }
                       uploaded={uploadedIndex.indexOf(key) > -1}
                       removeDocument={() => this.removeDocument(key)}

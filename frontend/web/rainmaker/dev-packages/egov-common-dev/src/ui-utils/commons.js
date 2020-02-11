@@ -574,7 +574,7 @@ let getModifiedPayment = (payments) =>{
             penalty = penalty+(billAccountDetail.amount);
             break;
           case "PT_TIME_REBATE":
-            rebate = rebate+(billAccountDetail.amount);
+            arrear = arrear+(billAccountDetail.amount);
             break;
           case "PT_ROUNDOFF":
             roundOff = roundOff+(billAccountDetail.amount);
@@ -583,7 +583,7 @@ let getModifiedPayment = (payments) =>{
             interest = interest+(billAccountDetail.amount);
             break;
           case "PT_PROMOTIONAL_REBATE":
-            rebate = rebate + (billAccountDetail.amount);
+            arrear = arrear + (billAccountDetail.amount);
             break;
           case "SWATCHATHA_TAX":
             swatchatha = swatchatha + (billAccountDetail.amount);

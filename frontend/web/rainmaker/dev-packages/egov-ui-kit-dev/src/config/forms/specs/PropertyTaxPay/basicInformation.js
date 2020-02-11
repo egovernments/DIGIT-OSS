@@ -84,7 +84,7 @@ const formConfig = {
       fullWidth:true,
       required:true,
       hintText:"PT_COMMONS_SELECT_PLACEHOLDER",
-      disabled:false,
+      disabled:false
     }
   },
   action: "",
