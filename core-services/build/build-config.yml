@@ -218,7 +218,7 @@ config:
   - name: "builds/core-services/http-to-kafka-connector"
     build:
       - work-dir: "http-to-kafka-connector"
-        image-name: "http-to-kafka-connector"
+        image-name: "whatsapp-webhook"
 
   - name: "builds/core-services/egov-user-chatbot"
     build:
