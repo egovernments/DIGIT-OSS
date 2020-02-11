@@ -41,8 +41,6 @@ public class TLValidator {
 
     private UserService userService;
    
-    private TradeLicenseService tlService;
-
     @Value("${egov.allowed.businessServices}")
     private String allowedBusinessService;
 
