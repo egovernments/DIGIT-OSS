@@ -43,6 +43,19 @@ const moveToSuccess = (LicenseData, dispatch) => {
     )
   );
 };
+const editRenewalMoveToSuccess = (LicenseData, dispatch) => {
+  const applicationNo = get(LicenseData, "applicationNumber");
+  const tenantId = get(LicenseData, "tenantId");
+  const financialYear = get(LicenseData, "financialYear");
+  const licenseNumber = get(LicenseData, "licenseNumber");
+  const purpose = "EDITRENEWAL";
+  const status = "success";
+  dispatch(
+    setRoute(
+      `/tradelicence/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&licenseNumber=${licenseNumber}&FY=${financialYear}&tenantId=${tenantId}`
+    )
+  );
+};
 
 export const generatePdfFromDiv = (action, applicationNumber) => {
   let target = document.querySelector("#custom-atoms-div");
@@ -309,6 +322,9 @@ export const callBackForNext = async (state, dispatch) => {
     );
     isFormValid = await applyTradeLicense(state, dispatch,activeStep);
     if (isFormValid) {
+      if (getQueryArg(window.location.href, "action") === "EDITRENEWAL")
+      editRenewalMoveToSuccess(LicenseData, dispatch);
+      else
       moveToSuccess(LicenseData, dispatch);
     }
   }
@@ -596,9 +612,13 @@ const response=  await httpRequest("post", "/tl-services/v1/_update", "", [], {
     response,
     `Licenses[0].applicationNumber`
   );
+  const licenseNumber = get(
+    response,
+    `Licenses[0].licenseNumber`
+  );
   dispatch(
   setRoute(
-    `/tradelicence/acknowledgement?purpose=EDITRENEWAL&status=success&applicationNumber=${applicationNumberNew}&FY=${financialYear}&tenantId=${tenantId}&action=${wfCode}`
+    `/tradelicence/acknowledgement?purpose=EDITRENEWAL&status=success&applicationNumber=${applicationNumberNew}&licenseNumber=${licenseNumber}&FY=${financialYear}&tenantId=${tenantId}&action=${wfCode}`
   ));
 };
 
@@ -614,6 +634,7 @@ export const footerReview = (
   /** MenuButton data based on status */
   let downloadMenu = [];
   let printMenu = [];
+  let licenseNumber= get(state.screenConfiguration.preparedFinalObject.Licenses[0], "licenseNumber")
   // let renewalMenu=[];
   let tlCertificateDownloadObject = {
     label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
@@ -845,7 +866,7 @@ export const footerReview = (
                   dispatch(
                     setRoute(
                      // `/tradelicence/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&FY=${financialYear}&tenantId=${tenantId}`
-                     `/tradelicense-citizen/apply?applicationNumber=${applicationNumber}&tenantId=${tenantId}&action=EDITRENEWAL`
+                     `/tradelicense-citizen/apply?applicationNumber=${applicationNumber}&licenseNumber=${licenseNumber}&tenantId=${tenantId}&action=EDITRENEWAL`
                     )
                   );
                 },

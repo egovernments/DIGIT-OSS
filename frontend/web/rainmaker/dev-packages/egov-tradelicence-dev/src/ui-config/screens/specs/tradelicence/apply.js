@@ -57,7 +57,10 @@ export const header = getCommonContainer({
               : ""
           }`,
           dynamicArray: [getCurrentFinancialYear()],
-          labelKey:
+          labelKey: getQueryArg(window.location.href, "action") === "EDITRENEWAL" ?
+          process.env.REACT_APP_NAME === "Citizen"
+          ? "TL_COMMON_APPL_RENEWAL_LICENSE"
+          : "TL_COMMON_APPL_RENEWAL_LICENSE_YEAR" :
             process.env.REACT_APP_NAME === "Citizen"
               ? "TL_COMMON_APPL_NEW_LICENSE"
               : "TL_COMMON_APPL_NEW_LICENSE_YEAR"

@@ -99,7 +99,6 @@ export const searchApiCall = async (state, dispatch) => {
     }
 
     const response = await getSearchResults(queryObject);
-    console.log("ress",response);
     try {
       let data = response.Licenses.map(item => ({
   
