@@ -219,3 +219,9 @@ config:
     build:
       - work-dir: "http-to-kafka-connector"
         image-name: "http-to-kafka-connector"
+
+  - name: "builds/core-services/egov-user-chatbot"
+    build:
+      - work-dir: "egov-user"
+        image-name: "egov-user-chatbot"
+        dockerfile: "build/maven/Dockerfile"
