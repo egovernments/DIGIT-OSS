@@ -40,9 +40,7 @@ public class TLValidator {
     private TradeUtil tradeUtil;
 
     private UserService userService;
-
-    private TLRepository repository;
-    
+   
     private TradeLicenseService tlService;
 
     @Value("${egov.allowed.businessServices}")
@@ -244,7 +242,7 @@ public class TLValidator {
         if(licenseNumbers.size() > 0){
             criteria.setLicenseNumbers(licenseNumbers);
         }
-        List<TradeLicense> searchResult = repository.getLicenses(criteria);
+        List<TradeLicense> searchResult = tlRepository.getLicenses(criteria);
         Map<String , TradeLicense> licenseMap = new HashMap<>();
         searchResult.forEach(license -> {
             licenseMap.put(license.getLicenseNumber() , license);
