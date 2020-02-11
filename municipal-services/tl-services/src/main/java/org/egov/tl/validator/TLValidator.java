@@ -234,7 +234,9 @@ public class TLValidator {
         List<String> licenseNumbers = new LinkedList<>();
         request.getLicenses().forEach(license -> {
             ids.add(license.getId());
-            licenseNumbers.add(license.getLicenseNumber());
+            if(license.getLicenseNumber() != null){
+                licenseNumbers.add(license.getLicenseNumber());
+            }            
         });
         criteria.setTenantId(request.getLicenses().get(0).getTenantId());
         criteria.setIds(ids);
