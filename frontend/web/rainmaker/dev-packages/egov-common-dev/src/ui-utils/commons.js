@@ -520,25 +520,25 @@ let getModifiedPayment = (payments) =>{
       billdetail.billAccountDetails.forEach(billAccountDetail =>{
         switch (billAccountDetail.taxHeadCode) {
           case "PT_TAX":
-            tax = tax+(billAccountDetail.amount);
+            tax = Math.round((tax+(billAccountDetail.amount))*100)/100;
             break;
           case "PT_LATE_ASSESSMENT_PENALTY":
-            penalty = penalty+(billAccountDetail.amount);
+            penalty = Math.round((penalty+(billAccountDetail.amount))*100)/100;
             break;
           case "PT_TIME_REBATE":
-            rebate = rebate+(billAccountDetail.amount);
+            rebate = Math.round((rebate+(billAccountDetail.amount))*100)/100;
             break;
           case "PT_ROUNDOFF":
-            roundOff = roundOff+(billAccountDetail.amount);
+            roundOff = Math.round((roundOff+(billAccountDetail.amount))*100)/100;
             break;
           case "PT_TIME_INTEREST":
-            interest = interest+(billAccountDetail.amount);
+            interest = Math.round((interest+(billAccountDetail.amount))*100)/100;
             break;
           case "PT_PROMOTIONAL_REBATE":
-            rebate = rebate+(billAccountDetail.amount);
+            rebate = Math.round((rebate+(billAccountDetail.amount))*100)/100;
             break;
           case "SWATCHATHA_TAX":
-            swatchatha = swatchatha+(billAccountDetail.amount);
+            swatchatha = Math.round((swatchatha+(billAccountDetail.amount))*100)/100;
             break;
           default:
             break;
@@ -548,25 +548,25 @@ let getModifiedPayment = (payments) =>{
       billdetail.billAccountDetails.forEach(billAccountDetail =>{
         switch (billAccountDetail.taxHeadCode) {
           case "PT_TAX":
-            arrear = arrear+(billAccountDetail.amount);
+            arrear = Math.round((arrear+(billAccountDetail.amount))*100)/100;
             break;
           case "PT_LATE_ASSESSMENT_PENALTY":
-            penalty = penalty+(billAccountDetail.amount);
+            penalty = Math.round((penalty+(billAccountDetail.amount))*100)/100;
             break;
           case "PT_TIME_REBATE":
-            arrear = arrear+(billAccountDetail.amount);
+            arrear = Math.round((arrear+(billAccountDetail.amount))*100)/100;
             break;
           case "PT_ROUNDOFF":
-            roundOff = roundOff+(billAccountDetail.amount);
+            roundOff = Math.round((roundOff+(billAccountDetail.amount))*100)/100;
             break;
           case "PT_TIME_INTEREST":
-            interest = interest+(billAccountDetail.amount);
+            interest = Math.round((interest+(billAccountDetail.amount))*100)/100;
             break;
           case "PT_PROMOTIONAL_REBATE":
-            arrear = arrear + (billAccountDetail.amount);
+            arrear = Math.round((arrear+(billAccountDetail.amount))*100)/100;
             break;
           case "SWATCHATHA_TAX":
-            swatchatha = swatchatha + (billAccountDetail.amount);
+            swatchatha = Math.round((swatchatha+(billAccountDetail.amount))*100)/100;
             break;
           default:
             break;
