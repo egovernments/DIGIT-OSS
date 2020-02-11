@@ -16320,7 +16320,28 @@
       "serviceCode": "DSS",
       "code": "null",
       "path": ""
+    },
+    {
+      "id": 1966,
+      "name": "Calculate Fee For Water Application",
+      "url": "/ws-calculator/waterCalculator/_estimate",
+      "displayName": "Fee Calculation For Water Application",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "ws-calculator",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1967,
+      "name": "Calculate Fee For Sewerage Application",
+      "url": "/sw-calculator/sewerageCalculator/_estimate",
+      "displayName": "Fee Calculation For Sewerage Application",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "sw-calculator",
+      "code": "null",
+      "path": ""
     }
-
   ]
 }
