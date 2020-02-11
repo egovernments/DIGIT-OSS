@@ -1,7 +1,7 @@
 {
   "topicContextConfigurations": [
     {
-      "topic": "tarento-dss-collection",
+      "topic": "dss-collection-update",
       "dataContext": "collection",
       "dataContextVersion": "v1"
     },
