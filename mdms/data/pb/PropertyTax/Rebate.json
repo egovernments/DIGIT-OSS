@@ -7,14 +7,17 @@
       "maxAmount": null,
       "flatAmount": null,
       "fromFY": "2018-19",
-      "endingDay": "25/09"
+      "endingDay": "25/09",
+      "mutationPaymentPeriodInMonth": "06"
+
     },
     {
       "rate": 10,
       "maxAmount": null,
       "flatAmount": null,
       "fromFY": "2019-20",
-      "endingDay": "28/02"
+      "endingDay": "28/02",
+      "mutationPaymentPeriodInMonth": "06"
     }
   ]
 }
