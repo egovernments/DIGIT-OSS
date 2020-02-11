@@ -476,7 +476,7 @@ serviceMaps:
 
            - jsonPath: $.BPA.id
 
-       - query: UPDATE eg_bpa_buildingplan SET status =?, permitOrderNo=?, validityDate=?, holdingno=?, registrationdetails=?, govtorquasi=?  WHERE id =?;
+       - query: UPDATE eg_bpa_buildingplan SET status =?, permitOrderNo=?, validityDate=?, holdingno=?, registrationdetails=?, govtorquasi=?, additionaldetails=? WHERE id =?;
          basePath: BPA
          jsonMaps:
            - jsonPath: $.BPA.status
@@ -490,5 +490,9 @@ serviceMaps:
            - jsonPath: $.BPA.registrationDetails
            
            - jsonPath: $.BPA.govtOrQuasi
+           
+           - jsonPath: $.BPA.additionalDetails
+             type: JSON
+             dbType: JSONB
            
            - jsonPath: $.BPA.id
