@@ -1,0 +1,12 @@
+{
+  "tenantId": "pb",
+  "moduleName": "sw-services-calculation",
+  "CalculationAttribute": [
+    {
+      "name": "Non Metered",
+      "code": "NONMETERED",
+      "attribute": "No. of water closets",
+      "active": true
+    }
+  ]
+}

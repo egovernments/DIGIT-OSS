@@ -2091,9 +2091,9 @@
       "isActualDemand": false,
       "order": "1",
       "isRequired": false
-    },{
+    }, {
       "category": "FEE",
-      "service": "WS",
+      "service": "WS.ONE_TIME_FEE",
       "name": "Water application form fee",
       "code": "WS_FORM_FEE",
       "isDebit": false,
@@ -2103,7 +2103,7 @@
     },
     {
       "category": "FEE",
-      "service": "WS",
+      "service": "WS.ONE_TIME_FEE",
       "name": "Water application scrutiny fee",
       "code": "WS_SCRUTINY_FEE",
       "isDebit": false,
@@ -2113,7 +2113,7 @@
     },
     {
       "category": "FEE",
-      "service": "WS",
+      "service": "WS.ONE_TIME_FEE",
       "name": "Water application one time fee",
       "code": "WS_ONE_TIME_FEE",
       "isDebit": false,
@@ -2123,7 +2123,7 @@
     },
     {
       "category": "CHARGES",
-      "service": "WS",
+      "service": "WS.ONE_TIME_FEE",
       "name": "Water application road cutting charge",
       "code": "WS_ROAD_CUTTING_CHARGE",
       "isDebit": false,
@@ -2133,7 +2133,7 @@
     },
     {
       "category": "CHARGES",
-      "service": "WS",
+      "service": "WS.ONE_TIME_FEE",
       "name": "Water application meter charge",
       "code": "WS_METER_CHARGE",
       "isDebit": false,
@@ -2143,7 +2143,7 @@
     },
     {
       "category": "CHARGES",
-      "service": "WS",
+      "service": "WS.ONE_TIME_FEE",
       "name": "Water application security charge",
       "code": "WS_SECURITY_CHARGE",
       "isDebit": false,
@@ -2153,7 +2153,7 @@
     },
     {
       "category": "CHARGES",
-      "service": "WS",
+      "service": "WS.ONE_TIME_FEE",
       "name": "Water application other charges",
       "code": "WS_OTHER_CHARGE",
       "isDebit": false,
@@ -2163,7 +2163,7 @@
     },
     {
       "category": "TAX",
-      "service": "WS",
+      "service": "WS.ONE_TIME_FEE",
       "name": "Water application tax and cess",
       "code": "WS_TAX_AND_CESS",
       "isDebit": false,
@@ -2173,7 +2173,7 @@
     },
     {
       "category": "FEE",
-      "service": "SW",
+      "service": "SW.ONE_TIME_FEE",
       "name": "Sewerage application form fee",
       "code": "SW_FORM_FEE",
       "isDebit": false,
@@ -2183,7 +2183,7 @@
     },
     {
       "category": "FEE",
-      "service": "SW",
+      "service": "SW.ONE_TIME_FEE",
       "name": "Sewerage application scrutiny fee",
       "code": "SW_SCRUTINY_FEE",
       "isDebit": false,
@@ -2193,7 +2193,7 @@
     },
     {
       "category": "FEE",
-      "service": "SW",
+      "service": "SW.ONE_TIME_FEE",
       "name": "Sewerage application one time fee",
       "code": "SW_ONE_TIME_FEE",
       "isDebit": false,
@@ -2203,7 +2203,7 @@
     },
     {
       "category": "CHARGES",
-      "service": "SW",
+      "service": "SW.ONE_TIME_FEE",
       "name": "Sewerage application road cutting charge",
       "code": "SW_ROAD_CUTTING_CHARGE",
       "isDebit": false,
@@ -2213,7 +2213,7 @@
     },
     {
       "category": "CHARGES",
-      "service": "SW",
+      "service": "SW.ONE_TIME_FEE",
       "name": "Sewerage application meter charge",
       "code": "SW_METER_CHARGE",
       "isDebit": false,
@@ -2223,7 +2223,7 @@
     },
     {
       "category": "CHARGES",
-      "service": "SW",
+      "service": "SW.ONE_TIME_FEE",
       "name": "Sewerage application security charge",
       "code": "SW_SECURITY_CHARGE",
       "isDebit": false,
@@ -2233,7 +2233,7 @@
     },
     {
       "category": "CHARGES",
-      "service": "SW",
+      "service": "SW.ONE_TIME_FEE",
       "name": "Sewerage application other charges",
       "code": "SW_OTHER_CHARGE",
       "isDebit": false,
@@ -2243,7 +2243,7 @@
     },
     {
       "category": "TAX",
-      "service": "SW",
+      "service": "SW.ONE_TIME_FEE",
       "name": "Sewerage application tax and cess",
       "code": "SW_TAX_AND_CESS",
       "isDebit": false,

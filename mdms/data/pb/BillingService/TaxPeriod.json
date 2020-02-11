@@ -377,6 +377,22 @@
       "service": "TL",
       "code": "TLRENEWAL2016",
       "financialYear": "2016-17"
+    },
+    {
+      "fromDate": 1554057000000,
+      "toDate": 1869676199000,
+      "periodCycle": "TENYEARS",
+      "service": "WS.ONE_TIME_FEE",
+      "code": "WS10YRS2019",
+      "financialYear": "2019-29"
+    },
+    {
+      "fromDate": 1554057000000,
+      "toDate": 1869676199000,
+      "periodCycle": "TENYEARS",
+      "service": "SW.ONE_TIME_FEE",
+      "code": "SW10YRS2019",
+      "financialYear": "2019-29"
     }
   ]
 }
