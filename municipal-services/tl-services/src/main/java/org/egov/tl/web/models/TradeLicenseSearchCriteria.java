@@ -27,8 +27,8 @@ public class TradeLicenseSearchCriteria {
     @JsonProperty("applicationNumber")
     private String applicationNumber;
 
-    @JsonProperty("licenseNumber")
-    private String licenseNumber;
+    @JsonProperty("licenseNumbers")
+    private List<String> licenseNumbers;
 
     @JsonProperty("oldLicenseNumber")
     private String oldLicenseNumber;
@@ -61,14 +61,14 @@ public class TradeLicenseSearchCriteria {
 
     public boolean isEmpty() {
         return (this.tenantId == null && this.status == null && this.ids == null && this.applicationNumber == null
-                && this.licenseNumber == null && this.oldLicenseNumber == null && this.mobileNumber == null &&
+                && this.licenseNumbers == null && this.oldLicenseNumber == null && this.mobileNumber == null &&
                 this.fromDate == null && this.toDate == null && this.ownerIds == null
         );
     }
 
     public boolean tenantIdOnly() {
         return (this.tenantId != null && this.status == null && this.ids == null && this.applicationNumber == null
-                && this.licenseNumber == null && this.oldLicenseNumber == null && this.mobileNumber == null &&
+                && this.licenseNumbers == null && this.oldLicenseNumber == null && this.mobileNumber == null &&
                 this.fromDate == null && this.toDate == null && this.ownerIds == null
         );
     }
