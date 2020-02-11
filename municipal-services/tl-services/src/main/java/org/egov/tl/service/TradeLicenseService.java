@@ -101,6 +101,7 @@ public class TradeLicenseService {
        Object mdmsData = util.mDMSCall(tradeLicenseRequest);
        actionValidator.validateCreateRequest(tradeLicenseRequest);
        enrichmentService.enrichTLCreateRequest(tradeLicenseRequest, mdmsData);
+       tlValidator.valideDatesForRenewal(tradeLicenseRequest);
        tlValidator.validateCreate(tradeLicenseRequest, mdmsData);
        switch(businessServicefromPath)
        {
@@ -278,7 +279,7 @@ public class TradeLicenseService {
             BusinessService businessService = workflowService.getBusinessService(tradeLicenseRequest.getLicenses().get(0).getTenantId(), tradeLicenseRequest.getRequestInfo(), businessServiceName);
             List<TradeLicense> searchResult = getLicensesWithOwnerInfo(tradeLicenseRequest);
             actionValidator.validateUpdateRequest(tradeLicenseRequest, businessService);
-            enrichmentService.enrichTLUpdateRequest(tradeLicenseRequest, businessService);//
+            enrichmentService.enrichTLUpdateRequest(tradeLicenseRequest, businessService);
             tlValidator.validateUpdate(tradeLicenseRequest, searchResult, mdmsData);
             switch(businessServicefromPath)
             {

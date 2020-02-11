@@ -40,6 +40,8 @@ public class TLValidator {
     private TradeUtil tradeUtil;
 
     private UserService userService;
+    
+    private TradeLicenseService tlService;
 
     @Value("${egov.allowed.businessServices}")
     private String allowedBusinessService;
@@ -155,7 +157,7 @@ public class TLValidator {
      *  Validates the fromDate and toDate of the request
      * @param request The input TradeLicenseRequest Object
      */
-    private void valideDates(TradeLicenseRequest request,Object mdmsData){
+    private void valideDates(TradeLicenseRequest request ,Object mdmsData){
         request.getLicenses().forEach(license -> {
             Map<String,Long> taxPeriods = null;
             if(license.getValidTo()==null)
@@ -211,6 +213,35 @@ public class TLValidator {
                 throw new CustomException("INVALID REQUEST","The institution object cannot be null for ownershipCategory "
                         +license.getTradeLicenseDetail().getSubOwnerShipCategory());
 
+        });
+    }
+
+
+
+    /**
+     *  Validates the fromDate and toDate of the request
+     * @param request The input TradeLicenseRequest Object
+     */
+    public void valideDatesForRenewal(TradeLicenseRequest request){
+        Map<String,String> errorMap = new HashMap<>();
+        request.getLicenses().forEach(license -> {
+            if(license.getApplicationType() != null && license.getApplicationType().toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL)){
+                List<TradeLicense> searchResult = tlService.getLicensesWithOwnerInfo(request);
+                searchResult.forEach(searchObj -> {
+                    if(license.getApplicationNumber().equals(searchObj.getApplicationNumber())){
+                        Long currentFromDate = license.getValidFrom();
+                        Long currentToDate = license.getValidTo();
+                        Long existingFromDate = searchObj.getValidFrom();
+                        Long existingToDate = searchObj.getValidTo();
+                        if((currentFromDate - existingFromDate) <= 0){
+                            errorMap.put("INVALID FROM DATE","ValidFrom should be greater than the applications ValidFrom Date");
+                        }
+                        if((currentToDate - existingToDate) < 0){
+                            errorMap.put("INVALID TO DATE","ValidTo should be greater than the applications ValidTo Date");
+                        }
+                    }
+                });
+            }
         });
     }
 
