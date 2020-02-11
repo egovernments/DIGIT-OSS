@@ -241,8 +241,9 @@ public class TLValidator {
         criteria.setTenantId(request.getLicenses().get(0).getTenantId());
         criteria.setIds(ids);
         criteria.setBusinessService(request.getLicenses().get(0).getBusinessService());
-        criteria.setLicenseNumbers(licenseNumbers);
-
+        if(licenseNumbers.size() > 0){
+            criteria.setLicenseNumbers(licenseNumbers);
+        }
         List<TradeLicense> searchResult = repository.getLicenses(criteria);
         Map<String , TradeLicense> licenseMap = new HashMap<>();
         searchResult.forEach(license -> {
