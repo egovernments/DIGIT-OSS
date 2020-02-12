@@ -130,7 +130,7 @@ class Property extends Component {
       { key: "businessService", value: 'PT' }
     ]);
 fetchAssessments([
-  { key: "consumerCodes", value: decodeURIComponent(this.props.match.params.propertyId) },
+  { key: "propertyIds", value: decodeURIComponent(this.props.match.params.propertyId) },
   { key: "tenantId", value: this.props.match.params.tenantId }
 ]);
 
