@@ -584,6 +584,7 @@ class FormWizard extends Component {
             termsAccepted={termsAccepted}
             termsError={termsError}
             calculationScreenData={this.state.calculationScreenData}
+            getEstimates={this.getEstimates}
           />
         </div>)
       case 5:
@@ -1276,124 +1277,40 @@ class FormWizard extends Component {
     }
   };
 
+  getEstimates = async () =>{
+    let { search: search1 } = this.props.location;
+    let isAssesment1 = Boolean(getQueryValue(search1, "isAssesment").replace('false', ''));
+    if(isAssesment1){
+      this.estimate().then(estimateResponse => {
+        if (estimateResponse) {
+          window.scrollTo(0, 0);
+          this.setState({
+            estimation: estimateResponse && estimateResponse.Calculation,
+            totalAmountToBePaid: 1, // What is this?
+            valueSelected: "Full_Amount"
+          });
+        }
+      });
+    }
+  }
+
   estimate = async () => {
     // utils
     let { toggleSpinner, form, common, location } = this.props;
     let { search } = location;
     let prepareFormData = { ...this.props.prepareFormData };
     toggleSpinner();
-    if (
-      get(
-        prepareFormData,
-        "Properties[0].propertyDetails[0].institution",
-        undefined
-      )
-    )
-      delete prepareFormData.Properties[0].propertyDetails[0].institution;
+    
     const financialYearFromQuery = getFinancialYearFromQuery();
-    const selectedownerShipCategoryType = get(
-      form,
-      "ownershipType.fields.typeOfOwnership.value",
-      ""
-    );
     try {
-      if (financialYearFromQuery) {
-        set(
-          prepareFormData,
-          "Properties[0].propertyDetails[0].financialYear",
-          financialYearFromQuery
-        );
-      } else {
-        toggleSpinner();
-        return;
-
-      }
-      if (selectedownerShipCategoryType === "SINGLEOWNER") {
-        set(
-          prepareFormData,
-          "Properties[0].propertyDetails[0].owners",
-          getSingleOwnerInfo(this)
-        );
-        set(
-          prepareFormData,
-          "Properties[0].propertyDetails[0].ownershipCategory",
-          get(
-            common,
-            `generalMDMSDataById.SubOwnerShipCategory[${selectedownerShipCategoryType}].ownerShipCategory`,
-            "INDIVIDUAL"
-          )
-        );
-        set(
-          prepareFormData,
-          "Properties[0].propertyDetails[0].subOwnershipCategory",
-          selectedownerShipCategoryType
-        );
-      }
-      if (selectedownerShipCategoryType === "MULTIPLEOWNERS") {
-        set(
-          prepareFormData,
-          "Properties[0].propertyDetails[0].owners",
-          getMultipleOwnerInfo(this)
-        );
-        set(
-          prepareFormData,
-          "Properties[0].propertyDetails[0].ownershipCategory",
-          get(
-            common,
-            `generalMDMSDataById.SubOwnerShipCategory[${selectedownerShipCategoryType}].ownerShipCategory`,
-            "INDIVIDUAL"
-          )
-        );
-        set(
-          prepareFormData,
-          "Properties[0].propertyDetails[0].subOwnershipCategory",
-          selectedownerShipCategoryType
-        );
-      }
-      if (
-        selectedownerShipCategoryType.toLowerCase().indexOf("institutional") !==
-        -1
-      ) {
-        const { instiObj, ownerArray } = getInstituteInfo(this);
-        set(
-          prepareFormData,
-          "Properties[0].propertyDetails[0].owners",
-          ownerArray
-        );
-        set(
-          prepareFormData,
-          "Properties[0].propertyDetails[0].institution",
-          instiObj
-        );
-        set(
-          prepareFormData,
-          "Properties[0].propertyDetails[0].ownershipCategory",
-          get(form, "ownershipType.fields.typeOfOwnership.value", "")
-        );
-        set(
-          prepareFormData,
-          "Properties[0].propertyDetails[0].subOwnershipCategory",
-          get(form, "institutionDetails.fields.type.value", "")
-        );
-      }
-      const propertyDetails = normalizePropertyDetails(
-        prepareFormData.Properties,
-        this
-      );
+      const financeYear = {financialYear:financialYearFromQuery};
+      const assessmentPayload = createAssessmentPayload(prepareFormData.Properties[0], financeYear);
       let estimateResponse = await httpRequest(
-        "pt-calculator-v2/propertytax/_estimate",
+        "pt-calculator-v2/propertytax/v2/_estimate",
         "_estimate",
         [],
         {
-          CalculationCriteria: [
-            {
-              assessmentYear: financialYearFromQuery,
-              tenantId:
-                prepareFormData.Properties[0] &&
-                prepareFormData.Properties[0].tenantId,
-              property: propertyDetails[0]
-            }
-          ]
+          Assessment: assessmentPayload
         }
       );
       //For calculation screen

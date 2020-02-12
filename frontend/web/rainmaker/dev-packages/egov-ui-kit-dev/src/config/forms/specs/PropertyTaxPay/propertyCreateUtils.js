@@ -87,9 +87,8 @@ export const createPropertyPayload = (properties, documentsUploadRedux, newPrope
 export const createAssessmentPayload = (properties, propertyPayload) => {
   const Assessment = {
     financialYear: propertyPayload.financialYear,
-    assessmentDate: properties.auditDetails.createdTime - 60000,
     tenantId: properties.tenantId,
-    propertyID: properties.propertyId,
+    propertyId: properties.propertyId,
     source: "MUNICIPAL_RECORDS",
     channel: "CFC_COUNTER",
     status: "ACTIVE",

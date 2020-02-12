@@ -36,6 +36,9 @@ class ReviewForm extends Component {
     calculationDetails: false,
   };
 
+  componentDidMount() {
+    this.props.getEstimates();
+  }
   handleOptionsChange = (event, value) => {
     this.setState({ valueSelected: value });
   };

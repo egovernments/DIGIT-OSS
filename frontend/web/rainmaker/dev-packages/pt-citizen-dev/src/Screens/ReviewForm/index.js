@@ -46,6 +46,7 @@ class ReviewForm extends Component {
 
   componentDidMount() {
     this.getImportantDates();
+    this.props.getEstimates();
   }
 
   getImportantDates = async () => {
