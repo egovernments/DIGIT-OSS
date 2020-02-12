@@ -115,7 +115,7 @@ serviceMaps:
       
       
     - query: INSERT INTO eg_pt_asmt_unitusage_audit SELECT *, (SELECT extract(epoch from now())) FROM eg_pt_unit WHERE id = ?;
-      basePath: Assessment.units.*
+      basePath: Assessment.unitUsageList.*
       jsonMaps:
 
       - jsonPath: $.Assessment.unitUsageList.*.id
