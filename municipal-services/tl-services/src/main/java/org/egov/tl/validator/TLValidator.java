@@ -64,13 +64,16 @@ public class TLValidator {
      * @param request The input TradeLicenseRequest Object
      */
     public void validateCreate(TradeLicenseRequest request, Object mdmsData) {
+        List<TradeLicense> licenses = request.getLicenses();
         String businessService = request.getLicenses().isEmpty()?null:request.getLicenses().get(0).getBusinessService();
+        if(licenses.get(0).getApplicationType() != null && licenses.get(0).getApplicationType().toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL)){
+            validateRenewal(request);
+        }
         if (businessService == null)
             businessService = businessService_TL;
         switch (businessService) {
             case businessService_TL:
                 valideDates(request, mdmsData);
-                validateRenewal(request);
                 propertyValidator.validateProperty(request);
                 validateTLSpecificNotNullFields(request);
                 break;
@@ -223,29 +226,26 @@ public class TLValidator {
      * @param request The input TradeLicenseRequest Object
      */
     public void validateRenewal(TradeLicenseRequest request){
-        Map<String,String> errorMap = new HashMap<>();
-        
+            
         TradeLicenseSearchCriteria criteria = new TradeLicenseSearchCriteria();
-        List<String> ids = new LinkedList<>();
         List<String> licenseNumbers = new LinkedList<>();
         request.getLicenses().forEach(license -> {
-            ids.add(license.getId());
             if(license.getLicenseNumber() != null){
                 licenseNumbers.add(license.getLicenseNumber());
-            }            
+            } else{
+                throw new CustomException("INVALID LICENSE","Please select the existing licence for renewal");  
+                
+            }
         });
         criteria.setTenantId(request.getLicenses().get(0).getTenantId());
-        criteria.setIds(ids);
+        criteria.setStatus(TLConstants.ACTION_STATUS_APPROVED);
         criteria.setBusinessService(request.getLicenses().get(0).getBusinessService());
-        if(licenseNumbers.size() > 0){
-            criteria.setLicenseNumbers(licenseNumbers);
-        }
+        criteria.setLicenseNumbers(licenseNumbers);
         List<TradeLicense> searchResult = tlRepository.getLicenses(criteria);
         Map<String , TradeLicense> licenseMap = new HashMap<>();
         searchResult.forEach(license -> {
             licenseMap.put(license.getLicenseNumber() , license);
         });
-        
         
         request.getLicenses().forEach(license -> {
             if(license.getApplicationType() != null && license.getApplicationType().toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL)){
@@ -256,26 +256,23 @@ public class TLValidator {
                     Long existingFromDate = searchObj.getValidFrom();
                     Long existingToDate = searchObj.getValidTo();
                     if(currentFromDate < existingToDate){
-                        errorMap.put("INVALID FROM DATE","ValidFrom should be greater than the previous applications ValidTo Date");
+                        throw new CustomException("INVALID FROM DATE","ValidFrom should be greater than the previous applications ValidTo Date");
                     }
                     if(currentFromDate  <= existingFromDate){
-                        errorMap.put("INVALID FROM DATE","ValidFrom should be greater than the applications ValidFrom Date");
+                        throw new CustomException("INVALID FROM DATE","ValidFrom should be greater than the applications ValidFrom Date");
                     }
                     if(currentToDate <= existingToDate) {
-                        errorMap.put("INVALID TO DATE", "ValidTo should be greater than the applications ValidTo Date");
+                        throw new CustomException("INVALID TO DATE", "ValidTo should be greater than the applications ValidTo Date");
                     }
                     if(currentFromDate > currentToDate){
-                        errorMap.put("INVALID FROM DATE","ValidFrom cannot be greater than ValidTo Date");
+                        throw new CustomException("INVALID FROM DATE","ValidFrom cannot be greater than ValidTo Date");
                     }          
                    
                 }else{
-                    errorMap.put("RENEWAL ERROR","The license applied for renewal is not present in the repository");
+                    throw new CustomException("RENEWAL ERROR","The license applied for renewal is not present in the repository");
                 }
             }
         });
-        
-        if(!CollectionUtils.isEmpty(errorMap))
-            throw new CustomException(errorMap);
     }
 
 
@@ -288,13 +285,15 @@ public class TLValidator {
         if (searchResult.size() != licenses.size())
             throw new CustomException("INVALID UPDATE", "The license to be updated is not in database");
         validateAllIds(searchResult, licenses);
-        String businessService = request.getLicenses().isEmpty()?null:request.getLicenses().get(0).getBusinessService();
+        String businessService = request.getLicenses().isEmpty()?null:licenses.get(0).getBusinessService();
+        if(licenses.get(0).getApplicationType() != null && licenses.get(0).getApplicationType().toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL)){
+            validateRenewal(request);
+        }        
         if (businessService == null)
             businessService = businessService_TL;
         switch (businessService) {
             case businessService_TL:
                 valideDates(request, mdmsData);
-                validateRenewal(request);
                 propertyValidator.validateProperty(request);
                 validateTLSpecificNotNullFields(request);
                 break;
