@@ -5,6 +5,11 @@ import { LoadingIndicator } from "../../ui-molecules";
 import "./index.css";
 
 class CommonView extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { error: null, errorInfo: null };
+  }
+
   render() {
     const {
       components,
