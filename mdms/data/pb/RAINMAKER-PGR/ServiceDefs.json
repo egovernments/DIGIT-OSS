@@ -53,8 +53,7 @@
       "department": "DEPT_4",
       "slaHours": 336,
       "menuPath": "Drains",
-      "active": true,
-      "order": 6
+      "active": true
     },
     {
       "serviceCode": "illegalDischargeOfSewage",
@@ -262,7 +261,8 @@
       "department": "DEPT_10",
       "slaHours": 336,
       "menuPath": "",
-      "active": true
+      "active": true,
+      "order": 6
     }
   ]
 }
