@@ -18,7 +18,7 @@ class Footer extends React.Component {
     open: false,
     data: {},
     employeeList: [],
-    responseLength:""
+    responseLength: 0
   };
   componentDidMount = async () => {
     const {state}=this.props;

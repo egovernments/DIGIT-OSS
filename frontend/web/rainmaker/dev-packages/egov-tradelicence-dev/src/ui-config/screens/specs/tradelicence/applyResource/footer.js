@@ -603,7 +603,7 @@ export const renewSearchLicense=async(tenantId,licenseNumber)=>{
       value: tenantId 
     },
     { key: "offset", value: "0" },
-    { key: "licenseNumber", value: licenseNumber}
+    { key: "licenseNumbers", value: licenseNumber}
   ];
   const response = await getSearchResults(queryObject);
   const responses=get(response,`Licenses`,[])

@@ -1209,7 +1209,7 @@ if(currentStatus==="CITIZENACTIONREQUIRED"){
 }
   if (!isEmpty(JSON.parse(localStorageGet("businessServiceData")))) {
     const tlBusinessService = JSON.parse(localStorageGet("businessServiceData")).filter(item => item.businessService === workflowCode)
-    const states = tlBusinessService[0].states;
+    const states = tlBusinessService && tlBusinessService.length > 0 &&tlBusinessService[0].states;
     for (var i = 0; i < states.length; i++) {
       if (states[i].state === currentStatus) {
         break;

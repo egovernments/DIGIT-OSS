@@ -1,6 +1,7 @@
 
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get"
 import store from "redux/store";
 
@@ -45,7 +46,7 @@ export const getSearchResults = async (tenantId ,licenseNumber) => {
       value: tenantId 
     },
     { key: "offset", value: "0" },
-    { key: "licenseNumber", value: licenseNumber}
+    { key: "licenseNumbers", value: licenseNumber}
   ];
   try {
     const response = await httpRequest(
