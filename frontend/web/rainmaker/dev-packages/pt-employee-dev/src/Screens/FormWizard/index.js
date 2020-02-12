@@ -1023,7 +1023,7 @@ class FormWizard extends Component {
         const { Properties: pts = [] } = asd;
         let { search: search1 } = this.props.location;
 
-
+let isReassesment = Boolean(getQueryValue(search1, "isReassesment").replace('false', ''));
         let isAssesment1 = Boolean(getQueryValue(search1, "isAssesment").replace('false', ''));
         let propertyId1 = '';
         let tenantId1 = '';
@@ -1039,7 +1039,10 @@ class FormWizard extends Component {
             // this.assessProperty();
             createAndUpdate(index, 'assess');
             // this.props.history.push(`pt-acknowledgment?purpose=assessment&consumerCode=${propertyId1}&status=success&tenantId=${tenantId1}&FY=2019-20`);
-          } else {
+          } 
+          else if(isReassesment){
+            createAndUpdate(index, 're-assess');
+          }else {
             createAndUpdate(index, 'create');
           }
           // createAndUpdate(index);
@@ -1610,12 +1613,39 @@ class FormWizard extends Component {
     // Create/Update property call, action will be either create or update
     this.createProperty(properties, action);
   };
+  
+  getAssessmentDetails=async()=>{
+    try{
+      const tenantId = getQueryArg(window.location.href, "tenantId");
+      const assessmentId = getQueryArg(
+        window.location.href,
+        "assessmentId"
+      );
+      let searchPropertyResponse = await httpRequest(
+        `property-services/assessment/_search?assessmentNumbers=${assessmentId}`,
+        "_search",
+        [],
+        {
+          
+        }
+      );
+      return searchPropertyResponse;
+    }catch(e){
+      console.log(e.message);
+      
+    }
+    
+  }
 
-  assessProperty = async (action) => {
+  assessProperty = async (action,Properties) => {
     let propertyMethodAction = action === "re-assess" ? "_update" : '_create';
     const propertyId = getQueryArg(
       window.location.href,
       "propertyId"
+    );
+    const assessmentId = getQueryArg(
+      window.location.href,
+      "assessmentId"
     );
     const financialYear = getQueryArg(window.location.href, "FY");
     const tenant = getQueryArg(window.location.href, "tenantId");
@@ -1628,6 +1658,24 @@ class FormWizard extends Component {
       "channel": "CFC_COUNTER",
       "status": "ACTIVE"
     }
+
+    console.log(Properties);
+    
+    if(action==="re-assess"){
+      let assessments= await this.getAssessmentDetails();
+if(assessments.Assessments.length>0){
+      let assessmentResponse=assessments.Assessments[0];
+  assessment=assessmentResponse;
+  assessment.assessmentDate=new Date().getTime() - 60000;
+}
+
+      // assessment.auditDetails={...Properties[0].auditDetails};
+      // assessment.unitUsageList=Properties[0].units.map(unit=>{
+      //   return {unitId:unit.id,occupancyDate:unit.occupancyDate}
+      // });
+      // assessment.assessmentNumber=assessmentId;
+
+    }
     try {
       let assessPropertyResponse = await httpRequest(
         `property-services/assessment/${propertyMethodAction}`,
@@ -1637,22 +1685,37 @@ class FormWizard extends Component {
           Assessment: assessment
         }
       );
+      if(action === "re-assess"){
+        store.dispatch(
+          setRoute(
+            `/property-tax/pt-acknowledgment?purpose=reassessment&status=success&propertyId=${assessment.propertyId}&FY=${assessment.financialYear}&tenantId=${assessment.tenantId}`
+          )
+        );
+      }else{
       store.dispatch(
         setRoute(
           `/property-tax/pt-acknowledgment?purpose=assessment&status=success&propertyId=${assessment.propertyId}&FY=${assessment.financialYear}&tenantId=${assessment.tenantId}`
         )
-      );
+      );}
 
     } catch (e) {
       hideSpinner();
       //  this.setState({ nextButtonEnabled: true });
       //  alert(e);
+      if(action==="assess"){
       store.dispatch(
         setRoute(
           `/property-tax/pt-acknowledgment?purpose=assessment&status=failure&propertyId=${assessment.propertyId}&FY=${assessment.financialYear}&tenantId=${assessment.tenantId}`
 
         )
-      );
+      );}
+      else{
+      store.dispatch(
+        setRoute(
+          `/property-tax/pt-acknowledgment?purpose=reassessment&status=failure&propertyId=${assessment.propertyId}&FY=${assessment.financialYear}&tenantId=${assessment.tenantId}`
+
+        )
+      );}
     }
   }
 
@@ -1678,7 +1741,7 @@ class FormWizard extends Component {
           const tenantId = propertyResponse.Properties[0].tenantId;
           // Navigate to success page
           if ((action === "assess") || (action === "re-assess")) {
-            this.assessProperty(action);
+            this.assessProperty(action,propertyResponse.Properties);
           } else {
             this.props.history.push(`pt-acknowledgment?purpose=apply&propertyId=${propertyId}&status=success&tenantId=${tenantId}&FY=2019-20`);
           }

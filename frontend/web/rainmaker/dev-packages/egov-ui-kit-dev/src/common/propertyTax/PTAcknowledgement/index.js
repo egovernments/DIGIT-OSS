@@ -225,19 +225,19 @@ class PTAcknowledgement extends React.Component {
       labelKey: "PT_PROPERTY_ID",
       visibility:true};
       statusIcon={
-        icon :"close",
-        iconColor :"#E54D42",
+        icon :"done",
+        iconColor :"#39CB74",
       };
       ptMsg={
         labelName: "Assessment Updated Successfully",
-        labelKey: "PT_PROPERTY_ASSESSMENT_SUCCESS_MSG",
+        labelKey: "PT_PROPERTY_RE_ASSESSMENT_SUCCESS_MSG",
       };
       ptSubMsg={
         labelName: "A notification regarding property assessment has been sent to property owner at registered Mobile No.",
         labelKey: "PT_PROPERTY_RE_ASSESSMENT_SUCCESS_SUB_MSG",
       };
-      Button1={name:"PT_GOHOME",buttonClick:this.onGoHomeClick,visibility:true} ;
-      Button2={name:"PT_PROCEED_PAYMENT",buttonClick:this.onAssessPayClick,visibility:false} ;
+      Button1={name:"PT_PROCEED_PAYMENT",buttonClick:this.onAssessPayClick,visibility:true} ;
+      Button2={name:"PT_GOHOME",buttonClick:this.onGoHomeClick,visibility:true} ;
       downloadButton={menu:downloadMenu,visibility:false} ;
       printButton={menu:printMenu,visibility:false} ;
     }
@@ -257,11 +257,11 @@ class PTAcknowledgement extends React.Component {
       };
       ptMsg={
         labelName: "Property Assessment Failed",
-        labelKey: "PT_PROPERTY_ASSESSMENT_Failure_MSG",
+        labelKey: "PT_PROPERTY_RE_ASSESSMENT_FAILED_MSG",
       };
       ptSubMsg={
-        labelName: "A notification regarding property assessment has been sent to property owner at registered Mobile No.",
-        labelKey: "PT_PROPERTY_ASSESSMENT_FAILURE_SUB_MSG",
+        labelName: "A notification regarding property reassessment has been sent to property owner at registered Mobile No.",
+        labelKey: "PT_PROPERTY_RE_ASSESSMENT_FAILURE_SUB_MSG",
       };
       Button1={name:"PT_GOHOME",buttonClick:this.onGoHomeClick,visibility:true} ;
       Button2={name:"PT_PROCEED_PAYMENT",buttonClick:this.onAssessPayClick,visibility:false} ;
