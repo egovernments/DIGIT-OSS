@@ -55,17 +55,31 @@ public class TranslationService {
         if(propertyTypeMasterData.length > 1)
             propertySubType = propertyTypeMasterData[1];
 
-        String[] usageCategoryMasterData = property.getUsageCategory().split("\\.");
-        String usageCategoryMajor = null,usageCategoryMinor = null;
-        usageCategoryMajor = usageCategoryMasterData[0];
-        if(usageCategoryMasterData.length > 1)
-            usageCategoryMinor = usageCategoryMasterData[1];
 
-        String[] ownershipCategoryMasterData  = property.getOwnershipCategory().split("\\.");
-        String ownershipCategory = null,subOwnershipCategory = null;
-        ownershipCategory = ownershipCategoryMasterData[0];
-        if(ownershipCategoryMasterData.length > 1)
-            subOwnershipCategory = ownershipCategoryMasterData[1];
+        if(property.getUsageCategory()!=null){
+
+            String[] usageCategoryMasterData = property.getUsageCategory().split("\\.");
+            String usageCategoryMajor = null,usageCategoryMinor = null;
+            usageCategoryMajor = usageCategoryMasterData[0];
+            if(usageCategoryMasterData.length > 1)
+                usageCategoryMinor = usageCategoryMasterData[1];
+
+            propertyDetail.put("usageCategoryMajor", usageCategoryMajor);
+            propertyDetail.put("usageCategoryMinor", usageCategoryMinor);
+
+        }
+
+
+        if(property.getOwnershipCategory()!=null){
+            String[] ownershipCategoryMasterData  = property.getOwnershipCategory().split("\\.");
+            String ownershipCategory = null,subOwnershipCategory = null;
+            ownershipCategory = ownershipCategoryMasterData[0];
+            if(ownershipCategoryMasterData.length > 1)
+                subOwnershipCategory = ownershipCategoryMasterData[1];
+
+            propertyDetail.put("ownershipCategory", ownershipCategory);
+            propertyDetail.put("subOwnershipCategory", subOwnershipCategory);
+        }
 
 
         propertyDetail.put("noOfFloors", property.getNoOfFloors());
@@ -76,10 +90,6 @@ public class TranslationService {
         propertyDetail.put("propertySubType", propertySubType);
         propertyDetail.put("assessmentNumber", assessment.getAssessmentNumber());
         propertyDetail.put("assessmentDate", assessment.getAssessmentDate());
-        propertyDetail.put("usageCategoryMajor", usageCategoryMajor);
-        propertyDetail.put("usageCategoryMinor", usageCategoryMinor);
-        propertyDetail.put("ownershipCategory", ownershipCategory);
-        propertyDetail.put("subOwnershipCategory", subOwnershipCategory);
 
        // propertyDetail.put("adhocExemption", );
         // propertyDetail.put("adhocPenalty",);
