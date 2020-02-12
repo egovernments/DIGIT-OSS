@@ -257,7 +257,7 @@ export const convertToOldPTObject = (newObject) => {
   propertyDetails.auditDetails = newProperty.auditDetails;
   propertyDetails.calculation = null;
   propertyDetails.channel = newProperty.channel;
-  propertyDetails.units= propertyDetails.units.map(unit=>{
+  propertyDetails.units=propertyDetails.units&& propertyDetails.units.map(unit=>{
 // unit.usageCategory;
 // propertyDetails.propertyType = extractFromString(newProperty.propertyType, 0);
 // propertyDetails.propertySubType = extractFromString(newProperty.propertyType, 1);

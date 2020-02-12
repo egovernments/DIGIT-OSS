@@ -33,22 +33,55 @@ export const registrationDetails = getCommonCard(
         }
       ),
       registrationDetailsContainer: getCommonContainer({ 
-        transferReason: getSelectField({
+        // transferReason: getSelectField({
+        //   label: {
+        //     labelName: "Reason For Transfer",
+        //     labelKey: "PT_MUTATION_TRANSFER_REASON"
+        //   },
+        //   placeholder: {
+        //     labelName: "Select Reason for Transfer",
+        //     labelKey: "PT_MUTATION_TRANSFER_REASON_PLACEHOLDER"
+        //   },
+        //   required:true,
+        //   jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].ownerType",
+        //   sourceJsonPath: "applyScreenMdmsData.common-masters.OwnerType",
+        //   localePrefix: {
+        //     moduleName: "common-masters",
+        //     masterName: "OwnerType"
+        //   }
+        // }),
+        transferReason: getTextField({
           label: {
-            labelName: "Reason For Transfer",
+            labelName: "Reason for Transfer",
             labelKey: "PT_MUTATION_TRANSFER_REASON"
+          },
+          props:{
+            className:"applicant-details-error"
           },
           placeholder: {
             labelName: "Select Reason for Transfer",
             labelKey: "PT_MUTATION_TRANSFER_REASON_PLACEHOLDER"
           },
           required:true,
-          jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].ownerType",
-          sourceJsonPath: "applyScreenMdmsData.common-masters.OwnerType",
-          localePrefix: {
-            moduleName: "common-masters",
-            masterName: "OwnerType"
-          }
+          pattern: getPattern("Address"),
+     //     jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress"
+        }),
+
+        marketValue: getTextField({
+          label: {
+            labelName: "Market Value",
+            labelKey: "PT_MUTATION_MARKET_VALUE"
+          },
+          props:{
+            className:"applicant-details-error"
+          },
+          placeholder: {
+            labelName: "Enter Market Value",
+            labelKey: "PT_MUTATION_MARKET_VALUE_PLACEHOLDER"
+          },
+          required:true,
+          pattern: getPattern("Address"),
+     //     jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress"
         }),
         documentNumber: getTextField({
           label: {

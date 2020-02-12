@@ -4,132 +4,91 @@ import DocumentListContainer from "../../../../common/DocumentListContainer";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "../../../../../utils/api";
+import get from "lodash/get";
+import {fetchDocuments} from "egov-ui-kit/redux/mdms/actions";
+import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 
 class DocumentsUpload extends Component {
+  
+ prepareDocumentsUploadData = (documents=[]) => {
+ 
+  documents = documents.filter(item => {
+    return item.active;
+  });
+  let documentsContract = [];
+  let tempDoc = {};
+  documents.forEach(doc => {
+    let card = {};
+    card["code"] = doc.documentType;
+    card["title"] = doc.documentType;
+    card["cards"] = [];
+    tempDoc[doc.documentType] = card;
+  });
+
+  documents.forEach(doc => {
+    // Handle the case for multiple muildings
+   
+      let card = {};
+      card["name"] = doc.code;
+      card["code"] = doc.code;
+      card["required"] = doc.required ? true : false;
+      if (doc.hasDropdown && doc.dropdownData) {
+        let dropdown = {};
+        dropdown.label = "PT_MUTATION_SELECT_DOC_LABEL";
+        dropdown.required = true;
+        dropdown.menu = doc.dropdownData.filter(item => {
+          return item.active;
+        });
+        dropdown.menu = dropdown.menu.map(item => {
+          return { code: item.code, label: getTransformedLocale(item.code) };
+        });
+        card["dropdown"] = dropdown;
+      }
+      tempDoc[doc.documentType].cards.push(card);
+    
+  });
+
+  Object.keys(tempDoc).forEach(key => {
+    documentsContract.push(tempDoc[key]);
+  });
+
+  this.props.prepareFinalObject("documentsContract", documentsContract);
+};
+
   getMdmsData = async () => {
-    const { prepareFinalObject } = this.props;
-    let tenantId = getTenantId();
-    let mdmsBody = {
-      MdmsCriteria: {
-        tenantId: tenantId,
-        moduleDetails: [{ moduleName: "FireNoc", masterDetails: [{ name: "Documents" }] }],
-      },
-    };
-    try {
-      let payload = null;
-      payload = await httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], mdmsBody, [], {}, true);
-      prepareFinalObject("applyScreenMdmsData", payload.MdmsRes);
-    } catch (e) {
-      console.log(e);
+    // const { prepareFinalObject } = this.props;
+     let tenantId = getTenantId();
+    // let mdmsBody = {
+    //   MdmsCriteria: {
+    //     tenantId: tenantId,
+    //     moduleDetails: [{ moduleName: "PropertyTax", masterDetails: [{ name: "Documents" }] }],
+    //   },
+    // };
+    // try {
+     
+    //  let payload = await httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], mdmsBody, [], {}, true);
+    //   prepareFinalObject("applyScreenMdmsData", payload.MdmsRes);
+    //   prepareDocumentsUploadData( payload.MdmsRes.PropertyTax.Documents);
+    // } catch (e) {
+    //   console.log(e);
+    // }
+   let respo=await this.props.fetchDocuments(tenantId);
+   const { Documents=[] } = this.props;
+    if(respo){
+      
     }
   };
+  componentDidMount(){
+    this.getMdmsData();
+  }
   render() {
+    const{Documents,documentsContract}=this.props;
+    if(Documents.length>0&&documentsContract.length==0){
+      this.prepareDocumentsUploadData(Documents);
+    }
     const listProps = {
-      documentsList: [
-        {
-          code: "OWNER",
-          title: "Required Documents",
-          cards: [
-            {
-              name: "OWNER.IDENTITYPROOF",
-              code: "OWNER.IDENTITYPROOF",
-              required: true,
-              dropdown: {
-                label: "PT_MUTATION_SELECT_DOC_LABEL",
-                required: true,
-                menu: [
-                  {
-                    code: "OWNER.IDENTITYPROOF.AADHAAR",
-                    label: "OWNER_IDENTITYPROOF_AADHAAR",
-                  },
-                  {
-                    code: "OWNER.IDENTITYPROOF.VOTERID",
-                    label: "OWNER_IDENTITYPROOF_VOTERID",
-                  },
-                  {
-                    code: "OWNER.IDENTITYPROOF.DRIVING",
-                    label: "OWNER_IDENTITYPROOF_DRIVING",
-                  },
-                  {
-                    code: "OWNER.IDENTITYPROOF.PAN",
-                    label: "OWNER_IDENTITYPROOF_PAN",
-                  },
-                  {
-                    code: "OWNER.IDENTITYPROOF.PASSPORT",
-                    label: "OWNER_IDENTITYPROOF_PASSPORT",
-                  },
-                ],
-              },
-            },
-            {
-              name: "OWNER.ADDRESSPROOF",
-              code: "OWNER.ADDRESSPROOF",
-              required: true,
-              dropdown: {
-                label: "PT_MUTATION_SELECT_DOC_LABEL",
-                required: true,
-                menu: [
-                  {
-                    code: "OWNER.ADDRESSPROOF.ELECTRICITYBILL",
-                    label: "OWNER_ADDRESSPROOF_ELECTRICITYBILL",
-                  },
-                  {
-                    code: "OWNER.ADDRESSPROOF.DL",
-                    label: "OWNER_ADDRESSPROOF_DL",
-                  },
-                  {
-                    code: "OWNER.ADDRESSPROOF.VOTERID",
-                    label: "OWNER_ADDRESSPROOF_VOTERID",
-                  },
-                  {
-                    code: "OWNER.ADDRESSPROOF.AADHAAR",
-                    label: "OWNER_ADDRESSPROOF_AADHAAR",
-                  },
-                  {
-                    code: "OWNER.ADDRESSPROOF.PAN",
-                    label: "OWNER_ADDRESSPROOF_PAN",
-                  },
-                  {
-                    code: "OWNER.ADDRESSPROOF.PASSPORT",
-                    label: "OWNER_ADDRESSPROOF_PASSPORT",
-                  },
-                ],
-              },
-            },
-            {
-              name: "OWNER.REGISTRATIONPROOF",
-              code: "OWNER.REGISTRATIONPROOF",
-              required: true,
-              dropdown: {
-                label: "PT_MUTATION_SELECT_DOC_LABEL",
-                required: true,
-                menu: [
-                  {
-                    code: "OWNER.REGISTRATIONPROOF.ELECTRICITYBILL",
-                    label: "OWNER_REGISTRATIONPROOF_ELECTRICITYBILL",
-                  },
-                  {
-                    code: "OWNER.REGISTRATIONPROOF.DL",
-                    label: "OWNER_REGISTRATIONPROOF_DL",
-                  },
-                  {
-                    code: "OWNER.REGISTRATIONPROOF.VOTERID",
-                    label: "OWNER_REGISTRATIONPROOF_VOTERID",
-                  },
-                  {
-                    code: "OWNER.REGISTRATIONPROOF.AADHAAR",
-                    label: "OWNER_REGISTRATIONPROOF_AADHAAR",
-                  },
-                  {
-                    code: "OWNER.REGISTRATIONPROOF.PAN",
-                    label: "OWNER_REGISTRATIONPROOF_PAN",
-                  },
-                ],
-              },
-            },
-          ],
-        },
-      ],
+      documents:documentsContract,
+      
       buttonLabel: {
         labelName: "UPLOAD FILE",
         labelKey: "PT_MUTATION_DOCUMENT_DETAILS_BUTTON_UPLOAD_FILE",
@@ -140,16 +99,27 @@ class DocumentsUpload extends Component {
       },
       maxFileSize: 6000,
     };
-    if (this.props.prepareFinalObject) {
-      this.getMdmsData();
-    }
+    
     return <DocumentListContainer {...listProps}></DocumentListContainer>;
   }
 }
+const mapStateToProps = state => {
+  const { screenConfiguration,mdms } = state;
+  
+  const { preparedFinalObject={} } = screenConfiguration;
+  const {documentsContract=[]} =preparedFinalObject;
+ const {applyScreenMdmsData={}}= mdms;
+  const {PropertyTax={}}=applyScreenMdmsData;
+  const {Documents=[]}=PropertyTax;
 
+
+
+  return { Documents,documentsContract};
+};
 const mapDispatchToProps = (dispatch) => {
   return {
     prepareFinalObject: (jsonPath, value) => dispatch(prepareFinalObject(jsonPath, value)),
+    fetchDocuments:(tenantId)=>dispatch(fetchDocuments(tenantId)),
   };
 };
-export default connect(null, mapDispatchToProps)(DocumentsUpload);
+export default connect(mapStateToProps, mapDispatchToProps)(DocumentsUpload);

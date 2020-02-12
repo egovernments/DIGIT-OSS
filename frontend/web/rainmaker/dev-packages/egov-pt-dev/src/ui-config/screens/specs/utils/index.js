@@ -680,7 +680,7 @@ export const getRequiredDocData = async (action, state, dispatch) => {
       tenantId: tenantId,
       moduleDetails: [
         {
-          moduleName: "FireNoc",
+          moduleName: "PropertyTax",
           masterDetails: [{ name: "Documents" }]
         }
       ]

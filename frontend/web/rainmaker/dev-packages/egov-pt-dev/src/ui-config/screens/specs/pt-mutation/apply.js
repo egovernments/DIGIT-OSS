@@ -219,7 +219,7 @@ const getMdmsData = async (action, state, dispatch) => {
             }
           ]
         },
-        { moduleName: "FireNoc", masterDetails: [{ name: "Documents" }] }
+        { moduleName: "PropertyTax", masterDetails: [{ name: "Documents" }] }
       ]
     }
   };

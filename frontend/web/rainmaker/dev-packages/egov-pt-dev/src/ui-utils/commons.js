@@ -295,8 +295,9 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
 };
 
 export const prepareDocumentsUploadData = (state, dispatch) => {
-  let documents = get(DATA,
-    "Documents",
+  let documents = get(
+    state,
+    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.PropertyTax.Documents",
     []
   );
   documents = documents.filter(item => {
@@ -314,32 +315,7 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
 
   documents.forEach(doc => {
     // Handle the case for multiple muildings
-    if (
-      doc.code === "BUILDING.BUILDING_PLAN" &&
-      doc.hasMultipleRows &&
-      doc.options
-    ) {
-      let buildingsData = get(
-        state,
-        "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.buildings",
-        []
-      );
-
-      buildingsData.forEach(building => {
-        let card = {};
-        card["name"] = building.name;
-        card["code"] = doc.code;
-        card["hasSubCards"] = true;
-        card["subCards"] = [];
-        doc.options.forEach(subDoc => {
-          let subCard = {};
-          subCard["name"] = subDoc.code;
-          subCard["required"] = subDoc.required ? true : false;
-          card.subCards.push(subCard);
-        });
-        tempDoc[doc.documentType].cards.push(card);
-      });
-    } else {
+   
       let card = {};
       card["name"] = doc.code;
       card["code"] = doc.code;
@@ -357,7 +333,7 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
         card["dropdown"] = dropdown;
       }
       tempDoc[doc.documentType].cards.push(card);
-    }
+    
   });
 
   Object.keys(tempDoc).forEach(key => {

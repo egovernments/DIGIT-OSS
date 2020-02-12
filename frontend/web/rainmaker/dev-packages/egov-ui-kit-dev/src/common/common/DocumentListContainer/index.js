@@ -22,12 +22,12 @@ class DocumentListContainer extends Component {
 }
 
 const mapStateToProps = state => {
-  let documentsList1 = get(
+  let ptDocumentsList = get(
     state,
     "screenConfiguration.preparedFinalObject.documentsContract",
     []
   );
-  return { documentsList1 };
+  return { ptDocumentsList };
 };
 
 export default withStyles(styles)(
