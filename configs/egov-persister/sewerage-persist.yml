@@ -102,7 +102,7 @@ serviceMaps:
  - version: 1.0
    name: SewerageConnection
    description: update ConnectionDetails in connection and eg_sw_service
-   fromTopic: save-sw-connection
+   fromTopic: update-sw-connection
    isTransaction: true
    queryMaps: 
     - query: UPDATE eg_sw_connection SET applicationstatus=?, status=?, connectionno=?, oldconnectionno=?, action=?, roadCuttingArea=?, roadType=? WHERE id=?;
