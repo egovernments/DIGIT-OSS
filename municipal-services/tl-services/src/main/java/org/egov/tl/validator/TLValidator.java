@@ -263,13 +263,19 @@ public class TLValidator {
                     }
                     if(currentToDate <= existingToDate) {
                         errorMap.put("INVALID TO DATE", "ValidTo should be greater than the applications ValidTo Date");
-                    }           
+                    }
+                    if(currentFromDate > currentToDate){
+                        errorMap.put("INVALID FROM DATE","ValidFrom cannot be greater than ValidTo Date");
+                    }          
                    
                 }else{
                     errorMap.put("RENEWAL ERROR","The license applied for renewal is not present in the repository");
                 }
             }
         });
+        
+        if(!CollectionUtils.isEmpty(errorMap))
+            throw new CustomException(errorMap);
     }
 
 
@@ -596,7 +602,7 @@ public class TLValidator {
         if(criteria.getMobileNumber()!=null && !allowedParams.contains("mobileNumber"))
             throw new CustomException("INVALID SEARCH","Search on mobileNumber is not allowed");
 
-        if(criteria.getLicenseNumbers()!=null && !allowedParams.contains("licenseNumber"))
+        if(criteria.getLicenseNumbers()!=null && !allowedParams.contains("licenseNumbers"))
             throw new CustomException("INVALID SEARCH","Search on licenseNumber is not allowed");
 
         if(criteria.getOldLicenseNumber()!=null && !allowedParams.contains("oldLicenseNumber"))
