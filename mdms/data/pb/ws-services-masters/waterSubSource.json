@@ -4,37 +4,34 @@
   "waterSubSource": [
     {
       "name": "Ground",
-      "code": {
-        "Ground": [
-          "Well",
-          "Hand-pump",
-          "Borewell"
-        ]
-      },
+      "code": "GROUND",
+      "subsource": [
+        "Well",
+        "Hand-pump",
+        "Borewell"
+      ],
       "active": true
     },
     {
       "name": "Surface",
-      "code": {
-        "Surface": [
-          "River",
-          "Canal",
-          "Lake",
-          "Pond",
-          "Rainwater",
-          "Recycled-water"
-        ]
-      },
+      "code": "SURFACE",
+      "subsource": [
+        "River",
+        "Canal",
+        "Lake",
+        "Pond",
+        "Rainwater",
+        "Recycled-water"
+      ],
       "active": true
     },
     {
       "name": "Bulk-Supply",
-      "code": {
-        "Bulk-Supply": [
-          "Raw",
-          "Treated"
-        ]
-      },
+      "code": "BULKSUPPLY",
+      "subsource": [
+        "Raw",
+        "Treated"
+      ],
       "active": true
     }
   ]
