@@ -186,3 +186,9 @@ export const DOWNLOADRECEIPT = {
     ACTION: "_get",
   },
 };
+export const FETCHASSESSMENTS = {
+  GET: {
+    URL: "/property-services/assessment/_search",
+    ACTION: "_search",
+  },
+};

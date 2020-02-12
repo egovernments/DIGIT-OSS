@@ -177,7 +177,7 @@ class FormWizard extends Component {
           "documentsUploadRedux",
           store.dispatch, 'PT'
         );
-        this.props.prepareFinalObject("newProperties",searchPropertyResponse.newProperties);
+        this.props.prepareFinalObject("newProperties", searchPropertyResponse.newProperties);
         if (
           searchPropertyResponse.Properties[0].propertyDetails &&
           searchPropertyResponse.Properties[0].propertyDetails.length > 0
@@ -747,7 +747,7 @@ class FormWizard extends Component {
     } = this.props;
     resetFormWizard(form, removeForm);
     prepareFormDataAction("Properties", []);
-    prepareFinalObject("documentsUploadRedux",{} );
+    prepareFinalObject("documentsUploadRedux", {});
     this.onTabClick(0);
   };
 
@@ -1619,15 +1619,12 @@ class FormWizard extends Component {
       "tenantId": tenant,
       "propertyId": propertyId,
       "financialYear": financialYear,
-      "assessmentDate": new Date().getTime(),
+      "assessmentDate": new Date().getTime() - 60000,
       "source": "MUNICIPAL_RECORDS",
       "channel": "CFC_COUNTER",
       "status": "ACTIVE"
-
     }
     try {
-
-
       let assessPropertyResponse = await httpRequest(
         `property-services/assessment/${propertyMethodAction}`,
         `${propertyMethodAction}`,
@@ -1639,7 +1636,6 @@ class FormWizard extends Component {
       store.dispatch(
         setRoute(
           `/property-tax/pt-acknowledgment?purpose=assessment&status=success&propertyId=${assessment.propertyId}&FY=${assessment.financialYear}&tenantId=${assessment.tenantId}`
-
         )
       );
 
@@ -1657,8 +1653,8 @@ class FormWizard extends Component {
   }
 
   createProperty = async (Properties, action) => {
-    const { documentsUploadRedux ,newProperties} = this.props;
-    const propertyPayload = createPropertyPayload(Properties, documentsUploadRedux,newProperties);
+    const { documentsUploadRedux, newProperties } = this.props;
+    const propertyPayload = createPropertyPayload(Properties, documentsUploadRedux, newProperties);
     const propertyMethodAction = (action === "assess" || action === "re-assess") ? "_update" : "_create";
     try {
       const propertyResponse = await httpRequest(
@@ -1957,13 +1953,6 @@ class FormWizard extends Component {
     } = this.state;
     const { location } = this.props;
     const { search } = location;
-    // let propertyId = getQueryValue(search, "propertyId");
-    // if( propertyId && selected == 3){
-    //   this.setState({
-    //     selected: 4,
-    //     formValidIndexArray: [...formValidIndexArray, 4]
-    //   });
-    // }
     let proceedToPayment = Boolean(getQueryValue(search, "proceedToPayment").replace('false', ''));
     if (proceedToPayment && selected == 3) {
       this.setState({
@@ -2067,7 +2056,7 @@ const mapStateToProps = state => {
     (propertyAddress && propertyAddress.fields && propertyAddress.fields) || {};
   const currentTenantId = (city && city.value) || commonConfig.tenantId;
   const { preparedFinalObject } = screenConfiguration;
-  const { documentsUploadRedux,newProperties=[] } = preparedFinalObject;
+  const { documentsUploadRedux, newProperties = [] } = preparedFinalObject;
   return {
     form,
     currentTenantId,
@@ -2111,7 +2100,7 @@ const mapDispatchToProps = dispatch => {
       dispatch(prepareFormDataAction(path, value)),
     removeForm: formkey => dispatch(removeForm(formkey)),
     prepareFinalObject: (jsonPath, value) =>
-    dispatch(prepareFinalObject(jsonPath, value))    
+      dispatch(prepareFinalObject(jsonPath, value))
 
   };
 };

@@ -1,5 +1,5 @@
 import * as actionTypes from "./actionTypes";
-import { PROPERTY, DRAFT, PGService, RECEIPT, BOUNDARY, FETCHBILL, FETCHRECEIPT, DOWNLOADRECEIPT } from "egov-ui-kit/utils/endPoints";
+import { PROPERTY, DRAFT, PGService, RECEIPT, BOUNDARY, FETCHBILL, FETCHRECEIPT,FETCHASSESSMENTS, DOWNLOADRECEIPT } from "egov-ui-kit/utils/endPoints";
 import { httpRequest } from "egov-ui-kit/utils/api";
 import { transformById } from "egov-ui-kit/utils/commons";
 import orderby from "lodash/orderBy";
@@ -65,7 +65,25 @@ const fetchReceiptError = (error) => {
     error,
   };
 };
+const fetchAssessmentsPending = () => {
+  return {
+    type: actionTypes.PROPERTY_FETCH_ASSESSMENTS_PENDING,
+  };
+};
 
+const fetchAssessmentsComplete = (payload) => {
+  return {
+    type: actionTypes.PROPERTY_FETCH_ASSESSMENTS_COMPLETE,
+    payload,
+  };
+};
+
+const fetchAssessmentsError = (error) => {
+  return {
+    type: actionTypes.PROPERTY_FETCH_ASSESSMENTS_ERROR,
+    error,
+  };
+};
 
 
 
@@ -613,6 +631,19 @@ export const fetchReceipt = (fetchReceiptQueryObject) => {
         dispatch(fetchReceiptComplete(payloadProperty));
       } catch (error) {
         dispatch(fetchReceiptError(error.message));
+      }
+    }
+  }
+}
+export const fetchAssessments = (fetchAssessmentsQueryObject) => {
+  return async (dispatch) => {
+    if (fetchAssessmentsQueryObject) {
+      dispatch(fetchAssessmentsPending());
+      try {
+        const payloadProperty = await httpRequest(FETCHASSESSMENTS.GET.URL, FETCHASSESSMENTS.GET.ACTION, fetchAssessmentsQueryObject);
+        dispatch(fetchAssessmentsComplete(payloadProperty));
+      } catch (error) {
+        dispatch(fetchAssessmentsError(error.message));
       }
     }
   }
