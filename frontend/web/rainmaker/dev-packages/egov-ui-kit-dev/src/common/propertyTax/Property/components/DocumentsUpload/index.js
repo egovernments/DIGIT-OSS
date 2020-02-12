@@ -27,7 +27,7 @@ class DocumentsUpload extends Component {
     const listProps = {
       documentsList: [
         {
-          code: "PT_REQUIRED_DOCUMENTS",
+          code: "OWNER",
           title: "Required Documents",
           cards: [
             {

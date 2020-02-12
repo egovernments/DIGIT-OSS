@@ -147,6 +147,8 @@ class DocumentList extends Component {
       prepareFinalObject
     } = this.props;
     let index = 0;
+    
+    let docsUploaded = {};
     documentsList.forEach(docType => {
       docType.cards &&
         docType.cards.forEach(card => {
@@ -169,11 +171,12 @@ class DocumentList extends Component {
                 oldDocCode != card.name ||
                 oldDocSubCode != subCard.name
               ) {
-                documentsUploadRedux[index] = {
-                  documentType: docType.code,
-                  documentCode: card.name,
-                  documentSubCode: subCard.name
-                };
+                    docsUploaded[index] = {
+                        documentType: docType.code,
+                        documentCode: card.name,
+                        documentSubCode: subCard.name
+                      };
+                
               }
               index++;
             });
@@ -187,20 +190,29 @@ class DocumentList extends Component {
               `[${index}].documentCode`
             );
             if (oldDocType != docType.code || oldDocCode != card.name) {
-              documentsUploadRedux[index] = {
-                documentType: docType.code,
-                documentCode: card.name,
-                isDocumentRequired: card.required,
-                isDocumentTypeRequired: card.dropdown
-                  ? card.dropdown.required
-                  : false
-              };
+                docsUploaded[index] = {
+                    documentType: docType.code,
+                    documentCode: card.name,
+                    isDocumentRequired: card.required,
+                    isDocumentTypeRequired: card.dropdown
+                      ? card.dropdown.required
+                      : false
+                  };
             }
             index++;
           }
         });
     });
-    prepareFinalObject("documentsUploadRedux", documentsUploadRedux);
+    if(documentsUploadRedux && Object.keys(documentsUploadRedux) && Object.keys(documentsUploadRedux).length){
+        Object.keys(docsUploaded).map((key, index)=>{
+            Object.keys(docsUploaded[key]).map((item,index)=>{
+                documentsUploadRedux[key][item]= docsUploaded[key][item];
+            });
+        });
+        prepareFinalObject("documentsUploadRedux", documentsUploadRedux);
+    }else{
+        prepareFinalObject("documentsUploadRedux", docsUploaded);
+    }
   };
 
   onUploadClick = uploadedDocIndex => {
@@ -334,7 +346,7 @@ class DocumentList extends Component {
             return (
               <div>
                 <Label fontSize="20px"
-                label={container.code}
+                label={"PT_REQUIRED_DOCUMENTS"}
                 labelStyle={styles.containerTitle}
                 />
                 <Label fontSize="14px"

@@ -82,7 +82,7 @@ import "./index.css";
 import AcknowledgementCard from "egov-ui-kit/common/propertyTax/AcknowledgementCard";
 import generateAcknowledgementForm from "egov-ui-kit/common/propertyTax/PaymentStatus/Components/acknowledgementFormPDF";
 import { getHeaderDetails } from "egov-ui-kit/common/propertyTax/PaymentStatus/Components/createReceipt";
-import { createPropertyPayload, createAssessmentPayload, getCreatePropertyResponse } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/propertyCreateUtils";
+import { createPropertyPayload, createAssessmentPayload, getCreatePropertyResponse, prefillPTDocuments } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/propertyCreateUtils";
 import DocumentsUpload from "egov-ui-kit/common/propertyTax/Property/components/DocumentsUpload";
 
 
@@ -186,6 +186,13 @@ class FormWizard extends Component {
           ]
         );
         searchPropertyResponse = getCreatePropertyResponse(searchPropertyResponse);
+        await prefillPTDocuments(
+          searchPropertyResponse,
+          "Properties[0].documents",
+          "documentsUploadRedux",
+          store.dispatch, 'PT'
+        );
+        // prepareFinalObject("documentsUploadRedux",{} );
         this.props.prepareFinalObject("newProperties",searchPropertyResponse.newProperties);
         let propertyResponse = {
           ...searchPropertyResponse,

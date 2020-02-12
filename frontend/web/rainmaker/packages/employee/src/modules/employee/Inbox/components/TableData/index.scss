@@ -74,9 +74,18 @@ top:46px;
       display: none;
       background-color: white !important;
   }
+  .whiteBackground {
+    height: 36px !important;
+    top: 26px;
+    // width:80%!important;
+    
+    input{
+      // padding: 0px 0px 2px !important;
+      margin-top: 2px !important;
+      left: 27px;
+    }}
   }
-  @media only screen and (min-width: 1400px) {
-    .whiteBackground input{
-      left:0px;
-    }
-  }
+
+.search-bar div div svg{
+  top:46px;
+}
