@@ -559,7 +559,12 @@
                   "type": "string",
                   "scema": [
                     {
-                      "key": "name"
+                      "key": "number",
+                      "localisation": {
+                        "required": true,
+                        "prefix": "FLOOR_NAME",
+                        "module": "rainmaker-bpa"
+                      }
                     },
                     {
                       "key": "number"
