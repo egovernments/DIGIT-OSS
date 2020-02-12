@@ -84,6 +84,7 @@ public class AssessmentEnrichmentService {
             for(UnitUsage unitUsage: assessment.getUnitUsageList()) {
                 unitUsage.setId(String.valueOf(UUID.randomUUID()));
                 unitUsage.setAuditDetails(auditDetails);
+                unitUsage.setTenantId(assessment.getTenantId());
             }
         }
         if(!CollectionUtils.isEmpty(assessment.getDocuments())) {
@@ -114,6 +115,7 @@ public class AssessmentEnrichmentService {
 
         if(!CollectionUtils.isEmpty(assessment.getUnitUsageList())) {
             for(UnitUsage unitUsage: assessment.getUnitUsageList()) {
+                unitUsage.setTenantId(assessment.getTenantId());
                 if(StringUtils.isEmpty(unitUsage.getId())) {
                     unitUsage.setId(String.valueOf(UUID.randomUUID()));
                     unitUsage.setAuditDetails(auditDetails);

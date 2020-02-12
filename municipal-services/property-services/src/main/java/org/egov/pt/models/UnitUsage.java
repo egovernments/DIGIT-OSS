@@ -17,11 +17,9 @@ import lombok.NoArgsConstructor;
 public class UnitUsage {
 
 	@JsonProperty("id")
-	@NotNull
 	private String id;
 
 	@JsonProperty("tenantId")
-	@NotNull
 	private String tenantId;
 
 	@JsonProperty("unitId")
@@ -29,6 +27,7 @@ public class UnitUsage {
 	private String unitId;
 
 	@JsonProperty("usageCategory")
+	@NotNull
 	private String usageCategory;
 
 	@JsonProperty("occupancyType")
@@ -36,7 +35,6 @@ public class UnitUsage {
 	private String occupancyType;
 
 	@JsonProperty("occupancyDate")
-	@NotNull
 	private Long occupancyDate;
 
 	@JsonProperty("auditDetails")
