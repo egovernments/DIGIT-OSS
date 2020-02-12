@@ -41,8 +41,9 @@ public class ActionValidator {
         Map<String, String> errorMap = new HashMap<>();
         Set<String> applicationTypes = new HashSet<>();
         request.getLicenses().forEach(license -> {
-        
-            applicationTypes.add(license.getApplicationType().toString());
+            if(license.getApplicationType() != null ){
+                applicationTypes.add(license.getApplicationType().toString());
+            }            
             String businessService = license.getBusinessService();
             if (businessService == null)
                 businessService = businessService_TL;
