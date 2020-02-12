@@ -52,7 +52,7 @@
 <div class="panel panel-primary" data-collapsed="0">
 	<div class="panel-heading custom_form_panel_heading">
 		<div class="panel-title">
-			<spring:message code="lbl.subledger.details" />
+			<spring:message code="lbl.subledger.details" text="SubLedger Details"/>
 		</div>
 	</div>
 	
@@ -60,10 +60,10 @@
 		<table class="table table-bordered" id="tblsubledgerdetails">
 			<thead>
 				<tr>
-					<th><spring:message code="lbl.account.code"/></th>
-					<th><spring:message code="lbl.subledgertype"/></th>
-					<th><spring:message code="lbl.subledger.name"/></th>
-					<th><spring:message code="lbl.amount"/></th>
+					<th><spring:message code="lbl.account.code" text="Account Code"/></th>
+					<th><spring:message code="lbl.subledgertype" text="SubLedger Type"/></th>
+					<th><spring:message code="lbl.subledger.name" text="SubLedger Name"/></th>
+					<th><spring:message code="lbl.amount" text="Amount"/></th>
 				</tr>
 			</thead>
 			<tbody>

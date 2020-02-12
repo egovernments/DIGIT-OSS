@@ -75,13 +75,13 @@
 	    if ((name=="Cancel" || name=="cancel")) {
 	    	var approverComments = document.getElementById("approverComments").value;
 	    	if (approverComments == null || approverComments == "") {
-	    		bootbox.alert("Please Enter Approver Remarks ");
+	    		bootbox.alert("<s:text name='msg.please.enter.approver.remarks'/> ");
 				return false;
 	    	}
 		}
 		<s:if test="%{getNextAction()!='END'}">
 	    if((name=="Forward" || name=="forward") && approverPosId && (approverPosId.value == -1 || approverPosId.value == "")) {
-	    	bootbox.alert("Please Select the Approver ");
+	    	bootbox.alert("<s:text name='msg.please.select.approver'/> ");
 			return false;
 	    }
 	    if((name=="Create And Approve")) {
@@ -103,7 +103,7 @@
 							value="%{validAction}" id="%{validAction}" name="%{validAction}"
 							onclick="return validateWorkFlowApprover('%{validAction}','jsValidationErrors');" />
 					</s:if>
-				</s:iterator> <input type="button" name="button2" id="button2" value="Close"
+				</s:iterator> <input type="button" name="button2" id="button2" value="<s:text name='lbl.close'/>"
 				class="button" onclick="window.parent.postMessage('close','*');window.close();" /></td>
 		</tr>
 	</table>

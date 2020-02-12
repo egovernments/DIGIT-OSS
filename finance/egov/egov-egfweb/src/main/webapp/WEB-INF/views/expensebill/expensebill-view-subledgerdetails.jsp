@@ -52,12 +52,12 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <div class="panel panel-primary" data-collapsed="0">
 	<div class="panel-heading custom_form_panel_heading">
-		<div class="panel-title"><spring:message  code="lbl.subledger.details"/></div>
+		<div class="panel-title"><spring:message  code="lbl.subledger.details" text="SubLedger Details"/></div>
 	</div>
 	<div class="panel-body">
 		<div class="row add-border">
 				<div class="col-md-3 col-xs-6 add-margin">
-					<spring:message code="lbl.payto" />
+					<spring:message code="lbl.payto" text="Pay To"/>
 				</div>
 				<div class="col-md-3 col-xs-6 add-margin view-content" id="ct-mobno">
 					<c:out default="N/A" value="${egBillregister.egBillregistermis.payto}" />

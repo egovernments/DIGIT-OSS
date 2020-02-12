@@ -81,7 +81,7 @@ function validateFund(){
 	var fund = document.getElementById('fundId').value;
 	var bank = document.getElementById('bank');
 	if(fund == -1 && bank.options.length==1){
-		bootbox.alert("Please select a Fund")
+		bootbox.alert("<s:text name='msg.please.select.fund'/>")
 		return false;
 	}
 	return true;
@@ -89,7 +89,7 @@ function validateFund(){
 function populateAvailableBalance(accnumObj) 
 {
 			if (document.getElementById('voucherDate').value == '') {
-				bootbox.alert("Please Select the Voucher Date!!");
+				bootbox.alert("<s:text name='msg.please.enter.voucher.date'/>");
 				accnumObj.options.value = -1;
 				return;
 			}
@@ -117,7 +117,6 @@ function balanceCheck() {
 	if (document.getElementById('availableBalance')) {
 		if(parseFloat(document.getElementById('totalAmount').value)>parseFloat(document.getElementById('availableBalance').value))
 		{
-			console.log("ins 44");
 			return false;
 		}
 	}
@@ -127,7 +126,7 @@ function checkLength(obj)
 {
 	if(obj.value.length>1024)
 	{
-		bootbox.alert('Max 1024 characters are allowed for comments. Remaining characters are truncated.')
+		bootbox.alert('<s:text name="msg.max.1024.char.allowed.rest.will.truncated"/>')
 		obj.value = obj.value.substring(1,1024);
 	}
 }
@@ -194,17 +193,17 @@ function populateUser(){
 			  return false;
 		if(document.getElementById('vouchermis.function')!=null && document.getElementById('vouchermis.function').value=='-1')
 		   {
-		   document.getElementById('lblError').innerHTML='Please select Function';
+		   document.getElementById('lblError').innerHTML='<s:text name="msg.please.select.function"/>';
 		   return false;
 		   }
 		   if(document.getElementById('bank').value=='-1')
 		   {
-		   document.getElementById('lblError').innerHTML='Please select Bank';
+		   document.getElementById('lblError').innerHTML='<s:text name="msg.please.select.bank"/>';
 		   return false;
 		   }
 		   if(document.getElementById('bankaccount').value=='-1')
 		   {
-		   document.getElementById('lblError').innerHTML='Please select Bank Account';
+		   document.getElementById('lblError').innerHTML='<s:text name="msg.please.select.bank.account.number"/>';
 		   return false;
 		   } 
 		  
@@ -244,11 +243,11 @@ function onSubmit()
 		  return true;
 		}
 	else if(!balanceCheck() && jQuery("#bankBalanceCheck").val()==balanceCheckMandatory){
-			 bootbox.alert("Insufficient Bank Balance.....");
+			 bootbox.alert("<s:text name='msg.insufficient.bank.balance'/>");
 			 return false;
 			}
 	else if(!balanceCheck() && jQuery("#bankBalanceCheck").val()==balanceCheckWarning){
-		 var msg = confirm("Insufficient Bank Balance. Do you want to process ?");
+		 var msg = confirm("<s:text name='msg.insuff.bank.bal.do.you.want.to.process'/>");
 		 if (msg == true) {
 			 disableAll();
 			 document.remittanceForm.action='${pageContext.request.contextPath}/deduction/remitRecovery-create.action';
@@ -381,7 +380,7 @@ else{
 																			id="bank" list="dropdownData.bankList"
 																			listKey="bank.id+'-'+id"
 																			listValue="bank.name+' '+branchname" headerKey="-1"
-																			headerValue="----Choose----" onclick="validateFund()"
+																			headerValue="%{getText('lbl.choose.options')}" onclick="validateFund()"
 																			onChange="populateAccNumbers(this);" /></td>
 																	<egov:ajaxdropdown id="accountNumber"
 																		fields="['Text','Value']" dropdownId="bankaccount"
@@ -393,11 +392,11 @@ else{
 																			list="dropdownData.accNumList" listKey="id"
 																			listValue="chartofaccounts.glcode+'--'+accountnumber+'--'+accounttype"
 																			onChange="populateAvailableBalance(this);"
-																			headerKey="-1" headerValue="----Choose----" /></td>
+																			headerKey="-1" headerValue="%{getText('lbl.choose.options')}" /></td>
 																</tr>
 																<tr class="greybox">
 																	<td class="greybox">&nbsp;</td>
-																	<td class="greybox">Payment Amount&nbsp;</td>
+																	<td class="greybox"><s:text name="lbl.payment.amount"/> &nbsp;</td>
 																	<td class="greybox"><label name="remitAmount"
 																		id="remitAmount" /></td>
 																	<egov:updatevalues id="availableBalance"
@@ -432,7 +431,7 @@ else{
 																</tr>
 																<tr>
 																	<td class="greybox">&nbsp;</td>
-																	<td class="greybox">Narration</td>
+																	<td class="greybox"><s:text name="lbl.narration"/> </td>
 																	<td class="greybox" colspan="4"><textarea
 																			name="description" id="narration" type="text"
 																			style="width: 580px;"></textarea></td>
@@ -522,7 +521,7 @@ else{
 			if(document.getElementById('vouchermis.departmentid'))
 			{
 				var d = document.getElementById('vouchermis.departmentid');
-				d.options[d.selectedIndex].text='----Choose----';
+				d.options[d.selectedIndex].text='%{getText("lbl.choose.options")}';
 				d.options[d.selectedIndex].text.value=-1;
 			}
 			disableControls(0,true);

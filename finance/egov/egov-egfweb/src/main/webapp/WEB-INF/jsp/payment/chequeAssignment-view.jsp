@@ -53,7 +53,7 @@
 <head>
 <link rel="stylesheet" type="text/css"
 	href="/services/EGF/resources/css/ccMenu.css?rnd=${app_release_no}" />
-<title>Cheque Assignment View</title>
+<title><s:text name="chq.assignment.heading.view" /></title>
 </head>
 <body>
 	<s:form action="chequeAssignment" theme="simple">
@@ -178,12 +178,12 @@
 			<div class="buttonbottom">
 
 				<s:if test="%{paymentMode=='rtgs'}">
-					<input type="button" value="Generate BankAdvice Excel"
+					<input type="button" value='<s:text name="lbl.generate.bank.advice.excel"/>'
 						class="buttonsubmit" onclick="return printAdviceExcel()" />
-					<input type="button" value="Generate BankAdvice Pdf"
+					<input type="button" value='<s:text name="lbl.generate.bank.advice.pdf"/>'
 						class="buttonsubmit" onclick="return printAdvicePdf()" />
 				</s:if>
-				<input type="button" value="Close"
+				<input type="button" value='<s:text name="lbl.close"/>'
 					onclick="javascript:window.parent.postMessage('close','*');" class="buttonsubmit" />
 			</div>
 		</div>
@@ -194,10 +194,6 @@ function printAdviceExcel(){
 	 	var bankbranch=document.getElementById("bankBranchId").value;
 	 	var bankaccount=document.getElementById("bankAccountNoId").value;
 	 	 var instrumentnumber=document.getElementById("transactionNumber").value;
-	 	// bootbox.alert("bank>>>>"+bank);   
-	 	// bootbox.alert("bankbranch>>>>"+bankbranch);   
-	 	// bootbox.alert("bankaccount>>>>"+bankaccount);   
-	 	// bootbox.alert("instrumentnumber>>>>"+instrumentnumber);                                        
 		 var url="${pageContext.request.contextPath}/report/bankAdviceReport!exportExcel.action?bank.id="+
 		 			bank+"&bankbranch.id="+bankbranch+"&bankaccount.id="+bankaccount+"&instrumentnumber.id="+instrumentnumber;
 		 window.open(url,'','height=650,width=980,scrollbars=yes,left=0,top=0,status=yes');
@@ -207,10 +203,6 @@ function printAdvicePdf(){
 	var bankbranch=document.getElementById("bankBranchId").value;
 	var bankaccount=document.getElementById("bankAccountNoId").value;
 	 var instrumentnumber=document.getElementById("transactionNumber").value;
-	// bootbox.alert("bank>>>>"+bank);   
-	// bootbox.alert("bankbranch>>>>"+bankbranch);   
-	// bootbox.alert("bankaccount>>>>"+bankaccount);   
-	// bootbox.alert("instrumentnumber>>>>"+instrumentnumber);                                        
 	 var url="${pageContext.request.contextPath}/report/bankAdviceReport!exportPDF.action?bank.id="+
 	 			bank+"&bankbranch.id="+bankbranch+"&bankaccount.id="+bankaccount+"&instrumentnumber.id="+instrumentnumber;
 	 window.open(url,'','height=650,width=980,scrollbars=yes,left=0,top=0,status=yes');
@@ -220,7 +212,7 @@ function printCheque(id)
 {
  	var chequeFormat=document.getElementById("chequeFormatId");
 	if(chequeFormat == "" || chequeFormat == null){
-		bootbox.alert("This bank account is not attached to any cheque formats");
+		bootbox.alert("<s:text name='msg.this.bank.account.not.attached.to.any.cheque.format'/>");
 		return false;
 	} 
 	window.open('/services/EGF/payment/chequeAssignmentPrint-generateChequeFormat.action?instrumentHeader='+id,'Search','resizable=yes,scrollbars=yes,left=300,top=40,width=900, height=700');

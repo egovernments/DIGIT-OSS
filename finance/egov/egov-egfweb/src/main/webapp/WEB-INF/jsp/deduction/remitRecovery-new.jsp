@@ -90,7 +90,7 @@
 					<td class="greybox"><s:text name="remit.recovery.search.code" /><span
 						class="mandatory"></span></td>
 					<td class="greybox">
-						<s:select name="remittanceBean.recoveryId" id="recoveryId" list="dropdownData.recoveryList" listKey="id" listValue="chartofaccounts.glcode+'-'+type+'-'+recoveryName" headerKey="-1" headerValue="----Choose----" value="%{remittanceBean.recoveryId}" />
+						<s:select name="remittanceBean.recoveryId" id="recoveryId" list="dropdownData.recoveryList" listKey="id" listValue="chartofaccounts.glcode+'-'+type+'-'+recoveryName" headerKey="-1" headerValue="%{getText('lbl.choose.options')}" value="%{remittanceBean.recoveryId}" />
 					</td>
 					<td class="greybox" width="10%">
 					<td class="greybox">
@@ -126,8 +126,8 @@
 			<label style="text-align: right;"></label>
 
 			<div class="buttonbottom" style="padding-bottom: 10px;">
-				<s:submit type="submit" cssClass="buttonsubmit" value="Search" id="search" name="search" method="search" onclick="return validateSearch();" />
-				<input type="button" id="Close" value="Close" onclick="javascript:window.close()" class="button" />
+				<s:submit type="submit" cssClass="buttonsubmit" key="lbl.search" id="search" name="search" method="search" onclick="return validateSearch();" />
+				<input type="button" id="Close" value='<s:text name="lbl.close"/>' onclick="javascript:window.close()" class="button" />
 			</div>
 		</div>
 		<s:if test='%{listRemitBean != null }'>
@@ -139,7 +139,7 @@
 				</div>
 				<div id="labelAD" align="center">
 					<table width="100%" border=0 id="recoveryDetails">
-						<th style="border-left-width: -;padding-left: 67px;">Recovery Details</th>
+						<th style="border-left-width: -;padding-left: 67px;"><s:text name="lbl.recovery.details"/> </th>
 					</table>
 				</div>
 				<table align="center" id="totalAmtTable">
@@ -163,7 +163,7 @@
 				<table align="center" id="totalAmtTable">
 					<tr>
 						<td width="850"></td>
-						<td>Total Amount</td>
+						<td><s:text name="lbl.total.payment"/> </td>
 						<td><s:textfield name="remittanceBean.totalAmount" id="totalAmount" style="width:90px;text-align:right" readonly="true" value="0" /></td>
 					</tr>
 					<tr>
@@ -173,7 +173,7 @@
 				<div id ="remitTotal" />
 				<s:hidden type="hidden" id="selectedrRemit" name="remittanceBean.selectedrRemit" />
 				<div class="buttonbottom" style="padding-bottom: 10px;">
-					<s:submit type="submit" cssClass="buttonsubmit" value="Generate Payment" id="genPayment" name="save&genPayment" method="remit" onclick="return validateRemit()" />
+					<s:submit type="submit" cssClass="buttonsubmit" key="" id="genPayment" name="save&genPayment" method="remit" onclick="return validateRemit()" />
 			</s:if>
 			<s:else>
 				<div class="error">

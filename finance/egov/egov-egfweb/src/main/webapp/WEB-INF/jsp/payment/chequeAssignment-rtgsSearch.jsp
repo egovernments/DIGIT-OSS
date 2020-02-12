@@ -99,14 +99,14 @@
 					<td class="bluebox"><s:text name="chq.assignment.billtype" />
 					</td>
 					<td class="bluebox"><s:select name="billType" id="billType"
-							list="billTypeMap" headerKey="-1" headerValue="----Choose----"
+							list="billTypeMap" headerKey="-1" headerValue="%{getText('lbl.choose.options')}"
 							value="%{billType}" /></td>
 				</tr>
 				<tr>
 					<td class="greybox"><s:text name="voucher.fund" /></td>
 					<td class="greybox"><s:select name="fundId" id="fundId"
 							list="dropdownData.fundList" listKey="id" listValue="name"
-							headerKey="-1" headerValue="----Choose----"
+							headerKey="-1" headerValue="%{getText('lbl.choose.options')}"
 							onChange="loadBank(this);" value="%{fundId.id}" /></td>
 
 					<td class="greybox" id="deptLabel"><s:text
@@ -114,7 +114,7 @@
 					<td class="greybox"><s:select name="vouchermis.departmentcode"
 							id="vouchermis.departmentcode" list="dropdownData.departmentList"
 							listKey="code" listValue="name" headerKey="-1"
-							headerValue="----Choose----"
+							headerValue="%{getText('lbl.choose.options')}"
 							value="voucherHeader.vouchermis.departmentcode" /></td>
 				</tr>
 				<tr>
@@ -124,7 +124,7 @@
 					<td class="greybox"><s:text name="chq.assignment.bank" /></td>
 					<td class="greybox"><s:select name="bank_branch"
 							id="bank_branch" list="bankBranchMap" headerKey="-1"
-							headerValue="----Choose----" onchange="loadBankAccount(this)"
+							headerValue="%{getText('lbl.choose.options')}" onchange="loadBankAccount(this)"
 							value="%{bank_branch}" /></td>
 					<egov:ajaxdropdown id="bankaccount" fields="['Text','Value']"
 						dropdownId="bankaccount"
@@ -133,7 +133,7 @@
 					<td class="greybox" colspan="2"><s:select name="bankaccount"
 							id="bankaccount" list="dropdownData.bankaccountList" listKey="id"
 							listValue="chartofaccounts.glcode+'--'+accountnumber+'---'+accounttype"
-							headerKey="-1" headerValue="----Choose----"
+							headerKey="-1" headerValue="%{getText('lbl.choose.options')}"
 							value="%{bankaccount}" /></td>
 				</tr>
 
@@ -147,9 +147,9 @@
 				</tr> -->
 			</table>
 			<div class="buttonbottom">
-				<s:submit method="searchRTGS" value="Search" id="searchBtn"
+				<s:submit method="searchRTGS" key="lbl.search" id="searchBtn"
 					cssClass="buttonsubmit" onclick="submitForm();" />
-				<input type="button" value="Close"
+				<input type="button" value='<s:text name="lbl.close"/>'
 					onclick="javascript:window.close();window.parent.postMessage('close','*');" class="button" />
 			</div>
 		</div>

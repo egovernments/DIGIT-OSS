@@ -210,7 +210,7 @@ function calcTotal(index,obj){
 		if(amnt>0){
 			totalAmount = parseFloat(totalAmount + amnt);
 		}else{
-			bootbox.alert("Zero amount remittence could not proceed for payment.");
+			bootbox.alert("<s:text name='msg.zero.amount.remittence.could.not.process.for.payment'/>");
 			obj.checked = false;
 		}
 		document.getElementById('listRemitBean['+index+'].chkremit').value=true;
@@ -256,25 +256,25 @@ function validateSearch()
 	document.getElementById('lblError').innerHTML ="";
 	
 	if(document.getElementById('recoveryId').value==-1){
-		bootbox.alert("Please select a recovery code");
+		bootbox.alert("<s:text name='msg.please.select.recovery.code'/>");
 		return false;
 	}
 	if(document.getElementById('voucherDate').value.trim().length == 0){
-		bootbox.alert("Please select date");
+		bootbox.alert("<s:text name='msg.please.select.date'/>");
 		return false;
 	}
 	var fund = document.getElementById('fundId').value;
 	if(fund == "-1"){
-		bootbox.alert("Please select fund");
+		bootbox.alert("<s:text name='msg.please.select.fund'/>");
 		return false;
 	}
 	if(jQuery("#bank").val()!=""){
 		if(jQuery("#bankBranch").val()==""){
-			bootbox.alert("Please select bank branch");
+			bootbox.alert("<s:text name='msg.please.select.bank.branch'/>");
 			return false;
 		}
 		else if(jQuery("#bankAccount").val()==""){
-			bootbox.alert("Please select bank account number");
+			bootbox.alert("<s:text name='msg.please.select.bank.account.number'/>");
 			return false;
 		}
 	}
@@ -291,70 +291,70 @@ function validateMisAttributes()
 			<s:if test="%{isFieldMandatory('vouchernumber')}"> 
 				 if(null != document.getElementById('voucherNumber') && document.getElementById('voucherNumber').value.trim().length == 0 ){
 
-					document.getElementById('lblError').innerHTML = "Please enter a voucher number";
+					document.getElementById('lblError').innerHTML = "<s:text name='voucher.field.vouchernumber'/>";
 					return false;
 				 }
 			 </s:if>
 		 <s:if test="%{isFieldMandatory('voucherdate')}"> 
 				 if(null != document.getElementById('voucherDate') && document.getElementById('voucherDate').value.trim().length == 0){
 
-					document.getElementById('lblError').innerHTML = "Please enter a voucher date";
+					document.getElementById('lblError').innerHTML = "<s:text name='msg.please.enter.voucher.date'/>";
 					return false;
 				 }
 			 </s:if>
 		 <s:if test="%{isFieldMandatory('fund')}"> 
 				 if(null != document.getElementById('fundId') && document.getElementById('fundId').value == ""){
 
-					document.getElementById('lblError').innerHTML = "Please Select a fund";
+					document.getElementById('lblError').innerHTML = "<s:text name='msg.please.select.fund'/>";
 					return false;
 				 }
 			 </s:if>
 			<s:if test="%{isFieldMandatory('department')}"> 
 				 if(null!= document.getElementById('vouchermis.departmentid') && document.getElementById('vouchermis.departmentid').value == ""){
 
-					document.getElementById('lblError').innerHTML = "Please select a department";
+					document.getElementById('lblError').innerHTML = "<s:text name='msg.please.select.department'/>";
 					return false;
 				 }
 			</s:if>
 			<s:if test="%{isFieldMandatory('scheme')}"> 
 				 if(null!=document.getElementById('schemeid') &&  document.getElementById('schemeid').value == -1){
 
-					document.getElementById('lblError').innerHTML = "Please select a scheme";
+					document.getElementById('lblError').innerHTML = "<s:text name='msg.please.select.scheme'/>";
 					return false;
 				 }
 			</s:if>
 			<s:if test="%{isFieldMandatory('subscheme')}"> 
 				 if(null!= document.getElementById('subschemeid') && document.getElementById('subschemeid').value == -1){
 
-					document.getElementById('lblError').innerHTML = "Please select a subscheme";
+					document.getElementById('lblError').innerHTML = "<s:text name='msg.please.select.sub.scheme'/>";
 					return false;
 				 }
 			</s:if>
 			<s:if test="%{isFieldMandatory('functionary')}"> 
 				 if(null!=document.getElementById('vouchermis.functionary') &&  document.getElementById('vouchermis.functionary').value == -1){
 
-					document.getElementById('lblError').innerHTML = "Please select a functionary";
+					document.getElementById('lblError').innerHTML = "<s:text name='msg.please.select.functionary'/>";
 					return false;
 				 }
 			</s:if>
 			<s:if test="%{isFieldMandatory('fundsource')}"> 
 				 if(null !=document.getElementById('fundsourceId') &&  document.getElementById('fundsourceId').value == -1){
 
-					document.getElementById('lblError').innerHTML = "Please select a fundsource";
+					document.getElementById('lblError').innerHTML = "<s:text name='msg.please.select.fundsource'/>";
 					return false;
 				}
 			</s:if>
 			<s:if test="%{isFieldMandatory('field')}"> 
 				 if(null!= document.getElementById('vouchermis.divisionid') && document.getElementById('vouchermis.divisionid').value == -1){
 
-					document.getElementById('lblError').innerHTML = "Please select a field";
+					document.getElementById('lblError').innerHTML = "<s:text name='msg.please.select.field'/>";
 					return false;
 				 }
 			</s:if>
 			<s:if test="%{isFieldMandatory('function')}"> 
 			 if(null!= document.getElementById('vouchermis.function') && document.getElementById('vouchermis.function').value == -1){
 
-				document.getElementById('lblError').innerHTML = "Please select a function";
+				document.getElementById('lblError').innerHTML = "<s:text name='msg.please.select.function'/>";
 				return false;
 			 }
 			</s:if>
@@ -375,7 +375,7 @@ function validateRemit(){
 		 }
 	}
 	if(atleastOnecheque == false){
-		 document.getElementById('remitlblError').innerHTML = "Please Select atleast one recovery " ;
+		 document.getElementById('remitlblError').innerHTML = "<s:text name='msg.please.select.atleast.one.recovery'/> " ;
 		 return false;
 	}
 	disableAll();

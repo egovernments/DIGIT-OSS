@@ -62,7 +62,7 @@
 			</s:if></td>
 		<td class="bluebox"><s:select name="fundId" id="fundId"
 				list="dropdownData.fundList" listKey="id" listValue="name"
-				headerKey="-1" headerValue="----Choose----"
+				headerKey="-1" headerValue="%{getText('lbl.choose.options')}"
 				onChange="getSchemelist(this)" value="%{fundId.id}" /></td>
 	</s:if>
 	<%if(count % 2 == 1) {%>
@@ -80,7 +80,7 @@
 			</s:if></td>
 		<td class="bluebox"><s:select name="fundsourceId"
 				id="fundsourceId" list="dropdownData.fundsourceList" listKey="id"
-				listValue="name" headerKey="-1" headerValue="----Choose----"
+				listValue="name" headerKey="-1" headerValue="%{getText('lbl.choose.options')}"
 				value="%{vouchermis.fundsource.id}" /></td>
 	</s:if>
 
@@ -102,7 +102,7 @@
 			</s:if></td>
 		<td class="greybox"><s:select name="vouchermis.schemeid"
 				id="schemeid" list="dropdownData.schemeList" listKey="id"
-				listValue="name" headerKey="-1" headerValue="----Choose----"
+				listValue="name" headerKey="-1" headerValue="%{getText('lbl.choose.options')}"
 				onChange="getSubSchemelist(this)" value="%{vouchermis.schemeid.id}" /></td>
 	</s:if>
 
@@ -123,7 +123,7 @@
 			</s:if></td>
 		<td class="greybox"><s:select name="vouchermis.subschemeid"
 				id="subschemeid" list="dropdownData.subschemeList" listKey="id"
-				listValue="name" headerKey="-1" headerValue="----Choose----"
+				listValue="name" headerKey="-1" headerValue="%{getText('lbl.choose.options')}"
 				value="%{vouchermis.subschemeid.id}" /></td>
 	</s:if>
 	
@@ -141,7 +141,7 @@
 		<td class="bluebox"><s:select name="vouchermis.functionary"
 				id="vouchermis.functionary" list="dropdownData.functionaryList"
 				listKey="id" listValue="name" headerKey="-1"
-				headerValue="----Choose----" value="%{vouchermis.functionary.id}" /></td>
+				headerValue="%{getText('lbl.choose.options')}" value="%{vouchermis.functionary.id}" /></td>
 	</s:if>
 
 	<%if(count % 2 == 1) {%>
@@ -157,7 +157,7 @@
 			</s:if></td>
 		<td class="greybox"><s:select name="deptImpl.code" id="deptImpl.code"
 				list="dropdownData.departmentList" listKey="code" listValue="name"
-				headerKey="-1" headerValue="----Choose----" value="%{deptImpl.code}" /></td>
+				headerKey="-1" headerValue="%{getText('lbl.choose.options')}" value="%{deptImpl.code}" /></td>
 	</s:if>
 
 	<%if(count % 2 == 1) {%>
@@ -174,7 +174,7 @@
 		<td class="greybox"><s:select name="vouchermis.divisionid"
 				id="vouchermis.divisionid" list="dropdownData.fieldList"
 				listKey="id" listValue="name" headerKey="-1"
-				headerValue="----Choose----" value="%{vouchermis.divisionid.id}" /></td>
+				headerValue="%{getText('lbl.choose.options')}" value="%{vouchermis.divisionid.id}" /></td>
 	</s:if>
 
 	<%if(count % 2 == 1) {%>

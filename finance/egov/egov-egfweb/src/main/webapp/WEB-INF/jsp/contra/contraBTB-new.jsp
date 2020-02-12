@@ -74,7 +74,7 @@
 			</jsp:include>
 			<div class="formmainbox">
 				<div class="formheading" />
-				<div class="subheadnew">Create Bank to Bank Transfer</div>
+				<div class="subheadnew"><s:text name="lbl.create.bank.to.bank.transfer"/> </div>
 				<div id="listid" style="display: block">
 					<br />
 				</div>
@@ -115,7 +115,7 @@
 					<%@include file="contraBTB-form.jsp"%>
 				</table>
 			</div>
-			<div class="mandatory1" align="left">* Mandatory Fields</div>
+			<div class="mandatory1" align="left">* <s:text name="lbl.mendatory.field"/> </div>
 
 			</br>
 			</br>
@@ -225,13 +225,13 @@ function	onLoadTask_new()
 		if(jQuery('#modeOfCollectioncheque').is(':checked')){
 			document.getElementById('chequeNumberlblError').innerHTML='';
 			if(obj.value.length != 6){
-				document.getElementById('chequeNumberlblError').innerHTML = "Cheque number must be a 6 digits";
+				document.getElementById('chequeNumberlblError').innerHTML =  '<s:text name="msg.cheque.number.must.be.six.digits" />';
 			}
 		}
 	}
 
 	if('<s:text name="%{isBankBalanceMandatory()}"/>'=='')
-		document.getElementById('lblError').innerHTML = "bank_balance_mandatory parameter is not defined";
+		document.getElementById('lblError').innerHTML = '<s:text name="msg.bank.bal.mendatory.param.not.defined" />';
 		
 		<s:if test="%{!validateUser('createpayment')}">
 			//document.getElementById('errorSpan').innerHTML='<s:text name="payment.invalid.user"/>';

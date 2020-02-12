@@ -58,13 +58,13 @@
 	<div class="panel-body">
 		<div class="row add-border">
 			<div class="col-md-3 col-xs-6 add-margin">
-				<spring:message code="lbl.billnumber" />
+				<spring:message code="lbl.billnumber" text="Bill Number"/>
 			</div>
 			<div class="col-md-3 col-xs-6 add-margin view-content" id="ct-mobno">
 				<c:out default="N/A" value="${egBillregister.billnumber }" />
 			</div>
 			<div class="col-md-3 col-xs-6 add-margin">
-				<spring:message code="lbl.billdate" />
+				<spring:message code="lbl.billdate" text="Bill Date"/>
 			</div>
 			<div class="col-md-3 col-xs-6 add-margin view-content" id="ct-email">
 				<fmt:formatDate value="${egBillregister.billdate}" pattern="dd/MM/yyyy" />
@@ -74,13 +74,13 @@
 		
 		<div class="row add-border">
 			<div class="col-md-3 col-xs-6 add-margin">
-				<spring:message code="lbl.function" />
+				<spring:message code="lbl.function" text="Function"/>
 			</div>
 			<div class="col-md-3 col-xs-6 add-margin view-content" id="ct-mobno">
 				<c:out default="N/A" value="${egBillregister.egBillregistermis.function.name }" />
 			</div>
 			<div class="col-md-3 col-xs-6 add-margin">
-				<spring:message code="lbl.narration" />
+				<spring:message code="lbl.narration" text="Narration"/>
 			</div>
 			<div class="col-md-3 col-xs-6 add-margin view-content" id="ct-email">
 				<c:out default="N/A" value="${egBillregister.egBillregistermis.narration }" />
@@ -89,13 +89,13 @@
 		
 		<div class="row add-border">
 			<div class="col-md-3 col-xs-6 add-margin">
-				<spring:message code="lbl.party.billnumber" />
+				<spring:message code="lbl.party.billnumber" text="Party Bill Number"/>
 			</div>
 			<div class="col-md-3 col-xs-6 add-margin view-content" id="ct-mobno">
 				<c:out default="N/A" value="${egBillregister.egBillregistermis.partyBillNumber }" />
 			</div>
 			<div class="col-md-3 col-xs-6 add-margin">
-				<spring:message code="lbl.party.billdate" />
+				<spring:message code="lbl.party.billdate" text="Party Bill Date"/>
 			</div>
 			<div class="col-md-3 col-xs-6 add-margin view-content" id="ct-email">
 				<fmt:formatDate value="${egBillregister.egBillregistermis.partyBillDate}" pattern="dd/MM/yyyy" />
@@ -105,13 +105,13 @@
 		
 		<div class="row add-border">
 			<div class="col-md-3 col-xs-6 add-margin">
-				<spring:message code="lbl.billsubtype" />
+				<spring:message code="lbl.billsubtype" text="Bill SubType"/>
 			</div>
 			<div class="col-md-3 col-xs-6 add-margin view-content" id="ct-mobno">
 				<c:out default="N/A" value="${egBillregister.egBillregistermis.egBillSubType.name }" />
 			</div>
 			<div class="col-md-3 col-xs-6 add-margin">
-				<spring:message code="lbl.ban.number" />
+				<spring:message code="lbl.ban.number" text="BAN Number"/>
 			</div>
 			<div class="col-md-3 col-xs-6 add-margin view-content" id="ct-email">
 				<c:out default="N/A" value="${egBillregister.egBillregistermis.budgetaryAppnumber }" />

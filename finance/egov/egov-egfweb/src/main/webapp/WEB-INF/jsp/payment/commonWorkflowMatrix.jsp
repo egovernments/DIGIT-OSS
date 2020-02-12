@@ -64,7 +64,7 @@
 	function callAlertForDepartment() {
 		var value = document.getElementById("approverDepartment").value;
 		if (value == "-1") {
-			bootbox.alert("Please select the Approver Department");
+			bootbox.alert("<s:text name='msg.please.select.approver.dept'/>");
 			document.getElementById("approverDepartment").focus();
 			return false;
 		}
@@ -73,7 +73,7 @@
 	function callAlertForDesignation() {
 		var value = document.getElementById("approverDesignation").value;
 		if (value == "-1") {
-			bootbox.alert("Please select the approver designation");
+			bootbox.alert("<s:text name='msg.please.select.approver.designation'/>");
 			document.getElementById("approverDesignation").focus();
 			return false;
 		}
@@ -84,10 +84,10 @@
 			pendingActionsValue) {
 		var designationObj = document.getElementById('approverDesignation');
 		designationObj.options.length = 0;
-		designationObj.options[0] = new Option("----Choose----", "-1");
+		designationObj.options[0] = new Option("<s:text name='lbl.choose.options'/>", "-1");
 		var approverObj = document.getElementById('approverPositionId');
 		approverObj.options.length = 0;
-		approverObj.options[0] = new Option("----Choose----", "-1");
+		approverObj.options[0] = new Option("<s:text name='lbl.choose.options'/>", "-1");
 		populateapproverDesignation({
 			departmentRule : departmentValue,
 			type : typeValue,
@@ -167,7 +167,7 @@
 			<td class="${approverOddTextCss}" width="14%">
 				<s:select name="approverDepartment" id="approverDepartment"
 					list="dropdownData.approverDepartmentList" listKey="code"
-					listValue="name" headerKey="-1" headerValue="----Choose----"
+					listValue="name" headerKey="-1" headerValue="%{getText('lbl.choose.options')}"
 					value="%{approverDepartment}"
 					onchange="loadDesignationFromMatrix();" cssClass="dropDownCss" />
 				<egov:ajaxdropdown fields="['Text','Value']"
@@ -181,7 +181,7 @@
 				<s:select	id="approverDesignation" name="approverDesignation"
 					list="dropdownData.designationList" listKey="designationId"
 					headerKey="-1" listValue="designationName"
-					headerValue="----Choose----" onchange="populateApprover();"
+					headerValue="%{getText('lbl.choose.options')}" onchange="populateApprover();"
 					onfocus="callAlertForDepartment();" cssClass="dropDownCss" /> 
 					<egov:ajaxdropdown id="approverPositionId" fields="['Text','Value']"
 					dropdownId="approverPositionId"
@@ -193,7 +193,7 @@
 			<td class="${approverOddTextCss}" width="14%">
 				<s:select	id="approverPositionId" name="approverPositionId"
 					list="dropdownData.approverList" headerKey="-1"
-					headerValue="----Choose----" listKey="id" listValue="firstName"
+					headerValue="%{getText('lbl.choose.options')}" listKey="id" listValue="firstName"
 					onfocus="callAlertForDesignation();" value="%{approverPositionId}"
 					cssClass="dropDownCss" />
 			</td>

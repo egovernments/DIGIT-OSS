@@ -50,20 +50,20 @@
 <%@ include file="/includes/taglibs.jsp"%>
 <%@ page language="java"%>
 <div class="panel-heading custom_form_panel_heading">
-	<div class="panel-title">Unreconciled Items</div>
+	<div class="panel-title"><s:text name="msg.unreconciled.items"/> </div>
 </div>
 <div class="col-md-12 form-group report-table-container">
 	<table class="table table-bordered table-hover multiheadertbl"
 		id="resultTable">
 		<thead>
 			<tr>
-				<th>Voucher Number</th>
-				<th>Cheque Number</th>
-				<th>Cheque Date</th>
-				<th>Type</th>
-				<th>Ins Type</th>
-				<th>Amount</th>
-				<th>Reconciliation Date</th>
+				<th><s:text name="lbl.voucher.number"/></th>
+				<th><s:text name="lbl.cheque.number"/></th>
+				<th><s:text name="lbl.cheque.date"/></th>
+				<th><s:text name="lbl.type"/></th>
+				<th><s:text name="lbl.instrument.type"/></th>
+				<th><s:text name="lbl.amount"/></th>
+				<th><s:text name="lbl.reconciliation.date"/></th>
 			</tr>
 		</thead>
 		<s:if test="%{unReconciledCheques.size>0}">
@@ -88,7 +88,7 @@
 		</s:if>
 		<s:else>
 			<tr>
-				<td colspan="6" style="text-align: center">No Data Found</td>
+				<td colspan="7" style="text-align: center"><s:text name="msg.no.record.found"/></td>
 			</tr>
 		</s:else>
 	</table>
@@ -97,10 +97,10 @@
 	<div class="buttonbottom" id="reconcileDiv" style="display: none">
 		<table>
 			<tr>
-				<td><input type="button" class="buttonsubmit" value="Reconcile"
+				<td><input type="button" class="buttonsubmit" value='<s:text name="lbl.reconcile.button"/>'
 					name="Reconcile" method="reconcile"
 					onclick="return validateReconcile();" /></td>
-				<td><input type="button" value="Close"
+				<td><input type="button" value="<s:text name='lbl.close'/>"
 					onclick="javascript:window.close()" class="buttonsubmit" /></td>
 			</tr>
 		</table>

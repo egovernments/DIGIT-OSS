@@ -86,15 +86,15 @@
 <form:form name="expenseBillForm" role="form" action="" modelAttribute="egBillregister" id="egBillregister"
            class="form-horizontal form-groups-bordered" enctype="multipart/form-data">
     <div class="position_alert">
-        <spring:message code="lbl.netpayable.amount"/> : &#8377 <span id="expenseNetPayableAmount"><c:out
+        <spring:message code="lbl.netpayable.amount" text="Net Payable Amount"/> : &#8377 <span id="expenseNetPayableAmount"><c:out
             value="${expenseNetPayableAmount}" default="0.0"></c:out></span>
     </div>
     <div class="position_alert1">
-        <spring:message code="lbl.total.debit.amount"/> : &#8377 <span id="expenseBillTotalDebitAmount"> <c:out
+        <spring:message code="lbl.total.debit.amount" text="Total Debit Amount"/> : &#8377 <span id="expenseBillTotalDebitAmount"> <c:out
             value="${expenseBillTotalDebitAmount}" default="0.0"></c:out></span>
     </div>
     <div class="position_alert2">
-        <spring:message code="lbl.total.credit.amount"/> : &#8377 <span id="expenseBillTotalCreditAmount"> <c:out
+        <spring:message code="lbl.total.credit.amount" text="Total Credit Amount"/> : &#8377 <span id="expenseBillTotalCreditAmount"> <c:out
             value="${expenseBillTotalCreditAmount}" default="0.0"></c:out></span>
     </div>
 
@@ -116,9 +116,9 @@
     </div>
     <ul class="nav nav-tabs" id="settingstab">
         <li class="active"><a data-toggle="tab" href="#expensebillheader"
-                              data-tabidx=0><spring:message code="lbl.header"/></a></li>
+                              data-tabidx=0><spring:message code="lbl.header" text="Header"/></a></li>
         <li><a data-toggle="tab" href="#checklist" data-tabidx=1><spring:message
-                code="lbl.checklist"/> </a></li>
+                code="lbl.checklist" text="CheckList"/> </a></li>
     </ul>
 
     <div class="tab-content">
@@ -147,7 +147,7 @@
         <c:if test="${mode == 'readOnly'}">
             <div class="row">
                 <div class="col-sm-12 text-center">
-                    <input type="submit" name="closeButton" id="closeButton" value="Close" Class="btn btn-default"
+                    <input type="submit" name="closeButton" id="closeButton" value='<spring:message code="lbl.close" text="Close"/>' Class="btn btn-default"
                            onclick="window.close();"/>
                 </div>
             </div>

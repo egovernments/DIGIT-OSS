@@ -46,6 +46,19 @@
  *
  */
 
+jQuery(document).ready(function(){
+	console.log("Browser Language ",navigator.language);
+	jQuery.i18n.properties({ 
+		name: 'message', 
+		path: '/services/EGF/resources/app/messages/', 
+		mode: 'both',
+		language: navigator.language,
+		callback: function() {
+			console.log('File loaded successfully');
+		}
+	});	
+})
+
 function getFormData($form) {
 	var unindexed_array = $form.serializeArray();
 	var indexed_array = {};
@@ -64,9 +77,7 @@ function callAjaxSearch() {
 		url : "/services/EGF/brs/manualReconciliation-ajaxSearch.action",
 		type : "POST",
 		data : fd,
-		// dataType: "text",
 		success : function(response) {
-			// console.log("success"+response );
 			jQuery('#resultDiv').html(response);
 			jQuery('#reconcileDiv').show();
 			jQuery(".datepicker").datepicker({
@@ -79,7 +90,7 @@ function callAjaxSearch() {
 		error : function(response) {
 			console.log("failed");
 
-			bootbox.alert("Failed to search Details");
+			bootbox.alert(jQuery.i18n.prop('msg.failed.to.search.details'));
 //			undoLoadingMask();
 		}
 	});
@@ -106,14 +117,14 @@ function validateReconcile() {
 
 	if (value == true) {
 
+		;
 		bootbox
-				.alert("Reconciliation Date should be less than or equal to Bank statement To Date : "
-						+ numOfrows.replace(/\,$/, ''));
+				.alert(jQuery.i18n.prop('msg.rec.date.should.be.less.than.or.equal.to.bank.stmt.date',numOfrows.replace(/\,$/, '')));
 		return false;
 	}
 
 	if (!validateReconDate()) {
-		bootbox.alert("Add atleast one Reconciliation Date");
+		bootbox.alert(jQuery.i18n.prop('msg.add.atleast.one.reconciliation.date'));
 		return false;
 	}
 
@@ -134,7 +145,7 @@ function validateReconcile() {
 		error : function(response) {
 			console.log("failed");
 			undoLoadingMask();
-			bootbox.alert("Failed to Reconcile Details");
+			bootbox.alert(jQuery.i18n.prop('msg.failed.to.reconcile.details'));
 
 		}
 	});
@@ -164,7 +175,7 @@ function showBalance() {
 		error : function(response) {
 			console.log("failed");
 			undoLoadingMask();
-			bootbox.alert("Failed to Show balance Details");
+			bootbox.alert(jQuery.i18n.prop('msg.failed.to.show.balance.details'));
 
 		}
 	});
@@ -190,15 +201,15 @@ function validateReconDate() {
 
 function validate() {
 	if (document.getElementById("bankId").value == "") {
-		bootbox.alert("Select Bank");
+		bootbox.alert(jQuery.i18n.prop('msg.select.bank.from.dropdown'));
 		return false;
 	}
 	if (document.getElementById("branchId").value == "") {
-		bootbox.alert("Select Branch");
+		bootbox.alert(jQuery.i18n.prop('msg.select.branch'));
 		return false;
 	}
 	if (document.getElementById("accountId").value == "") {
-		bootbox.alert("Select Account");
+		bootbox.alert(jQuery.i18n.prop('msg.select.account'));
 		return false;
 	}
 	var toDateStr = document.getElementById("toDate").value;
@@ -207,15 +218,15 @@ function validate() {
 	var toDateParts = toDateStr.split("/");
 	var fromDateParts = fromDatestr.split("/");
 	if (reconDateStr == "") {
-		bootbox.alert("Select Reconciliation Date");
+		bootbox.alert(jQuery.i18n.prop('msg.select.reconciliattion.date'));
 		return false;
 	}
 	if (fromDatestr == "") {
-		bootbox.alert("Select Bank Statement From Date");
+		bootbox.alert(jQuery.i18n.prop('msg.select.bank.statement.from.date'));
 		return false;
 	}
 	if (toDateStr == "") {
-		bootbox.alert("Select Bank Statement To Date");
+		bootbox.alert(jQuery.i18n.prop('msg.select.bank.statement.to.date'));
 		return false;
 	}
 
@@ -225,13 +236,13 @@ function validate() {
 			+ toDateParts[2]);
 	if (fromDate > toDates) {
 		bootbox
-				.alert("Bank Statement From Date must be less than or equal to Bank Statement To Date");
+				.alert(jQuery.i18n.prop('msg.bank.stmt.from.date.must.be.less.than.or.equal.bank.stmt.to.date'));
 		return false;
 	}
 	if (toDateStr != null && reconDateStr != null) {
 
 		if (toDateParts.length != 3) {
-			bootbox.alert("Enter date is 'DD/MM/YYYY' format only");
+			bootbox.alert(jQuery.i18n.prop('msg.enter.date.is.ddmmyyyy.format.only'));
 			return false;
 		}
 		var toDate = new Date(toDateParts[1] + "/" + toDateParts[0] + "/"
@@ -239,7 +250,7 @@ function validate() {
 		var reconDateParts = reconDateStr.split("/");
 
 		if (reconDateParts.length != 3) {
-			bootbox.alert("Enter date is 'DD/MM/YYYY' format only");
+			bootbox.alert(jQuery.i18n.prop('msg.enter.date.is.ddmmyyyy.format.only'));
 			return false;
 		}
 		var reconDate = new Date(reconDateParts[1] + "/" + reconDateParts[0]
@@ -247,7 +258,7 @@ function validate() {
 		// bootbox.alert(reconDate.toString('MM-dd-yyyy'));
 		if (reconDate < toDate) {
 			bootbox
-					.alert("Reconciliation Date must be greater than or equal to Bank Statement To Date");
+					.alert(jQuery.i18n.prop('msg.rec.date.must.be.greater.than.or.equal.to.bank.stmt.to.date'));
 			return false;
 		}
 	}

@@ -55,6 +55,19 @@ var creditAmoutrowcount=0;
 var $purchaseOrderId = 0;
 var $supplierId = 0;
 $(document).ready(function(){
+	console.log("Browser Language ",navigator.language);
+	$.i18n.properties({ 
+		name: 'message', 
+		path: '/services/EGF/resources/app/messages/', 
+		mode: 'both',
+		async:true,
+		cache:true,
+		language: navigator.language,
+		callback: function() {
+			console.log('File loaded successfully');
+		}
+	});
+	
 	$purchaseOrderId = $('#purchaseOrderId').val();
 	$supplierId = $('#supplierId').val();
 	patternvalidation(); 
@@ -174,7 +187,8 @@ function debitGlcode_initialize() {
 			}
 	   });
 	  if(flag){
-			bootbox.alert("Debit code already added", function() {
+		  
+			bootbox.alert($.i18n.prop('msg.debit.code.already.added'), function() {
 				var index= dt.length - 1;
 				if(document.getElementById('debitDetails['+index+'].debitGlcode'))
 					document.getElementById('debitDetails['+index+'].debitGlcode').value = "";
@@ -232,7 +246,7 @@ function creditGlcode_initialize() {
 			}
 	   });
 	   if(flag){
-			bootbox.alert("Credit code already added", function() {
+			bootbox.alert($.i18n.prop('msg.credit.code.already.added'), function() {
 				var index= dt.length - 1;
 				document.getElementById('creditDetails['+index+'].creditGlcode').value = "";
 			});
@@ -259,14 +273,14 @@ function addDebitDetailsRow() {
 			++debitAmountrowcount;
 		}
 	} else {
-		  bootbox.alert('limit reached!');
+		  bootbox.alert($.i18n.prop('msg.limit.reached'));
 	}
 }
 
 function deleteDebitDetailsRow(obj) {
 	var rowcount=$("#tbldebitdetails tbody tr").length;
     if(rowcount<=1) {
-		bootbox.alert("This row can not be deleted");
+		bootbox.alert($.i18n.prop('msg.this.row.can.not.be.deleted'));
 		return false;
 	} else {
 		deleteRow(obj,'tbldebitdetails');
@@ -292,14 +306,14 @@ function addCreditDetailsRow() {
 			++creditAmoutrowcount;
 		}
 	} else {
-		  bootbox.alert('limit reached!');
+		  bootbox.alert($.i18n.prop('msg.limit.reached'));
 	}
 }
 
 function deleteCreditDetailsRow(obj) {
 	var rowcount=$("#tblcreditdetails tbody tr").length;
     if(rowcount<=1) {
-		bootbox.alert("This row can not be deleted");
+		bootbox.alert($.i18n.prop('msg.this.row.can.not.be.deleted'));
 		return false;
 	} else {
 		deleteRow(obj,'tblcreditdetails');
@@ -319,28 +333,28 @@ var creditamount = $("#supplierBillTotalCreditAmount")["0"].innerHTML;
 	$("#passedamount").val(debitamount);
 
 	if(debitamount != Number(Number(creditamount) + Number(netpayableamount)).toFixed(2)){
-		bootbox.alert("Debit amount and credit amount is not matching");
+		bootbox.alert($.i18n.prop('msg.debit.and.credit.amount.is.not.matching'));
 		return false;
 	}
 	
 	if(debitamount == 0){
-		bootbox.alert("Please select at least one Debit Details");
+		bootbox.alert($.i18n.prop('msg.please.select.atleast.one.debit.details'));
 		return false;
 	}
 	
 	if(!$("#supplier-netPayableAmount").val())
 	{
-		bootbox.alert("Please select one Net payable account detail");
+		bootbox.alert($.i18n.prop('msg.please.select.one.net.payable.account.detail'));
 		return false;
 	}
 	
 	if(parseFloat(billamount) < parseFloat(debitamount)){
-		bootbox.alert("Bill amount should be greater than passed amount");
+		bootbox.alert($.i18n.prop('msg.bill.amount.should.not.greater.than.passed.amount'));
 		return false;
 	}
 	
 	if(parseFloat(debitamount) > parseFloat(billamount)){
-		bootbox.alert("Passed amount should not be greater then bill amount");
+		bootbox.alert($.i18n.prop('msg.passed.amount.should.not.be.greater.than.bill.amount'));
 		return false;
 	}
 	
@@ -403,7 +417,7 @@ function validateCutOff()
 	}
 	else
 	{
-		bootbox.alert("Bills created after "+cutofdate+" cannot be approved on create. Use the Forward option.");
+		bootbox.alert($.i18n.prop('msg.cutoff.warnig.message',cutofdate));
 		return false;
 	}
 	return false;

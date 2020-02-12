@@ -101,14 +101,14 @@
 					<td class="bluebox"><s:text name="chq.assignment.billtype" />
 					</td>
 					<td class="bluebox"><s:select name="billType" id="billType"
-							list="billTypeMap" headerKey="-1" headerValue="----Choose----"
+							list="billTypeMap" headerKey="-1" headerValue="%{getText('lbl.choose.options')}"
 							value="%{billType}" /></td>
 				</tr>
 				<tr>
 					<td class="greybox"><s:text name="voucher.fund" /></td>
 					<td class="greybox"><s:select name="fundId" id="fundId"
 							list="dropdownData.fundList" listKey="id" listValue="name"
-							headerKey="-1" headerValue="----Choose----"
+							headerKey="-1" headerValue="%{getText('lbl.choose.options')}"
 							onChange="loadBank(this);" value="%{fundId.id}" /></td>
 
 					<td class="greybox" id="deptLabel"><s:text
@@ -116,7 +116,7 @@
 					<td class="greybox"><s:select name="vouchermis.departmentid"
 							id="vouchermis.departmentid" list="dropdownData.departmentList"
 							listKey="id" listValue="name" headerKey="-1"
-							headerValue="----Choose----"
+							headerValue="%{getText('lbl.choose.options')}"
 							value="voucherHeader.vouchermis.departmentid.id" /></td>
 				</tr>
 				<tr>
@@ -126,7 +126,7 @@
 					<td class="greybox"><s:text name="chq.assignment.bank" /></td>
 					<td class="greybox"><s:select name="bank_branch"
 							id="bank_branch" list="bankBranchMap" headerKey="-1"
-							headerValue="----Choose----" onchange="loadBankAccount(this)"
+							headerValue="%{getText('lbl.choose.options')}" onchange="loadBankAccount(this)"
 							value="%{bank_branch}" /></td>
 					<egov:ajaxdropdown id="bankaccount" fields="['Text','Value']"
 						dropdownId="bankaccount"
@@ -135,7 +135,7 @@
 					<td class="greybox" colspan="2"><s:select name="bankaccount"
 							id="bankaccount" list="dropdownData.bankaccountList" listKey="id"
 							listValue="chartofaccounts.glcode+'--'+accountnumber+'---'+accounttype"
-							headerKey="-1" headerValue="----Choose----"
+							headerKey="-1" headerValue="%{getText('lbl.choose.options')}"
 							value="%{bankaccount}" /></td>
 				</tr>
 				<tr>
@@ -150,7 +150,7 @@
 							name="rtgs.assignment.remittance.pay.coa" /></td>
 					<td class="bluebox"><s:select name="recoveryId"
 							id="recoveryId" list="dropdownData.recoveryList" listKey="id"
-							listValue="type" headerKey="" headerValue="----Choose----"
+							listValue="type" headerKey="" headerValue="%{getText('lbl.choose.options')}"
 							onchange="setRecoveryCode();" /></td>
 
 					</td>
@@ -158,17 +158,15 @@
 
 			</table>
 			<div class="buttonbottom">
-				<s:submit method="searchRemittanceRTGS" value="Search"
+				<s:submit method="searchRemittanceRTGS" key="lbl.search"
 					id="searchBtn" cssClass="buttonsubmit" />
-				<input type="button" value="Close"
+				<input type="button" value='<s:text name="lbl.close"/>'
 					onclick="javascript:window.close()" class="button" />
 			</div>
 		</div>
 		<table align="center" width="100%" cellpadding="0" cellspacing="0">
 			</tr>
-			<td style="text-align: left" class="bluebox"><font color="red">*
-					Please select the service tax Coa in the search criteria, if the
-					RTGS assignment is for service tax department</font></td>
+			<td style="text-align: left" class="bluebox"><font color="red">*<s:text name="msg.please.select.service.tax.coa.in.search.criteria"/> </font></td>
 			<tr>
 		</table>
 		<s:hidden name="bankbranch" id="bankbranch" />

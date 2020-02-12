@@ -49,14 +49,14 @@
 
 <%@ include file="/includes/taglibs.jsp"%>
  <div class="panel-heading custom_form_panel_heading">
-    <div class="panel-title">Un Reconciled Totals</div>
+    <div class="panel-title"><s:text name="msg.unreconciled.total"/> </div>
 </div>
 
   <table class="table table-bordered table-hover multiheadertbl" id="ff" style="width:50%"   title="UnReconciled Details"  >
      <thead>
   <tr>
-  <th>Type</th>
-  <th>Amount</th>
+  <th><s:text name="lbl.type"/> </th>
+  <th><s:text name="lbl.amount"/> </th>
   </tr>
      </thead>
 <s:iterator value="unReconciledDrCr">

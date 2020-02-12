@@ -69,10 +69,10 @@
     <div class="panel-heading">
         <div class="panel-title">
             <c:if test="${mode != 'view' && mode != 'readOnly'}">
-                <spring:message code="lbl.upload.document" />
+                <spring:message code="lbl.upload.document" text="Upload Documents"/>
             </c:if>
             <c:if test="${mode == 'view' || mode == 'readOnly' }">
-                <spring:message code="lbl.documents" />
+                <spring:message code="lbl.documents" text="Uploaded Documents"/>
             </c:if>
         </div>
     </div>
@@ -82,7 +82,7 @@
         </c:forEach>
     </c:if>
     <c:if test="${mode == 'view' && egBillregister.documentDetail.isEmpty()}">
-        <spring:message code="msg.no.documents" />
+        <spring:message code="msg.no.documents" text="No Documents Attached"/>
     </c:if>
     <input type="hidden" value="${fn:length(egBillregister.documentDetail)}" id="documentsSize">
     <c:if test="${mode != 'view' && mode != 'readOnly' }">
@@ -103,7 +103,7 @@
                         </tr>
                         <tr>
                             <td align="center">
-                                <button id="attachNewFileBtn" type="button" class="btn btn-primary" onclick="addFileInputField()"><spring:message code="lbl.addfile" /></button>
+                                <button id="attachNewFileBtn" type="button" class="btn btn-primary" onclick="addFileInputField()"><spring:message code="lbl.addfile" text="Add File"/></button>
                             </td>
                         </tr>
                         </tbody>

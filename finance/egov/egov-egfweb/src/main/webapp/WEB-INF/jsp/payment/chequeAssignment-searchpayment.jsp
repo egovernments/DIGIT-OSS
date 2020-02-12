@@ -198,7 +198,7 @@
 				</s:iterator>
 			</table>
 			<div class="subheadsmallnew" id="noRecordsDiv"
-				style="visibility: hidden">No Records Found</div>
+				style="visibility: hidden"><s:text name="msg.no.record.found"/> </div>
 			<br />
 			<div id="departmentDiv" style="visibility: visible">
 				<s:hidden name="reassignSurrenderChq" />
@@ -208,7 +208,7 @@
 							class="mandatory1">*</span> <s:select
 								name="vouchermis.departmentcode" id="departmentid"
 								list="dropdownData.departmentList" listKey="code" listValue="name"
-								headerKey="-1" headerValue="----Choose----"
+								headerKey="-1" headerValue="%{getText('lbl.choose.options)}"
 								value="%{voucherHeader.vouchermis.departmentcode}"
 								onChange="populateYearcode(this);" /></td>
 
@@ -291,8 +291,8 @@
 					value="%{selectedRows}" />
 				<s:hidden id="paymentMode" name="paymentMode" value="%{paymentMode}" />
 				<s:hidden id="bankaccount" name="bankaccount" value="%{bankaccount}" />
-				<input type="button" class="buttonsubmit" value="Assign Cheque" id="assignChequeBtn"  onclick="validate();" />
-				<input type="button" value="Close"
+				<input type="button" class="buttonsubmit" value="<s:text name='lbl.assign.cheque'/>"  id="assignChequeBtn"  onclick="validate();" />
+				<input type="button" value="<s:text name='lbl.close'/>"
 					onclick="javascript:window.parent.postMessage('close','*');window.close();" class="button" />
 			</div>
 		</div>
@@ -317,12 +317,12 @@
 				var result=true;
 				if(dom.get('departmentid') && dom.get('departmentid').options[dom.get('departmentid').selectedIndex].value==-1)
 				{
-					bootbox.alert('Select Cheque Issued Department');
+					bootbox.alert('<s:text name="msg.select.cheque.issued.dept"/>');
 					return false;
 				}
 				if(document.getElementById('selectedRows').value=='' || document.getElementById('selectedRows').value==0)
 				{
-					bootbox.alert('Please select the payment voucher');
+					bootbox.alert('<s:text name="msg.please.select.the.payment.voucher"/>');
 					return false;
 				}
 				<s:if test="%{paymentMode=='cheque'}">
@@ -332,7 +332,7 @@
 				var srlNo=document.getElementsByName("chequeAssignmentList["+index+"].serialNo")[0].value;
 				if(srlNo=='')
 				{
-					bootbox.alert('Year code should not be empty');
+					bootbox.alert('<s:text name="payment.yearcode.invalid"/>');
 					return false;
 				}
 				}
@@ -343,7 +343,7 @@
 				<s:if test="%{paymentMode=='cash'}">
 				if( document.getElementById('serialNo')==null || document.getElementById('serialNo').value=='' )
 				{
-					bootbox.alert('Year code should not be empty');
+					bootbox.alert('<s:text name="payment.yearcode.invalid"/>');
 					return false;
 				}
 				
@@ -369,7 +369,6 @@
 			}
 		function validateForRtgsMode(){
 				var noOfSelectedRows=document.getElementById('selectedRows').value;
-				//bootbox.alert("sizseled"+noOfSelectedRows);
 				var chkCount=0;
 				var isSelected=0;
 				var chequeSize='<s:property value ="%{chequeAssignmentList.size()}"/>';
@@ -377,14 +376,13 @@
 				var rtgsNo=document.getElementById('rtgsRefNo').value;                                  
 				                                              
                                                               
-				//bootbox.alert(">>>"+rtgsNo);                          
 				if(rtgsNo==null || rtgsNo==''){
-					bootbox.alert("Please enter a valid RTGS Number");
+					bootbox.alert("<s:text name='msg.please.enter.valid.rtgs.number'/>");
 					return false;   
 				}	            			
 
 				if(isNaN( Date.parse( chequeDate))) {                
-					bootbox.alert("Please enter a valid cheque date");
+					bootbox.alert("<s:text name='msg.please.enter.valid.cheque.date'/>");
 					return false;
 				 }
 				               
@@ -395,7 +393,7 @@
 					chkCount++;
 					if( compareDate(paymentDate,chequeDate) == -1){     
 					  //  bootbox.alert(paymentDate+"----"+chequeDate);      
-						bootbox.alert('Cheque Date cannot be less than  payment Date');
+						bootbox.alert('<s:text name="msg.cheque.date.cant.be.less.than.payment.date"/>');
 						document.getElementById('rtgsDate').value='';
 						document.getElementById('rtgsDate').focus();
 						return false;
@@ -419,7 +417,7 @@
 				var chequeDate=document.getElementById('chequeDt').value;
 				var chequeNo=document.getElementById('chequeNumber0').value;
 				if(chequeNo==null || chequeNo==''){
-					bootbox.alert('Please enter a valid cheque Number', function() {
+					bootbox.alert('<s:text name="msg.please.enter.valid.cheque.number"/>', function() {
 						flag =  false;
 					});
 				}
@@ -427,10 +425,8 @@
 					var paymentDate= document.getElementsByName("chequeAssignmentList["+index+"].tempPaymentDate")[0].value; 
 					if(document.getElementById('isSelected'+index).checked){
 						chkCount++;
-						//bootbox.alert(document.getElementById('isSelected'+index).checked);
 						if( compareDate(paymentDate,chequeDate) == -1){     
-						  //  bootbox.alert(paymentDate+"----"+chequeDate);      
-							bootbox.alert('Cheque Date cannot be less than payment Date', function() {
+							bootbox.alert('<s:text name="msg.cheque.date.cant.be.less.than.payment.date"/>', function() {
 								document.getElementById('chequeDt').value='';
 								document.getElementById('chequeDt').focus();
 								flag =  false;
@@ -487,13 +483,13 @@
 					return true;
 				else if(isNaN(obj.value))
 				{
-					bootbox.alert('Cheque number contains alpha characters.', function() {
+					bootbox.alert('<s:text name="msg.number.date.contains.alpha.char"/>', function() {
 						obj.value='';
 						return true;
 					});
 				}else if(obj.value.length!=6)
 				{
-					bootbox.alert("Cheque number must be 6 digits long.", function() {
+					bootbox.alert("<s:text name='msg.cheque.number.must.be.six.digit.long'/>", function() {
 						obj.value='';
 						return true;
 					});
@@ -501,7 +497,7 @@
 				}
 				else if(obj.value.match(pattPeriod)!=null || obj.value.match(pattNegative)!=null )
 				{
-					bootbox.alert('Cheque number should contain only numbers', function() {
+					bootbox.alert('<s:text name="msg.cheque.num.should.contaain.only.number"/>', function() {
 						obj.value='';
 						return true;
 					});
@@ -509,7 +505,7 @@
 				
 				else if(dom.get('departmentid') && dom.get('departmentid').options[dom.get('departmentid').selectedIndex].value==-1)
 				{
-					bootbox.alert('Select Cheque Issued Department');
+					bootbox.alert('<s:text name="msg.select.cheque.issued.dept"/>');
 					obj.value='';
 					return true;
 				}
@@ -525,13 +521,13 @@
 			{
 				if(isNaN(obj.value))
 				{
-					bootbox.alert('Cheque number contains alpha characters.');
+					bootbox.alert('<s:text name="msg.cheque.number.contains.alpha.char"/>');
 					obj.value='';
 					return false;
 				}
 				if(obj.value.length!=6)
 				{
-					bootbox.alert("Cheque number must be 6 digits long.");
+					bootbox.alert("<s:text name='msg.cheque.number.must.be.six.digit.long'/>");
 					obj.value='';
 					return false;
 				}
@@ -540,7 +536,7 @@
 				var pattNegative=/-/i;
 				if(obj.value.match(pattPeriod)!=null || obj.value.match(pattNegative)!=null )
 				{
-					bootbox.alert('Cheque number should contain only numbers');
+					bootbox.alert('<s:text name="msg.cheque.num.should.contaain.only.number"/>');
 					obj.value='';
 					return false;
 				}
@@ -550,7 +546,7 @@
 					
 				if(dom.get('departmentid') && dom.get('departmentid').options[dom.get('departmentid').selectedIndex].value==-1)
 				{
-					bootbox.alert('Select Cheque Issued Department');
+					bootbox.alert('<s:text name="msg.select.cheque.issued.dept"/>');
 					obj.value='';
 					return false;
 				}
@@ -575,7 +571,7 @@
 					res = res.split('~');
 					if(res[1]=='false')
 					{
-						bootbox.alert('Enter valid cheque number or This Cheque number has been already used', function() {
+						bootbox.alert('<s:text name="msg.enter.valid.cheque.number.or.cheque.already.used"/>', function() {
 							return true;
 						});
 						document.getElementById('chequeNumber'+parseInt(res[0])).value='';
@@ -591,7 +587,7 @@
 					res = res.split('~');
 					if(res[1]=='false')
 					{
-						bootbox.alert('This cheque number is not there in the surrendered list');     
+						bootbox.alert('<s:text name="msg.cheque.num.not.exist.in.surrendered.list"/>');     
 						document.getElementById('chequeNumber'+parseInt(res[0])).value='';
 					}
 			    },

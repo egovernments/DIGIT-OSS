@@ -51,7 +51,7 @@
 <%@ include file="/includes/taglibs.jsp"%>
 <%@ page language="java"%>
 <head>
-<title>Bank Entries Not In Bank Book</title>
+<title><s:text name="msg.bank.entries.not.in.bank.book"/> </title>
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/resources/javascript/voucherHelper.js?rnd=${app_release_no}"></script>
 <script type="text/javascript"
@@ -115,7 +115,7 @@
 	var OneFunctionCenter = <s:property value="isRestrictedtoOneFunctionCenter"/>;
 	//bootbox.alert(">>.."+OneFunctionCenter);                 
 	var glcodeOptions = [ {
-		label : "--- Select ---",
+		label : "<s:text name='lbl.choose.options'/>",
 		value : "0"
 	} ];
 	<s:iterator value="dropdownData.glcodeList">
@@ -125,13 +125,13 @@
 	})
 	</s:iterator>
 	var typeOptions = [ {
-		label : "--- Select ---",
+		label : "<s:text name='lbl.choose.options'/>",
 		value : "0"
 	}, {
-		label : 'Receipt',
+		label : '<s:text name="lbl.receipt"/>',
 		value : 'Receipt'
 	}, {
-		label : 'Payment',
+		label :  '<s:text name="lbl.payment"/>',
 		value : 'Payment'
 	} ];
 
@@ -139,7 +139,7 @@
 		var bankEntriesNotInBankBookColumns = [
 				{
 					key : "refNum",
-					label : 'Ref No',
+					label : '<s:text name="lbl.ref.no"/>',
 					formatter : createTextFieldFormatterBENIBB(
 							BANKENTRIESNOTINBANKBOOKLIST, ".refNum")
 				},
@@ -151,26 +151,26 @@
 				},
 				{
 					key : "type",
-					label : 'Type  <span class="mandatory1">*</span>',
+					label : '<s:text name="lbl.type"/>  <span class="mandatory1">*</span>',
 					formatter : createDropdownFormatterBENIBB(BANKENTRIESNOTINBANKBOOKLIST),
 					dropdownOptions : typeOptions
 				},
 				{
 					key : "date",
-					label : 'Date <span class="mandatory1">*</span>',
+					label : '<s:text name="lbl.date"/> <span class="mandatory1">*</span>',
 					width:120,
 					formatter : createDateFormatterBENIBB(
 							BANKENTRIESNOTINBANKBOOKLIST, ".date")
 				},
 				{
 					key : "amount",
-					label : 'Amount <span class="mandatory1">*</span>',
+					label : '<s:text name="lbl.amount"/> <span class="mandatory1">*</span>',
 					formatter : createAmountFieldFormatterBENIBB(
 							BANKENTRIESNOTINBANKBOOKLIST, ".amount")
 				},
 				{
 					key : "remarks",
-					label : 'Remarks',
+					label : '<s:text name="lbl.remarks"/>',
 					formatter : createTextFieldFormatterBENIBB(
 							BANKENTRIESNOTINBANKBOOKLIST, ".remarks")
 				},
@@ -182,7 +182,7 @@
 				},
 				{
 					key : "glcodeDetail",
-					label : 'Account Code <span class="mandatory1">*</span>',
+					label : '<s:text name="lbl.account.code"/> <span class="mandatory1">*</span>',
 					width:120,
 					formatter : createDropdownFormatterBENIBB(
 							BANKENTRIESNOTINBANKBOOKLIST, "loaddropdown(this)"),
@@ -190,18 +190,18 @@
 				},
 				{
 					key : "createVoucher",
-					label : 'Create Voucher',
+					label : '<s:text name="lbl.create.voucher"/>',
 					formatter : createCheckBoxFormatterBENIBB(
 							BANKENTRIESNOTINBANKBOOKLIST, ".createVoucher")
 				},
 				{
 					key : 'Add',
-					label : 'Add',
+					label : '<s:text name="lbl.add"/>',
 					formatter : createAddImageFormatter("${pageContext.request.contextPath}")
 				},
 				{
 					key : 'Delete',
-					label : 'Delete',
+					label : '<s:text name="lbl.delete"/>',
 					formatter : createDeleteImageFormatter("${pageContext.request.contextPath}")
 				} ];
 		var bankEntriesNotInBankBookDS = new YAHOO.util.DataSource();
@@ -234,10 +234,10 @@
 							beId : record._oData.beId						
 						},
 						success : function(data, textStatus, jqXHR) {
-							bootbox.alert("Deleting data is successful");
+							bootbox.alert("<s:text name='msg.deleting.data.successful'/>");
 						},
 						error : function(jqXHR, textStatus, errorThrown) {
-							bootbox.alert("Error while deleting data");
+							bootbox.alert("<s:text name='msg.error.while.deleting.data'/>");
 						}
 					});
 					this.deleteRow(record);
@@ -256,7 +256,7 @@
 									.getColumn('SlNo'), "" + (i + 1));
 						}
 					} else {
-						bootbox.alert("This row can not be deleted");
+						bootbox.alert("<s:text name='msg.this.row.cant.be.deleted'/>");
 					}
 				}
 				
@@ -305,7 +305,7 @@
 				<jsp:param value="Bank Entries Not In Bank Book" name="heading" />
 			</jsp:include>
 			<div class="formmainbox">
-				<div class="subheadnew">Bank Entries Not In Bank Book</div>
+				<div class="subheadnew"><s:text name="msg.bank.entries.not.in.bank.book"/> </div>
 
 				<div align="center">
 					<font style='color: red;'>
@@ -329,7 +329,7 @@
 							class="mandatory1">*</span></td>
 						<td class="greybox"><s:select name="bank" id="bank"
 								list="dropdownData.bankList" headerKey="-1" listKey="id"
-								listValue="name" headerValue="----Choose----"
+								listValue="name" headerValue="%{getText('lbl.choose.options')}"
 								onchange="loadBankBranch(this)" value="%{bank}" /></td>
 						<egov:ajaxdropdown id="bank_branch" fields="['Text','Value']"
 							dropdownId="bank_branch"
@@ -340,7 +340,7 @@
 								id="bank_branch" list="dropdownData.bankBranchList"
 								listKey="id"
 								listValue="branchname"
-								headerKey="-1" headerValue="----Choose----"
+								headerKey="-1" headerValue="%{getText('lbl.choose.options')}"
 								onchange="loadBankAccount(this)" value="%{bank_branch}" /></td>
 					</tr>
 					<tr>
@@ -354,7 +354,7 @@
 								id="bankaccount" list="dropdownData.bankAccountList"
 								listKey="id"
 								listValue="chartofaccounts.glcode+'--'+accountnumber"
-								headerKey="-1" headerValue="----Choose----"
+								headerKey="-1" headerValue="%{getText('lbl.choose.options')}"
 								value="%{bankaccount}" /></td>
 						<td class="greybox"></td>
 						<td class="greybox"></td>
@@ -362,8 +362,8 @@
 				</table>
 			</div>
 			<div class="buttonbottom">
-				<input type="button" value="Search" class="buttonsubmit"
-					onclick="return onSearch();" /> <input type="button" value="Close"
+				<input type="button" value="<s:text name='lbl.search'/>" class="buttonsubmit"
+					onclick="return onSearch();" /> <input type="button" value="<s:text name='lbl.close'/>"
 					onclick="javascript:window.close()" class="button" />
 
 			</div>
@@ -377,7 +377,7 @@
 					<tr>
 						<td colspan="6">
 							<div class="subheadsmallnew">
-								<strong>Bank Entries Not In Bank Book Details </strong>
+								<strong><s:text name="msg.bank.entries.not.in.bank.book.details"/> </strong>
 							</div>
 							</div>
 
@@ -408,8 +408,8 @@
 
 
 			<div class="buttonbottom" id="saveButtion">
-				<input type="button" value="Save" class="buttonsubmit"
-					onclick="return onSave();" /> <input type="button" value="Close"
+				<input type="button" value='<s:text name="lbl.save"/>' class="buttonsubmit"
+					onclick="return onSave();" /> <input type="button" value='<s:text name="lbl.close"/>'
 					onclick="javascript:window.close()" class="button" />
 
 			</div>
@@ -424,76 +424,76 @@
 			var fund = document.getElementById("fundId").value;
 			var fund = document.getElementById("fundId").value;
 			if (fund == null || fund == "" || fund == "-1") {
-				bootbox.alert("Please select Fund");
+				bootbox.alert("<s:text name='msg.please.select.fund'/>");
 				return false;
 			} 
 			if (bank == null || bank == "" || bank == "-1") {
-				bootbox.alert("Please select bank");
+				bootbox.alert("<s:text name='msg.please.select.bank'/>");
 				return false;
 			} 
 			 if (bankBranch == null || bankBranch == ""
 					|| bankBranch == "-1") {
-				bootbox.alert("Please select bank branch");
+				bootbox.alert("<s:text name='msg.please.select.bank.branch'/>");
 
 				return false;
 			}  
 			if (bankAccount == null || bankAccount == ""
 					|| bankAccount == "-1") {
-				bootbox.alert("Please select bank account");
+				bootbox.alert("<s:text name='msg.please.select.bank.account'/>");
 				return false;
 			}
 			<s:if test="%{isFieldMandatory('fund')}"> 
 			 if(null != document.getElementById('fundId') && document.getElementById('fundId').value == ""){
-				 bootbox.alert( "Please select a Fund");
+				 bootbox.alert( "<s:text name='msg.please.select.fund'/>");
 				return false;
 			 }    
 		 </s:if>   
 		 <s:if test="%{isFieldMandatory('function')}">                        
 		 if(null != document.getElementById('vouchermis.function') && document.getElementById('vouchermis.function').value == -1){
 
-			 bootbox.alert( "Please select a Function");
+			 bootbox.alert( "<s:text name='msg.please.select.function'/>");
 			return false;
 		 }
 	 	</s:if>
 		<s:if test="%{isFieldMandatory('department')}"> 
 			 if(null!= document.getElementById('vouchermis.departmentid') && document.getElementById('vouchermis.departmentid').value ==""){
 
-				 bootbox.alert( "Please select a Department");
+				 bootbox.alert( "<s:text name='msg.please.select.department'/>");
 				return false;
 			 }
 		</s:if>
 		<s:if test="%{isFieldMandatory('scheme')}"> 
 			 if(null!=document.getElementById('schemeid') &&  document.getElementById('schemeid').value == -1){
 
-				 bootbox.alert( "Please select a Scheme");
+				 bootbox.alert( "<s:text name='msg.please.select.scheme'/>");
 				return false;
 			 }
 		</s:if>
 		<s:if test="%{isFieldMandatory('subscheme')}"> 
 			 if(null!= document.getElementById('subschemeid') && document.getElementById('subschemeid').value == -1){
 
-				 bootbox.alert( "Please select a Subscheme");
+				 bootbox.alert( "<s:text name='msg.please.select.sub.scheme'/>");
 				return false;
 			 }
 		</s:if>
 		<s:if test="%{isFieldMandatory('functionary')}"> 
 			 if(null!=document.getElementById('vouchermis.functionary') &&  document.getElementById('vouchermis.functionary').value == -1){
 
-				 bootbox.alert( "Please select a Functionary");
+				 bootbox.alert( "<s:text name='msg.please.select.functionary'/>");
 				return false;
 			 }
 		</s:if>
 		<s:if test="%{isFieldMandatory('fundsource')}"> 
 			 if(null !=document.getElementById('fundsourceId') &&  document.getElementById('fundsourceId').value == -1){
 
-				 bootbox.alert( "Please select a Fundsource");
+				 bootbox.alert( "<s:text name='msg.please.select.fundsource'/>");
 				return false;
 			}
 		</s:if>
 		<s:if test="%{isFieldMandatory('field')}"> 
 			 if(null!= document.getElementById('vouchermis.divisionid') && document.getElementById('vouchermis.divisionid').value == -1){
 
-				 bootbox.alert( "Please select a Field");
+				 bootbox.alert( "<s:text name='msg.please.select.field'/>");
 				return false;
 			 }
 		</s:if>
@@ -511,76 +511,76 @@
 			var fund = document.getElementById("fundId").value;
 			var fund = document.getElementById("fundId").value;
 			if (fund == null || fund == "" || fund == "-1") {
-				bootbox.alert("Please select Fund");
+				bootbox.alert("<s:text name='msg.please.select.fund'/>");
 				return false;
 			} 
 			if (bank == null || bank == "" || bank == "-1") {
-				bootbox.alert("Please select bank");
+				bootbox.alert("<s:text name='msg.please.select.bank'/>");
 				return false;
 			} 
 			 if (bankBranch == null || bankBranch == ""
 					|| bankBranch == "-1") {
-				bootbox.alert("Please select bank branch");
+				bootbox.alert("<s:text name='msg.please.select.bank.branch'/>");
 
 				return false;
 			}  
 			if (bankAccount == null || bankAccount == ""
 					|| bankAccount == "-1") {
-				bootbox.alert("Please select bank account");
+				bootbox.alert("<s:text name='msg.please.select.bank.account'/>");
 				return false;
 			}
 			<s:if test="%{isFieldMandatory('fund')}"> 
 			 if(null != document.getElementById('fundId') && document.getElementById('fundId').value == ""){
-				 bootbox.alert( "Please select a Fund");
+				 bootbox.alert( "<s:text name='msg.please.select.fund'/>");
 				return false;
 			 }    
 		 </s:if>   
 		 <s:if test="%{isFieldMandatory('function')}">                        
 		 if(null != document.getElementById('vouchermis.function') && document.getElementById('vouchermis.function').value == -1){
 
-			 bootbox.alert( "Please select a Function");
+			 bootbox.alert( "<s:text name='msg.please.select.function'/>");
 			return false;
 		 }
 	 	</s:if>
 		<s:if test="%{isFieldMandatory('department')}"> 
 			 if(null!= document.getElementById('vouchermis.departmentid') && document.getElementById('vouchermis.departmentid').value ==""){
 
-				 bootbox.alert( "Please select a Department");
+				 bootbox.alert( "<s:text name='msg.please.select.department'/>");
 				return false;
 			 }
 		</s:if>
 		<s:if test="%{isFieldMandatory('scheme')}"> 
 			 if(null!=document.getElementById('schemeid') &&  document.getElementById('schemeid').value == -1){
 
-				 bootbox.alert( "Please select a Scheme");
+				 bootbox.alert( "<s:text name='msg.please.select.scheme'/>");
 				return false;
 			 }
 		</s:if>
 		<s:if test="%{isFieldMandatory('subscheme')}"> 
 			 if(null!= document.getElementById('subschemeid') && document.getElementById('subschemeid').value == -1){
 
-				 bootbox.alert( "Please select a Subscheme");
+				 bootbox.alert( "<s:text name='msg.please.select.sub.scheme'/>");
 				return false;
 			 }
 		</s:if>
 		<s:if test="%{isFieldMandatory('functionary')}"> 
 			 if(null!=document.getElementById('vouchermis.functionary') &&  document.getElementById('vouchermis.functionary').value == -1){
 
-				 bootbox.alert( "Please select a Functionary");
+				 bootbox.alert( "<s:text name='msg.please.select.functionary'/>");
 				return false;
 			 }
 		</s:if>
 		<s:if test="%{isFieldMandatory('fundsource')}"> 
 			 if(null !=document.getElementById('fundsourceId') &&  document.getElementById('fundsourceId').value == -1){
 
-				 bootbox.alert( "Please select a Fundsource");
+				 bootbox.alert( "<s:text name='msg.please.select.fundsource'/>");
 				return false;
 			}
 		</s:if>
 		<s:if test="%{isFieldMandatory('field')}"> 
 			 if(null!= document.getElementById('vouchermis.divisionid') && document.getElementById('vouchermis.divisionid').value == -1){
 
-				 bootbox.alert( "Please select a Field");
+				 bootbox.alert( "<s:text name='msg.please.select.field'/>");
 				return false;
 			 }
 		</s:if>

@@ -717,7 +717,7 @@ function disableSelectedRows()
 			<span class="mandatory1"> <s:actionerror /> <s:fielderror />
 				<s:actionmessage />
 			</span>
-			<div class="subheadnew">Bill Payment</div>
+			<div class="subheadnew"><s:text name="lbl.bill.payment"/> </div>
 			<div id="budgetSearchGrid" style="display: block; width: 100%;">
 				<table width="100%" cellpadding="0" cellspacing="0" border="0">
 					<tr>
@@ -729,14 +729,13 @@ function disableSelectedRows()
 										<td>
 											<div class="tabber">
 												<div class="tabbertab" id="searchtab">
-													<h2>Search Bill</h2>
+													<h2><s:text name="lbl.search.bill"/></h2>
 													<span>
 														<table width="100%" border="0" cellspacing="0"
 															cellpadding="0">
 															<tr>
 																<td colspan="6">
-																	<div class="subheadsmallnew" style="border: 0;">Search
-																		Bill</div>
+																	<div class="subheadsmallnew" style="border: 0;"><s:text name="lbl.search.bill"/></div>
 																</td>
 															</tr>
 															<tr>
@@ -803,13 +802,12 @@ function disableSelectedRows()
 													</span>
 												</div>
 												<div class="tabbertab" id="contractortab">
-													<h2>Contractor Bill</h2>
+													<h2><s:text name="lbl.contractor.bill"/> </h2>
 													<span>
 														<table name="contractortable" align="center" border="0"
 															cellpadding="0" cellspacing="0" class="newtable">
 															<tr>
-																<td colspan="6"><div class="subheadsmallnew">Contractor
-																		Bill</div></td>
+																<td colspan="6"><div class="subheadsmallnew"><s:text name="lbl.contractor.bill"/></div></td>
 															</tr>
 															<tr>
 																<td colspan="6">
@@ -817,7 +815,7 @@ function disableSelectedRows()
 																		<table align="left" border="0" cellpadding="0"
 																			cellspacing="0" width="100%">
 																			<tr>
-																				<th class="bluebgheadtdnew">Select<input
+																				<th class="bluebgheadtdnew"><s:text name="lbl.select"/> <input
 																					type="checkbox" name="conSelectAll"
 																					id="conSelectAll"
 																					onclick="selectAllContractors(this)" /> </checkbox></th>
@@ -961,8 +959,7 @@ function disableSelectedRows()
 																		</table>
 																		<s:if
 																			test="contractorList == null || contractorList.size==0">
-																			<div class="subheadsmallnew" style="border: 0;">No
-																				Records Found</div>
+																			<div class="subheadsmallnew" style="border: 0;"><s:text name="msg.no.record.found"/> </div>
 																		</s:if>
 																	</div>
 																</td>
@@ -971,14 +968,13 @@ function disableSelectedRows()
 													</span>
 												</div>
 												<div class="tabbertab" id="suppliertab">
-													<h2>Supplier Bill</h2>
+													<h2><s:text name="lbl.supplier.bill"/> </h2>
 													<span>
 														<table align="center" border="0" cellpadding="0"
 															cellspacing="0" class="newtable" name="supSelectAll"
 															id="supSelectAll">
 															<tr>
-																<td colspan="6"><div class="subheadsmallnew">Supplier
-																		Bill</div></td>
+																<td colspan="6"><div class="subheadsmallnew"><s:text name="lbl.supplier.bill"/></div></td>
 															</tr>
 															<tr>
 																<td colspan="6">
@@ -986,7 +982,7 @@ function disableSelectedRows()
 																		<table align="center" border="0" cellpadding="0"
 																			cellspacing="0" width="100%">
 																			<tr>
-																				<th class="bluebgheadtdnew">Select<input
+																				<th class="bluebgheadtdnew"><s:text name="lbl.select"/><input
 																					type="checkbox" onclick="selectAllSuppliers(this)" />
 																					</checkbox></th>
 
@@ -1126,8 +1122,7 @@ function disableSelectedRows()
 																		</table>
 																		<s:if
 																			test="supplierList == null || supplierList.size==0">
-																			<div class="subheadsmallnew" style="border: 0;">No
-																				Records Found</div>
+																			<div class="subheadsmallnew" style="border: 0;"><s:text name="msg.no.record.found"/></div>
 																		</s:if>
 																	</div>
 																</td>
@@ -1136,13 +1131,12 @@ function disableSelectedRows()
 													</span>
 												</div>
 												<div class="tabbertab" id="cbilltab">
-													<h2>Expense Bill</h2>
+													<h2><s:text name="lbl.expense.bill"/> </h2>
 													<span>
 														<table align="center" border="0" cellpadding="0"
 															cellspacing="0" class="newtable" name="expSelectAll">
 															<tr>
-																<td colspan="6"><div class="subheadsmallnew">Expense
-																		Bill</div></td>
+																<td colspan="6"><div class="subheadsmallnew"><s:text name="lbl.expense.bill"/></div></td>
 															</tr>
 															<tr>
 																<td colspan="6">
@@ -1150,7 +1144,7 @@ function disableSelectedRows()
 																		<table align="center" border="0" cellpadding="0"
 																			cellspacing="0" width="100%">
 																			<tr>
-																				<th class="bluebgheadtdnew">Select<input
+																				<th class="bluebgheadtdnew"><s:text name="lbl.select"/> <input
 																					type="checkbox" id="expSelectAll"
 																					onclick="selectAllContingent(this)" /> </checkbox></th>
 																				<jsp:include page="billdetails-header.jsp" />
@@ -1293,8 +1287,7 @@ function disableSelectedRows()
 																		</table>
 																		<s:if
 																			test="contingentList == null || contingentList.size==0">
-																			<div class="subheadsmallnew" style="border: 0;">No
-																				Records Found</div>
+																			<div class="subheadsmallnew" style="border: 0;"><s:text name="msg.no.record.found"/></div>
 																		</s:if>
 																	</div>
 																</td>
@@ -1327,7 +1320,7 @@ function disableSelectedRows()
 			if(document.getElementById('vouchermis.departmentid'))
 			{
 				var d = document.getElementById('vouchermis.departmentid');
-				d.options[d.selectedIndex].text='----Choose----';
+				d.options[d.selectedIndex].text='<s:text name="lbl.choose.options"/>';
 				d.options[d.selectedIndex].text.value=-1;
 			}
 		</script>
@@ -1355,7 +1348,7 @@ function disableSelectedRows()
 				<table align="center" width="100%">
 					<tr>
 						<td class="text-right view-content">
-								Total:  
+								<s:text name="lbl.total"/> :  
 						</td>
 						<td width="10%" class="text-right view-content"><div id="totalPaymentAmount">0.00</div></td>
 					</tr>
@@ -1364,12 +1357,12 @@ function disableSelectedRows()
 									name="payment.mode" /><span class="mandatory1">*</span></strong> <input
 							name="paymentMode" id="paymentModecheque" checked="checked"
 							value="cheque" type="radio"><label
-							for="paymentModecheque">Cheque</label> <input name="paymentMode"
+							for="paymentModecheque"><s:text name="lbl.cheque"/> </label> <input name="paymentMode"
 							id="paymentModecash" value="cash" type="radio"><label
 							for="paymentModecash"><s:text
 									name="cash.consolidated.cheque" /></label><input name="paymentMode"
 							id="paymentModertgs" value="rtgs" type="radio"><label
-							for="paymentModertgs">RTGS</label></td>
+							for="paymentModertgs"><s:text name="lbl.rtgs"/></label></td>
 					</tr>
 					<tr>
 						<td colspan="2" align="center">
@@ -1380,12 +1373,11 @@ function disableSelectedRows()
 						</td>
 					</tr>
 					<tr>
-					<td align="center" colspan="2"><br/><input type="button" class="buttonsubmit" value="Generate Payment" id="generatePayment" onclick="return check();"/></td>
+					<td align="center" colspan="2"><br/><input type="button" class="buttonsubmit" value="<s:text name='lbl.generate.payment'/>"  id="generatePayment" onclick="return check();"/></td>
 					</tr>
 					<tr>
 						<td colspan="2" class="text-center">
-					 		<font size="small" color="red">*Maximum of 500 records are
-								displayed here<br>*You can select Maximum of 125 bills for single payment</font>
+					 		<font size="small" color="red">*<s:text name="msg.max.record.display.warning"/><br>*<s:text name="msg.you.can.select.max.125.bills.for.single.payment"/> </font>
 						</td>
 					</tr>
 </table>

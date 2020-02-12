@@ -53,6 +53,7 @@
 <%@ taglib uri="/WEB-INF/tags/cdn.tld" prefix="cdn" %>
 
 <head>
+<script src="<cdn:url value='/resources/app/js/i18n/jquery.i18n.properties.js?rnd=${app_release_no}' context='/services/EGF'/>"></script>
 <script type="text/javascript" src="<cdn:url value='/resources/app/js/reconciliationHelper.js?rnd=${app_release_no}'/>"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
@@ -117,7 +118,7 @@
 						url="/voucher/common-ajaxLoadBankBranchesByBank.action" />
 					<td class="greybox"><s:select name="reconcileBean.bankId" id="bankId"
 							list="dropdownData.bankList" listKey="id" listValue="name"
-							headerKey="" headerValue="----Choose----"
+							headerKey="" headerValue="%{getText('lbl.choose.options')}"
 							onchange="populatebranch(this);" value="%{bankId}" /></td>
 					<td class="greybox"><s:text name="bankbranch" /> <span
 						class="greybox"><span class="mandatory1">*</span></span></td>
@@ -126,7 +127,7 @@
 						url="/voucher/common-ajaxLoadBankAccountsByBranch.action" />
 					<td class="greybox"><s:select name="reconcileBean.branchId" id="branchId"
 							list="dropdownData.branchList" listKey="id" listValue="name"
-							headerKey="" headerValue="----Choose----"
+							headerKey="" headerValue="%{getText('lbl.choose.options')}"
 							onchange="populateaccount(this);" /></td>
 				</tr>
 				<tr>
@@ -136,7 +137,7 @@
 					<td class="bluebox"><s:select name="reconcileBean.accountId" id="accountId"
 							list="dropdownData.accountList" listKey="id"
 							listValue="accountnumber" headerKey=""
-							headerValue="----Choose----" /></td>
+							headerValue="%{getText('lbl.choose.options')}" /></td>
 					<td class="bluebox"><s:text name="reconciliationdate" /> <span
 						class="bluebox"><span class="mandatory1">*</span></span></td>
 					<td class="bluebox"><input type="text" name="reconcileBean.reconciliationDate" class="form-control datepicker"
@@ -176,11 +177,11 @@
 				<table>
 					<tr>
 						<td><input  type="button" class="buttonsubmit"
-								value="Search" name="Search" method="search"
+								value='<s:text name="lbl.search"/>' name="Search" method="search"
 								onclick="return validateSubmit();" /></td>
-                <td><input type="button" value="Show Pendings"
+                <td><input type="button" value='<s:text name="lbl.show.pending"/>'
                         onclick="showBalance()" class="buttonsubmit" /></td>
-						<td><input type="button" value="Close"
+						<td><input type="button" value='<s:text name="lbl.close"/>'
 							onclick="javascript:window.close()" class="buttonsubmit" /></td>
 					</tr>
 				</table>

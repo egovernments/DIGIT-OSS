@@ -58,7 +58,7 @@
 			</s:if></td>
 		<td class="greybox"><s:select name="fundId" id="fundId"
 				list="dropdownData.fundList" listKey="id" listValue="name"
-				headerKey="" headerValue="----Choose----"
+				headerKey="" headerValue="%{getText('lbl.choose.options')}"
 				onChange="populateSchemes(this);loadBank(this);"
 				value="%{fundId.id}" /></td>
 	</s:if>
@@ -72,7 +72,7 @@
 			</s:if></td>
 		<td class="greybox"><s:select list="dropdownData.schemeList"
 				name="vouchermis.schemeid" id="schemeid" listKey="id"
-				listValue="name" headerKey="-1" headerValue="----Choose----"
+				listValue="name" headerKey="-1" headerValue="%{getText('lbl.choose.options')}"
 				onChange="populatesubSchemes(this)"
 				value="voucherHeader.vouchermis.schemeid.id" /></td>
 	</s:if>
@@ -89,7 +89,7 @@
 			</s:if></td>
 		<td class="bluebox"><s:select name="vouchermis.subschemeid"
 				id="subschemeid" list="dropdownData.subschemeList" listKey="id"
-				listValue="name" headerKey="-1" headerValue="----Choose----"
+				listValue="name" headerKey="-1" headerValue="%{getText('lbl.choose.options')}"
 				value="voucherHeader.vouchermis.subschemeid.id"
 				onChange="populateFundSource(this)" /></td>
 	</s:if>
@@ -103,7 +103,7 @@
 			</s:if></td>
 		<td class="bluebox"><s:select name="vouchermis.fundsource"
 				id="fundsourceId" list="dropdownData.fundsourceList" listKey="id"
-				listValue="name" headerKey="-1" headerValue="----Choose----"
+				listValue="name" headerKey="-1" headerValue="%{getText('lbl.choose.options')}"
 				value="voucherHeader.vouchermis.fundsource.id" /></td>
 	</s:if>
 </tr>
@@ -118,7 +118,7 @@
 		<td class="greybox"><s:select name="vouchermis.departmentcode"
 				id="vouchermis.departmentid" list="dropdownData.departmentList"
 				listKey="code" listValue="name" headerKey=""
-				headerValue="----Choose----"
+				headerValue="%{getText('lbl.choose.options')}"
 				value="%{voucherHeader.vouchermis.departmentcode}"
 				 /></td>
 	</s:if>
@@ -130,7 +130,7 @@
 		<td class="greybox"><s:select name="vouchermis.divisionid"
 				id="vouchermis.divisionid" list="dropdownData.fieldList"
 				listKey="id" listValue="name" headerKey="-1"
-				headerValue="----Choose----"
+				headerValue="%{getText('lbl.choose.options')}"
 				value="voucherHeader.vouchermis.divisionid.id" /></td>
 	</s:if>
 </tr>
@@ -144,7 +144,7 @@
 		<td class="bluebox"><s:select name="vouchermis.functionary"
 				id="vouchermis.functionary" list="dropdownData.functionaryList"
 				listKey="id" listValue="name" headerKey="-1"
-				headerValue="----Choose----"
+				headerValue="%{getText('lbl.choose.options')}"
 				value="voucherHeader.vouchermis.functionary.id" style="width:180px" /></td>
 	</s:if>
 	<s:if test="%{shouldShowHeaderField('function')}">
@@ -155,7 +155,7 @@
 		<td class="bluebox"><s:select name="vouchermis.function"
 				id="vouchermis.function" list="dropdownData.functionList"
 				listKey="id" listValue="name" headerKey="-1"
-				headerValue="----Choose----" value="%{vouchermis.function.id}" /></td>
+				headerValue="%{getText('lbl.choose.options')}" value="%{vouchermis.function.id}" /></td>
 	</s:if>
 
 </tr>
@@ -187,69 +187,69 @@ function validateMIS(){
 			<s:if test="%{isFieldMandatory('vouchernumber')}"> 
 				 if(null != document.getElementById('voucherNumber') && document.getElementById('voucherNumber').value.trim().length == 0 ){
 
-					document.getElementById('lblError').innerHTML = "Please enter a voucher number";
+					document.getElementById('lblError').innerHTML = "<s:text name='msg.please.enter.voucher.number'/>";
 					return false;
 				 }
 			 </s:if>
 		 <s:if test="%{isFieldMandatory('voucherdate')}"> 
 				 if(null != document.getElementById('voucherDate') && document.getElementById('voucherDate').value.trim().length == 0){
 
-					document.getElementById('lblError').innerHTML = "Please enter a voucher date";
+					document.getElementById('lblError').innerHTML = "<s:text name='msg.please.enter.voucher.date'/>";
 					return false;
 				 }
 			 </s:if>
 		 <s:if test="%{isFieldMandatory('fund')}"> 
 				 if(null != document.getElementById('fundId') && document.getElementById('fundId').value ==""){
 
-					document.getElementById('lblError').innerHTML = "Please Select a fund";
+					document.getElementById('lblError').innerHTML = "<s:text name='msg.please.select.fund'/>";
 					return false;
 				 }
 			 </s:if>
 			<s:if test="%{isFieldMandatory('department')}"> 
 				 if(null!= document.getElementById('vouchermis.departmentid') && document.getElementById('vouchermis.departmentid').value ==""){
 
-					document.getElementById('lblError').innerHTML = "Please select a department";
+					document.getElementById('lblError').innerHTML = "<s:text name='msg.please.select.department'/>";
 					return false;
 				 }
 			</s:if>
 			<s:if test="%{isFieldMandatory('scheme')}"> 
 				 if(null!=document.getElementById('schemeid') &&  document.getElementById('schemeid').value ==""){
 
-					document.getElementById('lblError').innerHTML = "Please select a scheme";
+					document.getElementById('lblError').innerHTML = "<s:text name='msg.please.select.scheme'/>";
 					return false;
 				 }
 			</s:if>
 			<s:if test="%{isFieldMandatory('subscheme')}"> 
 				 if(null!= document.getElementById('subschemeid') && document.getElementById('subschemeid').value ==""){
 
-					document.getElementById('lblError').innerHTML = "Please select a subscheme";
+					document.getElementById('lblError').innerHTML = "<s:text name='msg.please.select.sub.scheme'/>";
 					return false;
 				 }
 			</s:if>
 			<s:if test="%{isFieldMandatory('functionary')}"> 
 				 if(null!=document.getElementById('vouchermis.functionary') &&  document.getElementById('vouchermis.functionary').value ==""){
 
-					document.getElementById('lblError').innerHTML = "Please select a functionary";
+					document.getElementById('lblError').innerHTML = "<s:text name='msg.please.select.functionary'/>";
 					return false;
 				 }
 			</s:if>
 			<s:if test="%{isFieldMandatory('fundsource')}"> 
 				 if(null !=document.getElementById('fundsourceId') &&  document.getElementById('fundsourceId').value ==""){
 
-					document.getElementById('lblError').innerHTML = "Please select a fundsource";
+					document.getElementById('lblError').innerHTML = "<s:text name='msg.please.select.fundsource'/>";
 					return false;
 				}
 			</s:if>
 			<s:if test="%{isFieldMandatory('field')}"> 
 				 if(null!= document.getElementById('vouchermis.divisionid') && document.getElementById('vouchermis.divisionid').value ==""){
 
-					document.getElementById('lblError').innerHTML = "Please select a field";
+					document.getElementById('lblError').innerHTML = "<s:text name='msg.please.select.field'/>";
 					return false;
 				 }
 			</s:if>
 			<s:if test="%{isFieldMandatory('function')}">                     
 				 if(null!= document.getElementById('functionId') && document.getElementById('functionId').value == -1){
-					document.getElementById('lblError').innerHTML = "Please select a function";                                   
+					document.getElementById('lblError').innerHTML = "<s:text name='msg.please.select.function'/>";                                   
 					return false;
 				 }            
 			</s:if>
