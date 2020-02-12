@@ -92,7 +92,7 @@ jQuery(function () {
 		var bankAccId=jQuery("#bankAccId").val();
         var url= "/services/EGF/brs/bankReconciliationDetails.action";
 	jQuery("#issuedChequAndDDId").click(function () {
-		opt.title="Cheques/DD issued but not presented in bank";
+		opt.title="<s:text name='msg.cheque.dd.issued.but.not.present.in.bank'/>";
 		jQuery.ajax({
             type: "POST",
             url:url,
@@ -106,7 +106,7 @@ jQuery(function () {
     });
 
 	jQuery("#issuedOtherInstrumentsId").click(function () {
-		opt.title="Other instruments issued but not presented in bank";
+		opt.title="<s:text name='msg.other.instruments.issued.but.not.presented.in.bank'/>";
 		jQuery.ajax({
             type: "POST",
             url: url,
@@ -120,7 +120,7 @@ jQuery(function () {
     });
 
 	jQuery("#unReconciledCrBrsEntryId").click(function () {
-		opt.title="Credit given by Bank either for interest or for any other account but not accounted for in Bank Book";
+		opt.title="<s:text name='msg.credit.given.by.bank.either.for.insterest.or.for.any.other.account'/>";
 		jQuery.ajax({
             type: "POST",
             url: url,
@@ -134,7 +134,7 @@ jQuery(function () {
     });
 
 	jQuery("#unReconciledDrBrsEntryId").click(function () {
-		opt.title="Service Charges/Bank Charges or any other charge levied by the Bank but not accounted for Bank book";
+		opt.title="<s:text name='msg.service.charge.bank.cherges.or.any.other.charge.levied.by.bank'/>";
 		jQuery.ajax({
             type: "POST",
             url:url,
@@ -148,7 +148,7 @@ jQuery(function () {
     });
 
     jQuery("#unReconciledDrId").click(function () {
-		opt.title="Cheques Deposited but not cleared";
+		opt.title="<s:text name='msg.cheques.deposited.but.not.cleared'/>";
 		jQuery.ajax({
             type: "POST",
             url: url,
@@ -182,12 +182,12 @@ jQuery(function () {
 				</tr>
 				<tr>
 					<td style="width: 5%"></td>
-					<td class="bluebox">Bank <span class="bluebox"><span
+					<td class="bluebox"><s:text name="lbl.bank"/> :<span class="bluebox"><span
 							class="mandatory1">*</span></span></td>
 					<td class="bluebox"><s:textfield name="bank" id="bank"
 							readonly="true" /><s:hidden name="bankAccount.id" id="bankAccId"></s:hidden>
 							</td>
-					<td class="bluebox">Branch <span class="bluebox"><span
+					<td class="bluebox"><s:text name="lbl.bank.branch"/> : <span class="bluebox"><span
 							class="mandatory1">*</span></span></td>
 					<td class="bluebox"><s:textfield name="branch" id="branch"
 							readonly="true" /></td>
@@ -199,11 +199,11 @@ jQuery(function () {
 
 				<tr>
 					<td style="width: 5%"></td>
-					<td class="bluebox">Account Number:<span class="bluebox"><span
+					<td class="bluebox"><s:text name="lbl.account.number"/> :<span class="bluebox"><span
 							class="mandatory1">*</span></span></td>
 					<td class="bluebox"><s:textfield name="accountNum"
 							id="accountNum" readonly="true" /></td>
-					<td class="bluebox">Bank Statement Balance:<span
+					<td class="bluebox"><s:text name="lbl.bank.statement.balance"/> :<span
 						class="bluebox"><span class="mandatory1">*</span></span></td>
 					<td class="bluebox"><s:textfield name="balanceAsPerStatement"
 							id="balanceAsPerStatement" readonly="true" /></td>
@@ -212,7 +212,7 @@ jQuery(function () {
 
 				<tr>
 					<td style="width: 5%"></td>
-					<td class="bluebox">Bank Statement Date:<span class="bluebox"><span
+					<td class="bluebox"><s:text name="lbl.bank.statement.date"/> :<span class="bluebox"><span
 							class="mandatory1">*</span></span></td>
 					<s:date name="bankStmtDate" format="dd/MM/yyyy" var="formtDate" />
 					<td class="greybox"><s:textfield name="bankStmtDate"
@@ -230,25 +230,23 @@ jQuery(function () {
 
 				<tr>
 					<td colspan=3 width="70%" class="blueborderfortd"
-						style="font-weight: bold;"><div align="center">Particulars</div></td>
+						style="font-weight: bold;"><div align="center"><s:text name="lbl.particulars"/> </div></td>
 					<td width="15%" class="blueborderfortd" style="font-weight: bold;"><div
-							align="center">Amount (Rs)</div></td>
+							align="center"><s:text name="lbl.amount"/>  (Rs) </div></td>
 					<td width="15%" class="blueborderfortd" style="font-weight: bold;"><div
-							align="center">Amount (Rs)</div></td>
+							align="center"><s:text name="lbl.amount"/> (Rs)</div></td>
 				</tr>
 
 				<tr>
 					<td colspan=3 class="blueborderfortd" valign="center"
-						style="font-weight: bold;">&nbsp;&nbsp;&nbsp;Balance as per
-						Bank Book</td>
+						style="font-weight: bold;">&nbsp;&nbsp;&nbsp;<s:text name="lbl.balance.as.per.bank.book"/> </td>
 					<td class="blueborderfortd" align="right"></td>
 					<td class="blueborderfortd" align="right"><div align="right">
 							<s:property value="accountBalance" />
 						</div></td>
 				</tr>
 				<tr>
-					<td colspan=3 class=blueborderfortd valign="center">&nbsp;&nbsp;&nbsp;Add:
-						Cheques/DD issued but not presented in bank</td>
+					<td colspan=3 class=blueborderfortd valign="center">&nbsp;&nbsp;&nbsp;<s:text name="lbl.cheque.dd.issued.but.not.presented.in.bank"/> </td>
 					<td class="blueborderfortd"><div align="right"
 							name="addAmountDebit" id="addAmountDebit" readOnly>&nbsp;</div></td>
 					<td class="blueborderfortd"><div align="right"
@@ -261,8 +259,7 @@ jQuery(function () {
 				</tr>
 
 				<tr>
-					<td colspan=3 class="blueborderfortd" valign="center">&nbsp;&nbsp;&nbsp;Add:
-						Other instruments issued but not presented in bank</td>
+					<td colspan=3 class="blueborderfortd" valign="center">&nbsp;&nbsp;&nbsp;<s:text name="lbl.other.instrument.issued.but.not.presented.in.bank"/> </td>
 					<td class="blueborderfortd"><div align="right"
 							name="addAmountDebit" id="addAmountDebit" readOnly>&nbsp;</div></td>
 					<td class="blueborderfortd"><div align="right"
@@ -274,9 +271,8 @@ jQuery(function () {
 						</div></td>
 				</tr>
 				<tr>
-					<td colspan=3 class="blueborderfortd" valign="center">&nbsp;&nbsp;&nbsp;Add:
-						Credit given by Bank either for interest or for any other account<br>&nbsp;&nbsp;&nbsp;
-						but not accounted for in Bank Book
+					<td colspan=3 class="blueborderfortd" valign="center">&nbsp;&nbsp;&nbsp;<s:text name="lbl.credit.given.by.bank.either.for.interest.or.for.any.other.account"/> <br>&nbsp;&nbsp;&nbsp;
+						<s:text name="lbl.not.accounted.for.in.bank.book"/>
 					</td>
 					<td class="blueborderfortd"><div align="right"
 							name="addOthersAmountDebit" id="addOthersAmountDebit" readOnly>&nbsp;</div></td>
@@ -305,7 +301,7 @@ jQuery(function () {
 				</tr>
 				<tr>
 					<td colspan=3 class="blueborderfortd" valign="center">&nbsp;&nbsp;&nbsp;
-						Less: Cheques Deposited but not cleared</td>
+						<s:text name="lbl.less.cheque.deposited.but.not.cleared"/> </td>
 					<td class="blueborderfortd"><div align="right"
 							name="lessAmountDebit" id="lessAmountDebit" readOnly>&nbsp;</div></td>
 					<td class="blueborderfortd"><div align="right"
@@ -319,7 +315,7 @@ jQuery(function () {
 
 				<tr>
 					<td colspan=3 class="blueborderfortd" valign="center">&nbsp;&nbsp;&nbsp;
-						Less: Other Instruments Deposited but not cleared</td>
+						<s:text name="lbl.less.other.instruments.deposited.but.not.cleared"/> </td>
 					<td class="blueborderfortd"><div align="right"
 							name="lessAmountDebit" id="lessAmountDebit" readOnly>&nbsp;</div></td>
 					<td class="blueborderfortd"><div align="right"
@@ -332,9 +328,7 @@ jQuery(function () {
 				</tr>
 				<tr>
 					<td colspan=3 class="blueborderfortd" valign="center">
-						&nbsp;&nbsp;&nbsp; Less: Service Charges / Bank Charges or any
-						other charge levied by<br> &nbsp;&nbsp;&nbsp;&nbsp;the Bank
-						but not accounted for Bank book
+						&nbsp;&nbsp;&nbsp; <s:text name="lbl.lest.service.bank.charges.or.any.other.charges.levied.by.bank"/><br> &nbsp;&nbsp;&nbsp;&nbsp;<s:text name="lbl.not.accounted.for.in.bank.book"/>
 					</td>
 					<td class="blueborderfortd"><div align="right"
 							name="lessOthersAmountDebit" id="lessOthersAmountDebit" readOnly>&nbsp;</div></td>
@@ -365,8 +359,7 @@ jQuery(function () {
 				</tr>
 				<tr>
 					<td colspan=3 class="blueborderfortd" valign="center"
-						style="font-weight: bold;">&nbsp;&nbsp;&nbsp; Bank Balance as
-						per Bank Statement</td>
+						style="font-weight: bold;">&nbsp;&nbsp;&nbsp; <s:text name="lbl.bank.bal.as.per.bank.statement"/> </td>
 					<td class="blueborderfortd"><div align="right"
 							name="bankBalanceDebit" id="bankBalanceDebit" readOnly>&nbsp;</div></td>
 					<td class="blueborderfortd"><div align="right"
@@ -383,10 +376,10 @@ jQuery(function () {
 			<table align=center>
 				<tr id="hideRow1" class="row1">
 
-					<td><input type="button" id="Close" value="Close"
+					<td><input type="button" id="Close" value='<s:text name="lbl.close"/>'
 						onclick="javascript:window.close()" class="button" /></td>
 					<td><input name="button" type="button" class="buttonsubmit"
-						id="button1" value="Print" onclick="window.print()" />&nbsp;</td>
+						id="button1" value='<s:text name="lbl.print"/>' onclick="window.print()" />&nbsp;</td>
 				</tr>
 			</table>
 			<div id="dialog" style="display: none">

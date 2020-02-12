@@ -103,7 +103,7 @@
 					<td class="greybox"><s:select name="bank_branch"
 							id="bank_branch" list="dropdownData.bankbranchList"
 							listKey="bankBranchId" listValue="bankBranchName" headerKey="-1"
-							headerValue="----Choose----" onchange="loadBankAccount(this)" /></td>
+							headerValue="%{getText('lbl.choose.options')}" onchange="loadBankAccount(this)" /></td>
 					<egov:ajaxdropdown id="bankaccount" fields="['Text','Value']"
 						dropdownId="bankaccount"
 						url="voucher/common-ajaxLoadBanksAccountsWithAssignedCheques.action" />
@@ -112,7 +112,7 @@
 					<td class="greybox" colspan="2"><s:select name="bankaccount"
 							id="bankaccount" list="dropdownData.bankaccountList" listKey="id"
 							listValue="chartofaccounts.glcode+'--'+accountnumber+'---'+accounttype"
-							headerKey="-1" headerValue="----Choose----"
+							headerKey="-1" headerValue="%{getText('lbl.choose.options')}"
 							value="%{bankaccount}" /></td>
 				</tr>
 				<tr>
@@ -124,7 +124,7 @@
 							</s:if></td>
 						<td class="greybox"><s:select name="department"
 								id="department" list="dropdownData.departmentList" listKey="code"
-								listValue="name" headerKey="" headerValue="----Choose----"
+								listValue="name" headerKey="" headerValue="%{getText('lbl.choose.options')}"
 								value="%{department}" />
 						<td>
 					</s:if>
@@ -134,9 +134,9 @@
 
 			</table>
 			<div class="buttonbottom">
-				<s:submit onclick="onSubmit();" value="Search" id="searchBtn"
+				<s:submit onclick="onSubmit();" key="lbl.search" id="searchBtn"
 					cssClass="buttonsubmit" />
-				<input type="button" value="Close"
+				<input type="button" value='<s:text name="lbl.close"/>'
 					onclick="javascript:window.close();window.parent.postMessage('close','*');" class="button" />
 			</div>
 		</div>

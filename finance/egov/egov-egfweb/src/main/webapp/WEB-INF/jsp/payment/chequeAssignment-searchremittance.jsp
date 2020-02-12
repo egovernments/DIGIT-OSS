@@ -53,7 +53,7 @@
 <head>
 <link rel="stylesheet" type="text/css"
 	href="/services/EGF/resources/css/ccMenu.css?rnd=${app_release_no}" />
-<title>Cheque Assignment Search</title>
+<title><s:text name="chq.assignment.heading.search" /></title>
 <meta http-equiv="Content-Type"
 	content="text/html; charset=windows-1252">
 </head>
@@ -193,7 +193,7 @@
 				</s:iterator>
 			</table>
 			<div class="subheadsmallnew" id="noRecordsDiv"
-				style="visibility: hidden">No Records Found</div>
+				style="visibility: hidden"><s:text name="msg.no.record.found"/> </div>
 			<br />
 			<div id="departmentDiv" style="visibility: visible">
 				<s:hidden name="reassignSurrenderChq" />
@@ -203,7 +203,7 @@
 							class="mandatory"></span> <s:select
 								name="vouchermis.departmentcode" id="departmentid"
 								list="dropdownData.departmentList" listKey="code" listValue="name"
-								headerKey="-1" headerValue="----Choose----"
+								headerKey="-1" headerValue="%{getText('lbl.choose.options')}"
 								value="%{voucherHeader.vouchermis.departmentid.id}" /></td>
 						<td class="greybox"><s:text
 								name="chq.assignment.instrument.serialno" /><span
@@ -262,9 +262,9 @@
 				<s:hidden id="bankaccount" name="bankaccount" value="%{bankaccount}" />
 				<s:hidden id="selectedRowsId" name="selectedRowsId"
 					value="%{selectedRowsId}" />
-				<input type="button" id="assignChequeBtn" method="create" value="Assign Cheque"
+				<input type="button" id="assignChequeBtn" method="create" value='<s:text name="lbl.assign.cheque"></s:text>'
 					class="buttonsubmit" onclick="return validate()" />
-				<input type="button" value="Close"
+				<input type="button" value='<s:text name="lbl.close"/>'
 					onclick="javascript:window.close()" class="button" />
 			</div>
 		</div>
@@ -284,22 +284,22 @@
 				
 				if(dom.get('departmentid') && dom.get('departmentid').options[dom.get('departmentid').selectedIndex].value==-1)
 				{
-					bootbox.alert('Select Cheque Issued From');
+					bootbox.alert('<s:text name="chq.assignment.department.mandatory"/>');
 					return false;
 				}
 				if(document.getElementById('selectedRows').value=='' || document.getElementById('selectedRows').value==0)
 				{
-					bootbox.alert('Please select the payment voucher');
+					bootbox.alert('<s:text name="msg.please.select.the.payment.voucher"/>');
 					return false;
 				}
 				if(document.getElementById('chequeDt')==null || document.getElementById('chequeDt').value=="")
 				{
-					bootbox.alert('Please enter cheque date');
+					bootbox.alert('<s:text name="msg.please.enter.cheque.date"/>');
 					return false;
 				}
 				if(document.getElementById('inFavourOf')==null || document.getElementById('inFavourOf').value=="")
 				{
-					bootbox.alert('Please enter in Favour of');
+					bootbox.alert('<s:text name="msg.please.enter.in.favour.of"/>');
 					return false;
 				}
 				dom.get('departmentid').disabled=false;
@@ -331,7 +331,7 @@
 				var chequeNo=document.getElementById('chequeNumber0').value;
 				
 				if(chequeNo==null || chequeNo==''){
-						bootbox.alert('Please enter a valid cheque Number');  
+						bootbox.alert('<s:text name="msg.please.enter.valid.cheque.number"/>');  
 							return false;
 				}else{
 				for(var index=0;index<chequeSize;index++){
@@ -340,7 +340,7 @@
 						chkCount++;
 					
 					if( compareDate(paymentDate,chequeDate) == -1){               
-						bootbox.alert('Cheque Date cannot be less than payment Date');
+						bootbox.alert('<s:text name="msg.cheque.date.cant.be.less.than.payment.date"/>');
 						return false;
 					}
 					if(chkCount==noOfSelectedRows){
@@ -356,13 +356,13 @@
 			{
 				if(isNaN(obj.value))
 				{
-					bootbox.alert('Cheque number contains alpha characters.');
+					bootbox.alert('<s:text name="msg.cheque.number.contains.alpha.char"/>');
 					obj.value='';
 					return false;
 				}
 				if(obj.value.length!=6)
 				{
-					bootbox.alert("Cheque number must be 6 digits long.");
+					bootbox.alert("<s:text name='msg.cheque.number.must.be.six.digit.long'/>");
 					obj.value='';
 					return false;
 				}
@@ -371,7 +371,7 @@
 				var pattNegative=/-/i;
 				if(obj.value.match(pattPeriod)!=null || obj.value.match(pattNegative)!=null )
 				{
-					bootbox.alert('Cheque number should contain only numbers');
+					bootbox.alert('<s:text name="msg.cheque.num.should.contaain.only.number"/>');
 					obj.value='';
 					return false;
 				}
@@ -381,7 +381,7 @@
 					
 				if(dom.get('departmentid') && dom.get('departmentid').options[dom.get('departmentid').selectedIndex].value==-1)
 				{
-					bootbox.alert('Select Cheque Issued From');
+					bootbox.alert('<s:text name="chq.assignment.department.mandatory"/>');
 					obj.value='';
 					return false;
 				}
@@ -397,13 +397,13 @@
 			{
 				if(isNaN(obj.value))
 				{
-					bootbox.alert('Cheque number contains alpha characters.');
+					bootbox.alert('<s:text name="msg.cheque.number.contains.alpha.char"/>');
 					obj.value='';
 					return false;
 				}
 				if(obj.value.length!=6)
 				{
-					bootbox.alert("Cheque number must be 6 digits long.");
+					bootbox.alert("<s:text name='msg.cheque.number.must.be.six.digit.long'/>");
 					obj.value='';
 					return false;
 				}
@@ -412,7 +412,7 @@
 				var pattNegative=/-/i;
 				if(obj.value.match(pattPeriod)!=null || obj.value.match(pattNegative)!=null )
 				{
-					bootbox.alert('Cheque number should contain only numbers');
+					bootbox.alert('<s:text name="msg.cheque.num.should.contaain.only.number"/>');
 					obj.value='';
 					return false;
 				}
@@ -422,7 +422,7 @@
 					
 				if(dom.get('departmentid') && dom.get('departmentid').options[dom.get('departmentid').selectedIndex].value==-1)
 				{
-					bootbox.alert('Select Cheque Issued From');
+					bootbox.alert('<s:text name="chq.assignment.department.mandatory"/>');
 					obj.value='';
 					return false;
 				}
@@ -448,7 +448,7 @@
 					res = res.split('~');
 					if(res[1]=='false')
 					{
-						bootbox.alert('Enter valid cheque number or This Cheque number has been already used');
+						bootbox.alert('<s:text name="msg.enter.valid.cheque.number.or.cheque.already.used"/>');
 						document.getElementById('chequeNumber'+parseInt(res[0])).value='';
 					}
 			    },
@@ -462,7 +462,7 @@
 					res = res.split('~');
 					if(res[1]=='false')
 					{
-						bootbox.alert('This cheque number is not there in the surrendered list');     
+						bootbox.alert('<s:text name="msg.cheque.num.not.exist.in.surrendered.list"/>');     
 						document.getElementById('chequeNumber'+parseInt(res[0])).value='';
 					}
 			    },
@@ -477,12 +477,12 @@
 				
 				 var chkDate =  Date.parse(obj.value);
 				 if(isNaN(chkDate))  {                
-					bootbox.alert("Please enter a valid cheque date")
+					bootbox.alert("<s:text name='msg.please.enter.valid.cheque.date'/>")
 					return false;
 				 }
 				 var chequeDate=obj.value;
 				 if( compareDate(paymentDate,chequeDate) == -1){               
-						bootbox.alert('Cheque Date cannot be less than than payment Date');
+						bootbox.alert('<s:text name="msg.cheque.date.cant.be.less.than.payment.date"/>');
 						obj.value='';
 					    obj.focus();
 						return false;

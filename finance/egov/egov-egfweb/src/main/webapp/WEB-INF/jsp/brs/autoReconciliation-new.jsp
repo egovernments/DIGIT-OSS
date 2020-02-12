@@ -52,6 +52,7 @@
 <%@ page language="java"%>
 <%@ taglib uri="/WEB-INF/tags/cdn.tld" prefix="cdn" %>
 <head>
+<script src="<cdn:url value='/resources/app/js/i18n/jquery.i18n.properties.js?rnd=${app_release_no}' context='/services/EGF'/>"></script>
 <script src="<cdn:url value='/resources/app/js/reconciliationHelper.js?rnd=${app_release_no}' />"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title><s:text name="bankreconciliation" /></title>
@@ -113,7 +114,7 @@ function validateSubmit() {
 							url="/voucher/common-ajaxLoadBankBranchesByBank.action" />
 						<td class="greybox"><s:select name="bankId" id="bankId"
 								list="dropdownData.bankList" listKey="id" listValue="name"
-								headerKey="" headerValue="----Choose----"
+								headerKey="" headerValue="%{getText('lbl.choose.options')}"
 								onchange="populatebranch(this);" value="%{bankId}" /></td>
 						<td class="greybox"><s:text name="bankbranch" /> <span
 							class="greybox"><span class="mandatory1">*</span></span></td>
@@ -122,7 +123,7 @@ function validateSubmit() {
 							url="/voucher/common-ajaxLoadBankAccountsByBranch.action" />
 						<td class="greybox"><s:select name="branchId" id="branchId"
 								list="dropdownData.branchList" listKey="id" listValue="name"
-								headerKey="" headerValue="----Choose----"
+								headerKey="" headerValue="%{getText('lbl.choose.options')}"
 								onchange="populateaccount(this);" /></td>
 					</tr>
 					<tr>
@@ -132,7 +133,7 @@ function validateSubmit() {
 						<td class="bluebox"><s:select name="accountId" id="accountId"
 								list="dropdownData.accountList" listKey="id"
 								listValue="accountnumber" headerKey=""
-								headerValue="----Choose----" /></td>
+								headerValue="%{getText('lbl.choose.options')}" /></td>
 						<td class="bluebox"><s:text name="reconciliationdate" /> <span
 							class="bluebox"><span class="mandatory1">*</span></span></td>
 						<td class="greybox"><s:date name="reconciliationDate"
@@ -170,9 +171,9 @@ function validateSubmit() {
 					<table>
 						<tr>
 							<td><input type="submit" class="buttonsubmit"
-								value="Process" name="Schedule" method="schedule"
+								value="<s:text name='lbl.process'/>" name="Schedule" method="schedule"
 								onclick="return validateSubmit();" /></td>
-							<td><input type="button" value="Close"
+							<td><input type="button" value="<s:text name='lbl.close'/>"
 								onclick="javascript:window.close()" class="buttonsubmit" /></td>
 						</tr>
 					</table>

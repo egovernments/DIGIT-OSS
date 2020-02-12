@@ -65,7 +65,7 @@ jQuery(document).ready(function() {
 		if (jQuery.inArray(ext, fileformats) > -1) {
 			//do something    
 		} else {
-			bootbox.alert(ext + " file format is not allowed");
+			bootbox.alert(ext + "<s:text name='msg.file.format.not.allowed'/>");
 			jQuery(this).val("");
 			return;
 		}
@@ -77,19 +77,19 @@ jQuery(document).ready(function() {
 	document.getElementById("Errors").innerHTML="";
 	
 		if (document.getElementById("bankId").value == "") {
-			bootbox.alert("Select Bank");
+			bootbox.alert("<s:text name='msg.please.select.bank'/>");
 			return false;
 		}
 		if (document.getElementById("branchId").value == "") {
-			bootbox.alert("Select Branch");
+			bootbox.alert("<s:text name='msg.please.select.bank.branch'/>");
 			return false;
 		}
 		if (document.getElementById("accountId").value == "") {
-			bootbox.alert("Select Account");
+			bootbox.alert("<s:text name='msg.please.select.bank.account'/>");
 			return false;
 		}
 		if (document.getElementById("bankStatmentInXls").value == "") {
-			bootbox.alert("Select File to upload");
+			bootbox.alert("<s:text name='msg.please.select.file.to.upload'/>");
 			return false;
 		}
 		
@@ -159,7 +159,7 @@ jQuery(document).ready(function() {
 						url="/voucher/common-ajaxLoadBankBranchesByBank.action" />
 					<td class="greybox"><s:select name="bankId" id="bankId"
 							list="dropdownData.bankList" listKey="id" listValue="name"
-							headerKey="" headerValue="----Choose----"
+							headerKey="" headerValue="%{getText('lbl.choose.options')}"
 							onchange="populatebranch(this);" /></td>
 					<td class="greybox"><s:text name="bankbranch" /> <span
 						class="greybox"><span class="mandatory1">*</span></span></td>
@@ -168,7 +168,7 @@ jQuery(document).ready(function() {
 						url="/voucher/common-ajaxLoadBankAccountsByBranch.action" />
 					<td class="greybox"><s:select name="branchId" id="branchId"
 							list="dropdownData.branchList" listKey="id"
-							listValue="branchname" headerKey="" headerValue="----Choose----"
+							listValue="branchname" headerKey="" headerValue="%{getText('lbl.choose.options')}"
 							onchange="populateaccount(this);" /></td>
 				</tr>
 				<tr>
@@ -178,7 +178,7 @@ jQuery(document).ready(function() {
 					<td class="bluebox"><s:select name="accountId" id="accountId"
 							list="dropdownData.accountList" listKey="id"
 							listValue="chartofaccounts.glcode+'-'+accountnumber" headerKey=""
-							headerValue="----Choose----" /></td>
+							headerValue="%{getText('lbl.choose.options')}" /></td>
 					<td class="bluebox" colspan="2"></td>
 				</tr>
 				<tr>
@@ -189,7 +189,7 @@ jQuery(document).ready(function() {
 							id="bankStatmentInXls" /></td>
                   
 					<td class="greybox" colspan="2">
-                    <a href="/services/EGF/resources/app/formats/brs_format.xls">Download Template</a>
+                    <a href="/services/EGF/resources/app/formats/brs_format.xls"><s:text name="lbl.download.template"/> </a>
 					</td>
 				</tr>
 
@@ -199,9 +199,9 @@ jQuery(document).ready(function() {
 				<table>
 					<tr>
 						<td><input type="button" Class="buttonsubmit"
-								value="Upload" name="upload" 
+								value="<s:text name='lbl.upload'/>" name="upload" 
 								onclick="validate();" /></td>
-						<td><input type="button" value="Close"
+						<td><input type="button" value="<s:text name='lbl.close'/>"
 							onclick="javascript:window.close()" class="buttonsubmit" /></td>
 					</tr>
 				</table>

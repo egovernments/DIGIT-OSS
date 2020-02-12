@@ -58,7 +58,7 @@
 		function validateBank(){
 		var bank = document.getElementById('bank').value;
 		if(bank == -1){
-			bootbox.alert("Please select a Bank");
+			bootbox.alert("<s:text name='msg.please.select.bank'/>");
 			return false;
 		}
 		return true;
@@ -74,29 +74,29 @@
 	  
 	  if(bank== "")
 	  {
-		bootbox.alert("Please select a Bank");
+		bootbox.alert("<s:text name='msg.please.select.bank'/>");
 			return false;
 		}
 	  if(bankBranch== "")
 	  {
-		bootbox.alert("Please select a Bank branch");
+		bootbox.alert("<s:text name='msg.please.select.bank.branch'/>");
 			return false;
 		}
 	  if(bankAccount== "")
 	  {
-			bootbox.alert("Please select a bank account number");
+			bootbox.alert("<s:text name='msg.please.select.bank.account'/>");
 			return false;
 		}
 
 	  if(amount=="")
 	  {
-		  bootbox.alert("Enter Bank Statement Balance");
+		  bootbox.alert("<s:text name='msg.enter.bank.statement.balance'/>");
 			return false;
 		}
 		
 		if(stmtDate == "")
 		{
-			bootbox.alert("Enter Bank Statement Date");
+			bootbox.alert("<s:text name='msg.enter.bank.statement.date'/>");
 			return false;
 		}
 		
@@ -147,7 +147,7 @@
 						url="/voucher/common-ajaxLoadBankBranchesByBank.action" />
 					<td class="bluebox"><s:select name="bankId" id="bankId"
 							list="dropdownData.bankList" listKey="id" listValue="name"
-							headerKey="" headerValue="----Choose----"
+							headerKey="" headerValue="%{getText('lbl.choose.options')}"
 							onchange="populatebranch(this);" /></td>
 					<td class="bluebox"><s:text name="bankbranch" /> <span
 						class="bluebox"><span class="mandatory1">*</span></span></td>
@@ -156,7 +156,7 @@
 						url="/voucher/common-ajaxLoadBankAccountsByBranch.action" />
 					<td class="bluebox"><s:select name="branchId" id="branchId"
 							list="dropdownData.branchList" listKey="id"
-							listValue="branchname" headerKey="" headerValue="----Choose----"
+							listValue="branchname" headerKey="" headerValue="%{getText('lbl.choose.options')}"
 							onchange="populateaccount(this);" /></td>
 				</tr>
 				<tr>
@@ -167,15 +167,15 @@
 					<td class="bluebox"><s:select name="accountId" id="accountId"
 							list="dropdownData.accountList" listKey="id"
 							listValue="chartofaccounts.glcode+'-'+accountnumber" headerKey=""
-							headerValue="----Choose----" /></td>
-					<td class="bluebox">Bank Statement Balance:<span
+							headerValue="%{getText('lbl.choose.options')}" /></td>
+					<td class="bluebox"><s:text name="lbl.bank.statement.balance"/>:<span
 						class="bluebox"><span class="mandatory1">*</span></span></td>
 					<td class="bluebox"><s:textfield name="bankStBalance"
 							id="bankStBalance" onkeypress="return event.charCode >= 48 && event.charCode <= 57"/></td>
 				</tr>
 				<tr>
 					<td class="bluebox"></td>
-					<td class="bluebox">Bank Statement Date:<span class="bluebox"><span
+					<td class="bluebox"><s:text name="lbl.bank.statement.date"/>:<span class="bluebox"><span
 							class="mandatory1">*</span></span></td>
 					<s:date name="bankStmtDate" format="dd/MM/yyyy" var="BSdate" />
 					<td class="greybox"><s:textfield id="bankStmtDate"
@@ -190,9 +190,9 @@
 	</div>
 	<div class="buttonbottom" style="padding-bottom: 10px;">
 
-		<input type="button" class="buttonsubmit" value="View Summary"
+		<input type="button" class="buttonsubmit" value='<s:text name="lbl.view.summary"/>'
 			id="search" name="Search" onclick="return validateAndSubmit();" />
-		<input type="button" id="Close" value="Close"
+		<input type="button" id="Close" value='<s:text name="lbl.close"/>'
 			onclick="javascript:window.close()" class="button" />
 	</div>
 

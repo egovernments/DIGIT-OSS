@@ -58,7 +58,7 @@
 			</s:if></td>
 		<td class="greybox"><s:select name="fundId" id="fundId"
 				list="dropdownData.fundList" listKey="id" listValue="name"
-				headerKey="" headerValue="----Choose----"
+				headerKey="" headerValue="%{getText('lbl.choose.options')}"
 				onChange="populateSchemes(this);loadBank(this);"
 				value="%{fundId.id}" /></td>
 	</s:if>
@@ -72,7 +72,7 @@
 			</s:if></td>
 		<td class="greybox"><s:select list="dropdownData.schemeList"
 				name="vouchermis.schemeid" id="schemeid" listKey="id"
-				listValue="name" headerKey="-1" headerValue="----Choose----"
+				listValue="name" headerKey="-1" headerValue="%{getText('lbl.choose.options')}"
 				onChange="populatesubSchemes(this)"
 				value="voucherHeader.vouchermis.schemeid.id" /></td>
 	</s:if>
@@ -89,7 +89,7 @@
 			</s:if></td>
 		<td class="bluebox"><s:select name="vouchermis.subschemeid"
 				id="subschemeid" list="dropdownData.subschemeList" listKey="id"
-				listValue="name" headerKey="-1" headerValue="----Choose----"
+				listValue="name" headerKey="-1" headerValue="%{getText('lbl.choose.options')}"
 				value="voucherHeader.vouchermis.subschemeid.id"
 				onChange="populateFundSource(this)" /></td>
 	</s:if>
@@ -103,7 +103,7 @@
 			</s:if></td>
 		<td class="bluebox"><s:select name="vouchermis.fundsource"
 				id="fundsourceId" list="dropdownData.fundsourceList" listKey="id"
-				listValue="name" headerKey="-1" headerValue="----Choose----"
+				listValue="name" headerKey="-1" headerValue="%{getText('lbl.choose.options')}"
 				value="voucherHeader.vouchermis.fundsource.id" /></td>
 	</s:if>
 </tr>
@@ -118,7 +118,7 @@
 		<td class="greybox"><s:select name="vouchermis.departmentcode"
 				id="vouchermis.departmentid" list="dropdownData.departmentList"
 				listKey="code" listValue="name" headerKey=""
-				headerValue="----Choose----"
+				headerValue="%{getText('lbl.choose.options')}"
 				value="%{voucherHeader.vouchermis.departmentcode}"
 				 /></td>
 	</s:if>
@@ -130,7 +130,7 @@
 		<td class="greybox"><s:select name="vouchermis.divisionid"
 				id="vouchermis.divisionid" list="dropdownData.fieldList"
 				listKey="id" listValue="name" headerKey="-1"
-				headerValue="----Choose----"
+				headerValue="%{getText('lbl.choose.options')}"
 				value="voucherHeader.vouchermis.divisionid.id" /></td>
 	</s:if>
 </tr>
@@ -144,7 +144,7 @@
 		<td class="bluebox"><s:select name="vouchermis.functionary"
 				id="vouchermis.functionary" list="dropdownData.functionaryList"
 				listKey="id" listValue="name" headerKey="-1"
-				headerValue="----Choose----"
+				headerValue="%{getText('lbl.choose.options')}"
 				value="voucherHeader.vouchermis.functionary.id" style="width:180px" /></td>
 	</s:if>
 	<s:if test="%{shouldShowHeaderField('function')}">
@@ -155,7 +155,7 @@
 		<td class="bluebox"><s:select name="vouchermis.function"
 				id="vouchermis.function" list="dropdownData.functionList"
 				listKey="id" listValue="name" headerKey="-1"
-				headerValue="----Choose----" value="%{vouchermis.function.id}" /></td>
+				headerValue="%{getText('lbl.choose.options')}" value="%{vouchermis.function.id}" /></td>
 	</s:if>
 
 </tr>

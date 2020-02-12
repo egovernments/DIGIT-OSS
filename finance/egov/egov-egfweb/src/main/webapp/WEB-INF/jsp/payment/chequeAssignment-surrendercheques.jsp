@@ -153,7 +153,7 @@
 							<td style="text-align: center" class="blueborderfortdnew"><s:select
 									name="surrendarReasons" id="surrendarReasons"
 									list="surrendarReasonMap" headerKey="-1"
-									headerValue="----Choose----"
+									headerValue="%{getText('lbl.choose.options')}"
 									value='%{surrendarReasons[#stat.index]}' /> <s:if
 									test="%{!isChequeNoGenerationAuto()}">
 									<td style="text-align: right" class="blueborderfortdnew">
@@ -182,7 +182,7 @@
 								name="chq.issued.department" /><span class="mandatory1">*</span>
 							<s:select name="department" id="department"
 								list="dropdownData.departmentList" listKey="code" listValue="name"
-								headerKey="-1" headerValue="----Choose----"
+								headerKey="-1" headerValue="%{getText('lbl.choose.options')}"
 								value="%{department}" onChange="populateYearcode(this);" /></td>
 						<td class="greybox" colspan="10"></td>
 					</tr>
@@ -200,19 +200,18 @@
 						<s:hidden name="containsRTGS" id="containsRTGS"
 						value="%{containsRTGS}" />
 					<input type="button" Class="buttonsubmit" name="Surrender"
-						value="Surrender" onclick="return surrenderChq();" method="save" />
+						value='<s:text name="lbl.surrender"/>' onclick="return surrenderChq();" method="save" />
 					<s:if test="%{containsRTGS==false}">
 						<input type="submit" Class="buttonsubmit"
-							name="SurrenderAndReassign" value="Surrender & Reassign"
+							name="SurrenderAndReassign" value='<s:text name="lbl.surrender.and.reassign"/>'
 							onclick="return Reassign();" method="save" />
 					</s:if>
-					<input type="button" value="Close"
+					<input type="button" value='<s:text name="lbl.close"/>'
 						onclick="javascript:window.close();window.parent.postMessage('close','*');" class="button" />
 				</div>
 			</s:if>
 			<s:else>
-				<div class="subheadsmallnew" id="noRecordsDiv">No Records
-					Found</div>
+				<div class="subheadsmallnew" id="noRecordsDiv"><s:text name="msg.no.record.found"/> </div>
 			</s:else>
 		</div>
 
@@ -224,7 +223,7 @@
 			{
 				if(isNaN(obj.value))
 				{
-					bootbox.alert('Cheque number contains alpha characters.');
+					bootbox.alert('<s:text name="msg.cheque.number.contains.alpha.char"/>');
 					obj.value='';
 					return false;
 				}
@@ -234,7 +233,7 @@
 				//bootbox.alert(index);		
 				if(document.getElementById('department') && document.getElementById('department').options[document.getElementById('department').selectedIndex].value==-1)
 				{
-					bootbox.alert('Select Cheque Issued From');
+					bootbox.alert('<s:text name="chq.assignment.department.mandatory"/>');
 					obj.value='';
 					return false;
 				}
@@ -254,7 +253,7 @@
 					res = res.split('~');
 					if(res[1]=='false')
 					{
-						bootbox.alert('Enter valid cheque number or This Cheque number has been already used');
+						bootbox.alert('<s:text name="msg.enter.valid.cheque.number.or.cheque.already.used"/>');
 						document.getElementById('newInstrumentNumber['+parseInt(res[0])+']').value='';
 					}
 			    },
@@ -271,17 +270,23 @@
  	}
  	function surrenderChq(){
  		resetSelectedRowsId();
+ 		if(Array.isArray(selectedRowsId) && !selectedRowsId.length){
+  	  		bootbox.alert("<s:text name='msg.please.select.atleast.one.record.for.surrender'/>");
+  	  		return false;
+  	  	}
  		disableAll();
  		document.getElementById('button').value='surrender';
  		document.chequeAssignment.action = '/services/EGF/payment/chequeAssignment-save.action';
 		document.chequeAssignment.submit();
 		 return true;
-		
-		 
  	}
   	function Reassign()
  	{
   		resetSelectedRowsId();
+  		if(Array.isArray(selectedRowsId) && !selectedRowsId.length){
+  	  		bootbox.alert("<s:text name='msg.please.select.atleast.one.record.for.surrender'/>");
+  	  		return false;
+  	  	}
 	 	document.getElementById('button').value='surrenderAndReassign';
 	 	var chqGenMode='<s:property value="isChequeNoGenerationAuto()"/>';
 	 	var alertNumber='<s:text name="chq.number.missing.alert"/>';
@@ -294,14 +299,13 @@
 	 		var newChqDateObj=document.getElementsByName('newInstrumentDate');
 			var i;
 			var srlNo=document.getElementById('newSerialNo').value;
-			console.log(srlNo);
 	 		for(i=0;i<surrenderObj.length;i++)
 	 		{
 	 		 if(surrenderObj[i].checked==true)
 	 			{
 	 			if(srlNo=="")
 	 			{
-	 				bootbox.alert("Year code should not be empty");
+	 				bootbox.alert("<s:text name='payment.yearcode.invalid'/>");
 	 				return false;
 	 			}
 	 				if(newChqNoObj[i].value==""||newChqNoObj[i].value==undefined)

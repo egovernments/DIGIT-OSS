@@ -109,7 +109,7 @@
 			</div>
 		</s:iterator>
 		<div class="col-md-1 col-sm-2">
-			<input type="button" name="button2" id="button2" value="Close"
+			<input type="button" name="button2" id="button2" value="<s:text name='lbl.close'/>"
 				class="button" onclick="window.parent.postMessage('close','*');window.close();" />
 		</div>
 	</div>
