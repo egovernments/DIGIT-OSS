@@ -2,6 +2,7 @@
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get"
+import store from "redux/store";
 
 export const getNextFinancialYearForRenewal = async (currentFinancialYear) => {
     
@@ -36,3 +37,31 @@ export const getNextFinancialYearForRenewal = async (currentFinancialYear) => {
     console.log(e.message)
   }
 }
+
+export const getSearchResults = async (tenantId ,licenseNumber) => {
+  let queryObject = [
+    {
+      key: "tenantId",
+      value: tenantId 
+    },
+    { key: "offset", value: "0" },
+    { key: "licenseNumber", value: licenseNumber}
+  ];
+  try {
+    const response = await httpRequest(
+      "post",
+      "/tl-services/v1/_search",
+      "",
+      queryObject
+    );
+    return response;
+  } catch (error) {
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelCode: error.message },
+        "error"
+      )
+    );
+  }
+};
