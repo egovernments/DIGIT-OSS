@@ -51,7 +51,7 @@ serviceMaps:
 
       - jsonPath: $.Assessment.unitUsageList.*.id
 
-      - jsonPath: $.Assessment.[*][?({id} in @.unitUsageList[*].id)].assessmentNumber
+      - jsonPath: $.Assessment[?({id} in @.unitUsageList[*].id)].id
 
       - jsonPath: $.Assessment.unitUsageList.*.unitid
 
@@ -98,9 +98,9 @@ serviceMaps:
       - jsonPath: $.Assessment.documents.*.auditDetails.createdTime
 
       - jsonPath: $.Assessment.documents.*.auditDetails.lastModifiedTime
-      
-      
-      
+
+
+
   - version: 1.0
     description: Updates assessment details to eg_pt_asmt_assessment table
     fromTopic: update-pt-assessment
@@ -112,15 +112,15 @@ serviceMaps:
       jsonMaps:
 
       - jsonPath: $.Assessment.id
-      
-      
-    - query: INSERT INTO eg_pt_asmt_unitusage_audit SELECT *, (SELECT extract(epoch from now())) FROM eg_pt_unit WHERE id = ?;
+
+
+    - query: INSERT INTO eg_pt_asmt_unitusage_audit SELECT *, (SELECT extract(epoch from now())) FROM eg_pt_asmt_unitusage WHERE id = ?;
       basePath: Assessment.unitUsageList.*
       jsonMaps:
 
       - jsonPath: $.Assessment.unitUsageList.*.id
-      
-      
+
+
     - query: UPDATE eg_pt_asmt_assessment SET financialyear = ?, status = ?, source = ?, assessmentDate = ?, additionaldetails = ?, lastmodifiedby = ?, lastmodifiedtime = ? WHERE id = ?;
       basePath: Assessment
       jsonMaps:
@@ -140,13 +140,13 @@ serviceMaps:
       - jsonPath: $.Assessment.auditDetails.lastModifiedBy
 
       - jsonPath: $.Assessment.auditDetails.lastModifiedTime
-      
+
       - jsonPath: $.Assessment.id
 
 
 
 
-    - query: INSERT INTO eg_pt_asmt_unitusage (tenantid, id, assessmentId,  usageCategory, occupancyType, occupancyDate, active, createdby, createdtime, lastmodifiedby, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE  usageCategory = ?, occupancyType = ?, occupancyDate = ?, active = ?, lastmodifiedby = ?, lastmodifiedtime = ?;
+    - query: INSERT INTO eg_pt_asmt_unitusage (tenantid, id, assessmentId, unitid, usageCategory, occupancyType, occupancyDate, active, createdby, createdtime, lastmodifiedby, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET usageCategory = ?, occupancyType = ?, occupancyDate = ?, active = ?, lastmodifiedby = ?, lastmodifiedtime = ?;
       basePath: Assessment.unitUsageList.*
       jsonMaps:
 
@@ -154,7 +154,9 @@ serviceMaps:
 
       - jsonPath: $.Assessment.unitUsageList.*.id
 
-      - jsonPath: $.Assessment.[*][?({id} in @.unitUsageList[*].id)].assessmentNumber
+      - jsonPath: $.Assessment[?({id} in @.unitUsageList[*].id)].id
+
+      - jsonPath: $.Assessment.unitUsageList.*.unitId
 
       - jsonPath: $.Assessment.unitUsageList.*.usageCategory
 
@@ -193,7 +195,7 @@ serviceMaps:
 
       - jsonPath: $.Assessment.documents.*.id
 
-      - jsonPath: $.Assessment.documents.*.tenantId
+      - jsonPath: $.Assessment.tenantId
 
       - jsonPath: $.Assessment.id
 
@@ -212,7 +214,7 @@ serviceMaps:
       - jsonPath: $.Assessment.documents.*.auditDetails.createdTime
 
       - jsonPath: $.Assessment.documents.*.auditDetails.lastModifiedTime
-      
+
       - jsonPath: $.Assessment.documents.*.documentType
 
       - jsonPath: $.Assessment.documents.*.documentUid
@@ -222,7 +224,5 @@ serviceMaps:
       - jsonPath: $.Assessment.documents.*.auditDetails.lastModifiedBy
 
       - jsonPath: $.Assessment.documents.*.auditDetails.lastModifiedTime
-      
-      
-      
-      
+
+
