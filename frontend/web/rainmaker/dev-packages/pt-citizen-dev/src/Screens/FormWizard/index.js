@@ -1295,50 +1295,52 @@ class FormWizard extends Component {
   }
 
   estimate = async () => {
-    // utils
-    let { toggleSpinner, form, common, location } = this.props;
-    let { search } = location;
-    let prepareFormData = { ...this.props.prepareFormData };
-    toggleSpinner();
-    
-    const financialYearFromQuery = getFinancialYearFromQuery();
-    try {
-      const financeYear = {financialYear:financialYearFromQuery};
-      const assessmentPayload = createAssessmentPayload(prepareFormData.Properties[0], financeYear);
-      let estimateResponse = await httpRequest(
-        "pt-calculator-v2/propertytax/v2/_estimate",
-        "_estimate",
-        [],
-        {
-          Assessment: assessmentPayload
-        }
-      );
-      //For calculation screen
-      const tenantId =
-        prepareFormData.Properties[0] && prepareFormData.Properties[0].tenantId;
-      const calculationScreenData = await getCalculationScreenData(
-        get(estimateResponse, "Calculation[0].billingSlabIds", []),
-        tenantId,
-        this
-      );
-      this.setState({ calculationScreenData: calculationScreenData.data });
-
+    let { toggleSpinner, location } = this.props;
+    let { search: search1 } = location;
+    let isAssesment1 = Boolean(getQueryValue(search1, "isAssesment").replace('false', ''));
+    if(isAssesment1){
+      let prepareFormData = { ...this.props.prepareFormData };
       toggleSpinner();
-      return estimateResponse;
-    } catch (e) {
-      toggleSpinner();
-      if (e.message) {
-        alert(e.message);
-      } else
-        this.props.toggleSnackbarAndSetText(
-          true,
+      const financialYearFromQuery = getFinancialYearFromQuery();
+      try {
+        const financeYear = {financialYear:financialYearFromQuery};
+        const assessmentPayload = createAssessmentPayload(prepareFormData.Properties[0], financeYear);
+        let estimateResponse = await httpRequest(
+          "pt-calculator-v2/propertytax/v2/_estimate",
+          "_estimate",
+          [],
           {
-            labelName: "Error calculating tax!",
-            labelKey: "ERR_ERROR_CALCULATING_TAX"
-          },
-          true
+            Assessment: assessmentPayload
+          }
         );
+        //For calculation screen
+        const tenantId =
+          prepareFormData.Properties[0] && prepareFormData.Properties[0].tenantId;
+        const calculationScreenData = await getCalculationScreenData(
+          get(estimateResponse, "Calculation[0].billingSlabIds", []),
+          tenantId,
+          this
+        );
+        this.setState({ calculationScreenData: calculationScreenData.data });
+  
+        toggleSpinner();
+        return estimateResponse;
+      } catch (e) {
+        toggleSpinner();
+        if (e.message) {
+          alert(e.message);
+        } else
+          this.props.toggleSnackbarAndSetText(
+            true,
+            {
+              labelName: "Error calculating tax!",
+              labelKey: "ERR_ERROR_CALCULATING_TAX"
+            },
+            true
+          );
+      }
     }
+    
   };
 
   pay = async () => {
