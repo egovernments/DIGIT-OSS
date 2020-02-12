@@ -56,7 +56,7 @@ export const tradeLicenseApplication = getCommonCard({
       required: false,
       pattern: /^[a-zA-Z0-9-]*$/i,
       errorMessage: "ERR_INVALID_TRADE_LICENSE_NO",
-      jsonPath: "searchScreen.licenseNumber"
+      jsonPath: "searchScreen.licenseNumbers"
     }),
     ownerMobNo: getTextField({
       label: {
