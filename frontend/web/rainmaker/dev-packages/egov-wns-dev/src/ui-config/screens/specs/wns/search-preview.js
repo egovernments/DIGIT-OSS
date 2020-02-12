@@ -8,7 +8,7 @@ import {
 import get from "lodash/get";
 import set from "lodash/set";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getQueryArg,setDocuments, setBusinessServiceDataToLocalStorage, getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg, setDocuments, setBusinessServiceDataToLocalStorage, getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import {
@@ -56,13 +56,13 @@ let headerSideText = { word1: "", word2: "" };
 
 const searchResults = async (action, state, dispatch, applicationNo) => {
   let queryObject = [
-    { key: "tenantId", value: "pb.amritsar" },
-    { key: "applicationNumber", value: "WS_AP/1013/2019-20/060213" }
+    { key: "tenantId", value:tenantId },
+    { key: "applicationNumber", value: applicationNumber }
   ];
   let payload = await getSearchResults(queryObject);
 
 
-  console.log("payloaddata",payload)
+  console.log("payloaddata", payload)
 
   headerSideText = getHeaderSideText(
     get(payload, "WaterConnection[0].applicationStatus"),
@@ -153,7 +153,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
           data,
           "Licenses[0].tradeLicenseDetail.verificationDocuments",
           "LicensesTemp[0].verifyDocData",
-          dispatch,'TL'
+          dispatch, 'TL'
         );
       } else {
         dispatch(
@@ -256,7 +256,7 @@ const setStatusBasedValue = status => {
 const headerrow = getCommonContainer({
   header: getCommonHeader({
     labelName: "Task Details",
-    labelKey: "WNS_TASK_DETAILS"
+    labelKey: "WS_TASK_DETAILS"
   }),
   applicationNumber: {
     uiFramework: "custom-atoms-local",
@@ -311,13 +311,17 @@ export const taskDetails = getCommonCard({
     "VIEW BREAKUP",
     "WS_PAYMENT_VIEW_BREAKUP",
     "search-preview"
-    ),
+  ),
   reviewConnectionDetails,
   reviewDocumentDetails,
-  reviewOwnerDetails,
+  reviewOwnerDetails
 });
 
-export const summaryScreen = getCommonCard({ reviewConnectionDetails, reviewDocumentDetails, reviewOwnerDetails, })
+export const summaryScreen = getCommonCard({ 
+  reviewConnectionDetails, 
+  reviewDocumentDetails, 
+  reviewOwnerDetails
+ })
 
 const screenConfig = {
   uiFramework: "material-ui",
@@ -327,12 +331,12 @@ const screenConfig = {
     const tenantId = getQueryArg(window.location.href, "tenantId");
     applicationNumber = getQueryArg(window.location.href, "applicationNumber");
     //To set the application no. at the  top
-    set(action.screenConfig, "components.div.children.headerDiv.children.header1.children.applicationNumber.props.number", "WS/1013/2019-20/060956");
-    if (status !== "pending_payment") {
-      set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.viewBreakupButton.visible", false);
-    }
+    set(action.screenConfig, "components.div.children.headerDiv.children.header1.children.applicationNumber.props.number", applicationNumber);
+    // if (status !== "pending_payment") {
+    //   set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.viewBreakupButton.visible", false);
+    // }
     const queryObject = [
-      { key: "tenantId", value: "pb.amritsar" },
+      { key: "tenantId", value: tenantId },
       { key: "businessServices", value: "NewWS1" }
     ];
     setBusinessServiceDataToLocalStorage(queryObject, dispatch)
@@ -447,16 +451,16 @@ const screenConfig = {
         // footer
       }
     },
-    breakUpDialog: {
-      uiFramework: "custom-containers-local",
-      moduleName: "egov-wns",
-      componentPath: "ViewBreakupContainer",
-      props: {
-        open: false,
-        maxWidth: "md",
-        screenKey: "search-preview"
-      }
-    }
+    // breakUpDialog: {
+    //   uiFramework: "custom-containers-local",
+    //   moduleName: "egov-wns",
+    //   componentPath: "ViewBreakupContainer",
+    //   props: {
+    //     open: false,
+    //     maxWidth: "md",
+    //     screenKey: "search-preview"
+    //   }
+    // }
   }
 };
 

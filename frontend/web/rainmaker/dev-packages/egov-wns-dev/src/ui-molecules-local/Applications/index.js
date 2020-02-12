@@ -27,9 +27,9 @@ class Applications extends React.Component {
   //   window.location.href = `/citizen/wns/viewBill?connectionNumber=${data.connectionNo}&tenantId=${data.property.tenantId}&service=${data.service.toUpperCase()}&connectionType=${data.connectionType}`
   // }
 
-  // getTaskDetails=data=>{
-  //   window.location.href = `/wns/search-preview?applicationNumber=${data.applicationNo}&history=${true}&tenantId=${data.property.tenantId}`
-  // }
+  getTaskDetails=data=>{
+    window.location.href = `/citizen/wns/search-preview?applicationNumber=${data.applicationNo}&history=${true}&tenantId=${data.property.tenantId}`
+  }
   render() {
     const { myApplicationResults, classes } = this.props;
     return (
