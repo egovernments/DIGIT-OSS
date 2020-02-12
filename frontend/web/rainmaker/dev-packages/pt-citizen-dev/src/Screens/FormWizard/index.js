@@ -1084,20 +1084,22 @@ class FormWizard extends Component {
 
         break;
       case 3:
-        const uploadedDocs = get(this.props, "documentsUploadRedux");
-        let temp = 0;
+        let maxDocuments=0;
         if (uploadedDocs) {
           let docsArray = [];
           Object.keys(uploadedDocs).map(key => {
             docsArray.push(uploadedDocs[key]);
           })
           docsArray.map(docs => {
+            if(docs&&docs.isDocumentRequired){
+              maxDocuments++;
+            }
             if (docs && docs.isDocumentRequired && docs.documents && docs.dropdown) {
               temp++;
             }
           });
         }
-        if (!uploadedDocs || temp < 3) {
+        if (!uploadedDocs || temp < maxDocuments) {
           alert("Please upload all the required documents and documents type.")
         } else {
           this.setState(
