@@ -420,7 +420,7 @@ const screenConfig = {
           props: {
             dataPath: "WaterConnection",
             moduleName: "NewWS1",
-            updateUrl: "/ws-services/v1/_update"
+            updateUrl: "/ws-services/wc/_update" 
           }
         },
         actionDialog: {
@@ -432,7 +432,7 @@ const screenConfig = {
             open: true,
             dataPath: "WaterConnection",
             moduleName: "NewWS1",
-            updateUrl: "/ws-services/v1/_update",
+            updateUrl: "/ws-services/wc/_update",
             data: {
               buttonLabel: "RESUBMIT",
               moduleName: "NewWS1",

@@ -242,6 +242,7 @@ class WorkFlowContainer extends React.Component {
   };
 
   getRedirectUrl = (action, businessId, moduleName) => {
+    console.log("modulenamewater",moduleName);
     const isAlreadyEdited = getQueryArg(window.location.href, "edited");
     const tenant = getQueryArg(window.location.href, "tenantId");
     const { ProcessInstances } = this.props;
@@ -256,6 +257,8 @@ class WorkFlowContainer extends React.Component {
     }else if(moduleName === "BPA"){
       baseUrl = "egov-bpa";
       bservice = ((applicationStatus =="PENDING_APPL_FEE") ? "BPA.NC_APP_FEE" :"BPA.NC_SAN_FEE");
+    }else if(moduleName === "NewWS1"||moduleName === "NewSW1"){
+      baseUrl="wns"
     }else{
       baseUrl = "tradelicence";
     }

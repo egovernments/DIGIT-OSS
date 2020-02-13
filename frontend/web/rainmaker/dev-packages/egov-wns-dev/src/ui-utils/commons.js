@@ -356,30 +356,30 @@ export const updatePFOforSearchResults = async (
     const payload = !isPreviouslyEdited ?
         await getSearchResults(queryObject) :
         {
-            Licenses: get(state.screenConfiguration.preparedFinalObject, "Licenses")
+            WaterConnection: get(state.screenConfiguration.preparedFinalObject, "WaterConnection")
         };
     getQueryArg(window.location.href, "action") === "edit" &&
         (await setDocsForEditFlow(state, dispatch));
     if (payload) {
-        dispatch(prepareFinalObject("Licenses[0]", payload.Licenses[0]));
+        dispatch(prepareFinalObject("WaterConnection[0]", payload.WaterConnection[0]));
     }
-    const licenseType = payload && get(payload, "Licenses[0].licenseType");
-    const structureSubtype =
-        payload && get(payload, "Licenses[0].tradeLicenseDetail.structureType");
-    const tradeTypes = setFilteredTradeTypes(
-        state,
-        dispatch,
-        licenseType,
-        structureSubtype
-    );
-    const tradeTypeDdData = getTradeTypeDropdownData(tradeTypes);
-    tradeTypeDdData &&
-        dispatch(
-            prepareFinalObject(
-                "applyScreenMdmsData.TradeLicense.TradeTypeTransformed",
-                tradeTypeDdData
-            )
-        );
+    // const licenseType = payload && get(payload, "Licenses[0].licenseType");
+    // const structureSubtype =
+    //     payload && get(payload, "Licenses[0].tradeLicenseDetail.structureType");
+    // const tradeTypes = setFilteredTradeTypes(
+    //     state,
+    //     dispatch,
+    //     licenseType,
+    //     structureSubtype
+    // );
+    // const tradeTypeDdData = getTradeTypeDropdownData(tradeTypes);
+    // tradeTypeDdData &&
+    //     dispatch(
+    //         prepareFinalObject(
+    //             "applyScreenMdmsData.TradeLicense.TradeTypeTransformed",
+    //             tradeTypeDdData
+    //         )
+    //     );
     updateDropDowns(payload, action, state, dispatch, queryValue);
     if (queryValuePurpose !== "cancel") {
         set(payload, getSafetyNormsJson(queryValuePurpose), "yes");
