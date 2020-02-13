@@ -927,6 +927,37 @@ export const footerReview = (
               },
               visible:getButtonVisibility(status, "APPROVED")&&renewSearchLicense,
             },    
+            makePayment: {
+              componentPath: "Button",
+              props: {
+                variant: "contained",
+                color: "primary",
+                className: "framework-responsive-button"
+              },
+              children: {
+                submitButtonLabel: getLabel({
+                  labelName: "MAKE PAYMENT",
+                  labelKey: "TL_COMMON_BUTTON_CITIZEN_MAKE_PAYMENT"
+                })
+              },
+              onClickDefination: {
+                action: "condition",
+                callBack: () => {
+                  dispatch(
+                    setRoute(
+                     // `/tradelicence/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&FY=${financialYear}&tenantId=${tenantId}`
+                     `/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenantId}`
+                    )
+                  );
+                },
+
+              },
+              roleDefination: {
+                rolePath: "user-info.roles",
+                action: "PAY"
+              },
+              visible: process.env.REACT_APP_NAME === "Citizen" ? true : false
+            }
           },
           gridDefination: {
             xs: 12,
