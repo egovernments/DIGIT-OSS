@@ -62,7 +62,7 @@ export const header = getCommonContainer({
   }
 });
 
-export const tradeDocumentDetails = getCommonCard({
+export const documentDetails = getCommonCard({
   header: getCommonTitle(
     {
       labelName: "Required Documents",

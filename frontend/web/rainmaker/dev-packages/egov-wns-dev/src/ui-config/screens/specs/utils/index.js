@@ -1657,38 +1657,11 @@ export const updateDropDowns = async (
 };
 
 export const getDocList = (state, dispatch) => {
-  const tradeSubTypes = get(
-    state.screenConfiguration.preparedFinalObject,
-    "Licenses[0].tradeLicenseDetail.tradeUnits"
-  );
-
-  const tradeSubCategories = get(
-    state.screenConfiguration.preparedFinalObject,
-    "applyScreenMdmsData.TradeLicense.MdmsTradeType"
-  );
-  let selectedTypes = [];
-  tradeSubTypes.forEach(tradeSubType => {
-    selectedTypes.push(
-      filter(tradeSubCategories, {
-        code: tradeSubType.tradeType
-      })
-    );
-  });
-
-  // selectedTypes[0] &&
-  //
-  let applicationDocArray = [];
-
-  selectedTypes.forEach(tradeSubTypeDoc => {
-    applicationDocArray = [
-      ...applicationDocArray,
-      ...tradeSubTypeDoc[0].applicationDocument
-    ];
-  });
+  const documentList = get(state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.ws-services-masters.Documents");
   function onlyUnique(value, index, self) {
     return self.indexOf(value) === index;
   }
-  applicationDocArray = applicationDocArray.filter(onlyUnique);
+  let applicationDocArray = documentList.filter(onlyUnique);
   let applicationDocument = prepareDocumentTypeObj(applicationDocArray);
   dispatch(
     prepareFinalObject(
@@ -2344,12 +2317,12 @@ export const getTextToLocalMapping = label => {
         "WS_COMMON_TABLE_COL_ADDRESS",
         localisationLabels
       );
-    
+
     case "Application Status":
       return getLocaleLabels(
         "Application Status",
         "WS_COMMON_TABLE_COL_APPLICATION_STATUS"
-      ) 
+      )
     // case "Connection Type":
     //   return getLocaleLabels(
     //     "Connection Type",

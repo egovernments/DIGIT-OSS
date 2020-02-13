@@ -9,8 +9,8 @@ import LabelContainer from "egov-ui-framework/ui-containers/LabelContainer";
 import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import get from "lodash/get";
 import "./index.css";
+import { toggleWater, toggleSewerage } from './toggleFeilds';
 
 const styles = {
   root: {
@@ -39,34 +39,64 @@ const styles = {
 };
 
 class CheckboxLabels extends React.Component {
-  handleChange = event => {
-    const { screenKey, componentJsonpath, onFieldChange, onChange } = this.props;
-    onChange ? onChange(event) : onFieldChange(screenKey, componentJsonpath, "props.value", event.target.value);
+  state = { checkedSewerage: false, checkedWater: true }
+
+  handleWater = name => event => {
+    const { jsonPathWater, approveCheck, onFieldChange } = this.props;
+    this.setState({ [name]: event.target.checked }, () => {
+      if (this.state.checkedWater) {
+        toggleWater(onFieldChange, true);
+        if (this.state.checkedSewerage) { toggleSewerage(onFieldChange, true); }
+        else { toggleSewerage(onFieldChange, false); }
+      } else { toggleWater(onFieldChange, false); }
+      approveCheck(jsonPathWater, this.state.checkedWater)
+    });
   };
 
+  handleSewerage = name => event => {
+    const { jsonPathSewerage, approveCheck, onFieldChange } = this.props;
+    this.setState({ [name]: event.target.checked }, () => {
+      if (this.state.checkedSewerage) {
+        toggleSewerage(onFieldChange, true);
+        if (this.state.checkedWater) { toggleWater(onFieldChange, true); }
+        else { toggleWater(onFieldChange, false); }
+      } else { toggleSewerage(onFieldChange, false); }
+      approveCheck(jsonPathSewerage, this.state.checkedSewerage)
+    });
+  }
+
   render() {
-    const { classes, label, buttons, defaultValue, value, fieldValue, required } = this.props;
+    const { classes, required } = this.props;
 
     return (
       <div className={classes.root}>
         <FormControl component="fieldset" className={classes.formControl} required={required}>
           <FormLabel className={classes.formLabel}>
-            {label && label.key && (<LabelContainer className={classes.formLabel} labelName={label.name} labelKey={label.key} />)}
+            <LabelContainer className={classes.formLabel} labelKey="WS_APPLY_FOR" />
           </FormLabel>
-          <FormGroup aria-label="Gender" name="gender1" className={classes.group} value={value || fieldValue || defaultValue} onChange={this.handleChange}>
-            {buttons && buttons.map((button, index) => {
-              return (
-                <FormControlLabel
-                  disabled={button.disabled ? true : false}
-                  key={index}
-                  classes={{ label: "checkbox-button-label" }}
-                  value={button.value}
-                  control={<Checkbox classes={{ root: classes.radioRoot, checked: classes.checked }} color="primary" />}
-                  label={<LabelContainer labelName={button.labelName} labelKey={button.labelKey} />}
-                />
-              );
-            })
-            }
+          <FormGroup row>
+            <FormControlLabel
+              classes={{ label: "checkbox-button-label" }}
+              control={
+                <Checkbox
+                  checked={this.state.checkedWater}
+                  onChange={this.handleWater("checkedWater")}
+                  classes={{ root: classes.radioRoot, checked: classes.checked }}
+                  color="primary"
+                />}
+              label={<LabelContainer labelKey="WS_APPLY_WATER" />}
+            />
+            <FormControlLabel
+              classes={{ label: "checkbox-button-label" }}
+              control={
+                <Checkbox
+                  checked={this.state.checkedSewerage}
+                  onChange={this.handleSewerage("checkedSewerage")}
+                  classes={{ root: classes.radioRoot, checked: classes.checked }}
+                  color="primary"
+                />}
+              label={<LabelContainer labelKey="WS_APPLY_SEWERAGE" />}
+            />
           </FormGroup>
         </FormControl>
       </div>
@@ -75,22 +105,16 @@ class CheckboxLabels extends React.Component {
 }
 
 const mapStateToProps = (state, ownprops) => {
-  let fieldValue = "";
   const { screenConfiguration } = state;
-  const { jsonPath } = ownprops;
+  const { jsonPathWater, jsonPathSewerage } = ownprops;
   const { preparedFinalObject } = screenConfiguration;
-  if (jsonPath) fieldValue = get(preparedFinalObject, jsonPath);
-  return { preparedFinalObject, jsonPath, fieldValue };
+  return { preparedFinalObject, jsonPathWater, jsonPathSewerage };
 };
 
 const mapDispatchToProps = dispatch => {
   return { approveCheck: (jsonPath, value) => { dispatch(prepareFinalObject(jsonPath, value)); } };
 };
 
-CheckboxLabels.propTypes = {
-  classes: PropTypes.object.isRequired
-};
+CheckboxLabels.propTypes = { classes: PropTypes.object.isRequired };
 
-export default withStyles(styles)(
-  connect(mapStateToProps, mapDispatchToProps)(CheckboxLabels)
-);
+export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(CheckboxLabels));

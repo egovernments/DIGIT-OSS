@@ -15,7 +15,7 @@ import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-fra
 import store from "redux/store";
 import get from "lodash/get";
 import set from "lodash/set";
-import { getQueryArg, getFileUrlFromAPI ,getFileUrl} from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg, getFileUrlFromAPI, getFileUrl, getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import {
     setBusinessServiceDataToLocalStorage,
@@ -531,169 +531,95 @@ const getMultipleOwners = owners => {
     return mergedOwners;
 };
 
-export const applyTradeLicense = async (state, dispatch, activeIndex) => {
+export const prepareDocumentsUploadData = (state, dispatch) => {
+    let documents = get(
+        state,
+        "screenConfiguration.preparedFinalObject.applyScreenMdmsData.ws-services-masters.Documents",
+        []
+    );
+    documents = documents.filter(item => {
+        return item.active;
+    });
+    console.log('documents')
+    console.log(documents)
+    let documentsContract = [];
+    let tempDoc = {};
+    documents.forEach(doc => {
+        let card = {};
+        card["code"] = doc.documentType;
+        card["title"] = doc.documentType;
+        card["cards"] = [];
+        tempDoc[doc.documentType] = card;
+    });
+
+    documents.forEach(doc => {
+        // Handle the case for multiple muildings
+        let card = {};
+        card["name"] = doc.code;
+        card["code"] = doc.code;
+        card["required"] = doc.required ? true : false;
+        if (doc.hasDropdown && doc.dropdownData) {
+            let dropdown = {};
+            dropdown.label = "NOC_SELECT_DOC_DD_LABEL";
+            dropdown.required = true;
+            dropdown.menu = doc.dropdownData.filter(item => {
+                return item.active;
+            });
+            dropdown.menu = dropdown.menu.map(item => {
+                return { code: item.code, label: getTransformedLocale(item.code) };
+            });
+            card["dropdown"] = dropdown;
+        }
+        tempDoc[doc.documentType].cards.push(card);
+    });
+
+    Object.keys(tempDoc).forEach(key => {
+        documentsContract.push(tempDoc[key]);
+    });
+
+    dispatch(prepareFinalObject("documentsContract", documentsContract));
+};
+
+export const applyForWaterOrSewerage = async (state, dispatch, activeIndex) => {
+
+    let queryObject = JSON.parse(JSON.stringify(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {})));
+    queryObject.property = JSON.parse(JSON.stringify(findAndReplace(get(state.screenConfiguration.preparedFinalObject, "Properties"), "NA", null)));
+    if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.water") && get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage")) {
+        await applyForBothWaterAndSewerage(state, dispatch, activeIndex, queryObject);
+    } else if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage")) {
+        await applyForSewerage(state, dispatch, activeIndex, queryObject);
+    } else {
+        await applyForWater(state, dispatch, activeIndex, queryObject);
+    }
+}
+
+const applyForWater = async (state, dispatch, activeIndex, queryObject) => {
     try {
-        let queryObject = JSON.parse(
-            JSON.stringify(
-                get(state.screenConfiguration.preparedFinalObject, "Licenses", [])
-            )
-        );
-        let documents = get(
-            queryObject[0],
-            "tradeLicenseDetail.applicationDocuments"
-        );
-        set(
-            queryObject[0],
-            "validFrom",
-            convertDateToEpoch(queryObject[0].validFrom, "dayend")
-        );
-        set(queryObject[0], "wfDocuments", documents);
-        set(
-            queryObject[0],
-            "validTo",
-            convertDateToEpoch(queryObject[0].validTo, "dayend")
-        );
-        if (queryObject[0] && queryObject[0].commencementDate) {
-            queryObject[0].commencementDate = convertDateToEpoch(
-                queryObject[0].commencementDate,
-                "dayend"
-            );
-        }
-        let owners = get(queryObject[0], "tradeLicenseDetail.owners");
-        owners = (owners && convertOwnerDobToEpoch(owners)) || [];
-
-        //set(queryObject[0], "tradeLicenseDetail.owners", getMultipleOwners(owners));
-        const cityId = get(
-            queryObject[0],
-            "tradeLicenseDetail.address.tenantId",
-            ""
-        );
-        const tenantId = ifUserRoleExists("CITIZEN") ? cityId : getTenantId();
-        // const BSqueryObject = [
-        //     { key: "tenantId", value: tenantId },
-        //     { key: "businessService", value: "newTL" }
-        // ];
-        if (process.env.REACT_APP_NAME === "Citizen") {
-            let currentFinancialYr = getCurrentFinancialYear();
-            //Changing the format of FY
-            let fY1 = currentFinancialYr.split("-")[1];
-            fY1 = fY1.substring(2, 4);
-            currentFinancialYr = currentFinancialYr.split("-")[0] + "-" + fY1;
-            set(queryObject[0], "financialYear", currentFinancialYr);
-            // setBusinessServiceDataToLocalStorage(BSqueryObject, dispatch);
-        }
-
-        set(queryObject[0], "tenantId", tenantId);
-
-        if (queryObject[0].applicationNumber) {
-            //call update
-
-            let accessories = get(queryObject[0], "tradeLicenseDetail.accessories");
-            let tradeUnits = get(queryObject[0], "tradeLicenseDetail.tradeUnits");
-            set(
-                queryObject[0],
-                "tradeLicenseDetail.tradeUnits",
-                getMultiUnits(tradeUnits)
-            );
-            set(
-                queryObject[0],
-                "tradeLicenseDetail.accessories",
-                getMultiUnits(accessories)
-            );
-            set(
-                queryObject[0],
-                "tradeLicenseDetail.owners",
-                getMultipleOwners(owners)
-            );
-
+        const tenantId = ifUserRoleExists("CITIZEN") ? "pb.amritsar" : getTenantId();
+        set(queryObject, "tenantId", tenantId);
+        if (queryObject.applicationNumber) {
             let action = "INITIATE";
-            if (
-                queryObject[0].tradeLicenseDetail &&
-                queryObject[0].tradeLicenseDetail.applicationDocuments
-            ) {
+            if (queryObject && queryObject.applicationDocuments) {
                 if (getQueryArg(window.location.href, "action") === "edit") {
-                    // const removedDocs = get(
-                    //   state.screenConfiguration.preparedFinalObject,
-                    //   "LicensesTemp[0].removedDocs",
-                    //   []
-                    // );
-                    // set(queryObject[0], "tradeLicenseDetail.applicationDocuments", [
-                    //   ...get(
-                    //     state.screenConfiguration.prepareFinalObject,
-                    //     "Licenses[0].tradeLicenseDetail.applicationDocuments",
-                    //     []
-                    //   ),
-                    //   ...removedDocs
-                    // ]);
+                    // Changes to be done on edit
                 } else if (activeIndex === 1) {
-                    set(queryObject[0], "tradeLicenseDetail.applicationDocuments", null);
+                    // set(queryObject, queryObject.applicationDocuments", null);
                 } else action = "APPLY";
             }
-            // else if (
-            //   queryObject[0].tradeLicenseDetail &&
-            //   queryObject[0].tradeLicenseDetail.applicationDocuments &&
-            //   activeIndex === 1
-            // ) {
-            // } else if (
-            //   queryObject[0].tradeLicenseDetail &&
-            //   queryObject[0].tradeLicenseDetail.applicationDocuments
-            // ) {
-            //   action = "APPLY";
-            // }
-            set(queryObject[0], "action", action);
+            set(queryObject, "action", action);
             const isEditFlow = getQueryArg(window.location.href, "action") === "edit";
-            !isEditFlow &&
-                (await httpRequest("post", "/tl-services/v1/_update", "", [], {
-                    Licenses: queryObject
-                }));
-            let searchQueryObject = [
-                { key: "tenantId", value: queryObject[0].tenantId },
-                { key: "applicationNumber", value: queryObject[0].applicationNumber }
-            ];
+            !isEditFlow && (await httpRequest("post", "/ws-services/ws/_update", "", [], { WaterConnection: queryObject }));
+            let searchQueryObject = [{ key: "tenantId", value: queryObject.tenantId }, { key: "applicationNumber", value: queryObject.applicationNumber }];
             let searchResponse = await getSearchResults(searchQueryObject);
-            if (isEditFlow) {
-                searchResponse = { Licenses: queryObject };
-            } else {
-                dispatch(prepareFinalObject("Licenses", searchResponse.Licenses));
-            }
-            const updatedtradeUnits = get(
-                searchResponse,
-                "Licenses[0].tradeLicenseDetail.tradeUnits"
-            );
-            const tradeTemp = updatedtradeUnits.map((item, index) => {
-                return {
-                    tradeSubType: item.tradeType.split(".")[1],
-                    tradeType: item.tradeType.split(".")[0]
-                };
-            });
-            dispatch(prepareFinalObject("LicensesTemp.tradeUnits", tradeTemp));
+            if (isEditFlow) { searchResponse = { WaterConnection: queryObject }; }
+            else { dispatch(prepareFinalObject("WaterConnection", searchResponse.WaterConnection)); }
             createOwnersBackup(dispatch, searchResponse);
         } else {
-            let accessories = get(queryObject[0], "tradeLicenseDetail.accessories");
-            let tradeUnits = get(queryObject[0], "tradeLicenseDetail.tradeUnits");
-            // let owners = get(queryObject[0], "tradeLicenseDetail.owners");
-            let mergedTradeUnits =
-                tradeUnits &&
-                tradeUnits.filter(item => !item.hasOwnProperty("isDeleted"));
-            let mergedAccessories =
-                accessories &&
-                accessories.filter(item => !item.hasOwnProperty("isDeleted"));
-            let mergedOwners =
-                owners && owners.filter(item => !item.hasOwnProperty("isDeleted"));
-
-            set(queryObject[0], "tradeLicenseDetail.tradeUnits", mergedTradeUnits);
-            set(queryObject[0], "tradeLicenseDetail.accessories", mergedAccessories);
-            set(queryObject[0], "tradeLicenseDetail.owners", mergedOwners);
-            set(queryObject[0], "action", "INITIATE");
+            set(queryObject, "action", "INITIATE");
             //Emptying application docs to "INITIATE" form in case of search and fill from old TL Id.
-            if (!queryObject[0].applicationNumber)
-                set(queryObject[0], "tradeLicenseDetail.applicationDocuments", null);
-            const response = await httpRequest(
-                "post",
-                "/tl-services/v1/_create",
-                "", [], { Licenses: queryObject }
-            );
-            dispatch(prepareFinalObject("Licenses", response.Licenses));
+            if (!queryObject.applicationNumber) set(queryObject, "WaterConnection", null);
+            const response = await httpRequest("post", "/ws-services/ws/_create", "", [], { WaterConnection: queryObject });
+            dispatch(prepareFinalObject("WaterConnection", response.WaterConnections));
             createOwnersBackup(dispatch, response);
         }
         /** Application no. box setting */
@@ -704,7 +630,99 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         console.log(error);
         return false;
     }
-};
+}
+
+const applyForSewerage = async (state, dispatch, activeIndex, queryObject) => {
+    try {
+        const tenantId = ifUserRoleExists("CITIZEN") ? "pb.amritsar" : getTenantId();
+        set(queryObject, "tenantId", tenantId);
+        if (queryObject.applicationNumber) {
+            let action = "INITIATE";
+            if (queryObject && queryObject.applicationDocuments) {
+                if (getQueryArg(window.location.href, "action") === "edit") {
+                    // Changes to be done on edit.
+                } else if (activeIndex === 1) {
+                    // set(queryObject, "tradeLicenseDetail", null);
+                } else action = "APPLY";
+            }
+            set(queryObject, "action", action);
+            const isEditFlow = getQueryArg(window.location.href, "action") === "edit";
+            !isEditFlow && (await httpRequest("post", "/sw-services/swc/_update", "", [], { WaterConnection: queryObject }));
+            let searchQueryObject = [{ key: "tenantId", value: queryObject.tenantId }, { key: "applicationNumber", value: queryObject.applicationNumber }];
+            let searchResponse = await getSearchResults(searchQueryObject);
+            if (isEditFlow) { searchResponse = { WaterConnection: queryObject }; }
+            else { dispatch(prepareFinalObject("WaterConnection", searchResponse.WaterConnection)); }
+            createOwnersBackup(dispatch, searchResponse);
+        } else {
+            set(queryObject, "action", "INITIATE");
+            if (!queryObject.applicationNumber) set(queryObject, "WaterConnection", null);
+            const response = await httpRequest("post", "/sw-services/swc/_create", "", [], { WaterConnection: queryObject });
+            dispatch(prepareFinalObject("WaterConnection", response.WaterConnections));
+            createOwnersBackup(dispatch, response);
+        }
+        setApplicationNumberBox(state, dispatch);
+        return true;
+    } catch (error) {
+        dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
+        console.log(error);
+        return false;
+    }
+}
+
+const applyForBothWaterAndSewerage = async (state, dispatch, activeIndex, queryObject) => {
+    try {
+        const tenantId = ifUserRoleExists("CITIZEN") ? "pb.amritsar" : getTenantId();
+        set(queryObject, "tenantId", tenantId);
+        if (queryObject.applicationNumber) {
+            let action = "INITIATE";
+            if (queryObject && queryObject.applicationDocuments) {
+                if (getQueryArg(window.location.href, "action") === "edit") {
+                    // Changes to be done on edit
+                } else if (activeIndex === 1) {
+                    // set(queryObject, queryObject.applicationDocuments", null);
+                } else action = "APPLY";
+            }
+            set(queryObject, "action", action);
+            const isEditFlow = getQueryArg(window.location.href, "action") === "edit";
+            !isEditFlow &&
+                (await httpRequest("post", "/ws-services/ws/_update", "", [], { WaterConnection: queryObject }) &&
+                    await httpRequest("post", "/sw-services/swc/_update", "", [], { SewerageConnection: queryObject }));
+            let searchQueryObject = [{ key: "tenantId", value: queryObject.tenantId }, { key: "applicationNumber", value: queryObject.applicationNumber }];
+            let searchResponse = await getSearchResults(searchQueryObject);
+            let sewerageResponse = await getSearchResults(searchQueryObject);
+            if (isEditFlow) {
+                searchResponse = { WaterConnection: queryObject };
+                sewerageResponse = { SewerageConnection: queryObject };
+            }
+            else {
+                dispatch(prepareFinalObject("WaterConnection", searchResponse.WaterConnection));
+                dispatch(prepareFinalObject("SewerageConnection", sewerageResponse.SewerageConnection));
+            }
+            createOwnersBackup(dispatch, searchResponse);
+            createOwnersBackup(dispatch, sewerageResponse);
+        } else {
+            set(queryObject, "action", "INITIATE");
+            //Emptying application docs to "INITIATE" form in case of search and fill from old TL Id.
+            if (!queryObject.applicationNumber) {
+                set(queryObject, "SewerageConnection", null)
+                set(queryObject, "WaterConnection", null);
+            }
+            const response = await httpRequest("post", "/ws-services/ws/_create", "", [], { WaterConnection: queryObject });
+            const sewerageResponse = await httpRequest("post", "/sw-services/swc/_create", "", [], { SewerageConnection: queryObject });
+            dispatch(prepareFinalObject("WaterConnection", response.WaterConnection));
+            dispatch(prepareFinalObject("SewerageConnection", sewerageResponse.SewerageConnection));
+            createOwnersBackup(dispatch, response);
+            createOwnersBackup(dispatch, sewerageResponse);
+        }
+        /** Application no. box setting */
+        setApplicationNumberBox(state, dispatch);
+        return true;
+    } catch (error) {
+        dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
+        console.log(error);
+        return false;
+    }
+}
 
 const convertOwnerDobToEpoch = owners => {
     let updatedOwners =
@@ -747,30 +765,22 @@ export const isFileValid = (file, acceptedFiles) => {
 };
 
 const setApplicationNumberBox = (state, dispatch) => {
-    let applicationNumber = get(
-        state,
-        "screenConfiguration.preparedFinalObject.Licenses[0].applicationNumber",
-        null
-    );
-    if (applicationNumber) {
-        dispatch(
-            handleField(
-                "apply",
-                "components.div.children.headerDiv.children.header.children.applicationNumber",
-                "visible",
-                true
-            )
-        );
-        dispatch(
-            handleField(
-                "apply",
-                "components.div.children.headerDiv.children.header.children.applicationNumber",
-                "props.number",
-                applicationNumber
-            )
-        );
+    let applicationNumberWater = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].applicationNumber", null);
+    let applicationNumberSewerage = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0].applicationNumber", null);
+    if (applicationNumberSewerage && applicationNumberWater) {
+        let applicationNumbers = applicationNumberWater.concat(" ", applicationNumberSewerage);
+        handleApplicationNumberDisplay(dispatch, applicationNumbers)
+    } else if (applicationNumberWater) {
+        handleApplicationNumberDisplay(dispatch, applicationNumberWater)
+    } else {
+        handleApplicationNumberDisplay(dispatch, applicationNumberSewerage)
     }
 };
+
+const handleApplicationNumberDisplay = (dispatch, applicationNumber) => {
+    dispatch(handleField("apply", "components.div.children.headerDiv.children.header.children.applicationNumber", "visible", true));
+    dispatch(handleField("apply", "components.div.children.headerDiv.children.header.children.applicationNumber", "props.number", applicationNumber));
+}
 
 export const findItemInArrayOfObject = (arr, conditionCheckerFn) => {
     for (let i = 0; i < arr.length; i++) {

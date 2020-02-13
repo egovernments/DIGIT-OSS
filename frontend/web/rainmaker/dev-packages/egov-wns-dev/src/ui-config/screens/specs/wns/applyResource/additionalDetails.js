@@ -14,6 +14,8 @@ import {
 //   import { searchApiCall } from "./functions";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getHeaderSideText } from "../../utils";
+import get from 'lodash/get';
+import { httpRequest } from '../../../../../../../../packages/lib/egov-ui-framework/ui-utils';
 
 const resetFields = (state, dispatch) => {
   dispatch(
@@ -70,94 +72,103 @@ const getPlumberRadioButton = {
   uiFramework: "custom-containers",
   componentPath: "RadioGroupContainer",
   gridDefination: { xs: 12, sm: 12 },
-  jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].gender",
+  jsonPath: "applyScreen.plumberDetails",
   props: {
     label: { key: "WS_ADDN_DETAILS_PLUMBER_PROVIDED_BY" },
     buttons: [
       { labelKey: "WS_PLUMBER_ULB", value: "ULB" },
       { labelKey: "WS_PLUMBER_SELF", value: "Self" },
     ],
-    jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].gender",
+    jsonPath: "applyScreen.plumberDetails",
     required: false
   },
   type: "array"
 };
 
+const waterSubSourceType = async (state, dispatch, code) => {
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: commonConfig.tenantId,
+      moduleDetails: [{ moduleName: "ws-services-masters", code }]
+    }
+  };
+  try {
+    let payload = null;
+    payload = await httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], mdmsBody);
+    dispatch(prepareFinalObject("applyScreenMdmsData.ws-services-masters.waterSubSource", payload.MdmsRes));
+  } catch (e) { console.log(e); }
+}
+
 export const additionDetails = getCommonCard({
-  header:getCommonHeader({
-labelKey:"WS_COMMON_ADDN_DETAILS"
+  header: getCommonHeader({
+    labelKey: "WS_COMMON_ADDN_DETAILS"
   }),
   connectiondetailscontainer: getCommonGrayCard({
     subHeader: getCommonTitle({
       labelKey: "WS_COMMON_CONNECTION_DETAILS"
     }),
+
     connectionDetails: getCommonContainer({
       connectionType: getSelectField({
-        label: {
-          labelKey: "WS_SERV_DETAIL_CONN_TYPE"
-        },
-        placeholder: {
-          labelKey: "WS_ADDN_DETAILS_CONN_TYPE_PLACEHOLDER"
-        },
+        label: { labelKey: "WS_SERV_DETAIL_CONN_TYPE" },
+        placeholder: { labelKey: "WS_ADDN_DETAILS_CONN_TYPE_PLACEHOLDER" },
         required: false,
-        jsonPath: "searchScreen.status",
-        sourceJsonPath: "applyScreenMdmsData.searchScreen.status",
-        gridDefination: {
-          xs: 12,
-          sm: 6
-        },
-        required: false,
+        sourceJsonPath: "applyScreenMdmsData.ws-services-masters.connectionType",
+        gridDefination: { xs: 12, sm: 6 },
         errorMessage: "ERR_INVALID_BILLING_PERIOD",
-        jsonPath: "searchScreen.status"
+        jsonPath: "searchScreen.connectionType"
       }),
+
       numberOfTaps: getTextField({
         label: { labelKey: "WS_SERV_DETAIL_NO_OF_TAPS" },
         placeholder: { labelKey: "WS_SERV_DETAIL_NO_OF_TAPS_PLACEHOLDER" },
         gridDefination: { xs: 12, sm: 6 },
-        jsonPath: "WaterConnection[0].noOfTaps"
+        jsonPath: "searchScreen.noOfTaps"
       }),
-      waterSource: getSelectField({
-        label: {
-          labelKey: "WS_SERV_DETAIL_WATER_SOURCE"
-        },
-        placeholder: {
-          labelKey: "WS_ADDN_DETAILS_WARER_SOURCE_PLACEHOLDER"
-        },
-        required: false,
-        jsonPath: "searchScreen.status",
-        sourceJsonPath: "applyScreenMdmsData.searchScreen.status",
-        gridDefination: {
-          xs: 12,
-          sm: 6
-        },
-        required: false,
-        errorMessage: "ERR_INVALID_BILLING_PERIOD",
-        jsonPath: "searchScreen.status"
-      }),
+
+      waterSourceType: {
+        ...getSelectField({
+          label: { labelKey: "WS_SERV_DETAIL_WATER_SOURCE" },
+          placeholder: { labelKey: "WS_ADDN_DETAILS_WARER_SOURCE_PLACEHOLDER" },
+          required: false,
+          sourceJsonPath: "applyScreenMdmsData.ws-services-masters.waterSource",
+          gridDefination: { xs: 12, sm: 6 },
+          errorMessage: "ERR_INVALID_BILLING_PERIOD",
+          jsonPath: "searchScreen.waterSource"
+        }),
+        beforeFieldChange: async (action, state, dispatch) => {
+          let waterSource = get(state, "screenConfiguration.preparedFinalObject.applyScreen.waterSourceType");
+          if (waterSource === "GROUND") {
+            let code = `masterDetails":[{"name":"waterSubSource","filter": "[?(@.code  == 'GROUND')]"}]`
+            await waterSubSourceType(state, dispatch, code)
+          } else if (waterSource === "SURFACE") {
+            let code = `masterDetails":[{"name":"waterSubSource","filter": "[?(@.code  == 'SURFACE')]"}]`
+            await waterSubSourceType(state, dispatch, code)
+          } else {
+            let code = `masterDetails":[{"name":"waterSubSource","filter": "[?(@.code  == 'BULKSUPPLY')]"}]`
+            await waterSubSourceType(state, dispatch, code)
+          }
+        }
+      },
+
       waterSubSource: getSelectField({
-        label: {
-          labelKey: "WS_SERV_DETAIL_WATER_SUB_SOURCE"
-        },
-        placeholder: {
-          labelKey: "WS_ADDN_DETAILS_WARER_SUB_SOURCE_PLACEHOLDER"
-        },
+        label: { labelKey: "WS_SERV_DETAIL_WATER_SUB_SOURCE" },
+        placeholder: { labelKey: "WS_ADDN_DETAILS_WARER_SUB_SOURCE_PLACEHOLDER" },
         required: false,
-        jsonPath: "searchScreen.status",
-        sourceJsonPath: "applyScreenMdmsData.searchScreen.status",
-        gridDefination: {
-          xs: 12,
-          sm: 6
-        },
-        required: false,
+        sourceJsonPath: "applyScreenMdmsData.ws-services-masters.waterSubSource[0].subsource",
+        gridDefination: { xs: 12, sm: 6 },
         errorMessage: "ERR_INVALID_BILLING_PERIOD",
-        jsonPath: "searchScreen.status"
+        jsonPath: "searchScreen.waterSubSource"
       }),
+
       pipeSize: getSelectField({
         label: { labelKey: "WS_SERV_DETAIL_PIPE_SIZE" },
         placeholder: { labelKey: "WS_SERV_DETAIL_PIPE_SIZE_PLACEHOLDER" },
         gridDefination: { xs: 12, sm: 6 },
-        jsonPath: "WaterConnection[0].pipeSize"
+        sourceJsonPath: "applyScreenMdmsData.ws-services-masters.pipeSize",
+        jsonPath: "searchScreen.pipeSize"
       }),
+
       //Removed - Confirmed by Aditya
       // billingType: getSelectField({
       //   label: {
@@ -177,11 +188,12 @@ labelKey:"WS_COMMON_ADDN_DETAILS"
       //   errorMessage: "ERR_INVALID_BILLING_PERIOD",
       //   jsonPath: "searchScreen.status"
       // }),
+
       waterClosets: getTextField({
         label: { labelKey: "WS_ADDN_DETAILS_NO_OF_WATER_CLOSETS" },
         placeholder: { labelKey: "WS_ADDN_DETAILS_NO_OF_WATER_CLOSETS_PLACEHOLDER" },
         gridDefination: { xs: 12, sm: 6 },
-        jsonPath: "WaterConnection[0].noOfTaps"
+        jsonPath: "searchScreen.waterClosets"
       }),
 
     }),
