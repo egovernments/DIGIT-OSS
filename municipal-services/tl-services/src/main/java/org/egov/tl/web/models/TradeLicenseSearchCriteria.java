@@ -21,6 +21,9 @@ public class TradeLicenseSearchCriteria {
     @JsonProperty("status")
     private String status;
 
+    @JsonProperty("applicationType")
+    private String applicationType;
+
     @JsonProperty("ids")
     private List<String> ids;
 

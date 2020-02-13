@@ -140,6 +140,11 @@ public class TLQueryBuilder {
                 preparedStmtList.add(criteria.getStatus());
             }
 
+            if (criteria.getApplicationType() != null) {
+                addClauseIfRequired(preparedStmtList, builder);
+                builder.append("  tl.applicationtype = ? ");
+                preparedStmtList.add(criteria.getApplicationType());
+            }
 
             List<String> licenseNumbers = criteria.getLicenseNumbers();
             if (!CollectionUtils.isEmpty(licenseNumbers)) {
