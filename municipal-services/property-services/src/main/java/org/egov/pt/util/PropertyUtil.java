@@ -1,5 +1,8 @@
 package org.egov.pt.util;
 
+import static org.egov.pt.util.PTConstants.ASMT_MODULENAME;
+import static org.egov.pt.util.PTConstants.BILL_AMOUNT_PATH;
+import static org.egov.pt.util.PTConstants.BILL_NODEMAND_ERROR_CODE;
 import static org.egov.pt.util.PTConstants.CREATE_PROCESS_CONSTANT;
 import static org.egov.pt.util.PTConstants.MUTATION_PROCESS_CONSTANT;
 import static org.egov.pt.util.PTConstants.UPDATE_PROCESS_CONSTANT;
@@ -9,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.User;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.OwnerInfo;
@@ -16,11 +20,15 @@ import org.egov.pt.models.Property;
 import org.egov.pt.models.user.UserDetailResponse;
 import org.egov.pt.models.workflow.ProcessInstance;
 import org.egov.pt.models.workflow.ProcessInstanceRequest;
+import org.egov.pt.repository.ServiceRequestRepository;
 import org.egov.pt.web.contracts.PropertyRequest;
+import org.egov.pt.web.contracts.RequestInfoWrapper;
+import org.egov.tracer.model.ServiceCallException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import lombok.extern.slf4j.Slf4j;
@@ -28,11 +36,16 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Slf4j
 public class PropertyUtil extends CommonUtils {
-
-    @Autowired
-    private PropertyConfiguration config;
-
-
+	
+	@Autowired
+	private PropertyConfiguration configs;
+	
+	@Autowired
+	private ServiceRequestRepository restRepo;
+	
+	@Autowired
+	private ObjectMapper mapper;
+	
     /**
 	 * Populates the owner fields inside of property objects from the response by user api
 	 * 
@@ -68,7 +81,7 @@ public class PropertyUtil extends CommonUtils {
 			Property property = propertyRequest.getProperty();
 			
 			ProcessInstance process = ProcessInstance.builder()
-				.businessService(config.getPropertyRegistryWf())
+				.businessService(configs.getPropertyRegistryWf())
 				.businessId(property.getAcknowldgementNumber())
 				.comment("Payment for property processed")
 				.assignes(getUserForWorkflow(property))
@@ -96,8 +109,8 @@ public class PropertyUtil extends CommonUtils {
 		case CREATE_PROCESS_CONSTANT :
 			List<User> owners = getUserForWorkflow(property);
 			wf.setAssignes(owners);
-			wf.setBusinessService(config.getPropertyRegistryWf());
-			wf.setModuleName(config.getPropertyModuleName());
+			wf.setBusinessService(configs.getPropertyRegistryWf());
+			wf.setModuleName(configs.getPropertyModuleName());
 			wf.setAction("OPEN");
 			break;
 
@@ -136,6 +149,39 @@ public class PropertyUtil extends CommonUtils {
 
 	public void clearSensitiveDataForPersistance(Property property) {
 		property.getOwners().forEach(owner -> owner.setMobileNumber(null));
+	}
+
+/**
+ * Utility method to fetch bill for validation of payment
+ * 
+ * @param propertyId
+ * @param tenantId
+ * @param request
+ */
+	public Boolean isBillUnpaid(String propertyId, String tenantId, RequestInfo request) {
+
+		Object res = null;
+		
+		StringBuilder uri = new StringBuilder(configs.getEgbsHost())
+				.append(configs.getEgbsFetchBill())
+				.append("?tenantId=").append(tenantId)
+				.append("&consumerCode=").append(propertyId)
+				.append("&businessService=").append(ASMT_MODULENAME);
+
+		try {
+			res = restRepo.fetchResult(uri, new RequestInfoWrapper(request)).get();
+		} catch (ServiceCallException e) {
+			
+			if(!e.getError().contains(BILL_NODEMAND_ERROR_CODE))
+				throw e;
+		}
+		
+		if (res != null) {
+			JsonNode node = mapper.convertValue(res, JsonNode.class);
+			Double amount = node.at(BILL_AMOUNT_PATH).asDouble();
+			return amount > 0;
+		}
+		return false;
 	}
 	
 }

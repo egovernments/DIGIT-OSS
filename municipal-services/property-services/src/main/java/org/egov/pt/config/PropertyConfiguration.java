@@ -202,6 +202,15 @@ public class PropertyConfiguration {
     @Value("${egov.mdms.search.endpoint}")
     private String mdmsEndpoint;
     
+    // Billing-Service
+    
+    
+    @Value("${egbs.host}")
+    private String egbsHost;
+
+    @Value("${egbs.fetchbill.endpoint}")
+    private String egbsFetchBill;
+    	
     // Registry 
     
     @Value("${property.min.landarea}")

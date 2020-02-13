@@ -33,6 +33,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.jayway.jsonpath.JsonPath;
 
+import lombok.Getter;
+
+@Getter
 public class CommonUtils {
 
 	
@@ -40,7 +43,7 @@ public class CommonUtils {
 	private ObjectMapper mapper;
 	
 	@Autowired
-	private PropertyConfiguration config;
+	private PropertyConfiguration configs;
 	
     @Autowired
     private ServiceRequestRepository restRepo;
@@ -99,7 +102,7 @@ public class CommonUtils {
 		}
 
 		IdGenerationRequest request = IdGenerationRequest.builder().idRequests(reqList).requestInfo(requestInfo).build();
-		StringBuilder uri = new StringBuilder(config.getIdGenHost()).append(config.getIdGenPath());
+		StringBuilder uri = new StringBuilder(configs.getIdGenHost()).append(configs.getIdGenPath());
 		IdGenerationResponse response = mapper.convertValue(restRepo.fetchResult(uri, request).get(), IdGenerationResponse.class);
 		
 		List<IdResponse> idResponses = response.getIdResponses();
@@ -124,7 +127,7 @@ public class CommonUtils {
      */
     public Map<String,List<String>> getAttributeValues(String tenantId, String moduleName, List<String> names, String filter,String jsonpath, RequestInfo requestInfo){
 
-    	StringBuilder uri = new StringBuilder(config.getMdmsHost()).append(config.getMdmsEndpoint());
+    	StringBuilder uri = new StringBuilder(configs.getMdmsHost()).append(configs.getMdmsEndpoint());
         MdmsCriteriaReq criteriaReq = prepareMdMsRequest(tenantId,moduleName,names,filter,requestInfo);
         Optional<Object> response = restRepo.fetchResult(uri, criteriaReq);
         
