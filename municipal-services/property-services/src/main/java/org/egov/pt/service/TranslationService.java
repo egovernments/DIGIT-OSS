@@ -1,17 +1,21 @@
 package org.egov.pt.service;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.models.Assessment;
 import org.egov.pt.models.Property;
 import org.egov.pt.web.contracts.AssessmentRequest;
-import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.*;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class TranslationService {
@@ -31,11 +35,11 @@ public class TranslationService {
         RequestInfo requestInfo = assessmentRequest.getRequestInfo();
         Assessment assessment = assessmentRequest.getAssessment();
 
-        Map<String, Object> propertyMap = new HashMap();
+        Map<String, Object> propertyMap = new HashMap<>();
         Map<String, Object> propertyDetail = new HashMap<>();
 
-        Map<String, Object> addressMap = new HashMap();
-        Map<String, Object> localityMap = new HashMap();
+        Map<String, Object> addressMap = new HashMap<>();
+        Map<String, Object> localityMap = new HashMap<>();
         localityMap.put("area",property.getAddress().getLocality().getArea());
         localityMap.put("code",property.getAddress().getLocality().getCode());
         addressMap.put("locality",localityMap);

@@ -67,8 +67,8 @@ public class BoundaryService {
 		uri.append("&").append("boundaryType=").append("Locality").append("&").append("codes=")
 				.append(property.getAddress().getLocality().getCode());
 
-		Optional<Object> response = serviceRequestRepository.fetchResult(uri,
-				RequestInfoWrapper.builder().requestInfo(requestInfo).build());
+		Optional<Object> response = serviceRequestRepository.fetchResult(uri, RequestInfoWrapper.builder().requestInfo(requestInfo).build());
+		
 		if (response.isPresent()) {
 			LinkedHashMap responseMap = (LinkedHashMap) response.get();
 			if (CollectionUtils.isEmpty(responseMap))

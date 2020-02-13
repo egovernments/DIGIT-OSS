@@ -35,17 +35,19 @@ public class ServiceRequestRepository {
 
 		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 		Object response = null;
+		
 		try {
+			
 			response = restTemplate.postForObject(uri.toString(), request, Map.class);
 		} catch (HttpClientErrorException e) {
+			
 			log.error("External Service threw an Exception: ", e);
 			throw new ServiceCallException(e.getResponseBodyAsString());
 		} catch (Exception e) {
+			
 			log.error("Exception while fetching from external service: ", e);
 			throw new CustomException("REST_CALL_EXCEPTION : "+uri.toString(),e.getMessage());
 		}
-
 		return Optional.ofNullable(response);
-
 	}
 }

@@ -121,5 +121,13 @@ public class PTConstants {
 	public static final String MUTATION_PROCESS_CONSTANT = "MUTATION";
 	
 	public static final String PREVIOUS_PROPERTY_PREVIOUD_UUID = "previousPropertyUuid";
+	
+	
+	
+	/* ASSESSMENT CONSTANTS */
+	
+    public static final String WORKFLOW_SENDBACK_CITIZEN = "SENDBACKTOCITIZEN";
+
+    public static final String ASSESSMENT_BUSINESSSERVICE = "ASMT";
 
 }

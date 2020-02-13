@@ -62,7 +62,14 @@ public class PropertyConfiguration {
     private String userSearchEndpoint;
 
 
-    //IDGEN
+    //IDGEN config
+    
+    @Value("${egov.idgen.host}")
+    private String idGenHost;
+
+    @Value("${egov.idgen.path}")
+    private String idGenPath;
+    
     @Value("${egov.idgen.ack.name}")
     private String ackIdGenName;
 
@@ -174,9 +181,6 @@ public class PropertyConfiguration {
 
     @Value("${is.workflow.enabled}")
     private Boolean isWorkflowEnabled;
-    
-    @Value("${is.update.workflow.enabled}")
-    private Boolean isUpdateWorkflowEnabled;
     
     @Value("${is.mutation.workflow.enabled}")
     private Boolean isMutationWorkflowEnabled;

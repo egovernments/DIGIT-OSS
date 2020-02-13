@@ -20,28 +20,6 @@ import org.springframework.util.CollectionUtils;
 @Service
 public class DiffService {
 
-
-    /**
-     * Creates a list of Difference object between the update and search
-     *
-     * @param request      The tradeLicenseRequest for update
-     * @param searchResult The searched licenses corresponding to the request
-     * @return List of Difference object
-     */
-//    public Difference getDifference(PropertyRequest request, Property searchResult) {
-//
-//        Property property = request.getProperty();
-//
-//        Difference diff = new Difference();
-//        diff.setId(property.getId());
-//        diff.setFieldsChanged(getUpdatedFields(property, searchResult));
-//        diff.setClassesAdded(getObjectsAdded(property, searchResult));
-//        diff.setClassesRemoved(getObjectsRemoved(property, searchResult));
-//
-//        return diff;
-//    }
-//
-
     /**
      * Gives the field names whose values are different in the two classes
      *
@@ -82,7 +60,6 @@ public class DiffService {
         Javers javers = JaversBuilder.javers().build();
         Diff diff = javers.compare(propertyFromSearch, propertyFromUpdate);
         List objectsAdded = diff.getObjectsByChangeType(NewObject.class);
-        ;
 
         List<String> classModified = new LinkedList<>();
 

@@ -61,7 +61,7 @@ public class PropertyService {
     private ObjectMapper mapper;
 
     @Autowired
-	private MutationCalculatorService mutationCalculatorService;
+	private CalculationService calculatorService;
 
 
     
@@ -135,7 +135,7 @@ public class PropertyService {
 		
 		util.mergeAdditionalDetails(request, propertyFromSearch);
 		
-		if(config.getIsUpdateWorkflowEnabled()) {
+		if(config.getIsWorkflowEnabled()) {
 			
 			State state = wfService.updateWorkflow(request, UPDATE_PROCESS_CONSTANT);
 			request.getProperty().getWorkflow().setState(state);
@@ -216,7 +216,7 @@ public class PropertyService {
 			 */
 			producer.push(config.getUpdatePropertyTopic(), request);
 		}
-		mutationCalculatorService.calculateMutationFee(request.getRequestInfo(), request.getProperty());
+		calculatorService.calculateMutationFee(request.getRequestInfo(), request.getProperty());
 	}
 
 	private void terminateWorkflowAndReInstatePreviousRecord(PropertyRequest request, Property propertyFromSearch) {

@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.config.PropertyConfiguration;
@@ -13,12 +12,9 @@ import org.egov.pt.models.Institution;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.PropertyCriteria;
 import org.egov.pt.models.enums.Status;
-import org.egov.pt.repository.IdGenRepository;
 import org.egov.pt.util.PTConstants;
 import org.egov.pt.util.PropertyUtil;
-import org.egov.pt.web.contracts.IdResponse;
 import org.egov.pt.web.contracts.PropertyRequest;
-import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -29,13 +25,10 @@ public class EnrichmentService {
 
 
     @Autowired
-    PropertyUtil propertyutil;
+    private PropertyUtil propertyutil;
 
     @Autowired
-    IdGenRepository idGenRepository;
-
-    @Autowired
-    BoundaryService boundaryService;
+    private BoundaryService boundaryService;
 
     @Autowired
     private PropertyConfiguration config;
@@ -132,25 +125,6 @@ public class EnrichmentService {
     }
 
 
-    /**
-     * Returns a list of numbers generated from idgen
-     * @param requestInfo RequestInfo from the request
-     * @param tenantId tenantId of the city
-     * @param idKey code of the field defined in application properties for which ids are generated for
-     * @param idformat format in which ids are to be generated
-     * @param count Number of ids to be generated
-     * @return List of ids generated using idGen service
-     */
-	public List<String> getIdList(RequestInfo requestInfo, String tenantId, String idKey, String idformat, int count) {
-		
-		List<IdResponse> idResponses = idGenRepository.getId(requestInfo, tenantId, idKey, idformat, count)
-				.getIdResponses();
-
-		if (CollectionUtils.isEmpty(idResponses))
-			throw new CustomException("IDGEN ERROR", "No ids returned from idgen Service");
-
-		return idResponses.stream().map(IdResponse::getId).collect(Collectors.toList());
-	}
 
     /**
 	 * Sets the acknowledgement and assessment Numbers for given PropertyRequest
@@ -165,11 +139,11 @@ public class EnrichmentService {
 
 		if (!config.getIsWorkflowEnabled()) {
 
-			String pId = getIdList(requestInfo, tenantId, config.getPropertyIdGenName(), config.getPropertyIdGenFormat(), 1).get(0);
+			String pId = propertyutil.getIdList(requestInfo, tenantId, config.getPropertyIdGenName(), config.getPropertyIdGenFormat(), 1).get(0);
 			property.setPropertyId(pId);
 			property.setStatus(Status.ACTIVE);
 		}
-		String ackNo = getIdList(requestInfo, tenantId, config.getAckIdGenName(), config.getAckIdGenFormat(), 1).get(0);
+		String ackNo = propertyutil.getIdList(requestInfo, tenantId, config.getAckIdGenName(), config.getAckIdGenFormat(), 1).get(0);
 		property.setAcknowldgementNumber(ackNo);
 	}
 
@@ -211,7 +185,7 @@ public class EnrichmentService {
 		
 		if (isStart) {
 			
-			String ackNo = getIdList(requestInfo, property.getTenantId(), config.getAckIdGenName(), config.getAckIdGenFormat(), 1).get(0);
+			String ackNo = propertyutil.getIdList(requestInfo, property.getTenantId(), config.getAckIdGenName(), config.getAckIdGenFormat(), 1).get(0);
 			
 			property.setId(UUID.randomUUID().toString());
 			property.setAcknowldgementNumber(ackNo);

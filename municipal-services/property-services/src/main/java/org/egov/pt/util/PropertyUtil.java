@@ -1,29 +1,16 @@
 package org.egov.pt.util;
 
-import static java.util.Objects.isNull;
 import static org.egov.pt.util.PTConstants.CREATE_PROCESS_CONSTANT;
-import static org.egov.pt.util.PTConstants.MODULE;
 import static org.egov.pt.util.PTConstants.MUTATION_PROCESS_CONSTANT;
-import static org.egov.pt.util.PTConstants.NOTIFICATION_LOCALE;
 import static org.egov.pt.util.PTConstants.UPDATE_PROCESS_CONSTANT;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
-import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.User;
-import org.egov.mdms.model.MasterDetail;
-import org.egov.mdms.model.MdmsCriteria;
-import org.egov.mdms.model.MdmsCriteriaReq;
-import org.egov.mdms.model.ModuleDetail;
 import org.egov.pt.config.PropertyConfiguration;
-import org.egov.pt.models.AuditDetails;
 import org.egov.pt.models.OwnerInfo;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.user.UserDetailResponse;
@@ -40,8 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Slf4j
-public class PropertyUtil {
-
+public class PropertyUtil extends CommonUtils {
 
     @Autowired
     private PropertyConfiguration config;
@@ -68,68 +54,14 @@ public class PropertyUtil {
 			property.getOwners().forEach(owner -> {
 
 				if (userIdToOwnerMap.get(owner.getUuid()) == null)
-					log.info("OWNER SEARCH ERROR",
-							"The owner with UUID : \"" + owner.getUuid() + "\" for the property with Id \""
-									+ property.getPropertyId() + "\" is not present in user search response");
+					log.info("OWNER SEARCH ERROR", "The owner with UUID : \"" + owner.getUuid() +
+							"\" for the property with Id \"" + property.getPropertyId() + "\" is not present in user search response");
 				else
 					owner.addUserDetail(userIdToOwnerMap.get(owner.getUuid()));
 			});
 		});
 	}
 	
-    /**
-     * Method to return auditDetails for create/update flows
-     *
-     * @param by
-     * @param isCreate
-     * @return AuditDetails
-     */
-    public AuditDetails getAuditDetails(String by, Boolean isCreate) {
-    	
-        Long time = System.currentTimeMillis();
-        if(isCreate)
-            return AuditDetails.builder().createdBy(by).lastModifiedBy(by).createdTime(time).lastModifiedTime(time).build();
-        else
-            return AuditDetails.builder().lastModifiedBy(by).lastModifiedTime(time).build();
-    }
-
-    public MdmsCriteriaReq prepareMdMsRequest(String tenantId,String moduleName, List<String> names, String filter, RequestInfo requestInfo) {
-
-        List<MasterDetail> masterDetails = new ArrayList<>();
-
-        names.forEach(name -> {
-            masterDetails.add(MasterDetail.builder().name(name).filter(filter).build());
-        });
-
-        ModuleDetail moduleDetail = ModuleDetail.builder()
-                .moduleName(moduleName).masterDetails(masterDetails).build();
-        List<ModuleDetail> moduleDetails = new ArrayList<>();
-        moduleDetails.add(moduleDetail);
-        MdmsCriteria mdmsCriteria = MdmsCriteria.builder().tenantId(tenantId).moduleDetails(moduleDetails).build();
-        return MdmsCriteriaReq.builder().requestInfo(requestInfo).mdmsCriteria(mdmsCriteria).build();
-    }
-
-    /**
-     * Returns the uri for the localization call
-     * @param tenantId TenantId of the propertyRequest
-     * @return The uri for localization search call
-     */
-    public StringBuilder getUri(String tenantId, RequestInfo requestInfo){
-        if(config.getIsStateLevel())
-            tenantId = tenantId.split("\\.")[0];
-
-        String locale = NOTIFICATION_LOCALE;
-        if(!StringUtils.isEmpty(requestInfo.getMsgId()) && requestInfo.getMsgId().split("\\|").length>=2)
-            locale = requestInfo.getMsgId().split("\\|")[1];
-
-        StringBuilder uri = new StringBuilder();
-        uri.append(config.getLocalizationHost())
-                .append(config.getLocalizationContextPath()).append(config.getLocalizationSearchEndpoint());
-        uri.append("?").append("locale=").append(locale)
-                .append("&tenantId=").append(tenantId)
-                .append("&module=").append(MODULE);
-        return uri;
-    }
 
 	public ProcessInstanceRequest getProcessInstanceForPayment(PropertyRequest propertyRequest) {
 
@@ -185,57 +117,6 @@ public class PropertyUtil {
 				.build();
 	}
 
-
-	/**
-	 *
-	 * @param property Property whose owners are to be returned
-	 * @return Owners of the property
-	 */
-	public List<User> getUserForWorkflow(Property property){
-		List<User> owners = new LinkedList<>();
-
-		property.getOwners().forEach(ownerInfo -> {
-			owners.add(User.builder().uuid(ownerInfo.getUuid()).build());
-		});
-
-		owners.add(User.builder().uuid(property.getAccountId()).build());
-		return owners;
-	}
-
-	/**
-	 * Method to merge additional details during update 
-	 * 
-	 * @param mainNode
-	 * @param updateNode
-	 * @return
-	 */
-	public JsonNode jsonMerge(JsonNode mainNode, JsonNode updateNode) {
-
-		if (isNull(mainNode) || mainNode.isNull())
-			return updateNode;
-		if (isNull(updateNode) || updateNode.isNull())
-			return mainNode;
-
-		Iterator<String> fieldNames = updateNode.fieldNames();
-		while (fieldNames.hasNext()) {
-
-			String fieldName = fieldNames.next();
-			JsonNode jsonNode = mainNode.get(fieldName);
-			// if field exists and is an embedded object
-			if (jsonNode != null && jsonNode.isObject()) {
-				jsonMerge(jsonNode, updateNode.get(fieldName));
-			} else {
-				if (mainNode instanceof ObjectNode) {
-					// Overwrite field
-					JsonNode value = updateNode.get(fieldName);
-					((ObjectNode) mainNode).set(fieldName, value);
-				}
-			}
-
-		}
-		return mainNode;
-	}
-	
 	/**
 	 * 
 	 * @param request

@@ -5,13 +5,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.User;
-import org.egov.mdms.model.MdmsCriteriaReq;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.ConstructionDetail;
 import org.egov.pt.models.GeoLocation;
@@ -22,9 +20,7 @@ import org.egov.pt.models.PropertyCriteria;
 import org.egov.pt.models.Unit;
 import org.egov.pt.models.enums.Status;
 import org.egov.pt.models.workflow.ProcessInstance;
-import org.egov.pt.repository.ServiceRequestRepository;
 import org.egov.pt.service.PropertyService;
-import org.egov.pt.util.ErrorConstants;
 import  org.egov.pt.util.PTConstants;
 import org.egov.pt.util.PropertyUtil;
 import org.egov.pt.web.contracts.PropertyRequest;
@@ -37,7 +33,6 @@ import org.springframework.util.StringUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
-import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.PathNotFoundException;
 
 import lombok.extern.slf4j.Slf4j;
@@ -50,12 +45,6 @@ public class PropertyValidator {
     @Autowired
     private PropertyUtil propertyUtil;
 
-    @Autowired
-    private PropertyConfiguration propertyConfiguration;
-
-    @Autowired
-    private ServiceRequestRepository serviceRequestRepository;
-    
     @Autowired
     private PropertyConfiguration configs;
     
@@ -181,7 +170,7 @@ public class PropertyValidator {
         if(request.getRequestInfo().getUserInfo().getType().equalsIgnoreCase("CITIZEN"))
             validateAssessees(request, errorMap);
 
-		if (configs.getIsUpdateWorkflowEnabled() && request.getProperty().getWorkflow() == null)
+		if (configs.getIsWorkflowEnabled() && request.getProperty().getWorkflow() == null)
 			throw new CustomException("EG_PT_UPDATE_WF_ERROR", "Workflow information is mandatory for update");
 		
 		
@@ -218,8 +207,9 @@ public class PropertyValidator {
 
 		validateInstitution(property, errorMap);
 		
-		Map<String, List<String>> codes = getAttributeValues(tenantId, PTConstants.MDMS_PT_MOD_NAME, 
-											masterNames, "$.*.code", PTConstants.JSONPATH_CODES, request.getRequestInfo());
+		Map<String, List<String>> codes = propertyUtil.getAttributeValues(tenantId, PTConstants.MDMS_PT_MOD_NAME, masterNames,
+				"$.*.code", PTConstants.JSONPATH_CODES, request.getRequestInfo());
+		
 		if (null != codes) {
 			validateMDMSData(masterNames, codes);
 			validateCodes(property, codes, errorMap);
@@ -231,34 +221,6 @@ public class PropertyValidator {
             throw new CustomException(errorMap);
     }
 
-    /**
-     *Fetches all the values of particular attribute as map of fieldname to list
-     *
-     * @param tenantId tenantId of properties in PropertyRequest
-     * @param names List of String containing the names of all masterdata whose code has to be extracted
-     * @param requestInfo RequestInfo of the received PropertyRequest
-     * @return Map of MasterData name to the list of code in the MasterData
-     *
-     */
-    public Map<String,List<String>> getAttributeValues(String tenantId, String moduleName, List<String> names, String filter,String jsonpath, RequestInfo requestInfo){
-
-    	StringBuilder uri = new StringBuilder(configs.getMdmsHost()).append(configs.getMdmsEndpoint());
-        MdmsCriteriaReq criteriaReq = propertyUtil.prepareMdMsRequest(tenantId,moduleName,names,filter,requestInfo);
-        Optional<Object> response = serviceRequestRepository.fetchResult(uri, criteriaReq);
-        
-        try {
-        	if(response.isPresent()) {
-                return JsonPath.read(response.get(),jsonpath);
-        	}
-        } catch (Exception e) {
-            log.error("Error while fetvhing MDMS data",e);
-            throw new CustomException(ErrorConstants.INVALID_TENANT_ID_MDMS_KEY,
-                    ErrorConstants.INVALID_TENANT_ID_MDMS_MSG);
-        }
-        
-        return null;
-    }
-    
     private void validateFields(PropertyRequest request, Map<String, String> errorMap) {
 
     	Property property = request.getProperty();
@@ -544,7 +506,7 @@ public class PropertyValidator {
 			if (isCriteriaEmpty)
 				criteria.setOwnerIds(Sets.newHashSet(user.getUuid()));
 			
-			allowedParams = Arrays.asList(propertyConfiguration.getCitizenSearchParams().split(","));
+			allowedParams = Arrays.asList(configs.getCitizenSearchParams().split(","));
 		}
 		
 		else {
@@ -555,7 +517,7 @@ public class PropertyValidator {
 			if(criteria.getTenantId() != null && isCriteriaEmpty)
 				throw new CustomException("EG_PT_INVALID_SEARCH"," Search is not allowed on empty Criteria, Atleast one criteria should be provided with tenantId for " + userType);
 			
-			allowedParams = Arrays.asList(propertyConfiguration.getEmployeeSearchParams().split(","));
+			allowedParams = Arrays.asList(configs.getEmployeeSearchParams().split(","));
 		}
 
 		if (criteria.getName() != null && !allowedParams.contains("name"))

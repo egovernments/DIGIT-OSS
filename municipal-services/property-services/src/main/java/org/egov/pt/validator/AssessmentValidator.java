@@ -1,17 +1,30 @@
 package org.egov.pt.validator;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.config.PropertyConfiguration;
-import org.egov.pt.models.*;
+import org.egov.pt.models.Assessment;
+import org.egov.pt.models.AssessmentSearchCriteria;
+import org.egov.pt.models.Property;
+import org.egov.pt.models.PropertyCriteria;
+import org.egov.pt.models.UnitUsage;
 import org.egov.pt.models.enums.Status;
 import org.egov.pt.repository.AssessmentRepository;
 import org.egov.pt.service.PropertyService;
+import org.egov.pt.util.AssessmentUtils;
 import org.egov.pt.util.ErrorConstants;
 import org.egov.pt.util.PTConstants;
-import org.egov.pt.util.PropertyUtil;
 import org.egov.pt.web.contracts.AssessmentRequest;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +38,7 @@ public class AssessmentValidator {
 	private PropertyService propertyService;
 
 	@Autowired
-	private PropertyValidator propertyValidator;
-
-	@Autowired
-	private PropertyUtil propertyUtils;
+	private AssessmentUtils AssmtUtils;
 
 	@Autowired
 	private AssessmentRepository assessmentRepository;
@@ -147,7 +157,7 @@ public class AssessmentValidator {
 			}
 		}*/
 		assessment.setAdditionalDetails(
-				propertyUtils.jsonMerge(assessmentFromDB.getAdditionalDetails(), assessment.getAdditionalDetails()));
+				AssmtUtils.jsonMerge(assessmentFromDB.getAdditionalDetails(), assessment.getAdditionalDetails()));
 
 
 		if (!CollectionUtils.isEmpty(errorMap.keySet())) {
@@ -217,12 +227,19 @@ public class AssessmentValidator {
 	}
 
 	private Map<String, List<String>> fetchMaster(RequestInfo requestInfo, String tenantId) {
-		String[] masterNames = {PTConstants.MDMS_PT_CONSTRUCTIONTYPE, PTConstants.MDMS_PT_OCCUPANCYTYPE,PTConstants.MDMS_PT_USAGEMAJOR };
-		Map<String, List<String>> codes = propertyValidator.getAttributeValues(tenantId, PTConstants.MDMS_PT_MOD_NAME, new ArrayList<>(Arrays.asList(masterNames)), "$.*.code",
-				PTConstants.JSONPATH_CODES, requestInfo);
-		if(null != codes) {
+		
+		String[] masterNames = { 
+				PTConstants.MDMS_PT_CONSTRUCTIONTYPE,
+				PTConstants.MDMS_PT_OCCUPANCYTYPE,
+				PTConstants.MDMS_PT_USAGEMAJOR 
+				};
+		
+		Map<String, List<String>> codes = AssmtUtils.getAttributeValues(tenantId, PTConstants.MDMS_PT_MOD_NAME,
+				new ArrayList<>(Arrays.asList(masterNames)), "$.*.code", PTConstants.JSONPATH_CODES, requestInfo);
+
+		if (null != codes) {
 			return codes;
-		}else {
+		} else {
 			throw new CustomException("MASTER_FETCH_FAILED", "Couldn't fetch master data for validation");
 		}
 	}

@@ -1,6 +1,6 @@
 package org.egov.pt.service;
 
-import static org.egov.pt.util.AssessmentConstants.ASSESSMENT_BUSINESSSERVICE;
+import static org.egov.pt.util.PTConstants.ASSESSMENT_BUSINESSSERVICE;
 
 import java.util.Arrays;
 import java.util.Collections;

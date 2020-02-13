@@ -1,12 +1,11 @@
 package org.egov.pt.service;
 
 
-import static org.egov.pt.util.AssessmentConstants.WORKFLOW_SENDBACK_CITIZEN;
+import static org.egov.pt.util.PTConstants.WORKFLOW_SENDBACK_CITIZEN;
 import static org.egov.pt.util.PTConstants.ASMT_MODULENAME;
 import static org.egov.pt.util.PTConstants.ASMT_WORKFLOW_CODE;
 import static org.egov.pt.util.PTConstants.WORKFLOW_START_ACTION;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -26,7 +25,6 @@ import org.egov.pt.models.workflow.BusinessService;
 import org.egov.pt.models.workflow.ProcessInstance;
 import org.egov.pt.models.workflow.State;
 import org.egov.pt.util.AssessmentUtils;
-import org.egov.pt.util.PropertyUtil;
 import org.egov.pt.web.contracts.AssessmentRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,23 +39,16 @@ public class AssessmentEnrichmentService {
 
     private PropertyConfiguration config;
 
-    private PropertyUtil propertyUtil;
-
     private WorkflowService workflowService;
 
-    @Autowired
-    public AssessmentEnrichmentService(AssessmentUtils assessmentUtils, PropertyConfiguration config, PropertyUtil propertyUtil, WorkflowService workflowService) {
-        this.assessmentUtils = assessmentUtils;
-        this.config = config;
-        this.propertyUtil = propertyUtil;
-        this.workflowService = workflowService;
-    }
-
-
-
-
-
-
+	@Autowired
+	public AssessmentEnrichmentService(AssessmentUtils assessmentUtils, PropertyConfiguration config,
+			WorkflowService workflowService) {
+		
+		this.assessmentUtils = assessmentUtils;
+		this.config = config;
+		this.workflowService = workflowService;
+	}
 
     /**
      * Service layer to enrich assessment object in create flow
@@ -65,6 +56,7 @@ public class AssessmentEnrichmentService {
      * @param request
      */
     public void enrichAssessmentCreate(AssessmentRequest request) {
+    	
         Assessment assessment = request.getAssessment();
         assessment.setId(String.valueOf(UUID.randomUUID()));
         assessment.setAssessmentNumber(getAssessmentNo(request));
@@ -74,11 +66,8 @@ public class AssessmentEnrichmentService {
         else
             assessment.setStatus(Status.ACTIVE);
 
-        AuditDetails auditDetails = AuditDetails.builder()
-                .createdBy(request.getRequestInfo().getUserInfo().getUuid())
-                .createdTime(new Date().getTime())
-                .lastModifiedBy(request.getRequestInfo().getUserInfo().getUuid())
-                .lastModifiedTime(new Date().getTime()).build();
+		AuditDetails auditDetails = assessmentUtils.getAuditDetails(request.getRequestInfo().getUserInfo().getUuid(),
+				true);
 
         if(!CollectionUtils.isEmpty(assessment.getUnitUsageList())) {
             for(UnitUsage unitUsage: assessment.getUnitUsageList()) {
@@ -105,13 +94,11 @@ public class AssessmentEnrichmentService {
      * @param request
      */
     public void enrichAssessmentUpdate(AssessmentRequest request, Property property) {
+    	
         Assessment assessment = request.getAssessment();
 
-        AuditDetails auditDetails = AuditDetails.builder()
-                .createdBy(request.getRequestInfo().getUserInfo().getUuid())
-                .createdTime(new Date().getTime())
-                .lastModifiedBy(request.getRequestInfo().getUserInfo().getUuid())
-                .lastModifiedTime(new Date().getTime()).build();
+		AuditDetails auditDetails = assessmentUtils.getAuditDetails(request.getRequestInfo().getUserInfo().getUuid(),
+				true);
 
         if(!CollectionUtils.isEmpty(assessment.getUnitUsageList())) {
             for(UnitUsage unitUsage: assessment.getUnitUsageList()) {
@@ -147,7 +134,7 @@ public class AssessmentEnrichmentService {
 
         if(request.getAssessment().getWorkflow().getAction().equalsIgnoreCase(WORKFLOW_SENDBACK_CITIZEN)){
 
-           List<User> owners = propertyUtil.getUserForWorkflow(property);
+           List<User> owners = assessmentUtils.getUserForWorkflow(property);
 
            request.getAssessment().getWorkflow().setAssignes(owners);
         }
@@ -238,8 +225,5 @@ public class AssessmentEnrichmentService {
         assessment.setWorkflow(processInstance);
 
     }
-
-
-
 
 }

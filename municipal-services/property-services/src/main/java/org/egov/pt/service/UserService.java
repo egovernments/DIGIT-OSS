@@ -230,15 +230,15 @@ public class UserService {
      * @return Response from user service as parsed as userDetailResponse
      */
     @SuppressWarnings("unchecked")
-	private UserDetailResponse userCall(Object userRequest, StringBuilder uri) {
+	private UserDetailResponse userCall(Object userRequest, StringBuilder url) {
     	
-        String dobFormat = null;
-        if(uri.toString().contains(userSearchEndpoint) || uri.toString().contains(userUpdateEndpoint))
-            dobFormat="yyyy-MM-dd";
-        else if(uri.toString().contains(userCreateEndpoint))
-            dobFormat = "dd/MM/yyyy";
-        try{
-        	Optional<Object> response = serviceRequestRepository.fetchResult(uri, userRequest);
+		String dobFormat = null;
+		if (url.indexOf(userSearchEndpoint) != -1 || url.indexOf(userUpdateEndpoint) != -1)
+			dobFormat = "yyyy-MM-dd";
+		else if (url.indexOf(userCreateEndpoint) != -1)
+			dobFormat = "dd/MM/yyyy";
+		try {
+        	Optional<Object> response = serviceRequestRepository.fetchResult(url, userRequest);
         	
         	if(response.isPresent()) {
         		LinkedHashMap<String, Object> responseMap = (LinkedHashMap<String, Object>)response.get();

@@ -39,9 +39,6 @@ public class WorkflowService {
 	private PropertyUtil utils;
 	
 	@Autowired
-	private EnrichmentService enricher;
-	
-	@Autowired
 	ServiceRequestRepository serviceRequestRepository;
 	
 
@@ -56,8 +53,8 @@ public class WorkflowService {
 	public State callWorkFlow(ProcessInstanceRequest workflowReq) {
 
 		ProcessInstanceResponse response = null;
-		Optional<Object> optional = serviceRequestRepository
-				.fetchResult(new StringBuilder(configs.getWfHost().concat(configs.getWfTransitionPath())), workflowReq);
+		StringBuilder url = new StringBuilder(configs.getWfHost().concat(configs.getWfTransitionPath()));
+		Optional<Object> optional = serviceRequestRepository.fetchResult(url, workflowReq);
 		response = mapper.convertValue(optional.get(), ProcessInstanceResponse.class);
 		return response.getProcessInstances().get(0).getState();
 	}
@@ -119,7 +116,7 @@ public class WorkflowService {
 		
 		if (state.getApplicationStatus().equalsIgnoreCase(configs.getWfStatusActive()) && property.getPropertyId() == null) {
 			
-			String pId = enricher.getIdList(request.getRequestInfo(), property.getTenantId(), configs.getPropertyIdGenName(), configs.getPropertyIdGenFormat(), 1).get(0);
+			String pId = utils.getIdList(request.getRequestInfo(), property.getTenantId(), configs.getPropertyIdGenName(), configs.getPropertyIdGenFormat(), 1).get(0);
 			request.getProperty().setPropertyId(pId);
 		}
 		request.getProperty().setStatus(Status.fromValue(state.getApplicationStatus()));
