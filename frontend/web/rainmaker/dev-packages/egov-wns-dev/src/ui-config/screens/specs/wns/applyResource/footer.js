@@ -543,3 +543,114 @@ export const footer = getCommonApplyFooter({
     visible: false
   }
 });
+
+export const footerReview = (
+  action,
+  state,
+  dispatch,
+  status,
+  applicationNumber,
+  tenantId
+) => {
+  /** MenuButton data based on status */
+  let downloadMenu = [];
+  let printMenu = [];
+  let tlCertificateDownloadObject = {
+    label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
+    link: () => {
+      const { Licenses } = state.screenConfiguration.preparedFinalObject;
+      downloadCertificateForm(Licenses);
+    },
+    leftIcon: "book"
+  };
+  let tlCertificatePrintObject = {
+    label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
+    link: () => {
+      const { Licenses } = state.screenConfiguration.preparedFinalObject;
+      downloadCertificateForm(Licenses, 'print');
+    },
+    leftIcon: "book"
+  };
+  let receiptDownloadObject = {
+    label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
+    link: () => {
+
+
+      const receiptQueryString = [
+        { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
+        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
+      ]
+      download(receiptQueryString);
+      // generateReceipt(state, dispatch, "receipt_download");
+    },
+    leftIcon: "receipt"
+  };
+  let receiptPrintObject = {
+    label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
+    link: () => {
+      const receiptQueryString = [
+        { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
+        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
+      ]
+      download(receiptQueryString, "print");
+      // generateReceipt(state, dispatch, "receipt_print");
+    },
+    leftIcon: "receipt"
+  };
+  let applicationDownloadObject = {
+    label: { labelName: "Application", labelKey: "TL_APPLICATION" },
+    link: () => {
+      const { Licenses, LicensesTemp } = state.screenConfiguration.preparedFinalObject;
+      const documents = LicensesTemp[0].reviewDocData;
+      set(Licenses[0], "additionalDetails.documents", documents)
+      downloadAcknowledgementForm(Licenses);
+    },
+    leftIcon: "assignment"
+  };
+  let applicationPrintObject = {
+    label: { labelName: "Application", labelKey: "TL_APPLICATION" },
+    link: () => {
+      const { Licenses, LicensesTemp } = state.screenConfiguration.preparedFinalObject;
+      const documents = LicensesTemp[0].reviewDocData;
+      set(Licenses[0], "additionalDetails.documents", documents)
+      downloadAcknowledgementForm(Licenses, 'print');
+    },
+    leftIcon: "assignment"
+  };
+  switch (status) {
+    case "APPROVED":
+      downloadMenu = [
+        tlCertificateDownloadObject,
+        receiptDownloadObject,
+        applicationDownloadObject
+      ];
+      printMenu = [
+        tlCertificatePrintObject,
+        receiptPrintObject,
+        applicationPrintObject
+      ];
+      break;
+    case "APPLIED":
+    case "CITIZENACTIONREQUIRED":
+    case "FIELDINSPECTION":
+    case "PENDINGAPPROVAL":
+    case "PENDINGPAYMENT":
+      downloadMenu = [applicationDownloadObject];
+      printMenu = [applicationPrintObject];
+      break;
+    case "pending_approval":
+      downloadMenu = [receiptDownloadObject, applicationDownloadObject];
+      printMenu = [receiptPrintObject, applicationPrintObject];
+      break;
+    case "CANCELLED":
+      downloadMenu = [applicationDownloadObject];
+      printMenu = [applicationPrintObject];
+      break;
+    case "REJECTED":
+      downloadMenu = [applicationDownloadObject];
+      printMenu = [applicationPrintObject];
+      break;
+    default:
+      break;
+  }
+}

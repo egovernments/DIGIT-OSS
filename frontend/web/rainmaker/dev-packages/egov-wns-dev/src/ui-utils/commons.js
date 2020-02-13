@@ -583,7 +583,7 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
 export const applyForWaterOrSewerage = async (state, dispatch, activeIndex) => {
 
     let queryObject = JSON.parse(JSON.stringify(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {})));
-    queryObject.property = JSON.parse(JSON.stringify(findAndReplace(get(state.screenConfiguration.preparedFinalObject, "Properties"), "NA", null)));
+    queryObject.Property = JSON.parse(JSON.stringify(findAndReplace(get(state.screenConfiguration.preparedFinalObject, "Properties"), "NA", null)));
     if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.water") && get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage")) {
         await applyForBothWaterAndSewerage(state, dispatch, activeIndex, queryObject);
     } else if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage")) {
@@ -608,7 +608,7 @@ const applyForWater = async (state, dispatch, activeIndex, queryObject) => {
             }
             set(queryObject, "action", action);
             const isEditFlow = getQueryArg(window.location.href, "action") === "edit";
-            !isEditFlow && (await httpRequest("post", "/ws-services/ws/_update", "", [], { WaterConnection: queryObject }));
+            !isEditFlow && (await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: queryObject }));
             let searchQueryObject = [{ key: "tenantId", value: queryObject.tenantId }, { key: "applicationNumber", value: queryObject.applicationNumber }];
             let searchResponse = await getSearchResults(searchQueryObject);
             if (isEditFlow) { searchResponse = { WaterConnection: queryObject }; }
@@ -617,8 +617,8 @@ const applyForWater = async (state, dispatch, activeIndex, queryObject) => {
         } else {
             set(queryObject, "action", "INITIATE");
             //Emptying application docs to "INITIATE" form in case of search and fill from old TL Id.
-            if (!queryObject.applicationNumber) set(queryObject, "WaterConnection", null);
-            const response = await httpRequest("post", "/ws-services/ws/_create", "", [], { WaterConnection: queryObject });
+            // if (!queryObject.applicationNumber) set(queryObject, "WaterConnection", null);
+            const response = await httpRequest("post", "/ws-services/wc/_create", "", [], { WaterConnection: queryObject });
             dispatch(prepareFinalObject("WaterConnection", response.WaterConnections));
             createOwnersBackup(dispatch, response);
         }
@@ -685,7 +685,7 @@ const applyForBothWaterAndSewerage = async (state, dispatch, activeIndex, queryO
             set(queryObject, "action", action);
             const isEditFlow = getQueryArg(window.location.href, "action") === "edit";
             !isEditFlow &&
-                (await httpRequest("post", "/ws-services/ws/_update", "", [], { WaterConnection: queryObject }) &&
+                (await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: queryObject }) &&
                     await httpRequest("post", "/sw-services/swc/_update", "", [], { SewerageConnection: queryObject }));
             let searchQueryObject = [{ key: "tenantId", value: queryObject.tenantId }, { key: "applicationNumber", value: queryObject.applicationNumber }];
             let searchResponse = await getSearchResults(searchQueryObject);
@@ -707,7 +707,7 @@ const applyForBothWaterAndSewerage = async (state, dispatch, activeIndex, queryO
                 set(queryObject, "SewerageConnection", null)
                 set(queryObject, "WaterConnection", null);
             }
-            const response = await httpRequest("post", "/ws-services/ws/_create", "", [], { WaterConnection: queryObject });
+            const response = await httpRequest("post", "/ws-services/wc/_create", "", [], { WaterConnection: queryObject });
             const sewerageResponse = await httpRequest("post", "/sw-services/swc/_create", "", [], { SewerageConnection: queryObject });
             dispatch(prepareFinalObject("WaterConnection", response.WaterConnection));
             dispatch(prepareFinalObject("SewerageConnection", sewerageResponse.SewerageConnection));
