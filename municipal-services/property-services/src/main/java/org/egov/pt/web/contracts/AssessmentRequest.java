@@ -13,6 +13,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 /**
  * The request to create or update an assessment. Contains the RequestHeader and the assessment details
@@ -30,6 +31,7 @@ public class AssessmentRequest   {
   private RequestInfo  requestInfo;
 
   @Valid
+  @NotNull
   @JsonProperty("Assessment")
   private Assessment assessment;
 }
