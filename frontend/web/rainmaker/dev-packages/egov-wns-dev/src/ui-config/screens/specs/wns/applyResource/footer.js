@@ -118,7 +118,7 @@ const getMdmsData = async (state, dispatch) => {
 };
 
 const callBackForNext = async (state, dispatch) => {
-  let isFormValid = false;
+  let isFormValid = true;
   let hasFieldToaster = false;
   let activeStep = get(state.screenConfiguration.screenConfig["apply"], "components.div.children.stepper.props.activeStep", 0);
   if (activeStep === 0) {
@@ -138,9 +138,9 @@ const callBackForNext = async (state, dispatch) => {
       dispatch
     );
 
-    if (validatePropertyLocationDetails && validatePropertyDetails && validateForm) {
-      isFormValid = true;
-    }
+    // if (validatePropertyLocationDetails && validatePropertyDetails && validateForm) {
+    //   isFormValid = await appl;
+    // }
     await applyForWaterOrSewerage(state, dispatch, activeStep);
   }
 

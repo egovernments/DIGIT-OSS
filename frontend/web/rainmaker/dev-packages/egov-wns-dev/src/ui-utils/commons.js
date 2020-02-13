@@ -168,7 +168,7 @@ export const getMyConnectionResults = async (queryObject, dispatch) => {
 
 };
 
-export const getMyApplicationResults = async (queryObject,dispatch) => {
+export const getMyApplicationResults = async (queryObject, dispatch) => {
     dispatch(toggleSpinner());
     try {
         const response = await httpRequest(
@@ -213,7 +213,7 @@ export const getMyApplicationResults = async (queryObject,dispatch) => {
 
 };
 
-export const getSWMyApplicationResults = async (queryObject,dispatch) => {
+export const getSWMyApplicationResults = async (queryObject, dispatch) => {
     dispatch(toggleSpinner());
     try {
         const response = await httpRequest(
@@ -261,7 +261,7 @@ export const getSWMyApplicationResults = async (queryObject,dispatch) => {
 export const getPropertyResults = async (queryObject, dispatch) => {
     dispatch(toggleSpinner());
     try {
-     const response = await httpRequest(
+        const response = await httpRequest(
             "post",
             "/property-services/property/_search",
             "_search",
@@ -583,7 +583,7 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
 export const applyForWaterOrSewerage = async (state, dispatch, activeIndex) => {
 
     let queryObject = JSON.parse(JSON.stringify(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {})));
-    queryObject.Property = JSON.parse(JSON.stringify(findAndReplace(get(state.screenConfiguration.preparedFinalObject, "Properties"), "NA", null)));
+    queryObject.Property = JSON.parse(JSON.stringify(findAndReplace(get(state.screenConfiguration.preparedFinalObject, "Properties[0]"), "NA", null)));
     if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.water") && get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage")) {
         await applyForBothWaterAndSewerage(state, dispatch, activeIndex, queryObject);
     } else if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage")) {
@@ -647,17 +647,17 @@ const applyForSewerage = async (state, dispatch, activeIndex, queryObject) => {
             }
             set(queryObject, "action", action);
             const isEditFlow = getQueryArg(window.location.href, "action") === "edit";
-            !isEditFlow && (await httpRequest("post", "/sw-services/swc/_update", "", [], { WaterConnection: queryObject }));
+            !isEditFlow && (await httpRequest("post", "/sw-services/swc/_update", "", [], { SewerageConnection: queryObject }));
             let searchQueryObject = [{ key: "tenantId", value: queryObject.tenantId }, { key: "applicationNumber", value: queryObject.applicationNumber }];
-            let searchResponse = await getSearchResults(searchQueryObject);
-            if (isEditFlow) { searchResponse = { WaterConnection: queryObject }; }
-            else { dispatch(prepareFinalObject("WaterConnection", searchResponse.WaterConnection)); }
+            let searchResponse = await getSearchResultsForSewerage(searchQueryObject);
+            if (isEditFlow) { searchResponse = { SewerageConnection: queryObject }; }
+            else { dispatch(prepareFinalObject("SewerageConnection", searchResponse.SewerageConnection)); }
             createOwnersBackup(dispatch, searchResponse);
         } else {
             set(queryObject, "action", "INITIATE");
-            if (!queryObject.applicationNumber) set(queryObject, "WaterConnection", null);
-            const response = await httpRequest("post", "/sw-services/swc/_create", "", [], { WaterConnection: queryObject });
-            dispatch(prepareFinalObject("WaterConnection", response.WaterConnections));
+            if (!queryObject.applicationNumber) set(queryObject, "SewerageConnection", null);
+            const response = await httpRequest("post", "/sw-services/swc/_create", "", [], { SewerageConnection: queryObject });
+            dispatch(prepareFinalObject("SewerageConnection", response.SewerageConnections));
             createOwnersBackup(dispatch, response);
         }
         setApplicationNumberBox(state, dispatch);
@@ -695,8 +695,8 @@ const applyForBothWaterAndSewerage = async (state, dispatch, activeIndex, queryO
                 sewerageResponse = { SewerageConnection: queryObject };
             }
             else {
-                dispatch(prepareFinalObject("WaterConnection", searchResponse.WaterConnection));
-                dispatch(prepareFinalObject("SewerageConnection", sewerageResponse.SewerageConnection));
+                dispatch(prepareFinalObject("WaterConnection", searchResponse.WaterConnections[0]));
+                dispatch(prepareFinalObject("SewerageConnection", sewerageResponse.SewerageConnections[0]));
             }
             createOwnersBackup(dispatch, searchResponse);
             createOwnersBackup(dispatch, sewerageResponse);
@@ -704,8 +704,8 @@ const applyForBothWaterAndSewerage = async (state, dispatch, activeIndex, queryO
             set(queryObject, "action", "INITIATE");
             //Emptying application docs to "INITIATE" form in case of search and fill from old TL Id.
             if (!queryObject.applicationNumber) {
-                set(queryObject, "SewerageConnection", null)
-                set(queryObject, "WaterConnection", null);
+                set(queryObject, "SewerageConnection", {})
+                set(queryObject, "WaterConnection", {});
             }
             const response = await httpRequest("post", "/ws-services/wc/_create", "", [], { WaterConnection: queryObject });
             const sewerageResponse = await httpRequest("post", "/sw-services/swc/_create", "", [], { SewerageConnection: queryObject });
@@ -765,8 +765,8 @@ export const isFileValid = (file, acceptedFiles) => {
 };
 
 const setApplicationNumberBox = (state, dispatch) => {
-    let applicationNumberWater = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].applicationNumber", null);
-    let applicationNumberSewerage = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0].applicationNumber", null);
+    let applicationNumberWater = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].applicationNo", null);
+    let applicationNumberSewerage = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0].applicationNo", null);
     if (applicationNumberSewerage && applicationNumberWater) {
         let applicationNumbers = applicationNumberWater.concat(" ", applicationNumberSewerage);
         handleApplicationNumberDisplay(dispatch, applicationNumbers)
