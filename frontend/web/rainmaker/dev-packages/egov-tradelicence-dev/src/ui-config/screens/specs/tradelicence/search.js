@@ -11,7 +11,9 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 // import { progressStatus } from "./searchResource/progressStatus";
 import { searchResults } from "./searchResource/searchResults";
 import { localStorageGet,getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { httpRequest } from "../../../../ui-utils";
 import find from "lodash/find";
+import get from "lodash/get";
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
@@ -22,6 +24,49 @@ const pageResetAndChange = (state, dispatch) => {
   dispatch(prepareFinalObject("LicensesTemp", []));
   dispatch(setRoute(`/tradelicence/apply?tenantId=${tenant}`));
 };
+
+
+const getMdmsData = async (dispatch) => {
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: getTenantId(),
+      moduleDetails: [
+        {
+          moduleName: "TradeLicense",
+          masterDetails: [
+            { name: "ApplicationType" }
+          ]
+        }
+      ]
+    }
+  };
+  try {
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+    let types = [];
+    if(payload && payload.MdmsRes){
+      types =  get(payload.MdmsRes, "TradeLicense.ApplicationType").map((item,index) => {
+        return {
+          code : item.code.split(".")[1]
+        }
+      });
+    }    
+     dispatch(
+      prepareFinalObject(
+        "applyScreenMdmsData.searchScreen.applicationType",
+        types
+      )
+    );
+  }catch (e) {
+    console.log(e);
+  }
+}
 
 const header = getCommonHeader({
   labelName: "Trade License",
@@ -50,7 +95,7 @@ const tradeLicenseSearchAndResult = {
         )
       );
     }
-
+    getMdmsData(dispatch);
     return action;
   },
   components: {

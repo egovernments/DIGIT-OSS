@@ -102,7 +102,7 @@ class SingleApplication extends React.Component {
   };
 
   render() {
-    const { searchResults, classes, contents, moduleName } = this.props;
+    const { searchResults, classes, contents, moduleName,setRoute } = this.props;
     return (
       <div className="application-card">
         {searchResults && searchResults.length > 0 ? (
@@ -138,8 +138,10 @@ class SingleApplication extends React.Component {
                         </Grid>
                       );
                     })}
-                    <Link to={this.onCardClick(item)}>
-                      <div>
+                    {/* <Link to={this.onCardClick(item)}> */}
+                      <div style={{cursor:"pointer"}} onClick = {()=>{
+                        setRoute(this.onCardClick(item));
+                        }}>
                         <Label
                           labelKey={ item.status==="APPROVED"&&moduleName === "TL" ? "TL_VIEW_DETAILS_RENEWAL":"TL_VIEW_DETAILS"}
                           textTransform={"uppercase"}
@@ -150,7 +152,7 @@ class SingleApplication extends React.Component {
                           }}
                         />
                       </div>
-                    </Link>
+                    {/* </Link> */}
                   </div>
                 </CardContent>
               </Card>
