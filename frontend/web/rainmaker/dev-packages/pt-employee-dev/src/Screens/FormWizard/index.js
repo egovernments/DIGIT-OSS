@@ -1668,7 +1668,7 @@ if(assessments.Assessments.length>0){
           if ((action === "assess") || (action === "re-assess")) {
             this.assessProperty(action,propertyResponse.Properties);
           } else {
-            this.props.history.push(`pt-acknowledgment?purpose=apply&propertyId=${propertyId}&status=success&tenantId=${tenantId}&FY=2019-20`);
+            this.props.history.push(`pt-acknowledgment?purpose=apply&propertyId=${propertyId}&status=success&tenantId=${tenantId}`);
           }
         }
       }

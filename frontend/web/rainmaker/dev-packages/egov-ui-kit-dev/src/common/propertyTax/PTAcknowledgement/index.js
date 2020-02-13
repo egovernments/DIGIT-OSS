@@ -1,19 +1,35 @@
 import FloatingActionButton from "material-ui/FloatingActionButton";
 
 import React from "react";
+import { connect } from "react-redux";
 import Label from "egov-ui-kit/utils/translationNode";
 import DownloadPrintButton from "egov-ui-framework/ui-molecules/DownloadPrintButton";
 import { Button, TimeLine, Card, Icon } from "components";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import store from "ui-redux/store";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { convertToOldPTObject } from "egov-ui-kit/utils/PTCommon/FormWizardUtils";
+import { getHeaderDetails } from "egov-ui-kit/common/propertyTax/PaymentStatus/Components/createReceipt";
+import { getQueryValue } from "egov-ui-kit/utils/PTCommon";
+import { fetchProperties } from "egov-ui-kit/redux/properties/actions";
+import { AcknowledgementReceipt } from "../AcknowledgementReceipt";
 import "./index.css";
 class PTAcknowledgement extends React.Component {
-  // state = {
-  //   purpose: "apply",
-  //   status: "success",
-  // };
+  state = {
+    propertyId: ""
+  };
 
+  componentDidMount = () => {
+    const { fetchProperties, location } = this.props;
+    const { search } = location;
+    const propertyId = getQueryValue(search, "propertyId");
+    const tenantId = getQueryValue(search, "tenantId");
+    fetchProperties([
+      { key: "propertyIds", value: propertyId },
+      { key: "tenantId", value: tenantId },
+    ]);
+    this.setState({propertyId: propertyId});
+  }
   onGoHomeClick=()=>{
     process.env.REACT_APP_NAME === "Employee" ?
     store.dispatch(
@@ -42,7 +58,29 @@ class PTAcknowledgement extends React.Component {
     );
   }
 
+  downloadAcknowledgementForm = () => {
+    const { common, app = {}, propertiesById } = this.props;
+    const { propertyId } = this.state;
+    const convertedResponse = [propertiesById[propertyId]];
+    const { address, propertyDetails } = convertedResponse[0];
+    const { owners } = propertyDetails[0];
+    const { localizationLabels } = app;
+    const { cities, generalMDMSDataById } = common;
+    const header = getHeaderDetails(convertedResponse[0], cities, localizationLabels, true)
+    let receiptDetails = {};
+    receiptDetails = {
+      propertyDetails,
+      address,
+      owners,
+      header,
+      propertyId
+    }
+    AcknowledgementReceipt("pt-reciept-citizen", receiptDetails, generalMDMSDataById, null);
+  }
+
   render() {
+    const { acknowledgeType = "success", messageHeader = "", message = "", receiptHeader = "PT_APPLICATION_NO_LABEL", receiptNo = "" } = this.props;
+
     const purpose = getQueryArg(window.location.href, "purpose");
     const status = getQueryArg(window.location.href, "status");
     const financialYear = getQueryArg(window.location.href, "FY");
@@ -62,6 +100,7 @@ class PTAcknowledgement extends React.Component {
         // const documents = LicensesTemp[0].reviewDocData;
         // set(Licenses[0],"additionalDetails.documents",documents)
         // downloadAcknowledgementForm(Licenses);
+        this.downloadAcknowledgementForm();
         console.log("Download");
       },
       leftIcon: "assignment"
@@ -81,7 +120,6 @@ class PTAcknowledgement extends React.Component {
 
     downloadMenu.push(applicationDownloadObject);
     printMenu.push(tlCertificatePrintObject);
-    const { acknowledgeType = "success", messageHeader = "", message = "", receiptHeader = "PT_APPLICATION_NO_LABEL", receiptNo = "" } = this.props;
     let icon;
     let iconColor;
     if (acknowledgeType == "success") {
@@ -394,4 +432,21 @@ class PTAcknowledgement extends React.Component {
   }
 }
 
-export default PTAcknowledgement;
+const mapStateToProps = state => {
+  const { screenConfiguration, common, app, properties } = state || {};
+  const { propertiesById } = properties;
+  
+  return {
+    propertiesById,
+    common, 
+    app
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchProperties: (queryObjectProperty) => dispatch(fetchProperties(queryObjectProperty))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(PTAcknowledgement);
