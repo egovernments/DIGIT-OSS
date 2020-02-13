@@ -167,6 +167,21 @@ export const callBackForNext = async (state, dispatch) => {
       let tenantIdInLocastorage = getTenantId();
       if (!tenantIdInLocastorage)
         setTenantId(process.env.REACT_APP_DEFAULT_TENANT_ID);
+        const appNumber = get(state.screenConfiguration.preparedFinalObject, "Licenses[0].applicationNumber", {});
+        const LicenseData = get(
+          state.screenConfiguration.preparedFinalObject,
+          "Licenses[0]",
+          {}
+        );
+        if (appNumber && LicenseData){
+          createEstimateData(
+            LicenseData,
+            "LicensesTemp[0].estimateCardData",
+            dispatch,
+            {},
+            true
+          ); //get bill and populate estimate card
+        }
     }
   }
 

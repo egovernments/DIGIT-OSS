@@ -3752,6 +3752,9 @@ export const requiredDocumentsData = async (state, dispatch, action) => {
           masterDetails: [
             {
               name: "DocTypeMapping"
+            },
+            {
+              name: "CheckList"
             }
           ]
         }
@@ -3787,6 +3790,7 @@ export const requiredDocumentsData = async (state, dispatch, action) => {
       );
     const wfState = wfPayload.ProcessInstances[0];
     let appState;
+    const appWfState = wfState.state.state;
 
      let requiredDocuments, appDocuments = [];
     if(payload && payload.MdmsRes && payload.MdmsRes.BPA && wfState ) {
@@ -3798,10 +3802,147 @@ export const requiredDocumentsData = async (state, dispatch, action) => {
         }
       });
     };
-    prepareDocumentsView(state, dispatch, action, appState)
+    prepareDocumentsView(state, dispatch, action, appState);
+    if(wfState.state.state == "FIELDINSPECTION_PENDING" && payload && payload.MdmsRes && payload.MdmsRes.BPA && payload.MdmsRes.BPA.CheckList) {
+      let fieldInfoDocs = payload.MdmsRes.BPA.CheckList;
+      prepareFieldDocumentsUploadData(state, dispatch, action, fieldInfoDocs, appWfState);
+    }
   } catch (e) {
     console.log(e);
   }
+}
+
+const prepareFieldDocumentsUploadData = async (state, dispatch, action, fieldInfoDocs, appWfState) => {
+  let documentsDropDownValues = get(
+    state,
+    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.common-masters.DocumentType",
+    []
+  );
+
+  let appState = get(
+    state.screenConfiguration.preparedFinalObject, "BPA.status",
+    []
+  )
+
+  let bpaAppDetails = get ( state.screenConfiguration.preparedFinalObject, "BPA", {});
+
+  let fieldInfo = []
+  fieldInfoDocs.forEach(wfDoc => {
+    if(wfDoc.WFState == appWfState && wfDoc.RiskType === bpaAppDetails.riskType && wfDoc.ServiceType === bpaAppDetails.serviceType && wfDoc.applicationType === bpaAppDetails.applicationType) { 
+      fieldInfo.push({"docTypes" : wfDoc.docTypes, "questions" : wfDoc.questions });
+      set(
+        action,
+        "screenConfig.components.div.children.body.children.cardContent.children.fieldinspectionSummary.visible",
+        true
+      );
+    }
+  });
+
+  let fieldreqDocuments = fieldInfo[0].docTypes;
+  let applyFieldinspectionQstns = fieldInfo[0].questions;
+  let checklistSelect = [];
+
+  if (applyFieldinspectionQstns && applyFieldinspectionQstns.length > 0) {
+    checklistSelect = [
+      { code: applyFieldinspectionQstns[0].fieldType.split("/")[0], label: applyFieldinspectionQstns[0].fieldType.split("/")[0] },
+      { code: applyFieldinspectionQstns[0].fieldType.split("/")[1], label: applyFieldinspectionQstns[0].fieldType.split("/")[1] },
+      { code: applyFieldinspectionQstns[0].fieldType.split("/")[2], label: applyFieldinspectionQstns[0].fieldType.split("/")[2] }
+    ];
+
+    const FieldinspectionQstns = applyFieldinspectionQstns.map(v => ({
+      code: v.question, title: v.question, cards: [{
+        name: v.question, code: v.question, required: true, dropDownValues: {
+          label: "Select", required: true, menu: checklistSelect
+        }
+      }]
+    }));
+    
+    dispatch(prepareFinalObject("FieldinspectionQstns", FieldinspectionQstns));    
+  }
+
+  if(fieldreqDocuments && fieldreqDocuments.length > 0) {
+    let documentsList = [];
+    fieldreqDocuments.forEach(doc => {
+    let code = doc.code;
+    doc.dropDownValues = [];
+    documentsDropDownValues.forEach(value => {
+      let values = value.code.slice(0, code.length);
+      if (code === values) {
+        doc.hasDropdown = true;
+        doc.dropDownValues.push(value);
+      }
+    });
+    documentsList.push(doc); 
+  });
+  const docList = documentsList.filter((el) => {
+    return fieldreqDocuments.some((f) => {
+      return f.code === el.code;
+    });
+  });
+  const bpaDocuments = docList;
+  let documentsContract = [];
+  let tempDoc = {};
+
+  bpaDocuments.forEach(doc => {
+    let card = {};
+    card["code"] = doc.code.split(".")[0];
+    card["title"] = doc.code.split(".")[0];
+    card["cards"] = [];
+    tempDoc[doc.code.split(".")[0]] = card;
+  });
+  bpaDocuments.forEach(doc => {
+    let card = {};
+    card["name"] = doc.code;
+    card["code"] = doc.code;
+    card["required"] = doc.required ? true : false;
+    if (doc.hasDropdown && doc.dropDownValues) {
+      let dropDownValues = {};
+      dropDownValues.label = "Select Documents";
+      dropDownValues.required = doc.required;
+      dropDownValues.menu = doc.dropDownValues.filter(item => {
+        return item.active;
+      });
+      dropDownValues.menu = dropDownValues.menu.map(item => {
+        return { code: item.code, label: item.code };
+      });
+      card["dropDownValues"] = dropDownValues;
+    }
+    tempDoc[doc.code.split(".")[0]].cards.push(card);
+  });
+
+  Object.keys(tempDoc).forEach(key => {
+    documentsContract.push(tempDoc[key]);
+  });
+  let applyFieldinspectionDocument = [];
+    documentsContract.forEach(doc => {
+      applyFieldinspectionDocument.push(doc);      
+    });
+  dispatch(prepareFinalObject("nocDocumentsContract", applyFieldinspectionDocument));  
+  }
+}
+const documentMaping = async (state, dispatch, action,documentsPreview) => {
+  let fileStoreIds = jp.query(documentsPreview, "$.*.fileStoreId");
+  let fileUrls =
+    fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
+  documentsPreview = documentsPreview.map((doc, index) => {
+    doc["link"] =
+      (fileUrls &&
+        fileUrls[doc.fileStoreId] &&
+        getFileUrl(fileUrls[doc.fileStoreId])) ||
+      "";
+    doc["name"] =
+      (fileUrls[doc.fileStoreId] &&
+        decodeURIComponent(
+          getFileUrl(fileUrls[doc.fileStoreId])
+            .split("?")[0]
+            .split("/")
+            .pop()
+            .slice(13)
+        )) ||
+      `Document - ${index + 1}`;
+      return doc;
+  });
+  return documentsPreview;
 }
 const prepareDocumentsView = async (state, dispatch, action, appState) => {
   let documentsPreview = [];
@@ -3829,6 +3970,34 @@ const prepareDocumentsView = async (state, dispatch, action, appState) => {
     ...otherDocuments
   ];
 
+    let additionalDetail = JSON.parse(BPA.additionalDetails), 
+    fieldInspectionDetails, fieldInspectionDocs = [], fieldInspectionsQstions = [];
+    if(additionalDetail) {
+      fieldInspectionDetails = additionalDetail["fieldinspection_pending"][0]
+      fieldInspectionDocs = fieldInspectionDetails.docs;
+      fieldInspectionsQstions = fieldInspectionDetails.questions;
+    }
+  
+    if(fieldInspectionDocs && fieldInspectionDocs.length > 0 && fieldInspectionsQstions && fieldInspectionsQstions.length > 0) {
+      let fiDocumentsPreview = [];
+      fieldInspectionDocs.forEach(fiDoc => {
+        fiDocumentsPreview.push({
+          title: getTransformedLocale(fiDoc.documentType),
+          fileStoreId: fiDoc.fileStoreId,
+          linkText: "View"
+        });
+      })
+      
+      let fieldInspectionDocuments = await documentMaping(state, dispatch, action, fiDocumentsPreview);
+      set(
+        action,
+        "screenConfig.components.div.children.body.children.cardContent.children.fieldSummary.children.cardContent.visible",
+        true
+      );
+      dispatch(prepareFinalObject("fieldInspectionDocumentsDetailsPreview", fieldInspectionDocuments));
+      dispatch(prepareFinalObject("fieldInspectionCheckListDetailsPreview", fieldInspectionsQstions)); 
+    }
+
   allDocuments.forEach(doc => {
     uploadedAppDocuments.push(doc);
 
@@ -3838,29 +4007,8 @@ const prepareDocumentsView = async (state, dispatch, action, appState) => {
       linkText: "View"
     });
   });
-  let fileStoreIds = jp.query(documentsPreview, "$.*.fileStoreId");
-  let fileUrls =
-    fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
-  documentsPreview = documentsPreview.map((doc, index) => {
-    doc["link"] =
-      (fileUrls &&
-        fileUrls[doc.fileStoreId] &&
-        getFileUrl(fileUrls[doc.fileStoreId])) ||
-      "";
-    doc["name"] =
-      (fileUrls[doc.fileStoreId] &&
-        decodeURIComponent(
-          getFileUrl(fileUrls[doc.fileStoreId])
-            .split("?")[0]
-            .split("/")
-            .pop()
-            .slice(13)
-        )) ||
-      `Document - ${index + 1}`;
-      return doc;
-
-  });
-  dispatch(prepareFinalObject("documentDetailsPreview", documentsPreview));
+  let appDocumentsPreview = await documentMaping(state, dispatch, action, documentsPreview);
+  dispatch(prepareFinalObject("documentDetailsPreview", appDocumentsPreview));
   let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
   if(isEmployee) {
     prepareDocsInEmployee(state, dispatch, action, appState, uploadedAppDocuments);

@@ -8,7 +8,6 @@ import {
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   getFileUrlFromAPI,
-  handleFileUpload,
   getTransformedLocale
 } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
@@ -16,7 +15,6 @@ import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { UploadSingleFile } from "../../ui-molecules-local";
-import Typography from "@material-ui/core/Typography";
 
 const themeStyles = theme => ({
   documentContainer: {
@@ -77,9 +75,8 @@ const themeStyles = theme => ({
     alignItems: "center"
   },
   descriptionDiv: {
-    alignItems: "center",
-    display: "block",
-    marginTop: "20px",
+    display: "flex",
+    alignItems: "center"
   },
   formControl: {
     minWidth: 250,
@@ -121,7 +118,7 @@ const requiredIcon = (
   <sup style={{ color: "#E54D42", paddingLeft: "5px" }}>*</sup>
 );
 
-class NocList extends Component {
+class CheckList extends Component {
   state = {
     uploadedDocIndex: 0
   };
@@ -129,7 +126,7 @@ class NocList extends Component {
   componentDidMount = () => {
     const {
       documentsList,
-      nocDocumentsUploadRedux = {},
+      checkListUploaRedux = {},
       prepareFinalObject
     } = this.props;
     let index = 0;
@@ -139,15 +136,15 @@ class NocList extends Component {
           if (card.subCards) {
             card.subCards.forEach(subCard => {
               let oldDocType = get(
-                nocDocumentsUploadRedux,
+                checkListUploaRedux,
                 `[${index}].documentType`
               );
               let oldDocCode = get(
-                nocDocumentsUploadRedux,
+                checkListUploaRedux,
                 `[${index}].documentCode`
               );
               let oldDocSubCode = get(
-                nocDocumentsUploadRedux,
+                checkListUploaRedux,
                 `[${index}].documentSubCode`
               );
               if (
@@ -155,26 +152,26 @@ class NocList extends Component {
                 oldDocCode != card.name ||
                 oldDocSubCode != subCard.name
               ) {
-                nocDocumentsUploadRedux[index] = {
-                  documentType: docType.code,
-                  documentCode: card.name,
-                  documentSubCode: subCard.name
+                checkListUploaRedux[index] = {
+                  question: docType.code,
+                  // documentCode: card.name,
+                  // documentSubCode: subCard.name
                 };
               }
               index++;
             });
           } else {
             let oldDocType = get(
-              nocDocumentsUploadRedux,
+              checkListUploaRedux,
               `[${index}].documentType`
             );
             let oldDocCode = get(
-              nocDocumentsUploadRedux,
+              checkListUploaRedux,
               `[${index}].documentCode`
             );
             if (oldDocType != docType.code || oldDocCode != card.name) {
-              nocDocumentsUploadRedux[index] = {
-                documentType: docType.code,
+              checkListUploaRedux[index] = {
+                question: docType.code,
                 documentCode: card.name,
                 isDocumentRequired: card.required,
                 isDocumentTypeRequired: card.dropDownValues
@@ -186,53 +183,48 @@ class NocList extends Component {
           }
         });
     });
-    prepareFinalObject("nocDocumentsUploadRedux", nocDocumentsUploadRedux);
+    prepareFinalObject("checkListUploaRedux", checkListUploaRedux);
   };
 
-  prepareDocumentsInEmployee = async (nocDocuments, bpaDetails) => {
+  prepareDocumentsInEmployee = async (checkListDocuments, bpaDetails) => {
     let documnts = [];
-    if (nocDocuments) {
-      Object.keys(nocDocuments).forEach(function (key) {
-        if (nocDocuments && nocDocuments[key]) {
-          documnts.push(nocDocuments[key]);
+    if (checkListDocuments) {
+      Object.keys(checkListDocuments).forEach(function (key) {
+        if (checkListDocuments && checkListDocuments[key]) {
+          documnts.push(checkListDocuments[key]);
         }
       });
     }
-
-    prepareFinalObject("nocDocumentsUploadRedux", {});
+    prepareFinalObject("checkListUploaRedux", {});
     let requiredDocuments = [], finalQstn = [];
     if (documnts && documnts.length > 0) {
       documnts.forEach(documents => {
-        if (documents && documents.documents && documents.dropDownValues && documents.dropDownValues.value) {
-          let doc = {}, finalDocs = [];
-          doc.documentType = documents.dropDownValues.value;
-          doc.fileStoreId = documents.documents[0].fileStoreId;
-          doc.fileStore = documents.documents[0].fileStoreId;
-          doc.fileName = documents.documents[0].fileName;
-          doc.fileUrl = documents.documents[0].fileUrl;
-          if (doc.id) {
-            doc.id = documents.documents[0].id;
-          }
+        if (documents && documents.remarks && documents.dropDownValues && documents.dropDownValues.value) {
+          let qstns = {}, finalDocs = [];
+          qstns.remarks = documents.remarks;
+          qstns.question = documents.question;
+          qstns.value = documents.dropDownValues.value;
+
           if(bpaDetails.additionalDetails) {
             if(bpaDetails.additionalDetails.fieldinspection_pending && bpaDetails.additionalDetails.fieldinspection_pending[0]) {
-              if(bpaDetails.additionalDetails.fieldinspection_pending[0].docs) {
-                finalQstn.push(doc);
-                bpaDetails.additionalDetails.fieldinspection_pending[0].docs = finalQstn
+              if(bpaDetails.additionalDetails.fieldinspection_pending[0].questions) {
+                finalQstn.push(qstns);
+                bpaDetails.additionalDetails.fieldinspection_pending[0].questions = finalQstn
               } else {
-                bpaDetails.additionalDetails.fieldinspection_pending.push({"docs" : doc, "question" : []})
+                bpaDetails.additionalDetails.fieldinspection_pending.push({"questions" : qstns,"docs" : []});
               }
             }
           } else {
             bpaDetails.additionalDetails = [];
             let documnt = [], fiDocs = [], details;
             documnt[0] = {}; 
-            documnt[0].docs = [];
             documnt[0].questions = [];
-            documnt[0].docs.push(doc);
+            documnt[0].docs = [];
+            documnt[0].questions.push(qstns);
             fiDocs.push({
-              "docs" : documnt[0].docs,
-              "questions" : []
-            })
+              "questions" : documnt[0].questions,
+              "docs" : []
+            });
             details = { "fieldinspection_pending" : fiDocs};
             finalDocs.push(details);
             finalDocs = finalDocs[0];
@@ -240,9 +232,8 @@ class NocList extends Component {
           }
         }
       });
-  
-      if(bpaDetails.additionalDetails && bpaDetails.additionalDetails["fieldinspection_pending"][0] && bpaDetails.additionalDetails["fieldinspection_pending"][0].docs) {
-        prepareFinalObject("BPA",  bpaDetails.additionalDetails["fieldinspection_pending"][0].docs);
+      if(bpaDetails.additionalDetails && bpaDetails.additionalDetails["fieldinspection_pending"][0] && bpaDetails.additionalDetails["fieldinspection_pending"][0].question) {
+        prepareFinalObject("BPA",  bpaDetails.additionalDetails.fieldinspection_pending[0].question);
       }
     }
   }
@@ -251,19 +242,15 @@ class NocList extends Component {
     return self.indexOf(value) === index
  };
 
-  onUploadClick = uploadedDocIndex => {
-    this.setState({ uploadedDocIndex });
-  };
-
   handleDocument = async (file, fileStoreId) => {
     let { uploadedDocIndex } = this.state;
-    const { prepareFinalObject, nocDocumentsUploadRedux, bpaDetails } = this.props;
+    const { prepareFinalObject, checkListUploaRedux, bpaDetails } = this.props;
     const fileUrl = await getFileUrlFromAPI(fileStoreId);
 
-    let nocDocuments = {
-      ...nocDocumentsUploadRedux,
+    let checkListDocuments = {
+      ...checkListUploaRedux,
       [uploadedDocIndex]: {
-        ...nocDocumentsUploadRedux[uploadedDocIndex],
+        ...checkListUploaRedux[uploadedDocIndex],
         documents: [
           {
             fileName: file.name,
@@ -273,12 +260,12 @@ class NocList extends Component {
         ]
       }
     }
-    prepareFinalObject("nocDocumentsUploadRedux", nocDocuments);
+    prepareFinalObject("checkListUploaRedux", checkListDocuments);    
   
     let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true
 
     if(isEmployee) {
-      this.prepareDocumentsInEmployee(nocDocuments, bpaDetails);
+      this.prepareDocumentsInEmployee(checkListDocuments, bpaDetails);
       }
 
   };
@@ -286,38 +273,57 @@ class NocList extends Component {
   removeDocument = remDocIndex => {
     const { prepareFinalObject } = this.props;
     prepareFinalObject(
-      `nocDocumentsUploadRedux.${remDocIndex}.documents`,
+      `checkListUploaRedux.${remDocIndex}.documents`,
       undefined
     );
     this.forceUpdate();
   };
 
   handleChange = (key, event) => {
-    const { nocDocumentsUploadRedux, prepareFinalObject, bpaDetails } = this.props;
-    let nocDocuments = {
-      ...nocDocumentsUploadRedux,
+    const { checkListUploaRedux, prepareFinalObject, bpaDetails } = this.props;
+    let checkListDocuments = {
+      ...checkListUploaRedux,
       [key]: {
-        ...nocDocumentsUploadRedux[key],
+        ...checkListUploaRedux[key],
         dropDownValues: { value: event.target.value }
       }
     };
-    prepareFinalObject(`nocDocumentsUploadRedux`, nocDocuments);
+    prepareFinalObject(`checkListUploaRedux`, checkListDocuments);    
 
     let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true
 
     if(isEmployee) {
-      this.prepareDocumentsInEmployee(nocDocuments, bpaDetails);
+      this.prepareDocumentsInEmployee(checkListDocuments, bpaDetails);
+    }
+       
+  };
+
+  handleFieldChange = (key, event) => {
+    const { checkListUploaRedux, prepareFinalObject, bpaDetails } = this.props;
+    let checkListDocuments = {
+      ...checkListUploaRedux,
+      [key]: {
+        ...checkListUploaRedux[key],
+        remarks: event.target.value
+      }
+    };
+    prepareFinalObject(`checkListUploaRedux`, checkListDocuments);
+
+    let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true
+
+    if(isEmployee) {
+      this.prepareDocumentsInEmployee(checkListDocuments, bpaDetails);
     }
        
   };
 
   getUploadCard = (card, key) => {
-    const { classes, nocDocumentsUploadRedux } = this.props;
-    let jsonPath = `nocDocumentsUploadRedux[${key}].dropDownValues.value`;
+    const { classes, checkListUploaRedux } = this.props;
+    let jsonPath = `checkListUploaRedux[${key}].dropDownValues.value`;
     return (
       <Grid container={true}>
         <Grid item={true} xs={2} sm={1} className={classes.iconDiv}>
-          {nocDocumentsUploadRedux[key] && nocDocumentsUploadRedux[key].documents ? (
+          {checkListUploaRedux[key] && checkListUploaRedux[key].documents ? (
             <div className={classes.documentSuccess}>
               <Icon>
                 <i class="material-icons">done</i>
@@ -342,11 +348,6 @@ class NocList extends Component {
             style={styles.documentName}
           />
           {card.required && requiredIcon}
-          <Typography variant="caption">
-            <LabelContainer
-              labelKey={getTransformedLocale("TL_UPLOAD_RESTRICTIONS")}
-            />
-          </Typography>
         </Grid>
         <Grid item={true} xs={12} sm={6} md={4}>
           {card.dropDownValues && (
@@ -370,25 +371,13 @@ class NocList extends Component {
           md={3}
           className={classes.fileUploadDiv}
         >
-          <UploadSingleFile
-            classes={this.props.classes}
-            handleFileUpload={e =>
-              handleFileUpload(e, this.handleDocument, this.props)
-            }
-            uploaded={
-              nocDocumentsUploadRedux[key] && nocDocumentsUploadRedux[key].documents
-                ? true
-                : false
-            }
-            removeDocument={() => this.removeDocument(key)}
-            documents={
-              nocDocumentsUploadRedux[key] && nocDocumentsUploadRedux[key].documents
-            }
-            onButtonClick={() => this.onUploadClick(key)}
-            inputProps={this.props.inputProps}
-            buttonLabel={this.props.buttonLabel}
-            id={`noc-${key+1}`}
-          />
+        <TextFieldContainer
+              select={false}
+              label={{ labelKey: "Remarks" }}
+              placeholder={{ labelKey: "Enter Remarks" }}
+              onChange={event => this.handleFieldChange(key, event)}              
+            />
+          
         </Grid>
       </Grid>
     );
@@ -403,10 +392,6 @@ class NocList extends Component {
           documentsList.map(container => {
             return (
               <div>
-                <LabelContainer
-                  labelKey={getTransformedLocale(container.title)}
-                  style={styles.documentTitle}
-                />
                 {container.cards.map(card => {
                   return (
                     <div className={classes.documentContainer}>
@@ -438,16 +423,16 @@ class NocList extends Component {
   }
 }
 
-NocList.propTypes = {
+CheckList.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => {
   const { screenConfiguration } = state;
   const { moduleName } = screenConfiguration;
-  const nocDocumentsUploadRedux = get(
+  const checkListUploaRedux = get(
     screenConfiguration.preparedFinalObject,
-    "nocDocumentsUploadRedux",
+    "checkListUploaRedux",
     {}
   );
   const bpaDetails = get(
@@ -455,7 +440,7 @@ const mapStateToProps = state => {
     "BPA",
     {}
   )
-  return { nocDocumentsUploadRedux, moduleName, bpaDetails };
+  return { checkListUploaRedux, moduleName, bpaDetails };
 };
 
 const mapDispatchToProps = dispatch => {
@@ -469,5 +454,5 @@ export default withStyles(themeStyles)(
   connect(
     mapStateToProps,
     mapDispatchToProps
-  )(NocList)
+  )(CheckList)
 );
