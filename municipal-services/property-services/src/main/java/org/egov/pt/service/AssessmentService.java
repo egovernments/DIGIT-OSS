@@ -15,6 +15,7 @@ import org.egov.pt.models.Property;
 import org.egov.pt.models.enums.Status;
 import org.egov.pt.models.workflow.BusinessService;
 import org.egov.pt.models.workflow.ProcessInstanceRequest;
+import org.egov.pt.models.workflow.State;
 import org.egov.pt.producer.Producer;
 import org.egov.pt.repository.AssessmentRepository;
 import org.egov.pt.util.AssessmentUtils;
@@ -80,7 +81,8 @@ public class AssessmentService {
 			assessmentEnrichmentService.enrichWorkflowForInitiation(request);
 			ProcessInstanceRequest workflowRequest = new ProcessInstanceRequest(request.getRequestInfo(),
 					Collections.singletonList(request.getAssessment().getWorkflow()));
-			workflowService.callWorkFlow(workflowRequest);
+			State state = workflowService.callWorkFlow(workflowRequest);
+			request.getAssessment().getWorkflow().setState(state);
 		}
 
 		producer.push(props.getCreateAssessmentTopic(), request);
@@ -123,8 +125,10 @@ public class AssessmentService {
 				producer.push(topic1,request);*/
 			}
 			ProcessInstanceRequest workflowRequest = new ProcessInstanceRequest(requestInfo, Collections.singletonList(assessment.getWorkflow()));
-			String state = workflowService.callWorkFlow(workflowRequest).getApplicationStatus();
-			assessmentEnrichmentService.enrichStatus(state, assessment, businessService);
+			State state = workflowService.callWorkFlow(workflowRequest);
+			String status = state.getApplicationStatus();
+			request.getAssessment().getWorkflow().setState(state);
+			assessmentEnrichmentService.enrichStatus(status, assessment, businessService);
 			calculationService.calculateTax(request, property);
 			producer.push(props.getUpdateAssessmentTopic(), request);
 
