@@ -3970,7 +3970,7 @@ const prepareDocumentsView = async (state, dispatch, action, appState) => {
     ...otherDocuments
   ];
 
-    let additionalDetail = JSON.parse(BPA.additionalDetails), 
+    let additionalDetail = BPA.additionalDetails, 
     fieldInspectionDetails, fieldInspectionDocs = [], fieldInspectionsQstions = [];
     if(additionalDetail) {
       fieldInspectionDetails = additionalDetail["fieldinspection_pending"][0]
