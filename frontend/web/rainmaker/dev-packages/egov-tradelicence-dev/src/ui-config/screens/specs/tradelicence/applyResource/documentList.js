@@ -22,6 +22,6 @@ export const documentList = {
       accept: "image/*, .png, .jpeg"
     },
     documentTypePrefix: "TL_",
-    //maxFileSize: 6000
+    maxFileSize: 6000
   }
 };

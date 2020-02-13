@@ -5,13 +5,13 @@ import Grid from "@material-ui/core/Grid";
 import Icon from "@material-ui/core/Icon";
 import Typography from "@material-ui/core/Typography";
 import {
+  handleFileUpload,
   getFileUrlFromAPI,
   getQueryArg
 } from "egov-ui-framework/ui-utils/commons";
 import { connect } from "react-redux";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { UploadSingleFile } from "../../ui-molecules-local";
-import { handleFileUpload } from "../../ui-utils/commons"
 import { LabelContainer } from "egov-ui-framework/ui-containers";
 import get from "lodash/get";
 import isUndefined from "lodash/isUndefined";
@@ -182,13 +182,12 @@ class DocumentList extends Component {
     }
   };
   render() {
-    const { classes, documents, documentTypePrefix, description ,imageDescription ,inputProps } = this.props;
+    const { classes, documents, documentTypePrefix, description } = this.props;
     const { uploadedIndex } = this.state;
     return (
       <div style={{ paddingTop: 10 }}>
         {documents &&
           documents.map((document, key) => {
-            const currentDocumentProps =  inputProps.filter(item => item.type === document.name);
             return (
               <div
                 key={key}
@@ -223,13 +222,14 @@ class DocumentList extends Component {
                         labelName={document.statement}
                         labelKey={document.statement}
                       />
-
+                      
                     </Typography> */}
                     <Typography variant="caption">
                       <LabelContainer
                         labelName={document.name == "OWNERPHOTO" ? this.props.imageDescription.labelName : description.labelName}
                         labelKey={document.name == "OWNERPHOTO" ? this.props.imageDescription.labelKey : description.labelKey}
                       />
+                      {/* {description} */}
                     </Typography>
                   </Grid>
                   <Grid item={true} xs={12} sm={5} align="right">
@@ -237,7 +237,6 @@ class DocumentList extends Component {
                       classes={this.props.classes}
                       id={`upload-button-${key}`}
                       handleFileUpload={e =>
-                        // handleFileUpload(e, this.handleDocument, this.props.inputProps[key])
                         handleFileUpload(e, this.handleDocument, this.props, document.name)
                       }
                       uploaded={uploadedIndex.indexOf(key) > -1}
@@ -246,7 +245,6 @@ class DocumentList extends Component {
                       onButtonClick={() => this.onUploadClick(key)}
                       inputProps={document.name == "OWNERPHOTO" ? this.props.imageProps : this.props.inputProps}
                       buttonLabel={this.props.buttonLabel}
-                      inputProps={currentDocumentProps[0].formatProps}
                     />
                   </Grid>
                 </Grid>
@@ -261,6 +259,21 @@ class DocumentList extends Component {
 DocumentList.propTypes = {
   classes: PropTypes.object.isRequired
 };
+
+// const mapStateToProps = state => {
+//   const { screenConfiguration } = state;
+// const documents = get(
+//   screenConfiguration.preparedFinalObject,
+//   "LicensesTemp[0].applicationDocuments",
+//   []
+// );
+// const tenantId = get(
+//   screenConfiguration.preparedFinalObject,
+//   "LicensesTemp[0].tenantId",
+//   ""
+// );
+//   return { screenConfiguration };
+// };
 
 const mapDispatchToProps = dispatch => {
   return {
