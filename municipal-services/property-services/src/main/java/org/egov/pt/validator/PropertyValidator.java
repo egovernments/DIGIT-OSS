@@ -109,6 +109,9 @@ public class PropertyValidator {
     	
     	Map<String, String> errorMap = new HashMap<>();
     	
+        if(request.getRequestInfo().getUserInfo().getType().equalsIgnoreCase("CITIZEN"))
+            validateAssessees(request, errorMap);
+        
         /*
          * Blocking owner changes in update flow
          */
@@ -167,8 +170,6 @@ public class PropertyValidator {
 		property.getAddress().setId(propertiesFromSearchResponse.get(0).getAddress().getId());
         
         validateMasterData(request, errorMap);
-        if(request.getRequestInfo().getUserInfo().getType().equalsIgnoreCase("CITIZEN"))
-            validateAssessees(request, errorMap);
 
 		if (configs.getIsWorkflowEnabled() && request.getProperty().getWorkflow() == null)
 			throw new CustomException("EG_PT_UPDATE_WF_ERROR", "Workflow information is mandatory for update");
@@ -442,10 +443,12 @@ public class PropertyValidator {
 
 		Set<String> owners = property.getOwners().stream().map(OwnerInfo::getUuid).collect(Collectors.toSet());
 
-		if (!owners.contains(uuid)) {
-			errorMap.put("UPDATE AUTHORIZATION FAILURE",
-					"Not Authorized to assess property with propertyId " + property.getPropertyId());
+		if (!(owners.contains(uuid)
+				|| (property.getAccountId() != null && uuid.equalsIgnoreCase(property.getAccountId())))) {
+			errorMap.put("EG_PT_UPDATE AUTHORIZATION FAILURE",
+					"Not Authorized to update property with propertyId " + property.getPropertyId());
 		}
+
 		if (!errorMap.isEmpty())
 			throw new CustomException(errorMap);
 	}
