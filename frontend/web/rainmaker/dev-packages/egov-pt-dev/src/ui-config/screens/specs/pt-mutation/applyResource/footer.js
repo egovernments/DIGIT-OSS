@@ -78,55 +78,49 @@ const callBackForNext = async (state, dispatch) => {
   let isFormValid = true;
   let hasFieldToaster = false;
 
-  if (activeStep === 1) {
-    let isPropertyLocationCardValid = validateFields(
-      "components.div.children.formwizardSecondStep.children.propertyLocationDetails.children.cardContent.children.propertyDetailsConatiner.children",
+  if (activeStep === 0) {
+    let isSingleOwnerValid = validateFields(
+      "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.children.individualApplicantInfo.children.cardContent.children.applicantCard.children",
       state,
       dispatch
     );
-    let isSinglePropertyCardValid = validateFields(
-      "components.div.children.formwizardSecondStep.children.propertyDetails.children.cardContent.children.propertyDetailsConatiner.children.buildingDataCard.children.singleBuildingContainer.children.singleBuilding.children.cardContent.children.singleBuildingCard.children",
+    let isMutilpleOwnerValid = validateFields(
+      "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer.children.multipleApplicantInfo.props.items[0].item0.children.cardContent.children.applicantCard.children",
+      state,
+      dispatch
+    );
+    let isInstitutionValid = validateFields(
+      "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer.children.institutionInfo.children.cardContent.children.institutionDetailsContainer.chilrden",
       state,
       dispatch
     );
 
-    // Multiple buildings cards validations
-    let multiplePropertyCardPath =
-      "components.div.children.formwizardSecondStep.children.propertyDetails.children.cardContent.children.propertyDetailsConatiner.children.buildingDataCard.children.multipleBuildingContainer.children.multipleBuilding.props.items";
-    let multiplePropertyCardItems = get(
-      state.screenConfiguration.screenConfig.apply,
-      multiplePropertyCardPath,
-      []
-    );
-    let isMultiplePropertyCardValid = true;
-    for (var j = 0; j < multiplePropertyCardItems.length; j++) {
-      if (
-        (multiplePropertyCardItems[j].isDeleted === undefined ||
-          multiplePropertyCardItems[j].isDeleted !== false) &&
-        !validateFields(
-          `${multiplePropertyCardPath}[${j}].item${j}.children.cardContent.children.multipleBuildingCard.children`,
-          state,
-          dispatch,
-          "apply"
-        )
-      )
-        isMultiplePropertyCardValid = false;
-    }
 
-    let noOfBuildings = get(
+let isTransfereeDetailsCardValid=isSingleOwnerValid||isMutilpleOwnerValid||isInstitutionValid;
+
+    let isApplicantTypeValid=validateFields(
+      "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.applicantTypeSelection.children",
       state,
-      "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.noOfBuildings"
+      dispatch
     );
-    if (noOfBuildings === "SINGLE") {
-      isMultiplePropertyCardValid = true;
-    } else {
-      isSinglePropertyCardValid = true;
-    }
+
+    let ismutationCardValid = validateFields(
+      "components.div.children.formwizardFirstStep.children.mutationDetails.children.cardContent.children.mutationDetailsContainer.children",
+      state,
+      dispatch
+    );
+    let isregistrationCardValid = validateFields(
+      "components.div.children.formwizardFirstStep.children.registrationDetails.children.cardContent.children.registrationDetailsContainer.children",
+      state,
+      dispatch
+    );
+
 
     if (
-      !isSinglePropertyCardValid ||
-      !isPropertyLocationCardValid ||
-      !isMultiplePropertyCardValid
+      !isregistrationCardValid ||
+      !ismutationCardValid ||
+      !isTransfereeDetailsCardValid ||
+      !isApplicantTypeValid
     ) {
       isFormValid = false;
       hasFieldToaster = true;
@@ -361,7 +355,7 @@ export const footer = getCommonApplyFooter({
     children: {
       nextButtonLabel: getLabel({
         labelName: "Next Step",
-        labelKey: "NOC_COMMON_BUTTON_NXT_STEP"
+        labelKey: "PT_COMMON_BUTTON_NXT_STEP"
       }),
       nextButtonIcon: {
         uiFramework: "custom-atoms",
@@ -390,7 +384,7 @@ export const footer = getCommonApplyFooter({
     children: {
       submitButtonLabel: getLabel({
         labelName: "Submit",
-        labelKey: "NOC_COMMON_BUTTON_SUBMIT"
+        labelKey: "PT_COMMON_BUTTON_SUBMIT"
       }),
       submitButtonIcon: {
         uiFramework: "custom-atoms",

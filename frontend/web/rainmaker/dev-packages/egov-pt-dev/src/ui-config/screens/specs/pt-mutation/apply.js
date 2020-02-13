@@ -11,6 +11,7 @@ import {mutationDetails
    } from "./applyResourceMutation/mutationDetails";
    import {registrationDetails} from "./applyResourceMutation/registrationDetails";
    import {transferorDetails} from "./applyResourceMutation/transferorDetails";
+   import cloneDeep from "lodash/cloneDeep";
    import {
     transferorSummary,transferorInstitutionSummary
   } from "./summaryResource/transferorSummary";
@@ -166,7 +167,7 @@ const getPropertyData = async (action, state, dispatch) => {
         value: tenantId
       },
       {
-        key: "ids",
+        key: "propertyIds",
         value: consumerCode
       }
     ];
@@ -179,6 +180,7 @@ const getPropertyData = async (action, state, dispatch) => {
       
     );
     dispatch(prepareFinalObject("Properties", payload.Properties));
+    dispatch(prepareFinalObject("PropertiesTemp",cloneDeep(payload.Properties)));
   } catch (e) {
     console.log(e);
   }
