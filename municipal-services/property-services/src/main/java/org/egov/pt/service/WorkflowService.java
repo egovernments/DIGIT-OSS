@@ -119,7 +119,9 @@ public class WorkflowService {
 			String pId = utils.getIdList(request.getRequestInfo(), property.getTenantId(), configs.getPropertyIdGenName(), configs.getPropertyIdGenFormat(), 1).get(0);
 			request.getProperty().setPropertyId(pId);
 		}
+		
 		request.getProperty().setStatus(Status.fromValue(state.getApplicationStatus()));
+		request.getProperty().getWorkflow().setState(state);
 		return state;
 	}
 

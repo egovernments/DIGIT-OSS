@@ -122,6 +122,7 @@ public class PropertyUtil extends CommonUtils {
 			break;
 		}
 		
+		property.setWorkflow(wf);
 		return ProcessInstanceRequest.builder()
 				.processInstances(Arrays.asList(wf))
 				.requestInfo(request.getRequestInfo())

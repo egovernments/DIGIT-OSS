@@ -138,7 +138,6 @@ public class PropertyService {
 		if(config.getIsWorkflowEnabled()) {
 			
 			State state = wfService.updateWorkflow(request, UPDATE_PROCESS_CONSTANT);
-			request.getProperty().getWorkflow().setState(state);
 					
 			if (state.getIsStartState() == true
 					&& state.getApplicationStatus().equalsIgnoreCase(Status.INWORKFLOW.toString())) {
@@ -182,7 +181,6 @@ public class PropertyService {
 		if (config.getIsMutationWorkflowEnabled()) {
 
 			State state = wfService.updateWorkflow(request, MUTATION_PROCESS_CONSTANT);
-			request.getProperty().getWorkflow().setState(state);
 			/*
 			 * updating property from search to INACTIVE status
 			 * 
