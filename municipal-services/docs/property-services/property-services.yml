@@ -341,7 +341,7 @@ components:
           $ref: '#/components/schemas/Status'
         address:
           $ref: '#/components/schemas/Address'
-        acknowldgementNumber:
+        acknowldgementIds:
           maxLength: 64
           minLength: 1
           type: string
