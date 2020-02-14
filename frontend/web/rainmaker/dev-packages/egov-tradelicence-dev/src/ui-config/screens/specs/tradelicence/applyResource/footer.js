@@ -594,8 +594,9 @@ export const footerReview = (
   let tlCertificateDownloadObject = {
     label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
     link: () => {
-      const { Licenses } = state.screenConfiguration.preparedFinalObject;
-      downloadCertificateForm(Licenses);
+      generateReceipt(state, dispatch, "certificate_download");
+      // const { Licenses } = state.screenConfiguration.preparedFinalObject;
+      // downloadCertificateForm(Licenses);
     },
     leftIcon: "book"
   };
@@ -785,8 +786,9 @@ export const downloadPrintContainer = (
   let tlCertificateDownloadObject = {
     label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
     link: () => {
-      const { Licenses } = state.screenConfiguration.preparedFinalObject;
-      downloadCertificateForm(Licenses);
+      generateReceipt(state, dispatch, "certificate_download");
+      // const { Licenses } = state.screenConfiguration.preparedFinalObject;
+      // downloadCertificateForm(Licenses);
     },
     leftIcon: "book"
   };
