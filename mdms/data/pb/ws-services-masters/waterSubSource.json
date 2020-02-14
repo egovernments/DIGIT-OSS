@@ -6,9 +6,21 @@
       "name": "Ground",
       "code": "GROUND",
       "subsource": [
-        "Well",
-        "Hand-pump",
-        "Borewell"
+        {
+          "name": "Well",
+          "code": "WELL",
+          "active": true
+        },
+        {
+          "name": "Hand-pump",
+          "code": "HANDPUMP",
+          "active": true
+        },
+        {
+          "name": "Borewell",
+          "code": "BOREWELL",
+          "active": true
+        }
       ],
       "active": true
     },
@@ -16,12 +28,41 @@
       "name": "Surface",
       "code": "SURFACE",
       "subsource": [
-        "River",
-        "Canal",
-        "Lake",
-        "Pond",
-        "Rainwater",
-        "Recycled-water"
+        {
+          "name": "River",
+          "code": "RIVER",
+          "active": true
+        },
+        {
+          "name": "Canal",
+          "code": "CANAL",
+          "active": true
+        },
+        {
+          "name": "Lake",
+          "code": "LAKE",
+          "active": true
+        },
+        {
+          "name": "Lake",
+          "code": "LAKE",
+          "active": true
+        },
+        {
+          "name": "Pond",
+          "code": "POND",
+          "active": true
+        },
+        {
+          "name": "Rainwater",
+          "code": "RAINWATER",
+          "active": true
+        },
+        {
+          "name": "Recycled-water",
+          "code": "RECYCLEDWATER",
+          "active": true
+        }
       ],
       "active": true
     },
@@ -29,8 +70,16 @@
       "name": "Bulk-Supply",
       "code": "BULKSUPPLY",
       "subsource": [
-        "Raw",
-        "Treated"
+        {
+          "name": "Raw",
+          "code": "RAW",
+          "active": true
+        },
+        {
+          "name": "Treated",
+          "code": "TREATED",
+          "active": true
+        }
       ],
       "active": true
     }
