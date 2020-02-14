@@ -32,7 +32,7 @@ serviceMaps:
 
        - jsonPath: $.SewerageConnection.roadType     
 
-    - query: INSERT INTO eg_sw_service(connection_id,connectionExecutionDate,noOfWaterClosets,noOfToilets,UOM,connectiontype,calculationAttribute) VALUES(?,?,?,?,?,?,?);
+    - query: INSERT INTO eg_sw_service(connection_id,connectionExecutionDate,noOfWaterClosets,noOfToilets,UOM,connectiontype,proposedWaterClosets,proposedToilets) VALUES(?,?,?,?,?,?,?,?);
       basePath: $.SewerageConnection
       jsonMaps:
 
@@ -47,8 +47,11 @@ serviceMaps:
        - jsonPath: $.SewerageConnection.uom
          
        - jsonPath: $.SewerageConnection.connectionType
+       
+       - jsonPath: $.SewerageConnection.proposedWaterClosets
+       
+       - jsonPath: $.SewerageConnection.proposedToilets
          
-       - jsonPath: $.SewerageConnection.calculationAttribute
 
     - query: INSERT INTO eg_sw_applicationdocument(id, tenantId, documenttype, filestoreid, swid,active, createdBy, lastModifiedBy, createdTime, lastModifiedTime,documentUid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?);
       basePath: $.SewerageConnection.documents.*
@@ -105,7 +108,7 @@ serviceMaps:
    fromTopic: update-sw-connection
    isTransaction: true
    queryMaps: 
-    - query: UPDATE eg_sw_connection SET applicationstatus=?, status=?, connectionno=?, oldconnectionno=?, action=?, roadCuttingArea=?, roadType=? WHERE id=?;
+    - query: UPDATE eg_sw_connection SET applicationstatus=?, status=?, connectionno=?, oldconnectionno=?, action=?, roadCuttingArea=?, roadType=?, proposedWaterClosets=?, proposedToilets=? WHERE id=?;
       basePath: $.SewerageConnection
       jsonMaps:
         
@@ -121,11 +124,15 @@ serviceMaps:
 
        - jsonPath: $.SewerageConnection.roadCuttingArea
 
-       - jsonPath: $.SewerageConnection.roadType 
+       - jsonPath: $.SewerageConnection.roadType
+       
+       - jsonPath: $.SewerageConnection.proposedWaterClosets
+       
+       - jsonPath: $.SewerageConnection.proposedToilets
 
        - jsonPath: $.SewerageConnection.id       
 
-    - query: UPDATE eg_sw_service SET connectionexecutiondate=?,noOfWaterClosets=?,noOfToilets=?,UOM=?,connectiontype=?,calculationAttribute=? WHERE connection_id=?;
+    - query: UPDATE eg_sw_service SET connectionexecutiondate=?,noOfWaterClosets=?,noOfToilets=?,UOM=?,connectiontype=? WHERE connection_id=?;
       basePath: $.SewerageConnection
       jsonMaps:
 
@@ -139,8 +146,6 @@ serviceMaps:
          
        - jsonPath: $.SewerageConnection.connectionType
          
-       - jsonPath: $.SewerageConnection.calculationAttribute
-
        - jsonPath: $.SewerageConnection.id
 
 
