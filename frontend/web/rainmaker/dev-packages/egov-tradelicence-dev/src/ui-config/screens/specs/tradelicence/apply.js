@@ -9,7 +9,7 @@ import {
 
 import get from "lodash/get";
 import set from "lodash/set";
-
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import {
   commonTransform,
   objectToDropdown,
@@ -46,7 +46,11 @@ export const stepper = getStepperObject(
   { props: { activeStep: 0 } },
   stepsData
 );
-
+export const pageResetAndChange = (state, dispatch,tenantId) => {
+  dispatch(prepareFinalObject("Licenses", [{ licenseType: "PERMANENT" }]));
+  dispatch(prepareFinalObject("LicensesTemp", []));
+ dispatch(setRoute(`/tradelicence/apply?tenantId=${tenantId}`));
+};
 export const header = getCommonContainer({
   header:
     getQueryArg(window.location.href, "action") !== "edit"
@@ -322,6 +326,11 @@ const screenConfig = {
   // hasBeforeInitAsync:true,
   beforeInitScreen: (action, state, dispatch) => {
     const tenantId = getTenantId();
+    const URL=window.location.href
+    const URLsplit=URL.split("/")
+    if(URLsplit[URLsplit.length-1]=="apply"){
+      pageResetAndChange(state,dispatch,tenantId)
+    }
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     getData(action, state, dispatch).then(responseAction => {
       const queryObj = [{ key: "tenantId", value: tenantId }];

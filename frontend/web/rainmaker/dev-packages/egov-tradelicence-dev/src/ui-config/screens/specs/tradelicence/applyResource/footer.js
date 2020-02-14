@@ -3,7 +3,7 @@ import {
   dispatchMultipleFieldChangeAction
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { download } from "egov-common/ui-utils/commons";
-import { applyTradeLicense,getSearchResults } from "../../../../../ui-utils/commons";
+import { applyTradeLicense,getNextFinancialYearForRenewal} from "../../../../../ui-utils/commons";
 import {
   getButtonVisibility,
   getCommonApplyFooter,
@@ -24,7 +24,6 @@ import {
   prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import "./index.css";
-import generateReceipt from "../../utils/receiptPdf";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import get from "lodash/get";
@@ -596,38 +595,28 @@ export const footer = getCommonApplyFooter({
   }
 });
 
-export const renewSearchLicense=async(tenantId,licenseNumber)=>{
-  let queryObject = [
-    {
-      key: "tenantId",
-      value: tenantId 
-    },
-    { key: "offset", value: "0" },
-    { key: "licenseNumbers", value: licenseNumber}
-  ];
-  const response = await getSearchResults(queryObject);
-  const responses=get(response,`Licenses`,[])
-     const responseLength=responses.length 
-     if(responseLength===1)
-     return true;
-     else
-     return false;
-}
 
-export const renewTradelicence = async (applicationNumber, financialYear, tenantId,state,dispatch) => {
+
+export const renewTradelicence  = async (financialYear,state,dispatch) => {
   const licences = get(
     state.screenConfiguration.preparedFinalObject,
     `Licenses`
   );
+
+  const tenantId= get(licences[0] , "tenantId");
+
+  const nextFinancialYear = await getNextFinancialYearForRenewal(financialYear);
+
   const wfCode = "DIRECTRENEWAL";
   set(licences[0], "action", "INITIATE");
   set(licences[0], "workflowCode", wfCode);
   set(licences[0], "applicationType", "RENEWAL");
+  set(licences[0],"financialYear" ,nextFinancialYear);
 
 const response=  await httpRequest("post", "/tl-services/v1/_update", "", [], {
     Licenses: licences
   })
-   const applicationNumberNew = get(
+   const renewedapplicationNo = get(
     response,
     `Licenses[0].applicationNumber`
   );
@@ -636,9 +625,9 @@ const response=  await httpRequest("post", "/tl-services/v1/_update", "", [], {
     `Licenses[0].licenseNumber`
   );
   dispatch(
-  setRoute(
-    `/tradelicence/acknowledgement?purpose=EDITRENEWAL&status=success&applicationNumber=${applicationNumberNew}&licenseNumber=${licenseNumber}&FY=${financialYear}&tenantId=${tenantId}&action=${wfCode}`
-  ));
+    setRoute(
+      `/tradelicence/acknowledgement?purpose=EDITRENEWAL&status=success&applicationNumber=${renewedapplicationNo}&licenseNumber=${licenseNumber}&FY=${nextFinancialYear}&tenantId=${tenantId}&action=${wfCode}`
+    ));
 };
 
 export const footerReview = (
@@ -654,6 +643,11 @@ export const footerReview = (
   let downloadMenu = [];
   let printMenu = [];
   let licenseNumber= get(state.screenConfiguration.preparedFinalObject.Licenses[0], "licenseNumber")
+  const responseLength = get(
+    state.screenConfiguration.preparedFinalObject,
+    `licenseCount`,
+    1
+  );
   // let renewalMenu=[];
   let tlCertificateDownloadObject = {
     label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
@@ -717,26 +711,7 @@ export const footerReview = (
     },
     leftIcon: "assignment"
   };
-  // let editObject = {
-  //   label: { labelName: "Edit", labelKey: "TL_EDIT" },
-  //   link: () => {
-  //     const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
-  //     const documents = LicensesTemp[0].reviewDocData;
-  //     set(Licenses[0],"additionalDetails.documents",documents)
-  //     downloadAcknowledgementForm(Licenses,'print');
-  //   },
-  //   leftIcon: "assignment"
-  // };
-  // let submitObject = {
-  //   label: { labelName: "Submit", labelKey: "TL_SUBMIT" },
-  //   link: () => {
-  //     const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
-  //     const documents = LicensesTemp[0].reviewDocData;
-  //     set(Licenses[0],"additionalDetails.documents",documents)
-  //     downloadAcknowledgementForm(Licenses,'print');
-  //   },
-  //   leftIcon: "assignment"
-  // };
+  
   switch (status) {
     case "APPROVED":
       downloadMenu = [
@@ -891,7 +866,7 @@ export const footerReview = (
                 },
 
               },
-              visible:getButtonVisibility(status, "APPROVED")&&renewSearchLicense,
+              visible:getButtonVisibility(status, "APPROVED")&&(responseLength === 1 ),
             },
             submitButton: {
               componentPath: "Button",
@@ -921,11 +896,11 @@ export const footerReview = (
               onClickDefination: {
                 action: "condition",
                 callBack: () => {
-                  renewTradelicence(applicationNumber, financialYear, tenantId,state,dispatch);
+                  renewTradelicence(financialYear, state,dispatch);
                 },
 
               },
-              visible:getButtonVisibility(status, "APPROVED")&&renewSearchLicense,
+              visible:getButtonVisibility(status, "APPROVED")&&(responseLength === 1 ),
             },    
             makePayment: {
               componentPath: "Button",

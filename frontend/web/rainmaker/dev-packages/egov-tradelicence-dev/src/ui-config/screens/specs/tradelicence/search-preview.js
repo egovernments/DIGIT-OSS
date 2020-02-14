@@ -95,6 +95,25 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
 
   let sts = getTransformedStatus(get(payload, "Licenses[0].status"));
   payload && dispatch(prepareFinalObject("Licenses[0]", payload.Licenses[0]));
+
+  //set business service data
+    
+  const businessService = get(
+    state.screenConfiguration.preparedFinalObject,
+    "Licenses[0].workflowCode"
+  );
+  const businessServiceQueryObject = [
+    { key: "tenantId", value: tenantId },
+    {
+      key: "businessServices",
+      value: businessService ? businessService : "NewTL"
+    }
+  ];
+
+  await setBusinessServiceDataToLocalStorage(businessServiceQueryObject, dispatch);
+
+  //set Trade Types
+
   payload &&
     dispatch(
       prepareFinalObject(
@@ -104,6 +123,9 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
     );
   const LicenseData = payload.Licenses[0];
   const fetchFromReceipt = sts !== "pending_payment";
+
+    
+  // generate estimate data
   createEstimateData(
     LicenseData,
     "LicensesTemp[0].estimateCardData",
@@ -118,19 +140,23 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
   if (applicationNumber) {
     !getQueryArg(window.location.href, "edited") &&
       (await searchResults(action, state, dispatch, applicationNumber));
-    const businessService = get(
-      state.screenConfiguration.preparedFinalObject,
-      "Licenses[0].workflowCode"
-    );
-    const queryObject = [
-      { key: "tenantId", value: tenantId },
-      {
-        key: "businessServices",
-        value: businessService ? businessService : "NewTL"
-      }
-    ];
-    setBusinessServiceDataToLocalStorage(queryObject, dispatch);
 
+   //check for renewal flow
+    const licenseNumber = get(
+      state.screenConfiguration.preparedFinalObject,
+      `Licenses[0].licenseNumber`
+    );
+    let queryObjectSearch = [
+      {
+        key: "tenantId",
+        value: tenantId 
+      },
+      { key: "offset", value: "0" },
+      { key: "licenseNumbers", value: licenseNumber}
+    ];
+    const payload = await getSearchResults(queryObjectSearch);
+    const length = payload && payload.Licenses.length > 0 ? get(payload,`Licenses`,[]).length : 0;
+    dispatch(prepareFinalObject("licenseCount" ,length));
     const status = get(
       state,
       "screenConfiguration.preparedFinalObject.Licenses[0].status"
@@ -243,6 +269,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       );
     }
 
+ 
     const footer = footerReview(
       action,
       state,
@@ -257,20 +284,12 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       ? set(action, "screenConfig.components.div.children.footer", footer)
       : set(action, "screenConfig.components.div.children.footer", {});
 
-    // const userRoles = JSON.parse(getUserInfo()).roles;
-    //   userRoles.map((userRole)=>{
-    //   if(userRole.code=='TL_CEMP' &&  userRole.tenantId==tenantId && status=="APPROVED"){
-    //     set(action, "screenConfig.components.div.children.footer", footer)
-    //   }
-    // })
-
     if (status === "cancelled")
       set(
         action,
         "screenConfig.components.div.children.headerDiv.children.helpSection.children.cancelledLabel.visible",
         true
-      );
-
+      );       
     setActionItems(action, obj);
     loadReceiptGenerationData(applicationNumber, tenantId);
   }
@@ -400,8 +419,6 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "search-preview",
   beforeInitScreen: (action, state, dispatch) => {
-    // const status = getQueryArg(window.location.href, "status");
-    const tenantId = getQueryArg(window.location.href, "tenantId");
     applicationNumber = getQueryArg(window.location.href, "applicationNumber");
     //To set the application no. at the  top
     set(
@@ -409,11 +426,6 @@ const screenConfig = {
       "components.div.children.headerDiv.children.header1.children.applicationNumber.props.number",
       applicationNumber
     );
-    // const queryObject = [
-    //   { key: "tenantId", value: tenantId },
-    //   { key: "businessServices", value: "NewTL" }
-    // ];
-    // setBusinessServiceDataToLocalStorage(queryObject, dispatch);
     beforeInitFn(action, state, dispatch, applicationNumber);
     return action;
   },
