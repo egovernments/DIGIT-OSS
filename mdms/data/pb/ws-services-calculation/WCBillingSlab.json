@@ -4,390 +4,344 @@
   "WCBillingSlab": [
     {
       "id": "1",
-      "BuildingType": "RESIDENTIAL",
-      "ConnectionType": "Metered",
-      "CalculationAttribute": "Water consumption",
-      "UOM": "kL",
+      "buildingType": "RESIDENTIAL",
+      "connectionType": "Metered",
+      "calculationAttribute": "Water consumption",
+      "minimumCharge": 100,
+      
       "slabs": [
         {
           "from": 0,
           "to": 10,
           "charge": 2,
-          "minimumCharge": 100,
           "meterCharge": 50
         },
         {
           "from": 10,
           "to": 20,
           "charge": 2.5,
-          "minimumCharge": 100,
           "meterCharge": 50
         },
         {
           "from": 20,
           "to": 30,
           "charge": 8,
-          "minimumCharge": 100,
           "meterCharge": 150
         },
         {
           "from": 30,
           "to": 40,
           "charge": 12,
-          "minimumCharge": 100,
           "meterCharge": 150
         },
         {
           "from": 40,
           "to": 1000000000,
           "charge": 15,
-          "minimumCharge": 100,
           "meterCharge": 150
         }
       ]
     },
     {
       "id": 2,
-      "BuildingType": "NONRESIDENTIAL",
-      "CalculationAttribute": "Water consumption",
-      "ConnectionType": "Metered",
-      "UOM": "kL",
+      "buildingType": "NONRESIDENTIAL",
+      "calculationAttribute": "Water consumption",
+      "connectionType": "Metered",
+      
+      "minimumCharge": 200,
       "slabs": [
         {
           "from": 0,
           "to": 10,
           "charge": 13.31,
-          "meterCharge": 532.4,
-          "minimumCharge": 200
+          "meterCharge": 532.4
+          
         },
         {
           "from": 10,
           "to": 25,
           "charge": 26.62,
-          "meterCharge": 798.6,
-          "minimumCharge": 200
+          "meterCharge": 798.6
         },
         {
           "from": 25,
           "to": 50,
           "charge": 66.55,
-          "meterCharge": 931.7,
-          "minimumCharge": 200
+          "meterCharge": 931.7
         },
         {
           "from": 50,
           "to": 100,
           "charge": 106.48,
-          "meterCharge": 1064.8,
-          "minimumCharge": 200
+          "meterCharge": 1064.8
         },
         {
           "from": 100,
           "to": 1000000000,
           "charge": 133.1,
-          "meterCharge": 1197.9,
-          "minimumCharge": 200
+          "meterCharge": 1197.9
         }
       ]
     },
     {
       "id": 3,
-      "BuildingType": "Commercial and Government",
-      "CalculationAttribute": "Water consumption",
-      "ConnectionType": "Metered",
-      "UOM": "kL",
+      "buildingType": "Commercial and Government",
+      "calculationAttribute": "Water consumption",
+      "connectionType": "Metered",
+      
+      "minimumCharge": 200,
       "slabs": [
         {
           "from": 0,
           "to": 10,
           "charge": 13.31,
-          "meterCharge": 532.4,
-          "minimumCharge": 200
+          "meterCharge": 532.4
+          
         },
         {
           "from": 10,
           "to": 25,
           "charge": 26.62,
-          "meterCharge": 798.6,
-          "minimumCharge": 200
+          "meterCharge": 798.6
         },
         {
           "from": 25,
           "to": 50,
           "charge": 66.55,
-          "meterCharge": 931.7,
-          "minimumCharge": 200
+          "meterCharge": 931.7
         },
         {
           "from": 50,
           "to": 100,
           "charge": 106.48,
-          "meterCharge": 1064.8,
-          "minimumCharge": 200
+          "meterCharge": 1064.8
         },
         {
           "from": 100,
           "to": 1000000000,
           "charge": 133.1,
-          "meterCharge": 1197.9,
-          "minimumCharge": 200
+          "meterCharge": 1197.9
         }
       ]
     },
     {
       "id": "4",
-      "BuildingType": "Partly Commercial",
-      "CalculationAttribute": "Water consumption",
-      "ConnectionType": "Metered",
-      "UOM": "kL",
+      "buildingType": "Partly Commercial",
+      "calculationAttribute": "Water consumption",
+      "connectionType": "Metered",
+      "minimumCharge": 150,
+      
       "slabs": [
         {
           "from": 0,
           "to": 10,
           "charge": 8,
-          "meterCharge": 250,
-          "minimumCharge": 150
+          "meterCharge": 250
         },
         {
           "from": 10,
           "to": 15,
           "charge": 25,
-          "meterCharge": 250,
-          "minimumCharge": 150
+          "meterCharge": 250
         },
         {
           "from": 15,
           "to": 1000000000,
           "charge": 40,
-          "meterCharge": 250,
-          "minimumCharge": 150
+          "meterCharge": 250
         }
       ]
     },
     {
       "id": "5",
-      "BuildingType": "RESIDENTIAL",
-      "CalculationAttribute": "No. of taps",
-      "ConnectionType": "Non Metered",
-      "UOM": "Number",
+      "buildingType": "RESIDENTIAL",
+      "calculationAttribute": "No. of taps",
+      "connectionType": "Non Metered",
+      
+      "minimumCharge": 100,
       "slabs": [
         {
           "from": 0,
           "to": 1000000000,
-          "charge": 100,
-          "minimumCharge": 100
+          "charge": 100
         }
       ]
     },
     {
       "id": "6",
-      "BuildingType": "RESIDENTIAL",
-      "CalculationAttribute": "Pipe Size",
-      "ConnectionType": "Non Metered",
-      "UOM": "Inches",
+      "buildingType": "RESIDENTIAL",
+      "calculationAttribute": "Pipe Size",
+      "connectionType": "Non Metered",
+      
+      "minimumCharge": 100,
       "slabs": [
         {
           "from": 0,
           "to": 1000000000,
-          "charge": 150,
-          "minimumCharge": 100
+          "charge": 150
         }
       ]
     },
-       {
+    {
       "id": "7",
-      "BuildingType": "NONRESIDENTIAL",
-      "CalculationAttribute": "Pipe Size",
-      "ConnectionType": "Non Metered",
-      "UOM": "Inches",
+      "buildingType": "NONRESIDENTIAL",
+      "calculationAttribute": "Pipe Size",
+      "connectionType": "Non Metered",
+      
+      "minimumCharge": 200,
       "slabs": [
         {
           "from": 0,
           "to": 1000000000,
-          "charge": 250,
-          "minimumCharge": 200
+          "charge": 250
         }
       ]
     },
        {
       "id": "8",
-      "BuildingType": "NONRESIDENTIAL",
-      "CalculationAttribute": "No. of taps",
-      "ConnectionType": "Non Metered",
-      "UOM": "Number",
+      "buildingType": "NONRESIDENTIAL",
+      "calculationAttribute": "No. of taps",
+      "connectionType": "Non Metered",
+      
+      "minimumCharge": 200,
       "slabs": [
         {
           "from": 0,
           "to": 1000000000,
-          "charge": 300,
-          "minimumCharge": 200
+          "charge": 300
         }
       ]
     },
     {
       "id": "9",
-      "BuildingType": "Commercial",
-      "CalculationAttribute": "Pipe Size",
-      "ConnectionType": "Non Metered",
-      "UOM": "Inches",
+      "buildingType": "Commercial",
+      "calculationAttribute": "Pipe Size",
+      "connectionType": "Non Metered",
+      
+      "minimumCharge": 200,
       "slabs": [
         {
           "from": 0,
           "to": 1000000000,
-          "charge": 250,
-          "minimumCharge": 200
+          "charge": 250
         }
       ]
     },
     {
       "id": "10",
-      "BuildingType": "Commercial",
-      "CalculationAttribute": "No. of taps",
-      "ConnectionType": "Non Metered",
-      "UOM": "Number",
+      "buildingType": "Commercial",
+      "calculationAttribute": "No. of taps",
+      "connectionType": "Non Metered",
+      "minimumCharge": 200,
+      
       "slabs": [
         {
           "from": 0,
           "to": 1000000000,
-          "charge": 300,
-          "minimumCharge": 200
+          "charge": 300
+          
         }
       ]
     },
     {
       "id": "11",
-      "BuildingType": "Government",
-      "CalculationAttribute": "No. of taps",
-      "ConnectionType": "Non Metered",
-      "UOM": "Number",
+      "buildingType": "Government",
+      "calculationAttribute": "No. of taps",
+      "connectionType": "Non Metered",
+      
+      "minimumCharge": 300,
       "slabs": [
         {
           "from": 0,
           "to": 1000000000,
-          "charge": 350,
-          "minimumCharge": 300
+          "charge": 350
         }
       ]
     },
     {
       "id": "12",
-      "BuildingType": "Government",
-      "CalculationAttribute": "Pipe Size",
-      "ConnectionType": "Non Metered",
-      "UOM": "Inches",
+      "buildingType": "Government",
+      "calculationAttribute": "Pipe Size",
+      "connectionType": "Non Metered",
+      
+      "minimumCharge": 300,
       "slabs": [
         {
           "from": 0,
           "to": 1000000000,
-          "charge": 250,
-          "minimumCharge": 300
+          "charge": 250
         }
       ]
     },
     {
       "id": "13",
-      "BuildingType": "Partly Commercial",
-      "CalculationAttribute": "No. of taps",
-      "ConnectionType": "Non Metered",
-      "UOM": "Number",
+      "buildingType": "Partly Commercial",
+      "calculationAttribute": "No. of taps",
+      "connectionType": "Non Metered",
+      
+      "minimumCharge": 150,
       "slabs": [
         {
           "from": 0,
           "to": 1000000000,
-          "charge": 200,
-          "minimumCharge": 150
+          "charge": 200
         }
       ]
     },
     {
       "id": "14",
-      "BuildingType": "Partly Commercial",
-      "CalculationAttribute": "Pipe Size",
-      "ConnectionType": "Non Metered",
-      "UOM": "Inches",
+      "buildingType": "Partly Commercial",
+      "calculationAttribute": "Pipe Size",
+      "connectionType": "Non Metered",
+      
+      "minimumCharge": 150,
       "slabs": [
         {
           "from": 0,
           "to": 1000000000,
-          "charge": 150,
-          "minimumCharge": 150
+          "charge": 150
         }
       ]
     },
     {
       "id": "15",
-      "BuildingType": "RESIDENTIAL",
-      "CalculationAttribute": "Flat",
-      "ConnectionType": "Non Metered",
-      "UOM": "Flat",
-      "slabs": [
-        {
-          "from": 0,
-          "to": 1000000000,
-          "charge": 250,
-          "minimumCharge": 0
-        }
-      ]
+      "buildingType": "RESIDENTIAL",
+      "calculationAttribute": "Flat",
+      "connectionType": "Non Metered",
+      "minimumCharge": 250,
+      "slabs": []
     },
     {
       "id": "16",
-      "BuildingType": "NONRESIDENTIAL",
-      "CalculationAttribute": "Flat",
-      "ConnectionType": "Non Metered",
-      "UOM": "Flat",
-      "slabs": [
-        {
-          "from": 0,
-          "to": 1000000000,
-          "charge": 550,
-          "minimumCharge": 0
-        }
-      ]
+      "buildingType": "NONRESIDENTIAL",
+      "calculationAttribute": "Flat",
+      "connectionType": "Non Metered",
+      "minimumCharge": 550,
+      "slabs": []
     },
     {
       "id": "17",
-      "BuildingType": "Commercial",
-      "CalculationAttribute": "Flat",
-      "ConnectionType": "Non Metered",
-      "UOM": "Flat",
-      "slabs": [
-        {
-          "from": 0,
-          "to": 1000000000,
-          "charge": 550,
-          "minimumCharge": 0
-        }
-      ]
+      "buildingType": "Commercial",
+      "calculationAttribute": "Flat",
+      "connectionType": "Non Metered",
+      "minimumCharge": 550,
+      "slabs": []
     },
     {
       "id": "18",
-      "BuildingType": "Government",
-      "CalculationAttribute": "Flat",
-      "ConnectionType": "Non Metered",
-      "UOM": "Flat",
-      "slabs": [
-        {
-          "from": 0,
-          "to": 1000000000,
-          "charge": 650,
-          "minimumCharge": 0
-        }
-      ]
+      "buildingType": "Government",
+      "calculationAttribute": "Flat",
+      "connectionType": "Non Metered",
+      "minimumCharge": 650,
+      "slabs": []
     },
     {
       "id": "19",
-      "BuildingType": "Partly commercial",
-      "CalculationAttribute": "Flat",
-      "ConnectionType": "Non Metered",
-      "UOM": "Flat",
-      "slabs": [
-        {
-          "from": 0,
-          "to": 1000000000,
-          "charge": 350,
-          "minimumCharge": 0
-        }
-      ]
+      "buildingType": "Partly commercial",
+      "calculationAttribute": "Flat",
+      "connectionType": "Non Metered",
+      "minimumCharge": 350,
+      "slabs": []
     }
   ]
 }

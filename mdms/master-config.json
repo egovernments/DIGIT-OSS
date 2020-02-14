@@ -881,6 +881,11 @@
       "masterName": "RoadType",
       "isStateLevel": true,
       "uniqueKeys": []
+    },
+    "CalculationAttribute": {
+      "masterName": "CalculationAttribute",
+      "isStateLevel": true,
+      "uniqueKeys": []
     }
   },
   "BPA": {
@@ -1010,6 +1015,11 @@
     },
     "RoadType": {
       "masterName": "RoadType",
+      "isStateLevel": true,
+      "uniqueKeys": []
+    },
+    "CalculationAttribute": {
+      "masterName": "CalculationAttribute",
       "isStateLevel": true,
       "uniqueKeys": []
     }
