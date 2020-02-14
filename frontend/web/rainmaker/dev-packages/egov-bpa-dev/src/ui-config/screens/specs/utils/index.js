@@ -2847,54 +2847,6 @@ const riskType = (state, dispatch) => {
   dispatch(prepareFinalObject("BPA.riskType", scrutinyRiskType));
 };
 
-export const calculationType = (state, dispatch) => {
-  const calcType = get(
-    state.screenConfiguration.preparedFinalObject,
-    "applyScreenMdmsData.BPA.CalculationType"
-  );
-  const appType = get(
-    state.screenConfiguration.preparedFinalObject,
-    "BPA.applicationType"
-  );
-  const riskType = get(
-    state.screenConfiguration.preparedFinalObject,
-    "BPA.riskType"
-  );
-  const serviceType = get(
-    state.screenConfiguration.preparedFinalObject,
-    "BPA.serviceType"
-  );
-  let amount;
-  let calcFeeData = [];
-  if (serviceType) {
-    calcType.forEach(type => {
-      // if(bpa.action == null || bpa.action == "INITIATE"){
-      // bpa.feeType = "ApplicationFee";
-      // }
-      if ((type.applicationType == appType || type.applicationType === "ALL") && (type.feeType == "ApplicationFee")) {
-        if (type.serviceType == serviceType || type.serviceType === "ALL") {
-          if (type.riskType == riskType || type.riskType === "ALL") {
-            calcFeeData.push(type);
-          }
-        }
-      }
-    })
-    let calcReqData = [];
-    if (calcFeeData.length > 1) {
-      calcFeeData.forEach(type => {
-        if (type.riskType == riskType) {
-          calcReqData.push(type);
-        }
-      })
-      dispatch(prepareFinalObject("BPAs[0].appfee", calcReqData[0].amount));
-    }
-    else {
-      dispatch(prepareFinalObject("BPAs[0].appfee", calcFeeData[0].amount));
-
-    }
-  }
-}
-
 export const residentialType = (state, dispatch) => {
   let resType = get(
     state.screenConfiguration.preparedFinalObject,
@@ -3019,7 +2971,6 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
           currOwnersArr = scrutinyData[0];
           dispatch(prepareFinalObject(`scrutinyDetails`, currOwnersArr));
           await riskType(state, dispatch);
-          await calculationType(state, dispatch);
           await residentialType(state, dispatch);
         } else {
           dispatch(

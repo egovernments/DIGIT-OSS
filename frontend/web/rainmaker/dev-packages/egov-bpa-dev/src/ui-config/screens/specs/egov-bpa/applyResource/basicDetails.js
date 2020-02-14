@@ -7,7 +7,7 @@ import {
   getCommonContainer,
   getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { getTodaysDateInYMD, calculationType, getScrutinyDetails } from "../../utils";
+import { getTodaysDateInYMD, getScrutinyDetails } from "../../utils";
 import "./index.css";
 
 export const basicDetails = getCommonCard({
@@ -148,9 +148,6 @@ export const basicDetails = getCommonCard({
         xs: 12,
         sm: 12,
         md: 6
-      },
-      afterFieldChange: (action, state, dispatch) => {
-        calculationType(state, dispatch)
       }
     }),
     applicationdate: getDateField({
@@ -158,7 +155,7 @@ export const basicDetails = getCommonCard({
         labelName: "Application Date",
         labelKey: "BPA_BASIC_DETAILS_APP_DATE_LABEL"
       },
-      jsonPath: "BPA.appdate",
+      jsonPath: "BPAs.appdate",
       props: {
         disabled: true,
         className : "tl-trade-type"

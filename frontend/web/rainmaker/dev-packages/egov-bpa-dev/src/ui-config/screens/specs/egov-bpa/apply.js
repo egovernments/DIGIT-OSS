@@ -36,7 +36,7 @@ import {
   prepareNOCUploadData,
   getAppSearchResults
 } from "../../../../ui-utils/commons";
-import { getTodaysDateInYYYMMDD, getTenantMdmsData, calculationType, setProposedBuildingData } from "../utils";
+import { getTodaysDateInYYYMMDD, getTenantMdmsData, setProposedBuildingData } from "../utils";
 import jp from "jsonpath";
 import { bpaSummaryDetails } from "../egov-bpa/summaryDetails";
 
@@ -173,9 +173,6 @@ const getMdmsData = async (action, state, dispatch) => {
               name: "RiskTypeComputation"
             },
             {
-              name: "CalculationType"
-            },
-            {
               name: "OccupancyType"
             },
             {
@@ -206,7 +203,7 @@ const getMdmsData = async (action, state, dispatch) => {
 
 const getTodaysDate = async(action, state, dispatch) => {
   const today = getTodaysDateInYYYMMDD();
-    dispatch(prepareFinalObject("BPA.appdate", today));
+    dispatch(prepareFinalObject("BPAs.appdate", today));
 }
 
 const getFirstListFromDotSeparated = list => {
@@ -273,8 +270,7 @@ const setSearchResponse = async (
     longitude
   ));
  }
-  dispatch(prepareFinalObject("BPA.appdate", appDate));
-  calculationType(state, dispatch);
+  dispatch(prepareFinalObject("BPAs.appdate", appDate));
   const docs = await prepareDocumentsUploadData(state, dispatch);
   const documentDetailsUploadRedux = await prepareDocumentDetailsUploadRedux(state, dispatch);
 };

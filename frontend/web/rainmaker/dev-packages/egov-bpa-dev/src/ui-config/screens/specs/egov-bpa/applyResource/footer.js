@@ -389,6 +389,10 @@ const callBackForNext = async (state, dispatch) => {
           state.screenConfiguration.preparedFinalObject,
           "BPA.owners"
         );
+        let bpaStatus = get(
+          state.screenConfiguration.preparedFinalObject,
+          "BPA.status", ""
+        )
 
         if (checkingOwner && checkingOwner === "INDIVIDUAL.SINGLEOWNER") {
           let primaryOwner = get(
@@ -396,14 +400,18 @@ const callBackForNext = async (state, dispatch) => {
             "BPA.owners[0].isPrimaryOwner"
           );
           if (primaryOwner && primaryOwner === true) {
-            let response = await createUpdateBpaApplication(
-              state,
-              dispatch,
-              "INITIATE"
-            );
-            prepareDocumentsUploadData(state, dispatch);  
-            responseStatus = get(response, "status", "");
-            responseStatus === "success" && changeStep(state, dispatch);
+            if (bpaStatus) {
+              changeStep(state, dispatch);
+            } else {
+              let response = await createUpdateBpaApplication(
+                state,
+                dispatch,
+                "INITIATE"
+              );
+              responseStatus = get(response, "status", "");
+              responseStatus === "success" && changeStep(state, dispatch);
+            }
+            prepareDocumentsUploadData(state, dispatch);
           } else {
             let errorMessage = {
               labelName: "Please check is primary owner",
@@ -429,15 +437,19 @@ const callBackForNext = async (state, dispatch) => {
                 labelKey: "ERR_PRIMARY_ONE_OWNER_TOAST"
               };
               dispatch(toggleSnackbar(true, errorMessage, "warning"));
-            } else {                         
-              let response = await createUpdateBpaApplication(
-                state,
-                dispatch,
-                "INITIATE"
-              );
-              prepareDocumentsUploadData(state, dispatch);  
-              responseStatus = get(response, "status", "");
-              responseStatus === "success" && changeStep(state, dispatch);
+            } else {
+              if (bpaStatus) {
+                changeStep(state, dispatch);
+              } else {
+                let response = await createUpdateBpaApplication(
+                  state,
+                  dispatch,
+                  "INITIATE"
+                );
+                responseStatus = get(response, "status", "");
+                responseStatus === "success" && changeStep(state, dispatch);
+              }
+              prepareDocumentsUploadData(state, dispatch);
             }
           } else {
             let errorMessage = {

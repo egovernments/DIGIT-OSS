@@ -78,6 +78,71 @@ export const scrutinySummary = getCommonGrayCard({
             }
         }
     },
+    buildingPlanScrutinyHeaderDetails: getHeader({
+        labelName: "Building Plan Scrutiny Application Details",
+        labelKey: "BPA_APPLICATION_SCRUNITY_DETAILS_TITLE"
+    }),
+    breakeDCR: getBreak(),
+    cardOne: {
+        uiFramework: "custom-containers",
+        componentPath: "MultiItem",
+        props: {
+            className: "applicant-summary",
+            scheama: getCommonGrayCard({
+                buildingPlanScrutinyDetailsContainer: getCommonContainer({
+                    buildingplanscrutinyapplicationnumber: getLabelWithValue(
+                        {
+                            labelName: "eDCR Number",
+                            labelKey: "BPA_EDCR_NO_LABEL"
+                        },
+                        {
+                            jsonPath: "scrutinyDetails.edcrNumber"
+                        }
+                    ),
+                    uploadedfile: {
+                        uiFramework: "custom-atoms-local",
+                        moduleName: "egov-bpa",
+                        componentPath: "downloadFile",
+                        gridDefination: {
+                            xs: 12,
+                            sm: 12,
+                            md: 3
+                        },
+                        props: {
+                            label: 'Uploaded Diagram',
+                            linkDetail: 'uploadedDiagram.dxf',
+                            jsonPath: "scrutinyDetails.updatedDxfFile",
+                        },
+                        type: "array"
+                    },
+                    scrutinyreport: {
+                        uiFramework: "custom-atoms-local",
+                        moduleName: "egov-bpa",
+                        componentPath: "downloadFile",
+                        gridDefination: {
+                            xs: 12,
+                            sm: 12,
+                            md: 3
+                        },
+                        props: {
+                            label: 'Scrutiny Report',
+                            linkDetail: 'ScrutinyReport.pdf',
+                            jsonPath: "scrutinyDetails.planReport",
+                        },
+                        type: "array"
+                    }
+                }),
+            }),
+            items: [],
+            hasAddItem: false,
+            isReviewPage: true,
+            sourceJsonPath: "scrutinyDetails",
+            sourceJsonPath: "BPA",
+            prefixSourceJsonPath: "children.cardContent.children.applicantContainer.children",
+            afterPrefixJsonPath: "children.value.children.key"
+        },
+        type: "array"
+    },
     BlockWiseOccupancyAndUsageDetails: getHeader({
         labelName: "Block wise occupancy /sub occupancy and usage details",
         labelKey: "BPA_APPLICATION_BLOCK_WISE_OCCUPANCY_SUB_OCCUPANCY_USAGE_TITLE"
