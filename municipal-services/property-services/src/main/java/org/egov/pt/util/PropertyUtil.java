@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.egov.common.contract.request.RequestInfo;
-import org.egov.common.contract.request.User;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.OwnerInfo;
 import org.egov.pt.models.Property;
@@ -107,8 +106,7 @@ public class PropertyUtil extends CommonUtils {
 		switch (process) {
 		
 		case CREATE_PROCESS_CONSTANT :
-			List<User> owners = getUserForWorkflow(property);
-			wf.setAssignes(owners);
+
 			wf.setBusinessService(configs.getPropertyRegistryWf());
 			wf.setModuleName(configs.getPropertyModuleName());
 			wf.setAction("OPEN");
@@ -125,7 +123,7 @@ public class PropertyUtil extends CommonUtils {
 		}
 		
 		return ProcessInstanceRequest.builder()
-				.processInstances(Arrays.asList(request.getProperty().getWorkflow()))
+				.processInstances(Arrays.asList(wf))
 				.requestInfo(request.getRequestInfo())
 				.build();
 	}

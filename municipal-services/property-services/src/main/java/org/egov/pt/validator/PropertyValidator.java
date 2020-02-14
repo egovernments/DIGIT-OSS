@@ -555,6 +555,49 @@ public class PropertyValidator {
 		else
 			return true;
 	}
+	
+    /**
+     * Validates if all ids are same as obtained from search result
+     * @param searchResult The license from search
+     * @param licenses The licenses from the update Request
+     */
+    private void validateAllIds(Property property, Property propertyFromSearch, Map<String, String> errorMap){
+
+    	
+//    	if(!propertyFromSearch.getPropertyId().equals(property.getPropertyId()));
+//    		errorMap.compute("EG_PT_UPDATE_PID_ERROR", )
+//    	
+//    	propertyFromSearch
+//    	searchResult.forEach(tradeLicense -> {
+//            idToTradeLicenseFromSearch.put(tradeLicense.getId(),tradeLicense);
+//        });
+//
+//        licenses.forEach(license -> {
+//            TradeLicense searchedLicense = idToTradeLicenseFromSearch.get(license.getId());
+//
+//            if(!searchedLicense.getApplicationNumber().equalsIgnoreCase(license.getApplicationNumber()))
+//                errorMap.put("INVALID UPDATE","The application number from search: "+searchedLicense.getApplicationNumber()
+//                        +" and from update: "+license.getApplicationNumber()+" does not match");
+//
+//            if(!searchedLicense.getTradeLicenseDetail().getId().
+//                    equalsIgnoreCase(license.getTradeLicenseDetail().getId()))
+//                errorMap.put("INVALID UPDATE","The id "+license.getTradeLicenseDetail().getId()+" does not exist");
+//
+//            if(!searchedLicense.getTradeLicenseDetail().getAddress().getId().
+//                    equalsIgnoreCase(license.getTradeLicenseDetail().getAddress().getId()))
+//                errorMap.put("INVALID UPDATE","The id "+license.getTradeLicenseDetail().getAddress().getId()+" does not exist");
+//
+//            compareIdList(getTradeUnitIds(searchedLicense),getTradeUnitIds(license),errorMap);
+//            compareIdList(getAccessoryIds(searchedLicense),getAccessoryIds(license),errorMap);
+//            compareIdList(getOwnerIds(searchedLicense),getOwnerIds(license),errorMap);
+//            compareIdList(getOwnerDocIds(searchedLicense),getOwnerDocIds(license),errorMap);
+//            compareIdList(getApplicationDocIds(searchedLicense),getApplicationDocIds(license),errorMap);
+//            compareIdList(getVerficationDocIds(searchedLicense),getVerficationDocIds(license),errorMap);
+//        });
+//
+//        if(!CollectionUtils.isEmpty(errorMap))
+//            throw new CustomException(errorMap);
+    }
 /*
  * 
  * Mutation methods
