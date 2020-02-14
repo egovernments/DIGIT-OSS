@@ -417,13 +417,6 @@ const mapStateToProps = state => {
       });
     }
   });
-
-
-
-
-
-
-
   return { urls, manualURL };
 };
 
