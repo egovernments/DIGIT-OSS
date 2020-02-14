@@ -44,28 +44,29 @@ export const OwnerInfoCard = getCommonCard({
       label: { labelKey: "WS_CONN_DETAIL_NO_OF_TAPS" },
       placeholder: { labelKey: "WS_SERV_DETAIL_NO_OF_TAPS_PLACEHOLDER" },
       gridDefination: { xs: 12, sm: 6 },
-      jsonPath: "applyScreen.noOfTaps"
+      jsonPath: "applyScreen.proposedTaps"
     }),
 
     pipeSize: getSelectField({
       label: { labelKey: "WS_CONN_DETAIL_PIPE_SIZE" },
+      sourceJsonPath: "applyScreenMdmsData.ws-services-calculation.pipeSize",
       placeholder: { labelKey: "WS_SERV_DETAIL_PIPE_SIZE_PLACEHOLDER" },
       gridDefination: { xs: 12, sm: 6 },
-      jsonPath: "applyScreen.pipeSize"
+      jsonPath: "applyScreen.proposedPipeSize"
     }),
 
     numberOfWaterClosets: getTextField({
       label: { labelKey: "WS_CONN_DETAIL_NO_OF_WATER_CLOSETS" },
       placeholder: { labelKey: "WS_CONN_DETAIL_NO_OF_WATER_CLOSETS_PLACEHOLDER" },
       gridDefination: { xs: 12, sm: 6 },
-      jsonPath: "applyScreen.numberOfWaterClosets"
+      jsonPath: "applyScreen.proposedWaterClosets"
     }),
 
     numberOfToilets: getTextField({
       label: { labelKey: "WS_ADDN_DETAILS_NO_OF_TOILETS" },
       placeholder: { labelKey: "WS_ADDN_DETAILS_NO_OF_TOILETS_PLACEHOLDER" },
       gridDefination: { xs: 12, sm: 6 },
-      jsonPath: "applyScreen.numberOfToilets"
+      jsonPath: "applyScreen.proposedToilets"
     }),
 
     // getGenderRadioButton

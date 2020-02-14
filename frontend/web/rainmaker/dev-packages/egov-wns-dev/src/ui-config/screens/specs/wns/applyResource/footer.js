@@ -281,7 +281,7 @@ const callBackForNext = async (state, dispatch) => {
       }
       if (activeStep === 2) {
         getMdmsData(state, dispatch);
-        let response = await createUpdateNocApplication(
+        let response = await applyForWaterOrSewerage(
           state,
           dispatch,
           "INITIATE"

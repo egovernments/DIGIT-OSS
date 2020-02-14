@@ -190,10 +190,10 @@ const showConnectionResults = (connections, dispatch) => {
 
 const showApplicationResults = (connections, dispatch) => {
   let data = connections.map(item => ({
-    [getTextToLocalMapping("Service")]: item.service,
     [getTextToLocalMapping("Consumer No")]: item.connectionNo,
+    [getTextToLocalMapping("Application No")]: item.applicationNo,
     [getTextToLocalMapping("Owner Name")]: item.name,
-    [getTextToLocalMapping("Application Status")]: item.status,
+    [getTextToLocalMapping("Application Status")]: item.applicationStatus,
     [getTextToLocalMapping("Address")]: item.address,
     ["tenantId"]: JSON.parse(getUserInfo()).tenantId,
     ["connectionType"]: item.connectionType
