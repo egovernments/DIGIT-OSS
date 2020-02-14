@@ -51,6 +51,8 @@
 <html>
 
 <head>
+<script
+        src="<cdn:url value='/resources/app/js/i18n/jquery.i18n.properties.js?rnd=${app_release_no}' context='/services/EGF'/>"></script>
 <script type="text/javascript"
 	src="/services/EGF/resources/javascript/ajaxCommonFunctions.js?rnd=${app_release_no}"></script>
 <script type="text/javascript"
@@ -81,7 +83,7 @@
 		</s:if>
 		<div class="formmainbox">
 			<div class="formheading">
-				<div class="subheadnew">Cheque Master</div>
+				<div class="subheadnew"><s:text name="lbl.cheque.master"/> </div>
 			</div>
 			<br />
 			<s:if test="%{bankaccount != null}">
@@ -90,7 +92,7 @@
 					<tr align="center">
 						<div class="headingsmallbg">
 							<td class="bluebgheadtd" width="100%" colspan="5"><strong
-								style="font-size: 15px;">Bank Details</strong></td>
+								style="font-size: 15px;"><s:text name="lbl.bank.details"/> </strong></td>
 						</div
 					</tr>
 				</table>
@@ -99,19 +101,19 @@
 
 					<tr>
 						<td class="bluebox "></td>
-						<td class="bluebox">Bank <span class="mandatory1">*</span></td>
+						<td class="bluebox"><s:text name="lbl.bank"/> <span class="mandatory1">*</span></td>
 						<td class="bluebox"><s:property
 								value="bankaccount.bankbranch.bank.name" /></td>
-						<td class="bluebox">Bank Branch <span class="mandatory1">*</span></td>
+						<td class="bluebox"><s:text name="lbl.bank.branch"/> <span class="mandatory1">*</span></td>
 						<td class="bluebox"><s:property
 								value="bankaccount.bankbranch.branchname" /></td>
 					</tr>
 					<tr>
 						<td class="bluebox "></td>
-						<td class="greybox">Account Number <span class="mandatory1">*</span></td>
+						<td class="greybox"><s:text name="lbl.account.number"/><span class="mandatory1">*</span></td>
 						<td class="greybox"><s:property
 								value="bankaccount.accountnumber" /></td>
-						<td class="greybox">Fund <span class="mandatory1">*</span></td>
+						<td class="greybox"><s:text name="lbl.fund"/> <span class="mandatory1">*</span></td>
 						<td class="greybox"><s:property value="bankaccount.fund.name" /></td>
 					</tr>
 				</table>
@@ -127,7 +129,7 @@
 
 					<div class="headingsmallbg">
 					<td class="bluebgheadtd" width="100%" colspan="5"><strong
-								style="font-size: 15px;">Add New Cheque</strong></td>
+								style="font-size: 15px;"><s:text name="lbl.add.new.cheque"/></strong></td>
 					</div>  
 
 				</tr>
@@ -139,12 +141,12 @@
 
 				<tr>
 					<td class="bluebox "></td>
-					<td class="greybox ">From Cheque Number<span
+					<td class="greybox "><s:text name="lbl.from.cheque.number"/> <span
 						class="mandatory1">*</span></td>
 					<td class="greybox"><s:textfield name="fromChqNo"
 							class="patternvalidation" data-pattern="number" id="fromChqNo"
 							maxlength="6" size="6" onkeyup="validateOnlyNumber(this);" /></td>
-					<td class="greybox">To Cheque Number<span class="mandatory1">*</span></td>
+					<td class="greybox"><s:text name="lbl.to.cheque.number"/><span class="mandatory1">*</span></td>
 					<td class="greybox"><s:textfield name="toChqNo"
 							class="patternvalidation" data-pattern="number" id="toChqNo"
 							maxlength="6" size="6" onkeyup="validateOnlyNumber(this);" /></td>
@@ -153,7 +155,7 @@
 
 				<tr>
 					<td class="bluebox "></td>
-					<td class="bluebox">Received Date<span class="mandatory1">*</span></td>
+					<td class="bluebox"><s:text name="lbl.recieve.date"/><span class="mandatory1">*</span></td>
 					<td class="bluebox"><s:textfield name="receivedDate"
 							id="receivedDate" maxlength="10"
 							onkeyup="DateFormat(this,this.value,event,false,'3')" /> <a
@@ -161,7 +163,7 @@
 						style="text-decoration: none">&nbsp;<img
 							src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)
 					</td>
-					<td class="bluebox">Department<span class="mandatory1">*</span></td>
+					<td class="bluebox"><s:text name="lbl.department"/><span class="mandatory1">*</span></td>
 					<td class="bluebox"><s:select name="departmentList"
 							id="departmentList" list="dropdownData.departmentList"
 							listKey="code" listValue="name" multiple="true" required="true"
@@ -171,11 +173,11 @@
 
 				<tr>
 					<td class="bluebox "></td>
-					<td class="greybox">Financial Year<span class="mandatory1">*</span></td>
+					<td class="greybox"><s:text name="lbl.financial.year"/><span class="mandatory1">*</span></td>
 					<td class="greybox"><s:select name="serialNo" id="serialNo"
 							list="dropdownData.financialYearList" listKey="id"
 							listValue="finYearRange" headerKey="-1" value="%{financialYearId}"
-							headerValue="----Choose----" required="true" disabled="true"/>
+							headerValue="%{getText('lbl.choose.options')}" required="true" disabled="true"/>
 					<td class="greybox"></td>
 					<td class="greybox"></td>
 
@@ -188,7 +190,7 @@
 
 					<td align="center" style="text-align: center"><input
 						type="button" name="Done" onclick="updateGridData()"
-						class="buttonsubmit" value="Click to add new cheque"
+						class="buttonsubmit" value='<s:text name="lbl.click.to.add.new.cheque"/>'
 						align="middle" /></td>
 
 				</tr>
@@ -202,7 +204,7 @@
 				align="center">
 				<tr align="center">
 					<div class="headingsmallbg">
-						<td><span class="bold">Existing Cheque Details</span></td>
+						<td><span class="bold"><s:text name="lbl.existing.cheque.details"/> </span></td>
 					</div>
 				</tr>
 			</table>
@@ -222,8 +224,8 @@
 					</script>
 					<br />
 					<div class="buttonbottom">
-						<input type="button" id="save" value="Save"	onclick="submitForm();" class="buttonsubmit" /> 
-						<input type="button" id="Close" value="Close" onclick="javascript:window.parent.postMessage('close','*');" class="button" />
+						<input type="button" id="save" value="<s:text name='lbl.save'/>"	onclick="submitForm();" class="buttonsubmit" /> 
+						<input type="button" id="Close" value="<s:text name='lbl.close'/>" onclick="javascript:window.parent.postMessage('close','*');" class="button" />
 					</div>
 				</div>
 			</div>
@@ -243,7 +245,7 @@
 			var isDefaultDeptEnabled = document.getElementById("isDefaultDeptEnabled").value;
 
 			if ((fromChequeNo != "" || toChequeNo != "" || receivedDate != "") ? true : isDefaultDeptEnabled == 'true' ? false : department != "")
-				document.getElementById("lblError").innerHTML = "Please click on add new cheque or unselect required fields";
+				document.getElementById("lblError").innerHTML = "<s:text name='msg.please.click.on.add.new.cheque.or.unselect.required.field'/>";
 			else {
 				disableParameters();
 				document.chequeMaster.action = '/services/EGF/masters/accountCheque-save.action';

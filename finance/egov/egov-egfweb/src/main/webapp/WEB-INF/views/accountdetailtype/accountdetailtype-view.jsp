@@ -54,46 +54,46 @@
 		<div class="col-md-12">
 			<div class="panel panel-primary" data-collapsed="0">
 				<div class="panel-heading">
-					<div class="panel-title">Accountdetailtype</div>
+					<div class="panel-title"><spring:message code="lbl.accountdetailtype" text="Account detail type"/></div>
 				</div>
 				<div class="panel-body custom">
 					<div class="row add-border">
 						<div class="col-xs-3 add-margin">
-							<spring:message code="lbl.name" />
+							<spring:message code="lbl.name" text="Name"/>
 						</div>
 						<div class="col-sm-3 add-margin view-content">${accountdetailtype.name}</div>
 						<div class="col-xs-3 add-margin">
-							<spring:message code="lbl.description" />
+							<spring:message code="lbl.description" text="Description"/>
 						</div>
 						<div class="col-sm-3 add-margin view-content">${accountdetailtype.description}</div>
 					</div>
 					<div class="row add-border">
 						<div class="col-xs-3 add-margin">
-							<spring:message code="lbl.tablename" />
+							<spring:message code="lbl.tablename" text="Table name"/>
 						</div>
 						<div class="col-sm-3 add-margin view-content">${accountdetailtype.tablename}</div>
 						<div class="col-xs-3 add-margin">
-							<spring:message code="lbl.columnname" />
+							<spring:message code="lbl.columnname" text="Column name"/>
 						</div>
 						<div class="col-sm-3 add-margin view-content">${accountdetailtype.columnname}</div>
 					</div>
 					<div class="row add-border">
 						<div class="col-xs-3 add-margin">
-							<spring:message code="lbl.attributename" />
+							<spring:message code="lbl.attributename" text="Attribute name"/>
 						</div>
 						<div class="col-sm-3 add-margin view-content">${accountdetailtype.attributename}</div>
 						<div class="col-xs-3 add-margin">
-							<spring:message code="lbl.nbroflevels" />
+							<spring:message code="lbl.nbroflevels" text="Number of Levels"/>
 						</div>
 						<div class="col-sm-3 add-margin view-content">${accountdetailtype.nbroflevels}</div>
 					</div>
 					<div class="row add-border">
 						<div class="col-xs-3 add-margin">
-							<spring:message code="lbl.isactive" />
+							<spring:message code="lbl.isactive" text="Active"/>
 						</div>
 						<div class="col-sm-3 add-margin view-content">${accountdetailtype.isactive}</div>
 						<div class="col-xs-3 add-margin">
-							<spring:message code="lbl.fullqualifiedname" />
+							<spring:message code="lbl.fullqualifiedname" text="Fully Qualified Name"/>
 						</div>
 						<div class="col-sm-3 add-margin view-content">${accountdetailtype.fullQualifiedName}</div>
 					</div>
@@ -106,6 +106,6 @@
 <div class="row text-center">
 	<div class="add-margin">
 		<a href="javascript:void(0)" class="btn btn-default"
-			onclick="self.close()">Close</a>
+			onclick="self.close()"><spring:message code="lbl.close" text="Close"/> </a>
 	</div>
 </div>

@@ -56,29 +56,29 @@
 			<div class="panel panel-primary" data-collapsed="0">
 				<div class="panel-heading">
 					<div class="panel-title">
-						<spring:message code="lbl.search.bank" />
+						<spring:message code="lbl.search.bank" text="Search Bank"/>
 					</div>
 				</div>
 				<div class="panel-body">
 					<div class="form-group">
-						<label class="col-sm-3 control-label text-right"><spring:message code="lbl.name" /> </label>
+						<label class="col-sm-3 control-label text-right"><spring:message code="lbl.name" text="Name"/> </label>
 						<div class="col-sm-3 add-margin">
 							<form:input path="name" class="form-control text-left patternvalidation" data-pattern="alphanumeric" maxlength="50" />
 							<form:errors path="name" cssClass="error-msg" />
 						</div>
-						<label class="col-sm-3 control-label text-right"><spring:message code="lbl.code" /> </label>
+						<label class="col-sm-3 control-label text-right"><spring:message code="lbl.code" text="Code"/> </label>
 						<div class="col-sm-3 add-margin">
 							<form:input path="code" class="form-control text-left patternvalidation" data-pattern="alphanumeric" maxlength="50" />
 							<form:errors path="code" cssClass="error-msg" />
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-sm-3 control-label text-right"><spring:message code="lbl.narration" /> </label>
+						<label class="col-sm-3 control-label text-right"><spring:message code="lbl.narration" text="Narration"/> </label>
 						<div class="col-sm-3 add-margin">
 							<form:textarea path="narration" id="narration" class="form-control" maxlength="250"></form:textarea>
 							<form:errors path="narration" cssClass="error-msg" />
 						</div>
-						<label class="col-sm-3 control-label text-right"><spring:message code="lbl.isactive" /> </label>
+						<label class="col-sm-3 control-label text-right"><spring:message code="lbl.isactive" text="Active"/> </label>
 						<div class="col-sm-3 add-margin">
 							<form:checkbox path="isactive" />
 							<form:errors path="isactive" cssClass="error-msg" />
@@ -92,22 +92,22 @@
 	</div>
 	<div class="text-center">
 		<button type='button' class='btn btn-primary' id="btnsearch">
-			<spring:message code='lbl.search' />
+			<spring:message code='lbl.search' text="Search"/>
 		</button>
-		<a href='javascript:void(0)' class='btn btn-default' onclick="window.parent.postMessage('close','*');window.close()"><spring:message code='lbl.close' /></a>
+		<a href='javascript:void(0)' class='btn btn-default' onclick="window.parent.postMessage('close','*');window.close()"><spring:message code='lbl.close' text="Close"/></a>
 	</div>
 </form:form>
 <div class="row display-hide report-section">
-	<div class="col-md-12 table-header text-left"><spring:message code="lbl.search.bank.result" /></div>
+	<div class="col-md-12 table-header text-left"><spring:message code="lbl.search.bank.result" text="Bank Search Result"/></div>
 	<div class="col-md-12 report-table-container">
 		<table class="table table-bordered table-hover multiheadertbl"
 			id="resultTable">
 			<thead>
 				<tr>
-					<th><spring:message code="lbl.name" /></th>
-					<th><spring:message code="lbl.code" /></th>
-					<th><spring:message code="lbl.isactive" /></th>
-					<th><spring:message code="lbl.narration" /></th>
+					<th><spring:message code="lbl.name" text="Name"/></th>
+					<th><spring:message code="lbl.code" text="Code"/></th>
+					<th><spring:message code="lbl.isactive" text="Active"/></th>
+					<th><spring:message code="lbl.narration" text="Narration"/></th>
 				</tr>
 			</thead>
 		</table>

@@ -57,28 +57,28 @@
       <div class="col-md-12">
         <div class="panel panel-primary" data-collapsed="0">
           <div class="panel-heading">
-            <div class="panel-title">Search Work Order</div>
+            <div class="panel-title"><spring:message code="title.workorder.search" text="Search Work Order"/></div>
           </div>
           <div class="panel-body">
           <input type="hidden" id="mode" name="mode" value="${mode}" />
              <div class="form-group">
-	              <label class="col-sm-2 control-label text-right"><spring:message code="workorder.number" /> </label>
+	              <label class="col-sm-2 control-label text-right"><spring:message code="workorder.number" text="Order No."/> </label>
 	              <div class="col-sm-3 add-margin">
 	                <form:input path="orderNumber" class="form-control text-left patternvalidation" data-pattern="alphanumeric"  maxlength="50" />
 	                <form:errors path="orderNumber" cssClass="error-msg" />
 	              </div>
-	              <label class="col-sm-2 control-label text-right"><spring:message code="lbl.name" /> </label>
+	              <label class="col-sm-2 control-label text-right"><spring:message code="lbl.name" text="Name"/> </label>
 	              <div class="col-sm-3 add-margin">
 	                <form:input path="name" class="form-control text-left patternvalidation" data-pattern="alphanumeric" maxlength="50" />
 	                <form:errors path="name" cssClass="error-msg" />
 	              </div>
               </div>
               <div class="form-group">
-				<label class="col-sm-2 control-label text-right" for="contractor"> <spring:message code="workorder.contractor" />
+				<label class="col-sm-2 control-label text-right" for="contractor"> <spring:message code="workorder.contractor" text="Contractor Name"/>
 				</label>
 				<div class="col-sm-3 add-margin contactPerson"> 
 					<form:select path="contractor" data-first-option="false" id="contractor" class="form-control">
-						<form:option value=""><spring:message code="lbl.select" /></form:option>
+						<form:option value=""><spring:message code="lbl.select" text="Select"/></form:option>
 						<c:forEach var="contractor" items="${contractors}">
 							<form:option  value="${contractor.id}" >
 								<c:out value="${contractor.name} - ${contractor.code}"/>
@@ -87,18 +87,18 @@
 					</form:select>
 					<form:errors path="contractor" cssClass="add-margin error-msg" />
 				</div>
-				<label class="col-sm-2 control-label text-right" for="contractorcode"> <spring:message code="workorder.contractorcode" />
+				<label class="col-sm-2 control-label text-right" for="contractorcode"> <spring:message code="workorder.contractorcode" text="Contractor Code"/>
 				</label>
 				<div class="col-sm-3 add-margin">
 					<form:input path="" id="contractorcode" maxlength="100" disabled="true" cssClass="form-control"/>
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="col-sm-2 control-label text-right" for="fund"> <spring:message code="workorder.fund" />
+				<label class="col-sm-2 control-label text-right" for="fund"> <spring:message code="workorder.fund" text="Fund"/>
 				</label>
 				<div class="col-sm-3 add-margin">
 					<form:select path="fund.id" data-first-option="false" id="fund" class="form-control">
-						<form:option value=""><spring:message code="lbl.select" /></form:option>
+						<form:option value=""><spring:message code="lbl.select" text="Select"/></form:option>
 						<form:options items="${funds}" itemValue="id" itemLabel="name" />
 					</form:select>
 					<form:errors path="fund.id" cssClass="add-margin error-msg" />
@@ -107,10 +107,10 @@
             <div class="form-group">
               <div class="text-center">
                 <button type='button' class='btn btn-primary' id="btnsearch">
-                  <spring:message code='lbl.search' />
+                  <spring:message code='lbl.search' text="Search"/>
                 </button>
                 <a href='javascript:void(0)' class='btn btn-default' onclick="javascript:window.parent.postMessage('close','*');"><spring:message
-                    code='lbl.close' /></a>
+                    code='lbl.close' text="Close"/></a>
               </div>
             </div>
           </div>
@@ -120,16 +120,16 @@
   </div>
 </form:form>
 <div class="row display-hide report-section">
-  <div class="col-md-12 table-header text-left">Work Order Search Result</div>
+  <div class="col-md-12 table-header text-left"><spring:message text="Work Order Search Result" code="workorder.search.result"/></div>
   <div class="col-md-12 form-group report-table-container">
     <table class="table table-bordered table-hover multiheadertbl" id="resultTable">
       <thead>
         <tr>
-          <th><spring:message code="workorder.number" /></th>
-          <th><spring:message code="lbl.name" /></th>
-          <th><spring:message code="workorder.ordervalue" /></th>
-          <th><spring:message code="workorder.contractor" /></th>
-          <th><spring:message code="workorder.active" /></th>
+          <th><spring:message code="workorder.number" text="Order No."/></th>
+          <th><spring:message code="lbl.name" text="Name"/></th>
+          <th><spring:message code="workorder.ordervalue" text="Total/Order Value"/></th>
+          <th><spring:message code="workorder.contractor" text="Contractor Name"/></th>
+          <th><spring:message code="workorder.active" text="Active Y/N"/></th>
         </tr>
       </thead>
     </table>

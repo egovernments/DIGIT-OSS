@@ -139,7 +139,7 @@
 	<div id="viewMode" class="buttonbottom">
 		<table table align="center">
 			<tr>
-				<td><input type="button" name="close" id="Close" value="Close"
+				<td><input type="button" name="close" id="Close" value="<s:text name='lbl.close'/>"
 					onclick="javascript:window.close()" class="button" /></td>
 			</tr>
 		</table>

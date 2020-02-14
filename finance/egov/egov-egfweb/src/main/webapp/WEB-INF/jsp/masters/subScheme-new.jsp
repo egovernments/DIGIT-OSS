@@ -155,13 +155,13 @@
 				<table width="100%" border="0" cellspacing="0" cellpadding="0">
 					<tr>
 						<td class="bluebox">&nbsp;</td>
-						<td class="bluebox" width="20%"><strong>Scheme<span
+						<td class="bluebox" width="20%"><strong><s:text name="lbl.scheme"/><span
 								class="mandatory1"> *</span></strong></td>
 						<td class="bluebox"><s:select name="scheme" id="scheme"
 								list="dropdownData.schemeList" listKey="id" listValue="name"
-								headerKey="" headerValue="--- Select ---"
+								headerKey="" headerValue="%{getText('lbl.choose.options')}"
 								value="%{subScheme.scheme.id}" /></td>
-						<td class="bluebox" width="20%"><strong>Sub Scheme Name<span
+						<td class="bluebox" width="20%"><strong><s:text name="lbl.sub.scheme.name"/><span
 								class="mandatory1"> *</span></strong></td>
 						<%-- <s:if test="showMode == 'new'"> --%>
 						<td class="bluebox"><s:textfield id="name" name="name"
@@ -174,7 +174,7 @@
 					</tr>
 					<tr>
 						<td class="greybox">&nbsp;</td>
-						<td class="greybox"><strong>Sub Scheme Code</strong><span
+						<td class="greybox"><strong><s:text name="lbl.sub.scheme.code"/></strong><span
 							class="mandatory1"> *</span></td>
 						<%-- <s:if test="showMode == 'new'"> --%>
 						<td class="greybox"><s:textfield id="code" name="code"
@@ -192,7 +192,7 @@
 					<tr>
 						<td class="bluebox">&nbsp;</td>
 						
-						<td class="bluebox"><strong>Valid From</strong><span
+						<td class="bluebox"><strong><s:text name="lbl.valid.from"/></strong><span
 							class="mandatory1"> *</span></td>
 						<td class="bluebox"><s:date name="subScheme.validfrom"
 								var="validfromId" format="dd/MM/yyyy" /> <s:textfield
@@ -200,7 +200,7 @@
 								onkeyup="DateFormat(this,this.value,event,false,'3')"
 								placeholder="DD/MM/YYYY" cssClass="form-control datepicker"
 								data-inputmask="'mask': 'd/m/y'" /></td>
-								<td class="bluebox"><strong>Valid To</strong><span
+								<td class="bluebox"><strong><s:text name="lbl.valid.to"/></strong><span
 							class="mandatory1"> *</span></td>
 						<td class="bluebox"><s:date name="subScheme.validto"
 								var="validtoId" format="dd/MM/yyyy" /> <s:textfield
@@ -213,12 +213,12 @@
 					</tr>
 					<tr>
 						<td class="greybox">&nbsp;</td>
-						<td class="greybox"><strong>Department</strong></td>
+						<td class="greybox"><strong><s:text name="lbl.department"/> </strong></td>
 						<td class="greybox"><s:select
 								list="dropdownData.departmentList" listKey="code" listValue="name"
-								headerKey="0" headerValue="--- Select ---" name="department"
+								headerKey="0" headerValue="%{getText('lbl.choose.options')}" name="department"
 								id="department" value="%{subScheme.department}"></s:select></td>
-						<td class="greybox"><strong>Initial Estimate Amount</strong></td>
+						<td class="greybox"><strong><s:text name="lbl.initial.estimate.amount"/> </strong></td>
 						<td class="greybox"><s:textfield
 								cssStyle="text-align: right;" id="initialEstimateAmount"
 								name="initialEstimateAmount"
@@ -227,13 +227,11 @@
 					</tr>
 					<tr>
 						<td class="bluebox">&nbsp;</td>
-						<td class="bluebox"><strong>Council Loan Proposal
-								Number</strong></td>
+						<td class="bluebox"><strong><s:text name="lbl.council.loan.proposal.number"/> </strong></td>
 						<td class="bluebox"><s:textfield
 								id="councilLoanProposalNumber" name="councilLoanProposalNumber"
 								value="%{subScheme.councilLoanProposalNumber}" /></td>
-						<td class="bluebox"><strong>Council Loan Proposal
-								Date</strong></td>
+						<td class="bluebox"><strong><s:text name="lbl.council.loan.proposal.date"/> </strong></td>
 						<td class="bluebox"><s:date
 								name="subScheme.councilLoanProposalDate"
 								var="councilLoanProposalDateId" format="dd/MM/yyyy" /> <s:textfield
@@ -246,14 +244,12 @@
 					</tr>
 					<tr>
 						<td class="greybox">&nbsp;</td>
-						<td class="greybox"><strong>Council Admin Sanctioned
-								Number</strong></td>
+						<td class="greybox"><strong><s:text name="lbl.council.admin.sanctioned.number"/> </strong></td>
 						<td class="greybox"><s:textfield
 								id="councilAdminSanctionNumber"
 								name="councilAdminSanctionNumber"
 								value="%{subScheme.councilAdminSanctionNumber}" /></td>
-						<td class="greybox"><strong>Council Admin Sanctioned
-								Date</strong></td>
+						<td class="greybox"><strong><s:text name="lbl.council.admin.sanctioned.date"/> </strong></td>
 						<td class="greybox"><s:date
 								name="subScheme.councilAdminSanctionDate"
 								var="councilAdminSanctionDateId" format="dd/MM/yyyy" />
@@ -266,13 +262,11 @@
 					</tr>
 					<tr>
 						<td class="bluebox">&nbsp;</td>
-						<td class="bluebox"><strong>Government Loan Proposal
-								Number</strong></td>
+						<td class="bluebox"><strong><s:text name="lbl.government.loan.proposal.number"/> </strong></td>
 						<td class="bluebox"><s:textfield id="govtLoanProposalNumber"
 								name="govtLoanProposalNumber"
 								value="%{subScheme.govtLoanProposalNumber}" /></td>
-						<td class="bluebox"><strong>Government Loan Proposal
-								Date</strong></td>
+						<td class="bluebox"><strong><s:text name="lbl.government.loan.proposal.date"/> </strong></td>
 						<td class="bluebox"><s:date
 								name="subScheme.govtLoanProposalDate"
 								var="govtLoanProposalDateId" format="dd/MM/yyyy" />
@@ -284,13 +278,11 @@
 					</tr>
 					<tr>
 						<td class="greybox">&nbsp;</td>
-						<td class="greybox"><strong>Government Admin
-								Sanction Number</strong></td>
+						<td class="greybox"><strong><s:text name="lbl.govt.admin.sanction.number"/> </strong></td>
 						<td class="greybox"><s:textfield id="govtAdminSanctionNumber"
 								name="govtAdminSanctionNumber"
 								value="%{subScheme.govtAdminSanctionNumber}" /></td>
-						<td class="greybox"><strong>Government Admin
-								Sanction Date</strong></td>
+						<td class="greybox"><strong><s:text name="lbl.govt.admin.sanction.date"/> </strong></td>
 						<td class="greybox"><s:date
 								name="subScheme.govtAdminSanctionDate"
 								var="govtAdminSanctionDateId" format="dd/MM/yyyy" /> <s:textfield
@@ -307,25 +299,25 @@
 				<s:if test="%{showMode=='new'}">
 					<div align="center" class="buttonbottom"
 						style="padding-bottom: 10px;">
-						<input type="submit" class="buttonsubmit" value="Save"
+						<input type="submit" class="buttonsubmit" value="<s:text name='lbl.save'/>"
 							id="saveButton" name="button" onclick="return validate();" /> 
-							<input type="reset" class="buttonsubmit" value="Reset"
+							<input type="reset" class="buttonsubmit" value="<s:text name='lbl.reset'/>"
 							id="resetButton" name="button" onclick="return resetSubmit();" /> <input
-							type="button" id="Close" value="Close"
+							type="button" id="Close" value="<s:text name='lbl.close'/>"
 							onclick="javascript:window.close()" class="button" />
 					</div>
 				</s:if>
 				<s:elseif test="%{showMode=='edit'}">
 					<div class="buttonbottom" style="padding-bottom: 10px;">
-						<input type="submit" class="buttonsubmit" value="Save"
+						<input type="submit" class="buttonsubmit" value="<s:text name='lbl.save'/>"
 							id="saveButton" name="button" onclick="return validate();" /> <input
-							type="button" id="Close" value="Close"
+							type="button" id="Close" value="<s:text name='lbl.close'/>"
 							onclick="javascript:window.close()" class="button" />
 					</div>
 				</s:elseif>
 				<s:else>
 					<div class="buttonbottom" style="padding-bottom: 10px;">
-						<input type="button" id="Close" value="Close"
+						<input type="button" id="Close" value="<s:text name='lbl.close'/>"
 							onclick="javascript:window.parent.postMessage('close','*');window.close();" class="button" />
 						</dev>
 				</s:else>

@@ -54,82 +54,82 @@
     <div class="col-md-12">
       <div class="panel panel-primary" data-collapsed="0">
         <div class="panel-heading">
-          <div class="panel-title">Work Order</div>
+          <div class="panel-title"><spring:message code="lbl.workorder" text="Work Order"/></div>
         </div>
         <div class="panel-body custom">
           <div class="row add-border">
             <div class="col-xs-3 add-margin">
-              <spring:message code="workorder.number" />
+              <spring:message code="workorder.number" text="Order No."/>
             </div>
             <div class="col-sm-3 add-margin view-content">${workOrder.orderNumber}</div>
             <div class="col-xs-3 add-margin">
-              <spring:message code="workorder.date" />
+              <spring:message code="workorder.date" text="Order Date"/>
             </div>
             <div class="col-sm-3 add-margin view-content"><fmt:formatDate value="${workOrder.orderDate}" pattern="dd/MM/yyyy" /></div>
           </div>
           <div class="row add-border">
             <div class="col-xs-3 add-margin">
-              <spring:message code="lbl.name" />
+              <spring:message code="lbl.name" text="Name"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${workOrder.name}</div>
           </div>
           <div class="row add-border">
             <div class="col-xs-3 add-margin">
-              <spring:message code="workorder.description" />
+              <spring:message code="workorder.description" text="Description"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${workOrder.description}</div>
             <div class="col-xs-3 add-margin">
-              <spring:message code="workorder.active" />
+              <spring:message code="workorder.active" text="Active Y/N"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${workOrder.active}</div>
           </div>
           <div class="row add-border">
             <div class="col-xs-3 add-margin">
-              <spring:message code="workorder.contractor" />
+              <spring:message code="workorder.contractor" text="Contractor Name"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${workOrder.contractor.name}</div>
             <div class="col-xs-3 add-margin">
-              <spring:message code="workorder.contractorcode" />
+              <spring:message code="workorder.contractorcode" text="Contractor Code"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${workOrder.contractor.code}</div>
           </div>
           <div class="row add-border">
             <div class="col-xs-3 add-margin">
-              <spring:message code="workorder.ordervalue" />
+              <spring:message code="workorder.ordervalue" text="Total/Order Value"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${workOrder.orderValue}</div>
             <div class="col-xs-3 add-margin">
-              <spring:message code="workorder.advancepayable" />
+              <spring:message code="workorder.advancepayable" text="Advance Payable"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${workOrder.advancePayable}</div>
           </div>
           <div class="row add-border">
             <div class="col-xs-3 add-margin">
-              <spring:message code="workorder.fund" />
+              <spring:message code="workorder.fund" text="Fund"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${workOrder.fund.name}</div>
             <div class="col-xs-3 add-margin">
-              <spring:message code="workorder.department" />
+              <spring:message code="workorder.department" text="Department"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${workOrder.departmentName}</div>
           </div>
           <div class="row add-border">
             <div class="col-xs-3 add-margin">
-              <spring:message code="workorder.scheme" />
+              <spring:message code="workorder.scheme" text="Scheme"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${workOrder.scheme.name}</div>
             <div class="col-xs-3 add-margin">
-              <spring:message code="workorder.subscheme" />
+              <spring:message code="workorder.subscheme" text="Sub Scheme"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${workOrder.subScheme.name}</div>
           </div>
           <div class="row add-border">
             <div class="col-xs-3 add-margin">
-              <spring:message code="workorder.sanctionnumber" />
+              <spring:message code="workorder.sanctionnumber" text="Sanction No."/>
             </div>
             <div class="col-sm-3 add-margin view-content">${workOrder.sanctionNumber}</div>
             <div class="col-xs-3 add-margin">
-              <spring:message code="workorder.sanctiondate" />
+              <spring:message code="workorder.sanctiondate" text="Sanction Date"/>
             </div>
             <div class="col-sm-3 add-margin view-content"><fmt:formatDate value="${workOrder.sanctionDate}" pattern="dd/MM/yyyy" /></div>
           </div>
@@ -139,10 +139,10 @@
     <div class="row text-center">
       <div class="add-margin">
       <c:if test="${mode == 'view'}">
-        <a href="javascript:void(0)" class="btn btn-default" onclick="self.close()">Close</a>
+        <a href="javascript:void(0)" class="btn btn-default" onclick="self.close()"><spring:message code='lbl.close' text="Close"/></a>
      </c:if> 
      <c:if test="${mode == 'create'}">
-        <a href="javascript:void(0)" class="btn btn-default" onclick="javascript:window.parent.postMessage('close','*');">Close</a>
+        <a href="javascript:void(0)" class="btn btn-default" onclick="javascript:window.parent.postMessage('close','*');"><spring:message code='lbl.close' text="Close"/></a>
      </c:if>  
       </div>
     </div>

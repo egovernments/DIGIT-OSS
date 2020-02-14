@@ -54,96 +54,96 @@
     <div class="col-md-12">
       <div class="panel panel-primary" data-collapsed="0">
         <div class="panel-heading">
-          <div class="panel-title">Contractor</div>
+          <div class="panel-title"><spring:message code="lbl.contractor" text="Contractor"/> </div>
         </div>
         <div class="panel-body custom">
           <div class="row add-border">
             <div class="col-xs-3 add-margin">
-              <spring:message code="lbl.name" />
+              <spring:message code="lbl.name" text="Name"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${contractor.name}</div>
             <div class="col-xs-3 add-margin">
-              <spring:message code="lbl.code" />
+              <spring:message code="lbl.code" text="Code"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${contractor.code}</div>
           </div>
           <div class="row add-border">
             <div class="col-xs-3 add-margin">
-              <spring:message code="contractor.correspondenceAddress" />
+              <spring:message code="contractor.correspondenceAddress" text="Correspondence Address"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${contractor.correspondenceAddress}</div>
             <div class="col-xs-3 add-margin">
-              <spring:message code="contractor.paymentAddress" />
+              <spring:message code="contractor.paymentAddress" text="Permanent Address"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${contractor.paymentAddress}</div>
           </div>
           <div class="row add-border">
             <div class="col-xs-3 add-margin">
-              <spring:message code="contractor.contactPerson" />
+              <spring:message code="contractor.contactPerson" text="Contact Person"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${contractor.contactPerson}</div>
             <div class="col-xs-3 add-margin">
-              <spring:message code="contractor.email" />
+              <spring:message code="contractor.email" text="Email"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${contractor.email}</div>
           </div>
           <div class="row add-border">
             <div class="col-xs-3 add-margin">
-              <spring:message code="contractor.narration" />
+              <spring:message code="contractor.narration" text="Narration"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${contractor.narration}</div>
             <div class="col-xs-3 add-margin">
-              <spring:message code="lbl.mobile" />
+              <spring:message code="lbl.mobile" text="Mobile Number"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${contractor.mobileNumber}</div>
           </div>
           <div class="row add-border">
             <div class="col-xs-3 add-margin">
-              <spring:message code="contractor.tinNo" />
+              <spring:message code="contractor.tinNo" text="GST/TIN No"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${contractor.tinNumber}</div>
             <div class="col-xs-3 add-margin">
-              <spring:message code="contractor.gst.registered.state" />
+              <spring:message code="contractor.gst.registered.state" text="GST registered State/UT"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${contractor.gstRegisteredState}</div>
           </div>
           <div class="row add-border">
             <div class="col-xs-3 add-margin">
-              <spring:message code="contractor.bank" />
+              <spring:message code="contractor.bank" text="Bank"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${contractor.bank.name}</div>
             <div class="col-xs-3 add-margin">
-              <spring:message code="contractor.ifscCode" />
+              <spring:message code="contractor.ifscCode" text="IFSC Code"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${contractor.ifscCode}</div>
           </div>
           <div class="row add-border">
             <div class="col-xs-3 add-margin">
-              <spring:message code="contractor.bankAccount" />
+              <spring:message code="contractor.bankAccount" text="Bank Account Number"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${contractor.bankAccount}</div>
             <div class="col-xs-3 add-margin">
-              <spring:message code="contractor.registrationNo" />
+              <spring:message code="contractor.registrationNo" text="Registration No"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${contractor.registrationNumber}</div>
           </div>
           <div class="row add-border">
             <div class="col-xs-3 add-margin">
-              <spring:message code="contractor.status" />
+              <spring:message code="contractor.status" text="Status"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${contractor.status.description}</div>
             <div class="col-xs-3 add-margin">
-              <spring:message code="contractor.panNo" />
+              <spring:message code="contractor.panNo" text="PAN No"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${contractor.panNumber}</div>
           </div>
           <div class="row add-border">
             <div class="col-xs-3 add-margin">
-              <spring:message code="contractor.epfNo" />
+              <spring:message code="contractor.epfNo" text="EPF No"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${contractor.epfNumber}</div>
             <div class="col-xs-3 add-margin">
-              <spring:message code="contractor.esiNo" />
+              <spring:message code="contractor.esiNo" text="ESI No"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${contractor.esiNumber}</div>
           </div>
@@ -153,10 +153,10 @@
     <div class="row text-center">
       <div class="add-margin">
       <c:if test="${mode == 'view'}">
-        <a href="javascript:void(0)" class="btn btn-default" onclick="self.close()">Close</a>
+        <a href="javascript:void(0)" class="btn btn-default" onclick="self.close()"><spring:message code="lbl.close" text="Close"/></a>
      </c:if> 
      <c:if test="${mode == 'create'}">
-        <a href="javascript:void(0)" class="btn btn-default" onclick="javascript:window.parent.postMessage('close','*');">Close</a>
+        <a href="javascript:void(0)" class="btn btn-default" onclick="javascript:window.parent.postMessage('close','*');"><spring:message code="lbl.close" text="Close"/></a>
      </c:if>  
       </div>
     </div>

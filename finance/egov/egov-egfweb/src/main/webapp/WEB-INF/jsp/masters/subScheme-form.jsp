@@ -54,7 +54,7 @@
 					name="subscheme.form.scheme" /><span class="mandatory1"> *</span></strong></td>
 		<td class="bluebox"><s:select list="dropdownData.schemeList"
 				listKey="id" listValue="name" id="scheme" name="scheme"
-				headerKey="0" headerValue="--- Select ---" value="%{scheme.id}"></s:select>
+				headerKey="0" headerValue="%{getText('lbl.choose.options')}" value="%{scheme.id}"></s:select>
 		</td>
 		<td class="bluebox" width="20%"><strong><s:text
 					name="subscheme.form.name" /><span class="mandatory1"> *</span></strong></td>
@@ -99,7 +99,7 @@
 					name="subscheme.form.department" /></strong></td>
 		<td class="greybox"><s:select list="dropdownData.departmentList"
 				listKey="code" listValue="name" headerKey="0"
-				headerValue="--- Select ---" name="department" id="department"
+				headerValue="%{getText('lbl.choose.options')}" name="department" id="department"
 				value="%{department}"></s:select></td>
 		<td class="greybox"><strong><s:text
 					name="subscheme.form.initialestimate" /></strong></td>

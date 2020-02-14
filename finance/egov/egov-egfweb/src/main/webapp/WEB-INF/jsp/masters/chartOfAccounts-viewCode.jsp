@@ -57,7 +57,7 @@
 <script type="text/javascript">
 		function validateAndSubmit(obj){
 			if(document.getElementById('glCode').value == null || document.getElementById('glCode').value==''){
-				bootbox.alert("Please enter account code");
+				bootbox.alert("<s:text name='msg.please.enter.account.code'/>");
 				return false;
 			}
 			var value = obj.value;
@@ -98,9 +98,9 @@
 			</table>
 	</div>
 	<div class="buttonbottom" style="padding-bottom: 10px;">
-		<input type="submit" class="buttonsubmit" value="Search and View"
+		<input type="submit" class="buttonsubmit" value='<s:text name="lbl.search.and.view"/>'
 			id="Search" name="Search" onclick="return validateAndSubmit(this);" />
-		<input type="button" value="Close" onclick="javascript:window.parent.postMessage('close','*');"
+		<input type="button" value='<s:text name="lbl.close"/>'' onclick="javascript:window.parent.postMessage('close','*');"
 			class="button" />
 	</div>
 	</s:form>

@@ -57,17 +57,17 @@
       <div class="col-md-12">
         <div class="panel panel-primary" data-collapsed="0">
           <div class="panel-heading">
-            <div class="panel-title">SearchFund</div>
+            <div class="panel-title"><spring:message code="lbl.search.fund" text="Search Fund"/> </div>
           </div>
           <div class="panel-body">
             <div class="form-group">
-            <label class="col-sm-3 control-label text-right"><spring:message code="lbl.name" /> </label>
+            <label class="col-sm-3 control-label text-right"><spring:message code="lbl.name" text="Name"/> </label>
               <div class="col-sm-3 add-margin">
                 <form:input path="name" class="form-control text-left patternvalidation" data-pattern="alphanumeric"
                   maxlength="50" />
                 <form:errors path="name" cssClass="error-msg" />
               </div>
-              <label class="col-sm-3 control-label text-right"><spring:message code="lbl.code" /> </label>
+              <label class="col-sm-3 control-label text-right"><spring:message code="lbl.code" text="Code"/> </label>
               <div class="col-sm-3 add-margin">
                 <form:input path="code" class="form-control text-left patternvalidation" data-pattern="alphanumeric"
                   maxlength="50" />
@@ -81,18 +81,18 @@
                 <form:checkbox path="isnotleaf" />
                 <form:errors path="isnotleaf" cssClass="error-msg" />
               </div> --%>
-              <label class="col-sm-3 control-label text-right"><spring:message code="lbl.parentid" /> </label>
+              <label class="col-sm-3 control-label text-right"><spring:message code="lbl.parentid" text="Parent Fund"/> </label>
               <div class="col-sm-3 add-margin">
                 <form:select path="parentId" id="parentId" cssClass="form-control"
                   cssErrorClass="form-control error">
                   <form:option value="">
-                    <spring:message code="lbl.select" />
+                    <spring:message code="lbl.select" text="Select"/>
                   </form:option>
                   <form:options items="${funds}" itemValue="id" itemLabel="name" />
                 </form:select>
                 <form:errors path="parentId" cssClass="error-msg" />
               </div>
-              <label class="col-sm-3 control-label text-right"><spring:message code="lbl.isactive" /> </label>
+              <label class="col-sm-3 control-label text-right"><spring:message code="lbl.isactive" text="Active"/> </label>
               <div class="col-sm-3 add-margin">
                 <form:checkbox path="isactive" />
                 <form:errors path="isactive" cssClass="error-msg" />
@@ -103,10 +103,10 @@
             <div class="form-group">
               <div class="text-center">
                 <button type='button' class='btn btn-primary' id="btnsearch">
-                  <spring:message code='lbl.search' />
+                  <spring:message code='lbl.search' text="Search"/>
                 </button>
                 <a href='javascript:void(0)' class='btn btn-default' onclick="javascript:window.parent.postMessage('close','*');"><spring:message
-                    code='lbl.close' /></a>
+                    code='lbl.close' text="Close"/></a>
               </div>
             </div>
           </div>
@@ -116,18 +116,18 @@
   </div>
 </form:form>
 <div class="row display-hide report-section">
-  <div class="col-md-12 table-header text-left">Fund Search Result</div>
+  <div class="col-md-12 table-header text-left"><spring:message text="Fund Search Result" code="lbl.fund.search.result"/></div>
   <div class="col-md-12 form-group report-table-container">
     <table class="table table-bordered table-hover multiheadertbl" id="resultTable">
       <thead>
         <tr>
-          <th><spring:message code="lbl.name" /></th>
-          <th><spring:message code="lbl.code" /></th>
-          <th><spring:message code="lbl.identifier" /></th>
-          <th><spring:message code="lbl.llevel" /></th>
-          <th><spring:message code="lbl.parentid" /></th>
-          <th><spring:message code="lbl.isnotleaf" /></th>
-          <th><spring:message code="lbl.isactive" /></th>
+          <th><spring:message code="lbl.name" text="Name"/></th>
+          <th><spring:message code="lbl.code" text="Code"/></th>
+          <th><spring:message code="lbl.identifier" text="Identifier"/></th>
+          <th><spring:message code="lbl.llevel" text="Level"/></th>
+          <th><spring:message code="lbl.parentid" text="Parent Fund"/></th>
+          <th><spring:message code="lbl.isnotleaf" text="Isnotleaf"/></th>
+          <th><spring:message code="lbl.isactive" text="Active"/></th>
         </tr>
       </thead>
     </table>

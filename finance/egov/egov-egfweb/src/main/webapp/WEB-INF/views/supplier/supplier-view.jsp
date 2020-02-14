@@ -54,96 +54,96 @@
     <div class="col-md-12">
       <div class="panel panel-primary" data-collapsed="0">
         <div class="panel-heading">
-          <div class="panel-title">Supplier</div>
+          <div class="panel-title"><spring:message code="lbl.supplier" text="Supplier"/> </div>
         </div>
         <div class="panel-body custom">
           <div class="row add-border">
             <div class="col-xs-3 add-margin">
-              <spring:message code="lbl.name" />
+              <spring:message code="lbl.name" text="Name"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${supplier.name}</div>
             <div class="col-xs-3 add-margin">
-              <spring:message code="lbl.code" />
+              <spring:message code="lbl.code" text="Code"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${supplier.code}</div>
           </div>
           <div class="row add-border">
             <div class="col-xs-3 add-margin">
-              <spring:message code="supplier.correspondenceAddress" />
+              <spring:message code="supplier.correspondenceAddress" text="Correspondence Address"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${supplier.correspondenceAddress}</div>
             <div class="col-xs-3 add-margin">
-              <spring:message code="supplier.paymentAddress" />
+              <spring:message code="supplier.paymentAddress" text="Permanent Address" />
             </div>
             <div class="col-sm-3 add-margin view-content">${supplier.paymentAddress}</div>
           </div>
           <div class="row add-border">
             <div class="col-xs-3 add-margin">
-              <spring:message code="supplier.contactPerson" />
+              <spring:message code="supplier.contactPerson" text="Contact Person"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${supplier.contactPerson}</div>
             <div class="col-xs-3 add-margin">
-              <spring:message code="supplier.email" />
+              <spring:message code="supplier.email" text="Email"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${supplier.email}</div>
           </div>
           <div class="row add-border">
             <div class="col-xs-3 add-margin">
-              <spring:message code="supplier.narration" />
+              <spring:message code="supplier.narration" text="Narration"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${supplier.narration}</div>
             <div class="col-xs-3 add-margin">
-              <spring:message code="lbl.mobile" />
+              <spring:message code="lbl.mobile" text="Mobile Number"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${supplier.mobileNumber}</div>
           </div>
           <div class="row add-border">
             <div class="col-xs-3 add-margin">
-              <spring:message code="supplier.tinNo" />
+              <spring:message code="supplier.tinNo" text="GST/TIN No"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${supplier.tinNumber}</div>
             <div class="col-xs-3 add-margin">
-              <spring:message code="supplier.gst.registered.state" />
+              <spring:message code="supplier.gst.registered.state" text="GST registered State/UT"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${supplier.gstRegisteredState}</div>
           </div>
           <div class="row add-border">
             <div class="col-xs-3 add-margin">
-              <spring:message code="supplier.bank" />
+              <spring:message code="supplier.bank" text="Bank"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${supplier.bank.name}</div>
             <div class="col-xs-3 add-margin">
-              <spring:message code="supplier.ifscCode" />
+              <spring:message code="supplier.ifscCode" text="IFSC Code"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${supplier.ifscCode}</div>
           </div>
           <div class="row add-border">
             <div class="col-xs-3 add-margin">
-              <spring:message code="supplier.bankAccount" />
+              <spring:message code="supplier.bankAccount" text="Bank Account Number"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${supplier.bankAccount}</div>
             <div class="col-xs-3 add-margin">
-              <spring:message code="supplier.registrationNo" />
+              <spring:message code="supplier.registrationNo" text="Registration No"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${supplier.registrationNumber}</div>
           </div>
           <div class="row add-border">
             <div class="col-xs-3 add-margin">
-              <spring:message code="supplier.status" />
+              <spring:message code="supplier.status" text="Status"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${supplier.status.description}</div>
             <div class="col-xs-3 add-margin">
-              <spring:message code="supplier.panNo" />
+              <spring:message code="supplier.panNo" text="PAN No"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${supplier.panNumber}</div>
           </div>
           <div class="row add-border">
             <div class="col-xs-3 add-margin">
-              <spring:message code="supplier.epfNo" />
+              <spring:message code="supplier.epfNo" text="EPF No"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${supplier.epfNumber}</div>
             <div class="col-xs-3 add-margin">
-              <spring:message code="supplier.esiNo" />
+              <spring:message code="supplier.esiNo" text="ESI No"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${supplier.esiNumber}</div>
           </div>
@@ -153,10 +153,10 @@
     <div class="row text-center">
 			<div class="add-margin">
 				<c:if test="${mode == 'view'}">
-					<a href="javascript:void(0)" class="btn btn-default" onclick="self.close()">Close</a>
+					<a href="javascript:void(0)" class="btn btn-default" onclick="self.close()"><spring:message code='lbl.close' text="Close"/></a>
 				</c:if>
 				<c:if test="${mode == 'create'}">
-					<a href="javascript:void(0)" class="btn btn-default" onclick="javascript:window.parent.postMessage('close','*');">Close</a>
+					<a href="javascript:void(0)" class="btn btn-default" onclick="javascript:window.parent.postMessage('close','*');"><spring:message code='lbl.close' text="Close"/></a>
 				</c:if>
 			</div>
 		</div>

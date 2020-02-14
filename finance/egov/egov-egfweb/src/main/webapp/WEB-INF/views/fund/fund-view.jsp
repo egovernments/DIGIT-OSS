@@ -54,42 +54,42 @@
     <div class="col-md-12">
       <div class="panel panel-primary" data-collapsed="0">
         <div class="panel-heading">
-          <div class="panel-title">Fund</div>
+          <div class="panel-title"><spring:message code="lbl.fund" text="Fund" /></div>
         </div>
         <div class="panel-body custom">
           <div class="row add-border">
             <div class="col-xs-3 add-margin">
-              <spring:message code="lbl.name" />
+              <spring:message code="lbl.name" text="Name"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${fund.name}</div>
             <div class="col-xs-3 add-margin">
-              <spring:message code="lbl.code" />
+              <spring:message code="lbl.code" text="Code"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${fund.code}</div>
           </div>
           <div class="row add-border">
             <div class="col-xs-3 add-margin">
-              <spring:message code="lbl.identifier" />
+              <spring:message code="lbl.identifier" text="Identifier"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${fund.identifier}</div>
             <div class="col-xs-3 add-margin">
-              <spring:message code="lbl.llevel" />
+              <spring:message code="lbl.llevel" text="Level"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${fund.llevel}</div>
           </div>
           <div class="row add-border">
             <div class="col-xs-3 add-margin">
-              <spring:message code="lbl.parentid" />
+              <spring:message code="lbl.parentid" text="Parent Fund"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${fund.parentId.name}</div>
             <div class="col-xs-3 add-margin">
-              <spring:message code="lbl.isnotleaf" />
+              <spring:message code="lbl.isnotleaf" text="Isnotleaf"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${fund.isnotleaf}</div>
           </div>
           <div class="row add-border">
             <div class="col-xs-3 add-margin">
-              <spring:message code="lbl.isactive" />
+              <spring:message code="lbl.isactive" text="Active"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${fund.isactive}</div>
           </div>
@@ -99,10 +99,10 @@
     <div class="row text-center">
       <div class="add-margin">
       <c:if test="${mode == 'view'}">
-        <a href="javascript:void(0)" class="btn btn-default" onclick="self.close()">Close</a>
+        <a href="javascript:void(0)" class="btn btn-default" onclick="self.close()"><spring:message code='lbl.close'  text="Close"/></a>
       </c:if>
       <c:if test="${mode == 'create'}">
-        <a href="javascript:void(0)" class="btn btn-default" onclick="javascript:window.parent.postMessage('close','*');">Close</a>
+        <a href="javascript:void(0)" class="btn btn-default" onclick="javascript:window.parent.postMessage('close','*');"><spring:message code='lbl.close'  text="Close"/></a>
       </c:if>
       </div>
     </div>

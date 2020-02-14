@@ -72,11 +72,11 @@
     		return false;
             }
         if(!validateDate(document.getElementById('validfromId').value)){
-			bootbox.alert("Invalid Date! Start date is greater than current date");
+			bootbox.alert("<s:text name='msg.start.date.is.greater.than.current.date'/>");
 			return false;
 		}
         if (compareDate(document.getElementById('validfromId').value,document.getElementById('validtoId').value) == -1){
-            bootbox.alert("End date should be greater than Start date");
+            bootbox.alert("<s:text name='msg.start.date.should.be.less.than.end.date'/>");
             undoLoadingMask();
             document.getElementById('validtoId').value = "";
             return false;
@@ -173,7 +173,7 @@
 						class="mandatory1"> *</span></td>
 					<td class="bluebox"><s:select name="fund" id="fundId"
 							list="dropdownData.fundDropDownList" listKey="id"
-							listValue="name" headerKey="" headerValue="----Select----"
+							listValue="name" headerKey="" headerValue="%{getText('lbl.choose.options')}"
 							value="scheme.fund.id" /></td>
 					<td class="bluebox">Active</td>
 					<td class="bluebox"><s:checkbox id="isactive" name="isactive"
@@ -214,23 +214,23 @@
 			<table align="center">
 				<tr class="buttonbottom" id="buttondiv" style="align: middle">
 					<s:if test="%{mode=='new'}">
-						<td><input type="submit" class="buttonsubmit" value="Save"
+						<td><input type="submit" class="buttonsubmit" value="<s:text name='lbl.save'/>"
 							id="saveButton" name="button"
 							onclick="return validateFormAndSubmit();" />&nbsp;</td>
-						<td><input type="reset" class="button" value="Reset"
+						<td><input type="reset" class="button" value="<s:text name='lbl.reset'/>"
 							 name="button" onclick="return resetForm();" />&nbsp;</td>
-						<td><input type="button" id="Close" value="Close"
+						<td><input type="button" id="Close" value="<s:text name='lbl.close'/>"
 							onclick="javascript:window.parent.postMessage('close','*');window.close()" class="button" />&nbsp;</td>
 					</s:if>
 					<s:elseif test="%{mode=='edit'}">
-						<td><input type="submit" class="buttonsubmit" value="Modify"
+						<td><input type="submit" class="buttonsubmit" value="<s:text name='lbl.modify'/>"
 							id="Modify" name="button"
 							onclick="return validateFormAndSubmit();" />&nbsp;</td>
-						<td><input type="button" id="Close" value="Close"
+						<td><input type="button" id="Close" value="<s:text name='lbl.close'/>"
 							onclick="javascript:window.parent.postMessage('close','*');window.close();" class="button" />&nbsp;</td>
 					</s:elseif>
 					<s:else>
-						<td><input type="button" id="Close" value="Close"
+						<td><input type="button" id="Close" value="<s:text name='lbl.close'/>"
 							onclick="javascript:window.parent.postMessage('close','*');window.close();" class="button" />&nbsp;</td>
 					</s:else>
 

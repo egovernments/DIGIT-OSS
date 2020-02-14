@@ -51,15 +51,15 @@
 	<div class="col-md-12">
 		<div class="panel panel-primary" data-collapsed="0">
 			<div class="panel-heading">
-				<div class="panel-title"><spring:message code="lbl.create.bankbranch" /></div>
+				<div class="panel-title"><spring:message code="lbl.create.bankbranch" text="Create Bank Branch"/></div>
 				<input type="hidden" name="bankbranch" value="${bankbranch.id}" />
 			</div>
 			<div class="panel-body">
 				<div class="form-group">
-					<label class="col-sm-3 control-label text-right"><spring:message code="lbl.bank" /> <span class="mandatory"></span> </label>
+					<label class="col-sm-3 control-label text-right"><spring:message code="lbl.bank" text="Bank"/> <span class="mandatory"></span> </label>
 					<div class="col-sm-3 add-margin">
 						<form:select path="bank" data-first-option="false" id="bank" class="form-control" required="required">
-							<form:option value=""><spring:message code="lbl.select" /></form:option>
+							<form:option value=""><spring:message code="lbl.select" text="Select"/></form:option>
 							<form:options items="${banks}" itemValue="id" itemLabel="name" />
 						</form:select>
 						<form:errors path="bank" cssClass="error-msg" />
@@ -69,48 +69,48 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-sm-3 control-label text-right"><spring:message code="lbl.name" /> <span class="mandatory"></span> </label>
+					<label class="col-sm-3 control-label text-right"><spring:message code="lbl.name" text="Name"/> <span class="mandatory"></span> </label>
 					<div class="col-sm-3 add-margin">
 						<form:input path="branchname" class="form-control text-left patternvalidation" data-pattern="alphanumeric" maxlength="50" required="required" />
 						<form:errors path="branchname" cssClass="error-msg" />
 					</div>
-					<label class="col-sm-2 control-label text-right"><spring:message code="lbl.code" /> <span class="mandatory"></span> </label>
+					<label class="col-sm-2 control-label text-right"><spring:message code="lbl.code" text="Code"/> <span class="mandatory"></span> </label>
 					<div class="col-sm-3 add-margin">
 						<form:input path="branchcode" class="form-control text-left patternvalidation" data-pattern="alphanumeric" maxlength="50" required="required" />
 						<form:errors path="branchcode" cssClass="error-msg" />
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-sm-3 control-label text-right"><spring:message code="lbl.branchmicr" /></label>
+					<label class="col-sm-3 control-label text-right"><spring:message code="lbl.branchmicr" text="MICR"/></label>
 					<div class="col-sm-3 add-margin">
 						<form:input path="branchMICR" class="form-control text-left patternvalidation" data-pattern="alphanumeric" maxlength="50" />
 						<form:errors path="branchMICR" cssClass="error-msg" />
 					</div>
-					<label class="col-sm-2 control-label text-right"><spring:message code="lbl.address" /><span class="mandatory"></span> </label>
+					<label class="col-sm-2 control-label text-right"><spring:message code="lbl.address" text="Address"/><span class="mandatory"></span> </label>
 					<div class="col-sm-3 add-margin">
 						<form:textarea path="branchaddress1" id="branchaddress1" class="form-control" maxlength="250" required="required"  ></form:textarea>
 						<form:errors path="branchaddress1" cssClass="error-msg" />
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-sm-3 control-label text-right"><spring:message code="lbl.contactperson" /> </label>
+					<label class="col-sm-3 control-label text-right"><spring:message code="lbl.contactperson" text="Contact Person"/> </label>
 					<div class="col-sm-3 add-margin">
 						<form:input path="contactperson" class="form-control text-left patternvalidation" data-pattern="alphanumeric" maxlength="50"  />
 						<form:errors path="contactperson" cssClass="error-msg" />
 					</div>
-					<label class="col-sm-2 control-label text-right"><spring:message code="lbl.branchphone" />  </label>
+					<label class="col-sm-2 control-label text-right"><spring:message code="lbl.branchphone" text="Phone Number"/>  </label>
 					<div class="col-sm-3 add-margin">
 						<form:input path="branchphone" class="form-control text-left patternvalidation" data-pattern="numeric" maxlength="10"/>
 						<form:errors path="branchphone" cssClass="error-msg" />
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-sm-3 control-label text-right"><spring:message code="lbl.narration" /></label>
+					<label class="col-sm-3 control-label text-right"><spring:message code="lbl.narration" text="Narration"/></label>
 					<div class="col-sm-3 add-margin">
 						<form:textarea path="narration" id="narration" class="form-control" maxlength="250"></form:textarea>
 						<form:errors path="narration" cssClass="error-msg" />
 					</div>
-					<label class="col-sm-2 control-label text-right"><spring:message code="lbl.isactive" /> </label>
+					<label class="col-sm-2 control-label text-right"><spring:message code="lbl.isactive" text="Active"/> </label>
 					<div class="col-sm-3 add-margin">
 						<form:checkbox path="isactive" />
 						<form:errors path="isactive" cssClass="error-msg" />

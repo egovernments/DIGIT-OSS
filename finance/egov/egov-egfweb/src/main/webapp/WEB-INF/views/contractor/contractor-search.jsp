@@ -57,18 +57,18 @@
       <div class="col-md-12">
         <div class="panel panel-primary" data-collapsed="0">
           <div class="panel-heading">
-            <div class="panel-title">Search Contractor</div>
+            <div class="panel-title"><spring:message code="title.contractor.search" text="Search Contractor"/> </div>
           </div>
           <div class="panel-body">
           <input type="hidden" id="mode" name="mode" value="${mode}" />
              <div class="form-group">
-	           	 <label class="col-sm-3 control-label text-right"><spring:message code="lbl.name" /> </label>
+	           	 <label class="col-sm-3 control-label text-right"><spring:message code="lbl.name" text="Name"/> </label>
 	              <div class="col-sm-3 add-margin">
 	                <form:input path="name" class="form-control text-left patternvalidation" data-pattern="alphanumeric"
 	                  maxlength="50" />
 	                <form:errors path="name" cssClass="error-msg" />
 	              </div>
-	              <label class="col-sm-3 control-label text-right"><spring:message code="lbl.code" /> </label>
+	              <label class="col-sm-3 control-label text-right"><spring:message code="lbl.code" text="Code"/> </label>
 	              <div class="col-sm-3 add-margin">
 	                <form:input path="code" class="form-control text-left patternvalidation" data-pattern="alphanumeric"
 	                  maxlength="50" />
@@ -81,7 +81,7 @@
                   <spring:message code='lbl.search' />
                 </button>
                 <a href='javascript:void(0)' class='btn btn-default' onclick="javascript:window.parent.postMessage('close','*');"><spring:message
-                    code='lbl.close' /></a>
+                    code='lbl.close' text="Close"/></a>
               </div>
             </div>
           </div>
@@ -91,14 +91,14 @@
   </div>
 </form:form>
 <div class="row display-hide report-section">
-  <div class="col-md-12 table-header text-left">Contractor Search Result</div>
+  <div class="col-md-12 table-header text-left"><spring:message code="lbl.contractor.search.result" text="Contractor Search Result"/> </div>
   <div class="col-md-12 form-group report-table-container">
     <table class="table table-bordered table-hover multiheadertbl" id="resultTable">
       <thead>
         <tr>
-          <th><spring:message code="lbl.name" /></th>
-          <th><spring:message code="lbl.code" /></th>
-          <th><spring:message code="contractor.status" /></th>
+          <th><spring:message code="lbl.name" text="Name"/></th>
+          <th><spring:message code="lbl.code" text="Code"/></th>
+          <th><spring:message code="contractor.status" text="Status"/></th>
         </tr>
       </thead>
     </table>

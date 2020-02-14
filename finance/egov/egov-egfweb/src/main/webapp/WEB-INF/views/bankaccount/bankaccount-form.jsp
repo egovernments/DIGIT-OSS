@@ -51,15 +51,15 @@
 	<div class="col-md-12">
 		<div class="panel panel-primary" data-collapsed="0">
 			<div class="panel-heading">
-				<div class="panel-title"><spring:message code="lbl.create.bankaccount" /></div>
+				<div class="panel-title"><spring:message code="lbl.create.bankaccount" text="Create Bank Account"/></div>
 				<input type="hidden" name="bankaccount" value="${bankaccount.id}" />
 			</div>
 			<div class="panel-body">
 				<div class="form-group">
-					<label class="col-sm-3 control-label text-right"><spring:message code="lbl.bankbranch" /> <span class="mandatory"></span> </label>
+					<label class="col-sm-3 control-label text-right"><spring:message code="lbl.bankbranch" text="Bank Branch"/> <span class="mandatory"></span> </label>
 					<div class="col-sm-3 add-margin">
 						<form:select path="bankbranch" data-first-option="false" id="bankbranch" class="form-control" required="required">
-							<form:option value=""><spring:message code="lbl.select" /></form:option>
+							<form:option value=""><spring:message code="lbl.select" text="Select"/></form:option>
 							<c:forEach var="branch" items="${bankbranches}">
 							<form:option  value="${branch}" ><c:out value="${branch.bank.name} - ${branch.branchname}"/>
 							</form:option>
@@ -72,47 +72,47 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-sm-3 control-label text-right"><spring:message code="lbl.accountnumber" /> <span class="mandatory"></span> </label>
+					<label class="col-sm-3 control-label text-right"><spring:message code="lbl.accountnumber" text="Account Number"/> <span class="mandatory"></span> </label>
 					<div class="col-sm-3 add-margin">
 						<form:input path="accountnumber" class="form-control text-left patternvalidation" data-pattern="alphanumeric" maxlength="50" required="required" />
 						<form:errors path="accountnumber" cssClass="error-msg" />
 					</div>
-					<label class="col-sm-2 control-label text-right"><spring:message code="lbl.fund" /> <span class="mandatory"></span></label>
+					<label class="col-sm-2 control-label text-right"><spring:message code="lbl.fund" text="Fund"/> <span class="mandatory"></span></label>
 					<div class="col-sm-3 add-margin">
 						<form:select path="fund" data-first-option="false" id="fund" class="form-control" required="required">
-							<form:option value=""><spring:message code="lbl.select" /></form:option>
+							<form:option value=""><spring:message code="lbl.select" text="Select"/></form:option>
 							<form:options items="${funds}" itemValue="id" itemLabel="name" />
 						</form:select>
 						<form:errors path="fund" cssClass="error-msg" />
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-sm-3 control-label text-right"><spring:message code="lbl.accounttype" /> <span class="mandatory"></span> </label>
+					<label class="col-sm-3 control-label text-right"><spring:message code="lbl.accounttype" text="Account Type"/> <span class="mandatory"></span> </label>
 					<div class="col-sm-3 add-margin">
 						<form:select path="accounttype" data-first-option="false" id="accounttype" class="form-control" required="required">
-							<form:option value=""><spring:message code="lbl.select" /></form:option>
+							<form:option value=""><spring:message code="lbl.select" text="Select"/></form:option>
 							<c:forEach items="${accounttypes}" var="accounttype" >
 							   <form:option value="${accounttype.glcode} - ${accounttype.name}">${accounttype.glcode} - ${accounttype.name}</form:option>
 							</c:forEach>
 						</form:select>
 						<form:errors path="accounttype" cssClass="error-msg" />
 					</div>
-					<label class="col-sm-2 control-label text-right"><spring:message code="lbl.description" /></label>
+					<label class="col-sm-2 control-label text-right"><spring:message code="lbl.description" text="Description"/></label>
 					<div class="col-sm-3 add-margin">
 						<form:textarea path="narration" id="narration" class="form-control" maxlength="250"></form:textarea>
 						<form:errors path="narration" cssClass="error-msg" />
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-sm-3 control-label text-right"><spring:message code="lbl.payto" /></label>
+					<label class="col-sm-3 control-label text-right"><spring:message code="lbl.payto" text="Pay To"/></label>
 					<div class="col-sm-3 add-margin">
 						<form:input path="payTo" class="form-control text-left patternvalidation" data-pattern="alphanumeric" maxlength="50" />
 						<form:errors path="payTo" cssClass="error-msg" />
 					</div>
-					<label class="col-sm-2 control-label text-right"><spring:message code="lbl.usagetype" /><span class="mandatory"></span> </label>
+					<label class="col-sm-2 control-label text-right"><spring:message code="lbl.usagetype" text="Usage Type"/><span class="mandatory"></span> </label>
 					<div class="col-sm-3 add-margin">
 						<form:select path="type" data-first-option="false" id="type" class="form-control" required="required">
-							<form:option value=""><spring:message code="lbl.select" /></form:option>
+							<form:option value=""><spring:message code="lbl.select" text="Select"/></form:option>
 							<c:forEach items="${usagetypes}" var="usagetype" >
 							   <form:option value="${usagetype}">${usagetype}</form:option>
 							</c:forEach>
@@ -120,7 +120,7 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-sm-3 control-label text-right"><spring:message code="lbl.isactive" /> </label>
+					<label class="col-sm-3 control-label text-right"><spring:message code="lbl.isactive" text="Active"/> </label>
 					<div class="col-sm-3 add-margin">
 						<form:checkbox path="isactive" />
 						<form:errors path="isactive" cssClass="error-msg" />
@@ -131,7 +131,7 @@
 						</div>
 					</c:if>
 					<c:if test="${!autoglcode}">
-						<label class="col-sm-2 control-label text-right"><spring:message code="lbl.gl.code" /><span class="mandatory"></span></label>
+						<label class="col-sm-2 control-label text-right"><spring:message code="lbl.gl.code" text="GLCode"/><span class="mandatory"></span></label>
 						<div class="col-sm-3 add-margin">
 						<form:input path="chartofaccounts.glcode" class="form-control text-left patternvalidation" data-pattern="numeric" maxlength="50" required="required" />
 						<form:errors path="chartofaccounts.glcode" cssClass="error-msg" />

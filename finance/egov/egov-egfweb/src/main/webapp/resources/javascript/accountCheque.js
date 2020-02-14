@@ -56,34 +56,48 @@
 
  Use case other than above 4 'll throw 'Invalid Cheque Range'
  */
+
+jQuery(document).ready(function(){
+	console.log("Browser Language ",navigator.language);
+	jQuery.i18n.properties({ 
+		name: 'message', 
+		path: '/services/EGF/resources/app/messages/', 
+		mode: 'both',
+		language: navigator.language,
+		callback: function() {
+			console.log('File loaded successfully');
+		}
+	});
+})
+
 function updateGridData() {
 	document.getElementById("lblError").innerHTML = "";
 
 	if (document.getElementById("fromChqNo").value.trim() == "") {
-		document.getElementById("lblError").innerHTML = "Please enter from cheque number";
+		document.getElementById("lblError").innerHTML = jQuery.i18n.prop('msg.please.enter.from.cheque.number');
 		return false;
 	}
 	if (document.getElementById("toChqNo").value.trim() == "") {
-		document.getElementById("lblError").innerHTML = "Please enter to cheque number";
+		document.getElementById("lblError").innerHTML = jQuery.i18n.prop('msg.please.enter.to.cheque.number') ;
 		return false;
 	}
 	if (document.getElementById("fromChqNo").value.trim().length != 6) {
-		document.getElementById("lblError").innerHTML = "From Cheque number should be 6 digits";
+		document.getElementById("lblError").innerHTML = jQuery.i18n.prop('msg.from.cheque.number.should.be.six.digit');
 		return false;
 	}
 	if (document.getElementById("toChqNo").value.trim().length != 6) {
-		document.getElementById("lblError").innerHTML = "To Cheque number should be 6 digits";
+		document.getElementById("lblError").innerHTML = jQuery.i18n.prop('msg.to.cheque.number.should.be.six.digit');
 		return false;
 	}
 	if (document.getElementById("fromChqNo").value.trim().length != document
 			.getElementById("toChqNo").value.trim().length) {
 
-		document.getElementById("lblError").innerHTML = "from cheque number and to cheque number length should be same";
+		document.getElementById("lblError").innerHTML = jQuery.i18n.prop('msg.from.cheque.number.and.to.cheque.number.length.should.be.same');
 		return false;
 	}
 
 	if (document.getElementById("receivedDate").value.trim() == "") {
-		document.getElementById("lblError").innerHTML = "Please enter received date";
+		document.getElementById("lblError").innerHTML = jQuery.i18n.prop('msg.please.enter.received.date');
 		return false;
 	}
 	var deptSelectedValue = new Array();
@@ -108,18 +122,18 @@ function updateGridData() {
 	}
 	
 	if (deptSelectedValue == "") {
-		document.getElementById("lblError").innerHTML = "Please select a department";
+		document.getElementById("lblError").innerHTML = jQuery.i18n.prop('msg.please.select.department');
 		return false;
 	}
 	if (document.getElementById("serialNo").value == "-1") {
-		document.getElementById("lblError").innerHTML = "Please enter financial year";
+		document.getElementById("lblError").innerHTML = jQuery.i18n.prop('msg.please.enter.financial.year');
 		return false;
 	}
 	// validate invalid cheque range.
 	var fromchqNum = parseInt(document.getElementById("fromChqNo").value.trim() * 1);
 	var tochqNum = parseInt(document.getElementById("toChqNo").value.trim() * 1);
 	if (fromchqNum > tochqNum) {
-		document.getElementById("lblError").innerHTML = "from cheque number should be less than to cheque number";
+		document.getElementById("lblError").innerHTML = jQuery.i18n.prop('msg.from.cheque.number.should.be.less.than.to.cheque.number');
 		return false;
 	}
 	for (var i = 0; i < deptSelectedValue.length; i++) {
@@ -130,9 +144,7 @@ function updateGridData() {
 					&& tochqNum == parseInt(tokens[1] * 1)
 					&& deptSelectedValue[i] == tokens[2]
 					&& serialNoSelectedValue[0] == tokens[3]) {
-
-				document.getElementById("lblError").innerHTML = "Cheque Range is already assigned for department :"
-						+ deptSelectedText[i] + " & SerialNo :" + serialNoSelectedText[0];
+				document.getElementById("lblError").innerHTML = jQuery.i18n.prop('msg.cheque.range.already.assigned.for.department',[deptSelectedText[i],serialNoSelectedText[0]]);
 				return false;
 			} else if (deptSelectedValue[i] != tokens[2]) {
 				continue;
@@ -147,7 +159,7 @@ function updateGridData() {
 					) {
 				continue;
 			} else {
-				document.getElementById("lblError").innerHTML = "Invalid cheque range";
+				document.getElementById("lblError").innerHTML = jQuery.i18n.prop('msg.invalid.cheque.range');
 				return false;
 			}
 
@@ -235,7 +247,7 @@ function validateCheque(obj) {
 		if (document.getElementById(CHQDETAILSLIST + '[' + index
 				+ '].fromChqNo').value.length != document
 				.getElementById(CHQDETAILSLIST + '[' + index + '].toChqNo').value.length) {
-			document.getElementById("lblErrorGrid").innerHTML = "From Cheque No. and To Cheque No. length should be same";
+			document.getElementById("lblErrorGrid").innerHTML = jQuery.i18n.prop('msg.from.chequeNo.and.to.chequeNo.length.should.be.same') ;
 			return false;
 
 		}
@@ -254,7 +266,7 @@ function validateCheque(obj) {
 				+ deptCode + "-" + serialNo);
 
 		if (parseInt(fromchqNum) > parseInt(tochqNum)) {
-			document.getElementById("lblErrorGrid").innerHTML = "from cheque number should be less than to cheque number";
+			document.getElementById("lblErrorGrid").innerHTML = jQuery.i18n.prop('msg.from.chequeNo.should.be.less.than.to.chequeNo');
 			return false;
 		}
 
@@ -269,8 +281,7 @@ function validateCheque(obj) {
 
 				count = count + 1;
 				if (count > 1) {
-					document.getElementById("lblErrorGrid").innerHTML = "Cheque Range is already assigned for department :"
-							+ deptName + " & SerialNo :" + serialNo;
+					document.getElementById("lblErrorGrid").innerHTML = jQuery.i18n.prop('msg.cheque.range.already.assigned.for.department',[deptName,serialNo]);;
 					return false;
 				}
 				continue;
@@ -280,7 +291,7 @@ function validateCheque(obj) {
 			} else if (serialNo != tokens[3]) {
 				continue;
 			} else {
-				document.getElementById("lblErrorGrid").innerHTML = "Invalid cheque range";
+				document.getElementById("lblErrorGrid").innerHTML =  jQuery.i18n.prop('msg.invalid.cheque.range');
 				return false;
 			}
 

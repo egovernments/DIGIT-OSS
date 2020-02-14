@@ -54,13 +54,13 @@
 		<div class="panel panel-primary" data-collapsed="0">
 			<div class="panel-heading">
 				<div class="panel-title">
-					<spring:message code="lbl.view.bankbranch" />
+					<spring:message code="lbl.view.bankbranch" text="View Bank Branch"/>
 				</div>
 			</div>
 			<div class="panel-body custom">
 				<div class="row add-border">
 					<div class="col-xs-3 add-margin">
-						<spring:message code="lbl.bank" />
+						<spring:message code="lbl.bank" text="Bank"/>
 					</div>
 					<div class="col-sm-3 add-margin view-content">${bankbranch.bank.name}</div>
 					<div class="col-xs-3 add-margin">
@@ -69,41 +69,41 @@
 				</div>
 				<div class="row add-border">
 					<div class="col-xs-3 add-margin">
-						<spring:message code="lbl.name" />
+						<spring:message code="lbl.name" text="Name"/>
 					</div>
 					<div class="col-sm-3 add-margin view-content">${bankbranch.branchname}</div>
 					<div class="col-xs-3 add-margin">
-						<spring:message code="lbl.code" />
+						<spring:message code="lbl.code" text="Code"/>
 					</div>
 					<div class="col-sm-3 add-margin view-content">${bankbranch.branchcode}</div>
 				</div>
 				<div class="row add-border">
 					<div class="col-xs-3 add-margin">
-						<spring:message code="lbl.branchmicr" />
+						<spring:message code="lbl.branchmicr" text="MICR"/>
 					</div>
 					<div class="col-sm-3 add-margin view-content">${bankbranch.branchMICR}</div>
 					<div class="col-xs-3 add-margin">
-						<spring:message code="lbl.address" />
+						<spring:message code="lbl.address" text="Address"/>
 					</div>
 					<div class="col-sm-3 add-margin view-content">${bankbranch.branchaddress1}</div>
 				</div>
 				<div class="row add-border">
 					<div class="col-xs-3 add-margin">
-						<spring:message code="lbl.contactperson" />
+						<spring:message code="lbl.contactperson" text="Contact Person"/>
 					</div>
 					<div class="col-sm-3 add-margin view-content">${bankbranch.contactperson}</div>
 					<div class="col-xs-3 add-margin">
-						<spring:message code="lbl.branchphone" />
+						<spring:message code="lbl.branchphone" text="Phone Number"/>
 					</div>
 					<div class="col-sm-3 add-margin view-content">${bankbranch.branchphone}</div>
 				</div>
 				<div class="row add-border">
 					<div class="col-xs-3 add-margin">
-						<spring:message code="lbl.narration" />
+						<spring:message code="lbl.narration" text="Narration"/>
 					</div>
 					<div class="col-sm-3 add-margin view-content">${bankbranch.narration}</div>
 					<div class="col-xs-3 add-margin">
-						<spring:message code="lbl.isactive" />
+						<spring:message code="lbl.isactive" text="Active"/>
 					</div>
 					<div class="col-sm-3 add-margin view-content">${bankbranch.isactive}</div>
 				</div>
@@ -113,10 +113,10 @@
 	<div class="row text-center">
 		<div class="add-margin">
 		<c:if test="${mode == 'view'}">
-			<a href="javascript:void(0)" class="btn btn-default" onclick="self.close()">Close</a>
+			<a href="javascript:void(0)" class="btn btn-default" onclick="self.close()"><spring:message code='lbl.close' text="Close"/></a>
 		</c:if>
 		<c:if test="${mode == 'create'}">
-            <a href="javascript:void(0)" class="btn btn-default" onclick="javascript:window.parent.postMessage('close','*');">Close</a>
+            <a href="javascript:void(0)" class="btn btn-default" onclick="javascript:window.parent.postMessage('close','*');"><spring:message code='lbl.close' text="Close"/></a>
         </c:if>	
 		</div>
 	</div>

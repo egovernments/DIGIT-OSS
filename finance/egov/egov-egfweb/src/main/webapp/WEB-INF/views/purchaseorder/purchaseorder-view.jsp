@@ -54,82 +54,82 @@
     <div class="col-md-12">
       <div class="panel panel-primary" data-collapsed="0">
         <div class="panel-heading">
-          <div class="panel-title">Purchase Order</div>
+          <div class="panel-title"><spring:message code="lbl.purchaseorder" text="Purchase Order"/> </div>
         </div>
         <div class="panel-body custom">
           <div class="row add-border">
             <div class="col-xs-3 add-margin">
-              <spring:message code="purchaseorder.number" />
+              <spring:message code="purchaseorder.number" text="Order No."/>
             </div>
             <div class="col-sm-3 add-margin view-content">${purchaseOrder.orderNumber}</div>
             <div class="col-xs-3 add-margin">
-              <spring:message code="purchaseorder.date" />
+              <spring:message code="purchaseorder.date" text="Order Date"/>
             </div>
             <div class="col-sm-3 add-margin view-content"><fmt:formatDate value="${purchaseOrder.orderDate}" pattern="dd/MM/yyyy" /></div>
           </div>
           <div class="row add-border">
             <div class="col-xs-3 add-margin">
-              <spring:message code="lbl.name" />
+              <spring:message code="lbl.name" text="Name"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${purchaseOrder.name}</div>
           </div>
           <div class="row add-border">
             <div class="col-xs-3 add-margin">
-              <spring:message code="purchaseorder.description" />
+              <spring:message code="purchaseorder.description" text="Description"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${purchaseOrder.description}</div>
             <div class="col-xs-3 add-margin">
-              <spring:message code="purchaseorder.active" />
+              <spring:message code="purchaseorder.active" text="Active Y/N"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${purchaseOrder.active}</div>
           </div>
           <div class="row add-border">
             <div class="col-xs-3 add-margin">
-              <spring:message code="purchaseorder.supplier" />
+              <spring:message code="purchaseorder.supplier" text="Supplier Name"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${purchaseOrder.supplier.name}</div>
             <div class="col-xs-3 add-margin">
-              <spring:message code="purchaseorder.suppliercode" />
+              <spring:message code="purchaseorder.suppliercode" text="Supplier Code"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${purchaseOrder.supplier.code}</div>
           </div>
           <div class="row add-border">
             <div class="col-xs-3 add-margin">
-              <spring:message code="purchaseorder.ordervalue" />
+              <spring:message code="purchaseorder.ordervalue" text="Total/Order Value"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${purchaseOrder.orderValue}</div>
             <div class="col-xs-3 add-margin">
-              <spring:message code="purchaseorder.advancepayable" />
+              <spring:message code="purchaseorder.advancepayable" text="Advance Payable"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${purchaseOrder.advancePayable}</div>
           </div>
           <div class="row add-border">
             <div class="col-xs-3 add-margin">
-              <spring:message code="purchaseorder.fund" />
+              <spring:message code="purchaseorder.fund" text="Fund"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${purchaseOrder.fund.name}</div>
             <div class="col-xs-3 add-margin">
-              <spring:message code="purchaseorder.department" />
+              <spring:message code="purchaseorder.department" text="Department"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${purchaseOrder.departmentName}</div>
           </div>
           <div class="row add-border">
             <div class="col-xs-3 add-margin">
-              <spring:message code="purchaseorder.scheme" />
+              <spring:message code="purchaseorder.scheme" text="Scheme"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${purchaseOrder.scheme.name}</div>
             <div class="col-xs-3 add-margin">
-              <spring:message code="purchaseorder.subscheme" />
+              <spring:message code="purchaseorder.subscheme" text="Sub Scheme"/>
             </div>
             <div class="col-sm-3 add-margin view-content">${purchaseOrder.subScheme.name}</div>
           </div>
           <div class="row add-border">
             <div class="col-xs-3 add-margin">
-              <spring:message code="purchaseorder.sanctionnumber" />
+              <spring:message code="purchaseorder.sanctionnumber" text="Sanction No."/>
             </div>
             <div class="col-sm-3 add-margin view-content">${purchaseOrder.sanctionNumber}</div>
             <div class="col-xs-3 add-margin">
-              <spring:message code="purchaseorder.sanctiondate" />
+              <spring:message code="purchaseorder.sanctiondate" text="Sanction Date"/>
             </div>
             <div class="col-sm-3 add-margin view-content"><fmt:formatDate value="${purchaseOrder.sanctionDate}" pattern="dd/MM/yyyy" /></div>
           </div>
@@ -139,10 +139,10 @@
     <div class="row text-center">
       <div class="add-margin">
       <c:if test="${mode == 'view'}">
-        <a href="javascript:void(0)" class="btn btn-default" onclick="self.close()">Close</a>
+        <a href="javascript:void(0)" class="btn btn-default" onclick="self.close()"><spring:message code='lbl.close' text="Close"/></a>
      </c:if> 
      <c:if test="${mode == 'create'}">
-        <a href="javascript:void(0)" class="btn btn-default" onclick="javascript:window.parent.postMessage('close','*');">Close</a>
+        <a href="javascript:void(0)" class="btn btn-default" onclick="javascript:window.parent.postMessage('close','*');"><spring:message code='lbl.close' text="Close"/></a>
      </c:if>  
       </div>
     </div>

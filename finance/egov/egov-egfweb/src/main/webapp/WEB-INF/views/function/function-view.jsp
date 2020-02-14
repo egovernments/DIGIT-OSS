@@ -54,48 +54,48 @@
 		<div class="col-md-12">
 			<div class="panel panel-primary" data-collapsed="0">
 				<div class="panel-heading">
-					<div class="panel-title">Function</div>
+					<div class="panel-title"><spring:message code="lbl.functionid" text="Function"/> </div>
 				</div>
 				<div class="panel-body custom">
 					<div class="row add-border">
 						<div class="col-xs-3 add-margin">
-							<spring:message code="lbl.name" />
+							<spring:message code="lbl.name" text="Name"/>
 						</div>
 						<div class="col-sm-3 add-margin view-content">
 							${function.name}</div>
 						<div class="col-xs-3 add-margin">
-							<spring:message code="lbl.code" />
+							<spring:message code="lbl.code" text="Code"/>
 						</div>
 						<div class="col-sm-3 add-margin view-content">
 							${function.code}</div>
 					</div>
 					<div class="row add-border">
 						<div class="col-xs-3 add-margin">
-							<spring:message code="lbl.type" />
+							<spring:message code="lbl.type" text="Type"/>
 						</div>
 						<div class="col-sm-3 add-margin view-content">
 							${function.type}</div>
 						<div class="col-xs-3 add-margin">
-							<spring:message code="lbl.llevel" />
+							<spring:message code="lbl.llevel" text="Level"/>
 						</div>
 						<div class="col-sm-3 add-margin view-content">
 							${function.llevel}</div>
 					</div>
 					<div class="row add-border">
 						<div class="col-xs-3 add-margin">
-							<spring:message code="lbl.isactive" />
+							<spring:message code="lbl.isactive" text="Active"/>
 						</div>
 						<div class="col-sm-3 add-margin view-content">
 							${function.isActive}</div>
 						<div class="col-xs-3 add-margin">
-							<spring:message code="lbl.isnotleaf" />
+							<spring:message code="lbl.isnotleaf" text="Isnotleaf"/>
 						</div>
 						<div class="col-sm-3 add-margin view-content">
 							${function.isNotLeaf}</div>
 					</div>
 					<div class="row add-border">
 						<div class="col-xs-3 add-margin">
-							<spring:message code="lbl.parentid" />
+							<spring:message code="lbl.parentid" text="Parent Type"/>
 						</div>
 						<div class="col-sm-3 add-margin view-content">
 							${function.parentId.name}</div>
@@ -106,10 +106,10 @@
 		<div class="row text-center">
 			<div class="add-margin">
 			<c:if test="${mode == 'view'}">
-				<a href="javascript:void(0)" class="btn btn-default" onclick="self.close()">Close</a>
+				<a href="javascript:void(0)" class="btn btn-default" onclick="self.close()"><s:text name='lbl.close'/></a>
 			</c:if>
 			<c:if test="${mode == 'create'}">
-				<a href="javascript:void(0)" class="btn btn-default" onclick="javascript:window.parent.postMessage('close','*');">Close</a>
+				<a href="javascript:void(0)" class="btn btn-default" onclick="javascript:window.parent.postMessage('close','*');"><s:text name='lbl.close'/></a>
 			</c:if>	
 			</div>
 		</div>

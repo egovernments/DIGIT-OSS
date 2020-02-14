@@ -78,7 +78,7 @@
 	<s:form theme="simple" name="chequeMaster">
 
 		<div class="formmainbox" />
-		<div class="subheadnew">Cheque Master - Search</div>
+		<div class="subheadnew"><s:text name="lbl.cheque.master.search"/> </div>
 		<br>
 		<font style='color: red; font-weight: bold'>
 			<p class="error-block" id="lblError"></p>
@@ -86,10 +86,10 @@
 		<br>
 		<%@include file="accountCheque-form.jsp"%>
 		<div class="buttonbottom" style="padding-bottom: 10px;">
-			<input type="button" id="Close" value="Add/Modify Cheque"
+			<input type="button" id="Close" value='<s:text name="lbl.add.modify.cheque"/>'
 				onclick="addModifyChq();" class="buttonsubmit" />
-			<s:reset id="Reset" value="Cancel" cssClass="buttonsubmit" />
-			<input type="button" id="Close" value="Close"
+			<s:reset id="Reset" key="lbl.cancel" cssClass="buttonsubmit" />
+			<input type="button" id="Close" value="<s:text name='lbl.close'/>"
 				onclick="javascript:window.parent.postMessage('close','*');" class="button" />
 		</div>
 		</div>

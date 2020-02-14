@@ -127,7 +127,7 @@
 								name="chartOfAccount.purpose" />:</strong></td>
 					<td class="bluebox"><s:select list="dropdownData.purposeList"
 							listKey="id" listValue="name" name="accountcodePurpose.id"
-							headerKey="0" headerValue="--- Select ---"
+							headerKey="0" headerValue="%{getText('lbl.choose.options')}"
 							value="accountcodePurpose.id"></s:select></td>
 					<td width="10%" class="bluebox"><strong><s:text
 								name="chartOfAccount.classification" />:</strong></td>
@@ -180,7 +180,7 @@
 		<br />
 		<br />
 		<div class="formmainbox">
-			<div class="subheadnew">Account Detail Type Mapping</div>
+			<div class="subheadnew"><s:text name="lbl.account.detail.type.mapping"/> </div>
 			<table>
 				<tr>
 					<td width="10%" class="greybox">
@@ -229,8 +229,8 @@
 		</div>
 		<div class="buttonbottom">
 			<input type="hidden" name="model.id" value='<s:property value="model.id"/>' />
-		    <input type="button" class="buttonsubmit" value="Save" id="Search" name="Search" onclick="return validateAndSubmit();" /> 
-			<input type="button" value="Close" onclick="javascript:window.parent.postMessage('close','*');window.close();" class="button" />
+		    <input type="button" class="buttonsubmit" value="<s:text name='lbl.save'/>" id="Search" name="Search" onclick="return validateAndSubmit();" /> 
+			<input type="button" value="<s:text name='lbl.close'/>" onclick="javascript:window.parent.postMessage('close','*');window.close();" class="button" />
 		</div>
 		<s:token />
 	</s:form>
