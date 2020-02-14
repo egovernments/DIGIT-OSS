@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { ActionDialog } from "../";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { Container, Item } from "egov-ui-framework/ui-atoms";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import MenuButton from "egov-ui-framework/ui-molecules/MenuButton";
@@ -197,7 +198,12 @@ class Footer extends React.Component {
           `licenseCount`,
           1
         );
-    if (status === "APPROVED" && applicationType !=="RENEWAL"&& responseLength===1) {
+      const rolearray=  getUserInfo() && JSON.parse(getUserInfo()).roles.filter((item)=>{
+          if(item.code=="TL_CEMP"&&item.tenantId===tenantId)
+          return true;
+        })
+       const rolecheck= rolearray.length>0? true: false;
+    if (status === "APPROVED" && applicationType !=="RENEWAL"&& responseLength===1 && rolecheck===true) {
       const editButton = {
         label: "Edit",
         labelKey: "WF_TL_RENEWAL_EDIT_BUTTON",

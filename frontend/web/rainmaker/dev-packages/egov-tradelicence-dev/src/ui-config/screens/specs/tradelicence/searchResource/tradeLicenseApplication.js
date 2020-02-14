@@ -156,7 +156,36 @@ export const tradeLicenseApplication = getCommonCard({
         masterName: "NEWTL"
       },
       jsonPath: "searchScreen.status",
-      sourceJsonPath: "applyScreenMdmsData.searchScreen.status",
+      data:[
+        {
+          code : "INITIATED"
+        },
+        {
+          code : "APPLIED"
+        },
+        {
+          code : "FIELDINSPECTION"
+        },
+        {
+          code : "APPROVED"
+        },
+        {
+          code : "CANCELLED"
+        },
+        {
+          code : "REJECTED"
+        },
+        {
+          code : "CITIZENACTIONREQUIRED"
+        },
+        {
+          code : "PENDINGPAYMENT"
+        },
+        {
+          code : "PENDINGAPPROVAL"
+        }
+      ],
+      // sourceJsonPath: "applyScreenMdmsData.searchScreen.status",
       gridDefination: {
         xs: 12,
         sm: 4

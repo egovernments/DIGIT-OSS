@@ -1806,6 +1806,8 @@ export const getDocList = (state, dispatch) => {
     "Licenses[0].tradeLicenseDetail.tradeUnits"
   );
 
+  const applicationType = get(state.screenConfiguration.preparedFinalObject ,"Licenses[0].applicationType" );
+
   const tradeSubCategories = get(
     state.screenConfiguration.preparedFinalObject,
     "applyScreenMdmsData.TradeLicense.MdmsTradeType"
@@ -1821,7 +1823,7 @@ export const getDocList = (state, dispatch) => {
   
   let applicationDocArray = [];
   selectedTypes && selectedTypes.forEach(tradeSubTypeDoc => {
-   const  applicationarrayTemp= getQueryArg(window.location.href , "action") === "EDITRENEWAL" ? tradeSubTypeDoc[0].applicationDocument.filter(item => item.applicationType === "RENEWAL")[0].documentList : tradeSubTypeDoc[0].applicationDocument.filter(item => item.applicationType === "NEW")[0].documentList;
+   const  applicationarrayTemp= getQueryArg(window.location.href , "action") === "EDITRENEWAL" || applicationType==="RENEWAL" ? tradeSubTypeDoc[0].applicationDocument.filter(item => item.applicationType === "RENEWAL")[0].documentList : tradeSubTypeDoc[0].applicationDocument.filter(item => item.applicationType === "NEW")[0].documentList;
    
     applicationDocArray = [
       ...applicationDocArray,
