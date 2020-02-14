@@ -108,7 +108,7 @@ serviceMaps:
    fromTopic: update-sw-connection
    isTransaction: true
    queryMaps: 
-    - query: UPDATE eg_sw_connection SET applicationstatus=?, status=?, connectionno=?, oldconnectionno=?, action=?, roadCuttingArea=?, roadType=?, proposedWaterClosets=?, proposedToilets=? WHERE id=?;
+    - query: UPDATE eg_sw_connection SET applicationstatus=?, status=?, connectionno=?, oldconnectionno=?, action=?, roadCuttingArea=?, roadType=? WHERE id=?;
       basePath: $.SewerageConnection
       jsonMaps:
         
@@ -125,14 +125,10 @@ serviceMaps:
        - jsonPath: $.SewerageConnection.roadCuttingArea
 
        - jsonPath: $.SewerageConnection.roadType
-       
-       - jsonPath: $.SewerageConnection.proposedWaterClosets
-       
-       - jsonPath: $.SewerageConnection.proposedToilets
 
        - jsonPath: $.SewerageConnection.id       
 
-    - query: UPDATE eg_sw_service SET connectionexecutiondate=?,noOfWaterClosets=?,noOfToilets=?,UOM=?,connectiontype=? WHERE connection_id=?;
+    - query: UPDATE eg_sw_service SET connectionexecutiondate=?, noOfWaterClosets=?, noOfToilets=?, UOM=?, connectiontype=?, proposedWaterClosets=?, proposedToilets=? WHERE connection_id=?;
       basePath: $.SewerageConnection
       jsonMaps:
 
@@ -145,6 +141,10 @@ serviceMaps:
        - jsonPath: $.SewerageConnection.uom
          
        - jsonPath: $.SewerageConnection.connectionType
+       
+       - jsonPath: $.SewerageConnection.proposedWaterClosets
+       
+       - jsonPath: $.SewerageConnection.proposedToilets
          
        - jsonPath: $.SewerageConnection.id
 
