@@ -110,7 +110,7 @@ public class PropertyValidator {
     	Map<String, String> errorMap = new HashMap<>();
     	
         if(request.getRequestInfo().getUserInfo().getType().equalsIgnoreCase("CITIZEN"))
-            validateAssessees(request, errorMap);
+            validateAssessees(request,propertyFromSearch, errorMap);
         
         /*
          * Blocking owner changes in update flow
@@ -436,15 +436,14 @@ public class PropertyValidator {
      * Validates the UserInfo of the the PropertyRequest. Update is allowed only for the user who created the property
      * @param request PropertyRequest received for update
      */
-	private void validateAssessees(PropertyRequest request, Map<String, String> errorMap) {
+	private void validateAssessees(PropertyRequest request,Property propertyFromSearch, Map<String, String> errorMap) {
 
 		String uuid = request.getRequestInfo().getUserInfo().getUuid();
 		Property property = request.getProperty();
 
-		Set<String> owners = property.getOwners().stream().map(OwnerInfo::getUuid).collect(Collectors.toSet());
+		Set<String> ownerIds = property.getOwners().stream().map(OwnerInfo::getUuid).collect(Collectors.toSet());
 
-		if (!(owners.contains(uuid)
-				|| (property.getAccountId() != null && uuid.equalsIgnoreCase(property.getAccountId())))) {
+		if (!(ownerIds.contains(uuid) || uuid.equalsIgnoreCase(propertyFromSearch.getAccountId()))) {
 			errorMap.put("EG_PT_UPDATE AUTHORIZATION FAILURE",
 					"Not Authorized to update property with propertyId " + property.getPropertyId());
 		}
