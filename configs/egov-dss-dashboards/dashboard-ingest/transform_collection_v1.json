@@ -4,6 +4,7 @@
     "spec": {
       "tenantId": "tenantId",
       "transactionId": "transactionId",
+      "@timestamp": "@timestamp",
       "Bill": {
         "$i": {
           "billDetails": {
