@@ -406,9 +406,10 @@ const mapStateToProps = state => {
   let userInfoManual = get(stateInfoById, "0.userManuals");
   let manualURL;
   userInfoManual.forEach(moduleManual => {
-    if (moduleManual.module === "TL") {
+    if (moduleManual.module === "PT") {
       console.log("==============cvvvcg===========" + moduleManual.manuals);
-      moduleManual.manuals.forEach(localeManual => {
+      let ptManuals = process.env.REACT_APP_NAME === "Citizen" ? moduleManual.manuals : moduleManual.employeeManuals
+      ptManuals.forEach(localeManual => {
         if (localeManual.locale == locale) {
           console.log("================>>>", JSON.stringify(localeManual.url));
           manualURL = localeManual.url;
