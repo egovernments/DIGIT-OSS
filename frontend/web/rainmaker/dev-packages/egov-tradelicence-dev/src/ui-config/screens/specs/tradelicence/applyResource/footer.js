@@ -920,18 +920,13 @@ export const footerReview = (
                 callBack: () => {
                   dispatch(
                     setRoute(
-                     // `/tradelicence/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&FY=${financialYear}&tenantId=${tenantId}`
                      `/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenantId}`
                     )
                   );
                 },
 
               },
-              roleDefination: {
-                rolePath: "user-info.roles",
-                action: "PAY"
-              },
-              visible: process.env.REACT_APP_NAME === "Citizen" ? true : false
+              visible: process.env.REACT_APP_NAME === "Citizen" && getButtonVisibility(status, "PENDINGPAYMENT") ? true : false
             }
           },
           gridDefination: {

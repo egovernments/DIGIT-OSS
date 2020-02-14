@@ -379,6 +379,10 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       //call update
       const isEditRenewal = getQueryArg(window.location.href, "action") === "EDITRENEWAL";
       if(isEditRenewal ){
+        if(process.env.REACT_APP_NAME === "Citizen"){
+          const nextFinancialyear = await getNextFinancialYearForRenewal(queryObject[0].financialYear);
+          set(queryObject[0], "financialYear", nextFinancialyear);
+        }     
         set(queryObject[0], "applicationType", "RENEWAL");
         set(queryObject[0], "workflowCode", getQueryArg(window.location.href, "action"));
       }
