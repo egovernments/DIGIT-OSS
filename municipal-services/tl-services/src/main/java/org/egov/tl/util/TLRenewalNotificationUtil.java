@@ -70,6 +70,11 @@ public class TLRenewalNotificationUtil {
                 message = getFieldInspectionMsg(license, messageTemplate);
                 break;
 
+            case ACTION_STATUS_PENDINGAPPROVAL:
+                messageTemplate = getMessageTemplate(TLConstants.RENEWAL_NOTIFICATION_PENDINGAPPROVAL, localizationMessage);
+                message = getPendingApprovalMsg(license, messageTemplate);
+                break;
+
             case ACTION_STATUS_REJECTED:
                 messageTemplate = getMessageTemplate(TLConstants.RENEWAL_NOTIFICATION_REJECTED, localizationMessage);
                 message = getRejectedMsg(license, messageTemplate);
@@ -263,6 +268,24 @@ public class TLRenewalNotificationUtil {
         message = message.replace("<3>", license.getTradeName());
         return message;
     }
+
+
+    /**
+     * Creates customized message for rejected
+     *
+     * @param license
+     *            tenantId of the tradeLicense
+     * @param message
+     *            Message from localization for rejected
+     * @return customized message for rejected
+     */
+    private String getPendingApprovalMsg(TradeLicense license, String message) {
+        message = message.replace("<2>", license.getApplicationNumber());
+        message = message.replace("<3>", license.getTradeName());
+        return message;
+    }
+
+
 
     /**
      * Creates customized message for citizen sendback

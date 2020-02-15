@@ -31,6 +31,8 @@ public class TLConstants {
 
     public static final String RENEWAL_NOTIFICATION_FIELD_INSPECTION = "tl.renew.en.field.inspection";
 
+    public static final String RENEWAL_NOTIFICATION_PENDINGAPPROVAL = "tl.renew.en.pending.approval";
+
     public static final String RENEWAL_NOTIFICATION_REJECTED = "tl.renew.en.counter.rejected";
 
     public static final String RENEWAL_NOTIFICATION_APPROVED = "tl.renew.en.counter.approved";
@@ -184,6 +186,8 @@ public class TLConstants {
     public static final String ACTION_STATUS_REJECTED  = "REJECT_REJECTED";
 
     public static final String ACTION_STATUS_FIELDINSPECTION  = "FORWARD_FIELDINSPECTION";
+
+    public static final String ACTION_STATUS_PENDINGAPPROVAL  = "FORWARD_PENDINGAPPROVAL";
 
     public static final String ACTION_CANCEL_CANCELLED  = "CANCEL_CANCELLED";
 
