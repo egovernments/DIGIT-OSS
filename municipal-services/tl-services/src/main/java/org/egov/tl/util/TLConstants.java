@@ -45,7 +45,11 @@ public class TLConstants {
 
     public static final String NOTIFICATION_PAYMENT_OWNER = "tl.en.counter.payment.successful.owner";
 
+    public static final String NOTIFICATION_RENEWAL_PAYMENT_OWNER = "tl.en.counter.renewal.payment.successful.owner";
+
     public static final String NOTIFICATION_PAYMENT_PAYER = "tl.en.counter.payment.successful.payer";
+
+    public static final String NOTIFICATION_RENEWAL_PAYMENT_PAYER = "tl.en.counter.renewal.payment.successful.payer";
 
     public static final String NOTIFICATION_PAID = "tl.en.counter.pending.approval";
 
