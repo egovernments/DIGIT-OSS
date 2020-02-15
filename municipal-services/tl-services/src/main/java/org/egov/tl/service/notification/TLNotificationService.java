@@ -186,13 +186,15 @@ public class TLNotificationService {
 		String localizationMessages = util.getLocalizationMessages(tenantId,request.getRequestInfo());
         for(TradeLicense license : request.getLicenses()){
 			String message = null;
+			String applicationType = String.valueOf(license.getApplicationType());
 			String businessService = license.getBusinessService();
-			if(businessService.equals(businessService_TL))
-            	message = util.getCustomizedMsg(request.getRequestInfo(), license, localizationMessages);
-
-			if(businessService.equals(businessService_DIRECT_RENEWAL) || businessService.equals(businessService_EDIT_RENEWAL))
-				message = tlRenewalNotificationUtil.getCustomizedMsg(request.getRequestInfo(), license, localizationMessages);
-
+			if(businessService.equals(businessService_TL)){
+				if(applicationType.equals(APPLICATION_TYPE_RENEWAL))
+					message = tlRenewalNotificationUtil.getCustomizedMsg(request.getRequestInfo(), license, localizationMessages);
+				else
+					message = util.getCustomizedMsg(request.getRequestInfo(), license, localizationMessages);
+			}
+			
             if(message == null) continue;
             Map<String,String > mobileNumberToOwner = new HashMap<>();
             license.getTradeLicenseDetail().getOwners().forEach(owner -> {
