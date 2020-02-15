@@ -142,7 +142,10 @@ public class TLNotificationService {
 			String message = null;
 			if (businessService.equals(businessService_TL)) {
 				String localizationMessages = util.getLocalizationMessages(tenantId, request.getRequestInfo());
-				message = util.getCustomizedMsg(request.getRequestInfo(), license, localizationMessages);
+				if(license.getApplicationType().equals(APPLICATION_TYPE_RENEWAL))
+					message = tlRenewalNotificationUtil.getCustomizedMsg(request.getRequestInfo(), license, localizationMessages);
+				else
+					message = util.getCustomizedMsg(request.getRequestInfo(), license, localizationMessages);
 			}
 			if(businessService.equals(businessService_BPA)){
 				String localizationMessages = bpaNotificationUtil.getLocalizationMessages(tenantId, request.getRequestInfo());
