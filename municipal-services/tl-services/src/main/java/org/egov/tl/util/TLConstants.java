@@ -181,7 +181,7 @@ public class TLConstants {
 
     public static final String ACTION_STATUS_APPROVED  = "APPROVE_PENDINGPAYMENT";
 
-    public static final String ACTION_STATUS_RENEWAL_APPROVED  = "PAY_APPROVED";
+    public static final String ACTION_STATUS_RENEWAL_APPROVED  = "APPROVE_PENDINGPAYMENT";
 
     public static final String ACTION_STATUS_REJECTED  = "REJECT_REJECTED";
 
