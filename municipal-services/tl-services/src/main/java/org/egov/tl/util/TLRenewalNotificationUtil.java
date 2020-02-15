@@ -86,6 +86,12 @@ public class TLRenewalNotificationUtil {
                 message = getApprovedMsg(license, amountToBePaid, messageTemplate);
                 break;
 
+            case ACTION_STATUS_RENEWAL_INITIATE_APPROVED:
+                BigDecimal amountToBePaid2 = getAmountToBePaid(requestInfo, license);
+                messageTemplate = getMessageTemplate(TLConstants.RENEWAL_NOTIFICATION_APPROVED, localizationMessage);
+                message = getApprovedMsg(license, amountToBePaid2, messageTemplate);
+                break;
+
             /*
              * case ACTION_STATUS_PAID : messageTemplate =
              * getMessageTemplate(TLConstants.NOTIFICATION_PAID,localizationMessage);
