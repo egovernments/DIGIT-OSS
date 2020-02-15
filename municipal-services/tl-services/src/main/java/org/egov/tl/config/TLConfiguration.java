@@ -181,6 +181,9 @@ public class TLConfiguration {
     @Value("${notification.sms.enabled.forBPA}")
     private Boolean isBPASMSEnabled;
 
+    @Value("${notification.sms.enabled.forTLRENEWAL}")
+    private Boolean isTLRENEWALSMSEnabled;
+
     //Localization
     @Value("${egov.localization.host}")
     private String localizationHost;
@@ -252,6 +255,9 @@ public class TLConfiguration {
 	
 	@Value("${egov.user.event.notification.enabledForTL}")
 	private Boolean isUserEventsNotificationEnabledForTL;
+
+    @Value("${egov.user.event.notification.enabledForTLRenewal}")
+    private Boolean isUserEventsNotificationEnabledForTLRenewal;
 
     @Value("${egov.user.event.notification.enabledForBPA}")
     private Boolean isUserEventsNotificationEnabledForBPA;

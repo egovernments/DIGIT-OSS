@@ -25,6 +25,16 @@ public class TLConstants {
 
     public static final String NOTIFICATION_LOCALE = "en_IN";
 
+    public static final String RENEWAL_NOTIFICATION_INITIATED = "tl.renew.en.counter.initiate";
+
+    public static final String RENEWAL_NOTIFICATION_APPLIED = "tl.renew.en.counter.submit";
+
+    public static final String RENEWAL_NOTIFICATION_FIELD_INSPECTION = "tl.renew.en.field.inspection";
+
+    public static final String RENEWAL_NOTIFICATION_REJECTED = "tl.renew.en.counter.rejected";
+
+    public static final String RENEWAL_NOTIFICATION_APPROVED = "tl.renew.en.counter.approved";
+
     public static final String NOTIFICATION_INITIATED = "tl.en.counter.initiate";
 
     public static final String NOTIFICATION_APPLIED = "tl.en.counter.submit";
@@ -168,6 +178,8 @@ public class TLConstants {
     public static final String ACTION_STATUS_APPLIED  = "APPLY_APPLIED";
 
     public static final String ACTION_STATUS_APPROVED  = "APPROVE_PENDINGPAYMENT";
+
+    public static final String ACTION_STATUS_RENEWAL_APPROVED  = "APPROVE_APPROVED";
 
     public static final String ACTION_STATUS_REJECTED  = "REJECT_REJECTED";
 

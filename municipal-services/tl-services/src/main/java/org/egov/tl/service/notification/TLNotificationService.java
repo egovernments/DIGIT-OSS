@@ -5,10 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.tl.config.TLConfiguration;
 import org.egov.tl.repository.ServiceRequestRepository;
-import org.egov.tl.util.BPAConstants;
-import org.egov.tl.util.BPANotificationUtil;
-import org.egov.tl.util.NotificationUtil;
-import org.egov.tl.util.TLConstants;
+import org.egov.tl.util.*;
 import org.egov.tl.web.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,8 +15,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.egov.tl.util.BPAConstants.NOTIFICATION_APPROVED;
-import static org.egov.tl.util.TLConstants.businessService_BPA;
-import static org.egov.tl.util.TLConstants.businessService_TL;
+import static org.egov.tl.util.TLConstants.*;
 
 
 @Slf4j
@@ -35,12 +31,15 @@ public class TLNotificationService {
 
 	private BPANotificationUtil bpaNotificationUtil;
 
+	private TLRenewalNotificationUtil tlRenewalNotificationUtil;
+
 	@Autowired
-	public TLNotificationService(TLConfiguration config, ServiceRequestRepository serviceRequestRepository, NotificationUtil util, BPANotificationUtil bpaNotificationUtil) {
+	public TLNotificationService(TLConfiguration config, ServiceRequestRepository serviceRequestRepository, NotificationUtil util, BPANotificationUtil bpaNotificationUtil,TLRenewalNotificationUtil tlRenewalNotificationUtil) {
 		this.config = config;
 		this.serviceRequestRepository = serviceRequestRepository;
 		this.util = util;
 		this.bpaNotificationUtil = bpaNotificationUtil;
+		this.tlRenewalNotificationUtil = tlRenewalNotificationUtil;
 	}
 
     /**
@@ -89,9 +88,45 @@ public class TLNotificationService {
 					}
 				}
 				break;
+
+
+			case businessService_EDIT_RENEWAL:
+				List<SMSRequest> smsRequestsTLRENEWAL = new LinkedList<>();
+				if(null != config.getIsTLRENEWALSMSEnabled()) {
+					if(config.getIsTLRENEWALSMSEnabled()) {
+						enrichSMSRequest(request,smsRequestsTLRENEWAL);
+						if(!CollectionUtils.isEmpty(smsRequestsTLRENEWAL))
+							util.sendSMS(smsRequestsTLRENEWAL,true);
+					}
+				}
+				if(null != config.getIsUserEventsNotificationEnabledForTLRenewal()) {
+					if(config.getIsUserEventsNotificationEnabledForTLRenewal()) {
+						EventRequest eventRequest = getEventsForTL(request);
+						if(null != eventRequest)
+							util.sendEventNotification(eventRequest);
+					}
+				}
+				break;
+
+			case businessService_DIRECT_RENEWAL:
+				List<SMSRequest> smsRequestsTLRENEWALDIRECT = new LinkedList<>();
+				if(null != config.getIsTLRENEWALSMSEnabled()) {
+					if(config.getIsTLRENEWALSMSEnabled()) {
+						enrichSMSRequest(request,smsRequestsTLRENEWALDIRECT);
+						if(!CollectionUtils.isEmpty(smsRequestsTLRENEWALDIRECT))
+							util.sendSMS(smsRequestsTLRENEWALDIRECT,true);
+					}
+				}
+				if(null != config.getIsUserEventsNotificationEnabledForTLRenewal()) {
+					if(config.getIsUserEventsNotificationEnabledForTLRenewal()) {
+						EventRequest eventRequest = getEventsForTL(request);
+						if(null != eventRequest)
+							util.sendEventNotification(eventRequest);
+					}
+				}
+				break;
 		}
     }
-
 
     /**
      * Enriches the smsRequest with the customized messages
@@ -108,9 +143,14 @@ public class TLNotificationService {
 			if (businessService.equals(businessService_TL)) {
 				String localizationMessages = util.getLocalizationMessages(tenantId, request.getRequestInfo());
 				message = util.getCustomizedMsg(request.getRequestInfo(), license, localizationMessages);
-			} else {
+			}
+			if(businessService.equals(businessService_BPA)){
 				String localizationMessages = bpaNotificationUtil.getLocalizationMessages(tenantId, request.getRequestInfo());
 				message = bpaNotificationUtil.getCustomizedMsg(request.getRequestInfo(), license, localizationMessages);
+			}
+			if(businessService.equals(businessService_DIRECT_RENEWAL) || businessService.equals(businessService_EDIT_RENEWAL)){
+				String localizationMessages = tlRenewalNotificationUtil.getLocalizationMessages(tenantId, request.getRequestInfo());
+				message = tlRenewalNotificationUtil.getCustomizedMsg(request.getRequestInfo(), license, localizationMessages);
 			}
             if(message==null) continue;
 
@@ -135,10 +175,16 @@ public class TLNotificationService {
     private EventRequest getEventsForTL(TradeLicenseRequest request) {
     	List<Event> events = new ArrayList<>();
         String tenantId = request.getLicenses().get(0).getTenantId();
-        String localizationMessages = util.getLocalizationMessages(tenantId,request.getRequestInfo());
+		String localizationMessages = util.getLocalizationMessages(tenantId,request.getRequestInfo());
         for(TradeLicense license : request.getLicenses()){
+			String message = null;
+			String businessService = license.getBusinessService();
+			if(businessService.equals(businessService_TL))
+            	message = util.getCustomizedMsg(request.getRequestInfo(), license, localizationMessages);
 
-            String message = util.getCustomizedMsg(request.getRequestInfo(), license, localizationMessages);
+			if(businessService.equals(businessService_DIRECT_RENEWAL) || businessService.equals(businessService_EDIT_RENEWAL))
+				message = tlRenewalNotificationUtil.getCustomizedMsg(request.getRequestInfo(), license, localizationMessages);
+
             if(message == null) continue;
             Map<String,String > mobileNumberToOwner = new HashMap<>();
             license.getTradeLicenseDetail().getOwners().forEach(owner -> {
