@@ -170,7 +170,7 @@ public class TLConstants {
 
     public static final String STATUS_PAID  = "PAID";
 
-    public static final String BILL_AMOUNT_JSONPATH = "$.billResponse.Bill[0].totalAmount";
+    public static final String BILL_AMOUNT_JSONPATH = "$.Bill[0].totalAmount";
 
 
     // ACTION_STATUS combinations for notification
