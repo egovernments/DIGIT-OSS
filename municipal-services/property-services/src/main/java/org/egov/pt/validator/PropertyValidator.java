@@ -511,7 +511,7 @@ public class PropertyValidator {
 		if (isUserCitizen) {
 			
 			if (isCriteriaEmpty)
-				criteria.setOwnerIds(Sets.newHashSet(user.getUuid()));
+				criteria.setMobileNumber(user.getMobileNumber());
 			
 			allowedParams = Arrays.asList(configs.getCitizenSearchParams().split(","));
 		}
