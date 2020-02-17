@@ -56,7 +56,7 @@ const LoginForm = ({ handleFieldChange, form, logoUrl,qrCodeURL,enableWhatsApp }
        <Label  color="black" fontSize= "16px" label="Or"/>
        </div>
     </div>
-    <div className="rainmaker-displayInline login-mobile-whatsapp-button"  onClick={()=>{window.location.href="https://api.whatsapp.com/send?phone=919987106368&text=Hello"}} >      
+    <div className="rainmaker-displayInline login-mobile-whatsapp-button"  onClick={()=>{window.location.href="https://api.whatsapp.com/send?phone=918744960111&text=mseva"}} >      
         <Icon action="custom" name="whatsapp" className="login-mobile-whatsapp-icon" />
         <Label bold={true} color="black" fontSize= "14px" label="WHATSAPP_CONTINUE_MOBILE"/>
     </div>
