@@ -136,9 +136,10 @@ const generateNextFinancialYear = state => {
   );
   const currrentFYending = financialYears.filter(item => item.code === currentFY)[0]
     .endingDate;
-  const nextYear = financialYears.filter(item => item.startingDate === currrentFYending)[0]
-    .code;
-  return nextYear;
+
+    const nectYearObject = financialYears.filter(item => item.startingDate === currrentFYending)[0];
+  nectYearObject ? nectYearObject.code : getCurrentFinancialYear();
+
 };
 
 export const updatePFOforSearchResults = async (
@@ -670,7 +671,8 @@ export const getNextFinancialYearForRenewal = async (currentFinancialYear) => {
     const financialYears = get(payload.MdmsRes, "egf-master.FinancialYear");
     const currrentFYending = financialYears.filter(item => item.code === currentFinancialYear)[0]
       .endingDate;
-    return financialYears.filter(item => item.startingDate === currrentFYending)[0].code;
+    const nectYearObject = financialYears.filter(item => item.startingDate === currrentFYending)[0];
+    return nectYearObject ? nectYearObject.code : getCurrentFinancialYear();
   } catch (e) {
     console.log(e.message)
   }

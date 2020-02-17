@@ -1347,6 +1347,11 @@ export const getCurrentFinancialYear = () => {
   return fiscalYr;
 };
 
+export const getnextFinancialYear = (year) => {
+  const nextFY=   year.substring(0, 2) + (parseInt(year.substring(2 ,4)) + 1)  + year.substring(4, 5) + (parseInt(year.substring(5 ,7)) + 1) ;
+   return nextFY;
+ };
+
 export const validateFields = (
   objectJsonPath,
   state,
