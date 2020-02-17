@@ -1504,7 +1504,7 @@
                   "headers": []
                 },
                 {
-                  "id": "totalApplication",
+                  "id": "wstotalCollection",
                   "name": "DSS_WS_TOTAL_CONNECTIONS",
                   "code": "",
                   "chartType": "metric",
