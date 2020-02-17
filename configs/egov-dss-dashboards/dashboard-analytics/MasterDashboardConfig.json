@@ -18,7 +18,7 @@
               "isCollapsible": false,
               "charts": [
                 {
-                  "id": "totalCollection",
+                  "id": "todaysCollection",
                   "name": "DSS_TOTAL_COLLECTION_TODAY",
                   "code": "",
                   "chartType": "",
@@ -309,7 +309,7 @@
               "charts": [
 
                 {
-                  "id": "totalCollection",
+                  "id": "todaysCollection",
                   "name": "DSS_TOTAL_COLLECTION_TODAY",
                   "code": "",
                   "chartType": "metric",
@@ -694,7 +694,7 @@
               "isCollapsible": false,
               "charts": [
                 {
-                  "id": "totalCollection",
+                  "id": "todaysCollection",
                   "name": "DSS_TOTAL_COLLECTION_TODAY",
                   "code": "",
                   "chartType": "metric",
@@ -1823,7 +1823,7 @@
               "label": "DSS_OVERVIEW",
               "charts": [
                 {
-                  "id": "totalCollection",
+                  "id": "todaysCollection",
                   "name": "DSS_TOTAL_COLLECTION_TODAY",
                   "code": "",
                   "chartType": "metric",
@@ -2208,7 +2208,7 @@
               "isCollapsible": false,
               "charts": [
                 {
-                  "id": "totalCollection",
+                  "id": "todaysCollection",
                   "name": "DSS_TOTAL_COLLECTION_TODAY",
                   "code": "",
                   "chartType": "metric",
@@ -2576,7 +2576,7 @@
               "isCollapsible": false,
               "charts": [
                 {
-                  "id": "totalCollection",
+                  "id": "todaysCollection",
                   "name": "DSS_TOTAL_COLLECTION_TODAY",
                   "code": "",
                   "chartType": "",
