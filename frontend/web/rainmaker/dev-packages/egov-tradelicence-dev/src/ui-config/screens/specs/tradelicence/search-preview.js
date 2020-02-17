@@ -291,7 +291,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         uiFramework: "custom-atoms-local",
         moduleName: "egov-tradelicence",
         componentPath: "licenceNoContainer",
-        visible: process.env.REACT_APP_NAME === "Employee" ? true : false,
+        visible: process.env.REACT_APP_NAME === "Employee" &&licenseNumber? true : false,
         props: {
           number: licenseNumber
         }
