@@ -3,7 +3,8 @@ import {
   getCommonCard,
   getCommonTitle,
   getCommonGrayCard,
-  getCommonContainer
+  getCommonContainer,
+  getCommonSubHeader
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import get from "lodash/get";
 import set from "lodash/set";
@@ -56,7 +57,7 @@ let headerSideText = { word1: "", word2: "" };
 
 const searchResults = async (action, state, dispatch, applicationNo) => {
   let queryObject = [
-    { key: "tenantId", value:tenantId },
+    { key: "tenantId", value: tenantId },
     { key: "applicationNumber", value: applicationNumber }
   ];
   let payload = await getSearchResults(queryObject);
@@ -100,14 +101,8 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
   //     )
   //   );
   const WaterData = payload.WaterConnection[0];
-  const fetchFromReceipt = sts !== "pending_payment";
-  createEstimateData(
-    WaterData,
-    "LicensesTemp[0].estimateCardData",
-    dispatch,
-    {},
-    fetchFromReceipt
-  );
+  // const fetchFromReceipt = sts !== "pending_payment";
+  createEstimateData(WaterData, "LicensesTemp[0].estimateCardData", dispatch, {}, {});
   // Fetch Bill and populate estimate card
   // const code = get(
   //   payload,
@@ -269,9 +264,20 @@ const headerrow = getCommonContainer({
 });
 
 const estimate = getCommonGrayCard({
+  header: getCommonSubHeader({ labelKey: "WS_TASK_DETAILS_FEE_ESTIMATE" }),
   estimateSection: getFeesEstimateCard({
-    sourceJsonPath: "LicensesTemp[0].estimateCardData"
-  })
+    sourceJsonPath: "LicensesTemp[0].estimateCardData",
+  }),
+  buttonView: getDialogButton(
+    "VIEW BREAKUP",
+    "WS_PAYMENT_VIEW_BREAKUP",
+    "search-preview"
+  ),
+  buttonAdd: getDialogButton(
+    "ADD REBATE/PENALTY",
+    "WS_PAYMENT_ADD_REBATE_PENALTY",
+    "search-preview"
+  ),
 });
 
 export const reviewConnectionDetails = getReviewConnectionDetails(false);
@@ -307,21 +313,16 @@ const setActionItems = (action, object) => {
 export const taskDetails = getCommonCard({
   title,
   estimate,
-  viewBreakupButton: getDialogButton(
-    "VIEW BREAKUP",
-    "WS_PAYMENT_VIEW_BREAKUP",
-    "search-preview"
-  ),
   reviewConnectionDetails,
   reviewDocumentDetails,
   reviewOwnerDetails
 });
 
-export const summaryScreen = getCommonCard({ 
-  reviewConnectionDetails, 
-  reviewDocumentDetails, 
+export const summaryScreen = getCommonCard({
+  reviewConnectionDetails,
+  reviewDocumentDetails,
   reviewOwnerDetails
- })
+})
 
 const screenConfig = {
   uiFramework: "material-ui",
@@ -420,7 +421,7 @@ const screenConfig = {
           props: {
             dataPath: "WaterConnection",
             moduleName: "NewWS1",
-            updateUrl: "/ws-services/wc/_update" 
+            updateUrl: "/ws-services/wc/_update"
           }
         },
         actionDialog: {

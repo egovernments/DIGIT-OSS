@@ -30,7 +30,7 @@ export const propertyLocationDetailsHeader = getHeader({
 });
 
 export const propertyOwnerDetailsHeader = getHeader({
-  labelKey: "WS_COMMON_OWN_DETAIL"
+  labelKey: "WS_COMMON_PROP_OWN_DETAIL"
 });
 
 export const connectionDetailsHeader = getHeader({
@@ -324,43 +324,64 @@ const propertyOwnerDetails = {
     isReviewPage: true,
     sourceJsonPath: "WaterConnection[0].property.owners",
     prefixSourceJsonPath:
-      "children.cardContent.children.getPropertyDetailsContainer.children",
+      "children.cardContent.children.getpropertyOwnerDetailsContainer.children",
     afterPrefixJsonPath: "children.value.children.key"
   },
   type: "array"
 }
 
-const connectionDetails = getCommonContainer({
-  reviewApplicationType: getLabelWithValue(
-    {
-      labelName: "Apply For",
-      labelKey: "WS_APPLY_FOR"
-    },
-    {
-      jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.applicationType",
-    }
-  ),
-  // reviewOldConsumerNumber: getLabelWithValue(
-  //   {
-  //     labelName: "Old Consumer Number",
-  //     labelKey: "WS_OLD_CONSUMER_NUMBER"
-  //   },
-  //   { jsonPath: "Licenses[0].oldConsumerNumber" }
-  // ),
-  reviewNumberOfTaps: getLabelWithValue(
-    {
-      labelName: "Number Of Taps",
-      labelKey: "WS_CONN_DETAIL_NO_OF_TAPS"
-    },
-    {
-      jsonPath: "WaterConnection[0].noOfTaps",
-    }
-  ),
-  reviewPipeSize: getLabelWithValue(
-    {
-      labelName: "Pipe Size (In Inches)",
-      labelKey: "WS_CONN_DETAIL_PIPE_SIZE"
-    },
-    { jsonPath: "WaterConnection[0].pipeSize"  }
-  ),
-})
+const connectionDetails = {
+  uiFramework: "custom-containers",
+  componentPath: "MultiItem",
+  props: {
+    className: "common-div-css search-preview",
+    scheama: getCommonGrayCard({
+      div4: connectionDetailsHeader,
+      connectionDetailsFeilds: getCommonContainer({
+        taskApplicationType: getLabelWithValue(
+          {
+            labelKey: "WS_APPLY_FOR"
+          },
+          {
+            label: "Water",
+          }
+        ),
+        taskOldConsumerNumber: getLabelWithValue(
+          {
+            labelKey: "WS_TASK_DETAILS_OLD_CONSUMER_NO"
+          },
+          { jsonPath: "WaterConnection[0].oldConnectionNo" }
+        ),
+        taskNumberOfTapsPropsed: getLabelWithValue(
+          {
+            labelKey: "WS_TASK_DETAILS_CONN_DETAIL_NO_OF_TAPS_PROPOSED"
+          },
+          {
+            jsonPath: "WaterConnection[0].proposedTaps",
+          }
+        ),
+        taskPipeSizeProposed: getLabelWithValue(
+          {
+            labelKey: "WS_TASK_DETAILS_CONN_DETAIL_PIPE_SIZE_PROPOSED"
+          },
+          { jsonPath: "WaterConnection[0].proposedPipeSize" }
+        ),
+        // taskNoOfClosets: getLabelWithValue(
+        //   {
+        //     labelName: "No. of water closets proposed",
+        //     labelKey: "WS_TASK_DETAILS_CONN_DETAIL_NO_OF_CLOSETS"
+        //   },
+        //   { jsonPath: "WaterConnection[0].pipeSize" }
+        // ),
+      })
+    }),
+    items: [],
+    hasAddItem: false,
+    isReviewPage: true,
+    sourceJsonPath: "WaterConnection[0]",
+    prefixSourceJsonPath:
+      "children.cardContent.children.getConnectionContainer.children",
+    afterPrefixJsonPath: "children.value.children.key"
+  },
+  type: "array"
+};
