@@ -252,7 +252,9 @@ public class TLRenewalNotificationUtil {
         Calendar cal = Calendar.getInstance();
         cal.setTime(time);
         String day = String.valueOf(cal.get(Calendar.DAY_OF_MONTH));
-        String month = String.valueOf(cal.get(Calendar.MONTH));
+        Integer mon = cal.get(Calendar.MONTH);
+        mon=mon+1;
+        String month = String.valueOf(mon);
         String year = String.valueOf(cal.get(Calendar.YEAR));
         StringBuilder date = new StringBuilder(day);
         date.append("/").append(month).append("/").append(year);

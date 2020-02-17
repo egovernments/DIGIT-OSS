@@ -88,43 +88,6 @@ public class TLNotificationService {
 					}
 				}
 				break;
-
-
-			case businessService_EDIT_RENEWAL:
-				List<SMSRequest> smsRequestsTLRENEWAL = new LinkedList<>();
-				if(null != config.getIsTLRENEWALSMSEnabled()) {
-					if(config.getIsTLRENEWALSMSEnabled()) {
-						enrichSMSRequest(request,smsRequestsTLRENEWAL);
-						if(!CollectionUtils.isEmpty(smsRequestsTLRENEWAL))
-							util.sendSMS(smsRequestsTLRENEWAL,true);
-					}
-				}
-				if(null != config.getIsUserEventsNotificationEnabledForTLRenewal()) {
-					if(config.getIsUserEventsNotificationEnabledForTLRenewal()) {
-						EventRequest eventRequest = getEventsForTL(request);
-						if(null != eventRequest)
-							util.sendEventNotification(eventRequest);
-					}
-				}
-				break;
-
-			case businessService_DIRECT_RENEWAL:
-				List<SMSRequest> smsRequestsTLRENEWALDIRECT = new LinkedList<>();
-				if(null != config.getIsTLRENEWALSMSEnabled()) {
-					if(config.getIsTLRENEWALSMSEnabled()) {
-						enrichSMSRequest(request,smsRequestsTLRENEWALDIRECT);
-						if(!CollectionUtils.isEmpty(smsRequestsTLRENEWALDIRECT))
-							util.sendSMS(smsRequestsTLRENEWALDIRECT,true);
-					}
-				}
-				if(null != config.getIsUserEventsNotificationEnabledForTLRenewal()) {
-					if(config.getIsUserEventsNotificationEnabledForTLRenewal()) {
-						EventRequest eventRequest = getEventsForTL(request);
-						if(null != eventRequest)
-							util.sendEventNotification(eventRequest);
-					}
-				}
-				break;
 		}
     }
 
