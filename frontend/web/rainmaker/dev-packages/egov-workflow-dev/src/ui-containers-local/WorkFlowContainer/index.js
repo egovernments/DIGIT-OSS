@@ -310,10 +310,10 @@ class WorkFlowContainer extends React.Component {
     const businessServiceData = JSON.parse(
       localStorageGet("businessServiceData")
     );    
-    const data = find(businessServiceData, { businessService: moduleName });
+    const data = businessServiceData && businessServiceData.length > 0 ? find(businessServiceData, { businessService: moduleName }) : [];
     // const nextState = data && data.length > 0 find(data.states, { uuid: nextStateUUID });
 
-    const isLastState = data && data.length > 0 ? find(data.states, { uuid: nextStateUUID }).isTerminateState : false;
+    const isLastState = data ? find(data.states, { uuid: nextStateUUID }).isTerminateState : false;
     return isLastState;
   };
 

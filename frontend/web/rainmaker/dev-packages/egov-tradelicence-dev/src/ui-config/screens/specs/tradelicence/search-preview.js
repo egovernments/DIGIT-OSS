@@ -268,6 +268,40 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         false
       );
     }
+    
+    const applicationType = get(
+      state.screenConfiguration.preparedFinalObject,
+      "Licenses[0].applicationType"
+    );
+   
+    const headerrow = getCommonContainer({
+      header: getCommonHeader({
+        labelName: "Trade License Application (2018-2019)",
+        labelKey: applicationType === "RENEWAL"? "TL_TRADE_RENEW_APPLICATION":"TL_TRADE_APPLICATION"
+      }),
+      applicationNumber: {
+        uiFramework: "custom-atoms-local",
+        moduleName: "egov-tradelicence",
+        componentPath: "ApplicationNoContainer",
+        props: {
+          number: applicationNumber
+        }
+      },
+      licenceNumber: {
+        uiFramework: "custom-atoms-local",
+        moduleName: "egov-tradelicence",
+        componentPath: "licenceNoContainer",
+        visible: process.env.REACT_APP_NAME === "Employee" ? true : false,
+        props: {
+          number: licenseNumber
+        }
+      }
+    });
+    set(
+      action.screenConfig,
+      "components.div.children.headerDiv.children.header1.children.headertop",
+      headerrow
+    );
 
  
     const footer = footerReview(
@@ -352,18 +386,6 @@ const setStatusBasedValue = status => {
 };
 
 const headerrow = getCommonContainer({
-  header: getCommonHeader({
-    labelName: "Trade License Application (2018-2019)",
-    labelKey: "TL_TRADE_APPLICATION"
-  }),
-  applicationNumber: {
-    uiFramework: "custom-atoms-local",
-    moduleName: "egov-tradelicence",
-    componentPath: "ApplicationNoContainer",
-    props: {
-      number: applicationNumber
-    }
-  }
 });
 
 const estimate = getCommonGrayCard({
@@ -447,7 +469,9 @@ const screenConfig = {
                 xs: 12,
                 sm: 8
               },
-              ...headerrow
+          
+             ...headerrow
+
             },
             helpSection: {
               uiFramework: "custom-atoms",
