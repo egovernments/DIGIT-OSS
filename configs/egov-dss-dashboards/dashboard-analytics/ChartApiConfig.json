@@ -103,21 +103,21 @@
     "_comment": " "
   },
   "todaysCollection": {
-    "chartName": "DSS_TOTAL_COLLECTION_TODAY",
+    "chartName": "DSS_TOTAL_COLLECTION",
     "queries": [
       {
         "module": "PT",
-        "dateRefField": "",
+        "dateRefField": "dataObject.Bill.billDetails.receiptDate",
         "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\"}",
         "indexName": "dss-collection_v2",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"dataObject.Bill.billDetails.status.keyword\":\"Approved\"}},{\"term\":{\"dataObject.Bill.billDetails.businessService.keyword\":\"PT\"}},{\"range\":{\"dataObject.@timestamp\":{\"gte\":\"now-24h\",\"lte\":\"now\"}}}]}},\"aggs\":{\"Total collection\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.amountPaid\"}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"dataObject.Bill.billDetails.businessService.keyword\":\"PT\"}},{\"term\":{\"dataObject.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.amountPaid\"}}}}}}"
       },
       {
         "module": "TL",
-        "dateRefField": "",
+        "dateRefField": "dataObject.Bill.billDetails.receiptDate",
         "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\"}",
         "indexName": "dss-collection_v2",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"dataObject.Bill.billDetails.status.keyword\":\"Approved\"}},{\"term\":{\"dataObject.Bill.billDetails.businessService.keyword\":\"TL\"}},{\"range\":{\"dataObject.@timestamp\":{\"gte\":\"now-24h\",\"lte\":\"now\"}}}]}},\"aggs\":{\"Total collection\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.amountPaid\"}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}}],\"must\":[{\"term\":{\"dataObject.Bill.billDetails.businessService.keyword\":\"TL\"}},{\"term\":{\"dataObject.Bill.billDetails.status.keyword\":\"Approved\"}}]}},\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.amountPaid\"}}}}}}"
       }
     ],
     "chartType": "metric",
@@ -129,7 +129,6 @@
       "Total Collection"
     ],
     "insight": {
-
     },
     "_comment": " "
   },
