@@ -161,9 +161,6 @@ public class PropertyConfiguration {
 
     // Workflow
 	
-    @Value("${property.workflow.name}")
-    private String propertyRegistryWf;
-	
     @Value("${pt.business.codes}")
     private List<String> businessServiceList;
 
@@ -181,6 +178,12 @@ public class PropertyConfiguration {
 
     @Value("${is.workflow.enabled}")
     private Boolean isWorkflowEnabled;
+    
+    @Value("${property.workflow.name}")
+    private String createPTWfName;
+    
+    @Value("${property.update.workflow.name}")
+    private String updatePTWfName;
     
     @Value("${is.mutation.workflow.enabled}")
     private Boolean isMutationWorkflowEnabled;

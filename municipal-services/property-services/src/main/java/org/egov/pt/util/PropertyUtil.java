@@ -80,7 +80,7 @@ public class PropertyUtil extends CommonUtils {
 			Property property = propertyRequest.getProperty();
 			
 			ProcessInstance process = ProcessInstance.builder()
-				.businessService(configs.getPropertyRegistryWf())
+				.businessService(configs.getCreatePTWfName())
 				.businessId(property.getAcknowldgementNumber())
 				.comment("Payment for property processed")
 				.assignes(getUserForWorkflow(property))
@@ -107,7 +107,7 @@ public class PropertyUtil extends CommonUtils {
 		
 		case CREATE_PROCESS_CONSTANT :
 
-			wf.setBusinessService(configs.getPropertyRegistryWf());
+			wf.setBusinessService(configs.getCreatePTWfName());
 			wf.setModuleName(configs.getPropertyModuleName());
 			wf.setAction("OPEN");
 			break;
