@@ -241,7 +241,23 @@ public class TLRenewalNotificationUtil {
     private String getApprovedMsg(TradeLicense license, BigDecimal amountToBePaid, String message) {
         message = message.replace("<2>", license.getTradeName());
         message = message.replace("<3>", license.getApplicationNumber());
+        String date = epochToDate(license.getValidTo());
+        message = message.replace("<4>", date);
         return message;
+    }
+
+    private String epochToDate(Long validTo){
+        Long timeStamp= validTo / 1000L;
+        java.util.Date time=new java.util.Date((Long)timeStamp*1000);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(time);
+        String day = String.valueOf(cal.get(Calendar.DAY_OF_MONTH));
+        String month = String.valueOf(cal.get(Calendar.MONTH));
+        String year = String.valueOf(cal.get(Calendar.YEAR));
+        StringBuilder date = new StringBuilder(day);
+        date.append("/").append(month).append("/").append(year);
+
+        return date.toString();
     }
 
     /**
@@ -354,7 +370,6 @@ public class TLRenewalNotificationUtil {
         String messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_RENEWAL_PAYMENT_OWNER, localizationMessages);
         messageTemplate = messageTemplate.replace("<2>", valMap.get(amountPaidKey));
         messageTemplate = messageTemplate.replace("<3>", valMap.get(receiptNumberKey));
-        messageTemplate = messageTemplate.replace("<4>", license.getTradeName());
         return messageTemplate;
     }
 
@@ -371,8 +386,6 @@ public class TLRenewalNotificationUtil {
         String messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_RENEWAL_PAYMENT_PAYER, localizationMessages);
         messageTemplate = messageTemplate.replace("<2>", valMap.get(amountPaidKey));
         messageTemplate = messageTemplate.replace("<3>", valMap.get(receiptNumberKey));
-        messageTemplate = messageTemplate.replace("<4>", license.getTradeName());
-
         return messageTemplate;
     }
 
