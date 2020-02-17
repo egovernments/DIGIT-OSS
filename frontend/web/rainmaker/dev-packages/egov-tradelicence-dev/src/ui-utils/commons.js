@@ -138,7 +138,7 @@ const generateNextFinancialYear = state => {
     .endingDate;
 
     const nectYearObject = financialYears.filter(item => item.startingDate === currrentFYending)[0];
-  nectYearObject ? nectYearObject.code : getCurrentFinancialYear();
+  return nectYearObject ? nectYearObject.code : getCurrentFinancialYear();
 
 };
 
