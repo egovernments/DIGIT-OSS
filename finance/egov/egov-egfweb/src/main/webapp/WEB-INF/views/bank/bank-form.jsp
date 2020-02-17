@@ -51,29 +51,29 @@
 		<div class="col-md-12">
 			<div class="panel panel-primary" data-collapsed="0">
 				<div class="panel-heading">
-					<div class="panel-title"><spring:message code="lbl.create.bank" /></div>
+					<div class="panel-title"><spring:message code="lbl.create.bank" text="Create Bank"/></div>
 					<input type="hidden" name="bank" value="${bank.id}" />
 				</div>
 				<div class="panel-body">
 					<div class="form-group">
-						<label class="col-sm-3 control-label text-right"><spring:message code="lbl.name" /> <span class="mandatory"></span> </label>
+						<label class="col-sm-3 control-label text-right"><spring:message code="lbl.name" text="Name"/> <span class="mandatory"></span> </label>
 						<div class="col-sm-3 add-margin">
 							<form:input path="name" class="form-control text-left patternvalidation" data-pattern="alphanumeric" maxlength="50" required="required" />
 							<form:errors path="name" cssClass="error-msg" />
 						</div>
-						<label class="col-sm-2 control-label text-right"><spring:message code="lbl.code" /> <span class="mandatory"></span> </label>
+						<label class="col-sm-2 control-label text-right"><spring:message code="lbl.code"  text="Code"/> <span class="mandatory"></span> </label>
 						<div class="col-sm-3 add-margin">
 							<form:input path="code" class="form-control text-left patternvalidation" data-pattern="alphanumeric" maxlength="50" required="required" />
 							<form:errors path="code" cssClass="error-msg" />
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-sm-3 control-label text-right"><spring:message code="lbl.isactive" /> </label>
+						<label class="col-sm-3 control-label text-right"><spring:message code="lbl.isactive"  text="Active"/> </label>
 						<div class="col-sm-3 add-margin">
 							<form:checkbox path="isactive" />
 							<form:errors path="isactive" cssClass="error-msg" />
 						</div>
-						<label class="col-sm-2 control-label text-right"><spring:message code="lbl.narration" /> </label>
+						<label class="col-sm-2 control-label text-right"><spring:message code="lbl.narration"  text="Narration"/> </label>
 						<div class="col-sm-3 add-margin">
 							<form:textarea path="narration" id="narration" class="form-control" maxlength="250" ></form:textarea>
 							<form:errors path="narration" cssClass="error-msg" />

@@ -1,3 +1,4 @@
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%--
   ~    eGov  SmartCity eGovernance suite aims to improve the internal efficiency,transparency,
   ~    accountability and the service delivery of the government  organizations.
@@ -52,12 +53,12 @@
 		<div class="col-md-12">
 			<div class="panel panel-primary" data-collapsed="0">
 				<div class="panel-heading">
-					<div class="panel-title">Function</div>
+					<div class="panel-title"><spring:message code="lbl.functionid" text="Function"/> </div>
 				</div>
 				<div class="panel-body">
 					<div class="form-group">
 						<label class="col-sm-3 control-label text-right"><spring:message
-								code="lbl.name" /> <span class="mandatory"></span> </label>
+								code="lbl.name" text="Name"/> <span class="mandatory"></span> </label>
 						<div class="col-sm-3 add-margin">
 							<form:input path="name"
 								class="form-control text-left patternvalidation"
@@ -65,7 +66,7 @@
 							<form:errors path="name" cssClass="error-msg" />
 						</div>
 						<label class="col-sm-3 control-label text-right"><spring:message
-								code="lbl.code" /> <span class="mandatory"></span> </label>
+								code="lbl.code" text="Code"/> <span class="mandatory"></span> </label>
 						<div class="col-sm-3 add-margin">
 							<form:input path="code"
 								class="form-control text-left patternvalidation"
@@ -75,7 +76,7 @@
 					</div>
 					<div class="form-group">
 						<label class="col-sm-3 control-label text-right"><spring:message
-								code="lbl.llevel" /> </label>
+								code="lbl.llevel" text="Level"/> </label>
 						<div class="col-sm-3 add-margin">
 							<form:input path="llevel"
 								class="form-control text-right patternvalidation"
@@ -83,7 +84,7 @@
 							<form:errors path="llevel" cssClass="error-msg" />
 						</div>
 						<label class="col-sm-3 control-label text-right"><spring:message
-								code="lbl.isactive" /> </label>
+								code="lbl.isactive" text="Active"/> </label>
 						<div class="col-sm-3 add-margin">
 							<form:checkbox path="isActive" />
 							<form:errors path="isActive" cssClass="error-msg" />
@@ -91,12 +92,12 @@
 					</div>
 					<div class="form-group">
 						<label class="col-sm-3 control-label text-right"><spring:message
-								code="lbl.parentType" /></label>
+								code="lbl.parentType" text="Parent Type"/></label>
 						<div class="col-sm-3 add-margin">
 							<form:select path="parentId" id="parentId"
 								cssClass="form-control" cssErrorClass="form-control error">
 								<form:option value="">
-									<spring:message code="lbl.select" />
+									<spring:message code="lbl.select" text="Select"/>
 								</form:option>
 								<form:options items="${functions}" itemValue="id"
 									itemLabel="name"/>
@@ -106,7 +107,7 @@
 					</div>
 					<div class="form-group">
 						<label class="col-sm-3 control-label text-right"><spring:message
-								code="lbl.isnotleaf" /> </label>
+								code="lbl.isnotleaf" text="Isnotleaf"/> </label>
 						<div class="col-sm-3 add-margin">
 							<form:checkbox path="isNotLeaf" />
 							<form:errors path="isNotLeaf" cssClass="error-msg" />

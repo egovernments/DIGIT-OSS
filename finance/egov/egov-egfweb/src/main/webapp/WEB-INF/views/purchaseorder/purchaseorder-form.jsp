@@ -48,13 +48,13 @@
   
   
 <div class="form-group">
-	<label class="col-sm-2 control-label text-right" for="orderNumber"> <spring:message code="purchaseorder.number" /><span class="mandatory"></span> 
+	<label class="col-sm-2 control-label text-right" for="orderNumber"> <spring:message code="purchaseorder.number" text="Order No"/><span class="mandatory"></span> 
 	</label>
 	<div class="col-sm-3 add-margin">
 		<form:input path="orderNumber" id="orderNumber" maxlength="50" cssClass="form-control patternvalidation" data-pattern="alphaNumericwithspecialcharForContraWOAndSupplierName" required="required"/>
 		<form:errors path="orderNumber" cssClass="add-margin error-msg" />
 	</div>
-	<label class="col-sm-2 control-label text-right" for="orderDate"> <spring:message code="purchaseorder.date" /><span class="mandatory"></span>
+	<label class="col-sm-2 control-label text-right" for="orderDate"> <spring:message code="purchaseorder.date" text="Order Date"/><span class="mandatory"></span>
 	</label>
 	<div class="col-sm-3 add-margin">
 		<form:input path="orderDate" class="form-control datepicker" required="required" id="orderDate"  data-date-end-date="0d" data-inputmask="'mask': 'd/m/y'"/>
@@ -64,7 +64,7 @@
 
 
 <div class="form-group">
-	<label class="col-sm-2 control-label text-right" for="name"> <spring:message code="purchaseorder.name" /><span class="mandatory"></span>
+	<label class="col-sm-2 control-label text-right" for="name"> <spring:message code="purchaseorder.name" text="Order Name"/><span class="mandatory"></span>
 	</label>
 	<div class="col-sm-3 add-margin">
 		<form:input path="name" id="name" maxlength="100" cssClass="form-control patternvalidation" data-pattern="alphabetWithSpecialCharForContraWOAndSupplierName" required="required"/>
@@ -73,12 +73,12 @@
 </div>
 
 <div class="form-group">
-	<label class="col-sm-2 control-label text-right" for="description" > <spring:message code="purchaseorder.description"   /></label>
+	<label class="col-sm-2 control-label text-right" for="description" > <spring:message code="purchaseorder.description" text="Description"/></label>
 	<div class="col-sm-3 add-margin">
 		<form:textarea path="description" id="description" cols="35" cssClass="form-control textfieldsvalidate patternvalidation"  maxlength = "250" />
 		<form:errors path="description" cssClass="add-margin error-msg" />
 	</div>
-	<label class="col-sm-2 control-label text-right" for="active"> <spring:message code="purchaseorder.active" />
+	<label class="col-sm-2 control-label text-right" for="active"> <spring:message code="purchaseorder.active" text="Active Y/N"/>
 	</label>
 	<div class="col-sm-3 add-margin">
 		<form:checkbox path="active" checked="checked"/>
@@ -87,12 +87,12 @@
 </div>
 
 <div class="form-group">
-	<label class="col-sm-2 control-label text-right" for="supplier"> <spring:message code="purchaseorder.supplier" /><span class="mandatory"></span> 
+	<label class="col-sm-2 control-label text-right" for="supplier"> <spring:message code="purchaseorder.supplier" text="Supplier Name"/><span class="mandatory"></span> 
 	</label>
 	<div class="col-sm-3 add-margin contactPerson"> 
 		<form:hidden path="" name="supplierId" id="supplierId" value="${purchaseOrder.supplier.id }"/>
 		<form:select path="supplier" data-first-option="false" id="supplier" class="form-control" required="required" value="${purchaseOrder.supplier.id}" >
-			<form:option value=""><spring:message code="lbl.select" /></form:option>
+			<form:option value=""><spring:message code="lbl.select" text="Select"/></form:option>
 			<c:forEach var="supplier" items="${suppliers}">
 				<form:option  value="${supplier.id}" >
 					<c:out value="${supplier.name} - ${supplier.code}"/>
@@ -101,7 +101,7 @@
 		</form:select>
 		<form:errors path="supplier" cssClass="add-margin error-msg" />
 	</div>
-	<label class="col-sm-2 control-label text-right" for="suppliercode"> <spring:message code="purchaseorder.suppliercode" />
+	<label class="col-sm-2 control-label text-right" for="suppliercode"> <spring:message code="purchaseorder.suppliercode" text="Supplier Code"/>
 	</label>
 	<div class="col-sm-3 add-margin">
 		<form:input path="" id="suppliercode" maxlength="100" disabled="true" cssClass="form-control"/>
@@ -109,13 +109,13 @@
 </div>
 
 <div class="form-group">
-	<label class="col-sm-2 control-label text-right" for="orderValue"> <spring:message code="purchaseorder.ordervalue" /><span class="mandatory"></span> 
+	<label class="col-sm-2 control-label text-right" for="orderValue"> <spring:message code="purchaseorder.ordervalue" text="Total/Order Value"/><span class="mandatory"></span> 
 	</label>
 	<div class="col-sm-3 add-margin">
 		<form:input path="orderValue" id="orderValue" cssClass="form-control patternvalidation" data-pattern="decimalvalue" required="required" />
 		<form:errors path="orderValue" cssClass="add-margin error-msg" />
 	</div>
-	<label class="col-sm-2 control-label text-right" for="advancePayable"> <spring:message code="purchaseorder.advancepayable" />
+	<label class="col-sm-2 control-label text-right" for="advancePayable"> <spring:message code="purchaseorder.advancepayable" text="Advance Payable"/>
 	</label>
 	<div class="col-sm-3 add-margin">
 		<form:input path="advancePayable" id="advancePayable" cssClass="form-control patternvalidation" data-pattern="decimalvalue" />
@@ -124,20 +124,20 @@
 </div>
 
 <div class="form-group">
-	<label class="col-sm-2 control-label text-right" for="fund"> <spring:message code="purchaseorder.fund" /><span class="mandatory"></span> 
+	<label class="col-sm-2 control-label text-right" for="fund"> <spring:message code="purchaseorder.fund" text="Fund"/><span class="mandatory"></span> 
 	</label>
 	<div class="col-sm-3 add-margin">
 		<form:select path="fund.id" data-first-option="false" id="fund" class="form-control" required="required" >
-			<form:option value=""><spring:message code="lbl.select" /></form:option>
+			<form:option value=""><spring:message code="lbl.select" text="Select"/></form:option>
 			<form:options items="${funds}" itemValue="id" itemLabel="name" />
 		</form:select>
 		<form:errors path="fund.id" cssClass="add-margin error-msg" />
 	</div>
-	<label class="col-sm-2 control-label text-right" for="department"> <spring:message code="purchaseorder.department" /><span class="mandatory"></span> 
+	<label class="col-sm-2 control-label text-right" for="department"> <spring:message code="purchaseorder.department" text="Department"/><span class="mandatory"></span> 
 	</label>
 	<div class="col-sm-3 add-margin">
 		<form:select path="department" data-first-option="false" id="department" class="form-control"  required="required">
-			<form:option value=""><spring:message code="lbl.select" /></form:option>
+			<form:option value=""><spring:message code="lbl.select" text="Select"/></form:option>
 			<form:options items="${departments}" itemValue="code" itemLabel="name" />
 		</form:select>
 		<form:errors path="department" cssClass="add-margin error-msg" />
@@ -145,34 +145,34 @@
 </div>
 
 <div class="form-group">
-	<label class="col-sm-2 control-label text-right" for="scheme"> <spring:message code="purchaseorder.scheme" />
+	<label class="col-sm-2 control-label text-right" for="scheme"> <spring:message code="purchaseorder.scheme" text="Scheme"/>
 	</label>
 	<div class="col-sm-3 add-margin">
 		<form:hidden path="" name="schemeId" id="schemeId" value="${purchaseOrder.scheme.id }"/>
 		<form:select path="scheme.id" data-first-option="false" id="scheme" class="form-control"  value="${purchaseOrder.scheme.id}">
-			<form:option value=""><spring:message code="lbl.select" /></form:option>
+			<form:option value=""><spring:message code="lbl.select" text=""/></form:option>
 		</form:select>
 		<form:errors path="scheme.id" cssClass="add-margin error-msg" />
 	</div>
-	<label class="col-sm-2 control-label text-right" for="subScheme"> <spring:message code="purchaseorder.subscheme" />
+	<label class="col-sm-2 control-label text-right" for="subScheme"> <spring:message code="purchaseorder.subscheme" text="Sub Scheme"/>
 	</label>
 	<div class="col-sm-3 add-margin">
 		<form:hidden path="" name="subSchemeId" id="subSchemeId" value="${purchaseOrder.subScheme.id }"/>
 		<form:select path="subScheme.id" data-first-option="false" id="subScheme" class="form-control" value="${purchaseOrder.subScheme.id}">
-			<form:option value=""><spring:message code="lbl.select" /></form:option>
+			<form:option value=""><spring:message code="lbl.select" text="Select"/></form:option>
 		</form:select>
 		<form:errors path="subScheme.id" cssClass="add-margin error-msg" />
 	</div>
 </div>
 
 <div class="form-group">
-	<label class="col-sm-2 control-label text-right" for="sanctionNumber"> <spring:message code="purchaseorder.sanctionnumber" />
+	<label class="col-sm-2 control-label text-right" for="sanctionNumber"> <spring:message code="purchaseorder.sanctionnumber" text="Sanction No"/>
 	</label>
 	<div class="col-sm-3 add-margin">
 		<form:input path="sanctionNumber" id="sanctionNumber" maxlength="50" cssClass="form-control patternvalidation" data-pattern="alphanumericwithspace" />
 		<form:errors path="sanctionNumber" cssClass="add-margin error-msg" />
 	</div>
-	<label class="col-sm-2 control-label text-right" for="sanctionDate"> <spring:message code="purchaseorder.sanctiondate" />
+	<label class="col-sm-2 control-label text-right" for="sanctionDate"> <spring:message code="purchaseorder.sanctiondate" text="Sanction Date"/>
 	</label>
 	<div class="col-sm-3 add-margin">
 		<form:input path="sanctionDate" class="form-control datepicker" id="sanctionDate"  data-date-end-date="0d" data-inputmask="'mask': 'd/m/y'"/>

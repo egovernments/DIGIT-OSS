@@ -93,7 +93,7 @@
 							*</span></td>
 					<td class="bluebox"><s:select list="dropdownData.fundList"
 							id="fundId" listKey="id" listValue="name" name="fundId"
-							headerKey="0" headerValue="---- Choose ----"
+							headerKey="0" headerValue="%{getText('lbl.choose.options')}"
 							onchange="loadScheme(this)"></s:select> <egov:ajaxdropdown
 							id="schemeId" dropdownId="schemeId" fields="['Text','Value']"
 							url="voucher/common-ajaxLoadSchemes.action" selectedValue="%{id}" />
@@ -103,7 +103,7 @@
 
 					<td class="bluebox"><s:select name="schemeId" id="schemeId"
 							list="dropdownData.schemeList" headerKey="-1"
-							headerValue="---- Choose ----" listKey="id" listValue="name"
+							headerValue="%{getText('lbl.choose.options')}" listKey="id" listValue="name"
 							onchange="loadSubScheme(this)" /></td>
 					<egov:ajaxdropdown id="subSchemeId" dropdownId="subSchemeId"
 						fields="['Text','Value']"
@@ -116,7 +116,7 @@
 					</td>
 					<td class="greybox"><s:select name="subScheme.id"
 							id="subSchemeId" list="dropdownData.subSchemeList" headerKey="-1"
-							headerValue="---- Choose ----" listKey="id" listValue="name" />
+							headerValue="%{getText('lbl.choose.options')}" listKey="id" listValue="name" />
 					</td>
 					<td class="greybox">&nbsp</td>
 					<td class="greybox">&nbsp</td>
@@ -132,9 +132,9 @@
 	</div>
 
 	<div class="buttonbottom">
-		<input type="submit" class="buttonsubmit" value="Search"
+		<input type="submit" class="buttonsubmit" value="<s:text name='lbl.search'/>"
 			id="saveButton" name="button" onclick="return submitForm();" /> <input
-			type="button" id="Close" value="Close"
+			type="button" id="Close" value="<s:text name='lbl.close'/>"
 			onclick="javascript:window.parent.postMessage('close','*');window.close();" class="button" />
 	</div>
 
@@ -196,7 +196,7 @@
 		<div id="msgdiv" style="display: block">
 			<table align="center" class="tablebottom" width="80%">
 				<tr>
-					<th class="bluebgheadtd" colspan="7">No Records Found
+					<th class="bluebgheadtd" colspan="7"><s:text name="msg.no.record.found"/>
 					</td>
 				</tr>
 			</table>
@@ -239,7 +239,7 @@
 	    function submitForm(){
 		    if(document.getElementById("fundId").value==0)
 			    {
-		    	bootbox.alert("Please select Fund");
+		    	bootbox.alert("<s:text name='msg.please.select.fund'/>");
 				return false;
 			    }
 	    	document.subSchemeForm.action='/services/EGF/masters/subScheme-search.action';

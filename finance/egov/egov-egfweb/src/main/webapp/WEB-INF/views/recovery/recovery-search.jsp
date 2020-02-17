@@ -58,17 +58,17 @@
 			<div class="col-md-12">
 				<div class="panel panel-primary" data-collapsed="0">
 					<div class="panel-heading" align="center">
-						<div class="panel-title" align="center">Search Deductions</div>
+						<div class="panel-title" align="center"><spring:message code="lbl.search.deductions" text="Search Deductions"/> </div>
 					</div>
 					<div class="panel-body">
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-left"><spring:message
-									code="lbl.chartofaccounts" /> </label>
+									code="lbl.chartofaccounts" text="Account Code"/> </label>
 							<div class="col-sm-3">
 								<form:select path="chartofaccounts.id" id="chartofaccounts.id"
 									cssClass="form-control" cssErrorClass="form-control error">
 									<form:option value="">
-										<spring:message code="lbl.select" />
+										<spring:message code="lbl.select" text="Select"/>
 									</form:option>
 									<c:forEach var="chartOfAccounts" items="${chartOfAccounts}">
 										<option value="${chartOfAccounts.id}">${chartOfAccounts.glcode}
@@ -78,7 +78,7 @@
 								<form:errors path="chartofaccounts" cssClass="error-msg" />
 							</div>
 							<label class="col-sm-2 control-label text-left"><spring:message
-									code="lbl.deductions.code" /> </label>
+									code="lbl.deductions.code" text="Deduction Code"/> </label>
 							<div class="col-sm-3 add-margin">
 								<form:input path="type" id="type" cssClass="form-control" cssErrorClass="form-control error"/>
 								<form:errors path="type" cssClass="error-msg" />
@@ -87,7 +87,7 @@
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-left"><spring:message
-									code="lbl.deductions.name" /> </label>
+									code="lbl.deductions.name" text="Deduction Name"/> </label>
 							<div class="col-sm-3 add-margin">
 								<form:input path="recoveryName" id="recoveryName" cssClass="form-control" cssErrorClass="form-control error"/>
 								<form:errors path="recoveryName" cssClass="error-msg" />
@@ -98,10 +98,10 @@
 						<div class="form-group">
 							<div class="text-center">
 								<button type='button' class='btn btn-primary' id="btnsearch">
-									<spring:message code='lbl.search' />
+									<spring:message code='lbl.search' text="Search"/>
 								</button>
 								<a href='javascript:void(0)' class='btn btn-default'
-									onclick="javascript:window.parent.postMessage('close','*');"><spring:message code='lbl.close' /></a>
+									onclick="javascript:window.parent.postMessage('close','*');"><spring:message code='lbl.close' text="Close"/></a>
 							</div>
 						</div>
 					</div>
@@ -111,21 +111,20 @@
 	</div>
 </form:form>
 <div class="row display-hide report-section">
-	<div class="col-md-12 table-header text-left">Deductions Search
-		Result</div>
+	<div class="col-md-12 table-header text-left"><spring:message code="lbl.deductions.search.result" text="Deductions Search Result"/></div>
 	<div class="col-md-12 form-group report-table-container">
 		<table class="table table-bordered table-hover multiheadertbl"
 			id="resultTable">
 			<thead>
 				<tr>
-					<th><spring:message code="lbl.recoverycode" /></th>
-					<th><spring:message code="lbl.recoveryname" /></th>
-					<th><spring:message code="lbl.subledgertype" /></th>
-					<th><spring:message code="lbl.chartofaccounts" /></th>
-					<th><spring:message code="lbl.remitted" /></th>
-					<th><spring:message code="lbl.ifsccode" /></th>
-					<th><spring:message code="lbl.accountnumber" /></th>
-					<th><spring:message code="lbl.isactive" /></th>
+					<th><spring:message code="lbl.recoverycode" text="Deductions Code"/></th>
+					<th><spring:message code="lbl.recoveryname" text="Deductions Name"/></th>
+					<th><spring:message code="lbl.subledgertype" text="SubLedger Type"/></th>
+					<th><spring:message code="lbl.chartofaccounts" text="Account Code"/></th>
+					<th><spring:message code="lbl.remitted" text="Remitted To"/></th>
+					<th><spring:message code="lbl.ifsccode" text="IFSC Code"/></th>
+					<th><spring:message code="lbl.accountnumber" text="Account Number"/></th>
+					<th><spring:message code="lbl.isactive" text="Active"/></th>
 				</tr>
 			</thead>
 		</table>

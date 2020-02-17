@@ -55,14 +55,14 @@
 		<div class="col-md-12">
 			<div class="panel panel-primary" data-collapsed="0">
 				<div class="panel-heading control-label">
-					 <div class="panel-title"><spring:message code="title.supplier.create" /></div>
+					 <div class="panel-title"><spring:message code="title.supplier.create" text="Supplier Master"/></div>
 				</div>
 			    <%@ include file="supplier-form.jsp"%>
 			    <div class="form-group">
 			      <div class="text-center">
-			        <button type='submit' class='btn btn-primary' id="buttonSubmit"> <spring:message code='lbl.create' /> </button>
-			        <input type="button" class="btn btn-default" value="Clear" id="button" name="clear" onclick="this.form.reset();">&nbsp;
-			        <a href='javascript:void(0)' class='btn btn-default' onclick="javascript:window.parent.postMessage('close','*');"><spring:message code='lbl.close' /></a>
+			        <button type='submit' class='btn btn-primary' id="buttonSubmit"> <spring:message code='lbl.create' text="Create"/> </button>
+			        <input type="button" class="btn btn-default" value='<spring:message code='lbl.clear' text="Clear"/>' id="button" name="clear" onclick="this.form.reset();">&nbsp;
+			        <a href='javascript:void(0)' class='btn btn-default' onclick="javascript:window.parent.postMessage('close','*');"><spring:message code='lbl.close' text="Close"/></a>
 			      </div>
 			    </div>
 		    </div>

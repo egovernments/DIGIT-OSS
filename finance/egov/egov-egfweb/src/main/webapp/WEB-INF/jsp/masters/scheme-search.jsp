@@ -66,13 +66,13 @@
 		
 
 		if(fundId == "-1"){
-			bootbox.alert("Please select fund");
+			bootbox.alert("<s:text name='msg.please.select.fund'/>");
 			return false;
 			}
 		
 		 
 		if(!validateDate(fromDate)){
-			bootbox.alert("Invalid Date! Start date is greater than current date");
+			bootbox.alert("<s:text name='msg.start.date.is.greater.than.current.date'/>");
 			return false;
 		}
 		var fdateParts=	fromDate.split("/");
@@ -80,7 +80,7 @@
 		var fdate=new Date(fdateParts[1]+"/"+fdateParts[0]+"/"+fdateParts[2]);
 		var tdate=new Date(tdateParts[1]+"/"+tdateParts[0]+"/"+tdateParts[2]);
 		if (fdate > tdate) {
-			bootbox.alert("Invalid Date Range! Start Date should be less than End Date!")
+			bootbox.alert("<s:text name='msg.start.date.should.be.less.than.end.date'/>")
 			return false;
 			} 
 
@@ -128,7 +128,7 @@
 						class="mandatory1"> *</span></td>
 					<td class="bluebox"><s:select name="fund" id="fundId"
 							list="dropdownData.fundDropDownList" listKey="id"
-							listValue="name" headerKey="-1" headerValue="----Select----"
+							listValue="name" headerKey="-1" headerValue="%{getText('lbl.choose.options')}"
 							value="scheme.fund.id" /></td>
 				</tr>
 				<tr>
@@ -160,9 +160,9 @@
 		<div class="buttonbottom">
 			<table align="center">
 				<tr>
-					<td><input type="submit" class="buttonsubmit" value="Search"
+					<td><input type="submit" class="buttonsubmit" value="<s:text name='lbl.search'/>"
 						id="search" name="button" onclick="return validateAndSubmit();" />&nbsp;</td>
-					<td><input type="button" id="Close" value="Close"
+					<td><input type="button" id="Close" value="<s:text name='lbl.close'/>"
 						onclick="javascript:window.parent.postMessage('close','*');window.close();" class="button" /></td>
 			</table>
 		</div>
@@ -172,17 +172,17 @@
 				cellspacing="0" class="setborder" style="border-collapse: inherit;">
 				<tr>
 					<th class="bluebgheadtd" style="width: 2%; text-align: center"
-						align="center">Sl No.</th>
+						align="center"><s:text name="lbl.sl.no"/></th>
 					<th class="bluebgheadtd" style="width: 4%; text-align: center"
-						align="center">Scheme Code</th>
+						align="center"><s:text name="lbl.scheme.code"/></th>
 					<th class="bluebgheadtd" style="width: 8%; text-align: center"
-						align="center">Scheme Name</th>
+						align="center"><s:text name="lbl.scheme.name"/></th>
 					<th class="bluebgheadtd" style="width: 2%; text-align: center"
-						align="center">Start Date</th>
+						align="center"><s:text name="scheme.startDate"/></th>
 					<th class="bluebgheadtd" style="width: 4%; text-align: center"
-						align="center">End Date</th>
+						align="center"><s:text name="scheme.endDate"/></th>
 					<th class="bluebgheadtd" style="width: 4%; text-align: center"
-						align="center">Active Y/N</th>
+						align="center"><s:text name="lbl.isactive"/></th>
 				</tr>
 				<c:set var="trclass" value="greybox" />
 				<s:iterator var="scheme" value="schemeList" status="f">
@@ -202,8 +202,8 @@
 						<td class="<c:out value="${trclass}"/>" style="text-align: center"
 							align="center"><s:date name="%{validto}" format="dd/MM/yyyy" /></td>
 						<td class="<c:out value="${trclass}"/>" style="text-align: center"
-							align="center"><s:if test="%{isactive==true}">Yes</s:if>
-						<s:else>No</s:else></td>
+							align="center"><s:if test="%{isactive==true}"><s:text name="lbl.yes"/></s:if>
+						<s:else><s:text name="lbl.no"/></s:else></td>
 						<c:choose>
 							<c:when test="${trclass=='greybox'}">
 								<c:set var="trclass" value="bluebox" />
@@ -222,7 +222,7 @@
 			<div id="msgdiv" style="display: block">
 				<table align="center" class="tablebottom" width="80%">
 					<tr>
-						<th class="bluebgheadtd" colspan="7">No Records Found
+						<th class="bluebgheadtd" colspan="7"><s:text name="no.records.found"/>
 						</td>
 					</tr>
 				</table>

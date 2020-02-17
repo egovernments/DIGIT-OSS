@@ -47,7 +47,7 @@
   --%>
   
 <div class="form-group">
-	<label class="col-sm-2 control-label text-right" for="name"> <spring:message code="workorder.name" /><span class="mandatory"></span>
+	<label class="col-sm-2 control-label text-right" for="name"> <spring:message code="workorder.name" text="Order Name"/><span class="mandatory"></span>
 	</label>
 	<div class="col-sm-3 add-margin">
 		<form:input path="name" id="name" maxlength="100" cssClass="form-control patternvalidation" data-pattern="alphabetwithspace" required="required"/>
@@ -56,12 +56,12 @@
 </div>
 
 <div class="form-group">
-	<label class="col-sm-2 control-label text-right" for="description" > <spring:message code="workorder.description"   /></label>
+	<label class="col-sm-2 control-label text-right" for="description" > <spring:message code="workorder.description"  text="Description" /></label>
 	<div class="col-sm-3 add-margin">
 		<form:textarea path="description" id="description" cols="35" cssClass="form-control textfieldsvalidate patternvalidation"  maxlength = "250" />
 		<form:errors path="description" cssClass="add-margin error-msg" />
 	</div>
-	<label class="col-sm-2 control-label text-right" for="active"> <spring:message code="workorder.active" />
+	<label class="col-sm-2 control-label text-right" for="active"> <spring:message code="workorder.active" text="Active Y/N"/>
 	</label>
 	<div class="col-sm-3 add-margin">
 		<form:checkbox path="active" />
@@ -70,13 +70,13 @@
 </div>
 
 <div class="form-group">
-	<label class="col-sm-2 control-label text-right" for="sanctionNumber"> <spring:message code="workorder.sanctionnumber" />
+	<label class="col-sm-2 control-label text-right" for="sanctionNumber"> <spring:message code="workorder.sanctionnumber" text="Sanction No."/>
 	</label>
 	<div class="col-sm-3 add-margin">
 		<form:input path="sanctionNumber" id="sanctionNumber" maxlength="50" cssClass="form-control patternvalidation" data-pattern="alphanumericwithspace" />
 		<form:errors path="sanctionNumber" cssClass="add-margin error-msg" />
 	</div>
-	<label class="col-sm-2 control-label text-right" for="sanctionDate"> <spring:message code="workorder.sanctiondate" />
+	<label class="col-sm-2 control-label text-right" for="sanctionDate"> <spring:message code="workorder.sanctiondate" text="Sanction Date"/>
 	</label>
 	<div class="col-sm-3 add-margin">
 		<form:input path="sanctionDate" class="form-control datepicker" id="sanctionDate"  data-date-end-date="0d" data-inputmask="'mask': 'd/m/y'"/>

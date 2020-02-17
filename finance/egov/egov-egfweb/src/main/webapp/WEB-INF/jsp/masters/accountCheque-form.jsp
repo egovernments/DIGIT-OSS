@@ -49,17 +49,17 @@
 <table border="0" width="100%">
 	<tr>
 		<td class="greybox"></td>
-		<td class="greybox">Fund <span class="mandatory1">*</span></td>
+		<td class="greybox"><s:text name='lbl.fund'/> <span class="mandatory1">*</span></td>
 		<td class="greybox"><s:select name="fundId" id="fundId"
 				list="dropdownData.fundList" listKey="id" listValue="name"
-				headerKey="-1" headerValue="----Choose----"
+				headerKey="-1" headerValue="%{getText('lbl.choose.options')}"
 				onChange="loadBank(this);" /></td>
 		<egov:ajaxdropdown id="bankbranchId" fields="['Text','Value']"
 			dropdownId="bankbranchId" url="voucher/common-ajaxLoadBanks.action" />
-		<td class="greybox">Bank <span class="mandatory1">*</span></td>
+		<td class="greybox"><s:text name='lbl.bank'/> <span class="mandatory1">*</span></td>
 		<td class="greybox"><s:select name="bankbranchId"
 				id="bankbranchId" list="dropdownData.bankList" listKey="id"
-				listValue="name" headerKey="-1" headerValue="----Choose----"
+				listValue="name" headerKey="-1" headerValue="%{getText('lbl.choose.options')}"
 				onChange="loadBankAccount(this);" /></td>
 	</tr>
 	<tr>
@@ -67,14 +67,14 @@
 		<egov:ajaxdropdown id="bankAccId" fields="['Text','Value']"
 			dropdownId="bankAccId"
 			url="voucher/common-ajaxLoadBankAccounts.action" />
-		<td class="bluebox">Account Number <span class="mandatory1">*</span></td>
+		<td class="bluebox"><s:text name='lbl.account.number'/><span class="mandatory1">*</span></td>
 		<td class="bluebox"><s:select name="bankAccId" id="bankAccId"
 				list="dropdownData.accNumList" listKey="id" listValue="name"
-				headerKey="-1" headerValue="----Choose----" /></td>
-		<td class="greybox">Financial Year <span class="mandatory1">*</span></td>
+				headerKey="-1" headerValue="%{getText('lbl.choose.options')}" /></td>
+		<td class="greybox"><s:text name='lbl.financial.year'/><span class="mandatory1">*</span></td>
 		<td class="greybox"><s:select name="financialYearId" id="financialYearId"
 				list="dropdownData.financialYearList" listKey="id" listValue="finYearRange"
-				headerKey="-1" headerValue="----Choose----"/></td>
+				headerKey="-1" headerValue="%{getText('lbl.choose.options')}"/></td>
 
 	</tr>
 </table>
@@ -120,20 +120,20 @@
 	function validate() {
 		if (document.getElementById("fundId").value == -1) {
 
-			document.getElementById("lblError").innerHTML = "Please select fund";
+			document.getElementById("lblError").innerHTML = "<s:text name='msg.please.select.fund'/>";
 			return false;
 		} else if (document.getElementById("bankbranchId").value == -1) {
 
-			document.getElementById("lblError").innerHTML = "Please select bank";
+			document.getElementById("lblError").innerHTML = "<s:text name='msg.please.select.bank'/>";
 			return false;
 		} else if (document.getElementById("bankAccId").value == -1) {
 
-			document.getElementById("lblError").innerHTML = "Please select bank account number";
+			document.getElementById("lblError").innerHTML = "<s:text name='msg.please.select.bank.account.number'/>";
 			return false;
 		}
 		else if (document.getElementById("financialYearId").value == -1) {
 
-			document.getElementById("lblError").innerHTML = "Please select financial year";
+			document.getElementById("lblError").innerHTML = "<s:text name='msg.please.select.financial.year'/>";
 			return false;
 		}
 	}

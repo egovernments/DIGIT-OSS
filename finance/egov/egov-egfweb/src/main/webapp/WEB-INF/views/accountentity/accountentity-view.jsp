@@ -54,32 +54,32 @@
 		<div class="col-md-12">
 			<div class="panel panel-primary" data-collapsed="0">
 				<div class="panel-heading">
-					<div class="panel-title">User Defined Code</div>
+					<div class="panel-title"><spring:message code="lbl.user.defined.code" text=" User Defined Code"/></div>
 				</div>
 				<div class="panel-body custom">
 					<div class="row add-border">
 						<div class="col-xs-3 add-margin">
-							<spring:message code="lbl.accountdetailtype" />
+							<spring:message code="lbl.accountdetailtype" text="Account detail type"/>
 						</div>
 						<div class="col-sm-3 add-margin view-content">${accountEntity.accountdetailtype.name}</div>
 						<div class="col-xs-3 add-margin">
-							<spring:message code="lbl.name" />
+							<spring:message code="lbl.name" text="Name"/>
 						</div>
 						<div class="col-sm-3 add-margin view-content">${accountEntity.name}</div>
 					</div>
 					<div class="row add-border">
 						<div class="col-xs-3 add-margin">
-							<spring:message code="lbl.code" />
+							<spring:message code="lbl.code" text="Code"/>
 						</div>
 						<div class="col-sm-3 add-margin view-content">${accountEntity.code}</div>
 						<div class="col-xs-3 add-margin">
-							<spring:message code="lbl.narration" />
+							<spring:message code="lbl.narration" text="Narration"/>
 						</div>
 						<div class="col-sm-3 add-margin view-content">${accountEntity.narration}</div>
 					</div>
 					<div class="row add-border">
 						<div class="col-xs-3 add-margin">
-							<spring:message code="lbl.isactive" />
+							<spring:message code="lbl.isactive" text="Active"/>
 						</div>
 						<div class="col-sm-3 add-margin view-content">${accountEntity.isactive}</div>
 					</div>
@@ -92,10 +92,10 @@
 <div class="row text-center">
 	<div class="add-margin">
 	<c:if test="${mode == 'view'}">
-		<a href="javascript:void(0)" class="btn btn-default" onclick="self.close()">Close</a>
+		<a href="javascript:void(0)" class="btn btn-default" onclick="self.close()"><spring:message code='lbl.close' text="Close"/></a>
 	</c:if>
 	<c:if test="${mode == 'create'}">
-		<a href="javascript:void(0)" class="btn btn-default" onclick="javascript:window.parent.postMessage('close','*');">Close</a>
+		<a href="javascript:void(0)" class="btn btn-default" onclick="javascript:window.parent.postMessage('close','*');"><spring:message code='lbl.close' text="Close"/></a>
 	</c:if>			
 	</div>
 </div>

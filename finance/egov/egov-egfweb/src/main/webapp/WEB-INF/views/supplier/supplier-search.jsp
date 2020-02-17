@@ -57,18 +57,18 @@
       <div class="col-md-12">
         <div class="panel panel-primary" data-collapsed="0">
           <div class="panel-heading">
-            <div class="panel-title">Search Supplier</div>
+            <div class="panel-title"><spring:message code="title.supplier.search" text="Search Supplier"/> </div>
           </div>
           <div class="panel-body">
           <input type="hidden" id="mode" name="mode" value="${mode}" />
              <div class="form-group">
-	           	 <label class="col-sm-3 control-label text-right"><spring:message code="lbl.name" /> </label>
+	           	 <label class="col-sm-3 control-label text-right"><spring:message code="lbl.name" text="Name"/> </label>
 	              <div class="col-sm-3 add-margin">
 	                <form:input path="name" class="form-control text-left patternvalidation" data-pattern="alphanumeric"
 	                  maxlength="50" />
 	                <form:errors path="name" cssClass="error-msg" />
 	              </div>
-	              <label class="col-sm-3 control-label text-right"><spring:message code="lbl.code" /> </label>
+	              <label class="col-sm-3 control-label text-right"><spring:message code="lbl.code" text="Code"/> </label>
 	              <div class="col-sm-3 add-margin">
 	                <form:input path="code" class="form-control text-left patternvalidation" data-pattern="alphanumeric"
 	                  maxlength="50" />
@@ -78,10 +78,10 @@
             <div class="form-group">
               <div class="text-center">
                 <button type='button' class='btn btn-primary' id="btnsearch">
-                  <spring:message code='lbl.search' />
+                  <spring:message code='lbl.search' text="Search"/>
                 </button>
                 <a href='javascript:void(0)' class='btn btn-default' onclick="javascript:window.parent.postMessage('close','*');"><spring:message
-                    code='lbl.close' /></a>
+                    code='lbl.close' text="Close"/></a>
               </div>
             </div>
           </div>

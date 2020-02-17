@@ -60,23 +60,23 @@
 <script type="text/javascript">
 		function validate(){
 			if(document.getElementById('name').value == null || document.getElementById('name').value==''){
-				bootbox.alert("Please enter Name");
+				bootbox.alert("<s:text name='msg.please.enter.name'/>");
 				return false;
 			}
 			if(document.getElementById('code').value == null || document.getElementById('code').value==''){
-				bootbox.alert("Please enter Code");
+				bootbox.alert("<s:text name='subscheme.code.mandatory'/>");
 				return false;
 			}
 			if(document.getElementById('validfrom').value == null || document.getElementById('validfrom').value==''){
-				bootbox.alert("Please enter Valid From Date");
+				bootbox.alert("<s:text name='subscheme.validfrom.mandatory'/>");
 				return false;
 			}
 			if(document.getElementById('validto').value == null || document.getElementById('validto').value==''){
-				bootbox.alert("Please enter Valid To Date");
+				bootbox.alert("<s:text name='subscheme.validto.mandatory'/>");
 				return false;
 			}
 			if(isNaN(document.getElementById('initialEstimateAmount').value)){
-				bootbox.alert("Please enter valid Initial Eastimate Amount");
+				bootbox.alert("<s:text name='msg.please.enter.valid.initial.estimate.date'/>");
 				return false;
 			}
 			document.getElementById("scheme").disabled  = false;
@@ -134,7 +134,7 @@
 	<div class="buttonbottom" style="padding-bottom: 10px;">
 
 
-		<input type="button" id="Close" value="Close"
+		<input type="button" id="Close" value="<s:text name='lbl.close'/>"
 			onclick="javascript:window.close()" class="button" />
 	</div>
 	<script>

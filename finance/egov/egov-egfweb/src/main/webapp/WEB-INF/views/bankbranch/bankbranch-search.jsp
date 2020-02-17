@@ -56,66 +56,66 @@
 			<div class="panel panel-primary" data-collapsed="0">
 				<div class="panel-heading">
 					<div class="panel-title">
-						<spring:message code="lbl.search.bankbranch" />
+						<spring:message code="lbl.search.bankbranch" text="Search Bank Branch"/>
 					</div>
 				</div>
 				<div class="panel-body">
 					<div class="form-group">
-						<label class="col-sm-3 control-label text-right"><spring:message code="lbl.bank" /></label>
+						<label class="col-sm-3 control-label text-right"><spring:message code="lbl.bank" text="Bank"/></label>
 						<div class="col-sm-3 add-margin">
 							<form:select path="bank" data-first-option="false" id="bank" class="form-control">
-								<form:option value=""><spring:message code="lbl.select" /></form:option>
+								<form:option value=""><spring:message code="lbl.select" text="Select"/></form:option>
 								<form:options items="${banks}" itemValue="id" itemLabel="name" />
 							</form:select>
 							<form:errors path="bank" cssClass="error-msg" />
 						</div>
-						<label class="col-sm-2 control-label text-right"><spring:message code="lbl.bankbranch" />  </label>
+						<label class="col-sm-2 control-label text-right"><spring:message code="lbl.bankbranch" text="Bank Branch"/>  </label>
 						<div class="col-sm-3 add-margin">
 							<form:select path="id" id="bankbranchname" class="form-control">
-								<form:option value=""><spring:message code="lbl.select" /></form:option>
+								<form:option value=""><spring:message code="lbl.select" text="Select"/></form:option>
 								<form:options items="${bankbranches}" itemValue="id" itemLabel="branchname" />
 							</form:select>
 							<form:errors path="id" cssClass="error-msg" />
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-sm-3 control-label text-right"><spring:message code="lbl.code" />  </label>
+						<label class="col-sm-3 control-label text-right"><spring:message code="lbl.code" text="Code"/>  </label>
 						<div class="col-sm-3 add-margin">
 							<form:input path="branchcode" class="form-control text-left patternvalidation" data-pattern="alphanumeric" maxlength="50"  />
 							<form:errors path="branchcode" cssClass="error-msg" />
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-sm-3 control-label text-right"><spring:message code="lbl.branchmicr" /></label>
+						<label class="col-sm-3 control-label text-right"><spring:message code="lbl.branchmicr" text="MICR"/></label>
 						<div class="col-sm-3 add-margin">
 							<form:input path="branchMICR" class="form-control text-left patternvalidation" data-pattern="alphanumeric" maxlength="50" />
 							<form:errors path="branchMICR" cssClass="error-msg" />
 						</div>
-						<label class="col-sm-2 control-label text-right"><spring:message code="lbl.address" /> </label>
+						<label class="col-sm-2 control-label text-right"><spring:message code="lbl.address" text="Address"/> </label>
 						<div class="col-sm-3 add-margin">
 							<form:textarea path="branchaddress1" id="branchaddress1" class="form-control" maxlength="250"   ></form:textarea>
 							<form:errors path="branchaddress1" cssClass="error-msg" />
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-sm-3 control-label text-right"><spring:message code="lbl.contactperson" /> </label>
+						<label class="col-sm-3 control-label text-right"><spring:message code="lbl.contactperson" text="Contact Person"/> </label>
 						<div class="col-sm-3 add-margin">
 							<form:input path="contactperson" class="form-control text-left patternvalidation" data-pattern="alphanumeric" maxlength="50"  />
 							<form:errors path="contactperson" cssClass="error-msg" />
 						</div>
-						<label class="col-sm-2 control-label text-right"><spring:message code="lbl.branchphone" />  </label>
+						<label class="col-sm-2 control-label text-right"><spring:message code="lbl.branchphone" text="Phone Number"/>  </label>
 						<div class="col-sm-3 add-margin">
 							<form:input path="branchphone" class="form-control text-left patternvalidation" data-pattern="alphanumeric" maxlength="50"/>
 							<form:errors path="branchphone" cssClass="error-msg" />
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-sm-3 control-label text-right"><spring:message code="lbl.narration" /> </label>
+						<label class="col-sm-3 control-label text-right"><spring:message code="lbl.narration" text="Narration"/> </label>
 						<div class="col-sm-3 add-margin">
 							<form:textarea path="narration" id="narration" class="form-control" maxlength="250"  ></form:textarea>
 							<form:errors path="narration" cssClass="error-msg" />
 						</div>
-						<label class="col-sm-2 control-label text-right"><spring:message code="lbl.isactive" /> </label>
+						<label class="col-sm-2 control-label text-right"><spring:message code="lbl.isactive" text="Active"/> </label>
 						<div class="col-sm-3 add-margin">
 							<form:checkbox path="isactive" />
 							<form:errors path="isactive" cssClass="error-msg" />
@@ -128,27 +128,27 @@
 	</div>
 	<div class="text-center">
 		<button type='button' class='btn btn-primary' id="btnsearch">
-			<spring:message code='lbl.search' />
+			<spring:message code='lbl.search' text="Search"/>
 		</button>
-		<a href='javascript:void(0)' class='btn btn-default' onclick="javascript:window.parent.postMessage('close','*');"><spring:message code='lbl.close' /></a>
+		<a href='javascript:void(0)' class='btn btn-default' onclick="javascript:window.parent.postMessage('close','*');"><spring:message code='lbl.close' text="Close"/></a>
 	</div>
 </form:form>
 <div class="row display-hide report-section">
-	<div class="col-md-12 table-header text-left"><spring:message code="lbl.search.bankbranch.result" /></div>
+	<div class="col-md-12 table-header text-left"><spring:message code="lbl.search.bankbranch.result" text="Bank Branch Search Result"/></div>
 	<div class="col-md-12 report-table-container">
 		<table class="table table-bordered table-hover multiheadertbl"
 			id="resultTable">
 			<thead>
 				<tr>
-					<th><spring:message code="lbl.bank" /></th>
-					<th><spring:message code="lbl.bankbranch" /></th>
-					<th><spring:message code="lbl.code" /></th>
-					<th><spring:message code="lbl.branchmicr" /></th>
-					<th><spring:message code="lbl.address" /></th>
-					<th><spring:message code="lbl.contactperson" /></th>
-					<th><spring:message code="lbl.branchphone" /></th>
-					<th><spring:message code="lbl.narration" /></th>
-					<th><spring:message code="lbl.isactive" /></th>
+					<th><spring:message code="lbl.bank" text="Bank"/></th>
+					<th><spring:message code="lbl.bankbranch" text="Bank Branch"/></th>
+					<th><spring:message code="lbl.code" text="Code"/></th>
+					<th><spring:message code="lbl.branchmicr" text="MICR"/></th>
+					<th><spring:message code="lbl.address" text="Address"/></th>
+					<th><spring:message code="lbl.contactperson" text="Contact Person"/></th>
+					<th><spring:message code="lbl.branchphone" text="Phone Number"/></th>
+					<th><spring:message code="lbl.narration" text="Narration"/></th>
+					<th><spring:message code="lbl.isactive" text="Active"/></th>
 				</tr>
 			</thead>
 		</table>

@@ -1,3 +1,4 @@
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%--
   ~    eGov  SmartCity eGovernance suite aims to improve the internal efficiency,transparency,
   ~    accountability and the service delivery of the government  organizations.
@@ -52,12 +53,12 @@
 		<div class="col-md-12">
 			<div class="panel panel-primary" data-collapsed="0">
 				<div class="panel-heading">
-					<div class="panel-title">Account Entity</div>
+					<div class="panel-title"><spring:message code="lbl.account.entity" text="Account Entity"/> </div>
 				</div>
 				<div class="panel-body">
 					<div class="form-group">
 						<label class="col-sm-3 control-label text-right"><spring:message
-								code="lbl.name" /><span class="mandatory"></label>
+								code="lbl.name" text="Name"/><span class="mandatory"></label>
 						<div class="col-sm-3 add-margin">
 							<form:input path="name"
 								class="form-control text-left patternvalidation"
@@ -65,7 +66,7 @@
 							<form:errors path="name" cssClass="error-msg" />
 						</div>
 						<label class="col-sm-3 control-label text-right"><spring:message
-								code="lbl.description" /> <span class="mandatory"></span> </label>
+								code="lbl.description" text="Description"/> <span class="mandatory"></span> </label>
 						<div class="col-sm-3 add-margin">
 							<form:input path="description"
 								class="form-control text-left patternvalidation"
@@ -75,7 +76,7 @@
 					</div>
 					<div class="form-group">
 						<label class="col-sm-3 control-label text-right"><spring:message
-								code="lbl.isactive" /> </label>
+								code="lbl.isactive" text="Active"/> </label>
 						<div class="col-sm-3 add-margin">
 							<form:checkbox path="isactive" />
 							<form:errors path="isactive" cssClass="error-msg" />

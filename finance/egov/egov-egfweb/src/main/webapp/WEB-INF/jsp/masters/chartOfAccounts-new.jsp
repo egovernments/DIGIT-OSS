@@ -55,12 +55,12 @@
 	function validate() {
 		if (document.getElementById('model.name').value == null
 				|| document.getElementById('model.name').value == '') {
-			bootbox.alert("Please enter Name");
+			bootbox.alert("<s:text name='msg.please.enter.name'/>");
 			return false;
 		}
 		if (document.getElementById('newGlcode').value == null
 				|| document.getElementById('newGlcode').value == '') {
-			bootbox.alert("Please enter Account Code");
+			bootbox.alert("<s:text name='msg.please.enter.account.code'/>");
 			return false;
 		}
 		document.chartOfAccountsForm.action = '${pageContext.request.contextPath}/masters/chartOfAccounts-save.action';
@@ -127,7 +127,7 @@
 								name="chartOfAccount.purpose" />:</strong></td>
 					<td class="bluebox"><s:select list="dropdownData.purposeList"
 							listKey="id" listValue="name" name="accountcodePurpose.id" headerKey="0"
-							headerValue="--- Select ---" value="accountcodePurpose.id"></s:select></td>
+							headerValue="%{getText('lbl.choose.options')}" value="accountcodePurpose.id"></s:select></td>
 				</tr>
 				<tr>
 					<td width="20%" class="greybox">&nbsp;</td>
@@ -157,9 +157,9 @@
 			<div class="buttonbottom">
 				<input type="hidden" name="parentId"
 					value='<s:property value="parentId"/>' />
-				<s:submit name="Save" value="Save"
+				<s:submit name="Save" key="lbl.save"
 					onclick="javascript: return validate();" cssClass="buttonsubmit" />
-				<s:submit value="Close" onclick="javascript: self.close()"
+				<s:submit value="<s:text name='lbl.close'/>" onclick="javascript: self.close()"
 					cssClass="buttonsubmit" />
 			</div>
 			<s:token />

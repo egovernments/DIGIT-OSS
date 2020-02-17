@@ -51,19 +51,19 @@
 <%@ page language="java"%>
 <html>
 <head>
-<title>Add Detailed Chart Of Accounts</title>
+<title><s:text name="lbl.add.detailed.chart.of.accounts"/></title>
 <script type="text/javascript">
 		function validateAndSubmit(){
 			if(document.getElementById('glCode').value == null || document.getElementById('glCode').value==''){
-				bootbox.alert("Please enter Parent GlCode");
+				bootbox.alert("<s:text name='msg.please.enter.parent.glcode'/>");
 				return false;
 			}
 			if(document.getElementById('model.name').value == null || document.getElementById('model.name').value==''){
-				bootbox.alert("Please enter Name");
+				bootbox.alert("<s:text name='msg.please.enter.name'/>");
 				return false;
 			}
 			if(document.getElementById('newGlcode').value == null || document.getElementById('newGlcode').value==''){
-				bootbox.alert("Please enter Account Code");
+				bootbox.alert("<s:text name='msg.please.enter.account.code'/>");
 				return false;
 			}
 			document.chartOfAccountsForm.action = '${pageContext.request.contextPath}/masters/chartOfAccounts-create.action';
@@ -99,7 +99,7 @@
 	<s:actionerror />
 	<s:fielderror />
 	<div class="formmainbox">
-		<div class="subheadnew">Add Detailed Chart Of Accounts</div>
+		<div class="subheadnew"><s:text name="lbl.add.detailed.chart.of.accounts"/></div>
 		<s:form name="chartOfAccountsForm" action="chartOfAccounts"
 			theme="simple">
 			<table width="100%" border="0" cellspacing="0" cellpadding="0"
@@ -144,7 +144,7 @@
 								name="chartOfAccount.purpose" />:</strong></td>
 					<td class="bluebox"><s:select list="dropdownData.purposeList"
 							listKey="id" listValue="name" name="purposeId" headerKey=""
-							headerValue="--- Select ---" value="model.purpose"></s:select></td>
+							headerValue="%{getText('lbl.choose.options')}" value="model.purpose"></s:select></td>
 					<td width="10%" class="bluebox"><strong><s:text
 								name="chartOfAccount.accountDetailType" />:</strong></td>
 					<td width="22%"><s:select
@@ -172,9 +172,9 @@
 			<br />
 			<br />
 			<div class="buttonbottom">
-				<input type="submit" class="buttonsubmit" value="Save" id="Save"
+				<input type="submit" class="buttonsubmit" value='<s:text name="lbl.save"/>' id="Save"
 					name="Save" onclick="return validateAndSubmit();" /> <input
-					type="button" value="Close" onclick="javascript:window.parent.postMessage('close','*');"
+					type="button" value="<s:text name="lbl.close"/>" onclick="javascript:window.parent.postMessage('close','*');"
 					class="button" />
 			</div>
 			<s:token />

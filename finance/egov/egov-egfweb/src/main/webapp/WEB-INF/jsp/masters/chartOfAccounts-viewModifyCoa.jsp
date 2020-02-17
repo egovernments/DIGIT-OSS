@@ -150,7 +150,7 @@
 				<tr>
 					<td width="20%" class="bluebox">&nbsp;</td>
 					<td width="10%" class="bluebox"><strong><s:text
-								name="Function Required" />:</strong></td>
+								name="chartOfAccount.functionRequired" />:</strong></td>
 					<td width="22%" class="bluebox"><s:if
 							test="%{getFunctionReqd() == true}">
 							<s:text name="yes" />
@@ -158,7 +158,7 @@
 							<s:text name="no" />
 						</s:else></td>
 					<td width="10%" class="bluebox"><strong><s:text
-								name="Budget Required" />:</strong></td>
+								name="chartOfAccount.budgetRequired" />:</strong></td>
 					<td class="bluebox"><s:if test="%{budgetCheckReq() == true}">
 							<s:text name="yes" />
 						</s:if> <s:else>
@@ -170,10 +170,10 @@
 		</div>
 		<div class="buttonbottom">
 			<s:if test="%{coaId !=null || coaId!=''}">
-				<input type="submit" class="buttonsubmit" value="Modify" id="Modify"
+				<input type="submit" class="buttonsubmit" value="<s:text name='lbl.modify'/>" id="Modify"
 					name="Modify" onclick="return submitForm();" />
 			</s:if>
-			<input type="button" value="Close"
+			<input type="button" value="<s:text name='lbl.close'/>"
 				onclick="javascript:window.parent.postMessage('close','*');" class="button" />
 		</div>
 	</s:form>

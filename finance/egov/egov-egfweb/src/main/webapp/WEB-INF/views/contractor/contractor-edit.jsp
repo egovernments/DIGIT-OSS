@@ -55,13 +55,13 @@
 		<div class="col-md-12">
 			<div class="panel panel-primary" data-collapsed="0">
 				<div class="panel-heading">
-					<div class="panel-title"><spring:message code="title.contractor.edit" /></div>
+					<div class="panel-title"><spring:message code="title.contractor.edit" text="Update Contractor"/></div>
 				</div>	
 				<%@ include file="contractor-form.jsp"%>
 				<div class="form-group">
 					<div class="text-center">
-						<button type='submit' class='btn btn-primary' id="buttonSubmit"> <spring:message code='lbl.update' /> </button>
-						<a href='javascript:void(0)' class='btn btn-default' onclick='self.close()'><spring:message code='lbl.close' /></a>
+						<button type='submit' class='btn btn-primary' id="buttonSubmit"> <spring:message code='lbl.update' text="Update"/> </button>
+						<a href='javascript:void(0)' class='btn btn-default' onclick='self.close()'><spring:message code='lbl.close' text="Close"/></a>
 					</div>
 				</div>
 			</div>

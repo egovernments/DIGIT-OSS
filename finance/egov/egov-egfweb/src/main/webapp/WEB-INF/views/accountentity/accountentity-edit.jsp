@@ -58,10 +58,10 @@
 	<div class="form-group">
 		<div class="text-center">
 			<button type='submit' class='btn btn-primary' id="buttonSubmit">
-				<spring:message code='lbl.update' />
+				<spring:message code='lbl.update' text="Update"/>
 			</button>
 			<a href='javascript:void(0)' class='btn btn-default'
-				onclick='self.close()'><spring:message code='lbl.close' /></a>
+				onclick='self.close()'><spring:message code='lbl.close' text="Close"/></a>
 		</div>
 	</div>
 </form:form>

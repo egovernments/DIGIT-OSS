@@ -51,6 +51,8 @@
 <html>
 
 <head>
+<script
+        src="<cdn:url value='/resources/app/js/i18n/jquery.i18n.properties.js?rnd=${app_release_no}' context='/services/EGF'/>"></script>
 <script type="text/javascript"
 	src="/services/EGF/resources/javascript/ajaxCommonFunctions.js?rnd=${app_release_no}"></script>
 <script type="text/javascript"
@@ -82,7 +84,7 @@
 		</s:if>
 		<div class="formmainbox">
 			<div class="formheading">
-				<div class="subheadnew">Cheque Master</div>
+				<div class="subheadnew"><s:text name="lbl.cheque.master"/></div>
 			</div>
 			<br />
 			<s:if test="%{bankaccount != null}">
@@ -91,7 +93,7 @@
 					<tr align="center">
 						<div class="headingsmallbg">
 							<td class="bluebgheadtd" width="100%" colspan="5"><strong
-								style="font-size: 15px;">Bank Details</strong></td>
+								style="font-size: 15px;"><s:text name="lbl.bank.details"/></strong></td>
 						</div
 					</tr>
 				</table>
@@ -100,19 +102,19 @@
 
 					<tr>
 						<td class="bluebox "></td>
-						<td class="bluebox">Bank <span class="mandatory1">*</span></td>
+						<td class="bluebox"><s:text name="lbl.bank"/> <span class="mandatory1">*</span></td>
 						<td class="bluebox"><s:property
 								value="bankaccount.bankbranch.bank.name" /></td>
-						<td class="bluebox">Bank Branch <span class="mandatory1">*</span></td>
+						<td class="bluebox"><s:text name="lbl.bank.branch"/> <span class="mandatory1">*</span></td>
 						<td class="bluebox"><s:property
 								value="bankaccount.bankbranch.branchname" /></td>
 					</tr>
 					<tr>
 						<td class="bluebox "></td>
-						<td class="greybox">Account Number <span class="mandatory1">*</span></td>
+						<td class="greybox"><s:text name="lbl.account.number"/><span class="mandatory1">*</span></td>
 						<td class="greybox"><s:property
 								value="bankaccount.accountnumber" /></td>
-						<td class="greybox">Fund <span class="mandatory1">*</span></td>
+						<td class="greybox"><s:text name="lbl.fund"/> <span class="mandatory1">*</span></td>
 						<td class="greybox"><s:property value="bankaccount.fund.name" /></td>
 					</tr>
 				</table>
@@ -125,7 +127,7 @@
 					align="center">
 					<tr align="center">
 						<div class="headingsmallbg">
-							<td><span class="bold">Existing Cheque Details</span></td>
+							<td><span class="bold"><s:text name="lbl.existing.cheque.details"/></span></td>
 						</div>
 					</tr>
 				</table>
@@ -136,12 +138,12 @@
 							<table width="100%" border="0" cellpadding="0" cellspacing="0"
 								class="tablebottom">
 								<tr>
-									<th class="bluebgheadtd">From Cheque Number</th>
-									<th class="bluebgheadtd">TO Cheque Number</th>
-									<th class="bluebgheadtd">Department</th>
-									<th class="bluebgheadtd">Received Date</th>
-									<th class="bluebgheadtd">Financial Year</th>
-									<th class="bluebgheadtd">Exhausted</th>
+									<th class="bluebgheadtd"><s:text name="lbl.from.cheque.number"/></th>
+									<th class="bluebgheadtd"><s:text name="lbl.to.cheque.number"/></th>
+									<th class="bluebgheadtd"><s:text name="lbl.department"/></th>
+									<th class="bluebgheadtd"><s:text name="lbl.recieve.date"/></th>
+									<th class="bluebgheadtd"><s:text name="lbl.financial.year"/></th>
+									<th class="bluebgheadtd"><s:text name="lbl.exhausted"/></th>
 								</tr>
 								<s:iterator value="chequeDetailsList" status="stat" var="p">
 									<tr>
@@ -171,10 +173,10 @@
 					</tr>
 				</table>
 			</s:if>
-			<span class="mandatory1"> <s:else>No Cheques Found</s:else></span>
+			<span class="mandatory1"> <s:else><s:text name="msg.no.cheque.found"/> </s:else></span>
 		</div>
 		<div class="buttonbottom">
-			<input type="button" id="Close" value="Close"
+			<input type="button" id="Close" value="<s:text name='lbl.close'/>"
 				onclick="javascript:window.close()" class="button" />
 		</div>
 	</s:form>

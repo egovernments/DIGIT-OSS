@@ -54,53 +54,53 @@
 		<div class="panel panel-primary" data-collapsed="0">
 			<div class="panel-heading">
 				<div class="panel-title">
-					<spring:message code="lbl.view.bankaccount" />
+					<spring:message code="lbl.view.bankaccount" text="View Bank Account"/>
 				</div>
 			</div>
 			<div class="panel-body custom">
 				<div class="row add-border">
 					<div class="col-xs-3 add-margin">
-						<spring:message code="lbl.accountnumber" />
+						<spring:message code="lbl.accountnumber" text="Account Number"/>
 					</div>
 					<div class="col-sm-3 add-margin view-content">${bankaccount.accountnumber}</div>
 					<div class="col-xs-3 add-margin">
-						<spring:message code="lbl.bankbranch" />
+						<spring:message code="lbl.bankbranch" text="Bank Branch"/>
 					</div>
 					<div class="col-sm-3 add-margin view-content">${bankaccount.bankbranch.branchname}</div>
 				</div>
 				<div class="row add-border">
 					<div class="col-xs-3 add-margin">
-						<spring:message code="lbl.fund" />
+						<spring:message code="lbl.fund" text="Fund"/>
 					</div>
 					<div class="col-sm-3 add-margin view-content">${bankaccount.fund.name}</div>
 					<div class="col-xs-3 add-margin">
-						<spring:message code="lbl.accounttype" />
+						<spring:message code="lbl.accounttype" text="Account Type"/>
 					</div>
 					<div class="col-sm-3 add-margin view-content">${bankaccount.accounttype}</div>
 				</div>
 				<div class="row add-border">
 					<div class="col-xs-3 add-margin">
-						<spring:message code="lbl.usagetype" />
+						<spring:message code="lbl.usagetype" text="Usage Type"/>
 					</div>
 					<div class="col-sm-3 add-margin view-content">${bankaccount.type}</div>
 					<div class="col-xs-3 add-margin">
-						<spring:message code="lbl.gl.code" />
+						<spring:message code="lbl.gl.code" text="GlCode"/>
 					</div>
 					<div class="col-sm-3 add-margin view-content">${bankaccount.chartofaccounts.glcode}</div>
 				</div>
 				<div class="row add-border">
 					<div class="col-xs-3 add-margin">
-						<spring:message code="lbl.payto" />
+						<spring:message code="lbl.payto" text="Pay To"/>
 					</div>
 					<div class="col-sm-3 add-margin view-content">${bankaccount.payTo}</div>
 					<div class="col-xs-3 add-margin">
-						<spring:message code="lbl.narration" />
+						<spring:message code="lbl.narration" text="Narration"/>
 					</div>
 					<div class="col-sm-3 add-margin view-content">${bankaccount.narration}</div>
 				</div>
 				<div class="row add-border">
 					<div class="col-xs-3 add-margin">
-						<spring:message code="lbl.isactive" />
+						<spring:message code="lbl.isactive" text="Active"/>
 					</div>
 					<div class="col-sm-3 add-margin view-content">${bankaccount.isactive}</div>
 					<div class="col-xs-3 add-margin">
@@ -113,10 +113,10 @@
 	<div class="row text-center">
 		<div class="add-margin">
 		<c:if test="${mode == 'view'}">
-			<a href="javascript:void(0)" class="btn btn-default" onclick="self.close()">Close</a>
+			<a href="javascript:void(0)" class="btn btn-default" onclick="self.close()"><spring:message code='lbl.close' text="Close"/></a>
 		 </c:if>
 		<c:if test="${mode == 'create'}">
-            <a href="javascript:void(0)" class="btn btn-default" onclick="javascript:window.parent.postMessage('close','*');">Close</a>
+            <a href="javascript:void(0)" class="btn btn-default" onclick="javascript:window.parent.postMessage('close','*');"><spring:message code='lbl.close' text="Close"/></a>
         </c:if>	
 		</div>
 	</div>

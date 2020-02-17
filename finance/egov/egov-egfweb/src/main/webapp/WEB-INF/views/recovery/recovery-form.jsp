@@ -1,3 +1,4 @@
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%--
   ~    eGov  SmartCity eGovernance suite aims to improve the internal efficiency,transparency,
   ~    accountability and the service delivery of the government  organizations.
@@ -52,12 +53,12 @@
 		<div class="col-md-12">
 			<div class="panel panel-primary" data-collapsed="0">
 				<div class="panel-heading">
-					<div class="panel-title">Deductions</div>
+					<div class="panel-title"><spring:message code="lbl.deductions" text="Deductions"/> </div>
 				</div>
 				<div class="panel-body">
 					<div class="form-group">
 						<label class="col-sm-3 control-label text-right"><spring:message
-								code="lbl.recoverycode" /> <span class="mandatory1">*</span></label>
+								code="lbl.recoverycode" text="Deductions Code"/> <span class="mandatory1">*</span></label>
 						<div class="col-sm-3 add-margin">
 							<form:input path="type" required="required" id="type"
 								class="form-control mandatory text-left patternvalidation"
@@ -65,7 +66,7 @@
 							<form:errors path="type" cssClass="error-msg" />
 						</div>
 						<label class="col-sm-2 control-label text-right"><spring:message
-								code="lbl.recoveryname" /> <span class="mandatory1">*</span></label>
+								code="lbl.recoveryname" text="Deductions Name"/> <span class="mandatory1">*</span></label>
 						<div class="col-sm-3 add-margin">
 							<form:input path="recoveryName" required="required"
 								class="form-control mandatory text-left patternvalidation"
@@ -75,13 +76,13 @@
 					</div>
 					<div class="form-group">
 						<label class="col-sm-3 control-label text-right"><spring:message
-								code="lbl.accountDetailType" /></label>
+								code="lbl.accountDetailType" text="Applied To"/></label>
 						<div class="col-sm-3 add-margin">
 							<form:select path="egPartytype.id" id="egPartytype"
 								cssClass="form-control mandatory"
 								cssErrorClass="form-control error">
 								<form:option value="0">
-									<spring:message code="lbl.select" />
+									<spring:message code="lbl.select" text="Select"/>
 								</form:option>
 								<form:options items="${egPartytypes}" itemValue="id"
 									itemLabel="code" />
@@ -89,13 +90,13 @@
 							<form:errors path="egPartytype" cssClass="error-msg" />
 						</div>
 						<label class="col-sm-2 control-label text-right"><spring:message
-								code="lbl.chartofaccounts" /> <span class="mandatory1">*</span></label>
+								code="lbl.chartofaccounts" text="Account Code"/> <span class="mandatory1">*</span></label>
 						<div class="col-sm-3 add-margin">
 							<form:select path="chartofaccounts.id" id="chartofaccounts" listKey='chartofaccounts.glcode' listValue='chartofaccounts.glcode'
 								required="required" cssClass="form-control mandatory"
 								cssErrorClass="form-control error">
 								<form:option value="">
-									<spring:message code="lbl.select" />
+									<spring:message code="lbl.select" text="Select"/>
 								</form:option>
 								<c:forEach var="chartOfAccounts" items="${chartOfAccountss}">
 									<option value="${chartOfAccounts.id}">
@@ -107,13 +108,13 @@
 					</div>
 					<div class="form-group">
 						<label class="col-sm-3 control-label text-right"><spring:message
-								code="lbl.bankloan" /> </label>
+								code="lbl.bankloan" text="Bank Loan"/> </label>
 						<div class="col-sm-3 add-margin">
 							<form:checkbox path="bankLoan" id="bankLoan" />
 							<form:errors path="bankLoan" cssClass="error-msg" />
 						</div>
 						<label class="col-sm-2 control-label text-right"><spring:message
-								code="lbl.isactive" /> </label>
+								code="lbl.isactive" text="Active"/> </label>
 						<div class="col-sm-3 add-margin">
 							<form:checkbox path="isactive" />
 							<form:errors path="isactive" cssClass="error-msg" />
@@ -121,12 +122,12 @@
 					</div>
 					<div class="form-group display-hide" id="bankDiv">
 						<label class="col-sm-3 control-label text-right"><spring:message
-								code="lbl.bank" /> </label>
+								code="lbl.bank" text="Bank"/> </label>
 						<div class="col-sm-3 add-margin">
 							<form:select path="bank.id" id="bank" cssClass="form-control"
 								cssErrorClass="form-control error">
 								<form:option value="">
-									<spring:message code="lbl.select" />
+									<spring:message code="lbl.select" text="Select"/>
 								</form:option>
 								<form:options items="${banks}" itemValue="id" itemLabel="name" />
 							</form:select>
@@ -135,7 +136,7 @@
 					</div>
 					<div class="form-group">
 						<label class="col-sm-3 control-label text-right"><spring:message
-								code="lbl.remitted" /> <span class="mandatory1">*</span></label>
+								code="lbl.remitted" text="Remitted To"/> <span class="mandatory1">*</span></label>
 						<div class="col-sm-3 add-margin">
 							<form:input path="remitted" required="required"
 								class="form-control mandatory text-left patternvalidation"
@@ -143,7 +144,7 @@
 							<form:errors path="remitted" cssClass="error-msg" />
 						</div>
 						<label class="col-sm-2 control-label text-right"><spring:message
-								code="lbl.ifsccode" /> </label>
+								code="lbl.ifsccode" text="IFSC Code"/> </label>
 						<div class="col-sm-3 add-margin">
 							<form:input path="ifscCode"
 								class="form-control text-left patternvalidation"
@@ -154,7 +155,7 @@
 					<div class="form-group">
 
 						<label class="col-sm-3 control-label text-right"><spring:message
-								code="lbl.accountnumber" /> </label>
+								code="lbl.accountnumber" text="Account Number"/> </label>
 						<div class="col-sm-3 add-margin">
 							<form:input path="accountNumber"
 								class="form-control text-left patternvalidation"
@@ -162,7 +163,7 @@
 							<form:errors path="accountNumber" cssClass="error-msg" />
 						</div>
 						<label class="col-sm-2 control-label text-right"><spring:message
-								code="lbl.description" /> </label>
+								code="lbl.description" text="Description"/> </label>
 						<div class="col-sm-3 add-margin">
 							<form:textarea path="description"
 								class="form-control text-left patternvalidation"

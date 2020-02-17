@@ -54,9 +54,9 @@
 	<div class="form-group">
 		<div class="text-center">
 			<button type='submit' class='btn btn-primary' id="buttonSubmit">
-				<spring:message code='lbl.create' />
+				<spring:message code='lbl.create' text="Create"/>
 			</button>
-			<a href='javascript:void(0)' class='btn btn-default' onclick="window.parent.postMessage('close','*');window.close()"><spring:message code='lbl.close' /></a>
+			<a href='javascript:void(0)' class='btn btn-default' onclick="window.parent.postMessage('close','*');window.close()"><spring:message code='lbl.close' text="Close"/></a>
 		</div>
 	</div>
 </form:form>

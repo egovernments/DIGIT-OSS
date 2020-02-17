@@ -52,18 +52,18 @@
     <div class="col-md-12">
       <div class="panel panel-primary" data-collapsed="0">
         <div class="panel-heading">
-          <div class="panel-title">Fund</div>
+          <div class="panel-title"><spring:message code="lbl.fund" text="Fund" /></div>
         </div>
         <div class="panel-body">
           <div class="form-group">
-            <label class="col-sm-3 control-label text-right"><spring:message code="lbl.name" /> <span
+            <label class="col-sm-3 control-label text-right"><spring:message code="lbl.name" text="Name"/> <span
               class="mandatory"></span> </label>
             <div class="col-sm-3 add-margin">
               <form:input path="name" class="form-control text-left patternvalidation" data-pattern="alphanumeric"
                 maxlength="50" required="required" />
               <form:errors path="name" cssClass="error-msg" />
             </div>
-            <label class="col-sm-3 control-label text-right"><spring:message code="lbl.code" /> <span
+            <label class="col-sm-3 control-label text-right"><spring:message code="lbl.code" text="Code"/> <span
               class="mandatory"></span> </label>
             <div class="col-sm-3 add-margin">
               <form:input path="code" class="form-control text-left patternvalidation" data-pattern="alphanumeric"
@@ -72,12 +72,12 @@
             </div>
           </div>
           <div class="form-group">
-            <label class="col-sm-3 control-label text-right"><spring:message code="lbl.identifier" /> </label>
+            <label class="col-sm-3 control-label text-right"><spring:message code="lbl.identifier" text="Identifier"/> </label>
             <div class="col-sm-3 add-margin">
               <form:input path="identifier" class="form-control text-right patternvalidation" data-pattern="number" />
               <form:errors path="identifier" cssClass="error-msg" />
             </div>
-            <label class="col-sm-3 control-label text-right"><spring:message code="lbl.llevel" /><span
+            <label class="col-sm-3 control-label text-right"><spring:message code="lbl.llevel" text="Level"/><span
               class="mandatory"></span>  </label>
             <div class="col-sm-3 add-margin">
               <form:input path="llevel" class="form-control text-right patternvalidation" data-pattern="number" required="required" />
@@ -85,25 +85,25 @@
             </div>
           </div>
           <div class="form-group">
-            <label class="col-sm-3 control-label text-right"><spring:message code="lbl.parentid" /> </label>
+            <label class="col-sm-3 control-label text-right"><spring:message code="lbl.parentid" text="Parent Fund"/> </label>
             <div class="col-sm-3 add-margin">
               <form:select path="parentId" id="parentId.id" cssClass="form-control"
                 cssErrorClass="form-control error">
                 <form:option value="">
-                  <spring:message code="lbl.select" />
+                  <spring:message code="lbl.select" text="Select"/>
                 </form:option>
                 <form:options items="${funds}" itemValue="id" itemLabel="name" />
               </form:select>
               <form:errors path="parentId" cssClass="error-msg" />
             </div>
-            <label class="col-sm-3 control-label text-right"><spring:message code="lbl.isnotleaf" /> </label>
+            <label class="col-sm-3 control-label text-right"><spring:message code="lbl.isnotleaf" text="Isnotleaf"/> </label>
             <div class="col-sm-3 add-margin">
               <form:checkbox path="isnotleaf" />
               <form:errors path="isnotleaf" cssClass="error-msg" />
             </div>
           </div>
           <div class="form-group">
-            <label class="col-sm-3 control-label text-right"><spring:message code="lbl.isactive" /> </label>
+            <label class="col-sm-3 control-label text-right"><spring:message code="lbl.isactive" text="Active"/> </label>
             <div class="col-sm-3 add-margin">
               <form:checkbox path="isactive" />
               <form:errors path="isactive" cssClass="error-msg" />

@@ -59,18 +59,18 @@
 			<div class="col-md-12">
 				<div class="panel panel-primary" data-collapsed="0">
 					<div class="panel-heading">
-						<div class="panel-title">Search User Defined Code</div>
+						<div class="panel-title"><spring:message code="title.accountentity.search" text="Search User Defined Code"/></div>
 					</div>
 					<div class="panel-body">
 						<div class="form-group">
 							<label class="col-sm-3 control-label text-right"><spring:message
-									code="lbl.accountdetailtype" /> </label>
+									code="lbl.accountdetailtype" text="Account detail type"/> </label>
 							<div class="col-sm-3 add-margin">
 								<form:select path="accountdetailtype.id"
 									id="accountdetailtype.id" cssClass="form-control"
 									cssErrorClass="form-control error">
 									<form:option value="">
-										<spring:message code="lbl.select" />
+										<spring:message code="lbl.select" text="Select"/>
 									</form:option>
 									<form:options items="${accountdetailtypes}" itemValue="id"
 										itemLabel="name" />
@@ -78,7 +78,7 @@
 								<form:errors path="accountdetailtype" cssClass="error-msg" />
 							</div>
 							<label class="col-sm-3 control-label text-right"><spring:message
-									code="lbl.name" /> </label>
+									code="lbl.name" text="Name"/> </label>
 							<div class="col-sm-3 add-margin">
 								<form:input path="name"
 									class="form-control text-left patternvalidation"
@@ -88,7 +88,7 @@
 						</div>
 						<div class="form-group">
 							<label class="col-sm-3 control-label text-right"><spring:message
-									code="lbl.code" /> </label>
+									code="lbl.code" text="Code"/> </label>
 							<div class="col-sm-3 add-margin">
 								<form:input path="code"
 									class="form-control text-left patternvalidation"
@@ -106,25 +106,24 @@
 	<div class="form-group">
 		<div class="text-center">
 			<button type='button' class='btn btn-primary' id="btnsearch">
-				<spring:message code='lbl.search' />
+				<spring:message code='lbl.search' text="Search"/>
 			</button>
 			<a href='javascript:void(0)' class='btn btn-default'
-				onclick="javascript:window.parent.postMessage('close','*');"><spring:message code='lbl.close' /></a>
+				onclick="javascript:window.parent.postMessage('close','*');"><spring:message code='lbl.close' text="Close"/></a>
 		</div>
 	</div>
 </form:form>
 <div class="row display-hide report-section">
-	<div class="col-md-12 table-header text-left">User Defined Code
-		Search Result</div>
+	<div class="col-md-12 table-header text-left"><spring:message code="lbl.user.defined.code.search.result" text="User Defined Code Search Result"/> </div>
 	<div class="col-md-12 form-group report-table-container">
 		<table class="table table-bordered table-hover multiheadertbl"
 			id="resultTable">
 			<thead>
 				<tr>
-					<th><spring:message code="lbl.accountdetailtype" /></th>
-					<th><spring:message code="lbl.name" /></th>
-					<th><spring:message code="lbl.code" /></th>
-					<th><spring:message code="lbl.isactive" /></th>
+					<th><spring:message code="lbl.accountdetailtype" text="Account detail type"/></th>
+					<th><spring:message code="lbl.name" text="Name"/></th>
+					<th><spring:message code="lbl.code" text="Code"/></th>
+					<th><spring:message code="lbl.isactive" text="Active"/></th>
 				</tr>
 			</thead>
 		</table>

@@ -68,13 +68,13 @@
 			<div class="col-md-12">
 				<div class="panel panel-primary" data-collapsed="0">
 					<div class="panel-heading">
-						<div class="panel-title">Chart Of Account Report</div>
+						<div class="panel-title"><spring:message code="lbl.chart.of.account.report" text="Chart Of Account Report"/> </div>
 					</div>
 					<div class="panel-body">
 
 						<div class="form-group">
 							<label class="col-sm-3 control-label text-right"><spring:message
-									code="lbl.majorcode" />:</label>
+									code="lbl.majorcode" text="Major Code"/>:</label>
 							<div class="col-sm-3 add-margin">
 								<form:select name="majorCodeId" path=""
 									data-first-option="false" id="majorCode"
@@ -88,13 +88,13 @@
 								</form:select>
 							</div>
 							<label class="col-sm-2 control-label text-right"><spring:message
-									code="lbl.minorcode" />:</label>
+									code="lbl.minorcode" text="Minor code"/>:</label>
 							<div class="col-sm-3 add-margin">
 								<form:select name="minorCodeId" path=""
 									data-first-option="false" id="minorCode"
 									cssClass="form-control">
 									<form:option value="">
-										<spring:message code="lbls.select" />
+										<spring:message code="lbls.select" text="Select"/>
 									</form:option>
 									<c:forEach items="${minCodeList}" var="mn">
 										<option value="${mn.id}">${mn.glcode}----${mn.name}</option>
@@ -105,7 +105,7 @@
 						</div>
 						<div class="form-group">
 							<label class="col-sm-3 control-label text-right"><spring:message
-									code="lbl.accountcode" /> :</label>
+									code="lbl.accountcode" text="Account Code"/> :</label>
 							<div class="col-sm-3 add-margin">
 								<form:input id="accountCode" type="text" class="form-control "
 									autocomplete="off" path="" name="accountCode" value=""
@@ -114,12 +114,12 @@
 
 							</div>
 							<label class="col-sm-2 control-label text-right"><spring:message
-									code="lbl.purpose" />:</label>
+									code="lbl.purpose" text="Purpose"/>:</label>
 							<div class="col-sm-3 add-margin">
 								<form:select name="purposeId" path="" data-first-option="false"
 									id="purposeId" cssClass="form-control">
 									<form:option value="">
-										<spring:message code="lbls.select" />
+										<spring:message code="lbls.select" text="Select"/>
 									</form:option>
 									<form:options items="${purposeList}" itemValue="id"
 										itemLabel="name" />
@@ -128,27 +128,27 @@
 						</div>
 						<div class="form-group">
 							<label class="col-sm-3 control-label"><spring:message
-									code="lbl.type" />:</label>
+									code="lbl.type" text="Type"/>:</label>
 							<div class="col-sm-3 add-margin">
 								<select name="type" id="type" class="form-control mandatory">
 									<option value="">
-										<spring:message code="lbl.select" />
+										<spring:message code="lbl.select" text="Select"/>
 									</option>
-									<option value="I"><spring:message code="value.income" /></option>
-									<option value="E"><spring:message code="value.expense" /></option>
+									<option value="I"><spring:message code="value.income" text="Income"/></option>
+									<option value="E"><spring:message code="value.expense" text="Expense"/></option>
 									<option value="L"><spring:message
-											code="value.liability" /></option>
-									<option value="A"><spring:message code="value.asset" /></option>
+											code="value.liability" text="Liability"/></option>
+									<option value="A"><spring:message code="value.asset" text="Asset"/></option>
 								</select>
 							</div>
 							<label class="col-sm-2 control-label text-right"><spring:message
-									code="lbl.accountdetailtype" />:</label>
+									code="lbl.accountdetailtype" text="Account detail type"/>:</label>
 							<div class="col-sm-3 add-margin">
 								<form:select name="detailTypeId" path=""
 									data-first-option="false" id="detailTypeId"
 									cssClass="form-control">
 									<form:option value="">
-										<spring:message code="lbls.select" />
+										<spring:message code="lbls.select" text="Select"/>
 									</form:option>
 									<form:options items="${accountDetailTypeList}" itemValue="id"
 										itemLabel="name" />
@@ -160,34 +160,34 @@
 
 						<div class="form-group">
 							<label class="col-sm-3 control-label text-right"><spring:message
-									code="lbl.isActiveForPosting" />:</label>
+									code="lbl.isActiveForPosting" text="Active for Posting"/>:</label>
 							<div class="col-sm-3 add-margin">
 								<select name="isActiveForPosting" id="active"
 									class="form-control mandatory">
 									<option value="">
-										<spring:message code="lbl.select" />
+										<spring:message code="lbl.select" text="Select"/>
 									</option>
-									<option value="true">Yes</option>
-									<option value="false">No</:option>
-									<option value="">All</:option>
+									<option value="true"><spring:message code="lbl.yes" text="Yes"/></option>
+									<option value="false"><spring:message code="lbl.no" text="No"/></:option>
+									<option value=""><spring:message code="lbl.all" text="All"/></:option>
 									</select>
 							</div>
 
 							<label class="col-sm-2 control-label text-right"><spring:message
-									code="lbl.functionRequired" />:</label>
+									code="lbl.functionRequired" text="Function Required"/>:</label>
 							<div class="col-sm-3 add-margin">
 								<select name="functionReqd" id="functionReqd"
 									Class="form-control">
 									<option value="">
-										<spring:message code="lbl.select" />
+										<spring:message code="lbl.select" text="Select"/>
 									</option>
-									<option value="true">Yes
+									<option value="true"><spring:message code="lbl.yes" text="Yes"/>
 										</:option>
 									
-									<option value="false">No
+									<option value="false"><spring:message code="lbl.no" text="No"/>
 										</:option>
 									
-									<option value="">All
+									<option value=""><spring:message code="lbl.all" text="All"/>
 										</:option>
 								
 								</select>
@@ -197,20 +197,20 @@
 
 						<div class="form-group">
 							<label class="col-sm-3 control-label text-right"><spring:message
-									code="lbl.budgetRequired" />:</label>
+									code="lbl.budgetRequired" text="Budget Required"/>:</label>
 							<div class="col-sm-3 add-margin">
 								<select name="budgetCheckReq" id="budgetCheckReq"
 									Class="form-control">
 									<option value="">
-										<spring:message code="lbl.select" />
+										<spring:message code="lbl.select" text="Select"/>
 									</option>
-									<option value="true">Yes
+									<option value="true"><spring:message code="lbl.yes" text="Yes"/>
 										</:option>
 									
-									<option value="false">No
+									<option value="false"><spring:message code="lbl.no" text="No"/>
 										</:option>
 									
-									<option value="">All
+									<option value=""><spring:message code="lbl.all" text="All"/>
 										</:option>
 								
 								</select>
@@ -221,7 +221,7 @@
 						<div class="form-group">
 							<div class="text-center">
 								<button type='button' class='btn btn-primary' id="btnsearch">
-									<spring:message code='lbl.search' />
+									<spring:message code='lbl.search' text="Search"/>
 								</button>
 								<a href='javascript:void(0)' class='btn btn-default'
 									onclick="javascript:window.parent.postMessage('close','*');"><spring:message
@@ -242,14 +242,14 @@
 			id="resultTable">
 			<thead>
 				<tr>
-					<th><spring:message code="lbl.majorcodename" /></th>
-					<th><spring:message code="lbl.minorcodename" /></th>
-					<th><spring:message code="lbl.accountcode" /></th>
-					<th><spring:message code="lbl.accountname" /></th>
-					<th><spring:message code="lbl.type" /></th>
-					<th><spring:message code="lbl.purpose" /></th>
-					<th><spring:message code="lbl.accountdetailtype" /></th>
-					<th><spring:message code="lbl.isActiveForPosting" /></th>
+					<th><spring:message code="lbl.majorcodename" text="Major Code-Name"/></th>
+					<th><spring:message code="lbl.minorcodename" text="Minor Code-Name"/></th>
+					<th><spring:message code="lbl.accountcode" text="Account Code"/></th>
+					<th><spring:message code="lbl.accountname" text="Account Name"/></th>
+					<th><spring:message code="lbl.type" text="Type"/></th>
+					<th><spring:message code="lbl.purpose" text="Purpose"/></th>
+					<th><spring:message code="lbl.accountdetailtype" text="Account detail type"/></th>
+					<th><spring:message code="lbl.isActiveForPosting" text="Active for Posting"/></th>
 				</tr>
 			</thead>
 		</table>

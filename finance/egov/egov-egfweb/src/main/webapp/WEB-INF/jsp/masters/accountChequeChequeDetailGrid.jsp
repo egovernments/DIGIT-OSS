@@ -56,20 +56,20 @@
    var chequeDetailsMap = new Map();
 	var makeChequeDetailsGridTable = function() {    
     var chequeDetailsGridColumns = [ 
-	{key:"fromChqNo",label:'From Cheque Number', formatter:createTextField(CHQDETAILSLIST,".fromChqNo")},
+	{key:"fromChqNo",label:'<s:text name="lbl.from.cheque.number"/>', formatter:createTextField(CHQDETAILSLIST,".fromChqNo")},
 	{key:"isExhaustedH",hidden:true,formatter:createHiddenField(CHQDETAILSLIST,".isExhusted","hidden")},
-	{key:"toChqNo",label:'To Cheque Number', formatter:createTextField(CHQDETAILSLIST,".toChqNo")},
+	{key:"toChqNo",label:'<s:text name="lbl.to.cheque.number"/>', formatter:createTextField(CHQDETAILSLIST,".toChqNo")},
 	{key:"chequeDeptId",hidden:true,formatter:createHiddenField(CHQDETAILSLIST,".chequeDeptId","hidden")},
-	{key:"deptName",label:'Department', formatter:createLabelSamll(CHQDETAILSLIST,".deptName")},
+	{key:"deptName",label:'<s:text name="lbl.department"/>', formatter:createLabelSamll(CHQDETAILSLIST,".deptName")},
 	{key:"deptCode",hidden:true,formatter:createHiddenField(CHQDETAILSLIST,".deptCode","hidden")},
-	{key:"receivedDateL",label:'Received Date', formatter:createLabelSamll(CHQDETAILSLIST,".receivedDateL")},
+	{key:"receivedDateL",label:'<s:text name="lbl.recieve.date"/>', formatter:createLabelSamll(CHQDETAILSLIST,".receivedDateL")},
 	{key:"receivedDateH",hidden:true,formatter:createHiddenField(CHQDETAILSLIST,".receivedDate","hidden")},
-	{key:"serialNoL",label:'Financial Year', formatter:createLabelSamll(CHQDETAILSLIST,".serialNoL")},
+	{key:"serialNoL",label:'<s:text name="lbl.financial.year"/>', formatter:createLabelSamll(CHQDETAILSLIST,".serialNoL")},
 	{key:"serialNoH",hidden:true,formatter:createHiddenField(CHQDETAILSLIST,".serialNo","hidden")},
-   	{key:"isExhaustedL",label:'Exhausted', formatter:createLabelSamll(CHQDETAILSLIST,".isExhustedL")},
+   	{key:"isExhaustedL",label:'<s:text name="lbl.exhausted"/>', formatter:createLabelSamll(CHQDETAILSLIST,".isExhustedL")},
 	{key:"nextChqPresent",hidden:true,formatter:createHiddenField(CHQDETAILSLIST,".nextChqPresent","hidden")},
 	{key:"accountChequeId",hidden:true,formatter:createHiddenField(CHQDETAILSLIST,".accountChequeId","hidden")},
-        {key:'Delete',label:'Delete',formatter:createDeleteImageFormatter("${pageContext.request.contextPath}")}
+        {key:'Delete',label:'<s:text name="lbl.delete"/>',formatter:createDeleteImageFormatter("${pageContext.request.contextPath}")}
 	];
 		
 		var chqueDetailsGridDS = new YAHOO.util.DataSource(); 

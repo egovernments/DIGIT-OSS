@@ -55,7 +55,7 @@
 		<div class="col-md-12">
 			<div class="panel panel-primary" data-collapsed="0">
 				<div class="panel-heading">
-					<div class="panel-title">Deductions</div>
+					<div class="panel-title"><spring:message code="lbl.deductions" text="Deductions"/></div>
 				</div>
 				<div class="panel-body custom">
 					<div class="row add-border">
@@ -137,7 +137,7 @@
 	<div class="row text-center">
 		<div class="add-margin">
 			<a href="javascript:void(0)" class="btn btn-default"
-				onclick="self.close()">Close</a>
+				onclick="self.close()"><spring:message code='lbl.close' text="Close"/></a>
 		</div>
 	</div>
 </div>

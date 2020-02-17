@@ -54,7 +54,7 @@
 		<div class="col-md-12">
 			<div class="panel panel-primary" data-collapsed="0">
 				<div class="panel-heading">
-					<div class="panel-title">Deductions</div>
+					<div class="panel-title"><spring:message code="lbl.deductions" text="Deductions"/> </div>
 				</div>
 				<div class="panel-body">
 					<div class="panel-title text-center no-float">
@@ -67,10 +67,10 @@
 	<div class="form-group">
 		<div class="text-center">
 		<c:if test="${mode == 'create'}">
-			<a href='javascript:void(0)' class='btn btn-default' onclick="javascript:window.parent.postMessage('close','*');"><spring:message code='lbl.close' /></a>
+			<a href='javascript:void(0)' class='btn btn-default' onclick="javascript:window.parent.postMessage('close','*');"><spring:message code='lbl.close' text="Close"/></a>
 		</c:if>
 		<c:if test="${mode == 'update'}">
-			<a href='javascript:void(0)' class='btn btn-default' onclick='self.close()'><spring:message code='lbl.close' /></a>
+			<a href='javascript:void(0)' class='btn btn-default' onclick='self.close()'><spring:message code='lbl.close' text="Close"/></a>
 		</c:if>		
 		</div>
 	</div>

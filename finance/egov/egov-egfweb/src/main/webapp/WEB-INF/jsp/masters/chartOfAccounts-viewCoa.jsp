@@ -140,7 +140,7 @@
 							<s:text name="no" />
 						</s:else></td>
 					<td width="10%" class="bluebox"><strong><s:text
-								name="Budget Required" />:</strong></td>
+								name="chartOfAccount.budgetRequired" />:</strong></td>
 					<td class="bluebox"><s:if test="%{budgetCheckReq() == true}">
 							<s:text name="yes" />
 						</s:if> <s:else>
@@ -151,7 +151,7 @@
 			<br /> <br />
 		</div>
 		<div class="buttonbottom">
-			<input type="button" value="Close"
+			<input type="button" value="<s:text name='lbl.close'/>"
 				onclick="javascript:window.parent.postMessage('close','*');" class="button" />
 		</div>
 	</s:form>
