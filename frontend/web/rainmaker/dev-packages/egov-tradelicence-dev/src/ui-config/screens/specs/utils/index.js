@@ -653,6 +653,8 @@ export const getHeaderSideText = (status, licenseNo = null) => {
       return { word1: "Status: ", word2: "TL_APPLIED" };
     case "REJECTED":
       return { word1: "Status: ", word2: "TL_REJECTED" };
+    case "CITIZENACTIONREQUIRED":
+      return { word1: "Status: ", word2: "WF_NEWTL_CITIZENACTIONREQUIRED" };
     case "CANCELLED":
       return { word1: `Trade License No: `, word2: `${licenseNo}` };
     case "APPROVED":
