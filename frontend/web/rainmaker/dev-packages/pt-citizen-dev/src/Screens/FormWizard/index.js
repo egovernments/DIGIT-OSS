@@ -10,7 +10,7 @@ import {
 } from "egov-ui-kit/redux/form/actions";
 import Label from "egov-ui-kit/utils/translationNode";
 import { getTranslatedLabel } from "egov-ui-kit/utils/commons";
-import { getLocale ,localStorageGet} from "egov-ui-kit/utils/localStorageUtils";
+import { getLocale, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 import { initLocalizationLabels } from "egov-ui-kit/redux/app/utils";
 import Property from "egov-ui-kit/common/propertyTax/Property";
 import { hideSpinner, showSpinner } from "egov-ui-kit/redux/common/actions";
@@ -337,21 +337,21 @@ class FormWizard extends Component {
       }
     }
   };
-  getBusinessServiceNextAction(businessServiceName,currentAction){
+  getBusinessServiceNextAction(businessServiceName, currentAction) {
     const businessServiceData = JSON.parse(
-        localStorageGet("businessServiceData")
-      );
-      const data = find(businessServiceData, { businessService: "PT.CREATE" });
-      const { states } = data || [];
-  
-      if (states && states.length > 0) {
-        const actions = states.filter((item, index) => {
-         if(item.state==null&&item.actions&&item.actions.length>0){
-           return item.actions;
-         }
-        });
-       return actions&&actions.length>0&&actions[0]&&actions[0].action;
-      }
+      localStorageGet("businessServiceData")
+    );
+    const data = find(businessServiceData, { businessService: "PT.CREATE" });
+    const { states } = data || [];
+
+    if (states && states.length > 0) {
+      const actions = states.filter((item, index) => {
+        if (item.state == null && item.actions && item.actions.length > 0) {
+          return item.actions;
+        }
+      });
+      return actions && actions.length > 0 && actions[0] && actions[0].action;
+    }
   }
   componentDidMount = async () => {
     const { selected } = this.state;
@@ -796,8 +796,8 @@ class FormWizard extends Component {
     this.createProperty(properties, action);
   };
 
-  getAssessmentDetails=async()=>{
-    try{
+  getAssessmentDetails = async () => {
+    try {
       const tenantId = getQueryArg(window.location.href, "tenantId");
       const assessmentId = getQueryArg(
         window.location.href,
@@ -808,15 +808,15 @@ class FormWizard extends Component {
         "_search",
         [],
         {
-          
+
         }
       );
       return searchPropertyResponse;
-    }catch(e){
+    } catch (e) {
       console.log(e.message);
-      
+
     }
-    
+
   }
 
   assessProperty = async (action) => {
@@ -841,13 +841,13 @@ class FormWizard extends Component {
       "channel": "CFC_COUNTER",
       "status": "ACTIVE"
     }
-    if(action==="re-assess"){
-      let assessments= await this.getAssessmentDetails();
-if(assessments.Assessments.length>0){
-      let assessmentResponse=assessments.Assessments[0];
-  assessment=assessmentResponse;
-  assessment.assessmentDate=new Date().getTime() - 60000;
-}
+    if (action === "re-assess") {
+      let assessments = await this.getAssessmentDetails();
+      if (assessments.Assessments.length > 0) {
+        let assessmentResponse = assessments.Assessments[0];
+        assessment = assessmentResponse;
+        assessment.assessmentDate = new Date().getTime() - 60000;
+      }
 
       // assessment.auditDetails={...Properties[0].auditDetails};
       // assessment.unitUsageList=Properties[0].units.map(unit=>{
@@ -865,96 +865,101 @@ if(assessments.Assessments.length>0){
           Assessment: assessment
         }
       );
-      if(action === "re-assess"){
+      if (action === "re-assess") {
         store.dispatch(
           setRoute(
             `/property-tax/pt-acknowledgment?purpose=reassessment&status=success&propertyId=${assessment.propertyId}&FY=${assessment.financialYear}&tenantId=${assessment.tenantId}`
           )
         );
       }
-      else{
-      store.dispatch(
-        setRoute(
-          `/property-tax/pt-acknowledgment?purpose=assessment&status=success&propertyId=${assessment.propertyId}&FY=${assessment.financialYear}&tenantId=${assessment.tenantId}`
-        )
-      );}
+      else {
+        store.dispatch(
+          setRoute(
+            `/property-tax/pt-acknowledgment?purpose=assessment&status=success&propertyId=${assessment.propertyId}&FY=${assessment.financialYear}&tenantId=${assessment.tenantId}`
+          )
+        );
+      }
 
     } catch (e) {
       hideSpinner();
-      if(action==="assess"){
-      store.dispatch(
-        setRoute(
-          `/property-tax/pt-acknowledgment?purpose=assessment&status=failure&propertyId=${assessment.propertyId}&FY=${assessment.financialYear}&tenantId=${assessment.tenantId}`
+      if (action === "assess") {
+        store.dispatch(
+          setRoute(
+            `/property-tax/pt-acknowledgment?purpose=assessment&status=failure&propertyId=${assessment.propertyId}&FY=${assessment.financialYear}&tenantId=${assessment.tenantId}`
 
-        )
-      );}
-      else{
+          )
+        );
+      }
+      else {
         store.dispatch(
           setRoute(
             `/property-tax/pt-acknowledgment?purpose=reassessment&status=failure&propertyId=${assessment.propertyId}&FY=${assessment.financialYear}&tenantId=${assessment.tenantId}`
-  
+
           )
-        );}
+        );
+      }
       // this.setState({ nextButtonEnabled: true });
       // alert(e);
     }
   }
 
   createProperty = async (Properties, action) => {
-    const { documentsUploadRedux, hidespinner, newProperties,propertiesEdited } = this.props;
+    const { documentsUploadRedux, hidespinner, newProperties, propertiesEdited } = this.props;
     const propertyPayload = createPropertyPayload(Properties, documentsUploadRedux, newProperties);
     const propertyMethodAction = (action === "assess" || action === "re-assess") ? "_update" : "_create";
-    if(!propertiesEdited){
-      this.assessProperty(action,propertyPayload);
-     }else{
-            try {
-             const workflow={
-               "businessService": "PT.CREATE",
-               "action": this.getBusinessServiceNextAction('PT.CREATE',null),
-               "moduleName": "PT"
-           }
-             if(propertyPayload.workflow){
-               propertyPayload.workflow={...propertyPayload.workflow,...workflow}
-             }else{
-               propertyPayload.workflow=workflow
-             }
-   
-      const propertyResponse = await httpRequest(
-        `property-services/property/${propertyMethodAction}`,
-        `${propertyMethodAction}`,
-        [],
-        {
-          Property: propertyPayload
-        },
-        [],
-        {},
-        true
-      );
-      if (propertyResponse && propertyResponse.Properties && propertyResponse.Properties.length) {
-        if (propertyResponse.Properties[0].propertyId) {
-          const propertyId = propertyResponse.Properties[0].propertyId;
-          const tenantId = propertyResponse.Properties[0].tenantId;
-          // Navigate to success page
-          if ((action === "assess") || (action === "re-assess")) {
-           
-            this.assessProperty(action,propertyResponse.Properties);
-          } else {
-            this.props.history.push(`pt-acknowledgment?purpose=apply&propertyId=${propertyId}&status=success&tenantId=${tenantId}&FY=2019-20`);
-          }
+
+    if ((action === "assess" || action === "re-assess") && !propertiesEdited) {
+      this.assessProperty(action, propertyPayload);
+    } else {
+      if (action === "assess" || action === "re-assess") {
+
+        const workflow = {
+          "businessService": "PT.CREATE",
+          "action": this.getBusinessServiceNextAction('PT.CREATE', null),
+          "moduleName": "PT"
+        }
+        if (propertyPayload.workflow) {
+          propertyPayload.workflow = { ...propertyPayload.workflow, ...workflow }
+        } else {
+          propertyPayload.workflow = workflow
         }
       }
-    } catch (e) {
-      hideSpinner();
-      // this.setState({ nextButtonEnabled: true });
-      // alert(e);
-      store.dispatch(
-        setRoute(
-          `/property-tax/pt-acknowledgment?purpose=apply&status=failure`
+      try {
+        const propertyResponse = await httpRequest(
+          `property-services/property/${propertyMethodAction}`,
+          `${propertyMethodAction}`,
+          [],
+          {
+            Property: propertyPayload
+          },
+          [],
+          {},
+          true
+        );
+        if (propertyResponse && propertyResponse.Properties && propertyResponse.Properties.length) {
+          if (propertyResponse.Properties[0].propertyId) {
+            const propertyId = propertyResponse.Properties[0].propertyId;
+            const tenantId = propertyResponse.Properties[0].tenantId;
+            // Navigate to success page
+            if ((action === "assess") || (action === "re-assess")) {
 
-        )
-      );
+              this.assessProperty(action, propertyResponse.Properties);
+            } else {
+              this.props.history.push(`pt-acknowledgment?purpose=apply&propertyId=${propertyId}&status=success&tenantId=${tenantId}&FY=2019-20`);
+            }
+          }
+        }
+      } catch (e) {
+        hideSpinner();
+        // this.setState({ nextButtonEnabled: true });
+        // alert(e);
+        store.dispatch(
+          setRoute(
+            `/property-tax/pt-acknowledgment?purpose=apply&status=failure`
+          )
+        );
+      }
     }
-  }
   }
 
   updateIndex = index => {
@@ -1174,15 +1179,15 @@ if(assessments.Assessments.length>0){
         break;
       case 3:
         const uploadedDocs = get(this.props, "documentsUploadRedux");
-        let temp=0;
-        let maxDocuments=0;
+        let temp = 0;
+        let maxDocuments = 0;
         if (uploadedDocs) {
           let docsArray = [];
           Object.keys(uploadedDocs).map(key => {
             docsArray.push(uploadedDocs[key]);
           })
           docsArray.map(docs => {
-            if(docs&&docs.isDocumentRequired){
+            if (docs && docs.isDocumentRequired) {
               maxDocuments++;
             }
             if (docs && docs.isDocumentRequired && docs.documents && docs.dropdown) {
@@ -1211,7 +1216,7 @@ if(assessments.Assessments.length>0){
           if (isAssesment1) {
             createAndUpdate(index, 'assess');
             // this.props.history.push(`pt-acknowledgment?purpose=assessment&consumerCode=${propertyId1}&status=success&tenantId=${tenantId1}&FY=2019-20`);
-          } else if(isReassesment){
+          } else if (isReassesment) {
             createAndUpdate(index, 're-assess');
           }
           else {
@@ -1371,10 +1376,10 @@ if(assessments.Assessments.length>0){
     }
   };
 
-  getEstimates = async () =>{
+  getEstimates = async () => {
     let { search: search1 } = this.props.location;
     let isAssesment1 = Boolean(getQueryValue(search1, "isAssesment").replace('false', ''));
-    if(isAssesment1){
+    if (isAssesment1) {
       this.estimate().then(estimateResponse => {
         if (estimateResponse) {
           window.scrollTo(0, 0);
@@ -1392,12 +1397,12 @@ if(assessments.Assessments.length>0){
     let { toggleSpinner, location } = this.props;
     let { search: search1 } = location;
     let isAssesment1 = Boolean(getQueryValue(search1, "isAssesment").replace('false', ''));
-    if(isAssesment1){
+    if (isAssesment1) {
       let prepareFormData = { ...this.props.prepareFormData };
       toggleSpinner();
       const financialYearFromQuery = getFinancialYearFromQuery();
       try {
-        const financeYear = {financialYear:financialYearFromQuery};
+        const financeYear = { financialYear: financialYearFromQuery };
         const assessmentPayload = createAssessmentPayload(prepareFormData.Properties[0], financeYear);
         let estimateResponse = await httpRequest(
           "pt-calculator-v2/propertytax/v2/_estimate",
@@ -1416,7 +1421,7 @@ if(assessments.Assessments.length>0){
           this
         );
         this.setState({ calculationScreenData: calculationScreenData.data });
-  
+
         toggleSpinner();
         return estimateResponse;
       } catch (e) {
@@ -1434,7 +1439,7 @@ if(assessments.Assessments.length>0){
           );
       }
     }
-    
+
   };
 
   pay = async () => {
@@ -1852,7 +1857,7 @@ const mapStateToProps = state => {
     (propertyAddress && propertyAddress.fields && propertyAddress.fields) || {};
   const currentTenantId = (city && city.value) || commonConfig.tenantId;
   const { preparedFinalObject } = screenConfiguration;
-  const { documentsUploadRedux, newProperties = [] ,propertiesEdited=false} = preparedFinalObject;
+  const { documentsUploadRedux, newProperties = [], propertiesEdited = false } = preparedFinalObject;
   return {
     form,
     prepareFormData: common.prepareFormData,
