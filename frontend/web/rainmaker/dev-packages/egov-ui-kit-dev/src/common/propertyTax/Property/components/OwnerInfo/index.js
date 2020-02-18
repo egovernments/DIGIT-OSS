@@ -1,3 +1,4 @@
+import React from "react";
 import { Card } from "components";
 import { withRouter } from "react-router-dom";
 import Label from "egov-ui-kit/utils/translationNode";

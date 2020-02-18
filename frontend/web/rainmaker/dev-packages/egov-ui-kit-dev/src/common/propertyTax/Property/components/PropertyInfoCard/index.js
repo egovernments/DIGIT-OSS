@@ -31,10 +31,10 @@ class PropertyInfoCard extends Component {
               </div>
               {{ editIcon } && <span style={{ alignItems: "right" }} >{editIcon}</span>}
               {/* Transfer ownership button and View History button */}
-              {(viewHistory || ownershipTransfer) && <div style={{ display: "flex" }}>
-                  {/* <ViewHistory viewHistory={viewHistory} openDialog={this.openDialog} /> */}
-                  {/* <TransferOwnership ownershipTransfer={ownershipTransfer} openDialog={this.openDialog} /> */}
-              </div>}
+              {/*(viewHistory || ownershipTransfer) && <div style={{ display: "flex" }}>
+                  <ViewHistory viewHistory={viewHistory} openDialog={this.openDialog} />
+                  <TransferOwnership ownershipTransfer={ownershipTransfer} openDialog={this.openDialog} />
+              </div>*/}
               {/* ------------------------- */}
             </div>
             <div>
@@ -79,7 +79,7 @@ class PropertyInfoCard extends Component {
               </div>
             }
           </div>
-        } 
+        }
       </Card>
         }
       </div>
