@@ -211,7 +211,8 @@ const getAddress=(item)=>{
         [getTextToLocalMapping("Address")]:
         getAddress(item) || "-",
         tenantId: item.tenantId,
-        [getTextToLocalMapping("Status")]: item.status || "-"
+        [getTextToLocalMapping("Status")]: item.status || "-",
+        temporary:item
       }));
 
       dispatch(

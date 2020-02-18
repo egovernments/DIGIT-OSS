@@ -1,28 +1,28 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import Label from "egov-ui-kit/utils/translationNode";
-import { getCommaSeperatedAddress, getTranslatedLabel } from "egov-ui-kit/utils/commons";
 import { getLatestPropertyDetails, getQueryValue } from "egov-ui-kit/utils/PTCommon";
 import { Button, Card } from "components";
 import Screen from "egov-ui-kit/common/common/Screen";
-import { Icon, BreadCrumbs } from "egov-ui-kit/components";
-import { addBreadCrumbs } from "egov-ui-kit/redux/app/actions";
+import { FETCHASSESSMENTS ,PROPERTY} from "egov-ui-kit/utils/endPoints";
 import { fetchGeneralMDMSData } from "egov-ui-kit/redux/common/actions";
+import { httpRequest } from "egov-ui-kit/utils/api";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+// import get from "lodash/get";
 import WorkFlowContainer from "egov-workflow/ui-containers-local/WorkFlowContainer";
-import { fetchProperties, getSingleAssesmentandStatus, fetchTotalBillAmount, fetchReceipt } from "egov-ui-kit/redux/properties/actions";
-import { getCompletedTransformedItems } from "egov-ui-kit/common/propertyTax/TransformedAssessments";
-import isEqual from "lodash/isEqual";
-import orderby from "lodash/orderBy";
+import { fetchProperties } from "egov-ui-kit/redux/properties/actions";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+// import isEqual from "lodash/isEqual";
+// import orderby from "lodash/orderBy";
 import { initLocalizationLabels } from "egov-ui-kit/redux/app/utils";
-import { getLocale, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 import commonConfig from "config/common.js";
-
+import { getTenantId, localStorageSet, localStorageGet, getLocalization, getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
 import PropertyAddressInfo from "../Property/components/PropertyAddressInfo";
 import AssessmentInfo from "../Property/components/AssessmentInfo";
 import OwnerInfo from "../Property/components/OwnerInfo";
 import PTHeader from "../../common/PTHeader";
-
+import DocumentsInfo from "../Property/components/DocumentsInfo";
+import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 
 const innerDivStyle = {
   padding: "0",
@@ -125,26 +125,143 @@ class ApplicationPreview extends Component {
       { key: "propertyIds", value: propertyId },
       { key: "tenantId", value: tenantId },
     ]);
+    this.fetchApplication();
   };
+  fetchApplication = async () => {
+    const applicationType=this.getApplicationType();
+    try {
+      const payload = await httpRequest(applicationType.endpoint.GET.URL, applicationType.endpoint.GET.ACTION, applicationType.queryParams
+      );
+
+      const responseObject=payload[applicationType.responsePath]&&payload[applicationType.responsePath].length>0&&payload[applicationType.responsePath][0];
+      if(!responseObject.workflow){
+
+      
+      let workflow={
+        "id": null,
+        "tenantId":  getQueryArg(
+          window.location.href,
+          "tenantId"
+        ),
+        "businessService": applicationType.moduleName,
+        "businessId": getQueryArg(
+          window.location.href,
+          "applicationNumber"
+        ),
+        "action": "",
+        "moduleName": "PT",
+        "state": null,
+        "comment": null,
+        "documents": null,
+        "assignes": null
+    }
+    responseObject.workflow=workflow;
+  }
+      this.props.prepareFinalObject(applicationType.dataPath, payload[applicationType.responsePath]&&responseObject)
+    } catch (e) {
+      console.log(e);
+
+    }
+
+  }
+
+  // setBusinessServiceDataToLocalStorage = async (queryObject) => {
+  //   const { toggleSnackbarAndSetText } = this.props;
+  //   try {
+  //     const payload = await httpRequest("egov-workflow-v2/egov-wf/businessservice/_search", "_search", queryObject);
+  //     localStorageSet("businessServiceData", JSON.stringify(get(payload, "BusinessServices")));
+  //     return get(payload, "BusinessServices");
+  //   } catch (e) {
+  //     toggleSnackbarAndSetText(
+  //       true,
+  //       {
+  //         labelName: "Not authorized to access Business Service!",
+  //         labelKey: "ERR_NOT_AUTHORISED_BUSINESS_SERVICE",
+  //       },
+  //       "error"
+  //     );
+  //   }
+  // };
+
+getApplicationType=()=>{
+  const applicationType = getQueryValue(window.location.href, "type");
+  let applicationObject={}
+if(applicationType=="assessment"){
+  applicationObject.dataPath="Assessment";
+  applicationObject.responsePath="Assessments";
+  applicationObject.moduleName="ASMT";
+  applicationObject.updateUrl="/property-services/assessment/_update";
+  
+
+  applicationObject.queryParams=[
+    {
+      key: "assessmentNumbers", value: getQueryArg(
+        window.location.href,
+        "assessmentNumber"
+      )
+    },
+    {
+      key: "tenantId", value: getQueryArg(
+        window.location.href,
+        "tenantId"
+      )
+    }
+  ]
+
+
+  applicationObject.endpoint=FETCHASSESSMENTS;
+
+}else if(applicationType=="property"){
+  applicationObject.responsePath="Properties";
+  applicationObject.dataPath="Property";
+  applicationObject.moduleName="PT.CREATE";
+  applicationObject.updateUrl="/property-services/property/_update";
+
+
+  applicationObject.queryParams=[
+    {
+      key: "propertyIds", value: getQueryArg(
+        window.location.href,
+        "propertyId"
+      )
+    },
+    {
+      key: "tenantId", value: getQueryArg(
+        window.location.href,
+        "tenantId"
+      )
+    }
+  ]
+
+
+  applicationObject.endpoint=PROPERTY;
+
+
+}
+return applicationObject;
+}
+
   render() {
-    const { location } = this.props;
+    const { location, documentsUploaded } = this.props;
     const { search } = location;
     const propertyId = getQueryValue(search, "propertyId");
     const { generalMDMSDataById, properties } = this.props;
+    const applicationType= this.getApplicationType();
     return <div>
       <Screen className={""}>
         <PTHeader header='PT_APPLICATION_TITLE' subHeaderTitle='PT_PROPERTY_APPLICATION_NO' subHeaderValue={propertyId} />
         <div className="form-without-button-cont-generic" >
           <div>
-            <WorkFlowContainer dataPath={"FireNOCs"}
-              moduleName={"FIRENOC"}
-              updateUrl={"/firenoc-services/v1/_update"}></WorkFlowContainer>
+            <WorkFlowContainer dataPath={applicationType.dataPath}
+              moduleName={applicationType.moduleName}
+              updateUrl={applicationType.updateUrl}></WorkFlowContainer>
             <Card
               textChildren={
                 <div className="col-sm-12 col-xs-12" style={{ alignItems: "center" }}>
                   <PropertyAddressInfo properties={properties} generalMDMSDataById={generalMDMSDataById}></PropertyAddressInfo>
                   <AssessmentInfo properties={properties} generalMDMSDataById={generalMDMSDataById} ></AssessmentInfo>
                   <OwnerInfo properties={properties} generalMDMSDataById={generalMDMSDataById} ></OwnerInfo>
+                  <DocumentsInfo documentsUploaded={documentsUploaded}></DocumentsInfo>
                 </div>
               }
             />
@@ -163,9 +280,10 @@ const mapStateToProps = (state, ownProps) => {
   const propertyId = getQueryValue(search, "propertyId");
 
   const properties = propertiesById[propertyId] || {};
+  const { documentsUploaded } = properties || [];
   return {
     ownProps,
-    generalMDMSDataById, properties
+    generalMDMSDataById, properties, documentsUploaded
   };
 };
 
@@ -173,7 +291,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     fetchGeneralMDMSData: (requestBody, moduleName, masterName) => dispatch(fetchGeneralMDMSData(requestBody, moduleName, masterName)),
     fetchProperties: (queryObjectProperty) => dispatch(fetchProperties(queryObjectProperty)),
-
+    toggleSnackbarAndSetText: (open, message, error) => dispatch(toggleSnackbarAndSetText(open, message, error)),
+    prepareFinalObject: (jsonPath, value) => dispatch(prepareFinalObject(jsonPath, value)),
   };
 };
 

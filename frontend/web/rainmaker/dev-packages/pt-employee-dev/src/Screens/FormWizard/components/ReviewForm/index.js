@@ -15,6 +15,7 @@ import PropertyAddressInfo from 'egov-ui-kit/common/propertyTax/Property/compone
 import AssessmentInfo from 'egov-ui-kit/common/propertyTax/Property/components/AssessmentInfo';
 import OwnerInfo from 'egov-ui-kit/common/propertyTax/Property/components/OwnerInfo';
 import DocumentsInfo from "egov-ui-kit/common/propertyTax/Property/components/DocumentsInfo";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 
 import "./index.css";
@@ -72,6 +73,7 @@ class ReviewForm extends Component {
 
   onEditButtonClick = (index) => {
     let { onTabClick } = this.props;
+    this.props.prepareFinalObject("propertiesEdited", true);
     onTabClick(index);
   };
 
@@ -149,6 +151,8 @@ const mapStateToProps = (state, ownProps) => {
 };
 const mapDispatchToProps = (dispatch) => ({
   setRoute: (route) => dispatch({ type: "SET_ROUTE", route }),
+  prepareFinalObject: (jsonPath, value) =>
+  dispatch(prepareFinalObject(jsonPath, value)),
 });
 export default connect(
   mapStateToProps,

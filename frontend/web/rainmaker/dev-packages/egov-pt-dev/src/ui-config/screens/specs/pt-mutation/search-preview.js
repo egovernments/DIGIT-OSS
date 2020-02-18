@@ -44,7 +44,7 @@ const titlebar = getCommonContainer({
     moduleName: "egov-pt",
     componentPath: "ApplicationNoContainer",
     props: {
-      number: getQueryArg(window.location.href, "applicationNumber"),
+      number: getQueryArg(window.location.href, "propertyId"),
       label: {
           labelValue: "Application No.",
           labelKey: "PT_MUTATION_APPLICATION_NO"
@@ -294,10 +294,10 @@ const setSearchResponse = async (
       key: "tenantId",
       value: tenantId
     },
-    { key: "applicationNumber", value: applicationNumber }
+    { key: "propertyIds", value: applicationNumber }
   ]);
   // const response = sampleSingleSearch();
-  dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", [])));
+  dispatch(prepareFinalObject("Properties", get(response, "Properties", [])));
 
   // Set Institution/Applicant info card visibility
   if (
@@ -338,7 +338,7 @@ const screenConfig = {
   beforeInitScreen: (action, state, dispatch) => {
     const applicationNumber = getQueryArg(
       window.location.href,
-      "applicationNumber"
+      "propertyId"
     );
     const tenantId = getQueryArg(window.location.href, "tenantId");
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
@@ -348,7 +348,7 @@ const screenConfig = {
 
     const queryObject = [
       { key: "tenantId", value: tenantId },
-      { key: "businessServices", value: "FIRENOC" }
+      { key: "businessServices", value: "PT.MUTATION" }
     ];
     setBusinessServiceDataToLocalStorage(queryObject, dispatch);
 
@@ -423,9 +423,9 @@ const screenConfig = {
           moduleName: "egov-workflow",
           // visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
           props: {
-            dataPath: "FireNOCs",
-            moduleName: "FIRENOC",
-            updateUrl: "/firenoc-services/v1/_update"
+            dataPath: "Properties",
+            moduleName: "PT.MUTATION",
+            updateUrl: "/property-services/property/_update"
           }
         },
         body: getCommonCard({

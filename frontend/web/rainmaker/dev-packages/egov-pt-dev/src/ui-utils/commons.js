@@ -52,6 +52,8 @@ export const findItemInArrayOfObject = (arr, conditionCheckerFn) => {
 
 export const getSearchResults = async (queryObject, dispatch) => {
   try {
+    
+    
     store.dispatch(toggleSpinner());
     const response = await httpRequest(
       "post",

@@ -265,7 +265,7 @@ import {
             required: false,
             pattern: /^[a-zA-Z0-9-]*$/i,
             errorMessage: "ERR_INVALID_APPLICATION_NO",
-            jsonPath: "searchScreen.ptApplicationNumber"
+            jsonPath: "searchScreen.acknowledgementIds"
           }), 
       ownerMobNoProp: getTextField({
         label: {

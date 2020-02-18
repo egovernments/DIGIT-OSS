@@ -257,8 +257,17 @@ export const searchApplicationTable = {
       },
       {
         name: "tenantId",
+        
         options: {
-          display: false
+          display: false,
+        }
+      },{
+        name: "temporary",
+        
+        options: {
+          display: false,
+      
+        
         }
       }
     ],
@@ -320,6 +329,7 @@ const onApplicationTabClick = (rowData,dispatch) => {
   }
     else{
       // store.dispatch(setRoute(`/property-tax/property/${rowData[1]}/${rowData[6]}`));
-      store.dispatch(setRoute(`/property-tax/application-preview?propertyId=${rowData[1].props.children}&applicationNumber=PB-FN-2019-07-11-002180&tenantId=${rowData[6]}`));
+      // property-tax/application-preview?propertyId=PB-PT-2020-02-12-019323&applicationNumber=PB-AS-2020-02-14-058692&tenantId=pb.amritsar&type=assessment&assessmentNumber=PB-AS-2020-02-14-058692
+      store.dispatch(setRoute(`/property-tax/application-preview?propertyId=${rowData[1].props.children}&applicationNumber=${rowData[7]&&rowData[7].acknowldgementNumber}&tenantId=${rowData[6]}&type=property`));
   }
 };

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import DocumentListContainer from "../../../../common/DocumentListContainer";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId ,getUserInfo} from "egov-ui-kit/utils/localStorageUtils";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "../../../../../utils/api";
 import get from "lodash/get";
@@ -57,7 +57,8 @@ class DocumentsUpload extends Component {
 
   getMdmsData = async () => {
     // const { prepareFinalObject } = this.props;
-     let tenantId = getTenantId();
+    
+     let tenantId = process.env.REACT_APP_NAME === "Employee" ?  getTenantId() : JSON.parse(getUserInfo()).permanentCity;
     // let mdmsBody = {
     //   MdmsCriteria: {
     //     tenantId: tenantId,

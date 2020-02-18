@@ -158,7 +158,7 @@ export const formwizardThirdStep = {
 
 const getPropertyData = async (action, state, dispatch) => {
   let tenantId =getQueryArg(window.location.href,"tenantId");
-  let consumerCode=getQueryArg(window.location.href,"consumerCode");
+  let consumerCode=getQueryArg(window.location.href,"propertyId");
     
   try {
     let queryObject = [
@@ -284,24 +284,24 @@ export const prepareEditFlow = async (
   applicationNumber,
   tenantId
 ) => {
-  const buildings = get(
-    state,
-    "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.buildings",
-    []
-  );
-  if (applicationNumber && buildings.length == 0) {
+  // const buildings = get(
+  //   state,
+  //   "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.buildings",
+  //   []
+  // );
+  if (applicationNumber) {
     let response = await getSearchResults([
       {
         key: "tenantId",
         value: tenantId
       },
-      { key: "applicationNumber", value: applicationNumber }
+      { key: "propertyIds", value: applicationNumber }
     ]);
     // let response = sampleSingleSearch();
 
     response = furnishNocResponse(response);
 
-    dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", [])));
+    dispatch(prepareFinalObject("Properties", get(response, "Properties", [])));
     if (applicationNumber) {
       setApplicationNumberBox(state, dispatch, applicationNumber);
     }

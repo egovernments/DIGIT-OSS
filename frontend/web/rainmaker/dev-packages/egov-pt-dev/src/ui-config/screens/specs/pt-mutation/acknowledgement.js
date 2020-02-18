@@ -71,7 +71,7 @@ const getAcknowledgementCard = (
   tenant
 ) => {
   if (purpose === "apply" && status === "success") {
-    loadPdfGenerationData(applicationNumber, tenant);
+    // loadPdfGenerationData(applicationNumber, tenant);
     return {
       header:getHeader(applicationNumber),
       applicationSuccessCard: {
@@ -196,7 +196,7 @@ const getAcknowledgementCard = (
     };
   }  else if (purpose === "apply" && status === "failure") {
     return {
-      header,
+      header:getHeader(applicationNumber),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -218,6 +218,219 @@ const getAcknowledgementCard = (
       },
       gotoHomeFooter
     };
+  }else if (purpose === "resubmit" && status === "success") {
+    return {
+      header:getHeader(applicationNumber),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        props: {
+          // style: {
+          //   position: "absolute",
+          //   width: "95%"
+          // }
+        },
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "Application Submitted Successfully",
+              labelKey: "PT_APPLICATION_RESUBMIT_SUCCESS_MESSAGE_MAIN"
+            },
+            body: {
+              labelName:
+                "A notification regarding Application Submission has been sent to trade owner at registered Mobile No.",
+              labelKey: "PT_APPLICATION_RESUBMIT_SUCCESS_MESSAGE_SUB"
+            },
+            tailText: {
+              labelName: "Application No.",
+              labelKey: "PT_MUTATION_APPLICATION_NO"
+            },
+            number: applicationNumber
+          })
+        }
+      },
+     
+      applicationSuccessFooter: applicationSuccessFooter(
+        state,
+        dispatch,
+        applicationNumber,
+        tenant
+      )
+    };
+  }else if (purpose === "approve" && status === "success") {
+    // loadReceiptGenerationData(applicationNumber, tenant);
+    return {
+      header:getHeader(applicationNumber),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "Application is Approved Successfully",
+              labelKey: "PT_APPROVAL_CHECKLIST_MESSAGE_HEAD"
+            },
+            body: {
+              labelName:
+                "A notification regarding Trade License Approval has been sent to trade owner at registered Mobile No.",
+              labelKey: "PT_APPROVAL_CHECKLIST_MESSAGE_SUB"
+            },
+            tailText: {
+              labelName: "Trade License No.",
+              labelKey: "PT_MUTATION_APPLICATION_NO"
+            },
+            number: secondNumber
+          })
+        }
+      },
+      gotoHomeFooter
+    };
+  } else if (purpose === "sendback" && status === "success") {
+    // loadReceiptGenerationData(applicationNumber, tenant);
+    return {
+      header:getHeader(applicationNumber),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "Application is sent back Successfully",
+              labelKey: "PT_SENDBACK_CHECKLIST_MESSAGE_HEAD"
+            },
+            // body: {
+            //   labelName:
+            //     "A notification regarding above application status has been sent to trade owner at registered Mobile No.",
+            //   labelKey: "PT_SENDBACK_CHECKLIST_MESSAGE_SUB"
+            // },
+            tailText: {
+              labelName: "Trade License No.",
+              labelKey: "PT_MUTATION_APPLICATION_NO"
+            },
+            number: secondNumber
+          })
+        }
+      },
+      gotoHomeFooter
+    };
+  }else if (purpose === "sendbacktocitizen" && status === "success") {
+    // loadReceiptGenerationData(applicationNumber, tenant);
+    return {
+      header:getHeader(applicationNumber),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "Application is sent back to Citizen Successfully",
+              labelKey: "PT_SENDBACK_TOCITIZEN_CHECKLIST_MESSAGE_HEAD"
+            },
+            // body: {
+            //   labelName:
+            //     "A notification regarding above application status has been sent to trade owner at registered Mobile No.",
+            //   labelKey: "TL_SENDBACK_CHECKLIST_MESSAGE_SUB"
+            // },
+            tailText: {
+              labelName: "Trade License No.",
+              labelKey: "PT_MUTATION_APPLICATION_NO"
+            },
+            number: secondNumber
+          })
+        }
+      },
+      gotoHomeFooter
+    };
+  } else if (purpose === "application" && status === "rejected") {
+    return {
+      header:getHeader(applicationNumber),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "close",
+            backgroundColor: "#E54D42",
+            header: {
+              labelName: "Trade License Application Rejected",
+              labelKey: "PT_APPROVAL_REJ_MESSAGE_HEAD"
+            },
+            body: {
+              labelName:
+                "A notification regarding Trade License Rejection has been sent to trade owner at registered Mobile No.",
+              labelKey: "PT_APPROVAL_REJ_MESSAGE_SUBHEAD"
+            }
+          })
+        }
+      },
+      gotoHomeFooter
+    };
+  } else if (purpose === "application" && status === "cancelled") {
+    return {
+      header:getHeader(applicationNumber),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "close",
+            backgroundColor: "#E54D42",
+            header: {
+              labelName: "Trade License Cancelled",
+              labelKey: "PT_PT_CANCELLED_MESSAGE_HEAD"
+            },
+            body: {
+              labelName:
+                "A notification regarding Trade License cancellation has been sent to trade owner at registered Mobile No.",
+              labelKey: "PT_PT_CANCELLED_MESSAGE_SUBHEAD"
+            },
+            tailText: {
+              labelName: "Trade License No.",
+              labelKey: "PT_MUTATION_APPLICATION_NO"
+            },
+            number: secondNumber
+          })
+        }
+      },
+      gotoHomeFooter
+    };
+  }else if (purpose === "forward" && status === "success") {
+    return {
+      header:getHeader(applicationNumber),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "Application Forwarded Successfully",
+              labelKey: "PT_FORWARD_SUCCESS_MESSAGE_MAIN"
+            },
+            body: {
+              labelName:
+                "A notification regarding above application status has been sent to trade owner at registered Mobile No.",
+              labelKey: "PT_APPLICATION_FORWARD_SUCCESS"
+            },
+            tailText: {
+              labelName: "Application No.",
+              labelKey: "PT_MUTATION_APPLICATION_NO"
+            },
+            number: applicationNumber
+          })
+        }
+      },
+      gotoHomeFooter
+    };
   }
 };
 
@@ -228,12 +441,12 @@ const setApplicationData = async (dispatch, applicationNumber, tenant) => {
       value: tenant
     },
     {
-      key: "applicationNumber",
+      key: "propertyIds",
       value: applicationNumber
     }
   ];
-  const response = await getSearchResults(queryObject);
-  dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", [])));
+  // const response = await getSearchResults(queryObject);
+  // dispatch(prepareFinalObject("Properties", get(response, "Properties", [])));
 };
 
 const screenConfig = {
