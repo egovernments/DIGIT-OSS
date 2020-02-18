@@ -207,6 +207,8 @@ public class TLConstants {
 
     public static final String VARIABLE_ACTION = "action";
 
+    public static final String VARIABLE_STATUS = "status";
+
     public static final String VARIABLE_WFDOCUMENTS = "wfDocuments";
 
     public static final String VARIABLE_ACTIVE = "active";
@@ -233,7 +235,7 @@ public class TLConstants {
 
 
     public static final List<String> FIELDS_TO_IGNORE = Collections.unmodifiableList(Arrays.asList(VARIABLE_ACTION,VARIABLE_WFDOCUMENTS,
-            VARIABLE_CREATEDBY,VARIABLE_LASTMODIFIEDBY,VARIABLE_CREATEDTIME,VARIABLE_LASTMODIFIEDTIME));
+            VARIABLE_CREATEDBY,VARIABLE_LASTMODIFIEDBY,VARIABLE_CREATEDTIME,VARIABLE_LASTMODIFIEDTIME,VARIABLE_STATUS));
 
 
     public TLConstants() {}
