@@ -105,14 +105,17 @@ public class PropertyValidator {
      * Validates the masterData,CitizenInfo and the authorization of the assessee for update
      * @param request PropertyRequest for update
      */
-    public void validateUpdateRequestForOwnerFields(PropertyRequest request, Property propertyFromSearch){ 
+    public void validateRequestForUpdate(PropertyRequest request, Property propertyFromSearch){ 
     	
     	Property property = request.getProperty();
     	Map<String, String> errorMap = new HashMap<>();
     	
         if(request.getRequestInfo().getUserInfo().getType().equalsIgnoreCase("CITIZEN"))
             validateAssessees(request,propertyFromSearch, errorMap);
-        
+
+		if (configs.getIsWorkflowEnabled() && request.getProperty().getWorkflow() == null)
+			throw new CustomException("EG_PT_UPDATE_WF_ERROR", "Workflow information is mandatory for update process");
+
         /*
          * Blocking owner changes in update flow
          */
@@ -176,10 +179,6 @@ public class PropertyValidator {
         
         validateMasterData(request, errorMap);
 
-		if (configs.getIsWorkflowEnabled() && request.getProperty().getWorkflow() == null)
-			throw new CustomException("EG_PT_UPDATE_WF_ERROR", "Workflow information is mandatory for update");
-		
-		
 		if (propertyFromSearch.getStatus().equals(Status.INWORKFLOW) && (property.getAcknowldgementNumber() == null
 				|| (property.getAcknowldgementNumber() != null && !propertyFromSearch.getAcknowldgementNumber()
 						.equalsIgnoreCase(property.getAcknowldgementNumber()))))
@@ -627,6 +626,10 @@ public class PropertyValidator {
 			if (isBillUnpaid)
 				throw new CustomException("EG_PT_MUTATION_UNPAID_ERROR", "Property has to be completely paid for before initiating the mutation process");
 		}
+		
+		if (configs.getIsMutationWorkflowEnabled() && request.getProperty().getWorkflow() == null)
+			throw new CustomException("EG_PT_UPDATE_WF_ERROR", "Workflow information is mandatory for mutation process");
+		
 		
 		@SuppressWarnings("unchecked")
 		Map<String, Object> additionalDetails = mapper.convertValue(property.getAdditionalDetails(), Map.class);

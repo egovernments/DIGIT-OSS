@@ -102,7 +102,19 @@ public class EnrichmentService {
     	Property property = request.getProperty();
         RequestInfo requestInfo = request.getRequestInfo();
         AuditDetails auditDetails = propertyutil.getAuditDetails(requestInfo.getUserInfo().getUuid().toString(), true);
+        
+		Boolean isWfEnabled = config.getIsWorkflowEnabled();
+		Boolean iswfStarting = propertyFromDb.getStatus().equals(Status.ACTIVE);
 
+		if (!isWfEnabled) {
+
+			property.setStatus(Status.ACTIVE);
+
+		} else if (isWfEnabled && iswfStarting) {
+
+			enrichPropertyForNewWf(requestInfo, property);
+		}
+		
 		if (!CollectionUtils.isEmpty(property.getDocuments()))
 			property.getDocuments().forEach(doc -> {
 
@@ -179,31 +191,21 @@ public class EnrichmentService {
      * 
      * @param request
      */
-	public void enrichMutationRequest(PropertyRequest request, Boolean isStart) {
+	public void enrichMutationRequest(PropertyRequest request, Property propertyFromSearch) {
 
 		RequestInfo requestInfo = request.getRequestInfo();
 		Property property = request.getProperty();
-		
-		if (isStart) {
-			
-			String ackNo = propertyutil.getIdList(requestInfo, property.getTenantId(), config.getAckIdGenName(), config.getAckIdGenFormat(), 1).get(0);
-			
-			property.setId(UUID.randomUUID().toString());
-			property.setAcknowldgementNumber(ackNo);
+		Boolean isWfEnabled = config.getIsMutationWorkflowEnabled();
+		Boolean iswfStarting = propertyFromSearch.getStatus().equals(Status.ACTIVE);
 
-			/*
-			 * if workflow not active then update the record
-			 * 
-			 * else insert a new record with new uuids
-			 */
-			if (!config.getIsMutationWorkflowEnabled()) {
-				
-				property.setStatus(Status.ACTIVE);
-			} else {
-				enrichUuidsForPropertyCreate(requestInfo, property);
-			}
+		if (!isWfEnabled) {
+
+			property.setStatus(Status.ACTIVE);
+
+		} else if (isWfEnabled && iswfStarting) {
+
+			enrichPropertyForNewWf(requestInfo, property);
 		}
-		
 
 		property.getOwners().forEach(owner -> {
 
@@ -221,5 +223,20 @@ public class EnrichmentService {
 					}
 				});
 		});
+	}
+
+	/**
+	 * enrich property as new entry for workflow validation
+	 * 
+	 * @param requestInfo
+	 * @param property
+	 */
+	private void enrichPropertyForNewWf(RequestInfo requestInfo, Property property) {
+		
+		String ackNo = propertyutil.getIdList(requestInfo, property.getTenantId(), config.getAckIdGenName(), config.getAckIdGenFormat(), 1).get(0);
+		property.setId(UUID.randomUUID().toString());
+		property.setAcknowldgementNumber(ackNo);
+		
+		enrichUuidsForPropertyCreate(requestInfo, property);
 	}
 }

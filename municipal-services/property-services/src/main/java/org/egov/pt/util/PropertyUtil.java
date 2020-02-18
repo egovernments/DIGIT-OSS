@@ -140,10 +140,26 @@ public class PropertyUtil extends CommonUtils {
 				request.getProperty().getAdditionalDetails()));
 	}
 
+	/**
+	 * Setting the uuid of old peoprty record to the new record
+	 * @param request
+	 * @param uuid
+	 * @return
+	 */
 	public JsonNode saveOldUuidToRequest(PropertyRequest request, String uuid) {
 
-		ObjectNode additionalDetail = (ObjectNode) request.getProperty().getAdditionalDetails();
-		return additionalDetail.put(PTConstants.PREVIOUS_PROPERTY_PREVIOUD_UUID, uuid);
+		ObjectNode objectNodeDetail;
+		JsonNode additionalDetails = request.getProperty().getAdditionalDetails();
+
+		if (null == additionalDetails || (null != additionalDetails && additionalDetails.isNull())) {
+			objectNodeDetail = mapper.createObjectNode();
+
+		} else {
+
+			objectNodeDetail = (ObjectNode) additionalDetails;
+		}
+		request.getProperty().setAdditionalDetails(objectNodeDetail);
+		return objectNodeDetail.put(PTConstants.PREVIOUS_PROPERTY_PREVIOUD_UUID, uuid);
 	}
 
 	public void clearSensitiveDataForPersistance(Property property) {

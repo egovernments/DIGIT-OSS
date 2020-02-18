@@ -123,7 +123,7 @@ public class PropertyService {
 	 */
 	private void processPropertyUpdate(PropertyRequest request, Property propertyFromSearch) {
 		
-		propertyValidator.validateUpdateRequestForOwnerFields(request, propertyFromSearch);
+		propertyValidator.validateRequestForUpdate(request, propertyFromSearch);
 		enrichmentService.enrichUpdateRequest(request, propertyFromSearch);
 		util.clearSensitiveDataForPersistance(request.getProperty());
 		
@@ -166,9 +166,7 @@ public class PropertyService {
 		
 		propertyValidator.validateMutation(request, propertyFromSearch);
 		userService.createUser(request);
-		Boolean isMutationSatrting = request.getProperty().getWorkflow().getAction().equalsIgnoreCase(
-				config.getMutationOpenState());
-		enrichmentService.enrichMutationRequest(request, isMutationSatrting);
+		enrichmentService.enrichMutationRequest(request, propertyFromSearch);
 		util.clearSensitiveDataForPersistance(request.getProperty());
 		// TODO FIX ME block property changes FIXME
 
