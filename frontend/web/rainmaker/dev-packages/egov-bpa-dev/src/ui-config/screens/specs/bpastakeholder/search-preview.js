@@ -448,7 +448,7 @@ const rightdiv = {
   children: {
     downloadMenu: {
       uiFramework: "custom-atoms-local",
-      moduleName: "egov-tradelicence",
+      moduleName: "egov-bpa",
       componentPath: "MenuButton",
       props: {
         data: {
@@ -462,7 +462,7 @@ const rightdiv = {
     },
     printMenu: {
       uiFramework: "custom-atoms-local",
-      moduleName: "egov-tradelicence",
+      moduleName: "egov-bpa",
       componentPath: "MenuButton",
       props: {
         data: {
