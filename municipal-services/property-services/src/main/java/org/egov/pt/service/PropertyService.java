@@ -124,10 +124,10 @@ public class PropertyService {
 	private void processPropertyUpdate(PropertyRequest request, Property propertyFromSearch) {
 		
 		propertyValidator.validateRequestForUpdate(request, propertyFromSearch);
+		request.getProperty().setOwners(propertyFromSearch.getOwners());
 		enrichmentService.enrichUpdateRequest(request, propertyFromSearch);
 		util.clearSensitiveDataForPersistance(request.getProperty());
 		
-		request.getProperty().setOwners(propertyFromSearch.getOwners());
 		PropertyRequest OldPropertyRequest = PropertyRequest.builder()
 				.requestInfo(request.getRequestInfo())
 				.property(propertyFromSearch)
@@ -151,9 +151,20 @@ public class PropertyService {
 					&& !state.getApplicationStatus().equalsIgnoreCase(Status.ACTIVE.toString())) {
 
 				terminateWorkflowAndReInstatePreviousRecord(request, propertyFromSearch);
+			}else {
+				/*
+				 * If property is In Workflow then continue
+				 */
+				producer.push(config.getUpdatePropertyTopic(), request);
 			}
+
+		} else {
+
+			/*
+			 * If no workflow then update property directly with mutation information
+			 */
+			producer.push(config.getUpdatePropertyTopic(), request);
 		}
-		producer.push(config.getUpdatePropertyTopic(), request);
 	}
 
 	/**

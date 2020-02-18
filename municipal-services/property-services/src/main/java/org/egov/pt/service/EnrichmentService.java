@@ -109,6 +109,7 @@ public class EnrichmentService {
 		if (!isWfEnabled) {
 
 			property.setStatus(Status.ACTIVE);
+			property.getAddress().setId(propertyFromDb.getAddress().getId());
 
 		} else if (isWfEnabled && iswfStarting) {
 
@@ -130,7 +131,6 @@ public class EnrichmentService {
 
             property.setAuditDetails(auditDetails);
             property.setAccountId(propertyFromDb.getAccountId());
-            property.getAddress().setId(propertyFromDb.getAddress().getId());
        
 		property.setAdditionalDetails(
 				propertyutil.jsonMerge(propertyFromDb.getAdditionalDetails(), property.getAdditionalDetails()));
