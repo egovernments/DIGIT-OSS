@@ -209,6 +209,8 @@ public class TLConstants {
 
     public static final String VARIABLE_STATUS = "status";
 
+    public static final String VARIABLE_ISSUED_DATE = "issuedDate";
+
     public static final String VARIABLE_WFDOCUMENTS = "wfDocuments";
 
     public static final String VARIABLE_ACTIVE = "active";
@@ -222,6 +224,8 @@ public class TLConstants {
     public static final String VARIABLE_CREATEDTIME = "createdTime";
 
     public static final String VARIABLE_LASTMODIFIEDTIME = "lastModifiedTime";
+
+    public static final String VARIABLE_LASTMODIFIEDDATE = "lastModifiedDate";
     
 	public static final String  USREVENTS_EVENT_TYPE = "SYSTEMGENERATED";
 	public static final String  USREVENTS_EVENT_NAME = "Trade License";
@@ -235,7 +239,7 @@ public class TLConstants {
 
 
     public static final List<String> FIELDS_TO_IGNORE = Collections.unmodifiableList(Arrays.asList(VARIABLE_ACTION,VARIABLE_WFDOCUMENTS,
-            VARIABLE_CREATEDBY,VARIABLE_LASTMODIFIEDBY,VARIABLE_CREATEDTIME,VARIABLE_LASTMODIFIEDTIME,VARIABLE_STATUS));
+            VARIABLE_CREATEDBY,VARIABLE_LASTMODIFIEDBY,VARIABLE_CREATEDTIME,VARIABLE_LASTMODIFIEDTIME,VARIABLE_STATUS,VARIABLE_LASTMODIFIEDDATE,VARIABLE_ISSUED_DATE));
 
 
     public TLConstants() {}
