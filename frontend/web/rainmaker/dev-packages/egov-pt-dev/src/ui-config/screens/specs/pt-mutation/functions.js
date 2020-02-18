@@ -202,7 +202,7 @@ const getAddress=(item)=>{
         // [getTextToLocalMapping("Application No")]:
         //   item.applicationNo || "-",
           [getTextToLocalMapping("Application No")]:
-          item.propertyId || "-",
+          item.acknowldgementNumber || "-",
         [getTextToLocalMapping("Property Tax Unique Id")]: item.propertyId || "-",
         [getTextToLocalMapping("Application Type")]:
           item.applicationNo || "PT",

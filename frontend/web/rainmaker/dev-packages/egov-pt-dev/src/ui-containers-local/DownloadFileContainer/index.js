@@ -8,7 +8,7 @@ class DownloadFileContainer extends Component {
   render() {
     const { data, documentData, ...rest } = this.props;
     return (
-      <MultiDownloadCard data={data} documentData={documentData} {...rest} />
+      <MultiDownloadCard data={documentData} documentData={documentData} {...rest} />
     );
   }
 }
