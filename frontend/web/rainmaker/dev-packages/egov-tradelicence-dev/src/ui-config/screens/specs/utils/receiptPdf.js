@@ -6,7 +6,7 @@ import pdfFonts from "./vfs_fonts";
 // pdfMakeCustom.vfs = pdfFonts.vfs;
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { from } from "rxjs";
-
+import { downloadPDFFileUsingBase64 } from "egov-ui-framework/ui-utils/commons"
 // pdfMakeCustom.fonts = {
 //   Camby:{
 //           normal: 'Cambay-Regular.ttf',
@@ -1768,7 +1768,8 @@ const generateReceipt = async (state, dispatch, type) => {
       let certificate_data = getCertificateData(transformedData, ulbLogo);
       certificate_data &&
         //  pdfMakeCustom.createPdf(certificate_data).download("tl_certificate.pdf");
-        pdfMakeCustom.createPdf(certificate_data).open();
+        //pdfMakeCustom.createPdf(certificate_data).open();
+        downloadPDFFileUsingBase64(pdfMakeCustom.createPdf(certificate_data), `tl_certificate.pdf`);
       break;
     case "certificate_print":
       certificate_data = getCertificateData(transformedData, ulbLogo);
@@ -1790,7 +1791,8 @@ const generateReceipt = async (state, dispatch, type) => {
 
       ack_data &&
         //   pdfMakeCustom.createPdf(receipt_data).download("tl_receipt.pdf");
-        pdfMakeCustom.createPdf(ack_data).open();
+       // pdfMakeCustom.createPdf(ack_data).open();
+       downloadPDFFileUsingBase64(pdfMakeCustom.createPdf(ack_data), `tl_receipt.pdf`);
       break;
     default:
       break;

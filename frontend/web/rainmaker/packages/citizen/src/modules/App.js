@@ -15,6 +15,7 @@ import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { handleFieldChange } from "egov-ui-kit/redux/form/actions";
 import { getQueryArg } from "egov-ui-kit/utils/commons";
 import isEmpty from "lodash/isEmpty";
+import "./app.css";
 import get from "lodash/get"
 
 class App extends Component {
@@ -89,7 +90,7 @@ class App extends Component {
         logout()
         setRoute("/user/otp?smsLink=true");
        // setPreviousRoute(redirectionLink(href));
-      } 
+      }
     }else{
       setRoute("/user/otp?smsLink=true");
       setPreviousRoute(redirectionLink(href));

@@ -2,7 +2,7 @@ import { sortDropdown } from "egov-ui-kit/utils/PTCommon";
 import { prepareFormData } from "egov-ui-kit/redux/common/actions";
 import { removeForm ,setFieldProperty} from "egov-ui-kit/redux/form/actions";
 import { removeFormKey } from "./utils/removeFloors";
-import { prepareDropDownData } from "./utils/reusableFields";
+import { prepareDropDownData,floorUtilFunction} from "./utils/reusableFields";
 import set from "lodash/set";
 import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
@@ -68,6 +68,13 @@ const formConfig = {
         }
         else {
           dispatch(setFieldProperty("basicInformation", "datePicker", "hideField", false));
+        }
+        if (field.value==="INDEPENDENTPROPERTY") {
+          dispatch(prepareFormData("Properties[0].propertyDetails[0].units[0].floorNo", 1));
+          floorUtilFunction({field:{value:1}, dispatch, state});
+        }
+        else {
+          localStorageSet("previousFloorNo", -1);
         }
       },
       dropDownData: [],

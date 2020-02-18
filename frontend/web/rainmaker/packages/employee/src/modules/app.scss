@@ -1,3 +1,20 @@
-span[class^="MuiFormLabel-asterisk"] {
-  color: #e54d42;
+.app-container-iframe {
+   border-width: 0; width: 100vw; height: 100vh; margin: 32px 0 0 0;
+  }
+@media (max-width: 768px) {
+   .app-container-iframe {
+       border-width: 0;
+       width: 100vw;
+       height: 100vh;
+       margin: 32px 0 0 0;
+   }
+}
+
+@media (max-width: 375px) {
+.app-container-iframe {
+       border-width: 0;
+       width: 100vw;
+       height: 100vh;
+       margin: 32px 0 0 0;
+   }
 }
