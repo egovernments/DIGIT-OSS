@@ -17,16 +17,28 @@ const registrationDetails =  getCommonGrayCard({
       },
       {
         jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].name"
+          "Properties[0].additionalDetails.reasonForTransfer"
       }
-    ), documentNo: getLabelWithValue(
+    ),
+    marketValue: getLabelWithValue(
+      {
+       
+        labelName: "Market Value",
+            labelKey: "PT_MUTATION_MARKET_VALUE"
+      },
+      {
+        jsonPath:
+          "Properties[0].additionalDetails.marketValue"
+      }
+    ),
+     documentNo: getLabelWithValue(
       {
         labelName: "Document No.",
         labelKey: "PT_MUTATION_DOCUMENT_NO"
       },
       {
         jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].fatherOrHusbandName"
+          "Properties[0].additionalDetails.documentNumber"
       }
     ), documentDate: getLabelWithValue(
       {
@@ -35,7 +47,7 @@ const registrationDetails =  getCommonGrayCard({
       },
       {
         jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].gender"
+          "Properties[0].additionalDetails.documentDate"
       }
     ), documentValue: getLabelWithValue(
       {
@@ -44,17 +56,17 @@ const registrationDetails =  getCommonGrayCard({
       },
       {
         jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].pan"
+          "Properties[0].additionalDetails.documentValue"
       }
     ),
-    saleDetails: getLabelWithValue(
+    remarks: getLabelWithValue(
       {
-        labelName: "Sale Details",
-        labelKey: "PT_MUTATION_SALE_DETAILS"
+        labelName: "Remarks",
+        labelKey: "PT_MUTATION_REMARKS"
       },
       {
         jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].mobileNumber"
+          "Properties[0].additionalDetails.remarks"
       }
     )
   })

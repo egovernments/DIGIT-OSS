@@ -15,10 +15,36 @@ class DownloadFileContainer extends Component {
 
 const mapStateToProps = (state, ownProps) => {
   const { screenConfiguration } = state;
+
+  let uploadedDocData = get(
+    state.screenConfiguration.preparedFinalObject,
+    "documentsUploadRedux",
+    []
+  );
+  let keys=Object.keys(uploadedDocData)
+
+  uploadedDocData=keys.map(key=>uploadedDocData[key])
+
+  const documentData =
+        uploadedDocData &&
+        uploadedDocData.map(item => {
+          return {
+            title: `PT_${item.documentType}`,
+            link: item.documents[0].fileUrl && item.documents[0].fileUrl.split(",")[0],
+            linkText: "View",
+            name: item.documents[0].fileName
+          };
+        });
+      // createEstimateData(
+      //   LicenseData,
+      //   "LicensesTemp[0].estimateCardData",
+      //   dispatch
+      // ); //get bill and populate estimate card
+  
   const data = ownProps.data
     ? ownProps.data
     : get(screenConfiguration.preparedFinalObject, ownProps.sourceJsonPath, []);
-  return { data };
+  return { data,documentData };
 };
 
 export default connect(

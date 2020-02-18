@@ -76,7 +76,7 @@ export const transferorSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-              "Properties[0].propertyDetails[0].owners[0].name"
+              "Properties[0].owners[0].name"
             }
           ), ownerFatherHusbandName: getLabelWithValue(
             {
@@ -85,7 +85,7 @@ export const transferorSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-              "Properties[0].propertyDetails[0].owners[0].fatherOrHusbandName"
+              "Properties[0].owners[0].fatherOrHusbandName"
             }
           ),  ownerGender: getLabelWithValue(
             {
@@ -94,7 +94,7 @@ export const transferorSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-              "Properties[0].propertyDetails[0].owners[0].gender"
+              "Properties[0].owners[0].gender"
             }
           ), ownerType: getLabelWithValue(
             {
@@ -103,7 +103,7 @@ export const transferorSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-              "Properties[0].propertyDetails[0].ownershipCategory"
+              "Properties[0].ownershipCategory"
             }
           ),
           mobileNo: getLabelWithValue(
@@ -113,7 +113,7 @@ export const transferorSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-              "Properties[0].propertyDetails[0].owners[0].mobileNumber"
+              "Properties[0].owners[0].mobileNumber"
             }
           ),  ownerEmail: getLabelWithValue(
             {
@@ -122,7 +122,7 @@ export const transferorSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-              "Properties[0].propertyDetails[0].owners[0].emailId"
+              "Properties[0].owners[0].emailId"
             }
           ),       
           ownerDob: getLabelWithValue(
@@ -132,7 +132,7 @@ export const transferorSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-              "Properties[0].propertyDetails[0].owners[0].ownerType",
+              "Properties[0].owners[0].ownerType",
               // callBack: value => {
               //   return convertEpochToDate(value);
               // }
@@ -145,7 +145,7 @@ export const transferorSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-              "Properties[0].propertyDetails[0].owners[0].permanentAddress"
+              "Properties[0].owners[0].permanentAddress"
             }
           )
         })
@@ -153,7 +153,7 @@ export const transferorSummary = getCommonGrayCard({
       items: [],
       hasAddItem: false,
       isReviewPage: true,
-      sourceJsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.owners",
+      sourceJsonPath: "Properties[0].owners",
       prefixSourceJsonPath:
         "children.cardContent.children.ownerContainer.children",
       afterPrefixJsonPath: "children.value.children.key"

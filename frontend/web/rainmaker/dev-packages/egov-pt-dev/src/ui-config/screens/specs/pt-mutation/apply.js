@@ -158,7 +158,7 @@ export const formwizardThirdStep = {
 
 const getPropertyData = async (action, state, dispatch) => {
   let tenantId =getQueryArg(window.location.href,"tenantId");
-  let consumerCode=getQueryArg(window.location.href,"propertyId");
+  let consumerCode=getQueryArg(window.location.href,"consumerCode");
     
   try {
     let queryObject = [

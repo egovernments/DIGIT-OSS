@@ -17,7 +17,7 @@ const mutationDetails =  getCommonGrayCard({
       },
       {
         jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].name"
+          "Properties[0].additionalDetails.isMutationInCourt"
       }
     ), documentNo: getLabelWithValue(
       {
@@ -26,7 +26,7 @@ const mutationDetails =  getCommonGrayCard({
       },
       {
         jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].fatherOrHusbandName"
+          "Properties[0].additionalDetails.caseDetails"
       }
     ), documentDate: getLabelWithValue(
       {
@@ -35,7 +35,7 @@ const mutationDetails =  getCommonGrayCard({
       },
       {
         jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].gender"
+          "Properties[0].additionalDetails.isPropertyUnderGovtPossession"
       }
     ), documentValue: getLabelWithValue(
       {
@@ -44,7 +44,7 @@ const mutationDetails =  getCommonGrayCard({
       },
       {
         jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].pan"
+          "Properties[0].additionalDetails.govtAcquisitionDetails"
       }
     )
   })

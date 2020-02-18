@@ -2,6 +2,10 @@ import { getSearchResults } from "../../../../../ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 export const fetchData = async (action, state, dispatch) => {
+
+
+  
+    
   const response = await getSearchResults();
   //const mdmsRes = await getMdmsData(dispatch);
   //   let tenants =
