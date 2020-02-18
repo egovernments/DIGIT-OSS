@@ -183,7 +183,7 @@ export const searchApplications = getCommonCard({
       required: false
     }),
     applicationType: getSelectField({
-      label: { labelName: "To Date", labelKey: "WSAPPLICATION_TYPE_LABEL" },
+      label: { labelName: "To Date", labelKey: "WS_APPLICATION_TYPE_LABEL" },
       placeholder: { labelName: "Select to Date", labelKey: "WS_COMMON_APPLICATION_TYPE_PLACEHOLDER" },
       sourceJsonPath: "applyScreenMdmsData.searchScreen.applicationType",
       jsonPath: "searchScreen.appType",

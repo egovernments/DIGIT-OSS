@@ -50,6 +50,12 @@ export const searchApplicationResults = {
         options: {
           display: false
         }
+      },
+      {
+        name: "service",
+        options: {
+          display: false
+        }
       }
     ],
     title: getTextToLocalMapping(
@@ -82,7 +88,7 @@ export const searchApplicationResults = {
 };
 
 const getApplicationDetails = data => {
-  window.location.href = `search-preview?applicationNumber=${data.rowData[1]}&tenantId=${data.rowData[6]}&history=true`
+  window.location.href = `search-preview?applicationNumber=${data.rowData[1]}&tenantId=${data.rowData[6]}&history=true&service=${data.rowData[2]}`
 }
 
 const getConnectionDetails = data => {

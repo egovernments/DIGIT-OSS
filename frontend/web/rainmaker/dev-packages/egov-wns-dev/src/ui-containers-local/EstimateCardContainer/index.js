@@ -4,8 +4,11 @@ import { connect } from "react-redux";
 import get from "lodash/get";
 
 class EstimateCardContainer extends Component {
+  constructor(props) {
+    super(props);
+  }
   render() {
-    return <FeesEstimateCard estimate={this.props.estimate} />;
+    return <FeesEstimateCard estimate={this.props.estimate} isCardrequired={this.props.isCardrequired ? this.props.isCardrequired : false} />;
   }
 }
 

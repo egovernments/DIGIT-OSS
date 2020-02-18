@@ -343,7 +343,7 @@ const connectionDetails = {
             labelKey: "WS_APPLY_FOR"
           },
           {
-            label: "Water",
+            jsonPath: "WaterConnection[0].service",
           }
         ),
         taskOldConsumerNumber: getLabelWithValue(

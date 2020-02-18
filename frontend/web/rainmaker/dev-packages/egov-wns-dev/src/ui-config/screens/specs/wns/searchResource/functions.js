@@ -204,7 +204,8 @@ const showApplicationResults = (connections, dispatch) => {
     [getTextToLocalMapping("Owner Name")]: item.name,
     [getTextToLocalMapping("Application Status")]: item.applicationStatus,
     [getTextToLocalMapping("Address")]: item.address,
-    ["tenantId"]: JSON.parse(getUserInfo()).tenantId
+    ["tenantId"]: JSON.parse(getUserInfo()).tenantId,
+    ["Service"]: item.service
   }));
   dispatch(handleField("search", "components.div.children.searchApplicationResults", "props.data", data));
   dispatch(handleField("search", "components.div.children.searchApplicationResults", "props.title",

@@ -59,7 +59,7 @@ const date = (from, to) => {
 }
 
 function FeesEstimateCard(props) {
-    const { classes, estimate } = props;
+    const { classes, estimate, isCardrequired } = props;
     let sortedArray = [], totalAmount, dueDate;
     const totalHeadClassName = "tl-total-amount-value " + classes.bigheader;
     if (estimate !== null && estimate !== undefined && estimate.fees !== undefined && estimate.fees !== null && estimate.fees.length > 0) {
@@ -88,7 +88,7 @@ function FeesEstimateCard(props) {
                     {
                         sortedArray.length > 0 && sortedArray.map(fee =>
                             <div>
-                                <Grid container>
+                                {/* <Grid container>
                                     <Grid item xs={6}>
                                         <Typography variant="body2" >
                                             <LabelContainer labelKey="WS_VIEW_BILL_BILLING_PERIOD_LABEL" />
@@ -102,7 +102,7 @@ function FeesEstimateCard(props) {
                                             {date(fee.fromPeriod, fee.toPeriod)}
                                         </Typography>
                                     </Grid>
-                                </Grid>
+                                </Grid> */}
                                 <Grid container> {
                                     fee.bill.map(element => {
                                         if (element !== undefined && element.key !== undefined) {
@@ -158,7 +158,7 @@ function FeesEstimateCard(props) {
                 sm={1} >
             </Grid>
             <Grid xs={12} sm={4}>
-                <Card className={classes.whiteCard}
+                {!isCardrequired && <Card className={classes.whiteCard}
                     style={{ backgroundColor: '#fff', boxShadow: "none" }} >
                     <Grid container >
                         <Grid xs={12}
@@ -175,6 +175,7 @@ function FeesEstimateCard(props) {
                         </Grid>
                     </Grid>
                 </Card >
+                }
                 {/* // ) : null} */}
             </Grid>
         </Grid >

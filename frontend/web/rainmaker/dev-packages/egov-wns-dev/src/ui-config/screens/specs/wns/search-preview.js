@@ -11,8 +11,13 @@ import set from "lodash/set";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg, setDocuments, setBusinessServiceDataToLocalStorage, getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getSearchResults } from "../../../../ui-utils/commons";
-import { createEstimateData, getDialogButton } from "../utils";
+import { getSearchResults, getSearchResultsForSewerage, fetchBill, getDescriptionFromMDMS } from "../../../../ui-utils/commons";
+import {
+  createEstimateData,
+  setMultiOwnerForSV,
+  setValidToFromVisibilityForSV,
+  getDialogButton
+} from "../utils";
 
 import { footerReview } from "./applyResource/footer";
 import {
@@ -27,37 +32,87 @@ import { loadReceiptGenerationData } from "../utils/receiptTransformer";
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+let service = getQueryArg(window.location.href, "service");
 let headerSideText = { word1: "", word2: "" };
 
-const searchResults = async (action, state, dispatch, applicationNumber) => {
-  let queryObject = [
-    { key: "tenantId", value: tenantId },
-    { key: "applicationNumber", value: applicationNumber }
-  ];
-  let payload = await getSearchResults(queryObject);
 
 
-  console.log("payloaddata", payload)
+// const getTradeTypeSubtypeDetails = payload => {
+//   const tradeUnitsFromApi = get(
+//     payload,
+//     "Licenses[0].tradeLicenseDetail.tradeUnits",
+//     []
+//   );
+//   const tradeUnitDetails = [];
+//   tradeUnitsFromApi.forEach(tradeUnit => {
+//     const { tradeType } = tradeUnit;
+//     const tradeDetails = tradeType.split(".");
+//     tradeUnitDetails.push({
+//       trade: get(tradeDetails, "[0]", ""),
+//       tradeType: get(tradeDetails, "[1]", ""),
+//       tradeSubType: get(tradeDetails, "[2]", "")
+//     });
+//   });
+//   return tradeUnitDetails;
+// };
 
-  headerSideText = getHeaderSideText(
-    get(payload, "WaterConnection[0].applicationStatus"),
-    get(payload, "WaterConnection[0].applicationNo")
-  );
-  set(payload, "WaterConnection[0].headerSideText", headerSideText);
+//---------------- existing Code -------------------- //
+// const searchResults = async (action, state, dispatch, applicationNo) => {
+//   let queryObject = [
+//     { key: "tenantId", value: tenantId },
+//     { key: "applicationNumber", value: applicationNumber }
+//   ];
+//   let payload = await getSearchResults(queryObject);
 
-  let sts = getTransformedStatus(get(payload, "WaterConnection[0].applicationStatus"));
-  payload && dispatch(prepareFinalObject("WaterConnection[0]", payload.WaterConnection[0]));
-  // const WaterData = payload.WaterConnection[0];
-  // const fetchFromReceipt = sts !== "pending_payment";
-  // createEstimateData(WaterData, "LicensesTemp[0].estimateCardData", dispatch, {}, fetchFromReceipt);
-  // Fetch Bill and populate estimate card
-  // const code = get(
-  //   payload,
-  //   "WaterConnection[0].property.address.locality.code"
-  // );
-  // const queryObj = [{ key: "tenantId", value: "pb.amritsar" }];
-  // getBoundaryData(action, state, dispatch, queryObj, code);
-};
+
+//   console.log("payloaddata", payload)
+
+//   headerSideText = getHeaderSideText(
+//     get(payload, "WaterConnection[0].applicationStatus"),
+//     get(payload, "WaterConnection[0].applicationNo")
+//   );
+//   set(payload, "WaterConnection[0].headerSideText", headerSideText);
+
+//   // get(payload, "WaterConnection[0].tradeLicenseDetail.subOwnerShipCategory") &&
+//   //   get(payload, "WaterConnection[0].tradeLicenseDetail.subOwnerShipCategory").split(
+//   //     "."
+//   //   )[0] === "INDIVIDUAL"
+//   //   ? setMultiOwnerForSV(action, true)
+//   //   : setMultiOwnerForSV(action, false);
+
+//   // if (get(payload, "Licenses[0].licenseType")) {
+//   //   setValidToFromVisibilityForSV(
+//   //     action,
+//   //     get(payload, "Licenses[0].licenseType")
+//   //   );
+//   // }
+
+//   // await setDocuments(
+//   //   payload,
+//   //   "Licenses[0].tradeLicenseDetail.applicationDocuments",
+//   //   "LicensesTemp[0].reviewDocData",
+//   //   dispatch,'TL'
+//   // );
+//   let sts = getTransformedStatus(get(payload, "WaterConnection[0].applicationStatus"));
+//   payload && dispatch(prepareFinalObject("WaterConnection[0]", payload.WaterConnection[0]));
+//   // payload &&
+//   //   dispatch(
+//   //     prepareFinalObject(
+//   //       "LicensesTemp[0].tradeDetailsResponse",
+//   //       getTradeTypeSubtypeDetails(payload)
+//   //     )
+//   //   );
+//   const WaterData = payload.WaterConnection[0];
+//   // const fetchFromReceipt = sts !== "pending_payment";
+//   createEstimateData(WaterData, "LicensesTemp[0].estimateCardData", dispatch, {}, {});
+//   // Fetch Bill and populate estimate card
+//   // const code = get(
+//   //   payload,
+//   //   "WaterConnection[0].property.address.locality.code"
+//   // );
+//   // const queryObj = [{ key: "tenantId", value: "pb.amritsar" }];
+//   // getBoundaryData(action, state, dispatch, queryObj, code);
+// };
 
 const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
   //Search details for given application Number
@@ -137,6 +192,8 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     setActionItems(action, obj);
     loadReceiptGenerationData(applicationNumber, tenantId);
   }
+
+
 };
 
 let titleText = "";
@@ -213,7 +270,8 @@ const headerrow = getCommonContainer({
 const estimate = getCommonGrayCard({
   header: getCommonSubHeader({ labelKey: "WS_TASK_DETAILS_FEE_ESTIMATE" }),
   estimateSection: getFeesEstimateCard({
-    sourceJsonPath: "LicensesTemp[0].estimateCardData",
+    sourceJsonPath: "viewBillToolipData",
+    isCardrequired: true
   }),
   buttonView: getDialogButton(
     "VIEW BREAKUP",
@@ -411,5 +469,75 @@ const screenConfig = {
     }
   }
 };
+
+//----------------- search code (feb17)---------------------- //
+const searchResults = async (action, state, dispatch, applicationNumber) => {
+  let queryObjForSearch = [{ key: "tenantId", value: tenantId }, { key: "applicationNumber", value: applicationNumber }]
+  let viewBillTooltip = [], data;
+  if (service === "WATER") {
+    let payload = await getSearchResults(queryObjForSearch);
+    let queryObjectForFetchBill = [{ key: "tenantId", value: tenantId }, { key: "consumerCode", value: applicationNumber }, { key: "businessService", value: "WS.ONE_TIME_FEE" }];
+    data = await fetchBill(queryObjectForFetchBill, dispatch);
+    if (payload !== null && payload !== undefined && data !== null && data !== undefined) {
+      if (payload.WaterConnection.length > 0 && data.Bill.length > 0) {
+        payload.WaterConnection[0].service = service
+        await processBills(data, viewBillTooltip, dispatch);
+
+        dispatch(prepareFinalObject("WaterConnection[0]", payload.WaterConnection[0]));
+        dispatch(prepareFinalObject("billData", data.Bill[0]));
+      }
+    }
+  } else if (service === "SEWERAGE") {
+    let queryObjectForFetchBill = [{ key: "tenantId", value: tenantId }, { key: "consumerCode", value: applicationNumber }, { key: "businessService", value: "SW.ONE_TIME_FEE" }];
+    let payload = await getSearchResultsForSewerage(queryObjForSearch, dispatch);
+    data = await fetchBill(queryObjectForFetchBill, dispatch)
+    let viewBillTooltip = []
+    if (payload !== null && payload !== undefined && data !== null && data !== undefined) {
+      if (payload.SewerageConnections.length > 0 && data.Bill.length > 0) {
+        payload.SewerageConnections[0].service = service;
+        await processBills(data, viewBillTooltip, dispatch);
+        dispatch(prepareFinalObject("WaterConnection[0]", payload.SewerageConnections[0]));
+        dispatch(prepareFinalObject("billData", data.Bill[0]));
+      }
+    }
+  }
+  createEstimateData(data, "screenConfiguration.preparedFinalObject.billData.billDetails", dispatch, {}, {});
+};
+
+const processBills = async (data, viewBillTooltip, dispatch) => {
+  data.Bill[0].billDetails.forEach(bills => {
+    let des, obj, groupBillDetails = [];
+    bills.billAccountDetails.forEach(async element => {
+      let cessKey = element.taxHeadCode
+      let body;
+      if (service === "WATER") {
+        body = { "MdmsCriteria": { "tenantId": "pb.amritsar", "moduleDetails": [{ "moduleName": "ws-services-calculation", "masterDetails": [{ "name": cessKey }] }] } }
+      } else {
+        body = { "MdmsCriteria": { "tenantId": "pb.amritsar", "moduleDetails": [{ "moduleName": "sw-services-calculation", "masterDetails": [{ "name": cessKey }] }] } }
+      }
+      let res = await getDescriptionFromMDMS(body, dispatch)
+      if (res !== null && res !== undefined && res.MdmsRes !== undefined && res.MdmsRes !== null) {
+        if (service === "WATER") { des = res.MdmsRes["ws-services-calculation"]; }
+        else { des = res.MdmsRes["sw-services-calculation"]; }
+        if (des !== null && des !== undefined && des[cessKey] !== undefined && des[cessKey][0] !== undefined && des[cessKey][0] !== null) {
+          groupBillDetails.push({ key: cessKey, value: des[cessKey][0].description, amount: element.amount, order: element.order })
+        } else {
+          groupBillDetails.push({ key: cessKey, value: 'Please put some description in mdms for this Key', amount: element.amount, order: element.order })
+        }
+        if (groupBillDetails.length >= bills.billAccountDetails.length) {
+          let arrayData = groupBillDetails.sort((a, b) => parseInt(a.order) - parseInt(b.order))
+          obj = { bill: arrayData, fromPeriod: bills.fromPeriod, toPeriod: bills.toPeriod }
+          viewBillTooltip.push(obj)
+        }
+        if (viewBillTooltip.length >= data.Bill[0].billDetails.length) {
+          let dataArray = [{ total: data.Bill[0].totalAmount, expiryDate: bills.expiryDate }]
+          let descriptionArray = viewBillTooltip
+          let finalArray = [{ description: descriptionArray, data: dataArray }]
+          dispatch(prepareFinalObject("viewBillToolipData", finalArray));
+        }
+      }
+    })
+  })
+}
 
 export default screenConfig;
