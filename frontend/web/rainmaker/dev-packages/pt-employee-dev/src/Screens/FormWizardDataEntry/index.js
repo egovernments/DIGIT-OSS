@@ -201,36 +201,48 @@ class FormWizardDataEntry extends Component {
         const { generalMDMSDataById } = this.props;
         let finalYear = "";
         const demands =
-          demandPropertyResponse && demandPropertyResponse.Demands.sort(function(a, b){return b.taxPeriodFrom-a.taxPeriodFrom}) || [];
+          (demandPropertyResponse &&
+            demandPropertyResponse.Demands.sort(function(a, b) {
+              return b.taxPeriodFrom - a.taxPeriodFrom;
+            })) ||
+          [];
         let demandResponse = demands.forEach((demand, yearKey) => {
           //add order for the taxt head and do the oerdering
           if (demand.demandDetails) {
-            demand.demandDetails=demand.demandDetails.map((demandDetail)=>{
-              return {
-                ...demandDetail,
-                order:get(generalMDMSDataById,`TaxHeadMaster.${demandDetail.taxHeadMasterCode}.order`,-1)
-              }
-            }).sort(function(a, b){return a.order-b.order})
-          }
-          else {
-            demand.demandDetails=[]
+            demand.demandDetails = demand.demandDetails
+              .map(demandDetail => {
+                return {
+                  ...demandDetail,
+                  order: get(
+                    generalMDMSDataById,
+                    `TaxHeadMaster.${demandDetail.taxHeadMasterCode}.order`,
+                    -1
+                  )
+                };
+              })
+              .sort(function(a, b) {
+                return a.order - b.order;
+              });
+          } else {
+            demand.demandDetails = [];
           }
           return demand.demandDetails.forEach((demandData, demandKey) => {
-            if (demandData.order>-1) {
+            if (demandData.order > -1) {
               let yearkeys = Object.keys(generalMDMSDataById.TaxPeriod).forEach(
                 (item, i) => {
                   if (
                     generalMDMSDataById.TaxPeriod[item].fromDate ===
                     demand.taxPeriodFrom
                   ) {
-                    finalYear = generalMDMSDataById.TaxPeriod[item].financialYear;
+                    finalYear =
+                      generalMDMSDataById.TaxPeriod[item].financialYear;
                   }
                 }
               );
-                prepareFinalObject(
-                  `DemandProperties[0].propertyDetails[0].demand[${yearKey}].demand[${finalYear}][${demandData.order}].PT_TAXHEAD`,
-                  demandData.taxHeadMasterCode
-                ),
+              prepareFinalObject(
+                `DemandProperties[0].propertyDetails[0].demand[${yearKey}].demand[${finalYear}][${demandData.order}].PT_TAXHEAD`,
+                demandData.taxHeadMasterCode
+              ),
                 prepareFinalObject(
                   `DemandProperties[0].propertyDetails[0].demand[${yearKey}].demand[${finalYear}][${demandData.order}].PT_DEMAND`,
                   `${demandData.taxAmount}`
@@ -238,9 +250,8 @@ class FormWizardDataEntry extends Component {
                 prepareFinalObject(
                   `DemandProperties[0].propertyDetails[0].demand[${yearKey}].demand[${finalYear}][${demandData.order}].PT_COLLECTED`,
                   `${demandData.collectionAmount}`
-                )
+                );
             }
-
           });
         });
         if (
@@ -896,8 +907,9 @@ class FormWizardDataEntry extends Component {
       case 0:
       case 1:
       case 2:
-      isReassesment === false  ?
-        headerObj.subHeaderValue ='': headerObj.subHeaderValue=propertyId;
+        isReassesment === false
+          ? (headerObj.subHeaderValue = "")
+          : (headerObj.subHeaderValue = propertyId);
         // headerObj.headerValue = "(" + assessmentYear + ")";
         isAssesment
           ? (headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER")
@@ -910,8 +922,9 @@ class FormWizardDataEntry extends Component {
             (headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER");
         break;
       case 3:
-      isReassesment === false  ?
-        headerObj.subHeaderValue = '':headerObj.subHeaderValue =propertyId;
+        isReassesment === false
+          ? (headerObj.subHeaderValue = "")
+          : (headerObj.subHeaderValue = propertyId);
         isAssesment
           ? (headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER")
           : isReassesment
@@ -921,8 +934,9 @@ class FormWizardDataEntry extends Component {
         // headerObj.headerValue = "(" + assessmentYear + ")";
         break;
       case 4:
-      isReassesment === false ?
-        headerObj.subHeaderValue = '':headerObj.subHeaderValue =propertyId;
+        isReassesment === false
+          ? (headerObj.subHeaderValue = "")
+          : (headerObj.subHeaderValue = propertyId);
         isAssesment
           ? (headerObj.header = "PT_DEMAND_PROPERTY_ASSESSMENT_HEADER")
           : isReassesment
@@ -1231,16 +1245,28 @@ class FormWizardDataEntry extends Component {
           );
         };
 
-        const checkPtTaxWithRebate = (taxHead, demandAmount, taxDetails = []) => {
-          const rebateHeadObject = get(generalMDMSDataById, `TaxHeadMaster.${taxHead}`,{});
-          if(rebateHeadObject.code === "PT_TAX")
-          {
-            let rebateHeads=[];
-            Object.keys(get(generalMDMSDataById, `TaxHeadMaster`,{})).forEach(
+        const checkPtTaxWithRebate = (
+          taxHead,
+          demandAmount,
+          taxDetails = [],
+          getTotalRebateAmount = false
+        ) => {
+          const rebateHeadObject = get(
+            generalMDMSDataById,
+            `TaxHeadMaster.${taxHead}`,
+            {}
+          );
+          if (rebateHeadObject.code === "PT_TAX") {
+            let rebateHeads = [];
+            Object.keys(get(generalMDMSDataById, `TaxHeadMaster`, {})).forEach(
               key => {
-                const object=get(generalMDMSDataById, `TaxHeadMaster.${key}`,{});
+                const object = get(
+                  generalMDMSDataById,
+                  `TaxHeadMaster.${key}`,
+                  {}
+                );
                 if (object.legacy && object.category === "REBATE") {
-                  rebateHeads.push(object)
+                  rebateHeads.push(object);
                 }
               }
             );
@@ -1255,21 +1281,24 @@ class FormWizardDataEntry extends Component {
                 }
               });
             });
-            return demandAmount + rebateAmount;
-          }
-          else {
-            return demandAmount
+            return getTotalRebateAmount
+              ? rebateAmount
+              : demandAmount + rebateAmount;
+          } else {
+            return demandAmount;
           }
         };
 
         const checkRebate = taxHead => {
-          const rebateHeads = get(generalMDMSDataById, `TaxHeadMaster.${taxHead}`,{});
-          if(rebateHeads.legacy && rebateHeads.category === "REBATE")
-          {
-            return false
-          }
-          else {
-            return true
+          const rebateHeads = get(
+            generalMDMSDataById,
+            `TaxHeadMaster.${taxHead}`,
+            {}
+          );
+          if (rebateHeads.legacy && rebateHeads.category === "REBATE") {
+            return false;
+          } else {
+            return true;
           }
         };
 
@@ -1284,9 +1313,16 @@ class FormWizardDataEntry extends Component {
               Object.keys(data.demand).forEach((data1, key1) => {
                 // let currentYearTaxHeadLength=Object.keys(data.demand[data1]).length;
                 let currentYearEnteredValueLength = 0;
+                let hasPropertyTax = false;
+                let propertyTaxAmount = 0;
+                let totalRebateAmount = 0;
                 // let previousYear=data1;
                 Object.keys(data.demand[data1]).forEach((data2, key2) => {
-                  if (!data.demand[data1][data2].PT_DEMAND && data.demand[data1][data2].PT_COLLECTED && parseInt(data.demand[data1][data2].PT_COLLECTED)) {
+                  if (
+                    !data.demand[data1][data2].PT_DEMAND &&
+                    data.demand[data1][data2].PT_COLLECTED &&
+                    parseInt(data.demand[data1][data2].PT_COLLECTED)
+                  ) {
                     errorCode = "ERR03_DEMAND_ENTER_THE_DATA";
                   }
                   if (data.demand[data1][data2].PT_DEMAND) {
@@ -1296,9 +1332,20 @@ class FormWizardDataEntry extends Component {
                         errorCode = "ERR04_DEMAND_ENTER_THE_DATA";
                       }
                     }
+                    if (data.demand[data1][data2].PT_TAXHEAD === "PT_TAX") {
+                      hasPropertyTax = true;
+                      propertyTaxAmount = data.demand[data1][data2].PT_DEMAND;
+                      totalRebateAmount = checkPtTaxWithRebate(
+                        data.demand[data1][data2].PT_TAXHEAD,
+                        parseInt(data.demand[data1][data2].PT_DEMAND),
+                        data.demand[data1],
+                        true
+                      );
+                    }
                     if (
                       checkRebate(data.demand[data1][data2].PT_TAXHEAD) &&
-                      data.demand[data1][data2].PT_COLLECTED && parseInt(data.demand[data1][data2].PT_COLLECTED) &&
+                      data.demand[data1][data2].PT_COLLECTED &&
+                      parseInt(data.demand[data1][data2].PT_COLLECTED) &&
                       checkPtTaxWithRebate(
                         data.demand[data1][data2].PT_TAXHEAD,
                         parseInt(data.demand[data1][data2].PT_DEMAND),
@@ -1317,6 +1364,13 @@ class FormWizardDataEntry extends Component {
                 });
                 if (!currentYearEnteredValueLength) {
                   arrayOfEmptyYears.push(key);
+                }
+                else {
+                  if (!hasPropertyTax) {
+                    errorCode = "ERR05_DEMAND_ENTER_THE_DATA";
+                  } else if (parseInt(propertyTaxAmount) < totalRebateAmount) {
+                    errorCode = "ERR06_DEMAND_ENTER_THE_DATA";
+                  }
                 }
               });
           });
@@ -1359,12 +1413,18 @@ class FormWizardDataEntry extends Component {
               "The entered collection should not greater than demand amount for any year !"
             );
             break;
-          // case :"ERR05_DEMAND_ENTER_THE_DATA"
-          //   callToggleSnackbar(
-          //     "ERR05_DEMAND_ENTER_THE_DATA",
-          //     "The demand amount is mandatory if you have entered collected amount !"
-          //   );
-          //   break;
+          case "ERR05_DEMAND_ENTER_THE_DATA":
+            callToggleSnackbar(
+              "ERR05_DEMAND_ENTER_THE_DATA",
+              "The property tax amount is mandatory for given financial year !"
+            );
+            break;
+          case "ERR06_DEMAND_ENTER_THE_DATA":
+            callToggleSnackbar(
+              "ERR06_DEMAND_ENTER_THE_DATA",
+              "The entered rebate should not greater than property tax amount for any year !"
+            );
+            break;
           default:
             if (arrayOfEmptyYears.length > 0) {
               prepareFinalObject("DemandProperties", DemandProperties);
@@ -1823,7 +1883,7 @@ class FormWizardDataEntry extends Component {
       generalMDMSDataById
     } = this.props;
     const { search } = location;
-    let {resetForm}=this;
+    let { resetForm } = this;
     const propertyId = getQueryValue(search, "propertyId");
     const assessmentId = getQueryValue(search, "assessmentId");
     const propertyMethodAction = !!propertyId ? "_update" : "_create";
@@ -2119,7 +2179,7 @@ class FormWizardDataEntry extends Component {
         formValidIndexArray: [...formValidIndexArray, selected]
       });
       hideSpinner();
-      const  callToggleBarSnackbar = (labelKey, labelName,status="error") => {
+      const callToggleBarSnackbar = (labelKey, labelName, status = "error") => {
         this.props.toggleSnackbarAndSetText(
           true,
           {
@@ -2130,22 +2190,22 @@ class FormWizardDataEntry extends Component {
         );
         resetForm();
       };
-      switch(propertyMethodAction){
+      switch (propertyMethodAction) {
         case "_update":
-        this.setState({
-          selected: index
-        });
-        break;
+          this.setState({
+            selected: index
+          });
+          break;
         case "_create":
-        // this.setState({
-        //   selected: index
-        // });
-        callToggleBarSnackbar(
-          "PT_PROPERTY_CREATED_SUCCESSFULLY",
-          "PropertyTax Created Successfully",
-          "success"
-        );
-        break;
+          this.setState({
+            selected: index
+          });
+          // callToggleBarSnackbar(
+          //   "PT_PROPERTY_CREATED_SUCCESSFULLY",
+          //   "PropertyTax Created Successfully",
+          //   "success"
+          // );
+          break;
         default:
       }
     } catch (e) {

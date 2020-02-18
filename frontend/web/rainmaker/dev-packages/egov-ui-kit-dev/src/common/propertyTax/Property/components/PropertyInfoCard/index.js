@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Card } from "components";
+import { Card,Grid } from "components";
 import Label from "egov-ui-kit/utils/translationNode";
 import PendingAmountDialog from "../PendingAmountDue";
 import ViewHistoryDialog from "../ViewHistory";

@@ -13,7 +13,7 @@ import { setFieldProperty } from "egov-ui-kit/redux/form/actions";
 
 let floorDropDownData = [];
 let innerDimensionsData = [{ value: "true", label: "YES" }, { value: "false", label: "NO" }];
-let constructiontypes = [{ value: "road1", label: "rd1" }];
+// let constructiontypes = [{ value: "road1", label: "rd1" }];
 
 for (var i = 1; i <= 25; i++) {
   floorDropDownData.push({ label: i, value: i });
@@ -55,27 +55,29 @@ export const floorCount = {
     required: true,
     numcols: 6,
     dropDownData: floorDropDownData,
-    updateDependentFields: ({ formKey, field, dispatch, state }) => {
-      // removeFormKey(formKey, field, dispatch, state);
-      var previousFloorNo = localStorageGet("previousFloorNo") || -1;
-      localStorageSet("previousFloorNo", field.value);
-      // dispatch(toggleSpinner());
-      if (previousFloorNo > field.value) {
-        for (var i = field.value; i < previousFloorNo; i++) {
-          if (state.form.hasOwnProperty(`customSelect_${i}`)) {
-            dispatch(removeForm(`customSelect_${i}`));
-          }
-          for (var variable in state.form) {
-            if (state.form.hasOwnProperty(variable) && variable.startsWith(`floorDetails_${i}`)) {
-              dispatch(removeForm(variable));
-            }
-          }
-        }
-      }
-
-    },
+    updateDependentFields: floorUtilFunction,
   },
 };
+
+export const floorUtilFunction=({ formKey, field, dispatch, state }) => {
+  // removeFormKey(formKey, field, dispatch, state);
+  var previousFloorNo = localStorageGet("previousFloorNo") || -1;
+  localStorageSet("previousFloorNo", field.value);
+  // dispatch(toggleSpinner());
+  if (previousFloorNo > field.value) {
+    for (var i = field.value; i < previousFloorNo; i++) {
+      if (state.form.hasOwnProperty(`customSelect_${i}`)) {
+        dispatch(removeForm(`customSelect_${i}`));
+      }
+      for (var variable in state.form) {
+        if (state.form.hasOwnProperty(variable) && variable.startsWith(`floorDetails_${i}`)) {
+          dispatch(removeForm(variable));
+        }
+      }
+    }
+  }
+
+}
 
 export const subUsageType = {
   subUsageType: {
@@ -306,6 +308,7 @@ export const constructionType = {
     hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
     numcols: 4,
     required:true,
+    dropDownData:[]
   },
 };
 
@@ -439,7 +442,7 @@ export const beforeInitForm = {
     }
 
     var occupancy = get(state, "common.generalMDMSDataById.OccupancyType");
-    var constructionType = get(state, "common.generalMDMSDataById.ConstructionType");
+    var cT = get(state, "common.generalMDMSDataById.ConstructionType");
     var usageCategoryMinor = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].usageCategoryMinor");
     var usageCategoryMajor = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].usageCategoryMajor");
     set(action, "form.fields.subUsageType.hideField", false);
@@ -492,7 +495,7 @@ export const beforeInitForm = {
     }
     set(action, "form.fields.occupancy.dropDownData", prepareDropDownData(occupancy));
     if( get(state, "form.basicInformation.fields.typeOfBuilding.value")){
-      set(action, "form.fields.constructionType.dropDownData", prepareDropDownData(constructionType));
+      set(action, "form.fields.constructionType.dropDownData", prepareDropDownData(cT));
     }
     if (get(action, "form.fields.subUsageType.jsonPath") && usageCategoryMajor !== "MIXED") {
       dispatch(
@@ -554,6 +557,7 @@ export const beforeInitFormForPlot = {
     }
     if (propertyType != "VACANT") {
       var occupancy = get(state, "common.generalMDMSDataById.OccupancyType");
+      var cT = get(state, "common.generalMDMSDataById.ConstructionType");
       var usageCategoryMinor = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].usageCategoryMinor");
       var usageCategoryMajor = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].usageCategoryMajor");
       set(action, "form.fields.subUsageType.hideField", false);
@@ -604,7 +608,7 @@ export const beforeInitFormForPlot = {
       }
       set(action, "form.fields.occupancy.dropDownData", prepareDropDownData(occupancy));
       if( get(state, "form.basicInformation.fields.typeOfBuilding.value")){
-        set(action, "form.fields.constructionType.dropDownData", prepareDropDownData(constructionType));
+        set(action, "form.fields.constructionType.dropDownData", prepareDropDownData(cT));
       }
       if (get(action, "form.fields.subUsageType.jsonPath") && usageCategoryMajor !== "MIXED") {
         dispatch(
