@@ -411,7 +411,7 @@ export const getFeesEstimateCard = props => {
   const { sourceJsonPath, ...rest } = props;
   return {
     uiFramework: "custom-containers-local",
-    moduleName: "egov-tradelicence",
+    moduleName: "egov-bpa",
     componentPath: "EstimateCardContainer",
     props: {
       sourceJsonPath,
