@@ -237,6 +237,49 @@ public class EnrichmentService {
 		property.setId(UUID.randomUUID().toString());
 		property.setAcknowldgementNumber(ackNo);
 		
-		enrichUuidsForPropertyCreate(requestInfo, property);
+		enrichUuidsForNewUpdate(requestInfo, property);
 	}
+	
+	private void enrichUuidsForNewUpdate(RequestInfo requestInfo, Property property) {
+		
+		AuditDetails propertyAuditDetails = propertyutil.getAuditDetails(requestInfo.getUserInfo().getUuid(), true);
+		
+		property.setId(UUID.randomUUID().toString());
+		
+		if (!CollectionUtils.isEmpty(property.getDocuments()))
+			property.getDocuments().forEach(doc -> {
+				doc.setId(UUID.randomUUID().toString());
+				if (null == doc.getStatus())
+					doc.setStatus(Status.ACTIVE);
+			});
+
+		property.getAddress().setTenantId(property.getTenantId());
+		property.getAddress().setId(UUID.randomUUID().toString());
+
+		if (!ObjectUtils.isEmpty(property.getInstitution()))
+			property.getInstitution().setId(UUID.randomUUID().toString());
+
+		property.setAuditDetails(propertyAuditDetails);
+		
+		if (!CollectionUtils.isEmpty(property.getUnits()))
+			property.getUnits().forEach(unit -> {
+
+				unit.setId(UUID.randomUUID().toString());
+				unit.setActive(true);
+			});
+		
+		property.getOwners().forEach(owner -> {
+			
+			owner.setOwnerInfoUuid(UUID.randomUUID().toString());
+			if (!CollectionUtils.isEmpty(owner.getDocuments()))
+				owner.getDocuments().forEach(doc -> {
+					doc.setId(UUID.randomUUID().toString());
+					if (null == doc.getStatus())
+						doc.setStatus(Status.ACTIVE);
+				});
+			if (null == owner.getStatus())
+				owner.setStatus(Status.ACTIVE);
+		});
+	}
+
 }
