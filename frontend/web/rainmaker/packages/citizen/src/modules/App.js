@@ -15,7 +15,6 @@ import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { handleFieldChange } from "egov-ui-kit/redux/form/actions";
 import { getQueryArg } from "egov-ui-kit/utils/commons";
 import isEmpty from "lodash/isEmpty";
-import "./app.css";
 import get from "lodash/get"
 
 class App extends Component {
@@ -90,7 +89,7 @@ class App extends Component {
         logout()
         setRoute("/user/otp?smsLink=true");
        // setPreviousRoute(redirectionLink(href));
-      }
+      } 
     }else{
       setRoute("/user/otp?smsLink=true");
       setPreviousRoute(redirectionLink(href));
@@ -111,8 +110,9 @@ class App extends Component {
       setRoute("");
     }
     const isWithoutAuthSelfRedirect = location && location.pathname && location.pathname.includes("openlink");
+    const isPrivacyPolicy = location && location.pathname && location.pathname.includes("privacy-policy");
 
-    if (nextProps.hasLocalisation !== this.props.hasLocalisation && !authenticated && !getQueryArg("", "smsLink") && !isWithoutAuthSelfRedirect) {
+    if (nextProps.hasLocalisation !== this.props.hasLocalisation && !authenticated && !getQueryArg("", "smsLink") && !isWithoutAuthSelfRedirect && !isPrivacyPolicy) {
       nextProps.hasLocalisation && this.props.history.replace("/language-selection");
     }
   }
