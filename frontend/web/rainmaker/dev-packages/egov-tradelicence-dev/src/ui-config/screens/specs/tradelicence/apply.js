@@ -61,14 +61,9 @@ export const header = getCommonContainer({
               ? "(" + getCurrentFinancialYear() + ")"
               : ""
           }`,
-          dynamicArray: getQueryArg(window.location.href, "action") === "EDITRENEWAL" ? [getnextFinancialYear(getCurrentFinancialYear())]:[getCurrentFinancialYear()],
-          labelKey: getQueryArg(window.location.href, "action") === "EDITRENEWAL" ?
-          process.env.REACT_APP_NAME === "Citizen"
-          ? "TL_COMMON_APPL_RENEWAL_LICENSE"
-          : "TL_COMMON_APPL_RENEWAL_LICENSE_YEAR" :
-            process.env.REACT_APP_NAME === "Citizen"
-              ? "TL_COMMON_APPL_NEW_LICENSE"
-              : "TL_COMMON_APPL_NEW_LICENSE_YEAR"
+         // dynamicArray: getQueryArg(window.location.href, "action") === "EDITRENEWAL" ? [getnextFinancialYear(getCurrentFinancialYear())]:[getCurrentFinancialYear()],
+          labelKey: getQueryArg(window.location.href, "action") === "EDITRENEWAL" ? "TL_COMMON_APPL_RENEWAL_LICENSE_YEAR":"TL_COMMON_APPL_NEW_LICENSE_YEAR"
+         
         })
       : {},
   applicationNumber: {

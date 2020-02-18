@@ -13,6 +13,7 @@ import "./index.css";
 import { checkValueForNA } from "../../ui-config/screens/specs/utils";
 import { localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
+import orderBy from "lodash/orderBy";
 const styles = {
   card: {
     marginLeft: 8,
@@ -205,11 +206,17 @@ class SingleApplication extends React.Component {
 }
 
 const mapStateToProps = state => {
-  const searchResults = get(
+  const searchResultsRaw = get(
     state.screenConfiguration.preparedFinalObject,
     "searchResults",
     []
   );
+
+  let searchResults = orderBy(
+    searchResultsRaw,
+    ["auditDetails.lastModifiedBy"],
+    ["desc"]);  
+    searchResults=searchResults?searchResults:searchResultsRaw ;
   const screenConfig = get(state.screenConfiguration, "screenConfig");
   return { screenConfig, searchResults };
 };

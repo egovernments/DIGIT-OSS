@@ -1339,10 +1339,12 @@ export const getCurrentFinancialYear = () => {
   var fiscalYr = "";
   if (curMonth >= 3) {
     var nextYr1 = (today.getFullYear() + 1).toString();
-    fiscalYr = today.getFullYear().toString() + "-" + nextYr1;
+    var nextYr1format=nextYr1.substring(2,4);
+    fiscalYr = today.getFullYear().toString() + "-" + nextYr1format;
   } else {
     var nextYr2 = today.getFullYear().toString();
-    fiscalYr = (today.getFullYear() - 1).toString() + "-" + nextYr2;
+    var nextYr2format=nextYr2.substring(2,4);
+    fiscalYr = (today.getFullYear() - 1).toString() + "-" + nextYr2format;
   }
   return fiscalYr;
 };

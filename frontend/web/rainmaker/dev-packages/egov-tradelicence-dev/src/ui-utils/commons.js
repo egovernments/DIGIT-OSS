@@ -363,12 +363,12 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       { key: "businessServices", value: "NewTL" }
     ];
     if (process.env.REACT_APP_NAME === "Citizen") {
-      let currentFinancialYr = getCurrentFinancialYear();
-      //Changing the format of FY
-      let fY1 = currentFinancialYr.split("-")[1];
-      fY1 = fY1.substring(2, 4);
-      currentFinancialYr = currentFinancialYr.split("-")[0] + "-" + fY1;
-      set(queryObject[0], "financialYear", currentFinancialYr);
+      // let currentFinancialYr = getCurrentFinancialYear();
+      // //Changing the format of FY
+      // let fY1 = currentFinancialYr.split("-")[1];
+      // fY1 = fY1.substring(2, 4);
+      // currentFinancialYr = currentFinancialYr.split("-")[0] + "-" + fY1;
+      // set(queryObject[0], "financialYear", currentFinancialYr);
       setBusinessServiceDataToLocalStorage(BSqueryObject, dispatch);
     }
 
@@ -380,10 +380,10 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       //call update
       const isEditRenewal = getQueryArg(window.location.href, "action") === "EDITRENEWAL";
       if(isEditRenewal ){
-        if(process.env.REACT_APP_NAME === "Citizen"){
-          const nextFinancialyear = await getNextFinancialYearForRenewal(queryObject[0].financialYear);
-          set(queryObject[0], "financialYear", nextFinancialyear);
-        }     
+        // if(process.env.REACT_APP_NAME === "Citizen"){
+        //   const nextFinancialyear = await getNextFinancialYearForRenewal(queryObject[0].financialYear);
+        //   set(queryObject[0], "financialYear", nextFinancialyear);
+        // }     
         set(queryObject[0], "applicationType", "RENEWAL");
         set(queryObject[0], "workflowCode", getQueryArg(window.location.href, "action"));
       }

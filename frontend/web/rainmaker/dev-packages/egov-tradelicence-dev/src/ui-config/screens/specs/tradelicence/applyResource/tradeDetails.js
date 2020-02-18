@@ -767,7 +767,6 @@ export const tradeDetails = getCommonCard({
           labelKey: "TL_FINANCIAL_YEAR_PLACEHOLDER"
         },
         required: true,
-        visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
         jsonPath: "Licenses[0].financialYear",
         sourceJsonPath: "applyScreenMdmsData.egf-master.FinancialYear",
         gridDefination: {

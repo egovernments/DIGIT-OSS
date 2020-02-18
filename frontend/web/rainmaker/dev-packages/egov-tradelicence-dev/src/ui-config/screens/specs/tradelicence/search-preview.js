@@ -279,6 +279,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         labelName: "Trade License Application (2018-2019)",
         labelKey: applicationType === "RENEWAL"? "TL_TRADE_RENEW_APPLICATION":"TL_TRADE_APPLICATION"
       }),
+    applicationLicence:getCommonContainer({
       applicationNumber: {
         uiFramework: "custom-atoms-local",
         moduleName: "egov-tradelicence",
@@ -296,6 +297,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
           number: licenseNumber
         }
       }
+    })
     });
     set(
       action.screenConfig,
