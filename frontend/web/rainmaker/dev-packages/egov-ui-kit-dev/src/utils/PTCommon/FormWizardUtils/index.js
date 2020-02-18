@@ -8,6 +8,7 @@ import { getPlotAndFloorFormConfigPath } from "../../../config/forms/specs/Prope
 import { get, set, isEmpty } from "lodash";
 import { trimObj } from "../../../utils/commons";
 import { MDMS } from "../../../utils/endPoints";
+import {  localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 
 
 const extractFromString = (str, index) => {
@@ -65,10 +66,26 @@ export const updateDraftinLocalStorage = async (draftInfo, assessmentNumber, sel
     }
   );
 };
+export const getBusinessServiceNextAction = (businessServiceName, currentAction) => {
+  const businessServiceData = JSON.parse(
+    localStorageGet("businessServiceData")
+  );
+  
+  const data =businessServiceData.filter(businessService=>businessService.businessService=="PT.CREATE");
+  let { states } = data&&data.length>0&&data[0] || [];
 
+  if (states && states.length > 0) {
+    states = states.filter((item, index) => {
+      if (item.state == null && item.actions && item.actions.length > 0) {
+        return item.actions;
+      }
+    });
+    const actions = states && states.length > 0 && states[0].actions;
+    return actions && actions.length > 0 && actions[0].action;
+  }
+}
 
 export const convertToOldPTObject = (newObject) => {
-  // newObject.Properties[0].propertyDetails = newObject.Properties;
   let Properties = [
     {
       propertyId: "",
@@ -178,7 +195,7 @@ export const convertToOldPTObject = (newObject) => {
   property.address = newProperty.address;
   property.auditDetails = newProperty.auditDetails;
   property.creationReason = newProperty.creationReason;
-  property.occupancyDate =newProperty.units&&newProperty.units.length&& newProperty.units[0].occupancyDate;
+  property.occupancyDate = newProperty.units && newProperty.units.length && newProperty.units[0].occupancyDate;
   property.additionalDetails = newProperty.additionalDetails;
 
   propertyDetails.institution = newProperty.institution;
@@ -191,7 +208,7 @@ export const convertToOldPTObject = (newObject) => {
   propertyDetails.landArea = newProperty.landArea;
   propertyDetails.buildUpArea = newProperty.superBuiltUpArea;
   propertyDetails.units = newProperty.units;
-  
+
   propertyDetails.documents = newProperty.documents;
   propertyDetails.additionalDetails = newProperty.additionalDetails;
   propertyDetails.financialYear = null;
@@ -257,21 +274,21 @@ export const convertToOldPTObject = (newObject) => {
   propertyDetails.auditDetails = newProperty.auditDetails;
   propertyDetails.calculation = null;
   propertyDetails.channel = newProperty.channel;
-  propertyDetails.units=propertyDetails.units&& propertyDetails.units.map(unit=>{
-// unit.usageCategory;
-// propertyDetails.propertyType = extractFromString(newProperty.propertyType, 0);
-// propertyDetails.propertySubType = extractFromString(newProperty.propertyType, 1);
+  propertyDetails.units = propertyDetails.units && propertyDetails.units.map(unit => {
+    // unit.usageCategory;
+    // propertyDetails.propertyType = extractFromString(newProperty.propertyType, 0);
+    // propertyDetails.propertySubType = extractFromString(newProperty.propertyType, 1);
 
-unit.usageCategoryMajor=extractFromString(unit.usageCategory, 0)
-unit.usageCategoryMinor=extractFromString(unit.usageCategory, 1)
-unit.usageCategorySubMinor=extractFromString(unit.usageCategory, 2)
-unit.usageCategoryDetail=extractFromString(unit.usageCategory, 3)
-// unit.constructionDetail = {
-//   builtUpArea: unit.unitArea,
-// };
+    unit.usageCategoryMajor = extractFromString(unit.usageCategory, 0)
+    unit.usageCategoryMinor = extractFromString(unit.usageCategory, 1)
+    unit.usageCategorySubMinor = extractFromString(unit.usageCategory, 2)
+    unit.usageCategoryDetail = extractFromString(unit.usageCategory, 3)
+    // unit.constructionDetail = {
+    //   builtUpArea: unit.unitArea,
+    // };
 
-unit.unitArea=unit.constructionDetail.builtUpArea;
-    return {...unit}
+    unit.unitArea = unit.constructionDetail.builtUpArea;
+    return { ...unit }
   })
 
 
@@ -282,7 +299,7 @@ unit.unitArea=unit.constructionDetail.builtUpArea;
   // "usageCategorySubMinor":"FOODJOINTS",
   // "usageCategoryDetail":"ACRESTAURANT",
   property["propertyDetails"] = [propertyDetails];
-  Properties[0] = {...newProperty,...property};
+  Properties[0] = { ...newProperty, ...property };
 
   return Properties;
 };
@@ -709,8 +726,8 @@ export const normalizePropertyDetails = (properties, self) => {
   const units =
     propertyDetails[0] && propertyDetails[0].units
       ? propertyDetails[0].units.filter((item, ind) => {
-          return item !== null;
-        })
+        return item !== null;
+      })
       : [];
   if (isReassesment && propertyId) {
     property.propertyId = propertyId;

@@ -10,7 +10,7 @@ import {
 } from "egov-ui-kit/redux/form/actions";
 import Label from "egov-ui-kit/utils/translationNode";
 import { getTranslatedLabel } from "egov-ui-kit/utils/commons";
-import { getLocale, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
+import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { initLocalizationLabels } from "egov-ui-kit/redux/app/utils";
 import Property from "egov-ui-kit/common/propertyTax/Property";
 import { hideSpinner, showSpinner } from "egov-ui-kit/redux/common/actions";
@@ -20,7 +20,6 @@ import { prepareFormData as prepareFormDataAction } from "egov-ui-kit/redux/comm
 import store from "ui-redux/store";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import find from "lodash/find";
 import {
   UsageInformationHOC,
   PropertyAddressHOC,
@@ -70,7 +69,8 @@ import {
   getHeaderLabel,
   validateUnitandPlotSize,
   normalizePropertyDetails,
-  renderPlotAndFloorDetails
+  renderPlotAndFloorDetails,
+  getBusinessServiceNextAction
 } from "egov-ui-kit/utils/PTCommon/FormWizardUtils";
 import sortBy from "lodash/sortBy";
 import {
@@ -337,22 +337,7 @@ class FormWizard extends Component {
       }
     }
   };
-  getBusinessServiceNextAction(businessServiceName, currentAction) {
-    const businessServiceData = JSON.parse(
-      localStorageGet("businessServiceData")
-    );
-    const data = find(businessServiceData, { businessService: "PT.CREATE" });
-    const { states } = data || [];
-
-    if (states && states.length > 0) {
-      const actions = states.filter((item, index) => {
-        if (item.state == null && item.actions && item.actions.length > 0) {
-          return item.actions;
-        }
-      });
-      return actions && actions.length > 0 && actions[0] && actions[0].action;
-    }
-  }
+ 
   componentDidMount = async () => {
     const { selected } = this.state;
     let {
@@ -915,7 +900,7 @@ class FormWizard extends Component {
 
         const workflow = {
           "businessService": "PT.CREATE",
-          "action": this.getBusinessServiceNextAction('PT.CREATE', null),
+          "action": getBusinessServiceNextAction('PT.CREATE', null),
           "moduleName": "PT"
         }
         if (propertyPayload.workflow) {

@@ -6,15 +6,17 @@ import {
   getTextToLocalMapping
 } from "../../utils";
 import store from "ui-redux/store";
-import {setRoute} from "egov-ui-kit/redux/app/actions";
+import { setRoute } from "egov-ui-kit/redux/app/actions";
 import {
   getLocalization,
   getTenantId
 } from "egov-ui-kit/utils/localStorageUtils";
 import {
-  getLocaleLabels,
+  getLocaleLabels, getQueryArg,
   getTransformedLocalStorgaeLabels
 } from "egov-ui-framework/ui-utils/commons";
+import { httpRequest } from "egov-ui-framework/ui-utils/api";
+
 
 const getLocalTextFromCode = localCode => {
   return JSON.parse(getLocalization("localization_en_IN")).find(
@@ -121,25 +123,25 @@ export const searchPropertyTable = {
   componentPath: "Table",
   visible: false,
   props: {
-    className:"propertyTab",
+    className: "propertyTab",
     // data: [],
     columns: [
       {
-        name:getTextToLocalMapping("Property Tax Unique Id"),
+        name: getTextToLocalMapping("Property Tax Unique Id"),
         options: {
           filter: false,
           customBodyRender: value => (
             <span
-            style={
-              { color: "#337ab7",cursor:"pointer",textDecoration:"underline" }
-            }
-            
+              style={
+                { color: "#337ab7", cursor: "pointer", textDecoration: "underline" }
+              }
+
             >
               {value}
             </span>
           )
         }
-        },
+      },
       getTextToLocalMapping("Owner Name"),
       getTextToLocalMapping("Guardian Name"),
       getTextToLocalMapping("Existing Property Id"),
@@ -174,8 +176,8 @@ export const searchPropertyTable = {
       selectableRows: false,
       hover: true,
       rowsPerPageOptions: [10, 15, 20],
-      onRowClick: (row, index,dispatch) => {
-        onPropertyTabClick(row,dispatch);
+      onRowClick: (row, index, dispatch) => {
+        onPropertyTabClick(row, dispatch);
       }
     },
     customSortColumn: {
@@ -202,40 +204,40 @@ export const searchApplicationTable = {
   componentPath: "Table",
   visible: false,
   props: {
-    className:"appTab",
+    className: "appTab",
     // data: [],
     columns: [
       {
-        name:getTextToLocalMapping("Application No"),
+        name: getTextToLocalMapping("Application No"),
         options: {
           filter: false,
           customBodyRender: value => (
             <span
-            style={
-              { color: "#337ab7",cursor:"pointer",textDecoration:"underline" }
-            }
-            
+              style={
+                { color: "#337ab7", cursor: "pointer", textDecoration: "underline" }
+              }
+
             >
               {value}
             </span>
           )
         }
-        },
+      },
       {
-      name:getTextToLocalMapping("Property Tax Unique Id"),
-      options: {
-        filter: false,
-        customBodyRender: value => (
-          <span
-          style={
-            { color: "#337ab7",cursor:"pointer",textDecoration:"underline" }
-          }
-          
-          >
-            {value}
-          </span>
-        )
-      }
+        name: getTextToLocalMapping("Property Tax Unique Id"),
+        options: {
+          filter: false,
+          customBodyRender: value => (
+            <span
+              style={
+                { color: "#337ab7", cursor: "pointer", textDecoration: "underline" }
+              }
+
+            >
+              {value}
+            </span>
+          )
+        }
       },
       getTextToLocalMapping("Application Type"),
       getTextToLocalMapping("Owner Name"),
@@ -257,17 +259,16 @@ export const searchApplicationTable = {
       },
       {
         name: "tenantId",
-        
         options: {
           display: false,
         }
-      },{
+      }, {
         name: "temporary",
-        
+
         options: {
           display: false,
-      
-        
+
+
         }
       }
     ],
@@ -279,8 +280,8 @@ export const searchApplicationTable = {
       selectableRows: false,
       hover: true,
       rowsPerPageOptions: [10, 15, 20],
-      onRowClick: (row, index,dispatch) => {
-        onApplicationTabClick(row,dispatch);
+      onRowClick: (row, index, dispatch) => {
+        onApplicationTabClick(row, dispatch);
       }
     },
     customSortColumn: {
@@ -303,33 +304,58 @@ export const searchApplicationTable = {
 
 
 
-const onPropertyTabClick = (rowData,dispatch) => {
+const onPropertyTabClick = (rowData, dispatch) => {
   switch (rowData[5]) {
     case "INITIATED":
       window.location.href = `apply?applicationNumber=${rowData[0]}&tenantId=${
         rowData[6]
-      }`;
+        }`;
       break;
     default:
-     // window.location.href = `search-preview?applicationNumber=${
-     // window.location.pathname=`property-tax/property/${rowData[0]}/${rowData[6]}`;
+      // window.location.href = `search-preview?applicationNumber=${
+      // window.location.pathname=`property-tax/property/${rowData[0]}/${rowData[6]}`;
       store.dispatch(setRoute(`/property-tax/property/${rowData[0].props.children}/${rowData[6]}`));
-    //   rowData[0]
-    // }&tenantId=${rowData[6]}`; 
+      //   rowData[0]
+      // }&tenantId=${rowData[6]}`; 
       break;
   }
 };
-
-const onApplicationTabClick = (rowData,dispatch) => {
- 
-  if (rowData[5]==="INITIATED") {
-      window.location.href = `apply?applicationNumber=${rowData[1]}&tenantId=${
-        rowData[6]
-      }`;
+const getApplicationType = async (applicationNumber, tenantId) => {
+  const queryObject = [
+    { key: "businessIds", value: applicationNumber },
+    { key: "history", value: true },
+    { key: "tenantId", value: tenantId }
+  ];
+  try {
+    const payload = await httpRequest(
+      "post",
+      "egov-workflow-v2/egov-wf/process/_search",
+      "",
+      queryObject
+    );
+    if (payload && payload.ProcessInstances.length > 0) {
+      return payload.ProcessInstances[0].businessService;
+    }
+  } catch (e) {
+    console.log(e);
   }
-    else{
-      // store.dispatch(setRoute(`/property-tax/property/${rowData[1]}/${rowData[6]}`));
-      // property-tax/application-preview?propertyId=PB-PT-2020-02-12-019323&applicationNumber=PB-AS-2020-02-14-058692&tenantId=pb.amritsar&type=assessment&assessmentNumber=PB-AS-2020-02-14-058692
-      store.dispatch(setRoute(`/property-tax/application-preview?propertyId=${rowData[1].props.children}&applicationNumber=${rowData[7]&&rowData[7].acknowldgementNumber}&tenantId=${rowData[6]}&type=property`));
+}
+const onApplicationTabClick =async (rowData, dispatch) => {
+  const businessService = await getApplicationType(rowData[7] && rowData[7].acknowldgementNumber, rowData[6]);
+  if (businessService == 'PT.MUTATION') {
+    store.dispatch(setRoute(`/pt-mutation/search-preview?applicationNumber=${rowData[7] && rowData[7].acknowldgementNumber}&propertyId=${rowData[1].props.children}&tenantId=${rowData[6]}`));
+  } else if (businessService == 'PT.CREATE') {
+    store.dispatch(setRoute(`/property-tax/application-preview?propertyId=${rowData[1].props.children}&applicationNumber=${rowData[7] && rowData[7].acknowldgementNumber}&tenantId=${rowData[6]}&type=property`));
+  } else {
+    console.log('Search Error');
   }
-};
+  // if (rowData[5]==="INITIATED") {
+  //   // http://localhost:3006/pt-mutation/search-preview?applicationNumber=PB-AC-2020-02-18-018790&tenantId=pb.amritsar&propertyId=PB-PT-2020-02-18-019402
+  //   store.dispatch(setRoute(`/pt-mutation/search-preview?applicationNumber=${rowData[7]&&rowData[7].acknowldgementNumber}&propertyId=${rowData[1].props.children}&tenantId=${rowData[6]}`));
+  // }
+  //   else{
+  //     // store.dispatch(setRoute(`/property-tax/property/${rowData[1]}/${rowData[6]}`));
+  //     // property-tax/application-preview?propertyId=PB-PT-2020-02-12-019323&applicationNumber=PB-AS-2020-02-14-058692&tenantId=pb.amritsar&type=assessment&assessmentNumber=PB-AS-2020-02-14-058692
+  //     store.dispatch(setRoute(`/property-tax/application-preview?propertyId=${rowData[1].props.children}&applicationNumber=${rowData[7]&&rowData[7].acknowldgementNumber}&tenantId=${rowData[6]}&type=property`));
+  // }
+}

@@ -297,7 +297,32 @@ const setSearchResponse = async (
     { key: "propertyIds", value: applicationNumber }
   ]);
   // const response = sampleSingleSearch();
-  dispatch(prepareFinalObject("Properties", get(response, "Properties", [])));
+  const properties=get(response, "Properties", []);
+  let property=properties&&properties.length>0&&properties[0]||{};
+
+
+  if(!property.workflow){
+    let workflow={
+      "id": null,
+      "tenantId":  getQueryArg(
+        window.location.href,
+        "tenantId"
+      ),
+      "businessService":"PT.MUTATION",
+      "businessId": getQueryArg(
+        window.location.href,
+        "applicationNumber"
+      ),
+      "action": "",
+      "moduleName": "PT",
+      "state": null,
+      "comment": null,
+      "documents": null,
+      "assignes": null
+  }
+  property.workflow=workflow;
+  }
+  dispatch(prepareFinalObject("Property",property));
 
   // Set Institution/Applicant info card visibility
   if (
@@ -423,7 +448,7 @@ const screenConfig = {
           moduleName: "egov-workflow",
           // visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
           props: {
-            dataPath: "Properties",
+            dataPath: "Property",
             moduleName: "PT.MUTATION",
             updateUrl: "/property-services/property/_update"
           }

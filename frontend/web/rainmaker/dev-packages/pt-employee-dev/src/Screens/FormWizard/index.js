@@ -66,10 +66,11 @@ import {
   normalizePropertyDetails,
   getImportantDates,
   renderPlotAndFloorDetails,
-  removeAdhocIfDifferentFY
+  removeAdhocIfDifferentFY,
+  getBusinessServiceNextAction
 } from "egov-ui-kit/utils/PTCommon/FormWizardUtils";
 import sortBy from "lodash/sortBy";
-import { getTenantId, getUserInfo, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import commonConfig from "config/common.js";
 import AcknowledgementCard from "egov-ui-kit/common/propertyTax/AcknowledgementCard";
 import generateAcknowledgementForm from "egov-ui-kit/common/propertyTax/PaymentStatus/Components/acknowledgementFormPDF";
@@ -80,7 +81,7 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { resetFormWizard } from "egov-ui-kit/utils/PTCommon";
 import { removeForm } from "egov-ui-kit/redux/form/actions";
 import { prepareFormData as prepareFormDataAction } from "egov-ui-kit/redux/common/actions";
-import find from "lodash/find";
+
 class FormWizard extends Component {
   state = {
     dialogueOpen: false,
@@ -1646,22 +1647,7 @@ class FormWizard extends Component {
       }
     }
   }
-  getBusinessServiceNextAction(businessServiceName, currentAction) {
-    const businessServiceData = JSON.parse(
-      localStorageGet("businessServiceData")
-    );
-    const data = find(businessServiceData, { businessService: "PT.CREATE" });
-    const { states } = data || [];
 
-    if (states && states.length > 0) {
-      const actions = states.filter((item, index) => {
-        if (item.state == null && item.actions && item.actions.length > 0) {
-          return item.actions;
-        }
-      });
-      return actions && actions.length > 0 && actions[0] && actions[0].action;
-    }
-  }
   createProperty = async (Properties, action) => {
     const { documentsUploadRedux, newProperties, propertiesEdited } = this.props;
     const propertyPayload = createPropertyPayload(Properties, documentsUploadRedux, newProperties);
@@ -1674,7 +1660,7 @@ class FormWizard extends Component {
 
         const workflow = {
           "businessService": "PT.CREATE",
-          "action": this.getBusinessServiceNextAction('PT.CREATE', null),
+          "action": getBusinessServiceNextAction('PT.CREATE', null),
           "moduleName": "PT"
         }
         if (propertyPayload.workflow) {
