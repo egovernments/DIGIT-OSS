@@ -345,6 +345,23 @@ public class NotificationUtil {
 		return messageTemplate;
 	}
 
+
+	/**
+	 *
+	 * @param license
+	 * @param localizationMessages
+	 * @return
+	 */
+	public String getReminderMsg(TradeLicense license, String localizationMessages) {
+
+		String messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_TL_REMINDER, localizationMessages);
+		messageTemplate = messageTemplate.replace(NOTIF_TRADE_NAME_KEY, license.getTradeName());
+		messageTemplate = messageTemplate.replace(NOTIF_EXPIRY_DATE_KEY, license.getValidTo().toString());
+		messageTemplate = messageTemplate.replace(NOTIF_TRADE_LICENSENUMBER_KEY, license.getLicenseNumber());
+		return messageTemplate;
+	}
+
+
 	/**
 	 * Send the SMSRequest on the SMSNotification kafka topic
 	 * 

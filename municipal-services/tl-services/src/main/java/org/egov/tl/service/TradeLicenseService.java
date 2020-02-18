@@ -6,9 +6,9 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.tl.config.TLConfiguration;
-import org.egov.tl.producer.Producer;
 import org.egov.tl.repository.TLRepository;
 import org.egov.tl.service.notification.EditNotificationService;
+import org.egov.tl.service.notification.TLReminderNotification;
 import org.egov.tl.util.TLConstants;
 import org.egov.tl.util.TradeUtil;
 import org.egov.tl.validator.TLValidator;
@@ -60,6 +60,8 @@ public class TradeLicenseService {
 
     private TradeUtil tradeUtil;
 
+    private TLReminderNotification tlReminderNotification;
+
     @Value("${workflow.bpa.businessServiceCode.fallback_enabled}")
     private Boolean pickWFServiceNameFromTradeTypeOnly;
 
@@ -68,7 +70,8 @@ public class TradeLicenseService {
                                UserService userService, TLRepository repository, ActionValidator actionValidator,
                                TLValidator tlValidator, TLWorkflowService TLWorkflowService,
                                CalculationService calculationService, TradeUtil util, DiffService diffService,
-                               TLConfiguration config, EditNotificationService editNotificationService, WorkflowService workflowService, TradeUtil tradeUtil) {
+                               TLConfiguration config, EditNotificationService editNotificationService, WorkflowService workflowService,
+                               TradeUtil tradeUtil, TLReminderNotification tlReminderNotification) {
         this.wfIntegrator = wfIntegrator;
         this.enrichmentService = enrichmentService;
         this.userService = userService;
@@ -83,6 +86,7 @@ public class TradeLicenseService {
         this.editNotificationService = editNotificationService;
         this.workflowService = workflowService;
         this.tradeUtil = tradeUtil;
+        this.tlReminderNotification = tlReminderNotification;
     }
 
 
@@ -321,4 +325,25 @@ public class TradeLicenseService {
         return licenceResponse;
         
     }
+
+
+    /**
+     *
+     * @param serviceName
+     */
+    public void sendReminderSMS(String serviceName){
+
+        if(serviceName == null)
+            serviceName = TRADE_LICENSE_MODULE_CODE;
+
+        Long validTill = System.currentTimeMillis() + config.getReminderPeriod();
+
+
+        RequestInfo requestInfo = new RequestInfo();
+
+        tlReminderNotification.getLicensesAndSendReminder(serviceName, validTill, requestInfo);
+
+
+    }
+
 }

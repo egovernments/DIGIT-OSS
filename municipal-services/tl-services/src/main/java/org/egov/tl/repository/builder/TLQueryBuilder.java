@@ -177,6 +177,13 @@ public class TLQueryBuilder {
                 preparedStmtList.add(criteria.getToDate());
             }
 
+
+            if (criteria.getValidTo() != null) {
+                addClauseIfRequired(preparedStmtList, builder);
+                builder.append("  tl.validTo <= ? ");
+                preparedStmtList.add(criteria.getValidTo());
+            }
+
         }
 
        // enrichCriteriaForUpdateSearch(builder,preparedStmtList,criteria);

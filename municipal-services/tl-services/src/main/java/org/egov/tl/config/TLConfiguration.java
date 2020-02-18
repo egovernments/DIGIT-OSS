@@ -266,4 +266,19 @@ public class TLConfiguration {
 	private String payTriggers;
 
 
+
+	//Reminder
+    @Value("${egov.tl.reminder.period}")
+    private Long reminderPeriod;
+
+    @Value("${egov.tl.pagination.size}")
+    private Integer paginationSize;
+
+    @Value("${egov.tl.reminder.enable}")
+    private Boolean isReminderEnabled;
+
+
+
+
+
 }

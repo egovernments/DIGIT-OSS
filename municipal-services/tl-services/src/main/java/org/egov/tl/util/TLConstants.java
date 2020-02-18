@@ -71,6 +71,8 @@ public class TLConstants {
 
     public static final String NOTIFICATION_FORWARD_CITIZEN = "tl.en.forward.citizen";
 
+    public static final String NOTIFICATION_TL_REMINDER = "tl.en.reminder";
+
 
     public static final String DEFAULT_OBJECT_MODIFIED_MSG = "Dear <1>,Your Trade License with application number <APPLICATION_NUMBER> was modified.";
 
@@ -240,6 +242,19 @@ public class TLConstants {
 
     public static final List<String> FIELDS_TO_IGNORE = Collections.unmodifiableList(Arrays.asList(VARIABLE_ACTION,VARIABLE_WFDOCUMENTS,
             VARIABLE_CREATEDBY,VARIABLE_LASTMODIFIEDBY,VARIABLE_CREATEDTIME,VARIABLE_LASTMODIFIEDTIME,VARIABLE_STATUS,VARIABLE_LASTMODIFIEDDATE,VARIABLE_ISSUED_DATE));
+
+
+
+
+    public static final String NOTIF_OWNER_NAME_KEY = "{OWNER_NAME}";
+
+    public static final String NOTIF_TRADE_NAME_KEY = "{TRADE_NAME}";
+
+    public static final String NOTIF_TRADE_LICENSENUMBER_KEY = "{LICENSE_NUMBER}";
+
+    public static final String NOTIF_EXPIRY_DATE_KEY = "{EXPIRY_DATE}";
+
+
 
 
     public TLConstants() {}

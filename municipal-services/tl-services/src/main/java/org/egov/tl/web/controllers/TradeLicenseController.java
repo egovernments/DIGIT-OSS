@@ -76,5 +76,16 @@ import javax.servlet.http.HttpServletRequest;
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @RequestMapping(value = {"/{servicename}/_reminder", "/_reminder"}, method = RequestMethod.POST)
+    public ResponseEntity sendReminderSMS(@PathVariable(required = false) String servicename) {
+
+        tradeLicenseService.sendReminderSMS(servicename);
+
+        return new ResponseEntity(HttpStatus.ACCEPTED);
+    }
+
+
+
+
 
 }
