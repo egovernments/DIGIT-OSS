@@ -5,6 +5,7 @@ import { convertEpochToDate, getTextToLocalMapping } from "../../utils/index";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validateFields } from "../../utils";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { findAndReplace } from "../../../../../ui-utils/commons";
 
 export const searchApiCall = async (state, dispatch) => {
   showHideApplicationTable(false, dispatch);
@@ -153,8 +154,15 @@ const renderSearchApplicationTable = async (state, dispatch) => {
       const sewerageConnections = searcSewerageConnectionResults ? searcSewerageConnectionResults.SewerageConnections.map(e => { e.service = 'SEWERAGE'; return e }) : [];
       let combinedSearchResults = searchWaterConnectionResults || searcSewerageConnectionResults ? sewerageConnections.concat(waterConnections) : []
       for (let i = 0; i < combinedSearchResults.length; i++) {
-        let element = combinedSearchResults[i];
-        finalArray.push({ service: element.service, connectionNo: element.connectionNo, name: element.property.owners[0].name, status: element.status, address: element.property.address.street, connectionType: element.connectionType })
+        let element = findAndReplace(combinedSearchResults[i], null, "NA");
+        finalArray.push({
+          connectionNo: element.connectionNo,
+          applicationNo: element.applicationNo,
+          name: element.property.owners[0].name,
+          applicationStatus: element.applicationStatus,
+          address: element.property.address.street,
+          connectionType: element.service
+        })
       }
       showApplicationResults(finalArray, dispatch)
     } catch (err) { console.log(err) }
@@ -192,11 +200,11 @@ const showApplicationResults = (connections, dispatch) => {
   let data = connections.map(item => ({
     [getTextToLocalMapping("Consumer No")]: item.connectionNo,
     [getTextToLocalMapping("Application No")]: item.applicationNo,
+    [getTextToLocalMapping("Application Type")]: item.connectionType,
     [getTextToLocalMapping("Owner Name")]: item.name,
     [getTextToLocalMapping("Application Status")]: item.applicationStatus,
     [getTextToLocalMapping("Address")]: item.address,
-    ["tenantId"]: JSON.parse(getUserInfo()).tenantId,
-    ["connectionType"]: item.connectionType
+    ["tenantId"]: JSON.parse(getUserInfo()).tenantId
   }));
   dispatch(handleField("search", "components.div.children.searchApplicationResults", "props.data", data));
   dispatch(handleField("search", "components.div.children.searchApplicationResults", "props.title",

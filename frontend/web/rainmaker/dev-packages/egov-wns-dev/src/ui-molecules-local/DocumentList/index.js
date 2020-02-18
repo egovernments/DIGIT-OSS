@@ -136,14 +136,8 @@ class DocumentList extends Component {
         docType.cards.forEach(card => {
           if (card.subCards) {
             card.subCards.forEach(subCard => {
-              let oldDocType = get(
-                documentsUploadRedux,
-                `[${index}].documentType`
-              );
-              let oldDocCode = get(
-                documentsUploadRedux,
-                `[${index}].documentCode`
-              );
+              let oldDocType = get(documentsUploadRedux, `[${index}].documentType`);
+              let oldDocCode = get(documentsUploadRedux, `[${index}].documentCode`);
               let oldDocSubCode = get(
                 documentsUploadRedux,
                 `[${index}].documentSubCode`
@@ -195,7 +189,6 @@ class DocumentList extends Component {
     let { uploadedDocIndex } = this.state;
     const { prepareFinalObject, documentsUploadRedux } = this.props;
     const fileUrl = await getFileUrlFromAPI(fileStoreId);
-
     prepareFinalObject("documentsUploadRedux", {
       ...documentsUploadRedux,
       [uploadedDocIndex]: {

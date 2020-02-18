@@ -9,6 +9,7 @@ import {
     setFilteredTradeTypes,
     getTradeTypeDropdownData
 } from "../ui-config/screens/specs/utils";
+import jp from "jsonpath";
 import { prepareFinalObject, toggleSnackbar, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTranslatedLabel, updateDropDowns, ifUserRoleExists } from "../ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -580,46 +581,143 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
     dispatch(prepareFinalObject("documentsContract", documentsContract));
 };
 
+const handleDeletedCards = (jsonObject, jsonPath, key) => {
+    let originalArray = get(jsonObject, jsonPath, []);
+    let modifiedArray = originalArray.filter(element => { return element.hasOwnProperty(key) || !element.hasOwnProperty("isDeleted"); });
+    modifiedArray = modifiedArray.map(element => {
+        if (element.hasOwnProperty("isDeleted")) { element["isActive"] = false; }
+        return element;
+    });
+    set(jsonObject, jsonPath, modifiedArray);
+};
+
+export const createUpdateNocApplication = async (state, dispatch, status) => {
+    let waterId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].applicationNo");
+    let sewerId = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0].applicationNo");
+    let method = (waterId || sewerId) ? "UPDATE" : "CREATE";
+    try {
+        let payload = get(state.screenConfiguration.preparedFinalObject, "applyScreen", {});
+        const tenantId = ifUserRoleExists("CITIZEN") ? "pb.amritsar" : getTenantId();
+        set(payload[0], "tenantId", tenantId);
+        set(payload[0], "applyScreen.action", status);
+
+        // Get uploaded documents from redux
+        let reduxDocuments = get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux", {});
+
+        handleDeletedCards(payload[0], "applyScreen.documents", "id");
+
+        // Set owners & other documents
+        let ownerDocuments = [];
+        let otherDocuments = [];
+        jp.query(reduxDocuments, "$.*").forEach(doc => {
+            if (doc.documents && doc.documents.length > 0) {
+                if (doc.documentType === "OWNER") {
+                    ownerDocuments = [...ownerDocuments, {
+                        tenantId: tenantId,
+                        documentType: doc.documentSubCode ? doc.documentSubCode : doc.documentCode,
+                        fileStoreId: doc.documents[0].fileStoreId
+                    }];
+                } else if (!doc.documentSubCode) {
+                    // SKIP BUILDING PLAN DOCS
+                    otherDocuments = [...otherDocuments, {
+                        tenantId: tenantId,
+                        documentType: doc.documentCode,
+                        fileStoreId: doc.documents[0].fileStoreId
+                    }];
+                }
+            }
+        });
+
+        set(payload, "ownerDocuments", ownerDocuments);
+        set(payload, "otherDocuments", otherDocuments);
+
+        let response;
+        if (method === "CREATE") {
+            response = await httpRequest("post", "/firenoc-services/v1/_create", "", [], { FireNOCs: payload });
+            dispatch(prepareFinalObject("FireNOCs", response.FireNOCs));
+            setApplicationNumberBox(state, dispatch);
+        } else if (method === "UPDATE") {
+            response = await httpRequest("post", "/firenoc-services/v1/_update", "", [], { FireNOCs: payload });
+            dispatch(prepareFinalObject("FireNOCs", response.FireNOCs));
+        }
+
+        return { status: "success", message: response };
+    } catch (error) {
+        dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
+
+        let fireNocData = get(state, "screenConfiguration.preparedFinalObject.FireNOCs", []);
+        fireNocData = furnishNocResponse({ FireNOCs: fireNocData });
+        dispatch(prepareFinalObject("FireNOCs", fireNocData.FireNOCs));
+
+        return { status: "failure", message: error };
+    }
+};
+
 export const applyForWaterOrSewerage = async (state, dispatch, activeIndex) => {
 
     let queryObject = JSON.parse(JSON.stringify(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {})));
+    const { documents, plumberInfo, roadType, roadCuttingArea, action, connectionCategory, connectionType, waterSource, meterId, meterInstallationDate, pipeSize, noOfTaps, waterSubSource, connectionExecutionDate, noOfWaterClosets, noOfToilets } = queryObject;
     queryObject.Property = JSON.parse(JSON.stringify(findAndReplace(get(state.screenConfiguration.preparedFinalObject, "Properties[0]"), "NA", null)));
+    let reduxDocuments = get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux", {});
+    let uploadedDocs = [];
+    if (reduxDocuments !== null && reduxDocuments !== undefined) {
+        Object.keys(reduxDocuments).forEach(key => {
+            if (reduxDocuments !== undefined && reduxDocuments[key] !== undefined && reduxDocuments[key].documents !== undefined) {
+                reduxDocuments[key].documents.forEach(element => {
+                    element.documentType = reduxDocuments[key].documentType;
+                    element.documentCode = reduxDocuments[key].documentCode;
+                })
+                uploadedDocs = uploadedDocs.concat(reduxDocuments[key].documents);
+                dispatch(prepareFinalObject("applyScreen.documents", uploadedDocs));
+            }
+        });
+    }
     if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.water") && get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage")) {
-        await applyForBothWaterAndSewerage(state, dispatch, activeIndex, queryObject);
+        await applyForBothWaterAndSewerage(state, dispatch, activeIndex);
     } else if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage")) {
-        await applyForSewerage(state, dispatch, activeIndex, queryObject);
+        await applyForSewerage(state, dispatch, activeIndex);
     } else {
-        await applyForWater(state, dispatch, activeIndex, queryObject);
+        await applyForWater(state, dispatch, activeIndex);
     }
 }
 
-const applyForWater = async (state, dispatch, activeIndex, queryObject) => {
+const applyForWater = async (state, dispatch, activeIndex) => {
     try {
         const tenantId = ifUserRoleExists("CITIZEN") ? "pb.amritsar" : getTenantId();
-        set(queryObject, "tenantId", tenantId);
-        if (queryObject.applicationNumber) {
-            let action = "INITIATE";
-            if (queryObject && queryObject.applicationDocuments) {
+        let queryObject = JSON.parse(JSON.stringify(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {})));
+        queryObject.Property = JSON.parse(JSON.stringify(findAndReplace(get(state.screenConfiguration.preparedFinalObject, "Properties[0]"), "NA", null)));
+        let applicationNo = get(state.screenConfiguration.prepareFinalObject, "WaterConnection[0].applicationNo")
+        if (applicationNo !== undefined && applicationNo !== null) {
+            let action = "edit";
+            let queryObjectForUpdate = get(state.screenConfiguration.prepareFinalObject, "WaterConnection[0]")
+            set(queryObjectForUpdate, "tenantId", tenantId);
+            if (queryObjectForUpdate && queryObjectForUpdate.documents) {
                 if (getQueryArg(window.location.href, "action") === "edit") {
                     // Changes to be done on edit
                 } else if (activeIndex === 1) {
-                    // set(queryObject, queryObject.applicationDocuments", null);
+                    // set(queryObjectForUpdate, queryObjectForUpdate.applicationDocuments", null);
                 } else action = "APPLY";
+                set(queryObjectForUpdate, "action", action);
+                const isEditFlow = getQueryArg(window.location.href, "action") === "edit";
+                !isEditFlow && (await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: queryObjectForUpdate }));
+                let searchQueryObject = [{ key: "tenantId", value: queryObjectForUpdate.tenantId }, { key: "applicationNumber", value: queryObjectForUpdate.applicationNumber }];
+                let searchResponse = await getSearchResults(searchQueryObject);
+                if (isEditFlow) {
+                    searchResponse = { WaterConnection: queryObjectForUpdate };
+                }
+                else {
+                    dispatch(prepareFinalObject("WaterConnection", searchResponse.WaterConnection));
+                }
+                createOwnersBackup(dispatch, searchResponse);
             }
-            set(queryObject, "action", action);
-            const isEditFlow = getQueryArg(window.location.href, "action") === "edit";
-            !isEditFlow && (await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: queryObject }));
-            let searchQueryObject = [{ key: "tenantId", value: queryObject.tenantId }, { key: "applicationNumber", value: queryObject.applicationNumber }];
-            let searchResponse = await getSearchResults(searchQueryObject);
-            if (isEditFlow) { searchResponse = { WaterConnection: queryObject }; }
-            else { dispatch(prepareFinalObject("WaterConnection", searchResponse.WaterConnection)); }
-            createOwnersBackup(dispatch, searchResponse);
         } else {
+            console.log('queryObject')
+            console.log(queryObject)
             set(queryObject, "action", "INITIATE");
             //Emptying application docs to "INITIATE" form in case of search and fill from old TL Id.
             // if (!queryObject.applicationNumber) set(queryObject, "WaterConnection", null);
             const response = await httpRequest("post", "/ws-services/wc/_create", "", [], { WaterConnection: queryObject });
-            dispatch(prepareFinalObject("WaterConnection", response.WaterConnections));
+            dispatch(prepareFinalObject("WaterConnection", response.WaterConnection));
             createOwnersBackup(dispatch, response);
         }
         /** Application no. box setting */
@@ -632,11 +730,14 @@ const applyForWater = async (state, dispatch, activeIndex, queryObject) => {
     }
 }
 
-const applyForSewerage = async (state, dispatch, activeIndex, queryObject) => {
+const applyForSewerage = async (state, dispatch, activeIndex) => {
     try {
         const tenantId = ifUserRoleExists("CITIZEN") ? "pb.amritsar" : getTenantId();
+        let queryObject = JSON.parse(JSON.stringify(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {})));
+        queryObject.Property = JSON.parse(JSON.stringify(findAndReplace(get(state.screenConfiguration.preparedFinalObject, "Properties[0]"), "NA", null)));
+        let applicationNo = get(state.screenConfiguration.prepareFinalObject, "WaterConnection[0].applicationNo")
         set(queryObject, "tenantId", tenantId);
-        if (queryObject.applicationNumber) {
+        if (applicationNo) {
             let action = "INITIATE";
             if (queryObject && queryObject.applicationDocuments) {
                 if (getQueryArg(window.location.href, "action") === "edit") {
@@ -669,9 +770,11 @@ const applyForSewerage = async (state, dispatch, activeIndex, queryObject) => {
     }
 }
 
-const applyForBothWaterAndSewerage = async (state, dispatch, activeIndex, queryObject) => {
+const applyForBothWaterAndSewerage = async (state, dispatch, activeIndex) => {
     try {
         const tenantId = ifUserRoleExists("CITIZEN") ? "pb.amritsar" : getTenantId();
+        let queryObject = JSON.parse(JSON.stringify(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {})));
+        queryObject.Property = JSON.parse(JSON.stringify(findAndReplace(get(state.screenConfiguration.preparedFinalObject, "Properties[0]"), "NA", null)));
         set(queryObject, "tenantId", tenantId);
         if (queryObject.applicationNumber) {
             let action = "INITIATE";
@@ -1301,7 +1404,7 @@ export const downloadBill = (receiptQueryString, mode = "download") => {
     }
 }
 
-let findAndReplace = (obj, oldValue, newValue) => {
+export const findAndReplace = (obj, oldValue, newValue) => {
     Object.keys(obj).forEach(key => {
         if ((obj[key] instanceof Object) || (obj[key] instanceof Array)) findAndReplace(obj[key], oldValue, newValue)
         obj[key] = obj[key] === oldValue ? newValue : obj[key]

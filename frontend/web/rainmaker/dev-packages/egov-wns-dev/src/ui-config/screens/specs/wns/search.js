@@ -24,21 +24,13 @@ const employeeSearchResults = {
     const businessServiceData = JSON.parse(
       localStorageGet("businessServiceData")
     );
-    const data = find(businessServiceData, { businessService: "NewTL" });
+    const data = find(businessServiceData, { businessService: "NewWS1" });
     const { states } = data || [];
-
+    const applicationType = [{ code: "Water", code: "WATER" }, { code: "Sewerage", code: "SEWERAGE" }]
+    dispatch(prepareFinalObject("applyScreenMdmsData.searchScreen.applicationType", applicationType));
     if (states && states.length > 0) {
-      const status = states.map((item, index) => {
-        return {
-          code: item.state
-        };
-      });
-      dispatch(
-        prepareFinalObject(
-          "applyScreenMdmsData.searchScreen.status",
-          status.filter(item => item.code != null)
-        )
-      );
+      const status = states.map((item, index) => { return { code: item.state } });
+      dispatch(prepareFinalObject("applyScreenMdmsData.searchScreen.status", status.filter(item => item.code != null)));
     }
 
     return action;

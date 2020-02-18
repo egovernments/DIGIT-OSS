@@ -73,13 +73,13 @@ const getPlumberRadioButton = {
   uiFramework: "custom-containers",
   componentPath: "RadioGroupContainer",
   gridDefination: { xs: 12, sm: 12 },
+  jsonPath: "applyScreen.plumberInfo[0].detailsProvidedBy",
   props: {
     label: { key: "WS_ADDN_DETAILS_PLUMBER_PROVIDED_BY" },
     buttons: [
       { labelKey: "WS_PLUMBER_ULB", value: "ULB" },
       { labelKey: "WS_PLUMBER_SELF", value: "Self" },
     ],
-    jsonPath: "applyScreen.plumberDetails",
     required: false
   },
   type: "array"
@@ -169,33 +169,12 @@ export const additionDetails = getCommonCard({
         jsonPath: "applyScreen.pipeSize"
       }),
 
-      //Removed - Confirmed by Aditya
-      // billingType: getSelectField({
-      //   label: {
-      //     labelKey: "WS_ADDN_DETAILS_BILLING_TYPE"
-      //   },
-      //   placeholder: {
-      //     labelKey: "WS_ADDN_DETAILS_BILLING_TYPE_PLACEHOLDER"
-      //   },
-      //   required: false,
-      //   jsonPath: "applyScreen.status",
-      //   sourceJsonPath: "applyScreenMdmsData.applyScreen.status",
-      //   gridDefination: {
-      //     xs: 12,
-      //     sm: 6
-      //   },
-      //   required: false,
-      //   errorMessage: "ERR_INVALID_BILLING_PERIOD",
-      //   jsonPath: "applyScreen.status"
-      // }),
-
       waterClosets: getTextField({
         label: { labelKey: "WS_ADDN_DETAILS_NO_OF_WATER_CLOSETS" },
         placeholder: { labelKey: "WS_ADDN_DETAILS_NO_OF_WATER_CLOSETS_PLACEHOLDER" },
         gridDefination: { xs: 12, sm: 6 },
         jsonPath: "applyScreen.waterClosets"
       }),
-
     }),
   }),
   plumberDetailsContainer: getCommonGrayCard({
@@ -218,7 +197,7 @@ export const additionDetails = getCommonCard({
         required: false,
         pattern: getPattern("consumerNo"),
         errorMessage: "ERR_INVALID_CONSUMER_NO",
-        jsonPath: "applyScreen.plumberLicenceNo"
+        jsonPath: "applyScreen.plumberInfo[0].plumberLicenceNo"
       }),
       plumberName: getTextField({
         label: {
@@ -234,7 +213,7 @@ export const additionDetails = getCommonCard({
         required: false,
         pattern: getPattern("consumerNo"),
         errorMessage: "ERR_INVALID_CONSUMER_NO",
-        jsonPath: "applyScreen.plumberName"
+        jsonPath: "applyScreen.plumberInfo[0].plumberName"
       }),
       plumberMobNo: getTextField({
         label: {
@@ -243,14 +222,8 @@ export const additionDetails = getCommonCard({
         placeholder: {
           labelKey: "WS_ADDN_DETAILS_PLUMBER_MOB_NO_LABEL_PLACEHOLDER"
         },
-        gridDefination: {
-          xs: 12,
-          sm: 6
-        },
-        iconObj: {
-          label: "+91 |",
-          position: "start"
-        },
+        gridDefination: { xs: 12, sm: 6 },
+        iconObj: { label: "+91 |", position: "start" },
         required: false,
         pattern: getPattern("MobileNo"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
@@ -294,7 +267,7 @@ export const additionDetails = getCommonCard({
         required: false,
         pattern: getPattern("consumerNo"),
         errorMessage: "ERR_INVALID_CONSUMER_NO",
-        jsonPath: "applyScreen.enterArea"
+        jsonPath: "applyScreen.roadCuttingArea"
       })
     }),
   }),
@@ -332,7 +305,7 @@ export const additionDetails = getCommonCard({
         required: false,
         pattern: getPattern("consumerNo"),
         errorMessage: "ERR_INVALID_CONSUMER_NO",
-        jsonPath: "applyScreen.meterID"
+        jsonPath: "applyScreen.meterId"
       }),
       meterInstallationDate: getDateField({
         label: { labelName: "meterInstallationDate", labelKey: "WS_ADDN_DETAIL_METER_INSTALL_DATE" },
@@ -364,7 +337,7 @@ export const additionDetails = getCommonCard({
         pattern: getPattern("consumerNo"),
         errorMessage: "ERR_INVALID_CONSUMER_NO",
         jsonPath: "applyScreen.initialMeterReading"
-      }),
-    }),
+      })
+    })
   })
 });

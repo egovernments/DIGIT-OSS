@@ -17,17 +17,11 @@ import {
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 const setReviewPageRoute = (state, dispatch) => {
-  let tenantId = get(
-    state,
-    "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.propertyDetails.address.city"
-  );
-  const applicationNumber = get(
-    state,
-    "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.applicationNumber"
-  );
+  let tenantId = "pb.amritsar";
+  const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].applicationNo");
   const appendUrl =
     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
-  const reviewUrl = `${appendUrl}/fire-noc/summary?applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
+  const reviewUrl = `${appendUrl}/wns/search-preview?applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
   dispatch(setRoute(reviewUrl));
 };
 const moveToReview = (state, dispatch) => {
@@ -89,28 +83,15 @@ const getMdmsData = async (state, dispatch) => {
   );
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: tenantId,
-      moduleDetails: [
+      tenantId: tenantId, moduleDetails: [
         { moduleName: "ws-services-masters", masterDetails: [{ name: "Documents" }] },
         { moduleName: "sw-services-calculation", masterDetails: [{ name: "Documents" }] }
       ]
     }
   };
   try {
-    let payload = await httpRequest(
-      "post",
-      "/egov-mdms-service/v1/_search",
-      "_search",
-      [],
-      mdmsBody
-    );
-
-    dispatch(
-      prepareFinalObject(
-        "applyScreenMdmsData.applyScreen.Documents",
-        payload.MdmsRes.applyScreen.Documents
-      )
-    );
+    let payload = await httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], mdmsBody);
+    dispatch(prepareFinalObject("applyScreenMdmsData.applyScreen.Documents", payload.MdmsRes['ws-services-masters'].Documents));
     prepareDocumentsUploadData(state, dispatch);
   } catch (e) {
     console.log(e);
@@ -158,50 +139,14 @@ const callBackForNext = async (state, dispatch) => {
       state,
       dispatch
     );
-    // Multiple buildings cards validations
-    let multiplePropertyCardPath =
-      "components.div.children.formwizardSecondStep.children.propertyDetails.children.cardContent.children.propertyDetailsConatiner.children.buildingDataCard.children.multipleBuildingContainer.children.multipleBuilding.props.items";
-    let multiplePropertyCardItems = get(
-      state.screenConfiguration.screenConfig.apply,
-      multiplePropertyCardPath,
-      []
-    );
-    let isMultiplePropertyCardValid = true;
-    for (var j = 0; j < multiplePropertyCardItems.length; j++) {
-      if (
-        (multiplePropertyCardItems[j].isDeleted === undefined ||
-          multiplePropertyCardItems[j].isDeleted !== false) &&
-        !validateFields(
-          `${multiplePropertyCardPath}[${j}].item${j}.children.cardContent.children.multipleBuildingCard.children`,
-          state,
-          dispatch,
-          "apply"
-        )
-      )
-        isMultiplePropertyCardValid = false;
-    }
-
-    let noOfBuildings = get(
-      state,
-      "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.noOfBuildings"
-    );
-    if (noOfBuildings === "SINGLE") {
-      isMultiplePropertyCardValid = true;
-    } else {
-      isSinglePropertyCardValid = true;
-    }
-
-    if (
-      !isSinglePropertyCardValid ||
-      !isPropertyLocationCardValid ||
-      !isMultiplePropertyCardValid
-    ) {
+    if (!isSinglePropertyCardValid || !isPropertyLocationCardValid) {
       isFormValid = false;
       hasFieldToaster = true;
     }
+    await applyForWaterOrSewerage(state, dispatch, activeStep);
   }
 
-  if (activeStep === 2) {
+  if (activeStep === 2 && process.env.REACT_APP_NAME !== "Citizen") {
     let isApplicantTypeCardValid = validateFields(
       "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.applicantTypeSelection.children",
       state,
@@ -218,62 +163,20 @@ const callBackForNext = async (state, dispatch) => {
       dispatch
     );
 
-    // Multiple applicants cards validations
-    let multipleApplicantCardPath =
-      "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer.children.multipleApplicantInfo.props.items";
-    // "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer.children.multipleApplicantInfo.props.items[0].item0.children.cardContent.children.applicantCard"
-    let multipleApplicantCardItems = get(
-      state.screenConfiguration.screenConfig.apply,
-      multipleApplicantCardPath,
-      []
-    );
-    let isMultipleApplicantCardValid = true;
-    for (var j = 0; j < multipleApplicantCardItems.length; j++) {
-      if (
-        (multipleApplicantCardItems[j].isDeleted === undefined ||
-          multipleApplicantCardItems[j].isDeleted !== false) &&
-        !validateFields(
-          `${multipleApplicantCardPath}[${j}].item${j}.children.cardContent.children.applicantCard.children`,
-          state,
-          dispatch,
-          "apply"
-        )
-      )
-        isMultipleApplicantCardValid = false;
-    }
-
-    let selectedApplicantType = get(
-      state,
-      "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType",
-      "SINGLE"
-    );
-    if (selectedApplicantType.includes("INSTITUTIONAL")) {
-      isSingleApplicantCardValid = true;
-      isMultipleApplicantCardValid = true;
-    } else if (selectedApplicantType.includes("MULTIPLEOWNERS")) {
-      isSingleApplicantCardValid = true;
-      isInstitutionCardValid = true;
-    } else {
-      isMultipleApplicantCardValid = true;
-      isInstitutionCardValid = true;
-    }
-
-    if (
-      !isApplicantTypeCardValid ||
-      !isSingleApplicantCardValid ||
-      !isInstitutionCardValid ||
-      !isMultipleApplicantCardValid
-    ) {
+    if (!isApplicantTypeCardValid || !isSingleApplicantCardValid || !isInstitutionCardValid) {
       isFormValid = false;
       hasFieldToaster = true;
     }
+    await applyForWaterOrSewerage(state, dispatch, activeStep);
   }
 
-  if (activeStep === 3) {
-    moveToReview(state, dispatch);
-  }
+  // if (process.env.REACT_APP_NAME !== "Citizen" && activeStep === 2) {
+  //   moveToReview(state, dispatch);
+  // } else if (activeStep === 2) {
+  //   moveToReview(state, dispatch);
+  // }
 
-  if (activeStep !== 3) {
+  if (process.env.REACT_APP_NAME !== "Citizen" && activeStep !== 2) {
     if (isFormValid) {
       let responseStatus = "success";
       if (activeStep === 1) {
@@ -281,11 +184,42 @@ const callBackForNext = async (state, dispatch) => {
       }
       if (activeStep === 2) {
         getMdmsData(state, dispatch);
-        let response = await applyForWaterOrSewerage(
-          state,
-          dispatch,
-          "INITIATE"
-        );
+        let response = await applyForWaterOrSewerage(state, dispatch, activeStep);
+        responseStatus = get(response, "status", "");
+      }
+      responseStatus === "success" && changeStep(state, dispatch);
+    } else if (hasFieldToaster) {
+      let errorMessage = {
+        labelName: "Please fill all mandatory fields and upload the documents!",
+        labelKey: "ERR_UPLOAD_MANDATORY_DOCUMENTS_TOAST"
+      };
+      switch (activeStep) {
+        case 1:
+          errorMessage = {
+            labelName:
+              "Please check the Missing/Invalid field for Property Details, then proceed!",
+            labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_PROPERTY_TOAST"
+          };
+          break;
+        case 2:
+          errorMessage = {
+            labelName:
+              "Please fill all mandatory fields for Applicant Details, then proceed!",
+            labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_APPLICANT_TOAST"
+          };
+          break;
+      }
+      dispatch(toggleSnackbar(true, errorMessage, "warning"));
+    }
+  } else if (activeStep !== 3) {
+    if (isFormValid) {
+      let responseStatus = "success";
+      if (activeStep === 1) {
+        prepareDocumentsUploadData(state, dispatch);
+      }
+      if (activeStep === 2) {
+        getMdmsData(state, dispatch);
+        let response = await applyForWaterOrSewerage(state, dispatch, activeStep);
         responseStatus = get(response, "status", "");
       }
       responseStatus === "success" && changeStep(state, dispatch);
@@ -321,29 +255,21 @@ export const changeStep = (
   mode = "next",
   defaultActiveStep = -1
 ) => {
-  let activeStep = get(
-    state.screenConfiguration.screenConfig["apply"],
-    "components.div.children.stepper.props.activeStep",
-    0
-  );
+  let activeStep = get(state.screenConfiguration.screenConfig["apply"], "components.div.children.stepper.props.activeStep", 0);
   if (defaultActiveStep === -1) {
-    // if (activeStep === 2 && mode === "next") {
-    //   const isDocsUploaded = get(
-    //     state.screenConfiguration.preparedFinalObject,
-    //     "LicensesTemp[0].reviewDocData",
-    //     null
-    //   );
-    //   activeStep = isDocsUploaded ? 3 : 2;
-    // } else {
-    activeStep = mode === "next" ? activeStep + 1 : activeStep - 1;
-    // }
+    if (activeStep === 2 && mode === "next") {
+      const getAppType = process.env.REACT_APP_NAME;
+      activeStep = getAppType === "Citizen" ? 3 : 2;
+    } else {
+      activeStep = mode === "next" ? activeStep + 1 : activeStep - 1;
+    }
   } else {
     activeStep = defaultActiveStep;
   }
 
   const isPreviousButtonVisible = activeStep > 0 ? true : false;
-  const isNextButtonVisible = activeStep < 4 ? true : false;
-  const isPayButtonVisible = activeStep === 4 ? true : false;
+  const isNextButtonVisible = isNextButton(activeStep);
+  const isPayButtonVisible = submitButton(activeStep);
   const actionDefination = [
     {
       path: "components.div.children.stepper.props",
@@ -368,7 +294,19 @@ export const changeStep = (
   ];
   dispatchMultipleFieldChangeAction("apply", actionDefination, dispatch);
   renderSteps(activeStep, dispatch);
-};
+}
+
+export const submitButton = (activeStep) => {
+  if (process.env.REACT_APP_NAME === "Citizen" && activeStep === 2) { return true; }
+  else if (process.env.REACT_APP_NAME !== "Citizen" && activeStep === 3) { return true; }
+  else return false;
+}
+
+export const isNextButton = (activeStep) => {
+  if (process.env.REACT_APP_NAME === "Citizen" && activeStep < 2) { return true; }
+  else if (process.env.REACT_APP_NAME !== "Citizen" && activeStep < 4) { return true; }
+  else return false
+}
 
 export const renderSteps = (activeStep, dispatch) => {
   switch (activeStep) {
@@ -391,13 +329,23 @@ export const renderSteps = (activeStep, dispatch) => {
       );
       break;
     case 2:
-      dispatchMultipleFieldChangeAction(
-        "apply",
-        getActionDefinationForStepper(
-          "components.div.children.formwizardThirdStep"
-        ),
-        dispatch
-      );
+      if (process.env.REACT_APP_NAME === "Citizen") {
+        dispatchMultipleFieldChangeAction(
+          "apply",
+          getActionDefinationForStepper(
+            "components.div.children.formwizardFourthStep"
+          ),
+          dispatch
+        );
+      } else {
+        dispatchMultipleFieldChangeAction(
+          "apply",
+          getActionDefinationForStepper(
+            "components.div.children.formwizardThirdStep"
+          ),
+          dispatch
+        );
+      }
       break;
     default:
       dispatchMultipleFieldChangeAction(
@@ -411,38 +359,53 @@ export const renderSteps = (activeStep, dispatch) => {
 };
 
 export const getActionDefinationForStepper = path => {
-  const actionDefination = [
-    {
-      path: "components.div.children.formwizardFirstStep",
-      property: "visible",
-      value: true
-    },
-    {
-      path: "components.div.children.formwizardSecondStep",
-      property: "visible",
-      value: false
-    },
-    {
-      path: "components.div.children.formwizardThirdStep",
-      property: "visible",
-      value: false
-    },
-    {
-      path: "components.div.children.formwizardFourthStep",
-      property: "visible",
-      value: false
-    }
-  ];
-  for (var i = 0; i < actionDefination.length; i++) {
-    actionDefination[i] = {
-      ...actionDefination[i],
-      value: false
-    };
-    if (path === actionDefination[i].path) {
-      actionDefination[i] = {
-        ...actionDefination[i],
+  let actionDefination = [];
+  if (process.env.REACT_APP_NAME === "Citizen") {
+    actionDefination = [
+      {
+        path: "components.div.children.formwizardFirstStep",
+        property: "visible",
         value: true
-      };
+      },
+      {
+        path: "components.div.children.formwizardSecondStep",
+        property: "visible",
+        value: false
+      },
+      {
+        path: "components.div.children.formwizardFourthStep",
+        property: "visible",
+        value: false
+      }
+    ];
+  } else {
+    actionDefination = [
+      {
+        path: "components.div.children.formwizardFirstStep",
+        property: "visible",
+        value: true
+      },
+      {
+        path: "components.div.children.formwizardSecondStep",
+        property: "visible",
+        value: false
+      },
+      {
+        path: "components.div.children.formwizardThirdStep",
+        property: "visible",
+        value: false
+      },
+      {
+        path: "components.div.children.formwizardFourthStep",
+        property: "visible",
+        value: false
+      }
+    ];
+  }
+  for (var i = 0; i < actionDefination.length; i++) {
+    actionDefination[i] = { ...actionDefination[i], value: false };
+    if (path === actionDefination[i].path) {
+      actionDefination[i] = { ...actionDefination[i], value: true };
     }
   }
   return actionDefination;
@@ -556,7 +519,7 @@ export const footerReview = (
   let downloadMenu = [];
   let printMenu = [];
   let tlCertificateDownloadObject = {
-    label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
+    label: { labelName: "TL Certificate", labelKey: "WSCERTIFICATE" },
     link: () => {
       const { Licenses } = state.screenConfiguration.preparedFinalObject;
       downloadCertificateForm(Licenses);
@@ -564,7 +527,7 @@ export const footerReview = (
     leftIcon: "book"
   };
   let tlCertificatePrintObject = {
-    label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
+    label: { labelName: "TL Certificate", labelKey: "WSCERTIFICATE" },
     link: () => {
       const { Licenses } = state.screenConfiguration.preparedFinalObject;
       downloadCertificateForm(Licenses, 'print');
@@ -572,7 +535,7 @@ export const footerReview = (
     leftIcon: "book"
   };
   let receiptDownloadObject = {
-    label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
+    label: { labelName: "Receipt", labelKey: "WSRECEIPT" },
     link: () => {
 
 
@@ -586,7 +549,7 @@ export const footerReview = (
     leftIcon: "receipt"
   };
   let receiptPrintObject = {
-    label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
+    label: { labelName: "Receipt", labelKey: "WSRECEIPT" },
     link: () => {
       const receiptQueryString = [
         { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
@@ -598,7 +561,7 @@ export const footerReview = (
     leftIcon: "receipt"
   };
   let applicationDownloadObject = {
-    label: { labelName: "Application", labelKey: "TL_APPLICATION" },
+    label: { labelName: "Application", labelKey: "WSAPPLICATION" },
     link: () => {
       const { Licenses, LicensesTemp } = state.screenConfiguration.preparedFinalObject;
       const documents = LicensesTemp[0].reviewDocData;
@@ -608,7 +571,7 @@ export const footerReview = (
     leftIcon: "assignment"
   };
   let applicationPrintObject = {
-    label: { labelName: "Application", labelKey: "TL_APPLICATION" },
+    label: { labelName: "Application", labelKey: "WSAPPLICATION" },
     link: () => {
       const { Licenses, LicensesTemp } = state.screenConfiguration.preparedFinalObject;
       const documents = LicensesTemp[0].reviewDocData;

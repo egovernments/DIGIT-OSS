@@ -10,17 +10,16 @@ export const searchApplicationResults = {
   props: {
     columns: [
       {
-        name: getTextToLocalMapping("Service"),
+        name: getTextToLocalMapping("Consumer No"),
         options: {
           filter: false,
-          customBodyRender: value => (
-            <span style={{ color: '#000000' }}>
-              {value}
-            </span>
+          customBodyRender: (value, index) => (
+            <div className="linkStyle" onClick={() => getConnectionDetails(index)}>
+              <a>{value}</a>
+            </div>
           )
         }
       },
-
       {
         name: getTextToLocalMapping("Application No"),
         options: {
@@ -33,27 +32,21 @@ export const searchApplicationResults = {
         }
       },
       {
-        name: getTextToLocalMapping("Consumer No"),
+        name: getTextToLocalMapping("Application Type"),
         options: {
           filter: false,
-          customBodyRender: (value, index) => (
-            <div className="linkStyle" onClick={() => getConnectionDetails(index)}>
-              <a>{value}</a>
-            </div>
+          customBodyRender: value => (
+            <span style={{ color: '#000000' }}>
+              {value}
+            </span>
           )
         }
       },
       getTextToLocalMapping("Owner Name"),
-      getTextToLocalMapping("Status"),
+      getTextToLocalMapping("Application Status"),
       getTextToLocalMapping("Address"),
       {
         name: "tenantId",
-        options: {
-          display: false
-        }
-      },
-      {
-        name: "connectionType",
         options: {
           display: false
         }
@@ -89,9 +82,9 @@ export const searchApplicationResults = {
 };
 
 const getApplicationDetails = data => {
-  window.location.href = `connection-details?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[8]}&service=${data.rowData[0]}&connectionType=${data.rowData[9]}`
+  window.location.href = `search-preview?applicationNumber=${data.rowData[1]}&tenantId=${data.rowData[6]}&history=true`
 }
 
 const getConnectionDetails = data => {
-  window.location.href = `connection-details?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[8]}&service=${data.rowData[0]}&connectionType=${data.rowData[9]}`
+  window.location.href = `connection-details?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[6]}&service=${data.rowData[0]}&connectionType=${data.rowData[9]}`
 }

@@ -31,8 +31,14 @@ import { getTenantId, getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import commonConfig from "config/common.js";
 
-export const stepsData = [{ labelKey: "WS_COMMON_CONNECTION_DETAILS" }, { labelKey: "WS_COMMON_DOCS" }, { labelKey: "WS_COMMON_ADDN_DETAILS" }, { labelKey: "WS_COMMON_SUMMARY" }];
-export const stepper = getStepperObject({ props: { activeStep: 0 } }, stepsData);
+export const stepperData = () => {
+  if (process.env.REACT_APP_NAME === "Citizen") {
+    return [{ labelKey: "WS_COMMON_CONNECTION_DETAILS" }, { labelKey: "WS_COMMON_DOCS" }, { labelKey: "WS_COMMON_SUMMARY" }];
+  } else {
+    return [{ labelKey: "WS_COMMON_CONNECTION_DETAILS" }, { labelKey: "WS_COMMON_DOCS" }, { labelKey: "WS_COMMON_ADDN_DETAILS" }, { labelKey: "WS_COMMON_SUMMARY" }];
+  }
+}
+export const stepper = getStepperObject({ props: { activeStep: 0 } }, stepperData());
 
 export const header = getCommonContainer({
   header:
