@@ -64,9 +64,9 @@ public class PaymentUpdateService {
 			for (PaymentDetail paymentDetail : paymentDetails) {
 
 				if (config.getBusinessServiceList().contains(paymentDetail.getBusinessService())
-						&& paymentDetail.getBusinessService().equalsIgnoreCase("PT")) {
+						&& paymentDetail.getBusinessService().equalsIgnoreCase(config.getMutationWfName())) {
 
-					updateWorkflowForPt(requestInfo, tenantId, paymentDetail);
+					updateWorkflowForMutationPayment(requestInfo, tenantId, paymentDetail);
 				}
 			}
 		} catch (Exception e) {
@@ -82,7 +82,8 @@ public class PaymentUpdateService {
 	 * @param tenantId
 	 * @param paymentDetail
 	 */
-	private void updateWorkflowForPt(RequestInfo requestInfo, String tenantId, PaymentDetail paymentDetail) {
+	private void updateWorkflowForMutationPayment(RequestInfo requestInfo, String tenantId, PaymentDetail paymentDetail) {
+		
 		Bill bill  = paymentDetail.getBill();
 		
 		PropertyCriteria criteria = PropertyCriteria.builder()
@@ -104,7 +105,7 @@ public class PaymentUpdateService {
 			PropertyRequest updateRequest = PropertyRequest.builder().requestInfo(requestInfo)
 					.property(property).build();
 			
-			State state = wfIntegrator.callWorkFlow(util.getProcessInstanceForPayment(updateRequest));
+			State state = wfIntegrator.callWorkFlow(util.getProcessInstanceForMutationPayment(updateRequest));
 			updateRequest.getProperty().setStatus(Status.fromValue(state.getApplicationStatus()));
 			
 			producer.push(config.getUpdatePropertyTopic(), updateRequest);

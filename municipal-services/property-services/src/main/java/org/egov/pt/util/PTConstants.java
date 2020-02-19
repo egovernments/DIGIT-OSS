@@ -53,8 +53,6 @@ public class PTConstants {
 
     public static final String BOUNDARY_HEIRARCHY_CODE = "REVENUE";
 
-    public static final String MODULE = "pt-services-v2";
-
     public static final String NOTIFICATION_LOCALE = "en_IN";
 
     public static final String NOTIFICATION_CREATE_CODE = "pt.property.en.create";
@@ -125,20 +123,46 @@ public class PTConstants {
 	
 	/* notificaion constants */
 	
-	public static final String WF_PAID_STATUS = "PAID";
+	public static final String WF_STATUS_PAID = "PAID";
 	
-	public static final String WF_PAYMENT_PENDING_STATUS = "PAYMENT_PENDING";
+	public static final String WF_STATUS_PAYMENT_PENDING = "PAYMENT_PENDING";
 	
-	public static final String WF_REJECTED_STATUS = "REJECTED";
+	public static final String WF_STATUS_REJECTED = "REJECTED";
 	
-	public static final String WF_CANCELLED_STATUS = "CANCELLED";
+	public static final String WF_STATUS_CANCELLED = "CANCELLED";
 	
-	public static final String WF_APPROVED_STATUS = "APPROVED";
+	public static final String WF_STATUS_APPROVED = "APPROVED";
 	
-	public static final String WF_OPEN_STATUS = "OPEN";
+	public static final String WF_STATUS_OPEN = "OPEN";
+	
+	public static final String WF_NO_WORKFLOW = "NO_WORKFLOW";
 
 	public static final String NOTIFICATION_MODULENAME = "rainmaker-pt";
 	
+	/* PT notif loc codes */
+	
+	public static final String WF_MT_STATUS_OPEN_CODE = "PT_NOTIF_WF_MT_OPEN";
+	
+	public static final String WF_MT_STATUS_CHANGE_CODE =  "PT_NOTIF_WF_MT_STATE_CHANGE";
+	
+	public static final String WF_MT_STATUS_PAYMENT_PENDING_CODE = "PT_NOTIF_WF_MT_PAYMENT_PENDING";
+	
+	public static final String WF_MT_STATUS_PAID_CODE =   "PT_NOTIF_WF_MT_PAID";
+	
+	public static final String WF_MT_STATUS_APPROVED_CODE =  "PT_NOTIF_WF_MT_APPROVED";
+	
+	public static final String MT_NO_WORKFLOW = "PT_NOTIF_WF_MT_NONE";
+	
+	/* update */
+	public static final String WF_UPDATE_STATUS_OPEN_CODE  = "PT_NOTIF_WF_OPEN";
+	
+	public static final String WF_UPDATE_STATUS_CHANGE_CODE = "PT_NOTIF_WF_STATUS_CHANGE";
+	
+	public static final String WF_UPDATE_STATUS_APPROVED_CODE =   "PT_NOTIF_WF_APPROVED";
+	
+	public static final String UPDATE_NO_WORKFLOW = "PT_NOTIF_WF_UPDATE_NONE";
+	
+	public static final String CREATE_NOTIF_CODE = "PT_NOTIF_CREATE";
 	
 	
 	/* ASSESSMENT CONSTANTS */
@@ -153,15 +177,32 @@ public class PTConstants {
 
 
 
-	// ASSESSMENT NOTIFICATION PLACEHOLDER
-
-    public static final String NOTIFICATION_ASSESSMENTNUMBER = "{ASSESSMENTNUMBER}";
+	
+	
+	//  NOTIFICATION PLACEHOLDER
 
     public static final String NOTIFICATION_OWNERNAME = "{OWNER_NAME}";
 
     public static final String NOTIFICATION_STATUS = "{STATUS}";
 
     public static final String NOTIFICATION_PROPERTYID = "{PROPERTYID}";
+    
+    // PROPERTY & MUTATION
+    public static final String NOTIFICATION_APPID =  "{APPID}";
+    
+    public static final String NOTIFICATION_SEARCH_LINK =  "{SEARCHLINK}";
+    
+    public static final String NOTIFICATION_PAY_LINK =  "{PAYLINK}";
+    
+    public static final String NOTIFICATION_RCPT_LINK =  "{RCPTLINK}";
+    
+    public static final String NOTIFICATION_CERT_LINK =  "{CERTLINK}";
+    
+    public static final String NOTIFICATION_AMOUNT    =  "{AMOUNT}";
+    
+    // ASSESSMENT
+    
+    public static final String NOTIFICATION_ASSESSMENTNUMBER = "{ASSESSMENTNUMBER}";
 
     public static final String NOTIFICATION_FINANCIALYEAR = "{FINANCIALYEAR}";
 

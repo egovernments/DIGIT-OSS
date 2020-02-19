@@ -1,12 +1,19 @@
 package org.egov.pt.util;
 
 
-import com.jayway.jsonpath.JsonPath;
-import lombok.extern.slf4j.Slf4j;
+import static org.egov.pt.util.PTConstants.NOTIFICATION_LOCALE;
+import static org.egov.pt.util.PTConstants.NOTIFICATION_MODULENAME;
+import static org.egov.pt.util.PTConstants.NOTIFICATION_OWNERNAME;
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.config.PropertyConfiguration;
-import org.egov.pt.models.Assessment;
 import org.egov.pt.producer.Producer;
 import org.egov.pt.repository.ServiceRequestRepository;
 import org.egov.pt.web.contracts.SMSRequest;
@@ -15,12 +22,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import java.math.BigDecimal;
-import java.util.*;
+import com.jayway.jsonpath.JsonPath;
 
-import static org.egov.pt.util.PTConstants.NOTIFICATION_LOCALE;
-import static org.egov.pt.util.PTConstants.NOTIFICATION_MODULENAME;
-import static org.egov.pt.util.PTConstants.NOTIFICATION_OWNERNAME;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
@@ -54,6 +58,7 @@ public class NotificationUtil {
      * @return message for the specific code
      */
     public String getMessageTemplate(String notificationCode, String localizationMessage) {
+
         String path = "$..messages[?(@.code==\"{}\")].message";
         path = path.replace("{}", notificationCode);
         String message = null;
@@ -123,6 +128,7 @@ public class NotificationUtil {
      * @return List of SMSRequest
      */
     public List<SMSRequest> createSMSRequest(String message, Map<String, String> mobileNumberToOwnerName) {
+    	
         List<SMSRequest> smsRequest = new LinkedList<>();
         for (Map.Entry<String, String> entryset : mobileNumberToOwnerName.entrySet()) {
             String customizedMsg = message.replace(NOTIFICATION_OWNERNAME, entryset.getValue());
