@@ -175,8 +175,6 @@ const callBackForNext = async (state, dispatch) => {
   // }
 
   if (activeStep === 3) {
-    let response = await applyForWaterOrSewerage(state, dispatch, "SUBMIT_APPLICATION");
-    let responseStatus = get(response, "status", "");
     let waterId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].id");
     let sewerId = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0].id");
     if (waterId && sewerId) {
@@ -186,7 +184,7 @@ const callBackForNext = async (state, dispatch) => {
     } else {
       await acknoledgementForSewerage(state, activeStep, isFormValid, dispatch);
     }
-    responseStatus === "success" && changeStep(activeStep, state, dispatch);
+    // responseStatus === "success" && changeStep(activeStep, state, dispatch);
   } else if (activeStep !== 3) {
     if (isFormValid) {
       changeStep(state, dispatch);
@@ -231,32 +229,31 @@ const moveToSuccess = (combinedArray, dispatch) => {
   } else if (applicationNoWater) {
     dispatch(
       setRoute(
-        `/wns/acknowledgement?purpose=${purpose}&status=${status}&applicationNumberWater=${applicationNoWater}&tenantId=${tenantId}`
+        `/wns/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNoWater}&tenantId=${tenantId}`
       )
     );
   } else {
     dispatch(
       setRoute(
-        `/wns/acknowledgement?purpose=${purpose}&status=${status}&applicationNumberWater=${applicationNoSewerage}&tenantId=${tenantId}`
+        `/wns/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNoSewerage}&tenantId=${tenantId}`
       )
     );
   }
 };
 
 const acknoledgementForBothWaterAndSewerage = async (state, activeStep, isFormValid, dispatch) => {
-  let WaterConnection = get(state.screenConfiguration.preparedFinalObject, "WaterConnection");
-  let SewerageConnection = get(state.screenConfiguration.preparedFinalObject, "SewerageConnection");
   if (isFormValid) {
     let responseStatus = "success";
     if (activeStep === 1) {
       prepareDocumentsUploadData(state, dispatch);
     }
     if (activeStep === 3) {
-      getMdmsData(state, dispatch);
-      let response = await applyForWaterOrSewerage(state, dispatch, "SUBMIT_APPLICATION");
+      await applyForWaterOrSewerage(state, dispatch, "SUBMIT_APPLICATION");
+      let WaterConnection = get(state.screenConfiguration.preparedFinalObject, "WaterConnection");
+      let SewerageConnection = get(state.screenConfiguration.preparedFinalObject, "SewerageConnection");
       let combinedArray = WaterConnection.concat(SewerageConnection)
-      if (response) { moveToSuccess(combinedArray, dispatch) }
-      responseStatus = get(response, "status", "");
+      if (combinedArray) { moveToSuccess(combinedArray, dispatch) }
+      responseStatus = get(combinedArray, "status", "");
     }
     responseStatus === "success" && changeStep(state, dispatch);
   } else if (hasFieldToaster) {
@@ -292,7 +289,9 @@ const acknoledgementForWater = async (state, activeStep, isFormValid, dispatch) 
     }
     if (activeStep === 3) {
       getMdmsData(state, dispatch);
-      let response = await applyForWaterOrSewerage(state, dispatch, "SUBMIT_APPLICATION");
+      await applyForWaterOrSewerage(state, dispatch, "SUBMIT_APPLICATION");
+      let response = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].applicationStatus")
+      let combinedArray = get(state.screenConfiguration.preparedFinalObject, "WaterConnection");
       if (response) { moveToSuccess(combinedArray, dispatch) }
       responseStatus = get(response, "status", "");
     }
@@ -330,7 +329,9 @@ const acknoledgementForSewerage = async (state, activeStep, isFormValid, dispatc
     }
     if (activeStep === 3) {
       getMdmsData(state, dispatch);
-      let response = await applyForWaterOrSewerage(state, dispatch, "SUBMIT_APPLICATION");
+      await applyForWaterOrSewerage(state, dispatch, "SUBMIT_APPLICATION");
+      let response = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0].applicationStatus")
+      let combinedArray = get(state.screenConfiguration.preparedFinalObject, "SewerageConnection");
       if (response) { moveToSuccess(combinedArray, dispatch) }
       responseStatus = get(response, "status", "");
     }
@@ -379,7 +380,7 @@ export const changeStep = (
 
   const isPreviousButtonVisible = activeStep > 0 ? true : false;
   const isNextButtonVisible = isNextButton(activeStep);
-  const isPayButtonVisible = submitButton(activeStep);
+  const isPayButtonVisible = activeStep === 3 ? true : false;
   const actionDefination = [
     {
       path: "components.div.children.stepper.props",
@@ -407,15 +408,9 @@ export const changeStep = (
   else { renderSteps(activeStep, dispatch); }
 }
 
-export const submitButton = (activeStep) => {
-  if (process.env.REACT_APP_NAME === "Citizen" && activeStep === 3) { return true; }
-  else if (process.env.REACT_APP_NAME !== "Citizen" && activeStep === 4) { return true; }
-  else return false;
-}
-
 export const isNextButton = (activeStep) => {
-  if (process.env.REACT_APP_NAME === "Citizen" && activeStep < 3) { return true; }
-  else if (process.env.REACT_APP_NAME !== "Citizen" && activeStep < 4) { return true; }
+  if (process.env.REACT_APP_NAME === "Citizen" && activeStep < 2) { return true; }
+  else if (process.env.REACT_APP_NAME !== "Citizen" && activeStep < 3) { return true; }
   else return false
 }
 
