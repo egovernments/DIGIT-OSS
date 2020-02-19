@@ -122,7 +122,7 @@ const callBackForNext = async (state, dispatch) => {
     // if (validatePropertyLocationDetails && validatePropertyDetails && validateForm) {
     //   isFormValid = await appl;
     // }
-    await applyForWaterOrSewerage(state, dispatch, activeStep);
+    await applyForWaterOrSewerage(state, dispatch, "INITIATE");
   }
 
   prepareDocumentsUploadData(state, dispatch);
@@ -143,7 +143,6 @@ const callBackForNext = async (state, dispatch) => {
       isFormValid = false;
       hasFieldToaster = true;
     }
-    await applyForWaterOrSewerage(state, dispatch, activeStep);
   }
 
   if (activeStep === 2 && process.env.REACT_APP_NAME !== "Citizen") {
@@ -167,7 +166,6 @@ const callBackForNext = async (state, dispatch) => {
       isFormValid = false;
       hasFieldToaster = true;
     }
-    await applyForWaterOrSewerage(state, dispatch, activeStep);
   }
 
   // if (process.env.REACT_APP_NAME !== "Citizen" && activeStep === 2) {
@@ -176,53 +174,22 @@ const callBackForNext = async (state, dispatch) => {
   //   moveToReview(state, dispatch);
   // }
 
-  if (process.env.REACT_APP_NAME !== "Citizen" && activeStep !== 2) {
-    if (isFormValid) {
-      let responseStatus = "success";
-      if (activeStep === 1) {
-        prepareDocumentsUploadData(state, dispatch);
-      }
-      if (activeStep === 2) {
-        getMdmsData(state, dispatch);
-        let response = await applyForWaterOrSewerage(state, dispatch, activeStep);
-        responseStatus = get(response, "status", "");
-      }
-      responseStatus === "success" && changeStep(state, dispatch);
-    } else if (hasFieldToaster) {
-      let errorMessage = {
-        labelName: "Please fill all mandatory fields and upload the documents!",
-        labelKey: "ERR_UPLOAD_MANDATORY_DOCUMENTS_TOAST"
-      };
-      switch (activeStep) {
-        case 1:
-          errorMessage = {
-            labelName:
-              "Please check the Missing/Invalid field for Property Details, then proceed!",
-            labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_PROPERTY_TOAST"
-          };
-          break;
-        case 2:
-          errorMessage = {
-            labelName:
-              "Please fill all mandatory fields for Applicant Details, then proceed!",
-            labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_APPLICANT_TOAST"
-          };
-          break;
-      }
-      dispatch(toggleSnackbar(true, errorMessage, "warning"));
+  if (activeStep === 3) {
+    let response = await applyForWaterOrSewerage(state, dispatch, "SUBMIT_APPLICATION");
+    let responseStatus = get(response, "status", "");
+    let waterId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].id");
+    let sewerId = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0].id");
+    if (waterId && sewerId) {
+      await acknoledgementForBothWaterAndSewerage(state, activeStep, isFormValid, dispatch);
+    } else if (waterId) {
+      await acknoledgementForWater(state, activeStep, isFormValid, dispatch);
+    } else {
+      await acknoledgementForSewerage(state, activeStep, isFormValid, dispatch);
     }
+    responseStatus === "success" && changeStep(activeStep, state, dispatch);
   } else if (activeStep !== 3) {
     if (isFormValid) {
-      let responseStatus = "success";
-      if (activeStep === 1) {
-        prepareDocumentsUploadData(state, dispatch);
-      }
-      if (activeStep === 2) {
-        getMdmsData(state, dispatch);
-        let response = await applyForWaterOrSewerage(state, dispatch, activeStep);
-        responseStatus = get(response, "status", "");
-      }
-      responseStatus === "success" && changeStep(state, dispatch);
+      changeStep(state, dispatch);
     } else if (hasFieldToaster) {
       let errorMessage = {
         labelName: "Please fill all mandatory fields and upload the documents!",
@@ -249,6 +216,150 @@ const callBackForNext = async (state, dispatch) => {
   }
 };
 
+const moveToSuccess = (combinedArray, dispatch) => {
+  const tenantId = get(combinedArray[0].property, "tenantId");
+  const purpose = "apply";
+  const status = "success";
+  const applicationNoWater = get(combinedArray[0], "applicationNo");
+  const applicationNoSewerage = get(combinedArray[1], "applicationNo");
+  if (applicationNoWater && applicationNoSewerage) {
+    dispatch(
+      setRoute(
+        `/wns/acknowledgement?purpose=${purpose}&status=${status}&applicationNumberWater=${applicationNoWater}&applicationNumberSewerage=${applicationNoSewerage}&tenantId=${tenantId}`
+      )
+    );
+  } else if (applicationNoWater) {
+    dispatch(
+      setRoute(
+        `/wns/acknowledgement?purpose=${purpose}&status=${status}&applicationNumberWater=${applicationNoWater}&tenantId=${tenantId}`
+      )
+    );
+  } else {
+    dispatch(
+      setRoute(
+        `/wns/acknowledgement?purpose=${purpose}&status=${status}&applicationNumberWater=${applicationNoSewerage}&tenantId=${tenantId}`
+      )
+    );
+  }
+};
+
+const acknoledgementForBothWaterAndSewerage = async (state, activeStep, isFormValid, dispatch) => {
+  let WaterConnection = get(state.screenConfiguration.preparedFinalObject, "WaterConnection");
+  let SewerageConnection = get(state.screenConfiguration.preparedFinalObject, "SewerageConnection");
+  if (isFormValid) {
+    let responseStatus = "success";
+    if (activeStep === 1) {
+      prepareDocumentsUploadData(state, dispatch);
+    }
+    if (activeStep === 3) {
+      getMdmsData(state, dispatch);
+      let response = await applyForWaterOrSewerage(state, dispatch, "SUBMIT_APPLICATION");
+      let combinedArray = WaterConnection.concat(SewerageConnection)
+      if (response) { moveToSuccess(combinedArray, dispatch) }
+      responseStatus = get(response, "status", "");
+    }
+    responseStatus === "success" && changeStep(state, dispatch);
+  } else if (hasFieldToaster) {
+    let errorMessage = {
+      labelName: "Please fill all mandatory fields and upload the documents!",
+      labelKey: "ERR_UPLOAD_MANDATORY_DOCUMENTS_TOAST"
+    };
+    switch (activeStep) {
+      case 1:
+        errorMessage = {
+          labelName:
+            "Please check the Missing/Invalid field for Property Details, then proceed!",
+          labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_PROPERTY_TOAST"
+        };
+        break;
+      case 2:
+        errorMessage = {
+          labelName:
+            "Please fill all mandatory fields for Applicant Details, then proceed!",
+          labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_APPLICANT_TOAST"
+        };
+        break;
+    }
+    dispatch(toggleSnackbar(true, errorMessage, "warning"));
+  }
+}
+
+const acknoledgementForWater = async (state, activeStep, isFormValid, dispatch) => {
+  if (isFormValid) {
+    let responseStatus = "success";
+    if (activeStep === 1) {
+      prepareDocumentsUploadData(state, dispatch);
+    }
+    if (activeStep === 3) {
+      getMdmsData(state, dispatch);
+      let response = await applyForWaterOrSewerage(state, dispatch, "SUBMIT_APPLICATION");
+      if (response) { moveToSuccess(combinedArray, dispatch) }
+      responseStatus = get(response, "status", "");
+    }
+    responseStatus === "success" && changeStep(state, dispatch);
+  } else if (hasFieldToaster) {
+    let errorMessage = {
+      labelName: "Please fill all mandatory fields and upload the documents!",
+      labelKey: "ERR_UPLOAD_MANDATORY_DOCUMENTS_TOAST"
+    };
+    switch (activeStep) {
+      case 1:
+        errorMessage = {
+          labelName:
+            "Please check the Missing/Invalid field for Property Details, then proceed!",
+          labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_PROPERTY_TOAST"
+        };
+        break;
+      case 2:
+        errorMessage = {
+          labelName:
+            "Please fill all mandatory fields for Applicant Details, then proceed!",
+          labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_APPLICANT_TOAST"
+        };
+        break;
+    }
+    dispatch(toggleSnackbar(true, errorMessage, "warning"));
+  }
+}
+
+const acknoledgementForSewerage = async (state, activeStep, isFormValid, dispatch) => {
+  if (isFormValid) {
+    let responseStatus = "success";
+    if (activeStep === 1) {
+      prepareDocumentsUploadData(state, dispatch);
+    }
+    if (activeStep === 3) {
+      getMdmsData(state, dispatch);
+      let response = await applyForWaterOrSewerage(state, dispatch, "SUBMIT_APPLICATION");
+      if (response) { moveToSuccess(combinedArray, dispatch) }
+      responseStatus = get(response, "status", "");
+    }
+    responseStatus === "success" && changeStep(state, dispatch);
+  } else if (hasFieldToaster) {
+    let errorMessage = {
+      labelName: "Please fill all mandatory fields and upload the documents!",
+      labelKey: "ERR_UPLOAD_MANDATORY_DOCUMENTS_TOAST"
+    };
+    switch (activeStep) {
+      case 1:
+        errorMessage = {
+          labelName:
+            "Please check the Missing/Invalid field for Property Details, then proceed!",
+          labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_PROPERTY_TOAST"
+        };
+        break;
+      case 2:
+        errorMessage = {
+          labelName:
+            "Please fill all mandatory fields for Applicant Details, then proceed!",
+          labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_APPLICANT_TOAST"
+        };
+        break;
+    }
+    dispatch(toggleSnackbar(true, errorMessage, "warning"));
+  }
+}
+
 export const changeStep = (
   state,
   dispatch,
@@ -257,9 +368,8 @@ export const changeStep = (
 ) => {
   let activeStep = get(state.screenConfiguration.screenConfig["apply"], "components.div.children.stepper.props.activeStep", 0);
   if (defaultActiveStep === -1) {
-    if (activeStep === 2 && mode === "next") {
-      const getAppType = process.env.REACT_APP_NAME;
-      activeStep = getAppType === "Citizen" ? 3 : 2;
+    if (activeStep === 1 && mode === "next") {
+      activeStep = process.env.REACT_APP_NAME === "Citizen" ? 3 : 2;
     } else {
       activeStep = mode === "next" ? activeStep + 1 : activeStep - 1;
     }
@@ -293,17 +403,18 @@ export const changeStep = (
     }
   ];
   dispatchMultipleFieldChangeAction("apply", actionDefination, dispatch);
-  renderSteps(activeStep, dispatch);
+  if (process.env.REACT_APP_NAME === "Citizen") { renderStepsCitizen(activeStep, dispatch); }
+  else { renderSteps(activeStep, dispatch); }
 }
 
 export const submitButton = (activeStep) => {
-  if (process.env.REACT_APP_NAME === "Citizen" && activeStep === 2) { return true; }
-  else if (process.env.REACT_APP_NAME !== "Citizen" && activeStep === 3) { return true; }
+  if (process.env.REACT_APP_NAME === "Citizen" && activeStep === 3) { return true; }
+  else if (process.env.REACT_APP_NAME !== "Citizen" && activeStep === 4) { return true; }
   else return false;
 }
 
 export const isNextButton = (activeStep) => {
-  if (process.env.REACT_APP_NAME === "Citizen" && activeStep < 2) { return true; }
+  if (process.env.REACT_APP_NAME === "Citizen" && activeStep < 3) { return true; }
   else if (process.env.REACT_APP_NAME !== "Citizen" && activeStep < 4) { return true; }
   else return false
 }
@@ -329,15 +440,7 @@ export const renderSteps = (activeStep, dispatch) => {
       );
       break;
     case 2:
-      if (process.env.REACT_APP_NAME === "Citizen") {
-        dispatchMultipleFieldChangeAction(
-          "apply",
-          getActionDefinationForStepper(
-            "components.div.children.formwizardFourthStep"
-          ),
-          dispatch
-        );
-      } else {
+      if (process.env.REACT_APP_NAME === "Employee") {
         dispatchMultipleFieldChangeAction(
           "apply",
           getActionDefinationForStepper(
@@ -346,6 +449,37 @@ export const renderSteps = (activeStep, dispatch) => {
           dispatch
         );
       }
+      break;
+    default:
+      dispatchMultipleFieldChangeAction(
+        "apply",
+        getActionDefinationForStepper(
+          "components.div.children.formwizardFourthStep"
+        ),
+        dispatch
+      );
+  }
+};
+
+export const renderStepsCitizen = (activeStep, dispatch) => {
+  switch (activeStep) {
+    case 0:
+      dispatchMultipleFieldChangeAction(
+        "apply",
+        getActionDefinationForStepper(
+          "components.div.children.formwizardFirstStep"
+        ),
+        dispatch
+      );
+      break;
+    case 1:
+      dispatchMultipleFieldChangeAction(
+        "apply",
+        getActionDefinationForStepper(
+          "components.div.children.formwizardSecondStep"
+        ),
+        dispatch
+      );
       break;
     default:
       dispatchMultipleFieldChangeAction(

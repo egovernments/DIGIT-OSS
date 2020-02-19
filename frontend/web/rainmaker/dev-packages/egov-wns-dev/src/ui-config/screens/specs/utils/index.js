@@ -2263,6 +2263,13 @@ export const getTextToLocalMapping = label => {
         "WS_COMMON_TABLE_COL_APP_NO_LABEL",
         localisationLabels
       );
+    
+    case "Application Type":
+      return getLocaleLabels(
+        "Application Type",
+        "WS_COMMON_TABLE_COL_APP_TYPE_LABEL",
+        localisationLabels
+      );
 
     case "Consumer No":
       return getLocaleLabels(

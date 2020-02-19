@@ -50,7 +50,14 @@ export const header = getCommonContainer({
       })
       :
       {},
-  applicationNumber: {
+  applicationNumberWater: {
+    uiFramework: "custom-atoms-local",
+    moduleName: "egov-wns",
+    componentPath: "ApplicationNoContainer",
+    props: { number: "NA" },
+    visible: false
+  },
+  applicationNumberSewerage: {
     uiFramework: "custom-atoms-local",
     moduleName: "egov-wns",
     componentPath: "ApplicationNoContainer",
@@ -284,6 +291,7 @@ const screenConfig = {
 
     const tenantId = getTenantId();
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
+    dispatch(prepareFinalObject("applyScreen.water", true));
     getData(action, state, dispatch).then(responseAction => {
       const queryObj = [{ key: "tenantId", value: tenantId }];
       getBoundaryData(action, state, dispatch, queryObj);

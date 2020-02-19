@@ -132,6 +132,14 @@ export const searchApplications = getCommonCard({
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       jsonPath: "searchScreen.mobileNumber"
     }),
+    applicationType: getSelectField({
+      label: { labelName: "To Date", labelKey: "WS_APPLICATION_TYPE_LABEL" },
+      placeholder: { labelName: "Select to Date", labelKey: "WS_COMMON_APPLICATION_TYPE_PLACEHOLDER" },
+      sourceJsonPath: "applyScreenMdmsData.searchScreen.applicationType",
+      jsonPath: "searchScreen.appType",
+      gridDefination: { xs: 12, sm: 4 },
+      required: false
+    }),
     applicationstatus: getSelectField({
       label: {
         labelKey: "WS_HOME_SEARCH_RESULTS_APP_STATUS_LABEL"

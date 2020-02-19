@@ -26,7 +26,7 @@ const employeeSearchResults = {
     );
     const data = find(businessServiceData, { businessService: "NewWS1" });
     const { states } = data || [];
-    const applicationType = [{ code: "Water", code: "WATER" }, { code: "Sewerage", code: "SEWERAGE" }]
+    const applicationType = [{ code: "New Water connection", code: "New Water connection" }, { code: "New Sewerage Connection", code: "New Sewerage Connection" }]
     dispatch(prepareFinalObject("applyScreenMdmsData.searchScreen.applicationType", applicationType));
     if (states && states.length > 0) {
       const status = states.map((item, index) => { return { code: item.state } });

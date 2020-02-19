@@ -200,7 +200,7 @@ const showApplicationResults = (connections, dispatch) => {
   let data = connections.map(item => ({
     [getTextToLocalMapping("Consumer No")]: item.connectionNo,
     [getTextToLocalMapping("Application No")]: item.applicationNo,
-    [getTextToLocalMapping("Application Type")]: item.connectionType,
+    [getTextToLocalMapping("Application Type")]: item.service === "WATER" ? "New Water Connection" : "New Sewerage Connection",
     [getTextToLocalMapping("Owner Name")]: item.name,
     [getTextToLocalMapping("Application Status")]: item.applicationStatus,
     [getTextToLocalMapping("Address")]: item.address,
