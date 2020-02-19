@@ -13,6 +13,7 @@ import "./index.css";
 import { checkValueForNA } from "../../ui-config/screens/specs/utils";
 import { localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
+import { convertEpochToDate } from "egov-ui-framework/ui-config/screens/specs/utils";
 import orderBy from "lodash/orderBy";
 const styles = {
   card: {
@@ -99,6 +100,12 @@ class SingleApplication extends React.Component {
     const { setRoute, homeURL } = this.props;
     setRoute(homeURL);
   };
+  generatevalidity = (item) => {
+    const validFrom=item.validFrom?convertEpochToDate( get(item, "validFrom")):"NA";
+    const validTo=item.validTo?convertEpochToDate( get(item, "validTo")):"NA";
+    const validity = validFrom+" - "+validTo;
+    return validity;
+  }
   generateLabelKey = (content, item) => {
     let LabelKey = "";
     if (content.prefix && content.suffix) {
@@ -158,6 +165,34 @@ class SingleApplication extends React.Component {
                         </Grid>
                       );
                     })}
+                   {moduleName === "TL"&&
+                     <div> 
+                             <Grid container style={{ marginBottom: 12 }}>
+                          <Grid item xs={6}>
+                            <Label
+                              labelKey="TL_COMMON_TABLE_VALIDITY"
+                              fontSize={14}
+                              style={{
+                                fontSize: 14,
+                                color: "rgba(0, 0, 0, 0.60"
+                              }}
+                            />
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Label
+                              labelKey={this.generatevalidity(item)}
+                              fontSize={14}
+                              checkValueForNA={checkValueForNA}
+                              style={{
+                                fontSize: 14,
+                                color: "rgba(0, 0, 0, 0.87"
+                              }}
+                            />
+                          </Grid>
+                        </Grid>
+                     </div>
+                   }
+
                     {/* <Link to={this.onCardClick(item)}> */}
                       <div style={{cursor:"pointer"}} onClick = {()=>{
                         const url = this.onCardClick(item);
@@ -211,10 +246,9 @@ const mapStateToProps = state => {
     "searchResults",
     []
   );
-
   let searchResults = orderBy(
     searchResultsRaw,
-    ["auditDetails.lastModifiedBy"],
+    ["auditDetails.lastModifiedTime"],
     ["desc"]);  
     searchResults=searchResults?searchResults:searchResultsRaw ;
   const screenConfig = get(state.screenConfiguration, "screenConfig");
