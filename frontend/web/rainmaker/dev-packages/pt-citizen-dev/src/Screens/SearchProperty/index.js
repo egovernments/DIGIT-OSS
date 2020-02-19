@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import formHoc from "egov-ui-kit/hocs/form";
+import { httpRequest } from "egov-ui-kit/utils/api";
 import Label from "egov-ui-kit/utils/translationNode";
 import YearDialogue from "../common/YearDialogue";
 import { Screen, SingleProperty } from "modules/common";
@@ -32,6 +33,14 @@ const PropertySearchFormHOC = formHoc({
   path: "PropertyTaxPay",
   isCoreConfiguration: true
 })(SearchPropertyForm);
+
+const linkStyle = {
+  height: 20,
+  lineHeight: "auto",
+  minWidth: "inherit",
+  cursor: "pointer",
+  textDecoration: "underline"
+};
 
 class SearchProperty extends Component {
   constructor(props) {
@@ -69,7 +78,7 @@ class SearchProperty extends Component {
 
     if (!validateForm(form)) {
       this.props.displayFormErrors(formKey);
-    } else if (!oldpropertyids.value && !ids.value && !mobileNumber.value) {
+    } else if (!oldpropertyids.value && !ids.value && !mobileNumber.value && !applicationNumber.value) {
       this.props.toggleSnackbarAndSetText(
         true,
         {
@@ -93,7 +102,7 @@ class SearchProperty extends Component {
         queryParams.push({ key: "mobileNumber", value: mobileNumber.value });
       }
       if (applicationNumber.value) {
-        queryParams.push({ key: "applicationNumber", value: applicationNumber.value });
+        queryParams.push({ key: "acknowledgementIds", value: applicationNumber.value });
       }
       this.setState({
         searchResult: tableData
@@ -103,16 +112,51 @@ class SearchProperty extends Component {
     }
   };
 
+  getApplicationType = async (applicationNumber, tenantId) => {
+    const queryObject = [
+      { key: "businessIds", value: applicationNumber },
+      { key: "history", value: true },
+      { key: "tenantId", value: tenantId }
+    ];
+    try {
+      const payload = await httpRequest(
+        "egov-workflow-v2/egov-wf/process/_search",
+        "_search",
+        queryObject
+      );
+      if (payload && payload.ProcessInstances.length > 0) {
+        return payload.ProcessInstances[0].businessService;
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
+  onApplicationClick =async (applicationNo, tenantId, propertyId) => {
+    const businessService = await this.getApplicationType(applicationNo, tenantId);
+    if (businessService == 'PT.MUTATION') {
+      this.props.history.push(`/pt-mutation/search-preview?applicationNumber=${applicationNo}&propertyId=${propertyId}&tenantId=${tenantId}`);
+    } else if (businessService == 'PT.CREATE') {
+      this.props.history.push(`/property-tax/application-preview?propertyId=${propertyId}&applicationNumber=${applicationNo}&tenantId=${tenantId}&type=property`);
+    } else {
+      console.log('Search Error');
+    }
+  }
+  
+  getApplicationLink = (applicationNo, tenantId, propertyId) => {
+    return (
+      <a
+        style={linkStyle}
+        onClick={ () => this.onApplicationClick(applicationNo, tenantId, propertyId) }
+      >
+        {applicationNo}
+      </a>
+    );
+  }
+
   getLink = (userType, history, id, tenantId) => {
     return (
       <a
-        style={{
-          height: 20,
-          lineHeight: "auto",
-          minWidth: "inherit",
-          cursor: "pointer",
-          textDecoration: "underline"
-        }}
+        style={linkStyle}
         onClick={
           userType === "CITIZEN"
             ? e => {
@@ -155,8 +199,7 @@ class SearchProperty extends Component {
       // const uuid = get(latestAssessment, "citizenInfo.uuid");
 
       let item = {
-        // applicationNo: this.getLink(userType, history, applicationNo, tenantId),
-        applicationNo: <a>{applicationNo}</a>,
+        applicationNo: this.getApplicationLink(applicationNo, tenantId, propertyId),
         propertyId: this.getLink(userType, history, propertyId, tenantId),
         applicationType: applicationType,
         name: name,

@@ -91,7 +91,7 @@ class SingleApplication extends React.Component {
         case "INITIATED":
           return `/pt-mutation/apply?propertyId=${item.propertyId}&tenantId=${item.tenantId}`;
         default:
-          return `/pt-mutation/search-preview?propertyId=${item.propertyId}&tenantId=${item.tenantId}`;
+          return `/pt-mutation/search-preview?applicationNumber=${item.acknowldgementNumber}&tenantId=${item.tenantId}`;
       }
     }
   };
