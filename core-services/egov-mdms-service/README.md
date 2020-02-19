@@ -2,12 +2,45 @@
 
 #### Master data management files check in location and details -
 
-1. Data folder parallel to docs (https://github.com/egovernments/egov-services/tree/master/data/mh). 
-2. Under data folder there will be a folder "mh" where maharastra specific state wide master data will be published.
-3. Under "mh" folder there will "tenant" folders where ulb specific master data will be checked in. for example "mh.roha"
+1. Data folder parallel to docs (https://github.com/egovernments/egov-mdms-data/tree/master/data/pb). 
+2. Under data folder there will be a folder `<state>` which is a state specific master folder.
+3. Under `<state>` folder there will `<tenant>` folders where ulb specific master data will be checked in. for example `pb.testing`
 4. Each module will have one file each for statewide and ulb wise master data. Keep the file name as module name itself.
 
+#### Local Setup
+
+To setup the service, clone the service. Update the `application.properties` and change
+
+- Update `egov.mdms.conf.path` to point to the folder where the master data is stored. [Sample](https://github.com/egovernments/egov-mdms-data/blob/master/data/pb/)
+- Update the `masters.config.url` to point to the file which has the masters configuration. [Sample](https://github.com/egovernments/egov-mdms-data/blob/master/master-config.json)
+
+Each master has three key parameters `tenantId`, `moduleName`, `masterName`. A sample master would look like below
+
+```json
+{
+  "tenantId": "pb",
+  "moduleName": "common-masters",
+  "OwnerType": [
+    {
+      "code": "FREEDOMFIGHTER",
+      "active": true
+    },
+    {
+      "code": "WIDOW",
+      "active": true
+    },
+    {
+      "code": "HANDICAPPED",
+      "active": true
+    }
+  ]
+}
+```
+
+Here `tenantId=pb`, `moduleName=common-masters`, `masterName=OwnerType`
+
 #### Query Construction
+
 ##### _get, method type post (Send requestInfo in Body)
 Sample Query: 
 If we have filter like this 
