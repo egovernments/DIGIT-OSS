@@ -683,15 +683,11 @@
             "externalAPI": [
               {
                 "path": "http://collection-services:8080/collection-services/payments/_search",
-                "queryParam": "tenantId=$.tenantId,consumerCodes=$.applicationNo,businessServices=BPA.NC_SAN_FEE",
+                "queryParam": "tenantId=$.tenantId,consumerCodes=$.applicationNo",
                 "apiRequest": null,
                 "responseMapping": [
                   {
-                    "variable": "totalDue",
-                    "value": "$.Payments[0].totalDue"
-                  },
-                  {
-                    "variable": "headCode",
+                    "variable": "sanHeadCode",
                     "value": "$.Payments[0].paymentDetails[0].bill.billDetails[0].billAccountDetails[0].taxHeadCode",
                     "localisation": {
                       "required": true,
@@ -700,8 +696,21 @@
                     }
                   },
                   {
-                    "variable": "fee",
+                    "variable": "sanFee",
                     "value": "$.Payments[0].paymentDetails[0].bill.billDetails[0].billAccountDetails[0].amount"
+                  },
+                  {
+                    "variable": "appHeadCode",
+                    "value": "$.Payments[1].paymentDetails[0].bill.billDetails[0].billAccountDetails[0].taxHeadCode",
+                    "localisation": {
+                      "required": true,
+                      "prefix": "BPA",
+                      "module": "rainmaker-bpa"
+                    }
+                  },
+                  {
+                    "variable": "appFee",
+                    "value": "$.Payments[1].paymentDetails[0].bill.billDetails[0].billAccountDetails[0].amount"
                   }
                 ]
               },
@@ -716,6 +725,14 @@
                     "isUpperCaseRequired": true
                   }
                 ]
+              }
+            ]
+          },
+          {
+            "derived": [
+              {
+                "variable": "totalDue",
+                "formula": "{{sanFee}}+{{appFee}}"
               }
             ]
           },

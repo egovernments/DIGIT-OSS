@@ -314,13 +314,22 @@
                         ],
                         [
                             {
-                                "text": "{{headCode}}"
+                                "text": "{{appHeadCode}}"
                             },
                             {
-                                "text": "{{fee}}",
+                                "text": "{{appFee}}",
                                 "alignment": "right"
                             }
                         ],
+						[
+						  {
+							"text": "{{sanHeadCode}}"
+						  },
+						  {
+							"text": "{{sanFee}}",
+							"alignment": "right"
+						  }
+						],
                         [
                             {
                                 "text": "Total",
