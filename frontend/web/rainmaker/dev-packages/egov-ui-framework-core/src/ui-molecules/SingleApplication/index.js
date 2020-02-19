@@ -87,11 +87,11 @@ class SingleApplication extends React.Component {
         }        
       }
     } else if (moduleName === "PT-MUTATION") {
-      switch (item.fireNOCDetails.status) {
+      switch (item.status) {
         case "INITIATED":
-          return `/pt-mutation/apply?applicationNumber=${item.fireNOCDetails.applicationNumber}&tenantId=${item.tenantId}`;
+          return `/pt-mutation/apply?propertyId=${item.propertyId}&tenantId=${item.tenantId}`;
         default:
-          return `/pt-mutation/search-preview?applicationNumber=${item.fireNOCDetails.applicationNumber}&tenantId=${item.tenantId}`;
+          return `/pt-mutation/search-preview?propertyId=${item.propertyId}&tenantId=${item.tenantId}`;
       }
     }
   };

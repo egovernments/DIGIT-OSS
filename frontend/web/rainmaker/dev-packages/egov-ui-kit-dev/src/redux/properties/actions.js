@@ -312,20 +312,23 @@ export const fetchProperties = (queryObjectproperty, queryObjectDraft, queryObje
       dispatch(propertyFetchPending());
       try {
         let payloadProperty = await httpRequest(PROPERTY.GET.URL, PROPERTY.GET.ACTION,queryObjectproperty);
-        payloadProperty=getCreatePropertyResponse(payloadProperty);
-        if(payloadProperty.Properties && payloadProperty.Properties[0] &&payloadProperty.Properties[0].documents){
-          payloadProperty.Properties[0].documentsUploaded = await setPTDocuments(
-            payloadProperty,
-            "Properties[0].documents",
-            "documentsUploaded",
-            dispatch, 
-            'PT'
-          );
-          dispatch(propertyFetchComplete(payloadProperty));
+        if(queryObjectDraft !== "citizen_search") {
+          payloadProperty=getCreatePropertyResponse(payloadProperty);
+          if(payloadProperty.Properties && payloadProperty.Properties[0] &&payloadProperty.Properties[0].documents){
+            payloadProperty.Properties[0].documentsUploaded = await setPTDocuments(
+              payloadProperty,
+              "Properties[0].documents",
+              "documentsUploaded",
+              dispatch, 
+              'PT'
+            );
+            dispatch(propertyFetchComplete(payloadProperty));
+          } else {
+            dispatch(propertyFetchComplete(payloadProperty));
+          }
         } else {
           dispatch(propertyFetchComplete(payloadProperty));
-        }
-        
+        }        
       } catch (error) {
         dispatch(propertyFetchError(error.message));
       }

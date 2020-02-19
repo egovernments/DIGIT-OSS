@@ -98,7 +98,7 @@ class SearchProperty extends Component {
       this.setState({
         searchResult: tableData
       });
-      this.props.fetchProperties(queryParams);
+      this.props.fetchProperties(queryParams, "citizen_search");
       this.setState({ showTable: true });
     }
   };
@@ -148,8 +148,8 @@ class SearchProperty extends Component {
       if (!applicationNo) applicationNo = property.acknowldgementNumber;
       if (!date) date = getDateFromEpoch(property.auditDetails.createdTime);
       applicationType = history.location.pathname.includes('property-tax') ? 'PT' : applicationType;
-      const latestAssessment = getLatestPropertyDetails(propertyDetails);
-      let name = latestAssessment.owners[0].name;
+      // const latestAssessment = getLatestPropertyDetails(propertyDetails);
+      let name = property.owners[0].name;
       // const guardianName = latestAssessment.owners[0].fatherOrHusbandName;
       // let assessmentNo = latestAssessment.assessmentNumber;
       // const uuid = get(latestAssessment, "citizenInfo.uuid");
@@ -316,7 +316,7 @@ const mapDispatchToProps = dispatch => {
   return {
     addBreadCrumbs: url => dispatch(addBreadCrumbs(url)),
     displayFormErrors: formKey => dispatch(displayFormErrors(formKey)),
-    fetchProperties: queryObject => dispatch(fetchProperties(queryObject)),
+    fetchProperties: (queryObject, searchType) => dispatch(fetchProperties(queryObject, searchType)),
     toggleSnackbarAndSetText: (open, message, error) =>
       dispatch(toggleSnackbarAndSetText(open, message, error)),
     resetForm: formKey => dispatch(resetForm(formKey)),

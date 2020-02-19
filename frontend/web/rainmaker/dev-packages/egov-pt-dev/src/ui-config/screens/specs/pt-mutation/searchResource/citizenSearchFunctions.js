@@ -21,10 +21,10 @@ export const fetchData = async (action, state, dispatch) => {
   //     )
   //   );
   try {
-    if (response && response.FireNOCs && response.FireNOCs.length > 0) {
-      dispatch(prepareFinalObject("searchResults", response.FireNOCs));
+    if (response && response.Properties && response.Properties.length > 0) {
+      dispatch(prepareFinalObject("searchResults", response.Properties));
       dispatch(
-        prepareFinalObject("myApplicationsCount", response.FireNOCs.length)
+        prepareFinalObject("myApplicationsCount", response.Properties.length)
       );
     }
   } catch (error) {

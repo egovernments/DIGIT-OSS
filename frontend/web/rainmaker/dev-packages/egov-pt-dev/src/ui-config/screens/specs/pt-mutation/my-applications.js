@@ -34,23 +34,23 @@ const screenConfig = {
             contents: [
               {
                 label: "PT_MUTATION_APPLICATION_NO",
-                jsonPath: "fireNOCDetails.applicationNumber"
+                jsonPath: "propertyId"
               },
               {
                 label: "PT_MUTATION_PID",
-                jsonPath: "fireNOCDetails.applicantDetails.owners[0].name"
+                jsonPath: "owners[0].name"
               },
               {
                 label: "PT_MUTATION_APPLICATION_TYPE",
-                jsonPath: "fireNOCDetails.buildings[0].name"
+                jsonPath: "propertyType"
               },
               {
                 label: "PT_MUTATION_CREATION_DATE",
-                jsonPath: "fireNOCDetails.buildings[0].name"
+                jsonPath: "auditDetails.createdTime"
               },
               {
                 label: "PT_MUTATION_STATUS",
-              jsonPath: "fireNOCDetails.status",
+                jsonPath: "status",
                 prefix: "WF_FIRENOC_"
               }
             ],
