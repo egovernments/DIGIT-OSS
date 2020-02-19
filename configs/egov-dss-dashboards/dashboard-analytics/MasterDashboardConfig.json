@@ -1425,27 +1425,27 @@
             },
             {
               "id": 141,
-              "name": "DSS_COMPLAINS",
+              "name": "DSS_TRADE_LICENCE",
               "vizType": "module",
-              "moduleLevel": "PGR",
+              "moduleLevel": "TL",
               "ref": {
-                "url": "pgr",
+                "url": "tradeLicense",
                 "logoUrl": "",
                 "type": "internal"
               },
               "label": "",
               "charts": [
                 {
-                  "id": "totalComplaints",
-                  "name": "DSS_PGR_TOTAL_COMPLAINTS",
+                  "id": "totalCollection",
+                  "name": "DSS_TOTAL_COLLECTION",
                   "code": "",
                   "chartType": "metric",
                   "filter": "",
                   "headers": []
                 },
                 {
-                  "id": "slaAchieved",
-                  "name": "DSS_SLA_ACHIEVED",
+                  "id": "totalApplication",
+                  "name": "DSS_TOTAL_APPLICATION",
                   "code": "",
                   "chartType": "metric",
                   "filter": "",
