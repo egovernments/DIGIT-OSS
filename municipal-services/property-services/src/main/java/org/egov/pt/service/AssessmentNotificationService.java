@@ -58,6 +58,7 @@ public class AssessmentNotificationService {
 
         enrichSMSRequest(topicName, assessmentRequest, property, smsRequests);
 
+        util.sendSMS(smsRequests);
     }
 
 

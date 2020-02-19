@@ -7,11 +7,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.Assessment;
+import org.egov.pt.producer.Producer;
 import org.egov.pt.repository.ServiceRequestRepository;
 import org.egov.pt.web.contracts.SMSRequest;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -30,12 +32,17 @@ public class NotificationUtil {
 
     private PropertyConfiguration config;
 
+    private Producer producer;
+
 
     @Autowired
-    public NotificationUtil(ServiceRequestRepository serviceRequestRepository, PropertyConfiguration config) {
+    public NotificationUtil(ServiceRequestRepository serviceRequestRepository, PropertyConfiguration config, Producer producer) {
         this.serviceRequestRepository = serviceRequestRepository;
         this.config = config;
+        this.producer = producer;
     }
+
+
 
     /**
      * Extracts message for the specific code
@@ -94,7 +101,7 @@ public class NotificationUtil {
 
         String locale = NOTIFICATION_LOCALE;
 
-        if (!StringUtils.isEmpty(requestInfo.getMsgId()) && requestInfo.getMsgId().split("|").length >= 2)
+        if (!StringUtils.isEmpty(requestInfo.getMsgId()) && requestInfo.getMsgId().split("\\|").length >= 2)
             locale = requestInfo.getMsgId().split("\\|")[1];
 
         StringBuilder uri = new StringBuilder();
@@ -122,6 +129,24 @@ public class NotificationUtil {
             smsRequest.add(new SMSRequest(entryset.getKey(), customizedMsg));
         }
         return smsRequest;
+    }
+
+
+    /**
+     * Send the SMSRequest on the SMSNotification kafka topic
+     *
+     * @param smsRequestList
+     *            The list of SMSRequest to be sent
+     */
+    public void sendSMS(List<SMSRequest> smsRequestList) {
+        if (config.getIsSMSNotificationEnabled()) {
+            if (CollectionUtils.isEmpty(smsRequestList))
+                log.info("Messages from localization couldn't be fetched!");
+            for (SMSRequest smsRequest : smsRequestList) {
+                producer.push(config.getSmsNotifTopic(), smsRequest);
+                log.info("MobileNumber: " + smsRequest.getMobileNumber() + " Messages: " + smsRequest.getMessage());
+            }
+        }
     }
 
 
