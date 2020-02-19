@@ -136,6 +136,8 @@ public class PTConstants {
 	public static final String WF_APPROVED_STATUS = "APPROVED";
 	
 	public static final String WF_OPEN_STATUS = "OPEN";
+
+	public static final String NOTIFICATION_MODULENAME = "rainmaker-pt";
 	
 	
 	
