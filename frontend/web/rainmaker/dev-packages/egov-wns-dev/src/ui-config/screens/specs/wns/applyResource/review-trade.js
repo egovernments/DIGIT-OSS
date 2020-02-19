@@ -5,6 +5,7 @@ import {
   getLabelWithValue,
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { propertyOwnerDetails } from "../applyResource/task-owner-details";
 
 const getHeader = label => {
   return {
@@ -87,7 +88,7 @@ export const getReviewConnectionDetails = (isEditable = true) => {
     },
     viewOne: getPropertyDetails,
     viewTwo: propertyLocationDetails,
-    viewThree: propertyOwnerDetails,
+    viewThree: propertyOwnerDetails(),
     viewFour: connectionDetails,
   });
 };
@@ -241,94 +242,6 @@ const getPropertyDetails = {
   },
   type: "array"
 };
-
-const propertyOwnerDetails = {
-  uiFramework: "custom-containers",
-  componentPath: "MultiItem",
-  props: {
-    className: "common-div-css search-preview",
-    scheama: getCommonGrayCard({
-      div3: propertyOwnerDetailsHeader,
-      propertyOwnerDetailsFeilds: getCommonContainer({
-        reviewMobileNumber: getLabelWithValue(
-          {
-            labelName: "Mobile No.",
-            labelKey: "WS_OWN_DETAIL_MOBILE_NO_LABEL"
-          },
-          { jsonPath: "WaterConnection[0].property.owners[0].mobileNumber" }
-        ),
-        reviewName: getLabelWithValue(
-          {
-            labelName: "Name",
-            labelKey: "WS_OWN_DETAIL_OWN_NAME_LABEL"
-          },
-          {
-            jsonPath: "WaterConnection[0].property.owners[0].name"
-          }
-        ),
-        reviewGender: getLabelWithValue(
-          {
-            labelName: "Gender",
-            labelKey: "WS_OWN_DETAIL_GENDER_LABEL"
-          },
-          {
-            jsonPath: "WaterConnection[0].property.owners[0].gender",
-            localePrefix: {
-              moduleName: "COMMON",
-              masterName: "GENDER"
-            }
-          }
-        ),
-        reviewDateOfBirth: getLabelWithValue(
-          {
-            labelName: "Date Of Birth",
-            labelKey: "WS_OWN_DETAIL_DOB_LABEL"
-          },
-          { jsonPath: "WaterConnection[0].property.owners[0].dob" }
-        ),
-        reviewFatherOrHusbandName: getLabelWithValue(
-          {
-            labelName: "Father/Husband's Name",
-            labelKey: "WS_OWN_DETAIL_FATHER_OR_HUSBAND_NAME"
-          },
-          { jsonPath: "WaterConnection[0].property.owners[0].fatherOrHusbandName" }
-        ),
-        reviewRelationship: getLabelWithValue(
-          {
-            labelName: "Relationship",
-            labelKey: "WS_OWN_DETAIL_RELATION_LABEL"
-          },
-          { jsonPath: "WaterConnection[0].property.owners[0].relationship" }
-        ),
-        reviewCorrespondenceAddress: getLabelWithValue(
-          {
-            labelName: "Correspondence Address",
-            labelKey: "WS_OWN_DETAIL_CROSADD"
-          },
-          { jsonPath: "WaterConnection[0].property.owners[0].correspondenceAddress" }
-        ),
-        reviewSpecialApplicantCategory: getLabelWithValue(
-          {
-            labelName: "Special Applicant Category",
-            labelKey: "WS_OWN_DETAIL_SPECIAL_APPLICANT_LABEL"
-          },
-          {
-            jsonPath:
-              "WaterConnection[0].property.owners."
-          }
-        )
-      })
-    }),
-    items: [],
-    hasAddItem: false,
-    isReviewPage: true,
-    sourceJsonPath: "WaterConnection[0].property.owners",
-    prefixSourceJsonPath:
-      "children.cardContent.children.getpropertyOwnerDetailsContainer.children",
-    afterPrefixJsonPath: "children.value.children.key"
-  },
-  type: "array"
-}
 
 const connectionDetails = {
   uiFramework: "custom-containers",

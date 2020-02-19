@@ -88,7 +88,7 @@ function FeesEstimateCard(props) {
                     {
                         sortedArray.length > 0 && sortedArray.map(fee =>
                             <div>
-                                {/* <Grid container>
+                                {!isCardrequired && <Grid container>
                                     <Grid item xs={6}>
                                         <Typography variant="body2" >
                                             <LabelContainer labelKey="WS_VIEW_BILL_BILLING_PERIOD_LABEL" />
@@ -102,7 +102,8 @@ function FeesEstimateCard(props) {
                                             {date(fee.fromPeriod, fee.toPeriod)}
                                         </Typography>
                                     </Grid>
-                                </Grid> */}
+                                </Grid>
+                                }
                                 <Grid container> {
                                     fee.bill.map(element => {
                                         if (element !== undefined && element.key !== undefined) {
