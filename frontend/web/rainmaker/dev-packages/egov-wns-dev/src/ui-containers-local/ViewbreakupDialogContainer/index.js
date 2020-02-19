@@ -135,6 +135,7 @@ class ViewBreakupContainer extends React.Component {
       accessoriesTotal,
       classes
     } = this.props;
+    console.log(this.props);
     const { style } = this.state;
     const { getGridItem, handleClose } = this;
     const totalBill = tradeTotal + accessoriesTotal;

@@ -35,7 +35,8 @@ let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 let service = getQueryArg(window.location.href, "service");
 let headerSideText = { word1: "", word2: "" };
 
-
+const serviceModuleName = service === "WATER" ? "NewWS1" : "NewSW1";
+const serviceUrl = serviceModuleName === "NewWS1" ? "/ws-services/wc/_update" : "/sw-services/swc/_update"
 
 // const getTradeTypeSubtypeDetails = payload => {
 //   const tradeUnitsFromApi = get(
@@ -330,6 +331,7 @@ export const summaryScreen = getCommonCard({
 })
 
 const screenConfig = {
+
   uiFramework: "material-ui",
   name: "search-preview",
   beforeInitScreen: (action, state, dispatch) => {
@@ -343,7 +345,7 @@ const screenConfig = {
     // }
     const queryObject = [
       { key: "tenantId", value: tenantId },
-      { key: "businessServices", value: "NewWS1" }
+      { key: "businessServices", value: serviceModuleName }
     ];
     setBusinessServiceDataToLocalStorage(queryObject, dispatch)
     // response.then(data=>console.log("applyresource",data));
@@ -425,8 +427,8 @@ const screenConfig = {
           // visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
           props: {
             dataPath: "WaterConnection",
-            moduleName: "NewWS1",
-            updateUrl: "/ws-services/wc/_update"
+            moduleName: serviceModuleName,
+            updateUrl: serviceUrl
           }
         },
         actionDialog: {
@@ -437,11 +439,11 @@ const screenConfig = {
           props: {
             open: true,
             dataPath: "WaterConnection",
-            moduleName: "NewWS1",
-            updateUrl: "/ws-services/wc/_update",
+            moduleName: serviceModuleName,
+            updateUrl: serviceUrl,
             data: {
-              buttonLabel: "RESUBMIT",
-              moduleName: "NewWS1",
+              buttonLabel: "SUBMIT_APPLICATION",
+              moduleName: serviceModuleName,
               isLast: false,
               dialogHeader: {
                 labelName: "RESUBMIT Application",
@@ -464,7 +466,7 @@ const screenConfig = {
       props: {
         open: false,
         maxWidth: "md",
-        screenKey: "search-preview"
+        screenKey: "search-preview",
       }
     }
   }

@@ -23,7 +23,7 @@ const getHeader = label => {
 };
 
 export const propertyOwnerDetailsHeader = getHeader({
-    labelKey: "WS_COMMON_PROP_OWN_DETAIL"
+    labelKey: "WS_TASK_PROP_OWN_HEADER"
 });
 
 export const mobileNumber = getLabelWithValue(
@@ -54,7 +54,6 @@ export const email = getLabelWithValue(
 
 export const gender = getLabelWithValue(
     {
-        labelName: "Gender",
         labelKey: "WS_OWN_DETAIL_GENDER_LABEL"
     },
     {
@@ -68,7 +67,6 @@ export const gender = getLabelWithValue(
 
 export const dateOfBirth = getLabelWithValue(
     {
-        labelName: "Date Of Birth",
         labelKey: "WS_OWN_DETAIL_DOB_LABEL"
     },
     { jsonPath: "WaterConnection[0].property.owners[0].dob" }
@@ -76,7 +74,6 @@ export const dateOfBirth = getLabelWithValue(
 
 export const fatherName = getLabelWithValue(
     {
-        labelName: "Father/Husband's Name",
         labelKey: "WS_OWN_DETAIL_FATHER_OR_HUSBAND_NAME"
     },
     { jsonPath: "WaterConnection[0].property.owners[0].fatherOrHusbandName" }
@@ -84,7 +81,6 @@ export const fatherName = getLabelWithValue(
 
 export const relationship = getLabelWithValue(
     {
-        labelName: "Relationship",
         labelKey: "WS_OWN_DETAIL_RELATION_LABEL"
     },
     { jsonPath: "WaterConnection[0].property.owners[0].relationship" }
@@ -92,7 +88,6 @@ export const relationship = getLabelWithValue(
 
 export const correspondenceAddress = getLabelWithValue(
     {
-        labelName: "Correspondence Address",
         labelKey: "WS_OWN_DETAIL_CROSADD"
     },
     { jsonPath: "WaterConnection[0].property.owners[0].correspondenceAddress" }
@@ -100,7 +95,6 @@ export const correspondenceAddress = getLabelWithValue(
 
 export const specialApplicantCategory = getLabelWithValue(
     {
-        labelName: "Special Applicant Category",
         labelKey: "WS_OWN_DETAIL_SPECIAL_APPLICANT_LABEL"
     },
     {
@@ -114,15 +108,18 @@ export const propertyOwnerDetails = () => {
         headerDiv: {
             uiFramework: "custom-atoms",
             componentPath: "Container",
+            props: {
+                className: "common-div-css search-preview"
+            },
             // header: {
             //     gridDefination: {
             //         xs: 12,
             //         sm: 10
             //     },
-                // div3: propertyOwnerDetailsHeader,
-                ...getHeader({
-                    labelKey: "WS_OWN_DETAIL_HEADER_INFO"
-                })
+            // div3: propertyOwnerDetailsHeader,
+            ...getHeader({
+                labelKey: "WS_OWN_DETAIL_HEADER_INFO"
+            })
             // },
         },
 
