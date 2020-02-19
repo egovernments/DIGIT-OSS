@@ -85,13 +85,11 @@ public class PropertyQueryBuilder {
 
 
 	private final String paginationWrapper = "SELECT * FROM "
-			+ "(SELECT *, DENSE_RANK() OVER (ORDER BY pid) offset_ FROM " + "({})" + " result) result_offset "
+			+ "(SELECT *, DENSE_RANK() OVER (ORDER BY plastmodifiedtime DESC, pid) offset_ FROM " + "({})" + " result) result_offset "
 			+ "WHERE offset_ > ? AND offset_ <= ?";
 
 	private String addPaginationWrapper(String query, List<Object> preparedStmtList, PropertyCriteria criteria) {
 		
-		if(criteria.getLimit() == null && criteria.getOffset() == null)
-			return query;
 		
 		Long limit = config.getDefaultLimit();
 		Long offset = config.getDefaultOffset();

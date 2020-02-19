@@ -59,6 +59,9 @@ public class PropertyService {
     
     @Autowired
     private ObjectMapper mapper;
+    
+    @Autowired
+    private NotificationService notifService;
 
     @Autowired
 	private CalculationService calculatorService;
@@ -78,8 +81,9 @@ public class PropertyService {
 		userService.createUser(request);
 		if (config.getIsWorkflowEnabled())
 			wfService.updateWorkflow(request, CREATE_PROCESS_CONSTANT);
-		util.clearSensitiveDataForPersistance(request.getProperty());
+		//util.clearSensitiveDataForPersistance(request.getProperty());
 		producer.push(config.getSavePropertyTopic(), request);
+		notifService.sendNotificationForUpdate(request, true);
 		return request.getProperty();
 	}
 	
@@ -126,7 +130,7 @@ public class PropertyService {
 		propertyValidator.validateRequestForUpdate(request, propertyFromSearch);
 		request.getProperty().setOwners(propertyFromSearch.getOwners());
 		enrichmentService.enrichUpdateRequest(request, propertyFromSearch);
-		util.clearSensitiveDataForPersistance(request.getProperty());
+		//util.clearSensitiveDataForPersistance(request.getProperty());
 		
 		PropertyRequest OldPropertyRequest = PropertyRequest.builder()
 				.requestInfo(request.getRequestInfo())
@@ -165,6 +169,7 @@ public class PropertyService {
 			 */
 			producer.push(config.getUpdatePropertyTopic(), request);
 		}
+		notifService.sendNotificationForUpdate(request, false);
 	}
 
 	/**
@@ -223,6 +228,8 @@ public class PropertyService {
 			 */
 			producer.push(config.getUpdatePropertyTopic(), request);
 		}
+		
+		notifService.sendNotificationForMutation(request);
 		calculatorService.calculateMutationFee(request.getRequestInfo(), request.getProperty());
 	}
 

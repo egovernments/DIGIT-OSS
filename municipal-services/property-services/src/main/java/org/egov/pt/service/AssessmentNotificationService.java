@@ -69,8 +69,8 @@ public class AssessmentNotificationService {
      * @param smsRequests List of SMSRequets
      */
     private void enrichSMSRequest(String topicName, AssessmentRequest request, Property property, List<SMSRequest> smsRequests){
+    	
         String tenantId = request.getAssessment().getTenantId();
-        Assessment assessment = request.getAssessment();
         String localizationMessages = util.getLocalizationMessages(tenantId,request.getRequestInfo());
         String message = getCustomizedMsg(topicName, request, property, localizationMessages);
         if(message==null)

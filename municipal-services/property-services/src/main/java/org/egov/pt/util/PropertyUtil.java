@@ -75,17 +75,16 @@ public class PropertyUtil extends CommonUtils {
 	}
 	
 
-	public ProcessInstanceRequest getProcessInstanceForPayment(PropertyRequest propertyRequest) {
+	public ProcessInstanceRequest getProcessInstanceForMutationPayment(PropertyRequest propertyRequest) {
 
 			Property property = propertyRequest.getProperty();
 			
 			ProcessInstance process = ProcessInstance.builder()
-				.businessService(configs.getCreatePTWfName())
+				.businessService(configs.getMutationWfName())
 				.businessId(property.getAcknowldgementNumber())
 				.comment("Payment for property processed")
-				.assignes(getUserForWorkflow(property))
-				.moduleName("PT")
-				.action("PAY")
+				.moduleName(PTConstants.ASMT_MODULENAME)
+				.action(PTConstants.ACTION_PAY)
 				.build();
 			
 			return ProcessInstanceRequest.builder()
