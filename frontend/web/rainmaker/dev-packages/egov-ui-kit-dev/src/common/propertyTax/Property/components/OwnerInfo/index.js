@@ -36,7 +36,7 @@ class OwnerInfo extends Component {
   getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
     const isInstitution =
       latestPropertyDetails.ownershipCategory === "INSTITUTIONALPRIVATE" || latestPropertyDetails.ownershipCategory === "INSTITUTIONALGOVERNMENT";
-    const { institution, owners: ownerDetails = [] } = latestPropertyDetails || {};
+    const { institution={}, owners: ownerDetails = [] } = latestPropertyDetails || {};
     let owner = [];
     if (ownerDetails && ownerDetails.length > 0) {
       owner = ownerDetails[0];

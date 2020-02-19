@@ -305,7 +305,7 @@ const institutionInformation = () => {
           },
           required:true,
           pattern: getPattern("Name"),
-    //      jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress"
+          jsonPath: "Properties[0].institutionTemp.institutionName"
         }),
       }),
 
@@ -325,7 +325,7 @@ const institutionInformation = () => {
           },
           required:true,
           pattern: getPattern("Name"),
-    //      jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress"
+        jsonPath: "Properties[0].institutionTemp.name"
         }),
           
         authorisedDesignationValue: getTextField({
@@ -342,7 +342,7 @@ const institutionInformation = () => {
           },
           required:true,
           pattern: getPattern("Name"),
-     //     jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress"
+         jsonPath: "Properties[0].institutionTemp.designation"
         }),
         authorisedMobile: getTextField({
           label: {
@@ -358,7 +358,7 @@ const institutionInformation = () => {
           },
           required:true,
           pattern: getPattern("Number"),
-         // jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress"
+          jsonPath: "Properties[0].institutionTemp.mobileNumber"
         }),
         authorisedLandline: getTextField({
             label: {
@@ -373,7 +373,7 @@ const institutionInformation = () => {
               labelKey: "PT_MUTATION_AUTHORISED_LANDLINE_PLACEHOLDER"
             },
             pattern: getPattern("MobileNo"),
-           // jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress"
+            jsonPath: "Properties[0].institutionTemp.landlineNumber"
           }),
           authorisedEmail: getTextField({
             label: {
@@ -388,7 +388,7 @@ const institutionInformation = () => {
               labelKey: "PT_MUTATION_AUTHORISED_EMAIL_PLACEHOLDER"
             },
             pattern: getPattern("Email"),
-           // jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress"
+            jsonPath: "Properties[0].institutionTemp.email"
           }),
           authorisedAddress: getTextField({
             label: {
@@ -404,7 +404,7 @@ const institutionInformation = () => {
             },
             required:true,
             pattern: getPattern("Address"),
-           // jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress"
+            jsonPath: "Properties[0].institutionTemp.correspondenceAddress"
           }),
       })
     }) }; 

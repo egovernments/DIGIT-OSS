@@ -171,7 +171,7 @@ propertyPayload.owners=[...propertyPayload.owners,...propertyPayload.ownersTemp]
     else{
       store.dispatch(
         setRoute(
-          `pt-mutation/acknowledgement?purpose=apply&status=failure&applicationNumber=${consumerCode}&tenantId=${tenantId}
+          `acknowledgement?purpose=apply&status=failure&applicationNumber=${consumerCode}&tenantId=${tenantId}
           `
         )
       );

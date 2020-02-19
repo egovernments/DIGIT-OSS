@@ -44,7 +44,7 @@ export const transferorDetails = getCommonCard(
             labelKey: "PT_MUTATION_TRANSFEROR_NAME"
           },
           {
-            jsonPath: "Properties[0].owners[0].name"
+            jsonPath: "Properties[0].owners[0].name" || "Property.owners[0].name"
             // callBack: value => {
             //   return value.split(".")[0];
             // }

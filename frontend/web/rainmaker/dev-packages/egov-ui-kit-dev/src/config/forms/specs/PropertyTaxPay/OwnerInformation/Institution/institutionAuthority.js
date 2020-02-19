@@ -22,7 +22,7 @@ const formConfig = {
     },
     designation: {
       id: "authority-designation",
-      jsonPath: "propertyDetails[0].institution.designation",
+      jsonPath: "Properties[0].propertyDetails[0].institution.designation",
       type: "textfield",
       floatingLabelText: "TL_NEW_OWNER_DESIG_LABEL",
       hintText: "TL_NEW_OWNER_DESIG_PLACEHOLDER",

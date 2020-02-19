@@ -76,7 +76,7 @@ export const transferorSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-              "Properties[0].owners[0].name"
+              "Properties[0].owners[0].name" || "Property.owners[0].name"
             }
           ), ownerFatherHusbandName: getLabelWithValue(
             {
@@ -85,16 +85,16 @@ export const transferorSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-              "Properties[0].owners[0].fatherOrHusbandName"
+              "Properties[0].owners[0].fatherOrHusbandName" || "Property.owners[0].fatherOrHusbandName"
             }
           ),  ownerGender: getLabelWithValue(
             {
               labelName: "Gender",
-              labelKey: "PT_OWNERSHIP_INFO_GENDER"
+              labelKey: "PT_OWNERSHIP_INFO_GENDER" 
             },
             {
               jsonPath:
-              "Properties[0].owners[0].gender"
+              "Properties[0].owners[0].gender" || "Property.owners[0].gender"
             }
           ), ownerType: getLabelWithValue(
             {
@@ -103,17 +103,17 @@ export const transferorSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-              "Properties[0].ownershipCategory"
+              "Properties[0].ownershipCategory" || "Property.owners[0].ownerType"
             }
           ),
           mobileNo: getLabelWithValue(
             {
               labelName: "Mobile No.",
-              labelKey: "PT_OWNERSHIP_INFO_MOBILE_NO"
+              labelKey: "PT_OWNERSHIP_INFO_MOBILE_NO" 
             },
             {
               jsonPath:
-              "Properties[0].owners[0].mobileNumber"
+              "Properties[0].owners[0].mobileNumber" || "Property.owners[0].mobileNumber"
             }
           ),  ownerEmail: getLabelWithValue(
             {
@@ -122,7 +122,7 @@ export const transferorSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-              "Properties[0].owners[0].emailId"
+              "Properties[0].owners[0].emailId" || "Property.owners[0].emailId"
             }
           ),       
           ownerDob: getLabelWithValue(
@@ -132,7 +132,7 @@ export const transferorSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-              "Properties[0].owners[0].ownerType",
+              "Properties[0].owners[0].ownerType" || "Property.owners[0].ownerType",
               // callBack: value => {
               //   return convertEpochToDate(value);
               // }
@@ -145,7 +145,7 @@ export const transferorSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-              "Properties[0].owners[0].permanentAddress"
+              "Properties[0].owners[0].permanentAddress" || "Property.owners[0].permanentAddress"
             }
           )
         })

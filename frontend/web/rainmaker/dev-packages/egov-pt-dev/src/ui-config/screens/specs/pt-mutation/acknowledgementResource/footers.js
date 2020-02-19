@@ -6,7 +6,7 @@ import "./index.css";
 export const getRedirectionURL = () => {
   const redirectionURL = ifUserRoleExists("CITIZEN")
     ? "/property-tax"
-    : "/inbox";
+    : "/pt-mutation/propertySearch";
   return redirectionURL;
 };
 
