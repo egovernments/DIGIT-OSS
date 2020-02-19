@@ -17,6 +17,11 @@ export const createPropertyPayload = (properties, documentsUploadRedux, newPrope
       if (obj.documents && Array.isArray(obj.documents) && obj.documents.length) {
         if (!obj.documents[0].documentType || !obj.documents[0].documentUid) {
           delete obj.documents;
+        }else{
+          obj.documents=obj.documents.map(document=>{
+            document.fileStoreId=document.documentUid
+            return {...document}
+          })
         }
       }
       obj.ownerType = obj.ownerType || "NONE";

@@ -7,7 +7,7 @@ import { FETCHASSESSMENTS, PROPERTY } from "egov-ui-kit/utils/endPoints";
 import { fetchGeneralMDMSData } from "egov-ui-kit/redux/common/actions";
 import { httpRequest } from "egov-ui-kit/utils/api";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-// import get from "lodash/get";
+import get from "lodash/get";
 import WorkFlowContainer from "egov-workflow/ui-containers-local/WorkFlowContainer";
 import { fetchProperties } from "egov-ui-kit/redux/properties/actions";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -22,6 +22,7 @@ import AssessmentInfo from "../Property/components/AssessmentInfo";
 import OwnerInfo from "../Property/components/OwnerInfo";
 import PTHeader from "../../common/PTHeader";
 import DocumentsInfo from "../Property/components/DocumentsInfo";
+
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 
 const innerDivStyle = {
@@ -118,11 +119,33 @@ class ApplicationPreview extends Component {
       "UsageCategoryDetail",
       "SubOwnerShipCategory",
     ]);
-
+    const tenantId = getQueryValue(window.location.href, "tenantId");
+    const queryObject = [
+      { key: "tenantId", value: tenantId },
+      { key: "businessServices", value: this.getApplicationType().moduleName }
+    ];
+    this.setBusinessServiceDataToLocalStorage(queryObject);
 
 
 
     this.fetchApplication();
+  };
+  setBusinessServiceDataToLocalStorage = async (queryObject) => {
+    const { toggleSnackbarAndSetText } = this.props;
+    try {
+      const payload = await httpRequest("egov-workflow-v2/egov-wf/businessservice/_search", "_search", queryObject);
+      localStorageSet("businessServiceData", JSON.stringify(get(payload, "BusinessServices")));
+      return get(payload, "BusinessServices");
+    } catch (e) {
+      toggleSnackbarAndSetText(
+        true,
+        {
+          labelName: "Not authorized to access Business Service!",
+          labelKey: "ERR_NOT_AUTHORISED_BUSINESS_SERVICE",
+        },
+        "error"
+      );
+    }
   };
   fetchApplication = async () => {
     const applicationType = this.getApplicationType();
@@ -189,6 +212,7 @@ class ApplicationPreview extends Component {
       { key: "propertyIds", value: propertyId },
       { key: "tenantId", value: tenantId },
     ]);
+   
     this.props.prepareFinalObject('PTApplication.propertyId', propertyId);
     this.setState({ propertyId });
 
@@ -238,7 +262,7 @@ class ApplicationPreview extends Component {
     if (applicationType == "assessment") {
       applicationObject.dataPath = "Assessment";
       applicationObject.responsePath = "Assessments";
-      applicationObject.moduleName = "ASMT";
+      applicationObject.moduleName = "PT.ASMT";
       applicationObject.updateUrl = "/property-services/assessment/_update";
 
 

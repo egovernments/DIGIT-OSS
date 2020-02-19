@@ -14,7 +14,6 @@ import generatePdf from "../utils/receiptPdf";
 import './index.css';
 import set from "lodash/set";
 import get from "lodash/get";
-
 import { loadPdfGenerationData } from "../utils/receiptTransformer";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 export const header = getCommonContainer({
@@ -36,8 +35,6 @@ export const header = getCommonContainer({
     visible: true
   }
 });
-
-
 const getHeader=(applicationNumber)=>{
 return getCommonContainer({
   header: getCommonHeader({
@@ -59,8 +56,6 @@ return getCommonContainer({
   // }
 })
 }
-
-
 const getAcknowledgementCard = (
   state,
   dispatch,
@@ -104,7 +99,6 @@ const getAcknowledgementCard = (
                 uiFramework: "custom-atoms",
                 componentPath: "Div",
                 children: {
-
                   div1: {
                     uiFramework: "custom-atoms",
                     componentPath: "Icon",
@@ -127,7 +121,6 @@ const getAcknowledgementCard = (
                     labelName: "ACKNOWLEDGEMENT FORM",
                     labelKey: "PT_MUTATION_ACKNOWLEDGEMENT_FORM"
                   })
-
                 },
                 onClickDefination: {
                   action: "condition",
@@ -140,7 +133,6 @@ const getAcknowledgementCard = (
                 uiFramework: "custom-atoms",
                 componentPath: "Div",
                 children: {
-
                   div1: {
                     uiFramework: "custom-atoms",
                     componentPath: "Icon",
@@ -163,7 +155,6 @@ const getAcknowledgementCard = (
                     labelName: "PRINT ACKNOWLEDGEMENT FORM",
                     labelKey: "PT_MUTATION_PRINT_ACKNOWLEDGEMENT_FORM"
                   })
-
                 },
                 onClickDefination: {
                   action: "condition",
@@ -172,12 +163,10 @@ const getAcknowledgementCard = (
                   }
                 },
               }
-
             },
             props: {
               style: {
                 display: "flex",
-
               }
             },
           }
@@ -289,7 +278,71 @@ const getAcknowledgementCard = (
       },
       gotoHomeFooter
     };
-  } else if (purpose === "sendback" && status === "success") {
+  }
+  else if (purpose === "verified" && status === "failure") {
+    // loadReceiptGenerationData(applicationNumber, tenant);
+    return {
+      header:getHeader(applicationNumber),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "Application Verification Failed",
+              labelKey: "PT_VERIFY_FAILURE_CHECKLIST_MESSAGE_HEAD"
+            },
+            body: {
+              labelName:
+                "A notification regarding Trade License Approval has been sent to trade owner at registered Mobile No.",
+              labelKey: "PT_VERIFY_FAILURE_CHECKLIST_MESSAGE_SUB"
+            },
+            tailText: {
+              labelName: "Trade License No.",
+              labelKey: "PT_MUTATION_APPLICATION_NO"
+            },
+            number: secondNumber
+          })
+        }
+      },
+      gotoHomeFooter
+    };
+  }  
+  else if (purpose === "verify" && status === "success") {
+    // loadReceiptGenerationData(applicationNumber, tenant);
+    return {
+      header:getHeader(applicationNumber),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "Application is Verified Successfully",
+              labelKey: "PT_VERIFIED_CHECKLIST_MESSAGE_HEAD"
+            },
+            body: {
+              labelName:
+                "A notification regarding Trade License Approval has been sent to trade owner at registered Mobile No.",
+              labelKey: "PT_VERIFIED_CHECKLIST_MESSAGE_SUB"
+            },
+            tailText: {
+              labelName: "Trade License No.",
+              labelKey: "PT_MUTATION_APPLICATION_NO"
+            },
+            number: secondNumber
+          })
+        }
+      },
+      gotoHomeFooter
+    };
+  } 
+  
+  else if (purpose === "sendback" && status === "success") {
     // loadReceiptGenerationData(applicationNumber, tenant);
     return {
       header:getHeader(applicationNumber),
@@ -433,7 +486,6 @@ const getAcknowledgementCard = (
     };
   }
 };
-
 const setApplicationData = async (dispatch, applicationNumber, tenant) => {
   const queryObject = [
     {
@@ -448,7 +500,6 @@ const setApplicationData = async (dispatch, applicationNumber, tenant) => {
   // const response = await getSearchResults(queryObject);
   // dispatch(prepareFinalObject("Properties", get(response, "Properties", [])));
 };
-
 const screenConfig = {
   uiFramework: "material-ui",
   name: "acknowledgement",
@@ -484,5 +535,4 @@ const screenConfig = {
     return action;
   }
 };
-
 export default screenConfig;

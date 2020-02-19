@@ -93,6 +93,8 @@ class WorkFlowContainer extends React.Component {
         return "purpose=forward&status=success";
       case "MARK":
         return "purpose=mark&status=success";
+      case "VERIFY":
+        return "purpose=verify&status=success";
       case "REJECT":
         return "purpose=application&status=rejected";
       case "CANCEL":
