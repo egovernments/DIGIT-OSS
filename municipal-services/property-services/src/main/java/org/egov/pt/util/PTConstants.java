@@ -163,11 +163,15 @@ public class PTConstants {
 
     public static final String NOTIFICATION_PROPERTYID = "{PROPERTYID}";
 
+    public static final String NOTIFICATION_FINANCIALYEAR = "{FINANCIALYEAR}";
+
     public static final String NOTIFICATION_ASSESSMENT_CREATE = "ASMT_CREATE";
 
     public static final String NOTIFICATION_ASSESSMENT_UPDATE = "ASMT_UPDATE";
 
     public static final String LOCALIZATION_ASMT_PREFIX = "ASMT_";
+
+    public static final String NOTIFICATION_ASMT_PREFIX = "ASMT_MSG_";
 
 
 

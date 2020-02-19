@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.egov.pt.service.AssessmentNotificationService;
 import org.egov.pt.web.contracts.AssessmentRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
@@ -21,7 +22,14 @@ public class AssessmentConsumer {
 
     private AssessmentNotificationService assessmentNotificationService;
 
-    @KafkaListener(topics = {"${persister.save.property.topic}","${persister.update.property.topic}"})
+
+    @Autowired
+    public AssessmentConsumer(ObjectMapper mapper, AssessmentNotificationService assessmentNotificationService) {
+        this.mapper = mapper;
+        this.assessmentNotificationService = assessmentNotificationService;
+    }
+
+    @KafkaListener(topics = {"${egov.pt.assessment.create.topic}","${egov.pt.assessment.update.topic}"})
     public void listen(final HashMap<String, Object> record, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
 
         try {
