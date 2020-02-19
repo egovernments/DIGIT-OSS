@@ -113,7 +113,7 @@ public class AssessmentNotificationService {
 
         }
         else{
-            msgCode = LOCALIZATION_ASMT_PREFIX + assessment.getWorkflow().getState().getState();
+            msgCode = NOTIFICATION_ASMT_PREFIX + assessment.getWorkflow().getState().getState();
             messageTemplate = customize(assessment, property, msgCode, localizationMessages);
         }
 
@@ -143,6 +143,9 @@ public class AssessmentNotificationService {
 
         if(messageTemplate.contains(NOTIFICATION_PROPERTYID))
             messageTemplate = messageTemplate.replace(NOTIFICATION_PROPERTYID, property.getPropertyId());
+
+        if(messageTemplate.contains(NOTIFICATION_FINANCIALYEAR))
+            messageTemplate = messageTemplate.replace(NOTIFICATION_FINANCIALYEAR, assessment.getFinancialYear());
 
         return messageTemplate;
     }
