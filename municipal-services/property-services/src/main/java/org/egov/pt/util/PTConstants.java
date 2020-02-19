@@ -123,6 +123,21 @@ public class PTConstants {
 	public static final String PREVIOUS_PROPERTY_PREVIOUD_UUID = "previousPropertyUuid";
 	
 	
+	/* notificaion constants */
+	
+	public static final String WF_PAID_STATUS = "PAID";
+	
+	public static final String WF_PAYMENT_PENDING_STATUS = "PAYMENT_PENDING";
+	
+	public static final String WF_REJECTED_STATUS = "REJECTED";
+	
+	public static final String WF_CANCELLED_STATUS = "CANCELLED";
+	
+	public static final String WF_APPROVED_STATUS = "APPROVED";
+	
+	public static final String WF_OPEN_STATUS = "OPEN";
+	
+	
 	
 	/* ASSESSMENT CONSTANTS */
 	
