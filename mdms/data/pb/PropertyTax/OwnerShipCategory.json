@@ -22,6 +22,33 @@
       "name": "Individual - SingleOwner",
       "code": "INDIVIDUAL.SINGLEOWNER",
       "active": true
+    },
+    {
+      "name": "Multiple Owners",
+      "code": "INDIVIDUAL.MULTIPLEOWNERS",
+      "active": true
+    },
+    {
+      "name": "Private Company",
+      "code": "INSTITUTIONALPRIVATE.PRIVATECOMPANY",
+      "active": true
+    },
+    {
+      "name": "NGO",
+      "code": "INSTITUTIONALPRIVATE.NGO",
+      "active": true
+    },
+    {
+      "name": "Private Trust",
+      "code": "INSTITUTIONALPRIVATE.PRIVATETRUST",
+      "active": true
+    },
+   
+    {
+      "name": "ULB Government",
+      "code": "INSTITUTIONALGOVERNMENT.ULBGOVERNMENT",
+      "active": true
     }
+  
   ]
 }
