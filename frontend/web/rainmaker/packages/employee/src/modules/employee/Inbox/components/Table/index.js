@@ -112,7 +112,7 @@ class InboxData extends React.Component {
     if(row[0].subtext=="PT.CREATE"){
       queryParams+='&type=property';
     }
-    else  if(row[0].subtext=="PT.ASMT"){
+    else  if(row[0].subtext=="ASMT"){
       queryParams+='&type=assessment';
     }
     this.props.setRoute(`${contextPath}?${queryParams}`);
