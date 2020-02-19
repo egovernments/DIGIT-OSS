@@ -201,15 +201,7 @@ public class LegacyIndexService {
 								threadRun = false;
 								break;
 							} else {
-								List<Object> searchResponse = JsonPath.read(response,
-										legacyIndexRequest.getApiDetails().getResponseJsonPath());
-								if(searchResponse.size() < size) {
-									for(long i = 0; i < 10000000; i++) {i = i;}
-									log.info("Retrying Offset: "+offset+" and Size: "+size);
-									response = restTemplate.postForObject(uri, request, Map.class);
-									searchResponse = JsonPath.read(response,
-											legacyIndexRequest.getApiDetails().getResponseJsonPath());
-								}
+								List<Object> searchResponse = JsonPath.read(response, legacyIndexRequest.getApiDetails().getResponseJsonPath());
 								if (!CollectionUtils.isEmpty(searchResponse)) {
 									childThreadExecutor(legacyIndexRequest, mapper, response);
 									presentCount = searchResponse.size();
@@ -217,9 +209,6 @@ public class LegacyIndexService {
 									log.info("Size of res: " + searchResponse.size() + " and Count: " + count
 											+ " and offset: " + offset);
 								} else {
-									log.info("Request: " + request);
-									log.info("URI: " + uri);
-									log.info("Response: " + response);
 									if (count > size) {
 										count = (count - size) + presentCount;
 									}else if(count == size) {
@@ -235,7 +224,7 @@ public class LegacyIndexService {
 							log.info("JOBFAILED!!! Offset: "+offset+" Size: "+size);
 							log.info("Request: " + request);
 							log.info("URI: " + uri);
-							log.error("Re-index Exception: ", e);
+							log.error("Legacy-index Exception: ", e);
 							IndexJob job = IndexJob.builder().jobId(legacyIndexRequest.getJobId())
 									.auditDetails(indexerUtils.getAuditDetails(
 											legacyIndexRequest.getRequestInfo().getUserInfo().getUuid(), false))

@@ -80,10 +80,12 @@ public class DataTransformationService {
 					String stringifiedObject = indexerUtils.buildString(kafkaJsonArray.get(i));
 					if (isCustom) {
 						String customIndexJson = buildCustomJsonForIndex(index.getCustomJsonMapping(), stringifiedObject);
+						indexerUtils.pushCollectionToDSSTopic(customIndexJson, index);
 						StringBuilder builder = appendIdToJson(index, jsonTobeIndexed, stringifiedObject, customIndexJson);
 						if (null != builder)
 							jsonTobeIndexed = builder;
 					} else {
+						indexerUtils.pushCollectionToDSSTopic(stringifiedObject, index);
 						StringBuilder builder = appendIdToJson(index, jsonTobeIndexed, stringifiedObject, null);
 						if (null != builder)
 							jsonTobeIndexed = builder;
@@ -188,7 +190,8 @@ public class DataTransformationService {
 					if (null == response)
 						continue;
 				} catch (Exception e) {
-					log.error("Exception while trying to hit: " + uri);
+					log.error("Exception while making external call: ", e);
+					log.error("URI: "+ uri);
 					continue;
 				}
 				log.debug("Response: " + response + " from the URI: " + uriMapping.getPath());

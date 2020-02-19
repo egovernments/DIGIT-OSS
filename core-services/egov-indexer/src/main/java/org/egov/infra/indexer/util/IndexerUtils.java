@@ -1,5 +1,7 @@
 package org.egov.infra.indexer.util;
 
+import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,6 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.infra.indexer.consumer.config.ReindexConsumerConfig;
 import org.egov.infra.indexer.models.AuditDetails;
+import org.egov.infra.indexer.producer.IndexerProducer;
 import org.egov.infra.indexer.web.contract.APIDetails;
 import org.egov.infra.indexer.web.contract.FilterMapping;
 import org.egov.infra.indexer.web.contract.Index;
@@ -37,6 +40,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 
@@ -66,6 +70,15 @@ public class IndexerUtils {
 
 	@Value("${egov.service.host}")
 	private String serviceHost;
+	
+	@Value("${egov.indexer.dss.collectionindex.topic}")
+	private String dssTopicForCollection;
+	
+	@Value("${dss.collectionindex.topic.push.enabled}")
+	private Boolean dssTopicPushEnabled;
+	
+	@Autowired
+	private IndexerProducer producer;
 
 	private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
@@ -183,6 +196,10 @@ public class IndexerUtils {
 							}
 						}
 						queryParam = values.toString();
+					}
+					if(null == queryParam) {
+						log.error("No value found for queryParam {}", queryParamsArray[i]);
+						continue;
 					}
 					resolvedParam.append(queryParamExpression[0].trim()).append("=")
 							.append(queryParam.toString().trim());
@@ -493,13 +510,17 @@ public class IndexerUtils {
 			ObjectMapper mapper = getObjectMapper();
 			String epochValue = mapper
 					.writeValueAsString(JsonPath.read(context.jsonString().toString(), index.getTimeStampField()));
-			Date date = new Date(Long.valueOf(epochValue));
+			if(null == epochValue) {
+				log.info("NULL found in place of timestamp field.");
+				return context;
+			}
+			Date date = new Date(Long.valueOf(convertEpochToLong(epochValue)));
 			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US);
 			formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
 			context.put("$", "@timestamp", formatter.format(date));
 		} catch (Exception e) {
-			log.info("Exception while adding timestamp!");
-			log.debug("Data: " + context.jsonString());
+			log.info("Exception while adding timestamp: ",e);
+			log.info("Time stamp field: "+index.getTimeStampField());
 		}
 
 		return context;
@@ -624,5 +645,44 @@ public class IndexerUtils {
 		return s.replaceAll(String.format("%s|%s|%s", "(?<=[A-Z])(?=[A-Z][a-z])", "(?<=[^A-Z])(?=[A-Z])",
 				"(?<=[A-Za-z])(?=[^A-Za-z])"), " ");
 	}
+	
+	/**
+	 * Method to convert double with scientific precision to plain long
+	 * ex:- 1.5534533434E10-->15534533434
+	 *
+	 * @param value
+	 * @return
+	 */
+	public String convertEpochToLong(String value){
+		DecimalFormat df = new DecimalFormat("#");
+		df.setMaximumFractionDigits(0);
+		return df.format(Double.valueOf(value));
+	}
+	
+	
+	/**
+	 * For the sake of DSS, collections data is being used from a different index.
+	 * This method pushes only the collections data to a different topic, for the dss ingest to pick.
+	 * 
+	 * @param enrichedObject
+	 * @param index
+	 */
+	public void pushCollectionToDSSTopic(String enrichedObject, Index index) {
+		if(dssTopicPushEnabled) {
+			if(index.getName().contains("collection") || index.getName().contains("payment")) {
+				log.info("Index name: "+ index.getName());
+				log.info("Pushing collections data to the DSS topic: "+dssTopicForCollection);
+				try{
+					JsonNode enrichedObjectNode = new ObjectMapper().readTree(enrichedObject);
+					producer.producer(dssTopicForCollection, enrichedObjectNode);
+
+				} catch (IOException e){
+					log.error("Failed pushing collections data to the DSS topic: "+dssTopicForCollection);
+
+				}
+			}
+		}
+	}
+	
 
 }
