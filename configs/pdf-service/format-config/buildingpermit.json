@@ -321,15 +321,15 @@
                                 "alignment": "right"
                             }
                         ],
-						[
-						  {
-							"text": "{{sanHeadCode}}"
-						  },
-						  {
-							"text": "{{sanFee}}",
-							"alignment": "right"
-						  }
-						],
+			[
+			  {
+				"text": "{{sanHeadCode}}"
+			  },
+			  {
+				"text": "{{sanFee}}",
+				"alignment": "right"
+			  }
+			],
                         [
                             {
                                 "text": "Total",
