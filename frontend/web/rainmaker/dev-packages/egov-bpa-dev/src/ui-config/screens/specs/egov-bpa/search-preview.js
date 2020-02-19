@@ -310,57 +310,43 @@ const setSearchResponse = async (
   const edcrNumber = response.Bpa["0"].edcrNumber;
   const status = response.Bpa["0"].status;
 
-  if ((status && status === "PENDING_APPL_FEE") || (status && status === "PENDING_SANC_FEE_PAYMENT")) {
-    dispatch(
-      handleField(
-        "search-preview",
-        "components.div.children.citizenFooter",
-        "visible",
-        true
-      )
-    ),
+  if (status && status === "CITIZEN_APPROVAL_INPROCESS") {
+    let userInfo = JSON.parse(getUserInfo()),
+    roles = get(userInfo, "roles"),
+    owners = get(response.Bpa["0"], "owners"),
+    archtect = "BPA_ARCHITECT",
+    isTrue = false, isOwner = true;
+    if(roles && roles.length > 0) {
+      roles.forEach(role => {
+        if(role.code === archtect) {
+          isTrue = true;
+        }
+      })
+    }
+
+    if(isTrue && owners && owners.length > 0) {
+      owners.forEach(owner => {
+        if(owner.uuid === userInfo.uuid) {
+          if(owner.roles && owner.roles.length > 0 ) {
+            owner.roles.forEach(owrRole => {
+              if(owrRole.code === archtect) {
+                isOwner = false;
+              }
+            })
+          }
+        }
+      })
+    }
+    if(isTrue && isOwner) {
       dispatch(
         handleField(
           "search-preview",
-          "components.div.children.citizenFooter.children.sendToArch",
-          "visible",
-          false
-        )
-      ),
-      dispatch(
-        handleField(
-          "search-preview",
-          "components.div.children.citizenFooter.children.approve",
-          "visible",
-          false
-        )
-      )
-  } else if (status && status === "CITIZEN_APPROVAL_INPROCESS") {
-    dispatch(
-      handleField(
-        "search-preview",
-        "components.div.children.citizenFooter",
-        "visible",
-        true
-      )
-    ),
-      dispatch(
-        handleField(
-          "search-preview",
-          "components.div.children.citizenFooter.children.makePayment",
+          "components.div.children.citizenFooter",
           "visible",
           false
         )
       )
-  } else {
-    dispatch(
-      handleField(
-        "search-preview",
-        "components.div.children.citizenFooter",
-        "visible",
-        false
-      )
-    )
+    }
   }
 
   dispatch(prepareFinalObject("BPA", response.Bpa[0]));

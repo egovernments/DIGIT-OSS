@@ -69,12 +69,10 @@ export const citizenFooter = getCommonApplyFooter({
       action: "condition",
       callBack: bpaMakePayment
     },
-    // roleDefination: {
-    //   rolePath: "user-info.roles",
-    //   action: "PAY",
-    //   roles: ["CITIZEN"]
-    // },
-    // visible: process.env.REACT_APP_NAME === "Citizen" ? true : false
+    roleDefination: {
+      rolePath: "user-info.roles",
+      action: "PAY"
+    }
   },
   sendToArch: {
     componentPath: "Button",
@@ -103,6 +101,10 @@ export const citizenFooter = getCommonApplyFooter({
     onClickDefination: {
       action: "condition",
       callBack: updateBpaApplication
+    },
+    roleDefination: {
+      rolePath: "user-info.roles",
+      action: "SEND_TO_ARCHITECT"
     }
   },
   approve: {
@@ -132,6 +134,10 @@ export const citizenFooter = getCommonApplyFooter({
     onClickDefination: {
       action: "condition",
       callBack: updateBpaApplication
+    },
+    roleDefination: {
+      rolePath: "user-info.roles",
+      action: "APPROVE"
     }
   }
 });
