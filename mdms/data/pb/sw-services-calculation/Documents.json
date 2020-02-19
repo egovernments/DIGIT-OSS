@@ -70,7 +70,7 @@
       "code": "BUILDING_PLAN_OR_COMPLETION_CERTIFICATE",
       "documentType": "SW",
       "active": true,
-      "required": true,
+      "required": false,
       "description": "BUILDING_PLAN_OR_COMPLETION_CERTIFICATE_DESCRIPTION"
     },
     {
@@ -84,7 +84,7 @@
       "code": "PROPERTY_TAX_RECIEPT",
       "documentType": "SW",
       "active": true,
-      "required": true,
+      "required": false,
       "description": "PROPERTY_TAX_RECIEPT_DESCRIPTION"
     },
     {
