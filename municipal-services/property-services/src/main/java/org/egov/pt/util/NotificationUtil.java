@@ -8,16 +8,17 @@ import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.Assessment;
 import org.egov.pt.repository.ServiceRequestRepository;
+import org.egov.pt.web.contracts.SMSRequest;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.*;
 
 import static org.egov.pt.util.PTConstants.NOTIFICATION_LOCALE;
 import static org.egov.pt.util.PTConstants.NOTIFICATION_MODULENAME;
+import static org.egov.pt.util.PTConstants.NOTIFICATION_OWNERNAME;
 
 @Slf4j
 @Component
@@ -45,7 +46,7 @@ public class NotificationUtil {
      *            The localization messages
      * @return message for the specific code
      */
-    private String getMessageTemplate(String notificationCode, String localizationMessage) {
+    public String getMessageTemplate(String notificationCode, String localizationMessage) {
         String path = "$..messages[?(@.code==\"{}\")].message";
         path = path.replace("{}", notificationCode);
         String message = null;
@@ -102,6 +103,25 @@ public class NotificationUtil {
                 .append("&tenantId=").append(tenantId).append("&module=").append(NOTIFICATION_MODULENAME);
 
         return uri;
+    }
+
+
+    /**
+     * Creates sms request for the each owners
+     *
+     * @param message
+     *            The message for the specific tradeLicense
+     * @param mobileNumberToOwnerName
+     *            Map of mobileNumber to OwnerName
+     * @return List of SMSRequest
+     */
+    public List<SMSRequest> createSMSRequest(String message, Map<String, String> mobileNumberToOwnerName) {
+        List<SMSRequest> smsRequest = new LinkedList<>();
+        for (Map.Entry<String, String> entryset : mobileNumberToOwnerName.entrySet()) {
+            String customizedMsg = message.replace(NOTIFICATION_OWNERNAME, entryset.getValue());
+            smsRequest.add(new SMSRequest(entryset.getKey(), customizedMsg));
+        }
+        return smsRequest;
     }
 
 

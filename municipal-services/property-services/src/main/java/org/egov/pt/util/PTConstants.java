@@ -151,5 +151,26 @@ public class PTConstants {
 
 	public static final String BILL_NODEMAND_ERROR_CODE = "EG_BS_BILL_NO_DEMANDS_FOUND";
 
+
+
+	// ASSESSMENT NOTIFICATION PLACEHOLDER
+
+    public static final String NOTIFICATION_ASSESSMENTNUMBER = "{ASSESSMENTNUMBER}";
+
+    public static final String NOTIFICATION_OWNERNAME = "{OWNER_NAME}";
+
+    public static final String NOTIFICATION_STATUS = "{STATUS}";
+
+    public static final String NOTIFICATION_PROPERTYID = "{PROPERTYID}";
+
+    public static final String NOTIFICATION_ASSESSMENT_CREATE = "ASMT_CREATE";
+
+    public static final String NOTIFICATION_ASSESSMENT_UPDATE = "ASMT_UPDATE";
+
+    public static final String LOCALIZATION_ASMT_PREFIX = "ASMT_";
+
+
+
+
 }
 
