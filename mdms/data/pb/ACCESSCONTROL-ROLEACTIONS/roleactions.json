@@ -19665,6 +19665,12 @@
       "tenantId": "pb"
     },
     {
+      "rolecode": "CITIZEN",
+      "actionid": 1931,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
       "rolecode": "BPA_VERIFIER",
       "actionid": 1930,
       "actioncode": "",
