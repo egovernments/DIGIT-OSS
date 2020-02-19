@@ -9,12 +9,17 @@ import org.egov.tl.service.EnrichmentService;
 import org.egov.tl.util.NotificationUtil;
 import org.egov.tl.web.models.SMSRequest;
 import org.egov.tl.web.models.TradeLicense;
+import org.egov.tl.web.models.TradeLicenseRequest;
 import org.egov.tl.web.models.TradeLicenseSearchCriteria;
+import org.egov.tl.workflow.WorkflowIntegrator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
+
+import static org.egov.tl.util.TLConstants.ACTION_EXPIRE;
+import static org.egov.tl.util.TLConstants.STATUS_APPROVED;
 
 @Component
 @Slf4j
@@ -30,14 +35,20 @@ public class TLReminderNotification {
 
     private EnrichmentService enrichmentService;
 
+    private WorkflowIntegrator workflowIntegrator;
+
 
     @Autowired
-    public TLReminderNotification(NotificationUtil util, TLConfiguration config, TLRepository repository, EnrichmentService enrichmentService) {
+    public TLReminderNotification(NotificationUtil util, TLConfiguration config, TLRepository repository,
+                                  EnrichmentService enrichmentService, WorkflowIntegrator workflowIntegrator) {
         this.util = util;
         this.config = config;
         this.repository = repository;
         this.enrichmentService = enrichmentService;
+        this.workflowIntegrator = workflowIntegrator;
     }
+
+
 
     /**
      * Searches trade licenses which are expiring and sends reminder sms to
@@ -51,6 +62,7 @@ public class TLReminderNotification {
         TradeLicenseSearchCriteria criteria = TradeLicenseSearchCriteria.builder()
                                         .businessService(serviceName)
                                         .validTo(validTill)
+                                        .status(STATUS_APPROVED)
                                         .limit(config.getPaginationSize())
                                         .build();
 
@@ -104,6 +116,25 @@ public class TLReminderNotification {
         util.sendSMS(smsRequests, config.getIsReminderEnabled());
 
     }
+
+
+    /**
+     * Calls workflow with action expire on the given license
+     * @param requestInfo
+     * @param licenses Licenses to be expired
+     */
+    private void expireLicenses(RequestInfo requestInfo, List<TradeLicense> licenses){
+
+         licenses.forEach(license -> {
+             license.setAction(ACTION_EXPIRE);
+         });
+
+        workflowIntegrator.callWorkFlow(new TradeLicenseRequest(requestInfo, licenses));
+
+
+    }
+
+
 
     /**
      * Returns state level tenant

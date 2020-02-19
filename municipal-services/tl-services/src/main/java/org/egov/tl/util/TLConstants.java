@@ -161,6 +161,8 @@ public class TLConstants {
 
     public static final String ACTION_ADHOC  = "ADHOC";
 
+    public static final String ACTION_EXPIRE  = "EXPIRE";
+
 
     public static final String STATUS_INITIATED = "INITIATED";
 
