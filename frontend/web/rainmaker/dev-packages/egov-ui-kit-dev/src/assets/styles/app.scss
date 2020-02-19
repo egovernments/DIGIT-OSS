@@ -165,6 +165,10 @@ body.employee-user-profile {
 .menu-search-container >div >svg{
   color:#fff !important; 
 }
+.menu-search-container > div > div:nth-child(1) > svg{
+  top:0!important;
+  color: #fff!important;
+}
 
   .menu-search-container{
     background-color: #34495E;
