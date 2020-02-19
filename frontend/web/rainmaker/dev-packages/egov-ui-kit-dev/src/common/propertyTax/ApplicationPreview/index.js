@@ -262,7 +262,7 @@ class ApplicationPreview extends Component {
     if (applicationType == "assessment") {
       applicationObject.dataPath = "Assessment";
       applicationObject.responsePath = "Assessments";
-      applicationObject.moduleName = "PT.ASMT";
+      applicationObject.moduleName = "ASMT";
       applicationObject.updateUrl = "/property-services/assessment/_update";
 
 
