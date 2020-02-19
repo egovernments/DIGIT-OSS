@@ -74,6 +74,7 @@ public class EnrichmentService {
                         Map<String, Long> taxPeriods = tradeUtil.getTaxPeriods(tradeLicense, mdmsData);
                         if (tradeLicense.getLicenseType().equals(TradeLicense.LicenseTypeEnum.PERMANENT) || tradeLicense.getValidTo() == null)
                             tradeLicense.setValidTo(taxPeriods.get(TLConstants.MDMS_ENDDATE));
+                            tradeLicense.setValidFrom(taxPeriods.get(TLConstants.MDMS_STARTDATE));
                     }
                     if (!CollectionUtils.isEmpty(tradeLicense.getTradeLicenseDetail().getAccessories()))
                         tradeLicense.getTradeLicenseDetail().getAccessories().forEach(accessory -> {
@@ -483,7 +484,7 @@ public class EnrichmentService {
                         license.setLicenseNumber(itr.next());
                         Long time = System.currentTimeMillis();
                         license.setIssuedDate(time);
-                        license.setValidFrom(time);
+                        //license.setValidFrom(time);
                     }
                 }
             }
