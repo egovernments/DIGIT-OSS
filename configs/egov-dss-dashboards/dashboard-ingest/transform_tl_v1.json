@@ -15,7 +15,9 @@
 				"applicationdate": "tradeLicense.applicationDate",
 				"oldpropertyid": "tradeLicense.oldPropertyId",
 				"action": "tradeLicense.action"
-			}
+			},
+		        "ward": "ward"
+
 		}
 	}
 ]
