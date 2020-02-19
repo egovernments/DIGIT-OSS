@@ -1686,11 +1686,12 @@ class FormWizard extends Component {
             const propertyId = propertyResponse.Properties[0].propertyId;
             const tenantId = propertyResponse.Properties[0].tenantId;
             // Navigate to success page
-            if ((action === "assess") || (action === "re-assess")) {
-              this.assessProperty(action, propertyResponse.Properties);
-            } else {
-              this.props.history.push(`pt-acknowledgment?purpose=apply&propertyId=${propertyId}&status=success&tenantId=${tenantId}`);
-            }
+            this.props.history.push(`pt-acknowledgment?purpose=apply&propertyId=${propertyId}&status=success&tenantId=${tenantId}`);
+            // if ((action === "assess") || (action === "re-assess")) {
+            //   this.assessProperty(action, propertyResponse.Properties);
+            // } else {
+            //   this.props.history.push(`pt-acknowledgment?purpose=apply&propertyId=${propertyId}&status=success&tenantId=${tenantId}`);
+            // }
           }
         }
       } catch (e) {
@@ -1701,7 +1702,6 @@ class FormWizard extends Component {
         store.dispatch(
           setRoute(
             `/property-tax/pt-acknowledgment?purpose=apply&status=failure`
-
           )
         );
 

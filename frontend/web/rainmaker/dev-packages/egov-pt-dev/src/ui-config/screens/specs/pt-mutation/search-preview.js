@@ -44,7 +44,7 @@ const titlebar = getCommonContainer({
     moduleName: "egov-pt",
     componentPath: "ApplicationNoContainer",
     props: {
-      number: getQueryArg(window.location.href, "propertyId"),
+      number: getQueryArg(window.location.href, "applicationNumber"),
       label: {
           labelValue: "Application No.",
           labelKey: "PT_MUTATION_APPLICATION_NO"
@@ -294,7 +294,7 @@ const setSearchResponse = async (
       key: "tenantId",
       value: tenantId
     },
-    { key: "propertyIds", value: applicationNumber }
+    { key: "acknowledgementIds", value: applicationNumber }
   ]);
   // const response = sampleSingleSearch();
   const properties=get(response, "Properties", []);
@@ -363,7 +363,7 @@ const screenConfig = {
   beforeInitScreen: (action, state, dispatch) => {
     const applicationNumber = getQueryArg(
       window.location.href,
-      "propertyId"
+      "applicationNumber"
     );
     const tenantId = getQueryArg(window.location.href, "tenantId");
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));

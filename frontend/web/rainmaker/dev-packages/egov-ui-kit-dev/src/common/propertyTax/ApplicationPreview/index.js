@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { getLatestPropertyDetails, getQueryValue } from "egov-ui-kit/utils/PTCommon";
 import { Button, Card } from "components";
 import Screen from "egov-ui-kit/common/common/Screen";
-import { FETCHASSESSMENTS ,PROPERTY} from "egov-ui-kit/utils/endPoints";
+import { FETCHASSESSMENTS, PROPERTY } from "egov-ui-kit/utils/endPoints";
 import { fetchGeneralMDMSData } from "egov-ui-kit/redux/common/actions";
 import { httpRequest } from "egov-ui-kit/utils/api";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
@@ -62,6 +62,7 @@ class ApplicationPreview extends Component {
   }
 
   componentDidMount = () => {
+    this.setPropertyId();
     const { location, fetchGeneralMDMSData, fetchProperties } = this.props;
     const requestBody = {
       MdmsCriteria: {
@@ -118,46 +119,42 @@ class ApplicationPreview extends Component {
       "SubOwnerShipCategory",
     ]);
 
-    const { search } = location;
-    const propertyId = getQueryValue(search, "propertyId");
-    const tenantId = getQueryValue(search, "tenantId");
-    fetchProperties([
-      { key: "propertyIds", value: propertyId },
-      { key: "tenantId", value: tenantId },
-    ]);
+
+
+
     this.fetchApplication();
   };
   fetchApplication = async () => {
-    const applicationType=this.getApplicationType();
+    const applicationType = this.getApplicationType();
     try {
       const payload = await httpRequest(applicationType.endpoint.GET.URL, applicationType.endpoint.GET.ACTION, applicationType.queryParams
       );
 
-      const responseObject=payload[applicationType.responsePath]&&payload[applicationType.responsePath].length>0&&payload[applicationType.responsePath][0];
-      if(!responseObject.workflow){
+      const responseObject = payload[applicationType.responsePath] && payload[applicationType.responsePath].length > 0 && payload[applicationType.responsePath][0];
+      if (!responseObject.workflow) {
 
-      
-      let workflow={
-        "id": null,
-        "tenantId":  getQueryArg(
-          window.location.href,
-          "tenantId"
-        ),
-        "businessService": applicationType.moduleName,
-        "businessId": getQueryArg(
-          window.location.href,
-          "applicationNumber"
-        ),
-        "action": "",
-        "moduleName": "PT",
-        "state": null,
-        "comment": null,
-        "documents": null,
-        "assignes": null
-    }
-    responseObject.workflow=workflow;
-  }
-      this.props.prepareFinalObject(applicationType.dataPath, payload[applicationType.responsePath]&&responseObject)
+
+        let workflow = {
+          "id": null,
+          "tenantId": getQueryArg(
+            window.location.href,
+            "tenantId"
+          ),
+          "businessService": applicationType.moduleName,
+          "businessId": getQueryArg(
+            window.location.href,
+            "applicationNumber"
+          ),
+          "action": "",
+          "moduleName": "PT",
+          "state": null,
+          "comment": null,
+          "documents": null,
+          "assignes": null
+        }
+        responseObject.workflow = workflow;
+      }
+      this.props.prepareFinalObject(applicationType.dataPath, payload[applicationType.responsePath] && responseObject)
     } catch (e) {
       console.log(e);
 
@@ -183,73 +180,133 @@ class ApplicationPreview extends Component {
   //   }
   // };
 
-getApplicationType=()=>{
-  const applicationType = getQueryValue(window.location.href, "type");
-  let applicationObject={}
-if(applicationType=="assessment"){
-  applicationObject.dataPath="Assessment";
-  applicationObject.responsePath="Assessments";
-  applicationObject.moduleName="ASMT";
-  applicationObject.updateUrl="/property-services/assessment/_update";
-  
 
-  applicationObject.queryParams=[
-    {
-      key: "assessmentNumbers", value: getQueryArg(
-        window.location.href,
-        "assessmentNumber"
-      )
-    },
-    {
-      key: "tenantId", value: getQueryArg(
-        window.location.href,
-        "tenantId"
-      )
+  setPropertyId = async () => {
+    const tenantId = getQueryValue(window.location.href, "tenantId");
+    const applicationNumber = getQueryValue(window.location.href, "applicationNumber");
+    const propertyId = await this.getPropertyId(applicationNumber, tenantId);
+    this.props.fetchProperties([
+      { key: "propertyIds", value: propertyId },
+      { key: "tenantId", value: tenantId },
+    ]);
+    this.props.prepareFinalObject('PTApplication.propertyId', propertyId);
+    this.setState({ propertyId });
+
+  }
+  getPropertyId = async (applicationNumber, tenantId) => {
+    const applicationType = getQueryValue(window.location.href, "type");
+    if (applicationType == 'assessment') {
+      const queryObject = [
+        { key: "assessmentNumbers", value: applicationNumber },
+        { key: "tenantId", value: tenantId }
+      ];
+      try {
+        const payload = await httpRequest(
+          "property-services/assessment/_search",
+          "_search",
+          queryObject
+        );
+        if (payload && payload.Assessments.length > 0) {
+          return payload.Assessments[0].propertyId;
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    } else {
+      const queryObject = [
+        { key: "acknowledgementIds", value: applicationNumber },
+        { key: "tenantId", value: tenantId }
+      ];
+      try {
+        const payload = await httpRequest(
+          "property-services/property/_search",
+          "_search",
+          queryObject
+        );
+        if (payload && payload.Properties.length > 0) {
+          return payload.Properties[0].propertyId;
+        }
+      } catch (e) {
+        console.log(e);
+      }
     }
-  ]
+
+  }
+  getApplicationType = () => {
+    const applicationType = getQueryValue(window.location.href, "type");
+    let applicationObject = {}
+    if (applicationType == "assessment") {
+      applicationObject.dataPath = "Assessment";
+      applicationObject.responsePath = "Assessments";
+      applicationObject.moduleName = "ASMT";
+      applicationObject.updateUrl = "/property-services/assessment/_update";
 
 
-  applicationObject.endpoint=FETCHASSESSMENTS;
+      applicationObject.queryParams = [
+        {
+          key: "assessmentNumbers", value: getQueryArg(
+            window.location.href,
+            "applicationNumber"
+          )
+        },
+        {
+          key: "tenantId", value: getQueryArg(
+            window.location.href,
+            "tenantId"
+          )
+        }
+      ]
 
-}else if(applicationType=="property"){
-  applicationObject.responsePath="Properties";
-  applicationObject.dataPath="Property";
-  applicationObject.moduleName="PT.CREATE";
-  applicationObject.updateUrl="/property-services/property/_update";
+
+      applicationObject.endpoint = FETCHASSESSMENTS;
+
+    } else if (applicationType == "property") {
+      applicationObject.responsePath = "Properties";
+      applicationObject.dataPath = "Property";
+      applicationObject.moduleName = "PT.CREATE";
+      applicationObject.updateUrl = "/property-services/property/_update";
 
 
-  applicationObject.queryParams=[
-    {
-      key: "propertyIds", value: getQueryArg(
-        window.location.href,
-        "propertyId"
-      )
-    },
-    {
-      key: "tenantId", value: getQueryArg(
-        window.location.href,
-        "tenantId"
-      )
+      applicationObject.queryParams = [
+        {
+          key: "acknowledgementIds", value: getQueryArg(
+            window.location.href,
+            "applicationNumber"
+          )
+        },
+        {
+          key: "tenantId", value: getQueryArg(
+            window.location.href,
+            "tenantId"
+          )
+        }
+      ]
+
+
+      applicationObject.endpoint = PROPERTY;
+
+
     }
-  ]
-
-
-  applicationObject.endpoint=PROPERTY;
-
-
-}
-return applicationObject;
-}
+    return applicationObject;
+  }
 
   render() {
     const { location, documentsUploaded } = this.props;
     const { search } = location;
-    const propertyId = getQueryValue(search, "propertyId");
+    const applicationNumber = getQueryValue(search, "applicationNumber");
     const { generalMDMSDataById, properties } = this.props;
-    const applicationType= this.getApplicationType();
+    const applicationType = this.getApplicationType();
+
+
+    let header = '';
+    if (applicationType.dataPath == 'Property') {
+      header = 'PT_APPLICATION_TITLE';
+    } else {
+      header = 'PT_ASSESS_APPLICATION_TITLE';
+    }
     return <div>
       <Screen className={""}>
-        <PTHeader header='PT_APPLICATION_TITLE' subHeaderTitle='PT_PROPERTY_APPLICATION_NO' subHeaderValue={propertyId} />
+        <PTHeader header={header} subHeaderTitle='PT_PROPERTY_APPLICATION_NO' subHeaderValue={applicationNumber} />
         <div className="form-without-button-cont-generic" >
           <div>
             <WorkFlowContainer dataPath={applicationType.dataPath}
@@ -271,19 +328,34 @@ return applicationObject;
     </div>
   }
 }
+
+// getApplicationDetailsBasedOnWorkflow(applicationNumber){
+
+
+
+
+// }
+
+
 const mapStateToProps = (state, ownProps) => {
-  const { common = {} } = state;
+  const { common = {}, screenConfiguration = {} } = state;
   const { generalMDMSDataById } = common || {};
   const { propertiesById, loading, } = state.properties || {};
   const { location } = ownProps;
   const { search } = location;
-  const propertyId = getQueryValue(search, "propertyId");
+
+  const { preparedFinalObject = {} } = screenConfiguration;
+  const { PTApplication = {} } = preparedFinalObject;
+  const { propertyId = '' } = PTApplication;
+
+
+
 
   const properties = propertiesById[propertyId] || {};
   const { documentsUploaded } = properties || [];
   return {
     ownProps,
-    generalMDMSDataById, properties, documentsUploaded
+    generalMDMSDataById, properties, documentsUploaded, propertyId
   };
 };
 

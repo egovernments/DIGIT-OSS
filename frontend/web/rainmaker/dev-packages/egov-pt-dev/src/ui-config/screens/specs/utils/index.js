@@ -821,5 +821,17 @@ export const getTextToLocalMapping = label => {
         "TL_MY_APPLICATIONS",
         localisationLabels
       );
+    case "INWORKFLOW":
+      return getLocaleLabels(
+        "In Workflow",
+        "INWORKFLOW",
+        localisationLabels
+      );
+    default:
+      return getLocaleLabels(
+        label,
+        label,
+        localisationLabels
+      );
   }
 };
