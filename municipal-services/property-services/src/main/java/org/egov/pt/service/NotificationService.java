@@ -1,5 +1,6 @@
 package org.egov.pt.service;
 
+import static org.egov.pt.util.PTConstants.CREATE_NOTIF_CODE;
 import static org.egov.pt.util.PTConstants.MT_NO_WORKFLOW;
 import static org.egov.pt.util.PTConstants.UPDATE_NO_WORKFLOW;
 import static org.egov.pt.util.PTConstants.WF_MT_STATUS_APPROVED_CODE;
@@ -15,7 +16,6 @@ import static org.egov.pt.util.PTConstants.WF_STATUS_PAYMENT_PENDING;
 import static org.egov.pt.util.PTConstants.WF_UPDATE_STATUS_APPROVED_CODE;
 import static org.egov.pt.util.PTConstants.WF_UPDATE_STATUS_CHANGE_CODE;
 import static org.egov.pt.util.PTConstants.WF_UPDATE_STATUS_OPEN_CODE;
-import static org.egov.pt.util.PTConstants.CREATE_NOTIF_CODE;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -33,8 +33,6 @@ import org.egov.pt.web.contracts.SMSRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import io.micrometer.core.instrument.MeterRegistry.Config;
 
 @Service
 public class NotificationService {
@@ -81,14 +79,20 @@ public class NotificationService {
 			msg.replace(PTConstants.NOTIFICATION_PAY_LINK, "");
 			break;
 			
+		case WF_STATUS_PAID:
+			break;
+			
 		default:
 			msg = notifUtil.getMessageTemplate(WF_MT_STATUS_CHANGE_CODE, CompleteMsgs);
 			break;
 		}
     	
-    	replaceCommonValues(property, msg);
-    	prepareMsgAndSend(property, msg);
-
+    	// Ignoring paid status, since it's wired from payment consumer directly
+    	
+		if (msg != null) {
+			replaceCommonValues(property, msg);
+			prepareMsgAndSend(property, msg);
+		}
 	}
 
     public void sendNotificationForMtPayment(PropertyRequest propertyRequest, BigDecimal Amount) {

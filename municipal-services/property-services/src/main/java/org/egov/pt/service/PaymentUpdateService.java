@@ -12,6 +12,7 @@ import org.egov.pt.models.collection.Bill;
 import org.egov.pt.models.collection.PaymentDetail;
 import org.egov.pt.models.collection.PaymentRequest;
 import org.egov.pt.models.enums.Status;
+import org.egov.pt.models.workflow.ProcessInstanceRequest;
 import org.egov.pt.models.workflow.State;
 import org.egov.pt.producer.Producer;
 import org.egov.pt.repository.PropertyRepository;
@@ -45,6 +46,9 @@ public class PaymentUpdateService {
 	
 	@Autowired
 	private PropertyUtil util;
+	
+	@Autowired
+	private NotificationService notifService;
 
 	/**
 	 * Process the message from kafka and updates the status to paid
@@ -105,9 +109,13 @@ public class PaymentUpdateService {
 			PropertyRequest updateRequest = PropertyRequest.builder().requestInfo(requestInfo)
 					.property(property).build();
 			
-			State state = wfIntegrator.callWorkFlow(util.getProcessInstanceForMutationPayment(updateRequest));
+			ProcessInstanceRequest wfRequest = util.getProcessInstanceForMutationPayment(updateRequest);
+			
+			State state = wfIntegrator.callWorkFlow(wfRequest);
+			property.setWorkflow(wfRequest.getProcessInstances().get(0));
 			updateRequest.getProperty().setStatus(Status.fromValue(state.getApplicationStatus()));
 			
+			notifService.sendNotificationForMtPayment(updateRequest, bill.getTotalAmount());
 			producer.push(config.getUpdatePropertyTopic(), updateRequest);
 		});
 	}
