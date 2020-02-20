@@ -45,8 +45,8 @@ class SingleApplication extends React.Component {
     }
   };
 
-  onCardClick =  (item) => {
-    const { moduleName } = this.props;
+  onCardClick = async (item) => {
+    const { moduleName, toggleSnackbar } = this.props;
     if (moduleName === "TL") {
       const wfCode = get(item, "workflowCode");
       const businessServiceQueryObject = [
@@ -88,8 +88,20 @@ class SingleApplication extends React.Component {
       }
     } else if (moduleName === "PT-MUTATION") {
       if(item.acknowldgementNumber){
-        const businessService = await getApplicationType(item.acknowldgementNumber, item.tenantId);
-        navigateToApplication(businessService, this.props.history, item.acknowldgementNumber, item.tenantId, item.propertyId);
+        const businessService = await getApplicationType(item.acknowldgementNumber, item.tenantId)
+        console.log("businessService-----", businessService);
+        if(businessService){
+          navigateToApplication(businessService, this.props.history, item.acknowldgementNumber, item.tenantId, item.propertyId);
+        }else{
+          toggleSnackbar(
+            true,
+            {
+              labelName: "Business service returns empty response!",
+              labelKey: "Business service returns empty response!",
+            },
+            "error"
+          );
+        }
       }
     }
   };
