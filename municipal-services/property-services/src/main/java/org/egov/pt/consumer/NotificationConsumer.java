@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 
 import org.egov.pt.config.PropertyConfiguration;
+import org.egov.pt.models.workflow.ProcessInstance;
 import org.egov.pt.service.AssessmentNotificationService;
 import org.egov.pt.service.NotificationService;
 import org.egov.pt.web.contracts.AssessmentRequest;
@@ -49,16 +50,19 @@ public class NotificationConsumer {
 			} else if (topic.equalsIgnoreCase(configs.getSavePropertyTopic())) {
 
 				PropertyRequest request = mapper.convertValue(record, PropertyRequest.class);
-				notifService.sendNotificationForUpdate(request, true);
+				notifService.sendNotificationForUpdate(request);
+				
 			} else if (topic.equalsIgnoreCase(configs.getUpdatePropertyTopic())) {
 
 				PropertyRequest request = mapper.convertValue(record, PropertyRequest.class);
+				ProcessInstance wf  = request.getProperty().getWorkflow();
 
-				if (request.getProperty().getWorkflow() != null) {
-					
-					notifService.sendNotificationForUpdate(request, false);
+				if (wf == null
+						|| (wf != null && wf.getBusinessService().equalsIgnoreCase(configs.getUpdatePTWfName()))) {
+
+					notifService.sendNotificationForUpdate(request);
 				} else {
-					
+
 					notifService.sendNotificationForMutation(request);
 				}
 			}
