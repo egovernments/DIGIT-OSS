@@ -149,7 +149,6 @@
                 "value": {
                   "path": "$.tenantId"
                 },
-                "type": "label",
                 "localisation":{
                   "required":true,
                   "prefix": "PDF_STATIC_LABEL_MUTATION_DECLARATION_LABEL",
