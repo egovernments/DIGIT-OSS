@@ -34,16 +34,16 @@ const screenConfig = {
             contents: [
               {
                 label: "PT_MUTATION_APPLICATION_NO",
-                jsonPath: "propertyId"
+                jsonPath: "acknowldgementNumber"
               },
               {
                 label: "PT_MUTATION_PID",
-                jsonPath: "owners[0].name"
+                jsonPath: "propertyId"
               },
-              {
-                label: "PT_MUTATION_APPLICATION_TYPE",
-                jsonPath: "propertyType"
-              },
+              // {
+              //   label: "PT_MUTATION_APPLICATION_TYPE",
+              //   jsonPath: "propertyType"
+              // },
               {
                 label: "PT_MUTATION_CREATION_DATE",
                 jsonPath: "auditDetails.createdTime"
@@ -51,7 +51,7 @@ const screenConfig = {
               {
                 label: "PT_MUTATION_STATUS",
                 jsonPath: "status",
-                prefix: "WF_FIRENOC_"
+                prefix: "WF_PT_"
               }
             ],
             moduleName: "PT-MUTATION",

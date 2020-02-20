@@ -835,3 +835,7 @@ export const getTextToLocalMapping = label => {
       );
   }
 };
+
+export const checkValueForNA = value => {
+  return value ? value : "NA";
+};

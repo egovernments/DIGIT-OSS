@@ -25,7 +25,7 @@ import {
   localStorageGet,
   getLocale
 } from "egov-ui-kit/utils/localStorageUtils";
-import { getDateFromEpoch, navigateToApplication } from "egov-ui-kit/utils/commons";
+import { getDateFromEpoch, navigateToApplication, getApplicationType } from "egov-ui-kit/utils/commons";
 import "./index.css";
 
 const PropertySearchFormHOC = formHoc({
@@ -112,27 +112,9 @@ class SearchProperty extends Component {
     }
   };
 
-  getApplicationType = async (applicationNumber, tenantId) => {
-    const queryObject = [
-      { key: "businessIds", value: applicationNumber },
-      { key: "history", value: true },
-      { key: "tenantId", value: tenantId }
-    ];
-    try {
-      const payload = await httpRequest(
-        "egov-workflow-v2/egov-wf/process/_search",
-        "_search",
-        queryObject
-      );
-      if (payload && payload.ProcessInstances.length > 0) {
-        return payload.ProcessInstances[0].businessService;
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  }
+  
   onApplicationClick =async (applicationNo, tenantId, propertyId) => {
-    const businessService = await this.getApplicationType(applicationNo, tenantId);
+    const businessService = await getApplicationType(applicationNo, tenantId);
     navigateToApplication(businessService, this.props.history, applicationNo, tenantId, propertyId);
   }
   

@@ -14,6 +14,7 @@ import { checkValueForNA } from "../../ui-config/screens/specs/utils";
 import { localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { convertEpochToDate } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getDateFromEpoch, navigateToApplication, getApplicationType } from "egov-ui-kit/utils/commons";
 import orderBy from "lodash/orderBy";
 const styles = {
   card: {
@@ -86,11 +87,9 @@ class SingleApplication extends React.Component {
         }        
       }
     } else if (moduleName === "PT-MUTATION") {
-      switch (item.status) {
-        case "INITIATED":
-          return `/pt-mutation/apply?propertyId=${item.propertyId}&tenantId=${item.tenantId}`;
-        default:
-          return `/pt-mutation/search-preview?applicationNumber=${item.acknowldgementNumber}&tenantId=${item.tenantId}`;
+      if(item.acknowldgementNumber){
+        const businessService = await getApplicationType(item.acknowldgementNumber, item.tenantId);
+        navigateToApplication(businessService, this.props.history, item.acknowldgementNumber, item.tenantId, item.propertyId);
       }
     }
   };

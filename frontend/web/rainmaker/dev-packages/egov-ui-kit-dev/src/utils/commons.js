@@ -780,3 +780,23 @@ export const navigateToApplication = (businessService, propsHistory, application
     console.log('Navigation Error');
   }
 }
+
+export const getApplicationType = async (applicationNumber, tenantId) => {
+  const queryObject = [
+    { key: "businessIds", value: applicationNumber },
+    { key: "history", value: true },
+    { key: "tenantId", value: tenantId }
+  ];
+  try {
+    const payload = await httpRequest(
+      "egov-workflow-v2/egov-wf/process/_search",
+      "_search",
+      queryObject
+    );
+    if (payload && payload.ProcessInstances.length > 0) {
+      return payload.ProcessInstances[0].businessService;
+    }
+  } catch (e) {
+    console.log(e);
+  }
+}

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { List, Icon, Card } from "components";
+import store from "ui-redux/store";
 import Label from "egov-ui-kit/utils/translationNode";
 import { Link } from "react-router-dom";
 import { Screen, ModuleLandingPage } from "modules/common";
@@ -9,6 +10,7 @@ import { addBreadCrumbs } from "egov-ui-kit/redux/app/actions";
 import { getFinalAssessments } from "../common/TransformedAssessments";
 import MyPropertyIcon from "@material-ui/icons/Home";
 import PropertyIcon from "@material-ui/icons/CreditCard";
+import { fetchData } from "egov-pt/ui-config/screens/specs/pt-mutation/searchResource/citizenSearchFunctions";
 import get from "lodash/get";
 import "./index.css";
 
@@ -59,7 +61,7 @@ class PTHome extends Component {
     overflow: "visible"
   };
   getCardItems = () => {
-    const { numProperties, numDrafts } = this.props;
+    const { numProperties, numDrafts, myApplicationsCount } = this.props;
     return [
       {
         label: "PT_PAYMENT_PAY_PROPERTY_TAX",
@@ -76,7 +78,7 @@ class PTHome extends Component {
       },{
         label: "PT_MUTATION_MY_APPLICATIONS",
         icon: <Icon style={iconStyle} action="custom" name="home-account" />,
-        dynamicArray: [numProperties],
+        dynamicArray: [myApplicationsCount],
         route: "/pt-mutation/my-applications"
       }
     ];
@@ -162,6 +164,7 @@ class PTHome extends Component {
         { key: "txnStatus", value: "FAILURE" }
       ]
     );
+    fetchData(null, null, store.dispatch);
   };
 
   handleItemClick = (item, index) => {
@@ -288,7 +291,9 @@ const getTransformedItems = propertiesById => {
 };
 
 const mapStateToProps = state => {
-  const { properties } = state;
+  const { properties, screenConfiguration} = state;
+  const {preparedFinalObject} = screenConfiguration;
+  const {myApplicationsCount} = preparedFinalObject;
   const { propertiesById, draftsById, loading, failedPayments } =
     properties || {};
   const numProperties = propertiesById && Object.keys(propertiesById).length;
@@ -314,7 +319,7 @@ const mapStateToProps = state => {
     []
   );
   const numDrafts = transformedDrafts.length + numFailedPayments;
-  return { numProperties, numDrafts, loading };
+  return { numProperties, numDrafts, loading, myApplicationsCount };
 };
 
 const mapDispatchToProps = dispatch => {
