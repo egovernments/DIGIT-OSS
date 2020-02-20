@@ -53,7 +53,7 @@ serviceMaps:
 
       - jsonPath: $.Assessment[?({id} in @.unitUsageList[*].id)].id
 
-      - jsonPath: $.Assessment.unitUsageList.*.unitid
+      - jsonPath: $.Assessment.unitUsageList.*.unitId
 
       - jsonPath: $.Assessment.unitUsageList.*.usageCategory
 
