@@ -256,7 +256,9 @@ public class TLConstants {
 
     public static final String NOTIF_EXPIRY_DATE_KEY = "{EXPIRY_DATE}";
 
+    public static final String JOB_SMS_REMINDER = "REMINDER";
 
+    public static final String JOB_EXPIRY = "EXPIRY";
 
 
     public TLConstants() {}

@@ -331,7 +331,7 @@ public class TradeLicenseService {
      *
      * @param serviceName
      */
-    public void sendReminderSMS(String serviceName){
+    public void runJob(String serviceName, String jobname){
 
         if(serviceName == null)
             serviceName = TRADE_LICENSE_MODULE_CODE;
@@ -341,7 +341,7 @@ public class TradeLicenseService {
 
         RequestInfo requestInfo = new RequestInfo();
 
-        tlReminderNotification.getLicensesAndSendReminder(serviceName, validTill, requestInfo);
+        tlReminderNotification.getLicensesAndPerformAction(serviceName, jobname, validTill, requestInfo);
 
 
     }

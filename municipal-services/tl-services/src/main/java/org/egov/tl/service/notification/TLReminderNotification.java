@@ -18,8 +18,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.*;
 
-import static org.egov.tl.util.TLConstants.ACTION_EXPIRE;
-import static org.egov.tl.util.TLConstants.STATUS_APPROVED;
+import static org.egov.tl.util.TLConstants.*;
 
 @Component
 @Slf4j
@@ -57,7 +56,7 @@ public class TLReminderNotification {
      * @param validTill
      * @param requestInfo
      */
-    public void getLicensesAndSendReminder(String serviceName, Long validTill, RequestInfo requestInfo){
+    public void getLicensesAndPerformAction(String serviceName, String jobName, Long validTill, RequestInfo requestInfo){
 
         TradeLicenseSearchCriteria criteria = TradeLicenseSearchCriteria.builder()
                                         .businessService(serviceName)
@@ -78,7 +77,11 @@ public class TLReminderNotification {
 
             licenses = enrichmentService.enrichTradeLicenseSearch(licenses, criteria, requestInfo);
 
-            sendReminderSMS(requestInfo, licenses);
+            if(jobName.equalsIgnoreCase(JOB_SMS_REMINDER))
+                sendReminderSMS(requestInfo, licenses);
+
+            else if(jobName.equalsIgnoreCase(JOB_EXPIRY))
+                expireLicenses(requestInfo, licenses);
 
             offSet = offSet + config.getPaginationSize();
 
@@ -130,7 +133,6 @@ public class TLReminderNotification {
          });
 
         workflowIntegrator.callWorkFlow(new TradeLicenseRequest(requestInfo, licenses));
-
 
     }
 

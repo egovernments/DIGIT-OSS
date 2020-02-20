@@ -76,10 +76,11 @@ import javax.servlet.http.HttpServletRequest;
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @RequestMapping(value = {"/{servicename}/_reminder", "/_reminder"}, method = RequestMethod.POST)
-    public ResponseEntity sendReminderSMS(@PathVariable(required = false) String servicename) {
+    @RequestMapping(value = {"/{servicename}/{jobname}/_batch", "/_batch"}, method = RequestMethod.POST)
+    public ResponseEntity sendReminderSMS(@PathVariable(required = false) String servicename,
+                                          @PathVariable(required = true) String jobname) {
 
-        tradeLicenseService.sendReminderSMS(servicename);
+        tradeLicenseService.runJob(servicename, jobname);
 
         return new ResponseEntity(HttpStatus.ACCEPTED);
     }
