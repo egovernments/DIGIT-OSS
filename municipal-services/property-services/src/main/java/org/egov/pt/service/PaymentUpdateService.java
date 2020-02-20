@@ -67,10 +67,9 @@ public class PaymentUpdateService {
 
 			for (PaymentDetail paymentDetail : paymentDetails) {
 				
-				Boolean isModuleExists = config.getBusinessServiceList().contains(paymentDetail.getBusinessService());
 				Boolean isModuleMutation = paymentDetail.getBusinessService().equalsIgnoreCase(config.getMutationWfName());
 				
-				if (isModuleExists && isModuleMutation) {
+				if (isModuleMutation) {
 
 					updateWorkflowForMutationPayment(requestInfo, tenantId, paymentDetail);
 				}
