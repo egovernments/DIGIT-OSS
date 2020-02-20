@@ -2073,7 +2073,7 @@
       {
         "postAggregationTheory" : "",
         "actionName": "PercentageComputedField",
-        "fields" : ["Total Complaints", "withinSLA"],
+        "fields" : ["withinSLA","Total Complaints"],
         "newField" : "Sla Achieved",
         "_comments": "fields are field names picked from its aggregation query to use post aggregation newField value with given new field name  "
       }
