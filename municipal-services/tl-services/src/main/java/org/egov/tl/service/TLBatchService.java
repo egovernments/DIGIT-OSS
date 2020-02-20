@@ -1,11 +1,9 @@
-package org.egov.tl.service.notification;
-
+package org.egov.tl.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.tl.config.TLConfiguration;
 import org.egov.tl.repository.TLRepository;
-import org.egov.tl.service.EnrichmentService;
 import org.egov.tl.util.NotificationUtil;
 import org.egov.tl.web.models.SMSRequest;
 import org.egov.tl.web.models.TradeLicense;
@@ -16,13 +14,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import static org.egov.tl.util.TLConstants.*;
 
-@Component
+
 @Slf4j
-public class TLReminderNotification {
+@Component
+public class TLBatchService {
 
 
 
@@ -38,14 +40,16 @@ public class TLReminderNotification {
 
 
     @Autowired
-    public TLReminderNotification(NotificationUtil util, TLConfiguration config, TLRepository repository,
-                                  EnrichmentService enrichmentService, WorkflowIntegrator workflowIntegrator) {
+    public TLBatchService(NotificationUtil util, TLConfiguration config, TLRepository repository,
+                          EnrichmentService enrichmentService, WorkflowIntegrator workflowIntegrator) {
         this.util = util;
         this.config = config;
         this.repository = repository;
         this.enrichmentService = enrichmentService;
         this.workflowIntegrator = workflowIntegrator;
     }
+
+
 
 
 
@@ -59,11 +63,11 @@ public class TLReminderNotification {
     public void getLicensesAndPerformAction(String serviceName, String jobName, Long validTill, RequestInfo requestInfo){
 
         TradeLicenseSearchCriteria criteria = TradeLicenseSearchCriteria.builder()
-                                        .businessService(serviceName)
-                                        .validTo(validTill)
-                                        .status(STATUS_APPROVED)
-                                        .limit(config.getPaginationSize())
-                                        .build();
+                .businessService(serviceName)
+                .validTo(validTill)
+                .status(STATUS_APPROVED)
+                .limit(config.getPaginationSize())
+                .build();
 
         int offSet = 0;
 
@@ -106,8 +110,8 @@ public class TLReminderNotification {
 
         for(TradeLicense license : licenses){
 
-           String message = util.getReminderMsg(license, localizationMessages);
-           Map<String,String > mobileNumberToOwner = new HashMap<>();
+            String message = util.getReminderMsg(license, localizationMessages);
+            Map<String,String > mobileNumberToOwner = new HashMap<>();
 
             license.getTradeLicenseDetail().getOwners().forEach(owner -> {
                 if(owner.getMobileNumber()!=null)
@@ -128,9 +132,9 @@ public class TLReminderNotification {
      */
     private void expireLicenses(RequestInfo requestInfo, List<TradeLicense> licenses){
 
-         licenses.forEach(license -> {
-             license.setAction(ACTION_EXPIRE);
-         });
+        licenses.forEach(license -> {
+            license.setAction(ACTION_EXPIRE);
+        });
 
         workflowIntegrator.callWorkFlow(new TradeLicenseRequest(requestInfo, licenses));
 
@@ -146,6 +150,8 @@ public class TLReminderNotification {
     private String getStateLevelTenant(String tenantId){
         return tenantId.split("\\.")[0];
     }
+
+
 
 
 }

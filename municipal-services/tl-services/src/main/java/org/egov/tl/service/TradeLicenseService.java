@@ -8,7 +8,6 @@ import org.egov.common.contract.request.RequestInfo;
 import org.egov.tl.config.TLConfiguration;
 import org.egov.tl.repository.TLRepository;
 import org.egov.tl.service.notification.EditNotificationService;
-import org.egov.tl.service.notification.TLReminderNotification;
 import org.egov.tl.util.TLConstants;
 import org.egov.tl.util.TradeUtil;
 import org.egov.tl.validator.TLValidator;
@@ -60,7 +59,7 @@ public class TradeLicenseService {
 
     private TradeUtil tradeUtil;
 
-    private TLReminderNotification tlReminderNotification;
+    private TLBatchService tlBatchService;
 
     @Value("${workflow.bpa.businessServiceCode.fallback_enabled}")
     private Boolean pickWFServiceNameFromTradeTypeOnly;
@@ -71,7 +70,7 @@ public class TradeLicenseService {
                                TLValidator tlValidator, TLWorkflowService TLWorkflowService,
                                CalculationService calculationService, TradeUtil util, DiffService diffService,
                                TLConfiguration config, EditNotificationService editNotificationService, WorkflowService workflowService,
-                               TradeUtil tradeUtil, TLReminderNotification tlReminderNotification) {
+                               TradeUtil tradeUtil, TLBatchService tlBatchService) {
         this.wfIntegrator = wfIntegrator;
         this.enrichmentService = enrichmentService;
         this.userService = userService;
@@ -86,7 +85,7 @@ public class TradeLicenseService {
         this.editNotificationService = editNotificationService;
         this.workflowService = workflowService;
         this.tradeUtil = tradeUtil;
-        this.tlReminderNotification = tlReminderNotification;
+        this.tlBatchService = tlBatchService;
     }
 
 
@@ -341,7 +340,7 @@ public class TradeLicenseService {
 
         RequestInfo requestInfo = new RequestInfo();
 
-        tlReminderNotification.getLicensesAndPerformAction(serviceName, jobname, validTill, requestInfo);
+        tlBatchService.getLicensesAndPerformAction(serviceName, jobname, validTill, requestInfo);
 
 
     }

@@ -436,7 +436,8 @@ public class NotificationUtil {
 	public List<SMSRequest> createSMSRequest(String message, Map<String, String> mobileNumberToOwnerName) {
 		List<SMSRequest> smsRequest = new LinkedList<>();
 		for (Map.Entry<String, String> entryset : mobileNumberToOwnerName.entrySet()) {
-			String customizedMsg = message.replace(NOTIF_OWNER_NAME_KEY, entryset.getValue());
+			String customizedMsg = message.replace("<1>", entryset.getValue());
+			customizedMsg = customizedMsg.replace(NOTIF_OWNER_NAME_KEY, entryset.getValue());
 			smsRequest.add(new SMSRequest(entryset.getKey(), customizedMsg));
 		}
 		return smsRequest;
