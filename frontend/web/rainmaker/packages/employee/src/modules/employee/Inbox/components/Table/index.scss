@@ -112,7 +112,10 @@
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0,   0.19);
   cursor : pointer;
 }
-
+#root > div > main > div > div.col-xs-12 > div.col-xs-12.col-sm-10.with-full-menu > div > div > div.col-md-12.col-sm-12.col-xs-12 > div.backgroundWhite > div:nth-child(2) > table > tbody > tr:nth-child(1) > td.jss273.jss275.inbox-data-table-bodycell.inbox-data-table-bodycell-0,
+#root > div > main > div > div.col-xs-12 > div.col-xs-12.col-sm-10.with-full-menu > div > div > div.col-md-12.col-sm-12.col-xs-12 > div.backgroundWhite > div:nth-child(2) > table > thead > tr > th.MuiTableCell-root-273.MuiTableCell-head-274.inbox-data-table-headcell.inbox-data-table-headcell-4{
+  width:230px!important;
+}
 .inbox-worklist-card {
   -webkit-box-shadow: none !important;
   box-shadow: none !important;
@@ -197,9 +200,10 @@
     display: block !important;
     width: 100% !important;
   }
-  .inbox-data-table-bodycell-0{
-    width: 200px;
-  }
+  // .inbox-data-table-bodycell-0,
+  // .inbox-data-table-bodycell-4{
+  //   width: 230px!important;
+  // }
   .inbox-card-top {
     height: 148px;
   }
