@@ -184,6 +184,19 @@ public class PTConstants {
     public static final String NOTIFICATION_OWNERNAME = "{OWNER_NAME}";
 
     public static final String NOTIFICATION_STATUS = "{STATUS}";
+    
+    public static final String NOTIFICATION_UPDATE_CREATE_REPLACE = "{update/create}";
+    
+    public static final String NOTIFICATION_UPDATED_CREATED_REPLACE = "{updated/created}";
+    
+    public static final String CREATE_STRING = "Create";
+    
+    public static final String UPDATE_STRING = "Update";
+    
+    public static final String CREATED_STRING = "Created";
+    
+    public static final String UPDATED_STRING = "Updated";
+    
 
     public static final String NOTIFICATION_PROPERTYID = "{PROPERTYID}";
     

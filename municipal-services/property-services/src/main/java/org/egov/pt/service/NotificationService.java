@@ -1,7 +1,8 @@
 package org.egov.pt.service;
 
-import static org.egov.pt.util.PTConstants.CREATE_NOTIF_CODE;
 import static org.egov.pt.util.PTConstants.MT_NO_WORKFLOW;
+import static org.egov.pt.util.PTConstants.NOTIFICATION_UPDATED_CREATED_REPLACE;
+import static org.egov.pt.util.PTConstants.NOTIFICATION_UPDATE_CREATE_REPLACE;
 import static org.egov.pt.util.PTConstants.UPDATE_NO_WORKFLOW;
 import static org.egov.pt.util.PTConstants.WF_MT_STATUS_APPROVED_CODE;
 import static org.egov.pt.util.PTConstants.WF_MT_STATUS_CHANGE_CODE;
@@ -25,7 +26,6 @@ import java.util.Map;
 
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.Property;
-import org.egov.pt.models.workflow.ProcessInstance;
 import org.egov.pt.util.NotificationUtil;
 import org.egov.pt.util.PTConstants;
 import org.egov.pt.web.contracts.PropertyRequest;
@@ -111,7 +111,7 @@ public class NotificationService {
     	}
     }
     
-    public void sendNotificationForUpdate (PropertyRequest propertyRequest, Boolean isCreate) {
+    public void sendNotificationForUpdate (PropertyRequest propertyRequest) {
     	
     	
     	Property property = propertyRequest.getProperty();
@@ -119,37 +119,33 @@ public class NotificationService {
     	String CompleteMsgs = notifUtil.getLocalizationMessages(property.getTenantId(), propertyRequest.getRequestInfo());
     	String msg = null;
     	String state = null;
-    	ProcessInstance wf = property.getWorkflow();
     	
-		if (isCreate && (wf == null
-				|| (wf != null && wf.getBusinessService().equalsIgnoreCase(configs.getCreatePTWfName()))))
-			state = "NOTIF_CREATE";
-		else
-			state = property.getWorkflow() != null ? property.getWorkflow().getState().getState() : WF_NO_WORKFLOW;
+    	String business  = property.getWorkflow().getBusinessService();
+    	Boolean isCreate = business.equalsIgnoreCase(configs.getCreatePTWfName());
+    	
+		state = property.getWorkflow() != null ? property.getWorkflow().getState().getState() : WF_NO_WORKFLOW;
 
     	switch (state) {
-    	
-    	case "NOTIF_CREATE" :
-    		msg = notifUtil.getMessageTemplate(CREATE_NOTIF_CODE, CompleteMsgs);
-    		break;
     	
 		case WF_NO_WORKFLOW :
 			
 			msg = notifUtil.getMessageTemplate(UPDATE_NO_WORKFLOW, CompleteMsgs);
-			
+			msg = msg.replace(NOTIFICATION_UPDATED_CREATED_REPLACE, isCreate ? PTConstants.CREATED_STRING : PTConstants.UPDATED_STRING);
 			break;	
     	
 		case WF_STATUS_OPEN :
 			msg = notifUtil.getMessageTemplate(WF_UPDATE_STATUS_OPEN_CODE, CompleteMsgs);
-			
+			msg = msg.replace(NOTIFICATION_UPDATE_CREATE_REPLACE, isCreate ? PTConstants.CREATED_STRING : PTConstants.UPDATED_STRING);
 			break;	
 			
 		case WF_STATUS_APPROVED :
 			msg = notifUtil.getMessageTemplate(WF_UPDATE_STATUS_APPROVED_CODE, CompleteMsgs);
+			msg = msg.replace(NOTIFICATION_UPDATED_CREATED_REPLACE, isCreate ? PTConstants.CREATED_STRING : PTConstants.UPDATED_STRING);
 			break;
 			
 		default:
 			msg = notifUtil.getMessageTemplate(WF_UPDATE_STATUS_CHANGE_CODE, CompleteMsgs);
+			msg = msg.replace(NOTIFICATION_UPDATE_CREATE_REPLACE, isCreate ? PTConstants.CREATED_STRING : PTConstants.UPDATED_STRING);
 			break;
 		}
     	
