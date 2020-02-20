@@ -30,7 +30,7 @@
                     {
                       "stack": [
                         {
-                          "text": "{{ULB_CITY}}{{municipal_corportaion}}",
+                          "text": "{{ULB_CITY}} {{municipal_corportaion}}",
                           "style": "receipt-logo-header"
                         },
                         {
