@@ -25,7 +25,7 @@ import {
   localStorageGet,
   getLocale
 } from "egov-ui-kit/utils/localStorageUtils";
-import { getDateFromEpoch } from "egov-ui-kit/utils/commons";
+import { getDateFromEpoch, navigateToApplication } from "egov-ui-kit/utils/commons";
 import "./index.css";
 
 const PropertySearchFormHOC = formHoc({
@@ -133,13 +133,7 @@ class SearchProperty extends Component {
   }
   onApplicationClick =async (applicationNo, tenantId, propertyId) => {
     const businessService = await this.getApplicationType(applicationNo, tenantId);
-    if (businessService == 'PT.MUTATION') {
-      this.props.history.push(`/pt-mutation/search-preview?applicationNumber=${applicationNo}&propertyId=${propertyId}&tenantId=${tenantId}`);
-    } else if (businessService == 'PT.CREATE') {
-      this.props.history.push(`/property-tax/application-preview?propertyId=${propertyId}&applicationNumber=${applicationNo}&tenantId=${tenantId}&type=property`);
-    } else {
-      console.log('Search Error');
-    }
+    navigateToApplication(businessService, this.props.history, applicationNo, tenantId, propertyId);
   }
   
   getApplicationLink = (applicationNo, tenantId, propertyId) => {

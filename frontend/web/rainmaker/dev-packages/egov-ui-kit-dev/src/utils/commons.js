@@ -770,3 +770,13 @@ export const onNotificationClick = async (history) => {
 export const getTotalAmountDue = (payload) => {
   return payload && payload.Bill && payload.Bill.length > 0 && payload.Bill[0].totalAmount ? payload.Bill[0].totalAmount : 0;
 }
+
+export const navigateToApplication = (businessService, propsHistory, applicationNo, tenantId, propertyId) => {
+  if (businessService == 'PT.MUTATION') {
+    propsHistory.push(`/pt-mutation/search-preview?applicationNumber=${applicationNo}&propertyId=${propertyId}&tenantId=${tenantId}`);
+  } else if (businessService == 'PT.CREATE') {
+    propsHistory.push(`/property-tax/application-preview?propertyId=${propertyId}&applicationNumber=${applicationNo}&tenantId=${tenantId}&type=property`);
+  } else {
+    console.log('Navigation Error');
+  }
+}
