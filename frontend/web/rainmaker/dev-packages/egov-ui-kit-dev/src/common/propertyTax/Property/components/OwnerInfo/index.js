@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Card } from "components";
 import { withRouter } from "react-router-dom";
+import { convertEpochToDate } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { httpRequest } from "egov-ui-kit/utils/api";
 import Label from "egov-ui-kit/utils/translationNode";
 import { getTranslatedLabel } from "egov-ui-kit/utils/commons";
 import { initLocalizationLabels } from "egov-ui-kit/redux/app/utils";
@@ -19,11 +21,63 @@ class OwnerInfo extends Component {
   state = {
     pendingAmountDue: false,
     viewHistory: false,
+    ownershipInfo: {}
   };
 
-  openDialog = (dialogName) => {
+  transformData = (data, key) => {
+    let itemKey = [];
+    data.map(item=>{
+      itemKey.push({
+        Name: item.name,
+        "Gaurdian's Name": item.fatherOrHusbandName,
+        Gender: item.gender,
+        "Date Of Birth": convertEpochToDate(item.dob),
+        "Mobile No.": item.mobileNumber,
+        Email: item.emailId,
+        "Special Category": item.ownerType,
+        "Correspondence Address": item.correspondenceAddress,
+      });
+    });
+    return itemKey;
+  }
+
+  getPropertyResponse = async (propertyId, tenantId, dialogName) => {    
+      const queryObject = [
+        { key: "propertyIds", value: propertyId },
+        { key: "tenantId", value: tenantId },
+        { key: "audit", value: true }
+      ];
+      let ownershipInfo = {};
+      try {
+        const payload = await httpRequest(
+          "property-services/property/_search",
+          "_search",
+          queryObject
+        );
+        if (payload && payload.Properties.length > 0) {
+          payload.Properties.map((item)=>{
+            const lastModifiedDate = convertEpochToDate(item.auditDetails.lastModifiedTime);
+            if(!ownershipInfo[lastModifiedDate]){
+              ownershipInfo[lastModifiedDate] = [];
+            }
+            ownershipInfo[lastModifiedDate].push(...this.transformData(item.owners))
+          });
+          this.setState({ [dialogName]: true, ownershipInfo });
+          return true;
+        }
+      } catch (e) {
+        console.log(e);
+      }
+  }
+
+  openDialog = async (dialogName) => {
+    const { properties } = this.props;
+    const { propertyId, tenantId } = properties;
     if(this.props.totalBillAmountDue === 0 && dialogName !== "viewHistory"){
-      this.props.history.push(`/pt-mutation/apply?consumerCode=${this.props.properties.propertyId}&tenantId=${this.props.properties.tenantId}`);
+      this.props.history.push(`/pt-mutation/apply?consumerCode=${propertyId}&tenantId=${tenantId}`);
+    } else if (dialogName === "viewHistory") {
+      await this.getPropertyResponse(propertyId, tenantId, dialogName);
+      
     } else {
       this.setState({ [dialogName]: true });
     }
@@ -244,7 +298,7 @@ class OwnerInfo extends Component {
         {this.state.viewHistory && (
           <ViewHistoryDialog
             open={this.state.viewHistory}
-            amount={totalBillAmountDue}
+            ownershipInfo={this.state.ownershipInfo}
             closeDialogue={() => this.closeDialogue("viewHistory")}
           ></ViewHistoryDialog>
         )}

@@ -16,76 +16,7 @@ const contentStyle = {
   maxWidth: "fit-content",
 };
 
-const historyData = {
-  "14/04/2018": [
-    {
-      Name: "Satinder Singh",
-      "Gaurdian's Name": "Jaswinder Singh",
-      Gender: "Male",
-      "Date Of Birth": "12/12/1980",
-      "Mobile No.": "965643455",
-      Email: "satinder@gmail.com",
-      "Special Category": "Not Applicable",
-      "Correspondence Address": "707/B, railway Colony, Vikarnagar, Amritsar",
-    },
-  ],
-  "14/04/2019": [
-    {
-      Name: "Satinder Singh",
-      "Gaurdian's Name": "Jaswinder Singh",
-      Gender: "Male",
-      "Date Of Birth": "12/12/1980",
-      "Mobile No.": "965643455",
-      Email: "satinder@gmail.com",
-      "Special Category": "Not Applicable",
-      "Correspondence Address": "707/B, railway Colony, Vikarnagar, Amritsar",
-    },
-    {
-      Name: "Satinder Singh",
-      "Gaurdian's Name": "Jaswinder Singh",
-      Gender: "Male",
-      "Date Of Birth": "12/12/1980",
-      "Mobile No.": "965643455",
-      Email: "satinder@gmail.com",
-      "Special Category": "Not Applicable",
-      "Correspondence Address": "707/B, railway Colony, Vikarnagar, Amritsar",
-    },
-  ],
-  "14/04/2020": [
-    {
-      Name: "Satinder Singh",
-      "Gaurdian's Name": "Jaswinder Singh",
-      Gender: "Male",
-      "Date Of Birth": "12/12/1980",
-      "Mobile No.": "965643455",
-      Email: "satinder@gmail.com",
-      "Special Category": "Not Applicable",
-      "Correspondence Address": "707/B, railway Colony, Vikarnagar, Amritsar",
-    },
-    {
-      Name: "Satinder Singh",
-      "Gaurdian's Name": "Jaswinder Singh",
-      Gender: "Male",
-      "Date Of Birth": "12/12/1980",
-      "Mobile No.": "965643455",
-      Email: "satinder@gmail.com",
-      "Special Category": "Not Applicable",
-      "Correspondence Address": "707/B, railway Colony, Vikarnagar, Amritsar",
-    },
-    {
-      Name: "Satinder Singh",
-      "Gaurdian's Name": "Jaswinder Singh",
-      Gender: "Male",
-      "Date Of Birth": "12/12/1980",
-      "Mobile No.": "965643455",
-      Email: "satinder@gmail.com",
-      "Special Category": "Not Applicable",
-      "Correspondence Address": "707/B, railway Colony, Vikarnagar, Amritsar",
-    },
-  ],
-};
-
-const ViewHistoryDialog = ({ open, closeDialogue }) => {
+const ViewHistoryDialog = ({ open, closeDialogue, ownershipInfo }) => {
   return (
     <Dialog
       open={open}
@@ -93,13 +24,13 @@ const ViewHistoryDialog = ({ open, closeDialogue }) => {
         <div style={{ margin: 16 }}>
           <Label label="PT_OWNER_HISTORY" fontSize="20px" labelClassName="owner-history" />
           <br />
-          {Object.keys(historyData).map((key) => {
+          {Object.keys(ownershipInfo).map((key) => {
             return (
               <div className="dialog-content">
                 <div className="oval-class"></div>
                 <Label label="PT_DATE_OF_TRANSFER" fontSize="14px" className="date-of-transfer" labelClassName="date-of-transfer" />
                 <span className="date-of-transfer">&nbsp;-&nbsp;{key}</span>
-                <TransferDetails data={historyData[key]} />
+                <TransferDetails data={ownershipInfo[key]} />
               </div>
             );
           })}
