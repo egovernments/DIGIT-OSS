@@ -28,14 +28,14 @@ class OwnerInfo extends Component {
     let itemKey = [];
     data.map(item=>{
       itemKey.push({
-        Name: item.name,
-        "Gaurdian's Name": item.fatherOrHusbandName,
-        Gender: item.gender,
-        "Date Of Birth": convertEpochToDate(item.dob),
-        "Mobile No.": item.mobileNumber,
-        Email: item.emailId,
-        "Special Category": item.ownerType,
-        "Correspondence Address": item.correspondenceAddress,
+        "PT_OWNER_NAME": item.name,
+        "PT_GUARDIANS_NAME": item.fatherOrHusbandName,
+        "PT_GENDER": item.gender,
+        "PT_OWNERSHIP_INFO_DOB": convertEpochToDate(item.dob),
+        "PT_OWNER_MOBILE_NO": item.mobileNumber,
+        "PT_MUTATION_AUTHORISED_EMAIL": item.emailId,
+        "PT_MUTATION_TRANSFEROR_SPECIAL_CATEGORY": item.ownerType,
+        "PT_OWNERSHIP_INFO_CORR_ADDR": item.correspondenceAddress,
       });
     });
     return itemKey;
