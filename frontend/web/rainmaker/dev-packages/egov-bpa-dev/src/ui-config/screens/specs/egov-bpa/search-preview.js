@@ -60,7 +60,7 @@ const titlebar = getCommonContainer({
       moduleName: "egov-bpa",
       componentPath: "ApplicationNoContainer",
       props: {
-        number: getQueryArg(window.location.href, "applicationNumber")
+        number: ""
       }
     },
 });
@@ -383,6 +383,15 @@ const setSearchResponse = async (
     )
   )
   }
+
+  dispatch(
+    handleField(
+      "search-preview",
+      "components.div.children.headerDiv.children.header.children.applicationNumber",
+      "props.number",
+      applicationNumber
+    )
+  );
 
   // Set Institution/Applicant info card visibility
   if (

@@ -236,8 +236,12 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
 
     let wfDocuments;
     if (method === "UPDATE") {
-      documents = payload.documents;
-      documents = requiredDocuments;
+      if (status === "APPLY") {
+        documents = payload.documents
+      } else {
+        documents = payload.documents;
+        documents = requiredDocuments;
+      }
       set(payload, "documents", documents);
       set(payload, "wfDocuments", null);
     } else if( method === 'CREATE') {

@@ -3396,7 +3396,9 @@ export const getBpaTextToLocalMapping = label => {
       return getLocaleLabels("Inprogress", "WF_BPA_INPROGRESS", localisationLabels);
     case "PENDING_APPL_FEE":
       return getLocaleLabels("Pedding Application Fee", "WF_BPA_PENDING_APPL_FEE", localisationLabels);
-  }
+    case "CITIZEN_APPROVAL_INPROCESS":
+      return getLocaleLabels("Inprogress", "WF_BPA_CITIZEN_APPROVAL_INPROCESS", localisationLabels);
+    }
 };
 
 export const showApplyCityPicker = (state, dispatch) => {

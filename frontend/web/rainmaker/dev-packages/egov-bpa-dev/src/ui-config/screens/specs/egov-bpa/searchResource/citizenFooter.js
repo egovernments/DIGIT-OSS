@@ -2,7 +2,7 @@ import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { createUpdateBpaApplication } from "../../../../../ui-utils/commons";
+import { createUpdateBpaApplication, submitBpaApplication } from "../../../../../ui-utils/commons";
 
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 let tenant = getQueryArg(window.location.href, "tenantId");
@@ -139,5 +139,31 @@ export const citizenFooter = getCommonApplyFooter({
       rolePath: "user-info.roles",
       action: "APPROVE"
     }
-  }
+  },
+  submitButton: {
+    componentPath: "Button",
+    props: {
+      variant: "contained",
+      color: "primary",
+      style: {
+        minWidth: "200px",
+        height: "48px",
+        marginRight: "45px"
+      }
+    },
+    children: {
+      submitButtonLabel: getLabel({
+        labelName: "Submit",
+        labelKey: "BPA_COMMON_BUTTON_SUBMIT"
+      })
+    },
+    onClickDefination: {
+      action: "condition",
+      callBack: submitBpaApplication
+    },
+    roleDefination: {
+      rolePath: "user-info.roles",
+      action : "APPLY"
+    }
+  },
 });
