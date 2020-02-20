@@ -39,7 +39,7 @@ import {
   setApplicationNumberBox
 } from "../../../../ui-utils/commons";
 import { propertySummary } from "./summaryResource/propertySummary";
-import { transfereeSummary } from "./summaryResource/transfereeSummary";
+import { transfereeSummary,transfereeInstitutionSummary } from "./summaryResource/transfereeSummary";
 import { registrationSummary } from "./summaryResource/registrationSummary";
 import { declarationSummary } from "./summaryResource/declarationSummary";
 
@@ -115,6 +115,7 @@ export const formwizardFirstStep = {
   },
   children: {
     transferorDetails,
+    //transferorInstitutionSummary,
     transfereeDetails,
     mutationDetails,
     registrationDetails
@@ -144,7 +145,7 @@ export const formwizardThirdStep = {
       transferorSummary: transferorSummary,
       // transferorInstitutionSummary:transferorInstitutionSummary,
       transfereeSummary: transfereeSummary,
-      // transfereeInstitutionSummary: transfereeInstitutionSummary,
+     //  transfereeInstitutionSummary: transfereeInstitutionSummary,
       mutationSummary:mutationSummary,
       registrationSummary:registrationSummary,
       documentsSummary: documentsSummary ,
@@ -179,7 +180,59 @@ const getPropertyData = async (action, state, dispatch) => {
       queryObject,
       
     );
-    dispatch(prepareFinalObject("Properties", payload.Properties));
+    dispatch(prepareFinalObject("Property", payload.Properties[0]));
+
+    if (
+      get(
+        state,
+        "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType",
+        ""
+      ).includes("MULTIPLEOWNERS")
+    ) {
+      set(
+        action.screenConfig,
+        "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.props.style",
+        { display: "none" }
+      );
+      set(
+        action.screenConfig,
+        "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer.props.style",
+        {}
+      );
+    } else if (
+      get(
+        state,
+        "screenConfiguration.preparedFinalObject.Property.ownershipCategory",
+        ""
+      ).includes("INSTITUTIONAL")
+    ) {
+      set(
+        action.screenConfig,
+        "components.div.children.formwizardFirstStep.children.transferorDetails.props.style",
+        { display: "none" }
+      );
+      set(
+        action.screenConfig,
+        "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorInstitutionSummary.props.style",
+        {}
+      );
+      set(
+        action.screenConfig,
+        "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.applicantSubType.props.style",
+        {}
+      );
+    }else{
+      set(
+        action.screenConfig,
+        "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorInstitutionSummary.props.style",
+        { display: "none" }
+      );
+    }
+
+
+
+
+
     dispatch(prepareFinalObject("PropertiesTemp",cloneDeep(payload.Properties)));
   } catch (e) {
     console.log(e);
@@ -472,46 +525,58 @@ const screenConfig = {
         { visibility: "hidden" }
       );
     }
-    // if (
-    //   get(
-    //     state,
-    //     "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType",
-    //     ""
-    //   ).includes("MULTIPLEOWNERS")
-    // ) {
-    //   set(
-    //     action.screenConfig,
-    //     "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.props.style",
-    //     { display: "none" }
-    //   );
-    //   set(
-    //     action.screenConfig,
-    //     "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer.props.style",
-    //     {}
-    //   );
-    // } else if (
-    //   get(
-    //     state,
-    //     "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType",
-    //     ""
-    //   ).includes("INSTITUTIONAL")
-    // ) {
-    //   set(
-    //     action.screenConfig,
-    //     "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.props.style",
-    //     { display: "none" }
-    //   );
-    //   set(
-    //     action.screenConfig,
-    //     "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer.props.style",
-    //     {}
-    //   );
-    //   set(
-    //     action.screenConfig,
-    //     "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.applicantSubType.props.style",
-    //     {}
-    //   );
-    // }
+
+
+
+
+    if (
+      get(
+        state,
+        "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType",
+        ""
+      ).includes("MULTIPLEOWNERS")
+    ) {
+      set(
+        action.screenConfig,
+        "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.props.style",
+        { display: "none" }
+      );
+      set(
+        action.screenConfig,
+        "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer.props.style",
+        {}
+      );
+    } else if (
+      get(
+        state,
+        "screenConfiguration.preparedFinalObject.Properties[0].ownershipCategory",
+        ""
+      ).includes("INSTITUTIONAL")
+    ) {
+      set(
+        action.screenConfig,
+        "components.div.children.formwizardFirstStep.children.transferorDetails.props.style",
+        { display: "none" }
+      );
+      set(
+        action.screenConfig,
+        "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorInstitutionSummary.props.style",
+        {}
+      );
+      set(
+        action.screenConfig,
+        "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.applicantSubType.props.style",
+        {}
+      );
+    }else{
+      set(
+        action.screenConfig,
+        "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorInstitutionSummary.props.style",
+        { display: "none" }
+      );
+    }
+
+
     set(
       action.screenConfig,
       "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.propertySummary.children.cardContent.children.header.children.editSection.visible",

@@ -20,11 +20,11 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 const setReviewPageRoute = (state, dispatch) => {
   let tenantId = get(
     state,
-    "screenConfiguration.preparedFinalObject.Properties[0].tenantId"
+    "screenConfiguration.preparedFinalObject.Property.tenantId"
   );
   const applicationNumber = get(
     state,
-    "screenConfiguration.preparedFinalObject.Properties[0].acknowldgementNumber"
+    "screenConfiguration.preparedFinalObject.Property.acknowldgementNumber"
   );
   const appendUrl =
     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
@@ -90,7 +90,7 @@ const moveToReview = (state, dispatch) => {
 const getMdmsData = async (state, dispatch) => {
   let tenantId = get(
     state.screenConfiguration.preparedFinalObject,
-    "Properties[0].tenantId"
+    "Property.tenantId"
   );
   let mdmsBody = {
     MdmsCriteria: {
@@ -126,7 +126,7 @@ const callBackForApply=async(state,dispatch)=>{
   let tenantId =getQueryArg(window.location.href,"tenantId");
   let consumerCode=getQueryArg(window.location.href,"consumerCode");
   let propertyPayload = get(
-    state,"screenConfiguration.preparedFinalObject.Properties[0]");
+    state,"screenConfiguration.preparedFinalObject.Property");
     propertyPayload.workflow={"businessService": "PT.MUTATION",
     "businessId": "PB-AC-2020-02-04-018568", 
     "action": "OPEN",
@@ -178,6 +178,12 @@ propertyPayload.owners=[...propertyPayload.owners,...propertyPayload.ownersTemp]
     }
   } catch (e) {
     console.log(e);
+    store.dispatch(
+      setRoute(
+        `acknowledgement?purpose=apply&status=failure&applicationNumber=${consumerCode}&tenantId=${tenantId}
+        `
+      )
+    );
   }
 }
 

@@ -17,7 +17,7 @@ const mutationDetails =  getCommonGrayCard({
       },
       {
         jsonPath:
-          "Properties[0].additionalDetails.isMutationInCourt"
+          "Property.additionalDetails.isMutationInCourt"
       }
     ), documentNo: getLabelWithValue(
       {
@@ -26,7 +26,7 @@ const mutationDetails =  getCommonGrayCard({
       },
       {
         jsonPath:
-          "Properties[0].additionalDetails.caseDetails"
+          "Property.additionalDetails.caseDetails"
       }
     ), documentDate: getLabelWithValue(
       {
@@ -35,7 +35,7 @@ const mutationDetails =  getCommonGrayCard({
       },
       {
         jsonPath:
-          "Properties[0].additionalDetails.isPropertyUnderGovtPossession"
+          "Property.additionalDetails.isPropertyUnderGovtPossession"
       }
     ), documentValue: getLabelWithValue(
       {
@@ -44,7 +44,7 @@ const mutationDetails =  getCommonGrayCard({
       },
       {
         jsonPath:
-          "Properties[0].additionalDetails.govtAcquisitionDetails"
+          "Property.additionalDetails.govtAcquisitionDetails"
       }
     )
   })

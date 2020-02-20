@@ -64,7 +64,7 @@ export const registrationDetails = getCommonCard(
           },
           required:true,
           pattern: getPattern("Address"),
-          jsonPath: "Properties[0].additionalDetails.reasonForTransfer"
+          jsonPath: "Property.additionalDetails.reasonForTransfer"
         }),
 
         marketValue: getTextField({
@@ -81,7 +81,7 @@ export const registrationDetails = getCommonCard(
           },
           required:true,
           pattern: getPattern("Address"),
-        jsonPath: "Properties[0].additionalDetails.marketValue"
+        jsonPath: "Property.additionalDetails.marketValue"
         }),
         documentNumber: getTextField({
           label: {
@@ -97,7 +97,7 @@ export const registrationDetails = getCommonCard(
           },
           required:true,
           pattern: getPattern("Address"),
-          jsonPath: "Properties[0].additionalDetails.documentNumber"
+          jsonPath: "Property.additionalDetails.documentNumber"
         }),
           documentIssueDateField :getDateField({
           label: { labelName: "Document Issue Date", labelKey: "PT_MUTATION_DOCUMENT_ISSUE_DATE" },
@@ -107,7 +107,7 @@ export const registrationDetails = getCommonCard(
           },
           required: true,
           pattern: getPattern("Date"),
-          jsonPath: "Properties[0].additionalDetails.documentDate",
+          jsonPath: "Property.additionalDetails.documentDate",
           // props: {
           //   inputProps: {
           //     max: getTodaysDateInYMD()
@@ -128,7 +128,7 @@ export const registrationDetails = getCommonCard(
           },
           required:true,
           pattern: getPattern("Address"),
-        jsonPath: "Properties[0].additionalDetails.documentValue",
+        jsonPath: "Property.additionalDetails.documentValue",
         }),
         remarks: getTextField({
           label: {
@@ -143,7 +143,7 @@ export const registrationDetails = getCommonCard(
             labelKey: "PT_MUTATION_REMARKS"
           },
           pattern: getPattern("Address"),
-          jsonPath: "Properties[0].additionalDetails.remarks",
+          jsonPath: "Property.additionalDetails.remarks",
         }),
       })
     }) ; 

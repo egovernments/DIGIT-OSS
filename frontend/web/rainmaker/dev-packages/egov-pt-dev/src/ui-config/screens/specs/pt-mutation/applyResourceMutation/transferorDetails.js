@@ -44,7 +44,7 @@ export const transferorDetails = getCommonCard(
             labelKey: "PT_MUTATION_TRANSFEROR_NAME"
           },
           {
-            jsonPath: "Properties[0].owners[0].name" || "Property.owners[0].name"
+            jsonPath: "Property.owners[0].name" || "Property.owners[0].name"
             // callBack: value => {
             //   return value.split(".")[0];
             // }
@@ -56,7 +56,7 @@ export const transferorDetails = getCommonCard(
             labelKey: "PT_MUTATION_TRANSFEROR_GUARDIAN_NAME"
           },
           {
-            jsonPath: "Properties[0].owners[0].fatherOrHusbandName"
+            jsonPath: "Property.owners[0].fatherOrHusbandName"
             // callBack: value => {
             //   return value.split(".")[1];
             // }
@@ -68,7 +68,7 @@ export const transferorDetails = getCommonCard(
             labelKey: "PT_MUTATION_TRANSFEROR_GENDER"
           },
           {
-            jsonPath: "Properties[0].owners[0].gender"
+            jsonPath: "Property.owners[0].gender"
             // callBack: value => {
             //   return value.split(".")[1];
             // }
@@ -80,8 +80,8 @@ export const transferorDetails = getCommonCard(
         //     labelKey: "PT_MUTATION_TRANSFEROR_DOB"
         //   },
         //   {
-        //    // jsonPath: "Properties[0].propertyDetails[0].owners[0].dob"
-        //    jsonPath: "Properties[0].propertyDetails[0].owners[0].dob",
+        //    // jsonPath: "Property.propertyDetails[0].owners[0].dob"
+        //    jsonPath: "Property.propertyDetails[0].owners[0].dob",
         //     callBack: checkValueForNA
         //     }
           
@@ -93,7 +93,7 @@ export const transferorDetails = getCommonCard(
           },
           {
             jsonPath:
-            "Properties[0].ownershipCategory"
+            "Property.ownershipCategory"
           }
         ),
         transferorMobile: getLabelWithValue(
@@ -102,7 +102,7 @@ export const transferorDetails = getCommonCard(
             labelKey: "PT_MUTATION_TRANSFEROR_MOBILE"
           },
           {
-            jsonPath: "Properties[0].owners[0].mobileNumber"
+            jsonPath: "Property.owners[0].mobileNumber"
             // callBack: value => {
             //   return value.split(".")[1];
             // }
@@ -114,7 +114,7 @@ export const transferorDetails = getCommonCard(
             labelKey: "PT_MUTATION_TRANSFEROR_EMAIL"
           },
           {
-            jsonPath: "Properties[0].owners[0].emailId"
+            jsonPath: "Property.owners[0].emailId"
             // callBack: value => {
             //   return value.split(".")[1];
             // }
@@ -126,7 +126,7 @@ export const transferorDetails = getCommonCard(
             labelKey: "PT_MUTATION_TRANSFEROR_SPECIAL_CATEGORY"
           },
           {
-            jsonPath: "Properties[0].owners[0].ownerType"
+            jsonPath: "Property.owners[0].ownerType"
             // callBack: value => {
             //   return value.split(".")[1];
             // }
@@ -138,7 +138,7 @@ export const transferorDetails = getCommonCard(
             labelKey: "PT_MUTATION_TRANSFEROR_CORRESPONDENCE_ADDRESS"
           },
           {
-            jsonPath: "Properties[0].owners[0].permanentAddress"
+            jsonPath: "Property.owners[0].permanentAddress"
             // callBack: value => {
             //   return value.split(".")[1];
             // }

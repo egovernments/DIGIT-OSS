@@ -17,7 +17,7 @@ const registrationDetails =  getCommonGrayCard({
       },
       {
         jsonPath:
-          "Properties[0].additionalDetails.reasonForTransfer"
+          "Property.additionalDetails.reasonForTransfer"
       }
     ),
     marketValue: getLabelWithValue(
@@ -28,7 +28,7 @@ const registrationDetails =  getCommonGrayCard({
       },
       {
         jsonPath:
-          "Properties[0].additionalDetails.marketValue"
+          "Property.additionalDetails.marketValue"
       }
     ),
      documentNo: getLabelWithValue(
@@ -38,7 +38,7 @@ const registrationDetails =  getCommonGrayCard({
       },
       {
         jsonPath:
-          "Properties[0].additionalDetails.documentNumber"
+          "Property.additionalDetails.documentNumber"
       }
     ), documentDate: getLabelWithValue(
       {
@@ -47,7 +47,7 @@ const registrationDetails =  getCommonGrayCard({
       },
       {
         jsonPath:
-          "Properties[0].additionalDetails.documentDate"
+          "Property.additionalDetails.documentDate"
       }
     ), documentValue: getLabelWithValue(
       {
@@ -56,7 +56,7 @@ const registrationDetails =  getCommonGrayCard({
       },
       {
         jsonPath:
-          "Properties[0].additionalDetails.documentValue"
+          "Property.additionalDetails.documentValue"
       }
     ),
     remarks: getLabelWithValue(
@@ -66,7 +66,7 @@ const registrationDetails =  getCommonGrayCard({
       },
       {
         jsonPath:
-          "Properties[0].additionalDetails.remarks"
+          "Property.additionalDetails.remarks"
       }
     )
   })
