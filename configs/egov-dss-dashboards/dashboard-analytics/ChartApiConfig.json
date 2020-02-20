@@ -2940,14 +2940,14 @@
       {
         "module": "W&S",
         "indexName": "receipts-consumers",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"status\":\"Cancelled\"}}]}},\"aggs\":{\"approved\":{\"sum\":{\"field\":\"totalamount\"}}}}}}",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"status\":\"Cancelled\"}}]}},\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"totalamount\"}}}}}}",
         "requestQueryMap": "{\"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\"}",
         "dateRefField": "@timestamp"
       }
     ],
     "translateTenantCode": true,
     "chartType": "metric",
-    "valueType": "number",
+    "valueType": "amount",
     "action": "",
     "drillChart": "none",
     "aggregationPaths": [
@@ -2997,7 +2997,7 @@
         "requestQueryMap": "{\"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\"}",
         "dateRefField": "@timestamp",
         "indexName": "receipts-consumers",
-        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"status\":\"Cancelled\"}}]}},\"aggs\":{\"approved\":{\"sum\":{\"field\":\"totalamount\"}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"status\":\"Cancelled\"}}]}},\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"totalamount\"}}}}}}"
       }
 
     ],
