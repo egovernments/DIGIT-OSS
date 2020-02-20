@@ -147,12 +147,12 @@
               {
                 "variable": "Mutation_Declaration_Label",
                 "value": {
-                  "path": "PDF_STATIC_LABEL_MUTATION_DECLARATION_LABEL"
+                  "path": "$.tenantId"
                 },
                 "type": "label",
                 "localisation":{
                   "required":true,
-                  "prefix": null,
+                  "prefix": "PDF_STATIC_LABEL_MUTATION_DECLARATION_LABEL",
                   "module":"rainmaker-common"
               }
             },
@@ -237,7 +237,7 @@
               {
                 "variable": "Mutation_Number",
                 "value": {
-                  "path": "$.propertyId"
+                  "path": "$.additionalDetails.mutationNumber"
                 }
             },
               {
@@ -245,19 +245,6 @@
                 "value": {
                   "path": "$.acknowldgementNumber"
                 }
-            },
-              {
-                "variable": "Receipt_Number",
-                "value": {
-                  "path": "$.acknowldgementNumber"
-                }
-            },
-              {
-                "variable": "Approval_Date",
-                "value": {
-                  "path": "$.additionalDetails.documentDate"
-                },
-                "type": "date"
             },
               {
                 "variable": "approved_by_value",
@@ -379,6 +366,11 @@
               {            
                 "variable":"approved_by_value",
                 "value":"$.ProcessInstances[?(@.action == 'APPROVE')].assigner.name"
+              },
+              {            
+                "variable":"Approval_Date",
+                "value":"$.ProcessInstances[?(@.action == 'APPROVE')].auditDetails.lastModifiedTime",
+                "type": "date"
               }
   
             ]
