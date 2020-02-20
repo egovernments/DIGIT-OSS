@@ -97,7 +97,8 @@
                   false,
                   false
                 ],
-                "style": "receipt-table"
+                "style": "receipt-table",
+                "font": "Roboto"
               },
               {
                 "text": "{{consumer_id}}",
@@ -117,7 +118,8 @@
                   true,
                   false
                 ],
-                "style": "receipt-table"
+                "style": "receipt-table",
+                "font": "Roboto"
               }
             ],
             [
@@ -341,7 +343,8 @@
                   true,
                   false
                 ],
-                "style": "receipt-table"
+                "style": "receipt-table",
+                "font": "Roboto"
               }
             ],
             [
