@@ -52,6 +52,7 @@ class Property extends Component {
     super(props);
 
     this.state = {
+      billFetched:false,
       pathName: null,
       dialogueOpen: false,
       urlToAppend: "",
@@ -60,7 +61,8 @@ class Property extends Component {
   }
 
   componentDidMount = () => {
-    const { location, addBreadCrumbs, fetchGeneralMDMSData, renderCustomTitleForPt, customTitle, fetchProperties, fetchTotalBillAmount, fetchReceipt, fetchAssessments } = this.props;
+    const { location, addBreadCrumbs, fetchGeneralMDMSData, renderCustomTitleForPt, customTitle, fetchProperties,  fetchReceipt, fetchAssessments } = this.props;
+    
     const requestBody = {
       MdmsCriteria: {
         tenantId: commonConfig.tenantId,
@@ -124,11 +126,7 @@ class Property extends Component {
       customTitle && addBreadCrumbs({ title: customTitle, path: window.location.pathname });
     }
     renderCustomTitleForPt(customTitle);
-    fetchTotalBillAmount([
-      { key: "consumerCode", value: decodeURIComponent(this.props.match.params.propertyId) },
-      { key: "tenantId", value: this.props.match.params.tenantId },
-      { key: "businessService", value: 'PT' }
-    ]);
+  
     fetchAssessments([
       { key: "propertyIds", value: decodeURIComponent(this.props.match.params.propertyId) },
       { key: "tenantId", value: this.props.match.params.tenantId }
@@ -260,6 +258,21 @@ class Property extends Component {
       },
     ];
   };
+  componentDidUpdate=(prevProps) =>{
+    // Typical usage (don't forget to compare props):
+    // if (this.props.userID !== prevProps.userID) {
+    //   this.fetchData(this.props.userID);
+    // }
+    const {  totalBillAmountDue,Assessments } = this.props;
+    if(Assessments&&Assessments.length>0&&totalBillAmountDue!==0&&!this.state.billFetched){
+      this.setState({billFetched:true})
+      this.props.fetchTotalBillAmount([
+        { key: "consumerCode", value: decodeURIComponent(this.props.match.params.propertyId) },
+        { key: "tenantId", value: this.props.match.params.tenantId },
+        { key: "businessService", value: 'PT' }
+      ]);
+    }
+  }
 
   componentWillReceiveProps = (nextProps) => {
     const { customTitle, renderCustomTitleForPt } = this.props;
@@ -625,7 +638,7 @@ const mapStateToProps = (state, ownProps) => {
   const { urls, localizationLabels } = app;
   const { cities } = common;
   const { generalMDMSDataById } = state.common || {};
-  const { propertiesById, singleAssessmentByStatus = [], loading, receiptsByYr, totalBillAmountDue } = state.properties || {};
+  const { propertiesById, singleAssessmentByStatus = [], loading, receiptsByYr, totalBillAmountDue,Assessments=[] } = state.properties || {};
   const tenantId = ownProps.match.params.tenantId;
   const propertyId = decodeURIComponent(ownProps.match.params.propertyId);
   const selPropertyDetails = propertiesById[propertyId] || {};
@@ -658,6 +671,9 @@ const mapStateToProps = (state, ownProps) => {
   const completedAssessments = getCompletedTransformedItems(pendingAssessments, cities, localizationLabels, propertyId);
   // const completedAssessments = getCompletedTransformedItems(singleAssessmentByStatus, cities, localizationLabels);
   const sortedAssessments = completedAssessments && orderby(completedAssessments, ["epocDate"], ["desc"]);
+ 
+ 
+
   return {
     urls,
     propertyItems,
@@ -671,7 +687,8 @@ const mapStateToProps = (state, ownProps) => {
     receiptsByYr,
     localization,
     totalBillAmountDue,
-    documentsUploaded
+    documentsUploaded,
+    Assessments
   };
 };
 

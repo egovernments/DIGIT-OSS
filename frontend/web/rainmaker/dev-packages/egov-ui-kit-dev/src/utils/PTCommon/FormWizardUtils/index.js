@@ -225,7 +225,7 @@ export const convertToOldPTObject = (newObject) => {
   propertyDetails.adhocExemptionReason = null;
   propertyDetails.adhocPenaltyReason = null;
   propertyDetails.owners = newProperty.owners;
-
+  propertyDetails.owners=propertyDetails.owners.filter((owner)=>owner.status=='ACTIVE')
 
   // propertyDetails.owners[0].persisterRefId = null;
   // propertyDetails.owners[0].id = newProperty.id;
@@ -278,7 +278,6 @@ export const convertToOldPTObject = (newObject) => {
     // unit.usageCategory;
     // propertyDetails.propertyType = extractFromString(newProperty.propertyType, 0);
     // propertyDetails.propertySubType = extractFromString(newProperty.propertyType, 1);
-
     unit.usageCategoryMajor = extractFromString(unit.usageCategory, 0)
     unit.usageCategoryMinor = extractFromString(unit.usageCategory, 1)
     unit.usageCategorySubMinor = extractFromString(unit.usageCategory, 2)
@@ -286,18 +285,9 @@ export const convertToOldPTObject = (newObject) => {
     // unit.constructionDetail = {
     //   builtUpArea: unit.unitArea,
     // };
-
     unit.unitArea = unit.constructionDetail.builtUpArea;
     return { ...unit }
   })
-
-
-
-
-  // "usageCategoryMajor":"NONRESIDENTIAL",
-  // "usageCategoryMinor":"COMMERCIAL",
-  // "usageCategorySubMinor":"FOODJOINTS",
-  // "usageCategoryDetail":"ACRESTAURANT",
   property["propertyDetails"] = [propertyDetails];
   Properties[0] = { ...newProperty, ...property };
 

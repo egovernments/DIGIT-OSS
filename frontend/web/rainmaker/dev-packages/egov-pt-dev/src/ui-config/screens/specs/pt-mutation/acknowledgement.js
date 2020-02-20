@@ -272,7 +272,7 @@ const getAcknowledgementCard = (
               labelName: "Trade License No.",
               labelKey: "PT_MUTATION_APPLICATION_NO"
             },
-            number: secondNumber
+            number: applicationNumber
           })
         }
       },
@@ -303,7 +303,7 @@ const getAcknowledgementCard = (
               labelName: "Trade License No.",
               labelKey: "PT_MUTATION_APPLICATION_NO"
             },
-            number: secondNumber
+            number: applicationNumber
           })
         }
       },
@@ -334,7 +334,7 @@ const getAcknowledgementCard = (
               labelName: "Trade License No.",
               labelKey: "PT_MUTATION_APPLICATION_NO"
             },
-            number: secondNumber
+            number: applicationNumber
           })
         }
       },
@@ -366,7 +366,7 @@ const getAcknowledgementCard = (
               labelName: "Trade License No.",
               labelKey: "PT_MUTATION_APPLICATION_NO"
             },
-            number: secondNumber
+            number: applicationNumber
           })
         }
       },
@@ -396,7 +396,7 @@ const getAcknowledgementCard = (
               labelName: "Trade License No.",
               labelKey: "PT_MUTATION_APPLICATION_NO"
             },
-            number: secondNumber
+            number: applicationNumber
           })
         }
       },
@@ -449,7 +449,7 @@ const getAcknowledgementCard = (
               labelName: "Trade License No.",
               labelKey: "PT_MUTATION_APPLICATION_NO"
             },
-            number: secondNumber
+            number: applicationNumber
           })
         }
       },

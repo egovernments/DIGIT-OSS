@@ -201,7 +201,7 @@ const propertyReducer = (state = initialState, action) => {
         loading: false,
         error: true,
         errorMessage: action.error,
-        totalBillAmountDue: ""
+        totalBillAmountDue: 0
       };
     case actionTypes.PROPERTY_FETCH_BILL_COMPLETE:
       const totalBillAmountDue = getTotalAmountDue(action.payload);
