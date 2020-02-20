@@ -12,7 +12,8 @@ import { httpRequest } from "../../../../../ui-utils";
 import {
   createUpdateNocApplication,
   prepareDocumentsUploadData,
-  applyForWaterOrSewerage
+  applyForWaterOrSewerage,
+  pushTheDocsUploadedToRedux
 } from "../../../../../ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
@@ -143,6 +144,7 @@ const callBackForNext = async (state, dispatch) => {
       isFormValid = false;
       hasFieldToaster = true;
     }
+    pushTheDocsUploadedToRedux(state, dispatch);
   }
 
   if (activeStep === 2 && process.env.REACT_APP_NAME !== "Citizen") {

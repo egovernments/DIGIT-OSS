@@ -26,6 +26,23 @@ import commonConfig from "config/common.js";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import printJS from 'print-js';
 
+export const pushTheDocsUploadedToRedux = (state, dispatch) => {
+    let reduxDocuments = get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux", {});
+    let uploadedDocs = [];
+    if (reduxDocuments !== null && reduxDocuments !== undefined) {
+        Object.keys(reduxDocuments).forEach(key => {
+            if (reduxDocuments !== undefined && reduxDocuments[key] !== undefined && reduxDocuments[key].documents !== undefined) {
+                reduxDocuments[key].documents.forEach(element => {
+                    element.documentType = reduxDocuments[key].documentType;
+                    element.documentCode = reduxDocuments[key].documentCode;
+                    element.status = "ACTIVE"
+                });
+                uploadedDocs = uploadedDocs.concat(reduxDocuments[key].documents);
+                dispatch(prepareFinalObject("applyScreen.documents", uploadedDocs));
+            }
+        });
+    }
+}
 export const updateTradeDetails = async requestBody => {
     try {
         const payload = await httpRequest(

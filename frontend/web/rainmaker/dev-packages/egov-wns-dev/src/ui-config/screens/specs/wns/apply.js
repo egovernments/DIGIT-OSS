@@ -9,27 +9,23 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import get from "lodash/get";
 import set from "lodash/set";
-import { commonTransform, objectToDropdown, getCurrentFinancialYear, getAllDataFromBillingSlab, getCheckbox } from "../utils";
+import { getAllDataFromBillingSlab } from "../utils";
 import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { footer } from "./applyResource/footer";
-import { connectionDetails } from "./applyResource/tradeReviewDetails";
-// import { tradeDetails } from "./applyResource/tradeDetails";
-// import { tradeLocationDetails } from "./applyResource/tradeLocationDetails";
-// import { connectionDetails } from "./applyResource/connectionDetails";
 import { getPropertyIDDetails, propertyID, propertyHeader } from "./applyResource/propertyDetails";
 import { getPropertyDetails } from "./applyResource/property-locationDetails";
 import { ownerDetailsHeader, getOwnerDetails, ownershipType } from "./applyResource/ownerDetails";
 import { additionDetails } from "./applyResource/additionalDetails";
-import { tradeOwnerDetails } from "./applyResource/tradeOwnerDetails";
 import { OwnerInfoCard } from "./applyResource/connectionDetails";
-import { documentList } from "./applyResource/documentList";
-import { summaryScreen } from "./search-preview";
 import { httpRequest } from "../../../../ui-utils";
 import { updatePFOforSearchResults, getBoundaryData, prepareDocumentsUploadData } from "../../../../ui-utils/commons";
 import { getTenantId, getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import commonConfig from "config/common.js";
+import { reviewDocuments } from "./applyResource/reviewDocuments";
+import { reviewOwner } from "./applyResource/reviewOwner";
+import { reviewConnectionDetails } from "./applyResource/reviewConnectionDetails";
 
 export const stepperData = () => {
   if (process.env.REACT_APP_NAME === "Citizen") {
@@ -65,6 +61,19 @@ export const header = getCommonContainer({
     visible: false
   }
 });
+
+export const reviewConnDetails = reviewConnectionDetails(false);
+
+export const reviewOwnerDetails = reviewOwner(false);
+
+export const reviewDocumentDetails = reviewDocuments(false, false);
+
+
+const summaryScreen = getCommonCard({
+  reviewConnDetails,
+  reviewDocumentDetails,
+  reviewOwnerDetails
+})
 
 export const documentDetails = getCommonCard({
   header: getCommonTitle(
@@ -184,16 +193,7 @@ export const getData = async (action, state, dispatch) => {
       const oldApplicationNo = get(state.screenConfiguration.preparedFinalObject, "Licenses[0].applicationNumber", null);
       dispatch(prepareFinalObject("Licenses[0].oldLicenseNumber", oldApplicationNo));
       if (oldApplicationNo !== null) {
-        dispatch(prepareFinalObject("Licenses[0].financialYear", ""));
-        dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.additionalDetail.applicationType", "APPLICATIONTYPE.RENEWAL"));
-        dispatch(
-          handleField(
-            "apply",
-            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.financialYear",
-            "props.value",
-            ""
-          )
-        );
+
         dispatch(
           handleField(
             "apply",
@@ -203,16 +203,6 @@ export const getData = async (action, state, dispatch) => {
           )
         );
       }
-
-      dispatch(prepareFinalObject("Licenses[0].applicationNumber", ""));
-      dispatch(
-        handleField(
-          "apply",
-          "components.div.children.headerDiv.children.header.children.applicationNumber",
-          "visible",
-          false
-        )
-      );
     }
   }
 };
@@ -350,7 +340,7 @@ const screenConfig = {
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     dispatch(prepareFinalObject("applyScreen.water", true));
     dispatch(prepareFinalObject("applyScreen.sewerage", false));
-    getData(action, state, dispatch).then(responseAction => {
+    getData(action, state, dispatch).then(() => {
       const queryObj = [{ key: "tenantId", value: tenantId }];
       getBoundaryData(action, state, dispatch, queryObj);
     });
