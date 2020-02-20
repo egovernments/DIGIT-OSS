@@ -363,28 +363,28 @@ class TableData extends Component {
       this.setState({
         filter: {
           localityFilter: {
-            selectedValue: ['ALL'],
+            selectedValue: ['All'],
             dropdownData: this.getUniqueList([
               {
-                value: "ALL",
+                value: "All",
                 label: getLocaleLabels("","CS_INBOX_SELECT_ALL",localizationLabels),
               }, ...localityDropdownList
             ])
           },
           moduleFilter: {
-            selectedValue: ['ALL'],
+            selectedValue: ['All'],
             dropdownData: this.getUniqueList([
               {
-                value: "ALL",
+                value: "All",
                 label: getLocaleLabels("","CS_INBOX_SELECT_ALL",localizationLabels),
               }, ...moduleDropdownList
             ])
           },
           statusFilter: {
-            selectedValue: ['ALL'],
+            selectedValue: ['All'],
             dropdownData: this.getUniqueList([
               {
-                value: "ALL",
+                value: "All",
                 label: getLocaleLabels("","CS_INBOX_SELECT_ALL",localizationLabels),
               }, ...statusDropdownList
             ])
