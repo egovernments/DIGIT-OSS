@@ -153,7 +153,7 @@ class WhatsAppLocality extends React.Component {
           <div className={`${classes.root} dashboard-search-main-cont`}>
             <Icon action="action" name="search" style={{ marginLeft: 12 }} />
             <Input
-              placeholder="Search Locality"
+              placeholder="Start typing to search your Locality"
               disableUnderline={true}
               fullWidth={true}
               //className={classes.input}
