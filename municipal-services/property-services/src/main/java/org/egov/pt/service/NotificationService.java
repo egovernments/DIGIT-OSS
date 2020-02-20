@@ -23,7 +23,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.Property;
+import org.egov.pt.models.workflow.ProcessInstance;
 import org.egov.pt.util.NotificationUtil;
 import org.egov.pt.util.PTConstants;
 import org.egov.pt.web.contracts.PropertyRequest;
@@ -32,11 +34,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import io.micrometer.core.instrument.MeterRegistry.Config;
+
 @Service
 public class NotificationService {
 
     @Autowired
     private NotificationUtil notifUtil;
+    
+    @Autowired
+    private PropertyConfiguration configs;
 
     @Value("${notification.url}")
     private String notificationURL;
@@ -107,10 +114,11 @@ public class NotificationService {
     	
     	String CompleteMsgs = notifUtil.getLocalizationMessages(property.getTenantId(), propertyRequest.getRequestInfo());
     	String msg = null;
-
     	String state = null;
+    	ProcessInstance wf = property.getWorkflow();
     	
-		if (isCreate && property.getWorkflow() == null)
+		if (isCreate && (wf == null
+				|| (wf != null && wf.getBusinessService().equalsIgnoreCase(configs.getCreatePTWfName()))))
 			state = "NOTIF_CREATE";
 		else
 			state = property.getWorkflow() != null ? property.getWorkflow().getState().getState() : WF_NO_WORKFLOW;
