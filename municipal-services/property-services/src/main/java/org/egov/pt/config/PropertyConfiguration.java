@@ -102,7 +102,7 @@ public class PropertyConfiguration {
     @Value("${egov.localization.statelevel}")
     private Boolean isStateLevel;
 
-    @Value("${notification.sms.enabled}")
+    @Value("${notif.sms.enabled}")
     private Boolean isSMSNotificationEnabled;
 
 
