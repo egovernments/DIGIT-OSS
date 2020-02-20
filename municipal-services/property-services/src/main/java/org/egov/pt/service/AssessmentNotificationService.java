@@ -7,6 +7,10 @@ import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.Assessment;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.PropertyCriteria;
+import org.egov.pt.models.event.Event;
+import org.egov.pt.models.event.EventRequest;
+import org.egov.pt.models.event.Recepient;
+import org.egov.pt.models.event.Source;
 import org.egov.pt.models.workflow.ProcessInstance;
 import org.egov.pt.util.NotificationUtil;
 import org.egov.pt.web.contracts.AssessmentRequest;
@@ -16,6 +20,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.egov.pt.util.PTConstants.*;
 
@@ -56,9 +61,15 @@ public class AssessmentNotificationService {
 
         List<SMSRequest> smsRequests = new LinkedList<>();
 
+        List<Event> events = new ArrayList<>();
+
         enrichSMSRequest(topicName, assessmentRequest, property, smsRequests);
 
         util.sendSMS(smsRequests);
+
+        enrichEvent(assessmentRequest, smsRequests, events);
+
+        util.sendEventNotification(new EventRequest(requestInfo, events));
     }
 
 
@@ -151,5 +162,35 @@ public class AssessmentNotificationService {
         return messageTemplate;
     }
 
+
+    /**
+     *
+     * @param request
+     * @param smsRequests
+     * @param events
+     */
+    private void enrichEvent(AssessmentRequest request, List<SMSRequest> smsRequests, List<Event> events){
+
+        String tenantId = request.getAssessment().getTenantId();
+        Set<String> mobileNumbers = smsRequests.stream().map(SMSRequest :: getMobileNumber).collect(Collectors.toSet());
+        Map<String, String> mapOfPhnoAndUUIDs = util.fetchUserUUIDs(mobileNumbers, request.getRequestInfo(), request.getAssessment().getTenantId());
+        if (CollectionUtils.isEmpty(mapOfPhnoAndUUIDs.keySet())) {
+            log.error("UUID search failed!");
+        }
+        Map<String,String > mobileNumberToMsg = smsRequests.stream().collect(Collectors.toMap(SMSRequest::getMobileNumber, SMSRequest::getMessage));
+
+        mobileNumbers.forEach(mobileNumber -> {
+            List<String> toUsers = new ArrayList<>();
+            toUsers.add(mapOfPhnoAndUUIDs.get(mobileNumber));
+            Recepient recepient = Recepient.builder().toUsers(toUsers).toRoles(null).build();
+            events.add(Event.builder().tenantId(tenantId).description(mobileNumberToMsg.get(mobileNumber))
+                    .eventType(USREVENTS_EVENT_TYPE).name(USREVENTS_EVENT_NAME)
+                    .postedBy(USREVENTS_EVENT_POSTEDBY).source(Source.WEBAPP).recepient(recepient)
+                    .eventDetails(null).build());
+        });
+
+
+
+    }
 
 }

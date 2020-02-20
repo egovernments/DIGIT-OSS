@@ -5,15 +5,12 @@ import static org.egov.pt.util.PTConstants.NOTIFICATION_LOCALE;
 import static org.egov.pt.util.PTConstants.NOTIFICATION_MODULENAME;
 import static org.egov.pt.util.PTConstants.NOTIFICATION_OWNERNAME;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.config.PropertyConfiguration;
+import org.egov.pt.models.event.EventRequest;
 import org.egov.pt.producer.Producer;
 import org.egov.pt.repository.ServiceRequestRepository;
 import org.egov.pt.web.contracts.SMSRequest;
@@ -155,6 +152,52 @@ public class NotificationUtil {
             }
         }
     }
+
+
+    /**
+     * Fetches UUIDs of CITIZENs based on the phone number.
+     *
+     * @param mobileNumbers
+     * @param requestInfo
+     * @param tenantId
+     * @return
+     */
+    public Map<String, String> fetchUserUUIDs(Set<String> mobileNumbers, RequestInfo requestInfo, String tenantId) {
+        Map<String, String> mapOfPhnoAndUUIDs = new HashMap<>();
+        StringBuilder uri = new StringBuilder();
+        uri.append(config.getUserHost()).append(config.getUserSearchEndpoint());
+        Map<String, Object> userSearchRequest = new HashMap<>();
+        userSearchRequest.put("RequestInfo", requestInfo);
+        userSearchRequest.put("tenantId", tenantId);
+        userSearchRequest.put("userType", "CITIZEN");
+        for(String mobileNo: mobileNumbers) {
+            userSearchRequest.put("userName", mobileNo);
+            try {
+                Object user = serviceRequestRepository.fetchResult(uri, userSearchRequest);
+                if(null != user) {
+                    String uuid = JsonPath.read(user, "$.user[0].uuid");
+                    mapOfPhnoAndUUIDs.put(mobileNo, uuid);
+                }else {
+                    log.error("Service returned null while fetching user for username - "+mobileNo);
+                }
+            }catch(Exception e) {
+                log.error("Exception while fetching user for username - "+mobileNo);
+                log.error("Exception trace: ",e);
+                continue;
+            }
+        }
+        return mapOfPhnoAndUUIDs;
+    }
+
+    /**
+     * Pushes the event request to Kafka Queue.
+     *
+     * @param request
+     */
+    public void sendEventNotification(EventRequest request) {
+        producer.push(config.getSaveUserEventsTopic(), request);
+    }
+
 
 
 }
