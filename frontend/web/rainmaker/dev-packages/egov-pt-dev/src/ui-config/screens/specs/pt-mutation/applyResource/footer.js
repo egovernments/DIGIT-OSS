@@ -132,11 +132,24 @@ const callBackForApply=async(state,dispatch)=>{
     "action": "OPEN",
     "moduleName": "PT"
 },
-propertyPayload.additionalDetails.documentDate=1581490792377;
 propertyPayload.owners[0].status="INACTIVE";
-propertyPayload.ownersTemp[0].status="ACTIVE";
-propertyPayload.ownersTemp[0].type=propertyPayload.ownershipCategoryTemp;
-propertyPayload.owners=[...propertyPayload.owners,...propertyPayload.ownersTemp]
+propertyPayload.additionalDetails.documentDate=1581490792377;
+
+if(propertyPayload.ownershipCategoryTemp.includes("INSTITUTIONAL")){
+  propertyPayload.institutionTemp.altContactNumber=propertyPayload.institutionTemp.landlineNumber;
+  propertyPayload.institutionTemp.ownerType="NONE";
+  propertyPayload.institutionTemp.status="ACTIVE";
+  propertyPayload.institutionTemp.type=propertyPayload.ownershipCategoryTemp;
+  propertyPayload.owners=[...propertyPayload.owners,propertyPayload.institutionTemp]
+}
+else{
+  propertyPayload.ownersTemp[0].status="ACTIVE";
+  propertyPayload.ownersTemp[0].type=propertyPayload.ownershipCategoryTemp;
+  propertyPayload.owners=[...propertyPayload.owners,...propertyPayload.ownersTemp]
+}
+
+
+
 
   try {
     let queryObject = [

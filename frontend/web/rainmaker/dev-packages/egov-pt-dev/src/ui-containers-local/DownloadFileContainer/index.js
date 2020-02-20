@@ -29,10 +29,13 @@ const mapStateToProps = (state, ownProps) => {
         uploadedDocData &&
         uploadedDocData.map(item => {
           return {
-            title: `PT_${item.title}`,
-            link: item.link,
+            title: `PT_${item.documentType}`,
+         //   title: `PT_${item.title}`,
+         link: item.documents[0].fileUrl && item.documents[0].fileUrl.split(",")[0],
+         //   link: item.link,
             linkText: "View",
-            name: item.name
+            name: item.documents[0].fileName,
+            //name: item.name
           };
         });
       // createEstimateData(
