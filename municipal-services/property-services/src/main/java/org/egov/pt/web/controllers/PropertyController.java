@@ -8,6 +8,8 @@ import javax.validation.Valid;
 import org.egov.common.contract.response.ResponseInfo;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.PropertyCriteria;
+import org.egov.pt.models.oldProperty.OldPropertyRequest;
+import org.egov.pt.service.MigrationService;
 import org.egov.pt.service.PropertyService;
 import org.egov.pt.util.ResponseInfoFactory;
 import org.egov.pt.web.contracts.PropertyRequest;
@@ -31,6 +33,9 @@ public class PropertyController {
 
 	@Autowired
 	private ResponseInfoFactory responseInfoFactory;
+
+	@Autowired
+	private MigrationService migrationService;
 
 	@PostMapping("/_create")
 	public ResponseEntity<PropertyResponse> create(@Valid @RequestBody PropertyRequest propertyRequest) {
@@ -64,6 +69,16 @@ public class PropertyController {
 		List<Property> properties = propertyService.searchProperty(propertyCriteria,requestInfoWrapper.getRequestInfo());
 		PropertyResponse response = PropertyResponse.builder().properties(properties).responseInfo(
 				responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
+				.build();
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
+	@PostMapping("/_migration")
+	public ResponseEntity<PropertyResponse> propertyMigration(@Valid @RequestBody OldPropertyRequest oldPropertyRequest) {
+
+		List<Property> properties = migrationService.migrateProperty(oldPropertyRequest.getRequestInfo(),oldPropertyRequest.getProperties());
+		PropertyResponse response = PropertyResponse.builder().properties(properties).responseInfo(
+				responseInfoFactory.createResponseInfoFromRequestInfo(oldPropertyRequest.getRequestInfo(), true))
 				.build();
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
