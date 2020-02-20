@@ -4,37 +4,37 @@
   "Penalty": [
     {
       "rate": 10,
-      "minAmount": null,
-      "flatAmount": null,
+      "minAmount": 0.0,
+      "flatAmount": 10.0,
       "fromFY": "2018-19",
       "startingDay": "1/09/2018"
     },
     {
       "rate": 10,
-      "minAmount": null,
-      "flatAmount": null,
+      "minAmount": 0.0,
+      "flatAmount": 10.0,
       "fromFY": "2015-16",
       "startingDay": "1/04/2016"
 
     },
     {
       "rate": 10,
-      "minAmount": null,
-      "flatAmount": null,
+      "minAmount": 0.0,
+      "flatAmount": 10.0,
       "fromFY": "2018-19",
       "startingDay": "1/09/2018"
     },
     {
       "rate": 10,
-      "minAmount": null,
-      "flatAmount": null,
+      "minAmount": 0.0,
+      "flatAmount": 10.0,
       "fromFY": "2019-20",
       "startingDay": "1/09/2019"
     },
     {
       "rate": 10,
-      "minAmount": null,
-      "flatAmount": null,
+      "minAmount": 0.0,
+      "flatAmount": 10.0,
       "fromFY": "2020-21",
       "startingDay": "1/09/2020"
     }
