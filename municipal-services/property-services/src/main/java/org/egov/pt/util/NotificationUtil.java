@@ -83,6 +83,7 @@ public class NotificationUtil {
      * @return Localization messages for the module
      */
     public String getLocalizationMessages(String tenantId, RequestInfo requestInfo) {
+    	
         LinkedHashMap responseMap = (LinkedHashMap) serviceRequestRepository.fetchResult(getUri(tenantId, requestInfo),
                 requestInfo).get();
         String jsonString = new JSONObject(responseMap).toString();
