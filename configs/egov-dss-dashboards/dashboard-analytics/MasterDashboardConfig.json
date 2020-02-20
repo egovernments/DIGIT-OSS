@@ -1429,7 +1429,7 @@
               "vizType": "module",
               "moduleLevel": "TL",
               "ref": {
-                "url": "tradeLicense",
+                "url": "tradelicense",
                 "logoUrl": "",
                 "type": "internal"
               },
