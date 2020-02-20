@@ -7,6 +7,7 @@ import Paper from "@material-ui/core/Paper";
 import Popper from "@material-ui/core/Popper";
 import MenuItem from "@material-ui/core/MenuItem";
 import MenuList from "@material-ui/core/MenuList";
+import LabelContainer from "egov-ui-framework/ui-containers/LabelContainer";
 import { withStyles } from "@material-ui/core/styles";
 //import Icon from "@material-ui/core/Icon";
 import Icon from "egov-ui-framework/ui-atoms/Icon";
@@ -19,7 +20,7 @@ const styles = theme => ({
     marginRight: theme.spacing.unit * 2
   },
   button: {
-    margin: theme.spacing.unit
+    border : "1px solid #FE7A51"
   },
   leftIcon: {
     marginRight: theme.spacing.unit
@@ -38,7 +39,8 @@ class MenuListComposition extends React.Component {
   };
 
   handleToggle = () => {
-    this.setState(state => ({ open: !state.open }));
+    const { open } = this.state;
+    this.setState({ open: !open });
   };
 
   handleClose = event => {
@@ -55,7 +57,7 @@ class MenuListComposition extends React.Component {
     return (
       <div className={classes.root} data-html2canvas-ignore={true}>
         <div>
-          <Button
+          <Button className={classes.button}
             buttonRef={node => {
               this.anchorEl = node;
             }}
@@ -65,10 +67,11 @@ class MenuListComposition extends React.Component {
             {...data.props}
           >
             <Icon className={classes.leftIcon} iconName={data.leftIcon} />
-            {data.label}
-            <Icon className={classes.rightIcon} iconName={data.rightIcon} />
+              <LabelContainer labelName={data.label.labelName} labelKey={data.label.labelKey} style={{color:data.props.style.color}}/>
+              <span style={{marginLeft:30 ,color : data.props.color}}> |  </span>
+            <Icon className={classes.rightIcon} iconName={data.rightIcon} color={data.props.color}/>
           </Button>
-          <Popper open={open} anchorEl={this.anchorEl} transition disablePortal>
+          <Popper open={open} anchorEl={this.anchorEl} style={{zIndex:100}} transition disablePortal>
             {({ TransitionProps, placement }) => (
               <Grow
                 {...TransitionProps}
@@ -82,13 +85,17 @@ class MenuListComposition extends React.Component {
                   <ClickAwayListener onClickAway={this.handleClose}>
                     <MenuList>
                       {data.menu.map((item, key) => {
+                        const { labelName, labelKey } = item.label;
                         return (
                           <MenuItem key={key} onClick={item.link}>
                             <Icon
                               className={classes.leftIcon}
                               iconName={item.leftIcon}
                             />
-                            {item.label}
+                            <LabelContainer
+                              labelName={labelName}
+                              labelKey={labelKey}
+                            />
                             <Icon
                               className={classes.leftIcon}
                               iconName={item.rightIcon}

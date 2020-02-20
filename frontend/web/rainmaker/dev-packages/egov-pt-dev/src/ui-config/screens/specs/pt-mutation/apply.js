@@ -404,6 +404,12 @@ const screenConfig = {
     );
     const tenantId = getQueryArg(window.location.href, "tenantId");
     const step = getQueryArg(window.location.href, "step");
+    dispatch(
+      prepareFinalObject(
+        "Property.additionalDetails",
+        {}
+      )
+    );
     getPropertyData(action,state,dispatch);
 
     //Set Module Name

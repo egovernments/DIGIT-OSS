@@ -203,19 +203,19 @@ export const getFinancialYearDates = (format, et) => {
 export const gotoApplyWithStep = (state, dispatch, step) => {
   const applicationNumber = getQueryArg(
     window.location.href,
-    "applicationNumber"
+    "consumerCode"
   );
   const tenantId = getQueryArg(
     window.location.href,
     "tenantId"
   );
   const applicationNumberQueryString = applicationNumber
-    ? `&applicationNumber=${applicationNumber}&tenantId=${tenantId}`
+    ? `consumerCode=${applicationNumber}&tenantId=${tenantId}`
     : ``;
   const applyUrl =
     process.env.REACT_APP_SELF_RUNNING === "true"
-      ? `/egov-ui-framework/pt-mutation/apply?step=${step}${applicationNumberQueryString}`
-      : `/pt-mutation/apply?step=${step}${applicationNumberQueryString}`;
+      ? `/egov-ui-framework/pt-mutation/apply?${applicationNumberQueryString}&step=${step}`
+      : `/pt-mutation/apply?${applicationNumberQueryString}&step=${step}`;
   dispatch(setRoute(applyUrl));
 };
 

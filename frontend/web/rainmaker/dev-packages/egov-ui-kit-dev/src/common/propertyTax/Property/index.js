@@ -264,7 +264,7 @@ class Property extends Component {
     //   this.fetchData(this.props.userID);
     // }
     const {  totalBillAmountDue,Assessments } = this.props;
-    if(Assessments&&Assessments.length>0&&totalBillAmountDue!==0&&!this.state.billFetched){
+    if(Assessments&&Assessments.length>0&&!this.state.billFetched){
       this.setState({billFetched:true})
       this.props.fetchTotalBillAmount([
         { key: "consumerCode", value: decodeURIComponent(this.props.match.params.propertyId) },
@@ -638,7 +638,7 @@ const mapStateToProps = (state, ownProps) => {
   const { urls, localizationLabels } = app;
   const { cities } = common;
   const { generalMDMSDataById } = state.common || {};
-  const { propertiesById, singleAssessmentByStatus = [], loading, receiptsByYr, totalBillAmountDue,Assessments=[] } = state.properties || {};
+  const { propertiesById, singleAssessmentByStatus = [], loading, receiptsByYr, totalBillAmountDue=0,Assessments=[] } = state.properties || {};
   const tenantId = ownProps.match.params.tenantId;
   const propertyId = decodeURIComponent(ownProps.match.params.propertyId);
   const selPropertyDetails = propertiesById[propertyId] || {};
