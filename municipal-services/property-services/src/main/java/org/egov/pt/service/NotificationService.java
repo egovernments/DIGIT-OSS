@@ -25,7 +25,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.egov.pt.config.PropertyConfiguration;
+import org.egov.pt.models.AuditDetails;
 import org.egov.pt.models.Property;
+import org.egov.pt.models.workflow.ProcessInstance;
 import org.egov.pt.util.NotificationUtil;
 import org.egov.pt.util.PTConstants;
 import org.egov.pt.web.contracts.PropertyRequest;
@@ -117,13 +119,22 @@ public class NotificationService {
     	Property property = propertyRequest.getProperty();
     	
     	String CompleteMsgs = notifUtil.getLocalizationMessages(property.getTenantId(), propertyRequest.getRequestInfo());
+    	AuditDetails audit = property.getAuditDetails();
     	String msg = null;
     	String state = null;
+    	Boolean isCreate = null;
+    	ProcessInstance wf = property.getWorkflow();
     	
-    	String business  = property.getWorkflow().getBusinessService();
-    	Boolean isCreate = business.equalsIgnoreCase(configs.getCreatePTWfName());
+		if (wf != null) {
+
+			isCreate = wf.getBusinessService().equalsIgnoreCase(configs.getCreatePTWfName());
+			state = property.getWorkflow().getState().getState();
+		} else {
+
+			isCreate = audit.getCreatedTime().compareTo(audit.getLastModifiedTime()) == 0;
+			state = WF_NO_WORKFLOW;
+		}
     	
-		state = property.getWorkflow() != null ? property.getWorkflow().getState().getState() : WF_NO_WORKFLOW;
 
     	switch (state) {
     	
@@ -135,7 +146,7 @@ public class NotificationService {
     	
 		case WF_STATUS_OPEN :
 			msg = notifUtil.getMessageTemplate(WF_UPDATE_STATUS_OPEN_CODE, CompleteMsgs);
-			msg = msg.replace(NOTIFICATION_UPDATE_CREATE_REPLACE, isCreate ? PTConstants.CREATED_STRING : PTConstants.UPDATED_STRING);
+			msg = msg.replace(NOTIFICATION_UPDATE_CREATE_REPLACE, isCreate ? PTConstants.CREATE_STRING : PTConstants.UPDATE_STRING);
 			break;	
 			
 		case WF_STATUS_APPROVED :
@@ -145,7 +156,7 @@ public class NotificationService {
 			
 		default:
 			msg = notifUtil.getMessageTemplate(WF_UPDATE_STATUS_CHANGE_CODE, CompleteMsgs);
-			msg = msg.replace(NOTIFICATION_UPDATE_CREATE_REPLACE, isCreate ? PTConstants.CREATED_STRING : PTConstants.UPDATED_STRING);
+			msg = msg.replace(NOTIFICATION_UPDATE_CREATE_REPLACE, isCreate ? PTConstants.CREATE_STRING : PTConstants.UPDATE_STRING);
 			break;
 		}
     	
