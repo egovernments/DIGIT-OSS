@@ -92,7 +92,7 @@ public class PaymentUpdateService {
 		Bill bill  = paymentDetail.getBill();
 		
 		PropertyCriteria criteria = PropertyCriteria.builder()
-				.propertyIds(Sets.newHashSet(bill.getConsumerCode()))
+				.acknowledgementIds(Sets.newHashSet(bill.getConsumerCode()))
 				.tenantId(tenantId)
 				.build();
 				
@@ -100,7 +100,7 @@ public class PaymentUpdateService {
 
 		if (CollectionUtils.isEmpty(properties))
 			throw new CustomException("INVALID RECEIPT",
-					"No tradeLicense found for the comsumerCode " + criteria.getPropertyIds());
+					"No Properties found for the comsumerCode " + criteria.getPropertyIds());
 
 		Role role = Role.builder().code("SYSTEM_PAYMENT").build();
 		requestInfo.getUserInfo().getRoles().add(role);
