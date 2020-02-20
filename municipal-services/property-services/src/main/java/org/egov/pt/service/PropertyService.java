@@ -61,9 +61,6 @@ public class PropertyService {
     private ObjectMapper mapper;
     
     @Autowired
-    private NotificationService notifService;
-
-    @Autowired
 	private CalculationService calculatorService;
 
 
@@ -83,7 +80,6 @@ public class PropertyService {
 			wfService.updateWorkflow(request, CREATE_PROCESS_CONSTANT);
 		//util.clearSensitiveDataForPersistance(request.getProperty());
 		producer.push(config.getSavePropertyTopic(), request);
-		notifService.sendNotificationForUpdate(request, true);
 		return request.getProperty();
 	}
 	
@@ -169,7 +165,6 @@ public class PropertyService {
 			 */
 			producer.push(config.getUpdatePropertyTopic(), request);
 		}
-		notifService.sendNotificationForUpdate(request, false);
 	}
 
 	/**
@@ -228,8 +223,6 @@ public class PropertyService {
 			 */
 			producer.push(config.getUpdatePropertyTopic(), request);
 		}
-		
-		notifService.sendNotificationForMutation(request);
 		calculatorService.calculateMutationFee(request.getRequestInfo(), request.getProperty());
 	}
 

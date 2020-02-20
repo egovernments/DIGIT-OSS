@@ -110,7 +110,7 @@ public class NotificationService {
 
     	String state = null;
     	
-		if (isCreate)
+		if (isCreate && property.getWorkflow() == null)
 			state = "NOTIF_CREATE";
 		else
 			state = property.getWorkflow() != null ? property.getWorkflow().getState().getState() : WF_NO_WORKFLOW;
