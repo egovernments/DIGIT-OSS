@@ -246,12 +246,6 @@
                 }
             },
               {
-                "variable": "approved_by_value",
-                "value": {
-                  "path": "$.owners[?(@.status == 'INACTIVE')].name"
-                }
-            },
-              {
                 "variable": "Transferrer_Name",
                 "value": {
                   "path": "$.owners[?(@.status == 'INACTIVE')].name"
