@@ -84,6 +84,7 @@ public class PropertyUtil extends CommonUtils {
 				.businessId(property.getAcknowldgementNumber())
 				.comment("Payment for property processed")
 				.moduleName(PTConstants.ASMT_MODULENAME)
+				.tenantId(property.getTenantId())
 				.action(PTConstants.ACTION_PAY)
 				.build();
 			
