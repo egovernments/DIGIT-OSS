@@ -27,7 +27,7 @@ export const getCheckboxContainer = {
     jsonPathWater: "applyScreen.water",
     required: true
   },
-  type: "array"
+  type: "array",
 };
 
 export const OwnerInfoCard = getCommonCard({
@@ -67,8 +67,6 @@ export const OwnerInfoCard = getCommonCard({
       placeholder: { labelKey: "WS_ADDN_DETAILS_NO_OF_TOILETS_PLACEHOLDER" },
       gridDefination: { xs: 12, sm: 6 },
       jsonPath: "applyScreen.proposedToilets"
-    }),
-
-    // getGenderRadioButton
+    })
   })
 });

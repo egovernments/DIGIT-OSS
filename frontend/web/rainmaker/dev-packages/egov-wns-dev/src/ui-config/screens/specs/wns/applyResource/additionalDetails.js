@@ -17,6 +17,7 @@ import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-fra
 import { getHeaderSideText } from "../../utils";
 import get from 'lodash/get';
 import { httpRequest } from '../../../../../ui-utils/index';
+import set from 'lodash/set';
 
 const resetFields = (state, dispatch) => {
   dispatch(
@@ -70,7 +71,8 @@ const resetFields = (state, dispatch) => {
 };
 
 const getPlumberRadioButton = {
-  uiFramework: "custom-containers",
+  uiFramework: "custom-containers-local",
+  moduleName: "egov-wns",
   componentPath: "RadioGroupContainer",
   gridDefination: { xs: 12, sm: 12 },
   jsonPath: "applyScreen.plumberInfo[0].detailsProvidedBy",
@@ -109,15 +111,24 @@ export const additionDetails = getCommonCard({
     }),
 
     connectionDetails: getCommonContainer({
-      connectionType: getSelectField({
-        label: { labelKey: "WS_SERV_DETAIL_CONN_TYPE" },
-        placeholder: { labelKey: "WS_ADDN_DETAILS_CONN_TYPE_PLACEHOLDER" },
-        required: false,
-        sourceJsonPath: "applyScreenMdmsData.ws-services-masters.connectionType",
-        gridDefination: { xs: 12, sm: 6 },
-        errorMessage: "ERR_INVALID_BILLING_PERIOD",
-        jsonPath: "applyScreen.connectionType"
-      }),
+      connectionType: {
+        ...getSelectField({
+          label: { labelKey: "WS_SERV_DETAIL_CONN_TYPE" },
+          placeholder: { labelKey: "WS_ADDN_DETAILS_CONN_TYPE_PLACEHOLDER" },
+          required: false,
+          sourceJsonPath: "applyScreenMdmsData.ws-services-masters.connectionType",
+          gridDefination: { xs: 12, sm: 6 },
+          errorMessage: "ERR_INVALID_BILLING_PERIOD",
+          jsonPath: "applyScreen.connectionType"
+        }),
+        beforeFieldChange: async (action, state, dispatch) => {
+          let connType = get(state, "screenConfiguration.preparedFinalObject.applyScreen.connectionType");
+          console.log('connType');
+          console.log(connType);
+          if (connType === "Non Metered" || connType === "Bulk-supply" || connType !== "Metered") { showHideFeilds(dispatch, false); }
+          else { showHideFeilds(dispatch, true); }
+        }
+      },
 
       numberOfTaps: getTextField({
         label: { labelKey: "WS_SERV_DETAIL_NO_OF_TAPS" },
@@ -137,11 +148,11 @@ export const additionDetails = getCommonCard({
           jsonPath: "applyScreen.waterSource"
         }),
         beforeFieldChange: async (action, state, dispatch) => {
-          let waterSource = get(state, "screenConfiguration.preparedFinalObject.applyScreen.waterSourceType");
-          if (waterSource === "GROUND") {
+          let waterSource = get(state, "screenConfiguration.preparedFinalObject.applyScreen.waterSource");
+          if (waterSource === "Ground") {
             let code = `masterDetails":[{"name":"waterSubSource","filter": "[?(@.code  == 'GROUND')]"}]`
             await waterSubSourceType(state, dispatch, code)
-          } else if (waterSource === "SURFACE") {
+          } else if (waterSource === "Surface") {
             let code = `masterDetails":[{"name":"waterSubSource","filter": "[?(@.code  == 'SURFACE')]"}]`
             await waterSubSourceType(state, dispatch, code)
           } else {
@@ -175,6 +186,12 @@ export const additionDetails = getCommonCard({
         gridDefination: { xs: 12, sm: 6 },
         jsonPath: "applyScreen.waterClosets"
       }),
+      noOfToilets: getTextField({
+        label: { labelKey: "WS_ADDN_DETAILS_NO_OF_TOILETS" },
+        placeholder: { labelKey: "WS_ADDN_DETAILS_NO_OF_TOILETS_PLACEHOLDER" },
+        gridDefination: { xs: 12, sm: 6 },
+        jsonPath: "applyScreen.noOfToilets"
+      })
     }),
   }),
   plumberDetailsContainer: getCommonGrayCard({
@@ -341,3 +358,30 @@ export const additionDetails = getCommonCard({
     })
   })
 });
+
+const showHideFeilds = (dispatch, value) => {
+  dispatch(
+    handleField(
+      "apply",
+      "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.initialMeterReading",
+      "visible",
+      value
+    )
+  );
+  dispatch(
+    handleField(
+      "apply",
+      "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterInstallationDate",
+      "visible",
+      value
+    )
+  );
+  dispatch(
+    handleField(
+      "apply",
+      "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterID",
+      "visible",
+      value
+    )
+  );
+}

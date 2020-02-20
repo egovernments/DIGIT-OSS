@@ -11,6 +11,54 @@ export const toggleWater = (onFieldChange, value) => {
     "visible",
     value
   );
+  onFieldChange(
+    "apply",
+    "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.connectionType",
+    "visible",
+    value
+  );
+  onFieldChange(
+    "apply",
+    "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.numberOfTaps",
+    "visible",
+    value
+  );
+  onFieldChange(
+    "apply",
+    "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.waterSourceType",
+    "visible",
+    value
+  );
+  onFieldChange(
+    "apply",
+    "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.waterSubSource",
+    "visible",
+    value
+  );
+  onFieldChange(
+    "apply",
+    "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.pipeSize",
+    "visible",
+    value
+  );
+  onFieldChange(
+    "apply",
+    "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterID",
+    "visible",
+    value
+  );
+  onFieldChange(
+    "apply",
+    "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterInstallationDate",
+    "visible",
+    value
+  );
+  onFieldChange(
+    "apply",
+    "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.initialMeterReading",
+    "visible",
+    value
+  );
 }
 
 export const toggleSewerage = (onFieldChange, value) => {
@@ -26,4 +74,37 @@ export const toggleSewerage = (onFieldChange, value) => {
     "visible",
     value
   );
+  onFieldChange(
+    "apply",
+    "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.noOfToilets",
+    "visible",
+    value
+  );
+  onFieldChange(
+    "apply",
+    "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.waterClosets",
+    "visible",
+    value
+  );
+}
+
+export const togglePlumberFeilds = (onFieldChange, value) => {
+  onFieldChange(
+    "apply",
+    "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.plumberDetailsContainer.children.cardContent.children.plumberDetails.children.plumberLicenceNo",
+    "visible",
+    value
+  );
+  onFieldChange(
+    "apply",
+    "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.plumberDetailsContainer.children.cardContent.children.plumberDetails.children.plumberName",
+    "visible",
+    value
+  );
+  onFieldChange(
+    "apply",
+    "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.plumberDetailsContainer.children.cardContent.children.plumberDetails.children.plumberMobNo",
+    "visible",
+    value
+  )
 }

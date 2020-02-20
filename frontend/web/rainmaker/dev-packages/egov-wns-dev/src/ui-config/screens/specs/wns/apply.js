@@ -103,18 +103,22 @@ export const documentDetails = getCommonCard({
         },
         {
           name: "Building Plan/ Completion Certificate",
+          required: false,
           jsonPath: "applyScreen.documents.completionCertificate"
         },
         {
           name: "Electicity Bill",
+          required: true,
           jsonPath: "applyScreen.documents.electricityBill"
         },
         {
           name: "Property Tax Reciept",
+          required: false,
           jsonPath: "applyScreen.documents.ptReciept"
         },
         {
           name: "Plumber Report/ Drawing",
+          required: true,
           jsonPath: "applyScreen.documents.plumberReport"
         }
       ],
@@ -213,6 +217,57 @@ export const getData = async (action, state, dispatch) => {
   }
 };
 
+const toggleSewerageFeilds = (action, value) => {
+  set(
+    action.screenConfig,
+    "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.noOfToilets.visible",
+    value
+  );
+  set(
+    action.screenConfig,
+    "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.waterClosets.visible",
+    value
+  )
+}
+
+const toggleWaterFeilds = (action, value) => {
+  set(
+    action.screenConfig,
+    "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.connectionType.visible",
+    value
+  );
+  set(
+    action.screenConfig,
+    "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.numberOfTaps.visible",
+    value
+  );
+  set(
+    action.screenConfig,
+    "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.waterSourceType.visible",
+    value
+  );
+  set(
+    action.screenConfig,
+    "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.pipeSize.visible",
+    value
+  );
+  set(
+    action.screenConfig,
+    "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterID.visible",
+    value
+  );
+  set(
+    action.screenConfig,
+    "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterInstallationDate.visible",
+    value
+  );
+  set(
+    action.screenConfig,
+    "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.initialMeterReading.visible",
+    value
+  );
+}
+
 const propertyDetail = getPropertyDetails();
 const propertyIDDetails = getPropertyIDDetails();
 const ownerDetail = getOwnerDetails();
@@ -256,15 +311,18 @@ const screenConfig = {
   name: "apply",
   // hasBeforeInitAsync:true,
   beforeInitScreen: (action, state, dispatch) => {
-    set(action.screenConfig,
+    set(
+      action.screenConfig,
       "components.div.children.formwizardFirstStep.children.IDDetails.children.cardContent.children.propertyIDDetails.visible",
       false
     );
-    set(action.screenConfig,
+    set(
+      action.screenConfig,
       "components.div.children.formwizardFirstStep.children.Details.visible",
       false
     );
-    set(action.screenConfig,
+    set(
+      action.screenConfig,
       "components.div.children.formwizardFirstStep.children.ownerDetails.visible",
       false
     );
@@ -288,14 +346,24 @@ const screenConfig = {
       "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfWaterClosets.visible",
       false
     );
-
     const tenantId = getTenantId();
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     dispatch(prepareFinalObject("applyScreen.water", true));
+    dispatch(prepareFinalObject("applyScreen.sewerage", false));
     getData(action, state, dispatch).then(responseAction => {
       const queryObj = [{ key: "tenantId", value: tenantId }];
       getBoundaryData(action, state, dispatch, queryObj);
     });
+    if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.water") && get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage")) {
+      toggleWaterFeilds(action, true);
+      toggleSewerageFeilds(action, true);
+    } else if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage")) {
+      toggleWaterFeilds(action, false);
+      toggleSewerageFeilds(action, true);
+    } else {
+      toggleWaterFeilds(action, true);
+      toggleSewerageFeilds(action, false);
+    }
     prepareDocumentsUploadData(state, dispatch);
     return action;
   },

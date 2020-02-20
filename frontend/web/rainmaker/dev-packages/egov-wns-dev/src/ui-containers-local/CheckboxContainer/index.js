@@ -49,7 +49,7 @@ class CheckboxLabels extends React.Component {
         if (this.state.checkedSewerage) { toggleSewerage(onFieldChange, true); }
         else { toggleSewerage(onFieldChange, false); }
       } else { toggleWater(onFieldChange, false); }
-      approveCheck(jsonPathWater, this.state.checkedWater)
+      approveCheck(jsonPathWater, this.state.checkedWater);
     });
   };
 
@@ -61,7 +61,7 @@ class CheckboxLabels extends React.Component {
         if (this.state.checkedWater) { toggleWater(onFieldChange, true); }
         else { toggleWater(onFieldChange, false); }
       } else { toggleSewerage(onFieldChange, false); }
-      approveCheck(jsonPathSewerage, this.state.checkedSewerage)
+      approveCheck(jsonPathSewerage, this.state.checkedSewerage);
     });
   }
 

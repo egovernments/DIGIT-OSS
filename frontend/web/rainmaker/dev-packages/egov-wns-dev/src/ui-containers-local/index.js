@@ -52,6 +52,11 @@ const ViewBreakupContainer = Loadable({
   loading: () => <Loading />
 });
 
+const RadioGroupContainer = Loadable({
+  loader: () => import("./RadioGroupContainer"),
+  loading: () => <Loading />
+});
+
 export {
   CustomTabContainer,
   LabelContainer,
@@ -63,5 +68,6 @@ export {
   PaymentRedirectPage,
   ResubmitActionContainer,
   ViewBreakupContainer,
-  DialogContainer
+  DialogContainer,
+  RadioGroupContainer
 };
