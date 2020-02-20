@@ -77,10 +77,11 @@ import javax.servlet.http.HttpServletRequest;
     }
 
     @RequestMapping(value = {"/{servicename}/{jobname}/_batch", "/_batch"}, method = RequestMethod.POST)
-    public ResponseEntity sendReminderSMS(@PathVariable(required = false) String servicename,
+    public ResponseEntity sendReminderSMS(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
+                                          @PathVariable(required = false) String servicename,
                                           @PathVariable(required = true) String jobname) {
 
-        tradeLicenseService.runJob(servicename, jobname);
+        tradeLicenseService.runJob(servicename, jobname, requestInfoWrapper.getRequestInfo());
 
         return new ResponseEntity(HttpStatus.ACCEPTED);
     }

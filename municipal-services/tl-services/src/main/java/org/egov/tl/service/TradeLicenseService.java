@@ -330,16 +330,13 @@ public class TradeLicenseService {
      *
      * @param serviceName
      */
-    public void runJob(String serviceName, String jobname){
+    public void runJob(String serviceName, String jobname, RequestInfo requestInfo){
 
         if(serviceName == null)
             serviceName = TRADE_LICENSE_MODULE_CODE;
 
         Long validTill = System.currentTimeMillis() + config.getReminderPeriod();
-
-
-        RequestInfo requestInfo = new RequestInfo();
-
+        
         tlBatchService.getLicensesAndPerformAction(serviceName, jobname, validTill, requestInfo);
 
 
