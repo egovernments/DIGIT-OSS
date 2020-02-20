@@ -144,7 +144,7 @@ public class PaymentUpdateService {
 							endStates = util.getBPAEndState(updateRequest);
 							break;
 					}
-					enrichmentService.postStatusEnrichment(updateRequest,endStates);
+					enrichmentService.postStatusEnrichment(updateRequest,endStates,null);
 
 					/*
 					 * calling repository to update the object in TL tables

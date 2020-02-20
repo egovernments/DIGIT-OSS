@@ -463,14 +463,28 @@ public class NotificationUtil {
 		 * getEditMsg(license,diff.getClassesRemoved(),messageTemplate);
 		 * finalMessage.append(message); }
 		 */
+		String applicationType = String.valueOf(license.getApplicationType());
+		if(applicationType.equals(APPLICATION_TYPE_RENEWAL)){
+			if (!CollectionUtils.isEmpty(diff.getFieldsChanged()) || !CollectionUtils.isEmpty(diff.getClassesAdded())
+					|| !CollectionUtils.isEmpty(diff.getClassesRemoved())) {
+				messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_OBJECT_RENEW_MODIFIED, localizationMessage);
+				if (messageTemplate == null)
+					messageTemplate = DEFAULT_OBJECT_RENEWAL_MODIFIED_MSG;
+				message = getEditMsg(license, messageTemplate);
+			}
 
-		if (!CollectionUtils.isEmpty(diff.getFieldsChanged()) || !CollectionUtils.isEmpty(diff.getClassesAdded())
-				|| !CollectionUtils.isEmpty(diff.getClassesRemoved())) {
-			messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_OBJECT_MODIFIED, localizationMessage);
-			if (messageTemplate == null)
-				messageTemplate = DEFAULT_OBJECT_MODIFIED_MSG;
-			message = getEditMsg(license, messageTemplate);
 		}
+		else{
+			if (!CollectionUtils.isEmpty(diff.getFieldsChanged()) || !CollectionUtils.isEmpty(diff.getClassesAdded())
+					|| !CollectionUtils.isEmpty(diff.getClassesRemoved())) {
+				messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_OBJECT_MODIFIED, localizationMessage);
+				if (messageTemplate == null)
+					messageTemplate = DEFAULT_OBJECT_MODIFIED_MSG;
+				message = getEditMsg(license, messageTemplate);
+			}
+		}
+
+
 
 		return message;
 	}

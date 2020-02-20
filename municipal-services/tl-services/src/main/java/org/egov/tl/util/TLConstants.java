@@ -67,6 +67,8 @@ public class TLConstants {
 
     public static final String NOTIFICATION_OBJECT_MODIFIED = "tl.en.edit.object.modified";
 
+    public static final String NOTIFICATION_OBJECT_RENEW_MODIFIED = "tl.en.edit.object.renew.modified";
+
     public static final String NOTIFICATION_SENDBACK_CITIZEN= "tl.en.sendback.citizen";
 
     public static final String NOTIFICATION_FORWARD_CITIZEN = "tl.en.forward.citizen";
@@ -75,6 +77,8 @@ public class TLConstants {
 
 
     public static final String DEFAULT_OBJECT_MODIFIED_MSG = "Dear <1>,Your Trade License with application number <APPLICATION_NUMBER> was modified.";
+
+    public static final String DEFAULT_OBJECT_RENEWAL_MODIFIED_MSG = "Dear <1>,Your Renewal Trade License with application number <APPLICATION_NUMBER> was modified.";
 
 
     // MDMS
@@ -230,6 +234,8 @@ public class TLConstants {
     public static final String VARIABLE_LASTMODIFIEDTIME = "lastModifiedTime";
 
     public static final String VARIABLE_LASTMODIFIEDDATE = "lastModifiedDate";
+
+    public static final String VARIABLE_COMMENT = "comment";
     
 	public static final String  USREVENTS_EVENT_TYPE = "SYSTEMGENERATED";
 	public static final String  USREVENTS_EVENT_NAME = "Trade License";
@@ -243,7 +249,7 @@ public class TLConstants {
 
 
     public static final List<String> FIELDS_TO_IGNORE = Collections.unmodifiableList(Arrays.asList(VARIABLE_ACTION,VARIABLE_WFDOCUMENTS,
-            VARIABLE_CREATEDBY,VARIABLE_LASTMODIFIEDBY,VARIABLE_CREATEDTIME,VARIABLE_LASTMODIFIEDTIME,VARIABLE_STATUS,VARIABLE_LASTMODIFIEDDATE,VARIABLE_ISSUED_DATE));
+            VARIABLE_CREATEDBY,VARIABLE_LASTMODIFIEDBY,VARIABLE_CREATEDTIME,VARIABLE_LASTMODIFIEDTIME,VARIABLE_STATUS,VARIABLE_LASTMODIFIEDDATE,VARIABLE_ISSUED_DATE,VARIABLE_COMMENT));
 
 
 
@@ -255,6 +261,8 @@ public class TLConstants {
     public static final String NOTIF_TRADE_LICENSENUMBER_KEY = "{LICENSE_NUMBER}";
 
     public static final String NOTIF_EXPIRY_DATE_KEY = "{EXPIRY_DATE}";
+
+    public static final String validityPeriodMap = "$.MdmsRes.TradeLicense.TradeType[?(@.code==\"{}\")].validityPeriod";
 
     public static final String JOB_SMS_REMINDER = "REMINDER";
 
