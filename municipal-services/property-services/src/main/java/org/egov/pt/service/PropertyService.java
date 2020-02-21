@@ -236,7 +236,8 @@ public class PropertyService {
 		Map<String, Object> additionalDetails = mapper.convertValue(propertyFromSearch.getAdditionalDetails(), Map.class);
 		String propertyUuId = (String) additionalDetails.get(PTConstants.PREVIOUS_PROPERTY_PREVIOUD_UUID);
 		
-		PropertyCriteria criteria = PropertyCriteria.builder().uuids(Sets.newHashSet(propertyUuId)).build();
+		PropertyCriteria criteria = PropertyCriteria.builder().uuids(Sets.newHashSet(propertyUuId))
+				.tenantId(propertyFromSearch.getTenantId()).build();
 		Property previousPropertyToBeReInstated = searchProperty(criteria, request.getRequestInfo()).get(0);
 		previousPropertyToBeReInstated.setStatus(Status.ACTIVE);
 		request.setProperty(previousPropertyToBeReInstated);
