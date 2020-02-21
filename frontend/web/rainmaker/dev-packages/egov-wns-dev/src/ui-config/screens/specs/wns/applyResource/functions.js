@@ -1,10 +1,6 @@
 import get from "lodash/get";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getPropertyResults } from "../../../../../ui-utils/commons";
-import set from 'lodash/set';
-import {
-  getUserInfo
-} from "egov-ui-kit/utils/localStorageUtils";
 
 export const propertySearchApiCall = async (state, dispatch) => {
   let queryObject = [
@@ -29,7 +25,7 @@ export const propertySearchApiCall = async (state, dispatch) => {
   }
   try {
     let response = await getPropertyResults(queryObject, dispatch);
-    dispatch(prepareFinalObject("Properties[0]", response.Properties[0]))
+    dispatch(prepareFinalObject("applyScreen.property", response.applyScreen.property))
     dispatch(
       handleField(
         "apply",

@@ -11,6 +11,7 @@ import FormLabel from "@material-ui/core/FormLabel";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import "./index.css";
 import { toggleWater, toggleSewerage } from './toggleFeilds';
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
 const styles = {
   root: {
@@ -40,6 +41,14 @@ const styles = {
 
 class CheckboxLabels extends React.Component {
   state = { checkedSewerage: false, checkedWater: true }
+
+  componentWillMount() {
+    const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+    if (applicationNumber && getQueryArg(window.location.href, "action") === "edit") {
+      if (applicationNumber.substring(0, 2) === "SW") { this.setState({ checkedSewerage: true, checkedWater: false }) }
+      else { this.setState({ checkedSewerage: false, checkedWater: true }) }
+    } else { this.setState({ checkedWater: true, checkedSewerage: false }); }
+  }
 
   handleWater = name => event => {
     const { jsonPathWater, approveCheck, onFieldChange } = this.props;

@@ -19,7 +19,7 @@ import {
       labelName: "Ownership Type ",
       labelKey: "WS_OWN_DETAIL_OWNERSHIP_TYPE_LABEL"
     },
-    { jsonPath: "Properties[0].ownershipCategory" }
+    { jsonPath: "applyScreen.property.ownershipCategory" }
   )
   
   export const ownerName = getLabelWithValue(
@@ -27,7 +27,7 @@ import {
       labelName: "Name",
       labelKey: "WS_OWN_DETAIL_OWN_NAME_LABEL"
     },
-    { jsonPath: "Properties[0].owners[0].name" }
+    { jsonPath: "applyScreen.property.owners[0].name" }
   )
   export const ownerMobileNumber = getLabelWithValue(
     {
@@ -36,7 +36,7 @@ import {
     },
     {
       jsonPath:
-        "Properties[0].owners[0].mobileNumber"
+        "applyScreen.property.owners[0].mobileNumber"
     }
   )
   export const gender = getLabelWithValue(
@@ -45,7 +45,7 @@ import {
       labelKey: "WS_OWN_DETAIL_GENDER_LABEL"
     },
     {
-      jsonPath: "Properties[0].owners[0].gender"
+      jsonPath: "applyScreen.property.owners[0].gender"
     }
   )
   export const dateOfBirth = getLabelWithValue(
@@ -54,7 +54,7 @@ import {
       labelKey: "WS_OWN_DETAIL_DOB_LABEL"
     },
     {
-      jsonPath: "Properties[0].owners[0].dob"
+      jsonPath: "applyScreen.property.owners[0].dob"
     }
   )
   export const Relationship = getLabelWithValue(
@@ -62,7 +62,7 @@ import {
       labelName: "Relationship",
       labelKey: "WS_OWN_DETAIL_RELATION_LABEL"
     },
-    { jsonPath: "Properties[0].owners[0].relationship" }
+    { jsonPath: "applyScreen.property.owners[0].relationship" }
   )
   export const fatherName = getLabelWithValue(
     {
@@ -70,7 +70,7 @@ import {
       labelKey: "WS_OWN_DETAIL_FATHER_OR_HUSBAND_NAME"
     },
     {
-      jsonPath: "Properties[0].owners[0].fatherOrHusbandName",
+      jsonPath: "applyScreen.property.owners[0].fatherOrHusbandName",
     }
   )
   // export const ownerCategory = getLabelWithValue(
@@ -88,7 +88,7 @@ import {
       labelKey: "WS_OWNER_DETAILS_EMAIL_LABEL"
     },
     {
-      jsonPath: "Properties[0].owners[0].emailId"
+      jsonPath: "applyScreen.property.owners[0].emailId"
     }
   )
   export const correspondenceAddress = getLabelWithValue(
@@ -96,7 +96,7 @@ import {
       labelName: "Correspondence Address",
       labelKey: "WS_OWN_DETAIL_CROSADD"
     },
-    { jsonPath: "Properties[0].owners[0].correspondenceAddress" }
+    { jsonPath: "applyScreen.property.owners[0].correspondenceAddress" }
   )
   export const specialApplicantCategory = getLabelWithValue(
     {

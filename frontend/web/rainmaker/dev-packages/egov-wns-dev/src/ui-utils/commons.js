@@ -408,7 +408,7 @@ export const updatePFOforSearchResults = async (
 
     setApplicationNumberBox(state, dispatch);
 
-    createOwnersBackup(dispatch, payload);
+    // createOwnersBackup(dispatch, payload);
 };
 
 export const getBoundaryData = async (
@@ -674,7 +674,6 @@ export const applyForWaterOrSewerage = async (state, dispatch, status) => {
         proposedTaps: parseInt(queryObject.proposedTaps)
     }
     queryObject = { ...queryObject, ...parsedObject }
-    queryObject.property = JSON.parse(JSON.stringify(findAndReplace(get(state.screenConfiguration.preparedFinalObject, "Properties[0]"), "NA", null)));
     let reduxDocuments = get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux", {});
     let uploadedDocs = [];
     if (reduxDocuments !== null && reduxDocuments !== undefined) {
@@ -853,7 +852,7 @@ const setApplicationNumberBox = (state, dispatch) => {
     }
 };
 
-const handleApplicationNumberDisplay = (dispatch, applicationNumber) => {
+export const handleApplicationNumberDisplay = (dispatch, applicationNumber) => {
     dispatch(handleField("apply", "components.div.children.headerDiv.children.header.children.applicationNumberWater", "visible", true));
     dispatch(handleField("apply", "components.div.children.headerDiv.children.header.children.applicationNumberWater", "props.number", applicationNumber));
 }

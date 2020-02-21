@@ -64,7 +64,7 @@ import {
         labelKey: "WS_PROP_DETAIL_CITY"
       },
       {
-        jsonPath: "Properties[0].address.city",
+        jsonPath: "applyScreen.property.address.city",
       }
     ),
     plotOrHouseOrSurveyNo: getLabelWithValue(
@@ -73,7 +73,7 @@ import {
         labelName:"Door/House No."
       },
       {
-        jsonPath: "Properties[0].address.doorNo",
+        jsonPath: "applyScreen.property.address.doorNo",
       }
     ),
     buildingOrColonyName: getLabelWithValue(
@@ -81,7 +81,7 @@ import {
         labelKey: "WS_PROP_DETAIL_BUILD_NAME_LABEL"
       },
       {
-        jsonPath: "Properties[0].address.buildingName"
+        jsonPath: "applyScreen.property.address.buildingName"
       }
     ),
     streetName: getLabelWithValue(
@@ -89,7 +89,7 @@ import {
         labelKey: "WS_PROP_DETAIL_STREET_NAME"
       },
       {
-        jsonPath: "Properties[0].address.street"
+        jsonPath: "applyScreen.property.address.street"
       }
     ),
     locality: getLabelWithValue(
@@ -98,21 +98,21 @@ import {
         labelName:"Locality/Mohalla"
       },
       {
-        jsonPath: "Properties[0].address.locality.name",
+        jsonPath: "applyScreen.property.address.locality.name",
       }
     ),
     pincode: getLabelWithValue(
       {
         labelKey: "WS_PROP_DETAIL_PINCODE"
       },
-      { jsonPath: "Properties[0].address.pincode" }
+      { jsonPath: "applyScreen.property.address.pincode" }
     ),
     // ExistingPropertyId: getLabelWithValue(
     //   {
     //     labelKey: "WS_PROPERTY_EXIST_ID_LABEL",
     //     labelName:"Existing Property ID"
     //   },
-    //   { jsonPath: "Properties[0].oldPropertyId" }
+    //   { jsonPath: "applyScreen.property.oldPropertyId" }
     // ), 
    })
   

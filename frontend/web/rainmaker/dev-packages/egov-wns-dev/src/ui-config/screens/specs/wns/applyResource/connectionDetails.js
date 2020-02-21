@@ -44,6 +44,7 @@ export const OwnerInfoCard = getCommonCard({
       label: { labelKey: "WS_CONN_DETAIL_NO_OF_TAPS" },
       placeholder: { labelKey: "WS_SERV_DETAIL_NO_OF_TAPS_PLACEHOLDER" },
       gridDefination: { xs: 12, sm: 6 },
+      sourceJsonPath: "applyScreen.proposedTaps",
       jsonPath: "applyScreen.proposedTaps"
     }),
 
@@ -52,6 +53,7 @@ export const OwnerInfoCard = getCommonCard({
       sourceJsonPath: "applyScreenMdmsData.ws-services-calculation.pipeSize",
       placeholder: { labelKey: "WS_SERV_DETAIL_PIPE_SIZE_PLACEHOLDER" },
       gridDefination: { xs: 12, sm: 6 },
+      sourceJsonPath: "applyScreen.proposedPipeSize",
       jsonPath: "applyScreen.proposedPipeSize"
     }),
 
@@ -59,6 +61,7 @@ export const OwnerInfoCard = getCommonCard({
       label: { labelKey: "WS_CONN_DETAIL_NO_OF_WATER_CLOSETS" },
       placeholder: { labelKey: "WS_CONN_DETAIL_NO_OF_WATER_CLOSETS_PLACEHOLDER" },
       gridDefination: { xs: 12, sm: 6 },
+      sourceJsonPath: "applyScreen.proposedWaterClosets",
       jsonPath: "applyScreen.proposedWaterClosets"
     }),
 
@@ -66,6 +69,7 @@ export const OwnerInfoCard = getCommonCard({
       label: { labelKey: "WS_ADDN_DETAILS_NO_OF_TOILETS" },
       placeholder: { labelKey: "WS_ADDN_DETAILS_NO_OF_TOILETS_PLACEHOLDER" },
       gridDefination: { xs: 12, sm: 6 },
+      sourceJsonPath: "applyScreen.proposedToilets",
       jsonPath: "applyScreen.proposedToilets"
     })
   })
