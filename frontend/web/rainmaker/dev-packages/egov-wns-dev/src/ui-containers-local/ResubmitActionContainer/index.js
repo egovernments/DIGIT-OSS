@@ -116,11 +116,10 @@ class ResubmitActionContainer extends React.Component {
   createWorkFLow = async (label, isDocRequired) => {
     const { toggleSnackbar, dataPath, preparedFinalObject } = this.props;
     let data = get(preparedFinalObject, dataPath, []);
-
     if (dataPath !== "BPA") {
       data = data[0];
     }
-  
+
     //setting the action to send in RequestInfo
     let appendToPath = dataPath === "FireNOCs" ? "fireNOCDetails." : "";
     set(data, `${appendToPath}action`, label);
