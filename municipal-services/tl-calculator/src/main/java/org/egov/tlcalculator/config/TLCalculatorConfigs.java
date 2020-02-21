@@ -78,6 +78,13 @@ public class TLCalculatorConfigs {
     @Value("${egov.taxhead.adhoc.exemption}")
     private String adhocExemptionTaxHead;
 
+    @Value("${egov.taxhead.time.penalty}")
+    private String timePenaltyTaxHead;
+
+    @Value("${egov.taxhead.time.rebate}")
+    private String timeRebateTaxHead;
+
+
 
     //MDMS
     @Value("${egov.mdms.host}")

@@ -1,6 +1,7 @@
 package org.egov.tlcalculator.service;
 
 import lombok.extern.slf4j.Slf4j;
+import net.minidev.json.JSONArray;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.tlcalculator.config.TLCalculatorConfigs;
 import org.egov.tlcalculator.kafka.broker.TLCalculatorProducer;
@@ -57,6 +58,8 @@ public class CalculationService {
     @Autowired
     private MDMSService mdmsService;
 
+    @Autowired
+    private TLRenewalCalculation tlRenewal;
 
     /**
      * Calculates tax estimates and creates demand
@@ -168,6 +171,7 @@ public class CalculationService {
       }
 
       TaxHeadEstimate estimate = new TaxHeadEstimate();
+      List<TaxHeadEstimate> estimateList = new ArrayList<>();
       BigDecimal totalTax = tradeUnitFee.add(accessoryFee);
 
       if(totalTax.compareTo(BigDecimal.ZERO)==-1)
@@ -177,10 +181,14 @@ public class CalculationService {
       estimate.setCategory(Category.TAX);
       if(license.getApplicationType() != null && license.getApplicationType().toString().equals(TLCalculatorConstants.APPLICATION_TYPE_RENEWAL)){
           estimate.setTaxHeadCode(config.getRenewTaxHead());
+          estimateList.add(estimate);
+          estimateList.add(tlRenewal.tlRenewalCalculation(requestInfo,calulationCriteria,mdmsData,totalTax));
       }else{
           estimate.setTaxHeadCode(config.getBaseTaxHead());
+          estimateList.add(estimate);
       }
-      estimatesAndSlabs.setEstimates(Collections.singletonList(estimate));
+
+      estimatesAndSlabs.setEstimates(estimateList);
 
       return estimatesAndSlabs;
   }
