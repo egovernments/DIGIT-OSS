@@ -93,7 +93,7 @@ public class PropertyConfiguration {
     @Value("${kafka.topics.notification.sms}")
     private String smsNotifTopic;
 
-    @Value("${kafka.topics.notification.fullpayment}")
+    @Value("${kafka.topics.receipt.create}")
     private String receiptTopic;
 
     @Value("${kafka.topics.notification.pg.save.txns}")
