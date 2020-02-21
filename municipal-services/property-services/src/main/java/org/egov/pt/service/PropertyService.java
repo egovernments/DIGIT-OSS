@@ -7,7 +7,6 @@ import static org.egov.pt.util.PTConstants.UPDATE_PROCESS_CONSTANT;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.config.PropertyConfiguration;
@@ -103,10 +102,6 @@ public class PropertyService {
 		boolean isRequestForOwnerMutation = workFlow != null
 				&& workFlow.getBusinessService().equalsIgnoreCase(config.getMutationWfName());
 		
-		// ID for audit and history search
-		request.getProperty().setAuditId(UUID.randomUUID().toString());
-		propertyFromSearch.setAuditId(UUID.randomUUID().toString());
-
 		if (isRequestForOwnerMutation)
 			processOwnerMutation(request, propertyFromSearch);
 		else
@@ -234,6 +229,10 @@ public class PropertyService {
 		/* Previous record set to ACTIVE */
 		@SuppressWarnings("unchecked")
 		Map<String, Object> additionalDetails = mapper.convertValue(propertyFromSearch.getAdditionalDetails(), Map.class);
+		
+		if(null == additionalDetails) 
+			return;
+		
 		String propertyUuId = (String) additionalDetails.get(PTConstants.PREVIOUS_PROPERTY_PREVIOUD_UUID);
 		
 		PropertyCriteria criteria = PropertyCriteria.builder().uuids(Sets.newHashSet(propertyUuId))

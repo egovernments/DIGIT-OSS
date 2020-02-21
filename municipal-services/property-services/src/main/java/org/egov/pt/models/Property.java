@@ -92,8 +92,6 @@ public class Property extends PropertyInfo {
 	@JsonProperty("workflow")
 	private ProcessInstance workflow;
 	
-	private String auditId;
-
 	@Builder
 	public Property(String id, String propertyId, String surveyId, List<String> linkedProperties, String tenantId,
 			String accountId, String oldPropertyId, Status status, Address address, String acknowldgementNumber,
