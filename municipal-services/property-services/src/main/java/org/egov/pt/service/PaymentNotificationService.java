@@ -97,7 +97,13 @@ public class PaymentNotificationService {
             String localizationMessages = util.getLocalizationMessages(tenantId,requestInfo);
             String consumerCode = transaction.getConsumerCode();
             String path = getJsonPath(topic, ONLINE_PAYMENT_MODE);
-            String messageTemplate = util.getMessageTemplate(path, localizationMessages);
+            String messageTemplate = null;
+            try {
+                Object messageObj = JsonPath.parse(localizationMessages).read(path);
+                messageTemplate = ((ArrayList<String>) messageObj).get(0);
+            } catch (Exception e) {
+                log.error("Fetching from localization failed", e);
+            };
             Map<String, String> valMap = getValuesFromTransaction(transaction);
             String customMessage = getCustomizedMessage(valMap,messageTemplate,path);
 
@@ -192,7 +198,13 @@ public class PaymentNotificationService {
 
             String customMessage = null;
             String path = getJsonPath(topic, paymentMode);
-            String messageTemplate = util.getMessageTemplate(path, localizationMessages);
+            String messageTemplate = null;
+            try {
+                Object messageObj = JsonPath.parse(localizationMessages).read(path);
+                messageTemplate = ((ArrayList<String>) messageObj).get(0);
+            } catch (Exception e) {
+                log.error("Fetching from localization failed", e);
+            }
             Map<String, String> valMap = getValuesFromPayment(transactionNumber, paymentMode, paymentDetail);
             customMessage = getCustomizedMessage(valMap,messageTemplate,path);
 
