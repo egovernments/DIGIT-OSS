@@ -1419,3 +1419,50 @@ export const findAndReplace = (obj, oldValue, newValue) => {
     })
     return obj
 }
+
+// api call to calculate water estimate
+export const waterEstimateCalculation = async (queryObject, dispatch) => {
+    dispatch(toggleSpinner());
+    try {
+        const response = await httpRequest(
+            "post",
+            "ws-calculator/waterCalculator/_estimate",
+            "_estimate",
+            [],
+
+            {
+                isconnectionCalculation: false,
+                CalculationCriteria: queryObject
+            }
+        );
+        dispatch(toggleSpinner());
+        return findAndReplace(response, null, "NA");
+    } catch (error) {
+        dispatch(toggleSpinner());
+        console.log(error);
+    }
+
+};
+
+// api call to calculate sewerage estimate
+export const swEstimateCalculation = async (queryObject, dispatch) => {
+    dispatch(toggleSpinner());
+    try {
+        const response = await httpRequest(
+            "post",
+            "sw-calculator/sewerageCalculator/_estimate",
+            "_estimate",
+            [],
+            {
+                isconnectionCalculation: false,
+                CalculationCriteria: queryObject
+            }
+        );
+        dispatch(toggleSpinner());
+        return findAndReplace(response, null, "NA");
+    } catch (error) {
+        dispatch(toggleSpinner());
+        console.log(error);
+    }
+
+};

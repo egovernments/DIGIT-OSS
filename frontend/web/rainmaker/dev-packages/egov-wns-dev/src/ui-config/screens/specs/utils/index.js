@@ -1006,15 +1006,15 @@ const getEstimateData = (Bill, getFromReceipt, LicenseData) => {
               item.accountDescription.split("-")[0],
               LicenseData
             ) && {
-              value: getToolTipInfo(
-                item.accountDescription.split("-")[0],
-                LicenseData
-              ),
-              key: getToolTipInfo(
-                item.accountDescription.split("-")[0],
-                LicenseData
-              )
-            }
+                value: getToolTipInfo(
+                  item.accountDescription.split("-")[0],
+                  LicenseData
+                ),
+                key: getToolTipInfo(
+                  item.accountDescription.split("-")[0],
+                  LicenseData
+                )
+              }
           });
       } else {
         item.taxHeadCode &&
@@ -2263,7 +2263,7 @@ export const getTextToLocalMapping = label => {
         "WS_COMMON_TABLE_COL_APP_NO_LABEL",
         localisationLabels
       );
-    
+
     case "Application Type":
       return getLocaleLabels(
         "Application Type",

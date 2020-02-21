@@ -109,7 +109,11 @@ export const propertyOwnerDetails = () => {
             uiFramework: "custom-atoms",
             componentPath: "Container",
             props: {
-                className: "common-div-css search-preview"
+                className: "common-div-css search-preview",
+                style: {
+                    padding: 0
+                }
+
             },
             // header: {
             //     gridDefination: {

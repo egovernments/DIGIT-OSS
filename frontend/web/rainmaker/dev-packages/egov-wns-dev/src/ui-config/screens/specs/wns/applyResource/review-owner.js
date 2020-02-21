@@ -111,36 +111,32 @@ export const reviewWaterClosets = getLabelWithValue(
 
 export const reviewPlumberProvidedBy = getLabelWithValue(
   {
-    labelName: "Plumber Provided By",
     labelKey: "WS_ADDN_DETAILS_PLUMBER_PROVIDED_BY"
   },
   {
-    jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].mobileNumber"
+    jsonPath: "WaterConnection[0].plumberInfo[0].name"
   }
 );
 export const reviewPlumberLicenseNo = getLabelWithValue(
   {
-    labelName: "Plumber License No.",
     labelKey: "WS_ADDN_DETAILS_PLUMBER_LICENCE_NO_LABEL"
   },
   {
-    jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].emailId"
+    jsonPath: "WaterConnection[0].plumberInfo[0].licenseNo"
   }
 );
 export const reviewPlumberName = getLabelWithValue(
   {
-    labelName: "Plumber Name",
     labelKey: "WS_ADDN_DETAILS_PLUMBER_NAME_LABEL"
   },
-  { jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].pan" }
+  { jsonPath: "WaterConnection[0].plumberInfo[0].name" }
 );
 
 export const reviewPlumberMobileNo = getLabelWithValue(
   {
-    labelName: "Plumber Mobile No.",
     labelKey: "WS_ADDN_DETAILS_PLUMBER_MOB_NO_LABEL"
   },
-  { jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].pan" }
+  { jsonPath: "WaterConnection[0].plumberInfo[0].mobileNumber" }
 );
 
 export const reviewRoadType = getLabelWithValue(
