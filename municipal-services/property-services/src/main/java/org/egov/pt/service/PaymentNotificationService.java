@@ -216,7 +216,10 @@ public class PaymentNotificationService {
             smsRequests.addAll(getSMSRequests(mobileNumbers,customMessage));
 
             if(null == propertyConfiguration.getIsUserEventsNotificationEnabled() || propertyConfiguration.getIsUserEventsNotificationEnabled()) {
-                events.addAll(getEvents(mobileNumbers,customMessage,requestInfo,property,false));
+                if(paymentDetail.getTotalDue().compareTo(paymentDetail.getTotalAmountPaid())==0)
+                    events.addAll(getEvents(mobileNumbers,customMessage,requestInfo,property,false));
+                else events.addAll(getEvents(mobileNumbers,customMessage,requestInfo,property,true));
+
             }
         }
 
