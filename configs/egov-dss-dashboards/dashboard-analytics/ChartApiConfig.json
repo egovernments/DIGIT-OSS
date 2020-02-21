@@ -3030,7 +3030,7 @@
         "dateRefField": "receiptdate",
         "requestQueryMap": "{\"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\"}",
         "indexName": "receipts-consumers",
-        "aggrQuery": "{\"aggs\":{\"Water Sewerage Collections\":{\"date_histogram\":{\"field\":\"receiptdate\",\"interval\":\"intervalvalue\"},\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"terms\":{\"status\":[\"Cancelled\"]}}]}},\"aggs\":{\"approved\":{\"sum\":{\"field\":\"totalamount\"}}}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"Water Sewerage\":{\"date_histogram\":{\"field\":\"receiptdate\",\"interval\":\"intervalvalue\"},\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"terms\":{\"status\":[\"Cancelled\"]}}]}},\"aggs\":{\"approved\":{\"sum\":{\"field\":\"totalamount\"}}}}}}}}"
       }
     ],
     "translateTenantCode": true,
@@ -3040,7 +3040,7 @@
     "drillChart": "none",
     "documentType": "_doc",
     "aggregationPaths": [
-      "Water Sewerage Collections"
+      "Water Sewerage"
     ],
     "isCumulative": true,
     "interval": "month",
