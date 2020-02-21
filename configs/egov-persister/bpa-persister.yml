@@ -451,7 +451,7 @@ serviceMaps:
 
            - jsonPath: $.BPA.owners.*.documents.*.id
            
-       - query: INSERT INTO eg_bpa_document( id, documenttype, filestoreid, buildingplanid, documentuid, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET documenttype =?,  filestoreid =?,lastmodifiedby =?, lastmodifiedtime =?;
+       - query: INSERT INTO eg_bpa_document( id, documenttype, filestoreid, buildingplanid, documentuid, createdby, lastmodifiedby, createdtime, lastmodifiedtime, wfstate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET documenttype =?,  filestoreid =?,lastmodifiedby =?, lastmodifiedtime =?;
          basePath: BPA.documents.*
          jsonMaps:
           
@@ -472,6 +472,8 @@ serviceMaps:
            - jsonPath: $.BPA.auditDetails.createdTime
 
            - jsonPath: $.BPA.auditDetails.lastModifiedTime
+
+           - jsonPath: $.BPA.documents.*.wfState
 
            - jsonPath: $.BPA.documents.*.documentType
 
@@ -487,7 +489,7 @@ serviceMaps:
    isTransaction: true
    queryMaps:
    
-       - query: INSERT INTO eg_bpa_document( id, documenttype, filestoreid, buildingplanid, documentuid, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET documenttype =?,  filestoreid =?,lastmodifiedby =?, lastmodifiedtime =?;
+       - query: INSERT INTO eg_bpa_document( id, documenttype, filestoreid, buildingplanid, documentuid, createdby, lastmodifiedby, createdtime, lastmodifiedtime, wfstate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET documenttype =?,  filestoreid =?,lastmodifiedby =?, lastmodifiedtime =?;
          basePath: BPA.documents.*
          jsonMaps:
           
@@ -508,6 +510,8 @@ serviceMaps:
            - jsonPath: $.BPA.auditDetails.createdTime
 
            - jsonPath: $.BPA.auditDetails.lastModifiedTime
+
+           - jsonPath: $.BPA.documents.*.wfState
 
            - jsonPath: $.BPA.documents.*.documentType
 
