@@ -16288,7 +16288,7 @@
     {
       "id": 1963,
       "name": "Dashboard collectionsindex-v1",
-      "url": "/dashboard-ingest/ingest/migrate/collectionsindex-v1",
+      "url": "/dashboard-ingest/ingest/migrate/collectionsindex-v1/v1",
       "parentModule": "",
       "displayName": "DSS",
       "orderNumber": 0,
