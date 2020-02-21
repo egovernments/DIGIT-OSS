@@ -61,11 +61,11 @@ public class PTConstants {
 
     public static final String NOTIFICATION_EMPLOYEE_UPDATE_CODE = "pt.property.en.update.employee";
 
-    public static final String NOTIFICATION_PAYMENT_ONLINE = "pt.payment.online";
+    public static final String NOTIFICATION_PAYMENT_ONLINE = "PT_NOTIFICATION_PAYMENT_ONLINE";
 
-    public static final String NOTIFICATION_PAYMENT_OFFLINE = "pt.payment.offline";
+    public static final String NOTIFICATION_PAYMENT_OFFLINE = "PT_NOTIFICATION_PAYMENT_OFFILE";
 
-    public static final String NOTIFICATION_PAYMENT_FAIL = "pt.payment.fail";
+    public static final String NOTIFICATION_PAYMENT_FAIL = "PT_NOTIFICATION_PAYMENT_FAIL";
 
     public static final String NOTIFICATION_OLDPROPERTYID_ABSENT = "pt.oldpropertyid.absent";
     

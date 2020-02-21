@@ -173,7 +173,7 @@ public class NotificationUtil {
         for(String mobileNo: mobileNumbers) {
             userSearchRequest.put("userName", mobileNo);
             try {
-                Object user = serviceRequestRepository.fetchResult(uri, userSearchRequest);
+                Object user = serviceRequestRepository.fetchResult(uri, userSearchRequest).get();
                 if(null != user) {
                     String uuid = JsonPath.read(user, "$.user[0].uuid");
                     mapOfPhnoAndUUIDs.put(mobileNo, uuid);
