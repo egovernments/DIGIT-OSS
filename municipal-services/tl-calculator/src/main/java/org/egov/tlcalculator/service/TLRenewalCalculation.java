@@ -40,20 +40,34 @@ public class TLRenewalCalculation {
     private TLCalculatorConfigs config;
 
 
-    public TaxHeadEstimate tlRenewalCalculation(RequestInfo requestInfo, CalulationCriteria calulationCriteria, Object mdmsData, BigDecimal taxAmt){
+    public List<TaxHeadEstimate> tlRenewalCalculation(RequestInfo requestInfo, CalulationCriteria calulationCriteria, Object mdmsData, BigDecimal taxAmt){
         Map<String, JSONArray> timeBasedExemptionMasterMap = new HashMap<>();
-        TaxHeadEstimate estimate = new TaxHeadEstimate();
+        TaxHeadEstimate estimateRebate = new TaxHeadEstimate();
+        TaxHeadEstimate estimatePenalty = new TaxHeadEstimate();
+        List<TaxHeadEstimate> estimateList = new ArrayList<>();
         String tenantId = calulationCriteria.getTenantId();
         setPropertyMasterValues(requestInfo, tenantId,timeBasedExemptionMasterMap);
         String financialyear = calulationCriteria.getTradelicense().getFinancialYear();
 
         BigDecimal rebate = getRebate(taxAmt, financialyear,timeBasedExemptionMasterMap.get(TLCalculatorConstants.REBATE_MASTER));
+        BigDecimal penalty = BigDecimal.ZERO;
 
-        estimate.setCategory(Category.REBATE);
-        estimate.setEstimateAmount(rebate);
-        estimate.setTaxHeadCode(config.getTimeRebateTaxHead());
+        if (rebate.equals(BigDecimal.ZERO)) {
+            penalty = getPenalty(taxAmt, financialyear, timeBasedExemptionMasterMap.get(TLCalculatorConstants.PENANLTY_MASTER));
+        }
 
-        return estimate;
+        estimateRebate.setCategory(Category.REBATE);
+        estimateRebate.setEstimateAmount(rebate.setScale(2, 2).negate());
+        estimateRebate.setTaxHeadCode(config.getTimeRebateTaxHead());
+        estimateList.add(estimateRebate);
+
+        estimatePenalty.setCategory(Category.PENALTY);
+        estimatePenalty.setEstimateAmount(penalty.setScale(2, 2));
+        estimatePenalty.setTaxHeadCode(config.getTimePenaltyTaxHead());
+        estimateList.add(estimatePenalty);
+
+
+        return estimateList;
     }
 
 
@@ -83,6 +97,31 @@ public class TLRenewalCalculation {
             rebateAmt = calculateApplicables(taxAmt, rebate);
         System.out.println("rebateAmt rate--->"+rebateAmt);
         return rebateAmt;
+    }
+
+
+    /**
+     * Returns the Amount of penalty that has to be applied on the given tax amount for the given period
+     *
+     * @param taxAmt
+     * @param assessmentYear
+     * @return
+     */
+    public BigDecimal getPenalty(BigDecimal taxAmt, String assessmentYear, JSONArray penaltyMasterList) {
+
+        BigDecimal penaltyAmt = BigDecimal.ZERO;
+        Map<String, Object> penalty = getApplicableMaster(assessmentYear, penaltyMasterList);
+        if (null == penalty) return penaltyAmt;
+
+        String[] time = getStartTime(assessmentYear,penalty);
+        Calendar cal = Calendar.getInstance();
+        setDateToCalendar(time, cal);
+        Long currentIST = System.currentTimeMillis()+TLCalculatorConstants.TIMEZONE_OFFSET;
+
+        if (cal.getTimeInMillis() < currentIST)
+            penaltyAmt = calculateApplicables(taxAmt, penalty);
+
+        return penaltyAmt;
     }
 
     /**
@@ -252,5 +291,46 @@ public class TLRenewalCalculation {
         }
         return currentApplicable;
     }
+
+    /**
+     * Fetch the fromFY and take the starting year of financialYear
+     * calculate the difference between the start of assessment financial year and fromFY
+     * Add the difference in year to the year in the starting day
+     * eg: Assessment year = 2017-18 and interestMap fetched from master due to fallback have fromFY = 2015-16
+     * and startingDay = 01/04/2016. Then diff = 2017-2015 = 2
+     * Therefore the starting day will be modified from 01/04/2016 to 01/04/2018
+     * @param assessmentYear Year of the assessment
+     * @param interestMap The applicable master data
+     * @return list of string with 0'th element as day, 1'st as month and 2'nd as year
+     */
+    private String[] getStartTime(String assessmentYear,Map<String, Object> interestMap){
+        String financialYearOfApplicableEntry = ((String) interestMap.get(TLCalculatorConstants.FROMFY_FIELD_NAME)).split("-")[0];
+        Integer diffInYear = Integer.valueOf(assessmentYear.split("-")[0]) - Integer.valueOf(financialYearOfApplicableEntry);
+        String startDay = ((String) interestMap.get(TLCalculatorConstants.STARTING_DATE_APPLICABLES));
+        Integer yearOfStartDayInApplicableEntry = Integer.valueOf((startDay.split("/")[2]));
+        startDay = startDay.replace(String.valueOf(yearOfStartDayInApplicableEntry),String.valueOf(yearOfStartDayInApplicableEntry+diffInYear));
+        String[] time = startDay.split("/");
+        return time;
+    }
+
+    /**
+     * Overloaded method
+     * Sets the date in to calendar based on the month and date value present in the time array*
+     * @param time
+     * @param cal
+     */
+    private void setDateToCalendar(String[] time, Calendar cal) {
+
+        cal.clear();
+        TimeZone timeZone = TimeZone.getTimeZone("Asia/Kolkata");
+        cal.setTimeZone(timeZone);
+        Integer day = Integer.valueOf(time[0]);
+        Integer month = Integer.valueOf(time[1])-1;
+        // One is subtracted because calender reads january as 0
+        Integer year = Integer.valueOf(time[2]);
+        cal.set(year, month, day);
+    }
+
+
 
 }

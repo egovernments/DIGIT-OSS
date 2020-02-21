@@ -70,5 +70,7 @@ public class TLCalculatorConstants {
 
     public static final BigDecimal HUNDRED = BigDecimal.valueOf(100);
 
+    public static final Long TIMEZONE_OFFSET = 19800000l;
+
 
 }
