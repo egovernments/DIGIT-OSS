@@ -493,8 +493,8 @@ export const setApplicationNumberBox = (state, dispatch, applicationNo) => {
   }
 };
 
-export const downloadReceiptFromFilestoreID=(fileStoreId,mode)=>{
-  getFileUrlFromAPI(fileStoreId).then(async(fileRes) => {
+export const downloadReceiptFromFilestoreID=(fileStoreId,tenantId,mode)=>{
+  getFileUrlFromAPI(fileStoreId,tenantId).then(async(fileRes) => {
     if (mode === 'download') {
       var win = window.open(fileRes[fileStoreId], '_blank');
       if(win){

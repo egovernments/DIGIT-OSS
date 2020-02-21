@@ -6,6 +6,9 @@ import {
   toggleSpinner
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
+import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
@@ -466,4 +469,57 @@ export const setApplicationNumberBox = (state, dispatch, applicationNo) => {
       )
     );
   }
+};
+export const downloadCertificateForm = (Properties,tenantId,mode='download') => {
+  const queryStr = [
+    { key: "key", value:"ptmutationcertificate" },
+    { key: "tenantId", value: tenantId }
+  ]
+  const DOWNLOADRECEIPT = {
+    GET: {
+      URL: "/pdf-service/v1/_create",
+      ACTION: "_get",
+    },
+  };
+  try {
+    httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Properties }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+      .then(res => {
+        res.filestoreIds[0]
+        if (res && res.filestoreIds && res.filestoreIds.length > 0) {
+          res.filestoreIds.map(fileStoreId => {
+            downloadReceiptFromFilestoreID(fileStoreId,tenantId,mode)
+          })
+        } else {
+          console.log("Error In Acknowledgement form Download");
+        }
+      });
+  } catch (exception) {
+    alert('Some Error Occured while downloading Acknowledgement form!');
+  }
+}
+export const generatePdfFromDiv = (action, applicationNumber) => {
+  let target = document.querySelector("#material-ui-cardContent");
+  html2canvas(target).then(canvas => {
+    var data = canvas.toDataURL();
+    var imgWidth = 200;
+    var pageHeight = 295;
+    var imgHeight = (canvas.height * imgWidth) / canvas.width;
+    var heightLeft = imgHeight;
+    var doc = new jsPDF("p", "mm");
+    var position = 0;
+    doc.addImage(data, "PNG", 5, 5 + position, imgWidth, imgHeight);
+    heightLeft -= pageHeight;
+    while (heightLeft >= 0) {
+      position = heightLeft - imgHeight;
+      doc.addPage();
+      doc.addImage(data, "PNG", 5, 5 + position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+    }
+    if (action === "download") {
+      doc.save(`preview-${applicationNumber}.pdf`);
+    } else if (action === "print") {
+      doc.autoPrint();
+      window.open(doc.output("bloburl"), "_blank");
+    }
+  });
 };

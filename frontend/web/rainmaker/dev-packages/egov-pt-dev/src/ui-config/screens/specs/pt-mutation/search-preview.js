@@ -20,7 +20,9 @@ import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
-import { getSearchResults } from "../../../../ui-utils/commons";
+import { getSearchResults,generatePdfFromDiv } from "../../../../ui-utils/commons";
+import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons"
+import { httpRequest } from "../../../../ui-utils/api";
 import { searchBill } from "../utils/index";
 import generatePdf from "../utils/receiptPdf";
 import { loadPdfGenerationData } from "../utils/receiptTransformer";
@@ -84,7 +86,33 @@ const titlebar = getCommonContainer({
   // }
 });
 
-
+export const downloadCertificateForm = (Properties,tenantId,mode='download') => {
+  const queryStr = [
+    { key: "key", value:"ptmutationcertificate" },
+    { key: "tenantId", value: tenantId }
+  ]
+  const DOWNLOADRECEIPT = {
+    GET: {
+      URL: "/pdf-service/v1/_create",
+      ACTION: "_get",
+    },
+  };
+  try {
+    httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Properties }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+      .then(res => {
+        res.filestoreIds[0]
+        if (res && res.filestoreIds && res.filestoreIds.length > 0) {
+          res.filestoreIds.map(fileStoreId => {
+            downloadReceiptFromFilestoreID(fileStoreId,tenantId,mode)
+          })
+        } else {
+          console.log("Error In Acknowledgement form Download");
+        }
+      });
+  } catch (exception) {
+    alert('Some Error Occured while downloading Acknowledgement form!');
+  }
+}
 
 const prepareUoms = (state, dispatch) => {
   let buildings = get(
@@ -133,7 +161,7 @@ const prepareUoms = (state, dispatch) => {
 //   dispatch(prepareFinalObject("documentsUploadRedux", documentsUploadRedux));
 // };
 
-const setDownloadMenu = (state, dispatch) => {
+const setDownloadMenu = (state, dispatch,tenantId,applicationNumber) => {
   /** MenuButton data based on status */
   // let status = get(
   //   state,
@@ -145,14 +173,14 @@ const setDownloadMenu = (state, dispatch) => {
   let certificateDownloadObject = {
     label: { labelName: "PT Certificate", labelKey: "PT_CERTIFICATE" },
     link: () => {
-      generatePdf(state, dispatch, "certificate_download");
+      downloadCertificateForm(get(state,"screenConfiguration.preparedFinalObject.Properties"),tenantId);
     },
     leftIcon: "book"
   };
   let certificatePrintObject = {
     label: { labelName: "PT Certificate", labelKey: "PT_CERTIFICATE" },
     link: () => {
-      generatePdf(state, dispatch, "certificate_print");
+      downloadCertificateForm(get(state,"screenConfiguration.preparedFinalObject.Properties"),tenantId,'print');
     },
     leftIcon: "book"
   };
@@ -173,14 +201,14 @@ const setDownloadMenu = (state, dispatch) => {
   let applicationDownloadObject = {
     label: { labelName: "Application", labelKey: "PT_APPLICATION" },
     link: () => {
-      generatePdf(state, dispatch, "application_download");
+      generatePdfFromDiv("download" ,applicationNumber )
     },
     leftIcon: "assignment"
   };
   let applicationPrintObject = {
     label: { labelName: "Application", labelKey: "PT_APPLICATION" },
     link: () => {
-      generatePdf(state, dispatch, "application_print");
+      generatePdfFromDiv("print" , applicationNumber)
     },
     leftIcon: "assignment"
   };
@@ -237,7 +265,7 @@ const prepareDocumentsView = async (state, dispatch) => {
   let allDocuments = 
     state.screenConfiguration.preparedFinalObject.Property.documents;
 
-  allDocuments.forEach(doc => {
+    allDocuments&& allDocuments.forEach(doc => {
     documentsPreview.push({
       title: getTransformedLocale(doc.documentType),
       fileStoreId: doc.fileStoreId,
@@ -349,8 +377,20 @@ const setSearchResponse = async (
   prepareDocumentsView(state, dispatch);
   prepareUoms(state, dispatch);
   await loadPdfGenerationData(applicationNumber, tenantId);
-  setDownloadMenu(state, dispatch);
+  setDownloadMenu(state, dispatch,tenantId,applicationNumber);
 };
+export const setData=async(state,dispatch,applicationNumber,tenantId)=>{
+  const response = await getSearchResults([
+     {
+       key: "tenantId",
+       value: tenantId
+     },
+     { key: "acknowledgementIds", value: applicationNumber }
+   ]);
+   
+   dispatch(prepareFinalObject("Properties", get(response, "Properties", [])));
+ 
+ }
 
 const screenConfig = {
   uiFramework: "material-ui",
@@ -373,6 +413,7 @@ const screenConfig = {
     setBusinessServiceDataToLocalStorage(queryObject, dispatch);
 
     // Hide edit buttons
+    setData(state,dispatch,applicationNumber,tenantId);
     set(
       action,
       "screenConfig.components.div.children.body.children.cardContent.children.nocSummary.children.cardContent.children.header.children.editSection.visible",

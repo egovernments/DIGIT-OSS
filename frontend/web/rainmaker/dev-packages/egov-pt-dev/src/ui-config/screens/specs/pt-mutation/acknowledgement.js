@@ -6,9 +6,11 @@ import {
   applicationSuccessFooter,
   gotoHomeFooter,
 } from "./acknowledgementResource/footers";
+import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons"
+import { getSearchResults,generatePdfFromDiv } from "../../../../ui-utils/commons";
 import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { getSearchResults } from "../../../../ui-utils/commons";
+import { httpRequest } from "../../../../ui-utils/api";
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import generatePdf from "../utils/receiptPdf";
 import './index.css';
@@ -35,6 +37,135 @@ export const header = getCommonContainer({
     visible: true
   }
 });
+ 
+export const downloadCertificateForm = (Properties,tenantId,mode='download') => {
+   const queryStr = [
+     { key: "key", value:"ptmutationcertificate" },
+     { key: "tenantId", value: tenantId }
+   ]
+   const DOWNLOADRECEIPT = {
+     GET: {
+       URL: "/pdf-service/v1/_create",
+       ACTION: "_get",
+     },
+   };
+   try {
+     httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Properties }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+       .then(res => {
+         res.filestoreIds[0]
+         if (res && res.filestoreIds && res.filestoreIds.length > 0) {
+           res.filestoreIds.map(fileStoreId => {
+             downloadReceiptFromFilestoreID(fileStoreId,tenantId,mode)
+           })
+         } else {
+           console.log("Error In Acknowledgement form Download");
+         }
+       });
+   } catch (exception) {
+     alert('Some Error Occured while downloading Acknowledgement form!');
+   }
+ }
+
+ const downloadprintMenu=(state,applicationNumber,tenantId,purpose)=>{
+  const certificateDownloadObject = {
+    label: { labelName: "PT Certificate", labelKey: "PT_CERTIFICATE" },
+    link: () => {
+      downloadCertificateForm(get(state,"screenConfiguration.preparedFinalObject.Properties"),tenantId);
+    },
+    leftIcon: "book"
+  };
+  const certificatePrintObject = {
+    label: { labelName: "PT Certificate", labelKey: "PT_CERTIFICATE" },
+    link: () => {
+      downloadCertificateForm(get(state,"screenConfiguration.preparedFinalObject.Properties"),tenantId,'print');
+    },
+    leftIcon: "book"
+  };
+ 
+  const applicationDownloadObject = {
+    label: { labelName: "PT Application", labelKey: "PT_APPLICATION" },
+    link: () => {
+      generatePdfFromDiv("download" ,applicationNumber )
+     
+    },
+    leftIcon: "assignment"
+  };
+  let applicationPrintObject = {
+    label: { labelName: "PT Application", labelKey: "PT_APPLICATION" },
+    link: () => {
+      // const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
+      // const documents = LicensesTemp[0].reviewDocData;
+      // set(Licenses[0],"additionalDetails.documents",documents)
+      // downloadAcknowledgementForm(Licenses,'print');
+      generatePdfFromDiv("print" , applicationNumber)
+     
+    },
+    leftIcon: "assignment"
+  };
+  let downloadMenu = [];
+  let printMenu = [];
+  switch (purpose) {
+    case "approve":
+      downloadMenu = [certificateDownloadObject ];
+      printMenu = [certificatePrintObject ];
+      break;
+    case "apply":
+      downloadMenu = [applicationDownloadObject];
+      printMenu = [applicationPrintObject];
+      break;
+      default:
+      break;
+  }
+
+    return {
+
+      uiFramework: "custom-atoms",
+      componentPath: "Div",
+      props: {
+        className:"downloadprint-menu",
+        style: { textAlign: "right", display: "flex" }
+      },
+      children: {
+        downloadMenu: {
+          uiFramework: "custom-molecules",
+          componentPath: "DownloadPrintButton",
+          props: {
+            data: {
+              label: {labelName : "DOWNLOAD" , labelKey :"TL_DOWNLOAD"},
+               leftIcon: "cloud_download",
+              rightIcon: "arrow_drop_down",
+              props: { variant: "outlined", style: { height: "60px", color : "#FE7A51" }, className: "tl-download-button" },
+              menu: downloadMenu
+            }
+          }
+        },
+        printMenu: {
+          uiFramework: "custom-molecules",
+          componentPath: "DownloadPrintButton",
+          props: {
+            data: {
+              label: {labelName : "PRINT" , labelKey :"TL_PRINT"},
+              leftIcon: "print",
+              rightIcon: "arrow_drop_down",
+              props: { variant: "outlined", style: { height: "60px", color : "#FE7A51" }, className: "tl-print-button" },
+              menu: printMenu
+            }
+          }
+        }
+  
+      },
+      // gridDefination: {
+      //   xs: 12,
+      //   sm: 6
+      // }
+    
+
+    }
+   
+}
+  /** END */
+
+
 const getHeader=(applicationNumber)=>{
 return getCommonContainer({
   header: getCommonHeader({
@@ -69,10 +200,12 @@ const getAcknowledgementCard = (
     // loadPdfGenerationData(applicationNumber, tenant);
     return {
       header:getHeader(applicationNumber),
+ //     dpmenu: downloadprintMenu(state,applicationNumber,tenant,purpose),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
         children: {
+          
           card: acknowledgementCard({
             icon: "done",
             backgroundColor: "#39CB74",
@@ -91,85 +224,6 @@ const getAcknowledgementCard = (
             },
             number: applicationNumber
           }),
-          abc: {
-            uiFramework: "custom-atoms",
-            componentPath: "Div",
-            children: {
-              downloadFormButton: {
-                uiFramework: "custom-atoms",
-                componentPath: "Div",
-                children: {
-                  div1: {
-                    uiFramework: "custom-atoms",
-                    componentPath: "Icon",
-                 
-                    props:{
-                      iconName: "cloud_download",
-                    style:{
-                      marginTop: "7px",
-                      marginRight: "8px",
-                    }
-                  },
-                    onClick: {
-                      action: "condition",
-                      callBack: () => {
-                        generatePdf(state, dispatch, "application_download");
-                      },
-                    },
-                  },
-                  div2: getLabel({
-                    labelName: "ACKNOWLEDGEMENT FORM",
-                    labelKey: "PT_MUTATION_ACKNOWLEDGEMENT_FORM"
-                  })
-                },
-                onClickDefination: {
-                  action: "condition",
-                  callBack: () => {
-                    generatePdf(state, dispatch, "application_download");
-                  }
-                },
-              },
-              printFormButton: {
-                uiFramework: "custom-atoms",
-                componentPath: "Div",
-                children: {
-                  div1: {
-                    uiFramework: "custom-atoms",
-                    componentPath: "Icon",
-                 
-                    props:{
-                      iconName: "print",
-                    style:{
-                      marginTop: "7px",
-                      marginRight: "8px",
-                    }
-                  },
-                    onClick: {
-                      action: "condition",
-                      callBack: () => {
-                        generatePdf(state, dispatch, "application_print");
-                      },
-                    },
-                  },
-                  div2: getLabel({
-                    labelName: "PRINT ACKNOWLEDGEMENT FORM",
-                    labelKey: "PT_MUTATION_PRINT_ACKNOWLEDGEMENT_FORM"
-                  })
-                },
-                onClickDefination: {
-                  action: "condition",
-                  callBack: () => {
-                    generatePdf(state, dispatch, "application_print");
-                  }
-                },
-              }
-            },
-            props: {
-              style: {
-                display: "flex",
-              }
-            },
-          }
         }
       },
       iframeForPdf: {
@@ -252,6 +306,7 @@ const getAcknowledgementCard = (
     // loadReceiptGenerationData(applicationNumber, tenant);
     return {
       header:getHeader(applicationNumber),
+      dpmenu: downloadprintMenu(state,applicationNumber,tenant,purpose),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -497,9 +552,21 @@ const setApplicationData = async (dispatch, applicationNumber, tenant) => {
       value: applicationNumber
     }
   ];
-  // const response = await getSearchResults(queryObject);
-  // dispatch(prepareFinalObject("Properties", get(response, "Properties", [])));
+  const response = await getSearchResults(queryObject);
+ // dispatch(prepareFinalObject("Properties", get(response, "Properties", [])));
 };
+export const setData=async(state,dispatch,applicationNumber,tenantId)=>{
+  const response = await getSearchResults([
+     {
+       key: "tenantId",
+       value: tenantId
+     },
+     { key: "acknowledgementIds", value: applicationNumber }
+   ]);
+   
+   dispatch(prepareFinalObject("Properties", get(response, "Properties", [])));
+ 
+ }
 const screenConfig = {
   uiFramework: "material-ui",
   name: "acknowledgement",
@@ -521,6 +588,8 @@ const screenConfig = {
     );
     const secondNumber = getQueryArg(window.location.href, "secondNumber");
     const tenant = getQueryArg(window.location.href, "tenantId");
+    setData(state,dispatch,applicationNumber,tenant);
+    setApplicationData(dispatch, applicationNumber, tenant);
     const data = getAcknowledgementCard(
       state,
       dispatch,
@@ -530,7 +599,7 @@ const screenConfig = {
       secondNumber,
       tenant
     );
-    setApplicationData(dispatch, applicationNumber, tenant);
+    
     set(action, "screenConfig.components.div.children", data);
     return action;
   }
