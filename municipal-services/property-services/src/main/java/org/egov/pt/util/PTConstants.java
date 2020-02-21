@@ -196,7 +196,9 @@ public class PTConstants {
     public static final String CREATED_STRING = "Created";
     
     public static final String UPDATED_STRING = "Updated";
-    
+
+    public static final String PT_BUSINESSSERVICE = "PT";
+
 
     public static final String NOTIFICATION_PROPERTYID = "{PROPERTYID}";
     
@@ -228,6 +230,8 @@ public class PTConstants {
     public static final String NOTIFICATION_ASMT_PREFIX = "ASMT_MSG_";
 
 
+
+    public static final String ONLINE_PAYMENT_MODE = "ONLINE";
 
 
 }
