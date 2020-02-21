@@ -16,7 +16,7 @@ class PropertyInfoCard extends Component {
             textChildren={
               <div>
                 <div >
-                {!ownerInfo && <div className="rainmaker-displayInline" style={{ alignItems: "center", marginLeft: "13px" }}>
+                {!ownerInfo && <div className="rainmaker-displayInline" style={{ alignItems: "center", marginLeft: "13px",marginTop:20 }}>
                     {header && (
                       <Label
                         labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.87)", fontWeight: "400", lineHeight: "19px" }}

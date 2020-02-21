@@ -4,6 +4,8 @@ import uniqBy from "lodash/uniqBy";
 import sortBy from "lodash/sortBy";
 import isUndefined from "lodash/isUndefined";
 import cloneDeep from "lodash/cloneDeep";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 import { getPlotAndFloorFormConfigPath } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/utils/assessInfoFormManager";
 
 export const resetFormWizard = (form, removeForm) => {
@@ -379,3 +381,31 @@ const modifyEndOfJsonPath = (jsonpath, toReplaceWith) => {
   return jP.join(".") + "." + toReplaceWith;
 };
 
+
+export const generatePdfFromDiv = (action, applicationNumber) => {
+  let target = document.querySelector("#property-review-form");
+
+  html2canvas(target, {
+    onclone: function (clonedDoc) {
+      clonedDoc.getElementById("property-assess-form").style.display = "none";
+      clonedDoc.getElementById("pt-header-button-container").style.display = "none";
+      clonedDoc.getElementById("pt-flex-child-button").style.display = "none";
+    }
+  }).then(canvas => {
+    var data = canvas.toDataURL();
+    var imgWidth = 200;
+    var pageHeight = 295;
+    var imgHeight =  pageHeight-80;
+    var doc = new jsPDF("p", "mm");
+    var position = 0;
+
+    doc.addImage(data, "PNG", 5, 10+position, imgWidth, imgHeight);
+ 
+    if (action === "download") {
+      doc.save(`preview-${applicationNumber}.pdf`);
+    } else if (action === "print") {
+      doc.autoPrint();
+      window.open(doc.output("bloburl"), "_blank");
+    }
+  });
+};

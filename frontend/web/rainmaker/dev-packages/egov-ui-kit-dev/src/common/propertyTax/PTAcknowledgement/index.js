@@ -13,6 +13,7 @@ import { getHeaderDetails } from "egov-ui-kit/common/propertyTax/PaymentStatus/C
 import { getQueryValue } from "egov-ui-kit/utils/PTCommon";
 import { fetchProperties } from "egov-ui-kit/redux/properties/actions";
 import { AcknowledgementReceipt } from "../AcknowledgementReceipt";
+import {generatePdfFromDiv,generatePdfAndDownload} from "../../../utils/PTCommon"
 import "./index.css";
 class PTAcknowledgement extends React.Component {
   state = {
@@ -80,27 +81,24 @@ class PTAcknowledgement extends React.Component {
 
   render() {
     const { acknowledgeType = "success", messageHeader = "", message = "", receiptHeader = "PT_APPLICATION_NO_LABEL", receiptNo = "" } = this.props;
-
     const purpose = getQueryArg(window.location.href, "purpose");
     const status = getQueryArg(window.location.href, "status");
     const financialYear = getQueryArg(window.location.href, "FY");
+    const tenantId = getQueryArg(window.location.href, "tenantId");
     const propertyId = getQueryArg(
       window.location.href,
       "propertyId"
     );
-    const secondNumber = getQueryArg(window.location.href, "secondNumber");
-    const tenant = getQueryArg(window.location.href, "tenantId");
     let downloadMenu=[];
     let printMenu=[];
     
     let applicationDownloadObject = {
       label: { labelName: "Application", labelKey: "PT_APPLICATION" },
       link: () => {
-        // const { Licenses ,LicensesTemp} = state.screenConfiguration.preparedFinalObject;
-        // const documents = LicensesTemp[0].reviewDocData;
-        // set(Licenses[0],"additionalDetails.documents",documents)
-        // downloadAcknowledgementForm(Licenses);
-        this.downloadAcknowledgementForm();
+
+        generatePdfAndDownload("download",propertyId,tenantId);
+
+        //this.downloadAcknowledgementForm();
         console.log("Download");
       },
       leftIcon: "assignment"
@@ -109,10 +107,8 @@ class PTAcknowledgement extends React.Component {
     let tlCertificatePrintObject = {
       label: { labelName: "Application", labelKey: "PT_APPLICATION" },
        link: () => {
-      //   const { Licenses } = state.screenConfiguration.preparedFinalObject;
-      //   downloadCertificateForm(Licenses,'print');
-      // 
-      console.log("Print");
+        generatePdfAndDownload("print",propertyId,tenantId);
+      //console.log("Print");
     },
        leftIcon: "book"
       
@@ -167,8 +163,8 @@ class PTAcknowledgement extends React.Component {
       visibility:true};
       Button1={name:"PT_GOHOME",buttonClick:this.onGoHomeClick,visibility:true} ;
       Button2={name:"PT_PROCEED_PAYMENT",buttonClick:this.onAssessPayClick,visibility:false} ;
-      downloadButton={menu:downloadMenu,visibility:true} ;
-      printButton={menu:printMenu,visibility:true} ;
+      // downloadButton={menu:downloadMenu,visibility:true} ;
+      // printButton={menu:printMenu,visibility:true} ;
     }
     else if (purpose === "apply" && status === "failure") {
       ptHeader = {
@@ -195,8 +191,8 @@ class PTAcknowledgement extends React.Component {
 
       Button1={name:"PT_GOHOME",buttonClick:this.onGoHomeClick,visibility:true} ;
       Button2={name:"PT_PROCEED_PAYMENT",buttonClick:this.onAssessPayClick,visibility:false} ;
-      downloadButton={menu:downloadMenu,visibility:false} ;
-      printButton={menu:printMenu,visibility:false} ;
+      // downloadButton={menu:downloadMenu,visibility:false} ;
+      // printButton={menu:printMenu,visibility:false} ;
     }
     else if (purpose === "assessment" && status === "success") {
       ptHeader = {
@@ -249,8 +245,8 @@ class PTAcknowledgement extends React.Component {
       };
       Button1={name:"PT_GOHOME",buttonClick:this.onGoHomeClick,visibility:true} ;
       Button2={name:"PT_PROCEED_PAYMENT",buttonClick:this.onAssessPayClick,visibility:false} ;
-      downloadButton={menu:downloadMenu,visibility:false} ;
-      printButton={menu:printMenu,visibility:false} ;
+      // downloadButton={menu:downloadMenu,visibility:false} ;
+      // printButton={menu:printMenu,visibility:false} ;
     }
     else if (purpose === "reassessment" && status === "success") {
       ptHeader = {
