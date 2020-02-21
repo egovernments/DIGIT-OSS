@@ -8,12 +8,10 @@ serviceMaps:
     queryMaps:
 
 
-    - query: INSERT INTO eg_pt_property_audit (audituuid, propertyid, property, auditcreatedtime) VALUES (?, ?, ?, (SELECT extract(epoch from now())));
+    - query: INSERT INTO eg_pt_property_audit (audituuid, propertyid, property, auditcreatedtime) VALUES ((select nextval('seq_eg_pt_registry_audit')), ?, ?, (SELECT extract(epoch from now())));
       basePath: Property
       jsonMaps:
 
-      - jsonPath: $.Property.id
-      
       - jsonPath: $.Property.propertyId
       
       - jsonPath: $.Property
@@ -295,12 +293,10 @@ serviceMaps:
     queryMaps:
 
 
-    - query: INSERT INTO eg_pt_property_audit (audituuid, propertyid, property, auditcreatedtime) VALUES (?, ?, ?, (SELECT extract(epoch from now())));
+    - query: INSERT INTO eg_pt_property_audit (audituuid, propertyid, property, auditcreatedtime) VALUES ((select nextval('seq_eg_pt_registry_audit')), ?, ?, (SELECT extract(epoch from now())));
       basePath: Property
       jsonMaps:
 
-      - jsonPath: $.Property.auditId
-      
       - jsonPath: $.Property.propertyId
       
       - jsonPath: $.Property
@@ -406,7 +402,7 @@ serviceMaps:
 
       - jsonPath: $.Property.auditDetails.lastModifiedTime
 
-    - query: INSERT INTO eg_pt_document (id, tenantid, entityid, documenttype, filestoreid, documentuid, status, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET documenttype = EXCLUDED.documenttype,filestoreid = EXCLUDED.filestoreid, documentuid=EXCLUDED.documentuid, status=EXCLUDED.status, lastmodifiedby = EXCLUDED.lastModifiedby, lastmodifiedtime = EXCLUDED.lastmodifiedtime;
+    - query: INSERT INTO eg_pt_document (id, tenantid, entityid, documenttype, filestoreid, documentuid, status, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET documenttype = EXCLUDED.documenttype,fileStore = EXCLUDED.filestore, documentuid=EXCLUDED.documentuid, status=EXCLUDED.status, lastmodifiedby = EXCLUDED.lastModifiedby, lastmodifiedtime = EXCLUDED.lastmodifiedtime;
       basePath: $.Property.owners.*.documents.*
       jsonMaps:
 
@@ -539,5 +535,4 @@ serviceMaps:
 
       - jsonPath: $.Property.auditDetails.lastModifiedTime
 
-      - jsonPath: $.Property.units.*.id
-      
+      - jsonPath: $.Property.units.*.id      
