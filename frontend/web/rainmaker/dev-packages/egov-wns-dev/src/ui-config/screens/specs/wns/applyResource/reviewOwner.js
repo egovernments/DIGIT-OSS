@@ -6,6 +6,7 @@ import {
   getLabel,
   getDivider
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { convertEpochToDate } from '../../utils';
 
 const getHeader = label => {
   return {
@@ -44,7 +45,7 @@ export const reviewConnectionType = getLabelWithValue(
     labelKey: "WS_SERV_DETAIL_CONN_TYPE"
   },
   {
-    jsonPath: "WaterConnection[0].connectionType",
+    jsonPath: "applyScreen.connectionType",
     // callBack: value => {
     //   return value.split(".")[0];
     // }
@@ -56,7 +57,7 @@ export const reviewNumberOfTaps = getLabelWithValue(
     labelKey: "WS_SERV_DETAIL_NO_OF_TAPS"
   },
   {
-    jsonPath: "WaterConnection[0].noOfTaps",
+    jsonPath: "applyScreen.noOfTaps",
   }
 );
 export const reviewWaterSource = getLabelWithValue(
@@ -65,7 +66,7 @@ export const reviewWaterSource = getLabelWithValue(
     labelKey: "WS_SERV_DETAIL_WATER_SOURCE"
   },
   {
-    jsonPath: "WaterConnection[0].waterSource"
+    jsonPath: "applyScreen.waterSource"
   }
 );
 export const reviewWaterSubSource = getLabelWithValue(
@@ -74,7 +75,7 @@ export const reviewWaterSubSource = getLabelWithValue(
     labelKey: "WS_SERV_DETAIL_WATER_SUB_SOURCE"
   },
   {
-    jsonPath: "WaterConnection[0].waterSubSource",
+    jsonPath: "applyScreen.waterSubSource",
   }
 );
 export const reviewPipeSize = getLabelWithValue(
@@ -83,20 +84,9 @@ export const reviewPipeSize = getLabelWithValue(
     labelKey: "WS_SERV_DETAIL_PIPE_SIZE"
   },
   {
-    jsonPath: "WaterConnection[0].pipeSize",
+    jsonPath: "applyScreen.pipeSize",
   }
 );
-
-// export const reviewBillingType = getLabelWithValue(
-//   {
-//     labelName: "Billing Type",
-//     labelKey: "WS_ADDN_DETAILS_BILLING_TYPE"
-//   },
-//   {
-//     jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].dob",
-//     // callBack: convertEpochToDate
-//   }
-// );
 
 export const reviewWaterClosets = getLabelWithValue(
   {
@@ -104,8 +94,17 @@ export const reviewWaterClosets = getLabelWithValue(
     labelKey: "WS_ADDN_DETAILS_NO_OF_WATER_CLOSETS"
   },
   {
-    jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].dob",
-    // callBack: convertEpochToDate
+    jsonPath: "applyScreen.waterClosets",
+  }
+);
+
+export const reviewNumberOfToilets = getLabelWithValue(
+  {
+    labelName: "No. of Water Closets",
+    labelKey: "WS_ADDN_DETAILS_NO_OF_WATER_CLOSETS"
+  },
+  {
+    jsonPath: "applyScreen.noOfToilets",
   }
 );
 
@@ -115,7 +114,7 @@ export const reviewPlumberProvidedBy = getLabelWithValue(
     labelKey: "WS_ADDN_DETAILS_PLUMBER_PROVIDED_BY"
   },
   {
-    jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].mobileNumber"
+    jsonPath: "applyScreen.plumberInfo[0].detailsProvidedBy"
   }
 );
 export const reviewPlumberLicenseNo = getLabelWithValue(
@@ -124,7 +123,7 @@ export const reviewPlumberLicenseNo = getLabelWithValue(
     labelKey: "WS_ADDN_DETAILS_PLUMBER_LICENCE_NO_LABEL"
   },
   {
-    jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].emailId"
+    jsonPath: "applyScreen.plumberInfo[0].licenseNo"
   }
 );
 export const reviewPlumberName = getLabelWithValue(
@@ -132,7 +131,7 @@ export const reviewPlumberName = getLabelWithValue(
     labelName: "Plumber Name",
     labelKey: "WS_ADDN_DETAILS_PLUMBER_NAME_LABEL"
   },
-  { jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].pan" }
+  { jsonPath: "applyScreen.plumberInfo[0].name" }
 );
 
 export const reviewPlumberMobileNo = getLabelWithValue(
@@ -140,7 +139,9 @@ export const reviewPlumberMobileNo = getLabelWithValue(
     labelName: "Plumber Mobile No.",
     labelKey: "WS_ADDN_DETAILS_PLUMBER_MOB_NO_LABEL"
   },
-  { jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].pan" }
+  {
+    jsonPath: "applyScreen.plumberInfo[0].mobileNumber"
+  }
 );
 
 export const reviewRoadType = getLabelWithValue(
@@ -149,7 +150,7 @@ export const reviewRoadType = getLabelWithValue(
     labelKey: "WS_ADDN_DETAIL_ROAD_TYPE"
   },
   {
-    jsonPath: "WaterConnection[0].roadType",
+    jsonPath: "applyScreen.roadType",
     // callBack: convertEpochToDate
   }
 );
@@ -160,7 +161,7 @@ export const reviewArea = getLabelWithValue(
     labelKey: "WS_ADDN_DETAILS_AREA_LABEL"
   },
   {
-    jsonPath: "WaterConnection[0].roadCuttingArea"
+    jsonPath: "applyScreen.roadCuttingArea"
   }
 );
 export const reviewConnectionExecutionDate = getLabelWithValue(
@@ -169,7 +170,8 @@ export const reviewConnectionExecutionDate = getLabelWithValue(
     labelKey: "WS_SERV_DETAIL_CONN_EXECUTION_DATE"
   },
   {
-    jsonPath: "WaterConnection[0].connectionExecutionDate"
+    jsonPath: "applyScreen.connectionExecutionDate",
+    callBack: convertEpochToDate
   }
 );
 export const reviewMeterId = getLabelWithValue(
@@ -177,7 +179,7 @@ export const reviewMeterId = getLabelWithValue(
     labelName: "Meter ID",
     labelKey: "WS_SERV_DETAIL_METER_ID"
   },
-  { jsonPath: "WaterConnection[0].meterId" }
+  { jsonPath: "applyScreen.meterId" }
 );
 
 export const reviewMeterInstallationDate = getLabelWithValue(
@@ -185,7 +187,7 @@ export const reviewMeterInstallationDate = getLabelWithValue(
     labelName: "Meter Installation Date",
     labelKey: "WS_ADDN_DETAIL_METER_INSTALL_DATE"
   },
-  { jsonPath: "WaterConnection[0].meterInstallationDate" }
+  { jsonPath: "applyScreen.meterInstallationDate" }
 );
 
 export const reviewInitialMeterReading = getLabelWithValue(
@@ -193,7 +195,7 @@ export const reviewInitialMeterReading = getLabelWithValue(
     labelName: "Initial Meter Reading",
     labelKey: "WS_ADDN_DETAILS_INITIAL_METER_READING"
   },
-  { jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].pan" }
+  { jsonPath: "applyScreen.initialMeterReading" }
 );
 
 export const reviewOwner = (isEditable = true) => {
@@ -268,7 +270,8 @@ const connectionDetails = getCommonContainer({
   reviewWaterSubSource,
   reviewPipeSize,
   // reviewBillingType,
-  reviewWaterClosets
+  reviewWaterClosets,
+  reviewNumberOfToilets
 });
 
 const connectionChargeDetails = getCommonContainer({

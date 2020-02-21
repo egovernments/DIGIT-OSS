@@ -8,7 +8,6 @@ import {
   getBreak
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import get from "lodash/get";
-import set from "lodash/set";
 import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { footer } from "./applyResource/footer";
@@ -18,13 +17,14 @@ import { ownerDetailsHeader, getOwnerDetails, ownershipType } from "./applyResou
 import { additionDetails } from "./applyResource/additionalDetails";
 import { OwnerInfoCard } from "./applyResource/connectionDetails";
 import { httpRequest } from "../../../../ui-utils";
-import { prepareDocumentsUploadData, getSearchResultsForSewerage, getSearchResults, handleApplicationNumberDisplay } from "../../../../ui-utils/commons";
+import { prepareDocumentsUploadData, getSearchResultsForSewerage, getSearchResults, handleApplicationNumberDisplay, findAndReplace } from "../../../../ui-utils/commons";
 import { getTenantId, getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import commonConfig from "config/common.js";
 import { reviewDocuments } from "./applyResource/reviewDocuments";
 import { reviewOwner } from "./applyResource/reviewOwner";
 import { reviewConnectionDetails } from "./applyResource/reviewConnectionDetails";
+import { togglePropertyFeilds, toggleSewerageFeilds, toggleWaterFeilds } from '../../../../ui-containers-local/CheckboxContainer/toggleFeilds';
 
 export const stepperData = () => {
   if (process.env.REACT_APP_NAME === "Citizen") {
@@ -177,108 +177,11 @@ export const getData = async (action, state, dispatch) => {
       const waterConnections = payloadWater ? payloadWater.WaterConnection : []
       const sewerageConnections = payloadSewerage ? payloadSewerage.SewerageConnections : [];
       let combinedArray = waterConnections.concat(sewerageConnections);
-      dispatch(prepareFinalObject("applyScreen", combinedArray[0]));
+      dispatch(prepareFinalObject("applyScreen", findAndReplace(combinedArray[0], "null", "NA")));
     }
   }
 };
 
-const togglePropertyFeilds = (dispatch, value) => {
-  dispatch(
-    handleField(
-      "apply",
-      "components.div.children.formwizardFirstStep.children.IDDetails.children.cardContent.children.propertyIDDetails",
-      "visible",
-      value
-    )
-  );
-  dispatch(
-    handleField(
-      "apply",
-      "components.div.children.formwizardFirstStep.children.Details.visible",
-      "visible",
-      value
-    )
-  );
-  dispatch(
-    handleField(
-      "apply",
-      "components.div.children.formwizardFirstStep.children.ownerDetails.visible",
-      "visible",
-      value
-    )
-  );
-}
-
-const toggleSewerageFeilds = (action, value) => {
-  set(
-    action.screenConfig,
-    "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.noOfToilets.visible",
-    value
-  );
-  set(
-    action.screenConfig,
-    "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.waterClosets.visible",
-    value
-  );
-  set(
-    action.screenConfig,
-    "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfToilets.visible",
-    value
-  );
-  set(
-    action.screenConfig,
-    "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfWaterClosets.visible",
-    value
-  );
-}
-
-const toggleWaterFeilds = (action, value) => {
-  set(
-    action.screenConfig,
-    "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.connectionType.visible",
-    value
-  );
-  set(
-    action.screenConfig,
-    "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.numberOfTaps.visible",
-    value
-  );
-  set(
-    action.screenConfig,
-    "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.waterSourceType.visible",
-    value
-  );
-  set(
-    action.screenConfig,
-    "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.pipeSize.visible",
-    value
-  );
-  set(
-    action.screenConfig,
-    "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterID.visible",
-    value
-  );
-  set(
-    action.screenConfig,
-    "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterInstallationDate.visible",
-    value
-  );
-  set(
-    action.screenConfig,
-    "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.initialMeterReading.visible",
-    value
-  );
-  set(
-    action.screenConfig,
-    "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.pipeSize.visible",
-    value
-  );
-  set(
-    action.screenConfig,
-    "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfTaps.visible",
-    value
-  );
-}
 
 const propertyDetail = getPropertyDetails();
 const propertyIDDetails = getPropertyIDDetails();

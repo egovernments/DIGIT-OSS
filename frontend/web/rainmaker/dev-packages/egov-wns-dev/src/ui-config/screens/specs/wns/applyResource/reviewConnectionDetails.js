@@ -224,7 +224,7 @@ const getPropertyDetails = {
             labelKey: "WS_SERV_DETAIL_CONN_RAIN_WATER_HARVESTING_FAC",
             labelName: "Rain Water Harvesting Facility"
           },
-          { jsonPath: "WaterConnection[0].rainWaterHarvesting" }
+          { jsonPath: "applyScreen.rainWaterHarvesting" }
         )
       })
     }),
@@ -359,40 +359,37 @@ export const taskApplicationType = getLabelWithValue(
     labelKey: "WS_APPLY_FOR"
   },
   {
-    jsonPath: "WaterConnection[0].service",
-  })
-
-export const taskOldConsumerNumber = getLabelWithValue(
-  {
-    labelKey: "WS_TASK_DETAILS_OLD_CONSUMER_NO"
-  },
-  { jsonPath: "WaterConnection[0].oldConnectionNo" })
+    jsonPath: "applyScreen.service",
+  }
+);
 
 export const taskNumberOfTapsPropsed = getLabelWithValue(
   {
     labelKey: "WS_TASK_DETAILS_CONN_DETAIL_NO_OF_TAPS_PROPOSED"
   },
   {
-    jsonPath: "WaterConnection[0].proposedTaps",
+    jsonPath: "applyScreen.proposedTaps",
   })
 export const taskPipeSizeProposed = getLabelWithValue(
   {
     labelKey: "WS_TASK_DETAILS_CONN_DETAIL_PIPE_SIZE_PROPOSED"
   },
-  { jsonPath: "WaterConnection[0].proposedPipeSize" })
+  { jsonPath: "applyScreen.proposedPipeSize" })
 
 export const taskNoOfClosets = getLabelWithValue(
   {
     labelKey: "WS_TASK_DETAILS_CONN_DETAIL_NO_OF_CLOSETS_PROPOSED"
   },
-  { jsonPath: "WaterConnection[0].proposedWaterClosets" }
+  { jsonPath: "applyScreen.proposedWaterClosets" }
 );
 
 export const taskNoOfToilets = getLabelWithValue(
   {
     labelKey: "WS_TASK_DETAILS_CONN_DETAIL_NO_OF_TOILETS_PROPOSED"
   },
-  { jsonPath: "WaterConnection[0].proposedToilets" }
+  {
+    jsonPath: "applyScreen.proposedToilets"
+  }
 );
 
 
@@ -409,7 +406,7 @@ const getConnectionDetails = () => {
       items: [],
       hasAddItem: false,
       isReviewPage: true,
-      sourceJsonPath: "WaterConnection[0]",
+      sourceJsonPath: "applyScreen",
       prefixSourceJsonPath:
         "children.cardContent.children.getConnectionContainer.children",
       afterPrefixJsonPath: "children.value.children.key"
@@ -421,7 +418,6 @@ const getConnectionDetails = () => {
 export const renderService = () => {
   return getCommonContainer({
     taskApplicationType,
-    taskOldConsumerNumber,
     taskNumberOfTapsPropsed,
     taskPipeSizeProposed,
     taskNoOfClosets,

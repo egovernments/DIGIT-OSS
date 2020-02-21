@@ -13,13 +13,14 @@ import {
   createUpdateNocApplication,
   prepareDocumentsUploadData,
   applyForWaterOrSewerage,
-  pushTheDocsUploadedToRedux
+  pushTheDocsUploadedToRedux,
+  findAndReplace
 } from "../../../../../ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 const setReviewPageRoute = (state, dispatch) => {
   let tenantId = "pb.amritsar";
-  const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].applicationNo");
+  const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.applyScreen.applicationNo");
   const appendUrl =
     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
   const reviewUrl = `${appendUrl}/wns/search-preview?applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
@@ -123,7 +124,23 @@ const callBackForNext = async (state, dispatch) => {
     // if (validatePropertyLocationDetails && validatePropertyDetails && validateForm) {
     //   isFormValid = await appl;
     // }
-    await applyForWaterOrSewerage(state, dispatch, "INITIATE");
+    if (getQueryArg(window.location.href, "action") === "edit") {
+      let application = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), "NA", null);
+      const uploadedDocData = application.documents;
+      const reviewDocData = uploadedDocData && uploadedDocData.map(item => {
+        return {
+          title: `WS_${item.documentType}`,
+          link: item.fileUrl && item.fileUrl.split(",")[0],
+          linkText: "View",
+          name: item.fileName
+        };
+      });
+      dispatch(prepareFinalObject("applyScreen.reviewDocData", reviewDocData));
+      let applyScreenObject = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), null, "NA");
+      dispatch(prepareFinalObject("applyScreen", applyScreenObject));
+    } else {
+      await applyForWaterOrSewerage(state, dispatch, "INITIATE");
+    }
   }
 
   prepareDocumentsUploadData(state, dispatch);
@@ -148,6 +165,9 @@ const callBackForNext = async (state, dispatch) => {
   }
 
   if (activeStep === 2 && process.env.REACT_APP_NAME !== "Citizen") {
+    if (getQueryArg(window.location.href, "action") === "edit") {
+      setReviewPageRoute(state, dispatch);
+    }
     let isApplicantTypeCardValid = validateFields(
       "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.applicantTypeSelection.children",
       state,
@@ -245,7 +265,6 @@ const moveToSuccess = (combinedArray, dispatch) => {
 
 const acknoledgementForBothWaterAndSewerage = async (state, activeStep, isFormValid, dispatch) => {
   if (isFormValid) {
-    let responseStatus = "success";
     if (activeStep === 1) {
       prepareDocumentsUploadData(state, dispatch);
     }
@@ -257,7 +276,6 @@ const acknoledgementForBothWaterAndSewerage = async (state, activeStep, isFormVa
       if (combinedArray) { moveToSuccess(combinedArray, dispatch) }
       responseStatus = get(combinedArray, "status", "");
     }
-    responseStatus === "success" && changeStep(state, dispatch);
   } else if (hasFieldToaster) {
     let errorMessage = {
       labelName: "Please fill all mandatory fields and upload the documents!",
@@ -285,7 +303,6 @@ const acknoledgementForBothWaterAndSewerage = async (state, activeStep, isFormVa
 
 const acknoledgementForWater = async (state, activeStep, isFormValid, dispatch) => {
   if (isFormValid) {
-    let responseStatus = "success";
     if (activeStep === 1) {
       prepareDocumentsUploadData(state, dispatch);
     }
@@ -297,7 +314,6 @@ const acknoledgementForWater = async (state, activeStep, isFormValid, dispatch) 
       if (response) { moveToSuccess(combinedArray, dispatch) }
       responseStatus = get(response, "status", "");
     }
-    responseStatus === "success" && changeStep(state, dispatch);
   } else if (hasFieldToaster) {
     let errorMessage = {
       labelName: "Please fill all mandatory fields and upload the documents!",
@@ -325,7 +341,6 @@ const acknoledgementForWater = async (state, activeStep, isFormValid, dispatch) 
 
 const acknoledgementForSewerage = async (state, activeStep, isFormValid, dispatch) => {
   if (isFormValid) {
-    let responseStatus = "success";
     if (activeStep === 1) {
       prepareDocumentsUploadData(state, dispatch);
     }
@@ -337,7 +352,6 @@ const acknoledgementForSewerage = async (state, activeStep, isFormValid, dispatc
       if (response) { moveToSuccess(combinedArray, dispatch) }
       responseStatus = get(response, "status", "");
     }
-    responseStatus === "success" && changeStep(state, dispatch);
   } else if (hasFieldToaster) {
     let errorMessage = {
       labelName: "Please fill all mandatory fields and upload the documents!",

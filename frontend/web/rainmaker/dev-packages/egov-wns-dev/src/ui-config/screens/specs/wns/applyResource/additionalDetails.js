@@ -214,7 +214,7 @@ export const additionDetails = getCommonCard({
         required: false,
         pattern: getPattern("consumerNo"),
         errorMessage: "ERR_INVALID_CONSUMER_NO",
-        jsonPath: "applyScreen.plumberInfo[0].plumberLicenceNo"
+        jsonPath: "applyScreen.plumberInfo[0].licenseNo"
       }),
       plumberName: getTextField({
         label: {
@@ -228,9 +228,8 @@ export const additionDetails = getCommonCard({
           sm: 6
         },
         required: false,
-        pattern: getPattern("consumerNo"),
         errorMessage: "ERR_INVALID_CONSUMER_NO",
-        jsonPath: "applyScreen.plumberInfo[0].plumberName"
+        jsonPath: "applyScreen.plumberInfo[0].name"
       }),
       plumberMobNo: getTextField({
         label: {
@@ -244,7 +243,7 @@ export const additionDetails = getCommonCard({
         required: false,
         pattern: getPattern("MobileNo"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-        jsonPath: "applyScreen.mobileNumber"
+        jsonPath: "applyScreen.plumberInfo[0].mobileNumber"
       }),
     })
   }),
