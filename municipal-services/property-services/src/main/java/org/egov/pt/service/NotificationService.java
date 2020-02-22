@@ -243,10 +243,14 @@ public class NotificationService {
 	 */
 	private String replaceCommonValues(Property property, String msg) {
 
-		return msg.replace(NOTIFICATION_PROPERTYID, property.getPropertyId())
-				  .replace(NOTIFICATION_STATUS, property.getStatus().toString())
-				  .replace(NOTIFICATION_APPID, property.getAcknowldgementNumber());
-			}
+		msg = msg.replace(NOTIFICATION_PROPERTYID, property.getPropertyId()).replace(NOTIFICATION_APPID,
+				property.getAcknowldgementNumber());
+		
+		if (configs.getIsWorkflowEnabled())
+			msg = msg.replace(NOTIFICATION_STATUS, property.getWorkflow().getState().getState());
+		
+		return msg;
+	}
 
 	/**
 	 * Prepares msg for each owner and send 
