@@ -1,5 +1,6 @@
 import React from "react";
 import { UploadFile, UploadedDocument } from "egov-ui-framework/ui-atoms";
+import "./index.css"; 
 
 const UploadSingleFile = ({
   uploaded,
@@ -33,7 +34,7 @@ const UploadSingleFile = ({
           {documents &&
             documents.map((document, documentIndex) => {
               return (
-                <div key={documentIndex}>
+                <div className="pt-upoaded-document" key={documentIndex}>
                   {document && (
                     <UploadedDocument
                       document={document}

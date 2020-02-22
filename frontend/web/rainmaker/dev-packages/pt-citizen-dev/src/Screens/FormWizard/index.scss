@@ -60,6 +60,7 @@
   .authority-details-form{
     display: grid !important;
     overflow: auto !important;
+    overflow-x: hidden !important;
   }
 }
 

@@ -7,6 +7,7 @@ import {
   getTransformedLocalStorgaeLabels,
   getLocaleLabels
 } from "egov-ui-framework/ui-utils/commons";
+import store from "ui-redux/store";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -217,7 +218,7 @@ export const gotoApplyWithStep = (state, dispatch, step) => {
     process.env.REACT_APP_SELF_RUNNING === "true"
       ? `/egov-ui-framework/pt-mutation/apply?${applicationNumberQueryString}&step=${step}`
       : `/pt-mutation/apply?${applicationNumberQueryString}&step=${step}`;
-  dispatch(setRoute(applyUrl));
+  store.dispatch(setRoute(applyUrl));
 };
 
 export const showHideAdhocPopup = (state, dispatch, screenKey) => {
