@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import { addComponentJsonpath } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import cloneDeep from "lodash/cloneDeep";
+import { resetFields } from "../../ui-config/screens/specs/pt-mutation/mutation-methods";
 
 class MultiItem extends React.Component {
   state = { tabIndex: 0 };
@@ -22,7 +23,7 @@ class MultiItem extends React.Component {
       }
       dispatch(prepareFinalObject("searchScreen.mobileNumber", ""));
       dispatch(prepareFinalObject("searchScreen.ids", ""));
-      
+      resetFields(value, dispatch)
   };
 
   onTabChange = (tabIndex, dispatch, state) => {
