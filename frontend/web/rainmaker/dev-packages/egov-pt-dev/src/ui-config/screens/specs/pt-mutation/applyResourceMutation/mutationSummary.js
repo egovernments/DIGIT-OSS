@@ -94,17 +94,17 @@ export const mutationSummary = getCommonGrayCard({
               iconName: "edit"
             }
           },
-          buttonLabel: getLabel({
-            labelName: "Edit",
-            labelKey: "PT_EDIT"
-          })
+          // buttonLabel: getLabel({
+          //   labelName: "Edit",
+          //   labelKey: "PT_EDIT"
+          // })
         },
-        onClickDefination: {
-          action: "condition",
-          callBack: (state, dispatch) => {
-            gotoApplyWithStep(state, dispatch, 0);
-          }
-        }
+        // onClickDefination: {
+        //   action: "condition",
+        //   callBack: (state, dispatch) => {
+        //     gotoApplyWithStep(state, dispatch, 0);
+        //   }
+        // }
       }
     }
   },

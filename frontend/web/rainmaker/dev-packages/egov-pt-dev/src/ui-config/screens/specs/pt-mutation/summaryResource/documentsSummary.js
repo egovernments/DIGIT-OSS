@@ -46,17 +46,17 @@ export const documentsSummary = getCommonGrayCard({
               iconName: "edit"
             }
           },
-          buttonLabel: getLabel({
-            labelName: "Edit",
-            labelKey: "PT_EDIT"
-          })
+          // buttonLabel: getLabel({
+          //   labelName: "Edit",
+          //   labelKey: "PT_EDIT"
+          // })
         },
-        onClickDefination: {
-          action: "condition",
-          callBack: (state, dispatch) => {
-            gotoApplyWithStep(state, dispatch, 1);
-          }
-        }
+        // onClickDefination: {
+        //   action: "condition",
+        //   callBack: (state, dispatch) => {
+        //     gotoApplyWithStep(state, dispatch, 1);
+        //   }
+        // }
       }
     }
   },
