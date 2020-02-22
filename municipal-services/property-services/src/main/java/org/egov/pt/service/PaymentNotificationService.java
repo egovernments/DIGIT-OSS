@@ -96,7 +96,7 @@ public class PaymentNotificationService {
 
             String localizationMessages = util.getLocalizationMessages(tenantId,requestInfo);
             String consumerCode = transaction.getConsumerCode();
-            String path = getJsonPath(topic, ONLINE_PAYMENT_MODE);
+            String path = getJsonPath(topic, ONLINE_PAYMENT_MODE, false);
             String messageTemplate = null;
             try {
                 Object messageObj = JsonPath.parse(localizationMessages).read(path);
@@ -196,8 +196,10 @@ public class PaymentNotificationService {
 
             Property property = properties.get(0);
 
+            Boolean isPartiallyPayment = !(paymentDetail.getTotalAmountPaid().compareTo(paymentDetail.getTotalDue())==0);
+
             String customMessage = null;
-            String path = getJsonPath(topic, paymentMode);
+            String path = getJsonPath(topic, paymentMode, isPartiallyPayment);
             String messageTemplate = null;
             try {
                 Object messageObj = JsonPath.parse(localizationMessages).read(path);
@@ -341,13 +343,19 @@ public class PaymentNotificationService {
      * @param paymentMode The payment mode used for payment
      * @return  The jsonPath
      */
-    private String getJsonPath(String topic,String paymentMode){
+    private String getJsonPath(String topic,String paymentMode, Boolean isPartiallyPayment){
         String path = "$..messages[?(@.code==\"{}\")].message";
-        if(topic.equalsIgnoreCase(propertyConfiguration.getReceiptTopic()) && paymentMode.equalsIgnoreCase("online"))
+        if(topic.equalsIgnoreCase(propertyConfiguration.getReceiptTopic()) && !isPartiallyPayment && paymentMode.equalsIgnoreCase("online"))
             path = path.replace("{}",NOTIFICATION_PAYMENT_ONLINE);
 
-        if(topic.equalsIgnoreCase(propertyConfiguration.getReceiptTopic()) && !paymentMode.equalsIgnoreCase("online"))
+        if(topic.equalsIgnoreCase(propertyConfiguration.getReceiptTopic()) && !isPartiallyPayment && !paymentMode.equalsIgnoreCase("online"))
             path = path.replace("{}",NOTIFICATION_PAYMENT_OFFLINE);
+
+        if(topic.equalsIgnoreCase(propertyConfiguration.getReceiptTopic())&& isPartiallyPayment && paymentMode.equalsIgnoreCase("online"))
+            path = path.replace("{}",NOTIFICATION_PAYMENT_PARTIAL_ONLINE);
+
+        if(topic.equalsIgnoreCase(propertyConfiguration.getReceiptTopic()) && isPartiallyPayment&& !paymentMode.equalsIgnoreCase("online"))
+            path = path.replace("{}",NOTIFICATION_PAYMENT_PARTIAL_OFFLINE);
 
         if(topic.equalsIgnoreCase(propertyConfiguration.getPgTopic()))
             path = path.replace("{}",NOTIFICATION_PAYMENT_FAIL);
@@ -364,9 +372,9 @@ public class PaymentNotificationService {
      */
     private String getCustomizedMessage(Map<String,String> valMap,String message,String path){
         String customMessage = null;
-        if(path.contains(NOTIFICATION_PAYMENT_ONLINE))
+        if(path.contains(NOTIFICATION_PAYMENT_ONLINE) || path.contains(NOTIFICATION_PAYMENT_PARTIAL_ONLINE))
             customMessage = getCustomizedOnlinePaymentMessage(message,valMap);
-        if(path.contains(NOTIFICATION_PAYMENT_OFFLINE))
+        if(path.contains(NOTIFICATION_PAYMENT_OFFLINE) || path.contains(NOTIFICATION_PAYMENT_PARTIAL_OFFLINE))
             customMessage = getCustomizedOfflinePaymentMessage(message,valMap);
         if(path.contains(NOTIFICATION_PAYMENT_FAIL))
             customMessage = getCustomizedPaymentFailMessage(message,valMap);
@@ -385,6 +393,7 @@ public class PaymentNotificationService {
         message = message.replace("< insert payment transaction id from PG>",valMap.get("transactionId"));
         message = message.replace("<insert Property Tax Assessment ID>",valMap.get("propertyId"));
         message = message.replace("<pt due>.",valMap.get("amountDue"));
+        message = message.replace("<payLink>.", getPaymentLink(valMap));
     //    message = message.replace("<FY>",valMap.get("financialYear"));
         return message;
     }
@@ -400,6 +409,7 @@ public class PaymentNotificationService {
         message = message.replace("<insert mode of payment>",valMap.get("paymentMode"));
         message = message.replace("<Enter pending amount>",valMap.get("amountDue"));
         message = message.replace("<insert inactive citizen application web URL>.",propertyConfiguration.getNotificationURL());
+        message = message.replace("<payLink>.", getPaymentLink(valMap));
 //        message = message.replace("<Insert FY>",valMap.get("financialYear"));
         return message;
     }
@@ -413,6 +423,7 @@ public class PaymentNotificationService {
     private String getCustomizedPaymentFailMessage(String message,Map<String,String> valMap){
         message = message.replace("<insert amount to pay>",valMap.get("txnAmount"));
         message = message.replace("<insert ID>",valMap.get("propertyId"));
+        message = message.replace("<payLink>.", getPaymentLink(valMap));
 //        message = message.replace("<FY>",valMap.get("financialYear"));
         return message;
     }
@@ -441,7 +452,8 @@ public class PaymentNotificationService {
         mobileNumbers.forEach(mobileNumber-> {
             if(mobileNumber!=null)
             {
-                SMSRequest smsRequest = new SMSRequest(mobileNumber,customizedMessage);
+                String finalMessage = customizedMessage.replace("$mobile", mobileNumber);
+                SMSRequest smsRequest = new SMSRequest(mobileNumber,finalMessage);
                 smsRequests.add(smsRequest);
             }
         });
@@ -498,6 +510,16 @@ public class PaymentNotificationService {
 
 
         return events;
+    }
+
+
+    private String getPaymentLink(Map<String,String> valMap){
+        StringBuilder builder = new StringBuilder(propertyConfiguration.getUiAppHost());
+        builder.append(propertyConfiguration.getPayLink());
+        String url = builder.toString();
+        url = url.replace("$consumerCode", valMap.get("propertyId"));
+        url = url.replace("$tenantId", valMap.get("tenantId"));
+        return url;
     }
 
 }
