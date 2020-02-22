@@ -28,26 +28,28 @@ class PropertyInfoCard extends Component {
                   </div>}
                   
                   {items.map((item) => {
-                    return (
-                      <div>
-                        <div className="col-sm-3 col-xs-12" style={{ marginBottom: 10, marginTop: 5 }}>
-                          <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>
-                            <Label
-                              labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.54)", fontWeight: "400", lineHeight: "1.375em" }}
-                              label={item.key ? item.key : "NA"}
-                              fontSize="12px"
-                            />
-                          </div>
-                          <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>
-                            <Label
-                              labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.87)", fontWeight: "400", lineHeight: "19px" }}
-                              label={item.value ? item.value : "NA"}
-                              fontSize="16px"
-                            />
+                    if(item){
+                      return (
+                        <div>
+                          <div className="col-sm-3 col-xs-12" style={{ marginBottom: 10, marginTop: 5 }}>
+                            <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>
+                              <Label
+                                labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.54)", fontWeight: "400", lineHeight: "1.375em" }}
+                                label={item.key ? item.key : "NA"}
+                                fontSize="12px"
+                              />
+                            </div>
+                            <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>
+                              <Label
+                                labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.87)", fontWeight: "400", lineHeight: "19px" }}
+                                label={item.value ? item.value : "NA"}
+                                fontSize="16px"
+                              />
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    );
+                      );
+                    }
                   })}
                 </div>
                 {subSection && (

@@ -103,9 +103,11 @@ const formConfig = {
           }, []);
 
         dispatch(setFieldProperty(formKey, "ownerCategoryIdType", "dropDownData", documentTypes));
-        dispatch(setFieldProperty(formKey, "ownerCategoryIdType", "value", get(documentTypes, "[0].value", "")));
+        dispatch(handleFieldChange(formKey, "ownerCategoryIdType", get(documentTypes, "[0].value", "")));
+        dispatch(setFieldProperty(formKey, "ownerCategoryIdType", "value", get(documentTypes, "[0].value", "")));       
         switch (value) {
           case "NONE":
+            dispatch(handleFieldChange(formKey, "ownerCategoryId", null));
             setDependentFields(dependentFields, dispatch, formKey, true);
             break;
           case "WIDOW":

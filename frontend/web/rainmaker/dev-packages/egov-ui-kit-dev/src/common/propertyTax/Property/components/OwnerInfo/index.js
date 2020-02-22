@@ -91,6 +91,20 @@ class OwnerInfo extends Component {
     this.setState({ [dialogName]: false });
   };
 
+  checkDocument = (owner) => {
+    if(owner){
+      if(owner.document && owner.document.documentType && owner.document.documentUid){
+        return owner.document;
+      } else if (owner.documents && owner.documents.length > 0 && owner.documents[0].documentType && owner.documents[0].documentUid) {
+        return owner.documents[0];
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
   getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
     const isInstitution =
       latestPropertyDetails.ownershipCategory === "INSTITUTIONALPRIVATE" || latestPropertyDetails.ownershipCategory === "INSTITUTIONALGOVERNMENT";
@@ -203,20 +217,21 @@ class OwnerInfo extends Component {
                   key: getTranslatedLabel("PT_OWNERSHIP_INFO_CORR_ADDR", localizationLabelsData),
                   value: owner.permanentAddress || "NA",
                 },
-                isInstitution
+                this.checkDocument(owner) && (isInstitution
                   ? {
                     }
                   : {
                       key: getTranslatedLabel("PT_OWNERSHIP_DOCUMENT_TYPE", localizationLabelsData),
-                      value:owner&&owner.documents&&owner.documents.length>0&&owner.documents[0].documentType? getTranslatedLabel("PT_"+(owner.documents[0].documentType).toUpperCase(),localizationLabelsData) || "NA" : "NA",
-                    },
-                    isInstitution
+                      value: getTranslatedLabel("PT_"+(this.checkDocument(owner).documentType).toUpperCase(),localizationLabelsData) || "NA",
+                    }),
+                    this.checkDocument(owner) && (isInstitution
                   ? {
                     }
                   : {
                       key: getTranslatedLabel("PT_OWNERSHIP_DOCUMENT_ID", localizationLabelsData),
-                      value:owner&&owner.documents&&owner.documents.length>0&&owner.documents[0].documentType? owner.documents[0].documentUid || "NA":"NA",
-                    },
+                      value: this.checkDocument(owner).documentUid || "NA",
+                    }
+                  )
           ],
         };
       })
