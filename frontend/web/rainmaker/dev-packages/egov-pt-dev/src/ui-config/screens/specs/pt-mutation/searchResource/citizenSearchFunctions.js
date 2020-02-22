@@ -1,5 +1,8 @@
 import { getSearchResults } from "../../../../../ui-utils/commons";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import {
+  handleScreenConfigurationFieldChange as handleField,
+  prepareFinalObject,
+} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 export const fetchData = async (action, state, dispatch) => {
 
@@ -26,6 +29,14 @@ export const fetchData = async (action, state, dispatch) => {
       dispatch(
         prepareFinalObject("myApplicationsCount", response.Properties.length)
       );
+      dispatch(
+        handleField(
+          "my-applications",
+          "components.div.children.header.children.key",
+          "props.dynamicArray",
+          response.Properties.length ? [response.Properties.length] : [0]
+        )
+      )
     }
   } catch (error) {
     console.log(error);

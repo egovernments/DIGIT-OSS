@@ -14,7 +14,7 @@ import { checkValueForNA } from "../../ui-config/screens/specs/utils";
 import { localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { convertEpochToDate } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { getDateFromEpoch, navigateToApplication, getApplicationType } from "egov-ui-kit/utils/commons";
+import { epochToDate, navigateToApplication, getApplicationType } from "egov-ui-kit/utils/commons";
 import orderBy from "lodash/orderBy";
 const styles = {
   card: {
@@ -46,7 +46,7 @@ class SingleApplication extends React.Component {
   };
 
   onCardClick = async (item) => {
-    const { moduleName, toggleSnackbar } = this.props;
+    const { moduleName, toggleSnackbar, setRoute } = this.props;
     if (moduleName === "TL") {
       const wfCode = get(item, "workflowCode");
       const businessServiceQueryObject = [
@@ -91,7 +91,14 @@ class SingleApplication extends React.Component {
         const businessService = await getApplicationType(item.acknowldgementNumber, item.tenantId)
         console.log("businessService-----", businessService);
         if(businessService){
-          navigateToApplication(businessService, this.props.history, item.acknowldgementNumber, item.tenantId, item.propertyId);
+          // navigateToApplication(businessService, this.props.history, item.acknowldgementNumber, item.tenantId, item.propertyId);
+          if (businessService == 'PT.MUTATION') {
+            setRoute("/pt-mutation/search-preview?applicationNumber=" + item.acknowldgementNumber + "&propertyId=" + item.propertyId + "&tenantId=" + item.tenantId);
+          } else if (businessService == 'PT.CREATE') {
+            setRoute("/property-tax/application-preview?propertyId=" + item.propertyId + "&applicationNumber=" + item.acknowldgementNumber + "&tenantId=" + item.tenantId + "&type=property");
+          } else {
+            console.log('Navigation Error');
+          }
         }else{
           toggleSnackbar(
             true,
@@ -133,7 +140,7 @@ class SingleApplication extends React.Component {
         content.suffix
       }`;
     } else {
-      LabelKey = `${get(item, content.jsonPath,"")}`;
+      LabelKey = content.label === "PT_MUTATION_CREATION_DATE" ? `${epochToDate(get(item, content.jsonPath,""))}` : `${get(item, content.jsonPath,"")}`;
     }
     return LabelKey;
   };

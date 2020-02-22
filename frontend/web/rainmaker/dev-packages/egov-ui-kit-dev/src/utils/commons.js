@@ -205,6 +205,14 @@ export const getDateFromEpoch = (epoch) => {
   return day + "-" + month + "-" + year;
 };
 
+export const epochToDate = et => {
+  if (!et) return null;
+  var date = new Date(Math.round(Number(et)));
+  var formattedDate =
+    date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
+  return formattedDate;
+};
+
 export const getBodyClassFromPath = (path) => {
   let bodyClass = path
     .split("/")
