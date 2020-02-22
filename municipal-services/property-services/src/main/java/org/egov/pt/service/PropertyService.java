@@ -25,6 +25,7 @@ import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
@@ -229,11 +230,12 @@ public class PropertyService {
 		/* Previous record set to ACTIVE */
 		@SuppressWarnings("unchecked")
 		Map<String, Object> additionalDetails = mapper.convertValue(propertyFromSearch.getAdditionalDetails(), Map.class);
-		
 		if(null == additionalDetails) 
 			return;
 		
 		String propertyUuId = (String) additionalDetails.get(PTConstants.PREVIOUS_PROPERTY_PREVIOUD_UUID);
+		if(StringUtils.isEmpty(propertyUuId)) 
+			return;
 		
 		PropertyCriteria criteria = PropertyCriteria.builder().uuids(Sets.newHashSet(propertyUuId))
 				.tenantId(propertyFromSearch.getTenantId()).build();
