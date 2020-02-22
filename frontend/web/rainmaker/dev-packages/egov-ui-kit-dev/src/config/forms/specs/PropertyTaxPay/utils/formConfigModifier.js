@@ -10,6 +10,9 @@ const formDropdown = category => {
   }
 }
 
+const getDropdwonForProperty = (ownerShipdropDown)=>{
+  return ownerShipdropDown && ownerShipdropDown.length && ownerShipdropDown.splice(0, 4);
+}
 export const getOwnerDetails = state => {
   const { OwnerShipCategory, SubOwnerShipCategory } = JSON.parse(JSON.stringify(state.common.generalMDMSDataById))
   const ownerShipdropDown = [];
@@ -26,7 +29,7 @@ export const getOwnerDetails = state => {
         ownerShipdropDown.push(formDropdown(OwnerShipCategory[category]))
       }
     })
-    return ownerShipdropDown;
+    return window.location.href.indexOf("/property-tax/assessment-form") > 0 ?getDropdwonForProperty(ownerShipdropDown) : ownerShipdropDown;
   }
 }
 
