@@ -151,7 +151,16 @@ class SearchProperty extends Component {
       </a>
     );
   }
-
+  getStatusColor = (status) => {
+    switch (status) {
+      case 'INWORKFLOW' : 
+        return status = <span style={{color:"red"}}>{status}</span>
+      case 'ACTIVE' : 
+        return status = <span style={{color:"green"}}>{status}</span>
+      default:
+        return status;
+    }
+  }
   extractTableData = properties => {
     const { history } = this.props;
     const userType = JSON.parse(getUserInfo()).type;
@@ -180,7 +189,7 @@ class SearchProperty extends Component {
         applicationType: applicationType,
         name: name,
         date: date,
-        status: status
+        status: this.getStatusColor(status)
       };
       tableData.push(item);
       return tableData;
