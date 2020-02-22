@@ -439,7 +439,7 @@ class PTAcknowledgement extends React.Component {
                 </div>
                 <div id="tax-wizard-buttons" className="wizard-footer col-sm-12" style={{ textAlign: "right" }}>
                   
-                  <div className="button-container col-xs-12 col-md-4 col-lg-2 property-info-access-btn" style={{ float: "right",right:"20px" }}>
+                  <div className="button-container col-xs-12 col-md-4 col-lg-2 property-info-access-btn first-button" style={{ float: "right",right:"20px",width:"auto" }}>
                    {Button1&&Button1.visibility&& <Button
                       onClick={Button1.buttonClick}
                       label={<Label buttonLabel={true} label={Button1.name}fontSize="16px" />}

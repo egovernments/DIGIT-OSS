@@ -82,7 +82,8 @@
     }
     .printDownloadButton{
        display: flex;
-       padding-left: 100px;
+       padding-left: 283px;
+       margin-top: 22px;
     }
    .ptHeader{
      padding-left: 20px;
@@ -98,6 +99,9 @@
    .button-container{
      right:0px !important;
    }
+   .first-button{
+     min-width: -webkit-fill-available;
+   }
    .mainContainer {
      margin-top: 25% !important;
      display: block !important;
@@ -105,13 +109,25 @@
      div:nth-child(1){
        div{
          span{
-           line-height: 2 !important;
+           //line-height: 2 !important;
+           margin-left: 1px;
          }
        }
      }
    }
    .printDownloadButton{
      padding-left: 0px !important;
+     div{
+       div{
+         button{
+          width: 165px !important;
+  
+          height: 42px;
+         }
+       }
+     }
+
+     
    }
    .ptMsg{
      div{

@@ -7,6 +7,7 @@ import {
   getLabelWithValue
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { gotoApplyWithStep } from "../../utils/index";
+import { checkValueForNA } from "../../utils";
 
 const registrationDetails =  getCommonGrayCard({
   propertyLocationContainer:getCommonContainer({
@@ -17,7 +18,8 @@ const registrationDetails =  getCommonGrayCard({
       },
       {
         jsonPath:
-          "Property.additionalDetails.reasonForTransfer"
+          "Property.additionalDetails.reasonForTransfer",
+          callBack: checkValueForNA
       }
     ),
     marketValue: getLabelWithValue(
@@ -28,7 +30,8 @@ const registrationDetails =  getCommonGrayCard({
       },
       {
         jsonPath:
-          "Property.additionalDetails.marketValue"
+          "Property.additionalDetails.marketValue",
+          callBack: checkValueForNA
       }
     ),
      documentNo: getLabelWithValue(
@@ -38,7 +41,8 @@ const registrationDetails =  getCommonGrayCard({
       },
       {
         jsonPath:
-          "Property.additionalDetails.documentNumber"
+          "Property.additionalDetails.documentNumber",
+          callBack: checkValueForNA
       }
     ), documentDate: getLabelWithValue(
       {
@@ -47,7 +51,8 @@ const registrationDetails =  getCommonGrayCard({
       },
       {
         jsonPath:
-          "Property.additionalDetails.documentDate"
+          "Property.additionalDetails.documentDate",
+          callBack: checkValueForNA
       }
     ), documentValue: getLabelWithValue(
       {
@@ -56,7 +61,8 @@ const registrationDetails =  getCommonGrayCard({
       },
       {
         jsonPath:
-          "Property.additionalDetails.documentValue"
+          "Property.additionalDetails.documentValue",
+          callBack: checkValueForNA
       }
     ),
     remarks: getLabelWithValue(
@@ -66,7 +72,8 @@ const registrationDetails =  getCommonGrayCard({
       },
       {
         jsonPath:
-          "Property.additionalDetails.remarks"
+          "Property.additionalDetails.remarks",
+          callBack: checkValueForNA
       }
     )
   })

@@ -7,6 +7,7 @@ import {
   getLabelWithValue
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { gotoApplyWithStep } from "../../utils/index";
+import { checkValueForNA } from "../../utils";
 
 const mutationDetails =  getCommonGrayCard({
   mutationDetailsContainer:getCommonContainer({
@@ -17,7 +18,8 @@ const mutationDetails =  getCommonGrayCard({
       },
       {
         jsonPath:
-          "Property.additionalDetails.isMutationInCourt"
+          "Property.additionalDetails.isMutationInCourt",
+          callBack: checkValueForNA
       }
     ), documentNo: getLabelWithValue(
       {
@@ -26,7 +28,8 @@ const mutationDetails =  getCommonGrayCard({
       },
       {
         jsonPath:
-          "Property.additionalDetails.caseDetails"
+          "Property.additionalDetails.caseDetails",
+          callBack: checkValueForNA
       }
     ), documentDate: getLabelWithValue(
       {
@@ -35,7 +38,8 @@ const mutationDetails =  getCommonGrayCard({
       },
       {
         jsonPath:
-          "Property.additionalDetails.isPropertyUnderGovtPossession"
+          "Property.additionalDetails.isPropertyUnderGovtPossession",
+          callBack: checkValueForNA
       }
     ), documentValue: getLabelWithValue(
       {
@@ -44,7 +48,8 @@ const mutationDetails =  getCommonGrayCard({
       },
       {
         jsonPath:
-          "Property.additionalDetails.govtAcquisitionDetails"
+          "Property.additionalDetails.govtAcquisitionDetails",
+          callBack: checkValueForNA
       }
     )
   })
