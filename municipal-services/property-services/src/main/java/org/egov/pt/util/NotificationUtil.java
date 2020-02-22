@@ -7,6 +7,7 @@ import static org.egov.pt.util.PTConstants.NOTIFICATION_OWNERNAME;
 
 import java.util.*;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.config.PropertyConfiguration;
@@ -14,6 +15,7 @@ import org.egov.pt.models.event.EventRequest;
 import org.egov.pt.producer.Producer;
 import org.egov.pt.repository.ServiceRequestRepository;
 import org.egov.pt.web.contracts.SMSRequest;
+import org.egov.tracer.model.CustomException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -198,6 +200,23 @@ public class NotificationUtil {
         producer.push(config.getSaveUserEventsTopic(), request);
     }
 
+    /**
+     *
+     * @param url
+     * @return
+     */
+    public String getShortenedUrl(String url){
+        HashMap<String,String> body = new HashMap<>();
+        body.put("url",url);
+        StringBuilder builder = new StringBuilder(config.getUrlShortnerHost());
+        builder.append(config.getUrlShortnerEndpoint());
+        Optional<Object> res = serviceRequestRepository.fetchResult(builder, body);
 
+        if(!res.isPresent()){
+            log.error("URL_SHORTENING_ERROR","Unable to shorten url: "+url); ;
+            return url;
+        }
+        else return res.get().toString();
+    }
 
 }

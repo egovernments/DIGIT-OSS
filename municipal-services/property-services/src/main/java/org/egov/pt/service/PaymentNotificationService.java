@@ -126,7 +126,7 @@ public class PaymentNotificationService {
                 mobileNumbers.add(owner.getMobileNumber());
             });
 
-            List<SMSRequest> smsRequests = getSMSRequests(mobileNumbers,customMessage);
+            List<SMSRequest> smsRequests = getSMSRequests(mobileNumbers,customMessage, valMap);
 
             util.sendSMS(smsRequests);
 
@@ -215,7 +215,7 @@ public class PaymentNotificationService {
                 mobileNumbers.add(owner.getMobileNumber());
             });
 
-            smsRequests.addAll(getSMSRequests(mobileNumbers,customMessage));
+            smsRequests.addAll(getSMSRequests(mobileNumbers,customMessage, valMap));
 
             if(null == propertyConfiguration.getIsUserEventsNotificationEnabled() || propertyConfiguration.getIsUserEventsNotificationEnabled()) {
                 if(paymentDetail.getTotalDue().compareTo(paymentDetail.getTotalAmountPaid())==0)
@@ -393,7 +393,6 @@ public class PaymentNotificationService {
         message = message.replace("< insert payment transaction id from PG>",valMap.get("transactionId"));
         message = message.replace("<insert Property Tax Assessment ID>",valMap.get("propertyId"));
         message = message.replace("<pt due>.",valMap.get("amountDue"));
-        message = message.replace("<payLink>.", getPaymentLink(valMap));
     //    message = message.replace("<FY>",valMap.get("financialYear"));
         return message;
     }
@@ -409,7 +408,6 @@ public class PaymentNotificationService {
         message = message.replace("<insert mode of payment>",valMap.get("paymentMode"));
         message = message.replace("<Enter pending amount>",valMap.get("amountDue"));
         message = message.replace("<insert inactive citizen application web URL>.",propertyConfiguration.getNotificationURL());
-        message = message.replace("<payLink>.", getPaymentLink(valMap));
 //        message = message.replace("<Insert FY>",valMap.get("financialYear"));
         return message;
     }
@@ -423,7 +421,6 @@ public class PaymentNotificationService {
     private String getCustomizedPaymentFailMessage(String message,Map<String,String> valMap){
         message = message.replace("<insert amount to pay>",valMap.get("txnAmount"));
         message = message.replace("<insert ID>",valMap.get("propertyId"));
-        message = message.replace("<payLink>.", getPaymentLink(valMap));
 //        message = message.replace("<FY>",valMap.get("financialYear"));
         return message;
     }
@@ -447,16 +444,18 @@ public class PaymentNotificationService {
      * @param customizedMessage The message to sent
      * @return List of SMSRequest
      */
-    private List<SMSRequest> getSMSRequests(Set<String> mobileNumbers, String customizedMessage){
+    private List<SMSRequest> getSMSRequests(Set<String> mobileNumbers, String customizedMessage, Map<String, String> valMap){
         List<SMSRequest> smsRequests = new ArrayList<>();
-        mobileNumbers.forEach(mobileNumber-> {
+        for(String mobileNumber : mobileNumbers){
             if(mobileNumber!=null)
-            {
-                String finalMessage = customizedMessage.replace("$mobile", mobileNumber);
+            {   String finalMessage = customizedMessage.replace("$mobile", mobileNumber);
+                if(customizedMessage.contains("<payLink>")){
+                    finalMessage = finalMessage.replace("<payLink>", getPaymentLink(valMap));
+                }
                 SMSRequest smsRequest = new SMSRequest(mobileNumber,finalMessage);
                 smsRequests.add(smsRequest);
             }
-        });
+        }
         return smsRequests;
     }
 
@@ -519,6 +518,7 @@ public class PaymentNotificationService {
         String url = builder.toString();
         url = url.replace("$consumerCode", valMap.get("propertyId"));
         url = url.replace("$tenantId", valMap.get("tenantId"));
+        url = util.getShortenedUrl(url);
         return url;
     }
 
