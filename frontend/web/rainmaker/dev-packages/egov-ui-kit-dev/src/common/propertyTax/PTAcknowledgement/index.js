@@ -15,6 +15,7 @@ import { fetchProperties } from "egov-ui-kit/redux/properties/actions";
 import { AcknowledgementReceipt } from "../AcknowledgementReceipt";
 import {generatePdfFromDiv,generatePdfAndDownload} from "../../../utils/PTCommon"
 import "./index.css";
+import PTHeader from "../../common/PTHeader";
 class PTAcknowledgement extends React.Component {
   state = {
     propertyId: ""
@@ -88,7 +89,11 @@ class PTAcknowledgement extends React.Component {
     const propertyId = getQueryArg(
       window.location.href,
       "propertyId"
-    );
+    )||'';
+    const secondNumber = getQueryArg(
+      window.location.href,
+      "secondNumber"
+    )||'';
     let downloadMenu=[];
     let printMenu=[];
     
@@ -143,7 +148,9 @@ class PTAcknowledgement extends React.Component {
         // labelName: `Application for New Trade License (${financialYearText})`,
         labelName: "New Property",
         labelKey: "PT_NEW_PROPERTY",
-        dynamicArray: [financialYear]
+        dynamicArray: [financialYear],
+        subheader:'propertyId',
+        subHeaderValue:'propertyId'
       };
      
       ptMsg={
@@ -159,13 +166,43 @@ class PTAcknowledgement extends React.Component {
         iconColor :"#39CB74",
       };
       ptIDLabel={labelName: "Poperty ID",
-      labelKey: "PT_PROPERTY_ID",
+      labelKey: "PT_ACKNOWLEDGEMENT_ID",
       visibility:true};
       Button1={name:"PT_GOHOME",buttonClick:this.onGoHomeClick,visibility:true} ;
       Button2={name:"PT_PROCEED_PAYMENT",buttonClick:this.onAssessPayClick,visibility:false} ;
       // downloadButton={menu:downloadMenu,visibility:true} ;
       // printButton={menu:printMenu,visibility:true} ;
-    }
+    }else if (purpose === "update" && status === "success") {
+      
+      ptHeader = {
+      // labelName: `Application for New Trade License (${financialYearText})`,
+      labelName: "New Property",
+      labelKey: "PT_UPDATE_PROPERTY",
+      dynamicArray: [financialYear],
+      subheader:'propertyId',
+      subHeaderValue:'propertyId'
+    };
+   
+    ptMsg={
+      labelName: "New Property Application Submitted Successfully",
+      labelKey: "PT_UPDATE_PROPERTY_SUCCESS_MSG",
+    };
+    ptSubMsg={
+      labelName: "A notification regarding new property application has been sent to property owner at registered Mobile No.",
+      labelKey: "PT_UPDATE_PROPERTY_SUCCESS_SUB_MSG",
+    };
+    statusIcon={
+      icon :"done",
+      iconColor :"#39CB74",
+    };
+    ptIDLabel={labelName: "Poperty ID",
+    labelKey: "PT_ACKNOWLEDGEMENT_ID",
+    visibility:true};
+    Button1={name:"PT_GOHOME",buttonClick:this.onGoHomeClick,visibility:true} ;
+    Button2={name:"PT_PROCEED_PAYMENT",buttonClick:this.onAssessPayClick,visibility:false} ;
+    // downloadButton={menu:downloadMenu,visibility:true} ;
+    // printButton={menu:printMenu,visibility:true} ;
+  }
     else if (purpose === "apply" && status === "failure") {
       ptHeader = {
         // labelName: `Application for New Trade License (${financialYearText})`,
@@ -202,7 +239,7 @@ class PTAcknowledgement extends React.Component {
         dynamicArray: [financialYear]
       };
       ptIDLabel={labelName: "Poperty ID",
-      labelKey: "PT_PROPERTY_ID",
+      labelKey: "PT_ASSESSMENT_NUMBER",
       visibility:true};
       statusIcon={
         icon :"done",
@@ -256,7 +293,7 @@ class PTAcknowledgement extends React.Component {
         dynamicArray: [financialYear]
       };
       ptIDLabel={labelName: "Poperty ID",
-      labelKey: "PT_PROPERTY_ID",
+      labelKey: "PT_ASSESSMENT_NUMBER",
       visibility:true};
       statusIcon={
         icon :"done",
@@ -305,7 +342,8 @@ class PTAcknowledgement extends React.Component {
     return (
       <div >
         <div className="mainContainer ">
-        <Label
+        <PTHeader header={ptHeader&&ptHeader.labelKey} subHeaderTitle='PT_PROPERTY_ID' subHeaderValue={propertyId} />
+        {/* <Label
           label={ptHeader&&ptHeader.labelKey}
           color="rgba(0, 0, 0, 0.87)"
           fontSize="22px"
@@ -315,17 +353,17 @@ class PTAcknowledgement extends React.Component {
           lineHeight="1.35417em"
           className="ptHeader"
           
-        />
+        /> */}
         <div className="printDownloadButton">
        {downloadButton&&downloadButton.visibility&& <DownloadPrintButton data={{label: {
-                    labelName:"Download",labelKey:"TL_DOWNLOAD"},
+                    labelName:"Download",labelKey:"PT_DOWNLOAD"},
                   leftIcon: "cloud_download",
                   rightIcon: "arrow_drop_down",
                   props: { variant: "outlined", style: { marginLeft: 10,color:"#FE7A51" } },
                   menu: downloadButton.menu
                 }}/>}
        {printButton&&printButton.visibility&& <DownloadPrintButton data={{label: {
-                    llabelName:"Print",labelKey:"TL_PRINT"},
+                    llabelName:"Print",labelKey:"PT_PRINT"},
                     leftIcon: "print",
                     rightIcon: "arrow_drop_down",
                     props: { variant: "outlined", style: { marginLeft: 10 ,color:"#FE7A51"} },
@@ -395,7 +433,7 @@ class PTAcknowledgement extends React.Component {
                     style={{ fontSize: "24px", fontWeight: "500" }}
                   >
                     <span>
-                      <Label label={propertyId} fontSize="24px" color="rgba(0, 0, 0, 0.87)" fontWeight="500" />
+                      <Label label={secondNumber} fontSize="24px" color="rgba(0, 0, 0, 0.87)" fontWeight="500" />
                     </span>
                   </h1>
                 </div>

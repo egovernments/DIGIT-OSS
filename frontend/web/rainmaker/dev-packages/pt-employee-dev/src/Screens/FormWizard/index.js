@@ -1611,16 +1611,18 @@ class FormWizard extends Component {
           Assessment: assessment
         }
       );
+     
+      const assessmentNumber= get(assessPropertyResponse, "Assessments[0].assessmentNumber",'');
       if (action === "re-assess") {
         store.dispatch(
           setRoute(
-            `/property-tax/pt-acknowledgment?purpose=reassessment&status=success&propertyId=${assessment.propertyId}&FY=${assessment.financialYear}&tenantId=${assessment.tenantId}`
+            `/property-tax/pt-acknowledgment?purpose=reassessment&status=success&propertyId=${assessment.propertyId}&FY=${assessment.financialYear}&tenantId=${assessment.tenantId}&secondNumber=${assessmentNumber}`
           )
         );
       } else {
         store.dispatch(
           setRoute(
-            `/property-tax/pt-acknowledgment?purpose=assessment&status=success&propertyId=${assessment.propertyId}&FY=${assessment.financialYear}&tenantId=${assessment.tenantId}`
+            `/property-tax/pt-acknowledgment?purpose=assessment&status=success&propertyId=${assessment.propertyId}&FY=${assessment.financialYear}&tenantId=${assessment.tenantId}&secondNumber=${assessmentNumber}`
           )
         );
       }
@@ -1683,10 +1685,16 @@ class FormWizard extends Component {
         );
         if (propertyResponse && propertyResponse.Properties && propertyResponse.Properties.length) {
           if (propertyResponse.Properties[0].propertyId) {
-            const propertyId = propertyResponse.Properties[0].propertyId;
-            const tenantId = propertyResponse.Properties[0].tenantId;
+            const propertyId = get(propertyResponse, "Properties[0].propertyId",'');
+            const tenantId =  get(propertyResponse, "Properties[0].tenantId",'');
+            const acknowldgementNumber= get(propertyResponse, "Properties[0].acknowldgementNumber",'');
             // Navigate to success page
-            this.props.history.push(`pt-acknowledgment?purpose=apply&propertyId=${propertyId}&status=success&tenantId=${tenantId}`);
+            if(action=='create'){
+              this.props.history.push(`pt-acknowledgment?purpose=apply&propertyId=${propertyId}&status=success&tenantId=${tenantId}&secondNumber=${acknowldgementNumber}`);
+            }else{
+              this.props.history.push(`pt-acknowledgment?purpose=update&propertyId=${propertyId}&status=success&tenantId=${tenantId}&secondNumber=${acknowldgementNumber}`);
+            }
+            
             // if ((action === "assess") || (action === "re-assess")) {
             //   this.assessProperty(action, propertyResponse.Properties);
             // } else {

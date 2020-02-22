@@ -804,8 +804,7 @@ class FormWizard extends Component {
 
   }
 
-  assessProperty = async (action) => {
-    const { hideSpinner } = this.props;
+  assessProperty = async (action, Properties) => {
     let propertyMethodAction = action === "re-assess" ? "_update" : '_create';
     const propertyId = getQueryArg(
       window.location.href,
@@ -826,6 +825,9 @@ class FormWizard extends Component {
       "channel": "CFC_COUNTER",
       "status": "ACTIVE"
     }
+
+    console.log(Properties);
+
     if (action === "re-assess") {
       let assessments = await this.getAssessmentDetails();
       if (assessments.Assessments.length > 0) {
@@ -850,23 +852,26 @@ class FormWizard extends Component {
           Assessment: assessment
         }
       );
+     
+      const assessmentNumber= get(assessPropertyResponse, "Assessments[0].assessmentNumber",'');
       if (action === "re-assess") {
         store.dispatch(
           setRoute(
-            `/property-tax/pt-acknowledgment?purpose=reassessment&status=success&propertyId=${assessment.propertyId}&FY=${assessment.financialYear}&tenantId=${assessment.tenantId}`
+            `/property-tax/pt-acknowledgment?purpose=reassessment&status=success&propertyId=${assessment.propertyId}&FY=${assessment.financialYear}&tenantId=${assessment.tenantId}&secondNumber=${assessmentNumber}`
           )
         );
-      }
-      else {
+      } else {
         store.dispatch(
           setRoute(
-            `/property-tax/pt-acknowledgment?purpose=assessment&status=success&propertyId=${assessment.propertyId}&FY=${assessment.financialYear}&tenantId=${assessment.tenantId}`
+            `/property-tax/pt-acknowledgment?purpose=assessment&status=success&propertyId=${assessment.propertyId}&FY=${assessment.financialYear}&tenantId=${assessment.tenantId}&secondNumber=${assessmentNumber}`
           )
         );
       }
 
     } catch (e) {
       hideSpinner();
+      //  this.setState({ nextButtonEnabled: true });
+      //  alert(e);
       if (action === "assess") {
         store.dispatch(
           setRoute(
@@ -883,13 +888,12 @@ class FormWizard extends Component {
           )
         );
       }
-      // this.setState({ nextButtonEnabled: true });
-      // alert(e);
     }
   }
 
+
   createProperty = async (Properties, action) => {
-    const { documentsUploadRedux, hidespinner, newProperties, propertiesEdited } = this.props;
+    const { documentsUploadRedux, newProperties, propertiesEdited } = this.props;
     const propertyPayload = createPropertyPayload(Properties, documentsUploadRedux, newProperties);
     const propertyMethodAction = (action === "assess" || action === "re-assess") ? "_update" : "_create";
 
@@ -923,26 +927,26 @@ class FormWizard extends Component {
         );
         if (propertyResponse && propertyResponse.Properties && propertyResponse.Properties.length) {
           if (propertyResponse.Properties[0].propertyId) {
-            const propertyId = propertyResponse.Properties[0].propertyId;
-            const tenantId = propertyResponse.Properties[0].tenantId;
+            const propertyId = get(propertyResponse, "Properties[0].propertyId",'');
+            const tenantId =  get(propertyResponse, "Properties[0].tenantId",'');
+            const acknowldgementNumber= get(propertyResponse, "Properties[0].acknowldgementNumber",'');
             // Navigate to success page
-            if ((action === "assess") || (action === "re-assess")) {
-
-              this.assessProperty(action, propertyResponse.Properties);
-            } else {
-              this.props.history.push(`pt-acknowledgment?purpose=apply&propertyId=${propertyId}&status=success&tenantId=${tenantId}&FY=2019-20`);
+            if(action=='create'){
+              this.props.history.push(`pt-acknowledgment?purpose=apply&propertyId=${propertyId}&status=success&tenantId=${tenantId}&secondNumber=${acknowldgementNumber}`);
+            }else{
+              this.props.history.push(`pt-acknowledgment?purpose=update&propertyId=${propertyId}&status=success&tenantId=${tenantId}&secondNumber=${acknowldgementNumber}`);
             }
+     
           }
         }
       } catch (e) {
         hideSpinner();
-        // this.setState({ nextButtonEnabled: true });
-        // alert(e);
-        store.dispatch(
+          store.dispatch(
           setRoute(
             `/property-tax/pt-acknowledgment?purpose=apply&status=failure`
           )
         );
+
       }
     }
   }
