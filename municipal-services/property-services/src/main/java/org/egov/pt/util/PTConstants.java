@@ -209,13 +209,15 @@ public class PTConstants {
     // PROPERTY & MUTATION
     public static final String NOTIFICATION_APPID =  "{APPID}";
     
-    public static final String NOTIFICATION_SEARCH_LINK =  "{SEARCHLINK}";
+    public static final String NOTIFICATION_CONSUMERCODE =  "{CONSUMERCODE}";
+    
+    public static final String NOTIFICATION_TENANTID =  "{TENANTID}";
     
     public static final String NOTIFICATION_PAY_LINK =  "{PAYLINK}";
     
-    public static final String NOTIFICATION_RCPT_LINK =  "{RCPTLINK}";
+    public static final String NOTIFICATION_PROPERTY_LINK =  "{PTURL}";
     
-    public static final String NOTIFICATION_CERT_LINK =  "{CERTLINK}";
+    public static final String NOTIFICATION_MUTATION_LINK =  "{MTURL}";
     
     public static final String NOTIFICATION_AMOUNT    =  "{AMOUNT}";
     
