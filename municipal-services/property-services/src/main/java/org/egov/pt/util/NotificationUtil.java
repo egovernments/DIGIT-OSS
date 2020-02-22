@@ -24,6 +24,7 @@ import org.springframework.util.CollectionUtils;
 import com.jayway.jsonpath.JsonPath;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.client.RestTemplate;
 
 @Slf4j
 @Component
@@ -37,13 +38,18 @@ public class NotificationUtil {
 
     private Producer producer;
 
+    private RestTemplate restTemplate;
 
     @Autowired
-    public NotificationUtil(ServiceRequestRepository serviceRequestRepository, PropertyConfiguration config, Producer producer) {
+    public NotificationUtil(ServiceRequestRepository serviceRequestRepository, PropertyConfiguration config,
+                            Producer producer, RestTemplate restTemplate) {
         this.serviceRequestRepository = serviceRequestRepository;
         this.config = config;
         this.producer = producer;
+        this.restTemplate = restTemplate;
     }
+
+
 
 
 
@@ -210,13 +216,13 @@ public class NotificationUtil {
         body.put("url",url);
         StringBuilder builder = new StringBuilder(config.getUrlShortnerHost());
         builder.append(config.getUrlShortnerEndpoint());
-        Optional<Object> res = serviceRequestRepository.fetchResult(builder, body);
+        String res = restTemplate.postForObject(builder.toString(), body, String.class);
 
-        if(!res.isPresent()){
+        if(StringUtils.isEmpty(res)){
             log.error("URL_SHORTENING_ERROR","Unable to shorten url: "+url); ;
             return url;
         }
-        else return res.get().toString();
+        else return res;
     }
 
 }
