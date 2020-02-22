@@ -21,9 +21,7 @@ import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
 import { getSearchResults,generatePdfFromDiv } from "../../../../ui-utils/commons";
-import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons"
-import { httpRequest } from "../../../../ui-utils/api";
-import { searchBill } from "../utils/index";
+import { searchBill,getReceiptData ,getpayments ,downloadCertificateForm,downloadReceitForm} from "../utils/index";
 import generatePdf from "../utils/receiptPdf";
 import { loadPdfGenerationData } from "../utils/receiptTransformer";
 import { citizenFooter } from "./searchResource/citizenFooter";
@@ -86,34 +84,6 @@ const titlebar = getCommonContainer({
   // }
 });
 
-export const downloadCertificateForm = (Properties,tenantId,mode='download') => {
-  const queryStr = [
-    { key: "key", value:"ptmutationcertificate" },
-    { key: "tenantId", value: tenantId }
-  ]
-  const DOWNLOADRECEIPT = {
-    GET: {
-      URL: "/pdf-service/v1/_create",
-      ACTION: "_get",
-    },
-  };
-  try {
-    httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Properties }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
-      .then(res => {
-        res.filestoreIds[0]
-        if (res && res.filestoreIds && res.filestoreIds.length > 0) {
-          res.filestoreIds.map(fileStoreId => {
-            downloadReceiptFromFilestoreID(fileStoreId,tenantId,mode)
-          })
-        } else {
-          console.log("Error In Acknowledgement form Download");
-        }
-      });
-  } catch (exception) {
-    alert('Some Error Occured while downloading Acknowledgement form!');
-  }
-}
-
 const prepareUoms = (state, dispatch) => {
   let buildings = get(
     state,
@@ -163,38 +133,37 @@ const prepareUoms = (state, dispatch) => {
 
 const setDownloadMenu = (state, dispatch,tenantId,applicationNumber) => {
   /** MenuButton data based on status */
-  // let status = get(
-  //   state,
-  //   "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.status"
-  // );
-  let status="APPROVED";
+  let status = get(
+   state,
+   "screenConfiguration.preparedFinalObject.Property.status"
+  );
   let downloadMenu = [];
   let printMenu = [];
   let certificateDownloadObject = {
     label: { labelName: "PT Certificate", labelKey: "PT_CERTIFICATE" },
     link: () => {
-      downloadCertificateForm(get(state,"screenConfiguration.preparedFinalObject.Properties"),tenantId);
+      downloadCertificateForm(get(state,"screenConfiguration.preparedFinalObject.Properties"),"ptmutationcertificate",tenantId);
     },
     leftIcon: "book"
   };
   let certificatePrintObject = {
     label: { labelName: "PT Certificate", labelKey: "PT_CERTIFICATE" },
     link: () => {
-      downloadCertificateForm(get(state,"screenConfiguration.preparedFinalObject.Properties"),tenantId,'print');
+      downloadCertificateForm(get(state,"screenConfiguration.preparedFinalObject.Properties"),"ptmutationcertificate",tenantId,'print');
     },
     leftIcon: "book"
   };
   let receiptDownloadObject = {
     label: { labelName: "Receipt", labelKey: "PT_RECEIPT" },
     link: () => {
-      generatePdf(state, dispatch, "receipt_download");
+      downloadReceitForm(get(state,"screenConfiguration.preparedFinalObject.Payments"),"consolidatedreceipt",tenantId);
     },
     leftIcon: "receipt"
   };
   let receiptPrintObject = {
     label: { labelName: "Receipt", labelKey: "PT_RECEIPT" },
     link: () => {
-      generatePdf(state, dispatch, "receipt_print");
+      downloadReceitForm(get(state,"screenConfiguration.preparedFinalObject.Payments"),"consolidatedreceipt",tenantId,'print');
     },
     leftIcon: "receipt"
   };
@@ -213,7 +182,7 @@ const setDownloadMenu = (state, dispatch,tenantId,applicationNumber) => {
     leftIcon: "assignment"
   };
   switch (status) {
-    case "APPROVED":
+    case "ACTIVE":
       downloadMenu = [
         certificateDownloadObject,
         receiptDownloadObject,
@@ -225,17 +194,9 @@ const setDownloadMenu = (state, dispatch,tenantId,applicationNumber) => {
         applicationPrintObject
       ];
       break;
-    case "DOCUMENTVERIFY":
-    case "FIELDINSPECTION":
-    case "PENDINGAPPROVAL":
-    case "REJECTED":
-      downloadMenu = [receiptDownloadObject, applicationDownloadObject];
-      printMenu = [receiptPrintObject, applicationPrintObject];
-      break;
-    case "CANCELLED":
-    case "PENDINGPAYMENT":
-      downloadMenu = [applicationDownloadObject];
-      printMenu = [applicationPrintObject];
+    case "INWORKFLOW":
+      downloadMenu = [certificateDownloadObject, applicationDownloadObject];
+      printMenu = [certificatePrintObject, applicationPrintObject];
       break;
     default:
       break;
@@ -389,6 +350,20 @@ export const setData=async(state,dispatch,applicationNumber,tenantId)=>{
    ]);
    
    dispatch(prepareFinalObject("Properties", get(response, "Properties", [])));
+   let queryObj = [
+    {
+      key: "tenantId",
+      value: tenantId
+    },
+    {
+      key: "consumerCodes",
+      value: applicationNumber
+    }
+  ];
+
+const responsePayments=await getpayments(queryObj)
+dispatch(prepareFinalObject("Payments", get(responsePayments, "Payments", [])));
+
  
  }
 
@@ -411,7 +386,6 @@ const screenConfig = {
       { key: "businessServices", value: "PT.MUTATION" }
     ];
     setBusinessServiceDataToLocalStorage(queryObject, dispatch);
-
     // Hide edit buttons
     setData(state,dispatch,applicationNumber,tenantId);
     set(

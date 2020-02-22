@@ -31,10 +31,10 @@ const mapStateToProps = (state, ownProps) => {
           return {
             title: `PT_${item.documentType}`,
          //   title: `PT_${item.title}`,
-         link: item.documents[0].fileUrl && item.documents[0].fileUrl.split(",")[0],
+         link: item&&item.documents&& item.documents[0].fileUrl && item.documents[0].fileUrl.split(",")[0],
          //   link: item.link,
             linkText: "View",
-            name: item.documents[0].fileName,
+            name: item&&item.documents&&item.documents[0].fileName,
             //name: item.name
           };
         });
