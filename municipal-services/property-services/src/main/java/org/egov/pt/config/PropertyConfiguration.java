@@ -104,8 +104,18 @@ public class PropertyConfiguration {
 
     @Value("${notif.sms.enabled}")
     private Boolean isSMSNotificationEnabled;
-
-
+    
+    // Notif variables 
+    
+    @Value("${egov.notif.commonpay}")
+    private String commonPayLink;
+    
+    @Value("${egov.notif.view.property}")
+    private String viewPropertyLink;
+    
+    @Value("${egov.notif.view.mutation}")
+    private String viewMutationLink;
+    
     //Property Search Params
     @Value("${citizen.allowed.search.params}")
     private String citizenSearchParams;
