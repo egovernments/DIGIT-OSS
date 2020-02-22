@@ -19,6 +19,7 @@ const formConfig = {
       hintText: "PT_FORM3_MOBILE_NO_PLACEHOLDER",
       pattern: /^(\+\d{1,2}[-]{0,1})?\(?[6-9]\d{2}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/i,
       errorMessage: "PT_MOBILE_NUMBER_ERROR_MESSAGE",
+      required: true,
     },
     designation: {
       id: "authority-designation",
@@ -38,7 +39,6 @@ const formConfig = {
       required: true,
       pattern: /^[0-9]{11}$/i,
       errorMessage: "PT_LAND_NUMBER_ERROR_MESSAGE",
-      required: true,
     },
     email: {
       id: "authority-email",

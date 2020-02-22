@@ -74,7 +74,11 @@ class OwnerInfo extends Component {
     const { properties } = this.props;
     const { propertyId, tenantId } = properties;
     if(this.props.totalBillAmountDue === 0 && dialogName !== "viewHistory"){
-      this.props.history.push(`/pt-mutation/apply?consumerCode=${propertyId}&tenantId=${tenantId}`);
+      if(properties.status=="INWORKFLOW"){
+        alert('Property is in Workflow ...')
+      }else{
+        this.props.history.push(`/pt-mutation/apply?consumerCode=${propertyId}&tenantId=${tenantId}`);
+      }
     } else if (dialogName === "viewHistory") {
       await this.getPropertyResponse(propertyId, tenantId, dialogName);
       
@@ -126,6 +130,7 @@ class OwnerInfo extends Component {
                       institution.type &&
                       generalMDMSDataById &&
                       generalMDMSDataById["SubOwnerShipCategory"] &&
+                      generalMDMSDataById["SubOwnerShipCategory"][institution.type]&&
                       generalMDMSDataById["SubOwnerShipCategory"][institution.type].name) ||
                     "NA",
                 }
@@ -141,6 +146,7 @@ class OwnerInfo extends Component {
                       institution.type &&
                       generalMDMSDataById &&
                       generalMDMSDataById["OwnerShipCategory"] &&
+                      generalMDMSDataById["OwnerShipCategory"][latestPropertyDetails.ownershipCategory]&&
                       generalMDMSDataById["OwnerShipCategory"][latestPropertyDetails.ownershipCategory].name) ||
                     "NA",
                 }
@@ -184,6 +190,7 @@ class OwnerInfo extends Component {
                       owner.ownerType &&
                       generalMDMSDataById &&
                       generalMDMSDataById["OwnerType"] &&
+                      generalMDMSDataById["OwnerType"][owner.ownerType]&&
                       generalMDMSDataById["OwnerType"][owner.ownerType].name) ||
                     "NA",
                 },
