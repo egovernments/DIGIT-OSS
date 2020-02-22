@@ -1,7 +1,20 @@
 package org.egov.pt.service;
 
 
-import lombok.extern.slf4j.Slf4j;
+import static org.egov.pt.util.PTConstants.LOCALIZATION_ASMT_PREFIX;
+import static org.egov.pt.util.PTConstants.NOTIFICATION_ASMT_PREFIX;
+import static org.egov.pt.util.PTConstants.NOTIFICATION_ASSESSMENTNUMBER;
+import static org.egov.pt.util.PTConstants.NOTIFICATION_ASSESSMENT_CREATE;
+import static org.egov.pt.util.PTConstants.NOTIFICATION_ASSESSMENT_UPDATE;
+import static org.egov.pt.util.PTConstants.NOTIFICATION_FINANCIALYEAR;
+import static org.egov.pt.util.PTConstants.NOTIFICATION_PROPERTYID;
+import static org.egov.pt.util.PTConstants.NOTIFICATION_STATUS;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.Assessment;
@@ -9,8 +22,6 @@ import org.egov.pt.models.Property;
 import org.egov.pt.models.PropertyCriteria;
 import org.egov.pt.models.event.Event;
 import org.egov.pt.models.event.EventRequest;
-import org.egov.pt.models.event.Recepient;
-import org.egov.pt.models.event.Source;
 import org.egov.pt.models.workflow.ProcessInstance;
 import org.egov.pt.util.NotificationUtil;
 import org.egov.pt.web.contracts.AssessmentRequest;
@@ -19,10 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
-import static org.egov.pt.util.PTConstants.*;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
@@ -48,8 +56,9 @@ public class AssessmentNotificationService {
 
         RequestInfo requestInfo = assessmentRequest.getRequestInfo();
         Assessment assessment = assessmentRequest.getAssessment();
+        String tenantId = assessment.getTenantId();
 
-        PropertyCriteria criteria = PropertyCriteria.builder().tenantId(assessment.getTenantId())
+        PropertyCriteria criteria = PropertyCriteria.builder().tenantId(tenantId)
                                     .propertyIds(Collections.singleton(assessment.getPropertyId()))
                                     .build();
         List<Property> properties = propertyService.searchProperty(criteria, requestInfo);
@@ -59,16 +68,10 @@ public class AssessmentNotificationService {
 
         Property property = properties.get(0);
 
-        List<SMSRequest> smsRequests = new LinkedList<>();
-
-        List<Event> events = new ArrayList<>();
-
-        enrichSMSRequest(topicName, assessmentRequest, property, smsRequests);
-
+        List<SMSRequest> smsRequests = enrichSMSRequest(topicName, assessmentRequest, property);
         util.sendSMS(smsRequests);
 
-        enrichEvent(assessmentRequest, smsRequests, events);
-
+        List<Event> events = util.enrichEvent(smsRequests, requestInfo, tenantId);
         util.sendEventNotification(new EventRequest(requestInfo, events));
     }
 
@@ -79,22 +82,20 @@ public class AssessmentNotificationService {
      * @param request The tradeLicenseRequest from kafka topic
      * @param smsRequests List of SMSRequets
      */
-    private void enrichSMSRequest(String topicName, AssessmentRequest request, Property property, List<SMSRequest> smsRequests){
+    private List<SMSRequest> enrichSMSRequest(String topicName, AssessmentRequest request, Property property){
     	
         String tenantId = request.getAssessment().getTenantId();
         String localizationMessages = util.getLocalizationMessages(tenantId,request.getRequestInfo());
         String message = getCustomizedMsg(topicName, request, property, localizationMessages);
         if(message==null)
-            return;
+            return Collections.emptyList();
 
         Map<String,String > mobileNumberToOwner = new HashMap<>();
-
         property.getOwners().forEach(owner -> {
             if(owner.getMobileNumber()!=null)
                 mobileNumberToOwner.put(owner.getMobileNumber(),owner.getName());
         });
-        smsRequests.addAll(util.createSMSRequest(message,mobileNumberToOwner));
-
+        return util.createSMSRequest(message,mobileNumberToOwner);
     }
 
 
@@ -160,37 +161,6 @@ public class AssessmentNotificationService {
             messageTemplate = messageTemplate.replace(NOTIFICATION_FINANCIALYEAR, assessment.getFinancialYear());
 
         return messageTemplate;
-    }
-
-
-    /**
-     *
-     * @param request
-     * @param smsRequests
-     * @param events
-     */
-    private void enrichEvent(AssessmentRequest request, List<SMSRequest> smsRequests, List<Event> events){
-
-        String tenantId = request.getAssessment().getTenantId();
-        Set<String> mobileNumbers = smsRequests.stream().map(SMSRequest :: getMobileNumber).collect(Collectors.toSet());
-        Map<String, String> mapOfPhnoAndUUIDs = util.fetchUserUUIDs(mobileNumbers, request.getRequestInfo(), request.getAssessment().getTenantId());
-        if (CollectionUtils.isEmpty(mapOfPhnoAndUUIDs.keySet())) {
-            log.error("UUID search failed!");
-        }
-        Map<String,String > mobileNumberToMsg = smsRequests.stream().collect(Collectors.toMap(SMSRequest::getMobileNumber, SMSRequest::getMessage));
-
-        mobileNumbers.forEach(mobileNumber -> {
-            List<String> toUsers = new ArrayList<>();
-            toUsers.add(mapOfPhnoAndUUIDs.get(mobileNumber));
-            Recepient recepient = Recepient.builder().toUsers(toUsers).toRoles(null).build();
-            events.add(Event.builder().tenantId(tenantId).description(mobileNumberToMsg.get(mobileNumber))
-                    .eventType(USREVENTS_EVENT_TYPE).name(USREVENTS_EVENT_NAME)
-                    .postedBy(USREVENTS_EVENT_POSTEDBY).source(Source.WEBAPP).recepient(recepient)
-                    .eventDetails(null).build());
-        });
-
-
-
     }
 
 }
