@@ -66,7 +66,7 @@ export const downloadCertificateForm = (Properties,tenantId,mode='download') => 
    }
  }
 
- const downloadprintMenu=(state,applicationNumber,tenantId,purpose)=>{
+ const downloadprintMenu=(state,applicationNumber,tenantId,purpose,moduleName)=>{
   const certificateDownloadObject = {
     label: { labelName: "PT Certificate", labelKey: "PT_CERTIFICATE" },
     link: () => {
@@ -104,6 +104,7 @@ export const downloadCertificateForm = (Properties,tenantId,mode='download') => 
   };
   let downloadMenu = [];
   let printMenu = [];
+  let visibility=moduleName=='ASMT'|| moduleName=="PT.CREATE"?"hidden":"visible"
   switch (purpose) {
     case "approve":
       downloadMenu = [certificateDownloadObject ];
@@ -134,7 +135,7 @@ export const downloadCertificateForm = (Properties,tenantId,mode='download') => 
               label: {labelName : "DOWNLOAD" , labelKey :"TL_DOWNLOAD"},
                leftIcon: "cloud_download",
               rightIcon: "arrow_drop_down",
-              props: { variant: "outlined", style: { height: "60px", color : "#FE7A51" }, className: "tl-download-button" },
+              props: { variant: "outlined", style: { height: "60px", color : "#FE7A51",visibility }, className: "tl-download-button" },
               menu: downloadMenu
             }
           }
@@ -147,7 +148,7 @@ export const downloadCertificateForm = (Properties,tenantId,mode='download') => 
               label: {labelName : "PRINT" , labelKey :"TL_PRINT"},
               leftIcon: "print",
               rightIcon: "arrow_drop_down",
-              props: { variant: "outlined", style: { height: "60px", color : "#FE7A51" }, className: "tl-print-button" },
+              props: { variant: "outlined", style: { height: "60px", color : "#FE7A51",visibility }, className: "tl-print-button" },
               menu: printMenu
             }
           }
@@ -194,7 +195,8 @@ const getAcknowledgementCard = (
   status,
   applicationNumber,
   secondNumber,
-  tenant
+  tenant,
+  moduleName
 ) => {
   if (purpose === "apply" && status === "success") {
     // loadPdfGenerationData(applicationNumber, tenant);
@@ -303,10 +305,11 @@ const getAcknowledgementCard = (
       )
     };
   }else if (purpose === "approve" && status === "success") {
+    
     // loadReceiptGenerationData(applicationNumber, tenant);
     return {
       header:getHeader(applicationNumber),
-      dpmenu: downloadprintMenu(state,applicationNumber,tenant,purpose),
+      dpmenu:downloadprintMenu(state,applicationNumber,tenant,purpose,moduleName),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -586,6 +589,7 @@ const screenConfig = {
       window.location.href,
       "applicationNumber"
     );
+    const moduleName= getQueryArg(window.location.href, "moduleName");
     const secondNumber = getQueryArg(window.location.href, "secondNumber");
     const tenant = getQueryArg(window.location.href, "tenantId");
     setData(state,dispatch,applicationNumber,tenant);
@@ -597,7 +601,7 @@ const screenConfig = {
       status,
       applicationNumber,
       secondNumber,
-      tenant
+      tenant,moduleName
     );
     
     set(action, "screenConfig.components.div.children", data);

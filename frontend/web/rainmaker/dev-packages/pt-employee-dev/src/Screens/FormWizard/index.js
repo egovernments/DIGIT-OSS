@@ -1349,12 +1349,12 @@ class FormWizard extends Component {
   }
 
   estimate = async () => {
-    let { toggleSpinner, location } = this.props;
+    let { hideSpinner, location ,showSpinner} = this.props;
     let { search: search1 } = location;
     let isAssesment1 = Boolean(getQueryValue(search1, "isAssesment").replace('false', ''));
     if (isAssesment1) {
       let prepareFormData = { ...this.props.prepareFormData };
-      toggleSpinner();
+      showSpinner();
       const financialYearFromQuery = getFinancialYearFromQuery();
       try {
         const financeYear = { financialYear: financialYearFromQuery };
@@ -1377,10 +1377,10 @@ class FormWizard extends Component {
         );
         this.setState({ calculationScreenData: calculationScreenData.data });
 
-        toggleSpinner();
+        hideSpinner();
         return estimateResponse;
       } catch (e) {
-        toggleSpinner();
+        hideSpinner();
         if (e.message) {
           alert(e.message);
         } else
@@ -1973,13 +1973,14 @@ class FormWizard extends Component {
       selected,
       formValidIndexArray,
     } = this.state;
-    const { location } = this.props;
+    const { location ,propertiesEdited} = this.props;
     const { search } = location;
-    let proceedToPayment = Boolean(getQueryValue(search, "proceedToPayment").replace('false', ''));
-    if (proceedToPayment && selected == 3) {
+    const propertyId = getQueryValue(search, "propertyId");
+    // let proceedToPayment = Boolean(getQueryValue(search, "proceedToPayment").replace('false', ''));
+    if (propertyId && selected == 3&&!propertiesEdited) {
       this.setState({
-        selected: 5,
-        formValidIndexArray: [...formValidIndexArray, 5]
+        selected: 4,
+        formValidIndexArray: [...formValidIndexArray, 4]
       });
     }
   }

@@ -176,7 +176,7 @@ else{
     if(payload){
       store.dispatch(
         setRoute(
-          `acknowledgement?purpose=apply&status=success&applicationNumber=${consumerCode}&tenantId=${tenantId}
+          `acknowledgement?purpose=apply&status=success&applicationNumber=${propertyPayload.acknowldgementNumber}&tenantId=${tenantId}
           `
         )
       );
