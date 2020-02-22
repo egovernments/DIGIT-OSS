@@ -32,13 +32,15 @@ import static org.egov.pt.util.PTConstants.WF_UPDATE_STATUS_OPEN_CODE;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.AuditDetails;
 import org.egov.pt.models.Property;
+import org.egov.pt.models.event.Event;
+import org.egov.pt.models.event.EventRequest;
 import org.egov.pt.models.workflow.ProcessInstance;
 import org.egov.pt.util.NotificationUtil;
 import org.egov.pt.web.contracts.PropertyRequest;
@@ -96,7 +98,7 @@ public class NotificationService {
 		// Ignoring paid status, since it's wired from payment consumer directly
 		if (msg != null) {
 			msg = replaceCommonValues(property, msg);
-			prepareMsgAndSend(property, msg);
+			prepareMsgAndSend(propertyRequest, msg);
 		}
 	}
 	
@@ -112,7 +114,7 @@ public class NotificationService {
 			String msg = getMsgForMutation(property, CompleteMsgs, WF_MT_STATUS_PAID_CODE, NOTIFICATION_MUTATION_LINK)
 						.replace(NOTIFICATION_AMOUNT, Amount.toPlainString());
 			msg = replaceCommonValues(property, msg);		
-			prepareMsgAndSend(property, msg);
+			prepareMsgAndSend(propertyRequest, msg);
 		}
 	}
 	
@@ -161,7 +163,7 @@ public class NotificationService {
 		}
 
 		msg = replaceCommonValues(property, msg);
-		prepareMsgAndSend(property, msg);
+		prepareMsgAndSend(propertyRequest, msg);
 	}
 
 
@@ -176,9 +178,10 @@ public class NotificationService {
 	 */
 	private String getMsgForUpdate(Property property, String msgCode, String completeMsgs, String createUpdateReplaceString) {
 		
-		String url = configs.getUiAppHost().concat(configs.getViewPropertyLink()
-				.replace(NOTIFICATION_PROPERTYID, property.getPropertyId())
-				.replace(NOTIFICATION_TENANTID, property.getTenantId()));
+		String url = notifUtil.getShortenedUrl(
+					   configs.getUiAppHost().concat(configs.getViewPropertyLink()
+					  .replace(NOTIFICATION_PROPERTYID, property.getPropertyId())
+					  .replace(NOTIFICATION_TENANTID, property.getTenantId())));
 		
 		return notifUtil.getMessageTemplate(msgCode, completeMsgs)
 				.replace(NOTIFICATION_PROPERTY_LINK, url)
@@ -210,9 +213,10 @@ public class NotificationService {
 	 */
 	private String getMutationUrl(Property property) {
 		
-		return configs.getUiAppHost().concat(configs.getViewMutationLink()
+		return notifUtil.getShortenedUrl(
+				 configs.getUiAppHost().concat(configs.getViewMutationLink()
 				.replace(NOTIFICATION_APPID, property.getAcknowldgementNumber())
-				.replace(NOTIFICATION_TENANTID, property.getTenantId()));
+				.replace(NOTIFICATION_TENANTID, property.getTenantId())));
 	}
 	
 	/**
@@ -223,9 +227,10 @@ public class NotificationService {
 	 */
 	private String getPayUrl(Property property) {
 		
-		return configs.getUiAppHost().concat(configs.getPayLink()
+		return notifUtil.getShortenedUrl( 
+				 configs.getUiAppHost().concat(configs.getPayLink()
 				.replace(NOTIFICATION_CONSUMERCODE, property.getAcknowldgementNumber())
-				.replace(NOTIFICATION_TENANTID, property.getTenantId()));
+				.replace(NOTIFICATION_TENANTID, property.getTenantId())));
 	}
 
 
@@ -249,18 +254,21 @@ public class NotificationService {
 	 * @param property
 	 * @param msg
 	 */
-	private void prepareMsgAndSend(Property property, String msg) {
+	private void prepareMsgAndSend(PropertyRequest request, String msg) {
 
-		List<SMSRequest> smsRequests = new LinkedList<>();
-
+		Property property = request.getProperty();
+		RequestInfo requestInfo = request.getRequestInfo();
 		Map<String, String> mobileNumberToOwner = new HashMap<>();
 
 		property.getOwners().forEach(owner -> {
 			if (owner.getMobileNumber() != null)
 				mobileNumberToOwner.put(owner.getMobileNumber(), owner.getName());
 		});
-		smsRequests.addAll(notifUtil.createSMSRequest(msg, mobileNumberToOwner));
 
+		List<SMSRequest> smsRequests = notifUtil.createSMSRequest(msg, mobileNumberToOwner);
 		notifUtil.sendSMS(smsRequests);
+
+		List<Event> events = notifUtil.enrichEvent(smsRequests, requestInfo, property.getTenantId());
+		notifUtil.sendEventNotification(new EventRequest(requestInfo, events));
 	}
 }

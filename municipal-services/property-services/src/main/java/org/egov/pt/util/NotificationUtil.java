@@ -4,27 +4,38 @@ package org.egov.pt.util;
 import static org.egov.pt.util.PTConstants.NOTIFICATION_LOCALE;
 import static org.egov.pt.util.PTConstants.NOTIFICATION_MODULENAME;
 import static org.egov.pt.util.PTConstants.NOTIFICATION_OWNERNAME;
+import static org.egov.pt.util.PTConstants.USREVENTS_EVENT_NAME;
+import static org.egov.pt.util.PTConstants.USREVENTS_EVENT_POSTEDBY;
+import static org.egov.pt.util.PTConstants.USREVENTS_EVENT_TYPE;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.config.PropertyConfiguration;
+import org.egov.pt.models.event.Event;
 import org.egov.pt.models.event.EventRequest;
+import org.egov.pt.models.event.Recepient;
+import org.egov.pt.models.event.Source;
 import org.egov.pt.producer.Producer;
 import org.egov.pt.repository.ServiceRequestRepository;
 import org.egov.pt.web.contracts.SMSRequest;
-import org.egov.tracer.model.CustomException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.client.RestTemplate;
 
 import com.jayway.jsonpath.JsonPath;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.client.RestTemplate;
 
 @Slf4j
 @Component
@@ -151,6 +162,7 @@ public class NotificationUtil {
      *            The list of SMSRequest to be sent
      */
     public void sendSMS(List<SMSRequest> smsRequestList) {
+    	
         if (config.getIsSMSNotificationEnabled()) {
             if (CollectionUtils.isEmpty(smsRequestList))
                 log.info("Messages from localization couldn't be fetched!");
@@ -171,6 +183,7 @@ public class NotificationUtil {
      * @return
      */
     public Map<String, String> fetchUserUUIDs(Set<String> mobileNumbers, RequestInfo requestInfo, String tenantId) {
+    	
         Map<String, String> mapOfPhnoAndUUIDs = new HashMap<>();
         StringBuilder uri = new StringBuilder();
         uri.append(config.getUserHost()).append(config.getUserSearchEndpoint());
@@ -207,11 +220,12 @@ public class NotificationUtil {
     }
 
     /**
-     *
+     * Method to shortent the url
+     * returns the same url if shortening fails 
      * @param url
-     * @return
      */
     public String getShortenedUrl(String url){
+    	
         HashMap<String,String> body = new HashMap<>();
         body.put("url",url);
         StringBuilder builder = new StringBuilder(config.getUrlShortnerHost());
@@ -224,5 +238,34 @@ public class NotificationUtil {
         }
         else return res;
     }
+    
+    /**
+    *
+    * @param request
+    * @param smsRequests
+    * @param events
+    */
+   public List<Event> enrichEvent(List<SMSRequest> smsRequests, RequestInfo requestInfo, String tenantId){
+
+		List<Event> events = new ArrayList<>();
+       Set<String> mobileNumbers = smsRequests.stream().map(SMSRequest :: getMobileNumber).collect(Collectors.toSet());
+       Map<String, String> mapOfPhnoAndUUIDs = fetchUserUUIDs(mobileNumbers, requestInfo, tenantId);
+       if (CollectionUtils.isEmpty(mapOfPhnoAndUUIDs.keySet())) {
+           log.error("UUIDs Not found for Mobilenumbers");
+       }
+       
+       Map<String,String > mobileNumberToMsg = smsRequests.stream().collect(Collectors.toMap(SMSRequest::getMobileNumber, SMSRequest::getMessage));
+       mobileNumbers.forEach(mobileNumber -> {
+       	
+           List<String> toUsers = new ArrayList<>();
+           toUsers.add(mapOfPhnoAndUUIDs.get(mobileNumber));
+           Recepient recepient = Recepient.builder().toUsers(toUsers).toRoles(null).build();
+           events.add(Event.builder().tenantId(tenantId).description(mobileNumberToMsg.get(mobileNumber))
+                   .eventType(USREVENTS_EVENT_TYPE).name(USREVENTS_EVENT_NAME)
+                   .postedBy(USREVENTS_EVENT_POSTEDBY).source(Source.WEBAPP).recepient(recepient)
+                   .eventDetails(null).build());
+		});
+		return events;
+	}
 
 }
