@@ -196,7 +196,7 @@ const formConfig = {
     isSameAsPropertyAddress: {
       id: "rcpt",
       type: "checkbox",
-      jsonPath: "",
+      jsonPath: "Properties[0].propertyDetails[0].owners[0].isCorrespondenceAddress",
       errorMessage: "",
       floatingLabelText: "PT_FORM3_ADDRESS_CHECKBOX",
       value: "",
@@ -218,8 +218,10 @@ const formConfig = {
           ]
             .join(", ")
             .replace(/^(,\s)+|(,\s)+$/g, "")
-            .replace(/(,\s){2,}/g, ", ");
+            .replace(/(,\s){2,}/g, ", ")
+            .replace(":","");
           dispatch(setFieldProperty(formKey, "ownerAddress", "value", correspondingAddress));
+          dispatch(handleFieldChange(formKey, "ownerAddress", correspondingAddress));
         } else {
           dispatch(setFieldProperty(formKey, "ownerAddress", "value", ""));
         }

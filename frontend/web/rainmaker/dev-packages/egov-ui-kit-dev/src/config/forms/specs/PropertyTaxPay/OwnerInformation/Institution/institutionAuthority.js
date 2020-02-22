@@ -1,5 +1,5 @@
 import get from "lodash/get";
-import { setFieldProperty } from "egov-ui-kit/redux/form/actions";
+import { setFieldProperty, handleFieldChange } from "egov-ui-kit/redux/form/actions";
 const formConfig = {
   name: "institutionAuthority",
   fields: {
@@ -60,7 +60,7 @@ const formConfig = {
     isSameAsPropertyAddress: {
       id: "rcpt",
       type: "checkbox",
-      jsonPath: "",
+      jsonPath: "Properties[0].propertyDetails[0].owners[0].isCorrespondenceAddress",
       errorMessage: "",
       floatingLabelText: "PT_FORM3_ADDRESS_CHECKBOX",
       value: "",
@@ -82,8 +82,10 @@ const formConfig = {
           ]
             .join(", ")
             .replace(/^(,\s)+|(,\s)+$/g, "")
-            .replace(/(,\s){2,}/g, ", ");
+            .replace(/(,\s){2,}/g, ", ")
+            .replace(":","");
           dispatch(setFieldProperty(formKey, "address", "value", correspondingAddress));
+          dispatch(handleFieldChange(formKey, "address", correspondingAddress));
         } else {
           dispatch(setFieldProperty(formKey, "address", "value", ""));
         }
