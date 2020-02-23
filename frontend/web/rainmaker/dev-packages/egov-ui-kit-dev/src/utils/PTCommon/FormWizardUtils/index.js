@@ -71,7 +71,7 @@ export const getBusinessServiceNextAction = (businessServiceName, currentAction)
     localStorageGet("businessServiceData")
   );
   
-  const data =businessServiceData.filter(businessService=>businessService.businessService=="PT.CREATE");
+  const data =businessServiceData&&businessServiceData.filter(businessService=>businessService.businessService=="PT.CREATE");
   let { states } = data&&data.length>0&&data[0] || [];
 
   if (states && states.length > 0) {

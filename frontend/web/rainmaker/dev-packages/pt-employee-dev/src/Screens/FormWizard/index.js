@@ -759,7 +759,7 @@ class FormWizard extends Component {
     const { formValidIndexArray, selected } = this.state;
     const { location } = this.props;
     let { search } = location;
-    const isCompletePayment = getQueryValue(search, "isCompletePayment");
+    const isCompletePayment =false;
     if (formValidIndexArray.indexOf(index) !== -1 && selected >= index) {
       !isCompletePayment
         ? this.setState({

@@ -26,7 +26,7 @@ const propertyReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         error: true,
-        errorMessage: action.error,
+        errorMessage: '',
       };
     case actionTypes.RECEIPT_FETCH_PENDING:
       return {

@@ -1603,17 +1603,10 @@ class FormWizard extends Component {
     const isCompletePayment = getQueryValue(search, "isCompletePayment");
     const isReassesment = getQueryValue(search, "isReassesment");
     if (formValidIndexArray.indexOf(index) !== -1 && selected >= index) {
-      isReassesment
-        ? isCompletePayment || propertyUUID !== currentUUID
-          ? alert("Not authorized to edit this property details")
-          : this.setState({
-            selected: index,
-            formValidIndexArray: range(0, index)
-          })
-        : this.setState({
-          selected: index,
-          formValidIndexArray: range(0, index)
-        });
+      this.setState({
+        selected: index,
+        formValidIndexArray: range(0, index)
+      });
     } else {
     }
   };
@@ -1887,6 +1880,7 @@ const mapDispatchToProps = dispatch => {
     prepareFormDataAction: (path, value) =>
       dispatch(prepareFormDataAction(path, value)),
     hideSpinner: () => dispatch(hideSpinner()),
+    showSpinner: () => dispatch(showSpinner()),
     removeForm: formkey => dispatch(removeForm(formkey)),
     prepareFinalObject: (jsonPath, value) =>
       dispatch(prepareFinalObject(jsonPath, value))
