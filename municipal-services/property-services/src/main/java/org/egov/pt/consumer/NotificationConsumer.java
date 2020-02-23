@@ -1,13 +1,13 @@
 package org.egov.pt.consumer;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
+import java.util.HashMap;
 
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.workflow.ProcessInstance;
 import org.egov.pt.service.AssessmentNotificationService;
 import org.egov.pt.service.NotificationService;
+import org.egov.pt.util.PTConstants;
 import org.egov.pt.web.contracts.AssessmentRequest;
 import org.egov.pt.web.contracts.PropertyRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,9 @@ import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Slf4j
@@ -42,28 +44,24 @@ public class NotificationConsumer {
 
 		try {
 
-			if (topic.equalsIgnoreCase(configs.getCreateAssessmentTopic())
-					|| topic.equalsIgnoreCase(configs.getUpdateAssessmentTopic())) {
-				
+			if (topic.equalsIgnoreCase(configs.getCreateAssessmentTopic()) || topic.equalsIgnoreCase(configs.getUpdateAssessmentTopic())) {
+
 				AssessmentRequest request = mapper.convertValue(record, AssessmentRequest.class);
 				assessmentNotificationService.process(topic, request);
-			} else if (topic.equalsIgnoreCase(configs.getSavePropertyTopic())) {
+			} else if (topic.equalsIgnoreCase(configs.getSavePropertyTopic()) || topic.equalsIgnoreCase(configs.getUpdatePropertyTopic())) {
 
 				PropertyRequest request = mapper.convertValue(record, PropertyRequest.class);
-				notifService.sendNotificationForUpdate(request);
+				ProcessInstance wf = request.getProperty().getWorkflow();
+				String notifAction = null != wf ? wf.getNotificationAction() : null;
+				if (null == notifAction) 
+					return;
 				
-			} else if (topic.equalsIgnoreCase(configs.getUpdatePropertyTopic())) {
-
-				PropertyRequest request = mapper.convertValue(record, PropertyRequest.class);
-				ProcessInstance wf  = request.getProperty().getWorkflow();
-
-				if (wf == null
-						|| (wf != null && wf.getBusinessService().equalsIgnoreCase(configs.getUpdatePTWfName()))) {
-
-					notifService.sendNotificationForUpdate(request);
-				} else {
+				if (PTConstants.MUTATION_PROCESS_CONSTANT.equalsIgnoreCase(notifAction)) {
 
 					notifService.sendNotificationForMutation(request);
+				} else {
+
+					notifService.sendNotificationForUpdate(request);					
 				}
 			}
 
