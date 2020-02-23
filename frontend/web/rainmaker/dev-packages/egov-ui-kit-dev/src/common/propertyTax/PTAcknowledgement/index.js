@@ -255,8 +255,8 @@ class PTAcknowledgement extends React.Component {
       };
       Button1={name:"PT_PROCEED_PAYMENT",buttonClick:this.onAssessPayClick,visibility:true} ;
       Button2={name:"PT_GOHOME",buttonClick:this.onGoHomeClick,visibility:true} ;
-      downloadButton={menu:downloadMenu,visibility:true} ;
-      printButton={menu:printMenu,visibility:true} ;
+      // downloadButton={menu:downloadMenu,visibility:true} ;
+      // printButton={menu:printMenu,visibility:true} ;
     }
     else if (purpose === "assessment" && status === "failure") {
       ptHeader = {
@@ -309,8 +309,8 @@ class PTAcknowledgement extends React.Component {
       };
       Button1={name:"PT_PROCEED_PAYMENT",buttonClick:this.onAssessPayClick,visibility:true} ;
       Button2={name:"PT_GOHOME",buttonClick:this.onGoHomeClick,visibility:true} ;
-      downloadButton={menu:downloadMenu,visibility:false} ;
-      printButton={menu:printMenu,visibility:false} ;
+      // downloadButton={menu:downloadMenu,visibility:false} ;
+      // printButton={menu:printMenu,visibility:false} ;
     }
     else if (purpose === "reassessment" && status === "failure") {
       ptHeader = {
@@ -336,8 +336,8 @@ class PTAcknowledgement extends React.Component {
       };
       Button1={name:"PT_GOHOME",buttonClick:this.onGoHomeClick,visibility:true} ;
       Button2={name:"PT_PROCEED_PAYMENT",buttonClick:this.onAssessPayClick,visibility:false} ;
-      downloadButton={menu:downloadMenu,visibility:false} ;
-      printButton={menu:printMenu,visibility:false} ;
+      // downloadButton={menu:downloadMenu,visibility:false} ;
+      // printButton={menu:printMenu,visibility:false} ;
     }
     return (
       <div >
