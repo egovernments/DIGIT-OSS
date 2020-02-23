@@ -77,7 +77,14 @@ class OwnerInfo extends Component {
       if(properties.status=="INWORKFLOW"){
         alert('Property is in Workflow ...')
       }else{
-        this.props.history.push(`/pt-mutation/apply?consumerCode=${propertyId}&tenantId=${tenantId}`);
+        let link=`/pt-mutation/apply?consumerCode=${propertyId}&tenantId=${tenantId}`;
+
+        let moduleName=process.env.REACT_APP_NAME === "Citizen" ?'/citizen':'/employee';
+        window.location.href = 
+        process.env.NODE_ENV === "production"
+          ? moduleName+link
+          : link;
+        // this.props.history.push(link);
       }
     } else if (dialogName === "viewHistory") {
       await this.getPropertyResponse(propertyId, tenantId, dialogName);
