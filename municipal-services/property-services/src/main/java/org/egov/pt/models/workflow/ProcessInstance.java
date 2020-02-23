@@ -69,6 +69,9 @@ public class ProcessInstance {
 
 	@JsonProperty("state")
 	private State state;
+	
+	/* for use of notification service in property*/
+	private String notificationAction;
 
 	@JsonProperty("comment")
 	private String comment;

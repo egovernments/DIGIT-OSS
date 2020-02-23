@@ -78,8 +78,9 @@ public class PropertyService {
 		userService.createUser(request);
 		if (config.getIsWorkflowEnabled())
 			wfService.updateWorkflow(request, CREATE_PROCESS_CONSTANT);
-		//util.clearSensitiveDataForPersistance(request.getProperty());
+		util.setdataForNotification(request, CREATE_PROCESS_CONSTANT);
 		producer.push(config.getSavePropertyTopic(), request);
+		request.getProperty().setWorkflow(null);
 		return request.getProperty();
 	}
 	
@@ -108,6 +109,7 @@ public class PropertyService {
 		else
 			processPropertyUpdate(request, propertyFromSearch);
 
+		request.getProperty().setWorkflow(null);
 		return request.getProperty();
 	}
 
@@ -122,8 +124,8 @@ public class PropertyService {
 		propertyValidator.validateRequestForUpdate(request, propertyFromSearch);
 		request.getProperty().setOwners(propertyFromSearch.getOwners());
 		enrichmentService.enrichUpdateRequest(request, propertyFromSearch);
-		//util.clearSensitiveDataForPersistance(request.getProperty());
 		
+		util.setdataForNotification(request, UPDATE_PROCESS_CONSTANT);
 		PropertyRequest OldPropertyRequest = PropertyRequest.builder()
 				.requestInfo(request.getRequestInfo())
 				.property(propertyFromSearch)
@@ -174,9 +176,8 @@ public class PropertyService {
 		propertyValidator.validateMutation(request, propertyFromSearch);
 		userService.createUser(request);
 		enrichmentService.enrichMutationRequest(request, propertyFromSearch);
-		util.clearSensitiveDataForPersistance(request.getProperty());
 		// TODO FIX ME block property changes FIXME
-
+		util.setdataForNotification(request, MUTATION_PROCESS_CONSTANT);
 		util.mergeAdditionalDetails(request, propertyFromSearch);
 		PropertyRequest oldPropertyRequest = PropertyRequest.builder()
 				.requestInfo(request.getRequestInfo())

@@ -198,5 +198,18 @@ public class PropertyUtil extends CommonUtils {
 		}
 		return false;
 	}
-	
+
+
+public void setdataForNotification(PropertyRequest request, String notificationAction) {
+
+		ProcessInstance workflow = request.getProperty().getWorkflow();
+
+		if (workflow != null) {
+
+			workflow.setNotificationAction(notificationAction);
+		} else {
+			workflow = ProcessInstance.builder().notificationAction(notificationAction).build();
+		}
+		request.getProperty().setWorkflow(workflow);
+	}
 }

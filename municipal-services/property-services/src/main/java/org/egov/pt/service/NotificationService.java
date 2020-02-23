@@ -1,6 +1,7 @@
 package org.egov.pt.service;
 
 import static org.egov.pt.util.PTConstants.CREATED_STRING;
+import static org.egov.pt.util.PTConstants.CREATE_PROCESS_CONSTANT;
 import static org.egov.pt.util.PTConstants.CREATE_STRING;
 import static org.egov.pt.util.PTConstants.MT_NO_WORKFLOW;
 import static org.egov.pt.util.PTConstants.NOTIFICATION_AMOUNT;
@@ -37,7 +38,6 @@ import java.util.Map;
 
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.config.PropertyConfiguration;
-import org.egov.pt.models.AuditDetails;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.event.Event;
 import org.egov.pt.models.event.EventRequest;
@@ -121,23 +121,13 @@ public class NotificationService {
 	public void sendNotificationForUpdate(PropertyRequest propertyRequest) {
 
 		Property property = propertyRequest.getProperty();
-		AuditDetails audit = property.getAuditDetails();
 		ProcessInstance wf = property.getWorkflow();
 		String createOrUpdate = null;
-		Boolean isCreate = null;
-		String state = null;
 		String msg = null;
+		
+		Boolean isCreate =  CREATE_PROCESS_CONSTANT.equalsIgnoreCase(wf.getNotificationAction());
+		String state = configs.getIsWorkflowEnabled() ? wf.getState().getState() : WF_NO_WORKFLOW;
 		String completeMsgs = notifUtil.getLocalizationMessages(property.getTenantId(), propertyRequest.getRequestInfo());
-
-		if (configs.getIsWorkflowEnabled()) {
-
-			isCreate = wf.getBusinessService().equalsIgnoreCase(configs.getCreatePTWfName());
-			state = property.getWorkflow().getState().getState();
-		} else {
-
-			isCreate = audit.getCreatedTime().compareTo(audit.getLastModifiedTime()) == 0;
-			state = WF_NO_WORKFLOW;
-		}
 
 		switch (state) {
 
