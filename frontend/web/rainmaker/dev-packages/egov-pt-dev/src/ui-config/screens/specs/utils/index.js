@@ -885,7 +885,7 @@ export const downloadCertificateForm = (Properties,pdfcode,tenantId,mode='downlo
         res.filestoreIds[0]
         if (res && res.filestoreIds && res.filestoreIds.length > 0) {
           res.filestoreIds.map(fileStoreId => {
-            downloadReceiptFromFilestoreID(fileStoreId,tenantId,mode)
+            downloadReceiptFromFilestoreID(fileStoreId,mode,tenantId)
           })
         } else {
           console.log("Error In Acknowledgement form Download");
@@ -913,7 +913,7 @@ export const downloadReceitForm = (Payments,pdfcode,tenantId,mode='download') =>
         res.filestoreIds[0]
         if (res && res.filestoreIds && res.filestoreIds.length > 0) {
           res.filestoreIds.map(fileStoreId => {
-            downloadReceiptFromFilestoreID(fileStoreId,tenantId,mode)
+            downloadReceiptFromFilestoreID(fileStoreId,mode,tenantId)
           })
         } else {
           console.log("Error In Acknowledgement form Download");
