@@ -268,6 +268,7 @@ public class TLConstants {
 
     public static final String JOB_EXPIRY = "EXPIRY";
 
+    public static final String DEFAULT_WORKFLOW = "NewTL";
 
     public TLConstants() {}
 

@@ -3,6 +3,7 @@ package org.egov.tl.service;
 import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.tl.config.TLConfiguration;
+import org.egov.tl.producer.Producer;
 import org.egov.tl.repository.TLRepository;
 import org.egov.tl.util.NotificationUtil;
 import org.egov.tl.web.models.SMSRequest;
@@ -13,6 +14,7 @@ import org.egov.tl.workflow.WorkflowIntegrator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -38,16 +40,21 @@ public class TLBatchService {
 
     private WorkflowIntegrator workflowIntegrator;
 
+    private Producer producer;
 
     @Autowired
     public TLBatchService(NotificationUtil util, TLConfiguration config, TLRepository repository,
-                          EnrichmentService enrichmentService, WorkflowIntegrator workflowIntegrator) {
+                          EnrichmentService enrichmentService, WorkflowIntegrator workflowIntegrator,
+                          Producer producer) {
         this.util = util;
         this.config = config;
         this.repository = repository;
         this.enrichmentService = enrichmentService;
         this.workflowIntegrator = workflowIntegrator;
+        this.producer = producer;
     }
+
+
 
 
 
@@ -134,9 +141,14 @@ public class TLBatchService {
 
         licenses.forEach(license -> {
             license.setAction(ACTION_EXPIRE);
+            if(StringUtils.isEmpty(license.getWorkflowCode()))
+                license.setWorkflowCode(DEFAULT_WORKFLOW);
         });
 
         workflowIntegrator.callWorkFlow(new TradeLicenseRequest(requestInfo, licenses));
+
+        producer.push(config.getUpdateWorkflowTopic(), new TradeLicenseRequest(requestInfo, licenses));
+
 
     }
 
