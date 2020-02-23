@@ -387,9 +387,16 @@ export const generatePdfFromDiv = (action, applicationNumber) => {
 
   html2canvas(target, {
     onclone: function (clonedDoc) {
-      clonedDoc.getElementById("property-assess-form").style.display = "none";
-      clonedDoc.getElementById("pt-header-button-container").style.display = "none";
-      clonedDoc.getElementById("pt-flex-child-button").style.display = "none";
+      if(clonedDoc.getElementById("property-assess-form")){
+        clonedDoc.getElementById("property-assess-form").style.display = "none";
+      }
+      if(clonedDoc.getElementById("pt-header-button-container")){
+        clonedDoc.getElementById("pt-header-button-container").style.display = "none";
+      }
+      if(clonedDoc.getElementById("pt-flex-child-button")){
+        clonedDoc.getElementById("pt-flex-child-button").style.display = "none";
+      }
+      
     }
   }).then(canvas => {
     var data = canvas.toDataURL();
