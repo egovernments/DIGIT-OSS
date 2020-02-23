@@ -53,6 +53,7 @@ import { convertRawDataToFormConfig } from "egov-ui-kit/utils/PTCommon/propertyT
 import { fetchMDMDDocumentTypeSuccess } from "redux/store/actions";
 import "./index.css";
 import {
+  callDraft,
   addOwner,
   configOwnersDetailsFromDraft,
   getTargetPropertiesDetails,
@@ -797,7 +798,7 @@ class FormWizard extends Component {
         }
         const isProperyAddressFormValid = validateForm(form.propertyAddress);
         if (isProperyAddressFormValid) {
-          //callDraft();
+          callDraft(this);
           window.scrollTo(0, 0);
           this.setState({
             selected: index,
@@ -850,7 +851,7 @@ class FormWizard extends Component {
                       }
                     }
                     if (floorValidation) {
-                      //callDraft();
+                      callDraft(this);
                       window.scrollTo(0, 0);
                       this.setState({
                         selected: index,
@@ -858,7 +859,7 @@ class FormWizard extends Component {
                       });
                     }
                   } else {
-                    //callDraft();
+                    callDraft(this);
                     window.scrollTo(0, 0);
                     this.setState({
                       selected: index,
@@ -919,7 +920,7 @@ class FormWizard extends Component {
               const { ownerInfo } = form;
               const isOwnerInfoFormValid = validateForm(ownerInfo);
               if (isOwnerInfoFormValid) {
-                //callDraft();
+                callDraft(this);
                 window.scrollTo(0, 0);
                 this.setState(
                   {
@@ -943,7 +944,7 @@ class FormWizard extends Component {
                 }
               }
               if (ownerValidation) {
-                //callDraft();
+                callDraft(this);
                 window.scrollTo(0, 0);
                 this.setState(
                   {
@@ -974,7 +975,7 @@ class FormWizard extends Component {
                 institutionFormValid = false;
               }
               if (institutionFormValid) {
-                //callDraft();
+                callDraft(this);
                 window.scrollTo(0, 0);
                 this.setState(
                   {
@@ -1718,7 +1719,7 @@ class FormWizard extends Component {
   }
 
   pay = async () => {
-    const { callPGService, callDraft } = this;
+    const { callPGService } = this;
     const financialYearFromQuery = getFinancialYearFromQuery();
     let { form, common, location, hideSpinner } = this.props;
     const { search } = location;
