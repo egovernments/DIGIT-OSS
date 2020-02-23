@@ -32,6 +32,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.egov.pt.util.PTConstants.*;
 
@@ -132,7 +133,7 @@ public class PaymentNotificationService {
 
             List<Event> events = new LinkedList<>();
             if(null == propertyConfiguration.getIsUserEventsNotificationEnabled() || propertyConfiguration.getIsUserEventsNotificationEnabled()) {
-                events.addAll(getEvents(mobileNumbers,customMessage,requestInfo,property,false));
+                events.addAll(getEvents(smsRequests,requestInfo,property,false));
                 util.sendEventNotification(new EventRequest(requestInfo, events));
             }
 
@@ -219,8 +220,8 @@ public class PaymentNotificationService {
 
             if(null == propertyConfiguration.getIsUserEventsNotificationEnabled() || propertyConfiguration.getIsUserEventsNotificationEnabled()) {
                 if(paymentDetail.getTotalDue().compareTo(paymentDetail.getTotalAmountPaid())==0)
-                    events.addAll(getEvents(mobileNumbers,customMessage,requestInfo,property,false));
-                else events.addAll(getEvents(mobileNumbers,customMessage,requestInfo,property,true));
+                    events.addAll(getEvents(smsRequests,requestInfo,property,false));
+                else events.addAll(getEvents(smsRequests,requestInfo,property,true));
 
             }
         }
@@ -462,14 +463,15 @@ public class PaymentNotificationService {
 
     /**
      *
-     * @param mobileNumbers
-     * @param customizedMessage
      * @param requestInfo
      * @param property
      * @param isActionReq
      * @return
      */
-    public List<Event> getEvents(Set<String> mobileNumbers, String customizedMessage, RequestInfo requestInfo,Property property, Boolean isActionReq) {
+    public List<Event> getEvents(List<SMSRequest> smsRequests, RequestInfo requestInfo,Property property, Boolean isActionReq) {
+
+        Set<String> mobileNumbers = smsRequests.stream().map(SMSRequest::getMobileNumber).collect(Collectors.toSet());
+        String customizedMessage = smsRequests.get(0).getMessage();
         Map<String, String> mapOfPhnoAndUUIDs = util.fetchUserUUIDs(mobileNumbers,requestInfo, property.getTenantId());
         if (CollectionUtils.isEmpty(mapOfPhnoAndUUIDs.keySet()) || StringUtils.isEmpty(customizedMessage))
             return null;
@@ -497,9 +499,7 @@ public class PaymentNotificationService {
                 action = Action.builder().actionUrls(items).build();
 
             }
-            if(customizedMessage.contains("$paylink")) {
-                customizedMessage = customizedMessage.replace("$paylink", "");
-            }
+
             events.add(Event.builder().tenantId(property.getTenantId()).description(customizedMessage)
                     .eventType(PTConstants.USREVENTS_EVENT_TYPE).name(PTConstants.USREVENTS_EVENT_NAME)
                     .postedBy(PTConstants.USREVENTS_EVENT_POSTEDBY).source(Source.WEBAPP).recepient(recepient)
