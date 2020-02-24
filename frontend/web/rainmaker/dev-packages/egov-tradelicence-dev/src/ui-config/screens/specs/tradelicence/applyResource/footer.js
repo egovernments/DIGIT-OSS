@@ -866,7 +866,7 @@ export const footerReview = (
                 },
 
               },
-              visible:getButtonVisibility(status, "APPROVED")&&(responseLength === 1 ),
+              visible:(getButtonVisibility(status, "APPROVED")||getButtonVisibility(status, "EXPIRED"))&&(responseLength === 1 ),
             },
             submitButton: {
               componentPath: "Button",
@@ -900,7 +900,7 @@ export const footerReview = (
                 },
 
               },
-              visible:getButtonVisibility(status, "APPROVED")&&(responseLength === 1 ),
+              visible:(getButtonVisibility(status, "APPROVED")||getButtonVisibility(status, "EXPIRED"))&&(responseLength === 1 ),
             },    
             makePayment: {
               componentPath: "Button",

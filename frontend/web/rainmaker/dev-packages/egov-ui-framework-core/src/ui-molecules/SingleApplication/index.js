@@ -216,7 +216,7 @@ class SingleApplication extends React.Component {
                         // setRoute(url);
                         }}>
                         <Label
-                          labelKey={ item.status==="APPROVED"&&moduleName === "TL" ? "TL_VIEW_DETAILS_RENEWAL":"TL_VIEW_DETAILS"}
+                          labelKey={ (item.status==="APPROVED"||item.status==="EXPIRED")&&moduleName === "TL" ? "TL_VIEW_DETAILS_RENEWAL":"TL_VIEW_DETAILS"}
                           textTransform={"uppercase"}
                           style={{
                             color: "#fe7a51",

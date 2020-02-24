@@ -203,7 +203,7 @@ class Footer extends React.Component {
           return true;
         })
        const rolecheck= rolearray.length>0? true: false;
-    if (status === "APPROVED" && applicationType !=="RENEWAL"&& responseLength===1 && rolecheck===true) {
+    if ((status === "APPROVED"||status === "EXPIRED") && applicationType !=="RENEWAL"&& responseLength===1 && rolecheck===true) {
       const editButton = {
         label: "Edit",
         labelKey: "WF_TL_RENEWAL_EDIT_BUTTON",
