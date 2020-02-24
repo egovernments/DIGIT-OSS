@@ -195,8 +195,8 @@ const setDownloadMenu = (state, dispatch, tenantId, applicationNumber) => {
       ];
       break;
     case "INWORKFLOW":
-      downloadMenu = [certificateDownloadObject, applicationDownloadObject];
-      printMenu = [certificatePrintObject, applicationPrintObject];
+      downloadMenu = [applicationDownloadObject];
+      printMenu = [applicationPrintObject];
       break;
     default:
       break;
