@@ -59,31 +59,31 @@ class SingleApplication extends React.Component {
       this.setBusinessServiceDataToLocalStorage(businessServiceQueryObject);
       switch (item.status) {
         case "INITIATED":
-          return `/tradelicense-citizen/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`;
+          setRoute(`/tradelicense-citizen/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
         default:
-          return `/tradelicence/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`;
+          setRoute(`/tradelicence/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
       }
     } else if (moduleName === "FIRENOC") {
       switch (item.fireNOCDetails.status) {
         case "INITIATED":
-          return `/fire-noc/apply?applicationNumber=${item.fireNOCDetails.applicationNumber}&tenantId=${item.tenantId}`;
+          setRoute(`/fire-noc/apply?applicationNumber=${item.fireNOCDetails.applicationNumber}&tenantId=${item.tenantId}`);
         default:
-          return `/fire-noc/search-preview?applicationNumber=${item.fireNOCDetails.applicationNumber}&tenantId=${item.tenantId}`;
+          setRoute(`/fire-noc/search-preview?applicationNumber=${item.fireNOCDetails.applicationNumber}&tenantId=${item.tenantId}`);
       }
     } else if (moduleName === "BPAREG") {
       if (item.serviceType === "BPAREG") {
         switch (item.status) {
           case "INITIATED":
-            return `/bpastakeholder-citizen/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`;
+            setRoute(`/bpastakeholder-citizen/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
           default:
-            return `/bpastakeholder/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`;
+            setRoute(`/bpastakeholder/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
         }
       } else {
         switch (item.status) {
           case "Initiated":
-            return `/egov-bpa/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`;
+            setRoute(`/egov-bpa/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
           default:
-            return `/egov-bpa/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`;
+            setRoute(`/egov-bpa/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
         }        
       }
     } else if (moduleName === "PT-MUTATION") {
@@ -213,7 +213,7 @@ class SingleApplication extends React.Component {
                     {/* <Link to={this.onCardClick(item)}> */}
                       <div style={{cursor:"pointer"}} onClick = {()=>{
                         const url = this.onCardClick(item);
-                        setRoute(url);
+                        // setRoute(url);
                         }}>
                         <Label
                           labelKey={ item.status==="APPROVED"&&moduleName === "TL" ? "TL_VIEW_DETAILS_RENEWAL":"TL_VIEW_DETAILS"}
