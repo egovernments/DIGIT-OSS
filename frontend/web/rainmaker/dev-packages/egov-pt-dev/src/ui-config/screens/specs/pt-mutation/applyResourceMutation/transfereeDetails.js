@@ -372,6 +372,7 @@ const institutionInformation = () => {
               labelName: "Enter Landline",
               labelKey: "PT_MUTATION_AUTHORISED_LANDLINE_PLACEHOLDER"
             },
+            required:true,
             pattern: getPattern("MobileNo"),
             jsonPath: "Property.institutionTemp.landlineNumber"
           }),

@@ -8,6 +8,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { gotoApplyWithStep } from "../../utils/index";
 import { checkValueForNA } from "../../utils";
+import { convertEpochToDate, convertDateToEpoch } from "../../utils/index";
 
 const registrationDetails =  getCommonGrayCard({
   propertyLocationContainer:getCommonContainer({
@@ -52,7 +53,9 @@ const registrationDetails =  getCommonGrayCard({
       {
         jsonPath:
           "Property.additionalDetails.documentDate",
-          callBack: checkValueForNA
+          callBack: value => {
+            return convertEpochToDate(value);
+          }
       }
     ), documentValue: getLabelWithValue(
       {

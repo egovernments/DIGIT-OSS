@@ -222,7 +222,7 @@ const callBackForNext = async (state, dispatch) => {
       dispatch
     );
     let isInstitutionValid = validateFields(
-      "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer.children.institutionInfo.children.cardContent.children.institutionDetailsContainer.chilrden",
+      "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer.children.institutionInfo.children.cardContent.children.institutionDetailsContainer.children",
       state,
       dispatch
     );
