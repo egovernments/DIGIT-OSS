@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import Label from "egov-ui-kit/utils/translationNode";
 import HistoryCard from "../../../../../Property/components/HistoryCard";
 import { getFormattedDate } from "../../../../../../../utils/PTCommon";
-
+import {  toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 export const getFullRow = (labelKey, labelValue, rowGrid = 12) => {
     let subRowGrid = 1;
     if (rowGrid == 6) {
@@ -91,12 +91,20 @@ return latestAssessments;
                                 label={<Label buttonLabel={true} label='PT_RE_ASSESS' color="rgb(254, 122, 81)" fontSize="16px" height="40px" labelStyle={labelStyle} />}
                                 buttonStyle={buttonStyle}
                                 onClick={() => {
-                                    history &&
+                                    if(this.props.selPropertyDetails.status=="INWORKFLOW"){
+                                        this.props.toggleSnackbarAndSetText(
+                                          true,
+                                          { labelName: "Property in Workflow", labelKey: "ERROR_PROPERTY_IN_WORKFLOW" },
+                                          "error"
+                                        );
+                                      }else{
+                                        history &&
                                         history.push(
                                             `/property-tax/assessment-form?FY=${Assessment.financialYear}&assessmentId=${Assessment.assessmentNumber}&isAssesment=false&isReassesment=true&propertyId=${
                                             propertyId
                                             }&tenantId=${Assessment.tenantId}`
                                         );
+                                      }                       
                                     // lastElement.onClick();
                                 }}
                             ></Button>
@@ -132,6 +140,7 @@ const mapStateToProps = (state, ownProps) => {
     const selPropertyDetails = propertiesById[propertyId] || {};
     const propertyDetails = selPropertyDetails.propertyDetails || [];
     return {
+        selPropertyDetails,
         propertyDetails,
         propertyId,
         Assessments
@@ -139,11 +148,19 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 
+const mapDispatchToProps = (dispatch) => {
+    return {
+      toggleSnackbarAndSetText: (open, message, error) => dispatch(toggleSnackbarAndSetText(open, message, error)),
+    };
+  };
+  
+  
+  
 
 export default compose(
     withRouter,
     connect(
         mapStateToProps,
-        null
+        mapDispatchToProps
     )
 )(AssessmentHistory);

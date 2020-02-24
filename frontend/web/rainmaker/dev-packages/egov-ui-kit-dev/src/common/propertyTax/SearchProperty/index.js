@@ -99,7 +99,7 @@ class SearchProperty extends Component {
             }
             : (e) => {
               // localStorageSet("draftId", "")
-              history.push(`/property-tax/property/${propertyId}/${tenantId}?isMutationApplication=true`);
+              history.push(`/property-tax/property/${propertyId}/${tenantId}`);
             }
         }
         style={{

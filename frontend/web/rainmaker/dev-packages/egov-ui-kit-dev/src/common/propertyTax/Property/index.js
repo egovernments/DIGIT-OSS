@@ -7,8 +7,8 @@ import AssessmentList from "../AssessmentList";
 import YearDialogue from "../YearDialogue";
 import Screen from "egov-ui-kit/common/common/Screen";
 import { Icon, BreadCrumbs } from "egov-ui-kit/components";
-import { addBreadCrumbs } from "egov-ui-kit/redux/app/actions";
 import { fetchGeneralMDMSData } from "egov-ui-kit/redux/common/actions";
+import { addBreadCrumbs, toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import PropertyInformation from "./components/PropertyInformation";
 import {
   fetchProperties,
@@ -165,12 +165,21 @@ class Property extends Component {
   };
 
   onAssessPayClick = () => {
-    const { latestPropertyDetails, propertyId, tenantId } = this.props;
+    const { latestPropertyDetails, propertyId, tenantId,selPropertyDetails } = this.props;
     const assessmentNo = latestPropertyDetails && latestPropertyDetails.assessmentNumber;
+    if(selPropertyDetails.status=="INWORKFLOW"){
+      this.props.toggleSnackbarAndSetText(
+        true,
+        { labelName: "Property in Workflow", labelKey: "ERROR_PROPERTY_IN_WORKFLOW" },
+        "error"
+      );
+    }else{
+    
     this.setState({
       dialogueOpen: true,
       urlToAppend: `/property-tax/assessment-form?assessmentId=${assessmentNo}&isReassesment=true&isAssesment=true&propertyId=${propertyId}&tenantId=${tenantId}`,
     });
+  }
   };
 
   getAssessmentHistory = (selPropertyDetails, receiptsByYr = []) => {
@@ -275,11 +284,12 @@ class Property extends Component {
     // if (this.props.userID !== prevProps.userID) {
     //   this.fetchData(this.props.userID);
     // }
+    const propertyId=decodeURIComponent(this.props.match.params.propertyId);
     const {  totalBillAmountDue,Assessments } = this.props;
-    if(Assessments&&Assessments.length>0&&!this.state.billFetched){
+    if(Assessments&&Assessments.length>0&&Assessments[0].propertyId==propertyId&&!this.state.billFetched){
       this.setState({billFetched:true})
       this.props.fetchTotalBillAmount([
-        { key: "consumerCode", value: decodeURIComponent(this.props.match.params.propertyId) },
+        { key: "consumerCode", value: propertyId },
         { key: "tenantId", value: this.props.match.params.tenantId },
         { key: "businessService", value: 'PT' }
       ]);
@@ -337,6 +347,7 @@ class Property extends Component {
             generalMDMSDataById={generalMDMSDataById && generalMDMSDataById}
             totalBillAmountDue={totalBillAmountDue}
             documentsUploaded={documentsUploaded}
+            toggleSnackbarAndSetText={this.props.toggleSnackbarAndSetText}
           />
         }
         <div id="tax-wizard-buttons" className="wizard-footer col-sm-12" style={{ textAlign: "right" }}>
@@ -718,6 +729,7 @@ const mapDispatchToProps = (dispatch) => {
     getSingleAssesmentandStatus: (queryObj) => dispatch(getSingleAssesmentandStatus(queryObj)),
     fetchTotalBillAmount: (fetchBillQueryObject) => dispatch(fetchTotalBillAmount(fetchBillQueryObject)),
     fetchReceipt: (fetchReceiptQueryObject) => dispatch(fetchReceipt(fetchReceiptQueryObject)),
+    toggleSnackbarAndSetText: (open, message, error) => dispatch(toggleSnackbarAndSetText(open, message, error)),
     fetchAssessments: (fetchAssessmentsQueryObject) => dispatch(fetchAssessments(fetchAssessmentsQueryObject)),
   };
 };

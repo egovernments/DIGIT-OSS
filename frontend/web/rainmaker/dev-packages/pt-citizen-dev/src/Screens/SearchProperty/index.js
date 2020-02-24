@@ -137,7 +137,7 @@ class SearchProperty extends Component {
           userType === "CITIZEN"
             ? e => {
               history.push(
-                `/property-tax/my-properties/property/${id}/${tenantId}?isMutationApplication=true`
+                `/property-tax/my-properties/property/${id}/${tenantId}`
               );
             }
             : e => {

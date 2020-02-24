@@ -293,7 +293,7 @@ const getTransformedItems = propertiesById => {
 const mapStateToProps = state => {
   const { properties, screenConfiguration} = state;
   const {preparedFinalObject} = screenConfiguration;
-  const {myApplicationsCount} = preparedFinalObject;
+  const {myApplicationsCount=0} = preparedFinalObject;
   const { propertiesById, draftsById, loading, failedPayments } =
     properties || {};
   const numProperties = propertiesById && Object.keys(propertiesById).length;

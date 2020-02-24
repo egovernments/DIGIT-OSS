@@ -24,6 +24,7 @@ const PTInformation = ({
   totalBillAmountDue,
   history,
   documentsUploaded,
+  toggleSnackbarAndSetText
 }) => {
   const items2 = [items[1]];
   return (
@@ -53,6 +54,7 @@ const PTInformation = ({
               <PropertyAddressInfo properties={properties} generalMDMSDataById={generalMDMSDataById}></PropertyAddressInfo>
               <AssessmentInfo properties={properties} generalMDMSDataById={generalMDMSDataById}></AssessmentInfo>
               <OwnerInfo
+              toggleSnackbarAndSetText={toggleSnackbarAndSetText}
                 properties={properties}
                 generalMDMSDataById={generalMDMSDataById}
                 totalBillAmountDue={totalBillAmountDue}

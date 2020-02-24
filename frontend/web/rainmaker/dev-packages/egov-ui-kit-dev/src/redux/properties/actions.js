@@ -311,9 +311,14 @@ export const fetchProperties = (queryObjectproperty, queryObjectDraft, queryObje
     if (queryObjectproperty) {
       dispatch(propertyFetchPending());
       try {
-        let payloadProperty = await httpRequest(PROPERTY.GET.URL, PROPERTY.GET.ACTION,queryObjectproperty);
+          let payloadProperty = await httpRequest(PROPERTY.GET.URL, PROPERTY.GET.ACTION,queryObjectproperty,{},[],{},true);
         if(queryObjectDraft !== "citizen_search") {
-          payloadProperty=getCreatePropertyResponse(payloadProperty);
+          if(payloadProperty&&payloadProperty.Properties&&payloadProperty.Properties.length>0){
+            payloadProperty.Properties=payloadProperty.Properties.map(property=>{
+              let properties=getCreatePropertyResponse({Properties:[property]});
+             return properties&&properties.Properties&&properties.Properties.length>0&&properties.Properties[0];
+            });
+          }      
           if(payloadProperty.Properties && payloadProperty.Properties[0] &&payloadProperty.Properties[0].documents){
             payloadProperty.Properties[0].documentsUploaded = await setPTDocuments(
               payloadProperty,

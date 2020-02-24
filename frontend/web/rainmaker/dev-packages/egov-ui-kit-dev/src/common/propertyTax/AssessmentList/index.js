@@ -178,7 +178,8 @@ const AssessmentList = ({properties,
   hoverColor,
   generalMDMSDataById,
   totalBillAmountDue,
-  documentsUploaded
+  documentsUploaded,
+  toggleSnackbarAndSetText
 }) => {
   return items.length == 0 ? (
     <BlankAssessment
@@ -210,6 +211,7 @@ const AssessmentList = ({properties,
         generalMDMSDataById={generalMDMSDataById}
         totalBillAmountDue={totalBillAmountDue}
         documentsUploaded={documentsUploaded}
+        toggleSnackbarAndSetText={toggleSnackbarAndSetText}
       />)
 
 

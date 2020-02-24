@@ -75,7 +75,11 @@ class OwnerInfo extends Component {
     const { propertyId, tenantId } = properties;
     if(this.props.totalBillAmountDue === 0 && dialogName !== "viewHistory"){
       if(properties.status=="INWORKFLOW"){
-        alert('Property is in Workflow ...')
+        this.props.toggleSnackbarAndSetText(
+          true,
+          { labelName: "Property in Workflow", labelKey: "ERROR_PROPERTY_IN_WORKFLOW" },
+          "error"
+        );
       }else{
         let link=`/pt-mutation/apply?consumerCode=${propertyId}&tenantId=${tenantId}`;
 
