@@ -236,7 +236,7 @@
               {
                 "variable": "Mutation_Number",
                 "value": {
-                  "path": "$.additionalDetails.mutationNumber"
+                  "path": "$.acknowldgementNumber"
                 }
             },
               {
@@ -341,7 +341,7 @@
             },
             {
               "path": "http://collection-services:8080/collection-services/payments/_search",
-              "queryParam": "tenantId=$.tenantId,consumerCodes=$.propertyId,businessServices=PT",
+              "queryParam": "tenantId=$.tenantId,consumerCodes=$.acknowldgementNumber,businessServices=PT.MUTATION",
               "apiRequest": null,
               "responseMapping":[
                 {            
