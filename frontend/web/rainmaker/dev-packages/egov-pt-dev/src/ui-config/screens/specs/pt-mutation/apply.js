@@ -23,7 +23,7 @@ import {
   prepareFinalObject,
   handleScreenConfigurationFieldChange as handleField
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId,getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "../../../../ui-utils";
 import {
   sampleSearch,
@@ -253,11 +253,7 @@ const getPropertyData = async (action, state, dispatch) => {
 
 
 const getMdmsData = async (action, state, dispatch) => {
-  let tenantId =
-    get(
-      state.screenConfiguration.preparedFinalObject,
-      "FireNOCs[0].fireNOCDetails.propertyDetails.address.city"
-    ) || getTenantId();
+  let tenantId = process.env.REACT_APP_NAME === "Employee" ?  getTenantId() : JSON.parse(getUserInfo()).permanentCity;
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: tenantId,

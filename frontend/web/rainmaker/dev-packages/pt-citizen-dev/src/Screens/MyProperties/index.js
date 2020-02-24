@@ -80,9 +80,11 @@ class MyProperties extends Component {
   };
 
   onNewPropertyButtonClick = () => {
-    this.setState({
-      dialogueOpen: true
-    });
+    const { history } = this.props;
+    history.push('/property-tax/assessment-form');
+    // this.setState({
+    //   dialogueOpen: true
+    // });
   };
 
   onListItemClick = item => {
