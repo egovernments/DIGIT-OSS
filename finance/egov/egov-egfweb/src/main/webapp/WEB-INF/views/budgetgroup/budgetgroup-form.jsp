@@ -1,3 +1,4 @@
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%--
   ~    eGov  SmartCity eGovernance suite aims to improve the internal efficiency,transparency,
   ~    accountability and the service delivery of the government  organizations.
@@ -61,12 +62,12 @@
 		<div class="col-md-12">
 			<div class="panel panel-primary" data-collapsed="0">
 				<div class="panel-heading">
-					<div class="panel-title">Budget Group</div>
+					<div class="panel-title"><spring:message code="lbl.budget.group" text="Budget Group"/> </div>
 				</div>
 				<div class="panel-body">
 					<div class="form-group">
 						<label class="col-sm-3 control-label text-right"><spring:message
-								code="lbl.name" /> <span class="mandatory"></span> </label>
+								code="lbl.name" text="Name"/> <span class="mandatory"></span> </label>
 						<div class="col-sm-6 add-margin">
 							<form:input path="name"
 								class="form-control text-left patternvalidation"
@@ -76,13 +77,13 @@
 					</div>
 					<div class="form-group">
 						<label class="col-sm-3 control-label text-right"><spring:message
-								code="lbl.accounttype" /><span class="mandatory"></span></label>
+								code="lbl.accounttype" text="Account Type"/><span class="mandatory"></span></label>
 						<div class="col-sm-4 add-margin">
 							<form:select path="accountType" id="accountType"
 								cssClass="form-control disablefield"
 								cssErrorClass="form-control error" disabled="disabled">
 								<form:option value="">
-									<spring:message code="lbl.select" />
+									<spring:message code="lbl.select" text="Select"/>
 								</form:option>
 								<form:options items="${budgetAccountTypes}" />
 							</form:select>
@@ -91,7 +92,7 @@
 					</div>
 					<div class="form-group">
 						<label class="col-sm-3 control-label text-right"><spring:message
-								code="lbl.budgetingtype" /> </label>
+								code="lbl.budgetingtype" text="Budgeting Type"/> </label>
 						<div class="col-sm-3 add-margin">
 							<form:select path="budgetingType" id="budgetingType"
 								cssClass="form-control disablefield"
@@ -108,13 +109,13 @@
 						type="hidden" id="minCodeValue" value="${budgetGroup.minCode.id}" />
 					<div class="form-group">
 						<label class="col-sm-3 control-label text-right"><spring:message
-								code="lbl.majorcode" /> </label>
+								code="lbl.majorcode" text="Major Code"/> </label>
 						<div class="col-sm-6 add-margin">
 							<form:select path="majorCode" id="majorCode"
 								cssClass="form-control disablefield"
 								cssErrorClass="form-control error" disabled="disabled">
 								<form:option value="">
-									<spring:message code="lbl.select" />
+									<spring:message code="lbl.select" text="Select"/>
 								</form:option>
 								<c:forEach items="${majorCodeList}" var="mc">
 									<option value="${mc.id}">${mc.glcode}----${mc.name}</option>
@@ -131,13 +132,13 @@
 					<br>
 					<div class="form-group">
 						<label class="col-sm-3 control-label text-right"><spring:message
-								code="lbl.mincode" /> </label>
+								code="lbl.mincode" text="Detailed Min Code"/> </label>
 						<div class="col-sm-6 add-margin">
 							<form:select path="minCode" id="minCode"
 								cssClass="form-control disablefield"
 								cssErrorClass="form-control error" disabled="disabled">
 								<form:option value="">
-									<spring:message code="lbl.select" />
+									<spring:message code="lbl.select" text="Select"/>
 								</form:option>
 								<c:forEach items="${minCodeList}" var="mc">
 									<option value="${mc.id}">${mc.glcode}----${mc.name}</option>
@@ -149,13 +150,13 @@
 					</div>
 					<div class="form-group">
 						<label class="col-sm-3 control-label text-right"><spring:message
-								code="lbl.maxcode" /> </label>
+								code="lbl.maxcode" text="Detailed Max Code"/> </label>
 						<div class="col-sm-6 add-margin">
 							<form:select path="maxCode" id="maxCode"
 								cssClass="form-control disablefield"
 								cssErrorClass="form-control error" disabled="disabled">
 								<form:option value="">
-									<spring:message code="lbl.select" />
+									<spring:message code="lbl.select" text="Select"/>
 								</form:option>
 								<c:forEach items="${minCodeList}" var="mc">
 									<option value="${mc.id}">${mc.glcode}----${mc.name}</option>
@@ -166,7 +167,7 @@
 					</div>
 					<div class="form-group">
 						<label class="col-sm-3 control-label text-right"><spring:message
-								code="lbl.description" /> </label>
+								code="lbl.description" text="Description"/> </label>
 						<div class="col-sm-6 add-margin">
 							<form:textarea path="description" type="text" placeholder=""
 								autocomplete="off" class="form-control low-width"
@@ -177,7 +178,7 @@
 
 					<div class="form-group">
 						<label class="col-sm-3 control-label text-right"><spring:message
-								code="lbl.bgisactive" /> </label>
+								code="lbl.bgisactive" text="Budget Group Active"/> </label>
 						<div class="col-sm-3 add-margin">
 							<form:checkbox path="isActive" />
 							<form:errors path="isActive" cssClass="error-msg" />

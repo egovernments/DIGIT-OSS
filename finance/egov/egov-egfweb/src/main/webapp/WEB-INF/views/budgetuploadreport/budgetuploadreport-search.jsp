@@ -60,18 +60,18 @@
 			<div class="col-md-12">
 				<div class="panel panel-primary" data-collapsed="0">
 					<div class="panel-heading">
-						<div class="panel-title">Budget Upload Report</div>
+						<div class="panel-title"><spring:message code="lbl.budget.upload.report" text="Budget Upload Report"/> </div>
 					</div>
 					<div class="panel-body">
 						<div class="form-group">
 							<label class="col-sm-3 control-label text-right"><spring:message
-									code="lbl.budget" /> <span class="mandatory1">*</span></label>
+									code="lbl.budget" text="Budget"/> <span class="mandatory1">*</span></label>
 							<div class="col-sm-3 add-margin">
 								<form:select path="reBudget.id" required="required"
 									id="reBudget" cssClass="form-control"
 									cssErrorClass="form-control error">
 									<form:option value="">
-										<spring:message code="lbl.select" />
+										<spring:message code="lbl.select" text="Select"/>
 									</form:option>
 									<form:options items="${budgets}" itemValue="id"
 										itemLabel="name" />
@@ -79,31 +79,31 @@
 								<form:errors path="reBudget" cssClass="error-msg" />
 							</div>
 							<label class="col-sm-2 control-label text-right"><spring:message
-									code="lbl.referenceBudget" /> </label>
+									code="lbl.referenceBudget" text="Reference Budget"/> </label>
 							<div class="col-sm-3 add-margin">
 								<div id="referenceBudget"></div>
 							</div>
 						</div>
 						<div class="form-group">
 							<label class="col-sm-3 control-label text-right"><spring:message
-									code="lbl.fund" /><span class="mandatory1">*</span> </label>
+									code="lbl.fund" text="Fund"/><span class="mandatory1">*</span> </label>
 							<div class="col-sm-3 add-margin">
 								<form:select path="fund.id" required="required" id="fund.id"
 									cssClass="form-control" cssErrorClass="form-control error">
 									<form:option value="">
-										<spring:message code="lbl.select" />
+										<spring:message code="lbl.select" text="Select"/>
 									</form:option>
 									<form:options items="${funds}" itemValue="id" itemLabel="name" />
 								</form:select>
 								<form:errors path="fund" cssClass="error-msg" />
 							</div>
 							<label class="col-sm-2 control-label text-right"><spring:message
-									code="lbl.department" /> </label>
+									code="lbl.department" text="Department"/> </label>
 							<div class="col-sm-3 add-margin">
 								<form:select path="department.code" id="department.code"
 									cssClass="form-control" cssErrorClass="form-control error">
 									<form:option value="">
-										<spring:message code="lbl.select" />
+										<spring:message code="lbl.select" text="Select"/>
 									</form:option>
 									<form:options items="${departments}" itemValue="code"
 										itemLabel="name" />
@@ -113,12 +113,12 @@
 						</div>
 						<div class="form-group">
 							<label class="col-sm-3 control-label text-right"><spring:message
-									code="lbl.function" /> </label>
+									code="lbl.function" text="Function"/> </label>
 							<div class="col-sm-3 add-margin">
 								<form:select path="function.id" id="function.id"
 									cssClass="form-control" cssErrorClass="form-control error">
 									<form:option value="">
-										<spring:message code="lbl.select" />
+										<spring:message code="lbl.select" text="Select"/>
 									</form:option>
 									<form:options items="${functions}" itemValue="id"
 										itemLabel="name" />
@@ -129,10 +129,10 @@
 						<div class="form-group">
 							<div class="text-center">
 								<button type='button' class='btn btn-primary' id="btnsearch">
-									<spring:message code='lbl.search' />
+									<spring:message code='lbl.search' text="Search"/>
 								</button>
 								<a href='javascript:void(0)' class='btn btn-default'
-									onclick="window.parent.postMessage('close','*');window.close();"><spring:message code='lbl.close' /></a>
+									onclick="window.parent.postMessage('close','*');window.close();"><spring:message code='lbl.close' text="Close"/></a>
 							</div>
 						</div>
 					</div>
@@ -142,8 +142,7 @@
 	</div>
 </form:form>
 <div class="row display-hide report-section">
-	<div class="col-md-12 table-header text-left">Budget Upload
-		Report Result</div>
+	<div class="col-md-12 table-header text-left"><spring:message code="lbl.budget.upload.report.result" text="Budget Upload Report Result"/> </div>
 	<div class="col-md-12 form-group report-table-container">
 		<table class="table table-bordered table-hover multiheadertbl"
 			id="resultTable">
@@ -154,18 +153,18 @@
 					<th colspan="2"><spring:message code="lbl.beamount" /></th>
 				</tr> --%>
 				<tr>
-					<th><spring:message code="lbl.fund" /></th>
-					<th><spring:message code="lbl.department" /></th>
-					<th><spring:message code="lbl.function" /></th>
-					<th><spring:message code="lbl.glcode" /></th>
+					<th><spring:message code="lbl.fund" text="Fund"/></th>
+					<th><spring:message code="lbl.department" text="Department"/></th>
+					<th><spring:message code="lbl.function" text="Function"/></th>
+					<th><spring:message code="lbl.glcode" text=""/></th>
 					<th><div id="REBudgetName1"></div> <spring:message
-							code="lbl.budgetedAmount" /></th>
+							code="lbl.budgetedAmount" text="Budgeted Amount"/></th>
 					<th><div id="REBudgetName2"></div> <spring:message
-							code="lbl.planningAmount" /></th>
+							code="lbl.planningAmount" text="Planning Amount"/></th>
 					<th><div id="BEBudgetName1"></div> <spring:message
-							code="lbl.budgetedAmount" /></th>
+							code="lbl.budgetedAmount" text="Budgeted Amount"/></th>
 					<th><div id="BEBudgetName2"></div> <spring:message
-							code="lbl.planningAmount" /></th>
+							code="lbl.planningAmount" text="Planning Amount"/></th>
 				</tr>
 			</thead>
 		</table>

@@ -82,29 +82,29 @@ function populateBudgetHead(obj) {
 function validateFields() {
 	<s:if test="%{isFieldMandatory('fund')}">
 	if(document.getElementById('fund').value == '0') {
-		bootbox.alert("Please select a Fund")
+		bootbox.alert("<s:text name='voucher.fund.mandatory'/>")
 		return false;
 	}
 	</s:if>
 	<s:if test="%{isFieldMandatory('executingDepartment')}">
 		if(document.getElementById('department').value == '0') {
-			bootbox.alert("Please select a Department");
+			bootbox.alert("<s:text name='voucher.department.mandatory'/>");
 			return false;
 		}
 	</s:if>
 
 	<s:if test="%{isFieldMandatory('function')}">
 	if(document.getElementById('functions').value == '0') {
-		bootbox.alert("Please select a Function");
+		bootbox.alert("<s:text name='budget.function.mandatory'/>");
 		return false;
 	}
 	</s:if>
 	if(document.getElementById('budgetHeadId').value == '0') {
-		bootbox.alert("Please select a Budget Head");
+		bootbox.alert("<s:text name='msg.please.select.budget.head'/>");
 		return false;
 	}
 	if(document.getElementById('asOnDate').value == '' ) {
-		bootbox.alert("Please select the As On Date");
+		bootbox.alert("<s:text name='msg.please.enter.as.onDate'/>");
 		return false;
 	}
 
@@ -130,7 +130,7 @@ function generateReport(){
 <body>
 	<div class="formmainbox">
 		<div class="formheading"></div>
-		<div class="subheadnew">Budget Watch Register Report</div>
+		<div class="subheadnew"><s:text name="lbl.budget.watch.register.report"/> </div>
 		<br /> <span class="mandatory1"> <s:actionerror /> <s:fielderror />
 			<s:actionmessage />
 		</span>
@@ -145,7 +145,7 @@ function generateReport(){
 						</s:if></td>
 					<td class="bluebox"><s:select list="dropdownData.fundList"
 							listKey="id" listValue="name" name="fund.id" headerKey="0"
-							headerValue="--- Select ---" value="fund.id" id="fund"
+							headerValue="%{getText('lbl.choose.options')}" value="fund.id" id="fund"
 							onChange="populateDepartment(this);"></s:select></td>
 
 					<egov:ajaxdropdown id="department" fields="['Text','Value']"
@@ -158,7 +158,7 @@ function generateReport(){
 					<td class="bluebox"><s:select
 							list="dropdownData.executingDepartmentList" listKey="code"
 							listValue="name" name="department.code" headerKey="0"
-							headerValue="--- Select ---" value="department.code"
+							headerValue="%{getText('lbl.choose.options')}" value="department.code"
 							id="department" onChange="populateFunction(this);"></s:select></td>
 
 
@@ -174,7 +174,7 @@ function generateReport(){
 						</s:if></td>
 					<td class="greybox"><s:select list="dropdownData.functionList"
 							listKey="id" listValue="name" name="function.id" headerKey="0"
-							headerValue="--- Select ---" value="function.id" id="functions"
+							headerValue="%{getText('lbl.choose.options')}" value="function.id" id="functions"
 							onChange="populateBudgetHead(this)"></s:select></td>
 					<egov:ajaxdropdown id="budgetHeadId" fields="['Text','Value']"
 						dropdownId="budgetHeadId"
@@ -183,14 +183,14 @@ function generateReport(){
 						class="mandatory1">*</span></td>
 					<td class="bluebox"><s:select
 							list="dropdownData.budgetGroupList" listKey="id" listValue="name"
-							name="budgetGroup.id" headerKey="0" headerValue="--- Select ---"
+							name="budgetGroup.id" headerKey="0" headerValue="%{getText('lbl.choose.options')}"
 							value="budgetGroup.id" id="budgetHeadId"></s:select></td>
 					<td class="bluebox">&nbsp;</td>
 				</tr>
 
 				<tr>
 					<td class="bluebox">&nbsp;</td>
-					<td class="greybox">As on Date:<span class="mandatory1">*</span></td>
+					<td class="greybox"><s:text name="report.asOnDate"/> :<span class="mandatory1">*</span></td>
 					<td class="greybox"><s:date name="asOnDate" var="asOnDate"
 							format="dd/MM/yyyy" /> <s:textfield id="asOnDate"
 							name="asOnDate" value="%{strAsOnDate}"
@@ -202,11 +202,11 @@ function generateReport(){
 			</table>
 
 			<div class="buttonbottom">
-				<input type="submit" value="Search" class="buttonsubmit"
+				<input type="submit" value="<s:text name='lbl.search'/>" class="buttonsubmit"
 					onclick="return generateReport()" /> &nbsp;
 				<s:reset name="button" type="submit" cssClass="button" id="button"
-					value="Reset" />
-				<input type="button" value="Close"
+					key="lbl.reset"/>
+				<input type="button" value="<s:text name='lbl.close'/>"
 					onclick="window.parent.postMessage('close','*');window.close();" class="button" />
 			</div>
 			<input type="hidden" name="accountNumber.id" id="accountNumber.id" />

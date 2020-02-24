@@ -102,7 +102,7 @@
 </table>
 <br/>
 <div class="buttonbottom">
-<input name="button2" type="button" class="button" id="button" onclick="window.close()" value="Close"/>
+<input name="button2" type="button" class="button" id="button" onclick="window.close()" value="<s:text name='lbl.close'/>"/>
 </div>
 </s:form>
 </body>

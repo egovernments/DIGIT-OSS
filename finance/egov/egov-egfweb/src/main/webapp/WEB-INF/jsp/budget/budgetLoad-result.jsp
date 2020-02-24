@@ -92,7 +92,7 @@
 						<th style="width: 2%; text-align: center" align="center"><a
 							href="#"
 							onclick="urlLoad('<s:property value="%{originalFileStoreId}" />');"
-							id="sourceLink" /> Download Original File </a></th>
+							id="sourceLink" /> <s:text name="lbl.download.original.file"/> </a></th>
 
 					</tr>
 					<tr align="center">
@@ -100,14 +100,14 @@
 						<th style="width: 2%; text-align: center" align="center"><a
 							href="#"
 							onclick="urlLoad('<s:property value="%{outPutFileStoreId}" />');"
-							id="sourceLink" /> Download OutPut File </a></th>
+							id="sourceLink" /><s:text name="lbl.download.output.file"/> </a></th>
 					</tr>
 				</table>
 
 				<div class="buttonbottom" id="buttondiv">
 					<table>
 						<tr>
-							<td><input type="button" value="Close"
+							<td><input type="button" value="<s:text name='lbl.close'/>"
 								onclick="window.parent.postMessage('close','*');window.close();" class="buttonsubmit" /></td>
 						</tr>
 					</table>

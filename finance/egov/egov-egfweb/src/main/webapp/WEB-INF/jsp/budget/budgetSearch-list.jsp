@@ -84,7 +84,7 @@
 				<input type="button" value="Search" class="buttonsubmit"
 					  onclick="return validateAndSubmit()" />
 				<s:reset value="Reset" cssClass="button" /> 
-				<input type="button" value="Close"
+				<input type="button" value="<s:text name='lbl.close'/>"
 					onclick="window.parent.postMessage('close','*');window.close();" class="button" />
 			</div>
 			<h5 style="color:red">

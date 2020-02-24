@@ -51,7 +51,7 @@
 <%@ page language="java"%>
 <html>
 <head>
-<title>Budget Report - Functionwise</title>
+<title><s:text name="lbl.budget.report.functionwise"/> </title>
 </head>
 <body>
 	<s:form action="budgetReport" theme="simple" name="budgetDetailReportForm">
@@ -59,7 +59,7 @@
 			<jsp:param name="heading" value="Budget Report - Functionwise" />
 		</jsp:include>
 		<div class="formmainbox">
-			<div class="subheadnew">Budget Report - Functionwise</div>
+			<div class="subheadnew"><s:text name="lbl.budget.report.functionwise"/> </div>
 			<%@include file="budgetReport-form.jsp"%>
 			<s:hidden name="onSaveOrForward" />
 			<div class="buttonbottom" style="padding-bottom: 10px;">
@@ -67,7 +67,7 @@
 					onclick="return validateFinYear('getFunctionwiseReport');" />
 					<s:reset name="button" type="submit" cssClass="button" id="button"
 					value="Reset" />
-				<input type="button" value="Close"
+				<input type="button" value="<s:text name='lbl.close'/>"
 					onclick="window.parent.postMessage('close','*');window.close();" class="button" />
 			</div>
 		</div>

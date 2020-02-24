@@ -479,10 +479,10 @@ function onChangeServiceClass(obj)
 </div>
 <div id="loadingMask" style="display: none; overflow: hidden; text-align: center"><img src="/services/collection/resources/images/bar_loader.gif"/> <span style="color: red">Please wait....</span></div>
     <div class="buttonbottom">
-      <label><s:submit type="submit" cssClass="buttonsubmit" id="button" value="Search" onclick="return validate();"/></label>
-      <label><s:submit type="submit" cssClass="button" value="Reset" onclick="document.searchReceiptForm.action='searchReceipt-reset.action'"/></label>
+      <label><s:submit type="submit" cssClass="buttonsubmit" id="button" key="lbl.search" onclick="return validate();"/></label>
+      <label><s:submit type="submit" cssClass="button" key="lbl.reset" onclick="document.searchReceiptForm.action='searchReceipt-reset.action'"/></label>
       <s:if test="%{results.isEmpty()}">
-      	<input name="closebutton" type="button" class="button" id="closebutton" value="Close" onclick="window.close();"/>
+      	<input name="closebutton" type="button" class="button" id="closebutton" value="<s:text name='lbl.close'/>" onclick="window.close();"/>
       </s:if>
       
 </div>
@@ -544,7 +544,7 @@ function onChangeServiceClass(obj)
    <%-- <egov-authz:authorize actionName="CancelReceipt">
   <input name="button32" type="button" class="buttonsubmit" id="button32" value="Cancel Receipt" onclick="return checkcancelforselectedrecord()"/>
   </egov-authz:authorize> --%>
-  <input name="button32" type="button" class="button" id="button32" value="Close" onclick="window.parent.postMessage('close','*');window.close();"/>
+  <input name="button32" type="button" class="button" id="button32" value="<s:text name='lbl.close'/>" onclick="window.parent.postMessage('close','*');window.close();"/>
 </div>
 </s:if>
 </s:form>

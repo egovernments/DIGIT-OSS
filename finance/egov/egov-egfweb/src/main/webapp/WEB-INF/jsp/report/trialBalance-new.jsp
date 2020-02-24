@@ -76,18 +76,18 @@ today = dd+'/'+mm+'/'+yyyy;
 
 				if (reportType == 'daterange') {
 			if (document.getElementById('fromDate').value == '') {
-				bootbox.alert('Please select From Date');
+				bootbox.alert('<s:text name="msg.please.select.from.date"/>');
 				return false;
 			}  if (document.getElementById('toDate').value == '') {
-				bootbox.alert('Please select To Date');
+				bootbox.alert('<s:text name="msg.please.select.toDate"/>');
 				return false;
 			}  if (document.getElementById('fundId').value == '') {
-				bootbox.alert('Please select Fund');
+				bootbox.alert('<s:text name="msg.please.select.fund"/>');
 				return false;
 			}  
  
 			 if( compareDate(formatDate6(document.getElementById('fromDate').value),formatDate6(document.getElementById('toDate').value)) == -1 ){
-				bootbox.alert('Start Date cannot be greater than End Date');
+				bootbox.alert('<s:text name="msg.start.date.cant.be.greater.than.end.date"/>');
 				document.getElementById('fromDate').value='';
 				document.getElementById('toDate').value='';
 				document.getElementById('fromDate').focus();
@@ -95,7 +95,7 @@ today = dd+'/'+mm+'/'+yyyy;
 			}
 		} else if (reportType == 'asondate') {
 			if (document.getElementById('toDate').value == '') {
-				bootbox.alert('Please select As On Date');
+				bootbox.alert('<s:text name="msg.please.enter.as.onDate"/>');
 				return false;
 			}
 			document.getElementById('fromDate').value='';
@@ -170,7 +170,7 @@ today = dd+'/'+mm+'/'+yyyy;
 
 	<s:form name="trialBalance" action="trialBalance" theme="simple">
 		<div class="formmainbox">
-			<div class="subheadnew">Trial Balance</div>
+			<div class="subheadnew"><s:text name="lbl.trial.balance"/> </div>
 			<s:push value="model">
 				<jsp:include page="../budget/budgetHeader.jsp">
 					<jsp:param name="heading" value='trialbalancereport' />
@@ -226,25 +226,25 @@ today = dd+'/'+mm+'/'+yyyy;
 							</div>
 						<td class="bluebox"><s:select name="fundId" id="fundId"
 								list="dropdownData.fundList" listKey="id" listValue="name"
-								headerKey="" headerValue="----Choose----" value="%{fundId}" /></td>
+								headerKey="" headerValue="%{getText('lbl.choose.options')}" value="%{fundId}" /></td>
 						<td class="bluebox"><s:text name="voucher.department" />
 						<td class="bluebox"><s:select name="departmentCode"
 								id="departmentcode" list="dropdownData.departmentList"
 								listKey="code" listValue="name" headerKey=""
-								headerValue="----Choose----" value="departmentCode" /></td>
+								headerValue="%{getText('lbl.choose.options')}" value="departmentCode" /></td>
 					</tr>
 					<tr>
 						<td class="greybox"></td>
 						<td class="greybox"><s:text name="voucher.function" />
 						<td class="greybox"><s:select name="functionId"
 								id="functionId" list="dropdownData.functionList" listKey="id"
-								listValue="name" headerKey="" headerValue="----Choose----"
+								listValue="name" headerKey="" headerValue="%{getText('lbl.choose.options')}"
 								value="functionId" style="width:180px" /></td>
 						<td class="greybox"><s:text name="voucher.functionary" />
 						<td class="greybox"><s:select name="functionaryId"
 								id="functionaryId" list="dropdownData.functionaryList"
 								listKey="id" listValue="name" headerKey=""
-								headerValue="----Choose----" value="functionaryId"
+								headerValue="%{getText('lbl.choose.options')}" value="functionaryId"
 								style="width:180px" /></td>
 					</tr>
 					<tr>
@@ -252,7 +252,7 @@ today = dd+'/'+mm+'/'+yyyy;
 						<td class="bluebox"><s:text name="voucher.field" />
 						<td class="bluebox"><s:select name="divisionId"
 								id="divisionId" list="dropdownData.fieldList" listKey="id"
-								listValue="name" headerKey="" headerValue="----Choose----"
+								listValue="name" headerKey="" headerValue="%{getText('lbl.choose.options')}"
 								value="divisionId" /></td>
 					</tr>
 				</table>
@@ -261,13 +261,13 @@ today = dd+'/'+mm+'/'+yyyy;
 		</div>
 		<div class="buttonbottom">
 			<s:hidden name="exportType" id="exportType" />
-			<s:submit value="View HTML" method="search" cssClass="button"
+			<s:submit key="lbl.view.html" method="search" cssClass="button"
 				onClick="return validate('html');" />
-			<s:submit value="Export EXCEL" method="search" cssClass="button"
+			<s:submit key="lbl.export.excel" method="search" cssClass="button"
 				onClick="return validate('xls');" />
-			<s:submit value="Export PDF" method="search" cssClass="button"
+			<s:submit key="lbl.export.pdf" method="search" cssClass="button"
 				onClick="return validate('pdf');" />
-			<input type="button" value="Close"
+			<input type="button" value="<s:text name='lbl.close'/>"
 				onclick="javascript:window.parent.postMessage('close','*');" class="button" />
 		</div>
 	</s:form>
@@ -297,13 +297,13 @@ today = dd+'/'+mm+'/'+yyyy;
 			</tr>
 			<s:if test='%{reportType == "daterange"}'>
 				<tr>
-					<th class="bluebgheadtd">Sl.No.</th>
-					<th class="bluebgheadtd">Account Number</th>
-					<th class="bluebgheadtd">Account Head</th>
-					<th class="bluebgheadtd">Opening Balance(Rs)</th>
-					<th class="bluebgheadtd">Debit(Rs)</th>
-					<th class="bluebgheadtd">Credit(Rs)</th>
-					<th class="bluebgheadtd">Closing Balnce(Rs)</th>
+					<th class="bluebgheadtd"><s:text name="lbl.sr.no"/></th>
+					<th class="bluebgheadtd"><s:text name="lbl.account.number"/></th>
+					<th class="bluebgheadtd"><s:text name="lbl.account.head"/></th>
+					<th class="bluebgheadtd"><s:text name="lbl.opening.balance"/></th>
+					<th class="bluebgheadtd"><s:text name="lbl.debit"/></th>
+					<th class="bluebgheadtd"><s:text name="lbl.credit"/></th>
+					<th class="bluebgheadtd"><s:text name="lbl.closing.balance"/></th>
 
 				</tr>
 				<s:iterator var="p" value="al" status="s">
@@ -340,9 +340,9 @@ today = dd+'/'+mm+'/'+yyyy;
 			</s:if>
 			<s:else>
 				<tr>
-					<th class="bluebgheadtd">Sl.No.</th>
-					<th class="bluebgheadtd">Account Number</th>
-					<th class="bluebgheadtd">Account Head</th>
+					<th class="bluebgheadtd"><s:text name="lbl.sr.no"/></th>
+					<th class="bluebgheadtd"><s:text name="lbl.account.number"/></th>
+					<th class="bluebgheadtd"><s:text name="lbl.account.head"/></th>
 					<s:iterator value="fundList" status="stat">
 						<th class="bluebgheadtd" colspan="1"><s:property value="name" />(Rs)</th>
 					</s:iterator>

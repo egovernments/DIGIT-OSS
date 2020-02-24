@@ -82,18 +82,18 @@ function validateMandatoryFields(){
 
 	if(document.getElementById('period').value=="Select")
 	{
-		bootbox.alert('Please select Period');
+		bootbox.alert('<s:text name="msg.please.select.period"/>');
 		return false;
 	}
 		
 	if(document.getElementById('period').value!="Date"){
 		if(document.getElementById('financialYear').value==0){
-			bootbox.alert('Please select a Financial year');
+			bootbox.alert('<s:text name="msg.please.select.financial.year"/>');
 			return false;
 		}
 	}
 	if(document.getElementById('period').value=="Date" && document.getElementById('asOndate').value==""){
-		bootbox.alert('Please enter As On Date');
+		bootbox.alert('<s:text name="msg.please.enter.as.onDate"/>');
 		return false;
 	}
 	return true;
@@ -148,7 +148,7 @@ th.bluebgheadtd {
 		theme="simple">
 		<div class="formmainbox">
 			<div class="formheading"></div>
-			<div class="subheadnew">Income Expenditure Report</div>
+			<div class="subheadnew"><s:text name="lbl.income.expenditure.report"/> </div>
 			<table width="100%" border="0" cellspacing="0" cellpadding="0">
 				<tr>
 					<td width="10%" class="bluebox">&nbsp;</td>
@@ -163,7 +163,7 @@ th.bluebgheadtd {
 					<td width="41%" class="bluebox"><s:select name="financialYear"
 							id="financialYear" list="dropdownData.financialYearList"
 							listKey="id" listValue="finYearRange" headerKey="0"
-							headerValue="----Select----" value="%{model.financialYear.id}" />
+							headerValue="%{getText('lbl.choose.options')}" value="%{model.financialYear.id}" />
 					</td>
 				</tr>
 				<tr>
@@ -186,12 +186,12 @@ th.bluebgheadtd {
 					<td class="bluebox"><s:text name="report.department" />:</td>
 					<td class="bluebox"><s:select name="department"
 							id="department" list="dropdownData.departmentList" listKey="code"
-							listValue="name" headerKey="null" headerValue="----Select----"
+							listValue="name" headerKey="null" headerValue="%{getText('lbl.choose.options')}"
 							value="model.department.code" /></td>
 					<td class="bluebox"><s:text name="report.fund" />:</td>
 					<td class="bluebox"><s:select name="fund" id="fund"
 							list="dropdownData.fundDropDownList" listKey="id"
-							listValue="name" headerKey="0" headerValue="----Select----"
+							listValue="name" headerKey="0" headerValue="%{getText('lbl.choose.options')}"
 							value="model.fund.id" /></td>
 				</tr>
 				<tr>
@@ -199,12 +199,12 @@ th.bluebgheadtd {
 					<td class="greybox"><s:text name="report.function" />:</td>
 					<td class="greybox"><s:select name="function" id="function"
 							list="dropdownData.functionList" listKey="id" listValue="name"
-							headerKey="0" headerValue="----Select----"
+							headerKey="0" headerValue="%{getText('lbl.choose.options')}"
 							value="model.function.id" /></td>
 					<%--<td class="greybox"><s:text name="report.functionary" />:</td>
 					<td class="greybox"><s:select name="functionary"
 							id="functionary" list="dropdownData.functionaryList" listKey="id"
-							listValue="name" headerKey="0" headerValue="----Select----"
+							listValue="name" headerKey="0" headerValue="%{getText('lbl.choose.options')}"
 							value="model.functionary.id" /></td> --%>
 				</tr>
 				<%-- tr>
@@ -212,7 +212,7 @@ th.bluebgheadtd {
 					<td class="bluebox"><s:text name="report.field" />:</td>
 					<td class="bluebox"><s:select name="field" id="field"
 							list="dropdownData.fieldList" listKey="id" listValue="name"
-							headerKey="0" headerValue="----Select----" value="model.field.id" />
+							headerKey="0" headerValue="%{getText('lbl.choose.options')}" value="model.field.id" />
 					</td>
 				</tr> --%>
 				<tr>
@@ -224,13 +224,13 @@ th.bluebgheadtd {
 				<s:text name="report.mandatory.fields" />
 			</div>
 			<div class="buttonbottom" style="padding-bottom: 10px;">
-				<input type="button" value="Submit" class="buttonsubmit"
+				<input type="button" value="<s:text name='lbl.submit'/>" class="buttonsubmit"
 					onclick="return getData()" /> <input name="button" type="button"
-					class="buttonsubmit" id="button3" value="Print"
+					class="buttonsubmit" id="button3" value="<s:text name='lbl.print'/>"
 					onclick="window.print()" />&nbsp;&nbsp; <input type="button"
-					value="View All Minor Schedules" class="buttonsubmit"
+					value="<s:text name='lbl.view.all.minor.schedules'/>" class="buttonsubmit"
 					onclick="return showAllMinorSchedules()" /> &nbsp;&nbsp; <input
-					type="button" value="View All Schedules" class="buttonsubmit"
+					type="button" value="<s:text name='lbl.view.all.schedules'/>" class="buttonsubmit"
 					onclick="return showAllSchedules()" /> &nbsp;&nbsp;
 			</div>
 			<div align="left" class="extracontent">

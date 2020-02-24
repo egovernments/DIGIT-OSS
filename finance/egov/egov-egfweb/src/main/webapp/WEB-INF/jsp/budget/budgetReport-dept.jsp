@@ -67,18 +67,18 @@
 <s:form name="budgetDetailReportForm" action="budgetReport" id = "budgetDetailReportForm"
 	theme="simple">
 	<div class="formmainbox">
-		<div class="subheadnew">Budget Report - Departmentwise</div>
+		<div class="subheadnew"><s:text name="lbl.budget.report.departmentwise"/> </div>
 		<%@include file="budgetReport-form.jsp"%>
 		<div class="buttonbottom" style="padding-bottom: 10px;">
-			<s:submit value="Search " onclick="return validateFinYear('printDepartmentWiseReport');"
+			<s:submit key="lbl.search" onclick="return validateFinYear('printDepartmentWiseReport');"
 				cssClass="buttonsubmit" />
-			<s:submit value="Save As PDF" onclick="return validateFinYear('generateDepartmentWisePdf');"
+			<s:submit key="lbl.save.as.pdf" onclick="return validateFinYear('generateDepartmentWisePdf');"
 				cssClass="buttonsubmit" />
-			<s:submit value="Save As EXCEL" onclick="return validateFinYear('generateDepartmentWiseXls');"
+			<s:submit key="lbl.save.as.excel" onclick="return validateFinYear('generateDepartmentWiseXls');"
 				cssClass="buttonsubmit" />
 			<s:reset name="button" type="submit" cssClass="button" id="button"
-					value="Reset" />
-			<input type="button" value="Close"
+					key="lbl.reset"/>
+			<input type="button" value="<s:text name='lbl.close'/>"
 					onclick="window.parent.postMessage('close','*');window.close();" class="button" />
 		</div>
 	</div>

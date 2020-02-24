@@ -96,14 +96,14 @@
 				<table width="100%" border="0" align="center" cellpadding="0"
 					cellspacing="0" class="tablebottom">
 					<tr>
-						<th class="bluebgheadtd">Sl.No.</th>
+						<th class="bluebgheadtd"><s:text name="lbl.sr.no"/> </th>
 						<s:if
 							test="%{shouldShowHeaderField('fund')|| shouldShowGridField('fund')}">
 							<th class="bluebgheadtd"><s:text name="fund" /></th>
 						</s:if>
 						<s:if
 							test="%{shouldShowHeaderField('executingDepartment')|| shouldShowGridField('executingDepartment')}">
-							<th class="bluebgheadtd">Executing Department</th>
+							<th class="bluebgheadtd"><s:text name="lbl.executing.department"/> </th>
 						</s:if>
 						<s:if
 							test="%{shouldShowField('function')|| shouldShowGridField('function')}">
@@ -125,11 +125,11 @@
 							test="%{shouldShowHeaderField('boundary')|| shouldShowGridField('boundary')}">
 							<th class="bluebgheadtd"><s:text name="field" /></th>
 						</s:if>
-						<th class="bluebgheadtd">Seq No</th>
-						<th class="bluebgheadtd">Sanctioned Budget(Rs)</th>
-						<th class="bluebgheadtd">Addition Amount Sought(Rs)</th>
-						<th class="bluebgheadtd">Reduction Amount Sought(Rs)</th>
-						<th class="bluebgheadtd">Cumulative Amount(Rs)</th>
+						<th class="bluebgheadtd"><s:text name="lbl.seq.no"/> </th>
+						<th class="bluebgheadtd"><s:text name="lbl.sanction.budget"/> </th>
+						<th class="bluebgheadtd"><s:text name="lbl.additional.amount.sought"/> </th>
+						<th class="bluebgheadtd"><s:text name="lbl.reduction.amount.sought"/> </th>
+						<th class="bluebgheadtd"><s:text name="lbl.cumulative.amount"/> </th>
 					</tr>
 					<c:set var="trclass" value="greybox" />
 					<c:set var="budgetdetailid" value="0" />
@@ -243,12 +243,12 @@
 			{
 				if(document.getElementById('financialYear').value==0)
 				{
-					bootbox.alert('Please Select Financial Year');
+					bootbox.alert('<s:text name="msg.please.select.financial.year"/>');
 					return false;
 				}
 				if(document.getElementById('budgetReAppropriation_fund').value==0 && document.getElementById('budgetReAppropriation_executingDepartment').value==0 && document.getElementById('budgetReAppropriation_function').value==0)
 				{
-					bootbox.alert('Please select Fund or Department or Functionary');
+					bootbox.alert('<s:text name="msg.please.select.fund.department.or.functionary"/>');
 					return false;
 				}
 				return true;

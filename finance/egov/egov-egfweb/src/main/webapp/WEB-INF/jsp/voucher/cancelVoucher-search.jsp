@@ -123,10 +123,10 @@ function loadNamesForSelectedType()
 				<tr>
 					<td class="greybox">&nbsp;</td>
 					<td class="greybox"><s:text name="voucher.type" /><span	class="mandatory1">*</span></td>
-					<td class="greybox"><s:select name="type" id="type"	list="dropdownData.typeList" headerKey="-1" headerValue="----Choose----"
+					<td class="greybox"><s:select name="type" id="type"	list="dropdownData.typeList" headerKey="-1" headerValue="%{getText('lbl.choose.options')}"
 							onchange="loadVoucherNames(this.value)" /></td>
 					<td class="greybox"><s:text name="voucher.name" /><span	class="mandatory1">*</span></td>
-					<td class="greybox"><s:select name="name" id="name"	list="%{nameMap}"  headerKey="-1" headerValue="----Choose----" /></td>
+					<td class="greybox"><s:select name="name" id="name"	list="%{nameMap}"  headerKey="-1" headerValue="%{getText('lbl.choose.options')}" /></td>
 				</tr>
 				<tr>
 					<td class="greybox">&nbsp;</td>
@@ -141,12 +141,12 @@ function loadNamesForSelectedType()
 				</tr>
 			</table>
 			<div class="subheadsmallnew"></div>
-			<div align="left" class="mandatory1">Either Voucher Number Or Mandatory Fields(*) Are Required</div>
+			<div align="left" class="mandatory1"><s:text name="msg.either.voucher.no.or.mendatory.field.required"/> </div>
 	</div>
 	<div class="buttonbottom">
-		<input type="button" class="buttonsubmit" value="Search" id="Search" name="button" onclick="return loadSearch();" />
-		 <input type="reset" value="Reset" class="buttonsubmit" onclick="return fieldReset();" />
-		<input type="button" value="Close" onclick="javascript:window.parent.postMessage('close','*');" class="button" />
+		<input type="button" class="buttonsubmit" value="<s:text name='lbl.search'/>" id="Search" name="button" onclick="return loadSearch();" />
+		 <input type="reset" value="<s:text name='lbl.reset'/>" class="buttonsubmit" onclick="return fieldReset();" />
+		<input type="button" value="<s:text name='lbl.close'/>" onclick="javascript:window.parent.postMessage('close','*');" class="button" />
 	</div>
 	<s:if test="%{voucherSearchList.size!=0}">
 		<div id="listid">
@@ -155,14 +155,14 @@ function loadNamesForSelectedType()
 			<table width="100%" border="0" align="center" cellpadding="0"
 				cellspacing="0" class="tablebottom">
 				<tr>
-					<th class="bluebgheadtd">Sl.No.</th>
-					<th class="bluebgheadtd">Voucher Number</th>
-					<th class="bluebgheadtd">Voucher Date</th>
-					<th class="bluebgheadtd">Fund Name</th>
-					<th class="bluebgheadtd">Department Name</th>
-					<th class="bluebgheadtd">Type-Name</th>
-					<th class="bluebgheadtd">Narration</th>
-					<th class="bluebgheadtd">Select</th>
+					<th class="bluebgheadtd"><s:text name="lbl.sr.no"/></th>
+					<th class="bluebgheadtd"><s:text name="voucher.number"/></th>
+					<th class="bluebgheadtd"><s:text name="voucher.date"/></th>
+					<th class="bluebgheadtd"><s:text name="lbl.fund.name"/></th>
+					<th class="bluebgheadtd"><s:text name="lbl.department.name"/></th>
+					<th class="bluebgheadtd"><s:text name="lbl.type.name"/></th>
+					<th class="bluebgheadtd"><s:text name="voucher.narration"/></th>
+					<th class="bluebgheadtd"><s:text name="lbl.select"/></th>
 				</tr>
 				<c:set var="trclass" value="greybox" />	
 
@@ -214,13 +214,13 @@ function loadNamesForSelectedType()
 				</s:iterator>
 			</table>
 			<div class="buttonbottom" align="center">
-				<input type="button" Class="buttonsubmit" value="Cancel Voucher" onclick="return validateVouchers();" />
+				<input type="button" Class="buttonsubmit" value="<s:text name='lbl.cancel.voucher'/>" onclick="return validateVouchers();" />
 			</div>
 
 		</div>
 	</s:if>
 	<s:else>
-		<s:if test="%{voucherList.size==0 && voucherList!=null}">No Data Found.</s:if>
+		<s:if test="%{voucherList.size==0 && voucherList!=null}"><s:text name="msg.no.data.found"/></s:if>
 	</s:else>
 
 	<s:token />
@@ -244,7 +244,7 @@ function loadNamesForSelectedType()
 		}                                      
 		</s:iterator> 
 		if(queryParams==""){
-			bootbox.alert("Alert please select atleast one voucher to cancel");
+			bootbox.alert("<s:text name='msg.please.select.atleast.one.voucher'/>");
 			return false;
 		}else{            
 			document.cancelVoucher.action = "${pageContext.request.contextPath}/voucher/cancelVoucher-update.action?"+queryParams;
@@ -263,11 +263,11 @@ function doAfterSubmit(){
 
 var callback = {
 		success: function(o){
-			bootbox.alert("Vouchers cancelled succesfully");
+			bootbox.alert("<s:text name='msg.vouchers.cancelled.successfully'/>");
 			document.getElementById('listid').style.display ='none';
 			},
 		failure: function(o) {
-			bootbox.alert("Search failed! Please try again");
+			bootbox.alert("<s:text name='msg.search.failed.try.again'/>");
 			}
 }
 function loadSearch(){

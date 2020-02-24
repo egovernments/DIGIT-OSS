@@ -56,7 +56,7 @@
 
 <html>
 <head>
-<title>Cancel Bills - Search</title>
+<title><s:text name="lbl.cancel.bill.search"/> </title>
 </head>
 <SCRIPT LANGUAGE="javascript"
 	SRC="../resources/javascript/jsCommonMethods.js?rnd=${app_release_no}"></Script>
@@ -72,7 +72,7 @@ function validate()
 		{
 			if( compareDate(formatDateToDDMMYYYY1(strtDate),formatDateToDDMMYYYY1(endDate)) == -1 )
 			{
-				bootbox.alert('From Date cannot be greater than To Date');
+				bootbox.alert('<s:text name="msg.fromDate.cant.be.greater.than.toDate"/>');
 				return false;
 		    }
 		 }
@@ -80,7 +80,7 @@ function validate()
 	}
 	else
 	{
-		bootbox.alert("Please select a fund");
+		bootbox.alert("<s:text name='msg.please.select.fund'/>");
 		return false;
 	}
 	
@@ -99,8 +99,7 @@ function resetSelectedRows()
 {   
 	var todate=document.getElementById('toDate').value
 	//todate.mask('99/99/9999',{placeholder:"mm/dd/yyyy"});
-	jQuery('fromDate').inputmask('99/99/9999',{placeholder:"mm/dd/yyyy"});
-	console.log(fromDate);
+	/* jQuery('fromDate').inputmask('99/99/9999',{placeholder:"mm/dd/yyyy"}); */
 	document.getElementById('selectedRows').value="0";
 }
 
@@ -108,9 +107,11 @@ function resetSelectedRows()
 function validateCancel()
 {
 	var rows=parseInt(document.getElementById('selectedRows').value);
-	if(rows==0)
+	console.log("rows : ",rows);
+	console.log("rows : ",rows == 0 || rows == "");
+	if(rows == 0 || rows == "")
 	{
-		bootbox.alert("Please select atleast one bill");
+		bootbox.alert("<s:text name='msg.please.select.atleast.one.bill'/>");
 		return false;
 	}
 	document.billForm.action='/services/EGF/voucher/cancelBill-cancelBill.action';
@@ -128,18 +129,14 @@ function validateCancel()
 		 <div style="color: green;"><s:actionmessage /></div>
 		</span>
 		<div class="formmainbox">
-			<div class="subheadnew">Cancel Bills - Search</div>
+			<div class="subheadnew"><s:text name="lbl.cancel.bill.search"/> </div>
 			<table width="100%" cellpadding="0" cellspacing="0">
 				<tr>
 				<td class="bluebox" width="10%" ></td>
 					<td class="bluebox"><s:text name="bill.Number" /></td>
-					<td class="bluebox"><s:textfield name="billNumber"
-							id="billNumber" value="%{billNumber}" /></td>
-					<td class="bluebox"><s:text name="voucher.fund" /><span
-						class="mandatory1">*</span></td>
-					<td class="bluebox"><s:select name="fund.id" id="fund.id"
-							list="dropdownData.fundList" listKey="id" listValue="name"
-							headerKey="-1" headerValue="----Choose----" value="%{fund.id}" /></td>
+					<td class="bluebox"><s:textfield name="billNumber" id="billNumber" value="%{billNumber}" /></td>
+					<td class="bluebox"><s:text name="voucher.fund" /><span class="mandatory1">*</span></td>
+					<td class="bluebox"><s:select name="fund.id" id="fund.id" list="dropdownData.fundList" listKey="id" listValue="name" headerKey="-1" headerValue="%{getText('lbl.choose.options')}" value="%{fund.id}" /></td>
 				</tr>
 				</br>
 				<tr>
@@ -149,7 +146,8 @@ function validateCancel()
 					<td class="bluebox"><s:date name="fromDate" var="fromDate"
 							format="dd/MM/yyyy" /> <s:textfield id="fromDate"
 							name="fromDate" value="%{fromDate}"
-							 cssClass="form-control datepicker"
+							 placeholder="DD/MM/YYYY" cssClass="form-control datepicker"
+							data-inputmask="'mask': 'd/m/y'"
 							 /></td>
 					<td class="bluebox"><s:text name="to.date" /></td>
 
@@ -165,7 +163,7 @@ function validateCancel()
 					<td class="greybox"><s:text name="voucher.department" /></td>
 					<td class="greybox"><s:select name="deptImpl.code"
 							id="deptImpl.code" list="dropdownData.DepartmentList" listKey="code"
-							listValue="name" headerKey="-1" headerValue="----Choose----"
+							listValue="name" headerKey="-1" headerValue="%{getText('lbl.choose.options')}"
 							value="%{deptImpl.code}" /></td>
 					
 				
@@ -174,25 +172,23 @@ function validateCancel()
 					
 					<td class="greybox"><s:select name="expType" id="expType"
 							list="dropdownData.expenditureList"
-							value="%{expType}" headerKey="" headerValue="--- Select ---" /></td>
+							value="%{expType}" headerKey="" headerValue="%{getText('lbl.choose.options')}" /></td>
 					
 				</tr>
 			</table>
 			<div class="buttonbottom">
-				<input type="button" value="Search" id="searchBtn" onclick="return validate()" class="buttonsubmit" />
-				<input type="button" value="Close" onclick="javascript:window.parent.postMessage('close','*');" class="button" />
+				<input type="button" value="<s:text name='lbl.search'/>" id="searchBtn" onclick="return validate()" class="buttonsubmit" />
+				<input type="button" value="<s:text name='lbl.close'/>" onclick="javascript:window.parent.postMessage('close','*');" class="button" />
 			</div>
 		</div>
 		<s:if test="%{billListDisplay.size()!=0}">
 			<table width="100%" cellpadding="0" cellspacing="0">
 				<tr>
-					<th class="bluebgheadtd"><s:text
-							name="bill.cancelation.serialno" /></th>
+					<th class="bluebgheadtd"><s:text name="bill.cancelation.serialno" /></th>
 					<th class="bluebgheadtd"><s:text name="bill.Number" /></th>
 					<th class="bluebgheadtd"><s:text name="bill.Dept.Name" /></th>
 					<th class="bluebgheadtd"><s:text name="bill.Date" /></th>
-					<th class="bluebgheadtd"><s:text
-							name="bill.cancelation.billamount" /></th>
+					<th class="bluebgheadtd"><s:text name="bill.cancelation.billamount" /></th>
 					<th class="bluebgheadtd"><s:text name="Select" /></th>
 				</tr>
 				<c:set var="trclass" value="greybox" />
@@ -243,13 +239,13 @@ function validateCancel()
 				</s:iterator>
 			</table>
 			<div class="buttonbottom">
-				<input type="button" value="Cancel Bill" id="cancelBill"
+				<input type="button" value="<s:text name='lbl.cancel.bill'/>" id="cancelBill"
 					onclick="return validateCancel();" class="buttonsubmit" />
 			</div>
 		</s:if>
 		<s:elseif test="%{billListDisplay.size() == 0 && afterSearch}">
 			<tr>
-				<td colspan="7" align="center"><font color="red">No Data Found.</font></td>
+				<td colspan="7" align="center"><font color="red"><s:text name="msg.no.data.found"/></font></td>
 			</tr>
 		</s:elseif>
 		<input type="hidden" id="selectedRows" name="selectedRows" />

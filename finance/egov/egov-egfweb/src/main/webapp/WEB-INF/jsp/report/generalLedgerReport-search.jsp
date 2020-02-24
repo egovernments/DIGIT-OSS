@@ -160,13 +160,13 @@ background: #DEDEDE;
 							class="mandatory1">*</span></td>
 						<td class="greybox"><s:select name="fund_id" id="fund_id"
 								list="dropdownData.fundList" listKey="id" listValue="name"
-								headerKey="" headerValue="----Choose----" /></td>
+								headerKey="" headerValue="%{getText('lbl.choose.options')}" /></td>
 								
 						<td class="greybox"><s:text name="generalLedger.department" /></td>
 						<td class="greybox"><s:select name="departmentCode"
 								id="departmentCode" list="dropdownData.departmentList"
 								listKey="code" listValue="name" headerKey=""   
-								headerValue="----Choose----" /></td>
+								headerValue="%{getText('lbl.choose.options')}" /></td>
 						
 					</tr>
 					<tr>
@@ -201,7 +201,7 @@ background: #DEDEDE;
 						<td class="greybox"><s:select name="functionaryId"
 								id="functionaryId" list="dropdownData.functionaryList"
 								listKey="id" listValue="name" headerKey=""
-								headerValue="----Choose----" /></td> --%>
+								headerValue="%{getText('lbl.choose.options')}" /></td> --%>
 
 					</tr>
 					<tr>
@@ -210,12 +210,12 @@ background: #DEDEDE;
 						<td class="greybox"><s:select name="fundSource_id"
 								id="fundSource_id" list="dropdownData.fundsourceList"
 								listKey="id" listValue="name" headerKey=""
-								headerValue="----Choose----" /></td> --%>
+								headerValue="%{getText('lbl.choose.options')}" /></td> --%>
 						
 						<%-- <td class="bluebox"><s:text name="generalLedger.field" /></td>
 						<td class="bluebox"><s:select name="fieldId" id="fieldId"
 								list="dropdownData.fieldList" listKey="id" listValue="name"
-								headerKey="" headerValue="----Choose----" /></td>
+								headerKey="" headerValue="%{getText('lbl.choose.options')}" /></td>
  --%>
 					</tr>
 
@@ -225,9 +225,9 @@ background: #DEDEDE;
 			<div class="buttonbottom">
 				<table align="center">
 					<tr>
-						<td><input type="button" value="Search" class="buttonsubmit"
+						<td><input type="button" value="<s:text name='lbl.search'/>" class="buttonsubmit"
 							onclick="return validate()" /></td>
-						<td><input type="button" id="Close" value="Close"
+						<td><input type="button" id="Close" value="<s:text name='lbl.close'/>"
 							onclick="javascript:window.parent.postMessage('close','*');" class="button" /></td>
 					</tr>
 				</table>

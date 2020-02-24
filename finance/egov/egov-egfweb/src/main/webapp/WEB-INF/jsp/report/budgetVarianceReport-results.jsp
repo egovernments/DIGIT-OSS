@@ -63,16 +63,15 @@
 								<table width="100%" border="0" cellpadding="0" cellspacing="0"
 									class="tablebottom">
 									<tr>
-										<th class="bluebgheadtd">Fund</th>
-										<th class="bluebgheadtd">Function</th>
-										<th class="bluebgheadtd">Department</th>
-										<th class="bluebgheadtd">Budget Head</th>
-										<th class="bluebgheadtd"><s:property value="type" />
-											Estimate(Rs)</th>
-										<th class="bluebgheadtd">Additional Appropriation(Rs)</th>
-										<th class="bluebgheadtd">Total(Rs)</th>
-										<th class="bluebgheadtd">Actual(Rs)</th>
-										<th class="bluebgheadtd">Variance(Rs)</th>
+										<th class="bluebgheadtd"><s:text name="report.fund"/> </th>
+										<th class="bluebgheadtd"><s:text name="report.function"/></th>
+										<th class="bluebgheadtd"><s:text name="report.department"/></th>
+										<th class="bluebgheadtd"><s:text name="report.budged.head"/></th>
+										<th class="bluebgheadtd"><s:property value="type" /><s:text name="lbl.report.estimate"/></th>
+										<th class="bluebgheadtd"><s:text name="lbl.report.additional.appropriaton"/></th>
+										<th class="bluebgheadtd"><s:text name="lbl.report.total"/></th>
+										<th class="bluebgheadtd"><s:text name="lbl.report.actual"/></th>
+										<th class="bluebgheadtd"><s:text name="lbl.report.variance"/></th>
 									</tr>
 									<s:iterator value="budgetVarianceEntries" status="stat" var="p">
 										<tr>
@@ -143,9 +142,9 @@
 	</table>
 
 	<div class="buttonbottom" align="center">
-		Export Options: <label onclick="exportXls()"><a
-			href='javascript:void(0);'>Excel</a></label> | <label onclick="exportPdf()"><a
-			href="javascript:void(0);">PDF</a></label>
+		<s:text name="lbl.report.options"/> <label onclick="exportXls()"><a
+			href='javascript:void(0);'><s:text name="lbl.excel"/> </a></label> | <label onclick="exportPdf()"><a
+			href="javascript:void(0);"><s:text name="lbl.pdf"/> </a></label>
 
 	</div>
 

@@ -45,6 +45,7 @@
   ~   In case of any queries, you can reach eGovernments Foundation at contact@egovernments.org.
   ~
   --%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="/WEB-INF/tags/cdn.tld" prefix="cdn" %>
 <input type="hidden" value="${modify}" id="modify" />
 <input type="hidden" value="${mode}" id="mode" />
@@ -57,12 +58,12 @@
 		<div class="col-md-12">
 			<div class="panel panel-primary" data-collapsed="0">
 				<div class="panel-heading">
-					<div class="panel-title">Budget Definition</div>
+					<div class="panel-title"><spring:message code="lbl.budget.definition" text="Budget Definition"/> </div>
 				</div>
 				<div class="panel-body">
 					<div class="form-group">
 						<label class="col-sm-3 control-label text-right"><spring:message
-								code="lbl.name" /> </label>
+								code="lbl.name" text="Name"/> </label>
 						<div class="col-sm-6 add-margin">
 							<form:input path="name"
 								class="form-control text-left patternvalidation"
@@ -73,10 +74,10 @@
 
 					<div class="form-group">
 						<label class="col-sm-3 control-label text-right"><spring:message
-								code="lbl.isbere" /> </label>
+								code="lbl.isbere" text="Budget/Revised Estimate"/> </label>
 						<div class="col-sm-2 col-xs-12 add-margin">
 							<div class="radio">
-								<label><form:radiobutton path="isbere" id="isBeRe"
+								<label><form:radiobutton path="isbere" id="isBeRe" 
 										value="BE" required="required" checked="checked" onchange="resetFunction()"/>BE</label>
 							</div>
 						</div>
@@ -91,7 +92,7 @@
 
 					<div class="form-group">
 						<label class="col-sm-3 control-label text-right"><spring:message
-								code="lbl.financialyear" /> </label>
+								code="lbl.financialyear" text="Financial Year"/> </label>
 						<div class="col-sm-6 add-margin">
 							<form:select path="financialYear" id="financialYear"
 								cssClass="form-control disablefield"
@@ -99,7 +100,7 @@
 								onchange="getParentByFinancialYear(this.value);getReferenceBudgets(this.value)"
 								disabled="disabled">
 								<form:option value="">
-									<spring:message code="lbl.select" />
+									<spring:message code="lbl.select" text="Select"/>
 								</form:option>
 								<c:forEach items="${financialYearList}" var="mc">
 									<option value="${mc.id}">${mc.finYearRange}</option>
@@ -111,14 +112,14 @@
 					<div class="form-group">
 
 						<label class="col-sm-3 control-label text-right"><spring:message
-								code="lbl.parent" /> </label>
+								code="lbl.parent" text="Parent"/> </label>
 						<div class="col-sm-6 add-margin">
 							<form:select path="parent" id="parent"
 								cssClass="form-control disablefield"
 								cssErrorClass="form-control error" disabled="disabled">
 								<c:if test="${empty modify}">
 									<form:option value="">
-										<spring:message code="lbl.select" />
+										<spring:message code="lbl.select" text="Select"/>
 									</form:option>
 								</c:if>
 								<form:options items="${budgets}" itemValue="id" itemLabel="name" />
@@ -129,7 +130,7 @@
 
 					<div class="form-group">
 						<label class="col-sm-3 control-label text-right"><spring:message
-								code="lbl.description" /> </label>
+								code="lbl.description" text="Description"/> </label>
 						<div class="col-sm-6 add-margin">
 							<form:textarea path="description"
 								class="form-control text-left patternvalidation"
@@ -139,7 +140,7 @@
 					</div>
 					<div class="form-group">
 						<label class="col-sm-3 control-label text-right"><spring:message
-								code="lbl.isactivebudget" /> </label>
+								code="lbl.isactivebudget" text="Active Budget"/> </label>
 						<div class="col-sm-6 add-margin">
 							<form:checkbox path="isActiveBudget" />
 							<form:errors path="isActiveBudget" cssClass="error-msg" />
@@ -147,7 +148,7 @@
 					</div>
 					<div class="form-group">
 						<label class="col-sm-3 control-label text-right"><spring:message
-								code="lbl.isprimarybudget" /> </label>
+								code="lbl.isprimarybudget" text="Primary Budget"/> </label>
 						<div class="col-sm-6 add-margin">
 							<form:checkbox path="isPrimaryBudget" id="isPrimaryBudget" />
 							<form:errors path="isPrimaryBudget" cssClass="error-msg" />
@@ -155,14 +156,14 @@
 					</div>
 					<div class="form-group">
 						<label class="col-sm-3 control-label text-right"><spring:message
-								code="lbl.referencebudget" /> </label>
+								code="lbl.referencebudget" text="Reference Budget"/> </label>
 						<div class="col-sm-6 add-margin">
 							<form:select path="referenceBudget" id="referenceBudget"
 								cssClass="form-control disablefield"
 								cssErrorClass="form-control error" disabled="disabled">
 								<c:if test="${empty modify}">
 									<form:option value="">
-										<spring:message code="lbl.select" />
+										<spring:message code="lbl.select" text="Select"/>
 									</form:option>
 								</c:if>
 								<form:options items="${budgets}" itemValue="id" itemLabel="name" />

@@ -201,6 +201,6 @@
 </br>
 </br>
 <center>
-	<input type="button" id="Close" value="Close"
+	<input type="button" id="Close" value="<s:text name='lbl.close'/>"
 		onclick="javascript:window.close()" class="button" />
 </center>
