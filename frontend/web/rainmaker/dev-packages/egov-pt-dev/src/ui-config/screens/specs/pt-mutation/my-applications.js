@@ -41,10 +41,7 @@ const screenConfig = {
                 label: "PT_MUTATION_PID",
                 jsonPath: "propertyId"
               },
-              {
-                label: "PT_MUTATION_APPLICATION_TYPE",
-                jsonPath: "propertyType"
-              },
+             
               {
                 label: "PT_MUTATION_CREATION_DATE",
                 jsonPath: "auditDetails.createdTime"

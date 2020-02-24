@@ -80,7 +80,7 @@ export const registrationDetails = getCommonCard(
             labelKey: "PT_MUTATION_MARKET_VALUE_PLACEHOLDER"
           },
           required:true,
-          pattern: getPattern("Address"),
+          pattern: getPattern("DocumentNo"),
         jsonPath: "Property.additionalDetails.marketValue"
         }),
         documentNumber: getTextField({
@@ -96,7 +96,7 @@ export const registrationDetails = getCommonCard(
             labelKey: "PT_MUTATION_DOCUMENT_NO_PLACEHOLDER"
           },
           required:true,
-          pattern: getPattern("Address"),
+          pattern: getPattern("DocumentNo"),
           jsonPath: "Property.additionalDetails.documentNumber"
         }),
           documentIssueDateField :getDateField({
@@ -127,7 +127,7 @@ export const registrationDetails = getCommonCard(
             labelKey: "PT_MUTATION_DOCUMENT_VALUE_PLACEHOLDER"
           },
           required:true,
-          pattern: getPattern("Address"),
+          pattern: getPattern("DocumentNo"),
         jsonPath: "Property.additionalDetails.documentValue",
         }),
         remarks: getTextField({

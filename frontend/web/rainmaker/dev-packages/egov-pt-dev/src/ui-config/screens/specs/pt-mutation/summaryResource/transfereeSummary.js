@@ -42,19 +42,19 @@ export const transfereeSummary = getCommonGrayCard({
           xs: 4,
           align: "right"
         },
-        children: {
-          editIcon: {
-            uiFramework: "custom-atoms",
-            componentPath: "Icon",
-            props: {
-              iconName: "edit"
-            }
-          },
+        // children: {
+        //   editIcon: {
+        //     uiFramework: "custom-atoms",
+        //     componentPath: "Icon",
+        //     props: {
+        //       iconName: "edit"
+        //     }
+        //   },
           // buttonLabel: getLabel({
           //   labelName: "Edit",
           //   labelKey: "PT_EDIT"
           // })
-        },
+        // },
         // onClickDefination: {
         //   action: "condition",
         //   callBack: (state, dispatch) => {
