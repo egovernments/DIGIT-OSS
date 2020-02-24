@@ -387,6 +387,9 @@ export const generatePdfFromDiv = (action, applicationNumber) => {
 
   html2canvas(target, {
     onclone: function (clonedDoc) {
+      if(clonedDoc.getElementById("pdf-header")){
+        clonedDoc.getElementById("pdf-header").style.display = "block";
+      }
       if(clonedDoc.getElementById("property-assess-form")){
         clonedDoc.getElementById("property-assess-form").style.display = "none";
       }
