@@ -129,7 +129,7 @@ public class TLBatchService {
             }
             catch (Exception e){
                 e.printStackTrace();
-                producer.push(config.getErrorTopic(), license);
+                producer.push(config.getReminderErrorTopic(), license);
             }
         }
 
@@ -158,7 +158,7 @@ public class TLBatchService {
         }
         catch (Exception e){
             e.printStackTrace();
-            producer.push(config.getErrorTopic(),licenses);
+            producer.push(config.getExpiryErrorTopic(), licenses);
         }
 
 
