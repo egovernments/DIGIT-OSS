@@ -324,10 +324,6 @@
                         {
                           "text": "{{Transferree_Address}}",
                           "style": "receipt-order-content"
-                        },
-                        {
-                          "text": "{{Transferree_City}},",
-                          "style": "receipt-order-content"
                         }
                       ],
                       "alignment": "left",
