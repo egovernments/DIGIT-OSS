@@ -104,25 +104,16 @@ export const specialApplicantCategory = getLabelWithValue(
 )
 
 export const propertyOwnerDetails = () => {
-    return getCommonContainer({
+    return getCommonGrayCard({
         headerDiv: {
             uiFramework: "custom-atoms",
             componentPath: "Container",
             props: {
                 className: "common-div-css search-preview",
-                style: {
-                    padding: 0
-                }
-
             },
-            // header: {
-            //     gridDefination: {
-            //         xs: 12,
-            //         sm: 10
-            //     },
             // div3: propertyOwnerDetailsHeader,
             ...getHeader({
-                labelKey: "WS_OWN_DETAIL_HEADER_INFO"
+                labelKey: "WS_TASK_PROP_OWN_HEADER"
             })
             // },
         },
