@@ -113,7 +113,7 @@ public class EnrichmentService {
 
 		} else if (isWfEnabled && iswfStarting) {
 
-			enrichPropertyForNewWf(requestInfo, property);
+			enrichPropertyForNewWf(requestInfo, property, false);
 		}
 		
 		if (!CollectionUtils.isEmpty(property.getDocuments()))
@@ -204,7 +204,7 @@ public class EnrichmentService {
 
 		} else if (isWfEnabled && iswfStarting) {
 
-			enrichPropertyForNewWf(requestInfo, property);
+			enrichPropertyForNewWf(requestInfo, property, true);
 		}
 
 		property.getOwners().forEach(owner -> {
@@ -231,9 +231,14 @@ public class EnrichmentService {
 	 * @param requestInfo
 	 * @param property
 	 */
-	private void enrichPropertyForNewWf(RequestInfo requestInfo, Property property) {
+	private void enrichPropertyForNewWf(RequestInfo requestInfo, Property property, Boolean isMutation) {
 		
-		String ackNo = propertyutil.getIdList(requestInfo, property.getTenantId(), config.getAckIdGenName(), config.getAckIdGenFormat(), 1).get(0);
+		String ackNo;
+
+		if (isMutation) {
+			ackNo = propertyutil.getIdList(requestInfo, property.getTenantId(), config.getMutationIdGenName(), config.getMutationIdGenFormat(), 1).get(0);
+		} else
+			ackNo = propertyutil.getIdList(requestInfo, property.getTenantId(), config.getAckIdGenName(), config.getAckIdGenFormat(), 1).get(0);
 		property.setId(UUID.randomUUID().toString());
 		property.setAcknowldgementNumber(ackNo);
 		

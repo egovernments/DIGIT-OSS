@@ -75,6 +75,12 @@ public class PropertyConfiguration {
 
     @Value("${egov.idgen.ack.format}")
     private String ackIdGenFormat;
+    
+    @Value("${egov.idgen.mutation.name}")
+    private String mutationIdGenName;
+
+    @Value("${egov.idgen.mutation.format}")
+    private String mutationIdGenFormat;
 
     @Value("${egov.idgen.assm.name}")
     private String assessmentIdGenName;
