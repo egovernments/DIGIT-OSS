@@ -40,7 +40,15 @@ class OwnerInfo extends Component {
     });
     return itemKey;
   }
-
+  getUniqueList = (list = []) => {
+    let newList = [];
+    list.map(element => {
+      if (!JSON.stringify(newList).includes(JSON.stringify(element.acknowldgementNumber))) {
+        newList.push(element);
+      }
+    })
+    return newList;
+  }
   getPropertyResponse = async (propertyId, tenantId, dialogName) => {    
       const queryObject = [
         { key: "propertyIds", value: propertyId },
@@ -55,7 +63,12 @@ class OwnerInfo extends Component {
           queryObject
         );
         if (payload && payload.Properties.length > 0) {
+
+
+          payload.Properties=this.getUniqueList(payload.Properties);
+
           payload.Properties.map((item)=>{
+            
             const lastModifiedDate = convertEpochToDate(item.auditDetails.lastModifiedTime);
             if(!ownershipInfo[lastModifiedDate]){
               ownershipInfo[lastModifiedDate] = [];

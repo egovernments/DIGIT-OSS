@@ -27,6 +27,16 @@ class ApplicationHistory extends Component {
         };
     }
 
+    getUniqueList = (list = []) => {
+        let newList = [];
+        list.map(element => {
+          if (!JSON.stringify(newList).includes(JSON.stringify(element.acknowldgementNumber))) {
+            newList.push(element);
+          }
+        })
+        return newList;
+      }
+
     getPropertyResponse = async (propertyId, tenantId, dialogName) => {    
         const queryObject = [
           { key: "propertyIds", value: propertyId },
@@ -41,6 +51,7 @@ class ApplicationHistory extends Component {
             queryObject
           );
           if (payload && payload.Properties.length > 0) {
+            payload.Properties=this.getUniqueList(payload.Properties);
             return payload.Properties;
           }
         } catch (e) {
