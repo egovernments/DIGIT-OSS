@@ -178,7 +178,7 @@ delete propertyPayload.ownershipCategoryTemp;
     if(payload){
       store.dispatch(
         setRoute(
-          `acknowledgement?purpose=apply&status=success&applicationNumber=${payload.acknowldgementNumber}&tenantId=${tenantId}
+          `acknowledgement?purpose=apply&status=success&applicationNumber=${payload.Properties[0].acknowldgementNumber}&tenantId=${tenantId}
           `
         )
       );
