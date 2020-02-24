@@ -104,7 +104,7 @@ export const specialApplicantCategory = getLabelWithValue(
 )
 
 export const propertyOwnerDetails = () => {
-    return getCommonGrayCard({
+    return getCommonContainer({
         headerDiv: {
             uiFramework: "custom-atoms",
             componentPath: "Container",

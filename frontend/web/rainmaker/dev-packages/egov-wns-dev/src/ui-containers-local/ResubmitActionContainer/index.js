@@ -160,7 +160,6 @@ class ResubmitActionContainer extends React.Component {
       dataPath,
     } = this.props;
     const { open, data } = this.props;
-
     return (
       <div className="apply-wizard-footer" id="custom-atoms-footer">
         <ActionDialog

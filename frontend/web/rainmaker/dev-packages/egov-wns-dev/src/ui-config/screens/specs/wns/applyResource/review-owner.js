@@ -6,6 +6,9 @@ import {
   getLabel,
   getDivider
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+
+const service = getQueryArg(window.location.href, "service")
 
 const getHeader = label => {
   return {
@@ -247,7 +250,8 @@ export const getReviewOwner = (isEditable = true) => {
     // viewOne: propertyDetails,
     // viewTwo: propertyLocationDetails
     viewFive: connectionDetailsHeader,
-    viewSix: connectionDetails,
+    viewSix: renderService(),
+    // viewSix: connectionDetails,
     viewSeven: connectionChargeDetailsHeader,
     viewEight: connectionChargeDetails,
     viewNine: roadCuttingChargesHeader,
@@ -285,3 +289,11 @@ const activationDetails = getCommonContainer({
   reviewMeterInstallationDate,
   reviewInitialMeterReading
 });
+
+export const renderService = () => {
+  if (service === "WATER") {
+    return getCommonContainer({ reviewConnectionType, reviewNumberOfTaps, reviewWaterSource, reviewWaterSubSource, reviewPipeSize });
+  } else if (service === "SEWERAGE") {
+    return getCommonContainer({ reviewConnectionType, reviewWaterClosets })
+  }
+}

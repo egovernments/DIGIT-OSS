@@ -383,39 +383,6 @@ const screenConfig = {
                 sm: 4,
                 align: "right"
               },
-              // children:
-              //   process.env.REACT_APP_NAME === "Employee"
-              //     ? {}
-              //     : {
-              //       word1: {
-              //         ...getCommonTitle(
-              //           {
-              //             jsonPath: "Licenses[0].headerSideText.word1"
-              //           },
-              //           {
-              //             style: {
-              //               marginRight: "10px",
-              //               color: "rgba(0, 0, 0, 0.6000000238418579)"
-              //             }
-              //           }
-              //         )
-              //       },
-              //       word2: {
-              //         ...getCommonTitle({
-              //           jsonPath: "Licenses[0].headerSideText.word2"
-              //         })
-              //       },
-              //       cancelledLabel: {
-              //         ...getCommonHeader(
-              //           {
-              //             labelName: "Cancelled",
-              //             labelKey: "WS_COMMON_STATUS_CANC"
-              //           },
-              //           { variant: "body1", style: { color: "#E54D42" } }
-              //         ),
-              //         visible: false
-              //       }
-              //     }
             }
           }
         },
@@ -445,8 +412,8 @@ const screenConfig = {
               moduleName: serviceModuleName,
               isLast: false,
               dialogHeader: {
-                labelName: "RESUBMIT Application",
-                labelKey: "WF_RESUBMIT_APPLICATION"
+                // labelName: "RESUBMIT Application",
+                labelKey: "WF_SUBMIT_APPLICATION"
               },
               showEmployeeList: false,
               roles: "CITIZEN",
@@ -455,7 +422,6 @@ const screenConfig = {
           }
         },
         taskDetails,
-        // footer
       }
     },
     breakUpDialog: {
@@ -517,7 +483,7 @@ const searchResults = async (action, state, dispatch, applicationNumber) => {
       tenantId: tenantId,
       sewerageConnection: convPayload.SewerageConnections[0]
     }]
-    estimate = swEstimateCalculation(queryObjectForEst, dispatch);
+    estimate = await swEstimateCalculation(queryObjectForEst, dispatch);
     let viewBillTooltip = []
     if (estimate !== null && estimate !== undefined) {
       if (estimate.Calculation !== undefined && estimate.Calculation.length > 0) {
@@ -526,7 +492,7 @@ const searchResults = async (action, state, dispatch, applicationNumber) => {
       }
     }
   }
-  if (estimate.Calculation.length > 0) {
+  if (estimate !== null && estimate !== undefined) {
     createEstimateData(estimate.Calculation[0].taxHeadEstimates, "taxHeadEstimates", dispatch, {}, {});
   }
 };
