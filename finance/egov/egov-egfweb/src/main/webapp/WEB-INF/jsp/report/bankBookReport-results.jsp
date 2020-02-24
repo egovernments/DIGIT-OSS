@@ -83,22 +83,20 @@
 					<table width="100%" border="0" cellpadding="0" cellspacing="0"
 						class="tablebottom">
 						<tr>
-							<th class="bluebgheadtd" colspan="5">Receipts</th>
-							<th class="bluebgheadtd" colspan="5">Payments</th>
+							<th class="bluebgheadtd" colspan="5"><s:text name="lbl.receipts"/> </th>
+							<th class="bluebgheadtd" colspan="5"><s:text name="lbl.payments"/></th>
 						</tr>
 						<tr>
-							<th class="bluebgheadtd" width="2%">Voucher Date</th>
-							<th class="bluebgheadtd" width="10%">Voucher Number</th>
-							<th class="bluebgheadtd" width="15%">Particulars</th>
-							<th class="bluebgheadtd" width="10%">Amount</th>
-							<th class="bluebgheadtd" width="10%">Cheque/RTGS Number
-								#/Date</th>
-							<th class="bluebgheadtd" width="2%">Voucher Date</th>
-							<th class="bluebgheadtd" width="10%">Voucher Number</th>
-							<th class="bluebgheadtd" width="15%">Particulars</th>
-							<th class="bluebgheadtd" width="10%">Amount</th>
-							<th class="bluebgheadtd" width="10%">Cheque/RTGS Number
-								#/Date</th>
+							<th class="bluebgheadtd" width="2%"><s:text name="lbl.voucher.date"/> </th>
+							<th class="bluebgheadtd" width="10%"><s:text name="lbl.voucher.number"/> </th>
+							<th class="bluebgheadtd" width="15%"><s:text name="lbl.particulars"/></th>
+							<th class="bluebgheadtd" width="10%"><s:text name="lbl.amount"/></th>
+							<th class="bluebgheadtd" width="10%"><s:text name="lbl.cheque.rtgs.and.date"/> </th>
+							<th class="bluebgheadtd" width="2%"><s:text name="lbl.voucher.date"/></th>
+							<th class="bluebgheadtd" width="10%"><s:text name="lbl.voucher.number"/></th>
+							<th class="bluebgheadtd" width="15%"><s:text name="lbl.particulars"/></th>
+							<th class="bluebgheadtd" width="10%"><s:text name="lbl.amount"/></th>
+							<th class="bluebgheadtd" width="10%"><s:text name="lbl.cheque.rtgs.and.date"/></th>
 						</tr>
 						<s:iterator value="bankBookViewEntries" status="stat" var="p">
 							<tr>
@@ -178,13 +176,13 @@
 	</tr>
 	<tr>
 		<div class="buttonbottom">
-			Export Options: <label onclick="exportXls()"><a
-				href='javascript:void(0);'>Excel</a></label> | <label onclick="exportPdf()"><a
-				href="javascript:void(0);">PDF</a></label>
+			<s:text name="lbl.report.options"/> <label onclick="exportXls()"><a
+				href='javascript:void(0);'><s:text name="lbl.excel"/> </a></label> | <label onclick="exportPdf()"><a
+				href="javascript:void(0);"><s:text name="lbl.pdf"/></a></label>
 		</div>
 	</tr>
 	</table>
 </s:if>
 <s:else>
-	<span class="mandatory1">No records found</span>
+	<span class="mandatory1"><s:text name="label.no.records.found"/> </span>
 </s:else>

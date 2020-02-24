@@ -523,7 +523,7 @@ function validate()
 	
    	<s:if test="%{!isBillSourcemisc()}"> 
 	 if(eval(document.getElementById("totalamountdisplay").value)>eval(document.getElementById("totalamounttobepaid").value)){
-		 var r = confirm('Collected amount is more than the amount to be paid. Do you want to collect advance amount?');
+		 var r = confirm('<s:text name="msg.collected.amount.is.more.than.amount.to.be.paid.do.you.want.to.collect.advance.amount"/>');
 		 if(r !=true)
 			 validation = false;
 	 }
@@ -1099,7 +1099,7 @@ function showHideMandataryMark(obj){
 	      <s:actionerror/>
 	      <s:fielderror/>	      
 	    </div>
-	    <input name="button" type="button" class="button" id="buttonclose" value="Close" onclick="window.close();" />
+	    <input name="button" type="button" class="button" id="buttonclose" value="<s:text name='lbl.close'/>" onclick="window.close();" />
 	</div>
 	</s:if>
 	<s:else>
@@ -1233,11 +1233,11 @@ function showHideMandataryMark(obj){
 			 <div id="loadingMask" style="display:none;overflow:hidden;text-align: center"><img src="/services/collection/resources/images/bar_loader.gif"/> <span style="color: red">Please wait....</span></div>
 			<div align="left" class="mandatorycoll"><s:text name="common.mandatoryfields"/></div>
 			<div class="buttonbottom" align="center">
-			      <label><input align="center" type="submit" class="buttonsubmit" id="button2" value="Pay" onclick="return validate();"/></label>
+			      <label><input align="center" type="submit" class="buttonsubmit" id="button2" value="<s:text name='lbl.pay'/>" onclick="return validate();"/></label>
 			      &nbsp;
-			      <input name="button" type="button" class="button" id="button" value="Reset" onclick="checkreset();"/>
+			      <input name="button" type="button" class="button" id="button" value="<s:text name='lbl.reset'/>" onclick="checkreset();"/>
 			      &nbsp;
-			      <input name="button" type="button" class="button" id="buttonclose2" value="Close" onclick="window.close();" />
+			      <input name="button" type="button" class="button" id="buttonclose2" value="<s:text name='lbl.close'/>" onclick="window.close();" />
 				</div>
 
 <!-- <table width="100%" >

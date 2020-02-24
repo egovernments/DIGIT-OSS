@@ -64,18 +64,18 @@
 						</div>
 					</c:if>
 					<div class="panel-heading">
-						<div class="panel-title">Approve Uploaded Budget</div>
+						<div class="panel-title"><spring:message code="title.approvebudget.search" text="Approve Uploaded Budget"/> </div>
 					</div>
 					<div class="panel-body">
 						<div class="form-group">
 							<label class="col-sm-3 control-label text-right"><spring:message
-									code="lbl.budget" /> <span class="mandatory1">*</span></label>
+									code="lbl.budget" text="Budget"/> <span class="mandatory1">*</span></label>
 							<div class="col-sm-3 add-margin">
 								<form:select path="reBudget.id" required="required"
 									id="reBudget" cssClass="form-control"
 									cssErrorClass="form-control error">
 									<form:option value="">
-										<spring:message code="lbl.select" />
+										<spring:message code="lbl.select" text="Select"/>
 									</form:option>
 									<form:options items="${budgets}" itemValue="id"
 										itemLabel="name" />
@@ -83,7 +83,7 @@
 								<form:errors path="reBudget" cssClass="error-msg" />
 							</div>
 							<label class="col-sm-2 control-label text-right"><spring:message
-									code="lbl.referenceBudget" /> </label>
+									code="lbl.referenceBudget" text="Reference Budget"/> </label>
 							<div class="col-sm-3 add-margin">
 								<div id="referenceBudget"></div>
 							</div>
@@ -91,10 +91,10 @@
 						<div class="form-group">
 							<div class="text-center">
 								<button type='submit' class='btn btn-primary' id="btnsearch">
-									<spring:message code='lbl.approve' />
+									<spring:message code='lbl.approve' text="Approve"/>
 								</button>
 								<a href='javascript:void(0)' class='btn btn-default'
-									onclick='self.close()'><spring:message code='lbl.close' /></a>
+									onclick='self.close()'><spring:message code='lbl.close' text="Close"/></a>
 							</div>
 						</div>
 					</div>

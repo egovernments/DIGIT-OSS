@@ -267,7 +267,7 @@
 
 	function searchDataToRemit() {
 		if(jQuery("#finYearId").val()==-1 && jQuery("#fromDate").val()=="" && jQuery("#toDate").val()==""){
-			bootbox.alert("Please enter either financial year or from date and to date");
+			bootbox.alert("<s:text name='msg.please.enter.either.financial.year.or.fromDate.and.toDate'/>");
 			return false;
 		}
 		if (dom.get("accountNumberId").value != null
@@ -434,7 +434,7 @@
 					</table>
 					</div>
 					<div class="buttonbottom">
-						<input name="search" type="submit" class="buttonsubmit" id="search" value="Search" onclick="return searchDataToRemit()" />
+						<input name="search" type="submit" class="buttonsubmit" id="search" value="<s:text name='lbl.search'/>" onclick="return searchDataToRemit()" />
 					</div>
 					<s:if test="%{!receiptBeanList.isEmpty()}">
 						<display:table name="receiptBeanList" uid="currentRow" pagesize="${pageSize}" style="border:1px;width:100%" cellpadding="0" cellspacing="0" export="false" requestURI="">
@@ -500,9 +500,9 @@
 					<s:text name="common.mandatoryfields" />
 				</div>
 				<div class="buttonbottom">
-					<input name="button32" type="submit" class="buttonsubmit" id="button32" value="Remit to Bank" onclick="return validate();" />
+					<input name="button32" type="submit" class="buttonsubmit" id="button32" value="<s:text name='lbl.remit.to.bank'/>" onclick="return validate();" />
 						&nbsp; 
-					<input name="buttonClose" type="button" class="button" id="button" value="Close" onclick="window.close()" />
+					<input name="buttonClose" type="button" class="button" id="button" value="<s:text name='lbl.close'/>" onclick="window.close()" />
 				</div>
 				</s:if>
 				<s:if test="%{isListData}">
@@ -519,7 +519,7 @@
 							<br />
 						</div>
 						<div class="buttonbottom">
-							<input name="buttonClose" type="button" class="button" id="buttonClose" value="Close" onclick="window.close()" />
+							<input name="buttonClose" type="button" class="button" id="buttonClose" value="<s:text name='lbl.close'/>" onclick="window.close()" />
 						</div>
 					</s:if>
 				</s:if>

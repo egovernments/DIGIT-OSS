@@ -91,7 +91,7 @@
 					list="dropdownData.budgetList" listKey="id" listValue="name"
 					name="budget.id" value="model.budget.id" id="budgetDetail_budget"
 					disabled="%{headerDisabled}" headerKey="0"
-					headerValue="--- Select ---"></s:select></td>
+					headerValue="%{getText('lbl.choose.options')}"></s:select></td>
 			<s:if
 				test="%{shouldShowHeaderField('executingDepartment') || shouldShowGridField('executingDepartment')}">
 				<td class="greybox"><s:text
@@ -99,7 +99,7 @@
 				<td width="22%" class="greybox"><s:select
 						list="dropdownData.executingDepartmentList" listKey="code"
 						listValue="name" name="executingDepartment" headerKey="0"
-						headerValue="--- Select ---"
+						headerValue="%{getText('lbl.choose.options')}"
 						onchange="updateGrid('executingDepartment',document.getElementById('budgetDetail_executingDepartment').selectedIndex)"
 						value="model.executingDepartment"
 						id="budgetDetail_executingDepartment"></s:select></td>
@@ -112,7 +112,7 @@
 				<td class="bluebox"><s:text name="budgetdetail.fund" /></td>
 				<td class="bluebox"><s:select list="dropdownData.fundList"
 						listKey="id" listValue="name" name="fund.id" headerKey="0"
-						headerValue="--- Select ---"
+						headerValue="%{getText('lbl.choose.options')}"
 						onchange="updateGrid('fund.id',document.getElementById('budgetDetail_fund').selectedIndex)"
 						value="fund.id" id="budgetDetail_fund"></s:select></td>
 			</s:if>
@@ -121,7 +121,7 @@
 				<td class="bluebox"><s:text name="budgetdetail.function" /></td>
 				<td class="bluebox"><s:select list="dropdownData.functionList"
 						listKey="id" listValue="name" name="function.id" headerKey="0"
-						headerValue="--- Select ---"
+						headerValue="%{getText('lbl.choose.options')}"
 						onchange="updateGrid('function.id',document.getElementById('budgetDetail_function').selectedIndex)"
 						value="function.id" id="budgetDetail_function"></s:select></td>
 			</s:if>
@@ -133,7 +133,7 @@
 				<td class="greybox"><s:text name="budgetdetail.scheme" /></td>
 				<td class="greybox"><s:select list="dropdownData.schemeList"
 						listKey="id" listValue="name" headerKey="0"
-						headerValue="--- Select ---" name="scheme"
+						headerValue="%{getText('lbl.choose.options')}" name="scheme"
 						onchange="updateGrid('scheme.id',document.getElementById('budgetDetail_scheme').selectedIndex);populateSubSchemes(this);"
 						value="scheme.id" id="budgetDetail_scheme"></s:select></td>
 			</s:if>
@@ -146,7 +146,7 @@
 				<td class="greybox"><s:text name="budgetdetail.subScheme" /></td>
 				<td class="greybox"><s:select list="dropdownData.subSchemeList"
 						listKey="id" listValue="name" headerKey="0"
-						headerValue="--- Select ---" name="subScheme"
+						headerValue="%{getText('lbl.choose.options')}" name="subScheme"
 						onchange="updateGrid('subScheme.id',document.getElementById('budgetDetail_subScheme').selectedIndex)"
 						value="subScheme.id" id="budgetDetail_subScheme"></s:select></td>
 			</s:if>
@@ -157,7 +157,7 @@
 				<td class="bluebox"><s:text name="budgetdetail.functionary" /></td>
 				<td class="bluebox"><s:select
 						list="dropdownData.functionaryList" listKey="id" listValue="name"
-						headerKey="0" headerValue="--- Select ---" name="functionary"
+						headerKey="0" headerValue="%{getText('lbl.choose.options')}" name="functionary"
 						onchange="updateGrid('functionary.id',document.getElementById('budgetDetail_functionary').selectedIndex)"
 						value="functionary.id" id="budgetDetail_functionary"></s:select></td>
 			</s:if>
@@ -166,7 +166,7 @@
 				<td class="bluebox"><s:text name="budgetdetail.field" /></td>
 				<td class="bluebox"><s:select list="dropdownData.boundaryList"
 						listKey="id" listValue="name" headerKey="0"
-						headerValue="--- Select ---" name="boundary"
+						headerValue="%{getText('lbl.choose.options')}" name="boundary"
 						onchange="updateGrid('boundary.id',document.getElementById('budgetDetail_boundary').selectedIndex)"
 						value="boundary.id" id="budgetDetail_boundary"></s:select></td>
 			</s:if>

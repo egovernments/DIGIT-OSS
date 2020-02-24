@@ -155,7 +155,7 @@
 				if(checkUser){
 					document.getElementById("actionName").value = 'forward';
 					if(null != document.getElementById("approverUserId") && document.getElementById("approverUserId").value == -1){
-						bootbox.alert("Please Select the user");
+						bootbox.alert("<s:text name='msg.please.select.the.user'/>");
 						return false;
 					}
 				}
@@ -169,27 +169,27 @@
 
 			var validateMandatoryForGetActual =  () => {
 				if(document.getElementById('financialYear').value==0){
-					bootbox.alert('Please select a Financial year');
+					bootbox.alert("<s:text name='msg.please.select.financial.year'/>");
 					return false;
 				}
 				if(document.getElementById('budgetReAppropriation_executingDepartment').value==0){
-					bootbox.alert('Please select a Executing Department');
+					bootbox.alert('<s:text name="msg.please.select.executing.department"/>');
 					return false;
 				}		
 				for(i=0;i<budgetDetailsTable.getRecordSet().getLength();i++){
 					if(document.getElementById('budgetReAppropriationList['+i+'].budgetDetail.budgetGroup.id').value === '0'){
-						bootbox.alert('Please select a Budget Group');
+						bootbox.alert('<s:text name="msg.please.budget.group"/>');
 						return false;
 						}
 					<s:if test="%{shouldShowField('function')}">				
 					if(document.getElementById('budgetReAppropriationList['+i+'].budgetDetail.function.id').value === '0'){
-						bootbox.alert('Please select a Function');
+						bootbox.alert('<s:text name="msg.please.select.function"/>');
 						return false;	
 						}
 					</s:if>
 					<s:if test="%{shouldShowField('fund')}">				
 					if(document.getElementById('budgetReAppropriationList['+i+'].budgetDetail.fund.id').value === '0'){
-						bootbox.alert('Please select a Fund');
+						bootbox.alert('<s:text name="msg.please.select.fund"/>');
 						return false;
 						}
 					</s:if>
@@ -200,23 +200,23 @@
 
 			function alertMessage(estimate,anticipatory){
 				if(estimate && anticipatory){
-					bootbox.alert('Estimate amount and Anticipatory amount must be a number');
+					bootbox.alert('<s:text name="msg.estimate.and.anticipatory.amount.must.be.number"/>');
 					return false;
 				}else if(estimate){
-					bootbox.alert('Estimate amount must be a number');
+					bootbox.alert('<s:text name="msg.estimate.amount.must.be.number"/>');
 					return false;
 				}else if(anticipatory){
-					bootbox.alert('Anticipatory amount must be a number');
+					bootbox.alert('<s:text name="msg.anticipatory.amount.must.be.number"/>');
 					return false;
 				}
 			}
 			function validateMandatoryFields(){
 				if(document.getElementById('financialYear').value==0){
-					bootbox.alert('Please select a Financial year');
+					bootbox.alert('<s:text name="msg.please.select.financial.year"/>');
 					return false;
 				}
 				if(document.getElementById('budgetReAppropriation_executingDepartment').value==0){
-					bootbox.alert('Please select a Executing Department');
+					bootbox.alert('<s:text name="msg.please.select.executing.department"/>');
 					return false;
 				}
 				return true;
@@ -273,7 +273,7 @@
 		<div class="formmainbox">
 			<div class="tabber">
 				<div class="tabbertab">
-					<h2>Additional Appropriation</h2>
+					<h2><s:text name="lbl.additional.appropriation"/> </h2>
 					<span>
 						<table width="60%" border="0" cellspacing="0" cellpadding="0">
 							<tr>
@@ -293,7 +293,7 @@
 										list="dropdownData.financialYearList" listKey="id"
 										listValue="finYearRange" name="financialYear.id"
 										value="financialYear.id" id="financialYear" headerKey="0"
-										headerValue="--- Select ---" onchange="getBeRe();"></s:select></td>
+										headerValue="%{getText('lbl.choose.options')}" onchange="getBeRe();"></s:select></td>
 								<td class="bluebox" width="19%"><s:text name="budget.bere" /></td>
 								<td class="bluebox"><s:select name="isBeRe" id="isBeRe"
 										list="#{'BE':'BE','RE':'RE'}" value="beRe" disabled="true" /></td>
@@ -309,7 +309,7 @@
 									<td width="22%" class="greybox"><s:select
 											list="dropdownData.executingDepartmentList" listKey="code"
 											listValue="name" name="budgetDetail.executingDepartment"
-											headerKey="0" headerValue="--- Select ---"
+											headerKey="0" headerValue="%{getText('lbl.choose.options')}"
 											onchange="updateGrid('budgetDetail.executingDepartment.id',document.getElementById('budgetReAppropriation_executingDepartment').selectedIndex);updateReAppGrid('budgetDetail.executingDepartment.id',document.getElementById('budgetReAppropriation_executingDepartment').selectedIndex);"
 											value="budgetDetail.executingDepartment"
 											id="budgetReAppropriation_executingDepartment"></s:select></td>
@@ -321,7 +321,7 @@
 										</s:if></td>
 									<td class="greybox"><s:select list="dropdownData.fundList"
 											listKey="id" listValue="name" name="budgetDetail.fund.id"
-											headerKey="0" headerValue="--- Select ---"
+											headerKey="0" headerValue="%{getText('lbl.choose.options')}"
 											onchange="updateGrid('budgetDetail.fund.id',document.getElementById('budgetReAppropriation_fund').selectedIndex);updateReAppGrid('budgetDetail.fund.id',document.getElementById('budgetReAppropriation_fund').selectedIndex)"
 											value="fund.id" id="budgetReAppropriation_fund"></s:select></td>
 								</s:if>
@@ -336,7 +336,7 @@
 									<td class="bluebox"><s:select
 											list="dropdownData.functionList" listKey="id"
 											listValue="name" name="budgetDetail.function.id"
-											headerKey="0" headerValue="--- Select ---"
+											headerKey="0" headerValue="%{getText('lbl.choose.options')}"
 											onchange="updateGrid('budgetDetail.function.id',document.getElementById('budgetReAppropriation_function').selectedIndex);updateReAppGrid('budgetDetail.function.id',document.getElementById('budgetReAppropriation_function').selectedIndex)"
 											value="function.id" id="budgetReAppropriation_function"></s:select></td>
 								</s:if>
@@ -347,7 +347,7 @@
 										</s:if></td>
 									<td class="bluebox"><s:select
 											list="dropdownData.functionaryList" listKey="id"
-											listValue="name" headerKey="0" headerValue="--- Select ---"
+											listValue="name" headerKey="0" headerValue="%{getText('lbl.choose.options')}"
 											name="budgetDetail.functionary.id"
 											onchange="updateGrid('budgetDetail.functionary.id',document.getElementById('budgetReAppropriation_functionary').selectedIndex);updateReAppGrid('budgetDetail.functionary.id',document.getElementById('budgetReAppropriation_functionary').selectedIndex)"
 											value="functionary.id" id="budgetReAppropriation_functionary"></s:select></td>
@@ -362,7 +362,7 @@
 										</s:if></td>
 									<td class="greybox"><s:select
 											list="dropdownData.schemeList" listKey="id" listValue="name"
-											headerKey="0" headerValue="--- Select ---"
+											headerKey="0" headerValue="%{getText('lbl.choose.options')}"
 											name="budgetDetail.scheme.id"
 											onchange="updateGrid('budgetDetail.scheme.id',document.getElementById('budgetReAppropriation_scheme').selectedIndex);populateSubSchemes(this);"
 											value="scheme.id" id="budgetReAppropriation_scheme"></s:select></td>
@@ -378,7 +378,7 @@
 										</s:if></td>
 									<td class="greybox"><s:select
 											list="dropdownData.subSchemeList" listKey="id"
-											listValue="name" headerKey="0" headerValue="--- Select ---"
+											listValue="name" headerKey="0" headerValue="%{getText('lbl.choose.options')}"
 											name="budgetDetail.subScheme"
 											onchange="updateGrid('budgetDetail.subScheme.id',document.getElementById('budgetReAppropriation_subScheme').selectedIndex);updateReAppGrid('budgetDetail.subScheme.id',document.getElementById('budgetReAppropriation_subScheme').selectedIndex)"
 											value="subScheme.id" id="budgetReAppropriation_subScheme"></s:select></td>
@@ -394,7 +394,7 @@
 										</s:if></td>
 									<td class="bluebox"><s:select
 											list="dropdownData.boundaryList" listKey="id"
-											listValue="name" headerKey="0" headerValue="--- Select ---"
+											listValue="name" headerKey="0" headerValue="%{getText('lbl.choose.options')}"
 											name="budgetDetail.boundary.id"
 											onchange="updateGrid('budgetDetail.boundary.id',document.getElementById('budgetReAppropriation_boundary').selectedIndex)"
 											value="boundary.id" id="budgetReAppropriation_boundary"></s:select></td>
@@ -429,7 +429,7 @@
 							<tr>
 								<td>
 									<div align="center">
-										<s:submit method="loadActuals" value="Get Actuals"
+										<s:submit method="loadActuals" key="lbl.get.actuals"
 											cssClass="buttonsubmit" onclick="loadActuals(event)" />
 									</div>
 								</td>
@@ -498,7 +498,7 @@
 						<tr>
 							<td>
 								<div class="buttonbottom" style="padding-bottom: 10px;">
-									<input type="submit" value="Save"
+									<input type="submit" value="<s:text name='lbl.close'/>"
 										id="budgetReAppropriation__create" name="method:create"
 										onClick="javascript: return validate(false,'create');"
 										class="buttonsubmit" />
@@ -507,7 +507,7 @@
 													name="method:createAndForward"
 													onClick="javascript: return validate(true,'createAndForward');"
 													class="buttonsubmit" /> -->
-									<s:submit value="Close" onclick="javascript: self.close()"
+									<s:submit onclick="javascript: self.close()" key="lbl.close"
 										cssClass="button" />
 								</div>
 							</td>

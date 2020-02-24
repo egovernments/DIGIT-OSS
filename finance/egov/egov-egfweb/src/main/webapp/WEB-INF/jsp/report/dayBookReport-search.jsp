@@ -170,7 +170,7 @@
 							class="mandatory"></span></td>
 						<td class="greybox"><s:select name="fundId" id="fundId"
 								list="dropdownData.fundList" listKey="id" listValue="name"
-								headerKey="" headerValue="----Choose----" /></td>
+								headerKey="" headerValue="%{getText('lbl.choose.options')}" /></td>
 						<td class="greybox"></td>
 						<td class="greybox"></td>
 					</tr>
@@ -182,10 +182,10 @@
 				<div class="buttonbottom">
 					<table align="center">
 						<tr>
-							<td><input type="button" value="Search" class="buttonsubmit"
+							<td><input type="button" value="<s:text name='lbl.search'/>" class="buttonsubmit"
 								onclick="return validate()" /></td>
 							<td>&nbsp;&nbsp;<input type="button" id="Close"
-								value="Close" onclick="javascript:window.parent.postMessage('close','*');" class="button" /></td>
+								value="<s:text name='lbl.close'/>" onclick="javascript:window.parent.postMessage('close','*');" class="button" /></td>
 						</tr>
 					</table>
 				</div>

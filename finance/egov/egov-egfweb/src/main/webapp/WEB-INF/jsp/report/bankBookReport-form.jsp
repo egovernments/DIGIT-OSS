@@ -156,18 +156,18 @@ function validateDataa(){
 	var bankAccount = document.getElementById('accountNumber').value;
 	var bank = document.getElementById('bank').value;
 	if(bank == -1){
-		bootbox.alert("Please select a Bank")
+		bootbox.alert("<s:text name='msg.please.select.bank'/>")
 		return false;
 	}
 	if(bankAccount == -1){
-		bootbox.alert("Please select a Bank Account")
+		bootbox.alert("<s:text name='msg.please.selet.bank.account'/>")
 		return false;
 	}
 	
 	var startDate = document.getElementById('startDate').value;
 	if(startDate=='')
 		{ 
-		bootbox.alert("Please enter start date")
+		bootbox.alert("<s:text name='msg.please.enter.start.date'/>")
 		return false;
 		}
 	
@@ -175,7 +175,7 @@ function validateDataa(){
 	
 	if(endDate=='')
 		{ 
-		bootbox.alert("Please enter end date")
+		bootbox.alert("<s:text name='msg.please.enter.end.date'/>")
 		return false;
 		}
 
@@ -187,7 +187,7 @@ function validateDataa(){
 
 	if(startDate > endDate)
 	{ 
-		bootbox.alert("Start date should be less than end date.")
+		bootbox.alert("<s:text name='msg.start.date.cant.be.greater.than.end.date'/>")
 		return false;
 		}
 	return true;
@@ -198,7 +198,7 @@ function validateFund(){
 	var fund = document.getElementById('fundId').value;
 	var bank = document.getElementById('bank');
 	if(fund == -1 && bank.options.length==1){
-		bootbox.alert("Please select a Fund")
+		bootbox.alert("<s:text name='msg.please.select.fund'/>")
 		return false;
 	}
 	return true;
@@ -207,7 +207,7 @@ function validateFund(){
 function validateBank(){
 	var bank = document.getElementById('bank').value;
 	if(bank == -1){
-		bootbox.alert("Please select a Bank")
+		bootbox.alert("<s:text name='msg.please.select.bank'/>")
 		return false;
 	}
 	return true;
@@ -229,7 +229,7 @@ function showChequeDetails(voucherId){
  
 	<div class="formmainbox">
 		<div class="formheading"></div>
-		<div class="subheadnew">Bank Book Report</div>
+		<div class="subheadnew"><s:text name="lbl.bank.book.report"/> </div>
 
 
 		<s:form action="bankBookReport" theme="simple" name="bankBookReport">
@@ -244,26 +244,26 @@ function showChequeDetails(voucherId){
 						dropdownId="bank" url="voucher/common-ajaxLoadAllBanks.action" />
 
                     <td style="width: 5%"></td>
-					<td class="bluebox" width="10%">Bank Name:<span
+					<td class="bluebox" width="10%"><s:text name="lbl.bank.name"/>:<span
 						class="bluebox"><span class="mandatory1">*</span></span></td>
 					<td class="bluebox"><s:select name="bank" id="bank"
 							list="dropdownData.bankList" listKey="bankBranchId"
 							listValue="bankBranchName" headerKey="-1"
-							headerValue="----Choose----" onclick="validateFund()"
+							headerValue="%{getText('lbl.choose.options')}" onclick="validateFund()"
 							onChange="populateAccNumbers(this);" /></td>
 					<egov:ajaxdropdown id="accountNumber" fields="['Text','Value']"
 						dropdownId="accountNumber"
 						url="voucher/common-ajaxLoadAccountNumbers.action" />
-					<td class="bluebox" width="10%">Account Number:<span
+					<td class="bluebox" width="10%"><s:text name="lbl.account.number"/>:<span
 						class="bluebox"><span class="mandatory1">*</span></span></td>
 					<td class="bluebox"><s:select name="bankAccount"
 							id="accountNumber" list="dropdownData.accNumList" listKey="id"
 							listValue="accountnumber" headerKey="-1"
-							headerValue="----Choose----" onclick="validateBank()" /></td>
+							headerValue="%{getText('lbl.choose.options')}" onclick="validateBank()" /></td>
 				</tr>
 				<tr>
 					<td style="width: 5%"></td>
-					<td class="greybox" width="10%">Start Date:<span
+					<td class="greybox" width="10%"><s:text name="lbl.start.date"/>:<span
 						class="mandatory1">*</span></td>
 					<s:date name="startDate" format="dd/MM/yyyy" var="tempFromDate" />
 					<td class="greybox"><s:textfield id="startDate"
@@ -271,7 +271,7 @@ function showChequeDetails(voucherId){
 							onkeyup="DateFormat(this,this.value,event,false,'3')"
 							placeholder="DD/MM/YYYY" cssClass="form-control datepicker"
 							data-inputmask="'mask': 'd/m/y'" /></td>
-					<td class="greybox" width="10%">End Date:<span
+					<td class="greybox" width="10%"><s:text name="lbl.end.date"/>:<span
 						class="mandatory1">*</span></td>
 					<td class="greybox"><s:textfield id="endDate" name="endDate"
 							value="%{endDate}"
@@ -283,11 +283,11 @@ function showChequeDetails(voucherId){
 			<br />
 			<br />
 			<div class="buttonbottom">
-				<input type="button" value="Search" class="buttonsubmit"
+				<input type="button" value="<s:text name='lbl.search'/>" class="buttonsubmit"
 					onclick="return getData()" /> &nbsp;
 				<s:reset name="button" type="submit" cssClass="button" id="button"
-					value="Reset" />
-				<input type="button" value="Close"
+					key="lbl.reset"/>
+				<input type="button" value="<s:text name='lbl.close'/>"
 					onclick="javascript:window.parent.postMessage('close','*');" class="button" />
 			</div>
 	</div>

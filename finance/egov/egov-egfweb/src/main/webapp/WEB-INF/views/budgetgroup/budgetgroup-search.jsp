@@ -57,12 +57,12 @@
 			<div class="col-md-12">
 				<div class="panel panel-primary" data-collapsed="0">
 					<div class="panel-heading">
-						<div class="panel-title">Search Budget Group</div>
+						<div class="panel-title"><spring:message code="title.budgetgroup.search" text="Search Budget Group"/> </div>
 					</div>
 					<div class="panel-body">
 						<div class="form-group">
 							<label class="col-sm-4 control-label text-right"><spring:message
-									code="lbl.name" /> </label>
+									code="lbl.name" text="Name"/> </label>
 							<div class="col-sm-4 add-margin">
 								<form:input path="name"
 									class="form-control text-left patternvalidation"
@@ -74,10 +74,10 @@
 					<div class="form-group">
 						<div class="text-center">
 							<button type='button' class='btn btn-primary' id="btnsearch">
-								<spring:message code='lbl.search' />
+								<spring:message code='lbl.search' text="Search"/>
 							</button>
 							<a href='javascript:void(0)' class='btn btn-default'
-								onclick="window.parent.postMessage('close','*');window.close();"><spring:message code='lbl.close' /></a>
+								onclick="window.parent.postMessage('close','*');window.close();"><spring:message code='lbl.close' text="Close"/></a>
 						</div>
 					</div>
 				</div>
@@ -86,20 +86,19 @@
 		</div>
 </form:form>
 <div class="row display-hide report-section">
-	<div class="col-md-12 table-header text-left">BudgetGroup Search
-		Result</div>
+	<div class="col-md-12 table-header text-left"><spring:message code="lbl.budget.group.search.result" text="BudgetGroup Search Result"/> </div>
 	<div class="col-md-12 form-group report-table-container">
 		<table class="table table-bordered table-hover multiheadertbl"
 			id="resultTable">
 			<thead>
 				<tr>
-					<th><spring:message code="lbl.name" /></th>
-					<th><spring:message code="lbl.majorcode" /></th>
-					<th><spring:message code="lbl.maxcode" /></th>
-					<th><spring:message code="lbl.mincode" /></th>
-					<th><spring:message code="lbl.accounttype" /></th>
-					<th><spring:message code="lbl.budgetingtype" /></th>
-					<th><spring:message code="lbl.isactive" /></th>
+					<th><spring:message code="lbl.name" text="Name"/></th>
+					<th><spring:message code="lbl.majorcode" text="Major Code"/></th>
+					<th><spring:message code="lbl.maxcode" text="Detailed Max Code"/></th>
+					<th><spring:message code="lbl.mincode" text="Detailed Min Code"/></th>
+					<th><spring:message code="lbl.accounttype" text="Account Type"/></th>
+					<th><spring:message code="lbl.budgetingtype" text="Budgeting Type"/></th>
+					<th><spring:message code="lbl.isactive" text="Active"/></th>
 				</tr>
 			</thead>
 		</table>

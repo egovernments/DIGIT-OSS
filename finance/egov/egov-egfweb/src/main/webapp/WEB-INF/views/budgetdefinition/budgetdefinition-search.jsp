@@ -57,17 +57,17 @@
 			<div class="col-md-12">
 				<div class="panel panel-primary" data-collapsed="0">
 					<div class="panel-heading">
-						<div class="panel-title">Search Budget Definition</div>
+						<div class="panel-title"><spring:message code="title.budget.search" text="Search Budget Definition"/> </div>
 					</div>
 					<div class="panel-body">
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right"><spring:message
-									code="lbl.financialyear" /> </label>
+									code="lbl.financialyear" text="Financial Year"/> </label>
 							<div class="col-sm-3 add-margin">
 								<form:select path="financialYear" id="financialYear"
 									cssClass="form-control" cssErrorClass="form-control error">
 									<form:option value="">
-										<spring:message code="lbl.select" />
+										<spring:message code="lbl.select" text="Select"/>
 									</form:option>
 									<c:forEach items="${financialYearList}" var="mc">
 										<option value="${mc.id}">${mc.finYearRange}</option>
@@ -76,12 +76,12 @@
 								<form:errors path="financialYear" cssClass="error-msg" />
 								</div>
 								<label class="col-sm-2 control-label text-right"><spring:message
-									code="lbl.isbere" /> </label>
+									code="lbl.isbere" text="Budget/Revised Estimate"/> </label>
 						<div class="col-sm-3 add-margin">
 							<form:select path="searchBere" id="searchBere" cssClass="form-control"
 								cssErrorClass="form-control error">
 								<form:option value="">
-									<spring:message code="lbl.select" />
+									<spring:message code="lbl.select" text="Select"/>
 								</form:option>
 								<form:options items="${isBereList}" />
 							</form:select>
@@ -94,10 +94,10 @@
 								<div class="col-sm-11 add-margin">
 									<div class="text-center">
 										<button type='button' class='btn btn-primary' id="btnsearch">
-											<spring:message code='lbl.search' />
+											<spring:message code='lbl.search' text="Search"/>
 										</button>
 										<a href='javascript:void(0)' class='btn btn-default'
-											onclick="window.parent.postMessage('close','*');window.close();"><spring:message code='lbl.close' /></a>
+											onclick="window.parent.postMessage('close','*');window.close();"><spring:message code='lbl.close' text="Close"/></a>
 									</div>
 								</div>
 							</div>
@@ -109,20 +109,19 @@
 	</div>
 </form:form>
 <div class="row display-hide report-section">
-	<div class="col-md-12 table-header text-left">Budget Definition
-		Search Result</div>
+	<div class="col-md-12 table-header text-left"><spring:message code="lbl.budget.definition.search.result" text="Budget Definition Search Result"/> </div>
 	<div class="col-md-12 form-group report-table-container">
 		<table class="table table-bordered table-hover multiheadertbl"
 			id="resultTable">
 			<thead>
 				<tr>
-					<th><spring:message code="lbl.name" /></th>
-					<th><spring:message code="lbl.isbere" /></th>
-					<th><spring:message code="lbl.financialyear" /></th>
-					<th><spring:message code="lbl.parent" /></th>
-					<th><spring:message code="lbl.referencebudget" /></th>
-					<th><spring:message code="lbl.isactivebudget" /></th>
-					<th><spring:message code="lbl.isprimarybudget" /></th>
+					<th><spring:message code="lbl.name" text="Name"/></th>
+					<th><spring:message code="lbl.isbere" text="Budget/Revised Estimate"/></th>
+					<th><spring:message code="lbl.financialyear" text="Financial Year"/></th>
+					<th><spring:message code="lbl.parent" text="Parent"/></th>
+					<th><spring:message code="lbl.referencebudget" text="Reference Budget"/></th>
+					<th><spring:message code="lbl.isactivebudget" text="Active Budget"/></th>
+					<th><spring:message code="lbl.isprimarybudget" text="Primary Budget"/></th>
 				</tr>
 			</thead>
 		</table>

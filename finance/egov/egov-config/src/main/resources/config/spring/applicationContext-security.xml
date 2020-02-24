@@ -48,11 +48,13 @@
   ~
   -->
 <beans xmlns:security="http://www.springframework.org/schema/security"
+	   xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.springframework.org/schema/beans"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
 	   http://www.springframework.org/schema/beans/spring-beans.xsd
 	   http://www.springframework.org/schema/security
-	   http://www.springframework.org/schema/security/spring-security.xsd" default-lazy-init="true">
+	   http://www.springframework.org/schema/security/spring-security.xsd
+	   http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd" default-lazy-init="true">
 
     <security:global-method-security secured-annotations="enabled"
                                      access-decision-manager-ref="accessDecisionManager"/>
@@ -248,4 +250,21 @@
             </list>
         </property>
     </bean>
+    
+    <bean id="localeResolver"
+		class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
+		<property name="defaultLocale" value="en" />
+	</bean>
+	
+    
+	<mvc:interceptors>
+		<mvc:interceptor>
+		<mvc:mapping path="/**"/>
+		<mvc:exclude-mapping path="/resources/**"/>
+		<bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+			<property name="paramName" value="locale" />
+		</bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
+	
 </beans>

@@ -50,7 +50,7 @@
 <script>
 	function validateFinYear(method) {
 		if (document.getElementById('financialYear').value == 0) {
-			bootbox.alert('Please select a financial year');
+			bootbox.alert('<s:text name="msg.please.select.financial.year"/>');
 			return false;
 		}
 		document.budgetDetailReportForm.action = "/services/EGF/budget/budgetReport-"
@@ -67,11 +67,11 @@
 		<td class="greybox"><s:select name="financialYear"
 				id="financialYear" list="dropdownData.financialYearList"
 				listKey="id" listValue="finYearRange" headerKey="0"
-				headerValue="----Select----" value="%{model.financialYear.id}" /></td>
+				headerValue="%{getText('lbl.choose.options')}" value="%{model.financialYear.id}" /></td>
 		<td class="greybox"><s:text name="report.department" /></td>
 		<td class="greybox"><s:select name="department" id="department"
 				list="dropdownData.departmentList" listKey="code" listValue="name"
-				headerKey="0" headerValue="----Select----"
+				headerKey="0" headerValue="%{getText('lbl.choose.options')}"
 				value="%{model.department.code}" /></td>
 	</tr>
 	<tr>
@@ -84,7 +84,7 @@
 				name="report.function" /></td>
 		<td class="bluebox"><s:select name="function" id="function"
 				list="dropdownData.functionList" listKey="id" listValue="name"
-				headerKey="-1" headerValue="----Select----" value="%{function.id}" />
+				headerKey="-1" headerValue="%{getText('lbl.choose.options')}" value="%{function.id}" />
 		</td>
 	</tr>
 </table>

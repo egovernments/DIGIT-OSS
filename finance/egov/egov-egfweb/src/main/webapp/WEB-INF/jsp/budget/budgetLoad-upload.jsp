@@ -60,7 +60,7 @@
 		document.getElementById("Errors").innerHTML = "";
 
 		if (document.getElementById("budgetInXls").value == "") {
-			bootbox.alert("Select File to upload");
+			bootbox.alert("<s:text name='msg.select.file.to.upload'/>");
 			return false;
 		}
 		document.budgetLoad.action = '/services/EGF/budget/budgetLoad-upload.action';
@@ -82,7 +82,7 @@
 			if (jQuery.inArray(ext, fileformats) > -1) {
 				//do something    
 			} else {
-				bootbox.alert(ext + " file format is not allowed");
+				bootbox.alert(ext + "<s:text name='msg.file.format.not.allowed'/>");
 				jQuery(this).val("");
 				return;
 			}
@@ -119,11 +119,9 @@
 					<tr width="50%">
 						<th width="50%"></th>
 						<th width="25%" class="bluebgheadtd"
-							style="width: 4%; text-align: center" align="center">Original
-							Files</th>
+							style="width: 4%; text-align: center" align="center"><s:text name="lbl.original.files"/> </th>
 						<th width="25%" class="bluebgheadtd"
-							style="width: 4%; text-align: center" align="center">Output
-							Files</th>
+							style="width: 4%; text-align: center" align="center"><s:text name="lbl.output.files"/></th>
 					</tr>
 					<tr>
 						<td width="50%">
@@ -171,19 +169,18 @@
 					<tr>
 
 						<td class="greybox" colspan="2"><a
-							href="/services/EGF/resources/app/formats/Budget_Data_Template.xls">Download
-								Template</a></td>
+							href="/services/EGF/resources/app/formats/Budget_Data_Template.xls"><s:text name="lbl.download.template"/> </a></td>
 					</tr>
 				</table>
-				<div  class="text-left error-msg" style="color: #C00000">&nbsp;* Only .xls files are supported.</span></div>
+				<div  class="text-left error-msg" style="color: #C00000">&nbsp;* <s:text name="msg.only.xls.files.supprted"/>.</span></div>
 				<div class="buttonbottom" id="buttondiv">
 					<table>
 						<tr>
 
 							<td><s:submit type="submit" cssClass="buttonsubmit"
-									value="Upload Budget" name="upload" method="upload"
+									key="lbl.upload.budget" name="upload" method="upload"
 									onclick="return validate();" /></td>
-							<td><input type="button" value="Close"
+							<td><input type="button" value="<s:text name='lbl.close'/>"
 								onclick="javascript:window.close()" class="buttonsubmit" /></td>
 						</tr>
 					</table>

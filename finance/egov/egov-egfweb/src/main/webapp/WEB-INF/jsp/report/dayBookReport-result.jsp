@@ -127,4 +127,4 @@
 	</display:table>
 
 </s:if>
-<s:else> No records found </s:else>
+<s:else> <s:text name="label.no.records.found"/> </s:else>

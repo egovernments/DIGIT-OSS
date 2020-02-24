@@ -54,50 +54,50 @@
 		<div class="col-md-12">
 			<div class="panel panel-primary" data-collapsed="0">
 				<div class="panel-heading">
-					<div class="panel-title">Budget Group</div>
+					<div class="panel-title"><spring:message code="lbl.budget.group" text="Budget Group"/></div>
 				</div>
 				<div class="panel-body custom">
 					<div class="row add-border">
 						<div class="col-xs-3 add-margin">
-							<spring:message code="lbl.name" />
+							<spring:message code="lbl.name" text="Name"/>
 						</div>
 						<div class="col-sm-3 add-margin view-content">${budgetGroup.name}</div>
 						<div class="col-xs-3 add-margin">
-							<spring:message code="lbl.description" />
+							<spring:message code="lbl.description" text="Description"/>
 						</div>
 						<div class="col-sm-3 add-margin view-content">${budgetGroup.description}</div>
 					</div>
 					<div class="row add-border">
 						<div class="col-xs-3 add-margin">
-							<spring:message code="lbl.majorcode" />
+							<spring:message code="lbl.majorcode" text="Major Code"/>
 						</div>
 						<div class="col-sm-3 add-margin view-content">
 							${budgetGroup.majorCode.name}</div>
 						<div class="col-xs-3 add-margin ">
-							<spring:message code="lbl.maxcode" />
+							<spring:message code="lbl.maxcode" text="Detailed Max Code"/>
 						</div>
 						<div class="col-sm-3 add-margin view-content">
 							${budgetGroup.maxCode.name}</div>
 					</div>
 					<div class="row add-border">
 						<div class="col-xs-3 add-margin ">
-							<spring:message code="lbl.mincode" />
+							<spring:message code="lbl.mincode" text="Detailed Min Code"/>
 						</div>
 						<div class="col-sm-3 add-margin view-content">
 							${budgetGroup.minCode.name}</div>
 						<div class="col-xs-3 add-margin">
-							<spring:message code="lbl.accounttype" />
+							<spring:message code="lbl.accounttype" text="Account Type"/>
 						</div>
 						<div class="col-sm-3 add-margin view-content">${budgetGroup.accountType}</div>
 					</div>
 					<div class="row add-border">
 						<div class="col-xs-3 add-margin">
-							<spring:message code="lbl.budgetingtype" />
+							<spring:message code="lbl.budgetingtype" text="Budgeting Type"/>
 						</div>
 						<div class="col-sm-3 add-margin view-content">
 							${budgetGroup.budgetingType}</div>
 						<div class="col-xs-3 add-margin">
-							<spring:message code="lbl.isactive" />
+							<spring:message code="lbl.isactive" text="Active"/>
 						</div>
 						<div class="col-sm-3 add-margin view-content">${budgetGroup.isActive}</div>
 					</div>
@@ -108,7 +108,7 @@
 	<div class="row text-center">
 		<div class="add-margin">
 			<a href="javascript:void(0)" class="btn btn-default"
-				onclick="window.parent.postMessage('close','*');window.close();">Close</a>
+				onclick="window.parent.postMessage('close','*');window.close();"><spring:message code='lbl.close' text="Close"/></a>
 		</div>
 	</div>
 </div>

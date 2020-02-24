@@ -84,7 +84,7 @@ function refreshInbox() {
 	refreshInbox();
 	</script>
 	<div class="buttonbottom">
-	<input name="buttonClose" type="button" class="button"	id="buttonClose" value="Close" onclick="window.parent.postMessage('close','*');window.close()" />
+	<input name="buttonClose" type="button" class="button"	id="buttonClose" value="<s:text name='lbl.close'/>" onclick="window.parent.postMessage('close','*');window.close()" />
 	</div>
 </s:form>
 </body>

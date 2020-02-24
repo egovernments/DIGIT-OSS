@@ -70,11 +70,11 @@ function getData(){
 	var department = document.getElementById('executingDepartment').value;
 	
 	if(department ==-1){
-		bootbox.alert("Please select department")
+		bootbox.alert("<s:text name='msg.please.select.department'/>")
 		return false;
 	}
 	if(asOnDate ==''){
-		bootbox.alert("Please enter a valid date")
+		bootbox.alert("<s:text name='msg.please.enter.valid.date'/>")
 		return false;
 	}
 	document.budgetVarianceReport.action='/services/EGF/report/budgetVarianceReport-loadData.action?asOnDate='+asOnDate;
@@ -109,7 +109,7 @@ function exportPdf(){
 function validateData(){
 	var asOnDate =  Date.parse(document.getElementById('asOnDate').value);
 	if(asOnDate == ''){
-		bootbox.alert("Please enter a valid date")
+		bootbox.alert("<s:text name='msg.please.enter.valid.date'/>")
 		return false;
 	}
 	<s:if test="%{isFieldMandatory('executingDepartment')}">
@@ -164,7 +164,7 @@ function resetSubmit()
 <body>
 	<div class="formmainbox">
 		<div class="formheading"></div>
-		<div class="subheadnew">Budget Variance Report</div>
+		<div class="subheadnew"><s:text name="lbl.budget.variance.report"/> </div>
 		<h5 style="color: red">
 			<s:actionerror />
 		</h5>
@@ -173,37 +173,37 @@ function resetSubmit()
 			<table width="100%" cellpadding="0" cellspacing="0" border="0">
 				<tr>
 					<s:if test="%{isFieldMandatory('executingDepartment')}">
-						<td class="bluebox" width="10%">Department:<span
+						<td class="bluebox" width="10%"><s:text name="report.department"/> :<span
 							class="mandatory1">*</span></td>
 						<td class="bluebox"><s:select name="executingDepartment"
 								id="executingDepartment" list="dropdownData.departmentList"
 								listKey="code" listValue="name" headerKey="-1"
 								value="%{budgetDetail.executingDepartment}"
-								headerValue="----Choose----" /></td>
+								headerValue="%{getText('lbl.choose.options')}" /></td>
 					</s:if>
 					<s:if test="%{isFieldMandatory('function')}">
-						<td class="bluebox" width="10%">Function:</td>
+						<td class="bluebox" width="10%"><s:text name="report.function"/> :</td>
 						<td class="bluebox"><s:select name="function" id="function"
 								value="%{budgetDetail.function.id}"
 								list="dropdownData.functionList" listKey="id" listValue="name"
-								headerKey="-1" headerValue="----Choose----" /></td>
+								headerKey="-1" headerValue="%{getText('lbl.choose.options')}" /></td>
 					</s:if>
 				</tr>
 				<tr>
 					<s:if test="%{isFieldMandatory('fund')}">
-						<td class="greybox" width="10%">Fund:</td>
+						<td class="greybox" width="10%"><s:text name="report.fund"/>:</td>
 						<td class="greybox"><s:select name="fund" id="fund"
 								value="%{budgetDetail.fund.id}" list="dropdownData.fundList"
 								listKey="id" listValue="name" headerKey="-1"
-								headerValue="----Choose----" /></td>
+								headerValue="%{getText('lbl.choose.options')}" /></td>
 					</s:if>
 					<s:if test="%{isFieldMandatory('functionary')}">
-						<td class="greybox" width="10%">Functionary:<span
+						<td class="greybox" width="10%"><s:text name="report.functionary"/>:<span
 							class="mandatory1">*</span></td>
 						<td class="greybox"><s:select name="functionary"
 								id="functionary" list="dropdownData.functionaryList"
 								listKey="id" listValue="name" headerKey="-1"
-								headerValue="----Choose----" /></td>
+								headerValue="%{getText('lbl.choose.options')}" /></td>
 					</s:if>
 					<s:else>
 						<td class="greybox">&nbsp;</td>
@@ -217,7 +217,7 @@ function resetSubmit()
 							class="mandatory1">*</span></td>
 						<td class="bluebox"><s:select list="dropdownData.schemeList"
 								listKey="id" listValue="name" headerKey="0"
-								headerValue="--- Select ---" name="scheme"
+								headerValue="%{getText('lbl.choose.options')}" name="scheme"
 								onchange="updateGrid('scheme.id',document.getElementById('budgetDetail_scheme').selectedIndex);populateSubSchemes(this);"
 								value="scheme.id" id="budgetDetail_scheme"></s:select></td>
 					</s:if>
@@ -230,7 +230,7 @@ function resetSubmit()
 							class="mandatory1">*</span></td>
 						<td class="bluebox"><s:select
 								list="dropdownData.subschemeList" listKey="id" listValue="name"
-								headerKey="0" headerValue="--- Select ---" name="subScheme"
+								headerKey="0" headerValue="%{getText('lbl.choose.options')}" name="subScheme"
 								onchange="updateGrid('subScheme.id',document.getElementById('budgetDetail_subScheme').selectedIndex)"
 								value="subScheme.id" id="budgetDetail_subScheme"></s:select></td>
 					</s:if>
@@ -241,24 +241,24 @@ function resetSubmit()
 							class="mandatory1">*</span></td>
 						<td class="greybox"><s:select list="dropdownData.fieldList"
 								listKey="id" listValue="name" headerKey="0"
-								headerValue="--- Select ---" name="boundary"
+								headerValue="%{getText('lbl.choose.options')}" name="boundary"
 								onchange="updateGrid('boundary.id',document.getElementById('budgetDetail_boundary').selectedIndex)"
 								value="boundary.id" id="budgetDetail_boundary"></s:select></td>
 					</s:if>
 				</tr>
 				<tr>
-					<td class="bluebox" width="10%">Account Type:</td>
+					<td class="bluebox" width="10%"><s:text name="lbl.account.type"/> :</td>
 					<td class="bluebox"><s:select name="accountType"
 							id="accountType" list="dropdownData.accountTypeList"
-							headerKey="-1" headerValue="----Choose----" /></td>
-					<td class="bluebox" width="10%">Budget Head:</td>
+							headerKey="-1" headerValue="%{getText('lbl.choose.options')}" /></td>
+					<td class="bluebox" width="10%"><s:text name="report.budged.head"/> :</td>
 					<td class="bluebox"><s:select name="budgetGroup"
 							value="%{budgetGroup.id}" id="budgetGroup"
 							list="dropdownData.budgetGroupList" listKey="id" listValue="name"
-							headerKey="-1" headerValue="----Choose----" /></td>
+							headerKey="-1" headerValue="%{getText('lbl.choose.options')}" /></td>
 				</tr>
 				<tr>
-					<td class="greybox" width="10%">As On Date:<span
+					<td class="greybox" width="10%"><s:text name="report.asOnDate"/> :<span
 						class="mandatory1">*</span></td>
 
 					<td class="greybox"><s:date name="asOnDate" var="asOnDateId"
@@ -276,10 +276,10 @@ function resetSubmit()
 			<br />
 			<br />
 			<div class="buttonbottom">
-				<input type="submit" value="Search" class="buttonsubmit"
+				<input type="submit" value="<s:text name='lbl.search'/>" class="buttonsubmit"
 					onclick="return getData();" /> &nbsp <input name="button"
-					type="submit" class="button" id="button" value="Reset"
-					onclick="resetSubmit();" /> <input type="button" value="Close"
+					type="submit" class="button" id="button" value="<s:text name='lbl.reset'/>"
+					onclick="resetSubmit();" /> <input type="button" value="<s:text name='lbl.close'/>"
 					onclick="window.parent.postMessage('close','*');window.close();" class="button" />
 			</div>
 	</div>

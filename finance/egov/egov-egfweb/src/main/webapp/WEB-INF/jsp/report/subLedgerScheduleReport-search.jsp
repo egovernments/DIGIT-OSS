@@ -163,7 +163,7 @@ background: #DEDEDE;
 							class="mandatory"></span></td>
 						<td class="bluebox"><s:select name="fund_id" id="fund_id"
 								list="dropdownData.fundList" listKey="id" listValue="name"
-								headerKey="" headerValue="----Choose----" /></td>
+								headerKey="" headerValue="%{getText('lbl.choose.options')}" /></td>
 					</tr>
 					<tr>
 						<td class="greybox"><s:text name="subLedger.startDate" /><span
@@ -192,12 +192,12 @@ background: #DEDEDE;
 								id="accEntityId" value='%{accEntityId}'
 								list="dropdownData.subLedgerTypeList" listKey="id"
 								listValue="description" headerKey=""
-								headerValue="----Choose----" /></td>
+								headerValue="%{getText('lbl.choose.options')}" /></td>
 						<td class="bluebox"><s:text name="subLedger.department" /></td>
 						<td class="bluebox"><s:select name="deptId" id="deptId"
 								value='%{deptId}' list="dropdownData.departmentList"
 								listKey="code" listValue="name" headerKey=""
-								headerValue="----Choose----" /></td>
+								headerValue="%{getText('lbl.choose.options')}" /></td>
 					</tr>
 
 
@@ -207,9 +207,9 @@ background: #DEDEDE;
 			<div class="buttonbottom">
 				<table align="center">
 					<tr>
-						<td><input type="button" value="Search" class="buttonsubmit"
+						<td><input type="button" value="<s:text name='lbl.search'/>" class="buttonsubmit"
 							onclick="return validate()" /></td>
-						<td><input type="button" id="Close" value="Close"
+						<td><input type="button" id="Close" value="<s:text name='lbl.close'/>"
 							onclick="javascript:window.parent.postMessage('close','*');" class="button" /></td>
 					</tr>
 				</table>
