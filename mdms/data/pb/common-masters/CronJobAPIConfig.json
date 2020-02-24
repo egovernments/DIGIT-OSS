@@ -1,0 +1,19 @@
+{
+  "tenantId": "pb",
+  "moduleName": "common-masters",
+  "CronJobAPIConfig": [
+    {
+
+      "jobName": "daily",			
+      "active": "true",
+    	"method" : "POST",
+      "url": "http://tl-services.egov:8080/tl-services/v1/TL/Reminder/_batch",
+      "payload": {
+          "RequestInfo": "{DEFAULT_REQUESTINFO}"
+      },      
+      "header": {
+        "Content-Type": "application/json"
+      }
+    }
+  ]
+}
