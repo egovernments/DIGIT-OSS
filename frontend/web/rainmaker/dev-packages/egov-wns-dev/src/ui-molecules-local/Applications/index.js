@@ -19,16 +19,17 @@ const styles = {
 };
 
 class Applications extends React.Component {
-//   getConnectionDetails = data => {
-//     window.location.href = `/citizen/wns/connection-details?connectionNumber=${data.connectionNo}&tenantId=${data.property.tenantId}&service=${data.service.toUpperCase()}&connectionType=${data.connectionType}`
-//   }
+  //   getConnectionDetails = data => {
+  //     window.location.href = `/citizen/wns/connection-details?connectionNumber=${data.connectionNo}&tenantId=${data.property.tenantId}&service=${data.service.toUpperCase()}&connectionType=${data.connectionType}`
+  //   }
 
   // getViewBillDetails = data => {
   //   window.location.href = `/citizen/wns/viewBill?connectionNumber=${data.connectionNo}&tenantId=${data.property.tenantId}&service=${data.service.toUpperCase()}&connectionType=${data.connectionType}`
   // }
 
-  getTaskDetails=data=>{
-    window.location.href = `/citizen/wns/search-preview?applicationNumber=${data.applicationNo}&history=${true}&tenantId=${data.property.tenantId}`
+  getTaskDetails = data => {
+    data.service = data.service.toUpperCase();
+    window.location.href = `/citizen/wns/search-preview?applicationNumber=${data.applicationNo}&history=${true}&tenantId=${data.property.tenantId}&service=${data.service}`
   }
   render() {
     const { myApplicationResults, classes } = this.props;
@@ -122,14 +123,14 @@ class Applications extends React.Component {
                         </Grid>
                       </Grid>
                       <div className="linkStyle" onClick={() => this.getTaskDetails(item)}>
-                      <LabelContainer 
-                                labelKey="WS_VIEW_DETAILS"
-                                style={{
-                                  color: "#fe7a51",
-                                  fontSize: 14,
-                                }}
-                              />
-                          
+                        <LabelContainer
+                          labelKey="WS_VIEW_DETAILS"
+                          style={{
+                            color: "#fe7a51",
+                            fontSize: 14,
+                          }}
+                        />
+
                         {/* {item.due === "-" ?
                           (<div></div>)
                           : item.due === 0 ?
