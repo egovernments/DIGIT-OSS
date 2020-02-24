@@ -116,15 +116,21 @@ public class TLBatchService {
         List<SMSRequest> smsRequests = new LinkedList<>();
 
         for(TradeLicense license : licenses){
+            try{
 
-            String message = util.getReminderMsg(license, localizationMessages);
-            Map<String,String > mobileNumberToOwner = new HashMap<>();
+                String message = util.getReminderMsg(license, localizationMessages);
+                Map<String,String > mobileNumberToOwner = new HashMap<>();
 
-            license.getTradeLicenseDetail().getOwners().forEach(owner -> {
-                if(owner.getMobileNumber()!=null)
-                    mobileNumberToOwner.put(owner.getMobileNumber(),owner.getName());
-            });
-            smsRequests.addAll(util.createSMSRequest(message,mobileNumberToOwner));
+                license.getTradeLicenseDetail().getOwners().forEach(owner -> {
+                    if(owner.getMobileNumber()!=null)
+                        mobileNumberToOwner.put(owner.getMobileNumber(),owner.getName());
+                });
+                smsRequests.addAll(util.createSMSRequest(message,mobileNumberToOwner));
+            }
+            catch (Exception e){
+                e.printStackTrace();
+                producer.push(config.getErrorTopic(), license);
+            }
         }
 
         util.sendSMS(smsRequests, config.getIsReminderEnabled());
@@ -139,15 +145,22 @@ public class TLBatchService {
      */
     private void expireLicenses(RequestInfo requestInfo, List<TradeLicense> licenses){
 
-        licenses.forEach(license -> {
-            license.setAction(ACTION_EXPIRE);
-            if(StringUtils.isEmpty(license.getWorkflowCode()))
-                license.setWorkflowCode(DEFAULT_WORKFLOW);
-        });
+        try {
+            licenses.forEach(license -> {
+                license.setAction(ACTION_EXPIRE);
+                if(StringUtils.isEmpty(license.getWorkflowCode()))
+                    license.setWorkflowCode(DEFAULT_WORKFLOW);
+            });
 
-        workflowIntegrator.callWorkFlow(new TradeLicenseRequest(requestInfo, licenses));
+            workflowIntegrator.callWorkFlow(new TradeLicenseRequest(requestInfo, licenses));
 
-        producer.push(config.getUpdateWorkflowTopic(), new TradeLicenseRequest(requestInfo, licenses));
+            producer.push(config.getUpdateWorkflowTopic(), new TradeLicenseRequest(requestInfo, licenses));
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            producer.push(config.getErrorTopic(),licenses);
+        }
+
 
 
     }

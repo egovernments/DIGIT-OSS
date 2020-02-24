@@ -277,6 +277,9 @@ public class TLConfiguration {
     @Value("${egov.tl.reminder.enable}")
     private Boolean isReminderEnabled;
 
+    @Value("${egov.tl.batch.error.topic}")
+    private String errorTopic;
+
 
 
 
