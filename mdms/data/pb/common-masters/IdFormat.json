@@ -504,7 +504,10 @@
     {
       "format": "PB-MU-[cy:yyyy-MM-dd]-[SEQ_EG_PT_ASSM]",
       "idname": "pt.mutation.receipt.id"
+    },
+    {
+      "format": "PB-MT-[CITY]-[SEQ_EG_PT_MUTATION]",
+      "idname": "pt.mutation.number"
     }
-
   ]
 }
