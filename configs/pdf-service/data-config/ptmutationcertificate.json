@@ -236,7 +236,7 @@
               {
                 "variable": "Mutation_Number",
                 "value": {
-                  "path": "$.additionalDetails.mutationNumber"
+                  "path": "$.acknowldgementNumber"
                 }
             },
               {
