@@ -114,10 +114,10 @@ public class PaymentUpdateService {
 			
 			State state = wfIntegrator.callWorkFlow(wfRequest);
 			property.setWorkflow(wfRequest.getProcessInstances().get(0));
+			property.getWorkflow().setState(state);
 			updateRequest.getProperty().setStatus(Status.fromValue(state.getApplicationStatus()));
-			
+			producer.push(config.getUpdatePropertyTopic(), updateRequest);			
 			notifService.sendNotificationForMtPayment(updateRequest, bill.getTotalAmount());
-			producer.push(config.getUpdatePropertyTopic(), updateRequest);
 		});
 	}
 
