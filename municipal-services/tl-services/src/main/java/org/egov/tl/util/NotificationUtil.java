@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static org.egov.tl.util.TLConstants.*;
@@ -355,8 +356,9 @@ public class NotificationUtil {
 	public String getReminderMsg(TradeLicense license, String localizationMessages) {
 
 		String messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_TL_REMINDER, localizationMessages);
+		String expiryDate = new SimpleDateFormat("dd/MM/yyyy").format(license.getValidTo());
 		messageTemplate = messageTemplate.replace(NOTIF_TRADE_NAME_KEY, license.getTradeName());
-		messageTemplate = messageTemplate.replace(NOTIF_EXPIRY_DATE_KEY, license.getValidTo().toString());
+		messageTemplate = messageTemplate.replace(NOTIF_EXPIRY_DATE_KEY, expiryDate);
 		messageTemplate = messageTemplate.replace(NOTIF_TRADE_LICENSENUMBER_KEY, license.getLicenseNumber());
 		return messageTemplate;
 	}
