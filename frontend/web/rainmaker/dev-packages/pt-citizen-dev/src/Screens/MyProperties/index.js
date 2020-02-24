@@ -74,14 +74,18 @@ class MyProperties extends Component {
       renderCustomTitle,
       numProperties
     } = this.props;
-    fetchProperties([ ]); //Unnecessary API call to prevent page break on reload
+    fetchProperties([]); //Unnecessary API call to prevent page break on reload
     renderCustomTitle(numProperties);
     title && addBreadCrumbs({ title: title, path: window.location.pathname });
   };
 
   onNewPropertyButtonClick = () => {
-    const { history } = this.props;
-    history.push('/property-tax/assessment-form');
+
+    let link = `/property-tax/assessment-form`;
+    let moduleName = process.env.REACT_APP_NAME === "Citizen" ? '/citizen' : '/employee';
+    window.location.href = process.env.NODE_ENV === "production" ? moduleName + link : link;
+    // const { history } = this.props;
+    // history.push('/property-tax/assessment-form');
     // this.setState({
     //   dialogueOpen: true
     // });
@@ -127,7 +131,7 @@ class MyProperties extends Component {
             data={transformedPropertiesMobile}
             action="PT_VIEW_DETAILS"
             history={history}
-            // onActionClick={this.onListItemClick}
+          // onActionClick={this.onListItemClick}
           />
         </Hidden>
       </Screen>
@@ -166,7 +170,7 @@ const mapStateToProps = state => {
           />
         ),
         secondaryText: (
-          <div className="rainmaker-displayInline" style={{height: "25px !important", marginTop: "0px !important"}}>
+          <div className="rainmaker-displayInline" style={{ height: "25px !important", marginTop: "0px !important" }}>
             <Label
               label="PT_PROPERTY_ASSESSMENT_ID"
               color="#484848"

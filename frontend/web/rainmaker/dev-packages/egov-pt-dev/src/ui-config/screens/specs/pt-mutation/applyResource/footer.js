@@ -127,8 +127,8 @@ const callBackForApply=async(state,dispatch)=>{
   let consumerCode=getQueryArg(window.location.href,"consumerCode");
   let propertyPayload = get(
     state,"screenConfiguration.preparedFinalObject.Property");
-    propertyPayload.workflow={"businessService": "PT.MUTATION",
-    "businessId": "PB-AC-2020-02-04-018568", 
+    propertyPayload.workflow={"businessService": "PT.MUTATION", 
+    tenantId,
     "action": "OPEN",
     "moduleName": "PT"
 },
@@ -141,13 +141,15 @@ if(propertyPayload.ownershipCategoryTemp.includes("INSTITUTIONAL")){
   propertyPayload.institutionTemp.status="ACTIVE";
   propertyPayload.institutionTemp.type=propertyPayload.ownershipCategoryTemp;
   propertyPayload.owners=[...propertyPayload.owners,propertyPayload.institutionTemp]
+  delete propertyPayload.institutionTemp;
 }
 else{
   propertyPayload.ownersTemp[0].status="ACTIVE";
   propertyPayload.ownersTemp[0].type=propertyPayload.ownershipCategoryTemp;
   propertyPayload.owners=[...propertyPayload.owners,...propertyPayload.ownersTemp]
+  delete propertyPayload.ownersTemp;
 }
-
+delete propertyPayload.ownershipCategoryTemp;
 
 
 
@@ -176,7 +178,7 @@ else{
     if(payload){
       store.dispatch(
         setRoute(
-          `acknowledgement?purpose=apply&status=success&applicationNumber=${propertyPayload.acknowldgementNumber}&tenantId=${tenantId}
+          `acknowledgement?purpose=apply&status=success&applicationNumber=${payload.acknowldgementNumber}&tenantId=${tenantId}
           `
         )
       );

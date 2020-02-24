@@ -222,7 +222,16 @@ export const gotoApplyWithStep = (state, dispatch, step) => {
 };
 
 export const showHideAdhocPopup = (state, dispatch, screenKey) => {
-  dispatch(setRoute(`/property-tax/assessment-form`));
+
+
+  let link = `/property-tax/assessment-form`;
+  let moduleName = process.env.REACT_APP_NAME === "Citizen" ? '/citizen' : '/employee';
+  window.location.href = process.env.NODE_ENV === "production" ? moduleName + link : link;
+
+
+  // dispatch(setRoute(`/property-tax/assessment-form`));
+
+
   // let toggle = get(
   //   state.screenConfiguration.screenConfig[screenKey],
   //   "components.adhocDialog.props.open",
@@ -713,20 +722,20 @@ export const getTextToLocalMapping = label => {
         localisationLabels
       );
 
-      case "Application No":
-        return getLocaleLabels(
-          "Application No.",
-          "PT_COMMON_TABLE_COL_APP_NO",
-          localisationLabels
-        );
+    case "Application No":
+      return getLocaleLabels(
+        "Application No.",
+        "PT_COMMON_TABLE_COL_APP_NO",
+        localisationLabels
+      );
 
-        case "Application Type":
-          return getLocaleLabels(
-            "Application Type",
-            "PT_COMMON_TABLE_COL_APP_TYPE",
-            localisationLabels
-          );
-  
+    case "Application Type":
+      return getLocaleLabels(
+        "Application Type",
+        "PT_COMMON_TABLE_COL_APP_TYPE",
+        localisationLabels
+      );
+
     case "Owner Name":
       return getLocaleLabels(
         "Owner Name",
@@ -809,13 +818,13 @@ export const getTextToLocalMapping = label => {
         "PT_HOME_PROPERTY_RESULTS_TABLE_HEADING",
         localisationLabels
       );
-      
-      case "Search Results for Property Application":
+
+    case "Search Results for Property Application":
       return getLocaleLabels(
         "Search Results for Property Application",
         "PT_HOME_APPLICATION_RESULTS_TABLE_HEADING",
         localisationLabels
-      );  
+      );
 
     case "MY_APPLICATIONS":
       return getLocaleLabels(
@@ -839,7 +848,7 @@ export const getTextToLocalMapping = label => {
 };
 
 export const checkValueForNA = value => {
-  return value==null||value==undefined||value=='' ?  "NA":value;
+  return value == null || value == undefined || value == '' ? "NA" : value;
 };
 export const fetchBill = async queryObject => {
   try {
@@ -868,9 +877,9 @@ export const getpayments = async queryObject => {
   }
 };
 
-export const downloadCertificateForm = (Properties,pdfcode,tenantId,mode='download') => {
+export const downloadCertificateForm = (Properties, pdfcode, tenantId, mode = 'download') => {
   const queryStr = [
-    { key: "key", value:pdfcode },
+    { key: "key", value: pdfcode },
     { key: "tenantId", value: tenantId }
   ]
   const DOWNLOADRECEIPT = {
@@ -885,7 +894,7 @@ export const downloadCertificateForm = (Properties,pdfcode,tenantId,mode='downlo
         res.filestoreIds[0]
         if (res && res.filestoreIds && res.filestoreIds.length > 0) {
           res.filestoreIds.map(fileStoreId => {
-            downloadReceiptFromFilestoreID(fileStoreId,mode,tenantId)
+            downloadReceiptFromFilestoreID(fileStoreId, mode, tenantId)
           })
         } else {
           console.log("Error In Acknowledgement form Download");
@@ -896,9 +905,9 @@ export const downloadCertificateForm = (Properties,pdfcode,tenantId,mode='downlo
   }
 }
 
-export const downloadReceitForm = (Payments,pdfcode,tenantId,mode='download') => {
+export const downloadReceitForm = (Payments, pdfcode, tenantId, mode = 'download') => {
   const queryStr = [
-    { key: "key", value:pdfcode },
+    { key: "key", value: pdfcode },
     { key: "tenantId", value: tenantId }
   ]
   const DOWNLOADRECEIPT = {
@@ -913,7 +922,7 @@ export const downloadReceitForm = (Payments,pdfcode,tenantId,mode='download') =>
         res.filestoreIds[0]
         if (res && res.filestoreIds && res.filestoreIds.length > 0) {
           res.filestoreIds.map(fileStoreId => {
-            downloadReceiptFromFilestoreID(fileStoreId,mode,tenantId)
+            downloadReceiptFromFilestoreID(fileStoreId, mode, tenantId)
           })
         } else {
           console.log("Error In Acknowledgement form Download");

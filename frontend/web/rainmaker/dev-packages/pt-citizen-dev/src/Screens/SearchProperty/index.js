@@ -112,17 +112,17 @@ class SearchProperty extends Component {
     }
   };
 
-  
-  onApplicationClick =async (applicationNo, tenantId, propertyId) => {
+
+  onApplicationClick = async (applicationNo, tenantId, propertyId) => {
     const businessService = await getApplicationType(applicationNo, tenantId);
     navigateToApplication(businessService, this.props.history, applicationNo, tenantId, propertyId);
   }
-  
+
   getApplicationLink = (applicationNo, tenantId, propertyId) => {
     return (
       <a
         style={linkStyle}
-        onClick={ () => this.onApplicationClick(applicationNo, tenantId, propertyId) }
+        onClick={() => this.onApplicationClick(applicationNo, tenantId, propertyId)}
       >
         {applicationNo}
       </a>
@@ -153,10 +153,10 @@ class SearchProperty extends Component {
   }
   getStatusColor = (status) => {
     switch (status) {
-      case 'INWORKFLOW' : 
-        return status = <span style={{color:"red"}}>{status}</span>
-      case 'ACTIVE' : 
-        return status = <span style={{color:"green"}}>{status}</span>
+      case 'INWORKFLOW':
+        return status = <span style={{ color: "red" }}>{status}</span>
+      case 'ACTIVE':
+        return status = <span style={{ color: "green" }}>{status}</span>
       default:
         return status;
     }
@@ -205,8 +205,12 @@ class SearchProperty extends Component {
     // this.setState({
     //   dialogueOpen: true
     // });
-    const { history } = this.props;
-    history.push('/property-tax/assessment-form');
+    // const { history } = this.props;
+    // history.push('/property-tax/assessment-form');
+
+    let link = `/property-tax/assessment-form`;
+    let moduleName = process.env.REACT_APP_NAME === "Citizen" ? '/citizen' : '/employee';
+    window.location.href = process.env.NODE_ENV === "production" ? moduleName + link : link;
   };
 
   render() {
