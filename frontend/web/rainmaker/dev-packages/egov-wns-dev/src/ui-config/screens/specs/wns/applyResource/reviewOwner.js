@@ -101,7 +101,7 @@ export const reviewWaterClosets = getLabelWithValue(
 export const reviewNumberOfToilets = getLabelWithValue(
   {
     labelName: "No. of Water Closets",
-    labelKey: "WS_ADDN_DETAILS_NO_OF_WATER_CLOSETS"
+    labelKey: "WS_ADDN_DETAILS_NO_OF_TOILETS"
   },
   {
     jsonPath: "applyScreen.noOfToilets",

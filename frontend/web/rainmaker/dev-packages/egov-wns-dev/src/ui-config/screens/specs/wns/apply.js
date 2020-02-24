@@ -171,6 +171,7 @@ export const getData = async (action, state, dispatch) => {
     //Edit/Update Flow ----
     let queryObject = [{ key: "tenantId", value: tenantId }, { key: "applicationNumber", value: applicationNo }];
     if (getQueryArg(window.location.href, "action") === "edit") {
+      handleApplicationNumberDisplay(dispatch, applicationNo)
       let payloadWater, payloadSewerage;
       try { payloadWater = await getSearchResults(queryObject) } catch (error) { console.error(error); };
       try { payloadSewerage = await getSearchResultsForSewerage(queryObject, dispatch) } catch (error) { console.error(error); }
@@ -226,11 +227,12 @@ const screenConfig = {
   name: "apply",
   // hasBeforeInitAsync:true,
   beforeInitScreen: (action, state, dispatch) => {
-    if (getQueryArg(window.location.href, "action") === "edit") { togglePropertyFeilds(dispatch, true); }
-    else { togglePropertyFeilds(dispatch, false); }
+    dispatch(prepareFinalObject("applyScreen.water", true));
+    dispatch(prepareFinalObject("applyScreen.sewerage", false));
     const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
     if (applicationNumber && getQueryArg(window.location.href, "action") === "edit") {
-      if (applicationNumber.substring(0, 2) === "SW") {
+      togglePropertyFeilds(action, true);
+      if (applicationNumber.includes("SW")) {
         dispatch(prepareFinalObject("applyScreen.water", false));
         dispatch(prepareFinalObject("applyScreen.sewerage", true));
         toggleWaterFeilds(action, false);
@@ -242,8 +244,7 @@ const screenConfig = {
         toggleSewerageFeilds(action, false);
       }
     } else {
-      dispatch(prepareFinalObject("applyScreen.water", true));
-      dispatch(prepareFinalObject("applyScreen.sewerage", false));
+      togglePropertyFeilds(action, false)
       if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.water") && get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage")) {
         toggleWaterFeilds(action, true);
         toggleSewerageFeilds(action, true);
@@ -258,7 +259,7 @@ const screenConfig = {
 
     const tenantId = getTenantId();
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
-    getData(action, state, dispatch).then(() => handleApplicationNumberDisplay(dispatch, applicationNumber));
+    getData(action, state, dispatch).then(() => { });
     prepareDocumentsUploadData(state, dispatch);
     return action;
   },

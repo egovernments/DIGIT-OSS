@@ -16,14 +16,16 @@ const styles = theme => ({
 
 class DocumentListContainer extends Component {
   render() {
-    const { ...rest } = this.props;
-    return <DocumentList {...rest} />;
+    const { uploadedDocuments, ...rest } = this.props;
+    return <DocumentList uploadedDocsInRedux={uploadedDocuments} {...rest} />;
   }
 }
 
 const mapStateToProps = state => {
   let documentsList = get(state, "screenConfiguration.preparedFinalObject.documentsContract", []);
-  return { documentsList };
+  const documents = get(state.screenConfiguration.preparedFinalObject, "applyScreen.documents", []);
+  const uploadedDocuments = get(state.screenConfiguration.preparedFinalObject, "UploadedDocs", []);
+  return { documentsList, uploadedDocuments, documents };
 };
 
 export default withStyles(styles)(

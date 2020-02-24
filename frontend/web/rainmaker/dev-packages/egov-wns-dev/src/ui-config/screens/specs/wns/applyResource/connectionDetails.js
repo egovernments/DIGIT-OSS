@@ -53,7 +53,6 @@ export const OwnerInfoCard = getCommonCard({
       sourceJsonPath: "applyScreenMdmsData.ws-services-calculation.pipeSize",
       placeholder: { labelKey: "WS_SERV_DETAIL_PIPE_SIZE_PLACEHOLDER" },
       gridDefination: { xs: 12, sm: 6 },
-      sourceJsonPath: "applyScreen.proposedPipeSize",
       jsonPath: "applyScreen.proposedPipeSize"
     }),
 

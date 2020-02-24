@@ -3,14 +3,8 @@ import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject
 import { getPropertyResults } from "../../../../../ui-utils/commons";
 
 export const propertySearchApiCall = async (state, dispatch) => {
-  let queryObject = [
-    { key: "tenantId", value: "pb.amritsar" }
-  ];
-  let searchScreenObject = get(
-    state.screenConfiguration.preparedFinalObject,
-    "searchScreen",
-    {}
-  );
+  let queryObject = [{ key: "tenantId", value: "pb.amritsar" }];
+  let searchScreenObject = get(state.screenConfiguration.preparedFinalObject, "searchScreen", {});
 
   // if (
   //   Object.keys(searchScreenObject).length == 0 ||
@@ -25,31 +19,33 @@ export const propertySearchApiCall = async (state, dispatch) => {
   }
   try {
     let response = await getPropertyResults(queryObject, dispatch);
-    dispatch(prepareFinalObject("applyScreen.property", response.applyScreen.property))
-    dispatch(
-      handleField(
-        "apply",
-        "components.div.children.formwizardFirstStep.children.IDDetails.children.cardContent.children.propertyIDDetails",
-        "visible",
-        true
-      )
-    );
-    dispatch(
-      handleField(
-        "apply",
-        "components.div.children.formwizardFirstStep.children.Details.visible",
-        "visible",
-        true
-      )
-    );
-    dispatch(
-      handleField(
-        "apply",
-        "components.div.children.formwizardFirstStep.children.ownerDetails.visible",
-        "visible",
-        true
-      )
-    );
+    dispatch(prepareFinalObject("applyScreen.property", response.Properties[0]))
+    if (response.Properties[0]) {
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardFirstStep.children.IDDetails.children.cardContent.children.propertyIDDetails",
+          "visible",
+          true
+        )
+      );
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardFirstStep.children.Details.visible",
+          "visible",
+          true
+        )
+      );
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardFirstStep.children.ownerDetails.visible",
+          "visible",
+          true
+        )
+      );
+    }
   } catch (err) { console.log(err) }
 }
 // }

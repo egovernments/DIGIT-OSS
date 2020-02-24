@@ -150,13 +150,13 @@ export const additionDetails = getCommonCard({
         beforeFieldChange: async (action, state, dispatch) => {
           let waterSource = get(state, "screenConfiguration.preparedFinalObject.applyScreen.waterSource");
           if (waterSource === "Ground") {
-            let code = `masterDetails":[{"name":"waterSubSource","filter": "[?(@.code  == 'GROUND')]"}]`
+            let code = `"masterDetails":[{"name":"waterSubSource","filter": "[?(@.code  == 'GROUND')]"}]`
             await waterSubSourceType(state, dispatch, code)
           } else if (waterSource === "Surface") {
-            let code = `masterDetails":[{"name":"waterSubSource","filter": "[?(@.code  == 'SURFACE')]"}]`
+            let code = `"masterDetails":[{"name":"waterSubSource","filter": "[?(@.code  == 'SURFACE')]"}]`
             await waterSubSourceType(state, dispatch, code)
           } else {
-            let code = `masterDetails":[{"name":"waterSubSource","filter": "[?(@.code  == 'BULKSUPPLY')]"}]`
+            let code = `"masterDetails":[{"name":"waterSubSource","filter": "[?(@.code  == 'BULKSUPPLY')]"}]`
             await waterSubSourceType(state, dispatch, code)
           }
         }
@@ -379,6 +379,30 @@ const showHideFeilds = (dispatch, value) => {
     handleField(
       "apply",
       "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterID",
+      "visible",
+      value
+    )
+  );
+  dispatch(
+    handleField(
+      "apply",
+      "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewInitialMeterReading",
+      "visible",
+      value
+    )
+  );
+  dispatch(
+    handleField(
+      "apply",
+      "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewMeterInstallationDate",
+      "visible",
+      value
+    )
+  );
+  dispatch(
+    handleField(
+      "apply",
+      "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewMeterId",
       "visible",
       value
     )

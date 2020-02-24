@@ -56,7 +56,7 @@ export const reviewDocuments = (isEditable = true) => {
           moduleName: "egov-wns",
           componentPath: "DownloadFileContainer",
           props: {
-            sourceJsonPath: "applyScreen.documents",
+            sourceJsonPath: "UploadedDocs",
             className: "review-documents"
           }
         }
