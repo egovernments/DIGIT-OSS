@@ -3,6 +3,7 @@ import { Dialog, Button } from "components";
 import Label from "egov-ui-kit/utils/translationNode";
 import TransferDetails from "./TransferDetails";
 import "./index.css";
+import { convertEpochToDate } from "egov-ui-framework/ui-config/screens/specs/utils";
 
 const bodyStyle = {
   backgroundColor: "#FFFFFF",
@@ -25,11 +26,12 @@ const ViewHistoryDialog = ({ open, closeDialogue, ownershipInfo }) => {
           <Label label="PT_OWNER_HISTORY" fontSize="20px" labelClassName="owner-history" />
           <br />
           {Object.keys(ownershipInfo).map((key) => {
+            const date=convertEpochToDate(Number(key));
             return (
               <div className="dialog-content">
                 <div className="oval-class"></div>
                 <Label label="PT_DATE_OF_TRANSFER" fontSize="14px" className="date-of-transfer" labelClassName="date-of-transfer" />
-                <span className="date-of-transfer">&nbsp;-&nbsp;{key}</span>
+                <span className="date-of-transfer">&nbsp;-&nbsp;{date}</span>
                 <TransferDetails data={ownershipInfo[key]} />
               </div>
             );

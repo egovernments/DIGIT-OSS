@@ -66,13 +66,13 @@ class OwnerInfo extends Component {
 
 
           payload.Properties=this.getUniqueList(payload.Properties);
-
-          payload.Properties.map((item)=>{
-            
-            const lastModifiedDate = convertEpochToDate(item.auditDetails.lastModifiedTime);
+          payload.Properties.map((item)=>{          
+            // let lastModifiedDate = convertEpochToDate(item.auditDetails.lastModifiedTime);
+            let lastModifiedDate = item.auditDetails.lastModifiedTime;
             if(!ownershipInfo[lastModifiedDate]){
               ownershipInfo[lastModifiedDate] = [];
             }
+            item.owners=item.owners.filter(owner=>owner.status== "ACTIVE")
             ownershipInfo[lastModifiedDate].push(...this.transformData(item.owners))
           });
           this.setState({ [dialogName]: true, ownershipInfo });
