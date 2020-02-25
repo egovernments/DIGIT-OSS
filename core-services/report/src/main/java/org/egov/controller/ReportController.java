@@ -1,44 +1,29 @@
 package org.egov.controller;
 
-import java.util.List;
-
-import javax.validation.Valid;
-
+import lombok.extern.slf4j.Slf4j;
 import org.egov.ReportApp;
-import org.egov.common.contract.request.RequestInfo;
 import org.egov.domain.model.MetaDataRequest;
 import org.egov.domain.model.ReportDefinitions;
-import org.egov.report.repository.builder.ReportQueryBuilder;
 import org.egov.report.service.ReportService;
 import org.egov.swagger.model.MetadataResponse;
-import org.egov.swagger.model.ReportDataResponse;
 import org.egov.swagger.model.ReportRequest;
 import org.egov.swagger.model.ReportResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import javax.validation.Valid;
+import java.util.List;
 
-
+@Slf4j
 @RestController
 public class ReportController {
 
     public ReportDefinitions reportDefinitions;
-
-    public static final Logger LOGGER = LoggerFactory.getLogger(ReportController.class);
-
 
     @Autowired
     public ReportController(ReportDefinitions reportDefinitions) {
@@ -62,11 +47,15 @@ public class ReportController {
             System.out.println("The Module Name from the URI is :" + moduleName);
             MetadataResponse mdr = reportService.getMetaData(metaDataRequest, moduleName);
             return reportService.getSuccessResponse(mdr, metaDataRequest.getRequestInfo(), metaDataRequest.getTenantId());
+        } catch (CustomException ex) {
+            log.error("Report config invalid", ex);
+            throw ex;
         } catch (Exception e) {
-            e.printStackTrace();
-            return reportService.getFailureResponse(metaDataRequest.getRequestInfo(), metaDataRequest.getTenantId());
+            log.error("ERROR IN GETTING METADATA", e);
+            throw new CustomException("ERROR_IN_GETTING_METADATA", e.getMessage());
         }
     }
+
 
     @PostMapping("/{moduleName}/_get")
     @ResponseBody
@@ -77,11 +66,15 @@ public class ReportController {
         try {
             ReportResponse reportResponse = reportService.getReportData(reportRequest, moduleName, reportRequest.getReportName(), reportRequest.getRequestInfo().getAuthToken());
             return new ResponseEntity<>(reportResponse, HttpStatus.OK);
+        } catch (CustomException e) {
+            log.error("Error in getting report data", e);
+            throw e;
         } catch (Exception e) {
-            e.printStackTrace();
-            return reportService.getFailureResponse(reportRequest.getRequestInfo(), reportRequest.getTenantId());
+            log.error("Error in getting report data", e);
+            throw new CustomException("ERROR_IN_RETRIEVING_REPORT_DATA", e.getMessage());
         }
     }
+
 
     @PostMapping("/{moduleName}/total/_get")
     @ResponseBody
@@ -91,8 +84,8 @@ public class ReportController {
             ReportResponse reportResponse = reportService.getReportData(reportRequest, moduleName, reportRequest.getReportName(), reportRequest.getRequestInfo().getAuthToken());
             return new ResponseEntity<>(reportResponse.getReportData().size(), HttpStatus.OK);
         } catch (Exception e) {
-            e.printStackTrace();
-            return reportService.getFailureResponse(reportRequest.getRequestInfo(), reportRequest.getTenantId());
+            log.error("Error in getting report data total", e);
+            throw new CustomException("ERROR_IN_RETRIEVING_REPORT_DATA_TOTAL", e.getMessage());
         }
     }
 
@@ -106,8 +99,8 @@ public class ReportController {
             ReportApp.loadYaml("common");
 
         } catch (Exception e) {
-            e.printStackTrace();
-            return reportService.getFailureResponse(reportRequest.getRequestInfo(), reportRequest.getTenantId(), e);
+            log.error("Error in reloading Yaml data", e);
+            throw new CustomException("ERROR_IN_RELOADING_YAML_DATA", e.getMessage());
         }
         return reportService.reloadResponse(reportRequest.getRequestInfo(), null);
 
@@ -122,8 +115,8 @@ public class ReportController {
             MetadataResponse mdr = reportService.getMetaData(metaDataRequest, moduleName);
             return reportService.getSuccessResponse(mdr, metaDataRequest.getRequestInfo(), metaDataRequest.getTenantId());
         } catch (Exception e) {
-            e.printStackTrace();
-            return reportService.getFailureResponse(metaDataRequest.getRequestInfo(), metaDataRequest.getTenantId());
+            log.error("Error in getting report data", e);
+            throw new CustomException("ERROR_IN_RETRIEVING_REPORT_DATA", e.getMessage());
         }
     }
 
@@ -135,8 +128,8 @@ public class ReportController {
             List<ReportResponse> reportResponse = reportService.getAllReportData(reportRequest, moduleName, reportRequest.getRequestInfo().getAuthToken());
             return reportService.getReportDataSuccessResponse(reportResponse, reportRequest.getRequestInfo(), reportRequest.getTenantId());
         } catch (Exception e) {
-            e.printStackTrace();
-            return reportService.getFailureResponse(reportRequest.getRequestInfo(), reportRequest.getTenantId());
+            log.error("Error in getting Report data ver1", e);
+            throw new CustomException("ERROR_IN_RETRIEVING_REPORT_DATA", e.getMessage());
         }
     }
 
@@ -149,8 +142,8 @@ public class ReportController {
 
             ReportApp.loadYaml(moduleName);
         } catch (Exception e) {
-            e.printStackTrace();
-            return reportService.getFailureResponse(reportRequest.getRequestInfo(), reportRequest.getTenantId(), e);
+            log.error("Error in reloading yaml data v1", e);
+            throw new CustomException("ERROR_IN_RELOADING_YAML_DATA", e.getMessage());
         }
         return reportService.reloadResponse(reportRequest.getRequestInfo(), null);
 

@@ -1,11 +1,6 @@
 package org.egov.report.service;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
+import lombok.extern.slf4j.Slf4j;
 import org.egov.ReportApp;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.response.ResponseInfo;
@@ -13,25 +8,21 @@ import org.egov.domain.model.MetaDataRequest;
 import org.egov.domain.model.ReportDefinitions;
 import org.egov.domain.model.Response;
 import org.egov.report.repository.ReportRepository;
-import org.egov.swagger.model.ColumnDetail;
+import org.egov.swagger.model.*;
 import org.egov.swagger.model.ColumnDetail.TypeEnum;
-import org.egov.swagger.model.MetadataResponse;
-import org.egov.swagger.model.ReportDataResponse;
-import org.egov.swagger.model.ReportDefinition;
-import org.egov.swagger.model.ReportMetadata;
-import org.egov.swagger.model.ReportRequest;
-import org.egov.swagger.model.ReportResponse;
-import org.egov.swagger.model.SearchColumn;
-import org.egov.swagger.model.SourceColumn;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.mvc.annotation.ResponseStatusExceptionResolver;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+@Slf4j
 @Service
 public class ReportService {
 
@@ -44,72 +35,91 @@ public class ReportService {
     @Autowired
     private IntegrationService integrationService;
 
+    //map to store metadata with <reportname+modulename> as key
+    public static Map<String, MetadataResponse> metaResponseCache = new HashMap<>();
 
-    public static final Logger LOGGER = LoggerFactory.getLogger(ReportService.class);
 
-    public MetadataResponse getMetaData(MetaDataRequest metaDataRequest, String moduleName) {
-        MetadataResponse metadataResponse = new MetadataResponse();
-        ReportDefinitions rds = ReportApp.getReportDefs();
-        ReportDefinition reportDefinition = new ReportDefinition();
-        //LOGGER.info("updated repot defs " + ReportApp.getReportDefs() + "\n\n\n");
-        reportDefinition = rds.getReportDefinition(moduleName + " " + metaDataRequest.getReportName());
-        ReportMetadata rmt = new ReportMetadata();
-        rmt.setReportName(reportDefinition.getReportName());
-        rmt.setSummary(reportDefinition.getSummary());
-        rmt.setViewPath(reportDefinition.getViewPath());
-        rmt.setSearchFilter(reportDefinition.isSearchFilter());
-        rmt.setSorting(reportDefinition.isSorting());
-        rmt.setSerialNo(reportDefinition.isSerialNo());
-        rmt.setSelectiveDownload(reportDefinition.isSelectiveDownload());
-        List<ColumnDetail> reportHeaders = new ArrayList<>();
-        List<ColumnDetail> searchParams = new ArrayList<>();
-        for (SourceColumn cd : reportDefinition.getSourceColumns()) {
-            ColumnDetail reportheader = new ColumnDetail();
-            reportheader.setLabel(cd.getLabel());
-            reportheader.setName(cd.getName());
-
-            TypeEnum te = TypeEnum.valueOf(cd.getType().toString().toUpperCase());
-
-            reportheader.setType(te);
-            reportheader.setRowTotal(cd.getRowTotal());
-            reportheader.setColumnTotal(cd.getColumnTotal());
-            reportHeaders.add(reportheader);
-
-        }
-        for (SearchColumn cd : reportDefinition.getSearchParams()) {
-
-            ColumnDetail sc = new ColumnDetail();
-
-            TypeEnum te = TypeEnum.valueOf(cd.getType().toString().toUpperCase());
-            sc.setType(te);
-            sc.setLabel(cd.getLabel());
-            sc.setName(cd.getName());
-            sc.setShowColumn(cd.getShowColumn());
-            sc.setDefaultValue(cd.getPattern());
-            sc.setIsMandatory(cd.getIsMandatory());
-
-            sc.setColumnTotal(cd.getColumnTotal());
-            sc.setRowTotal(cd.getRowTotal());
-
-            sc.setInitialValue(cd.getInitialValue());
-            sc.setMinValue(cd.getMinValue());
-            sc.setMaxValue(cd.getMaxValue());
-
-            searchParams.add(sc);
-
-        }
-        rmt.setReportHeader(reportHeaders);
-        rmt.setSearchParams(searchParams);
-        rmt.setAdditionalConfig(reportDefinition.getAdditionalConfig());
-        metadataResponse.setReportDetails(rmt);
-        metadataResponse.setTenantId(metaDataRequest.getTenantId());
+    public MetadataResponse getMetaData(MetaDataRequest metaDataRequest, String moduleName) throws CustomException {
+        String reportName = metaDataRequest.getReportName().concat(moduleName);
         try {
-            integrationService.getData(reportDefinition, metadataResponse, metaDataRequest.getRequestInfo(), moduleName);
+            if (metaResponseCache.containsKey(reportName)) {
+                return metaResponseCache.get(reportName);
+            } else {
+                MetadataResponse metadataResponse = new MetadataResponse();
+                ReportDefinitions rds = ReportApp.getReportDefs();
+                ReportDefinition reportDefinition = new ReportDefinition();
+                //   LOGGER.info("updated repot defs " + ReportApp.getReportDefs() + "\n\n\n");
+                reportDefinition = rds.getReportDefinition(moduleName + " " + metaDataRequest.getReportName());
+                ReportMetadata rmt = new ReportMetadata();
+                if (reportDefinition != null) {
+                    rmt.setReportName(reportDefinition.getReportName());
+                    rmt.setSummary(reportDefinition.getSummary());
+                    rmt.setViewPath(reportDefinition.getViewPath());
+                    rmt.setSearchFilter(reportDefinition.isSearchFilter());
+                    rmt.setSorting(reportDefinition.isSorting());
+                    rmt.setSerialNo(reportDefinition.isSerialNo());
+                    rmt.setSelectiveDownload(reportDefinition.isSelectiveDownload());
+                } else {
+                    throw new CustomException("REPORT_CONFIG_ERROR", "Error in retrieving report definition");
+                }
+                List<ColumnDetail> reportHeaders = new ArrayList<>();
+                List<ColumnDetail> searchParams = new ArrayList<>();
+
+                for (SourceColumn cd : reportDefinition.getSourceColumns()) {
+                    ColumnDetail reportheader = new ColumnDetail();
+                    reportheader.setLabel(cd.getLabel());
+                    reportheader.setName(cd.getName());
+                    if (cd.getType() != null) {
+                        TypeEnum te = TypeEnum.valueOf(cd.getType().toString().toUpperCase());
+                        reportheader.setType(te);
+                        reportheader.setRowTotal(cd.getRowTotal());
+                        reportheader.setColumnTotal(cd.getColumnTotal());
+                        reportHeaders.add(reportheader);
+                    } else {
+                        throw new CustomException("INVALID_TYPE_OF_SOURCE_COLUMN", "Type parameter in report definition is invalid for source column");
+                    }
+
+                }
+                for (SearchColumn cd : reportDefinition.getSearchParams()) {
+
+                    ColumnDetail sc = new ColumnDetail();
+                    if (cd.getType() != null) {
+                        TypeEnum te = TypeEnum.valueOf(cd.getType().toString().toUpperCase());
+                        sc.setType(te);
+                        sc.setLabel(cd.getLabel());
+                        sc.setName(cd.getName());
+                        sc.setShowColumn(cd.getShowColumn());
+                        sc.setDefaultValue(cd.getPattern());
+                        sc.setIsMandatory(cd.getIsMandatory());
+
+                        sc.setColumnTotal(cd.getColumnTotal());
+                        sc.setRowTotal(cd.getRowTotal());
+
+                        sc.setInitialValue(cd.getInitialValue());
+                        sc.setMinValue(cd.getMinValue());
+                        sc.setMaxValue(cd.getMaxValue());
+
+                        searchParams.add(sc);
+                    } else {
+                        throw new CustomException("INVALID_TYPE_OF_SEARCH_PARAM", "Type parameter in report definition is invalid for search param");
+                    }
+                }
+                rmt.setReportHeader(reportHeaders);
+                rmt.setSearchParams(searchParams);
+                rmt.setAdditionalConfig(reportDefinition.getAdditionalConfig());
+                metadataResponse.setReportDetails(rmt);
+                metadataResponse.setTenantId(metaDataRequest.getTenantId());
+                metaResponseCache.put(reportName, metadataResponse);
+                return metadataResponse;
+            }
+        } catch (CustomException ex) {
+            log.error("Invalid report config", ex);
+            throw ex;
         } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            log.error("Error in getting metadata", e);
+            throw new CustomException("ERROR_GETTING_METADATA", e.getMessage());
         }
-        return metadataResponse;
+
     }
 
 
@@ -144,6 +154,7 @@ public class ReportService {
         responseInfo.setResMsgId("Report Definition not found");
         metadataResponses.setRequestInfo(responseInfo);
         metadataResponses.setTenantId(tenantID);
+
         return new ResponseEntity<>(metadataResponses, HttpStatus.NOT_FOUND);
 
     }

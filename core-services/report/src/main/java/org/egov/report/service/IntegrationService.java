@@ -1,12 +1,11 @@
 package org.egov.report.service;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
-import java.net.URLDecoder;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.domain.model.RequestInfoWrapper;
 import org.egov.swagger.model.ColumnDetail;
@@ -17,25 +16,18 @@ import org.egov.swagger.model.MetadataResponse;
 import org.egov.swagger.model.ReportDefinition;
 import org.egov.swagger.model.SearchColumn;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriTemplate;
 
 import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.JsonPath;
 
-
+@Slf4j
 @Service
 public class IntegrationService {
 
     @Autowired
     private RestTemplate restTemplate;
-
-    public static final Logger LOGGER = LoggerFactory.getLogger(IntegrationService.class);
 
     public MetadataResponse getData(ReportDefinition reportDefinition, MetadataResponse metadataResponse, RequestInfo requestInfo, String moduleName) {
 
@@ -44,18 +36,17 @@ public class IntegrationService {
         List<ColumnDetail> columnDetails = metadataResponse.getReportDetails().getSearchParams();
         Map<String, ColumnDetail> colNameMap = columnDetails.stream().collect(Collectors.toMap(ColumnDetail::getName, Function.identity()));
 
-
         for (SearchColumn searchColumn : searchColumns) {
 
             if (searchColumn.getType().equals(TypeEnum.SINGLEVALUELIST) || searchColumn.getType().equals(TypeEnum.SINGLEVALUELISTAC) || searchColumn.getType().equals(TypeEnum.MULTIVALUELIST) || searchColumn.getType().equals(TypeEnum.MULTIVALUELISTAC)) {
-                LOGGER.info("if searchColumn:" + searchColumn);
-                LOGGER.info("Pattern is:" + searchColumn.getColName());
+                log.info("if searchColumn:" + searchColumn);
+                log.info("Pattern is:" + searchColumn.getColName());
 
                 String[] patterns = searchColumn.getPattern().split("\\|");
-                LOGGER.info("patterns:" + patterns.toString());
+                log.info("patterns:" + patterns.toString());
                 String url = patterns[0];
                 //url = url.replaceAll("\\$tenantid",metadataResponse.getTenantId());
-                LOGGER.info("url:" + url);
+                log.info("url:" + url);
                 ColumnDetail columnDetail = colNameMap.get(searchColumn.getName());
 
                 if (url != null && url.startsWith("list://")) {
@@ -76,7 +67,7 @@ public class IntegrationService {
 
                     url = url.replaceAll("\\$currentTime", Long.toString(getCurrentTime()));
 
-                    LOGGER.info("url:" + url);
+                    log.info("url:" + url);
 
                     if (searchColumn.getStateData() && (!metadataResponse.getTenantId().equals("default"))) {
                         stateid = metadataResponse.getTenantId().split("\\.");

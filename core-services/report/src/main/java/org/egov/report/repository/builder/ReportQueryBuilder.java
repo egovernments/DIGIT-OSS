@@ -1,14 +1,14 @@
 package org.egov.report.repository.builder;
 
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TimeZone;
-import java.util.WeakHashMap;
-
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.MapperFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.google.gson.Gson;
+import com.jayway.jsonpath.JsonPath;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.mdms.model.MasterDetail;
@@ -19,11 +19,10 @@ import org.egov.swagger.model.ExternalService;
 import org.egov.swagger.model.ReportDefinition;
 import org.egov.swagger.model.SearchColumn;
 import org.egov.swagger.model.SearchParam;
+import org.egov.tracer.model.CustomException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -33,16 +32,10 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import java.net.URI;
+import java.util.*;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.MapperFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import com.google.gson.Gson;
-import com.jayway.jsonpath.JsonPath;
-
+@Slf4j
 @Component
 public class ReportQueryBuilder {
 
@@ -52,7 +45,6 @@ public class ReportQueryBuilder {
     @Value("${mdms.search.enabled}")
     private boolean isSearchEnabled;
 
-    public static final Logger LOGGER = LoggerFactory.getLogger(ReportQueryBuilder.class);
 
     public String buildQuery(List<SearchParam> searchParams, String tenantId, ReportDefinition reportDefinition, String authToken, Long userId) {
 
@@ -60,7 +52,7 @@ public class ReportQueryBuilder {
 
 
         StringBuffer csinput = new StringBuffer();
-        LOGGER.info("ReportDefinition: " + reportDefinition);
+        log.info("ReportDefinition: " + reportDefinition);
         if (reportDefinition.getQuery().contains("UNION")) {
             baseQuery = generateUnionQuery(searchParams, tenantId, reportDefinition);
         } else if (reportDefinition.getQuery().contains("FULLJOIN")) {
@@ -119,7 +111,7 @@ public class ReportQueryBuilder {
 
         }
 
-        LOGGER.info("baseQuery :" + baseQuery);
+        log.info("baseQuery :" + baseQuery);
         return baseQuery;
     }
 
@@ -152,24 +144,28 @@ public class ReportQueryBuilder {
             }
 
             if (!isSearchEnabled) {
-                LOGGER.info("Entering _get block");
-                url = es.getApiURL();
-                LOGGER.info("URL from yaml config: " + url);
+                log.info("Entering _get block");
+                try {
+                    url = es.getApiURL();
+                } catch (Exception ex) {
+                    throw new CustomException("YAML_CONFIG_ERROR", ex.getMessage());
+                }
+                log.info("URL from yaml config: " + url);
                 url = url.replaceAll("\\$currentTime", Long.toString(getCurrentTime()));
                 String[] stateid = null;
                 if (es.getStateData() && (!tenantid.equals("default"))) {
-                    LOGGER.info("State Data");
+                    log.info("State Data");
                     stateid = tenantid.split("\\.");
                     url = url.replaceAll("\\$tenantid", stateid[0]);
                     finalJson = finalJson.replaceAll("\\$tenantid", stateid[0]);
                 } else {
-                    LOGGER.info("Tenant Data");
+                    log.info("Tenant Data");
                     url = url.replaceAll("\\$tenantId", tenantid);
                     finalJson = finalJson.replaceAll("\\$tenantid", tenantid);
                 }
-                LOGGER.info("Mapper Converted string with replaced values " + requestInfoJson);
+                log.info("Mapper Converted string with replaced values " + requestInfoJson);
                 URI uri = URI.create(url);
-                LOGGER.info("URI: " + uri);
+                log.info("URI: " + uri);
                 MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
                 Map headerMap = new HashMap<String, String>();
                 headerMap.put("Content-Type", "application/json");
@@ -178,25 +174,25 @@ public class ReportQueryBuilder {
                 try {
                     if (es.getPostObject() != null) {
                         res = restTemplate.postForObject(uri, request, String.class);
-                        LOGGER.info("Response - 1: " + res);
+                        log.info("Response - 1: " + res);
                     } else {
                         res = restTemplate.postForObject(uri, getRInfo(authToken), String.class);
-                        LOGGER.info("Response - 2 : " + res);
+                        log.info("Response - 2 : " + res);
                     }
                 } catch (HttpClientErrorException e) {
-                    LOGGER.error("Exception while fetching data from mdms: ", e);
+                    log.error("Exception while fetching data from mdms: ", e);
                 }
             } else {
                 ObjectMapper mapper = new ObjectMapper();
-                LOGGER.info("Entering _search block");
+                log.info("Entering _search block");
                 url = es.getApiURL();
-                LOGGER.info("URL from yaml config: " + url);
+                log.info("URL from yaml config: " + url);
                 String uri = null;
                 MdmsCriteriaReq mdmsCriteriaReq = new MdmsCriteriaReq();
                 String[] criteriaArray = null;
                 Map<String, String> keyValueMap = new WeakHashMap<>();
                 if (reportDefinition.getVersion().equals("1.0.0")) {
-                    LOGGER.info("Entering old config block");
+                    log.info("Entering old config block");
                     String[] splitUrl = url.split("[?]");
                     uri = splitUrl[0].replaceAll("_get", "_search");
                     String queryParam = null;
@@ -207,19 +203,19 @@ public class ReportQueryBuilder {
                         queryParam = splitUrl[1];
                         criteriaArray = queryParam.split("[&]");
                     }
-                    LOGGER.info("criteria: " + criteriaArray);
+                    log.info("criteria: " + criteriaArray);
                     for (String pair : criteriaArray) {
                         if (pair.split("=")[0].equals("tenantId"))
                             continue;
                         keyValueMap.put(pair.split("=")[0], pair.split("=")[1]);
                     }
                 } else {
-                    LOGGER.info("Entering new config block");
+                    log.info("Entering new config block");
                     uri = url;
                     String criteria = es.getCriteria();
                     if (null != criteria) {
                         criteriaArray = criteria.split(",");
-                        LOGGER.info("criteria: " + criteriaArray);
+                        log.info("criteria: " + criteriaArray);
                         for (String pair : criteriaArray) {
                             if (pair.split("=")[0].equals("tenantId"))
                                 continue;
@@ -228,7 +224,7 @@ public class ReportQueryBuilder {
 
                     }
                 }
-                LOGGER.info("keyValueMap: " + keyValueMap);
+                log.info("keyValueMap: " + keyValueMap);
                 MasterDetail masterDetail = new MasterDetail();
                 masterDetail.setName(keyValueMap.get("masterName"));
                 masterDetail.setFilter(keyValueMap.get("filter"));
@@ -244,13 +240,13 @@ public class ReportQueryBuilder {
                 mdmsCriteria.setModuleDetails(moduleDetails);
                 mdmsCriteriaReq.setMdmsCriteria(mdmsCriteria);
                 mdmsCriteriaReq.setRequestInfo(getRInfo(authToken));
-                LOGGER.info("URI: " + uri);
+                log.info("URI: " + uri);
                 try {
-                    LOGGER.info("Request: " + mapper.writeValueAsString(mdmsCriteriaReq));
+                    log.info("Request: " + mapper.writeValueAsString(mdmsCriteriaReq));
                     res = restTemplate.postForObject(uri, mdmsCriteriaReq, String.class);
-                    LOGGER.info("MDMS response: " + res);
+                    log.info("MDMS response: " + res);
                 } catch (Exception e) {
-                    LOGGER.error("Exception while fetching data from mdms: ", e);
+                    log.error("Exception while fetching data from mdms: ", e);
                 }
             }
 
@@ -343,7 +339,7 @@ public class ReportQueryBuilder {
             query.append(" " + orderByQuery);
 
         }
-        LOGGER.info("generate baseQuery :" + query);
+        log.info("generate baseQuery :" + query);
         return query.toString();
     }
 
@@ -466,10 +462,10 @@ public class ReportQueryBuilder {
                 if (name.equals(sc.getName())) {
                     if (sc.getSearchClause() != null) {
                         if (searchParam.getInput() instanceof ArrayList<?>) {
-                            LOGGER.info("Coming in to the instance of ArrayList ");
+                            log.info("Coming in to the instance of ArrayList ");
                             ArrayList<?> list = new ArrayList<>();
                             list = (ArrayList) (searchParam.getInput());
-                            LOGGER.info("Check the list is empty " + list.size());
+                            log.info("Check the list is empty " + list.size());
                             if (list.size() > 0) {
 
                                 query.append(" " + sc.getSearchClause());
@@ -495,7 +491,7 @@ public class ReportQueryBuilder {
         json = mapper.writeValueAsString(json);
         StringBuilder inlineQuery = new StringBuilder();
         if (json.toString().startsWith("[") && json.toString().endsWith("]")) {
-            LOGGER.info("Building inline query for JSONArray.....");
+            log.info("Building inline query for JSONArray.....");
             JSONArray array = new JSONArray(json.toString());
             try {
                 Map<String, Object> map = new HashMap<>();
@@ -527,7 +523,7 @@ public class ReportQueryBuilder {
                     values.replace(values.length() - 1, values.length(), "),");
                 }
                 table.replace(table.length() - 1, table.length(), ")");
-                LOGGER.info("tables: " + table.toString());
+                log.info("tables: " + table.toString());
 
                 values.replace(values.length() - 1, values.length(), ")");
 
@@ -536,12 +532,12 @@ public class ReportQueryBuilder {
                         .append(" AS ")
                         .append(table.toString());
             } catch (Exception e) {
-                LOGGER.error("Exception while building inline query, Valid Data format: [{},{}]. Please verify: ", e);
+                log.error("Exception while building inline query, Valid Data format: [{},{}]. Please verify: ", e);
             }
 
 
         } else {
-            LOGGER.info("Building inline query for a JSON Object.....");
+            log.info("Building inline query for a JSON Object.....");
             try {
                 Map<String, Object> map = new HashMap<>();
                 map = mapper.readValue(json.toString(), new TypeReference<Map<String, Object>>() {
@@ -555,16 +551,16 @@ public class ReportQueryBuilder {
                     values.append("'" + row.getValue() + "'" + ",");
                 }
                 table.replace(table.length() - 1, table.length(), ")");
-                LOGGER.info("tables: " + table.toString());
+                log.info("tables: " + table.toString());
 
                 values.replace(values.length() - 1, values.length(), "))");
-                LOGGER.info("values: " + values.toString());
+                log.info("values: " + values.toString());
 
                 inlineQuery.append(values.toString())
                         .append(" AS ")
                         .append(table.toString());
             } catch (Exception e) {
-                LOGGER.error("Exception while building inline query: ", e);
+                log.error("Exception while building inline query: ", e);
             }
 
 
