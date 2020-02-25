@@ -64,10 +64,16 @@ public class TLBatchService {
      * Searches trade licenses which are expiring and sends reminder sms to
      *  owner's of the licenses
      * @param serviceName
-     * @param validTill
      * @param requestInfo
      */
-    public void getLicensesAndPerformAction(String serviceName, String jobName, Long validTill, RequestInfo requestInfo){
+    public void getLicensesAndPerformAction(String serviceName, String jobName, RequestInfo requestInfo){
+
+
+        Long validTill = System.currentTimeMillis();
+
+        if(jobName.equalsIgnoreCase(JOB_SMS_REMINDER))
+            validTill = validTill + config.getReminderPeriod();
+
 
         TradeLicenseSearchCriteria criteria = TradeLicenseSearchCriteria.builder()
                 .businessService(serviceName)

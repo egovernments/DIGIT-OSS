@@ -335,9 +335,7 @@ public class TradeLicenseService {
         if(serviceName == null)
             serviceName = TRADE_LICENSE_MODULE_CODE;
 
-        Long validTill = System.currentTimeMillis() + config.getReminderPeriod();
-        
-        tlBatchService.getLicensesAndPerformAction(serviceName, jobname, validTill, requestInfo);
+        tlBatchService.getLicensesAndPerformAction(serviceName, jobname, requestInfo);
 
 
     }
