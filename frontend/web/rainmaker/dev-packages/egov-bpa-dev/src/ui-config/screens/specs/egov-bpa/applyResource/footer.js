@@ -119,16 +119,10 @@ const prepareDocumentsDetailsView = async (state, dispatch) => {
         title: getTransformedLocale(doc.documentCode),
         name: doc.documents[0].fileName,
         fileStoreId: doc.documents[0].fileStoreId,
-        linkText: "View"
+        linkText: "View",
+        link: doc.documents[0].fileUrl && doc.documents[0].fileUrl.split(",")[0]
       });
     }
-  });
-  let fileStoreIds = jp.query(documentsPreview, "$.*.fileStoreId");
-  let fileUrls =
-    fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : [];
-  documentsPreview = documentsPreview.map(doc => {
-    doc["link"] = fileUrls[doc.fileStoreId];
-    return doc;
   });
   dispatch(prepareFinalObject("documentDetailsPreview", documentsPreview));
 };

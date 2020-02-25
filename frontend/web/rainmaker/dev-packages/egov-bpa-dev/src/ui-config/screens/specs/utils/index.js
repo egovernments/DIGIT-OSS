@@ -2222,7 +2222,7 @@ export const setLicenseeSubTypeDropdownData = async (
         "apply",
         "components.div.children.formwizardFirstStep.children.LicenseeCard.children.cardContent.children.tradeUnitCardContainer.children.container2.children.licenseeSubType",
         "props.disabled",
-        true
+        false
       )
     );
     dispatch(
@@ -2270,7 +2270,7 @@ export const setLicenseeSubTypeDropdownData = async (
         "apply",
         "components.div.children.formwizardFirstStep.children.LicenseeCard.children.cardContent.children.tradeUnitCardContainer.children.container2.children.licenseeSubType",
         "visible",
-        true
+        false
       )
     );
   }

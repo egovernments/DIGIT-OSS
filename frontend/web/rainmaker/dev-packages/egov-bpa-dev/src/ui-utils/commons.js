@@ -223,7 +223,7 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
     set(payload, "tenantId", tenantId);
     set(payload, "action", status);
 
-    set(payload, "additionalDetails", {});
+    set(payload, "additionalDetails", null);
     set(payload, "units", null);
 
 

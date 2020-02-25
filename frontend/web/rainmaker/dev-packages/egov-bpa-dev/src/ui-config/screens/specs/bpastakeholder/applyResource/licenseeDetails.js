@@ -129,6 +129,13 @@ export const LicenseeCard = getCommonCard({
               dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.additionalDetail.counsilForArchNo", ""));
             }
           }
+          let getClassOfLicenseType = get(
+            state.screenConfiguration.preparedFinalObject,
+            "applyScreenMdmsData.TradeLicense.tradeSubType[0].code"
+          );
+          if(getClassOfRole) {
+            dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType", getClassOfLicenseType));
+          }
         }
       }
     }),
@@ -144,6 +151,7 @@ export const LicenseeCard = getCommonCard({
             labelKey: "BPA_LICENSEE_SUB_TYPE_PLACEHOLDER"
           },
           required: true,
+          visible: false,
           jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType",
           localePrefix: {
             moduleName: "TRADELICENSE",
