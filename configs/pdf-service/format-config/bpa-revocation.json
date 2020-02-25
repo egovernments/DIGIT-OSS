@@ -1,0 +1,171 @@
+{
+    "key": "bpa-revocation",
+    "config": {
+        "defaultStyle": {
+            "font": "Cambay"
+        },
+        "content": [
+            {
+                "columns": [
+                    {
+                        "image": "{{logoImage}}",
+                        "width": 70,
+                        "height": 70,
+                        "alignment": "left"
+                    },
+                    {
+                        "stack": [
+                            {
+                                "text": "{{tenantName}} Muncipal Council",
+                                "style": "header"
+                            },
+                            {
+                                "text": "REVOCATION OF BUILDING PERMIT",
+                                "style": "sub-header"
+                            }
+                        ]
+                    },
+                    {
+                        "image": "{{logoImage}}",
+                        "width": 70,
+                        "height": 70,
+                        "alignment": "right"
+                    }
+                ]
+            },
+            {
+                "columns": [
+                    {
+                        "text": [
+                            {
+                                "text": "Dated : ",
+                                "bold": true
+                            },
+                            {
+                                "text": "{{createdDate}}",
+                                "bold": true
+                            }
+                        ],
+                        "alignment": "right"
+                    }
+                ],
+                "style": "top-margin"
+            },
+            {
+                "text": [
+                    {
+                        "text": "Smt/Sri "
+                    },
+                    {
+                        "text": "{{ownerName}},",
+                        "bold": true
+                    }
+                ],
+                "style": "top-margin"
+            },
+            {
+                "text": [
+                    {
+                        "text": "The plan permission issued  "
+                    },
+                    {
+                        "text": "{{planPermissionNo}}",
+                        "bold": true,
+                        "font": "Roboto"
+                    },
+                    {
+                        "text": " with reference to the application number  "
+                    },
+                    {
+                        "text": "{{applicationNo}}",
+                        "bold": true,
+                        "font": "Roboto"
+                    },
+                    {
+                        "text": " dated "
+                    },
+                    {
+                        "text": "{{createdDate}}",
+                        "bold": true
+                    },
+                    {
+                        "text": " is revocated. "
+                    }
+                ],
+                "style": "top-low-margin"
+            },
+            {
+                "text": [
+                    {
+                        "text": "The reason for revocation is  "
+                    },
+                    {
+                        "text": " {{revocationReason}}.",
+                        "bold": true
+                    },
+                    {
+                        "text": " You are not authorized to construct the building.  "
+                    }
+                ],
+                "style": "top-low-margin"
+            },
+            {
+                "text": [
+                    {
+                        "text": "Please contact ULB officials for further action.  "
+                    }
+                ],
+                "style": "top-low-margin"
+            },
+            {
+                "stack": [
+                    {
+                        "text": "By Order",
+                        "style": "top-margin"
+                    },
+                    {
+                        "text": "Authorised Officer",
+                        "margin": 2
+                    },
+                    {
+                        "text": "{{revocatedBy}}",
+                        "margin": 2
+                    }
+                ],
+                "alignment": "right",
+                "style": "top-margin"
+            }
+        ],
+        "styles": {
+            "header": {
+                "bold": true,
+                "alignment": "center"
+            },
+            "sub-header": {
+                "alignment": "center",
+                "margin": [
+                    0,
+                    5,
+                    0,
+                    5
+                ]
+            },
+            "top-margin": {
+                "margin": [
+                    0,
+                    30,
+                    0,
+                    0
+                ]
+            },
+            "top-low-margin": {
+                "margin": [
+                    0,
+                    10,
+                    0,
+                    0
+                ]
+            }
+        }
+    }
+}
