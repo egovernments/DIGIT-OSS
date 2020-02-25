@@ -179,7 +179,7 @@ class SearchProperty extends Component {
 
       let item = {
         // applicationNo: this.getLink(userType, history, applicationNo, tenantId),
-        applicationNo: <a>{applicationNo}</a>,
+        // applicationNo: <a>{applicationNo}</a>,
         propertyId: this.getLink(userType, history, propertyId, tenantId),
         name: name,
         applicationType: applicationType,

@@ -58,7 +58,7 @@ class DemandCollection extends React.Component {
                         </div>
                         {data.taxHead.map((taxData, index1) => {
                           return (
-                            <div className={`col-xs-12`}>
+                            <div className={`col-xs-12`} key={index1}>
                               <TextField
                                 floatingLabelText={<Label label={taxData.code} />}
                                 hintText={<Label label="PT_ENTER_AN_AMOUNT" />}

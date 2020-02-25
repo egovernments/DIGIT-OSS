@@ -5,12 +5,12 @@ import TableUi from "egov-ui-kit/components/Tables";
 import Label from "egov-ui-kit/utils/translationNode";
 
 const columnData = [
-  {
-    id: "applicationNo",
-    numeric: false,
-    disablePadding: false,
-    label: "PT_PROPERTY_APPLICATION_NUMBER"
-  },
+  // {
+  //   id: "applicationNo",
+  //   numeric: false,
+  //   disablePadding: false,
+  //   label: "PT_PROPERTY_APPLICATION_NUMBER"
+  // },
   {
     id: "propertyId",
     numeric: false,

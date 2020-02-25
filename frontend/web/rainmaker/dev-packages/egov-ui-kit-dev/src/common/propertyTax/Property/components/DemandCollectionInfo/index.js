@@ -28,7 +28,7 @@ class DemandCollectionInfo extends React.Component {
                 <div>
                 {Object.keys(demand.demand).map((datas, ind) => {
                     return (
-                      <div>
+                      <div key={ind}>
                       <div>
                       <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 15px" }}>
                        <b>{datas}</b>
@@ -38,7 +38,7 @@ class DemandCollectionInfo extends React.Component {
                             data['PT_COLLECTED']='';
                           }
                           return data['PT_DEMAND']!=""? (
-                            <div>
+                            <div key={ind}>
                               {Object.keys(data).map((d, i) => {
                                 return (
                                   <div className="col-sm-4 col-xs-12" style={{ marginBottom: 10, marginTop: 5 }}>
