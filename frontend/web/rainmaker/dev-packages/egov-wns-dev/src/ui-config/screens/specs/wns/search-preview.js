@@ -36,7 +36,8 @@ let service = getQueryArg(window.location.href, "service");
 let headerSideText = { word1: "", word2: "" };
 
 const serviceModuleName = service === "WATER" ? "NewWS1" : "NewSW1";
-const serviceUrl = serviceModuleName === "NewWS1" ? "/ws-services/wc/_update" : "/sw-services/swc/_update"
+const serviceUrl = serviceModuleName === "NewWS1" ? "/ws-services/wc/_update" : "/sw-services/swc/_update";
+const servicePath = serviceModuleName === "NewWS1" ? "WaterConnection" : "SewerageConnection"
 
 // const getTradeTypeSubtypeDetails = payload => {
 //   const tradeUnitsFromApi = get(
@@ -392,7 +393,7 @@ const screenConfig = {
           moduleName: "egov-workflow",
           // visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
           props: {
-            dataPath: "WaterConnection",
+            dataPath: servicePath,
             moduleName: serviceModuleName,
             updateUrl: serviceUrl
           }
@@ -404,7 +405,7 @@ const screenConfig = {
           visible: process.env.REACT_APP_NAME === "Citizen" ? true : false,
           props: {
             open: true,
-            dataPath: "WaterConnection",
+            dataPath: servicePath,
             moduleName: serviceModuleName,
             updateUrl: serviceUrl,
             data: {

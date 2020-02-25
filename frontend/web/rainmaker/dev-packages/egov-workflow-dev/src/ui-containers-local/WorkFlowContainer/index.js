@@ -84,7 +84,6 @@ class WorkFlowContainer extends React.Component {
   };
 
   getPurposeString = action => {
-
     switch (action) {
       case "APPLY":
         return "purpose=apply&status=success";
@@ -107,6 +106,8 @@ class WorkFlowContainer extends React.Component {
         return "purpose=refer&status=success";
       case "SENDBACKTOCITIZEN":
         return "purpose=sendbacktocitizen&status=success";
+      case "SUBMIT_APPLICATION":
+        return "purpose=apply&status=success";
     }
   };
 
@@ -171,7 +172,7 @@ class WorkFlowContainer extends React.Component {
         }
       }
     }
-    if (moduleName === "NewWS1") {
+    if (moduleName === "NewWS1" || moduleName === "NewSW1") {
       data = data[0];
     }
     const applicationNumber = getQueryArg(
