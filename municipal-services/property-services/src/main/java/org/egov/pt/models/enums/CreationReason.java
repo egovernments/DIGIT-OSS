@@ -1,5 +1,7 @@
 package org.egov.pt.models.enums;
 
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
@@ -9,8 +11,16 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum CreationReason {
 	
-  NEWPROPERTY("NEWPROPERTY"),
-    
+  CREATE ("CREATE"),
+  
+  UPDATE ("UPDATE"),
+  
+  MUTATION ("MUTATION"),
+  
+  BIFURCATION ("BIFURCATION"),
+  
+  AMALGAMATION ("AMALGAMATION"),
+  
   SUBDIVISION("SUBDIVISION");
 
   private String value;
@@ -25,13 +35,14 @@ public enum CreationReason {
     return String.valueOf(value);
   }
 
-  @JsonCreator
-  public static CreationReason fromValue(String text) {
-    for (CreationReason b : CreationReason.values()) {
-      if (String.valueOf(b.value).equalsIgnoreCase(text)) {
-        return b;
-      }
-    }
-    return null;
-  }
+	@JsonCreator
+	@NotNull
+	public static CreationReason fromValue(String text) {
+		for (CreationReason b : CreationReason.values()) {
+			if (String.valueOf(b.value).equalsIgnoreCase(text)) {
+				return b;
+			}
+		}
+		return null;
+	}
 }

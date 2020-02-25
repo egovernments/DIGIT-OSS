@@ -11,6 +11,7 @@ import org.egov.pt.models.AuditDetails;
 import org.egov.pt.models.Institution;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.PropertyCriteria;
+import org.egov.pt.models.enums.CreationReason;
 import org.egov.pt.models.enums.Status;
 import org.egov.pt.util.PTConstants;
 import org.egov.pt.util.PropertyUtil;
@@ -56,6 +57,7 @@ public class EnrichmentService {
 		AuditDetails propertyAuditDetails = propertyutil.getAuditDetails(requestInfo.getUserInfo().getUuid(), true);
 		
 		property.setId(UUID.randomUUID().toString());
+		property.setCreationReason(CreationReason.CREATE);
 		
 		if (!CollectionUtils.isEmpty(property.getDocuments()))
 			property.getDocuments().forEach(doc -> {
