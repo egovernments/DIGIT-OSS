@@ -164,6 +164,9 @@ public class PropertyValidator {
 				&& !propertyFromSearch.getCreationReason().equals(reason)) {
 			throw new CustomException("EG_PT_ERROR_CREATION_REASON",
 					"The Creation reason sent in the update Request is Invalid, The Creationg reason can be changed only when a new process is initiated on an ACTIVE record");
+		} else if (propertyFromSearch.getStatus().equals(Status.ACTIVE) && reason.equals(CreationReason.CREATE)) {
+			throw new CustomException("EG_PT_ERROR_CREATION_REASON",
+					"The Creation reason sent in the update Request is Invalid, The Creationg reason cannot be create for an ACTIVE record");
 		}
 
 		property.getAddress().setId(propertiesFromSearchResponse.get(0).getAddress().getId());
