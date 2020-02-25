@@ -3,6 +3,10 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { createUpdateBpaApplication, submitBpaApplication } from "../../../../../ui-utils/commons";
+import {
+  handleScreenConfigurationFieldChange as handleField,
+  prepareFinalObject
+} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 let tenant = getQueryArg(window.location.href, "tenantId");
@@ -37,16 +41,18 @@ export const updateBpaApplication = async (state, dispatch, action) => {
     bpaAction = "APPROVE"
   }
 
-  let response = await createUpdateBpaApplication(state, dispatch, bpaAction);
-  let applicationNumber = get( state, "screenConfiguration.preparedFinalObject.BPA.applicationNo" );
-  let tenantId = get( state, "screenConfiguration.preparedFinalObject.BPA.address.city" );
-    if (get(response, "status", "") === "success") {
-      const acknowledgementUrl =
-        process.env.REACT_APP_SELF_RUNNING === "true"
-          ? `/egov-ui-framework/egov-bpa/acknowledgement?purpose=${bpaAction}&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`
-          : `/egov-bpa/acknowledgement?purpose=${bpaAction}&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
-      dispatch(setRoute(acknowledgementUrl));
-    }
+  let toggle = get(
+    state.screenConfiguration.screenConfig["search-preview"],
+    "components.div.children.sendToArchPickerDialog.props.open",
+    false
+  );
+  dispatch(
+    handleField("search-preview", "components.div.children.sendToArchPickerDialog", "props.open", !toggle)
+  );
+  dispatch(
+    handleField("search-preview", "components.div.children.sendToArchPickerDialog.children.dialogContent.children.popup.children.cityPicker.children.cityDropdown", "props.applicationAction", bpaAction)
+  );
+  
 };
 export const citizenFooter = getCommonApplyFooter({
   makePayment: {

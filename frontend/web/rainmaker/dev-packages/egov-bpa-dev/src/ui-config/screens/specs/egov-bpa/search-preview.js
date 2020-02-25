@@ -536,6 +536,44 @@ const screenConfig = {
             updateUrl: "/bpa-services/bpa/appl/_update"
           }
         },
+        sendToArchPickerDialog :{
+          componentPath: "Dialog",
+          props: {
+            open: false,
+            maxWidth: "md"
+          },
+          children: {
+            dialogContent: {
+              componentPath: "DialogContent",
+              props: {
+                classes: {
+                  root: "city-picker-dialog-style"
+                }
+              },
+              children: {
+                popup: getCommonContainer({
+                  header: getCommonHeader({
+                    labelName: "Forward Application",
+                    labelKey: "BPA_FORWARD_APPLICATION_HEADER"
+                  }),
+                  cityPicker: getCommonContainer({
+                    cityDropdown: {
+                      uiFramework: "custom-molecules-local",
+                      moduleName: "egov-bpa",
+                      componentPath: "ActionDialog",
+                      required: true,
+                      gridDefination: {
+                        xs: 12,
+                        sm: 12
+                      },
+                      props: {}
+                    },
+                  })
+                })
+              }
+            }
+          }
+        },
         body: getCommonCard({
           // estimateSummary: estimateSummary,
           fieldSummary: fieldSummary,
