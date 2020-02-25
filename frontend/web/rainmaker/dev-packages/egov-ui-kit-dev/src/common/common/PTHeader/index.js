@@ -5,6 +5,7 @@ import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { initLocalizationLabels } from "egov-ui-kit/redux/app/utils";
 import DownloadPrintButton from "egov-ui-framework/ui-molecules/DownloadPrintButton";
 import { generatePdfFromDiv } from "../../../utils/PTCommon";
+import "./index.css";
 
 const PTHeader = ({ header = '', headerValue = '', subHeaderTitle = '', subHeaderValue = '', downloadPrintButton=false }) => {
     const locale = getLocale() || "en_IN";
@@ -39,7 +40,7 @@ const PTHeader = ({ header = '', headerValue = '', subHeaderTitle = '', subHeade
     }
    
     return (
-        <div style={{ display: "flex" ,marginBottom : downloadPrintButton ? 50 : 10 ,marginTop : 20 ,justifyContent : "space-between"}}>
+        <div className="search-preview-header" style={{ display: "flex" ,marginBottom : downloadPrintButton ? 50 : 10 ,marginTop : 20 ,justifyContent : "space-between"}}>
         <div>
             <Label
                 label={`${getTranslatedLabel(header, localizationLabelsData)} ${headerValue}`}
@@ -69,12 +70,12 @@ const PTHeader = ({ header = '', headerValue = '', subHeaderTitle = '', subHeade
                 fontSize={"16px"}
             />}
         </div>
-       {downloadPrintButton&& <div style={{float : "right" ,display: "flex" ,marginRight:20}} >
+       {downloadPrintButton&& <div className="header-buttons" style={{float : "right" ,display: "flex" ,marginRight:20}} >
           <DownloadPrintButton
             data={{
               label: {
                 llabelName: "DOWNLOAD",
-                labelKey: "TL_DOWNLOAD",
+                labelKey: "PT_DOWNLOAD",
               },
               leftIcon: "print",
               rightIcon: "arrow_drop_down",
@@ -86,7 +87,7 @@ const PTHeader = ({ header = '', headerValue = '', subHeaderTitle = '', subHeade
             data={{
               label: {
                 llabelName: "Print",
-                labelKey: "TL_PRINT",
+                labelKey: "PT_PRINT",
               },
               leftIcon: "print",
               rightIcon: "arrow_drop_down",
