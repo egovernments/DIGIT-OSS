@@ -363,7 +363,7 @@ class TableData extends Component {
       this.setState({
         filter: {
           localityFilter: {
-            selectedValue: ['All'],
+            selectedValue: ['ALL'],
             dropdownData: this.getUniqueList([
               {
                 value: "All",
@@ -372,7 +372,7 @@ class TableData extends Component {
             ])
           },
           moduleFilter: {
-            selectedValue: ['All'],
+            selectedValue: ['ALL'],
             dropdownData: this.getUniqueList([
               {
                 value: "All",
@@ -381,7 +381,7 @@ class TableData extends Component {
             ])
           },
           statusFilter: {
-            selectedValue: ['All'],
+            selectedValue: ['ALL'],
             dropdownData: this.getUniqueList([
               {
                 value: "All",
