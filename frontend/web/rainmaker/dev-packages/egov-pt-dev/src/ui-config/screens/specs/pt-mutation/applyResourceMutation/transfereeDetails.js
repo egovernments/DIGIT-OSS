@@ -241,7 +241,6 @@ const commonApplicantInformation = () => {
           moduleName: "common-masters",
           masterName: "OwnerType"
         },
-        required:true,
         sourceJsonPath: "applyScreenMdmsData.common-masters.OwnerType",
         gridDefination: {
           xs: 12,
@@ -259,6 +258,7 @@ const commonApplicantInformation = () => {
           labelKey: "PT_MUTATION_TRANSFEREE_APPLICANT_CORRESPONDENCE_ADDRESS_PLACEHOLDER"
         },
         pattern: getPattern("Address"),
+        required:true,
         errorMessage: "Invalid Address",
         jsonPath:
           "Property.ownersTemp[0].permanentAddress",

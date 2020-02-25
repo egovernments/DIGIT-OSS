@@ -82,7 +82,7 @@ const moveToReview = (state, dispatch) => {
     return true;
     // setReviewPageRoute(state, dispatch);
   }
-  else{
+  else {
     return false;
   }
 };
@@ -121,35 +121,43 @@ const getMdmsData = async (state, dispatch) => {
   }
 };
 
-const callBackForApply=async(state,dispatch)=>{
-  
-  let tenantId =getQueryArg(window.location.href,"tenantId");
-  let consumerCode=getQueryArg(window.location.href,"consumerCode");
+const callBackForApply = async (state, dispatch) => {
+
+  let tenantId = getQueryArg(window.location.href, "tenantId");
+  let consumerCode = getQueryArg(window.location.href, "consumerCode");
   let propertyPayload = get(
-    state,"screenConfiguration.preparedFinalObject.Property");
-    propertyPayload.workflow={"businessService": "PT.MUTATION", 
+    state, "screenConfiguration.preparedFinalObject.Property");
+  propertyPayload.workflow = {
+    "businessService": "PT.MUTATION",
     tenantId,
     "action": "OPEN",
     "moduleName": "PT"
-},
-propertyPayload.owners[0].status="INACTIVE";
-propertyPayload.additionalDetails.documentDate=1581490792377;
+  },
+    propertyPayload.owners.map(owner => {
+      owner.status = "INACTIVE";
 
-if(propertyPayload.ownershipCategoryTemp.includes("INSTITUTIONAL")){
-  propertyPayload.institutionTemp.altContactNumber=propertyPayload.institutionTemp.landlineNumber;
-  propertyPayload.institutionTemp.ownerType="NONE";
-  propertyPayload.institutionTemp.status="ACTIVE";
-  propertyPayload.institutionTemp.type=propertyPayload.ownershipCategoryTemp;
-  propertyPayload.owners=[...propertyPayload.owners,propertyPayload.institutionTemp]
-  delete propertyPayload.institutionTemp;
-}
-else{
-  propertyPayload.ownersTemp[0].status="ACTIVE";
-  propertyPayload.ownersTemp[0].type=propertyPayload.ownershipCategoryTemp;
-  propertyPayload.owners=[...propertyPayload.owners,...propertyPayload.ownersTemp]
-  delete propertyPayload.ownersTemp;
-}
-delete propertyPayload.ownershipCategoryTemp;
+    })
+  propertyPayload.additionalDetails.documentDate = 1581490792377;
+
+  if (propertyPayload.ownershipCategoryTemp.includes("INSTITUTIONAL")) {
+    propertyPayload.institutionTemp.altContactNumber = propertyPayload.institutionTemp.landlineNumber;
+    propertyPayload.institutionTemp.ownerType = "NONE";
+    propertyPayload.institutionTemp.status = "ACTIVE";
+    propertyPayload.institutionTemp.type = propertyPayload.ownershipCategoryTemp;
+    propertyPayload.owners = [...propertyPayload.owners, propertyPayload.institutionTemp]
+    delete propertyPayload.institutionTemp;
+  }
+  else {
+    // 
+    propertyPayload.ownersTemp.map(owner => {
+      owner.status = "ACTIVE";
+      owner.ownerType = propertyPayload.ownershipCategoryTemp;
+    })
+
+    propertyPayload.owners = [...propertyPayload.owners, ...propertyPayload.ownersTemp]
+    delete propertyPayload.ownersTemp;
+  }
+  delete propertyPayload.ownershipCategoryTemp;
 
 
 
@@ -170,12 +178,12 @@ delete propertyPayload.ownershipCategoryTemp;
       "/property-services/property/_update",
       "_update",
       queryObject,
-      {Property: propertyPayload}
-      
+      { Property: propertyPayload }
+
     );
     // dispatch(prepareFinalObject("Properties", payload.Properties));
     // dispatch(prepareFinalObject("PropertiesTemp",cloneDeep(payload.Properties)));
-    if(payload){
+    if (payload) {
       store.dispatch(
         setRoute(
           `acknowledgement?purpose=apply&status=success&applicationNumber=${payload.Properties[0].acknowldgementNumber}&tenantId=${tenantId}
@@ -183,7 +191,7 @@ delete propertyPayload.ownershipCategoryTemp;
         )
       );
     }
-    else{
+    else {
       store.dispatch(
         setRoute(
           `acknowledgement?purpose=apply&status=failure&applicationNumber=${consumerCode}&tenantId=${tenantId}
@@ -202,6 +210,30 @@ delete propertyPayload.ownershipCategoryTemp;
   }
 }
 
+const validateMobileNumber = (state) => {
+  let err = false;
+  const newOwners = get(state, 'screenConfiguration.preparedFinalObject.Property.ownersTemp');
+  const owners = get(state, 'screenConfiguration.preparedFinalObject.Property.owners');
+  const names = owners.map(owner => {
+    return owner.name
+  })
+  const mobileNumbers = owners.map(owner => {
+    return owner.mobileNumber
+  })
+  newOwners.map(owner => {
+    if (names.includes(owner.name)) {
+      err = "OWNER_NAME_SAME";
+    }
+  })
+  newOwners.map(owner => {
+    if (mobileNumbers.includes(owner.mobileNumber)) {
+      err = "OWNER_NUMBER_SAME";
+    }
+  })
+
+  return err;
+}
+
 const callBackForNext = async (state, dispatch) => {
   let activeStep = get(
     state.screenConfiguration.screenConfig["apply"],
@@ -209,6 +241,7 @@ const callBackForNext = async (state, dispatch) => {
     0
   );
   // console.log(activeStep);
+  let errorMsg = false;
   let isFormValid = true;
   let hasFieldToaster = false;
 
@@ -230,9 +263,9 @@ const callBackForNext = async (state, dispatch) => {
     );
 
 
-let isTransfereeDetailsCardValid=isSingleOwnerValid||isMutilpleOwnerValid||isInstitutionValid;
+    let isTransfereeDetailsCardValid = isSingleOwnerValid || isMutilpleOwnerValid || isInstitutionValid;
 
-    let isApplicantTypeValid=validateFields(
+    let isApplicantTypeValid = validateFields(
       "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.applicantTypeSelection.children",
       state,
       dispatch
@@ -259,24 +292,32 @@ let isTransfereeDetailsCardValid=isSingleOwnerValid||isMutilpleOwnerValid||isIns
       isFormValid = false;
       hasFieldToaster = true;
     }
+
+    if (isFormValid) {
+      errorMsg = validateMobileNumber(state);
+      errorMsg ? isFormValid = false : {};
+    }
+
+
+
   }
 
   if (activeStep === 1) {
-    isFormValid=moveToReview(state, dispatch);
+    isFormValid = moveToReview(state, dispatch);
   }
- if(activeStep===2){
+  if (activeStep === 2) {
 
- }
+  }
   if (activeStep !== 2) {
     if (isFormValid) {
-      
+
       if (activeStep === 0) {
         prepareDocumentsUploadData(state, dispatch);
       }
       if (activeStep === 1) {
         getMdmsData(state, dispatch);
-      
- 
+
+
         // let response = await createUpdateNocApplication(
         //   state,
         //   dispatch,
@@ -284,21 +325,21 @@ let isTransfereeDetailsCardValid=isSingleOwnerValid||isMutilpleOwnerValid||isIns
         // );
         // responseStatus = get(response, "status", "");
       }
-      !hasFieldToaster&&changeStep(state, dispatch);
+      !hasFieldToaster && changeStep(state, dispatch);
     } else if (hasFieldToaster) {
       let errorMessage = {
         labelName: "Please fill all mandatory fields and upload the documents!",
         labelKey: "ERR_UPLOAD_MANDATORY_DOCUMENTS_TOAST"
       };
       switch (activeStep) {
-        case 1:
+        case 0:
           errorMessage = {
             labelName:
               "Please check the Missing/Invalid field for Property Details, then proceed!",
             labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_PROPERTY_TOAST"
           };
           break;
-        case 2:
+        case 1:
           errorMessage = {
             labelName:
               "Please fill all mandatory fields for Applicant Details, then proceed!",
@@ -307,6 +348,13 @@ let isTransfereeDetailsCardValid=isSingleOwnerValid||isMutilpleOwnerValid||isIns
           break;
       }
       dispatch(toggleSnackbar(true, errorMessage, "warning"));
+    } else if (errorMsg) {
+      let errorMes = {
+        labelName:
+          "Duplicate Applicant Details",
+        labelKey: errorMsg
+      };
+      dispatch(toggleSnackbar(true, errorMes, "warning"));
     }
   }
 };
