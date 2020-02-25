@@ -101,8 +101,8 @@ const getAcknowledgementCard = (
             },
             body: {
               labelName:
-                " A notification regarding Application Submission has been sent to trade owner at registered Mobile No. Please note your application No. for future reference ",
-              labelKey: "WS_APPLICATION_SUCCESS_MESSAGE_SUB"
+                " A notification regarding application submission has been sent at registered mobile no. Please note the application no. for future reference. ",
+              labelKey: "WS_APPLICATION_SUCCESS_ACKO_MESSAGE_SUB"
             },
             tailText: {
               labelName: "Water Application No.",

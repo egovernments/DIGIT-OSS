@@ -198,7 +198,7 @@ export const getMyApplicationResults = async (queryObject, dispatch) => {
                 try {
                     const data = await httpRequest(
                         "post",
-                        `billing-service/bill/v2/_fetchbill?consumerCode=${response.WaterConnection[i].applicationNo}&tenantId=${response.WaterConnection[i].property.tenantId}&businessService=WS`,
+                        `billing-service/bill/v2/_fetchbill?consumerCode=${response.WaterConnection[i].applicationNo}&tenantId=${response.WaterConnection[i].property.tenantId}&businessService=WS.ONE_TIME_FEE`,
                         "_fetchbill",
                         // queryObject
                     );
@@ -243,7 +243,7 @@ export const getSWMyApplicationResults = async (queryObject, dispatch) => {
                 try {
                     const data = await httpRequest(
                         "post",
-                        `billing-service/bill/v2/_fetchbill?consumerCode=${response.SewerageConnections[i].applicationNo}&tenantId=${response.SewerageConnections[i].property.tenantId}&businessService=SW`,
+                        `billing-service/bill/v2/_fetchbill?consumerCode=${response.SewerageConnections[i].applicationNo}&tenantId=${response.SewerageConnections[i].property.tenantId}&businessService=SW.ONE_TIME_FEE`,
                         "_fetchbill",
                         // queryObject
                     );
@@ -508,7 +508,7 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
         card["required"] = doc.required ? true : false;
         if (doc.hasDropdown && doc.dropdownData) {
             let dropdown = {};
-            dropdown.label = "NOC_SELECT_DOC_DD_LABEL";
+            dropdown.label = "WS_SELECT_DOC_DD_LABEL";
             dropdown.required = true;
             dropdown.menu = doc.dropdownData.filter(item => {
                 return item.active;

@@ -17,7 +17,7 @@ export const reviewDocuments = (isEditable = true) => {
           },
           ...getCommonSubHeader({
             labelName: "Documents",
-            labelKey: "TL_COMMON_DOCS"
+            labelKey: "WS_COMMON_DOCS"
           })
         },
         editSection: {
