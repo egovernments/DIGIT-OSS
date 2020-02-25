@@ -456,10 +456,11 @@ class FormWizard extends Component {
 
   getOwnerDetails = ownerType => {
     const { selected } = this.state;
+    const {propertiesEdited}= this.props;
     const isReviewPage = selected === 3;
     switch (ownerType) {
       case "SINGLEOWNER":
-        return <OwnerInfoHOC disabled={isReviewPage} />;
+        return <OwnerInfoHOC disabled={propertiesEdited} />;
       case "MULTIPLEOWNERS":
         return (
           <MultipleOwnerInfoHOC
@@ -468,14 +469,14 @@ class FormWizard extends Component {
             }}
             handleRemoveOwner={this.handleRemoveOwner}
             ownerDetails={this.state.ownerInfoArr}
-            disabled={isReviewPage}
+            disabled={propertiesEdited}
           />
         );
       case "INSTITUTIONALPRIVATE":
       case "INSTITUTIONALGOVERNMENT":
         return (
           <div>
-            <InstitutionHOC disabled={isReviewPage} />
+            <InstitutionHOC disabled={propertiesEdited} />
             <InstitutionAuthorityHOC
               cardTitle={
                 <Label
@@ -483,7 +484,7 @@ class FormWizard extends Component {
                   defaultLabel="Details of authorised person"
                 />
               }
-              disabled={isReviewPage}
+              disabled={propertiesEdited}
             />
           </div>
         );
@@ -537,9 +538,10 @@ class FormWizard extends Component {
       assessedPropertyDetails
     } = this.state;
     const { onRadioButtonChange, updateTotalAmount } = this;
-    const { location } = this.props;
+    const { location ,propertiesEdited} = this.props;
     const { search } = location;
     const isCompletePayment = getQueryValue(search, "isCompletePayment");
+
     switch (selected) {
       case 0:
         return (
@@ -567,7 +569,7 @@ class FormWizard extends Component {
         );
         return (
           <div>
-            <OwnershipTypeHOC disabled={fromReviewPage} />
+            <OwnershipTypeHOC disabled={propertiesEdited} />
             {getOwnerDetails(ownerType)}
           </div>
         );

@@ -347,7 +347,8 @@ const onApplicationTabClick =async (rowData, dispatch) => {
   } else if (businessService == 'PT.CREATE') {
     store.dispatch(setRoute(`/property-tax/application-preview?propertyId=${rowData[1].props.children}&applicationNumber=${rowData[7] && rowData[7].acknowldgementNumber}&tenantId=${rowData[6]}&type=property`));
   } else {
-    console.log('Search Error');
+    store.dispatch(setRoute(`/property-tax/property/${rowData[1].props.children}/${rowData[6]}`));
+    // console.log('Search Error');
   }
   // if (rowData[5]==="INITIATED") {
   //   // http://localhost:3006/pt-mutation/search-preview?applicationNumber=PB-AC-2020-02-18-018790&tenantId=pb.amritsar&propertyId=PB-PT-2020-02-18-019402

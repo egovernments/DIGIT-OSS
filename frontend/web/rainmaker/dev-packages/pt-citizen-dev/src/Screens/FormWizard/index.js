@@ -463,10 +463,11 @@ class FormWizard extends Component {
 
   getOwnerDetails = ownerType => {
     const { selected } = this.state;
+    const {propertiesEdited}= this.props;
     const isReviewPage = selected === 3;
     switch (ownerType) {
       case "SINGLEOWNER":
-        return <OwnerInfoHOC disabled={isReviewPage} />;
+        return <OwnerInfoHOC disabled={propertiesEdited} />;
       case "MULTIPLEOWNERS":
         return (
           <MultipleOwnerInfoHOC
@@ -475,14 +476,14 @@ class FormWizard extends Component {
             }}
             handleRemoveOwner={this.handleRemoveOwner}
             ownerDetails={this.state.ownerInfoArr}
-            disabled={isReviewPage}
+            disabled={propertiesEdited}
           />
         );
       case "INSTITUTIONALPRIVATE":
       case "INSTITUTIONALGOVERNMENT":
         return (
           <div>
-            <InstitutionHOC disabled={isReviewPage} />
+            <InstitutionHOC disabled={propertiesEdited} />
             <InstitutionAuthorityHOC
               cardTitle={
                 <Label
@@ -491,7 +492,7 @@ class FormWizard extends Component {
                   label="New"
                 />
               }
-              disabled={isReviewPage}
+              disabled={propertiesEdited}
             />
           </div>
         );
@@ -518,8 +519,7 @@ class FormWizard extends Component {
       termsError, propertyUUID,
       assessedPropertyDetails
     } = this.state;
-    const { form, currentTenantId, search } = this.props;
-    console.log(this.props, 'this.props');
+    const { form, currentTenantId, search ,propertiesEdited} = this.props;
     let { search: searchQuery } = this.props.location;
     let isAssesment = Boolean(getQueryValue(searchQuery, "isAssesment").replace('false', ''));
     const isCompletePayment = getQueryValue(search, "isCompletePayment");
@@ -550,7 +550,7 @@ class FormWizard extends Component {
         );
         return (
           <div>
-            <OwnershipTypeHOC disabled={fromReviewPage} />
+            <OwnershipTypeHOC disabled={propertiesEdited} />
             {getOwnerDetails(ownerType)}
           </div>
         );
