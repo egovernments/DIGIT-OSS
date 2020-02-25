@@ -1,11 +1,9 @@
 import {
     getCommonGrayCard,
-    getCommonSubHeader,
     getCommonContainer,
     getLabelWithValue,
-    getCommonHeader,
-    getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { convertEpochToDate } from "../../utils";
 
 const getHeader = label => {
     return {
@@ -69,7 +67,10 @@ export const dateOfBirth = getLabelWithValue(
     {
         labelKey: "WS_OWN_DETAIL_DOB_LABEL"
     },
-    { jsonPath: "WaterConnection[0].property.owners[0].dob" }
+    {
+        jsonPath: "WaterConnection[0].property.owners[0].dob",
+        callBack: convertEpochToDate
+    }
 )
 
 export const fatherName = getLabelWithValue(

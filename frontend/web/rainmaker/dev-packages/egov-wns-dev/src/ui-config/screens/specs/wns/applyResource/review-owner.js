@@ -4,9 +4,9 @@ import {
   getCommonContainer,
   getLabelWithValue,
   getLabel,
-  getDivider
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { convertEpochToDate } from "../../utils";
 
 const service = getQueryArg(window.location.href, "service")
 
@@ -107,8 +107,7 @@ export const reviewWaterClosets = getLabelWithValue(
     labelKey: "WS_ADDN_DETAILS_NO_OF_WATER_CLOSETS"
   },
   {
-    jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].dob",
-    // callBack: convertEpochToDate
+    jsonPath: "WaterConnection[0].noOfWaterClosets",
   }
 );
 
@@ -168,7 +167,8 @@ export const reviewConnectionExecutionDate = getLabelWithValue(
     labelKey: "WS_SERV_DETAIL_CONN_EXECUTION_DATE"
   },
   {
-    jsonPath: "WaterConnection[0].connectionExecutionDate"
+    jsonPath: "WaterConnection[0].connectionExecutionDate",
+    callBack: convertEpochToDate
   }
 );
 export const reviewMeterId = getLabelWithValue(
@@ -184,7 +184,10 @@ export const reviewMeterInstallationDate = getLabelWithValue(
     labelName: "Meter Installation Date",
     labelKey: "WS_ADDN_DETAIL_METER_INSTALL_DATE"
   },
-  { jsonPath: "WaterConnection[0].meterInstallationDate" }
+  {
+    jsonPath: "WaterConnection[0].meterInstallationDate",
+    callBack: convertEpochToDate
+  }
 );
 
 export const reviewInitialMeterReading = getLabelWithValue(
@@ -192,7 +195,7 @@ export const reviewInitialMeterReading = getLabelWithValue(
     labelName: "Initial Meter Reading",
     labelKey: "WS_ADDN_DETAILS_INITIAL_METER_READING"
   },
-  { jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].pan" }
+  // { jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].pan" }
 );
 
 export const getReviewOwner = (isEditable = true) => {

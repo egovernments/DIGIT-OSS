@@ -84,7 +84,7 @@ class WorkFlowContainer extends React.Component {
   };
 
   getPurposeString = action => {
-       
+
     switch (action) {
       case "APPLY":
         return "purpose=apply&status=success";
@@ -156,20 +156,23 @@ class WorkFlowContainer extends React.Component {
         );
       }
     }
-    if(dataPath === "BPA") {
+    if (dataPath === "BPA") {
       data.assignees = [];
-      if(data.assignee) {
+      if (data.assignee) {
         data.assignee.forEach(assigne => {
           data.assignees.push({
-            uuid : assigne
+            uuid: assigne
           });
         });
       }
-      if(data.wfDocuments) {
-        for(let i = 0; i < data.wfDocuments.length; i++) {
+      if (data.wfDocuments) {
+        for (let i = 0; i < data.wfDocuments.length; i++) {
           data.wfDocuments[i].fileStore = data.wfDocuments[i].fileStoreId
+        }
       }
-      }
+    }
+    if (moduleName === "NewWS1") {
+      data = data[0];
     }
     const applicationNumber = getQueryArg(
       window.location.href,
@@ -187,10 +190,10 @@ class WorkFlowContainer extends React.Component {
       if (payload) {
         let path = "";
 
-        if(moduleName == "PT.CREATE"||moduleName == "ASMT"){
+        if (moduleName == "PT.CREATE" || moduleName == "ASMT") {
           this.props.setRoute(`/pt-mutation/acknowledgement?${this.getPurposeString(
             label
-          )}&moduleName=${moduleName}&applicationNumber=${ get(payload, 'Properties[0].acknowldgementNumber', "")}&tenantId=${get(payload, 'Properties[0].tenantId', "")}`);
+          )}&moduleName=${moduleName}&applicationNumber=${get(payload, 'Properties[0].acknowldgementNumber', "")}&tenantId=${get(payload, 'Properties[0].tenantId', "")}`);
           return;
         }
 
@@ -204,7 +207,7 @@ class WorkFlowContainer extends React.Component {
         )}&applicationNumber=${applicationNumber}&tenantId=${tenant}&secondNumber=${licenseNumber}`;
       }
     } catch (e) {
-      if(moduleName === "BPA") {
+      if (moduleName === "BPA") {
         toggleSnackbar(
           true,
           {
@@ -229,25 +232,25 @@ class WorkFlowContainer extends React.Component {
   createWorkFLow = async (label, isDocRequired) => {
     const { toggleSnackbar, dataPath, preparedFinalObject } = this.props;
     let data = {};
-    
-    if (dataPath == "BPA" || dataPath == "Assessment"||dataPath == "Property") {
-      
+
+    if (dataPath == "BPA" || dataPath == "Assessment" || dataPath == "Property") {
+
       data = get(preparedFinalObject, dataPath, {})
-    }else{
-      data=get(preparedFinalObject, dataPath, [])
+    } else {
+      data = get(preparedFinalObject, dataPath, [])
       data = data[0];
     }
     //setting the action to send in RequestInfo
     let appendToPath = ""
-    if(dataPath === "FireNOCs"){
-      appendToPath ="fireNOCDetails."
-    }else if(dataPath === "Assessment"||dataPath === "Property"  ){
-      appendToPath ="workflow."
-    }else{
+    if (dataPath === "FireNOCs") {
+      appendToPath = "fireNOCDetails."
+    } else if (dataPath === "Assessment" || dataPath === "Property") {
+      appendToPath = "workflow."
+    } else {
       appendToPath = ""
     }
 
-    
+
     set(data, `${appendToPath}action`, label);
 
     if (isDocRequired) {
@@ -267,32 +270,32 @@ class WorkFlowContainer extends React.Component {
   };
 
   getRedirectUrl = (action, businessId, moduleName) => {
-    console.log("modulenamewater",moduleName);
+    console.log("modulenamewater", moduleName);
     const isAlreadyEdited = getQueryArg(window.location.href, "edited");
     const tenant = getQueryArg(window.location.href, "tenantId");
     const { ProcessInstances } = this.props;
     let applicationStatus;
-    if ( ProcessInstances && ProcessInstances.length > 0 ) {
-        applicationStatus = get( ProcessInstances[ProcessInstances.length - 1], "state.applicationStatus" );
+    if (ProcessInstances && ProcessInstances.length > 0) {
+      applicationStatus = get(ProcessInstances[ProcessInstances.length - 1], "state.applicationStatus");
     }
     let baseUrl = "";
     let bservice = "";
-    if(moduleName === "FIRENOC"){
+    if (moduleName === "FIRENOC") {
       baseUrl = "fire-noc";
-    }else if(moduleName === "BPA"){
+    } else if (moduleName === "BPA") {
       baseUrl = "egov-bpa";
-      bservice = ((applicationStatus =="PENDING_APPL_FEE") ? "BPA.NC_APP_FEE" :"BPA.NC_SAN_FEE");
-    }else if(moduleName === "NewWS1"||moduleName === "NewSW1"){
-      baseUrl="wns"
-    }else{
+      bservice = ((applicationStatus == "PENDING_APPL_FEE") ? "BPA.NC_APP_FEE" : "BPA.NC_SAN_FEE");
+    } else if (moduleName === "NewWS1" || moduleName === "NewSW1") {
+      baseUrl = "wns"
+    } else {
       baseUrl = "tradelicence";
     }
     const payUrl = `/egov-common/pay?consumerCode=${businessId}&tenantId=${tenant}`;
     switch (action) {
       case "PAY": return bservice ? `${payUrl}&businessService=${bservice}` : payUrl;
-      case "EDIT" : return isAlreadyEdited
-            ? `/${baseUrl}/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit&edited=true`
-            : `/${baseUrl}/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit`;
+      case "EDIT": return isAlreadyEdited
+        ? `/${baseUrl}/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit&edited=true`
+        : `/${baseUrl}/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit`;
     }
   };
 
@@ -334,7 +337,7 @@ class WorkFlowContainer extends React.Component {
   checkIfTerminatedState = (nextStateUUID, moduleName) => {
     const businessServiceData = JSON.parse(
       localStorageGet("businessServiceData")
-    );    
+    );
     const data = businessServiceData && businessServiceData.length > 0 ? find(businessServiceData, { businessService: moduleName }) : [];
     // const nextState = data && data.length > 0 find(data.states, { uuid: nextStateUUID });
 
@@ -389,13 +392,13 @@ class WorkFlowContainer extends React.Component {
       checkIfDocumentRequired,
       getEmployeeRoles
     } = this;
-    let businessService = moduleName === data[0].businessService ? moduleName  : data[0].businessService;
+    let businessService = moduleName === data[0].businessService ? moduleName : data[0].businessService;
     let businessId = get(data[data.length - 1], "businessId");
     let filteredActions = [];
-    
-      filteredActions = get(data[data.length - 1], "nextActions", []).filter(
-        item => item.action != "ADHOC"
-      );
+
+    filteredActions = get(data[data.length - 1], "nextActions", []).filter(
+      item => item.action != "ADHOC"
+    );
     let applicationStatus = get(
       data[data.length - 1],
       "state.applicationStatus"
@@ -414,7 +417,7 @@ class WorkFlowContainer extends React.Component {
         isDocRequired: checkIfDocumentRequired(item.nextState, businessService)
       };
     });
-    actions=actions.filter(item=>item.buttonLabel!=='INITIATE');
+    actions = actions.filter(item => item.buttonLabel !== 'INITIATE');
     let editAction = getActionIfEditable(
       applicationStatus,
       businessId,
@@ -451,23 +454,23 @@ class WorkFlowContainer extends React.Component {
       ProcessInstances.length > 0 &&
       this.prepareWorkflowContract(ProcessInstances, moduleName);
 
-      let showFooter=process.env.REACT_APP_NAME === "Citizen" ? false : true;
-      
+    let showFooter = process.env.REACT_APP_NAME === "Citizen" ? false : true;
+
     return (
       <div>
         {ProcessInstances && ProcessInstances.length > 0 && (
           <TaskStatusContainer ProcessInstances={ProcessInstances} />
         )}
-       {showFooter&& 
-        <Footer
-          handleFieldChange={prepareFinalObject}
-          variant={"contained"}
-          color={"primary"}
-          onDialogButtonClick={this.createWorkFLow}
-          contractData={workflowContract}
-          dataPath={dataPath}
-          moduleName={moduleName}
-        />}
+        {showFooter &&
+          <Footer
+            handleFieldChange={prepareFinalObject}
+            variant={"contained"}
+            color={"primary"}
+            onDialogButtonClick={this.createWorkFLow}
+            contractData={workflowContract}
+            dataPath={dataPath}
+            moduleName={moduleName}
+          />}
       </div>
     );
   }
@@ -487,7 +490,7 @@ const mapDispacthToProps = dispatch => {
       dispatch(prepareFinalObject(path, value)),
     toggleSnackbar: (open, message, variant) =>
       dispatch(toggleSnackbar(open, message, variant)),
-      setRoute: route => dispatch(setRoute(route))
+    setRoute: route => dispatch(setRoute(route))
   };
 };
 

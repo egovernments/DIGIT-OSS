@@ -445,6 +445,10 @@ const searchResults = async (action, state, dispatch, applicationNumber) => {
     let payload = await getSearchResults(queryObjForSearch);
     payload.WaterConnection[0].service = service;
 
+    // if (payload.WaterConnection[0].meterInstallationDate === 0) {
+    //   payload.WaterConnection[0].meterInstallationDate = 'NA';
+    // }
+
     // to set documents 
     if (payload.WaterConnection[0].documents !== null && payload.WaterConnection[0].documents !== "NA") {
       await setDocuments(
