@@ -12,8 +12,8 @@ import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.PropertyCriteria;
+import org.egov.pt.models.enums.CreationReason;
 import org.egov.pt.models.enums.Status;
-import org.egov.pt.models.workflow.ProcessInstance;
 import org.egov.pt.models.workflow.State;
 import org.egov.pt.producer.Producer;
 import org.egov.pt.repository.PropertyRepository;
@@ -99,10 +99,8 @@ public class PropertyService {
 	public Property updateProperty(PropertyRequest request) {
 
 		Property propertyFromSearch = propertyValidator.validateCommonUpdateInformation(request);
-		ProcessInstance workFlow = request.getProperty().getWorkflow();
 		
-		boolean isRequestForOwnerMutation = workFlow != null
-				&& workFlow.getBusinessService().equalsIgnoreCase(config.getMutationWfName());
+		boolean isRequestForOwnerMutation = CreationReason.MUTATION.equals(request.getProperty().getCreationReason());
 		
 		if (isRequestForOwnerMutation)
 			processOwnerMutation(request, propertyFromSearch);
@@ -176,6 +174,7 @@ public class PropertyService {
 		propertyValidator.validateMutation(request, propertyFromSearch);
 		userService.createUser(request);
 		enrichmentService.enrichMutationRequest(request, propertyFromSearch);
+		
 		// TODO FIX ME block property changes FIXME
 		util.setdataForNotification(request, MUTATION_PROCESS_CONSTANT);
 		util.mergeAdditionalDetails(request, propertyFromSearch);

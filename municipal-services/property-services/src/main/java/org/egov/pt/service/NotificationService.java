@@ -106,16 +106,12 @@ public class NotificationService {
 	public void sendNotificationForMtPayment(PropertyRequest propertyRequest, BigDecimal Amount) {
 
 		Property property = propertyRequest.getProperty();
-		String state = property.getWorkflow().getState().getState();
 		String CompleteMsgs = notifUtil.getLocalizationMessages(property.getTenantId(), propertyRequest.getRequestInfo());
 		
-		if (state.equalsIgnoreCase(WF_STATUS_PAID)) {
-
 			String msg = getMsgForMutation(property, CompleteMsgs, WF_MT_STATUS_PAID_CODE, NOTIFICATION_MUTATION_LINK)
 						.replace(NOTIFICATION_AMOUNT, Amount.toPlainString());
 			msg = replaceCommonValues(property, msg);		
 			prepareMsgAndSend(propertyRequest, msg);
-		}
 	}
 	
 	public void sendNotificationForUpdate(PropertyRequest propertyRequest) {

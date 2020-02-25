@@ -7,6 +7,7 @@ import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Max;
+import javax.validation.constraints.NotNull;
 
 import org.egov.pt.models.enums.Channel;
 import org.egov.pt.models.enums.CreationReason;
@@ -52,6 +53,7 @@ public class Property extends PropertyInfo {
 	private Institution institution;
 
 	@JsonProperty("creationReason")
+	@NotNull
 	private CreationReason creationReason;
 	
 	@JsonProperty("usageCategory")

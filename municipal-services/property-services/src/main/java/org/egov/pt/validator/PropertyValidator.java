@@ -3,6 +3,7 @@ package org.egov.pt.validator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -18,6 +19,7 @@ import org.egov.pt.models.OwnerInfo;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.PropertyCriteria;
 import org.egov.pt.models.Unit;
+import org.egov.pt.models.enums.CreationReason;
 import org.egov.pt.models.enums.Status;
 import org.egov.pt.models.workflow.ProcessInstance;
 import org.egov.pt.service.PropertyService;
@@ -119,31 +121,14 @@ public class PropertyValidator {
         /*
          * Blocking owner changes in update flow
          */
-		Boolean isNewOWnerAdded = false;
-		Boolean isOwnerCancelled = false;
 		List<String> searchOwnerUuids = propertyFromSearch.getOwners().stream().map(OwnerInfo::getUuid).collect(Collectors.toList());
 		List<String> uuidsNotFound = new ArrayList<>();
 
-		for (OwnerInfo owner : request.getProperty().getOwners()) {
-
-			if (owner.getUuid() == null && owner.getStatus().equals(Status.ACTIVE))
-				isNewOWnerAdded = true;
-			else if (owner.getStatus().equals(Status.INACTIVE))
-				isOwnerCancelled = true;
-
-			if (!searchOwnerUuids.contains(owner.getUuid()))
-				uuidsNotFound.add(owner.getUuid());
-		}
-		
 		if(!property.getWorkflow().getBusinessService().equalsIgnoreCase(configs.getUpdatePTWfName()))
 			errorMap.put("EG_PT_UPDATE_PROPERTY_WF_ERROR", "Invalid Workflow name for update, please provide the proper workflow information");
 
-
 		if (!CollectionUtils.isEmpty(uuidsNotFound))
 			errorMap.put("EG_PT_UPDATE_OWNER_UUID_ERROR", "Invalid owners found in request : " + uuidsNotFound);
-
-		if (isNewOWnerAdded || isOwnerCancelled)
-			errorMap.put("EG_PT_UPDATE_OWNER_ERROR", "Update request cannot change owner Information please use mutation process");
 
 		if(searchOwnerUuids.size() != request.getProperty().getOwners().size())
 			errorMap.put("EG_PT_UPDATE_OWNER_SIZE_ERROR", "Update request cannot change owner Information please use mutation process");
@@ -152,21 +137,23 @@ public class PropertyValidator {
 			throw new CustomException(errorMap);
     }
 
-    /**
-     * Validates common criteria of update and mutation
-     * 
-     * @param request
-     * @return
-     */
+	/**
+	 * Validates common criteria of update and mutation
+	 * 
+	 * @param request
+	 * @return
+	 */
 	public Property validateCommonUpdateInformation(PropertyRequest request) {
-		
+
 		Map<String, String> errorMap = new HashMap<>();
 		Property property = request.getProperty();
-		
-		
 		validateIds(request, errorMap);
-        validateMobileNumber(request, errorMap);
-        
+		validateMobileNumber(request, errorMap);
+
+		CreationReason reason = property.getCreationReason();
+		if (!(CreationReason.MUTATION.equals(reason) || CreationReason.UPDATE.equals(reason))) {
+			throw new CustomException("EG_PT_ERROR_CREATION_REASON", "The Creationg reason sent in the update Request is Invalid : " + reason);
+		}
         PropertyCriteria criteria = getPropertyCriteriaForSearch(request);
         List<Property> propertiesFromSearchResponse = service.searchProperty(criteria, request.getRequestInfo());
         boolean ifPropertyExists=PropertyExists(propertiesFromSearchResponse);
@@ -560,59 +547,16 @@ public class PropertyValidator {
 			return true;
 	}
 	
-    /**
-     * Validates if all ids are same as obtained from search result
-     * @param searchResult The license from search
-     * @param licenses The licenses from the update Request
-     */
-    private void validateAllIds(Property property, Property propertyFromSearch, Map<String, String> errorMap){
-
-    	
-//    	if(!propertyFromSearch.getPropertyId().equals(property.getPropertyId()));
-//    		errorMap.compute("EG_PT_UPDATE_PID_ERROR", )
-//    	
-//    	propertyFromSearch
-//    	searchResult.forEach(tradeLicense -> {
-//            idToTradeLicenseFromSearch.put(tradeLicense.getId(),tradeLicense);
-//        });
-//
-//        licenses.forEach(license -> {
-//            TradeLicense searchedLicense = idToTradeLicenseFromSearch.get(license.getId());
-//
-//            if(!searchedLicense.getApplicationNumber().equalsIgnoreCase(license.getApplicationNumber()))
-//                errorMap.put("INVALID UPDATE","The application number from search: "+searchedLicense.getApplicationNumber()
-//                        +" and from update: "+license.getApplicationNumber()+" does not match");
-//
-//            if(!searchedLicense.getTradeLicenseDetail().getId().
-//                    equalsIgnoreCase(license.getTradeLicenseDetail().getId()))
-//                errorMap.put("INVALID UPDATE","The id "+license.getTradeLicenseDetail().getId()+" does not exist");
-//
-//            if(!searchedLicense.getTradeLicenseDetail().getAddress().getId().
-//                    equalsIgnoreCase(license.getTradeLicenseDetail().getAddress().getId()))
-//                errorMap.put("INVALID UPDATE","The id "+license.getTradeLicenseDetail().getAddress().getId()+" does not exist");
-//
-//            compareIdList(getTradeUnitIds(searchedLicense),getTradeUnitIds(license),errorMap);
-//            compareIdList(getAccessoryIds(searchedLicense),getAccessoryIds(license),errorMap);
-//            compareIdList(getOwnerIds(searchedLicense),getOwnerIds(license),errorMap);
-//            compareIdList(getOwnerDocIds(searchedLicense),getOwnerDocIds(license),errorMap);
-//            compareIdList(getApplicationDocIds(searchedLicense),getApplicationDocIds(license),errorMap);
-//            compareIdList(getVerficationDocIds(searchedLicense),getVerficationDocIds(license),errorMap);
-//        });
-//
-//        if(!CollectionUtils.isEmpty(errorMap))
-//            throw new CustomException(errorMap);
-    }
-/*
- * 
- * Mutation methods
- */
-	
+	/*
+	 * 
+	 * Mutation methods
+	 */
 
 	public void validateMutation(PropertyRequest request, Property propertyFromSearch) {
 
 		Map<String, String> errorMap = new HashMap<>();
 		Property property = request.getProperty();
-		ProcessInstance workFlow = property.getWorkflow();	
+		ProcessInstance workFlow = property.getWorkflow();
 
 		String reasonForTransfer = null;
 		String docNo = null;
@@ -648,27 +592,37 @@ public class PropertyValidator {
 			throw new CustomException("EG_PT_ADDITIONALDETAILS_PARSING_ERROR", e.getMessage());
 		}
 
+		Boolean isNullStatusFound = false;
 		Boolean isNewOWnerAdded = false;
 		Boolean isOwnerCancelled = false;
+		Set<Status> statusSet = new HashSet<>();
 		Set<String> searchOwnerUuids = propertyFromSearch.getOwners().stream().map(OwnerInfo::getUuid).collect(Collectors.toSet());
 		List<String> uuidsNotFound = new ArrayList<String>();
 		
 		if(property.getOwners().size() != property.getOwners().stream().map(OwnerInfo::getUuid).collect(Collectors.toSet()).size())
 				errorMap.put("EG_PT_MUTATION_DUPLICATE_OWNER_ERROR", "Same Owner object is repated in the update Request");
 		
-		if(!property.getOwners().stream().map(OwnerInfo::getStatus).collect(Collectors.toSet()).contains(Status.ACTIVE))
-			errorMap.put("EG_PT_MUTATION_ALL_INACTIVE_OWNER_ERROR", "At the least one owner object should be ACTIVE ");
-			
 		for (OwnerInfo owner : property.getOwners()) {
 
+			if (StringUtils.isEmpty(owner.getStatus())) {
+				isNullStatusFound = true;
+			}
+
+			statusSet.add(owner.getStatus());
 			if (owner.getUuid() == null && owner.getStatus().equals(Status.ACTIVE))
 				isNewOWnerAdded = true;
 			else if (owner.getStatus().equals(Status.INACTIVE))
 				isOwnerCancelled = true;
-			
+
 			if (owner.getUuid() != null && !searchOwnerUuids.contains(owner.getUuid()))
 				uuidsNotFound.add(owner.getUuid());
 		}
+
+		if (isNullStatusFound)
+			errorMap.put("EG_PT_MUTATION_ALL_OWNER_STATUS_NULL_ERROR", "Status of the owner objects cannot be null, please make the status either ACTIVE or INACTIVE");
+
+		if (!statusSet.contains(Status.ACTIVE))
+			errorMap.put("EG_PT_MUTATION_ALL_OWNER_INACTIVE_ERROR", "At the least one owner object should be ACTIVE");
 
 		if (!CollectionUtils.isEmpty(uuidsNotFound))
 			errorMap.put("EG_PT_UPDATE_OWNER_ERROR", "Invalid owners found in request : " + uuidsNotFound);
@@ -676,12 +630,10 @@ public class PropertyValidator {
 		if (!propertyFromSearch.getStatus().equals(Status.INWORKFLOW)) {
 
 			if (!isNewOWnerAdded && !isOwnerCancelled)
-				errorMap.put("EG_PT_MUTATION_OWNER_ERROR",
-						"Mutation request should either add a new owner object or make an existing object INACTIVE in the request");
+				errorMap.put("EG_PT_MUTATION_OWNER_ERROR", "Mutation request should either add a new owner object or make an existing object INACTIVE in the request");
 
 			if (isOwnerCancelled && property.getOwners().size() == 1)
-				errorMap.put("EG_PT_MUTATION_OWNER_REMOVAL_ERROR",
-						"Single owner of a property cannot be deactivated or removed in a mutation request");
+				errorMap.put("EG_PT_MUTATION_OWNER_REMOVAL_ERROR", "Single owner of a property cannot be deactivated or removed in a mutation request");
 		}
 		
 		if (StringUtils.isEmpty(reasonForTransfer) || StringUtils.isEmpty(docNo) || ObjectUtils.isEmpty(docDate) || ObjectUtils.isEmpty(docVal) || ObjectUtils.isEmpty(marketVal)) {
@@ -696,10 +648,9 @@ public class PropertyValidator {
 		
 		if (propertyFromSearch.getStatus().equals(Status.INWORKFLOW)
 				&& property.getWorkflow().getAction().equalsIgnoreCase(configs.getMutationOpenState()))
-			errorMap.put("EG_PT_MUTATION_WF_ACTION_ERROR",
-					"Invalid action, OPEN action cannot be applied on an active workflow ");
+			errorMap.put("EG_PT_MUTATION_WF_ACTION_ERROR", "Invalid action, OPEN action cannot be applied on an active workflow ");
 
-		if(!CollectionUtils.isEmpty(errorMap))
+		if (!CollectionUtils.isEmpty(errorMap))
 			throw new CustomException(errorMap);
 	}
 
