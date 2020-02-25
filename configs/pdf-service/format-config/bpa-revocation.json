@@ -100,7 +100,7 @@
                         "text": "The reason for revocation is  "
                     },
                     {
-                        "text": " reason for revocation.",
+                        "text": " {{revocationReason}}.",
                         "bold": true
                     },
                     {
@@ -128,7 +128,7 @@
                         "margin": 2
                     },
                     {
-                        "text": "ULB official",
+                        "text": "{{revocatedBy}}",
                         "margin": 2
                     }
                 ],

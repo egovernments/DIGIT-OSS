@@ -53,6 +53,26 @@
                                 }
                             }
                         ]
+                    },
+                    {
+                        "externalAPI": [
+                            {
+                                "path": "http://192.168.1.134:8089/egov-workflow-v2/egov-wf/process/_search",
+                                "queryParam": "tenantId=$.tenantId,businessIds=$.applicationNo,history=true",
+                                "apiRequest": null,
+                                "responseMapping": [
+                                    {
+                                        "variable": "revocatedBy",
+                                        "value": "$.ProcessInstances[?(@.action=='REVOCATE')].assigner.name",
+                                        "isUpperCaseRequired": true
+                                    },
+                                    {
+                                        "variable": "revocationReason",
+                                        "value": "$.ProcessInstances[?(@.action=='REVOCATE')].comment"
+                                    }
+                                ]
+                            }
+                        ]
                     }
                 ]
             }
