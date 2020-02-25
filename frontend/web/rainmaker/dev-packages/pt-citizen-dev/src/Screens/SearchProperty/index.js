@@ -27,6 +27,7 @@ import {
 } from "egov-ui-kit/utils/localStorageUtils";
 import { getDateFromEpoch, navigateToApplication, getApplicationType } from "egov-ui-kit/utils/commons";
 import "./index.css";
+import {getRowData} from "egov-ui-kit/utils/PTCommon";
 
 const PropertySearchFormHOC = formHoc({
   formKey: "searchProperty",
@@ -34,13 +35,7 @@ const PropertySearchFormHOC = formHoc({
   isCoreConfiguration: true
 })(SearchPropertyForm);
 
-const linkStyle = {
-  height: 20,
-  lineHeight: "auto",
-  minWidth: "inherit",
-  cursor: "pointer",
-  textDecoration: "underline"
-};
+
 
 class SearchProperty extends Component {
   constructor(props) {
@@ -113,54 +108,11 @@ class SearchProperty extends Component {
   };
 
 
-  onApplicationClick = async (applicationNo, tenantId, propertyId) => {
-    const businessService = await getApplicationType(applicationNo, tenantId);
-    navigateToApplication(businessService, this.props.history, applicationNo, tenantId, propertyId);
-  }
+  
+  
 
-  getApplicationLink = (applicationNo, tenantId, propertyId) => {
-    return (
-      <a
-        style={linkStyle}
-        onClick={() => this.onApplicationClick(applicationNo, tenantId, propertyId)}
-      >
-        {applicationNo}
-      </a>
-    );
-  }
-
-  getLink = (userType, history, id, tenantId) => {
-    return (
-      <a
-        style={linkStyle}
-        onClick={
-          userType === "CITIZEN"
-            ? e => {
-              history.push(
-                `/property-tax/my-properties/property/${id}/${tenantId}`
-              );
-            }
-            : e => {
-              history.push(
-                `/property-tax/property/${id}/${tenantId}`
-              );
-            }
-        }
-      >
-        {id}
-      </a>
-    );
-  }
-  getStatusColor = (status) => {
-    switch (status) {
-      case 'INWORKFLOW':
-        return status = <span style={{ color: "red" }}>{status}</span>
-      case 'ACTIVE':
-        return status = <span style={{ color: "green" }}>{status}</span>
-      default:
-        return status;
-    }
-  }
+  
+  
   extractTableData = properties => {
     const { history } = this.props;
     const userType = JSON.parse(getUserInfo()).type;
@@ -183,14 +135,7 @@ class SearchProperty extends Component {
       // let assessmentNo = latestAssessment.assessmentNumber;
       // const uuid = get(latestAssessment, "citizenInfo.uuid");
 
-      let item = {
-        applicationNo: this.getApplicationLink(applicationNo, tenantId, propertyId),
-        propertyId: this.getLink(userType, history, propertyId, tenantId),
-        applicationType: applicationType,
-        name: name,
-        date: date,
-        status: this.getStatusColor(status)
-      };
+      let item = getRowData(property,history);
       tableData.push(item);
       return tableData;
     }, []);

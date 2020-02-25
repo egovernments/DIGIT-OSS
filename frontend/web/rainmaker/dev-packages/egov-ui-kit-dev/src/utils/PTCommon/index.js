@@ -1,4 +1,5 @@
 import get from "lodash/get";
+import React from "react";
 import set from "lodash/set";
 import uniqBy from "lodash/uniqBy";
 import sortBy from "lodash/sortBy";
@@ -6,6 +7,10 @@ import isUndefined from "lodash/isUndefined";
 import cloneDeep from "lodash/cloneDeep";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import { getDateFromEpoch,navigateToApplication,  getApplicationType } from "egov-ui-kit/utils/commons";
+import {
+  getUserInfo
+} from "egov-ui-kit/utils/localStorageUtils";
 import { getPlotAndFloorFormConfigPath } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/utils/assessInfoFormManager";
 
 export const resetFormWizard = (form, removeForm) => {
@@ -34,6 +39,77 @@ export const resetFormWizard = (form, removeForm) => {
   });
 };
 
+const onApplicationClick = async (applicationNo, tenantId, propertyId,history) => {
+  const businessService = await getApplicationType(applicationNo, tenantId);
+  navigateToApplication(businessService,history, applicationNo, tenantId, propertyId);
+}
+const linkStyle = {
+  height: 20,
+  lineHeight: "auto",
+  minWidth: "inherit",
+  cursor: "pointer",
+  textDecoration: "underline"
+};
+
+const getApplicationLink = (applicationNo, tenantId, propertyId,history) => {
+  return (
+    <a
+      style={linkStyle}
+      onClick={() => onApplicationClick(applicationNo, tenantId, propertyId,history)}
+    >
+      {applicationNo}
+    </a>
+  );
+}
+
+const getLink = (userType, history, id, tenantId) => {
+  return (
+    <a
+      style={linkStyle}
+      onClick={
+        userType === "CITIZEN"
+          ? e => {
+            history.push(
+              `/property-tax/my-properties/property/${id}/${tenantId}`
+            );
+          }
+          : e => {
+            history.push(
+              `/property-tax/property/${id}/${tenantId}`
+            );
+          }
+      }
+    >
+      {id}
+    </a>
+  );
+}
+
+const getStatusColor = (status) => {
+  switch (status) {
+    case 'INWORKFLOW':
+      return status = <span style={{ color: "red" }}>{status}</span>
+    case 'ACTIVE':
+      return status = <span style={{ color: "green" }}>{status}</span>
+    default:
+      return status;
+  }
+}
+
+export const getRowData=(property,history)=>{
+  let date = getDateFromEpoch(property.auditDetails.createdTime);
+      const userType = JSON.parse(getUserInfo()).type;
+  return {
+        
+    applicationNo: getApplicationLink(property.acknowldgementNumber, property.tenantId, property.propertyId,history),
+    propertyId: getLink(userType, history, property.propertyId, property.tenantId),
+    applicationType: "PT",
+    name: property.owners[0].name,
+    date: date,
+    status: getStatusColor(property.status)
+
+}
+}
 
 export const getFormattedDate = (date)=>{
   const dateArray=new Date(date).toString().split(' ');
