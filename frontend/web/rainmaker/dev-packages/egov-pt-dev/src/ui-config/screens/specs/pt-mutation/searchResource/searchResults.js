@@ -213,12 +213,15 @@ export const searchApplicationTable = {
           filter: false,
           customBodyRender: value => (
             <span
+            onClick={()=>{
+                applicationNumberClick(value)
+              }
+            }
               style={
                 { color: "#337ab7", cursor: "pointer", textDecoration: "underline" }
               }
-
-            >
-              {value}
+              >
+              {value.acknowldgementNumber}
             </span>
           )
         }
@@ -232,9 +235,11 @@ export const searchApplicationTable = {
               style={
                 { color: "#337ab7", cursor: "pointer", textDecoration: "underline" }
               }
-
+              onClick={()=>{
+                propertyIdClick(value)
+              }}
             >
-              {value}
+              {value.propertyId}
             </span>
           )
         }
@@ -281,7 +286,7 @@ export const searchApplicationTable = {
       hover: true,
       rowsPerPageOptions: [10, 15, 20],
       onRowClick: (row, index, dispatch) => {
-        onApplicationTabClick(row, dispatch);
+        // onApplicationTabClick(row,index, dispatch);
       }
     },
     customSortColumn: {
@@ -341,22 +346,33 @@ const getApplicationType = async (applicationNumber, tenantId) => {
   }
 }
 const onApplicationTabClick =async (rowData, dispatch) => {
+  
   const businessService = await getApplicationType(rowData[7] && rowData[7].acknowldgementNumber, rowData[6]);
   if (businessService == 'PT.MUTATION') {
-    store.dispatch(setRoute(`/pt-mutation/search-preview?applicationNumber=${rowData[7] && rowData[7].acknowldgementNumber}&propertyId=${rowData[1].props.children}&tenantId=${rowData[6]}`));
+    // store.dispatch(setRoute(`/pt-mutation/search-preview?applicationNumber=${rowData[7] && rowData[7].acknowldgementNumber}&propertyId=${rowData[1].props.children}&tenantId=${rowData[6]}`));
   } else if (businessService == 'PT.CREATE') {
-    store.dispatch(setRoute(`/property-tax/application-preview?propertyId=${rowData[1].props.children}&applicationNumber=${rowData[7] && rowData[7].acknowldgementNumber}&tenantId=${rowData[6]}&type=property`));
+    // store.dispatch(setRoute(`/property-tax/application-preview?propertyId=${rowData[1].props.children}&applicationNumber=${rowData[7] && rowData[7].acknowldgementNumber}&tenantId=${rowData[6]}&type=property`));
   } else {
-    store.dispatch(setRoute(`/property-tax/property/${rowData[1].props.children}/${rowData[6]}`));
-    // console.log('Search Error');
+    // store.dispatch(setRoute(`/property-tax/property/${rowData[1].props.children}/${rowData[6]}`));
   }
-  // if (rowData[5]==="INITIATED") {
-  //   // http://localhost:3006/pt-mutation/search-preview?applicationNumber=PB-AC-2020-02-18-018790&tenantId=pb.amritsar&propertyId=PB-PT-2020-02-18-019402
-  //   store.dispatch(setRoute(`/pt-mutation/search-preview?applicationNumber=${rowData[7]&&rowData[7].acknowldgementNumber}&propertyId=${rowData[1].props.children}&tenantId=${rowData[6]}`));
-  // }
-  //   else{
-  //     // store.dispatch(setRoute(`/property-tax/property/${rowData[1]}/${rowData[6]}`));
-  //     // property-tax/application-preview?propertyId=PB-PT-2020-02-12-019323&applicationNumber=PB-AS-2020-02-14-058692&tenantId=pb.amritsar&type=assessment&assessmentNumber=PB-AS-2020-02-14-058692
-  //     store.dispatch(setRoute(`/property-tax/application-preview?propertyId=${rowData[1].props.children}&applicationNumber=${rowData[7]&&rowData[7].acknowldgementNumber}&tenantId=${rowData[6]}&type=property`));
-  // }
+ 
+}
+
+const applicationNumberClick = async (item) => {
+  
+  const businessService = await getApplicationType(item&&item.acknowldgementNumber, item.tenantId);
+  if (businessService == 'PT.MUTATION') {
+    store.dispatch(setRoute(`/pt-mutation/search-preview?applicationNumber=${item.acknowldgementNumber}&tenantId=${item.tenantId}`));
+  } else if (businessService == 'PT.CREATE') {
+    store.dispatch(setRoute(`/property-tax/application-preview?applicationNumber=${item.acknowldgementNumber}&tenantId=${item.tenantId}&type=property`));
+  } else {
+    store.dispatch(setRoute(`/property-tax/property/${item.propertyId}/${item.tenantId}`));
+  }
+ 
+}
+
+const propertyIdClick =  (item) => {
+
+   store.dispatch(setRoute(`/property-tax/property/${item.propertyId}/${item.tenantId}`));
+ 
 }

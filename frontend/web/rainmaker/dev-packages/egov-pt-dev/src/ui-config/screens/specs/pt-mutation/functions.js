@@ -202,8 +202,8 @@ const searchApiCall = async (state, dispatch, index) => {
         // [getTextToLocalMapping("Application No")]:
         //   item.applicationNo || "-",
         [getTextToLocalMapping("Application No")]:
-          item.acknowldgementNumber || "-",
-        [getTextToLocalMapping("Property Tax Unique Id")]: item.propertyId || "-",
+          item || "-",
+        [getTextToLocalMapping("Property Tax Unique Id")]: item || "-",
         [getTextToLocalMapping("Application Type")]:
           item.applicationNo || "PT",
         [getTextToLocalMapping("Owner Name")]:
