@@ -1,0 +1,61 @@
+{
+    "key": "bpa-revocation",
+    "DataConfigs": {
+        "serviceName": "rainmaker-bpa",
+        "version": "1.0.0",
+        "baseKeyPath": "$.Bpa.*",
+        "entityIdPath": "$.applicationNo",
+        "isCommonTableBorderRequired": true,
+        "mappings": [
+            {
+                "mappings": [
+                    {
+                        "direct": [
+                            {
+                                "variable": "logoImage",
+                                "url": "https://raw.githubusercontent.com/egovernments/egov-web-app/master/web/rainmaker/dev-packages/egov-ui-kit-dev/src/assets/images/pblogo.png",
+                                "type": "image"
+                            },
+                            {
+                                "variable": "applicationNo",
+                                "value": {
+                                    "path": "$.applicationNo"
+                                }
+                            },
+                            {
+                                "variable": "planPermissionNo",
+                                "value": {
+                                    "path": "$.permitOrderNo"
+                                }
+                            },
+                            {
+                                "variable": "tenantName",
+                                "value": {
+                                    "path": "$.tenantId"
+                                },
+                                "localisation": {
+                                    "required": true,
+                                    "prefix": "TENANT_TENANTS",
+                                    "module": "rainmaker-common"
+                                }
+                            },
+                            {
+                                "variable": "createdDate",
+                                "value": {
+                                    "path": "$.auditDetails.createdTime"
+                                },
+                                "type": "date"
+                            },
+                            {
+                                "variable": "ownerName",
+                                "value": {
+                                    "path": "$.owners.*.name"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}
