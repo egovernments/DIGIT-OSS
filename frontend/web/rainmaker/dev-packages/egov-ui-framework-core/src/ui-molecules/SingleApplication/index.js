@@ -82,6 +82,7 @@ class SingleApplication extends React.Component {
         switch (item.status) {
           case "Initiated":
             setRoute(`/egov-bpa/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
+            break;
           default:
             setRoute(`/egov-bpa/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
         }        
