@@ -117,6 +117,7 @@ const routes = [
     options: {
       hideFooter: true,
       hideTitle:true,
+      title: "PT_HOME_MYPROPERTIES",
       // hideBackButton: true,
     }
   },
