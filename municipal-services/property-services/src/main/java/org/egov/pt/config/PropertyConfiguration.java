@@ -256,6 +256,10 @@ public class PropertyConfiguration {
     @Value("${assessment.workflow.trigger.object}")
     private String assessmentWorkflowObjectTriggers;
 
+    @Value("${assessment.workflow.demand.trigger}")
+    private String demandTriggerState;
+
+
 
     // Calculation
 
