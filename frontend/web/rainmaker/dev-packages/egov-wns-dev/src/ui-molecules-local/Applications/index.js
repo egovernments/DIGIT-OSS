@@ -19,14 +19,6 @@ const styles = {
 };
 
 class Applications extends React.Component {
-  //   getConnectionDetails = data => {
-  //     window.location.href = `/citizen/wns/connection-details?connectionNumber=${data.connectionNo}&tenantId=${data.property.tenantId}&service=${data.service.toUpperCase()}&connectionType=${data.connectionType}`
-  //   }
-
-  // getViewBillDetails = data => {
-  //   window.location.href = `/citizen/wns/viewBill?connectionNumber=${data.connectionNo}&tenantId=${data.property.tenantId}&service=${data.service.toUpperCase()}&connectionType=${data.connectionType}`
-  // }
-
   getTaskDetails = data => {
     data.service = data.service.toUpperCase();
     window.location.href = `/citizen/wns/search-preview?applicationNumber=${data.applicationNo}&history=${true}&tenantId=${data.property.tenantId}&service=${data.service}`

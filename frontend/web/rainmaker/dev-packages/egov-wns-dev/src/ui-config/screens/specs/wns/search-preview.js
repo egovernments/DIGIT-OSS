@@ -38,24 +38,6 @@ let headerSideText = { word1: "", word2: "" };
 const serviceModuleName = service === "WATER" ? "NewWS1" : "NewSW1";
 const serviceUrl = serviceModuleName === "NewWS1" ? "/ws-services/wc/_update" : "/sw-services/swc/_update";
 
-// const getTradeTypeSubtypeDetails = payload => {
-//   const tradeUnitsFromApi = get(
-//     payload,
-//     "Licenses[0].tradeLicenseDetail.tradeUnits",
-//     []
-//   );
-//   const tradeUnitDetails = [];
-//   tradeUnitsFromApi.forEach(tradeUnit => {
-//     const { tradeType } = tradeUnit;
-//     const tradeDetails = tradeType.split(".");
-//     tradeUnitDetails.push({
-//       trade: get(tradeDetails, "[0]", ""),
-//       tradeType: get(tradeDetails, "[1]", ""),
-//       tradeSubType: get(tradeDetails, "[2]", "")
-//     });
-//   });
-//   return tradeUnitDetails;
-// };
 
 //---------------- existing Code -------------------- //
 // const searchResults = async (action, state, dispatch, applicationNo) => {
@@ -171,19 +153,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       );
     }
 
-    const footer = footerReview(
-      action,
-      state,
-      dispatch,
-      status,
-      applicationNumber,
-      tenantId
-    );
-    process.env.REACT_APP_NAME === "Citizen"
-      ? set(action, "screenConfig.components.div.children.footer", footer)
-      : set(action, "screenConfig.components.div.children.footer", {});
-
-    if (status === "cancelled")
+  if (status === "cancelled")
       set(
         action,
         "screenConfig.components.div.children.headerDiv.children.helpSection.children.cancelledLabel.visible",
@@ -330,7 +300,6 @@ export const summaryScreen = getCommonCard({
 })
 
 const screenConfig = {
-
   uiFramework: "material-ui",
   name: "search-preview",
   beforeInitScreen: (action, state, dispatch) => {
