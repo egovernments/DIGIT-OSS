@@ -914,6 +914,7 @@ class FormWizard extends Component {
         }
       }
       try {
+        propertyPayload.creationReason=action=='create'?'CREATE':'UPDATE';
         const propertyResponse = await httpRequest(
           `property-services/property/${propertyMethodAction}`,
           `${propertyMethodAction}`,

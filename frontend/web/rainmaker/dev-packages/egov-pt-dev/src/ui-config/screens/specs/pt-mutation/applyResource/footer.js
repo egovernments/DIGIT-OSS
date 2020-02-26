@@ -143,7 +143,7 @@ const callBackForApply = async (state, dispatch) => {
     propertyPayload.institutionTemp.altContactNumber = propertyPayload.institutionTemp.landlineNumber;
     propertyPayload.institutionTemp.ownerType = "NONE";
     propertyPayload.institutionTemp.status = "ACTIVE";
-    propertyPayload.institutionTemp.type = propertyPayload.ownershipCategoryTemp;
+    // propertyPayload.institutionTemp.type = propertyPayload.ownershipCategoryTemp;
     propertyPayload.owners = [...propertyPayload.owners, propertyPayload.institutionTemp]
     delete propertyPayload.institutionTemp;
   }
@@ -151,15 +151,14 @@ const callBackForApply = async (state, dispatch) => {
     // 
     propertyPayload.ownersTemp.map(owner => {
       owner.status = "ACTIVE";
-      owner.ownerType = propertyPayload.ownershipCategoryTemp;
+      owner.ownerType = 'NONE';
     })
 
     propertyPayload.owners = [...propertyPayload.owners, ...propertyPayload.ownersTemp]
     delete propertyPayload.ownersTemp;
   }
+  propertyPayload.ownershipCategory = ownershipCategoryTemp;
   delete propertyPayload.ownershipCategoryTemp;
-
-
 
   try {
     let queryObject = [
@@ -172,6 +171,7 @@ const callBackForApply = async (state, dispatch) => {
         value: consumerCode
       }
     ];
+    propertyPayload.creationReason = 'MUTATION';
     let payload = null;
     payload = await httpRequest(
       "post",
