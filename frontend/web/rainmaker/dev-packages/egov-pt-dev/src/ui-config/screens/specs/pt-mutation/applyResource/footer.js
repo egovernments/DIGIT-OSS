@@ -157,7 +157,7 @@ const callBackForApply = async (state, dispatch) => {
     propertyPayload.owners = [...propertyPayload.owners, ...propertyPayload.ownersTemp]
     delete propertyPayload.ownersTemp;
   }
-  propertyPayload.ownershipCategory = ownershipCategoryTemp;
+  propertyPayload.ownershipCategory = propertyPayload.ownershipCategoryTemp;
   delete propertyPayload.ownershipCategoryTemp;
 
   try {
