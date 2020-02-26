@@ -154,7 +154,7 @@ public class AssessmentService {
 
 
 		}
-		else {
+		else if(!config.getIsAssessmentWorkflowEnabled()){
 			calculationService.calculateTax(request, property);
 			producer.push(props.getUpdateAssessmentTopic(), request);
 		}
