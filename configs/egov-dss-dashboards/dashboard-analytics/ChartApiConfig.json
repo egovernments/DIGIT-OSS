@@ -933,6 +933,12 @@
       },
       {
         "Penalty": "amount"
+      },
+      {
+        "Time Interest": "amount"
+      },
+      {
+        "Round Off": "amount"
       }
     ],
     "insight": {
@@ -991,6 +997,12 @@
       },
       {
         "Penalty": "amount"
+      },
+      {
+        "Time Interest": "amount"
+      },
+      {
+        "Round Off": "amount"
       }
     ],
     "insight": {
@@ -1048,6 +1060,12 @@
       },
       {
         "Penalty": "amount"
+      },
+      {
+        "Time Interest": "amount"
+      },
+      {
+        "Round Off": "amount"
       }
     ],
     "insight": {
@@ -1523,6 +1541,9 @@
     ],
     "pathDataTypeMapping": [
       {
+        "Total Amount": "amount"
+      },
+      {
         "TL Tax": "amount"
       },
       {
@@ -1564,6 +1585,9 @@
     ],
     "pathDataTypeMapping": [
       {
+        "Total Amount": "amount"
+      },
+      {
         "TL Tax": "amount"
       },
       {
@@ -1604,7 +1628,10 @@
     ],
     "pathDataTypeMapping": [
       {
-        "Tax": "amount"
+        "Total Amount": "amount"
+      },
+      {
+        "TL Tax": "amount"
       },
       {
         "Adhoc Penalty": "amount"
