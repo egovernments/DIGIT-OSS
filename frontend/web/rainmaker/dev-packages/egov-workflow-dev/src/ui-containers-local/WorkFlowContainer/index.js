@@ -172,13 +172,20 @@ class WorkFlowContainer extends React.Component {
         }
       }
     }
-    if (moduleName === "NewWS1" || moduleName === "NewSW1") {
-      data = data[0];
-    }
+
     const applicationNumber = getQueryArg(
       window.location.href,
       "applicationNumber"
     );
+
+    if (moduleName === "NewWS1" || moduleName === "NewSW1") {
+      data = data[0];
+    }
+
+    if (moduleName === "NewSW1") {
+      dataPath = "SewerageConnection";
+    }
+
     try {
       const payload = await httpRequest("post", updateUrl, "", [], {
         [dataPath]: data
@@ -198,7 +205,6 @@ class WorkFlowContainer extends React.Component {
           return;
         }
 
-
         if (moduleName === "NewTL") path = "Licenses[0].licenseNumber";
         else if (moduleName === "FIRENOC") path = "FireNOCs[0].fireNOCNumber";
         else path = "Licenses[0].licenseNumber";
@@ -206,6 +212,11 @@ class WorkFlowContainer extends React.Component {
         window.location.href = `acknowledgement?${this.getPurposeString(
           label
         )}&applicationNumber=${applicationNumber}&tenantId=${tenant}&secondNumber=${licenseNumber}`;
+
+        if (moduleName === "NewWS1" || moduleName === "NewSW1") {
+          window.location.href = `acknowledgement?${this.getPurposeString(label)}&applicationNumber=${applicationNumber}&tenantId=${tenant}`;
+        }
+
       }
     } catch (e) {
       if (moduleName === "BPA") {
