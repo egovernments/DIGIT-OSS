@@ -261,18 +261,26 @@ serviceMaps:
    isTransaction: true
    queryMaps:
 
-       - query: UPDATE eg_bpa_buildingplan SET applicationno=?, remarks=?,permitOrderNo=?, edcrnumber=?,  action=?, servicetype=?, riskType=?, status=?, ownershipcategory=?, additionaldetails=?, lastmodifiedby=?, lastmodifiedtime=?, validityDate=? WHERE id=?;
+       - query: UPDATE eg_bpa_buildingplan SET applicationno=?, remarks=?, holdingNo=?, subOccupancyType=?, permitOrderNo=?, edcrnumber=?,  action=?, registrationdetails=?, govtorquasi=?, servicetype=?, riskType=?, status=?, ownershipcategory=?, additionaldetails=?, lastmodifiedby=?, lastmodifiedtime=?, validityDate=? WHERE id=?;
          basePath: BPA
          jsonMaps:
           - jsonPath: $.BPA.applicationNo
           
           - jsonPath: $.BPA.remarks
           
+          - jsonPath: $.BPA.holdingNo
+          
+          - jsonPath: $.BPA.subOccupancyType
+          
           - jsonPath: $.BPA.permitOrderNo
 
           - jsonPath: $.BPA.edcrNumber
 
           - jsonPath: $.BPA.action
+
+          - jsonPath: $.BPA.registrationDetails
+
+          - jsonPath: $.BPA.govtOrQuasi
 
           - jsonPath: $.BPA.serviceType
 
@@ -300,7 +308,7 @@ serviceMaps:
 
            - jsonPath: $.BPA.id
 
-       - query: UPDATE eg_bpa_address SET  doorno=?, plotno=?, district=?, region=?, state=?, country=?, pincode=?, additiondetails=?, buildingname=?, locality=?, landmark=?, city=?, lastmodifiedby=?, lastmodifiedtime=? WHERE id=?;
+       - query: UPDATE eg_bpa_address SET  doorno=?, plotno=?, district=?, region=?, state=?, country=?, pincode=?, additiondetails=?, buildingname=?, street=?, locality=?, landmark=?, city=?, lastmodifiedby=?, lastmodifiedtime=? WHERE id=?;
          basePath: BPA.address
          jsonMaps:
 
@@ -321,6 +329,8 @@ serviceMaps:
           - jsonPath: $.BPA.address.additionDetails
 
           - jsonPath: $.BPA.address.buildingName
+
+          - jsonPath: $.BPA.address.street
 
           - jsonPath: $.BPA.address.locality.code
 
@@ -441,7 +451,7 @@ serviceMaps:
 
            - jsonPath: $.BPA.owners.*.documents.*.id
            
-       - query: INSERT INTO eg_bpa_document( id, documenttype, filestoreid, buildingplanid, documentuid, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET documenttype =?,  filestoreid =?,lastmodifiedby =?, lastmodifiedtime =?;
+       - query: INSERT INTO eg_bpa_document( id, documenttype, filestoreid, buildingplanid, documentuid, createdby, lastmodifiedby, createdtime, lastmodifiedtime, wfstate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET documenttype =?,  filestoreid =?,lastmodifiedby =?, lastmodifiedtime =?;
          basePath: BPA.documents.*
          jsonMaps:
           
@@ -462,6 +472,8 @@ serviceMaps:
            - jsonPath: $.BPA.auditDetails.createdTime
 
            - jsonPath: $.BPA.auditDetails.lastModifiedTime
+
+           - jsonPath: $.BPA.documents.*.wfState
 
            - jsonPath: $.BPA.documents.*.documentType
 
@@ -477,7 +489,7 @@ serviceMaps:
    isTransaction: true
    queryMaps:
    
-       - query: INSERT INTO eg_bpa_document( id, documenttype, filestoreid, buildingplanid, documentuid, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET documenttype =?,  filestoreid =?,lastmodifiedby =?, lastmodifiedtime =?;
+       - query: INSERT INTO eg_bpa_document( id, documenttype, filestoreid, buildingplanid, documentuid, createdby, lastmodifiedby, createdtime, lastmodifiedtime, wfstate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET documenttype =?,  filestoreid =?,lastmodifiedby =?, lastmodifiedtime =?;
          basePath: BPA.documents.*
          jsonMaps:
           
@@ -499,6 +511,8 @@ serviceMaps:
 
            - jsonPath: $.BPA.auditDetails.lastModifiedTime
 
+           - jsonPath: $.BPA.documents.*.wfState
+
            - jsonPath: $.BPA.documents.*.documentType
 
            - jsonPath: $.BPA.documents.*.fileStoreId
@@ -513,7 +527,7 @@ serviceMaps:
 
            - jsonPath: $.BPA.id
 
-       - query: UPDATE eg_bpa_buildingplan SET status =?, permitOrderNo=?, validityDate=?, holdingno=?, registrationdetails=?, govtorquasi=?, additionaldetails=? WHERE id =?;
+       - query: UPDATE eg_bpa_buildingplan SET status =?, permitOrderNo=?, validityDate=?, holdingno=?, registrationdetails=?, govtorquasi=?, additionaldetails=?  WHERE id =?;
          basePath: BPA
          jsonMaps:
            - jsonPath: $.BPA.status
