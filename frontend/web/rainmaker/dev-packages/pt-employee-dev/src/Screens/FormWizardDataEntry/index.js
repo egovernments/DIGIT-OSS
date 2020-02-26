@@ -190,14 +190,7 @@ class FormWizardDataEntry extends Component {
             }
           ]
         );
-        {
-          demandPropertyResponse.length != []
-            ? prepareFinalObject(
-                "DemandPropertiesResponse",
-                demandPropertyResponse
-              )
-            : [];
-        }
+
         const { generalMDMSDataById } = this.props;
         let finalYear = "";
         const demands =
@@ -206,6 +199,13 @@ class FormWizardDataEntry extends Component {
               return b.taxPeriodFrom - a.taxPeriodFrom;
             })) ||
           [];
+        if (demandPropertyResponse.length != []) {
+          demandPropertyResponse.Demands = demands;
+          prepareFinalObject(
+            "DemandPropertiesResponse",
+            demandPropertyResponse
+          );
+        }
         let demandResponse = demands.forEach((demand, yearKey) => {
           //add order for the taxt head and do the oerdering
           if (demand.demandDetails) {
@@ -215,9 +215,15 @@ class FormWizardDataEntry extends Component {
                   ...demandDetail,
                   order: get(
                     generalMDMSDataById,
-                    `TaxHeadMaster.${demandDetail.taxHeadMasterCode}.order`,
-                    -1
+                    `TaxHeadMaster.${demandDetail.taxHeadMasterCode}.legacy`,
+                    false
                   )
+                    ? get(
+                        generalMDMSDataById,
+                        `TaxHeadMaster.${demandDetail.taxHeadMasterCode}.order`,
+                        -1
+                      )
+                    : -1
                 };
               })
               .sort(function(a, b) {
@@ -1364,8 +1370,7 @@ class FormWizardDataEntry extends Component {
                 });
                 if (!currentYearEnteredValueLength) {
                   arrayOfEmptyYears.push(key);
-                }
-                else {
+                } else {
                   if (!hasPropertyTax) {
                     errorCode = "ERR05_DEMAND_ENTER_THE_DATA";
                   } else if (parseInt(propertyTaxAmount) < totalRebateAmount) {
@@ -2067,7 +2072,7 @@ class FormWizardDataEntry extends Component {
       let toDate;
       let demandResponse = DemandPropertiesResponse
         ? DemandPropertiesResponse.Demands
-          ? DemandPropertiesResponse.Demands.reverse()
+          ? DemandPropertiesResponse.Demands
           : []
         : [];
       const demandObject = {};
@@ -2105,8 +2110,18 @@ class FormWizardDataEntry extends Component {
                 // const demandResponse=demandResponse.map((demandResponse,responseKey)=>{
                 //   demandResponse.
                 // })
+                let previousDemandData = {};
+                if (dR.demandDetails) {
+                  const currentDemandObject = dR.demandDetails.filter(
+                    demand =>
+                      demand.taxHeadMasterCode === demandValue.PT_TAXHEAD
+                  );
+                  if (currentDemandObject.length > 0) {
+                    previousDemandData = currentDemandObject[0];
+                  }
+                }
                 demandDetails1.push({
-                  ...get(dR, `demandDetails[${ind}]`, {}),
+                  ...previousDemandData,
                   taxHeadMasterCode: demandValue.PT_TAXHEAD,
                   taxAmount: parseInt(
                     demandValue.PT_DEMAND != "" ? demandValue.PT_DEMAND : 0
