@@ -505,6 +505,29 @@
       "format": "PB-MU-[cy:yyyy-MM-dd]-[SEQ_EG_PT_ASSM]",
       "idname": "pt.mutation.receipt.id"
     },
+    {  
+      "format": "BR/ENG/[cy:yyyy]/[SEQ_EG_PT_LN]",
+      "idname": "egov.idgen.bpa.englicensenumber"
+    },
+    {
+      "format": "BR/STR/[cy:yyyy]/[SEQ_EG_PT_LN]",
+      "idname": "egov.idgen.bpa.strlicensenumber"
+    },
+    {
+      "format": "BR/TP/[cy:yyyy]/[SEQ_EG_PT_LN]",
+      "idname": "egov.idgen.bpa.tplicensenumber"
+    },
+    {
+      "format": "BR/SUP/[cy:yyyy]/[SEQ_EG_PT_LN]",
+      "idname": "egov.idgen.bpa.suplicensenumber"
+    },
+    {
+      "format": "BR/ARCT/[cy:yyyy]/[SEQ_EG_PT_LN]",
+      "idname": "egov.idgen.bpa.arlicensenumber"
+    },
+    {
+      "format": "BR/BLD/[cy:yyyy]/[SEQ_EG_PT_LN]",
+      "idname": "egov.idgen.bpa.bdlicensenumber"
     {
       "format": "PB-MT-[CITY]-[SEQ_EG_PT_MUTATION]",
       "idname": "pt.mutation.number"

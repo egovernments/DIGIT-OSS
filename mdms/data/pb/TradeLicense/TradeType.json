@@ -6064,59 +6064,7 @@
       "validityPeriod": 5
     },
     {
-      "code": "ARCHITECT.CLASSB",
-      "uom": null,
-      "applicationDocument": [
-        "OWNERIDPROOF",
-        "OWNERSHIPPROOF",
-        "EXPERIENCEPROOF"
-      ],
-      "verificationDocument": [],
-      "active": true,
-      "type": "BPA",
-      "validityPeriod": 5
-    },
-    {
-      "code": "ARCHITECT.CLASSC",
-      "uom": null,
-      "applicationDocument": [
-        "OWNERIDPROOF",
-        "OWNERSHIPPROOF",
-        "EXPERIENCEPROOF"
-      ],
-      "verificationDocument": [],
-      "active": true,
-      "type": "BPA",
-      "validityPeriod": 5
-    },
-    {
       "code": "BUILDER.CLASSA",
-      "uom": null,
-      "applicationDocument": [
-        "OWNERIDPROOF",
-        "OWNERSHIPPROOF",
-        "EXPERIENCEPROOF"
-      ],
-      "verificationDocument": [],
-      "active": true,
-      "type": "BPA",
-      "validityPeriod": 5
-    },
-    {
-      "code": "BUILDER.CLASSB",
-      "uom": null,
-      "applicationDocument": [
-        "OWNERIDPROOF",
-        "OWNERSHIPPROOF",
-        "EXPERIENCEPROOF"
-      ],
-      "verificationDocument": [],
-      "active": true,
-      "type": "BPA",
-      "validityPeriod": 5
-    },
-    {
-      "code": "BUILDER.CLASSC",
       "uom": null,
       "applicationDocument": [
         "OWNERIDPROOF",
@@ -6142,32 +6090,6 @@
       "validityPeriod": 5
     },
     {
-      "code": "ENGINEER.CLASSB",
-      "uom": null,
-      "applicationDocument": [
-        "OWNERIDPROOF",
-        "OWNERSHIPPROOF",
-        "EXPERIENCEPROOF"
-      ],
-      "verificationDocument": [],
-      "active": true,
-      "type": "BPA",
-      "validityPeriod": 5
-    },
-    {
-      "code": "ENGINEER.CLASSC",
-      "uom": null,
-      "applicationDocument": [
-        "OWNERIDPROOF",
-        "OWNERSHIPPROOF",
-        "EXPERIENCEPROOF"
-      ],
-      "verificationDocument": [],
-      "active": true,
-      "type": "BPA",
-      "validityPeriod": 5
-    },
-    {
       "code": "STRUCTURALENGINEER.CLASSA",
       "uom": null,
       "applicationDocument": [
@@ -6181,7 +6103,7 @@
       "validityPeriod": 5
     },
     {
-      "code": "STRUCTURALENGINEER.CLASSB",
+      "code": "TOWNPLANNER.CLASSA",
       "uom": null,
       "applicationDocument": [
         "OWNERIDPROOF",
@@ -6194,7 +6116,7 @@
       "validityPeriod": 5
     },
     {
-      "code": "STRUCTURALENGINEER.CLASSC",
+      "code": "SUPERVISOR.CLASSA",
       "uom": null,
       "applicationDocument": [
         "OWNERIDPROOF",

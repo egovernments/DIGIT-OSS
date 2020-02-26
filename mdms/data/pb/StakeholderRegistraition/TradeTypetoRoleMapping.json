@@ -7,89 +7,96 @@
       "tradeType": "ARCHITECT.CLASSA",
       "role": ["BPA_ARCHITECT","BPA_ENGINEER"],
       "endstate": "APPROVED",
-      "applicationFee": 100
+      "applicationFee": 500
     },
     {
       "id": "313bbadb-c0d7-49b5-b021-77a608f13a31",
       "tradeType": "ARCHITECT.CLASSB",
       "role": ["BPA_ARCHITECT"],
       "endstate": "APPROVED",
-      "applicationFee": 150
+      "applicationFee": 500
     },
     {
       "id": "313bbadb-c0d7-49b5-b021-77a608f13a31",
       "tradeType": "ARCHITECT.CLASSC",
       "role": ["BPA_ARCHITECT"],
       "endstate": "APPROVED",
-      "applicationFee": 160
+      "applicationFee": 500
     },
     {
       "id": "df027b77-69c1-4749-8608-601328a2deea",
       "tradeType": "BUILDER.CLASSA",
       "role": ["BPA_BUILDER","BPA_ARCHITECT"],
       "endstate": "APPROVED",
-      "applicationFee": 220
+      "applicationFee": 500
     },
     {
       "id": "df027b77-69c1-4749-8608-601328a2deea",
       "tradeType": "BUILDER.CLASSB",
       "role": ["BPA_BUILDER"],
       "endstate": "APPROVED",
-      "applicationFee": 250
+      "applicationFee": 500
     },
     {
       "id": "df027b77-69c1-4749-8608-601328a2deea",
       "tradeType": "BUILDER.CLASSC",
       "role": ["BPA_BUILDER"],
       "endstate": "APPROVED",
-      "applicationFee": 200
+      "applicationFee": 500
     },
     {
       "id": "7f26d283-cc52-4684-9bbc-f87ade6f2228",
       "tradeType": "ENGINEER.CLASSA",
       "role": ["BPA_ENGINEER"],
       "endstate": "APPROVED",
-      "applicationFee": 300
+      "applicationFee": 500
     },
     {
       "id": "7f26d283-cc52-4684-9bbc-f87ade6f2228",
       "tradeType": "ENGINEER.CLASSB",
       "role": ["BPA_ENGINEER"],
       "endstate": "APPROVED",
-      "applicationFee": 320
+      "applicationFee": 500
     },
     {
       "id": "7f26d283-cc52-4684-9bbc-f87ade6f2228",
       "tradeType": "ENGINEER.CLASSC",
       "role": ["BPA_ENGINEER","BPA_STRUCTURALENGINEER"],
       "endstate": "APPROVED",
-      "applicationFee": 300
+      "applicationFee": 500
     },
     {
       "id": "91d278e9-0bcd-4436-978e-793af58e325f",
       "tradeType": "STRUCTURALENGINEER.CLASSA",
       "role": ["BPA_STRUCTURALENGINEER"],
       "endstate": "APPROVED",
-      "applicationFee": 400
+      "applicationFee": 500
     },
     {
       "id": "91d278e9-0bcd-4436-978e-793af58e325f",
       "tradeType": "STRUCTURALENGINEER.CLASSB",
       "role": ["BPA_STRUCTURALENGINEER"],
       "endstate": "APPROVED",
-      "applicationFee": 450
+      "applicationFee": 500
     },
     {
       "id": "91d278e9-0bcd-4436-978e-793af58e325f",
       "tradeType": "STRUCTURALENGINEER.CLASSC",
       "role": ["BPA_STRUCTURALENGINEER"],
       "endstate": "APPROVED",
-      "applicationFee": 460
+      "applicationFee": 500
     },
     {
       "id": "57b66c2a-0033-4875-a3bd-856e5cf82427",
       "tradeType": "TOWNPLANNER",
       "role": ["BPA_TOWNPLANNER","BPA_STRUCTURALENGINEER"],
+      "endstate": "APPROVED",
+      "applicationFee": 500
+    },
+    {
+      "id": "57b66c2a-0033-4875-a3bd-856e5cf82430",
+      "tradeType": "SUPERVISOR",
+      "role": ["BPA_SUPERVISOR"],
       "endstate": "APPROVED",
       "applicationFee": 500
     }

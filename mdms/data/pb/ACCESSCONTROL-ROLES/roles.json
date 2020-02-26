@@ -388,6 +388,11 @@
       "description": "BPA Town Planner"
     },
     {
+      "code": "BPA_SUPERVISOR",
+      "name": "BPA Supervisor",
+      "description": "BPA Supervisor"
+    },
+    {
       "code": "ANONYMOUS",
       "name": "Anonymous User",
       "description": "Anonymous User to be used in case of no auth"

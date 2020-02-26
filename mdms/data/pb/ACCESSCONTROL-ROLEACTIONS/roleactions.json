@@ -19569,6 +19569,12 @@
       "tenantId": "pb"
     },
     {
+      "rolecode": "BPA_SUPERVISOR",
+      "actionid": 1921,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
       "rolecode": "SUPERUSER",
       "actionid": 1922,
       "actioncode": "",
