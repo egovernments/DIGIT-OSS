@@ -53,7 +53,7 @@ public class Property extends PropertyInfo {
 	private Institution institution;
 
 	@JsonProperty("creationReason")
-	@NotNull
+	@NotNull(message="The value provided is either Invald or null")
 	private CreationReason creationReason;
 	
 	@JsonProperty("usageCategory")

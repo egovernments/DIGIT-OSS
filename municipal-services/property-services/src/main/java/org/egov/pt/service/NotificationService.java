@@ -1,5 +1,6 @@
 package org.egov.pt.service;
 
+import static org.egov.pt.util.PTConstants.ACTION_PAY;
 import static org.egov.pt.util.PTConstants.CREATED_STRING;
 import static org.egov.pt.util.PTConstants.CREATE_PROCESS_CONSTANT;
 import static org.egov.pt.util.PTConstants.CREATE_STRING;
@@ -24,23 +25,35 @@ import static org.egov.pt.util.PTConstants.WF_MT_STATUS_PAID_CODE;
 import static org.egov.pt.util.PTConstants.WF_MT_STATUS_PAYMENT_PENDING_CODE;
 import static org.egov.pt.util.PTConstants.WF_NO_WORKFLOW;
 import static org.egov.pt.util.PTConstants.WF_STATUS_APPROVED;
+import static org.egov.pt.util.PTConstants.WF_STATUS_DOCVERIFIED;
+import static org.egov.pt.util.PTConstants.WF_STATUS_DOCVERIFIED_LOCALE;
+import static org.egov.pt.util.PTConstants.WF_STATUS_FIELDVERIFIED;
+import static org.egov.pt.util.PTConstants.WF_STATUS_FIELDVERIFIED_LOCALE;
 import static org.egov.pt.util.PTConstants.WF_STATUS_OPEN;
+import static org.egov.pt.util.PTConstants.WF_STATUS_OPEN_LOCALE;
 import static org.egov.pt.util.PTConstants.WF_STATUS_PAID;
 import static org.egov.pt.util.PTConstants.WF_STATUS_PAYMENT_PENDING;
+import static org.egov.pt.util.PTConstants.WF_STATUS_REJECTED;
+import static org.egov.pt.util.PTConstants.WF_STATUS_REJECTED_LOCALE;
 import static org.egov.pt.util.PTConstants.WF_UPDATE_STATUS_APPROVED_CODE;
 import static org.egov.pt.util.PTConstants.WF_UPDATE_STATUS_CHANGE_CODE;
 import static org.egov.pt.util.PTConstants.WF_UPDATE_STATUS_OPEN_CODE;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.Property;
+import org.egov.pt.models.enums.Status;
 import org.egov.pt.models.event.Event;
 import org.egov.pt.models.event.EventRequest;
+import org.egov.pt.models.workflow.Action;
 import org.egov.pt.models.workflow.ProcessInstance;
 import org.egov.pt.util.NotificationUtil;
 import org.egov.pt.web.contracts.PropertyRequest;
@@ -48,6 +61,7 @@ import org.egov.pt.web.contracts.SMSRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 @Service
 public class NotificationService {
@@ -64,31 +78,34 @@ public class NotificationService {
 	public void sendNotificationForMutation(PropertyRequest propertyRequest) {
 
 		String msg = null;
+		String state = null;
 		Property property = propertyRequest.getProperty();
-		String CompleteMsgs = notifUtil.getLocalizationMessages(property.getTenantId(), propertyRequest.getRequestInfo());
-		String state = configs.getIsMutationWorkflowEnabled() && property.getWorkflow().getState() != null
-				? property.getWorkflow().getState().getState() : WF_NO_WORKFLOW;
+		ProcessInstance wf = property.getWorkflow();
+		String completeMsgs = notifUtil.getLocalizationMessages(property.getTenantId(), propertyRequest.getRequestInfo());
+		state = getStateFromWf(wf, configs.getIsMutationWorkflowEnabled());
+		String localisedState = getLocalisedState(wf.getState().getState(), completeMsgs);
 
 		switch (state) {
 
 		case WF_NO_WORKFLOW:
-			msg = getMsgForMutation(property, CompleteMsgs, MT_NO_WORKFLOW, NOTIFICATION_MUTATION_LINK);
+			msg = getMsgForMutation(property, completeMsgs, MT_NO_WORKFLOW, NOTIFICATION_MUTATION_LINK);
 			break;
 			
 		case WF_STATUS_OPEN:
-			msg = getMsgForMutation(property, CompleteMsgs, WF_MT_STATUS_OPEN_CODE, NOTIFICATION_MUTATION_LINK);
+			msg = getMsgForMutation(property, completeMsgs, WF_MT_STATUS_OPEN_CODE, NOTIFICATION_MUTATION_LINK);
 			break;
 
 		case WF_STATUS_APPROVED:
-			msg = getMsgForMutation(property, CompleteMsgs, WF_MT_STATUS_APPROVED_CODE, NOTIFICATION_MUTATION_LINK);
+			msg = getMsgForMutation(property, completeMsgs, WF_MT_STATUS_APPROVED_CODE, NOTIFICATION_MUTATION_LINK);
 			break;
 
 		case WF_STATUS_PAYMENT_PENDING:
-			msg = getMsgForMutation(property, CompleteMsgs, WF_MT_STATUS_PAYMENT_PENDING_CODE, NOTIFICATION_PAY_LINK);
+			msg = getMsgForMutation(property, completeMsgs, WF_MT_STATUS_PAYMENT_PENDING_CODE, NOTIFICATION_PAY_LINK);
 			break;
 
 		default:
-			msg = getMsgForMutation(property, CompleteMsgs, WF_MT_STATUS_CHANGE_CODE, NOTIFICATION_MUTATION_LINK);
+			msg = getMsgForMutation(property, completeMsgs, WF_MT_STATUS_CHANGE_CODE, NOTIFICATION_MUTATION_LINK);
+			
 			break;
 			
 		case WF_STATUS_PAID:
@@ -97,11 +114,11 @@ public class NotificationService {
 
 		// Ignoring paid status, since it's wired from payment consumer directly
 		if (msg != null) {
-			msg = replaceCommonValues(property, msg);
+			msg = replaceCommonValues(property, msg, localisedState);
 			prepareMsgAndSend(propertyRequest, msg);
 		}
 	}
-	
+
 
 	public void sendNotificationForMtPayment(PropertyRequest propertyRequest, BigDecimal Amount) {
 
@@ -110,7 +127,7 @@ public class NotificationService {
 		
 			String msg = getMsgForMutation(property, CompleteMsgs, WF_MT_STATUS_PAID_CODE, NOTIFICATION_MUTATION_LINK)
 						.replace(NOTIFICATION_AMOUNT, Amount.toPlainString());
-			msg = replaceCommonValues(property, msg);		
+			msg = replaceCommonValues(property, msg, "");		
 			prepareMsgAndSend(propertyRequest, msg);
 	}
 	
@@ -122,9 +139,9 @@ public class NotificationService {
 		String msg = null;
 		
 		Boolean isCreate =  CREATE_PROCESS_CONSTANT.equalsIgnoreCase(wf.getNotificationAction());
-		String state = configs.getIsWorkflowEnabled() ? wf.getState().getState() : WF_NO_WORKFLOW;
+		String state = getStateFromWf(wf, configs.getIsWorkflowEnabled());
 		String completeMsgs = notifUtil.getLocalizationMessages(property.getTenantId(), propertyRequest.getRequestInfo());
-
+		String localisedState = getLocalisedState(wf.getState().getState(), completeMsgs);
 		switch (state) {
 
 		case WF_NO_WORKFLOW:
@@ -148,7 +165,8 @@ public class NotificationService {
 			break;
 		}
 
-		msg = replaceCommonValues(property, msg);
+		
+		msg = replaceCommonValues(property, msg, localisedState);
 		prepareMsgAndSend(propertyRequest, msg);
 	}
 
@@ -227,15 +245,68 @@ public class NotificationService {
 	 * @param msg
 	 * @return
 	 */
-	private String replaceCommonValues(Property property, String msg) {
+	private String replaceCommonValues(Property property, String msg, String localisedState) {
 
 		msg = msg.replace(NOTIFICATION_PROPERTYID, property.getPropertyId()).replace(NOTIFICATION_APPID,
 				property.getAcknowldgementNumber());
-		
+
 		if (configs.getIsWorkflowEnabled())
-			msg = msg.replace(NOTIFICATION_STATUS, property.getWorkflow().getState().getState());
-		
+			msg = msg.replace(NOTIFICATION_STATUS, localisedState);
 		return msg;
+	}
+	
+	private String getLocalisedState(String state, String completeMsgs) {
+		
+		switch (state) {
+			
+		case WF_STATUS_REJECTED :
+			return notifUtil.getMessageTemplate(WF_STATUS_REJECTED_LOCALE, completeMsgs);
+			
+		case WF_STATUS_DOCVERIFIED :
+			return notifUtil.getMessageTemplate(WF_STATUS_DOCVERIFIED_LOCALE, completeMsgs);
+			
+		case WF_STATUS_FIELDVERIFIED:
+			return notifUtil.getMessageTemplate(WF_STATUS_FIELDVERIFIED_LOCALE, completeMsgs);
+			
+		case WF_STATUS_OPEN:
+			return notifUtil.getMessageTemplate(WF_STATUS_OPEN_LOCALE, completeMsgs);
+		}
+		return state;
+	}
+
+
+	/**
+	 * Method to extract state from the workflow object
+	 * 
+	 * @param wf
+	 * @return
+	 */
+	private String getStateFromWf(ProcessInstance wf, Boolean isWorkflowEnabled) {
+		
+		String state;
+		if (isWorkflowEnabled) {
+
+			Boolean isPropertyActive = wf.getState().getApplicationStatus().equalsIgnoreCase(Status.ACTIVE.toString());
+			Boolean isTerminateState = wf.getState().getIsTerminateState();
+			Set<String> actions = null != wf.getState().getActions()
+					? actions = wf.getState().getActions().stream().map(Action::getAction).collect(Collectors.toSet())
+					: Collections.emptySet();
+
+			if (isTerminateState && CollectionUtils.isEmpty(actions)) {
+
+				state = isPropertyActive ? WF_STATUS_APPROVED : WF_STATUS_REJECTED;
+			} else if (actions.contains(ACTION_PAY)) {
+
+				state = WF_STATUS_PAYMENT_PENDING;
+			} else {
+
+				state = wf.getState().getState();
+			}
+
+		} else {
+			state = WF_NO_WORKFLOW;
+		}
+		return state;
 	}
 
 	/**

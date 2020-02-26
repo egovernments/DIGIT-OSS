@@ -134,9 +134,10 @@ public class PropertyService {
 		if(config.getIsWorkflowEnabled()) {
 			
 			State state = wfService.updateWorkflow(request, UPDATE_PROCESS_CONSTANT);
-					
+
 			if (state.getIsStartState() == true
-					&& state.getApplicationStatus().equalsIgnoreCase(Status.INWORKFLOW.toString())) {
+					&& state.getApplicationStatus().equalsIgnoreCase(Status.INWORKFLOW.toString())
+					&& !propertyFromSearch.getStatus().equals(Status.INWORKFLOW)) {
 
 				propertyFromSearch.setStatus(Status.INACTIVE);
 				producer.push(config.getUpdatePropertyTopic(), OldPropertyRequest);
@@ -192,7 +193,8 @@ public class PropertyService {
 			 * to create new entry for new Mutation
 			 */
 			if (state.getIsStartState() == true
-					&& state.getApplicationStatus().equalsIgnoreCase(Status.INWORKFLOW.toString())) {
+					&& state.getApplicationStatus().equalsIgnoreCase(Status.INWORKFLOW.toString())
+					&& !propertyFromSearch.getStatus().equals(Status.INWORKFLOW)) {
 				
 				propertyFromSearch.setStatus(Status.INACTIVE);
 				producer.push(config.getUpdatePropertyTopic(), oldPropertyRequest);
