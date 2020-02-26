@@ -133,7 +133,7 @@ export const LicenseeCard = getCommonCard({
             state.screenConfiguration.preparedFinalObject,
             "applyScreenMdmsData.TradeLicense.tradeSubType[0].code"
           );
-          if(getClassOfRole) {
+          if(getClassOfLicenseType) {
             dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType", getClassOfLicenseType));
           }
         }
