@@ -69,7 +69,6 @@ class pdfHeader extends React.Component {
 
 
 const mapStateToProps = state => {
-    console.log("RahulGandhi",state)
     const { screenConfiguration } = state;
     const { cities } = state.common || [];
     const {  preparedFinalObject } = screenConfiguration;

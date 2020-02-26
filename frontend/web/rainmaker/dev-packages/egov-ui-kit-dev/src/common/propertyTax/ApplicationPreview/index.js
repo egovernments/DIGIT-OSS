@@ -372,7 +372,7 @@ class ApplicationPreview extends Component {
       <Screen className={""}>
         <PTHeader header={header} subHeaderTitle='PT_PROPERTY_APPLICATION_NO' subHeaderValue={applicationNumber} />
 
-        <div className="printDownloadButton">
+        <div className="printdownload-app-preview">
           {<DownloadPrintButton data={{
             label: {
               labelName: "Download", labelKey: "PT_DOWNLOAD"

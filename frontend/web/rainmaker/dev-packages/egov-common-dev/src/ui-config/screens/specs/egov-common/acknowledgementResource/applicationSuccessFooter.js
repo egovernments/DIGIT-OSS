@@ -8,7 +8,7 @@ const getCommonApplyFooter = children => {
         uiFramework: "custom-atoms",
         componentPath: "Div",
         props: {
-            className: "apply-wizard-footer"
+            className: "apply-wizard-footer footer-com-style"
         },
         children
     };
@@ -31,7 +31,7 @@ export const applicationSuccessFooter = (
                 variant: "outlined",
                 color: "primary",
                 style: {
-                    minWidth: "290px",
+                    minWidth: "180px",
                     height: "48px",
                     marginRight: "16px"
                 },
@@ -60,7 +60,7 @@ export const applicationSuccessFooter = (
                 color: "primary",
                 // className: "apply-wizard-footer-right-button",
                 style: {
-                    minWidth: "290px",
+                    minWidth: "180px",
                     height: "48px",
                     marginRight: "16px"
                 },

@@ -141,11 +141,11 @@ class WhatsAppLocality extends React.Component {
           <div className="header-iconText">
             {/* <Icon id="back-navigator" action="navigation" name="arrow-back" /> */}
             <Label
-              label="CHOOSE LOCALITY"
+              label="Search and choose Locality"
               color="white"
               fontSize={18}
               bold={true}
-              containerStyle={{ marginLeft: 30, marginTop: -2 }}
+              containerStyle={{ marginLeft: 20, marginTop: -2 }}
             />
 
           </div>

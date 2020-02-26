@@ -22,7 +22,7 @@ import {
   getDialogButton
 } from "../utils";
 
-import { footerReview, downloadPrintContainer } from "./applyResource/footer";
+import { footerReview, downloadPrintContainer,footerReviewTop  } from "./applyResource/footer";
 import {
   getFeesEstimateCard,
   getHeaderSideText,
@@ -218,12 +218,22 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       applicationNumber,
       tenantId
     );
+    const CitizenprintCont=footerReviewTop(
+      action,
+      state,
+      dispatch,
+      status,
+      applicationNumber,
+      tenantId,
+      financialYear
+    );
+
 
     process.env.REACT_APP_NAME === "Citizen"
       ? set(
           action,
           "screenConfig.components.div.children.headerDiv.children.helpSection.children",
-          statusCont
+          CitizenprintCont
         )
       : set(
           action,
@@ -292,9 +302,9 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         uiFramework: "custom-atoms-local",
         moduleName: "egov-tradelicence",
         componentPath: "licenceNoContainer",
-        visible: process.env.REACT_APP_NAME === "Employee" &&licenseNumber? true : false,
+        visible: licenseNumber? true : false,
         props: {
-          number: licenseNumber
+          number: licenseNumber,
         }
       }
     })
