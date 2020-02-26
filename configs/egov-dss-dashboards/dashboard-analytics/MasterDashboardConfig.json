@@ -441,7 +441,7 @@
           "vizArray": [
             {
               "id": 231,
-              "name": "DSS_PT_DEMAND_COLLECTION",
+              "name": "DSS_PT_KEY_FY_INDICATORS",
               "dimensions": {
                 "height": 350,
                 "width": 12
@@ -1966,7 +1966,7 @@
               "charts": [
                 {
                   "id": "demandCollectionIndexDDRRevenue",
-                  "name": "DSS_PT_KEY_FY_INDICATORS",
+                  "name": "DSS_PT_DEMAND_COLLECTION_BOUNDARY",
                   "code": "",
                   "chartType": "table",
                   "filter": "",
@@ -2343,7 +2343,7 @@
           "vizArray": [
             {
               "id": 231,
-              "name": "DSS_TL_DEMAND_COLLECTION",
+              "name": "DSS_TL_KEY_FY_INDICATORS",
               "dimensions": {
                 "height": 350,
                 "width": 12
@@ -2355,7 +2355,7 @@
               "charts": [
                 {
                   "id": "licenseIssuedDDRRevenue",
-                  "name": "DSS_TL_KEY_FY_INDICATORS",
+                  "name": "DSS_TL_DEMAND_COLLECTION_BOUNDARY",
                   "code": "",
                   "chartType": "table",
                   "filter": "",
