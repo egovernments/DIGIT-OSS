@@ -18,7 +18,7 @@ const PTHeader = ({ header = '', headerValue = '', subHeaderTitle = '', subHeade
             label: { labelName: "Application", labelKey: "PT_APPLICATION" },
             link: () => {
       
-                generatePdfFromDiv("download",subHeaderValue);
+                generatePdfFromDiv("download",subHeaderValue),"#property-review-form";
             },
             leftIcon: "assignment"
           };
@@ -26,7 +26,7 @@ const PTHeader = ({ header = '', headerValue = '', subHeaderTitle = '', subHeade
           let tlCertificatePrintObject = {
             label: { labelName: "Application", labelKey: "PT_APPLICATION" },
             link: () => {
-                generatePdfFromDiv("print",subHeaderValue);
+                generatePdfFromDiv("print",subHeaderValue,"#property-review-form");
           },
             leftIcon: "book"
             

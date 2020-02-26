@@ -51,7 +51,10 @@ const MyApplicationIcon = Loadable({
   loader: () => import("./Icons/MyApplicationIcon"),
   loading: () => <Loading />
 });
-
+const pdfHeader = Loadable({
+  loader: () => import("./pdfHeader"),
+  loading: () => <Loading />
+});
 
 export {
   TestAtoms,
@@ -63,5 +66,6 @@ export {
   MenuButton,
   FireNocIcon,
   MyApplicationIcon,
-  PropertyIdContainer
+  PropertyIdContainer,
+  pdfHeader
 };

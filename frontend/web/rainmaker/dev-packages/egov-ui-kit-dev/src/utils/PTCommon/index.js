@@ -458,8 +458,8 @@ const modifyEndOfJsonPath = (jsonpath, toReplaceWith) => {
 };
 
 
-export const generatePdfFromDiv = (action, applicationNumber) => {
-  let target = document.querySelector("#property-review-form");
+export const generatePdfFromDiv = (action, applicationNumber,divIdName) => {
+  let target = document.querySelector(divIdName);
 
   html2canvas(target, {
     onclone: function (clonedDoc) {
