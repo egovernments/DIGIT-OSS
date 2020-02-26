@@ -265,7 +265,7 @@ const getMdmsData = async (action, state, dispatch) => {
         {
           moduleName: "firenoc",
           masterDetails: [{ name: "BuildingType" }, { name: "FireStations" }]
-        },
+        },      
         {
           moduleName: "egov-location",
           masterDetails: [
@@ -300,6 +300,32 @@ const getMdmsData = async (action, state, dispatch) => {
     console.log(e);
   }
 };
+
+const getMdmsTransferReasonData = async (action, state, dispatch) => {
+  let tenantId ='pb'
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: tenantId,
+      moduleDetails: [
+        { moduleName: "PropertyTax", masterDetails: [ { name: "ReasonForTransfer" }] }
+      ]
+    }
+  };
+  try {
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+    dispatch(prepareFinalObject("ReasonForTransfer", payload.MdmsRes));
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 
 const getFirstListFromDotSeparated = list => {
   list = list.map(item => {
@@ -457,7 +483,8 @@ const screenConfig = {
       prepareDocumentsUploadData(state, dispatch);
     });
 
-    // Search in case of EDIT flow
+getMdmsTransferReasonData(action, state, dispatch);
+    // Search in cprepareDocumentsUploadDataase of EDIT flow
     prepareEditFlow(state, dispatch, applicationNumber, tenantId);
 
     // Code to goto a specific step through URL
