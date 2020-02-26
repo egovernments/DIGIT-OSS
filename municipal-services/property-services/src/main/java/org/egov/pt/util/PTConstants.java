@@ -133,6 +133,10 @@ public class PTConstants {
 	
 	public static final String WF_STATUS_REJECTED = "REJECTED";
 	
+	public static final String WF_STATUS_FIELDVERIFIED = "FIELDVERIFIED";
+	
+	public static final String WF_STATUS_DOCVERIFIED = "DOCVERIFIED";
+	
 	public static final String WF_STATUS_CANCELLED = "CANCELLED";
 	
 	public static final String WF_STATUS_APPROVED = "APPROVED";
@@ -140,6 +144,18 @@ public class PTConstants {
 	public static final String WF_STATUS_OPEN = "OPEN";
 	
 	public static final String WF_NO_WORKFLOW = "NO_WORKFLOW";
+	
+	public static final String WF_STATUS_OPEN_LOCALE = "PT_NOTIF_WF_STATE_LOCALE_OPEN";
+	
+    public static final String WF_STATUS_DOCVERIFIED_LOCALE = "PT_NOTIF_WF_STATE_LOCALE_DOCVERIFIED";
+    
+    public static final String WF_STATUS_FIELDVERIFIED_LOCALE = "PT_NOTIF_WF_STATE_LOCALE_FIELDVERIFIED";
+    
+    public static final String WF_STATUS_APPROVED_LOCALE = "PT_NOTIF_WF_STATE_LOCALE_APPROVED";
+    
+    public static final String WF_STATUS_REJECTED_LOCALE = "PT_NOTIF_WF_STATE_LOCALE_REJECTED";
+    
+    public static final String WF_STATUS_PAID_LOCALE = "PT_NOTIF_WF_STATE_LOCALE_PAID";
 
 	public static final String NOTIFICATION_MODULENAME = "rainmaker-pt";
 	

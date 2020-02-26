@@ -36,7 +36,6 @@ public enum CreationReason {
   }
 
 	@JsonCreator
-	@NotNull
 	public static CreationReason fromValue(String text) {
 		for (CreationReason b : CreationReason.values()) {
 			if (String.valueOf(b.value).equalsIgnoreCase(text)) {
