@@ -55,11 +55,11 @@ export const header = getCommonContainer({
   }
 });
 
-export const reviewConnDetails = reviewConnectionDetails(false);
+export const reviewConnDetails = reviewConnectionDetails();
 
-export const reviewOwnerDetails = reviewOwner(false);
+export const reviewOwnerDetails = reviewOwner();
 
-export const reviewDocumentDetails = reviewDocuments(false, false);
+export const reviewDocumentDetails = reviewDocuments();
 
 
 const summaryScreen = getCommonCard({
@@ -173,8 +173,13 @@ export const getData = async (action, state, dispatch) => {
     if (getQueryArg(window.location.href, "action") === "edit") {
       handleApplicationNumberDisplay(dispatch, applicationNo)
       let payloadWater, payloadSewerage;
-      try { payloadWater = await getSearchResults(queryObject) } catch (error) { console.error(error); };
-      try { payloadSewerage = await getSearchResultsForSewerage(queryObject, dispatch) } catch (error) { console.error(error); }
+      if (applicationNo.includes("SW")) {
+        try { payloadSewerage = await getSearchResultsForSewerage(queryObject, dispatch) } catch (error) { console.error(error); }
+        dispatch(prepareFinalObject("SewerageConnection", payloadSewerage.SewerageConnections));
+      } else {
+        try { payloadWater = await getSearchResults(queryObject) } catch (error) { console.error(error); };
+        dispatch(prepareFinalObject("WaterConnection", payloadWater.WaterConnection));
+      }
       const waterConnections = payloadWater ? payloadWater.WaterConnection : []
       const sewerageConnections = payloadSewerage ? payloadSewerage.SewerageConnections : [];
       let combinedArray = waterConnections.concat(sewerageConnections);

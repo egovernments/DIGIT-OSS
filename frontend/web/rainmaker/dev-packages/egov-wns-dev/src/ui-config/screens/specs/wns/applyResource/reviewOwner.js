@@ -7,6 +7,7 @@ import {
   getDivider
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { convertEpochToDate } from '../../utils';
+import { changeStep } from "./footer";
 
 const getHeader = label => {
   return {
@@ -244,7 +245,7 @@ export const reviewOwner = (isEditable = true) => {
           onClickDefination: {
             action: "condition",
             callBack: (state, dispatch) => {
-              changeStep(state, dispatch, "", 1);
+              changeStep(state, dispatch, "", 2);
             }
           }
         }

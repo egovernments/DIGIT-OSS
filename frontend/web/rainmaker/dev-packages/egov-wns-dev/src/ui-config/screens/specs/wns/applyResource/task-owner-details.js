@@ -123,6 +123,7 @@ export const propertyOwnerDetails = () => {
             uiFramework: "custom-containers",
             componentPath: "MultiItem",
             props: {
+                className: "common-div-css search-preview",
                 scheama: getCommonGrayCard({
                     viewFive: getCommonContainer({
                         mobileNumber,

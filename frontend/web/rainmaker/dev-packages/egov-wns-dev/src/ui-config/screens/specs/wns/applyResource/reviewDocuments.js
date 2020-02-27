@@ -3,6 +3,7 @@ import {
   getCommonSubHeader,
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { changeStep } from "./footer";
 
 export const reviewDocuments = (isEditable = true) => {
   return getCommonGrayCard({
@@ -46,9 +47,9 @@ export const reviewDocuments = (isEditable = true) => {
           },
           onClickDefination: {
             action: "condition",
-            // callBack: (state, dispatch) => {
-            //   changeStep(state, dispatch, "", 2);
-            // }
+            callBack: (state, dispatch) => {
+              changeStep(state, dispatch, "", 1);
+            }
           }
         },
         documents: {

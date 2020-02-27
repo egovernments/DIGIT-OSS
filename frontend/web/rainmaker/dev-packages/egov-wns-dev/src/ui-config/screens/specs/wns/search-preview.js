@@ -18,8 +18,8 @@ import {
   setValidToFromVisibilityForSV,
   getDialogButton
 } from "../utils";
-
 import { footerReview } from "./applyResource/footer";
+import { downloadPrintContainer } from "../wns/acknowledgement";
 import {
   getFeesEstimateCard,
   getHeaderSideText,
@@ -102,7 +102,40 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
   if (applicationNumber) {
     !getQueryArg(window.location.href, "edited") &&
       (await searchResults(action, state, dispatch, applicationNumber));
-
+    let connectionType = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].connectionType");
+    if (connectionType === "Metered") {
+      set(
+        action.screenConfig,
+        "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewMeterId.visible",
+        true
+      );
+      set(
+        action.screenConfig,
+        "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewMeterInstallationDate.visible",
+        true
+      );
+      set(
+        action.screenConfig,
+        "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewInitialMeterReading.visible",
+        true
+      );
+    } else {
+      set(
+        action.screenConfig,
+        "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewMeterId.visible",
+        false
+      );
+      set(
+        action.screenConfig,
+        "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewMeterInstallationDate.visible",
+        false
+      );
+      set(
+        action.screenConfig,
+        "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewInitialMeterReading.visible",
+        false
+      );
+    }
     const status = getTransformedStatus(
       get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].applicationStatus")
     );
@@ -305,7 +338,7 @@ const screenConfig = {
   beforeInitScreen: (action, state, dispatch) => {
     const status = getQueryArg(window.location.href, "status");
     const tenantId = getQueryArg(window.location.href, "tenantId");
-    applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+    let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
     //To set the application no. at the  top
     set(action.screenConfig, "components.div.children.headerDiv.children.header1.children.applicationNumber.props.number", applicationNumber);
     // if (status !== "pending_payment") {
@@ -315,6 +348,19 @@ const screenConfig = {
       { key: "tenantId", value: tenantId },
       { key: "businessServices", value: serviceModuleName }
     ];
+    const printCont = downloadPrintContainer(
+      action,
+      state,
+      dispatch,
+      status,
+      applicationNumber,
+      tenantId
+    );
+    set(
+      action,
+      "screenConfig.components.div.children.headerDiv.children.helpSection.children",
+      printCont
+    );
     setBusinessServiceDataToLocalStorage(queryObject, dispatch)
     // response.then(data=>console.log("applyresource",data));
     beforeInitFn(action, state, dispatch, applicationNumber);

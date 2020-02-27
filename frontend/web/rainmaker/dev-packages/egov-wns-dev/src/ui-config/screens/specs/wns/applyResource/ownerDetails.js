@@ -103,7 +103,7 @@ import {
       labelName: "Special Applicant Category",
       labelKey: "WS_OWN_DETAIL_SPECIAL_APPLICANT_LABEL"
     },
-    { jsonPath: "WaterConnection[0].property.owners[0].correspondenceAddress" }
+    { jsonPath: "applyScreen.property.owners[0].ownerType" }
   )
   
   export const getOwnerDetails = (isEditable = true) => {
