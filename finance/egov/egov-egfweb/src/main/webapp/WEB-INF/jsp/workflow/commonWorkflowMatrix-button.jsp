@@ -68,7 +68,7 @@
 	    if ((name=="Reject" || name=="reject")) {
 	    	var approverComments = document.getElementById("approverComments").value;
 	    	if (approverComments == null || approverComments == "") {
-	    		bootbox.alert("Please Enter Approver Remarks ");
+	    		bootbox.alert("<s:text name='msg.please.enter.approver.remarks'/>");
 				return false;
 	    	}
 		}

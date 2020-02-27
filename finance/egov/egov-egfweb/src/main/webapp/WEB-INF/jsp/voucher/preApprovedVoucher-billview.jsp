@@ -76,7 +76,7 @@
 	function checkLength(obj){
 		if(obj.value.length>1024)
 		{
-			bootbox.alert('Max 1024 characters are allowed for comments. Remaining characters are truncated.')
+			bootbox.alert('<s:text name="msg.max.120.character.are.allowed.remaining.chars.will.truncated"/>')
 			obj.value = obj.value.substring(1,1024);
 		}
 	}
@@ -92,7 +92,7 @@
 function openSource(){
 	var url = '<s:property value='%{getSourcePath()}' />'
 	if(url!=null && url==""){
-		bootbox.alert("Source is not available");
+		bootbox.alert("<s:text name='msg.source.not.available'/>");
 		return false;
 	}
 	window.open(url,'Source','resizable=yes,scrollbars=yes,left=300,top=40, width=900, height=700')
@@ -124,7 +124,7 @@ function onSubmit()
 		document.preApprovedVoucher.action='${pageContext.request.contextPath}/voucher/preApprovedVoucher-save.action';
 		return true;
 	}else{
-		bootbox.alert("Please select voucher date");
+		bootbox.alert("<s:text name='msg.please.select.voucher.date'/> ");
 		return false;
 		}
 }
@@ -144,9 +144,9 @@ function onSubmit()
 		<span style="color: green;"><s:actionmessage /></span>
 		<div class="formmainbox">
 			<div class="subheadnew">
-				Generate
-				<s:property value="type" />
-				Bill Voucher
+			<s:text name="lbl.generate.voucher.title">
+			<s:param><s:property value="type" /></s:param>
+			</s:text>
 			</div>
 			<div id="listid" style="display: block">
 				<br />
@@ -178,7 +178,7 @@ function onSubmit()
 
 				<table align="center">
 					<tr class="bluebox">
-						<td><a href="#" onclick=" return openSource()">Source</a></td>
+						<td><a href="#" onclick=" return openSource()"><s:text name="lbl.source"/> </a></td>
 					</tr>
 				</table>
 
@@ -186,16 +186,14 @@ function onSubmit()
 				<div align="center">
 					<table border="1" width="100%">
 						<tr>
-							<td colspan="5"><strong>Account Details</strong></td>
+							<td colspan="5"><strong><s:text name="lbl.account.details"/> </strong></td>
 						</tr>
 						<tr>
-							<th class="bluebgheadtd" width="18%">Function Name</th>
-							<th class="bluebgheadtd" width="17%">Account&nbsp;Code</th>
-							<th class="bluebgheadtd" width="19%">Account Head</th>
-							<th class="bluebgheadtd" width="17%"><s:text
-									name="billVoucher.approve.dbtamt" /></th>
-							<th class="bluebgheadtd" width="16%"><s:text
-									name="billVoucher.approve.crdamt" /></th>
+							<th class="bluebgheadtd" width="18%"><s:text name="lbl.function.name"/> </th>
+							<th class="bluebgheadtd" width="17%"><s:text name="account.code"/> </th>
+							<th class="bluebgheadtd" width="19%"><s:text name="lbl.account.head"/> </th>
+							<th class="bluebgheadtd" width="17%"><s:text name="billVoucher.approve.dbtamt" /></th>
+							<th class="bluebgheadtd" width="16%"><s:text name="billVoucher.approve.crdamt" /></th>
 						</tr>
 						<s:iterator var="p" value="%{billDetails.tempList}" status="s">
 							<tr>
@@ -219,7 +217,7 @@ function onSubmit()
 						</s:iterator>
 						<tr>
 							<td class="greybox setborder" style="text-align: right"
-								colspan="3" />Total
+								colspan="3" /><s:text name="lbl.total"/>
 							</td>
 							<td class="greybox setborder" style="text-align: right"><fmt:formatNumber
 									value="${db}" pattern="#0.00" /></td>
@@ -232,16 +230,14 @@ function onSubmit()
 				<div align="center">
 					<table border="1" width="100%">
 						<tr>
-							<td colspan="5"><strong>Bill Payee Details</strong></td>
+							<td colspan="5"><strong><s:text name="lbl.bill.payee.details"/> </strong></td>
 						</tr>
 						<tr>
-							<th class="bluebgheadtd" width="18%">Account Code</th>
-							<th class="bluebgheadtd" width="17%">Detail Type</th>
-							<th class="bluebgheadtd" width="19%">Detail Key</th>
-							<th class="bluebgheadtd" width="17%"><s:text
-									name="billVoucher.approve.dbtamt" /></th>
-							<th class="bluebgheadtd" width="16%"><s:text
-									name="billVoucher.approve.crdamt" /></th>
+							<th class="bluebgheadtd" width="18%"><s:text name="account.code"/> </th>
+							<th class="bluebgheadtd" width="17%"><s:text name="lbl.detail.type"/> </th>
+							<th class="bluebgheadtd" width="19%"><s:text name="lbl.detail.key"/> </th>
+							<th class="bluebgheadtd" width="17%"><s:text name="billVoucher.approve.dbtamt" /></th>
+							<th class="bluebgheadtd" width="16%"><s:text name="billVoucher.approve.crdamt" /></th>
 						</tr>
 						<s:iterator var="p" value="%{billDetails.payeeList}" status="s">
 							<tr>
@@ -269,10 +265,10 @@ function onSubmit()
 				<div align="center">
 					<table border="0" width="100%">
 						<tr>
-							<td class="bluebox">Comments</td>
+							<td class="bluebox"><s:text name="lbl.comments"/> </td>
 							<td class="bluebox"><s:textarea name="comments"
 									id="comments" cols="150" rows="3" onblur="checkLength(this)" /></td>
-							<td><s:hidden id="methodName" name="methodName" value="save" /></td>
+							<td><s:hidden id="methodName" name="methodName" value="save"/></td>
 						</tr>
 						<br />
 					</table>
@@ -284,7 +280,7 @@ function onSubmit()
 				</s:if>
 				<s:else>
 					<div class="buttonbottom" align="center">
-						<input type="button" name="button2" id="button2" value="Close"
+						<input type="button" name="button2" id="button2" value="<s:text name='lbl.close'/>"
 							class="button" onclick="javascript:window.parent.postMessage('close','*');" />
 					</div>
 				</s:else>
