@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { withStyles } from "@material-ui/core/styles";
-import DocumentList from "../../ui-molecules-local/DocumentList";
+import { DocumentList } from "../../ui-molecules-local";
 import { connect } from "react-redux";
 import get from "lodash/get";
 
@@ -10,10 +10,7 @@ const styles = theme => ({
     padding: "8px 38px"
   },
   input: {
-    // display: "none !important",
-    //For QA Automation
-    position: "absolute",
-    right: 0
+    display: "none !important"
   }
 });
 
@@ -25,24 +22,10 @@ class DocumentListContainer extends Component {
 }
 
 const mapStateToProps = state => {
-  const { screenConfiguration } = state;
-  const documents = get(
-    screenConfiguration.preparedFinalObject,
-    "LicensesTemp[0].applicationDocuments",
-    []
-  );
-  const uploadedDocuments = get(
-    screenConfiguration.preparedFinalObject,
-    "LicensesTemp[0].uploadedDocsInRedux",
-    {}
-  );
-  const tenantId = get(
-    screenConfiguration.preparedFinalObject,
-    "Licenses[0].tenantId",
-    ""
-  );
-  const { preparedFinalObject } = screenConfiguration || {};
-  return { documents, tenantId, uploadedDocuments, preparedFinalObject };
+  let documentsList = get(state, "screenConfiguration.preparedFinalObject.documentsContract", []);
+  const documents = get(state.screenConfiguration.preparedFinalObject, "applyScreen.documents", []);
+  const uploadedDocuments = get(state.screenConfiguration.preparedFinalObject, "UploadedDocs", []);
+  return { documentsList, uploadedDocuments, documents };
 };
 
 export default withStyles(styles)(

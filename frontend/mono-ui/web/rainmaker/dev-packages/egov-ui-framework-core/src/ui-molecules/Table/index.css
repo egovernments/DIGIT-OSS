@@ -20,6 +20,7 @@ table tbody  tr  td {
     width: 50% !important;
     padding:4px 8px 4px 10px !important;
     font-size: 14px !important;
-    height: 27px !important;
+    height: auto !important;
+    white-space: pre-wrap !important;
   }
 }

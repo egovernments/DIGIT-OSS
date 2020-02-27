@@ -1,34 +1,3 @@
-/* for text entrable fields */
-.textfield-enterable-selection label {
-  color: black !important; 
-}
-
-.textfield-enterable-selection div div div {
-  color: black !important; 
-}
-
-.textfield-enterable-selection div div div .select-field-placeholder {
-  color: grey !important; 
-}
-
-#custom-containers-local-tradeLocMohalla div label,
-#custom-containers-local-residential div label {
-  color: black !important;
-}
-
-.radio-button-label, .formLabel, .root{
-  color: black !important;
-}
-
-.radio-button-label, .formLabel label, .root{
-  color: black !important;
-}
-
-span[data-localization="NOC_GENDER_LABEL"],
-span[data-localization="NOC_APPLICANT_RELATIONSHIP_LABEL"]{
-  color: black !important;
-};
-
 #material-ui-header {
   display: flex !important;
   // justify-content: space-between !important;
@@ -36,12 +5,25 @@ span[data-localization="NOC_APPLICANT_RELATIONSHIP_LABEL"]{
 .bpa-searchpview #material-ui-header #material-ui-rightContainer {
   width: 50% !important;
   }
-  .bpa-searchpview #material-ui-header #material-ui-leftContainer {
+.bpa-searchpview #material-ui-header #material-ui-leftContainer {
   width: 50% !important;
   }
-  #custom-atoms-titlebar2 {
+#custom-atoms-titlebar2 {
     display: block !important;
   }
-  #custom-atoms-titlebar2 div:nth-child(0) {
+#custom-atoms-titlebar2 div:nth-child(0) {
     padding: 10px 0 !important
   }
+@media only screen and (min-width: 768px){
+  .apply-wizard-footer {
+    z-index: 100 !important;
+   }
+  }
+#custom-containers-remarks,
+#custom-containers-landRegDetails {
+  line-height: 2rem !important;
+  padding: 2px !important;
+}
+
+div[class^="MuiPaper-root"] svg text, .stepper-container svg text {
+  font-size: 12px !important; }

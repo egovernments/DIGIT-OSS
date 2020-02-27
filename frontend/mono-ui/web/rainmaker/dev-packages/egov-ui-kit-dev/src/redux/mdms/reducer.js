@@ -26,7 +26,7 @@ const mdmsReducer = (state = initialState, action) => {
         error: false,
         errorMessage: "",
       };
-    case actionTypes.SPECS_FETCH_COMPLETE:
+      case actionTypes.SPECS_FETCH_COMPLETE:
       return {
         ...state,
         loading: false,
@@ -36,6 +36,30 @@ const mdmsReducer = (state = initialState, action) => {
             [masterName]: action.payload,
           },
         },
+      };
+      case actionTypes.DOCUMENT_DATA_FETCH_COMPLETE:
+        const applyScreenMdmsData=action.payload.MdmsRes;
+      return {
+        ...state,
+        loading: false,
+        error:false,
+        errorMessage:"",
+        applyScreenMdmsData,
+        
+      };
+      case actionTypes.DOCUMENT_DATA_FETCH_PENDING:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+        errorMessage: "",
+      };
+    case actionTypes.DOCUMENT_DATA_FETCH_ERROR:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMessage: action.error,
       };
     case actionTypes.DATA_FETCH_COMPLETE:
       return {

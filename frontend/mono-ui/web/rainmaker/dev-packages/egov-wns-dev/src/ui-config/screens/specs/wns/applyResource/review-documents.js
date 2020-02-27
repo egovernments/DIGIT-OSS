@@ -4,8 +4,6 @@ import {
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 
-import { changeStep } from "./footer";
-
 export const getReviewDocuments = (isEditable = true) => {
   return getCommonGrayCard({
     headerDiv: {
@@ -48,17 +46,17 @@ export const getReviewDocuments = (isEditable = true) => {
           },
           onClickDefination: {
             action: "condition",
-            callBack: (state, dispatch) => {
-              changeStep(state, dispatch, "", 2);
-            }
+            // callBack: (state, dispatch) => {
+            //   changeStep(state, dispatch, "", 2);
+            // }
           }
         },
         documents: {
           uiFramework: "custom-containers-local",
-          moduleName: "egov-tradelicence",
+          moduleName: "egov-wns",
           componentPath: "DownloadFileContainer",
           props: {
-            sourceJsonPath: "LicensesTemp[0].reviewDocData",
+            sourceJsonPath: "DocumentsData",
             className: "review-documents"
           }
         }

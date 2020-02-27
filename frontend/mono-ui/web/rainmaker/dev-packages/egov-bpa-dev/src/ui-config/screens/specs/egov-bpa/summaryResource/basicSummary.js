@@ -8,6 +8,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { gotoApplyWithStep, checkValueForNA, convertEpochToDate  } from "../../utils/index";
 import { getTransformedLocale, getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { changeStep } from "../applyResource/footer";
 
 
 const getHeader = label => {
@@ -71,7 +72,7 @@ export const basicSummary = getCommonGrayCard({
         onClickDefination: {
           action: "condition",
           callBack: (state, dispatch) => {
-            gotoApplyWithStep(state, dispatch, 0);
+            changeStep(state, dispatch, "", 0);
           }
         }
       }
@@ -160,17 +161,17 @@ export const basicSummary = getCommonGrayCard({
                 }
             }
           ),
-          applicationFee: getLabelWithValue(
-            {
-              labelName: "Application Fee",
-              labelKey: "BPA_BASIC_DETAILS_APP_FEE_LABEL"
-            },
-            {
-              jsonPath:
-                "ReceiptTemp[0].Bill[0].totalAmount",
-                callBack: checkValueForNA
-            }
-          ),
+          // applicationFee: getLabelWithValue(
+          //   {
+          //     labelName: "Application Fee",
+          //     labelKey: "BPA_BASIC_DETAILS_APP_FEE_LABEL"
+          //   },
+          //   {
+          //     jsonPath:
+          //       "ReceiptTemp[0].Bill[0].totalAmount",
+          //       callBack: checkValueForNA
+          //   }
+          // ),
           remarks: getLabelWithValue(
             {
               labelName: "Remarks",
@@ -218,13 +219,6 @@ export const basicSummary = getCommonGrayCard({
               },
             }
           ),
-          reviewDoorNo: getLabelWithValue(
-            {
-              labelName: "Door/House No.",
-              labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
-            },
-            { jsonPath: "BPA.address.doorNo", callBack: checkValueForNA }
-          ),
           reviewBuildingName: getLabelWithValue(
             {
               labelName: "Building/Company Name",
@@ -271,4 +265,78 @@ export const basicSummary = getCommonGrayCard({
     },
     type: "array"
   },
+
+  DetailsOfPlot: getHeader({
+    labelName: "Details Of Plot",
+    labelKey: "BPA_BOUNDARY_PLOT_DETAILS_TITLE"
+  }),
+  break2: getBreak(),
+  detailsOfPlotCrad: {
+    uiFramework: "custom-containers",
+    componentPath: "MultiItem",
+    props: {
+        className: "applicant-summary",
+        scheama: getCommonGrayCard({
+            detailsOfPlotContainer: getCommonContainer({
+                plotArea: getLabelWithValue(
+                    {
+                        labelName: "Plot Area",
+                        labelKey: "BPA_BOUNDARY_PLOT_AREA_LABEL"
+                    },
+                    {
+                        jsonPath: "scrutinyDetails.planDetail.plot.area",
+                        callBack: checkValueForNA
+                    }
+                ),
+                kathaNumber: getLabelWithValue(
+                    {
+                        labelName: "Khata No.",
+                        labelKey: "BPA_BOUNDARY_KHATA_NO_LABEL"
+                    },
+                    {
+                        jsonPath: "scrutinyDetails.planDetail.planInformation.khataNo",
+                        callBack: checkValueForNA
+                    }
+                ),
+                holdingNumber: getLabelWithValue(
+                    {
+                        labelName: "Holding No.",
+                        labelKey: "BPA_BOUNDARY_HOLDING_NO_LABEL"
+                    },
+                    {
+                        jsonPath: "BPA.holdingNo",
+                        callBack: checkValueForNA
+                    }
+                ),
+                plotNo: getLabelWithValue(
+                    {
+                        labelName: "Plot No(MSP)",
+                        labelKey: "BPA_BOUNDARY_PLOT_NO_LABEL"
+                    },
+                    {
+                        jsonPath: "scrutinyDetails.planDetail.planInformation.plotNo",
+                        callBack: checkValueForNA
+                    }
+                ),
+                landRegDetails: getLabelWithValue(
+                    {
+                        labelName: "Land Registration Details",
+                        labelKey: "BPA_BOUNDARY_LAND_REG_DETAIL_LABEL"
+                    },
+                    {
+                        jsonPath: "BPA.registrationDetails",
+                        callBack: checkValueForNA
+                    }
+                )
+            })
+        }),
+        items: [],
+        hasAddItem: false,
+        isReviewPage: true,
+        sourceJsonPath: "BPA",
+        prefixSourceJsonPath: "children.cardContent.children.detailsOfPlotContainer.children",
+        afterPrefixJsonPath: "children.value.children.key"
+    },
+    type: "array"
+  }
 });

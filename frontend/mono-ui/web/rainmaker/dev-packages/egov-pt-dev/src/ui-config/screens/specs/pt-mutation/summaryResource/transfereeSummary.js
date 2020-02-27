@@ -9,6 +9,8 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { gotoApplyWithStep } from "../../utils/index";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
+import { checkValueForNA } from "../../utils";
+
 
 export const transfereeSummary = getCommonGrayCard({
   header: {
@@ -40,25 +42,25 @@ export const transfereeSummary = getCommonGrayCard({
           xs: 4,
           align: "right"
         },
-        children: {
-          editIcon: {
-            uiFramework: "custom-atoms",
-            componentPath: "Icon",
-            props: {
-              iconName: "edit"
-            }
-          },
-          buttonLabel: getLabel({
-            labelName: "Edit",
-            labelKey: "PT_EDIT"
-          })
-        },
-        onClickDefination: {
-          action: "condition",
-          callBack: (state, dispatch) => {
-            gotoApplyWithStep(state, dispatch, 0);
-          }
-        }
+        // children: {
+        //   editIcon: {
+        //     uiFramework: "custom-atoms",
+        //     componentPath: "Icon",
+        //     props: {
+        //       iconName: "edit"
+        //     }
+        //   },
+          // buttonLabel: getLabel({
+          //   labelName: "Edit",
+          //   labelKey: "PT_EDIT"
+          // })
+        // },
+        // onClickDefination: {
+        //   action: "condition",
+        //   callBack: (state, dispatch) => {
+        //     gotoApplyWithStep(state, dispatch, 0);
+        //   }
+        // }
       }
     }
   },
@@ -76,7 +78,8 @@ export const transfereeSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-                "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].name"
+                "Property.ownersTemp[0].name",
+                callBack: checkValueForNA
             }
           ), ownerFatherHusbandName: getLabelWithValue(
             {
@@ -85,7 +88,8 @@ export const transfereeSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-                "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].fatherOrHusbandName"
+                "Property.ownersTemp[0].fatherOrHusbandName",
+                callBack: checkValueForNA
             }
           ),  ownerGender: getLabelWithValue(
             {
@@ -94,7 +98,8 @@ export const transfereeSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-                "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].gender"
+                "Property.ownersTemp[0].gender",
+                callBack: checkValueForNA
             }
           ), ownerType: getLabelWithValue(
             {
@@ -103,7 +108,8 @@ export const transfereeSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-                "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].pan"
+                "Property.ownershipCategoryTemp",
+                callBack: checkValueForNA
             }
           ),
           mobileNo: getLabelWithValue(
@@ -113,7 +119,8 @@ export const transfereeSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-                "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].mobileNumber"
+                "Property.ownersTemp[0].mobileNumber",
+                callBack: checkValueForNA
             }
           ),  ownerEmail: getLabelWithValue(
             {
@@ -122,7 +129,8 @@ export const transfereeSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-                "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].emailId"
+                "Property.ownersTemp[0].emailId",
+                callBack: checkValueForNA
             }
           ),       
           ownerDob: getLabelWithValue(
@@ -132,10 +140,11 @@ export const transfereeSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-                "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].dob",
-              callBack: value => {
-                return convertEpochToDate(value);
-              }
+                "Property.ownersTemp[0].ownerType",
+                callBack: checkValueForNA
+              // callBack: value => {
+              //   return convertEpochToDate(value);
+              // }
             }
           ),
           ownerAddress: getLabelWithValue(
@@ -145,7 +154,8 @@ export const transfereeSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-                "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].correspondenceAddress"
+                "Property.ownersTemp[0].permanentAddress",
+                callBack: checkValueForNA
             }
           )
         })
@@ -153,7 +163,7 @@ export const transfereeSummary = getCommonGrayCard({
       items: [],
       hasAddItem: false,
       isReviewPage: true,
-      sourceJsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.owners",
+      sourceJsonPath: "Property.ownersTemp",
       prefixSourceJsonPath:
         "children.cardContent.children.ownerContainer.children",
       afterPrefixJsonPath: "children.value.children.key"
@@ -175,8 +185,8 @@ export const transfereeInstitutionSummary = getCommonGrayCard({
           xs: 8
         },
         ...getCommonSubHeader({
-          labelName: "Institution Details",
-          labelKey: "PT_INSTITUTION_DETAILS_HEADER"
+          labelName: "Transferee Details",
+          labelKey: "PT_INSTITUTION_TRANSFEREE_DETAILS_HEADER"
         })
       },
       editSection: {
@@ -205,67 +215,88 @@ export const transfereeInstitutionSummary = getCommonGrayCard({
             labelKey: "PT_EDIT"
           })
         },
-        onClickDefination: {
-          action: "condition",
-          callBack: (state, dispatch) => {
-            gotoApplyWithStep(state, dispatch, 2);
-          }
-        }
+        // onClickDefination: {
+        //   action: "condition",
+        //   callBack: (state, dispatch) => {
+        //     gotoApplyWithStep(state, dispatch, 0);
+        //   }
+        // }
       }
     }
   },
   body: getCommonContainer({
-    institutionType: getLabelWithValue(
-      {
-        labelName: "Institution Type",
-        labelKey: "PT_OWNERSHIP_INFO_NAME_INSTI"
-      },
-      {
-        jsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType",
-        callBack: value => {
-          return `COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
-        }
-      }
-    ),
     institutionName: getLabelWithValue(
       {
         labelName: "Name of Institution",
-        labelKey: "PT_OWNERSHIP_INFO_TYPE_INSTI"
+        labelKey: "PT_OWNERSHIP_INSTI_NAME"
       },
       {
         jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.additionalDetail.institutionName"
+          "Property.institutionTemp.institutionName",
+          callBack: checkValueForNA
       }
     ),
-    telephoneNumber: getLabelWithValue(
+    designation: getLabelWithValue(
       {
-        labelName: "Official Telephone No.",
-        labelKey: "PT_OWNERSHIP_INFO_TEL_NO"
+        labelName: "Designation",
+        labelKey: "PT_OWNERSHIP_INFO_DESIGNATION"
       },
       {
         jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.additionalDetail.telephoneNumber"
+          "Property.institutionTemp.designation",
+          callBack: checkValueForNA
       }
     ),
+
+    institutionType: getLabelWithValue(
+      {
+        labelName: "Type Of Institution",
+        labelKey: "PT_OWNERSHIP_INSTI_TYPE"
+      },
+      {
+        jsonPath: "Property.institutionTemp.institutionName",
+        callBack: checkValueForNA
+        // callBack: value => {
+        //   return `COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
+        // }
+      }
+    ),
+    institutionOwnershipType: getLabelWithValue(
+      {
+        labelName: "Type Of Ownership",
+        labelKey: "PT_INSTI_OWNERSHIP_TYPE"
+      },
+      {
+        jsonPath: "Property.ownershipCategory",
+        callBack: checkValueForNA
+        // callBack: value => {
+        //   return `COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
+        // }
+      }
+    ),
+   
     authorizedPersonName: getLabelWithValue(
       {
         labelName: "Name of Authorized Person",
         labelKey: "PT_OWNERSHIP_INFO_NAME_OF_AUTH"
       },
       {
-        jsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].name"
+        jsonPath: "Property.institutionTemp.name",
+        callBack: checkValueForNA
       }
     ),
-    designation: getLabelWithValue(
+    landlineNumber: getLabelWithValue(
       {
-        labelName: "Designation in Institution",
-        labelKey: "PT_OWNERSHIP_INFO_DESIGNATION"
+        labelName: "Telephone No.",
+        labelKey: "PT_OWNERSHIP_INFO_TEL_NO"
       },
       {
         jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.additionalDetail.institutionDesignation"
+          "Property.institutionTemp.landlineNumber",
+          callBack: checkValueForNA
       }
     ),
+    
     mobileNumber: getLabelWithValue(
       {
         labelName: "Mobile No. of Authorized Person",
@@ -273,19 +304,11 @@ export const transfereeInstitutionSummary = getCommonGrayCard({
       },
       {
         jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].mobileNumber"
+          "Property.institutionTemp.mobileNumber",
+          callBack: checkValueForNA
       }
     ),
-    authorizedEmail: getLabelWithValue(
-      {
-        labelName: "Email of Authorized Person",
-        labelKey: "PT_OWNERSHIP_INFO_EMAIL_ID"
-      },
-      {
-        jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].emailId"
-      }
-    ),
+    
     officialAddress: getLabelWithValue(
       {
         labelName: "Official Correspondence Address",
@@ -293,7 +316,8 @@ export const transfereeInstitutionSummary = getCommonGrayCard({
       },
       {
         jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].correspondenceAddress"
+          "Property.institutionTemp.correspondenceAddress",
+          callBack: checkValueForNA
       }
     )
   })

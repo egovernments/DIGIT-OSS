@@ -6,7 +6,7 @@ import "./index.css";
 export const getRedirectionURL = () => {
   const redirectionURL = ifUserRoleExists("CITIZEN")
     ? "/property-tax"
-    : "/inbox";
+    : "/pt-mutation/propertySearch";
   return redirectionURL;
 };
 
@@ -105,61 +105,6 @@ export const applicationSuccessFooter = (
         }
       },
       visible: false
-    },
-    proceedToPaymentButton: {
-      componentPath: "Button",
-      props: {
-        variant: "contained",
-        color: "primary",
-        style: {
-          height: "48px",
-         marginRight: "45px"
-        }
-      },
-      children: {
-        proceedToPaymentButtonLabel: getLabel({
-          labelName: "Proceed to payment",
-          labelKey: "PT_MUTATION_PROCEED_PAYMENT"
-        })
-      },
-      onClickDefination: {
-        action: "page_change",
-        path:`/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenant}`
-      },
-      roleDefination: {
-        rolePath: "user-info.roles",
-        action: "PAY"
-      },
-      visible: process.env.REACT_APP_NAME === "Citizen" ? false : true
-    },
-    makePayment: {
-      componentPath: "Button",
-      props: {
-       className: "apply-wizard-footer1",
-        variant: "contained",
-        color: "primary",
-        style: {
-          minWidth: "180px",
-          height: "48px",
-        
-        }
-      },
-      children: {
-        submitButtonLabel: getLabel({
-          labelName: "MAKE PAYMENT",
-          labelKey: "PT_MUTATION_MAKE_PAYMENT"
-        })
-      },
-      onClickDefination: {
-        action: "page_change",
-        path:`/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenant}`,
-      },
-      roleDefination: {
-        rolePath: "user-info.roles",
-        roles: ["CITIZEN"],
-        action: "PAY"
-      },
-      visible: process.env.REACT_APP_NAME === "Citizen" ? true : false
     }
   });
 };

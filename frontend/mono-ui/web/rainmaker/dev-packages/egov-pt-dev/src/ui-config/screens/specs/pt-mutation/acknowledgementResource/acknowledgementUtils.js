@@ -61,7 +61,8 @@ const acknowledgementCard = ({
           )
         },
         props: {
-          style: style.tailBox
+          style: style.tailBox,
+          className: "ack-tail"
         }
       }
     : {};
@@ -102,7 +103,8 @@ const acknowledgementCard = ({
             })
           },
           props: {
-            style: style.bodyBox
+            style: style.bodyBox,
+            className: "ack-body"
           }
         },
         tail: tail

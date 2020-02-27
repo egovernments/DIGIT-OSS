@@ -1,0 +1,87 @@
+#material-ui-propertySearchTabs{
+    background-color: transparent !important;
+  box-shadow: none !important;
+  margin-top: 0px !important; 
+      div{
+          div{
+            background-color: transparent;
+          }
+      }
+}
+
+// #material-ui-propertySearchTabs{
+//     div{
+//     padding:0px !important;
+//     }
+//   }
+
+#material-ui-popup{
+    height: 100%;
+    width: 165px;
+}
+
+#material-ui-yearDetailsContainer{div{div{fieldset{div{label{span:nth-child(1){
+    height:20px !important;
+}}}}}}}
+
+#material-ui-yearDetailsContainer{div{div{fieldset{label{span:nth-child(1){
+    font-size:15px;
+    font-weight: bolder;
+}}}}}}
+#material-ui-yearDetailsContainer{div{div{fieldset{label{
+    padding-bottom: 10px;
+}}}}}
+
+
+// button[role=tab]{
+//     span{
+//         span{
+//             span{
+//                 span{
+//                     color:black;
+//                     font-weight:800;
+//                 }
+//             }
+//         }
+//     }
+// }
+#material-ui-searchPropertyDetails{
+    margin-right: -20px;
+    margin-left: -20px;
+    margin-top: 10px;
+    background-color: white !important;
+   }
+
+   #material-ui-searchApplicationDetails{
+    margin-right: -20px;
+    margin-left: -20px;
+    margin-top: 10px;
+    background-color: white !important;
+   }
+
+   @media only screen and (max-width: 768px) {
+    #material-ui-resetButton{
+        float:none !important;
+        margin-left: 38px !important; 
+    }
+    #material-ui-searchButton{
+      margin-left: 38px !important; 
+    }
+    
+    .ack-body, .ack-tail {
+        display: contents;
+        text-align: center;
+    }
+      
+  }
+  @media only screen and (min-width: 768px) {
+  
+    .downloadprint-menu {
+        float:right;
+        margin-top: -50px;
+
+    }
+      
+  }
+  
+  

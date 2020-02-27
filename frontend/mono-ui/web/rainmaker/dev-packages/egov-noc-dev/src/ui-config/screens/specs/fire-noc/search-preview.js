@@ -12,7 +12,8 @@ import {
   getFileUrlFromAPI,
   getQueryArg,
   getTransformedLocale,
-  setBusinessServiceDataToLocalStorage
+  setBusinessServiceDataToLocalStorage,
+  getFileUrl
 } from "egov-ui-framework/ui-utils/commons";
 import { createEstimateData } from "../utils/index";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
@@ -116,13 +117,12 @@ const prepareDocumentsView = async (state, dispatch) => {
     doc["link"] =
       (fileUrls &&
         fileUrls[doc.fileStoreId] &&
-        fileUrls[doc.fileStoreId].split(",")[0]) ||
+        getFileUrl(fileUrls[doc.fileStoreId])) ||
       "";
     doc["name"] =
       (fileUrls[doc.fileStoreId] &&
         decodeURIComponent(
-          fileUrls[doc.fileStoreId]
-            .split(",")[0]
+          getFileUrl(fileUrls[doc.fileStoreId])
             .split("?")[0]
             .split("/")
             .pop()

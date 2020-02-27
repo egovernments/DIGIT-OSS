@@ -108,10 +108,10 @@ const getPaymentCard = () => {
 
 
 
-const fetchBill = async (state, dispatch, consumerCode, tenantId) => {
+const fetchBill = async (state, dispatch, consumerCode, tenantId, billBusinessService) => {
     await getBusinessServiceMdmsData(dispatch, tenantId);
 
-    await generateBill(dispatch, consumerCode, tenantId);
+    await generateBill(dispatch, consumerCode, tenantId, billBusinessService);
 
     let payload = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].billDetails[0]");
     let totalAmount = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0]");
@@ -193,8 +193,8 @@ const screenConfig = {
     beforeInitScreen: (action, state, dispatch) => {
         let consumerCode = getQueryArg(window.location.href, "consumerCode");
         let tenantId = getQueryArg(window.location.href, "tenantId");
-        // let businessService = getQueryArg(window.location.href, "businessService");
-        fetchBill(state, dispatch, consumerCode, tenantId);
+        let businessService = getQueryArg(window.location.href, "businessService");
+        fetchBill(state, dispatch, consumerCode, tenantId, businessService);
         const data = getPaymentCard();
         set(action, "screenConfig.components.div.children.formwizardFirstStep", data);
         return action;

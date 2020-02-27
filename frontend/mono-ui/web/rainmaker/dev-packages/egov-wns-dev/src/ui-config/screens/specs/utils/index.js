@@ -385,11 +385,11 @@ export const onClickNextButton = (
 ) => {
   switch (queryValue) {
     case "reject":
-      return `/tradelicence/acknowledgement?purpose=application&status=rejected&applicationNumber=${applicationNumber}&secondNumber=${secondNumber}&tenantId=${tenantId}`;
+      return `/wns/acknowledgement?purpose=application&status=rejected&applicationNumber=${applicationNumber}&secondNumber=${secondNumber}&tenantId=${tenantId}`;
     case "cancel":
-      return `/tradelicence/acknowledgement?purpose=application&status=cancelled&applicationNumber=${applicationNumber}&secondNumber=${secondNumber}&tenantId=${tenantId}`;
+      return `/wns/acknowledgement?purpose=application&status=cancelled&applicationNumber=${applicationNumber}&secondNumber=${secondNumber}&tenantId=${tenantId}`;
     default:
-      return `/tradelicence/acknowledgement?purpose=approve&status=success&applicationNumber=${applicationNumber}&secondNumber=${secondNumber}&tenantId=${tenantId}`;
+      return `/wns/acknowledgement?purpose=approve&status=success&applicationNumber=${applicationNumber}&secondNumber=${secondNumber}&tenantId=${tenantId}`;
   }
 };
 
@@ -400,11 +400,11 @@ export const onClickPreviousButton = (
 ) => {
   switch (queryValue) {
     case "reject":
-      return `/tradelicence/search-preview?role=approver&status=pending_approval&applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
+      return `/wns/search-preview?role=approver&status=pending_approval&applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
     case "cancel":
-      return `/tradelicence/search-preview?role=approver&status=approved&applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
+      return `/wns/search-preview?role=approver&status=approved&applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
     default:
-      return `/tradelicence/search-preview?role=approver&status=pending_approval&applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
+      return `/wns/search-preview?role=approver&status=pending_approval&applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
   }
 };
 export const getFeesEstimateCard = props => {
@@ -736,15 +736,15 @@ export const getDetailsFromProperty = async (state, dispatch) => {
               "components.div.children.formwizardFirstStep.children.tradeLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocMohalla",
               "props.value",
               {
-                value: payload.Properties[0].address.locality.code,
-                label: payload.Properties[0].address.locality.name
+                value: payload.applyScreen.property.address.locality.code,
+                label: payload.applyScreen.property.address.locality.name
               }
             )
           );
           dispatch(
             prepareFinalObject(
               "Licenses[0].tradeLicenseDetail.address",
-              payload.Properties[0].address
+              payload.applyScreen.property.address
             )
           );
           dispatch(
@@ -752,7 +752,7 @@ export const getDetailsFromProperty = async (state, dispatch) => {
               "apply",
               "components.div.children.formwizardFirstStep.children.tradeLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocCity.children.cityDropdown",
               "props.value",
-              payload.Properties[0].address.tenantId
+              payload.applyScreen.property.address.tenantId
             )
           );
         }
@@ -1006,15 +1006,15 @@ const getEstimateData = (Bill, getFromReceipt, LicenseData) => {
               item.accountDescription.split("-")[0],
               LicenseData
             ) && {
-              value: getToolTipInfo(
-                item.accountDescription.split("-")[0],
-                LicenseData
-              ),
-              key: getToolTipInfo(
-                item.accountDescription.split("-")[0],
-                LicenseData
-              )
-            }
+                value: getToolTipInfo(
+                  item.accountDescription.split("-")[0],
+                  LicenseData
+                ),
+                key: getToolTipInfo(
+                  item.accountDescription.split("-")[0],
+                  LicenseData
+                )
+              }
           });
       } else {
         item.taxHeadCode &&
@@ -1657,38 +1657,11 @@ export const updateDropDowns = async (
 };
 
 export const getDocList = (state, dispatch) => {
-  const tradeSubTypes = get(
-    state.screenConfiguration.preparedFinalObject,
-    "Licenses[0].tradeLicenseDetail.tradeUnits"
-  );
-
-  const tradeSubCategories = get(
-    state.screenConfiguration.preparedFinalObject,
-    "applyScreenMdmsData.TradeLicense.MdmsTradeType"
-  );
-  let selectedTypes = [];
-  tradeSubTypes.forEach(tradeSubType => {
-    selectedTypes.push(
-      filter(tradeSubCategories, {
-        code: tradeSubType.tradeType
-      })
-    );
-  });
-
-  // selectedTypes[0] &&
-  //
-  let applicationDocArray = [];
-
-  selectedTypes.forEach(tradeSubTypeDoc => {
-    applicationDocArray = [
-      ...applicationDocArray,
-      ...tradeSubTypeDoc[0].applicationDocument
-    ];
-  });
+  const documentList = get(state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.ws-services-masters.Documents");
   function onlyUnique(value, index, self) {
     return self.indexOf(value) === index;
   }
-  applicationDocArray = applicationDocArray.filter(onlyUnique);
+  let applicationDocArray = documentList.filter(onlyUnique);
   let applicationDocument = prepareDocumentTypeObj(applicationDocArray);
   dispatch(
     prepareFinalObject(
@@ -2291,6 +2264,13 @@ export const getTextToLocalMapping = label => {
         localisationLabels
       );
 
+    case "Application Type":
+      return getLocaleLabels(
+        "Application Type",
+        "WS_COMMON_TABLE_COL_APP_TYPE_LABEL",
+        localisationLabels
+      );
+
     case "Consumer No":
       return getLocaleLabels(
         "Consumer No",
@@ -2344,6 +2324,12 @@ export const getTextToLocalMapping = label => {
         "WS_COMMON_TABLE_COL_ADDRESS",
         localisationLabels
       );
+
+    case "Application Status":
+      return getLocaleLabels(
+        "Application Status",
+        "WS_COMMON_TABLE_COL_APPLICATION_STATUS"
+      )
     // case "Connection Type":
     //   return getLocaleLabels(
     //     "Connection Type",
@@ -2387,6 +2373,13 @@ export const getTextToLocalMapping = label => {
       return getLocaleLabels(
         "Search Results for Water & Sewerage Connections",
         "WS_HOME_SEARCH_RESULTS_TABLE_HEADING",
+        localisationLabels
+      );
+
+    case "Search Results for Water & Sewerage Application":
+      return getLocaleLabels(
+        "Search Results for Water & Sewerage Application",
+        "WS_HOME_SEARCH_APPLICATION_RESULTS_TABLE_HEADING",
         localisationLabels
       );
 

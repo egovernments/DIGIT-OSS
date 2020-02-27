@@ -121,7 +121,7 @@ export const ACTIONMENU = {
 
 export const PROPERTY = {
   GET: {
-    URL: "/pt-services-v2/property/_search",
+    URL: "/property-services/property/_search",
     ACTION: "_get",
   },
 };
@@ -184,5 +184,11 @@ export const DOWNLOADRECEIPT = {
   GET: {
     URL: "/pdf-service/v1/_create",
     ACTION: "_get",
+  },
+};
+export const FETCHASSESSMENTS = {
+  GET: {
+    URL: "/property-services/assessment/_search",
+    ACTION: "_search",
   },
 };

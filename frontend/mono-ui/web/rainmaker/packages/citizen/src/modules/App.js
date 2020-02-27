@@ -110,8 +110,9 @@ class App extends Component {
       setRoute("");
     }
     const isWithoutAuthSelfRedirect = location && location.pathname && location.pathname.includes("openlink");
+    const isPrivacyPolicy = location && location.pathname && location.pathname.includes("privacy-policy");
 
-    if (nextProps.hasLocalisation !== this.props.hasLocalisation && !authenticated && !getQueryArg("", "smsLink") && !isWithoutAuthSelfRedirect) {
+    if (nextProps.hasLocalisation !== this.props.hasLocalisation && !authenticated && !getQueryArg("", "smsLink") && !isWithoutAuthSelfRedirect && !isPrivacyPolicy) {
       nextProps.hasLocalisation && this.props.history.replace("/language-selection");
     }
   }

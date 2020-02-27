@@ -141,6 +141,10 @@ const createDemand = async (state, dispatch) => {
       get(state.screenConfiguration.preparedFinalObject, "Demands")
     )
   );
+// Making payer object as null if it is empty object, later will changge in component.
+if(Object.keys(demands[0].payer).length === 0) {
+  demands[0].payer = null;
+}
   set(demands[0], "consumerType", demands[0].businessService);
   demands[0].demandDetails &&
     demands[0].demandDetails.forEach(item => {

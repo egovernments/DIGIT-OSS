@@ -7,9 +7,13 @@ import {
   getCommonGrayCard,
   getCommonSubHeader,
   getLabelWithValue,
-  getBreak
+  getBreak,
+  getSelectField
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import get from "lodash/get";
 import "./index.css";
+import { setProposedBuildingData } from "../../utils/index.js";
 
 export const buildingPlanScrutinyDetails = getCommonCard({
   header: getCommonTitle(
@@ -93,45 +97,115 @@ export const blockWiseOccupancyAndUsageDetails = getCommonCard({
         }
       }
     ),
-    blockWiseContainer: getCommonContainer({
-      residential: {
-        uiFramework: "custom-containers-local",
-        moduleName: "egov-bpa",
-        componentPath: "AutosuggestContainer",
-        jsonPath: "BPAs[0].BPADetails.blockwiseusagedetails.residential",
-        required: true,
-        gridDefination: {
-          xs: 12,
-          sm: 12,
-          md: 3
-        },
-        props: {
-          style: {
-            width: "100%",
-            cursor: "pointer"
+    applicantTypeSelection: getCommonContainer({
+      occupancyType: {
+        ...getSelectField({
+          label: {
+            labelName: "Occupancy Type",
+            labelKey: "BPA_OCCUPANCY_TYPE"
+          },
+          placeholder: {
+            labelName: "Select Occupancy Type",
+            labelKey: "BPA_OCCUPANCY_TYPE_PLACEHOLDER"
           },
           localePrefix: {
             moduleName: "BPA",
-            masterName: "BLOCK"
+            masterName: "OCCUPANCYTYPE"
           },
-          className: "citizen-city-picker",
-          label: { labelName: "Residential", labelKey: "BPA_APPLICATION_RESIDENTIAL_LABEL" },
-          placeholder: {
-          labelName: "Select Occupancy",
-          labelKey: "BPA_APPLICATION_OCCUPANCY_PLACEHOLDER"
-          },
-          jsonPath: "BPAs[0].BPADetails.blockwiseusagedetails.residential",
-          sourceJsonPath:
-            "BPA.blocks",
-          labelsFromLocalisation: true,
-          fullwidth: true,
+          jsonPath: "BPA.occupancyType",
+          sourceJsonPath: "applyScreenMdmsData.BPA.OccupancyType",
           required: true,
-          inputLabelProps: {
-            shrink: true
+          gridDefination: {
+            xs: 12,
+            sm: 12,
+            md: 6
+          },
+          props: {
+            disabled: true,
+            className : "tl-trade-type"
           }
+        }),
+        beforeFieldChange: (action, state, dispatch) => {
+          let path = action.componentJsonpath.replace(
+            /.occupancyType$/,
+            ".subOccupancyType"
+          );
+          let occupancyType = get(
+            state,
+            "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.SubOccupancyType",
+            []
+          );
+          let subOccupancyType = occupancyType.filter(item => {
+            return item.active && (item.occupancyType).toUpperCase() === (action.value).toUpperCase();
+          });
+          dispatch(handleField("apply", path, "props.data", subOccupancyType));
         }
       },
+      subOccupancyType: {
+        ...getSelectField({
+          label: {
+            labelName: "Sub Occupancy Type",
+            labelKey: "BPA_SUB_OCCUP_TYPE_LABEL"
+          },
+          placeholder: {
+            labelName: "Select Sub Occupancy Type",
+            labelKey: "BPA_SUB_OCCUP_TYPE_PLACEHOLDER"
+          },
+          jsonPath: "BPA.subOccupancyType",
+          localePrefix: {
+            moduleName: "BPA",
+            masterName: "SUBOCCUPANCYTYPE"
+          },
+          gridDefination: {
+            xs: 12,
+            sm: 12,
+            md: 6
+          },
+          props: {
+            className: "applicant-details-error textfield-enterable-selection"
+          }
+        }),
+      },
     }),
+    // blockWiseContainer: getCommonContainer({
+    //   residential: {
+    //     uiFramework: "custom-containers-local",
+    //     moduleName: "egov-bpa",
+    //     componentPath: "AutosuggestContainer",
+    //     jsonPath: "BPAs[0].BPADetails.blockwiseusagedetails.residential",
+    //     required: true,
+    //     gridDefination: {
+    //       xs: 12,
+    //       sm: 12,
+    //       md: 3
+    //     },
+    //     props: {
+    //       style: {
+    //         width: "100%",
+    //         cursor: "pointer"
+    //       },
+    //       localePrefix: {
+    //         moduleName: "BPA",
+    //         masterName: "BLOCK"
+    //       },
+    //       className: "citizen-city-picker",
+    //       label: { labelName: "Residential", labelKey: "BPA_APPLICATION_RESIDENTIAL_LABEL" },
+    //       placeholder: {
+    //       labelName: "Select Occupancy",
+    //       labelKey: "BPA_APPLICATION_OCCUPANCY_PLACEHOLDER"
+    //       },
+    //       jsonPath: "BPAs[0].BPADetails.blockwiseusagedetails.residential",
+    //       sourceJsonPath:
+    //         "BPA.blocks",
+    //       labelsFromLocalisation: true,
+    //       fullwidth: true,
+    //       required: true,
+    //       inputLabelProps: {
+    //         shrink: true
+    //       }
+    //     }
+    //   },
+    // }),
     break: getBreak()
   })
 });
@@ -157,7 +231,8 @@ export const demolitiondetails = getCommonCard({
         },
         jsonPath: "scrutinyDetails.planDetail.planInformation.demolitionArea",
         props: {
-          disabled: 'true'
+          disabled: 'true',
+          className : "tl-trade-type"
         }
       })
     }
@@ -187,24 +262,7 @@ export const proposedBuildingDetails = getCommonCard({
         moduleName: "egov-bpa",
         componentPath: "Table",
         props: {
-          data: [
-            {
-              "Floor Description": "Ground Floor",
-              "Level": 0,
-              "Occupancy/Sub Occupancy": "Individual residential",
-              "Buildup Area": 52.22,
-              "Floor Area": 51,
-              "Carpet Area": 49
-            },
-            {
-              "Floor Description": "First Floor",
-              "Level": 0,
-              "Occupancy/Sub Occupancy": "Individual residential",
-              "Buildup Area": 52.22,
-              "Floor Area": 51,
-              "Carpet Area": 49
-            }
-          ],
+          data : setProposedBuildingData,
           columns: {
             "Floor Description": {},
             "Level": {},
@@ -243,7 +301,8 @@ export const proposedBuildingDetails = getCommonCard({
             jsonPath:
               "scrutinyDetails.planDetail.blocks[0].building.totalBuitUpArea",
             props: {
-              disabled: 'true'
+              disabled: 'true',
+              className : "tl-trade-type"
             },
             gridDefination: {
               xs: 12,
@@ -261,7 +320,8 @@ export const proposedBuildingDetails = getCommonCard({
             required: true,
             jsonPath: "scrutinyDetails.planDetail.blocks[0].building.totalFloors",
             props: {
-              disabled: 'true'
+              disabled: 'true',
+              className : "tl-trade-type"
             },
             gridDefination: {
               xs: 12,
@@ -280,7 +340,8 @@ export const proposedBuildingDetails = getCommonCard({
             jsonPath:
               "scrutinyDetails.planDetail.blocks[0].building.buildingHeight",
             props: {
-              disabled: 'true'
+              disabled: 'true',
+              className : "tl-trade-type"
             },
             gridDefination: {
               xs: 12,

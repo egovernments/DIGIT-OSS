@@ -14,7 +14,8 @@ import get from "lodash/get";
 import set from "lodash/set";
 import {
   getQueryArg,
-  getFileUrlFromAPI
+  getFileUrlFromAPI,
+  getFileUrl
 } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { getMultiUnits } from "egov-ui-framework/ui-utils/commons";
@@ -28,6 +29,7 @@ import {
 import { httpRequest } from "./api";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import jp from "jsonpath";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 
 const handleDeletedCards = (jsonObject, jsonPath, key) => {
   let originalArray = get(jsonObject, jsonPath, []);
@@ -41,6 +43,16 @@ const handleDeletedCards = (jsonObject, jsonPath, key) => {
     return element;
   });
   set(jsonObject, jsonPath, modifiedArray);
+};
+
+export const convertEchToDate = dateEpoch => {
+  const dateFromApi = new Date(dateEpoch);
+  let month = dateFromApi.getMonth() + 1;
+  let day = dateFromApi.getDate();
+  let year = dateFromApi.getFullYear();
+  month = (month > 9 ? "" : "0") + month;
+  day = (day > 9 ? "" : "0") + day;
+  return `${year}-${month}-${day}`;
 };
 
 export const getSearchResults = async queryObject => {
@@ -67,7 +79,7 @@ export const getBpaSearchResults = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      "/bpa-services/bpa/appl/_search",
+      "/bpa-services/bpa/appl/_search?offset=0&limit=-1",
       "",
       queryObject
     );
@@ -115,7 +127,7 @@ export const getAppSearchResults = async (queryObject, dispatch) => {
   try {
     const response = await httpRequest(
       "post",
-      "bpa-services/bpa/appl/_search",
+      "/bpa-services/bpa/appl/_search",
       "",
       queryObject
     );
@@ -171,6 +183,7 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
       if(documents.dropDownValues) {
       doc.documentType = documents.dropDownValues.value;
       }
+      doc.fileStoreId = documents.documents[0].fileStoreId;
       doc.fileStore = documents.documents[0].fileStoreId;
       doc.fileName = documents.documents[0].fileName;
       doc.fileUrl = documents.documents[0].fileUrl;
@@ -210,7 +223,7 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
     set(payload, "tenantId", tenantId);
     set(payload, "action", status);
 
-    set(payload, "additionalDetails", {});
+    set(payload, "additionalDetails", null);
     set(payload, "units", null);
 
 
@@ -223,8 +236,12 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
 
     let wfDocuments;
     if (method === "UPDATE") {
-      documents = payload.documents;
-      documents = requiredDocuments;
+      if (status === "APPLY") {
+        documents = payload.documents
+      } else {
+        documents = payload.documents;
+        documents = requiredDocuments;
+      }
       set(payload, "documents", documents);
       set(payload, "wfDocuments", null);
     } else if( method === 'CREATE') {
@@ -249,6 +266,17 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
         convertDateToEpoch(get(owner, "dob"))
       );
     });
+
+    let authOwners = [];
+    let multiOwners = get (payload, "owners", []);
+    if(multiOwners && multiOwners.length > 0) {
+      multiOwners.forEach(owner => {
+        if(owner && owner.isDeleted != false) {
+          authOwners.push(owner);
+        }
+      })
+    }
+    payload.owners = authOwners;
     let response;
     if (method === "CREATE") {
       response = await httpRequest(
@@ -280,9 +308,9 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
 };
 
 export const prepareDocumentsUploadData = (state, dispatch) => {
-  let documents = get(
+  let applicationDocuments = get(
     state,
-    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.DocTypeMapping[0].docTypes",
+    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.DocTypeMapping", //[0].docTypes
     []
   );
   let documentsDropDownValues = get(
@@ -291,8 +319,21 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
     []
   );
 
-  let documentsList = [];
-  documents.forEach(doc => {
+  let bpaDetails = get (
+    state,
+    "screenConfiguration.preparedFinalObject.BPA", {}
+  );
+
+  let documents = []
+  applicationDocuments.forEach(doc => {
+    if(doc.WFState == "INITIATED" && doc.RiskType === bpaDetails.riskType && doc.ServiceType === bpaDetails.serviceType && doc.applicationType === bpaDetails.applicationType) { 
+      documents.push(doc.docTypes);
+    }
+  });
+
+  if(documents[0] && documents[0].length > 0) {
+    let documentsList = [];
+  documents[0].forEach(doc => {
     let code = doc.code;
     doc.dropDownValues = [];
     documentsDropDownValues.forEach(value => {
@@ -338,17 +379,9 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
   Object.keys(tempDoc).forEach(key => {
     documentsContract.push(tempDoc[key]);
   });
-  let documentDetailsContract = [],
-    nocDetailsContract = [];
-  documentsContract.forEach(doc => {
-    if (doc.code == "NOC") {
-      nocDetailsContract.push(doc);
-    } else {
-      documentDetailsContract.push(doc);
-    }
-  });
-  dispatch(prepareFinalObject("documentsContract", documentDetailsContract));
-  dispatch(prepareFinalObject("nocDocumentsContract", nocDetailsContract));
+
+  dispatch(prepareFinalObject("documentsContract", documentsContract));
+  }
 };
 
 export const prepareNOCUploadData = (state, dispatch) => {
@@ -470,8 +503,7 @@ const setDocsForEditFlow = async (state, dispatch) => {
             (fileUrlPayload &&
               fileUrlPayload[item.fileStoreId] &&
               decodeURIComponent(
-                fileUrlPayload[item.fileStoreId]
-                  .split(",")[0]
+                getFileUrl(fileUrlPayload[item.fileStoreId])
                   .split("?")[0]
                   .split("/")
                   .pop()
@@ -725,7 +757,13 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       if (isEditFlow) {
         searchResponse = { Licenses: queryObject };
       } else {
-        dispatch(prepareFinalObject("Licenses", searchResponse.Licenses));
+        let stakeHolderDetails = searchResponse.Licenses;
+        if(stakeHolderDetails && stakeHolderDetails[0] && stakeHolderDetails[0].tradeLicenseDetail) {
+          let owners = stakeHolderDetails[0].tradeLicenseDetail.owners;
+          let dob = convertEchToDate(owners[0].dob);
+          stakeHolderDetails[0].tradeLicenseDetail.owners[0].dob = dob;
+        } 
+        dispatch(prepareFinalObject("Licenses", stakeHolderDetails));
         await setDocsForEditFlow(state, dispatch);
       }
       const updatedtradeUnits = get(
@@ -754,7 +792,13 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       dispatch(toggleSpinner());
       if (!response) {
       }
-      dispatch(prepareFinalObject("Licenses", response.Licenses));
+      let stakeHolderDetails = response.Licenses;
+      if(stakeHolderDetails && stakeHolderDetails[0] && stakeHolderDetails[0].tradeLicenseDetail) {
+        let owners = stakeHolderDetails[0].tradeLicenseDetail.owners;
+        let dob = convertEchToDate(owners[0].dob);
+        stakeHolderDetails[0].tradeLicenseDetail.owners[0].dob = dob;
+      } 
+      dispatch(prepareFinalObject("Licenses", stakeHolderDetails));
       createOwnersBackup(dispatch, response);
     }
     /** Application no. box setting */
@@ -879,5 +923,33 @@ export const handleFileUpload = (event, handleDocument, props) => {
         handleDocument(file);
       }
     });
+  }
+};
+
+export const submitBpaApplication = async (state, dispatch) => {
+  const bpaAction = "APPLY";
+  let response = await createUpdateBpaApplication(state, dispatch, bpaAction);
+  const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.BPA.applicationNo");
+  const tenantId = getQueryArg(window.location.href, "tenantId");
+  if (get(response, "status", "") === "success") {
+    const acknowledgementUrl =
+      process.env.REACT_APP_SELF_RUNNING === "true"
+        ? `/egov-ui-framework/egov-bpa/acknowledgement?purpose=${bpaAction}&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`
+        : `/egov-bpa/acknowledgement?purpose=${bpaAction}&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
+    dispatch(setRoute(acknowledgementUrl));
+  }
+};
+
+export const updateBpaApplication = async (state, dispatch) => {
+  const bpaAction = "SEND_TO_CITIZEN";
+  let response = await createUpdateBpaApplication(state, dispatch, bpaAction);
+  const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.BPA.applicationNo");
+  const tenantId = getQueryArg(window.location.href, "tenantId");
+  if (get(response, "status", "") === "success") {
+    const acknowledgementUrl =
+      process.env.REACT_APP_SELF_RUNNING === "true"
+        ? `/egov-ui-framework/egov-bpa/acknowledgement?purpose=${bpaAction}&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`
+        : `/egov-bpa/acknowledgement?purpose=${bpaAction}&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
+    dispatch(setRoute(acknowledgementUrl));
   }
 };

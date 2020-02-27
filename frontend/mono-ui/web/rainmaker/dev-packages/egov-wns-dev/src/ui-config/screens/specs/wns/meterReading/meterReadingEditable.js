@@ -45,11 +45,11 @@ const saveData = async (state, dispatch) => {
     data.lastReading = get(state, "screenConfiguration.preparedFinalObject.autoPopulatedValues.lastReading");
     data.billingPeriod = get(state, "screenConfiguration.preparedFinalObject.autoPopulatedValues.billingPeriod");
     let lastReadingDate = get(state, "screenConfiguration.preparedFinalObject.consumptionDetails[0].lastReadingDate")
-    console.log(lastReadingDate, "lastReadingDate")
-    if (lastReadingDate !== 0 && lastReadingDate !== undefined && lastReadingDate !== null && lastReadingDate !== '') {
+    // console.log(lastReadingDate, "lastReadingDate")
+    if (lastReadingDate !== undefined && lastReadingDate !== null && lastReadingDate !== '') {
         data.lastReadingDate = get(state, "screenConfiguration.preparedFinalObject.consumptionDetails[0].currentReadingDate");
     } else {
-        data.lastReadingDate = new Date().getTime()
+        data.lastReadingDate = new Date().setMonth(new Date().getMonth() - 1);
     }
     if (data.meterStatus === 'Working') {
         const isCurrentMeterValid = validateFields(
@@ -87,7 +87,7 @@ const saveData = async (state, dispatch) => {
             dispatch,
             "meter-reading"
         );
-        console.log(data.consumption, consumption)
+        // console.log(data.consumption, consumption)
         if (data.consumption === undefined || data.currentReading === null || data.consumption === '') {
             return;
         }
@@ -103,7 +103,7 @@ const saveData = async (state, dispatch) => {
     if (data.consumption) {
         delete data.consumption
     }
-    console.log(data)
+    // console.log(data)
     createMeterReading(dispatch, data)
 
 }

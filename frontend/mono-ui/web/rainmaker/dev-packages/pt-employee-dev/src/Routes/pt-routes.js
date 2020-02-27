@@ -7,7 +7,10 @@ const PTHome = Loadable({
   loader: () => import("../Screens/PTHome"),
   loading: Loading
 });
-
+const ApplicationPreview = Loadable({
+  loader: () => import("egov-ui-kit/common/propertyTax/ApplicationPreview"),
+  loading: Loading
+});
 const HowItWorks = Loadable({
   loader: () => import("egov-ui-kit/common/propertyTax/HowItWorks"),
   loading: Loading
@@ -41,13 +44,19 @@ const PropertyInformationForm = Loadable({
   loading: Loading
 });
 
+const ptAcknowledgment = Loadable({
+  loader: () => import("egov-ui-kit/common/propertyTax/PTAcknowledgement"),
+  loading: Loading
+});
+
 // const redirectionUrl = "/user/login";
 
 const routes = [
   // property tax routes
   {
     path: "property-tax",
-    component: PTHome,
+    // component: PTHome,
+    component: SearchProperty,
     needsAuthentication: true,
     options: {
       title: "PT_HOME_PROPERTY_TAX",
@@ -78,7 +87,17 @@ const routes = [
       // hideBackButton: true,
     }
   },
-
+  {
+    path: "property-tax/application-preview",
+    component: ApplicationPreview,
+    needsAuthentication: true,
+    options: {
+      // hideTitle:true,
+      hideFooter: true,
+      hideTitle: true
+      // hideBackButton: true,
+    }
+  },
   {
     path: "property-tax/assessment-form",
     component: FormWizard,
@@ -139,6 +158,17 @@ const routes = [
       hideFooter: true,
       // hideBackButton: true,
       title: "PT_EXAMPLES"
+    }
+  },
+  {
+    path: "property-tax/pt-acknowledgment",
+    component: ptAcknowledgment,
+    needsAuthentication: true,
+    options: {
+      hideFooter: false,
+      hideTitle: true,
+      // hideBackButton: true,
+      // title: "PT_ACKNOWLEDGEMENT"
     }
   }
 ];

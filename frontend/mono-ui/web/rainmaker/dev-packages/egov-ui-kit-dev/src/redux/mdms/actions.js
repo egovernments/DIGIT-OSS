@@ -49,6 +49,26 @@ const dataFetchError = (error) => {
   };
 };
 
+const documentDataFetchPending = () => {
+  return {
+    type: actionTypes.DOCUMENT_DATA_FETCH_PENDING,
+  };
+};
+
+export const documentDataFetchComplete = (payload) => {
+  return {
+    type: actionTypes.DOCUMENT_DATA_FETCH_COMPLETE,
+    payload
+  };
+};
+
+const documentDataFetchError = (error) => {
+  return {
+    type: actionTypes.DOCUMENT_DATA_FETCH_ERROR,
+    error,
+  };
+};
+
 const mapFloatingLabelText = (rawText) => {
   return rawText.split(".").pop();
 };
@@ -186,5 +206,28 @@ export const fetchSpecs = (queryObject, moduleName, masterName, tenantId, reques
     } catch (error) {
       dispatch(specsFetchError(error.message));
     }
+  };
+};
+
+
+export const fetchDocuments = (tenantId) => {
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: tenantId,
+      moduleDetails: [{ moduleName: "PropertyTax", masterDetails: [{ name: "Documents" }] }],
+    },
+  };
+  return async (dispatch) => {
+    if(tenantId){
+    dispatch(documentDataFetchPending());
+    try {
+     
+        const payload = await httpRequest(MDMS.GET.URL, MDMS.GET.ACTION,[], mdmsBody);
+        
+      
+      dispatch(documentDataFetchComplete(payload));
+    } catch (e) {
+      dispatch(documentDataFetchError(e.message));
+    }}
   };
 };

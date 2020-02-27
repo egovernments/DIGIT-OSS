@@ -26,10 +26,13 @@
 }
 
 @media only screen and (max-width:768px){
-  .MuiStep-alternativeLabel-35,{
+  .MuiStep-alternativeLabel-35{
     width: calc(100% - (60px * 5)) !important;
    }
    .MuiStepConnector-alternativeLabel-88 {
      width: 50% !important;
    } 
+   .wizard-cont {
+     overflow-x: hidden;
+   }
 }

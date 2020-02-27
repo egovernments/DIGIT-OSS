@@ -3,10 +3,44 @@ import Label from "egov-ui-kit/utils/translationNode";
 import { getTranslatedLabel } from "egov-ui-kit/utils/commons";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { initLocalizationLabels } from "egov-ui-kit/redux/app/utils";
-const PTHeader = ({ header = '', headerValue = '', subHeaderTitle = '', subHeaderValue = '' }) => {
+import DownloadPrintButton from "egov-ui-framework/ui-molecules/DownloadPrintButton";
+import { generatePdfFromDiv } from "../../../utils/PTCommon";
+import "./index.css";
+
+const PTHeader = ({ header = '', headerValue = '', subHeaderTitle = '', subHeaderValue = '', downloadPrintButton=false }) => {
     const locale = getLocale() || "en_IN";
     const localizationLabelsData = initLocalizationLabels(locale);
+    let downloadButton;
+    let printButton
+
+    if(downloadPrintButton){
+        let applicationDownloadObject = {
+            label: { labelName: "Application", labelKey: "PT_APPLICATION" },
+            link: () => {
+      
+                generatePdfFromDiv("download",subHeaderValue),"#property-review-form";
+            },
+            leftIcon: "assignment"
+          };
+      
+          let tlCertificatePrintObject = {
+            label: { labelName: "Application", labelKey: "PT_APPLICATION" },
+            link: () => {
+                generatePdfFromDiv("print",subHeaderValue,"#property-review-form");
+          },
+            leftIcon: "book"
+            
+          };
+          let downloadMenu=[];
+          let printMenu=[];
+          downloadMenu.push(applicationDownloadObject);
+          printMenu.push(tlCertificatePrintObject);
+          downloadButton={menu:downloadMenu,visibility:true} ;
+          printButton={menu:printMenu,visibility:true} ;
+    }
+   
     return (
+        <div className="search-preview-header" style={{ display: "flex" ,marginBottom : downloadPrintButton ? 50 : 10 ,marginTop : 20 ,justifyContent : "space-between"}}>
         <div>
             <Label
                 label={`${getTranslatedLabel(header, localizationLabelsData)} ${headerValue}`}
@@ -36,6 +70,34 @@ const PTHeader = ({ header = '', headerValue = '', subHeaderTitle = '', subHeade
                 fontSize={"16px"}
             />}
         </div>
+       {downloadPrintButton&& <div className="header-buttons" style={{float : "right" ,display: "flex" ,marginRight:20}} >
+          <DownloadPrintButton
+            data={{
+              label: {
+                llabelName: "DOWNLOAD",
+                labelKey: "PT_DOWNLOAD",
+              },
+              leftIcon: "print",
+              rightIcon: "arrow_drop_down",
+              props: { variant: "outlined", style: { height:65 , marginRight: 20, color: "#FE7A51" } },
+              menu: downloadButton.menu,
+            }}
+          />
+          <DownloadPrintButton
+            data={{
+              label: {
+                llabelName: "Print",
+                labelKey: "PT_PRINT",
+              },
+              leftIcon: "print",
+              rightIcon: "arrow_drop_down",
+              props: { variant: "outlined", style: { height:65 , marginLeft: 10, color: "#FE7A51" } },
+              menu: printButton.menu,
+            }}
+          />
+        </div>}
+        </div>
+       
     )
 }
 export default PTHeader;
