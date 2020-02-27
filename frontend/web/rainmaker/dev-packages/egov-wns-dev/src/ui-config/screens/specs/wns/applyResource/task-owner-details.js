@@ -110,32 +110,24 @@ export const propertyOwnerDetails = () => {
             uiFramework: "custom-atoms",
             componentPath: "Container",
             props: {
-                className: "common-div-css search-preview",
+                style: { marginBottom: "10px" }
             },
-            // div3: propertyOwnerDetailsHeader,
-            ...getHeader({
-                labelKey: "WS_TASK_PROP_OWN_HEADER"
-            })
-            // },
+            ...propertyOwnerDetailsHeader,
         },
-
         multiOwner: {
             uiFramework: "custom-containers",
             componentPath: "MultiItem",
             props: {
-                className: "common-div-css search-preview",
-                scheama: getCommonGrayCard({
-                    viewFive: getCommonContainer({
-                        mobileNumber,
-                        name,
-                        gender,
-                        dateOfBirth,
-                        email,
-                        fatherName,
-                        relationship,
-                        correspondenceAddress,
-                        specialApplicantCategory
-                    }),
+                scheama: getCommonContainer({
+                    mobileNumber,
+                    name,
+                    gender,
+                    dateOfBirth,
+                    email,
+                    fatherName,
+                    relationship,
+                    correspondenceAddress,
+                    specialApplicantCategory
                 }),
                 items: [],
                 hasAddItem: false,

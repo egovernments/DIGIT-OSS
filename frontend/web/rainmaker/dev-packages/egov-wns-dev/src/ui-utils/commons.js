@@ -528,9 +528,7 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
     dispatch(prepareFinalObject("documentsContract", documentsContract));
 };
 
-export const applyForWaterOrSewerage = async (state, dispatch) => {
-    let waterId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].id");
-    let method = waterId ? "UPDATE" : "CREATE";
+const parserFunction = (state) => {
     let queryObject = JSON.parse(JSON.stringify(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {})));
     let parsedObject = {
         roadCuttingArea: parseInt(queryObject.roadCuttingArea),
@@ -544,6 +542,10 @@ export const applyForWaterOrSewerage = async (state, dispatch) => {
         proposedTaps: parseInt(queryObject.proposedTaps)
     }
     queryObject = { ...queryObject, ...parsedObject }
+    return queryObject;
+}
+
+export const applyForWaterOrSewerage = async (state, dispatch) => {
     let reduxDocuments = get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux", {});
     let uploadedDocs = [];
     if (reduxDocuments !== null && reduxDocuments !== undefined) {
@@ -559,18 +561,21 @@ export const applyForWaterOrSewerage = async (state, dispatch) => {
         });
     }
     if (get(state, "screenConfiguration.preparedFinalObject.applyScreen.water") && get(state, "screenConfiguration.preparedFinalObject.applyScreen.sewerage")) {
-        let response = await applyForBothWaterAndSewerage(state, dispatch, method, queryObject);
+        let response = await applyForBothWaterAndSewerage(state, dispatch);
         return response;
     } else if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage")) {
-        let response = await applyForSewerage(state, dispatch, method, queryObject);
+        let response = await applyForSewerage(state, dispatch);
         return response;
     } else {
-        let response = await applyForWater(state, dispatch, method, queryObject);
+        let response = await applyForWater(state, dispatch);
         return response;
     }
 }
 
-const applyForWater = async (state, dispatch, method, queryObject) => {
+export const applyForWater = async (state, dispatch) => {
+    let waterId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].id");
+    let method = waterId ? "UPDATE" : "CREATE";
+    let queryObject = parserFunction(state);
     try {
         const tenantId = ifUserRoleExists("CITIZEN") ? "pb.amritsar" : getTenantId();
         let response;
@@ -599,7 +604,10 @@ const applyForWater = async (state, dispatch, method, queryObject) => {
     }
 }
 
-const applyForSewerage = async (state, dispatch, method, queryObject) => {
+export const applyForSewerage = async (state, dispatch) => {
+    let sewerId = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0].id");
+    let method = sewerId ? "UPDATE" : "CREATE";
+    let queryObject = parserFunction(state);
     try {
         const tenantId = ifUserRoleExists("CITIZEN") ? "pb.amritsar" : getTenantId();
         let response;
@@ -629,7 +637,12 @@ const applyForSewerage = async (state, dispatch, method, queryObject) => {
     }
 }
 
-const applyForBothWaterAndSewerage = async (state, dispatch, method, queryObject) => {
+export const applyForBothWaterAndSewerage = async (state, dispatch) => {
+    let method;
+    let waterId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].id");
+    let sewerId = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0].id");
+    if (waterId && sewerId) { method = "UPDATE" } else { method = "CREATE" };
+    let queryObject = parserFunction(state);
     try {
         const tenantId = ifUserRoleExists("CITIZEN") ? "pb.amritsar" : getTenantId();
         let response;
