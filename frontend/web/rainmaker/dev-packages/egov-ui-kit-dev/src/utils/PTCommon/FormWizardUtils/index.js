@@ -195,7 +195,7 @@ export const getTargetPropertiesDetails = (propertyDetails, self) => {
   const selectedPropertyDetails = propertyDetails.filter((item) => item.assessmentNumber === assessmentNumber);
   // return the latest proeprty details of the selected year
   const lastIndex = 0;
-  if (selectedPropertyDetails[lastIndex].propertySubType === "SHAREDPROPERTY") {
+  if (selectedPropertyDetails && selectedPropertyDetails[lastIndex].propertySubType === "SHAREDPROPERTY") {
     selectedPropertyDetails[lastIndex].buildUpArea =
       selectedPropertyDetails[lastIndex] &&
       selectedPropertyDetails[lastIndex].buildUpArea &&

@@ -188,9 +188,18 @@ export const fetchGeneralMDMSData = (requestBody, moduleName, masterArray, key, 
           {
             moduleName,
             masterDetails: masterArray.map((item) => {
-              return {
-                name: item,
-              };
+              if (typeof(item)==="string") {
+                return {
+                  name: item
+                };
+              }
+              else {
+                return {
+                  name: item.masterName,
+                  filter:item.filter?item.filter:""
+                };
+              }
+
             }),
           },
         ],

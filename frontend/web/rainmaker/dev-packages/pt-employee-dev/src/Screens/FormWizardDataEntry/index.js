@@ -127,7 +127,8 @@ class FormWizardDataEntry extends Component {
       fetchMDMDDocumentTypeSuccess,
       updatePrepareFormDataFromDraft,
       location,
-      generalMDMSDataById,
+      // generalMDMSDataById,
+      // loadMdmsData,
       prepareFinalObject
     } = this.props;
     const { search } = location;
@@ -191,7 +192,7 @@ class FormWizardDataEntry extends Component {
           ]
         );
 
-        const { generalMDMSDataById } = this.props;
+        const { loadMdmsData } = this.props;
         let finalYear = "";
         const demands =
           (demandPropertyResponse &&
@@ -199,7 +200,7 @@ class FormWizardDataEntry extends Component {
               return b.taxPeriodFrom - a.taxPeriodFrom;
             })) ||
           [];
-        if (demandPropertyResponse.length != []) {
+        if (demandPropertyResponse && demandPropertyResponse.Demands.length >0) {
           demandPropertyResponse.Demands = demands;
           prepareFinalObject(
             "DemandPropertiesResponse",
@@ -214,12 +215,12 @@ class FormWizardDataEntry extends Component {
                 return {
                   ...demandDetail,
                   order: get(
-                    generalMDMSDataById,
+                    loadMdmsData.BillingService,
                     `TaxHeadMaster.${demandDetail.taxHeadMasterCode}.legacy`,
                     false
                   )
                     ? get(
-                        generalMDMSDataById,
+                        loadMdmsData.BillingService,
                         `TaxHeadMaster.${demandDetail.taxHeadMasterCode}.order`,
                         -1
                       )
@@ -234,14 +235,14 @@ class FormWizardDataEntry extends Component {
           }
           return demand.demandDetails.forEach((demandData, demandKey) => {
             if (demandData.order > -1) {
-              let yearkeys = Object.keys(generalMDMSDataById.TaxPeriod).forEach(
+              let yearkeys = Object.keys(loadMdmsData.BillingService.TaxPeriod).forEach(
                 (item, i) => {
                   if (
-                    generalMDMSDataById.TaxPeriod[item].fromDate ===
+                    loadMdmsData.BillingService.TaxPeriod[item].fromDate ===
                     demand.taxPeriodFrom
                   ) {
                     finalYear =
-                      generalMDMSDataById.TaxPeriod[item].financialYear;
+                      loadMdmsData.BillingService.TaxPeriod[item].financialYear;
                   }
                 }
               );
@@ -501,7 +502,7 @@ class FormWizardDataEntry extends Component {
       fetchGeneralMDMSData(
         null,
         "BillingService",
-        ["TaxPeriod", "TaxHeadMaster"],
+        [{masterName:"TaxPeriod",filter:"[?(@.service=='PT')]"}, {masterName:"TaxHeadMaster",filter:"[?(@.service=='PT')]"}],
         "",
         tenantId
       );
@@ -1227,7 +1228,8 @@ class FormWizardDataEntry extends Component {
         let {
           DemandProperties = [],
           prepareFinalObject,
-          generalMDMSDataById = {}
+          generalMDMSDataById = {},
+          loadMdmsData={}
         } = this.props;
         const demand = get(
           DemandProperties,
@@ -1258,16 +1260,16 @@ class FormWizardDataEntry extends Component {
           getTotalRebateAmount = false
         ) => {
           const rebateHeadObject = get(
-            generalMDMSDataById,
+            loadMdmsData.BillingService,
             `TaxHeadMaster.${taxHead}`,
             {}
           );
           if (rebateHeadObject.code === "PT_TAX") {
             let rebateHeads = [];
-            Object.keys(get(generalMDMSDataById, `TaxHeadMaster`, {})).forEach(
+            Object.keys(get(loadMdmsData.BillingService, `TaxHeadMaster`, {})).forEach(
               key => {
                 const object = get(
-                  generalMDMSDataById,
+                  loadMdmsData.BillingService,
                   `TaxHeadMaster.${key}`,
                   {}
                 );
@@ -1297,7 +1299,7 @@ class FormWizardDataEntry extends Component {
 
         const checkRebate = taxHead => {
           const rebateHeads = get(
-            generalMDMSDataById,
+            loadMdmsData.BillingService,
             `TaxHeadMaster.${taxHead}`,
             {}
           );
@@ -1885,7 +1887,8 @@ class FormWizardDataEntry extends Component {
       hideSpinner,
       DemandProperties,
       DemandPropertiesResponse = [],
-      generalMDMSDataById
+      generalMDMSDataById,
+      loadMdmsData
     } = this.props;
     const { search } = location;
     let { resetForm } = this;
@@ -2079,13 +2082,13 @@ class FormWizardDataEntry extends Component {
       let finaYr = "";
       const dmdObj = {};
       demandResponse.map(obj => {
-        let generalmdms = Object.keys(generalMDMSDataById.TaxPeriod).map(
+        let generalmdms = Object.keys(loadMdmsData.BillingService.TaxPeriod).map(
           (years, keys) => {
             if (
-              generalMDMSDataById.TaxPeriod[years].fromDate ===
+              loadMdmsData.BillingService.TaxPeriod[years].fromDate ===
               obj.taxPeriodFrom
             ) {
-              finaYr = generalMDMSDataById.TaxPeriod[years].financialYear;
+              finaYr = loadMdmsData.BillingService.TaxPeriod[years].financialYear;
             }
           }
         );
@@ -2627,11 +2630,11 @@ const mapStateToProps = state => {
   const { city } =
     (propertyAddress && propertyAddress.fields && propertyAddress.fields) || {};
   const currentTenantId = (city && city.value) || commonConfig.tenantId;
-  const { generalMDMSDataById } = common;
+  const { generalMDMSDataById ,loadMdmsData} = common;
   const yeardataInfo =
-    (generalMDMSDataById && generalMDMSDataById.TaxPeriod) || {};
+    (loadMdmsData && loadMdmsData.BillingService && loadMdmsData.BillingService.TaxPeriod) || {};
   const taxDataInfo =
-    (generalMDMSDataById && generalMDMSDataById.TaxHeadMaster) || {};
+    (loadMdmsData && loadMdmsData.BillingService && loadMdmsData.BillingService.TaxHeadMaster) || {};
   let yeardata = [];
   let taxData = [];
   const data = Object.keys(yeardataInfo).map((key, index) => {
@@ -2668,6 +2671,7 @@ const mapStateToProps = state => {
     finalData,
     app,
     generalMDMSDataById,
+    loadMdmsData,
     DemandProperties,
     DemandPropertiesResponse
   };

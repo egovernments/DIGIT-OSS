@@ -2,7 +2,7 @@ import React from "react";
 import { Card } from "components";
 import { Grid } from "@material-ui/core";
 import { connect } from "react-redux";
-import { fetchGeneralMDMSData } from "egov-ui-kit/redux/common/actions";
+// import { fetchGeneralMDMSData } from "egov-ui-kit/redux/common/actions";
 import { prepareFormData, loadMDMSData } from "egov-ui-kit/redux/common/actions";
 import { toggleSpinner } from "egov-ui-kit/redux/common/actions";
 import commonConfig from "config/common.js";
@@ -56,7 +56,7 @@ class DemandCollection extends React.Component {
                             fontSize="16px"
                           />
                         </div>
-                        {data.taxHead.map((taxData, index1) => {
+                        {data && data.taxHead &&  data.taxHead.map((taxData, index1) => {
                           return (
                             <div className={`col-xs-12`} key={index1}>
                               <TextField
@@ -109,7 +109,7 @@ class DemandCollection extends React.Component {
                             fontSize="16px"
                           />
                         </div>
-                        {data.taxHead.map((taxData, index1) => {
+                        {data && data.taxHead &&  data.taxHead.map((taxData, index1) => {
                           return (
                             <div className={`col-xs-12`} key={index1}>
                               <TextField
@@ -184,7 +184,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchGeneralMDMSData: (requestBody, moduleName, masterName) => dispatch(fetchGeneralMDMSData(requestBody, moduleName, masterName)),
+    // fetchGeneralMDMSData: (requestBody, moduleName, masterName) => dispatch(fetchGeneralMDMSData(requestBody, moduleName, masterName)),
     removeForm: (formkey) => dispatch(removeForm(formkey)),
     toggleSpinner: () => dispatch(toggleSpinner()),
     prepareFormData: (path, value) => dispatch(prepareFormData(path, value)),
