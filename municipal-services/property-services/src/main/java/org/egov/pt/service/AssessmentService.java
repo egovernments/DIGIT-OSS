@@ -129,8 +129,8 @@ public class AssessmentService {
 			State state = workflowService.callWorkFlow(workflowRequest);
 			String status = state.getApplicationStatus();
 			request.getAssessment().getWorkflow().setState(state);
-			assessmentEnrichmentService.enrichStatus(status, assessment, businessService);
-
+			//assessmentEnrichmentService.enrichStatus(status, assessment, businessService);
+			assessment.setStatus(Status.fromValue(status));
 			if(assessment.getWorkflow().getState().getState().equalsIgnoreCase(config.getDemandTriggerState()))
 				calculationService.calculateTax(request, property);
 
