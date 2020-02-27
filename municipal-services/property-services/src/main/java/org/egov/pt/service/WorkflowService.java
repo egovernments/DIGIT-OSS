@@ -134,7 +134,7 @@ public class WorkflowService {
 	 */
 	public Boolean isStateUpdatable(String stateCode, BusinessService businessService){
 		for(State state : businessService.getStates()){
-			if(state.getApplicationStatus()!=null && state.getApplicationStatus().equalsIgnoreCase(stateCode))
+			if(state.getState()!=null && state.getState().equalsIgnoreCase(stateCode))
 				return state.getIsStateUpdatable();
 		}
 		return null;
