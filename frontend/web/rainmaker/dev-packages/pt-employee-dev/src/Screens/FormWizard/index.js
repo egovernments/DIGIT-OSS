@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Card } from "components";
 import WizardComponent from "./components/WizardComponent";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import {
@@ -6,6 +7,8 @@ import {
   updateForms,
   handleFieldChange
 } from "egov-ui-kit/redux/form/actions";
+import store from "ui-redux/store";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import PTHeader from "egov-ui-kit/common/common/PTHeader";
 import Label from "egov-ui-kit/utils/translationNode";
 import { getTranslatedLabel } from "egov-ui-kit/utils/commons";
@@ -29,6 +32,7 @@ import { setRoute } from "egov-ui-kit/redux/app/actions";
 import { validateForm } from "egov-ui-kit/redux/form/utils";
 import { displayFormErrors } from "egov-ui-kit/redux/form/actions";
 import { httpRequest } from "egov-ui-kit/utils/api";
+import { toggleSpinner } from "egov-ui-kit/redux/common/actions";
 import {
   getQueryValue,
   getFinancialYearFromQuery,
@@ -49,6 +53,7 @@ import { convertRawDataToFormConfig } from "egov-ui-kit/utils/PTCommon/propertyT
 import { fetchMDMDDocumentTypeSuccess } from "redux/store/actions";
 import "./index.css";
 import {
+  callDraft,
   addOwner,
   configOwnersDetailsFromDraft,
   getTargetPropertiesDetails,
@@ -62,7 +67,8 @@ import {
   normalizePropertyDetails,
   getImportantDates,
   renderPlotAndFloorDetails,
-  removeAdhocIfDifferentFY
+  removeAdhocIfDifferentFY,
+  getBusinessServiceNextAction
 } from "egov-ui-kit/utils/PTCommon/FormWizardUtils";
 import sortBy from "lodash/sortBy";
 import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
@@ -70,6 +76,12 @@ import commonConfig from "config/common.js";
 import AcknowledgementCard from "egov-ui-kit/common/propertyTax/AcknowledgementCard";
 import generateAcknowledgementForm from "egov-ui-kit/common/propertyTax/PaymentStatus/Components/acknowledgementFormPDF";
 import { getHeaderDetails } from "egov-ui-kit/common/propertyTax/PaymentStatus/Components/createReceipt";
+import { createPropertyPayload, createAssessmentPayload, getCreatePropertyResponse, prefillPTDocuments } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/propertyCreateUtils";
+import DocumentsUpload from "egov-ui-kit/common/propertyTax/Property/components/DocumentsUpload";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { resetFormWizard } from "egov-ui-kit/utils/PTCommon";
+import { removeForm } from "egov-ui-kit/redux/form/actions";
+import { prepareFormData as prepareFormDataAction } from "egov-ui-kit/redux/common/actions";
 
 class FormWizard extends Component {
   state = {
@@ -147,8 +159,8 @@ class FormWizard extends Component {
             get(res, "id", "") === draftId
         );
       } else {
-        const searchPropertyResponse = await httpRequest(
-          "pt-services-v2/property/_search",
+        let searchPropertyResponse = await httpRequest(
+          "property-services/property/_search",
           "_search",
           [
             {
@@ -156,11 +168,19 @@ class FormWizard extends Component {
               value: tenantId
             },
             {
-              key: "ids",
+              key: "propertyIds",
               value: getQueryValue(search, "propertyId") //"PT-107-001278",
             }
           ]
         );
+        searchPropertyResponse = getCreatePropertyResponse(searchPropertyResponse);
+        await prefillPTDocuments(
+          searchPropertyResponse,
+          "Properties[0].documents",
+          "documentsUploadRedux",
+          store.dispatch, 'PT'
+        );
+        this.props.prepareFinalObject("newProperties", searchPropertyResponse.newProperties);
         if (
           searchPropertyResponse.Properties[0].propertyDetails &&
           searchPropertyResponse.Properties[0].propertyDetails.length > 0
@@ -287,7 +307,7 @@ class FormWizard extends Component {
         },
         () => {
           {
-            if (activeTab >= 3 && !isCompletePayment) {
+            if (activeTab >= 4 && !isCompletePayment) {
               this.estimate().then(estimateResponse => {
                 if (estimateResponse) {
                   this.setState({
@@ -302,7 +322,7 @@ class FormWizard extends Component {
                 }
               });
             }
-            if (activeTab === 4) this.pay();
+            if (activeTab === 5) this.pay();
           }
         }
       );
@@ -331,11 +351,12 @@ class FormWizard extends Component {
       renderCustomTitleForPt,
       showSpinner,
       hideSpinner,
-      fetchGeneralMDMSData
+      fetchGeneralMDMSData, history
     } = this.props;
     let { search } = location;
     showSpinner();
     const { selected } = this.state;
+    let { resetForm } = this;
     const isReasses = Boolean(getQueryValue(search, "isReassesment").replace('false', ''));
     const propertyId = getQueryValue(search, "propertyId");
     const isReassesment = Boolean(getQueryValue(search, "isReassesment").replace('false', ''));
@@ -343,7 +364,9 @@ class FormWizard extends Component {
     const draftUuid = getQueryValue(search, "uuid");
     const assessmentId =
       getQueryValue(search, "assessmentId") || fetchFromLocalStorage("draftId");
-
+    this.unlisten = history.listen((location, action) => {
+      resetForm();
+    });
     if (assessmentId) {
       fetchGeneralMDMSData(
         null,
@@ -433,10 +456,11 @@ class FormWizard extends Component {
 
   getOwnerDetails = ownerType => {
     const { selected } = this.state;
+    const {propertiesEdited}= this.props;
     const isReviewPage = selected === 3;
     switch (ownerType) {
       case "SINGLEOWNER":
-        return <OwnerInfoHOC disabled={isReviewPage} />;
+        return <OwnerInfoHOC disabled={propertiesEdited} />;
       case "MULTIPLEOWNERS":
         return (
           <MultipleOwnerInfoHOC
@@ -445,14 +469,14 @@ class FormWizard extends Component {
             }}
             handleRemoveOwner={this.handleRemoveOwner}
             ownerDetails={this.state.ownerInfoArr}
-            disabled={isReviewPage}
+            disabled={propertiesEdited}
           />
         );
       case "INSTITUTIONALPRIVATE":
       case "INSTITUTIONALGOVERNMENT":
         return (
           <div>
-            <InstitutionHOC disabled={isReviewPage} />
+            <InstitutionHOC disabled={propertiesEdited} />
             <InstitutionAuthorityHOC
               cardTitle={
                 <Label
@@ -460,7 +484,7 @@ class FormWizard extends Component {
                   defaultLabel="Details of authorised person"
                 />
               }
-              disabled={isReviewPage}
+              disabled={propertiesEdited}
             />
           </div>
         );
@@ -514,9 +538,10 @@ class FormWizard extends Component {
       assessedPropertyDetails
     } = this.state;
     const { onRadioButtonChange, updateTotalAmount } = this;
-    const { location } = this.props;
+    const { location ,propertiesEdited} = this.props;
     const { search } = location;
     const isCompletePayment = getQueryValue(search, "isCompletePayment");
+
     switch (selected) {
       case 0:
         return (
@@ -544,11 +569,13 @@ class FormWizard extends Component {
         );
         return (
           <div>
-            <OwnershipTypeHOC disabled={fromReviewPage} />
+            <OwnershipTypeHOC disabled={propertiesEdited} />
             {getOwnerDetails(ownerType)}
           </div>
         );
       case 3:
+        return (<Card textChildren={<DocumentsUpload></DocumentsUpload>} />);
+      case 4:
         return (
           <div className="review-pay-tab">
             <ReviewForm
@@ -561,21 +588,23 @@ class FormWizard extends Component {
               estimationDetails={estimation}
               updateEstimate={updateEstimate}
               importantDates={importantDates}
+              location={this.props.location}
               totalAmount={totalAmountToBePaid}
               isCompletePayment={isCompletePayment}
               calculationScreenData={this.state.calculationScreenData}
+              getEstimates={this.getEstimates}
             />
           </div>
         );
 
-      case 4:
+      case 5:
 
         return (
           <div>
             <AcknowledgementCard acknowledgeType='success' receiptHeader="PT_ASSESSMENT_NO" messageHeader={this.getMessageHeader()} message={this.getMessage()} receiptNo={assessedPropertyDetails['Properties'][0]['propertyDetails'][0]['assessmentNumber']} />
           </div>
         );
-      case 5:
+      case 6:
 
         return (
           <div>
@@ -600,7 +629,7 @@ class FormWizard extends Component {
 
           </div>
         );
-      case 6:
+      case 7:
         return (
           <div>
             <AcknowledgementCard acknowledgeType='success' receiptHeader="PT_PMT_RCPT_NO" messageHeader='PT_PROPERTY_PAYMENT_SUCCESS' message='PT_PROPERTY_PAYMENT_NOTIFICATION' receiptNo='PT-107-017574' />
@@ -617,13 +646,13 @@ class FormWizard extends Component {
     let isAssesment = Boolean(getQueryValue(search, "isAssesment").replace('false', ''));
 
     let buttonLabel = "PT_COMMONS_NEXT";
-    if (index == 3) {
+    if (index == 4) {
       isAssesment ? buttonLabel = 'PT_ASSESS_PROPERTY' : (isReassesment ? buttonLabel = "PT_UPDATE_ASSESSMENT" : buttonLabel = "PT_ADD_ASSESS_PROPERTY");
-    } else if (index == 4) {
-      buttonLabel = 'PT_PROCEED_PAYMENT'
     } else if (index == 5) {
-      buttonLabel = 'PT_GENERATE_RECEIPT'
+      buttonLabel = 'PT_PROCEED_PAYMENT'
     } else if (index == 6) {
+      buttonLabel = 'PT_GENERATE_RECEIPT'
+    } else if (index == 7) {
       buttonLabel = 'PT_DOWNLOAD_RECEIPT'
     }
 
@@ -676,28 +705,30 @@ class FormWizard extends Component {
           (headerObj.header = 'PT_PROPERTY_ASSESSMENT_HEADER') :
           (isReassesment ?
             (headerObj.header = "PT_REASSESS_PROPERTY") :
-            (headerObj.headerValue = headerObj.headerValue + ':' + addNewPropertyLabel,
+            (headerObj.headerValue = "",
               headerObj.subHeaderValue = '',
-              headerObj.header = "PT_PROPERTY_ASSESSMENT_HEADER")));
+              headerObj.header = "PT_PROPERTY_CREATE_HEADER")));
         break;
       case 3:
         headerObj.subHeaderValue = propertyId;
+        headerObj.headerValue = '(' + assessmentYear + ')';
         (isAssesment ?
           (headerObj.header = 'PT_PROPERTY_ASSESSMENT_HEADER') :
           (isReassesment ?
             (headerObj.header = "PT_REASSESS_PROPERTY") :
-            (headerObj.subHeaderValue = '',
-              headerObj.header = "PT_PROPERTY_ASSESSMENT_HEADER")));
-        headerObj.headerValue = '(' + assessmentYear + ')';
+            (headerObj.headerValue = "",
+              headerObj.subHeaderValue = '',
+              headerObj.header = "PT_PROPERTY_CREATE_HEADER")));
         break;
       case 4:
         headerObj.subHeaderValue = propertyId;
+        headerObj.headerValue = '(' + assessmentYear + ')';
         (isAssesment ?
           (headerObj.header = 'PT_PROPERTY_ASSESSMENT_HEADER') :
           (isReassesment ?
             (headerObj.header = "PT_REASSESS_PROPERTY") :
-            (headerObj.header = "PT_PROPERTY_ASSESSMENT_HEADER")));
-        headerObj.headerValue = '(' + assessmentYear + ')';
+            (headerObj.headerValue = "", headerObj.header = "PT_PROPERTY_CREATE_HEADER")));
+        // headerObj.headerValue = "";
         break;
       case 5:
       case 6:
@@ -713,13 +744,24 @@ class FormWizard extends Component {
   }
 
 
-
+  resetForm = () => {
+    const {
+      form,
+      removeForm,
+      prepareFormDataAction,
+      prepareFinalObject
+    } = this.props;
+    resetFormWizard(form, removeForm);
+    prepareFormDataAction("Properties", []);
+    prepareFinalObject("documentsUploadRedux", {});
+    this.onTabClick(0);
+  };
 
   onTabClick = index => {
     const { formValidIndexArray, selected } = this.state;
     const { location } = this.props;
     let { search } = location;
-    const isCompletePayment = getQueryValue(search, "isCompletePayment");
+    const isCompletePayment =false;
     if (formValidIndexArray.indexOf(index) !== -1 && selected >= index) {
       !isCompletePayment
         ? this.setState({
@@ -758,7 +800,7 @@ class FormWizard extends Component {
         }
         const isProperyAddressFormValid = validateForm(form.propertyAddress);
         if (isProperyAddressFormValid) {
-          //callDraft();
+          callDraft(this);
           window.scrollTo(0, 0);
           this.setState({
             selected: index,
@@ -811,7 +853,7 @@ class FormWizard extends Component {
                       }
                     }
                     if (floorValidation) {
-                      //callDraft();
+                      callDraft(this);
                       window.scrollTo(0, 0);
                       this.setState({
                         selected: index,
@@ -819,7 +861,7 @@ class FormWizard extends Component {
                       });
                     }
                   } else {
-                    //callDraft();
+                    callDraft(this);
                     window.scrollTo(0, 0);
                     this.setState({
                       selected: index,
@@ -880,7 +922,7 @@ class FormWizard extends Component {
               const { ownerInfo } = form;
               const isOwnerInfoFormValid = validateForm(ownerInfo);
               if (isOwnerInfoFormValid) {
-                //callDraft();
+                callDraft(this);
                 window.scrollTo(0, 0);
                 this.setState(
                   {
@@ -904,7 +946,7 @@ class FormWizard extends Component {
                 }
               }
               if (ownerValidation) {
-                //callDraft();
+                callDraft(this);
                 window.scrollTo(0, 0);
                 this.setState(
                   {
@@ -935,7 +977,7 @@ class FormWizard extends Component {
                 institutionFormValid = false;
               }
               if (institutionFormValid) {
-                //callDraft();
+                callDraft(this);
                 window.scrollTo(0, 0);
                 this.setState(
                   {
@@ -953,34 +995,89 @@ class FormWizard extends Component {
 
         break;
       case 3:
-        if (estimation[0].totalAmount < 0) {
+        window.scrollTo(0, 0);
+        const uploadedDocs = get(this.props, "documentsUploadRedux");
+        let temp = 0;
+        let maxDocuments = 0;
+        if (uploadedDocs) {
+          let docsArray = [];
+          Object.keys(uploadedDocs).map(key => {
+            docsArray.push(uploadedDocs[key]);
+          })
+          docsArray.map(docs => {
+            if (docs && docs.isDocumentRequired) {
+              maxDocuments++;
+            }
+            if (docs && docs.isDocumentRequired && docs.documents && docs.dropdown) {
+              temp++;
+            }
+          });
+        }
+        if (!uploadedDocs || temp < maxDocuments) {
+          alert("Please upload all the required documents and documents type.")
+        } else {
+          this.setState({
+            selected: index,
+            formValidIndexArray: [...formValidIndexArray, selected]
+          });
+        }
+
+        break;
+      // createAndUpdate(index);
+      case 4:
+        let { assessedPropertyDetails: asd = {} } = this.state;
+        const { Properties: pts = [] } = asd;
+        let { search: search1 } = this.props.location;
+
+        let isReassesment = Boolean(getQueryValue(search1, "isReassesment").replace('false', ''));
+        let isAssesment1 = Boolean(getQueryValue(search1, "isAssesment").replace('false', ''));
+        let propertyId1 = '';
+        let tenantId1 = '';
+        for (let pty of pts) {
+          propertyId1 = pty.propertyId;
+          tenantId1 = pty.tenantId;
+        }
+        if (estimation && estimation.length && estimation.length > 1 && estimation[0].totalAmount < 0) {
           alert('Property Tax amount cannot be Negative!');
         } else {
           window.scrollTo(0, 0);
-          createAndUpdate(index);
+          if (isAssesment1) {
+            // this.assessProperty();
+            createAndUpdate(index, 'assess');
+            // this.props.history.push(`pt-acknowledgment?purpose=assessment&consumerCode=${propertyId1}&status=success&tenantId=${tenantId1}&FY=2019-20`);
+          }
+          else if (isReassesment) {
+            createAndUpdate(index, 're-assess');
+          } else {
+            createAndUpdate(index, 'create');
+          }
+          // createAndUpdate(index);
+          // pt-acknowledgment?purpose=apply&status=success&applicationNumber=PB-TL-2019-12-20-003743&FY=2019-20&tenantId=pb.amritsar
+          // createAndUpdate(index);
+
         }
         break;
-      case 4:
-          const { assessedPropertyDetails = {} } = this.state;
-          const { Properties = [] } = assessedPropertyDetails;
-          let propertyId = '';
-          let tenantId = '';
-          for (let pty of Properties) {
-            propertyId = pty.propertyId;
-            tenantId = pty.tenantId;
-          }
-          this.props.history.push(`./../egov-common/pay?consumerCode=${propertyId}&tenantId=${tenantId}`
-          )
+      case 5:
+        const { assessedPropertyDetails = {} } = this.state;
+        const { Properties = [] } = assessedPropertyDetails;
+        let propertyId = '';
+        let tenantId = '';
+        for (let pty of Properties) {
+          propertyId = pty.propertyId;
+          tenantId = pty.tenantId;
+        }
+        this.props.history.push(`./../egov-common/pay?consumerCode=${propertyId}&tenantId=${tenantId}`
+        )
         // this.setState(
         //   {
         //     selected: index,
         //     formValidIndexArray: [...formValidIndexArray, selected]
         //   });
         break;
-      case 5:
+      case 6:
         onPayButtonClick();
         break;
-      case 6:
+      case 7:
         pay();
         break;
     }
@@ -1237,148 +1334,73 @@ class FormWizard extends Component {
     }
   };
 
-  estimate = async () => {
-    let { form, common, showSpinner, hideSpinner } = this.props;
-    let prepareFormData = { ...this.props.prepareFormData };
-
-    showSpinner();
-    if (
-      get(
-        prepareFormData,
-        "Properties[0].propertyDetails[0].institution",
-        undefined
-      )
-    )
-      delete prepareFormData.Properties[0].propertyDetails[0].institution;
-    const financialYearFromQuery = getFinancialYearFromQuery();
-    const selectedownerShipCategoryType = get(
-      form,
-      "ownershipType.fields.typeOfOwnership.value",
-      ""
-    );
-    try {
-      if (financialYearFromQuery) {
-        set(
-          prepareFormData,
-          "Properties[0].propertyDetails[0].financialYear",
-          financialYearFromQuery
-        );
-      }
-      if (selectedownerShipCategoryType === "SINGLEOWNER") {
-        set(
-          prepareFormData,
-          "Properties[0].propertyDetails[0].owners",
-          getSingleOwnerInfo(this)
-        );
-        set(
-          prepareFormData,
-          "Properties[0].propertyDetails[0].ownershipCategory",
-          get(
-            common,
-            `generalMDMSDataById.SubOwnerShipCategory[${selectedownerShipCategoryType}].ownerShipCategory`,
-            "INDIVIDUAL"
-          )
-        );
-        set(
-          prepareFormData,
-          "Properties[0].propertyDetails[0].subOwnershipCategory",
-          selectedownerShipCategoryType
-        );
-      }
-      if (selectedownerShipCategoryType === "MULTIPLEOWNERS") {
-        set(
-          prepareFormData,
-          "Properties[0].propertyDetails[0].owners",
-          getMultipleOwnerInfo(this)
-        );
-        set(
-          prepareFormData,
-          "Properties[0].propertyDetails[0].ownershipCategory",
-          get(
-            common,
-            `generalMDMSDataById.SubOwnerShipCategory[${selectedownerShipCategoryType}].ownerShipCategory`,
-            "INDIVIDUAL"
-          )
-        );
-        set(
-          prepareFormData,
-          "Properties[0].propertyDetails[0].subOwnershipCategory",
-          selectedownerShipCategoryType
-        );
-      }
-      if (
-        selectedownerShipCategoryType.toLowerCase().indexOf("institutional") !==
-        -1
-      ) {
-        const { instiObj, ownerArray } = getInstituteInfo(this);
-        set(
-          prepareFormData,
-          "Properties[0].propertyDetails[0].owners",
-          ownerArray
-        );
-        set(
-          prepareFormData,
-          "Properties[0].propertyDetails[0].institution",
-          instiObj
-        );
-        set(
-          prepareFormData,
-          "Properties[0].propertyDetails[0].ownershipCategory",
-          get(form, "ownershipType.fields.typeOfOwnership.value", "")
-        );
-        set(
-          prepareFormData,
-          "Properties[0].propertyDetails[0].subOwnershipCategory",
-          get(form, "institutionDetails.fields.type.value", "")
-        );
-      }
-      const propertyDetails = normalizePropertyDetails(
-        prepareFormData.Properties,
-        this
-      );
-
-      let estimateResponse = await httpRequest(
-        "pt-calculator-v2/propertytax/_estimate",
-        "_estimate",
-        [],
-        {
-          CalculationCriteria: [
-            {
-              assessmentYear: financialYearFromQuery,
-              tenantId:
-                prepareFormData.Properties[0] &&
-                prepareFormData.Properties[0].tenantId,
-              property: propertyDetails[0]
-            }
-          ]
+  getEstimates = async () => {
+    let { search: search1 } = this.props.location;
+    let isAssesment1 = Boolean(getQueryValue(search1, "isAssesment").replace('false', ''));
+    if (isAssesment1) {
+      this.estimate().then(estimateResponse => {
+        if (estimateResponse) {
+          window.scrollTo(0, 0);
+          this.setState({
+            estimation: estimateResponse && estimateResponse.Calculation,
+            totalAmountToBePaid: 1, // What is this?
+            valueSelected: "Full_Amount"
+          });
         }
-      );
-      const tenantId =
-        prepareFormData.Properties[0] && prepareFormData.Properties[0].tenantId;
-      const calculationScreenData = await getCalculationScreenData(
-        get(estimateResponse, "Calculation[0].billingSlabIds", []),
-        tenantId,
-        this
-      );
-      this.setState({ calculationScreenData: calculationScreenData.data });
-      return estimateResponse;
-    } catch (e) {
-      if (e.message) {
-        alert(e.message);
-      } else
-        this.props.toggleSnackbarAndSetText(
-          true,
-          {
-            labelName: "Error calculating tax!",
-            labelKey: "ERR_ERROR_CALCULATING_TAX"
-          },
-          "error"
-        );
-    } finally {
-      hideSpinner();
+      });
     }
+  }
+
+  estimate = async () => {
+    let { hideSpinner, location ,showSpinner} = this.props;
+    let { search: search1 } = location;
+    let isAssesment1 = Boolean(getQueryValue(search1, "isAssesment").replace('false', ''));
+    if (isAssesment1) {
+      let prepareFormData = { ...this.props.prepareFormData };
+      showSpinner();
+      const financialYearFromQuery = getFinancialYearFromQuery();
+      try {
+        const financeYear = { financialYear: financialYearFromQuery };
+        const assessmentPayload = createAssessmentPayload(prepareFormData.Properties[0], financeYear);
+        let estimateResponse = await httpRequest(
+          "pt-calculator-v2/propertytax/v2/_estimate",
+          "_estimate",
+          [],
+          {
+            Assessment: assessmentPayload
+          }
+        );
+        //For calculation screen
+        const tenantId =
+          prepareFormData.Properties[0] && prepareFormData.Properties[0].tenantId;
+        const calculationScreenData = await getCalculationScreenData(
+          get(estimateResponse, "Calculation[0].billingSlabIds", []),
+          tenantId,
+          this
+        );
+        this.setState({ calculationScreenData: calculationScreenData.data });
+
+        hideSpinner();
+        return estimateResponse;
+      } catch (e) {
+        hideSpinner();
+        if (e.message) {
+          alert(e.message);
+        } else
+          this.props.toggleSnackbarAndSetText(
+            true,
+            {
+              labelName: "Error calculating tax!",
+              labelKey: "ERR_ERROR_CALCULATING_TAX"
+            },
+            true
+          );
+      }
+    }
+
   };
-  createAndUpdate = async (index) => {
+
+  createAndUpdate = async (index, action) => {
     const {
       selected,
       formValidIndexArray
@@ -1508,40 +1530,199 @@ class FormWizard extends Component {
         )
       );
     }
+    set(
+      prepareFormData,
+      "Properties[0].propertyDetails[0].citizenInfo.name",
+      get(prepareFormData, "Properties[0].propertyDetails[0].owners[0].name")
+    );
+    const properties = normalizePropertyDetails(
+      prepareFormData.Properties,
+      this
+    );
+    // Create/Update property call, action will be either create or update
+    this.createProperty(properties, action);
+  };
+
+  getAssessmentDetails = async () => {
     try {
-      set(
-        prepareFormData,
-        "Properties[0].propertyDetails[0].citizenInfo.name",
-        get(prepareFormData, "Properties[0].propertyDetails[0].owners[0].name")
+      const tenantId = getQueryArg(window.location.href, "tenantId");
+      const assessmentId = getQueryArg(
+        window.location.href,
+        "assessmentId"
       );
-      const properties = normalizePropertyDetails(
-        prepareFormData.Properties,
-        this
+      let searchPropertyResponse = await httpRequest(
+        `property-services/assessment/_search?assessmentNumbers=${assessmentId}`,
+        "_search",
+        [],
+        {
+
+        }
       );
-      let createPropertyResponse = await httpRequest(
-        `pt-services-v2/property/${propertyMethodAction}`,
+      return searchPropertyResponse;
+    } catch (e) {
+      console.log(e.message);
+
+    }
+
+  }
+
+  assessProperty = async (action, Properties) => {
+    let propertyMethodAction = action === "re-assess" ? "_update" : '_create';
+    const propertyId = getQueryArg(
+      window.location.href,
+      "propertyId"
+    );
+    const assessmentId = getQueryArg(
+      window.location.href,
+      "assessmentId"
+    );
+    const financialYear = getQueryArg(window.location.href, "FY");
+    const tenant = getQueryArg(window.location.href, "tenantId");
+    let assessment = {
+      "tenantId": tenant,
+      "propertyId": propertyId,
+      "financialYear": financialYear,
+      "assessmentDate": new Date().getTime() - 60000,
+      "source": "MUNICIPAL_RECORDS",
+      "channel": "CFC_COUNTER",
+      "status": "ACTIVE"
+    }
+
+    console.log(Properties);
+
+    if (action === "re-assess") {
+      let assessments = await this.getAssessmentDetails();
+      if (assessments.Assessments.length > 0) {
+        let assessmentResponse = assessments.Assessments[0];
+        assessment = assessmentResponse;
+        assessment.assessmentDate = new Date().getTime() - 60000;
+      }
+
+      // assessment.auditDetails={...Properties[0].auditDetails};
+      // assessment.unitUsageList=Properties[0].units.map(unit=>{
+      //   return {unitId:unit.id,occupancyDate:unit.occupancyDate}
+      // });
+      // assessment.assessmentNumber=assessmentId;
+
+    }
+    try {
+      let assessPropertyResponse = await httpRequest(
+        `property-services/assessment/${propertyMethodAction}`,
         `${propertyMethodAction}`,
         [],
         {
-          Properties: properties
+          Assessment: assessment
         }
       );
-      this.setState(
-        {
-          assessedPropertyDetails: createPropertyResponse,
-          selected: index,
-          formValidIndexArray: [...formValidIndexArray, selected]
-        });
+     
+      const assessmentNumber= get(assessPropertyResponse, "Assessments[0].assessmentNumber",'');
+      if (action === "re-assess") {
+        store.dispatch(
+          setRoute(
+            `/property-tax/pt-acknowledgment?purpose=reassessment&status=success&propertyId=${assessment.propertyId}&FY=${assessment.financialYear}&tenantId=${assessment.tenantId}&secondNumber=${assessmentNumber}`
+          )
+        );
+      } else {
+        store.dispatch(
+          setRoute(
+            `/property-tax/pt-acknowledgment?purpose=assessment&status=success&propertyId=${assessment.propertyId}&FY=${assessment.financialYear}&tenantId=${assessment.tenantId}&secondNumber=${assessmentNumber}`
+          )
+        );
+      }
 
     } catch (e) {
       hideSpinner();
-      this.setState({ nextButtonEnabled: true });
-      alert(e);
+      //  this.setState({ nextButtonEnabled: true });
+      //  alert(e);
+      if (action === "assess") {
+        store.dispatch(
+          setRoute(
+            `/property-tax/pt-acknowledgment?purpose=assessment&status=failure&propertyId=${assessment.propertyId}&FY=${assessment.financialYear}&tenantId=${assessment.tenantId}`
+
+          )
+        );
+      }
+      else {
+        store.dispatch(
+          setRoute(
+            `/property-tax/pt-acknowledgment?purpose=reassessment&status=failure&propertyId=${assessment.propertyId}&FY=${assessment.financialYear}&tenantId=${assessment.tenantId}`
+
+          )
+        );
+      }
     }
-  };
+  }
+
+  createProperty = async (Properties, action) => {
+    const { documentsUploadRedux, newProperties, propertiesEdited } = this.props;
+    const propertyPayload = createPropertyPayload(Properties, documentsUploadRedux, newProperties);
+    const propertyMethodAction = (action === "assess" || action === "re-assess") ? "_update" : "_create";
+
+    if ((action === "assess" || action === "re-assess") && !propertiesEdited) {
+      this.assessProperty(action, propertyPayload);
+    } else {
+      if (action === "assess" || action === "re-assess") {
+
+        const workflow = {
+          "businessService": "PT.CREATE",
+          "action": getBusinessServiceNextAction('PT.CREATE', null),
+          "moduleName": "PT"
+        }
+        if (propertyPayload.workflow) {
+          propertyPayload.workflow = { ...propertyPayload.workflow, ...workflow }
+        } else {
+          propertyPayload.workflow = workflow
+        }
+      }
+      try {
+        propertyPayload.creationReason=action=='create'?'CREATE':'UPDATE';
+        const propertyResponse = await httpRequest(
+          `property-services/property/${propertyMethodAction}`,
+          `${propertyMethodAction}`,
+          [],
+          {
+            Property: propertyPayload
+          },
+          [],
+          {},
+          true
+        );
+        if (propertyResponse && propertyResponse.Properties && propertyResponse.Properties.length) {
+          if (propertyResponse.Properties[0].propertyId) {
+            const propertyId = get(propertyResponse, "Properties[0].propertyId",'');
+            const tenantId =  get(propertyResponse, "Properties[0].tenantId",'');
+            const acknowldgementNumber= get(propertyResponse, "Properties[0].acknowldgementNumber",'');
+            // Navigate to success page
+            if(action=='create'){
+              this.props.history.push(`pt-acknowledgment?purpose=apply&propertyId=${propertyId}&status=success&tenantId=${tenantId}&secondNumber=${acknowldgementNumber}`);
+            }else{
+              this.props.history.push(`pt-acknowledgment?purpose=update&propertyId=${propertyId}&status=success&tenantId=${tenantId}&secondNumber=${acknowldgementNumber}`);
+            }
+            
+            // if ((action === "assess") || (action === "re-assess")) {
+            //   this.assessProperty(action, propertyResponse.Properties);
+            // } else {
+            //   this.props.history.push(`pt-acknowledgment?purpose=apply&propertyId=${propertyId}&status=success&tenantId=${tenantId}`);
+            // }
+          }
+        }
+      } catch (e) {
+        hideSpinner();
+        // this.setState({ nextButtonEnabled: true });
+        // alert(e);
+
+        store.dispatch(
+          setRoute(
+            `/property-tax/pt-acknowledgment?purpose=apply&status=failure`
+          )
+        );
+
+      }
+    }
+  }
 
   pay = async () => {
-    const { callPGService, callDraft } = this;
+    const { callPGService } = this;
     const financialYearFromQuery = getFinancialYearFromQuery();
     let { form, common, location, hideSpinner } = this.props;
     const { search } = location;
@@ -1796,13 +1977,14 @@ class FormWizard extends Component {
       selected,
       formValidIndexArray,
     } = this.state;
-    const { location } = this.props;
+    const { location ,propertiesEdited} = this.props;
     const { search } = location;
-    let proceedToPayment = Boolean(getQueryValue(search, "proceedToPayment").replace('false', ''));
-    if (proceedToPayment && selected == 3) {
+    const propertyId = getQueryValue(search, "propertyId");
+    // let proceedToPayment = Boolean(getQueryValue(search, "proceedToPayment").replace('false', ''));
+    if (propertyId && selected == 3&&!propertiesEdited) {
       this.setState({
-        selected: 5,
-        formValidIndexArray: [...formValidIndexArray, 5]
+        selected: 4,
+        formValidIndexArray: [...formValidIndexArray, 4]
       });
     }
   }
@@ -1829,7 +2011,7 @@ class FormWizard extends Component {
     const { address, propertyDetails, propertyId } = Properties[0];
     const { owners } = propertyDetails[0];
     const { localizationLabels } = app;
-    const { cities,generalMDMSDataById } = common;
+    const { cities, generalMDMSDataById } = common;
     const header = getHeaderDetails(Properties[0], cities, localizationLabels, true)
     let receiptDetails = {};
     receiptDetails = {
@@ -1859,9 +2041,6 @@ class FormWizard extends Component {
     const fromReviewPage = selected === 3;
     const { history, location } = this.props;
     const { search } = location;
-
-
-
     const { Properties = [] } = assessedPropertyDetails;
     let propertyId = '';
     for (let pty of Properties) {
@@ -1898,17 +2077,22 @@ class FormWizard extends Component {
 }
 
 const mapStateToProps = state => {
-  const { form, common, app } = state || {};
+  const { form, common, app, screenConfiguration } = state || {};
   const { propertyAddress } = form;
   const { city } =
     (propertyAddress && propertyAddress.fields && propertyAddress.fields) || {};
   const currentTenantId = (city && city.value) || commonConfig.tenantId;
+  const { preparedFinalObject } = screenConfiguration;
+  const { documentsUploadRedux, newProperties = [], propertiesEdited = false } = preparedFinalObject;
   return {
     form,
     currentTenantId,
     prepareFormData: common.prepareFormData,
     common,
-    app
+    app,
+    documentsUploadRedux,
+    newProperties,
+    propertiesEdited
   };
 };
 
@@ -1939,7 +2123,13 @@ const mapDispatchToProps = dispatch => {
     updatePrepareFormDataFromDraft: prepareFormData =>
       dispatch(updatePrepareFormDataFromDraft(prepareFormData)),
     handleFieldChange: (formKey, fieldKey, value) =>
-      dispatch(handleFieldChange(formKey, fieldKey, value))
+      dispatch(handleFieldChange(formKey, fieldKey, value)),
+    prepareFormDataAction: (path, value) =>
+      dispatch(prepareFormDataAction(path, value)),
+    removeForm: formkey => dispatch(removeForm(formkey)),
+    prepareFinalObject: (jsonPath, value) =>
+      dispatch(prepareFinalObject(jsonPath, value)),
+    toggleSpinner: () => dispatch(toggleSpinner())
   };
 };
 

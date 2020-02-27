@@ -9,7 +9,7 @@
   .date-of-transfer {
     color: rgba(0, 0, 0, 0.87);
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 500;
     line-height: 17px;
     text-align: left;
     display: inline-block;
@@ -18,7 +18,7 @@
   .owner-history {
     color: rgba(0, 0, 0, 0.87);
     font-size: 20px;
-    font-weight: 600;
+    font-weight: 500;
     line-height: 28px;
     text-align: left;
   }
@@ -41,5 +41,20 @@
     float: right;
     margin-bottom: -15px;
     cursor: pointer;
+  }
+
+  .view-history-dialog {
+    width: 100% !important;
+  }
+
+  @media only screen and (max-width: 768px) {
+    .view-history-dialog {
+      max-width: 90% !important;
+    }
+  }
+  @media only screen and (min-width: 768px) {
+    .view-history-dialog {
+      max-width: 75% !important;
+    }
   }
   

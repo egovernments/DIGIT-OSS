@@ -16,6 +16,7 @@ import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { UploadSingleFile } from "../../ui-molecules-local";
+import Typography from "@material-ui/core/Typography";
 
 const themeStyles = theme => ({
   documentContainer: {
@@ -76,8 +77,9 @@ const themeStyles = theme => ({
     alignItems: "center"
   },
   descriptionDiv: {
-    display: "flex",
-    alignItems: "center"
+    alignItems: "center",
+    display: "block",
+    marginTop: "20px",
   },
   formControl: {
     minWidth: 250,
@@ -187,7 +189,7 @@ class NocList extends Component {
     prepareFinalObject("nocDocumentsUploadRedux", nocDocumentsUploadRedux);
   };
 
-  prepareForNocVerification = async (nocDocuments, bpaDetails) => {
+  prepareDocumentsInEmployee = async (nocDocuments, bpaDetails) => {
     let documnts = [];
     if (nocDocuments) {
       Object.keys(nocDocuments).forEach(function (key) {
@@ -198,36 +200,54 @@ class NocList extends Component {
     }
 
     prepareFinalObject("nocDocumentsUploadRedux", {});
-    let requiredDocuments = [];
+    let requiredDocuments = [], finalQstn = [];
     if (documnts && documnts.length > 0) {
       documnts.forEach(documents => {
         if (documents && documents.documents && documents.dropDownValues && documents.dropDownValues.value) {
-          let doc = {};
+          let doc = {}, finalDocs = [];
           doc.documentType = documents.dropDownValues.value;
+          doc.fileStoreId = documents.documents[0].fileStoreId;
           doc.fileStore = documents.documents[0].fileStoreId;
           doc.fileName = documents.documents[0].fileName;
           doc.fileUrl = documents.documents[0].fileUrl;
           if (doc.id) {
             doc.id = documents.documents[0].id;
           }
-          bpaDetails.documents.push(doc);
+          if(bpaDetails.additionalDetails) {
+            if(bpaDetails.additionalDetails.fieldinspection_pending && bpaDetails.additionalDetails.fieldinspection_pending[0]) {
+              if(bpaDetails.additionalDetails.fieldinspection_pending[0].docs) {
+                finalQstn.push(doc);
+                bpaDetails.additionalDetails.fieldinspection_pending[0].docs = finalQstn
+              } else {
+                bpaDetails.additionalDetails.fieldinspection_pending.push({"docs" : doc, "question" : []})
+              }
+            }
+          } else {
+            bpaDetails.additionalDetails = [];
+            let documnt = [], fiDocs = [], details;
+            documnt[0] = {}; 
+            documnt[0].docs = [];
+            documnt[0].questions = [];
+            documnt[0].docs.push(doc);
+            fiDocs.push({
+              "docs" : documnt[0].docs,
+              "questions" : []
+            })
+            details = { "fieldinspection_pending" : fiDocs};
+            finalDocs.push(details);
+            finalDocs = finalDocs[0];
+            bpaDetails.additionalDetails = finalDocs
+          }
         }
       });
-
-      var resArr = [];
-      bpaDetails.documents.forEach(function (item) {
-        var i = resArr.findIndex(x => x.documentType == item.documentType);
-        if (i <= -1) {
-          resArr.push(item);
-        }
-      });
-      bpaDetails.documents = resArr;
-      prepareFinalObject("BPA",  bpaDetails.documents);
+  
+      if(bpaDetails.additionalDetails && bpaDetails.additionalDetails["fieldinspection_pending"][0] && bpaDetails.additionalDetails["fieldinspection_pending"][0].docs) {
+        prepareFinalObject("BPA",  bpaDetails.additionalDetails["fieldinspection_pending"][0].docs);
+      }
     }
   }
 
   distinct = (value, index, self) => {
-    console.log(value, index, self, "ljkewjlkwelkewlkrjwlkej")
     return self.indexOf(value) === index
  };
 
@@ -254,17 +274,13 @@ class NocList extends Component {
       }
     }
     prepareFinalObject("nocDocumentsUploadRedux", nocDocuments);
-    if (bpaDetails && bpaDetails.status && bpaDetails.status === "NOC_VERIFICATION_INPROGRESS") {
-      let documnts = [];
-      if (nocDocuments) {
-        Object.keys(nocDocuments).forEach(function (key) {
-          documnts.push(nocDocuments[key])
-        });
+  
+    let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true
+
+    if(isEmployee) {
+      this.prepareDocumentsInEmployee(nocDocuments, bpaDetails);
       }
-      if (nocDocuments[0] && nocDocuments[0].documents && nocDocuments[0].dropDownValues) {
-        this.prepareForNocVerification(nocDocuments, bpaDetails);
-      }
-    }
+
   };
 
   removeDocument = remDocIndex => {
@@ -287,18 +303,12 @@ class NocList extends Component {
     };
     prepareFinalObject(`nocDocumentsUploadRedux`, nocDocuments);
 
-    if (bpaDetails && bpaDetails.status && bpaDetails.status === "NOC_VERIFICATION_INPROGRESS") {
-      let documnts = [];
-      if (nocDocuments) {
-        Object.keys(nocDocuments).forEach(function (key) {
-          documnts.push(nocDocuments[key])
-        });
-      }
-      console.log(documnts, "nocDocumentsnocDocumentsnocDocuments");
-      if (nocDocuments[0] && nocDocuments[0].documents && nocDocuments[0].dropDownValues) {
-        this.prepareForNocVerification(nocDocuments, bpaDetails);
-      }
+    let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true
+
+    if(isEmployee) {
+      this.prepareDocumentsInEmployee(nocDocuments, bpaDetails);
     }
+       
   };
 
   getUploadCard = (card, key) => {
@@ -332,6 +342,11 @@ class NocList extends Component {
             style={styles.documentName}
           />
           {card.required && requiredIcon}
+          <Typography variant="caption">
+            <LabelContainer
+              labelKey={getTransformedLocale("TL_UPLOAD_RESTRICTIONS")}
+            />
+          </Typography>
         </Grid>
         <Grid item={true} xs={12} sm={6} md={4}>
           {card.dropDownValues && (
@@ -372,6 +387,7 @@ class NocList extends Component {
             onButtonClick={() => this.onUploadClick(key)}
             inputProps={this.props.inputProps}
             buttonLabel={this.props.buttonLabel}
+            id={`noc-${key+1}`}
           />
         </Grid>
       </Grid>

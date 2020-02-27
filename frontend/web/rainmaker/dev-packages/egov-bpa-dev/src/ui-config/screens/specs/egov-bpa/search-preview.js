@@ -11,12 +11,13 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   getFileUrlFromAPI,
+  getFileUrl,
   getQueryArg,
   getTransformedLocale,
   setBusinessServiceDataToLocalStorage
 } from "egov-ui-framework/ui-utils/commons";
-// import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
-// import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
+import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
@@ -29,14 +30,25 @@ import { applicantSummary } from "./summaryResource/applicantSummary";
 import { basicSummary } from "./summaryResource/basicSummary"
 import { documentsSummary } from "./summaryResource/documentsSummary";
 import { scrutinySummary } from "./summaryResource/scrutinySummary";
-import { nocSummary } from "./summaryResource/nocSummary";
-import { plotAndBoundaryInfoSummary } from "./summaryResource/plotAndBoundaryInfoSummary";
+import { estimateSummary } from "./summaryResource/estimateSummary";
+import { fieldinspectionSummary } from "./summaryResource/fieldinspectionSummary";
 import { httpRequest, edcrHttpRequest } from "../../../../ui-utils/api";
 import { statusOfNocDetails } from "../egov-bpa/applyResource/updateNocDetails";
 import { nocVerificationDetails } from "../egov-bpa/nocVerificationDetails";
 import { permitOrderNoDownload, downloadFeeReceipt } from "../utils/index";
 import "../egov-bpa/applyResource/index.css";
-import "../egov-bpa/applyResource/index.scss"
+import "../egov-bpa/applyResource/index.scss";
+import { getUserInfo, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { fieldSummary } from "./summaryResource/fieldSummary";
+
+export const ifUserRoleExists = role => {
+  let userInfo = JSON.parse(getUserInfo());
+  const roles = get(userInfo, "roles");
+  const roleCodes = roles ? roles.map(role => role.code) : [];
+  if (roleCodes.indexOf(role) > -1) {
+    return true;
+  } else return false;
+};
 
 const titlebar = getCommonContainer({
     header: getCommonHeader({
@@ -48,7 +60,7 @@ const titlebar = getCommonContainer({
       moduleName: "egov-bpa",
       componentPath: "ApplicationNoContainer",
       props: {
-        number: getQueryArg(window.location.href, "applicationNumber")
+        number: ""
       }
     },
 });
@@ -69,27 +81,27 @@ const titlebar2 = {
     },
     rightContainer:getCommonContainer({
       downloadMenu: {
-        uiFramework: "custom-atoms",
-        componentPath: "MenuButton",
+        uiFramework: "custom-molecules",
+        componentPath: "DownloadPrintButton",
         props: {
           data: {
-            label: "Download",
+            label: {labelName : "DOWNLOAD" , labelKey :"TL_DOWNLOAD"},
             leftIcon: "cloud_download",
             rightIcon: "arrow_drop_down",
-            props: { variant: "outlined", style: { marginLeft: 10 } },
+            props: { variant: "outlined", style: { height: "60px", color : "#FE7A51", marginRight : 10 }, className: "tl-download-button" },
             menu: []
           }
         }
       },
       printMenu: {
-        uiFramework: "custom-atoms",
-        componentPath: "MenuButton",
+        uiFramework: "custom-molecules",
+        componentPath: "DownloadPrintButton",
         props: {
           data: {
-            label: "Print",
+            label: {labelName : "PRINT" , labelKey :"TL_PRINT"},
             leftIcon: "print",
             rightIcon: "arrow_drop_down",
-            props: { variant: "outlined", style: { marginLeft: 10 } },
+            props: { variant: "outlined", style: { height: "60px", color : "#FE7A51" }, className: "tl-download-button" },            
             menu: []
           }
         }
@@ -137,13 +149,12 @@ const prepareDocumentsView = async (state, dispatch) => {
     doc["link"] =
       (fileUrls &&
         fileUrls[doc.fileStoreId] &&
-        fileUrls[doc.fileStoreId].split(",")[0]) ||
+        getFileUrl(fileUrls[doc.fileStoreId])) ||
       "";
     doc["name"] =
       (fileUrls[doc.fileStoreId] &&
         decodeURIComponent(
-          fileUrls[doc.fileStoreId]
-            .split(",")[0]
+          getFileUrl(fileUrls[doc.fileStoreId])
             .split("?")[0]
             .split("/")
             .pop()
@@ -252,7 +263,7 @@ const setDownloadMenu = (action, state, dispatch) => {
     case "FIELDINSPECTION":
     case "PENDINGAPPROVAL":
     case "REJECTED":
-      downloadMenu = [receiptDownloadObject, applicationDownloadObject];
+      downloadMenu = [certificateDownloadObject];
       printMenu = [];
       break;
     case "CANCELLED":
@@ -297,27 +308,61 @@ const setSearchResponse = async (
   ]);
 
   const edcrNumber = response.Bpa["0"].edcrNumber;
+  const status = response.Bpa["0"].status;
+
+  if (status && status === "CITIZEN_APPROVAL_INPROCESS") {
+    let userInfo = JSON.parse(getUserInfo()),
+    roles = get(userInfo, "roles"),
+    owners = get(response.Bpa["0"], "owners"),
+    archtect = "BPA_ARCHITECT",
+    isTrue = false, isOwner = true;
+    if(roles && roles.length > 0) {
+      roles.forEach(role => {
+        if(role.code === archtect) {
+          isTrue = true;
+        }
+      })
+    }
+
+    if(isTrue && owners && owners.length > 0) {
+      owners.forEach(owner => {
+        if(owner.uuid === userInfo.uuid) {
+          if(owner.roles && owner.roles.length > 0 ) {
+            owner.roles.forEach(owrRole => {
+              if(owrRole.code === archtect) {
+                isOwner = false;
+              }
+            })
+          }
+        }
+      })
+    }
+    if(isTrue && isOwner) {
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.citizenFooter",
+          "visible",
+          false
+        )
+      )
+    }
+  }
 
   dispatch(prepareFinalObject("BPA", response.Bpa[0]));
-  let edcrRes = await edcrHttpRequest(
-    "post",
-    "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + edcrNumber + "&tenantId=" + tenantId,
-    "search", []
-    );
- 
+    let edcrRes = await edcrHttpRequest(
+      "post",
+      "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + edcrNumber + "&tenantId=" + tenantId,
+      "search", []
+      );
+
   dispatch(
     prepareFinalObject(
       `scrutinyDetails`,
       edcrRes.edcrDetail[0]
     )
   );
-  if(response && response.Bpa["0"] && response.Bpa["0"].status !== "NOC_VERIFICATION_INPROGRESS") {
-    set(
-      action,
-      "screenConfig.components.div.children.body.children.cardContent.children.nocVerificationDetails.visible",
-      false
-    );
-  }
+
   if ( response && response.Bpa["0"] && response.Bpa["0"].permitOrderNo ) {
     dispatch(
       handleField(
@@ -339,6 +384,15 @@ const setSearchResponse = async (
   )
   }
 
+  dispatch(
+    handleField(
+      "search-preview",
+      "components.div.children.headerDiv.children.header.children.applicationNumber",
+      "props.number",
+      applicationNumber
+    )
+  );
+
   // Set Institution/Applicant info card visibility
   if (
     get(
@@ -357,10 +411,7 @@ const setSearchResponse = async (
     );
   };
 
-  // prepareDocumentsView(state, dispatch);
-  await requiredDocumentsData(state, dispatch);
-     
-  // await loadPdfGenerationDataForBpa(applicationNumber, tenantId);
+  requiredDocumentsData(state, dispatch, action);
   setDownloadMenu(action, state, dispatch);
 };
 
@@ -373,9 +424,7 @@ const screenConfig = {
       "applicationNumber"
     );
     const tenantId = getQueryArg(window.location.href, "tenantId");
-    // dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
-    searchBill(dispatch, applicationNumber, tenantId);
-
+    dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));    
     setSearchResponse(state, dispatch, applicationNumber, tenantId, action);
 
     const queryObject = [
@@ -413,6 +462,26 @@ const screenConfig = {
     set(
       action,
       "screenConfig.components.div.children.body.children.cardContent.children.plotAndBoundaryInfoSummary.children.cardContent.children.header.children.editSection.visible",
+      false
+    );
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.uploadedDocumentDetailsCard.visible",
+      false
+    );
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.nocSummary.children.cardContent.children.uploadedNocDocumentDetailsCard.visible",
+      false
+    );
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.fieldSummary.children.cardContent.visible",
+      false
+    );
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.fieldinspectionSummary.visible",
       false
     );
 
@@ -467,19 +536,54 @@ const screenConfig = {
             updateUrl: "/bpa-services/bpa/appl/_update"
           }
         },
+        sendToArchPickerDialog :{
+          componentPath: "Dialog",
+          props: {
+            open: false,
+            maxWidth: "md"
+          },
+          children: {
+            dialogContent: {
+              componentPath: "DialogContent",
+              props: {
+                classes: {
+                  root: "city-picker-dialog-style"
+                }
+              },
+              children: {
+                popup: getCommonContainer({
+                  header: getCommonHeader({
+                    labelName: "Forward Application",
+                    labelKey: "BPA_FORWARD_APPLICATION_HEADER"
+                  }),
+                  cityPicker: getCommonContainer({
+                    cityDropdown: {
+                      uiFramework: "custom-molecules-local",
+                      moduleName: "egov-bpa",
+                      componentPath: "ActionDialog",
+                      required: true,
+                      gridDefination: {
+                        xs: 12,
+                        sm: 12
+                      },
+                      props: {}
+                    },
+                  })
+                })
+              }
+            }
+          }
+        },
         body: getCommonCard({
           // estimateSummary: estimateSummary,
+          fieldSummary: fieldSummary,
+          fieldinspectionSummary: fieldinspectionSummary,
           basicSummary: basicSummary,
           scrutinySummary:scrutinySummary,
           applicantSummary: applicantSummary,
-          plotAndBoundaryInfoSummary: plotAndBoundaryInfoSummary,
-          documentsSummary: documentsSummary,
-          nocSummary: nocSummary,
-          nocVerificationDetails : nocVerificationDetails
-
+          documentsSummary: documentsSummary
         }),
-        citizenFooter:
-          process.env.REACT_APP_NAME === "Citizen" ? citizenFooter : {}
+        citizenFooter: process.env.REACT_APP_NAME === "Citizen" ? citizenFooter : {}
       }
     }
   }

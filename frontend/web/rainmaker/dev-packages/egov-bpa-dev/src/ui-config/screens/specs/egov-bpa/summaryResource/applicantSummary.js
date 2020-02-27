@@ -8,6 +8,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { gotoApplyWithStep, checkValueForNA } from "../../utils/index";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
+import { changeStep } from "../applyResource/footer";
 
 export const applicantSummary = getCommonGrayCard({
   header: {
@@ -55,7 +56,7 @@ export const applicantSummary = getCommonGrayCard({
         onClickDefination: {
           action: "condition",
           callBack: (state, dispatch) => {
-            gotoApplyWithStep(state, dispatch, 2);
+            changeStep(state, dispatch, "", 2);            
           }
         }
       }
@@ -101,8 +102,8 @@ export const applicantSummary = getCommonGrayCard({
           ),
           applicantFatherHusbandName: getLabelWithValue(
             {
-              labelName: "Father/Husband's Name",
-              labelKey: "BPA_APPLICANT_FATHER_HUSBAND_NAME_LABEL"
+              labelName: "Guardian Name",
+              labelKey: "BPA_APPLICANT_GUARDIAN_NAME_LABEL"
             },
             {
               jsonPath:

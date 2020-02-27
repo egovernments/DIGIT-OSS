@@ -9,7 +9,7 @@ import {
   getPattern,
   getBreak
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 
 import { setLicenseeSubTypeDropdownData } from "../../utils";
@@ -57,6 +57,10 @@ export const LicenseeCard = getCommonCard({
             state.screenConfiguration.preparedFinalObject,
             "LicensesTemp[0].tradeLicenseDetail.tradeUnits[0].tradeType"
           );
+          let counsilForArchNo = get(
+            state.screenConfiguration.preparedFinalObject,
+            "Licenses[0].tradeLicenseDetail.additionalDetail.counsilForArchNo"
+          );
           if (action.value !== previousValue)
             await setLicenseeSubTypeDropdownData(action.value, state, dispatch);
 
@@ -85,6 +89,17 @@ export const LicenseeCard = getCommonCard({
                 true
               )
             );
+            
+            if(counsilForArchNo) {
+            dispatch(
+              handleField(
+                "apply",
+                "components.div.children.formwizardFirstStep.children.LicenseeCard.children.cardContent.children.tradeUnitCardContainer.children.container3.children.counsilForArchNo",
+                "props.value",
+                ""
+              )
+            );
+            }
           } else {
             dispatch(
               handleField(
@@ -109,7 +124,17 @@ export const LicenseeCard = getCommonCard({
                 "visible",
                 false
               )
-            );
+            );         
+            if(counsilForArchNo) {
+              dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.additionalDetail.counsilForArchNo", ""));
+            }
+          }
+          let getClassOfLicenseType = get(
+            state.screenConfiguration.preparedFinalObject,
+            "applyScreenMdmsData.TradeLicense.tradeSubType[0].code"
+          );
+          if(getClassOfLicenseType) {
+            dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType", getClassOfLicenseType));
           }
         }
       }
@@ -126,6 +151,7 @@ export const LicenseeCard = getCommonCard({
             labelKey: "BPA_LICENSEE_SUB_TYPE_PLACEHOLDER"
           },
           required: true,
+          visible: false,
           jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType",
           localePrefix: {
             moduleName: "TRADELICENSE",

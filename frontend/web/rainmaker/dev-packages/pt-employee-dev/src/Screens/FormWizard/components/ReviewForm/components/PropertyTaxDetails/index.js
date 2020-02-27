@@ -170,7 +170,7 @@ class PropertyTaxDetails extends React.Component {
                     }}
                   /></div>
                   <div className="flex-child">
-                  <Button
+                  {/* <Button
                     label={
                       <Label
                         label={"PT_CALCULATION_ADD_REBATE/CHARGES"}
@@ -183,7 +183,8 @@ class PropertyTaxDetails extends React.Component {
                       color: "#fe7a51"
                     }}
                     onClick={() => addRebateBox(true)}
-                  /></div>
+                  /> */}
+                  </div>
                 </div>
               </div>
               <div className="col-sm-6" style={{ backgroundColor: 'white' }}>

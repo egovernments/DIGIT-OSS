@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 
 const styles = theme => ({
   root: {
-    margin: "16px 8px 0px 8px",
+    margin: "2px 8px",
     backgroundColor: theme.palette.background.paper,
   }
 });

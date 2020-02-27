@@ -35,8 +35,13 @@ class OTP extends Component {
   componentDidMount() {
     const { submitForm, handleFieldChange, previousRoute } = this.props;
     const otpElement = document.getElementById("otp");
-    otpElement.addEventListener("smsReceived", (e) => {
+    if(window.mSewaApp){
       localStorageSet("isNative", true);
+    }else{
+      localStorageSet("isNative", false);
+    }
+    otpElement.addEventListener("smsReceived", (e) => {
+      // localStorageSet("isNative", true);
       const { otp } = e.detail;
       handleFieldChange("otp", "otp", otp);
       if (previousRoute === "/citizen/user/register") {

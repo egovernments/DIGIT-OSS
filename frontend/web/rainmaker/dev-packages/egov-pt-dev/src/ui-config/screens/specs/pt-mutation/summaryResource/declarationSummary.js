@@ -16,7 +16,7 @@ const declarationDetails = getCommonContainer({
     props: {
       content:'PT_MUTATION_DECLARATION'
     },
-    visible: true
+    visible: process.env.REACT_APP_NAME === "Citizen" ? true : false
   }
   });
 

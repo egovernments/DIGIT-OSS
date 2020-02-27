@@ -44,27 +44,51 @@ const acknowledgementCard = ({
   header,
   body,
   tailText,
-  number
+  number,
+  tailTextOne,
+  newNumber
 } = {}) => {
-  const tail =
-    tailText && number && number !== "null"
-      ? {
-          uiFramework: "custom-atoms",
-          componentPath: "Div",
-          children: {
-            text: getCommonHeader(tailText, { style: style.tailText }),
-            paragraph: getCommonHeader(
-              {
-                labelName: number
-              },
-              { style: style.tailNumber }
-            )
-          },
-          props: {
-            style: style.tailBox
-          }
-        }
+  let tail;
+  if (number && newNumber) {
+    tail = tailText && number && tailTextOne && newNumber && newNumber !== null && number !== "null" ? {
+      uiFramework: "custom-atoms",
+      componentPath: "Div",
+      children: {
+        text: getCommonHeader(tailText, { style: style.tailText }),
+        paragraph: getCommonHeader(
+          { labelName: number },
+          { style: style.tailNumber }
+        ),
+        textOne: getCommonHeader(tailTextOne, { style: style.tailText }),
+        paragraphOne: getCommonHeader(
+          { labelName: newNumber },
+          { style: style.tailNumber }
+        )
+      },
+      props: {
+        style: style.tailBox
+      }
+    }
       : {};
+  } else {
+    tail = tailText && number && number !== "null" ? {
+      uiFramework: "custom-atoms",
+      componentPath: "Div",
+      children: {
+        text: getCommonHeader(tailText, { style: style.tailText }),
+        paragraph: getCommonHeader(
+          {
+            labelName: number
+          },
+          { style: style.tailNumber }
+        )
+      },
+      props: {
+        style: style.tailBox
+      }
+    }
+      : {};
+  }
 
   return getCommonCard({
     applicationSuccessContainer: getCommonContainer(
@@ -99,8 +123,8 @@ const acknowledgementCard = ({
             header: getCommonHeader(header),
             paragraph: body
               ? getCommonParagraph(body, {
-                  style: style.bodySub
-                })
+                style: style.bodySub
+              })
               : {}
           },
           props: {

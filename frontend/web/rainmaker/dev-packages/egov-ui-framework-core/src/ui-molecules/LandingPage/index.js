@@ -8,10 +8,7 @@ import { Link } from "react-router-dom";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import get from "lodash/get";
 import LabelContainer from "../../ui-containers/LabelContainer";
-import {
-  handleScreenConfigurationFieldChange as handleField,
-  prepareFinalObject
-} from "../../ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import "./index.css";
 
 const styles = theme => ({

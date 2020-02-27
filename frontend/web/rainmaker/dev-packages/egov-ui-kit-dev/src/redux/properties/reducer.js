@@ -26,7 +26,7 @@ const propertyReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         error: true,
-        errorMessage: action.error,
+        errorMessage: '',
       };
     case actionTypes.RECEIPT_FETCH_PENDING:
       return {
@@ -201,7 +201,7 @@ const propertyReducer = (state = initialState, action) => {
         loading: false,
         error: true,
         errorMessage: action.error,
-        totalBillAmountDue: ""
+        totalBillAmountDue: 0
       };
     case actionTypes.PROPERTY_FETCH_BILL_COMPLETE:
       const totalBillAmountDue = getTotalAmountDue(action.payload);
@@ -238,6 +238,31 @@ const propertyReducer = (state = initialState, action) => {
         error: false,
         errorMessage: "",
         Payments
+      };
+      case actionTypes.PROPERTY_FETCH_ASSESSMENTS_PENDING:
+        return {
+          ...state,
+          loading: true,
+          error: false,
+          errorMessage: "",
+        };
+    case actionTypes.PROPERTY_FETCH_ASSESSMENTS_ERROR:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMessage: action.error,
+        Assessments: []
+      };
+    case actionTypes.PROPERTY_FETCH_ASSESSMENTS_COMPLETE:
+    
+      const Assessments=action.payload.Assessments;
+      return {
+        ...state,
+        loading: false,
+        error: false,
+        errorMessage: "",
+        Assessments
       };
       case actionTypes.PROPERTY_DOWNLOAD_RECEIPT_PENDING:
         return {

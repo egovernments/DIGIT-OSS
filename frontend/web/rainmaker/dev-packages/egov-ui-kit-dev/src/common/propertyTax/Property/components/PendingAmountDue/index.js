@@ -9,7 +9,6 @@ const bodyStyle = {
     backgroundColor: "#FFFFFF",
     border: "0.5px solid rgba(0, 0, 0, 0)",
     boxShadow: "0 24px 24px 0 rgba(0, 0, 0, 0.3), 0 0 24px 0 rgba(0, 0, 0, 0.22)",
-    width: "649px",
     height: "240px !important"
 }
 
@@ -36,7 +35,7 @@ class PendingAmountDialog extends Component {
       <Dialog
         open={open}
         children={[
-          <div style={{ margin: 16, height: "200px", display: "grid" }}>
+          <div style={{ margin: 16, display: "grid" }}>
             <Label label="PT_PENDING_AMOUNT_DUE" fontSize="20px" labelClassName="pending-amount-due" />
             <br />
             <p className="dialog-content">
@@ -45,7 +44,7 @@ class PendingAmountDialog extends Component {
             </p>
             
             <div className="text-right" style={{ marginTop: 10 }}>
-              <Label className="footer-amount" labelClassName="footer-amount" label="PT_MUTATION_RS" fontSize="24px" /><b style={{fontSize: "24px", color: "rgba(0, 0, 0, 0.87)", position: "relative", top: "5px"}}> {amount}</b>
+              <Label className="footer-amount" labelClassName="footer-amount" label="PT_MUTATION_RS" fontSize="24px" /><span className="footer-amount-no" > {amount}</span>&nbsp;&nbsp;&nbsp;&nbsp;
               <Button
                 label={<Label buttonLabel={true} label="PT_PROCEED_TO_PAY" fontSize="16px" labelClassName="footer-button-label" />}
                 primary={true}
@@ -60,6 +59,7 @@ class PendingAmountDialog extends Component {
         handleClose={closeDialogue}
         onRequestClose={closeDialogue}
         contentStyle={contentStyle}
+        contentClassName="amount-due-dialog-content"
       />
     );
   }

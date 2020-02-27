@@ -21,13 +21,30 @@ class SingleProperty extends React.Component {
             className="pt-application-card"
             textChildren={
               <div>
+
                 <Grid container style={{ marginBottom: 12 }}>
                   <Grid item xs={6}>
-                    <Label label="PT_SEARCHPROPERTY_TABEL_PTUID" fontSize={14} color={"rgba(0, 0, 0, 0.60"} />
+                    <Label label="PT_PROPERTY_APPLICATION_NUMBER" fontSize={14} color={"rgba(0, 0, 0, 0.60"} />
                   </Grid>
                   <Grid item xs={6}>
                     {/* <Label label={item.propertyId} fontSize={14} color={"rgba(0, 0, 0, 0.87"} /> */}
-                    {item.propertyId}
+                    {item.applicationNo}
+                  </Grid>
+                </Grid>
+                <Grid container style={{ marginBottom: 12 }}>
+                  <Grid item xs={6}>
+                    <Label label="PT_SEARCHPROPERTY_TABEL_PID" fontSize={14} color={"rgba(0, 0, 0, 0.60"} />
+                  </Grid>
+                  <Grid item xs={6}>
+                    {item.propertyId} 
+                  </Grid>
+                </Grid>
+                <Grid container style={{ marginBottom: 12 }}>
+                  <Grid item xs={6}>
+                    <Label label="PT_SEARCHPROPERTY_TABEL_APPLICATIONTYPE" fontSize={14} color={"rgba(0, 0, 0, 0.60"} />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Label label={item.applicationType} fontSize={14} color={"rgba(0, 0, 0, 0.87"} />
                   </Grid>
                 </Grid>
                 <Grid container style={{ marginBottom: 12 }}>
@@ -35,31 +52,15 @@ class SingleProperty extends React.Component {
                     <Label label="PT_SEARCHPROPERTY_TABEL_OWNERNAME" fontSize={14} color={"rgba(0, 0, 0, 0.60"} />
                   </Grid>
                   <Grid item xs={6}>
-                    <Label label={item.name} fontSize={14} color={"rgba(0, 0, 0, 0.87"} />
+                    <Label label={item.name ? item.name : "NA"} fontSize={14} color={"rgba(0, 0, 0, 0.87"} />
                   </Grid>
                 </Grid>
                 <Grid container style={{ marginBottom: 12 }}>
                   <Grid item xs={6}>
-                    <Label label="PT_SEARCHPROPERTY_TABEL_GUARDIANNAME" fontSize={14} color={"rgba(0, 0, 0, 0.60"} />
+                    <Label label="PT_SEARCHPROPERTY_TABEL_APPLICATIONDATE" fontSize={14} color={"rgba(0, 0, 0, 0.60"} />
                   </Grid>
                   <Grid item xs={6}>
-                    <Label label={item.guardianName} fontSize={14} color={"rgba(0, 0, 0, 0.87"} />
-                  </Grid>
-                </Grid>
-                <Grid container style={{ marginBottom: 12 }}>
-                  <Grid item xs={6}>
-                    <Label label="PT_SEARCHPROPERTY_TABEL_EPID" fontSize={14} color={"rgba(0, 0, 0, 0.60"} />
-                  </Grid>
-                  <Grid item xs={6}>
-                    <Label label={item.oldPropertyId ? item.oldPropertyId : "NA"} fontSize={14} color={"rgba(0, 0, 0, 0.87"} />
-                  </Grid>
-                </Grid>
-                <Grid container style={{ marginBottom: 12 }}>
-                  <Grid item xs={6}>
-                    <Label label="PT_SEARCHPROPERTY_TABEL_ADDRESS" fontSize={14} color={"rgba(0, 0, 0, 0.60"} />
-                  </Grid>
-                  <Grid item xs={6}>
-                    <Label label={item.address} fontSize={14} color={"rgba(0, 0, 0, 0.87"} />
+                    <Label label={item.date} fontSize={14} color={"rgba(0, 0, 0, 0.87"} />
                   </Grid>
                 </Grid>
                 <Grid container style={{ marginBottom: 12 }}>
@@ -67,7 +68,7 @@ class SingleProperty extends React.Component {
                     <Label label="PT_SEARCHPROPERTY_TABEL_STATUS" fontSize={14} color={"rgba(0, 0, 0, 0.60"} />
                   </Grid>
                   <Grid item xs={6}>
-                  <Label label={item.status} fontSize={14} color={"rgba(0, 0, 0, 0.87"} />
+                  {item.status} 
                   </Grid>
                 </Grid>
                 

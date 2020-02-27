@@ -19,13 +19,13 @@ import {
 } from "./applyResource/boundarydetails";
 import { documentDetails } from "./applyResource/documentDetails";
 import { statusOfNocDetails } from "./applyResource/updateNocDetails";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg, getFileUrlFromAPI, setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
 import {
   prepareFinalObject,
   handleScreenConfigurationFieldChange as handleField
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import { httpRequest } from "../../../../ui-utils";
+import { httpRequest, edcrHttpRequest } from "../../../../ui-utils/api";
 import set from "lodash/set";
 import get from "lodash/get";
 import {
@@ -33,18 +33,19 @@ import {
   getSearchResults,
   furnishNocResponse,
   setApplicationNumberBox,
-  prepareNOCUploadData
+  prepareNOCUploadData,
+  getAppSearchResults
 } from "../../../../ui-utils/commons";
-import { getTodaysDateInYYYMMDD } from "../utils";
-import { getTenantMdmsData } from "../utils";
+import { getTodaysDateInYYYMMDD, getTenantMdmsData, setProposedBuildingData } from "../utils";
+import jp from "jsonpath";
+import { bpaSummaryDetails } from "../egov-bpa/summaryDetails";
 
 export const stepsData = [
-  { labelName: "Basic Details", labelKey: "" },
-  { labelName: "Scrutiny Details", labelKey: "" },
-  { labelName: "Owner Info", labelKey: "" },
-  { labelName: "Plot & Boundary Info", labelKey: "" },
-  { labelName: "Document Details", labelKey: "" },
-  { labelName: "NOC Details", labelKey: "" }
+  { labelName: "Basic Details", labelKey: "BPA_STEPPER_BASIC_DETAILS_HEADER" },
+  { labelName: "Scrutiny Details", labelKey: "BPA_STEPPER_SCRUTINY_DETAILS_HEADER" },
+  { labelName: "Owner Info", labelKey: "BPA_STEPPER_OWNER_INFO_HEADER" },
+  { labelName: "Document and NOC details", labelKey: "BPA_STEPPER_DOCUMENT_NOC_DETAILS_HEADER" },
+  { labelName: "Application Summary", labelKey: "BPA_STEPPER_SUMMARY_HEADER" }
 ];
 
 export const stepper = getStepperObject(
@@ -77,7 +78,8 @@ export const formwizardFirstStep = {
   },
   children: {
     basicDetails,
-    bpaLocationDetails
+    bpaLocationDetails,
+    detailsofplot
   }
 };
 
@@ -115,7 +117,7 @@ export const formwizardFourthStep = {
     id: "apply_form4"
   },
   children: {
-    detailsofplot
+    documentDetails
   },
   visible: false
 };
@@ -127,19 +129,7 @@ export const formwizardFifthStep = {
     id: "apply_form4"
   },
   children: {
-    documentDetails
-  },
-  visible: false
-};
-
-export const formwizardSixthStep = {
-  uiFramework: "custom-atoms",
-  componentPath: "Form",
-  props: {
-    id: "apply_form4"
-  },
-  children: {
-    statusOfNocDetails
+    bpaSummaryDetails
   },
   visible: false
 };
@@ -183,7 +173,13 @@ const getMdmsData = async (action, state, dispatch) => {
               name: "RiskTypeComputation"
             },
             {
-              name: "CalculationType"
+              name: "OccupancyType"
+            },
+            {
+              name: "SubOccupancyType"
+            },
+            {
+              name: "Usages"
             }
           ]
         }
@@ -207,7 +203,7 @@ const getMdmsData = async (action, state, dispatch) => {
 
 const getTodaysDate = async(action, state, dispatch) => {
   const today = getTodaysDateInYYYMMDD();
-    dispatch(prepareFinalObject("BPA.appdate", today));
+    dispatch(prepareFinalObject("BPAs.appdate", today));
 }
 
 const getFirstListFromDotSeparated = list => {
@@ -221,6 +217,118 @@ const getFirstListFromDotSeparated = list => {
   });
   return list;
 };
+
+const setSearchResponse = async (
+  state,
+  dispatch,
+  applicationNumber,
+  tenantId, action
+) => {
+  const response = await getAppSearchResults([
+    {
+      key: "tenantId",
+      value: tenantId
+    },
+    { key: "applicationNos", value: applicationNumber }
+  ]);
+
+  const edcrNumber = response.Bpa["0"].edcrNumber;
+  const ownershipCategory = response.Bpa["0"].ownershipCategory;
+  const appDate = response.Bpa["0"].auditDetails.createdTime;
+  const latitude = response.Bpa["0"].address.geoLocation.latitude;
+  const longitude = response.Bpa["0"].address.geoLocation.longitude;
+  
+  dispatch(prepareFinalObject("BPA", response.Bpa[0]));
+  let edcrRes = await edcrHttpRequest(
+    "post",
+    "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + edcrNumber + "&tenantId=" + tenantId,
+    "search", []
+    );
+
+  dispatch(prepareFinalObject(`scrutinyDetails`, edcrRes.edcrDetail[0] ));
+
+  if(ownershipCategory) {
+    let ownerShipMajorType =  dispatch(
+      prepareFinalObject( "BPA.ownerShipMajorType", ownershipCategory.split('.')[0] ));
+  }
+  
+ if(latitude && longitude) {
+  dispatch(
+    handleField(
+      "apply",
+      "components.div.children.formwizardFirstStep.children.bpaLocationDetails.children.cardContent.children.bpaDetailsConatiner.children.tradeLocGISCoord.children.gisTextField",
+      "props.value",
+      `${latitude}, ${longitude}`
+    )
+  );
+  dispatch(prepareFinalObject(
+    "BPA.address.geoLocation.latitude",
+    latitude
+  ));
+  dispatch(prepareFinalObject(
+    "BPA.address.geoLocation.longitude",
+    longitude
+  ));
+ }
+  dispatch(prepareFinalObject("BPAs.appdate", appDate));
+  const docs = await prepareDocumentsUploadData(state, dispatch);
+  const documentDetailsUploadRedux = await prepareDocumentDetailsUploadRedux(state, dispatch);
+};
+
+export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
+  let docs = get (state.screenConfiguration.preparedFinalObject, "documentsContract");
+  let bpaDocs = [];
+
+  if (docs && docs.length > 0) {
+    docs.forEach(section => {
+      section.cards.forEach(doc => {
+        let docObj = {};
+        docObj.documentType = section.code;
+        docObj.documentCode = doc.code;
+        docObj.isDocumentRequired = doc.required;
+        docObj.isDocumentTypeRequired = doc.required;
+        bpaDocs.push(docObj);
+      })
+    });
+  }
+
+  let bpaDetails = get (state.screenConfiguration.preparedFinalObject, "BPA");
+  let uploadedDocs = bpaDetails.documents;
+  
+  if(uploadedDocs && uploadedDocs.length > 0) {
+    let fileStoreIds = jp.query(uploadedDocs, "$.*.fileStoreId");
+    let fileUrls = fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
+    uploadedDocs.forEach(upDoc => {
+      bpaDocs.forEach(bpaDoc => {
+        let bpaDetailsDoc = (upDoc.documentType).split('.')[0]+"."+(upDoc.documentType).split('.')[1];
+        if(bpaDetailsDoc == bpaDoc.documentCode) {
+          let url = (fileUrls && fileUrls[upDoc.fileStoreId] && fileUrls[upDoc.fileStoreId].split(",")[0]) || "";
+          let name = (fileUrls[upDoc.fileStoreId] && 
+            decodeURIComponent(
+              fileUrls[upDoc.fileStoreId]
+                .split(",")[0]
+                .split("?")[0]
+                .split("/")
+                .pop()
+                .slice(13)
+            )) ||
+          `Document - ${index + 1}`;
+          bpaDoc.dropDownValues = {};
+          bpaDoc.dropDownValues.value =  upDoc.documentType;
+          bpaDoc.documents = [
+            {
+              fileName : name,
+              fileStoreId : upDoc.fileStoreId,
+              fileUrl : url,
+              id : upDoc.id
+            }
+          ]
+        }
+      })
+    })
+    dispatch(prepareFinalObject("documentDetailsUploadRedux", bpaDocs));
+  }
+}
 
 const screenConfig = {
   uiFramework: "material-ui",
@@ -238,6 +346,23 @@ const screenConfig = {
     getTenantMdmsData(action, state, dispatch).then(response => {
       dispatch(prepareFinalObject("BPA.address.city", tenantId));
     });
+
+    let isEdit = true;
+    if(step || step == 0) {
+      isEdit = false
+    }
+    if (applicationNumber && isEdit) {
+      setSearchResponse(state, dispatch, applicationNumber, tenantId, action);
+    } else {
+      setProposedBuildingData(state, dispatch);
+      getTodaysDate(action, state, dispatch);
+    }
+    const queryObject = [
+      { key: "tenantId", value: tenantId },
+      { key: "businessServices", value: "BPA" }
+    ];
+    setBusinessServiceDataToLocalStorage(queryObject, dispatch);
+
     // Set MDMS Data
     getMdmsData(action, state, dispatch).then(response => {
       // Set Dropdowns Data
@@ -259,10 +384,9 @@ const screenConfig = {
       );
       dispatch(prepareFinalObject("BPA.applicationType", applicationType));
       // Set Documents Data (TEMP)
-      prepareDocumentsUploadData(state, dispatch);
-      prepareNOCUploadData(state, dispatch);
+      // prepareDocumentsUploadData(state, dispatch);
+      // prepareNOCUploadData(state, dispatch);
     });
-    getTodaysDate(action, state, dispatch);
 
     // Code to goto a specific step through URL
     if (step && step.match(/^\d+$/)) {
@@ -277,10 +401,9 @@ const screenConfig = {
         "formwizardSecondStep",
         "formwizardThirdStep",
         "formwizardFourthStep",
-        "formwizardFifthStep",
-        "formwizardSixthStep"
+        "formwizardFifthStep"
       ];
-      for (let i = 0; i < 6; i++) {
+      for (let i = 0; i < 5; i++) {
         set(
           action.screenConfig,
           `components.div.children.${formWizardNames[i]}.visible`,
@@ -322,7 +445,6 @@ const screenConfig = {
         formwizardThirdStep,
         formwizardFourthStep,
         formwizardFifthStep,
-        formwizardSixthStep,
         footer
       }
     }

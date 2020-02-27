@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import formHoc from "egov-ui-kit/hocs/form";
+import { httpRequest } from "egov-ui-kit/utils/api";
 import Label from "egov-ui-kit/utils/translationNode";
 import YearDialogue from "../common/YearDialogue";
 import { Screen, SingleProperty } from "modules/common";
@@ -15,7 +16,7 @@ import PropertyTable from "./components/PropertyTable";
 import { validateForm } from "egov-ui-kit/redux/form/utils";
 import { getLatestPropertyDetails } from "egov-ui-kit/utils/PTCommon";
 import { displayFormErrors, resetForm } from "egov-ui-kit/redux/form/actions";
-import {fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
+import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { connect } from "react-redux";
 import { fetchProperties } from "egov-ui-kit/redux/properties/actions";
 import get from "lodash/get";
@@ -24,14 +25,17 @@ import {
   localStorageGet,
   getLocale
 } from "egov-ui-kit/utils/localStorageUtils";
-import { getDateFromEpoch } from "egov-ui-kit/utils/commons";
+import { getDateFromEpoch, navigateToApplication, getApplicationType } from "egov-ui-kit/utils/commons";
 import "./index.css";
+import {getRowData} from "egov-ui-kit/utils/PTCommon";
 
 const PropertySearchFormHOC = formHoc({
   formKey: "searchProperty",
   path: "PropertyTaxPay",
   isCoreConfiguration: true
 })(SearchPropertyForm);
+
+
 
 class SearchProperty extends Component {
   constructor(props) {
@@ -62,14 +66,14 @@ class SearchProperty extends Component {
   };
 
   onSearchClick = (form, formKey) => {
-    const { propertiesFound,fetchLocalizationLabel } = this.props;
+    const { propertiesFound, fetchLocalizationLabel } = this.props;
     const { city, ids, oldpropertyids, mobileNumber, applicationNumber } = form.fields || {};
     const tableData = this.extractTableData(propertiesFound);
     fetchLocalizationLabel(getLocale(), city.value, city.value);
 
     if (!validateForm(form)) {
       this.props.displayFormErrors(formKey);
-    } else if (!oldpropertyids.value && !ids.value && !mobileNumber.value) {
+    } else if (!oldpropertyids.value && !ids.value && !mobileNumber.value && !applicationNumber.value) {
       this.props.toggleSnackbarAndSetText(
         true,
         {
@@ -84,7 +88,7 @@ class SearchProperty extends Component {
         queryParams.push({ key: "tenantId", value: city.value });
       }
       if (ids.value) {
-        queryParams.push({ key: "ids", value: ids.value });
+        queryParams.push({ key: "propertyIds", value: ids.value });
       }
       if (oldpropertyids.value) {
         queryParams.push({ key: "oldpropertyids", value: oldpropertyids.value });
@@ -93,45 +97,22 @@ class SearchProperty extends Component {
         queryParams.push({ key: "mobileNumber", value: mobileNumber.value });
       }
       if (applicationNumber.value) {
-        queryParams.push({ key: "applicationNumber", value: applicationNumber.value });
+        queryParams.push({ key: "acknowledgementIds", value: applicationNumber.value });
       }
       this.setState({
         searchResult: tableData
       });
-      this.props.fetchProperties(queryParams);
+      this.props.fetchProperties(queryParams, "citizen_search");
       this.setState({ showTable: true });
     }
   };
 
-  getLink = (userType, history, id, tenantId) => {
-    return (
-      <a
-        style={{
-          height: 20,
-          lineHeight: "auto",
-          minWidth: "inherit",
-          cursor: "pointer",
-          textDecoration: "underline"
-        }}
-        onClick={
-          userType === "CITIZEN"
-            ? e => {
-              history.push(
-                `/property-tax/my-properties/property/${id}/${tenantId}?isMutationApplication=true`
-              );
-            }
-            : e => {
-              history.push(
-                `/property-tax/property/${id}/${tenantId}`
-              );
-            }
-        }
-      >
-        {id}
-      </a>
-    );
-  }
 
+  
+  
+
+  
+  
   extractTableData = properties => {
     const { history } = this.props;
     const userType = JSON.parse(getUserInfo()).type;
@@ -145,24 +126,16 @@ class SearchProperty extends Component {
         propertyDetails,
         tenantId
       } = property;
-      if(!applicationNo) applicationNo = property.acknowldgementNumber;
-      if(!date) date = getDateFromEpoch(property.auditDetails.createdTime);
+      if (!applicationNo) applicationNo = property.acknowldgementNumber;
+      if (!date) date = getDateFromEpoch(property.auditDetails.createdTime);
       applicationType = history.location.pathname.includes('property-tax') ? 'PT' : applicationType;
-      const latestAssessment = getLatestPropertyDetails(propertyDetails);
-      let name = latestAssessment.owners[0].name;
+      // const latestAssessment = getLatestPropertyDetails(propertyDetails);
+      let name = property.owners[0].name;
       // const guardianName = latestAssessment.owners[0].fatherOrHusbandName;
       // let assessmentNo = latestAssessment.assessmentNumber;
       // const uuid = get(latestAssessment, "citizenInfo.uuid");
 
-      let item = {
-        // applicationNo: this.getLink(userType, history, applicationNo, tenantId),
-        applicationNo: <a>{applicationNo}</a>,
-        propertyId: this.getLink(userType, history, propertyId, tenantId),
-        applicationType: applicationType,
-        name: name,
-        date: date,
-        status: status
-      };
+      let item = getRowData(property,history);
       tableData.push(item);
       return tableData;
     }, []);
@@ -174,10 +147,15 @@ class SearchProperty extends Component {
   };
 
   onAddButtonClick = () => {
-    this.setState({
-      dialogueOpen: true
-    });
+    // this.setState({
+    //   dialogueOpen: true
+    // });
+    // const { history } = this.props;
+    // history.push('/property-tax/assessment-form');
 
+    let link = `/property-tax/assessment-form`;
+    let moduleName = process.env.REACT_APP_NAME === "Citizen" ? '/citizen' : '/employee';
+    window.location.href = process.env.NODE_ENV === "production" ? moduleName + link : link;
   };
 
   render() {
@@ -315,11 +293,11 @@ const mapDispatchToProps = dispatch => {
   return {
     addBreadCrumbs: url => dispatch(addBreadCrumbs(url)),
     displayFormErrors: formKey => dispatch(displayFormErrors(formKey)),
-    fetchProperties: queryObject => dispatch(fetchProperties(queryObject)),
+    fetchProperties: (queryObject, searchType) => dispatch(fetchProperties(queryObject, searchType)),
     toggleSnackbarAndSetText: (open, message, error) =>
       dispatch(toggleSnackbarAndSetText(open, message, error)),
     resetForm: formKey => dispatch(resetForm(formKey)),
-    fetchLocalizationLabel : (locale, tenantId, moduleValue) => dispatch(fetchLocalizationLabel(locale, tenantId, moduleValue))
+    fetchLocalizationLabel: (locale, tenantId, moduleValue) => dispatch(fetchLocalizationLabel(locale, tenantId, moduleValue))
   };
 };
 

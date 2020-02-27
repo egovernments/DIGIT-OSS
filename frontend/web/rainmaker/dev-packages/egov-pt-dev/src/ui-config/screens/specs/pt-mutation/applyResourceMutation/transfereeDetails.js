@@ -39,7 +39,7 @@ const commonApplicantInformation = () => {
         required: true,
         pattern: getPattern("Name"),
         errorMessage: "Invalid Name",
-        jsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].name",
+        jsonPath: "Property.ownersTemp[0].name",
         props:{
           className:"applicant-details-error"
         },
@@ -58,7 +58,7 @@ const commonApplicantInformation = () => {
           md: 6
         },
         jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].gender",
+          "Property.ownersTemp[0].gender",
         props: {
           label: { name: "Gender", key: "PT_MUTATION_TRANSFEREE_GENDER_LABEL" },
           className:"applicant-details-error",
@@ -79,10 +79,10 @@ const commonApplicantInformation = () => {
               value: "TRANSGENDER"
             }
           ],
-          jsonPath:
-            "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].gender"
-          // required: true
+          
+          required: true
         },
+        required: true,
         type: "array"
       },
       mobileNumber: getTextField({
@@ -106,7 +106,7 @@ const commonApplicantInformation = () => {
         pattern: getPattern("MobileNo"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].mobileNumber",
+          "Property.ownersTemp[0].mobileNumber",
         iconObj: {
           iconName: "search",
           position: "end",
@@ -154,7 +154,7 @@ const commonApplicantInformation = () => {
         pattern: getPattern("Email"),
         errorMessage: "Invalid Email",
         jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].emailId",
+          "Property.ownersTemp[0].emailId",
         gridDefination: {
           xs: 12,
           sm: 12,
@@ -177,7 +177,7 @@ const commonApplicantInformation = () => {
         pattern: getPattern("Name"),
         errorMessage: "Invalid Name",
         jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].fatherOrHusbandName",
+          "Property.ownersTemp[0].fatherOrHusbandName",
         gridDefination: {
           xs: 12,
           sm: 12,
@@ -196,14 +196,15 @@ const commonApplicantInformation = () => {
           labelName: "Select Relationship with Guardian",
           labelKey: "PT_MUTATION_TRANSFEREE_APPLICANT_RELATIONSHIP_LABEL_PLACEHOLDER"
         },
+        required:true,
         jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].ownerType",
+          "Property.ownersTemp[0].relationship",
         data: [
           {
-            code: "A"
+            code: "FATHER"
           },
           {
-            code: "B"
+            code: "HUSBAND"
           }
         ],
         localePrefix: {
@@ -217,30 +218,6 @@ const commonApplicantInformation = () => {
           md: 6
         }
       }),
-      
-      applicantAddress: getTextField({
-        label: {
-          labelName: "Correspondence Address",
-          labelKey: "PT_MUTATION_TRANSFEREE_APPLICANT_CORRESPONDENCE_ADDRESS_LABEL"
-        },
-        placeholder: {
-          labelName: "Enter Correspondence Address",
-          labelKey: "PT_MUTATION_TRANSFEREE_APPLICANT_CORRESPONDENCE_ADDRESS_PLACEHOLDER"
-        },
-        required: true,
-        pattern: getPattern("Address"),
-        errorMessage: "Invalid Address",
-        jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].correspondenceAddress",
-        gridDefination: {
-          xs: 12,
-          sm: 12,
-          md: 6
-        },
-        props:{
-          className:"applicant-details-error"
-        }
-      }),
       specialApplicantCategory: getSelectField({
         label: {
           labelName: "Special Applicant Category",
@@ -251,7 +228,7 @@ const commonApplicantInformation = () => {
           labelKey: "PT_MUTATION_TRANSFEREE_SPECIAL_APPLICANT_CATEGORY_PLACEHOLDER"
         },
         jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].ownerType",
+          "Property.ownersTemp[0].ownerType",
         // data: [
         //   {
         //     code: "A"
@@ -270,7 +247,30 @@ const commonApplicantInformation = () => {
           sm: 12,
           md: 6
         }
-      })
+      }),
+      applicantAddress: getTextField({
+        label: {
+          labelName: "Correspondence Address",
+          labelKey: "PT_MUTATION_TRANSFEREE_APPLICANT_CORRESPONDENCE_ADDRESS_LABEL"
+        },
+        placeholder: {
+          labelName: "Enter Correspondence Address",
+          labelKey: "PT_MUTATION_TRANSFEREE_APPLICANT_CORRESPONDENCE_ADDRESS_PLACEHOLDER"
+        },
+        pattern: getPattern("Address"),
+        required:true,
+        errorMessage: "Invalid Address",
+        jsonPath:
+          "Property.ownersTemp[0].permanentAddress",
+        gridDefination: {
+          xs: 12,
+          sm: 12,
+          md: 6
+        },
+        props:{
+          className:"applicant-details-error"
+        }
+      }),
     })
   });
 };
@@ -305,7 +305,7 @@ const institutionInformation = () => {
           },
           required:true,
           pattern: getPattern("Name"),
-    //      jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress"
+          jsonPath: "Property.institutionTemp.institutionName"
         }),
       }),
 
@@ -325,7 +325,7 @@ const institutionInformation = () => {
           },
           required:true,
           pattern: getPattern("Name"),
-    //      jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress"
+        jsonPath: "Property.institutionTemp.name"
         }),
           
         authorisedDesignationValue: getTextField({
@@ -342,7 +342,7 @@ const institutionInformation = () => {
           },
           required:true,
           pattern: getPattern("Name"),
-     //     jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress"
+         jsonPath: "Property.institutionTemp.designation"
         }),
         authorisedMobile: getTextField({
           label: {
@@ -358,7 +358,7 @@ const institutionInformation = () => {
           },
           required:true,
           pattern: getPattern("Number"),
-         // jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress"
+          jsonPath: "Property.institutionTemp.mobileNumber"
         }),
         authorisedLandline: getTextField({
             label: {
@@ -372,8 +372,9 @@ const institutionInformation = () => {
               labelName: "Enter Landline",
               labelKey: "PT_MUTATION_AUTHORISED_LANDLINE_PLACEHOLDER"
             },
+            required:true,
             pattern: getPattern("MobileNo"),
-           // jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress"
+            jsonPath: "Property.institutionTemp.landlineNumber"
           }),
           authorisedEmail: getTextField({
             label: {
@@ -388,7 +389,7 @@ const institutionInformation = () => {
               labelKey: "PT_MUTATION_AUTHORISED_EMAIL_PLACEHOLDER"
             },
             pattern: getPattern("Email"),
-           // jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress"
+            jsonPath: "Property.institutionTemp.email"
           }),
           authorisedAddress: getTextField({
             label: {
@@ -404,7 +405,7 @@ const institutionInformation = () => {
             },
             required:true,
             pattern: getPattern("Address"),
-           // jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress"
+            jsonPath: "Property.institutionTemp.correspondenceAddress"
           }),
       })
     }) }; 
@@ -438,7 +439,7 @@ export const transfereeDetails = getCommonCard({
             labelKey: "PT_MUTATION_APPLICANT_TYPE_LABEL_PLACEHOLDER"
           },
           jsonPath:
-            "FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipMajorType",
+            "Property.ownershipCategoryTemp",
           localePrefix: {
             moduleName: "common-masters",
             masterName: "OwnerShipCategory"
@@ -526,7 +527,7 @@ export const transfereeDetails = getCommonCard({
               labelKey: "PT_MUTATION_ADD_APPLICANT_LABEL"
             },
             sourceJsonPath:
-              "FireNOCs[0].fireNOCDetails.applicantDetails.owners",
+              "Property.ownersTemp",
             prefixSourceJsonPath:
               "children.cardContent.children.applicantCard.children"
           },

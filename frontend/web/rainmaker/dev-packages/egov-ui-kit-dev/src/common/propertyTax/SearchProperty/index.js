@@ -66,7 +66,7 @@ class SearchProperty extends Component {
         queryParams.push({ key: "tenantId", value: city.value });
       }
       if ( ids && ids.value) {
-        queryParams.push({ key: "ids", value: ids.value });
+        queryParams.push({ key: "propertyIds", value: ids.value });
       }
       if (oldpropertyids && oldpropertyids.value) {
         queryParams.push({ key: "oldpropertyids", value: oldpropertyids.value });
@@ -99,7 +99,7 @@ class SearchProperty extends Component {
             }
             : (e) => {
               // localStorageSet("draftId", "")
-              history.push(`/property-tax/property/${propertyId}/${tenantId}?isMutationApplication=true`);
+              history.push(`/property-tax/property/${propertyId}/${tenantId}`);
             }
         }
         style={{

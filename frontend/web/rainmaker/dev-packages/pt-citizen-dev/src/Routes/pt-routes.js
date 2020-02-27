@@ -1,4 +1,6 @@
 // property tax
+import React from "react";
+import Loadable from "react-loadable";
 import asyncComponent from "./asyncComponent";
 const PTHome = asyncComponent(() =>
   import("../Screens/PTHome").then(module => module.default)
@@ -23,6 +25,12 @@ const Property = asyncComponent(() =>
     module => module.default
   )
 );
+const ApplicationPreview = asyncComponent(() =>
+  import("egov-ui-kit/common/propertyTax/ApplicationPreview").then(
+    module => module.default
+  )
+);
+
 const MyReceipts = asyncComponent(() =>
   import("../Screens/MyReceipts").then(module => module.default)
 );
@@ -52,6 +60,10 @@ const PTExamples = asyncComponent(() =>
 );
 const FormWizard = asyncComponent(() =>
   import("../Screens/FormWizard").then(module => module.default)
+);
+
+const ptAcknowledgment = asyncComponent(() =>
+  import("egov-ui-kit/common/propertyTax/PTAcknowledgement").then(module => module.default)
 );
 
 const routes = [
@@ -105,12 +117,24 @@ const routes = [
     options: {
       hideFooter: true,
       hideTitle:true,
+      title: "PT_HOME_MYPROPERTIES",
       // hideBackButton: true,
     }
   },
   {
     path: "property-tax/my-properties/property/:propertyId/:tenantId",
     component: Property,
+    needsAuthentication: true,
+    options: {
+      // hideTitle:true,
+      hideFooter: true,
+      hideTitle: true
+      // hideBackButton: true,
+    }
+  },
+  {
+    path: "property-tax/application-preview",
+    component: ApplicationPreview,
     needsAuthentication: true,
     options: {
       // hideTitle:true,
@@ -224,6 +248,17 @@ const routes = [
       hideFooter: true,
       // hideBackButton: true,
       title: "PT_EXAMPLES"
+    }
+  },
+  {
+    path: "property-tax/pt-acknowledgment",
+    component: ptAcknowledgment,
+    needsAuthentication: true,
+    options: {
+      hideFooter: false,
+      hideTitle: true,
+      // hideBackButton: true,
+      // title: "PT_ACKNOWLEDGEMENT"
     }
   }
 ];

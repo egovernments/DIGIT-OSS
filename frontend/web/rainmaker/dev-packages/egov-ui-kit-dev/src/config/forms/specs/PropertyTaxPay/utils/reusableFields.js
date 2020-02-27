@@ -573,6 +573,7 @@ export const mohalla = {
     hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
     fullWidth: true,
     toolTip: true,
+    localePrefix: true,
     toolTipMessage: "PT_MOHALLA_TOOLTIP_MESSAGE",
     labelsFromLocalisation: true,
     //toolTipMessage: "Name of the area in which your property is located",
