@@ -621,19 +621,25 @@ export const download = (receiptQueryString, mode = "download") => {
   try {
     httpRequest("post", FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
       let queryStr = {};
-      if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService === 'PT'){
-       payloadReceiptDetails.Payments=getModifiedPayment(payloadReceiptDetails.Payments);
-       queryStr = [
-        { key: "key", value: "consolidatedreceipt" },
-        { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
-      ]
-      }
-      if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService === 'TL'){
+      if (payloadReceiptDetails.Payments[0].paymentDetails[0].businessService === 'PT') {
+        payloadReceiptDetails.Payments = getModifiedPayment(payloadReceiptDetails.Payments);
         queryStr = [
-         { key: "key", value: "tl-receipt" },
-         { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
-       ]
-       }
+          { key: "key", value: "consolidatedreceipt" },
+          { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
+        ]
+      }
+      else if (payloadReceiptDetails.Payments[0].paymentDetails[0].businessService === 'TL') {
+        queryStr = [
+          { key: "key", value: "tl-receipt" },
+          { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
+        ]
+      }
+      else {
+        queryStr = [
+          { key: "key", value: "misc-receipt" },
+          { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
+        ]
+      }
       if(payloadReceiptDetails&&payloadReceiptDetails.Payments&&payloadReceiptDetails.Payments.length==0){
         console.log("Could not find any receipts");
         return;
