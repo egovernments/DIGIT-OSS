@@ -100,8 +100,17 @@ const serviceUrl = serviceModuleName === "NewWS1" ? "/ws-services/wc/_update" : 
 const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
   //Search details for given application Number
   if (applicationNumber) {
-    !getQueryArg(window.location.href, "edited") &&
+    if (!getQueryArg(window.location.href, "edited")) {
       (await searchResults(action, state, dispatch, applicationNumber));
+    } else {
+      let statePath = state.screenConfiguration.preparedFinalObject;
+      dispatch(prepareFinalObject("WaterConnection[0]", statePath.applyScreen));
+
+      // to set documents 
+      if (statePath.applyScreen.documents !== undefined && statePath.applyScreen.documents !== null) {
+        setWSDocuments(statePath, dispatch);
+      }
+    }
     let connectionType = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].connectionType");
     if (connectionType === "Metered") {
       set(
@@ -186,7 +195,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       );
     }
 
-  if (status === "cancelled")
+    if (status === "cancelled")
       set(
         action,
         "screenConfig.components.div.children.headerDiv.children.helpSection.children.cancelledLabel.visible",
@@ -455,23 +464,15 @@ const screenConfig = {
 //----------------- search code (feb17)---------------------- //
 const searchResults = async (action, state, dispatch, applicationNumber) => {
   let queryObjForSearch = [{ key: "tenantId", value: tenantId }, { key: "applicationNumber", value: applicationNumber }]
-  let viewBillTooltip = [], estimate;
+  let viewBillTooltip = [], estimate, payload = [];
   if (service === "WATER") {
-    let payload = await getSearchResults(queryObjForSearch);
+    payload = [];
+    payload = await getSearchResults(queryObjForSearch);
     payload.WaterConnection[0].service = service;
-
-    // if (payload.WaterConnection[0].meterInstallationDate === 0) {
-    //   payload.WaterConnection[0].meterInstallationDate = 'NA';
-    // }
 
     // to set documents 
     if (payload.WaterConnection[0].documents !== null && payload.WaterConnection[0].documents !== "NA") {
-      await setDocuments(
-        payload,
-        "WaterConnection[0].documents",
-        "DocumentsData",
-        dispatch, "WS"
-      );
+      setWSDocuments(payload, dispatch);
     }
 
     const convPayload = findAndReplace(payload, "NA", null)
@@ -483,6 +484,7 @@ const searchResults = async (action, state, dispatch, applicationNumber) => {
     if (payload !== undefined && payload !== null) {
       dispatch(prepareFinalObject("WaterConnection[0]", payload.WaterConnection[0]));
     }
+
     estimate = await waterEstimateCalculation(queryObjectForEst, dispatch);
     if (estimate !== null && estimate !== undefined) {
       if (estimate.Calculation.length > 0) {
@@ -491,11 +493,18 @@ const searchResults = async (action, state, dispatch, applicationNumber) => {
       }
     }
   } else if (service === "SEWERAGE") {
-    let payload = await getSearchResultsForSewerage(queryObjForSearch, dispatch);
+    payload = [];
+    payload = await getSearchResultsForSewerage(queryObjForSearch, dispatch);
     payload.SewerageConnections[0].service = service;
     if (payload !== undefined && payload !== null) {
       dispatch(prepareFinalObject("WaterConnection[0]", payload.SewerageConnections[0]));
     }
+
+    // to set documents 
+    if (payload.SewerageConnections[0].documents !== null && payload.SewerageConnections[0].documents !== "NA") {
+      setWSDocuments(payload, dispatch);
+    }
+
     const convPayload = findAndReplace(payload, "NA", null)
     let queryObjectForEst = [{
       applicationNo: applicationNumber,
@@ -544,4 +553,12 @@ const processBills = async (data, viewBillTooltip, dispatch) => {
   dispatch(prepareFinalObject("viewBillToolipData", finalArray));
 }
 
+const setWSDocuments = async (obj, dispatch) => {
+  await setDocuments(
+    obj,
+    "WaterConnection[0].documents",
+    "DocumentsData",
+    dispatch, "WS"
+  );
+}
 export default screenConfig;

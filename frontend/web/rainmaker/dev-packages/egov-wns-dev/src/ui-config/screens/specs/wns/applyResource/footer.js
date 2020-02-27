@@ -25,7 +25,7 @@ const setReviewPageRoute = (state, dispatch) => {
   const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.applyScreen.applicationNo");
   const appendUrl =
     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
-  const reviewUrl = `${appendUrl}/wns/search-preview?applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
+  const reviewUrl = `${appendUrl}/wns/search-preview?applicationNumber=${applicationNumber}&tenantId=${tenantId}&edited=true`;
   dispatch(setRoute(reviewUrl));
 };
 const moveToReview = (state, dispatch) => {
@@ -75,7 +75,9 @@ const moveToReview = (state, dispatch) => {
     }
   }
 
-  return validateDocumentField;
+  if (validateDocumentField) {
+    setReviewPageRoute(state, dispatch);
+  }
 };
 
 const getMdmsData = async (state, dispatch) => {
@@ -105,6 +107,11 @@ const callBackForNext = async (state, dispatch) => {
   let isFormValid = true;
   let hasFieldToaster = false;
   if (activeStep === 0) {
+    let validateForm = validateFields(
+      "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children",
+      state,
+      dispatch
+    );
     let validatePropertyLocationDetails = validateFields(
       "components.div.children.formwizardFirstStep.children.Details.children.cardContent.children.propertyDetail.children.viewFour.children",
       state,
@@ -217,8 +224,21 @@ const callBackForNext = async (state, dispatch) => {
   // console.log(activeStep);
 
   if (activeStep === 1) {
-    if (moveToReview(state, dispatch)) { isFormValid = true; hasFieldToaster = false; }
-    else { isFormValid = false; hasFieldToaster = true; }
+    let isPropertyLocationCardValid = validateFields(
+      "components.div.children.formwizardSecondStep.children.propertyLocationDetails.children.cardContent.children.propertyDetailsConatiner.children",
+      state,
+      dispatch
+    );
+    let isSinglePropertyCardValid = validateFields(
+      "components.div.children.formwizardSecondStep.children.propertyDetails.children.cardContent.children.propertyDetailsConatiner.children.buildingDataCard.children.singleBuildingContainer.children.singleBuilding.children.cardContent.children.singleBuildingCard.children",
+      state,
+      dispatch
+    );
+    // if (!isSinglePropertyCardValid || !isPropertyLocationCardValid) {
+    //   isFormValid = false;
+    //   hasFieldToaster = true;
+    // }
+    isFormValid = true;
     await pushTheDocsUploadedToRedux(state, dispatch);
   }
   if (activeStep === 2 && process.env.REACT_APP_NAME !== "Citizen") {
@@ -264,15 +284,15 @@ const callBackForNext = async (state, dispatch) => {
       changeStep(state, dispatch);
     } else if (hasFieldToaster) {
       let errorMessage = {
-        labelName: "Please fill all mandatory fields!",
-        labelKey: "WS_FILL_MANDATORY_FIELDS"
+        labelName: "Please fill all mandatory fields and upload the documents!",
+        labelKey: "ERR_UPLOAD_MANDATORY_DOCUMENTS_TOAST"
       };
       switch (activeStep) {
         case 1:
           errorMessage = {
             labelName:
-              "Please upload all Mandatory Document!",
-            labelKey: "WS_UPLOAD_MANDATORY_DOCUMENTS"
+              "Please check the Missing/Invalid field for Property Details, then proceed!",
+            labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_PROPERTY_TOAST"
           };
           break;
         case 2:
@@ -334,13 +354,6 @@ const acknoledgementForBothWaterAndSewerage = async (state, activeStep, isFormVa
       labelKey: "ERR_UPLOAD_MANDATORY_DOCUMENTS_TOAST"
     };
     switch (activeStep) {
-      case 0:
-        errorMessage = {
-          labelName:
-            "Please check the Missing/Invalid field for Property Details, then proceed!",
-          labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_PROPERTY_TOAST"
-        };
-        break;
       case 1:
         errorMessage = {
           labelName:
