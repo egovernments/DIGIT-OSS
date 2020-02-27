@@ -41,8 +41,18 @@ class TastStatusContainer extends React.Component {
 
   render() {
     const { classes, ProcessInstances } = this.props;
-    const currentObj =
+    let currentObj =
       ProcessInstances && ProcessInstances[ProcessInstances.length - 1];
+      if(currentObj && currentObj.businessService && currentObj.businessService === "BPA"){
+        let assigness = [];
+          if(currentObj.assignes) {
+            currentObj.assignes.forEach(user => {
+              assigness.push(user.name);
+            });
+            currentObj.assignee={};
+            currentObj.assignee.name = assigness.join(',');
+          }
+      }
     return (
       <div>
         <Card className="">

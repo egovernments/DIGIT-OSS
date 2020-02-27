@@ -40,7 +40,7 @@ function MultiCardDownloadGrid(props) {
   const { classes, data, ...rest } = props;
   return (
     <Grid container {...rest}>
-      {data.map((item, key) => {
+      {data && data.length && data.map((item, key) => {
         return (
           <Grid
             item

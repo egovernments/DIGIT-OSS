@@ -85,6 +85,7 @@ export const fetchData = async (
     /*Mseva 2.0 */
 
     var searchConvertedArray = [];
+    var sortConvertedArray = [];
     if (response && response.Licenses && response.Licenses.length > 0) {
       const businessIdToOwnerMapping = await getWorkFlowData(response.Licenses);
 
@@ -96,6 +97,7 @@ export const fetchData = async (
         let status = getTextToLocalMapping(
           "WF_ARCHITECT_" + get(element, "status")
         );
+        let modifiedTime = element.auditDetails.lastModifiedTime;
         let licensetypeFull =
           element.tradeLicenseDetail.tradeUnits[0].tradeType;
         if (licensetypeFull.split(".").length > 1) {
@@ -128,7 +130,9 @@ export const fetchData = async (
             "sla",
             null
           ),
-          tenantId: get(element, "tenantId", null)
+          tenantId: get(element, "tenantId", null),
+          modifiedTime: modifiedTime,
+          sortNumber: 0
         });
       });
 
@@ -147,6 +151,7 @@ export const fetchData = async (
       service += " - "+getTextToLocalMapping(
         "BPA_SERVICETYPE_" + get(element, "serviceType")
       );
+      let modifiedTime = element.auditDetails.lastModifiedTime;
       let primaryowner = "-";
       let owners = get(element, "owners", [])
       owners.map(item=>{
@@ -170,15 +175,21 @@ export const fetchData = async (
           "sla",
           null
         ),
-        tenantId: get(element, "tenantId", null)
+        tenantId: get(element, "tenantId", null),
+        modifiedTime: modifiedTime,
+        sortNumber: 1
       })});
     }
 
-    dispatch(prepareFinalObject("searchResults", searchConvertedArray));
+    sortConvertedArray = [].slice.call(searchConvertedArray).sort(function(a,b){ 
+      return new Date(b.modifiedTime) - new Date(a.modifiedTime) || a.sortNumber - b.sortNumber;
+     });
+
+    dispatch(prepareFinalObject("searchResults", sortConvertedArray));
     dispatch(
-      prepareFinalObject("myApplicationsCount", searchConvertedArray.length)
+      prepareFinalObject("myApplicationsCount", sortConvertedArray.length)
     );
-    const myApplicationsCount = searchConvertedArray.length;
+    const myApplicationsCount = sortConvertedArray.length;
     if (fromMyApplicationPage) {
       dispatch(
         handleField(

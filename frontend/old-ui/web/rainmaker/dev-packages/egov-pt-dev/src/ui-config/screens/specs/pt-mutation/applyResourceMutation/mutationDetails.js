@@ -43,7 +43,7 @@ import {
                 sm: 12,
                 md: 6
               },
-              jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].relationship",
+              jsonPath:"Property.additionalDetails.isMutationInCourt",
               props: {
                 label: {
                   name: "Is Mutation Pending in Court?",
@@ -61,7 +61,7 @@ import {
                     value: "NO"
                   }
                 ],
-               // jsonPath:"Licenses[0].tradeLicenseDetail.owners[0].relationship",
+                // jsonPath:"Property.additionalDetails.isMutationInCourt",
                 required: true
               },
               required: true,
@@ -76,7 +76,7 @@ import {
                 sm: 12,
                 md: 6
               },
-              jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].relationship",
+              jsonPath:"Property.additionalDetails.isPropertyUnderGovtPossession",
               props: {
                 label: {
                   name: "Is Property or Part of Property under State/Central Government Acquisition? ",
@@ -94,7 +94,7 @@ import {
                     value: "NO"
                   }
                 ],
-                //jsonPath:"Licenses[0].tradeLicenseDetail.owners[0].relationship",
+                // jsonPath:"Property.additionalDetails.isPropertyUnderGovtPossession",
                 required: true
               },
               required: true,
@@ -114,7 +114,7 @@ import {
                 labelKey: "PT_MUTATION_COURT_CASE_DETAILS_PLACEHOLDER"
               },
               pattern: getPattern("Address"),
-      //        jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress"
+              jsonPath: "Property.additionalDetails.caseDetails"
             }),
             govtAcquisitionDetails: getTextField({
               label: {
@@ -129,7 +129,7 @@ import {
                 labelKey: "PT_MUTATION_GOVT_ACQUISITION_DETAILS_PLACEHOLDER"
               },
               pattern: getPattern("Address"),
-           //   jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress"
+              jsonPath: "Property.additionalDetails.govtAcquisitionDetails"
             }),
 
           })

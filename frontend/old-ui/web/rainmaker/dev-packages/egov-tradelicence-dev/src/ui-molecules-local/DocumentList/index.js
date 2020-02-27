@@ -84,7 +84,8 @@ class DocumentList extends Component {
       let simplified = Object.values(uploadedDocuments).map(item => item[0]);
       let uploadedDocumentsArranged = documents.reduce((acc, item, ind) => {
         const index = simplified.findIndex(i => i.documentType === item.name);
-        !isUndefined(index) && (acc[ind] = [simplified[index]]);
+        // !isUndefined(index) && (acc[ind] = [simplified[index]]);
+        index > -1 && (acc[ind] = [simplified[index]]);
         return acc;
       }, {});
 
@@ -151,7 +152,7 @@ class DocumentList extends Component {
     let { uploadedDocuments } = this.state;
     const { prepareFinalObject, documents, preparedFinalObject } = this.props;
     const jsonPath = documents[remDocIndex].jsonPath;
-    getQueryArg(window.location.href, "action") === "edit" &&
+   (getQueryArg(window.location.href, "action") === "edit"||getQueryArg(window.location.href, "action") === "EDITRENEWAL" )&&
       uploadedDocuments[remDocIndex][0].id &&
       prepareFinalObject("LicensesTemp[0].removedDocs", [
         ...get(preparedFinalObject, "LicensesTemp[0].removedDocs", []),
@@ -183,7 +184,9 @@ class DocumentList extends Component {
   };
   render() {
     const { classes, documents, documentTypePrefix, description ,imageDescription ,inputProps } = this.props;
+    
     const { uploadedIndex } = this.state;
+    console.log("prpsssss",uploadedIndex);
     return (
       <div style={{ paddingTop: 10 }}>
         {documents &&

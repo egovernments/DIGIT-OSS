@@ -37,6 +37,10 @@ const PaymentRedirectPage = Loadable({
   loader: () => import("./PaymentRedirectPage"),
   loading: () => <Loading />
 });
+const ResubmitActionContainer = Loadable({
+  loader: () => import("./ResubmitActionContainer"),
+  loading: () => <Loading />
+});
 
 const DialogContainer = Loadable({
   loader: () => import("./DialogContainer"),
@@ -45,6 +49,11 @@ const DialogContainer = Loadable({
 
 const ViewBreakupContainer = Loadable({
   loader: () => import("./ViewbreakupDialogContainer"),
+  loading: () => <Loading />
+});
+
+const RadioGroupContainer = Loadable({
+  loader: () => import("./RadioGroupContainer"),
   loading: () => <Loading />
 });
 
@@ -57,6 +66,8 @@ export {
   AutosuggestContainer,
   DocumentListContainer,
   PaymentRedirectPage,
+  ResubmitActionContainer,
   ViewBreakupContainer,
-  DialogContainer
+  DialogContainer,
+  RadioGroupContainer
 };

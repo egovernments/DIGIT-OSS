@@ -22,7 +22,7 @@ export const documentsSummary = getCommonGrayCard({
         },
         ...getCommonSubHeader({
           labelName: "Documents",
-          labelKey: "NOC_SUMMARY_DOCUMENTS_HEADER﻿"
+          labelKey: "PT_SUMMARY_DOCUMENTS_HEADER"
         })
       },
       editSection: {
@@ -38,25 +38,25 @@ export const documentsSummary = getCommonGrayCard({
           xs: 4,
           align: "right"
         },
-        children: {
-          editIcon: {
-            uiFramework: "custom-atoms",
-            componentPath: "Icon",
-            props: {
-              iconName: "edit"
-            }
-          },
-          buttonLabel: getLabel({
-            labelName: "Edit",
-            labelKey: "PT_EDIT"
-          })
-        },
-        onClickDefination: {
-          action: "condition",
-          callBack: (state, dispatch) => {
-            gotoApplyWithStep(state, dispatch, 1);
-          }
-        }
+        // children: {
+        //   editIcon: {
+        //     uiFramework: "custom-atoms",
+        //     componentPath: "Icon",
+        //     props: {
+        //       iconName: "edit"
+        //     }
+        //   },
+          // buttonLabel: getLabel({
+          //   labelName: "Edit",
+          //   labelKey: "PT_EDIT"
+          // })
+      //  },
+        // onClickDefination: {
+        //   action: "condition",
+        //   callBack: (state, dispatch) => {
+        //     gotoApplyWithStep(state, dispatch, 1);
+        //   }
+        // }
       }
     }
   },

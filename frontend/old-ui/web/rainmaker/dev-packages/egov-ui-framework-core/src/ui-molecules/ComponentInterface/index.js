@@ -13,7 +13,7 @@ import { getModuleName } from "./moduleConfig";
 class ComponentInterface extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { module: null };
+    this.state = { module: null,error: null, errorInfo: null };
   }
   componentDidMount() {
     const { componentPath, uiFramework, moduleName } = this.props;
@@ -100,6 +100,15 @@ class ComponentInterface extends React.Component {
     this.setState({ module: LoadableComponent });
   }
 
+  componentDidCatch(error, errorInfo) {
+    // Catch errors in any components below and re-render with error message
+    this.setState({
+      error: error,
+      errorInfo: errorInfo
+    })
+    // You can also log error messages to an error reporting service here
+  }
+
   render() {
     const { module: Component } = this.state; // Assigning to new variable names @see: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment
     let {
@@ -114,6 +123,17 @@ class ComponentInterface extends React.Component {
       menu,
       bpaTradeType
     } = this.props;
+
+    if (this.state.errorInfo) {
+      // Error path
+      console.error("Egov-ui-framework-error",this.state.error && this.state.error.toString());
+      console.error("Egov-ui-framework-errorInfo",this.state.errorInfo.componentStack);
+      console.error("Egov-ui-framework-component-details",this.props);
+
+
+       return null;
+    }
+    
     if (visible && !isEmpty(roleDefination)) {
       const splitList = get(roleDefination, "rolePath").split(".");
       const localdata = JSON.parse(localStorageGet(splitList[0]));
@@ -208,6 +228,8 @@ const mapStateToProps = state => {
     jsonPath = "FireNOCs[0].fireNOCDetails.status";
   } else if (moduleName === "NewTL") {
     jsonPath = "Licenses[0].status";
+  } else if (moduleName === "BPA") {
+    jsonPath = "BPA.status";
   } else {
     jsonPath = "Licenses[0].status";
   }

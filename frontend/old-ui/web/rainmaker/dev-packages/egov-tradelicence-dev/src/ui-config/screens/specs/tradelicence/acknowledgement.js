@@ -692,6 +692,51 @@ const getAcknowledgementCard = (
       },
       gotoHomeFooter
     };
+  }else if ((purpose === "EDITRENEWAL" || purpose === "DIRECTRENEWAL") && status === "success") {
+    return {
+
+      header: getCommonContainer({
+       Commonheader: getCommonHeader({
+        labelName: `Application for Trade License Renewal ${financialYearText}`,
+        labelKey: "TL_APPLICATION_TRADE_LICENSE_RENEWAL",
+        dynamicArray: [financialYearText]
+      }),
+      licenseNumber: {
+        uiFramework: "custom-atoms-local",
+        moduleName: "egov-tradelicence",
+        componentPath: "ApplicationNoContainer",
+        props: {
+          number: "NA"
+        },
+        visible: true 
+      }
+    }),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "Application Renewed Successfully",
+              labelKey: "TL_FORWARD_SUCCESS_MESSAGE_MAIN_RENEWAL"
+            },
+            body: {
+              labelName:
+                "A notification regarding above application status has been sent to trade owner at registered Mobile No.",
+              labelKey: "TL_APPLICATION_FORWARD_SUCCESS"
+            },
+            tailText: {
+              labelName: "Application No.",
+              labelKey: "TL_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+            },
+            number: applicationNumber
+          })
+        }
+      },
+      gotoHomeFooter
+    };
   }
 };
 

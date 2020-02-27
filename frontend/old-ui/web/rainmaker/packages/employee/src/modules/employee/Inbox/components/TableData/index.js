@@ -588,7 +588,7 @@ class TableData extends Component {
             className={`inbox-tabs-container ${classes.textColorPrimary}`}
             indicatorColor="primary"
             textColor="primary"
-            style={{ borderBottom: "1px rgba(0, 0, 0, 0.11999999731779099) solid", textColor: "red" }}
+            style={{ borderBottom: "1px solid rgb(211, 211, 211)", textColor: "red", backgroundColor: "white", }}
           >
             {tabData.map((item) => {
               return (

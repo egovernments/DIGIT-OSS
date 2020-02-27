@@ -13,7 +13,7 @@ import {
 } from "./acknowledgementResource/footers";
 import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { getBpaSearchResults } from "../../../../ui-utils/commons";
+import { getAppSearchResults } from "../../../../ui-utils/commons";
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import generatePdf from "../utils/generatePdfForBpa";
 import { Icon } from "egov-ui-framework/ui-atoms";
@@ -68,7 +68,7 @@ const getAcknowledgementCard = (
   secondNumber,
   tenant
 ) => {
-  if (purpose === "apply" && status === "success") {
+  if (purpose === "APPLY" && status === "success") {
     loadPdfGenerationDataForBpa(applicationNumber, tenant);
     return {
       header:getHeader(applicationNumber),
@@ -193,7 +193,109 @@ const getAcknowledgementCard = (
         tenant
       )
     };
-  } else if (purpose === "pay" && status === "success") {
+  } else if (purpose === "SEND_TO_CITIZEN" && status === "success") {
+    loadPdfGenerationDataForBpa(applicationNumber, tenant);
+    return {
+      header:getHeader(applicationNumber),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "Application Successfully Sent To Citizen",
+              labelKey: "BPA_APPLICATION_SENT_TO_CITIZEN_SUCCESS_MESSAGE_MAIN"
+            },
+            tailText: {
+              labelName: "Application No.",
+              labelKey: "NOC_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+            },
+            number: applicationNumber
+          })
+        }
+      },
+      iframeForPdf: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div"
+      },
+      applicationSuccessFooter: applicationSuccessFooter(
+        state,
+        dispatch,
+        applicationNumber,
+        tenant
+      )
+    };
+  } else if (purpose === "APPROVE" && status === "success") {
+    loadPdfGenerationDataForBpa(applicationNumber, tenant);
+    return {
+      header:getHeader(applicationNumber),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "Application Approved Successfully",
+              labelKey: "BPA_APPLICATION_APPROVED_SUCCESS_MESSAGE_MAIN"
+            },
+            tailText: {
+              labelName: "Application No.",
+              labelKey: "NOC_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+            },
+            number: applicationNumber
+          })
+        }
+      },
+      iframeForPdf: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div"
+      },
+      applicationSuccessFooter: applicationSuccessFooter(
+        state,
+        dispatch,
+        applicationNumber,
+        tenant
+      )
+    };
+  } else if (purpose === "SEND_TO_ARCHITECT" && status === "success") {
+    loadPdfGenerationDataForBpa(applicationNumber, tenant);
+    return {
+      header:getHeader(applicationNumber),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "Application Send To Architect Successfully",
+              labelKey: "BPA_APPLICATION_SEND_TO_ARCHITECT_SUCCESS_MESSAGE_MAIN"
+            },
+            tailText: {
+              labelName: "Application No.",
+              labelKey: "NOC_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+            },
+            number: applicationNumber
+          })
+        }
+      },
+      iframeForPdf: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div"
+      },
+      applicationSuccessFooter: applicationSuccessFooter(
+        state,
+        dispatch,
+        applicationNumber,
+        tenant
+      )
+    };
+  }  else if (purpose === "pay" && status === "success") {
     loadPdfGenerationDataForBpa(applicationNumber, tenant);
     return {
       header,
@@ -269,8 +371,8 @@ const getAcknowledgementCard = (
             icon: "close",
             backgroundColor: "#E54D42",
             header: {
-              labelName: "BPA Application Rejected",
-              labelKey: "BPA_APPROVAL_REJ_MESSAGE_HEAD"
+              labelName: "Application for permit order is rejected",
+              labelKey: "BPA_APPROVAL_REJECTED_MESSAGE_HEAD"
             },
             body: {
               labelName:
@@ -461,7 +563,7 @@ const setApplicationData = async (dispatch, applicationNumber, tenant) => {
       value: applicationNumber
     }
   ];
-  const response = await getBpaSearchResults(queryObject);
+  const response = await getAppSearchResults(queryObject);
   dispatch(prepareFinalObject("BPA", get(response, "Bpa", [])));
 };
 

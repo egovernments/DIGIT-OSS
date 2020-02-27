@@ -28,6 +28,7 @@ config:
       image-name: employee-mcs
 
 -   name: builds/frontend/ui-uploader
+
     build:
     - work-dir: web/ui-uploader/
       image-name: ui-uploader
@@ -37,7 +38,7 @@ config:
     - work-dir: web/dss-dashboard/
       dockerfile: web/dss-dashboard/docker/Dockerfile
       image-name: dss-dashboard
-
+      
 -   name: builds/frontend/common-screen
     build:
     - work-dir: web/egov-common-screen/

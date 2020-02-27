@@ -13,9 +13,9 @@ const labelStayle = {
 const returnTransferData = (value) => {
   return Object.keys(value).map((key) => {
     return (
-      <div className="flex-child" style={{textAlign:"left"}}>
+      <div className="flex-child col-sm-3" style={{textAlign:"left"}}>
         <Label label={key} fontSize="12px" labelStayle={labelStayle} />
-        <span className="value">{value[key]}</span>
+        <Label label={value[key]} labelClassName="value" fontSize="16px" />
       </div>
     );
   });

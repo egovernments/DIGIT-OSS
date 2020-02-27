@@ -56,7 +56,7 @@ export const tradeLicenseApplication = getCommonCard({
       required: false,
       pattern: /^[a-zA-Z0-9-]*$/i,
       errorMessage: "ERR_INVALID_TRADE_LICENSE_NO",
-      jsonPath: "searchScreen.licenseNumber"
+      jsonPath: "searchScreen.licenseNumbers"
     }),
     ownerMobNo: getTextField({
       label: {
@@ -81,29 +81,33 @@ export const tradeLicenseApplication = getCommonCard({
       errorMessage: "ERR_INVALID_MOBILE_NUMBER"
     })
   }),
-  appStatusAndToFromDateContainer: getCommonContainer({
-    applicationNo: getSelectField({
-      label: {
-        labelName: "Application status",
-        labelKey: "TL_HOME_SEARCH_RESULTS_APP_STATUS_LABEL"
-      },
-      placeholder: {
-        labelName: "Select Application Status",
-        labelKey: "TL_HOME_SEARCH_RESULTS_APP_STATUS_PLACEHOLDER"
-      },
-      required: false,
-      localePrefix: {
-        moduleName: "WF",
-        masterName: "NEWTL"
-      },
-      jsonPath: "searchScreen.status",
-      sourceJsonPath: "applyScreenMdmsData.searchScreen.status",
-      gridDefination: {
-        xs: 12,
-        sm: 4
-      }
-    }),
-
+  applicationTypeAndToFromDateContainer: getCommonContainer({
+    applicationType: {
+      ...getSelectField({
+        label: {
+          labelName: "Application Type",
+          labelKey: "TL_APPLICATION_TYPE_LABEL"
+        },
+        placeholder: {
+          labelName: "Select Application Type",
+          labelKey: "TL_APPLICATION_TYPE_PLACEHOLDER"
+        },
+        localePrefix: {
+          moduleName: "TradeLicense",
+          masterName: "ApplicationType"
+        },
+        jsonPath:
+          "searchScreen.applicationType",
+        sourceJsonPath: "applyScreenMdmsData.searchScreen.applicationType",
+        gridDefination: {
+          xs: 12,
+          sm: 4
+        },
+        props: {
+          className: "applicant-details-error"
+        }
+      })
+    },
     fromDate: getDateField({
       label: { labelName: "From Date", labelKey: "TL_COMMON_FROM_DATE_LABEL" },
       placeholder: {
@@ -136,6 +140,60 @@ export const tradeLicenseApplication = getCommonCard({
       required: false
     })
   }),
+  appStatusContainer: getCommonContainer({
+    applicationNo: getSelectField({
+      label: {
+        labelName: "Application status",
+        labelKey: "TL_HOME_SEARCH_RESULTS_APP_STATUS_LABEL"
+      },
+      placeholder: {
+        labelName: "Select Application Status",
+        labelKey: "TL_HOME_SEARCH_RESULTS_APP_STATUS_PLACEHOLDER"
+      },
+      required: false,
+      localePrefix: {
+        moduleName: "WF",
+        masterName: "NEWTL"
+      },
+      jsonPath: "searchScreen.status",
+      data:[
+        {
+          code : "INITIATED"
+        },
+        {
+          code : "APPLIED"
+        },
+        {
+          code : "FIELDINSPECTION"
+        },
+        {
+          code : "APPROVED"
+        },
+        {
+          code : "CANCELLED"
+        },
+        {
+          code : "REJECTED"
+        },
+        {
+          code : "CITIZENACTIONREQUIRED"
+        },
+        {
+          code : "PENDINGPAYMENT"
+        },
+        {
+          code : "PENDINGAPPROVAL"
+        }
+      ],
+      // sourceJsonPath: "applyScreenMdmsData.searchScreen.status",
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      }
+    }),
+
+  }),
+  
 
   button: getCommonContainer({
     // firstCont: {

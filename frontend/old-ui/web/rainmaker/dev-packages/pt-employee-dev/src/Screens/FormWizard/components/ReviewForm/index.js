@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Icon, Card, Dialog } from "components";
+import Label from "egov-ui-kit/utils/translationNode";
 import AddRebateExemption from "./components/addRebateBox";
 import PropertyTaxDetailsCard from "./components/PropertyTaxDetails";
 import CalculationDetails from "./components/CalculationDetails";
@@ -7,10 +8,14 @@ import propertyAddressConfig from "./formConfigs/propertyAddress";
 import { connect } from "react-redux";
 import formHoc from "egov-ui-kit/hocs/form";
 import EditIcon from "./components/EditIcon";
-
+import {getQueryValue,
+  } from "egov-ui-kit/utils/PTCommon";
+import { convertToArray } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/propertyCreateUtils";
 import PropertyAddressInfo from 'egov-ui-kit/common/propertyTax/Property/components/PropertyAddressInfo';
 import AssessmentInfo from 'egov-ui-kit/common/propertyTax/Property/components/AssessmentInfo';
 import OwnerInfo from 'egov-ui-kit/common/propertyTax/Property/components/OwnerInfo';
+import DocumentsInfo from "egov-ui-kit/common/propertyTax/Property/components/DocumentsInfo";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 
 import "./index.css";
@@ -32,6 +37,9 @@ class ReviewForm extends Component {
     calculationDetails: false,
   };
 
+  componentDidMount() {
+    this.props.getEstimates();
+  }
   handleOptionsChange = (event, value) => {
     this.setState({ valueSelected: value });
   };
@@ -65,6 +73,7 @@ class ReviewForm extends Component {
 
   onEditButtonClick = (index) => {
     let { onTabClick } = this.props;
+    this.props.prepareFinalObject("propertiesEdited", true);
     onTabClick(index);
   };
 
@@ -72,21 +81,33 @@ class ReviewForm extends Component {
     let { addRebateBox, updateCalculation, onEditButtonClick } = this;
     let { showRebateBox } = this.state;
     let { stepZero, stepTwo, stepOne, estimationDetails, importantDates, totalAmount } = this.props;
-    const { generalMDMSDataById = {} } = this.props;
+    const { generalMDMSDataById = {},location={} } = this.props;
+    const { search } = location;
+    const isReassess = Boolean(getQueryValue(search, "isReassesment").replace('false', ''));
+    const isAssess = Boolean(getQueryValue(search, "isAssesment").replace('false', ''));
     return (
       <div>
         <Card
           textChildren={
             <div className="col-sm-12 col-xs-12" style={{ alignItems: "center" }}>
-              <PropertyTaxDetailsCard
+              <div>
+                <Label
+                  labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.87)", fontWeight: "400", lineHeight: "19px" }}
+                  label={'PT_APPLICATION_SUMMARY'}
+                  fontSize="20px"
+                />
+
+              </div>
+              {(isAssess||isReassess) && <PropertyTaxDetailsCard
                 estimationDetails={estimationDetails}
                 importantDates={importantDates}
                 addRebateBox={addRebateBox}
                 openCalculationDetails={this.openCalculationDetails}
-              />
+              />}
               <PropertyAddressInfo generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={<EditIcon onIconClick={() => onEditButtonClick(0)} />}></PropertyAddressInfo>
               <AssessmentInfo generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={<EditIcon onIconClick={() => onEditButtonClick(1)} />}></AssessmentInfo>
-              <OwnerInfo generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={<EditIcon onIconClick={() => onEditButtonClick(2)} />}></OwnerInfo>
+              <OwnerInfo generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} ></OwnerInfo>
+              <DocumentsInfo generalMDMSDataById={generalMDMSDataById} documentsUploaded={this.props.documentsUploadRedux} editIcon={<EditIcon onIconClick={() => onEditButtonClick(3)} />}></DocumentsInfo>
             </div>
           }
         />
@@ -117,15 +138,21 @@ class ReviewForm extends Component {
   }
 }
 const mapStateToProps = (state, ownProps) => {
-  const { common = {} } = state;
+  const { common = {}, screenConfiguration } = state;
   const { generalMDMSDataById } = common || {};
+  const { preparedFinalObject} = screenConfiguration;
+  let { documentsUploadRedux } = preparedFinalObject;
+  documentsUploadRedux = convertToArray(documentsUploadRedux);
   return {
     ownProps,
     generalMDMSDataById,
+    documentsUploadRedux
   };
 };
 const mapDispatchToProps = (dispatch) => ({
   setRoute: (route) => dispatch({ type: "SET_ROUTE", route }),
+  prepareFinalObject: (jsonPath, value) =>
+  dispatch(prepareFinalObject(jsonPath, value)),
 });
 export default connect(
   mapStateToProps,

@@ -1,0 +1,39 @@
+.home-search-input-style {
+    border-radius: 28 !important;
+    z-index: 1100;
+    top: -22px;
+  }
+  
+  .dashboard-search-main-cont {
+    width: 95.5% !important;
+  }
+  
+  @media only screen and (min-width: 768px) {
+    .dashboard-search-main-cont {
+      width: 82.5% !important;
+    }
+  }
+    
+  @media only screen and (max-width: 768px) {
+      .search-background {
+        position: fixed !important;
+        width: 100% !important;
+        height: 104px;
+        background-color: #128C7E !important;
+        z-index: 9999 !important;
+    }
+    .header-iconText{
+        display: flex;
+       // justify-content: center;
+       margin-left: 10px;
+       margin-top: 13px;
+
+    }
+    .list-style{
+     // margin-top: 66px;
+    }
+    .whatsappScreen{
+      padding:100px 0px 0px 0px !important;
+    }
+  }
+  

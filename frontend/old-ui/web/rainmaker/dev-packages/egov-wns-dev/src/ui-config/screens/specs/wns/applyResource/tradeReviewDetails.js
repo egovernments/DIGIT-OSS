@@ -6,7 +6,7 @@ import {
 
 import { getFeesEstimateCard, getDialogButton } from "../../utils";
 
-import { getReviewTrade } from "./review-trade";
+import { getReviewConnectionDetails } from "./review-trade";
 import { getReviewOwner } from "./review-owner";
 import { getReviewDocuments } from "./review-documents";
 
@@ -16,7 +16,7 @@ const estimate = getCommonGrayCard({
   })
 });
 
-const reviewTradeDetails = getReviewTrade();
+const reviewConnectionDetails = getReviewConnectionDetails();
 
 const reviewOwnerDetails = getReviewOwner();
 
@@ -28,7 +28,7 @@ export const connectionDetails = getCommonCard({
     labelKey: "TL_SUMMARY_HEADER"
   }),
   estimate,
-  reviewTradeDetails,
+  reviewConnectionDetails,
   reviewOwnerDetails,
   reviewDocumentDetails
 });

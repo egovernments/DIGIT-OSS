@@ -27,7 +27,12 @@ const mapStateToProps = state => {
     "screenConfiguration.preparedFinalObject.documentsContract",
     []
   );
-  return { documentsList };
+  let bpaDetails = get(
+    state,
+    "screenConfiguration.preparedFinalObject.BPA",
+    []
+  )
+  return { documentsList, bpaDetails };
 };
 
 export default withStyles(styles)(

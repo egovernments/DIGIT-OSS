@@ -1,0 +1,19 @@
+.owner-info-card {
+    margin-bottom: 10px;
+    margin-top: 5px;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+}
+
+.header-button-container {
+    display: flex;
+}
+
+@media only screen and (max-width: 768px) {
+    .header-button-container {
+        padding-top: 12px;
+    }
+    .ownerinfo-header {
+        display: block !important;
+    }
+  }

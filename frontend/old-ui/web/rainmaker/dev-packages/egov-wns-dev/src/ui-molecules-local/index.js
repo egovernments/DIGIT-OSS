@@ -51,6 +51,18 @@ const HowItWorks = Loadable({
   loader: () => import("./HowItWorks"),
   loading: () => <Loading />
 });
+const NewConnection = Loadable({
+  loader: () => import("./NewConnection"),
+  loading: () => <Loading />
+});
+const MyApplications = Loadable({
+  loader: () => import("./MyApplications"),
+  loading: () => <Loading />
+});
+const Applications = Loadable({
+  loader: () => import("./Applications"),
+  loading: () => <Loading />
+});
 
 const MyConnections = Loadable({
   loader: () => import("./MyConnections"),
@@ -81,6 +93,10 @@ const MeterReadingEditable = Loadable({
   loader: () => import("./MeterReadingEditable"),
   loading: () => <Loading />
 })
+const ActionDialog = Loadable({
+  loader: () => import("./ActionDialog"),
+  loading: () => <Loading />
+})
 
 // const PropertyTaxDetails = Loadable({
 //   loader: () => import("./PropertyTaxDetails"),
@@ -98,10 +114,15 @@ export {
   FeesEstimateCard,
   HowItWorks,
   PastPayments,
+  ActionDialog,
   DividerWithLabel,
   MyConnections,
   PastPaymentsDetails,
   MeterReading,
   MeterReadingEditable,
+  NewConnection,
+  MyApplications,
+  Applications
+
   // PropertyTaxDetails
 };

@@ -16,7 +16,7 @@ const styles = {
     },
     whiteCard: {
         padding: 18,
-        marginTop: 24,
+        marginTop: 2,
         // boxShadow: "none",
         borderRadius: 0,
         backgroundColor: "#ffffff"
@@ -53,8 +53,13 @@ const styles = {
     }
 };
 
+const date = (from, to) => {
+    if (from !== undefined && to !== 'NA') { return convertEpochToDate(from) + " - " + convertEpochToDate(to); }
+    else { return "NA" }
+}
+
 function FeesEstimateCard(props) {
-    const { classes, estimate } = props;
+    const { classes, estimate, isCardrequired } = props;
     let sortedArray = [], totalAmount, dueDate;
     const totalHeadClassName = "tl-total-amount-value " + classes.bigheader;
     if (estimate !== null && estimate !== undefined && estimate.fees !== undefined && estimate.fees !== null && estimate.fees.length > 0) {
@@ -72,17 +77,18 @@ function FeesEstimateCard(props) {
             <Grid xs={12} sm={12}>
                 <Typography variant="body2"
                     align="right"
-                    className="tl-total-amount-text" >
+                    style={{ marginTop: -20 }}
+                    className="tl-total-amount-text">
                     <LabelContainer labelName="Total Amount" labelKey="WS_COMMON_TOTAL_AMT" />
                 </Typography>
                 <Typography className={totalHeadClassName} align="right" >Rs {totalAmount}</Typography>
             </Grid>
             <Grid xs={12} sm={7}>
-                <div style={{ marginTop: 48, maxWidth: 600 }}>
+                <div style={{ maxWidth: 600 }}>
                     {
                         sortedArray.length > 0 && sortedArray.map(fee =>
                             <div>
-                                <Grid container>
+                                {!isCardrequired && <Grid container>
                                     <Grid item xs={6}>
                                         <Typography variant="body2" >
                                             <LabelContainer labelKey="WS_VIEW_BILL_BILLING_PERIOD_LABEL" />
@@ -93,10 +99,11 @@ function FeesEstimateCard(props) {
                                         style={styles.taxStyles}
                                         className="tl-application-table-total-value" >
                                         <Typography variant="body2">
-                                            {convertEpochToDate(fee.fromPeriod) + " - " + convertEpochToDate(fee.toPeriod)}
+                                            {date(fee.fromPeriod, fee.toPeriod)}
                                         </Typography>
                                     </Grid>
                                 </Grid>
+                                }
                                 <Grid container> {
                                     fee.bill.map(element => {
                                         if (element !== undefined && element.key !== undefined) {
@@ -130,7 +137,7 @@ function FeesEstimateCard(props) {
                                 </Grid>
                             </div>
                         )}
-                    < Divider style={{ marginBottom: 16 }} />
+                    < Divider />
                     <Grid container >
                         <Grid item xs={6}>
                             <Typography variant="body2" >
@@ -152,7 +159,7 @@ function FeesEstimateCard(props) {
                 sm={1} >
             </Grid>
             <Grid xs={12} sm={4}>
-                <Card className={classes.whiteCard}
+                {!isCardrequired && <Card className={classes.whiteCard}
                     style={{ backgroundColor: '#fff', boxShadow: "none" }} >
                     <Grid container >
                         <Grid xs={12}
@@ -169,6 +176,7 @@ function FeesEstimateCard(props) {
                         </Grid>
                     </Grid>
                 </Card >
+                }
                 {/* // ) : null} */}
             </Grid>
         </Grid >

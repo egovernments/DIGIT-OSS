@@ -7,6 +7,7 @@ import {
   getLabelWithValue
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { gotoApplyWithStep } from "../../utils/index";
+import { checkValueForNA } from "../../utils";
 
 const mutationDetails =  getCommonGrayCard({
   mutationDetailsContainer:getCommonContainer({
@@ -17,7 +18,8 @@ const mutationDetails =  getCommonGrayCard({
       },
       {
         jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].name"
+          "Property.additionalDetails.isMutationInCourt",
+          callBack: checkValueForNA
       }
     ), documentNo: getLabelWithValue(
       {
@@ -26,7 +28,8 @@ const mutationDetails =  getCommonGrayCard({
       },
       {
         jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].fatherOrHusbandName"
+          "Property.additionalDetails.caseDetails",
+          callBack: checkValueForNA
       }
     ), documentDate: getLabelWithValue(
       {
@@ -35,7 +38,8 @@ const mutationDetails =  getCommonGrayCard({
       },
       {
         jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].gender"
+          "Property.additionalDetails.isPropertyUnderGovtPossession",
+          callBack: checkValueForNA
       }
     ), documentValue: getLabelWithValue(
       {
@@ -44,7 +48,8 @@ const mutationDetails =  getCommonGrayCard({
       },
       {
         jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].pan"
+          "Property.additionalDetails.govtAcquisitionDetails",
+          callBack: checkValueForNA
       }
     )
   })
@@ -81,25 +86,25 @@ export const mutationSummary = getCommonGrayCard({
           xs: 4,
           align: "right"
         },
-        children: {
-          editIcon: {
-            uiFramework: "custom-atoms",
-            componentPath: "Icon",
-            props: {
-              iconName: "edit"
-            }
-          },
-          buttonLabel: getLabel({
-            labelName: "Edit",
-            labelKey: "PT_EDIT"
-          })
-        },
-        onClickDefination: {
-          action: "condition",
-          callBack: (state, dispatch) => {
-            gotoApplyWithStep(state, dispatch, 0);
-          }
-        }
+        // children: {
+        //   editIcon: {
+        //     uiFramework: "custom-atoms",
+        //     componentPath: "Icon",
+        //     props: {
+        //       iconName: "edit"
+        //     }
+        //   },
+          // buttonLabel: getLabel({
+          //   labelName: "Edit",
+          //   labelKey: "PT_EDIT"
+          // })
+        // },
+        // onClickDefination: {
+        //   action: "condition",
+        //   callBack: (state, dispatch) => {
+        //     gotoApplyWithStep(state, dispatch, 0);
+        //   }
+        // }
       }
     }
   },

@@ -32,6 +32,8 @@ const processBills = async (data, viewBillTooltip, dispatch) => {
         else { des = res.MdmsRes["sw-services-calculation"]; }
         if (des !== null && des !== undefined && des[cessKey] !== undefined && des[cessKey][0] !== undefined && des[cessKey][0] !== null) {
           groupBillDetails.push({ key: cessKey, value: des[cessKey][0].description, amount: element.amount, order: element.order })
+        } else {
+          groupBillDetails.push({ key: cessKey, value: 'Please put some description in mdms for this Key', amount: element.amount, order: element.order })
         }
         if (groupBillDetails.length >= bills.billAccountDetails.length) {
           let arrayData = groupBillDetails.sort((a, b) => parseInt(a.order) - parseInt(b.order))
@@ -87,7 +89,7 @@ const searchResults = async (action, state, dispatch, consumerCode) => {
     let viewBillTooltip = []
     if (payload !== null && payload !== undefined && data !== null && data !== undefined) {
       if (payload.SewerageConnections.length > 0 && data.Bill.length > 0) {
-        payload.SewerageConnections[0].service = service
+        payload.SewerageConnections[0].service = service;
         await processBills(data, viewBillTooltip, dispatch);
         if (payload.SewerageConnections[0].property.usageCategory !== null && payload.SewerageConnections[0].property.usageCategory !== undefined) {
           const propertyUsageType = "[?(@.code  == " + JSON.stringify(payload.SewerageConnections[0].property.usageCategory) + ")]"
@@ -105,88 +107,7 @@ const searchResults = async (action, state, dispatch, consumerCode) => {
 
 const beforeInitFn = async (action, state, dispatch, consumerCode) => {
   if (consumerCode) {
-    (await searchResults(action, state, dispatch, consumerCode));
-    if (service === "WATER") {
-      set(
-        action.screenConfig,
-        "components.div.children.viewBill.children.cardContent.children.serviceDetails.children.cardContent.children.serviceCardContainer.children.connectionType.visible",
-        true
-      );
-      let connectionType = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].connectionType")
-      if (connectionType !== "Metered") {
-        set(
-          action.screenConfig,
-          "components.div.children.connectionDetails.children.cardContent.children.serviceDetails.children.cardContent.children.viewOne.children.editSection.visible",
-          false
-        );
-        set(
-          action.screenConfig,
-          "components.div.children.viewBill.children.cardContent.children.serviceDetails.children.cardContent.children.serviceCardContainer.children.meterId.visible",
-          false
-        );
-        set(
-          action.screenConfig,
-          "components.div.children.viewBill.children.cardContent.children.serviceDetails.children.cardContent.children.serviceCardContainer.children.consumption.visible",
-          false
-        );
-        set(
-          action.screenConfig,
-          "components.div.children.viewBill.children.cardContent.children.serviceDetails.children.cardContent.children.serviceCardContainer.children.meterReadingDate.visible",
-          false
-        );
-        set(
-          action.screenConfig,
-          "components.div.children.viewBill.children.cardContent.children.serviceDetails.children.cardContent.children.serviceCardContainer.children.meterStatus.visible",
-          false
-        );
-        set(
-          action.screenConfig,
-          "components.div.children.viewBill.children.cardContent.children.serviceDetails.children.cardContent.children.serviceCardContainer.children.currentMeterReading.visible",
-          false
-        );
-        set(
-          action.screenConfig,
-          "components.div.children.viewBill.children.cardContent.children.serviceDetails.children.cardContent.children.serviceCardContainer.children.lastMeterReading.visible",
-          false
-        );
-      }
-    } else if (service === "SEWERAGE") {
-      set(
-        action.screenConfig,
-        "components.div.children.viewBill.children.cardContent.children.serviceDetails.children.cardContent.children.serviceCardContainer.children.connectionType.visible",
-        false
-      );
-      set(
-        action.screenConfig,
-        "components.div.children.viewBill.children.cardContent.children.serviceDetails.children.cardContent.children.serviceCardContainer.children.meterId.visible",
-        false
-      );
-      set(
-        action.screenConfig,
-        "components.div.children.viewBill.children.cardContent.children.serviceDetails.children.cardContent.children.serviceCardContainer.children.consumption.visible",
-        false
-      );
-      set(
-        action.screenConfig,
-        "components.div.children.viewBill.children.cardContent.children.serviceDetails.children.cardContent.children.serviceCardContainer.children.meterReadingDate.visible",
-        false
-      );
-      set(
-        action.screenConfig,
-        "components.div.children.viewBill.children.cardContent.children.serviceDetails.children.cardContent.children.serviceCardContainer.children.meterStatus.visible",
-        false
-      );
-      set(
-        action.screenConfig,
-        "components.div.children.viewBill.children.cardContent.children.serviceDetails.children.cardContent.children.serviceCardContainer.children.currentMeterReading.visible",
-        false
-      );
-      set(
-        action.screenConfig,
-        "components.div.children.viewBill.children.cardContent.children.serviceDetails.children.cardContent.children.serviceCardContainer.children.lastMeterReading.visible",
-        false
-      );
-    }
+    await searchResults(action, state, dispatch, consumerCode);
   }
 };
 
@@ -209,7 +130,7 @@ let headerrow = getCommonContainer({
 });
 
 const estimate = getCommonGrayCard({
-  header: getCommonSubHeader({ labelKey: "WS_VIEWBILL_DETAILS_HEADER" }, { style: { marginBottom: 18 } }),
+  header: getCommonSubHeader({ labelKey: "WS_VIEWBILL_DETAILS_HEADER" }),
   estimateSection: getFeesEstimateCard({ sourceJsonPath: "viewBillToolipData" }),
 });
 
@@ -248,12 +169,6 @@ const screenConfig = {
         viewBill,
         viewBillFooter
       }
-    },
-    breakUpDialog: {
-      uiFramework: "custom-containers-local",
-      moduleName: "egov-wns",
-      componentPath: "ViewBreakupContainer",
-      props: { open: false, maxWidth: "md", screenKey: "search-preview" }
     }
   }
 };

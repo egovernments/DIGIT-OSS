@@ -3,12 +3,12 @@ import { Dialog, Button } from "components";
 import Label from "egov-ui-kit/utils/translationNode";
 import TransferDetails from "./TransferDetails";
 import "./index.css";
+import { convertEpochToDate } from "egov-ui-framework/ui-config/screens/specs/utils";
 
 const bodyStyle = {
   backgroundColor: "#FFFFFF",
   border: "0.5px solid rgba(0, 0, 0, 0)",
   boxShadow: "0 24px 24px 0 rgba(0, 0, 0, 0.3), 0 0 24px 0 rgba(0, 0, 0, 0.22)",
-  width: "954px",
   height: "625px",
 };
 
@@ -17,76 +17,7 @@ const contentStyle = {
   maxWidth: "fit-content",
 };
 
-const historyData = {
-  "14/04/2018": [
-    {
-      Name: "Satinder Singh",
-      "Gaurdian's Name": "Jaswinder Singh",
-      Gender: "Male",
-      "Date Of Birth": "12/12/1980",
-      "Mobile No.": "965643455",
-      Email: "satinder@gmail.com",
-      "Special Category": "Not Applicable",
-      "Correspondence Address": "707/B, railway Colony, Vikarnagar, Amritsar",
-    },
-  ],
-  "14/04/2019": [
-    {
-      Name: "Satinder Singh",
-      "Gaurdian's Name": "Jaswinder Singh",
-      Gender: "Male",
-      "Date Of Birth": "12/12/1980",
-      "Mobile No.": "965643455",
-      Email: "satinder@gmail.com",
-      "Special Category": "Not Applicable",
-      "Correspondence Address": "707/B, railway Colony, Vikarnagar, Amritsar",
-    },
-    {
-      Name: "Satinder Singh",
-      "Gaurdian's Name": "Jaswinder Singh",
-      Gender: "Male",
-      "Date Of Birth": "12/12/1980",
-      "Mobile No.": "965643455",
-      Email: "satinder@gmail.com",
-      "Special Category": "Not Applicable",
-      "Correspondence Address": "707/B, railway Colony, Vikarnagar, Amritsar",
-    },
-  ],
-  "14/04/2020": [
-    {
-      Name: "Satinder Singh",
-      "Gaurdian's Name": "Jaswinder Singh",
-      Gender: "Male",
-      "Date Of Birth": "12/12/1980",
-      "Mobile No.": "965643455",
-      Email: "satinder@gmail.com",
-      "Special Category": "Not Applicable",
-      "Correspondence Address": "707/B, railway Colony, Vikarnagar, Amritsar",
-    },
-    {
-      Name: "Satinder Singh",
-      "Gaurdian's Name": "Jaswinder Singh",
-      Gender: "Male",
-      "Date Of Birth": "12/12/1980",
-      "Mobile No.": "965643455",
-      Email: "satinder@gmail.com",
-      "Special Category": "Not Applicable",
-      "Correspondence Address": "707/B, railway Colony, Vikarnagar, Amritsar",
-    },
-    {
-      Name: "Satinder Singh",
-      "Gaurdian's Name": "Jaswinder Singh",
-      Gender: "Male",
-      "Date Of Birth": "12/12/1980",
-      "Mobile No.": "965643455",
-      Email: "satinder@gmail.com",
-      "Special Category": "Not Applicable",
-      "Correspondence Address": "707/B, railway Colony, Vikarnagar, Amritsar",
-    },
-  ],
-};
-
-const ViewHistoryDialog = ({ open, closeDialogue }) => {
+const ViewHistoryDialog = ({ open, closeDialogue, ownershipInfo }) => {
   return (
     <Dialog
       open={open}
@@ -94,13 +25,14 @@ const ViewHistoryDialog = ({ open, closeDialogue }) => {
         <div style={{ margin: 16 }}>
           <Label label="PT_OWNER_HISTORY" fontSize="20px" labelClassName="owner-history" />
           <br />
-          {Object.keys(historyData).map((key) => {
+          {Object.keys(ownershipInfo).map((key) => {
+            const date=convertEpochToDate(Number(key));
             return (
               <div className="dialog-content">
                 <div className="oval-class"></div>
                 <Label label="PT_DATE_OF_TRANSFER" fontSize="14px" className="date-of-transfer" labelClassName="date-of-transfer" />
-                <span className="date-of-transfer">&nbsp;-&nbsp;{key}</span>
-                <TransferDetails data={historyData[key]} />
+                <span className="date-of-transfer">&nbsp;-&nbsp;{date}</span>
+                <TransferDetails data={ownershipInfo[key]} />
               </div>
             );
           })}
@@ -112,6 +44,7 @@ const ViewHistoryDialog = ({ open, closeDialogue }) => {
       onRequestClose={closeDialogue}
       contentStyle={contentStyle}
       autoScrollBodyContent={true}
+      contentClassName="view-history-dialog"
     />
   );
 };

@@ -84,6 +84,27 @@ const BpaEstimateCardContainer = Loadable({
   loading: () => <Loading />
 });
 
+const BpaCheckboxContainer =  Loadable({
+  loader: () => import("./BpaCheckboxContainer"),
+  loading: () => <Loading />
+});
+
+const CheckListContainer =  Loadable({
+  loader: () => import("./CheckListContainer"),
+  loading: () => <Loading />
+});
+
+const FeildInspectionCards = Loadable({
+  loader: () => import("./FeildInspectionCards"),
+  loading: () => <Loading />
+});
+
+const FieldInspectionContainer = Loadable({
+  loader: () => import("./FieldInspectionContainer"),
+  loading: () => <Loading />
+});
+
+
 export {
   CustomTabContainer,
   LabelContainer,
@@ -99,5 +120,9 @@ export {
   RadioGroupWithLabelContainer,
   EDCRUploadCard,
   NocListContainer,
-  BpaEstimateCardContainer
+  BpaEstimateCardContainer,
+  BpaCheckboxContainer,
+  CheckListContainer,
+  FeildInspectionCards,
+  FieldInspectionContainer
 };

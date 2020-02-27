@@ -11,13 +11,15 @@ import { getBpaMapLocator } from "../../utils";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { showHideBpaMapPopup, geBpatDetailsFromProperty } from "../../utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
+import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
 
 export const bpaLocationDetails = getCommonCard(
   {
     header: getCommonTitle(
       {
-        labelName: "BPA Location Details",
+        labelName: "Location Details",
         labelKey: "BPA_NEW_TRADE_DETAILS_HEADER_DETAILS"
       },
       {
@@ -44,7 +46,8 @@ export const bpaLocationDetails = getCommonCard(
           required: true,
           props: {
             required: true,
-            disabled: true
+            disabled: true,
+            className : "tl-trade-type"
           }
         }),
         beforeFieldChange: async (action, state, dispatch) => {
@@ -107,6 +110,9 @@ export const bpaLocationDetails = getCommonCard(
                 mohallaLocalePrefix
               )
             );
+            dispatch(
+              fetchLocalizationLabel(getLocale(), action.value, action.value)
+            );
           } catch (e) {
             console.log(e);
           }
@@ -146,6 +152,7 @@ export const bpaLocationDetails = getCommonCard(
       // }),
 
       tradeLocDoorHouseNo: getTextField({
+        visible : false,
         label: {
           labelName: "Door/House No.",
           labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
@@ -249,7 +256,7 @@ export const bpaLocationDetails = getCommonCard(
             cursor: "pointer"
           }
         },
-        jsonPath: "BPA.address.latitude",
+        jsonPath: "BPA.address.geoLocation.latitude",
         onClickDefination: {
           action: "condition",
           callBack: showHideBpaMapPopup
@@ -269,7 +276,7 @@ export const bpaLocationDetails = getCommonCard(
                 labelName: "Select your trade location on map",
                 labelKey: "TL_NEW_TRADE_DETAILS_GIS_CORD_PLACEHOLDER"
               },
-              jsonPath: "BPA.address.latitude",
+              jsonPath: "BPA.address.geoLocation.latitude",
               iconObj: {
                 iconName: "gps_fixed",
                 position: "end"
@@ -280,7 +287,8 @@ export const bpaLocationDetails = getCommonCard(
               },
               props: {
                 disabled: true,
-                cursor: "pointer"
+                cursor: "pointer",
+                className : "tl-trade-type"
               }
             })
           }
