@@ -68,6 +68,7 @@ import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.LocaleResolver;
+import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import javax.annotation.PostConstruct;
@@ -76,6 +77,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Properties;
 
 import static org.egov.infra.config.core.LocalizationSettings.DEFAULT_COUNTRY_CODE_KEY;
@@ -112,8 +114,15 @@ public class ApplicationConfiguration {
     }
 
     @Bean
-    public LocaleResolver localeResolver() {
-        return new SessionLocaleResolver();
+    public LocaleResolver localeResolver () {
+        CookieLocaleResolver r = new CookieLocaleResolver();
+        r.setDefaultLocale(Locale.US);
+        r.setCookieName("locale");
+        r.setCookiePath("/services/EGF/");
+        //if set to -1, the cookie is deleted
+        // when browser shuts down
+        r.setCookieMaxAge(24*60*60);
+        return r;
     }
 
     @Bean(name = "cities", autowire = Autowire.BY_NAME)

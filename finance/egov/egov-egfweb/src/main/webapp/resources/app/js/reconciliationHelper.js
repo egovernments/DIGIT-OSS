@@ -52,12 +52,27 @@ jQuery(document).ready(function(){
 		name: 'message', 
 		path: '/services/EGF/resources/app/messages/', 
 		mode: 'both',
-		language: navigator.language,
+		async: true,
+	    cache: true,
+		language: getLocale("locale"),
 		callback: function() {
 			console.log('File loaded successfully');
 		}
 	});	
 })
+
+function getCookie(name){
+	let cookies = document.cookie;
+	if(cookies.search(name) != -1){
+		var keyValue = cookies.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+	    return keyValue ? keyValue[2] : null;
+	}
+}
+
+function getLocale(paramName){
+	return getCookie(paramName) ? getCookie(paramName) : navigator.language;
+}
+
 
 function getFormData($form) {
 	var unindexed_array = $form.serializeArray();

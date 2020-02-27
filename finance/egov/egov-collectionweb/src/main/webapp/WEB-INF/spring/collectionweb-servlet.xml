@@ -82,7 +82,15 @@
 			<mvc:exclude-mapping path="/resources/**"/>
 			<bean class="org.egov.infra.web.spring.interceptor.CacheControlInterceptor"/>
 		</mvc:interceptor>
+		<mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <ref bean="localeChangeInterceptor"/>
+        </mvc:interceptor>
 	</mvc:interceptors>
+	
+	<bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+		<property name="paramName" value="locale"/>
+	</bean>
 	
 	<bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean" />
 	

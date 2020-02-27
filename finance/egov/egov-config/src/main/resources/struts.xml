@@ -124,6 +124,9 @@
 				</interceptor-ref>
 				<interceptor-ref name="egov-validator" />
 				<interceptor-ref name="egov-cahecontrol"/>
+				<interceptor-ref name="defaultStack">
+					<param name="i18n.parameterName">locale</param>
+				</interceptor-ref>
 			</interceptor-stack>
 		</interceptors>
 		<default-interceptor-ref name="egov-interceptors" />
