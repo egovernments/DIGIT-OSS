@@ -32,7 +32,15 @@
       "minAmount": null,
       "flatAmount": null,
       "fromFY": "2019-20",
-      "startingDay": "11/12/2019",
+      "startingDay": "26/09/2019",
+      "mutationPaymentPeriodInMonth": "06"
+    },
+    {
+      "rate": 20,
+      "minAmount": null,
+      "flatAmount": null,
+      "fromFY": "2020-21",
+      "startingDay": "26/09/2020",
       "mutationPaymentPeriodInMonth": "06"
     }
   ]
