@@ -11,7 +11,7 @@ RUN cd ${WORK_DIR} \
 
 # Create runtime image
 
-FROM nikeshumredkar/wildfly:11
+FROM nikeshumredkar/wildfly:11-2
 
 COPY --from=build /app/egov/egov-ear/target/*.ear /opt/jboss/wildfly/standalone/deployments/
 USER jboss
