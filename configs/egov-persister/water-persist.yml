@@ -34,7 +34,7 @@ serviceMaps:
 
 
        
-    - query: INSERT INTO water_service_connection(connection_id,connectionCategory,rainWaterHarvesting,connectionType,waterSource,meterId,meterInstallationDate,pipeSize,noOfTaps,uom,waterSubSource,connectionexecutiondate,proposedPipeSize,proposedTaps) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?);
+    - query: INSERT INTO water_service_connection(connection_id,connectionCategory,rainWaterHarvesting,connectionType,waterSource,meterId,meterInstallationDate,pipeSize,noOfTaps,waterSubSource,connectionexecutiondate,proposedPipeSize,proposedTaps) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?);
       basePath: $.WaterConnection
       jsonMaps:
 
@@ -57,8 +57,6 @@ serviceMaps:
        - jsonPath: $.WaterConnection.pipeSize
 
        - jsonPath: $.WaterConnection.noOfTaps
-
-       - jsonPath: $.WaterConnection.uom
 
        - jsonPath: $.WaterConnection.waterSubSource
        
@@ -95,7 +93,7 @@ serviceMaps:
 
        - jsonPath: $.WaterConnection.id    
 
-    - query: UPDATE water_service_connection SET connectionCategory=?,rainWaterHarvesting=?,connectionType=?,waterSource=?,meterId=?,meterInstallationDate=?,pipeSize=?,noOfTaps=?,waterSubSource=?,uom=?,proposedPipeSize=?,proposedTaps=? WHERE connection_id=?;
+    - query: UPDATE water_service_connection SET connectionCategory=?,rainWaterHarvesting=?,connectionType=?,waterSource=?,meterId=?,meterInstallationDate=?,pipeSize=?,noOfTaps=?,waterSubSource=?,proposedPipeSize=?,proposedTaps=? WHERE connection_id=?;
       basePath: $.WaterConnection
       jsonMaps:
        
@@ -118,8 +116,6 @@ serviceMaps:
        - jsonPath: $.WaterConnection.noOfTaps
 
        - jsonPath: $.WaterConnection.waterSubSource
-
-       - jsonPath: $.WaterConnection.uom
        
        - jsonPath: $.WaterConnection.proposedPipeSize
        
