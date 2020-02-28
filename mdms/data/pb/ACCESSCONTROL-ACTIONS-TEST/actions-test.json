@@ -16342,6 +16342,18 @@
       "serviceCode": "sw-calculator",
       "code": "null",
       "path": ""
+    },
+    {
+      "id": 1968,
+      "name": "Dashboard Payments-v1",
+      "url": "/dashboard-ingest/ingest/paymentsindex-v1/v2",
+      "parentModule": "",
+      "displayName": "DSS",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "DSS",
+      "code": "null",
+      "path": ""
     }
   ]
 }
