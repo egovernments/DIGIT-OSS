@@ -8,7 +8,7 @@ serviceMaps:
    isTransaction: true
    queryMaps:
     - query: INSERT INTO eg_chat_conversation_state (conversation_id, user_id, active, locale) VALUES (?, ?, ?, ?);
-      basePath: $.
+      basePath: $
       jsonMaps:
 
        - jsonPath: $.conversationId
@@ -26,7 +26,7 @@ serviceMaps:
    isTransaction: true
    queryMaps:
     - query: UPDATE eg_chat_conversation_state SET active_node_id=?, question_details=?, last_modified_time=? WHERE conversation_id=?;
-      basePath: $.
+      basePath: $
       jsonMaps:
 
        - jsonPath: $.activeNodeId
@@ -46,7 +46,7 @@ serviceMaps:
    isTransaction: true
    queryMaps:
     - query: UPDATE eg_chat_conversation_state SET active=FALSE WHERE conversation_id=?;
-      basePath: $.
+      basePath: $
       jsonMaps:
 
        - jsonPath: $.conversationId
@@ -59,7 +59,7 @@ serviceMaps:
    isTransaction: true
    queryMaps:
     - query: INSERT INTO eg_chat_message (message_id, conversation_id, node_id, raw_input, message_content, content_type, is_valid) VALUES (?, ?, ?, ?, ?, ?, ?);
-      basePath: $.
+      basePath: $
       jsonMaps:
 
        - jsonPath: $.messageId
