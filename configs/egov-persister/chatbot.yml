@@ -32,6 +32,8 @@ serviceMaps:
        - jsonPath: $.activeNodeId
 
        - jsonPath: $.questionDetails
+         type: JSON
+         dbType: JSONB
 
        - jsonPath: $.lastModifiedTime
 
