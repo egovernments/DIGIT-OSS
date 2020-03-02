@@ -48,7 +48,7 @@ class TotalDues extends React.Component {
             height="35px"
           ></Label>
         </div>
-        {totalBillAmountDue > 0 && (
+        {/*totalBillAmountDue > 0 && (
           <div className="col-xs-6 col-sm-3 flex-child">
             <TotalDuesButton
               labelText="PT_TOTALDUES_VIEW"
@@ -58,9 +58,9 @@ class TotalDues extends React.Component {
               }}
             />
           </div>
-        )}
+        )*/}
         {totalBillAmountDue > 0 && (
-          <div className="col-xs-6 col-sm-3 flex-child ">
+          <div className="col-xs-6 col-sm-3 flex-child">
             <div style={{ float: "right" }}>
               <TotalDuesButton
                 labelText="PT_TOTALDUES_PAY"
