@@ -1064,6 +1064,17 @@
       "isActive": true
     },
     {
+      "businessService": "BPA.NEWCONSTRUCTION_LOW_RISK_PERMIT_FEE",
+      "code": "BPA.LOW_RISK_PERMIT_FEE",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
       "businessService": "PT.MUTATION",
       "code": "PT.MUTATION",
       "collectionModesNotAllowed": [
