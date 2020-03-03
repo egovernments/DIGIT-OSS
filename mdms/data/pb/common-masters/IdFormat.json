@@ -528,6 +528,7 @@
     {
       "format": "BR/BLD/[cy:yyyy]/[SEQ_EG_PT_LN]",
       "idname": "egov.idgen.bpa.bdlicensenumber"
+    },
     {
       "format": "PB-MT-[CITY]-[SEQ_EG_PT_MUTATION]",
       "idname": "pt.mutation.number"
