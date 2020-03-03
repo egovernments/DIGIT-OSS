@@ -11341,26 +11341,6 @@
       "rightIcon": ""
     },
     {
-      "id": 1578,
-      "name": "Assess And Search Properties",
-      "url": "url",
-      "displayName": "Assess And Search Properties",
-      "orderNumber": 1,
-      "queryParams": "",
-      "parentModule": "",
-      "enabled": true,
-      "serviceCode": "",
-      "tenantId": "pb",
-      "createdDate": null,
-      "createdBy": null,
-      "lastModifiedDate": null,
-      "lastModifiedBy": null,
-      "path": "Property Tax.Assess And Search Properties",
-      "navigationURL": "pt-mutation/propertySearch",
-      "leftIcon": "communication:business",
-      "rightIcon": ""
-    },
-    {
       "id": 1579,
       "name": "ULB PT Collection",
       "url": "url",
