@@ -60,8 +60,8 @@ if(totalAmount>0){
   const estimate = {
     header: { labelName: "Fee Estimate", labelKey: "NOC_FEE_ESTIMATE_HEADER" },
     fees,
-    totalAmount,
-    arrears
+    totalAmount: totalAmount.toFixed(2),
+    arrears : arrears.toFixed(2)
   };
   return { estimate };
 };
