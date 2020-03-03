@@ -1995,18 +1995,8 @@
     {
       "category": "FEE",
       "service": "BPA.LOW_RISK_PERMIT_FEE",
-      "name": "BPA Low Risk Permit Fees",
-      "code": "LOW_RISK_PERMIT_FEES",
-      "isDebit": false,
-      "isActualDemand": true,
-      "order": "1",
-      "isRequired": false
-    },
-    {
-      "category": "FEE",
-      "service": "BPA.LOW_RISK_PERMIT_FEE",
       "name": "BPA Low Risk Appllication Fees",
-      "code": "BPA_APPL_FEES",
+      "code": "BPA_LOW_APPL_FEES",
       "isDebit": false,
       "isActualDemand": true,
       "order": "1",
@@ -2016,7 +2006,7 @@
       "category": "FEE",
       "service": "BPA.LOW_RISK_PERMIT_FEE",
       "name": "BPA Low Risk Permit Fees",
-      "code": "BPA_SANC_FEES",
+      "code": "BPA_LOW_SANC_FEES",
       "isDebit": false,
       "isActualDemand": true,
       "order": "1",
