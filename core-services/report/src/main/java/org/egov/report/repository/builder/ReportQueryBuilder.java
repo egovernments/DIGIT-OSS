@@ -50,17 +50,13 @@ public class ReportQueryBuilder {
 
         String baseQuery = null;
 
-
-        StringBuffer csinput = new StringBuffer();
         log.info("ReportDefinition: " + reportDefinition);
         if (reportDefinition.getQuery().contains("UNION")) {
             baseQuery = generateUnionQuery(searchParams, tenantId, reportDefinition);
         } else if (reportDefinition.getQuery().contains("FULLJOIN")) {
             baseQuery = generateJoinQuery(searchParams, tenantId, reportDefinition);
         } else {
-
             baseQuery = generateQuery(searchParams, tenantId, reportDefinition, baseQuery);
-
         }
 
         try {
@@ -71,44 +67,12 @@ public class ReportQueryBuilder {
             e.printStackTrace();
         }
 
-        baseQuery = baseQuery.replaceAll("\\$tenantid", "'" + tenantId + "'");
+        baseQuery = baseQuery.replaceAll("\\$tenantid", ":tenantId");
 
-        if (reportDefinition.getModuleName().equalsIgnoreCase("rainmaker-pgr")) {
-            baseQuery = baseQuery.replaceAll("\\$userid", "'" + userId + "'");
-        }
+        baseQuery = baseQuery.replaceAll("\\$userid", ":userId");
 
         for (SearchParam searchParam : searchParams) {
-
-            Object value = searchParam.getInput();
-
-            if (value instanceof Number) {
-                baseQuery = baseQuery.replaceAll("\\$" + searchParam.getName(), value.toString());
-            }
-
-            if (value instanceof String) {
-
-                baseQuery = baseQuery.replaceAll("\\$" + searchParam.getName(), "'" + value.toString() + "'");
-            }
-            if (value instanceof Boolean) {
-
-                baseQuery = baseQuery.replaceAll("\\$" + searchParam.getName(), value.toString());
-
-            }
-            if (value instanceof ArrayList<?>) {
-
-                List<String> arrayInput = (ArrayList) value;
-
-                for (int i = 0; i < arrayInput.size(); i++) {
-                    if (i < (arrayInput.size() - 1)) {
-                        csinput.append("'" + arrayInput.get(i) + "',");
-                    } else {
-                        csinput.append("'" + arrayInput.get(i) + "'");
-                    }
-
-                }
-                baseQuery = baseQuery.replaceAll("\\$" + searchParam.getName(), csinput.toString());
-            }
-
+            baseQuery = baseQuery.replaceAll("\\$" + searchParam.getName(), ":" + searchParam.getName());
         }
 
         log.info("baseQuery :" + baseQuery);
@@ -456,7 +420,12 @@ public class ReportQueryBuilder {
                                          StringBuffer query) {
         for (SearchParam searchParam : searchParams) {
 
-            Object name = searchParam.getName();
+            String name = searchParam.getName();
+
+            //If name starts with a capital character auto append at the end of the query
+            // will be disabled
+            if(name.startsWith("_"))
+                continue;
 
             for (SearchColumn sc : reportDefinition.getSearchParams()) {
                 if (name.equals(sc.getName())) {
