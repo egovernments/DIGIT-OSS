@@ -141,7 +141,7 @@ serviceMaps:
 
       - jsonPath: $.Property.tenantId
 
-      - jsonPath: $.Property.owners[*][?({id} in @.documents[*].id)].uuid
+      - jsonPath: $.Property.owners[*][?({id} in @.documents[*].id)].ownerInfoUuid
 
       - jsonPath: $.Property.owners.*.documents.*.documentType
 
@@ -406,19 +406,19 @@ serviceMaps:
       basePath: $.Property.owners.*.documents.*
       jsonMaps:
 
-      - jsonPath: $.Property.documents.*.id
+      - jsonPath: $.Property.owners.*.documents.*.id
 
       - jsonPath: $.Property.tenantId
 
-      - jsonPath: $.Property.id
+      - jsonPath: $.Property.owners[*][?({id} in @.documents[*].id)].ownerInfoUuid
 
-      - jsonPath: $.Property.documents.*.documentType
+      - jsonPath: $.Property.owners.*.documents.*.documentType
 
-      - jsonPath: $.Property.documents.*.fileStoreId
+      - jsonPath: $.Property.owners.*.documents.*.fileStoreId
 
-      - jsonPath: $.Property.documents.*.documentUid
+      - jsonPath: $.Property.owners.*.documents.*.documentUid
 
-      - jsonPath: $.Property.documents.*.status
+      - jsonPath: $.Property.owners.*.documents.*.status
 
       - jsonPath: $.Property.auditDetails.createdBy
 
