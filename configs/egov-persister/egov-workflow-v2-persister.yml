@@ -213,7 +213,7 @@ serviceMaps:
 
 
 
-    - query: INSERT INTO eg_wf_state_v2(seq, uuid, tenantid, businessserviceid, state,applicationStatus,sla,docuploadrequired, isstartstate, isterminatestate,isStateUpdatable, createdby, createdtime, lastmodifiedby, lastmodifiedtime) VALUES (nextval('seq_eg_wf_state_v2'), ?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (uuid) DO UPDATE SET state=EXCLUDED.state, docuploadrequired=EXCLUDED.docuploadrequired, isstartstate=EXCLUDED.isstartstate, isterminatestate=EXCLUDED.isterminatestate,isStateUpdatable=EXCLUDED.isStateUpdatable, lastmodifiedby=EXCLUDED.lastmodifiedby, lastmodifiedtime=EXCLUDED.lastmodifiedtime;
+    - query: INSERT INTO eg_wf_state_v2(seq, uuid, tenantid, businessserviceid, state,applicationStatus,sla,docuploadrequired, isstartstate, isterminatestate,isStateUpdatable, createdby, createdtime, lastmodifiedby, lastmodifiedtime) VALUES (nextval('seq_eg_wf_state_v2'), ?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (uuid) DO UPDATE SET state=EXCLUDED.state,sla=EXCLUDED.sla,docuploadrequired=EXCLUDED.docuploadrequired,isstartstate=EXCLUDED.isstartstate, isterminatestate=EXCLUDED.isterminatestate,isStateUpdatable=EXCLUDED.isStateUpdatable, lastmodifiedby=EXCLUDED.lastmodifiedby, lastmodifiedtime=EXCLUDED.lastmodifiedtime;
       basePath: BusinessServices.*.states.*
       jsonMaps:
 
