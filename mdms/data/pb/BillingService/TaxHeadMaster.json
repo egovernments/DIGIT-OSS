@@ -2004,6 +2004,26 @@
     },
     {
       "category": "FEE",
+      "service": "BPA.LOW_RISK_PERMIT_FEE",
+      "name": "BPA Low Risk Appllication Fees",
+      "code": "BPA_APPL_FEES",
+      "isDebit": false,
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": false
+    },
+    {
+      "category": "FEE",
+      "service": "BPA.LOW_RISK_PERMIT_FEE",
+      "name": "BPA Low Risk Permit Fees",
+      "code": "BPA_SANC_FEES",
+      "isDebit": false,
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": false
+    },
+    {
+      "category": "FEE",
       "service": "PT.MUTATION",
       "name": "PT Mutation Fees",
       "code": "PT_MUTATION_FEE",
