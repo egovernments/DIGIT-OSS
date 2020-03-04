@@ -75,7 +75,7 @@ const TextFieldIcon = ({
         <TargetIcon onClick={onIconClick} style={{ ...style.iconStyle, ...iconStyle , top: 15 }} />
         </Hidden>
         <Hidden only='xs'>
-        <TargetIcon onClick={onIconClick} style={{ ...style.iconStyle, ...iconStyle, top: 46  }} />
+        <TargetIcon onClick={onIconClick} style={{ ...style.iconStyle, ...iconStyle, top: 15  }} />
         </Hidden>
       </div>
       )}
