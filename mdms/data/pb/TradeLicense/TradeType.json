@@ -6087,7 +6087,12 @@
       "verificationDocument": [],
       "active": true,
       "type": "BPA",
-      "validityPeriod": 5
+      "validityPeriod": 5,
+      "restrictions":{
+        "maxPlotArea":500,
+        "maxBulidingheight":15,
+        "maxFloors":3
+      }
     },
     {
       "code": "STRUCTURALENGINEER.CLASSA",
@@ -6126,7 +6131,12 @@
       "verificationDocument": [],
       "active": true,
       "type": "BPA",
-      "validityPeriod": 5
+      "validityPeriod": 5,
+      "restrictions":{
+        "maxPlotArea":100,
+        "maxBulidingheight":10,
+        "maxFloors":2
+      }
     }
   ]
 }
