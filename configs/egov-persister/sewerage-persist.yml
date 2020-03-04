@@ -57,7 +57,7 @@ serviceMaps:
    fromTopic: update-sw-connection
    isTransaction: true
    queryMaps: 
-    - query: UPDATE eg_sw_connection SET applicationstatus=?, status=?, connectionno=?, oldconnectionno=?, action=?, roadCuttingArea=?, roadType=? WHERE id=?;
+    - query: UPDATE eg_sw_connection SET applicationstatus=?, status=?, connectionno=?, oldconnectionno=?, action=?, roadCuttingArea=?, roadType=?, adhocpenalty=?, adhocrebate=?, adhocpenaltyreason=?, adhocpenaltycomment=?, adhocrebatereason=?, adhocrebatecomment=? WHERE id=?;
       basePath: $.SewerageConnection
       jsonMaps:
         
@@ -74,10 +74,22 @@ serviceMaps:
        - jsonPath: $.SewerageConnection.roadCuttingArea
 
        - jsonPath: $.SewerageConnection.roadType
+       
+       - jsonPath: $.SewerageConnection.additionalDetails.adhocPenalty 
+
+       - jsonPath: $.SewerageConnection.additionalDetails.adhocRebate 
+       
+       - jsonPath: $.SewerageConnection.additionalDetails.adhocPenaltyReason 
+
+       - jsonPath: $.SewerageConnection.additionalDetails.adhocPenaltyComment
+       
+       - jsonPath: $.SewerageConnection.additionalDetails.adhocPenaltyReason 
+
+       - jsonPath: $.SewerageConnection.additionalDetails.adhocRebateComment      
 
        - jsonPath: $.SewerageConnection.id       
 
-    - query: UPDATE eg_sw_service SET connectionexecutiondate=?, noOfWaterClosets=?, noOfToilets=?, connectiontype=?, proposedWaterClosets=?, proposedToilets=? WHERE connection_id=?;
+    - query: UPDATE eg_sw_service SET connectionexecutiondate=?, noOfWaterClosets=?, noOfToilets=?, connectiontype=?, proposedWaterClosets=?, proposedToilets=?  WHERE connection_id=?;
       basePath: $.SewerageConnection
       jsonMaps:
 
@@ -170,5 +182,4 @@ serviceMaps:
 
        - jsonPath: $.SewerageConnection.action
 
-       - jsonPath: $.SewerageConnection.id       
-
+       - jsonPath: $.SewerageConnection.id    
