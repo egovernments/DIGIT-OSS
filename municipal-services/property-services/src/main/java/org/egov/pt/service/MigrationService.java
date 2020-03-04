@@ -60,7 +60,6 @@ public class MigrationService {
         for(OldProperty oldProperty : oldProperties){
             Property property = new Property();
             property.setId(UUID.randomUUID().toString());
-            property.setAuditId(UUID.randomUUID().toString());
             property.setPropertyId(oldProperty.getPropertyId());
             property.setTenantId(oldProperty.getTenantId());
             property.setAccountId(requestInfo.getUserInfo().getUuid());
