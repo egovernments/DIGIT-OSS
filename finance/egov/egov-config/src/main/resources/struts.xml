@@ -108,7 +108,9 @@
 				<interceptor-ref name="params"/>
 				<interceptor-ref name="servletConfig" />
 				<interceptor-ref name="prepare" />
-				<interceptor-ref name="i18n" />
+				<interceptor-ref name="i18n">
+					<param name="parameterName">locale</param>
+				</interceptor-ref>
 				<interceptor-ref name="chain" />
 				<interceptor-ref name="scopedModelDriven" />
 				<interceptor-ref name="modelDriven" />
@@ -124,9 +126,6 @@
 				</interceptor-ref>
 				<interceptor-ref name="egov-validator" />
 				<interceptor-ref name="egov-cahecontrol"/>
-				<interceptor-ref name="defaultStack">
-					<param name="i18n.parameterName">locale</param>
-				</interceptor-ref>
 			</interceptor-stack>
 		</interceptors>
 		<default-interceptor-ref name="egov-interceptors" />
