@@ -13,6 +13,7 @@ import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.User;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.ConstructionDetail;
+import org.egov.pt.models.Document;
 import org.egov.pt.models.GeoLocation;
 import org.egov.pt.models.Institution;
 import org.egov.pt.models.OwnerInfo;
@@ -653,6 +654,20 @@ public class PropertyValidator {
 				ObjectUtils.isEmpty(workFlow.getBusinessService())))
 			errorMap.put("EG_PT_MUTATION_WF_FIELDS_ERROR", "mandatory fields Missing in workflow Object for Mutation please provide the following information : "
 					+ "action, moduleName and BusinessService");
+
+		Boolean isDocsEmpty = CollectionUtils.isEmpty(property.getDocuments());
+		Boolean isTransferDocPresent = false;
+		if (!isDocsEmpty) {
+
+			isTransferDocPresent = property.getDocuments().stream().map(doc -> doc.getDocumentType().toUpperCase())
+					.collect(Collectors.toSet()).contains(reasonForTransfer.toUpperCase());
+		}
+
+		if (isDocsEmpty || !isTransferDocPresent) {
+
+			throw new CustomException("EG_PT_MT_DOCS_ERROR",
+					"Mandatory documents mising for the muation reason : " + reasonForTransfer);
+		}
 		
 		if (propertyFromSearch.getStatus().equals(Status.INWORKFLOW)
 				&& property.getWorkflow().getAction().equalsIgnoreCase(configs.getMutationOpenState()))
