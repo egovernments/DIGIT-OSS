@@ -30,7 +30,7 @@ const AssessmentInfoTable = ({ items, tableHeaderItems }) => {
                     return (
                       <div>
                         {nestedIndex != 0 && (
-                          <div className="col-sm-4 col-xs-12" style={{ marginBottom: 10 }}>
+                          <div className="col-sm-3 col-xs-12" style={{ marginBottom: 10 }}>
                             <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>
                               <Label
                                 labelStyle={{ letterSpacing: 0, color: "rgba(0, 0, 0, 0.54)", fontWeight: "400", lineHeight: "1.375em" }}
