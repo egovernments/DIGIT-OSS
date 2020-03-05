@@ -665,10 +665,10 @@ public class PropertyValidator {
 
 		if (isDocsEmpty || !isTransferDocPresent) {
 
-			throw new CustomException("EG_PT_MT_DOCS_ERROR",
+			errorMap.put("EG_PT_MT_DOCS_ERROR",
 					"Mandatory documents mising for the muation reason : " + reasonForTransfer);
 		}
-		
+
 		if (propertyFromSearch.getStatus().equals(Status.INWORKFLOW)
 				&& property.getWorkflow().getAction().equalsIgnoreCase(configs.getMutationOpenState()))
 			errorMap.put("EG_PT_MUTATION_WF_ACTION_ERROR", "Invalid action, OPEN action cannot be applied on an active workflow ");
