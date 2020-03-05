@@ -403,6 +403,14 @@
       "uniqueKeys": [
         "$.code"
       ]
+    },
+    "footer": {
+      "masterName": "footer",
+      "isStateLevel": true,
+      "moduleDefinition": null,
+      "uniqueKeys": [
+        "$.code"
+      ]
     }
   },
   "works": {

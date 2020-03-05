@@ -1,0 +1,52 @@
+{
+    "tenantId": "pb",
+    "moduleName": "tenant",
+    "footer":[
+        {
+         "code": "pb.amritsar",
+         "service": "PT",
+         "footerContent": [
+            {
+             "disclaimer": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_DISCLAIMER_FIRST_LINE",
+             "order": "1."
+            },
+            {
+              "disclaimer": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_DISCLAIMER_SECOND_LINE",
+              "order": "2."
+            },
+            {
+              "disclaimer": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_DISCLAIMER_THIRD_LINE",
+              "order": "3."
+            },
+            {
+              "disclaimer": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_DISCLAIMER_FOURTH_LINE",
+              "order": "8."
+            },
+            {
+              "disclaimer": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_DISCLAIMER_FIFTH_LINE",
+              "order": "5."
+            }
+          ]
+           
+        },
+        {
+            "code": "pb.amritsar",
+            "service": "TL",
+            "footerContent": [
+               {
+                "disclaimer": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_DISCLAIMER_1",
+                "order": "1."
+               },
+               {
+                 "disclaimer": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_DISCLAIMER_2",
+                 "order": "2."
+               },
+               {
+                 "disclaimer": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_DISCLAIMER_3",
+                 "order": "3."
+               }
+             ]
+              
+           }
+    ]
+}
