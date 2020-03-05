@@ -646,7 +646,7 @@ public class PropertyValidator {
 		}
 		
 		if (StringUtils.isEmpty(reasonForTransfer) || StringUtils.isEmpty(docNo) || ObjectUtils.isEmpty(docDate) || ObjectUtils.isEmpty(docVal) || ObjectUtils.isEmpty(marketVal)) {
-			errorMap.put("EG_PT_MUTATION_FIELDS_ERROR", "mandatory fields Missing for mutation, please provide the following information : "
+				throw new CustomException("EG_PT_MUTATION_FIELDS_ERROR", "mandatory fields Missing for mutation, please provide the following information : "
 							+ "reasonForTransfer, documentNumber, documentDate, documentValue and marketValue");
 		}
 		
