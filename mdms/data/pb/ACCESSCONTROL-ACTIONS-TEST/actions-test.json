@@ -16334,6 +16334,20 @@
       "serviceCode": "DSS",
       "code": "null",
       "path": ""
+    },
+     {
+      "id": 1969,
+      "name": "Reopening Closed Period",
+      "url": "url",
+      "parentModule": "",
+      "displayName": "Reopening Closed Period",
+      "orderNumber": 4,
+      "enabled": true,
+      "serviceCode": "FinanceMaster",
+      "code": "null",
+      "leftIcon": "editor:insert-chart",
+      "path": "Finance.Period End Activities.Close Period",
+      "navigationURL": "services/EGF/closedperiod/search/reopen"
     }
   ]
 }

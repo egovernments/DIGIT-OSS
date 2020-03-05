@@ -20293,6 +20293,18 @@
       "actionid": 1936,
       "actioncode": "",
       "tenantId": "pb"
+    },
+    {
+      "rolecode": "Financial Administrator",
+      "actionid": 1969,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 1969,
+      "actioncode": "",
+      "tenantId": "pb"
     }
   ]
 }
