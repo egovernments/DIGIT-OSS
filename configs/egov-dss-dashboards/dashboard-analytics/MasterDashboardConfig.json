@@ -1246,7 +1246,7 @@
           "vizArray": [
             {
               "id": 421,
-              "name": "DSS_PGR_AVARAGE_TURN_AROUND",
+              "name": "DSS_PGR_CITIZENS",
               "dimensions": {
                 "height": 250,
                 "width": 4
@@ -1256,8 +1256,8 @@
               "label": "",
               "charts": [
                 {
-                  "id": "averageTurnAroundTime",
-                  "name": "DSS_PGR_AVARAGE_TURN_AROUND",
+                  "id": "pgrCitizenOnDateRange",
+                  "name": "DSS_PGR_CITIZENS",
                   "code": "",
                   "chartType": "line",
                   "filter": "",
