@@ -602,6 +602,20 @@
         "$.fromFY"
       ]
     },
+    "MutationRebate": {
+      "masterName": "MutationRebate",
+      "isStateLevel": true,
+      "uniqueKeys": [
+        "$.fromFY"
+      ]
+    },
+    "MutationPenalty": {
+      "masterName": "MutationPenalty",
+      "isStateLevel": true,
+      "uniqueKeys": [
+        "$.fromFY"
+      ]
+    },
     "CancerCess": {
       "masterName": "CancerCess",
       "isStateLevel": true,
@@ -634,14 +648,14 @@
       "masterName": "Penalty",
       "isStateLevel": true,
       "uniqueKeys": [
-        "$.code"
+        "$.fromFY"
       ]
     },
     "Rebate": {
       "masterName": "Rebate",
       "isStateLevel": true,
       "uniqueKeys": [
-        "$.code"
+        "$.fromFY"
       ]
     }
   },
