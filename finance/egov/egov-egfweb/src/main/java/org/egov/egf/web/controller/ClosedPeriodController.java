@@ -57,6 +57,7 @@ import javax.validation.Valid;
 import org.egov.commons.service.CFinancialYearService;
 import org.egov.egf.model.ClosedPeriod;
 import org.egov.egf.web.adaptor.ClosedPeriodJsonAdaptor;
+import org.egov.enums.CloseTypeEnum;
 import org.egov.infra.utils.DateUtils;
 import org.egov.services.closeperiod.ClosedPeriodService;
 import org.egov.utils.FinancialConstants;
@@ -80,11 +81,12 @@ import com.google.gson.GsonBuilder;
 @RequestMapping("/closedperiod")
 public class ClosedPeriodController {
     private static final String CLOSEDPERIOD_RESULT = "closedperiod-result";
-    private static final String CLOSEDPERIOD_EDIT = "closedperiod-edit";
+    private static final String CLOSEDPERIOD_REOPEN = "closedperiod-reopen";
     private static final String CLOSEDPERIOD_SEARCH = "closedperiod-search";
     private static final String CLOSEDPERIOD = "closedPeriod";
     private static final String CLOSEDPERIOD_NEW = "closedperiod-new";
     private static final String CLOSEDPERIOD_VIEW = "closedperiod-view";
+    final SimpleDateFormat dtFormat = new SimpleDateFormat("dd-MM-yyyy");
 
     @Autowired
     private ClosedPeriodService closedPeriodService;
@@ -96,6 +98,10 @@ public class ClosedPeriodController {
     private void prepareNewForm(final Model model) {
         model.addAttribute("cFinancialYears", cFinancialYearService.getFinancialYearNotClosedAndActive());
         model.addAttribute("getAllMonths", DateUtils.getAllMonths());
+    }
+    
+    private void prepareSoftClosePeriod(final Model model) {
+        model.addAttribute("cFinancialYears", closedPeriodService.getAllSoftClosePeriods());
     }
 
     @RequestMapping(value = "/new", method = { RequestMethod.GET, RequestMethod.POST })
@@ -110,7 +116,6 @@ public class ClosedPeriodController {
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public String create(@Valid @ModelAttribute final ClosedPeriod closedPeriod, final Model model,
             final BindingResult errors, final HttpServletRequest request, final RedirectAttributes redirectAttrs) {
-        final SimpleDateFormat dtFormat = new SimpleDateFormat("dd-MM-yyyy");
 
         closedPeriodService.prepareSartingDateAndEndingDate(closedPeriod);
         closedPeriodService.validateClosedPeriods(closedPeriod, errors);
@@ -126,54 +131,34 @@ public class ClosedPeriodController {
         return "redirect:/closedperiod/result/" + closedPeriod.getId();
     }
 
-    @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/reopen/{id}", method = RequestMethod.GET)
     public String edit(@PathVariable("id") final Long id, final Model model) {
         final ClosedPeriod closedPeriod = closedPeriodService.findOne(id);
 
         prepareNewForm(model);
+        if (closedPeriod.getIsClosed())
+            closedPeriod.setRemarks("");
         model.addAttribute(CLOSEDPERIOD, closedPeriod);
-        return CLOSEDPERIOD_EDIT;
+        return CLOSEDPERIOD_REOPEN;
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public String update(@ModelAttribute final ClosedPeriod closedPeriod, final BindingResult errors, final Model model,
             final RedirectAttributes redirectAttrs) {
         if (errors.hasErrors()) {
-            prepareNewForm(model);
-            return CLOSEDPERIOD_EDIT;
+            prepareSoftClosePeriod(model);
+            return CLOSEDPERIOD_REOPEN;
         }
-        final List<ClosedPeriod> closePer = closedPeriodService.findAll();
-        final Long cId = closedPeriod.getFinancialYear().getId();
-        if (!closePer.isEmpty()) {
-            for (final ClosedPeriod cp : closePer)
-                if (cp.getFinancialYear().getId() == closedPeriod.getFinancialYear().getId()
-                        && !closedPeriod.getIsClosed()) {
-                    closedPeriodService.delete(cp);
-                    redirectAttrs.addFlashAttribute("message",
-                            messageSource.getMessage("msg.reopenedperiod.success", null, null));
-                    return "redirect:/closedperiod/result/" + cId;
-                }
-        } else if (closePer.isEmpty() && closedPeriod.getIsClosed()) {
-            closedPeriodService.update(closedPeriod);
-            redirectAttrs.addFlashAttribute("message",
-                    messageSource.getMessage("msg.closedPeriod.success", null, null));
-            return "redirect:/closedperiod/result/" + closedPeriod.getId();
-        }
-
-        if (!closedPeriod.getFinancialYear().getIsClosed() && !closedPeriod.getIsClosed()) {
-            redirectAttrs.addFlashAttribute("message",
-                    messageSource.getMessage("msg.reopenedperiod.success", null, null));
-            return "redirect:/closedperiod/result/" + cId;
-
-        }
-
         closedPeriodService.update(closedPeriod);
-        redirectAttrs.addFlashAttribute("message", messageSource.getMessage("msg.closedPeriod.success", null, null));
+        final String startDate = dtFormat.format(closedPeriod.getStartingDate());
+        final String endDate = dtFormat.format(closedPeriod.getEndingDate());
+        redirectAttrs.addFlashAttribute("message",
+                messageSource.getMessage("msg.reopenedperiod.success", new String[] { startDate, endDate }, null));
         return "redirect:/closedperiod/result/" + closedPeriod.getId();
 
     }
 
-    @RequestMapping(value = "/view/{id}",  method = { RequestMethod.GET, RequestMethod.POST })
+    @RequestMapping(value = "/view/{id}", method = { RequestMethod.GET, RequestMethod.POST })
     public String view(@PathVariable("id") final Long id, final Model model) {
         final ClosedPeriod closedPeriod = closedPeriodService.findOne(id);
         prepareNewForm(model);
@@ -191,7 +176,11 @@ public class ClosedPeriodController {
     @RequestMapping(value = "/search/{mode}", method = { RequestMethod.GET, RequestMethod.POST })
     public String search(@PathVariable("mode") final String mode, final Model model) {
         final ClosedPeriod closedPeriod = new ClosedPeriod();
-        prepareNewForm(model);
+
+        if (mode.equalsIgnoreCase("reopen"))
+            prepareSoftClosePeriod(model);
+        else
+            prepareNewForm(model);
         model.addAttribute(CLOSEDPERIOD, closedPeriod);
         return CLOSEDPERIOD_SEARCH;
 
@@ -201,8 +190,10 @@ public class ClosedPeriodController {
     @ResponseBody
     public String ajaxsearch(@PathVariable("mode") final String mode, final Model model,
             @ModelAttribute final ClosedPeriod closedPeriod) {
+        if (mode.equalsIgnoreCase("reopen"))
+            closedPeriod.setCloseType(CloseTypeEnum.SOFTCLOSE);
+        closedPeriod.setIsClosed(true);
         final List<ClosedPeriod> searchResultList = closedPeriodService.search(closedPeriod);
-
         return new StringBuilder("{ \"data\":").append(toSearchResultJson(searchResultList)).append("}").toString();
     }
 

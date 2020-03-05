@@ -54,6 +54,7 @@
 	cssClass="form-horizontal form-groups-bordered"
 	enctype="multipart/form-data">
 	<div class="main-content">
+	<c:if test="${mode ne 'reopen'}">
 		<td colspan="5" align="right">
 			<div align="right">
 				<button type='button' class='btn btn-primary' id="addnewcloseperiod">
@@ -62,6 +63,7 @@
 				</button>
 			</div>
 		</td>
+		</c:if>
 		<div class="row">
 			<div class="col-md-12">
 				<div class="panel panel-primary" data-collapsed="0">
@@ -77,7 +79,7 @@
 								<form:option value="">
 									<spring:message code="lbl.select" />
 								</form:option>
-								<form:options items="${cFinancialYears}" itemValue="id"
+								<form:options items="${cFinancialYears}" itemValue="id" 
 									itemLabel="finYearRange" />
 							</form:select>
 							<form:errors path="financialYear" cssClass="error-msg" />

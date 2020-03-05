@@ -1220,7 +1220,7 @@ public class ChartOfAccounts {
 
 			if (!isClosed) {
 				List<Object[]> rs = null;
-				final String qry = "SELECT id FROM closedPeriods WHERE to_char(startingDate, 'DD-MON-YYYY')<='" + date
+				final String qry = "SELECT id FROM closedPeriods WHERE isClosed=true and to_char(startingDate, 'DD-MON-YYYY')<='" + date
 						+ "' AND endingDate>='" + date + "'";
 				if (LOGGER.isDebugEnabled())
 					LOGGER.debug(qry);

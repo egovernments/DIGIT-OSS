@@ -405,11 +405,11 @@
                        value="/WEB-INF/views/closedperiod/closedperiod-new.jsp"/>
     </definition>
 
-    <definition name="closedperiod-edit" extends="base_layout">
-        <put-attribute name="page-title" value="title.closedperiod.edit"
+    <definition name="closedperiod-reopen" extends="base_layout">
+        <put-attribute name="page-title" value="title.closedperiod.reopen"
                        cascade="true"/>
         <put-attribute name="body"
-                       value="/WEB-INF/views/closedperiod/closedperiod-edit.jsp"/>
+                       value="/WEB-INF/views/closedperiod/closedperiod-reopen.jsp"/>
     </definition>
 
     <definition name="closedperiod-result" extends="base_layout">

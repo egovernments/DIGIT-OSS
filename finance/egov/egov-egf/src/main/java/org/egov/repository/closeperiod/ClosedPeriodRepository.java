@@ -51,6 +51,7 @@ package org.egov.repository.closeperiod;
 import java.util.Date;
 import java.util.List;
 
+import org.egov.commons.CFinancialYear;
 import org.egov.egf.model.ClosedPeriod;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -69,5 +70,8 @@ public interface ClosedPeriodRepository extends JpaRepository<ClosedPeriod, Long
     // findByFinancialYearIdAndIsClosedTrueAndStartingDateBetweenOrEndingDateBetween(Long
     // financialYearId,Date startingDate1,Date endingDate1,Date
     // startingDate2,Date endingDate2);
+
+    @Query("select distinct cp.financialYear from ClosedPeriod cp where cp.closeType='SOFTCLOSE')")
+    List<CFinancialYear> getAllSoftClosedPeriods();
 
 }
