@@ -98,7 +98,7 @@ serviceMaps:
 
        - jsonPath: $.WaterConnection.additionalDetails.adhocPenaltyComment
        
-       - jsonPath: $.WaterConnection.additionalDetails.adhocPenaltyReason 
+       - jsonPath: $.WaterConnection.additionalDetails.adhocRebateReason 
 
        - jsonPath: $.WaterConnection.additionalDetails.adhocRebateComment
        
