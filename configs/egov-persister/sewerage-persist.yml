@@ -83,7 +83,7 @@ serviceMaps:
 
        - jsonPath: $.SewerageConnection.additionalDetails.adhocPenaltyComment
        
-       - jsonPath: $.SewerageConnection.additionalDetails.adhocPenaltyReason 
+       - jsonPath: $.SewerageConnection.additionalDetails.adhocRebateReason 
 
        - jsonPath: $.SewerageConnection.additionalDetails.adhocRebateComment      
 
