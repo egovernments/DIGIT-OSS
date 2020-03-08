@@ -1033,7 +1033,7 @@
             "externalAPI": [    
               {
                 "path": "http://billing-service:8080/billing-service/bill/v2/_fetchbill",
-                "queryParam": "tenantId=$.tenantId,consumerCode=$.applicationNumber,service=TL",
+                "queryParam": "tenantId=$.tenantId,consumerCode=$.applicationNumber,businessService=TL",
                   "apiRequest": null,
                   "responseMapping":[
                     {            
