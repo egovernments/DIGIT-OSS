@@ -9,6 +9,7 @@
         "DD"
       ],
       "partPaymentAllowed": true,
+      "minAmountPayable":100,
       "isAdvanceAllowed": false,
       "demandUpdateTime": 86400000,
       "isVoucherCreationEnabled": true,
