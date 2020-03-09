@@ -17,18 +17,6 @@
                 "type": "image"
               },
               {
-                "variable": "BPA_INTRO_MSG",
-                "value": {
-                  "path": "BPA_PDF_INTO"
-                },
-                "type": "label",
-                "localisation": {
-                  "required": true,
-                  "prefix": null,
-                  "module": "rainmaker-bpa"
-                }
-              },
-              {
                 "variable": "applicationNo",
                 "value": {
                   "path": "$.applicationNo"
@@ -103,18 +91,7 @@
                 "value": {
                   "path": "BOA_PDF_WRT_TXT"
                 },
-                "localisation": {
-                  "required": true,
-                  "prefix": null,
-                  "module": "rainmaker-bpa"
-                }
-              },
-              {
-                "variable": "buildingNearGovt",
-                "value": {
-                  "path": "BUILDING_NEAR_GOVT_BLDG"
-                },
-                "type": "label",
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -137,6 +114,7 @@
                 "value": {
                   "path": "BPA_PDF_GENERATED_ON"
                 },
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -155,6 +133,7 @@
                 "value": {
                   "path": "BPA_PDF_MUNCIPAL"
                 },
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -166,6 +145,7 @@
                 "value": {
                   "path": "BPA_PDF_FORM"
                 },
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -177,6 +157,7 @@
                 "value": {
                   "path": "BPA_PDF_FORM_APPROVAL_TXT"
                 },
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -188,6 +169,7 @@
                 "value": {
                   "path": "BPA_PDF_BYELAWS"
                 },
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -199,6 +181,7 @@
                 "value": {
                   "path": "BPA_PDF_PLANPERMISSION_NO"
                 },
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -210,6 +193,7 @@
                 "value": {
                   "path": "BPA_PDF_DATED"
                 },
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -221,6 +205,7 @@
                 "value": {
                   "path": "BPA_PDF_DATED_SMALL"
                 },
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -232,6 +217,7 @@
                 "value": {
                   "path": "BPA_PDF_PERMISSION_GRANT_TXT"
                 },
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -243,6 +229,7 @@
                 "value": {
                   "path": "BPA_PDF_SALUTATION"
                 },
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -254,6 +241,7 @@
                 "value": {
                   "path": "BPA_PDF_FOR"
                 },
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -265,6 +253,7 @@
                 "value": {
                   "path": "BPA_PDF_DSCR"
                 },
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -276,6 +265,7 @@
                 "value": {
                   "path": "BPA_PDF_PLOTNO_TXT"
                 },
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -287,6 +277,7 @@
                 "value": {
                   "path": "BPA_PDF_CS_PLOT"
                 },
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -298,6 +289,7 @@
                 "value": {
                   "path": "BPA_PDF_MSP_PLOT"
                 },
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -309,6 +301,7 @@
                 "value": {
                   "path": "BPA_PDF_KHATANO_TXT"
                 },
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -320,6 +313,7 @@
                 "value": {
                   "path": "BPA_PDF_HOLDINGNO_TXT"
                 },
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -331,6 +325,7 @@
                 "value": {
                   "path": "BPA_PDF_SERVEYNO_TXT"
                 },
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -342,6 +337,7 @@
                 "value": {
                   "path": "BPA_PDF_TOWN_PLANNING_TXT"
                 },
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -353,6 +349,7 @@
                 "value": {
                   "path": "BPA_PDF_PROPOSE_LAND"
                 },
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -364,6 +361,7 @@
                 "value": {
                   "path": "BPA_PDF_OF"
                 },
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -375,6 +373,7 @@
                 "value": {
                   "path": "BPA_PDF_CONDNS_TXT"
                 },
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -386,6 +385,7 @@
                 "value": {
                   "path": "BPA_PDF_PERMITFEE_DETAILS_TXT"
                 },
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -397,6 +397,7 @@
                 "value": {
                   "path": "BPA_PDF_FEE_DSCR"
                 },
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -408,6 +409,7 @@
                 "value": {
                   "path": "BPA_PDF_AMOUNT_TXT"
                 },
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -419,6 +421,7 @@
                 "value": {
                   "path": "BPA_PDF_TOTAL"
                 },
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -430,6 +433,7 @@
                 "value": {
                   "path": "BPA_PDF_BY_ORDER"
                 },
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -441,6 +445,7 @@
                 "value": {
                   "path": "BPA_PDF_AUTH_OFFICER"
                 },
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -452,6 +457,7 @@
                 "value": {
                   "path": "BPA_PDF_VALIDITY_DSCR"
                 },
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -463,6 +469,7 @@
                 "value": {
                   "path": "BPA_PDF_ONLY"
                 },
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -474,6 +481,7 @@
                 "value": {
                   "path": "BPA_PDF_NOTE"
                 },
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -485,6 +493,7 @@
                 "value": {
                   "path": "BPA_PDF_SUMMARY1"
                 },
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -496,6 +505,7 @@
                 "value": {
                   "path": "BPA_PDF_SUMMARY2"
                 },
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
