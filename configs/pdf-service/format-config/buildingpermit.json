@@ -1,1149 +1,351 @@
 {
     "key": "buildingpermit",
     "config": {
-        "defaultStyle": {
-            "font": "Cambay"
+      "defaultStyle": {
+        "font": "Cambay"
+      },
+      "content": [
+        {
+            "text" : "{{GENERATED_ON}}",
+            "absolutePosition" : {
+               "x" : 420,
+               "y" : 5
+            }
         },
-        "content": [
+        {
+          "text" : " : {{orderGeneratedOn}}",
+          "absolutePosition" : {
+              "x" : 500,
+              "y" : 5
+          }
+        },
+        {
+          "columns": [
             {
-                "columns": [
-                    {
-                        "image": "{{logoImage}}",
-                        "width": 70,
-                        "height": 70,
-                        "alignment": "left"
-                    },
-                    {
-                        "stack": [
-                            {
-                                "text": "{{tenantName}} Muncipal Council",
-                                "style": "header"
-                            },
-                            {
-                                "text": "FORM-VIII A",
-                                "style": "sub-header"
-                            },
-                            {
-                                "text": "FORM OF APPROVAL OF BUILDING PERMIT",
-                                "style": "header"
-                            },
-                            {
-                                "text": "BYELAWS NO.-8(4)",
-                                "style": "sub-header"
-                            }
-                        ]
-                    },
-                    {
-                        "image": "{{logoImage}}",
-                        "width": 70,
-                        "height": 70,
-                        "alignment": "right"
-                    }
-                ]
+              "image": "{{logoImage}}",
+              "width": 70,
+              "height": 70,
+              "alignment": "left"
             },
             {
-                "columns": [
-                    {
-                        "text": [
-                            {
-                                "text": "Plan Permission No : ",
-                                "bold": true
-                            },
-                            {
-                                "text": "{{planPermissionNo}}",
-                                "bold" : true,
-                                "font":"Roboto"
-                            }
-                        ],
-                        "alignment": "left",
-                        "width" : "*"
-                    },
-                    {
-                        "text": [
-                            {
-                                "text": "Dated : ",
-                                "bold": true
-                            },
-                            {
-                                "text": "{{applicationDate}}",
-                                "bold": true
-                            }
-                        ],
-                        "alignment": "right",
-                        "width" : "auto"
-                    }
-                ],
-                "style": "top-margin"
-            },
-            {
-                "text": [
-                    {
-                        "text": "With respect to your Application No "
-                    },
-                    {
-                        "text": "{{applicationNo}}",
-                        "bold" : true,
-                        "font":"Roboto"
-                    },
-                    {
-                        "text": " dated "
-                    },
-                    {
-                        "text": "{{applicationDate}}"
-                    },
-                    {
-                        "text": ", permission is hereby granted in favour of:"
-                    }
-                ],
-                "style": "top-margin"
-            },
-            {
-                "text": [
-                    {
-                        "text": "Smt/Sri "
-                    },
-                    {
-                        "text": "{{favourOf}}",
-                        "bold": true
-                    },
-                    {
-                        "text": " for "
-                    }
-                ],
-                "style": "top-margin"
-            },
-            {
-                "text": [
-                    {
-                        "text": "Construction of a Residential building in respect of Plot No (CS) "
-                    },
-                    {
-                        "text" : "{{plotNo}}",
-                        "bold": true
-                    },
-                    {
-                        "text" : "  Plot No (MSP) "
-                    },
-                    {
-                        "text" : "{{plotNo}}",
-                        "bold": true
-                    },
-                    {
-                        "text" : " Khata No " 
-                    },
-                    {
-                        "text" : "{{khataNo}}",
-                        "bold": true
-                    },
-                    {
-                        "text" : " Holding No. "
-                    },
-                    {
-                        "text" : "{{holdingNo}}",
-                        "bold" : true
-                    },
-                    {
-                        "text" : " of "
-                    },
-                    {
-                        "text" : "{{tenantName}} Municipal Council",
-                        "bold" : true
-                    },
-                    {
-                        "text" : "  subject to the following conditions/restrictions."
-                    }
-                ]
-            },
-            {
-                "stack": [
-                    {
-                        "text": "Proposed area is as follows,"
-                    },
-                    {
-                        "text": "Block No 1",
-                        "style": "top-margin"
-                    }
-                ],
-                "alignment": "left",
-                "bold": true,
-                "style": "top-margin"
-            },
-            {
-                "table": {
-                    "widths": [
-                        "*",
-                        "*",
-                        "*",
-                        "*",
-                        "*",
-                        "*"
-                    ],
-                    "body": [
-                        [
-                            {
-                                "text": "Floor Description",
-                                "bold": true
-                            },
-                            {
-                                "text": "Level",
-                                "bold": true
-                            },
-                            {
-                                "text": "Occupancy",
-                                "bold": true
-                            },
-                            {
-                                "text": "Builtup Area (m²)",
-                                "bold": true
-                            },
-                            {
-                                "text": "Floor Area (m²)",
-                                "bold": true
-                            },
-                            {
-                                "text": "Carpet Area (m²)",
-                                "bold": true
-                            }
-                        ],
-                        "{{floorWiseProposedArea}}",
-                        [
-                            {
-                                "text": " "
-                            },
-                            {
-                                "text": " "
-                            },
-                            {
-                                "text": "Total",
-                                "bold": true
-                            },
-                            {
-                                "text": "{{sumOfBuildupArea}}",
-                                "bold": true
-                            },
-                            {
-                                "text": "{{sumOfFloorArea}}",
-                                "bold": true
-                            },
-                            {
-                                "text": "{{sumOfCarpetArea}}",
-                                "bold": true
-                            }
-                        ]
-                    ]
+              "stack": [
+                {
+                  "text": "{{tenantName}} {{Muncipal_Council}}",
+                  "style": "header"
                 },
-                "style": "top-margin"
-            },
-            {
-                "stack": [
-                    {
-                        "text": "Total Proposed Area :"
-                    }
-                ],
-                "bold": true,
-                "style": "top-margin"
-            },
-            {
-                "table": {
-                    "widths": [
-                        "auto",
-                        "auto",
-                        "auto"
-                    ],
-                    "body": [
-                        [
-                            {
-                                "text": "Builtup Area (m²)",
-                                "bold": true
-                            },
-                            {
-                                "text": "Floor Area (m²)",
-                                "bold": true,
-                                "alignment": "right"
-                            },
-                            {
-                                "text": "Carpet Area (m²)",
-                                "bold": true,
-                                "alignment": "right"
-                            }
-                        ],
-                        [
-                            {
-                                "text": "{{totalBuitUpArea}}",
-                                "alignment": "right"
-                            },
-                            {
-                                "text": "{{totalFloorArea}}",
-                                "alignment": "right"
-                            },
-                            {
-                                "text": "{{totalCarpetArea}}",
-                                "alignment": "right"
-                            }
-                        ]
-                    ]
+                {
+                  "text": "{{BPA_FORM}}",
+                  "style": "sub-header"
                 },
-                "style": "top-margin"
-            },
-            {
-                "stack": [
-                    {
-                        "text": "Permit fee details as follows,"
-                    }
-                ],
-                "bold": true,
-                "style": "top-margin"
-            },
-            {
-                "table": {
-                    "widths": [
-                        "auto",
-                        "auto"
-                    ],
-                    "body": [
-                        [
-                            {
-                                "text": "Fee Description",
-                                "bold": true
-                            },
-                            {
-                                "text": "Amount (Rs)",
-                                "bold": true,
-                                "alignment": "right"
-                            }
-                        ],
-                        [
-                            {
-                                "text": "{{appHeadCode}}"
-                            },
-                            {
-                                "text": "{{appFee}}",
-                                "alignment": "right"
-                            }
-                        ],
-			[
-			  {
-				"text": "{{sanHeadCode}}"
-			  },
-			  {
-				"text": "{{sanFee}}",
-				"alignment": "right"
-			  }
-			],
-                        [
-                            {
-                                "text": "Total",
-                                "bold": true
-                            },
-                            {
-                                "text": "{{totalDue}}",
-                                "bold": true,
-                                "alignment": "right"
-                            }
-                        ]
-                    ]
+                {
+                  "text": "{{BPA_FORM_APPROVAL}}",
+                  "style": "header"
                 },
-                "margin": [
-                    0,
-                    5,
-                    0,
-                    0
-                ]
-            },
-            {
-                "pageBreak": "before",
-                "columns": [
-                    {
-                        "image": "{{logoImage}}",
-                        "width": 50,
-                        "height": 50,
-                        "alignment": "left"
-                    },
-                    {
-                        "stack": [
-                            {
-                                "text": "{{tenantName}} Muncipal Council",
-                                "style": "header"
-                            },
-                            {
-                                "text": "AUTOMATED BUILDING PERMIT APPROVAL SYSTEM",
-                                "style": "header",
-                                "decoration": "underline"
-                            },
-                            {
-                                "text": "PLAN DOCUMENT SCRUTINY REPORT",
-                                "style": "header",
-                                "decoration": "underline"
-                            }
-                        ]
-                    },
-                    {
-                        "image": "{{logoImage}}",
-                        "width": 50,
-                        "height": 50,
-                        "alignment": "right"
-                    }
-                ],
-                "style": "top-high-margin"
-            },
-            {
-                "text": [
-                    {
-                        "text": "STATUS : "
-                    },
-                    {
-                        "text": "{{status}}",
-                        "color": "green"
-                    }
-                ],
-                "bold": true,
-                "alignment": "center",
-                "style": "top-margin"
-            },
-            {
-                "table": {
-                    "widths": [
-                        "auto",
-                        "*",
-                        "*",
-                        "auto",
-                        "*",
-                        "*"
-                    ],
-                    "body": [
-                        [
-                            {
-                                "text": "APPLICATION DETAILS",
-                                "bold": true,
-                                "colSpan": 3,
-                                "alignment": "center"
-                            },
-                            " ",
-                            " ",
-                            {
-                                "text": "PLOT DETAILS",
-                                "bold": true,
-                                "colSpan": 3,
-                                "alignment": "center"
-                            },
-                            " ",
-                            " "
-                        ],
-                        [
-                            {
-                                "text": "1"
-                            },
-                            {
-                                "text": "APPLICANT NAME"
-                            },
-                            {
-                                "text": "{{applicantName}}"
-                            },
-                            {
-                                "text": "9"
-                            },
-                            {
-                                "text": "PLOT RESURVEY NUMBER"
-                            },
-                            {
-                                "text": "{{plotReserveNo}}"
-                            }
-                        ],
-                        [
-                            {
-                                "text": "2"
-                            },
-                            {
-                                "text": "APPLICATION NUMBER"
-                            },
-                            {
-                                "text": "{{applicationNo}}"
-                            },
-                            {
-                                "text": "10"
-                            },
-                            {
-                                "text": " REVENUE WARD"
-                            },
-                            {
-                                "text": "{{revenueWard}}"
-                            }
-                        ],
-                        [
-                            {
-                                "text": "3"
-                            },
-                            {
-                                "text": "APPLICATION DATE"
-                            },
-                            {
-                                "text": "{{applicationDate}}"
-                            },
-                            {
-                                "text": "11"
-                            },
-                            {
-                                "text": "DESAM"
-                            },
-                            {
-                                "text": "{{desam}}"
-                            }
-                        ],
-                        [
-                            {
-                                "text": "4"
-                            },
-                            {
-                                "text": "OCCUPANCY TYPE"
-                            },
-                            {
-                                "text": "{{occupancyType}}"
-                            },
-                            {
-                                "text": "12"
-                            },
-                            {
-                                "text": "VILLAGE"
-                            },
-                            {
-                                "text": "{{village}}"
-                            }
-                        ],
-                        [
-                            {
-                                "text": "5"
-                            },
-                            {
-                                "text": "LICENSEE"
-                            },
-                            {
-                                "text": "license"
-                            },
-                            {
-                                "text": "13"
-                            },
-                            {
-                                "text": "PLOT AREA in m²"
-                            },
-                            {
-                                "text": "{{plotArea}}"
-                            }
-                        ],
-                        [
-                            {
-                                "text": "6"
-                            },
-                            {
-                                "text": "DEMOLITION AREA in m²"
-                            },
-                            {
-                                "text": "{{demolitionArea}}"
-                            },
-                            {
-                                "text": "14"
-                            },
-                            {
-                                "text": "AVERAGE WIDTH OF PLOTin m"
-                            },
-                            {
-                                "text": "{{avgWidthOfPlot}}"
-                            }
-                        ],
-                        [
-                            {
-                                "text": "7"
-                            },
-                            {
-                                "text": "ROAD WIDTH in m"
-                            },
-                            {
-                                "text": "{{roadWidth}}"
-                            },
-                            {
-                                "text": "15"
-                            },
-                            {
-                                "text": "AVERAGE DEPTH OF PLOTin m"
-                            },
-                            {
-                                "text": "{{avgDepthOfPlot}}"
-                            }
-                        ],
-                        [
-                            {
-                                "text": "8"
-                            },
-                            {
-                                "text": "AREA TYPE"
-                            },
-                            {
-                                "text": "{{areaType}}"
-                            },
-                            {
-                                "text": " "
-                            },
-                            {
-                                "text": " "
-                            },
-                            {
-                                "text": " "
-                            }
-                        ]
-                    ]
+                {
+                  "text": "{{BPA_BYELAWS}}",
+                  "style": "sub-header"
                 }
+              ]
             },
             {
-                "text": "Decleration in Drawings",
-                "bold": true,
-                "style": "top-high-margin",
-                "fontSize": 15
-            },
-            {
-                "table": {
-                    "widths": [
-                        "auto",
-                        "auto",
-                        "auto"
-                    ],
-                    "body": [
-                        [
-                            {
-                                "text": "1"
-                            },
-                            {
-                                "text": "{{buildingNearGovt}}"
-                            },
-                            {
-                                "text": "{{isBuildingNearGovtBLDG}}"
-                            }
-                        ],
-                        [
-                            {
-                                "text": "2"
-                            },
-                            {
-                                "text": "{{buildingNearMonument}}"
-                            },
-                            {
-                                "text": "{{isBuildingNearMonument}}"
-                            }
-                        ],
-                        [
-                            {
-                                "text": "3"
-                            },
-                            {
-                                "text": "{{constructionNearAirport}}"
-                            },
-                            {
-                                "text": "{{isCostructionNearAirport}}"
-                            }
-                        ],
-                        [
-                            {
-                                "text": "4"
-                            },
-                            {
-                                "text": "{{constructionNearDefence}}"
-                            },
-                            {
-                                "text": "{{isConstructionNearDefence}}"
-                            }
-                        ],
-                        [
-                            {
-                                "text": "5"
-                            },
-                            {
-                                "text": "{{stateEnvImpact}}"
-                            },
-                            {
-                                "text": "{{isStateEnvImpact}}"
-                            }
-                        ],
-                        [
-                            {
-                                "text": "6"
-                            },
-                            {
-                                "text": "NOC from Heritage Conservation Committee (National MonumentsAuthority) available?"
-                            },
-                            {
-                                "text": "YES"
-                            }
-                        ],
-                        [
-                            {
-                                "text": "7"
-                            },
-                            {
-                                "text": "{{nocRailways}}"
-                            },
-                            {
-                                "text": "{{isNocRailways}}"
-                            }
-                        ],
-                        [
-                            {
-                                "text": "8"
-                            },
-                            {
-                                "text": "{{nocIrrigationDept}}"
-                            },
-                            {
-                                "text": "{{isNocIrrigationDept}}"
-                            }
-                        ],
-                        [
-                            {
-                                "text": "9"
-                            },
-                            {
-                                "text": "{{nocCollectorGvtLand}}"
-                            },
-                            {
-                                "text": "{{isNocCollectorGvtLand}}"
-                            }
-                        ]
-                    ]
-                }
-            },
-            {
-                "text": "Block No 1 - Proposed Details",
-                "style": "top-high-margin",
-                "fontSize": 15
-            },
-            {
-                "table": {
-                    "widths": [
-                        "*",
-                        "*",
-                        "*",
-                        "*",
-                        "*"
-                    ],
-                    "body": [
-                        [
-                            "Floor",
-                            "Occupancy",
-                            "Built Up Area in m²",
-                            "Floor Area in m²",
-                            "Carpet Area in m²"
-                        ],
-                        [
-                            {
-                                "ol": [
-                                    "Covered Area is {{coveredArea}} m²",
-                                    "Height of building is {{buildingHeight}} m"
-                                ],
-                                "colSpan": 5,
-                                "margin": 5
-                            }
-                        ]
-                    ]
-                }
-            },
-            {
-                "table": {
-                    "widths": [
-                        "*",
-                        "*",
-                        "*",
-                        "*",
-                        "*"
-                    ],
-                    "body": [
-                        [
-                            "Floor",
-                            "Occupancy",
-                            "Built Up Area in m²",
-                            "Floor Area in m²",
-                            "Carpet Area in m²"
-                        ],
-                        "{{blockWiseProposedArea}}",
-                        [
-                            {
-                                "text": "Total",
-                                "alignment": "right",
-                                "colSpan": 2
-                            },
-                            " ",
-                            "{{sumOfBuildupArea}}",
-                            "{{sumOfFloorArea}}",
-                            "{{sumOfCarpetArea}}"
-                        ],
-                        [
-                            {
-                                "ol": [
-                                    "Covered Area is {{coveredArea}}  m²",
-                                    "Height of building is {{buildingHeight}} m"
-                                ],
-                                "colSpan": 5,
-                                "margin": 5
-                            }
-                        ]
-                    ]
-                },
-                "style": "top-high-margin"
-            },
-            {
-                "text": "Total Area",
-                "style": "top-margin",
-                "fontSize": 15
-            },
-            {
-                "table": {
-                    "widths": [
-                        "*",
-                        "*",
-                        "*",
-                        "*"
-                    ],
-                    "body": [
-                        [
-                            "Built Up Area in m²",
-                            "Floor Area in m²",
-                            "Carpet Area in m²",
-                            "Covered Area in m²"
-                        ],
-                        [
-                            "{{totalBuitUpArea}}",
-                            "{{totalFloorArea}}",
-                            "{{totalCarpetArea}}",
-                            "{{totalCoverageArea}}"
-
-                        ]
-                    ]
-                },
-                "alignment": "center"
-            },
-            {
-                "text": "1.Far",
-                "style": "top-margin",
-                "fontSize": 15
-            },
-            {
-                "table": {
-                    "widths": [
-                        "*",
-                        "*",
-                        "*",
-                        "*",
-                        "*",
-                        "*"
-                    ],
-                    "body": [
-                        [
-                            "Bye Law",
-                            "Area Type",
-                            "Road Width",
-                            "Required",
-                            "Provided",
-                            "Status"
-                        ],
-                        "{{commonFar}}"
-                    ]
-                },
-                "alignment": "center"
-            },
-            {
-                "text": "2.Monument Distance",
-                "style": "top-margin",
-                "fontSize": 15
-            },
-            {
-                "table": {
-                    "widths": [
-                        "*",
-                        "*",
-                        "*",
-                        "*",
-                        "*",
-                        "*"
-                    ],
-                    "body": [
-                        [
-                            "Bye Law",
-                            "Description",
-                            "Distance",
-                            "Permitted",
-                            "Provided",
-                            "Status"
-                        ],
-                        "{{commonMonument}}"
-                    ]
-                },
-                "alignment": "center"
-            },
-            {
-                "text": "Block 1 - Scrutiny Details",
-                "style": "top-margin",
-                "fontSize": 15,
-                "color": "blue"
-            },
-            {
-                "text": "1.Front Setback",
-                "style": "top-margin",
-                "fontSize": 15
-            },
-            {
-                "table": {
-                    "widths": [
-                        "*",
-                        "*",
-                        "*",
-                        "*",
-                        "*",
-                        "*",
-                        "*"
-                    ],
-                    "body": [
-                        [
-                            "Bye Law",
-                            "Level",
-                            "Occupancy",
-                            "Field Verified",
-                            "Required",
-                            "Provided",
-                            "Status"
-                        ],
-                        "{{frontSetBack}}"
-                    ]
-                },
-                "alignment": "center"
-            },
-            {
-                "text": "2.Maximum Height of Building Allowed",
-                "style": "top-margin",
-                "fontSize": 15
-            },
-            {
-                "table": {
-                    "widths": [
-                        "*",
-                        "*",
-                        "*",
-                        "*",
-                        "*",
-                        "*",
-                        "*"
-                    ],
-                    "body": [
-                        [
-                            "Bye Law",
-                            "Description",
-                            "Area Type",
-                            "Road width",
-                            "Required",
-                            "Provided",
-                            "Status"
-                        ],
-                        "{{maxHeightBuildingAlwd}}"
-                    ]
-                },
-                "alignment": "center"
-            },
-            {
-                "text": "3.Number of Floors Allowed",
-                "style": "top-margin",
-                "fontSize": 15
-            },
-            {
-                "table": {
-                    "widths": [
-                        "*",
-                        "*",
-                        "*",
-                        "*",
-                        "*",
-                        "*",
-                        "*"
-                    ],
-                    "body": [
-                        [
-                            "Bye Law",
-                            "Description",
-                            "Area Type",
-                            "Road width",
-                            "Required",
-                            "Provided",
-                            "Status"
-                        ],
-                        "{{numOfFloorsAlwd}}"
-                    ]
-                },
-                "alignment": "center"
-            },
-            {
-                "text": "4.Plinth",
-                "style": "top-margin",
-                "fontSize": 15
-            },
-            {
-                "table": {
-                    "widths": [
-                        "*",
-                        "*",
-                        "*",
-                        "*",
-                        "*"
-                    ],
-                    "body": [
-                        [
-                            "Bye Law",
-                            "Description",
-                            "Required",
-                            "Provided",
-                            "Status"
-                        ],
-                        "{{plinth}}"
-                    ]
-                },
-                "alignment": "center"
-            },
-            {
-                "text": "5.Rear Setback",
-                "style": "top-margin",
-                "fontSize": 15
-            },
-            {
-                "table": {
-                    "widths": [
-                        "*",
-                        "*",
-                        "*",
-                        "*",
-                        "*",
-                        "*",
-                        "*"
-                    ],
-                    "body": [
-                        [
-                            "Bye Law",
-                            "Level",
-                            "Occupancy",
-                            "Field Verified",
-                            "Required",
-                            "Provided",
-                            "Status"
-                        ],
-                        "{{rearSetBack}}"
-                    ]
-                },
-                "alignment": "center"
-            },
-            {
-                "text": "6.Side Setback",
-                "style": "top-margin",
-                "fontSize": 15
-            },
-            {
-                "table": {
-                    "widths": [
-                        "*",
-                        "*",
-                        "*",
-                        "*",
-                        "*",
-                        "*",
-                        "*",
-                        "*"
-                    ],
-                    "body": [
-                        [
-                            "Bye Law",
-                            "Level",
-                            "Occupancy",
-                            "Side Number",
-                            "Field Verified",
-                            "Required",
-                            "Provided",
-                            "Status"
-                        ],
-                        "{{sideSetBack}}"
-                    ]
-                },
-                "alignment": "center"
-            },
-            {
-                "stack": [
-                    {
-                        "text": "By Order",
-                        "style": "top-margin"
-                    },
-                    {
-                        "text": "Authorised Officer",
-                        "margin": 2
-                    },
-                    {
-                        "text": "{{approvedBy}}",
-                        "margin": 2
-                    }
-                ],
-                "alignment": "right",
-                "style": "top-margin"
-            },
-            {
-                "text": [
-                    {
-                        "text": "Validity : This certificate is valid upto "
-                    },
-                    {
-                        "text": "{{validityDate}}"
-                    },
-                    {
-                        "text": " Only. "
-                    }
-                ],
-                "style": "top-margin",
-                "bold": true
-            },
-            {
-                "text": "Note : ",
-                "bold": true,
-                "style": "top-margin"
-            },
-            {
-                "text": "The owner as well as the architect/licensed engineer are fully responsible for adhering to the provisions of the bye laws in both the building plan as well as in the actual construction.In case it is found that the permission has been secured through misrepresentation or fraud, the permission may be suspended or revoked by the Authority under Section 363 (3) of the {{tenantName}} Municipal Act 2007 and/or cancelled under byelaw 14 of the bye laws.",
-                "style": "top-margin"
-            },
-            {
-                "image" : "{{qrCode}}",
-                "alignment" : "right",
-                "width" : 150,
-                "height" : 50
+              "image": "{{logoImage}}",
+              "width": 70,
+              "height": 70,
+              "alignment": "right"
             }
-        ],
-        "styles": {
-            "header": {
-                "bold": true,
-                "alignment": "center"
+          ]
+        },
+        {
+          "columns": [
+            {
+              "text": [
+                {
+                  "text": "{{PLAN_PERMISION_NO}} : ",
+                  "bold": true
+                },
+                {
+                  "text": "{{planPermissionNo}}",
+                  "bold": true,
+                  "font": "Roboto"
+                }
+              ],
+              "alignment": "left",
+              "width": "*"
             },
-            "sub-header": {
-                "alignment": "center",
-                "margin": [
-                    0,
-                    5,
-                    0,
-                    5
-                ]
-            },
-            "top-margin": {
-                "margin": [
-                    0,
-                    10,
-                    0,
-                    0
-                ]
-            },
-            "top-high-margin": {
-                "margin": [
-                    0,
-                    30,
-                    0,
-                    0
-                ]
+            {
+              "text": [
+                {
+                  "text": "{{Dated}} : ",
+                  "bold": true
+                },
+                {
+                  "text": "{{applicationDate}}",
+                  "bold": true
+                }
+              ],
+              "alignment": "right",
+              "width": "auto"
             }
+          ],
+          "style": "top-margin"
+        },
+        {
+          "text": [
+            {
+              "text": "{{WRT_TXT}}"
+            },
+            {
+              "text" : " {{applicationNo}}",
+              "bold" : true
+            },
+            {
+              "text" : " {{dated}}"
+            },
+            {
+              "text" : " {{applicationDate}}"
+            },
+            {
+              "text" : ", {{PERMISSION_GRANT_TXT}} : "
+            }
+          ],
+          "style": "top-margin"
+        },
+        {
+          "text": [
+            {
+              "text": "{{SALUTATION}} "
+            },
+            {
+              "text": "{{favourOf}}",
+              "bold": true
+            },
+            {
+              "text": " {{FOR}} "
+            }
+          ],
+          "style": "top-margin"
+        },
+        {
+          "text": [
+            {
+              "text": "{{DSCR1}} {{PLOT_NO}} {{CS_PLOT}}"
+            },
+            {
+              "text": " {{plotNo}}",
+              "bold": true
+            },
+            {
+              "text": "  {{PLOT_NO}} {{MSP_PLOT}} "
+            },
+            {
+              "text": "{{plotNo}}",
+              "bold": true
+            },
+            {
+              "text": " {{KHATA_NO}} "
+            },
+            {
+              "text": "{{khataNo}}",
+              "bold": true
+            },
+            {
+              "text": " {{HOLDING_NO}} "
+            },
+            {
+              "text": "{{holdingNo}}",
+              "bold": true
+            },
+            {
+               "text" : " {{SERVEY_NO}} "
+            },
+            {
+              "text" : "{{reServeyPlotNo}}",
+              "bold" : true
+            },
+            {
+              "text" : " {{TOWNPLANNING_TXT}} "
+           },
+           {
+             "text" : "{{townPlanningScheme}}",
+             "bold" : true
+           },
+            {
+            "text" : " {{PROPOSE_LAND}} "
+            },
+            {
+              "text" : "{{proposedLandUse}}",
+              "bold" : true
+            },
+            {
+              "text": " {{OF}} "
+            },
+            {
+              "text": "{{tenantName}} {{BPA_PDF_MUNCIPAL}}",
+              "bold": true
+            },
+            {
+              "text": "  {{CONDNS_TXT}}"
+            }
+          ]
+        },
+        {
+          "separator": ")",
+          "ol": ["{{conditions}}"]
+        },
+        {
+          "stack": [
+            {
+              "text": "{{PERMIT_DETAILS_TXT}},"
+            }
+          ],
+          "bold": true,
+          "style": "top-margin"
+        },
+        {
+          "table": {
+            "widths": [
+              "auto",
+              "auto"
+            ],
+            "body": [
+              [
+                {
+                  "text": "{{FEE_DSCR}}",
+                  "bold": true
+                },
+                {
+                  "text": "{{AMOUNT}}",
+                  "bold": true,
+                  "alignment": "right"
+                }
+              ],
+              [
+                {
+                  "text": "{{appHeadCode}}"
+                },
+                {
+                  "text": "{{appFee}}",
+                  "alignment": "right"
+                }
+              ],
+              [
+                {
+                  "text": "{{sanHeadCode}}"
+                },
+                {
+                  "text": "{{sanFee}}",
+                  "alignment": "right"
+                }
+              ],
+              [
+                {
+                  "text": "{{TOTAL}}",
+                  "bold": true
+                },
+                {
+                  "text": "{{totalDue}}",
+                  "bold": true,
+                  "alignment": "right"
+                }
+              ]
+            ]
+          },
+          "margin": [
+            0,
+            5,
+            0,
+            0
+          ]
+        },
+        {
+          "stack": [
+            {
+              "text": "{{BY_ORDER}}",
+              "style": "top-margin"
+            },
+            {
+              "text": "{{AUTH_OFFICER}}",
+              "margin": 2
+            },
+            {
+              "text": "{{approvedBy}}",
+              "margin": 2
+            }
+          ],
+          "alignment": "right",
+          "style": "top-margin"
+        },
+        {
+          "text": [
+            {
+              "text": "{{VALIDITY_DSCR}} "
+            },
+            {
+              "text": "{{validityDate}}"
+            },
+            {
+              "text": " {{ONLY}}."
+            }
+          ],
+          "style": "top-margin",
+          "bold": true
+        },
+        {
+          "text": "{{NOTE}} : ",
+          "bold": true,
+          "style": "top-margin"
+        },
+        {
+          "text": [
+            {
+              "text" : "{{SUMMARY1}}"
+            },
+            {
+              "text" : " {{tenantName}} "
+            },
+            {
+              "text" : "{{SUMMARY2}}"
+            }
+          ],
+          "style": "top-margin"
+        },
+        {
+          "image": "{{qrCode}}",
+          "alignment": "right",
+          "width": 150,
+          "height": 50
         }
+      ],
+      "styles": {
+        "header": {
+          "bold": true,
+          "alignment": "center"
+        },
+        "sub-header": {
+          "alignment": "center",
+          "margin": [
+            0,
+            5,
+            0,
+            5
+          ]
+        },
+        "top-margin": {
+          "margin": [
+            0,
+            10,
+            0,
+            0
+          ]
+        },
+        "top-high-margin": {
+          "margin": [
+            0,
+            30,
+            0,
+            0
+          ]
+        }
+      }
     }
-}
+  }
