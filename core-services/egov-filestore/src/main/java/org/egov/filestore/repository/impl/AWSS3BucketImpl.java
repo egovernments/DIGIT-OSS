@@ -1,6 +1,7 @@
 package org.egov.filestore.repository.impl;
 
 import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -83,10 +84,10 @@ public class AWSS3BucketImpl implements CloudFilesManager {
 			if (!isBucketFixed && !s3Client.doesBucketExistV2(bucketName))
 				s3Client.createBucket(bucketName);
 			Long contentLength = artifact.getMultipartFile().getSize();
-			InputStream inputStream;
+			BufferedInputStream inputStream;
 			
 			try {
-				inputStream = artifact.getMultipartFile().getInputStream();
+				inputStream = new BufferedInputStream(artifact.getMultipartFile().getInputStream());
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				log.error("EG_FILESTORE_INPUT_ERROR",e);
@@ -181,7 +182,7 @@ public class AWSS3BucketImpl implements CloudFilesManager {
 		}
 		ObjectMetadata objMd = new ObjectMetadata();
 		objMd.setContentLength(bytes.length);
-		s3Client.putObject(bucketName, fileName, new ByteArrayInputStream(bytes), objMd);
+		s3Client.putObject(bucketName, fileName, inputStream, objMd);
 	}
 
 	/**
