@@ -1,6 +1,7 @@
 package org.egov.filestore.repository.impl;
 
 import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -91,7 +92,7 @@ public class AzureBlobStorageImpl implements CloudFilesManager {
 				container.createIfNotExists(BlobContainerPublicAccessType.CONTAINER, new BlobRequestOptions(), new OperationContext());
 				
 				Long contentLength = artifact.getMultipartFile().getSize();
-				InputStream inputStream = artifact.getMultipartFile().getInputStream();
+				BufferedInputStream inputStream = new BufferedInputStream(artifact.getMultipartFile().getInputStream());
 				
 				if(artifact.getMultipartFile().getContentType().startsWith("image/")) {
 					String extension = FilenameUtils.getExtension(artifact.getMultipartFile().getOriginalFilename());

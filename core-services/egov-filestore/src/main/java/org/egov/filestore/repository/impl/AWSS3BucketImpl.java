@@ -181,7 +181,7 @@ public class AWSS3BucketImpl implements CloudFilesManager {
 			throw new CustomException("EG_FILESTORE_INPUT_ERROR", "Failed to read input stream");
 		}
 		ObjectMetadata objMd = new ObjectMetadata();
-		objMd.setContentLength(bytes.length);
+		objMd.setContentLength(contentLength);
 		s3Client.putObject(bucketName, fileName, inputStream, objMd);
 	}
 

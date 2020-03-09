@@ -1,6 +1,7 @@
 package org.egov.filestore.repository.impl;
 
 import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Base64;
@@ -61,7 +62,7 @@ public class CloudFileMgrUtils {
 	 * @param fileName
 	 * @return
 	 */
-	public Map<String, BufferedImage> createVersionsOfImage(InputStream inputStream, String fileName) {
+	public Map<String, BufferedImage> createVersionsOfImage(BufferedInputStream inputStream, String fileName) {
 		
 		Map<String, BufferedImage> mapOfImagesAndPaths = new HashMap<>();
 		try {
