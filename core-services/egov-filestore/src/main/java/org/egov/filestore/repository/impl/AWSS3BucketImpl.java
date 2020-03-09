@@ -14,6 +14,7 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.egov.filestore.domain.model.Artifact;
 import org.egov.filestore.repository.AWSClientFacade;
 import org.egov.filestore.repository.CloudFilesManager;
@@ -88,9 +89,8 @@ public class AWSS3BucketImpl implements CloudFilesManager {
 				inputStream = artifact.getMultipartFile().getInputStream();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
-				throw new CustomException("EG_FILESTORE_INPUT_ERROR",
-						"Failed to read input stream from multipart file");
+				log.error("EG_FILESTORE_INPUT_ERROR",e);
+				throw new CustomException("EG_FILESTORE_INPUT_ERROR", "Failed to read input stream from multipart file");
 			}
 
 			if (artifact.getMultipartFile().getContentType().startsWith("image/")) {
@@ -171,10 +171,17 @@ public class AWSS3BucketImpl implements CloudFilesManager {
 	 * @param fileName
 	 */
 	private void writeFile(InputStream inputStream, String bucketName, String fileName, Long contentLength) {
+		
+		byte[] bytes;
+		try {
+			 bytes = IOUtils.toByteArray(inputStream);
+		} catch (IOException e) {
 
+			throw new CustomException("EG_FILESTORE_INPUT_ERROR", "Failed to read input stream");
+		}
 		ObjectMetadata objMd = new ObjectMetadata();
-		objMd.setContentLength(contentLength);
-		s3Client.putObject(bucketName, fileName, inputStream, objMd);
+		objMd.setContentLength(bytes.length);
+		s3Client.putObject(bucketName, fileName, new ByteArrayInputStream(bytes), objMd);
 	}
 
 	/**
