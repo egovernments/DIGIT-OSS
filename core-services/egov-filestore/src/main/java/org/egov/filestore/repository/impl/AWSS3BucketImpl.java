@@ -171,11 +171,10 @@ public class AWSS3BucketImpl implements CloudFilesManager {
 	 * @param fileName
 	 */
 	private void writeFile(InputStream inputStream, String bucketName, String fileName, Long contentLength) {
-		InputStream is = null;
 
 		ObjectMetadata objMd = new ObjectMetadata();
 		objMd.setContentLength(contentLength);
-		s3Client.putObject(bucketName, fileName, is, objMd);
+		s3Client.putObject(bucketName, fileName, inputStream, objMd);
 	}
 
 	/**
