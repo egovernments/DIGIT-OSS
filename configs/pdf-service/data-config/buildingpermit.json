@@ -503,12 +503,6 @@
                 }
               },
               {
-                "variable": "status",
-                "value": {
-                  "path": "$.edcrDetail[0].status"
-                }
-              },
-              {
                 "variable": "applicantName",
                 "value": {
                   "path": "$.edcrDetail[0].planDetail.planInformation.applicantName"
