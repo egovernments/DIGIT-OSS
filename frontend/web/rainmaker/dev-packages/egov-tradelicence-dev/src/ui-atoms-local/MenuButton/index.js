@@ -67,8 +67,9 @@ class MenuListComposition extends React.Component {
             {...data.props}
           >
             <Icon className={classes.leftIcon} iconName={data.leftIcon} />
-            {data.label}
-            <Icon className={classes.rightIcon} iconName={data.rightIcon} />
+              <LabelContainer labelName={data.label.labelName} labelKey={data.label.labelKey} style={{color:data.props.style.color}}/>
+              <span style={{marginLeft:30 ,color : data.props.color}}> |  </span>
+            <Icon className={classes.rightIcon} iconName={data.rightIcon} color={data.props.color}/>
           </Button>
           <Popper className="menu-list-item5" open={open} anchorEl={this.anchorEl} transition disablePortal>
             {({ TransitionProps, placement }) => (
