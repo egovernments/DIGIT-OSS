@@ -7,10 +7,10 @@
         "headerBandLabel":"PAYMENT_COMMON_CONSUMER_CODE",
         "footer":{
           "label":{
-            labelName: "GO TO HOME",
-            labelKey: "COMMON_BUTTON_HOME"
-          }
-          "link":"/pt-mutation/propertySearch",
+            "labelName": "GO TO HOME",
+            "labelKey": "COMMON_BUTTON_HOME"
+          },
+          "link":"/pt-mutation/propertySearch"
         }
       }
   ]
