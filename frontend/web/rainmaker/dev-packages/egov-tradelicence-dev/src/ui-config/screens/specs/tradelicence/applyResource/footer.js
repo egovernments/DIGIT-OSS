@@ -891,7 +891,7 @@ export const downloadPrintContainer = (
               label: {labelName : "DOWNLOAD" , labelKey :"TL_DOWNLOAD"},
                leftIcon: "cloud_download",
               rightIcon: "arrow_drop_down",
-              props: { variant: "outlined", style: { height: "60px", color : "#FE7A51" }, className: "tl-download-button" },
+              props: { variant: "outlined", style: { height: "60px", color : "rgba(0, 0, 0, 0.87);" }, className: "tl-download-button" },
               menu: downloadMenu
             }
           }
