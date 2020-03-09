@@ -23,7 +23,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
@@ -75,20 +74,31 @@ public class AWSS3BucketImpl implements CloudFilesManager {
 			s3Client = awsFacade.getS3Client();
 
 		artifacts.forEach(artifact -> {
+			
 			String completeName = artifact.getFileLocation().getFileName();
 			int index = completeName.indexOf('/');
 			String bucketName = completeName.substring(0, index);
 			String fileNameWithPath = completeName.substring(index + 1, completeName.length());
 			if (!isBucketFixed && !s3Client.doesBucketExistV2(bucketName))
 				s3Client.createBucket(bucketName);
+			Long contentLength = artifact.getMultipartFile().getSize();
+			InputStream inputStream;
+			
+			try {
+				inputStream = artifact.getMultipartFile().getInputStream();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				throw new CustomException("EG_FILESTORE_INPUT_ERROR",
+						"Failed to read input stream from multipart file");
+			}
+
 			if (artifact.getMultipartFile().getContentType().startsWith("image/")) {
 				String extension = FilenameUtils.getExtension(artifact.getMultipartFile().getOriginalFilename());
-				Map<String, BufferedImage> mapOfImagesAndPaths = util.createVersionsOfImage(artifact.getMultipartFile(),
-						fileNameWithPath);
+				Map<String, BufferedImage> mapOfImagesAndPaths = util.createVersionsOfImage(inputStream, fileNameWithPath);
 				writeImage(mapOfImagesAndPaths, bucketName, extension);
-			} else {
-				writeFile(artifact.getMultipartFile(), bucketName, fileNameWithPath);
 			}
+			writeFile(inputStream, bucketName, fileNameWithPath, contentLength);
 		});
 	}
 
@@ -160,18 +170,11 @@ public class AWSS3BucketImpl implements CloudFilesManager {
 	 * @param bucketName
 	 * @param fileName
 	 */
-	private void writeFile(MultipartFile file, String bucketName, String fileName) {
+	private void writeFile(InputStream inputStream, String bucketName, String fileName, Long contentLength) {
 		InputStream is = null;
-		long contentLength = file.getSize();
-		try {
-			is = file.getInputStream();
-		} catch (IOException e) {
-			log.error(" exception occured while reading input stream from file {}", e);
-			throw new RuntimeException(e);
-		}
+
 		ObjectMetadata objMd = new ObjectMetadata();
 		objMd.setContentLength(contentLength);
-
 		s3Client.putObject(bucketName, fileName, is, objMd);
 	}
 

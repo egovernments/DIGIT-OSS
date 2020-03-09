@@ -5,7 +5,6 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.egov.filestore.domain.exception.EmptyFileUploadRequestException;
@@ -14,7 +13,6 @@ import org.egov.filestore.domain.model.FileInfo;
 import org.egov.filestore.domain.model.FileLocation;
 import org.egov.filestore.domain.model.Resource;
 import org.egov.filestore.persistence.repository.ArtifactRepository;
-import org.egov.filestore.persistence.repository.AwsS3Repository;
 import org.egov.filestore.repository.CloudFilesManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,12 +25,6 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 public class StorageService {
-	
-	private static final String AWS_URL = "https://{mybucket}.s3.amazonaws.com/{filename}";
-
-	private static final String AWS_BUCKET_STRING = "{mybucket}";
-
-	private static final String AWS_FILE_STRING="{filename}";
 	
 	@Value("${is.bucket.fixed}")
 	private Boolean isBucketFixed;
@@ -51,9 +43,6 @@ public class StorageService {
 	
 	@Value("${source.azure.blob}")
 	private String azureBlobSource;
-	
-	@Autowired
-	private AwsS3Repository awsS3Repository;
 	
 	@Autowired
 	private CloudFilesManager cloudFilesManager;
@@ -125,14 +114,6 @@ public class StorageService {
 						.toMap(org.egov.filestore.persistence.entity.Artifact::getFileStoreId, 
 								org.egov.filestore.persistence.entity.Artifact::getFileName));
 		return cloudFilesManager.getFiles(mapOfIdAndFile);
-	}
-
-	private String getUrlFromName(String completeName) {
-
-		int index = completeName.indexOf('/');
-		String bucketName = completeName.substring(0, index);
-		String fileNameWithPath = completeName.substring(index + 1, completeName.length());
-		return AWS_URL.replace(AWS_BUCKET_STRING, bucketName).replace(AWS_FILE_STRING, fileNameWithPath);
 	}
 
 	private String getFolderName(String module, String tenantId, Calendar calendar) {
