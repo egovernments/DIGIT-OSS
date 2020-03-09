@@ -1,0 +1,17 @@
+{
+  "tenantId": "pb",
+  "moduleName": "common-masters",
+  "uiCommonPay":[
+      {
+        "code":"PT",
+        "headerBandLabel":"PAYMENT_COMMON_CONSUMER_CODE",
+        "footer":{
+          "label":{
+            labelName: "GO TO HOME",
+            labelKey: "COMMON_BUTTON_HOME"
+          }
+          "link":"/pt-mutation/propertySearch",
+        }
+      }
+  ]
+}
