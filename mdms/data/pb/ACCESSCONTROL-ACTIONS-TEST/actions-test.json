@@ -16155,7 +16155,7 @@
       "id": 1954,
       "name": "MutationBillingSlabCreate",
       "url": "/pt-calculator-v2/billingslab/mutation/_create",
-      "displayName": "Draft Search",
+      "displayName": "Mutation Billing Slab Create",
       "orderNumber": 1,
       "parentModule": "",
       "enabled": false,
@@ -16167,7 +16167,7 @@
       "id": 1955,
       "name": "MutationBillingSlabSearch",
       "url": "/pt-calculator-v2/billingslab/mutation/_search",
-      "displayName": "Draft Search",
+      "displayName": "Mutation Billing Slab Search",
       "orderNumber": 1,
       "parentModule": "",
       "enabled": false,
@@ -16348,6 +16348,17 @@
       "leftIcon": "editor:insert-chart",
       "path": "Finance.Period End Activities.Close Period",
       "navigationURL": "services/EGF/closedperiod/search/reopen"
+    },
+    {
+      "id": 1970,
+      "name": "Migrate Property v1 to v2",
+      "url": "/property-services/property/_migration",
+      "displayName": "Migrate Property v1 to v2",
+      "orderNumber": 5,
+      "enabled": false,
+      "serviceCode": "property-services",
+      "code": "null",
+      "path": ""
     }
   ]
 }
