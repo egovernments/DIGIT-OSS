@@ -645,7 +645,7 @@ public class PropertyValidator {
 		}
 		
 		if (StringUtils.isEmpty(reasonForTransfer) || StringUtils.isEmpty(docNo) || ObjectUtils.isEmpty(docDate) || ObjectUtils.isEmpty(docVal) || ObjectUtils.isEmpty(marketVal)) {
-			errorMap.put("EG_PT_MUTATION_FIELDS_ERROR", "mandatory fields Missing for mutation, please provide the following information : "
+				throw new CustomException("EG_PT_MUTATION_FIELDS_ERROR", "mandatory fields Missing for mutation, please provide the following information : "
 							+ "reasonForTransfer, documentNumber, documentDate, documentValue and marketValue");
 		}
 		
@@ -653,7 +653,36 @@ public class PropertyValidator {
 				ObjectUtils.isEmpty(workFlow.getBusinessService())))
 			errorMap.put("EG_PT_MUTATION_WF_FIELDS_ERROR", "mandatory fields Missing in workflow Object for Mutation please provide the following information : "
 					+ "action, moduleName and BusinessService");
+
+		List<String> masterNames = new ArrayList<>(Arrays.asList(PTConstants.MDMS_PT_MUTATIONREASON));
+		Map<String, List<String>> codes = propertyUtil.getAttributeValues(property.getTenantId(), PTConstants.MDMS_PT_MOD_NAME,
+				masterNames, "$.*.code", PTConstants.JSONPATH_CODES, request.getRequestInfo());
+
+		if (null != codes) {
+			validateMDMSData(masterNames, codes);
+		} else {
+			errorMap.put("MASTER_FETCH_FAILED", "Couldn't fetch master data for validation");
+		}
+
+		if (!codes.get(PTConstants.MDMS_PT_MUTATIONREASON).contains(reasonForTransfer))
+			errorMap.put("EG_PT_MT_REASON_ERROR",
+					"The reason for tranfer provided is invalid, please provide a valid mdms data");
 		
+		
+		Boolean isDocsEmpty = CollectionUtils.isEmpty(property.getDocuments());
+		Boolean isTransferDocPresent = false;
+		if (!isDocsEmpty) {
+
+			isTransferDocPresent = property.getDocuments().stream().map(doc -> doc.getDocumentType().toUpperCase())
+					.collect(Collectors.toSet()).contains(reasonForTransfer.toUpperCase());
+		}
+
+		if (isDocsEmpty || !isTransferDocPresent) {
+
+			errorMap.put("EG_PT_MT_DOCS_ERROR",
+					"Mandatory documents mising for the muation reason : " + reasonForTransfer);
+		}
+
 		if (propertyFromSearch.getStatus().equals(Status.INWORKFLOW)
 				&& property.getWorkflow().getAction().equalsIgnoreCase(configs.getMutationOpenState()))
 			errorMap.put("EG_PT_MUTATION_WF_ACTION_ERROR", "Invalid action, OPEN action cannot be applied on an active workflow ");
