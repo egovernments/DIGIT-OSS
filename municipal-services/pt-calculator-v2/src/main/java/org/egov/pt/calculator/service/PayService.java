@@ -97,7 +97,7 @@ public class PayService {
 		long currentTime = Calendar.getInstance().getTimeInMillis();
 		int currentYear = Calendar.getInstance().get(Calendar.YEAR);
 		int currentMonth = Calendar.getInstance().get(Calendar.MONTH) + 1;
-		String currentFinancialYear = currentMonth < 3 ? (currentYear - 1) + "-" + currentYear
+		String currentFinancialYear = currentMonth < 4 ? (currentYear - 1) + "-" + currentYear
 				: currentYear + "-" + (currentYear + 1);
 
 		Calendar fromCalendar = Calendar.getInstance();
@@ -217,7 +217,7 @@ public class PayService {
 			return null;
 	}
 
-	public TaxHeadEstimate roundOffDecimals(BigDecimal amount,BigDecimal totalRoundOffAmount) {
+	public TaxHeadEstimate roundOffDecimals(BigDecimal amount,BigDecimal currentRoundOff) {
 
 		BigDecimal roundOff = BigDecimal.ZERO;
 
@@ -228,12 +228,8 @@ public class PayService {
 			roundOff = roundOff.add(BigDecimal.ONE.subtract(reminder));
 		else if (reminder.doubleValue() < 0.5)
 			roundOff = roundOff.add(reminder).negate();
-
-		if(roundOff.doubleValue() != 0)
-			roundOff = roundOff.subtract(totalRoundOffAmount);
-
-
-		if (roundOff.doubleValue() != 0)
+		
+		if (!(currentRoundOff==null && roundOff.doubleValue() == 0))
 			return TaxHeadEstimate.builder().estimateAmount(roundOff)
 					.taxHeadCode(PT_ROUNDOFF).build();
 		else

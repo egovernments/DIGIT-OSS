@@ -454,52 +454,41 @@ public class DemandService {
 	 * @param requestInfoWrapper
 	 */
 	public void roundOffDecimalForDemand(Demand demand, RequestInfoWrapper requestInfoWrapper) {
-		
+
 		List<DemandDetail> details = demand.getDemandDetails();
 		String tenantId = demand.getTenantId();
 		String demandId = demand.getId();
 
 		BigDecimal taxAmount = BigDecimal.ZERO;
+		BigDecimal currentRoundOff = null;
 
-		// Collecting the taxHead master codes with the isDebit field in a Map
-		Map<String, Boolean> isTaxHeadDebitMap = mstrDataService.getTaxHeadMasterMap(requestInfoWrapper.getRequestInfo(), tenantId).stream()
-				.collect(Collectors.toMap(TaxHeadMaster::getCode, TaxHeadMaster::getIsDebit));
-
-		/*
-		 * Summing the credit amount and Debit amount in to separate variables(based on the taxhead:isdebit map) to send to roundoffDecimal method
-		 */
-
-		BigDecimal totalRoundOffAmount = BigDecimal.ZERO;
 		for (DemandDetail detail : demand.getDemandDetails()) {
 
-			if(!detail.getTaxHeadMasterCode().equalsIgnoreCase(PT_ROUNDOFF)){
+			if (!detail.getTaxHeadMasterCode().equalsIgnoreCase(PT_ROUNDOFF)) {
 				taxAmount = taxAmount.add(detail.getTaxAmount());
-			}
-			else{
-				totalRoundOffAmount = totalRoundOffAmount.add(detail.getTaxAmount());
+			} else {
+				currentRoundOff = detail.getTaxAmount();
 			}
 		}
 
 		/*
-		 *  An estimate object will be returned incase if there is a decimal value
-		 *  
-		 *  If no decimal value found null object will be returned 
+		 * An estimate object will be returned incase if there is a decimal value If no
+		 * decimal value found null object will be returned
 		 */
-		TaxHeadEstimate roundOffEstimate = payService.roundOffDecimals(taxAmount,totalRoundOffAmount);
+		TaxHeadEstimate roundOffEstimate = payService.roundOffDecimals(taxAmount, currentRoundOff);
 
-
-
-		BigDecimal decimalRoundOff = null != roundOffEstimate
-				? roundOffEstimate.getEstimateAmount() : BigDecimal.ZERO;
-
-		if(decimalRoundOff.compareTo(BigDecimal.ZERO)!=0){
+		if (roundOffEstimate != null) {
+			if (currentRoundOff == null) {
 				details.add(DemandDetail.builder().taxAmount(roundOffEstimate.getEstimateAmount())
-						.taxHeadMasterCode(roundOffEstimate.getTaxHeadCode()).demandId(demandId).tenantId(tenantId).build());
+						.taxHeadMasterCode(roundOffEstimate.getTaxHeadCode()).demandId(demandId).tenantId(tenantId)
+						.build());
+			} else {
+				utils.getLatestDemandDetailByTaxHead(PT_ROUNDOFF, details).getLatestDemandDetail()
+						.setTaxAmount(roundOffEstimate.getEstimateAmount());
+			}
 		}
 
-
 	}
-
 
 	/**
 	 * Creates demandDetails for the new demand by adding all old demandDetails and then adding demandDetails
