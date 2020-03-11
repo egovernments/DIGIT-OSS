@@ -1790,7 +1790,7 @@ const generateReceipt = async (state, dispatch, type) => {
       ack_data &&
         //   pdfMakeCustom.createPdf(receipt_data).download("tl_receipt.pdf");
        // pdfMakeCustom.createPdf(ack_data).open();
-       downloadPDFFileUsingBase64(pdfMakeCustom.createPdf(ack_data), `tl_receipt.pdf`);
+       downloadPDFFileUsingBase64(pdfMakeCustom.createPdf(ack_data), `tl_Application.pdf`);
       break;
     default:
       break;
