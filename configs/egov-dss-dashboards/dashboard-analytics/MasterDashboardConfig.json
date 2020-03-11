@@ -3236,7 +3236,7 @@
                 },
                 {
                   "id": "wsNewSewerageConnection",
-                  "name": "",
+                  "name": "DSS_W&S_NEW_WATER_CONNECTIONS",
                   "code": "",
                   "chartType": "metric",
                   "filter": "",
@@ -3244,7 +3244,7 @@
                 },
                 {
                   "id": "wsActiveUlbs",
-                  "name": "",
+                  "name": "DSS_W&S_ACTIVE_ULBS",
                   "code": "",
                   "chartType": "metric",
                   "filter": "",
@@ -3294,7 +3294,7 @@
                   "id": "wsConsumersByConnectionType",
                   "name": "",
                   "code": "",
-                  "chartType": "chart",
+                  "chartType": "donut",
                   "filter": "",
                   "headers": []
                 }
@@ -3316,7 +3316,7 @@
                   "id": "wsConsumersByUsageType",
                   "name": "",
                   "code": "",
-                  "chartType": "chart",
+                  "chartType": "donut",
                   "filter": "",
                   "headers": []
                 }
@@ -3338,7 +3338,7 @@
                   "id": "wsConsumersByChannel",
                   "name": "",
                   "code": "",
-                  "chartType": "chart",
+                  "chartType": "donut",
                   "filter": "",
                   "headers": []
                 }
