@@ -3517,6 +3517,180 @@
     "insight": {
     },
     "_comment": " "
+  },
+
+  "wsActiveUlbs": {
+    "chartName": "DSS_W&S_ACTIVE_ULBS",
+    "queries": [
+      {
+        "module": "W&S",
+        "indexName": "receipts-consumers",
+        "aggrQuery": "{\"aggs\":{\"Active Ulbs\":{\"cardinality\":{\"field\":\"cityname.keyword\"}}}}",
+        "requestQueryMap": "{\"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\"}",
+        "dateRefField": "receiptdate"
+      }
+    ],
+    "translateTenantCode": true,
+    "chartType": "metric",
+    "valueType": "number",
+    "action": "",
+    "drillChart": "none",
+    "aggregationPaths": [
+      "Active Ulbs"
+    ],
+    "insight": {
+    },
+    "_comment": " "
+  },
+  "wsNewWaterConnection": {
+    "chartName": "DSS_W&S_NEW_WATER_CONNECTIONS",
+    "queries": [
+      {
+        "module": "W&S",
+        "indexName": "wsapplications",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"applicationstatus.keyword\":\"Cancelled\"}}],\"must\":[{\"terms\":{\"servicetype.keyword\":[\"Water Charges\"]}}]}},\"aggs\":{\"Water Connections\":{\"value_count\":{\"field\":\"id.keyword\"}}}}}}",
+        "requestQueryMap": "{\"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\"}",
+        "dateRefField": "@timestamp"
+      }
+    ],
+    "translateTenantCode": true,
+    "chartType": "metric",
+    "valueType": "number",
+    "action": "",
+    "drillChart": "none",
+    "aggregationPaths": [
+      "Water Connections"
+    ],
+    "insight": {
+    },
+    "_comment": " "
+  },
+  "wsNewSewerageConnection": {
+    "chartName": "DSS_W&S_NEW_WATER_CONNECTIONS",
+    "queries": [
+      {
+        "module": "W&S",
+        "indexName": "wsapplications",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"applicationstatus.keyword\":\"Cancelled\"}}],\"must\":[{\"terms\":{\"servicetype.keyword\":[\"Water Charges\"]}}]}},\"aggs\":{\"Sewerage Connections\":{\"value_count\":{\"field\":\"id.keyword\"}}}}}}",
+        "requestQueryMap": "{\"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\"}",
+        "dateRefField": "@timestamp"
+      }
+    ],
+    "translateTenantCode": true,
+    "chartType": "metric",
+    "valueType": "number",
+    "action": "",
+    "drillChart": "none",
+    "aggregationPaths": [
+      "Sewerage Connections"
+    ],
+    "insight": {
+    },
+    "_comment": " "
+  },
+
+  "wscumulativeConnections": {
+    "chartName": "DSS_W&S_CUMULATIVE_COLLECTION",
+    "queries": [
+      {
+        "module": "W&S",
+        "dateRefField": "@timestamp",
+        "requestQueryMap": "{\"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\"}",
+        "indexName": "wsapplications",
+        "aggrQuery": "{\"aggs\":{\"Water Connections\":{\"date_histogram\":{\"field\":\"@timestamp\",\"interval\":\"intervalvalue\"},\"aggs\":{\"Water\":{\"filter\":{\"bool\":{\"must\":[{\"terms\":{\"servicetype.keyword\":[\"Water Charges\"]}}],\"must_not\":[{\"terms\":{\"applicationstatus.keyword\":[\"Cancelled\"]}}]}},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"id.keyword\"}}}}}},\"Sewerage Connections\":{\"date_histogram\":{\"field\":\"@timestamp\",\"interval\":\"intervalvalue\"},\"aggs\":{\"Water\":{\"filter\":{\"bool\":{\"must\":[{\"terms\":{\"servicetype.keyword\":[\"Sewerage Charges\"]}}],\"must_not\":[{\"terms\":{\"applicationstatus.keyword\":[\"Cancelled\"]}}]}},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"id.keyword\"}}}}}}}}"
+      }
+    ],
+    "translateTenantCode": true,
+    "chartType": "line",
+    "valueType": "number",
+    "action": "",
+    "drillChart": "none",
+    "documentType": "_doc",
+    "aggregationPaths": [
+      "Water Connections",
+      "Sewerage Connections"
+
+    ],
+    "isCumulative": true,
+    "interval": "month",
+    "insight": {
+    },
+    "_comment": " "
+  },
+
+  "wsConsumersByConnectionType": {
+    "chartName": "DSS_W&S_WATER_CONNECTION_BY_USAGE",
+    "queries": [
+      {
+        "module": "W&S",
+        "dateRefField": "@timestamp",
+        "requestQueryMap": "{\"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\"}",
+        "indexName": "waterchargesconsumers",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must\":[{\"terms\":{\"servicetype.keyword\":[\"Water Charges\"]}},{\"terms\":{\"connectionstatus.keyword\":[\"ACTIVE\"]}}]}},\"aggs\":{\"Water Consumers by Connection Type\":{\"terms\":{\"field\":\"connectiontype.keyword\",\"size\":170}}}}}}"
+      }
+    ],
+    "translateTenantCode": true,
+    "chartType": "pie",
+    "valueType": "number",
+    "action": "",
+    "documentType": "_doc",
+    "drillChart": "none",
+    "aggregationPaths": [
+      "Water Consumers by Connection Type"
+    ],
+    "insight": {
+    },
+    "_comment": " "
+  },
+
+  "wsConsumersByUsageType": {
+    "chartName": "DSS_W&S_CONNECTION_BY_USAGE",
+    "queries": [
+      {
+        "module": "W&S",
+        "dateRefField": "@timestamp",
+        "requestQueryMap": "{\"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\"}",
+        "indexName": "waterchargesconsumers",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"applicationstatus.keyword\":\"Cancelled\"}}],\"must\":[{\"terms\":{\"servicetype.keyword\":[\"Water Charges\",\"Sewerage Charges\"]}},{\"terms\":{\"connectionstatus.keyword\":[\"ACTIVE\"]}}]}},\"aggs\":{\"W & S Consumers by Usage Type\":{\"terms\":{\"field\":\"usage.keyword\"}}}}}}"
+      }
+    ],
+    "translateTenantCode": true,
+    "chartType": "pie",
+    "valueType": "number",
+    "action": "",
+    "documentType": "_doc",
+    "drillChart": "none",
+    "aggregationPaths": [
+      "W & S Consumers by Usage Type"
+    ],
+    "insight": {
+    },
+    "_comment": " "
+  },
+
+  "wsConsumersByChannel": {
+    "chartName": "DSS_W&S_CONNECTION_BY_CHANNEL",
+    "queries": [
+      {
+        "module": "W&S",
+        "dateRefField": "@timestamp",
+        "requestQueryMap": "{\"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\"}",
+        "indexName": "receipts-consumers",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"channel\":\"FIELD\"}},{\"term\":{\"channel\":\"SYSTEM\"}}],\"must\":[{\"term\":{\"status\":\"Approved\"}}]}},\"aggs\":{\"W & S Consumers by Channel\":{\"terms\":{\"field\":\"channel\",\"size\":7}}}}}}"
+      }
+    ],
+    "translateTenantCode": true,
+    "chartType": "pie",
+    "valueType": "number",
+    "action": "",
+    "documentType": "_doc",
+    "drillChart": "none",
+    "aggregationPaths": [
+      "W & S Consumers by Channel"
+    ],
+    "insight": {
+    },
+    "_comment": " "
   }
 
 
