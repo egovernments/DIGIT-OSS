@@ -142,7 +142,7 @@ serviceMaps:
 
           - jsonPath: $.SewerageConnection.documents.*.auditDetails.lastModifiedTime
           
-    - query: INSERT INTO eg_sw_plumberinfo(id, name, licenseno, mobilenumber, gender, fatherorhusbandname, correspondenceaddress, relationship, detailsprovidedby, swid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET name =?, licenseno =?,mobilenumber =?, gender =?, fatherorhusbandname =?, correspondenceaddress =?, relationship=?, detailsprovidedby=?;
+    - query: INSERT INTO eg_sw_plumberinfo(id, name, licenseno, mobilenumber, gender, fatherorhusbandname, correspondenceaddress, relationship, swid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET name =?, licenseno =?,mobilenumber =?, gender =?, fatherorhusbandname =?, correspondenceaddress =?, relationship=?;
       basePath: $.SewerageConnection.plumberInfo.*
       jsonMaps:
          
@@ -161,8 +161,6 @@ serviceMaps:
           - jsonPath: $.SewerageConnection.plumberInfo.*.correspondenceAddress
 
           - jsonPath: $.SewerageConnection.plumberInfo.*.relationship
-          
-          - jsonPath: $.SewerageConnection.plumberInfo.*.detailsProvidedBy
 
           - jsonPath: $.SewerageConnection.id
           
@@ -179,8 +177,6 @@ serviceMaps:
           - jsonPath: $.SewerageConnection.plumberInfo.*.correspondenceAddress
 
           - jsonPath: $.SewerageConnection.plumberInfo.*.relationship
-          
-          - jsonPath: $.SewerageConnection.plumberInfo.*.detailsProvidedBy
           
           
 
