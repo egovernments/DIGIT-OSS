@@ -1375,7 +1375,7 @@ class FormWizardDataEntry extends Component {
                 } else {
                   if (!hasPropertyTax) {
                     errorCode = "ERR05_DEMAND_ENTER_THE_DATA";
-                  } else if (parseInt(propertyTaxAmount) < totalRebateAmount) {
+                  } else if (Math.abs(totalRebateAmount)>=parseInt(propertyTaxAmount)) {
                     errorCode = "ERR06_DEMAND_ENTER_THE_DATA";
                   }
                 }
