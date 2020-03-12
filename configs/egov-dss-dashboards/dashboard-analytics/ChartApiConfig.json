@@ -3691,7 +3691,137 @@
     "insight": {
     },
     "_comment": " "
+  },
+
+  "wsConnectionAgeingDDR": {
+    "chartName": "DSS_W&S_CONNECTION_AGEING",
+    "queries": [
+      {
+        "module": "W&S",
+        "requestQueryMap": "{\"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\" }",
+        "dateRefField": "applicationdate",
+        "indexName": "wsapplications",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must\":[{\"terms\":{\"servicetype.keyword\":[\"Water Charges\",\"Sewerage Charges\"]}},{\"terms\":{\"applicationstatus.keyword\":[\"Created\",\"Rejected\",\"Verified\",\"verified\"]}}]}},\"aggs\":{\"Pending lt 3 days\":{\"date_range\":{\"field\":\"applicationdate\",\"ranges\":[{\"from\":\"now-3d/d\",\"to\":\"now\"}]}},\"Pending gt 3 and lt 7 days\":{\"date_range\":{\"field\":\"applicationdate\",\"ranges\":[{\"from\":\"now-1w\",\"to\":\"now-3d/d\"}]}},\"Pending gt 7 and lt 15 days\":{\"date_range\":{\"field\":\"applicationdate\",\"ranges\":[{\"from\":\"now-15d\",\"to\":\"now-1w\"}]}},\"Pending gt 15 days\":{\"date_range\":{\"field\":\"applicationdate\",\"ranges\":[{\"from\":\"now-2y\",\"to\":\"now-15d\"}]}}}}}}"
+      }
+    ],
+    "isMdmsEnabled": true,
+    "translateTenantCode": true,
+    "filterKeys": [
+      {"key": "tenantId", "column": "DDRs"}
+    ],
+    "chartType": "xtable",
+    "valueType": "number",
+    "drillChart": "wsConnectionAgeingUlb",
+    "action": "",
+    "plotLabel": "DDRs",
+    "isPostResponseHandler": true,
+    "postAggregationTheory" : "",
+    "aggregationPaths": [
+      "Pending lt 3 days",
+      "Pending gt 3 and lt 7 days",
+      "Pending gt 7 and lt 15 days",
+      "Pending gt 15 days"
+    ],
+    "computedFields": [
+      {
+        "postAggregationTheory" : "",
+        "actionName": "AdditiveComputedField",
+        "fields" : [ "Pending lt 3 days", "Pending gt 3 and lt 7 days", "Pending gt 7 and lt 15 days", "Pending gt 15 days"],
+        "newField" : "Total Pending",
+        "_comments": "fields are field names picked from its aggregation query to use post aggregation newField value with given new field name  "
+      }
+    ],
+
+    "insight": {
+    },
+    "_comment": ""
+  },
+  "wsConnectionAgeingUlb": {
+    "chartName": "DSS_W&S_CONNECTION_AGEING",
+    "queries": [
+      {
+        "module": "W&S",
+        "requestQueryMap": "{\"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\" }",
+        "dateRefField": "applicationdate",
+        "indexName": "wsapplications",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must\":[{\"terms\":{\"servicetype.keyword\":[\"Water Charges\",\"Sewerage Charges\"]}},{\"terms\":{\"applicationstatus.keyword\":[\"Created\",\"Rejected\",\"Verified\",\"verified\"]}}]}},\"aggs\":{\"2\":{\"terms\":{\"field\":\"cityname.keyword\",\"size\":170,\"order\":{\"_key\":\"asc\"}},\"aggs\":{\"Pending lt 3 days\":{\"date_range\":{\"field\":\"applicationdate\",\"ranges\":[{\"from\":\"now-3d/d\",\"to\":\"now\"}]}},\"Pending gt 3 and lt 7 days\":{\"date_range\":{\"field\":\"applicationdate\",\"ranges\":[{\"from\":\"now-1w\",\"to\":\"now-3d/d\"}]}},\"Pending gt 7 and lt 15 days\":{\"date_range\":{\"field\":\"applicationdate\",\"ranges\":[{\"from\":\"now-15d\",\"to\":\"now-1w\"}]}},\"Pending gt 15 days\":{\"date_range\":{\"field\":\"applicationdate\",\"ranges\":[{\"from\":\"now-2y\",\"to\":\"now-15d\"}]}}}}}}}}"
+      }
+    ],
+    "isMdmsEnabled": false,
+    "translateTenantCode": true,
+    "filterKeys": [
+      {"key": "tenantId", "column": "ULB"}
+    ],
+    "chartType": "xtable",
+    "valueType": "number",
+    "drillChart": "wsConnectionAgeingWard",
+    "action": "",
+    "plotLabel": "ULB",
+    "isPostResponseHandler": true,
+    "postAggregationTheory" : "",
+    "aggregationPaths": [
+      "Pending lt 3 days",
+      "Pending gt 3 and lt 7 days",
+      "Pending gt 7 and lt 15 days",
+      "Pending gt 15 days"
+
+    ],
+    "computedFields": [
+      {
+        "postAggregationTheory" : "",
+        "actionName": "AdditiveComputedField",
+        "fields" : [ "Pending lt 3 days", "Pending gt 3 and lt 7 days", "Pending gt 7 and lt 15 days", "Pending gt 15 days"],
+        "newField" : "Total Pending",
+        "_comments": "fields are field names picked from its aggregation query to use post aggregation newField value with given new field name  "
+      }
+    ],
+
+    "insight": {
+    },
+    "_comment": ""
+  },
+  "wsConnectionAgeingWard": {
+    "chartName": "DSS_W&S_CONNECTION_AGEING",
+    "queries": [
+      {
+        "module": "W&S",
+        "requestQueryMap": "{\"tenantId\" : \"cityname.keyword\", \"wardId\" : \"block.keyword\" }",
+        "dateRefField": "applicationdate",
+        "indexName": "wsapplications",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must\":[{\"terms\":{\"servicetype.keyword\":[\"Water Charges\",\"Sewerage Charges\"]}},{\"terms\":{\"applicationstatus.keyword\":[\"Created\",\"Rejected\",\"Verified\",\"verified\"]}}]}},\"aggs\":{\"2\":{\"terms\":{\"field\":\"block.keyword\",\"size\":170,\"order\":{\"_key\":\"asc\"}},\"aggs\":{\"Pending lt 3 days\":{\"date_range\":{\"field\":\"applicationdate\",\"ranges\":[{\"from\":\"now-3d/d\",\"to\":\"now\"}]}},\"Pending gt 3 and lt 7 days\":{\"date_range\":{\"field\":\"applicationdate\",\"ranges\":[{\"from\":\"now-1w\",\"to\":\"now-3d/d\"}]}},\"Pending gt 7 and lt 15 days\":{\"date_range\":{\"field\":\"applicationdate\",\"ranges\":[{\"from\":\"now-15d\",\"to\":\"now-1w\"}]}},\"Pending gt 15 days\":{\"date_range\":{\"field\":\"applicationdate\",\"ranges\":[{\"from\":\"now-2y\",\"to\":\"now-15d\"}]}}}}}}}}"
+      }
+    ],
+    "isMdmsEnabled": false,
+    "translateTenantCode": true,
+    "filterKeys": [
+      {"key": "tenantId", "column": "Ward"}
+    ],
+    "chartType": "xtable",
+    "valueType": "number",
+    "drillChart": "",
+    "action": "",
+    "plotLabel": "Ward",
+    "isPostResponseHandler": true,
+    "postAggregationTheory" : "",
+    "aggregationPaths": [
+      "Pending lt 3 days",
+      "Pending gt 3 and lt 7 days",
+      "Pending gt 7 and lt 15 days",
+      "Pending gt 15 days"
+
+    ],
+    "computedFields": [
+      {
+        "postAggregationTheory" : "",
+        "actionName": "AdditiveComputedField",
+        "fields" : [ "Pending lt 3 days", "Pending gt 3 and lt 7 days", "Pending gt 7 and lt 15 days", "Pending gt 15 days"],
+        "newField" : "Total Pending",
+        "_comments": "fields are field names picked from its aggregation query to use post aggregation newField value with given new field name  "
+      }
+    ],
+
+    "insight": {
+    },
+    "_comment": ""
   }
-
-
 }
