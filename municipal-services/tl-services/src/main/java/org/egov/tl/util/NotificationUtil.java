@@ -148,7 +148,8 @@ public class NotificationUtil {
 		StringBuilder uri = new StringBuilder();
 		uri.append(config.getLocalizationHost()).append(config.getLocalizationContextPath())
 				.append(config.getLocalizationSearchEndpoint()).append("?").append("locale=").append(locale)
-				.append("&tenantId=").append(tenantId).append("&module=").append(TLConstants.MODULE);
+				.append("&tenantId=").append(tenantId).append("&module=").append(TLConstants.MODULE)
+				.append("&codes=").append(StringUtils.join(NOTIFICATION_CODES,','));
 
 		return uri;
 	}
