@@ -230,6 +230,9 @@ __Note__: Please check in [eGov Tools Repository] for any of the above software 
 * Install Jboss Tools and configure Wildfly Server.
 * Since jasperreport related jar's are not available in maven central, we have to tell eclipse to find jar's in alternative place for that navigate to `Windows -> Preference -> Maven -> User Settings -> Browse Global Settings` and point settings.xml available under egov-erp/
 * Now add your EAR project into the configured Wildfly server.
+* Install the lombok plugin in eclipse.
+  Download from this link https://search.maven.org/search?q=g:org.projectlombok%20AND%20a:lombok&core=gav
+  and run the commond java -jar lombok-1.18.4.jar
 * Start Wildfly in debug mode, this will enable hot deployment.
 
 ##### 2. Intellij Deployment
@@ -238,6 +241,7 @@ __Note__: Please check in [eGov Tools Repository] for any of the above software 
 * Open project
 * In project settings set JDK to 1.8
 * Add a run configuration for JBoss and point the JBOSS home to the wildfly unzipped folder
+* Add lombok plugin in Intellij (marketplace -> plugin -> lombok -> install -> restart ide).
 * Run
 
 ##### 3. Database Migration Procedure
