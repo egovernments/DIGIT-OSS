@@ -17,6 +17,8 @@ import Home from "modules/employee/Home";
 import Report from "modules/employee/reports/report";
 import EGFFinance from "modules/employee/Erp/EGF";
 import Notifications from "modules/employee/Notifications";
+import LocalizationScreen from "components/LocalizationScreen";
+
 
 import pgrRoutes from "pgr-employee/Routes/pgr-routes";
 import ptRoutes from "pt-employee/Routes/pt-routes";
@@ -167,6 +169,12 @@ const routes = [
       hideTitle: true,
       redirectionUrl,
     },
+  },
+  {
+    path: "utils/localization",
+    component: LocalizationScreen,
+    needsAuthentication: true,
+    options: { hideFooter: true, title: "CS_HOME_HEADER_LOCALIZATION" },
   },
   ...pgrRoutes,
   ...ptRoutes,
