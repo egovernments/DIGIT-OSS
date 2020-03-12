@@ -28,12 +28,12 @@ serviceMaps:
       
        - jsonPath: $.WaterConnection.roadCuttingArea
 
-       - jsonPath: $.WaterConnection.action
+       - jsonPath: $.WaterConnection.processInstance.action
 
        - jsonPath: $.WaterConnection.roadType
 
        
-    - query: INSERT INTO water_service_connection(connection_id,connectionCategory,rainWaterHarvesting,connectionType,waterSource,meterId,meterInstallationDate,pipeSize,noOfTaps,waterSubSource,connectionexecutiondate,proposedPipeSize,proposedTaps) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?);
+    - query: INSERT INTO water_service_connection(connection_id,connectionCategory,rainWaterHarvesting,connectionType,waterSource,meterId,meterInstallationDate,pipeSize,noOfTaps,connectionexecutiondate,proposedPipeSize,proposedTaps) VALUES(?,?,?,?,?,?,?,?,?,?,?,?);
       basePath: $.WaterConnection
       jsonMaps:
 
@@ -56,8 +56,6 @@ serviceMaps:
        - jsonPath: $.WaterConnection.pipeSize
 
        - jsonPath: $.WaterConnection.noOfTaps
-
-       - jsonPath: $.WaterConnection.waterSubSource
        
        - jsonPath: $.WaterConnection.connectionExecutionDate
        
@@ -84,7 +82,7 @@ serviceMaps:
 
        - jsonPath: $.WaterConnection.oldConnectionNo
 
-       - jsonPath: $.WaterConnection.action
+       - jsonPath: $.WaterConnection.processInstance.action
 
        - jsonPath: $.WaterConnection.roadCuttingArea
 
@@ -104,7 +102,7 @@ serviceMaps:
        
        - jsonPath: $.WaterConnection.id 
 
-    - query: UPDATE water_service_connection SET connectionCategory=?,rainWaterHarvesting=?,connectionType=?,waterSource=?,meterId=?,meterInstallationDate=?,pipeSize=?,noOfTaps=?,waterSubSource=?,proposedPipeSize=?,proposedTaps=? WHERE connection_id=?;
+    - query: UPDATE water_service_connection SET connectionCategory=?,rainWaterHarvesting=?,connectionType=?,waterSource=?,meterId=?,meterInstallationDate=?,pipeSize=?,noOfTaps=?,proposedPipeSize=?,proposedTaps=? WHERE connection_id=?;
       basePath: $.WaterConnection
       jsonMaps:
        
@@ -125,8 +123,6 @@ serviceMaps:
        - jsonPath: $.WaterConnection.pipeSize
 
        - jsonPath: $.WaterConnection.noOfTaps
-
-       - jsonPath: $.WaterConnection.waterSubSource
        
        - jsonPath: $.WaterConnection.proposedPipeSize
        
@@ -222,7 +218,7 @@ serviceMaps:
 
        - jsonPath: $.WaterConnection.connectionNo
 
-       - jsonPath: $.WaterConnection.action 
+       - jsonPath: $.WaterConnection.processInstance.action 
 
        - jsonPath: $.WaterConnection.id     
 
