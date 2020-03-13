@@ -18,3 +18,9 @@ config:
     build:
       - work-dir: "zuul-kubernetes-discovery"
         image-name: "zuul-kubernetes-discovery"  
+
+  - name: "builds/utilities/egov-api-cron-job"
+    build:
+      - work-dir: "egov-api-cron-job"
+        image-name: "egov-api-cron-job"
+        dockerfile: "build/python/Dockerfile"
