@@ -166,13 +166,25 @@
               {
                 "variable": "specialApplicantCategory",
                 "value": {
-                  "path": "$.WaterConnection[0].property.owners[0].ownerType"
+                  "path": "$.property.owners[0].ownerType"
                 }
               },
               {
                 "variable": "applyCategory",
                 "value": {
                   "path": "$.service"
+                }
+              },
+              {
+                "variable": "noOfTapsProposed",
+                "value": {
+                  "path": "$.proposedTaps"
+                }
+              },
+              {
+                "variable": "pipeSizeProposed",
+                "value": {
+                  "path": "$.proposedPipeSize"
                 }
               },
               {
@@ -310,6 +322,12 @@
                 }
               },
               {
+                "variable": "correspondenceAddress",
+                "value": {
+                  "path": "$.property.owners[0].correspondenceAddress"
+                }
+              },
+              {
                 "variable": "logoImage",
                 "url": "https://raw.githubusercontent.com/egovernments/egov-web-app/master/web/rainmaker/dev-packages/egov-ui-kit-dev/src/assets/images/pblogo.png",
                 "type": "image"
@@ -354,6 +372,18 @@
                 "variable": "status_label",
                 "value": {
                   "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_STATUS"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "document_details_header",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_DOCUMENT_DETAIL_HEADER"
                 },
                 "type": "label",
                 "localisation": {
@@ -1062,6 +1092,18 @@
                 "variable": "water_application",
                 "value": {
                   "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_WATER_APPLICATION"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "correspondence_address",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_CORRESPONDENCE_ADDRESS"
                 },
                 "type": "label",
                 "localisation": {
