@@ -111,7 +111,7 @@
                                                     false,
                                                     false
                                                 ],
-                                                "style": "ws-sub-table"
+                                                "style": "receipt-table-value-total"
                                             }
                                         ],
                                         [
@@ -133,7 +133,8 @@
                                                     false,
                                                     false
                                                 ],
-                                                "style": "ws-sub-table"
+                                                "style": "receipt-table-value-total",
+                                                "fontSize": 20
                                             }
                                         ],
                                         [
@@ -1715,6 +1716,19 @@
                 "color": "#484848",
                 "alignment": "right",
                 "backgroundColor": "#dddddd"
+            },
+            "receipt-table-value-total": {
+                "color": "#000000",
+                "bold": true,
+                "fontSize": 12,
+                "fontWeight": 500,
+                "alignment": "right",
+                "margin": [
+                    0,
+                    5,
+                    30,
+                    0
+                ]
             }
         }
     }
