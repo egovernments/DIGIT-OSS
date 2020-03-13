@@ -3,12 +3,17 @@ package org.egov.filestore.web.controller;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.tika.Tika;
+import org.apache.tika.exception.TikaException;
 import org.egov.filestore.domain.model.FileInfo;
 import org.egov.filestore.domain.service.StorageService;
 import org.egov.filestore.web.contract.File;
@@ -87,6 +92,21 @@ public class StorageController {
 			@RequestParam(value = "tenantId") String tenantId,
 			@RequestParam(value = "module", required = true) String module,
 			@RequestParam(value = "tag", required = false) String tag) {
+		
+//		String ip = null;
+//		for(MultipartFile file : files) {
+//			
+//			System.err.println(file.getContentType());
+//			System.err.println(FilenameUtils.getExtension(file.getOriginalFilename()));
+//			Tika tika = new Tika();
+//			try {
+//				ip = tika.parseToString(file.getInputStream());
+//				System.err.println(" th efile " + ip);
+//			} catch (IOException | TikaException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
 		
 		final List<String> fileStoreIds = storageService.save(files, module, tag, tenantId);
 		return getStorageResponse(fileStoreIds, tenantId);

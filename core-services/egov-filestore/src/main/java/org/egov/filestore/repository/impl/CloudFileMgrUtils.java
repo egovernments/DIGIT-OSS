@@ -1,7 +1,6 @@
 package org.egov.filestore.repository.impl;
 
 import java.awt.image.BufferedImage;
-import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Base64;
@@ -13,6 +12,7 @@ import java.util.Map;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import javax.imageio.ImageIO;
+import javax.imageio.stream.ImageInputStream;
 
 import org.egov.tracer.model.CustomException;
 import org.imgscalr.Scalr;
@@ -62,17 +62,20 @@ public class CloudFileMgrUtils {
 	 * @param fileName
 	 * @return
 	 */
-	public Map<String, BufferedImage> createVersionsOfImage(BufferedInputStream inputStream, String fileName) {
+	public Map<String, BufferedImage> createVersionsOfImage(InputStream inputStream, String fileName) {
 		
 		Map<String, BufferedImage> mapOfImagesAndPaths = new HashMap<>();
 		try {
+			
 			BufferedImage originalImage = ImageIO.read(inputStream);
-			//System.err.println(" the image size : " + originalImage.);
+			
 			if (null == originalImage) {
+				
 				Map<String, String> map = new HashMap<>();
 				map.put("Image Source Unavailable", "Image File present in upload request is Invalid/Not Readable");
 				throw new CustomException(map);
 			}
+			
 			BufferedImage largeImage = Scalr.resize(originalImage, Method.QUALITY, Mode.AUTOMATIC, mediumWidth, null,
 					Scalr.OP_ANTIALIAS);
 			BufferedImage mediumImg = Scalr.resize(originalImage, Method.QUALITY, Mode.AUTOMATIC, mediumWidth, null,
