@@ -4,7 +4,7 @@
     "serviceName": "rainmaker-common",
     "version": "1.0.0",
     "baseKeyPath": "$.WaterConnection.*",
-    "entityIdPath": "$.connectionNo",
+    "entityIdPath": "$.applicationNo",
     "isCommonTableBorderRequired": true,
     "mappings": [
       {
@@ -176,33 +176,9 @@
                 }
               },
               {
-                "variable": "noOfWaterClosetsProposed",
-                "value": {
-                  "path": "$.proposedWaterClosets"
-                }
-              },
-              {
-                "variable": "noOfWaterToiletsProposed",
-                "value": {
-                  "path": "$.proposedToilets"
-                }
-              },
-              {
                 "variable": "connectionType",
                 "value": {
                   "path": "$.connectionType"
-                }
-              },
-              {
-                "variable": "noOfWaterClosets",
-                "value": {
-                  "path": "$.noOfWaterClosets"
-                }
-              },
-              {
-                "variable": "noOfToilets",
-                "value": {
-                  "path": "$.noOfToilets"
                 }
               },
               {
@@ -759,30 +735,6 @@
                 }
               },
               {
-                "variable": "no_of_water_closets_proposed",
-                "value": {
-                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_NO_OF_WATER_CLOSETS_PROPOSED"
-                },
-                "type": "label",
-                "localisation": {
-                  "required": true,
-                  "prefix": null,
-                  "module": "rainmaker-common"
-                }
-              },
-              {
-                "variable": "no_of_water_toilets_proposed",
-                "value": {
-                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_NO_OF_WATER_TOILETS_PROPOSED"
-                },
-                "type": "label",
-                "localisation": {
-                  "required": true,
-                  "prefix": null,
-                  "module": "rainmaker-common"
-                }
-              },
-              {
                 "variable": "additional_connection_details_header",
                 "value": {
                   "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_ADDITIONAL_CONNECTION_HEADER"
@@ -798,30 +750,6 @@
                 "variable": "connection_type",
                 "value": {
                   "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_CONNECTION_TYPE"
-                },
-                "type": "label",
-                "localisation": {
-                  "required": true,
-                  "prefix": null,
-                  "module": "rainmaker-common"
-                }
-              },
-              {
-                "variable": "no_of_water_closets",
-                "value": {
-                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_NO_OF_WATER_CLOSETS"
-                },
-                "type": "label",
-                "localisation": {
-                  "required": true,
-                  "prefix": null,
-                  "module": "rainmaker-common"
-                }
-              },
-              {
-                "variable": "no_of_toilets",
-                "value": {
-                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_NO_OF_TOILETS"
                 },
                 "type": "label",
                 "localisation": {
