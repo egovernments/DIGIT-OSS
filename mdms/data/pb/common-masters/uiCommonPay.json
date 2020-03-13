@@ -5,9 +5,9 @@
     {
       "code": "PT",
       "headerBandLabel": "PT_COMMON_TABLE_COL_PT_ID",
-      "primaryMessage": "PAYMENT_MESSAGE_EMPLOYEE",
-      "secondaryMessage": "PAYMENT_MESSAGE_DETAIL_EMPLOYEE",
-      "receiptNo": "PAYMENT_RECEIPT_NO",
+      "primaryMessage": "PT_PAYMENT_MESSAGE_EMPLOYEE",
+      "secondaryMessage": "PT_PAYMENT_MESSAGE_DETAIL_EMPLOYEE",
+      "receiptNo": "PT_PAYMENT_RECEIPT_NO",
       "footer": {
         "label": {
           "labelName": "GO TO HOME",
@@ -19,9 +19,9 @@
     {
       "code": "TL",
       "headerBandLabel": "PAYMENT_COMMON_CONSUMER_CODE",
-      "primaryMessage": "PAYMENT_MESSAGE_EMPLOYEE",
-      "secondaryMessage": "PAYMENT_MESSAGE_DETAIL_EMPLOYEE",
-      "receiptNo": "PAYMENT_RECEIPT_NO",
+      "primaryMessage": "TL_PAYMENT_MESSAGE_EMPLOYEE",
+      "secondaryMessage": "TL_PAYMENT_MESSAGE_DETAIL_EMPLOYEE",
+      "receiptNo": "TL_PAYMENT_RECEIPT_NO",
       "footer": {
         "label": {
           "labelName": "GO TO HOME",
