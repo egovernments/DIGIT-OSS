@@ -4,7 +4,7 @@
         "serviceName": "rainmaker-common",
         "version": "1.0.0",
         "baseKeyPath": "$.SewerageConnection.*",
-        "entityIdPath": "$.connectionNo",
+        "entityIdPath": "$.applicationNo",
         "isCommonTableBorderRequired": true,
         "mappings": [
             {
@@ -247,36 +247,6 @@
                                     "path": "$.connectionExecutionDate"
                                 },
                                 "type": "date"
-                            },
-                            {
-                                "variable": "noOfTaps",
-                                "value": {
-                                    "path": "$.noOfTaps"
-                                }
-                            },
-                            {
-                                "variable": "waterSource",
-                                "value": {
-                                    "path": "$.waterSource"
-                                }
-                            },
-                            {
-                                "variable": "waterSource",
-                                "value": {
-                                    "path": "$.waterSource"
-                                }
-                            },
-                            {
-                                "variable": "waterSubSource",
-                                "value": {
-                                    "path": "$.waterSubSource"
-                                }
-                            },
-                            {
-                                "variable": "pipeSize",
-                                "value": {
-                                    "path": "$.pipeSize"
-                                }
                             },
                             {
                                 "variable": "ownershipProof",
@@ -932,78 +902,6 @@
                                 }
                             },
                             {
-                                "variable": "no_of_taps_proposed",
-                                "value": {
-                                    "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_TAPS_PROPOSED"
-                                },
-                                "type": "label",
-                                "localisation": {
-                                    "required": true,
-                                    "prefix": null,
-                                    "module": "rainmaker-common"
-                                }
-                            },
-                            {
-                                "variable": "pipe_size_proposed",
-                                "value": {
-                                    "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_PIPE_SIZE_PROPOSED"
-                                },
-                                "type": "label",
-                                "localisation": {
-                                    "required": true,
-                                    "prefix": null,
-                                    "module": "rainmaker-common"
-                                }
-                            },
-                            {
-                                "variable": "no_of_taps",
-                                "value": {
-                                    "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_NO_OF_TAPS"
-                                },
-                                "type": "label",
-                                "localisation": {
-                                    "required": true,
-                                    "prefix": null,
-                                    "module": "rainmaker-common"
-                                }
-                            },
-                            {
-                                "variable": "water_source",
-                                "value": {
-                                    "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_WATER_SOURCE"
-                                },
-                                "type": "label",
-                                "localisation": {
-                                    "required": true,
-                                    "prefix": null,
-                                    "module": "rainmaker-common"
-                                }
-                            },
-                            {
-                                "variable": "water_sub_source",
-                                "value": {
-                                    "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_WATER_SUB_SOURCE"
-                                },
-                                "type": "label",
-                                "localisation": {
-                                    "required": true,
-                                    "prefix": null,
-                                    "module": "rainmaker-common"
-                                }
-                            },
-                            {
-                                "variable": "pipe_size",
-                                "value": {
-                                    "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_PIPE_SIZE"
-                                },
-                                "type": "label",
-                                "localisation": {
-                                    "required": true,
-                                    "prefix": null,
-                                    "module": "rainmaker-common"
-                                }
-                            },
-                            {
                                 "variable": "ownership_proof",
                                 "value": {
                                     "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_OWNERSHIP_PROOF"
@@ -1078,15 +976,15 @@
                             {
                                 "variable": "sewerage_application",
                                 "value": {
-                                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_SEWERAGE_APPLICATION"
+                                    "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_SEWERAGE_APPLICATION"
                                 },
                                 "type": "label",
                                 "localisation": {
-                                  "required": true,
-                                  "prefix": null,
-                                  "module": "rainmaker-common"
+                                    "required": true,
+                                    "prefix": null,
+                                    "module": "rainmaker-common"
                                 }
-                              }
+                            }
                         ]
                     },
                     {
