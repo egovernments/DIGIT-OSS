@@ -166,7 +166,7 @@
                             {
                                 "variable": "specialApplicantCategory",
                                 "value": {
-                                    "path": "$.WaterConnection[0].property.owners[0].ownerType"
+                                    "path": "$.property.owners[0].ownerType"
                                 }
                             },
                             {
@@ -247,6 +247,12 @@
                                     "path": "$.connectionExecutionDate"
                                 },
                                 "type": "date"
+                            },
+                            {
+                                "variable": "correspondenceAddress",
+                                "value": {
+                                    "path":"$.property.owners[0].correspondenceAddress"
+                                }
                             },
                             {
                                 "variable": "ownershipProof",
@@ -337,6 +343,18 @@
                                     "module": "rainmaker-common"
                                 }
                             },
+                            {
+                                "variable": "document_details_header",
+                                "value": {
+                                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_DOCUMENT_DETAIL_HEADER"
+                                },
+                                "type": "label",
+                                "localisation": {
+                                  "required": true,
+                                  "prefix": null,
+                                  "module": "rainmaker-common"
+                                }
+                              },
                             {
                                 "variable": "fee_estimate_header",
                                 "value": {
@@ -977,6 +995,18 @@
                                 "variable": "sewerage_application",
                                 "value": {
                                     "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_SEWERAGE_APPLICATION"
+                                },
+                                "type": "label",
+                                "localisation": {
+                                    "required": true,
+                                    "prefix": null,
+                                    "module": "rainmaker-common"
+                                }
+                            },
+                            {
+                                "variable": "correspondence_address",
+                                "value": {
+                                    "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_CORRESPONDENCE_ADDRESS"
                                 },
                                 "type": "label",
                                 "localisation": {
