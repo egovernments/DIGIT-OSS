@@ -967,6 +967,199 @@
                 "layout": {}
             },
             {
+                "text": "{{document_details_header}}",
+                "style": "header"
+            },
+            {
+                "stack": [
+                    {
+                        "style": "ws-table",
+                        "table": {
+                            "widths": [
+                                "*"
+                            ],
+                            "body": [
+                                [
+                                    {
+                                        "table": {
+                                            "widths": [
+                                                "33%",
+                                                "33%",
+                                                "33%",
+                                                "1%"
+                                            ],
+                                            "body": [
+                                                [
+                                                    {
+                                                        "text": "{{ownership_proof}}",
+                                                        "border": [
+                                                            false,
+                                                            false,
+                                                            false,
+                                                            false
+                                                        ],
+                                                        "style": "ws-sub-table"
+                                                    },
+                                                    {
+                                                        "text": "{{owners_id_proof}}",
+                                                        "border": [
+                                                            false,
+                                                            false,
+                                                            false,
+                                                            false
+                                                        ],
+                                                        "style": "ws-sub-table",
+                                                        "fontSize": 11
+                                                    },
+                                                    {
+                                                        "text": "{{electricty_bill}}",
+                                                        "border": [
+                                                            false,
+                                                            false,
+                                                            false,
+                                                            false
+                                                        ],
+                                                        "style": "ws-sub-table",
+                                                        "fontSize": 11
+                                                    }
+                                                ],
+                                                [
+                                                    {
+                                                        "text": "{{ownershipProof}}",
+                                                        "border": [
+                                                            false,
+                                                            false,
+                                                            false,
+                                                            false
+                                                        ],
+                                                        "style": "ws-sub-table-value"
+                                                    },
+                                                    {
+                                                        "text": "{{ownersIdProof}}",
+                                                        "border": [
+                                                            false,
+                                                            false,
+                                                            false,
+                                                            false
+                                                        ],
+                                                        "style": "ws-sub-table-value"
+                                                    },
+                                                    {
+                                                        "text": "{{electricityBill}}",
+                                                        "border": [
+                                                            false,
+                                                            false,
+                                                            false,
+                                                            false
+                                                        ],
+                                                        "style": "ws-sub-table-value"
+                                                    }
+                                                ]
+                                            ]
+                                        },
+                                        "border": [
+                                            true,
+                                            true,
+                                            true,
+                                            false
+                                        ]
+                                    }
+                                ],
+                                [
+                                    {
+                                        "table": {
+                                            "widths": [
+                                                "33%",
+                                                "33%",
+                                                "33%",
+                                                "1%"
+                                            ],
+                                            "body": [
+                                                [
+                                                    {
+                                                        "text": "{{plumber_report}}",
+                                                        "border": [
+                                                            false,
+                                                            false,
+                                                            false,
+                                                            false
+                                                        ],
+                                                        "style": "ws-sub-table"
+                                                    },
+                                                    {
+                                                        "text": "{{building_plan}}",
+                                                        "border": [
+                                                            false,
+                                                            false,
+                                                            false,
+                                                            false
+                                                        ],
+                                                        "style": "ws-sub-table",
+                                                        "fontSize": 11
+                                                    },
+                                                    {
+                                                        "text": "{{property_tax_reciept}}",
+                                                        "border": [
+                                                            false,
+                                                            false,
+                                                            false,
+                                                            false
+                                                        ],
+                                                        "style": "ws-sub-table",
+                                                        "fontSize": 11
+                                                    }
+                                                ],
+                                                [
+                                                    {
+                                                        "text": "{{plumberReport}}",
+                                                        "border": [
+                                                            false,
+                                                            false,
+                                                            false,
+                                                            false
+                                                        ],
+                                                        "style": "ws-sub-table-value"
+                                                    },
+                                                    {
+                                                        "text": "{{buildingPlan}}",
+                                                        "border": [
+                                                            false,
+                                                            false,
+                                                            false,
+                                                            false
+                                                        ],
+                                                        "style": "ws-sub-table-value"
+                                                    },
+                                                    {
+                                                        "text": "{{ptTaxReciept}}",
+                                                        "border": [
+                                                            false,
+                                                            false,
+                                                            false,
+                                                            false
+                                                        ],
+                                                        "style": "ws-sub-table-value"
+                                                    }
+                                                ]
+                                            ]
+                                        },
+                                        "border": [
+                                            true,
+                                            false,
+                                            true,
+                                            true
+                                        ]
+                                    }
+                                ]
+                            ],
+                            "unbreakable": true
+                        },
+                        "layout": {}
+                    }
+                ],
+                "unbreakable": true
+            },
+            {
                 "text": "{{additional_connection_details_header}}",
                 "style": "header"
             },
