@@ -137,6 +137,7 @@ class ApiTable extends PureComponent {
           statelocale: payload.MdmsRes["common-masters"].StateInfo[0].languages,
           statemultiSelect: payload.MdmsRes["common-masters"].StateInfo[0].localizationModules,
         });
+        this.onSearch()
       } catch (e) {
         console.log(e);
       } finally {
@@ -327,7 +328,7 @@ class ApiTable extends PureComponent {
       ],
     };
     try {
-      const payload = await httpRequest(`localization/messages/v1/_delete`, "", {}, requestbody);
+      const payload = await httpRequest(`localization/messages/v1/_delete`, "", [], requestbody);
       this.setState({
         data: "",
       });
@@ -373,9 +374,12 @@ class ApiTable extends PureComponent {
   };
 
   onSearch = async () => {
+    const module=this.state.multiSelect.length>0?this.state.multiSelect.join(","):'module=rainmaker-pgr,rainmaker-pt,rainmaker-tl,finance-erp,rainmaker-common,rainmaker-hr,rainmaker-uc,rainmaker-noc,rainmaker-dss';
+    const locale=this.state.locale.length>0?this.state.locale:"en_IN";
+    const tenantId=this.state.selectedState?this.state.selectedState.split(".")[0]:getTenantId().split(".")[0]
     try {
       const payload = await httpRequest(
-        `localization/messages/v1/_search?module=${this.state.multiSelect.join(",")}&locale=${this.state.locale}&tenantId=${this.state.selectedState.split(".")[0]}`,"_search",[],{},[],{},true
+        `localization/messages/v1/_search?module=${module}&locale=${locale}&tenantId=${tenantId}`,"_search",[],{},[],{},true
       );
       this.setState({ ...this.state, newSearch: payload.messages });
     } catch (e) {
