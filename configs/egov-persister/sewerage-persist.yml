@@ -28,7 +28,7 @@ serviceMaps:
 
        - jsonPath: $.SewerageConnection.roadCuttingArea
 
-       - jsonPath: $.SewerageConnection.action
+       - jsonPath: $.SewerageConnection.processInstance.action
 
        - jsonPath: $.SewerageConnection.roadType     
 
@@ -69,7 +69,7 @@ serviceMaps:
 
        - jsonPath: $.SewerageConnection.oldConnectionNo
 
-       - jsonPath: $.SewerageConnection.action
+       - jsonPath: $.SewerageConnection.processInstance.action
 
        - jsonPath: $.SewerageConnection.roadCuttingArea
 
@@ -196,6 +196,6 @@ serviceMaps:
 
        - jsonPath: $.SewerageConnection.connectionNo
 
-       - jsonPath: $.SewerageConnection.action
+       - jsonPath: $.SewerageConnection.processInstance.action
 
        - jsonPath: $.SewerageConnection.id    
