@@ -5,9 +5,24 @@
     {
       "code": "PT",
       "headerBandLabel": "PT_COMMON_TABLE_COL_PT_ID",
-      "primaryMessage": "PT_PAYMENT_MESSAGE_EMPLOYEE",
-      "secondaryMessage": "PT_PAYMENT_MESSAGE_DETAIL_EMPLOYEE",
-      "receiptNo": "PT_PAYMENT_RECEIPT_NO",
+      "citizenSuccess" : {
+        "primaryMessage": "CITIZEN_SUCCESS_PT_PAYMENT_MESSAGE",
+        "secondaryMessage": "CITIZEN_SUCCESS_PT_PAYMENT_MESSAGE_DETAIL",
+         "receiptNo": "CITIZEN_SUCCESS_PT_PAYMENT_RECEIPT_NO"
+      },
+      "employeeSuccess" : {
+        "primaryMessage": "EMPLOYEE_SUCCESS_PT_PAYMENT_MESSAGE",
+        "secondaryMessage": "EMPLOYEE_SUCCESS_PT_PAYMENT_MESSAGE_DETAIL",
+        "receiptNo": "EMPLOYEE_SUCCESS_PT_PAYMENT_RECEIPT_NO"
+      },
+      "citizenFailure" : {
+        "primaryMessage": "CITIZEN_FAILURE_PT_PAYMENT_FAILURE_MESSAGE",
+        "secondaryMessage": "CITIZEN_FAILURE_PT_PAYMENT_FAILURE_MESSAGE_DETAIL"
+      },
+      "employeeFailure" : {
+        "primaryMessage": "EMPLOYEE_FAILURE_PT_PAYMENT_FAILURE_MESSAGE",
+        "secondaryMessage": "EMPLOYEE_FAILURE_PT_PAYMENT_FAILURE_MESSAGE_DETAIL"
+      },
       "footer": {
         "label": {
           "labelName": "GO TO HOME",
@@ -19,9 +34,24 @@
     {
       "code": "TL",
       "headerBandLabel": "PAYMENT_COMMON_CONSUMER_CODE",
-      "primaryMessage": "TL_PAYMENT_MESSAGE_EMPLOYEE",
-      "secondaryMessage": "TL_PAYMENT_MESSAGE_DETAIL_EMPLOYEE",
-      "receiptNo": "TL_PAYMENT_RECEIPT_NO",
+      "citizenSuccess" : {
+        "primaryMessage": "CITIZEN_SUCCESS_TL_PAYMENT_MESSAGE",
+        "secondaryMessage": "CITIZEN_SUCCESS_TL_PAYMENT_MESSAGE_DETAIL",
+        "receiptNo": "CITIZEN_SUCCESS_TL_PAYMENT_RECEIPT_NO"
+      },
+      "employeeSuccess" : {
+        "primaryMessage": "EMPLOYEE_SUCCESS_TL_PAYMENT_MESSAGE",
+        "secondaryMessage": "EMPLOYEE_SUCCESS_TL_PAYMENT_MESSAGE_DETAIL",
+        "receiptNo": "EMPLOYEE_SUCCESS_TL_PAYMENT_RECEIPT_NO"
+      },
+      "citizenFailure" : {
+        "primaryMessage": "CITIZEN_FAILURE_TL_PAYMENT_FAILURE_MESSAGE",
+        "secondaryMessage": "CITIZEN_FAILURE_TL_PAYMENT_FAILURE_MESSAGE_DETAIL"
+      },
+      "employeeFailure" : {
+        "primaryMessage": "EMPLOYEE_FAILURE_TL_PAYMENT_FAILURE_MESSAGE",
+        "secondaryMessage": "EMPLOYEE_FAILURE_TL_PAYMENT_FAILURE_MESSAGE_DETAIL"
+      },
       "footer": {
         "label": {
           "labelName": "GO TO HOME",
