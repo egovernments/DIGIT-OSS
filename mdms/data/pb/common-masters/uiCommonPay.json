@@ -1,28 +1,34 @@
 {
   "tenantId": "pb",
   "moduleName": "common-masters",
-  "uiCommonPay":[
-      {
-        "code":"PT",
-        "headerBandLabel":"PAYMENT_COMMON_CONSUMER_CODE",
-        "footer":{
-          "label":{
-            "labelName": "GO TO HOME",
-            "labelKey": "COMMON_BUTTON_HOME"
-          },
-          "link":"/pt-mutation/propertySearch"
-        }
-      },
-      {
-        "code":"TL",
-        "headerBandLabel":"PAYMENT_COMMON_CONSUMER_CODE",
-        "footer":{
-          "label":{
-            "labelName": "GO TO HOME",
-            "labelKey": "COMMON_BUTTON_HOME"
-          },
-          "link":"/tradelicence/search"
-        }
+  "uiCommonPay": [
+    {
+      "code": "PT",
+      "headerBandLabel": "PT_COMMON_TABLE_COL_PT_ID",
+      "primaryMessage": "PAYMENT_MESSAGE_EMPLOYEE",
+      "secondaryMessage": "PAYMENT_MESSAGE_DETAIL_EMPLOYEE",
+      "receiptNo": "PAYMENT_RECEIPT_NO",
+      "footer": {
+        "label": {
+          "labelName": "GO TO HOME",
+          "labelKey": "COMMON_BUTTON_HOME"
+        },
+        "link": "/pt-mutation/propertySearch"
       }
+    },
+    {
+      "code": "TL",
+      "headerBandLabel": "PAYMENT_COMMON_CONSUMER_CODE",
+      "primaryMessage": "PAYMENT_MESSAGE_EMPLOYEE",
+      "secondaryMessage": "PAYMENT_MESSAGE_DETAIL_EMPLOYEE",
+      "receiptNo": "PAYMENT_RECEIPT_NO",
+      "footer": {
+        "label": {
+          "labelName": "GO TO HOME",
+          "labelKey": "COMMON_BUTTON_HOME"
+        },
+        "link": "/tradelicence/search"
+      }
+    }
   ]
 }
