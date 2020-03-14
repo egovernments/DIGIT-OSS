@@ -33,7 +33,7 @@ serviceMaps:
        - jsonPath: $.WaterConnection.roadType
 
        
-    - query: INSERT INTO water_service_connection(connection_id,connectionCategory,rainWaterHarvesting,connectionType,waterSource,meterId,meterInstallationDate,pipeSize,noOfTaps,connectionexecutiondate,proposedPipeSize,proposedTaps, initialmeterreading) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?);
+    - query: INSERT INTO water_service_connection(connection_id,connectionCategory,rainWaterHarvesting,connectionType,waterSource,meterId,meterInstallationDate,pipeSize,noOfTaps,connectionexecutiondate,proposedPipeSize,proposedTaps) VALUES(?,?,?,?,?,?,?,?,?,?,?,?);
       basePath: $.WaterConnection
       jsonMaps:
 
@@ -63,7 +63,6 @@ serviceMaps:
        
        - jsonPath: $.WaterConnection.proposedTaps
        
-       - jsonPath: $.WaterConnection.additionalDetails.initialMeterReading
        
 
  - version: 1.0
