@@ -63,7 +63,7 @@ serviceMaps:
        
        - jsonPath: $.WaterConnection.proposedTaps
        
-       - jsonPath: $.WaterConnection.initialMeterReading
+       - jsonPath: $.WaterConnection.additionalDetails.initialMeterReading
        
 
  - version: 1.0
@@ -130,7 +130,7 @@ serviceMaps:
        
        - jsonPath: $.WaterConnection.proposedTaps
        
-       - jsonPath: $.WaterConnection.initialMeterReading
+       - jsonPath: $.WaterConnection.additionalDetails.initialMeterReading
 
        - jsonPath: $.WaterConnection.id
 
