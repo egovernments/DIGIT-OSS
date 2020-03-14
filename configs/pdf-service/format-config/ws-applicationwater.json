@@ -52,18 +52,31 @@
             {
                 "columns": [
                     {
-                        "width": "50%",
-                        "text": "{{water_application}}"
+                        "text": "{{water_application}}",
+                        "style": "ws-header"
                     },
                     {
-                        "width": "20%",
                         "text": "{{application_no}}",
-                        "alignment": "right"
+                        "alignment": "right",
+                        "color": "#484848",
+                        "margin": [
+                            0,
+                            2,
+                            -50,
+                            0
+                        ]
                     },
                     {
-                        "width": "50%",
                         "text": "{{applicationNo}}",
-                        "alignment": "right"
+                        "alignment": "right",
+                        "color": "#484848",
+                        "bold": true,
+                        "margin": [
+                            -150,
+                            2,
+                            -20,
+                            0
+                        ]
                     }
                 ],
                 "margin": [
@@ -88,8 +101,7 @@
                             {
                                 "table": {
                                     "widths": [
-                                        "25%",
-                                        "25%"
+                                        "*"
                                     ],
                                     "body": [
                                         [
@@ -145,7 +157,7 @@
                                                     false,
                                                     false
                                                 ],
-                                                "style": "ws-sub-table"
+                                                "style": "ws-sub-table-value"
                                             },
                                             {
                                                 "text": "{{applicationFee}}",
@@ -155,7 +167,7 @@
                                                     false,
                                                     false
                                                 ],
-                                                "style": "ws-sub-table"
+                                                "style": "ws-sub-table-value"
                                             }
                                         ],
                                         [
@@ -536,7 +548,7 @@
                                                 "style": "ws-sub-table-value"
                                             },
                                             {
-                                                "text": "streetName",
+                                                "text": "{{streetName}}",
                                                 "border": [
                                                     false,
                                                     false,
