@@ -1070,6 +1070,11 @@
       "masterName": "CalculationAttribute",
       "isStateLevel": true,
       "uniqueKeys": []
+    },
+    "waterSourceWithSubSource": {
+      "masterName": "waterSourceWithSubSource",
+      "isStateLevel": true,
+      "uniqueKeys": []
     }
   }
 }
