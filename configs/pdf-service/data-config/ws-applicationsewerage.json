@@ -257,37 +257,37 @@
                             {
                                 "variable": "ownershipProof",
                                 "value": {
-                                    "path": "$.documents[?(@.title == 'WS_OWNER.ADDRESSPROOF')].name"
+                                    "path": "$.pdfDocuments[?(@.title == 'WS_OWNER.ADDRESSPROOF')].name"
                                 }
                             },
                             {
                                 "variable": "ownersIdProof",
                                 "value": {
-                                    "path": "$.documents[?(@.title == 'WS_OWNER.IDENTITYPROOF')].name"
+                                    "path": "$.pdfDocuments[?(@.title == 'WS_OWNER.IDENTITYPROOF')].name"
                                 }
                             },
                             {
                                 "variable": "electricityBill",
                                 "value": {
-                                    "path": "$.documents[?(@.title == 'WS_ELECTRICITY_BILL')].name"
+                                    "path": "$.pdfDocuments[?(@.title == 'WS_ELECTRICITY_BILL')].name"
                                 }
                             },
                             {
                                 "variable": "plumberReport",
                                 "value": {
-                                    "path": "$.documents[?(@.title == 'WS_PLUMBER_REPORT_DRAWING')].name"
+                                    "path": "$.pdfDocuments[?(@.title == 'WS_PLUMBER_REPORT_DRAWING')].name"
                                 }
                             },
                             {
                                 "variable": "buildingPlan",
                                 "value": {
-                                    "path": "$.documents[?(@.title == 'WS_BUILDING_PLAN_OR_COMPLETION_CERTIFICATE')].name"
+                                    "path": "$.pdfDocuments[?(@.title == 'WS_BUILDING_PLAN_OR_COMPLETION_CERTIFICATE')].name"
                                 }
                             },
                             {
                                 "variable": "ptTaxReciept",
                                 "value": {
-                                    "path": "$.documents[?(@.title == 'WS_PROPERTY_TAX_RECIEPT')].name"
+                                    "path": "$.pdfDocuments[?(@.title == 'WS_PROPERTY_TAX_RECIEPT')].name"
                                 }
                             },
                             {
