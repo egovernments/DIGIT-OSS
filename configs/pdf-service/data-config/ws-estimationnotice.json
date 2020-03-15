@@ -21,8 +21,9 @@
                             {
                                 "variable": "appDate",
                                 "value": {
-                                    "path": "$.appDate"
-                                }
+                                    "path": "$.connectionExecutionDate"
+                                },
+                                "type":"date"
                             },
                             {
                                 "variable": "name",
@@ -94,6 +95,18 @@
                                 "variable": "taxCess",
                                 "value": {
                                     "path": "$.pdfTaxhead[?(@.taxHeadCode == 'TAX_AND_CESS')].estimateAmount"
+                                }
+                            },
+                            {
+                                "variable": "roadCharge",
+                                "value": {
+                                    "path": "$.pdfTaxhead[?(@.taxHeadCode == 'ROAD_CUTTING_CHARGE')].estimateAmount"
+                                }
+                            },
+                            {
+                                "variable": "oneTimeFee",
+                                "value": {
+                                    "path": "$.pdfTaxhead[?(@.taxHeadCode == 'ONE_TIME_FEE')].estimateAmount"
                                 }
                             },
                             {
@@ -429,6 +442,30 @@
                                 "variable": "approved_by",
                                 "value": {
                                     "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_APPROVED_BY"
+                                },
+                                "type": "label",
+                                "localisation": {
+                                    "required": true,
+                                    "prefix": null,
+                                    "module": "rainmaker-common"
+                                }
+                            },
+                            {
+                                "variable": "one_time_fee",
+                                "value": {
+                                    "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_ONE_TIME_FEE"
+                                },
+                                "type": "label",
+                                "localisation": {
+                                    "required": true,
+                                    "prefix": null,
+                                    "module": "rainmaker-common"
+                                }
+                            },
+                            {
+                                "variable": "road_charge",
+                                "value": {
+                                    "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_ROAD_CHARGE"
                                 },
                                 "type": "label",
                                 "localisation": {

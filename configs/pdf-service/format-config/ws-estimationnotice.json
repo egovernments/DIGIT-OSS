@@ -67,10 +67,10 @@
                             {
                                 "table": {
                                     "widths": [
-                                        "25%",
-                                        "25%",
-                                        "25%",
-                                        "25%"
+                                        "16%",
+                                        "34%",
+                                        "18%",
+                                        "32%"
                                     ],
                                     "body": [
                                         [
@@ -364,10 +364,36 @@
                                                 "alignment": "center"
                                             },
                                             {
+                                                "text": "{{one_time_fee}}"
+                                            },
+                                            {
+                                                "text": "{{oneTimeFee}}",
+                                                "alignment": "right"
+                                            }
+                                        ],
+                                        [
+                                            {
+                                                "text": "(+)",
+                                                "alignment": "center"
+                                            },
+                                            {
                                                 "text": "{{other_charge}}"
                                             },
                                             {
                                                 "text": "{{otherCharge}}",
+                                                "alignment": "right"
+                                            }
+                                        ],
+                                        [
+                                            {
+                                                "text": "(+)",
+                                                "alignment": "center"
+                                            },
+                                            {
+                                                "text": "{{road_charge}}"
+                                            },
+                                            {
+                                                "text": "{{roadCharge}}",
                                                 "alignment": "right"
                                             }
                                         ],
