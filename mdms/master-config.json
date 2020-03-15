@@ -851,6 +851,11 @@
       "uniqueKeys": [
         "$.billingCycle"
       ]
+    },
+    "waterSourceWithSubSource": {
+      "masterName": "waterSourceWithSubSource",
+      "isStateLevel": true,
+      "uniqueKeys": []
     }
   },
   "ws-services-calculation": {
@@ -1068,11 +1073,6 @@
     },
     "CalculationAttribute": {
       "masterName": "CalculationAttribute",
-      "isStateLevel": true,
-      "uniqueKeys": []
-    },
-    "waterSourceWithSubSource": {
-      "masterName": "waterSourceWithSubSource",
       "isStateLevel": true,
       "uniqueKeys": []
     }
