@@ -160,7 +160,7 @@
                             {
                                 "variable": "relationshipLabel",
                                 "value": {
-                                    "path": "$.property.owners[0].roles.relationship"
+                                    "path": "$.property.owners[0].relationship"
                                 }
                             },
                             {
@@ -251,7 +251,7 @@
                             {
                                 "variable": "correspondenceAddress",
                                 "value": {
-                                    "path":"$.property.owners[0].correspondenceAddress"
+                                    "path": "$.property.owners[0].correspondenceAddress"
                                 }
                             },
                             {
@@ -346,15 +346,15 @@
                             {
                                 "variable": "document_details_header",
                                 "value": {
-                                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_DOCUMENT_DETAIL_HEADER"
+                                    "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_DOCUMENT_DETAIL_HEADER"
                                 },
                                 "type": "label",
                                 "localisation": {
-                                  "required": true,
-                                  "prefix": null,
-                                  "module": "rainmaker-common"
+                                    "required": true,
+                                    "prefix": null,
+                                    "module": "rainmaker-common"
                                 }
-                              },
+                            },
                             {
                                 "variable": "fee_estimate_header",
                                 "value": {
@@ -1007,6 +1007,18 @@
                                 "variable": "correspondence_address",
                                 "value": {
                                     "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_CORRESPONDENCE_ADDRESS"
+                                },
+                                "type": "label",
+                                "localisation": {
+                                    "required": true,
+                                    "prefix": null,
+                                    "module": "rainmaker-common"
+                                }
+                            },
+                            {
+                                "variable": "Rs",
+                                "value": {
+                                    "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_RUPEE"
                                 },
                                 "type": "label",
                                 "localisation": {

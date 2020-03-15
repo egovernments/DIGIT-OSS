@@ -347,7 +347,7 @@
               {
                 "variable": "logo_sub_header",
                 "value": {
-                  "path": "PDF_STATIC_LABEL_SW_CONSOLIDATED_ACKNOWELDGMENT_LOGO_SUB_HEADER"
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_LOGO_SUB_HEADER"
                 },
                 "type": "label",
                 "localisation": {
@@ -1104,6 +1104,18 @@
                 "variable": "correspondence_address",
                 "value": {
                   "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_CORRESPONDENCE_ADDRESS"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "Rs",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_RUPEE"
                 },
                 "type": "label",
                 "localisation": {
