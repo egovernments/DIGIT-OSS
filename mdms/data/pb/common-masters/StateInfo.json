@@ -27,6 +27,52 @@
           "label": "ਪੰਜਾਬੀ",
           "value": "pn_IN"
         }
+      ],
+      "localizationModules": [
+        {
+          "label": "rainmaker-abg",
+          "value": "rainmaker-abg"
+        },
+        {
+          "label": "rainmaker-common",
+          "value": "rainmaker-common"
+        },
+        {
+          "label": "rainmaker-noc",
+          "value": "rainmaker-noc"
+        },
+        {
+          "label": "rainmaker-pt",
+          "value": "rainmaker-pt"
+        },
+        {
+          "label": "rainmaker-uc",
+          "value": "rainmaker-uc"
+        },
+        {
+          "label": "rainmaker-pgr",
+          "value": "rainmaker-pgr"
+        },
+        {
+          "label": "rainmaker-tl",
+          "value": "rainmaker-tl"
+        },
+        {
+          "label": "rainmaker-hr",
+          "value": "rainmaker-hr"
+        },
+        {
+          "label": "rainmaker-test",
+          "value": "rainmaker-test"
+        },
+        {
+          "label": "finance-erp",
+          "value": "finance-erp"
+        },
+        {
+          "label": "rainmaker-receipt",
+          "value": "rainmaker-receipt"
+        }
       ]
     }
   ]
