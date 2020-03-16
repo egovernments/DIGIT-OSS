@@ -159,7 +159,7 @@
                                                     false,
                                                     false
                                                 ],
-                                                "style": "ws-sub-table"
+                                                "style": "ws-sub-table-value"
                                             },
                                             {
                                                 "text": "{{applicationFee}}",
@@ -169,7 +169,7 @@
                                                     false,
                                                     false
                                                 ],
-                                                "style": "ws-sub-table"
+                                                "style": "ws-sub-table-value"
                                             }
                                         ],
                                         [
