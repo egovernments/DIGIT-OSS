@@ -412,7 +412,7 @@
                 "responseMapping":[
                   {
                     "variable": "variable11",                        
-                    "value": "$.MdmsRes.tenant.footer[0].footerContent.*",
+                    "value": "$.MdmsRes.tenant.footer[0].receiptFooterContent.*",
                      "type":"array",
                      "format":{                            
                         "type":"string",

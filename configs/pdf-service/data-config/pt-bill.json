@@ -616,7 +616,7 @@
                 "responseMapping":[
                   {
                     "variable": "variable11",                        
-                    "value": "$.MdmsRes.tenant.footer[0].billFooterContent.*",
+                    "value": "$.MdmsRes.tenant.footer[0].footerContent.*",
                      "type":"array",
                      "format":{                            
                         "type":"string",
