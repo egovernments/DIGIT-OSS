@@ -5,6 +5,8 @@
     {
       "code": "PT",
       "headerBandLabel": "PT_COMMON_TABLE_COL_PT_ID",
+      "receiptKey": "property-receipt",
+      "billKey":"property-bill",
       "citizenSuccess" : {
         "primaryMessage": "CITIZEN_SUCCESS_PT_PAYMENT_MESSAGE",
         "secondaryMessage": "CITIZEN_SUCCESS_PT_PAYMENT_MESSAGE_DETAIL",
@@ -34,6 +36,8 @@
     {
       "code": "TL",
       "headerBandLabel": "PAYMENT_COMMON_CONSUMER_CODE",
+      "receiptKey": "tradelicense-receipt",
+      "billKey":"tradelicense-bill",
       "citizenSuccess" : {
         "primaryMessage": "CITIZEN_SUCCESS_TL_PAYMENT_MESSAGE",
         "secondaryMessage": "CITIZEN_SUCCESS_TL_PAYMENT_MESSAGE_DETAIL",
