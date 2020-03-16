@@ -1,6 +1,7 @@
 package org.egov.filestore.domain.service;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -59,10 +60,10 @@ public class StorageService {
 		this.idGeneratorService = idGeneratorService;
 	}
 
-	public List<String> save(List<MultipartFile> filesToStore, String module, String tag, String tenantId) {
+	public List<String> save(List<MultipartFile> filesToStore, String module, String tag, String tenantId, String inputStreamAsString) {
 		validateFilesToUpload(filesToStore, module, tag, tenantId);
 		log.info(UPLOAD_MESSAGE, module, tag, filesToStore.size());
-		List<Artifact> artifacts = mapFilesToArtifacts(filesToStore, module, tag, tenantId);
+		List<Artifact> artifacts = mapFilesToArtifacts(filesToStore, module, tag, tenantId, inputStreamAsString);
 		return this.artifactRepository.save(artifacts);
 	}
 
@@ -72,14 +73,14 @@ public class StorageService {
 		}
 	}
 
-	private List<Artifact> mapFilesToArtifacts(List<MultipartFile> files, String module, String tag, String tenantId) {
+	private List<Artifact> mapFilesToArtifacts(List<MultipartFile> files, String module, String tag, String tenantId, String inputStreamAsString) {
 
 		final String folderName = getFolderName(module, tenantId);
 		return files.stream().map(file -> {
 			String fileName = folderName + System.currentTimeMillis() + file.getOriginalFilename();
 			String id = this.idGeneratorService.getId();
 			FileLocation fileLocation = new FileLocation(id, module, tag, tenantId, fileName,null);
-			return new Artifact(file, fileLocation);
+			return new Artifact(inputStreamAsString, file, fileLocation);
 		}).collect(Collectors.toList());
 	}
 

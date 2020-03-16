@@ -3,17 +3,17 @@ package org.egov.filestore.web.controller;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 
 import java.io.IOException;
-import java.nio.file.Files;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.tika.Tika;
-import org.apache.tika.exception.TikaException;
+import org.egov.filestore.config.FileStoreConfig;
 import org.egov.filestore.domain.model.FileInfo;
 import org.egov.filestore.domain.service.StorageService;
 import org.egov.filestore.web.contract.File;
@@ -21,6 +21,8 @@ import org.egov.filestore.web.contract.FileStoreResponse;
 import org.egov.filestore.web.contract.GetFilesByTagResponse;
 import org.egov.filestore.web.contract.ResponseFactory;
 import org.egov.filestore.web.contract.StorageResponse;
+import org.egov.tracer.model.CustomException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -34,16 +36,22 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Controller
 @RequestMapping("/v1/files")
+@Slf4j
 public class StorageController {
 
 	private StorageService storageService;
 	private ResponseFactory responseFactory;
+	private FileStoreConfig fileStoreConfig;
 
-	public StorageController(StorageService storageService, ResponseFactory responseFactory) {
+	@Autowired
+	public StorageController(StorageService storageService, ResponseFactory responseFactory, FileStoreConfig fileStoreConfig) {
 		this.storageService = storageService;
 		this.responseFactory = responseFactory;
+		this.fileStoreConfig = fileStoreConfig;
 	}
 
 	@GetMapping("/id")
@@ -93,22 +101,34 @@ public class StorageController {
 			@RequestParam(value = "module", required = true) String module,
 			@RequestParam(value = "tag", required = false) String tag) {
 		
-//		String ip = null;
-//		for(MultipartFile file : files) {
-//			
-//			System.err.println(file.getContentType());
-//			System.err.println(FilenameUtils.getExtension(file.getOriginalFilename()));
-//			Tika tika = new Tika();
-//			try {
-//				ip = tika.parseToString(file.getInputStream());
-//				System.err.println(" th efile " + ip);
-//			} catch (IOException | TikaException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
+		String inputStreamAsString = null;
+		String inputFormat = null;
+		for(MultipartFile file : files) {
+			
+			System.err.println(file.getContentType());
+			System.err.println(FilenameUtils.getExtension(file.getOriginalFilename()));
+			Tika tika = new Tika();
+			
+			try {
+				
+				inputStreamAsString = IOUtils.toString(file.getInputStream(), fileStoreConfig.getImageCharsetType());
+				InputStream ipStreamForValidation = IOUtils.toInputStream(inputStreamAsString, fileStoreConfig.getImageCharsetType());
+				inputFormat = tika.detect(ipStreamForValidation);
+				log.info(" the file format is : " + inputFormat);
+				ipStreamForValidation.close();
+			} catch (IOException e) {
+				throw new CustomException("EG_FILESTORE_PARSING_ERROR","not able to parse the input please upload a proper file of allowed type : " + e.getMessage());
+			}
+			
+			List<String> allowedFormats = fileStoreConfig.getAllowedFileFormats();
+			
+//			if (!allowedFormats.contains(inputFormat.split("/")[1])) {
+//				throw new CustomException("EG_FILESTORE_INVALID_INPUT", "Inalvid input provided for file, please upload any of the allowed formats : "
+//								+ allowedFormats);
 //			}
-//		}
-		
-		final List<String> fileStoreIds = storageService.save(files, module, tag, tenantId);
+		}
+
+		final List<String> fileStoreIds = storageService.save(files, module, tag, tenantId, inputStreamAsString);
 		return getStorageResponse(fileStoreIds, tenantId);
 	}
 

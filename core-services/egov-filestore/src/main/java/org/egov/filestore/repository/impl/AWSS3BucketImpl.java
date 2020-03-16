@@ -5,7 +5,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -16,6 +15,7 @@ import javax.imageio.ImageIO;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
+import org.egov.filestore.config.FileStoreConfig;
 import org.egov.filestore.domain.model.Artifact;
 import org.egov.filestore.repository.AWSClientFacade;
 import org.egov.filestore.repository.CloudFilesManager;
@@ -25,7 +25,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.filter.CharacterEncodingFilter;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
@@ -38,6 +37,9 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @ConditionalOnProperty(value = "isS3Enabled", havingValue = "true", matchIfMissing = true)
 public class AWSS3BucketImpl implements CloudFilesManager {
+	
+	@Autowired
+	private FileStoreConfig configs;
 
 	@Value("${aws.key}")
 	private String key;
@@ -88,21 +90,17 @@ public class AWSS3BucketImpl implements CloudFilesManager {
 
 			try {
 				
-				InputStream inputStreamForUpload = artifact.getMultipartFile().getInputStream();
+				String inputStreamAsString = artifact.getFileContentInString(); 
+				InputStream inputStreamForUpload = IOUtils.toInputStream(inputStreamAsString, configs.getImageCharsetType());
 				if (artifact.getMultipartFile().getContentType().startsWith("image/")) {
 
-					String inputStreamAsString;
-					InputStream ipStreamForImg;
-
-					inputStreamAsString = IOUtils.toString(inputStreamForUpload, "ISO-8859-1"); 
-					ipStreamForImg = IOUtils.toInputStream(inputStreamAsString, "ISO-8859-1");
-					inputStreamForUpload = IOUtils.toInputStream(inputStreamAsString, "ISO-8859-1");
+					InputStream ipStreamForImg = IOUtils.toInputStream(inputStreamAsString, configs.getImageCharsetType());
 
 					String extension = FilenameUtils.getExtension(artifact.getMultipartFile().getOriginalFilename());
 					Map<String, BufferedImage> mapOfImagesAndPaths = util.createVersionsOfImage(ipStreamForImg, fileNameWithPath);
 					writeImage(mapOfImagesAndPaths, bucketName, extension);
-					writeFile(inputStreamAsString, bucketName, fileNameWithPath, contentLength);
 				}
+				writeFile(inputStreamForUpload, bucketName, fileNameWithPath, contentLength);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				log.error("EG_FILESTORE_INPUT_ERROR", e);
@@ -181,11 +179,11 @@ public class AWSS3BucketImpl implements CloudFilesManager {
 	 * @param bucketName
 	 * @param fileName
 	 */
-	private void writeFile(String content, String bucketName, String fileName, Long contentLength) {
+	private void writeFile(InputStream content, String bucketName, String fileName, Long contentLength) {
 		
 		ObjectMetadata objMd = new ObjectMetadata();
 		objMd.setContentLength(contentLength);
-		s3Client.putObject(bucketName, fileName, content);
+		s3Client.putObject(bucketName, fileName, content, objMd);
 	}
 
 	/**
