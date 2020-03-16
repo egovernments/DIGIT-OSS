@@ -1,5 +1,5 @@
 {
-  "key": "buildingpermit",
+  "key": "buildingpermit-low",
   "DataConfigs": {
     "serviceName": "rainmaker-bpa",
     "version": "1.0.0",
@@ -91,7 +91,7 @@
                 "value": {
                   "path": "BOA_PDF_WRT_TXT"
                 },
-                "type": "label",
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -114,7 +114,7 @@
                 "value": {
                   "path": "BPA_PDF_GENERATED_ON"
                 },
-                "type": "label",
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -133,7 +133,7 @@
                 "value": {
                   "path": "BPA_PDF_MUNCIPAL"
                 },
-                "type": "label",
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -145,7 +145,7 @@
                 "value": {
                   "path": "BPA_PDF_FORM"
                 },
-                "type": "label",
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -157,7 +157,7 @@
                 "value": {
                   "path": "BPA_PDF_FORM_APPROVAL_TXT"
                 },
-                "type": "label",
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -169,7 +169,7 @@
                 "value": {
                   "path": "BPA_PDF_BYELAWS"
                 },
-                "type": "label",
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -181,7 +181,7 @@
                 "value": {
                   "path": "BPA_PDF_PLANPERMISSION_NO"
                 },
-                "type": "label",
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -193,7 +193,7 @@
                 "value": {
                   "path": "BPA_PDF_DATED"
                 },
-                "type": "label",
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -205,7 +205,7 @@
                 "value": {
                   "path": "BPA_PDF_DATED_SMALL"
                 },
-                "type": "label",
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -217,7 +217,7 @@
                 "value": {
                   "path": "BPA_PDF_PERMISSION_GRANT_TXT"
                 },
-                "type": "label",
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -229,7 +229,7 @@
                 "value": {
                   "path": "BPA_PDF_SALUTATION"
                 },
-                "type": "label",
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -241,7 +241,7 @@
                 "value": {
                   "path": "BPA_PDF_FOR"
                 },
-                "type": "label",
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -253,7 +253,7 @@
                 "value": {
                   "path": "BPA_PDF_DSCR"
                 },
-                "type": "label",
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -265,7 +265,7 @@
                 "value": {
                   "path": "BPA_PDF_PLOTNO_TXT"
                 },
-                "type": "label",
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -277,7 +277,7 @@
                 "value": {
                   "path": "BPA_PDF_CS_PLOT"
                 },
-                "type": "label",
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -289,7 +289,7 @@
                 "value": {
                   "path": "BPA_PDF_MSP_PLOT"
                 },
-                "type": "label",
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -301,7 +301,7 @@
                 "value": {
                   "path": "BPA_PDF_KHATANO_TXT"
                 },
-                "type": "label",
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -313,7 +313,7 @@
                 "value": {
                   "path": "BPA_PDF_HOLDINGNO_TXT"
                 },
-                "type": "label",
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -325,7 +325,7 @@
                 "value": {
                   "path": "BPA_PDF_SERVEYNO_TXT"
                 },
-                "type": "label",
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -337,7 +337,7 @@
                 "value": {
                   "path": "BPA_PDF_TOWN_PLANNING_TXT"
                 },
-                "type": "label",
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -349,19 +349,19 @@
                 "value": {
                   "path": "BPA_PDF_PROPOSE_LAND"
                 },
-                "type": "label",
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
                   "module": "rainmaker-bpa"
                 }
-              },
+              },              
               {
                 "variable": "OF",
                 "value": {
                   "path": "BPA_PDF_OF"
                 },
-                "type": "label",
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -373,7 +373,7 @@
                 "value": {
                   "path": "BPA_PDF_CONDNS_TXT"
                 },
-                "type": "label",
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -385,7 +385,7 @@
                 "value": {
                   "path": "BPA_PDF_PERMITFEE_DETAILS_TXT"
                 },
-                "type": "label",
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -397,7 +397,7 @@
                 "value": {
                   "path": "BPA_PDF_FEE_DSCR"
                 },
-                "type": "label",
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -409,7 +409,7 @@
                 "value": {
                   "path": "BPA_PDF_AMOUNT_TXT"
                 },
-                "type": "label",
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -421,7 +421,7 @@
                 "value": {
                   "path": "BPA_PDF_TOTAL"
                 },
-                "type": "label",
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -433,7 +433,7 @@
                 "value": {
                   "path": "BPA_PDF_BY_ORDER"
                 },
-                "type": "label",
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -443,9 +443,9 @@
               {
                 "variable": "AUTH_OFFICER",
                 "value": {
-                  "path": "BPA_PDF_AUTH_OFFICER"
+                  "path": "BPA_PDF_COMMISSIONER"
                 },
-                "type": "label",
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -457,7 +457,7 @@
                 "value": {
                   "path": "BPA_PDF_VALIDITY_DSCR"
                 },
-                "type": "label",
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -469,7 +469,7 @@
                 "value": {
                   "path": "BPA_PDF_ONLY"
                 },
-                "type": "label",
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -481,7 +481,7 @@
                 "value": {
                   "path": "BPA_PDF_NOTE"
                 },
-                "type": "label",
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -493,7 +493,7 @@
                 "value": {
                   "path": "BPA_PDF_SUMMARY1"
                 },
-                "type": "label",
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -505,7 +505,7 @@
                 "value": {
                   "path": "BPA_PDF_SUMMARY2"
                 },
-                "type": "label",
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -517,7 +517,7 @@
                 "value": {
                   "path": "BPA_PDF_AUTH_DSCR"
                 },
-                "type": "label",
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -529,7 +529,7 @@
                 "value": {
                   "path": "BIHAR_TENANT"
                 },
-                "type": "label",
+                "type" : "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
@@ -573,41 +573,29 @@
                   {
                     "variable": "paymentDetails",
                     "value": "$.Payments[0].paymentDetails[0].bill.billDetails[0].billAccountDetails.*",
-                    "type": "array",
-                    "format": {
-                      "type": "string",
-                      "scema": [
+                    "type" : "array",
+                    "format":{
+                      "type":"string",
+                      "scema":[
                         {
                           "variable": "headCode",
-                          "value": "taxHeadCode",
+                          "value":"taxHeadCode",
                           "localisation": {
                             "required": true,
                             "prefix": null,
                             "module": "rainmaker-bpa"
                           }
-                        },
+                       },
                         {
                           "variable": "amnt",
-                          "value": "amount"
+                          "value":"amount"
                         }
                       ]
-                    }
+                     }
                   },
                   {
-                    "variable": "totalDue",
-                    "value": "$.Payments[0].paymentDetails[0].bill.billDetails[0].amount"
-                  }
-                ]
-              },
-              {
-                "path": "http://egov-workflow-v2.egov:8080/egov-workflow-v2/egov-wf/process/_search",
-                "queryParam": "tenantId=$.tenantId,businessIds=$.applicationNo,history=true",
-                "apiRequest": null,
-                "responseMapping": [
-                  {
-                    "variable": "approvedBy",
-                    "value": "$.ProcessInstances[?(@.action=='APPROVE')].assigner.name",
-                    "isUpperCaseRequired": true
+                    "variable" : "totalDue",
+                    "value" : "$.Payments[0].paymentDetails[0].bill.billDetails[0].amount"
                   }
                 ]
               }

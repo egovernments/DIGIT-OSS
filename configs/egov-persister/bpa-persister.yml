@@ -58,7 +58,7 @@ serviceMaps:
 
           - jsonPath: $.BPA.auditDetails.lastModifiedTime
 
-       - query: INSERT INTO eg_bpa_document( id, documenttype, filestoreid, buildingplanid, documentuid, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+       - query: INSERT INTO eg_bpa_document( id, documenttype, filestoreId, buildingplanid, documentuid, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
          basePath: BPA.documents.*
          jsonMaps:
           - jsonPath: $.BPA.documents.*.id
@@ -151,7 +151,7 @@ serviceMaps:
           - jsonPath: $.BPA.owners.*.relationship
 
           - jsonPath: $.BPA.id
-
+          
           - jsonPath: $.BPA.owners.*.active
 
           - jsonPath: $.BPA.owners.*.auditDetails.createdBy
@@ -261,7 +261,7 @@ serviceMaps:
    isTransaction: true
    queryMaps:
 
-       - query: UPDATE eg_bpa_buildingplan SET applicationno=?, remarks=?, holdingNo=?, subOccupancyType=?, permitOrderNo=?, edcrnumber=?,  action=?, registrationdetails=?, govtorquasi=?, servicetype=?, riskType=?, status=?, ownershipcategory=?, additionaldetails=?, lastmodifiedby=?, lastmodifiedtime=?, validityDate=? WHERE id=?;
+       - query: UPDATE eg_bpa_buildingplan SET applicationno=?, remarks=?, holdingNo=?, subOccupancyType=?, permitOrderNo=?, edcrnumber=?,  action=?, registrationdetails=?, govtorquasi=?, servicetype=?, riskType=?, status=?, ownershipcategory=?, additionaldetails=?, lastmodifiedby=?, lastmodifiedtime=?, validityDate=?, orderGeneratedDate=? WHERE id=?;
          basePath: BPA
          jsonMaps:
           - jsonPath: $.BPA.applicationNo
@@ -299,6 +299,8 @@ serviceMaps:
           - jsonPath: $.BPA.auditDetails.lastModifiedTime
 
           - jsonPath: $.BPA.validityDate
+
+          - jsonPath: $.BPA.orderGeneratedDate
 
           - jsonPath: $.BPA.id
 
@@ -427,7 +429,7 @@ serviceMaps:
 
 
 
-       - query: UPDATE eg_bpa_document_owner SET tenantId=?,owner=?,active=?, buildingplanid=?, documenttype=?, fileStoreId=?,documentuid=?, lastmodifiedby=?, lastmodifiedtime=? WHERE id=?;
+       - query: UPDATE eg_bpa_document_owner SET tenantId=?,owner=?,active=?, buildingplanid=?, documenttype=?, fileStoreid=?,documentuid=?, lastmodifiedby=?, lastmodifiedtime=? WHERE id=?;
          basePath: BPA.owners.*.documents.*
          jsonMaps:
 
@@ -451,7 +453,7 @@ serviceMaps:
 
            - jsonPath: $.BPA.owners.*.documents.*.id
            
-       - query: INSERT INTO eg_bpa_document( id, documenttype, filestoreid, buildingplanid, documentuid, createdby, lastmodifiedby, createdtime, lastmodifiedtime, wfstate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET documenttype =?,  filestoreid =?,lastmodifiedby =?, lastmodifiedtime =?;
+       - query: INSERT INTO eg_bpa_document( id, documenttype, fileStoreid, buildingplanid, documentuid, createdby, lastmodifiedby, createdtime, lastmodifiedtime, wfstate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET documenttype =?,  filestoreid =?,lastmodifiedby =?, lastmodifiedtime =?;
          basePath: BPA.documents.*
          jsonMaps:
           
@@ -472,7 +474,7 @@ serviceMaps:
            - jsonPath: $.BPA.auditDetails.createdTime
 
            - jsonPath: $.BPA.auditDetails.lastModifiedTime
-
+           
            - jsonPath: $.BPA.documents.*.wfState
 
            - jsonPath: $.BPA.documents.*.documentType
@@ -510,7 +512,7 @@ serviceMaps:
            - jsonPath: $.BPA.auditDetails.createdTime
 
            - jsonPath: $.BPA.auditDetails.lastModifiedTime
-
+           
            - jsonPath: $.BPA.documents.*.wfState
 
            - jsonPath: $.BPA.documents.*.documentType
@@ -527,7 +529,7 @@ serviceMaps:
 
            - jsonPath: $.BPA.id
 
-       - query: UPDATE eg_bpa_buildingplan SET status =?, permitOrderNo=?, validityDate=?, holdingno=?, registrationdetails=?, govtorquasi=?, additionaldetails=?  WHERE id =?;
+       - query: UPDATE eg_bpa_buildingplan SET status =?, permitOrderNo=?, validityDate=?, orderGeneratedDate=?, holdingno=?, registrationdetails=?, govtorquasi=?, additionaldetails=?  WHERE id =?;
          basePath: BPA
          jsonMaps:
            - jsonPath: $.BPA.status
@@ -535,6 +537,8 @@ serviceMaps:
            - jsonPath: $.BPA.permitOrderNo
            
            - jsonPath: $.BPA.validityDate
+           
+           - jsonPath: $.BPA.orderGeneratedDate
            
            - jsonPath: $.BPA.holdingNo
            

@@ -1,0 +1,592 @@
+{
+  "key": "misc-receipt",
+  "config": {
+    "defaultStyle": {
+      "font": "Cambay"
+     },
+    "content": [
+      {
+        "style": "noc-head",
+        "table": {
+          "widths": [
+            60,
+            "*"
+          ],
+          "body": [
+            [
+              {
+                "image": "{{logoImage}}",
+                "width": 50,
+                "height": 61.25,
+                "margin": [
+                  10,
+                  0,
+                  0,
+                  0
+                ]  
+              },
+              {
+                "stack": [
+                  {
+                    "text": "{{logo-header}}",
+                    "style": "receipt-logo-header"
+                  },
+                  {
+                    "text": "{{payment_receipt}}",
+                    "style": "receipt-logo-sub-header"
+                  }
+                ],
+                "alignment": "center",
+                "margin": [
+                  0,
+                  10,
+                  0,
+                  0
+                ]
+              }
+            ]
+          ]
+        },
+        "layout": {}
+      },
+      {
+        "style": "receipt-approver",
+        "columns": [
+          {
+            "text": [
+              {
+                "text": "{{receipt_info}}",
+                "bold": true
+              }
+            ],
+            "alignment": "left"
+          }
+        ]
+      },
+      {
+        "style": "noc-table",
+        "table": {
+          "widths": [
+            "16%",
+            "18%",
+            "16%",
+            "10%",
+            "18%",
+            "22%"
+          ],
+          "body": [
+            [
+              {
+                "text": "{{receipt_no}} :",
+                "border": [
+                  true,
+                  true,
+                  false,
+                  true
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "{{receiptNo}}",
+                "border": [
+                  false,
+                  true,
+                  true,
+                  true
+                ],
+                "style": "receipt-table"
+              },
+              {
+                "text": "{{payment_date}} :",
+                "border": [
+                  true,
+                  true,
+                  false,
+                  true
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "{{paymentDate}}",
+                "border": [
+                  false,
+                  true,
+                  true,
+                  true
+                ],
+                "style": "receipt-table"
+              },
+              {
+                "text": "{{consumer_id}} :",
+                "border": [
+                  true,
+                  true,
+                  false,
+                  true
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "{{consumerID}}",
+                "border": [
+                  false,
+                  true,
+                  true,
+                  true
+                ],
+                "style": "receipt-table"
+              }
+            ]
+          ]              
+        },
+        "layout": {}
+      },
+      {
+        "style": "receipt-approver",
+        "columns": [
+          {
+            "text": [
+              {
+                "text": "{{payer_info}}",
+                "bold": true
+              }
+            ],
+            "alignment": "left"
+          }
+        ]
+      },
+      {
+        "style": "noc-table",
+        "table": {
+          "widths": [
+            "25%",
+            "25%",
+            "25%",
+            "25%"
+          ],
+          "body": [
+            [
+              {
+                "text": "{{payer_name}} :",
+                "border": [
+                  true,
+                  true,
+                  false,
+                  true
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "{{payerName}}",
+                "border": [
+                  false,
+                  true,
+                  true,
+                  true
+                ],
+                "style": "receipt-table"
+              },
+              {
+                "text": "{{payer_contact}} :",
+                "border": [
+                  true,
+                  true,
+                  false,
+                  true
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "{{payerContact}}",
+                "border": [
+                  false,
+                  true,
+                  true,
+                  true
+                ],
+                "style": "receipt-table"
+              }
+            ]
+          ]              
+        },
+        "layout": {}
+      },
+      {
+        "style": "receipt-approver",
+        "columns": [
+          {
+            "text": [
+              {
+                "text": "{{payment_info}}",
+                "bold": true
+              }
+            ],
+            "alignment": "left"
+          }
+        ]
+      },
+      {
+        "style": "next-noc-table",
+        "table": {
+          "widths": [
+            "25%",
+            "25%",
+            "25%",
+            "25%"
+          ],
+          "body": [
+            [
+              {
+                "text": "{{service_type}} :",
+                "border": [
+                  true,
+                  true,
+                  false,
+                  true
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "{{serviceType}}",
+                "border": [
+                  false,
+                  true,
+                  false,
+                  true
+                ],
+                "style": "receipt-table"
+              },
+              {
+                "text": " ",
+                "border": [
+                  false,
+                  true,
+                  false,
+                  true
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": " ",
+                "border": [
+                  false,
+                  true,
+                  true,
+                  true
+                ],
+                "style": "receipt-table"
+              }
+            ],
+            [
+              {
+                "text": "{{billing_period}} :",
+                "border": [
+                  true,
+                  true,
+                  false,
+                  true
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "{{fromPeriod}} {{to}} {{toPeriod}}",
+                "border": [
+                  false,
+                  true,
+                  true,
+                  true
+                ],
+                "style": "receipt-table"
+              },
+              {
+                "text": "{{paid_amount}} :",
+                "border": [
+                  true,
+                  true,
+                  false,
+                  true
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "₹ {{paidAmount}}",
+                "border": [
+                  false,
+                  true,
+                  true,
+                  true
+                ],
+                "style": "receipt-table"
+              }
+            ],
+            [
+              {
+                "text": "{{payment_mode}} :",
+                "border": [
+                  true,
+                  true,
+                  false,
+                  true
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "{{paymentMode}}",
+                "border": [
+                  false,
+                  true,
+                  true,
+                  true
+                ],
+                "style": "receipt-table"
+              },
+              {
+                "text": "{{transaction_id}} :",
+                "border": [
+                  true,
+                  true,
+                  false,
+                  true
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "{{transactionID}}",
+                "border": [
+                  false,
+                  true,
+                  true,
+                  true
+                ],
+                "style": "receipt-table"
+              }
+            ],
+            [
+              {
+                "text": "{{g8_receipt_no}} :",
+                "border": [
+                  true,
+                  true,
+                  false,
+                  true
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "{{G8ReceiptNo}}",
+                "border": [
+                  false,
+                  false,
+                  false,
+                  true
+                ],
+                "style": "receipt-table"
+              },
+              {
+                "text": "{{g8_receipt_date}} :",
+                "border": [
+                  true,
+                  true,
+                  false,
+                  true
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "{{G8ReceiptDate}}",
+                "border": [
+                  false,
+                  true,
+                  true,
+                  true
+                ],
+                "style": "receipt-table"
+              }
+            ]
+          ]
+        },
+        "layout": {}
+      },
+      {
+        "style": "receipt-approver",
+        "columns": [
+          {
+            "text": [
+              {
+                "text": "{{generated_by}} : ",
+                "bold": true
+              },
+              {
+                "text": "{{user-name}}",
+                "bold": false
+              }
+            ],
+            "alignment": "left"
+          },
+          {
+            "text": [
+              {
+                "text": "{{commissioner/eo}}",
+                "bold": true
+              }
+            ],
+            "alignment": "right",
+            "margin": [
+                0,
+                0,
+               -10,
+                1
+            ]
+          }
+        ]
+      },
+      {
+        "style": "no-signature",
+        "text": "{{no_signature}}"
+      },
+      {
+        "style": "pt-disclaimer",
+        "stack": [
+          {
+            "text": "{{disclamer}}",
+            "bold": true,
+            "style": "pt-disclaimer-value"
+          },
+          {
+            "text": "{{disclamer_1}}",
+            "bold": false,
+            "style": "pt-disclaimer-value"
+          },
+          {
+            "text": "{{disclamer_2}}",
+            "bold": false,
+            "style": "pt-disclaimer-value"
+          },
+          {
+            "text": "{{disclamer_3}}",
+            "bold": false,
+            "style": "pt-disclaimer-value"
+          },
+          {
+            "text": "{{disclamer_4}}",
+            "bold": false,
+            "style": "pt-disclaimer-value"
+          }
+        ]
+      }
+    ],
+    "styles": {
+     "noc-head": {
+      "fillColor": "#b8bfcc",
+      "margin": [
+        -25,
+        -30,
+        -22,
+        1
+      ]
+    },
+    "receipt-logo-header": {
+      "color": "#000000",
+      "fontSize": 14,
+      "bold": true,
+      "letterSpacing": 0.74,
+      "margin": [
+        0,
+        0,
+        0,
+        5
+      ]
+    },
+    "receipt-logo-sub-header": {
+      "color": "#000000",
+      "fontSize": 12,
+      "letterSpacing": 0.6
+    },
+     "noc-table": {
+      "fontSize": 12,
+      "color": "#000000",
+      "margin": [
+        -25,
+        20,
+        -22,
+        0
+      ]
+    },
+    "next-noc-table": {
+      "fontSize": 12,
+      "color": "#000000",
+      "margin": [
+        -25,
+        10,
+        -22,
+        0
+      ]
+    },
+     "receipt-table-value": {
+      "color": "#000000",
+      "bold": true,
+      "fontSize": 10,
+      "fontWeight": 500,
+      "margin": [
+        8,
+        8,
+        0,
+        0
+      ]
+    },
+    "receipt-table": {
+      "color": "#000000",
+      "bold": false,
+      "fontSize": 10,
+      "fontWeight": 400,
+      "margin": [
+        -6,
+        8,
+        0,
+        0
+      ]
+    },
+     "receipt-approver": {
+      "fontSize": 12,
+      "bold": true,
+      "margin": [
+        -27,
+        30,
+        -10,
+        0
+      ],
+      "color": "#484848"
+    },
+    "no-signature": {
+      "fontSize": 12,
+      "margin": [
+        -27,
+        35,
+        -10,
+        0
+      ],
+      "color": "#484848"
+    },
+    "pt-disclaimer": {
+      "fontSize": 12,
+      "margin": [
+        -27,
+        30,
+        -10,
+        0
+      ],
+      "color": "#484848"
+    },
+    "pt-disclaimer-value": {
+      "fontSize": 9,
+      "margin": [
+        2,
+        5,
+        0,
+        0
+      ],
+      "color": "#484848"
+     }
+   }
+  }
+}
