@@ -52,7 +52,7 @@
             {
                 "columns": [
                     {
-                        "text": "{{water_application}}",
+                        "text": "{{sewerage_application}}",
                         "style": "ws-header"
                     },
                     {
