@@ -479,6 +479,18 @@
                                     "prefix": null,
                                     "module": "rainmaker-common"
                                 }
+                            },
+                            {
+                                "variable": "UAT",
+                                "value": {
+                                    "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_UAT"
+                                },
+                                "type": "label",
+                                "localisation": {
+                                    "required": true,
+                                    "prefix": null,
+                                    "module": "rainmaker-common"
+                                }
                             }
                         ]
                     },

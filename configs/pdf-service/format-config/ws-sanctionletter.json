@@ -21,7 +21,7 @@
                                     "body": [
                                         [
                                             {
-                                                "text": "{{cityName}} {{ Municipal_Corporation}}",
+                                                "text": "{{cityName}} {{Municipal_Corporation}}",
                                                 "border": [
                                                     false,
                                                     false,
@@ -240,10 +240,9 @@
                                                         "table": {
                                                             "widths": [
                                                                 "3%",
-                                                                "40%",
-                                                                "4%",
-                                                                "9%",
-                                                                "40"
+                                                                "*",
+                                                                "10%",
+                                                                "*"
                                                             ],
                                                             "body": [
                                                                 [
