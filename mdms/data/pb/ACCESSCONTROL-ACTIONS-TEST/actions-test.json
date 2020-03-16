@@ -16359,6 +16359,17 @@
       "serviceCode": "property-services",
       "code": "null",
       "path": ""
+    },
+    {
+      "id": 1971,
+      "name": "BPA-PermitOrderEDCR Report",
+      "url": "/bpa-services/bpa/appl/_permitorderedcr",
+      "displayName": "Apply",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "BPA",
+      "code": "null",
+      "path": ""
     }
   ]
 }
