@@ -72,6 +72,10 @@
         {
           "label": "rainmaker-receipt",
           "value": "rainmaker-receipt"
+        },
+        {
+          "label": "rainmaker-dss",
+          "value": "rainmaker-dss"
         }
       ]
     }
