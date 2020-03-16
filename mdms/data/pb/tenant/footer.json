@@ -5,7 +5,7 @@
         {
          "code": "pb.amritsar",
          "service": "PT",
-         "footerContent": [
+         "receiptFooterContent": [
             {
              "disclaimer": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_DISCLAIMER_FIRST_LINE",
              "order": "1."
@@ -20,19 +20,46 @@
             },
             {
               "disclaimer": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_DISCLAIMER_FOURTH_LINE",
-              "order": "8."
+              "order": "4."
             },
             {
               "disclaimer": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_DISCLAIMER_FIFTH_LINE",
               "order": "5."
             }
+          ],
+          "billFooterContent":[
+            {
+              "disclaimer": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_PAYMENT_RECEIVED",
+              "order": "1."
+             },
+             {
+              "disclaimer": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_THIS_DOCUMENT",
+              "order": "2."
+            },
+            {
+              "disclaimer": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_THIS_IS",
+              "order": "3."
+            },
+            {
+              "disclaimer": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_ASSESSSMENT_PAYMENT",
+              "order": "4."
+            },
+            {
+              "disclaimer": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_PLEASE_DEPOSIT",
+              "order": "5."
+            },
+            {
+              "disclaimer": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_IF_THE_TAX",
+              "order": "6."
+            }
+
           ]
            
         },
         {
             "code": "pb.amritsar",
             "service": "TL",
-            "footerContent": [
+            "receiptFooterContent": [
                {
                 "disclaimer": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_DISCLAIMER_1",
                 "order": "1."
@@ -45,7 +72,34 @@
                  "disclaimer": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_DISCLAIMER_3",
                  "order": "3."
                }
-             ]
+             ],
+             "billFooterContent":[
+              {
+                "disclaimer": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_PAYMENT_RECEIVED",
+                "order": "1."
+               },
+               {
+                "disclaimer": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_THIS_DOCUMENT",
+                "order": "2."
+              },
+              {
+                "disclaimer": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_THIS_IS",
+                "order": "3."
+              },
+              {
+                "disclaimer": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_ASSESSSMENT_PAYMENT",
+                "order": "4."
+              },
+              {
+                "disclaimer": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_PLEASE_DEPOSIT",
+                "order": "5."
+              },
+              {
+                "disclaimer": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_IF_THE_TAX",
+                "order": "6."
+              }
+  
+            ]
               
            }
     ]
