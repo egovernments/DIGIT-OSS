@@ -215,7 +215,8 @@
                                 },
                                 {
                                   "text": "{{Approval_Date}}",
-                                  "style": "receipt-content"
+                                  "style": "receipt-content",
+                                  "font": "Roboto"
                                 }
                               ]
                             ]
