@@ -1,7 +1,7 @@
 const Pool = require("pg").Pool;
 import logger from "./config/logger";
 import producer from "./kafka/producer";
-// import consumer from "./kafka/consumer";
+import consumer from "./kafka/consumer";
 import envVariables from "./EnvironmentVariables";
 
 const pool = new Pool({

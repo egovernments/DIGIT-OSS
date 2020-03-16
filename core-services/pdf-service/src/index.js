@@ -23,6 +23,8 @@ import envVariables from "./EnvironmentVariables";
 import QRCode from "qrcode";
 import { getValue } from "./utils/commons";
 import { getFileStoreIds, insertStoreIds } from "./queries";
+import { listenConsumer } from "./kafka/consumer";
+
 var jp = require("jsonpath");
 //create binary
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
@@ -41,6 +43,11 @@ let formatConfigUrls = envVariables.FORMAT_CONFIG_URLS;
 
 let dataConfigMap = {};
 let formatConfigMap = {};
+
+let topicKeyMap = {};
+var topic = [];
+var datafileLength = dataConfigUrls.split(",").length;
+
 
 var fontDescriptors = {
   Cambay: {
@@ -431,6 +438,7 @@ app.post(
   })
 );
 
+var i=0;
 dataConfigUrls &&
   dataConfigUrls.split(",").map(item => {
     item = item.trim();
@@ -446,6 +454,14 @@ dataConfigUrls &&
           } else {
             data = JSON.parse(data);
             dataConfigMap[data.key] = data;
+            if(data.fromTopic != null){
+              topicKeyMap[data.fromTopic] = data.key;
+              topic.push(data.fromTopic);
+            }
+            i++;
+            if(i==datafileLength){
+              listenConsumer(topic);
+            }
             logger.info("loaded dataconfig: file:///" + item);
           }
         } catch (error) {
@@ -519,7 +535,16 @@ export const createAndSave = async (
   errorCallback
 ) => {
   var starttime = new Date().getTime();
-  let key = get(req.query || req, "key");
+
+  let topic = get(req,"topic");
+  let key;
+  if(topic!=null && topicKeyMap[topic] !=null){
+    key = topicKeyMap[topic];
+  }
+  else{
+    key = get(req.query || req, "key");
+  }
+  //let key = get(req.query || req, "key");
   let tenantId = get(req.query || req, "tenantId");
   var formatconfig = formatConfigMap[key];
   var dataconfig = dataConfigMap[key];
@@ -527,7 +552,7 @@ export const createAndSave = async (
   var dataconfig = dataConfigMap[key];
   var userid = get(req.body || req, "RequestInfo.userInfo.id");
   var requestInfo = get(req.body || req, "RequestInfo");
-  //
+
 
   var valid = validateRequest(req, res, key, tenantId, requestInfo);
   if (valid) {

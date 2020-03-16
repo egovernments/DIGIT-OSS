@@ -212,7 +212,67 @@ export const externalAPIMapping = async function(
             externalAPIArray[i].jPath[j].variable
           ] = replaceValue;
         }
-      } else {
+      }
+      else if (externalAPIArray[i].jPath[j].type == "array"){
+
+        let arrayOfOwnerObject = [];
+      // let ownerObject = JSON.parse(JSON.stringify(get(formatconfig, directArr[i].jPath + "[0]", [])));
+      let { format = {}, value = [], variable } = externalAPIArray[i].jPath[j];
+      let { scema = [] } = format;
+      let val= getValue(jp.query(res, value ), "NA", value);
+
+
+      //taking values about owner from request body
+      for (let l = 0; l < val.length; l++) {
+        // var x = 1;
+        let ownerObject = {};
+        for (let k = 0; k < scema.length; k++) {
+          let fieldValue = get(val[l], scema[k].value, "NA");
+          if (scema[k].type == "date") {
+            let myDate = new Date(fieldValue);
+            if (isNaN(myDate) || fieldValue === 0) {
+              ownerObject[scema[k].key] = "NA";
+            } else {
+              let replaceValue = getDateInRequiredFormat(fieldValue);
+              // set(formatconfig,externalAPIArray[i].jPath[j].variable,replaceValue);
+              ownerObject[scema[k].key] = replaceValue;
+            }
+          } else {
+            if (
+              fieldValue !== "NA" &&
+              scema[k].localisation &&
+              scema[k].localisation.required
+            ) {
+              let loc = scema[k].localisation;
+              fieldValue = await findAndUpdateLocalisation(
+                requestInfo,
+                localisationMap,
+                loc.prefix,
+                fieldValue,
+                loc.module,
+                localisationModuleList,
+                loc.isCategoryRequired,
+                loc.isMainTypeRequired,
+                loc.isSubTypeRequired,
+                loc.delimiter
+              );
+            }
+            ownerObject[scema[k].variable] = fieldValue;
+            
+          }
+          // set(ownerObject[x], "text", get(val[j], scema[k].key, ""));
+          // x += 2;
+        }
+        arrayOfOwnerObject.push(ownerObject);
+        
+      }
+  
+      variableTovalueMap[variable] = arrayOfOwnerObject;
+      //console.log("\nvariableTovalueMap[externalAPIArray[i].jPath.variable]--->\n"+JSON.stringify(variableTovalueMap[externalAPIArray[i].jPath.variable]));
+
+      } 
+      
+      else {
         if (
           replaceValue !== "NA" &&
           externalAPIArray[i].jPath[j].localisation &&
