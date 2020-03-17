@@ -280,6 +280,12 @@
           }
         ],
         "style": "top-margin"
+      },
+      {
+        "image": "{{qrCode}}",
+        "alignment": "right",
+        "width": 100,
+        "height": 100
       }
     ],
     "styles": {

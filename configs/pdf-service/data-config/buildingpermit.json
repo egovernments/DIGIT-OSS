@@ -29,6 +29,12 @@
                 }
               },
               {
+                "variable": "edcrNo",
+                "value": {
+                  "path": "$.edcrNumber"
+                }
+              },
+              {
                 "variable": "createdDate",
                 "value": {
                   "path": "$.auditDetails.createdTime"
@@ -610,6 +616,14 @@
                     "isUpperCaseRequired": true
                   }
                 ]
+              }
+            ]
+          },
+          {
+            "qrcodeConfig": [
+              {
+                "variable": "qrCode",
+                "value": "Applicant Name: {{favourOf}}, Permit Order Number : {{planPermissionNo}}, Permit Order Date : {{orderGeneratedOn}}, eDCR Scrutiny Number: {{edcrNo}}"
               }
             ]
           }
