@@ -45,7 +45,7 @@
                                         ],
                                         [
                                             {
-                                                "text": "{{presented_by}} {{presentByName}}",
+                                                "text": "{{presented_by}} : {{presentByName}}",
                                                 "border": [
                                                     false,
                                                     false,
@@ -465,7 +465,7 @@
                                                         "fontSize": 20
                                                     },
                                                     {
-                                                        "text": "{{UAT}}{{tenantName}} {{municipal_corporation}}",
+                                                        "text": "{{UAT}}{{cityName}} {{Municipal_Corporation}}",
                                                         "style": "receipt-table-value-total",
                                                         "fontSize": 20
                                                     }

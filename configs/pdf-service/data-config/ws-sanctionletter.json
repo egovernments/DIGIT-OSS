@@ -49,6 +49,12 @@
                                 }
                             },
                             {
+                                "variable": "service",
+                                "value": {
+                                    "path": "$.service"
+                                }
+                            },
+                            {
                                 "variable": "doorNo",
                                 "value": {
                                     "path": "$.property.address.doorNo"
