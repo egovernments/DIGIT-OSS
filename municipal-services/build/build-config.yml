@@ -74,6 +74,7 @@ config:
     build:
       - work-dir: "ws-services"
         image-name: "ws-services"
+        dockerfile: "build/maven/Dockerfile"
       - work-dir: "ws-services/src/main/resources/db"
         image-name: "ws-services-db"
         
