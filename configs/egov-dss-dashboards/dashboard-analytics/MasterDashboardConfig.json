@@ -3187,6 +3187,34 @@
           "vizArray": [
             {
               "id": 231,
+              "name": "DSS_W&S_NEW_VIZ",
+              "dimensions": {
+                "height": 350,
+                "width": 12
+              },
+              "vizType": "chart",
+              "noUnit": false,
+              "isCollapsible": false,
+              "charts": [
+                {
+                  "id": "wscollectionByUsage",
+                  "name": "DSS_W&S_DEMAND_COLLECTION_BOUNDARY",
+                  "code": "",
+                  "chartType": "table",
+                  "filter": "",
+                  "headers": [],
+                  "tabName": "Boundary"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "row": 4,
+          "name": "DSS_REVENUE",
+          "vizArray": [
+            {
+              "id": 231,
               "name": "DSS_W&S_TAX_HEAD_BOUNDARY",
               "dimensions": {
                 "height": 350,
