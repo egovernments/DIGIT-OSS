@@ -181,11 +181,11 @@ public class MigrationService {
         if(!CollectionUtils.isEmpty(userIds))
             userSearchRequest.setUuid(userIds);
         userSearchRequest.setRequestInfo(requestInfo);
-        userSearchRequest.setTenantId(criteria.getTenantId());
-        userSearchRequest.setMobileNumber(criteria.getMobileNumber());
-        userSearchRequest.setName(criteria.getName());
+        userSearchRequest.setTenantId(requestInfo.getUserInfo().getTenantId());
+        userSearchRequest.setMobileNumber(requestInfo.getUserInfo().getMobileNumber());
+        userSearchRequest.setName(requestInfo.getUserInfo().getName());
         userSearchRequest.setActive(true);
-        userSearchRequest.setUserType("CITIZEN");
+        userSearchRequest.setUserType(requestInfo.getUserInfo().getType());
         return userSearchRequest;
     }
 
@@ -377,7 +377,7 @@ public class MigrationService {
             }
             properties.add(property);
         }
-        System.out.println("Error---->"+errorMap);
+
         return properties;
     }
 
