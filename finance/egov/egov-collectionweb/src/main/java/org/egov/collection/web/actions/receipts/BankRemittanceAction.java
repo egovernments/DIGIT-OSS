@@ -221,7 +221,7 @@ public class BankRemittanceAction extends BaseFormAction {
             final CFinancialYear financialYear = financialYearDAO.getFinancialYearById(finYearId);
             resultList = remittanceService.findCashRemittanceDetailsForServiceAndFund("", StringUtils.join(serviceCodeList, ","),
                     StringUtils.join(fundCodeSet, ","), fromDate == null ? financialYear.getStartingDate() : fromDate,
-                    toDate == null ? financialYear.getEndingDate() : toDate);
+                    toDate == null ? financialYear.getEndingDate() : toDate, CollectionConstants.INSTRUMENT_NEW_STATUS);
             if (fromDate != null && toDate != null)
                 pageSize = resultList.size();
             else

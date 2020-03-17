@@ -32,6 +32,8 @@ public class Remittance {
     private Set<RemittanceInstrument> remittanceInstruments = new HashSet<>();
 
     private Set<RemittanceReceipt> remittanceReceipts = new HashSet<>();
+    
+    private AuditDetails auditDetails;
 
     public String getTenantId() {
         return tenantId;
@@ -143,6 +145,14 @@ public class Remittance {
 
     public void setRemittanceReceipts(Set<RemittanceReceipt> remittanceReceipts) {
         this.remittanceReceipts = remittanceReceipts;
+    }
+
+    public AuditDetails getAuditDetails() {
+        return auditDetails;
+    }
+
+    public void setAuditDetails(AuditDetails auditDetails) {
+        this.auditDetails = auditDetails;
     }
 
 }

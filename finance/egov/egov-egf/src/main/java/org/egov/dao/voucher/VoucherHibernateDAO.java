@@ -54,6 +54,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -256,6 +257,17 @@ public class VoucherHibernateDAO extends PersistenceService<CVoucherHeader, Long
             throw new ApplicationRuntimeException("exception in voucherHibDao while deleting from general ledger" + e);
         }
 
+    }
+    
+    @SuppressWarnings("unchecked")
+    public List<CVoucherHeader> getVoucherHeaderByNumber(final Set<String> voucherNumbers) {
+
+        if (LOGGER.isDebugEnabled())
+            LOGGER.debug("VoucherHibernateDAO | getVoucherHeaderById | Start ");
+        final List<CVoucherHeader> vhList = getSession().createCriteria(CVoucherHeader.class).add(Restrictions.in("voucherNumber", voucherNumbers)).list();
+        if (LOGGER.isDebugEnabled())
+            LOGGER.debug("numer of voucher with voucherNumbers " + voucherNumbers + "=" + vhList.size());
+        return vhList;
     }
 
     public PersistenceService getPersistenceService() {

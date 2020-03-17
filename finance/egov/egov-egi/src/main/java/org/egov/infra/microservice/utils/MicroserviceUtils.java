@@ -69,7 +69,11 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -141,6 +145,7 @@ import org.egov.infra.microservice.models.ReceiptSearchCriteria;
 import org.egov.infra.microservice.models.Remittance;
 import org.egov.infra.microservice.models.RemittanceRequest;
 import org.egov.infra.microservice.models.RemittanceResponse;
+import org.egov.infra.microservice.models.RemittanceSearcCriteria;
 import org.egov.infra.microservice.models.RequestInfo;
 import org.egov.infra.microservice.models.ResponseInfo;
 import org.egov.infra.microservice.models.TaxHeadMaster;
@@ -175,6 +180,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
+
+import bsh.StringUtil;
 
 @Service
 public class MicroserviceUtils {
@@ -396,30 +403,41 @@ public class MicroserviceUtils {
     }
 
     public List<Department> getDepartments(String codes) {
-        List<Department> deptList = new ArrayList<>();
-        FilterRequest filterReq = new FilterRequest();
+//        List<Department> deptList = new ArrayList<>();
+//        FilterRequest filterReq = new FilterRequest();
+//        List<BusinessService> list = null;
+        List<ModuleDetail> moduleDetailsList = new ArrayList<>();
         try {
-            if(!StringUtils.isEmpty(codes) && codes != null && StringUtils.contains(codes, ",")){
-                filterReq.setCodes(Arrays.asList(codes.split(",")));
-            }else if(!StringUtils.isEmpty(codes) && codes != null){
-                filterReq.setCode(codes);
-            }else{
-                final String deptCodes = (String) this.getFinanceDeptCodes();
-                filterReq.setCodes(Arrays.asList(deptCodes.split(",")));
+            this.prepareModuleDetails(moduleDetailsList , "common-masters", "Department", "code", codes, String.class);
+            Map postForObject = mapper.convertValue(this.getMdmsData(moduleDetailsList, true, null, null), Map.class);
+            if(postForObject != null){
+                return mapper.convertValue(JsonPath.read(postForObject, "$.MdmsRes.common-masters.Department"),new TypeReference<List<Department>>(){});
             }
-            JSONArray mdmObj = getFinanceMdmsByModuleNameAndMasterDetails("common-masters", "Department", filterReq);
-            mdmObj.stream().forEach(obj ->{
-                LinkedHashMap<String, Object> lhm = (LinkedHashMap)obj;
-                Department dept = new Department();
-                dept.setCode(lhm.get("code").toString());
-                dept.setName(lhm.get("name").toString());
-                dept.setActive((Boolean)lhm.get("active"));
-                deptList.add(dept);
-            });
-            return deptList;
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error("ERROR occurred while fetching business service details in getBusinessServiceByCodes method: ",e);
         }
+//        try {
+//            if(!StringUtils.isEmpty(codes) && codes != null && StringUtils.contains(codes, ",")){
+//                filterReq.setCodes(Arrays.asList(codes.split(",")));
+//            }else if(!StringUtils.isEmpty(codes) && codes != null){
+//                filterReq.setCode(codes);
+//            }else{
+//                final String deptCodes = (String) this.getFinanceDeptCodes();
+//                filterReq.setCodes(Arrays.asList(deptCodes.split(",")));
+//            }
+//            JSONArray mdmObj = getFinanceMdmsByModuleNameAndMasterDetails("common-masters", "Department", filterReq);
+//            mdmObj.stream().forEach(obj ->{
+//                LinkedHashMap<String, Object> lhm = (LinkedHashMap)obj;
+//                Department dept = new Department();
+//                dept.setCode(lhm.get("code").toString());
+//                dept.setName(lhm.get("name").toString());
+//                dept.setActive((Boolean)lhm.get("active"));
+//                deptList.add(dept);
+//            });
+//            return deptList;
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
         return null;
     }
 
@@ -457,29 +475,39 @@ public class MicroserviceUtils {
     }
 
     public List<Designation> getDesignation(String code) {
-            List<Designation> desgList = new ArrayList<>();
-            FilterRequest filterReq =new FilterRequest();
+//            List<Designation> desgList = new ArrayList<>();
+//            FilterRequest filterReq =new FilterRequest();
+            List<ModuleDetail> moduleDetailsList = new ArrayList<>();
             try {
-                if(!StringUtils.isEmpty(code) && code != null){
-                    filterReq.setCode(code);
-                }else{
-                    String desginCodes = (String) getFinanceDesginCodes();
-                    filterReq.setCodes(Arrays.asList(desginCodes.split(",")));
+                this.prepareModuleDetails(moduleDetailsList , "common-masters", "Designation", "code", code, String.class);
+                Map postForObject = mapper.convertValue(this.getMdmsData(moduleDetailsList, true, null, null), Map.class);
+                if(postForObject != null){
+                    return mapper.convertValue(JsonPath.read(postForObject, "$.MdmsRes.common-masters.Designation"),new TypeReference<List<Designation>>(){});
                 }
-                JSONArray mdmObj =  getFinanceMdmsByModuleNameAndMasterDetails("common-masters", "Designation", filterReq);
-                mdmObj.stream().forEach(obj ->{
-                    LinkedHashMap<String, Object> lhm = (LinkedHashMap)obj;
-                    Designation designation = new Designation();
-                    designation.setCode(lhm.get("code").toString());
-                    designation.setName(lhm.get("name").toString());
-                    designation.setDescription(lhm.get("description").toString());
-                    designation.setActive((Boolean)lhm.get("active"));
-                    desgList.add(designation);
-                });
-                return desgList;
             } catch (Exception e) {
-                e.printStackTrace();
+                LOGGER.error("ERROR occurred while fetching business service details in getBusinessServiceByCodes method: ",e);
             }
+//            try {
+//                if(!StringUtils.isEmpty(code) && code != null){
+//                    filterReq.setCode(code);
+//                }else{
+//                    String desginCodes = (String) getFinanceDesginCodes();
+//                    filterReq.setCodes(Arrays.asList(desginCodes.split(",")));
+//                }
+//                JSONArray mdmObj =  getFinanceMdmsByModuleNameAndMasterDetails("common-masters", "Designation", filterReq);
+//                mdmObj.stream().forEach(obj ->{
+//                    LinkedHashMap<String, Object> lhm = (LinkedHashMap)obj;
+//                    Designation designation = new Designation();
+//                    designation.setCode(lhm.get("code").toString());
+//                    designation.setName(lhm.get("name").toString());
+//                    designation.setDescription(lhm.get("description").toString());
+//                    designation.setActive((Boolean)lhm.get("active"));
+//                    desgList.add(designation);
+//                });
+//                return desgList;
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
             return null;
 }
     
@@ -696,21 +724,13 @@ public class MicroserviceUtils {
     }
 
     public EmployeeInfo getEmployeeById(Long empId) {
-
         final RestTemplate restTemplate = createRestTemplate();
-
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         StringBuilder empUrl = new StringBuilder(appConfigManager.getEgovHrmsSerHost()).append(approverSrvcUrl);
         empUrl.append("?tenantId=" + getTenentId());
-
         if (empId != 0)
-            empUrl.append("&id=" + empId);
-
-        empUrl.append("&asOnDate" + dateFormat.format(new Date()));
-
+            empUrl.append("&ids=" + empId);
         RequestInfo requestInfo = new RequestInfo();
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
-
         requestInfo.setAuthToken(getUserToken());
         requestInfo.setTs(getEpochDate(new Date()));
         reqWrapper.setRequestInfo(requestInfo);
@@ -719,6 +739,21 @@ public class MicroserviceUtils {
             return empResponse.getEmployees().get(0);
         else
             return null;
+    }
+    
+    public List<EmployeeInfo> getEmployeeByIds(Set<Long> ids){
+        final RestTemplate restTemplate = createRestTemplate();
+        StringBuilder empUrl = new StringBuilder(appConfigManager.getEgovHrmsSerHost()).append(approverSrvcUrl);
+        empUrl.append("?tenantId=" + getTenentId());
+        if (!ids.isEmpty())
+            empUrl.append("&ids=" + StringUtils.join(ids, ","));
+        RequestInfo requestInfo = new RequestInfo();
+        RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
+        requestInfo.setAuthToken(getUserToken());
+        requestInfo.setTs(getEpochDate(new Date()));
+        reqWrapper.setRequestInfo(requestInfo);
+        EmployeeInfoResponse empResponse = restTemplate.postForObject(empUrl.toString(), reqWrapper, EmployeeInfoResponse.class);
+        return empResponse != null ? empResponse.getEmployees() : null;
     }
 
     public List<Assignment> getAssignments(String department, String designation) {
@@ -914,6 +949,11 @@ public class MicroserviceUtils {
             LOGGER.error("ERROR occurred while fetching header name of tenant in getHeaderNameForTenant : ", e);
         }
         return basm;
+    }
+    
+    private static <T> Predicate<T> distinctByAccountNumber(Function<? super T, ?> keyExtractor) {
+        Map<Object,Boolean> seen = new ConcurrentHashMap<>();
+        return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
     }
 
     public List<BankAccountServiceMapping> getBankAcntServiceMappingsByBankAcc(String bankAccount, String businessDetails) {
@@ -1142,11 +1182,12 @@ public class MicroserviceUtils {
     }
 
     public InstrumentResponse reconcileInstrumentsWithPayinSlipId(List<Instrument> instruments, String depositedBankAccountNum,
-            String payinSlipId) {
+            Long payInSlipId) {
         FinancialStatus instrumentStatusReconciled = new FinancialStatus();
         instrumentStatusReconciled.setCode("Reconciled");
         for (Instrument i : instruments) {
-            i.setPayinSlipId(payinSlipId);
+            i.setPayinSlipId(payInSlipId.toString());
+            i.setReconciledOn(new Date());
         }
         return this.updateInstruments(instruments, depositedBankAccountNum, instrumentStatusReconciled);
     }
@@ -1405,8 +1446,15 @@ public class MicroserviceUtils {
                 if(StringUtils.isNotBlank(filterKey) && StringUtils.isNotBlank(filterValue)){
                     String oldFilter = md.getFilter();
                     if(StringUtils.isNotBlank(oldFilter)){
-                        String newFilter = oldFilter.substring(0, oldFilter.length()-2);
-                        filterBuilder.append(newFilter).append(" && ").append("@.").append(filterKey).append(" in [").append(getSingleQuoteBasedOnType(filterType)).append(filterValue).append(getSingleQuoteBasedOnType(filterType)).append("])]");
+                        Pattern pattern = Pattern.compile(filterKey);
+                        Matcher matcher = pattern.matcher(oldFilter); 
+                        if(matcher.find()){
+                            String newFilter = oldFilter.substring(0, oldFilter.length()-3);
+                            filterBuilder.append(newFilter).append(",").append(getSingleQuoteBasedOnType(filterType)).append(filterValue).append(getSingleQuoteBasedOnType(filterType)).append("])]");
+                        }else{
+                            String newFilter = oldFilter.substring(0, oldFilter.length()-2);
+                            filterBuilder.append(newFilter).append(" && ").append("@.").append(filterKey).append(" in [").append(getSingleQuoteBasedOnType(filterType)).append(filterValue).append(getSingleQuoteBasedOnType(filterType)).append("])]");
+                        }
                     }else{
                         filterBuilder.append("[?(@.").append(filterKey).append(" in [").append(getSingleQuoteBasedOnType(filterType)).append(filterValue).append(getSingleQuoteBasedOnType(filterType)).append("])]");
                     }
@@ -1491,7 +1539,9 @@ public class MicroserviceUtils {
                 e.printStackTrace();
             }
             if(StringUtils.isNotBlank(fieldValue)){
-                this.prepareModuleDetails(moduleDetailsList, "FinanceModule", "BusinessServiceMapping", fieldName, fieldValue, fieldType);
+                for(String str :  StringUtils.split(fieldValue, ",")){
+                    this.prepareModuleDetails(moduleDetailsList, "FinanceModule", "BusinessServiceMapping", fieldName, str, fieldType);                    
+                }
             }
         }
         Map postForObject = mapper.convertValue(this.getMdmsData(moduleDetailsList, true, null, null), Map.class);
@@ -1639,6 +1689,35 @@ public class MicroserviceUtils {
         StringBuilder uri = new StringBuilder(appConfigManager.getEgovCollSerHost()).append(appConfigManager.getCollSerPaymentWorkflow());
         response = restTemplate.postForObject(uri.toString(), request , PaymentResponse.class);            
         return response;
+    }
+
+    public RemittanceResponse getRemittance(RemittanceSearcCriteria criteria) {
+        StringBuilder uri = new StringBuilder(appConfigManager.getEgovCollSerHost()).append(appConfigManager.getCollSerRemittanceSearch()).append("?");
+        this.prepareRemmittanceSearchQueryString(uri, criteria);
+        RemittanceRequest request = new RemittanceRequest();
+        request.setRequestInfo(getRequestInfo());
+        return restTemplate.postForObject(uri.toString(), request , RemittanceResponse.class);
+    }
+
+    private void prepareRemmittanceSearchQueryString(StringBuilder uri, RemittanceSearcCriteria criteria) {
+        if(StringUtils.isNotBlank(criteria.getBankaccount())){
+            uri.append("&bankaccount=").append(criteria.getBankaccount());
+        }
+        if(criteria.getFromDate() != null && criteria.getFromDate().longValue() != 0){
+            uri.append("&fromDate=").append(criteria.getFromDate());
+        }
+        if(criteria.getToDate() != null && criteria.getToDate().longValue() != 0){
+            uri.append("&toDate=").append(criteria.getToDate());
+        }
+        if(StringUtils.isNotBlank(criteria.getFund())){
+            uri.append("&fund=").append(criteria.getFund());
+        }
+        if(StringUtils.isNotBlank(criteria.getStatus())){
+            uri.append("&status=").append(criteria.getStatus());
+        }
+        if(criteria.getLimit() != null && criteria.getLimit().intValue() != 0){
+            uri.append("&limit=").append(criteria.getLimit());
+        }
     }
     
 }
