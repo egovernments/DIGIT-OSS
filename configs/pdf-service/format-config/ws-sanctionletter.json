@@ -21,7 +21,7 @@
                                     "body": [
                                         [
                                             {
-                                                "text": "{{cityName}} {{Municipal_Corporation}}",
+                                                "text": "{{UAT}}{{cityName}} {{Municipal_Corporation}}",
                                                 "border": [
                                                     false,
                                                     false,
@@ -465,7 +465,7 @@
                                                         "fontSize": 20
                                                     },
                                                     {
-                                                        "text": "{{UAT}} {{tenantName}} {{municipal_corporation}}",
+                                                        "text": "{{UAT}}{{tenantName}} {{municipal_corporation}}",
                                                         "style": "receipt-table-value-total",
                                                         "fontSize": 20
                                                     }

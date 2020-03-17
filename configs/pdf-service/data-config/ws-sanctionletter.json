@@ -183,7 +183,7 @@
                             {
                                 "variable": "commissioner_label",
                                 "value": {
-                                    "path": "COMMON_MASTERS_DESIGNATION_DESIG_51"
+                                    "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_COMMISSIONER_LABEL"
                                 },
                                 "type": "label",
                                 "localisation": {
@@ -484,6 +484,114 @@
                                 "variable": "UAT",
                                 "value": {
                                     "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_UAT"
+                                },
+                                "type": "label",
+                                "localisation": {
+                                    "required": true,
+                                    "prefix": null,
+                                    "module": "rainmaker-common"
+                                }
+                            },
+                            {
+                                "variable": "form_fee",
+                                "value": {
+                                    "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_FORM_FEE"
+                                },
+                                "type": "label",
+                                "localisation": {
+                                    "required": true,
+                                    "prefix": null,
+                                    "module": "rainmaker-common"
+                                }
+                            },
+                            {
+                                "variable": "scrutiny_fee",
+                                "value": {
+                                    "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_SCRUTINY_FEE"
+                                },
+                                "type": "label",
+                                "localisation": {
+                                    "required": true,
+                                    "prefix": null,
+                                    "module": "rainmaker-common"
+                                }
+                            },
+                            {
+                                "variable": "other_charge",
+                                "value": {
+                                    "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_OTHER_CHARGE"
+                                },
+                                "type": "label",
+                                "localisation": {
+                                    "required": true,
+                                    "prefix": null,
+                                    "module": "rainmaker-common"
+                                }
+                            },
+                            {
+                                "variable": "security_charge",
+                                "value": {
+                                    "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_SECURITY_CHARGE"
+                                },
+                                "type": "label",
+                                "localisation": {
+                                    "required": true,
+                                    "prefix": null,
+                                    "module": "rainmaker-common"
+                                }
+                            },
+                            {
+                                "variable": "tax_cess",
+                                "value": {
+                                    "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_TAX_CESS"
+                                },
+                                "type": "label",
+                                "localisation": {
+                                    "required": true,
+                                    "prefix": null,
+                                    "module": "rainmaker-common"
+                                }
+                            },
+                            {
+                                "variable": "penalty",
+                                "value": {
+                                    "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_PENALTY"
+                                },
+                                "type": "label",
+                                "localisation": {
+                                    "required": true,
+                                    "prefix": null,
+                                    "module": "rainmaker-common"
+                                }
+                            },
+                            {
+                                "variable": "rebate",
+                                "value": {
+                                    "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_REBATE"
+                                },
+                                "type": "label",
+                                "localisation": {
+                                    "required": true,
+                                    "prefix": null,
+                                    "module": "rainmaker-common"
+                                }
+                            },
+                            {
+                                "variable": "one_time_fee",
+                                "value": {
+                                    "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_ONE_TIME_FEE"
+                                },
+                                "type": "label",
+                                "localisation": {
+                                    "required": true,
+                                    "prefix": null,
+                                    "module": "rainmaker-common"
+                                }
+                            },
+                            {
+                                "variable": "road_charge",
+                                "value": {
+                                    "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_ROAD_CHARGE"
                                 },
                                 "type": "label",
                                 "localisation": {
