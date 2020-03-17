@@ -124,6 +124,7 @@ public class MigrationService {
    public List<OldProperty> searchOldProperty(org.egov.pt.web.contracts.RequestInfoWrapper requestInfoWrapper, OldPropertyCriteria propertyCriteria){
        Map<String, String> errorMap = new HashMap<>();
         List<OldProperty> properties = getPropertiesPlainSearch(propertyCriteria);
+        /*
         try{
             enrichPropertyCriteriaWithOwnerids(propertyCriteria, properties);
         } catch (Exception e) {
@@ -137,6 +138,8 @@ public class MigrationService {
             errorMap.put("EnrichOwnerError", String.valueOf(e));
         }
         System.out.println("Error--->"+errorMap);
+
+         */
        return properties;
     }
 

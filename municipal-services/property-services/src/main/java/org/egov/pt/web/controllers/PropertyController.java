@@ -85,6 +85,9 @@ public class PropertyController {
 		List<OldProperty> oldProperties = migrationService.searchOldProperty(requestInfoWrapper,propertyCriteria) ;
 
 		List<Property> properties = migrationService.migrateProperty(requestInfo,oldProperties);
+		long endtime = System.nanoTime();
+		long elapsetime = endtime - startTime;
+		System.out.println("elapsetime--->"+elapsetime);
 		PropertyResponse response = PropertyResponse.builder().properties(properties).responseInfo(
 				responseInfoFactory.createResponseInfoFromRequestInfo(requestInfo, true))
 				.build();
