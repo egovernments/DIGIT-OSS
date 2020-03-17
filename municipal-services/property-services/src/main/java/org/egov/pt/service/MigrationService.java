@@ -423,7 +423,10 @@ public class MigrationService {
         locality.setLongitude(oldLocality.getLongitude());
         locality.setArea(oldLocality.getArea());
         locality.setMaterializedPath(oldLocality.getMaterializedPath());
-        locality.setChildren(setmigrateLocalityList(oldLocality.getChildren()));
+        if(oldLocality.getChildren() != null)
+            locality.setChildren(setmigrateLocalityList(oldLocality.getChildren()));
+        else
+            locality.setChildren(null);
         return  locality;
     }
 
