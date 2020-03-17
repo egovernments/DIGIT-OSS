@@ -250,35 +250,35 @@
                                                                     {
                                                                         "text": "1.",
                                                                         "alignment": "center",
-                                                                        border: [
+                                                                        "border": [
                                                                             false
                                                                         ]
                                                                     },
                                                                     {
                                                                         "text": "{{form_fee}}",
                                                                         "layout": "noBorders",
-                                                                        border: [
+                                                                        "border": [
                                                                             false
                                                                         ]
                                                                     },
                                                                     {
                                                                         "text": ":",
                                                                         "alignment": "center",
-                                                                        border: [
+                                                                        "border": [
                                                                             false
                                                                         ]
                                                                     },
                                                                     {
                                                                         "text": "{{Rs}}",
                                                                         "alignment": "center",
-                                                                        border: [
+                                                                        "border": [
                                                                             false
                                                                         ]
                                                                     },
                                                                     {
                                                                         "text": "{{formFee}}",
                                                                         "alignment": "right",
-                                                                        border: [
+                                                                        "border": [
                                                                             false
                                                                         ]
                                                                     }
@@ -287,34 +287,34 @@
                                                                     {
                                                                         "text": "2.",
                                                                         "alignment": "center",
-                                                                        border: [
+                                                                        "border": [
                                                                             false
                                                                         ]
                                                                     },
                                                                     {
                                                                         "text": "{{scrutiny_fee}}",
-                                                                        border: [
+                                                                        "border": [
                                                                             false
                                                                         ]
                                                                     },
                                                                     {
                                                                         "text": ":",
                                                                         "alignment": "center",
-                                                                        border: [
+                                                                        "border": [
                                                                             false
                                                                         ]
                                                                     },
                                                                     {
                                                                         "text": "{{Rs}}",
                                                                         "alignment": "center",
-                                                                        border: [
+                                                                        "border": [
                                                                             false
                                                                         ]
                                                                     },
                                                                     {
                                                                         "text": "{{ScrutinyFee}}",
                                                                         "alignment": "right",
-                                                                        border: [
+                                                                        "border": [
                                                                             false
                                                                         ]
                                                                     }
@@ -323,34 +323,34 @@
                                                                     {
                                                                         "text": "3.",
                                                                         "alignment": "center",
-                                                                        border: [
+                                                                        "border": [
                                                                             false
                                                                         ]
                                                                     },
                                                                     {
                                                                         "text": "{{one_time_fee}}",
-                                                                        border: [
+                                                                        "border": [
                                                                             false
                                                                         ]
                                                                     },
                                                                     {
                                                                         "text": ":",
                                                                         "alignment": "center",
-                                                                        border: [
+                                                                        "border": [
                                                                             false
                                                                         ]
                                                                     },
                                                                     {
                                                                         "text": "{{Rs}}",
                                                                         "alignment": "center",
-                                                                        border: [
+                                                                        "border": [
                                                                             false
                                                                         ]
                                                                     },
                                                                     {
                                                                         "text": "{{oneTimeFee}}",
                                                                         "alignment": "right",
-                                                                        border: [
+                                                                        "border": [
                                                                             false
                                                                         ]
                                                                     }
@@ -359,34 +359,34 @@
                                                                     {
                                                                         "text": "4.",
                                                                         "alignment": "center",
-                                                                        border: [
+                                                                        "border": [
                                                                             false
                                                                         ]
                                                                     },
                                                                     {
                                                                         "text": "{{other_charge}}",
-                                                                        border: [
+                                                                        "border": [
                                                                             false
                                                                         ]
                                                                     },
                                                                     {
                                                                         "text": ":",
                                                                         "alignment": "center",
-                                                                        border: [
+                                                                        "border": [
                                                                             false
                                                                         ]
                                                                     },
                                                                     {
                                                                         "text": "{{Rs}}",
                                                                         "alignment": "center",
-                                                                        border: [
+                                                                        "border": [
                                                                             false
                                                                         ]
                                                                     },
                                                                     {
                                                                         "text": "{{otherCharge}}",
                                                                         "alignment": "right",
-                                                                        border: [
+                                                                        "border": [
                                                                             false
                                                                         ]
                                                                     }
@@ -395,34 +395,34 @@
                                                                     {
                                                                         "text": "5.",
                                                                         "alignment": "center",
-                                                                        border: [
+                                                                        "border": [
                                                                             false
                                                                         ]
                                                                     },
                                                                     {
                                                                         "text": "{{road_charge}}",
-                                                                        border: [
+                                                                        "border": [
                                                                             false
                                                                         ]
                                                                     },
                                                                     {
                                                                         "text": ":",
                                                                         "alignment": "center",
-                                                                        border: [
+                                                                        "border": [
                                                                             false
                                                                         ]
                                                                     },
                                                                     {
                                                                         "text": "{{Rs}}",
                                                                         "alignment": "center",
-                                                                        border: [
+                                                                        "border": [
                                                                             false
                                                                         ]
                                                                     },
                                                                     {
                                                                         "text": "{{roadCharge}}",
                                                                         "alignment": "right",
-                                                                        border: [
+                                                                        "border": [
                                                                             false
                                                                         ]
                                                                     }
@@ -431,34 +431,34 @@
                                                                     {
                                                                         "text": "6.",
                                                                         "alignment": "center",
-                                                                        border: [
+                                                                        "border": [
                                                                             false
                                                                         ]
                                                                     },
                                                                     {
                                                                         "text": "{{security_charge}}",
-                                                                        border: [
+                                                                        "border": [
                                                                             false
                                                                         ]
                                                                     },
                                                                     {
                                                                         "text": ":",
                                                                         "alignment": "center",
-                                                                        border: [
+                                                                        "border": [
                                                                             false
                                                                         ]
                                                                     },
                                                                     {
                                                                         "text": "{{Rs}}",
                                                                         "alignment": "center",
-                                                                        border: [
+                                                                        "border": [
                                                                             false
                                                                         ]
                                                                     },
                                                                     {
                                                                         "text": "{{securityCharge}}",
                                                                         "alignment": "right",
-                                                                        border: [
+                                                                        "border": [
                                                                             false
                                                                         ]
                                                                     }
@@ -467,34 +467,34 @@
                                                                     {
                                                                         "text": "7.",
                                                                         "alignment": "center",
-                                                                        border: [
+                                                                        "border": [
                                                                             false
                                                                         ]
                                                                     },
                                                                     {
                                                                         "text": "{{tax_cess}}",
-                                                                        border: [
+                                                                        "border": [
                                                                             false
                                                                         ]
                                                                     },
                                                                     {
                                                                         "text": ":",
                                                                         "alignment": "center",
-                                                                        border: [
+                                                                        "border": [
                                                                             false
                                                                         ]
                                                                     },
                                                                     {
                                                                         "text": "{{Rs}}",
                                                                         "alignment": "center",
-                                                                        border: [
+                                                                        "border": [
                                                                             false
                                                                         ]
                                                                     },
                                                                     {
                                                                         "text": "{{taxCess}}",
                                                                         "alignment": "right",
-                                                                        border: [
+                                                                        "border": [
                                                                             false
                                                                         ]
                                                                     }
@@ -503,34 +503,34 @@
                                                                     {
                                                                         "text": "8.",
                                                                         "alignment": "center",
-                                                                        border: [
+                                                                        "border": [
                                                                             false
                                                                         ]
                                                                     },
                                                                     {
                                                                         "text": "{{penalty}}",
-                                                                        border: [
+                                                                        "border": [
                                                                             false
                                                                         ]
                                                                     },
                                                                     {
                                                                         "text": ":",
                                                                         "alignment": "center",
-                                                                        border: [
+                                                                        "border": [
                                                                             false
                                                                         ]
                                                                     },
                                                                     {
                                                                         "text": "{{Rs}}",
                                                                         "alignment": "center",
-                                                                        border: [
+                                                                        "border": [
                                                                             false
                                                                         ]
                                                                     },
                                                                     {
                                                                         "text": "{{penaltyAmount}}",
                                                                         "alignment": "right",
-                                                                        border: [
+                                                                        "border": [
                                                                             false
                                                                         ]
                                                                     }
@@ -539,34 +539,34 @@
                                                                     {
                                                                         "text": "9.",
                                                                         "alignment": "center",
-                                                                        border: [
+                                                                        "border": [
                                                                             false
                                                                         ]
                                                                     },
                                                                     {
                                                                         "text": "{{rebate}}",
-                                                                        border: [
+                                                                        "border": [
                                                                             false
                                                                         ]
                                                                     },
                                                                     {
                                                                         "text": ":",
                                                                         "alignment": "center",
-                                                                        border: [
+                                                                        "border": [
                                                                             false
                                                                         ]
                                                                     },
                                                                     {
                                                                         "text": "{{Rs}}",
                                                                         "alignment": "center",
-                                                                        border: [
+                                                                        "border": [
                                                                             false
                                                                         ]
                                                                     },
                                                                     {
                                                                         "text": "{{rebateAmount}}",
                                                                         "alignment": "right",
-                                                                        border: [
+                                                                        "border": [
                                                                             false
                                                                         ]
                                                                     }
@@ -574,35 +574,35 @@
                                                                 [
                                                                     {
                                                                         "text": " ",
-                                                                        border: [
+                                                                        "border": [
                                                                             false
                                                                         ]
                                                                     },
                                                                     {
                                                                         "text": "{{total}}",
                                                                         "alignment": "center",
-                                                                        border: [
+                                                                        "border": [
                                                                             false
                                                                         ]
                                                                     },
                                                                     {
                                                                         "text": ":",
                                                                         "alignment": "center",
-                                                                        border: [
+                                                                        "border": [
                                                                             false
                                                                         ]
                                                                     },
                                                                     {
                                                                         "text": "{{Rs}}",
                                                                         "alignment": "center",
-                                                                        border: [
+                                                                        "border": [
                                                                             false
                                                                         ]
                                                                     },
                                                                     {
                                                                         "text": "{{totalAmount}}",
                                                                         "alignment": "right",
-                                                                        border: [
+                                                                        "border": [
                                                                             false
                                                                         ]
                                                                     }
