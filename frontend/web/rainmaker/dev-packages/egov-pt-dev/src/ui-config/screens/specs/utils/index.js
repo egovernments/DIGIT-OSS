@@ -211,10 +211,6 @@ export const gotoApplyWithStep = (state, dispatch, step) => {
     window.location.href,
     "tenantId"
   );
-  const tenantId = getQueryArg(
-    window.location.href,
-    "tenantId"
-  );
   const applicationNumberQueryString = applicationNumber
     ? `consumerCode=${applicationNumber}&tenantId=${tenantId}`
     : ``;

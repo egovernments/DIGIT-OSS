@@ -11,7 +11,7 @@ import {
 import { connect } from "react-redux";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { UploadSingleFile } from "../../ui-molecules-local";
-import { handleFileUpload } from "../../ui-utils/commons"
+import { handleFileUpload } from "../../ui-utils/commons";
 import { LabelContainer } from "egov-ui-framework/ui-containers";
 import get from "lodash/get";
 import isUndefined from "lodash/isUndefined";
@@ -152,7 +152,8 @@ class DocumentList extends Component {
     let { uploadedDocuments } = this.state;
     const { prepareFinalObject, documents, preparedFinalObject } = this.props;
     const jsonPath = documents[remDocIndex].jsonPath;
-   (getQueryArg(window.location.href, "action") === "edit"||getQueryArg(window.location.href, "action") === "EDITRENEWAL" )&&
+    (getQueryArg(window.location.href, "action") === "edit" ||
+      getQueryArg(window.location.href, "action") === "EDITRENEWAL") &&
       uploadedDocuments[remDocIndex][0].id &&
       prepareFinalObject("LicensesTemp[0].removedDocs", [
         ...get(preparedFinalObject, "LicensesTemp[0].removedDocs", []),
@@ -183,15 +184,24 @@ class DocumentList extends Component {
     }
   };
   render() {
-    const { classes, documents, documentTypePrefix, description ,imageDescription ,inputProps } = this.props;
+    const {
+      classes,
+      documents,
+      documentTypePrefix,
+      description,
+      imageDescription,
+      inputProps
+    } = this.props;
 
     const { uploadedIndex } = this.state;
-    console.log("prpsssss",uploadedIndex);
+    console.log("prpsssss", uploadedIndex);
     return (
       <div style={{ paddingTop: 10 }}>
         {documents &&
           documents.map((document, key) => {
-            const currentDocumentProps =  inputProps.filter(item => item.type === document.name);
+            const currentDocumentProps = inputProps.filter(
+              item => item.type === document.name
+            );
             return (
               <div
                 key={key}
@@ -230,13 +240,24 @@ class DocumentList extends Component {
                     </Typography> */}
                     <Typography variant="caption">
                       <LabelContainer
-                        labelName={document.name == "OWNERPHOTO" ? this.props.imageDescription.labelName : description.labelName}
-                        labelKey={document.name == "OWNERPHOTO" ? this.props.imageDescription.labelKey : description.labelKey}
+                        labelName={
+                          document.name == "OWNERPHOTO"
+                            ? this.props.imageDescription.labelName
+                            : description.labelName
+                        }
+                        labelKey={
+                          document.name == "OWNERPHOTO"
+                            ? this.props.imageDescription.labelKey
+                            : description.labelKey
+                        }
+                      />
                     </Typography>
                     <Typography variant="caption">
                       <LabelContainer
-                     labelName={currentDocumentProps[0].description.labelName}
-                     labelKey={currentDocumentProps[0].description.labelKey}
+                        labelName={
+                          currentDocumentProps[0].description.labelName
+                        }
+                        labelKey={currentDocumentProps[0].description.labelKey}
                       />
                     </Typography>
                   </Grid>
@@ -245,13 +266,21 @@ class DocumentList extends Component {
                       classes={this.props.classes}
                       id={`upload-button-${key}`}
                       handleFileUpload={e =>
-                        handleFileUpload(e, this.handleDocument, this.props.inputProps[key])
+                        handleFileUpload(
+                          e,
+                          this.handleDocument,
+                          this.props.inputProps[key]
+                        )
                       }
                       uploaded={uploadedIndex.indexOf(key) > -1}
                       removeDocument={() => this.removeDocument(key)}
                       documents={this.state.uploadedDocuments[key]}
                       onButtonClick={() => this.onUploadClick(key)}
-                      inputProps={document.name == "OWNERPHOTO" ? this.props.imageProps : this.props.inputProps}
+                      inputProps={
+                        document.name == "OWNERPHOTO"
+                          ? this.props.imageProps
+                          : this.props.inputProps
+                      }
                       buttonLabel={this.props.buttonLabel}
                       inputProps={currentDocumentProps[0].formatProps}
                     />

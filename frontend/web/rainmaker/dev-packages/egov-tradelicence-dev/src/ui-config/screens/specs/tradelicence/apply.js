@@ -107,9 +107,7 @@ export const getMdmsData = async (action, state, dispatch) => {
           masterDetails: [
             { name: "TradeType", filter: `[?(@.type == "TL")]` },
             { name: "AccessoriesCategory" },
-            { name: "ApplicationType" },
-            { name: "OccupancyType" },
-            { name: "RelationType" }
+            { name: "ApplicationType" }
           ]
         },
         {
@@ -228,56 +226,45 @@ export const getData = async (action, state, dispatch) => {
         "Licenses[0].applicationNumber",
         null
       );
-      getAllDataFromBillingSlab(getTenantId(1), dispatch,[{
-        key:"applicationType",value:applicationType
-      }]);
-      if (!queryValue) {
-        const oldApplicationNo = get(
-          state.screenConfiguration.preparedFinalObject,
-          "Licenses[0].applicationNumber",
-          null
-        );
+      dispatch(
+        prepareFinalObject("Licenses[0].oldLicenseNumber", oldApplicationNo)
+      );
+      if (oldApplicationNo !== null) {
+        dispatch(prepareFinalObject("Licenses[0].financialYear", ""));
         dispatch(
-          prepareFinalObject("Licenses[0].oldLicenseNumber", oldApplicationNo)
+          prepareFinalObject(
+            "Licenses[0].tradeLicenseDetail.additionalDetail.applicationType",
+            "APPLICATIONTYPE.RENEWAL"
+          )
         );
-        if (oldApplicationNo !== null) {
-          dispatch(prepareFinalObject("Licenses[0].financialYear", ""));
-          dispatch(
-            prepareFinalObject(
-              "Licenses[0].tradeLicenseDetail.additionalDetail.applicationType",
-              "APPLICATIONTYPE.RENEWAL"
-            )
-          );
-          dispatch(
-            handleField(
-              "apply",
-              "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.financialYear",
-              "props.value",
-              ""
-            )
-          );
-          dispatch(
-            handleField(
-              "apply",
-              "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.applicationType",
-              "props.value",
-              "APPLICATIONTYPE.RENEWAL"
-            )
-          );
-        }
-
-        dispatch(prepareFinalObject("Licenses[0].applicationNumber", ""));
         dispatch(
           handleField(
             "apply",
-            "components.div.children.headerDiv.children.header.children.applicationNumber",
-            "visible",
-            false
+            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.financialYear",
+            "props.value",
+            ""
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.applicationType",
+            "props.value",
+            "APPLICATIONTYPE.RENEWAL"
           )
         );
       }
-    });
 
+      dispatch(prepareFinalObject("Licenses[0].applicationNumber", ""));
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.headerDiv.children.header.children.applicationNumber",
+          "visible",
+          false
+        )
+      );
+    }
   }
 };
 

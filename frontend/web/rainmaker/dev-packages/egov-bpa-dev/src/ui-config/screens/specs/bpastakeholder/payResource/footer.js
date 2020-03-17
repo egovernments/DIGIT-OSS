@@ -3,14 +3,12 @@ import get from "lodash/get";
 import set from "lodash/set";
 import cloneDeep from "lodash/cloneDeep";
 import { httpRequest } from "../../../../../ui-utils/api";
-import { getBpaSearchResults } from "../../../../../ui-utils/commons";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import {
   getQueryArg,
   getSelectedTabIndex
 } from "egov-ui-framework/ui-utils/commons";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { convertDateToEpoch,getBill, validateFields } from "../../utils";
+import { convertDateToEpoch, validateFields } from "../../utils";
 import {
   toggleSnackbar,
   toggleSpinner
@@ -18,7 +16,6 @@ import {
 import { getBill } from "../../utils";
 
 export const callPGService = async (state, dispatch) => {
-
   const tenantId = getQueryArg(window.location.href, "tenantId");
   let callbackUrl = `${document.location.origin}/${
     process.env.NODE_ENV === "production" ? "citizen" : ""
@@ -39,12 +36,6 @@ export const callPGService = async (state, dispatch) => {
       }
     ];
     const billPayload = await getBill(queryObj);
-    const taxAndPayments = get(billPayload, "Bill[0].taxAndPayments", []).map((item,index)=>{
-      return {
-        amountPaid :item.taxAmount,
-        billId : get(billPayload, "Bill[0].id")
-      }
-    })
     const taxAndPayments = get(
       billPayload,
       "billResponse.Bill[0].taxAndPayments",
@@ -59,8 +50,6 @@ export const callPGService = async (state, dispatch) => {
       return item;
     });
     try {
-      const userMobileNumber = get(state,"auth.userInfo.mobileNumber")
-      const userName = get(state,"auth.userInfo.name")
       const requestBody = {
         Transaction: {
           tenantId,
@@ -77,11 +66,6 @@ export const callPGService = async (state, dispatch) => {
           ),
           productInfo: "Trade License Payment",
           gateway: "AXIS",
-          user : {
-            mobileNumber : userMobileNumber,
-            name : userName,
-            tenantId : process.env.REACT_APP_NAME === "Employee" ? getTenantId() : get(state,"auth.userInfo.permanentCity")
-          },
           callbackUrl
         }
       };
@@ -129,7 +113,6 @@ const allDateToEpoch = (finalObj, jsonPaths) => {
     }
   });
 };
-
 
 const callBackForPay = async (state, dispatch) => {
   const { href } = window.location;
@@ -288,7 +271,7 @@ export const footer = getCommonApplyFooter({
       variant: "contained",
       color: "primary",
       style: {
-      //  minWidth: "200px",
+        minWidth: "200px",
         height: "48px",
         marginRight: "45px"
       }
