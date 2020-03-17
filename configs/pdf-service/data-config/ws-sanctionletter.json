@@ -40,7 +40,8 @@
                                 "variable": "connectionExecutionDate",
                                 "value": {
                                     "path": "$.connectionExecutionDate"
-                                }
+                                },
+                                "type": "date"
                             },
                             {
                                 "variable": "applicationType",
@@ -142,7 +143,8 @@
                                 "variable": "date",
                                 "value": {
                                     "path": "$.connectionExecutionDate"
-                                }
+                                },
+                                "type": "date"
                             },
                             {
                                 "variable": "total",
