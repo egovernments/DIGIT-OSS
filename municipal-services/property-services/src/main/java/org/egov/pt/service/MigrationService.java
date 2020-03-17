@@ -122,12 +122,22 @@ public class MigrationService {
     }*/
 
    public List<OldProperty> searchOldProperty(org.egov.pt.web.contracts.RequestInfoWrapper requestInfoWrapper, OldPropertyCriteria propertyCriteria){
-
+       Map<String, String> errorMap = new HashMap<>();
         List<OldProperty> properties = getPropertiesPlainSearch(propertyCriteria);
-        enrichPropertyCriteriaWithOwnerids(propertyCriteria, properties);
-        OldUserDetailResponse userDetailResponse = getUser(propertyCriteria, requestInfoWrapper.getRequestInfo());
-        enrichOwner(userDetailResponse, properties);
-        return properties;
+        try{
+            enrichPropertyCriteriaWithOwnerids(propertyCriteria, properties);
+        } catch (Exception e) {
+            errorMap.put("EnrichPropertyCriteriaWithOwneridsError", String.valueOf(e));
+        }
+
+       OldUserDetailResponse userDetailResponse = getUser(propertyCriteria, requestInfoWrapper.getRequestInfo());
+        try{
+            enrichOwner(userDetailResponse, properties);
+        } catch (Exception e) {
+            errorMap.put("EnrichOwnerError", String.valueOf(e));
+        }
+        System.out.println("Error--->"+errorMap);
+       return properties;
     }
 
     public List<OldProperty> getPropertiesPlainSearch(OldPropertyCriteria criteria){
