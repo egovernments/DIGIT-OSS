@@ -47,6 +47,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.Property;
@@ -113,12 +114,11 @@ public class NotificationService {
 		}
 
 		// Ignoring paid status, since it's wired from payment consumer directly
-		if (msg != null) {
+		if (!StringUtils.isEmpty(msg)) {
 			msg = replaceCommonValues(property, msg, localisedState);
 			prepareMsgAndSend(propertyRequest, msg);
 		}
 	}
-
 
 	public void sendNotificationForMtPayment(PropertyRequest propertyRequest, BigDecimal Amount) {
 

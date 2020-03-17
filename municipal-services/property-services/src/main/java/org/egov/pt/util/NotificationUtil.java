@@ -27,6 +27,7 @@ import org.egov.pt.models.event.Source;
 import org.egov.pt.producer.Producer;
 import org.egov.pt.repository.ServiceRequestRepository;
 import org.egov.pt.web.contracts.SMSRequest;
+import org.egov.tracer.model.CustomException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -77,7 +78,7 @@ public class NotificationUtil {
 
         String path = "$..messages[?(@.code==\"{}\")].message";
         path = path.replace("{}", notificationCode);
-        String message = null;
+        String message = "";
         try {
             Object messageObj = JsonPath.parse(localizationMessage).read(path);
             message = ((ArrayList<String>) messageObj).get(0);
@@ -100,13 +101,28 @@ public class NotificationUtil {
      */
     public String getLocalizationMessages(String tenantId, RequestInfo requestInfo) {
     	
-        LinkedHashMap responseMap = (LinkedHashMap) serviceRequestRepository.fetchResult(getUri(tenantId, requestInfo),
-                requestInfo).get();
-        String jsonString = new JSONObject(responseMap).toString();
-        return jsonString;
-    }
+        String locale = NOTIFICATION_LOCALE;
+        Boolean isRetryNeeded = false;
+        String jsonString = null;
+        LinkedHashMap responseMap = null;
 
+        if (!StringUtils.isEmpty(requestInfo.getMsgId()) && requestInfo.getMsgId().split("\\|").length >= 2) {
+            locale = requestInfo.getMsgId().split("\\|")[1];
+			isRetryNeeded = true;
+		}
 
+		responseMap = (LinkedHashMap) serviceRequestRepository.fetchResult(getUri(tenantId, requestInfo, locale), requestInfo).get();
+		jsonString = new JSONObject(responseMap).toString();
+
+		if (StringUtils.isEmpty(jsonString) && isRetryNeeded) {
+
+			responseMap = (LinkedHashMap) serviceRequestRepository.fetchResult(getUri(tenantId, requestInfo, NOTIFICATION_LOCALE), requestInfo).get();
+			jsonString = new JSONObject(responseMap).toString();
+			if(StringUtils.isEmpty(jsonString))
+				throw new CustomException("EG_PT_LOCALE_ERROR","Localisation values not found for Property notifications");
+		}
+		return jsonString;
+	}
 
 
     /**
@@ -116,15 +132,10 @@ public class NotificationUtil {
      *            TenantId of the propertyRequest
      * @return The uri for localization search call
      */
-    public StringBuilder getUri(String tenantId, RequestInfo requestInfo) {
+    public StringBuilder getUri(String tenantId, RequestInfo requestInfo, String locale) {
 
         if (config.getIsLocalizationStateLevel())
             tenantId = tenantId.split("\\.")[0];
-
-        String locale = NOTIFICATION_LOCALE;
-
-        if (!StringUtils.isEmpty(requestInfo.getMsgId()) && requestInfo.getMsgId().split("\\|").length >= 2)
-            locale = requestInfo.getMsgId().split("\\|")[1];
 
         StringBuilder uri = new StringBuilder();
         uri.append(config.getLocalizationHost()).append(config.getLocalizationContextPath())
