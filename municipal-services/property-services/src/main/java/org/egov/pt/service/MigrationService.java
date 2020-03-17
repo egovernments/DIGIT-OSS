@@ -107,7 +107,7 @@ public class MigrationService {
 
 
 
-    public List<OldProperty> searchOldProperty(org.egov.pt.web.contracts.RequestInfoWrapper requestInfoWrapper, OldPropertyCriteria propertyCriteria){
+    public List<OldProperty> searchOldProperty(org.egov.pt.web.contracts.RequestInfoWrapper requestInfoWrapper, PropertyCriteria propertyCriteria){
 
 
         StringBuilder url = new StringBuilder(userHost).append(oldPropertySearchEndpoint).append(URL_PARAMS_SEPARATER)
@@ -119,6 +119,178 @@ public class MigrationService {
 
 
         return res.getProperties();
+    }
+
+   public List<OldProperty> searchOldProperty(org.egov.pt.web.contracts.RequestInfoWrapper requestInfoWrapper, OldPropertyCriteria propertyCriteria){
+       Map<String, String> errorMap = new HashMap<>();
+        List<OldProperty> properties = getPropertiesPlainSearch(propertyCriteria);
+        /*
+        try{
+            enrichPropertyCriteriaWithOwnerids(propertyCriteria, properties);
+        } catch (Exception e) {
+            errorMap.put("EnrichPropertyCriteriaWithOwneridsError", String.valueOf(e));
+        }
+
+       OldUserDetailResponse userDetailResponse = getUser(propertyCriteria, requestInfoWrapper.getRequestInfo());
+        try{
+            enrichOwner(userDetailResponse, properties);
+        } catch (Exception e) {
+            errorMap.put("EnrichOwnerError", String.valueOf(e));
+        }
+        System.out.println("Error--->"+errorMap);
+        */
+       return properties;
+    }
+
+    public List<OldProperty> getPropertiesPlainSearch(OldPropertyCriteria criteria){
+        List<Object> preparedStmtList = new ArrayList<>();
+        String query = queryBuilder.getPropertyLikeQuery(criteria, preparedStmtList);
+        log.info("Query: "+query);
+        log.info("PS: "+preparedStmtList);
+        return jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
+    }
+
+    /**
+     * Overloaded function which populates ownerids in criteria from list of property
+     * @param criteria PropertyCriteria whose ownerids are to be populated
+     * @param properties List of property whose owner's uuids are to added in propertyCriteria
+     */
+    public void enrichPropertyCriteriaWithOwnerids(OldPropertyCriteria criteria, List<OldProperty> properties){
+        Set<String> ownerids = new HashSet<>();
+        properties.forEach(property -> {
+            property.getPropertyDetails().forEach(propertyDetail -> propertyDetail.getOwners().forEach(owner -> ownerids.add(owner.getUuid())));
+        });
+        properties.forEach(property -> {
+            property.getPropertyDetails().forEach(propertyDetail -> {
+                ownerids.add(propertyDetail.getCitizenInfo().getUuid());
+            });
+        });
+        criteria.setOwnerids(ownerids);
+    }
+
+    /**
+     * Returns user using user search based on propertyCriteria(owner name,mobileNumber,userName)
+     * @param criteria
+     * @param requestInfo
+     * @return serDetailResponse containing the user if present and the responseInfo
+     */
+    public OldUserDetailResponse getUser(OldPropertyCriteria criteria,RequestInfo requestInfo){
+        UserSearchRequest userSearchRequest = getUserSearchRequest(criteria,requestInfo);
+        StringBuilder uri = new StringBuilder(userHost).append(userSearchEndpoint);
+        OldUserDetailResponse userDetailResponse = userCall(userSearchRequest,uri);
+        return userDetailResponse;
+    }
+
+    /**
+     * Creates and Returns UserSearchRequest from the propertyCriteria(Creates UserSearchRequest from values related to owner(i.e mobileNumber and name) from propertyCriteria )
+     * @param criteria PropertyCriteria from which UserSearchRequest is to be created
+     * @param requestInfo RequestInfo of the propertyRequest
+     * @return UserSearchRequest created from propertyCriteria
+     */
+    private UserSearchRequest getUserSearchRequest(OldPropertyCriteria criteria,RequestInfo requestInfo){
+        UserSearchRequest userSearchRequest = new UserSearchRequest();
+        Set<String> userIds = criteria.getOwnerids();
+        if(!CollectionUtils.isEmpty(userIds))
+            userSearchRequest.setUuid(userIds);
+        userSearchRequest.setRequestInfo(requestInfo);
+        userSearchRequest.setTenantId(requestInfo.getUserInfo().getTenantId());
+        userSearchRequest.setMobileNumber(requestInfo.getUserInfo().getMobileNumber());
+        userSearchRequest.setName(requestInfo.getUserInfo().getName());
+        userSearchRequest.setActive(true);
+        userSearchRequest.setUserType(requestInfo.getUserInfo().getType());
+        return userSearchRequest;
+    }
+
+    /**
+     * Returns UserDetailResponse by calling user service with given uri and object
+     * @param userRequest Request object for user service
+     * @param uri The address of the endpoint
+     * @return Response from user service as parsed as userDetailResponse
+     */
+    private OldUserDetailResponse userCall(Object userRequest, StringBuilder uri) {
+        String dobFormat = null;
+        if(uri.toString().contains(userSearchEndpoint) || uri.toString().contains(userUpdateEndpoint))
+            dobFormat="yyyy-MM-dd";
+        else if(uri.toString().contains(userCreateEndpoint))
+            dobFormat = "dd/MM/yyyy";
+        try{
+            LinkedHashMap responseMap = (LinkedHashMap)fetchResult(uri, userRequest);
+            parseResponse(responseMap,dobFormat);
+            OldUserDetailResponse userDetailResponse = mapper.convertValue(responseMap,OldUserDetailResponse.class);
+            return userDetailResponse;
+        }
+        // Which Exception to throw?
+        catch(IllegalArgumentException  e)
+        {
+            throw new CustomException("IllegalArgumentException","ObjectMapper not able to convertValue in userCall");
+        }
+    }
+
+    /**
+     * Parses date formats to long for all users in responseMap
+     * @param responeMap LinkedHashMap got from user api response
+     * @param dobFormat dob format (required because dob is returned in different format's in search and create response in user service)
+     */
+    private void parseResponse(LinkedHashMap responeMap,String dobFormat){
+        List<LinkedHashMap> users = (List<LinkedHashMap>)responeMap.get("user");
+        String format1 = "dd-MM-yyyy HH:mm:ss";
+        if(users!=null){
+            users.forEach( map -> {
+                        map.put("createdDate",dateTolong((String)map.get("createdDate"),format1));
+                        if((String)map.get("lastModifiedDate")!=null)
+                            map.put("lastModifiedDate",dateTolong((String)map.get("lastModifiedDate"),format1));
+                        if((String)map.get("dob")!=null)
+                            map.put("dob",dateTolong((String)map.get("dob"),dobFormat));
+                        if((String)map.get("pwdExpiryDate")!=null)
+                            map.put("pwdExpiryDate",dateTolong((String)map.get("pwdExpiryDate"),format1));
+                    }
+            );
+        }
+    }
+
+    /**
+     * Converts date to long
+     * @param date date to be parsed
+     * @param format Format of the date
+     * @return Long value of date
+     */
+    private Long dateTolong(String date,String format){
+        SimpleDateFormat f = new SimpleDateFormat(format);
+        Date d = null;
+        try {
+            d = f.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return  d.getTime();
+    }
+
+
+    /**
+     * Populates the owner fields inside of property objects from the response got from calling user api
+     * @param userDetailResponse response from user api which contains list of user which are used to populate owners in properties
+     * @param properties List of property whose owner's are to be populated from userDetailResponse
+     */
+    public void enrichOwner(OldUserDetailResponse userDetailResponse, List<OldProperty> properties){
+        List<OldOwnerInfo> users = userDetailResponse.getUser();
+        Map<String,OldOwnerInfo> userIdToOwnerMap = new HashMap<>();
+        users.forEach(user -> userIdToOwnerMap.put(user.getUuid(),user));
+        properties.forEach(property -> {
+            property.getPropertyDetails().forEach(propertyDetail ->
+            {
+                propertyDetail.getOwners().forEach(owner -> {
+                    if(userIdToOwnerMap.get(owner.getUuid())==null)
+                        throw new CustomException("OWNER SEARCH ERROR","The owner of the propertyDetail "+propertyDetail.getAssessmentNumber()+" is not coming in user search");
+                    else
+                        owner.addUserDetail(userIdToOwnerMap.get(owner.getUuid()));
+
+                });
+                if(userIdToOwnerMap.get(propertyDetail.getCitizenInfo().getUuid())!=null)
+                    propertyDetail.getCitizenInfo().addCitizenDetail(userIdToOwnerMap.get(propertyDetail.getCitizenInfo().getUuid()));
+                else
+                    throw new CustomException("CITIZENINFO ERROR","The citizenInfo of property with id: "+property.getPropertyId()+" cannot be found");
+            });
+        });
     }
 
 
@@ -710,199 +882,6 @@ public class MigrationService {
 
         return response;
     }
-
-
-
-
-
-/*
-    public List<OldProperty> searchOldProperty(org.egov.pt.web.contracts.RequestInfoWrapper requestInfoWrapper, OldPropertyCriteria propertyCriteria){
-        Map<String, String> errorMap = new HashMap<>();
-        List<OldProperty> properties = getPropertiesPlainSearch(propertyCriteria);
-
-        try{
-            enrichPropertyCriteriaWithOwnerids(propertyCriteria, properties);
-        } catch (Exception e) {
-            errorMap.put("EnrichPropertyCriteriaWithOwneridsError", String.valueOf(e));
-        }
-
-       OldUserDetailResponse userDetailResponse = getUser(propertyCriteria, requestInfoWrapper.getRequestInfo());
-        try{
-            enrichOwner(userDetailResponse, properties);
-        } catch (Exception e) {
-            errorMap.put("EnrichOwnerError", String.valueOf(e));
-        }
-        System.out.println("Error--->"+errorMap);
-
-
-        return properties;
-    }
-
-    public List<OldProperty> getPropertiesPlainSearch(OldPropertyCriteria criteria){
-        List<Object> preparedStmtList = new ArrayList<>();
-        String query = queryBuilder.getPropertyLikeQuery(criteria, preparedStmtList);
-        log.info("Query: "+query);
-        log.info("PS: "+preparedStmtList);
-        return jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
-    }
-*/
-    /**
-     * Overloaded function which populates ownerids in criteria from list of property
-     * @param criteria PropertyCriteria whose ownerids are to be populated
-     * @param properties List of property whose owner's uuids are to added in propertyCriteria
-     */
-  /*
-    public void enrichPropertyCriteriaWithOwnerids(OldPropertyCriteria criteria, List<OldProperty> properties){
-        Set<String> ownerids = new HashSet<>();
-        properties.forEach(property -> {
-            property.getPropertyDetails().forEach(propertyDetail -> propertyDetail.getOwners().forEach(owner -> ownerids.add(owner.getUuid())));
-        });
-        properties.forEach(property -> {
-            property.getPropertyDetails().forEach(propertyDetail -> {
-                ownerids.add(propertyDetail.getCitizenInfo().getUuid());
-            });
-        });
-        criteria.setOwnerids(ownerids);
-    }
-*/
-    /**
-     * Returns user using user search based on propertyCriteria(owner name,mobileNumber,userName)
-     * @param criteria
-     * @param requestInfo
-     * @return serDetailResponse containing the user if present and the responseInfo
-     */
-   /*
-    public OldUserDetailResponse getUser(OldPropertyCriteria criteria,RequestInfo requestInfo){
-        UserSearchRequest userSearchRequest = getUserSearchRequest(criteria,requestInfo);
-        StringBuilder uri = new StringBuilder(userHost).append(userSearchEndpoint);
-        OldUserDetailResponse userDetailResponse = userCall(userSearchRequest,uri);
-        return userDetailResponse;
-    }
-*/
-    /**
-     * Creates and Returns UserSearchRequest from the propertyCriteria(Creates UserSearchRequest from values related to owner(i.e mobileNumber and name) from propertyCriteria )
-     * @param criteria PropertyCriteria from which UserSearchRequest is to be created
-     * @param requestInfo RequestInfo of the propertyRequest
-     * @return UserSearchRequest created from propertyCriteria
-     */
-    /*
-    private UserSearchRequest getUserSearchRequest(OldPropertyCriteria criteria,RequestInfo requestInfo){
-        UserSearchRequest userSearchRequest = new UserSearchRequest();
-        Set<String> userIds = criteria.getOwnerids();
-        if(!CollectionUtils.isEmpty(userIds))
-            userSearchRequest.setUuid(userIds);
-        userSearchRequest.setRequestInfo(requestInfo);
-        userSearchRequest.setTenantId(requestInfo.getUserInfo().getTenantId());
-        userSearchRequest.setMobileNumber(requestInfo.getUserInfo().getMobileNumber());
-        userSearchRequest.setName(requestInfo.getUserInfo().getName());
-        userSearchRequest.setActive(true);
-        userSearchRequest.setUserType(requestInfo.getUserInfo().getType());
-        return userSearchRequest;
-    }
-*/
-    /**
-     * Returns UserDetailResponse by calling user service with given uri and object
-     * @param userRequest Request object for user service
-     * @param uri The address of the endpoint
-     * @return Response from user service as parsed as userDetailResponse
-     */
-    /*
-    private OldUserDetailResponse userCall(Object userRequest, StringBuilder uri) {
-        String dobFormat = null;
-        if(uri.toString().contains(userSearchEndpoint) || uri.toString().contains(userUpdateEndpoint))
-            dobFormat="yyyy-MM-dd";
-        else if(uri.toString().contains(userCreateEndpoint))
-            dobFormat = "dd/MM/yyyy";
-        try{
-            LinkedHashMap responseMap = (LinkedHashMap)fetchResult(uri, userRequest);
-            parseResponse(responseMap,dobFormat);
-            OldUserDetailResponse userDetailResponse = mapper.convertValue(responseMap,OldUserDetailResponse.class);
-            return userDetailResponse;
-        }
-        // Which Exception to throw?
-        catch(IllegalArgumentException  e)
-        {
-            throw new CustomException("IllegalArgumentException","ObjectMapper not able to convertValue in userCall");
-        }
-    }
-*/
-    /**
-     * Parses date formats to long for all users in responseMap
-     * @param responeMap LinkedHashMap got from user api response
-     * @param dobFormat dob format (required because dob is returned in different format's in search and create response in user service)
-     */
-   /*
-    private void parseResponse(LinkedHashMap responeMap,String dobFormat){
-        List<LinkedHashMap> users = (List<LinkedHashMap>)responeMap.get("user");
-        String format1 = "dd-MM-yyyy HH:mm:ss";
-        if(users!=null){
-            users.forEach( map -> {
-                        map.put("createdDate",dateTolong((String)map.get("createdDate"),format1));
-                        if((String)map.get("lastModifiedDate")!=null)
-                            map.put("lastModifiedDate",dateTolong((String)map.get("lastModifiedDate"),format1));
-                        if((String)map.get("dob")!=null)
-                            map.put("dob",dateTolong((String)map.get("dob"),dobFormat));
-                        if((String)map.get("pwdExpiryDate")!=null)
-                            map.put("pwdExpiryDate",dateTolong((String)map.get("pwdExpiryDate"),format1));
-                    }
-            );
-        }
-    }
-*/
-    /**
-     * Converts date to long
-     * @param date date to be parsed
-     * @param format Format of the date
-     * @return Long value of date
-     */
-   /*
-    private Long dateTolong(String date,String format){
-        SimpleDateFormat f = new SimpleDateFormat(format);
-        Date d = null;
-        try {
-            d = f.parse(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return  d.getTime();
-    }
-*/
-
-    /**
-     * Populates the owner fields inside of property objects from the response got from calling user api
-     * @param userDetailResponse response from user api which contains list of user which are used to populate owners in properties
-     * @param properties List of property whose owner's are to be populated from userDetailResponse
-     */
-   /*
-    public void enrichOwner(OldUserDetailResponse userDetailResponse, List<OldProperty> properties){
-        List<OldOwnerInfo> users = userDetailResponse.getUser();
-        Map<String,OldOwnerInfo> userIdToOwnerMap = new HashMap<>();
-        users.forEach(user -> userIdToOwnerMap.put(user.getUuid(),user));
-        properties.forEach(property -> {
-            property.getPropertyDetails().forEach(propertyDetail ->
-            {
-                propertyDetail.getOwners().forEach(owner -> {
-                    if(userIdToOwnerMap.get(owner.getUuid())==null)
-                        throw new CustomException("OWNER SEARCH ERROR","The owner of the propertyDetail "+propertyDetail.getAssessmentNumber()+" is not coming in user search");
-                    else
-                        owner.addUserDetail(userIdToOwnerMap.get(owner.getUuid()));
-
-                });
-                if(userIdToOwnerMap.get(propertyDetail.getCitizenInfo().getUuid())!=null)
-                    propertyDetail.getCitizenInfo().addCitizenDetail(userIdToOwnerMap.get(propertyDetail.getCitizenInfo().getUuid()));
-                else
-                    throw new CustomException("CITIZENINFO ERROR","The citizenInfo of property with id: "+property.getPropertyId()+" cannot be found");
-            });
-        });
-    }
-
-
-*/
-
-
-
-
-
 
 
 
