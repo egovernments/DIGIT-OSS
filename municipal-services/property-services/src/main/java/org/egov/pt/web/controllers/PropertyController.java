@@ -5,9 +5,12 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.response.ResponseInfo;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.PropertyCriteria;
+import org.egov.pt.models.oldProperty.OldProperty;
+import org.egov.pt.models.oldProperty.OldPropertyCriteria;
 import org.egov.pt.models.oldProperty.OldPropertyRequest;
 import org.egov.pt.service.MigrationService;
 import org.egov.pt.service.PropertyService;
@@ -16,6 +19,7 @@ import org.egov.pt.web.contracts.PropertyRequest;
 import org.egov.pt.web.contracts.PropertyResponse;
 import org.egov.pt.web.contracts.RequestInfoWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -74,11 +78,15 @@ public class PropertyController {
 	}
 
 	@PostMapping("/_migration")
-	public ResponseEntity<PropertyResponse> propertyMigration(@Valid @RequestBody OldPropertyRequest oldPropertyRequest) {
+	public ResponseEntity<PropertyResponse> propertyMigration(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
+															  @Valid @ModelAttribute OldPropertyCriteria propertyCriteria) {
+		long startTime = System.nanoTime();
+		RequestInfo requestInfo = requestInfoWrapper.getRequestInfo();
+		List<OldProperty> oldProperties = migrationService.searchOldProperty(requestInfoWrapper,propertyCriteria) ;
 
-		List<Property> properties = migrationService.migrateProperty(oldPropertyRequest.getRequestInfo(),oldPropertyRequest.getProperties());
+		List<Property> properties = migrationService.migrateProperty(requestInfo,oldProperties);
 		PropertyResponse response = PropertyResponse.builder().properties(properties).responseInfo(
-				responseInfoFactory.createResponseInfoFromRequestInfo(oldPropertyRequest.getRequestInfo(), true))
+				responseInfoFactory.createResponseInfoFromRequestInfo(requestInfo, true))
 				.build();
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}

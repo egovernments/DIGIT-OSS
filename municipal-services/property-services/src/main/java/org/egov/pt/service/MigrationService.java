@@ -2,7 +2,9 @@ package org.egov.pt.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.*;
@@ -10,8 +12,16 @@ import org.egov.pt.models.Address;
 import org.egov.pt.models.UnitUsage;
 import org.egov.pt.models.enums.*;
 import org.egov.pt.models.oldProperty.*;
+//import org.egov.pt.models.oldProperty.PropertyCriteria;
+import org.egov.pt.models.user.UserDetailResponse;
+import org.egov.pt.models.user.UserSearchRequest;
 import org.egov.pt.producer.Producer;
 import org.egov.pt.repository.AssessmentRepository;
+import org.egov.pt.repository.ServiceRequestRepository;
+import org.egov.pt.repository.builder.OldPropertyQueryBuilder;
+import org.egov.pt.repository.builder.PropertyQueryBuilder;
+import org.egov.pt.repository.rowmapper.OldPropertyRowMapper;
+import org.egov.pt.repository.rowmapper.PropertyRowMapper;
 import org.egov.pt.util.AssessmentUtils;
 import org.egov.pt.util.ErrorConstants;
 import org.egov.pt.util.PTConstants;
@@ -20,16 +30,27 @@ import org.egov.pt.validator.PropertyValidator;
 import org.egov.pt.web.contracts.AssessmentRequest;
 import org.egov.pt.web.contracts.PropertyRequest;
 import org.egov.tracer.model.CustomException;
+import org.egov.tracer.model.ServiceCallException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.ResourceAccessException;
+import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
+
+import static org.egov.pt.util.PTConstants.*;
 
 
 @Service
+@Slf4j
 public class MigrationService {
 
     @Autowired
@@ -53,9 +74,216 @@ public class MigrationService {
     @Autowired
     private AssessmentRepository assessmentRepository;
 
+    @Autowired
+    private RestTemplate restTemplate;
+
+    @Autowired
+    private OldPropertyQueryBuilder queryBuilder;
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    private OldPropertyRowMapper rowMapper;
+
+
+
+    @Value("${egov.user.host}")
+    private String userHost;
+
+    @Value("${egov.oldProperty.search}")
+    private String oldPropertySearchEndpoint;
+
+    @Value("${egov.user.search.path}")
+    private String userSearchEndpoint;
+
+    @Value("${egov.user.update.path}")
+    private String userUpdateEndpoint;
+
+    @Value("${egov.user.create.path}")
+    private String userCreateEndpoint;
+
+
+
+
+/*
+    public List<OldProperty> searchOldProperty(org.egov.pt.web.contracts.RequestInfoWrapper requestInfoWrapper, PropertyCriteria propertyCriteria){
+
+
+        StringBuilder url = new StringBuilder(userHost).append(oldPropertySearchEndpoint).append(URL_PARAMS_SEPARATER)
+                .append(TENANT_ID_FIELD_FOR_SEARCH_URL).append(propertyCriteria.getTenantId())
+                .append(SEPARATER).append(OFFSET_FIELD_FOR_SEARCH_URL)
+                .append(propertyCriteria.getOffset()).append(SEPARATER)
+                .append(LIMIT_FIELD_FOR_SEARCH_URL).append(propertyCriteria.getLimit());
+        OldPropertyResponse res = mapper.convertValue(fetchResult(url, requestInfoWrapper), OldPropertyResponse.class);
+
+
+        return res.getProperties();
+    }*/
+
+   public List<OldProperty> searchOldProperty(org.egov.pt.web.contracts.RequestInfoWrapper requestInfoWrapper, OldPropertyCriteria propertyCriteria){
+
+        List<OldProperty> properties = getPropertiesPlainSearch(propertyCriteria);
+        enrichPropertyCriteriaWithOwnerids(propertyCriteria, properties);
+        OldUserDetailResponse userDetailResponse = getUser(propertyCriteria, requestInfoWrapper.getRequestInfo());
+        enrichOwner(userDetailResponse, properties);
+        return properties;
+    }
+
+    public List<OldProperty> getPropertiesPlainSearch(OldPropertyCriteria criteria){
+        List<Object> preparedStmtList = new ArrayList<>();
+        String query = queryBuilder.getPropertyLikeQuery(criteria, preparedStmtList);
+        log.info("Query: "+query);
+        log.info("PS: "+preparedStmtList);
+        return jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
+    }
+
+    /**
+     * Overloaded function which populates ownerids in criteria from list of property
+     * @param criteria PropertyCriteria whose ownerids are to be populated
+     * @param properties List of property whose owner's uuids are to added in propertyCriteria
+     */
+    public void enrichPropertyCriteriaWithOwnerids(OldPropertyCriteria criteria, List<OldProperty> properties){
+        Set<String> ownerids = new HashSet<>();
+        properties.forEach(property -> {
+            property.getPropertyDetails().forEach(propertyDetail -> propertyDetail.getOwners().forEach(owner -> ownerids.add(owner.getUuid())));
+        });
+        properties.forEach(property -> {
+            property.getPropertyDetails().forEach(propertyDetail -> {
+                ownerids.add(propertyDetail.getCitizenInfo().getUuid());
+            });
+        });
+        criteria.setOwnerids(ownerids);
+    }
+
+    /**
+     * Returns user using user search based on propertyCriteria(owner name,mobileNumber,userName)
+     * @param criteria
+     * @param requestInfo
+     * @return serDetailResponse containing the user if present and the responseInfo
+     */
+    public OldUserDetailResponse getUser(OldPropertyCriteria criteria,RequestInfo requestInfo){
+        UserSearchRequest userSearchRequest = getUserSearchRequest(criteria,requestInfo);
+        StringBuilder uri = new StringBuilder(userHost).append(userSearchEndpoint);
+        OldUserDetailResponse userDetailResponse = userCall(userSearchRequest,uri);
+        return userDetailResponse;
+    }
+
+    /**
+     * Creates and Returns UserSearchRequest from the propertyCriteria(Creates UserSearchRequest from values related to owner(i.e mobileNumber and name) from propertyCriteria )
+     * @param criteria PropertyCriteria from which UserSearchRequest is to be created
+     * @param requestInfo RequestInfo of the propertyRequest
+     * @return UserSearchRequest created from propertyCriteria
+     */
+    private UserSearchRequest getUserSearchRequest(OldPropertyCriteria criteria,RequestInfo requestInfo){
+        UserSearchRequest userSearchRequest = new UserSearchRequest();
+        Set<String> userIds = criteria.getOwnerids();
+        if(!CollectionUtils.isEmpty(userIds))
+            userSearchRequest.setUuid(userIds);
+        userSearchRequest.setRequestInfo(requestInfo);
+        userSearchRequest.setTenantId(criteria.getTenantId());
+        userSearchRequest.setMobileNumber(criteria.getMobileNumber());
+        userSearchRequest.setName(criteria.getName());
+        userSearchRequest.setActive(true);
+        userSearchRequest.setUserType("CITIZEN");
+        return userSearchRequest;
+    }
+
+    /**
+     * Returns UserDetailResponse by calling user service with given uri and object
+     * @param userRequest Request object for user service
+     * @param uri The address of the endpoint
+     * @return Response from user service as parsed as userDetailResponse
+     */
+    private OldUserDetailResponse userCall(Object userRequest, StringBuilder uri) {
+        String dobFormat = null;
+        if(uri.toString().contains(userSearchEndpoint) || uri.toString().contains(userUpdateEndpoint))
+            dobFormat="yyyy-MM-dd";
+        else if(uri.toString().contains(userCreateEndpoint))
+            dobFormat = "dd/MM/yyyy";
+        try{
+            LinkedHashMap responseMap = (LinkedHashMap)fetchResult(uri, userRequest);
+            parseResponse(responseMap,dobFormat);
+            OldUserDetailResponse userDetailResponse = mapper.convertValue(responseMap,OldUserDetailResponse.class);
+            return userDetailResponse;
+        }
+        // Which Exception to throw?
+        catch(IllegalArgumentException  e)
+        {
+            throw new CustomException("IllegalArgumentException","ObjectMapper not able to convertValue in userCall");
+        }
+    }
+
+    /**
+     * Parses date formats to long for all users in responseMap
+     * @param responeMap LinkedHashMap got from user api response
+     * @param dobFormat dob format (required because dob is returned in different format's in search and create response in user service)
+     */
+    private void parseResponse(LinkedHashMap responeMap,String dobFormat){
+        List<LinkedHashMap> users = (List<LinkedHashMap>)responeMap.get("user");
+        String format1 = "dd-MM-yyyy HH:mm:ss";
+        if(users!=null){
+            users.forEach( map -> {
+                        map.put("createdDate",dateTolong((String)map.get("createdDate"),format1));
+                        if((String)map.get("lastModifiedDate")!=null)
+                            map.put("lastModifiedDate",dateTolong((String)map.get("lastModifiedDate"),format1));
+                        if((String)map.get("dob")!=null)
+                            map.put("dob",dateTolong((String)map.get("dob"),dobFormat));
+                        if((String)map.get("pwdExpiryDate")!=null)
+                            map.put("pwdExpiryDate",dateTolong((String)map.get("pwdExpiryDate"),format1));
+                    }
+            );
+        }
+    }
+
+    /**
+     * Converts date to long
+     * @param date date to be parsed
+     * @param format Format of the date
+     * @return Long value of date
+     */
+    private Long dateTolong(String date,String format){
+        SimpleDateFormat f = new SimpleDateFormat(format);
+        Date d = null;
+        try {
+            d = f.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return  d.getTime();
+    }
+
+
+    /**
+     * Populates the owner fields inside of property objects from the response got from calling user api
+     * @param userDetailResponse response from user api which contains list of user which are used to populate owners in properties
+     * @param properties List of property whose owner's are to be populated from userDetailResponse
+     */
+    public void enrichOwner(OldUserDetailResponse userDetailResponse, List<OldProperty> properties){
+        List<OldOwnerInfo> users = userDetailResponse.getUser();
+        Map<String,OldOwnerInfo> userIdToOwnerMap = new HashMap<>();
+        users.forEach(user -> userIdToOwnerMap.put(user.getUuid(),user));
+        properties.forEach(property -> {
+            property.getPropertyDetails().forEach(propertyDetail ->
+            {
+                propertyDetail.getOwners().forEach(owner -> {
+                    if(userIdToOwnerMap.get(owner.getUuid())==null)
+                        throw new CustomException("OWNER SEARCH ERROR","The owner of the propertyDetail "+propertyDetail.getAssessmentNumber()+" is not coming in user search");
+                    else
+                        owner.addUserDetail(userIdToOwnerMap.get(owner.getUuid()));
+
+                });
+                if(userIdToOwnerMap.get(propertyDetail.getCitizenInfo().getUuid())!=null)
+                    propertyDetail.getCitizenInfo().addCitizenDetail(userIdToOwnerMap.get(propertyDetail.getCitizenInfo().getUuid()));
+                else
+                    throw new CustomException("CITIZENINFO ERROR","The citizenInfo of property with id: "+property.getPropertyId()+" cannot be found");
+            });
+        });
+    }
+
 
     public List<Property> migrateProperty(RequestInfo requestInfo, List<OldProperty> oldProperties) {
-
+        Map<String, String> errorMap = new HashMap<>();
         List<Property> properties = new ArrayList<>();
         for(OldProperty oldProperty : oldProperties){
             Property property = new Property();
@@ -78,7 +306,6 @@ public class MigrationService {
             for(int i=0;i< oldProperty.getPropertyDetails().size();i++){
                 property.setPropertyType(oldProperty.getPropertyDetails().get(i).getPropertyType());
                 property.setOwnershipCategory(migrateOwnwershipCategory(oldProperty.getPropertyDetails().get(i)));
-                property.setOwners(migrateOwnerInfo(oldProperty.getPropertyDetails().get(i).getOwners()));
 
                 if(oldProperty.getPropertyDetails().get(i).getInstitution() == null)
                     property.setInstitution(null);
@@ -99,9 +326,13 @@ public class MigrationService {
 
                 if(!StringUtils.isEmpty(oldProperty.getPropertyDetails().get(i).getSource()))
                     property.setSource(Source.fromValue(String.valueOf(oldProperty.getPropertyDetails().get(i).getSource())));
+                else
+                    property.setSource(Source.fromValue("MUNICIPAL_RECORDS"));
 
                 if(!StringUtils.isEmpty(oldProperty.getPropertyDetails().get(i).getChannel()))
                     property.setChannel(Channel.fromValue(String.valueOf(oldProperty.getPropertyDetails().get(i).getChannel())));
+                else
+                    property.setChannel(Channel.fromValue("MIGRATION"));
 
                 if(oldProperty.getPropertyDetails().get(i).getDocuments() == null)
                     property.setDocuments(null);
@@ -126,23 +357,27 @@ public class MigrationService {
                 else
                     property.setAuditDetails(migrateAuditDetails(oldProperty.getOldAuditDetails()));
 
+                List<OwnerInfo> ownerInfos = migrateOwnerInfo(oldProperty.getPropertyDetails().get(i).getOwners());
+                property.setOwners(ownerInfos);
 
-                properties.add(property);
+
+
                 PropertyRequest request = PropertyRequest.builder().requestInfo(requestInfo).property(property).build();
-                propertyValidator.validateCreateRequest(request);
+                try{
+                    propertyValidator.validateCreateRequest(request);
+                } catch (Exception e) {
+                    errorMap.put(property.getPropertyId(), String.valueOf(e));
+                }
                 if(i==0)
                     producer.push(config.getSavePropertyTopic(), request);
                 else
                     producer.push(config.getUpdatePropertyTopic(), request);
 
-                migrateAssesment(oldProperty.getPropertyDetails().get(i),property,requestInfo);
-
-
-
+                migrateAssesment(oldProperty.getPropertyDetails().get(i),property,requestInfo,errorMap);
             }
-
+            properties.add(property);
         }
-
+        System.out.println("Error---->"+errorMap);
         return properties;
     }
 
@@ -259,6 +494,7 @@ public class MigrationService {
 
             ownerInfolist.add(ownerInfo);
         }
+
         return ownerInfolist;
     }
 
@@ -361,6 +597,8 @@ public class MigrationService {
     public List<Document> migrateDocument(Set<OldDocument> oldDocumentList){
         List<Document> documentList = new ArrayList<>();
         for(OldDocument oldDocument: oldDocumentList){
+            if(StringUtils.isEmpty(oldDocument.getFileStore()))
+                continue;
             Document doc = new Document();
             doc.setId(oldDocument.getId());
             doc.setDocumentType(oldDocument.getDocumentType());
@@ -381,7 +619,7 @@ public class MigrationService {
     }
 
 
-    public void migrateAssesment(PropertyDetail propertyDetail, Property property, RequestInfo requestInfo){
+    public void migrateAssesment(PropertyDetail propertyDetail, Property property, RequestInfo requestInfo,Map<String,String> errorMap){
         Assessment assessment = new Assessment();
         assessment.setId(String.valueOf(UUID.randomUUID()));
         assessment.setTenantId(propertyDetail.getTenantId());
@@ -421,7 +659,12 @@ public class MigrationService {
         }
 
         AssessmentRequest request = AssessmentRequest.builder().requestInfo(requestInfo).assessment(assessment).build();
-        ValidateMigrationData(request,property);
+        try{
+            ValidateMigrationData(request,property);
+        } catch (Exception e) {
+            errorMap.put(assessment.getAssessmentNumber(), String.valueOf(e));
+        }
+
         producer.push(config.getCreateAssessmentTopic(), request);
     }
 
@@ -599,6 +842,30 @@ public class MigrationService {
         if(!CollectionUtils.isEmpty(assessments))
             throw new CustomException("INVALID_REQUEST","The property has other assessment in workflow");
 
+    }
+
+    /**
+     * Fetches results from external services through rest call.
+     *
+     * @param request
+     * @param uri
+     * @return Object
+     */
+    public Object fetchResult(StringBuilder uri, Object request) {
+        mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+        Object response = null;
+        log.info("URI: "+uri.toString());
+        try {
+            log.info("Request: "+mapper.writeValueAsString(request));
+            response = restTemplate.postForObject(uri.toString(), request, Map.class);
+        }catch(HttpClientErrorException e) {
+            log.error("External Service threw an Exception: ",e);
+            throw new ServiceCallException(e.getResponseBodyAsString());
+        }catch(Exception e) {
+            log.error("Exception while fetching from external service: ",e);
+        }
+
+        return response;
     }
 
 

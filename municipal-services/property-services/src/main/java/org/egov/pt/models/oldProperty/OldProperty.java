@@ -75,6 +75,9 @@ public class OldProperty extends PropertyInfo {
 	@JsonProperty("propertyDetails")
 	private List<PropertyDetail> propertyDetails;
 
+	@JsonProperty("additionalDetails")
+	private Object additionalDetails;
+
 
 	public OldProperty addpropertyDetailsItem(PropertyDetail propertyDetailsItem) {
 		if (this.propertyDetails == null) {
@@ -110,6 +113,7 @@ public class OldProperty extends PropertyInfo {
 		@NotNull
 		@Valid
 		private Address address;
+		private Object additionalDetails;
 
 
 
@@ -130,6 +134,11 @@ public class OldProperty extends PropertyInfo {
 
 		public PropertyBuilder auditDetails(OldAuditDetails oldAuditDetails){
 			this.oldAuditDetails = oldAuditDetails;
+			return this;
+		}
+
+		public PropertyBuilder additionalDetails(Object additionalDetails){
+			this.additionalDetails = additionalDetails;
 			return this;
 		}
 

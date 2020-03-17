@@ -7,6 +7,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Size;
 
 import org.egov.common.contract.request.Role;
 import org.springframework.validation.annotation.Validated;
@@ -41,9 +42,11 @@ public class OldOwnerInfo extends User  {
         @JsonProperty("ownerShipPercentage")
         private Double ownerShipPercentage;
 
+        @Size(max=64)
         @JsonProperty("ownerType")
         private String ownerType;
 
+        @Size(max=64)
         @JsonProperty("institutionId")
         private String institutionId;
 
@@ -71,7 +74,7 @@ public class OldOwnerInfo extends User  {
                 @JsonCreator
                 public static RelationshipEnum fromValue(String text) {
                         for (RelationshipEnum b : RelationshipEnum.values()) {
-                                if (String.valueOf(b.value).equals(text)) {
+                                if (String.valueOf(b.value).equalsIgnoreCase(text)) {
                                         return b;
                                 }
                         }
@@ -82,17 +85,30 @@ public class OldOwnerInfo extends User  {
         @JsonProperty("relationship")
         private RelationshipEnum relationship;
 
+        @JsonProperty("additionalDetails")
+        private Object additionalDetails;
+
+
+        private String persisterRefId;
 
 
         @Builder
-        public OldOwnerInfo(Long id, String uuid, String userName, String password, String salutation, String name, String gender, String mobileNumber, String emailId, String altContactNumber, String pan, String aadhaarNumber, String permanentAddress, String permanentCity, String permanentPincode, String correspondenceCity, String correspondencePincode, String correspondenceAddress, Boolean active, Long dob, Long pwdExpiryDate, String locale, String type, String signature, Boolean accountLocked, List<Role> roles, String fatherOrHusbandName, String bloodGroup, String identificationMark, String photo, String createdBy, Long createdDate, String lastModifiedBy, Long lastModifiedDate, String otpReference, String tenantId, Boolean isPrimaryOwner, Double ownerShipPercentage, String ownerType, String institutionId, Set<OldDocument> oldDocuments, RelationshipEnum relationship) {
+        public OldOwnerInfo(Long id, String uuid, String userName, String password, String salutation, String name, String gender, String mobileNumber,
+                         String emailId, String altContactNumber, String pan, String aadhaarNumber, String permanentAddress, String permanentCity,
+                         String permanentPincode, String correspondenceCity, String correspondencePincode, String correspondenceAddress,
+                         Boolean active, Long dob, Long pwdExpiryDate, String locale, String type, String signature, Boolean accountLocked,
+                         List<Role> roles, String fatherOrHusbandName, String bloodGroup, String identificationMark, String photo,
+                         String createdBy, Long createdDate, String lastModifiedBy, Long lastModifiedDate, String otpReference,
+                         String tenantId, Boolean isPrimaryOwner, Double ownerShipPercentage, String ownerType,String institutionId,
+                         Set<OldDocument> oldDocuments,RelationshipEnum relationship,Object additionalDetails) {
                 super(id,uuid, userName, password, salutation, name, gender, mobileNumber, emailId, altContactNumber, pan, aadhaarNumber, permanentAddress, permanentCity, permanentPincode, correspondenceCity, correspondencePincode, correspondenceAddress, active, dob, pwdExpiryDate, locale, type, signature, accountLocked, roles, fatherOrHusbandName, bloodGroup, identificationMark, photo, createdBy, createdDate, lastModifiedBy, lastModifiedDate, otpReference, tenantId);
                 this.isPrimaryOwner = isPrimaryOwner;
                 this.ownerShipPercentage = ownerShipPercentage;
                 this.ownerType = ownerType;
                 this.relationship=relationship;
                 this.institutionId=institutionId;
-                this.oldDocuments = oldDocuments;
+                this.oldDocuments=oldDocuments;
+                this.additionalDetails=additionalDetails;
         }
 
         public OldOwnerInfo addDocumentsItem(OldDocument documentsItem) {
@@ -142,7 +158,7 @@ public class OldOwnerInfo extends User  {
                 this.setTenantId(user.getTenantId());
         }
 
-        public OldOwnerInfo(User user){
+        public OldOwnerInfo(org.egov.common.contract.request.User user){
                 this.setTenantId(user.getTenantId());
                 this.setUserName(user.getUserName());
                 this.setId(user.getId());
@@ -166,7 +182,7 @@ public class OldOwnerInfo extends User  {
                 this.setUuid(user.getUuid());
         }
 
-        private List<Role> addRoles(List<Role> Roles){
+        private List<Role> addRoles(List<org.egov.common.contract.request.Role> Roles){
                 LinkedList<Role> addroles = new LinkedList<>();
                 Roles.forEach(role -> {
                         Role addrole = new Role();

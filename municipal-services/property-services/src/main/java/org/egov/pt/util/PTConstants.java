@@ -255,6 +255,17 @@ public class PTConstants {
 
     public static final String ONLINE_PAYMENT_MODE = "ONLINE";
 
+    public static final String URL_PARAMS_SEPARATER = "?";
+
+    public static final String TENANT_ID_FIELD_FOR_SEARCH_URL = "tenantId=";
+
+    public static final String LIMIT_FIELD_FOR_SEARCH_URL = "limit=";
+
+    public static final String OFFSET_FIELD_FOR_SEARCH_URL = "offset=";
+
+    public static final String SEPARATER = "&";
+
+
 
 }
 
