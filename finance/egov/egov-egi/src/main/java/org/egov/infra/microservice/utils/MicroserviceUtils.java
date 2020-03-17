@@ -181,8 +181,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 
-import bsh.StringUtil;
-
 @Service
 public class MicroserviceUtils {
 
