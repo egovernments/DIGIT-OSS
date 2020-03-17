@@ -58,7 +58,7 @@
 			</s:if></td>
 		<td class="bluebox"><s:select name="egBillregistermis.fund"
 				id="fundId" list="dropdownData.fundList" listKey="id"
-				listValue="name" headerKey="-1" headerValue="----Choose----"
+				listValue="name" headerKey="-1" headerValue="%{getText('lbl.choose.options')}"
 				value="%{egBillregistermis.fund.id}"
 				onChange="populateSchemes(this);" /></td>
 	</s:if>
@@ -69,7 +69,7 @@
 			</s:if></td>
 		<td class="bluebox"><s:select name="egBillregistermis.fundsource"
 				id="fundsourceId" list="dropdownData.fundsourceList" listKey="id"
-				listValue="name" headerKey="-1" headerValue="----Choose----"
+				listValue="name" headerKey="-1" headerValue="%{getText('lbl.choose.options')}"
 				value="%{egBillregistermis.fundsource.id}" /></td>
 	</s:if>
 </tr>
@@ -84,7 +84,7 @@
 			</s:if></td>
 		<td class="greybox"><s:select name="egBillregistermis.scheme"
 				id="schemeid" list="dropdownData.schemeList" listKey="id"
-				listValue="name" headerKey="-1" headerValue="----Choose----"
+				listValue="name" headerKey="-1" headerValue="%{getText('lbl.choose.options')}"
 				value="%{egBillregistermis.scheme.id}"
 				onChange="populatesubSchemes(this)" /></td>
 	</s:if>
@@ -98,7 +98,7 @@
 			</s:if></td>
 		<td class="greybox"><s:select name="egBillregistermis.subScheme"
 				id="subschemeid" list="dropdownData.subschemeList" listKey="id"
-				listValue="name" headerKey="-1" headerValue="----Choose----"
+				listValue="name" headerKey="-1" headerValue="%{getText('lbl.choose.options')}"
 				value="%{egBillregistermis.subScheme.id}" /></td>
 	</s:if>
 </tr>
@@ -112,7 +112,7 @@
 		<td class="bluebox"><s:select
 				name="egBillregistermis.functionaryid" id="functionaryId"
 				list="dropdownData.functionaryList" listKey="id" listValue="name"
-				headerKey="-1" headerValue="----Choose----"
+				headerKey="-1" headerValue="%{getText('lbl.choose.options')}"
 				value="%{egBillregistermis.subScheme.id}" /></td>
 	</s:if>
 	<s:if test="%{shouldShowHeaderField('department')}">
@@ -123,7 +123,7 @@
 		<td class="bluebox"><s:select
 				name="egBillregistermis.departmentcode" id="departmentcode"
 				list="dropdownData.departmentList" listKey="code" listValue="name"
-				headerKey="-1" headerValue="----Choose----"
+				headerKey="-1" headerValue="%{getText('lbl.choose.options')}"
 				value="%{egBillregistermis.departmentcode}" /></td>
 	</s:if>
 </tr>
@@ -136,7 +136,7 @@
 			</s:if><br> <br></td>
 		<td class="greybox"><s:select name="egBillregistermis.fieldid"
 				id="divisionid" list="dropdownData.fieldList" listKey="id"
-				listValue="name" headerKey="-1" headerValue="----Choose----"
+				listValue="name" headerKey="-1" headerValue="%{getText('lbl.choose.options')}"
 				value="%{egBillregistermis.fieldid.id}" /></td>
 	</s:if>
 </tr>

@@ -77,7 +77,7 @@
 						class="mandatory1">*</span></td>
 					<td class="bluebox"><s:select name="expType" id="expType"
 							list="dropdownData.expType" headerKey="-1"
-							headerValue="----Choose----" value="%{expType}" /></td>
+							headerValue="%{getText('lbl.choose.options')}" value="%{expType}" /></td>
 					<td class="greybox"><s:text name="bill.search.billnumber" /></td>
 					<td class="greybox"><s:textfield name="billnumber"
 							id="billnumber" value="%{billnumber}"
