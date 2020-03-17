@@ -137,7 +137,7 @@
 							</div>
 						</c:if>
 						<c:if test="${!autoglcode}">
-							<label class="col-sm-2 control-label text-right"><spring:message code="lbl.gl.code" text="GlCode"/></label>
+							<label class="col-sm-2 control-label text-right"><spring:message code="lbl.glcode" text="GlCode"/></label>
 							<div class="col-sm-3 add-margin">
 							<form:input path="chartofaccounts.glcode" class="form-control text-left patternvalidation" data-pattern="numeric" maxlength="50" />
 							<form:errors path="chartofaccounts.glcode" cssClass="error-msg" />
@@ -168,7 +168,7 @@
 					<th><spring:message code="lbl.fund" text="Fund"/></th>
 					<th><spring:message code="lbl.bank" text="Fund"/></th>
 					<th><spring:message code="lbl.bankbranch" text="Bank Branch"/></th>
-					<th><spring:message code="lbl.gl.code" text="GlCode"/></th>
+					<th><spring:message code="lbl.glcode" text="GlCode"/></th>
 					<th><spring:message code="lbl.accounttype" text="Account Type"/></th>
 					<th><spring:message code="lbl.usagetype" text="Usage Type"/></th>
 					<th><spring:message code="lbl.payto" text="Pay To"/></th>

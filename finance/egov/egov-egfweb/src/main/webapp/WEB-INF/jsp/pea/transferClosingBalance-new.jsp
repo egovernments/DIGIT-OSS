@@ -72,7 +72,8 @@
 		id="transferClosingBalance" method="post">
 		<div class="formmainbox">
 			<div class="formheading"></div>
-			<div class="subheadnew">Transfer Closing Balance</div>
+			<div class="subheadnew"><s:text name="lbl.transfer.closing.balance" />
+			</div>
 
 			<div align="center">
 				<font style='color: green;'>
@@ -102,11 +103,11 @@
 								<tr>
 									<td class="greybox" ></td>
 									<td class="greybox"></td>
-									<td class="greybox">Financial Year <span class="greybox"><span
+									<td class="greybox"><s:text name="financialyear" /> <span class="greybox"><span
 											class="mandatory1">*</span></span></td>
 									<td class="greybox"><s:select name="financialYear" id="financialYear"
 											list="dropdownData.financialYearList" listKey="id" listValue="finYearRange"
-											headerKey="-1" headerValue="----Choose----"
+											headerKey="-1" headerValue="%{getText('lbl.choose.options')}"
 											value="%{financialYear}" /></td>
 									<span class="greybox" colspan="2">
 										</td>
@@ -122,9 +123,9 @@
 						<tr>
 
 							<td><s:submit type="submit" cssClass="buttonsubmit"
-									value="Transfer" name="transfer" method="transfer"
+							key="lbl.transfer" name="transfer" method="transfer"
 									onclick="return transfer();" /></td>
-							<td><input type="button" value="Close"
+							<td><input type="button" value="<s:text name='lbl.close'/>"
 								onclick="window.parent.postMessage('close','*');window.close();" class="buttonsubmit"/></td>
 						</tr>
 					</table>

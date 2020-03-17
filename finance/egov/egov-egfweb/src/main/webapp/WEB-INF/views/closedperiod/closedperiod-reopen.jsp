@@ -57,7 +57,8 @@
 			<div class="col-md-12">
 				<div class="panel panel-primary" data-collapsed="0">
 					<div class="panel-heading">
-						<div class="panel-title">ReOpen Closed Period</div>
+						<div class="panel-title"><spring:message
+									code="lbl.reopen.closed.period" /></div>
 					</div>
 					<spring:hasBindErrors name="closedPeriod">
 						<div class="alert alert-danger"

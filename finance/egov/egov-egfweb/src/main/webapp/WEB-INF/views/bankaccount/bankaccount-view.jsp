@@ -84,7 +84,7 @@
 					</div>
 					<div class="col-sm-3 add-margin view-content">${bankaccount.type}</div>
 					<div class="col-xs-3 add-margin">
-						<spring:message code="lbl.gl.code" text="GlCode"/>
+						<spring:message code="lbl.glcode" text="GlCode"/>
 					</div>
 					<div class="col-sm-3 add-margin view-content">${bankaccount.chartofaccounts.glcode}</div>
 				</div>

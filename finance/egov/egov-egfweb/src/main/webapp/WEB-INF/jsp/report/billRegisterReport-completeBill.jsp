@@ -107,11 +107,11 @@
 				<td class="bluebox"><s:text name="bill.expenditure.type" /></td>
 				<td class="bluebox"><s:select name="exptype" id="exptype"
 						list="dropdownData.expenditureList" headerKey=""
-						headerValue="----Choose----" /></td>
+						headerValue="%{getText('lbl.choose.options')}" /></td>
 				<td class="bluebox"><s:text name="bill.type" /></td>
 				<td class="bluebox"><s:select name="billType" id="billType"
 						list="dropdownData.billTypeList" headerKey=""
-						headerValue="----Choose----" /></td>
+						headerValue="%{getText('lbl.choose.options')}" /></td>
 			</tr>
 			<tr>
 			<td style="width: 5%"></td>
@@ -128,10 +128,10 @@
 		</div>
 		
 		<div class="buttonbottom">
-			<s:submit method="billSearch" value="Search" cssClass="buttonsubmit"
+			<s:submit method="billSearch" key="lbl.search" cssClass="buttonsubmit"
 				onclick="return validate();" />
-			<s:submit method="searchform" value="Reset" cssClass="button" onclick="return resetAndSubmit();"/>
-			<input type="button" value="Close"
+			<s:submit method="searchform" key="lbl.reset" cssClass="button" onclick="return resetAndSubmit();"/>
+			<input type="button" value="<s:text name='lbl.close'/>"
 				onclick="javascript:window.parent.postMessage('close','*');" class="button" />
 
 		</div>

@@ -221,7 +221,7 @@
 						<div class="form-group">
 							<div class="text-center">
 								<button type='button' class='btn btn-primary' id="btnsearch">
-									<spring:message code='lbl.search' text="Search"/>
+									<spring:message code='lbl.search'/>
 								</button>
 								<a href='javascript:void(0)' class='btn btn-default'
 									onclick="javascript:window.parent.postMessage('close','*');"><spring:message
@@ -285,3 +285,5 @@
 	src="<cdn:url value='/resources/global/js/jquery/plugins/jquery.validate.min.js' context='/services/egi'/>"></script>
 <script type="text/javascript"
 	src="<cdn:url value='/resources/app/js/coareport.js?rnd=${app_release_no}'/>"></script>
+<script type="text/javascript"
+        src="<cdn:url value='/resources/app/js/i18n/jquery.i18n.properties.js?rnd=${app_release_no}' context='/services/EGF'/>"></script>

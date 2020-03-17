@@ -51,10 +51,10 @@
 <%@ taglib prefix="egov" tagdir="/WEB-INF/tags"%>
 <tr>
 	<td style="width: 5%"></td>
-	<td class="bluebox">Voucher Sub-Type<span class="mandatory1">*</span></td>
+	<td class="bluebox"><s:text name="lbl.voucher.subtype"/><span class="mandatory1">*</span></td>
 	<td class="bluebox"><select name="vType" id="vType"
 		onchange="onChangeVSubType()">
-			<option value="-1">------Choose------</option>
+			<option value="-1"><s:text name="%{getText('lbl.choose.options')}"/></option>
 			<option value="JVGeneral">General</option>
 			<option value="Works">Works</option>
 			<option value="Purchase">Purchase</option>

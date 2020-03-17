@@ -65,7 +65,7 @@
 					</tr>
 					<tr>
 						<th class="bluebgheadtd" width="100%"><strong
-							style="font-size: 15px;"> Cheque issue register report
+							style="font-size: 15px;"><s:text name="lbl.cheque.issue.register.report" /> 
 								for <b><s:property value="formattedBankName" /></b> with <br />account
 								no:<b><s:property value="accountNumber.accountnumber" /></b>
 								from <b><s:property value="fromDate" /></b> to <b><s:property

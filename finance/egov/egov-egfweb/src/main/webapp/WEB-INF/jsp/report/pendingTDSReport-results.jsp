@@ -77,7 +77,7 @@
 
 		<tr>
 			<th class="bluebgheadtd" width="100%" colspan="5"><strong
-				style="font-size: 15px;"> Pending Deductions to be remitted</strong></th>
+				style="font-size: 15px;"> <s:text name='lbl.pending.deduction'/></strong></th>
 		</tr>
 	</table>
 	<table width="99%" border="0" cellspacing="0" cellpadding="0">
@@ -347,7 +347,7 @@
 </s:if>
 <s:if
 	test="%{pendingTDS.size()<=0  && remittedTDS.size()<=0 && inWorkflowTDS.size()<=0}">
-No Deduction details found
+	<s:text name='lbl.no.deduction.found'/>
 </s:if>
 <s:if
 	test="%{pendingTDS.size()>0 || (showRemittedEntries==true && remittedTDS.size()>0) || inWorkflowTDS.size()>0 }">

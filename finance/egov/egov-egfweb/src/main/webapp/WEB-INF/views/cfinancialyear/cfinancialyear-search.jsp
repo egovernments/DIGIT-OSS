@@ -59,7 +59,8 @@
 			<div class="col-md-12">
 				<div class="panel panel-primary" data-collapsed="0">
 					<div class="panel-heading">
-						<div class="panel-title">Search Financial Year</div>
+						<div class="panel-title"><spring:message
+									code="lbl.search.finacial.year" /></div>
 					</div>
 					<div class="panel-body">
 						<div class="form-group">
@@ -94,8 +95,7 @@
 		</div>
 </form:form>
 <div class="row display-hide report-section">
-	<div class="col-md-12 table-header text-left">Financial Year
-		Search Result</div>
+	<div class="col-md-12 table-header text-left"><spring:message code='lbl.search.financial.year.result' /></div>
 	<div class="col-md-12 form-group report-table-container">
 		<table class="table table-bordered table-hover multiheadertbl"
 			id="resultTable">

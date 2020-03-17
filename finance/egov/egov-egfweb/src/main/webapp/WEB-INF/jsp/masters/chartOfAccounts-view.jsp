@@ -171,7 +171,7 @@
 		<div class="buttonbottom">
 			<s:if test="%{coaId !=null || coaId!=''}">
 				<s:if test="%{shouldAllowCreation()}">
-					<s:submit name="Add" value="Add" cssClass="buttonsubmit"
+					<s:submit name="Add" key="lbl.add" cssClass="buttonsubmit"
 						onclick="submitForAdd()" />
 				</s:if>
 			</s:if>

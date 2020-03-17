@@ -783,9 +783,9 @@ function disableSelectedRows()
 															<tr>
 																<td align="center" colspan="5">
 																	<div class="buttonbottom">
-																		<input type="button" method="search" value="Search"
+																		<input type="button" method="search"  value="<s:text name='lbl.search'/>"
 																			Class="button" onclick="return search()" />
-																		<input type="button" value="Close"
+																		<input type="button" value="<s:text name='lbl.close'/>"
 																			onclick="javascript:window.close()" class="button" />
 																		<s:hidden name="miscount" id="miscount" />
 																		<s:hidden name="miscattributes" id="miscattributes"

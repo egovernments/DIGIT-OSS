@@ -46,6 +46,33 @@
  *
  */
 
+
+jQuery(document).ready(function(){
+	console.log("Browser Language ",navigator.language);
+	jQuery.i18n.properties({ 
+		name: 'message', 
+		path: '/services/EGF/resources/app/messages/', 
+		mode: 'both',
+		async: true,
+	    cache: true,
+		language: getLocale("locale"),
+		callback: function() {
+			console.log('File loaded successfully');
+		}
+	});	
+})
+
+function getCookie(name){
+	let cookies = document.cookie;
+	if(cookies.search(name) != -1){
+		var keyValue = cookies.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+	    return keyValue ? keyValue[2] : null;
+	}
+}
+
+function getLocale(paramName){
+	return getCookie(paramName) ? getCookie(paramName) : navigator.language;
+}
 jQuery('#btnsearch').click(function(e) {
 
 	callAjaxSearch();
@@ -359,7 +386,7 @@ $('#buttonSubmit').click(function(e){
 					});
 					
 				} else if (res == "false") {
-					bootbox.alert("Transfer the closing balance of this year to next year in order to proceed with the closing of this year.");
+					bootbox.alert(jQuery.i18n.prop('msg.transfer.closing.balance.this.year'));
 				}
 			},
 			error : function (res){

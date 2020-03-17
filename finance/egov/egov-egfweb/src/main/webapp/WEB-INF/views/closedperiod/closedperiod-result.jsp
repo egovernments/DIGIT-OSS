@@ -50,11 +50,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ include file="/includes/taglibs.jsp"%>
 <div class="main-content">
+<input type="hidden" id="mode" name="mode" value="${mode}" />
 	<div class="row">
 		<div class="col-md-12">
 			<div class="panel panel-primary" data-collapsed="0">
 				<div class="panel-heading">
-					<div class="panel-title">ClosedPeriod</div>
+					<div class="panel-title"><spring:message code="lbl.closedperiod" /></div>
 				</div>
 				<div class="panel-body">
 					<div class="panel-title text-center no-float">

@@ -123,3 +123,5 @@
 </script>
 <script type="text/javascript"
 	src="<cdn:url value='/resources/app/js/cFinancialYearHelper.js?rnd=${app_release_no}'/>"></script>
+	<script type="text/javascript"
+        src="<cdn:url value='/resources/app/js/i18n/jquery.i18n.properties.js?rnd=${app_release_no}' context='/services/EGF'/>"></script>

@@ -102,52 +102,52 @@ table.its th {
 
 			<table align="center" width="100%" cellpadding="0" cellspacing="0">
 				<tr>
-					<td class="bluebox" width="10%">Bank Name:<span
+					<td class="bluebox" width="10%"><s:text name="lbl.bank.name" />:<span
 						class="bluebox"><span class="mandatory"></span></span></td>
 					<td class="bluebox"><s:select name="bank.id" id="bank.id"
 							list="dropdownData.bankList" listKey="id" listValue="name"
-							headerKey="-1" headerValue="----Choose----"
+							headerKey="-1" headerValue="%{getText('lbl.choose.options')}"
 							onChange="populateBankBranch(this);" /></td>
 					<egov:ajaxdropdown id="bankbranch" fields="['Text','Value']"
 						dropdownId="bankbranch"
 						url="voucher/common-ajaxLoadBankBranchFromBank.action" />
-					<td class="bluebox" width="10%">Bank Branch:<span
+					<td class="bluebox" width="10%"><s:text name="bankbranch" />:<span
 						class="bluebox"><span class="mandatory"></span></span></td>
 					<td class="bluebox"><s:select name="bankbranch.id"
 							id="bankbranch" list="dropdownData.bankBranchList" listKey="id"
 							listValue="branchname" headerKey="-1"
-							headerValue="----Choose----"
+							headerValue="%{getText('lbl.choose.options')}"
 							onChange="populateBankAccount(this);" /></td>
 					<egov:ajaxdropdown id="bankaccount" fields="['Text','Value']"
 						dropdownId="bankaccount"
 						url="voucher/common-ajaxLoadBankAccFromBranch.action" />
 				</tr>
 				<tr>
-					<td class="bluebox" width="10%">Account Number:<span
+					<td class="bluebox" width="10%"><s:text name="lbl.account.number " />:<span
 						class="bluebox"><span class="mandatory"></span></span></td>
 					<td class="bluebox"><s:select name="bankaccount.id"
 							id="bankaccount" list="dropdownData.bankAccountList" listKey="id"
 							listValue="accountnumber" headerKey="-1"
-							headerValue="----Choose----"
+							headerValue="%{getText('lbl.choose.options')}"
 							onChange="populateInstrumentNumber(this);" /></td>
 					<egov:ajaxdropdown id="instrumentnumber" fields="['Text','Value']"
 						dropdownId="instrumentnumber"
 						url="voucher/common-ajaxLoadRTGSChequeFromBankAcc.action" />
-					<td class="bluebox" width="10%">RTGS Number:<span
+					<td class="bluebox" width="10%"><s:text name="report.rtgsnumber " />:<span
 						class="bluebox"><span class="mandatory"></span></span></td>
 					<td class="bluebox"><s:select name="instrumentnumber.id"
 							id="instrumentnumber" list="dropdownData.chequeNumberList"
 							listKey="id" listValue="transactionNumber" headerKey="-1"
-							headerValue="----Choose----" /></td>
+							headerValue="%{getText('lbl.choose.options')}" /></td>
 				</tr>
 				<tr>
 
 				</tr>
 			</table>
 			<div class="buttonbottom">
-				<s:submit method="search" value="Search" cssClass="buttonsubmit"
+				<s:submit  key="lbl.search" cssClass="buttonsubmit"
 					onclick="return validate();" />
-				<input type="button" value="Close"
+				<input type="button" value="<s:text name='lbl.close'/>"
 					onclick="javascript:window.parent.postMessage('close','*');" class="button" />
 
 			</div>

@@ -68,7 +68,7 @@
 	<s:hidden name="temp" value="contraBean.fromBankId" />
 	<td class="greybox"><s:select name="contraBean.fromBankId"
 			id="fromBankId" list="%{fromBankBranchMap}" headerKey="-1"
-			headerValue="----Choose----" onChange="loadFromAccNum(this);" /></td>
+			headerValue="%{getText('lbl.choose.options')}" onChange="loadFromAccNum(this);" /></td>
 	<egov:ajaxdropdown id="fromAccountNumber" fields="['Text','Value']"
 		dropdownId="fromAccountNumber"
 		url="/voucher/common-ajaxLoadAccountNumbers.action" />
@@ -77,7 +77,7 @@
 	<td class="greybox"><s:select name="contraBean.fromBankAccountId"
 			value="%{contraBean.fromBankAccountId}" id="fromAccountNumber"
 			list="dropdownData.fromAccNumList" listKey="id"
-			listValue="accountnumber" headerKey="-1" headerValue="----Choose----"
+			listValue="accountnumber" headerKey="-1" headerValue="%{getText('lbl.choose.options')}"
 			onChange="populatefromNarration(this);loadFromBalance(this)" /> <s:textfield
 			name="fromAccnumnar" id="fromAccnumnar" value="%{fromAccnumnar}"
 			readonly="true" tabindex="-1" /></td>
@@ -114,7 +114,7 @@
 		<td class="greybox"><s:select name="contraBean.toFundId"
 				id="toFundId" list="dropdownData.fundList" listKey="id"
 				listValue="name" onChange="loadToBank(this);checkInterFund();"
-				headerKey="" headerValue="----Choose----" /></td>
+				headerKey="" headerValue="%{getText('lbl.choose.options')}" /></td>
 	</s:if>
 	<s:if test="%{shouldShowHeaderField('department')}">
 		<td id="interFundRow1" style="visibility: hidden" class="greybox"><s:text
@@ -125,7 +125,7 @@
 		<td id="interFundRow2" style="visibility: hidden" class="greybox"><s:select
 				name="contraBean.toDepartment" id="contraBean.toDepartment"
 				list="dropdownData.departmentList" listKey="code" listValue="name"
-				headerKey="" headerValue="----Choose----"
+				headerKey="" headerValue="%{getText('lbl.choose.options')}"
 				value="voucherHeader.vouchermis.departmentcode"
 				onChange="populateApproverDept(this);" /></td>
 	</s:if>
@@ -139,7 +139,7 @@
 		class="bluebox"><span class="mandatory1">*</span></span></td>
 	<td class="bluebox"><s:select name="contraBean.toBankId"
 			id="toBankId" list="%{toBankBranchMap}" headerKey="-1"
-			headerValue="----Choose----" onChange="loadToAccNum(this);" /></td>
+			headerValue="%{getText('lbl.choose.options')}" onChange="loadToAccNum(this);" /></td>
 	<egov:ajaxdropdown id="toAccountNumber" fields="['Text','Value']"
 		dropdownId="toAccountNumber"
 		url="/voucher/common-ajaxLoadAccountNumbers.action" />
@@ -147,7 +147,7 @@
 		class="bluebox"><span class="mandatory1">*</span></span></td>
 	<td class="bluebox"><s:select name="contraBean.toBankAccountId"
 			id="toAccountNumber" list="dropdownData.toAccNumList" listKey="id"
-			listValue="accountnumber" headerKey="-1" headerValue="----Choose----"
+			listValue="accountnumber" headerKey="-1" headerValue="%{getText('lbl.choose.options')}"
 			onChange="populatetoNarration(this);loadToBalance(this)" /> <s:textfield
 			name="toAccnumnar" id="toAccnumnar" value="%{toAccnumnar}"
 			readonly="true" tabindex="-1" /></td>
@@ -172,13 +172,13 @@
 			name="contraBean.sourceGlcode" id="sourceGlcode"
 			list="dropdownData.interFundList" listKey="glcode"
 			listValue="glcode+'-'+name" headerKey="-1"
-			headerValue="----Choose----" /></td>
+			headerValue="%{getText('lbl.choose.options')}" /></td>
 	<td class="greybox"><s:text name="lbl.destination.inter.fund.code" /></td>
 	<td class="greybox"><span class="mandatory1">*</span> <s:select
 			name="contraBean.destinationGlcode" id="destinationGlcode"
 			list="dropdownData.interFundList" listKey="glcode"
 			listValue="glcode+'-'+name" headerKey="-1"
-			headerValue="----Choose----" /></td>
+			headerValue="%{getText('lbl.choose.options')}" /></td>
 </tr>
 
 

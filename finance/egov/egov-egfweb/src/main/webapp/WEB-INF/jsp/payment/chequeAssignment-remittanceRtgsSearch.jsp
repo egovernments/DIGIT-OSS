@@ -144,7 +144,7 @@
 					<td class="bluebox"><s:select id="drawingOfficerId"
 							name="drawingOfficerId" cssClass="selectwk"
 							list="dropdownData.drawingofficerList" listKey="id"
-							listValue="name" headerValue="Choose" headerKey="0"
+							listValue="name" headerValue="%{getText('lbl.choose.options')}" headerKey="0"
 							value="%{drawingOfficer.id}" /></td>
 					<td class="bluebox"><s:text
 							name="rtgs.assignment.remittance.pay.coa" /></td>

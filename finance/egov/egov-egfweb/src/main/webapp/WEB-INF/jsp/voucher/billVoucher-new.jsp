@@ -54,7 +54,6 @@
 <head>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/javascript/voucherHelper.js?rnd=${app_release_no}"></script>
 	<meta http-equiv="Content-Type" content="text/html; charset=windows-1252" />
-	<title>Create Voucher From Bill</title>
 	<script type="text/javascript">
 		function onloadtask() 
 		{
@@ -117,9 +116,9 @@
 					<table border="0" width="100%">
 						<tr>
 							<td class="bluebox"><s:text name="lbl.bill.type"/> <span class="bluebox"><span class="mandatory1">*</span></span></td>
-							<td class="bluebox"><s:select name="expType" id="expType" list="dropdownData.expTypeList" headerKey="-1" headerValue="----Choose----" /></td>
+							<td class="bluebox"><s:select name="expType" id="expType" list="dropdownData.expTypeList" headerKey="-1" headerValue="%{getText('lbl.choose.options')}" /></td>
 							<td class="bluebox" id="deptLabel"><s:text name="voucher.department" /></td>
-							<td class="bluebox"><s:select name="vouchermis.departmentcode" id="departmentid" list="dropdownData.departmentList" listKey="code" listValue="name" headerKey="-1" headerValue="----Choose----" value="voucherHeader.vouchermis.departmentcode" /></td>
+							<td class="bluebox"><s:select name="vouchermis.departmentcode" id="departmentid" list="dropdownData.departmentList" listKey="code" listValue="name" headerKey="-1" headerValue="%{getText('lbl.choose.options')}" value="voucherHeader.vouchermis.departmentcode" /></td>
 
 						</tr>
 

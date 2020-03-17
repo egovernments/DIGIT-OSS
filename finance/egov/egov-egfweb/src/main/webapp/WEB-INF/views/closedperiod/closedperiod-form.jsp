@@ -51,14 +51,17 @@
 		<div class="col-md-12">
 			<div class="panel panel-primary" data-collapsed="0">
 				<div class="panel-heading">
-					<div class="panel-title">Closed Period</div>
+					<div class="panel-title">
+						<spring:message code="lbl.closedperiod" />
+					</div>
 				</div>
-				 <spring:hasBindErrors name="closedPeriod">
-        <div class="alert alert-danger" style="margin-top: 20px; margin-bottom: 10px;">
-            <form:errors path="*"/>
-            <br/>
-        </div>
-    </spring:hasBindErrors>
+				<spring:hasBindErrors name="closedPeriod">
+					<div class="alert alert-danger"
+						style="margin-top: 20px; margin-bottom: 10px;">
+						<form:errors path="*" />
+						<br />
+					</div>
+				</spring:hasBindErrors>
 				<div class="panel-body">
 					<input type="hidden" value="${startingDate}" id="finYearStartDate" />
 					<div class="form-group">
@@ -94,22 +97,20 @@
 								<form:option value="0">
 									<spring:message code="lbl.select" />
 								</form:option>
-								<form:options items="${getAllMonths}" 
-									 />
+								<form:options items="${getAllMonths}" />
 							</form:select>
 							<form:errors path="fromDate" cssClass="error-msg" />
 						</div>
 						<label class="col-sm-3 control-label text-right"><spring:message
 								code="lbl.tillmonth" /> <span class="mandatory"></span> </label>
 						<div class="col-sm-3 add-margin">
-						<form:select path="toDate" id="endingDate"
+							<form:select path="toDate" id="endingDate"
 								cssClass="form-control" cssErrorClass="form-control error"
 								required="required" onchange="validateEndDate();">
 								<form:option value="0">
 									<spring:message code="lbl.select" />
 								</form:option>
-								<form:options items="${getAllMonths}" 
-									 />
+								<form:options items="${getAllMonths}" />
 							</form:select>
 							<form:errors path="toDate" cssClass="error-msg" />
 						</div>
@@ -124,7 +125,9 @@
 
 							<div class="radio">
 								<label><form:radiobutton path="closeType" id="closeType"
-										value="SOFTCLOSE" checked="checked" />SoftClose</label>
+										value="SOFTCLOSE" checked="checked" /><spring:message
+								code="lbl.softclose" /></label>
+										
 							</div>
 
 						</div>
@@ -132,7 +135,8 @@
 
 							<div class="radio">
 								<label><form:radiobutton path="closeType" id="closeType"
-										value="HARDCLOSE"  />HardClose</label>
+										value="HARDCLOSE" /><spring:message
+								code="lbl.hardclose" /></label>
 							</div>
 
 						</div>
@@ -144,10 +148,10 @@
 						<div class="col-sm-3 add-margin">
 							<form:textarea path="remarks" type="text" placeholder=""
 								autocomplete="off" class="form-control low-width"
-								maxlength="250"  required="required"  cssErrorClass="form-control error"/>
+								maxlength="250" required="required"
+								cssErrorClass="form-control error" />
 							<form:errors path="remarks" cssClass="error-msg" />
 						</div>
 						<input type="hidden" name="closedPeriod"
-							value="${closedPeriod.financialYear.id}" /> <input
-							type="hidden" name="closedPeriod"
-							value="${closedPeriod.isClosed}" />
+							value="${closedPeriod.financialYear.id}" /> <input type="hidden"
+							name="closedPeriod" value="${closedPeriod.isClosed}" />

@@ -82,11 +82,11 @@
 					<td class="greybox"><s:text name="voucher.type" /></td>
 					<td class="greybox"><s:select name="type" id="type"
 							list="dropdownData.typeList" headerKey="-1"
-							headerValue="----Choose----"
+							headerValue="%{getText('lbl.choose.options')}"
 							onchange="loadVoucherNames(this.value);activeModeOfPayment()" /></td>
 					<td class="greybox"><s:text name="voucher.name" /></td>
 					<td class="greybox"><s:select name="name" id="name"
-							list="%{nameMap}" headerKey="-1" headerValue="----Choose----" /></td>
+							list="%{nameMap}" headerKey="-1" headerValue="%{getText('lbl.choose.options')}" /></td>
 
 				</tr>
 
@@ -95,7 +95,7 @@
 					<td class="bluebox"><s:text name="voucher.modeOfPayment" /></td>
 					<td class="bluebox"><s:select name="modeOfPayment"
 							id="modeOfPayment" list="dropdownData.modeOfPaymentList"
-							headerKey="-1" headerValue="----Choose----" /></td>
+							headerKey="-1" headerValue="%{getText('lbl.choose.options')}" /></td>
 					<td class="bluebox"></td>
 					<td class="bluebox"></td>
 				</tr>
@@ -126,18 +126,18 @@
 					<td style="width: 5%"></td>
 					<td class="greybox"><s:text name="voucher.status" /></td>
 					<td class="greybox"><s:select name="status" id="status"
-							list="%{statusMap}" headerKey="-1" headerValue="----Choose----"
+							list="%{statusMap}" headerKey="-1" headerValue="%{getText('lbl.choose.options')}"
 							value="%{status}" /></td>
 					<td class="greybox"></td>
 					<td class="greybox"></td>
 				</tr>
 			</table>
 			<div class="buttonbottom">
-				<s:submit method="search" value="Search" cssClass="buttonsubmit"
+				<s:submit method="search" key="lbl.search" cssClass="buttonsubmit"
 					onclick="return validateSearch();" />
-				<s:submit method="beforeSearch" value="Reset" cssClass="button"
+				<s:submit method="beforeSearch" key="lbl.reset" cssClass="button"
 					onclick="return resetAndSubmit();" />
-				<input type="button" value="Close"
+				<input type="button" value="<s:text name='lbl.close'/>"
 					onclick="javascript:window.parent.postMessage('close','*');" class="button" />
 
 			</div>
