@@ -58,7 +58,6 @@
                     {
                         "text": "{{application_no}}",
                         "alignment": "right",
-                        "color": "#484848",
                         "margin": [
                             0,
                             2,
@@ -69,7 +68,6 @@
                     {
                         "text": "{{applicationNo}}",
                         "alignment": "right",
-                        "color": "#484848",
                         "bold": true,
                         "margin": [
                             -150,
@@ -484,7 +482,7 @@
                                                     false,
                                                     false
                                                 ],
-                                                "style": "ws-sub-table-value"
+                                                "style": "ws-sub-table"
                                             },
                                             {
                                                 "text": "{{door_house_no}}",
@@ -494,7 +492,7 @@
                                                     false,
                                                     false
                                                 ],
-                                                "style": "ws-sub-table-value"
+                                                "style": "ws-sub-table"
                                             },
                                             {
                                                 "text": "{{building_colony_name}}",
@@ -504,7 +502,7 @@
                                                     false,
                                                     false
                                                 ],
-                                                "style": "ws-sub-table-value"
+                                                "style": "ws-sub-table"
                                             },
                                             {
                                                 "text": "{{street_name}}",
@@ -514,7 +512,7 @@
                                                     false,
                                                     false
                                                 ],
-                                                "style": "ws-sub-table-value"
+                                                "style": "ws-sub-table"
                                             }
                                         ],
                                         [
@@ -989,7 +987,7 @@
                         "style": "ws-table",
                         "table": {
                             "widths": [
-                                "*"
+                                "103%"
                             ],
                             "body": [
                                 [
