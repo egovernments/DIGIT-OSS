@@ -775,8 +775,7 @@
 
       {
         "text": "{{acknowledgement_for}}",
-        "style": "footer-header",
-        "pageBreak":  "before"
+        "style": "footer-header"
 
       },
       {
