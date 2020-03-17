@@ -330,7 +330,7 @@ public class RemittanceServiceImpl extends RemittanceService {
         
         List<Instrument> instrumentList = receiptInstrumentMap.values().stream().flatMap(Set::stream).collect(Collectors.toList());
         if(!instrumentList.isEmpty()){
-            microserviceUtils.reconcileInstrumentsWithPayinSlipId(instrumentList, accountNumberId,remittance.getVoucherHeader().getVoucherNumber());            
+            microserviceUtils.reconcileInstrumentsWithPayinSlipId(instrumentList, accountNumberId,remittance.getVoucherHeader().getId());            
         }
         receiptList.stream().forEach(receipt -> {
             receipt.setRemittanceReferenceNumber(remittance.getReferenceNumber());
@@ -487,7 +487,7 @@ public class RemittanceServiceImpl extends RemittanceService {
         RemittanceReceipt rr;
         for (Receipt receipt : receiptHeadList) {
             rr = new RemittanceReceipt();
-            rr.setReceipt(receipt.getBill().get(0).getBillDetails().get(0).getId());
+            rr.setReceipt(receipt.getPaymentId());
             rr.setTenantId(microserviceUtils.getTenentId());
             r.getRemittanceReceipts().add(rr);
         }
@@ -553,11 +553,11 @@ public class RemittanceServiceImpl extends RemittanceService {
      */
     @Override
     public List<ReceiptBean> findCashRemittanceDetailsForServiceAndFund(final String boundaryIdList,
-            final String serviceCodes, final String fundCodes, final Date startDate, final Date endDate) {
+            final String serviceCodes, final String fundCodes, final Date startDate, final Date endDate, String instrumentStatus) {
      // TODO : need to make this call to mdms
 //        FinancialStatus status = microserviceUtils.getInstrumentStatusByCode(CollectionConstants.INSTRUMENT_NEW_STATUS);
         List<Instrument> instruments = microserviceUtils.getInstruments(CollectionConstants.INSTRUMENTTYPE_NAME_CASH, TransactionType.Debit,
-                CollectionConstants.INSTRUMENT_NEW_STATUS);
+                instrumentStatus);
         List<String> receiptIds = new ArrayList<>();
         for (Instrument i : instruments) {
             if (i.getInstrumentVouchers() != null)

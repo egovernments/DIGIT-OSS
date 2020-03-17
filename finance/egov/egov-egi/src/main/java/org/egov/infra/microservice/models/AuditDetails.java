@@ -56,6 +56,14 @@ public class AuditDetails implements Serializable {
     public void setLastModifiedDate(Long lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
     }
+    
+    public void setLastModifiedTime(Long lastModifiedTime) {
+        this.lastModifiedTime = lastModifiedTime;
+    }
+    
+    public Long getLastModifiedTime() {
+        return lastModifiedTime;
+    }
 
     public static long getSerialversionuid() {
         return serialVersionUID;

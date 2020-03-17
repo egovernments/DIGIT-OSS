@@ -95,6 +95,9 @@ public class ApplicationConfigManager {
     @Value("${egov.services.collection.service.payment.workflow:}")
     private String collSerPaymentWorkflow;
     
+    @Value("${egov.services.collection.service.remittance.search:}")
+    private String collSerRemittanceSearch;
+    
     public String getEgovHrmsSerHost(){
         return StringUtils.isNotBlank(egovHrmsSerHost) ? egovHrmsSerHost : egovSerHost; 
     }
