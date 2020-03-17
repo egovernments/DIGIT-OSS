@@ -24,6 +24,7 @@ import {
   prepareFinalObject as pFO,
   toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 import filter from "lodash/filter";
@@ -744,31 +745,22 @@ export const tradeDetails = getCommonCard(
           marginBottom: 18
         }
       }
-    ),
-    tradeDetailsConatiner: getCommonContainer({
-      financialYear: {
-        ...getSelectField({
-          label: {
-            labelName: "Financial Year",
-            labelKey: "TL_FINANCIAL_YEAR_LABEL"
-          },
-          placeholder: {
-            labelName: "Select Financial Year",
-            labelKey: "TL_FINANCIAL_YEAR_PLACEHOLDER"
-          },
-          required: true,
-          visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
-          jsonPath: "Licenses[0].financialYear",
-          sourceJsonPath: "applyScreenMdmsData.egf-master.FinancialYear",
-          gridDefination: {
-            xs: 12,
-            sm: 6
-          }
-        })
-      },
-      dummyDiv: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
+    }
+  ),
+  tradeDetailsConatiner: getCommonContainer({
+    financialYear: {
+      ...getSelectField({
+        label: {
+          labelName: "Financial Year",
+          labelKey: "TL_FINANCIAL_YEAR_LABEL"
+        },
+        placeholder: {
+          labelName: "Select Financial Year",
+          labelKey: "TL_FINANCIAL_YEAR_PLACEHOLDER"
+        },
+        required: true,
+        jsonPath: "Licenses[0].financialYear",
+        sourceJsonPath: "applyScreenMdmsData.egf-master.FinancialYear",
         gridDefination: {
           xs: 12,
           sm: 6
@@ -1165,16 +1157,27 @@ export const tradeDetails = getCommonCard(
       //       "Licenses[0].tradeLicenseDetail.additionalDetail.organizationName"
       // }),
     }),
-
-    tradeUnitCard
-    // accessoriesCard
+    tradeNoOfEmployee: getTextField({
+      label: {
+        labelName: "No. Of Employee",
+        labelKey: "TL_NEW_TRADE_DETAILS_NO_EMPLOYEES_LABEL"
+      },
+      props:{
+        className:"applicant-details-error"
+      },
+      placeholder: {
+        labelName: "Enter No. Of Employee",
+        labelKey: "TL_NEW_TRADE_DETAILS_NO_EMPLOYEES_PLACEHOLDER"
+      },
+      pattern: getPattern("NoOfEmp"),
+      jsonPath: "Licenses[0].tradeLicenseDetail.noOfEmployees"
+    })
   },
-  {
-    style: {
-      overflow: "visible"
-    }
-  }
-);
+  {style:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? {"pointer-events":"none"}:{}}
+  ),
+  tradeUnitCard,
+  // accessoriesCard
+});
 
 const setFieldsOnAddItem = (state, multiItemContent) => {
   const preparedFinalObject = JSON.parse(

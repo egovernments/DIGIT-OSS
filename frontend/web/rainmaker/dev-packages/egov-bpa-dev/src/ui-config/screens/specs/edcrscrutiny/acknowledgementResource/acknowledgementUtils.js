@@ -66,7 +66,7 @@ export const downloadReport=async(url,mode)=>{
           myWindow.print();
         });
       }
-    
+
     }
 }
 
@@ -177,7 +177,7 @@ export const downloadPrintContainer = (
       printMenu = [
         receiptPrintObject
       ];
- 
+
   /** END */
 
   return {
@@ -189,7 +189,7 @@ export const downloadPrintContainer = (
     children: {
       downloadMenu: {
         uiFramework: "custom-atoms-local",
-        moduleName: "egov-tradelicence",
+        moduleName: "egov-bpa",
         componentPath: "MenuButton",
         props: {
           data: {
@@ -203,7 +203,7 @@ export const downloadPrintContainer = (
       },
       printMenu: {
         uiFramework: "custom-atoms-local",
-        moduleName: "egov-tradelicence",
+        moduleName: "egov-bpa",
         componentPath: "MenuButton",
         props: {
           data: {

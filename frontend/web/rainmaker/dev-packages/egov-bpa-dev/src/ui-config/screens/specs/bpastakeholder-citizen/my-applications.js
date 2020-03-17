@@ -35,7 +35,7 @@ const screenConfig = {
               {
                 label: "BPA_COMMON_APP_NO",
                 jsonPath: "applicationNumber"
-              }, 
+              },
               {
                 label: "TL_COMMON_TABLE_COL_OWN_NAME",
                 jsonPath: "ownername"
@@ -54,10 +54,6 @@ const screenConfig = {
               {
                 label: "BPA_COMMON_SLA",
                 jsonPath: "sla",
-              },
-              {
-                label: "BPA_PERMIT_NUMBER",
-                jsonPath: "permitOrderNo",
               }
             ],
             moduleName: "BPAREG",

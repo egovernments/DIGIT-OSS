@@ -54,12 +54,15 @@
   .address {
     margin-left: 0px !important;
   }
- 
+  .wizard-form-main-cont {
+   overflow-x: hidden;
+  }
 }
 @media only screen and (max-width: 768px) {
   .authority-details-form{
     display: grid !important;
     overflow: auto !important;
+    overflow-x: hidden !important;
   }
 }
 

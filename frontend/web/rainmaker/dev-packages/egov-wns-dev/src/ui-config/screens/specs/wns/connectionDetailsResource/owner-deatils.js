@@ -64,7 +64,7 @@ export const email = getLabelWithValue(
     labelKey: "WS_OWNER_DETAILS_EMAIL_LABEL"
   },
   {
-    jsonPath: "WaterConnection[0].property.owners[0].email"
+    jsonPath: "WaterConnection[0].property.owners[0].emailId"
   }
 )
 export const correspondenceAddress = getLabelWithValue(
@@ -152,5 +152,3 @@ export const getOwnerDetails = (isEditable = true) => {
     }
   });
 }
-
-

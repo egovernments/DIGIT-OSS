@@ -3,149 +3,39 @@ import {
   getCommonSubHeader,
   getCommonContainer,
   getLabelWithValue,
-  getDivider,
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { changeStep } from "./footer";
+import { getConnectionDetails } from './../applyResource/task-connectiondetails';
+import { propertyOwnerDetails } from "../applyResource/task-owner-details";
 
-import { convertEpochToDate } from "../../utils";
-
-const accessoriesCard = {
-  uiFramework: "custom-containers",
-  componentPath: "MultiItem",
-  props: {
-    className: "review-trade-search-preview",
-    scheama: getCommonGrayCard({
-      accessoriesCardContainer: getCommonContainer({
-        reviewAccessoryType: getLabelWithValue(
-          {
-            labelName: "Accesory Type",
-            labelKey: "TL_REVIEWACCESSORY_TYPE_LABEL"
-          },
-          {
-            jsonPath:
-              "Licenses[0].tradeLicenseDetail.accessories[0].accessoryCategory",
-            localePrefix: {
-              moduleName: "TRADELICENSE",
-              masterName: "ACCESSORIESCATEGORY"
-            }
-          }
-        ),
-        reviewAccessoryUOM: getLabelWithValue(
-          {
-            labelName: "UOM",
-            labelKey: "TL_NEW_TRADE_DETAILS_UOM_UOM_PLACEHOLDER"
-          },
-          { jsonPath: "Licenses[0].tradeLicenseDetail.accessories[0].uom" }
-        ),
-        reviewAccessoryUOMValue: getLabelWithValue(
-          {
-            labelName: "UOM Value",
-            labelKey: "TL_NEW_TRADE_DETAILS_UOM_VALUE_LABEL"
-          },
-          { jsonPath: "Licenses[0].tradeLicenseDetail.accessories[0].uomValue" }
-        ),
-        reviewAccessoryCount: getLabelWithValue(
-          {
-            labelName: "Accessory Count",
-            labelKey: "TL_NEW_TRADE_ACCESSORY_COUNT"
-          },
-          { jsonPath: "Licenses[0].tradeLicenseDetail.accessories[0].count" }
-        )
-      })
-    }),
-
-    items: [],
-    hasAddItem: false,
-    isReviewPage: true,
-    sourceJsonPath: "Licenses[0].tradeLicenseDetail.accessories",
-    prefixSourceJsonPath:
-      "children.cardContent.children.accessoriesCardContainer.children",
-    afterPrefixJsonPath: "children.value.children.key"
-  },
-  type: "array"
+const getHeader = label => {
+  return {
+    uiFramework: "custom-molecules-local",
+    moduleName: "egov-wns",
+    componentPath: "DividerWithLabel",
+    props: {
+      className: "hr-generic-divider-label",
+      labelProps: {},
+      dividerProps: {},
+      label
+    },
+    type: "array"
+  };
 };
 
-const tradeTypeCard = {
-  uiFramework: "custom-containers",
-  componentPath: "MultiItem",
-  props: {
-    className: "review-trade-search-preview",
-    scheama: getCommonGrayCard({
-      tradeTypeCardContainer: getCommonContainer({
-        reviewTradeCategory: getLabelWithValue(
-          {
-            labelName: "Trade Category",
-            labelKey: "TL_NEW_TRADE_DETAILS_TRADE_CAT_LABEL"
-          },
-          {
-            jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType",
-            localePrefix: {
-              moduleName: "TRADELICENSE",
-              masterName: "TRADETYPE"
-            },
-            callBack: value => {
-              return value.split(".")[0];
-            }
-          }
-        ),
-        reviewTradeType: getLabelWithValue(
-          {
-            labelName: "Trade Type",
-            labelKey: "TL_NEW_TRADE_DETAILS_TRADE_TYPE_LABEL"
-          },
-          {
-            jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType",
-            localePrefix: {
-              moduleName: "TRADELICENSE",
-              masterName: "TRADETYPE"
-            },
-            callBack: value => {
-              return value.split(".")[1];
-            }
-          }
-        ),
-        reviewTradeSubtype: getLabelWithValue(
-          {
-            labelName: "Trade Sub-Type",
-            labelKey: "TL_NEW_TRADE_DETAILS_TRADE_SUBTYPE_LABEL"
-          },
-          {
-            jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType",
-            localePrefix: {
-              moduleName: "TRADELICENSE",
-              masterName: "TRADETYPE"
-            }
-          }
-        ),
+export const propertyDetailsHeader = getHeader({
+  labelKey: "WS_COMMON_PROP_DETAIL"
+});
 
-        reviewTradeUOM: getLabelWithValue(
-          {
-            labelName: "UOM (Unit of Measurement)",
-            labelKey: "TL_NEW_TRADE_DETAILS_UOM_LABEL"
-          },
-          { jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].uom" }
-        ),
-        reviewTradeUOMValue: getLabelWithValue(
-          {
-            labelName: "UOM Value",
-            labelKey: "TL_NEW_TRADE_DETAILS_UOM_VALUE_LABEL"
-          },
-          { jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].uomValue" }
-        )
-      })
-    }),
-    items: [],
-    hasAddItem: false,
-    isReviewPage: true,
-    sourceJsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits",
-    prefixSourceJsonPath:
-      "children.cardContent.children.tradeTypeCardContainer.children",
-    afterPrefixJsonPath: "children.value.children.key"
-  },
-  type: "array"
-};
-export const getReviewTrade = (isEditable = true) => {
+export const propertyLocationDetailsHeader = getHeader({
+  labelKey: "WS_COMMON_PROP_LOC_DETAIL_HEADER"
+});
+
+export const connectionDetailsHeader = getHeader({
+  labelKey: "WS_COMMON_CONNECTION_DETAILS"
+});
+
+export const getReviewConnectionDetails = (isEditable = true) => {
   return getCommonGrayCard({
     headerDiv: {
       uiFramework: "custom-atoms",
@@ -160,15 +50,13 @@ export const getReviewTrade = (isEditable = true) => {
             sm: 10
           },
           ...getCommonSubHeader({
-            labelName: "Trade Details",
-            labelKey: "TL_COMMON_TR_DETAILS"
+            labelName: "Connection Details",
+            labelKey: "WS_COMMON_CONNECTION_DETAILS"
           })
         },
         editSection: {
           componentPath: "Button",
-          props: {
-            color: "primary"
-          },
+          props: { color: "primary" },
           visible: isEditable,
           gridDefination: {
             xs: 12,
@@ -179,209 +67,175 @@ export const getReviewTrade = (isEditable = true) => {
             editIcon: {
               uiFramework: "custom-atoms",
               componentPath: "Icon",
-              props: {
-                iconName: "edit"
-              }
+              props: { iconName: "edit" }
             },
             buttonLabel: getLabel({
               labelName: "Edit",
-              labelKey: "TL_SUMMARY_EDIT"
+              labelKey: "WS_SUMMARY_EDIT"
             })
           },
           onClickDefination: {
             action: "condition",
-            callBack: (state, dispatch) => {
-              changeStep(state, dispatch, "", 0);
-            }
+            // callBack: (state, dispatch) => {
+            //   changeStep(state, dispatch, "", 0);
+            // }
           }
         }
       }
     },
-    viewOne: getCommonContainer({
-      reviewApplicationType: getLabelWithValue(
-        {
-          labelName: "Application Type",
-          labelKey: "TL_APPLICATION_TYPE"
-        },
-        {
-          jsonPath:
-            "Licenses[0].tradeLicenseDetail.additionalDetail.applicationType",
-          localePrefix: {
-            moduleName: "TradeLicense",
-            masterName: "ApplicationType"
-          }
-        }
-      ),
-      reviewOldLicenseNo: getLabelWithValue(
-        {
-          labelName: "Old License Number",
-          labelKey: "TL_OLD_LICENSE_NO"
-        },
-        { jsonPath: "Licenses[0].oldLicenseNumber" }
-      ),
-      reviewLicenceType: getLabelWithValue(
-        {
-          labelName: "Licence Type",
-          labelKey: "TL_COMMON_TABLE_COL_LICENSE_TYPE"
-        },
-        {
-          jsonPath: "Licenses[0].licenseType",
-          localePrefix: {
-            moduleName: "TRADELICENSE",
-            masterName: "LICENSETYPE"
-          }
-        }
-      ),
-      reviewTradeName: getLabelWithValue(
-        {
-          labelName: "Trade Name",
-          labelKey: "TL_COMMON_TABLE_COL_TRD_NAME"
-        },
-        { jsonPath: "Licenses[0].tradeName" }
-      ),
-      reviewFromDate: getLabelWithValue(
-        { labelName: "From Date" },
-        {
-          jsonPath: "Licenses[0].validFrom",
-          callBack: convertEpochToDate
-        }
-      ),
-      reviewToDate: getLabelWithValue(
-        { labelName: "To Date" },
-        {
-          jsonPath: "Licenses[0].validTo",
-          callBack: convertEpochToDate
-        }
-      ),
-      reviewStructureType: getLabelWithValue(
-        { labelName: "Structure Type" },
-        {
-          jsonPath: "Licenses[0].tradeLicenseDetail.structureType",
-          localePrefix: {
-            moduleName: "common-masters",
-            masterName: "STRUCTURETYPE"
-          },
-          callBack: value => {
-            return value.split(".")[0];
-          }
-        }
-      ),
-      reviewSubStructureType: getLabelWithValue(
-        { labelName: "Structure Sub Type" },
-        {
-          jsonPath: "Licenses[0].tradeLicenseDetail.structureType",
-          localePrefix: {
-            moduleName: "common-masters",
-            masterName: "STRUCTURETYPE"
-          }
-        }
-      ),
-      reviewCommencementDate: getLabelWithValue(
-        {
-          labelName: "Commencement Date",
-          labelKey: "TL_NEW_TRADE_DETAILS_TRADE_COMM_DATE_LABEL"
-        },
-        {
-          jsonPath: "Licenses[0].commencementDate",
-          callBack: convertEpochToDate
-        }
-      ),
-      reviewGSTNo: getLabelWithValue(
-        {
-          labelName: "GST No.",
-          labelKey: "TL_NEW_TRADE_DETAILS_TRADE_GST_NO_LABEL"
-        },
-        {
-          jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.gstNo"
-        }
-      ),
-      reviewOperationalArea: getLabelWithValue(
-        {
-          labelName: "Operational Area",
-          labelKey: "TL_NEW_TRADE_DETAILS_OPR_AREA_LABEL"
-        },
-        { jsonPath: "Licenses[0].tradeLicenseDetail.operationalArea" }
-      ),
-      reviewNoOfEmployee: getLabelWithValue(
-        {
-          labelName: "No of Employees",
-          labelKey: "TL_NEW_TRADE_DETAILS_NO_EMPLOYEES_LABEL"
-        },
-        { jsonPath: "Licenses[0].tradeLicenseDetail.noOfEmployees" }
-      )
-    }),
-    div1: getDivider(),
-    viewTwo: tradeTypeCard,
-    div2: getDivider(),
-    viewThree: accessoriesCard,
-
-    div3: getDivider(),
-    viewFour: getCommonContainer({
-      reviewPropertyID: getLabelWithValue(
-        {
-          labelName: "Property Assessment ID",
-          labelKey: "TL_EMP_APPLICATION_PT_ASS_ID"
-        },
-        { jsonPath: "Licenses[0].propertyId" }
-      ),
-      reviewCity: getLabelWithValue(
-        {
-          labelName: "City",
-          labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
-        },
-        {
-          jsonPath: "Licenses[0].tradeLicenseDetail.address.city",
-          localePrefix: {
-            moduleName: "TENANT",
-            masterName: "TENANTS"
-          }
-        }
-      ),
-      reviewDoorNo: getLabelWithValue(
-        {
-          labelName: "Door/House No.",
-          labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
-        },
-        { jsonPath: "Licenses[0].tradeLicenseDetail.address.doorNo" }
-      ),
-      reviewBuildingName: getLabelWithValue(
-        {
-          labelName: "Building/Company Name",
-          labelKey: "TL_NEW_TRADE_DETAILS_BLDG_NAME_LABEL"
-        },
-        { jsonPath: "Licenses[0].tradeLicenseDetail.address.buildingName" }
-      ),
-      reviewStreetName: getLabelWithValue(
-        {
-          labelName: "Street Name",
-          labelKey: "TL_NEW_TRADE_DETAILS_SRT_NAME_LABEL"
-        },
-        { jsonPath: "Licenses[0].tradeLicenseDetail.address.street" }
-      ),
-      reviewMohalla: getLabelWithValue(
-        {
-          labelName: "Mohalla",
-          labelKey: "TL_NEW_TRADE_DETAILS_MOHALLA_LABEL"
-        },
-        { jsonPath: "Licenses[0].tradeLicenseDetail.address.locality.name" }
-      ),
-      reviewPincode: getLabelWithValue(
-        {
-          labelName: "Pincode",
-          labelKey: "TL_NEW_TRADE_DETAILS_PIN_LABEL"
-        },
-        { jsonPath: "Licenses[0].tradeLicenseDetail.address.pincode" }
-      ),
-      reviewElectricityNo: getLabelWithValue(
-        {
-          labelName: "Electricity Connection No.",
-          labelKey: "TL_NEW_TRADE_DETAILS_ELEC_CON_NO_LABEL"
-        },
-        {
-          jsonPath:
-            "Licenses[0].tradeLicenseDetail.additionalDetail.electricityConnectionNo"
-        }
-      )
-    })
+    viewOne: getPropertyDetails,
+    viewTwo: propertyLocationDetails,
+    viewThree: propertyOwnerDetails(),
+    viewFour: getConnectionDetails(),
   });
+};
+
+const propertyLocationDetails = {
+  uiFramework: "custom-containers",
+  componentPath: "MultiItem",
+  props: {
+    className: "common-div-css search-preview",
+    scheama: getCommonGrayCard({
+      div1: propertyLocationDetailsHeader,
+      propertyLocationDetailsContainer: getCommonContainer({
+        reviewCity: getLabelWithValue(
+          {
+            labelName: "City",
+            labelKey: "WS_PROP_DETAIL_CITY"
+          },
+          {
+            jsonPath:
+              "WaterConnection[0].property.address.city"
+          }
+        ),
+        reviewDoorOrHouseNumber: getLabelWithValue(
+          {
+            labelName: "Door/House No.",
+            labelKey: "WS_PROP_DETAIL_DHNO"
+          },
+          { jsonPath: "WaterConnection[0].property.address.doorNo" }
+        ),
+        reviewBuildingOrColonyName: getLabelWithValue(
+          {
+            labelName: "Building/Colony Name",
+            labelKey: "WS_PROP_DETAIL_BUILD_NAME_LABEL"
+          },
+          { jsonPath: "WaterConnection[0].property.address.buildingName" }
+        ),
+        reviewStreetName: getLabelWithValue(
+          {
+            labelName: "Street Name",
+            labelKey: "WS_PROP_DETAIL_STREET_NAME"
+          },
+          { jsonPath: "WaterConnection[0].property.address.street" }
+        ),
+        reviewLocalityOrMohalla: getLabelWithValue(
+          {
+            labelName: "Locality/Mohalla",
+            labelKey: "WS_PROP_DETAIL_LOCALITY_MOHALLA_LABEL"
+          },
+          { jsonPath: "WaterConnection[0].property.address.locality.name" }
+        ),
+        reviewPincode: getLabelWithValue(
+          {
+            labelName: "Pincode",
+            labelKey: "WS_PROP_DETAIL_PINCODE"
+          },
+          { jsonPath: "WaterConnection[0].property.address.pincode" }
+        ),
+      })
+    }),
+
+    items: [],
+    hasAddItem: false,
+    isReviewPage: true,
+    sourceJsonPath: "WaterConnection[0].property.address",
+    prefixSourceJsonPath:
+      "children.cardContent.children.propertyLocationDetailsContainer.children",
+    afterPrefixJsonPath: "children.value.children.key"
+  },
+  type: "array"
+};
+
+const getPropertyDetails = {
+  uiFramework: "custom-containers",
+  componentPath: "MultiItem",
+  props: {
+    className: "common-div-css search-preview",
+    scheama: getCommonGrayCard({
+      div2: propertyDetailsHeader,
+      getPropertyDetailsContainer: getCommonContainer({
+        reviewPropertyId: getLabelWithValue(
+          {
+            labelName: "Property Id",
+            labelKey: "WS_PROPERTY_ID_LABEL"
+          },
+          {
+            jsonPath: "WaterConnection[0].property.propertyId",
+            // callBack: value => {
+            //   return value.split(".")[0];
+            // }
+          }
+        ),
+        reviewPropertyType: getLabelWithValue(
+          {
+            labelName: "Property Type",
+            labelKey: "WS_PROPERTY_TYPE_LABEL"
+          },
+          {
+            jsonPath: "WaterConnection[0].property.propertyType",
+            // callBack: value => {
+            //   return value.split(".")[1];
+            // }
+          }
+        ),
+        reviewPropertyUsageType: getLabelWithValue(
+          {
+            labelName: "Property Usage Type",
+            labelKey: "WS_PROPERTY_USAGE_TYPE_LABEL"
+          },
+          {
+            jsonPath: "WaterConnection[0].property.usageCategory"
+          }
+        ),
+
+        reviewPropertySubUsageType: getLabelWithValue(
+          {
+            labelName: "Property Sub usage type",
+            labelKey: "WS_PROPERTY_SUB_USAGE_TYPE_LABEL"
+          },
+          { jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].uom" }
+        ),
+        reviewPlotSize: getLabelWithValue(
+          {
+            labelName: "Plot Size (in sq metres)",
+            labelKey: "WS_PROP_DETAIL_PLOT_SIZE_LABEL"
+          },
+          { jsonPath: "WaterConnection[0].property.landArea" }
+        ),
+        reviewNumberOfFloors: getLabelWithValue(
+          {
+            labelName: "Number Of Floors",
+            labelKey: "WS_PROPERTY_NO_OF_FLOOR_LABEL"
+          },
+          { jsonPath: "WaterConnection[0].property.noOfFloors" }
+        ),
+        rainwaterHarvestingFacility: getLabelWithValue(
+          {
+            labelKey: "WS_SERV_DETAIL_CONN_RAIN_WATER_HARVESTING_FAC",
+            labelName: "Rain Water Harvesting Facility"
+          },
+          { jsonPath: "WaterConnection[0].rainWaterHarvesting" }
+        )
+      })
+    }),
+    items: [],
+    hasAddItem: false,
+    isReviewPage: true,
+    sourceJsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits",
+    prefixSourceJsonPath:
+      "children.cardContent.children.getPropertyDetailsContainer.children",
+    afterPrefixJsonPath: "children.value.children.key"
+  },
+  type: "array"
 };

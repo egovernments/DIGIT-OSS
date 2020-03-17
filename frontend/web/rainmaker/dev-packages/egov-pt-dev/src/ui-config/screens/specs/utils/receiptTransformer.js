@@ -75,7 +75,7 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
   let data = {};
   let queryObject = [
     { key: "tenantId", value: tenant },
-    { key: "applicationNumber", value: applicationNumber }
+    { key: "propertyIds", value: applicationNumber }
   ];
   let response = await getSearchResults(queryObject);
 

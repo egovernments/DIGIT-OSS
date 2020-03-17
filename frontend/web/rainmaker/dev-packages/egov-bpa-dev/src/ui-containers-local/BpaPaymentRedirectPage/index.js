@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import get from "lodash/get";
 import { httpRequest } from "../../ui-utils/api";
 import { withRouter } from "react-router";
-import { getBpaSearchResults } from "../../ui-utils/commons";
+import { getAppSearchResults } from "../../ui-utils/commons";
 
 class BpaPaymentRedirect extends Component {
   componentDidMount = async () => {
@@ -27,7 +27,7 @@ class BpaPaymentRedirect extends Component {
           value: consumerCode
         }
       ];
-      const response = await getBpaSearchResults(queryObject);
+      const response = await getAppSearchResults(queryObject);
       const financialYear = get(response.Licenses[0], "financialYear");
       if (get(pgUpdateResponse, "Transaction[0].txnStatus") === "FAILURE") {
         window.location.href = `${

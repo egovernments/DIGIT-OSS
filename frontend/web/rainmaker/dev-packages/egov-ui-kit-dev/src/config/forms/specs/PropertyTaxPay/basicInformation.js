@@ -107,7 +107,7 @@ const formConfig = {
       const mergedMaster = mergeMaster(masterOne, masterTwo, "usageCategoryMajor");
       const typeOfUsageSorted = sortDropdown(mergedMaster, "label", true);
       set(action, "form.fields.typeOfUsage.dropDownData", typeOfUsageSorted);
-      masterOne = get(state, "common.generalMDMSDataById.PropertyType");
+      masterOne = Object.values(get(state, "common.generalMDMSDataById.PropertyType")).filter(item=> item.propertyType !== "BUILTUP");
       masterTwo = get(state, "common.generalMDMSDataById.PropertySubType");
       set(action, "form.fields.typeOfBuilding.dropDownData", mergeMaster(masterOne, masterTwo, "propertyType"));
       const propertyType=get(state,"common.prepareFormData.Properties[0].propertyDetails[0].propertyType");

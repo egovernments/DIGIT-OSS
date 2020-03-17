@@ -20,7 +20,7 @@ const styles = theme => ({
     marginRight: theme.spacing.unit * 2
   },
   button: {
-    margin: theme.spacing.unit
+    border : "1px solid #FE7A51"
   },
   leftIcon: {
     marginRight: theme.spacing.unit
@@ -30,6 +30,9 @@ const styles = theme => ({
   },
   iconSmall: {
     fontSize: 20
+  },
+  iconSize: {
+    width : 175
   }
 });
 
@@ -58,6 +61,7 @@ class MenuListComposition extends React.Component {
       <div className={classes.root} data-html2canvas-ignore={true}>
         <div>
           <Button
+            className={classes.button}
             buttonRef={node => {
               this.anchorEl = node;
             }}
@@ -67,10 +71,11 @@ class MenuListComposition extends React.Component {
             {...data.props}
           >
             <Icon className={classes.leftIcon} iconName={data.leftIcon} />
-            {data.label}
-            <Icon className={classes.rightIcon} iconName={data.rightIcon} />
+              <LabelContainer labelName={data.label.labelName} labelKey={data.label.labelKey} style={{color:data.props.style.color}}/>
+              <span style={{marginLeft:30 ,color : data.props.color}}> |  </span>
+            <Icon className={classes.rightIcon} iconName={data.rightIcon} color={data.props.color}/>
           </Button>
-          <Popper open={open} anchorEl={this.anchorEl} transition disablePortal>
+          <Popper open={open} anchorEl={this.anchorEl} style={{zIndex:100}} className={classes.iconSize} transition disablePortal>
             {({ TransitionProps, placement }) => (
               <Grow
                 {...TransitionProps}

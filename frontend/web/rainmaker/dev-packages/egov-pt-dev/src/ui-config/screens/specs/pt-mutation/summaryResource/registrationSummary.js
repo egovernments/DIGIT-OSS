@@ -7,6 +7,8 @@ import {
   getLabelWithValue
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { gotoApplyWithStep } from "../../utils/index";
+import { checkValueForNA } from "../../utils";
+import { convertEpochToDate, convertDateToEpoch } from "../../utils/index";
 
 const registrationDetails =  getCommonGrayCard({
   propertyLocationContainer:getCommonContainer({
@@ -17,16 +19,31 @@ const registrationDetails =  getCommonGrayCard({
       },
       {
         jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].name"
+          "Property.additionalDetails.reasonForTransfer",
+          callBack: checkValueForNA
       }
-    ), documentNo: getLabelWithValue(
+    ),
+    marketValue: getLabelWithValue(
+      {
+
+        labelName: "Market Value",
+            labelKey: "PT_MUTATION_MARKET_VALUE"
+      },
+      {
+        jsonPath:
+          "Property.additionalDetails.marketValue",
+          callBack: checkValueForNA
+      }
+    ),
+     documentNo: getLabelWithValue(
       {
         labelName: "Document No.",
         labelKey: "PT_MUTATION_DOCUMENT_NO"
       },
       {
         jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].fatherOrHusbandName"
+          "Property.additionalDetails.documentNumber",
+          callBack: checkValueForNA
       }
     ), documentDate: getLabelWithValue(
       {
@@ -35,7 +52,10 @@ const registrationDetails =  getCommonGrayCard({
       },
       {
         jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].gender"
+          "Property.additionalDetails.documentDate",
+          callBack: value => {
+            return convertEpochToDate(value);
+          }
       }
     ), documentValue: getLabelWithValue(
       {
@@ -44,17 +64,19 @@ const registrationDetails =  getCommonGrayCard({
       },
       {
         jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].pan"
+          "Property.additionalDetails.documentValue",
+          callBack: checkValueForNA
       }
     ),
-    saleDetails: getLabelWithValue(
+    remarks: getLabelWithValue(
       {
-        labelName: "Sale Details",
-        labelKey: "PT_MUTATION_SALE_DETAILS"
+        labelName: "Remarks",
+        labelKey: "PT_MUTATION_REMARKS"
       },
       {
         jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].mobileNumber"
+          "Property.additionalDetails.remarks",
+          callBack: checkValueForNA
       }
     )
   })
@@ -91,25 +113,25 @@ export const registrationSummary = getCommonGrayCard({
           xs: 4,
           align: "right"
         },
-        children: {
-          editIcon: {
-            uiFramework: "custom-atoms",
-            componentPath: "Icon",
-            props: {
-              iconName: "edit"
-            }
-          },
-          buttonLabel: getLabel({
-            labelName: "Edit",
-            labelKey: "PT_EDIT"
-          })
-        },
-        onClickDefination: {
-          action: "condition",
-          callBack: (state, dispatch) => {
-            gotoApplyWithStep(state, dispatch, 0);
-          }
-        }
+        // children: {
+        //   editIcon: {
+        //     uiFramework: "custom-atoms",
+        //     componentPath: "Icon",
+        //     props: {
+        //       iconName: "edit"
+        //     }
+        //   },
+          // buttonLabel: getLabel({
+          //   labelName: "Edit",
+          //   labelKey: "PT_EDIT"
+          // })
+       // },
+        // onClickDefination: {
+        //   action: "condition",
+        //   callBack: (state, dispatch) => {
+        //     gotoApplyWithStep(state, dispatch, 0);
+        //   }
+        // }
       }
     }
   },

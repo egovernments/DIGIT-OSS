@@ -14,24 +14,25 @@ const header = getCommonHeader({
 });
 
 const cardItems = [{
-        label: {
-            labelKey: "WS_COMMON_PAY_WS_BILL_HEADER",
-        },
-        icon: < PayWnsBillIcon / > ,
-        route: "search"
+    label: {
+        labelKey: "WS_COMMON_PAY_WS_BILL_HEADER",
     },
-    {
-        label: {
-            labelKey: "WS_MYCONNECTIONS_HEADER",
-        },
-        icon: < MyConnectionsIcon / > ,
-        route: "my-connections"
-    }
+    icon: < PayWnsBillIcon />,
+    route: "search"
+},
+{
+    label: {
+        labelKey: "WS_MYCONNECTIONS_HEADER",
+    },
+    icon: < MyConnectionsIcon />,
+    route: "my-connections"
+}
 ];
 
 const waterAndSewerageSearchAndResult = {
     uiFramework: "material-ui",
     name: "home",
+    moduleName: "egov-wns",
     beforeInitScreen: (action, state, dispatch) => {
         fetchData(action, state, dispatch);
         return action;
@@ -40,14 +41,16 @@ const waterAndSewerageSearchAndResult = {
         div: {
             uiFramework: "custom-atoms",
             componentPath: "Div",
+            moduleName: "egov-wns",
             props: {
-                className: "common-div-css"
+                // className: "common-div-css"
             },
             children: {
                 header: header,
                 applyCard: {
                     uiFramework: "custom-molecules",
                     componentPath: "LandingPage",
+                    moduleName: "egov-wns",
                     props: {
                         items: cardItems,
                         history: {}
@@ -56,115 +59,31 @@ const waterAndSewerageSearchAndResult = {
                 listCard: {
                     uiFramework: "custom-molecules-local",
                     moduleName: "egov-wns",
+                    componentPath: "NewConnection",
+                    props: {
+                        route:"/citizen/wns/apply"
+                    }
+                },
+                listCard1: {
+                    uiFramework: "custom-molecules-local",
+                    moduleName: "egov-wns",
+                    componentPath: "MyApplications",
+                },
+                listCard2: {
+                    uiFramework: "custom-molecules-local",
+                    moduleName: "egov-wns",
                     componentPath: "PastPayments",
                     props: {
                         route: "my-connections"
                     }
-
                 },
-                listCard2: {
+                listCard3: {
                     uiFramework: "custom-molecules-local",
                     moduleName: "egov-wns",
                     componentPath: "HowItWorks",
                 }
             }
         },
-        // div: {
-        //   uiFramework: "custom-atoms",
-        //   componentPath: "Div",
-        //   props: {
-        //     className: "common-div-css"
-        //   },
-        //   children: {
-        //     header: header,
-        //     applyCard: {
-        //       uiFramework: "custom-atoms",
-        //       componentPath: "Div",
-        //       children: {
-        //         card: getCommonCard({
-        //           applicationSuccessContainer: getCommonContainer({
-        //             icon: {
-        //               uiFramework: "custom-atoms",
-        //               componentPath: "Icon",
-        //               props: {
-        //                 iconName: "book",
-        //                 variant: "outlined",
-        //                 style: {
-        //                   fontSize: "110px",
-        //                   width: 120,
-        //                   height: 100,
-        //                   color: "rgba(0, 0, 0, 0.6)",
-        //                   marginLeft: -22
-        //                 },
-        //                 iconSize: "110px"
-        //               }
-        //             },
-        //             body: {
-        //               uiFramework: "custom-atoms",
-        //               componentPath: "Div",
-        //               children: {
-        //                 header: getCommonHeader({
-        //                   labelName: "Apply for New Trade License",
-        //                   labelKey: "TL_COMMON_APPL_NEW_LIC"
-        //                 }),
-        //                 break: getBreak(),
-        //                 applyButton: {
-        //                   componentPath: "Button",
-        //                   props: {
-        //                     variant: "contained",
-        //                     color: "primary",
-        //                     style: {
-        //                       width: "200px",
-        //                       height: "48px",
-        //                       marginRight: "40px"
-        //                     }
-        //                   },
-        //                   children: {
-        //                     collectPaymentButtonLabel: getLabel({
-        //                       labelName: "APPLY",
-        //                       labelKey: "TL_APPLY"
-        //                     })
-        //                   },
-        //                   onClickDefination: {
-        //                     action: "condition",
-        //                     callBack: showCityPicker
-        //                   },
-        //                   roleDefination: {
-        //                     rolePath: "user-info.roles",
-        //                     roles: ["CITIZEN"]
-        //                   }
-        //                 }
-        //               }
-        //             }
-        //           })
-        //         }),
-        //         break: getBreak(),
-        //         searchResults: searchResults
-        //       }
-        //     }
-        //   }
-        // },
-        // cityPickerDialog: {
-        //   componentPath: "Dialog",
-        //   props: {
-        //     open: false,
-        //     maxWidth: "md"
-        //   },
-        //   children: {
-        //     dialogContent: {
-        //       componentPath: "DialogContent",
-        //       props: {
-        //         classes: {
-        //           root: "city-picker-dialog-style"
-        //         }
-        //         // style: { minHeight: "180px", minWidth: "365px" }
-        //       },
-        //       children: {
-        //         popup: cityPicker
-        //       }
-        //     }
-        //   }
-        // }
     }
 };
 

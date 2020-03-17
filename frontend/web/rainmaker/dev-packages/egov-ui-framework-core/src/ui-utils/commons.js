@@ -7,7 +7,7 @@ import {
   getLocalization,
   getLocale
 } from "egov-ui-kit/utils/localStorageUtils";
-import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { toggleSnackbar,toggleSpinner,prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import orderBy from "lodash/orderBy";
 import get from "lodash/get";
 import set from "lodash/set";
@@ -200,16 +200,16 @@ export const getLocaleLabels = (label, labelKey, localizationLabels) => {
 };
 
 export const replaceStrInPath = (inputString, search, replacement) => {
-  String.prototype.replaceAll = function(search, replacement) {
+  String.prototype.replaceAll = function (search, replacement) {
     var target = this;
     return target.replace(new RegExp(search, "g"), replacement);
   };
   return inputString.replaceAll(search, replacement);
 };
 
-export const getFileUrlFromAPI = async (fileStoreId, tenantId) => {
+export const getFileUrlFromAPI = async (fileStoreId,tenantId) => {
   const queryObject = [
-    { key: "tenantId", value: tenantId? tenantId : commonConfig.tenantId },
+    { key: "tenantId", value: tenantId||commonConfig.tenantId },
     { key: "fileStoreIds", value: fileStoreId }
   ];
   try {
@@ -240,6 +240,64 @@ const getAllFileStoreIds = async ProcessInstances => {
   );
 };
 
+
+export const getFileUrl = (linkText="") => {
+  const linkList = linkText.split(",");
+  let fileURL = '';
+  linkList&&linkList.map(link => {
+    if (!link.includes('large') && !link.includes('medium') && !link.includes('small')) {
+      fileURL = link;
+    }
+  })
+  return fileURL;
+}
+
+export const setDocuments = async (
+  payload,
+  sourceJsonPath,
+  destJsonPath,
+  dispatch,
+  businessService
+) => {
+  const uploadedDocData = get(payload, sourceJsonPath);
+
+  const fileStoreIds =
+    uploadedDocData &&
+    uploadedDocData
+      .map(item => {
+        return item.fileStoreId;
+      })
+      .join(",");
+  const fileUrlPayload =
+    fileStoreIds && (await getFileUrlFromAPI(fileStoreIds));
+  const reviewDocData =
+    uploadedDocData &&
+    uploadedDocData.map((item, index) => {
+      return {
+        title: `${businessService}_${item.documentType}` || "",
+        link:
+          (fileUrlPayload &&
+            fileUrlPayload[item.fileStoreId] &&
+            getFileUrl(fileUrlPayload[item.fileStoreId])) ||
+          "",
+        linkText: "View",
+        name:
+          (fileUrlPayload &&
+            fileUrlPayload[item.fileStoreId] &&
+            decodeURIComponent(
+              getFileUrl(fileUrlPayload[item.fileStoreId])
+                .split("?")[0]
+                .split("/")
+                .pop()
+                .slice(13)
+            )) ||
+          `Document - ${index + 1}`
+      };
+    });
+  reviewDocData && dispatch(prepareFinalObject(destJsonPath, reviewDocData));
+};
+
+
 export const addWflowFileUrl = async (ProcessInstances, prepareFinalObject) => {
   const fileStoreIdByAction = await getAllFileStoreIds(ProcessInstances);
   const fileUrlPayload = await getFileUrlFromAPI(
@@ -250,11 +308,10 @@ export const addWflowFileUrl = async (ProcessInstances, prepareFinalObject) => {
     if (item.documents && item.documents.length > 0) {
       item.documents.forEach(i => {
         if (i.fileStoreId && fileUrlPayload[i.fileStoreId]) {
-          i.link = fileUrlPayload[i.fileStoreId].split(",")[0];
+          i.link = getFileUrl(fileUrlPayload[i.fileStoreId]);
           i.title = `TL_${i.documentType}`;
           i.name = decodeURIComponent(
-            fileUrlPayload[i.fileStoreId]
-              .split(",")[0]
+            getFileUrl(fileUrlPayload[i.fileStoreId])
               .split("?")[0]
               .split("/")
               .pop()
@@ -273,6 +330,7 @@ export const setBusinessServiceDataToLocalStorage = async (
   dispatch
 ) => {
   try {
+    dispatch(toggleSpinner());
     const payload = await httpRequest(
       "post",
       "egov-workflow-v2/egov-wf/businessservice/_search",
@@ -300,7 +358,9 @@ export const setBusinessServiceDataToLocalStorage = async (
         )
       );
     }
+    dispatch(toggleSpinner());
   } catch (e) {
+    dispatch(toggleSpinner());
     dispatch(
       toggleSnackbar(
         true,
@@ -331,7 +391,7 @@ export const handleFileUpload = (event, handleDocument, props, docName="") => {
   const S3_BUCKET = {
     endPoint: "filestore/v1/files"
   };
-  let uploadDocument = true;  
+  let uploadDocument = true;
   const { inputProps, maxFileSize, moduleName } = props;
   const input = event.target;
   if (input.files && input.files.length > 0) {

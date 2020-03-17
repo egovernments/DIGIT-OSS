@@ -9,11 +9,12 @@ import {
 
 import get from "lodash/get";
 import set from "lodash/set";
-
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import {
   commonTransform,
   objectToDropdown,
   getCurrentFinancialYear,
+  getnextFinancialYear,
   getAllDataFromBillingSlab
 } from "../utils";
 import {
@@ -46,7 +47,11 @@ export const stepper = getStepperObject(
   { props: { activeStep: 0 } },
   stepsData
 );
-
+export const pageResetAndChange = (state, dispatch,tenantId) => {
+  dispatch(prepareFinalObject("Licenses", [{ licenseType: "PERMANENT" }]));
+  dispatch(prepareFinalObject("LicensesTemp", []));
+ dispatch(setRoute(`/tradelicence/apply?tenantId=${tenantId}`));
+};
 export const header = getCommonContainer({
   header:
     getQueryArg(window.location.href, "action") !== "edit"
@@ -56,11 +61,9 @@ export const header = getCommonContainer({
               ? "(" + getCurrentFinancialYear() + ")"
               : ""
           }`,
-          dynamicArray: [getCurrentFinancialYear()],
-          labelKey:
-            process.env.REACT_APP_NAME === "Citizen"
-              ? "TL_COMMON_APPL_NEW_LICENSE"
-              : "TL_COMMON_APPL_NEW_LICENSE_YEAR"
+         // dynamicArray: getQueryArg(window.location.href, "action") === "EDITRENEWAL" ? [getnextFinancialYear(getCurrentFinancialYear())]:[getCurrentFinancialYear()],
+          labelKey: getQueryArg(window.location.href, "action") === "EDITRENEWAL" ? "TL_COMMON_APPL_RENEWAL_LICENSE_YEAR":"TL_COMMON_APPL_NEW_LICENSE_YEAR"
+
         })
       : {},
   applicationNumber: {
@@ -190,14 +193,18 @@ export const getData = async (action, state, dispatch) => {
       );
   await getMdmsData(action, state, dispatch);
   await getAllDataFromBillingSlab(getTenantId(), dispatch);
-  const applicationType = get(
-    state.screenConfiguration.preparedFinalObject,
-    "Licenses[0].tradeLicenseDetail.additionalDetail.applicationType",
-    null
-  );
+
+
   if (applicationNo) {
     //Edit/Update Flow ----
-    getQueryArg(window.location.href, "action") !== "edit" &&
+    const applicationType = get(
+      state.screenConfiguration.preparedFinalObject,
+      "Licenses[0].tradeLicenseDetail.additionalDetail.applicationType",
+      null
+    );
+    const isEditRenewal = getQueryArg(window.location.href,"action") === "EDITRENEWAL";
+
+    if(getQueryArg(window.location.href, "action") !== "edit" && !isEditRenewal ){
       dispatch(
         prepareFinalObject("Licenses", [
           {
@@ -211,12 +218,14 @@ export const getData = async (action, state, dispatch) => {
           }
         ])
       );
+    }
     // dispatch(prepareFinalObject("LicensesTemp", []));
+    await updatePFOforSearchResults(action, state, dispatch, applicationNo);
 
-    updatePFOforSearchResults(action, state, dispatch, applicationNo).then((response)=>{
-      const applicationType = get(
-        response,
-        "Licenses[0].tradeLicenseDetail.additionalDetail.applicationType",
+    if (!queryValue) {
+      const oldApplicationNo = get(
+        state.screenConfiguration.preparedFinalObject,
+        "Licenses[0].applicationNumber",
         null
       );
       getAllDataFromBillingSlab(getTenantId(1), dispatch,[{
@@ -326,6 +335,11 @@ const screenConfig = {
   // hasBeforeInitAsync:true,
   beforeInitScreen: (action, state, dispatch) => {
     const tenantId = getTenantId();
+    const URL=window.location.href
+    const URLsplit=URL.split("/")
+    if(URLsplit[URLsplit.length-1]=="apply"){
+      pageResetAndChange(state,dispatch,tenantId)
+    }
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     getData(action, state, dispatch).then(responseAction => {
       const queryObj = [{ key: "tenantId", value: tenantId }];

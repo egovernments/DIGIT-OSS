@@ -16,11 +16,11 @@ import { setRoute } from "egov-ui-kit/redux/app/actions";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import Label from "egov-ui-kit/utils/translationNode";
 import { Card } from "components";
-import orderBy from "lodash/orderBy";
 import { getWFConfig } from "./workflowRedirectionConfig";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import "./index.css";
 import ImportExportIcon from "@material-ui/icons/ImportExport";
+import "./index.css";
+import get from "lodash/get"
 
 class InboxData extends React.Component {
   state = {
@@ -28,7 +28,41 @@ class InboxData extends React.Component {
     workflowHistory: [],
     sortOrder: "asc",
     isSorting: false,
+    wfSlaConfig:[]
   };
+
+  componentDidMount = async () => {
+    let mdmsBody = {
+      MdmsCriteria: {
+        tenantId: process.env.REACT_APP_DEFAULT_TENANT_ID,
+        moduleDetails: [
+         {
+            moduleName: "common-masters",
+            masterDetails: [
+              {
+                name: "wfSlaConfig"
+              }
+            ]
+          }
+        ]
+      }
+    };
+    try {
+      const payload = await httpRequest(
+        "/egov-mdms-service/v1/_search",
+        "_search",
+        [],
+        mdmsBody
+      );
+      if(payload){
+        this.setState({
+          wfSlaConfig : get(payload.MdmsRes, "common-masters.wfSlaConfig")
+        })
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   getProcessIntanceData = async (pid) => {
     const tenantId = getTenantId();
@@ -72,29 +106,30 @@ class InboxData extends React.Component {
     // if (processInstances && processInstances.length > 0) {
     //   await addWflowFileUrl(processInstances, prepareFinalObject);
     // }
-    let contextPath = status === "Initiated" ? getWFConfig(row[0].hiddenText).INITIATED : getWFConfig(row[0].hiddenText).DEFAULT;
+    let contextPath = status === "Initiated" ? getWFConfig(row[0].hiddenText,row[0].subtext).INITIATED : getWFConfig(row[0].hiddenText,row[0].subtext).DEFAULT;
     let queryParams = `applicationNumber=${taskId}&tenantId=${tenantId}`;
+
+    if(row[0].subtext=="PT.CREATE"){
+      queryParams+='&type=property';
+    }
+    else  if(row[0].subtext=="ASMT"){
+      queryParams+='&type=assessment';
+    }
     this.props.setRoute(`${contextPath}?${queryParams}`);
   };
 
   getSlaColor = (sla, businessService) => {
     const { businessServiceSla } = this.props;
+    const { wfSlaConfig } = this.state;
     const MAX_SLA = businessServiceSla[businessService];
-    let slaValue = "";
-    if (sla <= 0) {
-      slaValue = "redSlab";
-    } else if (0 < sla && sla <= MAX_SLA - MAX_SLA / 3) {
-      slaValue = "yellowSlab";
-    } else {
-      slaValue = "greenSlab";
-    }
-    switch (slaValue) {
-      case "greenSlab":
-        return "inbox-cell-badge-primary sla-positive-value";
-      case "yellowSlab":
-        return "inbox-cell-badge-primary sla-middle-value";
-      case "redSlab":
-        return "inbox-cell-badge-primary sla-negative-value";
+    if(wfSlaConfig){
+      if( (MAX_SLA - (MAX_SLA*eval(wfSlaConfig[0].slotPercentage)) <= sla) && sla <= MAX_SLA){
+        return wfSlaConfig[0].positiveSlabColor;
+       }else if(0 < sla && sla < MAX_SLA - (MAX_SLA*eval(wfSlaConfig[0].slotPercentage))){
+         return wfSlaConfig[0].middleSlabColor;
+       }else{
+         return wfSlaConfig[0].negativeSlabColor;
+       }
     }
   };
 
@@ -119,7 +154,7 @@ class InboxData extends React.Component {
       <div>
         <Hidden only={["xs"]}>
           <Table>
-            <TableHead>
+            <TableHead style={{backgroundColor: "white", borderBottom: "1px solid rgb(211, 211, 211)"}}>
               <TableRow>
                 {data.headers.map((item, index) => {
                   let classNames = `inbox-data-table-headcell inbox-data-table-headcell-${index}`;
@@ -146,6 +181,7 @@ class InboxData extends React.Component {
                     </TableCell>
                   );
                 })}
+                <TableCell></TableCell>
               </TableRow>
             </TableHead>
             {data.rows.length === 0 ? (
@@ -163,7 +199,7 @@ class InboxData extends React.Component {
                           return (
                             <TableCell className={classNames}>
                               <div onClick={() => getModuleLink(item, row, index)} className="inbox-cell-text">
-                                {<a>{item.text} </a>}
+                                {<a style={{color: "#FE7A51"}}>{item.text} </a>}
                               </div>
                               <div className="inbox-cell-subtext">
                                 {<Label label={`CS_COMMON_INBOX_${item.subtext.toUpperCase()}`} color="#000000" />}
@@ -173,7 +209,7 @@ class InboxData extends React.Component {
                         } else if (item.badge) {
                           return (
                             <TableCell className={classNames}>
-                              <span class={this.getSlaColor(item.text, row[2].text.props.label.split("_")[1])}>{item.text}</span>
+                              <span class={"inbox-cell-badge-primary"} style={{backgroundColor : this.getSlaColor(item.text, row[2].text.props.label.split("_")[1])}}>{item.text}</span>
                             </TableCell>
                           );
                         } else if (item.historyButton) {
@@ -213,7 +249,7 @@ class InboxData extends React.Component {
                   <ImportExportIcon />
                   <Label className="sort-icon" label={"INBOX_SORT_ICON"} />
                 </div>
-              )}            
+              )}
           </div>
           {data.rows.length === 0 ? (
             <Card textChildren={<Label labelClassName="" label="COMMON_INBOX_NO_DATA" />} />
@@ -251,7 +287,7 @@ class InboxData extends React.Component {
                           <Label label={data.headers[4]} labelStyle={{ fontWeight: "500" }} />
                         </div>
                         <div className="card-sladiv-style">
-                          <span class={this.getSlaColor(row[4].text, row[2].text.props.label.split("_")[1])}>{row[4].text}</span>
+                          <span class={"inbox-cell-badge-primary"} style={{backgroundColor : this.getSlaColor(row[4].text, row[2].text.props.label.split("_")[1])}}>{row[4].text}</span>
                         </div>
 
                         <div className="card-viewHistory-icon" onClick={() => onHistoryClick(row[0])}>

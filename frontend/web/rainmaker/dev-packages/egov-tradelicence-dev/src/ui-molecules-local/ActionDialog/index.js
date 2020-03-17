@@ -86,7 +86,7 @@ class ActionDialog extends React.Component {
 
   render() {
     console.log('props',this.props);
-    
+
     let {
       open,
       onClose,
@@ -255,7 +255,7 @@ class ActionDialog extends React.Component {
                         }}
                         className="bottom-button"
                         onClick={() =>
-                          onButtonClick(buttonLabel, isDocRequired)
+                          onButtonClick('FORWARD', isDocRequired)
                         }
                       >
                         <LabelContainer

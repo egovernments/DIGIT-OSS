@@ -366,7 +366,7 @@ class TableData extends Component {
             selectedValue: ['ALL'],
             dropdownData: this.getUniqueList([
               {
-                value: "All",
+                value: "ALL",
                 label: getLocaleLabels("","CS_INBOX_SELECT_ALL",localizationLabels),
               }, ...localityDropdownList
             ])
@@ -375,7 +375,7 @@ class TableData extends Component {
             selectedValue: ['ALL'],
             dropdownData: this.getUniqueList([
               {
-                value: "All",
+                value: "ALL",
                 label: getLocaleLabels("","CS_INBOX_SELECT_ALL",localizationLabels),
               }, ...moduleDropdownList
             ])
@@ -384,7 +384,7 @@ class TableData extends Component {
             selectedValue: ['ALL'],
             dropdownData: this.getUniqueList([
               {
-                value: "All",
+                value: "ALL",
                 label: getLocaleLabels("","CS_INBOX_SELECT_ALL",localizationLabels),
               }, ...statusDropdownList
             ])
@@ -445,7 +445,10 @@ class TableData extends Component {
       const requestBody = [{ key: "tenantId", value: tenantId }];
       const responseData = await httpRequest("egov-workflow-v2/egov-wf/process/_search", "_search", requestBody);
       const assignedData = orderBy(
-        filter(responseData.ProcessInstances, (item) => get(item.assigner, "uuid") === uuid),
+        filter(responseData.ProcessInstances, (item) =>{
+          let assignes=get(item,'assignes');
+          return get(assignes?assignes[0]:{}, "uuid") === uuid
+      }),
         ["businesssServiceSla"]
       );
       const allData = orderBy(get(responseData, "ProcessInstances", []), ["businesssServiceSla"]);
@@ -554,6 +557,7 @@ class TableData extends Component {
             <div className="col-md-3 col-sm-3 col-xs-10 search-bar" style={{}}>
               <TextFieldIcon
               hintStyle={{top:'6px'}}
+              iconStyle={{top: 46}}
                 hintText={getLocaleLabels("","CS_INBOX_SEARCH",localizationLabels)}
                 value={searchFilter.value}
                 iconPosition="before"
@@ -584,7 +588,7 @@ class TableData extends Component {
             className={`inbox-tabs-container ${classes.textColorPrimary}`}
             indicatorColor="primary"
             textColor="primary"
-            style={{ borderBottom: "1px rgba(0, 0, 0, 0.11999999731779099) solid", textColor: "red" }}
+            style={{ borderBottom: "1px solid rgb(211, 211, 211)", textColor: "red", backgroundColor: "white", }}
           >
             {tabData.map((item) => {
               return (

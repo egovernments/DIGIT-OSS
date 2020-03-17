@@ -10,6 +10,11 @@ import { fetchProperties } from "egov-ui-kit/redux/properties/actions";
 import { getCommaSeperatedAddress } from "egov-ui-kit/utils/commons";
 import orderby from "lodash/orderBy";
 import get from "lodash/get";
+import { getDateFromEpoch } from "egov-ui-kit/utils/commons";
+import {getRowData} from "egov-ui-kit/utils/PTCommon";
+import {
+  getUserInfo
+} from "egov-ui-kit/utils/localStorageUtils";
 
 const innerDivStyle = {
   paddingTop: "16px",
@@ -74,15 +79,21 @@ class MyProperties extends Component {
       renderCustomTitle,
       numProperties
     } = this.props;
-    fetchProperties([ ]); //Unnecessary API call to prevent page break on reload
+    fetchProperties([]); //Unnecessary API call to prevent page break on reload
     renderCustomTitle(numProperties);
     title && addBreadCrumbs({ title: title, path: window.location.pathname });
   };
 
   onNewPropertyButtonClick = () => {
-    this.setState({
-      dialogueOpen: true
-    });
+
+    let link = `/property-tax/assessment-form`;
+    let moduleName = process.env.REACT_APP_NAME === "Citizen" ? '/citizen' : '/employee';
+    window.location.href = process.env.NODE_ENV === "production" ? moduleName + link : link;
+    // const { history } = this.props;
+    // history.push('/property-tax/assessment-form');
+    // this.setState({
+    //   dialogueOpen: true
+    // });
   };
 
   onListItemClick = item => {
@@ -90,7 +101,7 @@ class MyProperties extends Component {
     this.props.history.push(
       `/property-tax/my-properties/property/${encodeURIComponent(
         propertyId
-      )}/${tenantId}?isMutationApplication=true`
+      )}/${tenantId}`
     );
   };
 
@@ -133,7 +144,7 @@ class MyProperties extends Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state,ownProps) => {
   const { properties, common } = state;
   const { urls } = state.app;
   const { cities } = common;
@@ -141,14 +152,10 @@ const mapStateToProps = state => {
   const numProperties = propertiesById && Object.keys(propertiesById).length;
   const transformedPropertiesMobile = Object.values(propertiesById).map(
     (property, index) => {
-      return {
-        address: getCommaSeperatedAddress(property.address, cities),
-        propertyId: property.propertyId,
-        route: property.propertyId,
-        tenantId: property.tenantId,
-        oldPropertyId: property.oldPropertyId,
-        name: get(property, "propertyDetails[0].owners[0].name")
-      };
+      let date = getDateFromEpoch(property.auditDetails.createdTime);
+      const userType = JSON.parse(getUserInfo()).type;
+      const { history } = ownProps;
+      return getRowData(property,history);
     }
   );
   const transformedPropertiesWeb = Object.values(propertiesById).map(

@@ -42,12 +42,10 @@ class PastPayments extends Component {
 
   render() {
     const { urls, pastPaymentsDetails } = this.props;
-    let address = JSON.parse(getUserInfo()).permanentAddress ? JSON.parse(getUserInfo()).permanentAddress : "-"
     let name = JSON.parse(getUserInfo()).name ? JSON.parse(getUserInfo()).name : "-"
     const date = (from, to) => {
-      let fromDate = new Date(from)
-      let toDate = new Date(to)
-      return fromDate.getFullYear().toString() + '-' + toDate.getFullYear().toString().substring(2)
+      if (from !== undefined && to !== 'NA') { return convertEpochToDate(from) + " - " + convertEpochToDate(to); }
+      else { return "NA" }
     }
     const data = pastPaymentsDetails.map((element) =>
       <div style={{ marginLeft: '0px', padding: '0px', position: 'relative', borderBottom: '1px solid  rgb(224, 224, 224)', flexgrow: 1 }}>
@@ -99,7 +97,7 @@ class PastPayments extends Component {
               </div>
               <div style={{ height: "auto" }}>
                 <Label
-                  label={address}
+                  label={element.payerAddress ? element.payerAddress : "NA"}
                   labelStyle={secondaryTextLabelStyle}
                   fontSize="14px"
                   containerStyle={secondaryTextContainer}

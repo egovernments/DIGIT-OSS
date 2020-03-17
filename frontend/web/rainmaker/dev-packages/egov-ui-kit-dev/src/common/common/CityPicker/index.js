@@ -73,6 +73,7 @@ class CityPickerDialog extends Component {
           <TextFieldIcon
             {...field}
             errorStyle={{ bottom: "0px" }}
+            // hemanth please do the proper fix for this, we should not module specific code.
             value={getCityNameByCode((field || {}).value != 'uk' ? (field || {}).value : "", localizationLabels)}
             id="person-city"
             iconPosition="after"
@@ -121,8 +122,8 @@ class CityPickerDialog extends Component {
             innerDivStyle={{ paddingLeft: "50px",color:"#484848"  }}
             listItemStyle={{ borderBottom: "1px solid #eee",color:"#484848"}}
             items={displayInitialList ? prepareResultsForDisplay(cities) : prepareResultsForDisplay(results)}
-            
-            
+
+
           />
         </Dialog>
       </div>

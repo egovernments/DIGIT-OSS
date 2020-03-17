@@ -15,7 +15,7 @@ import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import {
   getQueryArg,
   setBusinessServiceDataToLocalStorage,
-  getFileUrlFromAPI
+  getFileUrlFromAPI,setDocuments
 } from "egov-ui-framework/ui-utils/commons";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import {
@@ -26,7 +26,7 @@ import {
   showHideAdhocPopup
 } from "../utils";
 
-import { footerReview, downloadPrintContainer } from "./applyResource/footer";
+import { footerReview, downloadPrintContainer,footerReviewTop  } from "./applyResource/footer";
 import {
   getFeesEstimateCard,
   getHeaderSideText,
@@ -124,6 +124,13 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
   set(payload, "Licenses[0].headerSideText", headerSideText);
 
   let rebateAmount = get(payload, "Licenses[0].tradeLicenseDetail.adhocExemption");
+  set(payload, "Licenses[0].assignee", []);
+  get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory") &&
+  get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory").split(
+    "."
+  )[0] === "INDIVIDUAL"
+    ? setMultiOwnerForSV(action, true)
+    : setMultiOwnerForSV(action, false);
 
   if(rebateAmount && rebateAmount < 0){
     set(payload, "Licenses[0].tradeLicenseDetail.adhocExemption", -rebateAmount);
@@ -161,11 +168,30 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
     payload,
     "Licenses[0].tradeLicenseDetail.applicationDocuments",
     "LicensesTemp[0].reviewDocData",
-    dispatch
+    dispatch,'TL'
   );
 
   let sts = getTransformedStatus(get(payload, "Licenses[0].status"));
   payload && dispatch(prepareFinalObject("Licenses[0]", payload.Licenses[0]));
+
+  //set business service data
+
+  const businessService = get(
+    state.screenConfiguration.preparedFinalObject,
+    "Licenses[0].workflowCode"
+  );
+  const businessServiceQueryObject = [
+    { key: "tenantId", value: tenantId },
+    {
+      key: "businessServices",
+      value: businessService ? businessService : "NewTL"
+    }
+  ];
+
+  await setBusinessServiceDataToLocalStorage(businessServiceQueryObject, dispatch);
+
+  //set Trade Types
+
   payload &&
     dispatch(
       prepareFinalObject(
@@ -175,6 +201,9 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
     );
   const LicenseData = payload.Licenses[0];
   const fetchFromReceipt = sts !== "pending_payment";
+
+
+  // generate estimate data
   createEstimateData(
     LicenseData,
     "LicensesTemp[0].estimateCardData",
@@ -182,13 +211,6 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
     {},
     fetchFromReceipt
   );
-  //Fetch Bill and populate estimate card
-  // const code = get(
-  //   payload,
-  //   "Licenses[0].tradeLicenseDetail.address.locality.code"
-  // );
-  // const queryObj = [{ key: "tenantId", value: tenantId }];
-  // // getBoundaryData(action, state, dispatch, queryObj, code);
 };
 
 export const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
@@ -197,9 +219,22 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
     !getQueryArg(window.location.href, "edited") &&
       (await searchResults(action, state, dispatch, applicationNumber));
 
-    // const status = getTransformedStatus(
-    //   get(state, "screenConfiguration.preparedFinalObject.Licenses[0].status")
-    // );
+   //check for renewal flow
+    const licenseNumber = get(
+      state.screenConfiguration.preparedFinalObject,
+      `Licenses[0].licenseNumber`
+    );
+    let queryObjectSearch = [
+      {
+        key: "tenantId",
+        value: tenantId
+      },
+      { key: "offset", value: "0" },
+      { key: "licenseNumbers", value: licenseNumber}
+    ];
+    const payload = await getSearchResults(queryObjectSearch);
+    const length = payload && payload.Licenses.length > 0 ? get(payload,`Licenses`,[]).length : 0;
+    dispatch(prepareFinalObject("licenseCount" ,length));
     const status = get(
       state,
       "screenConfiguration.preparedFinalObject.Licenses[0].status"
@@ -221,6 +256,11 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
         )
       );
     }
+
+    const financialYear = get(
+      state,
+      "screenConfiguration.preparedFinalObject.Licenses[0].financialYear"
+    );
 
     let data = get(state, "screenConfiguration.preparedFinalObject");
 
@@ -244,7 +284,7 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
         data,
         "Licenses[0].tradeLicenseDetail.applicationDocuments",
         "LicensesTemp[0].reviewDocData",
-        dispatch
+        dispatch,'TL'
       );
     }
 
@@ -287,10 +327,28 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
       applicationNumber,
       tenantId
     );
+    const CitizenprintCont=footerReviewTop(
+      action,
+      state,
+      dispatch,
+      status,
+      applicationNumber,
+      tenantId,
+      financialYear
+    );
+
 
     process.env.REACT_APP_NAME === "Citizen"
-      ? set(action, "screenConfig.components.div.children.headerDiv.children.helpSection.children", statusCont)
-      : set(action, "screenConfig.components.div.children.headerDiv.children.helpSection.children", printCont);
+      ? set(
+          action,
+          "screenConfig.components.div.children.headerDiv.children.helpSection.children",
+          CitizenprintCont
+        )
+      : set(
+          action,
+          "screenConfig.components.div.children.headerDiv.children.helpSection.children",
+          printCont
+        );
 
     // Get approval details based on status and set it in screenconfig
 
@@ -310,7 +368,7 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
           data,
           "Licenses[0].tradeLicenseDetail.verificationDocuments",
           "LicensesTemp[0].verifyDocData",
-          dispatch
+          dispatch,'TL'
         );
       } else {
         dispatch(
@@ -330,25 +388,56 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
       );
     }
 
+    const applicationType = get(
+      state.screenConfiguration.preparedFinalObject,
+      "Licenses[0].applicationType"
+    );
+
+    const headerrow = getCommonContainer({
+      header: getCommonHeader({
+        labelName: "Trade License Application (2018-2019)",
+        labelKey: applicationType === "RENEWAL"? "TL_TRADE_RENEW_APPLICATION":"TL_TRADE_APPLICATION"
+      }),
+    applicationLicence:getCommonContainer({
+      applicationNumber: {
+        uiFramework: "custom-atoms-local",
+        moduleName: "egov-tradelicence",
+        componentPath: "ApplicationNoContainer",
+        props: {
+          number: applicationNumber
+        }
+      },
+      licenceNumber: {
+        uiFramework: "custom-atoms-local",
+        moduleName: "egov-tradelicence",
+        componentPath: "licenceNoContainer",
+        visible: licenseNumber? true : false,
+        props: {
+          number: licenseNumber,
+        }
+      }
+    })
+    });
+    set(
+      action.screenConfig,
+      "components.div.children.headerDiv.children.header1.children.headertop",
+      headerrow
+    );
+
+
     const footer = footerReview(
       action,
       state,
       dispatch,
       status,
       applicationNumber,
-      tenantId
+      tenantId,
+      financialYear
     );
 
     process.env.REACT_APP_NAME === "Citizen"
       ? set(action, "screenConfig.components.div.children.footer", footer)
       : set(action, "screenConfig.components.div.children.footer", {});
-
-    // const userRoles = JSON.parse(getUserInfo()).roles;
-    //   userRoles.map((userRole)=>{
-    //   if(userRole.code=='TL_CEMP' &&  userRole.tenantId==tenantId && status=="APPROVED"){
-    //     set(action, "screenConfig.components.div.children.footer", footer)
-    //   }
-    // })
 
     if (status === "cancelled")
       set(
@@ -356,7 +445,6 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
         "screenConfig.components.div.children.headerDiv.children.helpSection.children.cancelledLabel.visible",
         true
       );
-
     setActionItems(action, obj);
     // loadReceiptGenerationData(applicationNumber, tenantId);
   }
@@ -420,18 +508,6 @@ const setStatusBasedValue = status => {
 };
 
 const headerrow = getCommonContainer({
-  header: getCommonHeader({
-    labelName: "Trade License Application (2018-2019)",
-    labelKey: "TL_TRADE_APPLICATION"
-  }),
-  applicationNumber: {
-    uiFramework: "custom-atoms-local",
-    moduleName: "egov-tradelicence",
-    componentPath: "ApplicationNoContainer",
-    props: {
-      number: applicationNumber
-    }
-  }
 });
 
 const estimate = getCommonGrayCard({
@@ -576,7 +652,9 @@ const screenConfig = {
                 xs: 12,
                 sm: 8
               },
-              ...headerrow
+
+             ...headerrow
+
             },
             helpSection: {
               uiFramework: "custom-atoms",
@@ -589,40 +667,7 @@ const screenConfig = {
                 xs: 12,
                 sm: 4,
                 align: "right"
-              },
-              // children:
-              //   process.env.REACT_APP_NAME === "Employee"
-              //     ? {}
-              //     : {
-              //       word1: {
-              //         ...getCommonTitle(
-              //           {
-              //             jsonPath: "Licenses[0].headerSideText.word1"
-              //           },
-              //           {
-              //             style: {
-              //               marginRight: "10px",
-              //               color: "rgba(0, 0, 0, 0.6000000238418579)"
-              //             }
-              //           }
-              //         )
-              //       },
-              //       word2: {
-              //         ...getCommonTitle({
-              //           jsonPath: "Licenses[0].headerSideText.word2"
-              //         })
-              //       },
-              //       cancelledLabel: {
-              //         ...getCommonHeader(
-              //           {
-              //             labelName: "Cancelled",
-              //             labelKey: "TL_COMMON_STATUS_CANC"
-              //           },
-              //           { variant: "body1", style: { color: "#E54D42" } }
-              //         ),
-              //         visible: false
-              //       }
-              //     }
+              }
             }
           }
         },
@@ -670,8 +715,31 @@ const screenConfig = {
             }
           }
         },
+        actionDialog: {
+          uiFramework: "custom-containers-local",
+          componentPath: "ResubmitActionContainer",
+          moduleName: "egov-tradelicence",
+          visible: process.env.REACT_APP_NAME === "Citizen" ? true : false,
+          props: {
+            open: true,
+            dataPath: "Licenses",
+            moduleName: "NewTL",
+            updateUrl: "/tl-services/v1/_update",
+            data: {
+              buttonLabel: "RESUBMIT",
+              moduleName: "NewTL",
+              isLast: false,
+              dialogHeader: {
+                labelName: "RESUBMIT Application",
+                labelKey: "WF_RESUBMIT_APPLICATION"
+              },
+              showEmployeeList: false,
+              roles: "CITIZEN",
+              isDocRequired: false
+            }
+          }
+        },
         tradeReviewDetails
-        //footer
       }
     },
     breakUpDialog: {

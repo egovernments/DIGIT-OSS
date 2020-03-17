@@ -33,6 +33,10 @@ const screenConfig = {
           props: {
             contents: [
               {
+                label: "TL_COMMON_TABLE_COL_APP_TYPE",
+                jsonPath: "applicationType"
+              },
+              {
                 label: "TL_COMMON_TABLE_COL_TRD_NAME",
                 jsonPath: "tradeName"
               },

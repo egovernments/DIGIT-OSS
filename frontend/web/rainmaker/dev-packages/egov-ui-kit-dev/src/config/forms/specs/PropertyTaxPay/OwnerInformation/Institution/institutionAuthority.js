@@ -1,5 +1,5 @@
 import get from "lodash/get";
-import { setFieldProperty } from "egov-ui-kit/redux/form/actions";
+import { setFieldProperty, handleFieldChange } from "egov-ui-kit/redux/form/actions";
 const formConfig = {
   name: "institutionAuthority",
   fields: {
@@ -19,6 +19,7 @@ const formConfig = {
       hintText: "PT_FORM3_MOBILE_NO_PLACEHOLDER",
       pattern: /^(\+\d{1,2}[-]{0,1})?\(?[6-9]\d{2}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/i,
       errorMessage: "PT_MOBILE_NUMBER_ERROR_MESSAGE",
+      required: true,
     },
     designation: {
       id: "authority-designation",
@@ -38,7 +39,6 @@ const formConfig = {
       required: true,
       pattern: /^[0-9]{11}$/i,
       errorMessage: "PT_LAND_NUMBER_ERROR_MESSAGE",
-      required: true,
     },
     email: {
       id: "authority-email",
@@ -60,7 +60,7 @@ const formConfig = {
     isSameAsPropertyAddress: {
       id: "rcpt",
       type: "checkbox",
-      jsonPath: "",
+      jsonPath: "Properties[0].propertyDetails[0].owners[0].isCorrespondenceAddress",
       errorMessage: "",
       floatingLabelText: "PT_FORM3_ADDRESS_CHECKBOX",
       value: "",
@@ -82,8 +82,10 @@ const formConfig = {
           ]
             .join(", ")
             .replace(/^(,\s)+|(,\s)+$/g, "")
-            .replace(/(,\s){2,}/g, ", ");
+            .replace(/(,\s){2,}/g, ", ")
+            .replace(":","");
           dispatch(setFieldProperty(formKey, "address", "value", correspondingAddress));
+          dispatch(handleFieldChange(formKey, "address", correspondingAddress));
         } else {
           dispatch(setFieldProperty(formKey, "address", "value", ""));
         }

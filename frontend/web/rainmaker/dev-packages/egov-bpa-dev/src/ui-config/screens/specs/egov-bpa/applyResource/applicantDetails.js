@@ -11,7 +11,7 @@ import {
   getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getBpaDetailsForOwner } from "../../utils";
+import { getBpaDetailsForOwner, getTodaysDateInYMD } from "../../utils";
 import get from "lodash/get";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import "./index.css";
@@ -109,64 +109,67 @@ const commonApplicantInformation = () => {
           md: 6
         }
       }),
-      genderRadioGroup: {
-        uiFramework: "custom-containers",
-        componentPath: "RadioGroupContainer",
-        gridDefination: {
-          xs: 12,
-          sm: 12,
-          md: 6
-        },
-        style : {
-          color: "black"
-        },
-        jsonPath: "BPA.owners[0].gender",
-        props: {
-          label: { name: "Gender", key: "NOC_GENDER_LABEL" },
-          className: "applicant-details-error textfield-enterable-selection radio-button-label formLabel, root",
-          buttons: [
-            {
-              labelName: "Male",
-              labelKey: "NOC_GENDER_MALE_RADIOBUTTON",
-              value: "MALE"
-            },
-            {
-              labelName: "FEMALE",
-              labelKey: "NOC_GENDER_FEMALE_RADIOBUTTON",
-              value: "FEMALE"
-            },
-            {
-              labelName: "Transgender",
-              labelKey: "NOC_GENDER_TRANSGENDER_RADIOBUTTON",
-              value: "TRANSGENDER"
-            }
-          ],
-          jsonPath: "BPA.owners[0].gender"
-        },
-        type: "array"
-      },
-      applicantDob: getDateField({
+      genderRadioGroup: getSelectField({
         label: {
-          labelName: "Date Of Birth",
-          labelKey: "NOC_APPLICANT_DOB_LABEL"
+          labelName: "Gender",
+          labelKey: "TL_NEW_OWNER_DETAILS_GENDER_LABEL"
         },
         placeholder: {
-          labelName: "DD/MM/YYYY",
-          labelKey: "NOC_ENTER_APPLICANT_DOB_PLACEHOLDER"
+          labelName: "Select Gender",
+          labelKey: "TL_NEW_OWNER_DETAILS_GENDER_PLACEHOLDER"
         },
         required: true,
-        pattern: getPattern("Date"),
-        errorMessage: "Invalid Date",
-        jsonPath: "BPA.owners[0].dob",
+        optionValue: "code",
+        optionLabel: "label",
+        jsonPath: "BPA.owners[0].gender",
+        data: [
+          {
+            code: "MALE",
+            label: "COMMON_GENDER_MALE"
+          },
+          {
+            code: "FEMALE",
+            label: "COMMON_GENDER_FEMALE"
+          },
+          {
+            code: "OTHERS",
+            label: "COMMON_GENDER_TRANSGENDER"
+          }
+        ],
         gridDefination: {
           xs: 12,
           sm: 12,
           md: 6
-        },
-        props: {
-          className: "applicant-details-error textfield-enterable-selection"
         }
       }),
+      applicantDob: {
+        ...getDateField({
+          label: {
+            labelName: "Date Of Birth",
+            labelKey: "NOC_APPLICANT_DOB_LABEL"
+          },
+          placeholder: {
+            labelName: "DD/MM/YYYY",
+            labelKey: "NOC_ENTER_APPLICANT_DOB_PLACEHOLDER"
+          },
+          required: true,
+          pattern: getPattern("Date"),
+          isDOB: true,
+          errorMessage: "TL_DOB_ERROR_MESSAGE",
+          jsonPath: "BPA.owners[0].dob",
+          props: {
+            className: "applicant-details-error textfield-enterable-selection",
+            inputProps: {
+              max: getTodaysDateInYMD()
+            }
+          },
+          gridDefination: {
+            xs: 12,
+            sm: 12,
+            md: 6
+          },
+        })
+      },
       applicantEmail: getTextField({
         label: {
           labelName: "Email",
@@ -190,12 +193,12 @@ const commonApplicantInformation = () => {
       }),
       fatherHusbandName: getTextField({
         label: {
-          labelName: "Father/Husband's Name",
-          labelKey: "NOC_APPLICANT_FATHER_HUSBAND_NAME_LABEL"
+          labelName: "Guardian Name",
+          labelKey: "BPA_APPLICANT_GUARDIAN_NAME_LABEL"
         },
         placeholder: {
-          labelName: "Enter Father/Husband's Name",
-          labelKey: "NOC_APPLICANT_FATHER_HUSBAND_NAME_PLACEHOLDER"
+          labelName: "Enter Guardian Name",
+          labelKey: "BPA_APPLICANT_GUARDIAN_NAME_PLACEHOLDER"
         },
         required: true,
         pattern: getPattern("Name"),
@@ -289,40 +292,40 @@ const commonApplicantInformation = () => {
           className: "applicant-details-error textfield-enterable-selection"
         }
       }),
-      specialApplicantCategory: getSelectField({
-        label: {
-          labelName: "Special Applicant Category",
-          labelKey: "NOC_SPECIAL_APPLICANT_CATEGORY_LABEL"
-        },
-        placeholder: {
-          labelName: "Select Special Applicant Category",
-          labelKey: "NOC_SPECIAL_APPLICANT_CATEGORY_PLACEHOLDER"
-        },
-        props: {
-          className: "textfield-enterable-selection"
-        },
-        required: true,
-        jsonPath: "BPA.owners[0].ownerType",
-        localePrefix: {
-          moduleName: "common-masters",
-          masterName: "OwnerType"
-        },
-        sourceJsonPath: "applyScreenMdmsData.common-masters.OwnerType",
-        gridDefination: {
-          xs: 12,
-          sm: 12,
-          md: 6
-        }
-      }),
+      // specialApplicantCategory: getSelectField({
+      //   label: {
+      //     labelName: "Special Applicant Category",
+      //     labelKey: "NOC_SPECIAL_APPLICANT_CATEGORY_LABEL"
+      //   },
+      //   placeholder: {
+      //     labelName: "Select Special Applicant Category",
+      //     labelKey: "NOC_SPECIAL_APPLICANT_CATEGORY_PLACEHOLDER"
+      //   },
+      //   props: {
+      //     className: "textfield-enterable-selection"
+      //   },
+      //   required: true,
+      //   jsonPath: "BPA.owners[0].ownerType",
+      //   localePrefix: {
+      //     moduleName: "common-masters",
+      //     masterName: "OwnerType"
+      //   },
+      //   sourceJsonPath: "applyScreenMdmsData.common-masters.OwnerType",
+      //   gridDefination: {
+      //     xs: 12,
+      //     sm: 12,
+      //     md: 6
+      //   }
+      // }),
       primaryOwner: {
         uiFramework: "custom-containers-local",
         moduleName: "egov-bpa",
-        componentPath: "CheckboxContainer",
-        jsonPath: "BPA.owners[0].primaryOwner",
+        componentPath: "BpaCheckboxContainer",
+        jsonPath: "BPA.owners[0].isPrimaryOwner",
         props: {
-          label : {
-            name : "Is Primary Owner ?",
-            key : "Is Primary Owner ?",
+          label: {
+            labelName: "Is Primary Owner ?",
+            labelKey: "BPA_IS_PRIMARY_OWNER_LABEL"
           },
           jsonPath: "BPA.owners[0].isPrimaryOwner"
         },
@@ -583,14 +586,12 @@ export const applicantDetails = getCommonCard({
             showComponent(dispatch, singleApplicantContainerJsonPath, true);
             showComponent(dispatch, multipleApplicantContainerJsonPath, false);
             showComponent(dispatch, institutionContainerJsonPath, false);
-            showComponent(dispatch, primaryOwnerJsonPath, false);
-            // dispatch(prepareFinalObject("BPA.owners[0].isPrimaryOwner", true));
+            dispatch(prepareFinalObject("BPA.owners[0].isPrimaryOwner", true));
           } else if (action.value.includes("MULTIPLEOWNERS")) {
             showComponent(dispatch, singleApplicantContainerJsonPath, false);
             showComponent(dispatch, multipleApplicantContainerJsonPath, true);
             showComponent(dispatch, institutionContainerJsonPath, false);
-            showComponent(dispatch, primaryOwnerJsonPath, true);
-            // dispatch(prepareFinalObject("BPA.owners[0].isPrimaryOwner", false));
+            dispatch(prepareFinalObject("BPA.owners[0].isPrimaryOwner", false));
           } else if (action.value.includes("INSTITUTIONAL")) {
             showComponent(dispatch, singleApplicantContainerJsonPath, false);
             showComponent(dispatch, multipleApplicantContainerJsonPath, false);

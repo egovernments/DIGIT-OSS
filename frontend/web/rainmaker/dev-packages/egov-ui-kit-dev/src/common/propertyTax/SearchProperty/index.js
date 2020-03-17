@@ -72,8 +72,8 @@ class SearchProperty extends Component {
       if (city && city.value) {
         queryParams.push({ key: "tenantId", value: city.value });
       }
-      if (ids && ids.value) {
-        queryParams.push({ key: "ids", value: ids.value });
+      if ( ids && ids.value) {
+        queryParams.push({ key: "propertyIds", value: ids.value });
       }
       if (oldpropertyids && oldpropertyids.value) {
         queryParams.push({ key: "oldpropertyids", value: oldpropertyids.value });
@@ -112,7 +112,7 @@ class SearchProperty extends Component {
             }
             : (e) => {
               // localStorageSet("draftId", "")
-              history.push(`/property-tax/property/${propertyId}/${tenantId}?isMutationApplication=true`);
+              history.push(`/property-tax/property/${propertyId}/${tenantId}`);
             }
         }
         style={{
@@ -144,9 +144,10 @@ class SearchProperty extends Component {
       applicationType = history.location.pathname.includes('property-tax') ? 'PT' : applicationType;
       const latestAssessment = getLatestPropertyDetails(propertyDetails);
       let name = latestAssessment.owners[0].name;
-      let guardianName = latestAssessment.owners[0].fatherOrHusbandName ? latestAssessment.owners[0].fatherOrHusbandName : "NA";
-      let assessmentNo = latestAssessment.assessmentNumber;
-      const uuid = get(latestAssessment, "citizenInfo.uuid");
+      // let guardianName = latestAssessment.owners[0].fatherOrHusbandName || "";
+      // let assessmentNo = latestAssessment.assessmentNumber;
+      // const uuid = get(latestAssessment, "citizenInfo.uuid");
+
       // let button = (
       //   <a
       //     onClick={

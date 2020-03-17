@@ -76,6 +76,53 @@ export const billSearchCard = getCommonCard({
         sm: 4
       }
     }),
+    serviceCategory: getSelectField({
+      label: {
+        labelName: "Service Category",
+        labelKey: "ABG_SERVICE_CATEGORY_LABEL"
+      },
+      placeholder: {
+        labelName: "Select Service Category",
+        labelKey: "ABG_SERVICE_CATEGORY_PLACEHOLDER"
+      },
+      required: true,
+      jsonPath: "searchScreen.businesService",
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      },
+      localePrefix : {
+        moduleName : "BillingService",
+        masterName : "BusinessService"
+      },
+      sourceJsonPath: "searchScreenMdmsData.BillingService.BusinessService",
+      beforeFieldChange :(action, state, dispatch) => {
+        const labelName = {
+          labelKey : `ABG_${action.value}_CONSUMER_CODE_LABEL`,
+          labelName : "Consumer Code"
+        }
+        const placeHolder = {
+          labelKey : `ABG_${action.value}_CONSUMER_CODE_PLACEHOLDER`,
+          labelName : "Enter Consumer Code"
+        }
+        dispatch(
+          handleField(
+            "billSearch",
+            "components.div.children.billSearchCard.children.cardContent.children.searchContainer.children.consumerCode",
+            "props.label",
+            labelName
+          )
+        );
+        dispatch(
+          handleField(
+            "billSearch",
+            "components.div.children.billSearchCard.children.cardContent.children.searchContainer.children.consumerCode",
+            "props.placeholders",
+            placeHolder
+          )
+        );
+      }
+    }),
     consumerCode: getTextField({
       label: {
         labelName: "Consumer Code",

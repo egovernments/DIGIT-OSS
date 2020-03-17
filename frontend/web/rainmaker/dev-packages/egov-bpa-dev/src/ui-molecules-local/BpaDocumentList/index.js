@@ -16,6 +16,7 @@ import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { UploadSingleFile } from "../../ui-molecules-local";
+import Typography from "@material-ui/core/Typography";
 
 const themeStyles = theme => ({
   documentContainer: {
@@ -76,8 +77,9 @@ const themeStyles = theme => ({
     alignItems: "center"
   },
   descriptionDiv: {
-    display: "flex",
-    alignItems: "center"
+    alignItems: "center",
+    display: "block",
+    marginTop: "20px",
   },
   formControl: {
     minWidth: 250,
@@ -188,16 +190,62 @@ class BpaDocumentList extends Component {
     prepareFinalObject("documentDetailsUploadRedux", documentDetailsUploadRedux);
   };
 
+  prepareDocumentsInEmployee = async (appDocumentList, bpaDetails) => {
+    let documnts = [];
+    if (appDocumentList) {
+      Object.keys(appDocumentList).forEach(function (key) {
+        if (appDocumentList && appDocumentList[key]) {
+          documnts.push(appDocumentList[key]);
+        }
+      });
+    }
+
+    prepareFinalObject("documentDetailsUploadRedux", {});
+    let requiredDocuments = [];
+    if (documnts && documnts.length > 0) {
+      documnts.forEach(documents => {
+        if (documents && documents.documents && documents.dropDownValues && documents.dropDownValues.value) {
+          let doc = {};
+          doc.documentType = documents.dropDownValues.value;
+          doc.fileStoreId = documents.documents[0].fileStoreId;
+          doc.fileStore = documents.documents[0].fileStoreId;
+          doc.fileName = documents.documents[0].fileName;
+          doc.fileUrl = documents.documents[0].fileUrl;
+          if (doc.id) {
+            doc.id = documents.documents[0].id;
+          }
+          if (bpaDetails.documents) {
+            bpaDetails.documents.push(doc);
+          } else {
+            bpaDetails.documents = [doc];
+          }
+        }
+      });
+
+      if(bpaDetails.documents && bpaDetails.documents.length > 0) {
+        var resArr = [];
+      bpaDetails.documents.forEach(function (item) {
+        var i = resArr.findIndex(x => x.documentType == item.documentType);
+        if (i <= -1) {
+          resArr.push(item);
+        }
+      });
+      bpaDetails.documents = resArr;
+      prepareFinalObject("BPA",  bpaDetails.documents);
+      }
+    }
+  }
+
   onUploadClick = uploadedDocIndex => {
     this.setState({ uploadedDocIndex });
   };
 
   handleDocument = async (file, fileStoreId) => {
     let { uploadedDocIndex } = this.state;
-    const { prepareFinalObject, documentDetailsUploadRedux } = this.props;
+    const { prepareFinalObject, documentDetailsUploadRedux, bpaDetails } = this.props;
     const fileUrl = await getFileUrlFromAPI(fileStoreId);
 
-    prepareFinalObject("documentDetailsUploadRedux", {
+    let appDocumentList = {
       ...documentDetailsUploadRedux,
       [uploadedDocIndex]: {
         ...documentDetailsUploadRedux[uploadedDocIndex],
@@ -209,7 +257,15 @@ class BpaDocumentList extends Component {
           }
         ]
       }
-    });
+    }
+
+    prepareFinalObject("documentDetailsUploadRedux", appDocumentList );
+
+    let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true
+
+    if(isEmployee) {
+      this.prepareDocumentsInEmployee(appDocumentList, bpaDetails);
+      }
   };
 
   removeDocument = remDocIndex => {
@@ -222,14 +278,21 @@ class BpaDocumentList extends Component {
   };
 
   handleChange = (key, event) => {
-    const { documentDetailsUploadRedux, prepareFinalObject } = this.props;
-    prepareFinalObject(`documentDetailsUploadRedux`, {
+    const { documentDetailsUploadRedux, prepareFinalObject, bpaDetails } = this.props;
+    let appDocumentList = {
       ...documentDetailsUploadRedux,
       [key]: {
         ...documentDetailsUploadRedux[key],
         dropDownValues: { value: event.target.value }
       }
-    });
+    }
+    prepareFinalObject(`documentDetailsUploadRedux`, appDocumentList);
+
+    let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true
+
+    if(isEmployee) {
+      this.prepareDocumentsInEmployee(appDocumentList, bpaDetails);
+    }
   };
 
   getUploadCard = (card, key) => {
@@ -263,6 +326,11 @@ class BpaDocumentList extends Component {
             style={styles.documentName}
           />
           {card.required && requiredIcon}
+          <Typography variant="caption">
+            <LabelContainer
+              labelKey={getTransformedLocale("TL_UPLOAD_RESTRICTIONS")}
+            />
+          </Typography>
         </Grid>
         <Grid item={true} xs={12} sm={6} md={4}>
           {card.dropDownValues && (
@@ -303,6 +371,7 @@ class BpaDocumentList extends Component {
             onButtonClick={() => this.onUploadClick(key)}
             inputProps={this.props.inputProps}
             buttonLabel={this.props.buttonLabel}
+            id={`doc-${key+1}`}
           />
         </Grid>
       </Grid>
@@ -365,7 +434,12 @@ const mapStateToProps = state => {
     "documentDetailsUploadRedux",
     {}
   );
-  return { documentDetailsUploadRedux, moduleName };
+  const bpaDetails = get(
+    screenConfiguration.preparedFinalObject,
+    "BPA",
+    {}
+  )
+  return { documentDetailsUploadRedux, moduleName, bpaDetails };
 };
 
 const mapDispatchToProps = dispatch => {

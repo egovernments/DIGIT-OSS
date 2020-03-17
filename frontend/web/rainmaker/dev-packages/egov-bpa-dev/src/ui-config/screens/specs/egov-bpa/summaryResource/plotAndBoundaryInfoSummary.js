@@ -7,8 +7,8 @@ import {
     getLabelWithValue,
     convertEpochToDate
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { gotoApplyWithStep } from "../../utils/index";
-import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
+import { gotoApplyWithStep, checkValueForNA } from "../../utils/index";
+import { getTransformedLocale, getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
 const getHeader = label => {
   return {
@@ -24,7 +24,7 @@ const getHeader = label => {
     type: "array"
   };
 };
-  
+
 export const  plotAndBoundaryInfoSummary = getCommonGrayCard({
     header: {
         uiFramework: "custom-atoms",
@@ -96,7 +96,8 @@ export const  plotAndBoundaryInfoSummary = getCommonGrayCard({
                             labelKey: "BPA_BOUNDARY_PLOT_AREA_LABEL"
                         },
                         {
-                            jsonPath: "scrutinyDetails.planDetail.plot.area"
+                            jsonPath: "scrutinyDetails.planDetail.plot.area",
+                            callBack: checkValueForNA
                         }
                     ),
                     kathaNumber: getLabelWithValue(
@@ -105,7 +106,8 @@ export const  plotAndBoundaryInfoSummary = getCommonGrayCard({
                             labelKey: "BPA_BOUNDARY_KHATA_NO_LABEL"
                         },
                         {
-                            jsonPath: "scrutinyDetails.planDetail.planInformation.khataNo"
+                            jsonPath: "scrutinyDetails.planDetail.planInformation.khataNo",
+                            callBack: checkValueForNA
                         }
                     ),
                     holdingNumber: getLabelWithValue(
@@ -114,7 +116,8 @@ export const  plotAndBoundaryInfoSummary = getCommonGrayCard({
                             labelKey: "BPA_BOUNDARY_HOLDING_NO_LABEL"
                         },
                         {
-                            jsonPath: "BPA.holdingNo"
+                            jsonPath: "BPA.holdingNo",
+                            callBack: checkValueForNA
                         }
                     ),
                     plotNo: getLabelWithValue(
@@ -123,7 +126,8 @@ export const  plotAndBoundaryInfoSummary = getCommonGrayCard({
                             labelKey: "BPA_BOUNDARY_PLOT_NO_LABEL"
                         },
                         {
-                            jsonPath: "scrutinyDetails.planDetail.planInformation.plotNo"
+                            jsonPath: "scrutinyDetails.planDetail.planInformation.plotNo",
+                            callBack: checkValueForNA
                         }
                     ),
                     cityTown: getLabelWithValue(
@@ -132,7 +136,10 @@ export const  plotAndBoundaryInfoSummary = getCommonGrayCard({
                             labelKey: "BPA_BOUNDARY_CITY_TOWN_LABEL"
                         },
                         {
-                            jsonPath: "BPAs[0].BPADetails.plotdetails.citytown.label"
+                            jsonPath: "BPAs[0].BPADetails.plotdetails.citytown.label",
+                            callBack: value => {
+                                return getQueryArg(window.location.href, "tenantId") || checkValueForNA;
+                              },
                         }
                     ),
                     landRegDetails: getLabelWithValue(
@@ -141,7 +148,8 @@ export const  plotAndBoundaryInfoSummary = getCommonGrayCard({
                             labelKey: "BPA_BOUNDARY_LAND_REG_DETAIL_LABEL"
                         },
                         {
-                            jsonPath: "BPA.registrationDetails"
+                            jsonPath: "BPA.registrationDetails",
+                            callBack: checkValueForNA
                         }
                     ),
                     whetherGovOrQuasi: getLabelWithValue(
@@ -150,7 +158,8 @@ export const  plotAndBoundaryInfoSummary = getCommonGrayCard({
                             labelKey: "BPA_BOUNDARY_GOVT_QUASI_LABEL"
                         },
                         {
-                            jsonPath: "BPA.govtOrQuasi"
+                            jsonPath: "BPA.govtOrQuasi",
+                            callBack: checkValueForNA
                         }
                     )
                 })
@@ -159,7 +168,7 @@ export const  plotAndBoundaryInfoSummary = getCommonGrayCard({
             hasAddItem: false,
             isReviewPage: true,
             sourceJsonPath: "scrutinyDetails.planDetail",
-            prefixSourceJsonPath: 
+            prefixSourceJsonPath:
                 "children.cardContent.children.applicantContainer.children",
             afterPrefixJsonPath: "children.value.children.key"
         },

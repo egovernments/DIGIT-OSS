@@ -1,7 +1,14 @@
 import { getSearchResults } from "../../../../../ui-utils/commons";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import {
+  handleScreenConfigurationFieldChange as handleField,
+  prepareFinalObject,
+} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 export const fetchData = async (action, state, dispatch) => {
+
+
+  
+    
   const response = await getSearchResults();
   //const mdmsRes = await getMdmsData(dispatch);
   //   let tenants =
@@ -17,11 +24,19 @@ export const fetchData = async (action, state, dispatch) => {
   //     )
   //   );
   try {
-    if (response && response.FireNOCs && response.FireNOCs.length > 0) {
-      dispatch(prepareFinalObject("searchResults", response.FireNOCs));
+    if (response && response.Properties && response.Properties.length > 0) {
+      dispatch(prepareFinalObject("searchResults", response.Properties));
       dispatch(
-        prepareFinalObject("myApplicationsCount", response.FireNOCs.length)
+        prepareFinalObject("myApplicationsCount", response.Properties.length)
       );
+      dispatch(
+        handleField(
+          "my-applications",
+          "components.div.children.header.children.key",
+          "props.dynamicArray",
+          response.Properties.length ? [response.Properties.length] : [0]
+        )
+      )
     }
   } catch (error) {
     console.log(error);

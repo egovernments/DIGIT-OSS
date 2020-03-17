@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import SelectField from "material-ui/SelectField";
 import MenuItem from "material-ui/MenuItem";
 import Label from "../../utils/translationNode";
-import isEmpty from "lodash/isEmpty";
 import "./index.css";
 
 const floatingLabelStyle = {
@@ -77,14 +76,15 @@ const DropDownUi = ({
     return label&&label.toUpperCase().replace(/[.:-\s\/]/g, "_");
   };
 
-  const getDropdownLabel = (value) => {
+  const getDropdownLabel = (value,label) => {
     return typeof localePrefix === "string" ? (
       <Label label={`${getTransformedLocale(localePrefix)}_${getTransformedLocale(value)}`} />
     ) : typeof localePrefix === "object" ? (
       <Label label={`${getTransformedLocale(moduleName)}_${getTransformedLocale(masterName)}_${getTransformedLocale(value)}`} />
-    ) : (
-      value
-    );
+    ) : typeof localePrefix === "boolean" ? (
+       <Label label={label} />
+    ) :
+      value;
   };
 
   const renderSelectMenuItems = () => {
@@ -94,7 +94,7 @@ const DropDownUi = ({
           className="menu-class"
           key={index}
           value={option.value}
-          primaryText={localePrefix ? getDropdownLabel(option.value) : option.label}
+          primaryText={localePrefix ? getDropdownLabel(option.value,option.label) :option.label}
         />
       );
     });
@@ -136,7 +136,7 @@ const DropDownUi = ({
       hintStyle={{ ...hintBaseStyle, ...hintStyle }}
       {...rest}
     >
-      {dropDownData && renderSelectMenuItems()}
+      {dropDownData && dropDownData.length > 0 &&  renderSelectMenuItems()}
     </SelectField>
   );
 };

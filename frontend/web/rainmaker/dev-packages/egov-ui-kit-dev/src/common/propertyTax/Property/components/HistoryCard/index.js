@@ -33,7 +33,7 @@ const HistoryCard = ({ header, backgroundColor = 'rgb(242, 242, 242)', items = [
       {items && <Card style={{ backgroundColor, boxShadow: 'none' }}
         textChildren={
           <div >
-            <div className="pt-rf-title rainmaker-displayInline" style={{ justifyContent: "space-between", margin: '5px 0px 5px 0px' }}>
+            <div className="pt-rf-title rainmaker-displayInline" onClick={() => onHeaderClick()} style={{ justifyContent: "space-between", margin: '5px 0px 5px 0px' ,cursor: 'pointer' }}>
               <div className="rainmaker-displayInline" style={{ alignItems: "center", marginLeft: '13px' }}>
                 {header && <Label
                   labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.87)", fontWeight: "400", lineHeight: "19px" }}

@@ -11,6 +11,7 @@ import {mutationDetails
    } from "./applyResourceMutation/mutationDetails";
    import {registrationDetails} from "./applyResourceMutation/registrationDetails";
    import {transferorDetails} from "./applyResourceMutation/transferorDetails";
+   import cloneDeep from "lodash/cloneDeep";
    import {
     transferorSummary,transferorInstitutionSummary
   } from "./summaryResource/transferorSummary";
@@ -22,7 +23,7 @@ import {
   prepareFinalObject,
   handleScreenConfigurationFieldChange as handleField
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId,getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "../../../../ui-utils";
 import {
   sampleSearch,
@@ -38,7 +39,7 @@ import {
   setApplicationNumberBox
 } from "../../../../ui-utils/commons";
 import { propertySummary } from "./summaryResource/propertySummary";
-import { transfereeSummary } from "./summaryResource/transfereeSummary";
+import { transfereeSummary,transfereeInstitutionSummary } from "./summaryResource/transfereeSummary";
 import { registrationSummary } from "./summaryResource/registrationSummary";
 import { declarationSummary } from "./summaryResource/declarationSummary";
 
@@ -96,8 +97,8 @@ export const header = getCommonContainer({
     props: {
       number: getQueryArg(window.location.href, "consumerCode"),
       label: {
-        labelValue: "Application No.",
-        labelKey: "PT_MUTATION_APPLICATION_NO"
+        labelValue: "Property Tax Unique ID.",
+        labelKey: "PT_PROPERTY_TAX_UNIQUE_ID"
     }
     },
     visible: true
@@ -114,6 +115,7 @@ export const formwizardFirstStep = {
   },
   children: {
     transferorDetails,
+    transferorInstitutionSummary,
     transfereeDetails,
     mutationDetails,
     registrationDetails
@@ -139,26 +141,26 @@ export const formwizardThirdStep = {
     id: "apply_form3"
   },
   children:{
-    summary:getCommonCard({  
+    summary:getCommonCard({
       transferorSummary: transferorSummary,
-      // transferorInstitutionSummary:transferorInstitutionSummary,
+       transferorInstitutionSummary:transferorInstitutionSummary,
       transfereeSummary: transfereeSummary,
-      // transfereeInstitutionSummary: transfereeInstitutionSummary,
+       transfereeInstitutionSummary: transfereeInstitutionSummary,
       mutationSummary:mutationSummary,
       registrationSummary:registrationSummary,
       documentsSummary: documentsSummary ,
       declarationSummary:declarationSummary
     }),
- 
+
   },
-  
+
   visible: false
 };
 
 const getPropertyData = async (action, state, dispatch) => {
   let tenantId =getQueryArg(window.location.href,"tenantId");
   let consumerCode=getQueryArg(window.location.href,"consumerCode");
-    
+
   try {
     let queryObject = [
       {
@@ -166,19 +168,84 @@ const getPropertyData = async (action, state, dispatch) => {
         value: tenantId
       },
       {
-        key: "ids",
+        key: "propertyIds",
         value: consumerCode
       }
     ];
     let payload = null;
     payload = await httpRequest(
       "post",
-      "/pt-services-v2/property/_search",
+      "/property-services/property/_search",
       "_search",
       queryObject,
-      
+
     );
-    dispatch(prepareFinalObject("Properties", payload.Properties));
+    dispatch(prepareFinalObject("Property", payload.Properties[0]));
+
+    if (
+      get(
+        state,
+        "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType",
+        ""
+      ).includes("MULTIPLEOWNERS")
+    ) {
+      set(
+        action.screenConfig,
+        "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.props.style",
+        { display: "none" }
+      );
+      set(
+        action.screenConfig,
+        "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer.props.style",
+        {}
+      );
+    } else if (
+      get(
+        state,
+        "screenConfiguration.preparedFinalObject.Property.ownershipCategory",
+        ""
+      ).includes("INSTITUTIONAL")
+    ) {
+      set(
+        action.screenConfig,
+        "components.div.children.formwizardFirstStep.children.transferorDetails.props.style",
+        { display: "none" }
+      );
+      set(
+        action.screenConfig,
+        "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorSummary.props.style",
+        { display: "none" }
+      );
+      set(
+        action.screenConfig,
+        "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorInstitutionSummary.props.style",
+        {}
+      );
+      set(
+        action.screenConfig,
+      "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transfereeSummary.props.style",
+      {display: "none"}
+      );
+    }else{
+      // set(
+      //   action.screenConfig,
+      //   "components.div.children.formwizardFirstStep.children.transferorDetails.props.style",
+      //   { display: "none" }
+      // );
+      set(
+        action.screenConfig,
+        "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorInstitutionSummary.props.style",
+        { display: "none" }
+      );
+
+      set(
+        action.screenConfig,
+        "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transfereeInstitutionSummary.props.style",
+        { display: "none" }
+      );
+    }
+
+    dispatch(prepareFinalObject("PropertiesTemp",cloneDeep(payload.Properties)));
   } catch (e) {
     console.log(e);
   }
@@ -186,11 +253,7 @@ const getPropertyData = async (action, state, dispatch) => {
 
 
 const getMdmsData = async (action, state, dispatch) => {
-  let tenantId =
-    get(
-      state.screenConfiguration.preparedFinalObject,
-      "FireNOCs[0].fireNOCDetails.propertyDetails.address.city"
-    ) || getTenantId();
+  let tenantId = process.env.REACT_APP_NAME === "Employee" ?  getTenantId() : JSON.parse(getUserInfo()).permanentCity;
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: tenantId,
@@ -219,7 +282,7 @@ const getMdmsData = async (action, state, dispatch) => {
             }
           ]
         },
-        { moduleName: "FireNoc", masterDetails: [{ name: "Documents" }] }
+        { moduleName: "PropertyTax", masterDetails: [{ name: "Documents" }] }
       ]
     }
   };
@@ -237,6 +300,32 @@ const getMdmsData = async (action, state, dispatch) => {
     console.log(e);
   }
 };
+
+const getMdmsTransferReasonData = async (action, state, dispatch) => {
+  let tenantId ='pb'
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: tenantId,
+      moduleDetails: [
+        { moduleName: "PropertyTax", masterDetails: [ { name: "ReasonForTransfer" }] }
+      ]
+    }
+  };
+  try {
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+    dispatch(prepareFinalObject("ReasonForTransfer", payload.MdmsRes));
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 
 const getFirstListFromDotSeparated = list => {
   list = list.map(item => {
@@ -282,24 +371,24 @@ export const prepareEditFlow = async (
   applicationNumber,
   tenantId
 ) => {
-  const buildings = get(
-    state,
-    "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.buildings",
-    []
-  );
-  if (applicationNumber && buildings.length == 0) {
+  // const buildings = get(
+  //   state,
+  //   "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.buildings",
+  //   []
+  // );
+  if (applicationNumber) {
     let response = await getSearchResults([
       {
         key: "tenantId",
         value: tenantId
       },
-      { key: "applicationNumber", value: applicationNumber }
+      { key: "propertyIds", value: applicationNumber }
     ]);
     // let response = sampleSingleSearch();
 
     response = furnishNocResponse(response);
 
-    dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", [])));
+    dispatch(prepareFinalObject("Properties", get(response, "Properties", [])));
     if (applicationNumber) {
       setApplicationNumberBox(state, dispatch, applicationNumber);
     }
@@ -349,11 +438,17 @@ const screenConfig = {
     );
     const tenantId = getQueryArg(window.location.href, "tenantId");
     const step = getQueryArg(window.location.href, "step");
+    dispatch(
+      prepareFinalObject(
+        "Property.additionalDetails",
+        {}
+      )
+    );
     getPropertyData(action,state,dispatch);
 
     //Set Module Name
     set(state, "screenConfiguration.moduleName", "pt-mutation");
-    
+
     // Set MDMS Data
     getMdmsData(action, state, dispatch).then(response => {
       // Set Dropdowns Data
@@ -388,7 +483,8 @@ const screenConfig = {
       prepareDocumentsUploadData(state, dispatch);
     });
 
-    // Search in case of EDIT flow
+getMdmsTransferReasonData(action, state, dispatch);
+    // Search in cprepareDocumentsUploadDataase of EDIT flow
     prepareEditFlow(state, dispatch, applicationNumber, tenantId);
 
     // Code to goto a specific step through URL
@@ -470,6 +566,10 @@ const screenConfig = {
         { visibility: "hidden" }
       );
     }
+
+
+
+
     // if (
     //   get(
     //     state,
@@ -490,18 +590,28 @@ const screenConfig = {
     // } else if (
     //   get(
     //     state,
-    //     "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType",
+    //     "screenConfiguration.preparedFinalObject.Properties[0].ownershipCategory",
     //     ""
     //   ).includes("INSTITUTIONAL")
     // ) {
     //   set(
     //     action.screenConfig,
-    //     "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.props.style",
+    //     "components.div.children.formwizardFirstStep.children.transferorDetails.props.style",
     //     { display: "none" }
     //   );
     //   set(
     //     action.screenConfig,
-    //     "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer.props.style",
+    //     "components.div.children.formwizardFirstStep.children.transferorDetails.props.style",
+    //     { display: "none" }
+    //   );
+    //   set(
+    //     action.screenConfig,
+    //     "components.div.children.formwizardFirstStep.children.transferorDetails.props.style",
+    //     { display: "none" }
+    //   );
+    //   set(
+    //     action.screenConfig,
+    //     "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorInstitutionSummary.props.style",
     //     {}
     //   );
     //   set(
@@ -509,7 +619,15 @@ const screenConfig = {
     //     "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.applicantSubType.props.style",
     //     {}
     //   );
+    // }else{
+    //   set(
+    //     action.screenConfig,
+    //     "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorInstitutionSummary.props.style",
+    //     { display: "none" }
+    //   );
     // }
+
+
     set(
       action.screenConfig,
       "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.propertySummary.children.cardContent.children.header.children.editSection.visible",
@@ -520,7 +638,7 @@ const screenConfig = {
       "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorSummary.children.cardContent.children.header.children.editSection.visible",
       false
     );
- 
+
     return action;
   },
   components: {

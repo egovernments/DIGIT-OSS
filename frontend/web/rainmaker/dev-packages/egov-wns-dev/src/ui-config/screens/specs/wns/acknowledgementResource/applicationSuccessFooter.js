@@ -145,7 +145,7 @@ export const applicationSuccessFooter = (
       children: {
         downloadReceiptButtonLabel: getLabel({
           labelName: "GO TO HOME",
-          labelKey: "TL_COMMON_BUTTON_HOME"
+          labelKey: "WS_COMMON_BUTTON_HOME"
         })
       },
       onClickDefination: {
@@ -167,7 +167,8 @@ export const applicationSuccessFooter = (
       children: {
         downloadFormButtonLabel: getLabel({
           labelName: "DOWNLOAD CONFIRMATION FORM",
-          labelKey: "TL_APPLICATION_BUTTON_DOWN_CONF"
+          labelKey:"WS_COMMON_BUTTON_DOWNLOAD"
+          // labelKey: "WS_APPLICATION_BUTTON_DOWN_CONF"
         })
       },
       onClickDefination: {
@@ -197,7 +198,8 @@ export const applicationSuccessFooter = (
       children: {
         printFormButtonLabel: getLabel({
           labelName: "PRINT CONFIRMATION FORM",
-          labelKey: "TL_APPLICATION_BUTTON_PRINT_CONF"
+          labelKey:"WS_COMMON_BUTTON_PRINT"
+          // labelKey: "WS_APPLICATION_BUTTON_PRINT_CONF"
         })
       },
       onClickDefination: {

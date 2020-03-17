@@ -1,6 +1,6 @@
 import React from "react";
 // nodejs library that concatenates classes
-// import classNames from "classnames";
+
 // nodejs library to set properties for components
 import PropTypes from "prop-types";
 import SwipeableViews from "react-swipeable-views";
@@ -15,6 +15,7 @@ import GridContainer from "@material-ui/core/Grid";
 import GridItem from "@material-ui/core/Grid";
 
 import navPillsStyle from "./css.js";
+import LabelContainer from "egov-ui-framework/ui-containers/LabelContainer";
 
 class NavPills extends React.Component {
   constructor(props) {
@@ -24,9 +25,9 @@ class NavPills extends React.Component {
     };
   }
   handleChange = (event, active) => {
-    const {handleClick}=this.props;
+    const { handleClick } = this.props;
     this.setState({ active });
-    handleClick(active)
+    handleClick(active);
   };
   handleChangeIndex = index => {
     this.setState({ active: index });
@@ -45,7 +46,12 @@ class NavPills extends React.Component {
         {tabs.map((prop, key) => {
           return (
             <Tab
-              label={prop.tabButton}
+              label={
+                <LabelContainer
+                  labelName={prop.tabButton.labelName}
+                  labelKey={prop.tabButton.labelKey}
+                />
+              }
               key={key}
               classes={{ root: classes.tabRoot, selected: classes.tabSelected }}
             />
@@ -55,19 +61,13 @@ class NavPills extends React.Component {
     );
     const tabContent = (
       <div className={classes.contentWrapper}>
-        <SwipeableViews
-          axis={direction === "rtl" ? "x-reverse" : "x"}
-          index={this.state.active}
-          onChangeIndex={this.handleChangeIndex}
-        >
           {tabs.map((prop, key) => {
-            return (
-              <div className={classes.tabContent} key={key}>
-                {prop.tabContent}
-              </div>
-            );
-          })}
-        </SwipeableViews>
+          return this.state.active===key? (
+            <div className={classes.tabContent} key={key} >
+              {prop.tabContent}
+            </div>
+          ):null;
+        })}
       </div>
     );
     return horizontal !== undefined ? (

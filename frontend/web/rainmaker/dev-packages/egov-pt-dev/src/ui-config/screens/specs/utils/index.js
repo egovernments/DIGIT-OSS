@@ -7,10 +7,12 @@ import {
   getTransformedLocalStorgaeLabels,
   getLocaleLabels
 } from "egov-ui-framework/ui-utils/commons";
+import store from "ui-redux/store";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "../../../../ui-utils/api";
+import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons"
 import isUndefined from "lodash/isUndefined";
 import {
   getCommonCard,
@@ -203,31 +205,45 @@ export const getFinancialYearDates = (format, et) => {
 export const gotoApplyWithStep = (state, dispatch, step) => {
   const applicationNumber = getQueryArg(
     window.location.href,
-    "applicationNumber"
+    "consumerCode"
+  );
+  const tenantId = getQueryArg(
+    window.location.href,
+    "tenantId"
   );
   const tenantId = getQueryArg(
     window.location.href,
     "tenantId"
   );
   const applicationNumberQueryString = applicationNumber
-    ? `&applicationNumber=${applicationNumber}&tenantId=${tenantId}`
+    ? `consumerCode=${applicationNumber}&tenantId=${tenantId}`
     : ``;
   const applyUrl =
     process.env.REACT_APP_SELF_RUNNING === "true"
-      ? `/egov-ui-framework/pt-mutation/apply?step=${step}${applicationNumberQueryString}`
-      : `/pt-mutation/apply?step=${step}${applicationNumberQueryString}`;
-  dispatch(setRoute(applyUrl));
+      ? `/egov-ui-framework/pt-mutation/apply?${applicationNumberQueryString}&step=${step}`
+      : `/pt-mutation/apply?${applicationNumberQueryString}&step=${step}`;
+  store.dispatch(setRoute(applyUrl));
 };
 
 export const showHideAdhocPopup = (state, dispatch, screenKey) => {
-  let toggle = get(
-    state.screenConfiguration.screenConfig[screenKey],
-    "components.adhocDialog.props.open",
-    false
-  );
-  dispatch(
-    handleField(screenKey, "components.adhocDialog", "props.open", !toggle)
-  );
+
+
+  let link = `/property-tax/assessment-form`;
+  let moduleName = process.env.REACT_APP_NAME === "Citizen" ? '/citizen' : '/employee';
+  window.location.href = process.env.NODE_ENV === "production" ? moduleName + link : link;
+
+
+  // dispatch(setRoute(`/property-tax/assessment-form`));
+
+
+  // let toggle = get(
+  //   state.screenConfiguration.screenConfig[screenKey],
+  //   "components.adhocDialog.props.open",
+  //   false
+  // );
+  // dispatch(
+  //   handleField(screenKey, "components.adhocDialog", "props.open", !toggle)
+  // );
 };
 
 export const getCommonGrayCard = children => {
@@ -679,7 +695,7 @@ export const getRequiredDocData = async (action, state, dispatch) => {
       tenantId: tenantId,
       moduleDetails: [
         {
-          moduleName: "FireNoc",
+          moduleName: "PropertyTax",
           masterDetails: [{ name: "Documents" }]
         }
       ]
@@ -703,85 +719,114 @@ export const getRequiredDocData = async (action, state, dispatch) => {
 export const getTextToLocalMapping = label => {
   const localisationLabels = getTransformedLocalStorgaeLabels();
   switch (label) {
+    case "Property Tax Unique Id":
+      return getLocaleLabels(
+        "Property Tax Unique Id",
+        "PT_COMMON_TABLE_COL_PT_ID",
+        localisationLabels
+      );
+
     case "Application No":
       return getLocaleLabels(
-        "Application No",
-        "TL_COMMON_TABLE_COL_APP_NO",
+        "Application No.",
+        "PT_COMMON_TABLE_COL_APP_NO",
         localisationLabels
       );
 
-    case "NOC No":
+    case "Application Type":
       return getLocaleLabels(
-        "NOC No",
-        "NOC_COMMON_TABLE_COL_NOC_NO_LABEL",
+        "Application Type",
+        "PT_COMMON_TABLE_COL_APP_TYPE",
         localisationLabels
       );
 
-    case "NOC Type":
-      return getLocaleLabels("NOC Type", "NOC_TYPE_LABEL", localisationLabels);
     case "Owner Name":
       return getLocaleLabels(
         "Owner Name",
-        "NOC_COMMON_TABLE_COL_OWN_NAME_LABEL",
+        "PT_COMMON_TABLE_COL_OWNER_NAME",
         localisationLabels
       );
 
-    case "Application Date":
+    case "Guardian Name":
+      return getLocaleLabels("Guardian Name", "PT_GUARDIAN_NAME", localisationLabels);
+    case "Existing Property Id":
       return getLocaleLabels(
-        "Application Date",
-        "NOC_COMMON_TABLE_COL_APP_DATE_LABEL",
+        "Existing Property Id",
+        "PT_COMMON_COL_EXISTING_PROP_ID",
+        localisationLabels
+      );
+
+    case "Address":
+      return getLocaleLabels(
+        "Address",
+        "PT_COMMON_COL_ADDRESS",
         localisationLabels
       );
 
     case "Status":
       return getLocaleLabels(
         "Status",
-        "NOC_COMMON_TABLE_COL_STATUS_LABEL",
+        "PT_COMMON_TABLE_COL_STATUS_LABEL",
         localisationLabels
       );
-
+    case "ACTIVE":
+      return getLocaleLabels("Active,", "PT_ACTIVE", localisationLabels);
     case "INITIATED":
-      return getLocaleLabels("Initiated,", "NOC_INITIATED", localisationLabels);
+      return getLocaleLabels("Initiated,", "PT_INITIATED", localisationLabels);
     case "APPLIED":
-      getLocaleLabels("Applied", "NOC_APPLIED", localisationLabels);
+      getLocaleLabels("Applied", "PT_APPLIED", localisationLabels);
     case "PAID":
-      getLocaleLabels("Paid", "WF_NEWTL_PENDINGAPPROVAL", localisationLabels);
+      getLocaleLabels("Paid", "WF_NEWPT_PENDINGAPPROVAL", localisationLabels);
 
     case "APPROVED":
-      return getLocaleLabels("Approved", "NOC_APPROVED", localisationLabels);
+      return getLocaleLabels("Approved", "PT_APPROVED", localisationLabels);
     case "REJECTED":
-      return getLocaleLabels("Rejected", "NOC_REJECTED", localisationLabels);
+      return getLocaleLabels("Rejected", "PT_REJECTED", localisationLabels);
     case "CANCELLED":
-      return getLocaleLabels("Cancelled", "NOC_CANCELLED", localisationLabels);
+      return getLocaleLabels("Cancelled", "PT_CANCELLED", localisationLabels);
     case "PENDINGAPPROVAL ":
       return getLocaleLabels(
         "Pending for Approval",
-        "WF_FIRENOC_PENDINGAPPROVAL",
+        "WF_PT_PENDINGAPPROVAL",
         localisationLabels
       );
     case "PENDINGPAYMENT":
       return getLocaleLabels(
         "Pending payment",
-        "WF_FIRENOC_PENDINGPAYMENT",
+        "WF_PT_PENDINGPAYMENT",
         localisationLabels
       );
     case "DOCUMENTVERIFY":
       return getLocaleLabels(
         "Pending for Document Verification",
-        "WF_FIRENOC_DOCUMENTVERIFY",
+        "WF_PT_DOCUMENTVERIFY",
         localisationLabels
       );
     case "FIELDINSPECTION":
       return getLocaleLabels(
         "Pending for Field Inspection",
-        "WF_FIRENOC_FIELDINSPECTION",
+        "WF_PT_FIELDINSPECTION",
         localisationLabels
       );
 
-    case "Search Results for Fire-NOC Applications":
+    case "Search Results for PT Applications":
       return getLocaleLabels(
-        "Search Results for Fire-NOC Applications",
-        "NOC_HOME_SEARCH_RESULTS_TABLE_HEADING",
+        "Search Results for PT Applications",
+        "PT_HOME_SEARCH_RESULTS_TABLE_HEADING",
+        localisationLabels
+      );
+
+    case "Search Results for Properties":
+      return getLocaleLabels(
+        "Search Results for Properties",
+        "PT_HOME_PROPERTY_RESULTS_TABLE_HEADING",
+        localisationLabels
+      );
+
+    case "Search Results for Property Application":
+      return getLocaleLabels(
+        "Search Results for Property Application",
+        "PT_HOME_APPLICATION_RESULTS_TABLE_HEADING",
         localisationLabels
       );
 
@@ -791,5 +836,103 @@ export const getTextToLocalMapping = label => {
         "TL_MY_APPLICATIONS",
         localisationLabels
       );
+    case "INWORKFLOW":
+      return getLocaleLabels(
+        "In Workflow",
+        "INWORKFLOW",
+        localisationLabels
+      );
+    default:
+      return getLocaleLabels(
+        label,
+        label,
+        localisationLabels
+      );
   }
 };
+
+export const checkValueForNA = value => {
+  return value == null || value == undefined || value == '' ? "NA" : value;
+};
+export const fetchBill = async queryObject => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/billing-service/bill/v2/_fetchbill",
+      "",
+      queryObject
+    );
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+export const getpayments = async queryObject => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/collection-services/payments/_search",
+      "",
+      queryObject
+    );
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const downloadCertificateForm = (Properties, pdfcode, tenantId, mode = 'download') => {
+  const queryStr = [
+    { key: "key", value: pdfcode },
+    { key: "tenantId", value: tenantId }
+  ]
+  const DOWNLOADRECEIPT = {
+    GET: {
+      URL: "/pdf-service/v1/_create",
+      ACTION: "_get",
+    },
+  };
+  try {
+    httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Properties }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+      .then(res => {
+        res.filestoreIds[0]
+        if (res && res.filestoreIds && res.filestoreIds.length > 0) {
+          res.filestoreIds.map(fileStoreId => {
+            downloadReceiptFromFilestoreID(fileStoreId, mode, tenantId)
+          })
+        } else {
+          console.log("Error In Acknowledgement form Download");
+        }
+      });
+  } catch (exception) {
+    alert('Some Error Occured while downloading Acknowledgement form!');
+  }
+}
+
+export const downloadReceitForm = (Payments, pdfcode, tenantId, mode = 'download') => {
+  const queryStr = [
+    { key: "key", value: pdfcode },
+    { key: "tenantId", value: tenantId }
+  ]
+  const DOWNLOADRECEIPT = {
+    GET: {
+      URL: "/pdf-service/v1/_create",
+      ACTION: "_get",
+    },
+  };
+  try {
+    httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+      .then(res => {
+        res.filestoreIds[0]
+        if (res && res.filestoreIds && res.filestoreIds.length > 0) {
+          res.filestoreIds.map(fileStoreId => {
+            downloadReceiptFromFilestoreID(fileStoreId, mode, tenantId)
+          })
+        } else {
+          console.log("Error In Acknowledgement form Download");
+        }
+      });
+  } catch (exception) {
+    alert('Some Error Occured while downloading Acknowledgement form!');
+  }
+}

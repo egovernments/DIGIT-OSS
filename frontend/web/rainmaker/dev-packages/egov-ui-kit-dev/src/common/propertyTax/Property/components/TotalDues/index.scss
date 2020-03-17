@@ -4,29 +4,50 @@
   flex-wrap: wrap;
   margin-left: 8px;
 }
-
-.flex-child {
- 
- 
-
-}
-
-.flex-child {
+.flex-child{
   div {
-    min-width: 100px !important;
-    button {
-      div {
+    min-width: 115px !important;
+  }
+}
+.flex-child-button {
+  div {
+    min-width: 115px !important;
+    div {
+      button {
         div {
-          height: 30px !important;
+          div {
+            span {
+              padding-left: 0px;
+              padding-right: 0px;
+            }
+          }
         }
       }
     }
   }
 }
+
 @media only screen and (max-width: 768px) {
-  .flex-child {
-    div {
-      min-width: 60px !important;
-    }
+  .totaldues-tooltip-icon {
+    padding-top: 0px !important;
   }
+
+  .flex-child-button div {
+    min-width: 100%!important;}
+}
+
+.dues-button-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.button-style {
+  div, div:hover {
+    box-shadow: none !important;
+    min-width: 100px !important;
+    background-color: transparent !important;
+  }
+
+
+
 }

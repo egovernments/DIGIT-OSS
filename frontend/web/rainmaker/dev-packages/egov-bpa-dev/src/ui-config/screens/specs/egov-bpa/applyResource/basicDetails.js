@@ -7,7 +7,7 @@ import {
   getCommonContainer,
   getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { getTodaysDateInYMD, calculationType, getScrutinyDetails } from "../../utils";
+import { getTodaysDateInYMD, getScrutinyDetails } from "../../utils";
 import "./index.css";
 
 export const basicDetails = getCommonCard({
@@ -32,6 +32,7 @@ export const basicDetails = getCommonCard({
         labelName: "Enter Scrutiny Number",
         labelKey: "BPA_BASIC_DETAILS_SCRUTINY_NUMBER_PLACEHOLDER"
       },
+      required: true,
       title: {
         value: "Please search scrutiny details linked to the scrutiny number",
         key: "BPA_BASIC_DETAILS_SCRUTINY_NUMBER_SEARCH_TITLE"
@@ -73,7 +74,8 @@ export const basicDetails = getCommonCard({
         md: 6
       },
       props: {
-        disabled: true
+        disabled: true,
+        className : "tl-trade-type"
       }
     }),
     applicationType: getSelectField({
@@ -90,7 +92,8 @@ export const basicDetails = getCommonCard({
         masterName: "BPA"
       },
       props: {
-        disabled: true
+        disabled: true,
+        className : "tl-trade-type"
       },
       jsonPath: "BPA.applicationType",
       sourceJsonPath: "applyScreenMdmsData.BPA.ApplicationType",
@@ -118,7 +121,8 @@ export const basicDetails = getCommonCard({
         md: 6
       },
       props: {
-        disabled: true
+        disabled: true,
+        className : "tl-trade-type"
       }
     }),
     servicetype: getSelectField({
@@ -144,9 +148,6 @@ export const basicDetails = getCommonCard({
         xs: 12,
         sm: 12,
         md: 6
-      },
-      afterFieldChange: (action, state, dispatch) => {
-        calculationType(state, dispatch)
       }
     }),
     applicationdate: getDateField({
@@ -154,9 +155,10 @@ export const basicDetails = getCommonCard({
         labelName: "Application Date",
         labelKey: "BPA_BASIC_DETAILS_APP_DATE_LABEL"
       },
-      jsonPath: "BPA.appdate",
+      jsonPath: "BPAs.appdate",
       props: {
-        disabled: true
+        disabled: true,
+        className : "tl-trade-type"
       },
       gridDefination: {
         xs: 12,
@@ -164,23 +166,23 @@ export const basicDetails = getCommonCard({
         md: 6
       }
     }),
-    applicationFee: getTextField({
-      label: {
-        labelName: "Application Fee",
-        labelKey: "BPA_BASIC_DETAILS_APP_FEE_LABEL"
-      },
-      jsonPath: "BPAs[0].appfee",
-      // value: 1000,
-      props: {
-        // value: 100,
-        disabled: true
-      },
-      gridDefination: {
-        xs: 12,
-        sm: 12,
-        md: 6
-      }
-    }),
+    // applicationFee: getTextField({
+    //   label: {
+    //     labelName: "Application Fee",
+    //     labelKey: "BPA_BASIC_DETAILS_APP_FEE_LABEL"
+    //   },
+    //   jsonPath: "BPAs[0].appfee",
+    //   // value: 1000,
+    //   props: {
+    //     // value: 100,
+    //     disabled: true
+    //   },
+    //   gridDefination: {
+    //     xs: 12,
+    //     sm: 12,
+    //     md: 6
+    //   }
+    // }),
     remarks: getTextField({
       label: {
         labelName: "Remarks",
@@ -192,12 +194,10 @@ export const basicDetails = getCommonCard({
       },
       jsonPath: "BPA.remarks",
       props:{
-        className:"textfield-enterable-selection"
+        className:"textfield-enterable-selection",
+        multiline: true,
+        rows: "4"
       },
-      // props: {
-      //   multiline: true,
-      //   rows: "4"
-      // },
       gridDefination: {
         xs: 12,
         sm: 12,

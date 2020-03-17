@@ -386,14 +386,6 @@ export const getReviewTrade = (isEditable = true) => {
           labelKey: "TL_NEW_TRADE_DETAILS_MOHALLA_LABEL"
         },
         {
-      //     jsonPath: "Licenses[0].tradeLicenseDetail.address.locality.name",
-      //     callBack: checkValueForNA,
-      //   /*localePrefix:{
-      //     isJsonPath:true,
-      //     moduleName: "Licenses[0].tradeLicenseDetail.address.city",
-      //     masterName: "REVENUE"
-      //   }*/
-      // }
           jsonPath:"Licenses[0].tradeLicenseDetail.address.locality.code",
           localePrefix: {
             moduleName: getQueryArg(window.location.href, "tenantId") ? getQueryArg(window.location.href, "tenantId").replace('.','_').toUpperCase():"",

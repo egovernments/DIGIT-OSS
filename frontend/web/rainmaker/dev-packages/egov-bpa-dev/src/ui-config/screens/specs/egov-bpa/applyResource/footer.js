@@ -2,89 +2,21 @@ import {
   dispatchMultipleFieldChangeAction,
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import get from "lodash/get";
-import { getCommonApplyFooter, validateFields, getBpaTextToLocalMapping } from "../../utils";
-// import "./index.css";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getCommonApplyFooter, validateFields, getBpaTextToLocalMapping, generateBillForBPA } from "../../utils";
+import "./index.css";
+import { getQueryArg, getFileUrlFromAPI, getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "../../../../../ui-utils";
 import {
   createUpdateBpaApplication,
-  prepareDocumentsUploadData
+  prepareDocumentsUploadData,
+  submitBpaApplication,
+  updateBpaApplication
 } from "../../../../../ui-utils/commons";
-import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { toggleSnackbar, prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-const setReviewPageRoute = (state, dispatch) => {
-  let tenantId = get(
-    state,
-    "screenConfiguration.preparedFinalObject.BPA.address.city"
-  ) || getQueryArg(window.location.href, "tenantId") || getTenantId();
-  const applicationNumber = get(
-    state,
-    "screenConfiguration.preparedFinalObject.BPA.applicationNo"
-  );
-  const appendUrl =
-    process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
-  const reviewUrl = `${appendUrl}/egov-bpa/summary?applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
-  dispatch(setRoute(reviewUrl));
-};
-const moveToReview = (state, dispatch) => {
-  const documentsFormat = Object.values(
-    get(state.screenConfiguration.preparedFinalObject, "nocDocumentsUploadRedux")
-  );
-
-  let validateDocumentField = false;
-
-  for (let i = 0; i < documentsFormat.length; i++) {
-    let isDocumentRequired = get(documentsFormat[i], "isDocumentRequired");
-    let isDocumentTypeRequired = get(
-      documentsFormat[i],
-      "isDocumentTypeRequired"
-    );
-
-    let documents = get(documentsFormat[i], "documents");
-    if (isDocumentRequired) {
-      if (documents && documents.length > 0) {
-        if (isDocumentTypeRequired) {
-          if (get(documentsFormat[i], "natureOfNoc.value")) {
-            validateDocumentField = true;
-          }else if (get(documentsFormat[i], "remarks.value")) {
-            validateDocumentField = true;
-          } else {
-            dispatch(
-              toggleSnackbar(
-                true,
-                { labelName: "Please select type of Document!", labelKey: "" },
-                "warning"
-              )
-            );
-            validateDocumentField = false;
-            break;
-          }
-        } else {
-          validateDocumentField = true;
-        }
-      } else {
-        dispatch(
-          toggleSnackbar(
-            true,
-            { labelName: "Please uplaod mandatory documents!", labelKey: "" },
-            "warning"
-          )
-        );
-        validateDocumentField = false;
-        break;
-      }
-    } else {
-      validateDocumentField = true;
-    }
-  }
-
-  if (validateDocumentField) {
-    setReviewPageRoute(state, dispatch);
-  }
-};
+import jp from "jsonpath";
 
 const getMdmsData = async (state, dispatch) => {
   const tenantId = get(
@@ -169,10 +101,49 @@ const getMdmsData = async (state, dispatch) => {
 
 const getFloorDetail = (index) => {
   let floorNo = ['Ground', 'First', 'Second', 'Third', 'Forth', 'Fifth', 'Sixth', 'Seventh', 'Eighth', 'Ninth', 'Tenth']
-  return `${floorNo[index]} floor`;
+  if(index) {
+    return `${floorNo[index]} floor`;
+  }
 };
 
+const prepareDocumentsDetailsView = async (state, dispatch) => {
+  let documentsPreview = [];
+  let reduxDocuments = get(
+    state,
+    "screenConfiguration.preparedFinalObject.documentDetailsUploadRedux",
+    {}
+  );
+  jp.query(reduxDocuments, "$.*").forEach(doc => {
+    if (doc.documents && doc.documents.length > 0) {
+      documentsPreview.push({
+        title: getTransformedLocale(doc.documentCode),
+        name: doc.documents[0].fileName,
+        fileStoreId: doc.documents[0].fileStoreId,
+        linkText: "View",
+        link: doc.documents[0].fileUrl && doc.documents[0].fileUrl.split(",")[0]
+      });
+    }
+  });
+  dispatch(prepareFinalObject("documentDetailsPreview", documentsPreview));
+};
+
+const getSummaryRequiredDetails = async (state, dispatch) => {
+  const applicationNumber = get(state.screenConfiguration.preparedFinalObject, "BPA.applicationNo");
+  const tenantId = getQueryArg(window.location.href, "tenantId");
+  generateBillForBPA(dispatch, applicationNumber, tenantId, "BPA.NC_APP_FEE");
+  prepareDocumentsDetailsView(state, dispatch);
+  dispatch(
+    handleField(
+      "apply",
+      "components.div.children.formwizardFifthStep.children.bpaSummaryDetails.children.cardContent.children.documentsSummary.children.cardContent.children.uploadedDocumentDetailsCard",
+      "visible",
+      false
+    )
+  )
+}
+
 const callBackForNext = async (state, dispatch) => {
+  window.scrollTo(0,0);
   let activeStep = get(
     state.screenConfiguration.screenConfig["apply"],
     "components.div.children.stepper.props.activeStep",
@@ -192,10 +163,16 @@ const callBackForNext = async (state, dispatch) => {
       state,
       dispatch
     );
+    let isDetailsofplotCardValid = validateFields(
+      "components.div.children.formwizardFourthStep.children.detailsofplot.children.cardContent.children.detailsOfPlotContainer.children",
+      state,
+      dispatch
+    );
 
     if (
       !isBasicDetailsCardValid ||
-      !isLocationDetailsCardValid
+      !isLocationDetailsCardValid ||
+      !isDetailsofplotCardValid
     ) {
       isFormValid = false;
       hasFieldToaster = true;
@@ -205,14 +182,14 @@ const callBackForNext = async (state, dispatch) => {
       "screenConfiguration.preparedFinalObject.scrutinyDetails.planDetail.blocks[0].building.floors",
       []
   );
-
-    let tableData = response.map((item, index) => ({
-      [getBpaTextToLocalMapping("Floor Description")]: getFloorDetail(index),
-      [getBpaTextToLocalMapping("Level")]: index,
+    let tableData = response.map((item, index) => (
+      {
+      [getBpaTextToLocalMapping("Floor Description")]: getFloorDetail((item.number).toString()) || '-',
+      [getBpaTextToLocalMapping("Level")]:item.number,
       [getBpaTextToLocalMapping("Occupancy/Sub Occupancy")]: item.occupancies[0].type || "-",
-      [getBpaTextToLocalMapping("Buildup Area")]: item.occupancies[0].builtUpArea || "-",
-      [getBpaTextToLocalMapping("Floor Area")]: item.occupancies[0].floorArea || "-",
-      [getBpaTextToLocalMapping("Carpet Area")]: item.occupancies[0].carpetArea || "-"
+      [getBpaTextToLocalMapping("Buildup Area")]: item.occupancies[0].builtUpArea || "0",
+      [getBpaTextToLocalMapping("Floor Area")]: item.occupancies[0].floorArea || "0",
+      [getBpaTextToLocalMapping("Carpet Area")]: item.occupancies[0].carpetArea || "0"
     }));
     dispatch(
       handleField(
@@ -232,7 +209,7 @@ const callBackForNext = async (state, dispatch) => {
     );
     let isBlockWiseOccupancyAndUsageDetailsCardValid = validateFields(
       "components.div.children.formwizardSecondStep.children.blockWiseOccupancyAndUsageDetails.children.cardContent.children.blockWiseOccupancyAndUsageDetailscontainer.children.cardContent.children.blockWiseContainer.children",
-      state, 
+      state,
       dispatch
     )
     let isDemolitiondetailsCardValid = validateFields(
@@ -247,7 +224,7 @@ const callBackForNext = async (state, dispatch) => {
     );
 
     if (
-      // !isBuildingPlanScrutinyDetailsCardValid 
+      // !isBuildingPlanScrutinyDetailsCardValid
       !isBlockWiseOccupancyAndUsageDetailsCardValid ||
       !isDemolitiondetailsCardValid ||
       !isProposedBuildingDetailsCardValid
@@ -300,7 +277,7 @@ const callBackForNext = async (state, dispatch) => {
 
     let selectedApplicantType = get(
       state,
-      "screenConfiguration.preparedFinalObject.BPA.ownerShipType",
+      "screenConfiguration.preparedFinalObject.BPA.ownershipCategory",
       "SINGLE"
     );
     if (selectedApplicantType.includes("INSTITUTIONAL")) {
@@ -326,85 +303,72 @@ const callBackForNext = async (state, dispatch) => {
   }
 
   if (activeStep === 3) {
-   
-    let isDetailsofplotCardValid = validateFields(
-      "components.div.children.formwizardFourthStep.children.detailsofplot.children.cardContent.children.detailsOfPlotContainer.children",
-      state,
-      dispatch
-    );
-
-    if (
-      !isDetailsofplotCardValid
-    ) {
-      isFormValid = false;
-      hasFieldToaster = true;
-    }
-  }
-
-  if (activeStep === 4) {
     const documentsFormat = Object.values(
       get(state.screenConfiguration.preparedFinalObject, "documentDetailsUploadRedux")
     );
 
     let validateDocumentField = false;
 
-    for (let i = 0; i < documentsFormat.length; i++) {
-      let isDocumentRequired = get(documentsFormat[i], "isDocumentRequired");
-      let isDocumentTypeRequired = get(
-        documentsFormat[i],
-        "isDocumentTypeRequired"
-      );
+    if (documentsFormat && documentsFormat.length) {
+      for (let i = 0; i < documentsFormat.length; i++) {
+        let isDocumentRequired = get(documentsFormat[i], "isDocumentRequired");
+        let isDocumentTypeRequired = get(
+          documentsFormat[i],
+          "isDocumentTypeRequired"
+        );
 
-      let documents = get(documentsFormat[i], "documents");
-      if (isDocumentRequired) {
-        if (documents && documents.length > 0) {
-          if (isDocumentTypeRequired) {
-            if (get(documentsFormat[i], "dropDownValues.value")) {
-              validateDocumentField = true;
+        let documents = get(documentsFormat[i], "documents");
+        if (isDocumentRequired) {
+          if (documents && documents.length > 0) {
+            if (isDocumentTypeRequired) {
+              if (get(documentsFormat[i], "dropDownValues.value")) {
+                validateDocumentField = true;
+              } else {
+                dispatch(
+                  toggleSnackbar(
+                    true,
+                    { labelName: "Please select type of Document!", labelKey: "BPA_FOOTER_SELECT_DOC_TYPE" },
+                    "warning"
+                  )
+                );
+                validateDocumentField = false;
+                break;
+              }
             } else {
-              dispatch(
-                toggleSnackbar(
-                  true,
-                  { labelName: "Please select type of Document!", labelKey: "BPA_FOOTER_SELECT_DOC_TYPE" },
-                  "warning"
-                )
-              );
-              validateDocumentField = false;
-              break;
+              validateDocumentField = true;
             }
           } else {
-            validateDocumentField = true;
+            dispatch(
+              toggleSnackbar(
+                true,
+                { labelName: "Please uplaod mandatory documents!", labelKey: "BPA_FOOTER_UPLOAD_MANDATORY_DOC" },
+                "warning"
+              )
+            );
+            validateDocumentField = false;
+            break;
           }
         } else {
-          dispatch(
-            toggleSnackbar(
-              true,
-              { labelName: "Please uplaod mandatory documents!", labelKey: "BPA_FOOTER_UPLOAD_MANDATORY_DOC" },
-              "warning"
-            )
-          );
-          validateDocumentField = false;
-          break;
+          validateDocumentField = true;
         }
-      } else {
-        validateDocumentField = true;
       }
-    }
-    if (!validateDocumentField) {
-    isFormValid = false;
-    hasFieldToaster = true;
+      if (!validateDocumentField) {
+      isFormValid = false;
+      hasFieldToaster = true;
+      } else {
+        getSummaryRequiredDetails(state, dispatch);
+      }
+    } else {
+      getSummaryRequiredDetails(state, dispatch);
     }
   }
 
-  if (activeStep === 5) {
-    moveToReview(state, dispatch);
-  }
-
-  if (activeStep !== 5) {
+  if (activeStep !== 4) {
     if (isFormValid) {
       let responseStatus = "success";
       if(activeStep === 1){
         // dispatch(prepareFinalObject("BPA.owners[0].primaryOwner", true));
+        // dispatch(prepareFinalObject("BPA.owners[0].ownerType", "NONE"));
       }
       if (activeStep === 3) {
         // getMdmsData(state, dispatch);
@@ -419,6 +383,10 @@ const callBackForNext = async (state, dispatch) => {
           state.screenConfiguration.preparedFinalObject,
           "BPA.owners"
         );
+        let bpaStatus = get(
+          state.screenConfiguration.preparedFinalObject,
+          "BPA.status", ""
+        )
 
         if (checkingOwner && checkingOwner === "INDIVIDUAL.SINGLEOWNER") {
           let primaryOwner = get(
@@ -426,13 +394,18 @@ const callBackForNext = async (state, dispatch) => {
             "BPA.owners[0].isPrimaryOwner"
           );
           if (primaryOwner && primaryOwner === true) {
-            let response = await createUpdateBpaApplication(
-              state,
-              dispatch,
-              "INITIATE"
-            );
-            responseStatus = get(response, "status", "");
-            responseStatus === "success" && changeStep(state, dispatch);
+            if (bpaStatus) {
+              changeStep(state, dispatch);
+            } else {
+              let response = await createUpdateBpaApplication(
+                state,
+                dispatch,
+                "INITIATE"
+              );
+              responseStatus = get(response, "status", "");
+              responseStatus === "success" && changeStep(state, dispatch);
+            }
+            prepareDocumentsUploadData(state, dispatch);
           } else {
             let errorMessage = {
               labelName: "Please check is primary owner",
@@ -459,13 +432,18 @@ const callBackForNext = async (state, dispatch) => {
               };
               dispatch(toggleSnackbar(true, errorMessage, "warning"));
             } else {
-              let response = await createUpdateBpaApplication(
-                state,
-                dispatch,
-                "INITIATE"
-              );
-              responseStatus = get(response, "status", "");
-              responseStatus === "success" && changeStep(state, dispatch);
+              if (bpaStatus) {
+                changeStep(state, dispatch);
+              } else {
+                let response = await createUpdateBpaApplication(
+                  state,
+                  dispatch,
+                  "INITIATE"
+                );
+                responseStatus = get(response, "status", "");
+                responseStatus === "success" && changeStep(state, dispatch);
+              }
+              prepareDocumentsUploadData(state, dispatch);
             }
           } else {
             let errorMessage = {
@@ -487,7 +465,7 @@ const callBackForNext = async (state, dispatch) => {
               labelName: "Please search scrutiny details linked to the scrutiny number",
               labelKey: "BPA_BASIC_DETAILS_SCRUTINY_NUMBER_SEARCH_TITLE"
             };
-            dispatch(toggleSnackbar(true, errorMessage, "warning")); 
+            dispatch(toggleSnackbar(true, errorMessage, "warning"));
           }else{
             responseStatus === "success" && changeStep(state, dispatch);
           }
@@ -522,20 +500,6 @@ const callBackForNext = async (state, dispatch) => {
             labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_APPLICANT_TOAST"
           };
           break;
-        case 3:
-          errorMessage = {
-            labelName:
-              "Please fill all mandatory fields for Plot & Boundary Details, then proceed!",
-            labelKey: "Please fill all mandatory fields for Plot & Boundary Details, then proceed!"
-          };
-          break;
-        case 4:
-          errorMessage = {
-            labelName:
-              "Please fill all mandatory fields for Plot & Boundary Info Details, then proceed!",
-            labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_APPLICANT_TOAST"
-          };
-          break;
       }
       dispatch(toggleSnackbar(true, errorMessage, "warning"));
     }
@@ -560,8 +524,10 @@ export const changeStep = (
   }
 
   const isPreviousButtonVisible = activeStep > 0 ? true : false;
-  const isNextButtonVisible = activeStep < 6 ? true : false;
-  const isPayButtonVisible = activeStep === 6 ? true : false;
+  const isNextButtonVisible = activeStep < 4 ? true : false;
+  const isSendToCitizenButtonVisible = activeStep === 4 ? true : false;
+  const isSubmitButtonVisible = activeStep === 4 ? true : false;
+
   const actionDefination = [
     {
       path: "components.div.children.stepper.props",
@@ -579,9 +545,14 @@ export const changeStep = (
       value: isNextButtonVisible
     },
     {
-      path: "components.div.children.footer.children.payButton",
+      path: "components.div.children.footer.children.submitButton",
       property: "visible",
-      value: isPayButtonVisible
+      value: isSubmitButtonVisible
+    },
+    {
+      path: "components.div.children.footer.children.sendToCitizen",
+      property: "visible",
+      value: isSendToCitizenButtonVisible
     }
   ];
   dispatchMultipleFieldChangeAction("apply", actionDefination, dispatch);
@@ -626,20 +597,11 @@ export const renderSteps = (activeStep, dispatch) => {
         dispatch
       );
       break;
-    case 4:
-      dispatchMultipleFieldChangeAction(
-        "apply",
-        getActionDefinationForStepper(
-          "components.div.children.formwizardFifthStep"
-        ),
-        dispatch
-      );
-      break;
     default:
       dispatchMultipleFieldChangeAction(
         "apply",
         getActionDefinationForStepper(
-          "components.div.children.formwizardSixthStep"
+          "components.div.children.formwizardFifthStep"
         ),
         dispatch
       );
@@ -675,11 +637,6 @@ export const getActionDefinationForStepper = path => {
     },
     {
       path: "components.div.children.formwizardFifthStep",
-      property: "visible",
-      value: false
-    },
-    {
-      path: "components.div.children.formwizardSixthStep",
       property: "visible",
       value: false
     }
@@ -763,7 +720,7 @@ export const footer = getCommonApplyFooter({
       callBack: callBackForNext
     }
   },
-  payButton: {
+  submitButton: {
     componentPath: "Button",
     props: {
       variant: "contained",
@@ -789,7 +746,45 @@ export const footer = getCommonApplyFooter({
     },
     onClickDefination: {
       action: "condition",
-      callBack: callBackForNext
+      callBack: submitBpaApplication
+    },
+    roleDefination: {
+      rolePath: "user-info.roles",
+      action : "APPLY"
+    },
+    visible: false
+  },
+  sendToCitizen: {
+    componentPath: "Button",
+    props: {
+      variant: "contained",
+      color: "primary",
+      style: {
+        minWidth: "200px",
+        height: "48px",
+        marginRight: "45px"
+      }
+    },
+    children: {
+      sendToCitizenLabel: getLabel({
+        labelName: "SEND TO CITIZEN",
+        labelKey: "BPA_SEND_TO_CITIZEN_BUTTON"
+      }),
+      sendToCitizenIcon: {
+        uiFramework: "custom-atoms",
+        componentPath: "Icon",
+        props: {
+          iconName: "keyboard_arrow_right"
+        }
+      }
+    },
+    onClickDefination: {
+      action: "condition",
+      callBack: updateBpaApplication
+    },
+    roleDefination: {
+      rolePath: "user-info.roles",
+      action : "SEND_TO_CITIZEN"
     },
     visible: false
   }

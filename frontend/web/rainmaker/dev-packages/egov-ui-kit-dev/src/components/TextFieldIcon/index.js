@@ -72,10 +72,10 @@ const TextFieldIcon = ({
       ) : (
         <div onClick={onIconClick} style={{ cursor: "pointer" }}>
         <Hidden only={['sm', 'lg','xl','md']}>
-        <TargetIcon onClick={onIconClick} style={{ ...style.iconStyle, ...iconStyle , top: 15 }} />
+        <TargetIcon onClick={onIconClick} style={{ ...style.iconStyle, ...iconStyle  }} />
         </Hidden>
         <Hidden only='xs'>
-        <TargetIcon onClick={onIconClick} style={{ ...style.iconStyle, ...iconStyle, top: 15  }} />
+        <TargetIcon onClick={onIconClick} style={{ ...style.iconStyle, ...iconStyle }} />
         </Hidden>
       </div>
       )}

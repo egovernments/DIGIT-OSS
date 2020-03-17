@@ -22,6 +22,7 @@ const styles = (theme) => ({
   },
   mobileRoot1: {
     flexGrow: 1,
+    padding:'1%',
     width: "33%",
   },
   paper: {
@@ -64,7 +65,6 @@ class ServiceList extends React.Component {
     }else{
       list = menu && menu.filter((item) => item.url === "card");
     }
-    
     this.setState({
       actionList: list,
     });

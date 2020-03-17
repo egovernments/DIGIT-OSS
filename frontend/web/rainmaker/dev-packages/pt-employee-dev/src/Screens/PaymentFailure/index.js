@@ -111,7 +111,7 @@ class PaymentFailure extends Component {
       propertyId
     } = match.params;
     fetchProperties([
-      { key: "ids", value: match.params.propertyId },
+      { key: "propertyIds", value: match.params.propertyId },
       { key: "tenantId", value: match.params.tenantId }
     ]);
     this.getBill(tenantId, assessmentNumber, assessmentYear, propertyId);

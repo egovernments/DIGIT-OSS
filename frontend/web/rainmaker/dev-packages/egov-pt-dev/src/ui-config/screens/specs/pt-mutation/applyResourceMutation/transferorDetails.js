@@ -10,8 +10,9 @@ import {
       getPattern,
       getSelectField,
       getTextField,
-      getDateField    
+      getDateField
     } from "egov-ui-framework/ui-config/screens/specs/utils";
+    import { checkValueForNA } from "../../utils";
     import { prepareFinalObject as pFO } from "egov-ui-framework/ui-redux/screen-configuration/actions";
     import {
       getDetailsForOwner,
@@ -19,6 +20,9 @@ import {
     } from "../../utils";
     import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
     import get from "lodash/get";
+
+
+
 export const transferorDetails = getCommonCard(
     {
       header: getCommonTitle(
@@ -39,7 +43,8 @@ export const transferorDetails = getCommonCard(
             labelKey: "PT_MUTATION_TRANSFEROR_NAME"
           },
           {
-            jsonPath: "Properties[0].propertyDetails[0].owners[0].name"
+            jsonPath: "Property.owners[0].name",
+            callBack: checkValueForNA
             // callBack: value => {
             //   return value.split(".")[0];
             // }
@@ -51,7 +56,8 @@ export const transferorDetails = getCommonCard(
             labelKey: "PT_MUTATION_TRANSFEROR_GUARDIAN_NAME"
           },
           {
-            jsonPath: "Properties[0].propertyDetails[0].owners[0].fatherOrHusbandName"
+            jsonPath: "Property.owners[0].fatherOrHusbandName",
+            callBack: checkValueForNA
             // callBack: value => {
             //   return value.split(".")[1];
             // }
@@ -63,23 +69,34 @@ export const transferorDetails = getCommonCard(
             labelKey: "PT_MUTATION_TRANSFEROR_GENDER"
           },
           {
-            jsonPath: "Properties[0].propertyDetails[0].owners[0].gender"
+            jsonPath: "Property.owners[0].gender",
+            callBack: checkValueForNA
             // callBack: value => {
             //   return value.split(".")[1];
             // }
           }
         ),
-        transferorDOB: getLabelWithValue(
+        // transferorDOB: getLabelWithValue(
+        //   {
+        //     labelName: "Date Of Birth",
+        //     labelKey: "PT_MUTATION_TRANSFEROR_DOB"
+        //   },
+        //   {
+        //    // jsonPath: "Property.propertyDetails[0].owners[0].dob"
+        //    jsonPath: "Property.propertyDetails[0].owners[0].dob",
+        //     callBack: checkValueForNA
+        //     }
+
+        // ),
+        transferorOwnerType: getLabelWithValue(
           {
-            labelName: "Date Of Birth",
-            labelKey: "PT_MUTATION_TRANSFEROR_DOB"
+            labelName: "Type of Ownership",
+            labelKey: "PT_FORM3_OWNERSHIP_TYPE"
           },
           {
-           // jsonPath: "Properties[0].propertyDetails[0].owners[0].dob"
-           jsonPath: "NA"
-            // callBack: value => {
-            //   return value.split(".")[1];
-            // }
+            jsonPath:
+            "Property.ownershipCategory",
+            callBack: checkValueForNA
           }
         ),
         transferorMobile: getLabelWithValue(
@@ -88,7 +105,8 @@ export const transferorDetails = getCommonCard(
             labelKey: "PT_MUTATION_TRANSFEROR_MOBILE"
           },
           {
-            jsonPath: "Properties[0].propertyDetails[0].owners[0].mobileNumber"
+            jsonPath: "Property.owners[0].mobileNumber",
+            callBack: checkValueForNA
             // callBack: value => {
             //   return value.split(".")[1];
             // }
@@ -100,7 +118,8 @@ export const transferorDetails = getCommonCard(
             labelKey: "PT_MUTATION_TRANSFEROR_EMAIL"
           },
           {
-            jsonPath: "Properties[0].propertyDetails[0].owners[0].emailId"
+            jsonPath: "Property.owners[0].emailId",
+            callBack: checkValueForNA
             // callBack: value => {
             //   return value.split(".")[1];
             // }
@@ -112,7 +131,8 @@ export const transferorDetails = getCommonCard(
             labelKey: "PT_MUTATION_TRANSFEROR_SPECIAL_CATEGORY"
           },
           {
-            jsonPath: "Properties[0].propertyDetails[0].owners[0].ownerType"
+            jsonPath: "Property.owners[0].ownerType",
+            callBack: checkValueForNA
             // callBack: value => {
             //   return value.split(".")[1];
             // }
@@ -124,7 +144,8 @@ export const transferorDetails = getCommonCard(
             labelKey: "PT_MUTATION_TRANSFEROR_CORRESPONDENCE_ADDRESS"
           },
           {
-            jsonPath: "Properties[0].propertyDetails[0].owners[0].permanentAddress"
+            jsonPath: "Property.owners[0].permanentAddress",
+            callBack: checkValueForNA
             // callBack: value => {
             //   return value.split(".")[1];
             // }
@@ -132,9 +153,3 @@ export const transferorDetails = getCommonCard(
         )
       })
     });
-
-    
-
-
-
-

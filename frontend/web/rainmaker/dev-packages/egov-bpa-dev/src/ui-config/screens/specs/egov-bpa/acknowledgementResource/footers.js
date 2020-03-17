@@ -2,10 +2,13 @@ import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { ifUserRoleExists } from "../../utils";
 import generatePdf from "../../utils/generatePdfForBpa";
 import "./index.css";
+import get from "lodash/get";
+import { stat } from "fs";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
 export const getRedirectionURL = () => {
   const redirectionURL = ifUserRoleExists("CITIZEN")
-    ? "/BPA/home"
+    ? "/bpastakeholder-citizen/home"
     : "/inbox";
   return redirectionURL;
 };
@@ -56,6 +59,13 @@ export const applicationSuccessFooter = (
   applicationNumber,
   tenant
 ) => {
+  let status = (get(state.screenConfiguration.preparedFinalObject, "BPA[0].status") ||  get(state.screenConfiguration.preparedFinalObject, "BPA.status"));
+  let billbService = (( status=="PENDING_APPL_FEE")?"BPA.NC_APP_FEE":"BPA.NC_SAN_FEE");
+  let purpose = getQueryArg(window.location.href, "purpose");
+  let isTrue = false;
+  if(purpose == "APPLY") {
+    isTrue = true;
+  }
   return getCommonApplyFooter({
     gotoHome: {
       componentPath: "Button",
@@ -80,7 +90,7 @@ export const applicationSuccessFooter = (
         action: "page_change",
         path: `${getRedirectionURL()}`
       },
-     
+
     },
     downloadFormButton: {
       componentPath: "Button",
@@ -152,7 +162,7 @@ export const applicationSuccessFooter = (
       //Add onClickDefination and RoleDefination later
       onClickDefination: {
         action: "page_change",
-        path:`/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenant}&businessService=BPA`
+        path:`/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenant}&businessService=${billbService}`
           // process.env.REACT_APP_SELF_RUNNING === "true"
           //   ? `/egov-ui-framework/BPA/pay?applicationNumber=${applicationNumber}&tenantId=${tenant}&businessService=FIRENOC`
           //   : `/BPA/pay?applicationNumber=${applicationNumber}&tenantId=${tenant}&businessService=FIRENOC`
@@ -173,7 +183,7 @@ export const applicationSuccessFooter = (
         style: {
           minWidth: "180px",
           height: "48px",
-        
+
         }
       },
       children: {
@@ -184,7 +194,7 @@ export const applicationSuccessFooter = (
       },
       onClickDefination: {
         action: "page_change",
-        path:`/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenant}&businessService=BPA`,
+        path:`/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenant}&businessService=${billbService}`,
           // process.env.REACT_APP_SELF_RUNNING === "true"
           //   ? `BPA/citizen-pay?applicationNumber=${applicationNumber}&tenantId=${tenant}`
           //   : `/BPA/citizen-pay?applicationNumber=${applicationNumber}&tenantId=${tenant}`
@@ -194,7 +204,7 @@ export const applicationSuccessFooter = (
         roles: ["CITIZEN"],
         action: "PAY"
       },
-      visible: process.env.REACT_APP_NAME === "Citizen" ? true : false
+      visible: process.env.REACT_APP_NAME === "Citizen" ? isTrue : false
     }
   });
 };
@@ -217,7 +227,7 @@ export const approvalSuccessFooter = getCommonApplyFooter({
       //downloadReceiptButtonLabel: getLabel
       goToHomeButtonLabel: getLabel({
         labelName: "GO TO HOME",
-        labelKey: "BPA_COMMON_BUTTON_HOME"
+        labelKey: "TL_COMMON_BUTTON_HOME"
       })
     },
     // Check this onClickDefinition later again
@@ -226,54 +236,54 @@ export const approvalSuccessFooter = getCommonApplyFooter({
       path: `${getRedirectionURL()}`
     }
   },
-  downloadLicenseButton: {
-    componentPath: "Button",
-    props: {
-      variant: "outlined",
-      color: "primary",
-      style: {
-        width: "250px",
-        height: "48px",
-        marginRight: "16px"
-      }
-    },
-    children: {
-      downloadLicenseButtonLabel: getLabel({
-        labelName: "DOWNLOAD BPA",
-        labelKey: "BPA_APPROVAL_CHECKLIST_BUTTON_DOWN_LIC"
-      })
-    },
-    onClickDefination: {
-      action: "condition",
-      callBack: (state, dispatch) => {
-        generatePdf(state, dispatch, "certificate_download");
-      }
-    }
-  },
-  printNOCButton: {
-    componentPath: "Button",
-    props: {
-      variant: "contained",
-      color: "primary",
-      style: {
-        width: "250px",
-        height: "48px",
-        marginRight: "40px"
-      }
-    },
-    children: {
-      printLicenseButtonLabel: getLabel({
-        labelName: "PRINT BPA",
-        labelKey: "BPA_APPROVAL_CHECKLIST_PRINT_LIC"
-      })
-    },
-    onClickDefination: {
-      action: "condition",
-      callBack: (state, dispatch) => {
-        generatePdf(state, dispatch, "certificate_print");
-      }
-    }
-  }
+  // downloadLicenseButton: {
+  //   componentPath: "Button",
+  //   props: {
+  //     variant: "outlined",
+  //     color: "primary",
+  //     style: {
+  //       width: "250px",
+  //       height: "48px",
+  //       marginRight: "16px"
+  //     }
+  //   },
+  //   children: {
+  //     downloadLicenseButtonLabel: getLabel({
+  //       labelName: "DOWNLOAD BPA",
+  //       labelKey: "BPA_APPROVAL_CHECKLIST_BUTTON_DOWN_LIC"
+  //     })
+  //   },
+  //   onClickDefination: {
+  //     action: "condition",
+  //     callBack: (state, dispatch) => {
+  //       generatePdf(state, dispatch, "certificate_download");
+  //     }
+  //   }
+  // },
+  // printNOCButton: {
+  //   componentPath: "Button",
+  //   props: {
+  //     variant: "contained",
+  //     color: "primary",
+  //     style: {
+  //       width: "250px",
+  //       height: "48px",
+  //       marginRight: "40px"
+  //     }
+  //   },
+  //   children: {
+  //     printLicenseButtonLabel: getLabel({
+  //       labelName: "PRINT BPA",
+  //       labelKey: "BPA_APPROVAL_CHECKLIST_PRINT_LIC"
+  //     })
+  //   },
+  //   onClickDefination: {
+  //     action: "condition",
+  //     callBack: (state, dispatch) => {
+  //       generatePdf(state, dispatch, "certificate_print");
+  //     }
+  //   }
+  // }
 });
 
 //Function for payment failure(retry button)

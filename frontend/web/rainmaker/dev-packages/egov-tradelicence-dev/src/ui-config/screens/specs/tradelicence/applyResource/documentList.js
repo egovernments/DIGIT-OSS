@@ -7,21 +7,52 @@ export const documentList = {
       labelName: "UPLOAD FILE",
       labelKey: "TL_BUTTON_UPLOAD FILE"
     },
-    description: {
-      labelName: "Only .jpg and .pdf files. 6MB max file size.",
-      labelKey: "TL_UPLOAD_RESTRICTIONS"
-    },
-    imageDescription: {
-      labelName: "Only .jpg and .png files. 6MB max file size.",
-      labelKey: "TL_UPLOAD_IMAGE_RESTRICTIONS"
-    },
-    inputProps: {
-      accept: "image/*, .pdf, .png, .jpeg"
-    },
-    imageProps: {
-      accept: "image/*, .png, .jpeg"
-    },
+    inputProps : [
+      {
+        type : "OWNERIDPROOF",
+        description: {
+          labelName: "Only .jpg and .pdf files. 6MB max file size.",
+          labelKey: "TL_UPLOAD_RESTRICTIONS"
+        },
+        formatProps :{
+          accept : "image/*, .pdf, .png, .jpeg",
+        },
+        maxFileSize: 6000
+      },
+      {
+        type : "OWNERSHIPPROOF",
+        description: {
+          labelName: "Only .jpg and .pdf files. 6MB max file size.",
+          labelKey: "TL_UPLOAD_RESTRICTIONS"
+        },
+        formatProps :{
+          accept : "image/*, .pdf, .png, .jpeg",
+        },
+        maxFileSize: 6000
+      },
+      {
+        type : "OWNERPHOTO",
+        description: {
+          labelName: "Only .png and .jpeg 6MB max file size.",
+          labelKey: "TL_UPLOAD_IMAGE_RESTRICTIONS"
+        },
+        formatProps :{
+          accept: "image/*, .png, .jpeg",
+        },
+        maxFileSize: 3000
+      },
+      {
+        type : "OLDLICENCENO",
+        description: {
+          labelName: "Only .jpg and .pdf files. 6MB max file size.",
+          labelKey: "TL_UPLOAD_RESTRICTIONS"
+        },
+        formatProps :{
+          accept : "image/*, .pdf, .png, .jpeg",
+        },
+        maxFileSize: 6000
+      }
+    ],
     documentTypePrefix: "TL_",
-    maxFileSize: 6000
   }
 };

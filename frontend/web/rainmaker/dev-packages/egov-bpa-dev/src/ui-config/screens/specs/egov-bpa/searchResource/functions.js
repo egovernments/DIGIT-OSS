@@ -1,6 +1,6 @@
 import get from "lodash/get";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getAppSearchResults } from "../../../../../ui-utils/commons";
+import { getAppSearchResults, getBpaSearchResults } from "../../../../../ui-utils/commons";
 import { convertEpochToDate, convertDateToEpoch } from "../../utils/index";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { textToLocalMapping } from "./searchResults";
@@ -40,7 +40,7 @@ export const searchApiCall = async (state, dispatch) => {
   //       "error"
   //     )
   //   );
-  // } else 
+  // } else
   if (
     Object.keys(searchScreenObject).length == 0 ||
     Object.values(searchScreenObject).every(x => x === "")
@@ -92,7 +92,7 @@ export const searchApiCall = async (state, dispatch) => {
       }
     }
     try {
-      const response = await getAppSearchResults(queryObject);
+      const response = await getBpaSearchResults(queryObject);
       // const response = searchSampleResponse();
 
       let data = response.Bpa.map(item => ({
@@ -130,14 +130,6 @@ export const searchApiCall = async (state, dispatch) => {
       //showHideProgress(false, dispatch);
       showHideTable(true, dispatch);
     } catch (error) {
-      //showHideProgress(false, dispatch);
-      dispatch(
-        toggleSnackbar(
-          true,
-          { labelName: error.message, labelKey: error.message },
-          "error"
-        )
-      );
       console.log(error);
     }
   }

@@ -539,5 +539,6 @@ div[class^="MuiPaper-root"],
   .authority-details-form{
    display: grid !important;
    overflow: auto !important;
+   overflow-x: hidden !important;
  }
 }

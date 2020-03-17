@@ -11,6 +11,7 @@ import {
   getQueryArg,
   getTransformedLocale
 } from "egov-ui-framework/ui-utils/commons";
+import {checkValueForNA} from "../../utils";
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
 
@@ -22,11 +23,12 @@ const propertyDetails =  getCommonGrayCard({
         labelKey: "PT_PROPERTY_ADDRESS_CITY"
       },
       {
-        jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",
+        jsonPath: "Property.address.city",
         localePrefix: {
           moduleName: "TENANT",
           masterName: "TENANTS"
-        }
+        },
+        callBack: checkValueForNA
       }
     ),
     doorHouseNo: getLabelWithValue(
@@ -34,7 +36,7 @@ const propertyDetails =  getCommonGrayCard({
         labelName: "Door/House No.",
         labelKey: "PT_PROPERTY_ADDRESS_HOUSE_NO"
       },
-      { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.doorNo" }
+      { jsonPath: "Property.address.doorNo", callBack: checkValueForNA }
     ),
     buildingCompanyName: getLabelWithValue(
       {
@@ -43,7 +45,7 @@ const propertyDetails =  getCommonGrayCard({
       },
       {
         jsonPath:
-          "FireNOCs[0].fireNOCDetails.propertyDetails.address.buildingName"
+          "Property.address.buildingName", callBack: checkValueForNA
       }
     ),
     streetName: getLabelWithValue(
@@ -51,7 +53,7 @@ const propertyDetails =  getCommonGrayCard({
         labelName: "Street Name",
         labelKey: "PT_PROPERTY_ADDRESS_STREET_NAME"
       },
-      { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.street" }
+      { jsonPath: "Property.address.street", callBack: checkValueForNA }
     ),
     mohalla: getLabelWithValue(
       {
@@ -60,9 +62,9 @@ const propertyDetails =  getCommonGrayCard({
       },
       {
         jsonPath:
-          "FireNOCs[0].fireNOCDetails.propertyDetails.address.locality.code",
+          "Property.address.locality.code",
         callBack: value => {
-          return `${getTransformedLocale(tenantId)}_REVENUE_${value}`;
+          return value ? `${getTransformedLocale(tenantId)}_REVENUE_${value}` : "NA";
         }
       }
     ),
@@ -71,14 +73,14 @@ const propertyDetails =  getCommonGrayCard({
         labelName: "Pincode",
         labelKey: "PT_PROPERTY_ADDRESS_PINCODE"
       },
-      { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.pincode" }
+      { jsonPath: "Property.address.pincode", callBack: checkValueForNA }
     ),
     existingPropertyId: getLabelWithValue(
       {
         labelName: "Existing Property ID",
         labelKey: "PT_PROPERTY_ADDRESS_EXISTING_PID"
       },
-      { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.propertyId" }
+      { jsonPath: "Property.oldPropertyId", callBack: checkValueForNA }
     ),
   })
 })

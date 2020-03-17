@@ -168,7 +168,7 @@ class PaymentSuccess extends Component {
       commonConfig.tenantId
     );
     fetchProperties([
-      { key: "ids", value: match.params.propertyId },
+      { key: "propertyIds", value: match.params.propertyId },
       { key: "tenantId", value: match.params.tenantId }
     ]);
     fetchReceipts([

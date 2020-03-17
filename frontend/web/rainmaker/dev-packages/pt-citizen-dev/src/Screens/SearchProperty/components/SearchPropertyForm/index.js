@@ -80,7 +80,7 @@ const SearchPropertyForm = ({
 
                     style={{
                       backgroundColor: "white"
-                    
+
                     }}
 
                   />

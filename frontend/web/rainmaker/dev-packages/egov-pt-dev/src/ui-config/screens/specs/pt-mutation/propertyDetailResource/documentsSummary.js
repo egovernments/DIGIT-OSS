@@ -22,7 +22,7 @@ export const documentsSummary = getCommonGrayCard({
         },
         ...getCommonSubHeader({
           labelName: "Documents",
-          labelKey: "NOC_SUMMARY_DOCUMENTS_HEADER﻿"
+          labelKey: "PT_SUMMARY_DOCUMENTS_HEADER"
         })
       },
       editSection: {
@@ -62,11 +62,11 @@ export const documentsSummary = getCommonGrayCard({
   },
   body: {
     uiFramework: "custom-containers-local",
-    moduleName: "egov-noc",
+    moduleName: "egov-pt",
     componentPath: "DownloadFileContainer",
     props: {
       sourceJsonPath: "documentsPreview",
-      className: "noc-review-documents"
+      className: "pt-review-documents"
     }
   }
 });

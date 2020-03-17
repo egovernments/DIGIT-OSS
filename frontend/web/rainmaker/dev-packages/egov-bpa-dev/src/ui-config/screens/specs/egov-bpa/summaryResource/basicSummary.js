@@ -3,11 +3,28 @@ import {
   getCommonGrayCard,
   getCommonSubHeader,
   getLabel,
-  getLabelWithValue
+  getLabelWithValue,
+  getBreak
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { gotoApplyWithStep } from "../../utils/index";
-import { convertEpochToDate } from "../../utils/index";
-import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
+import { gotoApplyWithStep, checkValueForNA, convertEpochToDate  } from "../../utils/index";
+import { getTransformedLocale, getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { changeStep } from "../applyResource/footer";
+
+
+const getHeader = label => {
+  return {
+    uiFramework: "custom-molecules-local",
+    moduleName: "egov-bpa",
+    componentPath: "DividerWithLabel",
+    props: {
+      className: "hr-generic-divider-label",
+      labelProps: {},
+      dividerProps: {},
+      label
+    },
+    type: "array"
+  };
+};
 
 export const basicSummary = getCommonGrayCard({
   header: {
@@ -55,12 +72,17 @@ export const basicSummary = getCommonGrayCard({
         onClickDefination: {
           action: "condition",
           callBack: (state, dispatch) => {
-            gotoApplyWithStep(state, dispatch, 0);
+            changeStep(state, dispatch, "", 0);
           }
         }
       }
     }
   },
+  bpaBasicDetailsContainer: getHeader({
+    labelName: "Basic Details",
+    labelKey: "BPA_BASIC_DETAILS_TITLE"
+  }),
+  break1: getBreak(),
   cardOne: {
     uiFramework: "custom-containers",
     componentPath: "MultiItem",
@@ -75,9 +97,10 @@ export const basicSummary = getCommonGrayCard({
             },
             {
               jsonPath: "BPA.edcrNumber",
-              callBack: value => {
-                return value //`COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
-              }
+              callBack: checkValueForNA
+              // callBack: value => {
+              //   return value //`COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
+              // }
             }
           ),
           occupancy: getLabelWithValue(
@@ -88,9 +111,10 @@ export const basicSummary = getCommonGrayCard({
             {
               jsonPath:
                 "scrutinyDetails.planDetail.planInformation.occupancy",
-              callBack: value => {
-                return value //`COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
-              }
+                callBack: checkValueForNA
+              // callBack: value => {
+              //   return value //`COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
+              // }
             }
           ),
           applicationtype: getLabelWithValue(
@@ -100,7 +124,8 @@ export const basicSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-                "BPA.applicationType"
+                "BPA.applicationType",
+                callBack: checkValueForNA
             }
           ),
           servicetype: getLabelWithValue(
@@ -109,7 +134,8 @@ export const basicSummary = getCommonGrayCard({
               labelKey: "Service Type"
             },
             {
-              jsonPath: "BPA.serviceType"
+              jsonPath: "BPA.serviceType",
+              callBack: checkValueForNA
             }
           ),
           risktype: getLabelWithValue(
@@ -118,7 +144,8 @@ export const basicSummary = getCommonGrayCard({
               labelKey: "BPA_BASIC_DETAILS_RISK_TYPE_LABEL"
             },
             {
-              jsonPath: "BPA.riskType"
+              jsonPath: "BPA.riskType",
+              callBack: checkValueForNA
             }
           ),
           applicationdate: getLabelWithValue(
@@ -130,20 +157,21 @@ export const basicSummary = getCommonGrayCard({
               jsonPath:
                 "scrutinyDetails.planDetail.applicationDate",
                 callBack: value => {
-                  return convertEpochToDate(value);
+                  return convertEpochToDate(value) || checkValueForNA;
                 }
             }
           ),
-          applicationFee: getLabelWithValue(
-            {
-              labelName: "Application Fee",
-              labelKey: "BPA_BASIC_DETAILS_APP_FEE_LABEL"
-            },
-            {
-              jsonPath:
-                "ReceiptTemp[0].bill[0].totalAmount"
-            }
-          ),
+          // applicationFee: getLabelWithValue(
+          //   {
+          //     labelName: "Application Fee",
+          //     labelKey: "BPA_BASIC_DETAILS_APP_FEE_LABEL"
+          //   },
+          //   {
+          //     jsonPath:
+          //       "ReceiptTemp[0].Bill[0].totalAmount",
+          //       callBack: checkValueForNA
+          //   }
+          // ),
           remarks: getLabelWithValue(
             {
               labelName: "Remarks",
@@ -151,8 +179,79 @@ export const basicSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-                "BPA.remarks"
+                "BPA.remarks",
+                callBack: checkValueForNA
             }
+          )
+        }),
+      }),
+      items: [],
+      hasAddItem: false,
+      isReviewPage: true,
+      sourceJsonPath: "BPA",
+      prefixSourceJsonPath:
+        "children.cardContent.children.basicDetailsContainer.children",
+      afterPrefixJsonPath: "children.value.children.key"
+    },
+    type: "array"
+  },
+  BlockWiseOccupancyAndUsageDetails: getHeader({
+    labelName: "BPA Location Details",
+    labelKey: "BPA_NEW_TRADE_DETAILS_HEADER_DETAILS"
+  }),
+  break1: getBreak(),
+  cardTwo: {
+    uiFramework: "custom-containers",
+    componentPath: "MultiItem",
+    props: {
+      className: "applicant-summary",
+      scheama: getCommonGrayCard({
+        viewFour: getCommonContainer({
+          reviewCity: getLabelWithValue(
+            {
+              labelName: "City",
+              labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
+            },
+            {
+              jsonPath: "BPA.address.city",
+              callBack: value => {
+                return getQueryArg(window.location.href, "tenantId");
+              },
+            }
+          ),
+          reviewBuildingName: getLabelWithValue(
+            {
+              labelName: "Building/Company Name",
+              labelKey: "TL_NEW_TRADE_DETAILS_BLDG_NAME_LABEL"
+            },
+            { jsonPath: "BPA.address.buildingName", callBack: checkValueForNA }
+          ),
+          reviewStreetName: getLabelWithValue(
+            {
+              labelName: "Street Name",
+              labelKey: "TL_NEW_TRADE_DETAILS_SRT_NAME_LABEL"
+            },
+            { jsonPath: "BPA.address.street", callBack: checkValueForNA }
+          ),
+          reviewMohalla: getLabelWithValue(
+            {
+              labelName: "Mohalla",
+              labelKey: "TL_NEW_TRADE_DETAILS_MOHALLA_LABEL"
+            },
+            {
+              jsonPath:"BPA.address.locality.code",
+              localePrefix: {
+                moduleName: getQueryArg(window.location.href, "tenantId") ? getQueryArg(window.location.href, "tenantId").replace('.','_').toUpperCase():"",
+                masterName: "REVENUE"
+              }, callBack: checkValueForNA
+            }
+          ),
+          reviewPincode: getLabelWithValue(
+            {
+              labelName: "Pincode",
+              labelKey: "TL_NEW_TRADE_DETAILS_PIN_LABEL"
+            },
+            { jsonPath: "BPA.address.pincode", callBack: checkValueForNA }
           )
         })
       }),
@@ -163,6 +262,80 @@ export const basicSummary = getCommonGrayCard({
       prefixSourceJsonPath:
         "children.cardContent.children.basicDetailsContainer.children",
       afterPrefixJsonPath: "children.value.children.key"
+    },
+    type: "array"
+  },
+
+  DetailsOfPlot: getHeader({
+    labelName: "Details Of Plot",
+    labelKey: "BPA_BOUNDARY_PLOT_DETAILS_TITLE"
+  }),
+  break2: getBreak(),
+  detailsOfPlotCrad: {
+    uiFramework: "custom-containers",
+    componentPath: "MultiItem",
+    props: {
+        className: "applicant-summary",
+        scheama: getCommonGrayCard({
+            detailsOfPlotContainer: getCommonContainer({
+                plotArea: getLabelWithValue(
+                    {
+                        labelName: "Plot Area",
+                        labelKey: "BPA_BOUNDARY_PLOT_AREA_LABEL"
+                    },
+                    {
+                        jsonPath: "scrutinyDetails.planDetail.plot.area",
+                        callBack: checkValueForNA
+                    }
+                ),
+                kathaNumber: getLabelWithValue(
+                    {
+                        labelName: "Khata No.",
+                        labelKey: "BPA_BOUNDARY_KHATA_NO_LABEL"
+                    },
+                    {
+                        jsonPath: "scrutinyDetails.planDetail.planInformation.khataNo",
+                        callBack: checkValueForNA
+                    }
+                ),
+                holdingNumber: getLabelWithValue(
+                    {
+                        labelName: "Holding No.",
+                        labelKey: "BPA_BOUNDARY_HOLDING_NO_LABEL"
+                    },
+                    {
+                        jsonPath: "BPA.holdingNo",
+                        callBack: checkValueForNA
+                    }
+                ),
+                plotNo: getLabelWithValue(
+                    {
+                        labelName: "Plot No(MSP)",
+                        labelKey: "BPA_BOUNDARY_PLOT_NO_LABEL"
+                    },
+                    {
+                        jsonPath: "scrutinyDetails.planDetail.planInformation.plotNo",
+                        callBack: checkValueForNA
+                    }
+                ),
+                landRegDetails: getLabelWithValue(
+                    {
+                        labelName: "Land Registration Details",
+                        labelKey: "BPA_BOUNDARY_LAND_REG_DETAIL_LABEL"
+                    },
+                    {
+                        jsonPath: "BPA.registrationDetails",
+                        callBack: checkValueForNA
+                    }
+                )
+            })
+        }),
+        items: [],
+        hasAddItem: false,
+        isReviewPage: true,
+        sourceJsonPath: "BPA",
+        prefixSourceJsonPath: "children.cardContent.children.detailsOfPlotContainer.children",
+        afterPrefixJsonPath: "children.value.children.key"
     },
     type: "array"
   }

@@ -1,5 +1,5 @@
 import * as actionTypes from "./actionTypes";
-import { PROPERTY, DRAFT, PGService, RECEIPT, BOUNDARY, FETCHBILL, FETCHRECEIPT, DOWNLOADRECEIPT } from "egov-ui-kit/utils/endPoints";
+import { PROPERTY, DRAFT, PGService, RECEIPT, BOUNDARY, FETCHBILL, FETCHRECEIPT,FETCHASSESSMENTS, DOWNLOADRECEIPT } from "egov-ui-kit/utils/endPoints";
 import { httpRequest } from "egov-ui-kit/utils/api";
 import { transformById } from "egov-ui-kit/utils/commons";
 import orderby from "lodash/orderBy";
@@ -9,9 +9,10 @@ import FileSaver from "file-saver";
 import cloneDeep from "lodash/cloneDeep";
 import { getLatestPropertyDetails } from "egov-ui-kit/utils/PTCommon";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
-import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/utils";
+import {  getCreatePropertyResponse, setPTDocuments } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/propertyCreateUtils";
+import { getFileUrl } from "egov-ui-framework/ui-utils/commons";
 
-const FileDownload = require("js-file-download");
+const FileDownload = require('js-file-download');
 const reset_property_reset = () => {
   return {
     type: actionTypes.RESET_PROPERTY_STATE,
@@ -63,6 +64,27 @@ const fetchReceiptError = (error) => {
     error,
   };
 };
+const fetchAssessmentsPending = () => {
+  return {
+    type: actionTypes.PROPERTY_FETCH_ASSESSMENTS_PENDING,
+  };
+};
+
+const fetchAssessmentsComplete = (payload) => {
+  return {
+    type: actionTypes.PROPERTY_FETCH_ASSESSMENTS_COMPLETE,
+    payload,
+  };
+};
+
+const fetchAssessmentsError = (error) => {
+  return {
+    type: actionTypes.PROPERTY_FETCH_ASSESSMENTS_ERROR,
+    error,
+  };
+};
+
+
 
 const downloadReceiptPending = () => {
   return {
@@ -286,27 +308,29 @@ export const fetchProperties = (queryObjectproperty, queryObjectDraft, queryObje
     if (queryObjectproperty) {
       dispatch(propertyFetchPending());
       try {
-        const payloadProperty = await httpRequest(PROPERTY.GET.URL, PROPERTY.GET.ACTION, queryObjectproperty);
-        payloadProperty.Properties = payloadProperty.Properties.map((property) => {
-          return {
-            ...property,
-            propertyDetails: property.propertyDetails.map((details) => {
-              return {
-                ...details,
-                buildUpArea:details.buildUpArea?Math.round(details.buildUpArea * 9):null,
-                units:
-                  details.units &&
-                  details.units.map((unit) => {
-                    return {
-                      ...unit,
-                      unitArea: Math.round(unit.unitArea * 9),
-                    };
-                  }),
-              };
-            }),
-          };
-        });
-        dispatch(propertyFetchComplete(payloadProperty));
+          let payloadProperty = await httpRequest(PROPERTY.GET.URL, PROPERTY.GET.ACTION,queryObjectproperty,{},[],{},true);
+        if(queryObjectDraft !== "citizen_search") {
+          if(payloadProperty&&payloadProperty.Properties&&payloadProperty.Properties.length>0){
+            payloadProperty.Properties=payloadProperty.Properties.map(property=>{
+              let properties=getCreatePropertyResponse({Properties:[property]});
+             return properties&&properties.Properties&&properties.Properties.length>0&&properties.Properties[0];
+            });
+          }
+          if(payloadProperty.Properties && payloadProperty.Properties[0] &&payloadProperty.Properties[0].documents){
+            payloadProperty.Properties[0].documentsUploaded = await setPTDocuments(
+              payloadProperty,
+              "Properties[0].documents",
+              "documentsUploaded",
+              dispatch,
+              'PT'
+            );
+            dispatch(propertyFetchComplete(payloadProperty));
+          } else {
+            dispatch(propertyFetchComplete(payloadProperty));
+          }
+        } else {
+          dispatch(propertyFetchComplete(payloadProperty));
+        }
       } catch (error) {
         dispatch(propertyFetchError(error.message));
       }
@@ -612,10 +636,26 @@ export const fetchReceipt = (fetchReceiptQueryObject) => {
         dispatch(fetchReceiptError(error.message));
       }
     }
-  };
-};
-const getFileUrlFromAPI = async (fileStoreId, tenantId) => {
-  const queryObject = [{ key: "tenantId", value: tenantId }, { key: "fileStoreIds", value: fileStoreId }];
+  }
+}
+export const fetchAssessments = (fetchAssessmentsQueryObject) => {
+  return async (dispatch) => {
+    if (fetchAssessmentsQueryObject) {
+      dispatch(fetchAssessmentsPending());
+      try {
+        const payloadProperty = await httpRequest(FETCHASSESSMENTS.GET.URL, FETCHASSESSMENTS.GET.ACTION, fetchAssessmentsQueryObject);
+        dispatch(fetchAssessmentsComplete(payloadProperty));
+      } catch (error) {
+        dispatch(fetchAssessmentsError(error.message));
+      }
+    }
+  }
+}
+export const getFileUrlFromAPI = async fileStoreId => {
+  const queryObject = [
+    { key: "tenantId", value: "pb" },
+    { key: "fileStoreIds", value: fileStoreId }
+  ];
   try {
     const fileUrl = await httpRequest("/filestore/v1/files/url", "", queryObject, {}, [], {}, false, true);
     return fileUrl;

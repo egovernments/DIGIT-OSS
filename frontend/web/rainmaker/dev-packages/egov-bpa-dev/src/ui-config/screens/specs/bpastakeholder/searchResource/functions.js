@@ -22,7 +22,8 @@ export const searchApiCall = async (state, dispatch) => {
       key: "tenantId",
       value: process.env.REACT_APP_DEFAULT_TENANT_ID
     },
-    { key: "offset", value: "0" }
+    { key: "offset", value: "0" },
+    { key: "limit", value: "100" }
   ];
   let searchScreenObject = get(
     state.screenConfiguration.preparedFinalObject,

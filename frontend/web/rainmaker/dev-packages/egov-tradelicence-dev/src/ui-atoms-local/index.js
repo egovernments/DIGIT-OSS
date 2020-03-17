@@ -12,6 +12,10 @@ const ApplicationNoContainer = Loadable({
   loader: () => import("./ApplicationNo"),
   loading: () => <Loading />
 });
+const  licenceNoContainer = Loadable({
+  loader: () => import("./LicenceNo"),
+  loading: () => <Loading />
+});
 
 const Checkbox = Loadable({
   loader: () => import("./Checkbox"),
@@ -51,6 +55,7 @@ const TradeLicenseIcon = Loadable({
 export {
   TestAtoms,
   ApplicationNoContainer,
+  licenceNoContainer,
   Checkbox,
   MapLocation,
   AutoSuggest,

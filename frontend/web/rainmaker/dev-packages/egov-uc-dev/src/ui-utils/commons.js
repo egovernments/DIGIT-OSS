@@ -27,7 +27,7 @@ import {
   getFileUrlFromAPI
 } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import { setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
+import { setBusinessServiceDataToLocalStorage ,getFileUrl} from "egov-ui-framework/ui-utils/commons";
 
 export const updateTradeDetails = async requestBody => {
   try {
@@ -99,8 +99,7 @@ const setDocsForEditFlow = async (state, dispatch) => {
             (fileUrlPayload &&
               fileUrlPayload[item.fileStoreId] &&
               decodeURIComponent(
-                fileUrlPayload[item.fileStoreId]
-                  .split(",")[0]
+                getFileUrl( fileUrlPayload[item.fileStoreId])
                   .split("?")[0]
                   .split("/")
                   .pop()

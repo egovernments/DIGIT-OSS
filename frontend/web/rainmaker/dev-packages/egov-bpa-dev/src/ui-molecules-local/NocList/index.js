@@ -16,6 +16,7 @@ import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { UploadSingleFile } from "../../ui-molecules-local";
+import Typography from "@material-ui/core/Typography";
 
 const themeStyles = theme => ({
   documentContainer: {
@@ -76,8 +77,9 @@ const themeStyles = theme => ({
     alignItems: "center"
   },
   descriptionDiv: {
-    display: "flex",
-    alignItems: "center"
+    alignItems: "center",
+    display: "block",
+    marginTop: "20px",
   },
   formControl: {
     minWidth: 250,
@@ -187,16 +189,78 @@ class NocList extends Component {
     prepareFinalObject("nocDocumentsUploadRedux", nocDocumentsUploadRedux);
   };
 
+  prepareDocumentsInEmployee = async (nocDocuments, bpaDetails) => {
+    let documnts = [];
+    if (nocDocuments) {
+      Object.keys(nocDocuments).forEach(function (key) {
+        if (nocDocuments && nocDocuments[key]) {
+          documnts.push(nocDocuments[key]);
+        }
+      });
+    }
+
+    prepareFinalObject("nocDocumentsUploadRedux", {});
+    let requiredDocuments = [], finalQstn = [];
+    if (documnts && documnts.length > 0) {
+      documnts.forEach(documents => {
+        if (documents && documents.documents && documents.dropDownValues && documents.dropDownValues.value) {
+          let doc = {}, finalDocs = [];
+          doc.documentType = documents.dropDownValues.value;
+          doc.fileStoreId = documents.documents[0].fileStoreId;
+          doc.fileStore = documents.documents[0].fileStoreId;
+          doc.fileName = documents.documents[0].fileName;
+          doc.fileUrl = documents.documents[0].fileUrl;
+          if (doc.id) {
+            doc.id = documents.documents[0].id;
+          }
+          if(bpaDetails.additionalDetails) {
+            if(bpaDetails.additionalDetails.fieldinspection_pending && bpaDetails.additionalDetails.fieldinspection_pending[0]) {
+              if(bpaDetails.additionalDetails.fieldinspection_pending[0].docs) {
+                finalQstn.push(doc);
+                bpaDetails.additionalDetails.fieldinspection_pending[0].docs = finalQstn
+              } else {
+                bpaDetails.additionalDetails.fieldinspection_pending.push({"docs" : doc, "question" : []})
+              }
+            }
+          } else {
+            bpaDetails.additionalDetails = [];
+            let documnt = [], fiDocs = [], details;
+            documnt[0] = {};
+            documnt[0].docs = [];
+            documnt[0].questions = [];
+            documnt[0].docs.push(doc);
+            fiDocs.push({
+              "docs" : documnt[0].docs,
+              "questions" : []
+            })
+            details = { "fieldinspection_pending" : fiDocs};
+            finalDocs.push(details);
+            finalDocs = finalDocs[0];
+            bpaDetails.additionalDetails = finalDocs
+          }
+        }
+      });
+
+      if(bpaDetails.additionalDetails && bpaDetails.additionalDetails["fieldinspection_pending"][0] && bpaDetails.additionalDetails["fieldinspection_pending"][0].docs) {
+        prepareFinalObject("BPA",  bpaDetails.additionalDetails["fieldinspection_pending"][0].docs);
+      }
+    }
+  }
+
+  distinct = (value, index, self) => {
+    return self.indexOf(value) === index
+ };
+
   onUploadClick = uploadedDocIndex => {
     this.setState({ uploadedDocIndex });
   };
 
   handleDocument = async (file, fileStoreId) => {
     let { uploadedDocIndex } = this.state;
-    const { prepareFinalObject, nocDocumentsUploadRedux } = this.props;
+    const { prepareFinalObject, nocDocumentsUploadRedux, bpaDetails } = this.props;
     const fileUrl = await getFileUrlFromAPI(fileStoreId);
 
-    prepareFinalObject("nocDocumentsUploadRedux", {
+    let nocDocuments = {
       ...nocDocumentsUploadRedux,
       [uploadedDocIndex]: {
         ...nocDocumentsUploadRedux[uploadedDocIndex],
@@ -208,7 +272,15 @@ class NocList extends Component {
           }
         ]
       }
-    });
+    }
+    prepareFinalObject("nocDocumentsUploadRedux", nocDocuments);
+
+    let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true
+
+    if(isEmployee) {
+      this.prepareDocumentsInEmployee(nocDocuments, bpaDetails);
+      }
+
   };
 
   removeDocument = remDocIndex => {
@@ -221,14 +293,22 @@ class NocList extends Component {
   };
 
   handleChange = (key, event) => {
-    const { nocDocumentsUploadRedux, prepareFinalObject } = this.props;
-    prepareFinalObject(`nocDocumentsUploadRedux`, {
+    const { nocDocumentsUploadRedux, prepareFinalObject, bpaDetails } = this.props;
+    let nocDocuments = {
       ...nocDocumentsUploadRedux,
       [key]: {
         ...nocDocumentsUploadRedux[key],
         dropDownValues: { value: event.target.value }
       }
-    });
+    };
+    prepareFinalObject(`nocDocumentsUploadRedux`, nocDocuments);
+
+    let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true
+
+    if(isEmployee) {
+      this.prepareDocumentsInEmployee(nocDocuments, bpaDetails);
+    }
+
   };
 
   getUploadCard = (card, key) => {
@@ -244,10 +324,10 @@ class NocList extends Component {
               </Icon>
             </div>
           ) : (
-            <div className={classes.documentIcon}>
-              <span>{key + 1}</span>
-            </div>
-          )}
+              <div className={classes.documentIcon}>
+                <span>{key + 1}</span>
+              </div>
+            )}
         </Grid>
         <Grid
           item={true}
@@ -262,6 +342,11 @@ class NocList extends Component {
             style={styles.documentName}
           />
           {card.required && requiredIcon}
+          <Typography variant="caption">
+            <LabelContainer
+              labelKey={getTransformedLocale("TL_UPLOAD_RESTRICTIONS")}
+            />
+          </Typography>
         </Grid>
         <Grid item={true} xs={12} sm={6} md={4}>
           {card.dropDownValues && (
@@ -302,6 +387,7 @@ class NocList extends Component {
             onButtonClick={() => this.onUploadClick(key)}
             inputProps={this.props.inputProps}
             buttonLabel={this.props.buttonLabel}
+            id={`noc-${key+1}`}
           />
         </Grid>
       </Grid>
@@ -364,7 +450,12 @@ const mapStateToProps = state => {
     "nocDocumentsUploadRedux",
     {}
   );
-  return { nocDocumentsUploadRedux, moduleName };
+  const bpaDetails = get(
+    screenConfiguration.preparedFinalObject,
+    "BPA",
+    {}
+  )
+  return { nocDocumentsUploadRedux, moduleName, bpaDetails };
 };
 
 const mapDispatchToProps = dispatch => {

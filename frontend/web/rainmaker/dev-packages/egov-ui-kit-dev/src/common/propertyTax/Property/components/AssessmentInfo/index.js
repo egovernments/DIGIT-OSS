@@ -202,78 +202,32 @@ properties.push({
 const getUnitInfo = (units = [],usageCategoryMajor="",buildUpArea) => {
   units = units || [];
   let floors = [];
-  units && units.length>0 ? units.forEach((unit={}, index) => {
+  units.map((unit, index) => {
     if(unit){
-    let floor = [{
-      key: getTranslatedLabel("PT_ASSESSMENT_UNIT_USAGE_TYPE", localizationLabelsData),
-      value: unit && unit.usageCategoryMinor ? 'PROPERTYTAX_BILLING_SLAB_' + unit.usageCategoryMinor :
-        (unit.usageCategoryMajor||usageCategoryMajor) ? 'PROPERTYTAX_BILLING_SLAB_' + (unit.usageCategoryMajor||usageCategoryMajor) : "NA",
-    }
-    ,{
-      key: getTranslatedLabel("PT_ASSESMENT_INFO_OCCUPLANCY", localizationLabelsData),
-      value: unit.occupancyType ? 'PROPERTYTAX_OCCUPANCYTYPE_' + unit.occupancyType : "NA",
-    },
-    {
-      key: getTranslatedLabel("PT_ASSESMENT_INFO_CONSTRUCTION_TYPE", localizationLabelsData),
-      value: (unit.constructionType||unit.ConstructionType) ? 'PROPERTYTAX_CONSTRUCTIONTYPE_' + (unit.constructionType||unit.ConstructionType) : "NA",
-    },
-    {
-      key: getTranslatedLabel("PT_ASSESMENT_INFO_INNER_DIMENSION", localizationLabelsData),
-      value: unit.additionalDetails && unit.additionalDetails.innerDimensionsKnown ? unit.additionalDetails.innerDimensionsKnown == "true" ? "COMMON_MASTER_TRUE" : "COMMON_MASTER_FALSE" : "COMMON_MASTER_FALSE",
-    }];
-    if (unit.additionalDetails && unit.additionalDetails.innerDimensionsKnown == "true") {
-      floor.push({
-        key: getTranslatedLabel("PROPERTYTAX_BILLING_SLAB_SUBMNR26", localizationLabelsData),
-        value: unit.additionalDetails && unit.additionalDetails.roomsArea ? unit.additionalDetails.roomsArea + '' : "NA",
-      },
-        {
-          key: getTranslatedLabel("PROPERTYTAX_BILLING_SLAB_SUBMNR27", localizationLabelsData),
-          value: unit.additionalDetails && unit.additionalDetails.commonArea ? unit.additionalDetails.commonArea + '' : "NA",
-        },
-        {
-          key: getTranslatedLabel("PROPERTYTAX_BILLING_SLAB_SUBMNR28", localizationLabelsData),
-          value: unit.additionalDetails && unit.additionalDetails.garageArea ? unit.additionalDetails.garageArea + '' : "NA",
-        },
-        {
-          key: getTranslatedLabel("PROPERTYTAX_BILLING_SLAB_SUBMNR29", localizationLabelsData),
-          value: unit.additionalDetails && unit.additionalDetails.bathroomArea ? unit.additionalDetails.bathroomArea + '' : "NA",
-        })
-    }
-    // else {
-      floor.push(
-        {
-          key: getTranslatedLabel("PT_FORM2_BUILT_AREA", localizationLabelsData),
-          value: unit.unitArea ? unit.unitArea + '' : "NA",
-        })
-    // }
-    if (usageCategoryMajor=="RESIDENTIAL") {
-      floor.push(
-        {
-          key: getTranslatedLabel("PT_FORM2_TOTAL_BUILT_AREA", localizationLabelsData),
-          value: buildUpArea ? buildUpArea + '' : "NA",
-        })
-    }
+      let floor = [{
+        key: getTranslatedLabel("PT_ASSESSMENT_UNIT_USAGE_TYPE", localizationLabelsData),
+        value: unit.usageCategoryMinor ? 'PROPERTYTAX_BILLING_SLAB_' + unit.usageCategoryMinor :
+          unit.usageCategoryMajor ? 'PROPERTYTAX_BILLING_SLAB_' + unit.usageCategoryMajor : "NA",
+      }, {
 
-    if (usageCategoryMajor!="RESIDENTIAL") {
-      floor.push(
-        {
-          key: getTranslatedLabel("PT_FORM2_SUB_USAGE_TYPE", localizationLabelsData),
-          value: unit && unit.usageCategoryMinor ? 'PROPERTYTAX_BILLING_SLAB_' + unit.usageCategorySubMinor :
-            (unit.usageCategorySubMinor||unit.usageCategoryDetail) ? 'PROPERTYTAX_BILLING_SLAB_' + (unit.usageCategorySubMinor||unit.usageCategoryDetail) : "NA",
+        key: getTranslatedLabel("PT_ASSESMENT_INFO_OCCUPLANCY", localizationLabelsData),
+        value: unit.occupancyType ? 'PROPERTYTAX_OCCUPANCYTYPE_' + unit.occupancyType : "NA",
+      }, {
+
+        key: getTranslatedLabel("PT_FORM2_BUILT_AREA", localizationLabelsData),
+        value: unit.unitArea ? unit.unitArea + '' : "NA",
+      }];
+      if (unit.occupancyType === "RENTED") {
+        floor.push({
+          key: getTranslatedLabel("PT_FORM2_TOTAL_ANNUAL_RENT", localizationLabelsData),
+          value: unit.arv ? unit.arv + '' : "NA",
         })
-    }
-
-
-    // if (unit.occupancyType === "RENTED") {
-      floor.push({
-        key: getTranslatedLabel("PT_FORM2_TOTAL_ANNUAL_RENT", localizationLabelsData),
-        value: unit.arv ? unit.arv + '' : "NA",
-      })
-    // }
-    if (!floors[unit['floorNo']]) {
-      floors[unit['floorNo']] = [floor];
-    } else {
-      floors[unit['floorNo']].push(floor);
+      }
+      if (!floors[unit['floorNo']]) {
+        floors[unit['floorNo']] = [floor];
+      } else {
+        floors[unit['floorNo']].push(floor);
+      }
     }
   }}): []
   return floors;

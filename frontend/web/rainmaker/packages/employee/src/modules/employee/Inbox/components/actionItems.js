@@ -14,7 +14,7 @@ export class Taskboard extends React.Component{
       <div className="inbox-taskboard">
         {data.map((item, i) => (
           <Card
-            className="inbox-card inbox-worklist-card"
+            className={`inbox-card inbox-worklist-card inbox-worklist-card-hover-${i}`}
             key={i}
             onClick={() => onSlaClick(item.baseColor,item.body)}
             style={{backgroundColor : item.color ,borderTop:  item.baseColor === color ?  `4px solid ${color}`  : ""}}

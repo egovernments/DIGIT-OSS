@@ -152,6 +152,7 @@ body.employee-user-profile {
     color: #484848 !important;
     font-size: 14px !important;
   }
+  
   .with-icon-menu{
     width : calc(100% - 50px );
     margin-left: 50px;
@@ -310,10 +311,35 @@ body.employee-user-profile {
   .sort-button {
     display: none;
   }
-  .screen-with-bredcrumb{
-    padding-top:80px;
-  }
+  // .screen-with-bredcrumb{
+  //   padding-top:45px;
+  // div:nth-child(1){
+  //  display: grid;
+  //  div:nth-child(2){
+  //   margin-bottom: -35px;
+  //   display: contents !important; 
+    // div:nth-child(1){
+    //   div{
+    //     button{
+    //       width: 340px;
+    //     }
+    //   }
+    // }
+    // div:nth-child(2){
+    //   div{
+    //     button{
+    //       width: 340px;
+    //       margin-left: 0px !important;
+    //     }
+    //   }
+    // }
+ // }
+  // }
+   
+  // }
 }
+  
+
 
 @media only screen and (max-width: 768px) {
   .screen-title-label {

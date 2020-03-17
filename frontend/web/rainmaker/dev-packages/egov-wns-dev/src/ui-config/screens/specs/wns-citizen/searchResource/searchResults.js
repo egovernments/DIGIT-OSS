@@ -70,13 +70,19 @@ export const searchResults = {
               )
             }
             else {
-              return ("")
+              return ("NA")
             }
           }
         }
       },
       {
         name: "tenantId",
+        options: {
+          display: false
+        }
+      },
+      {
+        name: "connectionType",
         options: {
           display: false
         }
@@ -113,5 +119,5 @@ export const searchResults = {
 
 
 const getViewBillDetails = data => {
-  window.location.href = `/citizen/wns/viewBill?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[8]}&service=${data.rowData[0]}`
+  window.location.href = `/citizen/wns/viewBill?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[8]}&service=${data.rowData[0]}&connectionType=${data.rowData[9]}`
 }

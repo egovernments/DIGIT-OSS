@@ -21,15 +21,14 @@
     margin-left: 5px !important;
     margin-top: 15px !important;
   }
-  .abcd .selected{ 
+  .abcd .selected{
     color:green !important;
     background-color:rgb(31, 8, 241) !important;
-    
   }
   .whiteBackground{
     background-color: white !important;
     height: 36px !important;
-    
+
     // width:90%!important;
     top: 6px;
       input{
@@ -56,7 +55,6 @@
   .inbox-card {
     padding: 2px!important;
 }
-  
 }
 .whiteBackground div hr{
   border-bottom: none !important;
@@ -70,7 +68,7 @@
     height: 36px !important;
     top: 8px;
     // width:80%!important;
-    
+
     input{
       // padding: 0px 0px 2px !important;
       margin-top: 2px !important;
@@ -78,3 +76,6 @@
     }}
   }
 
+.search-bar div div svg{
+  top:46px;
+}

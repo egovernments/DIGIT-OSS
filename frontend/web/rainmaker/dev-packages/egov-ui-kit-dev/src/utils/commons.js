@@ -206,6 +206,14 @@ export const getDateFromEpoch = (epoch) => {
   return day + "-" + month + "-" + year;
 };
 
+export const epochToDate = et => {
+  if (!et) return null;
+  var date = new Date(Math.round(Number(et)));
+  var formattedDate =
+    date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
+  return formattedDate;
+};
+
 export const getBodyClassFromPath = (path) => {
   let bodyClass = path
     .split("/")
@@ -774,4 +782,34 @@ export const onNotificationClick = async (history) => {
 
 export const getTotalAmountDue = (payload) => {
   return payload && payload.Bill && payload.Bill.length > 0 && payload.Bill[0].totalAmount ? payload.Bill[0].totalAmount : 0;
+}
+
+export const navigateToApplication = (businessService, propsHistory, applicationNo, tenantId, propertyId) => {
+  if (businessService == 'PT.MUTATION') {
+    propsHistory.push(`/pt-mutation/search-preview?applicationNumber=${applicationNo}&propertyId=${propertyId}&tenantId=${tenantId}`);
+  } else if (businessService == 'PT.CREATE') {
+    propsHistory.push(`/property-tax/application-preview?propertyId=${propertyId}&applicationNumber=${applicationNo}&tenantId=${tenantId}&type=property`);
+  } else {
+    console.log('Navigation Error');
+  }
+}
+
+export const getApplicationType = async (applicationNumber, tenantId) => {
+  const queryObject = [
+    { key: "businessIds", value: applicationNumber },
+    { key: "history", value: true },
+    { key: "tenantId", value: tenantId }
+  ];
+  try {
+    const payload = await httpRequest(
+      "egov-workflow-v2/egov-wf/process/_search",
+      "_search",
+      queryObject
+    );
+    if (payload && payload.ProcessInstances.length > 0) {
+      return payload.ProcessInstances[0].businessService;
+    }
+  } catch (e) {
+    console.log(e);
+  }
 }

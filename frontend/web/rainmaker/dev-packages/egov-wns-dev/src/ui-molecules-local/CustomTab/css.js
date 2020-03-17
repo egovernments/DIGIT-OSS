@@ -1,7 +1,7 @@
 const navPillsStyle = theme => ({
   root: {
     flexGrow: 1,
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: "#F4F7FB",
     width: '100%'
   },
   tabsRoot: {
@@ -41,7 +41,10 @@ const navPillsStyle = theme => ({
   },
   tabSelected: {},
   tabContent: {
-    padding: theme.spacing.unit * 2,
+    paddingTop: 16,
+    paddingBottom: 16,
+    paddingLeft: 0,
+    paddingRight: 0
   }
 });
 
