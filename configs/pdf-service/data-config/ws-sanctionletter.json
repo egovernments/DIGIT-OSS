@@ -139,6 +139,12 @@
                                 }
                             },
                             {
+                                "variable": "date",
+                                "value": {
+                                    "path": "$.connectionExecutionDate"
+                                }
+                            },
+                            {
                                 "variable": "total",
                                 "value": {
                                     "path": "PDF_STATIC_LABELWS_CONSOLIDATED_ACKNOWELDGMENT_TOTAL"
