@@ -353,12 +353,11 @@
               {
                 "variable": "consumer_id",
                 "value": {
-                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_CONSUMER_ID"
+                  "path": "$.consumerCode"
                 },
-                "type": "label",
                 "localisation":{
                   "required":true,
-                  "prefix": null,
+                  "prefix": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_CONSUMER_ID",
                   "module":"rainmaker-common"
                }
               },
