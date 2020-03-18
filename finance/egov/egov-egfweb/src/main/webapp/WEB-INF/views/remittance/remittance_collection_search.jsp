@@ -63,9 +63,10 @@
     background-color: #f2851f;
     color: white;
 }
-.form-horizontal .form-group {
-    margin-right: 0px;
-    margin-left: 0px;
+
+div.dataTables_wrapper div.dataTables_filter {
+    text-align: right;
+    margin-bottom: -24px;
 }
 </style>
 <script type="text/javascript">
@@ -206,7 +207,7 @@ var fromDateToDateAlertMsg = '<spring:message code="msg.fromDate.must.be.lower.t
 							<!-- <div class="alert alert-success" role="alert"></div> -->
 							<div class="col-md-12 form-group report-table-container">
 								<table class="table table-bordered table-hover multiheadertbl"
-									id="resultTable">
+									id="resultTable" style="width: 100%;table-layout: fixed;">
 									<thead>
 										<tr>
 											<th><spring:message code="lbl.sr.no" text="Sr. No" /></th>
