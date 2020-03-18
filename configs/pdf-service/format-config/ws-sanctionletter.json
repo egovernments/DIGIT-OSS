@@ -21,7 +21,7 @@
                                     "body": [
                                         [
                                             {
-                                                "text": "{{UAT}}{{cityName}} {{Municipal_Corporation}}",
+                                                "text": "{{UAT}} {{cityName}} {{Municipal_Corporation}}",
                                                 "border": [
                                                     false,
                                                     false,
@@ -88,28 +88,28 @@
                                                 ],
                                                 "columns": [
                                                     {
-                                                        "width": "*",
+                                                        "width": "auto",
                                                         "text": "{{app_no}}",
                                                         "style": "ws-sub-header"
                                                     },
                                                     {
-                                                        "width": "*",
+                                                        "width": "2$",
                                                         "text": ":",
                                                         "style": "ws-sub-header"
                                                     },
                                                     {
-                                                        "width": "*",
+                                                        "width": "auto",
                                                         "text": "{{applicationNumber}}",
                                                         "style": "ws-sub-data"
                                                     },
                                                     {
-                                                        "width": "*",
+                                                        "width": "auto",
                                                         "text": "{{date_label}}",
                                                         "style": "ws-sub-header",
                                                         "alignment": "right"
                                                     },
                                                     {
-                                                        "width": "*",
+                                                        "width": "auto",
                                                         "text": "{{connectionExecutionDate}}",
                                                         "alignment": "right",
                                                         "style": "ws-sub-data"
@@ -636,12 +636,12 @@
                                                 "columns": [
                                                     {
                                                         "width": "100%",
-                                                        "text": "{{order_data2}} {{service}} {{app_no}}:{{applicationNumber}}",
+                                                        "text": "{{order_data2}} {{service}} {{order_data3}} {{app_no}}:{{applicationNumber}}",
                                                         "style": "receipt-value-down"
                                                     }
                                                 ],
                                                 "margin": [
-                                                    50,
+                                                    30,
                                                     10,
                                                     0,
                                                     0
@@ -654,12 +654,12 @@
                                                     {
                                                         "text": "{{for_commissioner_label}}",
                                                         "style": "receipt-table-value-total",
-                                                        "fontSize": 20
+                                                        "fontSize": 12
                                                     },
                                                     {
-                                                        "text": "{{UAT}}{{cityName}} {{Municipal_Corporation}}",
+                                                        "text": "{{UAT}} {{cityName}} {{Municipal_Corporation}}",
                                                         "style": "receipt-table-value-total",
-                                                        "fontSize": 20
+                                                        "fontSize": 12
                                                     }
                                                 ],
                                                 "border": [
@@ -765,16 +765,16 @@
                                                             ],
                                                             "columns": [
                                                                 {
-                                                                    "width": "*",
+                                                                    "width": "auto",
                                                                     "text": "{{app_no}}",
                                                                     "style": "ws-consumer-sub-header"
                                                                 },
                                                                 {
                                                                     "width": "2%",
-                                                                    "text": " "
+                                                                    "text": ":"
                                                                 },
                                                                 {
-                                                                    "width": "*",
+                                                                    "width": "auto",
                                                                     "text": "{{applicationNumber}}",
                                                                     "style": "ws-consumer-sub-header"
                                                                 }
@@ -806,7 +806,7 @@
                                             {
                                                 "stack": [
                                                     {
-                                                        "text": "{{copy_message1}}",
+                                                        "text": "{{copy_message1}} {{service}} {{copy_message-sub1}}",
                                                         "style": "receipt-value-down"
                                                     }
                                                 ],
@@ -912,7 +912,7 @@
             "ws-table-header": {
                 "color": "#000000",
                 "bold": true,
-                "fontSize": 20,
+                "fontSize": 18,
                 "fontWeight": 500,
                 "alignment": "center",
                 "margin": [
@@ -962,9 +962,8 @@
             },
             "ws-consumer-sub-header": {
                 "color": "#000000",
-                "fontSize": 14,
-                "fontWeight": 400,
-                "bold": true
+                "fontSize": 12,
+                "fontWeight": 400
             },
             "receipt-value-down": {
                 "color": "#000000",
