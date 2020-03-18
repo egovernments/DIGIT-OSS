@@ -37,6 +37,8 @@ public class ResponseEnhancementFilter extends ZuulFilter {
     public Object run() {
         RequestContext ctx = RequestContext.getCurrentContext();
         ctx.addZuulResponseHeader(CORRELATION_HEADER_NAME, getCorrelationId());
+        ctx.addZuulResponseHeader("Cache-Control", "no-cache, no-store, max-age=0, must-revalidate");
+
         return null;
     }
 
