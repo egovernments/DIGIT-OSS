@@ -15308,7 +15308,7 @@
     },
     {
       "id": 1888,
-      "name": "Dashboard Home",
+      "name": "Tradelicense",
       "url": "url",
       "displayName": "Tradelicense",
       "orderNumber": 5,
@@ -16368,6 +16368,18 @@
       "orderNumber": 0,
       "enabled": false,
       "serviceCode": "BPA",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1972,
+      "name": "DSS Dashboard Config Home V2",
+      "url": "/dashboard-analytics/dashboard/getDashboardConfig/homev2",
+      "parentModule": "",
+      "displayName": "DSS",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "DSS",
       "code": "null",
       "path": ""
     }
