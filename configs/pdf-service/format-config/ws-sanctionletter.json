@@ -109,7 +109,7 @@
                                                         "alignment": "right"
                                                     },
                                                     {
-                                                        "width": "auto",
+                                                        "width": "*",
                                                         "text": "{{connectionExecutionDate}}",
                                                         "alignment": "right",
                                                         "style": "ws-sub-data"
