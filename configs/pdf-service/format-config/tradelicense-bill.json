@@ -648,7 +648,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "{{nameAddress}}",
+                "text": "{{payerName}}, {{nameAddress}}",
                 "border": [
                   false,
                   false,
