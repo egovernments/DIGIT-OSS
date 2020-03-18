@@ -4,8 +4,10 @@
     text-align: -webkit-center; }
     #material-ui-applicationSuccessContainer #custom-atoms-tail {
       text-align: center !important; }
-  .footer-com-style {
-    display: flex; } }
+  .common-footer {
+    width: 100%; }
+  .common-footer-mobile {
+    width: 100%; } }
 
 @media only screen and (min-width: 768px) {
   .footer-com-style {

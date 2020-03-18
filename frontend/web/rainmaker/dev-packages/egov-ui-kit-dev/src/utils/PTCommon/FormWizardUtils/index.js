@@ -207,7 +207,10 @@ export const convertToOldPTObject = (newObject) => {
   propertyDetails.noOfFloors = newProperty.noOfFloors;
   propertyDetails.landArea = newProperty.landArea;
   propertyDetails.buildUpArea = newProperty.superBuiltUpArea;
-  propertyDetails.units = newProperty.units;
+  propertyDetails.units = newProperty.units&&newProperty.units.map(unit=>{
+    unit.floorNo = unit.floorNo || unit.floorNo === 0 ? unit.floorNo.toString() : unit.floorNo
+    return {...unit}
+  });
 
   propertyDetails.documents = newProperty.documents;
   propertyDetails.additionalDetails = newProperty.additionalDetails;
@@ -337,53 +340,58 @@ export const callDraft = async (self, formArray = [], assessmentNumber = "") => 
   } catch (e) {
     alert(e);
   }
-
+  if(process.env.REACT_APP_NAME === "Citizen")
+  {
+  /*  
+  Draft Removed from PT2.2
+  
   if (!draftRequest.draft.id) {
-    draftRequest.draft.tenantId = getQueryValue(search, "tenantId") || prepareFormData.Properties[0].tenantId;
-    draftRequest.draft.draftRecord = {
-      selectedTabIndex: selected + 1,
-      prepareFormData,
-    };
-    try {
-      let draftResponse = await httpRequest("pt-services-v2/drafts/_create", "_cretae", [], draftRequest);
-      const draftInfo = draftResponse.drafts[0];
-
-      updateDraftinLocalStorage(draftInfo, assessmentNumber, self);
-    } catch (e) {
-      alert(e);
-    }
-  } else {
-    const assessmentNo = assessmentNumber || draftRequest.draft.assessmentNumber;
-    draftRequest.draft = {
-      ...draftRequest.draft,
-      assessmentNumber: assessmentNo,
-      tenantId: getQueryValue(search, "tenantId") || prepareFormData.Properties[0].tenantId,
-      draftRecord: {
-        ...draftRequest.draft.draftRecord,
-        selectedTabIndex: assessmentNumber ? selected : selected + 1,
-        assessmentNumber: assessmentNo,
-        prepareFormData,
-      },
-      prepareFormData,
-    };
-    try {
-      if (selected === 3) {
-        draftRequest = {
-          ...draftRequest,
-          draft: {
-            ...draftRequest.draft,
-            isActive: false,
-          },
+        draftRequest.draft.tenantId = getQueryValue(search, "tenantId") || prepareFormData.Properties[0].tenantId;
+        draftRequest.draft.draftRecord = {
+          selectedTabIndex: selected + 1,
+          prepareFormData,
         };
-      }
-      let draftResponse = await httpRequest("pt-services-v2/drafts/_update", "_update", [], draftRequest);
-      const draftInfo = draftResponse.drafts[0];
+        try {
+          let draftResponse = await httpRequest("pt-services-v2/drafts/_create", "_cretae", [], draftRequest);
+          const draftInfo = draftResponse.drafts[0];  
+          updateDraftinLocalStorage(draftInfo, assessmentNumber, self);
+        } catch (e) {
+          alert(e);
+        }
+      } else {
+        const assessmentNo = assessmentNumber || draftRequest.draft.assessmentNumber;
+        draftRequest.draft = {
+          ...draftRequest.draft,
+          assessmentNumber: assessmentNo,
+          tenantId: getQueryValue(search, "tenantId") || prepareFormData.Properties[0].tenantId,
+          draftRecord: {
+            ...draftRequest.draft.draftRecord,
+            selectedTabIndex: assessmentNumber ? selected : selected + 1,
+            assessmentNumber: assessmentNo,
+            prepareFormData,
+          },
+          prepareFormData,
+        };
+        try {
+          if (selected === 3) {
+            draftRequest = {
+              ...draftRequest,
+              draft: {
+                ...draftRequest.draft,
+                isActive: false,
+              },
+            };
+          }
+          let draftResponse = await httpRequest("pt-services-v2/drafts/_update", "_update", [], draftRequest);
+          const draftInfo = draftResponse.drafts[0];  
+          updateDraftinLocalStorage(draftInfo, "", self);
+        } catch (e) {
+          alert(e);
+        }
+      } */
+  } 
 
-      updateDraftinLocalStorage(draftInfo, "", self);
-    } catch (e) {
-      alert(e);
-    }
-  }
+  
 };
 
 export const updateTotalAmount = (value, isFullPayment, errorText) => {

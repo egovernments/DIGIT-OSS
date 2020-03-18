@@ -19,6 +19,12 @@ import {
     } from "../../utils";
     import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
     import get from "lodash/get";
+
+
+
+
+
+    
 export const registrationDetails = getCommonCard(
     {
       header: getCommonTitle(
@@ -105,21 +111,26 @@ export const registrationDetails = getCommonCard(
           pattern: getPattern("DocumentNo"),
           jsonPath: "Property.additionalDetails.documentNumber"
         }),
-          documentIssueDateField :getDateField({
-          label: { labelName: "Document Issue Date", labelKey: "PT_MUTATION_DOCUMENT_ISSUE_DATE" },
-          placeholder: {
-            labelName: "Enter Document No.",
-            labelKey: "PT_MUTATION_DOCUMENT_ISSUE_DATE_PLACEHOLDER"
-          },
-          required: true,
-          pattern: getPattern("Date"),
-          jsonPath: "Property.additionalDetails.documentDate",
-          // props: {
-          //   inputProps: {
-          //     max: getTodaysDateInYMD()
-          //   }
-          // }
-        }),
+        documentIssueDateField: {
+          ...getDateField({
+            label: { labelName: "Document Issue Date", labelKey: "PT_MUTATION_DOCUMENT_ISSUE_DATE" },
+            placeholder: {
+              labelName: "Enter Document No.",
+              labelKey: "PT_MUTATION_DOCUMENT_ISSUE_DATE_PLACEHOLDER"
+            },
+            required: true,
+            pattern: getPattern("Date"),
+            isDOB: true,
+            errorMessage: "PT_DOCUMENT_DATE_ERROR_MESSAGE",
+            jsonPath: "Property.additionalDetails.documentDate",
+            props: {
+              inputProps: {
+                max: getTodaysDateInYMD()
+              }
+            }
+          })
+        },
+          
         documentValue: getTextField({
           label: {
             labelName: "Document Value",

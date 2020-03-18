@@ -1,17 +1,16 @@
-import React from "react";
-import set from "lodash/set";
-import isEmpty from "lodash/isEmpty";
 import axios from "axios";
+import commonConfig from "config/common.js";
+import { getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
+import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
+import { setFieldProperty } from "egov-ui-kit/redux/form/actions";
 import { httpRequest } from "egov-ui-kit/utils/api";
 import { TENANT } from "egov-ui-kit/utils/endPoints";
-import commonConfig from "config/common.js";
-import { Icon } from "egov-ui-kit/components";
+import { getAccessToken, getTenantId, getUserInfo, localStorageGet, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 import Label from "egov-ui-kit/utils/translationNode";
-import { setFieldProperty } from "egov-ui-kit/redux/form/actions";
 import get from "lodash/get";
-import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
-import { localStorageSet, localStorageGet, getTenantId, getUserInfo, getAccessToken } from "egov-ui-kit/utils/localStorageUtils";
-import { getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
+import isEmpty from "lodash/isEmpty";
+import set from "lodash/set";
+import React from "react";
 
 export const statusToMessageMapping = {
   rejected: "Rejected",
@@ -228,7 +227,7 @@ export const addBodyClass = (path) => {
   try {
     document.body.classList.forEach((className) => document.body.classList.remove(className));
     bodyClass && document.body.classList.add(bodyClass);
-  } catch (error) {}
+  } catch (error) { }
 };
 
 export const prepareFormData = (form) => {
@@ -282,8 +281,8 @@ export const fetchImages = (actionArray) => {
 // };
 
 export const getCityNameByCode = (code, localizationLabels) => {
-  const tenantId=code&&code.replace('.','_').toUpperCase();
-  return code&&getTranslatedLabel(`TENANT_TENANTS_${tenantId}`, localizationLabels);
+  const tenantId = code && code.replace('.', '_').toUpperCase();
+  return code && getTranslatedLabel(`TENANT_TENANTS_${tenantId}`, localizationLabels);
 };
 
 export const isImage = (url) => {
@@ -486,10 +485,10 @@ export const transformComplaintForComponent = (complaints, role, employeeById, c
         role === "citizen"
           ? displayStatus(complaintDetail.status, complaintDetail.assignee, complaintDetail.actions.filter((complaint) => complaint.status)[0].action)
           : getTransformedStatus(complaintDetail.status) === "CLOSED"
-          ? complaintDetail.rating
-            ? displayStatus(`${complaintDetail.rating}/5`)
-            : displayStatus(complaintDetail.actions[0].status)
-          : displayStatus(
+            ? complaintDetail.rating
+              ? displayStatus(`${complaintDetail.rating}/5`)
+              : displayStatus(complaintDetail.actions[0].status)
+            : displayStatus(
               returnSLAStatus(
                 getPropertyFromObj(categoriesById, complaintDetail.serviceCode, "slaHours", "NA"),
                 getLatestCreationTime(complaintDetail)
@@ -507,7 +506,7 @@ export const startSMSRecevier = () => {
     if (typeof androidAppProxy !== "undefined") {
       window.androidAppProxy.requestSMS();
     }
-  } catch (error) {}
+  } catch (error) { }
 };
 
 export const upperCaseFirst = (word) => {
@@ -536,11 +535,11 @@ export const fetchDropdownData = async (dispatch, dataFetchConfig, formKey, fiel
       const payloadSpec = await httpRequest(url, action, queryParams || [], requestBody);
       const dropdownData = boundary
         ? // ? jp.query(payloadSpec, dataFetchConfig.dataPath)
-          payloadSpec.TenantBoundary[0].boundary
+        payloadSpec.TenantBoundary[0].boundary
         : dataFetchConfig.dataPath.reduce((dropdownData, path) => {
-            dropdownData = [...dropdownData, ...get(payloadSpec, path)];
-            return dropdownData;
-          }, []);
+          dropdownData = [...dropdownData, ...get(payloadSpec, path)];
+          return dropdownData;
+        }, []);
       const ddData =
         dropdownData &&
         dropdownData.length > 0 &&
@@ -587,7 +586,7 @@ export const fetchDropdownData = async (dispatch, dataFetchConfig, formKey, fiel
         )
       );
     } else {
-      dispatch(toggleSnackbarAndSetText(true, { labelName: message, labelKey: message },   "error"));
+      dispatch(toggleSnackbarAndSetText(true, { labelName: message, labelKey: message }, "error"));
     }
     return;
   }
@@ -623,11 +622,11 @@ const getTimeFormat = (epochTime) => {
 };
 const getDateFormat = (epochTime) => {
   const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "June",
-  "July", "Aug", "Sep", "Oct", "Nov", "Dec"
-];
+    "July", "Aug", "Sep", "Oct", "Nov", "Dec"
+  ];
   epochTime = new Date(epochTime);
-  const day = epochTime.getDate() ;
-  const Month = epochTime.getMonth() ;
+  const day = epochTime.getDate();
+  const Month = epochTime.getMonth();
   return day.toString() + " " + monthNames[Month];
 };
 
@@ -636,7 +635,7 @@ const getEventSLA = (item) => {
   let sla;
 
   if (item.eventType === "EVENTSONGROUND") {
-    const disp =getDateFormat(item.eventDetails.fromDate) +" "+ getTimeFormat(item.eventDetails.fromDate) +  "-"+getDateFormat(item.eventDetails.toDate) +" "+ getTimeFormat(item.eventDetails.toDate);
+    const disp = getDateFormat(item.eventDetails.fromDate) + " " + getTimeFormat(item.eventDetails.fromDate) + "-" + getDateFormat(item.eventDetails.toDate) + " " + getTimeFormat(item.eventDetails.toDate);
     sla = (
       // <div style={{ display: "flex" }}>
       //   <Icon name="access-time" action="device" viewBox="0 0 24 24" style={{ height: "20px", width: "35px" }} />
@@ -713,9 +712,9 @@ export const getTransformedNotifications = async (notifications) => {
       buttons:
         item.actions && item.actions.actionUrls
           ? item.actions.actionUrls.map((actionUrls) => ({
-              label: actionUrls.code,
-              route: getEndpointfromUrl(actionUrls.actionUrl, "redirectTo"),
-            }))
+            label: actionUrls.code,
+            route: getEndpointfromUrl(actionUrls.actionUrl, "redirectTo"),
+          }))
           : [],
       eventDate: (item.eventDetails && getEventDate(item.eventDetails.fromDate)) || "",
       eventToDate: (item.eventDetails && getEventDate(item.eventDetails.toDate)) || "",
@@ -725,7 +724,7 @@ export const getTransformedNotifications = async (notifications) => {
       locationObj: item.eventDetails && { lat: item.eventDetails.latitude || 12.9199988, lng: item.eventDetails.longitude || 77.67078 },
       entryFees: item.eventDetails && item.eventDetails.fees,
       referenceId: item.referenceId,
-          });
+    });
   }
   const fileUrls = await getFileUrlFromAPI(fieStoreIdString.join(","));
   const finalArray =
@@ -771,7 +770,7 @@ export const onNotificationClick = async (history) => {
     await httpRequest("/egov-user-event/v1/events/lat/_update", "_update", queryObject, requestBody);
     history.push("/notifications");
   } catch (e) {
-    toggleSnackbarAndSetText(true, { labelName: "Count update error", labelKey: "Count update error" },   "error");
+    toggleSnackbarAndSetText(true, { labelName: "Count update error", labelKey: "Count update error" }, "error");
   }
 };
 
@@ -779,30 +778,56 @@ export const getTotalAmountDue = (payload) => {
   return payload && payload.Bill && payload.Bill.length > 0 && payload.Bill[0].totalAmount ? payload.Bill[0].totalAmount : 0;
 }
 
+
+
+export const setRoute = (link) => {
+  let moduleName = process.env.REACT_APP_NAME === "Citizen" ? '/citizen' : '/employee';
+  window.location.href =
+    process.env.NODE_ENV === "production"
+      ? moduleName + link
+      : link;
+}
+
+
 export const navigateToApplication = (businessService, propsHistory, applicationNo, tenantId, propertyId) => {
   if (businessService == 'PT.MUTATION') {
-    propsHistory.push(`/pt-mutation/search-preview?applicationNumber=${applicationNo}&propertyId=${propertyId}&tenantId=${tenantId}`);
+    setRoute(`/pt-mutation/search-preview?applicationNumber=${applicationNo}&propertyId=${propertyId}&tenantId=${tenantId}`);
   } else if (businessService == 'PT.CREATE') {
-    propsHistory.push(`/property-tax/application-preview?propertyId=${propertyId}&applicationNumber=${applicationNo}&tenantId=${tenantId}&type=property`);
+    setRoute(`/property-tax/application-preview?propertyId=${propertyId}&applicationNumber=${applicationNo}&tenantId=${tenantId}&type=property`);
   } else {
-    console.log('Navigation Error');
+    process.env.REACT_APP_NAME === "Citizen" ?
+      setRoute(`/property-tax/my-properties/property/${propertyId}/${tenantId}`)
+      : setRoute(`/property-tax/property/${propertyId}/${tenantId}`)
   }
 }
 
-export const getApplicationType = async (applicationNumber, tenantId) => {
+export const getApplicationType = async (applicationNumber, tenantId, creationReason) => {
   const queryObject = [
     { key: "businessIds", value: applicationNumber },
     { key: "history", value: true },
     { key: "tenantId", value: tenantId }
   ];
   try {
-    const payload = await httpRequest(
-      "egov-workflow-v2/egov-wf/process/_search",
-      "_search",
-      queryObject
-    );
-    if (payload && payload.ProcessInstances.length > 0) {
-      return payload.ProcessInstances[0].businessService;
+    if (creationReason) {
+      if (creationReason == 'MUTATION') {
+        return 'PT.MUTATION';
+      } else if (creationReason == 'CREATE') {
+        return 'PT.CREATE';
+      } else if (creationReason == 'UPDATE') {
+        return 'PT.CREATE';
+      }
+      else {
+        return 'NA';
+      }
+    } else {
+      const payload = await httpRequest(
+        "egov-workflow-v2/egov-wf/process/_search",
+        "_search",
+        queryObject
+      );
+      if (payload && payload.ProcessInstances.length > 0) {
+        return payload.ProcessInstances[0].businessService;
+      }
     }
   } catch (e) {
     console.log(e);

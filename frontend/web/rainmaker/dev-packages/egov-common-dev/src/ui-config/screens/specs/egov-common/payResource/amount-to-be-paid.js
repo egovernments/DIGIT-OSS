@@ -64,8 +64,9 @@ const AmountToBePaid = getCommonGrayCard({
       }),
       beforeFieldChange: (action, state, dispatch) => {
         const pattern = getPattern("Amount");
+        const minAmountPayable = get(state.screenConfiguration.preparedFinalObject , "businessServiceInfo.minAmountPayable");
         try {
-          validateAmountInput(pattern, action, dispatch, state);
+          validateAmountInput(pattern, action, dispatch, state , minAmountPayable);
         } catch (e) {
           console.log(e);
         }

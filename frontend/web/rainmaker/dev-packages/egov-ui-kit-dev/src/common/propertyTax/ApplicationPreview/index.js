@@ -1,31 +1,29 @@
+import { Card } from "components";
+import commonConfig from "config/common.js";
+import DownloadPrintButton from "egov-ui-framework/ui-molecules/DownloadPrintButton";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import Screen from "egov-ui-kit/common/common/Screen";
+import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
+import { initLocalizationLabels } from "egov-ui-kit/redux/app/utils";
+import { fetchGeneralMDMSData } from "egov-ui-kit/redux/common/actions";
+import { fetchProperties } from "egov-ui-kit/redux/properties/actions";
+import { httpRequest } from "egov-ui-kit/utils/api";
+import { FETCHASSESSMENTS, PROPERTY } from "egov-ui-kit/utils/endPoints";
+import { getLocale, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
+import { generatePdfFromDiv, getQueryValue } from "egov-ui-kit/utils/PTCommon";
+import Label from "egov-ui-kit/utils/translationNode";
+import WorkFlowContainer from "egov-workflow/ui-containers-local/WorkFlowContainer";
+import get from "lodash/get";
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { getLatestPropertyDetails, getQueryValue,generatePdfFromDiv } from "egov-ui-kit/utils/PTCommon";
-import { Button, Card } from "components";
-import Label from "egov-ui-kit/utils/translationNode";
-import Screen from "egov-ui-kit/common/common/Screen";
-import { FETCHASSESSMENTS, PROPERTY } from "egov-ui-kit/utils/endPoints";
-import { fetchGeneralMDMSData } from "egov-ui-kit/redux/common/actions";
-import { httpRequest } from "egov-ui-kit/utils/api";
-import DownloadPrintButton from "egov-ui-framework/ui-molecules/DownloadPrintButton";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import get from "lodash/get";
-import WorkFlowContainer from "egov-workflow/ui-containers-local/WorkFlowContainer";
-import { fetchProperties } from "egov-ui-kit/redux/properties/actions";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-// import isEqual from "lodash/isEqual";
-// import orderby from "lodash/orderBy";
-import { initLocalizationLabels } from "egov-ui-kit/redux/app/utils";
-import commonConfig from "config/common.js";
-import { getTenantId, localStorageSet, localStorageGet, getLocalization, getLocale } from "egov-ui-kit/utils/localStorageUtils";
-import "./index.css";
-import PropertyAddressInfo from "../Property/components/PropertyAddressInfo";
-import AssessmentInfo from "../Property/components/AssessmentInfo";
-import OwnerInfo from "../Property/components/OwnerInfo";
 import PTHeader from "../../common/PTHeader";
+import AssessmentInfo from "../Property/components/AssessmentInfo";
 import DocumentsInfo from "../Property/components/DocumentsInfo";
+import OwnerInfo from "../Property/components/OwnerInfo";
+import PropertyAddressInfo from "../Property/components/PropertyAddressInfo";
+import "./index.css";
 
-import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 
 const innerDivStyle = {
   padding: "0",
@@ -186,7 +184,7 @@ class ApplicationPreview extends Component {
     }
 
   }
-  
+
 
   // setBusinessServiceDataToLocalStorage = async (queryObject) => {
   //   const { toggleSnackbarAndSetText } = this.props;
@@ -317,40 +315,40 @@ class ApplicationPreview extends Component {
     return applicationObject;
   }
   getLogoUrl = (tenantId) => {
-    const {cities} = this.props
+    const { cities } = this.props
     const filteredCity = cities && cities.length > 0 && cities.filter(item => item.code === tenantId);
-    return filteredCity ? get(filteredCity[0] , "logoId") : "" ; 
+    return filteredCity ? get(filteredCity[0], "logoId") : "";
   }
 
   render() {
     const { location, documentsUploaded } = this.props;
     const { search } = location;
     const applicationNumber = getQueryValue(search, "applicationNumber");
-    const { generalMDMSDataById, properties ,cities} = this.props;
+    const { generalMDMSDataById, properties, cities } = this.props;
     const applicationType = this.getApplicationType();
     const applicationDownloadObject = {
       label: { labelName: "PT Application", labelKey: "PT_APPLICATION" },
       link: () => {
-        generatePdfFromDiv("download" ,applicationNumber, "#property-application-review-form")
-       
+        generatePdfFromDiv("download", applicationNumber, "#property-application-review-form")
+
       },
       leftIcon: "assignment"
     };
-   const  applicationPrintObject = {
+    const applicationPrintObject = {
       label: { labelName: "PT Application", labelKey: "PT_APPLICATION" },
       link: () => {
         // const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
         // const documents = LicensesTemp[0].reviewDocData;
         // set(Licenses[0],"additionalDetails.documents",documents)
         // downloadAcknowledgementForm(Licenses,'print');
-        generatePdfFromDiv("print" , applicationNumber,"#property-application-review-form")
-       
+        generatePdfFromDiv("print", applicationNumber, "#property-application-review-form")
+
       },
       leftIcon: "assignment"
     };
-    
-   const downloadMenu = [applicationDownloadObject];
-   const printMenu = [applicationPrintObject];
+
+    const downloadMenu = [applicationDownloadObject];
+    const printMenu = [applicationPrintObject];
 
     let header = '';
     if (applicationType.dataPath == 'Property') {
@@ -358,21 +356,21 @@ class ApplicationPreview extends Component {
     } else {
       header = 'PT_ASSESS_APPLICATION_TITLE';
     }
-    let logoUrl = ""; 
+    let logoUrl = "";
     let corpCity = "";
     let ulbGrade = "";
-    if(get(properties,"tenantId")) {
-      logoUrl =get(properties,"tenantId") ?  this.getLogoUrl(get(properties,"tenantId")) : "";
-      corpCity = `TENANT_TENANTS_${get(properties,"tenantId").toUpperCase().replace(/[.:-\s\/]/g, "_")}`;
-      const selectedCityObject = cities && cities.length > 0 && cities.filter(item => item.code === get(properties,"tenantId"));
-      ulbGrade = selectedCityObject ? `ULBGRADE_${get(selectedCityObject[0] ,"city.ulbGrade")}` : "MUNICIPAL CORPORATION";
+    if (get(properties, "tenantId")) {
+      logoUrl = get(properties, "tenantId") ? this.getLogoUrl(get(properties, "tenantId")) : "";
+      corpCity = `TENANT_TENANTS_${get(properties, "tenantId").toUpperCase().replace(/[.:-\s\/]/g, "_")}`;
+      const selectedCityObject = cities && cities.length > 0 && cities.filter(item => item.code === get(properties, "tenantId"));
+      ulbGrade = selectedCityObject ? `ULBGRADE_${get(selectedCityObject[0], "city.ulbGrade")}` : "MUNICIPAL CORPORATION";
     }
-   
+
     return <div>
       <Screen className={""}>
         <PTHeader header={header} subHeaderTitle='PT_PROPERTY_APPLICATION_NO' subHeaderValue={applicationNumber} />
 
-        <div className="printdownload-app-preview">
+        {/* <div className="printDownloadButton">
           {<DownloadPrintButton data={{
             label: {
               labelName: "Download", labelKey: "PT_DOWNLOAD"
@@ -382,57 +380,57 @@ class ApplicationPreview extends Component {
             props: { variant: "outlined", style: { marginLeft: 10, color: "#FE7A51" } },
             menu: downloadMenu
           }} />}
-          { <DownloadPrintButton data={{
+          {<DownloadPrintButton data={{
             label: {
-              llabelName: "Print", labelKey: "PT_PRINT"
+              labelName: "Print", labelKey: "PT_PRINT"
             },
             leftIcon: "print",
             rightIcon: "arrow_drop_down",
             props: { variant: "outlined", style: { marginLeft: 10, color: "#FE7A51" } },
             menu: printMenu
           }} />}
-        </div>
+        </div> */}
 
         <div className="form-without-button-cont-generic" >
           <div>
             <WorkFlowContainer dataPath={applicationType.dataPath}
               moduleName={applicationType.moduleName}
               updateUrl={applicationType.updateUrl}></WorkFlowContainer>
-            <Card 
-             
+            <Card
+
               textChildren={
-                <div className="col-sm-12 col-xs-12"  id="property-application-review-form" style={{ alignItems: "center" }}>
-                     <div className="pdf-header" id="pdf-header">
-                  <Card
-                    style={{ display : "flex" , backgroundColor : "rgb(242, 242, 242)" , minHeight: "120px" , alignItems: "center" ,paddingLeft :"10px"}}
-                    textChildren={
-                      <div style={{display : "flex" }}>
-                        {/* <Image  id="image-id" style={logoStyle} source={logoUrl} /> */}
-                        <div style={{marginLeft : 30}}> 
-                          <div style={{display:"flex" , marginBottom : 5}}>
-                            <Label label={corpCity} fontSize="20px" fontWeight="500" color="rgba(0, 0, 0, 0.87)" containerStyle={{marginRight : 10 ,textTransform: "uppercase"}}/>
-                            <Label label={ulbGrade} fontSize="20px" fontWeight="500" color="rgba(0, 0, 0, 0.87)" />
+                <div className="col-sm-12 col-xs-12" id="property-application-review-form" style={{ alignItems: "center" }}>
+                  <div className="pdf-header" id="pdf-header">
+                    <Card
+                      style={{ display: "flex", backgroundColor: "rgb(242, 242, 242)", minHeight: "120px", alignItems: "center", paddingLeft: "10px" }}
+                      textChildren={
+                        <div style={{ display: "flex" }}>
+                          {/* <Image  id="image-id" style={logoStyle} source={logoUrl} /> */}
+                          <div style={{ marginLeft: 30 }}>
+                            <div style={{ display: "flex", marginBottom: 5 }}>
+                              <Label label={corpCity} fontSize="20px" fontWeight="500" color="rgba(0, 0, 0, 0.87)" containerStyle={{ marginRight: 10, textTransform: "uppercase" }} />
+                              <Label label={ulbGrade} fontSize="20px" fontWeight="500" color="rgba(0, 0, 0, 0.87)" />
+                            </div>
+                            <Label label={"PT_PDF_SUBHEADER"} fontSize="16px" fontWeight="500" />
                           </div>
-                          <Label label={"PT_PDF_SUBHEADER"} fontSize="16px" fontWeight="500" />
                         </div>
+                      }
+                    />
+                    <div style={{ display: "flex", justifyContent: "space-between" }}>
+                      <div style={{ display: "flex" }}>
+                        <Label label="PT_PROPERTY_ID" color="rgba(0, 0, 0, 0.87)" fontSize="20px" containerStyle={{ marginRight: 10 }} />
+                        <Label label={`: ${get(properties, "propertyId")}`} fontSize="20px" />
                       </div>
-                    }
-                  />
-                  <div style={{display : "flex" , justifyContent : "space-between"}}>
-                    <div style={{display : "flex"}}>
-                      <Label label="PT_PROPERTY_ID" color="rgba(0, 0, 0, 0.87)" fontSize="20px" containerStyle={{marginRight : 10}}/>
-                      <Label label={`: ${get(properties,"propertyId")}`} fontSize="20px"/>
-                    </div>
-                    {/* <div style={{display : "flex"}}>
+                      {/* <div style={{display : "flex"}}>
                       <Label label="Property ID :" color="rgba(0, 0, 0, 0.87)" fontSize="20px"/>
                       <Label label="PT-JLD-2018-09-145323" fontSize="20px"/>
                     </div> */}
-                    {/* <div style={{display : "flex"}}>
+                      {/* <div style={{display : "flex"}}>
                       <Label label="PDF_STATIC_LABEL_CONSOLIDATED_BILL_DATE" color="rgba(0, 0, 0, 0.87)" fontSize="20px"/>
                       <Label label="PT-JLD-2018-09-145323" fontSize="20px"/>
                     </div> */}
+                    </div>
                   </div>
-                </div>
                   <PropertyAddressInfo properties={properties} generalMDMSDataById={generalMDMSDataById}></PropertyAddressInfo>
                   <AssessmentInfo properties={properties} generalMDMSDataById={generalMDMSDataById} ></AssessmentInfo>
                   <OwnerInfo properties={properties} generalMDMSDataById={generalMDMSDataById} ></OwnerInfo>
@@ -473,7 +471,7 @@ const mapStateToProps = (state, ownProps) => {
   const { documentsUploaded } = properties || [];
   return {
     ownProps,
-    generalMDMSDataById, properties, documentsUploaded, propertyId,cities
+    generalMDMSDataById, properties, documentsUploaded, propertyId, cities
   };
 };
 

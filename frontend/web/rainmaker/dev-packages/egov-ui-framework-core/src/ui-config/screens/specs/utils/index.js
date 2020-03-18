@@ -150,6 +150,15 @@ export const getCommonGrayCard = children => {
     }
   });
 };
+export const getCommonCardWithNoShadow = children => {
+  return getCommonCard(children, {
+    style: {
+      boxShadow: "none",
+      borderRadius: 0,
+      overflow: "visible"
+    }
+  });
+};
 
 export const getBreak = (props = {}) => {
   return {
@@ -472,7 +481,7 @@ export const getTab = (label, props = {}) => {
 export const getPattern = type => {
   switch (type) {
     case "Name":
-      return /^[^\$\"'<>?\\\\~`!@#$%^()+={}\[\]*,.:;“”‘’]{1,50}$/i;
+      return /^[^{0-9}^\$\"'<>?\\\\~`!@#$%^()+={}\[\]*,.:;“”‘’]{1,50}$/i;
     case "MobileNo":
       return /^[6789][0-9]{9}$/i;
     case "Amount":
@@ -501,6 +510,8 @@ export const getPattern = type => {
       return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,100}$/i;
     case "Pincode":
       return /^[1-9][0-9]{5}$/i;
+    case "Landline":
+        return /^[0-9]{11}$/i;
     case "PropertyID":
       return /^[a-zA-z0-9\s\\/\-]$/i;
     case "ElectricityConnNo":

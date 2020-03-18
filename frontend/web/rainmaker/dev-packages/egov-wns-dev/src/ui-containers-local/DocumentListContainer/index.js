@@ -24,7 +24,7 @@ class DocumentListContainer extends Component {
 const mapStateToProps = state => {
   let documentsList = get(state, "screenConfiguration.preparedFinalObject.documentsContract", []);
   const documents = get(state.screenConfiguration.preparedFinalObject, "applyScreen.documents", []);
-  const uploadedDocuments = get(state.screenConfiguration.preparedFinalObject, "UploadedDocs", []);
+  const uploadedDocuments = get(state.screenConfiguration.preparedFinalObject, "displayDocs");
   return { documentsList, uploadedDocuments, documents };
 };
 

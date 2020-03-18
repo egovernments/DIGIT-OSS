@@ -18,7 +18,7 @@ const PTHeader = ({ header = '', headerValue = '', subHeaderTitle = '', subHeade
             label: { labelName: "Application", labelKey: "PT_APPLICATION" },
             link: () => {
       
-                generatePdfFromDiv("download",subHeaderValue),"#property-review-form";
+                generatePdfFromDiv("download",subHeaderValue,"#property-review-form");
             },
             leftIcon: "assignment"
           };

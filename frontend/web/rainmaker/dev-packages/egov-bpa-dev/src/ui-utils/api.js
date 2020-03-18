@@ -26,7 +26,7 @@ const edcrInstance = axios.create({
   }
 })
 
-const wrapRequestBody = (requestBody, action, customRequestInfo) => {
+export const wrapRequestBody = (requestBody, action, customRequestInfo) => {
   const authToken = getAccessToken();
   let RequestInfo = {
     apiId: "Rainmaker",

@@ -1,22 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Field from "egov-ui-kit/utils/field";
-//import Icon from "@material-ui/core/Icon";
 import { Button, Card, Image,Icon} from "components";
-import IconButton from "material-ui/IconButton";
 import Label from "egov-ui-kit/utils/translationNode";
 import { CityPicker } from "modules/common";
 import Hidden from "@material-ui/core/Hidden";
 import { startSMSRecevier } from "egov-ui-kit/utils/commons";
 import logo from "egov-ui-kit/assets/images/logo_black.png";
-import qrlogo from "egov-ui-kit/assets/images//qrImage.png";
 import "./index.css";
 
-const iconButtonStyle = {
-  paddingLeft: 0,
-  paddingRight: 0,
-  width: 35,
-};
 
 const RegisterForm = ({ handleFieldChange, form,logoUrl ,qrCodeURL,enableWhatsApp}) => {
   const fields = form.fields || {};
@@ -66,7 +58,7 @@ const RegisterForm = ({ handleFieldChange, form,logoUrl ,qrCodeURL,enableWhatsAp
        <Label  color="black" fontSize= "16px" label="Or"/>
        </div>
     </div>
-    <div className="rainmaker-displayInline register-mobile-whatsapp-button" onClick={()=>{window.location.href="https://api.whatsapp.com/send?phone=918744960111s&text=mseva"}} >      
+    <div className="rainmaker-displayInline register-mobile-whatsapp-button" onClick={()=>{window.location.href="https://api.whatsapp.com/send?phone=918744960111&text=mSeva-send+this+to+start"}} >      
         <Icon action="custom" name="whatsapp" className="register-mobile-whatsapp-icon" />
         <Label bold={true} color="black" fontSize= "14px" label="WHATSAPP_CONTINUE_MOBILE"/>
     </div>

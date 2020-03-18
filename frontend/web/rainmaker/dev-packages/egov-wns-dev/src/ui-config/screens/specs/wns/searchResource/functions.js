@@ -1,7 +1,7 @@
 import get from "lodash/get";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSearchResults, fetchBill, getSearchResultsForSewerage } from "../../../../../ui-utils/commons";
-import { convertEpochToDate, getTextToLocalMapping } from "../../utils/index";
+import { convertEpochToDate,convertDateToEpoch, getTextToLocalMapping, resetFieldsForApplication, resetFieldsForConnection } from "../../utils/index";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validateFields } from "../../utils";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
@@ -13,15 +13,17 @@ export const searchApiCall = async (state, dispatch) => {
   let getCurrentTab = get(state.screenConfiguration.preparedFinalObject, "currentTab");
   let currentSearchTab = getCurrentTab === undefined ? "SEARCH_CONNECTION" : getCurrentTab;
   if (currentSearchTab === "SEARCH_CONNECTION") {
+    resetFieldsForApplication(state, dispatch);
     await renderSearchConnectionTable(state, dispatch);
   } else {
+    resetFieldsForConnection(state, dispatch);
     await renderSearchApplicationTable(state, dispatch);
   }
 }
 
 const renderSearchConnectionTable = async (state, dispatch) => {
   let queryObject = [{ key: "tenantId", value: JSON.parse(getUserInfo()).tenantId }, { key: "offset", value: "0" }];
-  let searchScreenObject = get(state.screenConfiguration.preparedFinalObject, "searchScreen", {});
+  let searchScreenObject = get(state.screenConfiguration.preparedFinalObject, "searchConnection", {});
   const isSearchBoxFirstRowValid = validateFields(
     "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.wnsApplication.children.cardContent.children.wnsApplicationContainer.children",
     state,
@@ -77,10 +79,21 @@ const renderSearchConnectionTable = async (state, dispatch) => {
           queryObjectForWaterFetchBill = [{ key: "tenantId", value: JSON.parse(getUserInfo()).tenantId }, { key: "consumerCode", value: element.connectionNo }, { key: "businessService", value: "SW" }];
         }
         let billResults = await fetchBill(queryObjectForWaterFetchBill, dispatch)
-        billResults ? billResults.Bill.map(bill => {
-          finalArray.push({
-            due: bill.totalAmount,
-            dueDate: bill.billDetails[0].expiryDate,
+        if(element.connectionNo!=="NA" && element.connectionNo!== null){
+          billResults ? billResults.Bill.map(bill => {
+            finalArray.push({
+              due: bill.totalAmount,
+              dueDate: bill.billDetails[0].expiryDate,
+              service: element.service,
+              connectionNo: element.connectionNo,
+              name: element.property.owners[0].name,
+              status: element.status,
+              address: element.property.address.street,
+              connectionType: element.connectionType
+            })
+          }) : finalArray.push({
+            due: 'NA',
+            dueDate: 'NA',
             service: element.service,
             connectionNo: element.connectionNo,
             name: element.property.owners[0].name,
@@ -88,16 +101,8 @@ const renderSearchConnectionTable = async (state, dispatch) => {
             address: element.property.address.street,
             connectionType: element.connectionType
           })
-        }) : finalArray.push({
-          due: 'NA',
-          dueDate: 'NA',
-          service: element.service,
-          connectionNo: element.connectionNo,
-          name: element.property.owners[0].name,
-          status: element.status,
-          address: element.property.address.street,
-          connectionType: element.connectionType
-        })
+        }
+        
       }
       showConnectionResults(finalArray, dispatch)
     } catch (err) { console.log(err) }
@@ -144,8 +149,15 @@ const renderSearchApplicationTable = async (state, dispatch) => {
       }
     }
     try {
-      let getSearchResult = getSearchResults(queryObject)
-      let getSearchResultForSewerage = getSearchResultsForSewerage(queryObject, dispatch)
+      let getSearchResult, getSearchResultForSewerage;
+      if(searchScreenObject.applicationType==="New Water connection") {
+         getSearchResult = getSearchResults(queryObject)
+      }else if(searchScreenObject.applicationType==="New Sewerage Connection"){
+         getSearchResultForSewerage = getSearchResultsForSewerage(queryObject, dispatch)
+      }else{
+        getSearchResult = getSearchResults(queryObject),
+        getSearchResultForSewerage = getSearchResultsForSewerage(queryObject, dispatch)
+      }
       let finalArray = [];
       let searchWaterConnectionResults, searcSewerageConnectionResults;
       try { searchWaterConnectionResults = await getSearchResult } catch (error) { finalArray = []; console.log(error) }
@@ -161,7 +173,8 @@ const renderSearchApplicationTable = async (state, dispatch) => {
           name: element.property.owners[0].name,
           applicationStatus: element.applicationStatus,
           address: element.property.address.street,
-          connectionType: element.service,
+          service: element.service,
+          connectionType: element.connectionType
         })
       }
       showApplicationResults(finalArray, dispatch)
@@ -200,12 +213,13 @@ const showApplicationResults = (connections, dispatch) => {
   let data = connections.map(item => ({
     [getTextToLocalMapping("Consumer No")]: item.connectionNo,
     [getTextToLocalMapping("Application No")]: item.applicationNo,
-    [getTextToLocalMapping("Application Type")]: item.connectionType === "WATER" ? "New Water Connection" : "New Sewerage Connection",
+    [getTextToLocalMapping("Application Type")]: item.service === "WATER" ? "New Water Connection" : "New Sewerage Connection",
     [getTextToLocalMapping("Owner Name")]: item.name,
     [getTextToLocalMapping("Application Status")]: item.applicationStatus,
     [getTextToLocalMapping("Address")]: item.address,
     ["tenantId"]: JSON.parse(getUserInfo()).tenantId,
-    ["service"]: item.connectionType
+    ["service"]: item.service,
+    ["connectionType"]: item.connectionType,
   }));
   dispatch(handleField("search", "components.div.children.searchApplicationResults", "props.data", data));
   dispatch(handleField("search", "components.div.children.searchApplicationResults", "props.title",

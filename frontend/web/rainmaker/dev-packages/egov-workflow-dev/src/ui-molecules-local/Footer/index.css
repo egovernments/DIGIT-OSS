@@ -31,7 +31,13 @@
     display: flex;
     min-width: 50px !important; }
     .wf-footer-container div {
-      width: 100%; } }
+      width: 100%; }
+  .apply-wizard-footer button {
+    width: 100% !important;
+    margin: initial;
+    border: none;
+    margin: 0 !important;
+    border-radius: none !important; } }
 
 @media only screen and (min-width: 768px) {
   .wf-footer-button {

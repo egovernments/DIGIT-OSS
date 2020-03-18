@@ -302,7 +302,7 @@ export const createUpdatePTApplication = async (state, dispatch, status) => {
 export const prepareDocumentsUploadData = (state, dispatch) => {
   let documents = get(
     state,
-    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.PropertyTax.Documents",
+    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.PropertyTax.MutationDocuments",
     []
   );
   documents = documents.filter(item => {

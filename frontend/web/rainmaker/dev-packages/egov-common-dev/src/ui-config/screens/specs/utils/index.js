@@ -599,6 +599,10 @@ export const getBusinessServiceMdmsData = async (dispatch,  tenantId) => {
         {
           moduleName: "BillingService",
           masterDetails: [{ name: "BusinessService" }]
+        },
+        {
+          moduleName: "common-masters",
+          masterDetails: [{ name: "uiCommonPay" }]
         }
       ]
     }

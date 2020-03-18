@@ -139,7 +139,7 @@ export const applicationSuccessFooter = (
     gotLabelName = "PROCEED TO LOGIN";
     gotHomeKey = "BPA_COMMON_PROCEED_NEXT";
   }
-  const payURL = `/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenant}`;
+  const payURL = `/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenant}&businessService=BPAREG`;
   return getCommonApplyFooter({
     gotoHome: {
       componentPath: "Button",

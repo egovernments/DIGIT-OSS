@@ -1,6 +1,6 @@
 import { prepareFormData, getTenantForLatLng } from "egov-ui-kit/utils/commons";
 import get from "lodash/get";
-import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId, getUserInfo, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 
 const updateComplaintStatus = (state, form) => {
   const formData = prepareFormData(form);
@@ -135,11 +135,10 @@ const transformer = (formKey, form = {}, state = {}) => {
     complaint: async () => {
       const formData = prepareFormData(form);
       const userInfo = getUserInfo();
-      let userRole = null;
+      const isNative = JSON.parse(localStorageGet("isNative"));
+      // let userRole = null;
       try {
         const { phone } = form.fields;
-        userRole = JSON.parse(userInfo).roles[0].code;
-        formData.services[0].source = userRole === "CSR" ? "ivr" : "";
         formData.services[0].phone = phone.value;
       } catch (error) {}
 
@@ -152,6 +151,11 @@ const transformer = (formKey, form = {}, state = {}) => {
           tenantId = city.value && city.value;
         }
         formData.services[0].tenantId = tenantId;
+        const userRolesArray = JSON.parse(userInfo).roles.filter(item => item.tenantId === tenantId || item.tenantId === process.env.REACT_APP_DEFAULT_TENANT_ID);
+        const index = userRolesArray.findIndex((role) => {
+          return role.code === "CSR";
+        });
+        formData.services[0].source = index > -1 ? "ivr" : isNative ? "mobileapp" : "web" ;
       } catch (error) {
         throw new Error(error.message);
       }

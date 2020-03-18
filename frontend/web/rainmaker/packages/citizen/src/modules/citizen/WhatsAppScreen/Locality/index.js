@@ -1,7 +1,5 @@
 import React from "react";
 import { Icon } from "components";
-import filter from "lodash/filter";
-import isUndefined from "lodash/isUndefined";
 import { Screen } from "modules/common";
 import { withStyles } from "@material-ui/core/styles";
 import Label from "egov-ui-kit/utils/translationNode";
@@ -166,7 +164,19 @@ class WhatsAppLocality extends React.Component {
               }}
             />
           </div>
-        </div>
+        </div> 
+        {(this.state.data.length===0&&this.state.searchText === "")&&
+             <Screen className="whatsappScreen">
+             <Label
+          label="Please start typing to search and choose locality"
+          fontSize="30px"
+          color="#808080"
+          labelStyle={{ fontWeight: 500, marginTop:166,textAlign: "center"}}
+        />
+   
+           </Screen >
+        
+        }
         <Screen className="whatsappScreen">
           <List
             items={this.getListItems(this.state.data)}

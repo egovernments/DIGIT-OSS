@@ -69,6 +69,11 @@ const MenuListCompositionForBpa = Loadable({
   loading: () => <Loading />
 });
 
+const PermitListCondition = Loadable({
+  loader: () => import("./PermitListCondition"),
+  loading: () => <Loading />
+});
+
 export {
   TestAtoms,
   AutoSuggest,
@@ -82,5 +87,6 @@ export {
   MenuButton,
   TradeLicenseIcon,
   PermitNumber,
-  MenuListCompositionForBpa
+  MenuListCompositionForBpa,
+  PermitListCondition
 };

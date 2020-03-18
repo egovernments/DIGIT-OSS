@@ -68,6 +68,7 @@ const waterAndSewerageSearchAndResult = {
                     uiFramework: "custom-molecules-local",
                     moduleName: "egov-wns",
                     componentPath: "MyApplications",
+                    props:{}
                 },
                 listCard2: {
                     uiFramework: "custom-molecules-local",

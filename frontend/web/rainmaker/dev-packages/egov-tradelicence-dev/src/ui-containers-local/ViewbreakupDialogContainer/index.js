@@ -115,6 +115,35 @@ class ViewBreakupContainer extends React.Component {
       </Grid>
     );
   };
+  getRebatePenalty = (label,total, classes, style) => {
+    return (
+      <Grid sm={12} className={classes.container} container={true}>
+        <Grid sm={10}>
+          <LabelContainer
+            labelName={label}
+            labelKey={label}
+            style={{
+              color: "rgba(0, 0, 0, 0.8700000047683716)",
+              fontSize: "14px",
+              fontWeigt: 400,
+              lineSpacing: "17px"
+            }}
+          />
+        </Grid>
+        <Grid sm={2}>
+          <LabelContainer
+            labelName={`Rs ${total}`}
+            style={{
+              color: "rgba(0, 0, 0, 0.8700000047683716)",
+              fontSize: "14px",
+              fontWeigt: 400,
+              lineSpacing: "17px"
+            }}
+          />
+        </Grid>
+      </Grid>
+    );
+  };
 
   handleClose = () => {
     const { screenKey } = this.props;
@@ -133,11 +162,16 @@ class ViewBreakupContainer extends React.Component {
       accessoriesUnitData,
       tradeTotal,
       accessoriesTotal,
-      classes
+      classes,
+      estimateCardData
     } = this.props;
+    const RebateArray=estimateCardData&&estimateCardData.length>1  && estimateCardData.filter(item => item.name.labelKey === "TL_RENEWAL_REBATE");
+    const PenaltyArray=estimateCardData && estimateCardData.length>1 &&estimateCardData.filter(item => item.name.labelKey === "TL_RENEWAL_PENALTY");
+    const RebateTotal=RebateArray&& get(RebateArray[0],"value",0);
+    const PenaltyTotal=PenaltyArray&& get(PenaltyArray[0],"value",0);
     const { style } = this.state;
     const { getGridItem, handleClose } = this;
-    const totalBill = tradeTotal + accessoriesTotal;
+    const totalBill = tradeTotal + accessoriesTotal+RebateTotal+PenaltyTotal;
     return (
       <Dialog
         open={open}
@@ -209,9 +243,13 @@ class ViewBreakupContainer extends React.Component {
               {accessoriesUnitData &&
                 accessoriesUnitData.length > 0 &&
                 getGridItem(accessoriesTotal, classes)}
-              {accessoriesUnitData &&
-                accessoriesUnitData.length > 0 &&
-                getGridItem(totalBill, classes, style)}
+             {RebateArray&&RebateArray.length>0 && (
+              this.getRebatePenalty("TL_RENEWAL_REBATE",RebateTotal,classes,style)
+              )}
+              {PenaltyArray&&PenaltyArray.length >0 && (
+              this.getRebatePenalty("TL_RENEWAL_PENALTY",PenaltyTotal,classes,style)
+              )}
+              {getGridItem(totalBill, classes, style)}
             </div>
           ) : (
             <div style={{ padding: "16px", width: "500px" }}>
@@ -227,6 +265,12 @@ class ViewBreakupContainer extends React.Component {
                   }}
                 />
               </div>
+              {RebateArray&&RebateArray.length>0 && (
+              this.getRebatePenalty("TL_RENEWAL_REBATE",RebateTotal,classes,style)
+              )}
+              {PenaltyArray&&PenaltyArray.length >0 && (
+              this.getRebatePenalty("TL_RENEWAL_PENALTY",PenaltyTotal,classes,style)
+              )}
               {getGridItem(totalBill, classes, style)}
             </div>
           )
@@ -256,7 +300,10 @@ const mapStateToProps = (state, ownProps) => {
     preparedFinalObject,
     "LicensesTemp[0].billingSlabData.accessoriesTotal"
   );
-
+  const estimateCardData = get(
+    preparedFinalObject,
+    "LicensesTemp[0].estimateCardData"
+  ); 
   const open = get(
     screenConfig,
     `${screenKey}.components.breakUpDialog.props.open`
@@ -269,7 +316,8 @@ const mapStateToProps = (state, ownProps) => {
     tradeTotal,
     accessoriesTotal,
     screenKey,
-    screenConfig
+    screenConfig,
+    estimateCardData 
   };
 };
 

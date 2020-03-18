@@ -72,7 +72,11 @@ function FeildInspectionCards(props) {
           md={4}
           align="left"
           > 
-            <Typography className={classes.body2} className={classes.subtext}>{getTransformedLocale(item.question)}</Typography> 
+          <Typography className={classes.body2} className={classes.subtext}>
+              <LabelContainer
+                labelKey={getTransformedLocale(item.question)}
+              />
+            </Typography>
           </Grid> 
           <Grid item={true} xs={12} sm={6} md={4} className={classes.subtext}> 
             <Typography className={classes.body2}>{getTransformedLocale(item.value)}</Typography> 

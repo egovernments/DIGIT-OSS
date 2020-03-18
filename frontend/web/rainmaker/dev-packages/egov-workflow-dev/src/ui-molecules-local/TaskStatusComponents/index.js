@@ -125,8 +125,8 @@ const TaskStatusComponents = ({ currentObj, index }) => {
         >
           <LabelContainer
             labelName={
-              get(currentObj, "assignee.name")
-                ? get(currentObj, "assignee.name")
+              get(currentObj, "assignes[0].name")
+                ? get(currentObj, "assignes[0].name")
                 : "NA"
             }
           />

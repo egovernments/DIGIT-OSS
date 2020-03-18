@@ -1,10 +1,12 @@
 import {
   getCommonContainer,
   getCommonHeader,
-  getStepperObject
+  getStepperObject,
+  getSelectField,
+  getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getCurrentFinancialYear } from "../utils";
-import { footer } from "./applyResource/footer";
+import { footer, showApplyLicencePicker } from "./applyResource/footer";
 import { basicDetails } from "./applyResource/basicDetails";
 import { bpaLocationDetails } from "./applyResource/propertyLocationDetails";
 import {
@@ -22,7 +24,8 @@ import { statusOfNocDetails } from "./applyResource/updateNocDetails";
 import { getQueryArg, getFileUrlFromAPI, setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
 import {
   prepareFinalObject,
-  handleScreenConfigurationFieldChange as handleField
+  handleScreenConfigurationFieldChange as handleField,
+  toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest, edcrHttpRequest } from "../../../../ui-utils/api";
@@ -39,6 +42,7 @@ import {
 import { getTodaysDateInYYYMMDD, getTenantMdmsData, setProposedBuildingData } from "../utils";
 import jp from "jsonpath";
 import { bpaSummaryDetails } from "../egov-bpa/summaryDetails";
+import { changeStep } from "./applyResource/footer";
 
 export const stepsData = [
   { labelName: "Basic Details", labelKey: "BPA_STEPPER_BASIC_DETAILS_HEADER" },
@@ -141,7 +145,7 @@ const getMdmsData = async (action, state, dispatch) => {
   ) || getTenantId();
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: 'pb', //tenantId,
+      tenantId: getTenantId(), //tenantId,
       moduleDetails: [
         {
           moduleName: "common-masters",
@@ -180,7 +184,19 @@ const getMdmsData = async (action, state, dispatch) => {
             },
             {
               name: "Usages"
+            },
+            {
+              name: "ProposedLandUse"
+            },
+            {
+              name: "TownPlanningScheme"
             }
+          ]
+        },
+        {
+          moduleName: "TradeLicense",
+          masterDetails: [
+            { name: "TradeType", filter: `[?(@.type == "BPA")]` }
           ]
         }
       ]
@@ -329,6 +345,80 @@ export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
     dispatch(prepareFinalObject("documentDetailsUploadRedux", bpaDocs));
   }
 }
+const selectLicenceType = (state, dispatch) => {
+  let value = get(
+    state.screenConfiguration.preparedFinalObject , 
+    "BPA.licenceType", ""
+    );
+  let plotArea = get(
+    state.screenConfiguration.preparedFinalObject , 
+    "scrutinyDetails.planDetail.plot.area"
+    );
+  let numOfFloors = get(
+    state.screenConfiguration.preparedFinalObject , 
+    "scrutinyDetails.planDetail.blocks[0].building.totalFloors"
+    );
+  let heighOfTheBuilding = get(
+    state.screenConfiguration.preparedFinalObject , 
+    "scrutinyDetails.planDetail.blocks[0].building.buildingHeight"
+  )
+  let tradeTypes = get(
+    state.screenConfiguration.preparedFinalObject,
+    "applyScreenMdmsData.TradeLicense.TradeType", []
+    );
+  let isTrue = false;
+  if(value === "ENGINEER" || value === "SUPERVISOR" ) {
+    tradeTypes.forEach(type =>{
+      if(type.code.split('.')[0] === value) {
+        if(type.restrictions) {
+          if(plotArea <= type.restrictions.maxPlotArea && 
+            heighOfTheBuilding < type.restrictions.maxBulidingheight && 
+            numOfFloors <= type.restrictions.maxBulidingheight) {
+              isTrue = true;
+            } else {
+              dispatch(
+                toggleSnackbar(
+                  true,
+                  {
+                    labelName: "Not able to create the application for this role",
+                    labelKey: "BPA_NOT_ABLE_TO_CREATE_LABEL"
+                  },
+                  "error"
+                )
+              );
+            }
+        }
+      }
+    });
+  } else {
+    if(value != "") {
+      isTrue = true;
+    } else {
+      dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "Not able to create the application for this role",
+            labelKey: "BPA_NOT_ABLE_TO_CREATE_LABEL"
+          },
+          "error"
+        )
+      );
+    }
+  }
+
+if(isTrue) {
+  let toggle = get(
+    state.screenConfiguration.screenConfig["apply"],
+    "components.cityPickerDialog.props.open",
+    false
+  );
+  dispatch(
+    handleField("apply", "components.cityPickerDialog", "props.open", !toggle)
+  );
+  changeStep(state, dispatch, "", 1);
+}
+}
 
 const screenConfig = {
   uiFramework: "material-ui",
@@ -447,7 +537,103 @@ const screenConfig = {
         formwizardFifthStep,
         footer
       }
-    }
+    },
+    cityPickerDialog :{
+      componentPath: "Dialog",
+      props: {
+        open: false,
+        maxWidth: "md"
+      },
+      children: {
+        dialogContent: {
+          componentPath: "DialogContent",
+          props: {
+            classes: {
+              root: "city-picker-dialog-style"
+            }
+          },
+          children: {
+            popup: getCommonContainer({
+              header: getCommonHeader({
+                labelName: "Select Licensee Type",
+                labelKey: "BPA_SELECT_LICENSE_TYPE_LABEL"
+              }),
+              cityPicker: getCommonContainer({
+                licenceDropdown: getSelectField({
+                  label: {
+                    labelName: "Licensee Type",
+                    labelKey: "BPA_LICENSE_TYPE_LABEL"
+                  },
+                  placeholder: {
+                    labelName: "Select Licensee Type",
+                    labelKey: "BPA_SELECT_LICENSE_TYPE_LABEL"
+                  },
+                  jsonPath: "BPA.licenceType",
+                  sourceJsonPath: "applyScreenMdmsData.licenceTypes",
+                  required: true,
+                  gridDefination: {
+                    xs: 12,
+                    sm: 12
+                  }
+                }),
+                div: {
+                  uiFramework: "custom-atoms",
+                  componentPath: "Div",
+                  children: {
+                    selectButton: {
+                      componentPath: "Button",
+                      props: {
+                        variant: "contained",
+                        color: "primary",
+                        style: {
+                          width: "40px",
+                          height: "20px",
+                          marginRight: "4px",
+                          marginTop: "16px"
+                        }
+                      },
+                      children: {
+                        previousButtonLabel: getLabel({
+                          labelName: "SELECT",
+                          labelKey: "TL_CITIZEN_SELECT"
+                        })
+                      },
+                      onClickDefination: {
+                        action: "condition",
+                        callBack: selectLicenceType
+                      }
+                    },
+                    cancelButton: {
+                      componentPath: "Button",
+                      props: {
+                        variant: "outlined",
+                        color: "primary",
+                        style: {
+                          width: "40px",
+                          height: "20px",
+                          marginRight: "4px",
+                          marginTop: "16px"
+                        }
+                      },
+                      children: {
+                        previousButtonLabel: getLabel({
+                          labelName: "CANCEL",
+                          labelKey: "TL_ADD_HOC_CHARGES_POPUP_BUTTON_CANCEL"
+                        })
+                      },
+                      onClickDefination: {
+                        action: "condition",
+                        callBack: showApplyLicencePicker
+                      }
+                    }
+                  }
+                }
+              })
+            })
+          }
+        }
+      }
+    },
   }
 };
 

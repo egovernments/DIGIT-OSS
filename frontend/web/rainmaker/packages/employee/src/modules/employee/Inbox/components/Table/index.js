@@ -108,12 +108,17 @@ class InboxData extends React.Component {
     // }
     let contextPath = status === "Initiated" ? getWFConfig(row[0].hiddenText,row[0].subtext).INITIATED : getWFConfig(row[0].hiddenText,row[0].subtext).DEFAULT;
     let queryParams = `applicationNumber=${taskId}&tenantId=${tenantId}`;
-
     if(row[0].subtext=="PT.CREATE"){
       queryParams+='&type=property';
     }
     else  if(row[0].subtext=="ASMT"){
       queryParams+='&type=assessment';
+    }
+    else if(row[0].subtext=="NewWS1"){
+      queryParams+='&history=true&service=WATER';
+    }
+    else if(row[0].subtext=="NewSW1"){
+      queryParams+='&history=true&service=SEWERAGE';
     }
     this.props.setRoute(`${contextPath}?${queryParams}`);
   };

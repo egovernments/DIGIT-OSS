@@ -29,13 +29,16 @@ import { citizenFooter } from "./searchResource/citizenFooter";
 import { applicantSummary } from "./summaryResource/applicantSummary";
 import { basicSummary } from "./summaryResource/basicSummary"
 import { documentsSummary } from "./summaryResource/documentsSummary";
+import { declarationSummary } from "./summaryResource/declarationSummary";
 import { scrutinySummary } from "./summaryResource/scrutinySummary";
 import { estimateSummary } from "./summaryResource/estimateSummary";
 import { fieldinspectionSummary } from "./summaryResource/fieldinspectionSummary";
 import { httpRequest, edcrHttpRequest } from "../../../../ui-utils/api";
 import { statusOfNocDetails } from "../egov-bpa/applyResource/updateNocDetails";
 import { nocVerificationDetails } from "../egov-bpa/nocVerificationDetails";
-import { permitOrderNoDownload, downloadFeeReceipt } from "../utils/index";
+import { permitConditions } from "../egov-bpa/summaryResource/permitConditions";
+import { permitListSummary } from "../egov-bpa/summaryResource/permitListSummary";
+import { permitOrderNoDownload, downloadFeeReceipt, revocationPdfDownload } from "../utils/index";
 import "../egov-bpa/applyResource/index.css";
 import "../egov-bpa/applyResource/index.scss";
 import { getUserInfo, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
@@ -189,6 +192,10 @@ const setDownloadMenu = (action, state, dispatch) => {
     state,
     "screenConfiguration.preparedFinalObject.BPA.status"
   );
+  let riskType = get(
+    state,
+    "screenConfiguration.preparedFinalObject.BPA.riskType"
+  );
   let downloadMenu = [];
   let printMenu = [];
   let certificateDownloadObject = {
@@ -223,7 +230,7 @@ const setDownloadMenu = (action, state, dispatch) => {
     label: { labelName: "Permit Order Receipt", labelKey: "BPA_PERMIT_ORDER" },
     link: () => {
       permitOrderNoDownload(action, state, dispatch);
-      generatePdf(state, dispatch, "application_download");
+      // generatePdf(state, dispatch, "application_download");
     },
     leftIcon: "assignment"
   };
@@ -234,45 +241,78 @@ const setDownloadMenu = (action, state, dispatch) => {
     },
     leftIcon: "assignment"
   };
-  switch (status) {
-    case "APPROVED":
-      downloadMenu = [
-        certificateDownloadObject,
-        receiptDownloadObject,
-        applicationDownloadObject
-      ];
-      printMenu = [];
-      break;
-    case "DOC_VERIFICATION_INPROGRESS" :
-    downloadMenu = [certificateDownloadObject];
-      break;
-    case "FIELDINSPECTION_INPROGRESS" :
-    downloadMenu = [certificateDownloadObject];
-      break;
-    case "NOC_VERIFICATION_INPROGRESS" :
-    downloadMenu = [certificateDownloadObject];
-      break;
-    case "APPROVAL_INPROGRESS" : 
-    downloadMenu = [certificateDownloadObject];
-     break;
-    case "PENDING_SANC_FEE_PAYMENT" :
-    downloadMenu = [certificateDownloadObject];
-    break;
-    printMenu = [];
-    case "DOCUMENTVERIFY":
-    case "FIELDINSPECTION":
-    case "PENDINGAPPROVAL":
-    case "REJECTED":
+  let paymentReceiptDownload = {
+    label: { labelName: "Fee Receipt", labelKey: "BPA_FEE_RECEIPT" },
+    link: () => {
+      downloadFeeReceipt(state, dispatch, status, "BPA.LOW_RISK_PERMIT_FEE");
+    },
+    leftIcon: "book"
+  };
+  let revocationPdfDownlaod = {
+    label: { labelName: "Revocation Letter", labelKey: "BPA_REVOCATION_PDF_LABEL" },
+    link: () => {
+      revocationPdfDownload(action, state, dispatch);
+      // generatePdf(state, dispatch, "application_download");
+    },
+    leftIcon: "assignment"
+  };
+
+  if (riskType === "LOW") {
+    switch (status) {
+      case "REVOCATED":
+        downloadMenu = [paymentReceiptDownload, revocationPdfDownlaod];
+        break;
+      case "APPROVED":
+      case "DOC_VERIFICATION_INPROGRESS":
+      case "FIELDINSPECTION_INPROGRESS":
+      case "NOC_VERIFICATION_INPROGRESS":
+      case "APPROVAL_INPROGRESS":
+        downloadMenu = [paymentReceiptDownload, applicationDownloadObject];
+        break;
+      default:
+        break;
+    }
+  } else {
+    switch (status) {
+      case "APPROVED":
+        downloadMenu = [
+          certificateDownloadObject,
+          receiptDownloadObject,
+          applicationDownloadObject
+        ];
+        printMenu = [];
+        break;
+      case "DOC_VERIFICATION_INPROGRESS" :
       downloadMenu = [certificateDownloadObject];
+        break;
+      case "FIELDINSPECTION_INPROGRESS" :
+      downloadMenu = [certificateDownloadObject];
+        break;
+      case "NOC_VERIFICATION_INPROGRESS" :
+      downloadMenu = [certificateDownloadObject];
+        break;
+      case "APPROVAL_INPROGRESS" : 
+      downloadMenu = [certificateDownloadObject];
+       break;
+      case "PENDING_SANC_FEE_PAYMENT" :
+      downloadMenu = [certificateDownloadObject];
+      break;
       printMenu = [];
-      break;
-    case "CANCELLED":
-    case "PENDINGPAYMENT":
-      downloadMenu = [applicationDownloadObject];
-      printMenu = [];
-      break;
-    default:
-      break;
+      case "DOCUMENTVERIFY":
+      case "FIELDINSPECTION":
+      case "PENDINGAPPROVAL":
+      case "REJECTED":
+        downloadMenu = [certificateDownloadObject];
+        printMenu = [];
+        break;
+      case "CANCELLED":
+      case "PENDINGPAYMENT":
+        downloadMenu = [applicationDownloadObject];
+        printMenu = [];
+        break;
+      default:
+        break;
+    }
   }
   dispatch(
     handleField(
@@ -309,6 +349,44 @@ const setSearchResponse = async (
 
   const edcrNumber = response.Bpa["0"].edcrNumber;
   const status = response.Bpa["0"].status;
+  const riskType = response.Bpa["0"].riskType;
+  let businessServicesValue = "BPA";
+  if (riskType === "LOW") {
+    businessServicesValue = "BPA_LOW";
+  }
+
+  const queryObject = [
+    { key: "tenantId", value: tenantId },
+    { key: "businessServices", value: businessServicesValue }
+  ];
+  setBusinessServiceDataToLocalStorage(queryObject, dispatch);
+
+  if (status && status == "INPROGRESS") {
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.body.children.cardContent.children.declarationSummary.children.headers",
+        "visible",
+        true
+      )
+    );
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.body.children.cardContent.children.declarationSummary.children.header.children.body.children.firstStakeholder",
+        "visible",
+        true
+      )
+    );
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.body.children.cardContent.children.declarationSummary.children.header.children.body.children.secondStakeholder",
+        "visible",
+        true
+      )
+    )
+  }
 
   if (status && status === "CITIZEN_APPROVAL_INPROCESS") {
     let userInfo = JSON.parse(getUserInfo()),
@@ -347,6 +425,22 @@ const setSearchResponse = async (
         )
       )
     }
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.body.children.cardContent.children.declarationSummary.children.headers",
+        "visible",
+        true
+      )
+    );
+    dispatch(
+      handleField(
+      "search-preview",
+      "components.div.children.body.children.cardContent.children.declarationSummary.children.header.children.body.children.citizen",
+      "visible",
+      true
+    )
+  )
   }
 
   dispatch(prepareFinalObject("BPA", response.Bpa[0]));
@@ -484,6 +578,21 @@ const screenConfig = {
       "screenConfig.components.div.children.body.children.cardContent.children.fieldinspectionSummary.visible",
       false
     );
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.permitConditions.visible",
+      false
+    );
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.permitListSummary.visible",
+      false
+    );
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.declarationSummary.children.headers.visible",
+      false
+    );
 
     return action;
   },
@@ -502,7 +611,8 @@ const screenConfig = {
             header: {
               gridDefination: {
                 xs: 12,
-                sm: 8,
+                sm: 6,
+                md: 6
               },
               ...titlebar
             },
@@ -515,7 +625,8 @@ const screenConfig = {
               },
               gridDefination: {
                 xs: 12,
-                sm: 4,
+                sm: 6,
+                md: 6,
                 align: "right"
               },
               children: {
@@ -581,7 +692,10 @@ const screenConfig = {
           basicSummary: basicSummary,
           scrutinySummary:scrutinySummary,
           applicantSummary: applicantSummary,
-          documentsSummary: documentsSummary
+          documentsSummary: documentsSummary,
+          declarationSummary: declarationSummary,
+          permitConditions: permitConditions,
+          permitListSummary : permitListSummary
         }),
         citizenFooter: process.env.REACT_APP_NAME === "Citizen" ? citizenFooter : {}
       }

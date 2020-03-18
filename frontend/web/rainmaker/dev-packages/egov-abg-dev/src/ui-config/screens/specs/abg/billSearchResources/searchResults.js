@@ -5,6 +5,7 @@ import {
   getTextToLocalMapping
 } from "../../utils";
 import { download, downloadBill } from "egov-common/ui-utils/commons";
+import {  getLocaleLabels} from "egov-ui-framework/ui-utils/commons";
 
 export const searchResults = {
   uiFramework: "custom-molecules",
@@ -19,7 +20,7 @@ export const searchResults = {
           customBodyRender: (value, tableMeta, updateValue) => (
             <div
               onClick={() => {
-                downloadBill(tableMeta.rowData[1], tableMeta.rowData[7]);
+                downloadBill(tableMeta.rowData[1], tableMeta.rowData[10], tableMeta.rowData[9]);
               }}
             >
               <a>{value}</a>
@@ -42,7 +43,7 @@ export const searchResults = {
           filter: false,
           customBodyRender: value => (
             <span>
-               {getTextToLocalMapping(value.toUpperCase())}
+               {getLocaleLabels(value.toUpperCase(),value.toUpperCase())}
             </span>
           )
 
@@ -65,30 +66,48 @@ export const searchResults = {
                     : "employee";
                 if (tableMeta.rowData[5] === "PAID") {
                   const receiptQueryString = [
-                    { key: "billIds", value: tableMeta.rowData[8] },
-                    { key: "tenantId", value: tableMeta.rowData[7] }
+                    { key: "billIds", value: tableMeta.rowData[11] },
+                    { key: "tenantId", value: tableMeta.rowData[10] }
                   ];
-                  download(receiptQueryString);
+                  download(receiptQueryString , "download" ,tableMeta.rowData[8]);
                 } else {
                   const url =
                     process.env.NODE_ENV === "development"
                       ? `/egov-common/pay?consumerCode=${
                           tableMeta.rowData[1]
-                        }&tenantId=${tableMeta.rowData[7]}&businessService=${
-                          tableMeta.rowData[0].split("-")[0]
+                        }&tenantId=${tableMeta.rowData[10]}&businessService=${
+                          tableMeta.rowData[7]
                         }`
                       : `/${appName}/egov-common/pay?consumerCode=${
                           tableMeta.rowData[1]
-                        }&tenantId=${tableMeta.rowData[7]}&businessService=${
-                          tableMeta.rowData[0].split("-")[0]
+                        }&tenantId=${tableMeta.rowData[10]}&businessService=${
+                          tableMeta.rowData[7]
                         }`;
                   document.location.href = `${document.location.origin}${url}`;
                 }
               }}
             >
-              {getTextToLocalMapping(value)}
+              {getLocaleLabels(value,value)}
             </div>
           )
+        }
+      },
+      {
+        name: "businessService",
+        options: {
+          display: false
+        }
+      },
+      {
+        name: "receiptKey",
+        options: {
+          display: false
+        }
+      },
+      {
+        name: "billKey",
+        options: {
+          display: false
         }
       },
       {
