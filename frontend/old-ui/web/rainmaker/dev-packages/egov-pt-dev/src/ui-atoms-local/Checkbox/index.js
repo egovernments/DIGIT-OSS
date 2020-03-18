@@ -6,6 +6,10 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import { LabelContainer } from "egov-ui-framework/ui-containers";
 import "./index.scss";
+import { connect } from "react-redux";
+import get from "lodash/get";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+
 
 const styles = {
   root: {
@@ -23,19 +27,22 @@ class CheckboxLabels extends React.Component {
   };
 
   handleChange = name => event => {
-    this.setState({ [name]: event.target.checked });
+    // this.setState({ [name]: event.target.checked });
+    const { jsonPath, prepareFinalObject, preparedFinalObject } = this.props;
+    const checkedG = get(preparedFinalObject, jsonPath, false);
+    prepareFinalObject(jsonPath, !checkedG);
   };
 
   render() {
-    const { classes, content } = this.props;
-
+    const { classes, content, jsonPath, preparedFinalObject } = this.props;
+    const checkedG = get(preparedFinalObject, jsonPath, false);
     return (
       <FormGroup row>
         <FormControlLabel
           classes={{ label: "checkbox-label" }}
           control={
             <Checkbox
-              checked={this.state.checkedG}
+              checked={checkedG}
               onChange={this.handleChange("checkedG")}
               value="checkedG"
               classes={{
@@ -58,4 +65,22 @@ CheckboxLabels.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(CheckboxLabels);
+
+const mapStateToProps = (state, ownProps) => {
+  let preparedFinalObject = get(state, 'screenConfiguration.preparedFinalObject', {})
+  return { preparedFinalObject: { ...preparedFinalObject } };
+};
+const mapDispatchToProps = dispatch => {
+  return {
+    prepareFinalObject: (jsonPath, value) => {
+      dispatch(prepareFinalObject(jsonPath, value));
+    }
+  };
+};
+export default withStyles(styles)(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(withStyles(styles)(CheckboxLabels))
+);
+

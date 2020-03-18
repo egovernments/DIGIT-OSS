@@ -51,7 +51,6 @@ const updateSearchResults = async (
     state,
     dispatch,
     queryValue,
-    "",
     tenantId
   );
   const queryValueFromUrl = getQueryArg(

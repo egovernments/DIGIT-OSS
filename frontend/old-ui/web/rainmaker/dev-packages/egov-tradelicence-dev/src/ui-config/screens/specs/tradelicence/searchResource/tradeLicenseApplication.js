@@ -167,25 +167,27 @@ export const tradeLicenseApplication = getCommonCard({
           code : "FIELDINSPECTION"
         },
         {
+          code : "PENDINGAPPROVAL"
+        },
+        {
+          code : "PENDINGPAYMENT"
+        },
+        {
           code : "APPROVED"
+        },
+        {
+          code : "CITIZENACTIONREQUIRED"
+        },     
+        {
+          code : "EXPIRED"
         },
         {
           code : "CANCELLED"
         },
         {
           code : "REJECTED"
-        },
-        {
-          code : "CITIZENACTIONREQUIRED"
-        },
-        {
-          code : "PENDINGPAYMENT"
-        },
-        {
-          code : "PENDINGAPPROVAL"
         }
       ],
-      // sourceJsonPath: "applyScreenMdmsData.searchScreen.status",
       gridDefination: {
         xs: 12,
         sm: 4

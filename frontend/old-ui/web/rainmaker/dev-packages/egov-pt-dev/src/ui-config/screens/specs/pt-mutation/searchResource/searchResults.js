@@ -1,22 +1,11 @@
 
+import { getLocaleLabels, getTransformedLocalStorgaeLabels } from "egov-ui-framework/ui-utils/commons";
+// import { setRoute } from "egov-ui-kit/redux/app/actions";
+import { getApplicationType,setRoute } from "egov-ui-kit/utils/commons";
+import { getLocalization } from "egov-ui-kit/utils/localStorageUtils";
 import React from "react";
-import {
-  sortByEpoch,
-  getEpochForDate,
-  getTextToLocalMapping
-} from "../../utils";
 import store from "ui-redux/store";
-import { setRoute } from "egov-ui-kit/redux/app/actions";
-import {
-  getLocalization,
-  getTenantId
-} from "egov-ui-kit/utils/localStorageUtils";
-import {
-  getLocaleLabels, getQueryArg,
-  getTransformedLocalStorgaeLabels
-} from "egov-ui-framework/ui-utils/commons";
-import { httpRequest } from "egov-ui-framework/ui-utils/api";
-
+import { getEpochForDate, getTextToLocalMapping, sortByEpoch } from "../../utils";
 
 const getLocalTextFromCode = localCode => {
   return JSON.parse(getLocalization("localization_en_IN")).find(
@@ -213,14 +202,14 @@ export const searchApplicationTable = {
           filter: false,
           customBodyRender: value => (
             <span
-            onClick={()=>{
+              onClick={() => {
                 applicationNumberClick(value)
               }
-            }
+              }
               style={
                 { color: "#337ab7", cursor: "pointer", textDecoration: "underline" }
               }
-              >
+            >
               {value.acknowldgementNumber}
             </span>
           )
@@ -235,7 +224,7 @@ export const searchApplicationTable = {
               style={
                 { color: "#337ab7", cursor: "pointer", textDecoration: "underline" }
               }
-              onClick={()=>{
+              onClick={() => {
                 propertyIdClick(value)
               }}
             >
@@ -319,60 +308,40 @@ const onPropertyTabClick = (rowData, dispatch) => {
     default:
       // window.location.href = `search-preview?applicationNumber=${
       // window.location.pathname=`property-tax/property/${rowData[0]}/${rowData[6]}`;
-      store.dispatch(setRoute(`/property-tax/property/${rowData[0].props.children}/${rowData[6]}`));
+      navigate(propertyInformationScreenLink(rowData[0].props.children,rowData[6]));
       //   rowData[0]
       // }&tenantId=${rowData[6]}`; 
       break;
   }
 };
-const getApplicationType = async (applicationNumber, tenantId) => {
-  const queryObject = [
-    { key: "businessIds", value: applicationNumber },
-    { key: "history", value: true },
-    { key: "tenantId", value: tenantId }
-  ];
-  try {
-    const payload = await httpRequest(
-      "post",
-      "egov-workflow-v2/egov-wf/process/_search",
-      "",
-      queryObject
-    );
-    if (payload && payload.ProcessInstances.length > 0) {
-      return payload.ProcessInstances[0].businessService;
-    }
-  } catch (e) {
-    console.log(e);
-  }
-}
-const onApplicationTabClick =async (rowData, dispatch) => {
-  
-  const businessService = await getApplicationType(rowData[7] && rowData[7].acknowldgementNumber, rowData[6]);
-  if (businessService == 'PT.MUTATION') {
-    // store.dispatch(setRoute(`/pt-mutation/search-preview?applicationNumber=${rowData[7] && rowData[7].acknowldgementNumber}&propertyId=${rowData[1].props.children}&tenantId=${rowData[6]}`));
-  } else if (businessService == 'PT.CREATE') {
-    // store.dispatch(setRoute(`/property-tax/application-preview?propertyId=${rowData[1].props.children}&applicationNumber=${rowData[7] && rowData[7].acknowldgementNumber}&tenantId=${rowData[6]}&type=property`));
-  } else {
-    // store.dispatch(setRoute(`/property-tax/property/${rowData[1].props.children}/${rowData[6]}`));
-  }
- 
-}
+
 
 const applicationNumberClick = async (item) => {
-  
-  const businessService = await getApplicationType(item&&item.acknowldgementNumber, item.tenantId);
+
+  const businessService = await getApplicationType(item && item.acknowldgementNumber, item.tenantId, item.creationReason);
   if (businessService == 'PT.MUTATION') {
-    store.dispatch(setRoute(`/pt-mutation/search-preview?applicationNumber=${item.acknowldgementNumber}&tenantId=${item.tenantId}`));
+    navigate(`/pt-mutation/search-preview?applicationNumber=${item.acknowldgementNumber}&tenantId=${item.tenantId}`);
   } else if (businessService == 'PT.CREATE') {
-    store.dispatch(setRoute(`/property-tax/application-preview?applicationNumber=${item.acknowldgementNumber}&tenantId=${item.tenantId}&type=property`));
+    navigate(`/property-tax/application-preview?applicationNumber=${item.acknowldgementNumber}&tenantId=${item.tenantId}&type=property`);
   } else {
-    store.dispatch(setRoute(`/property-tax/property/${item.propertyId}/${item.tenantId}`));
+    navigate(propertyInformationScreenLink(item.propertyId,item.tenantId));
   }
- 
+
 }
 
-const propertyIdClick =  (item) => {
+const propertyIdClick = (item) => {
+  navigate(propertyInformationScreenLink(item.propertyId,item.tenantId));
+}
 
-   store.dispatch(setRoute(`/property-tax/property/${item.propertyId}/${item.tenantId}`));
- 
+const navigate=(url)=>{
+  // store.dispatch(setRoute(url));
+  setRoute(url);
+}
+
+const propertyInformationScreenLink=(propertyId,tenantId)=>{
+  if(process.env.REACT_APP_NAME == "Citizen"){
+    return `/property-tax/my-properties/property/${propertyId}/${tenantId}`;
+  }else{
+    return `/property-tax/property/${propertyId}/${tenantId}`;
+  }
 }

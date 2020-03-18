@@ -1,33 +1,21 @@
-import React, { Component } from "react";
-import formHoc from "egov-ui-kit/hocs/form";
-import { httpRequest } from "egov-ui-kit/utils/api";
-import Label from "egov-ui-kit/utils/translationNode";
-import YearDialogue from "../common/YearDialogue";
-import { Screen, SingleProperty } from "modules/common";
 import Hidden from "@material-ui/core/Hidden";
-import { BreadCrumbs, Button, Icon, Card } from "components";
-import Grid from "@material-ui/core/Grid";
-import {
-  addBreadCrumbs,
-  toggleSnackbarAndSetText
-} from "egov-ui-kit/redux/app/actions";
-import SearchPropertyForm from "./components/SearchPropertyForm";
-import PropertyTable from "./components/PropertyTable";
-import { validateForm } from "egov-ui-kit/redux/form/utils";
-import { getLatestPropertyDetails } from "egov-ui-kit/utils/PTCommon";
+import { Button, Icon } from "components";
+import formHoc from "egov-ui-kit/hocs/form";
+import { addBreadCrumbs, fetchLocalizationLabel, toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import { displayFormErrors, resetForm } from "egov-ui-kit/redux/form/actions";
-import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
-import { connect } from "react-redux";
+import { validateForm } from "egov-ui-kit/redux/form/utils";
 import { fetchProperties } from "egov-ui-kit/redux/properties/actions";
-import get from "lodash/get";
-import {
-  getUserInfo,
-  localStorageGet,
-  getLocale
-} from "egov-ui-kit/utils/localStorageUtils";
-import { getDateFromEpoch, navigateToApplication, getApplicationType } from "egov-ui-kit/utils/commons";
+import { getDateFromEpoch } from "egov-ui-kit/utils/commons";
+import { getLocale, getUserInfo, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
+import { getRowData } from "egov-ui-kit/utils/PTCommon";
+import Label from "egov-ui-kit/utils/translationNode";
+import { Screen, SingleProperty } from "modules/common";
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import YearDialogue from "../common/YearDialogue";
+import PropertyTable from "./components/PropertyTable";
+import SearchPropertyForm from "./components/SearchPropertyForm";
 import "./index.css";
-import {getRowData} from "egov-ui-kit/utils/PTCommon";
 
 const PropertySearchFormHOC = formHoc({
   formKey: "searchProperty",
@@ -108,11 +96,11 @@ class SearchProperty extends Component {
   };
 
 
-  
-  
 
-  
-  
+
+
+
+
   extractTableData = properties => {
     const { history } = this.props;
     const userType = JSON.parse(getUserInfo()).type;
@@ -135,7 +123,7 @@ class SearchProperty extends Component {
       // let assessmentNo = latestAssessment.assessmentNumber;
       // const uuid = get(latestAssessment, "citizenInfo.uuid");
 
-      let item = getRowData(property,history);
+      let item = getRowData(property, history);
       tableData.push(item);
       return tableData;
     }, []);

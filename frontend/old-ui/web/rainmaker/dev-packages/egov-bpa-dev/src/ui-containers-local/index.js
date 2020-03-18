@@ -104,6 +104,10 @@ const FieldInspectionContainer = Loadable({
   loading: () => <Loading />
 });
 
+const BpaConditionsContainer = Loadable({
+  loader: () => import("./BpaConditionsContainer"),
+  loading: () => <Loading />
+});
 
 export {
   CustomTabContainer,
@@ -124,5 +128,6 @@ export {
   BpaCheckboxContainer,
   CheckListContainer,
   FeildInspectionCards,
-  FieldInspectionContainer
+  FieldInspectionContainer,
+  BpaConditionsContainer
 };

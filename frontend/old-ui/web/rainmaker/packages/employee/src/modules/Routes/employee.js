@@ -5,6 +5,7 @@ import LanguageSelection from "modules/employee/User/LanguageSelection";
 import ChangePassword from "modules/employee/User/ChangePassword";
 import Profile from "modules/employee/User/Profile";
 import ForgotPassword from "modules/employee/User/ForgotPassword";
+import PushLocalization from "modules/employee/PushLocalization";
 
 // Employee specific routes
 import { TrackLocation } from "modules/common";
@@ -164,6 +165,18 @@ const routes = [
     options: {
       hideFooter: true,
       title: "CS_PGR_REPORTS_HEADER",
+      hideTitle: true,
+      redirectionUrl,
+    },
+  },
+  {
+    path: "push-localization",
+    component: PushLocalization,
+    needsAuthentication: true,
+
+    options: {
+      hideFooter: true,
+      title: "CS_PUSH_LOCALIZATION",
       hideTitle: true,
       redirectionUrl,
     },

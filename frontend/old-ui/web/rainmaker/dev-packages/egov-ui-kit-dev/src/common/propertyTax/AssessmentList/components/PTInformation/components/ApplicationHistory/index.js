@@ -7,7 +7,7 @@ import { convertEpochToDate } from "egov-ui-framework/ui-config/screens/specs/ut
 import Label from "egov-ui-kit/utils/translationNode";
 import HistoryCard from "../../../../../Property/components/HistoryCard";
 import { getFullRow } from "../AssessmentHistory";
-import { navigateToApplication } from "egov-ui-kit/utils/commons";
+import { navigateToApplication,getApplicationType } from "egov-ui-kit/utils/commons";
 
 const labelStyle = {
     letterSpacing: 1.2,
@@ -59,11 +59,16 @@ class ApplicationHistory extends Component {
         }
     }
 
-    componentDidMount = () => {
+    navigateToApplication = async (acknowldgementNumber, tenantId, creationReason,history,propertyId) => {
+         const businessService= await getApplicationType(acknowldgementNumber, tenantId, creationReason);
+         navigateToApplication(businessService, history, acknowldgementNumber, tenantId, propertyId);
+     }
+
+    componentDidMount = async() => {
         const { propertyId, tenantId, history } = this.props;
         if (propertyId) {
             this.getPropertyResponse(propertyId, tenantId).then((response)=>{
-                console.log("response----", response);
+                
                 if(response && response.length > 0){
                     let applicationHistoryItem = [];
                     applicationHistoryItem = response.map(item=>{
@@ -78,14 +83,8 @@ class ApplicationHistory extends Component {
                                 <div className="application-history" style={{ float: "left",marginLeft: "15px" }}>
                                     <a
                                         onClick={() => {
-                                            // history &&
-                                            //     history.push(
-                                            //         `/property-tax/assessment-form?FY=${Assessment.financialYear}&assessmentId=${Assessment.assessmentNumber}&isAssesment=false&isReassesment=true&propertyId=${
-                                            //         propertyId
-                                            //         }&tenantId=${Assessment.tenantId}`
-                                            //     );
-                                            // lastElement.onClick();
-                                            item.workflow && item.workflow.businessService && navigateToApplication(item.workflow.businessService, history, item.acknowldgementNumber, item.tenantId, item.propertyId);
+                                             this.navigateToApplication(item.acknowldgementNumber, item.tenantId, item.creationReason,history,item.propertyId)
+                                            
                                         }}
                                     >
                                         <Label buttonLabel={true} label='PT_VIEW_DETAILS' color="rgb(254, 122, 81)" fontSize="16px" height="40px" labelStyle={labelStyle} />

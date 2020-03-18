@@ -10,7 +10,6 @@ export const createPropertyPayload = (properties, documentsUploadRedux, newPrope
     ...properties[0].propertyDetails[0],
     source: "MUNICIPAL_RECORDS",
     channel: "CFC_COUNTER",
-    status: "ACTIVE",
   };
   if (properties[0].owners && properties[0].owners.length) {
     properties[0].owners.map((obj) => {
@@ -96,7 +95,6 @@ export const createAssessmentPayload = (properties, propertyPayload) => {
     propertyId: properties.propertyId,
     source: "MUNICIPAL_RECORDS",
     channel: "CFC_COUNTER",
-    status: "ACTIVE",
   };
 
   return Assessment;
@@ -106,7 +104,12 @@ export const getCreatePropertyResponse = (createPropertyResponse) => {
   // createPropertyResponse.Properties[0].propertyDetails = createPropertyResponse.Properties;
   // Documents array coming in reverse order from API
   // createPropertyResponse.Properties[0] && createPropertyResponse.Properties[0].documents && createPropertyResponse.Properties[0].documents.length && createPropertyResponse.Properties[0].documents.reverse();
+  try{
   return { Properties: convertToOldPTObject(createPropertyResponse), newProperties: createPropertyResponse.Properties };
+  }catch(e){
+    console.error(e);
+    return { Properties: [], newProperties: [] };
+  }
 };
 
 export const convertToArray = (documentsUploadRedux) => {

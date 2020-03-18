@@ -47,12 +47,14 @@ const getMDMSData = async (dispatch) => {
     );
     // console.log("payload--", payload)
     dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
-    dispatch(
-      prepareFinalObject(
-        "searchScreen.tenantId",
-        tenant
-      )
-    );
+    if(process.env.REACT_APP_NAME != "Citizen"){
+      dispatch(
+        prepareFinalObject(
+          "searchScreen.tenantId",
+          tenant
+        )
+      );
+    }
   } catch (e) {
     console.log(e);
   }

@@ -1,21 +1,21 @@
-import React from "react";
-import { connect } from "react-redux";
-import Label from "../../ui-containers/LabelContainer";
+import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Grid from "@material-ui/core/Grid";
-import Button from "@material-ui/core/Button";
-import get from "lodash/get";
 import { withStyles } from "@material-ui/core/styles";
-import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import {toggleSnackbar} from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import "./index.css";
-import { checkValueForNA } from "../../ui-config/screens/specs/utils";
-import { localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
-import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { convertEpochToDate } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { epochToDate, navigateToApplication, getApplicationType } from "egov-ui-kit/utils/commons";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { httpRequest } from "egov-ui-framework/ui-utils/api";
+import { epochToDate, getApplicationType } from "egov-ui-kit/utils/commons";
+import { localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
+import get from "lodash/get";
 import orderBy from "lodash/orderBy";
+import React from "react";
+import { connect } from "react-redux";
+import { checkValueForNA } from "../../ui-config/screens/specs/utils";
+import Label from "../../ui-containers/LabelContainer";
+import "./index.css";
 const styles = {
   card: {
     marginLeft: 8,
@@ -26,11 +26,11 @@ const styles = {
 
 
 class SingleApplication extends React.Component {
-  
+
   setBusinessServiceDataToLocalStorage = async (queryObject) => {
-    const {toggleSnackbar} = this.props;
+    const { toggleSnackbar } = this.props;
     try {
-      const payload = await httpRequest("post","egov-workflow-v2/egov-wf/businessservice/_search", "_search", queryObject);
+      const payload = await httpRequest("post", "egov-workflow-v2/egov-wf/businessservice/_search", "_search", queryObject);
       localStorageSet("businessServiceData", JSON.stringify(get(payload, "BusinessServices")));
       return get(payload, "BusinessServices");
     } catch (e) {
@@ -84,14 +84,13 @@ class SingleApplication extends React.Component {
             setRoute(`/egov-bpa/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
             break;
           default:
-            setRoute(`/egov-bpa/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
-        }        
+            setRoute(`/egov-bpa/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}&type=${item.type}`);
+        }
       }
     } else if (moduleName === "PT-MUTATION") {
-      if(item.acknowldgementNumber){
-        const businessService = await getApplicationType(item.acknowldgementNumber, item.tenantId)
-        console.log("businessService-----", businessService);
-        if(businessService){
+      if (item.acknowldgementNumber) {
+        const businessService = await getApplicationType(item.acknowldgementNumber, item.tenantId, item.creationReason)
+        if (businessService) {
           // navigateToApplication(businessService, this.props.history, item.acknowldgementNumber, item.tenantId, item.propertyId);
           if (businessService == 'PT.MUTATION') {
             setRoute("/pt-mutation/search-preview?applicationNumber=" + item.acknowldgementNumber + "&propertyId=" + item.propertyId + "&tenantId=" + item.tenantId);
@@ -100,7 +99,7 @@ class SingleApplication extends React.Component {
           } else {
             console.log('Navigation Error');
           }
-        }else{
+        } else {
           toggleSnackbar(
             true,
             {
@@ -119,35 +118,35 @@ class SingleApplication extends React.Component {
     setRoute(homeURL);
   };
   generatevalidity = (item) => {
-    const validFrom=item.validFrom?convertEpochToDate( get(item, "validFrom")):"NA";
-    const validTo=item.validTo?convertEpochToDate( get(item, "validTo")):"NA";
-    const validity = validFrom+" - "+validTo;
+    const validFrom = item.validFrom ? convertEpochToDate(get(item, "validFrom")) : "NA";
+    const validTo = item.validTo ? convertEpochToDate(get(item, "validTo")) : "NA";
+    const validity = validFrom + " - " + validTo;
     return validity;
   }
   generateLabelKey = (content, item) => {
     let LabelKey = "";
     if (content.prefix && content.suffix) {
-      LabelKey = `${content.prefix}${get(item, content.jsonPath,"").replace(
+      LabelKey = `${content.prefix}${get(item, content.jsonPath, "").replace(
         /[._:-\s\/]/g,
         "_"
       )}${content.suffix}`;
     } else if (content.prefix) {
-      LabelKey = `${content.prefix}${get(item, content.jsonPath,"").replace(
+      LabelKey = `${content.prefix}${get(item, content.jsonPath, "").replace(
         /[._:-\s\/]/g,
         "_"
       )}`;
     } else if (content.suffix) {
-      LabelKey = `${get(item, content.jsonPath,"").replace(/[._:-\s\/]/g, "_")}${
+      LabelKey = `${get(item, content.jsonPath, "").replace(/[._:-\s\/]/g, "_")}${
         content.suffix
-      }`;
+        }`;
     } else {
-      LabelKey = content.label === "PT_MUTATION_CREATION_DATE" ? `${epochToDate(get(item, content.jsonPath,""))}` : `${get(item, content.jsonPath,"")}`;
+      LabelKey = content.label === "PT_MUTATION_CREATION_DATE" ? `${epochToDate(get(item, content.jsonPath, ""))}` : `${get(item, content.jsonPath, "")}`;
     }
     return LabelKey;
   };
 
   render() {
-    const { searchResults, classes, contents, moduleName,setRoute } = this.props;
+    const { searchResults, classes, contents, moduleName, setRoute } = this.props;
     return (
       <div className="application-card">
         {searchResults && searchResults.length > 0 ? (
@@ -183,9 +182,9 @@ class SingleApplication extends React.Component {
                         </Grid>
                       );
                     })}
-                   {moduleName === "TL"&&
-                     <div> 
-                             <Grid container style={{ marginBottom: 12 }}>
+                    {moduleName === "TL" &&
+                      <div>
+                        <Grid container style={{ marginBottom: 12 }}>
                           <Grid item xs={6}>
                             <Label
                               labelKey="TL_COMMON_TABLE_VALIDITY"
@@ -208,24 +207,24 @@ class SingleApplication extends React.Component {
                             />
                           </Grid>
                         </Grid>
-                     </div>
-                   }
+                      </div>
+                    }
 
                     {/* <Link to={this.onCardClick(item)}> */}
-                      <div style={{cursor:"pointer"}} onClick = {()=>{
-                        const url = this.onCardClick(item);
-                        // setRoute(url);
-                        }}>
-                        <Label
-                          labelKey={ (item.status==="APPROVED"||item.status==="EXPIRED")&&moduleName === "TL" ? "TL_VIEW_DETAILS_RENEWAL":"TL_VIEW_DETAILS"}
-                          textTransform={"uppercase"}
-                          style={{
-                            color: "#fe7a51",
-                            fontSize: 14,
-                            textTransform: "uppercase"
-                          }}
-                        />
-                      </div>
+                    <div style={{ cursor: "pointer" }} onClick={() => {
+                      const url = this.onCardClick(item);
+                      // setRoute(url);
+                    }}>
+                      <Label
+                        labelKey={(item.status === "APPROVED" || item.status === "EXPIRED") && moduleName === "TL" ? "TL_VIEW_DETAILS_RENEWAL" : "TL_VIEW_DETAILS"}
+                        textTransform={"uppercase"}
+                        style={{
+                          color: "#fe7a51",
+                          fontSize: 14,
+                          textTransform: "uppercase"
+                        }}
+                      />
+                    </div>
                     {/* </Link> */}
                   </div>
                 </CardContent>
@@ -233,26 +232,26 @@ class SingleApplication extends React.Component {
             );
           })
         ) : (
-          <div className="no-assessment-message-cont">
-            <Label
-              labelKey={"No results Found!"}
-              style={{ marginBottom: 10 }}
-            />
-            <Button
-              style={{
-                height: 36,
-                lineHeight: "auto",
-                minWidth: "inherit"
-              }}
-              className="assessment-button"
-              variant="contained"
-              color="primary"
-              onClick={this.onButtonCLick}
-            >
-              <Label labelKey={`${moduleName}_NEW_APPLICATION`} />
-            </Button>
-          </div>
-        )}
+            <div className="no-assessment-message-cont">
+              <Label
+                labelKey={"No results Found!"}
+                style={{ marginBottom: 10 }}
+              />
+              <Button
+                style={{
+                  height: 36,
+                  lineHeight: "auto",
+                  minWidth: "inherit"
+                }}
+                className="assessment-button"
+                variant="contained"
+                color="primary"
+                onClick={this.onButtonCLick}
+              >
+                <Label labelKey={`${moduleName}_NEW_APPLICATION`} />
+              </Button>
+            </div>
+          )}
       </div>
     );
   }
@@ -267,8 +266,8 @@ const mapStateToProps = state => {
   let searchResults = orderBy(
     searchResultsRaw,
     ["auditDetails.lastModifiedTime"],
-    ["desc"]);  
-    searchResults=searchResults?searchResults:searchResultsRaw ;
+    ["desc"]);
+  searchResults = searchResults ? searchResults : searchResultsRaw;
   const screenConfig = get(state.screenConfiguration, "screenConfig");
   return { screenConfig, searchResults };
 };
@@ -276,7 +275,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     setRoute: path => dispatch(setRoute(path)),
-    toggleSnackbar : (open,message,type) => dispatch(toggleSnackbar(open,message,type))
+    toggleSnackbar: (open, message, type) => dispatch(toggleSnackbar(open, message, type))
   };
 };
 

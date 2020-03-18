@@ -21,7 +21,7 @@ class TotalDues extends React.Component {
   };
   onClickAction = async (consumerCode, tenantId) => {
     this.setState({
-      url: await downloadBill(consumerCode, tenantId),
+      url: await downloadBill(consumerCode, tenantId , "property-bill"),
     });
   };
   render() {

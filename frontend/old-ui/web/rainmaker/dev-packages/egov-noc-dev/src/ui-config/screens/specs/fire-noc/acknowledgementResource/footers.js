@@ -184,7 +184,7 @@ export const applicationSuccessFooter = (
       },
       onClickDefination: {
         action: "page_change",
-        path:`/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenant}&businessService=NOC`,
+        path:`/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenant}&businessService=FIRENOC`,
           // process.env.REACT_APP_SELF_RUNNING === "true"
           //   ? `fire-noc/citizen-pay?applicationNumber=${applicationNumber}&tenantId=${tenant}`
           //   : `/fire-noc/citizen-pay?applicationNumber=${applicationNumber}&tenantId=${tenant}`

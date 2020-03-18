@@ -139,6 +139,7 @@ export const blockWiseOccupancyAndUsageDetails = getCommonCard({
             return item.active && (item.occupancyType).toUpperCase() === (action.value).toUpperCase();
           });
           dispatch(handleField("apply", path, "props.data", subOccupancyType));
+          dispatch(prepareFinalObject("BPA.additionalDetails.isCharitableTrustBuilding",false));
         }
       },
       subOccupancyType: {
@@ -166,6 +167,63 @@ export const blockWiseOccupancyAndUsageDetails = getCommonCard({
           }
         }),
       },
+      // annualExpectedExpenditure : getTextField({
+      //   label: {
+      //     labelName: "Annual Expected Expenditure",
+      //     labelKey: "BPA_ANNUAL_EXPECTED_EXPENDITURE_LABEL"
+      //   },
+      //   placeholder: {
+      //     labelName: "Enter Annual Expected Expenditure",
+      //     labelKey: "BPA_ANNUAL_EXPECTED_EXPENDITURE_PLACEHOLDER"
+      //   },
+      //   pattern: getPattern("Amount"),
+      //   required: true,
+      //   jsonPath:
+      //     "BPA.additionalDetails.annualExpectedExpenditure",
+      //   gridDefination: {
+      //     xs: 12,
+      //     sm: 12,
+      //     md: 6
+      //   }
+      // }),
+      // isCharitableTrustBuilding: {
+      //   uiFramework: "custom-containers-local",
+      //   moduleName: "egov-bpa",
+      //   componentPath: "BpaCheckboxContainer",
+      //   jsonPath: "BPA.additionalDetail.isPrimaryOwner",
+      //   props: {
+      //     label: {
+      //       labelName: "Is Charitable TrustBuilding ?",
+      //       labelKey: "BPA_IS_CHARITABLE_TRUSTBUILDING_LABEL"
+      //     },
+      //     jsonPath: "BPA.additionalDetails.isCharitableTrustBuilding"
+      //   },
+      //   gridDefination: {
+      //     xs: 12,
+      //     sm: 12,
+      //     md: 6
+      //   },
+      //   type: "array"
+      // },
+      // isAffordableHousingScheme: {
+      //   uiFramework: "custom-containers-local",
+      //   moduleName: "egov-bpa",
+      //   componentPath: "BpaCheckboxContainer",
+      //   jsonPath: "BPA.additionalDetail.isAffordableHousingScheme",
+      //   props: {
+      //     label: {
+      //       labelName: "Is Affordable Housing Scheme ?",
+      //       labelKey: "BPA_IS_AFFRORADABLE_HOUSING_LABEL"
+      //     },
+      //     jsonPath: "BPA.additionalDetails.isAffordableHousingScheme"
+      //   },
+      //   gridDefination: {
+      //     xs: 12,
+      //     sm: 12,
+      //     md: 6
+      //   },
+      //   type: "array"
+      // }
     }),
     // blockWiseContainer: getCommonContainer({
     //   residential: {

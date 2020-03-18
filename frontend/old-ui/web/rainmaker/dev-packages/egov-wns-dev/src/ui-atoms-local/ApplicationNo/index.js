@@ -1,4 +1,5 @@
 import React from "react";
+import { LabelContainer } from "egov-ui-framework/ui-containers";
 
 const styles = {
   backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
@@ -14,7 +15,12 @@ const styles = {
 
 function ApplicationNoContainer(props) {
   const { number } = props;
-  return <div style={styles}>Application No. {number}</div>;
+  if(number.includes("WS")){
+    return <div style={styles}><LabelContainer labelKey={"WS_ACKNO_APP_NO_LABEL"}/> {number}</div>;
+  }else{
+    return <div style={styles}><LabelContainer labelKey={"WS_ACKNO_SEW_APP_NO_LABEL"}/> {number}</div>;
+  }
+  
 }
 
 export default ApplicationNoContainer;

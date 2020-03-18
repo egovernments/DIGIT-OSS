@@ -460,12 +460,13 @@ div[class^="MuiPaper-root"],
     }
 
   }
-  [class*="MuiStepIcon-active"] ,[class*="MuiStep-completed"]{
+  [class*="MuiStepIcon-active"] {
     circle,
     path {
       color: #fe7a51;
     }
   }
+ 
   [class*="MuiStepLabel"] {
     color: rgba(0, 0, 0, 0.87);
   }
@@ -474,6 +475,15 @@ div[class^="MuiPaper-root"],
   }
 }
 
+div[class^="MuiPaper-root"],
+.stepper-container {
+[class*="MuiStep-completed"]{
+  circle,
+  path {
+    color: #39CB74;
+  }
+}
+}
 #tax-wizard-buttons {
   height: 64px;
   padding: 8px;

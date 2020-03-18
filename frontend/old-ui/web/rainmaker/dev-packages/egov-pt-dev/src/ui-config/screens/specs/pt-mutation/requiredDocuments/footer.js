@@ -28,7 +28,7 @@ export const footer = {
   uiFramework: "custom-atoms",
   componentPath: "Div",
   props: {
-    className: "apply-wizard-footer",
+    className: "pt-apply-wizard-footer",
 
     style: {
       width: "100%",
@@ -38,7 +38,7 @@ export const footer = {
   },
 
   // props: {
-  //   className: "apply-wizard-footer",
+  //   className: "pt-apply-wizard-footer",
   //   style: {
   //     textAlign: "center"
   //   }

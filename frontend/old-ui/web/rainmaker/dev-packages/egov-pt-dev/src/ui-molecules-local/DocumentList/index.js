@@ -126,6 +126,7 @@ class DocumentList extends Component {
 
   componentDidMount = () => {
     const {
+      preparedFinalObject,
       documentsList,
       documentsUploadRedux = {},
       prepareFinalObject
@@ -184,7 +185,12 @@ class DocumentList extends Component {
           }
         });
     });
+    
     prepareFinalObject("documentsUploadRedux", documentsUploadRedux);
+    prepareFinalObject(
+      "documentsUploadRedux.3.dropdown.value",
+      `${get(preparedFinalObject,'documentsUploadRedux.3.documentCode','')}.${get(preparedFinalObject,'Property.additionalDetails.reasonForTransfer','')}`
+    )  
   };
 
   onUploadClick = uploadedDocIndex => {
@@ -270,6 +276,7 @@ class DocumentList extends Component {
               label={{ labelKey: getTransformedLocale(card.dropdown.label) }}
               placeholder={{ labelKey: card.dropdown.label }}
               data={card.dropdown.menu}
+              disabled={card.dropdown.disabled}
               optionValue="code"
               optionLabel="label"
               required={true}
@@ -364,7 +371,8 @@ const mapStateToProps = state => {
     "documentsUploadRedux",
     {}
   );
-  return { documentsUploadRedux, moduleName };
+  let   preparedFinalObject=get(state,'screenConfiguration.preparedFinalObject',{})
+  return { documentsUploadRedux,preparedFinalObject, moduleName };
 };
 
 const mapDispatchToProps = dispatch => {

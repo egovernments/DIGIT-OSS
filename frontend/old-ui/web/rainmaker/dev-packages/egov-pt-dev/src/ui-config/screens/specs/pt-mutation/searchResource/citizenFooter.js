@@ -9,7 +9,7 @@ const getCommonApplyFooter = children => {
     uiFramework: "custom-atoms",
     componentPath: "Div",
     props: {
-      className: "apply-wizard-footer"
+      className: "pt-apply-wizard-footer"
     },
     children
   };

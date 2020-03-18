@@ -136,41 +136,7 @@ class FormWizard extends Component {
 
     try {
       let currentDraft;
-      if (!isReassesment) {
-        let draftsResponse = await httpRequest(
-          "pt-services-v2/drafts/_search",
-          "_search",
-          [
-            {
-              key: isReassesment ? "assessmentNumber" : "id",
-              value: draftId
-            },
-            {
-              key: "tenantId",
-              value: getQueryValue(search, "tenantId")
-            }
-          ],
-          draftRequest
-        );
-        currentDraft = draftsResponse.drafts.find(
-          res =>
-            get(res, "assessmentNumber", "") === draftId ||
-            get(res, "id", "") === draftId
-        );
-        const prepareFormDataFromApi = get(
-          currentDraft,
-          "draftRecord.prepareFormData",
-          {}
-        );
-        const preparedForm = convertRawDataToFormConfig(prepareFormDataFromApi); //convertRawDataToFormConfig(responseee)
-        currentDraft = {
-          draftRecord: {
-            ...currentDraft.draftRecord,
-            ...preparedForm,
-            prepareFormData: prepareFormDataFromApi
-          }
-        };
-      } else {
+    
         let searchPropertyResponse = await httpRequest(
           "property-services/property/_search",
           "_search",
@@ -194,7 +160,18 @@ class FormWizard extends Component {
         );
         // prepareFinalObject("documentsUploadRedux",{} );
         this.props.prepareFinalObject("newProperties", searchPropertyResponse.newProperties);
-        let propertyResponse = {
+        if (
+          searchPropertyResponse.Properties[0].propertyDetails &&
+          searchPropertyResponse.Properties[0].propertyDetails.length > 0
+        ) {
+          searchPropertyResponse.Properties[0].propertyDetails.forEach(item => {
+            item.units = sortBy(
+              item.units,
+              unit => parseInt(unit.floorNo) || -99999
+            );
+          });
+        }
+           let propertyResponse = {
           ...searchPropertyResponse,
           Properties: [
             {
@@ -220,11 +197,7 @@ class FormWizard extends Component {
             "Properties[0].propertyDetails[0].citizenInfo.uuid"
           )
         });
-      }
-
-      if (!currentDraft) {
-        throw new Error("draft not found");
-      }
+      
 
       this.setState({
         draftByIDResponse: currentDraft
@@ -823,11 +796,7 @@ class FormWizard extends Component {
       "assessmentDate": new Date().getTime() - 60000,
       "source": "MUNICIPAL_RECORDS",
       "channel": "CFC_COUNTER",
-      "status": "ACTIVE"
     }
-
-    console.log(Properties);
-
     if (action === "re-assess") {
       let assessments = await this.getAssessmentDetails();
       if (assessments.Assessments.length > 0) {
@@ -1223,7 +1192,7 @@ class FormWizard extends Component {
           propertyId = pty.propertyId;
           tenantId = pty.tenantId;
         }
-        this.props.history.push(`./../egov-common/pay?consumerCode=${propertyId}&tenantId=${tenantId}`
+        this.props.history.push(`./../egov-common/pay?consumerCode=${propertyId}&tenantId=${tenantId}&businessService=PT`
         )
         break;
       case 6:
@@ -1367,9 +1336,10 @@ class FormWizard extends Component {
   };
 
   getEstimates = async () => {
-    let { search: search1 } = this.props.location;
-    let isAssesment1 = Boolean(getQueryValue(search1, "isAssesment").replace('false', ''));
-    if (isAssesment1) {
+    let { search } = this.props.location;
+    let isAssesment = Boolean(getQueryValue(search, "isAssesment").replace('false', ''));
+    let isReassesment = Boolean(getQueryValue(search, "isReassesment").replace('false', ''));
+    if (isAssesment || isReassesment) {
       this.estimate().then(estimateResponse => {
         if (estimateResponse) {
           window.scrollTo(0, 0);
@@ -1385,9 +1355,10 @@ class FormWizard extends Component {
 
   estimate = async () => {
     let { showSpinner, location ,hideSpinner} = this.props;
-    let { search: search1 } = location;
-    let isAssesment1 = Boolean(getQueryValue(search1, "isAssesment").replace('false', ''));
-    if (isAssesment1) {
+    let { search } = location;
+    let isAssesment = Boolean(getQueryValue(search, "isAssesment").replace('false', ''));
+    let isReassesment = Boolean(getQueryValue(search, "isReassesment").replace('false', ''));
+    if (isAssesment || isReassesment) {
       let prepareFormData = { ...this.props.prepareFormData };
       showSpinner();
       const financialYearFromQuery = getFinancialYearFromQuery();
@@ -1719,6 +1690,7 @@ class FormWizard extends Component {
       this.setState({
         termsError: "PT_CHECK_DECLARATION_BOX"
       });
+      window.scrollTo(0, document.body.scrollHeight || document.documentElement.scrollHeight);
       alert("Please check the declaration box to proceed futher");
       return;
     }

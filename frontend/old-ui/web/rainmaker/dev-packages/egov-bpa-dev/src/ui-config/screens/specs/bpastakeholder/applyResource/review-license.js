@@ -106,7 +106,7 @@ export const getReviewLicenseDetails = (isEditable = true) => {
     multiOwner: getCommonContainer({
       viewFive: getCommonContainer({
         reviewLicenseeType,
-        reviewLicenseeSubType,
+        // reviewLicenseeSubType,
         reviewcounsilForArchNo
       })
     })

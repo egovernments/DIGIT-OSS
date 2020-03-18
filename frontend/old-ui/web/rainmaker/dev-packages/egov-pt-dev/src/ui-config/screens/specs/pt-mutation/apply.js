@@ -15,6 +15,9 @@ import {mutationDetails
    import {
     transferorSummary,transferorInstitutionSummary
   } from "./summaryResource/transferorSummary";
+  import {
+    transferorSummary as ts1 ,transferorInstitutionSummary as ti1
+  } from "./summaryResource/transferorSummary1";
 import { propertyDetails } from "./applyResource/propertyDetails";
 import { propertyLocationDetails } from "./applyResource/propertyLocationDetails";
 
@@ -106,7 +109,6 @@ export const header = getCommonContainer({
 });
 
 
-
 export const formwizardFirstStep = {
   uiFramework: "custom-atoms",
   componentPath: "Form",
@@ -114,8 +116,8 @@ export const formwizardFirstStep = {
     id: "apply_form1"
   },
   children: {
-    transferorDetails,
-    transferorInstitutionSummary,
+    transferorDetails: {...ts1},
+    transferorInstitutionDetails:{...ti1},
     transfereeDetails,
     mutationDetails,
     registrationDetails
@@ -142,8 +144,8 @@ export const formwizardThirdStep = {
   },
   children:{
     summary:getCommonCard({  
-      transferorSummary: transferorSummary,
-       transferorInstitutionSummary:transferorInstitutionSummary,
+      transferorSummary: {...transferorSummary},
+       transferorInstitutionSummary:{...transferorInstitutionSummary},
       transfereeSummary: transfereeSummary,
        transfereeInstitutionSummary: transfereeInstitutionSummary,
       mutationSummary:mutationSummary,
@@ -180,6 +182,25 @@ const getPropertyData = async (action, state, dispatch) => {
       queryObject,
       
     );
+    
+  if (payload&&payload.Properties && payload.Properties[0].owners && payload.Properties[0].owners.length > 0) {
+    
+    let owners = [];
+    payload.Properties[0].owners.map(owner => {
+      owner.documentUid= owner.documents? owner.documents[0].documentUid: "NA";
+      owner.documentType=owner.documents? owner.documents[0].documentType: "NA";
+      
+      if (owner.status == "ACTIVE") {
+        owners.push(owner);
+      } 
+    });
+    
+    
+    payload.Properties[0].ownersInit = owners;
+    payload.Properties[0].ownershipCategoryInit=payload.Properties[0].ownershipCategory;
+  }
+  const previousPropertyUuid=payload.Properties[0].additionalDetails&&payload.Properties[0].additionalDetails.previousPropertyUuid;
+  payload.Properties[0].additionalDetails={previousPropertyUuid};
     dispatch(prepareFinalObject("Property", payload.Properties[0]));
 
     if (
@@ -209,38 +230,37 @@ const getPropertyData = async (action, state, dispatch) => {
       set(
         action.screenConfig,
         "components.div.children.formwizardFirstStep.children.transferorDetails.props.style",
-        { display: "none" }
+        {display: "none"}
       );
       set(
         action.screenConfig,
         "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorSummary.props.style",
-        { display: "none" }
+        {display: "none"}
       );
-      set(
-        action.screenConfig,
-        "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorInstitutionSummary.props.style",
-        {}
-      );
-      set(
-        action.screenConfig,
-      "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transfereeSummary.props.style",
-      {display: "none"}
-      );
+      // set(
+      //   action.screenConfig,
+      //  "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorInstitutionSummary.props.style",
+      //   {background:'grey'}
+      // );
+  
     }else{
       // set(
       //   action.screenConfig,
       //   "components.div.children.formwizardFirstStep.children.transferorDetails.props.style",
       //   { display: "none" }
       // );
+      // set(
+      //   action.screenConfig,
+      //   "components.div.children.formwizardFirstStep.children.transferorDetails.props.style",
+      //   {background:'white'}
+      // );
       set(
         action.screenConfig,
-        "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorInstitutionSummary.props.style",
+        "components.div.children.formwizardFirstStep.children.transferorInstitutionDetails.props.style",
         { display: "none" }
       );
-    
       set(
-        action.screenConfig,
-        "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transfereeInstitutionSummary.props.style",
+        action.screenConfig,"components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorInstitutionSummary.props.style",
         { display: "none" }
       );
     }
@@ -251,7 +271,39 @@ const getPropertyData = async (action, state, dispatch) => {
   }
 };
 
+const getSpecialCategoryDocumentTypeMDMSData=async (action, state, dispatch) => {
+  let tenantId ='pb'
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: tenantId,
+      moduleDetails: [
+        {
+          moduleName: "PropertyTax",
+          masterDetails: [{ name: "OwnerTypeDocument" }]
+        }
+      ]
+    }
+  };
+  try {
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
 
+    let OwnerTypeDocument=get(
+      payload,
+      "MdmsRes.PropertyTax.OwnerTypeDocument"
+    )
+    dispatch(prepareFinalObject("applyScreenMdmsData.OwnerTypeDocument", OwnerTypeDocument));
+  } catch (e) {
+    console.log(e);
+  }
+
+};
 const getMdmsData = async (action, state, dispatch) => {
   let tenantId = process.env.REACT_APP_NAME === "Employee" ?  getTenantId() : JSON.parse(getUserInfo()).permanentCity;
   let mdmsBody = {
@@ -282,7 +334,7 @@ const getMdmsData = async (action, state, dispatch) => {
             }
           ]
         },
-        { moduleName: "PropertyTax", masterDetails: [{ name: "Documents" }] }
+        { moduleName: "PropertyTax", masterDetails: [{ name: "MutationDocuments" }] }
       ]
     }
   };
@@ -295,6 +347,27 @@ const getMdmsData = async (action, state, dispatch) => {
       [],
       mdmsBody
     );
+
+    let OwnerShipCategory=get(
+      payload,
+      "MdmsRes.common-masters.OwnerShipCategory"
+    )
+    let institutions=[]
+    OwnerShipCategory = OwnerShipCategory.map(category=>{
+      if(category.code.includes("INDIVIDUAL")){
+        return category.code;
+      }
+      else{
+        let code=category.code.split(".");
+        institutions.push({code:code[1],parent:code[0],active:true});
+       return code[0] ;
+      }
+      });
+    OwnerShipCategory=OwnerShipCategory.filter((v,i,a)=>a.indexOf(v)===i)
+    OwnerShipCategory = OwnerShipCategory.map(val=>{return{code:val,active:true}});
+    payload.MdmsRes['common-masters'].Institutions=institutions;
+    payload.MdmsRes['common-masters'].OwnerShipCategory=OwnerShipCategory;
+    
     dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
   } catch (e) {
     console.log(e);
@@ -339,31 +412,7 @@ const getFirstListFromDotSeparated = list => {
   return list;
 };
 
-const setCardsIfMultipleBuildings = (state, dispatch) => {
-  if (
-    get(
-      state,
-      "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.noOfBuildings"
-    ) === "MULTIPLE"
-  ) {
-    dispatch(
-      handleField(
-        "apply",
-        "components.div.children.formwizardSecondStep.children.propertyDetails.children.cardContent.children.propertyDetailsConatiner.children.buildingDataCard.children.singleBuildingContainer",
-        "props.style",
-        { display: "none" }
-      )
-    );
-    dispatch(
-      handleField(
-        "apply",
-        "components.div.children.formwizardSecondStep.children.propertyDetails.children.cardContent.children.propertyDetailsConatiner.children.buildingDataCard.children.multipleBuildingContainer",
-        "props.style",
-        {}
-      )
-    );
-  }
-};
+
 
 export const prepareEditFlow = async (
   state,
@@ -484,6 +533,8 @@ const screenConfig = {
     });
 
 getMdmsTransferReasonData(action, state, dispatch);
+
+getSpecialCategoryDocumentTypeMDMSData(action, state, dispatch);
     // Search in cprepareDocumentsUploadDataase of EDIT flow
     prepareEditFlow(state, dispatch, applicationNumber, tenantId);
 

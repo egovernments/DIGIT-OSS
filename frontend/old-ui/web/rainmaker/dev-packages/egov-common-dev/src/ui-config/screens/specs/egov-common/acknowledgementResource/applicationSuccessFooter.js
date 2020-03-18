@@ -30,6 +30,7 @@ export const applicationSuccessFooter = (
             props: {
                 variant: "outlined",
                 color: "primary",
+                className: "common-footer",
                 style: {
                     minWidth: "180px",
                     height: "48px",
@@ -59,6 +60,7 @@ export const applicationSuccessFooter = (
                 variant: "contained",
                 color: "primary",
                 // className: "apply-wizard-footer-right-button",
+                className: "common-footer",
                 style: {
                     minWidth: "180px",
                     height: "48px",

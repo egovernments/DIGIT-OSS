@@ -20,7 +20,8 @@ const styles = theme => ({
   documentContainer: {
     backgroundColor: "#F2F2F2",
     padding: "16px",
-    marginBottom: "16px"
+    marginBottom: "16px",
+    wordBreak : "break-word"
   },
   documentIcon: {
     backgroundColor: "#FFFFFF",

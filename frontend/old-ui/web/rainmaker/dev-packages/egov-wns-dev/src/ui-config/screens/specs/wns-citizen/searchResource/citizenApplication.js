@@ -55,10 +55,10 @@ const resetFields = (state, dispatch) => {
 };
 export const citizenApplication = getCommonCard({
     subHeader: getCommonTitle({
-        labelKey: "WS_SEARCH_CONNECTION_HEADER"
+        labelKey: "WS_SEARCH_CONNECTION_SUB_HEADER"
     }),
     subParagraph: getCommonParagraph({
-        labelKey: "WS_HOME_SEARCH_RESULTS_DESC"
+        labelKey: "WS_HOME_SEARCH_CONN_RESULTS_DESC"
     }),
     cityPropertyAndMobNumContainer: getCommonContainer({
         city: getSelectField({

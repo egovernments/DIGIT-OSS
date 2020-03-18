@@ -27,7 +27,7 @@ export const getCommonApplyFooter = children => {
     uiFramework: "custom-atoms",
     componentPath: "Div",
     props: {
-      className: "apply-wizard-footer"
+      className: "pt-apply-wizard-footer"
     },
     children
   };
@@ -71,6 +71,9 @@ export const validateFields = (
     objectJsonPath,
     {}
   );
+  if(fields.isFieldValid===false){
+    return false;
+  }
   let isFormValid = true;
   for (var variable in fields) {
     if (fields.hasOwnProperty(variable)) {
@@ -682,6 +685,15 @@ export const resetFields = (state, dispatch) => {
     )
   );
 };
+export const getTodaysDateInYMD = () => {
+  let date = new Date();
+  //date = date.valueOf();
+  let month = date.getMonth() + 1;
+  let day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
+  date = `${date.getFullYear()}-${month}-${day}`;
+  // date = epochToYmdDate(date);
+  return date;
+};
 
 export const getRequiredDocData = async (action, state, dispatch) => {
   let tenantId =
@@ -692,7 +704,7 @@ export const getRequiredDocData = async (action, state, dispatch) => {
       moduleDetails: [
         {
           moduleName: "PropertyTax",
-          masterDetails: [{ name: "Documents" }]
+          masterDetails: [{ name: "MutationDocuments" }]
         }
       ]
     }

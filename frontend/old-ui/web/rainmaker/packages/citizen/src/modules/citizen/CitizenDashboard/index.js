@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import SearchService from "./components/SearchService";
 import ServiceList from "egov-ui-kit/common/common/ServiceList"
 import { getNotificationCount, getNotifications } from "egov-ui-kit/redux/app/actions";
 import { connect } from "react-redux";

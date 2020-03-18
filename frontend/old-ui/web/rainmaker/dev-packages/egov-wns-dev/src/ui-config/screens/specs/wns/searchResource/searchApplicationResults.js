@@ -56,6 +56,12 @@ export const searchApplicationResults = {
         options: {
           display: false
         }
+      },
+      {
+        name: "connectionType",
+        options: {
+          display: false
+        }
       }
     ],
     title: getTextToLocalMapping(
@@ -92,5 +98,5 @@ const getApplicationDetails = data => {
 }
 
 const getConnectionDetails = data => {
-  window.location.href = `connection-details?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[6]}&service=${data.rowData[0]}&connectionType=${data.rowData[9]}`
+  window.location.href = `connection-details?connectionNumber=${data.rowData[0]}&tenantId=${data.rowData[6]}&service=${data.rowData[7]}&connectionType=${data.rowData[8]}`
 }

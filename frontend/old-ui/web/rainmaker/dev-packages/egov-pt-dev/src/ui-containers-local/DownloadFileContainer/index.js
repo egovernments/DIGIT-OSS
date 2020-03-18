@@ -33,7 +33,7 @@ const mapStateToProps = (state, ownProps) => {
       }
       else {
         return {
-          title: `PT_${item.documentType}`,
+          title: item.documentCode,
           //   title: `PT_${item.title}`,
           link: item.documents && item.documents[0].fileUrl && item.documents[0].fileUrl.split(",")[0],
           //   link: item.link,

@@ -25,7 +25,7 @@ const getMdmsData = async (state, dispatch) => {
   );
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: 'pb',
+      tenantId: getTenantId(),
       moduleDetails: [
         {
           moduleName: "common-masters",
@@ -106,6 +106,24 @@ const getFloorDetail = (index) => {
   }
 };
 
+export const showApplyLicencePicker = (state, dispatch) => {
+  let toggle = get(
+    state.screenConfiguration.screenConfig["apply"],
+    "components.cityPickerDialog.props.open",
+    false
+  );
+  dispatch(
+    handleField("apply", "components.cityPickerDialog", "props.open", !toggle)
+  );
+  dispatch(
+    handleField(
+      "components.cityPickerDialog.children.dialogContent.children.popup.children.cityPicker.children.div.children.selectButton",
+      "visible",
+      false
+    )
+  )
+};
+
 const prepareDocumentsDetailsView = async (state, dispatch) => {
   let documentsPreview = [];
   let reduxDocuments = get(
@@ -130,7 +148,12 @@ const prepareDocumentsDetailsView = async (state, dispatch) => {
 const getSummaryRequiredDetails = async (state, dispatch) => {
   const applicationNumber = get(state.screenConfiguration.preparedFinalObject, "BPA.applicationNo");
   const tenantId = getQueryArg(window.location.href, "tenantId");
-  generateBillForBPA(dispatch, applicationNumber, tenantId, "BPA.NC_APP_FEE");
+  const riskType = get(state.screenConfiguration.preparedFinalObject, "BPA.riskType");
+  let businessService = "BPA.NC_APP_FEE"
+  if(riskType === "LOW") {
+    businessService = "BPA.LOW_RISK_PERMIT_FEE"
+  }
+  generateBillForBPA(dispatch, applicationNumber, tenantId, businessService);
   prepareDocumentsDetailsView(state, dispatch);
   dispatch(
     handleField(
@@ -164,7 +187,7 @@ const callBackForNext = async (state, dispatch) => {
       dispatch
     );
     let isDetailsofplotCardValid = validateFields(
-      "components.div.children.formwizardFourthStep.children.detailsofplot.children.cardContent.children.detailsOfPlotContainer.children",
+      "components.div.children.formwizardFirstStep.children.detailsofplot.children.cardContent.children.detailsOfPlotContainer.children",
       state,
       dispatch
     );
@@ -208,10 +231,10 @@ const callBackForNext = async (state, dispatch) => {
       dispatch
     );
     let isBlockWiseOccupancyAndUsageDetailsCardValid = validateFields(
-      "components.div.children.formwizardSecondStep.children.blockWiseOccupancyAndUsageDetails.children.cardContent.children.blockWiseOccupancyAndUsageDetailscontainer.children.cardContent.children.blockWiseContainer.children",
+      "components.div.children.formwizardSecondStep.children.blockWiseOccupancyAndUsageDetails.children.cardContent.children.blockWiseOccupancyAndUsageDetailscontainer.children.cardContent.children.applicantTypeSelection.children",
       state, 
       dispatch
-    )
+    );
     let isDemolitiondetailsCardValid = validateFields(
       "components.div.children.formwizardSecondStep.children.demolitiondetails.children.cardContent.children.demolitionDetailsContainer.children",
       state,
@@ -467,7 +490,19 @@ const callBackForNext = async (state, dispatch) => {
             };
             dispatch(toggleSnackbar(true, errorMessage, "warning")); 
           }else{
-            responseStatus === "success" && changeStep(state, dispatch);
+            let licenceType = get(
+              state.screenConfiguration.preparedFinalObject , 
+              "applyScreenMdmsData.licenceTypes", []
+              );
+            let bpaStatus = get(
+              state.screenConfiguration.preparedFinalObject,
+              "BPA.status", ""
+            )
+            if(licenceType && licenceType.length > 1 && !bpaStatus) {
+              showApplyLicencePicker(state, dispatch, activeStep);
+            } else {
+              responseStatus === "success" && changeStep(state, dispatch);
+            }
           }
         }else{
           responseStatus === "success" && changeStep(state, dispatch);
@@ -782,10 +817,10 @@ export const footer = getCommonApplyFooter({
       action: "condition",
       callBack: updateBpaApplication
     },
-    roleDefination: {
-      rolePath: "user-info.roles",
-      action : "SEND_TO_CITIZEN"
-    },
+    // roleDefination: {
+    //   rolePath: "user-info.roles",
+    //   action : "SEND_TO_CITIZEN"
+    // },
     visible: false
   }
 });

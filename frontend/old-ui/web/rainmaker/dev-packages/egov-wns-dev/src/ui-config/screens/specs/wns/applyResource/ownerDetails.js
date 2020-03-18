@@ -179,7 +179,7 @@ import {
           }),
           items: [],
           hasAddItem: false,
-          // sourceJsonPath: "WaterConnection[0].property.owners",
+          sourceJsonPath: "WaterConnection[0].property.owners",
           prefixSourceJsonPath: "children.cardContent.children.viewFive.children",
           afterPrefixJsonPath: "children.value.children.key"
         },
