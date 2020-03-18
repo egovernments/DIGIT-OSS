@@ -70,11 +70,24 @@ export const searchApiCall = async (state, dispatch) => {
         } else {
           queryObjectForWaterFetchBill = [{ key: "tenantId", value: tenantId }, { key: "consumerCode", value: element.connectionNo }, { key: "businessService", value: "SW" }];
         }
-        let billResults = await fetchBill(queryObjectForWaterFetchBill, dispatch)
-        billResults ? billResults.Bill.map(bill => {
-          let obj = {
-            due: bill.totalAmount,
-            dueDate: bill.billDetails[0].expiryDate,
+        if(element.connectionNo!=='NA'){
+          let billResults = await fetchBill(queryObjectForWaterFetchBill, dispatch)
+          billResults ? billResults.Bill.map(bill => {
+            let obj = {
+              due: bill.totalAmount,
+              dueDate: bill.billDetails[0].expiryDate,
+              service: element.service,
+              connectionNo: element.connectionNo,
+              name: element.property.owners[0].name,
+              status: element.status,
+              address: element.property.address.street,
+              tenantId: tenantId,
+              connectionType: element.connectionType
+            }
+            finalArray.push(obj)
+          }) : finalArray.push({
+            due: 'NA',
+            dueDate: 'NA',
             service: element.service,
             connectionNo: element.connectionNo,
             name: element.property.owners[0].name,
@@ -82,19 +95,8 @@ export const searchApiCall = async (state, dispatch) => {
             address: element.property.address.street,
             tenantId: tenantId,
             connectionType: element.connectionType
-          }
-          finalArray.push(obj)
-        }) : finalArray.push({
-          due: 'NA',
-          dueDate: 'NA',
-          service: element.service,
-          connectionNo: element.connectionNo,
-          name: element.property.owners[0].name,
-          status: element.status,
-          address: element.property.address.street,
-          tenantId: tenantId,
-          connectionType: element.connectionType
-        })
+          })
+        }
       }
       showResults(finalArray, dispatch, tenantId)
     } catch (err) { console.log(err) }

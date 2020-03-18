@@ -7,7 +7,6 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import IconButton from "@material-ui/core/IconButton";
 import KeyboardRightIcon from "@material-ui/icons/KeyboardArrowRight";
-
 const styles = theme => ({
   root: {
     margin: "2px 8px",
@@ -16,10 +15,15 @@ const styles = theme => ({
 });
 
 class HowItWorks extends React.Component {
+
+  clickHandler = () => {
+    window.location.href = "/citizen/wns-citizen/howItWorks"
+  }
+
   render() {
     const { classes } = this.props;
     return (
-      <div className={classes.root}>
+      <div className={classes.root} onClick={this.clickHandler}>
         <List component="nav">
           <ListItem button>
             <ListItemText

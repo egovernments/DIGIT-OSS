@@ -7,6 +7,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getConnectionDetails } from './../applyResource/task-connectiondetails';
 import { propertyOwnerDetails } from "../applyResource/task-owner-details";
+import { convertEpochToDate } from "../../utils";
 
 const getHeader = label => {
   return {
@@ -33,6 +34,10 @@ export const propertyLocationDetailsHeader = getHeader({
 
 export const connectionDetailsHeader = getHeader({
   labelKey: "WS_COMMON_CONNECTION_DETAILS"
+});
+
+export const propertyOwnerDetailsHeader = getHeader({
+  labelKey: "WS_TASK_PROP_OWN_HEADER"
 });
 
 export const getReviewConnectionDetails = (isEditable = true) => {
@@ -85,8 +90,8 @@ export const getReviewConnectionDetails = (isEditable = true) => {
     },
     viewOne: getPropertyDetails,
     viewTwo: propertyLocationDetails,
-    viewThree: propertyOwnerDetails(),
-    viewFour: getConnectionDetails(),
+    viewThree: ownerDetails,
+    viewFour: getConnectionDetails()
   });
 };
 
@@ -239,4 +244,96 @@ const getPropertyDetails = {
   },
   type: "array"
 };
+
+const ownerDetails = {
+  // return getCommonGrayCard({
+  //   headerDiv: {
+  //     uiFramework: "custom-atoms",
+  //     componentPath: "Container",
+  //     ...propertyOwnerDetailsHeader,
+  //   },
+      uiFramework: "custom-containers",
+      componentPath: "MultiItem",
+      props: {
+        className: "common-div-css search-preview",
+        scheama: getCommonGrayCard({
+          div3: propertyOwnerDetailsHeader,
+          propertyLocationDetailsContainer: getCommonContainer({
+            name: getLabelWithValue(
+              {
+                labelName: "Name",
+                labelKey: "WS_OWN_DETAIL_OWN_NAME_LABEL"
+              },
+              {
+                jsonPath: "WaterConnection[0].property.owners[0].name"
+              }
+            ),
+            email: getLabelWithValue(
+              {
+                labelKey: "WS_OWN_DETAIL_OWN_EMAIL_LABEL"
+              },
+              {
+                jsonPath: "WaterConnection[0].property.owners[0].emailId"
+              }
+            ),
+            gender: getLabelWithValue(
+              {
+                labelKey: "WS_OWN_DETAIL_GENDER_LABEL"
+              },
+              {
+                jsonPath: "WaterConnection[0].property.owners[0].gender",
+                localePrefix: {
+                  moduleName: "COMMON",
+                  masterName: "GENDER"
+                }
+              }
+            ),
+            dateOfBirth: getLabelWithValue(
+              {
+                labelKey: "WS_OWN_DETAIL_DOB_LABEL"
+              },
+              {
+                jsonPath: "WaterConnection[0].property.owners[0].dob",
+                callBack: convertEpochToDate
+              }
+            ),
+            fatherName: getLabelWithValue(
+              {
+                labelKey: "WS_OWN_DETAIL_FATHER_OR_HUSBAND_NAME"
+              },
+              { jsonPath: "WaterConnection[0].property.owners[0].fatherOrHusbandName" }
+            ),
+            relationship: getLabelWithValue(
+              {
+                labelKey: "WS_OWN_DETAIL_RELATION_LABEL"
+              },
+              { jsonPath: "WaterConnection[0].property.owners[0].relationship" }
+            ),
+            correspondenceAddress: getLabelWithValue(
+              {
+                labelKey: "WS_OWN_DETAIL_CROSADD"
+              },
+              { jsonPath: "WaterConnection[0].property.owners[0].correspondenceAddress" }
+            ), specialApplicantCategory: getLabelWithValue(
+              {
+                labelKey: "WS_OWN_DETAIL_SPECIAL_APPLICANT_LABEL"
+              },
+              {
+                jsonPath: "WaterConnection[0].property.owners[0].ownerType"
+              })
+          })
+        }),
+
+        items: [],
+        hasAddItem: false,
+        isReviewPage: true,
+        sourceJsonPath: "WaterConnection[0].property.owners",
+        prefixSourceJsonPath:
+          "children.cardContent.children.propertyLocationDetailsContainer.children",
+        afterPrefixJsonPath: "children.value.children.key"
+      },
+      type: "array"
+    
+  // });
+}
 

@@ -136,7 +136,15 @@ span[class^="MuiFormLabel-asterisk"] {
     width: 100%;
     overflow: inherit !important;
   }
-
+  .pt-apply-wizard-footer {
+    position: fixed;
+    bottom: 0;
+    display: inline;
+    z-index: 1;
+    left: 0;
+    width: 100%;
+    overflow: inherit !important;
+  }
   .button-wizard-footer {
     min-width: 50%;
     height: 48px;
@@ -165,7 +173,16 @@ span[class^="MuiFormLabel-asterisk"] {
     height: 48px !important;
     margin-right: 45px !important;
   }
-
+  .pt-apply-wizard-footer {
+    background-color: #ffffff;
+    box-shadow: 0 -2px 4px 0 rgba(0, 0, 0, 0.24);
+    padding: 8px;
+    position: fixed !important;
+    bottom: 0;
+    right: 0;
+    width:100%;
+    text-align: right;
+}
   .apply-wizard-footer {
     background-color: #ffffff;
     box-shadow: 0 -2px 4px 0 rgba(0, 0, 0, 0.24);
@@ -199,6 +216,19 @@ span[class^="MuiFormLabel-asterisk"] {
         overflow: inherit !important;
     }
     .apply-wizard-footer { button {
+       // min-width: 360px !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+     }}
+     .pt-apply-wizard-footer {
+        position: fixed;
+        bottom: 0;
+        z-index: 1;
+        /* left: 35px; */
+        width: 100%;
+        overflow: inherit !important;
+    }
+    .pt-apply-wizard-footer { button {
        // min-width: 360px !important;
         margin-left: 0 !important;
         margin-right: 0 !important;

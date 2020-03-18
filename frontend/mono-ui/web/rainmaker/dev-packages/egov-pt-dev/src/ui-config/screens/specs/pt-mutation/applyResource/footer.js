@@ -16,6 +16,7 @@ import {
 } from "../../../../../ui-utils/commons";
 import store from "ui-redux/store";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/utils";
 
 const setReviewPageRoute = (state, dispatch) => {
   let tenantId = get(
@@ -96,7 +97,7 @@ const getMdmsData = async (state, dispatch) => {
     MdmsCriteria: {
       tenantId: tenantId,
       moduleDetails: [
-        { moduleName: "PropertyTax", masterDetails: [{ name: "Documents" }] }
+        { moduleName: "PropertyTax", masterDetails: [{ name: "MutationDocuments" }] }
       ]
     }
   };
@@ -112,7 +113,7 @@ const getMdmsData = async (state, dispatch) => {
     dispatch(
       prepareFinalObject(
         "applyScreenMdmsData.PropertyTax.Documents",
-        payload.MdmsRes.PropertyTax.Documents
+        payload.MdmsRes.PropertyTax.MutationDocuments
       )
     );
     prepareDocumentsUploadData(state, dispatch);
@@ -127,6 +128,20 @@ const callBackForApply = async (state, dispatch) => {
   let consumerCode = getQueryArg(window.location.href, "consumerCode");
   let propertyPayload = get(
     state, "screenConfiguration.preparedFinalObject.Property");
+
+  if (process.env.REACT_APP_NAME === "Citizen" && propertyPayload && !propertyPayload.declaration) {
+    const errorMessage = {
+      labelName:
+        "Please fill all mandatory fields for Applicant Details, then proceed!",
+      labelKey: "ERR_CITIZEN_DECLARATION_TOAST"
+    };
+    dispatch(toggleSnackbar(true, errorMessage, "warning"));
+    return;
+  }
+
+
+  let documentsUploadRedux = get(
+    state, "screenConfiguration.preparedFinalObject.documentsUploadRedux");
   propertyPayload.workflow = {
     "businessService": "PT.MUTATION",
     tenantId,
@@ -137,9 +152,56 @@ const callBackForApply = async (state, dispatch) => {
       owner.status = "INACTIVE";
 
     })
-  propertyPayload.additionalDetails.documentDate = 1581490792377;
 
-  if (propertyPayload.ownershipCategoryTemp.includes("INSTITUTIONAL")) {
+  propertyPayload.ownersTemp.map(owner => {
+    if (owner.documentUid && owner.documentType) {
+      owner.documents = [{}]
+      owner.documents[0].fileStoreId = owner.documentUid;
+      owner.documents[0].documentType = owner.documentType;
+      owner.documents[0].documentUid = owner.documentUid;
+    }
+  })
+  propertyPayload.additionalDetails.documentDate = convertDateToEpoch(
+    propertyPayload.additionalDetails.documentDate);
+
+  if (propertyPayload.ownershipCategory.includes("INDIVIDUAL") && propertyPayload.ownershipCategoryTemp.includes("INDIVIDUAL")) {
+    propertyPayload.ownersTemp.map(owner => {
+      owner.status = "ACTIVE";
+      owner.ownerType = 'NONE';
+    })
+    propertyPayload.owners = [...propertyPayload.owners, ...propertyPayload.ownersTemp]
+    delete propertyPayload.ownersTemp;
+  } else if (propertyPayload.ownershipCategory.includes("INSTITUTIONAL") && propertyPayload.ownershipCategoryTemp.includes("INDIVIDUAL")) {
+    propertyPayload.ownersTemp.map(owner => {
+      owner.status = "ACTIVE";
+      owner.ownerType = 'NONE';
+    })
+    propertyPayload.institution = null;
+    propertyPayload.owners = [...propertyPayload.owners, ...propertyPayload.ownersTemp]
+    delete propertyPayload.ownersTemp;
+  } else if (propertyPayload.ownershipCategory.includes("INDIVIDUAL") && propertyPayload.ownershipCategoryTemp.includes("INSTITUTIONAL")) {
+    propertyPayload.owners[0].altContactNumber = propertyPayload.institutionTemp.landlineNumber;
+    propertyPayload.institution = {};
+    propertyPayload.institution.nameOfAuthorizedPerson = propertyPayload.institutionTemp.name;
+    propertyPayload.institution.name = propertyPayload.institutionTemp.institutionName;
+    propertyPayload.institution.designation = propertyPayload.institutionTemp.designation;
+    propertyPayload.institution.tenantId = tenantId;
+    propertyPayload.institution.type = propertyPayload.institutionTemp.institutionType;
+
+    propertyPayload.institutionTemp.altContactNumber = propertyPayload.institutionTemp.landlineNumber;
+    propertyPayload.institutionTemp.ownerType = "NONE";
+    propertyPayload.institutionTemp.status = "ACTIVE";
+    // propertyPayload.institutionTemp.type = propertyPayload.ownershipCategoryTemp;
+    propertyPayload.owners = [...propertyPayload.owners, propertyPayload.institutionTemp]
+    delete propertyPayload.institutionTemp;
+  } else if (propertyPayload.ownershipCategory.includes("INSTITUTIONAL") && propertyPayload.ownershipCategoryTemp.includes("INSTITUTIONAL")) {
+    propertyPayload.institution = {};
+    propertyPayload.institution.nameOfAuthorizedPerson = propertyPayload.institutionTemp.name;
+    propertyPayload.institution.name = propertyPayload.institutionTemp.institutionName;
+    propertyPayload.institution.designation = propertyPayload.institutionTemp.designation;
+    propertyPayload.institution.tenantId = tenantId;
+    propertyPayload.institution.type = propertyPayload.institutionTemp.institutionType;
+
     propertyPayload.institutionTemp.altContactNumber = propertyPayload.institutionTemp.landlineNumber;
     propertyPayload.institutionTemp.ownerType = "NONE";
     propertyPayload.institutionTemp.status = "ACTIVE";
@@ -147,18 +209,18 @@ const callBackForApply = async (state, dispatch) => {
     propertyPayload.owners = [...propertyPayload.owners, propertyPayload.institutionTemp]
     delete propertyPayload.institutionTemp;
   }
-  else {
-    // 
-    propertyPayload.ownersTemp.map(owner => {
-      owner.status = "ACTIVE";
-      owner.ownerType = 'NONE';
-    })
-
-    propertyPayload.owners = [...propertyPayload.owners, ...propertyPayload.ownersTemp]
-    delete propertyPayload.ownersTemp;
-  }
   propertyPayload.ownershipCategory = propertyPayload.ownershipCategoryTemp;
   delete propertyPayload.ownershipCategoryTemp;
+  propertyPayload.documents = Object.values(documentsUploadRedux).map(o => {
+    let documentValue = o.dropdown.value.split('.');
+    return {
+      documentType: documentValue && documentValue.length > 1 && documentValue[2],
+      fileStoreId: o.documents[0].fileStoreId,
+      documentUid: o.documents[0].fileStoreId,
+      auditDetails: null,
+      status: "ACTIVE"
+    }
+  })
 
   try {
     let queryObject = [
@@ -186,7 +248,7 @@ const callBackForApply = async (state, dispatch) => {
     if (payload) {
       store.dispatch(
         setRoute(
-          `acknowledgement?purpose=apply&status=success&applicationNumber=${payload.Properties[0].acknowldgementNumber}&tenantId=${tenantId}
+          `acknowledgement?purpose=apply&status=success&applicationNumber=${payload.Properties[0].acknowldgementNumber}&moduleName=PT.MUTATION&tenantId=${tenantId}
           `
         )
       );
@@ -212,24 +274,50 @@ const callBackForApply = async (state, dispatch) => {
 
 const validateMobileNumber = (state) => {
   let err = false;
-  const newOwners = get(state, 'screenConfiguration.preparedFinalObject.Property.ownersTemp');
-  const owners = get(state, 'screenConfiguration.preparedFinalObject.Property.owners');
-  const names = owners.map(owner => {
-    return owner.name
-  })
-  const mobileNumbers = owners.map(owner => {
-    return owner.mobileNumber
-  })
-  newOwners.map(owner => {
-    if (names.includes(owner.name)) {
-      err = "OWNER_NAME_SAME";
-    }
-  })
-  newOwners.map(owner => {
-    if (mobileNumbers.includes(owner.mobileNumber)) {
-      err = "OWNER_NUMBER_SAME";
-    }
-  })
+  let ownershipCategoryTemp = get(state, 'screenConfiguration.preparedFinalObject.Property.ownershipCategoryTemp');
+
+
+  if (ownershipCategoryTemp.includes('INSTITUTIONAL')) {
+    const newOwners = [get(state, 'screenConfiguration.preparedFinalObject.Property.institutionTemp', {})];
+    const owners = get(state, 'screenConfiguration.preparedFinalObject.Property.owners');
+    const names = owners.map(owner => {
+      return owner.name
+    })
+    const mobileNumbers = owners.map(owner => {
+      if (owner.status == "ACTIVE") {
+        return owner.mobileNumber;
+      }
+    })
+    // newOwners.map(owner => {
+    //   if (names.includes(owner.name)) {
+    //     err = "OWNER_NAME_SAME";
+    //   }
+    // })
+    newOwners.map(owner => {
+      if (mobileNumbers.includes(owner.mobileNumber)) {
+        err = "OWNER_NUMBER_SAME";
+      }
+    })
+  } else {
+
+    const newOwners = get(state, 'screenConfiguration.preparedFinalObject.Property.ownersTemp');
+    const owners = get(state, 'screenConfiguration.preparedFinalObject.Property.owners');
+    const names = owners.map(owner => {
+      return owner.name
+    })
+    const mobileNumbers = owners.map(owner => {
+      if (owner.status == "ACTIVE") {
+        return owner.mobileNumber;
+      }
+    })
+    newOwners.map(owner => {
+      if (mobileNumbers.includes(owner.mobileNumber)) {
+        err = "OWNER_NUMBER_SAME";
+      }
+    })
+  }
+
+
 
   return err;
 }
@@ -262,8 +350,14 @@ const callBackForNext = async (state, dispatch) => {
       dispatch
     );
 
+    let isInstitutionTypeValid = validateFields(
+      "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer.children.institutionType.children.cardContent.children.institutionTypeDetailsContainer.children",
+      state,
+      dispatch
+    );
 
-    let isTransfereeDetailsCardValid = isSingleOwnerValid || isMutilpleOwnerValid || isInstitutionValid;
+
+    let isTransfereeDetailsCardValid = isSingleOwnerValid || isMutilpleOwnerValid || (isInstitutionValid && isInstitutionTypeValid);
 
     let isApplicantTypeValid = validateFields(
       "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.applicantTypeSelection.children",
@@ -292,7 +386,12 @@ const callBackForNext = async (state, dispatch) => {
       isFormValid = false;
       hasFieldToaster = true;
     }
-
+    // dispatch(
+    //   prepareFinalObject(
+    //     "documentsUploadRedux.3.dropdown.value",
+    //     `${get(state,'screenConfiguration.preparedFinalObject.documentsUploadRedux.3.documentCode','')}.${get(state,'screenConfiguration.preparedFinalObject.Property.additionalDetails.reasonForTransfer','')}`
+    //   )
+    // );
     if (isFormValid) {
       errorMsg = validateMobileNumber(state);
       errorMsg ? isFormValid = false : {};
@@ -304,6 +403,67 @@ const callBackForNext = async (state, dispatch) => {
 
   if (activeStep === 1) {
     isFormValid = moveToReview(state, dispatch);
+
+
+    const ownershipCategory = get(
+      state.screenConfiguration.preparedFinalObject,
+      "Property.ownershipCategory",
+      ''
+    );
+    const ownershipCategoryTemp = get(
+      state.screenConfiguration.preparedFinalObject,
+      "Property.ownershipCategoryTemp",
+      ''
+    );
+
+    if (ownershipCategory.includes("INSTITUTIONAL")) {
+      const owner = get(
+        state.screenConfiguration.preparedFinalObject,
+        "Property.owners",
+        []
+      );
+      dispatch(
+        prepareFinalObject(
+          "Property.ownersInit",
+          owner
+        )
+      );
+    }
+    else {
+      const owner = get(
+        state.screenConfiguration.preparedFinalObject,
+        "Property.owners",
+        []
+      );
+      dispatch(
+        prepareFinalObject(
+          "Property.ownersInit",
+          owner
+        )
+      );
+    }
+    if (ownershipCategoryTemp.includes("INSTITUTIONAL")) {
+      const institutionTemp = get(
+        state.screenConfiguration.preparedFinalObject,
+        "Property.institutionTemp",
+        ''
+      );
+      let temp = {};
+      temp = { ...institutionTemp }
+      temp.name = institutionTemp.institutionName;
+      temp.fatherOrHusbandName = institutionTemp.name;
+      temp.permanentAddress = institutionTemp.correspondenceAddress;
+      const ownerTemp = [temp];
+      dispatch(
+        prepareFinalObject(
+          "Property.ownersTemp",
+          ownerTemp
+        )
+      );
+
+
+    }
+
   }
   if (activeStep === 2) {
 

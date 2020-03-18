@@ -100,8 +100,8 @@ export const searchApiCall = async (state, dispatch) => {
 
     const response = await getSearchResults(queryObject);
     try {
+      
       let data = response.Licenses.map(item => ({
-  
         [getTextToLocalMapping("Application No")]:
           item.applicationNumber || "-",
         [getTextToLocalMapping("License No")]: item.licenseNumber || "-",
@@ -113,12 +113,11 @@ export const searchApiCall = async (state, dispatch) => {
           [getTextToLocalMapping("Financial Year")]:
           item.financialYear || "-",
           [getTextToLocalMapping("Application Type")]:
-          item.applicationType || "NEW",
-        [getTextToLocalMapping("Status")]: item.status || "-",
+          `TL_TYPE_${item.applicationType}`  || "NEW",
+        [getTextToLocalMapping("Status")]: `WF_${item.workflowCode.toUpperCase()}_${item.status}` || "-",
         ["tenantId"]: item.tenantId,
         ["status1"]: item.status || "-"
       }));
-
       dispatch(
         handleField(
           "search",

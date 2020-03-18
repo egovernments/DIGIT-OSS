@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import Label from "egov-ui-kit/utils/translationNode";
 import HistoryCard from "../../../../../Property/components/HistoryCard";
 import { getFormattedDate } from "../../../../../../../utils/PTCommon";
-import {  toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
+import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 export const getFullRow = (labelKey, labelValue, rowGrid = 12) => {
     let subRowGrid = 1;
     if (rowGrid == 6) {
@@ -20,9 +20,9 @@ export const getFullRow = (labelKey, labelValue, rowGrid = 12) => {
                 fontSize="14px"
             />
         </div>
-        <div className={`col-sm-${4 * subRowGrid} col-xs-8`} style={{ padding: "3px 0px 0px 0px",paddingLeft:rowGrid==12?'10px':'15px' }}>
+        <div className={`col-sm-${4 * subRowGrid} col-xs-8`} style={{ padding: "3px 0px 0px 0px", paddingLeft: rowGrid == 12 ? '10px' : '15px' }}>
             <Label
-                labelStyle={{ letterSpacing: "0.47px", color: "rgba(0, 0, 0, 1.87)", fontWeight: "400", lineHeight: "19px !important"  }}
+                labelStyle={{ letterSpacing: "0.47px", color: "rgba(0, 0, 0, 1.87)", fontWeight: "400", lineHeight: "19px !important" }}
                 label={labelValue}
                 fontSize="14px"
             />
@@ -41,23 +41,23 @@ class AssessmentHistory extends Component {
         this.state = {
             items: [],
             showItems: false,
-            errorMessage:"PT_ASSESSMENT_HISTORY_ERROR"
+            errorMessage: "PT_ASSESSMENT_HISTORY_ERROR"
         };
     }
 
-    getLatestAssessments(Assessments=[]){
-        let latestAssessments=[];
-        let financialYears=[];
-        Assessments.sort((a1,a2)=>a2.assessmentDate-a1.assessmentDate);
-        
-        Assessments.map(Assessment=>{
-            if(!financialYears.includes(Assessment.financialYear)){
+    getLatestAssessments(Assessments = []) {
+        let latestAssessments = [];
+        let financialYears = [];
+        Assessments.sort((a1, a2) => a2.assessmentDate - a1.assessmentDate);
+
+        Assessments.map(Assessment => {
+            if (!financialYears.includes(Assessment.financialYear)) {
                 latestAssessments.push(Assessment);
                 financialYears.push(Assessment.financialYear);
             }
-            
+
         })
-return latestAssessments;
+        return latestAssessments;
     }
     getTransformedAssessmentHistory() {
         const labelStyle = {
@@ -77,7 +77,7 @@ return latestAssessments;
             alignItems: "right",
         };
         const { Assessments = [], history, propertyId } = this.props;
-        
+
         const assessmentHistoryItems = this.getLatestAssessments(Assessments).map((Assessment) => {
             return (
                 <div>
@@ -91,20 +91,20 @@ return latestAssessments;
                                 label={<Label buttonLabel={true} label='PT_RE_ASSESS' color="rgb(254, 122, 81)" fontSize="16px" height="40px" labelStyle={labelStyle} />}
                                 buttonStyle={buttonStyle}
                                 onClick={() => {
-                                    if(this.props.selPropertyDetails.status=="INWORKFLOW"){
+                                    if (this.props.selPropertyDetails.status != "ACTIVE") {
                                         this.props.toggleSnackbarAndSetText(
-                                          true,
-                                          { labelName: "Property in Workflow", labelKey: "ERROR_PROPERTY_IN_WORKFLOW" },
-                                          "error"
+                                            true,
+                                            { labelName: "Property in Workflow", labelKey: "ERROR_PROPERTY_IN_WORKFLOW" },
+                                            "error"
                                         );
-                                      }else{
+                                    } else {
                                         history &&
-                                        history.push(
-                                            `/property-tax/assessment-form?FY=${Assessment.financialYear}&assessmentId=${Assessment.assessmentNumber}&isAssesment=false&isReassesment=true&propertyId=${
-                                            propertyId
-                                            }&tenantId=${Assessment.tenantId}`
-                                        );
-                                      }                       
+                                            history.push(
+                                                `/property-tax/assessment-form?FY=${Assessment.financialYear}&assessmentId=${Assessment.assessmentNumber}&isAssesment=false&isReassesment=true&propertyId=${
+                                                propertyId
+                                                }&tenantId=${Assessment.tenantId}`
+                                            );
+                                    }
                                     // lastElement.onClick();
                                 }}
                             ></Button>
@@ -119,12 +119,12 @@ return latestAssessments;
     }
 
     render() {
-        let { propertyDetails = [], propertyId,Assessments=[] } = this.props;
-         if (Assessments.length > 0) {
+        let { propertyDetails = [], propertyId, Assessments = [] } = this.props;
+        if (Assessments.length > 0) {
             Assessments = this.getTransformedAssessmentHistory();
         }
-        const items = this.state.showItems ? this.state.items : [] ;
-        const errorMessage = this.state.showItems&&items.length==0 ? this.state.errorMessage : '';
+        const items = this.state.showItems ? this.state.items : [];
+        const errorMessage = this.state.showItems && items.length == 0 ? this.state.errorMessage : '';
         return (<HistoryCard header={'PT_ASSESMENT_HISTORY'} items={items} errorMessage={errorMessage} onHeaderClick={() => {
             this.setState({ showItems: !this.state.showItems, items: Assessments })
         }}></HistoryCard>)
@@ -135,7 +135,7 @@ return latestAssessments;
 
 
 const mapStateToProps = (state, ownProps) => {
-    const { propertiesById ,Assessments=[]} = state.properties || {};
+    const { propertiesById, Assessments = [] } = state.properties || {};
     const propertyId = decodeURIComponent(ownProps.match.params.propertyId);
     const selPropertyDetails = propertiesById[propertyId] || {};
     const propertyDetails = selPropertyDetails.propertyDetails || [];
@@ -150,12 +150,12 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-      toggleSnackbarAndSetText: (open, message, error) => dispatch(toggleSnackbarAndSetText(open, message, error)),
+        toggleSnackbarAndSetText: (open, message, error) => dispatch(toggleSnackbarAndSetText(open, message, error)),
     };
-  };
-  
-  
-  
+};
+
+
+
 
 export default compose(
     withRouter,

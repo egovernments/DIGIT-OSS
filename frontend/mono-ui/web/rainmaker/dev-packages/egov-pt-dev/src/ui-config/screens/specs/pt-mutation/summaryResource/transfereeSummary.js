@@ -7,11 +7,17 @@ import {
   getLabelWithValue,
   convertEpochToDate
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import get from "lodash/get";
 import { gotoApplyWithStep } from "../../utils/index";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { checkValueForNA } from "../../utils";
 
-
+const showComponent = (dispatch, componentJsonPath, display) => {
+  let displayProps = display ? {} : { display: "none" };
+  dispatch(
+    handleField("apply", componentJsonPath, "props.style", displayProps)
+  );
+};
 export const transfereeSummary = getCommonGrayCard({
   header: {
     uiFramework: "custom-atoms",
@@ -42,25 +48,7 @@ export const transfereeSummary = getCommonGrayCard({
           xs: 4,
           align: "right"
         },
-        // children: {
-        //   editIcon: {
-        //     uiFramework: "custom-atoms",
-        //     componentPath: "Icon",
-        //     props: {
-        //       iconName: "edit"
-        //     }
-        //   },
-          // buttonLabel: getLabel({
-          //   labelName: "Edit",
-          //   labelKey: "PT_EDIT"
-          // })
-        // },
-        // onClickDefination: {
-        //   action: "condition",
-        //   callBack: (state, dispatch) => {
-        //     gotoApplyWithStep(state, dispatch, 0);
-        //   }
-        // }
+      
       }
     }
   },
@@ -157,8 +145,28 @@ export const transfereeSummary = getCommonGrayCard({
                 "Property.ownersTemp[0].permanentAddress",
                 callBack: checkValueForNA
             }
-          )
-        })
+          ),
+          ownerSpecialDocumentType: getLabelWithValue(
+            {
+              labelName: "Special Category Document Type",
+              labelKey: "PT_OWNERSHIP_SPECIAL_CATEGORY_DOCUMENT_TYPE"
+            },
+            {
+              jsonPath:"Property.ownersTemp[0].documentType",
+              callBack: checkValueForNA      }
+          ),
+          ownerDocumentId: getLabelWithValue(
+            {
+              labelName: "Document ID",
+              labelKey: "PT_OWNERSHIP_DOCUMENT_ID"
+            },
+            {
+              jsonPath:"Property.ownersTemp[0].documentUid",
+                callBack: checkValueForNA
+            }
+          ),
+          
+        }),
       }),
       items: [],
       hasAddItem: false,
@@ -166,10 +174,25 @@ export const transfereeSummary = getCommonGrayCard({
       sourceJsonPath: "Property.ownersTemp",
       prefixSourceJsonPath:
         "children.cardContent.children.ownerContainer.children",
-      afterPrefixJsonPath: "children.value.children.key"
+      afterPrefixJsonPath: "children.value.children.key",
+
     },
     type: "array"
-  }
+  },
+  beforeInitScreen: (action, state, dispatch) => {
+    const categoryDocumentIDJsonPath= "components.div.children.body.children.cardContent.children.transfereeSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerDocumentId.props.style";
+
+    const categoryDocumentTypeJsonPath="components.div.children.body.children.cardContent.children.transfereeSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerSpecialDocumentType.props.style";
+    
+    
+    if(categoryType === "NONE"){
+    
+       dispatch(handleField("search-preview", categoryDocumentIDJsonPath, "display","none"));
+       dispatch(handleField("search-preview", categoryDocumentTypeJsonPath, "display","none"));
+
+      
+    }
+  },
 });
 
 export const transfereeInstitutionSummary = getCommonGrayCard({
@@ -202,19 +225,19 @@ export const transfereeInstitutionSummary = getCommonGrayCard({
           xs: 4,
           align: "right"
         },
-        children: {
-          editIcon: {
-            uiFramework: "custom-atoms",
-            componentPath: "Icon",
-            props: {
-              iconName: "edit"
-            }
-          },
-          buttonLabel: getLabel({
-            labelName: "Edit",
-            labelKey: "PT_EDIT"
-          })
-        },
+        // children: {
+        //   editIcon: {
+        //     uiFramework: "custom-atoms",
+        //     componentPath: "Icon",
+        //     props: {
+        //       iconName: "edit"
+        //     }
+        //   },
+        //   buttonLabel: getLabel({
+        //     labelName: "Edit",
+        //     labelKey: "PT_EDIT"
+        //   })
+        // },
         // onClickDefination: {
         //   action: "condition",
         //   callBack: (state, dispatch) => {
@@ -267,7 +290,7 @@ export const transfereeInstitutionSummary = getCommonGrayCard({
         labelKey: "PT_INSTI_OWNERSHIP_TYPE"
       },
       {
-        jsonPath: "Property.ownershipCategory",
+        jsonPath: "Property.ownershipCategoryTemp",
         callBack: checkValueForNA
         // callBack: value => {
         //   return `COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;

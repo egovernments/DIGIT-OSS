@@ -19,27 +19,74 @@ const getAddress = (item) => {
   let doorNo = item.address.doorNo != null ? (item.address.doorNo + ",") : '';
   let buildingName = item.address.buildingName != null ? (item.address.buildingName + ",") : '';
   let street = item.address.street != null ? (item.address.street + ",") : '';
+  let mohalla = item.address.locality.name ? (item.address.locality.name + ",") : '';
   let city = item.address.city != null ? (item.address.city) : '';
-  return (doorNo + buildingName + street + city);
+  return (doorNo + buildingName + street + mohalla + city);
 }
 
 const searchApiCall = async (state, dispatch, index) => {
   showHideTable(false, dispatch, 0);
   showHideTable(false, dispatch, 1);
-  let queryObject = [
-    {
-      key: "tenantId",
-      value: getTenantId()
-    }
-    // { key: "limit", value: "10" },
-    // { key: "offset", value: "0" }
-  ];
+
   let searchScreenObject = get(
     state.screenConfiguration.preparedFinalObject,
     "searchScreen",
     {}
   );
+  if ((!searchScreenObject.tenantId) && index == 0) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        {
+          labelName: "Please fill valid fields to search",
+          labelKey: "ERR_FIRENOC_FILL_VALID_FIELDS"
+        },
+        "error"
+      )
+    );
+    return;
 
+  }
+  let queryObject = [
+    {
+      key: "tenantId",
+      value: searchScreenObject.tenantId
+    }
+  ];
+  if (index == 1 && process.env.REACT_APP_NAME == "Citizen") {
+    queryObject = [];
+  }
+
+
+  let formValid = false;
+  if (index == 0) {
+    if (searchScreenObject.ids != '' || searchScreenObject.mobileNumber != '' || searchScreenObject.oldpropertyids != '') {
+      formValid = true;
+    }
+  } else {
+    if (searchScreenObject.ids != '' || searchScreenObject.mobileNumber != '' || searchScreenObject.acknowledgementIds != '') {
+      formValid = true;
+    }
+  }
+  if (!formValid) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        {
+          labelName: "Please fill valid fields to search",
+          labelKey: "ERR_FIRENOC_FILL_VALID_FIELDS"
+        },
+        "error"
+      )
+    );
+    return;
+  }
+
+  let form1 = validateFields("components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails", state, dispatch, "propertySearch");
+  let form2 = validateFields("components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails", state, dispatch, "propertySearch");
+  // "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails"
+  // "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails"
+  // "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerMobNo"
   const isSearchBoxFirstRowValid = validateFields(
     "components.div.children.captureMutationDetails.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchProperty.children.searchPropertyDetails.children.ulbCityContainer.children",
     state,
@@ -82,6 +129,21 @@ const searchApiCall = async (state, dispatch, index) => {
     dispatch,
     "propertySearch"
   );
+  const ispropertyTaxApplicationOwnerNoRowValid = validateFields(
+    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.ownerMobNoProp",
+    state,
+    dispatch,
+    "propertySearch"
+  );
+  const ispropertyTaxApplicationPidRowValid = validateFields(
+    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.applicationPropertyTaxUniqueId",
+    state,
+    dispatch,
+    "propertySearch"
+  );
+
+
+
 
   if (!(isSearchBoxFirstRowValid)) {
     dispatch(
@@ -94,19 +156,34 @@ const searchApiCall = async (state, dispatch, index) => {
         "error"
       )
     );
+    return;
   }
-  if (isSearchBoxFirstRowValid && isownerCityRowValid && !(ispropertyTaxUniqueIdRowValid || isexistingPropertyIdRowValid || isownerMobNoRowValid || ispropertyTaxApplicationNoRowValid)) {
+  if (index == 0 && !(isSearchBoxFirstRowValid && isownerCityRowValid && ispropertyTaxUniqueIdRowValid && isexistingPropertyIdRowValid && isownerMobNoRowValid)) {
     dispatch(
       toggleSnackbar(
         true,
         {
           labelName: "Please fill at least one field along with city",
-          labelKey: "PT_SEARCH_SELECT_AT_LEAST_ONE_TOAST_MESSAGE_OTHER_THAN_CITY"
+          labelKey: "PT_INVALID_INPUT"
         },
         "error"
       )
     );
+    return;
+  } else if (index == 1 && !(ispropertyTaxApplicationPidRowValid && ispropertyTaxApplicationOwnerNoRowValid && ispropertyTaxApplicationNoRowValid)) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        {
+          labelName: "Please fill at least one field along with city",
+          labelKey: "PT_INVALID_INPUT"
+        },
+        "error"
+      )
+    );
+    return;
   }
+
 
   if (
     Object.keys(searchScreenObject).length == 0 || Object.keys(searchScreenObject).length == 1 ||
@@ -122,6 +199,7 @@ const searchApiCall = async (state, dispatch, index) => {
         "error"
       )
     );
+    return;
   }
   //   else if (
   //     (searchScreenObject["fromDate"] === undefined ||
@@ -205,7 +283,7 @@ const searchApiCall = async (state, dispatch, index) => {
           item || "-",
         [getTextToLocalMapping("Property Tax Unique Id")]: item || "-",
         [getTextToLocalMapping("Application Type")]:
-          item.applicationNo || "PT",
+          item.creationReason ? getTextToLocalMapping("PT." + item.creationReason) : "NA",
         [getTextToLocalMapping("Owner Name")]:
           item.owners[0].name || "-",
         [getTextToLocalMapping("Address")]:
@@ -305,42 +383,42 @@ export const downloadPrintContainer = (
   let downloadMenu = [];
   let printMenu = [];
   let ptMutationCertificateDownloadObject = {
-    label: { labelName: "PT Certificate", labelKey: "PT_CERTIFICATE" },
+    label: { labelName: "PT Certificate", labelKey: "MT_CERTIFICATE" },
     link: () => {
       console.log("clicked");
     },
     leftIcon: "book"
   };
   let ptMutationCertificatePrintObject = {
-    label: { labelName: "PT Certificate", labelKey: "PT_CERTIFICATE" },
+    label: { labelName: "PT Certificate", labelKey: "MT_CERTIFICATE" },
     link: () => {
       console.log("clicked");
     },
     leftIcon: "book"
   };
   let receiptDownloadObject = {
-    label: { labelName: "Receipt", labelKey: "PT_RECEIPT" },
+    label: { labelName: "Receipt", labelKey: "MT_RECEIPT" },
     link: () => {
       console.log("clicked");
     },
     leftIcon: "receipt"
   };
   let receiptPrintObject = {
-    label: { labelName: "Receipt", labelKey: "PT_RECEIPT" },
+    label: { labelName: "Receipt", labelKey: "MT_RECEIPT" },
     link: () => {
       console.log("clicked");
     },
     leftIcon: "receipt"
   };
   let applicationDownloadObject = {
-    label: { labelName: "Application", labelKey: "PT_APPLICATION" },
+    label: { labelName: "Application", labelKey: "MT_APPLICATION" },
     link: () => {
       console.log("clicked");
     },
     leftIcon: "assignment"
   };
   let applicationPrintObject = {
-    label: { labelName: "Application", labelKey: "PT_APPLICATION" },
+    label: { labelName: "Application", labelKey: "MT_APPLICATION" },
     link: () => {
       console.log("clicked");
 
@@ -395,7 +473,7 @@ export const downloadPrintContainer = (
           componentPath: "MenuButton",
           props: {
             data: {
-              label: { labelName: "DOWNLOAD", labelKey: "PT_DOWNLOAD" },
+              label: { labelName: "DOWNLOAD", labelKey: "MT_DOWNLOAD" },
               leftIcon: "cloud_download",
               rightIcon: "arrow_drop_down",
               props: { variant: "outlined", style: { height: "60px", color: "#FE7A51" }, className: "pt-download-button" },
@@ -409,7 +487,7 @@ export const downloadPrintContainer = (
           componentPath: "MenuButton",
           props: {
             data: {
-              label: { labelName: "PRINT", labelKey: "PT_PRINT" },
+              label: { labelName: "PRINT", labelKey: "MT_PRINT" },
               leftIcon: "print",
               rightIcon: "arrow_drop_down",
               props: { variant: "outlined", style: { height: "60px", color: "#FE7A51" }, className: "pt-print-button" },

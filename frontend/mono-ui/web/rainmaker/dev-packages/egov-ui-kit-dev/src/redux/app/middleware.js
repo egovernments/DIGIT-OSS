@@ -1,4 +1,4 @@
-import { SHOW_TOAST } from "./actionTypes";
+import { SHOW_TOAST, ADD_LOCALIZATION } from "./actionTypes";
 import isEmpty from "lodash/isEmpty";
 
 const app = (store) => (next) => (action) => {
@@ -14,12 +14,22 @@ const app = (store) => (next) => (action) => {
     //   next(action);
     // }
 
-  //  if ((action.open && action.message && !isEmpty(action.message)) || (toast.open && toast.message && !isEmpty(action.message) && !action.open)) {
-      next(action);
+    //  if ((action.open && action.message && !isEmpty(action.message)) || (toast.open && toast.message && !isEmpty(action.message) && !action.open)) {
+    next(action);
     // }
     return;
   }
+  if (type === ADD_LOCALIZATION) {
+    if (window.location.pathname.search("/services/EGF/") !== -1) {
+      localeChangeLableEvent();
+    }
+  }
   next(action);
 };
+
+function localeChangeLableEvent() {
+  var event = new CustomEvent("loacaleChangeEvent");
+  window.dispatchEvent(event);
+}
 
 export default app;

@@ -182,6 +182,8 @@ export const getMdmsData = async (action, state, dispatch) => {
 
 export const getData = async (action, state, dispatch) => {
   const queryValue = getQueryArg(window.location.href, "applicationNumber");
+  const tenantId = getQueryArg(window.location.href, "tenantId");
+
   const applicationNo = queryValue
     ? queryValue
     : get(
@@ -218,7 +220,7 @@ export const getData = async (action, state, dispatch) => {
       );
     }
     // dispatch(prepareFinalObject("LicensesTemp", []));
-    await updatePFOforSearchResults(action, state, dispatch, applicationNo);
+    await updatePFOforSearchResults(action, state, dispatch, applicationNo,tenantId);
    
     if (!queryValue) {
       const oldApplicationNo = get(

@@ -1,7 +1,5 @@
 import React from "react";
 import { Icon } from "components";
-import filter from "lodash/filter";
-import isUndefined from "lodash/isUndefined";
 import { Screen } from "modules/common";
 import { withStyles } from "@material-ui/core/styles";
 import Label from "egov-ui-kit/utils/translationNode";

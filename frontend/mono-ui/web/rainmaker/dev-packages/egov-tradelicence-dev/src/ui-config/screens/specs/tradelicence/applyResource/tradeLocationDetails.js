@@ -307,7 +307,11 @@ export const tradeLocationDetails = getCommonCard(
         jsonPath:
           "Licenses[0].tradeLicenseDetail.additionalDetail.electricityConnectionNo"
       })
-    }),
+    },
+    {
+      style:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? {"pointer-events":"none"}:{} 
+    }
+    ),
     mapsDialog: {
       componentPath: "Dialog",
       props: {
@@ -324,7 +328,7 @@ export const tradeLocationDetails = getCommonCard(
     }
   },
   {
-    style:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? {"pointer-events":"none",overflow:"visible"}:{overflow: "visible"}
+    style:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? {"cursor":"not-allowed",overflow:"visible"}:{overflow: "visible"}
 
   }
 );

@@ -222,8 +222,8 @@ class NocList extends Component {
                 bpaDetails.additionalDetails.fieldinspection_pending.push({"docs" : doc, "question" : []})
               }
             }
-          } else {
-            bpaDetails.additionalDetails = [];
+           else {
+            // bpaDetails.additionalDetails = [];
             let documnt = [], fiDocs = [], details;
             documnt[0] = {}; 
             documnt[0].docs = [];
@@ -236,12 +236,17 @@ class NocList extends Component {
             details = { "fieldinspection_pending" : fiDocs};
             finalDocs.push(details);
             finalDocs = finalDocs[0];
-            bpaDetails.additionalDetails = finalDocs
+            let additionalDetailsDocs = {
+              ...bpaDetails.additionalDetails,
+              fieldinspection_pending : fiDocs
+            }
+            bpaDetails.additionalDetails = additionalDetailsDocs;
           }
+        }
         }
       });
   
-      if(bpaDetails.additionalDetails && bpaDetails.additionalDetails["fieldinspection_pending"][0] && bpaDetails.additionalDetails["fieldinspection_pending"][0].docs) {
+      if(bpaDetails.additionalDetails && bpaDetails.additionalDetails["fieldinspection_pending"] && bpaDetails.additionalDetails["fieldinspection_pending"][0] && bpaDetails.additionalDetails["fieldinspection_pending"][0].docs) {
         prepareFinalObject("BPA",  bpaDetails.additionalDetails["fieldinspection_pending"][0].docs);
       }
     }

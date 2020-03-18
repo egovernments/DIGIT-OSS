@@ -1,5 +1,6 @@
 import {
   getBreak,
+  getCommonCard,
   getCommonContainer,
   getCommonGrayCard,
   getCommonSubHeader,
@@ -10,6 +11,7 @@ import {
 import { gotoApplyWithStep } from "../../utils/index";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { checkValueForNA } from "../../utils";
+import get from "lodash/get";
 
 export const transferorSummary = getCommonGrayCard({
   header: {
@@ -27,40 +29,40 @@ export const transferorSummary = getCommonGrayCard({
           labelName: "Transferor Details",
           labelKey: "PT_MUTATION_TRANSFEROR_DETAILS"
         })
-      },
-      editSection: {
-        componentPath: "Button",
-        props: {
-          color: "primary",
-          style: {
-            marginTop: "-10px",
-            marginRight: "-18px"
-          }
-        },
-        gridDefination: {
-          xs: 4,
-          align: "right"
-        },
-        children: {
-          editIcon: {
-            uiFramework: "custom-atoms",
-            componentPath: "Icon",
-            props: {
-              iconName: "edit"
-            }
-          },
-          buttonLabel: getLabel({
-            labelName: "Edit",
-            labelKey: "PT_EDIT"
-          })
-        },
-        onClickDefination: {
-          action: "condition",
-          callBack: (state, dispatch) => {
-            gotoApplyWithStep(state, dispatch, 0);
-          }
-        }
       }
+      // editSection: {
+      //   componentPath: "Button",
+      //   props: {
+      //     color: "primary",
+      //     style: {
+      //       marginTop: "-10px",
+      //       marginRight: "-18px"
+      //     }
+      //   },
+      //   gridDefination: {
+      //     xs: 4,
+      //     align: "right"
+      //   },
+      //   children: {
+      //     editIcon: {
+      //       uiFramework: "custom-atoms",
+      //       componentPath: "Icon",
+      //       props: {
+      //         iconName: "edit"
+      //       }
+      //     },
+      //     buttonLabel: getLabel({
+      //       labelName: "Edit",
+      //       labelKey: "PT_EDIT"
+      //     })
+      //   },
+      //   onClickDefination: {
+      //     action: "condition",
+      //     callBack: (state, dispatch) => {
+      //       gotoApplyWithStep(state, dispatch, 0);
+      //     }
+      //   }
+      // }
     }
   },
   cardOne: {
@@ -77,7 +79,7 @@ export const transferorSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-              "Property.owners[0].name",
+              "Property.ownersInit[0].name",
               callBack: checkValueForNA
             }
           ), ownerFatherHusbandName: getLabelWithValue(
@@ -87,7 +89,7 @@ export const transferorSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-              "Property.owners[0].fatherOrHusbandName",
+              "Property.ownersInit[0].fatherOrHusbandName",
               callBack: checkValueForNA
             }
           ),  ownerGender: getLabelWithValue(
@@ -97,7 +99,7 @@ export const transferorSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-              "Property.owners[0].gender",
+              "Property.ownersInit[0].gender",
               callBack: checkValueForNA
             }
           ), ownerType: getLabelWithValue(
@@ -107,7 +109,7 @@ export const transferorSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-              "Property.ownershipCategory",
+              "Property.ownershipCategoryInit",
               callBack: checkValueForNA
             }
           ),
@@ -118,7 +120,7 @@ export const transferorSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-              "Property.owners[0].mobileNumber" ,
+              "Property.ownersInit[0].mobileNumber" ,
               callBack: checkValueForNA
             }
           ),  ownerEmail: getLabelWithValue(
@@ -128,7 +130,7 @@ export const transferorSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-              "Property.owners[0].emailId",
+              "Property.ownersInit[0].emailId",
               callBack: checkValueForNA
             }
           ),       
@@ -139,12 +141,41 @@ export const transferorSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-              "Property.owners[0].ownerType" ,
+              "Property.ownersInit[0].ownerType" ,
               callBack: checkValueForNA
               // callBack: value => {
               //   return convertEpochToDate(value);
               // }
             }
+          ),
+          ownerSpecialCategoryType: getLabelWithValue(
+            {
+              labelName: "Document Type",
+              labelKey: "PT_CATEGORY_DOCUMENT_TYPE"
+            },
+            {
+              jsonPath:
+              "Property.ownersInit[0].documentType" ,
+              callBack: checkValueForNA
+              // callBack: value => {
+              //   return convertEpochToDate(value);
+              // }
+            }
+          ),
+          ownerSpecialCategoryDocumentId: getLabelWithValue(
+            {
+              labelName: "Document Id",
+              labelKey: "PT_CATEGORY_DOCUMENT_ID"
+            },
+            {
+              jsonPath:
+              "Property.ownersInit[0].documentUid" ,
+              callBack: checkValueForNA
+              // callBack: value => {
+              //   return convertEpochToDate(value);
+              // }
+            },
+            
           ),
           ownerAddress: getLabelWithValue(
             {
@@ -153,7 +184,7 @@ export const transferorSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-              "Property.owners[0].permanentAddress" ,
+              "Property.ownersInit[0].permanentAddress" ,
               callBack: checkValueForNA
             }
           )
@@ -162,7 +193,7 @@ export const transferorSummary = getCommonGrayCard({
       items: [],
       hasAddItem: false,
       isReviewPage: true,
-      sourceJsonPath: "Property.owners",
+      sourceJsonPath: "Property.ownersInit",
       prefixSourceJsonPath:
         "children.cardContent.children.ownerContainer.children",
       afterPrefixJsonPath: "children.value.children.key"
@@ -187,30 +218,30 @@ export const transferorInstitutionSummary = getCommonGrayCard({
           labelName: "Transferor Details",
           labelKey: "PT_INSTITUTION_TRANSFEROR_DETAILS_HEADER"
         })
-      },
-      editSection: {
-        componentPath: "Button",
-        props: {
-          color: "primary",
-          style: {
-            marginTop: "-10px",
-            marginRight: "-18px"
-          }
-        },
-        gridDefination: {
-          xs: 4,
-          align: "right"
-        },
-        children: {
-          
-        },
-        onClickDefination: {
-          action: "condition",
-          callBack: (state, dispatch) => {
-            gotoApplyWithStep(state, dispatch, 2);
-          }
-        }
       }
+      // editSection: {
+      //   componentPath: "Button",
+      //   props: {
+      //     color: "primary",
+      //     style: {
+      //       marginTop: "-10px",
+      //       marginRight: "-18px"
+      //     }
+      //   },
+      //   gridDefination: {
+      //     xs: 4,
+      //     align: "right"
+      //   },
+      //   children: {
+          
+      //   },
+      //   onClickDefination: {
+      //     action: "condition",
+      //     callBack: (state, dispatch) => {
+      //       gotoApplyWithStep(state, dispatch, 2);
+      //     }
+      //   }
+      // }
     }
   },
   body: getCommonContainer({
@@ -248,6 +279,9 @@ export const transferorInstitutionSummary = getCommonGrayCard({
         jsonPath: "Property.institution.type",
         
         callBack: value => {
+          if(!value){
+            return 'NA';
+          }
           return `COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
         }
       }
@@ -259,7 +293,7 @@ export const transferorInstitutionSummary = getCommonGrayCard({
         labelKey: "PT_INSTI_OWNERSHIP_TYPE"
       },
       {
-        jsonPath: "Property.ownershipCategory",
+        jsonPath: "Property.ownershipCategoryInit",
         callBack: checkValueForNA
         // callBack: value => {
         //   return `COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
@@ -285,7 +319,7 @@ export const transferorInstitutionSummary = getCommonGrayCard({
       },
       {
         jsonPath:
-          "Property.owners[0].altContactNumber",
+          "Property.ownersInit[0].altContactNumber",
           callBack: checkValueForNA
       }
     ),
@@ -297,7 +331,7 @@ export const transferorInstitutionSummary = getCommonGrayCard({
       },
       {
         jsonPath:
-          "Property.owners[0].mobileNumber",
+          "Property.ownersInit[0].mobileNumber",
           callBack: checkValueForNA
       }
     ),
@@ -308,7 +342,7 @@ export const transferorInstitutionSummary = getCommonGrayCard({
       },
       {
         jsonPath:
-          "Property.owners[0].correspondenceAddress",
+          "Property.ownersInit[0].correspondenceAddress",
           callBack: checkValueForNA
       }
     )

@@ -75,8 +75,10 @@ const themeStyles = theme => ({
     alignItems: "center"
   },
   descriptionDiv: {
-    display: "flex",
-    alignItems: "center"
+    // display: "flex",
+    // alignItems: "center",
+    marginTop: "30px",
+    paddingRight: "20px"
   },
   formControl: {
     minWidth: 250,
@@ -199,9 +201,9 @@ class CheckList extends Component {
     let requiredDocuments = [], finalQstn = [];
     if (documnts && documnts.length > 0) {
       documnts.forEach(documents => {
-        if (documents && documents.remarks && documents.dropDownValues && documents.dropDownValues.value) {
+        if (documents && documents.dropDownValues && documents.dropDownValues.value) {
           let qstns = {}, finalDocs = [];
-          qstns.remarks = documents.remarks;
+          if(documents.remarks) qstns.remarks = documents.remarks;
           qstns.question = documents.question;
           qstns.value = documents.dropDownValues.value;
 
@@ -214,8 +216,8 @@ class CheckList extends Component {
                 bpaDetails.additionalDetails.fieldinspection_pending.push({"questions" : qstns,"docs" : []});
               }
             }
-          } else {
-            bpaDetails.additionalDetails = [];
+          else {
+            // bpaDetails.additionalDetails = [];
             let documnt = [], fiDocs = [], details;
             documnt[0] = {}; 
             documnt[0].questions = [];
@@ -228,11 +230,16 @@ class CheckList extends Component {
             details = { "fieldinspection_pending" : fiDocs};
             finalDocs.push(details);
             finalDocs = finalDocs[0];
-            bpaDetails.additionalDetails = finalDocs
+            let additionalDetailsDocs = {
+              ...bpaDetails.additionalDetails,
+              fieldinspection_pending : fiDocs
+            }
+            bpaDetails.additionalDetails = additionalDetailsDocs
           }
         }
+        }
       });
-      if(bpaDetails.additionalDetails && bpaDetails.additionalDetails["fieldinspection_pending"][0] && bpaDetails.additionalDetails["fieldinspection_pending"][0].question) {
+      if(bpaDetails.additionalDetails && bpaDetails.additionalDetails["fieldinspection_pending"] && bpaDetails.additionalDetails["fieldinspection_pending"][0] && bpaDetails.additionalDetails["fieldinspection_pending"][0].question) {
         prepareFinalObject("BPA",  bpaDetails.additionalDetails.fieldinspection_pending[0].question);
       }
     }

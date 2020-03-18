@@ -2,6 +2,7 @@ import get from "lodash/get";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getPropertyResults } from "../../../../../ui-utils/commons";
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
 export const propertySearchApiCall = async (state, dispatch) => {
   let queryObject = [{ key: "tenantId", value: "pb.amritsar" }];
@@ -19,9 +20,12 @@ export const propertySearchApiCall = async (state, dispatch) => {
       }
     }
     try {
+      if (process.env.REACT_APP_NAME === "Citizen") {
+        queryObject.push({ key: "mobileNumber", value: JSON.parse(getUserInfo()).mobileNumber })
+      }
       let response = await getPropertyResults(queryObject, dispatch);
       dispatch(prepareFinalObject("applyScreen.property", response.Properties[0]))
-      if (response.Properties.length > 0 && response.Properties[0]) {
+      if (response && response.Properties.length > 0) {
         showHideFields(dispatch, true);
       } else {
         showHideFields(dispatch, false);

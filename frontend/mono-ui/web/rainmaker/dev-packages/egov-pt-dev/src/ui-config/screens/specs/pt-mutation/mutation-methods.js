@@ -120,7 +120,7 @@ import {
             required: true,
             props:{
               required: true,
-            disabled: true
+            disabled: process.env.REACT_APP_NAME === "Citizen"?false:true,
             },
             gridDefination: {
               xs: 12,

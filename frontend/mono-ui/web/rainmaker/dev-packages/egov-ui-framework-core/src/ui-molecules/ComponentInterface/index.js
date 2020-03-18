@@ -228,7 +228,7 @@ const mapStateToProps = state => {
     jsonPath = "FireNOCs[0].fireNOCDetails.status";
   } else if (moduleName === "NewTL") {
     jsonPath = "Licenses[0].status";
-  } else if (moduleName === "BPA") {
+  } else if ((moduleName === "BPA") || (moduleName === "BPA_LOW")) {
     jsonPath = "BPA.status";
   } else {
     jsonPath = "Licenses[0].status";

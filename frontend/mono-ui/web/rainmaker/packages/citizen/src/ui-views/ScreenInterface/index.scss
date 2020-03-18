@@ -133,7 +133,19 @@ span[class^="MuiFormLabel-asterisk"] {
      margin-left: 0 !important;
      margin-right: 0 !important;
   }}
-
+  .pt-apply-wizard-footer {
+    position: fixed;
+    bottom: 0;
+    z-index: 1;
+    /* left: 35px; */
+    width: 100%;
+    overflow: inherit !important;
+  }
+  .pt-apply-wizard-footer { button {
+     /* min-width: 360px !important; */
+     margin-left: 0 !important;
+     margin-right: 0 !important;
+  }}
 }
 @media only screen and (min-width: 768px) {
   .common-div-css {
@@ -151,7 +163,19 @@ span[class^="MuiFormLabel-asterisk"] {
     bottom: 0;
     right: 0;
     z-index: 1;
-    width: 83.33vw;
+    width:100%;
+    text-align: right;
+    overflow: inherit !important;
+  }
+  .pt-apply-wizard-footer {
+    background-color: #ffffff;
+    box-shadow: 0 -2px 4px 0 rgba(0, 0, 0, 0.24);
+    padding: 8px;
+    position: fixed !important;
+    bottom: 0;
+    right: 0;
+    z-index: 1;
+    width: 100%;
     text-align: right;
     overflow: inherit !important;
   }

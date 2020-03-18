@@ -20,7 +20,7 @@ function ApplicationNoContainer(props) {
       labelName={label.labelValue}
       labelKey={label.labelKey}
     />
-    <span>. </span>{number}</div>;
+    <span> </span>{number}</div>;
 }
 
 export default ApplicationNoContainer;

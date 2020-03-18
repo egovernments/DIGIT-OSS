@@ -36,8 +36,8 @@ export const fieldSummary = getCommonGrayCard({
           xs: 8
         },
         ...getCommonSubHeader({
-          labelName: "Document and NOC details",
-          labelKey: "BPA_DOCUMENT_AND_NOC_DETAILS_HEADER"
+          labelName: "Check List",
+          labelKey: "BPA_CHECK_LIST_DETAILS"
         })
       }
     }

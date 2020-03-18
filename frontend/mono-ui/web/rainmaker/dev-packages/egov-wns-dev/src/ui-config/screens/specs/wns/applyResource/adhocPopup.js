@@ -16,102 +16,86 @@ import {
   toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import set from "lodash/set";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+
+const tenantId = getQueryArg(window.location.href, "tenantId");
 
 const getEstimateDataAfterAdhoc = async (state, dispatch) => {
-  const TLRequestBody = cloneDeep(
-    get(state.screenConfiguration.preparedFinalObject, "Licenses")
-  );
-  set(TLRequestBody[0], "action", "ADHOC");
-  const TLpayload = await httpRequest(
-    "post",
-    "/tl-services/v1/_update",
-    "",
-    [],
-    { Licenses: TLRequestBody }
+  const WSRequestBody = cloneDeep(
+    get(state.screenConfiguration.preparedFinalObject, "WaterConnection")
   );
 
-  // clear data from form
+  // to parse penalty and rebate amount
+  if (WSRequestBody[0].additionalDetails !== undefined && WSRequestBody[0].additionalDetails.length !== 0) {
+    if (WSRequestBody[0].additionalDetails.hasOwnProperty('adhocPenalty') === true) {
+      WSRequestBody[0].additionalDetails.adhocPenalty = parseFloat(WSRequestBody[0].additionalDetails.adhocPenalty);
+    }
 
-  const billPayload = await createEstimateData(
-    TLpayload.Licenses[0],
-    "LicensesTemp[0].estimateCardData",
-    dispatch,
-    window.location.href
-  );
-
-  //get deep copy of bill in redux - merge new bill after adhoc
-  const billInRedux = cloneDeep(
-    get(state.screenConfiguration.preparedFinalObject, "ReceiptTemp[0].Bill[0]")
-  );
-  const mergedBillObj = { ...billInRedux, ...billPayload.billResponse.Bill[0] };
-
-  //merge bill in Receipt obj
-  billPayload &&
-    dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0]", mergedBillObj));
-
-  //set amount paid as total amount from bill
-  billPayload &&
-    dispatch(
-      prepareFinalObject(
-        "ReceiptTemp[0].Bill[0].billDetails[0].amountPaid",
-        billPayload.billResponse.Bill[0].billDetails[0].totalAmount
-      )
-    );
-
-  //set total amount in instrument
-  billPayload &&
-    dispatch(
-      prepareFinalObject(
-        "ReceiptTemp[0].instrument.amount",
-        billPayload.billResponse.Bill[0].billDetails[0].totalAmount
-      )
-    );
-
-  //Collection Type Added in CS v1.1
-  const totalAmount = get(
-    billPayload,
-    "billResponse.Bill[0].billDetails[0].totalAmount"
-  );
-  dispatch(
-    prepareFinalObject(
-      "ReceiptTemp[0].Bill[0].billDetails[0].collectionType",
-      "COUNTER"
-    )
-  );
-  if (totalAmount) {
-    //set amount paid as total amount from bill - destination changed in CS v1.1
-    dispatch(
-      prepareFinalObject(
-        "ReceiptTemp[0].Bill[0].taxAndPayments[0].amountPaid",
-        totalAmount
-      )
-    );
+    if (WSRequestBody[0].additionalDetails.hasOwnProperty('adhocRebate') === true) {
+      WSRequestBody[0].additionalDetails.adhocRebate = parseFloat(WSRequestBody[0].additionalDetails.adhocRebate);
+    }
   }
 
-  showHideAdhocPopup(state, dispatch);
+  dispatch(prepareFinalObject("WaterConnection[0]", WSRequestBody[0]));
+  set(WSRequestBody[0], "action", "ADHOC");
+
+  let querObj = [{
+    applicationNo: WSRequestBody[0].applicationNo,
+    tenantId: tenantId,
+  }]
+
+  let serviceUrl;
+  if (WSRequestBody[0].service === "WATER") {
+    serviceUrl = "ws-calculator/waterCalculator/_estimate";
+    querObj[0].waterConnection = WSRequestBody[0];
+  } else {
+    serviceUrl = "sw-calculator/sewerageCalculator/_estimate"
+    querObj[0].sewerageConnection = WSRequestBody[0];
+  }
+
+  const WSpayload = await httpRequest(
+    "post",
+    serviceUrl,
+    "",
+    [],
+    {
+      isconnectionCalculation: false,
+      CalculationCriteria: querObj
+    }
+  );
+
+  WSpayload.Calculation[0].billSlabData = _.groupBy(WSpayload.Calculation[0].taxHeadEstimates, 'category');
+
+  const billPayload = await createEstimateData(
+    WSpayload.Calculation[0],
+    "dataCalculation",
+    dispatch,
+    window.location.href,
+    showHideAdhocPopup(state, dispatch),
+  );
+
 };
 
 const updateAdhoc = (state, dispatch) => {
   const adhocAmount = get(
     state.screenConfiguration.preparedFinalObject,
-    "Licenses[0].tradeLicenseDetail.adhocPenalty"
+    "WaterConnection[0].additionalDetails.adhocPenalty"
   );
   const rebateAmount = get(
     state.screenConfiguration.preparedFinalObject,
-    "Licenses[0].tradeLicenseDetail.adhocExemption"
+    "WaterConnection[0].additionalDetails.adhocRebate"
   );
   if (adhocAmount || rebateAmount) {
     const totalAmount = get(
       state.screenConfiguration.preparedFinalObject,
-      "ReceiptTemp[0].Bill[0].billDetails[0].totalAmount"
+      "dataCalculation.totalAmount"
     );
     if (rebateAmount && rebateAmount > totalAmount) {
       dispatch(
         toggleSnackbar(
           true,
           {
-            labelName: "Rebate should be less than or equal to total amount!",
-            labelKey: "ERR_REBATE_GREATER_THAN_AMOUNT"
+            labelKey: "ERR_WS_REBATE_GREATER_THAN_AMOUNT"
           },
           "warning"
         )
@@ -125,7 +109,7 @@ const updateAdhoc = (state, dispatch) => {
         true,
         {
           labelName: "Enter at least one field",
-          labelKey: "ERR_ENTER_ATLEAST_ONE_FIELD"
+          labelKey: "ERR_WS_ENTER_ATLEAST_ONE_FIELD"
         },
         "warning"
       )
@@ -134,10 +118,6 @@ const updateAdhoc = (state, dispatch) => {
 };
 
 export const adhocPopup = getCommonContainer({
-  // header: getCommonHeader({
-  //   labelName: "Add Adhoc Penalty/Rebate",
-  //   labelKey: "TL_ADD_HOC_CHARGES_POPUP_HEAD"
-  // }),
   header: {
     uiFramework: "custom-atoms",
     componentPath: "Container",
@@ -164,8 +144,7 @@ export const adhocPopup = getCommonContainer({
         children: {
           div: getCommonHeader(
             {
-              labelName: "Add Adhoc Penalty/Rebate",
-              labelKey: "TL_ADD_HOC_CHARGES_POPUP_HEAD"
+              labelKey: "WS_ADD_HOC_CHARGES_POPUP_HEAD"
             },
             {
               style: {
@@ -220,8 +199,7 @@ export const adhocPopup = getCommonContainer({
     {
       subheader: getCommonSubHeader(
         {
-          labelName: "Adhoc Penalty",
-          labelKey: "TL_ADD_HOC_CHARGES_POPUP_SUB_FIRST"
+          labelKey: "WS_ADD_HOC_CHARGES_POPUP_SUB_FIRST"
         },
         {
           style: {
@@ -232,28 +210,25 @@ export const adhocPopup = getCommonContainer({
       penaltyAmountAndReasonContainer: getCommonContainer({
         penaltyAmount: getTextField({
           label: {
-            labelName: "Adhoc Penalty Amount",
-            labelKey: "TL_ADD_HOC_CHARGES_POPUP_PEN_AMT_LABEL"
+            labelKey: "WS_ADD_HOC_CHARGES_POPUP_PEN_AMT_LABEL"
           },
           placeholder: {
-            labelName: "Enter Adhoc Charge Amount",
-            labelKey: "TL_ADD_HOC_CHARGES_POPUP_PEN_AMT_PLACEHOLDER"
+            labelKey: "WS_ADD_HOC_CHARGES_POPUP_PEN_AMT_PLACEHOLDER"
           },
           props: {
             style: {
               width: "90%"
-            }
+            },
+            type: "number"
           },
-          jsonPath: "Licenses[0].tradeLicenseDetail.adhocPenalty"
+          jsonPath: "WaterConnection[0].additionalDetails.adhocPenalty",
         }),
         penaltyReason: getSelectField({
           label: {
-            labelName: "Reason for Adhoc Penalty",
-            labelKey: "TL_PAYMENT_PENALTY_REASON"
+            labelKey: "WS_PAYMENT_PENALTY_REASON"
           },
           placeholder: {
-            labelName: "Select reason for Adhoc Penalty",
-            labelKey: "TL_PAYMENT_PENALTY_REASON_SELECT"
+            labelKey: "WS_PAYMENT_PENALTY_REASON_SELECT"
           },
           props: {
             style: {
@@ -262,29 +237,27 @@ export const adhocPopup = getCommonContainer({
           },
           data: [
             {
-              code: "TL_ADHOC_PENDING_DUES"
+              code: "WS_ADHOC_PENDING_DUES"
             },
             {
-              code: "TL_ADHOC_MISCALCULATION"
+              code: "WS_ADHOC_MISCALCULATION"
             },
             {
-              code: "TL_ADHOC_ONE_TIME_PENALTY"
+              code: "WS_ADHOC_ONE_TIME_PENALTY"
             },
             {
-              code: "TL_ADHOC_OTHER"
+              code: "WS_ADHOC_OTHER"
             }
           ],
-          jsonPath: "Licenses[0].tradeLicenseDetail.adhocPenaltyReason"
+          jsonPath: "WaterConnection[0].additionalDetails.adhocPenaltyReason"
         })
       }),
       commentsField: getTextField({
         label: {
-          labelName: "Enter Comments",
-          labelKey: "TL_ADD_HOC_CHARGES_POPUP_COMMENT_LABEL"
+          labelKey: "WS_ADD_HOC_CHARGES_POPUP_COMMENT_LABEL"
         },
         placeholder: {
-          labelName: "Enter Comments",
-          labelKey: "TL_ADD_HOC_CHARGES_POPUP_COMMENT_LABEL"
+          labelKey: "WS_ADD_HOC_CHARGES_POPUP_COMMENT_LABEL"
         },
         gridDefination: {
           xs: 12,
@@ -295,7 +268,7 @@ export const adhocPopup = getCommonContainer({
             width: "90%"
           }
         },
-        jsonPath: "Licenses[0].tradeLicenseDetail.penaltyComments"
+        jsonPath: "WaterConnection[0].additionalDetails.adhocPenaltyComment"
       })
     },
     {
@@ -308,8 +281,7 @@ export const adhocPopup = getCommonContainer({
     {
       subHeader: getCommonSubHeader(
         {
-          labelName: "Adhoc Rebate",
-          labelKey: "TL_ADD_HOC_CHARGES_POPUP_SUB_SEC"
+          labelKey: "WS_ADD_HOC_CHARGES_POPUP_SUB_SEC"
         },
         {
           style: {
@@ -320,28 +292,25 @@ export const adhocPopup = getCommonContainer({
       rebateAmountAndReasonContainer: getCommonContainer({
         rebateAmount: getTextField({
           label: {
-            labelName: "Adhoc Rebate Amount",
-            labelKey: "TL_ADD_HOC_CHARGES_POPUP_RBT_AMT_LABEL"
+            labelKey: "WS_ADD_HOC_CHARGES_POPUP_RBT_AMT_LABEL"
           },
           placeholder: {
-            labelName: "Enter Adhoc Rebate Amount",
-            labelKey: "TL_ADD_HOC_CHARGES_POPUP_RBT_AMT_PLACEHOLDER"
+            labelKey: "WS_ADD_HOC_CHARGES_POPUP_RBT_AMT_PLACEHOLDER"
           },
           props: {
             style: {
               width: "90%"
-            }
+            },
+            type: "number"
           },
-          jsonPath: "Licenses[0].tradeLicenseDetail.adhocExemption"
+          jsonPath: "WaterConnection[0].additionalDetails.adhocRebate",
         }),
         rebateReason: getSelectField({
           label: {
-            labelName: "Reason for Adhoc Rebate",
-            labelKey: "TL_PAYMENT_REBATE_REASON"
+            labelKey: "WS_PAYMENT_REBATE_REASON"
           },
           placeholder: {
-            labelName: "Select Reason for Adhoc Rebate",
-            labelKey: "TL_PAYMENT_REBATE_REASON_SELECT"
+            labelKey: "WS_PAYMENT_REBATE_REASON_SELECT"
           },
           props: {
             style: {
@@ -350,28 +319,26 @@ export const adhocPopup = getCommonContainer({
           },
           data: [
             {
-              code: "TL_REBATE_ADVANCED_PAID"
+              code: "WS_REBATE_ADVANCED_PAID"
             },
             {
-              code: "TL_REBATE_BY_COMMISSIONER"
+              code: "WS_REBATE_BY_COMMISSIONER"
             },
             {
-              code: "TL_REBATE_ADDITIONAL_AMOUNT_CAHNGED"
+              code: "WS_REBATE_ADDITIONAL_AMOUNT_CHARGED"
             },
             {
-              code: "TL_ADHOC_OTHER"
+              code: "WS_ADHOC_OTHER"
             }
           ],
-          jsonPath: "Licenses[0].tradeLicenseDetail.adhocExemptionReason"
+          jsonPath: "WaterConnection[0].additionalDetails.adhocRebateReason"
         }),
         rebateCommentsField: getTextField({
           label: {
-            labelName: "Enter Comments",
-            labelKey: "TL_ADD_HOC_CHARGES_POPUP_COMMENT_LABEL"
+            labelKey: "WS_ADD_HOC_CHARGES_POPUP_COMMENT_LABEL"
           },
           placeholder: {
-            labelName: "Enter Comments",
-            labelKey: "TL_ADD_HOC_CHARGES_POPUP_COMMENT_LABEL"
+            labelKey: "WS_ADD_HOC_CHARGES_POPUP_COMMENT_LABEL"
           },
           gridDefination: {
             xs: 12,
@@ -382,7 +349,7 @@ export const adhocPopup = getCommonContainer({
               width: "90%"
             }
           },
-          jsonPath: "Licenses[0].tradeLicenseDetail.rebateComments"
+          jsonPath: "WaterConnection[0].additionalDetails.adhocRebateComment"
         })
       })
     },
@@ -398,7 +365,7 @@ export const adhocPopup = getCommonContainer({
     props: {
       style: {
         width: "100%",
-        textAlign: "right"
+        textAlign: "center"
       }
     },
     children: {
@@ -410,13 +377,12 @@ export const adhocPopup = getCommonContainer({
           style: {
             width: "140px",
             height: "48px",
-            marginRight: "16px"
+            margin: "8px"
           }
         },
         children: {
           previousButtonLabel: getLabel({
-            labelName: "CANCEL",
-            labelKey: "TL_ADD_HOC_CHARGES_POPUP_BUTTON_CANCEL"
+            labelKey: "WS_ADD_HOC_CHARGES_POPUP_BUTTON_CANCEL"
           })
         },
         onClickDefination: {
@@ -436,8 +402,7 @@ export const adhocPopup = getCommonContainer({
         },
         children: {
           previousButtonLabel: getLabel({
-            labelName: "ADD",
-            labelKey: "TL_ADD_HOC_CHARGES_POPUP_BUTTON_ADD"
+            labelKey: "WS_ADD_HOC_CHARGES_POPUP_BUTTON_ADD"
           })
         },
         onClickDefination: {

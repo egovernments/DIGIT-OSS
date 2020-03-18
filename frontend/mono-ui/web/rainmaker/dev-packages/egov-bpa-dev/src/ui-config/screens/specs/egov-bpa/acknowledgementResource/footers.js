@@ -60,7 +60,13 @@ export const applicationSuccessFooter = (
   tenant
 ) => {
   let status = (get(state.screenConfiguration.preparedFinalObject, "BPA[0].status") ||  get(state.screenConfiguration.preparedFinalObject, "BPA.status"));
-  let billbService = (( status=="PENDING_APPL_FEE")?"BPA.NC_APP_FEE":"BPA.NC_SAN_FEE");
+  let riskType = (get(state.screenConfiguration.preparedFinalObject, "BPA[0].riskType") ||  get(state.screenConfiguration.preparedFinalObject, "BPA.riskType"));
+  let billbService
+  if(riskType === "LOW") {
+    billbService = "BPA.LOW_RISK_PERMIT_FEE"
+  } else {
+    billbService = (( status=="PENDING_APPL_FEE")?"BPA.NC_APP_FEE":"BPA.NC_SAN_FEE");
+  }
   let purpose = getQueryArg(window.location.href, "purpose");
   let isTrue = false;
   if(purpose == "APPLY") {

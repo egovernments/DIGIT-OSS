@@ -48,7 +48,7 @@ export const fetchData = async (
     mdmsRes &&
     mdmsRes.MdmsRes &&
     mdmsRes.MdmsRes.tenant.citymodule.find(item => {
-      if (item.code === "TL") return true;
+      if (item.code === "BPAAPPLY") return true;
     });
   dispatch(
     prepareFinalObject(
@@ -177,7 +177,8 @@ export const fetchData = async (
         ),
         tenantId: get(element, "tenantId", null),
         modifiedTime: modifiedTime,
-        sortNumber: 1
+        sortNumber: 1,
+        type: element.riskType
       })});
     }
 

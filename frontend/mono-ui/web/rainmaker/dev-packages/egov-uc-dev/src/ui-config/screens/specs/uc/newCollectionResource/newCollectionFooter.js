@@ -118,7 +118,11 @@ const processDemand = async (state, dispatch) => {
           state.screenConfiguration.preparedFinalObject,
           "Demands[0].tenantId"
         );
-        getCommonPayUrl(dispatch, applicationNumber, tenantId);
+        const businessService = get(
+          state.screenConfiguration.preparedFinalObject,
+          "Demands[0].businessService"
+        );
+        getCommonPayUrl(dispatch, applicationNumber, tenantId, businessService);
       }
     } catch (error) {}
   } else {

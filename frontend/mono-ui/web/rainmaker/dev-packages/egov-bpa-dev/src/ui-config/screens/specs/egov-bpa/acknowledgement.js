@@ -208,6 +208,11 @@ const getAcknowledgementCard = (
               labelName: "Application Successfully Sent To Citizen",
               labelKey: "BPA_APPLICATION_SENT_TO_CITIZEN_SUCCESS_MESSAGE_MAIN"
             },
+            body: {
+              labelName:
+                "A notification has been sent to Architect",
+              labelKey: "BPA_APPROVAL_SENT_TO_CITIZEN_SUBHEAD"
+            },
             tailText: {
               labelName: "Application No.",
               labelKey: "NOC_HOME_SEARCH_RESULTS_APP_NO_LABEL"
@@ -239,8 +244,12 @@ const getAcknowledgementCard = (
             icon: "done",
             backgroundColor: "#39CB74",
             header: {
-              labelName: "Application Approved Successfully",
-              labelKey: "BPA_APPLICATION_APPROVED_SUCCESS_MESSAGE_MAIN"
+              labelName: "Application Approved By Citizen Successfully",
+              labelKey: "BPA_APPLICATION_APPROVED_ARCT_SUCCESS_MESSAGE_MAIN"
+            },
+            body: {
+              labelName: "A notification has been sent to Architect",
+              labelKey: "BPA_APPLICATION_APPROVED_ARCT_SUCCESS_BODY_MESSAGE"
             },
             tailText: {
               labelName: "Application No.",
@@ -275,6 +284,11 @@ const getAcknowledgementCard = (
             header: {
               labelName: "Application Send To Architect Successfully",
               labelKey: "BPA_APPLICATION_SEND_TO_ARCHITECT_SUCCESS_MESSAGE_MAIN"
+            },
+            body: {
+              labelName:
+                "A notification has been sent to Architect",
+              labelKey: "BPA_APPROVAL_SEND_TO_ARCHITECT_SUBHEAD"
             },
             tailText: {
               labelName: "Application No.",
@@ -378,6 +392,30 @@ const getAcknowledgementCard = (
               labelName:
                 "A notification regarding BPA Rejection has been sent to building owner at registered Mobile No.",
               labelKey: "BPA_APPROVAL_REJ_MESSAGE_SUBHEAD"
+            }
+          })
+        }
+      },
+      gotoHomeFooter
+    };
+  } else if (purpose === "application" && status === "revocated") {
+    return {
+      header,
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "close",
+            backgroundColor: "#E54D42",
+            header: {
+              labelName: "Application for permit order is revocated",
+              labelKey: "BPA_APPROVAL_REVOCATED_MESSAGE_HEAD"
+            },
+            body: {
+              labelName:
+                "A notification regarding BPA Revocation has been sent to building owner at registered Mobile No.",
+              labelKey: "BPA_APPROVAL_REV_MESSAGE_SUBHEAD"
             }
           })
         }

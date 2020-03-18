@@ -5,7 +5,7 @@ import {
   getLabelWithValue,
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { ownerDetailsHeader } from './ownerDetails';
+import { changeStep } from "./footer";
 
 const getHeader = label => {
   return {
@@ -75,9 +75,9 @@ export const reviewConnectionDetails = (isEditable = true) => {
           },
           onClickDefination: {
             action: "condition",
-            // callBack: (state, dispatch) => {
-            //   changeStep(state, dispatch, "", 0);
-            // }
+            callBack: (state, dispatch) => {
+              changeStep(state, dispatch, "", 0);
+            }
           }
         }
       }

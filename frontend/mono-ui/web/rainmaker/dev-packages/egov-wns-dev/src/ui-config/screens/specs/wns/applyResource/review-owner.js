@@ -6,7 +6,7 @@ import {
   getLabel,
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { convertEpochToDate } from "../../utils";
+import { convertEpochToDateAndHandleNA } from "../../utils";
 
 const service = getQueryArg(window.location.href, "service")
 
@@ -110,6 +110,15 @@ export const reviewWaterClosets = getLabelWithValue(
     jsonPath: "WaterConnection[0].noOfWaterClosets",
   }
 );
+export const reviewNoOfToilets = getLabelWithValue(
+  {
+    labelName: "No. of Toilets",
+    labelKey: "WS_ADDN_DETAILS_NO_OF_TOILETS"
+  },
+  {
+    jsonPath: "WaterConnection[0].noOfToilets",
+  }
+);
 
 export const reviewPlumberProvidedBy = getLabelWithValue(
   {
@@ -168,7 +177,7 @@ export const reviewConnectionExecutionDate = getLabelWithValue(
   },
   {
     jsonPath: "WaterConnection[0].connectionExecutionDate",
-    callBack: convertEpochToDate
+    callBack: convertEpochToDateAndHandleNA
   }
 );
 export const reviewMeterId = getLabelWithValue(
@@ -186,7 +195,7 @@ export const reviewMeterInstallationDate = getLabelWithValue(
   },
   {
     jsonPath: "WaterConnection[0].meterInstallationDate",
-    callBack: convertEpochToDate
+    callBack: convertEpochToDateAndHandleNA
   }
 );
 
@@ -195,7 +204,7 @@ export const reviewInitialMeterReading = getLabelWithValue(
     labelName: "Initial Meter Reading",
     labelKey: "WS_ADDN_DETAILS_INITIAL_METER_READING"
   },
-  // { jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].pan" }
+  { jsonPath: "WaterConnection[0].additionalDetails.initialMeterReading" }
 );
 
 export const getReviewOwner = (isEditable = true) => {
@@ -271,7 +280,8 @@ const connectionDetails = getCommonContainer({
   reviewWaterSubSource,
   reviewPipeSize,
   // reviewBillingType,
-  reviewWaterClosets
+  reviewWaterClosets,
+  reviewNoOfToilets
 });
 
 const connectionChargeDetails = getCommonContainer({
@@ -297,6 +307,6 @@ export const renderService = () => {
   if (service === "WATER") {
     return getCommonContainer({ reviewConnectionType, reviewNumberOfTaps, reviewWaterSource, reviewWaterSubSource, reviewPipeSize });
   } else if (service === "SEWERAGE") {
-    return getCommonContainer({ reviewConnectionType, reviewWaterClosets })
+    return getCommonContainer({ reviewConnectionType, reviewWaterClosets,reviewNoOfToilets })
   }
 }

@@ -1,10 +1,19 @@
 export const getWFConfig = (module,businessService) => {
-  console.log("module", module);
   switch (module.toUpperCase()) {
     case "TL-SERVICES":
       return {
         INITIATED: "/tradelicence/apply",
         DEFAULT: "/tradelicence/search-preview",
+      };
+      case "WS-SERVICES":
+        return {
+          INITIATED: "/wns/apply",
+          DEFAULT: "/wns/search-preview",
+        };
+        case "SW-SERVICES":
+      return {
+        INITIATED: "/wns/apply",
+        DEFAULT: "/wns/search-preview",
       };
     case "FIRENOC":
       return {

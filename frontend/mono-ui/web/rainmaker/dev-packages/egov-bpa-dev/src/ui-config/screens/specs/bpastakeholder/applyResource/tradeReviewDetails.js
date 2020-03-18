@@ -14,6 +14,7 @@ import {
   getCommunicactionDetails
 } from "./review-location";
 import { getReviewDocuments } from "./review-documents";
+import { declarationSummary } from "./declarationDetails";
 
 const estimate = getCommonGrayCard({
   estimateSection: getFeesEstimateCard({
@@ -41,5 +42,6 @@ export const tradeReviewDetails = getCommonCard({
   // reviewOrganizationDetails,
   reviewPermanentDetails,
   reviewCommunicationDetails,
-  reviewDocumentDetails
+  reviewDocumentDetails,
+  declarationSummary,
 });

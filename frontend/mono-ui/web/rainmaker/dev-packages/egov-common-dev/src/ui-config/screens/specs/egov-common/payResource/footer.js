@@ -8,6 +8,7 @@ import set from "lodash/set";
 import { httpRequest } from "../../../../../ui-utils/api";
 import { convertDateToEpoch, validateFields } from "../../utils";
 import { ifUserRoleExists } from "../../utils";
+import "./index.css";
 
 export const callPGService = async (state, dispatch) => {
   const isAdvancePaymentAllowed =get(state, "screenConfiguration.preparedFinalObject.businessServiceInfo.isAdvanceAllowed");
@@ -456,13 +457,14 @@ export const footer = getCommonApplyFooter({
     props: {
       variant: "contained",
       color: "primary",
-      style: {
-        width: "379px",
-        height: "48px ",
-        right: "19px ",
-        position: "relative",
-        borderRadius: "0px "
-      }
+      className:"gen-receipt-com",
+      // style: {
+      //   width: "379px",
+      //   height: "48px ",
+      //   right: "19px ",
+      //   position: "relative",
+      //   borderRadius: "0px "
+      // }
     },
     children: {
       submitButtonLabel: getLabel({
@@ -493,13 +495,14 @@ export const footer = getCommonApplyFooter({
     props: {
       variant: "contained",
       color: "primary",
-      style: {
-        width: "363px",
-        height: "48px ",
-        right: "19px",
-        position: "relative",
-        borderRadius: "0px "
-      }
+      className:"make-payment-com",
+      // style: {
+      //   width: "363px",
+      //   height: "48px ",
+      //   right: "19px",
+      //   position: "relative",
+      //   borderRadius: "0px "
+      // }
     },
     children: {
       submitButtonLabel: getLabel({

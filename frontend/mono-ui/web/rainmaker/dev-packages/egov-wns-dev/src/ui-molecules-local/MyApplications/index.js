@@ -20,7 +20,8 @@ class MyApplications extends React.Component {
     window.location.href = "my-applications"
   }
   render() {
-    const { classes } = this.props;
+    const { classes,Count } = this.props;
+    let myApplicationCount= Count?[Count]:[0]
     return (
       <div className={classes.root}>
         <List component="nav" onClick={this.clickHandler}>
@@ -28,7 +29,8 @@ class MyApplications extends React.Component {
             <ListItemText
               primary={
                 <LabelContainer
-                  labelKey="WS_MYAPPLICATIONS_HEADER"
+                  labelKey="WS_MYAPPLICATIONS_HEADER" 
+                  dynamicArray={myApplicationCount}
                   style={{
                     fontSize: 14,
                     color: "rgba(0, 0, 0, 0.8700000047683716)"

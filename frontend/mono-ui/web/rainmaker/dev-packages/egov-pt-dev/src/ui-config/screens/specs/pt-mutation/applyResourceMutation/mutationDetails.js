@@ -65,7 +65,18 @@ import {
                 required: true
               },
               required: true,
-              type: "array"
+              type: "array",
+              beforeFieldChange:(action, state, dispatch) => {
+                const courtCaseJsonPath = "components.div.children.formwizardFirstStep.children.mutationDetails.children.cardContent.children.mutationDetailsContainer.children.courtCaseDetails";
+                if(action.value === "NO"){
+                  dispatch(handleField("apply", courtCaseJsonPath, "props.disabled", true));
+                  dispatch(handleField("apply", courtCaseJsonPath, "props.value", ""));
+                  dispatch(handleField("apply", courtCaseJsonPath, "props.helperText", ""));
+                  dispatch(handleField("apply", courtCaseJsonPath, "props.error", false));
+                }else{
+                  dispatch(handleField("apply", courtCaseJsonPath, "props.disabled", false));
+                }
+              }
             },
 
             getMutationStateAcquisitionRadioButton : {
@@ -98,7 +109,18 @@ import {
                 required: true
               },
               required: true,
-              type: "array"
+              type: "array",
+              beforeFieldChange:(action, state, dispatch) => {
+                const courtCaseJsonPath = "components.div.children.formwizardFirstStep.children.mutationDetails.children.cardContent.children.mutationDetailsContainer.children.govtAcquisitionDetails";
+                if(action.value === "NO"){
+                  dispatch(handleField("apply", courtCaseJsonPath, "props.disabled", true));
+                  dispatch(handleField("apply", courtCaseJsonPath, "props.value", ""));
+                  dispatch(handleField("apply", courtCaseJsonPath, "props.helperText", ""));
+                  dispatch(handleField("apply", courtCaseJsonPath, "props.error", false));
+                }else{
+                  dispatch(handleField("apply", courtCaseJsonPath, "props.disabled", false));
+                }
+              }
             },
 
             courtCaseDetails: getTextField({

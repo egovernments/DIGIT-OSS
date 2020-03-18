@@ -5,33 +5,47 @@ import { searchResults } from "./searchResource/searchResults";
 import { searchApplicationResults } from "./searchResource/searchApplicationResults";
 import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 import find from "lodash/find";
-import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
+import { resetFieldsForConnection, resetFieldsForApplication } from '../utils';
 
 const header = getCommonHeader({
   labelKey: "WS_SEARCH_CONNECTION_HEADER"
 });
 
 const pageResetAndChange = (state, dispatch) => {
-  dispatch(prepareFinalObject("Licenses", [{ licenseType: "PERMANENT" }]));
-  dispatch(prepareFinalObject("LicensesTemp", []));
-  dispatch(setRoute("/wns/apply"));
+  dispatch(prepareFinalObject("WaterConnection", []));
+  dispatch(prepareFinalObject("SewerageConnection", []));
+  dispatch(prepareFinalObject("applyScreen", {}));
+  dispatch(prepareFinalObject("searchScreen", {}));
+  window.location.href = "/employee/wns/apply";
 };
+
+const queryObject = [
+  { key: "tenantId", value: 'pb.amritsar' },
+  { key: "businessServices", value: 'NewWS1' }
+];
 
 const employeeSearchResults = {
   uiFramework: "material-ui",
   name: "search",
-  beforeInitScreen: (action, state, dispatch) => {
+  beforeInitScreen:  (action, state, dispatch) => {
+    resetFieldsForConnection(state, dispatch);
+    resetFieldsForApplication(state, dispatch);
+    setBusinessServiceDataToLocalStorage(queryObject,dispatch);
     const businessServiceData = JSON.parse(
       localStorageGet("businessServiceData")
     );
-    const data = find(businessServiceData, { businessService: "NewWS1" });
-    const { states } = data || [];
+    if(businessServiceData[0].businessService==="NewWS1"||businessServiceData[0].businessService==="NewSW1" ){
+      const data = find(businessServiceData, { businessService: businessServiceData[0].businessService });
+      const { states } = data || [];  
+      if (states && states.length > 0) {
+        const status = states.map((item) => { return { code: item.state } });
+        const applicationStatus = status.filter(item => item.code != null);
+        dispatch(prepareFinalObject("applyScreenMdmsData.searchScreen.applicationStatus", applicationStatus));
+      }
+    }
     const applicationType = [{ code: "New Water connection", code: "New Water connection" }, { code: "New Sewerage Connection", code: "New Sewerage Connection" }]
     dispatch(prepareFinalObject("applyScreenMdmsData.searchScreen.applicationType", applicationType));
-    if (states && states.length > 0) {
-      const status = states.map((item, index) => { return { code: item.state } });
-      dispatch(prepareFinalObject("applyScreenMdmsData.searchScreen.status", status.filter(item => item.code != null)));
-    }
 
     return action;
   },

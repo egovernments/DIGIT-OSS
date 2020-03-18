@@ -223,7 +223,7 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
     set(payload, "tenantId", tenantId);
     set(payload, "action", status);
 
-    set(payload, "additionalDetails", null);
+    // set(payload, "additionalDetails", null);
     set(payload, "units", null);
 
 
@@ -928,7 +928,11 @@ export const handleFileUpload = (event, handleDocument, props) => {
 
 export const submitBpaApplication = async (state, dispatch) => {
   const bpaAction = "APPLY";
-  let response = await createUpdateBpaApplication(state, dispatch, bpaAction);
+  let isDeclared = get(state, "screenConfiguration.preparedFinalObject.BPA.isDeclared"); 
+  let isDeclaration = get(state, "screenConfiguration.preparedFinalObject.BPA.isDeclaration");  
+   
+  if(isDeclared && isDeclaration) {
+    let response = await createUpdateBpaApplication(state, dispatch, bpaAction);
   const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.BPA.applicationNo");
   const tenantId = getQueryArg(window.location.href, "tenantId");
   if (get(response, "status", "") === "success") {
@@ -937,6 +941,14 @@ export const submitBpaApplication = async (state, dispatch) => {
         ? `/egov-ui-framework/egov-bpa/acknowledgement?purpose=${bpaAction}&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`
         : `/egov-bpa/acknowledgement?purpose=${bpaAction}&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
     dispatch(setRoute(acknowledgementUrl));
+  }
+  }  
+  else {
+    let errorMessage = {
+      labelName: "Please confirm the declaration!",
+      labelKey: "BPA_DECLARATION_COMMON_LABEL"
+    };
+    dispatch(toggleSnackbar(true, errorMessage, "warning"));      
   }
 };
 

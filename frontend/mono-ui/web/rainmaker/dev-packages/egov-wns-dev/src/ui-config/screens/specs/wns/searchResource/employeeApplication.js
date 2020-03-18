@@ -8,33 +8,14 @@ import {
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { searchApiCall } from "./functions";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-
-const resetFields = (state, dispatch) => {
-  dispatch(
-    handleField(
-      "search",
-      "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.wnsApplication.children.cardContent.children.wnsApplicationContainer.children.consumerNo",
-      "props.value",
-      ""
-    )
-  );
-  dispatch(
-    handleField(
-      "search",
-      "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.wnsApplication.children.cardContent.children.wnsApplicationContainer.children.ownerMobNo",
-      "props.value",
-      ""
-    )
-  );
-};
+import { resetFieldsForConnection } from '../../utils';
 
 export const wnsApplication = getCommonCard({
   subHeader: getCommonTitle({
-    labelKey: "WS_SEARCH_CONNECTION_HEADER"
+    labelKey: "WS_SEARCH_CONNECTION_SUB_HEADER"
   }),
   subParagraph: getCommonParagraph({
-    labelKey: "WS_HOME_SEARCH_RESULTS_DESC"
+    labelKey: "WS_HOME_SEARCH_CONN_RESULTS_DESC"
   }),
   wnsApplicationContainer: getCommonContainer({
     consumerNo: getTextField({
@@ -51,7 +32,7 @@ export const wnsApplication = getCommonCard({
       required: false,
       pattern: getPattern("consumerNo"),
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      jsonPath: "searchScreen.connectionNumber"
+      jsonPath: "searchConnection.connectionNumber"
     }),
 
     ownerMobNo: getTextField({
@@ -72,7 +53,7 @@ export const wnsApplication = getCommonCard({
       required: false,
       pattern: getPattern("MobileNo"),
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      jsonPath: "searchScreen.mobileNumber"
+      jsonPath: "searchConnection.mobileNumber"
     })
   }),
 
@@ -103,7 +84,7 @@ export const wnsApplication = getCommonCard({
         },
         onClickDefination: {
           action: "condition",
-          callBack: resetFields
+          callBack: resetFieldsForConnection
         }
       },
       searchButton: {

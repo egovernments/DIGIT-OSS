@@ -1,7 +1,6 @@
-import React from "react";
-import { TableUi } from "components";
-import { Card, Button } from "components";
+import { Button, Card, TableUi } from "components";
 import Label from "egov-ui-kit/utils/translationNode";
+import React from "react";
 
 const columnData = [
   {
@@ -55,7 +54,7 @@ const PropertyTable = ({ tableData, onActionClick, sortOnObject }) => {
         textChildren={
           <div>
             <Label
-            secondaryText={'('+tableData.length+')'}
+              secondaryText={'(' + tableData.length + ')'}
               label="PT_SEARCH_PROPERTY_TABLE_HEADERS"
               className="property-search-table-heading"
               fontSize={16}

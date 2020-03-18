@@ -132,7 +132,7 @@ class PastPayments extends Component {
     );
     return (
       <div class="screen screen-with-bredcrumb">
-        <BreadCrumbs url={urls} history="" />
+        <BreadCrumbs url={urls} history="" label="WS_COMMON_PAST_PAYMENTS"/>
         <div className="form-without-button-cont-generic">
           <div className="rainmaker-card clearfix property-tax-card">
             <div className="list-main-card">

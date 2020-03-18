@@ -28,47 +28,6 @@ import {
       moduleName: "egov-pt",
       componentPath: "DocumentListContainer",
       props: {
-        documents: [
-          {
-            name: "Identity Proof ",
-            required: true,
-            jsonPath: "noc.documents.identityProof",
-            selector: {
-              inputLabel: "Select Document",
-              menuItems: [
-                { value: "AADHAAR", label: "Aadhaar Card" },
-                { value: "VOTERID", label: "Voter ID Card" },
-                { value: "DRIVING", label: "Driving License" }
-              ]
-            }
-          },
-          {
-            name: "Address Proof ",
-            required: true,
-            jsonPath: "noc.documents.addressProof",
-            selector: {
-              inputLabel: "Select Document",
-              menuItems: [
-                { value: "ELECTRICITYBILL", label: "Electricity Bill" },
-                { value: "DL", label: "Driving License" },
-                { value: "VOTERID", label: "Voter ID Card" }
-              ]
-            }
-          },
-          {
-            name: "Registration Proof ",
-            required: true,
-            jsonPath: "noc.documents.registrationProof",
-            selector: {
-              inputLabel: "Select Document",
-              menuItems: [
-                { value: "ELECTRICITYBILL", label: "Electricity Bill" },
-                { value: "DL", label: "Driving License" },
-                { value: "VOTERID", label: "Voter ID Card" }
-              ]
-            }
-          },
-        ],
         buttonLabel: {
           labelName: "UPLOAD FILE",
           labelKey: "PT_MUTATION_DOCUMENT_DETAILS_BUTTON_UPLOAD_FILE"

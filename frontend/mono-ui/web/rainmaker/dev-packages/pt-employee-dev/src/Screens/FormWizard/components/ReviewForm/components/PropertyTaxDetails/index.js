@@ -149,28 +149,31 @@ class PropertyTaxDetails extends React.Component {
                   </div>
                 </div>
                 <div
-                  style={{ padding: 0 }}
-                  className="additional-rebate-charges col-sm-10 flex-container"
+                  style={{ padding: 0, textAlign: "right" }}
+                  className="col-sm-10"
                 >
-                  <div className="flex-child">
-                  <Button
+                  <FlatButton
                     label={
                       <Label
                         label={"PT_CALCULATION_DETAILS"}
                         buttonLabel={true}
+                        bold={true}
+                        fontSize="12px"
+                        color="rgb(254, 122, 81)"
                       />
                     }
+                    primary={true}
                     style={{
-                      height: 22,
-                      borderRadius: 2,
-                      color: "#fe7a51"
+                      height: 40,
+                      lineHeight: "auto",
+                      minWidth: "inherit"
                     }}
                     onClick={() => {
                       openCalculationDetails();
                     }}
-                  /></div>
-                  <div className="flex-child">
-                  {/* <Button
+                  />
+                  {/* <div className="flex-child">
+                  <Button
                     label={
                       <Label
                         label={"PT_CALCULATION_ADD_REBATE/CHARGES"}
@@ -183,8 +186,8 @@ class PropertyTaxDetails extends React.Component {
                       color: "#fe7a51"
                     }}
                     onClick={() => addRebateBox(true)}
-                  /> */}
-                  </div>
+                  />
+                  </div> */}
                 </div>
               </div>
               <div className="col-sm-6" style={{ backgroundColor: 'white' }}>

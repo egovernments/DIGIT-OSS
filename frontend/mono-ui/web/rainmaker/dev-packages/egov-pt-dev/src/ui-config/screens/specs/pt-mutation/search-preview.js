@@ -20,7 +20,8 @@ import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
-import { getSearchResults, generatePdfFromDiv } from "../../../../ui-utils/commons";
+import { getSearchResults } from "../../../../ui-utils/commons";
+import {generatePdfFromDiv } from "egov-ui-kit/utils/PTCommon";
 import { searchBill, getReceiptData, getpayments, downloadCertificateForm, downloadReceitForm } from "../utils/index";
 import generatePdf from "../utils/receiptPdf";
 import { loadPdfGenerationData } from "../utils/receiptTransformer";
@@ -141,44 +142,44 @@ const setDownloadMenu = (state, dispatch, tenantId, applicationNumber) => {
   let downloadMenu = [];
   let printMenu = [];
   let certificateDownloadObject = {
-    label: { labelName: "PT Certificate", labelKey: "PT_CERTIFICATE" },
+    label: { labelName: "PT Certificate", labelKey: "MT_CERTIFICATE" },
     link: () => {
       downloadCertificateForm(get(state, "screenConfiguration.preparedFinalObject.Properties"), "ptmutationcertificate", tenantId);
     },
     leftIcon: "book"
   };
   let certificatePrintObject = {
-    label: { labelName: "PT Certificate", labelKey: "PT_CERTIFICATE" },
+    label: { labelName: "PT Certificate", labelKey: "MT_CERTIFICATE" },
     link: () => {
       downloadCertificateForm(get(state, "screenConfiguration.preparedFinalObject.Properties"), "ptmutationcertificate", tenantId, 'print');
     },
     leftIcon: "book"
   };
   let receiptDownloadObject = {
-    label: { labelName: "Receipt", labelKey: "PT_RECEIPT" },
+    label: { labelName: "Receipt", labelKey: "MT_RECEIPT" },
     link: () => {
       downloadReceitForm(get(state, "screenConfiguration.preparedFinalObject.Payments"), "consolidatedreceipt", tenantId);
     },
     leftIcon: "receipt"
   };
   let receiptPrintObject = {
-    label: { labelName: "Receipt", labelKey: "PT_RECEIPT" },
+    label: { labelName: "Receipt", labelKey: "MT_RECEIPT" },
     link: () => {
       downloadReceitForm(get(state, "screenConfiguration.preparedFinalObject.Payments"), "consolidatedreceipt", tenantId, 'print');
     },
     leftIcon: "receipt"
   };
   let applicationDownloadObject = {
-    label: { labelName: "Application", labelKey: "PT_APPLICATION" },
+    label: { labelName: "Application", labelKey: "MT_APPLICATION" },
     link: () => {
-      generatePdfFromDiv("download", applicationNumber)
+      generatePdfFromDiv("download", applicationNumber,"#material-ui-cardContent")
     },
     leftIcon: "assignment"
   };
   let applicationPrintObject = {
-    label: { labelName: "Application", labelKey: "PT_APPLICATION" },
+    label: { labelName: "Application", labelKey: "MT_APPLICATION" },
     link: () => {
-      generatePdfFromDiv("print", applicationNumber)
+      generatePdfFromDiv("print", applicationNumber,"#material-ui-cardContent")
     },
     leftIcon: "assignment"
   };
@@ -289,52 +290,88 @@ const setSearchResponse = async (
       assignes: null
     };
     property.workflow = workflow;
+
   }
 
-  if (property && property.owners && property.owners.length > 1) {
+  if (property && property.owners && property.owners.length > 0) {
+
     let ownersTemp = [];
     let owners = [];
     property.owners.map(owner => {
-      if (owner.status == "INACTIVE") {
+      owner.documentUid= owner.documents? owner.documents[0].documentUid: "NA";
+      owner.documentType=owner.documents? owner.documents[0].documentType: "NA";
+      if (owner.status == "ACTIVE") {
+      
         ownersTemp.push(owner);
       } else {
         owners.push(owner);
       }
     });
 
-    property.owners = owners;
+    property.ownersInit = owners;
     property.ownersTemp = ownersTemp;
   }
-
-  dispatch(prepareFinalObject("Property", property));
-  dispatch(prepareFinalObject("documentsUploadRedux", property.documents));
-  prepareDocumentsView(state, dispatch);
+  property.ownershipCategoryTemp = property.ownershipCategory;
+  property.ownershipCategoryInit = 'NA';
   // Set Institution/Applicant info card visibility
   if (
     get(
       response,
-      "FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType",
+      "Properties[0].ownershipCategory",
       ""
     ).startsWith("INSTITUTION")
   ) {
+    property.institutionTemp = property.institution;
+
     dispatch(
       handleField(
         "search-preview",
-        "components.div.children.body.children.cardContent.children.applicantSummary",
+        "components.div.children.body.children.cardContent.children.transfereeSummary",
         "visible",
         false
       )
     );
   } else {
+
     dispatch(
       handleField(
         "search-preview",
-        "components.div.children.body.children.cardContent.children.institutionSummary",
+        "components.div.children.body.children.cardContent.children.transfereeInstitutionSummary",
         "visible",
         false
       )
     );
   }
+
+  if (get(property, 'ownersInit[0].altContactNumber', 0)) {
+    property.institution = {};
+    property.institution.nameOfAuthorizedPerson = get(property, 'ownersInit[0].name', '');
+
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.body.children.cardContent.children.transferorSummary",
+        "visible",
+        false
+      )
+    );
+
+  } else {
+
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.body.children.cardContent.children.transferorInstitutionSummary",
+        "visible",
+        false
+      )
+    );
+  }
+
+
+  dispatch(prepareFinalObject("Property", property));
+  dispatch(prepareFinalObject("documentsUploadRedux", property.documents));
+  prepareDocumentsView(state, dispatch);
 
   prepareUoms(state, dispatch);
   await loadPdfGenerationData(applicationNumber, tenantId);
@@ -376,6 +413,7 @@ const screenConfig = {
       "applicationNumber"
     );
     const tenantId = getQueryArg(window.location.href, "tenantId");
+    
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     searchBill(dispatch, applicationNumber, tenantId);
     let businessServicesData = JSON.parse(localStorage.getItem('businessServiceData'));
@@ -430,6 +468,25 @@ const screenConfig = {
       "screenConfig.components.div.children.body.children.cardContent.children.transferorInstitutionSummary.children.cardContent.children.header.children.editSection.visible",
       false
     );
+  
+    let categoryType = get(
+      state.screenConfiguration.preparedFinalObject,
+      "Property.ownersTemp[0].ownerType"
+    ); 
+    if(categoryType === "NONE"){
+      set(
+        action,
+        "screenConfig.components.div.children.body.children.cardContent.children.transfereeSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerDocumentId.visible",
+        false
+      );
+      set(
+        action,
+        "screenConfig.components.div.children.body.children.cardContent.children.transfereeSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerSpecialDocumentType.visible",
+        false
+      );
+      
+     
+   }
     // set(
     //   action,
     //   "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.header.children.editSection.visible",
@@ -498,22 +555,20 @@ const screenConfig = {
           }
         },
         body: getCommonCard({
-          pdfHeader:{
+          pdfHeader: {
             uiFramework: "custom-atoms-local",
             moduleName: "egov-pt",
-            componentPath: "pdfHeader"            
+            componentPath: "pdfHeader"
           },
           propertySummary: propertySummary,
           transferorSummary: transferorSummary,
-          // transferorInstitutionSummary:transferorInstitutionSummary,
+          transferorInstitutionSummary: transferorInstitutionSummary,
           transfereeSummary: transfereeSummary,
-          // transfereeInstitutionSummary: transfereeInstitutionSummary,
-          mutationSummary:mutationSummary,
+          transfereeInstitutionSummary: transfereeInstitutionSummary,
+          mutationSummary: mutationSummary,
           registrationSummary: registrationSummary,
           documentsSummary: documentsSummary
-        }),
-        citizenFooter:
-          process.env.REACT_APP_NAME === "Citizen" ? citizenFooter : {}
+        })
       }
     }
   }

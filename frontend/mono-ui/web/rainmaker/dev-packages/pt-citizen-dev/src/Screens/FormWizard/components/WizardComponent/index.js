@@ -8,6 +8,22 @@ import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
 import generateReceipt from "egov-ui-kit/common/propertyTax/PaymentStatus/Components/receiptsPDF";
 import "./index.css";
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+
+
+
+const theme = createMuiTheme({
+  overrides: {
+    MuiStepIcon: {
+      completed: {
+        color: '#39CB74!important',
+      },
+      active: {
+        color: '#fe7a51!important',
+      },
+    },
+  },
+})
 
 const ptSteps = [
   "PT_PROPERTY_ADDRESS_SUB_HEADER",
@@ -43,26 +59,29 @@ const WizardComponent = ({
     <div className={`wizard-cont active-step-${selected}`}>
       {/*<BreadCrumbsForm onTabClick={onTabClick} selected={selected} formValidIndexArray={formValidIndexArray} />*/}
 
-      {selected < 5 && <div><Stepper
-        activeStep={selected}
-        alternativeLabel
-        style={{
-          background: "inherit"
-        }}
-        className="stepper-container"
-      >
+      {selected < 5 && <div>
+        <MuiThemeProvider theme={theme}>
+          <Stepper
+            activeStep={selected}
+            alternativeLabel
+            style={{
+              background: "inherit"
+            }}
+            className="stepper-container"
+          >
 
-        {ptSteps.map(label => {
-          return (
-            <Step key={label}>
-              <StepLabel>
+            {ptSteps.map(label => {
+              return (
+                <Step key={label}>
+                  <StepLabel>
 
-                <Label label={label} labelStyle={{ wordBreak: "inherit" }} />
-              </StepLabel>
-            </Step>
-          );
-        })}
-      </Stepper></div>}
+                    <Label label={label} labelStyle={{ wordBreak: "inherit" }} />
+                  </StepLabel>
+                </Step>
+              );
+            })}
+          </Stepper>
+        </MuiThemeProvider></div>}
       {selected < 4 && <div>{header}</div>}
       {/* //new-logic-needed */}
       <div className="wizard-content clearfix">{content}</div>
@@ -73,7 +92,7 @@ const WizardComponent = ({
         style={{ textAlign: "right" }}
       >
         <div className="button-container col-xs-10" style={{ float: "right" }}>
-          { selected != 5 && selected != 4 && <Button
+          {selected != 5 && selected != 4 && <Button
             label={
               <Label buttonLabel={true}
                 label={

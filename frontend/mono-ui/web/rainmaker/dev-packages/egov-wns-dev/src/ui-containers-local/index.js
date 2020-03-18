@@ -57,6 +57,12 @@ const RadioGroupContainer = Loadable({
   loading: () => <Loading />
 });
 
+const EstimateOverviewCardContainer = Loadable({
+  loader: () => import("./EstimateOverviewCardContainer"),
+  loading: () => <Loading />
+});
+
+
 export {
   CustomTabContainer,
   LabelContainer,
@@ -69,5 +75,6 @@ export {
   ResubmitActionContainer,
   ViewBreakupContainer,
   DialogContainer,
-  RadioGroupContainer
+  RadioGroupContainer,
+  EstimateOverviewCardContainer
 };
