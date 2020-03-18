@@ -498,7 +498,7 @@
 						<tr>
 							<td>
 								<div class="buttonbottom" style="padding-bottom: 10px;">
-									<input type="submit" value="<s:text name='lbl.close'/>"
+									<input type="submit" value="<s:text name='lbl.save'/>"
 										id="budgetReAppropriation__create" name="method:create"
 										onClick="javascript: return validate(false,'create');"
 										class="buttonsubmit" />
