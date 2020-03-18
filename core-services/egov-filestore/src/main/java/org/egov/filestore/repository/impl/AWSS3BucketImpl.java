@@ -40,6 +40,14 @@ public class AWSS3BucketImpl implements CloudFilesManager {
 	
 	@Autowired
 	private FileStoreConfig configs;
+	
+	private AmazonS3 s3Client;
+
+	@Autowired
+	private AWSClientFacade awsFacade;
+
+	@Autowired
+	private CloudFileMgrUtils util;
 
 	@Value("${aws.key}")
 	private String key;
@@ -64,15 +72,9 @@ public class AWSS3BucketImpl implements CloudFilesManager {
 
 	@Value("${presigned.url.expiry.time.in.secs}")
 	private Long presignedUrlExpirytime;
-
-	private AmazonS3 s3Client;
-
-	@Autowired
-	private AWSClientFacade awsFacade;
-
-	@Autowired
-	private CloudFileMgrUtils util;
-
+	
+	private List<String> scalableImageTypes = Arrays.asList("jpg","png","jpeg");
+	
 	@Override
 	public void saveFiles(List<Artifact> artifacts) {
 		if (null == s3Client)
@@ -90,12 +92,12 @@ public class AWSS3BucketImpl implements CloudFilesManager {
 
 			try {
 				
+				String imagetype = FilenameUtils.getExtension(artifact.getMultipartFile().getOriginalFilename());
 				String inputStreamAsString = artifact.getFileContentInString(); 
 				InputStream inputStreamForUpload = IOUtils.toInputStream(inputStreamAsString, configs.getImageCharsetType());
-				if (artifact.getMultipartFile().getContentType().startsWith("image/")) {
+				if (scalableImageTypes.contains(imagetype)) {
 
 					InputStream ipStreamForImg = IOUtils.toInputStream(inputStreamAsString, configs.getImageCharsetType());
-
 					String extension = FilenameUtils.getExtension(artifact.getMultipartFile().getOriginalFilename());
 					Map<String, BufferedImage> mapOfImagesAndPaths = util.createVersionsOfImage(ipStreamForImg, fileNameWithPath);
 					writeImage(mapOfImagesAndPaths, bucketName, extension);

@@ -101,12 +101,16 @@ public class StorageController {
 			@RequestParam(value = "module", required = true) String module,
 			@RequestParam(value = "tag", required = false) String tag) {
 		
+		List<String> allowedFormats = fileStoreConfig.getAllowedFileFormats();
+		List<String> allowedTikaFormats = fileStoreConfig.getAllowedTikaFormats();
 		String inputStreamAsString = null;
 		String inputFormat = null;
 		for(MultipartFile file : files) {
 			
-			System.err.println(file.getContentType());
-			System.err.println(FilenameUtils.getExtension(file.getOriginalFilename()));
+			String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+			if(!allowedFormats.contains(extension)) {
+				throw new CustomException("EG_FILESTORE_INVALID_INPUT","Inalvid input provided for file : " + extension + ", please upload any of the allowed formats : " + allowedFormats);
+			}
 			Tika tika = new Tika();
 			
 			try {
@@ -120,12 +124,12 @@ public class StorageController {
 				throw new CustomException("EG_FILESTORE_PARSING_ERROR","not able to parse the input please upload a proper file of allowed type : " + e.getMessage());
 			}
 			
-			List<String> allowedFormats = fileStoreConfig.getAllowedFileFormats();
 			
-//			if (!allowedFormats.contains(inputFormat.split("/")[1])) {
-//				throw new CustomException("EG_FILESTORE_INVALID_INPUT", "Inalvid input provided for file, please upload any of the allowed formats : "
-//								+ allowedFormats);
-//			}
+			
+			if (!allowedTikaFormats.contains(inputFormat)) {
+				throw new CustomException("EG_FILESTORE_INVALID_INPUT", "Inalvid input provided for file, please upload any of the allowed formats : "
+								+ allowedFormats);
+			}
 		}
 
 		final List<String> fileStoreIds = storageService.save(files, module, tag, tenantId, inputStreamAsString);
