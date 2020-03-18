@@ -110,7 +110,7 @@
                                                     },
                                                     {
                                                         "width": "*",
-                                                        "text": "{{connectionExecutionDate}",
+                                                        "text": "{{connectionExecutionDate}}",
                                                         "alignment": "right",
                                                         "style": "ws-sub-data"
                                                     }
