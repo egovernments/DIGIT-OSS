@@ -1,5 +1,6 @@
 package org.egov.pt.service;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -10,12 +11,15 @@ import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.models.Assessment;
 import org.egov.pt.models.Property;
 import org.egov.pt.web.contracts.AssessmentRequest;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import static org.egov.pt.util.PTConstants.*;
 
 @Service
 public class TranslationService {
@@ -95,8 +99,31 @@ public class TranslationService {
         propertyDetail.put("assessmentNumber", assessment.getAssessmentNumber());
         propertyDetail.put("assessmentDate", assessment.getAssessmentDate());
 
-       // propertyDetail.put("adhocExemption", );
-        // propertyDetail.put("adhocPenalty",);
+        if(assessment.getAdditionalDetails()!=null){
+
+            try{
+                if(assessment.getAdditionalDetails().get(ADHOC_REBATE)!=null){
+                    BigDecimal adhocExemption = new BigDecimal(assessment.getAdditionalDetails().get(ADHOC_REBATE).doubleValue());
+                    propertyDetail.put("adhocExemption",adhocExemption);
+                }
+
+                if(assessment.getAdditionalDetails().get(ADHOC_REBATE_REASON)!=null)
+                    propertyDetail.put("adhocExemptionReason",assessment.getAdditionalDetails().get(ADHOC_REBATE_REASON).asText());
+
+
+                if(assessment.getAdditionalDetails().get(ADHOC_PENALTY)!=null){
+                    BigDecimal adhocPenalty = new BigDecimal(assessment.getAdditionalDetails().get(ADHOC_PENALTY).doubleValue());
+                    propertyDetail.put("adhocPenalty",adhocPenalty);
+                }
+
+                if(assessment.getAdditionalDetails().get(ADHOC_PENALTY_REASON)!=null)
+                    propertyDetail.put("adhocPenaltyReason", assessment.getAdditionalDetails().get(ADHOC_PENALTY_REASON).asText());
+            } catch (Exception e){
+                e.printStackTrace();
+                throw new CustomException("PARSING_ERROR","Failed to parse additional details in translation");
+            }
+
+        }
 
         List<Map<String, Object>> owners = new LinkedList<>();
 

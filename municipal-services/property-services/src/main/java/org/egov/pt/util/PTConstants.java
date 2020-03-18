@@ -260,5 +260,14 @@ public class PTConstants {
     public static final String ONLINE_PAYMENT_MODE = "ONLINE";
 
 
+    public static final String ADHOC_PENALTY = "adhocPenalty";
+
+    public static final String ADHOC_PENALTY_REASON = "adhocPenaltyReason";
+
+    public static final String ADHOC_REBATE = "adhocExemption";
+
+    public static final String ADHOC_REBATE_REASON = "adhocExemptionReason";
+
+
 }
 
