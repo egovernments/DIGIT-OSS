@@ -88,28 +88,28 @@
                                                 ],
                                                 "columns": [
                                                     {
-                                                        "width": "*",
+                                                        "width": "auto",
                                                         "text": "{{app_no}}",
                                                         "style": "ws-sub-header"
                                                     },
                                                     {
-                                                        "width": "*",
+                                                        "width": "2$",
                                                         "text": ":",
                                                         "style": "ws-sub-header"
                                                     },
                                                     {
-                                                        "width": "*",
+                                                        "width": "auto",
                                                         "text": "{{applicationNumber}}",
                                                         "style": "ws-sub-data"
                                                     },
                                                     {
-                                                        "width": "*",
+                                                        "width": "auto",
                                                         "text": "{{date_label}}",
                                                         "style": "ws-sub-header",
                                                         "alignment": "right"
                                                     },
                                                     {
-                                                        "width": "*",
+                                                        "width": "auto",
                                                         "text": "{{connectionExecutionDate}}",
                                                         "alignment": "right",
                                                         "style": "ws-sub-data"
