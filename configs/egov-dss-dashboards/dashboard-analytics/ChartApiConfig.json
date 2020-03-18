@@ -1,5 +1,80 @@
 {
+  "totalCollectionv2": {
+    "chartName": "DSS_TOTAL_COLLECTION",
+    "queries": [
+      {
+        "module": "PT",
+        "dateRefField": "dataObject.paymentDetails.receiptDate",
+        "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\"module\" : \"dataObject.paymentDetails.businessService.keyword\", \"tenantId\" : \"dataObject.tenantId\"}",
+        "indexName": "dss-payment_v2",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}},{\"terms\":{\"dataObject.bill.status.keyword\":[\"Cancelled\"]}}],\"must\":[{\"term\":{\"dataObject.paymentDetails.businessService.keyword\":\"PT\"}}]}},\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"dataObject.paymentDetails.bill.billDetails.amountPaid\"}}}}}}"
+      },
+      {
+        "module": "TL",
+        "dateRefField": "dataObject.paymentDetails.receiptDate",
+        "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\"module\" : \"dataObject.paymentDetails.businessService.keyword\", \"tenantId\" : \"dataObject.tenantId\"}",
+        "indexName": "dss-payment_v2",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}},{\"terms\":{\"dataObject.bill.status.keyword\":[\"Cancelled\"]}}],\"must\":[{\"term\":{\"dataObject.paymentDetails.businessService.keyword\":\"TL\"}}]}},\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"dataObject.paymentDetails.bill.billDetails.amountPaid\"}}}}}}"
+      }
+    ],
+    "chartType": "metric",
+    "valueType": "Amount",
+    "drillChart": "none",
+    "documentType": "_doc",
+    "action": "",
+    "aggregationPaths": [
+      "Total Collection"
+    ],
+    "insight": {
+      "chartResponseMap" : "totalCollection",
+      "action" : "differenceOfNumbers",
+      "upwardIndicator" : "positive",
+      "downwardIndicator" : "negative",
+      "textMessage" : "$indicator$value% than last $insightInterval",
+      "colorCode" : "#228B22",
+      "insightInterval" : "month"
+    },
+    "_comment": " "
+  },
+  "targetAchievedv2": {
+    "chartName": "DSS_TARGET_ACHIEVED",
+    "queries": [
+      {
+        "module": "COMMON",
+        "requestQueryMap": "{\r\n  \"module\" : \"businessService.keyword\", \n\"tenantId\" : \"tenantIdForMunicipalCorporation\"}",
+        "dateRefField": "",
+        "indexName": "dss-target_v1",
+        "aggrQuery": "{\"aggs\":{\"Actual collection\":{\"sum\":{\"field\":\"budgetProposedForMunicipalCorporation\"}}}}"
+      },
+      {
+        "module": "COMMON",
+        "requestQueryMap": "{\"wardId\" : \"domainObject.ward.name.keyword\",\r\n  \"module\" : \"dataObject.paymentDetails.businessService.keyword\", \n\"tenantId\" : \"dataObject.tenantId\"}",
+        "dateRefField": "dataObject.paymentDetails.receiptDate",
+        "indexName": "dss-payment_v2",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"pb.testing\"}},{\"terms\":{\"dataObject.bill.status.keyword\":[\"Cancelled\"]}}]}},\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"dataObject.paymentDetails.bill.billDetails.amountPaid\"}}}}}}"
+      }
 
+    ],
+    "chartType": "metric",
+    "valueType": "percentage",
+    "drillChart": "none",
+    "documentType": "_doc",
+    "action": "percentage",
+    "aggregationPaths": [
+      "Total Collection",
+      "Actual collection"
+    ],
+    "insight": {
+      "chartResponseMap" : "targetAchieved",
+      "action" : "differenceOfNumbers",
+      "upwardIndicator" : "positive",
+      "downwardIndicator" : "negative",
+      "textMessage" : "$indicator$value% than last $insightInterval",
+      "colorCode" : "#228B22",
+      "insightInterval" : "month"
+    },
+    "_comment": " "
+  },
   "_comment": "dss-collectionindex new queries ",
   "totalCollection": {
     "chartName": "DSS_TOTAL_COLLECTION",
