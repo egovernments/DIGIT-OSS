@@ -24,3 +24,8 @@ config:
       - work-dir: "egov-api-cron-job"
         image-name: "egov-api-cron-job"
         dockerfile: "build/python/Dockerfile"
+
+  - name: "builds/utilities/kuberhealthy-checks"
+    build:
+      - work-dir: "kuberhealthy-checks"
+        image-name: "kuberhealthy-checks"
