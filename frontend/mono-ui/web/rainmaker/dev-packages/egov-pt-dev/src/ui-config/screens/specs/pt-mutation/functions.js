@@ -1,11 +1,8 @@
 
+import { handleScreenConfigurationFieldChange as handleField, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSearchResults } from "../../../../ui-utils/commons";
-import { convertDateToEpoch } from "../utils/index";
-import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { validateFields, getTextToLocalMapping } from "../utils/index";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { convertDateToEpoch, getTextToLocalMapping, validateFields } from "../utils/index";
 
 export const propertySearch = async (state, dispatch) => {
   searchApiCall(state, dispatch, 0)
@@ -81,7 +78,6 @@ const searchApiCall = async (state, dispatch, index) => {
     );
     return;
   }
-
   let form1 = validateFields("components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails", state, dispatch, "propertySearch");
   let form2 = validateFields("components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails", state, dispatch, "propertySearch");
   // "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails"
@@ -107,40 +103,39 @@ const searchApiCall = async (state, dispatch, index) => {
     state,
     dispatch,
     "propertySearch"
-  );
+  ) || searchScreenObject.mobileNumber == '';
 
   const ispropertyTaxUniqueIdRowValid = validateFields(
     "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.propertyTaxUniqueId",
     state,
     dispatch,
     "propertySearch"
-  );
+  ) || searchScreenObject.ids == '';
 
   const isexistingPropertyIdRowValid = validateFields(
     "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.existingPropertyId",
     state,
     dispatch,
     "propertySearch"
-  );
-
+  ) || searchScreenObject.oldpropertyids == '';
   const ispropertyTaxApplicationNoRowValid = validateFields(
     "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.propertyTaxApplicationNo",
     state,
     dispatch,
     "propertySearch"
-  );
+  ) || searchScreenObject.acknowledgementIds == '';
   const ispropertyTaxApplicationOwnerNoRowValid = validateFields(
     "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.ownerMobNoProp",
     state,
     dispatch,
     "propertySearch"
-  );
+  ) || searchScreenObject.mobileNumber == '';
   const ispropertyTaxApplicationPidRowValid = validateFields(
     "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.applicationPropertyTaxUniqueId",
     state,
     dispatch,
     "propertySearch"
-  );
+  ) || searchScreenObject.ids == '';
 
 
 
