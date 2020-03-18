@@ -1517,6 +1517,196 @@
         }
       ]
     },
+    {
+      "name": "DSS_HOME_DASHBOARD",
+      "id": "homev2",
+      "isActive": "",
+      "style": "",
+      "title": "title",
+      "visualizations": [
+        {
+          "name": "DSS_OVERVIEW",
+          "row": 1,
+          "vizArray": [
+            {
+              "id": 111,
+              "name": "DSS_OVERVIEW",
+              "vizType": "collection",
+              "noUnit": true,
+              "isCollapsible": false,
+              "ref": {
+                "url": "overview",
+                "logoUrl": "",
+                "type": "internal"
+              },
+              "charts": [
+                {
+                  "id": "totalCollectionv2",
+                  "name": "DSS_TOTAL_COLLECTION",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                },
+                {
+                  "id": "targetAchievedv2",
+                  "name": "DSS_TARGET_ACHIEVED",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                },
+                {
+                  "id": "totalApplication",
+                  "name": "DSS_TOTAL_APPLICATION",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                },
+                {
+                  "id": "slaAchieved",
+                  "name": "DSS_SLA_ACHIEVED",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "row": 2,
+          "name": "DSS_OVERVIEW",
+          "vizArray": [
+            {
+              "id": 121,
+              "name": "DSS_PROPERTY_TAX",
+              "vizType": "module",
+              "moduleLevel": "PT",
+              "type": "",
+              "noUnit": false,
+              "isCollapsible": false,
+              "ref": {
+                "url": "propertytax",
+                "logoUrl": "",
+                "type": "internal"
+              },
+              "label": "",
+              "charts": [
+                {
+                  "id": "totalCollectionv2",
+                  "name": "DSS_TOTAL_COLLECTION",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                },
+                {
+                  "id": "propertiesAssessed",
+                  "name": "DSS_PT_TOTAL_PROPERTIES_ASSESSED",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                }
+              ]
+            },
+            {
+              "id": 141,
+              "name": "DSS_TRADE_LICENCE",
+              "vizType": "module",
+              "moduleLevel": "TL",
+              "ref": {
+                "url": "tradelicense",
+                "logoUrl": "",
+                "type": "internal"
+              },
+              "label": "",
+              "charts": [
+                {
+                  "id": "totalCollectionv2",
+                  "name": "DSS_TOTAL_COLLECTION",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                },
+                {
+                  "id": "totalApplication",
+                  "name": "DSS_TOTAL_APPLICATION",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                }
+              ]
+            },
+            {
+              "id": 141,
+              "name": "DSS_COMPLAINS",
+              "vizType": "module",
+              "moduleLevel": "PGR",
+              "ref": {
+                "url": "pgr",
+                "logoUrl": "",
+                "type": "internal"
+              },
+              "label": "",
+              "charts": [
+                {
+                  "id": "totalComplaints",
+                  "name": "DSS_PGR_TOTAL_COMPLAINTS",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                },
+                {
+                  "id": "slaAchieved",
+                  "name": "DSS_SLA_ACHIEVED",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                }
+              ]
+            },
+            {
+              "id": 142,
+              "name": "DSS_WATER_SEWERAGE",
+              "vizType": "module",
+              "moduleLevel": "W&S",
+              "ref": {
+                "url": "ws",
+                "logoUrl": "",
+                "type": "internal"
+              },
+              "label": "",
+              "charts": [
+                {
+                  "id": "wstotalCollection",
+                  "name": "DSS_WS_TOTAL_COLLECTION",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                },
+                {
+                  "id": "wstotalConnection",
+                  "name": "DSS_WS_TOTAL_CONNECTIONS",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
 
     {
       "name": "DSS_PGR_DASHBOARD",
@@ -3181,7 +3371,6 @@
             }
           ]
         },
-
         {
           "row": 4,
           "name": "DSS_REVENUE",
@@ -3228,8 +3417,16 @@
               "isCollapsible": true,
               "charts": [
                 {
+                  "id": "wstotalConnection",
+                  "name": "DSS_W&S_CONNECTIONS",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                },
+                {
                   "id": "wsNewWaterConnection",
-                  "name": "DSS_W&S_NEW_WATER_CONNECTIONS",
+                  "name": "DSS_W&S_WATER_CONNECTIONS",
                   "code": "",
                   "chartType": "metric",
                   "filter": "",
@@ -3237,7 +3434,7 @@
                 },
                 {
                   "id": "wsNewSewerageConnection",
-                  "name": "DSS_W&S_NEW_WATER_CONNECTIONS",
+                  "name": "DSS_W&S_SEWERAGE_CONNECTIONS",
                   "code": "",
                   "chartType": "metric",
                   "filter": "",
@@ -3602,8 +3799,16 @@
               "isCollapsible": true,
               "charts": [
                 {
+                  "id": "wstotalConnection",
+                  "name": "DSS_W&S_CONNECTIONS",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                },
+                {
                   "id": "wsNewWaterConnection",
-                  "name": "DSS_W&S_NEW_WATER_CONNECTIONS",
+                  "name": "DSS_W&S_WATER_CONNECTIONS",
                   "code": "",
                   "chartType": "metric",
                   "filter": "",
@@ -3611,7 +3816,7 @@
                 },
                 {
                   "id": "wsNewSewerageConnection",
-                  "name": "DSS_W&S_NEW_WATER_CONNECTIONS",
+                  "name": "DSS_W&S_SEWERAGE_CONNECTIONS",
                   "code": "",
                   "chartType": "metric",
                   "filter": "",
