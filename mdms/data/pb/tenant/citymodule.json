@@ -105,7 +105,7 @@
         {
           "code": "pb.amritsar"
         },
-	{
+	      {
           "code": "pb.jalandhar"
         }
       ]
@@ -121,6 +121,24 @@
         {
           "code": "pb.phagwara",
           "name": "Phagwara"
+        }
+      ]
+    },
+    {
+      "module": "UC",
+      "code": "UC",
+      "tenants": [
+        {
+          "code": "pb.jalandhar",
+	        "name": "Jalandhar"
+        },
+        {
+          "code": "pb.phagwara",
+          "name": "Phagwara"
+        },
+        {
+          "code": "pb.amritsar",
+          "name": "Amritsar"
         }
       ]
     }
