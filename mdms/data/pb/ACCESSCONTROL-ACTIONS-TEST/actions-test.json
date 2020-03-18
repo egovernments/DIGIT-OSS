@@ -13721,17 +13721,17 @@
     },
     {
       "id": 1761,
-      "name": "budgetAdditionalAppropriation_Master",
+      "name": "Budget Additional Appropriation",
       "navigationURL": "services/EGF/budget/budgetReAppropriation.action",
       "url": "url",
       "parentModule": "EGF",
-      "displayName": "Add/Release",
-      "orderNumber": 4,
+      "displayName": "Budget Additional Appropriation",
+      "orderNumber": 3,
       "enabled": true,
       "serviceCode": "FinanceBudget",
       "code": "null",
       "leftIcon": "editor:insert-chart",
-      "path": "Finance.Budgeting.Budget Addition Appropriation.budgetAdditionalAppropriation_Master"
+      "path": "Finance.Budgeting.Budget Additional Appropriation"
     },
     {
       "id": 1762,
