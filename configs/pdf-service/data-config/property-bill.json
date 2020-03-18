@@ -353,7 +353,7 @@
               {
                 "variable": "consumer_id",
                 "value": {
-                  "path": "$.consumerCode"
+                  "path": "$.businessService"
                 },
                 "localisation":{
                   "required":true,
