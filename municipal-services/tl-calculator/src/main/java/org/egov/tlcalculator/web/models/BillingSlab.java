@@ -36,6 +36,9 @@ public class BillingSlab {
 
 	@JsonProperty("licenseType")
 	private LicenseTypeEnum licenseType = null;
+	
+	@JsonProperty("applicationType")
+	private String applicationType = null;
 
 	@JsonProperty("structureType")
 	@Size(min = 2, max = 64)

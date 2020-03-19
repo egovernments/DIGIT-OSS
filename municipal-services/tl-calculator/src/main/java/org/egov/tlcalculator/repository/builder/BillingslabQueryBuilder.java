@@ -52,6 +52,11 @@ public class BillingslabQueryBuilder {
 			queryBuilder.append(" AND (licensetype = ? OR licensetype = 'ALL')");
 			preparedStmtList.add(billingSlabSearcCriteria.getLicenseType());
 		}
+		
+		if (!StringUtils.isEmpty(billingSlabSearcCriteria.getApplicationType())) {
+			queryBuilder.append(" AND applicationtype = ? ");
+			preparedStmtList.add(billingSlabSearcCriteria.getApplicationType());
+		}
 
 		if (!StringUtils.isEmpty(billingSlabSearcCriteria.getStructureType())) {
 			queryBuilder.append(" AND (structuretype = ? OR structuretype = 'ALL')");
