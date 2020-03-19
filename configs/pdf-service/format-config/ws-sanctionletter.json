@@ -963,7 +963,7 @@
             "ws-consumer-sub-header": {
                 "color": "#000000",
                 "fontSize": 12,
-                "fontWeight": 400
+                "fontWeight": 500
             },
             "receipt-value-down": {
                 "color": "#000000",
