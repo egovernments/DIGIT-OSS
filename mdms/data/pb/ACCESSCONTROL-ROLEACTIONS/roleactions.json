@@ -20437,6 +20437,30 @@
       "actionid": 1972,
       "actioncode": "",
       "tenantId": "pb"
+    },
+    {
+      "rolecode": "EGF_REPORT_VIEW",
+      "actionid": 1973,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 1973,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "EGF_REPORT_VIEW",
+      "actionid": 1974,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 1974,
+      "actioncode": "",
+      "tenantId": "pb"
     }
   ]
 }

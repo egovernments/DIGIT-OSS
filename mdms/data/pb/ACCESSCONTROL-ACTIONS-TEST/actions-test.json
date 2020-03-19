@@ -16382,6 +16382,34 @@
       "serviceCode": "DSS",
       "code": "null",
       "path": ""
+    },
+    {
+      "id": 1973,
+      "name": "Surrendered Cheque",
+      "url": "url",
+      "parentModule": "",
+      "displayName": "Surrendered Cheque",
+      "orderNumber": 6,
+      "enabled": true,
+      "serviceCode": "FinanceReport",
+      "code": "null",
+      "leftIcon": "editor:insert-chart",
+      "path": "Finance.Reports.MIS Reports.Surrendered Cheque",
+      "navigationURL": "services/EGF/report/cheque/surrendered/form"
+    },
+    {
+      "id": 1974,
+      "name": "Remittance Collection Report",
+      "url": "url",
+      "parentModule": "",
+      "displayName": "Remittance Collection Report",
+      "orderNumber": 6,
+      "enabled": true,
+      "serviceCode": "FinanceReport",
+      "code": "null",
+      "leftIcon": "editor:insert-chart",
+      "path": "Finance.Reports.Revenue Reports.Remittance Collection Report",
+      "navigationURL": "services/EGF/report/remittance/collection/form"
     }
   ]
 }
