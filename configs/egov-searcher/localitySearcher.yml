@@ -76,3 +76,26 @@ SearchDefinitions:
       jsonFormat: {"ResponseInfo": {}}
       outJsonPath: $.Localities
       responseInfoPath: $.ResponseInfo
+
+  - name: bpa-services
+    query:
+      baseQuery: |
+        Select row_to_json(result) from
+        (
+          select applicationNo as referenceNumber,locality from eg_bpa_buildingplan bpa
+          INNER JOIN eg_bpa_address ad ON ad.buildingplanid = bpa.id
+        ) result  $where
+      groupBy:
+      orderBy:
+    searchParams:
+      condition: AND
+      params:
+      - name: result.referenceNumber
+        isMandatory: true
+        jsonPath: $.searchCriteria.referenceNumber
+        operator: 
+
+    output:
+      jsonFormat: {"ResponseInfo": {}}
+      outJsonPath: $.Localities
+      responseInfoPath: $.ResponseInfo
