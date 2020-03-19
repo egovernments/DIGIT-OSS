@@ -102,7 +102,7 @@ public class StorageController {
 			@RequestParam(value = "module", required = true) String module,
 			@RequestParam(value = "tag", required = false) String tag) {
 		
-		Map<String, String> allowedFormatsMap = fileStoreConfig.getAllowedFormatsMap();
+		Map<String, List<String>> allowedFormatsMap = fileStoreConfig.getAllowedFormatsMap();
 		Set<String> keySet = fileStoreConfig.getAllowedKeySet();
 		String inputStreamAsString = null;
 		String inputFormat = null;
@@ -127,7 +127,7 @@ public class StorageController {
 			
 			
 			
-			if (!allowedFormatsMap.get(extension).equalsIgnoreCase(inputFormat)) {
+			if (!allowedFormatsMap.get(extension).contains(inputFormat)) {
 				throw new CustomException("EG_FILESTORE_INVALID_INPUT", "Inalvid input provided for file, the extension does not match the file format. Please upload any of the allowed formats : "
 								+ keySet);
 			}

@@ -19,7 +19,7 @@ public class FileStoreConfig {
 	private String imageCharsetType;
 	
 	@Value("#{${allowed.formats.map}}")
-	private Map<String,String> allowedFormatsMap;
+	private Map<String,List<String>> allowedFormatsMap;
 	
 	private Set<String> allowedKeySet;
 	
