@@ -1426,7 +1426,7 @@
                                                 "style": "ws-sub-table"
                                             },
                                             {
-                                                "text": "plumber_mobile_no",
+                                                "text": "{{plumber_mobile_no}}",
                                                 "border": [
                                                     false,
                                                     false,

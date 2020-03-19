@@ -57,13 +57,13 @@
               {
                 "variable": "propertyType",
                 "value": {
-                  "path": "$.property.address.propertyType"
+                  "path": "$.property.propertyType"
                 }
               },
               {
                 "variable": "propertyUsageType",
                 "value": {
-                  "path": "$.property.owners.usageCategory"
+                  "path": "$.property.usageCategory"
                 }
               },
               {
@@ -81,7 +81,7 @@
               {
                 "variable": "noOfFloor",
                 "value": {
-                  "path": "$.property.address.noOfFloors"
+                  "path": "$.property.noOfFloors"
                 }
               },
               {
@@ -154,13 +154,13 @@
               {
                 "variable": "guardianName",
                 "value": {
-                  "path": "$.property.owners[0].roles.fatherOrHusbandName"
+                  "path": "$.property.owners[0].fatherOrHusbandName"
                 }
               },
               {
                 "variable": "relationshipLabel",
                 "value": {
-                  "path": "$.property.owners[0].roles.relationship"
+                  "path": "$.property.owners[0].relationship"
                 }
               },
               {
@@ -479,7 +479,7 @@
               {
                 "variable": "property_id",
                 "value": {
-                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_PROPERTY_TYPE"
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_PROPERTY_ID"
                 },
                 "type": "label",
                 "localisation": {
