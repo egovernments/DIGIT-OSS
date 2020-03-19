@@ -761,10 +761,10 @@ export const tradeDetails = getCommonCard({
             xs: 12,
             sm: 6
           },
-          visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
-          props: {
-            disabled: true
-          }
+          // visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
+          // props: {
+          //   disabled: true
+          // }
         })
       },
       applicationType: {
