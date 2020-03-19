@@ -20461,6 +20461,42 @@
       "actionid": 1974,
       "actioncode": "",
       "tenantId": "pb"
+    },
+    {
+      "rolecode": "BPA_VERIFIER",
+      "actionid": 1975,
+      "actioncode": "",
+      "tenantId": "bh"
+    },
+    {
+      "rolecode": "BPA_FIELD_INSPECTOR",
+      "actionid": 1975,
+      "actioncode": "",
+      "tenantId": "bh"
+    },
+    {
+      "rolecode": "BPA_NOC_VERIFIER",
+      "actionid": 1975,
+      "actioncode": "",
+      "tenantId": "bh"
+    },
+    {
+      "rolecode": "BPA_APPROVER",
+      "actionid": 1975,
+      "actioncode": "",
+      "tenantId": "bh"
+    },
+    {
+      "rolecode": "BPAREG_APPROVER",
+      "actionid": 1976,
+      "actioncode": "",
+      "tenantId": "bh"
+    },
+    {
+      "rolecode": "BPAREG_DOC_VERIFIER",
+      "actionid": 1976,
+      "actioncode": "",
+      "tenantId": "bh"
     }
   ]
 }

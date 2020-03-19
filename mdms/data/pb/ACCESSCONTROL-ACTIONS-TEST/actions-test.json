@@ -16335,7 +16335,7 @@
       "code": "null",
       "path": ""
     },
-     {
+    {
       "id": 1969,
       "name": "Reopening Closed Period",
       "url": "url",
@@ -16410,6 +16410,28 @@
       "leftIcon": "editor:insert-chart",
       "path": "Finance.Reports.Revenue Reports.Remittance Collection Report",
       "navigationURL": "services/EGF/report/remittance/collection/form"
+    },
+    {
+      "id": 1975,
+      "name": "Locality searcher endpoint for BPA",
+      "url": "/egov-searcher/locality/bpa-services/_get",
+      "displayName": "BPA locality searcher",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "egov-searcher",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1976,
+      "name": "Locality searcher endpoint for BPA",
+      "url": "/egov-searcher/locality/BPAREG/_get",
+      "displayName": "BPA locality searcher",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "egov-searcher",
+      "code": "null",
+      "path": ""
     }
   ]
 }
