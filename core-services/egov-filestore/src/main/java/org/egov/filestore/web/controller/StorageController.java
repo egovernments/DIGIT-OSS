@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
@@ -101,15 +102,15 @@ public class StorageController {
 			@RequestParam(value = "module", required = true) String module,
 			@RequestParam(value = "tag", required = false) String tag) {
 		
-		List<String> allowedFormats = fileStoreConfig.getAllowedFileFormats();
-		List<String> allowedTikaFormats = fileStoreConfig.getAllowedTikaFormats();
+		Map<String, String> allowedFormatsMap = fileStoreConfig.getAllowedFormatsMap();
+		Set<String> keySet = fileStoreConfig.getAllowedKeySet();
 		String inputStreamAsString = null;
 		String inputFormat = null;
 		for(MultipartFile file : files) {
 			
 			String extension = FilenameUtils.getExtension(file.getOriginalFilename());
-			if(!allowedFormats.contains(extension)) {
-				throw new CustomException("EG_FILESTORE_INVALID_INPUT","Inalvid input provided for file : " + extension + ", please upload any of the allowed formats : " + allowedFormats);
+			if(!allowedFormatsMap.containsKey(extension)) {
+				throw new CustomException("EG_FILESTORE_INVALID_INPUT","Inalvid input provided for file : " + extension + ", please upload any of the allowed formats : " + keySet);
 			}
 			Tika tika = new Tika();
 			
@@ -126,9 +127,9 @@ public class StorageController {
 			
 			
 			
-			if (!allowedTikaFormats.contains(inputFormat)) {
-				throw new CustomException("EG_FILESTORE_INVALID_INPUT", "Inalvid input provided for file, please upload any of the allowed formats : "
-								+ allowedFormats);
+			if (!allowedFormatsMap.get(extension).equalsIgnoreCase(inputFormat)) {
+				throw new CustomException("EG_FILESTORE_INVALID_INPUT", "Inalvid input provided for file, the extension does not match the file format. Please upload any of the allowed formats : "
+								+ keySet);
 			}
 		}
 

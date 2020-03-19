@@ -1,6 +1,10 @@
 package org.egov.filestore.config;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -14,9 +18,13 @@ public class FileStoreConfig {
 	@Value("${image.charset.type}")
 	private String imageCharsetType;
 	
-	@Value("#{'${allowed.file.formats}'.split(',')}")
-	private List<String> allowedFileFormats;
+	@Value("#{${allowed.formats.map}}")
+	private Map<String,String> allowedFormatsMap;
 	
-	@Value("#{'${allowed.tika.formats}'.split(',')}")
-	private List<String> allowedTikaFormats;
+	private Set<String> allowedKeySet;
+	
+	@PostConstruct
+	private void enrichKeysetForFormats() {
+		allowedKeySet = allowedFormatsMap.keySet();
+	}
 }
