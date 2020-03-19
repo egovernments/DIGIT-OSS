@@ -174,6 +174,7 @@ public class PropertyService {
 		
 		propertyValidator.validateMutation(request, propertyFromSearch);
 		userService.createUser(request);
+		calculatorService.calculateMutationFee(request.getRequestInfo(), request.getProperty());
 		enrichmentService.enrichMutationRequest(request, propertyFromSearch);
 		
 		// TODO FIX ME block property changes FIXME
@@ -221,7 +222,6 @@ public class PropertyService {
 			 */
 			producer.push(config.getUpdatePropertyTopic(), request);
 		}
-		calculatorService.calculateMutationFee(request.getRequestInfo(), request.getProperty());
 	}
 
 	private void terminateWorkflowAndReInstatePreviousRecord(PropertyRequest request, Property propertyFromSearch) {
