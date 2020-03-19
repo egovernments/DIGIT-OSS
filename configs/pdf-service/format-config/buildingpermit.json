@@ -199,25 +199,42 @@
           "body": [
             [
               {
-                "text" : "{{FEE_DSCR}}",
-                "alignment" : "center",
-                "bold" : true
+                "text": "Fee Description",
+                "bold": true
               },
               {
-                "text" : "{{AMOUNT}}",
-                "bold" : true,
-                "alignment" : "right"
+                "text": "Amount (Rs)",
+                "bold": true,
+                "alignment": "right"
               }
             ],
-            "{{#paymentDetails}}[{ \"text\":\"{{headCode}}\", \"border\":[ true, true, true, true ],\"alignment\": \"center\"},{ \"text\":\"{{amnt}}\", \"border\":[ true, true, true, true ],\"alignment\": \"right\"}]{{/paymentDetails}}",
             [
               {
-                "text" : "{{TOTAL}}",
-                "alignment" : "center"
+                "text": "{{appHeadCode}}"
               },
               {
-                "text" : "{{totalDue}}",
-                "alignment" : "right"
+                "text": "{{appFee}}",
+                "alignment": "right"
+              }
+            ],
+            [
+              {
+                "text": "{{sanHeadCode}}"
+              },
+              {
+                "text": "{{sanFee}}",
+                "alignment": "right"
+              }
+            ],
+            [
+              {
+                "text": "Total",
+                "bold": true
+              },
+              {
+                "text": "{{totalDue}}",
+                "bold": true,
+                "alignment": "right"
               }
             ]
           ]
