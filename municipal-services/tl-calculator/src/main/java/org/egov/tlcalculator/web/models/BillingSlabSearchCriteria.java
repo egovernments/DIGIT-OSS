@@ -33,6 +33,9 @@ public class BillingSlabSearchCriteria {
 	@JsonProperty("applicationType")
 	private String applicationType;
 
+	@JsonProperty("applicationType")
+	private String applicationType;
+
 	@JsonProperty("structureType")
 	private String structureType;
 

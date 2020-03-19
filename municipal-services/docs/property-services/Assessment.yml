@@ -1,0 +1,321 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: eGov Property Assessment System.
+  description: |
+    APIs for Property Tax module. This modules handles assessment of new properties, changes to existing properties (Detail Updates, division of property, etc.),  search of required properties and property tax.
+  contact:
+    name: Egovernments Foundation
+    email: contact@egovernments.org
+x-module: PT
+x-common-path: 'https://raw.githubusercontent.com/egovernments/egov-services/PT_APPLY_PAY/docs/common/contracts/v1-1-1.yml'
+paths:
+  /assessment/_create:
+    post:
+      summary: Creates assessment object.
+      description: API to create assessment for the given constructionDetailNumber and financialYear. Creating assessment will result in generation of demand for the given financial year
+      x-roles: 'PT_CEMP,CITIZEN'
+      responses:
+        '201':
+          description: Assessment created sucessfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AssessmentResponse'
+        '400':
+          description: Assessment creation failed
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/PT_APPLY_PAY/docs/common/contracts/v1-1-1.yml#/components/schemas/ErrorRes'
+      tags:
+        - Assessment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssessmentRequest'
+        description: Details for the new assessment + RequestHeader meta data.
+        required: true
+        
+        
+  /assessment/_update:
+    post:
+      summary: Updates existing assessment.
+      description: The update API is used to reassess the constructionDetail for the given financial year. Updating assessment will update the demand for the given financial year
+      x-roles: 'PT_CEMP,CITIZEN'
+      tags:
+        - Assessment
+      responses:
+        '200':
+          description: Assessment details updated successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AssessmentResponse'
+        '400':
+          description: Failed to update Assessment details
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/PT_APPLY_PAY/docs/common/contracts/v1-1-1.yml#/components/schemas/ErrorRes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssessmentRequest'
+        description: Request header for the assessment Request.
+        required: true
+        
+        
+  /assessment/_search:
+    post:
+      summary: Get the list of assessment defined in the system.
+      description: |
+        Get the assessment list based on the input parameters.
+      x-roles: 'PT_CEMP,CITIZEN'
+      parameters:
+        - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/PT_APPLY_PAY/docs/common/contracts/v1-1-1.yml#/components/parameters/tenantId'
+        - name: propertyIds
+          in: query
+          description: List of system generated ids of properties.
+          required: false
+          schema:
+            type: string
+            format: varchar
+        - name: assessmentNumbers
+          in: query
+          description: List of system assessment ids of properties.
+          required: false
+          schema:
+            type: string
+            format: varchar
+        - name: financialYear
+          in: query
+          description: The financial Year of the assessment
+          required: false
+          schema:
+            type: string
+            format: varchar
+        - name: fromDate
+          in: query
+          description: Fetches assessments with created time after fromDate.
+          required: false
+          schema:
+            type: number
+        - name: toDate
+          in: query
+          description: Fetches assessments with created time till toDate.
+          required: false
+          schema:
+            type: number
+        - name: status
+          in: query
+          description: List of system assessment ids of properties.
+          required: false
+          schema:
+            type: string
+            format: varchar
+            
+      responses:
+        '200':
+          description: Successful response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AssessmentResponse'
+        '400':
+          description: Invalid input.
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/PT_APPLY_PAY/docs/common/contracts/v1-1-1.yml#/components/schemas/ErrorRes'
+      tags:
+        - Assessment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/PT_APPLY_PAY/docs/common/contracts/v1-1-1.yml#/components/schemas/RequestHeader'
+        description: RequestHeader meta data.
+        required: true
+        
+        
+  /assessment/_delete:
+    post:
+      summary: Delete existing assessment details
+      description: Deletes  assessment detials  based on assessment number from the system.
+      x-roles: PT_ADMIN
+      tags:
+        - Assessment
+      responses:
+        '200':
+          description: deleted assessment successful
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AssessmentResponse'
+        '404':
+          description: Assessment details not found
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/PT_APPLY_PAY/docs/common/contracts/v1-1-1.yml#/components/schemas/ErrorRes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssessmentRequest'
+        description: Request header for the assessment Request.
+        required: true
+        
+        
+  /assessment/_cancel:
+    post:
+      summary: Deactivates/Cancels existing assessment.
+      description: Deactivates/Cancels based on the given assessment number
+      x-roles: PT_ADMIN
+      tags:
+        - Assessment
+      responses:
+        '200':
+          description: Deactivates/Cancels assessment successful
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AssessmentResponse'
+        '400':
+          description: Deactivation of assessment failed
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/PT_APPLY_PAY/docs/common/contracts/v1-1-1.yml#/components/schemas/ErrorRes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssessmentRequest'
+        description: Request header for the assessment cancel/deactivate Request.
+        required: true
+        
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: 'https://virtserver.swaggerhub.com/egovernmets-faoundat/PT-2.0/1.0.0'
+  - url: 'https://egov-micro-dev.egovernments.org'
+components:
+  schemas:
+    Assessment:
+      type: object
+      description: Contains the assessment details of a constructionDetail. Assessment refers to the calculation of  property tax for the given constructionDetail number and financial year
+      properties:
+        tenantId:
+          type: string
+          description: The tenantId of the constructionDetail for which assessment is done
+        assessmentNumber:
+          type: string
+          description: The assessment number generated by the system for the given assessment details
+        propertyId:
+          type: string
+          description: The propertyId against which assessment is done
+        financialYear:
+          type: string
+          description: The financialYear of the assessmnet
+        assessmentDate:
+          type: number
+          description: epoch date of the assessment
+        source:
+          type: string
+          enum:
+            - MUNICIPAL_RECORDS
+            - WEBAPP
+            - MOBILEAPP
+            - FIELD_SURVEY
+        channel:
+          type: string
+          enum:
+            - SYSTEM
+            - CFC_COUNTER
+            - CITIZEN
+            - DATA_ENTRY
+            - MIGRATION
+        status:
+          type: string
+          enum:
+            - ACTIVE
+            - INACTIVE
+            - CANCELED
+        documents:
+          description: The documents attached by owner for exemption.
+          type: array
+          items:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/PT_APPLY_PAY/docs/common/contracts/v1-1-1.yml#/components/schemas/Document'
+        unitUsageList:
+          description: The documents attached by owner for exemption.
+          type: array
+          items:
+           $ref: '#/components/schemas/UnitUsage'
+        additionalDetails:
+          type: object
+          description: Json object to capture any extra information which is not accommodated of model
+        auditDetails:
+          $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/PT_APPLY_PAY/docs/common/contracts/v1-1-1.yml#/components/schemas/AuditDetails'
+      required:
+        - tenantId
+        - constructionDetailNumber
+        - financialYear
+        - propertyId
+        - assessmentDate
+        - source
+        - channel
+        
+    AssessmentRequest:
+      description: The request to create or update an assessment. Contains the RequestHeader and the assessment details
+      properties:
+        RequestHeader:
+          $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/PT_APPLY_PAY/docs/common/contracts/v1-1-1.yml#/components/schemas/RequestHeader'
+        Assessment:
+          $ref: '#/components/schemas/Assessment'
+          
+    AssessmentResponse:
+      description: The response of create or update of assessment. Contains the ResponseHeader and created/updated assessment
+      properties:
+        RequestHeader:
+          $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/PT_APPLY_PAY/docs/common/contracts/v1-1-1.yml#/components/schemas/ResponseHeader'
+        Assessment:
+          $ref: '#/components/schemas/Assessment'
+          
+    UnitUsage:
+      type: object
+      properties:
+        unitId:
+          type: string
+          description: Unique Identifier of the Unit(UUID).
+        usageCategory:
+          type: string
+          description: 'This is about the usage of the property like Residential, Non-residential, Mixed(Property witch is gettiong used for Residential, Non-residential purpose)'
+          maxLength: 64
+          minLength: 1
+        occupancyType:
+          type: string
+          description: Value denoting if the unit is rented or occupied by owner
+          enum:
+            - OWNER
+            - TENANT
+          maxLength: 64
+          minLength: 1
+        occupancyDate:
+          type: number
+          format: int64
+          description: Date on which unit is occupied.
+        tenantId:
+          type: string
+          description: tenant id of the Property
+          maxLength: 256
+          minLength: 2
+        additionalDetails:
+          type: object
+          description: Json object to capture any extra information which is not accommodated by model
+      required:
+        - tenantId
+        - occupancyType
+        - occupancyDate

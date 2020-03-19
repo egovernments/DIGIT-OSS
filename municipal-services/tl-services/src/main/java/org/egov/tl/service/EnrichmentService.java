@@ -14,6 +14,7 @@ import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import com.jayway.jsonpath.JsonPath;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -48,54 +49,77 @@ public class EnrichmentService {
      */
     public void enrichTLCreateRequest(TradeLicenseRequest tradeLicenseRequest,Object mdmsData) {
         RequestInfo requestInfo = tradeLicenseRequest.getRequestInfo();
-        AuditDetails auditDetails = tradeUtil.getAuditDetails(requestInfo.getUserInfo().getUuid(), true);
+        String uuid = requestInfo.getUserInfo().getUuid();
+        AuditDetails auditDetails = tradeUtil.getAuditDetails(uuid, true);
         tradeLicenseRequest.getLicenses().forEach(tradeLicense -> {
             tradeLicense.setAuditDetails(auditDetails);
             tradeLicense.setId(UUID.randomUUID().toString());
             tradeLicense.setApplicationDate(auditDetails.getCreatedTime());
             tradeLicense.getTradeLicenseDetail().setId(UUID.randomUUID().toString());
             tradeLicense.getTradeLicenseDetail().setAuditDetails(auditDetails);
-
-            Map<String,Long> taxPeriods = tradeUtil.getTaxPeriods(tradeLicense,mdmsData);
-            if(tradeLicense.getLicenseType().equals(TradeLicense.LicenseTypeEnum.PERMANENT) || tradeLicense.getValidTo()==null)
-                tradeLicense.setValidTo(taxPeriods.get(TLConstants.MDMS_ENDDATE));
-            
-
+            String businessService = tradeLicense.getBusinessService();
+            if (businessService == null)
+            {
+                businessService = businessService_TL;
+                tradeLicense.setBusinessService(businessService);
+            }
+            switch (businessService) {
+                case businessService_TL:
+                    //TLR Changes
+                    if(tradeLicense.getApplicationType() != null && tradeLicense.getApplicationType().toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL)){
+                        tradeLicense.setLicenseNumber(tradeLicenseRequest.getLicenses().get(0).getLicenseNumber());
+                        Map<String, Long> taxPeriods = tradeUtil.getTaxPeriods(tradeLicense, mdmsData);
+                        tradeLicense.setValidTo(taxPeriods.get(TLConstants.MDMS_ENDDATE));
+                        tradeLicense.setValidFrom(taxPeriods.get(TLConstants.MDMS_STARTDATE));
+                    }else{
+                        Map<String, Long> taxPeriods = tradeUtil.getTaxPeriods(tradeLicense, mdmsData);
+                        if (tradeLicense.getLicenseType().equals(TradeLicense.LicenseTypeEnum.PERMANENT) || tradeLicense.getValidTo() == null)
+                            tradeLicense.setValidTo(taxPeriods.get(TLConstants.MDMS_ENDDATE));
+                            tradeLicense.setValidFrom(taxPeriods.get(TLConstants.MDMS_STARTDATE));
+                    }
+                    if (!CollectionUtils.isEmpty(tradeLicense.getTradeLicenseDetail().getAccessories()))
+                        tradeLicense.getTradeLicenseDetail().getAccessories().forEach(accessory -> {
+                            accessory.setTenantId(tradeLicense.getTenantId());
+                            accessory.setId(UUID.randomUUID().toString());
+                            accessory.setActive(true);
+                        });
+                    break;
+            }
             tradeLicense.getTradeLicenseDetail().getAddress().setTenantId(tradeLicense.getTenantId());
             tradeLicense.getTradeLicenseDetail().getAddress().setId(UUID.randomUUID().toString());
-
-            if(!CollectionUtils.isEmpty(tradeLicense.getTradeLicenseDetail().getAccessories()))
-                tradeLicense.getTradeLicenseDetail().getAccessories().forEach(accessory -> {
-                    accessory.setTenantId(tradeLicense.getTenantId());
-                    accessory.setId(UUID.randomUUID().toString());
-                    accessory.setActive(true);
-                });
-
-
             tradeLicense.getTradeLicenseDetail().getTradeUnits().forEach(tradeUnit -> {
                 tradeUnit.setTenantId(tradeLicense.getTenantId());
                 tradeUnit.setId(UUID.randomUUID().toString());
                 tradeUnit.setActive(true);
             });
 
-            if(tradeLicense.getAction().equalsIgnoreCase(ACTION_APPLY))
-            {
+            if (tradeLicense.getAction().equalsIgnoreCase(ACTION_APPLY)) {
                 tradeLicense.getTradeLicenseDetail().getApplicationDocuments().forEach(document -> {
                     document.setId(UUID.randomUUID().toString());
                     document.setActive(true);
                 });
             }
+            
+            if(tradeLicense.getApplicationType() !=null && tradeLicense.getApplicationType().toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL)){
+                if(tradeLicense.getAction().equalsIgnoreCase(ACTION_APPLY) || tradeLicense.getAction().equalsIgnoreCase(TLConstants.TL_ACTION_INITIATE)){
+                    tradeLicense.getTradeLicenseDetail().getApplicationDocuments().forEach(document -> {
+                        document.setId(UUID.randomUUID().toString());
+                        document.setActive(true);
+                    });
+                }
+                               
+            }
 
             tradeLicense.getTradeLicenseDetail().getOwners().forEach(owner -> {
                 owner.setUserActive(true);
-                if(!CollectionUtils.isEmpty(owner.getDocuments()))
+                if (!CollectionUtils.isEmpty(owner.getDocuments()))
                     owner.getDocuments().forEach(document -> {
                         document.setId(UUID.randomUUID().toString());
                         document.setActive(true);
                     });
             });
 
-            if(tradeLicense.getTradeLicenseDetail().getSubOwnerShipCategory().contains(config.getInstitutional())){
+            if (tradeLicense.getTradeLicenseDetail().getSubOwnerShipCategory().contains(config.getInstitutional())) {
                 tradeLicense.getTradeLicenseDetail().getInstitution().setId(UUID.randomUUID().toString());
                 tradeLicense.getTradeLicenseDetail().getInstitution().setActive(true);
                 tradeLicense.getTradeLicenseDetail().getInstitution().setTenantId(tradeLicense.getTenantId());
@@ -104,13 +128,20 @@ public class EnrichmentService {
                 });
             }
 
-            if(requestInfo.getUserInfo().getType().equalsIgnoreCase("CITIZEN"))
+            if (requestInfo.getUserInfo().getType().equalsIgnoreCase("CITIZEN"))
                 tradeLicense.setAccountId(requestInfo.getUserInfo().getUuid());
 
         });
         setIdgenIds(tradeLicenseRequest);
         setStatusForCreate(tradeLicenseRequest);
-        boundaryService.getAreaType(tradeLicenseRequest,config.getHierarchyTypeCode());
+        String businessService = tradeLicenseRequest.getLicenses().isEmpty()?null:tradeLicenseRequest.getLicenses().get(0).getBusinessService();
+        if (businessService == null)
+            businessService = businessService_TL;
+        switch (businessService) {
+            case businessService_TL:
+                boundaryService.getAreaType(tradeLicenseRequest, config.getHierarchyTypeCode());
+                break;
+        }
     }
 
 
@@ -145,8 +176,19 @@ public class EnrichmentService {
         RequestInfo requestInfo = request.getRequestInfo();
         String tenantId = request.getLicenses().get(0).getTenantId();
         List<TradeLicense> licenses = request.getLicenses();
+        String businessService = licenses.isEmpty() ? null : licenses.get(0).getBusinessService();
+        if (businessService == null)
+            businessService = businessService_TL;
+        List<String> applicationNumbers = null;
+        switch (businessService) {
+            case businessService_TL:
+                applicationNumbers = getIdList(requestInfo, tenantId, config.getApplicationNumberIdgenNameTL(), config.getApplicationNumberIdgenFormatTL(), request.getLicenses().size());
+                break;
 
-        List<String> applicationNumbers = getIdList(requestInfo, tenantId, config.getApplicationNumberIdgenName(), config.getApplicationNumberIdgenFormat(), request.getLicenses().size());
+            case businessService_BPA:
+                applicationNumbers = getIdList(requestInfo, tenantId, config.getApplicationNumberIdgenNameBPA(), config.getApplicationNumberIdgenFormatBPA(), request.getLicenses().size());
+                break;
+        }
         ListIterator<String> itr = applicationNumbers.listIterator();
 
         Map<String, String> errorMap = new HashMap<>();
@@ -188,6 +230,7 @@ public class EnrichmentService {
         licenses.forEach(license -> ids.add(license.getId()));
         criteria.setIds(ids);
         criteria.setTenantId(licenses.get(0).getTenantId());
+        criteria.setBusinessService(licenses.get(0).getBusinessService());
         return criteria;
     }
 
@@ -197,7 +240,7 @@ public class EnrichmentService {
      * @param criteria TradeLicense search criteria
      * @param licenses The tradeLicense whose owners are to be enriched
      */
-    public TradeLicenseSearchCriteria enrichTLSearchCriteriaWithOwnerids(TradeLicenseSearchCriteria criteria, List<TradeLicense> licenses){
+    public TradeLicenseSearchCriteria enrichTLSearchCriteriaWithOwnerids(TradeLicenseSearchCriteria criteria, List<TradeLicense> licenses) {
         TradeLicenseSearchCriteria searchCriteria = new TradeLicenseSearchCriteria();
         searchCriteria.setTenantId(criteria.getTenantId());
         Set<String> ownerids = new HashSet<>();
@@ -208,7 +251,7 @@ public class EnrichmentService {
       /*  licenses.forEach(tradeLicense -> {
             ownerids.add(tradeLicense.getCitizenInfo().getUuid());
             });*/
-
+        searchCriteria.setBusinessService(licenses.get(0).getBusinessService());
         searchCriteria.setOwnerIds(new ArrayList<>(ownerids));
         return searchCriteria;
     }
@@ -222,7 +265,7 @@ public class EnrichmentService {
     public void enrichBoundary(TradeLicenseRequest tradeLicenseRequest){
         List<TradeLicenseRequest> requests = getRequestByTenantId(tradeLicenseRequest);
         requests.forEach(tenantWiseRequest -> {
-            boundaryService.getAreaType(tenantWiseRequest,config.getHierarchyTypeCode());
+           boundaryService.getAreaType(tenantWiseRequest,config.getHierarchyTypeCode());
         });
     }
 
@@ -288,12 +331,23 @@ public class EnrichmentService {
      * Sets status for create request
      * @param tradeLicenseRequest The create request
      */
-    private void setStatusForCreate(TradeLicenseRequest tradeLicenseRequest){
+    private void setStatusForCreate(TradeLicenseRequest tradeLicenseRequest) {
         tradeLicenseRequest.getLicenses().forEach(license -> {
-            if(license.getAction().equalsIgnoreCase(ACTION_INITIATE))
-                license.setStatus(STATUS_INITIATED);
-            if(license.getAction().equalsIgnoreCase(ACTION_APPLY))
-                license.setStatus(STATUS_APPLIED);
+            String businessService = tradeLicenseRequest.getLicenses().isEmpty()?null:tradeLicenseRequest.getLicenses().get(0).getBusinessService();
+            if (businessService == null)
+                businessService = businessService_TL;
+            switch (businessService) {
+                case businessService_TL:
+                    if (license.getAction().equalsIgnoreCase(ACTION_INITIATE))
+                        license.setStatus(STATUS_INITIATED);
+                    if (license.getAction().equalsIgnoreCase(ACTION_APPLY))
+                        license.setStatus(STATUS_APPLIED);
+                    break;
+
+                case businessService_BPA:
+                    license.setStatus(STATUS_INITIATED);
+                    break;
+            }
         });
     }
 
@@ -302,15 +356,21 @@ public class EnrichmentService {
      * Enriches the update request
      * @param tradeLicenseRequest The input update request
      */
-    public void enrichTLUpdateRequest(TradeLicenseRequest tradeLicenseRequest,BusinessService businessService){
+    public void enrichTLUpdateRequest(TradeLicenseRequest tradeLicenseRequest, BusinessService businessService){
         RequestInfo requestInfo = tradeLicenseRequest.getRequestInfo();
         AuditDetails auditDetails = tradeUtil.getAuditDetails(requestInfo.getUserInfo().getUuid(), false);
         tradeLicenseRequest.getLicenses().forEach(tradeLicense -> {
             tradeLicense.setAuditDetails(auditDetails);
-            if(workflowService.isStateUpdatable(tradeLicense.getStatus(), businessService)) {
+            enrichAssignes(tradeLicense);
+            String nameOfBusinessService = tradeLicense.getBusinessService();
+            if(nameOfBusinessService==null)
+            {
+                nameOfBusinessService=businessService_TL;
+                tradeLicense.setBusinessService(nameOfBusinessService);
+            }
+            if ((nameOfBusinessService.equals(businessService_BPA) && (tradeLicense.getStatus().equalsIgnoreCase(STATUS_INITIATED))) || workflowService.isStateUpdatable(tradeLicense.getStatus(), businessService)) {
                 tradeLicense.getTradeLicenseDetail().setAuditDetails(auditDetails);
-
-                if(!CollectionUtils.isEmpty(tradeLicense.getTradeLicenseDetail().getAccessories())){
+                if (!CollectionUtils.isEmpty(tradeLicense.getTradeLicenseDetail().getAccessories())) {
                     tradeLicense.getTradeLicenseDetail().getAccessories().forEach(accessory -> {
                         if (accessory.getId() == null) {
                             accessory.setTenantId(tradeLicense.getTenantId());
@@ -376,35 +436,70 @@ public class EnrichmentService {
      * Sets the licenseNumber generated by idgen
      * @param request The update request
      */
-    private void setLicenseNumberAndIssueDate(TradeLicenseRequest request) {
+    private void setLicenseNumberAndIssueDate(TradeLicenseRequest request,List<String>endstates , Object mdmsData) {
         RequestInfo requestInfo = request.getRequestInfo();
         String tenantId = request.getLicenses().get(0).getTenantId();
         List<TradeLicense> licenses = request.getLicenses();
         int count=0;
-        for(TradeLicense license : licenses){
-           if(license.getStatus().equalsIgnoreCase(STATUS_APPROVED))
-               count++;
-        }
-        if(count!=0) {
-            List<String> licenseNumbers = getIdList(requestInfo, tenantId, config.getLicenseNumberIdgenName(), config.getLicenseNumberIdgenFormat(), count);
-            ListIterator<String> itr = licenseNumbers.listIterator();
+        
+        
+        if (licenses.get(0).getApplicationType() != null && licenses.get(0).getApplicationType().toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL)) {
+            for(int i=0;i<licenses.size();i++){
+                TradeLicense license = licenses.get(i);
+                Long time = System.currentTimeMillis();
+                license.setIssuedDate(time);
+            }
+        }else {
+            for (int i = 0; i < licenses.size(); i++) {
+                TradeLicense license = licenses.get(i);
+                if ((license.getStatus() != null) && license.getStatus().equalsIgnoreCase(endstates.get(i)))
+                    count++;
+            }
+            if (count != 0) {
+                List<String> licenseNumbers = null;
+                String businessService = licenses.isEmpty() ? null : licenses.get(0).getBusinessService();
+                if (businessService == null)
+                    businessService = businessService_TL;
+                switch (businessService) {
+                    case businessService_TL:
+                        licenseNumbers = getIdList(requestInfo, tenantId, config.getLicenseNumberIdgenNameTL(), config.getLicenseNumberIdgenFormatTL(), count);
+                        break;
 
-            Map<String, String> errorMap = new HashMap<>();
-            if (licenseNumbers.size() != count) {
-                errorMap.put("IDGEN ERROR ", "The number of LicenseNumber returned by idgen is not equal to number of TradeLicenses");
+                    case businessService_BPA:
+                        licenseNumbers = getIdList(requestInfo, tenantId, config.getLicenseNumberIdgenNameBPA(), config.getLicenseNumberIdgenFormatBPA(), count);
+                        break;
+                }
+                ListIterator<String> itr = licenseNumbers.listIterator();
+
+                Map<String, String> errorMap = new HashMap<>();
+                if (licenseNumbers.size() != count) {
+                    errorMap.put("IDGEN ERROR ", "The number of LicenseNumber returned by idgen is not equal to number of TradeLicenses");
+                }
+
+                if (!errorMap.isEmpty())
+                    throw new CustomException(errorMap);
+
+                for (int i = 0; i < licenses.size(); i++) {
+                    TradeLicense license = licenses.get(i);
+                    if ((license.getStatus() != null) && license.getStatus().equalsIgnoreCase(endstates.get(i))) {
+                        license.setLicenseNumber(itr.next());
+                        Long time = System.currentTimeMillis();
+                        license.setIssuedDate(time);
+                        //license.setValidFrom(time);
+                        if (mdmsData != null && businessService.equalsIgnoreCase(businessService_BPA)) {
+                            String jsonPath = TLConstants.validityPeriodMap.replace("{}",
+                                    license.getTradeLicenseDetail().getTradeUnits().get(0).getTradeType());
+                            List<Integer> res = JsonPath.read(mdmsData, jsonPath);
+                            Calendar calendar = Calendar.getInstance();
+                            calendar.add(Calendar.YEAR, res.get(0));
+                            license.setValidTo(calendar.getTimeInMillis());
+                            license.setValidFrom(time);
+                        }
+
+                    }
+                }
             }
 
-            if (!errorMap.isEmpty())
-                throw new CustomException(errorMap);
-
-            licenses.forEach(license -> {
-                if (license.getStatus().equalsIgnoreCase(STATUS_APPROVED)){
-                    license.setLicenseNumber(itr.next());
-                    Long time = System.currentTimeMillis();
-                    license.setIssuedDate(time);
-                    license.setValidFrom(time);
-                }
-            });
         }
     }
 
@@ -431,8 +526,16 @@ public class EnrichmentService {
      * @return enriched tradeLicenses
      */
     public List<TradeLicense> enrichTradeLicenseSearch(List<TradeLicense> licenses, TradeLicenseSearchCriteria criteria, RequestInfo requestInfo){
+
+        String businessService = licenses.isEmpty()?null:licenses.get(0).getBusinessService();
+        if (businessService == null)
+            businessService = businessService_TL;
         TradeLicenseSearchCriteria searchCriteria = enrichTLSearchCriteriaWithOwnerids(criteria,licenses);
-        enrichBoundary(new TradeLicenseRequest(requestInfo,licenses));
+        switch (businessService) {
+            case businessService_TL:
+                enrichBoundary(new TradeLicenseRequest(requestInfo, licenses));
+                break;
+        }
         UserDetailResponse userDetailResponse = userService.getUser(searchCriteria,requestInfo);
         enrichOwner(userDetailResponse,licenses);
         return licenses;
@@ -443,8 +546,8 @@ public class EnrichmentService {
      * Enriches the object after status is assigned
      * @param tradeLicenseRequest The update request
      */
-    public void postStatusEnrichment(TradeLicenseRequest tradeLicenseRequest){
-        setLicenseNumberAndIssueDate(tradeLicenseRequest);
+    public void postStatusEnrichment(TradeLicenseRequest tradeLicenseRequest,List<String>endstates, Object mdmsData){
+        setLicenseNumberAndIssueDate(tradeLicenseRequest,endstates,mdmsData);
     }
 
 
@@ -458,9 +561,32 @@ public class EnrichmentService {
         Set<String> licenseIds = new HashSet<>();
         licenses.forEach(license -> licenseIds.add(license.getId()));
         criteria.setIds(new LinkedList<>(licenseIds));
+        criteria.setBusinessService(licenses.get(0).getBusinessService());
         return criteria;
     }
 
+    /**
+     * In case of SENDBACKTOCITIZEN enrich the assignee with the owners and creator of license
+     * @param license License to be enriched
+     */
+    public void enrichAssignes(TradeLicense license){
+
+            if(license.getAction().equalsIgnoreCase(CITIZEN_SENDBACK_ACTION)){
+
+                    List<String> assignes = new LinkedList<>();
+
+                    // Adding owners to assignes list
+                    license.getTradeLicenseDetail().getOwners().forEach(ownerInfo -> {
+                       assignes.add(ownerInfo.getUuid());
+                    });
+
+                    // Adding creator of license
+                    if(license.getAccountId()!=null)
+                        assignes.add(license.getAccountId());
+
+                    license.setAssignee(assignes);
+            }
+    }
 
 
 

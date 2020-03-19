@@ -3,12 +3,18 @@ package org.egov.tl.service.notification;
 import com.jayway.jsonpath.DocumentContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
+import net.minidev.json.JSONArray;
+import org.apache.commons.lang.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.tl.config.TLConfiguration;
 import org.egov.tl.repository.TLRepository;
 import org.egov.tl.service.TradeLicenseService;
+import org.egov.tl.util.BPANotificationUtil;
 import org.egov.tl.util.NotificationUtil;
+import org.egov.tl.util.TLRenewalNotificationUtil;
 import org.egov.tl.web.models.*;
+import org.egov.tl.web.models.collection.PaymentDetail;
+import org.egov.tl.web.models.collection.PaymentRequest;
 import org.egov.tracer.model.CustomException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +22,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import static org.egov.tl.util.BPAConstants.NOTIFICATION_APPROVED;
+import static org.egov.tl.util.BPAConstants.NOTIFICATION_PENDINGDOCVERIFICATION;
+import static org.egov.tl.util.TLConstants.*;
 
 
 @Service
@@ -34,14 +41,22 @@ public class PaymentNotificationService {
     
     private ObjectMapper mapper;
 
+    private BPANotificationUtil bpaNotificationUtil;
+
+    private TLNotificationService tlNotificationService;
+
+    private TLRenewalNotificationUtil tlRenewalNotificationUtil;
 
     @Autowired
     public PaymentNotificationService(TLConfiguration config, TradeLicenseService tradeLicenseService,
-                                      NotificationUtil util,ObjectMapper mapper) {
+                                      NotificationUtil util, ObjectMapper mapper, BPANotificationUtil bpaNotificationUtil,TLNotificationService tlNotificationService,TLRenewalNotificationUtil tlRenewalNotificationUtil) {
         this.config = config;
         this.tradeLicenseService = tradeLicenseService;
         this.util = util;
         this.mapper = mapper;
+        this.bpaNotificationUtil = bpaNotificationUtil;
+        this.tlNotificationService = tlNotificationService;
+        this.tlRenewalNotificationUtil=tlRenewalNotificationUtil;
     }
 
 
@@ -68,28 +83,73 @@ public class PaymentNotificationService {
      * @param record The kafka message from receipt create topic
      */
     public void process(HashMap<String, Object> record){
+        processBusinessService(record, businessService_TL);
+        processBusinessService(record, businessService_BPA);
+    }
+
+
+    private void processBusinessService(HashMap<String, Object> record, String businessService)
+    {
         try{
             String jsonString = new JSONObject(record).toString();
             DocumentContext documentContext = JsonPath.parse(jsonString);
-            Map<String,String> valMap = enrichValMap(documentContext);
+            Map<String,String> valMap = enrichValMap(documentContext, businessService);
+            if(!StringUtils.equals(businessService,valMap.get(businessServiceKey)))
+                return;
             Map<String, Object> info = documentContext.read("$.RequestInfo");
             RequestInfo requestInfo = mapper.convertValue(info, RequestInfo.class);
-//            RequestInfo requestInfo = new RequestInfo();
 
-            if(valMap.get(businessServiceKey).equalsIgnoreCase(config.getBusinessService())){
+            if(valMap.get(businessServiceKey).equalsIgnoreCase(config.getBusinessServiceTL())||valMap.get(businessServiceKey).equalsIgnoreCase(config.getBusinessServiceBPA())){
                 TradeLicense license = getTradeLicenseFromConsumerCode(valMap.get(tenantIdKey),valMap.get(consumerCodeKey),
-                                                                       requestInfo);
-                String localizationMessages = util.getLocalizationMessages(license.getTenantId(),requestInfo);
-                List<SMSRequest> smsRequests = getSMSRequests(license,valMap,localizationMessages);
-                util.sendSMS(smsRequests);
+                        requestInfo,valMap.get(businessServiceKey));
+                switch(valMap.get(businessServiceKey))
+                {
+                    case businessService_TL:
+                        String applicationType = String.valueOf(license.getApplicationType());
+                        if(applicationType.equals(APPLICATION_TYPE_RENEWAL)){
+                            String localizationMessages = tlRenewalNotificationUtil.getLocalizationMessages(license.getTenantId(), requestInfo);
+                            List<SMSRequest> smsRequests = getSMSRequests(license, valMap, localizationMessages);
+                            util.sendSMS(smsRequests, config.getIsTLSMSEnabled());
+                        }
+                        else{
+                            String localizationMessages = util.getLocalizationMessages(license.getTenantId(), requestInfo);
+                            List<SMSRequest> smsRequests = getSMSRequests(license, valMap, localizationMessages);
+                            util.sendSMS(smsRequests, config.getIsTLSMSEnabled());
+                        }
+
+                        break;
+
+                    case businessService_BPA:
+                        String localizationMessages = bpaNotificationUtil.getLocalizationMessages(license.getTenantId(), requestInfo);
+                        PaymentRequest paymentRequest = mapper.convertValue(record, PaymentRequest.class);
+                        String totalAmountPaid = paymentRequest.getPayment().getTotalAmountPaid().toString();
+                        Map<String, String> mobileNumberToOwner = new HashMap<>();
+                        String locMessage = bpaNotificationUtil.getMessageTemplate(NOTIFICATION_PENDINGDOCVERIFICATION, localizationMessages);
+                        String message = bpaNotificationUtil.getPendingDocVerificationMsg(license, locMessage, localizationMessages, totalAmountPaid);
+                        license.getTradeLicenseDetail().getOwners().forEach(owner -> {
+                            if (owner.getMobileNumber() != null)
+                                mobileNumberToOwner.put(owner.getMobileNumber(), owner.getName());
+                        });
+                        List<SMSRequest> smsList = new ArrayList<>();
+                        smsList.addAll(util.createSMSRequest(message, mobileNumberToOwner));
+                        util.sendSMS(smsList, config.getIsBPASMSEnabled());
+
+                        if(null != config.getIsUserEventsNotificationEnabledForBPA()) {
+                            if(config.getIsUserEventsNotificationEnabledForBPA()) {
+                                TradeLicenseRequest tradeLicenseRequest=TradeLicenseRequest.builder().requestInfo(requestInfo).licenses(Collections.singletonList(license)).build();
+                                EventRequest eventRequest = tlNotificationService.getEventsForBPA(tradeLicenseRequest,true, message);
+                                if(null != eventRequest)
+                                    util.sendEventNotification(eventRequest);
+                            }
+                        }
+                        break;
+                }
             }
         }
         catch (Exception e){
             e.printStackTrace();
         }
     }
-
-
     /**
      * Creates the SMSRequest
      * @param license The TradeLicense for which the receipt is generated
@@ -117,7 +177,13 @@ public class PaymentNotificationService {
      * @return The list of the SMS Requests
      */
     private List<SMSRequest> getOwnerSMSRequest(TradeLicense license, Map<String,String> valMap,String localizationMessages){
-        String message = util.getOwnerPaymentMsg(license,valMap,localizationMessages);
+        String applicationType = String.valueOf(license.getApplicationType());
+        String message=null;
+        if(applicationType.equals(APPLICATION_TYPE_RENEWAL)){
+            message = tlRenewalNotificationUtil.getOwnerPaymentMsg(license,valMap,localizationMessages);
+        }
+        else
+             message = util.getOwnerPaymentMsg(license,valMap,localizationMessages);
 
         HashMap<String,String> mobileNumberToOwnerName = new HashMap<>();
         license.getTradeLicenseDetail().getOwners().forEach(owner -> {
@@ -142,7 +208,14 @@ public class PaymentNotificationService {
      * @return
      */
     private SMSRequest getPayerSMSRequest(TradeLicense license,Map<String,String> valMap,String localizationMessages){
-        String message = util.getPayerPaymentMsg(license,valMap,localizationMessages);
+        String applicationType = String.valueOf(license.getApplicationType());
+        String message=null;
+        if(applicationType.equals(APPLICATION_TYPE_RENEWAL)){
+            message = tlRenewalNotificationUtil.getPayerPaymentMsg(license,valMap,localizationMessages);
+        }
+        else
+            message = util.getPayerPaymentMsg(license,valMap,localizationMessages);
+
         String customizedMsg = message.replace("<1>",valMap.get(paidByKey));
         SMSRequest smsRequest = new SMSRequest(valMap.get(payerMobileNumberKey),customizedMsg);
         return smsRequest;
@@ -154,18 +227,22 @@ public class PaymentNotificationService {
      * @param context The documentContext of the receipt
      * @return The map containing required fields from receipt
      */
-    private Map<String,String> enrichValMap(DocumentContext context){
+    private Map<String,String> enrichValMap(DocumentContext context, String businessService){
         Map<String,String> valMap = new HashMap<>();
         try{
-            valMap.put(businessServiceKey,context.read("$.Receipt[0].Bill[0].billDetails[0].businessService"));
-            valMap.put(consumerCodeKey,context.read("$.Receipt[0].Bill[0].billDetails[0].consumerCode"));
-            valMap.put(tenantIdKey,context.read("$.Receipt[0].tenantId"));
-            valMap.put(payerMobileNumberKey,context.read("$.Receipt[0].Bill[0].mobileNumber"));
-            valMap.put(paidByKey,context.read("$.Receipt[0].Bill[0].paidBy"));
-            Integer amountPaid = context.read("$.Receipt[0].instrument.amount");
-            valMap.put(amountPaidKey,amountPaid.toString());
-            valMap.put(receiptNumberKey,context.read("$.Receipt[0].Bill[0].billDetails[0].receiptNumber"));
 
+            List <String>businessServiceList=context.read("$.Payment.paymentDetails[?(@.businessService=='"+businessService+"')].businessService");
+            List <String>consumerCodeList=context.read("$.Payment.paymentDetails[?(@.businessService=='"+businessService+"')].bill.consumerCode");
+            List <String>mobileNumberList=context.read("$.Payment.paymentDetails[?(@.businessService=='"+businessService+"')].bill.mobileNumber");
+            List <Integer>amountPaidList=context.read("$.Payment.paymentDetails[?(@.businessService=='"+businessService+"')].bill.amountPaid");
+            List <String>receiptNumberList=context.read("$.Payment.paymentDetails[?(@.businessService=='"+businessService+"')].receiptNumber");
+            valMap.put(businessServiceKey,businessServiceList.isEmpty()?null:businessServiceList.get(0));
+            valMap.put(consumerCodeKey,consumerCodeList.isEmpty()?null:consumerCodeList.get(0));
+            valMap.put(tenantIdKey,context.read("$.Payment.tenantId"));
+            valMap.put(payerMobileNumberKey,mobileNumberList.isEmpty()?null:mobileNumberList.get(0));
+            valMap.put(paidByKey,context.read("$.Payment.paidBy"));
+            valMap.put(amountPaidKey,amountPaidList.isEmpty()?null:String.valueOf(amountPaidList.get(0)));
+            valMap.put(receiptNumberKey,receiptNumberList.isEmpty()?null:receiptNumberList.get(0));
         }
         catch (Exception e){
             e.printStackTrace();
@@ -182,11 +259,12 @@ public class PaymentNotificationService {
      * @param requestInfo The requestInfo of the request
      * @return TradeLicense for the particular consumerCode
      */
-    private TradeLicense getTradeLicenseFromConsumerCode(String tenantId,String consumerCode,RequestInfo requestInfo){
+    private TradeLicense getTradeLicenseFromConsumerCode(String tenantId,String consumerCode,RequestInfo requestInfo, String businessService){
 
         TradeLicenseSearchCriteria searchCriteria = new TradeLicenseSearchCriteria();
         searchCriteria.setApplicationNumber(consumerCode);
         searchCriteria.setTenantId(tenantId);
+        searchCriteria.setBusinessService(businessService);
         List<TradeLicense> licenses = tradeLicenseService.getLicensesWithOwnerInfo(searchCriteria,requestInfo);
 
         if(CollectionUtils.isEmpty(licenses))
@@ -200,11 +278,4 @@ public class PaymentNotificationService {
         return licenses.get(0);
 
     }
-
-
-
-
-
-
-
 }

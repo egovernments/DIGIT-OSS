@@ -13,10 +13,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.egov.tl.util.TLConstants.*;
 
@@ -31,8 +28,7 @@ public class TLRowMapper  implements ResultSetExtractor<List<TradeLicense>> {
 
 
     public List<TradeLicense> extractData(ResultSet rs) throws SQLException, DataAccessException {
-
-        Map<String, TradeLicense> tradeLicenseMap = new HashMap<>();
+        Map<String, TradeLicense> tradeLicenseMap = new LinkedHashMap<>();
 
         while (rs.next()) {
             String id = rs.getString("tl_id");
@@ -59,6 +55,8 @@ public class TLRowMapper  implements ResultSetExtractor<List<TradeLicense>> {
                 currentTradeLicense = TradeLicense.builder().auditDetails(auditdetails)
                         .licenseNumber(rs.getString("licensenumber"))
                         .licenseType(TradeLicense.LicenseTypeEnum.fromValue(rs.getString("licensetype")))
+                        .applicationType(TradeLicense.ApplicationTypeEnum.fromValue(rs.getString( "applicationType")))
+                        .workflowCode(rs.getString("workflowCode"))
                         .oldLicenseNumber(rs.getString("oldlicensenumber"))
                         .applicationDate(applicationDate)
                         .applicationNumber(rs.getString("applicationnumber"))
@@ -74,6 +72,7 @@ public class TLRowMapper  implements ResultSetExtractor<List<TradeLicense>> {
                         .tradeName(rs.getString("tradeName"))
                         .propertyId(rs.getString("propertyid"))
                         .oldPropertyId(rs.getString("oldpropertyid"))
+                        .businessService(rs.getString("businessservice"))
                         .id(id)
                         .build();
 
@@ -126,10 +125,14 @@ public class TLRowMapper  implements ResultSetExtractor<List<TradeLicense>> {
             { institution = Institution.builder()
                     .id(rs.getString("instiid"))
                     .tenantId(rs.getString("institenantId"))
-                    .name(rs.getString("institutionName"))
+                    .name(rs.getString("name"))
                     .type(rs.getString("institutionType"))
                     .designation(rs.getString("designation"))
                     .active(rs.getBoolean("instiactive"))
+                    .contactNo(rs.getString("insticontactno"))
+                    .instituionName(rs.getString("instiinstituionname"))
+                    .organisationRegistrationNo(rs.getString("instiorganisationregistrationno"))
+                    .address(rs.getString("address"))
                     .build();
             }
 

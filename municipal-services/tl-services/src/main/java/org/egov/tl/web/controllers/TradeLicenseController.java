@@ -43,38 +43,51 @@ import javax.servlet.http.HttpServletRequest;
     }
 
 
-
-        @PostMapping("/_create")
-        public ResponseEntity<TradeLicenseResponse> create(@Valid @RequestBody TradeLicenseRequest tradeLicenseRequest)
-        {
-             List<TradeLicense> licenses = tradeLicenseService.create(tradeLicenseRequest);
-                TradeLicenseResponse response = TradeLicenseResponse.builder().licenses(licenses).responseInfo(
-                    responseInfoFactory.createResponseInfoFromRequestInfo(tradeLicenseRequest.getRequestInfo(), true))
-                    .build();
-                return new ResponseEntity<>(response,HttpStatus.OK);
-        }
-
-        @RequestMapping(value="/_search", method = RequestMethod.POST)
-        public ResponseEntity<TradeLicenseResponse> search(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
-                                                           @Valid @ModelAttribute TradeLicenseSearchCriteria criteria){
-
-            List<TradeLicense> licenses = tradeLicenseService.search(criteria,requestInfoWrapper.getRequestInfo());
-
-            TradeLicenseResponse response = TradeLicenseResponse.builder().licenses(licenses).responseInfo(
-                    responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
-                    .build();
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        }
-
-        @RequestMapping(value="/_update", method = RequestMethod.POST)
-        public ResponseEntity<TradeLicenseResponse> update(@Valid @RequestBody TradeLicenseRequest tradeLicenseRequest){
-            List<TradeLicense> licenses = tradeLicenseService.update(tradeLicenseRequest);
-
-            TradeLicenseResponse response = TradeLicenseResponse.builder().licenses(licenses).responseInfo(
-                    responseInfoFactory.createResponseInfoFromRequestInfo(tradeLicenseRequest.getRequestInfo(), true))
-                    .build();
-            return new ResponseEntity<>(response, HttpStatus.OK);
-            }
-
-
+    @PostMapping({"/{servicename}/_create", "/_create"})
+    public ResponseEntity<TradeLicenseResponse> create(@Valid @RequestBody TradeLicenseRequest tradeLicenseRequest,
+                                                       @PathVariable(required = false) String servicename) {
+        List<TradeLicense> licenses = tradeLicenseService.create(tradeLicenseRequest, servicename);
+        TradeLicenseResponse response = TradeLicenseResponse.builder().licenses(licenses).responseInfo(
+                responseInfoFactory.createResponseInfoFromRequestInfo(tradeLicenseRequest.getRequestInfo(), true))
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @RequestMapping(value = {"/{servicename}/_search", "/_search"}, method = RequestMethod.POST)
+    public ResponseEntity<TradeLicenseResponse> search(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
+                                                       @Valid @ModelAttribute TradeLicenseSearchCriteria criteria,
+                                                       @PathVariable(required = false) String servicename) {
+        List<TradeLicense> licenses = tradeLicenseService.search(criteria, requestInfoWrapper.getRequestInfo(), servicename);
+
+        TradeLicenseResponse response = TradeLicenseResponse.builder().licenses(licenses).responseInfo(
+                responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = {"/{servicename}/_update", "/_update"}, method = RequestMethod.POST)
+    public ResponseEntity<TradeLicenseResponse> update(@Valid @RequestBody TradeLicenseRequest tradeLicenseRequest,
+                                                       @PathVariable(required = false) String servicename) {
+        List<TradeLicense> licenses = tradeLicenseService.update(tradeLicenseRequest, servicename);
+
+        TradeLicenseResponse response = TradeLicenseResponse.builder().licenses(licenses).responseInfo(
+                responseInfoFactory.createResponseInfoFromRequestInfo(tradeLicenseRequest.getRequestInfo(), true))
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = {"/{servicename}/{jobname}/_batch", "/_batch"}, method = RequestMethod.POST)
+    public ResponseEntity sendReminderSMS(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
+                                          @PathVariable(required = false) String servicename,
+                                          @PathVariable(required = true) String jobname) {
+
+        tradeLicenseService.runJob(servicename, jobname, requestInfoWrapper.getRequestInfo());
+
+        return new ResponseEntity(HttpStatus.ACCEPTED);
+    }
+
+
+
+
+
+}

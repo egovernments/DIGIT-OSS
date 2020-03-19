@@ -63,6 +63,10 @@ public class PropertyService {
      */
     public List<Property> searchProperty(PropertyCriteria criteria, RequestInfo requestInfo) {
         List<Property> properties;
+
+        if(criteria.isNull())
+            enrichmentService.enrichPropertyCriteriaForDefaultSearch(requestInfo,criteria);
+
         propertyValidator.validatePropertyCriteria(criteria, requestInfo);
         if (criteria.getMobileNumber() != null || criteria.getName() != null) {
             UserDetailResponse userDetailResponse = userService.getUser(criteria, requestInfo);
@@ -101,7 +105,7 @@ public class PropertyService {
      * @param requestInfo RequestInfo object of the request
      * @return properties with owner information added from user service
      */
-    List<Property> getPropertiesWithOwnerInfo(PropertyCriteria criteria, RequestInfo requestInfo) {
+    public List<Property> getPropertiesWithOwnerInfo(PropertyCriteria criteria, RequestInfo requestInfo) {
         List<Property> properties = repository.getProperties(criteria);
         if (CollectionUtils.isEmpty(properties))
             return Collections.emptyList();

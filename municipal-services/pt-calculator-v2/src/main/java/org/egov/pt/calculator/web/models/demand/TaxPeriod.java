@@ -41,6 +41,7 @@ package org.egov.pt.calculator.web.models.demand;
 
 import javax.validation.constraints.NotNull;
 
+import lombok.Builder;
 import org.egov.pt.calculator.web.models.property.AuditDetails;
 
 import lombok.AllArgsConstructor;
@@ -50,6 +51,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class TaxPeriod {
 
 	private String id;

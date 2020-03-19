@@ -137,6 +137,18 @@ public class CalculatorConstants {
 
 	public static final String STARTING_DATE_APPLICABLES = "startingDay";
 
+    public static final String RECEIPT_START_DATE_PARAM = "fromDate=";
+
+    public static final String RECEIPT_END_DATE_PARAM = "toDate=";
+
+    public static final String DEMAND_START_DATE_PARAM = "periodFrom=";
+
+    public static final String DEMAND_END_DATE_PARAM = "periodTo=";
+
+	public static final String DEMAND_STATUS_PARAM = "status=";
+
+	public static final String DEMAND_STATUS_ACTIVE = DemandStatus.ACTIVE.toString();
+
 	/*
 	 * special characters
 	 */
@@ -174,13 +186,15 @@ public class CalculatorConstants {
 	
 	public static final String BUSINESSSERVICE_FIELD_FOR_SEARCH_URL = "businessService=";
 
-	public static final String STATUS_FIELD_FOR_SEARCH_URL = "status=";
+	public static final String STATUS_FIELD_FOR_SEARCH_URL = "instrumentStatus=";
 
 	public static final String SERVICE_FIELD_VALUE_PT = "PT";
 
 	public static final String URL_PARAMS_SEPARATER = "?";
 
 	public static final String SEPARATER = "&";
+
+	public static final String ASSESSMENTNUMBER_FIELD_SEARCH = "propertyDetailids=";
 
 	public static final String MDMS_FINACIALYEAR_PATH = "$.MdmsRes.egf-master.FinancialYear[?(@.code==\"{}\")]";
 
@@ -195,6 +209,9 @@ public class CalculatorConstants {
 	 */
 
 	public static final String CONSUMER_CODE_SEARCH_FIELD_NAME = "consumerCode=";
+
+	public static final String CONSUMER_CODE_SEARCH_FIELD_NAME_PAYMENT = "consumerCodes=";
+
 
 	public static final String DEMAND_ID_SEARCH_FIELD_NAME = "demandId=";
 	
@@ -276,5 +293,9 @@ public class CalculatorConstants {
 	public static final String EG_PT_INVALID_DEMAND_ERROR_MSG = " Bill cannot be generated for previous assessments in a year, please use the latest assesmment to pay";
 
     public static final Long TIMEZONE_OFFSET = 19800000l;
+
+    public static final String BILLINGSLAB_KEY = "calculationDescription";
+
+
 
 }

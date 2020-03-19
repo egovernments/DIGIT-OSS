@@ -2,6 +2,7 @@ package org.egov.tl.util;
 
 import com.jayway.jsonpath.JsonPath;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.mdms.model.MasterDetail;
 import org.egov.mdms.model.MdmsCriteria;
@@ -63,9 +64,20 @@ public class TradeUtil {
      * Creates url for tl-calculator service
      * @return url for tl-calculator service
      */
-    public StringBuilder getCalculationURI(){
-        StringBuilder uri = new StringBuilder(config.getCalculatorHost());
-        uri.append(config.getCalculateEndpoint());
+    public StringBuilder getCalculationURI(String businessService) {
+        StringBuilder uri = new StringBuilder();
+        uri.append(config.getCalculatorHost());
+        if (businessService == null)
+            businessService = businessService_TL;
+        switch (businessService) {
+            case businessService_TL:
+                uri.append(config.getCalculateEndpointTL());
+                break;
+
+            case businessService_BPA:
+                uri.append(config.getCalculateEndpointBPA());
+                break;
+        }
         return uri;
     }
 
@@ -90,8 +102,6 @@ public class TradeUtil {
 
     /**
      * Creates request to search UOM from MDMS
-     * @param requestInfo The requestInfo of the request
-     * @param tenantId The tenantId of the tradeLicense
      * @return request to search UOM from MDMS
      */
     public List<ModuleDetail> getTradeModuleRequest() {
@@ -185,6 +195,30 @@ public class TradeUtil {
 
 
     /**
+     * Creates map containing the startTime and endTime of the given tradeLicense for Renewal 
+     * @param license The create or update TradeLicense request
+     * @return Map containing startTime and endTime
+     */
+//    public Map<String,Long> getTaxPeriodsforRenewal(TradeLicense license,Object mdmsData){
+//        Map<String,Long> taxPeriods = new HashMap<>();
+//        try {
+//            String currentYearjsonPath = TLConstants.MDMS_FINACIALYEAR_PATH.replace("{}",license.getFinancialYear());
+//            List<Map<String,Object>> currentFinancialYear = JsonPath.read(mdmsData, currentYearjsonPath);
+//            Map<String,Object> currentFYObject = currentFinancialYear.get(0);
+//            Object startDate = currentFYObject.get(TLConstants.MDMS_STARTDATE);
+//            Object endDate = currentFYObject.get(TLConstants.MDMS_ENDDATE);
+//            taxPeriods.put(TLConstants.MDMS_STARTDATE,(Long) startDate);
+//            taxPeriods.put(TLConstants.MDMS_ENDDATE,(Long) endDate);
+//        } catch (Exception e) {
+//            log.error("Error while fetching MDMS data", e);
+//            throw new CustomException("INVALID FINANCIALYEAR", "No data found for the financialYear: "+license.getFinancialYear());
+//        }
+//        return taxPeriods;
+//    }
+
+
+
+    /**
      * Creates request to search financialYear in mdms
      * @return MDMS request for financialYear
      */
@@ -226,7 +260,24 @@ public class TradeUtil {
         return mdmsCriteriaReq;
     }
 
+    public List<String> getBPAEndState(TradeLicenseRequest tradeLicenseRequest) {
 
+        List<String> endstates = new ArrayList<>();
+        for (TradeLicense tradeLicense : tradeLicenseRequest.getLicenses()) {
+            String tradetype = tradeLicense.getTradeLicenseDetail().getTradeUnits().get(0).getTradeType();
+            Object mdmsData = mDMSCallForBPA(tradeLicenseRequest.getRequestInfo(), tradeLicense.getTenantId(), tradetype);
+            List<String> res = JsonPath.read(mdmsData, BPAConstants.MDMS_ENDSTATEPATH);
+            endstates.add(res.get(0));
+        }
+        return endstates;
+    }
+
+    public List<String> getusernewRoleFromMDMS(TradeLicense license,RequestInfo requestInfo){
+        String tradetype=license.getTradeLicenseDetail().getTradeUnits().get(0).getTradeType();
+        Object mdmsData=mDMSCallForBPA(requestInfo,license.getTenantId(),tradetype);
+        List<List<String>>res=JsonPath.read(mdmsData, BPAConstants.MDMS_BPAROLEPATH);
+        return  res.get(0);
+    }
 
     public Object mDMSCall(TradeLicenseRequest tradeLicenseRequest){
         RequestInfo requestInfo = tradeLicenseRequest.getRequestInfo();
@@ -237,22 +288,50 @@ public class TradeUtil {
     }
 
 
+
+
+    public Object mDMSCallForBPA(RequestInfo requestInfo,String tenantId,String tradetype){
+
+
+        List<MasterDetail> masterDetails = new ArrayList<>();
+
+
+        final String filterCodeForLicenseetypes = "$.[?(@.tradeType =='"+tradetype+"')]";
+
+        masterDetails.add(MasterDetail.builder().name(BPAConstants.TRADETYPE_TO_ROLEMAPPING).filter(filterCodeForLicenseetypes).build());
+
+        ModuleDetail moduleDetail = ModuleDetail.builder().masterDetails(masterDetails)
+                .moduleName(BPAConstants.MDMS_MODULE_BPAREGISTRATION).build();
+
+
+        MdmsCriteria mdmsCriteria = MdmsCriteria.builder().moduleDetails(Collections.singletonList(moduleDetail)).tenantId(tenantId)
+                .build();
+
+
+        MdmsCriteriaReq mdmsCriteriaReq = MdmsCriteriaReq.builder().mdmsCriteria(mdmsCriteria)
+                .requestInfo(requestInfo).build();
+        Object result = serviceRequestRepository.fetchResult(getMdmsSearchUrl(), mdmsCriteriaReq);
+        return result;
+    }
+
+
+
+
     /**
      * Creates a map of id to isStateUpdatable
      * @param searchresult Licenses from DB
      * @param businessService The businessService configuration
      * @return Map of is to isStateUpdatable
      */
-    public Map<String,Boolean> getIdToIsStateUpdatableMap(BusinessService businessService,List<TradeLicense> searchresult){
-        Map<String ,Boolean> idToIsStateUpdatableMap = new HashMap<>();
+    public Map<String, Boolean> getIdToIsStateUpdatableMap(BusinessService businessService, List<TradeLicense> searchresult) {
+        Map<String, Boolean> idToIsStateUpdatableMap = new HashMap<>();
         searchresult.forEach(result -> {
-            idToIsStateUpdatableMap.put(result.getId(),workflowService.isStateUpdatable(result.getStatus(), businessService));
+            String nameofBusinessService = result.getBusinessService();
+            if (StringUtils.equals(nameofBusinessService,businessService_BPA) && (result.getStatus().equalsIgnoreCase(STATUS_INITIATED))) {
+                idToIsStateUpdatableMap.put(result.getId(), true);
+            } else
+                idToIsStateUpdatableMap.put(result.getId(), workflowService.isStateUpdatable(result.getStatus(), businessService));
         });
         return idToIsStateUpdatableMap;
     }
-
-
-
-
-
 }

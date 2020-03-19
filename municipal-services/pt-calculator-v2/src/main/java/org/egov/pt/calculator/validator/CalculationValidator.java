@@ -8,17 +8,39 @@ import static org.egov.pt.calculator.util.CalculatorConstants.PT_ESTIMATE_VACANT
 import static org.egov.pt.calculator.util.CalculatorConstants.PT_ESTIMATE_VACANT_LAND_NULL_MSG;
 import static org.egov.pt.calculator.util.CalculatorConstants.PT_TYPE_VACANT_LAND;
 
+import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.egov.common.contract.request.RequestInfo;
+import org.egov.pt.calculator.repository.Repository;
+import org.egov.pt.calculator.util.CalculatorConstants;
+import org.egov.pt.calculator.util.CalculatorUtils;
+import org.egov.pt.calculator.web.models.CalculationCriteria;
 import org.egov.pt.calculator.web.models.GetBillCriteria;
+import org.egov.pt.calculator.web.models.demand.Demand;
+import org.egov.pt.calculator.web.models.demand.DemandDetail;
+import org.egov.pt.calculator.web.models.demand.DemandRequest;
+import org.egov.pt.calculator.web.models.property.Property;
 import org.egov.pt.calculator.web.models.property.PropertyDetail;
+import org.egov.pt.calculator.web.models.property.RequestInfoWrapper;
 import org.egov.tracer.model.CustomException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 @Service
 public class CalculationValidator {
+
+
+	@Autowired
+	private CalculatorUtils utils;
+
+	@Autowired
+	private Repository repository;
+
 
 	/**
 	 * validates for the required information needed to do the calculation/estimation
@@ -55,4 +77,76 @@ public class CalculationValidator {
 		}
 
 	}
+
+
+	/**
+	 * if any previous assessments and demands associated with it exists for the
+	 * same financial year
+	 *
+	 * Then Returns the collected amount of previous demand if the current
+	 * assessment is for the current year
+	 *
+	 * and cancels the previous demand by updating it's status to inactive
+	 *
+	 * @param criteria
+	 * @return
+	 */
+	public void getCarryForwardAndCancelOldDemand(BigDecimal newTax, CalculationCriteria criteria, RequestInfo requestInfo
+			, Demand demand) {
+
+		Property property = criteria.getProperty();
+
+		BigDecimal oldTaxAmt = BigDecimal.ZERO;
+
+		Boolean isPTDepriciated = false;
+
+		if(null == property.getPropertyId()) return ;
+
+		//	Demand demand = getLatestDemandForCurrentFinancialYear(requestInfo, property);
+
+		if(null == demand) return ;
+
+		for (DemandDetail detail : demand.getDemandDetails()) {
+			if (detail.getTaxHeadMasterCode().equalsIgnoreCase(CalculatorConstants.PT_TAX))
+				oldTaxAmt = oldTaxAmt.add(detail.getTaxAmount());
+		}
+
+		if (oldTaxAmt.compareTo(newTax) > 0) {
+			boolean isDepreciationAllowed = utils.isAssessmentDepreciationAllowed(demand,new RequestInfoWrapper(requestInfo));
+			if (!isDepreciationAllowed)
+				isPTDepriciated = true;
+		}
+
+		if(isPTDepriciated)
+			throw new CustomException(CalculatorConstants.EG_PT_DEPRECIATING_ASSESSMENT_ERROR,
+					CalculatorConstants.EG_PT_DEPRECIATING_ASSESSMENT_ERROR_MSG );
+
+	}
+
+
+    /**
+     * Validates demand before update or create
+     * @param demand Demand to be validated
+     */
+	public void validationsBeforeDemandUpdate(Demand demand){
+
+		BigDecimal totalTaxAmount = demand.getDemandDetails().stream().map(DemandDetail::getTaxAmount).reduce(BigDecimal.ZERO,BigDecimal::add);
+        BigDecimal totalCollectionAmount = demand.getDemandDetails().stream().map(DemandDetail::getCollectionAmount).reduce(BigDecimal.ZERO,BigDecimal::add);
+
+		Map<String,String> errorMap = new HashMap<>();
+
+		if(totalTaxAmount.remainder(BigDecimal.ONE).doubleValue()!=0)
+			errorMap.put("INVALID_TAXAMOUNT","Failed to roundOff the tax amount");
+
+        if(totalCollectionAmount.remainder(BigDecimal.ONE).doubleValue()!=0)
+            errorMap.put("INVALID_COLLECTIONAMOUNT","The collection amount is not properly apportioned");
+
+        if(totalCollectionAmount.doubleValue()<0)
+            errorMap.put("INVALID_COLLECTIONAMOUNT","The collection amount cannot be negative");
+
+
+
+	}
+
+
 }

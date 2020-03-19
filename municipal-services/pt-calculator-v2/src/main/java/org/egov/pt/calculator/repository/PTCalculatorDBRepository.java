@@ -3,6 +3,7 @@ package org.egov.pt.calculator.repository;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.egov.pt.calculator.repository.querybuilder.BillingSlabQueryBuilder;
 import org.egov.pt.calculator.repository.rowmapper.BillingSlabRowMapper;
 import org.egov.pt.calculator.web.models.BillingSlab;
 import org.egov.pt.calculator.web.models.BillingSlabSearchCriteria;

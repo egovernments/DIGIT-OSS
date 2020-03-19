@@ -1,8 +1,8 @@
 package org.egov.tlcalculator.service;
 
 import lombok.extern.slf4j.Slf4j;
+import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
-
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.tlcalculator.config.TLCalculatorConfigs;
 import org.egov.tlcalculator.kafka.broker.TLCalculatorProducer;
@@ -26,6 +26,8 @@ import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.util.*;
+
+import static org.egov.tlcalculator.utils.TLCalculatorConstants.businessService_TL;
 
 
 @Service
@@ -57,6 +59,8 @@ public class CalculationService {
     @Autowired
     private MDMSService mdmsService;
 
+    @Autowired
+    private TLRenewalCalculation tlRenewal;
 
     /**
      * Calculates tax estimates and creates demand
@@ -68,7 +72,7 @@ public class CalculationService {
        Object mdmsData = mdmsService.mDMSCall(calculationReq.getRequestInfo(),tenantId);
        List<Calculation> calculations = getCalculation(calculationReq.getRequestInfo(),
                calculationReq.getCalulationCriteria(),mdmsData);
-       demandService.generateDemand(calculationReq.getRequestInfo(),calculations,mdmsData);
+       demandService.generateDemand(calculationReq.getRequestInfo(),calculations,mdmsData,businessService_TL);
        CalculationRes calculationRes = CalculationRes.builder().calculations(calculations).build();
        producer.push(config.getSaveTopic(),calculationRes);
        return calculations;
@@ -89,15 +93,12 @@ public class CalculationService {
               license = utils.getTradeLicense(requestInfo, criteria.getApplicationNumber(), criteria.getTenantId());
               criteria.setTradelicense(license);
           }
-
           EstimatesAndSlabs estimatesAndSlabs = getTaxHeadEstimates(criteria,requestInfo,mdmsData);
           List<TaxHeadEstimate> taxHeadEstimates = estimatesAndSlabs.getEstimates();
           FeeAndBillingSlabIds tradeTypeFeeAndBillingSlabIds = estimatesAndSlabs.getTradeTypeFeeAndBillingSlabIds();
           FeeAndBillingSlabIds accessoryFeeAndBillingSlabIds = null;
           if(estimatesAndSlabs.getAccessoryFeeAndBillingSlabIds()!=null)
               accessoryFeeAndBillingSlabIds = estimatesAndSlabs.getAccessoryFeeAndBillingSlabIds();
-
-
           Calculation calculation = new Calculation();
           calculation.setTradeLicense(criteria.getTradelicense());
           calculation.setTenantId(criteria.getTenantId());
@@ -171,6 +172,7 @@ public class CalculationService {
       }
 
       TaxHeadEstimate estimate = new TaxHeadEstimate();
+      List<TaxHeadEstimate> estimateList = new ArrayList<>();
       BigDecimal totalTax = tradeUnitFee.add(accessoryFee);
 
       if(totalTax.compareTo(BigDecimal.ZERO)==-1)
@@ -178,9 +180,16 @@ public class CalculationService {
 
       estimate.setEstimateAmount(totalTax);
       estimate.setCategory(Category.TAX);
-      estimate.setTaxHeadCode(config.getBaseTaxHead());
+      if(license.getApplicationType() != null && license.getApplicationType().toString().equals(TLCalculatorConstants.APPLICATION_TYPE_RENEWAL)){
+          estimate.setTaxHeadCode(config.getRenewTaxHead());
+          estimateList.add(estimate);
+          estimateList.addAll(tlRenewal.tlRenewalCalculation(requestInfo,calulationCriteria,mdmsData,totalTax));
+      }else{
+          estimate.setTaxHeadCode(config.getBaseTaxHead());
+          estimateList.add(estimate);
+      }
 
-      estimatesAndSlabs.setEstimates(Collections.singletonList(estimate));
+      estimatesAndSlabs.setEstimates(estimateList);
 
       return estimatesAndSlabs;
   }

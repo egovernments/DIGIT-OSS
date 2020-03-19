@@ -261,10 +261,8 @@ public class NotificationService {
 			if(isActionReq) {
 				List<ActionItem> items = new ArrayList<>();
 				String actionLink = propertyConfiguration.getPayLink().replace("$mobile", mobile)
-							.replace("$assessmentId", property.getPropertyDetails().get(0).getAssessmentNumber())
-							.replace("$propertyId", property.getPropertyId())
-							.replace("$tenantId", property.getTenantId())
-							.replace("$financialYear", property.getPropertyDetails().get(0).getFinancialYear());
+							.replace("$consumerCode", property.getPropertyId())
+							.replace("$tenantId", property.getTenantId());
 				
 				actionLink = propertyConfiguration.getUiAppHost() + actionLink;
 				

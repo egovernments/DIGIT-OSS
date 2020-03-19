@@ -5,6 +5,9 @@ import org.springframework.context.annotation.Configuration;
 
 import lombok.Getter;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 @Configuration
 @Getter
 public class Configurations {
@@ -57,6 +60,9 @@ public class Configurations {
 	
 	@Value("${egov.receipt.search.endpoint}")
 	private String	ReceiptSearchEndpoint;
+
+	@Value("${egov.payment.search.endpoint}")
+	private String	PaymentSearchEndpoint;
 	
 	// billing slab configs
 		
@@ -83,4 +89,38 @@ public class Configurations {
 
 	@Value("${pt.financialyear.start.month}")
 	private String financialYearStartMonth;
+
+	// PT Service
+
+	@Value("${egov.pt.host}")
+	private String ptHost;
+
+	@Value("${egov.pt.search.endpoint}")
+	private String ptSearchEndpoint;
+
+	@Value("#{'${egov.pt.source.demand.gen.ignore}'.split(',')}")
+	private List<String> sourcesToBeIgnored;
+	
+	
+	//Mutation
+	@Value("${pt.mutation.fees.business.code}")
+	private String ptMutationBusinessCode;
+	
+	@Value("${pt.mutation.fee.taxhead}")
+	private String ptMutationFeeTaxHead;
+	
+	@Value("${pt.mutation.penalty.taxhead}")
+	private String ptMutationPenaltyTaxHead;
+	
+	@Value("${pt.mutation.rebate.taxhead}")
+	private String ptMutationRebateTaxHead;
+	
+	@Value("${pt.mutation.exemption.taxhead}")
+	private String ptMutationExemptionTaxHead;
+	
+	@Value("${pt.mutation.minpayable.amount}")
+	private BigDecimal ptMutationMinPayable;
+	
+
+
 }

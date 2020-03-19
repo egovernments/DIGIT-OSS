@@ -56,7 +56,6 @@ public class TLRepository {
     public List<TradeLicense> getLicenses(TradeLicenseSearchCriteria criteria) {
         List<Object> preparedStmtList = new ArrayList<>();
         String query = queryBuilder.getTLSearchQuery(criteria, preparedStmtList);
-        log.info("Query: " + query);
         List<TradeLicense> licenses =  jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
         sortChildObjectsById(licenses);
         return licenses;
@@ -70,7 +69,6 @@ public class TLRepository {
     public void save(TradeLicenseRequest tradeLicenseRequest) {
         producer.push(config.getSaveTopic(), tradeLicenseRequest);
     }
-
     /**
      * Pushes the update request to update topic or on workflow topic depending on the status
      *

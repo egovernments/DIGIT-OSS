@@ -1,13 +1,13 @@
 package org.egov.pt.service;
 
+import java.util.List;
 import java.util.Map;
 
 import lombok.extern.slf4j.Slf4j;
+import org.egov.common.contract.request.RequestInfo;
+import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.repository.ServiceRequestRepository;
-import org.egov.pt.web.models.Calculation;
-import org.egov.pt.web.models.CalculationCriteria;
-import org.egov.pt.web.models.CalculationReq;
-import org.egov.pt.web.models.PropertyRequest;
+import org.egov.pt.web.models.*;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,25 +19,23 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Service
 public class CalculationService {
 
-    @Autowired
     private ObjectMapper mapper;
 
-    @Autowired
     private ServiceRequestRepository serviceRequestRepository;
 
-   @Value("${egov.calculation.host}")
-   private String calculationHost;
-
-    @Value("${egov.calculation.context.path}")
-    private String calculationContextPath;
-
-    @Value("${egov.calculation.endpoint}")
-   private String calculationEndpoint;
+    private PropertyConfiguration config;
 
 
-     public void calculateTax(PropertyRequest request){
+    @Autowired
+    public CalculationService(ObjectMapper mapper, ServiceRequestRepository serviceRequestRepository, PropertyConfiguration config) {
+        this.mapper = mapper;
+        this.serviceRequestRepository = serviceRequestRepository;
+        this.config = config;
+    }
+
+    public void calculateTax(PropertyRequest request){
          StringBuilder uri = new StringBuilder();
-         uri.append(calculationHost).append(calculationContextPath).append(calculationEndpoint);
+         uri.append(config.getCalculationHost()).append(config.getCalculationContextPath()).append(config.getCalculationEndpoint());
 
          CalculationReq calculationReq = createCalculationReq(request);
 
@@ -69,6 +67,17 @@ public class CalculationService {
          });
        return calculationReq;
      }
+
+
+
+    public Object getBills(List<String> consumercodes, String tenantId, RequestInfo requestInfo) {
+
+        StringBuilder uri = new StringBuilder();
+        uri.append(config.getBillingHost()).append(config.getBillingContext()).append(config.getFetchBillEndPoint())
+                .append("?tenantId=").append(tenantId).append("&consumerCodes=")
+                .append(consumercodes.toString().replace("[", "").replace("]", ""));
+        return serviceRequestRepository.fetchResult(uri, RequestInfoWrapper.builder().requestInfo(requestInfo).build());
+    }
 
 
 

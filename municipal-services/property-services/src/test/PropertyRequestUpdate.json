@@ -1,0 +1,96 @@
+{
+   	"RequestInfo": {
+         "apiId": "asset-services",
+         "userInfo":{
+         	"id":"12"
+         }
+       },
+         "properties": [
+    { "id":"one",
+      "tenantId": "test3",
+      "status": "ACTIVE",
+      "assessmentNumber":"dsgdggd",
+      "financialYear": "second",
+      "acknowldgementNumber":"xyz",
+      "propertyType": "residential",
+      "propertySubType":"residential",
+      "usageCategoryMajor": "residential",
+      "owners":[
+             {}
+           ],
+      "address": {
+        "id":"two",
+        "latitude": 0,
+        "longitude": 0,
+        "addressNumber": "string",
+        "type": "four",
+        "addressLine1": "afsdg",
+        "addressLine2": "line4",
+        "landmark": "string",
+        "city": "string",
+        "pincode": "string",
+        "detail": "string",
+        "buildingName": "string",
+        "street": "string",
+        "locality": {
+          "code": "xyz",
+          "name": "string",
+          "label": "string",
+          "latitude": "string",
+          "longitude": "string",
+          "children": [
+            null
+          ]
+        }
+      },
+      "oldAssessmentNumber": "string",
+      "assessmentDate": 1,
+      "creationReason": "NEWPROPERTY",
+      "occupancyDate": 0,
+      "propertyDetail": {
+        "id":"two",
+        "source": "MUNICIPAL_RECORDS",
+        "usage": "string",
+        "noOfFloors": 0,
+        "landArea": 0,
+        "buildUpArea": 0,
+        "units": [
+          {
+            "floorNo": "1",
+            "unitType": "string",
+            "unitArea": 0,
+            "usageCategoryMajor":"residential",
+            "usageCategoryMinor":"residential",
+            "usageCategorySubMinor":"residential",
+            "usageCategoryDetail":"residential",
+            "occupancyType":"OWNER",
+            "occupancyDate":132321,
+            "constructionType":"apartment",
+            "constructionSubType":"apartment",
+            "arv":132.0
+          }
+        ],
+        "documents": [
+          {
+            "documentType": "pancard",
+            "fileStore": "string"
+          }
+        ],
+        "additionalDetails": "string",
+        "channel": "SYSTEM"
+      }
+    }
+  ]
+
+
+
+
+
+
+
+
+
+
+
+
+   }
