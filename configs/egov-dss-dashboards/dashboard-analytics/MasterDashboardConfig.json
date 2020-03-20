@@ -26,7 +26,7 @@
                   "headers": []
                 },
                 {
-                  "id": "totalCollection",
+                  "id": "totalCollectionv2",
                   "name": "DSS_TOTAL_COLLECTION",
                   "code": "",
                   "chartType": "metric",
@@ -42,7 +42,7 @@
                   "headers": []
                 },
                 {
-                  "id": "targetAchieved",
+                  "id": "targetAchievedv2",
                   "name": "DSS_TARGET_ACHIEVED",
                   "code": "",
                   "chartType": "metric",
@@ -64,7 +64,7 @@
               "isCollapsible": false,
               "charts": [
                 {
-                  "id": "cumulativeCollection",
+                  "id": "cumulativeCollectionv2",
                   "name": "Weekly",
                   "code": "",
                   "chartType": "line",
@@ -92,7 +92,7 @@
               "label": "",
               "charts": [
                 {
-                  "id": "topPerformingUlbs",
+                  "id": "topPerformingUlbsv2",
                   "name": "DSS_TOP_PERFORMING_ULBS",
                   "code": "",
                   "chartType": "bar",
@@ -113,7 +113,7 @@
               "isCollapsible": false,
               "charts": [
                 {
-                  "id": "bottomPerformingUlbs",
+                  "id": "bottomPerformingUlbsv2",
                   "name": "DSS_BOTTOM_PERFORMING_ULBS",
                   "code": "",
                   "chartType": "bar",
@@ -134,7 +134,7 @@
               "isCollapsible": false,
               "charts": [
                 {
-                  "id": "totalCollectionDeptWise",
+                  "id": "totalCollectionDeptWisev2",
                   "name": "DSS_TOTAL_CUMULATIVE_COLLECTION:_DEPARTMENT_WISE",
                   "code": "",
                   "chartType": "donut",
@@ -316,7 +316,7 @@
                   "headers": []
                 },
                 {
-                  "id": "totalCollection",
+                  "id": "totalCollectionv2",
                   "name": "DSS_TOTAL_COLLECTION",
                   "code": "",
                   "chartType": "metric",
@@ -332,7 +332,7 @@
                   "headers": []
                 },
                 {
-                  "id": "targetAchieved",
+                  "id": "targetAchievedv2",
                   "name": "DSS_TARGET_ACHIEVED",
                   "code": "",
                   "chartType": "metric",
@@ -354,7 +354,7 @@
               "isCollapsible": false,
               "charts": [
                 {
-                  "id": "cumulativeCollection",
+                  "id": "cumulativeCollectionv2",
                   "name": "Monthly",
                   "code": "",
                   "chartType": "line",
@@ -382,7 +382,7 @@
               "isCollapsible": false,
               "charts": [
                 {
-                  "id": "topPerformingUlbs",
+                  "id": "topPerformingUlbsv2",
                   "name": "DSS_TL_TOP_3_PERFORMING_ULBS",
                   "code": "",
                   "chartType": "bar",
@@ -404,7 +404,7 @@
               "isCollapsible": false,
               "charts": [
                 {
-                  "id": "bottomPerformingUlbs",
+                  "id": "bottomPerformingUlbsv2",
                   "name": "DSS_TL_BOTTOM_3_PERFORMING_ULBS",
                   "code": "",
                   "chartType": "bar",
@@ -426,7 +426,7 @@
               "isCollapsible": false,
               "charts": [
                 {
-                  "id": "licenseByLicenseType",
+                  "id": "licenseByLicenseTypev2",
                   "name": "DSS_TL_LICENSE_BY_TYPE",
                   "code": "",
                   "chartType": "donut",
@@ -454,7 +454,7 @@
               "isCollapsible": false,
               "charts": [
                 {
-                  "id": "licenseIssuedDDRRevenue",
+                  "id": "licenseIssuedDDRRevenuev2",
                   "name": "DSS_TL_DEMAND_COLLECTION_BOUNDARY",
                   "code": "",
                   "chartType": "table",
@@ -483,7 +483,7 @@
               "isCollapsible": true,
               "charts": [
                 {
-                  "id": "licenceTaxHeadsBreakupDDR",
+                  "id": "licenceTaxHeadsBreakupDDRv2",
                   "name": "DSS_TL_TAX_HEAD_BREAKUP_BOUNDARY",
                   "code": "",
                   "chartType": "table",
