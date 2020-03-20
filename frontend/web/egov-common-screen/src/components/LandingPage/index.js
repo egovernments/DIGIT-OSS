@@ -90,10 +90,8 @@ class LandingPage extends React.Component {
 
         return (
             <div className="common-background" style={{
-                backgroundImage: `url(${backgroundUrl})`,
-                backgroundRepeat: "no-repeat",
-                backgroundPosition: "center center",
-                backgroundSize: "cover"
+                height: '100%',
+                background: `linear-gradient(rgba(255,255,255,.5), rgba(255,255,255,.5)), url(${backgroundUrl}) no-repeat center`,
             }}>
                 <Grid container className={classes.root}>
 
@@ -175,6 +173,12 @@ class LandingPage extends React.Component {
                                 </CardActions>
                             </Card>
                         </Grid>
+                        <Grid container style={{ marginBottom: "10px" }}>
+                        <Grid item md={12} style={{ textAlign: "center" }}>
+                            <p style={{color:"#fff",fontSize:"20px"}}>For Right of Way/Road Cutting/Road Digging Service <a style={{color:"#EA784E"}} href="http://enagarsewa.uk.gov.in/" target="_blank" >APPLY HERE
+                             </a></p>
+                        </Grid>
+                    </Grid>
                         <Grid item md={1}></Grid>
                     </Grid>
                 </Grid>
