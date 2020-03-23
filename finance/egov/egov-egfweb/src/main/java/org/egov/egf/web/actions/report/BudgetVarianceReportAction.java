@@ -445,6 +445,10 @@ public class BudgetVarianceReportAction extends BaseFormAction {
                 row.setActual(BigDecimal.ZERO);
             row.setVariance(row.getEstimate().add(
                     row.getAdditionalAppropriation().subtract(row.getActual() == null ? BigDecimal.ZERO : row.getActual())));
+            if(row.getVariance()!=null && row.getTotal()!=null) {
+            BigDecimal variancePercentage=(BigDecimal)((row.getVariance().divide(row.getTotal())).multiply(BigDecimal.valueOf(100)));
+            row.setVariancePercentage(variancePercentage);
+            }
         }
     }
 

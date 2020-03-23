@@ -72,6 +72,7 @@
 										<th class="bluebgheadtd"><s:text name="lbl.report.total"/></th>
 										<th class="bluebgheadtd"><s:text name="lbl.report.actual"/></th>
 										<th class="bluebgheadtd"><s:text name="lbl.report.variance"/></th>
+										<th class="bluebgheadtd"><s:text name="lbl.report.variance.percentage"/></th>
 									</tr>
 									<s:iterator value="budgetVarianceEntries" status="stat" var="p">
 										<tr>
@@ -126,6 +127,14 @@
 													<s:if test="%{#p.variance != null}">
 														<s:text name="format.number">
 															<s:param name="value" value="variance" />
+														</s:text>&nbsp;
+														</s:if>
+													<s:else>0.00</s:else>
+												</div></td>
+												<td class="blueborderfortd"><div align="right">
+													<s:if test="%{#p.variancePercentage != null}">
+														<s:text name="format.number">
+															<s:param name="value" value="variancePercentage" />
 														</s:text>&nbsp;
 														</s:if>
 													<s:else>0.00</s:else>

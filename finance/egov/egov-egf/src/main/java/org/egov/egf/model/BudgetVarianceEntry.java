@@ -62,6 +62,15 @@ public class BudgetVarianceEntry {
     BigDecimal variance;
     private Long detailId;
     private BigDecimal total;
+    private BigDecimal variancePercentage;
+
+    public BigDecimal getVariancePercentage() {
+        return variancePercentage;
+    }
+
+    public void setVariancePercentage(BigDecimal variancePercentage) {
+        this.variancePercentage = variancePercentage;
+    }
 
     public String getDepartmentCode() {
         return departmentCode;
