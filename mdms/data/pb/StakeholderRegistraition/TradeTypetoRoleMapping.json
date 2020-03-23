@@ -5,7 +5,7 @@
     {
       "id": "313bbadb-c0d7-49b5-b021-77a608f13a31",
       "tradeType": "ARCHITECT.CLASSA",
-      "role": ["BPA_ARCHITECT","BPA_ENGINEER"],
+      "role": ["BPA_ARCHITECT"],
       "endstate": "APPROVED",
       "applicationFee": 500
     },
@@ -26,7 +26,7 @@
     {
       "id": "df027b77-69c1-4749-8608-601328a2deea",
       "tradeType": "BUILDER.CLASSA",
-      "role": ["BPA_BUILDER","BPA_ARCHITECT"],
+      "role": ["BPA_BUILDER"],
       "endstate": "APPROVED",
       "applicationFee": 500
     },
@@ -61,7 +61,7 @@
     {
       "id": "7f26d283-cc52-4684-9bbc-f87ade6f2228",
       "tradeType": "ENGINEER.CLASSC",
-      "role": ["BPA_ENGINEER","BPA_STRUCTURALENGINEER"],
+      "role": ["BPA_ENGINEER"],
       "endstate": "APPROVED",
       "applicationFee": 500
     },
@@ -88,14 +88,14 @@
     },
     {
       "id": "57b66c2a-0033-4875-a3bd-856e5cf82427",
-      "tradeType": "TOWNPLANNER",
-      "role": ["BPA_TOWNPLANNER","BPA_STRUCTURALENGINEER"],
+      "tradeType": "TOWNPLANNER.CLASSA",
+      "role": ["BPA_TOWNPLANNER"],
       "endstate": "APPROVED",
       "applicationFee": 500
     },
     {
       "id": "57b66c2a-0033-4875-a3bd-856e5cf82430",
-      "tradeType": "SUPERVISOR",
+      "tradeType": "SUPERVISOR.CLASSA",
       "role": ["BPA_SUPERVISOR"],
       "endstate": "APPROVED",
       "applicationFee": 500
