@@ -98,10 +98,6 @@ public class BillingslabQueryBuilder {
 			preparedStmtList.add(billingSlabSearcCriteria.getUomValue());
 		}
 		
-		if(null != billingSlabSearcCriteria.getApplicationType()){
-			queryBuilder.append(" AND (applicationTion =? OR licensetype = 'ALL')");
-			preparedStmtList.add(billingSlabSearcCriteria.getApplicationType());
-		}
 	}
 
 	/**
