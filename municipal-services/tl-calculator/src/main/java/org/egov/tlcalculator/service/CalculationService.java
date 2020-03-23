@@ -243,7 +243,7 @@ public class CalculationService {
               BillingSlabSearchCriteria searchCriteria = new BillingSlabSearchCriteria();
               searchCriteria.setTenantId(license.getTenantId());
               searchCriteria.setStructureType(license.getTradeLicenseDetail().getStructureType());
-              searchCriteria.setApplicationType((String) ( (HashMap<String, Object>) license.getTradeLicenseDetail().getAdditionalDetail()).get("applicationType"));
+              searchCriteria.setApplicationType(license.getApplicationType().toString());
               searchCriteria.setLicenseType(license.getLicenseType().toString());
               searchCriteria.setTradeType(tradeUnit.getTradeType());
               if(tradeUnit.getUomValue()!=null)
