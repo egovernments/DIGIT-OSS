@@ -47,6 +47,8 @@ export const clearUserDetails = () => {
       window.localStorage.removeItem(key);
     }
   });
+  //this is the recent change done as per the audit team
+  window.localStorage.removeItem("user-info");
 };
 //Role specific get-set Methods
 export const localStorageGet = (key, path) => {
