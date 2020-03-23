@@ -107,7 +107,7 @@ public class MigrationService {
 
 
 
-    public List<OldProperty> searchOldProperty(org.egov.pt.web.contracts.RequestInfoWrapper requestInfoWrapper, PropertyCriteria propertyCriteria){
+    public List<OldProperty> searchOldPropertyFromURL(org.egov.pt.web.contracts.RequestInfoWrapper requestInfoWrapper, OldPropertyCriteria propertyCriteria){
 
 
         StringBuilder url = new StringBuilder(userHost).append(oldPropertySearchEndpoint).append(URL_PARAMS_SEPARATER)
@@ -665,8 +665,41 @@ public class MigrationService {
             assessment.setUnitUsageList(migrateUnitUsageList(propertyDetail));
 
         if(propertyDetail.getAdditionalDetails()!=null){
-            JsonNode additionalDetails = mapper.convertValue(propertyDetail.getAdditionalDetails(),JsonNode.class);
-            assessment.setAdditionalDetails(additionalDetails);
+            try{
+                Object propertyDetailAdditionalDetail = propertyDetail.getAdditionalDetails();
+                Map<String,Object> assessmentAdditionalDetail = mapper.convertValue(propertyDetailAdditionalDetail,Map.class);
+                addAssessmentPenaltyandRebate(assessmentAdditionalDetail,propertyDetail);
+
+                if(assessmentAdditionalDetail.size() >0){
+                    JsonNode additionalDetails = mapper.convertValue(assessmentAdditionalDetail,JsonNode.class);
+                    assessment.setAdditionalDetails(additionalDetails);
+                }
+                else
+                    assessment.setAdditionalDetails(null);
+
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+                throw new CustomException("PARSING_ERROR","Failed to parse additional details in translation");
+            }
+        }
+        else{
+
+            try{
+                Map<String,Object> assessmentAdditionalDetail = new HashMap<>();
+                addAssessmentPenaltyandRebate(assessmentAdditionalDetail,propertyDetail);
+                if(assessmentAdditionalDetail.size() >0){
+                    JsonNode additionalDetails = mapper.convertValue(assessmentAdditionalDetail,JsonNode.class);
+                    assessment.setAdditionalDetails(additionalDetails);
+                }
+                else
+                    assessment.setAdditionalDetails(null);
+
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+                throw new CustomException("PARSING_ERROR","Failed to parse additional details in translation");
+            }
+
+
         }
         if(propertyDetail.getAuditDetails()!=null){
             AuditDetails audit = mapper.convertValue(propertyDetail.getAuditDetails(),AuditDetails.class);
@@ -679,8 +712,21 @@ public class MigrationService {
         } catch (Exception e) {
             errorMap.put(assessment.getAssessmentNumber(), String.valueOf(e));
         }
-
+        
         producer.push(config.getCreateAssessmentTopic(), request);
+    }
+
+    public Map<String,Object> addAssessmentPenaltyandRebate(Map<String,Object> assessmentAdditionalDetail,PropertyDetail propertyDetail){
+        if(propertyDetail.getAdhocExemption() != null)
+            assessmentAdditionalDetail.put("adhocExemption",propertyDetail.getAdhocExemption().doubleValue());
+        if(!StringUtils.isEmpty(propertyDetail.getAdhocExemptionReason()))
+            assessmentAdditionalDetail.put("adhocExemptionReason",propertyDetail.getAdhocExemptionReason());
+        if(propertyDetail.getAdhocPenalty() != null)
+            assessmentAdditionalDetail.put("adhocPenalty",propertyDetail.getAdhocPenalty().doubleValue());
+        if(!StringUtils.isEmpty(propertyDetail.getAdhocPenaltyReason()))
+            assessmentAdditionalDetail.put("adhocPenaltyReason",propertyDetail.getAdhocPenaltyReason());
+
+        return assessmentAdditionalDetail;
     }
 
     public List<UnitUsage> migrateUnitUsageList(PropertyDetail propertyDetail){
