@@ -18,7 +18,7 @@
               "isCollapsible": false,
               "charts": [
                 {
-                  "id": "todaysCollection",
+                  "id": "todaysCollectionv2",
                   "name": "DSS_TOTAL_COLLECTION_TODAY",
                   "code": "",
                   "chartType": "",
@@ -308,7 +308,7 @@
               "isCollapsible": false,
               "charts": [
                 {
-                  "id": "todaysCollection",
+                  "id": "todaysCollectionv2",
                   "name": "DSS_TOTAL_COLLECTION_TODAY",
                   "code": "",
                   "chartType": "metric",
@@ -1156,7 +1156,7 @@
               "charts": [
 
                 {
-                  "id": "todaysCollection",
+                  "id": "todaysCollectionv2",
                   "name": "DSS_TOTAL_COLLECTION_TODAY",
                   "code": "",
                   "chartType": "metric",
@@ -1824,7 +1824,7 @@
               "label": "DSS_OVERVIEW",
               "charts": [
                 {
-                  "id": "todaysCollection",
+                  "id": "todaysCollectionv2",
                   "name": "DSS_TOTAL_COLLECTION_TODAY",
                   "code": "",
                   "chartType": "metric",
@@ -1832,7 +1832,7 @@
                   "headers": []
                 },
                 {
-                  "id": "totalCollection",
+                  "id": "totalCollectionv2",
                   "name": "DSS_TOTAL_COLLECTION",
                   "code": "",
                   "chartType": "metric",
@@ -1848,7 +1848,7 @@
                   "headers": []
                 },
                 {
-                  "id": "targetAchieved",
+                  "id": "targetAchievedv2",
                   "name": "DSS_TARGET_ACHIEVED",
                   "code": "",
                   "chartType": "metric",
@@ -1869,7 +1869,7 @@
               "isCollapsible": false,
               "charts": [
                 {
-                  "id": "cumulativeCollection",
+                  "id": "cumulativeCollectionv2",
                   "name": "Monthly",
                   "code": "",
                   "chartType": "line",
@@ -1897,7 +1897,7 @@
               "label": "",
               "charts": [
                 {
-                  "id": "topPerformingUlbs",
+                  "id": "topPerformingUlbsv2",
                   "name": "DSS_PT_TOP_3_PERFORMING_ULBS",
                   "code": "",
                   "chartType": "bar",
@@ -1918,7 +1918,7 @@
               "isCollapsible": false,
               "charts": [
                 {
-                  "id": "bottomPerformingUlbs",
+                  "id": "bottomPerformingUlbsv2",
                   "name": "DSS_PT_BOTTOM_3_PERFORMING_ULBS",
                   "code": "",
                   "chartType": "bar",
@@ -1939,7 +1939,7 @@
               "isCollapsible": false,
               "charts": [
                 {
-                  "id": "collectionByUsageType",
+                  "id": "collectionByUsageTypev2",
                   "name": "DSS_PT_COLLECTION_BY_USAGE_TYPE",
                   "code": "",
                   "chartType": "donut",
@@ -1966,7 +1966,7 @@
               "isCollapsible": true,
               "charts": [
                 {
-                  "id": "demandCollectionIndexDDRRevenue",
+                  "id": "demandCollectionIndexDDRRevenuev2",
                   "name": "DSS_PT_DEMAND_COLLECTION_BOUNDARY",
                   "code": "",
                   "chartType": "table",
@@ -1975,7 +1975,7 @@
                   "tabName": "Boundary"
                 },
                 {
-                  "id": "demandCollectionIndexUsageRevenue",
+                  "id": "demandCollectionIndexUsageRevenuev2",
                   "name": "DSS_PT_DEMAND_COLLECTION_USAGETYPE",
                   "code": "",
                   "chartType": "table",
@@ -2004,7 +2004,7 @@
               "isCollapsible": false,
               "charts": [
                 {
-                  "id": "taxHeadsBreakupDDRRevenue",
+                  "id": "taxHeadsBreakupDDRRevenuev2",
                   "name": "DSS_PT_TAX_HEAD_BREAKUP_REVENUE",
                   "code": "",
                   "chartType": "table",
@@ -2013,7 +2013,7 @@
                   "tabName": "Boundary"
                 },
                 {
-                  "id": "taxHeadsBreakupUsage",
+                  "id": "taxHeadsBreakupUsagev2",
                   "name": "DSS_PT_TAX_HEAD_BREAKUP_USAGE",
                   "code": "",
                   "chartType": "table",
@@ -2209,7 +2209,7 @@
               "isCollapsible": false,
               "charts": [
                 {
-                  "id": "todaysCollection",
+                  "id": "todaysCollectionv2",
                   "name": "DSS_TOTAL_COLLECTION_TODAY",
                   "code": "",
                   "chartType": "metric",
@@ -2217,7 +2217,7 @@
                   "headers": []
                 },
                 {
-                  "id": "totalCollection",
+                  "id": "totalCollectionv2",
                   "name": "DSS_TOTAL_COLLECTION",
                   "code": "",
                   "chartType": "metric",
@@ -2233,7 +2233,7 @@
                   "headers": []
                 },
                 {
-                  "id": "targetAchieved",
+                  "id": "targetAchievedv2",
                   "name": "DSS_TARGET_ACHIEVED",
                   "code": "",
                   "chartType": "metric",
@@ -2255,7 +2255,7 @@
               "isCollapsible": false,
               "charts": [
                 {
-                  "id": "cumulativeCollection",
+                  "id": "cumulativeCollectionv2",
                   "name": "Monthly",
                   "code": "",
                   "chartType": "line",
@@ -2283,7 +2283,7 @@
               "isCollapsible": false,
               "charts": [
                 {
-                  "id": "topPerformingUlbs",
+                  "id": "topPerformingUlbsv2",
                   "name": "DSS_TL_TOP_3_PERFORMING_ULBS",
                   "code": "",
                   "chartType": "bar",
@@ -2305,7 +2305,7 @@
               "isCollapsible": false,
               "charts": [
                 {
-                  "id": "bottomPerformingUlbs",
+                  "id": "bottomPerformingUlbsv2",
                   "name": "DSS_TL_BOTTOM_3_PERFORMING_ULBS",
                   "code": "",
                   "chartType": "bar",
@@ -2327,7 +2327,7 @@
               "isCollapsible": false,
               "charts": [
                 {
-                  "id": "licenseByLicenseType",
+                  "id": "licenseByLicenseTypev2",
                   "name": "DSS_TL_LICENSE_BY_TYPE",
                   "code": "",
                   "chartType": "donut",
@@ -2355,7 +2355,7 @@
               "isCollapsible": true,
               "charts": [
                 {
-                  "id": "licenseIssuedDDRRevenue",
+                  "id": "licenseIssuedDDRRevenuev2",
                   "name": "DSS_TL_DEMAND_COLLECTION_BOUNDARY",
                   "code": "",
                   "chartType": "table",
@@ -2384,7 +2384,7 @@
               "isCollapsible": true,
               "charts": [
                 {
-                  "id": "licenceTaxHeadsBreakupDDR",
+                  "id": "licenceTaxHeadsBreakupDDRv2",
                   "name": "DSS_TL_TAX_HEAD_BREAKUP_BOUNDARY",
                   "code": "",
                   "chartType": "table",
@@ -2577,7 +2577,7 @@
               "isCollapsible": false,
               "charts": [
                 {
-                  "id": "todaysCollection",
+                  "id": "todaysCollectionv2",
                   "name": "DSS_TOTAL_COLLECTION_TODAY",
                   "code": "",
                   "chartType": "",
@@ -2585,7 +2585,7 @@
                   "headers": []
                 },
                 {
-                  "id": "totalCollection",
+                  "id": "totalCollectionv2",
                   "name": "DSS_TOTAL_COLLECTION",
                   "code": "",
                   "chartType": "metric",
@@ -2601,7 +2601,7 @@
                   "headers": []
                 },
                 {
-                  "id": "targetAchieved",
+                  "id": "targetAchievedv2",
                   "name": "DSS_TARGET_ACHIEVED",
                   "code": "",
                   "chartType": "metric",
@@ -2623,7 +2623,7 @@
               "isCollapsible": false,
               "charts": [
                 {
-                  "id": "cumulativeCollection",
+                  "id": "cumulativeCollectionv2",
                   "name": "Weekly",
                   "code": "",
                   "chartType": "line",
@@ -2651,7 +2651,7 @@
               "label": "",
               "charts": [
                 {
-                  "id": "topPerformingUlbs",
+                  "id": "topPerformingUlbsv2",
                   "name": "DSS_TOP_PERFORMING_ULBS",
                   "code": "",
                   "chartType": "bar",
@@ -2672,7 +2672,7 @@
               "isCollapsible": false,
               "charts": [
                 {
-                  "id": "bottomPerformingUlbs",
+                  "id": "bottomPerformingUlbsv2",
                   "name": "DSS_BOTTOM_PERFORMING_ULBS",
                   "code": "",
                   "chartType": "bar",
@@ -2693,7 +2693,7 @@
               "isCollapsible": false,
               "charts": [
                 {
-                  "id": "totalCollectionDeptWise",
+                  "id": "totalCollectionDeptWisev2",
                   "name": "DSS_TOTAL_CUMULATIVE_COLLECTION:_DEPARTMENT_WISE",
                   "code": "",
                   "chartType": "donut",
@@ -2868,7 +2868,7 @@
               },
               "charts": [
                 {
-                  "id": "totalCollection",
+                  "id": "totalCollectionv2",
                   "name": "DSS_TOTAL_COLLECTION",
                   "code": "",
                   "chartType": "metric",
@@ -2876,7 +2876,7 @@
                   "headers": []
                 },
                 {
-                  "id": "targetAchieved",
+                  "id": "targetAchievedv2",
                   "name": "DSS_TARGET_ACHIEVED",
                   "code": "",
                   "chartType": "metric",
@@ -2923,7 +2923,7 @@
               "label": "",
               "charts": [
                 {
-                  "id": "totalCollection",
+                  "id": "totalCollectionv2",
                   "name": "DSS_TOTAL_COLLECTION",
                   "code": "",
                   "chartType": "metric",
@@ -2953,7 +2953,7 @@
               "label": "",
               "charts": [
                 {
-                  "id": "totalCollection",
+                  "id": "totalCollectionv2",
                   "name": "DSS_TOTAL_COLLECTION",
                   "code": "",
                   "chartType": "metric",
