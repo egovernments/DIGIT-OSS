@@ -717,8 +717,10 @@ public class MigrationService {
     }
 
     public Map<String,Object> addAssessmentPenaltyandRebate(Map<String,Object> assessmentAdditionalDetail,PropertyDetail propertyDetail){
-        if(propertyDetail.getAdhocExemption() != null)
-            assessmentAdditionalDetail.put("adhocExemption",propertyDetail.getAdhocExemption().doubleValue());
+        if(propertyDetail.getAdhocExemption() != null) {
+            assessmentAdditionalDetail.put("adhocExemption", propertyDetail.getAdhocExemption().doubleValue());
+            System.out.println("Rebate----------->"+propertyDetail.getAdhocExemption().doubleValue());
+        }
         if(!StringUtils.isEmpty(propertyDetail.getAdhocExemptionReason()))
             assessmentAdditionalDetail.put("adhocExemptionReason",propertyDetail.getAdhocExemptionReason());
         if(propertyDetail.getAdhocPenalty() != null)
