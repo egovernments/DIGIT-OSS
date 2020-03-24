@@ -670,7 +670,7 @@ public class MigrationService {
                 Map<String,Object> assessmentAdditionalDetail = mapper.convertValue(propertyDetailAdditionalDetail,Map.class);
                 addAssessmentPenaltyandRebate(assessmentAdditionalDetail,propertyDetail);
 
-                if(assessmentAdditionalDetail.size() >0){
+                if(assessmentAdditionalDetail != null && assessmentAdditionalDetail.size() >0){
                     JsonNode additionalDetails = mapper.convertValue(assessmentAdditionalDetail,JsonNode.class);
                     assessment.setAdditionalDetails(additionalDetails);
                 }
@@ -687,7 +687,7 @@ public class MigrationService {
             try{
                 Map<String,Object> assessmentAdditionalDetail = new HashMap<>();
                 addAssessmentPenaltyandRebate(assessmentAdditionalDetail,propertyDetail);
-                if(assessmentAdditionalDetail.size() >0){
+                if(assessmentAdditionalDetail != null && assessmentAdditionalDetail.size() >0){
                     JsonNode additionalDetails = mapper.convertValue(assessmentAdditionalDetail,JsonNode.class);
                     assessment.setAdditionalDetails(additionalDetails);
                 }
