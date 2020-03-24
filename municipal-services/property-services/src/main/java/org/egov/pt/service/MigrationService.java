@@ -717,14 +717,19 @@ public class MigrationService {
     }
 
     public Map<String,String> addAssessmentPenaltyandRebate(Map<String,String> assessmentAdditionalDetail,PropertyDetail propertyDetail){
-        if(propertyDetail.getAdhocExemption() != null)
-            assessmentAdditionalDetail.put("adhocExemption", String.valueOf(propertyDetail.getAdhocExemption().doubleValue()));
-        if(!StringUtils.isEmpty(propertyDetail.getAdhocExemptionReason()))
-            assessmentAdditionalDetail.put("adhocExemptionReason",propertyDetail.getAdhocExemptionReason());
-        if(propertyDetail.getAdhocPenalty() != null)
-            assessmentAdditionalDetail.put("adhocPenalty", String.valueOf(propertyDetail.getAdhocPenalty().doubleValue()));
-        if(!StringUtils.isEmpty(propertyDetail.getAdhocPenaltyReason()))
-            assessmentAdditionalDetail.put("adhocPenaltyReason",propertyDetail.getAdhocPenaltyReason());
+        try{
+            if(propertyDetail.getAdhocExemption() != null)
+                assessmentAdditionalDetail.put("adhocExemption", String.valueOf(propertyDetail.getAdhocExemption()));
+            if(!StringUtils.isEmpty(propertyDetail.getAdhocExemptionReason()))
+                assessmentAdditionalDetail.put("adhocExemptionReason",propertyDetail.getAdhocExemptionReason());
+            if(propertyDetail.getAdhocPenalty() != null)
+                assessmentAdditionalDetail.put("adhocPenalty", String.valueOf(propertyDetail.getAdhocPenalty().doubleValue()));
+            if(!StringUtils.isEmpty(propertyDetail.getAdhocPenaltyReason()))
+                assessmentAdditionalDetail.put("adhocPenaltyReason",propertyDetail.getAdhocPenaltyReason());
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("ERROR----->"+e);
+        }
 
         return assessmentAdditionalDetail;
     }
