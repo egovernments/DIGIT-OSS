@@ -19,27 +19,9 @@
                 }
               },
               {
-                "variable": "applicationFee",
-                "value": {
-                  "path": "$.applicationFee"
-                }
-              },
-              {
                 "variable": "status",
                 "value": {
                   "path": "$.status"
-                }
-              },
-              {
-                "variable": "serviceFee",
-                "value": {
-                  "path": "$.serviceFee"
-                }
-              },
-              {
-                "variable": "tax",
-                "value": {
-                  "path": "$.tax"
                 }
               },
               {
