@@ -30,7 +30,7 @@
       "jobName": "daily",
       "active": "true",
       "method": "POST",
-      "url": "http://sw-calculator.egov:8080/sewerageCalculator/_jobscheduler",
+      "url": "http://sw-calculator.egov:8080/sw-calculator/sewerageCalculator/_jobscheduler",
       "payload": {
         "RequestInfo": "{DEFAULT_REQUESTINFO}"
       },
