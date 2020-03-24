@@ -377,7 +377,7 @@
                                                 "style": "ws-sub-table"
                                             },
                                             {
-                                                "text": "{{rainwater_harvesting_facility}}",
+                                                "text": " ",
                                                 "border": [
                                                     false,
                                                     false,
@@ -419,7 +419,7 @@
                                                 "style": "ws-sub-table-value"
                                             },
                                             {
-                                                "text": "{{rainwaterHarvestingFacility}}",
+                                                "text": " ",
                                                 "border": [
                                                     false,
                                                     false,
