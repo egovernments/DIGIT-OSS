@@ -4,7 +4,7 @@
   "CronJobAPIConfig": [
     {
       "jobName": "daily",
-      "active": "true",
+      "active": "false",
       "method": "POST",
       "url": "http://tl-services.egov:8080/tl-services/v1/TL/Expiry/_batch",
       "payload": {
@@ -18,7 +18,7 @@
       "jobName": "daily",
       "active": "true",
       "method": "POST",
-      "url": "http://ws-calculator.egov:8080/waterCalculator/_jobscheduler",
+      "url": "http://ws-calculator.egov:8080/ws-calculator/waterCalculator/_jobscheduler",
       "payload": {
         "RequestInfo": "{DEFAULT_REQUESTINFO}"
       },
