@@ -91,6 +91,9 @@ public class MigrationService {
     @Value("${egov.user.host}")
     private String userHost;
 
+    @Value("${egov.pt-services-v2.host}")
+    private String ptHost;
+
     @Value("${egov.oldProperty.search}")
     private String oldPropertySearchEndpoint;
 
@@ -110,7 +113,7 @@ public class MigrationService {
     public List<OldProperty> searchOldPropertyFromURL(org.egov.pt.web.contracts.RequestInfoWrapper requestInfoWrapper, OldPropertyCriteria propertyCriteria){
 
 
-        StringBuilder url = new StringBuilder(userHost).append(oldPropertySearchEndpoint).append(URL_PARAMS_SEPARATER)
+        StringBuilder url = new StringBuilder(ptHost).append(oldPropertySearchEndpoint).append(URL_PARAMS_SEPARATER)
                 .append(TENANT_ID_FIELD_FOR_SEARCH_URL).append(propertyCriteria.getTenantId())
                 .append(SEPARATER).append(OFFSET_FIELD_FOR_SEARCH_URL)
                 .append(propertyCriteria.getOffset()).append(SEPARATER)
