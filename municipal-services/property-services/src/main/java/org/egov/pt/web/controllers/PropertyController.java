@@ -82,7 +82,7 @@ public class PropertyController {
 															  @Valid @ModelAttribute OldPropertyCriteria propertyCriteria) {
 		long startTime = System.nanoTime();
 		RequestInfo requestInfo = requestInfoWrapper.getRequestInfo();
-		List<OldProperty> oldProperties = migrationService.searchOldPropertyFromURL(requestInfoWrapper,propertyCriteria) ;
+		List<OldProperty> oldProperties = migrationService.searchOldProperty(requestInfoWrapper,propertyCriteria) ;
 
 		List<Property> properties = migrationService.migrateProperty(requestInfo,oldProperties);
 		long endtime = System.nanoTime();
