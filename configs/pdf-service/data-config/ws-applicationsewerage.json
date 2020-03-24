@@ -85,12 +85,6 @@
                                 }
                             },
                             {
-                                "variable": "rainwaterHarvestingFacility",
-                                "value": {
-                                    "path": "$.rainWaterHarvesting"
-                                }
-                            },
-                            {
                                 "variable": "cityName",
                                 "value": {
                                     "path": "$.property.address.city"

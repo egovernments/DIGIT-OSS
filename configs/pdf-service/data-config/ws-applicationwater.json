@@ -88,6 +88,11 @@
                 "variable": "rainwaterHarvestingFacility",
                 "value": {
                   "path": "$.rainWaterHarvesting"
+                },
+                "localisation": {
+                  "required": true,
+                  "prefix": "HARVESTING",
+                  "module": "rainmaker-common"
                 }
               },
               {
