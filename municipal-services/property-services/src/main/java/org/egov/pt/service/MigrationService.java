@@ -667,7 +667,7 @@ public class MigrationService {
         if(propertyDetail.getAdditionalDetails()!=null){
             try{
                 Object propertyDetailAdditionalDetail = propertyDetail.getAdditionalDetails();
-                Map<String,Object> assessmentAdditionalDetail = mapper.convertValue(propertyDetailAdditionalDetail,Map.class);
+                Map<String,String> assessmentAdditionalDetail = mapper.convertValue(propertyDetailAdditionalDetail,Map.class);
                 addAssessmentPenaltyandRebate(assessmentAdditionalDetail,propertyDetail);
 
                 if(assessmentAdditionalDetail != null && assessmentAdditionalDetail.size() >0){
@@ -685,7 +685,7 @@ public class MigrationService {
         else{
 
             try{
-                Map<String,Object> assessmentAdditionalDetail = new HashMap<>();
+                Map<String,String> assessmentAdditionalDetail = new HashMap<>();
                 addAssessmentPenaltyandRebate(assessmentAdditionalDetail,propertyDetail);
                 if(assessmentAdditionalDetail != null && assessmentAdditionalDetail.size() >0){
                     JsonNode additionalDetails = mapper.convertValue(assessmentAdditionalDetail,JsonNode.class);
@@ -716,16 +716,13 @@ public class MigrationService {
         producer.push(config.getCreateAssessmentTopic(), request);
     }
 
-    public Map<String,Object> addAssessmentPenaltyandRebate(Map<String,Object> assessmentAdditionalDetail,PropertyDetail propertyDetail){
-        if(propertyDetail.getAdhocExemption() != null) {
-            System.out.println("Rebate----------->"+propertyDetail.getAdhocExemption().doubleValue());
-            assessmentAdditionalDetail.put("adhocExemption", propertyDetail.getAdhocExemption().doubleValue());
-
-        }
+    public Map<String,String> addAssessmentPenaltyandRebate(Map<String,String> assessmentAdditionalDetail,PropertyDetail propertyDetail){
+        if(propertyDetail.getAdhocExemption() != null)
+            assessmentAdditionalDetail.put("adhocExemption", String.valueOf(propertyDetail.getAdhocExemption().doubleValue()));
         if(!StringUtils.isEmpty(propertyDetail.getAdhocExemptionReason()))
             assessmentAdditionalDetail.put("adhocExemptionReason",propertyDetail.getAdhocExemptionReason());
         if(propertyDetail.getAdhocPenalty() != null)
-            assessmentAdditionalDetail.put("adhocPenalty",propertyDetail.getAdhocPenalty().doubleValue());
+            assessmentAdditionalDetail.put("adhocPenalty", String.valueOf(propertyDetail.getAdhocPenalty().doubleValue()));
         if(!StringUtils.isEmpty(propertyDetail.getAdhocPenaltyReason()))
             assessmentAdditionalDetail.put("adhocPenaltyReason",propertyDetail.getAdhocPenaltyReason());
 
