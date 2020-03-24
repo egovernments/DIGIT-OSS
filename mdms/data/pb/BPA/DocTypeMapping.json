@@ -217,30 +217,6 @@
             "applicationType": "BUILDING_PLAN_SCRUTINY",
             "ServiceType": "NEW_CONSTRUCTION",
             "RiskType": "LOW",
-            "WFState": "FIELDINSPECTION_PENDING",
-            "docTypes": [
-                {
-                    "code": "FI.FIR",
-                    "required": false
-                }, {
-                    "code": "FI.SINS",
-                    "required": false
-                }, {
-                    "code": "FI.SISS",
-                    "required": false
-                }, {
-                    "code": "FI.SIES",
-                    "required": false
-                }, {
-                    "code": "FI.SIWS",
-                    "required": false
-                }
-            ]
-        },
-        {
-            "applicationType": "BUILDING_PLAN_SCRUTINY",
-            "ServiceType": "NEW_CONSTRUCTION",
-            "RiskType": "LOW",
             "WFState": "NOC_VERIFICATION_PENDING",
             "docTypes": [
                 {
@@ -273,30 +249,6 @@
             "applicationType": "BUILDING_PLAN_SCRUTINY",
             "ServiceType": "NEW_CONSTRUCTION",
             "RiskType": "HIGH",
-            "WFState": "FIELDINSPECTION_PENDING",
-            "docTypes": [
-                {
-                    "code": "FI.FIR",
-                    "required": false
-                }, {
-                    "code": "FI.SINS",
-                    "required": false
-                }, {
-                    "code": "FI.SISS",
-                    "required": false
-                }, {
-                    "code": "FI.SIES",
-                    "required": false
-                }, {
-                    "code": "FI.SIWS",
-                    "required": false
-                }
-            ]
-        },
-        {
-            "applicationType": "BUILDING_PLAN_SCRUTINY",
-            "ServiceType": "NEW_CONSTRUCTION",
-            "RiskType": "HIGH",
             "WFState": "NOC_VERIFICATION_PENDING",
             "docTypes": [
                 {
@@ -321,30 +273,6 @@
                 },
                 {
                     "code": "APPL.LOCALBODY",
-                    "required": false
-                }
-            ]
-        },
-        {
-            "applicationType": "BUILDING_PLAN_SCRUTINY",
-            "ServiceType": "NEW_CONSTRUCTION",
-            "RiskType": "MEDIUM",
-            "WFState": "FIELDINSPECTION_PENDING",
-            "docTypes": [
-                {
-                    "code": "FI.FIR",
-                    "required": false
-                }, {
-                    "code": "FI.SINS",
-                    "required": false
-                }, {
-                    "code": "FI.SISS",
-                    "required": false
-                }, {
-                    "code": "FI.SIES",
-                    "required": false
-                }, {
-                    "code": "FI.SIWS",
                     "required": false
                 }
             ]
