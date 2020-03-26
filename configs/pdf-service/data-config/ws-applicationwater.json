@@ -114,47 +114,66 @@
                 }
               },
               {
-                "variable": "ownerName",
-                "value": {
-                  "path": "$.property.owners[0].name"
+                "variable": "property_owner_details_header",                        
+                "value":{
+                     "path":"$.property.owners.*"                          
+                 },
+                 "type":"array",
+                 "format":{                            
+                  "type":"string",
+                  "scema":[
+                    {
+                      "variable": "ownerName",
+                      "value": {
+                        "path": "$.name"
+                      }
+                    },
+                    {
+                      "variable": "emailLabel",
+                      "value": {
+                        "path": "$.emailId"
+                      }
+                    },
+                    {
+                      "variable": "gender",
+                      "value": {
+                        "path": "$.gender"
+                      }
+                    },
+                    {
+                      "variable": "dob",
+                      "value": {
+                        "path": "$.dob"
+                      },
+                      "type": "date"
+                    },
+                    {
+                      "variable": "guardianName",
+                      "value": {
+                        "path": "$.fatherOrHusbandName"
+                      }
+                    },
+                    {
+                      "variable": "relationshipLabel",
+                      "value": {
+                        "path": "$.relationship"
+                      }
+                    },
+                    {
+                      "variable": "specialApplicantCategory",
+                      "value": {
+                        "path": "$.ownerType"
+                      }
+                    },
+                    {
+                      "variable": "correspondenceAddress",
+                      "value": {
+                        "path": "$.correspondenceAddress"
+                      }
+                    }
+                  ]
                 }
-              },
-              {
-                "variable": "emailLabel",
-                "value": {
-                  "path": "$.property.owners[0].emailId"
-                }
-              },
-              {
-                "variable": "gender",
-                "value": {
-                  "path": "$.property.owners[0].gender"
-                }
-              },
-              {
-                "variable": "dob",
-                "value": {
-                  "path": "$.property.owners[0].dob"
-                },
-                "type": "date"
-              },
-              {
-                "variable": "guardianName",
-                "value": {
-                  "path": "$.property.owners[0].fatherOrHusbandName"
-                }
-              },
-              {
-                "variable": "relationshipLabel",
-                "value": {
-                  "path": "$.property.owners[0].relationship"
-                }
-              },
-              {
-                "variable": "specialApplicantCategory",
-                "value": {
-                  "path": "$.property.owners[0].ownerType"
-                }
+
               },
               {
                 "variable": "applyCategory",
@@ -213,7 +232,7 @@
               {
                 "variable": "area",
                 "value": {
-                  "path": "$.property.address.locality.area"
+                  "path": "$.roadCuttingArea"
                 }
               },
               {
@@ -227,12 +246,6 @@
                 "variable": "noOfTaps",
                 "value": {
                   "path": "$.noOfTaps"
-                }
-              },
-              {
-                "variable": "waterSource",
-                "value": {
-                  "path": "$.waterSource"
                 }
               },
               {
@@ -305,13 +318,7 @@
               {
                 "variable": "initialMeterReading",
                 "value": {
-                  "path": "$.initialMeterReading"
-                }
-              },
-              {
-                "variable": "correspondenceAddress",
-                "value": {
-                  "path": "$.property.owners[0].correspondenceAddress"
+                  "path": "$.additionalDetails.initialMeterReading"
                 }
               },
               {
