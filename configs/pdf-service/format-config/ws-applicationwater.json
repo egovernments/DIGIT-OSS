@@ -492,7 +492,7 @@
                 "layout": {}
             },
             {
-                "text": "{{property_owner_details_header}}",
+                "text": "{{#property_owner_details_header}}",
                 "style": "header"
             },
             {
