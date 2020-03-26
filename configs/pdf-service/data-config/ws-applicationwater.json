@@ -124,9 +124,7 @@
                   "scema":[
                     {
                       "variable": "ownerName",
-                      "value": {
-                        "path": "$.name"
-                      }
+                      "value": "name"
                     },
                     {
                       "variable": "emailLabel",
