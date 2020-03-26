@@ -48,6 +48,7 @@ class DemandCollection extends React.Component {
                                 type="number"
                                 value={get(preparedFinalObject,`DemandProperties[0].propertyDetails[0].demand[${index}].demand[${data.financialYear}][${index1}].PT_DEMAND`)}
                                 onChange={(e) => {
+                                  if (e.target.value.includes(".")) return
                                   let value = "";
                                   value = e.target.value;
                                   prepareFinalObject(`DemandProperties[0].propertyDetails[0].demand[${index}].demand[${data.financialYear}][${index1}].PT_TAXHEAD`,taxData.code)
@@ -78,7 +79,9 @@ class DemandCollection extends React.Component {
                                 value={get(preparedFinalObject,`DemandProperties[0].propertyDetails[0].demand[${index}].demand[${data.financialYear}][${index1}].PT_COLLECTED`)}
                                 floatingLabelText={<Label label={taxData.code}/>}
                                 hintText={<Label label="PT_ENTER_AN_AMOUNT"/>}
+
                                 onChange={(e) => {
+                                  if (e.target.value.includes(".")) return
                                   prepareFinalObject(`DemandProperties[0].propertyDetails[0].demand[${index}].demand[${data.financialYear}][${index1}].PT_TAXHEAD`,taxData.code);
                                   prepareFinalObject(`DemandProperties[0].propertyDetails[0].demand[${index}].demand[${data.financialYear}][${index1}].PT_COLLECTED`, e.target.value);
                                 }}
