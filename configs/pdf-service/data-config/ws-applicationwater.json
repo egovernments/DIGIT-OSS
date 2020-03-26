@@ -114,7 +114,7 @@
                 }
               },
               {
-                "variable": "property_owner_details_header",                        
+                "variable": "variable13",                        
                 "value":{
                      "path":"$.property.owners.*"                          
                  },
