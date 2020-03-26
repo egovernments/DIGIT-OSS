@@ -128,46 +128,32 @@
                     },
                     {
                       "variable": "emailLabel",
-                      "value": {
-                        "path": "$.emailId"
-                      }
+                      "value":"emailId"
                     },
                     {
                       "variable": "gender",
-                      "value": {
-                        "path": "$.gender"
-                      }
+                      "value": "gender"
                     },
                     {
                       "variable": "dob",
-                      "value": {
-                        "path": "$.dob"
-                      },
+                      "value": "dob",
                       "type": "date"
                     },
                     {
                       "variable": "guardianName",
-                      "value": {
-                        "path": "$.fatherOrHusbandName"
-                      }
+                      "value": "fatherOrHusbandName"
                     },
                     {
                       "variable": "relationshipLabel",
-                      "value": {
-                        "path": "$.relationship"
-                      }
+                      "value": "relationship"
                     },
                     {
                       "variable": "specialApplicantCategory",
-                      "value": {
-                        "path": "$.ownerType"
-                      }
+                      "value": "ownerType"
                     },
                     {
                       "variable": "correspondenceAddress",
-                      "value": {
-                        "path": "$.correspondenceAddress"
-                      }
+                      "value": "correspondenceAddress"
                     }
                   ]
                 }
