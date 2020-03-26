@@ -1,0 +1,555 @@
+{
+    "key": "tlcertificate",
+    "DataConfigs": {
+      "serviceName": "rainmaker-common",
+      "version": "1.0.0",
+      "baseKeyPath": "$.Licenses.*",
+      "entityIdPath":"$.licenseNumber",
+      "isCommonTableBorderRequired": true,
+      "mappings": [
+        {
+          "mappings": [
+            {
+              "direct": [
+                {
+                    "variable": "logoImage",                        
+                    "url":"https://raw.githubusercontent.com/egovernments/egov-web-app/master/web/rainmaker/dev-packages/egov-ui-kit-dev/src/assets/images/pblogo.png",
+                    "type":"image"      
+                },
+                {
+                    "variable": "tradeLicenseNo",
+                    "value": {
+                      "path": "$.licenseNumber"
+                    }
+                },
+                {
+                    "variable": "applicationNo",
+                    "value": {
+                      "path": "$.applicationNumber"
+                    }
+                },
+                {
+                    "variable": "financialYear",
+                    "value": {
+                      "path": "$.financialYear"
+                    }
+                },
+                {
+                    "variable": "tradeName",
+                    "value": {
+                      "path": "$.tradeName"
+                    }
+                },
+                {
+                    "variable": "tradeOwnerName",
+                    "value": {
+                      "path": "$.tradeLicenseDetail.owners[0].name"
+                    }
+                },
+                {
+                    "variable": "tradeOwnerContact",
+                    "value": {
+                      "path": "$.tradeLicenseDetail.owners[0].mobileNumber"
+                    }
+                },
+                {
+                    "variable": "tradeAddress",
+                    "value": {
+                      "path": "$.tradeLicenseDetail.address.locality.name"
+                    }
+                },
+                {
+                  "variable": "city",
+                  "value": {
+                    "path": "$.tradeLicenseDetail.address.city"
+                  },
+                  "localisation":{
+                    "required":true,
+                    "prefix": "TENANT_TENANTS",
+                    "module": "rainmaker-common"
+                 }
+              },
+              {
+                "variable": "tradeType",
+                "value": {
+                  "path": "$.tradeLicenseDetail.tradeUnits[0].tradeType"
+                },
+                "localisation":{
+                  "required":true,
+                  "prefix": "TRADELICENSE_TRADETYPE",
+                  "module": "rainmaker-tl",
+                  "isCategoryRequired":true
+               }
+            },
+            {
+              "variable": "passSubCategory",
+              "value": {
+                "path": "$.tradeLicenseDetail.tradeUnits[0].tradeType"
+              },
+              "localisation":{
+                "required":true,
+                "prefix": "TRADELICENSE_TRADETYPE",
+                "module": "rainmaker-tl",
+                "isMainTypeRequired":true
+             }
+          },
+                {
+                    "variable": "accessories",
+                    "value": {
+                      "path": "$.tradeLicenseDetail.accessories[0].accessoryCategory"
+                    },
+                    "localisation":{
+                      "required":true,
+                      "prefix": "TL",
+                      "module": "rainmaker-tl"
+                   }
+                },
+                {
+                  "variable": "purpose_content",
+                  "value": {
+                    "path": "$.tradeLicenseDetail.additionalDetail.purpose"
+                  }
+              },
+                {
+                    "variable": "licenseIssueDate",
+                    "value": {
+                      "path": "$.issuedDate"
+                    },
+                    "type": "date"
+                },
+                {
+                    "variable": "licenseValidityFrom",
+                    "value": {
+                      "path": "$.validFrom"
+                    },
+                    "type": "date"
+                },
+                {
+                  "variable": "licenseValidityTo",
+                  "value": {
+                    "path": "$.validTo"
+                  },
+                  "type": "date"
+              },
+              {
+                "variable": "vehicleNumber",
+                "value": {
+                  "path": "$.tradeLicenseDetail.additionalDetail.vehicleNumber"
+                }
+            },
+            {
+              "variable": "vehicleCompany",
+              "value": {
+                "path": "$.tradeLicenseDetail.additionalDetail.vehicleCompany"
+              }
+          },
+          {
+            "variable": "vehicleModel",
+            "value": {
+              "path": "$.tradeLicenseDetail.additionalDetail.vehicleModel"
+            }
+        },
+              {
+                "variable": "to",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_TO"
+                },
+                "type": "label",
+                "localisation":{
+                  "required":true,
+                  "prefix": null,
+                  "module":"rainmaker-common"
+               }
+              },
+              {
+                "variable": "vehicle_number_label",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_PASS_VEHICLE_NUMBER_LABLE"
+                },
+                "type": "label",
+                "localisation":{
+                  "required":true,
+                  "prefix": null,
+                  "module":"rainmaker-common"
+               }
+            },
+            {
+              "variable": "vehicle_company_label",
+              "value": {
+                "path": "PDF_STATIC_LABEL_CONSOLIDATED_PASS_VEHICLE_COMPANY_LABLE"
+              },
+              "type": "label",
+              "localisation":{
+                "required":true,
+                "prefix": null,
+                "module":"rainmaker-common"
+             }
+          },
+          {
+            "variable": "vehicle_model_label",
+            "value": {
+              "path": "PDF_STATIC_LABEL_CONSOLIDATED_PASS_VEHICLE_MODEL_LABLE"
+            },
+            "type": "label",
+            "localisation":{
+              "required":true,
+              "prefix": null,
+              "module":"rainmaker-common"
+           }
+        },
+                {
+                    "variable": "municipal_corportaion",
+                    "value": {
+                      "path": "PDF_STATIC_LABEL_CONSOLIDATED_PASS_CITY_POLICE_LABLE"
+                    },
+                    "type": "label",
+                    "localisation":{
+                      "required":true,
+                      "prefix": null,
+                      "module":"rainmaker-common"
+                   }
+                },
+                {
+                    "variable": "corporation_contact",
+                    "value": {
+                      "path": "PDF_STATIC_LABEL_CONSOLIDATED_TLCERTIFICATE_LICENSE_CORPORATION_CONTACT"
+                    },
+                    "type": "label",
+                    "localisation":{
+                      "required":true,
+                      "prefix": null,
+                      "module":"rainmaker-common"
+                   }
+                },
+                {
+                  "variable": "disclaimer_heading",
+                  "value": {
+                    "path": "PDF_STATIC_LABEL_CONSOLIDATED_TLCERTIFICATE_LICENSE_DISCLAIMER_HEADING"
+                  },
+                  "type": "label",
+                  "localisation": {
+                    "required": true,
+                    "prefix": null,
+                    "module": "rainmaker-common"
+                  }
+                },
+                {
+                  "variable": "disclaimer_body",
+                  "value": {
+                    "path": "PDF_STATIC_LABEL_CONSOLIDATED_TLCERTIFICATE_LICENSE_DISCLAIMER_BODY"
+                  },
+                  "type": "label",
+                  "localisation": {
+                    "required": true,
+                    "prefix": null,
+                    "module": "rainmaker-common"
+                  }
+                },
+                {
+                    "variable": "corporation_website",
+                    "value": {
+                      "path": "PDF_STATIC_LABEL_CONSOLIDATED_TLCERTIFICATE_LICENSE_CORPORATION_WEBSITE"
+                    },
+                    "type": "label",
+                    "localisation":{
+                      "required":true,
+                      "prefix": null,
+                      "module":"rainmaker-common"
+                   }
+                },
+                {
+                    "variable": "corporation_email",
+                    "value": {
+                      "path": "PDF_STATIC_LABEL_CONSOLIDATED_TLCERTIFICATE_LICENSE_CORPORATION_EMAIL"
+                    },
+                    "type": "label",
+                    "localisation":{
+                      "required":true,
+                      "prefix": null,
+                      "module":"rainmaker-common"
+                   }
+                },
+                {
+                    "variable": "trade_license_certifcate",
+                    "value": {
+                      "path": "PDF_STATIC_LABEL_CONSOLIDATED_PASS_CERTIFICATE"
+                    },
+                    "type": "label",
+                    "localisation":{
+                      "required":true,
+                      "prefix": null,
+                      "module":"rainmaker-common"
+                   }
+                },
+                {
+                    "variable": "trade_license_no",
+                    "value": {
+                      "path": "PDF_STATIC_LABEL_CONSOLIDATED_PASS_NO"
+                    },
+                    "type": "label",
+                    "localisation":{
+                      "required":true,
+                      "prefix": null,
+                      "module":"rainmaker-common"
+                   }
+                },
+                {
+                    "variable": "application_no",
+                    "value": {
+                      "path": "PDF_STATIC_LABEL_CONSOLIDATED_TLCERTIFICATE_APPLICATION_NO"
+                    },
+                    "type": "label",
+                    "localisation":{
+                      "required":true,
+                      "prefix": null,
+                      "module":"rainmaker-common"
+                   }
+                },
+                {
+                    "variable": "reciept_no",
+                    "value": {
+                      "path": "PDF_STATIC_LABEL_CONSOLIDATED_TLCERTIFICATE_RECIEPT_NO"
+                    },
+                    "type": "label",
+                    "localisation":{
+                      "required":true,
+                      "prefix": null,
+                      "module":"rainmaker-common"
+                   }
+                },
+                {
+                    "variable": "financial_year",
+                    "value": {
+                      "path": "PDF_STATIC_LABEL_CONSOLIDATED_TLCERTIFICATE_FINANCIAL_YEAR"
+                    },
+                    "type": "label",
+                    "localisation":{
+                      "required":true,
+                      "prefix": null,
+                      "module":"rainmaker-common"
+                   }
+                },
+                {
+                    "variable": "trade_name",
+                    "value": {
+                      "path": "PDF_STATIC_LABEL_CONSOLIDATED_TLCERTIFICATE_TRADE_NAME"
+                    },
+                    "type": "label",
+                    "localisation":{
+                      "required":true,
+                      "prefix": null,
+                      "module":"rainmaker-common"
+                   }
+                },
+                {
+                    "variable": "trade_owner_name",
+                    "value": {
+                      "path": "PDF_STATIC_LABEL_CONSOLIDATED_TLCERTIFICATE_TRADE_OWNER_NAME"
+                    },
+                    "type": "label",
+                    "localisation":{
+                      "required":true,
+                      "prefix": null,
+                      "module":"rainmaker-common"
+                   }
+                },
+                {
+                    "variable": "trade_owner_contact",
+                    "value": {
+                      "path": "PDF_STATIC_LABEL_CONSOLIDATED_TLCERTIFICATE_TRADE_OWNER_CONTACT"
+                    },
+                    "type": "label",
+                    "localisation":{
+                      "required":true,
+                      "prefix": null,
+                      "module":"rainmaker-common"
+                   }
+                },
+                {
+                    "variable": "trade_address",
+                    "value": {
+                      "path": "PDF_STATIC_LABEL_CONSOLIDATED_TLCERTIFICATE_TRADE_ADDRESS"
+                    },
+                    "type": "label",
+                    "localisation":{
+                      "required":true,
+                      "prefix": null,
+                      "module":"rainmaker-common"
+                   }
+                },
+                {
+                    "variable": "trade_type",
+                    "value": {
+                      "path": "PDF_STATIC_LABEL_CONSOLIDATED_PASS_TRADE_TYPE"
+                    },
+                    "type": "label",
+                    "localisation":{
+                      "required":true,
+                      "prefix": null,
+                      "module":"rainmaker-common"
+                   }
+                },
+                {
+                  "variable": "pass_subCategory",
+                  "value": {
+                    "path": "PDF_STATIC_LABEL_CONSOLIDATED_PASS_TRADE_SUB_TYPE"
+                  },
+                  "type": "label",
+                  "localisation":{
+                    "required":true,
+                    "prefix": null,
+                    "module":"rainmaker-common"
+                 }
+              },
+              {
+                "variable": "purpose_label",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_PASS_PURPOSE_LABEL"
+                },
+                "type": "label",
+                "localisation":{
+                  "required":true,
+                  "prefix": null,
+                  "module":"rainmaker-common"
+               }
+            },
+                {
+                    "variable": "accessories_label",
+                    "value": {
+                      "path": "PDF_STATIC_LABEL_CONSOLIDATED_TLCERTIFICATE_ACCESSORIES_LABEL"
+                    },
+                    "type": "label",
+                    "localisation":{
+                      "required":true,
+                      "prefix": null,
+                      "module":"rainmaker-common"
+                   }
+                },
+                {
+                    "variable": "trade_license_fee",
+                    "value": {
+                      "path": "PDF_STATIC_LABEL_CONSOLIDATED_TLCERTIFICATE_TRADE_LICENSE_FEE"
+                    },
+                    "type": "label",
+                    "localisation":{
+                      "required":true,
+                      "prefix": null,
+                      "module":"rainmaker-common"
+                   }
+                },
+                {
+                    "variable": "license_issue_date",
+                    "value": {
+                      "path": "PDF_STATIC_LABEL_CONSOLIDATED_TLCERTIFICATE_LICENSE_ISSUE_DATE"
+                    },
+                    "type": "label",
+                    "localisation":{
+                      "required":true,
+                      "prefix": null,
+                      "module":"rainmaker-common"
+                   }
+                },
+                {
+                    "variable": "license_validity",
+                    "value": {
+                      "path": "PDF_STATIC_LABEL_CONSOLIDATED_TLCERTIFICATE_LICENSE_VALIDITY"
+                    },
+                    "type": "label",
+                    "localisation":{
+                      "required":true,
+                      "prefix": null,
+                      "module":"rainmaker-common"
+                   }
+                },
+                {
+                  "variable": "license_validity_from",
+                  "value": {
+                    "path": "PDF_STATIC_LABEL_CONSOLIDATED_PASS_LICENSE_VALIDITY_FROM"
+                  },
+                  "type": "label",
+                  "localisation":{
+                    "required":true,
+                    "prefix": null,
+                    "module":"rainmaker-common"
+                 }
+              },
+              {
+                "variable": "license_validity_to",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_PASS_LICENSE_VALIDITY_TO"
+                },
+                "type": "label",
+                "localisation":{
+                  "required":true,
+                  "prefix": null,
+                  "module":"rainmaker-common"
+               }
+            },
+                {
+                    "variable": "approved_by",
+                    "value": {
+                      "path": "PDF_STATIC_LABEL_CONSOLIDATED_TLCERTIFICATE_APPROVED_BY"
+                    },
+                    "type": "label",
+                    "localisation":{
+                      "required":true,
+                      "prefix": null,
+                      "module":"rainmaker-common"
+                   }
+                },
+                {
+                    "variable": "commissioner",
+                    "value": {
+                      "path": "PDF_STATIC_LABEL_CONSOLIDATED_TLCERTIFICATE_COMMISSIONER"
+                    },
+                    "type": "label",
+                    "localisation":{
+                      "required":true,
+                      "prefix": null,
+                      "module":"rainmaker-common"
+                   }
+                },
+                {
+                  "variable":"userpic",
+                  "url":"https://egov-covid-assets.s3.ap-south-1.amazonaws.com/Bangalore_Police.jpeg",
+                  "type":"image"
+                },
+                {
+                  "variable": "tenantID",
+                  "value": {
+                    "path": "$.tenantId"
+                  }
+              }
+            ]
+          },
+          {
+            "externalAPI": [     
+          {
+            "path": "http://egov-workflow-v2.egov:8080/egov-workflow-v2/egov-wf/process/_search",
+            "queryParam": "businessIds=$.applicationNumber,history=true,tenantId=$.tenantId",
+            "apiRequest": null,
+            "responseMapping":[
+              {            
+                "variable":"approvedBy",
+                "value":"$.ProcessInstances[?(@.action == 'APPROVE')].assigner.name"
+              }
+  
+            ]
+        }
+          
+       ]
+     },
+     {
+      "qrcodeConfig": [
+         {
+            "variable": "qr",
+            "value":"https://egov-micro-qa.egovernments.org/employee/tradelicence/search-preview?applicationNumber={{applicationNo}}&tenantId={{tenantID}}"
+         }
+      ]
+   }
+   ]
+  
+  }
+  ]
+  }
+  }
