@@ -1,0 +1,500 @@
+{
+    "key": "tlcertificate",
+    "config": {
+        "defaultStyle": {
+            "font": "Cambay"
+             },
+            "content": [
+  
+              {
+                "style": "noc-head",
+                "table": {
+                  "widths": [
+                    "*"
+                  ],
+                  "body": [
+                      [
+                        {
+                          "image": "{{qr}}",
+                          "width": 70,
+                          "height": 70,
+                          "margin": [
+                            50,
+                            8,
+                            -30,
+                            8
+                          ],
+                          "alignment": "right"
+                        }  
+  
+                     ]
+                  ]
+                },
+                "layout": "noBorders"
+              },
+  
+               {
+                 "style":"noc-head",
+                 "table":{
+                   "widths":[
+                     "*"
+                   ],
+                   "body":[ 
+                        [
+                            {
+                                "image": "{{userpic}}",
+                                "width": 80,
+                                "height": 92,
+                                "alignment": "center",
+                                 "margin": [
+                                        0,
+                                        10,
+                                        0,
+                                        10
+                                ]
+                             }  
+                        ],
+                     [
+                       {
+                         "stack": [
+                           {
+                             "text":"{{municipal_corportaion}}",
+                             "style":"receipt-logo-header"
+                           }
+                         ],
+                         "alignment":"left",
+                         "margin":[
+                           0,
+                           10,
+                           0,
+                           0
+                         ]
+                       }
+                     ],
+                     [
+                       {
+                         "stack": [
+                           {
+                                     "text":"{{trade_license_certifcate}}",
+                                     "style":"receipt-sub-logo-header"
+                           },
+                           {
+                                 "style":"noc-head",
+                                 "table":{
+                                   "widths":[
+                                     "35%",
+                                     "65%"
+                                   ],
+                                   "body":[
+                                       [
+                                           {
+                                               "text":"{{trade_license_no}}",
+                                               "style":"receipt-sub-logo-sub-header"
+                                           },
+                                           {
+                                               "text":"{{tradeLicenseNo}}",
+                                               "style":"receipt-sub-logo-sub-header"
+                                           }
+                                      ]
+                                   ]
+                                 },
+                                 "layout":"noBorders"
+                           },
+                           {
+                                 "style":"noc-head",
+                                 "table":{
+                                   "widths":[
+                                     "35%",
+                                     "65%"
+                                   ],
+                                   "body":[
+                                       [
+                                           {
+                                               "text":"{{application_no}}",
+                                               "style":"receipt-sub-logo-sub-header"
+                                           },
+                                           {
+                                               "text":"{{applicationNo}}",
+                                               "style":"receipt-sub-logo-sub-header"
+                                           }
+                                      ]
+                                   ]
+                                 },
+                                 "layout":"noBorders"
+                           },
+                           {
+                            "style":"noc-head",
+                            "table":{
+                              "widths":[
+                               "35%",
+                                "65%"
+                              ],
+                              "body":[
+                                  [
+                                      {
+                                          "text":"{{trade_type}}",
+                                          "style":"receipt-sub-logo-sub-header"
+                                      },
+                                      {
+                                          "text":"{{tradeType}}",
+                                          "style":"receipt-sub-logo-sub-header"
+                                      }
+                                 ]
+                              ]
+                            },
+                            "layout":"noBorders"
+                      },
+                      {
+                       "style":"noc-head",
+                       "table":{
+                         "widths":[
+                          "35%",
+                           "65%"
+                         ],
+                         "body":[
+                             [
+                                 {
+                                     "text":"{{pass_subCategory}}",
+                                     "style":"receipt-sub-logo-sub-header"
+                                 },
+                                 {
+                                     "text":"{{passSubCategory}}",
+                                     "style":"receipt-sub-logo-sub-header"
+                                 }
+                            ]
+                         ]
+                       },
+                       "layout":"noBorders"
+                   },  
+                   {
+                    "style":"noc-head",
+                    "table":{
+                      "widths":[
+                       "35%",
+                        "65%"
+                      ],
+                      "body":[
+                          [
+                              {
+                                  "text":"{{purpose_label}}",
+                                  "style":"receipt-sub-logo-sub-header"
+                              },
+                              {
+                                  "text":"{{purpose_content}}",
+                                  "style":"receipt-sub-logo-sub-header"
+                              }
+                         ]
+                      ]
+                    },
+                    "layout":"noBorders"
+              },
+              {
+                "style":"noc-head",
+                "table":{
+                  "widths":[
+                   "35%",
+                    "65%"
+                  ],
+                  "body":[
+                      [
+                          {
+                              "text":"{{license_issue_date}}",
+                              "style":"receipt-sub-logo-sub-header"
+                          },
+                          {
+                              "text":"{{licenseIssueDate}}",
+                              "style":"receipt-sub-logo-sub-header"
+                          }
+                     ]
+                  ]
+                },
+                "layout":"noBorders"
+          },
+  
+              {
+                "style":"noc-head",
+                "table":{
+                  "widths":[
+                    "35%",
+                    "65%"
+                  ],
+                  "body":[
+                      [
+                          {
+                              "text":"{{license_validity_from}}",
+                              "style":"receipt-sub-logo-sub-header"
+                          },
+                          {
+                              "text":"{{licenseValidityFrom}}",
+                              "style":"receipt-sub-logo-sub-header"
+                          }
+                     ]
+                  ]
+                },
+                "layout":"noBorders"
+          },
+          {
+            "style":"noc-head",
+            "table":{
+              "widths":[
+                "35%",
+                "65%"
+              ],
+              "body":[
+                  [
+                      {
+                          "text":"{{license_validity_to}}",
+                          "style":"receipt-sub-logo-sub-header"
+                      },
+                      {
+                          "text":"{{licenseValidityTo}}",
+                          "style":"receipt-sub-logo-sub-header"
+                      }
+                 ]
+              ]
+            },
+            "layout":"noBorders"
+      },
+      {
+        "style":"noc-head",
+        "table":{
+          "widths":[
+           "35%",
+            "65%"
+          ],
+          "body":[
+              [
+                  {
+                      "text":"{{vehicle_number_label}}",
+                      "style":"receipt-sub-logo-sub-header"
+                  },
+                  {
+                      "text":"{{vehicleNumber}}",
+                      "style":"receipt-sub-logo-sub-header",
+                      "font": "Roboto"
+                  }
+             ]
+          ]
+        },
+        "layout":"noBorders"
+  },
+                          {
+                                 "style":"noc-head",
+                                 "table":{
+                                   "widths":[
+                                    "35%",
+                                     "65%"
+                                   ],
+                                   "body":[
+                                       [
+                                           {
+                                               "text":"{{vehicle_company_label}}",
+                                               "style":"receipt-sub-logo-sub-header"
+                                           },
+                                           {
+                                               "text":"{{vehicleCompany}}",
+                                               "style":"receipt-sub-logo-sub-header"
+                                           }
+                                      ]
+                                   ]
+                                 },
+                                 "layout":"noBorders"
+                           },
+  
+                           {
+                            "style":"noc-head",
+                            "table":{
+                              "widths":[
+                               "35%",
+                                "65%"
+                              ],
+                              "body":[
+                                  [
+                                      {
+                                          "text":"{{vehicle_model_label}}",
+                                          "style":"receipt-sub-logo-sub-header"
+                                      },
+                                      {
+                                          "text":"{{vehicleModel}}",
+                                          "style":"receipt-sub-logo-sub-header"
+                                      }
+                                 ]
+                              ]
+                            },
+                            "layout":"noBorders"
+                      }
+                         ],
+                         "alignment":"left",
+                         "margin":[
+                           0,
+                           10,
+                           0,
+                           0
+                         ]
+                       }
+                     ]
+                   ]
+                 },
+                 "layout":"noBorders"
+               },
+               {
+                 "style":"receipt-approver",
+                 "columns": [
+                   {
+                     "text":[
+                       {
+                         "text":"{{approved_by}} ",
+                         "bold": true
+                       },
+                       {
+                         "text":" {{approvedBy}}",
+                         "bold": false
+                       }
+                     ],
+                     "alignment":"left"
+                   },
+                   {
+                     "text":[
+                       {
+                         "text":"{{commissioner}}",
+                         "bold": true
+                       }
+                     ],
+                     "alignment":"right"
+                   }
+                 ]
+               },
+               {
+                "text": "{{disclaimer_heading}}",
+                "bold": true,
+                "style": "receipt-approver",
+                "alignment": "left",
+                "fontSize": 13,
+                "margin": [
+                  -10,
+                  70,
+                  0,
+                  0
+                ]
+              },
+              {
+                "text": "{{disclaimer_body}}",
+                "style": "receipt-sub-logo-sub-header",
+                "alignment": "left",
+                "fontSize": 13,
+                "margin": [
+                  -10,
+                  10,
+                  0,
+                  0
+                ]
+              }
+             ],
+             "styles": {
+              "noc-head": {
+                "margin": [
+                  -30,
+                  -35,
+                  0,
+                  -2
+                ]
+              },
+               "receipt-approver": {
+                "color": "#000000",
+                "fontSize": 14,
+                "letterSpacing": 0.6,
+                "alignment": "center",
+                "margin": [
+                  -10,
+                  50,
+                  0,
+                  1
+                ]
+              },
+              "receipt-logo-header": {
+                "color": "#000000",
+                "fontSize": 20,
+                "letterSpacing": 0.74,
+                "alignment": "center",
+                "margin": [
+                  0,
+                  0,
+                  0,
+                  5
+                ]
+              },
+              "receipt-sub-logo-header": {
+                "color": "#000000",
+                "fontSize": 18,
+                "letterSpacing": 0.74,
+                "alignment": "center",
+                "margin": [
+                  0,
+                  5,
+                  0,
+                  5
+                ]
+              },
+              "receipt-logo-sub-header": {
+                "color": "#484848",
+                "fontSize": 14,
+                "letterSpacing": 0.6,
+                "alignment": "center",
+                "margin": [
+                  0,
+                  5,
+                  0,
+                  0
+                ]
+              },
+              "receipt-sub-logo-sub-header": {
+                "color": "#484848",
+                "fontSize": 14,
+                "letterSpacing": 0.6,
+                "alignment": "left",
+                "margin": [
+                  50,
+                  40,
+                  0,
+                  0
+                ]
+              },
+                "receipt-sub-address-sub-header": {
+                "color": "#484848",
+                "fontSize": 14,
+                "letterSpacing": 0.1,
+                "alignment": "right",
+                "margin": [
+                  50,
+                  30,
+                  -90,
+                  0
+                ]
+              },
+               "receipt-sub-website-sub-header": {
+                "color": "#484848",
+                "fontSize": 14,
+                "letterSpacing": 0.1,
+                "alignment": "right",
+                "margin": [
+                  50,
+                  30,
+                  -120,
+                  0
+                ]
+              },
+                "receipt-sub-email-sub-header": {
+                "color": "#484848",
+                "fontSize": 14,
+                "letterSpacing": 0.1,
+                "alignment": "right",
+                "margin": [
+                  50,
+                  30,
+                  -110,
+                  0
+                ]
+              }
+            }
+           }
+        }
