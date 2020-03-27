@@ -91,7 +91,7 @@ serviceMaps:
 
        - jsonPath: $.SewerageConnection.id       
 
-    - query: UPDATE eg_sw_service SET connectionexecutiondate=?, noOfWaterClosets=?, noOfToilets=?, connectiontype=?, proposedWaterClosets=?, proposedToilets=?  WHERE connection_id=?;
+    - query: UPDATE eg_sw_service SET connectionexecutiondate=?, noOfWaterClosets=?, noOfToilets=?, connectiontype=?, proposedWaterClosets=?, proposedToilets=?, detailsprovidedby = ?  WHERE connection_id=?;
       basePath: $.SewerageConnection
       jsonMaps:
 
@@ -106,6 +106,8 @@ serviceMaps:
        - jsonPath: $.SewerageConnection.proposedWaterClosets
        
        - jsonPath: $.SewerageConnection.proposedToilets
+       
+       - jsonPath: $.WaterConnection.additionalDetails.detailsProvidedBy       
          
        - jsonPath: $.SewerageConnection.id
 
@@ -144,7 +146,7 @@ serviceMaps:
 
           - jsonPath: $.SewerageConnection.documents.*.auditDetails.lastModifiedTime
           
-    - query: INSERT INTO eg_sw_plumberinfo(id, name, licenseno, mobilenumber, gender, fatherorhusbandname, correspondenceaddress, relationship, swid,detailsprovidedby) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,?) ON CONFLICT (id) DO UPDATE SET name =?, licenseno =?,mobilenumber =?, gender =?, fatherorhusbandname =?, correspondenceaddress =?, relationship=?, detailsprovidedby=?;
+    - query: INSERT INTO eg_sw_plumberinfo(id, name, licenseno, mobilenumber, gender, fatherorhusbandname, correspondenceaddress, relationship, swid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET name =?, licenseno =?,mobilenumber =?, gender =?, fatherorhusbandname =?, correspondenceaddress =?, relationship=?;
       basePath: $.SewerageConnection.plumberInfo.*
       jsonMaps:
          
@@ -164,9 +166,7 @@ serviceMaps:
 
           - jsonPath: $.SewerageConnection.plumberInfo.*.relationship
           
-          - jsonPath: $.SewerageConnection.id
-          
-          - jsonPath: $.SewerageConnection.additionalDetails.detailsProvidedBy           
+          - jsonPath: $.SewerageConnection.id           
           
           - jsonPath: $.SewerageConnection.plumberInfo.*.name
 
@@ -180,9 +180,7 @@ serviceMaps:
 
           - jsonPath: $.SewerageConnection.plumberInfo.*.correspondenceAddress
 
-          - jsonPath: $.SewerageConnection.plumberInfo.*.relationship
-          
-          - jsonPath: $.SewerageConnection.additionalDetails.detailsProvidedBy          
+          - jsonPath: $.SewerageConnection.plumberInfo.*.relationship         
           
           
 
