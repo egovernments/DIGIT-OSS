@@ -715,7 +715,7 @@ public class MigrationService {
         } catch (Exception e) {
             errorMap.put(assessment.getAssessmentNumber(), String.valueOf(e));
         }
-        
+        System.out.println("Assessment---->"+assessment);
         producer.push(config.getCreateAssessmentTopic(), request);
     }
 
