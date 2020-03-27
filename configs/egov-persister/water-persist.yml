@@ -106,7 +106,7 @@ serviceMaps:
        
        - jsonPath: $.WaterConnection.id 
 
-    - query: UPDATE water_service_connection SET connectionCategory=?,rainWaterHarvesting=?,connectionType=?,waterSource=?,meterId=?,meterInstallationDate=?,pipeSize=?,noOfTaps=?,proposedPipeSize=?,proposedTaps=?, initialmeterreading = ?, connectionexecutiondate = ? WHERE connection_id=?;
+    - query: UPDATE water_service_connection SET connectionCategory=?,rainWaterHarvesting=?,connectionType=?,waterSource=?,meterId=?,meterInstallationDate=?,pipeSize=?,noOfTaps=?,proposedPipeSize=?,proposedTaps=?, initialmeterreading = ?, connectionexecutiondate = ?, detailsprovidedby = ? WHERE connection_id=?;
       basePath: $.WaterConnection
       jsonMaps:
        
@@ -135,6 +135,8 @@ serviceMaps:
        - jsonPath: $.WaterConnection.additionalDetails.initialMeterReading
        
        - jsonPath: $.WaterConnection.connectionExecutionDate
+       
+       - jsonPath: $.WaterConnection.additionalDetails.detailsProvidedBy
 
        - jsonPath: $.WaterConnection.id
 
@@ -172,7 +174,7 @@ serviceMaps:
 
           - jsonPath: $.WaterConnection.documents.*.auditDetails.lastModifiedTime
 
-    - query: INSERT INTO eg_ws_plumberinfo(id, name, licenseno, mobilenumber, gender, fatherorhusbandname, correspondenceaddress, relationship, wsid, detailsprovidedby) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET name =?, licenseno =?,mobilenumber =?, gender =?, fatherorhusbandname =?, correspondenceaddress =?, relationship=?, detailsprovidedby=?;
+    - query: INSERT INTO eg_ws_plumberinfo(id, name, licenseno, mobilenumber, gender, fatherorhusbandname, correspondenceaddress, relationship, wsid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET name =?, licenseno =?,mobilenumber =?, gender =?, fatherorhusbandname =?, correspondenceaddress =?, relationship=?;
       basePath: $.WaterConnection.plumberInfo.*
       jsonMaps:
          
@@ -192,9 +194,7 @@ serviceMaps:
 
           - jsonPath: $.WaterConnection.plumberInfo.*.relationship
           
-          - jsonPath: $.WaterConnection.id  
-          
-          - jsonPath: $.WaterConnection.additionalDetails.detailsProvidedBy          
+          - jsonPath: $.WaterConnection.id         
           
           - jsonPath: $.WaterConnection.plumberInfo.*.name
 
@@ -210,8 +210,6 @@ serviceMaps:
 
           - jsonPath: $.WaterConnection.plumberInfo.*.relationship
           
-          - jsonPath: $.WaterConnection.additionalDetails.detailsProvidedBy
-
 
 
  - version: 1.0
