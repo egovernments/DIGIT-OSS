@@ -192,9 +192,9 @@ serviceMaps:
 
           - jsonPath: $.WaterConnection.plumberInfo.*.relationship
           
-          - jsonPath: $.WaterConnection.additionalDetails.detailsProvidedBy
-
           - jsonPath: $.WaterConnection.id  
+          
+          - jsonPath: $.WaterConnection.additionalDetails.detailsProvidedBy          
           
           - jsonPath: $.WaterConnection.plumberInfo.*.name
 
