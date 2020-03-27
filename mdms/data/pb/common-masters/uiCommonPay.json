@@ -34,7 +34,7 @@
       }
     },
     {
-      "code": "PTM",
+      "code": "PT.MUTATION",
       "headerBandLabel": "PTM_COMMON_TABLE_COL_PT_ID",
       "receiptKey": "property-receipt",
       "billKey":"property-bill",
