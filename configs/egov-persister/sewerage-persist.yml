@@ -32,7 +32,7 @@ serviceMaps:
 
        - jsonPath: $.SewerageConnection.roadType     
 
-    - query: INSERT INTO eg_sw_service(connection_id,connectionExecutionDate,noOfWaterClosets,noOfToilets,connectiontype,proposedWaterClosets,proposedToilets) VALUES(?,?,?,?,?,?,?);
+    - query: INSERT INTO eg_sw_service(connection_id,connectionExecutionDate,noOfWaterClosets,noOfToilets,connectiontype,proposedWaterClosets,proposedToilets, appCreatedDate) VALUES(?,?,?,?,?,?,?, ?);
       basePath: $.SewerageConnection
       jsonMaps:
 
@@ -49,6 +49,8 @@ serviceMaps:
        - jsonPath: $.SewerageConnection.proposedWaterClosets
        
        - jsonPath: $.SewerageConnection.proposedToilets
+       
+       - jsonPath: $.SewerageConnection.additionalDetails.appCreatedDate
          
 
  - version: 1.0
