@@ -6,7 +6,7 @@ import axios from 'axios';
 
 const styles = theme => ({
     root: {
-        paddingTop: "30px",
+        paddingTop: "0px",
         overflow: "hidden",
         height: '100%',
     },
@@ -91,12 +91,12 @@ class LandingPage extends React.Component {
         return (
             <div className="common-background" style={{
                 height: '100%',
-                background: `linear-gradient(rgba(255,255,255,.5), rgba(255,255,255,.5)), url(${backgroundUrl}) no-repeat center`,
+                background: `url(https://s3.ap-south-1.amazonaws.com/ukd-egov-assets/Stateimages/banner.png) no-repeat center`,
             }}>
                 <Grid container className={classes.root}>
 
                     <Grid container style={{ marginBottom: "10px" }}>
-                        <Grid item md={12} style={{ textAlign: "center" }}>
+                        <Grid item md={12} style={{ textAlign: "center", backgroundColor:"#FFF", paddingTop:"20px", height:"80px", marginBottom:"50px"}}>
                             <img src={logoUrl} alt="company-logo" width="20%" />
                         </Grid>
                     </Grid>
@@ -173,6 +173,12 @@ class LandingPage extends React.Component {
                                 </CardActions>
                             </Card>
                         </Grid>
+                        <Grid container style={{ marginBottom: "10px" }}>
+                        <Grid item md={12} style={{ textAlign: "center" }}>
+                            <p style={{color:"#fff",fontSize:"20px"}}>For Right of Way/Road Cutting/Road Digging Service <a style={{color:"#EA784E"}} href="http://enagarsewa.uk.gov.in/" target="_blank" >APPLY HERE
+                             </a></p>
+                        </Grid>
+                    </Grid>
                         <Grid item md={1}></Grid>
                     </Grid>
                 </Grid>
