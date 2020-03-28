@@ -32,5 +32,5 @@ config:
 
   - name: "builds/utilities/egov-pdf"
     build:
-      - work-dir: "egov-pdf/src"
+      - work-dir: "egov-pdf"
         image-name: "egov-pdf"  
