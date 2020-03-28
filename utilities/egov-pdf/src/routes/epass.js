@@ -11,6 +11,10 @@ const {
 } = require('../utils/asyncMiddleware');
 
 
+function renderError(res, errorMessage) {
+  res.render('error-message', {message: errorMessage})
+}
+
 /* GET users listing. */
 router.get('/', asyncMiddleware(async function(req, res, next) {
   var tenantId = req.query.tenantId;
@@ -18,21 +22,37 @@ router.get('/', asyncMiddleware(async function(req, res, next) {
   var hash = req.query.hash;
 
   try {
-    var resPass = await search_epass(uuid, tenantId);
+    var resPass 
+    try {
+      resPass = await search_epass(uuid, tenantId);
+    } catch (ex) {
+      console.log(ex.stack);
+      return renderError(res, "Failed to query details of the pass");
+    }
     var passes = resPass.data;
 
     if (passes && passes.Licenses && passes.Licenses.length > 0) {
       var license = passes.Licenses[0]
       var approverUuid = license.auditDetails.lastModifiedBy;
 
-      var approverRes = await search_user(approverUuid);
-      var approver = approverRes.data;
-      
+      // var approverRes = await search_user(approverUuid);
+      // var approver = approverRes.data;
+      if (license.status != "APPROVED") {
+        return renderError(res, "This pass has not yet been approved");
+      }
+
       license.tradeLicenseDetail.additionalDetail = Object.assign(license.tradeLicenseDetail.additionalDetail, {
         qrcode: url.resolve(config.app.host, config.app.contextPath + config.paths.download_url) + `?uuid=${uuid}&tenantId=${tenantId}`
       })
       
-      var pdfResponse = await create_pdf(tenantId, config.pdf.epass_pdf_template, passes);
+      var pdfResponse;
+      try{
+        pdfResponse = await create_pdf(tenantId, config.pdf.epass_pdf_template, passes);
+      } catch (ex) {
+        console.log(ex.stack);
+        return renderError(res, "Failed to generate PDF for the pass");
+      }
+
       var applicationNo = license.applicationNumber;
 
       //pdfData = pdfResponse.data.read();
@@ -42,10 +62,11 @@ router.get('/', asyncMiddleware(async function(req, res, next) {
       });
       pdfResponse.data.pipe(res);
     } else {
-      // failed to get license
+      console.log(ex.stack);
+      return renderError(res, "There is no pass for this id");
     }
   } catch  (ex) {
-    console.log(ex);
+    console.log(ex.stack);
   }
 }));
 
