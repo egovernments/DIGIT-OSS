@@ -27,6 +27,8 @@ router.get('/', asyncMiddleware(async function(req, res, next) {
       resPass = await search_epass(uuid, tenantId);
     } catch (ex) {
       console.log(ex.stack);
+      if (ex.response && ex.response.data)
+          console.log(ex.response.data);
       return renderError(res, "Failed to query details of the pass");
     }
     var passes = resPass.data;
@@ -50,7 +52,9 @@ router.get('/', asyncMiddleware(async function(req, res, next) {
         pdfResponse = await create_pdf(tenantId, config.pdf.epass_pdf_template, passes);
       } catch (ex) {
         console.log(ex.stack);
-        return renderError(res, "Failed to generate PDF for the pass");
+        if (ex.response && ex.response.data)
+          console.log(ex.response.data);
+      return renderError(res, "Failed to generate PDF for the pass");
       }
 
       var applicationNo = license.applicationNumber;
