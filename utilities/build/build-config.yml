@@ -29,3 +29,8 @@ config:
     build:
       - work-dir: "kuberhealthy-checks"
         image-name: "kuberhealthy-checks"
+
+  - name: "builds/utilities/egov-pdf"
+    build:
+      - work-dir: "egov-pdf/src"
+        image-name: "egov-pdf"  
