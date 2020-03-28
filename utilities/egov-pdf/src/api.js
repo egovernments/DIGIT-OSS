@@ -58,7 +58,8 @@ async function create_pdf(tenantId, key, data) {
         url: url.resolve(config.host.pdf, config.paths.pdf_create),
         data: Object.assign({
             "RequestInfo": {
-                "authToken": auth_token
+                "authToken": auth_token,
+                "userInfo": {}
             }
         }, data),
         params: {
