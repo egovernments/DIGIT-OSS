@@ -30,6 +30,6 @@ module.exports = {
         epass_search: "/tl-services/v1/_search",
         user_search: "/user/_search",
         mdms_search: "/egov-mdms-service/v1/_search",
-        download_url: "download/epass"
+        download_url: "/download/epass"
     }
    };

@@ -21,6 +21,10 @@ router.get('/', asyncMiddleware(async function(req, res, next) {
   var uuid = req.query.uuid;
   var hash = req.query.hash;
 
+  if (!tenantId || !uuid) {
+    return renderError("tenantId and uuid are mandatory to generate the pass")
+  }
+
   try {
     var resPass 
     try {
