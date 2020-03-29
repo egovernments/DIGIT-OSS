@@ -107,7 +107,7 @@ serviceMaps:
        
        - jsonPath: $.SewerageConnection.proposedToilets
        
-       - jsonPath: $.WaterConnection.additionalDetails.detailsProvidedBy       
+       - jsonPath: $.SewerageConnection.additionalDetails.detailsProvidedBy       
          
        - jsonPath: $.SewerageConnection.id
 
