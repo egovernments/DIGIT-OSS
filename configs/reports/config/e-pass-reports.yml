@@ -1,0 +1,97 @@
+---
+ReportDefinitions:
+- reportName: epassreport
+  summary: epass report
+  version: 1.0.0
+  moduleName: rainmaker-pt
+  additionalConfig:
+    print:
+      pdfPageSize: "Legal"
+  sourceColumns:
+  - name: applicationnumber
+    label: reports.epass.applicationnumber
+    type: string
+    source: pt
+    total: false
+  - name: applicationdate
+    label: reports.epass.applicationdate
+    type: string
+    source: pt
+    total: false
+  - name: fromdistrict
+    label: reports.epass.fromdistrict
+    type: string
+    source: pt
+    total: false
+  - name: todistrict
+    label: reports.epass.todistrict
+    type: string
+    source: pt
+    total: false
+  - name: issuedate
+    label: reports.epass.issuedate
+    type: string
+    source: pt
+    total: false
+  - name: purpose
+    label: reports.epass.purpose
+    type: string
+    source: pt
+    total: false
+  - name: vehiclenumber
+    label: reports.epass.vehiclenumber
+    type: string
+    source: pt
+    total: false
+  - name: licensenumber
+    label: reports.epass.licensenumber
+    type: string
+    source: pt
+    total: false
+  - name: status
+    label: reports.epass.status
+    type: string
+    source: pt
+    total: false
+  - name: rejectionremarks
+    label: reports.epass.rejectionremarks
+    type: string
+    source: pt
+    total: false
+  searchParams:
+  - name: fromDate
+    label: reports.epass.fromDate
+    type: epoch
+    source: pt
+    isMandatory: false
+    searchClause: AND tl.createdtime >= $fromDate
+  - name: toDate
+    label: reports.epass.toDate
+    type: epoch
+    source: pt
+    isMandatory: false
+    searchClause: AND tl.createdtime <= $toDate
+  - name: status
+    label: Approval Mode
+    type: singlevaluelist
+    pattern: 'list://Approved:APPROVED,Pending:APPLIED,Rejected:REJECTED'
+    source: pt
+    isMandatory: false
+    searchClause: AND tl.status = $status
+  query: |
+        select 
+        tl.applicationnumber, 
+        to_char((To_timestamp(tl.createdtime/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY HH:MI AM') as applicationDate,   
+        initcap(replace(tld.additionaldetail->>'fromDistrict', 'MP_', '')) as fromDistrict, 
+        initcap(replace(tld.additionaldetail->>'toDistrict', 'MP_', ''))  as toDistrict,
+        COALESCE(to_char((To_timestamp(tl.issueddate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY HH:MI AM'), '') as issueDate,
+        initcap(replace(COALESCE(tld.additionaldetail->>'purpose', ''), '_',' ')) as purpose, 
+        COALESCE(tld.additionaldetail->>'vehicleNumber', '') as vehicleNumber,
+        COALESCE(tl.licensenumber, '') as licensenumber,
+        initcap(tl.status) as status,
+        COALESCE(tlw.comment, '') as rejecttionRemarks
+        from eg_tl_tradelicense as tl
+        inner join eg_tl_tradelicensedetail as tld on tld.tradelicenseid  = tl.id 
+        left join eg_wf_processinstance_v2 as tlw on tlw.businessid = tl.applicationnumber and tlw.action = 'REJECT'
+        where tl.tenantid =  $tenantid  and tl.status not in ('INITIATED')
+  orderby: order by tl.createdtime desc
