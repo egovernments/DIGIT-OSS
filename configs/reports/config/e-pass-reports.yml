@@ -78,7 +78,7 @@ ReportDefinitions:
         COALESCE(tld.additionaldetail->>'vehicleNumber', '') as vehicleNumber,
         COALESCE(tl.licensenumber, '') as licensenumber,
         initcap(tl.status) as status,
-        COALESCE(tlw.comment, '') as rejecttionRemarks
+        COALESCE(tlw.comment, '') as rejectionRemarks
         from eg_tl_tradelicense as tl
         inner join eg_tl_tradelicensedetail as tld on tld.tradelicenseid  = tl.id 
         left join eg_wf_processinstance_v2 as tlw on tlw.businessid = tl.applicationnumber and tlw.action = 'REJECT'
