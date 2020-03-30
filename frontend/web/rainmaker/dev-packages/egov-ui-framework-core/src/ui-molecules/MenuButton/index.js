@@ -69,7 +69,7 @@ class MenuListComposition extends React.Component {
               <span style={{marginLeft:30 ,color : data.props.color}}> |  </span>
             <Icon className={classes.rightIcon} iconName={data.rightIcon} />
           </Button>
-          <Popper open={open} anchorEl={this.anchorEl} transition disablePortal>
+          <Popper style={{zIndex:100}} open={open} anchorEl={this.anchorEl} transition disablePortal>
             {({ TransitionProps, placement }) => (
               <Grow
                 {...TransitionProps}
