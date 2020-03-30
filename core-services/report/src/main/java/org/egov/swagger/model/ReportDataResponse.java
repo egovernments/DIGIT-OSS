@@ -35,7 +35,7 @@ public class ReportDataResponse {
         this.requestInfo = requestInfo;
     }
 
-    @JsonProperty("reportResponses")
+    @JsonProperty("reportData")
     public List<ReportResponse> reportResponses = new ArrayList<ReportResponse>();
 
     public List<ReportResponse> getReportResponses() {
