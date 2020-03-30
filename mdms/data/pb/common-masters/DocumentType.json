@@ -114,6 +114,26 @@
     {
       "code": "APPL.LOCALBODY.DTCP_APPROVAL",
       "active": true
+    },
+    {
+      "code" : "OWNERIDPROOF",
+      "allowedFormat" : ["image/*", ".pdf", ".png", ".jpeg"],
+      "maxFileSize": 6000
+    },
+    {
+      "code" : "OWNERSHIPPROOF",
+      "allowedFormat" : ["image/*", ".pdf", ".png", ".jpeg"],
+      "maxFileSize": 6000
+    },
+    {
+      "code" : "OWNERPHOTO",
+      "allowedFormat" : ["image/*", ".png", ".jpeg"],
+      "maxFileSize": 3000
+    },
+    {
+      "code" : "OLDLICENCENO",
+      "allowedFormat" : ["image/*", ".pdf", ".png", ".jpeg"],
+      "maxFileSize": 6000
     }
   ]
 }
