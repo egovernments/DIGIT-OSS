@@ -4,9 +4,6 @@ ReportDefinitions:
   summary: epass report
   version: 1.0.0
   moduleName: rainmaker-tl
-  additionalConfig:
-    print:
-      pdfPageSize: "Legal"
   sourceColumns:
   - name: applicationnumber
     label: reports.epass.applicationnumber
