@@ -3,7 +3,7 @@ ReportDefinitions:
 - reportName: epassreport
   summary: epass report
   version: 1.0.0
-  moduleName: rainmaker-pt
+  moduleName: rainmaker-tl
   additionalConfig:
     print:
       pdfPageSize: "Legal"
@@ -11,71 +11,71 @@ ReportDefinitions:
   - name: applicationnumber
     label: reports.epass.applicationnumber
     type: string
-    source: pt
+    source: tl
     total: false
   - name: applicationdate
     label: reports.epass.applicationdate
     type: string
-    source: pt
+    source: tl
     total: false
   - name: fromdistrict
     label: reports.epass.fromdistrict
     type: string
-    source: pt
+    source: tl
     total: false
   - name: todistrict
     label: reports.epass.todistrict
     type: string
-    source: pt
+    source: tl
     total: false
   - name: issuedate
     label: reports.epass.issuedate
     type: string
-    source: pt
+    source: tl
     total: false
   - name: purpose
     label: reports.epass.purpose
     type: string
-    source: pt
+    source: tl
     total: false
   - name: vehiclenumber
     label: reports.epass.vehiclenumber
     type: string
-    source: pt
+    source: tl
     total: false
   - name: licensenumber
     label: reports.epass.licensenumber
     type: string
-    source: pt
+    source: tl
     total: false
   - name: status
     label: reports.epass.status
     type: string
-    source: pt
+    source: tl
     total: false
   - name: rejectionremarks
     label: reports.epass.rejectionremarks
     type: string
-    source: pt
+    source: tl
     total: false
   searchParams:
   - name: fromDate
     label: reports.epass.fromDate
     type: epoch
-    source: pt
+    source: tl
     isMandatory: false
     searchClause: AND tl.createdtime >= $fromDate
   - name: toDate
     label: reports.epass.toDate
     type: epoch
-    source: pt
+    source: tl
     isMandatory: false
     searchClause: AND tl.createdtime <= $toDate
   - name: status
     label: Approval Mode
     type: singlevaluelist
     pattern: 'list://Approved:APPROVED,Pending:APPLIED,Rejected:REJECTED'
-    source: pt
+    source: tl
     isMandatory: false
     searchClause: AND tl.status = $status
   query: |
