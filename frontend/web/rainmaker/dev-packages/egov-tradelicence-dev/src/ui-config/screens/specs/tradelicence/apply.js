@@ -100,14 +100,16 @@ export const tradeDocumentDetails = getCommonCard({
 export const getMdmsData = async (action, state, dispatch) => {
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: commonConfig.tenantId,
+      tenantId: process.env.REACT_APP_NAME === "Citizen"? window.document.location.search.split('=')[1] : state.auth.userInfo.tenantId,
       moduleDetails: [
         {
           moduleName: "TradeLicense",
           masterDetails: [
             { name: "TradeType", filter: `[?(@.type == "TL")]` },
             { name: "AccessoriesCategory" },
-            { name: "ApplicationType" }
+            { name: "ApplicationType" },
+            { name: "OccupancyType" },
+            { name: "RelationType" }
           ]
         },
         {
@@ -197,7 +199,7 @@ export const getData = async (action, state, dispatch) => {
     //Edit/Update Flow ----
     const applicationType = get(
       state.screenConfiguration.preparedFinalObject,
-      "Licenses[0].tradeLicenseDetail.additionalDetail.applicationType",
+      "Licenses[0].applicationType",
       null
     );
     const isEditRenewal = getQueryArg(window.location.href,"action") === "EDITRENEWAL";

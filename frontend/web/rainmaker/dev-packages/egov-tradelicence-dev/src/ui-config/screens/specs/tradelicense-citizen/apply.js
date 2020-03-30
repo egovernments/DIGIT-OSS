@@ -83,7 +83,7 @@ const updateSearchResults = async (
     else {
       const applicationType = get(
         response,
-        "Licenses[0].tradeLicenseDetail.additionalDetail.applicationType",
+        "Licenses[0].applicationType",
         null
       );
       getAllDataFromBillingSlab(tenantId, dispatch,[{

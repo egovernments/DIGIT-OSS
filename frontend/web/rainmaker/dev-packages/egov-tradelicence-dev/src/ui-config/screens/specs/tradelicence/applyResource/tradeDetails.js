@@ -783,7 +783,7 @@ export const tradeDetails = getCommonCard({
             masterName: "ApplicationType"
           },
           jsonPath:
-            "Licenses[0].tradeLicenseDetail.additionalDetail.applicationType",
+            "Licenses[0].applicationType",
           sourceJsonPath: "applyScreenMdmsData.TradeLicense.ApplicationType",
           gridDefination: {
             xs: 12,
@@ -799,11 +799,11 @@ export const tradeDetails = getCommonCard({
             [
               {
                 key: "applicationType",
-                value: action.value
+                value: action.value.split(".")[1]
               }
             ]
           );
-          if (action.value === "APPLICATIONTYPE.RENEWAL") {
+          if (action.value.split(".")[1] === "RENEWAL") {
             dispatch(
               handleField(
                 "apply",
