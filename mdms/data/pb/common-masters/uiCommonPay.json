@@ -94,6 +94,99 @@
         },
         "link": "/tradelicence/search"
       }
+    },
+    {
+      "code": "BPA.NC_APP_FEE",
+      "headerBandLabel": "PAYMENT_COMMON_CONSUMER_CODE",
+      "receiptKey": "consolidatedreceipt",
+      "billKey": "consolidatedbill",
+      "citizenSuccess": {
+        "primaryMessage": "CITIZEN_SUCCESS_BPA_PAYMENT_MESSAGE",
+        "secondaryMessage": "CITIZEN_SUCCESS_BPA_PAYMENT_MESSAGE_DETAIL",
+        "receiptNo": "CITIZEN_SUCCESS_BPA_PAYMENT_RECEIPT_NO"
+      },
+      "employeeSuccess": {
+        "primaryMessage": "EMPLOYEE_SUCCESS_BPA_PAYMENT_MESSAGE",
+        "secondaryMessage": "EMPLOYEE_SUCCESS_BPA_PAYMENT_MESSAGE_DETAIL",
+        "receiptNo": "EMPLOYEE_SUCCESS_BPA_PAYMENT_RECEIPT_NO"
+      },
+      "citizenFailure": {
+        "primaryMessage": "CITIZEN_FAILURE_BPA_PAYMENT_FAILURE_MESSAGE",
+        "secondaryMessage": "CITIZEN_FAILURE_BPA_PAYMENT_FAILURE_MESSAGE_DETAIL"
+      },
+      "employeeFailure": {
+        "primaryMessage": "EMPLOYEE_FAILURE_BPA_PAYMENT_FAILURE_MESSAGE",
+        "secondaryMessage": "EMPLOYEE_FAILURE_BPA_PAYMENT_FAILURE_MESSAGE_DETAIL"
+      },
+      "footer": {
+        "label": {
+          "labelName": "GO TO HOME",
+          "labelKey": "COMMON_BUTTON_HOME"
+        },
+        "link": "/egov-bpa/search"
+      }
+    },
+    {
+      "code": "BPA.NC_SAN_FEE",
+      "headerBandLabel": "PAYMENT_COMMON_CONSUMER_CODE",
+      "receiptKey": "consolidatedreceipt",
+      "billKey": "consolidatedbill",
+      "citizenSuccess": {
+        "primaryMessage": "CITIZEN_SUCCESS_BPA_PAYMENT_MESSAGE",
+        "secondaryMessage": "CITIZEN_SUCCESS_BPA_PAYMENT_MESSAGE_DETAIL",
+        "receiptNo": "CITIZEN_SUCCESS_BPA_PAYMENT_RECEIPT_NO"
+      },
+      "employeeSuccess": {
+        "primaryMessage": "EMPLOYEE_SUCCESS_BPA_PAYMENT_MESSAGE",
+        "secondaryMessage": "EMPLOYEE_SUCCESS_BPA_PAYMENT_MESSAGE_DETAIL",
+        "receiptNo": "EMPLOYEE_SUCCESS_BPA_PAYMENT_RECEIPT_NO"
+      },
+      "citizenFailure": {
+        "primaryMessage": "CITIZEN_FAILURE_BPA_PAYMENT_FAILURE_MESSAGE",
+        "secondaryMessage": "CITIZEN_FAILURE_BPA_PAYMENT_FAILURE_MESSAGE_DETAIL"
+      },
+      "employeeFailure": {
+        "primaryMessage": "EMPLOYEE_FAILURE_BPA_PAYMENT_FAILURE_MESSAGE",
+        "secondaryMessage": "EMPLOYEE_FAILURE_BPA_PAYMENT_FAILURE_MESSAGE_DETAIL"
+      },
+      "footer": {
+        "label": {
+          "labelName": "GO TO HOME",
+          "labelKey": "COMMON_BUTTON_HOME"
+        },
+        "link": "/egov-bpa/search"
+      }
+    },
+    {
+      "code": "BPA.LOW_RISK_PERMIT_FEE",
+      "headerBandLabel": "PAYMENT_COMMON_CONSUMER_CODE",
+      "receiptKey": "consolidatedreceipt",
+      "billKey": "consolidatedbill",
+      "citizenSuccess": {
+        "primaryMessage": "CITIZEN_SUCCESS_BPA_PAYMENT_MESSAGE",
+        "secondaryMessage": "CITIZEN_SUCCESS_BPA_PAYMENT_MESSAGE_DETAIL",
+        "receiptNo": "CITIZEN_SUCCESS_BPA_PAYMENT_RECEIPT_NO"
+      },
+      "employeeSuccess": {
+        "primaryMessage": "EMPLOYEE_SUCCESS_BPA_PAYMENT_MESSAGE",
+        "secondaryMessage": "EMPLOYEE_SUCCESS_BPA_PAYMENT_MESSAGE_DETAIL",
+        "receiptNo": "EMPLOYEE_SUCCESS_BPA_PAYMENT_RECEIPT_NO"
+      },
+      "citizenFailure": {
+        "primaryMessage": "CITIZEN_FAILURE_BPA_PAYMENT_FAILURE_MESSAGE",
+        "secondaryMessage": "CITIZEN_FAILURE_BPA_PAYMENT_FAILURE_MESSAGE_DETAIL"
+      },
+      "employeeFailure": {
+        "primaryMessage": "EMPLOYEE_FAILURE_BPA_PAYMENT_FAILURE_MESSAGE",
+        "secondaryMessage": "EMPLOYEE_FAILURE_BPA_PAYMENT_FAILURE_MESSAGE_DETAIL"
+      },
+      "footer": {
+        "label": {
+          "labelName": "GO TO HOME",
+          "labelKey": "COMMON_BUTTON_HOME"
+        },
+        "link": "/egov-bpa/search"
+      }
     }
   ]
 }
