@@ -42,22 +42,33 @@
       "allowedDocs": [
         {
           "documentType": "OWNERIDPROOF",
-          "applicationType": "NEW",
+          "applicationType": [
+            "NEW",
+            "RENEWAL"
+          ],
           "required": true
         },
         {
           "documentType": "OWNERSHIPPROOF",
-          "applicationType": "NEW",
+          "applicationType": [
+            "NEW",
+            "RENEWAL"
+          ],
           "required": true
         },
         {
           "documentType": "OWNERPHOTO",
-          "applicationType": "NEW",
+          "applicationType": [
+            "NEW",
+            "RENEWAL"
+          ],
           "required": true
         },
         {
           "documentType": "OLDLICENCENO",
-          "applicationType": "NEW",
+          "applicationType": [
+            "RENEWAL"
+          ],
           "required": true
         }
       ],
