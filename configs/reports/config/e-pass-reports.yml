@@ -67,13 +67,6 @@ ReportDefinitions:
     source: epass
     isMandatory: false
     searchClause: AND tl.createdtime <= $toDate
-  - name: status
-    label: Approval Mode
-    type: singlevaluelist
-    pattern: 'list://Approved:APPROVED,Pending:APPLIED,Rejected:REJECTED'
-    source: epass
-    isMandatory: false
-    searchClause: AND tl.status = $status
   query: |
         select 
         tl.applicationnumber, 
