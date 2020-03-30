@@ -206,7 +206,7 @@ class FormWizardDataEntry extends Component {
               return b.taxPeriodFrom - a.taxPeriodFrom;
             })) ||
           [];
-        let demandResponse = demands.forEach((demand, yearKey) => {
+        demands.forEach((demand, yearKey) => {
           //add order for the taxt head and do the oerdering
           if (demand.demandDetails) {
             demand.demandDetails = demand.demandDetails
@@ -217,6 +217,11 @@ class FormWizardDataEntry extends Component {
                     generalMDMSDataById,
                     `TaxHeadMaster.${demandDetail.taxHeadMasterCode}.order`,
                     -1
+                  ),
+                  isLegacy:get(
+                    generalMDMSDataById,
+                    `TaxHeadMaster.${demandDetail.taxHeadMasterCode}.legacy`,
+                    false
                   )
                 };
               })
