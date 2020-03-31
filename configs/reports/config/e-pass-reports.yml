@@ -76,7 +76,7 @@ ReportDefinitions:
         select 
         tl.applicationnumber, 
         to_char((To_timestamp(tl.createdtime/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY HH:MI AM') as applicationDate,  
-        CONCAT('TL_', initcap(tlu.tradeType)),  
+        initcap(tlu.tradeType),  
         initcap(replace(tld.additionaldetail->>'fromDistrict', 'MP_', '')) as fromDistrict, 
         initcap(replace(tld.additionaldetail->>'toDistrict', 'MP_', ''))  as toDistrict,
         COALESCE(to_char((To_timestamp(tl.issueddate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY HH:MI AM'), '') as issueDate,
