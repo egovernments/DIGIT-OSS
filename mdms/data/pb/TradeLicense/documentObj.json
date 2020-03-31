@@ -1,6 +1,6 @@
 {
   "tenantId": "pb",
-  "moduleName": "common-masters",
+  "moduleName": "TradeLicense",
   "documentObj": [
     {
       "allowedDocs": [
