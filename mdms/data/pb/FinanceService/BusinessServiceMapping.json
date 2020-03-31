@@ -85,6 +85,30 @@
       "subscheme":"",
       "validFrom":1234567890,
       "validTo":2345678901
+    },
+    {
+      "code":"BPA.NC_APP_FEE",
+      "voucherCreationEnabled":true,
+      "fund":"01",
+      "function":"01",
+      "department":"Rev",
+      "functionary":"",
+      "scheme":"",
+      "subscheme":"",
+      "validFrom":1234567890,
+      "validTo":2345678901
+    },
+    {
+      "code":"BPA.NC_SAN_FEE",
+      "voucherCreationEnabled":true,
+      "fund":"01",
+      "function":"01",
+      "department":"Rev",
+      "functionary":"",
+      "scheme":"",
+      "subscheme":"",
+      "validFrom":1234567890,
+      "validTo":2345678901
     }
   ]
 }
