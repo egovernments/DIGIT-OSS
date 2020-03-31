@@ -29,6 +29,7 @@ ReportDefinitions:
     type: string
     source: epass
     total: false
+    isLocalisationRequired: true
   - name: issuedate
     label: reports.epass.issuedate
     type: string
