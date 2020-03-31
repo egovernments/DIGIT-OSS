@@ -24,6 +24,11 @@ ReportDefinitions:
     type: string
     source: epass
     total: false
+  - name: tradeType
+    label: reports.epass.tradetype
+    type: string
+    source: epass
+    total: false
   - name: issuedate
     label: reports.epass.issuedate
     type: string
@@ -70,7 +75,8 @@ ReportDefinitions:
   query: |
         select 
         tl.applicationnumber, 
-        to_char((To_timestamp(tl.createdtime/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY HH:MI AM') as applicationDate,   
+        to_char((To_timestamp(tl.createdtime/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY HH:MI AM') as applicationDate,  
+        tlu.tradeType,  
         initcap(replace(tld.additionaldetail->>'fromDistrict', 'MP_', '')) as fromDistrict, 
         initcap(replace(tld.additionaldetail->>'toDistrict', 'MP_', ''))  as toDistrict,
         COALESCE(to_char((To_timestamp(tl.issueddate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY HH:MI AM'), '') as issueDate,
@@ -81,6 +87,7 @@ ReportDefinitions:
         COALESCE(tlw.comment, '') as rejectionRemarks
         from eg_tl_tradelicense as tl
         inner join eg_tl_tradelicensedetail as tld on tld.tradelicenseid  = tl.id 
+        inner join eg_tl_TradeUnit as tlu on tlu.tradeLicenseDetailId = tld.id
         left join eg_wf_processinstance_v2 as tlw on tlw.businessid = tl.applicationnumber and tlw.action = 'REJECT'
         where tl.tenantid =  $tenantid  and tl.status not in ('INITIATED')
   orderby: order by tl.createdtime desc
