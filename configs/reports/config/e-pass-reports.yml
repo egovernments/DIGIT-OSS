@@ -29,8 +29,6 @@ ReportDefinitions:
     type: string
     source: epass
     total: false
-    isLocalisationRequired: true
-    localisationRequired: true
   - name: issuedate
     label: reports.epass.issuedate
     type: string
@@ -78,7 +76,7 @@ ReportDefinitions:
         select 
         tl.applicationnumber, 
         to_char((To_timestamp(tl.createdtime/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY HH:MI AM') as applicationDate,  
-        tlu.tradeType,  
+        CASE WHEN tlu.tradeType = 'INTERSTATE' THEN 'Other State to MP Pass' ELSE 'MP Inter District Pass' as tradeType,  
         initcap(replace(tld.additionaldetail->>'fromDistrict', 'MP_', '')) as fromDistrict, 
         initcap(replace(tld.additionaldetail->>'toDistrict', 'MP_', ''))  as toDistrict,
         COALESCE(to_char((To_timestamp(tl.issueddate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY HH:MI AM'), '') as issueDate,
