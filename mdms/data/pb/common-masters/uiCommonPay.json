@@ -10,7 +10,8 @@
       "buttons": [
         {
           "label": "COMMON_BUTTON_HOME",
-          "link": "/pt-mutation/propertySearch"
+          "citizenUrl": "/property-tax",
+          "employeeUrl": "/pt-mutation/propertySearch"
         }
       ]
     },
@@ -22,7 +23,8 @@
       "buttons": [
         {
           "label": "COMMON_BUTTON_HOME",
-          "link": "/pt-mutation/propertySearch"
+          "citizenUrl": "/property-tax",
+          "employeeUrl": "/pt-mutation/propertySearch"
         }
       ]
     },
@@ -34,7 +36,8 @@
       "buttons": [
         {
           "label": "COMMON_BUTTON_HOME",
-          "link": "/tradelicence/search"
+          "citizenUrl": "/tradelicense-citizen/home",
+          "employeeUrl": "/tradelicence/search"
         }
       ]
     },
@@ -46,7 +49,8 @@
       "buttons": [
         {
           "label": "COMMON_BUTTON_HOME",
-          "link": "/egov-bpa/search"
+          "citizenUrl": "/bpastakeholder-citizen/home",
+          "employeeUrl": "/egov-bpa/search"
         }
       ]
     },
@@ -58,7 +62,8 @@
       "buttons": [
         {
           "label": "COMMON_BUTTON_HOME",
-          "link": "/egov-bpa/search"
+          "citizenUrl": "/bpastakeholder-citizen/home",
+          "employeeUrl": "/egov-bpa/search"
         }
       ]
     },
@@ -70,7 +75,8 @@
       "buttons": [
         {
           "label": "COMMON_BUTTON_HOME",
-          "link": "/egov-bpa/search"
+          "citizenUrl": "/bpastakeholder-citizen/home",
+          "employeeUrl": "/egov-bpa/search"
         }
       ]
     }
