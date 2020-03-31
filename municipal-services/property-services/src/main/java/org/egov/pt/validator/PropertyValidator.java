@@ -489,7 +489,7 @@ public class PropertyValidator {
 		
 		User user = requestInfo.getUserInfo();
 		String userType = requestInfo.getUserInfo().getType();
-		Boolean isUserCitizen = userType.equalsIgnoreCase("CITIZEN");
+		Boolean isUserCitizen = "CITIZEN".equalsIgnoreCase(userType);
 		
 		Boolean isCriteriaEmpty = CollectionUtils.isEmpty(criteria.getOldpropertyids())
 				&& CollectionUtils.isEmpty(criteria.getAcknowledgementIds())
