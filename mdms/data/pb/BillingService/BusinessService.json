@@ -1028,7 +1028,7 @@
       "isAdvanceAllowed": true,
       "demandUpdateTime": 86400000,
       "isVoucherCreationEnabled": false,
-      "billGineiURL" : "egov-searcher/bill-genie/billswithaddranduser/_get"
+      "billGineiURL" : "egov-searcher/bill-genie/waterbills/_get"
     },
       {
       "businessService": "sw-services-calculation",
@@ -1040,7 +1040,7 @@
       "isAdvanceAllowed": true,
       "demandUpdateTime": 86400000,
       "isVoucherCreationEnabled": false,
-      "billGineiURL" : "egov-searcher/bill-genie/billswithaddranduser/_get"
+      "billGineiURL" : "egov-searcher/bill-genie/seweragebills/_get"
     },
     {
       "businessService": "BPA.NEWCONSTRUCTION_APP_FEE",
