@@ -276,34 +276,18 @@
     },
     {
       "fromDate": 1554076800000,
-      "toDate": 1585612800000,
-      "periodCycle": "ANNUAL",
+      "toDate": 1617175799000,
+      "periodCycle": "TWOYEARS",
       "service": "WS",
       "code": "WC2018",
-      "financialYear": "2019-20"
-    },
-    {
-      "fromDate": 1585679400000,
-      "toDate": 1617175799000,
-      "periodCycle": "ANNUAL",
-      "service": "WS",
-      "code": "WC2020",
       "financialYear": "2020-21"
     },
     {
       "fromDate": 1554076800000,
-      "toDate": 1585612800000,
-      "periodCycle": "ANNUAL",
+      "toDate": 1617175799000,
+      "periodCycle": "TWOYEARS",
       "service": "SW",
       "code": "SC2018",
-      "financialYear": "2019-20"
-    },
-    {
-      "fromDate": 1585679400000,
-      "toDate": 1617175799000,
-      "periodCycle": "ANNUAL",
-      "service": "SW",
-      "code": "SW2020",
       "financialYear": "2020-21"
     },
     {
