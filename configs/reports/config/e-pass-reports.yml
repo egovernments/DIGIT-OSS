@@ -78,7 +78,7 @@ ReportDefinitions:
         to_char((To_timestamp(tl.createdtime/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY HH:MI AM') as applicationDate,  
         CASE WHEN tlu.tradeType = 'INTERSTATE' THEN 'Other State to MP Pass' 
         WHEN tlu.tradeType = 'INTRASTATE' THEN 'MP Inter District Pass'  
-        WHEN tlu.tradeType = 'MP_TO_OTHER_STATE' THEN 'MP to Other State' 
+        WHEN tlu.tradeType = 'MP_TO_OTHER_STATE' THEN 'MP to Other State Pass' 
         ELSE 'NA' END as tradeType,  
         initcap(replace(tld.additionaldetail->>'fromDistrict', 'MP_', '')) as fromDistrict, 
         initcap(replace(tld.additionaldetail->>'toDistrict', 'MP_', ''))  as toDistrict,
