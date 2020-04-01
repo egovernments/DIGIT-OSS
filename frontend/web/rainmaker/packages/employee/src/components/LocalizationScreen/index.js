@@ -578,9 +578,9 @@ class ApiTable extends PureComponent {
               onChange={this.handleChangeExcel}
             />
             <label htmlFor="outlined-button-file">
-              <Fab color="primary" size="small" aria-label="Add" component="span" style={{ background: "#fe7a51", color: "#fff" }}>
+              {/*<Fab color="primary" size="small" aria-label="Add" component="span" style={{ background: "#fe7a51", color: "#fff" }}>*/}
                 <AddIcon />
-              </Fab>
+              {/*</Fab>*/}
             </label>
             <span style={{ padding: "8px" }}>{this.state.file.name} </span>
             {/* </Grid> */}
