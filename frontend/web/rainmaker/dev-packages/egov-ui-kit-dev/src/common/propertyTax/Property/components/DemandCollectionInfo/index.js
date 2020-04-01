@@ -27,6 +27,7 @@ class DemandCollectionInfo extends React.Component {
               return demand ? (
                 <div>
                 {Object.keys(demand.demand).map((datas, ind) => {
+
                     return (
                       <div>
                       <div>
@@ -40,7 +41,7 @@ class DemandCollectionInfo extends React.Component {
                           return data['PT_DEMAND']!=""? (
                             <div>
                               {Object.keys(data).map((d, i) => {
-                                return (
+                                return d!=="ID" && (
                                   <div className="col-sm-4 col-xs-12" style={{ marginBottom: 10, marginTop: 5 }}>
                                     <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>
                                       <Label
