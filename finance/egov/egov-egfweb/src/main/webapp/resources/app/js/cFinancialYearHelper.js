@@ -47,9 +47,9 @@
  */
 
 
-jQuery(document).ready(function(){
+$(document).ready(function(){
 	console.log("Browser Language ",navigator.language);
-	jQuery.i18n.properties({ 
+	$.i18n.properties({ 
 		name: 'message', 
 		path: '/services/EGF/resources/app/messages/', 
 		mode: 'both',
@@ -59,8 +59,8 @@ jQuery(document).ready(function(){
 		callback: function() {
 			console.log('File loaded successfully');
 		}
-	});	
-})
+	});
+
 
 function getCookie(name){
 	let cookies = document.cookie;
@@ -386,7 +386,7 @@ $('#buttonSubmit').click(function(e){
 					});
 					
 				} else if (res == "false") {
-					bootbox.alert(jQuery.i18n.prop('msg.transfer.closing.balance.this.year'));
+					bootbox.alert($.i18n.prop('msg.transfer.closing.balance.this.year'));
 				}
 			},
 			error : function (res){
@@ -396,4 +396,5 @@ $('#buttonSubmit').click(function(e){
 		}
 	}
 	
+});
 });
