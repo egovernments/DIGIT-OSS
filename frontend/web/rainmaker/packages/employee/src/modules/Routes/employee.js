@@ -85,10 +85,10 @@ const Notifications = Loadable({
   loading: () => <Loading />
 });
 // import Notifications from "modules/employee/Notifications";
-const LocalizationScreen = Loadable({
-  loader: () => import("components/LocalizationScreen"),
-  loading: () => <Loading />
-});
+// const LocalizationScreen = Loadable({
+//   loader: () => import("components/LocalizationScreen"),
+//   loading: () => <Loading />
+// });
 // import LocalizationScreen from "components/LocalizationScreen";
 
 // import PTHome from "modules/employee/PropertyTax/PTHome";
@@ -236,12 +236,12 @@ const routes = [
       redirectionUrl,
     },
   },
-  {
-    path: "utils/localization",
-    component: LocalizationScreen,
-    needsAuthentication: true,
-    options: { hideFooter: true, title: "CS_HOME_HEADER_LOCALIZATION" },
-  },
+  // {
+  //   path: "utils/localization",
+  //   component: LocalizationScreen,
+  //   needsAuthentication: true,
+  //   options: { hideFooter: true, title: "CS_HOME_HEADER_LOCALIZATION" },
+  // },
   ...pgrRoutes,
   ...ptRoutes,
   ...frameworkScreens,
