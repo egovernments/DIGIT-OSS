@@ -34,3 +34,9 @@ config:
     build:
       - work-dir: "egov-pdf"
         image-name: "egov-pdf"  
+
+  - name: "builds/utilities/epass-chatbot"
+    build:
+      - work-dir: "epass-chatbot"
+        image-name: "epass-chatbot"
+        dockerfile: "build/maven/Dockerfile"
