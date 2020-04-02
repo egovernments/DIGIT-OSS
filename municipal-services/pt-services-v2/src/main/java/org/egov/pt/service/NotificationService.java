@@ -258,13 +258,14 @@ public class NotificationService {
 			toUsers.add(mapOfPhnoAndUUIDs.get(mobile));
 			Recepient recepient = Recepient.builder().toUsers(toUsers).toRoles(null).build();
 			Action action = null;
+			log.info("paylink is..." + property);
 			if(isActionReq) {
 				List<ActionItem> items = new ArrayList<>();
 				String actionLink = propertyConfiguration.getPayLink().replace("$mobile", mobile)
-							.replace("$assessmentId", property.getPropertyDetails().get(0).getAssessmentNumber())
+//							.replace("$assessmentId", property.getPropertyDetails().get(0).getAssessmentNumber())
 							.replace("$propertyId", property.getPropertyId())
-							.replace("$tenantId", property.getTenantId())
-							.replace("$financialYear", property.getPropertyDetails().get(0).getFinancialYear());
+							.replace("$tenantId", property.getTenantId());
+//							.replace("$financialYear", property.getPropertyDetails().get(0).getFinancialYear());
 				
 				actionLink = propertyConfiguration.getUiAppHost() + actionLink;
 				
