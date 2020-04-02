@@ -92,6 +92,19 @@
           "employeeUrl": "/inbox"
         }
       ]
+    },
+    {
+      "code": "BPAREG",
+      "headerBandLabel": "PAYMENT_COMMON_CONSUMER_CODE",
+      "receiptKey": "consolidatedreceipt",
+      "billKey": "consolidatedbill",
+      "buttons": [
+        {
+          "label": "COMMON_BUTTON_HOME",
+          "citizenUrl": "/bpastakeholder-citizen/home",
+          "employeeUrl": "/bpastakeholder/search"
+        }
+      ]
     }
   ]
 }
