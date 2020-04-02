@@ -186,7 +186,7 @@
               {
                 "variable": "plumberProvidedBy",
                 "value": {
-                  "path": "$.plumberInfo[0].name"
+                  "path": "$.additionalDetails.detailsProvidedBy"
                 }
               },
               {
