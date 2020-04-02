@@ -193,18 +193,10 @@ public class NotificationService {
 	 * @return
 	 */
 	private String getPayUrl(Property property) {
-		String businessService = "";
-		if(property.getChannel().toString().equalsIgnoreCase(MUTATION_PROCESS_CONSTANT)){
-			businessService = MUTATION_BUSINESSSERVICE;
-		}else{
-			businessService = PT_BUSINESSSERVICE;
-		}
-		
 		return notifUtil.getShortenedUrl( 
 				 configs.getUiAppHost().concat(configs.getPayLink()
 				.replace(NOTIFICATION_CONSUMERCODE, property.getAcknowldgementNumber())
-				.replace(NOTIFICATION_TENANTID, property.getTenantId())
-				.replace(NOTIFICATION_BUSINESSSERVICE, businessService)));
+				.replace(NOTIFICATION_TENANTID, property.getTenantId())));
 	}
 
 

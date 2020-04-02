@@ -487,9 +487,17 @@ public class PaymentNotificationService {
             Action action = null;
             if(isActionReq) {
                 List<ActionItem> items = new ArrayList<>();
+                String businessService = "";
+                if(property.getChannel().toString().equalsIgnoreCase(MUTATION_PROCESS_CONSTANT)){
+                    businessService = MUTATION_BUSINESSSERVICE;
+                }else{
+                    businessService = PT_BUSINESSSERVICE;
+                }
+
                 String actionLink = propertyConfiguration.getPayLink().replace("$mobile", mobile)
                         .replace("$consumerCode", property.getPropertyId())
-                        .replace("$tenantId", property.getTenantId());
+                        .replace("$tenantId", property.getTenantId())
+                        .replace("$businessService" , businessService);
 
                 actionLink = propertyConfiguration.getUiAppHost() + actionLink;
 
