@@ -81,6 +81,9 @@ SearchDefinitions:
     - name: b.isactive
       isMandatory: false
       jsonPath: $.searchCriteria.billActive
+    - name: b.status
+      isMandatory: false
+      jsonPath: $.searchCriteria.billStatus
 
    output:
     jsonFormat: {"ResponseInfo": {},"Bills": []}
@@ -162,6 +165,9 @@ SearchDefinitions:
     - name: b.isactive
       isMandatory: false
       jsonPath: $.searchCriteria.billActive
+    - name: b.status
+      isMandatory: false
+      jsonPath: $.searchCriteria.billStatus
 
    output:
     jsonFormat: {"ResponseInfo": {},"Bills": []}
@@ -245,6 +251,9 @@ SearchDefinitions:
     - name: b.isactive
       isMandatory: false
       jsonPath: $.searchCriteria.billActive
+    - name: b.status
+      isMandatory: false
+      jsonPath: $.searchCriteria.billStatus
 
    output:
     jsonFormat: {"ResponseInfo": {},"Bills": []}
