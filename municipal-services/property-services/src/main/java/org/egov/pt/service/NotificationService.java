@@ -1,44 +1,5 @@
 package org.egov.pt.service;
 
-import static org.egov.pt.util.PTConstants.ACTION_PAY;
-import static org.egov.pt.util.PTConstants.CREATED_STRING;
-import static org.egov.pt.util.PTConstants.CREATE_PROCESS_CONSTANT;
-import static org.egov.pt.util.PTConstants.CREATE_STRING;
-import static org.egov.pt.util.PTConstants.MT_NO_WORKFLOW;
-import static org.egov.pt.util.PTConstants.NOTIFICATION_AMOUNT;
-import static org.egov.pt.util.PTConstants.NOTIFICATION_APPID;
-import static org.egov.pt.util.PTConstants.NOTIFICATION_CONSUMERCODE;
-import static org.egov.pt.util.PTConstants.NOTIFICATION_MUTATION_LINK;
-import static org.egov.pt.util.PTConstants.NOTIFICATION_PAY_LINK;
-import static org.egov.pt.util.PTConstants.NOTIFICATION_PROPERTYID;
-import static org.egov.pt.util.PTConstants.NOTIFICATION_PROPERTY_LINK;
-import static org.egov.pt.util.PTConstants.NOTIFICATION_STATUS;
-import static org.egov.pt.util.PTConstants.NOTIFICATION_TENANTID;
-import static org.egov.pt.util.PTConstants.NOTIFICATION_UPDATED_CREATED_REPLACE;
-import static org.egov.pt.util.PTConstants.UPDATED_STRING;
-import static org.egov.pt.util.PTConstants.UPDATE_NO_WORKFLOW;
-import static org.egov.pt.util.PTConstants.UPDATE_STRING;
-import static org.egov.pt.util.PTConstants.WF_MT_STATUS_APPROVED_CODE;
-import static org.egov.pt.util.PTConstants.WF_MT_STATUS_CHANGE_CODE;
-import static org.egov.pt.util.PTConstants.WF_MT_STATUS_OPEN_CODE;
-import static org.egov.pt.util.PTConstants.WF_MT_STATUS_PAID_CODE;
-import static org.egov.pt.util.PTConstants.WF_MT_STATUS_PAYMENT_PENDING_CODE;
-import static org.egov.pt.util.PTConstants.WF_NO_WORKFLOW;
-import static org.egov.pt.util.PTConstants.WF_STATUS_APPROVED;
-import static org.egov.pt.util.PTConstants.WF_STATUS_DOCVERIFIED;
-import static org.egov.pt.util.PTConstants.WF_STATUS_DOCVERIFIED_LOCALE;
-import static org.egov.pt.util.PTConstants.WF_STATUS_FIELDVERIFIED;
-import static org.egov.pt.util.PTConstants.WF_STATUS_FIELDVERIFIED_LOCALE;
-import static org.egov.pt.util.PTConstants.WF_STATUS_OPEN;
-import static org.egov.pt.util.PTConstants.WF_STATUS_OPEN_LOCALE;
-import static org.egov.pt.util.PTConstants.WF_STATUS_PAID;
-import static org.egov.pt.util.PTConstants.WF_STATUS_PAYMENT_PENDING;
-import static org.egov.pt.util.PTConstants.WF_STATUS_REJECTED;
-import static org.egov.pt.util.PTConstants.WF_STATUS_REJECTED_LOCALE;
-import static org.egov.pt.util.PTConstants.WF_UPDATE_STATUS_APPROVED_CODE;
-import static org.egov.pt.util.PTConstants.WF_UPDATE_STATUS_CHANGE_CODE;
-import static org.egov.pt.util.PTConstants.WF_UPDATE_STATUS_OPEN_CODE;
-
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.HashMap;
@@ -63,6 +24,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+
+import static org.egov.pt.util.PTConstants.*;
 
 @Service
 public class NotificationService {
@@ -230,11 +193,18 @@ public class NotificationService {
 	 * @return
 	 */
 	private String getPayUrl(Property property) {
+		String businessService = "";
+		if(property.getChannel().toString().equalsIgnoreCase(MUTATION_PROCESS_CONSTANT)){
+			businessService = MUTATION_BUSINESSSERVICE;
+		}else{
+			businessService = PT_BUSINESSSERVICE;
+		}
 		
 		return notifUtil.getShortenedUrl( 
 				 configs.getUiAppHost().concat(configs.getPayLink()
 				.replace(NOTIFICATION_CONSUMERCODE, property.getAcknowldgementNumber())
-				.replace(NOTIFICATION_TENANTID, property.getTenantId())));
+				.replace(NOTIFICATION_TENANTID, property.getTenantId())
+				.replace(NOTIFICATION_BUSINESSSERVICE, businessService)));
 	}
 
 
@@ -311,7 +281,7 @@ public class NotificationService {
 
 	/**
 	 * Prepares msg for each owner and send 
-	 * 
+	 *
 	 * @param property
 	 * @param msg
 	 */

@@ -223,6 +223,8 @@ public class PTConstants {
 
     public static final String PT_BUSINESSSERVICE = "PT";
 
+    public static final String MUTATION_BUSINESSSERVICE = "PT.MUTATION";
+
 
     public static final String NOTIFICATION_PROPERTYID = "{PROPERTYID}";
     
@@ -232,6 +234,8 @@ public class PTConstants {
     public static final String NOTIFICATION_CONSUMERCODE =  "{CONSUMERCODE}";
     
     public static final String NOTIFICATION_TENANTID =  "{TENANTID}";
+
+    public static final String NOTIFICATION_BUSINESSSERVICE =  "{BUSINESSSERVICE}";
     
     public static final String NOTIFICATION_PAY_LINK =  "{PAYLINK}";
     
