@@ -78,12 +78,9 @@ SearchDefinitions:
       isMandatory: false
       jsonPath: $.searchCriteria.toPeriod
       operator: GE
-    - name: b.isactive
-      isMandatory: false
-      jsonPath: $.searchCriteria.billActive
     - name: b.status
       isMandatory: false
-      jsonPath: $.searchCriteria.billStatus
+      jsonPath: $.searchCriteria.billActive
 
    output:
     jsonFormat: {"ResponseInfo": {},"Bills": []}
@@ -162,12 +159,9 @@ SearchDefinitions:
       isMandatory: false
       jsonPath: $.searchCriteria.toPeriod
       operator: GE
-    - name: b.isactive
-      isMandatory: false
-      jsonPath: $.searchCriteria.billActive
     - name: b.status
       isMandatory: false
-      jsonPath: $.searchCriteria.billStatus
+      jsonPath: $.searchCriteria.billActive
 
    output:
     jsonFormat: {"ResponseInfo": {},"Bills": []}
@@ -248,12 +242,9 @@ SearchDefinitions:
       isMandatory: false
       jsonPath: $.searchCriteria.toPeriod
       operator: GE
-    - name: b.isactive
-      isMandatory: false
-      jsonPath: $.searchCriteria.billActive
     - name: b.status
       isMandatory: false
-      jsonPath: $.searchCriteria.billStatus
+      jsonPath: $.searchCriteria.billActive
 
    output:
     jsonFormat: {"ResponseInfo": {},"Bills": []}
