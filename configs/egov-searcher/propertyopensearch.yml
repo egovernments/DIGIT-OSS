@@ -9,8 +9,8 @@ SearchDefinitions:
         (
           select property.tenantid, property.propertyid, surveyid, oldpropertyid, property.createdtime, locality, owner.userid as owneruuid from eg_pt_property as property
           INNER JOIN eg_pt_address ptadd ON ptadd.propertyid = property.id
-          INNER JOIN eg_pt_owner owner ON owner.propertyid=property.id $where
-        ) result
+          INNER JOIN eg_pt_owner owner ON owner.propertyid=property.id
+        ) result  $where
     groupBy:    
     orderBy: createdtime,desc
    searchParams: 
@@ -28,12 +28,6 @@ SearchDefinitions:
     - name: property.oldPropertyId
       isMandatory: false
       jsonPath: $.searchCriteria.oldPropertyId
-    - name: owner.ownerName
-      isMandatory: false
-      jsonPath: $.searchCriteria.ownerName
-    - name: owner.mobileNumber
-      isMandatory: false
-      jsonPath: $.searchCriteria.mobileNumber
     - name: ptadd.doorNo
       isMandatory: false
       jsonPath: $.searchCriteria.doorNo
@@ -46,4 +40,3 @@ SearchDefinitions:
     jsonFormat: {"ResponseInfo": {},"Properties": []}
     outJsonPath: $.Properties
     responseInfoPath: $.ResponseInfo
-    
