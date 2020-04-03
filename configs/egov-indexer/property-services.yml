@@ -2,6 +2,25 @@ ServiceMaps:
  serviceName: Property Tax - rainmaker
  version: 1.0.0
  mappings:
+  - topic: save-property-registry
+    configKey: INDEX
+    indexes:
+      - name: property-services
+        type: general
+        id: $.propertyId,$.tenantId,$.auditDetails.lastModifiedTime
+        jsonPath: $.Property
+        timeStampField: $.auditDetails.lastModifiedTime
+
+
+  - topic: update-property-registry
+    configKey: INDEX
+    indexes:
+      - name: property-services
+        type: general
+        id: $.propertyId,$.tenantId,$.auditDetails.lastModifiedTime
+        jsonPath: $.Property
+        timeStampField: $.auditDetails.lastModifiedTime
+        
   - topic: save-pt-assessment
     configKey: INDEX
     indexes:
