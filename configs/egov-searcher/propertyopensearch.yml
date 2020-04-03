@@ -9,8 +9,8 @@ SearchDefinitions:
         (
           select property.tenantid, property.propertyid, surveyid, oldpropertyid, property.createdtime, locality, owner.userid as owneruuid from eg_pt_property as property
           INNER JOIN eg_pt_address ptadd ON ptadd.propertyid = property.id
-          INNER JOIN eg_pt_owner owner ON owner.propertyid=property.id
-        ) result  $where
+          INNER JOIN eg_pt_owner owner ON owner.propertyid=property.id $where
+        ) result
     groupBy:    
     orderBy: createdtime,desc
    searchParams: 
