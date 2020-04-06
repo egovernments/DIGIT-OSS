@@ -158,7 +158,7 @@ export const getRelationshipRadioButton = {
       }
     ],
     jsonPath:
-      "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].relationship",
+      "Licenses[0].tradeLicenseDetail.owners[0].relationship",
     required: true
   },
   required: true,
@@ -192,7 +192,7 @@ export const getRelationshipRadioButtonInstitutionalOwner = {
       }
     ],
     jsonPath:
-      "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].relationship",
+      "Licenses[0].tradeLicenseDetail.owners[0].relationship",
     required: true
   },
   required: true,
