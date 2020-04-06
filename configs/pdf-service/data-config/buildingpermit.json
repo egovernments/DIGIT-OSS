@@ -69,7 +69,8 @@
                 "format": {
                   "scema": [
                     {
-                      "key": "pendingapproval"
+                      "key": "pendingapproval",
+                      "type" : "array-orderedlist"
                     }
                   ]
                 }
