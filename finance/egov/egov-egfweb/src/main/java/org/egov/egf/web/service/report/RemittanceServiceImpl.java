@@ -264,7 +264,7 @@ public class RemittanceServiceImpl implements RemittanceService{
                 rb.setBankBranch(bankaccount.getBankbranch().getBranchname());
             }
             EmployeeInfo remittedBy = empIdMap.get(Long.parseLong(rb.getRemitterId()));
-            rb.setRemittedBy(remittedBy.getUser().getName());
+            rb.setRemittedBy(remittedBy != null ? remittedBy.getUser().getName() : (StringUtils.isNotBlank(rb.getRemitterId()) ? rb.getRemitterId() : "--" ));
         }
     }
     private List<RemittanceReportModel> getConsolidatedCashReceiptForReport(List<Receipt> receipts, Map<String, Instrument> recInstrumentMap, Map<String, Remittance> instRemittanceMap){
