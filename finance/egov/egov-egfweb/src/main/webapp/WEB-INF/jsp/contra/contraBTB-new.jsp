@@ -51,6 +51,8 @@
 <head>
 <%@ include file="/includes/taglibs.jsp"%>
 <%@ page language="java"%>
+<script
+        src="<cdn:url value='/resources/app/js/i18n/jquery.i18n.properties.js?rnd=${app_release_no}' context='/services/EGF'/>"></script>
 <script type="text/javascript"
 	src="/services/EGF/resources/javascript/voucherHelper.js?rnd=${app_release_no}"></script>
 <script type="text/javascript"

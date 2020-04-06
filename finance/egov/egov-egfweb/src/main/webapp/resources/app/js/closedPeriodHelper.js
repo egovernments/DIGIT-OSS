@@ -46,6 +46,38 @@
  *
  */
 
+
+
+
+$(document).ready(function(){
+	console.log("Browser Language ",navigator.language);
+	$.i18n.properties({ 
+		name: 'message', 
+		path: '/services/EGF/resources/app/messages/', 
+		mode: 'both',
+		async: true,
+	    cache: true,
+		language: getLocale("locale"),
+		callback: function() {
+			console.log('File loaded successfully');
+		}
+	});
+	
+});
+	
+
+
+function getCookie(name){
+	let cookies = document.cookie;
+	if(cookies.search(name) != -1){
+		var keyValue = cookies.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+	    return keyValue ? keyValue[2] : null;
+	}
+}
+
+function getLocale(paramName){
+	return getCookie(paramName) ? getCookie(paramName) : navigator.language;
+}
 jQuery('#btnsearch').click(function(e) {
 
 	callAjaxSearch();
@@ -141,18 +173,21 @@ function validateEndDate(event) {
 	var endofmonth= 3;
 	if(fromdate <= endofmonth ){
 		if(fromdate > todate){
-			bootbox.alert("From period should be prior or same as that of till period.");
+			//bootbox.alert("From period should be prior or same as that of till period.");
+			bootbox.alert($.i18n.prop('msg.from.period.should.be.prior.or.same'));
 			document.getElementById('startingDate').value=0;
 			document.getElementById('endingDate').value=0;
 		}else if(todate>endofmonth){
-			bootbox.alert(" From period should be prior or same as that of till period.");
+			//bootbox.alert(" From period should be prior or same as that of till period.");
+			bootbox.alert($.i18n.prop('msg.from.period.should.be.prior.or.same'));
 			document.getElementById('startingDate').value=0;
 			document.getElementById('endingDate').value=0;
 
 		}
 	}else{
 		if(endofmonth < todate && todate < fromdate){
-			bootbox.alert("From period should be prior or same as that of till period.");
+			//bootbox.alert("From period should be prior or same as that of till period.");
+			bootbox.alert($.i18n.prop('msg.from.period.should.be.prior.or.same'));
 			document.getElementById('startingDate').value=0;
 			document.getElementById('endingDate').value=0;
 		}
@@ -186,12 +221,14 @@ function validate(){
 	var todate = parseInt(document.getElementById('endingDate').value);
 
 	if(fromdate == 0 ){
-		bootbox.alert("Please select From Month");
+		//bootbox.alert("Please select From Month");
+		bootbox.alert($.i18n.prop('msg.please.select.from.month'));
 		return false;
 	}
 	
 	if(todate == 0 ){
-		bootbox.alert("Please select Till Month");
+		//bootbox.alert("Please select Till Month");
+		bootbox.alert($.i18n.prop('msg.please.select.till.month'));
 		return false;
 	}
 	

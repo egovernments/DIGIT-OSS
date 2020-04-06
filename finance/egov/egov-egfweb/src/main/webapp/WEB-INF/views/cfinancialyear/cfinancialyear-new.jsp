@@ -93,7 +93,8 @@
 		var endingDate = getControlInBranch(tbl.rows[lastRow], 'endDate').value;
 		var finYearEndDate = document.getElementById("endingDate").value;
 		if (name == '' || startingDate == '' || endingDate == '') {
-			bootbox.alert("Enter all values for existing rows before adding.");
+			//bootbox.alert("Enter all values for existing rows before adding.");
+			bootbox.alert(jQuery.i18n.prop('msg.enter.all.existing.rows.before.adding'));
 			return false;
 		}
 		var currDate = new Date();
@@ -102,7 +103,8 @@
 		if (prevRow > 0) {
 			var prevEndDate = getControlInBranch(tbl.rows[prevRow], 'endDate').value;
 			if (compareDate(formatDate6(prevEndDate), formatDate6(startingDate)) == -1) {
-				bootbox.alert('Enter valid Start date');
+				//bootbox.alert('Enter valid Start date');
+				bootbox.alert($.i18n.prop('msg.enter.valid.startdate'));
 				getControlInBranch(tbl.rows[lastRow], 'startDate').value = '';
 				getControlInBranch(tbl.rows[lastRow], 'startDate').focus();
 				return false;
@@ -112,7 +114,8 @@
 		if (endingDate != finYearEndDate) {
 			if (compareDate(formatDate6(endingDate),
 					formatDate6(finYearEndDate)) == -1) {
-				bootbox.alert('Enter valid End date');
+				//bootbox.alert('Enter valid End date');
+				bootbox.alert($.i18n.prop('msg.enter.valid.enddate'));
 				getControlInBranch(tbl.rows[lastRow], 'endDate').value = '';
 				getControlInBranch(tbl.rows[lastRow], 'endDate').focus();
 				return false;
@@ -121,7 +124,7 @@
 		return true;
 	}
 </script>
-<script type="text/javascript"
+<script
         src="<cdn:url value='/resources/app/js/i18n/jquery.i18n.properties.js?rnd=${app_release_no}' context='/services/EGF'/>"></script>
         <script type="text/javascript"
 	src="<cdn:url value='/resources/app/js/cFinancialYearHelper.js?rnd=${app_release_no}'/>"></script>

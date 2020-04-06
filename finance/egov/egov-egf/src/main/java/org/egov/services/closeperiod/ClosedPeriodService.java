@@ -210,7 +210,7 @@ public class ClosedPeriodService {
         final List<ClosedPeriod> dateGreaterThanEqualAndIsClosedTrue = closedPeriodRepository.getAllClosedPeriods(finId,
                 startingDate, endingDate, startingDate, endingDate);
         if (!dateGreaterThanEqualAndIsClosedTrue.isEmpty())
-            errors.reject("msg.startingdate.endingdate.closedperiod", new String[] { startDate, endDate }, null);
+            errors.reject("msg.startingdate.endingdate.range.present.closedperiod", new String[] { startDate, endDate }, null);
     }
 
     public List<CFinancialYear> getAllSoftClosePeriods() {
