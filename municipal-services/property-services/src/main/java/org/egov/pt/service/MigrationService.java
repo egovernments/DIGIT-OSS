@@ -319,7 +319,7 @@ public class MigrationService {
             });
 
             for(int i=0;i< oldProperty.getPropertyDetails().size();i++){
-                property.setPropertyType(oldProperty.getPropertyDetails().get(i).getPropertyType());
+                property.setPropertyType(migratePropertyType(oldProperty.getPropertyDetails().get(i)));
                 property.setOwnershipCategory(migrateOwnwershipCategory(oldProperty.getPropertyDetails().get(i)));
 
                 if(oldProperty.getPropertyDetails().get(i).getInstitution() == null)
@@ -383,9 +383,9 @@ public class MigrationService {
                 } catch (Exception e) {
                     errorMap.put(property.getPropertyId(), String.valueOf(e));
                 }
-                if(i==0)
+                /*if(i==0)
                     producer.push(config.getSavePropertyTopic(), request);
-                else
+                else*/
                     producer.push(config.getUpdatePropertyTopic(), request);
 
                 migrateAssesment(oldProperty.getPropertyDetails().get(i),property,requestInfo,errorMap);
@@ -557,6 +557,20 @@ public class MigrationService {
         return ownershipCategory.toString();
     }
 
+    public String migratePropertyType(PropertyDetail propertyDetail){
+        StringBuilder propertyType = new StringBuilder();
+        if(StringUtils.isEmpty(propertyDetail.getPropertyType()))
+            return null;
+        else
+            propertyType.append(propertyDetail.getPropertyType());
+
+        if(!StringUtils.isEmpty(propertyDetail.getPropertySubType()))
+            propertyType.append(".").append(propertyDetail.getPropertySubType());
+
+        return propertyType.toString();
+    }
+
+
     public List<Unit> migrateUnit(List<OldUnit> oldUnits){
         List<Unit> units = new ArrayList<>();
         for(OldUnit oldUnit : oldUnits){
@@ -715,8 +729,8 @@ public class MigrationService {
         } catch (Exception e) {
             errorMap.put(assessment.getAssessmentNumber(), String.valueOf(e));
         }
-        System.out.println("Assessment---->"+assessment);
-        producer.push(config.getCreateAssessmentTopic(), request);
+        //producer.push(config.getCreateAssessmentTopic(), request);
+        producer.push(config.getUpdateAssessmentTopic(), request);
     }
 
     public Map<String,String> addAssessmentPenaltyandRebate(Map<String,String> assessmentAdditionalDetail,PropertyDetail propertyDetail){
