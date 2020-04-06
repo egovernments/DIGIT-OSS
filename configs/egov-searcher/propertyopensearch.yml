@@ -32,7 +32,7 @@ SearchDefinitions:
       isMandatory: false
       jsonPath: $.searchCriteria.doorNo
     - name: ptadd.locality
-      isMandatory: false
+      isMandatory: true
       jsonPath: $.searchCriteria.locality
 
 
