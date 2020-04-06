@@ -130,6 +130,8 @@
 		}
 	});
 </script>
+<script
+        src="<cdn:url value='/resources/app/js/i18n/jquery.i18n.properties.js?rnd=${app_release_no}' context='/services/EGF'/>"></script>
 <link rel="stylesheet"
 	href="<cdn:url value='/resources/global/css/font-icons/entypo/css/entypo.css' context='/services/egi'/>" />
 <link rel="stylesheet"

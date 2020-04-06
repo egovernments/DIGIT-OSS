@@ -45,6 +45,34 @@
  *   In case of any queries, you can reach eGovernments Foundation at contact@egovernments.org.
  *
  */
+
+$(document).ready(function(){
+	console.log("Browser Language ",navigator.language);
+	$.i18n.properties({ 
+		name: 'message', 
+		path: '/services/EGF/resources/app/messages/', 
+		mode: 'both',
+		async: true,
+	    cache: true,
+		language: getLocale("locale"),
+		callback: function() {
+			console.log('File loaded successfully');
+		}
+	});
+
+
+function getCookie(name){
+	let cookies = document.cookie;
+	if(cookies.search(name) != -1){
+		var keyValue = cookies.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+	    return keyValue ? keyValue[2] : null;
+	}
+}
+
+function getLocale(paramName){
+	return getCookie(paramName) ? getCookie(paramName) : navigator.language;
+}
+
 function loadBank(fund) {
 	// bootbox.alert(fund.options[fund.selectedIndex].value);
 	//loadFromDepartment();

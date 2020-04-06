@@ -47,9 +47,11 @@
  */
 
 
-jQuery(document).ready(function(){
+
+
+$(document).ready(function(){
 	console.log("Browser Language ",navigator.language);
-	jQuery.i18n.properties({ 
+	$.i18n.properties({ 
 		name: 'message', 
 		path: '/services/EGF/resources/app/messages/', 
 		mode: 'both',
@@ -59,8 +61,11 @@ jQuery(document).ready(function(){
 		callback: function() {
 			console.log('File loaded successfully');
 		}
-	});	
-})
+	});
+	
+});
+	
+
 
 function getCookie(name){
 	let cookies = document.cookie;
@@ -101,7 +106,8 @@ function validateFields(){
 		var finYearEndDate=document.getElementById("endingDate").value;
 		
 		if(startingDate!=finYearStartDate){
-			bootbox.alert('Enter valid Start date');
+			//bootbox.alert('Enter valid Start date');
+			bootbox.alert($.i18n.prop('msg.enter.valid.startdate'));
 			getControlInBranch(tbl.rows[1],'startDate').value='';
 			getControlInBranch(tbl.rows[1],'startDate').focus();
 			return false;
@@ -109,12 +115,14 @@ function validateFields(){
 		if(lastRowEndDate!=finYearEndDate)
 		{
 			bootbox.alert('Enter valid End date');
+			bootbox.alert($.i18n.prop('msg.enter.valid.enddate'));
 			getControlInBranch(tbl.rows[lastRow],'endDate').value='';
 			getControlInBranch(tbl.rows[lastRow],'endDate').focus();
 			return false;
 		}
 		if(lastRowFiscalName==""){
-			bootbox.alert('Enter Fiscal Period Name');
+			//bootbox.alert('Enter Fiscal Period Name');
+			bootbox.alert($.i18n.prop('msg.enter.fiscal.period.name'));
 			getControlInBranch(tbl.rows[1],'name').value='';
 			getControlInBranch(tbl.rows[1],'name').focus();
 			return false;
@@ -125,7 +133,8 @@ function validateFields(){
 		    var previousEndDate=getControlInBranch(tbl.rows[previousRow],'endDate').value;
 		    if( compareDate(formatDate6(previousEndDate),formatDate6(lastRowStartDate)) == -1 )
 			{
-			     bootbox.alert('Enter valid Start Date');
+			    // bootbox.alert('Enter valid Start Date');
+			     bootbox.alert($.i18n.prop('msg.enter.valid.startdate'));
 				 getControlInBranch(tbl.rows[lastRow],'startDate').value='';
 				 getControlInBranch(tbl.rows[lastRow],'startDate').focus();
 				 return false;
@@ -246,7 +255,8 @@ function validateStartDate() {
 	if(startDate!=finYearStartDate){
 		if( compareDate(formatDate6(finYearStartDate),formatDate6(startDate)) == -1 )
 		{
-			bootbox.alert('Enter valid Start Date');
+			//bootbox.alert('Enter valid Start Date');
+			bootbox.alert($.i18n.prop('msg.enter.valid.startdate'));
 			document.getElementById('endingDate').value='';
 			document.getElementById('endingDate').focus();
 			return false;
@@ -263,7 +273,8 @@ function validateEndDate() {
 	/*To check whether Start Date is Greater than End Date*/
 	if( compareDate(formatDate6(strtDate),formatDate6(endDate)) == -1 )
 	{
-		bootbox.alert('Start Date cannot be greater than End Date');
+		//bootbox.alert('Start Date cannot be greater than End Date');
+		bootbox.alert($.i18n.prop('msg.startdate.enddate.greater'));
 		document.getElementById('endingDate').value='';
 		document.getElementById('endingDate').focus();
 		return false;
@@ -309,7 +320,8 @@ function validateFiscalEndDate() {
 
 	if( endDate == '' )
 	{
-		bootbox.alert('Enter Ending Date');
+		//bootbox.alert('Enter Ending Date');
+		bootbox.alert($.i18n.prop('msg.enter.endingdate'));
 		document.getElementById('endDate').value='';
 		document.getElementById('endDate').focus();
 		return false;
@@ -386,7 +398,7 @@ $('#buttonSubmit').click(function(e){
 					});
 					
 				} else if (res == "false") {
-					bootbox.alert(jQuery.i18n.prop('msg.transfer.closing.balance.this.year'));
+					bootbox.alert($.i18n.prop('msg.transfer.closing.balance.this.year'));
 				}
 			},
 			error : function (res){

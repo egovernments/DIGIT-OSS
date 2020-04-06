@@ -533,10 +533,11 @@ public class BudgetSearchAction extends BaseFormAction {
     }
 
     public BigDecimal calculateTotal(final BudgetDetail detail) {
-        final BigDecimal approvedAmount = detail.getApprovedAmount() == null ? BigDecimal.ZERO : detail.getApprovedAmount();
+        final BigDecimal approvedAmount = detail.getApprovedAmount() == null ? BigDecimal.ZERO : divideAndRoundStrToBigDec(detail
+                .getApprovedAmount().toString());
         final BigDecimal approvedReAppropriationsTotal = detail.getApprovedReAppropriationsTotal() == null ? BigDecimal.ZERO
-                : detail
-                        .getApprovedReAppropriationsTotal();
+                : divideAndRoundStrToBigDec(detail
+                        .getApprovedReAppropriationsTotal().toString());
         return approvedAmount.add(approvedReAppropriationsTotal);
     }
 
