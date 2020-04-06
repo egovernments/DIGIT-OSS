@@ -4,7 +4,7 @@
   "OccupancyType": [
     {
       "name": "Residential",
-      "code": "RESIDENTIAL",
+      "code": "A",
       "active": true
     }
   ]

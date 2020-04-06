@@ -4,51 +4,51 @@
   "SubOccupancyType": [
     {
       "name": "Residential",
-      "code": "RESIDENTIAL",
+      "code": "A-R",
       "active": true,
-      "occupancyType": "RESIDENTIAL"
+      "occupancyType": "A"
     },
     {
       "name": "Special Residential",
-      "code": "SPECIAL_RESIDENTIAL",
+      "code": "A-SR",
       "active": true,
-      "occupancyType": "RESIDENTIAL"
+      "occupancyType": "A"
     },
     {
       "name": "Hostel Educational",
-      "code": "HOSTEL_EDUCATIONAL",
+      "code": "A-HE",
       "active": true,
-      "occupancyType": "RESIDENTIAL"
+      "occupancyType": "A"
     },
     {
       "name": "Apartment/Flat",
-      "code": "APARTMENT_FLAT",
+      "code": "A-AF",
       "active": true,
-      "occupancyType": "RESIDENTIAL"
+      "occupancyType": "A"
     },
     {
       "name": "Professional Office",
-      "code": "PROFESSIONAL_OFFICE",
+      "code": "A-PO",
       "active": true,
-      "occupancyType": "RESIDENTIAL"
+      "occupancyType": "A"
     },
     {
       "name": "Farm House",
-      "code": "FARM_HOUSE",
+      "code": "A_FH",
       "active": true,
-      "occupancyType": "RESIDENTIAL"
+      "occupancyType": "A"
     },
     {
       "name": "Old Age Home",
-      "code": "OLD_AGE_HOME",
+      "code": "A2",
       "active": true,
-      "occupancyType": "RESIDENTIAL"
+      "occupancyType": "A"
     },
     {
       "name": "Service Apartment",
-      "code": "SERVICE_APARTMENT",
+      "code": "A-SA",
       "active": true,
-      "occupancyType": "RESIDENTIAL"
+      "occupancyType": "A"
     }
   ]
 }
