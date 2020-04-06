@@ -23,7 +23,8 @@ import {
   prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import "./index.css";
-import generateReceipt from "../../utils/receiptPdf";
+import { generateReceipt } from "../../utils/receiptPdf";
+import { downloadBill } from "../../../../../ui-utils/commons";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import get from "lodash/get";
@@ -634,6 +635,30 @@ export const footerReview = (
     },
     leftIcon: "receipt"
   };
+  let challanDownloadObject = {
+    label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
+    link: () => {
+      const receiptQueryString = [
+        { key: "consumerCode", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
+        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
+      ]
+      downloadBill(receiptQueryString);
+      // generateReceipt(state, dispatch, "receipt_download");
+    },
+    leftIcon: "receipt"
+  };
+  let challanPrintObject = {
+    label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
+    link: () => {
+      const receiptQueryString =  [
+        { key: "consumerCode", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
+        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
+      ]
+      download(receiptQueryString,"print");
+     // generateReceipt(state, dispatch, "receipt_print");
+    },
+    leftIcon: "receipt"
+  };
   let applicationDownloadObject = {
     label: { labelName: "Application", labelKey: "TL_APPLICATION" },
     link: () => {
@@ -669,9 +694,12 @@ export const footerReview = (
     case "CITIZENACTIONREQUIRED":
     case "FIELDINSPECTION":
     case "PENDINGAPPROVAL":
-    case "PENDINGPAYMENT":
       downloadMenu = [applicationDownloadObject];
       printMenu = [applicationPrintObject];
+      break;
+    case "PENDINGPAYMENT":
+      downloadMenu = [applicationDownloadObject, challanDownloadObject];
+      printMenu = [applicationPrintObject, challanPrintObject];
       break;
     case "pending_approval":
       downloadMenu = [receiptDownloadObject, applicationDownloadObject];
@@ -822,6 +850,30 @@ export const downloadPrintContainer = (
     },
     leftIcon: "receipt"
   };
+  let challanDownloadObject = {
+    label: { labelName: "Challan", labelKey: "TL_CHALLAN" },
+    link: () => {
+      const receiptQueryString = [
+        { key: "consumerCode", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
+        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
+      ]
+      downloadBill(receiptQueryString);
+      // generateReceipt(state, dispatch, "receipt_download");
+    },
+    leftIcon: "receipt"
+  };
+  let challanPrintObject = {
+    label: { labelName: "Challan", labelKey: "TL_CHALLAN" },
+    link: () => {
+      const receiptQueryString =  [
+        { key: "consumerCode", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
+        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
+      ]
+      download(receiptQueryString,"print");
+     // generateReceipt(state, dispatch, "receipt_print");
+    },
+    leftIcon: "receipt"
+  };
   let applicationDownloadObject = {
     label: { labelName: "Application", labelKey: "TL_APPLICATION" },
     link: () => {
@@ -856,11 +908,14 @@ export const downloadPrintContainer = (
     case "APPLIED":
     case "CITIZENACTIONREQUIRED":
     case "FIELDINSPECTION":
-    case "PENDINGAPPROVAL":
-    case "PENDINGPAYMENT":
-      downloadMenu = [applicationDownloadObject];
-      printMenu = [applicationPrintObject];
-      break;
+      case "PENDINGAPPROVAL":
+        downloadMenu = [applicationDownloadObject];
+        printMenu = [applicationPrintObject];
+        break;
+      case "PENDINGPAYMENT":
+        downloadMenu = [applicationDownloadObject, challanDownloadObject];
+        printMenu = [applicationPrintObject, challanPrintObject];
+        break;
     case "CANCELLED":
       downloadMenu = [applicationDownloadObject];
       printMenu = [applicationPrintObject];
