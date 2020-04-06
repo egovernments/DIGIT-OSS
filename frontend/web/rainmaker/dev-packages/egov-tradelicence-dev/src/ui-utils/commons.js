@@ -593,7 +593,7 @@ export const downloadBill = (receiptQueryString, mode = "download") => {
               { key: "key", value: "consolidatedbill" },
               { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
           ]
-          httpRequest("post", DOWNLOADBILL.GET.URL, DOWNLOADBILL.GET.ACTION, queryStr, { Bill: payloadReceiptDetails.Bill[0] }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
+          httpRequest("post", DOWNLOADBILL.GET.URL, DOWNLOADBILL.GET.ACTION, queryStr, { Bill: payloadReceiptDetails.Bill }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
               .then(res => {
                   getFileUrlFromAPI(res.filestoreIds[0]).then((fileRes) => {
                       if (mode === 'download') {
