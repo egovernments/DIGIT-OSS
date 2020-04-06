@@ -21,6 +21,16 @@ ServiceMaps:
         jsonPath: $.Property
         timeStampField: $.auditDetails.lastModifiedTime
         
+  - topic: property-registry-legacyIndex
+    configKey: LEGACYINDEX
+    indexes:
+      - name: property-services
+        type: general
+        isBulk: true
+        id: $.propertyId,$.tenantId,$.auditDetails.lastModifiedTime
+        jsonPath: $.Properties.*
+        timeStampField: $.auditDetails.lastModifiedTime        
+        
   - topic: save-pt-assessment
     configKey: INDEX
     indexes:
@@ -39,3 +49,13 @@ ServiceMaps:
         id: $.assessmentNumber, $.tenantId
         jsonPath: $.Assessment
         timeStampField: $.auditDetails.createdTime
+        
+  - topic: pt-assessment-legacyIndex
+    configKey: LEGACYINDEX
+    indexes:
+      - name: property-assessments
+        type: general
+        id: $.assessmentNumber, $.tenantId
+        jsonPath: $.Assessments.*
+        isBulk: true
+        timeStampField: $.auditDetails.createdTime   
