@@ -1,3 +1,4 @@
+
 {
   "tenantId": "pb.amritsar",
   "moduleName": "PropertyTax",
@@ -8,6 +9,26 @@
       "required": true,
       "active": true,
       "hasDropdown": true,
+      "additionalDetails": {
+        "enabledActions": {
+          "assess": {
+            "disableUpload": true,
+            "disableDropdown": true
+          },
+          "reassess": {
+            "disableUpload": true,
+            "disableDropdown": true
+          },
+          "update": {
+            "disableUpload": true,
+            "disableDropdown": true
+          },
+          "create": {
+            "disableUpload": false,
+            "disableDropdown": false
+          }
+        }
+      },
       "dropdownData": [
         {
           "code": "OWNER.ADDRESSPROOF.ELECTRICITYBILL",
@@ -46,6 +67,26 @@
       "required": true,
       "active": true,
       "hasDropdown": true,
+      "additionalDetails": {
+        "enabledActions": {
+          "assess": {
+            "disableUpload": true,
+            "disableDropdown": true
+          },
+          "reassess": {
+            "disableUpload": true,
+            "disableDropdown": true
+          },
+          "update": {
+            "disableUpload": true,
+            "disableDropdown": true
+          },
+          "create": {
+            "disableUpload": false,
+            "disableDropdown": false
+          }
+        }
+      },
       "dropdownData": [
         {
           "code": "OWNER.IDENTITYPROOF.AADHAAR",
@@ -76,6 +117,26 @@
       "required": true,
       "active": true,
       "hasDropdown": true,
+      "additionalDetails": {
+        "enabledActions": {
+          "assess": {
+            "disableUpload": true,
+            "disableDropdown": true
+          },
+          "reassess": {
+            "disableUpload": true,
+            "disableDropdown": true
+          },
+          "update": {
+            "disableUpload": false,
+            "disableDropdown": false
+          },
+          "create": {
+            "disableUpload": false,
+            "disableDropdown": false
+          }
+        }
+      },
       "dropdownData": [
         {
           "code": "OWNER.REGISTRATIONPROOF.SALEDEED",
@@ -114,6 +175,24 @@
         "dropdownFilter": {
           "parentArrayJsonPath": "Properties[0].propertyDetails[0].owners",
           "parentJsonpath": "ownerType"
+        },
+        "enabledActions": {
+          "assess": {
+            "disableUpload": true,
+            "disableDropdown": true
+          },
+          "reassess": {
+            "disableUpload": true,
+            "disableDropdown": true
+          },
+          "update": {
+            "disableUpload": true,
+            "disableDropdown": true
+          },
+          "create": {
+            "disableUpload": false,
+            "disableDropdown": false
+          }
         }
       },
       "dropdownData": [
@@ -158,6 +237,24 @@
       "additionalDetails": {
         "dropdownFilter": {
           "parentJsonpath": "Properties[0].propertyDetails[0].usageCategoryMinor"
+        },
+        "enabledActions": {
+          "assess": {
+            "disableUpload": true,
+            "disableDropdown": true
+          },
+          "reassess": {
+            "disableUpload": true,
+            "disableDropdown": true
+          },
+          "update": {
+            "disableUpload": false,
+            "disableDropdown": false
+          },
+          "create": {
+            "disableUpload": false,
+            "disableDropdown": false
+          }
         }
       },
       "dropdownData": [
@@ -202,6 +299,24 @@
           "jsonPath": "Properties[0].propertyDetails[0].units",
           "onArray": true,
           "arrayAttribute": "occupancyType"
+        },
+        "enabledActions": {
+          "assess": {
+            "disableUpload": true,
+            "disableDropdown": true
+          },
+          "reassess": {
+            "disableUpload": true,
+            "disableDropdown": true
+          },
+          "update": {
+            "disableUpload": false,
+            "disableDropdown": false
+          },
+          "create": {
+            "disableUpload": false,
+            "disableDropdown": false
+          }
         }
       },
       "dropdownData": [
@@ -225,6 +340,24 @@
           ],
           "jsonPath": "Properties[0].propertyDetails[0].propertyType",
           "onArray": false
+        },
+        "enabledActions": {
+          "assess": {
+            "disableUpload": true,
+            "disableDropdown": true
+          },
+          "reassess": {
+            "disableUpload": true,
+            "disableDropdown": true
+          },
+          "update": {
+            "disableUpload": false,
+            "disableDropdown": false
+          },
+          "create": {
+            "disableUpload": false,
+            "disableDropdown": false
+          }
         }
       },
       "dropdownData": [
