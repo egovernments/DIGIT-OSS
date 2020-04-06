@@ -302,7 +302,7 @@ public class MigrationService {
         List<Property> properties = new ArrayList<>();
         for(OldProperty oldProperty : oldProperties){
             Property property = new Property();
-            property.setId(UUID.randomUUID().toString());
+            //property.setId(UUID.randomUUID().toString());
             property.setPropertyId(oldProperty.getPropertyId());
             property.setTenantId(oldProperty.getTenantId());
             property.setAccountId(requestInfo.getUserInfo().getUuid());
@@ -493,7 +493,7 @@ public class MigrationService {
             ownerInfo.setLastModifiedBy(oldOwnerInfo.getLastModifiedBy());
             ownerInfo.setLastModifiedDate(oldOwnerInfo.getLastModifiedDate());
             ownerInfo.setTenantId(oldOwnerInfo.getTenantId());
-            ownerInfo.setOwnerInfoUuid(UUID.randomUUID().toString());
+            //ownerInfo.setOwnerInfoUuid(UUID.randomUUID().toString());
             ownerInfo.setMobileNumber(oldOwnerInfo.getMobileNumber());
             ownerInfo.setGender(oldOwnerInfo.getGender());
             ownerInfo.setFatherOrHusbandName(oldOwnerInfo.getFatherOrHusbandName());
@@ -653,7 +653,7 @@ public class MigrationService {
 
     public void migrateAssesment(PropertyDetail propertyDetail, Property property, RequestInfo requestInfo,Map<String,String> errorMap){
         Assessment assessment = new Assessment();
-        assessment.setId(String.valueOf(UUID.randomUUID()));
+        //assessment.setId(String.valueOf(UUID.randomUUID()));
         assessment.setTenantId(propertyDetail.getTenantId());
         assessment.setAssessmentNumber(propertyDetail.getAssessmentNumber());
         assessment.setPropertyId(property.getPropertyId());
@@ -756,7 +756,7 @@ public class MigrationService {
         List<UnitUsage> units = new ArrayList<>();
         for(OldUnit oldUnit : oldUnits){
             UnitUsage unit = new UnitUsage();
-            unit.setId(String.valueOf(UUID.randomUUID()));
+            //unit.setId(String.valueOf(UUID.randomUUID()));
             unit.setUnitId(oldUnit.getId());
             unit.setTenantId(oldUnit.getTenantId());
             unit.setUsageCategory(migrateUnitUsageCategory(oldUnit));
