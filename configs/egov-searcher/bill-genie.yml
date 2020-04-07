@@ -34,8 +34,7 @@ SearchDefinitions:
             ad.taxheadcode AS ad_taxheadcode, ad.demanddetailid, 
             ad.isactualdemand AS ad_isactualdemand, ad.purpose AS ad_purpose,   
             ad.additionaldetails as ad_additionaldetails,
-            ptadd.doorNo as ptadd_doorNo, ptadd.addressline1 as ptadd_addressline1, 
-            ptadd.addressline2 as ptadd_addressline2, ptadd.landmark as ptadd_landmark, 
+            ptadd.doorNo as ptadd_doorNo,ptadd.landmark as ptadd_landmark, 
             ptadd.city as ptadd_city, ptadd.pincode as ptadd_pincode, 
             ptadd.locality as ptadd_locality, ptown.userid as ptown_userid 
             
