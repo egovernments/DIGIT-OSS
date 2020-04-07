@@ -155,6 +155,33 @@ ServiceMaps:
         id: $.assessmentNumber, $.tenantId
         jsonPath: $.Assessment
         timeStampField: $.auditDetails.createdTime
+        customJsonMapping:
+          indexMapping: {"Data":{"id":"","tenantId":"","assessmentNumber":"","financialYear":"","propertyId":"","assessmentDate":"","status":"","source":"","unitUsageList":{},"channel":"","auditDetails":{},"@timestamp":"timestamp"}}
+          fieldMapping:
+          - inJsonPath: $.id
+            outJsonPath: $.Data.id
+          - inJsonPath: $.tenantId
+            outJsonPath: $.Data.tenantId
+          - inJsonPath: $.assessmentNumber
+            outJsonPath: $.Data.assessmentNumber
+          - inJsonPath: $.financialYear
+            outJsonPath: $.Data.financialYear
+          - inJsonPath: $.propertyId
+            outJsonPath: $.Data.propertyId
+          - inJsonPath: $.assessmentDate
+            outJsonPath: $.Data.assessmentDate
+          - inJsonPath: $.status
+            outJsonPath: $.Data.status
+          - inJsonPath: $.source
+            outJsonPath: $.Data.source
+          - inJsonPath: $.unitUsageList
+            outJsonPath: $.Data.unitUsageList
+          - inJsonPath: $.channel
+            outJsonPath: $.Data.channel
+          - inJsonPath: $.auditDetails
+            outJsonPath: $.Data.auditDetails
+          - inJsonPath: $.@timestamp
+            outJsonPath: $.Data.@timestamp
 
 
   - topic: update-pt-assessment
@@ -165,6 +192,33 @@ ServiceMaps:
         id: $.assessmentNumber, $.tenantId
         jsonPath: $.Assessment
         timeStampField: $.auditDetails.createdTime
+        customJsonMapping:
+          indexMapping: {"Data":{"id":"","tenantId":"","assessmentNumber":"","financialYear":"","propertyId":"","assessmentDate":"","status":"","source":"","unitUsageList":{},"channel":"","auditDetails":{},"@timestamp":"timestamp"}}
+          fieldMapping:
+          - inJsonPath: $.id
+            outJsonPath: $.Data.id
+          - inJsonPath: $.tenantId
+            outJsonPath: $.Data.tenantId
+          - inJsonPath: $.assessmentNumber
+            outJsonPath: $.Data.assessmentNumber
+          - inJsonPath: $.financialYear
+            outJsonPath: $.Data.financialYear
+          - inJsonPath: $.propertyId
+            outJsonPath: $.Data.propertyId
+          - inJsonPath: $.assessmentDate
+            outJsonPath: $.Data.assessmentDate
+          - inJsonPath: $.status
+            outJsonPath: $.Data.status
+          - inJsonPath: $.source
+            outJsonPath: $.Data.source
+          - inJsonPath: $.unitUsageList
+            outJsonPath: $.Data.unitUsageList
+          - inJsonPath: $.channel
+            outJsonPath: $.Data.channel
+          - inJsonPath: $.auditDetails
+            outJsonPath: $.Data.auditDetails
+          - inJsonPath: $.@timestamp
+            outJsonPath: $.Data.@timestamp
         
   - topic: cancel-property-assessment
     configKey: INDEX
@@ -173,7 +227,34 @@ ServiceMaps:
         type: general
         id: $.assessmentNumber, $.tenantId
         jsonPath: $.Assessment
-        timeStampField: $.auditDetails.createdTime 
+        timeStampField: $.auditDetails.createdTime
+        customJsonMapping:
+          indexMapping: {"Data":{"id":"","tenantId":"","assessmentNumber":"","financialYear":"","propertyId":"","assessmentDate":"","status":"","source":"","unitUsageList":{},"channel":"","auditDetails":{},"@timestamp":"timestamp"}}
+          fieldMapping:
+          - inJsonPath: $.id
+            outJsonPath: $.Data.id
+          - inJsonPath: $.tenantId
+            outJsonPath: $.Data.tenantId
+          - inJsonPath: $.assessmentNumber
+            outJsonPath: $.Data.assessmentNumber
+          - inJsonPath: $.financialYear
+            outJsonPath: $.Data.financialYear
+          - inJsonPath: $.propertyId
+            outJsonPath: $.Data.propertyId
+          - inJsonPath: $.assessmentDate
+            outJsonPath: $.Data.assessmentDate
+          - inJsonPath: $.status
+            outJsonPath: $.Data.status
+          - inJsonPath: $.source
+            outJsonPath: $.Data.source
+          - inJsonPath: $.unitUsageList
+            outJsonPath: $.Data.unitUsageList
+          - inJsonPath: $.channel
+            outJsonPath: $.Data.channel
+          - inJsonPath: $.auditDetails
+            outJsonPath: $.Data.auditDetails
+          - inJsonPath: $.@timestamp
+            outJsonPath: $.Data.@timestamp
  
   - topic: pt-assessment-legacyIndex
     configKey: LEGACYINDEX
@@ -183,4 +264,31 @@ ServiceMaps:
         id: $.assessmentNumber, $.tenantId
         jsonPath: $.Assessments.*
         isBulk: true
-        timeStampField: $.auditDetails.createdTime   
+        timeStampField: $.auditDetails.createdTime 
+        customJsonMapping:
+          indexMapping: {"Data":{"id":"","tenantId":"","assessmentNumber":"","financialYear":"","propertyId":"","assessmentDate":"","status":"","source":"","unitUsageList":{},"channel":"","auditDetails":{},"@timestamp":"timestamp"}}
+          fieldMapping:
+          - inJsonPath: $.id
+            outJsonPath: $.Data.id
+          - inJsonPath: $.tenantId
+            outJsonPath: $.Data.tenantId
+          - inJsonPath: $.assessmentNumber
+            outJsonPath: $.Data.assessmentNumber
+          - inJsonPath: $.financialYear
+            outJsonPath: $.Data.financialYear
+          - inJsonPath: $.propertyId
+            outJsonPath: $.Data.propertyId
+          - inJsonPath: $.assessmentDate
+            outJsonPath: $.Data.assessmentDate
+          - inJsonPath: $.status
+            outJsonPath: $.Data.status
+          - inJsonPath: $.source
+            outJsonPath: $.Data.source
+          - inJsonPath: $.unitUsageList
+            outJsonPath: $.Data.unitUsageList
+          - inJsonPath: $.channel
+            outJsonPath: $.Data.channel
+          - inJsonPath: $.auditDetails
+            outJsonPath: $.Data.auditDetails
+          - inJsonPath: $.@timestamp
+            outJsonPath: $.Data.@timestamp
