@@ -41,9 +41,9 @@ SearchDefinitions:
             FROM egbs_bill_v1 b INNER JOIN egbs_billdetail_v1 bd ON b.id = bd.billid AND b.tenantid = bd.tenantid 
             INNER JOIN egbs_billaccountdetail_v1 ad ON bd.id = ad.billdetail AND bd.tenantid = ad.tenantid 
             LEFT OUTER JOIN eg_pt_property pt ON bd.consumercode = pt.propertyid 
-            INNER JOIN eg_pt_address ptadd ON ptadd.propertyid = pt.propertyid
+            INNER JOIN eg_pt_address ptadd ON ptadd.id = pt.propertyid
             INNER JOIN eg_pt_asmt_assessment ptdet ON ptdet.propertyid = pt.propertyid 
-            INNER JOIN eg_pt_owner ptown ON pt.propertyid = ptown.propertyid $where )
+            INNER JOIN eg_pt_owner ptown ON pt.id = ptown.propertyid $where )
 
       select * from bill_data inner join (select max(b_createddate) as maxcreateddate, bd_consumercode from bill_data group by bd_consumercode) as max ON max.maxcreateddate=b_createddate
    searchParams: 
