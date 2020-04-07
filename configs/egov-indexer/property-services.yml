@@ -10,7 +10,33 @@ ServiceMaps:
         id: $.propertyId,$.tenantId,$.auditDetails.lastModifiedTime
         jsonPath: $.Property
         timeStampField: $.auditDetails.lastModifiedTime
-
+        customJsonMapping:
+          indexMapping: {"Data":{},"@timestamp":"timestamp"}
+          fieldMapping:
+          - inJsonPath: $
+            outJsonPath: $.Data
+          - inJsonPath: $.@timestamp
+            outJsonPath: $.Data.@timestamp
+          externalUriMapping:
+          - path: http://egov-location.egov:8080/egov-location/location/v11/boundarys/_search
+            queryParam: hierarchyTypeCode=REVENUE,boundaryType=Block,codes=$.address.locality.code,tenantId=$.tenantId
+            apiRequest: {"RequestInfo": {"apiId": "org.egov.pt","ver": "1.0","ts": 1502890899493,"action": "asd","did": "4354648646","key": "xyz","msgId": "654654", "requesterId": "61",
+            "authToken": "02dbe5be-28df-4d82-954f-3d27c56cca7d","userInfo":{"id":73}}}
+            uriResponseMapping:
+            - inJsonPath: $.TenantBoundary[0].boundary[0]
+              outJsonPath: $.Data.ward
+          mdmsMapping:
+          - path: http://egov-mdms-service.egov:8080/egov-mdms-service/v1/_search
+            moduleName: tenant
+            masterName: tenants
+            tenantId: pb
+            filter: "[?(@.code == $tenant)]"
+            filterMapping:
+            - variable: $tenant
+              valueJsonpath: $.tenantId
+            uriResponseMapping:
+            - inJsonPath: $.MdmsRes.tenant.tenants
+              outJsonPath: $.Data.tenantData
 
   - topic: update-property-registry
     configKey: INDEX
@@ -20,7 +46,34 @@ ServiceMaps:
         id: $.propertyId,$.tenantId,$.auditDetails.lastModifiedTime
         jsonPath: $.Property
         timeStampField: $.auditDetails.lastModifiedTime
-        
+        customJsonMapping:
+          indexMapping: {"Data":{},"@timestamp":"timestamp"}
+          fieldMapping:
+          - inJsonPath: $
+            outJsonPath: $.Data
+          - inJsonPath: $.@timestamp
+            outJsonPath: $.Data.@timestamp
+          externalUriMapping:
+          - path: http://egov-location.egov:8080/egov-location/location/v11/boundarys/_search
+            queryParam: hierarchyTypeCode=REVENUE,boundaryType=Block,codes=$.address.locality.code,tenantId=$.tenantId
+            apiRequest: {"RequestInfo": {"apiId": "org.egov.pt","ver": "1.0","ts": 1502890899493,"action": "asd","did": "4354648646","key": "xyz","msgId": "654654", "requesterId": "61",
+            "authToken": "02dbe5be-28df-4d82-954f-3d27c56cca7d","userInfo":{"id":73}}}
+            uriResponseMapping:
+            - inJsonPath: $.TenantBoundary[0].boundary[0]
+              outJsonPath: $.Data.ward
+          mdmsMapping:
+          - path: http://egov-mdms-service.egov:8080/egov-mdms-service/v1/_search
+            moduleName: tenant
+            masterName: tenants
+            tenantId: pb
+            filter: "[?(@.code == $tenant)]"
+            filterMapping:
+            - variable: $tenant
+              valueJsonpath: $.tenantId
+            uriResponseMapping:
+            - inJsonPath: $.MdmsRes.tenant.tenants
+              outJsonPath: $.Data.tenantData
+              
   - topic: cancel-property-registry
     configKey: INDEX
     indexes:
@@ -28,7 +81,34 @@ ServiceMaps:
         type: general
         id: $.propertyId,$.tenantId,$.auditDetails.lastModifiedTime
         jsonPath: $.Property
-        timeStampField: $.auditDetails.lastModifiedTime   
+        timeStampField: $.auditDetails.lastModifiedTime 
+        customJsonMapping:
+          indexMapping: {"Data":{},"@timestamp":"timestamp"}
+          fieldMapping:
+          - inJsonPath: $
+            outJsonPath: $.Data
+          - inJsonPath: $.@timestamp
+            outJsonPath: $.Data.@timestamp
+          externalUriMapping:
+          - path: http://egov-location.egov:8080/egov-location/location/v11/boundarys/_search
+            queryParam: hierarchyTypeCode=REVENUE,boundaryType=Block,codes=$.address.locality.code,tenantId=$.tenantId
+            apiRequest: {"RequestInfo": {"apiId": "org.egov.pt","ver": "1.0","ts": 1502890899493,"action": "asd","did": "4354648646","key": "xyz","msgId": "654654", "requesterId": "61",
+            "authToken": "02dbe5be-28df-4d82-954f-3d27c56cca7d","userInfo":{"id":73}}}
+            uriResponseMapping:
+            - inJsonPath: $.TenantBoundary[0].boundary[0]
+              outJsonPath: $.Data.ward
+          mdmsMapping:
+          - path: http://egov-mdms-service.egov:8080/egov-mdms-service/v1/_search
+            moduleName: tenant
+            masterName: tenants
+            tenantId: pb
+            filter: "[?(@.code == $tenant)]"
+            filterMapping:
+            - variable: $tenant
+              valueJsonpath: $.tenantId
+            uriResponseMapping:
+            - inJsonPath: $.MdmsRes.tenant.tenants
+              outJsonPath: $.Data.tenantData        
         
   - topic: property-registry-legacyIndex
     configKey: LEGACYINDEX
@@ -39,6 +119,33 @@ ServiceMaps:
         id: $.propertyId,$.tenantId,$.auditDetails.lastModifiedTime
         jsonPath: $.Properties.*
         timeStampField: $.auditDetails.lastModifiedTime        
+        customJsonMapping:
+          indexMapping: {"Data":{},"@timestamp":"timestamp"}
+          fieldMapping:
+          - inJsonPath: $
+            outJsonPath: $.Data
+          - inJsonPath: $.@timestamp
+            outJsonPath: $.Data.@timestamp
+          externalUriMapping:
+          - path: http://egov-location.egov:8080/egov-location/location/v11/boundarys/_search
+            queryParam: hierarchyTypeCode=REVENUE,boundaryType=Block,codes=$.address.locality.code,tenantId=$.tenantId
+            apiRequest: {"RequestInfo": {"apiId": "org.egov.pt","ver": "1.0","ts": 1502890899493,"action": "asd","did": "4354648646","key": "xyz","msgId": "654654", "requesterId": "61",
+            "authToken": "02dbe5be-28df-4d82-954f-3d27c56cca7d","userInfo":{"id":73}}}
+            uriResponseMapping:
+            - inJsonPath: $.TenantBoundary[0].boundary[0]
+              outJsonPath: $.Data.ward
+          mdmsMapping:
+          - path: http://egov-mdms-service.egov:8080/egov-mdms-service/v1/_search
+            moduleName: tenant
+            masterName: tenants
+            tenantId: pb
+            filter: "[?(@.code == $tenant)]"
+            filterMapping:
+            - variable: $tenant
+              valueJsonpath: $.tenantId
+            uriResponseMapping:
+            - inJsonPath: $.MdmsRes.tenant.tenants
+              outJsonPath: $.Data.tenantData        
         
   - topic: save-pt-assessment
     configKey: INDEX
