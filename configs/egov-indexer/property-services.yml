@@ -11,10 +11,48 @@ ServiceMaps:
         jsonPath: $.Property
         timeStampField: $.auditDetails.lastModifiedTime
         customJsonMapping:
-          indexMapping: {"Data":{},"@timestamp":"timestamp"}
+          indexMapping: {"Data":{"acknowldgementNumber":"","propertyType":"","ownershipCategory":"","creationReason":"","usageCategory":"","noOfFloors":"","landArea":"","superBuiltUpArea":"","source":"","channel":"","units":{},"auditDetails":{},"id":"","propertyId":"","surveyId":"","linkedProperties":{},"tenantId":"","accountId":"","oldPropertyId":"","status":"","@timestamp":"timestamp"}}
           fieldMapping:
-          - inJsonPath: $
-            outJsonPath: $.Data
+          - inJsonPath: $.acknowldgementNumber
+            outJsonPath: $.Data.acknowldgementNumber
+          - inJsonPath: $.propertyType
+            outJsonPath: $.Data.propertyType
+          - inJsonPath: $.ownershipCategory
+            outJsonPath: $.Data.ownershipCategory
+          - inJsonPath: $.creationReason
+            outJsonPath: $.Data.creationReason
+          - inJsonPath: $.usageCategory
+            outJsonPath: $.Data.usageCategory
+          - inJsonPath: $.noOfFloors
+            outJsonPath: $.Data.noOfFloors
+          - inJsonPath: $.landArea
+            outJsonPath: $.Data.landArea
+          - inJsonPath: $.superBuiltUpArea
+            outJsonPath: $.Data.superBuiltUpArea
+          - inJsonPath: $.source
+            outJsonPath: $.Data.source
+          - inJsonPath: $.channel
+            outJsonPath: $.Data.channel
+          - inJsonPath: $.units
+            outJsonPath: $.Data.units
+          - inJsonPath: $.auditDetails
+            outJsonPath: $.Data.auditDetails
+          - inJsonPath: $.id
+            outJsonPath: $.Data.id
+          - inJsonPath: $.propertyId
+            outJsonPath: $.Data.propertyId
+          - inJsonPath: $.surveyId
+            outJsonPath: $.Data.surveyId
+          - inJsonPath: $.linkedProperties
+            outJsonPath: $.Data.linkedProperties
+          - inJsonPath: $.tenantId
+            outJsonPath: $.Data.tenantId
+          - inJsonPath: $.accountId
+            outJsonPath: $.Data.accountId
+          - inJsonPath: $.oldPropertyId
+            outJsonPath: $.Data.oldPropertyId
+          - inJsonPath: $.status
+            outJsonPath: $.Data.status
           - inJsonPath: $.@timestamp
             outJsonPath: $.Data.@timestamp
           externalUriMapping:
@@ -47,10 +85,48 @@ ServiceMaps:
         jsonPath: $.Property
         timeStampField: $.auditDetails.lastModifiedTime
         customJsonMapping:
-          indexMapping: {"Data":{},"@timestamp":"timestamp"}
+          indexMapping: {"Data":{"acknowldgementNumber":"","propertyType":"","ownershipCategory":"","creationReason":"","usageCategory":"","noOfFloors":"","landArea":"","superBuiltUpArea":"","source":"","channel":"","units":{},"auditDetails":{},"id":"","propertyId":"","surveyId":"","linkedProperties":{},"tenantId":"","accountId":"","oldPropertyId":"","status":"","@timestamp":"timestamp"}}
           fieldMapping:
-          - inJsonPath: $
-            outJsonPath: $.Data
+          - inJsonPath: $.acknowldgementNumber
+            outJsonPath: $.Data.acknowldgementNumber
+          - inJsonPath: $.propertyType
+            outJsonPath: $.Data.propertyType
+          - inJsonPath: $.ownershipCategory
+            outJsonPath: $.Data.ownershipCategory
+          - inJsonPath: $.creationReason
+            outJsonPath: $.Data.creationReason
+          - inJsonPath: $.usageCategory
+            outJsonPath: $.Data.usageCategory
+          - inJsonPath: $.noOfFloors
+            outJsonPath: $.Data.noOfFloors
+          - inJsonPath: $.landArea
+            outJsonPath: $.Data.landArea
+          - inJsonPath: $.superBuiltUpArea
+            outJsonPath: $.Data.superBuiltUpArea
+          - inJsonPath: $.source
+            outJsonPath: $.Data.source
+          - inJsonPath: $.channel
+            outJsonPath: $.Data.channel
+          - inJsonPath: $.units
+            outJsonPath: $.Data.units
+          - inJsonPath: $.auditDetails
+            outJsonPath: $.Data.auditDetails
+          - inJsonPath: $.id
+            outJsonPath: $.Data.id
+          - inJsonPath: $.propertyId
+            outJsonPath: $.Data.propertyId
+          - inJsonPath: $.surveyId
+            outJsonPath: $.Data.surveyId
+          - inJsonPath: $.linkedProperties
+            outJsonPath: $.Data.linkedProperties
+          - inJsonPath: $.tenantId
+            outJsonPath: $.Data.tenantId
+          - inJsonPath: $.accountId
+            outJsonPath: $.Data.accountId
+          - inJsonPath: $.oldPropertyId
+            outJsonPath: $.Data.oldPropertyId
+          - inJsonPath: $.status
+            outJsonPath: $.Data.status
           - inJsonPath: $.@timestamp
             outJsonPath: $.Data.@timestamp
           externalUriMapping:
@@ -83,10 +159,48 @@ ServiceMaps:
         jsonPath: $.Property
         timeStampField: $.auditDetails.lastModifiedTime 
         customJsonMapping:
-          indexMapping: {"Data":{},"@timestamp":"timestamp"}
+          indexMapping: {"Data":{"acknowldgementNumber":"","propertyType":"","ownershipCategory":"","creationReason":"","usageCategory":"","noOfFloors":"","landArea":"","superBuiltUpArea":"","source":"","channel":"","units":{},"auditDetails":{},"id":"","propertyId":"","surveyId":"","linkedProperties":{},"tenantId":"","accountId":"","oldPropertyId":"","status":"","@timestamp":"timestamp"}}
           fieldMapping:
-          - inJsonPath: $
-            outJsonPath: $.Data
+          - inJsonPath: $.acknowldgementNumber
+            outJsonPath: $.Data.acknowldgementNumber
+          - inJsonPath: $.propertyType
+            outJsonPath: $.Data.propertyType
+          - inJsonPath: $.ownershipCategory
+            outJsonPath: $.Data.ownershipCategory
+          - inJsonPath: $.creationReason
+            outJsonPath: $.Data.creationReason
+          - inJsonPath: $.usageCategory
+            outJsonPath: $.Data.usageCategory
+          - inJsonPath: $.noOfFloors
+            outJsonPath: $.Data.noOfFloors
+          - inJsonPath: $.landArea
+            outJsonPath: $.Data.landArea
+          - inJsonPath: $.superBuiltUpArea
+            outJsonPath: $.Data.superBuiltUpArea
+          - inJsonPath: $.source
+            outJsonPath: $.Data.source
+          - inJsonPath: $.channel
+            outJsonPath: $.Data.channel
+          - inJsonPath: $.units
+            outJsonPath: $.Data.units
+          - inJsonPath: $.auditDetails
+            outJsonPath: $.Data.auditDetails
+          - inJsonPath: $.id
+            outJsonPath: $.Data.id
+          - inJsonPath: $.propertyId
+            outJsonPath: $.Data.propertyId
+          - inJsonPath: $.surveyId
+            outJsonPath: $.Data.surveyId
+          - inJsonPath: $.linkedProperties
+            outJsonPath: $.Data.linkedProperties
+          - inJsonPath: $.tenantId
+            outJsonPath: $.Data.tenantId
+          - inJsonPath: $.accountId
+            outJsonPath: $.Data.accountId
+          - inJsonPath: $.oldPropertyId
+            outJsonPath: $.Data.oldPropertyId
+          - inJsonPath: $.status
+            outJsonPath: $.Data.status
           - inJsonPath: $.@timestamp
             outJsonPath: $.Data.@timestamp
           externalUriMapping:
@@ -120,10 +234,48 @@ ServiceMaps:
         jsonPath: $.Properties.*
         timeStampField: $.auditDetails.lastModifiedTime        
         customJsonMapping:
-          indexMapping: {"Data":{},"@timestamp":"timestamp"}
+          indexMapping: {"Data":{"acknowldgementNumber":"","propertyType":"","ownershipCategory":"","creationReason":"","usageCategory":"","noOfFloors":"","landArea":"","superBuiltUpArea":"","source":"","channel":"","units":{},"auditDetails":{},"id":"","propertyId":"","surveyId":"","linkedProperties":{},"tenantId":"","accountId":"","oldPropertyId":"","status":"","@timestamp":"timestamp"}}
           fieldMapping:
-          - inJsonPath: $
-            outJsonPath: $.Data
+          - inJsonPath: $.acknowldgementNumber
+            outJsonPath: $.Data.acknowldgementNumber
+          - inJsonPath: $.propertyType
+            outJsonPath: $.Data.propertyType
+          - inJsonPath: $.ownershipCategory
+            outJsonPath: $.Data.ownershipCategory
+          - inJsonPath: $.creationReason
+            outJsonPath: $.Data.creationReason
+          - inJsonPath: $.usageCategory
+            outJsonPath: $.Data.usageCategory
+          - inJsonPath: $.noOfFloors
+            outJsonPath: $.Data.noOfFloors
+          - inJsonPath: $.landArea
+            outJsonPath: $.Data.landArea
+          - inJsonPath: $.superBuiltUpArea
+            outJsonPath: $.Data.superBuiltUpArea
+          - inJsonPath: $.source
+            outJsonPath: $.Data.source
+          - inJsonPath: $.channel
+            outJsonPath: $.Data.channel
+          - inJsonPath: $.units
+            outJsonPath: $.Data.units
+          - inJsonPath: $.auditDetails
+            outJsonPath: $.Data.auditDetails
+          - inJsonPath: $.id
+            outJsonPath: $.Data.id
+          - inJsonPath: $.propertyId
+            outJsonPath: $.Data.propertyId
+          - inJsonPath: $.surveyId
+            outJsonPath: $.Data.surveyId
+          - inJsonPath: $.linkedProperties
+            outJsonPath: $.Data.linkedProperties
+          - inJsonPath: $.tenantId
+            outJsonPath: $.Data.tenantId
+          - inJsonPath: $.accountId
+            outJsonPath: $.Data.accountId
+          - inJsonPath: $.oldPropertyId
+            outJsonPath: $.Data.oldPropertyId
+          - inJsonPath: $.status
+            outJsonPath: $.Data.status
           - inJsonPath: $.@timestamp
             outJsonPath: $.Data.@timestamp
           externalUriMapping:
