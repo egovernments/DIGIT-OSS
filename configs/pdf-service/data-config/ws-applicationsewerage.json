@@ -51,7 +51,7 @@
                             {
                                 "variable": "propertyUsageSubType",
                                 "value": {
-                                    "path": "$.property.usageCategory"
+                                    "path": "$.property.propertySubUsageType"
                                 }
                             },
                             {
@@ -66,6 +66,17 @@
                                     "path": "$.property.noOfFloors"
                                 }
                             },
+                            {
+                                "variable": "rainwaterHarvestingFacility",
+                                "value": {
+                                  "path": "$.property.rainWaterHarvesting"
+                                },
+                                "localisation": {
+                                  "required": true,
+                                  "prefix": "HARVESTING",
+                                  "module": "rainmaker-common"
+                                }
+                              },
                             {
                                 "variable": "cityName",
                                 "value": {

@@ -51,7 +51,7 @@
               {
                 "variable": "propertyUsageSubType",
                 "value": {
-                  "path": "$.property.usageCategory"
+                  "path": "$.property.propertySubUsageType"
                 }
               },
               {
@@ -69,7 +69,7 @@
               {
                 "variable": "rainwaterHarvestingFacility",
                 "value": {
-                  "path": "$.rainWaterHarvesting"
+                  "path": "$.property.rainWaterHarvesting"
                 },
                 "localisation": {
                   "required": true,
