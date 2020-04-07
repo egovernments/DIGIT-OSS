@@ -156,7 +156,7 @@ ServiceMaps:
         jsonPath: $.Assessment
         timeStampField: $.auditDetails.createdTime
         customJsonMapping:
-          indexMapping: {"Data":{"id":"","tenantId":"","assessmentNumber":"","financialYear":"","propertyId":"","assessmentDate":"","status":"","source":"","unitUsageList":{},"channel":"","auditDetails":{},"@timestamp":"timestamp"}}
+          indexMapping: {"Data":{"id":"","tenantId":"","additionalDetails":"","assessmentNumber":"","financialYear":"","propertyId":"","assessmentDate":"","status":"","source":"","unitUsageList":{},"channel":"","auditDetails":{},"@timestamp":"timestamp"}}
           fieldMapping:
           - inJsonPath: $.id
             outJsonPath: $.Data.id
@@ -180,6 +180,8 @@ ServiceMaps:
             outJsonPath: $.Data.channel
           - inJsonPath: $.auditDetails
             outJsonPath: $.Data.auditDetails
+          - inJsonPath: $.additionalDetails
+            outJsonPath: $.Data.additionalDetails
           - inJsonPath: $.@timestamp
             outJsonPath: $.Data.@timestamp
 
@@ -193,7 +195,7 @@ ServiceMaps:
         jsonPath: $.Assessment
         timeStampField: $.auditDetails.createdTime
         customJsonMapping:
-          indexMapping: {"Data":{"id":"","tenantId":"","assessmentNumber":"","financialYear":"","propertyId":"","assessmentDate":"","status":"","source":"","unitUsageList":{},"channel":"","auditDetails":{},"@timestamp":"timestamp"}}
+          indexMapping: {"Data":{"id":"","tenantId":"","additionalDetails":"","assessmentNumber":"","financialYear":"","propertyId":"","assessmentDate":"","status":"","source":"","unitUsageList":{},"channel":"","auditDetails":{},"@timestamp":"timestamp"}}
           fieldMapping:
           - inJsonPath: $.id
             outJsonPath: $.Data.id
@@ -217,6 +219,8 @@ ServiceMaps:
             outJsonPath: $.Data.channel
           - inJsonPath: $.auditDetails
             outJsonPath: $.Data.auditDetails
+          - inJsonPath: $.additionalDetails
+            outJsonPath: $.Data.additionalDetails
           - inJsonPath: $.@timestamp
             outJsonPath: $.Data.@timestamp
         
@@ -229,7 +233,7 @@ ServiceMaps:
         jsonPath: $.Assessment
         timeStampField: $.auditDetails.createdTime
         customJsonMapping:
-          indexMapping: {"Data":{"id":"","tenantId":"","assessmentNumber":"","financialYear":"","propertyId":"","assessmentDate":"","status":"","source":"","unitUsageList":{},"channel":"","auditDetails":{},"@timestamp":"timestamp"}}
+          indexMapping: {"Data":{"id":"","tenantId":"","additionalDetails":"","assessmentNumber":"","financialYear":"","propertyId":"","assessmentDate":"","status":"","source":"","unitUsageList":{},"channel":"","auditDetails":{},"@timestamp":"timestamp"}}
           fieldMapping:
           - inJsonPath: $.id
             outJsonPath: $.Data.id
@@ -252,7 +256,9 @@ ServiceMaps:
           - inJsonPath: $.channel
             outJsonPath: $.Data.channel
           - inJsonPath: $.auditDetails
-            outJsonPath: $.Data.auditDetails
+            outJsonPath: $.Data.auditDetails     
+          - inJsonPath: $.additionalDetails
+            outJsonPath: $.Data.additionalDetails
           - inJsonPath: $.@timestamp
             outJsonPath: $.Data.@timestamp
  
@@ -266,7 +272,7 @@ ServiceMaps:
         isBulk: true
         timeStampField: $.auditDetails.createdTime 
         customJsonMapping:
-          indexMapping: {"Data":{"id":"","tenantId":"","assessmentNumber":"","financialYear":"","propertyId":"","assessmentDate":"","status":"","source":"","unitUsageList":{},"channel":"","auditDetails":{},"@timestamp":"timestamp"}}
+          indexMapping: {"Data":{"id":"","tenantId":"","additionalDetails":"","assessmentNumber":"","financialYear":"","propertyId":"","assessmentDate":"","status":"","source":"","unitUsageList":{},"channel":"","auditDetails":{},"@timestamp":"timestamp"}}
           fieldMapping:
           - inJsonPath: $.id
             outJsonPath: $.Data.id
@@ -289,6 +295,8 @@ ServiceMaps:
           - inJsonPath: $.channel
             outJsonPath: $.Data.channel
           - inJsonPath: $.auditDetails
-            outJsonPath: $.Data.auditDetails
+            outJsonPath: $.Data.auditDetails            
+          - inJsonPath: $.additionalDetails
+            outJsonPath: $.Data.additionalDetails
           - inJsonPath: $.@timestamp
             outJsonPath: $.Data.@timestamp
