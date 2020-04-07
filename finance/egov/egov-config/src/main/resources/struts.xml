@@ -94,6 +94,7 @@
 			<interceptor name="egov-trim" class="org.egov.infra.web.struts.interceptors.TrimInterceptor" />
 			<interceptor name="egov-exception" class="org.egov.infra.web.struts.interceptors.ExceptionInterceptor" />
 			<interceptor name="egov-cahecontrol" class="org.egov.infra.web.struts.interceptors.CacheControlInterceptor"/>
+			<interceptor name="i18n" class="org.egov.infra.web.struts.interceptors.CustomI18nInterceptor"/>
 			<interceptor-stack name="egov-interceptors">
 				<!-- 
 				Commenting out for now since this interceptor creating problem
@@ -110,6 +111,7 @@
 				<interceptor-ref name="prepare" />
 				<interceptor-ref name="i18n">
 					<param name="parameterName">locale</param>
+					<param name="storage">COOKIE</param>
 				</interceptor-ref>
 				<interceptor-ref name="chain" />
 				<interceptor-ref name="scopedModelDriven" />
