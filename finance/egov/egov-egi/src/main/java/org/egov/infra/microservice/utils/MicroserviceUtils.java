@@ -1661,15 +1661,6 @@ public class MicroserviceUtils {
         response = restTemplate.postForObject(uri.toString(), request , PaymentResponse.class);            
         return response;
     }
-    
-    public PaymentResponse updatePayments(Payment payment) {
-      PaymentResponse response = null;
-      String uri = "http://localhost:8095/collection-services/payments/_update";
-      final RequestInfo requestInfo = getRequestInfo();
-      PaymentRequest request = PaymentRequest.builder().requestInfo(requestInfo).payment(payment).build();
-      response = restTemplate.postForObject(uri, request , PaymentResponse.class);            
-      return response;
-  }
 
     private RequestInfo getRequestInfo() {
         final RequestInfo requestInfo = new RequestInfo();
@@ -1691,8 +1682,16 @@ public class MicroserviceUtils {
         StringBuilder uri = new StringBuilder(appConfigManager.getEgovCollSerHost()).append(appConfigManager.getCollSerRemittanceSearch()).append("?");
         this.prepareRemmittanceSearchQueryString(uri, criteria);
         RemittanceRequest request = new RemittanceRequest();
-        request.setRequestInfo(getRequestInfo());
+        request.setRequestInfo(getAdminRequestInfo());
         return restTemplate.postForObject(uri.toString(), request , RemittanceResponse.class);
+    }
+    
+    private RequestInfo getAdminRequestInfo(){
+        final RequestInfo requestInfo = new RequestInfo();
+        requestInfo.setAuthToken(generateAdminToken(getTenentId()));
+        requestInfo.setUserInfo(new UserInfo());
+        requestInfo.getUserInfo().setId(ApplicationThreadLocals.getUserId());
+        return requestInfo;
     }
 
     private void prepareRemmittanceSearchQueryString(StringBuilder uri, RemittanceSearcCriteria criteria) {
