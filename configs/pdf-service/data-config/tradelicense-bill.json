@@ -4,7 +4,7 @@
     "serviceName": "rainmaker-common",
     "version": "1.0.0",
     "baseKeyPath": "$.Bill.*",
-    "entityIdPath":"$.billNumber",
+    "entityIdPath":"$.id",
     "isCommonTableBorderRequired": true,
     "mappings": [
       {
