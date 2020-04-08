@@ -9,8 +9,8 @@
 # - 
 
 config:
--   name: builds/eGov-dcr-service/egov-dcr
+-   name: builds/eGov-dcr-service/egov-edcr
     build:
     - work-dir: egov
-      image-name: egov-dcr-service
+      image-name: egov-edcr
       dockerfile: Dockerfile
