@@ -1,6 +1,7 @@
 ---
 ReportDefinitions:
 - reportName: TradeLicenseRegistryReport
+  decryptionPathId: TradeLicenseRegistryReport
   summary: TL Receipt Register Report
   version: 1.0.0
   moduleName: rainmaker-tl
