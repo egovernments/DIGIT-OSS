@@ -102,6 +102,8 @@ public class AssessmentRowMapper implements ResultSetExtractor<List<Assessment>>
 				.occupancyDate(rs.getLong("us_occupancydate"))
 				.occupancyType((rs.getString("us_occupancytype")))
 				.usageCategory(rs.getString("us_usagecategory"))
+				.tenantId(rs.getString("us_tenantid"))
+				.unitId(rs.getString("us_unitid"))
 				.auditDetails(auditDetails)
 				.build();
 	}
