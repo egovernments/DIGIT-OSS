@@ -250,6 +250,9 @@ public class AssessmentValidator {
 		List<String> activeUnitIdsInAssessment = new LinkedList<>();
 		List<String> activeUnitIdsInProperty = new LinkedList<>();
 
+		System.out.println("Property--->"+property);
+		System.out.println("Assessment--->"+assessment);
+
 		if(!CollectionUtils.isEmpty(assessment.getUnitUsageList())){
 			assessment.getUnitUsageList().forEach(unitUsage -> {
 					activeUnitIdsInAssessment.add(unitUsage.getUnitId());
