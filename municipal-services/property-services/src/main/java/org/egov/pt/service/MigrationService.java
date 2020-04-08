@@ -582,7 +582,10 @@ public class MigrationService {
             unit.setUsageCategory(migrateUnitUsageCategory(oldUnit));
             unit.setOccupancyType(oldUnit.getOccupancyType());
             unit.setOccupancyDate(oldUnit.getOccupancyDate());
-            unit.setActive(oldUnit.getActive());
+            if(oldUnit.getActive() == null)
+                unit.setActive(Boolean.TRUE);
+            else
+                unit.setActive(oldUnit.getActive());
             unit.setConstructionDetail(migrateConstructionDetail(oldUnit));
             unit.setAdditionalDetails(oldUnit.getAdditionalDetails());
             //unit.setAuditDetails();

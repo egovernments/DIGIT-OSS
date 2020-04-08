@@ -50,7 +50,7 @@ public class AssessmentValidator {
 	public void validateAssessmentCreate(AssessmentRequest assessmentRequest, Property property) {
 		Map<String, String> errorMap = new HashMap<>();
 		validateRI(assessmentRequest.getRequestInfo(), errorMap);
-		validateUnitIds(assessmentRequest.getAssessment(),property);
+		//validateUnitIds(assessmentRequest.getAssessment(),property);
 		validateCreateRequest(assessmentRequest.getAssessment(),property);
 		commonValidations(assessmentRequest, errorMap, false);
 		validateMDMSData(assessmentRequest.getRequestInfo(), assessmentRequest.getAssessment(), errorMap);
@@ -62,7 +62,7 @@ public class AssessmentValidator {
 	public void validateAssessmentUpdate(AssessmentRequest assessmentRequest, Assessment assessmentFromDB, Property property , Boolean isWorkflowTriggered) {
 		Map<String, String> errorMap = new HashMap<>();
 		validateRI(assessmentRequest.getRequestInfo(), errorMap);
-		validateUnitIds(assessmentRequest.getAssessment(),property);
+		//validateUnitIds(assessmentRequest.getAssessment(),property);
 		validateUpdateRequest(assessmentRequest, assessmentFromDB, property, errorMap);
 		commonValidations(assessmentRequest, errorMap, true);
 		validateMDMSData(assessmentRequest.getRequestInfo(), assessmentRequest.getAssessment(), errorMap);
