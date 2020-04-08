@@ -315,6 +315,14 @@
       "financialYear": "2018-28"
     },
     {
+      "fromDate": 1585785599000,
+      "toDate": 1617235199000,
+      "periodCycle": "ANNUAL",
+      "service": "PT.MUTATION",
+      "code": "PTMUTAN2020",
+      "financialYear": "2020-21"
+    },
+    {
       "fromDate": 1554076799000,
       "toDate": 1585679399000,
       "periodCycle": "ANNUAL",
