@@ -2,6 +2,7 @@ ReportDefinitions:
 - reportName: epassreport
   summary: epass report
   version: 1.0.0
+  decryptionPathId: epassreport
   moduleName: rainmaker-epass
   sourceColumns:
   - name: applicationnumber
