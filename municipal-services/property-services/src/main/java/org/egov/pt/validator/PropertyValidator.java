@@ -269,7 +269,7 @@ public class PropertyValidator {
     /**
      *Checks if the codes of all fields are in the list of codes obtain from master data
      *
-     * @param properties List of properties from PropertyRequest which are to validated
+     * @param property property from PropertyRequest which are to validated
      * @param codes Map of MasterData name to List of codes in that MasterData
      * @param errorMap Map to fill all errors caught to send as custom Exception
      * @return Error map containing error if existed
@@ -391,7 +391,6 @@ public class PropertyValidator {
 
     /**
      * Checks if the property ids in search response are same as in request
-     * @param request PropertyRequest received for update
      * @param responseProperties List of properties received from property Search
      * @return
      */
@@ -401,7 +400,7 @@ public class PropertyValidator {
 
     /**
      * Validates if institution Object has null InstitutionType
-     * @param request PropertyRequest which is to be validated
+     * @param property PropertyRequest which is to be validated
      * @param errorMap ErrorMap to catch and to throw error using CustomException
      */
     private void validateInstitution(Property property, Map<String,String> errorMap){
@@ -464,7 +463,7 @@ public class PropertyValidator {
 
 			owners.forEach(owner -> {
 				if (!isMobileNumberValid(owner.getMobileNumber()))
-					errorMap.put("INVALID OWNER", "MobileNumber is not valid for user : " + owner.getName());
+					errorMap.put("INVALID OWNER", "MobileNumber is not valid for user : " + property.getPropertyId());
 			});
 		} else {
 			owners.forEach(owner -> {
@@ -490,7 +489,7 @@ public class PropertyValidator {
 		
 		User user = requestInfo.getUserInfo();
 		String userType = requestInfo.getUserInfo().getType();
-		Boolean isUserCitizen = userType.equalsIgnoreCase("CITIZEN");
+		Boolean isUserCitizen = "CITIZEN".equalsIgnoreCase(userType);
 		
 		Boolean isCriteriaEmpty = CollectionUtils.isEmpty(criteria.getOldpropertyids())
 				&& CollectionUtils.isEmpty(criteria.getAcknowledgementIds())
