@@ -6,11 +6,6 @@
       "dataContextVersion": "v1"
     },
     {
-      "topic": "collectionsindex-v1-enriched",
-      "dataContext": "collection",
-      "dataContextVersion": "v1"
-    },
-    {
       "topic": "topicTwo",
       "dataContext": "billing",
       "dataContextVersion": "v1"
