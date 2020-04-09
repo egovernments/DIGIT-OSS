@@ -6,7 +6,7 @@ serviceMaps:
     description: create PDF
     fromTopic: PDF_GEN_CREATE
     queryMaps:
-    - query: INSERT INTO egov_pdf_gen(jobid,filestoreids,tenantid,createdtime,endtime,totalcount,entityid,isconsolidated,id,createdby,modifiedby) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+    - query: INSERT INTO egov_pdf_gen(jobid,filestoreids,tenantid,createdtime,endtime,totalcount,entityid,isconsolidated,id,createdby,modifiedby,key,documenttype,modulename) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
       basePath: $.jobs.*
       jsonMaps:
 
@@ -33,3 +33,9 @@ serviceMaps:
       - jsonPath: $.jobs.*.createdby
 
       - jsonPath: $.jobs.*.modifiedby
+
+      - jsonPath: $.jobs.*.key
+
+      - jsonPath: $.jobs.*.documentType   
+      
+      - jsonPath: $.jobs.*.moduleName         
