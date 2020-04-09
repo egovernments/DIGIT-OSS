@@ -283,6 +283,24 @@ public class PTConstants {
 
     public static final String ADHOC_REBATE_REASON = "adhocExemptionReason";
 
+    // PDF CONSUMER
+
+    public static final String KEY_ID = "id";
+
+    public static final String KEY_FILESTOREID = "filestoreid";
+
+    public static final String KEY_PDF_JOBS = "jobs";
+
+    public static final String KEY_PDF_ENTITY_ID = "entityid";
+
+    public static final String KEY_PDF_TENANT_ID = "tenantId";
+
+    public static final String KEY_PDF_MODULE_NAME = "moduleName";
+
+    public static final String KEY_PDF_FILESTOREID = "filestoreids";
+
+    public static final String KEY_PDF_DOCUMENTTYPE = "documentType";
+
 
 }
 
