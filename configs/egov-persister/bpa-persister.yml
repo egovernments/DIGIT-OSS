@@ -451,7 +451,7 @@ serviceMaps:
           - jsonPath: $.BPA.units.*.id
 
 
-       - query: INSERT INTO eg_bpa_blocks( id, suboccupancytype, buildingplanid, createdby,lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id, buildingplanid) WHERE id IS NOT NULL DO UPDATE SET subOccupancyType=?, lastmodifiedby=?, lastmodifiedtime=?;
+       - query: INSERT INTO eg_bpa_blocks( id, suboccupancytype, buildingplanid, createdby,lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) WHERE id IS NOT NULL DO UPDATE SET subOccupancyType=?, lastmodifiedby=?, lastmodifiedtime=?;
          basePath: BPA.blocks.*
          jsonMaps:
           - jsonPath: $.BPA.blocks.*.id
