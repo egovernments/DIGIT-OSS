@@ -1,6 +1,6 @@
 {
   "key": "property-receipt",
-  "documentType": "PROPERTYBILL"
+  "documentType": "PROPERTYBILL",
   "DataConfigs": {
     "moduleName": "PT",
     "version": "1.0.0",
