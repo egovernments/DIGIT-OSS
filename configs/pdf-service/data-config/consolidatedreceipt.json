@@ -1,6 +1,6 @@
 {
   "key": "consolidatedreceipt",
-  "documentType":"PTMUTATIONCERTIFICATE",
+  "documentType":"CONSOLIDATED_RECEIPT",
   "DataConfigs": {
     "moduleName": "rainmaker-common",
     "version": "1.0.0",
