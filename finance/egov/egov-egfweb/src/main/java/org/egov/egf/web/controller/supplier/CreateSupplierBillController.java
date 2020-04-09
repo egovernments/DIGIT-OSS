@@ -93,8 +93,6 @@ import org.egov.model.bills.EgBillregister;
 import org.egov.model.masters.PurchaseOrder;
 import org.egov.utils.FinancialConstants;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -146,10 +144,6 @@ public class CreateSupplierBillController extends BaseBillController {
     private static final String PASSEDAMOUNT = "supplierBillTotalDebitAmount";
 
     private static final int BUFFER_SIZE = 4096;
-
-    @Autowired
-    @Qualifier("messageSource")
-    private MessageSource messageSource;
 
     @Autowired
     private SupplierBillService supplierBillService;

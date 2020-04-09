@@ -81,8 +81,6 @@ import org.egov.model.bills.DocumentUpload;
 import org.egov.model.bills.EgBillregister;
 import org.egov.utils.FinancialConstants;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -116,10 +114,6 @@ public class CreateExpenseBillController extends BaseBillController {
 
     private static final int BUFFER_SIZE = 4096;
 
-    
-    @Autowired
-    @Qualifier("messageSource")
-    private MessageSource messageSource;
     @Autowired
     private ExpenseBillService expenseBillService;
     @Autowired
@@ -144,8 +138,6 @@ public class CreateExpenseBillController extends BaseBillController {
     public String showNewForm(@ModelAttribute("egBillregister") final EgBillregister egBillregister, final Model model,HttpServletRequest request) {
         LOGGER.info("New expensebill creation request created");
         Cookie[] cookies = request.getCookies();
-    	
-    	
     	if(null!=cookies && cookies.length>0)
     	{
     	   for(Cookie ck:cookies) {
@@ -300,22 +292,22 @@ public class CreateExpenseBillController extends BaseBillController {
                     .isNotBlank(expenseBill.getEgBillregistermis().getBudgetaryAppnumber())
                     && !BudgetControlType.BudgetCheckOption.NONE.toString()
                     .equalsIgnoreCase(budgetControlTypeService.getConfigValue()))
-                message = messageSource.getMessage("msg.expense.bill.create.success.with.budgetappropriation",
+                message = getLocalizedMessage("msg.expense.bill.create.success.with.budgetappropriation",
                         new String[]{expenseBill.getBillnumber(), approverName, nextDesign,
                                 expenseBill.getEgBillregistermis().getBudgetaryAppnumber()},
                         null);
             else
-                message = messageSource.getMessage("msg.expense.bill.create.success",
+                message = getLocalizedMessage("msg.expense.bill.create.success",
                         new String[]{expenseBill.getBillnumber(), approverName, nextDesign}, null);
 
         } else if (FinancialConstants.CONTINGENCYBILL_APPROVED_STATUS.equals(expenseBill.getStatus().getCode()))
-            message = messageSource.getMessage("msg.expense.bill.approved.success",
+            message = getLocalizedMessage("msg.expense.bill.approved.success",
                     new String[]{expenseBill.getBillnumber()}, null);
         else if (FinancialConstants.WORKFLOW_STATE_REJECTED.equals(expenseBill.getState().getValue()))
-            message = messageSource.getMessage("msg.expense.bill.reject",
+            message = getLocalizedMessage("msg.expense.bill.reject",
                     new String[]{expenseBill.getBillnumber(), approverName, nextDesign}, null);
         else if (FinancialConstants.WORKFLOW_STATE_CANCELLED.equals(expenseBill.getState().getValue()))
-            message = messageSource.getMessage("msg.expense.bill.cancel",
+            message = getLocalizedMessage("msg.expense.bill.cancel",
                     new String[]{expenseBill.getBillnumber()}, null);
 
         return message;

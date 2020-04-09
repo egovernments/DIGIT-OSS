@@ -55,8 +55,6 @@ import org.egov.infra.admin.master.service.AppConfigValueService;
 import org.egov.infra.validation.exception.ValidationException;
 import org.egov.utils.FinancialConstants;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -84,10 +82,6 @@ public class CreateJournalVoucherController extends BaseVoucherController {
     private static final String STATE_TYPE = "stateType";
 
     private static final String APPROVAL_POSITION = "approvalPosition";
-
-    @Autowired
-    @Qualifier("messageSource")
-    private MessageSource messageSource;
 
     @Autowired
     private JournalVoucherService journalVoucherService;

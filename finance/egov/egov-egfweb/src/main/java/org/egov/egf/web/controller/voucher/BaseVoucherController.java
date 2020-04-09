@@ -61,6 +61,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
@@ -95,6 +97,10 @@ public abstract class BaseVoucherController extends GenericWorkFlowController {
 
     @Autowired
     private VoucherTypeForULB voucherTypeForULB;
+    
+    @Autowired
+    @Qualifier("messageSource")
+    protected MessageSource messageSource;
 
     @Autowired
     public BaseVoucherController(final AppConfigValueService appConfigValuesService) {
@@ -151,7 +157,7 @@ public abstract class BaseVoucherController extends GenericWorkFlowController {
         if (!cutOffDateconfigValue.isEmpty()) {
             final DateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
             model.addAttribute("validActionList",
-                    Arrays.asList(FinancialConstants.BUTTONFORWARD, FinancialConstants.CREATEANDAPPROVE));
+                    Arrays.asList(getLocalizedMessage("lbl.forward.button", null, null), getLocalizedMessage("lbl.create.and.approve.button", null, null)));
             try {
                 model.addAttribute("cutOffDate",
                         DateUtils.getDefaultFormattedDate(df.parse(cutOffDateconfigValue.get(0).getValue())));
@@ -160,6 +166,11 @@ public abstract class BaseVoucherController extends GenericWorkFlowController {
             }
         }
     }
+    
+    protected String getLocalizedMessage(String key,  Object[] args, String defaultMsg ){
+        return messageSource.getMessage(key, args, defaultMsg, LocaleContextHolder.getLocale());
+    }
+        
 
     protected Boolean isVoucherNumberGenerationAuto(final CVoucherHeader voucherHeader, Model model) {
         String vNumGenMode;

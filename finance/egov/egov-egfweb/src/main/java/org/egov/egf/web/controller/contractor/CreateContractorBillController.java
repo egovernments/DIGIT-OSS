@@ -93,8 +93,6 @@ import org.egov.model.bills.EgBillregister;
 import org.egov.model.masters.WorkOrder;
 import org.egov.utils.FinancialConstants;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -144,10 +142,6 @@ public class CreateContractorBillController extends BaseBillController {
     private static final int BUFFER_SIZE = 4096;
 
     private static final String BILL_TYPES = "billTypes";
-
-    @Autowired
-    @Qualifier("messageSource")
-    private MessageSource messageSource;
 
     @Autowired
     private ContractorBillService contractorBillService;
