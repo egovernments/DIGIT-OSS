@@ -1,7 +1,8 @@
 {
   "key": "property-receipt",
+  "documentType": "PROPERTYBILL"
   "DataConfigs": {
-    "serviceName": "rainmaker-common",
+    "moduleName": "PT",
     "version": "1.0.0",
     "baseKeyPath": "$.Payments.*",
     "entityIdPath":"$.id",
