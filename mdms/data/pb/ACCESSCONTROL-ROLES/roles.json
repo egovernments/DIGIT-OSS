@@ -63,11 +63,6 @@
       "description": "Property Verifier"
     },
     {
-      "code": "Financial Administrator",
-      "name": "Financial Administrator",
-      "description": "Financial Administrator"
-    },
-    {
       "code": "AssetReportViewer",
       "name": "AssetReportViewer",
       "description": "AssetReportViewer"
