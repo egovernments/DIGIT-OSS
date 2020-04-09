@@ -1,7 +1,8 @@
 {
   "key": "property-bill",
+  "documentType": "PROPERTYBILL"
   "DataConfigs": {
-    "serviceName": "rainmaker-common",
+    "moduleName": "PT",
     "version": "1.0.0",
     "baseKeyPath": "$.Bill.*",
     "entityIdPath":"$.id",
