@@ -1,7 +1,8 @@
 {
   "key": "consolidatedreceipt",
+  "documentType":"PTMUTATIONCERTIFICATE",
   "DataConfigs": {
-    "serviceName": "rainmaker-common",
+    "moduleName": "rainmaker-common",
     "version": "1.0.0",
     "baseKeyPath": "$.Payments.*",
     "entityIdPath":"$.id",
