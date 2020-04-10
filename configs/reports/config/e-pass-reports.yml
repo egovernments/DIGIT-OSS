@@ -2,7 +2,6 @@ ReportDefinitions:
 - reportName: epassreport
   summary: epass report
   version: 1.0.0
-  decryptionPathId: epassreport
   moduleName: rainmaker-epass
   sourceColumns:
   - name: applicationnumber
@@ -14,11 +13,6 @@ ReportDefinitions:
     label: reports.epass.applicationdate
     type: string
     source: epass
-    total: false
-  - name: tlOwner
-    label: report.tl.user.name
-    type: string
-    source: tl
     total: false
   - name: fromdistrict
     label: reports.epass.fromdistrict
@@ -60,11 +54,6 @@ ReportDefinitions:
     type: string
     source: epass
     total: false
-  - name: approverName
-    label: report.tl.user.approverName
-    type: string
-    source: tl
-    total: false
   - name: rejectionremarks
     label: reports.epass.rejectionremarks
     type: string
@@ -90,8 +79,7 @@ ReportDefinitions:
         CASE WHEN tlu.tradeType = 'INTERSTATE' THEN 'Other State to MP Pass' 
         WHEN tlu.tradeType = 'INTRASTATE' THEN 'MP Inter District Pass'  
         WHEN tlu.tradeType = 'MP_TO_OTHER_STATE' THEN 'MP to Other State Pass' 
-        ELSE 'NA' END as tradeType,  
-        tlown.name as tlOwner,
+        ELSE 'NA' END as tradeType,
         initcap(replace(tld.additionaldetail->>'fromDistrict', 'MP_', '')) as fromDistrict, 
         initcap(replace(tld.additionaldetail->>'toDistrict', 'MP_', ''))  as toDistrict,
         COALESCE(to_char((To_timestamp(tl.issueddate/1000) at time Zone 'Asia/Kolkata'),'DD-MM-YYYY HH:MI AM'), '') as issueDate,
@@ -99,22 +87,10 @@ ReportDefinitions:
         COALESCE(tld.additionaldetail->>'vehicleNumber', '') as vehicleNumber,
         COALESCE(tl.licensenumber, '') as licensenumber,
         initcap(tl.status) as status,
-        initcap(tlw.name) as approverName,
         COALESCE(tlw.comment, '') as rejectionRemarks
         from eg_tl_tradelicense as tl
         inner join eg_tl_tradelicensedetail as tld on tld.tradelicenseid  = tl.id 
-        INNER JOIN (
-        SELECT tradelicensedetailid, array_to_string(array_agg(name),', ') as name
-        FROM eg_tl_owner tlowner 
-        INNER JOIN eg_user tluser ON tluser.uuid = tlowner.id
-        group by tradelicensedetailid
-        ) tlown ON tlown.tradelicensedetailid = tld.id
         inner join eg_tl_TradeUnit as tlu on tlu.tradeLicenseDetailId = tld.id
-        INNER JOIN( 
-        SELECT array_to_string(array_agg(action),', ') as action, businessId, array_to_string(array_agg(comment),', ') as comment, array_to_string(array_agg(name),', ') as name 
-        from eg_wf_processinstance_v2 wf
-        INNER JOIN eg_user usr ON wf.assigner = usr.uuid 
-        where wf.action IN ('APPROVE', 'REJECT')
-        GROUP BY businessId) tlw  ON tlw.businessid = tl.applicationnumber
+        left join eg_wf_processinstance_v2 as tlw on tlw.businessid = tl.applicationnumber and tlw.action = 'REJECT'
         where tl.tenantid =  $tenantid  and tl.status not in ('INITIATED')
   orderby: order by tl.createdtime desc
