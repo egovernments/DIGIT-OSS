@@ -645,12 +645,23 @@
                   "widths" : [
                     "18%",
                     "11%",
+                    "11%",
                     "11%"
                   ],
                   "body":[
                     [
                       {
                         "text": "{{advance_carryforward_label}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "receipt-table-value2"
+                      },
+                      {
+                        "text": "{{arrears_label}}",
                         "border": [
                           false,
                           false,
@@ -683,6 +694,16 @@
                     [
                       {
                         "text": "{{advance_carryforward}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "receipt-table2"
+                      },
+                      {
+                        "text": "{{arrearrs}}",
                         "border": [
                           false,
                           false,
