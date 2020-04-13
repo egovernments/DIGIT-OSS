@@ -606,6 +606,12 @@
                 }
               },
               {
+                "variable": "pt_arrearrs",
+                "value":{
+                  "path": "$.billDetails[0].amount"
+                }
+              },
+              {
                 "variable":"scissorImage",
                 "url":"http://www.pngall.com/wp-content/uploads/2016/03/Scissor-PNG-Clipart.png",
                 "type":"image"
@@ -632,7 +638,7 @@
               },
               {
                 "variable": "arrears",
-                "formula": "{{carryForward}}+{{ownerExemption}}+{{usageExemption}}"
+                "formula": "{{pt_arrearrs}}"
               }
             ]
           },
