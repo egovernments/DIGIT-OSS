@@ -13,7 +13,7 @@ SearchDefinitions:
             b.tenantid AS b_tenantid, b.payername AS b_payername, 
             b.payeraddress AS b_payeraddress, b.payeremail AS b_payeremail, 
             b.isactive AS b_isactive, b.iscancelled AS b_iscancelled, 
-            b.createdby AS b_createdby, b.status as b_status,
+            b.createdby AS b_createdby, b.status as b_status,b.filestoreid AS b_filestoreid,
             b.createddate AS b_createddate, b.lastmodifiedby AS b_lastmodifiedby, 
             b.lastmodifieddate AS b_lastmodifieddate, bd.id AS bd_id, 
             bd.billid AS bd_billid, bd.tenantid AS bd_tenantid,
