@@ -566,6 +566,12 @@
                 }
               },
               {
+                "variable": "pt_arrearrs",
+                "value":{
+                  "path": "$.billDetails[0].amount"
+                }
+              },
+              {
                 "variable": "pt_advance_carryforward",
                 "value":{
                   "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'PT_ADVANCE_CARRYFORWARD')].amount"
@@ -727,6 +733,18 @@
                   "prefix": null,
                   "module":"rainmaker-common"
                }
+              },
+              {
+                "variable": "arrears_label",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_DECIMAL_ARREARS"
+                },
+                "type": "label",
+                "localisation":{
+                  "required":true,
+                  "prefix": null,
+                  "module":"rainmaker-common"
+               }
               }
             ]
           },
@@ -787,6 +805,10 @@
               {
                 "variable": "roundoff",
                 "formula": "{{pt_roundoff}}"
+              },
+              {
+                "variable": "arrearrs",
+                "formula": "{{pt_arrearrs}}"
               }
             ]
           },
