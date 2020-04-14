@@ -4,16 +4,18 @@ import static org.egov.pt.util.PTConstants.CREATE_PROCESS_CONSTANT;
 import static org.egov.pt.util.PTConstants.MUTATION_PROCESS_CONSTANT;
 import static org.egov.pt.util.PTConstants.UPDATE_PROCESS_CONSTANT;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.config.PropertyConfiguration;
+import org.egov.pt.models.OwnerInfo;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.PropertyCriteria;
 import org.egov.pt.models.enums.CreationReason;
 import org.egov.pt.models.enums.Status;
+import org.egov.pt.models.user.UserDetailResponse;
+import org.egov.pt.models.user.UserSearchRequest;
 import org.egov.pt.models.workflow.State;
 import org.egov.pt.producer.Producer;
 import org.egov.pt.repository.PropertyRepository;
@@ -288,4 +290,33 @@ public class PropertyService {
 		return properties;
 	}
 
+	public List<Property> searchPropertyPlainSearch(PropertyCriteria criteria, RequestInfo requestInfo) {
+		List<Property> properties = getPropertiesPlainSearch(criteria, requestInfo);
+		for(Property property:properties)
+			enrichmentService.enrichBoundary(property,requestInfo);
+		return properties;
+	}
+
+
+	List<Property> getPropertiesPlainSearch(PropertyCriteria criteria, RequestInfo requestInfo) {
+
+		if (criteria.getLimit() != null && criteria.getLimit() > config.getMaxSearchLimit())
+			criteria.setLimit(config.getMaxSearchLimit());
+
+		List<String> propertyids = repository.fetchPropertyIds(criteria);
+		if(propertyids.isEmpty())
+			return Collections.emptyList();
+
+		PropertyCriteria propertyCriteria = PropertyCriteria.builder().propertyIds(new HashSet<>(propertyids)).build();
+
+		List<Property> properties = repository.getPropertiesPlainSearch(propertyCriteria);
+		Set<String> ownerIds = properties.stream().map(Property::getOwners).flatMap(List::stream)
+				.map(OwnerInfo::getUuid).collect(Collectors.toSet());
+
+		UserSearchRequest userSearchRequest = userService.getBaseUserSearchRequest(criteria.getTenantId(), requestInfo);
+		userSearchRequest.setUuid(ownerIds);
+		UserDetailResponse userDetailResponse = userService.getUser(userSearchRequest);
+		util.enrichOwner(userDetailResponse, properties);
+		return properties;
+	}
 }

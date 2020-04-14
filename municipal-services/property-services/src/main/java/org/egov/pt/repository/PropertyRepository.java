@@ -19,8 +19,10 @@ import org.egov.pt.repository.rowmapper.PropertyAuditRowMapper;
 import org.egov.pt.repository.rowmapper.PropertyRowMapper;
 import org.egov.pt.service.UserService;
 import org.egov.pt.util.PropertyUtil;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.SingleColumnRowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 
@@ -59,6 +61,23 @@ public class PropertyRepository {
 		List<Object> preparedStmtList = new ArrayList<>();
 		String query = queryBuilder.getPropertySearchQuery(criteria, preparedStmtList);
 		return jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
+	}
+
+	public List<String> fetchPropertyIds(PropertyCriteria criteria) {
+		List<Object> preparedStmtList = new ArrayList<>();
+		preparedStmtList.add(criteria.getOffset());
+		preparedStmtList.add(criteria.getLimit());
+		return jdbcTemplate.query("SELECT propertyid from eg_pt_property ORDER BY createdtime offset " +
+						" ? " +
+						"limit ? ",
+				preparedStmtList.toArray(),
+				new SingleColumnRowMapper<>(String.class));
+	}
+
+	public List<Property> getPropertiesPlainSearch(PropertyCriteria criteria) {
+		if (criteria.getPropertyIds() == null || criteria.getPropertyIds().isEmpty())
+			throw new CustomException("PLAIN_SEARCH_ERROR", "Search only allowed by ids!");
+		return getProperties(criteria);
 	}
 
 	/**

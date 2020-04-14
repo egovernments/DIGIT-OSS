@@ -4,10 +4,13 @@ import java.util.*;
 
 import org.egov.pt.models.Assessment;
 import org.egov.pt.models.AssessmentSearchCriteria;
+import org.egov.pt.models.Property;
+import org.egov.pt.models.PropertyCriteria;
 import org.egov.pt.repository.builder.AssessmentQueryBuilder;
 import org.egov.pt.repository.rowmapper.AssessmentRowMapper;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.SingleColumnRowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -38,6 +41,20 @@ public class AssessmentRepository {
 		return assessments;
 	}
 
+	public List<String> fetchAssessmentNumbers(AssessmentSearchCriteria criteria) {
+		Map<String, Object> preparedStatementValues = new HashMap<>();
+		preparedStatementValues.put("offset", criteria.getOffset());
+		preparedStatementValues.put("limit", criteria.getLimit());
+		return namedParameterJdbcTemplate.query("SELECT assessmentnumber from eg_pt_asmt_assessment ORDER BY createdtime offset :offset limit :limit",
+				preparedStatementValues,
+				new SingleColumnRowMapper<>(String.class));
+	}
+
+	public List<Assessment> getAssessmentPlainSearch(AssessmentSearchCriteria criteria) {
+		if (criteria.getAssessmentNumbers() == null || criteria.getAssessmentNumbers().isEmpty())
+			throw new CustomException("PLAIN_SEARCH_ERROR", "Search only allowed by assessent Numbers!");
+		return getAssessments(criteria);
+	}
 	/**
 	 * Fetches the assessment from DB corresponding to given assessment for update
 	 * @param assessment THe Assessment to be updated
