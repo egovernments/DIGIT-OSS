@@ -491,91 +491,91 @@
               {
                 "variable": "fees",
                 "value":{
-                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'PT_TAX')].amount"
+                  "path": "$.billDetails[(@.length-1)].billAccountDetails[?(@.taxHeadCode == 'PT_TAX')].amount"
                 }
               },
               {
                 "variable": "pt_penalty",
                 "value":{
-                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'PT_TIME_PENALTY')].amount"
+                  "path": "$.billDetails[(@.length-1)].billAccountDetails[?(@.taxHeadCode == 'PT_TIME_PENALTY')].amount"
                 }
               },
               {
                 "variable": "pt_rebate",
                 "value":{
-                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'PT_TIME_REBATE')].amount"
+                  "path": "$.billDetails[(@.length-1)].billAccountDetails[?(@.taxHeadCode == 'PT_TIME_REBATE')].amount"
                 }
               },
               {
                 "variable": "pt_adhoc_penalty",
                 "value":{
-                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'PT_ADHOC_PENALTY')].amount"
+                  "path": "$.billDetails[(@.length-1)].billAccountDetails[?(@.taxHeadCode == 'PT_ADHOC_PENALTY')].amount"
                 }
               },
               {
                 "variable": "pt_adhoc_rebate",
                 "value":{
-                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'PT_ADHOC_REBATE')].amount"
+                  "path": "$.billDetails[(@.length-1)].billAccountDetails[?(@.taxHeadCode == 'PT_ADHOC_REBATE')].amount"
                 }
               },
               {
                 "variable": "pt_owner_exemption",
                 "value":{
-                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'PT_OWNER_EXEMPTION')].amount"
+                  "path": "$.billDetails[(@.length-1)].billAccountDetails[?(@.taxHeadCode == 'PT_OWNER_EXEMPTION')].amount"
                 }
               },
               {
                 "variable": "pt_unit_usage_exemption",
                 "value":{
-                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'PT_UNIT_USAGE_EXEMPTION')].amount"
+                  "path": "$.billDetails[(@.length-1)].billAccountDetails[?(@.taxHeadCode == 'PT_UNIT_USAGE_EXEMPTION')].amount"
                 }
               },
               {
                 "variable": "pt_fire_cess",
                 "value":{
-                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'PT_FIRE_CESS')].amount"
+                  "path": "$.billDetails[(@.length-1)].billAccountDetails[?(@.taxHeadCode == 'PT_FIRE_CESS')].amount"
                 }
               },
               {
                 "variable": "pt_cancer_cess",
                 "value":{
-                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'PT_CANCER_CESS')].amount"
+                  "path": "$.billDetails[(@.length-1)].billAccountDetails[?(@.taxHeadCode == 'PT_CANCER_CESS')].amount"
                 }
               },
               {
                 "variable": "pt_time_interest",
                 "value":{
-                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'PT_TIME_INTEREST')].amount"
+                  "path": "$.billDetails[(@.length-1)].billAccountDetails[?(@.taxHeadCode == 'PT_TIME_INTEREST')].amount"
                 }
               },
               {
                 "variable": "pt_decimal_ceiling_debit",
                 "value":{
-                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'PT_DECIMAL_CEILING_DEBIT')].amount"
+                  "path": "$.billDetails[(@.length-1)].billAccountDetails[?(@.taxHeadCode == 'PT_DECIMAL_CEILING_DEBIT')].amount"
                 }
               },
               {
                 "variable": "pt_decimal_ceiling_credit",
                 "value":{
-                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'PT_DECIMAL_CEILING_CREDIT')].amount"
+                  "path": "$.billDetails[(@.length-1)].billAccountDetails[?(@.taxHeadCode == 'PT_DECIMAL_CEILING_CREDIT')].amount"
                 }
               },
               {
                 "variable": "pt_roundoff",
                 "value":{
-                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'PT_ROUNDOFF')].amount"
+                  "path": "$.billDetails[(@.length-1)].billAccountDetails[?(@.taxHeadCode == 'PT_ROUNDOFF')].amount"
                 }
               },
               {
                 "variable": "pt_arrearrs",
                 "value":{
-                  "path": "$.billDetails[0].amount"
+                  "path": "$.billDetails[(@.length-1)].amount"
                 }
               },
               {
                 "variable": "pt_advance_carryforward",
                 "value":{
-                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'PT_ADVANCE_CARRYFORWARD')].amount"
+                  "path": "$.billDetails[(@.length-1)].billAccountDetails[?(@.taxHeadCode == 'PT_ADVANCE_CARRYFORWARD')].amount"
                 }
               },
               {
@@ -809,7 +809,7 @@
               },
               {
                 "variable": "arrearrs",
-                "formula": "{{pt_arrearrs}}"
+                "formula": "{{totalAmountDue}} - {{pt_arrearrs}}"
               }
             ]
           },
