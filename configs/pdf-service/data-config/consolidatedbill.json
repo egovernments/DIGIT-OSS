@@ -606,9 +606,9 @@
                 }
               },
               {
-                "variable": "pt_arrearrs",
+                "variable": "WS_arrears",
                 "value":{
-                  "path": "$.billDetails[0].amount"
+                  "path": "$.arrearAmount"
                 }
               },
               {
@@ -638,7 +638,7 @@
               },
               {
                 "variable": "arrears",
-                "formula": "{{pt_arrearrs}}"
+                "formula": "{{WS_arrears}}"
               }
             ]
           },
