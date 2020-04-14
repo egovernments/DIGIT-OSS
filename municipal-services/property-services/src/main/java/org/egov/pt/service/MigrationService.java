@@ -632,13 +632,17 @@ public class MigrationService {
     public List<Document> migrateDocument(Set<OldDocument> oldDocumentList){
         List<Document> documentList = new ArrayList<>();
         for(OldDocument oldDocument: oldDocumentList){
-            if(StringUtils.isEmpty(oldDocument.getFileStore()))
-                continue;
             Document doc = new Document();
             doc.setId(oldDocument.getId());
             doc.setDocumentType(oldDocument.getDocumentType());
-            doc.setFileStoreId(oldDocument.getFileStore());
-            doc.setDocumentUid(oldDocument.getDocumentUid());
+            if(oldDocument.getFileStore() == null)
+                doc.setFileStoreId(oldDocument.getId());
+            else
+                doc.setFileStoreId(oldDocument.getFileStore());
+            if(oldDocument.getDocumentUid() == null)
+                doc.setDocumentUid(oldDocument.getId());
+            else
+                doc.setDocumentUid(oldDocument.getDocumentUid());
             documentList.add(doc);
         }
         return  documentList;
