@@ -137,7 +137,7 @@
           }
         }
       },
-      "dropdownData": [
+      "dropdownData":[
         {
           "code": "OWNER.REGISTRATIONPROOF.SALEDEED",
           "active": true
@@ -147,11 +147,35 @@
           "active": true
         },
         {
-          "code": "OWNER.REGISTRATIONPROOF.PATTADEED",
+          "code": "OWNER.REGISTRATIONPROOF.PATTACERTIFICATE",
           "active": true
         },
         {
-          "code": "OWNER.REGISTRATIONPROOF.WILLDEED",
+          "code": "OWNER.REGISTRATIONPROOF.REGISTEREDWILLDEED",
+          "active": true
+        },
+        {
+          "code": "OWNER.REGISTRATIONPROOF.PARTITIONDEED",
+          "active": true
+        },
+        {
+          "code": "OWNER.REGISTRATIONPROOF.COURTDECREE",
+          "active": true
+        },
+        {
+          "code": "OWNER.REGISTRATIONPROOF.PROPERTYAUCTION",
+          "active": true
+        },
+        {
+          "code": "OWNER.REGISTRATIONPROOF.SUCCESSIONORDEATHCERTIFICATE",
+          "active": true
+        },
+        {
+          "code": "OWNER.REGISTRATIONPROOF.FAMILYSETTLEMENT",
+          "active": true
+        },
+        {
+          "code": "OWNER.REGISTRATIONPROOF.UNREGISTEREDWILLDEED",
           "active": true
         }
       ],
