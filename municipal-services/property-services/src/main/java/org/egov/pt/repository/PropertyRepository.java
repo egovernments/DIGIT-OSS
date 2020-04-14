@@ -63,22 +63,21 @@ public class PropertyRepository {
 		return jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
 	}
 
-	public List<String> fetchPropertyIds(PropertyCriteria criteria) {
+	public List<Property> getPropertiesAuditInBulk(PropertyCriteria criteria) {
 		List<Object> preparedStmtList = new ArrayList<>();
 		preparedStmtList.add(criteria.getOffset());
 		preparedStmtList.add(criteria.getLimit());
-		return jdbcTemplate.query("SELECT propertyid from eg_pt_property ORDER BY createdtime offset " +
+		return jdbcTemplate.query("select property from eg_pt_property_audit order by propertyid,auditcreatedtime offset " +
 						" ? " +
 						"limit ? ",
-				preparedStmtList.toArray(),
-				new SingleColumnRowMapper<>(String.class));
+				preparedStmtList.toArray(), auditRowMapper);
 	}
 
-	public List<Property> getPropertiesPlainSearch(PropertyCriteria criteria) {
-		if (criteria.getPropertyIds() == null || criteria.getPropertyIds().isEmpty())
-			throw new CustomException("PLAIN_SEARCH_ERROR", "Search only allowed by ids!");
-		return getProperties(criteria);
-	}
+//	public List<Property> getPropertiesPlainSearch(PropertyCriteria criteria) {
+//		if (criteria.getPropertyIds() == null || criteria.getPropertyIds().isEmpty())
+//			throw new CustomException("PLAIN_SEARCH_ERROR", "Search only allowed by ids!");
+//		return getPropertyAuditBulk(criteria);
+//	}
 
 	/**
 	 * Returns list of properties based on the given propertyCriteria with owner
@@ -117,6 +116,11 @@ public class PropertyRepository {
 		String query = queryBuilder.getpropertyAuditQuery();
 		return jdbcTemplate.query(query, criteria.getPropertyIds().toArray(), auditRowMapper);
 	}
+
+//	private List<Property> getPropertyAuditBulk(PropertyCriteria criteria) {
+//		String query = queryBuilder.getPropertyAuditBulkSearchQuery(criteria.getPropertyIds());
+//		return jdbcTemplate.query(query, criteria.getPropertyIds().toArray(), auditRowMapper);
+//	}
 
 	/**
 	 * 

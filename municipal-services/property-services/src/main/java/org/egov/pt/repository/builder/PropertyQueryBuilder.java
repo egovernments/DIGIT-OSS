@@ -201,8 +201,15 @@ public class PropertyQueryBuilder {
 		return PROEPRTY_ID_QUERY.replace(REPLACE_STRING, query).toString();
 	}
 
+
+//	public String getPropertyAuditBulkSearchQuery(Set<String> propertyIds) {
+//		StringBuilder query = new StringBuilder("(");
+//		query.append(createQuery(propertyIds));
+//		query.append(")");
+//		return PROEPRTY_AUDIT_QUERY_BULK.replace(REPLACE_STRING, query).toString();
+//	}
+
 	private String createQuery(Set<String> ids) {
-		
 		StringBuilder builder = new StringBuilder();
 		int length = ids.size();
 		for (int i = 0; i < length; i++) {
