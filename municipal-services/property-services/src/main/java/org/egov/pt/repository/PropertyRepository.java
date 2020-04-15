@@ -63,21 +63,21 @@ public class PropertyRepository {
 		return jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
 	}
 
-	public List<Property> getPropertiesAuditInBulk(PropertyCriteria criteria) {
+	public List<String> fetchAuditUUIDs(PropertyCriteria criteria) {
 		List<Object> preparedStmtList = new ArrayList<>();
 		preparedStmtList.add(criteria.getOffset());
 		preparedStmtList.add(criteria.getLimit());
-		return jdbcTemplate.query("select property from eg_pt_property_audit order by propertyid,auditcreatedtime offset " +
+		return jdbcTemplate.query("select audituuid from eg_pt_property_audit order by auditcreatedtime offset " +
 						" ? " +
 						"limit ? ",
-				preparedStmtList.toArray(), auditRowMapper);
+				preparedStmtList.toArray(), new SingleColumnRowMapper<>(String.class));
 	}
 
-//	public List<Property> getPropertiesPlainSearch(PropertyCriteria criteria) {
-//		if (criteria.getPropertyIds() == null || criteria.getPropertyIds().isEmpty())
-//			throw new CustomException("PLAIN_SEARCH_ERROR", "Search only allowed by ids!");
-//		return getPropertyAuditBulk(criteria);
-//	}
+	public List<Property> getPropertiesBulkSearch(PropertyCriteria criteria) {
+		if (criteria.getUuids() == null || criteria.getUuids().isEmpty())
+			throw new CustomException("PLAIN_SEARCH_ERROR", "Search only allowed by ids!");
+		return getPropertyAuditBulk(criteria);
+	}
 
 	/**
 	 * Returns list of properties based on the given propertyCriteria with owner
@@ -117,10 +117,10 @@ public class PropertyRepository {
 		return jdbcTemplate.query(query, criteria.getPropertyIds().toArray(), auditRowMapper);
 	}
 
-//	private List<Property> getPropertyAuditBulk(PropertyCriteria criteria) {
-//		String query = queryBuilder.getPropertyAuditBulkSearchQuery(criteria.getPropertyIds());
-//		return jdbcTemplate.query(query, criteria.getPropertyIds().toArray(), auditRowMapper);
-//	}
+	private List<Property> getPropertyAuditBulk(PropertyCriteria criteria) {
+		String query = queryBuilder.getPropertyAuditBulkSearchQuery(criteria.getUuids());
+		return jdbcTemplate.query(query, criteria.getUuids().toArray(), auditRowMapper);
+	}
 
 	/**
 	 * 

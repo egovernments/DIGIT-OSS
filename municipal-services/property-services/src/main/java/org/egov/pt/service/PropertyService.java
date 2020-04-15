@@ -303,13 +303,13 @@ public class PropertyService {
 		if (criteria.getLimit() != null && criteria.getLimit() > config.getMaxSearchLimit())
 			criteria.setLimit(config.getMaxSearchLimit());
 
-//		List<String> propertyids = repository.fetchPropertyIds(criteria);
-//		if(propertyids.isEmpty())
-//			return Collections.emptyList();
-//
-//		PropertyCriteria propertyCriteria = PropertyCriteria.builder().propertyIds(new HashSet<>(propertyids)).build();
+		List<String> audituuids = repository.fetchAuditUUIDs(criteria);
+		if(audituuids.isEmpty())
+			return Collections.emptyList();
 
-		List<Property> properties = repository.getPropertiesAuditInBulk(criteria);
+		PropertyCriteria propertyCriteria = PropertyCriteria.builder().uuids(new HashSet<>(audituuids)).build();
+
+		List<Property> properties = repository.getPropertiesBulkSearch(propertyCriteria);
 		if(properties.isEmpty())
 			return Collections.emptyList();
 		Set<String> ownerIds = properties.stream().map(Property::getOwners).flatMap(List::stream)
