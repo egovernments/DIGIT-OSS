@@ -298,7 +298,7 @@ export const footer = getCommonApplyFooter({
       //roles: ["TL_CEMP"]
       action: "PAY"
     },
-    visible: process.env.REACT_APP_NAME === "Citizen" ? false : true
+     visible: process.env.REACT_APP_NAME === "Citizen" ? false : true
   },
   // downloadConfirmationform: {
   //   componentPath: "Button",
