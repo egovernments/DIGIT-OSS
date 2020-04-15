@@ -1,0 +1,175 @@
+ServiceMaps:
+ serviceName: Sewerage Service - rainmaker
+ version: 1.0.0
+ mappings:
+  - topic: save-sw-connection
+    configKey: INDEX
+    indexes:
+      - name: sewerage-services
+        type: general
+        id: $.id,$.property.tenantId
+        jsonPath: $.SewerageConnection
+        customJsonMapping:
+          indexMapping: {"Data":{"workflow": {"state": {}, "action": "", "assignes": []},"ownersmobileNos":[],"applicationNo":"","applicationStatus":"","status":"","connectionNo":"","oldConnectionNo":"","plumberInfo":[],"roadType":"","roadCuttingArea":"","connectionExecutionDate":"","connectionCategory":"","connectionType":"","additionalDetails":{},"id":"","propertyId":"","tenantId":"","proposedWaterClosets":"","proposedToilets":"","noOfWaterClosets":"","noOfToilets":""}}
+          fieldMapping:
+          - inJsonPath: $.applicationStatus.state
+            outJsonPath: $.Data.workflow.state
+          - inJsonPath: $.processInstance.action
+            outJsonPath: $.Data.workflow.action
+          - inJsonPath: $.processInstance.assignes.*.uuid
+            outJsonPath: $.Data.workflow.assignes
+          - inJsonPath: $.property.owners.*.mobileNumber
+            outJsonPath: $.Data.ownersmobileNos
+          - inJsonPath: $.applicationNo
+            outJsonPath: $.Data.applicationNo
+          - inJsonPath: $.applicationStatus
+            outJsonPath: $.Data.applicationStatus
+          - inJsonPath: $.status
+            outJsonPath: $.Data.status
+          - inJsonPath: $.connectionNo
+            outJsonPath: $.Data.connectionNo
+          - inJsonPath: $.oldConnectionNo
+            outJsonPath: $.Data.oldConnectionNo
+          - inJsonPath: $.plumberInfo
+            outJsonPath: $.Data.plumberInfo
+          - inJsonPath: $.roadType
+            outJsonPath: $.Data.roadType
+          - inJsonPath: $.roadCuttingArea
+            outJsonPath: $.Data.roadCuttingArea
+          - inJsonPath: $.connectionExecutionDate
+            outJsonPath: $.Data.connectionExecutionDate
+          - inJsonPath: $.connectionCategory
+            outJsonPath: $.Data.connectionCategory
+          - inJsonPath: $.connectionType
+            outJsonPath: $.Data.connectionType
+          - inJsonPath: $.additionalDetails
+            outJsonPath: $.Data.additionalDetails
+          - inJsonPath: $.id
+            outJsonPath: $.Data.id
+          - inJsonPath: $.property.propertyId
+            outJsonPath: $.Data.propertyId
+          - inJsonPath: $.property.tenantId
+            outJsonPath: $.Data.tenantId
+          - inJsonPath: $.proposedWaterClosets
+            outJsonPath: $.Data.proposedWaterClosets
+          - inJsonPath: $.proposedToilets
+            outJsonPath: $.Data.proposedToilets
+          - inJsonPath: $.noOfWaterClosets
+            outJsonPath: $.Data.noOfWaterClosets
+          - inJsonPath: $.noOfToilets
+            outJsonPath: $.Data.noOfToilets
+
+
+  - topic: update-sw-connection
+    configKey: INDEX
+    indexes:
+      - name: sewerage-services
+        type: general
+        id: $.id,$.property.tenantId
+        jsonPath: $.SewerageConnection
+        customJsonMapping:
+          indexMapping: {"Data":{"workflow": {"state": {}, "action": "", "assignes": []},"ownersmobileNos":[],"applicationNo":"","applicationStatus":"","status":"","connectionNo":"","oldConnectionNo":"","plumberInfo":[],"roadType":"","roadCuttingArea":"","connectionExecutionDate":"","connectionCategory":"","connectionType":"","additionalDetails":{},"id":"","propertyId":"","tenantId":"","proposedWaterClosets":"","proposedToilets":"","noOfWaterClosets":"","noOfToilets":""}}
+          fieldMapping:
+          - inJsonPath: $.applicationStatus.state
+            outJsonPath: $.Data.workflow.state
+          - inJsonPath: $.processInstance.action
+            outJsonPath: $.Data.workflow.action
+          - inJsonPath: $.processInstance.assignes.*.uuid
+            outJsonPath: $.Data.workflow.assignes
+          - inJsonPath: $.property.owners.*.mobileNumber
+            outJsonPath: $.Data.ownersmobileNos
+          - inJsonPath: $.applicationNo
+            outJsonPath: $.Data.applicationNo
+          - inJsonPath: $.applicationStatus
+            outJsonPath: $.Data.applicationStatus
+          - inJsonPath: $.status
+            outJsonPath: $.Data.status
+          - inJsonPath: $.connectionNo
+            outJsonPath: $.Data.connectionNo
+          - inJsonPath: $.oldConnectionNo
+            outJsonPath: $.Data.oldConnectionNo
+          - inJsonPath: $.plumberInfo
+            outJsonPath: $.Data.plumberInfo
+          - inJsonPath: $.roadType
+            outJsonPath: $.Data.roadType
+          - inJsonPath: $.roadCuttingArea
+            outJsonPath: $.Data.roadCuttingArea
+          - inJsonPath: $.connectionExecutionDate
+            outJsonPath: $.Data.connectionExecutionDate
+          - inJsonPath: $.connectionCategory
+            outJsonPath: $.Data.connectionCategory
+          - inJsonPath: $.connectionType
+            outJsonPath: $.Data.connectionType
+          - inJsonPath: $.additionalDetails
+            outJsonPath: $.Data.additionalDetails
+          - inJsonPath: $.id
+            outJsonPath: $.Data.id
+          - inJsonPath: $.property.propertyId
+            outJsonPath: $.Data.propertyId
+          - inJsonPath: $.property.tenantId
+            outJsonPath: $.Data.tenantId
+          - inJsonPath: $.proposedWaterClosets
+            outJsonPath: $.Data.proposedWaterClosets
+          - inJsonPath: $.proposedToilets
+            outJsonPath: $.Data.proposedToilets
+          - inJsonPath: $.noOfWaterClosets
+            outJsonPath: $.Data.noOfWaterClosets
+          - inJsonPath: $.noOfToilets
+            outJsonPath: $.Data.noOfToilets
+
+  - topic: update-sw-workflow
+    configKey: INDEX
+    indexes:
+      - name: sewerage-services
+        type: general
+        id: $.id,$.property.tenantId
+        jsonPath: $.SewerageConnection
+        customJsonMapping:
+          indexMapping: {"Data":{"workflow": {"state": {}, "action": "", "assignes": []},"ownersmobileNos":[],"applicationNo":"","applicationStatus":"","status":"","connectionNo":"","oldConnectionNo":"","plumberInfo":[],"roadType":"","roadCuttingArea":"","connectionExecutionDate":"","connectionCategory":"","connectionType":"","additionalDetails":{},"id":"","propertyId":"","tenantId":"","proposedWaterClosets":"","proposedToilets":"","noOfWaterClosets":"","noOfToilets":""}}
+          fieldMapping:
+          - inJsonPath: $.applicationStatus.state
+            outJsonPath: $.Data.workflow.state
+          - inJsonPath: $.processInstance.action
+            outJsonPath: $.Data.workflow.action
+          - inJsonPath: $.processInstance.assignes.*.uuid
+            outJsonPath: $.Data.workflow.assignes
+          - inJsonPath: $.property.owners.*.mobileNumber
+            outJsonPath: $.Data.ownersmobileNos
+          - inJsonPath: $.applicationNo
+            outJsonPath: $.Data.applicationNo
+          - inJsonPath: $.applicationStatus
+            outJsonPath: $.Data.applicationStatus
+          - inJsonPath: $.status
+            outJsonPath: $.Data.status
+          - inJsonPath: $.connectionNo
+            outJsonPath: $.Data.connectionNo
+          - inJsonPath: $.oldConnectionNo
+            outJsonPath: $.Data.oldConnectionNo
+          - inJsonPath: $.plumberInfo
+            outJsonPath: $.Data.plumberInfo
+          - inJsonPath: $.roadType
+            outJsonPath: $.Data.roadType
+          - inJsonPath: $.roadCuttingArea
+            outJsonPath: $.Data.roadCuttingArea
+          - inJsonPath: $.connectionExecutionDate
+            outJsonPath: $.Data.connectionExecutionDate
+          - inJsonPath: $.connectionCategory
+            outJsonPath: $.Data.connectionCategory
+          - inJsonPath: $.connectionType
+            outJsonPath: $.Data.connectionType
+          - inJsonPath: $.additionalDetails
+            outJsonPath: $.Data.additionalDetails
+          - inJsonPath: $.id
+            outJsonPath: $.Data.id
+          - inJsonPath: $.property.propertyId
+            outJsonPath: $.Data.propertyId
+          - inJsonPath: $.property.tenantId
+            outJsonPath: $.Data.tenantId
+          - inJsonPath: $.proposedWaterClosets
+            outJsonPath: $.Data.proposedWaterClosets
+          - inJsonPath: $.proposedToilets
+            outJsonPath: $.Data.proposedToilets
+          - inJsonPath: $.noOfWaterClosets
+            outJsonPath: $.Data.noOfWaterClosets
+          - inJsonPath: $.noOfToilets
+            outJsonPath: $.Data.noOfToilets
