@@ -49,10 +49,10 @@ const AppCards = Loadable({
   loading: () => <Loading />
 });
 
-const AppCarosel = Loadable({
-  loader: () => import("./AppCarosel"),
-  loading: () => <Loading />
-});
+// const AppCarosel = Loadable({
+//   loader: () => import("./AppCarosel"),
+//   loading: () => <Loading />
+// });
 
 const AppSubOption = Loadable({
   loader: () => import("./AppSubOption"),
@@ -160,7 +160,7 @@ export {
   CommonView,
   AppCard,
   AppCards,
-  AppCarosel,
+  //AppCarosel,
   AppSubOption,
   Stepper,
   Carousel,
