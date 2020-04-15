@@ -43,7 +43,7 @@
                 },
                 "localisation": {
                   "required": true,
-                  "module": "rainmaker-common"
+                  "module": "rainmaker-ws"
                 }
               },
               {
