@@ -169,7 +169,8 @@ public class AssessmentService {
 		List<String> assessmentNumbers = repository.fetchAssessmentNumbers(criteria);
 		if (assessmentNumbers.isEmpty())
 			return Collections.emptyList();
-		AssessmentSearchCriteria assessmentSearchCriteria = AssessmentSearchCriteria.builder().assessmentNumbers(new HashSet<>(assessmentNumbers)).build();
+		AssessmentSearchCriteria assessmentSearchCriteria = AssessmentSearchCriteria.builder().limit(criteria.getLimit())
+				.assessmentNumbers(new HashSet<>(assessmentNumbers)).build();
 		return repository.getAssessmentPlainSearch(assessmentSearchCriteria);
 	}
 
