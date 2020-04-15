@@ -40,13 +40,21 @@
                                 "variable": "propertyType",
                                 "value": {
                                     "path": "$.property.propertyType"
-                                }
+                                },
+                                "localisation": {
+                                    "required": true,
+                                    "module": "rainmaker-ws"
+                                  }
                             },
                             {
                                 "variable": "propertyUsageType",
                                 "value": {
                                     "path": "$.property.usageCategory"
-                                }
+                                },
+                                "localisation": {
+                                    "required": true,
+                                    "module": "rainmaker-ws"
+                                  }
                             },
                             {
                                 "variable": "propertyUsageSubType",
