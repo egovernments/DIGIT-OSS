@@ -49,10 +49,10 @@ const AppCards = Loadable({
   loading: () => <Loading />
 });
 
-// const AppCarosel = Loadable({
-//  loader: () => import("./AppCarosel"),
-//  loading: () => <Loading />
-// });
+const AppCarosel = Loadable({
+ loader: () => import("./AppCarosel"),
+ loading: () => <Loading />
+});
 
 const AppSubOption = Loadable({
   loader: () => import("./AppSubOption"),
@@ -64,10 +64,10 @@ const Stepper = Loadable({
   loading: () => <Loading />
 });
 
-const Carousel = Loadable({
-  loader: () => import("./Carousel"),
-  loading: () => <Loading />
-});
+// const Carousel = Loadable({
+//   loader: () => import("./Carousel"),
+//   loading: () => <Loading />
+// });
 
 const StepperStaticVertical = Loadable({
   loader: () => import("./StepperStaticVertical"),
@@ -160,10 +160,10 @@ export {
   CommonView,
   AppCard,
   AppCards,
-  //AppCarosel,
+  AppCarosel,
   AppSubOption,
   Stepper,
-  Carousel,
+  //Carousel,
   StepperStaticVertical,
   TextfieldWithIcon,
   StepperStaticVerticalWithTab,
