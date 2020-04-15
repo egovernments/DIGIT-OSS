@@ -40,12 +40,20 @@
                 "variable": "propertyType",
                 "value": {
                   "path": "$.property.propertyType"
+                },
+                "localisation": {
+                  "required": true,
+                  "module": "rainmaker-common"
                 }
               },
               {
                 "variable": "propertyUsageType",
                 "value": {
                   "path": "$.property.usageCategory"
+                },
+                "localisation": {
+                  "required": true,
+                  "module": "rainmaker-ws"
                 }
               },
               {
