@@ -50,8 +50,8 @@ const AppCards = Loadable({
 });
 
 // const AppCarosel = Loadable({
-//   loader: () => import("./AppCarosel"),
-//   loading: () => <Loading />
+//  loader: () => import("./AppCarosel"),
+//  loading: () => <Loading />
 // });
 
 const AppSubOption = Loadable({
