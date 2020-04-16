@@ -13,22 +13,38 @@ export const searchApplicationResults = {
         name: getTextToLocalMapping("Consumer No"),
         options: {
           filter: false,
-          customBodyRender: (value, index) => (
-            <div className="linkStyle" onClick={() => getConnectionDetails(index)}>
-              <a>{value}</a>
-            </div>
-          )
+          customBodyRender: (value, data) => {
+            if (data.rowData[0] !== "NA" && data.rowData[0] !== null) {
+              return (
+                <div className="linkStyle" onClick={() => getConnectionDetails(data)}>
+                  <a>{value}</a>
+                </div>
+              )
+            } else {
+              return (
+                <p>{value}</p>
+              )
+            }
+          }
         }
       },
       {
         name: getTextToLocalMapping("Application No"),
         options: {
           filter: false,
-          customBodyRender: (value, index) => (
-            <div className="linkStyle" onClick={() => getApplicationDetails(index)}>
-              <a>{value}</a>
-            </div>
-          )
+          customBodyRender: (value, data) => {
+            if (data.rowData[1] !== "NA" && data.rowData[1] !== null) {
+              return (
+                <div className="linkStyle" onClick={() => getApplicationDetails(data)}>
+                  <a>{value}</a>
+                </div>
+              )
+            } else {
+              return (
+                <p>{value}</p>
+              )
+            }
+          }
         }
       },
       {

@@ -74,6 +74,11 @@ const PermitListCondition = Loadable({
   loading: () => <Loading />
 });
 
+const NoteAtom = Loadable({
+  loader: () => import("./NoteAtom"),
+  loading: () => <Loading />
+});
+
 export {
   TestAtoms,
   AutoSuggest,
@@ -88,5 +93,6 @@ export {
   TradeLicenseIcon,
   PermitNumber,
   MenuListCompositionForBpa,
-  PermitListCondition
+  PermitListCondition,
+  NoteAtom
 };

@@ -117,20 +117,21 @@ const styles = {
 };
 
 const requiredIcon = (
-  <sup style={{ color: "#E54D42", paddingLeft: "5px" }}>*</sup>
+  <sup style={{ color: "#5b5b5b", fontSize: "12px", paddingLeft: "5px" }}>*</sup>
 );
 
 class CheckList extends Component {
   state = {
-    uploadedDocIndex: 0
+    uploadedDocIndex: 0,
+    checkListUploaRedux : []
   };
 
   componentDidMount = () => {
     const {
       documentsList,
-      checkListUploaRedux = {},
       prepareFinalObject
     } = this.props;
+    const { checkListUploaRedux } = this.state;
     let index = 0;
     documentsList.forEach(docType => {
       docType.cards &&
@@ -185,7 +186,7 @@ class CheckList extends Component {
           }
         });
     });
-    prepareFinalObject("checkListUploaRedux", checkListUploaRedux);
+    this.setState({ ...this.state, "checkListUploaRedux":checkListUploaRedux});
   };
 
   prepareDocumentsInEmployee = async (checkListDocuments, bpaDetails) => {
@@ -197,51 +198,21 @@ class CheckList extends Component {
         }
       });
     }
-    prepareFinalObject("checkListUploaRedux", {});
-    let requiredDocuments = [], finalQstn = [];
+    let finalQstn = [];
     if (documnts && documnts.length > 0) {
       documnts.forEach(documents => {
         if (documents && documents.dropDownValues && documents.dropDownValues.value) {
-          let qstns = {}, finalDocs = [];
+          let qstns = {};
           if(documents.remarks) qstns.remarks = documents.remarks;
           qstns.question = documents.question;
           qstns.value = documents.dropDownValues.value;
 
           if(bpaDetails.additionalDetails) {
-            if(bpaDetails.additionalDetails.fieldinspection_pending && bpaDetails.additionalDetails.fieldinspection_pending[0]) {
-              if(bpaDetails.additionalDetails.fieldinspection_pending[0].questions) {
-                finalQstn.push(qstns);
-                bpaDetails.additionalDetails.fieldinspection_pending[0].questions = finalQstn
-              } else {
-                bpaDetails.additionalDetails.fieldinspection_pending.push({"questions" : qstns,"docs" : []});
-              }
-            }
-          else {
-            // bpaDetails.additionalDetails = [];
-            let documnt = [], fiDocs = [], details;
-            documnt[0] = {}; 
-            documnt[0].questions = [];
-            documnt[0].docs = [];
-            documnt[0].questions.push(qstns);
-            fiDocs.push({
-              "questions" : documnt[0].questions,
-              "docs" : []
-            });
-            details = { "fieldinspection_pending" : fiDocs};
-            finalDocs.push(details);
-            finalDocs = finalDocs[0];
-            let additionalDetailsDocs = {
-              ...bpaDetails.additionalDetails,
-              fieldinspection_pending : fiDocs
-            }
-            bpaDetails.additionalDetails = additionalDetailsDocs
+            finalQstn.push(qstns);
           }
         }
-        }
       });
-      if(bpaDetails.additionalDetails && bpaDetails.additionalDetails["fieldinspection_pending"] && bpaDetails.additionalDetails["fieldinspection_pending"][0] && bpaDetails.additionalDetails["fieldinspection_pending"][0].question) {
-        prepareFinalObject("BPA",  bpaDetails.additionalDetails.fieldinspection_pending[0].question);
-      }
+      this.props.dispatch(prepareFinalObject(this.props.jsonPath, finalQstn));
     }
   }
 
@@ -250,8 +221,8 @@ class CheckList extends Component {
  };
 
   handleDocument = async (file, fileStoreId) => {
-    let { uploadedDocIndex } = this.state;
-    const { prepareFinalObject, checkListUploaRedux, bpaDetails } = this.props;
+    let { uploadedDocIndex, checkListUploaRedux } = this.state;
+    const { prepareFinalObject, bpaDetails } = this.props;
     const fileUrl = await getFileUrlFromAPI(fileStoreId);
 
     let checkListDocuments = {
@@ -267,7 +238,7 @@ class CheckList extends Component {
         ]
       }
     }
-    prepareFinalObject("checkListUploaRedux", checkListDocuments);    
+    this.setState({ ...this.state, "checkListUploaRedux": checkListDocuments});  
   
     let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true
 
@@ -287,7 +258,8 @@ class CheckList extends Component {
   };
 
   handleChange = (key, event) => {
-    const { checkListUploaRedux, prepareFinalObject, bpaDetails } = this.props;
+    const { prepareFinalObject, bpaDetails } = this.props;
+    const { checkListUploaRedux } = this.state;
     let checkListDocuments = {
       ...checkListUploaRedux,
       [key]: {
@@ -295,7 +267,8 @@ class CheckList extends Component {
         dropDownValues: { value: event.target.value }
       }
     };
-    prepareFinalObject(`checkListUploaRedux`, checkListDocuments);    
+    this.setState({ ...this.state, "checkListUploaRedux": checkListDocuments });
+
 
     let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true
 
@@ -306,7 +279,8 @@ class CheckList extends Component {
   };
 
   handleFieldChange = (key, event) => {
-    const { checkListUploaRedux, prepareFinalObject, bpaDetails } = this.props;
+    const { prepareFinalObject, bpaDetails } = this.props;
+    const { checkListUploaRedux } = this.state;
     let checkListDocuments = {
       ...checkListUploaRedux,
       [key]: {
@@ -314,7 +288,7 @@ class CheckList extends Component {
         remarks: event.target.value
       }
     };
-    prepareFinalObject(`checkListUploaRedux`, checkListDocuments);
+    this.setState({ ...this.state, "checkListUploaRedux" : checkListDocuments});
 
     let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true
 
@@ -325,8 +299,9 @@ class CheckList extends Component {
   };
 
   getUploadCard = (card, key) => {
-    const { classes, checkListUploaRedux } = this.props;
-    let jsonPath = `checkListUploaRedux[${key}].dropDownValues.value`;
+    const { classes } = this.props;
+    const { checkListUploaRedux } = this.state;
+    let jsonPath = (checkListUploaRedux[key] && checkListUploaRedux[key].dropDownValues) ? checkListUploaRedux[key].dropDownValues.value : "";
     return (
       <Grid container={true}>
         <Grid item={true} xs={2} sm={1} className={classes.iconDiv}>
@@ -365,9 +340,9 @@ class CheckList extends Component {
               data={card.dropDownValues.menu}
               optionValue="code"
               optionLabel="label"
-              required={true}
+              required={card.required}
               onChange={event => this.handleChange(key, event)}
-              jsonPath={jsonPath}
+              value={jsonPath}
             />
           )}
         </Grid>
@@ -437,17 +412,12 @@ CheckList.propTypes = {
 const mapStateToProps = state => {
   const { screenConfiguration } = state;
   const { moduleName } = screenConfiguration;
-  const checkListUploaRedux = get(
-    screenConfiguration.preparedFinalObject,
-    "checkListUploaRedux",
-    {}
-  );
   const bpaDetails = get(
     screenConfiguration.preparedFinalObject,
     "BPA",
     {}
   )
-  return { checkListUploaRedux, moduleName, bpaDetails };
+  return { moduleName, bpaDetails };
 };
 
 const mapDispatchToProps = dispatch => {

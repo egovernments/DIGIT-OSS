@@ -34,6 +34,7 @@ import get from "lodash/get";
 import set from "lodash/set";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { getLocale} from "egov-ui-kit/utils/localStorageUtils";
+import { httpRequest } from "../../../../ui-utils";
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -177,6 +178,36 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         "LicensesTemp[0].reviewDocData",
         dispatch,'TL'
       );
+    }
+
+    const businessService = get(
+      state.screenConfiguration.preparedFinalObject,
+      `Licenses[0].businessService`
+    );
+    let mdmsBody = {
+      MdmsCriteria: {
+        tenantId: tenantId,
+        moduleDetails: [
+          {
+            moduleName: "common-masters",
+            masterDetails: [{ name: "uiCommonPay",filter: `[?(@.code=="${businessService}")]` }]
+          }
+        ]
+      }
+    };
+    try {
+      let payload = null;
+      payload = await httpRequest(
+        "post",
+        "/egov-mdms-service/v1/_search",
+        "_search",
+        [],
+        mdmsBody
+      );
+      console.log("payload...",payload)
+      dispatch(prepareFinalObject("uiCommonConfig", get(payload.MdmsRes , "common-masters.uiCommonPay[0]")));
+    } catch (e) {
+      console.log(e);
     }
 
     const statusCont = {

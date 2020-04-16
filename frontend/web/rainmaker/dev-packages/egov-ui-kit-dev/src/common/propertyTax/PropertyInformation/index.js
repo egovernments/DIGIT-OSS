@@ -70,6 +70,9 @@ class Property extends Component {
               {
                 name: "PropertyType",
               },
+              {
+                name: "UsageCategory",
+              },
             ],
           },
         ],
@@ -82,6 +85,7 @@ class Property extends Component {
       "UsageCategorySubMinor",
       "OccupancyType",
       "PropertyType",
+      "UsageCategory"
     ]);
     const { pathname } = location;
     if (!(localStorageGet("path") === pathname)) {

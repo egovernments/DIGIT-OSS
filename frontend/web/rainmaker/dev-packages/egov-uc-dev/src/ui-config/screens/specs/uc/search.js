@@ -37,7 +37,15 @@ const getMDMSData = async (action, state, dispatch) => {
           masterDetails: [
             { name: "BusinessService", filter: "[?(@.type=='Adhoc')]" }
           ]
-        }
+        },
+        {
+          moduleName: "common-masters",
+          masterDetails: [
+            {
+              name: "uiCommonPay"
+            }
+          ]
+        },
       ]
     }
   };
@@ -52,9 +60,9 @@ const getMDMSData = async (action, state, dispatch) => {
     setServiceCategory(
       get(payload, "MdmsRes.BillingService.BusinessService", []),
       dispatch
-    );   
- 
-  } catch (e) {
+    ); 
+    dispatch(prepareFinalObject("applyScreenMdmsData.uiCommonConfig" , get(payload.MdmsRes ,"common-masters.uiCommonPay")))
+    } catch (e) {
     console.log(e);
     alert("Billing service data fetch failed");
   }

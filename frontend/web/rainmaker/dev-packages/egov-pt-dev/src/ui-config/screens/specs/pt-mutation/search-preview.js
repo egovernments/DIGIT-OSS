@@ -21,8 +21,9 @@ import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
 import { getSearchResults } from "../../../../ui-utils/commons";
-import {generatePdfFromDiv } from "egov-ui-kit/utils/PTCommon";
-import { searchBill, getReceiptData, getpayments, downloadCertificateForm, downloadReceitForm } from "../utils/index";
+import { httpRequest } from "../../../../ui-utils";
+import { generatePdfFromDiv } from "egov-ui-kit/utils/PTCommon";
+import { searchBill, showHideMutationDetailsCard, getpayments, downloadCertificateForm, downloadReceitForm, prepareDocumentsView } from "../utils/index";
 import generatePdf from "../utils/receiptPdf";
 import { loadPdfGenerationData } from "../utils/receiptTransformer";
 import { citizenFooter } from "./searchResource/citizenFooter";
@@ -144,42 +145,42 @@ const setDownloadMenu = (state, dispatch, tenantId, applicationNumber) => {
   let certificateDownloadObject = {
     label: { labelName: "PT Certificate", labelKey: "MT_CERTIFICATE" },
     link: () => {
-      downloadCertificateForm(get(state, "screenConfiguration.preparedFinalObject.Properties"), "ptmutationcertificate", tenantId);
+      downloadCertificateForm(get(state, "screenConfiguration.preparedFinalObject.Properties"), "ptmutationcertificate", tenantId,applicationNumber);
     },
     leftIcon: "book"
   };
   let certificatePrintObject = {
     label: { labelName: "PT Certificate", labelKey: "MT_CERTIFICATE" },
     link: () => {
-      downloadCertificateForm(get(state, "screenConfiguration.preparedFinalObject.Properties"), "ptmutationcertificate", tenantId, 'print');
+      downloadCertificateForm(get(state, "screenConfiguration.preparedFinalObject.Properties"), "ptmutationcertificate", tenantId,applicationNumber, 'print');
     },
     leftIcon: "book"
   };
   let receiptDownloadObject = {
     label: { labelName: "Receipt", labelKey: "MT_RECEIPT" },
     link: () => {
-      downloadReceitForm(get(state, "screenConfiguration.preparedFinalObject.Payments"), "consolidatedreceipt", tenantId);
+      downloadReceitForm(get(state, "screenConfiguration.preparedFinalObject.Payments"), "consolidatedreceipt", tenantId,applicationNumber);
     },
     leftIcon: "receipt"
   };
   let receiptPrintObject = {
     label: { labelName: "Receipt", labelKey: "MT_RECEIPT" },
     link: () => {
-      downloadReceitForm(get(state, "screenConfiguration.preparedFinalObject.Payments"), "consolidatedreceipt", tenantId, 'print');
+      downloadReceitForm(get(state, "screenConfiguration.preparedFinalObject.Payments"), "consolidatedreceipt", tenantId,applicationNumber, 'print');
     },
     leftIcon: "receipt"
   };
   let applicationDownloadObject = {
     label: { labelName: "Application", labelKey: "MT_APPLICATION" },
     link: () => {
-      generatePdfFromDiv("download", applicationNumber,"#material-ui-cardContent")
+      generatePdfFromDiv("download", applicationNumber, "#material-ui-cardContent")
     },
     leftIcon: "assignment"
   };
   let applicationPrintObject = {
     label: { labelName: "Application", labelKey: "MT_APPLICATION" },
     link: () => {
-      generatePdfFromDiv("print", applicationNumber,"#material-ui-cardContent")
+      generatePdfFromDiv("print", applicationNumber, "#material-ui-cardContent")
     },
     leftIcon: "assignment"
   };
@@ -222,43 +223,6 @@ const setDownloadMenu = (state, dispatch, tenantId, applicationNumber) => {
   /** END */
 };
 
-const prepareDocumentsView = async (state, dispatch) => {
-  let documentsPreview = [];
-
-  let allDocuments =
-    state.screenConfiguration.preparedFinalObject.Property.documents;
-
-  allDocuments && allDocuments.forEach(doc => {
-    documentsPreview.push({
-      title: getTransformedLocale(doc.documentType),
-      fileStoreId: doc.fileStoreId,
-      linkText: "View"
-    });
-  });
-  let fileStoreIds = jp.query(documentsPreview, "$.*.fileStoreId");
-  let fileUrls =
-    fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
-  documentsPreview = documentsPreview.map((doc, index) => {
-    doc["link"] =
-      (fileUrls &&
-        fileUrls[doc.fileStoreId] &&
-        getFileUrl(fileUrls[doc.fileStoreId])) ||
-      "";
-    doc["name"] =
-      (fileUrls[doc.fileStoreId] &&
-        decodeURIComponent(
-          getFileUrl(fileUrls[doc.fileStoreId])
-            .split("?")[0]
-            .split("/")
-            .pop()
-            .slice(13)
-        )) ||
-      `Document - ${index + 1}`;
-    return doc;
-  });
-  dispatch(prepareFinalObject("documentsUploadRedux", documentsPreview));
-};
-
 const setSearchResponse = async (
   state,
   dispatch,
@@ -298,10 +262,10 @@ const setSearchResponse = async (
     let ownersTemp = [];
     let owners = [];
     property.owners.map(owner => {
-      owner.documentUid= owner.documents? owner.documents[0].documentUid: "NA";
-      owner.documentType=owner.documents? owner.documents[0].documentType: "NA";
+      owner.documentUid = owner.documents ? owner.documents[0].documentUid : "NA";
+      owner.documentType = owner.documents ? owner.documents[0].documentType : "NA";
       if (owner.status == "ACTIVE") {
-      
+
         ownersTemp.push(owner);
       } else {
         owners.push(owner);
@@ -344,9 +308,7 @@ const setSearchResponse = async (
   }
 
   if (get(property, 'ownersInit[0].altContactNumber', 0)) {
-    property.institution = {};
-    property.institution.nameOfAuthorizedPerson = get(property, 'ownersInit[0].name', '');
-
+   
     dispatch(
       handleField(
         "search-preview",
@@ -368,6 +330,66 @@ const setSearchResponse = async (
     );
   }
 
+
+  let transfereeOwners = get(
+    property,
+    "ownersTemp", []
+  );
+  let transferorOwners = get(
+    property,
+    "ownersInit", []
+  );
+  let transfereeOwnersDid = true;
+  let transferorOwnersDid = true;
+  transfereeOwners.map(owner => {
+    if (owner.ownerType != 'NONE') {
+      transfereeOwnersDid = false;
+    }
+  })
+  transferorOwners.map(owner => {
+    if (owner.ownerType != 'NONE') {
+      transferorOwnersDid = false;
+    }
+
+  })
+  if (transferorOwnersDid) {
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.body.children.cardContent.children.transferorSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerSpecialDocumentType",
+        "props.style.display",
+        'none'
+      )
+    );
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.body.children.cardContent.children.transferorSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerSpecialDocumentID",
+        "props.style.display",
+        'none'
+      )
+    );
+
+  }
+  if (transfereeOwnersDid) {
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.body.children.cardContent.children.transfereeSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerDocumentId",
+        "props.style.display",
+        'none'
+      )
+    );
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.body.children.cardContent.children.transfereeSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerSpecialDocumentType",
+        "props.style.display",
+        'none'
+      )
+    );
+
+  }
 
   dispatch(prepareFinalObject("Property", property));
   dispatch(prepareFinalObject("documentsUploadRedux", property.documents));
@@ -404,6 +426,36 @@ export const setData = async (state, dispatch, applicationNumber, tenantId) => {
 
 }
 
+const getPropertyConfigurationMDMSData = async (action, state, dispatch) => {
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: 'pb',
+      moduleDetails: [
+        {
+          moduleName: "PropertyTax",
+          masterDetails: [{ name: "PropertyConfiguration" }]
+        }
+      ]
+    }
+  };
+  try {
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+
+    let propertyConfiguation = get(payload, "MdmsRes.PropertyTax.PropertyConfiguration");
+    dispatch(prepareFinalObject("PropertyConfiguration", propertyConfiguation));
+    showHideMutationDetailsCard(action, state, dispatch);
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 const screenConfig = {
   uiFramework: "material-ui",
   name: "search-preview",
@@ -413,7 +465,7 @@ const screenConfig = {
       "applicationNumber"
     );
     const tenantId = getQueryArg(window.location.href, "tenantId");
-    
+
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     searchBill(dispatch, applicationNumber, tenantId);
     let businessServicesData = JSON.parse(localStorage.getItem('businessServiceData'));
@@ -468,25 +520,7 @@ const screenConfig = {
       "screenConfig.components.div.children.body.children.cardContent.children.transferorInstitutionSummary.children.cardContent.children.header.children.editSection.visible",
       false
     );
-  
-    let categoryType = get(
-      state.screenConfiguration.preparedFinalObject,
-      "Property.ownersTemp[0].ownerType"
-    ); 
-    if(categoryType === "NONE"){
-      set(
-        action,
-        "screenConfig.components.div.children.body.children.cardContent.children.transfereeSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerDocumentId.visible",
-        false
-      );
-      set(
-        action,
-        "screenConfig.components.div.children.body.children.cardContent.children.transfereeSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerSpecialDocumentType.visible",
-        false
-      );
-      
-     
-   }
+
     // set(
     //   action,
     //   "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.header.children.editSection.visible",
@@ -506,7 +540,7 @@ const screenConfig = {
       "screenConfig.components.div.children.headerDiv.children.helpSection.children",
       printCont
     );
-
+    getPropertyConfigurationMDMSData(action, state, dispatch);
     return action;
   },
   components: {

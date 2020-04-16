@@ -2,11 +2,20 @@ import React from "react";
 import { Button, TextField, Card, Image } from "components";
 import Label from "egov-ui-kit/utils/translationNode";
 import logo from "egov-ui-kit/assets/images/logo_black.png";
+import { Icon } from "egov-ui-framework/ui-atoms";
+import { CountdownTimer } from "egov-ui-framework/ui-atoms/index";
 import "./index.css";
 
-const OTP = ({ handleFieldChange, form, phoneNumber, resendOTP ,logoUrl}) => {
+const OTP = ({ handleFieldChange, form, phoneNumber, resendOTP ,logoUrl,history,timerSwitch,completed,timeLeft,reset}) => {
   const fields = form.fields || {};
   const submit = form.submit;
+
+
+  
+  const tick =(leftTime) => {
+  //  console.log(leftTime);
+  }
+
 
   return (
     <Card
@@ -28,6 +37,16 @@ const OTP = ({ handleFieldChange, form, phoneNumber, resendOTP ,logoUrl}) => {
           <div className="citizen-otp-sent-message">
             <Label label="CORE_OTP_SENT_MESSAGE" />
             <Label labelClassName="otp-mobile-number" containerStyle={{ paddingLeft: "5px" }} label={phoneNumber} />
+            <Icon
+            style={{
+              width: "22px",
+              height: "22px",
+              marginLeft: "4px"
+            }}
+            action="action"
+            iconName={"edit"}
+            onClick={() => {history.goBack()}}
+          />
           </div>
           <Label label="CORE_COMMON_CHECK_MESSAGE" color={"#b3b3b3"} fontSize={"12px"} />
           <TextField
@@ -38,12 +57,25 @@ const OTP = ({ handleFieldChange, form, phoneNumber, resendOTP ,logoUrl}) => {
             fullWidth={true}
             type={"number"}
           />
-          <div style={{ marginBottom: "24px" }} className="text-right">
-            <Label id="otp-trigger" className="otp-prompt" label="CORE_OTP_NOT_RECEIVE" />
-            <span style={{ cursor: "pointer" }} onClick={() => resendOTP()}>
-              <Label id="otp-resend" className="otp-resend" label="CORE_OTP_RESEND" />
-            </span>
-          </div>
+ 
+         
+            {timerSwitch? (
+               <div style={{ marginBottom: "24px",display:"flex",float:"right" }} className="text-right">
+               <Label id="otp-trigger" className="otp-prompt" label="CORE_OTP_NOT_RECEIVE" />
+               <span style={{ cursor: "pointer" }} onClick={() => {
+                 resendOTP();
+                 reset();
+                 }}>
+               <Label id="otp-resend" className="otp-resend" label="CORE_OTP_RESEND" />
+               </span>
+               </div>
+            ) : (
+              <div style={{ marginBottom: "24px" ,display:"flex",float:"right"}} className="text-right">
+              <Label id="otp-resendt"className="otp-prompt" label="CORE_ANOTHER_OTP" />
+              <CountdownTimer timeLeft={timeLeft} completeCallback={completed} tickCallback={tick} />
+              <Label id="otp-resendt" label="CORE_OTP_SECONDS" />
+              </div>
+            )}         
           <Button {...submit} primary={true} fullWidth={true} />
         </div>
       }

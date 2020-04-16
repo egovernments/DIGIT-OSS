@@ -6,10 +6,45 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { getSearchResults } from "../../ui-utils/commons";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 class PaymentRedirect extends Component {
+  getBusinessServiceMdmsData = async (tenantId) => {
+    const {prepareFinalObject} = this.props
+    let mdmsBody = {
+      MdmsCriteria: {
+        tenantId: tenantId,
+        moduleDetails: [
+          {
+            moduleName: "BillingService",
+            masterDetails: [{ name: "BusinessService" }]
+          },
+          {
+            moduleName: "common-masters",
+            masterDetails: [{ name: "uiCommonPay" }]
+          }
+        ]
+      }
+    };
+    try {
+      let payload = null;
+      payload = await httpRequest(
+        "post",
+        "/egov-mdms-service/v1/_search",
+        "_search",
+        [],
+        mdmsBody
+      );
+      prepareFinalObject("businessServiceMdmsData", payload.MdmsRes);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+
   componentDidMount = async () => {
     let { search } = this.props.location;
+    const {reduxObj , prepareFinalObject} = this.props;
     const txnQuery=search.split('&')[0].replace('eg_pg_txnid','transactionId');
     console.log(txnQuery,'txnQuery');
     
@@ -38,12 +73,22 @@ class PaymentRedirect extends Component {
           [],
           {}
         );
-
+        const businessService = get(searchResponse, "Payments[0].paymentDetails[0].businessService");
         let transactionId = get(searchResponse, "Payments[0].paymentDetails[0].receiptNumber");
-        this.props.setRoute(
-          // status=success&receiptNumber=PB-TL-2019-10-29-003220&consumerCode=PT-1909-208877&tenantId=pb.amritsar
-          `/egov-common/acknowledgement?status=${"success"}&consumerCode=${consumerCode}&tenantId=${tenantId}&receiptNumber=${transactionId}`
-        );
+        this.getBusinessServiceMdmsData(tenantId).then(response => {
+          const commonPayDetails = get(reduxObj , "businessServiceMdmsData.common-masters.uiCommonPay");
+          const index = commonPayDetails && commonPayDetails.findIndex((item) => {
+            return item.code == businessService;
+          });
+          if(index > -1){
+            prepareFinalObject("commonPayInfo" , commonPayDetails[index]);
+          }else{
+            const details = commonPayDetails.filter(item => item.code === "DEFAULT");
+            prepareFinalObject("commonPayInfo" , details);
+          }
+          this.props.setRoute(`/egov-common/acknowledgement?status=${"success"}&consumerCode=${consumerCode}&tenantId=${tenantId}&receiptNumber=${transactionId}&businessService=${businessService}`
+          );
+      })
       }
     } catch (e) {
       alert(e);
@@ -54,13 +99,19 @@ class PaymentRedirect extends Component {
   }
 }
 
+const mapStateToProps = (state) => {
+  const reduxObj = get(state , "screenConfiguration.preparedFinalObject");
+  return {reduxObj};
+}
+
 const mapDispatchToProps = dispatch => {
   return {
-    setRoute: route => dispatch(setRoute(route))
+    setRoute: route => dispatch(setRoute(route)),
+    prepareFinalObject : (jsonPath , value) => dispatch(prepareFinalObject(jsonPath , value))
   };
 };
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(withRouter(PaymentRedirect));

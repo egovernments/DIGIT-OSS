@@ -3,7 +3,8 @@ import {
   getCommonContainer,
   getCommonHeader,
   getLabelWithValue,
-  getCommonTitle
+  getCommonTitle,
+  convertEpochToDate
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
   handleScreenConfigurationFieldChange as handleField,
@@ -22,7 +23,7 @@ import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
 import { getAppSearchResults } from "../../../../ui-utils/commons";
-import { searchBill , requiredDocumentsData, setNocDocuments } from "../utils/index";
+import { searchBill , requiredDocumentsData, setNocDocuments, getCurrentFinancialYear } from "../utils/index";
 import generatePdf from "../utils/generatePdfForBpa";
 // import { loadPdfGenerationDataForBpa } from "../utils/receiptTransformerForBpa";
 import { citizenFooter } from "./searchResource/citizenFooter";
@@ -38,7 +39,7 @@ import { statusOfNocDetails } from "../egov-bpa/applyResource/updateNocDetails";
 import { nocVerificationDetails } from "../egov-bpa/nocVerificationDetails";
 import { permitConditions } from "../egov-bpa/summaryResource/permitConditions";
 import { permitListSummary } from "../egov-bpa/summaryResource/permitListSummary";
-import { permitOrderNoDownload, downloadFeeReceipt, revocationPdfDownload } from "../utils/index";
+import { permitOrderNoDownload, downloadFeeReceipt, revocationPdfDownload, setProposedBuildingData } from "../utils/index";
 import "../egov-bpa/applyResource/index.css";
 import "../egov-bpa/applyResource/index.scss";
 import { getUserInfo, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
@@ -53,20 +54,39 @@ export const ifUserRoleExists = role => {
   } else return false;
 };
 
-const titlebar = getCommonContainer({
-    header: getCommonHeader({
-      labelName: "Task Details",
-      labelKey: "NOC_TASK_DETAILS_HEADER"
-    }),
-    applicationNumber: {
-      uiFramework: "custom-atoms-local",
-      moduleName: "egov-bpa",
-      componentPath: "ApplicationNoContainer",
-      props: {
-        number: ""
+const titlebar = {
+  uiFramework: "custom-atoms",
+  componentPath: "Div",
+  children: {
+    leftContainerH:getCommonContainer({
+      header: getCommonHeader({
+        labelName: "Task Details",
+        labelKey: "NOC_TASK_DETAILS_HEADER"
+      }),
+      applicationNumber: {
+        uiFramework: "custom-atoms-local",
+        moduleName: "egov-bpa",
+        componentPath: "ApplicationNoContainer",
+        props: {
+          number: ""
+        }
       }
-    },
-});
+    }),
+    rightContainerH: getCommonContainer({
+      footNote : {
+        uiFramework: "custom-atoms-local",
+        moduleName: "egov-bpa",
+        componentPath: "NoteAtom",
+        props: {
+          labelName: "This licensee is valid for <xx> Year(s)",
+          labelKey: ["BPA_LICENSE_VALID_LABEL"],
+        },
+        visible: false
+      }
+    })
+  }
+}
+
 const titlebar2 = {
   uiFramework: "custom-atoms",
   componentPath: "Div",
@@ -137,7 +157,7 @@ const prepareDocumentsView = async (state, dispatch) => {
   ];
 
   allDocuments.forEach(doc => {
-    
+
     documentsPreview.push({
       title: getTransformedLocale(doc.documentType),
       //title: doc.documentType,
@@ -362,30 +382,32 @@ const setSearchResponse = async (
   setBusinessServiceDataToLocalStorage(queryObject, dispatch);
 
   if (status && status == "INPROGRESS") {
-    dispatch(
-      handleField(
-        "search-preview",
-        "components.div.children.body.children.cardContent.children.declarationSummary.children.headers",
-        "visible",
-        true
-      )
-    );
-    dispatch(
-      handleField(
-        "search-preview",
-        "components.div.children.body.children.cardContent.children.declarationSummary.children.header.children.body.children.firstStakeholder",
-        "visible",
-        true
-      )
-    );
-    dispatch(
-      handleField(
-        "search-preview",
-        "components.div.children.body.children.cardContent.children.declarationSummary.children.header.children.body.children.secondStakeholder",
-        "visible",
-        true
-      )
-    )
+    let userInfo = JSON.parse(getUserInfo()), roles = get(userInfo, "roles"), isArchitect = false;
+    if (roles && roles.length > 0) {
+      roles.forEach(role => {
+        if (role.code === "BPA_ARCHITECT") {
+          isArchitect = true;
+        }
+      })
+    }
+    if(isArchitect) {
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.body.children.cardContent.children.declarationSummary.children.headers",
+          "visible",
+          true
+        )
+      );
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.body.children.cardContent.children.declarationSummary.children.header.children.body.children.firstStakeholder",
+          "visible",
+          true
+        )
+      );
+    }
   }
 
   if (status && status === "CITIZEN_APPROVAL_INPROCESS") {
@@ -444,6 +466,9 @@ const setSearchResponse = async (
   }
 
   dispatch(prepareFinalObject("BPA", response.Bpa[0]));
+  if(response && response.Bpa["0"] && response.Bpa["0"].documents) {
+    dispatch(prepareFinalObject("documentsTemp", response.Bpa["0"].documents));
+  }
     let edcrRes = await edcrHttpRequest(
       "post",
       "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + edcrNumber + "&tenantId=" + tenantId,
@@ -481,7 +506,7 @@ const setSearchResponse = async (
   dispatch(
     handleField(
       "search-preview",
-      "components.div.children.headerDiv.children.header.children.applicationNumber",
+      "components.div.children.headerDiv.children.header.children.leftContainerH.children.applicationNumber",
       "props.number",
       applicationNumber
     )
@@ -505,6 +530,27 @@ const setSearchResponse = async (
     );
   };
 
+  setProposedBuildingData(state, dispatch);
+
+  if(get(response, "Bpa[0].validityDate")) {
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.headerDiv.children.header.children.rightContainerH.children.footNote",
+        "props.labelKey[2]",
+        convertEpochToDate(get(response, "Bpa[0].validityDate"))
+      )
+    );
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.headerDiv.children.header.children.rightContainerH.children.footNote.visible",
+        true
+      )
+    );
+  }
+
+  dispatch(prepareFinalObject("documentDetailsPreview", {}));
   requiredDocumentsData(state, dispatch, action);
   setDownloadMenu(action, state, dispatch);
 };
@@ -570,7 +616,7 @@ const screenConfig = {
     );
     set(
       action,
-      "screenConfig.components.div.children.body.children.cardContent.children.fieldSummary.children.cardContent.visible",
+      "screenConfig.components.div.children.body.children.cardContent.children.fieldSummary.visible",
       false
     );
     set(
@@ -593,7 +639,7 @@ const screenConfig = {
       "screenConfig.components.div.children.body.children.cardContent.children.declarationSummary.children.headers.visible",
       false
     );
-
+    
     return action;
   },
   components: {
@@ -644,7 +690,7 @@ const screenConfig = {
           props: {
             dataPath: "BPA",
             moduleName: "BPA",
-            updateUrl: "/bpa-services/bpa/appl/_update"
+            updateUrl: "/bpa-services/_update"
           }
         },
         sendToArchPickerDialog :{

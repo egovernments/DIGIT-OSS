@@ -70,7 +70,7 @@ class OwnerInfo extends Component {
         newList.push(element);
       }
     })
-    return newList;
+    return newList&&Array.isArray(newList)&&newList.filter(element=>element.creationReason!='UPDATE');
   }
   getPropertyResponse = async (propertyId, tenantId, dialogName) => {
     const queryObject = [

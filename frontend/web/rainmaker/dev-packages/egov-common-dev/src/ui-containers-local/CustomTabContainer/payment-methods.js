@@ -5,6 +5,7 @@ import {
   getDateField,
   getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getTodaysDateInYMD } from "egov-ui-framework/ui-utils/commons";
 
 import get from "lodash/get";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -63,6 +64,7 @@ const onIconClick = (state, dispatch, index) => {
   }
 };
 
+
 export const payeeDetails = getCommonContainer({
   paidBy: getSelectField({
     label: {
@@ -113,6 +115,80 @@ export const payeeDetails = getCommonContainer({
       label: "+91 |"
     },
     required: true
+  })
+});
+
+export const onlineDetails = getCommonContainer({
+  txnNo: getTextField({
+    label: {
+      labelName: "Transaction No.",
+      labelKey: "PAYMENT_TXN_NO_LABEL"
+    },
+    placeholder: {
+      labelName: "Enter Transaction  no.",
+      labelKey: "PAYMENT_TXN_NO_PLACEHOLDER"
+    },
+    //Pattern validation for Cheque number
+    jsonPath: "ReceiptTemp[0].instrument.transactionNumber",
+    required: true
+  }),
+  txnDate: getDateField({
+    label: {
+      labelName: "Transaction Date",
+      labelKey: "PAYMENT_TXN_DATE_LABEL"
+    },
+    placeholder: {
+      labelName: "dd/mm/yy",
+      labelKey: "PAYMENT_TXN_DATE_PLACEHOLDER"
+    },
+    pattern: getPattern("Date"),
+    errorMessage: "PAYMENT_TX_ERROR_MESSAGE",
+    required: true,
+    isDOB: true,
+    jsonPath: "ReceiptTemp[0].instrument.transactionDateInput",
+    props: {
+      inputProps: {
+        max: getTodaysDateInYMD()
+      }
+    }
+  }),
+  onlineIFSC: getTextField({
+    label: {
+      labelName: "IFSC",
+      labelKey: "NOC_PAYMENT_IFSC_CODE_LABEL"
+    },
+    placeholder: {
+      labelName: "Enter bank IFSC",
+      labelKey: "NOC_PAYMENT_IFSC_CODE_PLACEHOLDER"
+    },
+    required: true,
+    jsonPath: "ReceiptTemp[0].instrument.ifscCode",
+    iconObj: {
+      iconName: "search",
+      position: "end",
+      color: "#FE7A51",
+      onClickDefination: {
+        action: "condition",
+        callBack: (state, dispatch) => {
+          onIconClick(state, dispatch, 1);
+        }
+      }
+    }
+  }),
+  chequeBank: getTextField({
+    label: {
+      labelName: "Bank Name",
+      labelKey: "NOC_PAYMENT_BANK_NAME_LABEL"
+    },
+    placeholder: {
+      labelName: "Enter bank name",
+      labelKey: "NOC_PAYMENT_BANK_NAME_PLACEHOLDER"
+    },
+    required: true,
+    props: {
+      disabled: true
+    },
+    jsonPath: "ReceiptTemp[0].instrument.bank.name"
   })
 });
 
@@ -197,9 +273,55 @@ export const chequeDetails = getCommonContainer({
   })
 });
 
+export const poDetails = getCommonContainer({
+  ipoNo: getTextField({
+    label: {
+      labelName: "IPO No.",
+      labelKey: "PAYMENT_IPO_NO_LABEL"
+    },
+    placeholder: {
+      labelName: "Enter IPO No.",
+      labelKey: "PAYMENT_IPO_NO_PLACEHOLDER"
+    },
+    //Pattern validation for Cheque number
+    jsonPath: "ReceiptTemp[0].instrument.transactionNumber",
+    required: true
+  }),
+  txnDate: getDateField({
+    label: {
+      labelName: "Transaction Date",
+      labelKey: "PAYMENT_TXN_DATE_LABEL"
+    },
+    placeholder: {
+      labelName: "dd/mm/yy",
+      labelKey: "PAYMENT_TXN_DATE_PLACEHOLDER"
+    },
+    pattern: getPattern("Date"),
+    errorMessage: "PAYMENT_TX_ERROR_MESSAGE",
+    isDOB: true,
+    required: true,
+    jsonPath: "ReceiptTemp[0].instrument.transactionDateInput",
+    props: {
+      inputProps: {
+        max: getTodaysDateInYMD()
+      }
+    }
+  })
+});
+
 export const cheque = getCommonContainer({
   payeeDetails,
   chequeDetails
+});
+
+export const neftRtgs = getCommonContainer({
+  payeeDetails,
+  onlineDetails
+});
+
+export const postalOrder = getCommonContainer({
+  payeeDetails,
+  poDetails
 });
 
 export const demandDraftDetails = getCommonContainer({
@@ -336,3 +458,50 @@ export const card = getCommonContainer({
 export const cash = getCommonContainer({
   payeeDetails
 });
+
+
+export const paymentMethods= [
+  {
+    code : "CASH",
+    tabButton: "COMMON_CASH",    
+    tabIcon: "Dashboard",
+    tabContent: { cash }
+  },
+  {
+    code : "CHEQUE",
+    tabButton: "COMMON_CHEQUE",
+    tabIcon: "Schedule",
+    tabContent: { cheque }
+  },
+  {
+    code : "DD",
+    tabButton: "COMMON_DD",
+    tabIcon: "Schedule",
+    tabContent: { demandDraft }
+  },
+  {
+    code : "CARD",
+    tabButton: "COMMON_CREDIT_DEBIT_CARD",
+    tabIcon: "Schedule",
+    tabContent: { card }
+  },
+  {
+    code : "OFFLINE_NEFT",
+    tabButton: "COMMON_NEFT",
+    tabIcon: "Schedule",
+    tabContent: { neftRtgs }
+  },
+  {
+    code : "OFFLINE_RTGS",
+    tabButton: "COMMON_RTGS",
+    tabIcon: "Schedule",
+    tabContent: { neftRtgs }
+  },
+  {
+    code : "POSTAL_ORDER",
+    tabButton: "COMMON_POSTAL_ORDER",
+    tabIcon: "Schedule",
+    tabContent: { postalOrder }
+  }
+]
+

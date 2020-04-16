@@ -6,13 +6,12 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getCurrentFinancialYear, generateBill, getBusinessServiceMdmsData } from "../utils";
-import { capturePaymentDetails } from "./payResource/capture-payment-details";
+import capturePaymentDetails  from "./payResource/capture-payment-details";
 import estimateDetails from "./payResource/estimate-details";
 import { footer } from "./payResource/footer";
 import g8Details from "./payResource/g8-details";
 import AmountToBePaid from "./payResource/amount-to-be-paid";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { prepareFinalObject ,handleScreenConfigurationFieldChange as handleField  } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { radioButtonJsonPath, paybuttonJsonpath } from "./payResource/constants";
 import { ifUserRoleExists } from "../utils";
 import set from "lodash/set";
@@ -22,7 +21,7 @@ import "./pay.css";
 export const getHeader = (state) => {
     const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject , "commonPayInfo");
     let consumerCode = getQueryArg(window.location.href, "consumerCode");
-
+    let businessService = getQueryArg(window.location.href, "businessService");
     let label = get(uiCommonPayConfig,"headerBandLabel");
     return getCommonContainer({
         header: getCommonHeader({
@@ -36,55 +35,13 @@ export const getHeader = (state) => {
             props: {
                 number: consumerCode,
                 label: {
-                    labelKey: label,
+                    labelKey: label?label: "PAYMENT_COMMON_CONSUMER_CODE",
                 },
             }
         }
     });
 }
 
-const getPaymentCard = (state) => {
-    const roleExists = ifUserRoleExists("CITIZEN");
-    if (roleExists) {
-        return {
-            uiFramework: "custom-atoms",
-            componentPath: "Div",
-            children: {
-                paymentDetails: getCommonCard({
-                    header: getCommonTitle({
-                        labelName: "Payment Collection Details",
-                        labelKey: "NOC_PAYMENT_HEAD"
-                    }),
-                    estimateDetails,
-                    AmountToBePaid: {
-                        ...AmountToBePaid,
-                        visible: false
-                    }
-                })
-            }
-        }
-    } else {
-        return {
-            uiFramework: "custom-atoms",
-            componentPath: "Div",
-            children: {
-                paymentDetails: getCommonCard({
-                    header: getCommonTitle({
-                        labelName: "Payment Collection Details",
-                        labelKey: "NOC_PAYMENT_HEAD"
-                    }),
-                    estimateDetails,
-                    AmountToBePaid: {
-                        ...AmountToBePaid,
-                        visible: false
-                    },
-                    capturePaymentDetails : capturePaymentDetails(state),
-                    g8Details
-                })
-            }
-        }
-    }
-}
 
 const fetchBill = async (action, state, dispatch, consumerCode, tenantId, billBusinessService) => {
     await getBusinessServiceMdmsData(dispatch, tenantId);
@@ -109,18 +66,20 @@ const fetchBill = async (action, state, dispatch, consumerCode, tenantId, billBu
 
     //commonPay configuration 
     const commonPayDetails = get(state , "screenConfiguration.preparedFinalObject.businessServiceMdmsData.common-masters.uiCommonPay");
-    commonPayDetails && commonPayDetails.map(item => {
-        if (item.code == businessService) {
-            dispatch(prepareFinalObject("commonPayInfo", item));
-        }
-    })
+    const index = commonPayDetails && commonPayDetails.findIndex((item) => {
+        return item.code == businessService;
+    });
+    if(index > -1){
+        dispatch(prepareFinalObject("commonPayInfo" , commonPayDetails[index]));
+    }else{
+        const details = commonPayDetails.filter(item => item.code === "DEFAULT");
+        dispatch(prepareFinalObject("commonPayInfo" , details));
+    }
 
     let header = getHeader(state);
-    set(action, "screenConfig.components.div.children.headerDiv.children.header" ,header) 
+    set(action.screenConfig, "components.div.children.headerDiv.children.header" ,header) 
 
-    const data = getPaymentCard(state);    
-    set(action, "screenConfig.components.div.children.formwizardFirstStep", data);
-
+    
     const isPartialPaymentAllowed = get(state, "screenConfiguration.preparedFinalObject.businessServiceInfo.partPaymentAllowed");
     if (isPartialPaymentAllowed) {
         dispatch(handleField("pay", "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.AmountToBePaid", "visible", true));
@@ -202,7 +161,25 @@ const screenConfig = {
                         // header : {}
                     }
                 },
-                // formwizardFirstStep: {},
+                formwizardFirstStep: {
+                    uiFramework: "custom-atoms",
+                    componentPath: "Div",
+                    children: {
+                        paymentDetails: getCommonCard({
+                            header: getCommonTitle({
+                                labelName: "Payment Collection Details",
+                                labelKey: "NOC_PAYMENT_HEAD"
+                            }),
+                            estimateDetails,
+                            AmountToBePaid: {
+                                ...AmountToBePaid,
+                                visible: false
+                            },
+                            capturePaymentDetails : ifUserRoleExists("CITIZEN") ? {} : capturePaymentDetails,
+                            g8Details : ifUserRoleExists("CITIZEN") ? {} : g8Details
+                        })
+                    }
+                },
                 footer
             }
         },

@@ -71,8 +71,8 @@
     .ack-body, .ack-tail {
         display: contents;
         text-align: center;
-    }
-      
+    } 
+         
   }
   @media only screen and (min-width: 768px) {
   
@@ -87,4 +87,11 @@
   
   #material-ui-searchPropertyDetails div div div div div div button span span span span {
       font-size: 14px!important;
+  }
+
+  .public-domain-search {
+    #material-ui-resetButton, #material-ui-searchButton {
+    width: 100% !important;
+    margin: 8px 0px !important;
+    }
   }

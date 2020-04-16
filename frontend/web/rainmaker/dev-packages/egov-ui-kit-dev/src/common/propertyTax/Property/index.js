@@ -1,31 +1,26 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import Label from "egov-ui-kit/utils/translationNode";
-import { getCommaSeperatedAddress, getTranslatedLabel } from "egov-ui-kit/utils/commons";
-import { getLatestPropertyDetails } from "egov-ui-kit/utils/PTCommon";
-import AssessmentList from "../AssessmentList";
-import YearDialogue from "../YearDialogue";
+import { Button } from "components";
+import commonConfig from "config/common.js";
 import Screen from "egov-ui-kit/common/common/Screen";
-import { Icon, BreadCrumbs } from "egov-ui-kit/components";
-import { fetchGeneralMDMSData } from "egov-ui-kit/redux/common/actions";
-import { addBreadCrumbs, toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
-import PropertyInformation from "./components/PropertyInformation";
-import {
-  fetchProperties,
-  getSingleAssesmentandStatus,
-  fetchTotalBillAmount,
-  fetchReceipt,
-  fetchAssessments,
-} from "egov-ui-kit/redux/properties/actions";
 import { getCompletedTransformedItems } from "egov-ui-kit/common/propertyTax/TransformedAssessments";
+import { Icon } from "egov-ui-kit/components";
+import { addBreadCrumbs, toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
+import { initLocalizationLabels } from "egov-ui-kit/redux/app/utils";
+import { fetchGeneralMDMSData } from "egov-ui-kit/redux/common/actions";
+import { fetchAssessments, fetchProperties, fetchReceipt, fetchTotalBillAmount, getSingleAssesmentandStatus } from "egov-ui-kit/redux/properties/actions";
+import { generalMDMSDataRequestObj, getCommaSeperatedAddress, getGeneralMDMSDataDropdownName, getTranslatedLabel } from "egov-ui-kit/utils/commons";
+import { getLocale, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
+import { getLatestPropertyDetails } from "egov-ui-kit/utils/PTCommon";
+import { formWizardConstants, getPropertyLink, PROPERTY_FORM_PURPOSE } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
+import Label from "egov-ui-kit/utils/translationNode";
 import isEqual from "lodash/isEqual";
 import orderby from "lodash/orderBy";
-import { initLocalizationLabels } from "egov-ui-kit/redux/app/utils";
-import { getLocale, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
-import commonConfig from "config/common.js";
-import { Button, Card } from "components";
-import "./index.css";
+import React, { Component } from "react";
+import { connect } from "react-redux";
 import PTHeader from "../../common/PTHeader";
+import AssessmentList from "../AssessmentList";
+import YearDialogue from "../YearDialogue";
+import PropertyInformation from "./components/PropertyInformation";
+import "./index.css";
 
 const innerDivStyle = {
   padding: "0",
@@ -76,60 +71,9 @@ class Property extends Component {
       fetchReceipt,
       fetchAssessments,
     } = this.props;
-    const requestBody = {
-      MdmsCriteria: {
-        tenantId: commonConfig.tenantId,
-        moduleDetails: [
-          {
-            moduleName: "PropertyTax",
-            masterDetails: [
-              {
-                name: "Floor",
-              },
-              {
-                name: "UsageCategoryMajor",
-              },
-              {
-                name: "UsageCategoryMinor",
-              },
-              {
-                name: "UsageCategorySubMinor",
-              },
-              {
-                name: "OccupancyType",
-              },
-              {
-                name: "PropertyType",
-              },
-              {
-                name: "PropertySubType",
-              },
-              {
-                name: "OwnerType",
-              },
-              {
-                name: "UsageCategoryDetail",
-              },
-              {
-                name: "SubOwnerShipCategory",
-              },
-            ],
-          },
-        ],
-      },
-    };
-    fetchGeneralMDMSData(requestBody, "PropertyTax", [
-      "Floor",
-      "UsageCategoryMajor",
-      "UsageCategoryMinor",
-      "UsageCategorySubMinor",
-      "OccupancyType",
-      "PropertyType",
-      "PropertySubType",
-      "OwnerType",
-      "UsageCategoryDetail",
-      "SubOwnerShipCategory",
-    ]);
+    const requestBody = generalMDMSDataRequestObj(commonConfig.tenantId);
+    fetchGeneralMDMSData(requestBody, "PropertyTax", getGeneralMDMSDataDropdownName());
+
     fetchProperties([
       { key: "propertyIds", value: decodeURIComponent(this.props.match.params.propertyId) },
       { key: "tenantId", value: this.props.match.params.tenantId },
@@ -177,8 +121,25 @@ class Property extends Component {
 
       this.setState({
         dialogueOpen: true,
-        urlToAppend: `/property-tax/assessment-form?assessmentId=${assessmentNo}&isReassesment=true&isAssesment=true&propertyId=${propertyId}&tenantId=${tenantId}`,
+        urlToAppend: getPropertyLink(propertyId, tenantId, PROPERTY_FORM_PURPOSE.ASSESS, -1, assessmentNo),
       });
+    }
+  };
+  onEditPropertyClick = () => {
+    const { latestPropertyDetails, propertyId, tenantId, selPropertyDetails } = this.props;
+    const assessmentNo = latestPropertyDetails && latestPropertyDetails.assessmentNumber;
+    if (selPropertyDetails.status != "ACTIVE") {
+      this.props.toggleSnackbarAndSetText(
+        true,
+        { labelName: "Property in Workflow", labelKey: "ERROR_PROPERTY_IN_WORKFLOW" },
+        "error"
+      );
+    } else {
+      this.props.history.push(getPropertyLink(propertyId, tenantId, PROPERTY_FORM_PURPOSE.UPDATE, -1, assessmentNo));
+      // this.setState({
+      //   dialogueOpen: true,
+      //   urlToAppend: getPropertyLink(propertyId, tenantId, "assess", -1, assessmentNo),
+      // });
     }
   };
 
@@ -284,6 +245,8 @@ class Property extends Component {
     // if (this.props.userID !== prevProps.userID) {
     //   this.fetchData(this.props.userID);
     // }
+
+
     const propertyId = decodeURIComponent(this.props.match.params.propertyId);
     const { totalBillAmountDue, Assessments } = this.props;
     if (Assessments && Assessments.length > 0 && Assessments[0].propertyId == propertyId && !this.state.billFetched) {
@@ -319,6 +282,7 @@ class Property extends Component {
       receiptsByYr,
       totalBillAmountDue,
       documentsUploaded,
+      loading
     } = this.props;
     const { closeYearRangeDialogue } = this;
     const { dialogueOpen, urlToAppend, showAssessmentHistory } = this.state;
@@ -333,7 +297,7 @@ class Property extends Component {
       assessmentHistory = this.getAssessmentHistory(selPropertyDetails, receiptsByYr.receiptDetailsArray);
     }
     return (
-      <Screen className={clsName}>
+      <Screen className={clsName} loading={loading}>
         <PTHeader header="PT_PROPERTY_INFORMATION" subHeaderTitle="PT_PROPERTY_PTUID" subHeaderValue={propertyId} downloadPrintButton={true} />
         {
           <AssessmentList
@@ -351,12 +315,24 @@ class Property extends Component {
           />
         }
         <div id="tax-wizard-buttons" className="wizard-footer col-sm-12" style={{ textAlign: "right" }}>
-          <div className="button-container col-xs-6 property-info-access-btn" style={{ float: "right" }}>
+          <div className="button-container col-xs-4 property-info-access-btn" style={{ float: "right" }}>
+
+            <Button
+              label={
+                <Label buttonLabel={true}
+                  label={formWizardConstants[PROPERTY_FORM_PURPOSE.UPDATE].parentButton} fontSize="16px"
+                  color="#fe7a51" />
+              }
+              onClick={() => this.onEditPropertyClick()}
+              labelStyle={{ letterSpacing: 0.7, padding: 0, color: "#fe7a51" }}
+              buttonStyle={{ border: "1px solid #fe7a51" }}
+              style={{ lineHeight: "auto", minWidth: "45%", marginRight: "10%" }}
+            />
             <Button
               onClick={() => this.onAssessPayClick()}
-              label={<Label buttonLabel={true} label="PT_ASSESS_PROPERTY" fontSize="16px" />}
+              label={<Label buttonLabel={true} label={formWizardConstants[PROPERTY_FORM_PURPOSE.ASSESS].parentButton} fontSize="16px" />}
               primary={true}
-              style={{ lineHeight: "auto", minWidth: "inherit" }}
+              style={{ lineHeight: "auto", minWidth: "45%" }}
             />
           </div>
         </div>
@@ -365,31 +341,7 @@ class Property extends Component {
     );
   }
 }
-const getYearlyAssessments = (propertiesArray = []) => {
-  let yearlyAssessments = [];
-  return yearlyAssessments;
-  // propertiesArray.map((property) => {
-  //   if (yearlyAssessments.length == 0) {
-  //     yearlyAssessments[0] = [property];
-  //   } else {
-  //     let bool = true;
-  //     for (let pty of yearlyAssessments) {
-  //       if (pty[0].financialYear == property.financialYear) {
-  //         pty.push(property)
-  //         bool = false;
-  //       }
-  //     }
-  //     if (bool) {
-  //       yearlyAssessments.push([property]);
-  //     }
-  //   }
-  // })
-  // for (let eachYrAssessments of yearlyAssessments) {
-  //   eachYrAssessments.sort((x, y) => y.assessmentDate - x.assessmentDate);
-  // }
-  // yearlyAssessments.sort((x, y) => x[0].financialYear.localeCompare(y[0].financialYear));
-  // return yearlyAssessments;
-};
+
 const getPendingAssessments = (selPropertyDetails, singleAssessmentByStatus = []) => {
   let pendingAssessments = [];
   // let propertiesArray = selPropertyDetails.propertyDetails || [];
@@ -414,15 +366,7 @@ const getPendingAssessments = (selPropertyDetails, singleAssessmentByStatus = []
   // }
   return pendingAssessments;
 };
-const checkPaid = (property, ptList = []) => {
-  let status = true;
-  for (let pt of ptList) {
-    if (pt.assessmentNumber == property.assessmentNumber) {
-      status = false;
-    }
-  }
-  return status;
-};
+
 const getAddressInfo = (addressObj, extraItems) => {
   return (
     addressObj && [
@@ -480,7 +424,7 @@ const transform = (floor, key, generalMDMSDataById, propertyDetails) => {
       //   return "NA";
       // }
       if (floor[dataKey] === "NONRESIDENTIAL") {
-        return generalMDMSDataById["UsageCategoryMinor"] ? generalMDMSDataById["UsageCategoryMinor"][floor["usageCategoryMinor"]].name : "NA";
+        return generalMDMSDataById["UsageCategoryMinor"]&& generalMDMSDataById["UsageCategoryMinor"][floor["usageCategoryMinor"]]&& generalMDMSDataById["UsageCategoryMinor"][floor["usageCategoryMinor"]].name ? generalMDMSDataById["UsageCategoryMinor"][floor["usageCategoryMinor"]].name : "NA";
       } else {
         return generalMDMSDataById[masterName] ? generalMDMSDataById[masterName][floor[dataKey]].name : "NA";
       }
@@ -671,6 +615,7 @@ const mapStateToProps = (state, ownProps) => {
   const tenantId = ownProps.match.params.tenantId;
   const propertyId = decodeURIComponent(ownProps.match.params.propertyId);
   const selPropertyDetails = propertiesById[propertyId] || {};
+  loading = loading==false && Object.keys(selPropertyDetails).length > 0 ? false : true;
   const { documentsUploaded } = selPropertyDetails || [];
   const latestPropertyDetails = getLatestPropertyDetails(selPropertyDetails.propertyDetails);
   const pendingAssessments = getPendingAssessments(selPropertyDetails, singleAssessmentByStatus);
@@ -703,8 +648,6 @@ const mapStateToProps = (state, ownProps) => {
   if (Assessments.length == 0) {
     totalBillAmountDue = 0
   }
-
-
   return {
     urls,
     propertyItems,
@@ -719,7 +662,8 @@ const mapStateToProps = (state, ownProps) => {
     localization,
     totalBillAmountDue,
     documentsUploaded,
-    Assessments
+    Assessments,
+    loading
   };
 };
 

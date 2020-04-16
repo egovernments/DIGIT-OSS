@@ -1,25 +1,23 @@
-import React, { Component } from "react";
 import Hidden from "@material-ui/core/Hidden";
-import formHoc from "egov-ui-kit/hocs/form";
-import Label from "egov-ui-kit/utils/translationNode";
 import Screen from "egov-ui-kit/common/common/Screen";
+import { Button, Icon } from "egov-ui-kit/components";
+import formHoc from "egov-ui-kit/hocs/form";
+import { addBreadCrumbs, fetchLocalizationLabel, toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
+import { displayFormErrors, resetForm } from "egov-ui-kit/redux/form/actions";
+import { validateForm } from "egov-ui-kit/redux/form/utils";
+import { fetchProperties } from "egov-ui-kit/redux/properties/actions";
+import { getDateFromEpoch } from "egov-ui-kit/utils/commons";
+import { getLocale, getUserInfo, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
+import { getLatestPropertyDetails } from "egov-ui-kit/utils/PTCommon";
+import Label from "egov-ui-kit/utils/translationNode";
+import React, { Component } from "react";
+import { connect } from "react-redux";
 import SingleProperty from "../SingleProperty";
 import YearDialogue from "../YearDialogue";
-import { Button, BreadCrumbs, Icon } from "egov-ui-kit/components";
-import { addBreadCrumbs, toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
-import SearchPropertyForm from "./components/SearchPropertyForm";
 import PropertyTable from "./components/PropertyTable";
-import { validateForm } from "egov-ui-kit/redux/form/utils";
-import {fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions"
-import { displayFormErrors, resetForm } from "egov-ui-kit/redux/form/actions";
-import { connect } from "react-redux";
-import { fetchProperties } from "egov-ui-kit/redux/properties/actions";
-import { getLatestPropertyDetails } from "egov-ui-kit/utils/PTCommon";
-import get from "lodash/get";
-import { getUserInfo, localStorageGet,getLocale } from "egov-ui-kit/utils/localStorageUtils";
-import { getDateFromEpoch } from "egov-ui-kit/utils/commons";
-
+import SearchPropertyForm from "./components/SearchPropertyForm";
 import "./index.css";
+
 
 const userType = getUserInfo() && JSON.parse(getUserInfo()).type;
 
@@ -50,7 +48,7 @@ class SearchProperty extends Component {
 
   };
   onSearchClick = (form, formKey) => {
-    const {fetchLocalizationLabel} = this.props
+    const { fetchLocalizationLabel } = this.props
     const { city, ids, oldpropertyids, mobileNumber, applicationNumber } = form.fields || {};
     if (!validateForm(form)) {
       this.props.displayFormErrors(formKey);
@@ -65,13 +63,13 @@ class SearchProperty extends Component {
       if (city && city.value) {
         queryParams.push({ key: "tenantId", value: city.value });
       }
-      if ( ids && ids.value) {
+      if (ids && ids.value) {
         queryParams.push({ key: "propertyIds", value: ids.value });
       }
       if (oldpropertyids && oldpropertyids.value) {
         queryParams.push({ key: "oldpropertyids", value: oldpropertyids.value });
       }
-      if ( mobileNumber && mobileNumber.value) {
+      if (mobileNumber && mobileNumber.value) {
         queryParams.push({ key: "mobileNumber", value: mobileNumber.value });
       }
       if (applicationNumber && applicationNumber.value) {
@@ -83,24 +81,16 @@ class SearchProperty extends Component {
     fetchLocalizationLabel(getLocale(), city.value, city.value);
   };
 
-  
+
 
   getLink = (userType, history, propertyId, tenantId) => {
     return (
       <a
         onClick={
-          userType === "CITIZEN"
-            ? () => {
-              // localStorageSet("draftId", "")
-              this.setState({
-                dialogueOpen: true,
-                urlToAppend: `/property-tax/assessment-form?isReassesment=false&propertyId=${propertyId}&tenantId=${tenantId}`,
-              });
-            }
-            : (e) => {
-              // localStorageSet("draftId", "")
-              history.push(`/property-tax/property/${propertyId}/${tenantId}`);
-            }
+          (e) => {
+            // localStorageSet("draftId", "")
+            history.push(`/property-tax/property/${propertyId}/${tenantId}`);
+          }
         }
         style={{
           height: 20,
@@ -125,9 +115,9 @@ class SearchProperty extends Component {
         propertyDetails,
         tenantId,
       } = property;
-      
-      if(!applicationNo) applicationNo = property.acknowldgementNumber;
-      if(!date) date = getDateFromEpoch(property.auditDetails.createdTime);
+
+      if (!applicationNo) applicationNo = property.acknowldgementNumber;
+      if (!date) date = getDateFromEpoch(property.auditDetails.createdTime);
       applicationType = history.location.pathname.includes('property-tax') ? 'PT' : applicationType;
       const latestAssessment = getLatestPropertyDetails(propertyDetails);
       let name = latestAssessment.owners[0].name;
@@ -251,8 +241,8 @@ class SearchProperty extends Component {
         </div>
         <PropertySearchFormHOC history={this.props.history} onSearchClick={this.onSearchClick} onResetClick={this.onResetClick} />
         <Hidden xsDown>
-        {!loading && showTable && tableData.length > 0  ? 
-        <PropertyTable tableData={tableData} sortOnObject="propertyId" onActionClick={this.onActionClick} /> : null}
+          {!loading && showTable && tableData.length > 0 ?
+            <PropertyTable tableData={tableData} sortOnObject="propertyId" onActionClick={this.onActionClick} /> : null}
         </Hidden>
         <Hidden smUp>
           {tableData && tableData.length > 0 && showTable && (
@@ -316,7 +306,7 @@ const mapDispatchToProps = (dispatch) => {
     fetchProperties: (queryObject) => dispatch(fetchProperties(queryObject)),
     toggleSnackbarAndSetText: (open, message, error) => dispatch(toggleSnackbarAndSetText(open, message, error)),
     resetForm: formKey => dispatch(resetForm(formKey)),
-    fetchLocalizationLabel : (locale, tenantId, moduleValue) => dispatch(fetchLocalizationLabel(locale, tenantId, moduleValue))
+    fetchLocalizationLabel: (locale, tenantId, moduleValue) => dispatch(fetchLocalizationLabel(locale, tenantId, moduleValue))
   };
 };
 

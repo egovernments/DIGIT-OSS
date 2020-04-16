@@ -1,5 +1,5 @@
 import * as commonTypes from "./actionTypes";
-import { transformById } from "egov-ui-kit/utils/commons";
+import { transformById, getTransformedDropdown } from "egov-ui-kit/utils/commons";
 import set from "lodash/set";
 import { commonActions } from "egov-ui-kit/utils/commons";
 
@@ -144,7 +144,7 @@ const commonReducer = (state = intialState, action) => {
       return {
         ...state,
         loading: false,
-        generalMDMSDataById,
+        generalMDMSDataById: getTransformedDropdown(generalMDMSDataById, ["PropertyType", "OwnerShipCategory", "UsageCategory"]),
       };
 
     case commonTypes.GENERAL_MDMS_FETCH_ERROR:

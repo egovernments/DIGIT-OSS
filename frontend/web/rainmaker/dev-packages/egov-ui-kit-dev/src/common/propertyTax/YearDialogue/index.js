@@ -1,20 +1,17 @@
-import React, { Component } from "react";
-import { Dialog } from "components";
-import { Button } from "components";
-import RadioButtonForm from "./components/RadioButtonForm";
-import Label from "egov-ui-kit/utils/translationNode";
-import formHoc from "egov-ui-kit/hocs/form";
-import { connect } from "react-redux";
-import { fetchGeneralMDMSData } from "egov-ui-kit/redux/common/actions";
-import { removeForm } from "egov-ui-kit/redux/form/actions";
-import { toggleSpinner } from "egov-ui-kit/redux/common/actions";
+import { Button, Dialog } from "components";
 import commonConfig from "config/common.js";
-import { prepareFormData } from "egov-ui-kit/redux/common/actions";
+import formHoc from "egov-ui-kit/hocs/form";
+import { fetchGeneralMDMSData, prepareFormData, toggleSpinner } from "egov-ui-kit/redux/common/actions";
+import { removeForm } from "egov-ui-kit/redux/form/actions";
 import { reset_property_reset } from "egov-ui-kit/redux/properties/actions";
 import { resetFormWizard } from "egov-ui-kit/utils/PTCommon";
-
-
+import Label from "egov-ui-kit/utils/translationNode";
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import RadioButtonForm from "./components/RadioButtonForm";
 import "./index.css";
+
+
 
 // const getYearList = () => {
 //   let today = new Date();
@@ -113,7 +110,7 @@ class YearDialog extends Component {
                 buttonStyle={{ border: "1px solid rgb(255, 255, 255)" }} onClick={() => {
                   if (this.state.selectedYear !== '') {
                     this.resetForm()
-                    history && urlToAppend ? history.push(`${urlToAppend}&FY=${this.state.selectedYear}`) : history.push(`/property-tax/assessment-form?FY=${this.state.selectedYear}&type=new`);
+                    history && urlToAppend ? history.push(`${urlToAppend}&FY=${this.state.selectedYear}`) : history.push(`/property-tax/assessment-form`);
                   }
                   else {
                     alert('Please Select a Financial Year!');

@@ -1,5 +1,5 @@
 import { getCommonHeader, getCommonCard, getCommonGrayCard, getCommonContainer, getCommonSubHeader, convertEpochToDate } from "egov-ui-framework/ui-config/screens/specs/utils";
-import get from "lodash/get";
+// import get from "lodash/get";
 import { getSearchResults, getSearchResultsForSewerage, fetchBill, getDescriptionFromMDMS, getConsumptionDetails } from "../../../../ui-utils/commons";
 import set from "lodash/set";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
@@ -41,9 +41,21 @@ const processBills = async (data, viewBillTooltip, dispatch) => {
           viewBillTooltip.push(obj)
         }
         if (viewBillTooltip.length >= data.Bill[0].billDetails.length) {
-          let dataArray = [{ total: data.Bill[0].totalAmount, expiryDate: bills.expiryDate }]
-          let descriptionArray = viewBillTooltip
-          let finalArray = [{ description: descriptionArray, data: dataArray }]
+          let dataArray = [{
+            total: data.Bill[0].totalAmount,
+            expiryDate: bills.expiryDate
+          }]
+          let sortedBills = viewBillTooltip.sort((a, b) => b.toPeriod - a.toPeriod);
+          let currentDemand = sortedBills[0];
+          sortedBills.shift();
+          let totalArrears = 0;
+          sortedBills.forEach(e => { e.bill.forEach(o => { totalArrears = totalArrears + o.amount }); })
+          let finalArray = [{
+            arrears: totalArrears,
+            arrearsDescription: "Total outstanding payment of previous billing cycles.",
+            description: currentDemand,
+            data: dataArray
+          }]
           dispatch(prepareFinalObject("viewBillToolipData", finalArray));
         }
       }
@@ -75,7 +87,7 @@ const searchResults = async (action, state, dispatch, consumerCode) => {
           const propertyUsageType = "[?(@.code  == " + JSON.stringify(payload.WaterConnection[0].property.usageCategory) + ")]"
           let propertyUsageTypeParams = { MdmsCriteria: { tenantId: "pb", moduleDetails: [{ moduleName: "PropertyTax", masterDetails: [{ name: "UsageCategoryMajor", filter: `${propertyUsageType}` }] }] } }
           const mdmsPropertyUsageType = await getDescriptionFromMDMS(propertyUsageTypeParams, dispatch)
-          payload.WaterConnection[0].property.propertyUsageType = mdmsPropertyUsageType.MdmsRes.PropertyTax.UsageCategoryMajor[0].name;//propertyUsageType from Mdms
+          payload.WaterConnection[0].property.propertyUsageType = validatePropertyTaxName(mdmsPropertyUsageType);
         }
         dispatch(prepareFinalObject("WaterConnection[0]", payload.WaterConnection[0]));
         dispatch(prepareFinalObject("billData", data.Bill[0]));
@@ -95,7 +107,7 @@ const searchResults = async (action, state, dispatch, consumerCode) => {
           const propertyUsageType = "[?(@.code  == " + JSON.stringify(payload.SewerageConnections[0].property.usageCategory) + ")]"
           let propertyUsageTypeParams = { MdmsCriteria: { tenantId: "pb", moduleDetails: [{ moduleName: "PropertyTax", masterDetails: [{ name: "UsageCategoryMajor", filter: `${propertyUsageType}` }] }] } }
           const mdmsPropertyUsageType = await getDescriptionFromMDMS(propertyUsageTypeParams, dispatch)
-          payload.SewerageConnections[0].property.propertyUsageType = mdmsPropertyUsageType.MdmsRes.PropertyTax.UsageCategoryMajor[0].name;//propertyUsageType from Mdms
+          payload.SewerageConnections[0].property.propertyUsageType = validatePropertyTaxName(mdmsPropertyUsageType);//propertyUsageType from Mdms
         }
         dispatch(prepareFinalObject("WaterConnection[0]", payload.SewerageConnections[0]));
         dispatch(prepareFinalObject("billData", data.Bill[0]));
@@ -104,6 +116,21 @@ const searchResults = async (action, state, dispatch, consumerCode) => {
   }
   createEstimateData(data, "screenConfiguration.preparedFinalObject.billData.billDetails", dispatch, {}, {});
 };
+
+const validatePropertyTaxName = (mdmsPropertyUsageType) => {
+  if (
+    mdmsPropertyUsageType !== undefined &&
+    mdmsPropertyUsageType !== null &&
+    mdmsPropertyUsageType.MdmsRes !== undefined &&
+    mdmsPropertyUsageType.MdmsRes !== null &&
+    mdmsPropertyUsageType.MdmsRes.PropertyTax !== undefined &&
+    mdmsPropertyUsageType.MdmsRes.PropertyTax !== null &&
+    mdmsPropertyUsageType.MdmsRes.PropertyTax.UsageCategoryMajor !== undefined &&
+    mdmsPropertyUsageType.MdmsRes.PropertyTax.UsageCategoryMajor !== null &&
+    mdmsPropertyUsageType.MdmsRes.PropertyTax.UsageCategoryMajor.length > 0
+  ) { return mdmsPropertyUsageType.MdmsRes.PropertyTax.UsageCategoryMajor[0].name }
+  else { return "NA" }
+}
 
 const beforeInitFn = async (action, state, dispatch, consumerCode) => {
   if (consumerCode) {

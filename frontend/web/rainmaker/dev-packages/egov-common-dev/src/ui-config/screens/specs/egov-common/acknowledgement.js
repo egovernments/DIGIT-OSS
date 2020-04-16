@@ -5,7 +5,7 @@ import set from "lodash/set";
 import get from "lodash/get";
 import { ifUserRoleExists } from "../utils";
 import {download} from  "../../../../ui-utils/commons";
-import {getHeader} from "./pay"
+import {getHeader} from "./pay";
 import './index.css';
 
 
@@ -18,7 +18,7 @@ const downloadprintMenu=(state,applicationNumber,tenantId,uiCommonPayConfig)=>{
                 { key: "receiptNumbers", value: applicationNumber },
                 { key: "tenantId", value: tenantId }
             ]
-            download(receiptQueryString , "download" , receiptKey);
+            download(receiptQueryString , "download" , receiptKey, state);
           
         },
         leftIcon: "receipt"
@@ -30,7 +30,7 @@ const downloadprintMenu=(state,applicationNumber,tenantId,uiCommonPayConfig)=>{
                 { key: "receiptNumbers", value: applicationNumber },
                 { key: "tenantId", value: tenantId }
             ]
-            download(receiptQueryString  ,"print" , receiptKey);
+            download(receiptQueryString  ,"print" , receiptKey ,state);
         },
         leftIcon: "receipt"
       };
@@ -89,12 +89,9 @@ const getAcknowledgementCard = (
 ) => {
     const roleExists = ifUserRoleExists("CITIZEN");
     let header = getHeader(state);
+    const businessService = getQueryArg(window.location.href, "businessService");
+    const transBusinessService = businessService ? businessService.toUpperCase().replace(/[._:-\s\/]/g, "_") : "DEFAULT";
     const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject , "commonPayInfo");
-    const citizenSuccess=get(uiCommonPayConfig,"citizenSuccess");
-    const citizenFailure=get(uiCommonPayConfig,"citizenFailure");
-    const employeeSuccess=get(uiCommonPayConfig,"employeeSuccess");
-    const employeeFailure=get(uiCommonPayConfig,"employeeFailure");
-  //  const {citizenSuccess , employeeSuccess , citizenFailure , employeeFailure} = uiCommonPayConfig;
     if (status === "success") {
         return {
             header,
@@ -106,15 +103,15 @@ const getAcknowledgementCard = (
                     card: acknowledgementCard({
                         icon: "done",
                         backgroundColor: "#39CB74",
-                        header: {
-                            labelKey: roleExists ? get(citizenSuccess,"primaryMessage","PAYMENT_MESSAGE_CITIZEN")  : get(employeeSuccess,"primaryMessage","PAYMENT_MESSAGE_EMPLOYEE")
-                        },
-                        body: {
-                            labelKey: roleExists ? get(citizenSuccess,"secondaryMessage","PAYMENT_MESSAGE_DETAIL_CITIZEN") : get(employeeSuccess,"secondaryMessage","PAYMENT_MESSAGE_DETAIL_EMPLOYEE")
-                        },
-                        tailText: {
-                            labelKey : roleExists ? get(citizenSuccess,"receiptNo","PAYMENT_RECEIPT_NO") : get(employeeSuccess,"receiptNo","PAYMENT_RECEIPT_NO")
-                        },
+                            header: {
+                                labelKey: roleExists ? `CITIZEN_SUCCESS_${transBusinessService}_PAYMENT_MESSAGE` : `EMPLOYEE_SUCCESS_${transBusinessService}_PAYMENT_MESSAGE`
+                            },
+                            body: {
+                                labelKey: roleExists ? `CITIZEN_SUCCESS_${transBusinessService}_PAYMENT_MESSAGE_DETAIL` : `EMPLOYEE_SUCCESS_${transBusinessService}_PAYMENT_MESSAGE_DETAIL`
+                            },
+                            tailText: {
+                                labelKey : roleExists ? `CITIZEN_SUCCESS_${transBusinessService}_PAYMENT_RECEIPT_NO` : `EMPLOYEE_SUCCESS_${transBusinessService}_PAYMENT_RECEIPT_NO`
+                            },
                         number: receiptNumber
                     })
                 }
@@ -132,10 +129,10 @@ const getAcknowledgementCard = (
                         icon: "close",
                         backgroundColor: "#E54D42",
                         header: {
-                            labelKey: roleExists ? get(citizenFailure,"primaryMessage","PAYMENT_FAILURE_MESSAGE") : get(employeeFailure,"primaryMessage","PAYMENT_FAILURE_MESSAGE")
+                            labelKey: roleExists ? `CITIZEN_FAILURE_${transBusinessService}_PAYMENT_MESSAGE` : `EMPLOYEE_FAILURE_${transBusinessService}_PAYMENT_MESSAGE`
                         },
                         body: {
-                            labelKey: roleExists ? get(citizenFailure,"secondaryMessage","PAYMENT_FAILURE_MESSAGE_DETAIL") : get(employeeFailure,"secondaryMessage","PAYMENT_FAILURE_MESSAGE_DETAIL")
+                            labelKey: roleExists ? `CITIZEN_FAILURE_${transBusinessService}_PAYMENT_MESSAGE_DETAIL` : `EMPLOYEE_FAILURE_${transBusinessService}_PAYMENT_MESSAGE_DETAIL`
                         }
                     })
                 }
@@ -162,6 +159,7 @@ const screenConfig = {
         const consumerCode = getQueryArg(window.location.href, "consumerCode");
         const receiptNumber = getQueryArg(window.location.href, "receiptNumber");
         const tenant = getQueryArg(window.location.href, "tenantId");
+        const businessService = getQueryArg(window.location.href, "businessService");
         const data = getAcknowledgementCard(
             state,
             dispatch,
@@ -170,7 +168,7 @@ const screenConfig = {
             consumerCode,
             tenant
         );
-        set(action, "screenConfig.components.div.children", data);
+        set(action, "screenConfig.components.div.children", data);        
         return action;
     }
 };

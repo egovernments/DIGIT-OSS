@@ -1,6 +1,8 @@
 import {
   getCommonHeader,
-  getCommonContainer
+  getCommonContainer,
+  getCommonCard,
+  getLabelWithValue,
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
   applicationSuccessFooter,
@@ -13,11 +15,26 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "../../../../ui-utils/api";
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import generatePdf from "../utils/receiptPdf";
+import { prepareDocumentsView } from "../utils/index";
 import './index.css';
 import set from "lodash/set";
 import get from "lodash/get";
 import { loadPdfGenerationData } from "../utils/receiptTransformer";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import {  downloadCertificateForm} from "../utils/index";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import {
+  transferorSummary,
+  transferorInstitutionSummary
+} from "./summaryResource/transferorSummary";
+import {
+  transfereeSummary,
+  transfereeInstitutionSummary
+} from "./summaryResource/transfereeSummary";
+import { documentsSummary } from "./summaryResource/documentsSummary";
+import { propertySummary } from "./summaryResource/propertySummary";
+import { registrationSummary } from './summaryResource/registrationSummary';
+import { mutationSummary } from "./applyResourceMutation/mutationSummary";
+
 export const header = getCommonContainer({
   header: getCommonHeader({
     labelName: `Application for Transfer of Ownership`, 
@@ -38,46 +55,19 @@ export const header = getCommonContainer({
   }
 });
  
-export const downloadCertificateForm = (Properties,tenantId,mode='download') => {
-   const queryStr = [
-     { key: "key", value:"ptmutationcertificate" },
-     { key: "tenantId", value: tenantId }
-   ]
-   const DOWNLOADRECEIPT = {
-     GET: {
-       URL: "/pdf-service/v1/_create",
-       ACTION: "_get",
-     },
-   };
-   try {
-     httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Properties }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
-       .then(res => {
-         res.filestoreIds[0]
-         if (res && res.filestoreIds && res.filestoreIds.length > 0) {
-           res.filestoreIds.map(fileStoreId => {
-             downloadReceiptFromFilestoreID(fileStoreId,mode,tenantId)
-           })
-         } else {
-           console.log("Error In Acknowledgement form Download");
-         }
-       });
-   } catch (exception) {
-     alert('Some Error Occured while downloading Acknowledgement form!');
-   }
- }
-
  const downloadprintMenu=(state,applicationNumber,tenantId,purpose,moduleName)=>{
   const certificateDownloadObject = {
     label: { labelName: "PT Certificate", labelKey: "PT_CERTIFICATE" },
     link: () => {
-      downloadCertificateForm(get(state,"screenConfiguration.preparedFinalObject.Properties"),tenantId);
+      downloadCertificateForm(get(state, "screenConfiguration.preparedFinalObject.Properties"), "ptmutationcertificate", tenantId,applicationNumber);
+     
     },
     leftIcon: "book"
   };
   const certificatePrintObject = {
     label: { labelName: "PT Certificate", labelKey: "PT_CERTIFICATE" },
     link: () => {
-      downloadCertificateForm(get(state,"screenConfiguration.preparedFinalObject.Properties"),tenantId,'print');
+      downloadCertificateForm(get(state, "screenConfiguration.preparedFinalObject.Properties"), "ptmutationcertificate", tenantId,applicationNumber, 'print');
     },
     leftIcon: "book"
   };
@@ -85,7 +75,7 @@ export const downloadCertificateForm = (Properties,tenantId,mode='download') => 
   const applicationDownloadObject = {
     label: { labelName: "PT Application", labelKey: "PT_APPLICATION" },
     link: () => {
-      generatePdfFromDiv("download" ,applicationNumber )
+      generatePdfFromDiv("download" ,applicationNumber, ".print-mutation-application-pdf" )
      
     },
     leftIcon: "assignment"
@@ -97,7 +87,7 @@ export const downloadCertificateForm = (Properties,tenantId,mode='download') => 
       // const documents = LicensesTemp[0].reviewDocData;
       // set(Licenses[0],"additionalDetails.documents",documents)
       // downloadAcknowledgementForm(Licenses,'print');
-      generatePdfFromDiv("print" , applicationNumber)
+generatePdfFromDiv("print" , applicationNumber, ".print-mutation-application-pdf")
      
     },
     leftIcon: "assignment"
@@ -111,6 +101,10 @@ export const downloadCertificateForm = (Properties,tenantId,mode='download') => 
       printMenu = [certificatePrintObject ];
       break;
     case "apply":
+      downloadMenu = [applicationDownloadObject];
+      printMenu = [applicationPrintObject];
+      break;
+    case "verify":
       downloadMenu = [applicationDownloadObject];
       printMenu = [applicationPrintObject];
       break;
@@ -165,7 +159,34 @@ export const downloadCertificateForm = (Properties,tenantId,mode='download') => 
    
 }
   /** END */
-
+const getDocumentDetailsCard = ()=>{
+  return {
+    body: {...getCommonCard({
+      pdfHeader: {
+        uiFramework: "custom-atoms-local",
+        moduleName: "egov-pt",
+        componentPath: "pdfHeader"
+      },
+      propertySummary: propertySummary,
+      transferorSummary: transferorSummary,
+      transferorInstitutionSummary: transferorInstitutionSummary,
+      transfereeSummary: transfereeSummary,
+      transfereeInstitutionSummary: transfereeInstitutionSummary,
+      mutationSummary: mutationSummary,
+      registrationSummary: registrationSummary,
+      documentsSummary: documentsSummary
+    },{},{className:"print-mutation-application-pdf"}),
+    props: {
+      style: {
+        height: "100%",
+        position: "fixed",
+        zIndex: -9999,
+        opacity: 0,
+      }
+    }
+  }
+  }
+}
 
 const getHeader=(applicationNumber,moduleName)=>{
   if(moduleName=='PT.CREATE'){
@@ -215,7 +236,7 @@ const getAcknowledgementCard = (
     // loadPdfGenerationData(applicationNumber, tenant);
     return {
       header:getHeader(applicationNumber,moduleName),
- //     dpmenu: downloadprintMenu(state,applicationNumber,tenant,purpose),
+      dpmenu: downloadprintMenu(state,applicationNumber,tenant,purpose),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -344,7 +365,8 @@ const getAcknowledgementCard = (
               labelKey: "PT_MUTATION_APPLICATION_NO"
             },
             number: applicationNumber
-          })
+          }),
+		  ...getDocumentDetailsCard()
         }
       },
       gotoHomeFooter
@@ -385,6 +407,7 @@ const getAcknowledgementCard = (
     // loadReceiptGenerationData(applicationNumber, tenant);
     return {
       header:getHeader(applicationNumber,moduleName),
+	  dpmenu: downloadprintMenu(state,applicationNumber,tenant,purpose),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -406,7 +429,8 @@ const getAcknowledgementCard = (
               labelKey: "PT_MUTATION_APPLICATION_NO"
             },
             number: applicationNumber
-          })
+          }),
+          ...getDocumentDetailsCard()
         }
       },
       gotoHomeFooter
@@ -529,6 +553,7 @@ const getAcknowledgementCard = (
   }else if (purpose === "forward" && status === "success") {
     return {
       header:getHeader(applicationNumber,moduleName),
+	  dpmenu: downloadprintMenu(state,applicationNumber,tenant,purpose),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -550,26 +575,232 @@ const getAcknowledgementCard = (
               labelKey: "PT_MUTATION_APPLICATION_NO"
             },
             number: applicationNumber
-          })
+          }),
+          ...getDocumentDetailsCard()
         }
       },
       gotoHomeFooter
     };
   }
 };
-const setApplicationData = async (dispatch, applicationNumber, tenant) => {
+
+const prepareUoms = (state, dispatch) => {
+  let buildings = get(
+    state,
+    "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.buildings",
+    []
+  );
+  buildings.forEach((building, index) => {
+    let uoms = get(building, "uoms", []);
+    let uomsMap = {};
+    uoms.forEach(uom => {
+      uomsMap[uom.code] = uom.value;
+    });
+    dispatch(
+      prepareFinalObject(
+        `FireNOCs[0].fireNOCDetails.buildings[${index}].uomsMap`,
+        uomsMap
+      )
+    );
+
+    // Display UOMS on search preview page
+    uoms.forEach(item => {
+      let labelElement = getLabelWithValue(
+        {
+          labelName: item.code,
+          labelKey: `NOC_PROPERTY_DETAILS_${item.code}_LABEL`
+        },
+        {
+          jsonPath: `FireNOCs[0].fireNOCDetails.buildings[0].uomsMap.${item.code}`
+        }
+      );
+
+      dispatch(
+        handleField(
+          "acknowledgement",
+          "components.div.children.body.children.cardContent.children.propertySummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.propertyContainer.children",
+          item.code,
+          labelElement
+        )
+      );
+    });
+  });
+};
+
+const setApplicationData = async (state, dispatch, applicationNumber, tenant) => {
   const queryObject = [
     {
       key: "tenantId",
       value: tenant
     },
     {
-      key: "propertyIds",
+      key: "acknowledgementIds",
       value: applicationNumber
     }
   ];
   const response = await getSearchResults(queryObject);
- // dispatch(prepareFinalObject("Properties", get(response, "Properties", [])));
+  const properties = get(response, "Properties", []);
+  let property = (properties && properties.length > 0 && properties[0]) || {};
+
+  if (!property.workflow) {
+    let workflow = {
+      id: null,
+      tenantId: getQueryArg(window.location.href, "tenantId"),
+      businessService: "PT.MUTATION",
+      businessId: getQueryArg(window.location.href, "applicationNumber"),
+      action: "",
+      moduleName: "PT",
+      state: null,
+      comment: null,
+      documents: null,
+      assignes: null
+    };
+    property.workflow = workflow;
+
+  }
+
+  if (property && property.owners && property.owners.length > 0) {
+
+    let ownersTemp = [];
+    let owners = [];
+    property.owners.map(owner => {
+      owner.documentUid = owner.documents ? owner.documents[0].documentUid : "NA";
+      owner.documentType = owner.documents ? owner.documents[0].documentType : "NA";
+      if (owner.status == "ACTIVE") {
+
+        ownersTemp.push(owner);
+      } else {
+        owners.push(owner);
+      }
+    });
+
+    property.ownersInit = owners;
+    property.ownersTemp = ownersTemp;
+  }
+  property.ownershipCategoryTemp = property.ownershipCategory;
+  property.ownershipCategoryInit = 'NA';
+  // Set Institution/Applicant info card visibility
+  if (
+    get(
+      response,
+      "Properties[0].ownershipCategory",
+      ""
+    ).startsWith("INSTITUTION")
+  ) {
+    property.institutionTemp = property.institution;
+
+    dispatch(
+      handleField(
+        "acknowledgement",
+        "components.div.children.applicationSuccessCard.children.body.children.cardContent.children.transfereeSummary",
+        "visible",
+        false
+      )
+    );
+  } else {
+
+    dispatch(
+      handleField(
+        "acknowledgement",
+        "components.div.children.applicationSuccessCard.children.body.children.cardContent.children.transfereeInstitutionSummary",
+        "visible",
+        false
+      )
+    );
+  }
+
+  if (get(property, 'ownersInit[0].altContactNumber', 0)) {
+   
+    dispatch(
+      handleField(
+        "acknowledgement",
+        "components.div.children.applicationSuccessCard.children.body.children.cardContent.children.transferorSummary",
+        "visible",
+        false
+      )
+    );
+
+  } else {
+
+    dispatch(
+      handleField(
+        "acknowledgement",
+        "components.div.children.applicationSuccessCard.children.body.children.cardContent.children.transferorInstitutionSummary",
+        "visible",
+        false
+      )
+    );
+  }
+
+
+  let transfereeOwners = get(
+    property,
+    "ownersTemp", []
+  );
+  let transferorOwners = get(
+    property,
+    "ownersInit", []
+  );
+  let transfereeOwnersDid = true;
+  let transferorOwnersDid = true;
+  transfereeOwners.map(owner => {
+    if (owner.ownerType != 'NONE') {
+      transfereeOwnersDid = false;
+    }
+  })
+  transferorOwners.map(owner => {
+    if (owner.ownerType != 'NONE') {
+      transferorOwnersDid = false;
+    }
+
+  })
+  if (transferorOwnersDid) {
+    dispatch(
+      handleField(
+        "acknowledgement",
+        "components.div.children.applicationSuccessCard.children.body.children.cardContent.children.transferorSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerSpecialDocumentType",
+        "props.style.display",
+        'none'
+      )
+    );
+    dispatch(
+      handleField(
+        "acknowledgement",
+        "components.div.children.applicationSuccessCard.children.body.children.cardContent.children.transferorSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerSpecialDocumentID",
+        "props.style.display",
+        'none'
+      )
+    );
+
+  }
+  if (transfereeOwnersDid) {
+    dispatch(
+      handleField(
+        "acknowledgement",
+        "components.div.children.applicationSuccessCard.children.body.children.cardContent.children.transfereeSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerDocumentId",
+        "props.style.display",
+        'none'
+      )
+    );
+    dispatch(
+      handleField(
+        "acknowledgement",
+        "components.div.children.applicationSuccessCard.children.body.children.cardContent.children.transfereeSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerSpecialDocumentType",
+        "props.style.display",
+        'none'
+      )
+    );
+
+  }
+
+  dispatch(prepareFinalObject("Property", property));
+  dispatch(prepareFinalObject("documentsUploadRedux", property.documents));
+  prepareDocumentsView(state, dispatch);
+
+  // prepareUoms(state, dispatch);
+  // await loadPdfGenerationData(applicationNumber, tenantId);
+  // setDownloadMenu(state, dispatch, tenantId, applicationNumber);
+ dispatch(prepareFinalObject("Properties", get(response, "Properties", [])));
 };
 export const setData=async(state,dispatch,applicationNumber,tenantId)=>{
   const response = await getSearchResults([
@@ -606,7 +837,7 @@ const screenConfig = {
     const secondNumber = getQueryArg(window.location.href, "secondNumber");
     const tenant = getQueryArg(window.location.href, "tenantId");
     setData(state,dispatch,applicationNumber,tenant);
-    setApplicationData(dispatch, applicationNumber, tenant);
+    setApplicationData(state, dispatch, applicationNumber, tenant);
     const data = getAcknowledgementCard(
       state,
       dispatch,
@@ -618,6 +849,42 @@ const screenConfig = {
     );
     
     set(action, "screenConfig.components.div.children", data);
+        // Hiding edit section
+    set(
+      action,
+      "screenConfig.components.div.children.applicationSuccessCard.children.body.children.cardContent.children.nocSummary.children.cardContent.children.header.children.editSection.visible",
+      false
+    );
+    set(
+      action,
+      "screenConfig.components.div.children.applicationSuccessCard.children.body.children.cardContent.children.propertySummary.children.cardContent.children.header.children.editSection.visible",
+      false
+    );
+    set(
+      action,
+      "screenConfig.components.div.children.applicationSuccessCard.children.body.children.cardContent.children.transfereeSummary.children.cardContent.children.header.children.editSection.visible",
+      false
+    );
+    set(
+      action,
+      "screenConfig.components.div.children.applicationSuccessCard.children.body.children.cardContent.children.registrationSummary.children.cardContent.children.header.children.editSection.visible",
+      false
+    );
+    set(
+      action,
+      "screenConfig.components.div.children.applicationSuccessCard.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.header.children.editSection.visible",
+      false
+    );
+    set(
+      action,
+      "screenConfig.components.div.children.applicationSuccessCard.children.body.children.cardContent.children.transferorSummary.children.cardContent.children.header.children.editSection.visible",
+      false
+    );
+    set(
+      action,
+      "screenConfig.components.div.children.applicationSuccessCard.children.body.children.cardContent.children.transferorInstitutionSummary.children.cardContent.children.header.children.editSection.visible",
+      false
+    );
     return action;
   }
 };

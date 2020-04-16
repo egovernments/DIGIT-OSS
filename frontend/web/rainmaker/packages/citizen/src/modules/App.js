@@ -111,8 +111,8 @@ class App extends Component {
     }
     const isWithoutAuthSelfRedirect = location && location.pathname && location.pathname.includes("openlink");
     const isPrivacyPolicy = location && location.pathname && location.pathname.includes("privacy-policy");
-
-    if (nextProps.hasLocalisation !== this.props.hasLocalisation && !authenticated && !getQueryArg("", "smsLink") && !isWithoutAuthSelfRedirect && !isPrivacyPolicy) {
+    const isPublicSearch = location && location.pathname && location.pathname.includes("/withoutAuth/pt-mutation/public-search");
+    if (nextProps.hasLocalisation !== this.props.hasLocalisation && !authenticated && !getQueryArg("", "smsLink") && !isWithoutAuthSelfRedirect && !isPrivacyPolicy && !isPublicSearch) {
       nextProps.hasLocalisation && this.props.history.replace("/language-selection");
     }
   }

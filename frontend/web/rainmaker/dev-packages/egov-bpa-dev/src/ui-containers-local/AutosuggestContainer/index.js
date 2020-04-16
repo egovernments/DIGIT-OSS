@@ -16,9 +16,10 @@ import { getLocalization } from "egov-ui-kit/utils/localStorageUtils";
 // const transfomedKeys = transformById(localizationLabels, "code");
 class AutoSuggestor extends Component {
   onSelect = value => {
-    const { onChange } = this.props;
+    const { onChange,jsonPath, approveCheck } = this.props;
     //Storing multiSelect values not handled yet
-    onChange({ target: { value: value.value } });
+    // onChange({ target: { value: value } });
+    approveCheck(jsonPath, value);
   };
 
   render() {
@@ -30,6 +31,7 @@ class AutoSuggestor extends Component {
       suggestions,
       className,
       localizationLabels,
+      jsonPath,
       ...rest
     } = this.props;
     let translatedLabel = getLocaleLabels(
@@ -117,8 +119,11 @@ const mapStateToProps = (state, ownprops) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    prepareFinalObject: (path, value) =>
-      dispatch(prepareFinalObject(path, value))
+    // prepareFinalObject: (path, value) =>
+    //   dispatch(prepareFinalObject(path, value))
+    approveCheck: (jsonPath, value) => {
+      dispatch(prepareFinalObject(jsonPath, value));
+    }
   };
 };
 

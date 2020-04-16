@@ -1,10 +1,11 @@
-import SelectField from "material-ui/SelectField";
-import MenuItem from "material-ui/MenuItem";
-import Label from "egov-ui-kit/utils/translationNode";
 import { httpRequest } from "egov-ui-kit/utils/api";
+import { getPropertyLink } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
+import Label from "egov-ui-kit/utils/translationNode";
+import MenuItem from "material-ui/MenuItem";
+import SelectField from "material-ui/SelectField";
+import React from "react";
 import createReceipt from "../../../PaymentStatus/Components/createReceipt";
 import generateReceipt from "../../../PaymentStatus/Components/receiptsPDF";
-import React from "react";
 
 const styles = {
   customWidth: {
@@ -23,11 +24,7 @@ const onSelectFieldChange = (event, key, payload, history, item) => {
     case "Re-Assess":
       history &&
         history.push(
-          `/property-tax/assessment-form?FY=${
-            item.financialYear
-          }&assessmentId=${item.assessmentNo}&isReassesment=true&isAssesment=false&propertyId=${
-            item.propertyId
-          }&tenantId=${item.tenantId}`
+          getPropertyLink(item.propertyId, item.tenantId, "reassess", item.financialYear, item.assessmentNo)
         );
       break;
     case "Download Receipt":
@@ -38,11 +35,7 @@ const onSelectFieldChange = (event, key, payload, history, item) => {
     case "Complete Payment":
       history &&
         history.push(
-          `/property-tax/assessment-form?FY=${
-            item.financialYear
-          }&assessmentId=${item.assessmentNo}&isReassesment=true&isAssesment=true&propertyId=${
-            item.propertyId
-          }&tenantId=${item.tenantId}`
+          getPropertyLink(item.propertyId, item.tenantId, "assess", item.financialYear, item.assessmentNo, true)
         );
       break;
   }

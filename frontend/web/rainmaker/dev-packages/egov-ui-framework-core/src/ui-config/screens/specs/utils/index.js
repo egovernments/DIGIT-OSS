@@ -91,7 +91,7 @@ export const getCommonValue = (value, props = {}) => {
   return getCommonHeader(value, { variant: "body2", ...props });
 };
 
-export const getCommonCard = (children, cardProps = {}) => {
+export const getCommonCard = (children, cardProps = {}, cardContentProps = {}) => {
   return {
     componentPath: "Card",
     props: {
@@ -100,6 +100,9 @@ export const getCommonCard = (children, cardProps = {}) => {
     children: {
       cardContent: {
         componentPath: "CardContent",
+        props: {
+          ...cardContentProps
+        },
         children
       }
     }
@@ -481,7 +484,7 @@ export const getTab = (label, props = {}) => {
 export const getPattern = type => {
   switch (type) {
     case "Name":
-      return /^[^{0-9}^\$\"'<>?\\\\~`!@#$%^()+={}\[\]*,.:;“”‘’]{1,50}$/i;
+      return /^[^{0-9}^\$\"'<>?\\\\~`!@#$%^()+={}\[\]*,._:;“”‘’]{1,50}$/i;
     case "MobileNo":
       return /^[6789][0-9]{9}$/i;
     case "Amount":

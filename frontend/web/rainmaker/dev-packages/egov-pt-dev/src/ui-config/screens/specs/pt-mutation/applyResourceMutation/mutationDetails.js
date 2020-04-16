@@ -78,7 +78,21 @@ import {
                 }
               }
             },
-
+            courtCaseDetails: getTextField({
+              label: {
+                labelName: "Details of Court Case",
+                labelKey: "PT_MUTATION_COURT_CASE_DETAILS"
+              },
+              props:{
+                className:"applicant-details-error",
+              },
+              placeholder: {
+                labelName: "Enter Details of Court Case",
+                labelKey: "PT_MUTATION_COURT_CASE_DETAILS_PLACEHOLDER"
+              },
+              pattern: getPattern("Address"),
+              jsonPath: "Property.additionalDetails.caseDetails"
+            }),
             getMutationStateAcquisitionRadioButton : {
               uiFramework: "custom-containers",
               componentPath: "RadioGroupContainer",
@@ -122,22 +136,6 @@ import {
                 }
               }
             },
-
-            courtCaseDetails: getTextField({
-              label: {
-                labelName: "Details of Court Case",
-                labelKey: "PT_MUTATION_COURT_CASE_DETAILS"
-              },
-              props:{
-                className:"applicant-details-error"
-              },
-              placeholder: {
-                labelName: "Enter Details of Court Case",
-                labelKey: "PT_MUTATION_COURT_CASE_DETAILS_PLACEHOLDER"
-              },
-              pattern: getPattern("Address"),
-              jsonPath: "Property.additionalDetails.caseDetails"
-            }),
             govtAcquisitionDetails: getTextField({
               label: {
                 labelName: "Details of Government Acquisition",
