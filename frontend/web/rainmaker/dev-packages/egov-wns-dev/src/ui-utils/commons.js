@@ -892,13 +892,17 @@ export const applyForWaterOrSewerage = async (state, dispatch) => {
 }
 
 export const applyForWater = async (state, dispatch) => {
+    let queryObject = parserFunction(state);
     let waterId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].id");
     let method = waterId ? "UPDATE" : "CREATE";
-    let queryObject = parserFunction(state);
     try {
         const tenantId = ifUserRoleExists("CITIZEN") ? "pb.amritsar" : getTenantId();
         let response;
         if (method === "UPDATE") {
+            queryObject.additionalDetails.appCreatedDate = get(
+                state.screenConfiguration.preparedFinalObject,
+                "WaterConnection[0].additionalDetails.appCreatedDate"
+            )
             let queryObjectForUpdate = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0]");
             set(queryObjectForUpdate, "tenantId", tenantId);
             queryObjectForUpdate = { ...queryObjectForUpdate, ...queryObject }
@@ -925,14 +929,18 @@ export const applyForWater = async (state, dispatch) => {
 }
 
 export const applyForSewerage = async (state, dispatch) => {
+    let queryObject = parserFunction(state);
     let sewerId = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0].id");
     let method = sewerId ? "UPDATE" : "CREATE";
-    let queryObject = parserFunction(state);
     try {
         const tenantId = ifUserRoleExists("CITIZEN") ? "pb.amritsar" : getTenantId();
         let response;
         set(queryObject, "tenantId", tenantId);
         if (method === "UPDATE") {
+            queryObject.additionalDetails.appCreatedDate = get(
+                state.screenConfiguration.preparedFinalObject,
+                "SewerageConnection[0].additionalDetails.appCreatedDate"
+            )
             let queryObjectForUpdate = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0]");
             queryObjectForUpdate = { ...queryObjectForUpdate, ...queryObject }
             set(queryObjectForUpdate, "processInstance.action", "SUBMIT_APPLICATION");
@@ -959,10 +967,10 @@ export const applyForSewerage = async (state, dispatch) => {
 
 export const applyForBothWaterAndSewerage = async (state, dispatch) => {
     let method;
+    let queryObject = parserFunction(state);
     let waterId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].id");
     let sewerId = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0].id");
     if (waterId && sewerId) { method = "UPDATE" } else { method = "CREATE" };
-    let queryObject = parserFunction(state);
     try {
         const tenantId = ifUserRoleExists("CITIZEN") ? "pb.amritsar" : getTenantId();
         let response;
@@ -978,8 +986,22 @@ export const applyForBothWaterAndSewerage = async (state, dispatch) => {
             set(queryObjectForUpdateWater, "waterSource", (queryObjectForUpdateWater.waterSource + "." + queryObjectForUpdateWater.waterSubSource));
             set(queryObjectForUpdateSewerage, "processInstance.action", "SUBMIT_APPLICATION");
             set(queryObjectForUpdateSewerage, "connectionType", "Non Metered");
-            (await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: queryObjectForUpdateWater }) &&
-                await httpRequest("post", "/sw-services/swc/_update", "", [], { SewerageConnection: queryObjectForUpdateSewerage }));
+            set(
+                queryObjectForUpdateSewerage,
+                "additionalDetails.appCreatedDate", get(
+                    state.screenConfiguration.preparedFinalObject,
+                    "SewerageConnection[0].additionalDetails.appCreatedDate"
+                )
+            );
+            set(
+                queryObjectForUpdateWater,
+                "additionalDetails.appCreatedDate", get(
+                    state.screenConfiguration.preparedFinalObject,
+                    "WaterConnection[0].additionalDetails.appCreatedDate"
+                )
+            );
+            await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: queryObjectForUpdateWater });
+            await httpRequest("post", "/sw-services/swc/_update", "", [], { SewerageConnection: queryObjectForUpdateSewerage });
             let searchQueryObjectWater = [
                 { key: "tenantId", value: queryObjectForUpdateWater.tenantId },
                 { key: "applicationNumber", value: queryObjectForUpdateWater.applicationNo }
