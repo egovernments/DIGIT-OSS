@@ -9,10 +9,9 @@ import {
   getDateField,
   getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg,getTodaysDateInYMD } from "egov-ui-framework/ui-utils/commons";
 import {
   getDetailsForOwner,
-  getTodaysDateInYMD,
   getRadioGroupWithLabel
 } from "../../utils";
 import { prepareFinalObject as pFO } from "egov-ui-framework/ui-redux/screen-configuration/actions";

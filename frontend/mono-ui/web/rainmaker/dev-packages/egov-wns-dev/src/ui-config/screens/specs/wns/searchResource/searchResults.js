@@ -47,7 +47,7 @@ export const searchResults = {
               return (
                 <div className="linkStyle" onClick={() => getViewBillDetails(data)} style={{ color: '#fe7a51', textTransform: 'uppercase' }}>
                   <LabelContainer
-                    labelKey="CS_COMMON_PAY"
+                    labelKey="WS_COMMON_COLLECT_LABEL"
                     style={{
                       color: "#fe7a51",
                       fontSize: 14,

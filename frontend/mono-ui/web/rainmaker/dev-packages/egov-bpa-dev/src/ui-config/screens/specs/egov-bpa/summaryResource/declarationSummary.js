@@ -23,25 +23,10 @@ const declarationDetails = getCommonContainer({
     jsonPath: "BPA.isDeclared",
     props: {
       label: {
-        labelName: "I hereby declare that the measurements, specifications and other details and specifications mentioned above are correct, complete and true to the best of my knowledge and belief and that I shall abide by the approved plan and the provisions in the Act and Rules in undertaking the construction.",
+        labelName: "I hereby declare that the measurements, specifications and other details and specifications mentioned above are correct, complete and true to the best of my knowledge and belief and that I shall abide by the approved plan and the provisions in the Act and Rules in undertaking the construction.I am responsible for any defects/errors/omissions made while submitting the application",
         labelKey: "BPA_STAKEHOLDER_DECLARAION_LABEL"
       },
       jsonPath: "BPA.isDeclared",
-    },
-    visible: false,
-    type: "array"
-  },
-  secondStakeholder: {
-    uiFramework: "custom-containers-local",
-    moduleName: "egov-bpa",
-    componentPath: "BpaCheckboxContainer",
-    jsonPath: "BPA.isDeclaration",
-    props: {
-      label: {
-        labelName: "I am responsible for any defects/errors/omissions made while submitting the application",
-        labelKey: "BPA_STAKEHOLDER_DECLARAION_LABEL"
-      },
-      jsonPath: "BPA.isDeclaration",
     },
     visible: false,
     type: "array"

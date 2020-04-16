@@ -5,19 +5,20 @@ import {
   getCommonHeader,
   getStepperObject
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { getCurrentFinancialYear } from "../utils";
+import { getCurrentFinancialYear, showHideMutationDetailsCard } from "../utils";
 import { footer } from "./applyResource/footer";
-import {mutationDetails
-   } from "./applyResourceMutation/mutationDetails";
-   import {registrationDetails} from "./applyResourceMutation/registrationDetails";
-   import {transferorDetails} from "./applyResourceMutation/transferorDetails";
-   import cloneDeep from "lodash/cloneDeep";
-   import {
-    transferorSummary,transferorInstitutionSummary
-  } from "./summaryResource/transferorSummary";
-  import {
-    transferorSummary as ts1 ,transferorInstitutionSummary as ti1
-  } from "./summaryResource/transferorSummary1";
+import {
+  mutationDetails
+} from "./applyResourceMutation/mutationDetails";
+import { registrationDetails } from "./applyResourceMutation/registrationDetails";
+import { transferorDetails } from "./applyResourceMutation/transferorDetails";
+import cloneDeep from "lodash/cloneDeep";
+import {
+  transferorSummary, transferorInstitutionSummary
+} from "./summaryResource/transferorSummary";
+import {
+  transferorSummary as ts1, transferorInstitutionSummary as ti1
+} from "./summaryResource/transferorSummary1";
 import { propertyDetails } from "./applyResource/propertyDetails";
 import { propertyLocationDetails } from "./applyResource/propertyLocationDetails";
 
@@ -26,7 +27,7 @@ import {
   prepareFinalObject,
   handleScreenConfigurationFieldChange as handleField
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getTenantId,getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "../../../../ui-utils";
 import {
   sampleSearch,
@@ -42,14 +43,14 @@ import {
   setApplicationNumberBox
 } from "../../../../ui-utils/commons";
 import { propertySummary } from "./summaryResource/propertySummary";
-import { transfereeSummary,transfereeInstitutionSummary } from "./summaryResource/transfereeSummary";
+import { transfereeSummary, transfereeInstitutionSummary } from "./summaryResource/transfereeSummary";
 import { registrationSummary } from "./summaryResource/registrationSummary";
 import { declarationSummary } from "./summaryResource/declarationSummary";
 
 import { documentsSummary } from "./summaryResource/documentsSummary";
 import { mutationSummary } from "./applyResourceMutation/mutationSummary";
-import {documentDetails} from "./applyResourceMutation/mutationDocuments";
-import {transfereeDetails} from './applyResourceMutation/transfereeDetails'
+import { documentDetails } from "./applyResourceMutation/mutationDocuments";
+import { transfereeDetails } from './applyResourceMutation/transfereeDetails'
 export const stepsData = [
   { labelName: "Transfer Details", labelKey: "PT_MUTATION_TRANSFER_DETAILS" },
   { labelName: "Document Upload", labelKey: "PT_MUTATION_DOCUMENT_UPLOAD" },
@@ -102,7 +103,7 @@ export const header = getCommonContainer({
       label: {
         labelValue: "Property Tax Unique ID.",
         labelKey: "PT_PROPERTY_TAX_UNIQUE_ID"
-    }
+      }
     },
     visible: true
   }
@@ -116,8 +117,8 @@ export const formwizardFirstStep = {
     id: "apply_form1"
   },
   children: {
-    transferorDetails: {...ts1},
-    transferorInstitutionDetails:{...ti1},
+    transferorDetails: { ...ts1 },
+    transferorInstitutionDetails: { ...ti1 },
     transfereeDetails,
     mutationDetails,
     registrationDetails
@@ -131,7 +132,7 @@ export const formwizardSecondStep = {
     id: "apply_form2"
   },
   children: {
-    documentDetails:documentDetails
+    documentDetails: documentDetails
   },
   visible: false
 };
@@ -142,27 +143,27 @@ export const formwizardThirdStep = {
   props: {
     id: "apply_form3"
   },
-  children:{
-    summary:getCommonCard({  
-      transferorSummary: {...transferorSummary},
-       transferorInstitutionSummary:{...transferorInstitutionSummary},
+  children: {
+    summary: getCommonCard({
+      transferorSummary: { ...transferorSummary },
+      transferorInstitutionSummary: { ...transferorInstitutionSummary },
       transfereeSummary: transfereeSummary,
-       transfereeInstitutionSummary: transfereeInstitutionSummary,
-      mutationSummary:mutationSummary,
-      registrationSummary:registrationSummary,
-      documentsSummary: documentsSummary ,
-      declarationSummary:declarationSummary
+      transfereeInstitutionSummary: transfereeInstitutionSummary,
+      mutationSummary: mutationSummary,
+      registrationSummary: registrationSummary,
+      documentsSummary: documentsSummary,
+      declarationSummary: declarationSummary
     }),
- 
+
   },
-  
+
   visible: false
 };
 
 const getPropertyData = async (action, state, dispatch) => {
-  let tenantId =getQueryArg(window.location.href,"tenantId");
-  let consumerCode=getQueryArg(window.location.href,"consumerCode");
-    
+  let tenantId = getQueryArg(window.location.href, "tenantId");
+  let consumerCode = getQueryArg(window.location.href, "consumerCode");
+
   try {
     let queryObject = [
       {
@@ -180,28 +181,58 @@ const getPropertyData = async (action, state, dispatch) => {
       "/property-services/property/_search",
       "_search",
       queryObject,
-      
+
     );
-    
-  if (payload&&payload.Properties && payload.Properties[0].owners && payload.Properties[0].owners.length > 0) {
-    
-    let owners = [];
-    payload.Properties[0].owners.map(owner => {
-      owner.documentUid= owner.documents? owner.documents[0].documentUid: "NA";
-      owner.documentType=owner.documents? owner.documents[0].documentType: "NA";
-      
-      if (owner.status == "ACTIVE") {
-        owners.push(owner);
-      } 
-    });
-    
-    
-    payload.Properties[0].ownersInit = owners;
-    payload.Properties[0].ownershipCategoryInit=payload.Properties[0].ownershipCategory;
-  }
-  const previousPropertyUuid=payload.Properties[0].additionalDetails&&payload.Properties[0].additionalDetails.previousPropertyUuid;
-  payload.Properties[0].additionalDetails={previousPropertyUuid};
+
+    if (payload && payload.Properties && payload.Properties[0].owners && payload.Properties[0].owners.length > 0) {
+
+      let owners = [];
+      payload.Properties[0].owners.map(owner => {
+        owner.documentUid = owner.documents ? owner.documents[0].documentUid : "NA";
+        owner.documentType = owner.documents ? owner.documents[0].documentType : "NA";
+
+        if (owner.status == "ACTIVE") {
+          owners.push(owner);
+        }
+      });
+
+
+      payload.Properties[0].ownersInit = owners;
+      payload.Properties[0].ownershipCategoryInit = payload.Properties[0].ownershipCategory;
+    }
+    const previousPropertyUuid = payload.Properties[0].additionalDetails && payload.Properties[0].additionalDetails.previousPropertyUuid;
+    payload.Properties[0].additionalDetails = { previousPropertyUuid };
     dispatch(prepareFinalObject("Property", payload.Properties[0]));
+
+    let owners = get(state, "screenConfiguration.preparedFinalObject.Property.owners");
+    if (owners && owners.length > 0) {
+      owners.map(owner => {
+        if (owner.ownerType != 'NONE' && owner.status == "ACTIVE") {
+
+          set(
+            action.screenConfig,
+            "components.div.children.formwizardFirstStep.children.transferorDetails.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerSpecialDocumentID.props.style.display",
+            'block'
+          );
+          set(
+            action.screenConfig,
+            "components.div.children.formwizardFirstStep.children.transferorDetails.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerSpecialDocumentType.props.style.display",
+            'block'
+          );
+             
+          set(
+            action.screenConfig,
+            "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerSpecialDocumentID.props.style.display",
+            'block'
+          );
+          set(
+            action.screenConfig,
+            "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerSpecialDocumentType.props.style.display",
+            'block'
+          );
+        }
+      })
+    }
 
     if (
       get(
@@ -230,20 +261,20 @@ const getPropertyData = async (action, state, dispatch) => {
       set(
         action.screenConfig,
         "components.div.children.formwizardFirstStep.children.transferorDetails.props.style",
-        {display: "none"}
+        { display: "none" }
       );
       set(
         action.screenConfig,
         "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorSummary.props.style",
-        {display: "none"}
+        { display: "none" }
       );
       // set(
       //   action.screenConfig,
       //  "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorInstitutionSummary.props.style",
       //   {background:'grey'}
       // );
-  
-    }else{
+
+    } else {
       // set(
       //   action.screenConfig,
       //   "components.div.children.formwizardFirstStep.children.transferorDetails.props.style",
@@ -260,26 +291,27 @@ const getPropertyData = async (action, state, dispatch) => {
         { display: "none" }
       );
       set(
-        action.screenConfig,"components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorInstitutionSummary.props.style",
+        action.screenConfig, "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorInstitutionSummary.props.style",
         { display: "none" }
       );
     }
 
-    dispatch(prepareFinalObject("PropertiesTemp",cloneDeep(payload.Properties)));
+    dispatch(prepareFinalObject("PropertiesTemp", cloneDeep(payload.Properties)));
   } catch (e) {
     console.log(e);
   }
 };
 
-const getSpecialCategoryDocumentTypeMDMSData=async (action, state, dispatch) => {
-  let tenantId ='pb'
+const getSpecialCategoryDocumentTypeMDMSData = async (action, state, dispatch) => {
+  let tenantId = 'pb'
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: tenantId,
       moduleDetails: [
         {
           moduleName: "PropertyTax",
-          masterDetails: [{ name: "OwnerTypeDocument" }]
+          masterDetails: [{ name: "OwnerTypeDocument" }, { name: "PropertyConfiguration" }]
+
         }
       ]
     }
@@ -294,18 +326,21 @@ const getSpecialCategoryDocumentTypeMDMSData=async (action, state, dispatch) => 
       mdmsBody
     );
 
-    let OwnerTypeDocument=get(
+    let OwnerTypeDocument = get(
       payload,
       "MdmsRes.PropertyTax.OwnerTypeDocument"
     )
+    let propertyConfiguation = get(payload, "MdmsRes.PropertyTax.PropertyConfiguration");
     dispatch(prepareFinalObject("applyScreenMdmsData.OwnerTypeDocument", OwnerTypeDocument));
+    dispatch(prepareFinalObject("PropertyConfiguration", propertyConfiguation));
+    showHideMutationDetailsCard(action, state, dispatch);
   } catch (e) {
     console.log(e);
   }
 
 };
 const getMdmsData = async (action, state, dispatch) => {
-  let tenantId = process.env.REACT_APP_NAME === "Employee" ?  getTenantId() : JSON.parse(getUserInfo()).permanentCity;
+  let tenantId = process.env.REACT_APP_NAME === "Employee" ? getTenantId() : JSON.parse(getUserInfo()).permanentCity;
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: tenantId,
@@ -317,7 +352,7 @@ const getMdmsData = async (action, state, dispatch) => {
         {
           moduleName: "firenoc",
           masterDetails: [{ name: "BuildingType" }, { name: "FireStations" }]
-        },      
+        },
         {
           moduleName: "egov-location",
           masterDetails: [
@@ -348,26 +383,26 @@ const getMdmsData = async (action, state, dispatch) => {
       mdmsBody
     );
 
-    let OwnerShipCategory=get(
+    let OwnerShipCategory = get(
       payload,
       "MdmsRes.common-masters.OwnerShipCategory"
     )
-    let institutions=[]
-    OwnerShipCategory = OwnerShipCategory.map(category=>{
-      if(category.code.includes("INDIVIDUAL")){
+    let institutions = []
+    OwnerShipCategory = OwnerShipCategory.map(category => {
+      if (category.code.includes("INDIVIDUAL")) {
         return category.code;
       }
-      else{
-        let code=category.code.split(".");
-        institutions.push({code:code[1],parent:code[0],active:true});
-       return code[0] ;
+      else {
+        let code = category.code.split(".");
+        institutions.push({ code: code[1], parent: code[0], active: true });
+        return code[0];
       }
-      });
-    OwnerShipCategory=OwnerShipCategory.filter((v,i,a)=>a.indexOf(v)===i)
-    OwnerShipCategory = OwnerShipCategory.map(val=>{return{code:val,active:true}});
-    payload.MdmsRes['common-masters'].Institutions=institutions;
-    payload.MdmsRes['common-masters'].OwnerShipCategory=OwnerShipCategory;
-    
+    });
+    OwnerShipCategory = OwnerShipCategory.filter((v, i, a) => a.indexOf(v) === i)
+    OwnerShipCategory = OwnerShipCategory.map(val => { return { code: val, active: true } });
+    payload.MdmsRes['common-masters'].Institutions = institutions;
+    payload.MdmsRes['common-masters'].OwnerShipCategory = OwnerShipCategory;
+
     dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
   } catch (e) {
     console.log(e);
@@ -375,12 +410,12 @@ const getMdmsData = async (action, state, dispatch) => {
 };
 
 const getMdmsTransferReasonData = async (action, state, dispatch) => {
-  let tenantId ='pb'
+  let tenantId = 'pb'
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: tenantId,
       moduleDetails: [
-        { moduleName: "PropertyTax", masterDetails: [ { name: "ReasonForTransfer" }] }
+        { moduleName: "PropertyTax", masterDetails: [{ name: "ReasonForTransfer" }] }
       ]
     }
   };
@@ -444,7 +479,7 @@ export const prepareEditFlow = async (
     // Set no of buildings radiobutton and eventually the cards
     let noOfBuildings =
       get(response, "FireNOCs[0].fireNOCDetails.noOfBuildings", "SINGLE") ===
-      "MULTIPLE"
+        "MULTIPLE"
         ? "MULTIPLE"
         : "SINGLE";
     dispatch(
@@ -493,11 +528,32 @@ const screenConfig = {
         {}
       )
     );
-    getPropertyData(action,state,dispatch);
+
+    set(
+      action.screenConfig,
+      "components.div.children.formwizardFirstStep.children.transferorDetails.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerSpecialDocumentID.props.style.display",
+      'none'
+    );
+    set(
+      action.screenConfig,
+      "components.div.children.formwizardFirstStep.children.transferorDetails.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerSpecialDocumentType.props.style.display",
+      'none'
+    );
+    set(
+      action.screenConfig,
+      "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerSpecialDocumentID.props.style.display",
+      'none'
+    );
+    set(
+      action.screenConfig,
+      "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerSpecialDocumentType.props.style.display",
+      'none'
+    );
+    getPropertyData(action, state, dispatch);
 
     //Set Module Name
     set(state, "screenConfiguration.moduleName", "pt-mutation");
-    
+
     // Set MDMS Data
     getMdmsData(action, state, dispatch).then(response => {
       // Set Dropdowns Data
@@ -520,7 +576,7 @@ const screenConfig = {
         "screenConfiguration.preparedFinalObject.applyScreenMdmsData.common-masters.OwnerShipCategory",
         []
       );
-    //  ownershipCategory = getFirstListFromDotSeparated(ownershipCategory);
+      //  ownershipCategory = getFirstListFromDotSeparated(ownershipCategory);
       dispatch(
         prepareFinalObject(
           "applyScreenMdmsData.DropdownsData.OwnershipCategory",
@@ -532,9 +588,9 @@ const screenConfig = {
       prepareDocumentsUploadData(state, dispatch);
     });
 
-getMdmsTransferReasonData(action, state, dispatch);
+    getMdmsTransferReasonData(action, state, dispatch);
 
-getSpecialCategoryDocumentTypeMDMSData(action, state, dispatch);
+    getSpecialCategoryDocumentTypeMDMSData(action, state, dispatch);
     // Search in cprepareDocumentsUploadDataase of EDIT flow
     prepareEditFlow(state, dispatch, applicationNumber, tenantId);
 
@@ -618,67 +674,6 @@ getSpecialCategoryDocumentTypeMDMSData(action, state, dispatch);
       );
     }
 
-
-
-
-    // if (
-    //   get(
-    //     state,
-    //     "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType",
-    //     ""
-    //   ).includes("MULTIPLEOWNERS")
-    // ) {
-    //   set(
-    //     action.screenConfig,
-    //     "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.props.style",
-    //     { display: "none" }
-    //   );
-    //   set(
-    //     action.screenConfig,
-    //     "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer.props.style",
-    //     {}
-    //   );
-    // } else if (
-    //   get(
-    //     state,
-    //     "screenConfiguration.preparedFinalObject.Properties[0].ownershipCategory",
-    //     ""
-    //   ).includes("INSTITUTIONAL")
-    // ) {
-    //   set(
-    //     action.screenConfig,
-    //     "components.div.children.formwizardFirstStep.children.transferorDetails.props.style",
-    //     { display: "none" }
-    //   );
-    //   set(
-    //     action.screenConfig,
-    //     "components.div.children.formwizardFirstStep.children.transferorDetails.props.style",
-    //     { display: "none" }
-    //   );
-    //   set(
-    //     action.screenConfig,
-    //     "components.div.children.formwizardFirstStep.children.transferorDetails.props.style",
-    //     { display: "none" }
-    //   );
-    //   set(
-    //     action.screenConfig,
-    //     "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorInstitutionSummary.props.style",
-    //     {}
-    //   );
-    //   set(
-    //     action.screenConfig,
-    //     "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.applicantSubType.props.style",
-    //     {}
-    //   );
-    // }else{
-    //   set(
-    //     action.screenConfig,
-    //     "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorInstitutionSummary.props.style",
-    //     { display: "none" }
-    //   );
-    // }
-
-
     set(
       action.screenConfig,
       "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.propertySummary.children.cardContent.children.header.children.editSection.visible",
@@ -689,7 +684,7 @@ getSpecialCategoryDocumentTypeMDMSData(action, state, dispatch);
       "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorSummary.children.cardContent.children.header.children.editSection.visible",
       false
     );
- 
+
     return action;
   },
   components: {

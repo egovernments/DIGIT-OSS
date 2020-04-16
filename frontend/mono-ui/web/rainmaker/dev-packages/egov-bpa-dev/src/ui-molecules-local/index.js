@@ -44,6 +44,11 @@ const UploadSingleFile = Loadable({
   loading: () => <Loading />
 });
 
+const UploadMultipleFile = Loadable({
+  loader: () => import("./UploadMultipleFile"),
+  loading: () => <Loading />
+});
+
 const Table = Loadable({
   loader: () => import("./Table"),
   loading: () => <Loading />
@@ -89,6 +94,11 @@ const ActionDialog = Loadable({
   loading: () => <Loading />
 });
 
+const MultiDownloadCard = Loadable({
+  loader: () => import("./MultiDownloadCard"),
+  loading: () => <Loading />
+ });
+
 export {
   TestMolecules,
   RadioButtonsGroup,
@@ -103,8 +113,10 @@ export {
   NocList,
   Table,
   UploadSingleFile,
+  UploadMultipleFile,
   DividerWithLabel,
   BpaFeesEstimateCard,
   CheckList,
-  ActionDialog
+  ActionDialog,
+  MultiDownloadCard
 };

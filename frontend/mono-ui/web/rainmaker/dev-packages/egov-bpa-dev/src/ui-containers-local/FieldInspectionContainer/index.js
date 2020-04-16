@@ -16,7 +16,7 @@ const mapStateToProps = (state, ownProps) => {
   const { screenConfiguration } = state;
   const data = get(
     screenConfiguration.preparedFinalObject,
-    ownProps.sourceJsonPath,
+    ownProps.jsonPath,
     []
   );
   return { data };

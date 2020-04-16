@@ -64,13 +64,13 @@ export const toggleWater = (onFieldChange, value) => {
   );
   onFieldChange(
     "apply",
-    "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewConnDetails.children.cardContent.children.viewFour.props.items[0].item0.children.cardContent.children.serviceCardContainer.children.taskPipeSizeProposed",
+    "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewConnDetails.children.cardContent.children.viewFour.children.view.children.taskPipeSizeProposed",
     "visible",
     value
   );
   onFieldChange(
     "apply",
-    "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewConnDetails.children.cardContent.children.viewFour.props.items[0].item0.children.cardContent.children.serviceCardContainer.children.taskNumberOfTapsPropsed",
+    "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewConnDetails.children.cardContent.children.viewFour.children.view.children.taskNumberOfTapsPropsed",
     "visible",
     value
   );
@@ -106,7 +106,7 @@ export const toggleWater = (onFieldChange, value) => {
   );
   onFieldChange(
     "apply",
-    "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewConnDetails.children.cardContent.children.viewFour.props.items[0].item0.children.cardContent.children.serviceCardContainer.children.taskPipeSizeProposed",
+    "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewConnDetails.children.cardContent.children.viewFour.children.view.children.taskPipeSizeProposed",
     "visible",
     value
   );
@@ -169,7 +169,13 @@ export const toggleSewerage = (onFieldChange, value) => {
   );
   onFieldChange(
     "apply",
-    "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewConnDetails.children.cardContent.children.viewFour.props.items[0].item0.children.cardContent.children.serviceCardContainer.children.taskNoOfClosets",
+    "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewConnDetails.children.cardContent.children.viewFour.children.view.children.taskNoOfClosets",
+    "visible",
+    value
+  );
+  onFieldChange(
+    "apply",
+    "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewConnDetails.children.cardContent.children.viewFour.children.view.children.taskNoOfToilets",
     "visible",
     value
   );
@@ -262,12 +268,17 @@ export const toggleSewerageFeilds = (action, value) => {
   );
   set(
     action.screenConfig,
+    "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewConnDetails.children.cardContent.children.viewFour.children.view.children.taskNoOfToilets.visible",
+    value
+  );
+  set(
+    action.screenConfig,
     "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfWaterClosets.visible",
     value
   );
   set(
     action.screenConfig,
-    "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewConnDetails.children.cardContent.children.viewFour.props.items[0].item0.children.cardContent.children.serviceCardContainer.children.taskNoOfClosets.visible",
+    "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewConnDetails.children.cardContent.children.viewFour.children.view.children.taskNoOfClosets.visible",
     value
   );
   set(
@@ -335,12 +346,12 @@ export const toggleWaterFeilds = (action, value) => {
   );
   set(
     action.screenConfig,
-    "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewConnDetails.children.cardContent.children.viewFour.props.items[0].item0.children.cardContent.children.serviceCardContainer.children.taskPipeSizeProposed.visible",
+    "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewConnDetails.children.cardContent.children.viewFour.children.view.children.taskPipeSizeProposed.visible",
     value
   );
   set(
     action.screenConfig,
-    "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewConnDetails.children.cardContent.children.viewFour.props.items[0].item0.children.cardContent.children.serviceCardContainer.children.taskNumberOfTapsPropsed.visible",
+    "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewConnDetails.children.cardContent.children.viewFour.children.view.children.taskNumberOfTapsPropsed.visible",
     value
   );
   set(
@@ -370,7 +381,7 @@ export const toggleWaterFeilds = (action, value) => {
   );
   set(
     action.screenConfig,
-    "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewConnDetails.children.cardContent.children.viewFour.props.items[0].item0.children.cardContent.children.serviceCardContainer.children.taskPipeSizeProposed.visible",
+    "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewConnDetails.children.cardContent.children.viewFour.children.view.children.taskPipeSizeProposed.visible",
     value
   );
   set(

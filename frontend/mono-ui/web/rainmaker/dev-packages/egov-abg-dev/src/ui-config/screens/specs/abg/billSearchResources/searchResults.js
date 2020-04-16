@@ -20,7 +20,7 @@ export const searchResults = {
           customBodyRender: (value, tableMeta, updateValue) => (
             <div
               onClick={() => {
-                downloadBill(tableMeta.rowData[1], tableMeta.rowData[10], tableMeta.rowData[9]);
+                downloadBill(tableMeta.rowData[1], tableMeta.rowData[10], tableMeta.rowData[9],tableMeta.rowData[12]);
               }}
             >
               <a>{value}</a>
@@ -118,6 +118,12 @@ export const searchResults = {
       },
       {
         name: "Bill Id",
+        options: {
+          display: false
+        }
+      },
+      {
+        name: "billSearchUrl",
         options: {
           display: false
         }

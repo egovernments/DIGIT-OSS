@@ -158,13 +158,16 @@ class Header extends Component {
       activeRoutePath,
       hasLocalisation,
       notificationsCount,
+      isUserSetting = true,
+      msevaLogo,
+      headerStyle
     } = this.props;
     const tenantId = role.toLowerCase() === "citizen" ? userInfo.permanentCity : getTenantId();
     const currentCity = cities.filter((item) => item.code === tenantId);
     const ulbLogo =
       currentCity.length > 0 ? get(currentCity[0], "logoId") : "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.amritsar/logo.png";
     return (
-      <div>
+      <div style={headerStyle}>
         <AppBar
           className={className}
           title={title ? title : headerTitle}
@@ -172,7 +175,7 @@ class Header extends Component {
           defaultTitle={defaultTitle}
           titleAddon={titleAddon}
           role={role}
-          ulbLogo={ulbLogo}
+          ulbLogo={isUserSetting === false ? msevaLogo : ulbLogo}
           {...appBarProps}
           fetchLocalizationLabel={fetchLocalizationLabel}
           userInfo={userInfo}
@@ -187,6 +190,7 @@ class Header extends Component {
           activeRoutePath={activeRoutePath}
           hasLocalisation={hasLocalisation}
           notificationsCount={notificationsCount}
+          isUserSetting={isUserSetting}
         />
         <NavigationDrawer
           handleItemClick={_handleItemClick}
@@ -202,6 +206,7 @@ class Header extends Component {
           openSecondary={window.innerWidth >= 768 ? true : false}
           width={300}
           containerStyle={{ zIndex: 1999 }}
+          isUserSetting={isUserSetting}
         />
         <LogoutDialog
           logoutPopupOpen={logoutPopupOpen}

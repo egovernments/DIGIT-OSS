@@ -12,6 +12,9 @@ const UploadSingleFile = ({
   buttonLabel,
   id
 }) => {
+  if(!inputProps.multiple) {
+    inputProps.multiple = inputProps.multiple == false ? true : false;
+  }
   return (
     <div>
       {!uploaded && (

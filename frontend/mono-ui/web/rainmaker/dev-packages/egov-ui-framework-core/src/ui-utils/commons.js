@@ -622,3 +622,11 @@ export const getCommonPayUrl = (dispatch, applicationNo, tenantId ,businessServi
   const url = `/egov-common/pay?consumerCode=${applicationNo}&tenantId=${tenantId}&businessService=${businessService}`;
   dispatch(setRoute(url));
 };
+
+export const getTodaysDateInYMD = () => {
+  let date = new Date();
+  let month = date.getMonth() + 1;
+  let day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
+  date = `${date.getFullYear()}-${month}-${day}`;
+  return date;
+};

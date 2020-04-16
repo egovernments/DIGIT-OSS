@@ -109,6 +109,15 @@ export const searchApiCall = async (state, dispatch) => {
         [getBpaTextToLocalMapping("Status")]: item.status || "-"
       }));
 
+      if (data && data.length > 0) {
+        data.map(items => {
+          if (items && items["Application Date"]) {
+            const date = items["Application Date"].split("/");
+            items["Application Date"] = `${date[1]}/${date[0]}/${date[2]}`
+          }
+        });
+      }
+
       dispatch(
         handleField(
           "search",

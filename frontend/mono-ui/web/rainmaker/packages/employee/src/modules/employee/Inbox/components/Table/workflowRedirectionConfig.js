@@ -7,12 +7,12 @@ export const getWFConfig = (module,businessService) => {
       };
       case "WS-SERVICES":
         return {
-          INITIATED: "/wns/apply",
+          INITIATED: "/wns/search-preview",
           DEFAULT: "/wns/search-preview",
         };
         case "SW-SERVICES":
       return {
-        INITIATED: "/wns/apply",
+        INITIATED: "/wns/search-preview",
         DEFAULT: "/wns/search-preview",
       };
     case "FIRENOC":

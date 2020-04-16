@@ -1,13 +1,12 @@
-import get from "lodash/get";
-import filter from "lodash/filter";
-import { CITY } from "egov-ui-kit/utils/endPoints";
-import { pincode, mohalla, street, colony, houseNumber, dummy } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/utils/reusableFields";
-import { prepareFormData, fetchGeneralMDMSData } from "egov-ui-kit/redux/common/actions";
-import { setFieldProperty } from "egov-ui-kit/redux/form/actions";
-import { getTranslatedLabel } from "egov-ui-kit/utils/commons";
-import sortBy from "lodash/sortBy";
+import { mohalla } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/utils/reusableFields";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
+import { fetchGeneralMDMSData, prepareFormData } from "egov-ui-kit/redux/common/actions";
+import { setFieldProperty } from "egov-ui-kit/redux/form/actions";
+import { fetchDropdownData, generalMDMSDataRequestObj, getGeneralMDMSDataDropdownName, getTranslatedLabel } from "egov-ui-kit/utils/commons";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import filter from "lodash/filter";
+import get from "lodash/get";
+import sortBy from "lodash/sortBy";
 
 const formConfig = {
   name: "propertyAddress",
@@ -43,66 +42,10 @@ const formConfig = {
         dispatch(setFieldProperty("propertyAddress", "mohalla", "value", ""));
         const moduleValue = field.value;
         dispatch(fetchLocalizationLabel(getLocale(), moduleValue, moduleValue));
-        let requestBody = {
-          MdmsCriteria: {
-            tenantId: field.value,
-            moduleDetails: [
-              {
-                moduleName: "PropertyTax",
-                masterDetails: [
-                  {
-                    name: "Floor",
-                  },
-                  {
-                    name: "OccupancyType",
-                  },
-                  {
-                    name: "OwnerShipCategory",
-                  },
-                  {
-                    name: "OwnerType",
-                  },
-                  {
-                    name: "PropertySubType",
-                  },
-                  {
-                    name: "PropertyType",
-                  },
-                  {
-                    name: "SubOwnerShipCategory",
-                  },
-                  {
-                    name: "UsageCategoryDetail",
-                  },
-                  {
-                    name: "UsageCategoryMajor",
-                  },
-                  {
-                    name: "UsageCategoryMinor",
-                  },
-                  {
-                    name: "UsageCategorySubMinor",
-                  },
-                ],
-              },
-            ],
-          },
-        };
+        let requestBody = generalMDMSDataRequestObj(field.value);
 
         dispatch(
-          fetchGeneralMDMSData(requestBody, "PropertyTax", [
-            "Floor",
-            "OccupancyType",
-            "OwnerShipCategory",
-            "OwnerType",
-            "PropertySubType",
-            "PropertyType",
-            "SubOwnerShipCategory",
-            "UsageCategoryDetail",
-            "UsageCategoryMajor",
-            "UsageCategoryMinor",
-            "UsageCategorySubMinor",
-          ])
+          fetchGeneralMDMSData(requestBody, "PropertyTax", getGeneralMDMSDataDropdownName())
         );
       },
     },
@@ -191,6 +134,23 @@ const formConfig = {
           return dd;
         }, []);
         dispatch(setFieldProperty("propertyAddress", "city", "dropDownData", sortBy(dd, ["label"])));
+      }
+      const tenant = get(state, 'form.propertyAddress.fields.city.value', null);
+      const mohallaDropDownData = get(state, 'form.propertyAddress.fields.mohalla.dropDownData', []);
+
+      if (process.env.REACT_APP_NAME === "Citizen" && tenant && mohallaDropDownData.length == 0) {
+        const dataFetchConfig = {
+          url: "egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
+          action: "",
+          queryParams: [{
+            key: "tenantId",
+            value: tenant
+          }],
+          requestBody: {},
+          isDependent: true,
+          hierarchyType: "REVENUE"
+        }
+        fetchDropdownData(dispatch, dataFetchConfig, 'propertyAddress', 'mohalla', state, true);
       }
       return action;
     } catch (e) {

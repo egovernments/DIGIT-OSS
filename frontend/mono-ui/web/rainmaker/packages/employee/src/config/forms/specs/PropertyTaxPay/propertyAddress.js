@@ -5,6 +5,7 @@ import { prepareFormData, fetchGeneralMDMSData } from "egov-ui-kit/redux/common/
 import set from "lodash/set";
 import get from "lodash/get";
 import { getLocale, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { generalMDMSDataRequestObj, getGeneralMDMSDataDropdownName } from "egov-ui-kit/utils/commons";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import commonConfig from '../../../common'
 
@@ -54,67 +55,6 @@ const formConfig = {
       updateDependentFields: ({ formKey, field, dispatch, state }) => {
         dispatch(prepareFormData("Properties[0].tenantId", field.value));
         // dispatch(setFieldProperty("propertyAddress", "mohalla", "value", ""));
-        let requestBody = {
-          MdmsCriteria: {
-            tenantId: field.value,
-            moduleDetails: [
-              {
-                moduleName: "PropertyTax",
-                masterDetails: [
-                  {
-                    name: "Floor",
-                  },
-                  {
-                    name: "OccupancyType",
-                  },
-                  {
-                    name: "OwnerShipCategory",
-                  },
-                  {
-                    name: "OwnerType",
-                  },
-                  {
-                    name: "PropertySubType",
-                  },
-                  {
-                    name: "PropertyType",
-                  },
-                  {
-                    name: "SubOwnerShipCategory",
-                  },
-                  {
-                    name: "UsageCategoryDetail",
-                  },
-                  {
-                    name: "UsageCategoryMajor",
-                  },
-                  {
-                    name: "UsageCategoryMinor",
-                  },
-                  {
-                    name: "UsageCategorySubMinor",
-                  },
-                ],
-              },
-            ],
-          },
-        };
-
-        dispatch(
-          fetchGeneralMDMSData(requestBody, "PropertyTax", [
-            "Floor",
-            "OccupancyType",
-            "OwnerShipCategory",
-            "OwnerType",
-            "PropertySubType",
-            "PropertyType",
-            "SubOwnerShipCategory",
-            "UsageCategoryDetail",
-            "UsageCategoryMajor",
-            "UsageCategoryMinor",
-            "UsageCategorySubMinor",
-          ])
-        );
       },
       beforeFieldChange: ({ action, dispatch, state }) => {
         if (get(state, "common.prepareFormData.PropertiesTemp[0].address.city") !== action.value) {

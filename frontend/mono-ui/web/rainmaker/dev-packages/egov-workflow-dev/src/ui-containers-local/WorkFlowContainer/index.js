@@ -108,19 +108,21 @@ class WorkFlowContainer extends React.Component {
         return "purpose=sendbacktocitizen&status=success";
       case "SUBMIT_APPLICATION":
         return "purpose=apply&status=success";
-        case "RESUBMIT_APPLICATION":
+      case "RESUBMIT_APPLICATION":
         return "purpose=forward&status=success";
       case "SEND_BACK_TO_CITIZEN":
         return "purpose=sendback&status=success";
       case "VERIFY_AND_FORWARD":
         return "purpose=forward&status=success";
       case "SEND_BACK_FOR_DOCUMENT_VERIFICATION":
-        case "SEND_BACK_FOR_FIELD_INSPECTION":
+      case "SEND_BACK_FOR_FIELD_INSPECTION":
         return "purpose=sendback&status=success";
       case "APPROVE_FOR_CONNECTION":
         return "purpose=approve&status=success";
-        case "ACTIVATE_CONNECTION":
+      case "ACTIVATE_CONNECTION":
         return "purpose=activate&status=success";
+      case "REVOCATE":
+        return "purpose=application&status=revocated"
     }
   };
 
@@ -185,30 +187,34 @@ class WorkFlowContainer extends React.Component {
         }
       }
     }
+    if (dataPath == 'Property') {
+      if (data.workflow && data.workflow.wfDocuments) {
+        data.workflow.documents = data.workflow.wfDocuments;
+      }
+    }
 
     const applicationNumber = getQueryArg(
       window.location.href,
       "applicationNumber"
     );
-
-    if (moduleName === "NewWS1" || moduleName === "NewSW1") {
-      data = data[0];
-      data.assignees = [];
-      if (data.assignee) {
-        data.assignee.forEach(assigne => {
-          data.assignees.push({
-            uuid: assigne
+      if (moduleName === "NewWS1" || moduleName === "NewSW1") {
+        data = data[0];
+        data.assignees = [];
+        if (data.assignee) {
+          data.assignee.forEach(assigne => {
+            data.assignees.push({
+              uuid: assigne
+            })
           })
-        })
+        }
+        data.processInstance = {
+          documents: data.wfDocuments,
+          assignes: data.assignees,
+          comment: data.comment,
+          action: data.action
+        }
+        data.waterSource = data.waterSource + "." + data.waterSubSource;
       }
-      data.processInstance = {
-        documents: data.wfDocuments,
-        assignes: data.assignees,
-        comment: data.comment,
-        action: data.action
-      }
-      data.waterSource = data.waterSource + "." + data.waterSubSource;
-    }
 
     if (moduleName === "NewSW1") {
       dataPath = "SewerageConnection";
@@ -316,7 +322,6 @@ class WorkFlowContainer extends React.Component {
   };
 
   getRedirectUrl = (action, businessId, moduleName) => {
-    console.log("modulenamewater", moduleName);
     const isAlreadyEdited = getQueryArg(window.location.href, "edited");
     const tenant = getQueryArg(window.location.href, "tenantId");
     const { ProcessInstances } = this.props;
@@ -330,22 +335,25 @@ class WorkFlowContainer extends React.Component {
       baseUrl = "fire-noc";
     } else if (moduleName === "BPA" || moduleName === "BPA_LOW") {
       baseUrl = "egov-bpa";
-      if(moduleName === "BPA") {
+      if (moduleName === "BPA") {
         bservice = ((applicationStatus == "PENDING_APPL_FEE") ? "BPA.NC_APP_FEE" : "BPA.NC_SAN_FEE");
-      }else {
+      } else {
         bservice = "BPA.LOW_RISK_PERMIT_FEE"
       }
     } else if (moduleName === "NewWS1" || moduleName === "NewSW1") {
       baseUrl = "wns"
-      if(moduleName === "NewWS1"){
-        bservice="WS.ONE_TIME_FEE"
-      }else{
-        bservice="SW.ONE_TIME_FEE"
+      if (moduleName === "NewWS1") {
+        bservice = "WS.ONE_TIME_FEE"
+      } else {
+        bservice = "SW.ONE_TIME_FEE"
       }
-      
+    } else if (moduleName === "PT") {
+      bservice = "PT"
+    } else if (moduleName === "PT.MUTATION") {
+      bservice = "PT.MUTATION"
     } else {
-      baseUrl = process.env.REACT_APP_NAME==="Citizen" ? "tradelicense-citizen" : "tradelicence";
-      bservice="TL"
+      baseUrl = process.env.REACT_APP_NAME === "Citizen" ? "tradelicense-citizen" : "tradelicence";
+      bservice = "TL"
     }
     const payUrl = `/egov-common/pay?consumerCode=${businessId}&tenantId=${tenant}`;
     switch (action) {
@@ -469,7 +477,7 @@ class WorkFlowContainer extends React.Component {
         isLast: item.action === "PAY" ? true : false,
         buttonUrl: getRedirectUrl(item.action, businessId, businessService),
         dialogHeader: getHeaderName(item.action),
-        showEmployeeList: !checkIfTerminatedState(item.nextState, businessService) && item.action !== "SENDBACKTOCITIZEN",
+        showEmployeeList: (businessService === "NewWS1" || businessService === "NewSW1") ? !checkIfTerminatedState(item.nextState, businessService) && item.action !== "SEND_BACK_TO_CITIZEN" && item.action !== "RESUBMIT_APPLICATION" : !checkIfTerminatedState(item.nextState, businessService) && item.action !== "SENDBACKTOCITIZEN",
         roles: getEmployeeRoles(item.nextState, item.currentState, businessService),
         isDocRequired: checkIfDocumentRequired(item.nextState, businessService)
       };
@@ -522,7 +530,7 @@ class WorkFlowContainer extends React.Component {
     // } else {
     //   showFooter = process.env.REACT_APP_NAME === "Citizen" ? true : true;
     // }
-    if(moduleName === 'BPA' || moduleName === 'BPA_LOW') {
+    if (moduleName === 'BPA' || moduleName === 'BPA_LOW') {
       showFooter = process.env.REACT_APP_NAME === "Citizen" ? false : true;
     }
     return (

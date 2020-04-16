@@ -68,7 +68,13 @@ export const consumption = getLabelWithValue(
         labelKey: "WS_SERV_DETAIL_CONSUMP"
     },
     {
-        jsonPath: "WaterConnection[0].consumption"
+        jsonPath: "WaterConnection[0].consumption",
+        callBack: (params) => {
+            if (params !== undefined && params !== null && params > 0) {
+                return parseFloat(params).toFixed(2)
+            } else if (params === 0) { return 0; }
+            else return "NA"
+        }
     }
 );
 

@@ -170,6 +170,12 @@ export const getMdmsData = async (action, state, dispatch) => {
         {
           moduleName: "egf-master",
           masterDetails: [{ name: "FinancialYear" }]
+        },
+        {
+          moduleName: "StakeholderRegistraition",
+          masterDetails: [
+            { name: "TradeTypetoRoleMapping" }
+          ]
         }
       ]
     }

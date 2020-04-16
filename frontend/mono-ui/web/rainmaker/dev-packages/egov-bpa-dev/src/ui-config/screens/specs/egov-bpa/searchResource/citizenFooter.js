@@ -41,7 +41,7 @@ export const bpaMakePayment = async (state, dispatch) => {
 export const updateBpaApplication = async (state, dispatch, action) => {
   let bpaStatus = get(state, "screenConfiguration.preparedFinalObject.BPA.status");
   let isDeclared = get(state, "screenConfiguration.preparedFinalObject.BPA.isDeclared");  
-  let bpaAction, isArchitect = false, isCitizen = false;
+  let bpaAction, isArchitect = false, isCitizen = false, isCitizenBack = false;
   if(action && action.componentJsonpath === "components.div.children.citizenFooter.children.sendToArch") {
     bpaAction = "SEND_TO_ARCHITECT",
     isArchitect = true;
@@ -50,13 +50,18 @@ export const updateBpaApplication = async (state, dispatch, action) => {
     bpaAction = "APPROVE",
     isCitizen = true;
   }
+ let bpaStatusAction = bpaStatus.includes("CITIZEN_ACTION_PENDING")
+  if(bpaStatusAction) {
+    bpaAction = "FORWARD",
+    isCitizenBack = true;
+  }
 
   let toggle = get(
     state.screenConfiguration.screenConfig["search-preview"],
     "components.div.children.sendToArchPickerDialog.props.open",
     false
   );
-  if((isDeclared && isCitizen ) || (isArchitect)){
+  if((isDeclared && isCitizen ) || (isArchitect) || (isCitizenBack)){
     dispatch(
       handleField("search-preview", "components.div.children.sendToArchPickerDialog", "props.open", !toggle)
     );
@@ -144,7 +149,7 @@ export const citizenFooter = getCommonApplyFooter({
     children: {
       submitButtonLabel: getLabel({
         labelName: "Approve",
-        labelKey: "BPA_CITIZEN_APPROVE_BUTTON"
+        labelKey: "BPA_APPROVE_BUTTON"
       }),
       nextButtonIcon: {
         uiFramework: "custom-atoms",
@@ -187,6 +192,32 @@ export const citizenFooter = getCommonApplyFooter({
     roleDefination: {
       rolePath: "user-info.roles",
       action : "APPLY"
+    }
+  },
+  forwardButton: {
+    componentPath: "Button",
+    props: {
+      variant: "contained",
+      color: "primary",
+      style: {
+        minWidth: "200px",
+        height: "48px",
+        marginRight: "45px"
+      }
+    },
+    children: {
+      submitButtonLabel: getLabel({
+        labelName: "Forward",
+        labelKey: "BPA_FORWARD_BUTTON"
+      })
+    },
+    onClickDefination: {
+      action: "condition",
+      callBack: updateBpaApplication
+    },
+    roleDefination: {
+      rolePath: "user-info.roles",
+      action : "FORWARD"
     }
   },
 });

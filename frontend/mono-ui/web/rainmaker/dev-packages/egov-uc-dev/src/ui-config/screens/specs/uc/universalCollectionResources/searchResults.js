@@ -1,3 +1,4 @@
+import React from "react";
 import {
   sortByEpoch,
   getEpochForDate,
@@ -11,12 +12,37 @@ export const searchResults = {
   visible: false,
   props: {
     columns: [
-      getTextToLocalMapping("Receipt No."),
+
+      {
+        name : getTextToLocalMapping("Receipt No."),
+        options: {
+          filter: false,
+          customBodyRender: (value, tableMeta, updateValue) => (
+            <div onClick={value => {
+                const receiptQueryString = [
+                  { key: "receiptNumbers", value:  tableMeta.rowData[0]},
+                  { key: "tenantId", value: tableMeta.rowData[7] }
+                ]
+                download(receiptQueryString , "download" ,tableMeta.rowData[6]) ;
+              }}>
+              {value}
+            </div>
+          )
+        }
+      },
+
+      
       getTextToLocalMapping("Payee Name"),
       getTextToLocalMapping("Service Type"),
       getTextToLocalMapping("Date"),
       getTextToLocalMapping("Amount[INR]"),
       getTextToLocalMapping("Status"),
+      {
+        name: "receiptKey",
+        options: {
+          display: false
+        }
+      },
       {
         name: "tenantId",
         options: {
@@ -31,13 +57,6 @@ export const searchResults = {
       selectableRows: false,
       hover: true,
       rowsPerPageOptions: [10, 15, 20],
-      onRowClick: (row, index) => {
-        const receiptQueryString = [
-          { key: "receiptNumbers", value:  row[0]},
-          { key: "tenantId", value: row[6] }
-        ]
-        download(receiptQueryString);
-      }
     },
     customSortColumn: {
       column: "Date",

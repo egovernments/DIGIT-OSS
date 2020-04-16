@@ -5,12 +5,14 @@ import {
   getCommonSubHeader,
   getLabel,
   getLabelWithValue,
-  convertEpochToDate
+  convertEpochToDate,
+  getLabelWithValueIfNotNull
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import get from "lodash/get";
-import { gotoApplyWithStep } from "../../utils/index";
+import { gotoApplyWithStep, getLabelIfNotNull } from "../../utils/index";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { checkValueForNA } from "../../utils";
+
 
 const showComponent = (dispatch, componentJsonPath, display) => {
   let displayProps = display ? {} : { display: "none" };
@@ -146,16 +148,17 @@ export const transfereeSummary = getCommonGrayCard({
                 callBack: checkValueForNA
             }
           ),
-          ownerSpecialDocumentType: getLabelWithValue(
+          ownerSpecialDocumentType: getLabelIfNotNull(
             {
               labelName: "Special Category Document Type",
               labelKey: "PT_OWNERSHIP_SPECIAL_CATEGORY_DOCUMENT_TYPE"
             },
             {
               jsonPath:"Property.ownersTemp[0].documentType",
-              callBack: checkValueForNA      }
+              callBack: checkValueForNA     
+              }
           ),
-          ownerDocumentId: getLabelWithValue(
+          ownerDocumentId: getLabelIfNotNull(
             {
               labelName: "Document ID",
               labelKey: "PT_OWNERSHIP_DOCUMENT_ID"

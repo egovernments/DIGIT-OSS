@@ -112,6 +112,29 @@ const getAcknowledgementCard = (
       },
       gotoHomeFooter
     };
+  } else if (purpose == "apply" && status == "aborted") {
+    return {
+      headerrow,
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "close",
+            backgroundColor: "#E54D42",
+            header: {
+              labelName: "Building plan eDCR is Aborted",
+              labelKey: "EDCR_ABORTED_MESSAGE"
+            },
+            body: {
+              labelName: "The uploaded plan is not drawn as per the standard's , please check the layers and colour coding standards and try again",
+              labelKey: "EDCR_ABORTED_COMMENT"
+            }
+          })
+        }
+      },
+      gotoHomeFooter
+    };
   }
 };
 

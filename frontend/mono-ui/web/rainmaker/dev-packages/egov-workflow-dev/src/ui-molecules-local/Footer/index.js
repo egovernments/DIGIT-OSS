@@ -281,7 +281,7 @@ class Footer extends React.Component {
       menu: downloadMenu
     };
     return (
-      <div className="apply-wizard-footer" id="custom-atoms-footer">
+      <div className="wf-wizard-footer" id="custom-atoms-footer">
         {!isEmpty(downloadMenu) && (
           <Container>
             <Item xs={12} sm={12} className="wf-footer-container">

@@ -24,7 +24,9 @@ class pdfHeader extends React.Component {
         let corpCity="";
         let ulbGrade="";
         if(get(properties,"tenantId")) {
-             logoUrl =get(properties,"tenantId") ?  this.getLogoUrl(get(properties,"tenantId")) : "";
+          let tenantid=get(properties, "tenantId");
+          logoUrl = window.location.origin + `/pb-egov-assets/${tenantid}/logo.png`;
+           //  logoUrl =get(properties,"tenantId") ?  this.getLogoUrl(get(properties,"tenantId")) : "";
             corpCity = `TENANT_TENANTS_${get(properties,"tenantId").toUpperCase().replace(/[.:-\s\/]/g, "_")}`;
             const selectedCityObject = cities && cities.length > 0 && cities.filter(item => item.code === get(properties,"tenantId"));
             ulbGrade = selectedCityObject ? `ULBGRADE_${get(selectedCityObject[0] ,"city.ulbGrade")}` : "MUNICIPAL CORPORATION";
@@ -35,7 +37,7 @@ class pdfHeader extends React.Component {
                     style={{ display : "flex" , backgroundColor : "rgb(242, 242, 242)" , minHeight: "120px" , alignItems: "center" ,paddingLeft :"10px"}}
                     textChildren={
                       <div style={{display : "flex" }}>
-                        {/* <Image  id="image-id" style={logoStyle} source={logoUrl} /> */}
+                        <Image  id="image-id" style={logoStyle} source={logoUrl} />
                         <div style={{marginLeft : 30}}>
                           <div style={{display:"flex" , marginBottom : 5}}>
                             <Label label={corpCity} fontSize="20px" fontWeight="500" color="rgba(0, 0, 0, 0.87)" containerStyle={{marginRight : 10 ,textTransform: "uppercase"}}/>

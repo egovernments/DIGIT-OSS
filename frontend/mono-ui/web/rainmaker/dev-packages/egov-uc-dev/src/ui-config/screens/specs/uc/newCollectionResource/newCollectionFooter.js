@@ -120,7 +120,7 @@ const processDemand = async (state, dispatch) => {
         );
         const businessService = get(
           state.screenConfiguration.preparedFinalObject,
-          "Demands[0].businessService"
+          "Demands[0].serviceType"
         );
         getCommonPayUrl(dispatch, applicationNumber, tenantId, businessService);
       }

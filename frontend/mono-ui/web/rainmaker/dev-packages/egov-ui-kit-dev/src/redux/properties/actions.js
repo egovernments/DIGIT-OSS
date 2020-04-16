@@ -2,6 +2,7 @@ import * as actionTypes from "./actionTypes";
 import { PROPERTY, DRAFT, PGService, RECEIPT, BOUNDARY, FETCHBILL, FETCHRECEIPT,FETCHASSESSMENTS, DOWNLOADRECEIPT } from "egov-ui-kit/utils/endPoints";
 import { httpRequest } from "egov-ui-kit/utils/api";
 import { transformById } from "egov-ui-kit/utils/commons";
+import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons"
 import orderby from "lodash/orderBy";
 import get from "lodash/get";
 import FileSaver from 'file-saver';
@@ -686,7 +687,11 @@ export const downloadReceipt = (receiptQueryString) => {
           { key: "key", value: "consolidatedreceipt" },
           { key: "tenantId", value: receiptQueryString[1].value.split('.')[0]}
         ]
-
+        const oldFileStoreId=get(payloadReceiptDetails.Payments[0],"fileStoreId")
+      if(oldFileStoreId){
+        downloadReceiptFromFilestoreID(oldFileStoreId,"download")
+      }
+     else{
         httpRequest(DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments: payloadReceiptDetails.Payments }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
           .then(res => {
             getFileUrlFromAPI(res.filestoreIds[0]).then((fileRes) => {
@@ -695,7 +700,7 @@ export const downloadReceipt = (receiptQueryString) => {
             });
 
           });
-
+        }
       } catch (error) {
         dispatch(downloadReceiptError(error.message));
       }

@@ -1,16 +1,8 @@
 import axios from "axios";
-import { prepareForm, fetchFromLocalStorage, addQueryArg, hasTokenExpired } from "./commons";
-import some from "lodash/some";
 import commonConfig from "egov-ui-kit/config/common.js";
-import {
-  getTenantId,
-  getAccessToken,
-  setTenantId,
-  getLocale,
-  setLocale,
-  localStorageSet,
-  localStorageGet,
-} from "egov-ui-kit/utils/localStorageUtils";
+import { getAccessToken, getLocale, getTenantId, localStorageGet, localStorageSet, setLocale, setTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import some from "lodash/some";
+import { addQueryArg, hasTokenExpired, prepareForm } from "./commons";
 
 axios.interceptors.response.use(
   (response) => {
@@ -64,7 +56,7 @@ export const httpRequest = async (
   headers = [],
   customRequestInfo = {},
   ignoreTenantId = false,
-  isGetMethod=false
+  isGetMethod = false
 ) => {
   const tenantId = getTenantId() || commonConfig.tenantId;
   let apiError = "Api Error";
@@ -84,22 +76,22 @@ export const httpRequest = async (
   if (queryObject && queryObject.length) {
     endPoint = addQueryArg(endPoint, queryObject);
   }
-  
+
   try {
-if(isGetMethod){
-  const getResponse = await instance.get(endPoint, wrapRequestBody(requestBody, action, customRequestInfo));
-  const getResponseStatus = parseInt(getResponse.status, 10);
-  if (getResponseStatus === 200 || getResponseStatus === 201) {    
-    return getResponse.data;
-  }
-}else{
-  const response = await instance.post(endPoint, wrapRequestBody(requestBody, action, customRequestInfo));
-  const responseStatus = parseInt(response.status, 10);
-  if (responseStatus === 200 || responseStatus === 201) {    
-    return response.data;
-  }
-}
-   
+    if (isGetMethod) {
+      const getResponse = await instance.get(endPoint, wrapRequestBody(requestBody, action, customRequestInfo));
+      const getResponseStatus = parseInt(getResponse.status, 10);
+      if (getResponseStatus === 200 || getResponseStatus === 201) {
+        return getResponse.data;
+      }
+    } else {
+      const response = await instance.post(endPoint, wrapRequestBody(requestBody, action, customRequestInfo));
+      const responseStatus = parseInt(response.status, 10);
+      if (responseStatus === 200 || responseStatus === 201) {
+        return response.data;
+      }
+    }
+
   } catch (error) {
     const { data, status } = error.response;
     if (hasTokenExpired(status, data)) {
@@ -259,10 +251,10 @@ export const commonApiPost = (
 
   return instance
     .post(url, body)
-    .then(function(response) {
+    .then(function (response) {
       return response.data;
     })
-    .catch(function(response) {
+    .catch(function (response) {
       try {
         if (response && response.response && response.response.data && response.response.data[0] && response.response.data[0].error) {
           var _err = response.response.data[0].error.message || "";

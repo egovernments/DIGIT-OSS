@@ -53,6 +53,7 @@ const NavigationDrawer = ({
   containerStyle,
   isCSR,
   isADMIN,
+  isUserSetting,
 }) => {
   return (
     <Drawer
@@ -63,7 +64,7 @@ const NavigationDrawer = ({
       open={toggleMenu}
       onRequestChange={(open) => onUpdateMenuStatus(open)}
     >
-      <UserProfile role={role} cities={cities} userInfo={userInfo} />
+      {isUserSetting && <UserProfile role={role} cities={cities} userInfo={userInfo} />}
       <div className="col-sm-1 drawer-list-poweredBy-wrapper">
         {/* <List
           onItemClick={handleItemClick}
@@ -82,10 +83,10 @@ const NavigationDrawer = ({
           listContainerStyle={{ background: "#ffffff" }}
           listItemStyle={{ borderBottom: "1px solid #e0e0e0" }}
         /> */}
-        {window && window.outerWidth <= 768 && <ActionMenu role={role} />}
+        {window && window.outerWidth <= 768 && isUserSetting && <ActionMenu role={role} />}
         {/* <Divider light /> */}
         <LanguageSelection fetchLocalizationLabel={fetchLocalizationLabel} />
-        {CommonMenuItems.map((item) => {
+        {isUserSetting && CommonMenuItems.map((item) => {
           return (
             <div className="sideMenuItem">
               <MenuItem

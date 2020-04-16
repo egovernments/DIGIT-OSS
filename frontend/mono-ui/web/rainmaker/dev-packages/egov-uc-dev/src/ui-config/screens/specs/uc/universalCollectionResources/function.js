@@ -72,16 +72,7 @@ export const searchApiCall = async (state, dispatch) => {
         "warning"
       )
     );
-  } 
-  //else if (
-  //   (searchScreenObject["fromDate"] === undefined ||
-  //     searchScreenObject["fromDate"].length === 0) &&
-  //   searchScreenObject["toDate"] !== undefined &&
-  //   searchScreenObject["toDate"].length !== 0
-  // ) {
-  //   dispatch(toggleSnackbar(true, "Please fill From Date", "warning"));
-  // } 
-  
+  }   
   else {
     for (var key in searchScreenObject) {
       if (searchScreenObject.hasOwnProperty(key) && key === "businessServices") {
@@ -120,9 +111,10 @@ export const searchApiCall = async (state, dispatch) => {
         receiptdate: get(Payments[i], `paymentDetails[0].receiptDate`),
         amount: get(Payments[i], `paymentDetails[0].bill.totalAmount`),
         status: get(Payments[i], `paymentDetails[0].bill.status`),
+        businessService : get(Payments[i], `paymentDetails[0].bill.businessService`),
         tenantId : get(Payments[i], `tenantId`),        };
       }
-
+      const uiConfigs = get(state.screenConfiguration.preparedFinalObject , "applyScreenMdmsData.uiCommonConfig");
       try {
         let data = response.map(item => ({
           [getTextToLocalMapping("Receipt No.")]: item.receiptNumber || "-",
@@ -131,6 +123,7 @@ export const searchApiCall = async (state, dispatch) => {
           [getTextToLocalMapping("Date")]: convertEpochToDate(item.receiptdate) || "-",
           [getTextToLocalMapping("Amount[INR]")]: item.amount || "-",
           [getTextToLocalMapping("Status")]: item.status || "-",
+          ["receiptKey"]:  get(uiConfigs.filter(item => item.code === item.businessService) , "0.receiptKey" , "consolidatedreceipt"),
           ["tenantId"]: item.tenantId || "-"
         }));
         dispatch(

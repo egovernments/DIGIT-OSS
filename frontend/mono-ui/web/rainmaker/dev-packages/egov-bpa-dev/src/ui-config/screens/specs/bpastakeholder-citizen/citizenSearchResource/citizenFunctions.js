@@ -7,7 +7,7 @@ import {
 import commonConfig from "config/common.js";
 import get from "lodash/get";
 import { getWorkFlowData,getWorkFlowDataForBPA } from "../../bpastakeholder/searchResource/functions";
-import { getTextToLocalMapping } from "../../utils/index";
+import { getTextToLocalMapping, convertEpochToDate } from "../../utils/index";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 
 const getMdmsData = async () => {

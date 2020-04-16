@@ -1,6 +1,7 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { ifUserRoleExists } from "../../utils";
-import {download} from  "../../../../../ui-utils/commons"
+import {download} from  "../../../../../ui-utils/commons";
+import get from "lodash/get";
 
 
 const getCommonApplyFooter = children => {
@@ -23,6 +24,8 @@ export const applicationSuccessFooter = (
 ) => {
     const roleExists = ifUserRoleExists("CITIZEN");
     const redirectionURL = roleExists ? "/" : "/inbox";
+    const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject , "commonPayInfo");
+    const receiptKey = get(uiCommonPayConfig, "receiptKey")
     return getCommonApplyFooter({
 
         downloadFormButton: {
@@ -50,7 +53,7 @@ export const applicationSuccessFooter = (
                         { key: "receiptNumbers", value: applicationNumber },
                         { key: "tenantId", value: tenant }
                     ]
-                    download(receiptQueryString);
+                    download(receiptQueryString , "download" , receiptKey);
                 }
             }
         },
@@ -81,7 +84,7 @@ export const applicationSuccessFooter = (
                         { key: "receiptNumbers", value: applicationNumber },
                         { key: "tenantId", value: tenant }
                     ]
-                    download(receiptQueryString,"print");
+                    download(receiptQueryString,"print",receiptKey);
                 }
             }
         }

@@ -109,6 +109,11 @@ const BpaConditionsContainer = Loadable({
   loading: () => <Loading />
 });
 
+const DownloadFileContainerForFI = Loadable({
+  loader: () => import("./DownloadFileContainerForFI"),
+  loading: () => <Loading />
+});
+
 export {
   CustomTabContainer,
   LabelContainer,
@@ -129,5 +134,6 @@ export {
   CheckListContainer,
   FeildInspectionCards,
   FieldInspectionContainer,
-  BpaConditionsContainer
+  BpaConditionsContainer,
+  DownloadFileContainerForFI
 };

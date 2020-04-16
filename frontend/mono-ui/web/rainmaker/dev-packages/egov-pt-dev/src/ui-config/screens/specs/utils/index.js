@@ -5,22 +5,28 @@ import get from "lodash/get";
 import {
   getQueryArg,
   getTransformedLocalStorgaeLabels,
-  getLocaleLabels
+  getLocaleLabels,
+  getTransformedLocale,
+  getFileUrlFromAPI,
+  getFileUrl
 } from "egov-ui-framework/ui-utils/commons";
 import store from "ui-redux/store";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "../../../../ui-utils/api";
+import { getSearchResults } from "../../../../ui-utils/commons";
 import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons"
 import isUndefined from "lodash/isUndefined";
 import {
   getCommonCard,
   getCommonValue,
   getCommonCaption,
-  getPattern
+  getPattern,
+  getLabelWithValue
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { sampleGetBill } from "../../../../ui-utils/sampleResponses";
+import jp from "jsonpath";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -850,6 +856,12 @@ export const getTextToLocalMapping = label => {
         "INWORKFLOW",
         localisationLabels
       );
+      case "Property ID":
+      return getLocaleLabels(
+        "Property ID",
+        "PT_MUTATION_PID",
+        localisationLabels
+      );
     default:
       return getLocaleLabels(
         label,
@@ -889,7 +901,7 @@ export const getpayments = async queryObject => {
   }
 };
 
-export const downloadCertificateForm = (Properties, pdfcode, tenantId, mode = 'download') => {
+export const downloadCertificateForm = async(oldProperties, pdfcode, tenantId,applicationNumber, mode = 'download') => {
   const queryStr = [
     { key: "key", value: pdfcode },
     { key: "tenantId", value: tenantId }
@@ -900,6 +912,21 @@ export const downloadCertificateForm = (Properties, pdfcode, tenantId, mode = 'd
       ACTION: "_get",
     },
   };
+  const response = await getSearchResults([
+    {
+      key: "tenantId",
+      value: tenantId
+    },
+    { key: "acknowledgementIds", value: applicationNumber }
+  ]);
+  const Properties= get(response, "Properties", oldProperties);
+  const document=get(Properties[0],"documents").filter(item=>item.documentType=="PTMUTATION");
+  const oldFileStoreId=document&& get(document[0],"fileStoreId")
+  if(oldFileStoreId){
+    downloadReceiptFromFilestoreID(oldFileStoreId, mode, tenantId)
+  }
+  else{
+  
   try {
     httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Properties }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
       .then(res => {
@@ -916,8 +943,9 @@ export const downloadCertificateForm = (Properties, pdfcode, tenantId, mode = 'd
     alert('Some Error Occured while downloading Acknowledgement form!');
   }
 }
+}
 
-export const downloadReceitForm = (Payments, pdfcode, tenantId, mode = 'download') => {
+export const downloadReceitForm = async(Payments, pdfcode, tenantId,applicationNumber, mode = 'download') => {
   const queryStr = [
     { key: "key", value: pdfcode },
     { key: "tenantId", value: tenantId }
@@ -928,6 +956,23 @@ export const downloadReceitForm = (Payments, pdfcode, tenantId, mode = 'download
       ACTION: "_get",
     },
   };
+  let queryObj = [
+    {
+      key: "tenantId",
+      value: tenantId
+    },
+    {
+      key: "consumerCodes",
+      value: applicationNumber
+    }
+  ];
+
+  const responsePayments = await getpayments(queryObj)
+  const oldFileStoreId=get(responsePayments.Payments[0],"fileStoreId")
+  if(oldFileStoreId){
+    downloadReceiptFromFilestoreID(oldFileStoreId, mode, tenantId)
+  }
+  else{
   try {
     httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
       .then(res => {
@@ -944,3 +989,76 @@ export const downloadReceitForm = (Payments, pdfcode, tenantId, mode = 'download
     alert('Some Error Occured while downloading Acknowledgement form!');
   }
 }
+}
+export const getLabelIfNotNull=(label,value,props)=>{
+  const labelObj=getLabelWithValue(label,value,props);
+   return labelObj ;
+}
+
+
+
+export const showHideMutationDetailsCard = (action, state, dispatch)=>{
+  const isMutationDetailsCard = get(state, "screenConfiguration.preparedFinalObject.PropertyConfiguration[0].Mutation.MutationDetails");
+  dispatch(
+    handleField(
+      "apply",
+      "components.div.children.formwizardFirstStep.children.mutationDetails",
+      "props.hidden",
+      !isMutationDetailsCard
+    )
+  );
+  dispatch(
+    handleField(
+      "apply",
+      "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.mutationSummary",
+      "props.hidden",
+      !isMutationDetailsCard
+    )
+  );
+  dispatch(
+    handleField(
+      "search-preview",
+      "components.div.children.body.children.cardContent.children.mutationSummary",
+      "props.hidden",
+      !isMutationDetailsCard
+    )
+  );
+}
+
+
+export const prepareDocumentsView = async (state, dispatch) => {
+  let documentsPreview = [];
+
+  let allDocuments =
+    state.screenConfiguration.preparedFinalObject.Property.documents;
+
+  allDocuments && allDocuments.forEach(doc => {
+    documentsPreview.push({
+      title: getTransformedLocale(doc.documentType),
+      fileStoreId: doc.fileStoreId,
+      linkText: "View"
+    });
+  });
+  let fileStoreIds = jp.query(documentsPreview, "$.*.fileStoreId");
+  let fileUrls =
+    fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
+  documentsPreview = documentsPreview.map((doc, index) => {
+    doc["link"] =
+      (fileUrls &&
+        fileUrls[doc.fileStoreId] &&
+        getFileUrl(fileUrls[doc.fileStoreId])) ||
+      "";
+    doc["name"] =
+      (fileUrls[doc.fileStoreId] &&
+        decodeURIComponent(
+          getFileUrl(fileUrls[doc.fileStoreId])
+            .split("?")[0]
+            .split("/")
+            .pop()
+            .slice(13)
+        )) ||
+      `Document - ${index + 1}`;
+    return doc;
+  });
+  dispatch(prepareFinalObject("documentsUploadRedux", documentsPreview));
+};

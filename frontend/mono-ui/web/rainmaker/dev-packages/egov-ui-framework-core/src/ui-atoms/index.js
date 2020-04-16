@@ -127,6 +127,10 @@ const MapLocation = Loadable({
   loader: () => import("./MapLocation"),
   loading: () => <Loading />
 });
+const CountdownTimer = Loadable({
+  loader: () => import("./CountdownTimer"),
+  loading: () => <Loading />
+});
 
 export {
   Div,
@@ -159,5 +163,6 @@ export {
   UploadedDocument,
   MenuButton,
   AutoSuggest,
-  MapLocation
+  MapLocation,
+  CountdownTimer
 };

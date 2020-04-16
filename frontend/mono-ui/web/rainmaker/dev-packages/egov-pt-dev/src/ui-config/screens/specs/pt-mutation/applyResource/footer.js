@@ -67,7 +67,7 @@ const moveToReview = (state, dispatch) => {
         dispatch(
           toggleSnackbar(
             true,
-            { labelName: "Please uplaod mandatory documents!", labelKey: "" },
+            { labelName: "Please upload mandatory documents!", labelKey: "" },
             "warning"
           )
         );
@@ -211,16 +211,22 @@ const callBackForApply = async (state, dispatch) => {
   }
   propertyPayload.ownershipCategory = propertyPayload.ownershipCategoryTemp;
   delete propertyPayload.ownershipCategoryTemp;
-  propertyPayload.documents = Object.values(documentsUploadRedux).map(o => {
-    let documentValue = o.dropdown.value.split('.');
+  let newDocuments = Object.values(documentsUploadRedux).map(document => {
+    let documentValue = document.dropdown.value.includes('TRANSFERREASONDOCUMENT')?document.dropdown.value.split('.')[2]:document.dropdown.value;
     return {
-      documentType: documentValue && documentValue.length > 1 && documentValue[2],
-      fileStoreId: o.documents[0].fileStoreId,
-      documentUid: o.documents[0].fileStoreId,
+      documentType: documentValue ,
+      fileStoreId: document.documents[0].fileStoreId,
+      documentUid: document.documents[0].fileStoreId,
       auditDetails: null,
       status: "ACTIVE"
     }
   })
+  let oldDocuments=[];
+  oldDocuments=propertyPayload.documents&&Array.isArray(propertyPayload.documents)&&propertyPayload.documents.filter(document=>{
+    return (document.documentType.includes('USAGEPROOF')|| document.documentType.includes('OCCUPANCYPROOF')|| document.documentType.includes('CONSTRUCTIONPROOF'))
+  })
+  oldDocuments=oldDocuments||[];
+  propertyPayload.documents=[...newDocuments,...oldDocuments];
 
   try {
     let queryObject = [
@@ -328,6 +334,7 @@ const callBackForNext = async (state, dispatch) => {
     "components.div.children.stepper.props.activeStep",
     0
   );
+  const isMutationDetailsCard = get(state, "screenConfiguration.preparedFinalObject.PropertyConfiguration[0].Mutation.MutationDetails");
   // console.log(activeStep);
   let errorMsg = false;
   let isFormValid = true;
@@ -365,11 +372,11 @@ const callBackForNext = async (state, dispatch) => {
       dispatch
     );
 
-    let ismutationCardValid = validateFields(
+    let ismutationCardValid = isMutationDetailsCard ? validateFields(
       "components.div.children.formwizardFirstStep.children.mutationDetails.children.cardContent.children.mutationDetailsContainer.children",
       state,
       dispatch
-    );
+    ):true;
     let isregistrationCardValid = validateFields(
       "components.div.children.formwizardFirstStep.children.registrationDetails.children.cardContent.children.registrationDetailsContainer.children",
       state,
@@ -417,11 +424,13 @@ const callBackForNext = async (state, dispatch) => {
     );
 
     if (ownershipCategory.includes("INSTITUTIONAL")) {
-      const owner = get(
+      let owner = get(
         state.screenConfiguration.preparedFinalObject,
         "Property.owners",
         []
       );
+      owner=owner.filter(own=>own.status == "ACTIVE");
+      
       dispatch(
         prepareFinalObject(
           "Property.ownersInit",
@@ -430,11 +439,13 @@ const callBackForNext = async (state, dispatch) => {
       );
     }
     else {
-      const owner = get(
+      let owner = get(
         state.screenConfiguration.preparedFinalObject,
         "Property.owners",
         []
       );
+      owner=owner.filter(own=>own.status == "ACTIVE");
+      
       dispatch(
         prepareFinalObject(
           "Property.ownersInit",

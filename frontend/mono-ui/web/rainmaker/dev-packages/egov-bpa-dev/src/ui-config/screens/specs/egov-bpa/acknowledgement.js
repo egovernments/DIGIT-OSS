@@ -391,7 +391,7 @@ const getAcknowledgementCard = (
             body: {
               labelName:
                 "A notification regarding BPA Rejection has been sent to building owner at registered Mobile No.",
-              labelKey: "BPA_APPROVAL_REJ_MESSAGE_SUBHEAD"
+              labelKey: "BPA_APPROVAL_REJE_MESSAGE_SUBHEAD"
             }
           })
         }
@@ -414,7 +414,7 @@ const getAcknowledgementCard = (
             },
             body: {
               labelName:
-                "A notification regarding BPA Revocation has been sent to building owner at registered Mobile No.",
+                "A notification regarding Building Permit application revocation has been sent to applicant at registered Mobile No.",
               labelKey: "BPA_APPROVAL_REV_MESSAGE_SUBHEAD"
             }
           })
@@ -503,7 +503,7 @@ const getAcknowledgementCard = (
       },
       gotoHomeFooter
     };
-  } else if (purpose === "forward" && status === "success") {
+  } else if ((purpose === "forward" || purpose === "FORWARD") && status === "success") {
     return {
       header,
       applicationSuccessCard: {
@@ -547,11 +547,11 @@ const getAcknowledgementCard = (
             },
             body: {
               labelName: "Application has been sent back successfully",
-              labelKey: "NOC_APPLICATION_SENDBACK_SUCCESS"
+              labelKey: "BPA_APPLICATION_SENDBACK_SUCCESS"
             },
             tailText: {
               labelName: "Application No.",
-              labelKey: "NOC_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+              labelKey: "BPA_HOME_SEARCH_RESULTS_APP_NO_LABEL"
             },
             number: applicationNumber
           })
