@@ -363,6 +363,18 @@
                }
               },
               {
+                "variable": "consumer_no",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_CONSUMER_NO"
+                },
+                "type": "label",
+                "localisation":{
+                  "required":true,
+                  "prefix": null,
+                  "module":"rainmaker-common"
+               }
+              },
+              {
                 "variable": "name_address",
                 "value": {
                   "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_NAME_ADDRESS"
