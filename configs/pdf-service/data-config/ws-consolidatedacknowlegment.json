@@ -199,6 +199,11 @@
                 "variable": "ownerCategory",
                 "value": {
                   "path": "$.property.ownershipCategory"
+                },
+                "localisation": {
+                  "required": true,
+                  "prefix": "WS_OWNERSHIPCATEGORY",
+                  "module": "rainmaker-ws"
                 }
               },
               {
