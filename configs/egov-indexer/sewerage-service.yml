@@ -8,6 +8,7 @@ ServiceMaps:
       - name: sewerage-services
         type: general
         id: $.id,$.property.tenantId
+        timeStampField: $.additionalDetails.appCreatedDate
         jsonPath: $.SewerageConnection
         customJsonMapping:
           indexMapping: {"Data":{"workflow": {"state": {}, "action": "", "assignes": []},"ownersmobileNos":[],"applicationNo":"","applicationStatus":"","status":"","connectionNo":"","oldConnectionNo":"","plumberInfo":[],"roadType":"","roadCuttingArea":"","connectionExecutionDate":"","connectionCategory":"","connectionType":"","additionalDetails":{},"id":"","propertyId":"","tenantId":"","proposedWaterClosets":"","proposedToilets":"","noOfWaterClosets":"","noOfToilets":""}}
@@ -66,6 +67,7 @@ ServiceMaps:
       - name: sewerage-services
         type: general
         id: $.id,$.property.tenantId
+        timeStampField: $.additionalDetails.appCreatedDate
         jsonPath: $.SewerageConnection
         customJsonMapping:
           indexMapping: {"Data":{"workflow": {"state": {}, "action": "", "assignes": []},"ownersmobileNos":[],"applicationNo":"","applicationStatus":"","status":"","connectionNo":"","oldConnectionNo":"","plumberInfo":[],"roadType":"","roadCuttingArea":"","connectionExecutionDate":"","connectionCategory":"","connectionType":"","additionalDetails":{},"id":"","propertyId":"","tenantId":"","proposedWaterClosets":"","proposedToilets":"","noOfWaterClosets":"","noOfToilets":""}}
@@ -123,6 +125,7 @@ ServiceMaps:
       - name: sewerage-services
         type: general
         id: $.id,$.property.tenantId
+        timeStampField: $.additionalDetails.appCreatedDate
         jsonPath: $.SewerageConnection
         customJsonMapping:
           indexMapping: {"Data":{"workflow": {"state": {}, "action": "", "assignes": []},"ownersmobileNos":[],"applicationNo":"","applicationStatus":"","status":"","connectionNo":"","oldConnectionNo":"","plumberInfo":[],"roadType":"","roadCuttingArea":"","connectionExecutionDate":"","connectionCategory":"","connectionType":"","additionalDetails":{},"id":"","propertyId":"","tenantId":"","proposedWaterClosets":"","proposedToilets":"","noOfWaterClosets":"","noOfToilets":""}}
