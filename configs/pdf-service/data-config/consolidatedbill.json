@@ -646,7 +646,7 @@
               },
               {
                 "variable": "others",
-                "formula": "{{{cancerCess}}+{{roundoff}}+{{timeInterest}}+{{ceilingDebit}}+{{ceilingCredit}}+{{firecess}}+{{waterCess}}}.toFixed(2)"
+                "formula": "{{cancerCess}}+{{roundoff}}+{{timeInterest}}+{{ceilingDebit}}+{{ceilingCredit}}+{{firecess}}+{{waterCess}}"
               },
               {
                 "variable": "arrears",
