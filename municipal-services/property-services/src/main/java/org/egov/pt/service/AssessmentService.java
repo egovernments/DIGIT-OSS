@@ -2,17 +2,15 @@ package org.egov.pt.service;
 
 import static org.egov.pt.util.PTConstants.ASSESSMENT_BUSINESSSERVICE;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.config.PropertyConfiguration;
-import org.egov.pt.models.Assessment;
-import org.egov.pt.models.AssessmentSearchCriteria;
-import org.egov.pt.models.Property;
+import org.egov.pt.models.*;
 import org.egov.pt.models.enums.Status;
+import org.egov.pt.models.user.UserDetailResponse;
+import org.egov.pt.models.user.UserSearchRequest;
 import org.egov.pt.models.workflow.BusinessService;
 import org.egov.pt.models.workflow.ProcessInstanceRequest;
 import org.egov.pt.models.workflow.State;
@@ -163,6 +161,17 @@ public class AssessmentService {
 
 	public List<Assessment> searchAssessments(AssessmentSearchCriteria criteria){
 		return repository.getAssessments(criteria);
+	}
+
+	public List<Assessment> getAssessmenPlainSearch(AssessmentSearchCriteria criteria) {
+		if (criteria.getLimit() != null && criteria.getLimit() > config.getMaxSearchLimit())
+			criteria.setLimit(config.getMaxSearchLimit());
+		List<String> assessmentNumbers = repository.fetchAssessmentNumbers(criteria);
+		if (assessmentNumbers.isEmpty())
+			return Collections.emptyList();
+		AssessmentSearchCriteria assessmentSearchCriteria = AssessmentSearchCriteria.builder().limit(criteria.getLimit())
+				.assessmentNumbers(new HashSet<>(assessmentNumbers)).build();
+		return repository.getAssessmentPlainSearch(assessmentSearchCriteria);
 	}
 
 	/**

@@ -70,4 +70,16 @@ public class AssessmentController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
+	@PostMapping("/_plainsearch")
+	public ResponseEntity<AssessmentResponse> plainsearch(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
+														  @ModelAttribute AssessmentSearchCriteria assessmentSearchCriteria) {
+		List<Assessment> assessments = assessmentService.getAssessmenPlainSearch(assessmentSearchCriteria);
+		ResponseInfo resInfo = responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true);
+		AssessmentResponse response = AssessmentResponse.builder()
+				.assessments(assessments)
+				.responseInfo(resInfo)
+				.build();
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
 }

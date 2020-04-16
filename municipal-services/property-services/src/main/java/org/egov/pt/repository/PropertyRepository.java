@@ -19,8 +19,10 @@ import org.egov.pt.repository.rowmapper.PropertyAuditRowMapper;
 import org.egov.pt.repository.rowmapper.PropertyRowMapper;
 import org.egov.pt.service.UserService;
 import org.egov.pt.util.PropertyUtil;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.SingleColumnRowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 
@@ -61,6 +63,22 @@ public class PropertyRepository {
 		return jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
 	}
 
+	public List<String> fetchAuditUUIDs(PropertyCriteria criteria) {
+		List<Object> preparedStmtList = new ArrayList<>();
+		preparedStmtList.add(criteria.getOffset());
+		preparedStmtList.add(criteria.getLimit());
+		return jdbcTemplate.query("select audituuid from eg_pt_property_audit order by auditcreatedtime offset " +
+						" ? " +
+						"limit ? ",
+				preparedStmtList.toArray(), new SingleColumnRowMapper<>(String.class));
+	}
+
+	public List<Property> getPropertiesBulkSearch(PropertyCriteria criteria) {
+		if (criteria.getUuids() == null || criteria.getUuids().isEmpty())
+			throw new CustomException("PLAIN_SEARCH_ERROR", "Search only allowed by ids!");
+		return getPropertyAuditBulk(criteria);
+	}
+
 	/**
 	 * Returns list of properties based on the given propertyCriteria with owner
 	 * fields populated from user service
@@ -97,6 +115,11 @@ public class PropertyRepository {
 
 		String query = queryBuilder.getpropertyAuditQuery();
 		return jdbcTemplate.query(query, criteria.getPropertyIds().toArray(), auditRowMapper);
+	}
+
+	private List<Property> getPropertyAuditBulk(PropertyCriteria criteria) {
+		String query = queryBuilder.getPropertyAuditBulkSearchQuery(criteria.getUuids());
+		return jdbcTemplate.query(query, criteria.getUuids().toArray(), auditRowMapper);
 	}
 
 	/**
