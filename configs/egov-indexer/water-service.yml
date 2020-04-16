@@ -9,6 +9,8 @@ ServiceMaps:
         type: general
         id: $.id,$.property.tenantId
         jsonPath: $.WaterConnection
+        isBulk: true
+        timeStampField: $.additionalDetails.appCreatedDate
         customJsonMapping:
           indexMapping: {"Data":{"workflow": {"state": {}, "action": "", "assignes": []},"ownersmobileNos":[],"applicationNo":"","applicationStatus":"","status":"","connectionNo":"","oldConnectionNo":"","plumberInfo":[],"roadType":"","roadCuttingArea":"","connectionExecutionDate":"","connectionCategory":"","connectionType":"","additionalDetails":{},"id":"","propertyId":"","rainWaterHarvesting":"","waterSource":"","tenantId":"","meterId":"","meterInstallationDate":"","proposedPipeSize":"","proposedTaps":"","pipeSize":"","noOfTaps":""}}
           fieldMapping:
@@ -74,6 +76,8 @@ ServiceMaps:
       - name: water-services
         type: general
         id: $.id,$.property.tenantId
+        isBulk: true
+        timeStampField: $.additionalDetails.appCreatedDate
         jsonPath: $.WaterConnection
         customJsonMapping:
           indexMapping: {"Data":{"workflow": {"state": {}, "action": "", "assignes": []},"ownersmobileNos":[],"applicationNo":"","applicationStatus":"","status":"","connectionNo":"","oldConnectionNo":"","plumberInfo":[],"roadType":"","roadCuttingArea":"","connectionExecutionDate":"","connectionCategory":"","connectionType":"","additionalDetails":{},"id":"","propertyId":"","rainWaterHarvesting":"","waterSource":"","tenantId":"","meterId":"","meterInstallationDate":"","proposedPipeSize":"","proposedTaps":"","pipeSize":"","noOfTaps":""}}
@@ -139,6 +143,8 @@ ServiceMaps:
       - name: water-services
         type: general
         id: $.id,$.property.tenantId
+        isBulk: true
+        timeStampField: $.additionalDetails.appCreatedDate
         jsonPath: $.WaterConnection
         customJsonMapping:
           indexMapping: {"Data":{"workflow": {"state": {}, "action": "", "assignes": []},"ownersmobileNos":[],"applicationNo":"","applicationStatus":"","status":"","connectionNo":"","oldConnectionNo":"","plumberInfo":[],"roadType":"","roadCuttingArea":"","connectionExecutionDate":"","connectionCategory":"","connectionType":"","additionalDetails":{},"id":"","propertyId":"","rainWaterHarvesting":"","waterSource":"","tenantId":"","meterId":"","meterInstallationDate":"","proposedPipeSize":"","proposedTaps":"","pipeSize":"","noOfTaps":""}}
