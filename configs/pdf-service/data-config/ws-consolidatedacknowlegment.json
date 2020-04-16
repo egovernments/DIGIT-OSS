@@ -81,13 +81,23 @@
               {
                 "variable": "propertyType",
                 "value": {
-                  "path": "$.property.propertyTypeValue"
+                  "path": "$.property.propertyType"
+                },
+                "localisation": {
+                  "required": true,
+                  "prefix": "WS_PROPTYPE",
+                  "module": "rainmaker-ws"
                 }
               },
               {
                 "variable": "propertyUsageType",
                 "value": {
-                  "path": "$.property.propertyUsageType"
+                  "path": "$.property.usageCategory"
+                },
+                "localisation": {
+                  "required": true,
+                  "prefix": "WS_PROPUSGTYPE",
+                  "module": "rainmaker-ws"
                 }
               },
               {
