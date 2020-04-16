@@ -1,9 +1,9 @@
-import React from "react";
-import Icon from "@material-ui/core/Icon";
 import Button from "@material-ui/core/Button";
+import Icon from "@material-ui/core/Icon";
+import React from "react";
 
 const UploadedDocument = props => {
-  const { document, removeDocument } = props;
+  const { document, removeDocument, disabled } = props;
   return (
     <Button
       variant="outlined"
@@ -15,12 +15,12 @@ const UploadedDocument = props => {
       }}
     >
       {document.fileName}
-      <Icon
+      {!disabled && <Icon
         style={{ color: "#E54D42", marginLeft: "16px" }}
         onClick={removeDocument}
       >
         <i class="material-icons">highlight_off</i>
-      </Icon>
+      </Icon>}
     </Button>
   );
 };

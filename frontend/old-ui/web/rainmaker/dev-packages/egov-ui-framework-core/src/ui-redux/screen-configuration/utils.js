@@ -23,7 +23,7 @@ export const validateField = field => {
     return { isFieldValid: true, errorText: "" };
   }
 
-  const fieldValue = field.value || (field.props && field.props.value);
+  const fieldValue = field.value;
   const value = fieldValue
     ? typeof fieldValue === "string"
       ? fieldValue.trim()

@@ -30,7 +30,7 @@ class PaymentSuccess extends Component {
     this.setState({
       yearDialogue: {
         dialogueOpen: !this.state.yearDialogue.dialogueOpen,
-        urlToAppend: `/property-tax/assessment-form?assessmentId=${assessmentId}&isReassesment=true&isAssesment=true&propertyId=${this.props.match.params.propertyId}&tenantId=${this.props.match.params.tenantId}`
+        urlToAppend: `/property-tax/assessment-form?assessmentId=${assessmentId}&purpose=assess&propertyId=${this.props.match.params.propertyId}&tenantId=${this.props.match.params.tenantId}`
       }
     })
   }

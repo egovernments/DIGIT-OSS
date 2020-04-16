@@ -1,7 +1,8 @@
 import {
   getCommonCard,
   getCommonGrayCard,
-  getCommonTitle
+  getCommonTitle,
+  getCommonContainer
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 
 import { getFeesEstimateCard, getDialogButton } from "../../utils";
@@ -31,6 +32,7 @@ const reviewOwnerDetails = getReviewOwner();
 const reviewLicenseDetails = getReviewLicenseDetails();
 const reviewDocumentDetails = getReviewDocuments();
 
+
 export const tradeReviewDetails = getCommonCard({
   header: getCommonTitle({
     labelName: "Please review your Application and Submit",
@@ -43,5 +45,5 @@ export const tradeReviewDetails = getCommonCard({
   reviewPermanentDetails,
   reviewCommunicationDetails,
   reviewDocumentDetails,
-  declarationSummary,
+  declarationSummary
 });

@@ -114,7 +114,7 @@ class MyConnections extends React.Component {
                         </Grid>
                         <Grid item md={8} xs={6}>
                           <LabelContainer
-                            labelName={item.property.owners.map(owner => owner.name)}
+                            labelName={item.property.owners.map(owner =>owner.name).join(",")}
                             fontSize={14}
                             style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
                           />

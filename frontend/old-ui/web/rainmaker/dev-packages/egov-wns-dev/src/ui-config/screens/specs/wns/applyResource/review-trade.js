@@ -8,6 +8,7 @@ import {
 import { getConnectionDetails } from './../applyResource/task-connectiondetails';
 import { propertyOwnerDetails } from "../applyResource/task-owner-details";
 import { convertEpochToDate } from "../../utils";
+import { handleNA } from '../../utils';
 
 const getHeader = label => {
   return {
@@ -110,7 +111,8 @@ const propertyLocationDetails = {
           },
           {
             jsonPath:
-              "WaterConnection[0].property.address.city"
+              "WaterConnection[0].property.address.city",
+              callBack: handleNA
           }
         ),
         reviewDoorOrHouseNumber: getLabelWithValue(
@@ -118,35 +120,40 @@ const propertyLocationDetails = {
             labelName: "Door/House No.",
             labelKey: "WS_PROP_DETAIL_DHNO"
           },
-          { jsonPath: "WaterConnection[0].property.address.doorNo" }
+          { jsonPath: "WaterConnection[0].property.address.doorNo",
+          callBack: handleNA }
         ),
         reviewBuildingOrColonyName: getLabelWithValue(
           {
             labelName: "Building/Colony Name",
             labelKey: "WS_PROP_DETAIL_BUILD_NAME_LABEL"
           },
-          { jsonPath: "WaterConnection[0].property.address.buildingName" }
+          { jsonPath: "WaterConnection[0].property.address.buildingName",
+          callBack: handleNA }
         ),
         reviewStreetName: getLabelWithValue(
           {
             labelName: "Street Name",
             labelKey: "WS_PROP_DETAIL_STREET_NAME"
           },
-          { jsonPath: "WaterConnection[0].property.address.street" }
+          { jsonPath: "WaterConnection[0].property.address.street",
+          callBack: handleNA }
         ),
         reviewLocalityOrMohalla: getLabelWithValue(
           {
             labelName: "Locality/Mohalla",
             labelKey: "WS_PROP_DETAIL_LOCALITY_MOHALLA_LABEL"
           },
-          { jsonPath: "WaterConnection[0].property.address.locality.name" }
+          { jsonPath: "WaterConnection[0].property.address.locality.name",
+          callBack: handleNA }
         ),
         reviewPincode: getLabelWithValue(
           {
             labelName: "Pincode",
             labelKey: "WS_PROP_DETAIL_PINCODE"
           },
-          { jsonPath: "WaterConnection[0].property.address.pincode" }
+          { jsonPath: "WaterConnection[0].property.address.pincode",
+          callBack: handleNA }
         ),
       })
     }),
@@ -177,9 +184,7 @@ const getPropertyDetails = {
           },
           {
             jsonPath: "WaterConnection[0].property.propertyId",
-            // callBack: value => {
-            //   return value.split(".")[0];
-            // }
+            callBack: handleNA
           }
         ),
         reviewPropertyType: getLabelWithValue(
@@ -189,9 +194,7 @@ const getPropertyDetails = {
           },
           {
             jsonPath: "WaterConnection[0].property.propertyType",
-            // callBack: value => {
-            //   return value.split(".")[1];
-            // }
+            callBack: handleNA
           }
         ),
         reviewPropertyUsageType: getLabelWithValue(
@@ -200,7 +203,8 @@ const getPropertyDetails = {
             labelKey: "WS_PROPERTY_USAGE_TYPE_LABEL"
           },
           {
-            jsonPath: "WaterConnection[0].property.usageCategory"
+            jsonPath: "WaterConnection[0].property.usageCategory",
+            callBack: handleNA
           }
         ),
 
@@ -209,28 +213,32 @@ const getPropertyDetails = {
             labelName: "Property Sub usage type",
             labelKey: "WS_PROPERTY_SUB_USAGE_TYPE_LABEL"
           },
-          { jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].uom" }
+          { jsonPath: "WaterConnection[0].property.propertySubUsageType",
+          callBack: handleNA}
         ),
         reviewPlotSize: getLabelWithValue(
           {
             labelName: "Plot Size (in sq metres)",
             labelKey: "WS_PROP_DETAIL_PLOT_SIZE_LABEL"
           },
-          { jsonPath: "WaterConnection[0].property.landArea" }
+          { jsonPath: "WaterConnection[0].property.landArea",
+          callBack: handleNA }
         ),
         reviewNumberOfFloors: getLabelWithValue(
           {
             labelName: "Number Of Floors",
             labelKey: "WS_PROPERTY_NO_OF_FLOOR_LABEL"
           },
-          { jsonPath: "WaterConnection[0].property.noOfFloors" }
+          { jsonPath: "WaterConnection[0].property.noOfFloors",
+          callBack: handleNA }
         ),
         rainwaterHarvestingFacility: getLabelWithValue(
           {
             labelKey: "WS_SERV_DETAIL_CONN_RAIN_WATER_HARVESTING_FAC",
             labelName: "Rain Water Harvesting Facility"
           },
-          { jsonPath: "WaterConnection[0].rainWaterHarvesting" }
+          { jsonPath: "WaterConnection[0].property.rainWaterHarvesting",
+          callBack: handleNA }
         )
       })
     }),
@@ -246,12 +254,6 @@ const getPropertyDetails = {
 };
 
 const ownerDetails = {
-  // return getCommonGrayCard({
-  //   headerDiv: {
-  //     uiFramework: "custom-atoms",
-  //     componentPath: "Container",
-  //     ...propertyOwnerDetailsHeader,
-  //   },
       uiFramework: "custom-containers",
       componentPath: "MultiItem",
       props: {
@@ -259,13 +261,22 @@ const ownerDetails = {
         scheama: getCommonGrayCard({
           div3: propertyOwnerDetailsHeader,
           propertyLocationDetailsContainer: getCommonContainer({
+             mobileNumber: getLabelWithValue(
+              {
+                labelName: "Mobile Number",
+                  labelKey: "WS_OWN_DETAIL_MOBILE_NO_LABEL"
+              },
+              { jsonPath: "WaterConnection[0].property.owners[0].mobileNumber",
+              callBack: handleNA }
+          ),
             name: getLabelWithValue(
               {
                 labelName: "Name",
                 labelKey: "WS_OWN_DETAIL_OWN_NAME_LABEL"
               },
               {
-                jsonPath: "WaterConnection[0].property.owners[0].name"
+                jsonPath: "WaterConnection[0].property.owners[0].name",
+                callBack: handleNA
               }
             ),
             email: getLabelWithValue(
@@ -273,7 +284,8 @@ const ownerDetails = {
                 labelKey: "WS_OWN_DETAIL_OWN_EMAIL_LABEL"
               },
               {
-                jsonPath: "WaterConnection[0].property.owners[0].emailId"
+                jsonPath: "WaterConnection[0].property.owners[0].emailId",
+                callBack: handleNA
               }
             ),
             gender: getLabelWithValue(
@@ -282,6 +294,7 @@ const ownerDetails = {
               },
               {
                 jsonPath: "WaterConnection[0].property.owners[0].gender",
+                callBack: handleNA,
                 localePrefix: {
                   moduleName: "COMMON",
                   masterName: "GENDER"
@@ -294,32 +307,37 @@ const ownerDetails = {
               },
               {
                 jsonPath: "WaterConnection[0].property.owners[0].dob",
-                callBack: convertEpochToDate
+                callBack: convertEpochToDate,
+                callBack: handleNA
               }
             ),
             fatherName: getLabelWithValue(
               {
                 labelKey: "WS_OWN_DETAIL_FATHER_OR_HUSBAND_NAME"
               },
-              { jsonPath: "WaterConnection[0].property.owners[0].fatherOrHusbandName" }
+              { jsonPath: "WaterConnection[0].property.owners[0].fatherOrHusbandName",
+              callBack: handleNA }
             ),
             relationship: getLabelWithValue(
               {
                 labelKey: "WS_OWN_DETAIL_RELATION_LABEL"
               },
-              { jsonPath: "WaterConnection[0].property.owners[0].relationship" }
+              { jsonPath: "WaterConnection[0].property.owners[0].relationship",
+              callBack: handleNA }
             ),
             correspondenceAddress: getLabelWithValue(
               {
                 labelKey: "WS_OWN_DETAIL_CROSADD"
               },
-              { jsonPath: "WaterConnection[0].property.owners[0].correspondenceAddress" }
+              { jsonPath: "WaterConnection[0].property.owners[0].correspondenceAddress",
+              callBack: handleNA }
             ), specialApplicantCategory: getLabelWithValue(
               {
                 labelKey: "WS_OWN_DETAIL_SPECIAL_APPLICANT_LABEL"
               },
               {
-                jsonPath: "WaterConnection[0].property.owners[0].ownerType"
+                jsonPath: "WaterConnection[0].property.owners[0].ownerType",
+                callBack: handleNA
               })
           })
         }),
@@ -333,7 +351,5 @@ const ownerDetails = {
         afterPrefixJsonPath: "children.value.children.key"
       },
       type: "array"
-    
-  // });
 }
 

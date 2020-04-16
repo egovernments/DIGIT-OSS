@@ -27,3 +27,18 @@
 
 div[class^="MuiPaper-root"] svg text, .stepper-container svg text {
   font-size: 12px !important; }
+
+.occupancytypeblock {
+    float: right; 
+    width: 50%;
+    margin-top: -15px
+  }
+
+  .occupancytypeblock > div {
+    max-width: 100%;
+    flex-basis: 100%;
+  }
+
+   .mymuicontainer #material-ui-cardContent #material-ui-applicantContainer div:nth-child(3) > div:nth-child(1) {
+     display:none;
+   }

@@ -10,9 +10,19 @@ import { paymentFailureFooter } from "./acknowledgementResource/paymentFailureFo
 import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { loadReceiptGenerationData } from "../utils/receiptTransformer";
-import { downloadApp } from "../../../../ui-utils/commons";
-import get from "lodash/get";
+import {
+  downloadApp,
+  getSearchResultsForSewerage,
+  getSearchResults,
+  findAndReplace,
+  prepareDocumentsUploadRedux,
+  prepareDocumentsUploadData,
+  prepareDocUploadRedux,
+  downloadAndPrintForNonApply
+} from "../../../../ui-utils/commons";
 import set from "lodash/set";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getMdmsData } from './apply';
 
 const getAcknowledgementCard = (
   state,
@@ -213,7 +223,12 @@ const getAcknowledgementCard = (
           })
         }
       },
-      approvalSuccessFooter
+      applicationSuccessFooter: applicationSuccessFooter(
+        state,
+        dispatch,
+        applicationNumber,
+        tenant
+      )
     };
   } else if (purpose === "sendback" && status === "success") {
     loadReceiptGenerationData(applicationNumber, tenant);
@@ -256,7 +271,12 @@ const getAcknowledgementCard = (
           })
         }
       },
-      approvalSuccessFooter
+      applicationSuccessFooter: applicationSuccessFooter(
+        state,
+        dispatch,
+        applicationNumber,
+        tenant
+      )
     };
   } else if (purpose === "application" && status === "rejected") {
     return {
@@ -293,7 +313,12 @@ const getAcknowledgementCard = (
           })
         }
       },
-      gotoHomeFooter
+      applicationSuccessFooter: applicationSuccessFooter(
+        state,
+        dispatch,
+        applicationNumber,
+        tenant
+      )
     };
   } else if (purpose === "application" && status === "cancelled") {
     return {
@@ -336,7 +361,6 @@ const getAcknowledgementCard = (
           })
         }
       },
-      gotoHomeFooter
     };
   } else if (purpose === "pay" && status === "failure") {
     return {
@@ -406,7 +430,6 @@ const getAcknowledgementCard = (
           })
         }
       },
-      gotoHomeFooter
     };
   } else if (purpose === "forward" && status === "success") {
     return {
@@ -438,7 +461,12 @@ const getAcknowledgementCard = (
           })
         }
       },
-      gotoHomeFooter
+      applicationSuccessFooter: applicationSuccessFooter(
+        state,
+        dispatch,
+        applicationNumber,
+        tenant
+      )
     };
   } else if (purpose === "activate" && status === "success") {
     return {
@@ -470,7 +498,12 @@ const getAcknowledgementCard = (
           })
         }
       },
-      gotoHomeFooter
+      applicationSuccessFooter: applicationSuccessFooter(
+        state,
+        dispatch,
+        applicationNumber,
+        tenant
+      )
     };
   }
 };
@@ -602,7 +635,7 @@ export const downloadPrintContainer = (
               label: { labelName: "DOWNLOAD", labelKey: "WS_COMMON_BUTTON_DOWNLOAD" },
               leftIcon: "cloud_download",
               rightIcon: "arrow_drop_down",
-              props: { variant: "outlined", style: { height: "60px", color: "#FE7A51" }, className: "tl-download-button" },
+              props: { variant: "outlined", style: { height: "60px", color: "#FE7A51", maxWidth: "95%", marginRight: "-15px" }, className: "tl-download-button" },
               menu: downloadMenu
             }
           }
@@ -616,7 +649,7 @@ export const downloadPrintContainer = (
               label: { labelName: "PRINT", labelKey: "WS_COMMON_BUTTON_PRINT" },
               leftIcon: "print",
               rightIcon: "arrow_drop_down",
-              props: { variant: "outlined", style: { height: "60px", color: "#FE7A51", marginLeft: "15px" }, className: "tl-print-button" },
+              props: { variant: "outlined", style: { height: "60px", color: "#FE7A51", maxWidth: "85%" }, className: "tl-print-button" },
               menu: printMenu
             }
           }
@@ -631,6 +664,52 @@ export const downloadPrintContainer = (
   }
 };
 
+const fetchData = async (dispatch) => {
+  const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+  const applicationNumberWater = getQueryArg(window.location.href, "applicationNumberWater");
+  const applicationNumberSewerage = getQueryArg(window.location.href, "applicationNumberSewerage");
+  const tenantId = getQueryArg(window.location.href, "tenantId");
+  if (applicationNumberSewerage && applicationNumberWater) {
+    await getWaterData(dispatch, applicationNumberWater, tenantId);
+    await getSewerageData(dispatch, applicationNumberSewerage, tenantId);
+  } else if (applicationNumber) {
+    if (applicationNumber.includes("WS")) {
+      await getWaterData(dispatch, applicationNumber, tenantId);
+    } else if (applicationNumber.includes("SW")) {
+      await getSewerageData(dispatch, applicationNumber, tenantId);
+    }
+  }
+}
+
+const getWaterData = async (dispatch, applicationNumber, tenantId) => {
+  let waterResponse = [];
+  let queryObject = [{ key: "tenantId", value: tenantId }, { key: "applicationNumber", value: applicationNumber }];
+  try { waterResponse = await getSearchResults(queryObject); } catch (error) { console.log(error); waterResponse = [] };
+  if (waterResponse && waterResponse.WaterConnection !== undefined && waterResponse.WaterConnection.length > 0) {
+    waterResponse.WaterConnection[0].service = "WATER";
+    dispatch(prepareFinalObject("WaterConnection", findAndReplace(waterResponse.WaterConnection, "NA", null)));
+  } else { dispatch(prepareFinalObject("WaterConnection", [])); }
+}
+
+const getSewerageData = async (dispatch, applicationNumber, tenantId) => {
+  let sewerResponse = [];
+  let queryObject = [{ key: "tenantId", value: tenantId }, { key: "applicationNumber", value: applicationNumber }];
+  try { sewerResponse = await getSearchResultsForSewerage(queryObject, dispatch) } catch (error) { console.log(error); sewerResponse = [] };
+  if (sewerResponse && sewerResponse.SewerageConnections !== undefined && sewerResponse.SewerageConnections.length > 0) {
+    sewerResponse.SewerageConnections[0].service = "SEWERAGE";
+    dispatch(prepareFinalObject("SewerageConnection", findAndReplace(sewerResponse.SewerageConnections, "NA", null)));
+  } else { dispatch(prepareFinalObject("SewerageConnection", [])); }
+}
+
+const pageReset = (dispatch) => {
+  dispatch(prepareFinalObject("WaterConnection", []));
+  dispatch(prepareFinalObject("SewerageConnection", []));
+  dispatch(prepareFinalObject("applyScreen", {}));
+  dispatch(prepareFinalObject("searchScreen", {}));
+  dispatch(prepareFinalObject("waterSubSourceForSelectedWaterSource", {}));
+  dispatch(prepareFinalObject("UploadedDocs", []));
+}
+
 const screenConfig = {
   uiFramework: "material-ui",
   name: "acknowledgement",
@@ -644,6 +723,14 @@ const screenConfig = {
     }
   },
   beforeInitScreen: (action, state, dispatch) => {
+    pageReset(dispatch);
+    fetchData(dispatch)
+      .then(() => getMdmsData(dispatch))
+      .then(() => prepareDocumentsUploadData(state, dispatch))
+      .then(() => prepareDocUploadRedux(state, dispatch))
+      .then(() => prepareDocumentsUploadRedux(state, dispatch))
+      .then(() => downloadAndPrintForNonApply(state, dispatch))
+      .catch(error => console.log(error))
     const purpose = getQueryArg(window.location.href, "purpose");
     const status = getQueryArg(window.location.href, "status");
     // const service = getQueryArg(window.location.href, "service");

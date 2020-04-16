@@ -2,6 +2,7 @@ import {
   getStepperObject,
   getCommonHeader,
   getCommonCard,
+  getCommonGrayCard,
   getCommonContainer,
   getCommonTitle,
   getCommonParagraph,
@@ -56,7 +57,7 @@ export const header = getCommonContainer({
     props: { number: "NA" },
     visible: false
   },
- 
+
   applicationNumberSewerage: {
     uiFramework: "custom-atoms-local",
     moduleName: "egov-wns",
@@ -73,13 +74,16 @@ export const reviewOwnerDetails = reviewOwner(process.env.REACT_APP_NAME !== "Ci
 
 export const reviewDocumentDetails = reviewDocuments();
 
-
-const summaryScreen = getCommonCard({
+const summaryScreenCitizen = getCommonCard({
+  reviewConnDetails,
+  reviewDocumentDetails,
+});
+const summaryScreenEMP = getCommonCard({
   reviewConnDetails,
   reviewDocumentDetails,
   reviewOwnerDetails
 })
-
+let summaryScreen=process.env.REACT_APP_NAME === "Citizen"?summaryScreenCitizen:summaryScreenEMP;
 export const documentDetails = getCommonCard({
   header: getCommonTitle(
     { labelName: "Required Documents", labelKey: "WS_DOCUMENT_DETAILS_HEADER" },
@@ -96,46 +100,6 @@ export const documentDetails = getCommonCard({
     moduleName: "egov-wns",
     componentPath: "DocumentListContainer",
     props: {
-      documents: [
-        {
-          name: "Identity Proof ",
-          required: true,
-          jsonPath: "applyScreen.documents.identityProof",
-          selector: {
-            inputLabel: "Select Document",
-            menuItems: [{ value: "AADHAAR", label: "Aadhaar Card" }, { value: "VOTERID", label: "Voter ID Card" }, { value: "DRIVING", label: "Driving License" }]
-          }
-        },
-        {
-          name: "Address Proof",
-          required: true,
-          jsonPath: "applyScreen.documents.addressProof",
-          selector: {
-            inputLabel: "Select Document",
-            menuItems: [{ value: "ELECTRICITYBILL", label: "Electricity Bill" }, { value: "DL", label: "Driving License" }, { value: "VOTERID", label: "Voter ID Card" }]
-          }
-        },
-        {
-          name: "Building Plan/ Completion Certificate",
-          required: false,
-          jsonPath: "applyScreen.documents.completionCertificate"
-        },
-        {
-          name: "Electicity Bill",
-          required: true,
-          jsonPath: "applyScreen.documents.electricityBill"
-        },
-        {
-          name: "Property Tax Reciept",
-          required: false,
-          jsonPath: "applyScreen.documents.ptReciept"
-        },
-        {
-          name: "Plumber Report/ Drawing",
-          required: true,
-          jsonPath: "applyScreen.documents.plumberReport"
-        }
-      ],
       buttonLabel: {
         labelName: "UPLOAD FILE",
         labelKey: "WS_DOCUMENT_DETAILS_BUTTON_UPLOAD_FILE"
@@ -244,6 +208,86 @@ export const getData = async (action, state, dispatch) => {
       const sewerageConnections = payloadSewerage ? payloadSewerage.SewerageConnections : [];
       let combinedArray = waterConnections.concat(sewerageConnections);
       dispatch(prepareFinalObject("applyScreen", findAndReplace(combinedArray[0], "null", "NA")));
+      let data = get(state.screenConfiguration.preparedFinalObject, "applyScreen")
+      if (data.connectionType !== "Metered") {
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.initialMeterReading",
+            "visible",
+            false
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterInstallationDate",
+            "visible",
+            false
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterID",
+            "visible",
+            false
+          )
+        );
+      }
+      if (data.additionalDetails !== undefined && data.additionalDetails.detailsProvidedBy !== undefined) {
+        if (data.additionalDetails.detailsProvidedBy === "Self") {
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.plumberDetailsContainer.children.cardContent.children.plumberDetails.children.plumberLicenceNo",
+              "visible",
+              false
+            )
+          );
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.plumberDetailsContainer.children.cardContent.children.plumberDetails.children.plumberName",
+              "visible",
+              false
+            )
+          );
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.plumberDetailsContainer.children.cardContent.children.plumberDetails.children.plumberMobNo",
+              "visible",
+              false
+            )
+          );
+        } else if (data.additionalDetails.detailsProvidedBy === "ULB") {
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.plumberDetailsContainer.children.cardContent.children.plumberDetails.children.plumberLicenceNo",
+              "visible",
+              true
+            )
+          );
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.plumberDetailsContainer.children.cardContent.children.plumberDetails.children.plumberName",
+              "visible",
+              true
+            )
+          );
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.plumberDetailsContainer.children.cardContent.children.plumberDetails.children.plumberMobNo",
+              "visible",
+              true
+            )
+          );
+        }
+      }
       let propId = get(state.screenConfiguration.preparedFinalObject, "applyScreen.property.propertyId")
       dispatch(prepareFinalObject("searchScreen.propertyIds", propId));
       let docs = get(state, "screenConfiguration.preparedFinalObject");
@@ -260,6 +304,7 @@ export const getData = async (action, state, dispatch) => {
 const propertyDetail = getPropertyDetails();
 const propertyIDDetails = getPropertyIDDetails();
 const ownerDetail = getOwnerDetails();
+
 export const ownerDetails = getCommonCard({ ownerDetailsHeader, ownershipType, ownerDetail });
 export const IDDetails = getCommonCard({ propertyHeader, propertyID, propertyIDDetails });
 export const Details = getCommonCard({ propertyDetail });
@@ -308,6 +353,7 @@ const screenConfig = {
   // hasBeforeInitAsync:true,
   beforeInitScreen: (action, state, dispatch) => {
     pageReset(dispatch);
+    getData(action, state, dispatch).then(() => { });
     dispatch(prepareFinalObject("applyScreen.water", true));
     dispatch(prepareFinalObject("applyScreen.sewerage", false));
     const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -340,7 +386,6 @@ const screenConfig = {
 
     const tenantId = getTenantId();
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
-    getData(action, state, dispatch).then(() => { });
     prepareDocumentsUploadData(state, dispatch);
     return action;
   },

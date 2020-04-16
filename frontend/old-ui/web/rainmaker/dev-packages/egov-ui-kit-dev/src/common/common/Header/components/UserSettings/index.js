@@ -120,7 +120,7 @@ class UserSettings extends Component {
   render() {
     const { languageSelected, displayAccInfo, tenantSelected, open } = this.state;
     const { style } = this;
-    const { onIconClick, userInfo, handleItemClick, hasLocalisation, languages, fetchLocalizationLabel } = this.props;
+    const { onIconClick, userInfo, handleItemClick, hasLocalisation, languages, fetchLocalizationLabel, isUserSetting } = this.props;
 
     /**
      * Get All tenant id's from (user info -> roles) to populate dropdown
@@ -135,7 +135,7 @@ class UserSettings extends Component {
 
     return (
       <div className="userSettingsContainer">
-        <LogoutDialog
+        {isUserSetting && <LogoutDialog
           logoutPopupOpen={open}
           closeLogoutDialog={this.handleClose}
           logout={this.handleTenantChange}
@@ -143,8 +143,8 @@ class UserSettings extends Component {
           canceltext={"CORE_CHANGE_TENANT_CANCEL"}
           title={"CORE_CHANGE_TENANT"}
           body={"CORE_CHANGE_TENANT_DESCRIPTION"}
-        />
-        {process.env.REACT_APP_NAME === "Employee" && (
+        />}
+        {process.env.REACT_APP_NAME === "Employee" && isUserSetting && (
           <DropDown
             onChange={this.onTenantChange}
             listStyle={style.listStyle}
@@ -183,7 +183,7 @@ class UserSettings extends Component {
 
         {/* <Icon action="social" name="notifications" color="#767676" style={style.iconStyle} /> */}
         <ClickAwayListener onClickAway={this.handleClose}>
-          <div
+          {isUserSetting && <div
             onClick={() => {
               this.toggleAccInfo();
             }}
@@ -209,17 +209,18 @@ class UserSettings extends Component {
                   ""
                 )}
             </div>
-          </div>
+          </div>}
         </ClickAwayListener>
       </div>
     );
   }
 }
 
-const mapStateToProps = ({ common }) => {
+const mapStateToProps = ({ app,common }) => {
+  const {locale}=app;
   const { stateInfoById } = common;
   let languages = get(stateInfoById, "0.languages", []);
-  return { languages };
+  return { languages ,locale};
 };
 
 const mapDispatchToProps = (dispatch) => {

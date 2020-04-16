@@ -29,7 +29,7 @@ const styles = theme => ({
     padding: 0
   },
   ac_valueContainer: {
-    display: "flex",
+    // display: "flex",
     // flexWrap: "wrap",
     flex: 1,
     alignItems: "center"
@@ -49,7 +49,7 @@ const styles = theme => ({
   },
   ac_paper: {
     position: "absolute",
-    zIndex: 1105,
+    zIndex: 13305,
     left: 0,
     right: 0,
     marginTop: theme.spacing.unit

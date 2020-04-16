@@ -1,8 +1,7 @@
-// import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
-import get from "lodash/get";
-import { getFileUrlFromAPI, getFileUrl } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { convertToOldPTObject } from "egov-ui-kit/utils/PTCommon/FormWizardUtils";
+import { getFileUrl, getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
+import { convertToOldPTObject } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
+import get from "lodash/get";
 
 export const createPropertyPayload = (properties, documentsUploadRedux, newProperties = []) => {
   properties[0] = {
@@ -16,10 +15,10 @@ export const createPropertyPayload = (properties, documentsUploadRedux, newPrope
       if (obj.documents && Array.isArray(obj.documents) && obj.documents.length) {
         if (!obj.documents[0].documentType || !obj.documents[0].documentUid) {
           delete obj.documents;
-        }else{
-          obj.documents=obj.documents.map(document=>{
-            document.fileStoreId=document.documentUid
-            return {...document}
+        } else {
+          obj.documents = obj.documents.map(document => {
+            document.fileStoreId = document.documentUid
+            return { ...document }
           })
         }
       }
@@ -104,9 +103,9 @@ export const getCreatePropertyResponse = (createPropertyResponse) => {
   // createPropertyResponse.Properties[0].propertyDetails = createPropertyResponse.Properties;
   // Documents array coming in reverse order from API
   // createPropertyResponse.Properties[0] && createPropertyResponse.Properties[0].documents && createPropertyResponse.Properties[0].documents.length && createPropertyResponse.Properties[0].documents.reverse();
-  try{
-  return { Properties: convertToOldPTObject(createPropertyResponse), newProperties: createPropertyResponse.Properties };
-  }catch(e){
+  try {
+    return { Properties: convertToOldPTObject(createPropertyResponse), newProperties: createPropertyResponse.Properties };
+  } catch (e) {
     console.error(e);
     return { Properties: [], newProperties: [] };
   }
@@ -117,7 +116,11 @@ export const convertToArray = (documentsUploadRedux) => {
     if (Object.keys(documentsUploadRedux) && Object.keys(documentsUploadRedux).length) {
       let documentsData = [];
       Object.keys(documentsUploadRedux).map((key) => {
-        let docTitleArray = documentsUploadRedux[key].dropdown.value.split(".");
+        const dropdownValue = documentsUploadRedux[key] && documentsUploadRedux[key].dropdown && documentsUploadRedux[key].dropdown.value || '';
+        let docTitleArray = dropdownValue.split(".");
+        if (dropdownValue == '' && docTitleArray.length == 1) {
+          return;
+        }
         return documentsData.push({
           title: docTitleArray[docTitleArray.length - 1],
           link: getFileUrl(documentsUploadRedux[key].documents[0].fileUrl),
@@ -186,11 +189,12 @@ export const prefillPTDocuments = async (payload, sourceJsonPath, destJsonPath, 
       docUploadRedux[key].isDocumentTypeRequired = true;
       return docUploadRedux;
     });
-    // documentsUploadRedux && documentsUploadRedux.length && documentsUploadRedux.reverse();
+  // documentsUploadRedux && documentsUploadRedux.length && documentsUploadRedux.reverse();
   let docs = {};
-  for (let i = 0; i < documentsUploadRedux.length; i++) {
-    docs[i] = documentsUploadRedux[i][i];
+  if (documentsUploadRedux) {
+    for (let i = 0; i < documentsUploadRedux.length; i++) {
+      docs[i] = documentsUploadRedux[i][i];
+    }
   }
-  console.log("documentsUploadRedux-----:   ", docs);
   dispatch(prepareFinalObject(destJsonPath, docs));
 };

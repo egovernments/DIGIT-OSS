@@ -6,6 +6,7 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
 const connectionNo = getQueryArg(window.location.href, "connectionNumber");
 const tenantId = getQueryArg(window.location.href, "tenantId");
+const businessService = connectionNo.includes("WS") ? "WS" : "SW";
 
 const callDownloadBill = () => {
   const val = [
@@ -13,9 +14,11 @@ const callDownloadBill = () => {
       key: 'consumerCode',
       value: getQueryArg(window.location.href, "connectionNumber")
     },
-    // { key: "billIds", value: '9d9293bc-da3f-474f-a392-b71242791471' },
-
-    { key: 'tenantId', value: getQueryArg(window.location.href, "tenantId") }]
+    { key: 'tenantId', value: tenantId },
+    {
+      key: "businessService", value: businessService
+    }
+  ]
   downloadBill(val);
 }
 
@@ -60,7 +63,7 @@ export const viewBillFooter = getCommonApplyFooter({
     },
     onClickDefination: {
       action: "page_change",
-      path: `/egov-common/pay?consumerCode=${connectionNo}&tenantId=${tenantId}&businessService=WS`
+      path: `/egov-common/pay?consumerCode=${connectionNo}&tenantId=${tenantId}&businessService=${businessService}`
     }
   }
 });

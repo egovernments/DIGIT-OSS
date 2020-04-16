@@ -125,7 +125,7 @@ export const sendOTP = (intent) => {
       const formResponse = await httpRequest(OTP.RESEND.URL, OTP.RESEND.ACTION, [], formData);
     } catch (error) {}
     dispatch(sendOtpCompleted());
-    dispatch(toggleSnackbarAndSetText(true, { labelName: "OTP has been Resent", labelKey: "ERR_OTP_RESENT" },"info"));
+    dispatch(toggleSnackbarAndSetText(true, { labelName: "OTP has been Resent", labelKey: "ERR_OTP_RESENT" },"success"));
   };
 };
 

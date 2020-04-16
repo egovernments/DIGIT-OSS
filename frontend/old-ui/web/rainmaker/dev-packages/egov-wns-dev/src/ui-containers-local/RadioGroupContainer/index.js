@@ -10,7 +10,6 @@ import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
-import set from 'lodash/set';
 import { togglePlumberFeilds } from '../CheckboxContainer/toggleFeilds';
 
 const styles = theme => ({
@@ -42,20 +41,8 @@ const disableRadioButton = {
 
 class RadioButtonsGroup extends React.Component {
   handleChange = event => {
-    const {
-      screenKey,
-      componentJsonpath,
-      jsonPath,
-      approveCheck,
-      onFieldChange,
-      onChange
-    } = this.props;
-    onChange ? onChange(event) : onFieldChange(
-      screenKey,
-      componentJsonpath,
-      "props.value",
-      event.target.value
-    );
+    const { screenKey, componentJsonpath, onFieldChange, onChange } = this.props;
+    onChange ? onChange(event) : onFieldChange(screenKey, componentJsonpath, "props.value", event.target.value);
     if (event.target.value === "Self") {
       togglePlumberFeilds(onFieldChange, false);
     } else {
@@ -64,69 +51,40 @@ class RadioButtonsGroup extends React.Component {
   };
 
   render() {
-    //  const { classes, buttons, fieldValue } = this.props;
-    const {
-      label,
-      classes,
-      buttons,
-      defaultValue,
-      value,
-      fieldValue,
-      required
-    } = this.props;
-
+    const { classes, required, preparedFinalObject } = this.props;
+    const { applyScreen } = preparedFinalObject;
+    const { additionalDetails } = applyScreen;
+    let value = (additionalDetails !== undefined && additionalDetails.detailsProvidedBy !== undefined) ? additionalDetails.detailsProvidedBy : "";
     return (
       <div className={classes.root}>
-        {/* <FormControl component="fieldset" className={classes.formControl}> */}
         <FormControl
           component="fieldset"
           className={classes.formControl}
-          required={required}
-        >
+          required={required}>
           <FormLabel className={classes.formLabel}>
-            {label && label.key && (
-              <LabelContainer
-                className={classes.formLabel}
-                labelName={label.name}
-                labelKey={label.key}
-              />
-            )}
+            <LabelContainer
+              className={classes.formLabel}
+              labelKey="WS_ADDN_DETAILS_PLUMBER_PROVIDED_BY"
+            />
           </FormLabel>
           <RadioGroup
             aria-label="Gender"
             name="gender1"
+            value={value}
             className={classes.group}
-            // value={this.state.value || fieldValue}
-            value={value || fieldValue || defaultValue}
-            onChange={this.handleChange}
-          >
-            {buttons &&
-              buttons.map((button, index) => {
-                return (
-                  <FormControlLabel
-                    disabled={button.disabled ? true : false}
-                    key={index}
-                    classes={{ label: "radio-button-label" }}
-                    value={button.value}
-                    control={
-                      // <Radio
-                      //   classes={{
-                      //     root: "radio-root"
-                      //   }}
-                      //   color="primary"
-                      // />
-                      <Radio className={classes.radioRoot} color="primary" />
-                    }
-                    // label={button.label}
-                    label={
-                      <LabelContainer
-                        labelName={button.labelName}
-                        labelKey={button.labelKey}
-                      />
-                    }
-                  />
-                );
-              })}
+            onChange={this.handleChange}>
+            <FormControlLabel
+              classes={{ label: "radio-button-label" }}
+              value="ULB"
+              control={<Radio className={classes.radioRoot} color="primary" />}
+              label={<LabelContainer labelKey="WS_PLUMBER_ULB" />}
+            />
+            <FormControlLabel
+              value="Self"
+              classes={{ label: "radio-button-label" }}
+              control={<Radio className={classes.radioRoot} color="primary" />}
+              label={<LabelContainer labelKey="WS_PLUMBER_SELF" />}
+            />
           </RadioGroup>
         </FormControl>
       </div>

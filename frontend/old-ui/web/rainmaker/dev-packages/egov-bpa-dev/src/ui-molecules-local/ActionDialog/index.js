@@ -84,15 +84,21 @@ class ActionDialog extends React.Component {
     };
 
     updateTheApplication = async() => {
-      let { bpaDetails, applicationAction, toggleSnackbar, prepareFinalObject } = this.props;
+      let { bpaDetails, applicationAction, toggleSnackbar, prepareFinalObject, applicationProcessInstances } = this.props;
       let applicationNumber = get(bpaDetails, "applicationNo");
       let tenantId = getQueryArg(window.location.href, "tenantId");
       let comment = get(bpaDetails, "comment");
       set(bpaDetails, "action", applicationAction);
-      if((comment && applicationAction === "SEND_TO_ARCHITECT") || (applicationAction === "APPROVE")) {
+      if( get(bpaDetails,"status").includes("CITIZEN_ACTION_PENDING")) {
+        let getId = get(applicationProcessInstances, "assigner.uuid");
+        let uuids = { uuid: getId };
+        bpaDetails.assignees = [uuids];
+        bpaDetails.assignee = [getId];
+      }
+      if((comment && applicationAction === "SEND_TO_ARCHITECT") || (applicationAction === "APPROVE") || (applicationAction === "FORWARD")) {
         let response = await httpRequest(
           "post",
-          "bpa-services/bpa/appl/_update",
+          "bpa-services/_update",
           "",
           [],
           { BPA: bpaDetails }
@@ -223,7 +229,7 @@ class ActionDialog extends React.Component {
               >
                 <LabelContainer
                   labelName={"send to architect"}
-                  labelKey={`WF_BPAbuttonLabel`}
+                  labelKey={`BPA_${applicationAction}_BUTTON`}
                 />
               </Button>
             </Grid>
@@ -242,9 +248,13 @@ const mapStateToProps = ( state, ownprops ) => {
     screenConfiguration.preparedFinalObject,
     "BPA",
     {}
-  )
+  );
+  const applicationProcessInstances = get(
+    screenConfiguration.preparedFinalObject,
+    "applicationProcessInstances"
+  );
   const applicationProps = screenConfiguration;
-  return {applicationProps, moduleName, bpaDetails, applicationAction };
+  return {applicationProps, moduleName, bpaDetails, applicationAction, applicationProcessInstances };
 };
 
 const mapDispatchToProps = dispatch => {

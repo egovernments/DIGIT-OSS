@@ -5,14 +5,22 @@ import { getPropertyResults } from "../../../../../ui-utils/commons";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
 export const propertySearchApiCall = async (state, dispatch) => {
+  showHideFields(dispatch, false);
   let queryObject = [{ key: "tenantId", value: "pb.amritsar" }];
   let searchScreenObject = get(state.screenConfiguration.preparedFinalObject, "searchScreen", {});
-
+  dispatch(
+    handleField(
+      "apply",
+      "components.div.children.formwizardFirstStep.children.ownerDetails.children.cardContent.children.ownerDetail.children.cardContent.children.headerDiv",
+      "props.items",
+      []
+    )
+  );
   if (
     Object.keys(searchScreenObject).length == 0 ||
     Object.values(searchScreenObject).every(x => x === "")
   ) {
-    dispatch(toggleSnackbar(true, { labelKey: "ERR_WS_PROVIDE_VALID_PROP_ID" }, "warning"));
+    dispatch(toggleSnackbar(true, { labelKey: "WS_FILL_REQUIRED_FIELDS", labelName: "Please fill required details" }, "warning"));
   } else {
     for (var key in searchScreenObject) {
       if (searchScreenObject.hasOwnProperty(key) && searchScreenObject[key].trim() !== "") {
@@ -24,8 +32,11 @@ export const propertySearchApiCall = async (state, dispatch) => {
         queryObject.push({ key: "mobileNumber", value: JSON.parse(getUserInfo()).mobileNumber })
       }
       let response = await getPropertyResults(queryObject, dispatch);
-      dispatch(prepareFinalObject("applyScreen.property", response.Properties[0]))
       if (response && response.Properties.length > 0) {
+        if (!_.isEmpty(get(state, "screenConfiguration.preparedFinalObject.applyScreen.property", {}))) {
+          dispatch(prepareFinalObject("applyScreen.property", {}))
+        }
+        dispatch(prepareFinalObject("applyScreen.property", response.Properties[0]))
         showHideFields(dispatch, true);
       } else {
         showHideFields(dispatch, false);
@@ -50,7 +61,7 @@ const showHideFields = (dispatch, value) => {
   dispatch(
     handleField(
       "apply",
-      "components.div.children.formwizardFirstStep.children.Details.visible",
+      "components.div.children.formwizardFirstStep.children.Details",
       "visible",
       value
     )
@@ -58,7 +69,7 @@ const showHideFields = (dispatch, value) => {
   dispatch(
     handleField(
       "apply",
-      "components.div.children.formwizardFirstStep.children.ownerDetails.visible",
+      "components.div.children.formwizardFirstStep.children.ownerDetails",
       "visible",
       value
     )

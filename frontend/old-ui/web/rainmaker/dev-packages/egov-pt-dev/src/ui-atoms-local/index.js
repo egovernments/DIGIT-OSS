@@ -55,6 +55,10 @@ const pdfHeader = Loadable({
   loader: () => import("./pdfHeader"),
   loading: () => <Loading />
 });
+const Button = Loadable({
+  loader: () => import("./Button"),
+  loading: () => <Loading />
+});
 
 export {
   TestAtoms,
@@ -67,5 +71,6 @@ export {
   FireNocIcon,
   MyApplicationIcon,
   PropertyIdContainer,
-  pdfHeader
+  pdfHeader,
+  Button
 };

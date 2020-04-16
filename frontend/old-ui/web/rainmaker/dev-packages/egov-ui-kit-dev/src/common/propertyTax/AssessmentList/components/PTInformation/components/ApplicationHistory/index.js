@@ -7,6 +7,7 @@ import { convertEpochToDate } from "egov-ui-framework/ui-config/screens/specs/ut
 import Label from "egov-ui-kit/utils/translationNode";
 import HistoryCard from "../../../../../Property/components/HistoryCard";
 import { getFullRow } from "../AssessmentHistory";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { navigateToApplication,getApplicationType } from "egov-ui-kit/utils/commons";
 
 const labelStyle = {
@@ -38,18 +39,19 @@ class ApplicationHistory extends Component {
       }
 
     getPropertyResponse = async (propertyId, tenantId, dialogName) => {    
+        const {prepareFinalObject}=this.props;
         const queryObject = [
           { key: "propertyIds", value: propertyId },
           { key: "tenantId", value: tenantId },
           { key: "audit", value: true }
         ];
-        let ownershipInfo = {};
         try {
           const payload = await httpRequest(
             "property-services/property/_search",
             "_search",
             queryObject
           );
+          prepareFinalObject("propertiesAudit", payload.Properties);
           if (payload && payload.Properties.length > 0) {
             payload.Properties=this.getUniqueList(payload.Properties);
             return payload.Properties;
@@ -125,11 +127,17 @@ const mapStateToProps = (state, ownProps) => {
         tenantId
     };
 };
+const mapDispatchToProps = dispatch => {
+    return {
+      prepareFinalObject: (jsonPath, value) =>
+        dispatch(prepareFinalObject(jsonPath, value))
+    };
+  };
 
 export default compose(
     withRouter,
     connect(
         mapStateToProps,
-        null
+        mapDispatchToProps
     )
 )(ApplicationHistory);

@@ -1,9 +1,10 @@
-import React from "react";
-import { Tooltip } from "egov-ui-framework/ui-molecules";
-import Label from "egov-ui-kit/utils/translationNode";
-import { TotalDuesButton } from "./components";
-import { withRouter } from "react-router-dom";
 import { downloadBill } from "egov-common/ui-utils/commons";
+import { Tooltip } from "egov-ui-framework/ui-molecules";
+import { routeToCommonPay } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
+import Label from "egov-ui-kit/utils/translationNode";
+import React from "react";
+import { withRouter } from "react-router-dom";
+import { TotalDuesButton } from "./components";
 import "./index.css";
 
 const labelStyle = {
@@ -21,7 +22,7 @@ class TotalDues extends React.Component {
   };
   onClickAction = async (consumerCode, tenantId) => {
     this.setState({
-      url: await downloadBill(consumerCode, tenantId , "property-bill"),
+      url: await downloadBill(consumerCode, tenantId, "property-bill"),
     });
   };
   render() {
@@ -29,7 +30,7 @@ class TotalDues extends React.Component {
     const envURL = "/egov-common/pay";
     const data = { value: "PT_TOTALDUES_TOOLTIP", key: "PT_TOTALDUES_TOOLTIP" };
     return (
-      <div className="">
+      <div className="" id="pt-header-due-amount">
         <div className="col-xs-6 col-sm-3 flex-child" style={{ minHeight: "60px" }}>
           <Label buttonLabel={false} label="PT_TOTAL_DUES" color="rgba(0, 0, 0, 0.74)" labelStyle={labelStyle} fontSize="14px" />
           <Label
@@ -46,7 +47,7 @@ class TotalDues extends React.Component {
           className="totaldues-tooltip-icon"
           val={data}
           icon={"info_circle"}
-          style={{ position: "absolute", left: "160px",  top: "30px" }}
+          style={{ position: "absolute", left: "160px", top: "30px" }}
         />
         <div className="col-xs-6 col-sm-3 flex-child" style={{ minHeight: "60px" }}>
         </div>
@@ -68,7 +69,8 @@ class TotalDues extends React.Component {
                 primary={true}
                 labelText="PT_TOTALDUES_PAY"
                 onClickAction={() => {
-                  history.push(`${envURL}?consumerCode=${consumerCode}&tenantId=${tenantId}`);
+                  routeToCommonPay(consumerCode, tenantId);
+                  // history.push(`${envURL}?consumerCode=${consumerCode}&tenantId=${tenantId}&businessService=PT`);
                 }}
               />
             </div>

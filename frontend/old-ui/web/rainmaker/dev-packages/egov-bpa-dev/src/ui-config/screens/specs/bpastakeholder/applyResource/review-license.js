@@ -3,7 +3,8 @@ import {
   getCommonSubHeader,
   getCommonContainer,
   getLabelWithValue,
-  getLabel
+  getLabel,
+  convertEpochToDate
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { checkValueForNA } from "../../utils";
 
@@ -48,6 +49,19 @@ export const reviewcounsilForArchNo = getLabelWithValue(
     jsonPath:
       "Licenses[0].tradeLicenseDetail.additionalDetail.counsilForArchNo",
     callBack: checkValueForNA
+  }
+);
+
+export const reviewValidityPeriod = getLabelWithValue(
+  {
+    labelName: "License valid up to.",
+    labelKey: "BPA_LICENSE_VALID_UP_TO_LABEL"
+  },
+  {
+    jsonPath: "Licenses[0].validTo",
+    callBack: value => {
+      return convertEpochToDate(value) || checkValueForNA;
+    }
   }
 );
 
@@ -107,7 +121,8 @@ export const getReviewLicenseDetails = (isEditable = true) => {
       viewFive: getCommonContainer({
         reviewLicenseeType,
         // reviewLicenseeSubType,
-        reviewcounsilForArchNo
+        reviewcounsilForArchNo,
+        reviewValidityPeriod
       })
     })
   });

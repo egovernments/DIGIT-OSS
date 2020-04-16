@@ -125,8 +125,25 @@
 }
 }
 
+.rebate-button{
+  float:left;
+}
+.view-detail-button{
+  float:left;
+}
 @media only screen and (max-width:768px){
+  .rebate-button{
+    float:none;
+  }
+  .view-detail-button{
+    float:none;
+  }
   .fare-section{
     display: block;
   } 
+}
+@media only screen and (min-width:768px){
+  .view-detail-button{
+    margin-left: -5px;
+  }
 }

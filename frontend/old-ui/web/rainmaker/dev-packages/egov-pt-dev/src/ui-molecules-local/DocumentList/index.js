@@ -188,8 +188,8 @@ class DocumentList extends Component {
     
     prepareFinalObject("documentsUploadRedux", documentsUploadRedux);
     prepareFinalObject(
-      "documentsUploadRedux.3.dropdown.value",
-      `${get(preparedFinalObject,'documentsUploadRedux.3.documentCode','')}.${get(preparedFinalObject,'Property.additionalDetails.reasonForTransfer','')}`
+      "documentsUploadRedux.2.dropdown.value",
+      `${get(preparedFinalObject,'documentsUploadRedux.2.documentCode','')}.${get(preparedFinalObject,'Property.additionalDetails.reasonForTransfer','')}`
     )  
   };
 

@@ -136,7 +136,7 @@ const getTransformedItems = (propertiesById, cities) => {
               item.financialYear
             }&assessmentId=${
               item.assessmentNumber
-            }&isReassesment=true&isAssesment=false&propertyId=${curr.propertyId}&tenantId=${
+            }&purpose=reassess&propertyId=${curr.propertyId}&tenantId=${
               item.tenantId
             }`,
             date: item.auditDetails

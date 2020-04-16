@@ -527,7 +527,11 @@ export const downloadReceiptFromFilestoreID=(fileStoreId,mode,tenantId)=>{
 }
 
 
-export const download = (receiptQueryString, mode = "download" ,configKey = "consolidatedreceipt") => {
+export const download = (receiptQueryString, mode = "download" ,configKey = "consolidatedreceipt" , state) => {
+  if(state && process.env.REACT_APP_NAME === "Citizen" && configKey === "consolidatedreceipt"){
+    const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject , "commonPayInfo");
+    configKey = get(uiCommonPayConfig, "receiptKey")
+  }
   const FETCHRECEIPT = {
     GET: {
       URL: "/collection-services/payments/_search",
@@ -550,6 +554,11 @@ export const download = (receiptQueryString, mode = "download" ,configKey = "con
         console.log("Could not find any receipts");   
         return;
       }
+      const oldFileStoreId=get(payloadReceiptDetails.Payments[0],"fileStoreId")
+      if(oldFileStoreId){
+        downloadReceiptFromFilestoreID(oldFileStoreId,mode)
+      }
+     else{
       httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments: payloadReceiptDetails.Payments }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
         .then(res => {
           res.filestoreIds[0]
@@ -561,6 +570,7 @@ export const download = (receiptQueryString, mode = "download" ,configKey = "con
             console.log("Error In Receipt Download");        
           }         
         });
+      }
     })
   } catch (exception) {
     alert('Some Error Occured while downloading Receipt!');
@@ -568,14 +578,14 @@ export const download = (receiptQueryString, mode = "download" ,configKey = "con
 }
 
 
-export const downloadBill = async (consumerCode ,tenantId ,configKey = "consolidatedbill") => {
+export const downloadBill = async (consumerCode ,tenantId ,configKey = "consolidatedbill",url = "egov-searcher/bill-genie/billswithaddranduser/_get") => {
   const searchCriteria = {
     consumerCode ,
     tenantId
   }
   const FETCHBILL={
     GET:{
-      URL:"egov-searcher/bill-genie/billswithaddranduser/_get",
+      URL:url,
       ACTION: "_get",
     }
   }
@@ -586,11 +596,17 @@ export const downloadBill = async (consumerCode ,tenantId ,configKey = "consolid
       },
   };
   const billResponse = await httpRequest("post", FETCHBILL.GET.URL, FETCHBILL.GET.ACTION, [],{searchCriteria});
+  const oldFileStoreId=get(billResponse.Bills[0],"fileStoreId")
+  if(oldFileStoreId){
+    downloadReceiptFromFilestoreID(oldFileStoreId,'download')
+  }
+  else{
   const queryStr = [
             { key: "key", value: configKey },
             { key: "tenantId", value: "pb" }
         ]
   const pfResponse = await httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Bill: billResponse.Bills }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
   downloadReceiptFromFilestoreID(pfResponse.filestoreIds[0],'download');
+      }
 }
 

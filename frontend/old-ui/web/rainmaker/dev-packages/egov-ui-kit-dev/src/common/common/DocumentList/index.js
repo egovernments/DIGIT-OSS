@@ -1,16 +1,9 @@
 import Grid from "@material-ui/core/Grid";
 import Icon from "@material-ui/core/Icon";
 import { withStyles } from "@material-ui/core/styles";
-import {
-  LabelContainer,
-  TextFieldContainer
-} from "egov-ui-framework/ui-containers";
+import { LabelContainer, TextFieldContainer } from "egov-ui-framework/ui-containers";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import {
-  getFileUrlFromAPI,
-  handleFileUpload,
-  getTransformedLocale
-} from "egov-ui-framework/ui-utils/commons";
+import { getFileUrlFromAPI, getTransformedLocale, handleFileUpload } from "egov-ui-framework/ui-utils/commons";
 import Label from "egov-ui-kit/utils/translationNode";
 import get from "lodash/get";
 import PropTypes from "prop-types";
@@ -139,8 +132,7 @@ class DocumentList extends Component {
   state = {
     uploadedDocIndex: 0
   };
-
-  componentDidMount = () => {
+  initDocumentData() {
     const {
       ptDocumentsList,
       documentsUploadRedux = {},
@@ -170,12 +162,12 @@ class DocumentList extends Component {
                 oldDocCode != card.name ||
                 oldDocSubCode != subCard.name
               ) {
-                    docsUploaded[index] = {
-                        documentType: docType.code,
-                        documentCode: card.name,
-                        documentSubCode: subCard.name
-                      };
-                
+                docsUploaded[index] = {
+                  documentType: docType.code,
+                  documentCode: card.name,
+                  documentSubCode: subCard.name
+                };
+
               }
               index++;
             });
@@ -189,31 +181,45 @@ class DocumentList extends Component {
               `[${index}].documentCode`
             );
             if (oldDocType != docType.code || oldDocCode != card.name) {
-                docsUploaded[index] = {
-                    documentType: docType.code,
-                    documentCode: card.name,
-                    isDocumentRequired: card.required,
-                    isDocumentTypeRequired: card.dropdown
-                      ? card.dropdown.required
-                      : false
-                  };
+              docsUploaded[index] = {
+                documentType: docType.code,
+                documentCode: card.name,
+                isDocumentRequired: card.required,
+                isDocumentTypeRequired: card.dropdown
+                  ? card.dropdown.required
+                  : false
+              };
+              if (card.dropdown && card.dropdown.value) {
+                docsUploaded[index]['dropdown'] = {}
+                docsUploaded[index]['dropdown']['value'] = card.dropdown.value;
+              }
             }
             index++;
           }
         });
     });
-    if(documentsUploadRedux && Object.keys(documentsUploadRedux) && Object.keys(documentsUploadRedux).length){
-        Object.keys(docsUploaded).map((key, index)=>{
-            Object.keys(docsUploaded[key]).map((item,index)=>{
-                documentsUploadRedux[key][item]= docsUploaded[key][item];
-            });
+    if (documentsUploadRedux && Object.keys(documentsUploadRedux) && Object.keys(documentsUploadRedux).length) {
+      Object.keys(docsUploaded).map((key, index) => {
+        Object.keys(docsUploaded[key]).map((item, index) => {
+          if (docsUploaded[key] && documentsUploadRedux[key]) {
+            documentsUploadRedux[key][item] = docsUploaded[key][item];
+          }
         });
-        prepareFinalObject("documentsUploadRedux", documentsUploadRedux);
-    }else{
-        prepareFinalObject("documentsUploadRedux", docsUploaded);
+      });
+      prepareFinalObject("documentsUploadRedux", documentsUploadRedux);
+    } else {
+      prepareFinalObject("documentsUploadRedux", docsUploaded);
     }
+  }
+  componentDidMount = () => {
+    this.initDocumentData()
   };
-
+  componentDidUpdate(prevProps) {
+    // Typical usage (don't forget to compare props):
+    if (this.props.ptDocumentsList !== prevProps.ptDocumentsList) {
+      this.initDocumentData()
+    }
+  }
   onUploadClick = uploadedDocIndex => {
     this.setState({ uploadedDocIndex });
   };
@@ -271,10 +277,10 @@ class DocumentList extends Component {
               </Icon>
             </div>
           ) : (
-            <div className={classes.documentIcon}>
-              <span>{key + 1}</span>
-            </div>
-          )}
+              <div className={classes.documentIcon}>
+                <span>{key + 1}</span>
+              </div>
+            )}
         </Grid>
         <Grid
           item={true}
@@ -297,6 +303,7 @@ class DocumentList extends Component {
               label={{ labelKey: getTransformedLocale(card.dropdown.label) }}
               placeholder={{ labelKey: card.dropdown.label }}
               data={card.dropdown.menu}
+              disabled={card.dropdown.disabled && documentsUploadRedux[key] && documentsUploadRedux[key].documents ? true : false}
               optionValue="code"
               optionLabel="label"
               required={true}
@@ -329,6 +336,7 @@ class DocumentList extends Component {
             onButtonClick={() => this.onUploadClick(key)}
             inputProps={this.props.inputProps}
             buttonLabel={this.props.buttonLabel}
+            disabled={card.disabled && documentsUploadRedux[key] && documentsUploadRedux[key].documents ? true : false}
           />
         </Grid>
       </Grid>
@@ -345,8 +353,8 @@ class DocumentList extends Component {
             return (
               <div>
                 <Label fontSize="20px"
-                label={"PT_REQUIRED_DOCUMENTS"}
-                labelStyle={styles.containerTitle}
+                  label={"PT_REQUIRED_DOCUMENTS"}
+                  labelStyle={styles.containerTitle}
                 />
                 <Label fontSize="14px"
                   label="PT_REQUIRED_DOC_SUB_HEADING"
@@ -395,6 +403,13 @@ const mapStateToProps = state => {
     "documentsUploadRedux",
     {}
   );
+  Object.keys(documentsUploadRedux).map(key=>{
+    let documentCode = documentsUploadRedux[key] && documentsUploadRedux[key].dropdown && documentsUploadRedux[key].dropdown.value||'';
+    let codes=documentCode&&documentCode.split('.');
+    if(codes&&codes.length==1&&codes[0].length>0){
+      documentsUploadRedux[key].dropdown.value="OWNER.REGISTRATIONPROOF."+documentCode;
+    }
+  })
   return { documentsUploadRedux, moduleName };
 };
 

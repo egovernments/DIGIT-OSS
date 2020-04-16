@@ -43,6 +43,7 @@ const EgovAppBar = ({
   handleItemClick,
   hasLocalisation,
   notificationsCount,
+  isUserSetting,
   ...rest
 }) => {
   return (
@@ -63,14 +64,14 @@ const EgovAppBar = ({
                 label={titleAddon}
               />
             )}
-            <div className="rainmaker-displayInline">
+            {isUserSetting && <div className="rainmaker-displayInline">
               <Label
                 containerStyle={{ marginLeft: "10px" }}
                 className="screenHeaderLabelStyle appbar-municipal-label"
                 label={ulbName && `TENANT_TENANTS_${ulbName.toUpperCase().replace(/[.]/g, "_")}`}
               />
               <Label containerStyle={{ marginLeft: "4px" }} className="screenHeaderLabelStyle appbar-municipal-label" label={defaultTitle} />
-            </div>
+            </div>}
           </div>
         }
         titleStyle={styles.titleStyle}
@@ -83,6 +84,7 @@ const EgovAppBar = ({
             onIconClick={onToolBarIconClick}
             userInfo={userInfo}
             handleItemClick={handleItemClick}
+            isUserSetting={isUserSetting}
           />
         </Toolbar>
         {notificationButton && role === "citizen" && (

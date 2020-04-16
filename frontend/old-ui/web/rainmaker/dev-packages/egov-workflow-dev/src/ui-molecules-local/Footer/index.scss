@@ -44,7 +44,15 @@
         width: 100%;
     }
   }
-  .apply-wizard-footer button {
+  .wf-wizard-footer {
+    position: fixed;
+    bottom: 0;
+    display: inline;
+    z-index: 1;
+    left: 0;
+    width: 100%;
+    overflow: inherit !important;
+   button {
     width: 100% !important;
     margin: initial;
     border: none;
@@ -52,8 +60,27 @@
     border-radius: none !important;
   }
 }
+
+
+
+}
 @media only screen and (min-width: 768px) {
   .wf-footer-button {
     min-width: 200px;
   }
+  .wf-wizard-footer {
+    background-color: #ffffff;
+    box-shadow: 0 -2px 4px 0 rgba(0, 0, 0, 0.24);
+    padding: 8px;
+    position: fixed !important;
+    bottom: 0;
+    right: 0;
+    text-align: right;
+    z-index: 1;
+    left: 0;
+    width: 100%;
+    overflow: inherit !important;
 }
+}
+
+

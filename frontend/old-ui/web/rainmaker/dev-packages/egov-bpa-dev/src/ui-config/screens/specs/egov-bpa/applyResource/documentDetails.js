@@ -62,7 +62,8 @@ export const documentDetails = getCommonCard({
       },
       // description: "Only .jpg and .pdf files. 6MB max file size.",
       inputProps: {
-        accept: "image/*, .pdf, .png, .jpeg"
+        accept: "image/*, .pdf, .png, .jpeg",
+        multiple: false
       },
       maxFileSize: 6000
     },

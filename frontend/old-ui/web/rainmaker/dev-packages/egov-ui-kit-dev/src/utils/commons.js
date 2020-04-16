@@ -60,6 +60,111 @@ export const hyphenSeperatedDateTime = (d) => {
   return d;
 };
 
+export const getSingleCodeObject = (dataKey, tempObj, MDMSdata, keys) => {
+  keys.forEach(key=>{
+    let splittedKey = key.split(".");
+    tempObj[splittedKey[splittedKey.length-1]] = MDMSdata[dataKey][key];
+    tempObj[splittedKey[splittedKey.length-1]].code = splittedKey[splittedKey.length-1];
+  })
+  return tempObj;
+}
+
+export const getCategoryObject = (categoryCode, MDMSdata, dataKey, key, parentKey, parentKeyValue) => {
+  let tempObj = {}
+  tempObj[categoryCode] = MDMSdata[dataKey][key];
+  tempObj[categoryCode].code = categoryCode;
+  tempObj[categoryCode][parentKey] = parentKeyValue;
+  return tempObj;
+}
+
+export const getUsageCategory = (dataKey, tempObj, MDMSdata, keys) => {
+  keys.forEach(key=>{
+    let splittedKey = key.split(".");
+    let categoryCode = splittedKey.pop();
+    if(splittedKey.length === 0) {
+      tempObj["UsageCategoryMajor"] = {...tempObj["UsageCategoryMajor"], ...getCategoryObject(categoryCode, MDMSdata, dataKey, key)};
+    } else if (splittedKey.length === 1) {
+      tempObj["UsageCategoryMinor"] = {...tempObj["UsageCategoryMinor"], ...getCategoryObject(categoryCode, MDMSdata, dataKey, key, "usageCategoryMajor", splittedKey[splittedKey.length-1])};
+    } else if (splittedKey.length === 2) {
+      tempObj["UsageCategorySubMinor"] = {...tempObj["UsageCategorySubMinor"], ...getCategoryObject(categoryCode, MDMSdata, dataKey, key, "usageCategoryMinor", splittedKey[splittedKey.length-1])};
+    } else if (splittedKey.length === 3) {
+      tempObj["UsageCategoryDetail"] = {...tempObj["UsageCategoryDetail"], ...getCategoryObject(categoryCode, MDMSdata, dataKey, key, "usageCategorySubMinor", splittedKey[splittedKey.length-1])};
+    }
+  });
+  return tempObj;
+}
+
+export const getTransformedDropdown = (MDMSdata, dataKeys) => {
+  dataKeys.forEach(dataKey=>{
+    if(MDMSdata.hasOwnProperty(dataKey)){
+      let keys = Object.keys(MDMSdata[dataKey]);
+      let tempObj = {};
+      if(keys && keys.length > 0){
+        if(dataKey !== "UsageCategory"){
+          MDMSdata[dataKey] = getSingleCodeObject(dataKey, tempObj, MDMSdata, keys);
+        } else {
+          MDMSdata = {...MDMSdata, ...getUsageCategory(dataKey, tempObj, MDMSdata, keys)};
+        }
+      }
+    }
+  });
+  return MDMSdata;
+  }  
+
+export const generalMDMSDataRequestObj = (tenantId)=>{
+  let requestBody = {
+    MdmsCriteria: {
+      tenantId: tenantId,
+      moduleDetails: [
+        {
+          moduleName: "PropertyTax",
+          masterDetails: [
+            {
+              name: "Floor",
+            },
+            {
+              name: "OccupancyType",
+            },
+            {
+              name: "OwnerShipCategory",
+            },
+            {
+              name: "OwnerType",
+            },
+            {
+              name: "PropertySubType",
+            },
+            {
+              name: "PropertyType",
+            },
+            {
+              name: "SubOwnerShipCategory",
+            },
+            {
+              name: "UsageCategory",
+            },
+          ],
+        },
+      ],
+    },
+  };
+  return requestBody;
+}
+
+export const getGeneralMDMSDataDropdownName = () => {
+  let keys = [
+            "Floor",
+            "OccupancyType",
+            "OwnerShipCategory",
+            "OwnerType",
+            "PropertySubType",
+            "PropertyType",
+            "SubOwnerShipCategory",
+            "UsageCategory"
+  ];
+  return keys;
+}
+
 export const getQueryArg = (url, name) => {
   if (!url) url = window.location.href;
   name = name.replace(/[\[\]]/g, "\\$&");
@@ -832,4 +937,37 @@ export const getApplicationType = async (applicationNumber, tenantId, creationRe
   } catch (e) {
     console.log(e);
   }
+}
+
+export const isDocumentValid = (docUploaded,requiredDocCount) => {
+  const totalDocsKeys = Object.keys(docUploaded) || [];
+  let temp = 0;
+  if(totalDocsKeys.length === requiredDocCount){
+    totalDocsKeys.map(key=>{
+      if(docUploaded[key].documents && docUploaded[key].dropdown && docUploaded[key].dropdown.value){
+        temp++;
+      }
+      return temp;
+    });
+    return temp === requiredDocCount ? true : false;
+  }else{
+    return false;
+  }
+}
+
+export const getMohallaData = (payload, tenantId) => {
+  return payload &&	payload.TenantBoundary[0] && payload.TenantBoundary[0].boundary && payload.TenantBoundary[0].boundary.reduce((result, item) => {
+			  result.push({
+				...item,
+				name: `${tenantId
+				  .toUpperCase()
+				  .replace(
+					/[.]/g,
+					"_"
+				  )}_REVENUE_${item.code
+				  .toUpperCase()
+				  .replace(/[._:-\s\/]/g, "_")}`
+			  });
+			  return result;
+      }, []);
 }

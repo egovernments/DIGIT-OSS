@@ -37,6 +37,7 @@ export const pushTheDocsUploadedToRedux = async (state, dispatch) => {
                     element.id = reduxDocuments[key].id;
                 });
                 uploadedDocs = uploadedDocs.concat(reduxDocuments[key].documents);
+                dispatch(prepareFinalObject("applyScreen.documents", uploadedDocs));
                 let docArrayFromFileStore = await setDocsForEditFlow(state);
                 uploadedDocs.forEach(obj => {
                     let element = obj.fileStoreId;
@@ -44,14 +45,14 @@ export const pushTheDocsUploadedToRedux = async (state, dispatch) => {
                         docArrayFromFileStore[resp].forEach(arr => { if (arr.fileStoreId === element) { obj.fileName = arr.fileName; } })
                     })
                 })
-                dispatch(prepareFinalObject("applyScreen.documents", uploadedDocs));
                 let docs = get(state, "screenConfiguration.preparedFinalObject");
                 await setDocuments(docs, "applyScreen.documents", "UploadedDocs", dispatch, "WS");
                 await setDocuments(docs, "applyScreen.documents", "DocumentsData", dispatch, "WS");
                 let applyScreenObject = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), "NA", null);
-                dispatch(prepareFinalObject("applyScreen", applyScreenObject));
+                let applyScreenObj = findAndReplace(applyScreenObject, 0, null);
+                dispatch(prepareFinalObject("applyScreen", applyScreenObj));
                 if (getQueryArg(window.location.href, "action") === "edit") {
-                    dispatch(prepareFinalObject("WaterConnection[0]", applyScreenObject));
+                    dispatch(prepareFinalObject("WaterConnection[0]", applyScreenObj));
                 }
             }
         });
@@ -95,8 +96,8 @@ export const getSearchResults = async queryObject => {
             queryObject
         );
         let result = findAndReplace(response, null, "NA");
-        let waterSource = result.WaterConnection[0].waterSource.split(".")[0];
-        let waterSubSource = result.WaterConnection[0].waterSource.split(".")[1];
+        let waterSource = result.WaterConnection[0].waterSource.includes("null") ? "NA" : result.WaterConnection[0].waterSource.split(".")[0];
+        let waterSubSource = result.WaterConnection[0].waterSource.includes("null") ? "NA" : result.WaterConnection[0].waterSource.split(".")[1];
         result.WaterConnection[0].waterSource = waterSource;
         result.WaterConnection[0].waterSubSource = waterSubSource;
         return result;
@@ -230,7 +231,11 @@ export const getMyApplicationResults = async (queryObject, dispatch) => {
                         );
                         if (data && data !== undefined) {
                             if (data.Bill !== undefined && data.Bill.length > 0) {
-                                response.WaterConnection[i].due = data.Bill[0].totalAmount
+                                if (data.Bill[0].totalAmount !== 0) {
+                                    response.WaterConnection[i].due = data.Bill[0].totalAmount
+                                } else {
+                                    response.WaterConnection[i].due = "NA"
+                                }
                             }
 
                         } else {
@@ -277,7 +282,11 @@ export const getSWMyApplicationResults = async (queryObject, dispatch) => {
                         );
                         if (data && data !== undefined) {
                             if (data.Bill !== undefined && data.Bill.length > 0) {
-                                response.SewerageConnections[i].due = data.Bill[0].totalAmount
+                                if (data.Bill[0].totalAmount !== 0) {
+                                    response.SewerageConnections[i].due = data.Bill[0].totalAmount
+                                } else {
+                                    response.SewerageConnections[i].due = "NA"
+                                }
                             }
 
                         } else {
@@ -544,6 +553,46 @@ export const validateFeildsForSewerage = (applyScreenObject) => {
     ) { return true; } else { return false }
 }
 
+export const handleMandatoryFeildsOfProperty = (applyScreenObject) => {
+    let propertyObject = findAndReplace(applyScreenObject, "NA", null);
+    if (
+        propertyObject.hasOwnProperty("propertyId") && propertyObject['propertyId'] !== undefined && propertyObject["propertyId"] !== "" &&
+        propertyObject.hasOwnProperty("propertyType") && propertyObject["propertyType"] !== undefined && propertyObject["propertyType"] !== "" &&
+        propertyObject.hasOwnProperty("usageCategory") && propertyObject["usageCategory"] !== undefined && propertyObject["usageCategory"] !== "" &&
+        propertyObject.hasOwnProperty("landArea") && propertyObject["landArea"] !== undefined && propertyObject["landArea"] !== "" &&
+        // propertyObject.hasOwnProperty("rainWaterHarvesting") && propertyObject["rainWaterHarvesting"] !== undefined && propertyObject["rainWaterHarvesting"] !== "" &&
+        propertyObject.hasOwnProperty("owners") && propertyObject["owners"] !== undefined && propertyObject["owners"] !== "" &&
+        validatePropertyOwners(applyScreenObject) &&
+        handleAddressObjectInProperty(applyScreenObject.address)
+    ) { return true; } else { return false; }
+}
+
+const handleAddressObjectInProperty = (address) => {
+    if (address !== undefined && address !== null && address !== {}) {
+        if (
+            address.hasOwnProperty("city") && address['city'] !== undefined && address["city"] !== "" && address["city"] !== null &&
+            address.hasOwnProperty("doorNo") && address["doorNo"] !== undefined && address["doorNo"] !== "" && address["doorNo"] !== null &&
+            address.hasOwnProperty("locality") && address.locality.name !== undefined && address.locality.name !== "" && address.locality.name !== null
+        ) { return true; } else { return false; }
+    }
+}
+
+const validatePropertyOwners = (applyScreenObject) => {
+    if (applyScreenObject.owners && applyScreenObject.owners.length > 0) {
+        let owners = applyScreenObject.owners;
+        let valid = [];
+        for (let i = 0; i < owners.length; i++) {
+            if (
+                owners[i].hasOwnProperty("mobileNumber") && owners[i]['mobileNumber'] !== undefined && owners[i]["mobileNumber"] !== "" &&
+                owners[i].hasOwnProperty("name") && owners[i]['name'] !== undefined && owners[i]["name"] !== "" &&
+                owners[i].hasOwnProperty("fatherOrHusbandName") && owners[i]['fatherOrHusbandName'] !== undefined && owners[i]["fatherOrHusbandName"] !== "" &&
+                owners[i].hasOwnProperty("correspondenceAddress") && owners[i]['correspondenceAddress'] !== undefined && owners[i]["correspondenceAddress"] !== ""
+            ) { valid.push(1) } else { valid.push(0) }
+        }
+        if (valid.includes(0)) { return false; } else { return true; }
+    }
+}
+
 export const prepareDocumentsUploadData = (state, dispatch) => {
     let documents = get(
         state,
@@ -603,17 +652,75 @@ const parserFunction = (state) => {
         noOfWaterClosets: parseInt(queryObject.noOfWaterClosets),
         noOfToilets: parseInt(queryObject.noOfToilets),
         proposedTaps: parseInt(queryObject.proposedTaps),
-        meterId: parseInt(queryObject.meterId),
         additionalDetails: {
             initialMeterReading: (
                 queryObject.additionalDetails !== undefined &&
                 queryObject.additionalDetails.initialMeterReading !== undefined
-            ) ? parseInt(queryObject.additionalDetails.initialMeterReading) : null
+            ) ? parseFloat(queryObject.additionalDetails.initialMeterReading) : null,
+            detailsProvidedBy: (
+                queryObject.additionalDetails !== undefined &&
+                queryObject.additionalDetails.detailsProvidedBy !== undefined &&
+                queryObject.additionalDetails.detailsProvidedBy !== null
+            ) ? queryObject.additionalDetails.detailsProvidedBy : "",
         }
     }
     queryObject = { ...queryObject, ...parsedObject }
     return queryObject;
 }
+
+export const prepareDocumentsUploadRedux = async (state, dispatch) => {
+    const { documentsUploadRedux } = state.screenConfiguration.preparedFinalObject;
+    let documentsList = get(state, "screenConfiguration.preparedFinalObject.documentsContract", []);
+    let index = 0;
+    documentsList.forEach(docType => {
+        docType.cards &&
+            docType.cards.forEach(card => {
+                if (card.subCards) {
+                    card.subCards.forEach(subCard => {
+                        let oldDocType = get(
+                            documentsUploadRedux,
+                            `[${index}].documentType`
+                        );
+                        let oldDocCode = get(
+                            documentsUploadRedux,
+                            `[${index}].documentCode`
+                        );
+                        let oldDocSubCode = get(
+                            documentsUploadRedux,
+                            `[${index}].documentSubCode`
+                        );
+                        if (
+                            oldDocType != docType.code ||
+                            oldDocCode != card.name ||
+                            oldDocSubCode != subCard.name
+                        ) {
+                            documentsUploadRedux[index] = {
+                                documentType: docType.code,
+                                documentCode: card.name,
+                                documentSubCode: subCard.name
+                            };
+                        }
+                        index++;
+                    });
+                } else {
+                    let oldDocType = get(documentsUploadRedux, `[${index}].documentType`);
+                    let oldDocCode = get(documentsUploadRedux, `[${index}].documentCode`);
+                    if (oldDocType != docType.code || oldDocCode != card.name) {
+                        documentsUploadRedux[index] = {
+                            documentType: docType.code,
+                            documentCode: card.name,
+                            isDocumentRequired: card.required,
+                            isDocumentTypeRequired: card.dropdown
+                                ? card.dropdown.required
+                                : false
+                        };
+                    }
+                }
+                index++;
+            });
+    });
+    prepareFinalObject("documentsUploadRedux", documentsUploadRedux);
+};
 
 export const setDocsForEditFlow = async (state) => {
     const applicationDocuments = get(state.screenConfiguration.preparedFinalObject, "applyScreen.documents", []);
@@ -641,59 +748,134 @@ export const setDocsForEditFlow = async (state) => {
 
 export const setWSDocuments = async (payload, sourceJsonPath, businessService) => {
     const uploadedDocData = get(payload, sourceJsonPath);
-    const fileStoreIds =
-        uploadedDocData &&
-        uploadedDocData
-            .map((item) => {
-                return item.fileStoreId;
-            })
-            .join(",");
-    const fileUrlPayload = fileStoreIds && (await getFileUrlFromAPI(fileStoreIds));
-    const reviewDocData =
-        uploadedDocData &&
-        uploadedDocData.map((item, index) => {
-            return {
-                title: `${businessService}_${item.documentType}`.replace(".", "_") || "",
-                link: (fileUrlPayload && fileUrlPayload[item.fileStoreId] && getFileUrl(fileUrlPayload[item.fileStoreId])) || "",
-                linkText: "View",
-                name:
-                    (fileUrlPayload &&
-                        fileUrlPayload[item.fileStoreId] &&
-                        decodeURIComponent(
-                            getFileUrl(fileUrlPayload[item.fileStoreId])
-                                .split("?")[0]
-                                .split("/")
-                                .pop()
-                                .slice(13)
-                        )) ||
-                    `Document - ${index + 1}`,
-            };
+    if (uploadedDocData !== "NA" && uploadedDocData.length > 0) {
+        const fileStoreIds =
+            uploadedDocData &&
+            uploadedDocData
+                .map((item) => {
+                    return item.fileStoreId;
+                })
+                .join(",");
+        const fileUrlPayload = fileStoreIds && (await getFileUrlFromAPI(fileStoreIds));
+        const reviewDocData =
+            uploadedDocData &&
+            uploadedDocData.map((item, index) => {
+                return {
+                    title: `${businessService}_${item.documentType}`.replace(".", "_") || "",
+                    link: (fileUrlPayload && fileUrlPayload[item.fileStoreId] && getFileUrl(fileUrlPayload[item.fileStoreId])) || "",
+                    linkText: "View",
+                    name:
+                        (fileUrlPayload &&
+                            fileUrlPayload[item.fileStoreId] &&
+                            decodeURIComponent(
+                                getFileUrl(fileUrlPayload[item.fileStoreId])
+                                    .split("?")[0]
+                                    .split("/")
+                                    .pop()
+                                    .slice(13)
+                            )) ||
+                        `Document - ${index + 1}`,
+                };
+            });
+        return reviewDocData;
+    }
+};
+
+export const downloadAndPrintForNonApply = async (state, dispatch) => {
+    let documentPath;
+    const {
+        WaterConnection,
+        SewerageConnection
+    } = state.screenConfiguration.preparedFinalObject;
+    if (
+        (WaterConnection.length > 0 &&
+            SewerageConnection.length > 0) ||
+        WaterConnection.length > 0
+    ) {
+        documentPath = 'WaterConnection[0].documents';
+    } else if (SewerageConnection.length > 0) {
+        documentPath = 'SewerageConnection[0].documents';
+    }
+    await setDocuments(
+        state.screenConfiguration.preparedFinalObject,
+        documentPath,
+        "DocumentsData",
+        dispatch,
+        "WS"
+    );
+}
+
+export const prepareDocUploadRedux = async (state, dispatch) => {
+    let documentsUploadRedux = {}, uploadedDocs = [];
+    let payload = state.screenConfiguration.preparedFinalObject;
+    let documentPath;
+    const {
+        WaterConnection,
+        SewerageConnection
+    } = state.screenConfiguration.preparedFinalObject;
+    if (
+        (
+            WaterConnection !== undefined &&
+            WaterConnection.length > 0 &&
+            SewerageConnection !== undefined &&
+            SewerageConnection.length > 0
+        ) ||
+        (
+            WaterConnection !== undefined &&
+            WaterConnection.length > 0
+        )
+    ) {
+        documentPath = payload.WaterConnection[0].documents;
+        uploadedDocs = await setWSDocuments(state.screenConfiguration.preparedFinalObject, "WaterConnection[0].documents", "WS");
+    } else if (SewerageConnection !== undefined && SewerageConnection.length > 0) {
+        documentPath = payload.SewerageConnection[0].documents;
+        uploadedDocs = await setWSDocuments(state.screenConfiguration.preparedFinalObject, "SewerageConnection[0].documents", "WS");
+    }
+    if (uploadedDocs !== undefined && uploadedDocs !== null && uploadedDocs.length > 0) {
+        documentsUploadRedux = uploadedDocs && uploadedDocs.length && uploadedDocs.map((item, key) => {
+            let docUploadRedux = {};
+            docUploadRedux[key] = { documents: [{ fileName: item.name, fileUrl: item.link, fileStoreId: documentPath[key].fileStoreId }] };
+            let splittedString = documentPath[key].documentType.split(".");
+            if (splittedString[1] === "ADDRESSPROOF") { docUploadRedux[key].dropdown = { value: splittedString.join(".") }; }
+            else if (splittedString[1] === "IDENTITYPROOF") { docUploadRedux[key].dropdown = { value: splittedString.join(".") }; }
+            else { docUploadRedux[key].documentType = documentPath[key].documentType; }
+            docUploadRedux[key].id = documentPath[key].id;
+            docUploadRedux[key].isDocumentRequired = true;
+            docUploadRedux[key].isDocumentTypeRequired = true;
+            return docUploadRedux;
         });
-    return reviewDocData;
+        let docs = {};
+        for (let i = 0; i < documentsUploadRedux.length; i++) {
+            docs[i] = documentsUploadRedux[i][i];
+        }
+        dispatch(prepareFinalObject("documentsUploadRedux", docs))
+    }
 };
 
 export const prefillDocuments = async (payload, destJsonPath, dispatch) => {
     let documentsUploadRedux = {};
     // const uploadedDocData = get(payload, sourceJsonPath);
     let uploadedDocs = await setWSDocuments(payload, "applyScreen.documents", "WS");
-    documentsUploadRedux = uploadedDocs && uploadedDocs.length && uploadedDocs.map((item, key) => {
-        let docUploadRedux = {};
-        docUploadRedux[key] = { documents: [{ fileName: item.name, fileUrl: item.link, fileStoreId: payload.applyScreen.documents[key].fileStoreId }] };
-        let splittedString = payload.applyScreen.documents[key].documentType.split(".");
-        if (splittedString[1] === "ADDRESSPROOF") { docUploadRedux[key].dropdown = { value: splittedString.join(".") }; }
-        else if (splittedString[1] === "IDENTITYPROOF") { docUploadRedux[key].dropdown = { value: splittedString.join(".") }; }
-        else { docUploadRedux[key].documentType = payload.applyScreen.documents[key].documentType; }
-        docUploadRedux[key].id = payload.applyScreen.documents[key].id;
-        docUploadRedux[key].isDocumentRequired = true;
-        docUploadRedux[key].isDocumentTypeRequired = true;
-        return docUploadRedux;
-    });
-    let docs = {};
-    for (let i = 0; i < documentsUploadRedux.length; i++) {
-        docs[i] = documentsUploadRedux[i][i];
+    if (uploadedDocs !== undefined && uploadedDocs !== null && uploadedDocs.length > 0) {
+        documentsUploadRedux = uploadedDocs && uploadedDocs.length && uploadedDocs.map((item, key) => {
+            let docUploadRedux = {};
+            docUploadRedux[key] = { documents: [{ fileName: item.name, fileUrl: item.link, fileStoreId: payload.applyScreen.documents[key].fileStoreId }] };
+            let splittedString = payload.applyScreen.documents[key].documentType.split(".");
+            if (splittedString[1] === "ADDRESSPROOF") { docUploadRedux[key].dropdown = { value: splittedString.join(".") }; }
+            else if (splittedString[1] === "IDENTITYPROOF") { docUploadRedux[key].dropdown = { value: splittedString.join(".") }; }
+            else { docUploadRedux[key].documentType = payload.applyScreen.documents[key].documentType; }
+            docUploadRedux[key].id = payload.applyScreen.documents[key].id;
+            docUploadRedux[key].isDocumentRequired = true;
+            docUploadRedux[key].isDocumentTypeRequired = true;
+            return docUploadRedux;
+        });
+        let docs = {};
+        for (let i = 0; i < documentsUploadRedux.length; i++) {
+            docs[i] = documentsUploadRedux[i][i];
+        }
+        dispatch(prepareFinalObject("documentsUploadRedux", docs));
+        dispatch(prepareFinalObject(destJsonPath, docs));
     }
-    dispatch(prepareFinalObject("documentsUploadRedux", docs));
-    dispatch(prepareFinalObject(destJsonPath, docs));
 };
 
 export const applyForWaterOrSewerage = async (state, dispatch) => {
@@ -1271,7 +1453,7 @@ export const wsDownloadConnectionDetails = (receiptQueryString, mode, dispatch) 
                                     win.focus();
                                 }
                                 else {
-                                    printJS(fileRes[res.filestoreIds[0]])
+                                    downloadReceiptFromFilestoreID(res.filestoreIds[0], "print");
                                 }
                             });
 
@@ -1312,7 +1494,7 @@ export const wsDownloadConnectionDetails = (receiptQueryString, mode, dispatch) 
                                     win.focus();
                                 }
                                 else {
-                                    printJS(fileRes[res.filestoreIds[0]])
+                                    downloadReceiptFromFilestoreID(res.filestoreIds[0], "print");
                                 }
                             });
 
@@ -1393,6 +1575,21 @@ export const downloadBill = (receiptQueryString, mode = "download") => {
                 { key: "key", value: "consolidatedbill" },
                 { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
             ]
+            let data=[];
+            payloadReceiptDetails.Bill[0].billDetails.map(curEl=>data.push(curEl));
+            let sortData=data.sort((a,b)=>b.toPeriod-a.toPeriod);
+            sortData.shift();
+            let totalAmount=0;
+            let previousArrears=0;
+            if(sortData.length>0){
+                let totalArrearsAmount=sortData.map(el=>el.amount+totalAmount);
+                 previousArrears=totalArrearsAmount.reduce((a,b)=>a+b);
+            }
+           
+            payloadReceiptDetails.Bill[0].billDetails.sort((a,b)=>b.toPeriod-a.toPeriod);
+    
+            payloadReceiptDetails.Bill[0].arrearAmount=previousArrears.toFixed(2);
+
             httpRequest("post", DOWNLOADBILL.GET.URL, DOWNLOADBILL.GET.ACTION, queryStr, { Bill: payloadReceiptDetails.Bill }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
                 .then(res => {
                     getFileUrlFromAPI(res.filestoreIds[0]).then((fileRes) => {
@@ -1474,9 +1671,19 @@ export const downloadApp = async (wnsConnection, type, mode = "download") => {
 
     wnsConnection[0].tenantName = tenantName.toUpperCase();
     const appNo = wnsConnection[0].applicationNo;
+
     let queryStr = [{ key: "tenantId", value: getTenantId().split('.')[0] }];
     let apiUrl, appService, estKey, queryObjectForEst
     if (wnsConnection[0].service === "WATER") {
+
+        // for Estimate api 
+        if (wnsConnection[0].property.rainWaterHarvesting !== undefined && wnsConnection[0].property.rainWaterHarvesting !== null) {
+            if (wnsConnection[0].property.rainWaterHarvesting === 'SCORE_YES') {
+                wnsConnection[0].property.rainWaterHarvesting = true
+            } else if (wnsConnection[0].property.rainWaterHarvesting === 'SCORE_NO') {
+                wnsConnection[0].property.rainWaterHarvesting = false
+            }
+        }
         apiUrl = "ws-calculator/waterCalculator/_estimate";
         appService = "ws-applicationwater";
         queryObjectForEst = [{
@@ -1549,6 +1756,13 @@ export const downloadApp = async (wnsConnection, type, mode = "download") => {
 
         if (type === 'application') {
             if (wnsConnection[0].service === "WATER") {
+                if (wnsConnection[0].property.rainWaterHarvesting !== undefined && wnsConnection[0].property.rainWaterHarvesting !== null) {
+                    if (wnsConnection[0].property.rainWaterHarvesting === true) {
+                        wnsConnection[0].property.rainWaterHarvesting = 'SCORE_YES'
+                    } else {
+                        wnsConnection[0].property.rainWaterHarvesting = 'SCORE_NO'
+                    }
+                }
                 obj = {
                     WaterConnection: wnsConnection
                 }
@@ -1557,7 +1771,7 @@ export const downloadApp = async (wnsConnection, type, mode = "download") => {
                     SewerageConnection: wnsConnection
                 }
             }
-        } 
+        }
 
         await httpRequest("post", DOWNLOADCONNECTIONDETAILS.GET.URL, DOWNLOADCONNECTIONDETAILS.GET.ACTION, queryStr, obj, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
             .then(res => {

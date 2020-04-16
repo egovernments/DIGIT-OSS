@@ -50,7 +50,9 @@ const styles = theme => ({
     width: "80%",
     maxHeight: "200px",
     overflowY: "scroll",
-    marginTop: theme.spacing.unit
+    marginTop: theme.spacing.unit,
+    position: "absolute",
+    zIndex: 2000
   },
   ac_divider: {
     height: theme.spacing.unit * 2

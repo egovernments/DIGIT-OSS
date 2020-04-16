@@ -125,6 +125,16 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
     dispatch,
     {}
   );
+  let validTo = false;
+  if(get(payload, "Licenses[0].validTo")) {
+    validTo = true;
+  }
+  set(
+    action.screenConfig,
+    "components.div.children.tradeReviewDetails.children.cardContent.children.reviewLicenseDetails.children.cardContent.children.multiOwner.children.viewFive.children.reviewValidityPeriod.visible",
+    validTo
+  );
+
   //Fetch Bill and populate estimate card
   // const code = get(
   //   payload,

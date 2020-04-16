@@ -148,7 +148,18 @@ export const transferorSummary = getCommonGrayCard({
               // }
             }
           ),
-          ownerSpecialCategoryType: getLabelWithValue(
+          ownerAddress: getLabelWithValue(
+            {
+              labelName: "Correspondence Address",
+              labelKey: "PT_OWNERSHIP_INFO_CORR_ADDR"
+            },
+            {
+              jsonPath:
+              "Property.ownersInit[0].permanentAddress" ,
+              callBack: checkValueForNA
+            }
+          ),
+          ownerSpecialDocumentType: getLabelWithValue(
             {
               labelName: "Document Type",
               labelKey: "PT_CATEGORY_DOCUMENT_TYPE"
@@ -162,7 +173,7 @@ export const transferorSummary = getCommonGrayCard({
               // }
             }
           ),
-          ownerSpecialCategoryDocumentId: getLabelWithValue(
+          ownerSpecialDocumentID: getLabelWithValue(
             {
               labelName: "Document Id",
               labelKey: "PT_CATEGORY_DOCUMENT_ID"
@@ -174,18 +185,6 @@ export const transferorSummary = getCommonGrayCard({
               // callBack: value => {
               //   return convertEpochToDate(value);
               // }
-            },
-            
-          ),
-          ownerAddress: getLabelWithValue(
-            {
-              labelName: "Correspondence Address",
-              labelKey: "PT_OWNERSHIP_INFO_CORR_ADDR"
-            },
-            {
-              jsonPath:
-              "Property.ownersInit[0].permanentAddress" ,
-              callBack: checkValueForNA
             }
           )
         })

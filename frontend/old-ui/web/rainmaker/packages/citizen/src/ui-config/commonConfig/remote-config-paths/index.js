@@ -21,6 +21,9 @@ const remoteConfigPath = (path, screenKey) => {
     case "uc-citizen":
       config = require(`egov-uc/ui-config/screens/specs/${path}/${screenKey}`).default;
       break;
+    case "uc":
+        config = require(`egov-uc/ui-config/screens/specs/${path}/${screenKey}`).default;
+        break;
     case "abg":
       config = require(`egov-abg/ui-config/screens/specs/${path}/${screenKey}`).default;
       break;

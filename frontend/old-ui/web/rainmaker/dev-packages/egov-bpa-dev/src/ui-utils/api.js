@@ -20,7 +20,7 @@ const instance = axios.create({
 });
 
 const edcrInstance = axios.create({
-  baseURL: "https://egov-dcr-galaxy.egovernments.org",
+  baseURL:  window.location.origin,
   headers: {
     "Content-Type": "application/json"
   }

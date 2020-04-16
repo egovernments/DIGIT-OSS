@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { FeesEstimateCard } from "../../ui-molecules-local";
 import { connect } from "react-redux";
 import get from "lodash/get";
+import orderBy from "lodash/orderBy";
 
 class EstimateCardContainer extends Component {
   render() {
@@ -18,7 +19,11 @@ const formatTaxHeaders = (billDetail = {}) => {
 
   let formattedFees = []
   const { billAccountDetails = [] } = billDetail;
-  formattedFees = billAccountDetails.map((taxHead) => {
+const billAccountDetailsSorted=  orderBy(
+    billAccountDetails,
+    ["amount"],
+    ["asce"]);
+  formattedFees = billAccountDetailsSorted.map((taxHead) => {
     return {
       info: {
         labelKey: taxHead.taxHeadCode,
@@ -52,6 +57,7 @@ const mapStateToProps = (state, ownProps) => {
   }
 if(totalAmount>0){
   arrears=totalAmount-billDetails[0].amount;
+  arrears = arrears.toFixed(2);
 }
   const estimate = {
     header: { labelName: "Fee Estimate", labelKey: "NOC_FEE_ESTIMATE_HEADER" },

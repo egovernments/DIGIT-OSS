@@ -114,7 +114,7 @@ const Notifications = ({ notifications = [], history }) => {
                         style={{ cursor: "pointer", marginBottom: 10 }}
                       >
                         <Label
-                          label={`CS_COMMON_${button.label}`}
+                          label={`CS_COMMON_${button.label.toUpperCase().replace(/[._:-\s\/]/g, "_")}`}
                           color={"#FC8019"}
                           fontSize={12}
                           containerStyle={index != buttons.length - 1 ? { marginRight: 30 } : {}}

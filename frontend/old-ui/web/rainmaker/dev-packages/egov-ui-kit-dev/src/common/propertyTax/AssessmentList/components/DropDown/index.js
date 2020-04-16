@@ -1,15 +1,15 @@
 
-import { connect } from "react-redux";
-import SelectField from "material-ui/SelectField";
-import MenuItem from "material-ui/MenuItem";
 import { httpRequest } from "egov-ui-kit/utils/api";
-import { localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
+import { getUserInfo, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
+import { getPropertyLink } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
+import Label from "egov-ui-kit/utils/translationNode";
+import get from "lodash/get";
+import MenuItem from "material-ui/MenuItem";
+import SelectField from "material-ui/SelectField";
+import React, { Component } from "react";
+import { connect } from "react-redux";
 import { createReceiptDetails } from "../../../PaymentStatus/Components/createReceipt";
 import generateReceipt from "../../../PaymentStatus/Components/receipt";
-import React, { Component } from "react";
-import get from "lodash/get";
-import Label from "egov-ui-kit/utils/translationNode";
-import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
 const styles = {
   customWidth: {
@@ -71,10 +71,7 @@ class DropDown extends Component {
     switch (payload) {
       case "Re-Assess":
         history &&
-          history.push(
-            `/property-tax/assessment-form?FY=${item.financialYear}&assessmentId=${item.latestAssessmentNumber}&isAssesment=false&isReassesment=true&propertyId=${
-            item.propertyId
-            }&tenantId=${item.tenantId}`
+          history.push(getPropertyLink(item.propertyId, item.tenantId, "reassess", item.financialYear, item.latestAssessmentNumber)
           );
         break;
       case "Download Receipt":
@@ -93,10 +90,7 @@ class DropDown extends Component {
         break;
       case "Complete Payment":
         history &&
-          history.push(
-            `/property-tax/assessment-form?FY=${item.financialYear}&assessmentId=${
-            item.assessmentNo
-            }&isAssesment=true&isReassesment=true&proceedToPayment=true&isCompletePayment=true&propertyId=${item.propertyId}&tenantId=${item.tenantId}`
+          history.push(getPropertyLink(item.propertyId, item.tenantId, "assess", item.financialYear, item.assessmentNo, true)
           );
         break;
     }

@@ -16,7 +16,9 @@ import GridItem from "@material-ui/core/Grid";
 
 import navPillsStyle from "./css.js";
 import LabelContainer from "egov-ui-framework/ui-containers/LabelContainer";
-
+const tabTitle = {
+  fontSize: "15px"
+};
 class NavPills extends React.Component {
   constructor(props) {
     super(props);
@@ -48,6 +50,7 @@ class NavPills extends React.Component {
             <Tab
               label={
                 <LabelContainer
+                  style={tabTitle}
                   labelName={prop.tabButton.labelName}
                   labelKey={prop.tabButton.labelKey}
                 />

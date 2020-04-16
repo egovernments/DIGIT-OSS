@@ -473,17 +473,30 @@ export const generatePdfFromDiv = (action, applicationNumber, divIdName) => {
       if (clonedDoc.getElementById("pt-flex-child-button")) {
         clonedDoc.getElementById("pt-flex-child-button").style.display = "none";
       }
-
+      if (clonedDoc.getElementById("pt-header-due-amount")) {
+        clonedDoc.getElementById("pt-header-due-amount").style.display = "none";
+      }
+      
     }
   }).then(canvas => {
-    var data = canvas.toDataURL();
+    // var data = canvas.toDataURL();
+    // var imgWidth = 200;
+    // var pageHeight = 295;
+    // var imgHeight = pageHeight - 80;
+    // var doc = new jsPDF("p", "mm");
+    // var position = 0;
+
+    // doc.addImage(data, "PNG", 5, 10 + position, imgWidth, imgHeight);
+    var data = canvas.toDataURL("image/jpeg", 1);
     var imgWidth = 200;
     var pageHeight = 295;
-    var imgHeight = pageHeight - 80;
+    var imgHeight = (canvas.height * imgWidth) / canvas.width;
+    var heightLeft = imgHeight;
     var doc = new jsPDF("p", "mm");
     var position = 0;
 
-    doc.addImage(data, "PNG", 5, 10 + position, imgWidth, imgHeight);
+    doc.addImage(data, "PNG", 5, 5 + position, imgWidth, imgHeight);
+    heightLeft -= pageHeight;
 
     if (action === "download") {
       doc.save(`preview-${applicationNumber}.pdf`);

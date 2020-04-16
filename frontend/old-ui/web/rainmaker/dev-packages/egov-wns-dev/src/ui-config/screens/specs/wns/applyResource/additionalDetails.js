@@ -22,63 +22,13 @@ import get from 'lodash/get';
 import { httpRequest } from '../../../../../ui-utils/index';
 import set from 'lodash/set';
 
-const resetFields = (state, dispatch) => {
-  dispatch(
-    handleField(
-      "search",
-      "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.searchApplications.children.cardContent.children.wnsApplicationSearch.children.consumerNo",
-      "props.value",
-      ""
-    )
-  );
-  dispatch(
-    handleField(
-      "search",
-      "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.searchApplications.children.cardContent.children.wnsApplicationSearch.children.applicationNo",
-      "props.value",
-      ""
-    )
-  );
-  dispatch(
-    handleField(
-      "search",
-      "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.searchApplications.children.cardContent.children.wnsApplicationSearch.children.ownerMobNo",
-      "props.value",
-      ""
-    )
-  );
-  dispatch(
-    handleField(
-      "search",
-      "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.searchApplications.children.cardContent.children.wnsApplicationSearch.children.applicationstatus",
-      "props.value",
-      ""
-    )
-  );
-  dispatch(
-    handleField(
-      "search",
-      "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.searchApplications.children.cardContent.children.wnsApplicationSearch.children.fromDate",
-      "props.value",
-      ""
-    )
-  );
-  dispatch(
-    handleField(
-      "search",
-      "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.searchApplications.children.cardContent.children.wnsApplicationSearch.children.toDate",
-      "props.value",
-      ""
-    )
-  );
-};
 
 const getPlumberRadioButton = {
   uiFramework: "custom-containers-local",
   moduleName: "egov-wns",
   componentPath: "RadioGroupContainer",
   gridDefination: { xs: 12, sm: 12 },
-  jsonPath: "applyScreen.plumberInfo[0].detailsProvidedBy",
+  jsonPath: "applyScreen.additionalDetails.detailsProvidedBy",
   props: {
     label: { key: "WS_ADDN_DETAILS_PLUMBER_PROVIDED_BY" },
     buttons: [
@@ -90,23 +40,9 @@ const getPlumberRadioButton = {
   type: "array"
 };
 
-const waterSubSourceType = async (state, dispatch, code) => {
-  let mdmsBody = {
-    MdmsCriteria: {
-      tenantId: commonConfig.tenantId,
-      moduleDetails: [{ moduleName: "ws-services-masters", code }]
-    }
-  };
-  try {
-    let payload = null;
-    payload = await httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], mdmsBody);
-    dispatch(prepareFinalObject("applyScreenMdmsData.ws-services-masters.waterSubSource[0].subsource", payload.MdmsRes));
-  } catch (e) { console.log(e); }
-}
-
 export const additionDetails = getCommonCard({
   header: getCommonHeader({
-    labelKey: "WS_COMMON_ADDN_DETAILS"
+    labelKey: "WS_COMMON_ADDN_DETAILS_HEADER"
   }),
   connectiondetailscontainer: getCommonGrayCard({
     subHeader: getCommonTitle({
@@ -264,7 +200,7 @@ export const additionDetails = getCommonCard({
         },
         required: false,
         pattern: getPattern("Name"),
-        errorMessage: "ERR_INVALID_CONSUMER_NO",
+        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "applyScreen.plumberInfo[0].name"
       }),
       plumberMobNo: getTextField({
@@ -355,7 +291,7 @@ export const additionDetails = getCommonCard({
           sm: 6
         },
         required: false,
-        pattern: /^[0-9]*$/i,
+        pattern: /^[a-z0-9]+$/i,
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "applyScreen.meterId"
       }),
@@ -386,7 +322,7 @@ export const additionDetails = getCommonCard({
           sm: 6
         },
         required: false,
-        pattern: getPattern("Amount"),
+        pattern: /^[0-9]\d{0,9}(\.\d{1,3})?%?$/,
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "applyScreen.additionalDetails.initialMeterReading"
       })

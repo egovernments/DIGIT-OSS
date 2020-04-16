@@ -98,7 +98,7 @@ export const callPGService = async (state, dispatch) => {
 
       dispatch(
         setRoute(
-          `/egov-common/acknowledgement?status=${"success"}&consumerCode=${consumerCode}&tenantId=${tenantId}&receiptNumber=${transactionId}`
+          `/egov-common/acknowledgement?status=${"success"}&consumerCode=${consumerCode}&tenantId=${tenantId}&receiptNumber=${transactionId}&businessService=${businessService}`
         )
       );
     } else {
@@ -126,24 +126,26 @@ export const callPGService = async (state, dispatch) => {
 const moveToSuccess = (dispatch, receiptNumber) => {
   const consumerCode = getQueryArg(window.location, "consumerCode");
   const tenantId = getQueryArg(window.location, "tenantId");
+  const businessService = getQueryArg(window.location, "businessService");
   const status = "success";
   const appendUrl =
     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
   dispatch(
     setRoute(
-      `${appendUrl}/egov-common/acknowledgement?status=${status}&consumerCode=${consumerCode}&tenantId=${tenantId}&receiptNumber=${receiptNumber}`
+      `${appendUrl}/egov-common/acknowledgement?status=${status}&consumerCode=${consumerCode}&tenantId=${tenantId}&receiptNumber=${receiptNumber}&businessService=${businessService}`
     )
   );
 };
 const moveToFailure = dispatch => {
   const consumerCode = getQueryArg(window.location, "consumerCode");
   const tenantId = getQueryArg(window.location, "tenantId");
+  const businessService = getQueryArg(window.location, "businessService");
   const status = "failure";
   const appendUrl =
     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
   dispatch(
     setRoute(
-      `${appendUrl}/egov-common/acknowledgement?status=${status}&consumerCode=${consumerCode}&tenantId=${tenantId}`
+      `${appendUrl}/egov-common/acknowledgement?status=${status}&consumerCode=${consumerCode}&tenantId=${tenantId}&businessService=${businessService}`
     )
   );
 };
@@ -352,15 +354,17 @@ const callBackForPay = async (state, dispatch) => {
   ReceiptBodyNew.Payment["mobileNumber"] =
     finalReceiptData.Bill[0].payerMobileNumber;
   ReceiptBodyNew.Payment["payerName"] = finalReceiptData.Bill[0].payerName;
-  if (ReceiptBodyNew.Payment.paymentMode !== "Cash") {
+  if(finalReceiptData.instrument.transactionNumber){
     ReceiptBodyNew.Payment["transactionNumber"] =
       finalReceiptData.instrument.transactionNumber;
+  }
+  if(finalReceiptData.instrument.instrumentNumber){
     ReceiptBodyNew.Payment["instrumentNumber"] =
       finalReceiptData.instrument.instrumentNumber;
-    if (ReceiptBodyNew.Payment.paymentMode === "Cheque") {
-      ReceiptBodyNew.Payment["instrumentDate"] =
+  }
+  if( finalReceiptData.instrument.instrumentDate){
+    ReceiptBodyNew.Payment["instrumentDate"] =
         finalReceiptData.instrument.instrumentDate;
-    }
   }
 
   let amtPaid =

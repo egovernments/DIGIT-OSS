@@ -5,6 +5,7 @@ import PTList from "./components/PTList";
 import BlankAssessment from "../BlankAssessment";
 import DropDown from "./components/DropDown";
 import "./index.css";
+import { getPropertyLink } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
 
 const getItemStatus = (item, history) => {
   let status = item.status;
@@ -49,7 +50,7 @@ const getItemStatus = (item, history) => {
       return (
         <div
           onClick={() => {
-            
+
             history &&
               history.push(`/property-tax/assessment-form?FY=${item.financialYear}&assessmentId=${item.assessmentNo}&tenantId=${item.tenantId}`);
           }}
@@ -68,11 +69,9 @@ const getItemStatus = (item, history) => {
             label={<Label buttonLabel={true} label="PT_PAYMENT_ASSESS_AND_PAY" fontSize="12px" />}
             primary={true}
             onClick={(e) => {
-              
+
               history.push(
-                `/property-tax/assessment-form?FY=${item.financialYear}&assessmentId=${item.assessmentNo}&isAssesment=true&isReassesment=true&propertyId=${
-                  item.propertyId
-                }&tenantId=${item.tenantId}`
+                getPropertyLink(item.propertyId, item.tenantId, "assess", item.financialYear, item.assessmentNo)
               );
             }}
             style={{
@@ -100,8 +99,8 @@ const getRightIconItems = (item, history) => {
       </div>
     </div>
   ) : (
-    item.rightIcon
-  );
+      item.rightIcon
+    );
 };
 
 const getListItems = (items, history) => {
@@ -116,8 +115,8 @@ const getListItems = (items, history) => {
             (typeof item.secondaryText === "object" ? (
               item.secondaryText
             ) : (
-              <Label label={item.secondaryText} fontSize="14px" color="#484848" containerStyle={{ marginTop: "15px" }} />
-            )),
+                <Label label={item.secondaryText} fontSize="14px" color="#484848" containerStyle={{ marginTop: "15px" }} />
+              )),
           route: item.route && item.route,
           leftIcon: item.leftIcon,
           rightIcon: getRightIconItems(item, history),
@@ -134,8 +133,8 @@ const getListItems = (items, history) => {
                     <Label label={nestedItem.primaryText} fontSize="14px" color="#484848" containerStyle={{ marginLeft: "8px" }} />
                   </div>
                 ) : (
-                  nestedItem.primaryText
-                ),
+                    nestedItem.primaryText
+                  ),
                 secondaryText: nestedItem.secondaryText,
                 route: nestedItem.route,
                 rightIcon: getRightIconItems(nestedItem, history),
@@ -170,15 +169,15 @@ const AssessmentList = ({
       history={history}
     />
   ) : (
-    <PTList
-      items={getListItems(items, history)}
-      history={history}
-      onItemClick={onItemClick}
-      innerDivStyle={innerDivStyle}
-      listItemStyle={listItemStyle}
-      hoverColor={hoverColor}
-    />
-  );
+      <PTList
+        items={getListItems(items, history)}
+        history={history}
+        onItemClick={onItemClick}
+        innerDivStyle={innerDivStyle}
+        listItemStyle={listItemStyle}
+        hoverColor={hoverColor}
+      />
+    );
 };
 
 export default AssessmentList;

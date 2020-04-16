@@ -7,6 +7,7 @@ import {
   displayFormErrors
 } from "egov-ui-kit/redux/form/actions";
 import { validateForm } from "egov-ui-kit/redux/form/utils";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 const labelStyle = {
   fontFamily: "Roboto",
@@ -23,10 +24,27 @@ class AddRebateExemption extends React.Component {
     showExtraPenaltyField: false,
     showExtraExemptField: false,
     exemptValue: null,
-    initialTaxValue:0,
-    isTaxValueInitialized:false
+    initialTaxValue: 0,
+    isTaxValueInitialized: false
   };
-
+  validateForm = () => {
+    const { adhocPenalty,
+      adhocPenaltyReason, adhocOtherPenaltyReason,
+      adhocExemption,
+      adhocExemptionReason, adhocOtherExemptionReason } = this.props;
+    if ((adhocPenaltyReason == 'Others' && !(adhocOtherPenaltyReason && adhocOtherPenaltyReason.length > 0)) || (adhocExemptionReason == 'Others' && !(adhocOtherExemptionReason && adhocOtherExemptionReason.length > 0))) {
+      alert('Enter Other Reason');
+      return false
+    }
+    if (adhocPenalty && adhocPenalty != '' && Number(adhocPenalty) > 0 && (!adhocPenaltyReason || adhocPenaltyReason.length == 0)) {
+      alert('Select any Reason');
+      return false;
+    } else if (adhocExemption && adhocExemption != '' && Number(adhocExemption) > 0 && (!adhocExemptionReason || adhocExemptionReason.length == 0)) {
+      alert('Select any Reason');
+      return false;
+    }
+    return true;
+  }
   onChangePenaltyField = value => {
     let show = false;
     const { setFieldProperty } = this.props;
@@ -50,7 +68,7 @@ class AddRebateExemption extends React.Component {
     this.setState({
       showExtraPenaltyField: show
     });
-    this.props.handleFieldChange("adhocPenaltyReason", value);
+    this.props.prepareFinalObject("adhocExemptionPenalty.adhocPenaltyReason", value);
   };
   onChangeExemptField = value => {
     let show = false;
@@ -75,78 +93,145 @@ class AddRebateExemption extends React.Component {
     this.setState({
       showExtraExemptField: show
     });
-    this.props.handleFieldChange("adhocExemptionReason", value);
+    this.props.prepareFinalObject("adhocExemptionPenalty.adhocExemptionReason", value);
   };
+
+  updateValueToEstimate = () => {
+    const {
+
+      adhocPenalty,
+      adhocExemption, estimateResponse, prepareFinalObject
+    } = this.props;
+    let { taxHeadEstimates, initialAmount: totalAmount, adhocPenaltyAmt: initialAdhocPenaltyAmt, adhocExemptionAmt: initialAdhocExemptionAmt } = estimateResponse[0] || {};
+
+    let adhocPenaltyAmt = adhocPenalty && adhocPenalty != '' ? Number.parseInt(adhocPenalty) : 0
+    let adhocExemptionAmt = adhocExemption && adhocExemption != '' ? Number.parseInt(adhocExemption) : 0
+    taxHeadEstimates.map(taxHead => {
+      if (taxHead.taxHeadCode == "PT_TIME_PENALTY") {
+        taxHead.estimateAmount = initialAdhocPenaltyAmt + adhocPenaltyAmt;
+      }
+      if (taxHead.taxHeadCode == "PT_TIME_REBATE") {
+        taxHead.estimateAmount = initialAdhocExemptionAmt + adhocExemptionAmt;
+      }
+    }
+    );
+    estimateResponse[0].totalAmount = totalAmount + adhocPenaltyAmt - adhocExemptionAmt;
+    prepareFinalObject('estimateResponse', [...estimateResponse]);
+  }
+
   onSubmit = () => {
     const {
-      updateEstimate,
-      totalAmount,
+      handleClose,
       displayFormErrors,
       adhocPenalty,
-      additionalRebate
+      additionalRebate, adhocExemption, estimateResponse
     } = this.props;
-    let { adhocExemption } = this.props;
+
     const { exemptValue } = this.state;
-    adhocExemption = { ...adhocExemption, value: exemptValue };
+
+
+    let { taxHeadEstimates, totalAmount } = estimateResponse[0] || {};
+    taxHeadEstimates.map(taxHead => {
+      if (taxHead.taxHeadCode == "PT_TAX") {
+        totalAmount = taxHead.estimateAmount;
+      }
+    });
 
 
 
-
-
-    if (adhocExemption.value >= 0) {
-      if (adhocExemption.value > sessionStorage.getItem('taxValue')) {
-        if (validateForm(additionalRebate)) {
+    if (adhocExemption >= 0) {
+      if (adhocExemption > totalAmount) {
+        if (this.validateForm(additionalRebate)) {
           alert(
             "Adhoc Exemption cannot be greater than the estimated tax for the given property"
           );
+          return;
         } else {
           displayFormErrors("additionalRebate");
         }
       } else {
-        if (validateForm(additionalRebate)) {
-          exemptValue !== null &&
-            this.props.handleFieldChange("adhocExemption", exemptValue);
-          updateEstimate();
+        if (this.validateForm(additionalRebate)) {
+          // exemptValue !== null &&
+          // this.props.handleFieldChange("adhocExemption", exemptValue);
+          // updateEstimate();
+          this.updateValueToEstimate();
+          handleClose();
         } else {
           displayFormErrors("additionalRebate");
         }
       }
+      displayFormErrors("additionalRebate");
     }
-    if (adhocPenalty.value >= 0) {
-      if (!validateForm(additionalRebate)) {
+    if (adhocPenalty >= 0) {
+      if (!this.validateForm(additionalRebate)) {
         displayFormErrors("additionalRebate");
       } else {
-        updateEstimate();
+        this.updateValueToEstimate();
+        handleClose();
+        // updateEstimate();
       }
     }
   };
+  resetFields = () => {
+    this.props.prepareFinalObject('adhocExemptionPenalty', {});
+  }
+  componentDidMount = () => {
+    this.resetFields();
+  }
 
   render() {
-    const { handleFieldChange, fields,totalAmount } = this.props;
+
+    const { adhocPenalty,
+      adhocPenaltyReason, adhocOtherPenaltyReason,
+      adhocExemption,
+      adhocExemptionReason, adhocOtherExemptionReason, estimateResponse, prepareFinalObject, fields } = this.props;
+    let {
+      adhocPenalty: adhocPenaltyForm,
+      adhocPenaltyReason: adhocPenaltyReasonForm,
+      adhocExemption: adhocExemptionForm,
+      adhocExemptionReason: adhocExemptionReasonForm,
+      otherExemptionReason: otherExemptionReasonForm,
+      otherPenaltyReason: otherPenaltyReasonForm
+    } = fields || {};
+
+    let { taxHeadEstimates, totalAmount } = estimateResponse[0] || {};
+    taxHeadEstimates.map(taxHead => {
+      if (taxHead.taxHeadCode == "PT_TAX") {
+        totalAmount = taxHead.estimateAmount;
+      }
+    });
+    // const { handleFieldChange, fields,totalAmount } = this.props;
     const {
       showExtraExemptField,
       showExtraPenaltyField,
       exemptValue
     } = this.state;
-    let {
-      adhocPenalty,
-      adhocPenaltyReason,
-      adhocExemption,
-      adhocExemptionReason,
-      otherExemptionReason,
-      otherPenaltyReason
-    } = fields || {};
-    if(!sessionStorage.getItem('taxValue')){
-      sessionStorage.setItem('taxValue',totalAmount)
+    // let {
+    //   adhocPenalty,
+    //   adhocPenaltyReason,
+    //   adhocExemption,
+    //   adhocExemptionReason,
+    //   otherExemptionReason,
+    //   otherPenaltyReason
+    // } = fields || {};
+    if (!sessionStorage.getItem('taxValue')) {
+      sessionStorage.setItem('taxValue', totalAmount)
     }
-    if(!this.state.isTaxValueInitialized){
-     
+    if (!this.state.isTaxValueInitialized) {
+
       this.setState({
-        isTaxValueInitialized:true,
-        initialTaxValue:totalAmount
+        isTaxValueInitialized: true,
+        initialTaxValue: totalAmount
       })
     }
-    adhocExemption = { ...adhocExemption, value: exemptValue };
+    // adhocExemption = { ...adhocExemption, value: exemptValue };
+
+
+
+    //     adhocPenalty
+    // adhocPenaltyReason
+    // adhocExemption
+    // adhocExemptionReason
     return (
       <div className="add-rebate-box">
         <div className="pt-emp-penalty-charges col-xs-12">
@@ -157,24 +242,29 @@ class AddRebateExemption extends React.Component {
           />
           <div className="adhocPenalty col-sm-6 col-xs-12">
             <TextField
-              onChange={(e, value) => handleFieldChange("adhocPenalty", value)}
-              {...adhocPenalty}
+              onChange={(e, value) => prepareFinalObject("adhocExemptionPenalty.adhocPenalty", value)}
+              // {...adhocPenalty}
+              {...adhocPenaltyForm}
+              value={adhocPenalty}
+
             />
           </div>
           <div className="adhocPenaltyReason col-sm-6 col-xs-12">
             <DropDown
               onChange={e => this.onChangePenaltyField(e.target.innerText)}
-              {...adhocPenaltyReason}
+              {...adhocPenaltyReasonForm}
+              value={adhocPenaltyReason}
             />
           </div>
           {showExtraPenaltyField && (
             <div className="col-sm-6 col-xs-12">
               <TextField
                 onChange={(e, value) =>
-                  handleFieldChange("otherPenaltyReason", value)
+                  prepareFinalObject("adhocExemptionPenalty.adhocOtherPenaltyReason", value)
                 }
                 fullWidth={true}
-                {...otherPenaltyReason}
+                {...otherPenaltyReasonForm}
+                value={adhocOtherPenaltyReason}
               />
             </div>
           )}
@@ -186,26 +276,28 @@ class AddRebateExemption extends React.Component {
             labelStyle={labelStyle} />
           <div className="adhocExemption col-sm-6 col-xs-12">
             <TextField
-              onChange={(e, value) => {
-                this.setState({ exemptValue: value });
-              }}
-              {...adhocExemption}
+              onChange={(e, value) => prepareFinalObject("adhocExemptionPenalty.adhocExemption", value)}
+              {...adhocExemptionForm}
+              value={adhocExemption}
             />
           </div>
           <div className="adhocExemptionReason col-sm-6 col-xs-12">
             <DropDown
               onChange={e => this.onChangeExemptField(e.target.innerText)}
-              {...adhocExemptionReason}
+              {...adhocExemptionReasonForm}
+              value={adhocExemptionReason}
             />
           </div>
           {showExtraExemptField && (
             <div className="col-sm-6 col-xs-12">
               <TextField
                 onChange={(e, value) =>
-                  handleFieldChange("otherExemptionReason", value)
+                  prepareFinalObject("adhocExemptionPenalty.adhocOtherExemptionReason", value)
                 }
                 fullWidth={true}
-                {...otherExemptionReason}
+                {...
+                otherExemptionReasonForm}
+                value={adhocOtherExemptionReason}
               />
             </div>
           )}
@@ -229,12 +321,23 @@ class AddRebateExemption extends React.Component {
 }
 
 const mapStateToProps = state => {
-  const { form } = state;
-  const { additionalRebate } = form;
-  const { fields } = additionalRebate || {};
-  const { adhocExemption, adhocPenalty } =
-    (additionalRebate && additionalRebate.fields) || {};
-  return { additionalRebate, fields, adhocExemption, adhocPenalty };
+  const { screenConfiguration, form } = state;
+  const { additionalRebate = {} } = form;
+  const { fields = {} } = additionalRebate;
+
+  const { preparedFinalObject } = screenConfiguration;
+  let { estimateResponse = [], adhocExemptionPenalty = {} } = preparedFinalObject;
+  let { adhocPenalty,
+    adhocPenaltyReason, adhocOtherPenaltyReason,
+    adhocExemption,
+    adhocExemptionReason, adhocOtherExemptionReason } = adhocExemptionPenalty;
+
+  return {
+    adhocPenalty,
+    adhocPenaltyReason, adhocOtherPenaltyReason,
+    adhocExemption,
+    adhocExemptionReason, adhocOtherExemptionReason, estimateResponse: [...estimateResponse], fields
+  };
 };
 
 const mapDispatchToProps = dispatch => {
@@ -243,7 +346,9 @@ const mapDispatchToProps = dispatch => {
       dispatch(
         setFieldProperty(formKey, fieldKey, propertyName, propertyValue)
       ),
-    displayFormErrors: formKey => dispatch(displayFormErrors(formKey))
+    displayFormErrors: formKey => dispatch(displayFormErrors(formKey)),
+    prepareFinalObject: (jsonPath, value) =>
+      dispatch(prepareFinalObject(jsonPath, value)),
   };
 };
 

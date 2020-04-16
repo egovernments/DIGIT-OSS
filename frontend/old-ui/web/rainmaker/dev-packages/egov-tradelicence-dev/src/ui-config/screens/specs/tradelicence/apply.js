@@ -107,7 +107,8 @@ export const getMdmsData = async (action, state, dispatch) => {
           masterDetails: [
             { name: "TradeType", filter: `[?(@.type == "TL")]` },
             { name: "AccessoriesCategory" },
-            { name: "ApplicationType" }
+            { name: "ApplicationType" },
+            { name: "documentObj" }
           ]
         },
         {
@@ -116,7 +117,7 @@ export const getMdmsData = async (action, state, dispatch) => {
             { name: "OwnerType" },
             { name: "OwnerShipCategory" },
             { name: "DocumentType" },
-            { name: "UOM" }
+            { name: "UOM" },
           ]
         },
         {

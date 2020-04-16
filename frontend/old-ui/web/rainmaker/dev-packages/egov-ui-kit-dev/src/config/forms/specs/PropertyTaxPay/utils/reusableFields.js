@@ -3,7 +3,7 @@ import { prepareFormData, fetchGeneralMDMSData, toggleSpinner } from "egov-ui-ki
 import { setDependentFields } from "./enableDependentFields";
 import { removeFormKey } from "./removeFloors";
 import { removeForm } from "egov-ui-kit/redux/form/actions";
-import { getTranslatedLabel } from "egov-ui-kit/utils/commons";
+import { getTranslatedLabel, generalMDMSDataRequestObj, getGeneralMDMSDataDropdownName } from "egov-ui-kit/utils/commons";
 import set from "lodash/set";
 import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
@@ -450,66 +450,10 @@ export const city = {
     },
     updateDependentFields: ({ formKey, field, dispatch, state }) => {
       dispatch(prepareFormData("Properties[0].tenantId", field.value));
-      let requestBody = {
-        MdmsCriteria: {
-          tenantId: field.value,
-          moduleDetails: [
-            {
-              moduleName: "PropertyTax",
-              masterDetails: [
-                {
-                  name: "Floor",
-                },
-                {
-                  name: "OccupancyType",
-                },
-                {
-                  name: "OwnerShipCategory",
-                },
-                {
-                  name: "OwnerType",
-                },
-                {
-                  name: "PropertySubType",
-                },
-                {
-                  name: "PropertyType",
-                },
-                {
-                  name: "SubOwnerShipCategory",
-                },
-                {
-                  name: "UsageCategoryDetail",
-                },
-                {
-                  name: "UsageCategoryMajor",
-                },
-                {
-                  name: "UsageCategoryMinor",
-                },
-                {
-                  name: "UsageCategorySubMinor",
-                },
-              ],
-            },
-          ],
-        },
-      };
+      let requestBody = generalMDMSDataRequestObj(field.value);
 
       dispatch(
-        fetchGeneralMDMSData(requestBody, "PropertyTax", [
-          "Floor",
-          "OccupancyType",
-          "OwnerShipCategory",
-          "OwnerType",
-          "PropertySubType",
-          "PropertyType",
-          "SubOwnerShipCategory",
-          "UsageCategoryDetail",
-          "UsageCategoryMajor",
-          "UsageCategoryMinor",
-          "UsageCategorySubMinor",
-        ])
+        fetchGeneralMDMSData(requestBody, "PropertyTax", getGeneralMDMSDataDropdownName())
       );
     },
   },

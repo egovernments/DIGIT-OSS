@@ -79,8 +79,8 @@ class App extends Component {
     }
 
     const isPrivacyPolicy = location && location.pathname && location.pathname.includes("privacy-policy");
-
-    if (nextProps.hasLocalisation !== this.props.hasLocalisation && !authenticated && !isPrivacyPolicy) {
+    const isPublicSearch = location && location.pathname && location.pathname.includes("/withoutAuth/pt-mutation/public-search");
+    if (nextProps.hasLocalisation !== this.props.hasLocalisation && !authenticated && !isPrivacyPolicy && !isPublicSearch) {
       nextProps.hasLocalisation && this.props.history.replace("/language-selection");
     }
   }

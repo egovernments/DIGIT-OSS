@@ -17,20 +17,6 @@ const header = getCommonHeader({
 const tenantId = getTenantId();
 
 const getData = async (action, state, dispatch, demandId) => {
-  const cityByModulueRequest = {
-    MdmsCriteria: {
-      tenantId: commonConfig.tenantId,
-      moduleDetails: [
-        {
-          moduleName: "tenant",
-          masterDetails: [{ name: "citymodule" }]
-        }
-      ]
-    }
-  };
-  dispatch(
-    fetchGeneralMDMSData(cityByModulueRequest, "tenant", ["citymodule"])
-  );
 
   let requestBody = {
     MdmsCriteria: {
@@ -41,7 +27,8 @@ const getData = async (action, state, dispatch, demandId) => {
           masterDetails: [
             {
               name: "tenants"
-            }
+            },
+            { name: "citymodule" }
           ]
         }
       ]
@@ -57,7 +44,15 @@ const getData = async (action, state, dispatch, demandId) => {
       [],
       requestBody
     );
-    dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
+    
+    if(payload){
+      dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
+      const citymodule = get(payload , "MdmsRes.tenant.citymodule"); 
+      const liveTenants =  citymodule && citymodule.filter(item => item.code === "UC" );
+      dispatch(
+        prepareFinalObject("applyScreenMdmsData.tenant.citiesByModule", get(liveTenants[0], "tenants"))
+      );
+    }
     const serviceCategories = get(
       state.screenConfiguration,
       "preparedFinalObject.searchScreenMdmsData.serviceCategory",
@@ -94,10 +89,7 @@ const getData = async (action, state, dispatch, demandId) => {
       console.log(e);
     }
   }
-  const liveTenants = get(state, "common.citiesByModule.UC.tenants", []);
-  dispatch(
-    prepareFinalObject("applyScreenMdmsData.tenant.citiesByModule", liveTenants)
-  );
+  
   // return action;
 };
 
@@ -110,11 +102,12 @@ const newCollection = {
       "Demands[0].id",
       null
     );
+    const screenConfigForUpdate = get(
+      state.screenConfiguration,
+      "screenConfig.newCollection"
+    );
     if (demandId) {
-      const screenConfigForUpdate = get(
-        state.screenConfiguration,
-        "screenConfig.newCollection"
-      );
+     
       set(
         screenConfigForUpdate,
         "components.div.children.newCollectionDetailsCard.children.cardContent.children.searchContainer.children.serviceCategory.props.disabled",

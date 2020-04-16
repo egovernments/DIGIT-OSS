@@ -1262,7 +1262,7 @@ export const getCurrentFinancialYear = () => {
   return fiscalYr;
 };
 
-export const validateFields = (
+export const validateFields = (  
   objectJsonPath,
   state,
   dispatch,
@@ -1688,69 +1688,108 @@ export const updateDropDowns = async (
   setOwnerShipDropDownFieldChange(state, dispatch, payload);
 };
 
-export const getDocList = (state, dispatch) => {
+export const prepareBPAREGDocumentDetailsUploadRedux = async (state, dispatch) => {
+  let docs = get (state.screenConfiguration.preparedFinalObject, "BPARegDocumentsContract");
+  let bpaDocs = [];
+
+  if (docs && docs.length > 0) {
+    docs.forEach(section => {
+      section.cards.forEach(doc => {
+        let docObj = {};
+        docObj.documentType = section.code;
+        docObj.documentCode = doc.code;
+        docObj.isDocumentRequired = doc.required;
+        docObj.isDocumentTypeRequired = doc.required;
+        bpaDocs.push(docObj);
+      })
+    });
+  }
+
+  let uploadedDocs = get (
+    state.screenConfiguration.preparedFinalObject,
+    "Licenses[0].tradeLicenseDetail.applicationDocuments", []);
+  
+  if(uploadedDocs && uploadedDocs.length > 0) {
+    let fileStoreIds = jp.query(uploadedDocs, "$.*.fileStoreId");
+    let fileUrls = fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
+    uploadedDocs.forEach(upDoc => {
+      bpaDocs.forEach(bpaDoc => {
+        let bpaDetailsDoc = (upDoc.documentType).split('.')[0]+"."+(upDoc.documentType).split('.')[1];
+        if(bpaDetailsDoc == bpaDoc.documentCode) {
+          let url = (fileUrls && fileUrls[upDoc.fileStoreId] && fileUrls[upDoc.fileStoreId].split(",")[0]) || "";
+          let name = (fileUrls[upDoc.fileStoreId] && 
+            decodeURIComponent(
+              fileUrls[upDoc.fileStoreId]
+                .split(",")[0]
+                .split("?")[0]
+                .split("/")
+                .pop()
+                .slice(13)
+            )) ||
+          `Document - ${index + 1}`;
+          bpaDoc.dropDownValues = {};
+          bpaDoc.dropDownValues.value =  upDoc.documentType;
+          bpaDoc.documents = [
+            {
+              fileName : name,
+              fileStoreId : upDoc.fileStoreId,
+              fileUrl : url,
+              id : upDoc.id
+            }
+          ]
+        }
+      })
+    })
+    dispatch(prepareFinalObject("bparegDocumentDetailsUploadRedux", bpaDocs));
+  }
+}
+
+export const getDocList = async (state, dispatch) => {
   const tradeSubTypes = get(
     state.screenConfiguration.preparedFinalObject,
     "Licenses[0].tradeLicenseDetail.tradeUnits"
   );
 
-  const tradeSubCategories = get(
+  let TradeTypetoRoleMapping =  get(
     state.screenConfiguration.preparedFinalObject,
-    "applyScreenMdmsData.TradeLicense.MdmsTradeType"
+    "applyScreenMdmsData.StakeholderRegistraition.TradeTypetoRoleMapping", []
   );
-  let selectedTypes = [];
-  tradeSubTypes.forEach(tradeSubType => {
-    selectedTypes.push(
-      filter(tradeSubCategories, {
-        code: tradeSubType.tradeType
+  
+  let tardetypSeletedTypes = [];
+  tradeSubTypes.forEach(tradeTradeSubType => {
+    tardetypSeletedTypes.push(
+      filter(TradeTypetoRoleMapping, {
+        tradeType: tradeTradeSubType.tradeType
       })
     );
   });
 
-  // selectedTypes[0] &&
-  //
-  let applicationDocArray = [];
+  let docTyps = tardetypSeletedTypes[0][0].docTypes;
+  if(docTyps && docTyps.length > 0) {
+  const bpaDocuments = docTyps;
+  let documentsContract = [];
+  let tempDoc = {};
 
-  selectedTypes.forEach(tradeSubTypeDoc => {
-    applicationDocArray = [
-      ...applicationDocArray,
-      ...tradeSubTypeDoc[0].applicationDocument
-    ];
+  bpaDocuments.forEach(doc => {
+    let card = {};
+    card["code"] = doc.code.split(".")[0];
+    card["title"] = doc.code.split(".")[0];
+    card["cards"] = [];
+    tempDoc[doc.code.split(".")[0]] = card;
   });
-  function onlyUnique(value, index, self) {
-    return self.indexOf(value) === index;
-  }
-  applicationDocArray = applicationDocArray.filter(onlyUnique);
-  let applicationDocument = prepareDocumentTypeObj(applicationDocArray);
-  dispatch(
-    prepareFinalObject(
-      "LicensesTemp[0].applicationDocuments",
-      applicationDocument
-    )
-  );
+  bpaDocuments.forEach(doc => {
+    let card = {};
+    card["name"] = doc.code;
+    card["code"] = doc.code;
+    card["required"] = doc.required ? true : false;
+    tempDoc[doc.code.split(".")[0]].cards.push(card);
+  });
 
-  //REARRANGE APPLICATION DOCS FROM TL SEARCH IN EDIT FLOW
-  let applicationDocs = get(
-    state.screenConfiguration.preparedFinalObject,
-    "Licenses[0].tradeLicenseDetail.applicationDocuments",
-    []
-  );
-  let applicationDocsReArranged =
-    applicationDocs &&
-    applicationDocs.length &&
-    applicationDocument.map(item => {
-      const index = applicationDocs.findIndex(
-        i => i.documentType === item.name
-      );
-      return applicationDocs[index];
-    });
-  applicationDocsReArranged &&
-    dispatch(
-      prepareFinalObject(
-        "Licenses[0].tradeLicenseDetail.applicationDocuments",
-        applicationDocsReArranged
-      )
-    );
+  Object.keys(tempDoc).forEach(key => {
+    documentsContract.push(tempDoc[key]);
+  });
+  dispatch(prepareFinalObject("BPARegDocumentsContract", documentsContract));
+  }
 };
 
 export const setOwnerShipDropDownFieldChange = (state, dispatch, payload) => {
@@ -2946,7 +2985,7 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
     ];
     const bpaSearch = await httpRequest(
       "post",
-      "bpa-services/bpa/appl/_search",
+      "bpa-services/_search",
       "",
       queryObject
     );
@@ -3475,6 +3514,24 @@ export const getBpaTextToLocalMapping = label => {
         "WF_BPA_PENDING_FEE",
         localisationLabels
     );
+    case "CITIZEN_ACTION_PENDING_AT_DOC_VERIF":
+      return getLocaleLabels(
+        "Send Back From Doc Verification",
+        "WF_BPA_CITIZEN_ACTION_PENDING_AT_DOC_VERIF",
+        localisationLabels
+    );
+    case "CITIZEN_ACTION_PENDING_AT_FI_VERIF":
+      return getLocaleLabels(
+        "Send Back From Field Inspection",
+        "WF_BPA_CITIZEN_ACTION_PENDING_AT_FI_VERIF",
+        localisationLabels
+    );
+    case "CITIZEN_ACTION_PENDING_AT_NOC_VERIF":
+      return getLocaleLabels(
+        "Send Back From Noc Verification",
+        "WF_BPA_CITIZEN_ACTION_PENDING_AT_NOC_VERIF",
+        localisationLabels
+    );
     }
 };
 
@@ -3821,6 +3878,7 @@ export const requiredDocumentsData = async (state, dispatch, action) => {
     const wfState = wfPayload.ProcessInstances[0];
     let appState;
     const appWfState = wfState.state.state;
+    dispatch(prepareFinalObject("applicationProcessInstances", get(wfPayload, "ProcessInstances[0]")));
 
      let requiredDocuments, appDocuments = [];
     if(payload && payload.MdmsRes && payload.MdmsRes.BPA && wfState ) {
@@ -3832,7 +3890,11 @@ export const requiredDocumentsData = async (state, dispatch, action) => {
         }
       });
     };
-    prepareDocumentsView(state, dispatch, action, appState);
+    let proInstance = wfPayload.ProcessInstances[0];
+    let nextActions = get(proInstance, "nextActions");
+    let isVisibleTrue = false;
+    if(nextActions && nextActions.length > 0) isVisibleTrue = true;
+    prepareDocumentsView(state, dispatch, action, appState, isVisibleTrue);
     let permitList = get (state.screenConfiguration.preparedFinalObject, "BPA.additionalDetails.pendingapproval");
     if(permitList && permitList.length > 0) {
       let riskType = get(
@@ -3848,7 +3910,7 @@ export const requiredDocumentsData = async (state, dispatch, action) => {
         dispatch(prepareFinalObject("permitList", permitList));
       }
     }
-    if(wfState.state.state == "FIELDINSPECTION_PENDING" && payload && payload.MdmsRes && payload.MdmsRes.BPA && payload.MdmsRes.BPA.CheckList) {
+    if( isVisibleTrue && wfState.state.state == "FIELDINSPECTION_PENDING" && payload && payload.MdmsRes && payload.MdmsRes.BPA && payload.MdmsRes.BPA.CheckList) {
       let fieldInfoDocs = payload.MdmsRes.BPA.CheckList;
       prepareFieldDocumentsUploadData(state, dispatch, action, fieldInfoDocs, appWfState);
     }
@@ -3856,7 +3918,7 @@ export const requiredDocumentsData = async (state, dispatch, action) => {
       state,
       "screenConfiguration.preparedFinalObject.BPA.riskType", ""
     );
-    if(wfState.state.state == "PENDINGAPPROVAL" && payload && payload.MdmsRes && payload.MdmsRes.BPA && payload.MdmsRes.BPA.CheckList) {
+    if( isVisibleTrue && wfState.state.state == "PENDINGAPPROVAL" && payload && payload.MdmsRes && payload.MdmsRes.BPA && payload.MdmsRes.BPA.CheckList) {
       if(riskType && riskType !== "LOW") {
         let checkListConditions = payload.MdmsRes.BPA.CheckList;
         prepareapprovalQstns(state, dispatch, action, checkListConditions, appWfState);
@@ -3979,7 +4041,7 @@ const prepareFieldDocumentsUploadData = async (state, dispatch, action, fieldInf
     if (doc.hasDropdown && doc.dropDownValues) {
       let dropDownValues = {};
       dropDownValues.label = "Select Documents";
-      dropDownValues.required = doc.required;
+      dropDownValues.required = doc.required ? true : false;
       dropDownValues.menu = doc.dropDownValues.filter(item => {
         return item.active;
       });
@@ -4005,7 +4067,7 @@ const documentMaping = async (state, dispatch, action,documentsPreview) => {
   let fileStoreIds = jp.query(documentsPreview, "$.*.fileStoreId");
   let fileUrls =
     fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
-  documentsPreview = documentsPreview.map((doc, index) => {
+   let documentsPreviews = documentsPreview.map((doc, index) => {
     doc["link"] =
       (fileUrls &&
         fileUrls[doc.fileStoreId] &&
@@ -4023,9 +4085,9 @@ const documentMaping = async (state, dispatch, action,documentsPreview) => {
       `Document - ${index + 1}`;
       return doc;
   });
-  return documentsPreview;
+  return documentsPreviews;
 }
-const prepareDocumentsView = async (state, dispatch, action, appState) => {
+const prepareDocumentsView = async (state, dispatch, action, appState, isVisibleTrue) => {
   let documentsPreview = [];
 
   // Get all documents from response
@@ -4061,37 +4123,70 @@ const prepareDocumentsView = async (state, dispatch, action, appState) => {
   
     if(fieldInspectionDocs && fieldInspectionDocs.length > 0 && fieldInspectionsQstions && fieldInspectionsQstions.length > 0) {
       let fiDocumentsPreview = [];
-      fieldInspectionDocs.forEach(fiDoc => {
+      fieldInspectionDocs.forEach(fiDoc => {        
         fiDocumentsPreview.push({
           title: getTransformedLocale(fiDoc.documentType),
           fileStoreId: fiDoc.fileStoreId,
           linkText: "View"
         });
       })
-      
+
       let fieldInspectionDocuments = await documentMaping(state, dispatch, action, fiDocumentsPreview);
       set(
         action,
-        "screenConfig.components.div.children.body.children.cardContent.children.fieldSummary.children.cardContent.visible",
+        "screenConfig.components.div.children.body.children.cardContent.children.fieldSummary.visible",
         true
       );
       dispatch(prepareFinalObject("fieldInspectionDocumentsDetailsPreview", fieldInspectionDocuments));
       dispatch(prepareFinalObject("fieldInspectionCheckListDetailsPreview", fieldInspectionsQstions)); 
     }
-
-  allDocuments.forEach(doc => {
+    let fileStoreIds = jp.query(allDocuments, "$.*.fileStoreId");
+    let fileUrls =
+    fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
+    allDocuments.map((doc, index) => {
     uploadedAppDocuments.push(doc);
-
-    documentsPreview.push({
-      title: getTransformedLocale(doc.documentType),
-      fileStoreId: doc.fileStoreId,
-      linkText: "View"
-    });
+    let obj = {};
+    obj.title = getTransformedLocale(doc.documentType);
+    obj.fileStoreId = doc.fileStoreId;
+    obj.linkText = "View";
+    obj.wfState = doc.wfState;
+    obj["link"] =
+      (fileUrls &&
+        fileUrls[doc.fileStoreId] &&
+        getFileUrl(fileUrls[doc.fileStoreId])) ||
+      "";
+    obj["name"] =
+      (fileUrls[doc.fileStoreId] &&
+        decodeURIComponent(
+          getFileUrl(fileUrls[doc.fileStoreId])
+            .split("?")[0]
+            .split("/")
+            .pop()
+            .slice(13)
+        )) ||
+      `Document - ${index + 1}`;
+    if (doc.wfState === "SEND_TO_CITIZEN") {
+      obj.createdBy = "BPA Architect"
+    }
+    else if(doc.wfState === "DOC_VERIFICATION_PENDING") {
+      obj.createdBy = "BPA Document Verifier"
+    }
+    else if (doc.wfState === "FIELDINSPECTION_PENDING") {
+      obj.createdBy = "BPA Field Inspector"   
+    }
+    else if (doc.wfState === "NOC_VERIFICATION_PENDING") {
+      obj.createdBy = "BPA Noc Verifier"    
+    } else {
+      obj.createdBy = "BPA Architect"
+    }   
+    documentsPreview.push(obj);
+    return obj;
   });
-  let appDocumentsPreview = await documentMaping(state, dispatch, action, documentsPreview);
-  dispatch(prepareFinalObject("documentDetailsPreview", appDocumentsPreview));
+  dispatch(prepareFinalObject("documentDetailsPreview", documentsPreview));
+  let previewDocuments = [];
+  
   let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
-  if(isEmployee) {
+  if((isEmployee && isVisibleTrue) || (!isEmployee && isVisibleTrue)) {
     prepareDocsInEmployee(state, dispatch, action, appState, uploadedAppDocuments);
   }
 };
@@ -4113,7 +4208,16 @@ export const prepareDocsInEmployee = (state, dispatch, action, appState, uploade
     {}
   );
 
-  let documents = []
+  let documents = [];
+  let bpaStatusAction = get(bpaAppDetails, "status").includes("CITIZEN_ACTION_PENDING");
+  if(bpaStatusAction) {
+    appState = "INITIATED";
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.documentDetailsCard.visible",
+      false
+    );
+  }
   applicationDocuments.forEach(doc => {
     if(doc.WFState == appState && doc.RiskType === bpaAppDetails.riskType && doc.ServiceType === bpaAppDetails.serviceType && doc.applicationType === bpaAppDetails.applicationType) {
       documents.push(doc.docTypes)
@@ -4203,7 +4307,17 @@ if(tempDoc) {
 
     let result;
     if (documentsDocTypes && documentsDocTypes.length > 0) {
-      result = documentsCodes.filter(comparer(documentsDocTypes));
+      documentsCodes.map( docs => {
+        documentsDocTypes.map( doc => {
+        if(docs === doc) {
+          documentsContract[0].cards.map( items => {
+            if(items && items.code === doc) return items.required = false;
+          })
+        }
+        })
+        return docs;
+      })
+      result = documentsCodes;
     } else {
       result = documentsCodes;
     }
@@ -4248,7 +4362,7 @@ if(tempDoc) {
     }
 
     let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
-    if (finalDocuments && finalDocuments.length > 0 && isEmployee) {
+    if (finalDocuments && finalDocuments.length > 0 && (isEmployee || bpaStatusAction) ) {
       set(
         action,
         "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.uploadedDocumentDetailsCard.visible",
@@ -4259,6 +4373,101 @@ if(tempDoc) {
   }
 };
 
+export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
+  let docs = get (state.screenConfiguration.preparedFinalObject, "documentsContract");
+  let bpaDocs = [];    
+  const bpaDetails = get(
+    state.screenConfiguration.preparedFinalObject,
+    "BPA",
+    {}
+  );
+  let uploadedDocs = bpaDetails.documents; 
+
+  if (docs && docs.length > 0) {
+    docs.forEach(section => {
+      section.cards.forEach(doc => {
+        let docObj = {};
+        docObj.documentType = section.code;
+        docObj.documentCode = doc.code;
+        if(uploadedDocs && uploadedDocs.length > 0) {
+          docObj.isDocumentRequired = false;
+        }
+        else {
+          docObj.isDocumentRequired = doc.required;          
+        }
+        docObj.isDocumentTypeRequired = doc.required;
+        bpaDocs.push(docObj);
+      })
+    });
+  }
+  if(uploadedDocs && uploadedDocs.length > 0) {
+    let fileStoreIds = jp.query(uploadedDocs, "$.*.fileStoreId");
+    let fileUrls = fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
+    uploadedDocs.forEach(upDoc => {
+      bpaDocs.forEach(bpaDoc => {
+        let bpaDetailsDoc;
+        if(upDoc.documentType) bpaDetailsDoc = (upDoc.documentType).split('.')[0]+"."+(upDoc.documentType).split('.')[1];
+        if(bpaDetailsDoc == bpaDoc.documentCode) {
+          let url = (fileUrls && fileUrls[upDoc.fileStoreId] && fileUrls[upDoc.fileStoreId].split(",")[0]) || "";
+          let name = (fileUrls[upDoc.fileStoreId] && 
+            decodeURIComponent(
+              fileUrls[upDoc.fileStoreId]
+                .split(",")[0]
+                .split("?")[0]
+                .split("/")
+                .pop()
+                .slice(13)
+            )) ||
+          `Document - ${index + 1}`;
+          bpaDoc.dropDownValues = {};
+          bpaDoc.dropDownValues.value =  upDoc.documentType;
+          if(bpaDoc.previewdocuments ){
+            bpaDoc.previewdocuments.push(
+              {
+                title: getTransformedLocale(bpaDoc.documentCode),
+                documentType: bpaDoc.dropDownValues.value,
+                name: name,
+                linkText: "View",
+                fileName : name,
+                fileStoreId : upDoc.fileStoreId,
+                fileUrl : url,
+                id : upDoc.id,
+                wfState: upDoc.wfState
+              }
+            );
+          }else{
+            bpaDoc.previewdocuments = [
+              {
+                title: getTransformedLocale(bpaDoc.documentCode),
+                documentType: bpaDoc.dropDownValues.value,               
+                name: name,
+                linkText: "View",
+                fileName : name,
+                fileStoreId : upDoc.fileStoreId,
+                fileUrl : url,
+                id : upDoc.id,
+                wfState: upDoc.wfState                
+              }
+            ];
+          }
+        }
+      })
+    })
+    let previewStoreIds = jp.query(bpaDocs, "$..[*].*.fileStoreId");
+    let previewFileUrls = previewStoreIds.length > 0 ? await getFileUrlFromAPI(previewStoreIds) : {};
+      
+    bpaDocs.forEach(doc => {
+
+      if (doc.previewdocuments && doc.previewdocuments.length > 0) {
+          doc.previewdocuments.forEach(docDetail =>{
+            docDetail["link"] = fileUrls[docDetail.fileStoreId];
+            return docDetail;
+          });
+      }
+    });
+    dispatch(prepareFinalObject("documentDetailsUploadRedux", bpaDocs));
+  }
+}
 
 export const revocationPdfDownload = async(action, state, dispatch) => {
   let bpaDetails = get (
@@ -4316,7 +4525,7 @@ export const permitOrderNoDownload = async(action, state, dispatch) => {
   
 let data =  wrapRequestBody({ BPA : detailsOfBpa }) ;
   axios({
-    url: '/bpa-services/bpa/appl/_permitorderedcr',
+    url: '/bpa-services/_permitorderedcr',
     method: 'POST',
     responseType: 'blob',data
    // important
@@ -4378,34 +4587,65 @@ const getFloorDetails = (index) => {
   }
 };
 
-export const setProposedBuildingData = async (state, dispatch) => {
+export const setProposedBuildingData = async (state, dispatch, action) => {
   const response = get(
     state,
-    "screenConfiguration.preparedFinalObject.scrutinyDetails.planDetail.blocks[0].building.floors",
+    "screenConfiguration.preparedFinalObject.scrutinyDetails.planDetail.blocks",
     []
   );
-  if (response && response.length > 0) {
-    let tableData = await response.map((item, index) => (
-      {
-        [getBpaTextToLocalMapping("Floor Description")]: getFloorDetails((item.number).toString()) || '-',
-        [getBpaTextToLocalMapping("Level")]: item.number,
-        [getBpaTextToLocalMapping("Occupancy/Sub Occupancy")]: item.occupancies[0].type || "-",
-        [getBpaTextToLocalMapping("Buildup Area")]: item.occupancies[0].builtUpArea || "0",
-        [getBpaTextToLocalMapping("Floor Area")]: item.occupancies[0].floorArea || "0",
-        [getBpaTextToLocalMapping("Carpet Area")]: item.occupancies[0].carpetArea || "0"
-      }));
+  let occupancyType = get(
+    state,
+    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.SubOccupancyType",
+    []
+  );
+  const BPA = get (
+    state,
+    "screenConfiguration.preparedFinalObject.BPA",
+    {}
+  );
+  
+  let subOccupancyType = occupancyType.filter(item => {
+    return item.active;
+  });
 
-    dispatch(
-      handleField(
-        "apply",
-        "components.div.children.formwizardSecondStep.children.proposedBuildingDetails.children.cardContent.children.proposedContainer.children.proposedBuildingDetailsContainer",
-        "props.data",
-        tableData
-      )
-    );
+  let tableData = [];
+  if (response && response.length > 0) {
+    for (var j = 0; j < response.length; j++) {
+      let title = `Block ${j + 1}`;
+      let floors = response[j] && response[j].building && response[j].building.floors;
+      let block = await floors.map((item, index) => (
+        {
+          [getBpaTextToLocalMapping("Floor Description")]: getFloorDetails((item.number).toString()) || '-',
+          [getBpaTextToLocalMapping("Level")]: item.number,
+          [getBpaTextToLocalMapping("Occupancy/Sub Occupancy")]: item.occupancies[0].type || "-",
+          [getBpaTextToLocalMapping("Buildup Area")]: item.occupancies[0].builtUpArea || "0",
+          [getBpaTextToLocalMapping("Floor Area")]: item.occupancies[0].floorArea || "0",
+          [getBpaTextToLocalMapping("Carpet Area")]: item.occupancies[0].carpetArea || "0"
+        }));
+      let occupancyTypeCheck = [], formatedSubOccupancyType = "";
+      if(BPA && BPA.blocks && BPA.blocks[j] && BPA.blocks[j].subOccupancyType) {
+        let sOccupancyType = (BPA.blocks[j].subOccupancyType).split(",");
+        sOccupancyType.forEach(subOcData => {
+          occupancyTypeCheck.push({
+            value : subOcData,
+            label : getTransformedLocale(`BPA_SUBOCCUPANCYTYPE_${subOcData}`)
+          });
+        });
+      }
+      
+      if(occupancyTypeCheck && occupancyTypeCheck.length) {
+        tableData.push({ blocks: block, suboccupancyData: subOccupancyType, titleData: title, occupancyType: occupancyTypeCheck });
+      } else {
+        tableData.push({ blocks: block, suboccupancyData: subOccupancyType, titleData: title });
+      }
+
+    };
+    dispatch(prepareFinalObject("edcr.blockDetail", tableData));
+
     return tableData;
   }
-}
+} 
+
 
 export const getConditionsInPermitList = async (action, state, dispatch) => {
   let permitConditions = get(
