@@ -329,7 +329,7 @@
                   "body": [
                     [
                       {
-                        "text": "{{property_id}}",
+                        "text": "{{consumer_no}}",
                         "border": [
                           false,
                           false,
@@ -689,7 +689,7 @@
             ],
             [
               {
-                "text": "{{consumer_id}}",
+                "text": "{{consumer_no}}",
                 "border": [
                   false,
                   false,
