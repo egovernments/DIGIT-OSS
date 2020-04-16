@@ -43,6 +43,7 @@
                                 },
                                 "localisation": {
                                     "required": true,
+                                    "prefix": "WS_PROPTYPE",
                                     "module": "rainmaker-ws"
                                   }
                             },
@@ -53,6 +54,7 @@
                                 },
                                 "localisation": {
                                     "required": true,
+                                    "prefix": "WS_PROPUSGTYPE",
                                     "module": "rainmaker-ws"
                                   }
                             },
