@@ -23,7 +23,7 @@ import {
   prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import "./index.css";
-import { generateReceipt } from "../../utils/receiptPdf";
+import generateReceipt from "../../utils/receiptPdf";
 import { downloadBill } from "../../../../../ui-utils/commons";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
