@@ -181,4 +181,3 @@ ServiceMaps:
             outJsonPath: $.Data.noOfToilets
           - inJsonPath: $.@timestamp
             outJsonPath: $.Data.@timestamp
-
