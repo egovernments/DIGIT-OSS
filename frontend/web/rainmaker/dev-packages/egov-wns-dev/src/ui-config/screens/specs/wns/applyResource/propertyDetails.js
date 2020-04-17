@@ -71,7 +71,11 @@ const propertyDetails = getCommonContainer({
     {
       jsonPath:
         "applyScreen.property.propertyType",
-        callBack: handleNA
+        callBack: handleNA,
+        localePrefix: {
+          moduleName: "WS",
+          masterName: "PROPTYPE"
+        }
 
     }
   ),
@@ -80,7 +84,11 @@ const propertyDetails = getCommonContainer({
       labelKey: "WS_PROPERTY_USAGE_TYPE_LABEL"
     },
     { jsonPath: "applyScreen.property.usageCategory",
-    callBack: handleNA
+    callBack: handleNA,
+    localePrefix: {
+      moduleName: "WS",
+      masterName: "PROPUSGTYPE"
+    }
   }
   ),
   propertySubUsageType: getLabelWithValue(

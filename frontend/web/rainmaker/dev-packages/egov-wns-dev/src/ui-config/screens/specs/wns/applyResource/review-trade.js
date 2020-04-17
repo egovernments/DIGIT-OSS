@@ -194,7 +194,12 @@ const getPropertyDetails = {
           },
           {
             jsonPath: "WaterConnection[0].property.propertyType",
-            callBack: handleNA
+            callBack: handleNA,
+            localePrefix: {
+              moduleName: "WS",
+              masterName: "PROPTYPE"
+            }
+            
           }
         ),
         reviewPropertyUsageType: getLabelWithValue(
@@ -204,7 +209,11 @@ const getPropertyDetails = {
           },
           {
             jsonPath: "WaterConnection[0].property.usageCategory",
-            callBack: handleNA
+            callBack: handleNA,
+            localePrefix: {
+              moduleName: "WS",
+              masterName: "PROPUSGTYPE"
+            }        
           }
         ),
 

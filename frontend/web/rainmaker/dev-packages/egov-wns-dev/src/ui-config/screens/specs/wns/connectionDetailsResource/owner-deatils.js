@@ -56,6 +56,10 @@ export const ownerCategory = getLabelWithValue(
   },
   {
     jsonPath: "WaterConnection[0].property.ownershipCategory",
+    localePrefix: {
+      moduleName: "WS",
+      masterName: "OWNERSHIPCATEGORY"
+    }
   }
 )
 export const email = getLabelWithValue(
