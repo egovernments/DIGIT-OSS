@@ -73,7 +73,8 @@ const getMultiItemForTax = (billingslabData, classes, style) => {
               color: "rgba(0, 0, 0, 0.8700000047683716)",
               fontSize: "16px",
               fontWeigt: 400,
-              lineSpacing: "19px"
+              lineSpacing: "19px",
+              marginRight: "10px"
             }}
           />
         </Grid>
@@ -101,7 +102,7 @@ class ViewBreakupContainer extends React.Component {
       fontWeigt: 500,
       lineSpacing: "28px",
       marginTop: 25,
-      marginRight:10
+      marginRight: 5
     }
   };
 
@@ -244,9 +245,9 @@ class ViewBreakupContainer extends React.Component {
                 getMultiItemForTax(taxUnitData, classes)
               )}
               <Divider className={classes.root} />
-              {taxUnitData &&
+              {/* {taxUnitData &&
                 taxUnitData.length > 0 &&
-                getGridItem(taxTotal, classes)}
+                getGridItem(taxTotal, classes)} */}
 
               {/* {serviceUnitData &&
                 serviceUnitData.length > 0 && */}

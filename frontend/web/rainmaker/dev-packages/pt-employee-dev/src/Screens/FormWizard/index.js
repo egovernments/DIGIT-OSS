@@ -874,6 +874,7 @@ class FormWizard extends Component {
         break;
       case 3:
         window.scrollTo(0, 0);
+        const newDocs = {};
         const uploadedDocs = get(this.props, "documentsUploadRedux");
         if (!isDocumentValid(uploadedDocs, requiredDocCount)) {
           alert("Please upload all the required documents and documents type.")
@@ -882,6 +883,14 @@ class FormWizard extends Component {
             selected: index,
             formValidIndexArray: [...formValidIndexArray, selected]
           });
+          if (Object.keys(uploadedDocs).length != requiredDocCount) {
+            Object.keys(uploadedDocs).map(key => {
+              if (key < requiredDocCount) {
+                newDocs[key] = uploadedDocs[key];
+              }
+            })
+            this.props.prepareFinalObject('documentsUploadRedux', newDocs)
+          }
         }
 
         break;
@@ -1791,13 +1800,9 @@ const mapStateToProps = state => {
     (propertyAddress && propertyAddress.fields && propertyAddress.fields) || {};
   const currentTenantId = (city && city.value) || commonConfig.tenantId;
   const { preparedFinalObject } = screenConfiguration;
-  const { documentsContract = [], documentsUploadRedux, newProperties = [], propertiesEdited = false, adhocExemptionPenalty = {} } = preparedFinalObject;
-  let requiredDocCount = 0;
-  documentsContract && documentsContract[0] && documentsContract[0].cards && documentsContract[0].cards.map(document => {
-    if (document.required == true) {
-      requiredDocCount++;
-    }
-  })
+  const { documentsUploadRedux, newProperties = [], propertiesEdited = false, adhocExemptionPenalty = {}, ptDocumentCount = 0 } = preparedFinalObject;
+  let requiredDocCount = ptDocumentCount;
+
   return {
     form,
     currentTenantId,

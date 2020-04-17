@@ -1,4 +1,5 @@
 import { withStyles } from "@material-ui/core/styles";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getPurpose } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
 import get from "lodash/get";
 import React, { Component } from "react";
@@ -16,6 +17,14 @@ const styles = theme => ({
 });
 
 class DocumentListContainer extends Component {
+  componentDidUpdate() {
+    const { ptDocumentsList, prepareFinalObject, ptDocumentCount } = this.props;
+    const documents = get(ptDocumentsList, '[0].cards', []) || [];
+    if (ptDocumentCount != documents.length) {
+      prepareFinalObject('ptDocumentCount', documents.length);
+    }
+
+  }
   render() {
     const { ...rest } = this.props;
     return <DocumentList {...rest} />;
@@ -74,10 +83,14 @@ const mapStateToProps = state => {
     return documentTypes && Array.isArray(documentTypes) && documentTypes.length > 1 && documentTypes[1];
   })
 
-
   let ptDocumentsList = get(
     state,
     "screenConfiguration.preparedFinalObject.documentsContract",
+    []
+  );
+  let ptDocumentCount = get(
+    state,
+    "screenConfiguration.preparedFinalObject.ptDocumentCount",
     []
   );
   ptDocumentsList.map(documentList => {
@@ -100,12 +113,18 @@ const mapStateToProps = state => {
     })
     documentList.cards = documentList.cards.filter(document => filterFunction(document, preparedFinalObject, document.filterCondition))
   })
-  return { ptDocumentsList, preparedFinalObject };
+  return { ptDocumentsList, preparedFinalObject, ptDocumentCount };
+};
+const mapDispatchToProps = dispatch => {
+  return {
+    prepareFinalObject: (jsonPath, value) =>
+      dispatch(prepareFinalObject(jsonPath, value))
+  };
 };
 
 export default withStyles(styles)(
   connect(
     mapStateToProps,
-    null
+    mapDispatchToProps
   )(DocumentListContainer)
 );

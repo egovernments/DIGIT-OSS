@@ -1,21 +1,14 @@
 import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/utils";
-import {
-  handleScreenConfigurationFieldChange as handleField,
-  prepareFinalObject,
-  toggleSnackbar,
-  toggleSpinner
-} from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
-import { getTransformedLocale, getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
+import { getFileUrlFromAPI, getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
+import { downloadPdf, printPdf } from "egov-ui-kit/utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
 import store from "ui-redux/store";
 import { getTranslatedLabel } from "../ui-config/screens/specs/utils";
-import printJS from 'print-js';
-import axios from 'axios';
-
 
 const handleDeletedCards = (jsonObject, jsonPath, key) => {
   let originalArray = get(jsonObject, jsonPath, []);
@@ -493,43 +486,21 @@ export const setApplicationNumberBox = (state, dispatch, applicationNo) => {
   }
 };
 
-export const downloadReceiptFromFilestoreID=(fileStoreId,mode,tenantId)=>{
-  getFileUrlFromAPI(fileStoreId,tenantId).then(async(fileRes) => {
+export const downloadReceiptFromFilestoreID = (fileStoreId, mode, tenantId) => {
+  getFileUrlFromAPI(fileStoreId, tenantId).then(async (fileRes) => {
     if (mode === 'download') {
-      var win = window.open(fileRes[fileStoreId], '_blank');
-      if(win){
-        win.focus();
-      }
+      downloadPdf(fileRes[fileStoreId]);
     }
     else {
-     // printJS(fileRes[fileStoreId])
-      var response =await axios.get(fileRes[fileStoreId], {
-        //responseType: "blob",
-        responseType: "arraybuffer",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/pdf"
-        }
-      });
-      console.log("responseData---",response);
-      const file = new Blob([response.data], { type: "application/pdf" });
-      const fileURL = URL.createObjectURL(file);
-      var myWindow = window.open(fileURL);
-      if (myWindow != undefined) {
-        myWindow.addEventListener("load", event => {
-          myWindow.focus();
-          myWindow.print();
-        });
-      }
-    
+      printPdf(fileRes[fileStoreId]);
     }
   });
 }
 
 
-export const download = (receiptQueryString, mode = "download" ,configKey = "consolidatedreceipt" , state) => {
-  if(state && process.env.REACT_APP_NAME === "Citizen" && configKey === "consolidatedreceipt"){
-    const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject , "commonPayInfo");
+export const download = (receiptQueryString, mode = "download", configKey = "consolidatedreceipt", state) => {
+  if (state && process.env.REACT_APP_NAME === "Citizen" && configKey === "consolidatedreceipt") {
+    const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject, "commonPayInfo");
     configKey = get(uiCommonPayConfig, "receiptKey")
   }
   const FETCHRECEIPT = {
@@ -550,26 +521,26 @@ export const download = (receiptQueryString, mode = "download" ,configKey = "con
         { key: "key", value: configKey },
         { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
       ]
-      if(payloadReceiptDetails&&payloadReceiptDetails.Payments&&payloadReceiptDetails.Payments.length==0){
-        console.log("Could not find any receipts");   
+      if (payloadReceiptDetails && payloadReceiptDetails.Payments && payloadReceiptDetails.Payments.length == 0) {
+        console.log("Could not find any receipts");
         return;
       }
-      const oldFileStoreId=get(payloadReceiptDetails.Payments[0],"fileStoreId")
-      if(oldFileStoreId){
-        downloadReceiptFromFilestoreID(oldFileStoreId,mode)
+      const oldFileStoreId = get(payloadReceiptDetails.Payments[0], "fileStoreId")
+      if (oldFileStoreId) {
+        downloadReceiptFromFilestoreID(oldFileStoreId, mode)
       }
-     else{
-      httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments: payloadReceiptDetails.Payments }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
-        .then(res => {
-          res.filestoreIds[0]
-          if(res&&res.filestoreIds&&res.filestoreIds.length>0){
-            res.filestoreIds.map(fileStoreId=>{
-              downloadReceiptFromFilestoreID(fileStoreId,mode)
-            })          
-          }else{
-            console.log("Error In Receipt Download");        
-          }         
-        });
+      else {
+        httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments: payloadReceiptDetails.Payments }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+          .then(res => {
+            res.filestoreIds[0]
+            if (res && res.filestoreIds && res.filestoreIds.length > 0) {
+              res.filestoreIds.map(fileStoreId => {
+                downloadReceiptFromFilestoreID(fileStoreId, mode)
+              })
+            } else {
+              console.log("Error In Receipt Download");
+            }
+          });
       }
     })
   } catch (exception) {
@@ -578,35 +549,35 @@ export const download = (receiptQueryString, mode = "download" ,configKey = "con
 }
 
 
-export const downloadBill = async (consumerCode ,tenantId ,configKey = "consolidatedbill",url = "egov-searcher/bill-genie/billswithaddranduser/_get") => {
+export const downloadBill = async (consumerCode, tenantId, configKey = "consolidatedbill", url = "egov-searcher/bill-genie/billswithaddranduser/_get") => {
   const searchCriteria = {
-    consumerCode ,
+    consumerCode,
     tenantId
   }
-  const FETCHBILL={
-    GET:{
-      URL:url,
+  const FETCHBILL = {
+    GET: {
+      URL: url,
       ACTION: "_get",
     }
   }
   const DOWNLOADRECEIPT = {
-      GET: {
-          URL: "/pdf-service/v1/_create",
-          ACTION: "_get",
-      },
+    GET: {
+      URL: "/pdf-service/v1/_create",
+      ACTION: "_get",
+    },
   };
-  const billResponse = await httpRequest("post", FETCHBILL.GET.URL, FETCHBILL.GET.ACTION, [],{searchCriteria});
-  const oldFileStoreId=get(billResponse.Bills[0],"fileStoreId")
-  if(oldFileStoreId){
-    downloadReceiptFromFilestoreID(oldFileStoreId,'download')
+  const billResponse = await httpRequest("post", FETCHBILL.GET.URL, FETCHBILL.GET.ACTION, [], { searchCriteria });
+  const oldFileStoreId = get(billResponse.Bills[0], "fileStoreId")
+  if (oldFileStoreId) {
+    downloadReceiptFromFilestoreID(oldFileStoreId, 'download')
   }
-  else{
-  const queryStr = [
-            { key: "key", value: configKey },
-            { key: "tenantId", value: "pb" }
-        ]
-  const pfResponse = await httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Bill: billResponse.Bills }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
-  downloadReceiptFromFilestoreID(pfResponse.filestoreIds[0],'download');
-      }
+  else {
+    const queryStr = [
+      { key: "key", value: configKey },
+      { key: "tenantId", value: "pb" }
+    ]
+    const pfResponse = await httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Bill: billResponse.Bills }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
+    downloadReceiptFromFilestoreID(pfResponse.filestoreIds[0], 'download');
+  }
 }
 
