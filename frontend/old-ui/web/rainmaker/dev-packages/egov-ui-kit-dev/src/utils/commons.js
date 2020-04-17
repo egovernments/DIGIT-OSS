@@ -61,10 +61,10 @@ export const hyphenSeperatedDateTime = (d) => {
 };
 
 export const getSingleCodeObject = (dataKey, tempObj, MDMSdata, keys) => {
-  keys.forEach(key=>{
+  keys.forEach(key => {
     let splittedKey = key.split(".");
-    tempObj[splittedKey[splittedKey.length-1]] = MDMSdata[dataKey][key];
-    tempObj[splittedKey[splittedKey.length-1]].code = splittedKey[splittedKey.length-1];
+    tempObj[splittedKey[splittedKey.length - 1]] = MDMSdata[dataKey][key];
+    tempObj[splittedKey[splittedKey.length - 1]].code = splittedKey[splittedKey.length - 1];
   })
   return tempObj;
 }
@@ -78,40 +78,40 @@ export const getCategoryObject = (categoryCode, MDMSdata, dataKey, key, parentKe
 }
 
 export const getUsageCategory = (dataKey, tempObj, MDMSdata, keys) => {
-  keys.forEach(key=>{
+  keys.forEach(key => {
     let splittedKey = key.split(".");
     let categoryCode = splittedKey.pop();
-    if(splittedKey.length === 0) {
-      tempObj["UsageCategoryMajor"] = {...tempObj["UsageCategoryMajor"], ...getCategoryObject(categoryCode, MDMSdata, dataKey, key)};
+    if (splittedKey.length === 0) {
+      tempObj["UsageCategoryMajor"] = { ...tempObj["UsageCategoryMajor"], ...getCategoryObject(categoryCode, MDMSdata, dataKey, key) };
     } else if (splittedKey.length === 1) {
-      tempObj["UsageCategoryMinor"] = {...tempObj["UsageCategoryMinor"], ...getCategoryObject(categoryCode, MDMSdata, dataKey, key, "usageCategoryMajor", splittedKey[splittedKey.length-1])};
+      tempObj["UsageCategoryMinor"] = { ...tempObj["UsageCategoryMinor"], ...getCategoryObject(categoryCode, MDMSdata, dataKey, key, "usageCategoryMajor", splittedKey[splittedKey.length - 1]) };
     } else if (splittedKey.length === 2) {
-      tempObj["UsageCategorySubMinor"] = {...tempObj["UsageCategorySubMinor"], ...getCategoryObject(categoryCode, MDMSdata, dataKey, key, "usageCategoryMinor", splittedKey[splittedKey.length-1])};
+      tempObj["UsageCategorySubMinor"] = { ...tempObj["UsageCategorySubMinor"], ...getCategoryObject(categoryCode, MDMSdata, dataKey, key, "usageCategoryMinor", splittedKey[splittedKey.length - 1]) };
     } else if (splittedKey.length === 3) {
-      tempObj["UsageCategoryDetail"] = {...tempObj["UsageCategoryDetail"], ...getCategoryObject(categoryCode, MDMSdata, dataKey, key, "usageCategorySubMinor", splittedKey[splittedKey.length-1])};
+      tempObj["UsageCategoryDetail"] = { ...tempObj["UsageCategoryDetail"], ...getCategoryObject(categoryCode, MDMSdata, dataKey, key, "usageCategorySubMinor", splittedKey[splittedKey.length - 1]) };
     }
   });
   return tempObj;
 }
 
 export const getTransformedDropdown = (MDMSdata, dataKeys) => {
-  dataKeys.forEach(dataKey=>{
-    if(MDMSdata.hasOwnProperty(dataKey)){
+  dataKeys.forEach(dataKey => {
+    if (MDMSdata.hasOwnProperty(dataKey)) {
       let keys = Object.keys(MDMSdata[dataKey]);
       let tempObj = {};
-      if(keys && keys.length > 0){
-        if(dataKey !== "UsageCategory"){
+      if (keys && keys.length > 0) {
+        if (dataKey !== "UsageCategory") {
           MDMSdata[dataKey] = getSingleCodeObject(dataKey, tempObj, MDMSdata, keys);
         } else {
-          MDMSdata = {...MDMSdata, ...getUsageCategory(dataKey, tempObj, MDMSdata, keys)};
+          MDMSdata = { ...MDMSdata, ...getUsageCategory(dataKey, tempObj, MDMSdata, keys) };
         }
       }
     }
   });
   return MDMSdata;
-  }  
+}
 
-export const generalMDMSDataRequestObj = (tenantId)=>{
+export const generalMDMSDataRequestObj = (tenantId) => {
   let requestBody = {
     MdmsCriteria: {
       tenantId: tenantId,
@@ -153,14 +153,14 @@ export const generalMDMSDataRequestObj = (tenantId)=>{
 
 export const getGeneralMDMSDataDropdownName = () => {
   let keys = [
-            "Floor",
-            "OccupancyType",
-            "OwnerShipCategory",
-            "OwnerType",
-            "PropertySubType",
-            "PropertyType",
-            "SubOwnerShipCategory",
-            "UsageCategory"
+    "Floor",
+    "OccupancyType",
+    "OwnerShipCategory",
+    "OwnerType",
+    "PropertySubType",
+    "PropertyType",
+    "SubOwnerShipCategory",
+    "UsageCategory"
   ];
   return keys;
 }
@@ -939,35 +939,62 @@ export const getApplicationType = async (applicationNumber, tenantId, creationRe
   }
 }
 
-export const isDocumentValid = (docUploaded,requiredDocCount) => {
+export const isDocumentValid = (docUploaded, requiredDocCount) => {
   const totalDocsKeys = Object.keys(docUploaded) || [];
   let temp = 0;
-  if(totalDocsKeys.length === requiredDocCount){
-    totalDocsKeys.map(key=>{
-      if(docUploaded[key].documents && docUploaded[key].dropdown && docUploaded[key].dropdown.value){
+  if (totalDocsKeys.length >= requiredDocCount) {
+    for (let key = 0; key < requiredDocCount; key++) {
+      if (docUploaded[key].documents && docUploaded[key].dropdown && docUploaded[key].dropdown.value) {
         temp++;
       }
-      return temp;
-    });
+    }
     return temp === requiredDocCount ? true : false;
-  }else{
+  } else {
     return false;
   }
 }
 
 export const getMohallaData = (payload, tenantId) => {
-  return payload &&	payload.TenantBoundary[0] && payload.TenantBoundary[0].boundary && payload.TenantBoundary[0].boundary.reduce((result, item) => {
-			  result.push({
-				...item,
-				name: `${tenantId
-				  .toUpperCase()
-				  .replace(
-					/[.]/g,
-					"_"
-				  )}_REVENUE_${item.code
-				  .toUpperCase()
-				  .replace(/[._:-\s\/]/g, "_")}`
-			  });
-			  return result;
-      }, []);
+  return payload && payload.TenantBoundary[0] && payload.TenantBoundary[0].boundary && payload.TenantBoundary[0].boundary.reduce((result, item) => {
+    result.push({
+      ...item,
+      name: `${tenantId
+        .toUpperCase()
+        .replace(
+          /[.]/g,
+          "_"
+        )}_REVENUE_${item.code
+          .toUpperCase()
+          .replace(/[._:-\s\/]/g, "_")}`
+    });
+    return result;
+  }, []);
+}
+
+
+
+export const downloadPdf = (link) => {
+  var win = window.open(link, '_blank');
+  if (win) {
+    win.focus();
+  }
+}
+
+export const printPdf = async (link) => {
+  var response = await axios.get(link, {
+    responseType: "arraybuffer",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/pdf"
+    }
+  });
+  const file = new Blob([response.data], { type: "application/pdf" });
+  const fileURL = URL.createObjectURL(file);
+  var myWindow = window.open(fileURL);
+  if (myWindow != undefined) {
+    myWindow.addEventListener("load", event => {
+      myWindow.focus();
+      myWindow.print();
+    });
+  }
 }

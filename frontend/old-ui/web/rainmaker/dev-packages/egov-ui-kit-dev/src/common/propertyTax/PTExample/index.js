@@ -26,7 +26,7 @@ class PTExample extends Component {
                 <Label label="PT_EXAMPLES_DESCRIPTION" />
                 <div style={{ display: "flex" }}>
                   <a
-                    href={require("./PT_Corporation_Notification.pdf")}
+                    // href={require("./PT_Corporation_Notification.pdf")}
                     target="_blank"
                   >
                     <Label label="PT_HERE_LABEL" color="#fe7a51" />
@@ -37,7 +37,7 @@ class PTExample extends Component {
                   />
 
                   <a
-                    href={require("./PT_Council_Notification.pdf")}
+                    // href={require("./PT_Council_Notification.pdf")}
                     target="_blank"
                   >
                     <Label label="PT_HERE_LABEL" color="#fe7a51" />
