@@ -18,11 +18,15 @@ export const ownerDetailsHeader = getCommonContainer({
 export const ownershipType = getLabelWithValue(
   {
     labelName: "Ownership Type ",
-    labelKey: "WS_OWN_DETAIL_OWNERSHIP_TYPE_LABEL"
+    labelKey: "WS_OWN_DETAIL_OWNERSHIP_TYPE_LABEL"  
   },
   {
     jsonPath: "applyScreen.property.ownershipCategory",
-    callBack: handleNA
+    callBack: handleNA,
+    localePrefix: {
+      moduleName: "WS",
+      masterName: "OWNERSHIPCATEGORY"
+    }
   }
 )
 
