@@ -11,7 +11,7 @@ ServiceMaps:
         timeStampField: $.additionalDetails.appCreatedDate
         jsonPath: $.SewerageConnection
         customJsonMapping:
-          indexMapping: {"Data":{"workflow": {"state": {}, "action": "", "assignes": []},"ownersmobileNos":[],"applicationNo":"","applicationStatus":"","status":"","connectionNo":"","oldConnectionNo":"","plumberInfo":[],"roadType":"","roadCuttingArea":"","connectionExecutionDate":"","connectionCategory":"","connectionType":"","additionalDetails":{},"id":"","propertyId":"","tenantId":"","proposedWaterClosets":"","proposedToilets":"","noOfWaterClosets":"","noOfToilets":""}}
+          indexMapping: {"Data":{"workflow": {"state": {}, "action": "", "assignes": []},"ownersmobileNos":[],"applicationNo":"","applicationStatus":"","status":"","connectionNo":"","oldConnectionNo":"","plumberInfo":[],"roadType":"","roadCuttingArea":"","connectionExecutionDate":"","connectionCategory":"","connectionType":"","additionalDetails":{},"id":"","propertyId":"","tenantId":"","proposedWaterClosets":"","proposedToilets":"","noOfWaterClosets":"","noOfToilets":"","@timestamp":"timestamp"}}
           fieldMapping:
           - inJsonPath: $.applicationStatus.state
             outJsonPath: $.Data.workflow.state
@@ -59,7 +59,8 @@ ServiceMaps:
             outJsonPath: $.Data.noOfWaterClosets
           - inJsonPath: $.noOfToilets
             outJsonPath: $.Data.noOfToilets
-
+          - inJsonPath: $.@timestamp
+            outJsonPath: $.Data.@timestamp
 
   - topic: update-sw-connection
     configKey: INDEX
@@ -70,7 +71,7 @@ ServiceMaps:
         timeStampField: $.additionalDetails.appCreatedDate
         jsonPath: $.SewerageConnection
         customJsonMapping:
-          indexMapping: {"Data":{"workflow": {"state": {}, "action": "", "assignes": []},"ownersmobileNos":[],"applicationNo":"","applicationStatus":"","status":"","connectionNo":"","oldConnectionNo":"","plumberInfo":[],"roadType":"","roadCuttingArea":"","connectionExecutionDate":"","connectionCategory":"","connectionType":"","additionalDetails":{},"id":"","propertyId":"","tenantId":"","proposedWaterClosets":"","proposedToilets":"","noOfWaterClosets":"","noOfToilets":""}}
+          indexMapping: {"Data":{"workflow": {"state": {}, "action": "", "assignes": []},"ownersmobileNos":[],"applicationNo":"","applicationStatus":"","status":"","connectionNo":"","oldConnectionNo":"","plumberInfo":[],"roadType":"","roadCuttingArea":"","connectionExecutionDate":"","connectionCategory":"","connectionType":"","additionalDetails":{},"id":"","propertyId":"","tenantId":"","proposedWaterClosets":"","proposedToilets":"","noOfWaterClosets":"","noOfToilets":"","@timestamp":"timestamp"}}
           fieldMapping:
           - inJsonPath: $.applicationStatus.state
             outJsonPath: $.Data.workflow.state
@@ -118,6 +119,8 @@ ServiceMaps:
             outJsonPath: $.Data.noOfWaterClosets
           - inJsonPath: $.noOfToilets
             outJsonPath: $.Data.noOfToilets
+          - inJsonPath: $.@timestamp
+            outJsonPath: $.Data.@timestamp
 
   - topic: update-sw-workflow
     configKey: INDEX
@@ -128,7 +131,7 @@ ServiceMaps:
         timeStampField: $.additionalDetails.appCreatedDate
         jsonPath: $.SewerageConnection
         customJsonMapping:
-          indexMapping: {"Data":{"workflow": {"state": {}, "action": "", "assignes": []},"ownersmobileNos":[],"applicationNo":"","applicationStatus":"","status":"","connectionNo":"","oldConnectionNo":"","plumberInfo":[],"roadType":"","roadCuttingArea":"","connectionExecutionDate":"","connectionCategory":"","connectionType":"","additionalDetails":{},"id":"","propertyId":"","tenantId":"","proposedWaterClosets":"","proposedToilets":"","noOfWaterClosets":"","noOfToilets":""}}
+          indexMapping: {"Data":{"workflow": {"state": {}, "action": "", "assignes": []},"ownersmobileNos":[],"applicationNo":"","applicationStatus":"","status":"","connectionNo":"","oldConnectionNo":"","plumberInfo":[],"roadType":"","roadCuttingArea":"","connectionExecutionDate":"","connectionCategory":"","connectionType":"","additionalDetails":{},"id":"","propertyId":"","tenantId":"","proposedWaterClosets":"","proposedToilets":"","noOfWaterClosets":"","noOfToilets":"","@timestamp":"timestamp"}}
           fieldMapping:
           - inJsonPath: $.applicationStatus.state
             outJsonPath: $.Data.workflow.state
@@ -176,3 +179,5 @@ ServiceMaps:
             outJsonPath: $.Data.noOfWaterClosets
           - inJsonPath: $.noOfToilets
             outJsonPath: $.Data.noOfToilets
+          - inJsonPath: $.@timestamp
+            outJsonPath: $.Data.@timestamp
