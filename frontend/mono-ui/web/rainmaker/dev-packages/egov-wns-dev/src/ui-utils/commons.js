@@ -1,23 +1,13 @@
-import { httpRequest } from "./api";
-import {
-    convertDateToEpoch,
-    getCheckBoxJsonpath,
-    getSafetyNormsJson,
-    getHygeneLevelJson,
-    getLocalityHarmedJson
-} from "../ui-config/screens/specs/utils";
-import { prepareFinalObject, toggleSnackbar, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getTranslatedLabel, updateDropDowns, ifUserRoleExists } from "../ui-config/screens/specs/utils";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import store from "redux/store";
+import commonConfig from "config/common.js";
+import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getFileUrl, getFileUrlFromAPI, getQueryArg, getTransformedLocale, setDocuments } from "egov-ui-framework/ui-utils/commons";
+import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import set from "lodash/set";
-import { getQueryArg, getFileUrlFromAPI, getFileUrl, getTransformedLocale, setDocuments } from "egov-ui-framework/ui-utils/commons";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import commonConfig from "config/common.js";
-import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
-import printJS from 'print-js';
-import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons"
+import store from "redux/store";
+import { convertDateToEpoch, getCheckBoxJsonpath, getHygeneLevelJson, getLocalityHarmedJson, getSafetyNormsJson, getTranslatedLabel, ifUserRoleExists, updateDropDowns } from "../ui-config/screens/specs/utils";
+import { httpRequest } from "./api";
 
 export const pushTheDocsUploadedToRedux = async (state, dispatch) => {
     let reduxDocuments = get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux", {});
@@ -1453,16 +1443,7 @@ export const wsDownloadConnectionDetails = (receiptQueryString, mode, dispatch) 
                     }
                     httpRequest("post", DOWNLOADCONNECTIONDETAILS.GET.URL, DOWNLOADCONNECTIONDETAILS.GET.ACTION, queryStr, { WaterConnection: payloadReceiptDetails.WaterConnection }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
                         .then(res => {
-                            getFileUrlFromAPI(res.filestoreIds[0]).then((fileRes) => {
-                                if (mode === 'download') {
-                                    var win = window.open(fileRes[res.filestoreIds[0]], '_blank');
-                                    win.focus();
-                                }
-                                else {
-                                    downloadReceiptFromFilestoreID(res.filestoreIds[0], "print");
-                                }
-                            });
-
+                            downloadReceiptFromFilestoreID(res.filestoreIds[0], mode);
                         });
                 })
 
@@ -1480,16 +1461,7 @@ export const wsDownloadConnectionDetails = (receiptQueryString, mode, dispatch) 
 
                     httpRequest("post", DOWNLOADCONNECTIONDETAILS.GET.URL, DOWNLOADCONNECTIONDETAILS.GET.ACTION, queryStr, { SewerageConnections: payloadReceiptDetails.SewerageConnections }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
                         .then(res => {
-                            getFileUrlFromAPI(res.filestoreIds[0]).then((fileRes) => {
-                                if (mode === 'download') {
-                                    var win = window.open(fileRes[res.filestoreIds[0]], '_blank');
-                                    win.focus();
-                                }
-                                else {
-                                    downloadReceiptFromFilestoreID(res.filestoreIds[0], "print");
-                                }
-                            });
-
+                            downloadReceiptFromFilestoreID(res.filestoreIds[0], mode);
                         });
                 })
 
@@ -1567,33 +1539,24 @@ export const downloadBill = (receiptQueryString, mode = "download") => {
                 { key: "key", value: "consolidatedbill" },
                 { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
             ]
-            let data=[];
-            payloadReceiptDetails.Bill[0].billDetails.map(curEl=>data.push(curEl));
-            let sortData=data.sort((a,b)=>b.toPeriod-a.toPeriod);
+            let data = [];
+            payloadReceiptDetails.Bill[0].billDetails.map(curEl => data.push(curEl));
+            let sortData = data.sort((a, b) => b.toPeriod - a.toPeriod);
             sortData.shift();
-            let totalAmount=0;
-            let previousArrears=0;
-            if(sortData.length>0){
-                let totalArrearsAmount=sortData.map(el=>el.amount+totalAmount);
-                 previousArrears=totalArrearsAmount.reduce((a,b)=>a+b);
+            let totalAmount = 0;
+            let previousArrears = 0;
+            if (sortData.length > 0) {
+                let totalArrearsAmount = sortData.map(el => el.amount + totalAmount);
+                previousArrears = totalArrearsAmount.reduce((a, b) => a + b);
             }
-           
-            payloadReceiptDetails.Bill[0].billDetails.sort((a,b)=>b.toPeriod-a.toPeriod);
-    
-            payloadReceiptDetails.Bill[0].arrearAmount=previousArrears.toFixed(2);
+
+            payloadReceiptDetails.Bill[0].billDetails.sort((a, b) => b.toPeriod - a.toPeriod);
+
+            payloadReceiptDetails.Bill[0].arrearAmount = previousArrears.toFixed(2);
 
             httpRequest("post", DOWNLOADBILL.GET.URL, DOWNLOADBILL.GET.ACTION, queryStr, { Bill: payloadReceiptDetails.Bill }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
                 .then(res => {
-                    getFileUrlFromAPI(res.filestoreIds[0]).then((fileRes) => {
-                        if (mode === 'download') {
-                            var win = window.open(fileRes[res.filestoreIds[0]], '_blank');
-                            win.focus();
-                        }
-                        else {
-                            printJS(fileRes[res.filestoreIds[0]])
-                        }
-                    });
-
+                    downloadReceiptFromFilestoreID(res.filestoreIds[0], mode);
                 });
         })
 
