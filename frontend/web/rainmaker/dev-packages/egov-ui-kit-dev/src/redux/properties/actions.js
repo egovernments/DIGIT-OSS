@@ -1,18 +1,15 @@
-import * as actionTypes from "./actionTypes";
-import { PROPERTY, DRAFT, PGService, RECEIPT, BOUNDARY, FETCHBILL, FETCHRECEIPT,FETCHASSESSMENTS, DOWNLOADRECEIPT } from "egov-ui-kit/utils/endPoints";
+import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons";
+import { getCreatePropertyResponse, setPTDocuments } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/propertyCreateUtils";
+import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import { httpRequest } from "egov-ui-kit/utils/api";
 import { transformById } from "egov-ui-kit/utils/commons";
-import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons"
-import orderby from "lodash/orderBy";
-import get from "lodash/get";
-import FileSaver from 'file-saver';
-import cloneDeep from "lodash/cloneDeep";
+import { BOUNDARY, DOWNLOADRECEIPT, DRAFT, FETCHASSESSMENTS, FETCHBILL, FETCHRECEIPT, PGService, PROPERTY, RECEIPT } from "egov-ui-kit/utils/endPoints";
 import { getLatestPropertyDetails } from "egov-ui-kit/utils/PTCommon";
-import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
-import {  getCreatePropertyResponse, setPTDocuments } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/propertyCreateUtils";
-import { getFileUrl } from "egov-ui-framework/ui-utils/commons";
+import cloneDeep from "lodash/cloneDeep";
+import get from "lodash/get";
+import orderby from "lodash/orderBy";
+import * as actionTypes from "./actionTypes";
 
-const FileDownload = require('js-file-download');
 const reset_property_reset = () => {
   return {
     type: actionTypes.RESET_PROPERTY_STATE,
@@ -276,21 +273,21 @@ const setMohallaInRedux = (dispatch, state, draftResponse) => {
     }, {});
   const queryObj = Object.keys(mohallaCodes).map((item) => {
     return [{
-        key: "tenantId",
-        value: item,
-      },
-      {
-        key: "hierarchyTypeCode",
-        value: "REVENUE"
-      },
-      {
-        key: "boundaryType",
-        value: "Locality"
-      },
-      {
-        key: "codes",
-        value: mohallaCodes[item].join(",")
-      },
+      key: "tenantId",
+      value: item,
+    },
+    {
+      key: "hierarchyTypeCode",
+      value: "REVENUE"
+    },
+    {
+      key: "boundaryType",
+      value: "Locality"
+    },
+    {
+      key: "codes",
+      value: mohallaCodes[item].join(",")
+    },
     ];
   });
   dispatch(fetchMohalla(queryObj));
@@ -312,21 +309,21 @@ export const fetchProperties = (queryObjectproperty, queryObjectDraft, queryObje
     if (queryObjectproperty) {
       dispatch(propertyFetchPending());
       try {
-          let payloadProperty = await httpRequest(PROPERTY.GET.URL, PROPERTY.GET.ACTION,queryObjectproperty,{},[],{},true);
-        if(queryObjectDraft !== "citizen_search") {
-          if(payloadProperty&&payloadProperty.Properties&&payloadProperty.Properties.length>0){
-            let convertedProperties=payloadProperty.Properties.map(property=>{
-              let properties=getCreatePropertyResponse({Properties:[property]});
-             return properties&&properties.Properties&&properties.Properties.length>0&&properties.Properties[0];
+        let payloadProperty = await httpRequest(PROPERTY.GET.URL, PROPERTY.GET.ACTION, queryObjectproperty, {}, [], {}, true);
+        if (queryObjectDraft !== "citizen_search") {
+          if (payloadProperty && payloadProperty.Properties && payloadProperty.Properties.length > 0) {
+            let convertedProperties = payloadProperty.Properties.map(property => {
+              let properties = getCreatePropertyResponse({ Properties: [property] });
+              return properties && properties.Properties && properties.Properties.length > 0 && properties.Properties[0];
             });
-            payloadProperty.Properties=convertedProperties;
-          }      
-          if(payloadProperty.Properties && payloadProperty.Properties[0] &&payloadProperty.Properties[0].documents&&queryObjectproperty!=[]){
+            payloadProperty.Properties = convertedProperties;
+          }
+          if (payloadProperty.Properties && payloadProperty.Properties[0] && payloadProperty.Properties[0].documents && queryObjectproperty != []) {
             payloadProperty.Properties[0].documentsUploaded = await setPTDocuments(
               payloadProperty,
               "Properties[0].documents",
               "documentsUploaded",
-              dispatch, 
+              dispatch,
               'PT'
             );
             dispatch(propertyFetchComplete(payloadProperty));
@@ -335,7 +332,7 @@ export const fetchProperties = (queryObjectproperty, queryObjectDraft, queryObje
           }
         } else {
           dispatch(propertyFetchComplete(payloadProperty));
-        }        
+        }
       } catch (error) {
         dispatch(propertyFetchError(error.message));
       }
@@ -500,8 +497,8 @@ export const getAssesmentsandStatus = (queryObjectproperty) => {
         [{ key: "consumerCode", value: commaSeperatedCC.split(':')[0] }],
         {},
         [], {
-          ts: 0,
-        },
+        ts: 0,
+      },
         true
       );
       const receiptbyId = transformById(payloadReceipts["Receipt"], "transactionId");
@@ -685,21 +682,21 @@ export const downloadReceipt = (receiptQueryString) => {
         const payloadReceiptDetails = await httpRequest(FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString);
         const queryStr = [
           { key: "key", value: "consolidatedreceipt" },
-          { key: "tenantId", value: receiptQueryString[1].value.split('.')[0]}
+          { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
         ]
-        const oldFileStoreId=get(payloadReceiptDetails.Payments[0],"fileStoreId")
-      if(oldFileStoreId){
-        downloadReceiptFromFilestoreID(oldFileStoreId,"download")
-      }
-     else{
-        httpRequest(DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments: payloadReceiptDetails.Payments }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
-          .then(res => {
-            getFileUrlFromAPI(res.filestoreIds[0]).then((fileRes) => {
-              var win = window.open(fileRes[res.filestoreIds[0]], '_blank');
-              win.focus();
-            });
+        const oldFileStoreId = get(payloadReceiptDetails.Payments[0], "fileStoreId")
+        if (oldFileStoreId) {
+          downloadReceiptFromFilestoreID(oldFileStoreId, "download")
+        }
+        else {
+          httpRequest(DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments: payloadReceiptDetails.Payments }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+            .then(res => {
+              getFileUrlFromAPI(res.filestoreIds[0]).then((fileRes) => {
+                var win = window.open(fileRes[res.filestoreIds[0]], '_blank');
+                win.focus();
+              });
 
-          });
+            });
         }
       } catch (error) {
         dispatch(downloadReceiptError(error.message));
