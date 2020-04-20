@@ -1,23 +1,10 @@
-import {
-  pincode,
-  mohalla,
-  street,
-  colony,
-  houseNumber,
-  dummy
-} from "egov-ui-kit/config/forms/specs/PropertyTaxPay/utils/reusableFields";
-import {
-  handleFieldChange,
-  setFieldProperty
-} from "egov-ui-kit/redux/form/actions";
-import { CITY } from "egov-ui-kit/utils/endPoints";
-import {
-  prepareFormData,
-  fetchGeneralMDMSData
-} from "egov-ui-kit/redux/common/actions";
-import set from "lodash/set";
 import commonConfig from "config/common.js";
-import { getUserInfo, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { colony, dummy, houseNumber, mohalla, pincode, street } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/utils/reusableFields";
+import { fetchGeneralMDMSData, prepareFormData } from "egov-ui-kit/redux/common/actions";
+import { handleFieldChange } from "egov-ui-kit/redux/form/actions";
+import { CITY } from "egov-ui-kit/utils/endPoints";
+import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import set from "lodash/set";
 // const Search = <Icon action="action" name="home" color="#30588c" />;
 
 const formConfig = {

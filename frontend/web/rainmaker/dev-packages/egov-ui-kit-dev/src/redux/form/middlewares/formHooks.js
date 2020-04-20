@@ -1,6 +1,6 @@
-import * as actionTypes from "../actionTypes";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import { fetchDropdownData } from "egov-ui-kit/utils/commons";
+import * as actionTypes from "../actionTypes";
 
 const formValidation = (store) => (next) => (action) => {
   const { formKey, type, value, fieldKey } = action;
@@ -44,7 +44,7 @@ const formValidation = (store) => (next) => (action) => {
       }
     } catch (error) {
       const { message } = error;
-      dispatch(toggleSnackbarAndSetText(true, { labelName: message, labelKey: message },"error"));
+      dispatch(toggleSnackbarAndSetText(true, { labelName: message, labelKey: message }, "error"));
       return;
     }
   }

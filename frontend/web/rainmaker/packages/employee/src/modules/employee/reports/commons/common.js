@@ -23,7 +23,7 @@ export function validate_fileupload(files, formats) {
 
     //file length validation
     if (filename.length <= 30) {
-      if (formats.indexOf(fileext) >= 0 || !formats || formats.length == 0) {
+      if (formats.indexOf(fileext) >= 0 || !formats || formats.length === 0) {
         if (filesize <= filelimit) {
           //console.log('file size validation success');
         } else {
