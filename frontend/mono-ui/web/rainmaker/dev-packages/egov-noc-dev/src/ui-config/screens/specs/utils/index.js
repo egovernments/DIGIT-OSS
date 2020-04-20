@@ -600,7 +600,7 @@ export const generateBill = async (dispatch, applicationNumber, tenantId) => {
           key: "consumerCode",
           value: applicationNumber
         },
-        { key: "services", value: "FIRENOC" }
+        { key: "businessService", value: "FIRENOC" }
       ];
       const payload = await createBill(queryObj,dispatch);
       // let payload = sampleGetBill();
