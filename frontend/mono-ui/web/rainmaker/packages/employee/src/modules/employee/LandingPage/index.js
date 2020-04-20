@@ -1,7 +1,7 @@
-import React, { Component } from "react";
-import { Dashboard } from "modules/common";
-import { connect } from "react-redux";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { Dashboard } from "modules/common";
+import React, { Component } from "react";
+import { connect } from "react-redux";
 
 class LandingPage extends Component {
   state = { mdmsResponse: {}, dialogueOpen: false };
@@ -91,7 +91,7 @@ class LandingPage extends Component {
     const { history, name, citiesByModule } = this.props;
     const { getModuleItems, onPGRClick, onDialogueClose } = this;
     const moduleItems = getModuleItems(citiesByModule) || [];
-    const renderCityPicker = moduleItems && moduleItems.findIndex((item) => item.moduleTitle === "Complaints") > -1;
+    // const renderCityPicker = moduleItems && moduleItems.findIndex((item) => item.moduleTitle === "Complaints") > -1;
     return (
       <Dashboard
         moduleItems={moduleItems}

@@ -1,4 +1,4 @@
-import { setDependentFields } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/utils/enableDependentFields";
+// import { setDependentFields } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/utils/enableDependentFields";
 const formConfig = {
   name: "demandInfo ",
   fields: {
