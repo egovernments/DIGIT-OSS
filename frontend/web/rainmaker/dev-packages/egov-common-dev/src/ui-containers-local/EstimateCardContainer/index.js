@@ -14,7 +14,7 @@ const sortBillDetails = (billDetails = []) => {
   sortedBillDetails = billDetails.sort((x, y) => y.fromPeriod - x.fromPeriod);
   return sortedBillDetails;
 }
-const formatTaxHeaders = (billDetail = {}) => {
+const formatTaxHeaders = (billDetail = {},businesService) => {
 
   let formattedFees = []
   const { billAccountDetails = [], fromPeriod, toPeriod } = billDetail;
@@ -28,7 +28,7 @@ const formatTaxHeaders = (billDetail = {}) => {
         labelKey: taxHead.taxHeadCode,
         labelName: taxHead.taxHeadCode
       },
-      value: (fromPeriod < Date.now() && Date.now() < toPeriod) ? taxHead.amount : 0
+      value: ((fromPeriod < Date.now() && Date.now() < toPeriod) || businesService!="PT") ? taxHead.amount : 0
     }
   })
   formattedFees.reverse();
@@ -41,9 +41,9 @@ const mapStateToProps = (state, ownProps) => {
 
 
 
-  const fees = formatTaxHeaders(sortBillDetails(get(screenConfiguration, "preparedFinalObject.ReceiptTemp[0].Bill[0].billDetails", []))[0]);
-  // const fees = get(screenConfiguration, "preparedFinalObject.applyScreenMdmsData.estimateCardData", []);
+  const fees = formatTaxHeaders(sortBillDetails(get(screenConfiguration, "preparedFinalObject.ReceiptTemp[0].Bill[0].billDetails", []))[0],businesService);  // const fees = get(screenConfiguration, "preparedFinalObject.applyScreenMdmsData.estimateCardData", []);
   const billDetails = get(screenConfiguration, "preparedFinalObject.ReceiptTemp[0].Bill[0].billDetails", []);
+  const businesService=get(screenConfiguration, "preparedFinalObject.ReceiptTemp[0].Bill[0].businessService");
   let totalAmount = 0;
   let current = 0;
   let arrears=0;
@@ -55,7 +55,10 @@ const mapStateToProps = (state, ownProps) => {
 
   }
 if(totalAmount>0){
-  arrears=totalAmount-current;
+  if(businesService=="PT")
+  {
+   arrears=totalAmount-current;
+  }
 }
   const estimate = {
     header: { labelName: "Fee Estimate", labelKey: "NOC_FEE_ESTIMATE_HEADER" },
