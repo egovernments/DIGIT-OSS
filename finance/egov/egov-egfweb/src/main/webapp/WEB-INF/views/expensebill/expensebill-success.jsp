@@ -74,6 +74,6 @@
 			</div>
 		</div>
 	</div>			
-	<div class="text-center"><input type="button" name="button2" id="button2" value="Close" class="btn btn-default" onclick="window.parent.postMessage('close','*');window.close();"/></div>		
+	<div class="text-center"><input type="button" name="button2" id="button2" value='<spring:message code="lbl.close" text="Close"/>' class="btn btn-default" onclick="window.parent.postMessage('close','*');window.close();"/></div>		
 </div>					
 </div>

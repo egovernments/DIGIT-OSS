@@ -123,7 +123,7 @@ table.its th {
 						url="voucher/common-ajaxLoadBankAccFromBranch.action" />
 				</tr>
 				<tr>
-					<td class="bluebox" width="10%"><s:text name="lbl.account.number " />:<span
+					<td class="bluebox" width="10%"><s:text name="lbl.account.number" />:<span
 						class="bluebox"><span class="mandatory"></span></span></td>
 					<td class="bluebox"><s:select name="bankaccount.id"
 							id="bankaccount" list="dropdownData.bankAccountList" listKey="id"
@@ -133,7 +133,7 @@ table.its th {
 					<egov:ajaxdropdown id="instrumentnumber" fields="['Text','Value']"
 						dropdownId="instrumentnumber"
 						url="voucher/common-ajaxLoadRTGSChequeFromBankAcc.action" />
-					<td class="bluebox" width="10%"><s:text name="report.rtgsnumber " />:<span
+					<td class="bluebox" width="10%"><s:text name="report.rtgsnumber" />:<span
 						class="bluebox"><span class="mandatory"></span></span></td>
 					<td class="bluebox"><s:select name="instrumentnumber.id"
 							id="instrumentnumber" list="dropdownData.chequeNumberList"

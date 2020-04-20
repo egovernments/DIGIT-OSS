@@ -242,8 +242,8 @@ background: #DEDEDE;
 					<div class="buttonbottom">
 						<table align="center">
 							<tr>
-								<td><s:submit cssClass="buttonsubmit" value="<s:text name='lbl.search'/>"
-										method="search" onclick="return validate()" /></td>
+								<td><s:submit method="search" cssClass="buttonsubmit" key="lbl.search"
+										 onclick="return validate()" /></td>
 								<td><input type="button" id="Close" value="<s:text name='lbl.close'/>"
 									onclick="javascript:window.parent.postMessage('close','*');" class="button" /></td>
 							</tr>
