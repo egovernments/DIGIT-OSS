@@ -20,3 +20,6 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# ignoring css files as we used scss
+src/**/*.css
