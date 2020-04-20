@@ -1,5 +1,4 @@
-import React from "react";
-import { connect } from "react-redux";
+import Hidden from "@material-ui/core/Hidden";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -7,20 +6,20 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
-import Hidden from "@material-ui/core/Hidden";
-import { TaskDialog } from "egov-workflow/ui-molecules-local";
-import { addWflowFileUrl, orderWfProcessInstances } from "egov-ui-framework/ui-utils/commons";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { httpRequest } from "egov-ui-kit/utils/api";
-import { setRoute } from "egov-ui-kit/redux/app/actions";
-import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
-import Label from "egov-ui-kit/utils/translationNode";
-import { Card } from "components";
-import { getWFConfig } from "./workflowRedirectionConfig";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import ImportExportIcon from "@material-ui/icons/ImportExport";
+import { Card } from "components";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { addWflowFileUrl, orderWfProcessInstances } from "egov-ui-framework/ui-utils/commons";
+import { setRoute, toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
+import { httpRequest } from "egov-ui-kit/utils/api";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import Label from "egov-ui-kit/utils/translationNode";
+import { TaskDialog } from "egov-workflow/ui-molecules-local";
+import get from "lodash/get";
+import React from "react";
+import { connect } from "react-redux";
 import "./index.css";
-import get from "lodash/get"
+import { getWFConfig } from "./workflowRedirectionConfig";
 
 class InboxData extends React.Component {
   state = {
@@ -28,7 +27,7 @@ class InboxData extends React.Component {
     workflowHistory: [],
     sortOrder: "asc",
     isSorting: false,
-    wfSlaConfig:[]
+    wfSlaConfig: []
   };
 
   componentDidMount = async () => {
@@ -36,7 +35,7 @@ class InboxData extends React.Component {
       MdmsCriteria: {
         tenantId: process.env.REACT_APP_DEFAULT_TENANT_ID,
         moduleDetails: [
-         {
+          {
             moduleName: "common-masters",
             masterDetails: [
               {
@@ -54,9 +53,9 @@ class InboxData extends React.Component {
         [],
         mdmsBody
       );
-      if(payload){
+      if (payload) {
         this.setState({
-          wfSlaConfig : get(payload.MdmsRes, "common-masters.wfSlaConfig")
+          wfSlaConfig: get(payload.MdmsRes, "common-masters.wfSlaConfig")
         })
       }
     } catch (e) {
@@ -107,19 +106,19 @@ class InboxData extends React.Component {
     // if (processInstances && processInstances.length > 0) {
     //   await addWflowFileUrl(processInstances, prepareFinalObject);
     // }
-    let contextPath = status === "Initiated" ? getWFConfig(row[0].hiddenText,row[0].subtext).INITIATED : getWFConfig(row[0].hiddenText,row[0].subtext).DEFAULT;
+    let contextPath = status === "Initiated" ? getWFConfig(row[0].hiddenText, row[0].subtext).INITIATED : getWFConfig(row[0].hiddenText, row[0].subtext).DEFAULT;
     let queryParams = `applicationNumber=${taskId}&tenantId=${tenantId}`;
-    if(row[0].subtext=="PT.CREATE"){
-      queryParams+='&type=property';
+    if (row[0].subtext === "PT.CREATE") {
+      queryParams += '&type=property';
     }
-    else  if(row[0].subtext=="ASMT"){
-      queryParams+='&type=assessment';
+    else if (row[0].subtext === "ASMT") {
+      queryParams += '&type=assessment';
     }
-    else if(row[0].subtext=="NewWS1"){
-      queryParams+='&history=true&service=WATER';
+    else if (row[0].subtext === "NewWS1") {
+      queryParams += '&history=true&service=WATER';
     }
-    else if(row[0].subtext=="NewSW1"){
-      queryParams+='&history=true&service=SEWERAGE';
+    else if (row[0].subtext === "NewSW1") {
+      queryParams += '&history=true&service=SEWERAGE';
     }
     this.props.setRoute(`${contextPath}?${queryParams}`);
   };
@@ -128,14 +127,14 @@ class InboxData extends React.Component {
     const { businessServiceSla } = this.props;
     const { wfSlaConfig } = this.state;
     const MAX_SLA = businessServiceSla[businessService];
-    if(wfSlaConfig){
-      if( (MAX_SLA - (MAX_SLA*eval(wfSlaConfig[0].slotPercentage)) <= sla) && sla <= MAX_SLA){
+    if (wfSlaConfig) {
+      if ((MAX_SLA - (MAX_SLA * eval(wfSlaConfig[0].slotPercentage)) <= sla) && sla <= MAX_SLA) {
         return wfSlaConfig[0].positiveSlabColor;
-       }else if(0 < sla && sla < MAX_SLA - (MAX_SLA*eval(wfSlaConfig[0].slotPercentage))){
-         return wfSlaConfig[0].middleSlabColor;
-       }else{
-         return wfSlaConfig[0].negativeSlabColor;
-       }
+      } else if (0 < sla && sla < MAX_SLA - (MAX_SLA * eval(wfSlaConfig[0].slotPercentage))) {
+        return wfSlaConfig[0].middleSlabColor;
+      } else {
+        return wfSlaConfig[0].negativeSlabColor;
+      }
     }
   };
 
@@ -160,14 +159,14 @@ class InboxData extends React.Component {
       <div>
         <Hidden only={["xs"]}>
           <Table>
-            <TableHead style={{backgroundColor: "white", borderBottom: "1px solid rgb(211, 211, 211)"}}>
+            <TableHead style={{ backgroundColor: "white", borderBottom: "1px solid rgb(211, 211, 211)" }}>
               <TableRow>
                 {data.headers.map((item, index) => {
                   let classNames = `inbox-data-table-headcell inbox-data-table-headcell-${index}`;
                   return (
                     <TableCell className={classNames}>
                       {index === 4 ? (
-                        <div className = "rainmaker-displayInline">
+                        <div className="rainmaker-displayInline">
                           {sortOrder === "desc" && (
                             <div className="arrow-icon-style" onClick={() => this.sortingTable("asc")}>
                               <Label label={item} labelStyle={{ fontWeight: "500" }} color="#000000" />
@@ -182,8 +181,8 @@ class InboxData extends React.Component {
                           )}
                         </div>
                       ) : (
-                        <Label label={item} labelStyle={{ fontWeight: "500" }} color="#000000" />
-                      )}
+                          <Label label={item} labelStyle={{ fontWeight: "500" }} color="#000000" />
+                        )}
                     </TableCell>
                   );
                 })}
@@ -195,118 +194,118 @@ class InboxData extends React.Component {
                 <Label labelClassName="" label="COMMON_INBOX_NO_DATA" />
               </TableBody>
             ) : (
-              <TableBody>
-                {data.rows.map((row, i) => {
-                  return (
-                    <TableRow key={i} className="inbox-data-table-bodyrow">
-                      {row.map((item, index) => {
-                        let classNames = `inbox-data-table-bodycell inbox-data-table-bodycell-${index}`;
-                        if (item.subtext) {
-                          return (
-                            <TableCell className={classNames}>
-                              <div onClick={() => getModuleLink(item, row, index)} className="inbox-cell-text">
-                                {<a style={{color: "#FE7A51"}}>{item.text} </a>}
-                              </div>
-                              <div className="inbox-cell-subtext">
-                                {<Label label={`CS_COMMON_INBOX_${item.subtext.toUpperCase()}`} color="#000000" />}
-                              </div>
-                            </TableCell>
-                          );
-                        } else if (item.badge) {
-                          return (
-                            <TableCell className={classNames}>
-                              <span class={"inbox-cell-badge-primary"} style={{backgroundColor : this.getSlaColor(item.text, row[2].text.props.label.split("_")[1])}}>{item.text}</span>
-                            </TableCell>
-                          );
-                        } else if (item.historyButton) {
-                          return (
-                            <TableCell className={classNames}>
-                              <div onClick={() => onHistoryClick(row[0])} style={{ cursor: "pointer" }}>
-                                <i class="material-icons">history</i>
-                              </div>
-                            </TableCell>
-                          );
-                        } else {
-                          return (
-                            <TableCell className={classNames}>
-                              <div>{item.text}</div>
-                            </TableCell>
-                          );
-                        }
-                      })}
-                    </TableRow>
-                  );
-                })}
-                <TaskDialog open={this.state.dialogOpen} onClose={onDialogClose} history={ProcessInstances} />
-              </TableBody>
-            )}
+                <TableBody>
+                  {data.rows.map((row, i) => {
+                    return (
+                      <TableRow key={i} className="inbox-data-table-bodyrow">
+                        {row.map((item, index) => {
+                          let classNames = `inbox-data-table-bodycell inbox-data-table-bodycell-${index}`;
+                          if (item.subtext) {
+                            return (
+                              <TableCell className={classNames}>
+                                <div onClick={() => getModuleLink(item, row, index)} className="inbox-cell-text">
+                                  {<a style={{ color: "#FE7A51" }}>{item.text} </a>}
+                                </div>
+                                <div className="inbox-cell-subtext">
+                                  {<Label label={`CS_COMMON_INBOX_${item.subtext.toUpperCase()}`} color="#000000" />}
+                                </div>
+                              </TableCell>
+                            );
+                          } else if (item.badge) {
+                            return (
+                              <TableCell className={classNames}>
+                                <span class={"inbox-cell-badge-primary"} style={{ backgroundColor: this.getSlaColor(item.text, row[2].text.props.label.split("_")[1]) }}>{item.text}</span>
+                              </TableCell>
+                            );
+                          } else if (item.historyButton) {
+                            return (
+                              <TableCell className={classNames}>
+                                <div onClick={() => onHistoryClick(row[0])} style={{ cursor: "pointer" }}>
+                                  <i class="material-icons">history</i>
+                                </div>
+                              </TableCell>
+                            );
+                          } else {
+                            return (
+                              <TableCell className={classNames}>
+                                <div>{item.text}</div>
+                              </TableCell>
+                            );
+                          }
+                        })}
+                      </TableRow>
+                    );
+                  })}
+                  <TaskDialog open={this.state.dialogOpen} onClose={onDialogClose} history={ProcessInstances} />
+                </TableBody>
+              )}
           </Table>
         </Hidden>
         <Hidden only={["sm", "md", "lg", "xl"]} implementation="css">
           <div class="sort-icon-flex">
-              {sortOrder === "asc" && (
-                <div className = "rainmaker-displayInline" onClick={() => this.sortingTable("desc")}>
-                  <ImportExportIcon />
-                  <Label className="sort-icon" label={"INBOX_SORT_ICON"} />
-                </div>
-              )}
-              {sortOrder === "desc" && (
-                <div className = "rainmaker-displayInline" onClick={() => this.sortingTable("asc")}>
-                  <ImportExportIcon />
-                  <Label className="sort-icon" label={"INBOX_SORT_ICON"} />
-                </div>
-              )}            
+            {sortOrder === "asc" && (
+              <div className="rainmaker-displayInline" onClick={() => this.sortingTable("desc")}>
+                <ImportExportIcon />
+                <Label className="sort-icon" label={"INBOX_SORT_ICON"} />
+              </div>
+            )}
+            {sortOrder === "desc" && (
+              <div className="rainmaker-displayInline" onClick={() => this.sortingTable("asc")}>
+                <ImportExportIcon />
+                <Label className="sort-icon" label={"INBOX_SORT_ICON"} />
+              </div>
+            )}
           </div>
           {data.rows.length === 0 ? (
             <Card textChildren={<Label labelClassName="" label="COMMON_INBOX_NO_DATA" />} />
           ) : (
-            <div>
-              {data.rows.map((row, index) => {
-                return (
-                  <Card
-                    key={index}
-                    textChildren={
-                      <div>
-                        <div className="head" onClick={() => getModuleLink(row[0], row, 0)}>
-                          <a style={{ color: "#FE7A51" }}>{row[0].text}</a>
-                        </div>
-                        <div className="head">
-                          <Label label={`CS_COMMON_INBOX_${row[0].subtext.toUpperCase()}`} color="#000000" />
-                        </div>
+              <div>
+                {data.rows.map((row, index) => {
+                  return (
+                    <Card
+                      key={index}
+                      textChildren={
+                        <div>
+                          <div className="head" onClick={() => getModuleLink(row[0], row, 0)}>
+                            <a style={{ color: "#FE7A51" }}>{row[0].text}</a>
+                          </div>
+                          <div className="head">
+                            <Label label={`CS_COMMON_INBOX_${row[0].subtext.toUpperCase()}`} color="#000000" />
+                          </div>
 
-                        <div className="card-div-style">
-                          <Label label={data.headers[1]} labelStyle={{ fontWeight: "500" }} />
-                        </div>
-                        <div className="card-div-style">{row[1].text}</div>
+                          <div className="card-div-style">
+                            <Label label={data.headers[1]} labelStyle={{ fontWeight: "500" }} />
+                          </div>
+                          <div className="card-div-style">{row[1].text}</div>
 
-                        <div className="card-div-style">
-                          <Label label={data.headers[2]} labelStyle={{ fontWeight: "500" }} />
-                        </div>
-                        <div className="card-div-style">{row[2].text}</div>
+                          <div className="card-div-style">
+                            <Label label={data.headers[2]} labelStyle={{ fontWeight: "500" }} />
+                          </div>
+                          <div className="card-div-style">{row[2].text}</div>
 
-                        <div className="card-div-style">
-                          <Label label={data.headers[3]} labelStyle={{ fontWeight: "500" }} />
-                        </div>
-                        <div className="card-div-style">{row[3].text}</div>
+                          <div className="card-div-style">
+                            <Label label={data.headers[3]} labelStyle={{ fontWeight: "500" }} />
+                          </div>
+                          <div className="card-div-style">{row[3].text}</div>
 
-                        <div className="card-div-style">
-                          <Label label={data.headers[4]} labelStyle={{ fontWeight: "500" }} />
-                        </div>
-                        <div className="card-sladiv-style">
-                          <span class={"inbox-cell-badge-primary"} style={{backgroundColor : this.getSlaColor(row[4].text, row[2].text.props.label.split("_")[1])}}>{row[4].text}</span>
-                        </div>
+                          <div className="card-div-style">
+                            <Label label={data.headers[4]} labelStyle={{ fontWeight: "500" }} />
+                          </div>
+                          <div className="card-sladiv-style">
+                            <span class={"inbox-cell-badge-primary"} style={{ backgroundColor: this.getSlaColor(row[4].text, row[2].text.props.label.split("_")[1]) }}>{row[4].text}</span>
+                          </div>
 
-                        <div className="card-viewHistory-icon" onClick={() => onHistoryClick(row[0])}>
-                          <i class="material-icons">history</i>
+                          <div className="card-viewHistory-icon" onClick={() => onHistoryClick(row[0])}>
+                            <i class="material-icons">history</i>
+                          </div>
                         </div>
-                      </div>
-                    }
-                  />
-                );
-              })}
-              <TaskDialog open={this.state.dialogOpen} onClose={onDialogClose} history={ProcessInstances} />
-            </div>
-          )}
+                      }
+                    />
+                  );
+                })}
+                <TaskDialog open={this.state.dialogOpen} onClose={onDialogClose} history={ProcessInstances} />
+              </div>
+            )}
         </Hidden>
       </div>
     );
@@ -352,6 +351,3 @@ export const Taskboard = ({ data }) => {
   );
 };
 
-const onModuleCardClick = (route) => {
-  window.location.href = document.location.origin + route;
-};

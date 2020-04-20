@@ -9,12 +9,12 @@ import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { fetchUiCommonConstants } from "egov-ui-kit/redux/app/actions";
 const theme = createMuiTheme(themeObject);
 
-const headerStyle = {
-  color: "rgb(72, 72, 72)",
-  fontWeight: 500,
-  fontSize: "20px",
-  margin: "16px",
-};
+// const headerStyle = {
+//   color: "rgb(72, 72, 72)",
+//   fontWeight: 500,
+//   fontSize: "20px",
+//   margin: "16px",
+// };
 
 class IFrameInterface extends React.Component {
   constructor(props) {
@@ -54,7 +54,7 @@ class IFrameInterface extends React.Component {
     let url = `${domain}${contextPath}`;
     if (this.props.common && this.props.common.cities) {
       let tenantid = getTenantId();
-      let tenant_info = this.props.common.cities.filter((key) => key.code == tenantid)[0];
+      let tenant_info = this.props.common.cities.filter((key) => key.code === tenantid)[0];
       let tenant_name = tenant_info.name;
       url = url.replace(/__tenantid__/g, tenantid).replace(/__tenantname__/g, tenant_name);
       this.setState({ url, title });
@@ -66,10 +66,10 @@ class IFrameInterface extends React.Component {
     const { match: currentMatch } = this.props;
     const { params: nextParams } = nextMatch;
     const { params: currentParams } = currentMatch;
-    const { moduleName: nextmoduleName, pageName: nextpageName } = nextParams;
-    const { moduleName: currentmoduleName, pageName: currentpageName } = currentParams;
-    const { uiCommonConstants: nextUiCommonConstants } = nextProps;
-    const { uiCommonConstants: currentUiCommonConstants } = this.props;
+    // const { moduleName: nextmoduleName, pageName: nextpageName } = nextParams;
+    // const { moduleName: currentmoduleName, pageName: currentpageName } = currentParams;
+    // const { uiCommonConstants: nextUiCommonConstants } = nextProps;
+    // const { uiCommonConstants: currentUiCommonConstants } = this.props;
     this.buildURL(nextProps);
 
     // if (nextmoduleName !== currentmoduleName || nextpageName !== currentpageName || nextRoutesData !== currentRoutesData) {

@@ -1,40 +1,39 @@
-import React, { Component } from "react";
-import { Screen } from "modules/common";
+import Button from "@material-ui/core/Button";
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import Button from "@material-ui/core/Button";
-import { connect } from "react-redux";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
-import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
+import { Screen } from "modules/common";
+import React, { Component } from "react";
+import { connect } from "react-redux";
 import "./index.css";
-  const styles = theme => ({
-    container: {
-      display: 'flex',
-      flexWrap: 'wrap',
-    },
-    textField: {
-      marginLeft: theme.spacing.unit,
-      marginRight: theme.spacing.unit,
-      width: 200,
-    },
-    button: {
-        margin: theme.spacing.unit,
-      },
-    menu: {
-      width: 200,
-    },
+const styles = theme => ({
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: 200,
+  },
+  button: {
+    margin: theme.spacing.unit,
+  },
+  menu: {
+    width: 200,
+  },
 
-  });
-  
+});
+
 class PushLocalization extends Component {
   constructor(props) {
     super(props);
     this.state = {
-            labelName: '',
-            labelMsg: '',
-            locale: '',
-            module: '',
+      labelName: '',
+      labelMsg: '',
+      locale: '',
+      module: '',
     };
   }
   handleChange = name => event => {
@@ -42,52 +41,54 @@ class PushLocalization extends Component {
       [name]: event.target.value,
     });
   };
-  localizaionSubmit=async()=>{
-const {labelName , labelMsg , module , locale} = this.state;
-const {toggleSnackbarAndSetText}=this.props;
+  localizaionSubmit = async () => {
+    const { labelName, labelMsg, module, locale } = this.state;
+    const { toggleSnackbarAndSetText } = this.props;
 
-      if(labelName && labelMsg  && module  && locale){
-        const requestBody={ 
-            "tenantId": "pb", 
-           "messages": [
-           {
-               "code":this.state.labelName,
-               "message": this.state.labelMsg,
-               "module": this.state.module,
-               "locale": this.state.locale
-           }]
-       }
-    try{
-      const submit = await httpRequest(
+    if (labelName && labelMsg && module && locale) {
+      const requestBody = {
+        "tenantId": "pb",
+        "messages": [
+          {
+            "code": this.state.labelName,
+            "message": this.state.labelMsg,
+            "module": this.state.module,
+            "locale": this.state.locale
+          }]
+      }
+      try {
+        const submit = await httpRequest(
           "post",
           "localization/messages/v1/_upsert",
           "_upsert",
           [],
           requestBody
         );
-        toggleSnackbarAndSetText(
+        if (submit) {
+          toggleSnackbarAndSetText(
             true,
             {
               labelKey: "Message updated successfully",
             },
             "success"
           )
+        }
 
       }
-      catch(e){
-       console.log(e.message) 
+      catch (e) {
+        console.log(e.message)
       }
-      }else{       
-        toggleSnackbarAndSetText(
-              true,
-              {
-                labelKey: "Please fill all the fields",
-              },
-              "warning"
-            )
-          
-      }
-     
+    } else {
+      toggleSnackbarAndSetText(
+        true,
+        {
+          labelKey: "Please fill all the fields",
+        },
+        "warning"
+      )
+
+    }
+
   }
 
 
@@ -105,7 +106,7 @@ const {toggleSnackbarAndSetText}=this.props;
           margin="normal"
           required="true"
         />
-           <TextField
+        <TextField
           id="name"
           label="message"
           className={classes.textField}
@@ -114,7 +115,7 @@ const {toggleSnackbarAndSetText}=this.props;
           margin="normal"
           required="true"
         />
-           <TextField
+        <TextField
           id="name"
           label="locale"
           className={classes.textField}
@@ -123,7 +124,7 @@ const {toggleSnackbarAndSetText}=this.props;
           margin="normal"
           required="true"
         />
-           <TextField
+        <TextField
           id="name"
           label="module"
           className={classes.textField}
@@ -133,26 +134,26 @@ const {toggleSnackbarAndSetText}=this.props;
           required="true"
         />
         <div onClick={this.localizaionSubmit}>
-        <Button  variant="contained" color="secondary" className={classes.button}>
-             Submit
+          <Button variant="contained" color="secondary" className={classes.button}>
+            Submit
         </Button>
-        </div>   
-   
+        </div>
+
       </Screen>
     );
   }
 }
 const mapDispatchToProps = dispatch => {
-    return {
-        toggleSnackbarAndSetText: (open, message,variant) =>
-        dispatch(toggleSnackbarAndSetText(open, message,variant))
-    };
+  return {
+    toggleSnackbarAndSetText: (open, message, variant) =>
+      dispatch(toggleSnackbarAndSetText(open, message, variant))
   };
+};
 
 export default withStyles(styles)(
-    connect(
-      null,
-      mapDispatchToProps
-    )(PushLocalization)
-  );
+  connect(
+    null,
+    mapDispatchToProps
+  )(PushLocalization)
+);
 

@@ -1,4 +1,4 @@
-import { setFieldProperty, handleFieldChange } from "egov-ui-kit/redux/form/actions";
+import { setFieldProperty } from "egov-ui-kit/redux/form/actions";
 import get from "lodash/get";
 
 const formConfig = {
@@ -44,9 +44,9 @@ const formConfig = {
     let firstOwnerName = get(state, "form.ownerInfo_0.fields.ownerName.value") || get(state, "form.ownerInfo.fields.ownerName.value");
     let firstOwnerMobile = get(state, "form.ownerInfo_0.fields.ownerMobile.value") || get(state, "form.ownerInfo.fields.ownerMobile.value");
 
-    if (action.type === "INIT_FORM"){
-      dispatch(setFieldProperty("cashInfo","payerMobile", "value", firstOwnerMobile));
-      dispatch(setFieldProperty("cashInfo","payerName", "value", firstOwnerName));
+    if (action.type === "INIT_FORM") {
+      dispatch(setFieldProperty("cashInfo", "payerMobile", "value", firstOwnerMobile));
+      dispatch(setFieldProperty("cashInfo", "payerName", "value", firstOwnerName));
     }
   }
 };
