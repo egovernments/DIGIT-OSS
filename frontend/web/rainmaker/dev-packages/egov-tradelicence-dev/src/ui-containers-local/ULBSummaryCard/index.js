@@ -25,7 +25,7 @@ class ULBSummaryCard extends Component {
   };
 
   render() {
-    const { data, preparedFinalObject, logoBase64, ...rest } = this.props;
+    const { data={}, preparedFinalObject, logoBase64, ...rest } = this.props;
     //For multiSelect to be enabled, pass isMultiSelect=true in props.
     return (
       <div style={styles}>

@@ -106,7 +106,7 @@ const getCorporationName = (corporationName, actualAddress) => {
   }
 };
 
-const getReceiptData = (transformedData, ulbLogo) => {
+const getReceiptData = (transformedData={}, ulbLogo) => {
   let owners = transformedData.owners.map(owner => [
     {
       text: getLocaleLabels("Owner Name", "TL_LOCALIZATION_OWNER_NAME"),
@@ -894,7 +894,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
           table: {
             widths: [
               "70%",
-              "30%"             
+              "30%"
             ],
             body: [
               [
@@ -915,7 +915,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
                           text: transformedData.licenseNumber
                         }
                       ]
-                    },  
+                    },
                     {
                       style: "tl-certificate-data-2",
                       columns: [
@@ -931,7 +931,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
                           text: transformedData.oldLicenseNumber
                         }
                       ]
-                    },    
+                    },
                     {
                       style: "tl-certificate-data-2",
                       columns: [
@@ -996,7 +996,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
                         }
                       ]
                     }
-                    
+
                   ],
                 },
                 transformedData.ownerPhoto?{
@@ -1006,8 +1006,8 @@ const getCertificateData = (transformedData, ulbLogo) => {
                   alignment: "right",
                   margin: [0, 12, 0, 0]
                 }:{}
-              ]   
-            ]    
+              ]
+            ]
           },
         layout: noborder
       },
@@ -1224,7 +1224,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
     styles: {
       "noctable": {
         fontSize: 10,
-        color: "#000000", 
+        color: "#000000",
         margin: [
           0,
           0,
