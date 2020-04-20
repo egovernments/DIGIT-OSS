@@ -1,0 +1,24 @@
+ServiceMaps:
+ serviceName: BPA - rainmaker
+ version: 1.0.0
+ mappings:                        
+  - topic: save-tl-tradelicense
+    configKey: INDEX
+    indexes:
+    - name: bpastakeholderindex-v1
+      type: stakeholder
+      id: $.id, $.tenantId
+      isBulk: true
+      jsonPath: $.Licenses
+      timeStampField: $.auditDetails.createdTime
+      fieldsToBeMasked: ["$.tradeLicenseDetail.owners[0].userName","$.tradeLicenseDetail.owners[0].password","$.tradeLicenseDetail.owners[0].mobileNumber","$.tradeLicenseDetail.owners[0].emailId","$.tradeLicenseDetail.owners[0].altContactNumber","$.tradeLicenseDetail.owners[0].pan","$.tradeLicenseDetail.owners[0].aadhaarNumber"]
+      customJsonMapping:
+        indexMapping: {"Data":{"owners":{},"tradeUnits": {},"@timestamp":"timestamp"}}
+        fieldMapping:
+        - inJsonPath: $.tradeLicenseDetail.owners
+          outJsonPath: $.Data.owners
+        - inJsonPath: $.tradeLicenseDetail.tradeUnits
+          outJsonPath: $.Data.tradeUnits
+        - inJsonPath: $.@timestamp
+          outJsonPath: $.Data.@timestamp
+
