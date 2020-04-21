@@ -7,7 +7,7 @@ import {
   getLabelWithValue,
   convertEpochToDate
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { gotoApplyWithStep } from "../../utils/index";
+import { gotoApplyWithStep, checkValueForNA } from "../../utils/index";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 
 export const applicantSummary = getCommonGrayCard({
@@ -76,10 +76,8 @@ export const applicantSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-                "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].mobileNumber"
-              // callBack: value => {
-              //   return value.split(".")[0];
-              // }
+                "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].mobileNumber",
+                callBack: checkValueForNA
             }
           ),
           applicantName: getLabelWithValue(
@@ -89,10 +87,8 @@ export const applicantSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-                "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].name"
-              // callBack: value => {
-              //   return value.split(".")[1];
-              // }
+                "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].name",
+                callBack: checkValueForNA
             }
           ),
           applicantGender: getLabelWithValue(
@@ -102,7 +98,8 @@ export const applicantSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-                "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].gender"
+                "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].gender",
+                callBack: checkValueForNA
             }
           ),
           applicantFatherHusbandName: getLabelWithValue(
@@ -112,7 +109,8 @@ export const applicantSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-                "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].fatherOrHusbandName"
+                "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].fatherOrHusbandName",
+                callBack: checkValueForNA
             }
             ),
             applicantRelation: getLabelWithValue(
@@ -122,7 +120,8 @@ export const applicantSummary = getCommonGrayCard({
               },
               {
                 jsonPath:
-                  "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].relationship"
+                  "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].relationship",
+                  callBack: checkValueForNA
               },
           ),
           applicantDob: getLabelWithValue(
@@ -134,7 +133,7 @@ export const applicantSummary = getCommonGrayCard({
               jsonPath:
                 "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].dob",
               callBack: value => {
-                return convertEpochToDate(value);
+                return value ? convertEpochToDate(value): "NA";
               }
             }
           ),
@@ -145,7 +144,8 @@ export const applicantSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-                "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].emailId"
+                "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].emailId",
+                callBack: checkValueForNA
             }
           ),
           applicantPan: getLabelWithValue(
@@ -155,7 +155,8 @@ export const applicantSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-                "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].pan"
+                "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].pan",
+                callBack: checkValueForNA
             }
           ),
           applicantAddress: getLabelWithValue(
@@ -165,7 +166,8 @@ export const applicantSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-                "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].correspondenceAddress"
+                "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].correspondenceAddress",
+                callBack: checkValueForNA
             }
           )
         })
@@ -243,7 +245,7 @@ export const institutionSummary = getCommonGrayCard({
       {
         jsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType",
         callBack: value => {
-          return `COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
+          return value ? `COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`:"NA";
         }
       }
     ),
@@ -254,7 +256,8 @@ export const institutionSummary = getCommonGrayCard({
       },
       {
         jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.additionalDetail.institutionName"
+          "FireNOCs[0].fireNOCDetails.applicantDetails.additionalDetail.institutionName",
+          callBack: checkValueForNA
       }
     ),
     telephoneNumber: getLabelWithValue(
@@ -264,7 +267,8 @@ export const institutionSummary = getCommonGrayCard({
       },
       {
         jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.additionalDetail.telephoneNumber"
+          "FireNOCs[0].fireNOCDetails.applicantDetails.additionalDetail.telephoneNumber",
+          callBack: checkValueForNA
       }
     ),
     authorizedPersonName: getLabelWithValue(
@@ -273,7 +277,8 @@ export const institutionSummary = getCommonGrayCard({
         labelKey: "NOC_AUTHORIZED_PERSON_NAME_LABEL"
       },
       {
-        jsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].name"
+        jsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].name",
+        callBack: checkValueForNA
       }
     ),
     designation: getLabelWithValue(
@@ -283,7 +288,8 @@ export const institutionSummary = getCommonGrayCard({
       },
       {
         jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.additionalDetail.institutionDesignation"
+          "FireNOCs[0].fireNOCDetails.applicantDetails.additionalDetail.institutionDesignation",
+          callBack: checkValueForNA
       }
     ),
     mobileNumber: getLabelWithValue(
@@ -293,7 +299,8 @@ export const institutionSummary = getCommonGrayCard({
       },
       {
         jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].mobileNumber"
+          "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].mobileNumber",
+          callBack: checkValueForNA
       }
     ),
     authorizedEmail: getLabelWithValue(
@@ -303,7 +310,8 @@ export const institutionSummary = getCommonGrayCard({
       },
       {
         jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].emailId"
+          "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].emailId",
+          callBack: checkValueForNA
       }
     ),
     officialAddress: getLabelWithValue(
@@ -313,7 +321,8 @@ export const institutionSummary = getCommonGrayCard({
       },
       {
         jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].correspondenceAddress"
+          "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].correspondenceAddress",
+          callBack: checkValueForNA
       }
     )
   })
