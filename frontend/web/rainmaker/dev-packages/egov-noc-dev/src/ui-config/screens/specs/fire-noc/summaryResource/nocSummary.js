@@ -6,7 +6,7 @@ import {
   getLabel,
   getLabelWithValue
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { gotoApplyWithStep } from "../../utils/index";
+import { gotoApplyWithStep, checkValueForNA } from "../../utils/index";
 
 export const nocSummary = getCommonGrayCard({
   header: {
@@ -67,10 +67,8 @@ export const nocSummary = getCommonGrayCard({
         labelKey: "NOC_TYPE_LABEL"
       },
       {
-        jsonPath: "FireNOCs[0].fireNOCDetails.fireNOCType"
-        // callBack: value => {
-        //   return value.split(".")[0];
-        // }
+        jsonPath: "FireNOCs[0].fireNOCDetails.fireNOCType",
+        callBack: checkValueForNA
       }
     ),
     fireNocNumber: getLabelWithValue(
@@ -79,10 +77,8 @@ export const nocSummary = getCommonGrayCard({
         labelKey: "NOC_PROVISIONAL_FIRE_NOC_NO_LABEL"
       },
       {
-        jsonPath: "FireNOCs[0].provisionFireNOCNumber"
-        // callBack: value => {
-        //   return value.split(".")[1];
-        // }
+        jsonPath: "FireNOCs[0].provisionFireNOCNumber",
+        callBack: checkValueForNA
       }
     )
   })
