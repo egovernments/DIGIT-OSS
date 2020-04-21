@@ -67,7 +67,7 @@ public class PropertyRepository {
 		List<Object> preparedStmtList = new ArrayList<>();
 		preparedStmtList.add(criteria.getOffset());
 		preparedStmtList.add(criteria.getLimit());
-		return jdbcTemplate.query("select audituuid from eg_pt_property_audit order by auditcreatedtime offset " +
+		return jdbcTemplate.query("select audituuid from eg_pt_property_audit order by auditcreatedtime,,audituuid offset " +
 						" ? " +
 						"limit ? ",
 				preparedStmtList.toArray(), new SingleColumnRowMapper<>(String.class));
