@@ -6,14 +6,14 @@ import {
   getLabel,
   getLabelWithValue
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { gotoApplyWithStep } from "../../utils/index";
+import { gotoApplyWithStep, checkValueForNA } from "../../utils/index";
 import {
   getQueryArg,
   getTransformedLocale
 } from "egov-ui-framework/ui-utils/commons";
 
 const test = value => {
-  value = value ? value.split(".")[0] : "";
+  value = value ? value.split(".")[0] : "NA";
   return value;
 };
 
@@ -47,7 +47,8 @@ const propertyDetails = {
             labelKey: "NOC_PROPERTY_TYPE_LABEL"
           },
           {
-            jsonPath: "FireNOCs[0].fireNOCDetails.noOfBuildings"
+            jsonPath: "FireNOCs[0].fireNOCDetails.noOfBuildings",
+            callBack: checkValueForNA
           }
         ),
         buildingName: getLabelWithValue(
@@ -56,7 +57,8 @@ const propertyDetails = {
             labelKey: "NOC_NAME_OF_BUILDING_LABEL"
           },
           {
-            jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].name"
+            jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].name",
+            callBack: checkValueForNA
           }
         ),
         buildingUsageType: getLabelWithValue(
@@ -80,6 +82,7 @@ const propertyDetails = {
           },
           {
             jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].usageType",
+            callBack: checkValueForNA,
             localePrefix: {
               moduleName: "firenoc",
               masterName: "BuildingType"
@@ -106,7 +109,7 @@ const propertyLocationDetails = getCommonGrayCard({
         labelName: "Property ID",
         labelKey: "NOC_PROPERTY_ID_LABEL"
       },
-      { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.propertyId" }
+      { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.propertyId", callBack: checkValueForNA }
     ),
     city: getLabelWithValue(
       {
@@ -115,6 +118,7 @@ const propertyLocationDetails = getCommonGrayCard({
       },
       {
         jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",
+        callBack: checkValueForNA,
         localePrefix: {
           moduleName: "TENANT",
           masterName: "TENANTS"
@@ -126,7 +130,7 @@ const propertyLocationDetails = getCommonGrayCard({
         labelName: "Door/House No.",
         labelKey: "NOC_SUMMARY_PROPERTY__LOCATION_DOOR_HOUSE_NO_LABEL"
       },
-      { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.doorNo" }
+      { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.doorNo", callBack: checkValueForNA }
     ),
     buildingCompanyName: getLabelWithValue(
       {
@@ -135,7 +139,7 @@ const propertyLocationDetails = getCommonGrayCard({
       },
       {
         jsonPath:
-          "FireNOCs[0].fireNOCDetails.propertyDetails.address.buildingName"
+          "FireNOCs[0].fireNOCDetails.propertyDetails.address.buildingName", callBack: checkValueForNA
       }
     ),
     streetName: getLabelWithValue(
@@ -143,7 +147,7 @@ const propertyLocationDetails = getCommonGrayCard({
         labelName: "Street Name",
         labelKey: "NOC_PROPERTY_DETAILS_SRT_NAME_LABEL"
       },
-      { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.street" }
+      { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.street", callBack: checkValueForNA }
     ),
     mohalla: getLabelWithValue(
       {
@@ -163,7 +167,7 @@ const propertyLocationDetails = getCommonGrayCard({
         labelName: "Pincode",
         labelKey: "NOC_PROPERTY_DETAILS_PIN_LABEL"
       },
-      { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.pincode" }
+      { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.pincode", callBack: checkValueForNA }
     ),
     locationOnMap: getLabelWithValue(
       {
@@ -172,7 +176,8 @@ const propertyLocationDetails = getCommonGrayCard({
       },
       {
         jsonPath:
-          "FireNOCs[0].fireNOCDetails.propertyDetails.address.locality.latitude"
+          "FireNOCs[0].fireNOCDetails.propertyDetails.address.locality.latitude",
+          callBack: checkValueForNA
       }
     ),
     applicableFireStation: getLabelWithValue(
@@ -182,6 +187,7 @@ const propertyLocationDetails = getCommonGrayCard({
       },
       {
         jsonPath: "FireNOCs[0].fireNOCDetails.firestationId",
+        callBack: checkValueForNA,
         localePrefix: {
           moduleName: "firenoc",
           masterName: "FireStations"
