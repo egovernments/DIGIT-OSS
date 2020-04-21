@@ -45,7 +45,7 @@ public class AssessmentRepository {
 		Map<String, Object> preparedStatementValues = new HashMap<>();
 		preparedStatementValues.put("offset", criteria.getOffset());
 		preparedStatementValues.put("limit", criteria.getLimit());
-		return namedParameterJdbcTemplate.query("SELECT assessmentnumber from eg_pt_asmt_assessment ORDER BY createdtime offset :offset limit :limit",
+		return namedParameterJdbcTemplate.query("SELECT assessmentnumber from eg_pt_asmt_assessment ORDER BY createdtime,id offset :offset limit :limit",
 				preparedStatementValues,
 				new SingleColumnRowMapper<>(String.class));
 	}
