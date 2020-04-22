@@ -1,27 +1,18 @@
+import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { httpRequest } from "egov-ui-framework/ui-utils/api";
+import { addWflowFileUrl, getMultiUnits, getQueryArg, orderWfProcessInstances } from "egov-ui-framework/ui-utils/commons";
+import { getUserInfo, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
+import find from "lodash/find";
+import get from "lodash/get";
+import orderBy from "lodash/orderBy";
+import set from "lodash/set";
 import React from "react";
 import { connect } from "react-redux";
-import TaskStatusContainer from "../TaskStatusContainer";
-import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { Footer } from "../../ui-molecules-local";
-import {
-  getQueryArg,
-  addWflowFileUrl,
-  orderWfProcessInstances,
-  getMultiUnits
-} from "egov-ui-framework/ui-utils/commons";
-import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/utils";
+import TaskStatusContainer from "../TaskStatusContainer";
 
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { httpRequest } from "egov-ui-framework/ui-utils/api";
-import get from "lodash/get";
-import set from "lodash/set";
-import find from "lodash/find";
-import {
-  localStorageGet,
-  getUserInfo
-} from "egov-ui-kit/utils/localStorageUtils";
-import orderBy from "lodash/orderBy";
 
 const tenant = getQueryArg(window.location.href, "tenantId");
 
@@ -132,7 +123,8 @@ class WorkFlowContainer extends React.Component {
       preparedFinalObject,
       dataPath,
       moduleName,
-      updateUrl
+      updateUrl,
+      beforeSubmitHook
     } = this.props;
     const tenant = getQueryArg(window.location.href, "tenantId");
     let data = get(preparedFinalObject, dataPath, []);
@@ -197,30 +189,33 @@ class WorkFlowContainer extends React.Component {
       window.location.href,
       "applicationNumber"
     );
-      if (moduleName === "NewWS1" || moduleName === "NewSW1") {
-        data = data[0];
-        data.assignees = [];
-        if (data.assignee) {
-          data.assignee.forEach(assigne => {
-            data.assignees.push({
-              uuid: assigne
-            })
+    if (moduleName === "NewWS1" || moduleName === "NewSW1") {
+      data = data[0];
+      data.assignees = [];
+      if (data.assignee) {
+        data.assignee.forEach(assigne => {
+          data.assignees.push({
+            uuid: assigne
           })
-        }
-        data.processInstance = {
-          documents: data.wfDocuments,
-          assignes: data.assignees,
-          comment: data.comment,
-          action: data.action
-        }
-        data.waterSource = data.waterSource + "." + data.waterSubSource;
+        })
       }
+      data.processInstance = {
+        documents: data.wfDocuments,
+        assignes: data.assignees,
+        comment: data.comment,
+        action: data.action
+      }
+      data.waterSource = data.waterSource + "." + data.waterSubSource;
+    }
 
     if (moduleName === "NewSW1") {
       dataPath = "SewerageConnection";
     }
 
     try {
+      if (beforeSubmitHook) {
+        data = beforeSubmitHook(data);
+      }
       const payload = await httpRequest("post", updateUrl, "", [], {
         [dataPath]: data
       });
