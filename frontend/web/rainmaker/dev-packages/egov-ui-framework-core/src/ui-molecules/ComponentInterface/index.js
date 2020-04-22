@@ -7,7 +7,7 @@ import remoteComponents from "ui-config/commonConfig/remote-component-paths";
 import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
 import find from "lodash/find";
-import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
+import { localStorageGet } from "../../ui-utils/localStorageUtils";
 import { getModuleName } from "./moduleConfig";
 
 class ComponentInterface extends React.Component {

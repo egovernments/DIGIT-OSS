@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import Icon from "@material-ui/core/Icon";
 import Tooltip from "@material-ui/core/Tooltip";
 import { getLocaleLabelsforTL } from "../../ui-config/screens/specs/utils";
-import { getLocalization } from "egov-ui-kit/utils/localStorageUtils";
+import { getLocalization } from "../../ui-utils/localStorageUtils";
 import { transformById } from "../../ui-utils/commons";
 import { LabelContainer } from "egov-ui-framework/ui-containers";
 

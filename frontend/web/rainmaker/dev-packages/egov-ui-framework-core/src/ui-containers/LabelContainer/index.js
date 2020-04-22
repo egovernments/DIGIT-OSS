@@ -3,7 +3,7 @@ import { Label } from "../../ui-atoms";
 import get from "lodash/get";
 import { connect } from "react-redux";
 import { getLocaleLabels, appendModulePrefix } from "../../ui-utils/commons";
-import { getLocalization } from "egov-ui-kit/utils/localStorageUtils";
+import { getLocalization } from "../../ui-utils/localStorageUtils";
 import isEmpty from "lodash/isEmpty";
 
 class LabelContainer extends React.Component {
@@ -87,7 +87,7 @@ const mapStateToProps = (state, ownprops) => {
       {
         localePrefix.moduleName=get(preparedFinalObject,localePrefix.moduleName,"");
       }
-      
+
   }
   return { fieldValue, localizationLabels,localePrefix };
 };
