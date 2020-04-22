@@ -16,11 +16,11 @@
                     {
                         "stack": [
                             {
-                                "text": "{{tenantName}} Muncipal Council",
+                                "text": "{{tenantName}} {{Muncipal_Council}}",
                                 "style": "header"
                             },
                             {
-                                "text": "REVOCATION OF BUILDING PERMIT",
+                                "text": "{{Revocation_Title}}",
                                 "style": "sub-header"
                             }
                         ]
@@ -38,7 +38,7 @@
                     {
                         "text": [
                             {
-                                "text": "Dated : ",
+                                "text": "{{Dated}} : ",
                                 "bold": true
                             },
                             {
@@ -54,7 +54,7 @@
             {
                 "text": [
                     {
-                        "text": "Smt/Sri "
+                        "text": "{{SALUTATION}} "
                     },
                     {
                         "text": "{{ownerName}},",
@@ -66,7 +66,7 @@
             {
                 "text": [
                     {
-                        "text": "The plan permission issued  "
+                        "text": "{{Permision_Issued}}  "
                     },
                     {
                         "text": "{{planPermissionNo}}",
@@ -74,22 +74,22 @@
                         "font": "Roboto"
                     },
                     {
-                        "text": " with reference to the application number  "
+                        "text": " {{WRT_APPNO}} "
                     },
                     {
                         "text": "{{applicationNo}}",
                         "bold": true,
                         "font": "Roboto"
                     },
-                    {
-                        "text": " dated "
+                    {   
+                        "text": " {{dated}} "
                     },
                     {
                         "text": "{{createdDate}}",
                         "bold": true
                     },
                     {
-                        "text": " is revocated. "
+                        "text": " {{isRevocated}}. "
                     }
                 ],
                 "style": "top-low-margin"
@@ -97,14 +97,14 @@
             {
                 "text": [
                     {
-                        "text": "The reason for revocation is  "
+                        "text": "{{revocationReasonIs}}"
                     },
                     {
                         "text": " {{revocationReason}}.",
                         "bold": true
                     },
                     {
-                        "text": " You are not authorized to construct the building.  "
+                        "text": " {{noAuthText}}."
                     }
                 ],
                 "style": "top-low-margin"
@@ -112,7 +112,7 @@
             {
                 "text": [
                     {
-                        "text": "Please contact ULB officials for further action.  "
+                        "text": "{{contactULB}}."
                     }
                 ],
                 "style": "top-low-margin"
@@ -120,11 +120,11 @@
             {
                 "stack": [
                     {
-                        "text": "By Order",
+                        "text": "{{BY_ORDER}}",
                         "style": "top-margin"
                     },
                     {
-                        "text": "Authorised Officer",
+                        "text": "{{AUTH_OFFICER}}",
                         "margin": 2
                     },
                     {
