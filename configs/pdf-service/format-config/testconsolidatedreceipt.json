@@ -567,6 +567,7 @@
       ],
       "color": "#484848"
      }
-   }
+   },
+   "footer": "(function(currentPage, pageCount) { return currentPage.toString() + ' of ' + pageCount; })"
   }
 }
