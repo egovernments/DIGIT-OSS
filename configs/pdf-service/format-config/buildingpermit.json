@@ -305,7 +305,8 @@
         "height": 100
       }
     ],
-    "styles": {
+    "footer": "(function(currentPage, pageCount) { return currentPage.toString() + ' of ' + pageCount; })",
+	"styles": {
       "header": {
         "bold": true,
         "alignment": "center"
