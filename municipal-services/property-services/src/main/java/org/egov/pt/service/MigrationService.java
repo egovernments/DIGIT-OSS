@@ -29,6 +29,7 @@ import org.egov.pt.validator.AssessmentValidator;
 import org.egov.pt.validator.PropertyValidator;
 import org.egov.pt.web.contracts.AssessmentRequest;
 import org.egov.pt.web.contracts.PropertyRequest;
+import org.egov.pt.web.contracts.RequestInfoWrapper;
 import org.egov.tracer.model.CustomException;
 import org.egov.tracer.model.ServiceCallException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,6 +106,58 @@ public class MigrationService {
 
     @Value("${egov.user.create.path}")
     private String userCreateEndpoint;
+
+    @Value("${migration.batch.value}")
+    private Integer batchSize;
+
+    public static final String COUNT_QUERY = "select count(*) from eg_pt_property_v2 where tenantid ilike 'pb%';";
+
+
+
+    public Map<String, String> initiatemigration(RequestInfoWrapper requestInfoWrapper,OldPropertyCriteria propertyCriteria) {
+
+        Map<String, String> responseMap = new HashMap<>();
+        Integer startBatch = Math.toIntExact(propertyCriteria.getOffset());
+        Integer batchSizeInput = Math.toIntExact(propertyCriteria.getLimit());
+        RequestInfo requestInfo = requestInfoWrapper.getRequestInfo();
+        List<Property> properties = new ArrayList<>();
+
+        int count = jdbcTemplate.queryForObject(COUNT_QUERY, Integer.class);
+        System.out.println("Count---->"+count);
+        int i = 0;
+        if (null != startBatch && startBatch > 0)
+            i = startBatch;
+
+        if(null != batchSizeInput && batchSizeInput > 0)
+            batchSize = batchSizeInput;
+
+        for( ; i<count;i = i+batchSize) {
+
+            List<OldProperty> oldProperties = searchOldPropertyFromURL(requestInfoWrapper,propertyCriteria) ;
+            try {
+                properties = migrateProperty(requestInfo,oldProperties);
+            } catch (Exception e) {
+
+                log.error("Migration failed at batch count of : " + i);
+                responseMap.put( "Migration failed at batch count : " + i, e.getMessage());
+                return responseMap;
+            }
+            addResponseToMap(properties,responseMap,"SUCCESS");
+            log.info(" count completed : " + i);
+        }
+
+        return responseMap;
+
+    }
+
+    private void addResponseToMap(List<Property> properties, Map<String, String> responseMap, String message) {
+
+        properties.forEach(property -> {
+
+            responseMap.put(property.getPropertyId(), message);
+            log.info("the demand id : " + property.getPropertyId() + " message : " + message);
+        });
+    }
 
 
 
@@ -382,6 +435,7 @@ public class MigrationService {
                     propertyValidator.validateCreateRequest(request);
                 } catch (Exception e) {
                     errorMap.put(property.getPropertyId(), String.valueOf(e));
+                    throw new CustomException(errorMap);
                 }
                 if(i==0)
                     producer.push(config.getSavePropertyTopic(), request);
@@ -735,6 +789,7 @@ public class MigrationService {
             ValidateMigrationData(request,property);
         } catch (Exception e) {
             errorMap.put(assessment.getAssessmentNumber(), String.valueOf(e));
+            throw new CustomException(errorMap);
         }
         producer.push(config.getCreateAssessmentTopic(), request);
     }
@@ -750,8 +805,7 @@ public class MigrationService {
             if(!StringUtils.isEmpty(propertyDetail.getAdhocPenaltyReason()))
                 assessmentAdditionalDetail.put("adhocPenaltyReason",propertyDetail.getAdhocPenaltyReason());
         } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("ERROR----->"+e);
+            throw new CustomException("INVALID_PENALTY_REBATE",String.valueOf(e));
         }
 
         return assessmentAdditionalDetail;

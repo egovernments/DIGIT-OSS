@@ -2,6 +2,7 @@ package org.egov.pt.web.controllers;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -75,20 +76,17 @@ public class PropertyController {
 	}
 
 	@PostMapping("/_migration")
-	public ResponseEntity<PropertyResponse> propertyMigration(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
+	public ResponseEntity<?> propertyMigration(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
 															  @Valid @ModelAttribute OldPropertyCriteria propertyCriteria) {
 		long startTime = System.nanoTime();
-		RequestInfo requestInfo = requestInfoWrapper.getRequestInfo();
-		List<OldProperty> oldProperties = migrationService.searchOldPropertyFromURL(requestInfoWrapper,propertyCriteria) ;
 
-		List<Property> properties = migrationService.migrateProperty(requestInfo,oldProperties);
+		Map<String, String> resultMap = migrationService.initiatemigration(requestInfoWrapper, propertyCriteria);
+
 		long endtime = System.nanoTime();
 		long elapsetime = endtime - startTime;
 		System.out.println("Elapsed time--->"+elapsetime);
-		PropertyResponse response = PropertyResponse.builder().properties(properties).responseInfo(
-				responseInfoFactory.createResponseInfoFromRequestInfo(requestInfo, true))
-				.build();
-		return new ResponseEntity<>(response, HttpStatus.OK);
+		
+		return new ResponseEntity<>(resultMap, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/_plainauditsearch", method = RequestMethod.POST)
