@@ -106,7 +106,7 @@ serviceMaps:
        
        - jsonPath: $.WaterConnection.id 
 
-    - query: UPDATE water_service_connection SET connectionCategory=?,rainWaterHarvesting=?,connectionType=?,waterSource=?,meterId=?,meterInstallationDate=?,pipeSize=?,noOfTaps=?,proposedPipeSize=?,proposedTaps=?, initialmeterreading = ?, connectionexecutiondate = ?, detailsprovidedby = ? WHERE connection_id=?;
+    - query: UPDATE water_service_connection SET connectionCategory=?,rainWaterHarvesting=?,connectionType=?,waterSource=?,meterId=?,meterInstallationDate=?,pipeSize=?,noOfTaps=?,proposedPipeSize=?,proposedTaps=?, initialmeterreading = ?, connectionexecutiondate = ?, detailsprovidedby = ?, estimationfileStoreId = ?, sanctionfileStoreId = ? WHERE connection_id=?;
       basePath: $.WaterConnection
       jsonMaps:
        
@@ -137,6 +137,10 @@ serviceMaps:
        - jsonPath: $.WaterConnection.connectionExecutionDate
        
        - jsonPath: $.WaterConnection.additionalDetails.detailsProvidedBy
+       
+       - jsonPath: $.WaterConnection.additionalDetails.estimationFileStoreId
+
+       - jsonPath: $.WaterConnection.additionalDetails.sanctionFileStoreId
 
        - jsonPath: $.WaterConnection.id
 
