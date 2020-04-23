@@ -79,7 +79,7 @@ public class PropertyValidator {
 			throw new CustomException(errorMap);
 
 		validateMasterData(request, errorMap);
-		//validateMobileNumber(request, errorMap);
+		validateMobileNumber(request, errorMap);
 		validateFields(request, errorMap);
 		if (!CollectionUtils.isEmpty(units))
 			validateUnits(request, errorMap);
