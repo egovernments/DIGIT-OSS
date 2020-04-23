@@ -435,12 +435,12 @@ public class MigrationService {
 
 
                 PropertyRequest request = PropertyRequest.builder().requestInfo(requestInfo).property(property).build();
-                try{
+                /*try{
                     propertyValidator.validateCreateRequest(request);
                 } catch (Exception e) {
                     errorMap.put(property.getPropertyId(), String.valueOf(e));
                     throw new CustomException(errorMap);
-                }
+                }*/
                 if(i==0)
                     producer.push(config.getSavePropertyTopic(), request);
                 else
@@ -789,12 +789,12 @@ public class MigrationService {
         }
 
         AssessmentRequest request = AssessmentRequest.builder().requestInfo(requestInfo).assessment(assessment).build();
-        try{
+        /*try{
             ValidateMigrationData(request,property);
         } catch (Exception e) {
             errorMap.put(assessment.getAssessmentNumber(), String.valueOf(e));
             throw new CustomException(errorMap);
-        }
+        }*/
         producer.push(config.getCreateAssessmentTopic(), request);
     }
 
