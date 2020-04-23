@@ -3,7 +3,7 @@
   "version": "0.0.2",
   "license": "egov",
   "private": true,
-  "homepage": "https://uttarakhand-uat.egovernments.org/employee-noc/",
+  "homepage": "https://uttarakhand-uat.egovernments.org/ui-localisation/",
   "proxy": "https://uttarakhand-uat.egovernments.org/",
   "dependencies": {
     "@babel/runtime": "^7.3.1",
