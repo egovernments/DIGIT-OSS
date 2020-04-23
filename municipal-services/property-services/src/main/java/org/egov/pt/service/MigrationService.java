@@ -133,7 +133,7 @@ public class MigrationService {
             batchSize = batchSizeInput;
 
         for( ; i<count;i = i+batchSize) {
-
+            long startTime = System.nanoTime();
             List<OldProperty> oldProperties = searchOldPropertyFromURL(requestInfoWrapper,tenantId,i,batchSize) ;
             try {
                 properties = migrateProperty(requestInfo,oldProperties);
@@ -145,6 +145,9 @@ public class MigrationService {
             }
             addResponseToMap(properties,responseMap,"SUCCESS");
             log.info(" count completed : " + i);
+            long endtime = System.nanoTime();
+            long elapsetime = endtime - startTime;
+            System.out.println("\n\nBatch elapsed time----------->"+elapsetime+"\n\n");
         }
 
         return responseMap;
@@ -432,12 +435,12 @@ public class MigrationService {
 
 
                 PropertyRequest request = PropertyRequest.builder().requestInfo(requestInfo).property(property).build();
-                /*try{
+                try{
                     propertyValidator.validateCreateRequest(request);
                 } catch (Exception e) {
                     errorMap.put(property.getPropertyId(), String.valueOf(e));
                     throw new CustomException(errorMap);
-                }*/
+                }
                 if(i==0)
                     producer.push(config.getSavePropertyTopic(), request);
                 else
@@ -786,12 +789,12 @@ public class MigrationService {
         }
 
         AssessmentRequest request = AssessmentRequest.builder().requestInfo(requestInfo).assessment(assessment).build();
-        /*try{
+        try{
             ValidateMigrationData(request,property);
         } catch (Exception e) {
             errorMap.put(assessment.getAssessmentNumber(), String.valueOf(e));
             throw new CustomException(errorMap);
-        }*/
+        }
         producer.push(config.getCreateAssessmentTopic(), request);
     }
 
