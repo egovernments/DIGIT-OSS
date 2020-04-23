@@ -121,6 +121,7 @@ public class MigrationService {
         Integer batchSizeInput = Math.toIntExact(propertyCriteria.getLimit());
         RequestInfo requestInfo = requestInfoWrapper.getRequestInfo();
         List<Property> properties = new ArrayList<>();
+        String tenantId = propertyCriteria.getTenantId();
 
         int count = jdbcTemplate.queryForObject(COUNT_QUERY, Integer.class);
         System.out.println("Count---->"+count);
@@ -133,7 +134,7 @@ public class MigrationService {
 
         for( ; i<count;i = i+batchSize) {
 
-            List<OldProperty> oldProperties = searchOldPropertyFromURL(requestInfoWrapper,propertyCriteria) ;
+            List<OldProperty> oldProperties = searchOldPropertyFromURL(requestInfoWrapper,tenantId,i,batchSize) ;
             try {
                 properties = migrateProperty(requestInfo,oldProperties);
             } catch (Exception e) {
@@ -163,14 +164,14 @@ public class MigrationService {
 
 
 
-    public List<OldProperty> searchOldPropertyFromURL(org.egov.pt.web.contracts.RequestInfoWrapper requestInfoWrapper, OldPropertyCriteria propertyCriteria){
+    public List<OldProperty> searchOldPropertyFromURL(org.egov.pt.web.contracts.RequestInfoWrapper requestInfoWrapper,String tenantId,int i,Integer batchSize){
 
 
         StringBuilder url = new StringBuilder(ptHost).append(oldPropertySearchEndpoint).append(URL_PARAMS_SEPARATER)
-                .append(TENANT_ID_FIELD_FOR_SEARCH_URL).append(propertyCriteria.getTenantId())
+                .append(TENANT_ID_FIELD_FOR_SEARCH_URL).append(tenantId)
                 .append(SEPARATER).append(OFFSET_FIELD_FOR_SEARCH_URL)
-                .append(propertyCriteria.getOffset()).append(SEPARATER)
-                .append(LIMIT_FIELD_FOR_SEARCH_URL).append(propertyCriteria.getLimit());
+                .append(i).append(SEPARATER)
+                .append(LIMIT_FIELD_FOR_SEARCH_URL).append(batchSize);
         OldPropertyResponse res = mapper.convertValue(fetchResult(url, requestInfoWrapper), OldPropertyResponse.class);
 
 
