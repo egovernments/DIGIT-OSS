@@ -91,7 +91,7 @@ serviceMaps:
 
        - jsonPath: $.SewerageConnection.id       
 
-    - query: UPDATE eg_sw_service SET connectionexecutiondate=?, noOfWaterClosets=?, noOfToilets=?, connectiontype=?, proposedWaterClosets=?, proposedToilets=?, detailsprovidedby = ?  WHERE connection_id=?;
+    - query: UPDATE eg_sw_service SET connectionexecutiondate=?, noOfWaterClosets=?, noOfToilets=?, connectiontype=?, proposedWaterClosets=?, proposedToilets=?, detailsprovidedby = ?, estimationfileStoreId = ?, sanctionfileStoreId = ?  WHERE connection_id=?;
       basePath: $.SewerageConnection
       jsonMaps:
 
@@ -107,7 +107,11 @@ serviceMaps:
        
        - jsonPath: $.SewerageConnection.proposedToilets
        
-       - jsonPath: $.SewerageConnection.additionalDetails.detailsProvidedBy       
+       - jsonPath: $.SewerageConnection.additionalDetails.detailsProvidedBy 
+       
+       - jsonPath: $.SewerageConnection.additionalDetails.estimationFileStoreId
+       
+       - jsonPath: $.SewerageConnection.additionalDetails.sanctionFileStoreId
          
        - jsonPath: $.SewerageConnection.id
 
