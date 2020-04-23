@@ -16432,6 +16432,28 @@
       "serviceCode": "egov-searcher",
       "code": "null",
       "path": ""
+    },
+    {
+      "id": 1977,
+      "name": "Add adhoc tax",
+      "url": "/ws-calculator/waterCalculator/_applyAdhocTax",
+      "displayName": "Add adhoc tax",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "ws-calculator",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1978,
+      "name": "Add adhoc tax to sewerage",
+      "url": "/sw-calculator/sewerageCalculator/_applyAdhocTax",
+      "displayName": "Add adhoc tax",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "sw-calculator",
+      "code": "null",
+      "path": ""
     }
   ]
 }
