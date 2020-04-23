@@ -41,6 +41,7 @@ public class KeyIdGenerator implements ApplicationRunner {
         while(presentKeyIds.contains(keyId)) {
             keyId = getRandomNumber(appProperties.getKeyIdLength());
         }
+        presentKeyIds.add(keyId);
         return keyId;
     }
 
