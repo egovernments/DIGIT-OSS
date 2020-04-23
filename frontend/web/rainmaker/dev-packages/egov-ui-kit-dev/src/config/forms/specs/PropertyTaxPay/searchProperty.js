@@ -162,7 +162,7 @@ const formConfig = {
           });
           if (found) {
             dispatch(handleFieldChange("searchProperty", "city", tenantId));
-            dispatch(setFieldProperty("searchProperty", "city", "disabled", true));
+            dispatch(setFieldProperty("searchProperty", "city", true));
           }
         }
         else {
