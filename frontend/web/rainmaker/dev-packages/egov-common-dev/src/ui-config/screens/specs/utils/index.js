@@ -617,7 +617,7 @@ export const getBusinessServiceMdmsData = async (dispatch,  tenantId) => {
     console.log(e);
   }
 };
-export const generateBill = async (dispatch, consumerCode, tenantId) => {
+export const generateBill = async (dispatch, consumerCode, tenantId, businessService) => {
   try {
     if (consumerCode && tenantId) {
       const queryObj = [
@@ -628,13 +628,16 @@ export const generateBill = async (dispatch, consumerCode, tenantId) => {
         {
           key: "consumerCode",
           value: consumerCode
+        },
+      ];  
+        if(businessService){
+          queryObj.push({
+            key: "businessService",
+            value: businessService
+          });
         }
-        // ,
-        // {
-        //   key: "businessService",
-        //   value: businessService
-        // }
-      ];
+         
+        
       const payload = await getBill(queryObj,dispatch);
       // let payload = sampleGetBill();
       if (payload && payload.Bill[0]) {
@@ -650,7 +653,8 @@ export const generateBill = async (dispatch, consumerCode, tenantId) => {
           );
       }
     }
-  } catch (e) {
+  } 
+catch (e) {
     dispatch(
       toggleSnackbar(
         true,
