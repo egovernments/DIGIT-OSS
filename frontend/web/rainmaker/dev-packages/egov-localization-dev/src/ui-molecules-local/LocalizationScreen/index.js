@@ -1,4 +1,4 @@
-import React, { PureComponent ,forwardRef} from "react";
+import React, { PureComponent, forwardRef } from "react";
 import MaterialTable from "material-table";
 // import axios from "axios";
 import * as XLSX from "xlsx";
@@ -17,46 +17,80 @@ import {
   Checkbox,
   Typography,
   Hidden,
-  Fab,
+  Fab
 } from "@material-ui/core";
 
 import AddIcon from "@material-ui/icons/Add";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { getTenantId } from "egov-ui-framework/ui-utils/localStorageUtils";
-import AddBox from '@material-ui/icons/AddBox';
-import ArrowUpward from '@material-ui/icons/ArrowUpward';
-import Check from '@material-ui/icons/Check';
-import ChevronLeft from '@material-ui/icons/ChevronLeft';
-import ChevronRight from '@material-ui/icons/ChevronRight';
-import Clear from '@material-ui/icons/Clear';
-import DeleteOutline from '@material-ui/icons/DeleteOutline';
-import Edit from '@material-ui/icons/Edit';
-import FilterList from '@material-ui/icons/FilterList';
-import FirstPage from '@material-ui/icons/FirstPage';
-import LastPage from '@material-ui/icons/LastPage';
-import Remove from '@material-ui/icons/Remove';
-import SaveAlt from '@material-ui/icons/SaveAlt';
-import Search from '@material-ui/icons/Search';
-import ViewColumn from '@material-ui/icons/ViewColumn';
+import AddBox from "@material-ui/icons/AddBox";
+import ArrowUpward from "@material-ui/icons/ArrowUpward";
+import Check from "@material-ui/icons/Check";
+import ChevronLeft from "@material-ui/icons/ChevronLeft";
+import ChevronRight from "@material-ui/icons/ChevronRight";
+import Clear from "@material-ui/icons/Clear";
+import DeleteOutline from "@material-ui/icons/DeleteOutline";
+import Edit from "@material-ui/icons/Edit";
+import FilterList from "@material-ui/icons/FilterList";
+import FirstPage from "@material-ui/icons/FirstPage";
+import LastPage from "@material-ui/icons/LastPage";
+import Remove from "@material-ui/icons/Remove";
+import SaveAlt from "@material-ui/icons/SaveAlt";
+import Search from "@material-ui/icons/Search";
+import ViewColumn from "@material-ui/icons/ViewColumn";
 
 const tableIcons = {
-  Add: forwardRef((props, ref:React.Ref<SVGSVGElement>) => <AddBox {...props} ref={ref} />),
-  Check: forwardRef((props, ref:React.Ref<SVGSVGElement>) => <Check {...props} ref={ref} />),
-  Clear: forwardRef((props, ref:React.Ref<SVGSVGElement>) => <Clear {...props} ref={ref} />),
-  Delete: forwardRef((props, ref:React.Ref<SVGSVGElement>) => <DeleteOutline {...props} ref={ref} />),
-  DetailPanel: forwardRef((props, ref:React.Ref<SVGSVGElement>) => <ChevronRight {...props} ref={ref} />),
-  Edit: forwardRef((props, ref:React.Ref<SVGSVGElement>) => <Edit {...props} ref={ref} />),
-  Export: forwardRef((props, ref:React.Ref<SVGSVGElement>) => <SaveAlt {...props} ref={ref} />),
-  Filter: forwardRef((props, ref:React.Ref<SVGSVGElement>) => <FilterList {...props} ref={ref} />),
-  FirstPage: forwardRef((props, ref:React.Ref<SVGSVGElement>) => <FirstPage {...props} ref={ref} />),
-  LastPage: forwardRef((props, ref:React.Ref<SVGSVGElement>) => <LastPage {...props} ref={ref} />),
-  NextPage: forwardRef((props, ref:React.Ref<SVGSVGElement>) => <ChevronRight {...props} ref={ref} />),
-  PreviousPage: forwardRef((props, ref:React.Ref<SVGSVGElement>) => <ChevronLeft {...props} ref={ref} />),
-  ResetSearch: forwardRef((props, ref:React.Ref<SVGSVGElement>) => <Clear {...props} ref={ref} />),
-  Search: forwardRef((props, ref:React.Ref<SVGSVGElement>) => <Search {...props} ref={ref} />),
-  SortArrow: forwardRef((props, ref:React.Ref<SVGSVGElement>) => <ArrowUpward {...props} ref={ref} />),
-  ThirdStateCheck: forwardRef((props, ref:React.Ref<SVGSVGElement>) => <Remove {...props} ref={ref} />),
-  ViewColumn: forwardRef((props, ref:React.Ref<SVGSVGElement>) => <ViewColumn {...props} ref={ref} />)
+  Add: forwardRef((props, ref: React.Ref<SVGSVGElement>) => (
+    <AddBox {...props} ref={ref} />
+  )),
+  Check: forwardRef((props, ref: React.Ref<SVGSVGElement>) => (
+    <Check {...props} ref={ref} />
+  )),
+  Clear: forwardRef((props, ref: React.Ref<SVGSVGElement>) => (
+    <Clear {...props} ref={ref} />
+  )),
+  Delete: forwardRef((props, ref: React.Ref<SVGSVGElement>) => (
+    <DeleteOutline {...props} ref={ref} />
+  )),
+  DetailPanel: forwardRef((props, ref: React.Ref<SVGSVGElement>) => (
+    <ChevronRight {...props} ref={ref} />
+  )),
+  Edit: forwardRef((props, ref: React.Ref<SVGSVGElement>) => (
+    <Edit {...props} ref={ref} />
+  )),
+  Export: forwardRef((props, ref: React.Ref<SVGSVGElement>) => (
+    <SaveAlt {...props} ref={ref} />
+  )),
+  Filter: forwardRef((props, ref: React.Ref<SVGSVGElement>) => (
+    <FilterList {...props} ref={ref} />
+  )),
+  FirstPage: forwardRef((props, ref: React.Ref<SVGSVGElement>) => (
+    <FirstPage {...props} ref={ref} />
+  )),
+  LastPage: forwardRef((props, ref: React.Ref<SVGSVGElement>) => (
+    <LastPage {...props} ref={ref} />
+  )),
+  NextPage: forwardRef((props, ref: React.Ref<SVGSVGElement>) => (
+    <ChevronRight {...props} ref={ref} />
+  )),
+  PreviousPage: forwardRef((props, ref: React.Ref<SVGSVGElement>) => (
+    <ChevronLeft {...props} ref={ref} />
+  )),
+  ResetSearch: forwardRef((props, ref: React.Ref<SVGSVGElement>) => (
+    <Clear {...props} ref={ref} />
+  )),
+  Search: forwardRef((props, ref: React.Ref<SVGSVGElement>) => (
+    <Search {...props} ref={ref} />
+  )),
+  SortArrow: forwardRef((props, ref: React.Ref<SVGSVGElement>) => (
+    <ArrowUpward {...props} ref={ref} />
+  )),
+  ThirdStateCheck: forwardRef((props, ref: React.Ref<SVGSVGElement>) => (
+    <Remove {...props} ref={ref} />
+  )),
+  ViewColumn: forwardRef((props, ref: React.Ref<SVGSVGElement>) => (
+    <ViewColumn {...props} ref={ref} />
+  ))
 };
 
 class ApiTable extends PureComponent {
@@ -81,7 +115,7 @@ class ApiTable extends PureComponent {
     data: [],
     cols: [],
     validate: "",
-    matchData: [],
+    matchData: []
   };
 
   componentDidMount = async () => {
@@ -90,13 +124,13 @@ class ApiTable extends PureComponent {
     var module = mod ? mod.split(",") : [];
     var loc = new URL(window.location.href).searchParams.get("locale");
     var locale = loc ? loc.split(",") : [];
-    var tenantId=new URL(window.location.href).searchParams.get("tenantId");
+    var tenantId = new URL(window.location.href).searchParams.get("tenantId");
     console.log(module, "module");
 
     console.log(this.state, "state");
     if (locale.length >= 1 && module.length >= 1) {
       var statemultiSelect = [];
-      statemultiSelect = module.map((m) => {
+      statemultiSelect = module.map(m => {
         return { label: m, value: m };
       });
 
@@ -104,12 +138,14 @@ class ApiTable extends PureComponent {
       this.setState({
         ...this.state,
         statemultiSelect,
-        selectedState: new URL(window.location.href).searchParams.get("tenantId"),
+        selectedState: new URL(window.location.href).searchParams.get(
+          "tenantId"
+        ),
         multiSelect: module,
-        statelocale: locale.map((m) => {
+        statelocale: locale.map(m => {
           return { label: m, value: m };
         }),
-        locale: locale,
+        locale: locale
       });
     } else {
       console.log("axios");
@@ -121,64 +157,36 @@ class ApiTable extends PureComponent {
               moduleName: "common-masters",
               masterDetails: [
                 {
-                  name: "StateInfo",
-                },
-              ],
-            },
-          ],
-        },
+                  name: "StateInfo"
+                }
+              ]
+            }
+          ]
+        }
       };
       try {
-        const payload = await httpRequest("post",`egov-mdms-service/v1/_search?tenantId=${tenantId?tenantId:getTenantId()}`,"_search",[],requestbody);
+        const payload = await httpRequest(
+          "post",
+          `egov-mdms-service/v1/_search?tenantId=${
+            tenantId ? tenantId : getTenantId()
+          }`,
+          "_search",
+          [],
+          requestbody
+        );
         this.setState({
           ...this.state,
           apidata: payload.MdmsRes["common-masters"],
-          selectedState: tenantId?tenantId:getTenantId(),
+          selectedState: tenantId ? tenantId : getTenantId(),
           statelocale: payload.MdmsRes["common-masters"].StateInfo[0].languages,
-          statemultiSelect: payload.MdmsRes["common-masters"].StateInfo[0].localizationModules,
+          statemultiSelect:
+            payload.MdmsRes["common-masters"].StateInfo[0].localizationModules
         });
-        this.onSearch()
+        this.onSearch();
       } catch (e) {
         console.log(e);
       } finally {
       }
-
-      // axios
-      //   .post(`${document.location.origin}/egov-mdms-service/v1/_search?tenantId=${this.state.selectedState}`, {
-      //     RequestInfo: {
-      //       apiId: "Rainmaker",
-      //       ver: ".01",
-      //       ts: "",
-      //       action: "_search",
-      //       did: "1",
-      //       key: "",
-      //       msgId: "20170310130900|en_IN",
-      //       authToken: "a969d202-0b39-4fb2-8334-2f0c4d281bf6",
-      //     },
-      //     MdmsCriteria: {
-      //       tenantId: getTenantId(),
-      //       moduleDetails: [
-      //         {
-      //           moduleName: "common-masters",
-      //           masterDetails: [
-      //             {
-      //               name: "StateInfo",
-      //             },
-      //           ],
-      //         },
-      //       ],
-      //     },
-      //   })
-      //   .then((response) => {
-      //     this.setState({
-      //       ...this.state,
-      //       apidata: response.data.MdmsRes["common-masters"],
-      //       selectedState: new URL(window.location.href).searchParams.get("tenantId"),
-      //       statelocale: response.data.MdmsRes["common-masters"].StateInfo[0].languages,
-      //       statemultiSelect: response.data.MdmsRes["common-masters"].StateInfo[0].localizationModules,
-      //     });
-      //   })
-      //   .catch((err) => console.log(err));
     }
   };
 
@@ -197,59 +205,30 @@ class ApiTable extends PureComponent {
           code: newData.code,
           message: newData.message,
           module: newData.module,
-          locale: newData.locale,
-        },
-      ],
+          locale: newData.locale
+        }
+      ]
     };
     try {
-      const payload = await httpRequest("post",`localization/messages/v1/_create`, "_create", [], requestbody);
+      await httpRequest(
+        "post",
+        `localization/messages/v1/_create`,
+        "_create",
+        [],
+        requestbody
+      );
       this.setState({
-        data: "",
+        data: ""
       });
     } catch (e) {
       console.log(e);
     } finally {
     }
-    // axios
-    //   .post(`${document.location.origin}/localization/messages/v1/_create`, {
-    //     RequestInfo: {
-    //       apiId: "emp",
-    //       ver: "1.0",
-    //       ts: "10-03-2017 00:00:00",
-    //       action: "create",
-    //       did: "1",
-    //       key: "abcdkey",
-    //       msgId: "20170310130900",
-    //       requesterId: "rajesh",
-    //       authToken: localStorage.getItem("auth"),
-    //       userInfo: {
-    //         id: 128,
-    //       },
-    //     },
-    //     locale: newData.locale,
-    //     tenantId: "pb",
-    //     messages: [
-    //       {
-    //         code: newData.code,
-    //         message: newData.message,
-    //         module: newData.module,
-    //         locale: newData.locale,
-    //       },
-    //     ],
-    //   })
-    //   .then((response) => {
-    //     console.log("response API", response);
-    //     // this.onFetch();
-    //     this.setState({
-    //       data: "",
-    //     });
-    //   })
-    //   .catch((err) => console.log(err));
-    // window.location.reload();
+
     onSearch();
   };
 
-  onUpdate = async (id) => {
+  onUpdate = async id => {
     const { datas } = this.state;
     const { onSearch } = this;
     const requestbody = {
@@ -261,60 +240,29 @@ class ApiTable extends PureComponent {
           code: datas.code,
           message: datas.message,
           module: datas.module,
-          locale: datas.locale,
-        },
-      ],
+          locale: datas.locale
+        }
+      ]
     };
     try {
-      const payload = await httpRequest("post",`localization/messages/v1/_update`, "_update", [], requestbody);
+      await httpRequest(
+        "post",
+        `localization/messages/v1/_update`,
+        "_update",
+        [],
+        requestbody
+      );
       this.setState({
-        data: "",
+        data: ""
       });
     } catch (e) {
       console.log(e);
     } finally {
     }
-    // axios
-    //   .post(`${document.location.origin}/localization/messages/v1/_update`, {
-    //     RequestInfo: {
-    //       apiId: "emp",
-    //       ver: "1.0",
-    //       ts: "10-03-2017 00:00:00",
-    //       action: "create",
-    //       did: "1",
-    //       key: "abcdkey",
-    //       msgId: "20170310130900",
-    //       requesterId: "rajesh",
-    //       authToken: localStorage.getItem("auth"),
-    //       userInfo: {
-    //         id: 128,
-    //       },
-    //     },
-    //     locale: datas.locale,
-    //     module: datas.module,
-    //     tenantId: "pb",
-    //     messages: [
-    //       {
-    //         code: datas.code,
-    //         message: datas.message,
-    //         module: datas.module,
-    //         locale: datas.locale,
-    //       },
-    //     ],
-    //   })
-    //   .then((response) => {
-    //     console.log("response API", response);
-    //     this.setState({
-    //       data: "",
-    //     });
-    //   })
-    //   .catch((err) => console.log(err));
-    // window.location.reload();
     onSearch();
   };
 
-  onDelete = async (id) => {
-    const { saveData } = this;
+  onDelete = async id => {
     const requestbody = {
       locale: this.state.datas.locale,
       tenantId: getTenantId().split(".")[0],
@@ -323,98 +271,66 @@ class ApiTable extends PureComponent {
           code: this.state.newData.code,
           message: this.state.newData.message,
           module: this.state.newData.module,
-          locale: this.state.newData.locale,
-        },
-      ],
+          locale: this.state.newData.locale
+        }
+      ]
     };
     try {
-      const payload = await httpRequest("post",`localization/messages/v1/_delete`, "_delete", [], requestbody);
+      await httpRequest(
+        "post",
+        `localization/messages/v1/_delete`,
+        "_delete",
+        [],
+        requestbody
+      );
       this.setState({
-        data: "",
+        data: ""
       });
     } catch (e) {
       console.log(e);
     } finally {
     }
-    // axios
-    //   .post(`${document.location.origin}/localization/messages/v1/_delete`, {
-    //     requestInfo: {
-    //       apiId: "emp",
-    //       ver: "1.0",
-    //       ts: "10-03-2017 00:00:00",
-    //       action: "create",
-    //       did: "1",
-    //       key: "abcdkey",
-    //       msgId: "20170310130900",
-    //       requesterId: "rajesh",
-    //       authToken: localStorage.getItem("auth"),
-    //       userInfo: {
-    //         id: 1,
-    //       },
-    //     },
-    //     locale: this.state.datas.locale,
-    //     tenantId: "default",
-    //     messages: [
-    //       {
-    //         code: this.state.newData.code,
-    //         message: this.state.newData.message,
-    //         module: this.state.newData.module,
-    //         locale: this.state.newData.locale,
-    //       },
-    //     ],
-    //   })
-    //   .then((response) => {
-    //     console.log("response API", response);
-    //     saveData(response.data.messages);
-    //     // this.setState({
-    //     //   message: ''
-    //     // })
-    //   })
-    //   .catch((err) => console.log(err));
   };
 
   onSearch = async () => {
-    const module=this.state.multiSelect.length>0?this.state.multiSelect.join(","):'module=rainmaker-pgr,rainmaker-pt,rainmaker-tl,finance-erp,rainmaker-common,rainmaker-hr,rainmaker-uc,rainmaker-noc,rainmaker-dss';
-    const locale=this.state.locale.length>0?this.state.locale:"en_IN";
-    const tenantId=this.state.selectedState?this.state.selectedState.split(".")[0]:getTenantId().split(".")[0]
+    const module =
+      this.state.multiSelect.length > 0
+        ? this.state.multiSelect.join(",")
+        : "module=rainmaker-pgr,rainmaker-pt,rainmaker-tl,finance-erp,rainmaker-common,rainmaker-hr,rainmaker-uc,rainmaker-noc,rainmaker-dss";
+    const locale = this.state.locale.length > 0 ? this.state.locale : "en_IN";
+    const tenantId = this.state.selectedState
+      ? this.state.selectedState.split(".")[0]
+      : getTenantId().split(".")[0];
     try {
-      const payload = await httpRequest("post",
-        `localization/messages/v1/_search?module=${module}&locale=${locale}&tenantId=${tenantId}`,"_search");
+      const payload = await httpRequest(
+        "post",
+        `localization/messages/v1/_search?module=${module}&locale=${locale}&tenantId=${tenantId}`,
+        "_search"
+      );
       this.setState({ ...this.state, newSearch: payload.messages });
     } catch (e) {
       console.log(e);
     } finally {
     }
-
-    // axios
-    //   .post(
-    //     `${document.location.origin}/localization/messages/v1/_search?module=${this.state.multiSelect.join(",")}&locale=${
-    //       this.state.locale
-    //     }&tenantId=${this.state.selectedState}`
-    //   )
-    //   .then((response) => {
-    //     this.setState({ ...this.state, newSearch: response.data.messages });
-    //   })
-    //   .catch((err) => console.log(err));
   };
 
   onReset = () => {
     this.setState({
       ...this.state,
       multiSelect: [],
-      locale: [],
+      locale: []
     });
   };
 
-  handleChange = (event) => {
+  handleChange = event => {
     this.setState({ selectedState: event.target.value });
   };
 
-  handleChangeLocale = (event) => {
+  handleChangeLocale = event => {
     this.setState({ locale: event.target.value });
   };
 
-  handleChangeExcel = (e) => {
+  handleChangeExcel = e => {
     const { handleFile } = this;
     const files = e.target.files;
     console.log(files, "files");
@@ -425,14 +341,13 @@ class ApiTable extends PureComponent {
     }
   };
 
-  handleChangeMulti = (event) => {
+  handleChangeMulti = event => {
     console.log(event.target.value, "event");
 
     this.setState({ multiSelect: event.target.value });
-    // multiSelect(event.target.value);
   };
 
-  handleChangeMultiple = (event) => {
+  handleChangeMultiple = event => {
     const { options } = event.target;
     const value = [];
     for (let i = 0, l = options.length; i < l; i += 1) {
@@ -442,7 +357,7 @@ class ApiTable extends PureComponent {
     }
     // multiSelect(value);
     this.setState({
-      multiSelect: value,
+      multiSelect: value
     });
   };
 
@@ -453,10 +368,13 @@ class ApiTable extends PureComponent {
     const reader = new FileReader();
     const rABS = !!reader.readAsBinaryString;
 
-    reader.onload = (e) => {
+    reader.onload = e => {
       /* Parse data */
       const bstr = e.target.result;
-      const wb = XLSX.read(bstr, { type: rABS ? "binary" : "array", bookVBA: true });
+      const wb = XLSX.read(bstr, {
+        type: rABS ? "binary" : "array",
+        bookVBA: true
+      });
       /* Get first worksheet */
       const wsname = wb.SheetNames[0];
       const ws = wb.Sheets[wsname];
@@ -476,11 +394,17 @@ class ApiTable extends PureComponent {
   };
 
   handleValidateUpload = () => {
-    var TotallenOfObj = this.state.data.reduce((a, obj) => a + Object.keys(obj).length, 0);
-    var lenOfObj = this.state.data.reduce((a, obj) => Object.keys(obj).length, 0);
+    var TotallenOfObj = this.state.data.reduce(
+      (a, obj) => a + Object.keys(obj).length,
+      0
+    );
+    var lenOfObj = this.state.data.reduce(
+      (a, obj) => Object.keys(obj).length,
+      0
+    );
     var lenOfArr = this.state.data.length * 4;
     console.log(lenOfObj, "data", TotallenOfObj, lenOfArr);
-    if (TotallenOfObj == lenOfArr && lenOfObj == 4) {
+    if (TotallenOfObj === lenOfArr && lenOfObj === 4) {
       console.log("correct data");
       this.setState({ validate: "" });
     } else {
@@ -490,11 +414,15 @@ class ApiTable extends PureComponent {
   };
 
   cmpreUpload = (searchData, excelData) => {
-    excelData.map((s1, k1) => {
+    excelData.forEach((s1, k1) => {
       let matchFound = false;
 
-      searchData.map((e1, k2) => {
-        if (s1.Code === e1.code && s1.Module === e1.module && s1.Message === e1.message) {
+      searchData.forEach((e1, k2) => {
+        if (
+          s1.Code === e1.code &&
+          s1.Module === e1.module &&
+          s1.Message === e1.message
+        ) {
           matchFound = true;
         }
         // } else {
@@ -511,48 +439,46 @@ class ApiTable extends PureComponent {
   };
 
   render() {
-    console.log("matchData", this.state.matchData);
+    // console.log("matchData", this.state.matchData);
 
-    const { data = [], newSearch = [], apidata = [] } = this.state;
-    // localStorage.setItem("auth", "024494f4-239a-41e8-a3c0-0fa4d804a2c8");
-    let empty = [];
-    let dropData = [];
-    let datas = [];
-    let locale = [];
+    const { data = [], newSearch = [] } = this.state;
     let filterModule = [];
     let filterLocale = [];
 
-    dropData =
-      newSearch !== []
-        ? newSearch.map((da, key) => {
-            return filterModule.push(da.module);
-          })
-        : [];
+
+    newSearch !== []
+      && newSearch.forEach((da, key) => {
+          filterModule.push(da.module);
+        })
+
 
     let filtermoduleUnique = {};
-    var filterMooduleuniqueSearch = filterModule.filter((v, i, a) => a.indexOf(v) === i);
-    datas = filterMooduleuniqueSearch.map((u, i) => {
-      return (filtermoduleUnique[u] = u);
+    var filterMooduleuniqueSearch = filterModule.filter(
+      (v, i, a) => a.indexOf(v) === i
+    );
+    filterMooduleuniqueSearch.forEach((u, i) => {
+      filtermoduleUnique[u] = u;
     });
 
-    dropData =
-      newSearch !== []
-        ? newSearch.map((da, key) => {
-            return filterLocale.push(da.locale);
-          })
-        : [];
+    newSearch !== []
+      && newSearch.forEach((da, key) => {
+          filterLocale.push(da.locale);
+        })
+
 
     let filterLocaleUnique = {};
-    var filterLocaleuniqueSearch = filterLocale.filter((v, i, a) => a.indexOf(v) === i);
-    datas = filterLocaleuniqueSearch.map((u, i) => {
-      return (filterLocaleUnique[u] = u);
+    var filterLocaleuniqueSearch = filterLocale.filter(
+      (v, i, a) => a.indexOf(v) === i
+    );
+    filterLocaleuniqueSearch.forEach((u, i) => {
+      filterLocaleUnique[u] = u
     });
 
     const columns = [
       { title: "Code", field: "code" },
       { title: "Message", field: "message" },
       { title: "Module", field: "module", lookup: filtermoduleUnique },
-      { title: "Locale", field: "locale", lookup: filterLocaleUnique },
+      { title: "Locale", field: "locale", lookup: filterLocaleUnique }
     ];
 
     const enabled = this.state.locale.length >= 1;
@@ -566,10 +492,18 @@ class ApiTable extends PureComponent {
             </Typography>
           </Grid>
 
-          <Grid item md={6} sm={6} xs={11} container direction="row" justify="flex-end">
+          <Grid
+            item
+            md={6}
+            sm={6}
+            xs={11}
+            container
+            direction="row"
+            justify="flex-end"
+          >
             <input
               style={{ display: "none" }}
-              accept="file"
+              // accept="file"
               id="outlined-button-file"
               multiple
               type="file"
@@ -577,7 +511,13 @@ class ApiTable extends PureComponent {
               onChange={this.handleChangeExcel}
             />
             <label htmlFor="outlined-button-file">
-              <Fab color="primary" size="small" aria-label="Add" component="span" style={{ background: "#fe7a51", color: "#fff" }}>
+              <Fab
+                color="primary"
+                size="small"
+                aria-label="Add"
+                component="span"
+                style={{ background: "#fe7a51", color: "#fff" }}
+              >
                 <AddIcon />
               </Fab>
             </label>
@@ -586,11 +526,20 @@ class ApiTable extends PureComponent {
 
             {/* <Grid item md={4} sm={4} xs={11}> */}
 
-            <Button variant="contained" onClick={() => this.cmpreUpload(newSearch, data)} style={{ background: "#fe7a51", color: "#fff" }}>
+            <Button
+              variant="contained"
+              onClick={() => this.cmpreUpload(newSearch, data)}
+              style={{ background: "#fe7a51", color: "#fff" }}
+            >
               Upload
             </Button>
             <br />
-            <Grid container direction="row" justify="flex-end" alignItems="center">
+            <Grid
+              container
+              direction="row"
+              justify="flex-end"
+              alignItems="center"
+            >
               <span style={{ color: "red" }}>&nbsp;{this.state.validate}</span>
             </Grid>
           </Grid>
@@ -614,7 +563,9 @@ class ApiTable extends PureComponent {
                       onChange={this.handleChange}
                       disabled
                     >
-                      <MenuItem value={this.state.selectedState}>{this.state.selectedState}</MenuItem>
+                      <MenuItem value={this.state.selectedState}>
+                        {this.state.selectedState}
+                      </MenuItem>
                     </Select>
                   </FormControl>
                 </Grid>
@@ -628,11 +579,15 @@ class ApiTable extends PureComponent {
                       onChange={this.handleChangeMulti}
                       id="multiSelect"
                       input={<Input />}
-                      renderValue={(selected) => selected.join(", ")}
+                      renderValue={selected => selected.join(", ")}
                     >
-                      {this.state.statemultiSelect.map((name) => (
+                      {this.state.statemultiSelect.map(name => (
                         <MenuItem key={name.value} value={name.value}>
-                          <Checkbox checked={this.state.multiSelect.indexOf(name.label) > -1} />
+                          <Checkbox
+                            checked={
+                              this.state.multiSelect.indexOf(name.label) > -1
+                            }
+                          />
                           <ListItemText primary={name.label} />
                         </MenuItem>
                       ))}
@@ -650,7 +605,7 @@ class ApiTable extends PureComponent {
                       value={this.state.locale}
                       onChange={this.handleChangeLocale}
                     >
-                      {this.state.statelocale.map((name) => (
+                      {this.state.statelocale.map(name => (
                         <MenuItem key={name.value} value={name.value}>
                           {name.label}
                         </MenuItem>
@@ -666,7 +621,12 @@ class ApiTable extends PureComponent {
                 <Grid item md={6} sm={6} xs={12}>
                   <Button
                     variant="contained"
-                    style={{ width: "60%", marginTop: "2rem", background: "#fff", color: "#333" }}
+                    style={{
+                      width: "60%",
+                      marginTop: "2rem",
+                      background: "#fff",
+                      color: "#333"
+                    }}
                     color="secondary"
                     onClick={this.onReset}
                   >
@@ -678,7 +638,12 @@ class ApiTable extends PureComponent {
                 <Grid item md={6} sm={6} xs={12}>
                   <Button
                     variant="contained"
-                    style={{ width: "60%", marginTop: "2rem", background: "#666666", color: "#fff" }}
+                    style={{
+                      width: "60%",
+                      marginTop: "2rem",
+                      background: "#666666",
+                      color: "#fff"
+                    }}
                     color="secondary"
                     onClick={this.onSearch}
                     disabled={!enabled}
@@ -706,14 +671,14 @@ class ApiTable extends PureComponent {
                 pageSizeOptions: [5, 10, 25, 50, 75, 100],
                 addRowPosition: "first",
                 exportButton: true,
-                exportAllData: true,
+                exportAllData: true
               }}
               editable={{
-                onRowAdd: (newData) =>
-                  new Promise((resolve) => {
+                onRowAdd: newData =>
+                  new Promise(resolve => {
                     setTimeout(() => {
                       resolve();
-                      this.setState((prevState) => {
+                      this.setState(prevState => {
                         const data = [...prevState.data];
                         console.log(newData, "newData", "data:", data);
                         return { ...prevState, data, newData: newData };
@@ -722,12 +687,12 @@ class ApiTable extends PureComponent {
                     }, 600);
                   }),
                 onRowUpdate: (newData, oldData) =>
-                  new Promise((resolve) => {
+                  new Promise(resolve => {
                     setTimeout(() => {
                       resolve();
                       if (oldData) {
                         console.log(oldData, "oldData");
-                        this.setState((prevState) => {
+                        this.setState(prevState => {
                           const data = [...prevState.data];
                           const id = data.indexOf(oldData);
                           data[data.indexOf(oldData)] = newData;
@@ -738,18 +703,18 @@ class ApiTable extends PureComponent {
                       }
                     }, 600);
                   }),
-                onRowDelete: (oldData) =>
-                  new Promise((resolve) => {
+                onRowDelete: oldData =>
+                  new Promise(resolve => {
                     setTimeout(() => {
                       resolve();
-                      this.setState((prevState) => {
+                      this.setState(prevState => {
                         const data = [...prevState.data];
                         const id = data.indexOf(oldData);
                         return { ...prevState, data, newData: oldData, id: id };
                       });
                       this.onDelete(this.state.id);
                     }, 600);
-                  }),
+                  })
               }}
               columns={columns}
               data={newSearch}

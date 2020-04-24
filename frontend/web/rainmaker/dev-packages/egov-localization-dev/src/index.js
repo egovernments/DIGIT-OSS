@@ -3,7 +3,7 @@ import "babel-polyfill";
 import "url-search-params-polyfill";
 import React from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter as Router } from "react-router-dom";
+import { HashRouter as Router } from "react-router-dom";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import themeObject from "ui-config/themes";
 import { Provider } from "react-redux";
@@ -16,7 +16,7 @@ const theme = createMuiTheme(themeObject);
 
 // move it to a env file
 window.basename =
-  process.env.NODE_ENV === "production" ? "/employee-tradelicence" : "";
+  process.env.NODE_ENV === "production" ? "" : "";
 // hardcoded the base; to be changed soon!!!!!
 
 ReactDOM.render(
