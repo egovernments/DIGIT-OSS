@@ -1007,6 +1007,13 @@
       "uniqueKeys": [
         "$.question"
       ]
+    },
+    "DeviationParams":{
+      "masterName": "DeviationParams",
+      "isStateLevel": true,
+      "uniqueKeys": [
+        "$.parameter"
+      ]
     }
   },
   "sw-services-calculation": {

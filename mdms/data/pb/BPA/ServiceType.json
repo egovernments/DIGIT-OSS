@@ -4,7 +4,8 @@
     "ServiceType": [
        {
         "code": "NEW_CONSTRUCTION",
-        "active": true
+        "active": true,
+        "applicationType":"BUILDING_PLAN_SCRUTINY"
       }
     ]
   }
