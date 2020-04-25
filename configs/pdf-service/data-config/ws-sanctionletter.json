@@ -662,6 +662,30 @@
                 }
               },
               {
+                "variable": "approved_by",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_APPROVED_BY"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "connection_header",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_CONNECTION_HEADER"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
                 "variable": "road_charge",
                 "value": {
                   "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_ROAD_CHARGE"
