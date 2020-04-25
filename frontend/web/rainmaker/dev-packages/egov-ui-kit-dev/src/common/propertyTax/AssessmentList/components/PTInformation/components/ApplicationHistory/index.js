@@ -8,6 +8,7 @@ import Label from "egov-ui-kit/utils/translationNode";
 import HistoryCard from "../../../../../Property/components/HistoryCard";
 import { getFullRow } from "../AssessmentHistory";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getQueryValue } from "egov-ui-kit/utils/PTCommon";
 import { navigateToApplication,getApplicationType } from "egov-ui-kit/utils/commons";
 
 const labelStyle = {
@@ -118,10 +119,21 @@ class ApplicationHistory extends Component {
     }
 }
 
+const getIdFromUrl = (ownProps) => {
+    let idFromUrl = {};
+    const {location} = ownProps;
+    const {search} = location;
+    idFromUrl.propertyId = getQueryValue(search, "propertyId");
+    idFromUrl.tenantId = getQueryValue(search, "tenantId");
+    return idFromUrl;
+}
+
 const mapStateToProps = (state, ownProps) => {
     // const { Bill = [], Payments = [] } = state.properties || {};
-    const propertyId = decodeURIComponent(ownProps.match.params.propertyId);
-    const tenantId = decodeURIComponent(ownProps.match.params.tenantId);
+    let propertyId = decodeURIComponent(ownProps.match.params.propertyId);
+    let tenantId = decodeURIComponent(ownProps.match.params.tenantId);
+    propertyId = (!propertyId || propertyId === "undefined") ? getIdFromUrl(ownProps).propertyId : propertyId;
+    tenantId = (!tenantId || tenantId === "undefined") ? getIdFromUrl(ownProps).tenantId : tenantId;
     return {
         propertyId,
         tenantId
