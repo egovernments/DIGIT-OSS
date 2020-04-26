@@ -235,9 +235,17 @@ var chequeDDDateMendatoryMessage = "<spring:message code='msg.please.select.cheq
 									cssClass="add-margin error-msg" />
 							</div>
 							<label class="col-sm-2 control-label text-right"><spring:message
-									code="lbl.dishonor.reason" /> <span
+									code="lbl.remarks" /> <span
 								class="mandatory"></span>:</label>
 							<div class="col-sm-3 add-margin">
+								<form:textarea path="remarks" id="remarks" class="form-control" maxlength="1024" ></form:textarea>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label text-right"><spring:message
+									code="lbl.dishonor.reason" /> <span
+								class="mandatory"></span> </label>
+							<div class="col-sm-5 add-margin">
 								<form:select name="dishonorReason" path=""
 									data-first-option="false" id="dishonorReasonId"
 									cssClass="form-control">
@@ -248,14 +256,6 @@ var chequeDDDateMendatoryMessage = "<spring:message code='msg.please.select.cheq
 										<option value="${reason}">${reason}</option>
 									</c:forEach>
 								</form:select>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-3 control-label text-right"><spring:message
-									code="lbl.remarks" /> <span
-								class="mandatory"></span> </label>
-							<div class="col-sm-3 add-margin">
-								<form:textarea path="remarks" id="remarks" class="form-control" maxlength="1024" ></form:textarea>
 							</div>
 						</div>
 						<hr/>
