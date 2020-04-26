@@ -260,6 +260,7 @@ const getAcknowledgementCard = (
             },
             number: applicationNumber
           }),
+          ...getDocumentDetailsCard()
         }
       },
       iframeForPdf: {
@@ -343,7 +344,7 @@ const getAcknowledgementCard = (
     // loadReceiptGenerationData(applicationNumber, tenant);
     return {
       header:getHeader(applicationNumber,moduleName),
-      dpmenu:downloadprintMenu(state,applicationNumber,tenant,purpose,moduleName),
+      // dpmenu:downloadprintMenu(state,applicationNumber,tenant,purpose,moduleName),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -366,7 +367,7 @@ const getAcknowledgementCard = (
             },
             number: applicationNumber
           }),
-		  ...getDocumentDetailsCard()
+		  // ...getDocumentDetailsCard()
         }
       },
       gotoHomeFooter
@@ -407,7 +408,7 @@ const getAcknowledgementCard = (
     // loadReceiptGenerationData(applicationNumber, tenant);
     return {
       header:getHeader(applicationNumber,moduleName),
-	  dpmenu: downloadprintMenu(state,applicationNumber,tenant,purpose),
+	  // dpmenu: downloadprintMenu(state,applicationNumber,tenant,purpose),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -430,7 +431,7 @@ const getAcknowledgementCard = (
             },
             number: applicationNumber
           }),
-          ...getDocumentDetailsCard()
+          // ...getDocumentDetailsCard()
         }
       },
       gotoHomeFooter
@@ -553,7 +554,7 @@ const getAcknowledgementCard = (
   }else if (purpose === "forward" && status === "success") {
     return {
       header:getHeader(applicationNumber,moduleName),
-	  dpmenu: downloadprintMenu(state,applicationNumber,tenant,purpose),
+	  // dpmenu: downloadprintMenu(state,applicationNumber,tenant,purpose),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -576,7 +577,7 @@ const getAcknowledgementCard = (
             },
             number: applicationNumber
           }),
-          ...getDocumentDetailsCard()
+          // ...getDocumentDetailsCard()
         }
       },
       gotoHomeFooter
