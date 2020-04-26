@@ -156,8 +156,8 @@ class PTAcknowledgement extends React.Component {
     let ptSubMsg = {};
     let Button1 = { name: "", onClick: "", visibility: false };
     let Button2 = { name: "", onClick: "", visibility: false };
-    let downloadButton = { menu: downloadMenu, onClick: "", visibility: true };
-    let printButton = { menu: printMenu, onClick: "", visibility: true };
+    let downloadButton = { menu: downloadMenu, onClick: "", visibility: (purpose === PROPERTY_FORM_PURPOSE.CREATE || purpose === PROPERTY_FORM_PURPOSE.UPDATE) && status === "success" ? true : false };
+    let printButton = { menu: printMenu, onClick: "", visibility: (purpose === PROPERTY_FORM_PURPOSE.CREATE || purpose === PROPERTY_FORM_PURPOSE.UPDATE) && status === "success" ? true : false };
     let statusIcon = {};
     let ptIDLabel = {};
     if (purpose === PROPERTY_FORM_PURPOSE.CREATE && status === "success") {
