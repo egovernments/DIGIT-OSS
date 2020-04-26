@@ -103,6 +103,7 @@ import org.egov.infra.admin.master.service.AppConfigValueService;
 import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.exception.ApplicationException;
 import org.egov.infra.exception.ApplicationRuntimeException;
+import org.egov.infra.microservice.models.VoucherSearchCriteria;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.persistence.utils.Page;
 import org.egov.infra.script.entity.Script;
@@ -130,8 +131,10 @@ import org.egov.services.bills.EgBillRegisterService;
 import org.egov.utils.Constants;
 import org.egov.utils.FinancialConstants;
 import org.egov.utils.VoucherHelper;
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -145,6 +148,7 @@ import com.exilant.eGov.src.transactions.VoucherTypeForULB;
 @Service
 public class VoucherService extends PersistenceService<CVoucherHeader, Long> {
 	private static final Logger LOGGER = Logger.getLogger(VoucherService.class);
+    private static final Integer DEAFULT_PAGE_SIZE = 10;
 	@Autowired
 	@Qualifier("persistenceService")
 	protected PersistenceService persistenceService;
@@ -1525,5 +1529,47 @@ public class VoucherService extends PersistenceService<CVoucherHeader, Long> {
 	public List<CVoucherHeader> getVoucherByServiceNameAndReferenceDocument( String serviceName, String referenceDocument) {
             return vmisHibernateDao.getRecentVoucherByServiceNameAndReferenceDoc(serviceName, referenceDocument);
         }
+
+    public VoucherResponse findVouchersByCriteria(VoucherSearchCriteria criteria, VoucherSearchRequest voucherSearchRequest) {
+        Criteria createCriteria = persistenceService.getSession().createCriteria(CVoucherHeader.class, "voucherHeader")
+                .createAlias("voucherHeader.fundId", "fund")
+                .createAlias("voucherHeader.vouchermis", "voucherMis");
+        if(criteria.getIds() != null && !criteria.getIds().isEmpty()){
+            createCriteria.add(Restrictions.in("voucherHeader.id", criteria.getIds()));
+        }
+        if(criteria.getVoucherNumbers() != null && !criteria.getVoucherNumbers().isEmpty()){
+            createCriteria.add(Restrictions.in("voucherHeader.voucherNumber", criteria.getVoucherNumbers()));
+        }
+        if(criteria.getVoucherFromDate() != null && criteria.getVoucherFromDate() != 0){
+            createCriteria.add(Restrictions.ge("voucherHeader.voucherDate", criteria.getVoucherFromDate()));
+        }
+        if(criteria.getVoucherToDate() != null && criteria.getVoucherToDate() != 0){
+            createCriteria.add(Restrictions.le("voucherHeader.voucherDate", criteria.getVoucherToDate()));
+        }
+        if(StringUtils.isNotBlank(criteria.getVoucherName())){
+            createCriteria.add(Restrictions.eq("voucherHeader.name", criteria.getVoucherName()));
+        }
+        if(StringUtils.isNotBlank(criteria.getVoucherType())){
+            createCriteria.add(Restrictions.eq("voucherHeader.type", criteria.getVoucherType()));
+        }
+        if(StringUtils.isNotBlank(criteria.getFundId())){
+            createCriteria.add(Restrictions.eq("fund.code", criteria.getFundId()));
+        }
+        if(StringUtils.isNotBlank(criteria.getDeptCode())){
+            createCriteria.add(Restrictions.eq("voucherMis.departmentcode", criteria.getDeptCode()));
+        }
+        
+        createCriteria.setMaxResults(criteria.getPageSize() != null && criteria.getPageSize() != 0 ? criteria.getPageSize() : DEAFULT_PAGE_SIZE);
+        List<CVoucherHeader> list = createCriteria.list();
+        List<Voucher> returnList = new ArrayList<>();
+        for(CVoucherHeader header : list){
+            Voucher voucher = new Voucher(header);
+            voucher.setTenantId(voucherSearchRequest.getTenantId());
+            returnList.add(voucher);
+        }
+        VoucherResponse voucherResponse = new VoucherResponse();
+        voucherResponse.setVouchers(returnList);
+        return voucherResponse;
+    }
 
 }

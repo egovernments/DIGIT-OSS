@@ -1013,6 +1013,9 @@ public class MicroserviceUtils {
         if(StringUtils.isNotBlank(insSearchContra.getBankAccountNumber())){
             url.append("&bankAccount.accountNumber=").append(insSearchContra.getBankAccountNumber());
         }
+        if(StringUtils.isNotBlank(insSearchContra.getBankId())){
+            url.append("&bank.id=").append(insSearchContra.getBankId());
+        }
         if(StringUtils.isNotBlank(insSearchContra.getInstrumentTypes())){
             url.append("&instrumentTypes=").append(insSearchContra.getInstrumentTypes());
         }
@@ -1038,6 +1041,10 @@ public class MicroserviceUtils {
         if(insSearchContra.getTransactionToDate() != null){
             Date toDate = insSearchContra.getTransactionToDate();
             url.append("&transactionToDate=").append(ddMMMyyyyFormat.format(toDate));
+        }
+        if(insSearchContra.getTransactionDate() != null){
+            Date transactionDate = insSearchContra.getTransactionDate();
+            url.append("&transactionDate=").append(ddMMMyyyyFormat.format(transactionDate));
         }
         RequestInfo requestInfo = new RequestInfo();
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
@@ -1714,7 +1721,7 @@ public class MicroserviceUtils {
             uri.append("&limit=").append(criteria.getLimit());
         }
     }
-    
+
 }
 
 class FilterRequest {

@@ -49,12 +49,13 @@ package org.egov.collection.entity;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 public class DishonoredChequeBean {
     
     private String voucherNumber;
     private String receiptNumber;
-    private String receiptDate;
+    private Long receiptDate;
     private String instrumentNumber;
     private String instrumentDate;
     private String bankName;
@@ -84,6 +85,13 @@ public class DishonoredChequeBean {
     private String voucherHeaderIds;
     private String receiptGLDetails;
     private String remittanceGLDetails;
+    
+    private String instrumentMode;
+    private String receiptSourceUrl;
+    private List<AccountCode> receiptVoucherGLDetails;
+    private List<AccountCode> payInSlipVoucherGLDetails;
+    private Date dishonorDate;
+    private String bankBranch;
 
     public String getReceiptNumber() {
         return receiptNumber;
@@ -93,11 +101,11 @@ public class DishonoredChequeBean {
         this.receiptNumber = receiptNumber;
     }
 
-    public String getReceiptDate() {
+    public Long getReceiptDate() {
         return receiptDate;
     }
 
-    public void setReceiptDate(final String receiptDate) {
+    public void setReceiptDate(final Long receiptDate) {
         this.receiptDate = receiptDate;
     }
 
@@ -325,6 +333,92 @@ public class DishonoredChequeBean {
         this.remittanceGLDetails = remittanceGLDetails;
     }
 
-   
+    public String getInstrumentMode() {
+        return instrumentMode;
+    }
+
+    public void setInstrumentMode(String instrumentMode) {
+        this.instrumentMode = instrumentMode;
+    }
+
+    public String getReceiptSourceUrl() {
+        return receiptSourceUrl;
+    }
+
+    public void setReceiptSourceUrl(String receiptSourceUrl) {
+        this.receiptSourceUrl = receiptSourceUrl;
+    }
+
+    public List<AccountCode> getReceiptVoucherGLDetails() {
+        return receiptVoucherGLDetails;
+    }
+
+    public void setReceiptVoucherGLDetails(List<AccountCode> receiptVoucherGLDetails) {
+        this.receiptVoucherGLDetails = receiptVoucherGLDetails;
+    }
+
+    public List<AccountCode> getPayInSlipVoucherGLDetails() {
+        return payInSlipVoucherGLDetails;
+    }
+
+    public void setPayInSlipVoucherGLDetails(List<AccountCode> payInSlipVoucherGLDetails) {
+        this.payInSlipVoucherGLDetails = payInSlipVoucherGLDetails;
+    }
+
+    public Date getDishonorDate() {
+        return dishonorDate;
+    }
+
+    public void setDishonorDate(Date dishonorDate) {
+        this.dishonorDate = dishonorDate;
+    }
+
+    public String getBankBranch() {
+        return bankBranch;
+    }
+
+    public void setBankBranch(String bankBranch) {
+        this.bankBranch = bankBranch;
+    }
+
+    public static class  AccountCode {
+        private String glcode;
+        private String accounthead;
+        private Double debitamount;
+        private Double creditamount;
+        public AccountCode() {
+            // TODO Auto-generated constructor stub
+        }
+        public AccountCode(String glcode, String accounthead, Double debitamount, Double creditamount) {
+            this.glcode = glcode;
+            this.accounthead = accounthead;
+            this.debitamount = debitamount;
+            this.creditamount = creditamount;
+        }
+        public String getGlcode() {
+            return glcode;
+        }
+        public void setGlcode(String glcode) {
+            this.glcode = glcode;
+        }
+        public String getAccounthead() {
+            return accounthead;
+        }
+        public void setAccounthead(String accounthead) {
+            this.accounthead = accounthead;
+        }
+        public Double getDebitamount() {
+            return debitamount;
+        }
+        public void setDebitamount(Double debitamount) {
+            this.debitamount = debitamount;
+        }
+        public Double getCreditamount() {
+            return creditamount;
+        }
+        public void setCreditamount(Double creditamount) {
+            this.creditamount = creditamount;
+        }
+    }
 
 }

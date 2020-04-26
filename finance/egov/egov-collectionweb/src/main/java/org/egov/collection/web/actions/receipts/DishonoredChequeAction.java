@@ -249,7 +249,7 @@ public class DishonoredChequeAction extends SearchFormAction {
             chequeBean.setReceiptHeaderid(receiptId);
             chequeBean.setInstrumentHeaderid(getLongValue(object[1]));
             chequeBean.setReceiptNumber(getStringValue(object[2]));
-            chequeBean.setReceiptDate(getDateValue(object[3]));
+            chequeBean.setReceiptDate(Long.parseLong(getDateValue(object[3])));
             chequeBean.setInstrumentNumber(getStringValue(object[4]));
             chequeBean.setInstrumentDate(getDateValue(object[5]));
             chequeBean.setInstrumentAmount(getBigDecimalValue(object[6]));

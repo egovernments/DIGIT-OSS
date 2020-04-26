@@ -49,10 +49,15 @@ package org.egov.collection.integration.services;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import org.egov.billsaccounting.services.CreateVoucher;
@@ -65,9 +70,11 @@ import org.egov.collection.entity.CollectionDishonorChequeSubLedgerDetails;
 import org.egov.collection.entity.DishonoredChequeBean;
 import org.egov.collection.entity.ReceiptDetail;
 import org.egov.collection.entity.ReceiptHeader;
+import org.egov.collection.entity.DishonoredChequeBean.AccountCode;
 import org.egov.collection.service.ReceiptHeaderService;
 import org.egov.collection.utils.CollectionsUtil;
 import org.egov.collection.utils.FinancialsUtil;
+import org.egov.commons.Bankaccount;
 import org.egov.commons.CChartOfAccounts;
 import org.egov.commons.CGeneralLedger;
 import org.egov.commons.CGeneralLedgerDetail;
@@ -75,6 +82,16 @@ import org.egov.commons.CVoucherHeader;
 import org.egov.commons.EgwStatus;
 import org.egov.commons.dao.EgwStatusHibernateDAO;
 import org.egov.commons.service.ChartOfAccountsService;
+import org.egov.infra.config.core.ApplicationThreadLocals;
+import org.egov.infra.microservice.models.DishonorReasonContract;
+import org.egov.infra.microservice.models.FinancialStatus;
+import org.egov.infra.microservice.models.Instrument;
+import org.egov.infra.microservice.models.InstrumentSearchContract;
+import org.egov.infra.microservice.models.InstrumentVoucher;
+import org.egov.infra.microservice.models.Receipt;
+import org.egov.infra.microservice.models.ReceiptSearchCriteria;
+import org.egov.infra.microservice.models.TransactionType;
+import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.validation.exception.ValidationError;
 import org.egov.infra.validation.exception.ValidationException;
 import org.egov.infstr.services.PersistenceService;
@@ -88,6 +105,8 @@ import org.egov.services.voucher.GeneralLedgerDetailService;
 import org.egov.services.voucher.GeneralLedgerService;
 import org.egov.services.voucher.VoucherHeaderService;
 import org.egov.utils.FinancialConstants;
+import org.hibernate.Query;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -98,6 +117,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class DishonorChequeService implements FinancialIntegrationService {
 
     private static final Logger LOGGER = Logger.getLogger(DishonorChequeService.class);
+
+    private static final String VOUCHER_SEARCH_QUERY = " from CVoucherHeader where voucherNumber=?";;
 
     @Autowired
     private FinancialsUtil financialsUtil;
@@ -140,6 +161,9 @@ public class DishonorChequeService implements FinancialIntegrationService {
     @Autowired
     @Qualifier("collectionsUtil")
     public CollectionsUtil collectionsUtil;
+    
+    @Autowired
+    private MicroserviceUtils microserviceUtils;
 
     @Transactional
     public DishonorCheque createDishonorCheque(final DishonoredChequeBean chequeForm) throws Exception {
@@ -501,4 +525,171 @@ public class DishonorChequeService implements FinancialIntegrationService {
 
     }
 
+    public List<DishonoredChequeBean> getCollectionListForDishonorInstrument(String instrumentMode,String bankId, String accountNumber, String chequeNumber,
+            Date chequeDate) {
+        try {
+            InstrumentSearchContract insSearchContra = new InstrumentSearchContract();
+            insSearchContra.setBankAccountNumber(accountNumber != null && Long.parseLong(accountNumber)  > 0 ? accountNumber : null);
+            insSearchContra.setInstrumentTypes(instrumentMode);
+            insSearchContra.setFinancialStatuses("Deposited");
+            insSearchContra.setTransactionType(TransactionType.Debit);
+            insSearchContra.setTransactionNumber(chequeNumber);
+            insSearchContra.setTransactionDate(chequeDate);
+            insSearchContra.setBankId(bankId);
+            List<Instrument> instList = microserviceUtils.getInstrumentsBySearchCriteria(insSearchContra );
+            Map<String, String> receiptInstMap = instList.stream().map(Instrument::getInstrumentVouchers).flatMap(x -> x.stream()).collect(Collectors.toMap(InstrumentVoucher::getReceiptHeaderId, InstrumentVoucher::getInstrument));
+            Set<String> receiptIds = receiptInstMap.keySet();
+            ReceiptSearchCriteria rSearchcriteria = ReceiptSearchCriteria.builder().receiptNumbers(receiptIds).build();
+            List<Receipt> receipt = microserviceUtils.getReceipt(rSearchcriteria  );
+            Map<String, Receipt> receiptIdToReceiptMap= null;
+            switch (ApplicationThreadLocals.getCollectionVersion().toUpperCase()) {
+            case "V2":
+                receiptIdToReceiptMap = receipt.stream().collect(Collectors.toMap(Receipt::getPaymentId, Function.identity()));
+                break;
+
+            default:
+                receiptIdToReceiptMap = receipt.stream().collect(Collectors.toMap(Receipt::getReceiptNumber, Function.identity()));
+                break;
+            }
+            final Map<String, Receipt> receiptIdToReceiptMapTemp = receiptIdToReceiptMap;
+            List<DishonoredChequeBean> dishonoredChequeList = new ArrayList<>();
+            instList.stream().filter(ins -> receiptIdToReceiptMapTemp.containsKey(ins.getInstrumentVouchers().get(0).getReceiptHeaderId())).forEach(ins -> {
+                DishonoredChequeBean chequeBean = new DishonoredChequeBean();
+                String voucherNumber = ins.getInstrumentVouchers().get(0).getVoucherHeaderId();
+                CVoucherHeader receiptVoucherHeader = getVoucherByNumber(voucherNumber);
+                CVoucherHeader payInSlipVoucher = getVoucherById(Long.parseLong(ins.getPayinSlipId()));
+                chequeBean.setReceiptNumber(receiptIdToReceiptMapTemp.get(ins.getInstrumentVouchers().get(0).getReceiptHeaderId()).getReceiptNumber());
+                chequeBean.setReceiptDate(receiptIdToReceiptMapTemp.get(ins.getInstrumentVouchers().get(0).getReceiptHeaderId()).getReceiptDate());
+                chequeBean.setVoucherNumber(receiptVoucherHeader.getVoucherNumber());
+                chequeBean.setVoucherHeaderId(receiptVoucherHeader.getId());
+                chequeBean.setReceiptSourceUrl(receiptVoucherHeader.getVouchermis().getSourcePath());
+                chequeBean.setInstrumentNumber(ins.getTransactionNumber());
+                chequeBean.setInstHeaderIds(ins.getId());
+                chequeBean.setInstrumentDate(ins.getTransactionDate().toString());
+                chequeBean.setTransactionDate(ins.getTransactionDate());
+                chequeBean.setInstrumentAmount(ins.getAmount());
+                chequeBean.setBankName(getBankName(ins));
+                chequeBean.setAccountNumber(ins.getBankAccount().getAccountNumber());
+                chequeBean.setPayTo(ins.getPayee());
+                populateReceiptVoucherAccountDetails(receiptVoucherHeader, chequeBean);
+                populateReversalVoucherAccountDetails(receiptVoucherHeader, payInSlipVoucher, chequeBean);
+                dishonoredChequeList.add(chequeBean);
+            });
+            return dishonoredChequeList;
+        } catch (Exception e) {
+            LOGGER.error("Error in Cheques Dishonoring Listing :: ",e);
+            throw e;
+        }
+    }
+
+    private void populateReversalVoucherAccountDetails(CVoucherHeader receiptVoucher, CVoucherHeader payInSlipVoucher, DishonoredChequeBean chequeBean) {
+        try {
+            List<CGeneralLedger> accountCodeForReceiptVoucher = getAccountCodeForVoucher(receiptVoucher.getId());
+            List<CGeneralLedger> accountCodeForPayInSlipVoucher = getAccountCodeForVoucher(payInSlipVoucher.getId());
+            Map<String, Double> ledgerAmountMap = new LinkedHashMap<>();
+            for(CGeneralLedger gl : accountCodeForReceiptVoucher){
+                Double amount = gl.getCreditAmount() - gl.getDebitAmount();
+                if(ledgerAmountMap.get(gl.getGlcode()) != null){
+                    ledgerAmountMap.put(gl.getGlcode(), ledgerAmountMap.get(gl.getGlcode()) + amount);
+                }else{
+                    ledgerAmountMap.put(gl.getGlcode(), amount);
+                }
+            }
+            Double amountCreditToBank = 0d;
+            for(CGeneralLedger gl : accountCodeForPayInSlipVoucher){
+                Double amount = gl.getCreditAmount() - gl.getDebitAmount();
+                if(ledgerAmountMap.get(gl.getGlcode()) != null){
+                    amountCreditToBank = ledgerAmountMap.get(gl.getGlcode());
+                    ledgerAmountMap.remove(gl.getGlcode());
+                }else{
+                    ledgerAmountMap.put(gl.getGlcode(), amountCreditToBank);
+                }
+            }
+            List<CChartOfAccounts> chartOfAccounts = getChartOfAccounts(ledgerAmountMap.keySet());
+            Map<String, CChartOfAccounts> coaMap = chartOfAccounts.stream().collect(Collectors.toMap(CChartOfAccounts::getGlcode, Function.identity()));
+            chequeBean.setPayInSlipVoucherGLDetails(new ArrayList<>());
+            ledgerAmountMap.keySet().stream().forEach(ac -> {
+                if(ledgerAmountMap.get(ac) != 0){
+                    DishonoredChequeBean.AccountCode accountCode = new DishonoredChequeBean.AccountCode (ac, coaMap.get(ac).getName() , ledgerAmountMap.get(ac) <= 0 ? 0 : ledgerAmountMap.get(ac), ledgerAmountMap.get(ac) >= 0 ? 0 : -ledgerAmountMap.get(ac));
+                    chequeBean.getPayInSlipVoucherGLDetails().add(accountCode);
+                }
+            });
+            
+        } catch (Exception e) {
+            LOGGER.error("Error occurred in populateReversalVoucherAccountDetails : ",e);
+            throw e;
+        }
+    }
+
+    private String getBankName(Instrument ins) {
+        StringBuilder query = new StringBuilder("from Bankaccount ba where ba.accountnumber=:bankaccount");
+        if(ins.getBank().getId() != null){
+            query.append(" and ba.bankbranch.bank.id=:bankId");
+        }
+        Query createQuery = persistenceService.getSession().createQuery(query.toString());
+        createQuery.setParameter("bankaccount", ins.getBankAccount().getAccountNumber());
+        if(ins.getBank().getId() != null){
+            createQuery.setParameter("bankId", ins.getBank().getId().intValue());
+        }
+        Bankaccount bankAccount = (Bankaccount) createQuery.uniqueResult();
+        return bankAccount.getBankbranch().getBank().getName();
+    }
+
+    private void populateReceiptVoucherAccountDetails(CVoucherHeader cVoucherHeader, DishonoredChequeBean chequeBean) {
+        try {
+            List<CGeneralLedger> accountCodeForVoucher = getAccountCodeForVoucher(cVoucherHeader.getId());
+            Set<String> glcodeSet = accountCodeForVoucher.stream().map(CGeneralLedger::getGlcode).collect(Collectors.toSet());
+            List<CChartOfAccounts> chartOfAccounts = getChartOfAccounts(glcodeSet);
+            Map<String, CChartOfAccounts> coaMap = chartOfAccounts.stream().collect(Collectors.toMap(CChartOfAccounts::getGlcode, Function.identity()));
+            chequeBean.setReceiptVoucherGLDetails(new ArrayList<>());
+            accountCodeForVoucher.stream().forEach(ac -> {
+                DishonoredChequeBean.AccountCode accountCode = new DishonoredChequeBean.AccountCode (ac.getGlcode(), coaMap.get(ac.getGlcode()).getName(), ac.getDebitAmount() == null ? 0 : ac.getDebitAmount() , ac.getCreditAmount() == null ? 0 : ac.getCreditAmount());
+                chequeBean.getReceiptVoucherGLDetails().add(accountCode);
+            });
+        } catch (Exception e) {
+            LOGGER.error("Error occurred in populateReceiptVoucherAccountDetails : ",e);
+            throw e;
+        }
+    }
+
+    private String getInstrument(String instrumentMode) {
+        return instrumentMode.equals("cheque") ? "Cheque": instrumentMode.equals("dd") ? "DD" : null;
+    }
+    
+    private CVoucherHeader getVoucherByNumber(String voucherNumber) {
+        return (CVoucherHeader)persistenceService.find(VOUCHER_SEARCH_QUERY, voucherNumber);
+    }
+    
+    private CVoucherHeader getVoucherById(Long vhId) {
+        return persistenceService.getSession().get(CVoucherHeader.class, vhId);
+    }
+
+    public List<CGeneralLedger> getAccountCodeForVoucher(Long vouhcerHeaderId) {
+        return persistenceService.findAllBy(" from CGeneralLedger where voucherHeaderId.id=? order by id asc",vouhcerHeaderId);
+    }
+
+    public List<CChartOfAccounts> getChartOfAccounts(Set<String> glcodeSet) {
+        List list = persistenceService.getSession().createCriteria(CChartOfAccounts.class).add(Restrictions.in("glcode", glcodeSet)).list();
+        return list;
+    }
+
+    public void processDishonor(DishonoredChequeBean model) {
+        List<Instrument> instruments = microserviceUtils.getInstruments(model.getInstHeaderIds());
+        FinancialStatus finStatus = new FinancialStatus();
+        finStatus.setCode("Dishonored");
+        finStatus.setId("Dishonored");
+        finStatus.setDescription("Status assign when instrument is Dishonored");
+        instruments.stream().forEach(ins -> {
+            DishonorReasonContract dishonorReasonContract = new DishonorReasonContract().builder()
+                    .reason(model.getDishonorReason())
+                    .remarks(model.getRemarks())
+                    .dishonorDate(model.getDishonorDate().getTime())
+                    .instrument(ins.getId())
+                    .build();
+            ins.setDishonor(dishonorReasonContract);
+        });
+        microserviceUtils.updateInstruments(instruments, null, finStatus );
+    }
 }
+
+

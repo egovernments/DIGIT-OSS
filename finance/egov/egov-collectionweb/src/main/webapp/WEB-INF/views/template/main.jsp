@@ -68,12 +68,18 @@
 		<link rel="icon" href="<cdn:url value='/resources/global/images/favicon.png' context='/services/egi'/>" sizes="32x32">
 	    <link rel="stylesheet" href="<cdn:url value='/resources/global/css/bootstrap/bootstrap.css' context='/services/egi'/>">
 	    <link rel="stylesheet" href="<cdn:url value='/resources/global/css/font-icons/font-awesome/css/font-awesome.min.css' context='/services/egi'/>">
-		<link rel="stylesheet" href="<cdn:url value='/resources/global/css/egov/custom.css?rnd=${app_release_no}' context='/services/egi'/>">
+		<link rel="stylesheet" href="<cdn:url value='/resources/global/css/bootstrap/typeahead.css' context='/services/egi'/>">
+		<link rel="stylesheet" href="<cdn:url value='/resources/global/css/bootstrap/bootstrap-datepicker.css' context='/services/egi'/>" />
+		<link rel="stylesheet" href="<cdn:url value='/resources/global/css/egov/custom.css?rnd=${app_release_no}' context='/services/egi'/>">		
 		
 		<script src="<cdn:url value='/resources/global/js/jquery/jquery.js' context='/services/egi'/>"></script>
 		<script src="<cdn:url value='/resources/global/js/bootstrap/bootstrap.js' context='/services/egi'/>"></script>
+		<script src="<cdn:url value='/resources/global/js/bootstrap/bootbox.min.js' context='/services/egi'/>"></script>
+		<script src="<cdn:url value='/resources/global/js/bootstrap/typeahead.bundle.js' context='/services/egi'/>"></script>
+		<script src="<cdn:url value='/resources/global/js/jquery/plugins/jquery.inputmask.bundle.min.js' context='/services/egi'/>"></script>
+		<script src="<cdn:url value='/resources/global/js/bootstrap/bootstrap-datepicker.js' context='/services/egi'/>"></script>
 		<script src="<cdn:url value='/resources/global/js/jquery/plugins/jquery.validate.min.js' context='/services/egi'/>"></script>
-		<script src="<cdn:url value='/resources/global/js/egov/custom.js?rnd=${app_release_no}' context='/services/egi'/>"></script>	
+        <script src="<cdn:url value='/resources/global/js/egov/custom.js?rnd=${app_release_no}' context='/services/egi'/>"></script>
 	    
 		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 		<!--[if lt IE 9]>
@@ -89,7 +95,7 @@
 					<spring:htmlEscape defaultHtmlEscape="true" />
                     <tiles:insertAttribute name="body"/>
                 </div>
-				<tiles:insertAttribute name="footer"/>
+				<%-- <tiles:insertAttribute name="footer"/> --%>
         </div>
         <div class="modal fade loader-class" data-backdrop="static">
 			<div class="modal-dialog">

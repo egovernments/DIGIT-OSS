@@ -74,7 +74,7 @@ public class AccountDetailContract {
 		 this.debitAmount=gl.getDebitAmount();
 		 if(gl.getFunctionId()!=null)
 		 {
-			 this.function=new FunctionContract().code(gl.getFunctionId().toString());
+			 this.function=new FunctionContract().id(new Long(gl.getFunctionId()));
 		 }
 		 for(CGeneralLedgerDetail sub:gl.getGeneralLedgerDetails())
 		 {

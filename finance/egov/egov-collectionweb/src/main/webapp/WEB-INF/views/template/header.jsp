@@ -52,7 +52,7 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@ taglib uri="/WEB-INF/taglib/cdn.tld" prefix="cdn" %>
 <header class="navbar navbar-fixed-top"><!-- set fixed position by adding class "navbar-fixed-top" -->
-    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <%-- <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
         <div class="container-fluid">
             <div class="navbar-header col-md-10 col-xs-10">
                 <a class="navbar-brand" href="javascript:void(0);">
@@ -80,5 +80,5 @@
             </div>
 
         </div>
-    </nav>
+    </nav> --%>
 </header>
