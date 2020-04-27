@@ -34,7 +34,13 @@ public class FileRepository {
 			if (file.getContentType().startsWith("image/")) {
 				// generate thumbnails
 				log.debug("its an image");
-				writeImage(file, path);
+				try {
+					writeImage(file, path);
+				} catch (RuntimeException e) {
+					//if fails to read as image save atleast file only
+					file.transferTo(path.toFile());
+					 
+				}
 			} else {
 				log.debug("its other format");
 				file.transferTo(path.toFile());
