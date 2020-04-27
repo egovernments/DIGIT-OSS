@@ -137,6 +137,12 @@
       "code": "NONRESIDENTIAL.INSTITUTIONAL.EDUCATIONAL.COLLEGES",
       "active": true,
       "fromFY": "2015-16"
+    },
+    {
+      "name": "Other Commercial Usage",
+      "code": "NONRESIDENTIAL.COMMERCIAL.OTHERCOMMERCIALSUBMINOR.OTHERCOMMERCIAL",
+      "active": true,
+      "fromFY": "2015-16"
     }
   ]
 }
