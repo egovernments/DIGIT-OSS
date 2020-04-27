@@ -14,6 +14,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import static org.apache.commons.io.FileUtils.getUserDirectoryPath;
 
 @Service
 @ConditionalOnProperty(value = "isNfsStorageEnabled", havingValue = "true")
@@ -29,6 +30,8 @@ public class DiskFileStoreRepository  implements CloudFilesManager {
 	public DiskFileStoreRepository(FileRepository fileRepository,
 			@Value("${file.storage.mount.path}") String fileMountPath) {
 		this.fileRepository = fileRepository;
+		if(null==fileMountPath || fileMountPath.isEmpty())
+			fileMountPath=getUserDirectoryPath();
 		this.fileMountPath = fileMountPath;
 	}
 
