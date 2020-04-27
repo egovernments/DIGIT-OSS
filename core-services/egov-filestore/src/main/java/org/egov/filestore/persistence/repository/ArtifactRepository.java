@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ArtifactRepository {
 
-	private DiskFileStoreRepository diskFileStoreRepository;
+	
 	private FileStoreJpaRepository fileStoreJpaRepository;
 	
 	@Autowired
@@ -36,9 +36,8 @@ public class ArtifactRepository {
 	@Value("${source.azure.blob}")
 	private String azureBlobSource;
 
-	public ArtifactRepository(DiskFileStoreRepository diskFileStoreRepository,
-			FileStoreJpaRepository fileStoreJpaRepository) {
-		this.diskFileStoreRepository = diskFileStoreRepository;
+	public ArtifactRepository(FileStoreJpaRepository fileStoreJpaRepository) {
+	
 		this.fileStoreJpaRepository = fileStoreJpaRepository;
 	}
 
@@ -92,8 +91,20 @@ public class ArtifactRepository {
 		if (artifact == null)
 			throw new ArtifactNotFoundException(fileStoreId);
 
-		org.springframework.core.io.Resource resource = diskFileStoreRepository.read(artifact.getFileLocation());
+
+		
+		//if only DiskFileStoreRepository use read else ignore
+		if(cloudFilesManager.getClass().getSimpleName().equalsIgnoreCase("DiskFileStoreRepository"))
+		{
+		DiskFileStoreRepository diskfileStore=(DiskFileStoreRepository) cloudFilesManager;
+		 
+		org.springframework.core.io.Resource resource = diskfileStore.read(artifact.getFileLocation());
 		return new Resource(artifact.getContentType(), artifact.getFileName(), resource, artifact.getTenantId(),""+resource.getFile().length()+" bytes");
+		}
+		else
+		{
+			return null;
+		}
 	}
 
 	public List<FileInfo> findByTag(String tag, String tenantId) {
