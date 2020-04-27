@@ -29,7 +29,7 @@
               {
                 "stack": [
                   {
-                    "text": "{{tenantName}} - {{UAT}}",
+                    "text": "{{municipalCouncil}}",
                     "style": "receipt-logo-header",
                     "margin": [
                       0,
@@ -39,11 +39,11 @@
                     ]
                   },
                   {
-                    "text": "{{estimation_notice_header}} {{service}} {{connection_header}}",
+                    "text": "{{tenantName}}",
                     "style": "receipt-logo-header"
                   },
                   {
-                    "text": "{{estimation_notice_header}} {{service}} {{connection_header}}",
+                    "text": "{{sanctionLetter}}",
                     "style": "receipt-logo-header"
                   }
                 ],
@@ -78,12 +78,12 @@
                 "columns": [
                   {
                     "width": "auto",
-                    "text": "{{date_label}}:",
+                    "text": "{{date_label}}",
                     "style": "ws-sub-header",
                     "alignment": "right"
                   },
                   {
-                    "width": "*",
+                    "width": "auto",
                     "text": "{{connectionExecutionDate}}",
                     "alignment": "right",
                     "style": "ws-sub-data"
@@ -102,7 +102,7 @@
                 "columns": [
                   {
                     "width": "20%",
-                    "text": "{{sub_label}}:",
+                    "text": "{{sub_label}}",
                     "style": "receipt-value-down-sub"
                   },
                   {
@@ -130,7 +130,7 @@
                 "columns": [
                   {
                     "width": "20%",
-                    "text": "{{ref_label}}:",
+                    "text": "{{ref_label}}",
                     "style": "receipt-value-down-sub"
                   },
                   {
@@ -141,7 +141,7 @@
                         "style": "receipt-value-down"
                       },
                       {
-                        "text": "{{ref_message2}}",
+                        "text": "{{ref_message2}}{{applicationNumber}}{{dated_label}} {{date}}",
                         "style": "receipt-value-down"
                       }
                     ]
@@ -166,7 +166,7 @@
                 "columns": [
                   {
                     "width": "100%",
-                    "text": "{{order_label}}:",
+                    "text": "{{order_label}}",
                     "style": "receipt-value-down-sub"
                   }
                 ],
@@ -189,7 +189,7 @@
                 "columns": [
                   {
                     "width": "100%",
-                    "text": "{{in_ref_label}} {{ownerName}} {{order_meassage1}} {{applicationType}} {{order_meassage2}}  {{doorNo}} {{locality}} {{order_meassage3}}",
+                    "text": "{{in_ref_label}} {{applicationNumber}} {{dated}} {{date}} {{order_meassage2}} {{applicationType}} {{order_meassage3}} {{doorNo}} {{locality_label}} {{locality}}{{order_meassage4}} {{totalAmount}} {{order_meassage5}} {{applicationType}} {{order_meassage6}} {{totalAmount}} {{dated}} {{date}} {{order_meassage7}}",
                     "style": "receipt-value-down"
                   }
                 ],
@@ -212,7 +212,7 @@
                 "columns": [
                   {
                     "width": "100%",
-                    "text": "{{in_ref_label}} {{ownerName}} {{order_meassage1}} {{applicationType}} {{order_meassage2}}  {{doorNo}} {{locality}} {{order_meassage3}}",
+                    "text": "{{order_meassage8}} {{applicationType}} {{order_meassage9}} {{applicationNumber}} {{order_meassage10}} {{date}} {{order_meassage11}}",
                     "style": "receipt-value-down"
                   }
                 ],
@@ -393,7 +393,7 @@
         ]
       },
       "receipt-down-footer": {
-        "color": "#000000",
+        "color": "#FF0000",
         "fontFamily": "Cambay",
         "fontSize": 14,
         "bold": true,
@@ -417,7 +417,7 @@
         "fontWeight": 400,
         "alignment": "left",
         "margin": [
-          3,
+          -8,
           0,
           0,
           5
@@ -430,7 +430,7 @@
         "fontWeight": 400,
         "alignment": "left",
         "margin": [
-          3,
+          10,
           0,
           0,
           5
@@ -528,7 +528,7 @@
         "fontSize": 10,
         "fontWeight": 400,
         "margin": [
-          0,
+          -8,
           10,
           10,
           10
