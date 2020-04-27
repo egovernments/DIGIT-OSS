@@ -150,6 +150,9 @@ public class BillV2 {
 
           @JsonProperty("amountPaid")
           private BigDecimal amountPaid;
+          
+          @JsonProperty("fileStoreId")
+          private String fileStoreId;
 
 
 
