@@ -206,4 +206,20 @@ serviceMaps:
 
        - jsonPath: $.SewerageConnection.processInstance.action
 
-       - jsonPath: $.SewerageConnection.id    
+       - jsonPath: $.SewerageConnection.id
+       
+ - version: 1.0
+   name: SewerageConnection
+   description: save filestore ids
+   fromTopic: save-sw-filestoreids
+   isTransaction: true
+   queryMaps: 
+    - query: UPDATE eg_sw_service SET estimationfileStoreId = ?, sanctionfileStoreId = ? WHERE connection_id=?;
+      basePath: $.SewerageConnection
+      jsonMaps:
+
+        - jsonPath: $.SewerageConnection.additionalDetails.estimationFileStoreId
+
+        - jsonPath: $.SewerageConnection.additionalDetails.sanctionFileStoreId
+
+        - jsonPath: $.SewerageConnection.id      
