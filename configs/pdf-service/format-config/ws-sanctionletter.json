@@ -212,7 +212,7 @@
                 "columns": [
                   {
                     "width": "100%",
-                    "text": "{{order_meassage8}} {{applicationType}} {{order_meassage9}} {{applicationNumber}} {{order_meassage10}} {{date}} {{order_meassage11}}",
+                    "text": "{{order_meassage8}} {{applicationType}} {{order_meassage9}} {{applicationNumber}} {{order_meassage12}} {{plumberName}}{{order_meassage13}} {{licenceNo}}{{order_meassage14}} {{contactNo}}{{order_meassage10}} {{date}}{{order_meassage11}}",
                     "style": "receipt-value-down"
                   }
                 ],
