@@ -241,6 +241,60 @@
                 }
               },
               {
+                "variable": "plumberName",
+                "value": {
+                  "path": "$.plumberInfo[0].name"
+                }
+              },
+              {
+                "variable": "licenceNo",
+                "value": {
+                  "path": "$.plumberInfo[0].licenseNo"
+                }
+              },
+              {
+                "variable": "contactNo",
+                "value": {
+                  "path": "$.plumberInfo[0].mobileNumber"
+                }
+              },
+              {
+                "variable": "order_meassage14",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_CONCERNED_PLUMBER_CONTACT"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "order_meassage12",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_CONCERNED_PLUMBER_ALLOTED"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "order_meassage13",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_CONCERNED_PLUMBER_LICENCE"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
                 "variable": "formFee",
                 "value": {
                   "path": "$.pdfTaxhead[?(@.taxHeadCode == 'FORM_FEE')].estimateAmount"
