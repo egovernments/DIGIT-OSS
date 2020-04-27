@@ -141,7 +141,7 @@
                         "style": "receipt-value-down"
                       },
                       {
-                        "text": "{{ref_message2}}{{applicationNumber}}{{dated_label}} {{date}}",
+                        "text": "{{ref_message2}}{{applicationNumber}} {{dated_label}} {{date}}",
                         "style": "receipt-value-down"
                       }
                     ]
