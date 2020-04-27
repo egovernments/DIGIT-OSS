@@ -24,6 +24,138 @@
                 "type": "image"
               },
               {
+                "variable": "municipalCouncil",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_SUNAM_DEV_MUNICIPAL_COUNCIL"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "sanctionLetter",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_SANCTION_LETTER"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "dated",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_DATED_IN_LOWER_CASE"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "order_meassage4",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_SEEKING_ESTIMATE_AMOUNT"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "order_meassage5",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_PREPARATION_NOTICE"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "order_meassage6",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_SERVICE_PAYMENT"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "order_meassage7",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_SAID_PREMISES"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "order_meassage8",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_FURTHER"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "order_meassage9",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_CONNECTION_SANCTIONED"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "order_meassage10",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_PLUMBER_INFO"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
+                "variable": "order_meassage11",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_BILLING_CYCLE"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
                 "variable": "estimation_notice_header",
                 "value": {
                   "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_ESTIMATION_NOTICE_HEADER"
@@ -256,7 +388,7 @@
               {
                 "variable": "date_label",
                 "value": {
-                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_ACKNOWELDGMENT_DATE_LABEL"
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_DATE_LABEL"
                 },
                 "type": "label",
                 "localisation": {
@@ -268,7 +400,7 @@
               {
                 "variable": "sub_label",
                 "value": {
-                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_SUB_LEBEL"
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_SUBJECT"
                 },
                 "type": "label",
                 "localisation": {
@@ -280,7 +412,7 @@
               {
                 "variable": "ref_label",
                 "value": {
-                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_REF_LEBEL"
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_REFERENCE"
                 },
                 "type": "label",
                 "localisation": {
@@ -376,7 +508,7 @@
               {
                 "variable": "ref_message2",
                 "value": {
-                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_REF_MESSAGE2"
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ESTIMATION_NOTICE_NO"
                 },
                 "type": "label",
                 "localisation": {
@@ -400,7 +532,7 @@
               {
                 "variable": "in_ref_label",
                 "value": {
-                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_IN_REF_LABEL"
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ORDER_DESCRIPTION"
                 },
                 "type": "label",
                 "localisation": {
@@ -424,7 +556,7 @@
               {
                 "variable": "order_meassage2",
                 "value": {
-                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_ORDER_MESSAGE2"
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_SEEKING"
                 },
                 "type": "label",
                 "localisation": {
@@ -436,7 +568,7 @@
               {
                 "variable": "order_meassage3",
                 "value": {
-                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_ORDER_MESSAGE3"
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_WATER_TAP_CONNECTION"
                 },
                 "type": "label",
                 "localisation": {
@@ -472,7 +604,7 @@
               {
                 "variable": "for_commissioner_label",
                 "value": {
-                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_FOR_COMMISSIONER_LABEL"
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_APPROVAL_EXECUTIVE_OFFICER"
                 },
                 "type": "label",
                 "localisation": {
@@ -664,7 +796,7 @@
               {
                 "variable": "approved_by",
                 "value": {
-                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_APPROVED_BY"
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_COMPUTER_GENERATED_DOCUMENT"
                 },
                 "type": "label",
                 "localisation": {
