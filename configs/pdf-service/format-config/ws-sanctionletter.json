@@ -212,7 +212,7 @@
                 "columns": [
                   {
                     "width": "100%",
-                    "text": "{{order_meassage8}} {{applicationType}} {{order_meassage9}} {{applicationNumber}} {{order_meassage10}} {{date}} {{order_meassage11}}",
+                    "text": "{{order_meassage8}} {{applicationType}} {{order_meassage9}} {{applicationNumber}} {{order_meassage10}} {{date}}{{order_meassage11}}",
                     "style": "receipt-value-down"
                   }
                 ],
@@ -241,7 +241,7 @@
                 ],
                 "margin": [
                   40,
-                  80,
+                  60,
                   0,
                   0
                 ]
@@ -433,7 +433,7 @@
           10,
           0,
           0,
-          5
+          1
         ]
       },
       "ws-sub-header": {
