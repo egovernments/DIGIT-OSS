@@ -420,7 +420,7 @@ serviceMaps:
           - jsonPath: $.BPA.owners.*.auditDetails.lastModifiedTime
 
 
-       - query: INSERT INTO eg_bpa_unit(id, tenantId, buildingplanid, blockindex,  usageCategory ,additionalDetails ,createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id, tenantId, buildingplanid, blockIndex) WHERE id IS NOT NULL DO UPDATE SET usageCategory=?, blockIndex=?, additionaldetails=?, lastmodifiedby=?, lastmodifiedtime=?;
+       - query: INSERT INTO eg_bpa_unit(id, tenantId, buildingplanid, blockindex,  usageCategory ,additionalDetails ,createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id, buildingplanid, blockIndex) WHERE id IS NOT NULL DO UPDATE SET usageCategory=?, blockIndex=?, additionaldetails=?, lastmodifiedby=?, lastmodifiedtime=?;
          basePath: BPA.units.*
          jsonMaps: 
           - jsonPath: $.BPA.units.*.id
@@ -651,7 +651,7 @@ serviceMaps:
           
           
           
-       - query: INSERT INTO eg_bpa_unit(id, tenantId, buildingplanid, blockindex, usageCategory,additionalDetails , createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id, tenantId, buildingplanid, blockIndex) WHERE id IS NOT NULL DO UPDATE SET usageCategory=?, blockIndex=?, additionaldetails=?, lastmodifiedby=?, lastmodifiedtime=?;
+       - query: INSERT INTO eg_bpa_unit(id, tenantId, buildingplanid, blockindex, usageCategory,additionalDetails , createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id, buildingplanid, blockIndex) WHERE id IS NOT NULL DO UPDATE SET usageCategory=?, blockIndex=?, additionaldetails=?, lastmodifiedby=?, lastmodifiedtime=?;
          basePath: BPA.units.*
          jsonMaps: 
           - jsonPath: $.BPA.units.*.id
