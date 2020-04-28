@@ -143,6 +143,198 @@
       "code": "NONRESIDENTIAL.COMMERCIAL.OTHERCOMMERCIALSUBMINOR.OTHERCOMMERCIAL",
       "active": true,
       "fromFY": "2015-16"
+    },
+    {
+      "name": "Malls",
+      "code": "NONRESIDENTIAL.COMMERCIAL.RETAIL.ESTABLISHMENTSINMALLS",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "Industrial Other Commercial Usage",
+      "code": "NONRESIDENTIAL.INDUSTRIAL.OTHERCOMMERCIALSUBMINOR.OTHERCOMMERCIAL",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "Other Instituation",
+      "code": "NONRESIDENTIAL.INSTITUTIONAL.OTHERINSTITUTIONALSUBMINOR.OTHERINSTITUTIONAL",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "School",
+      "code": "NONRESIDENTIAL.INSTITUTIONAL.EDUCATIONAL.SCHOOL",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "Cremation/ Burial Ground",
+      "code": "NONRESIDENTIAL.OTHERS.PUBLICSPACES.CREMATION/BURIAL",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "Govt. Aided Educational Institute",
+      "code": "NONRESIDENTIAL.INSTITUTIONAL.EDUCATIONALGOVAIDED.GOVAIDEDEDUCATIONAL",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "Pharmcy",
+      "code": "NONRESIDENTIAL.COMMERCIAL.RETAIL.PHARMACY",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "Establishment In Multiplex",
+      "code": "NONRESIDENTIAL.COMMERCIAL.RETAIL.ESTABLISHMENTSINMULTIPLEX",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "Godown/Warehouse",
+      "code": "NONRESIDENTIAL.INDUSTRIAL.WAREHOUSE.WAREHOUSE",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "Training Institute",
+      "code": "NONRESIDENTIAL.INSTITUTIONAL.EDUCATIONAL.TRAININGINSTITUTES",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "Other Industrial Usage ",
+      "code": "NONRESIDENTIAL.INDUSTRIAL.OTHERCOMMERCIALSUBMINOR.OTHERINDUSTRIAL",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "Private Hospital",
+      "code": "NONRESIDENTIAL.COMMERCIAL.MEDICALFACILITY.PVTHOSPITAL",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "Residential Officespace",
+      "code": "RESIDENTIAL.OFFICESPACE",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "Govt. Hospital & Dispensary",
+      "code": "NONRESIDENTIAL.INSTITUTIONAL.PUBLICFACILITY.GOVTHOSPITAL",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "Marriage Palace",
+      "code": "NONRESIDENTIAL.COMMERCIAL.EVENTSPACE.MARRIAGEPALACE",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "Industrial Showroom",
+      "code": "NONRESIDENTIAL.INDUSTRIAL.RETAIL.SHOWROOM",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "Other Private Educational Institute",
+      "code": "NONRESIDENTIAL.INSTITUTIONAL.EDUCATIONAL.OTHEREDUCATIONAL",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "Other Private Educational Institute",
+      "code": "NONRESIDENTIAL.INSTITUTIONAL.EDUCATIONAL.OTHEREDUCATIONAL",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "Manufacturing Facility",
+      "code": "NONRESIDENTIAL.INDUSTRIAL.MANUFACTURINGFACILITY.MANUFACTURINGFACILITY",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "Grocery Store",
+      "code": "NONRESIDENTIAL.COMMERCIAL.RETAIL.GROCERY",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "Golf Club",
+      "code": "NONRESIDENTIAL.INSTITUTIONAL.RECREATIONAL.GOLFCLUB",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "Social Club",
+      "code": "NONRESIDENTIAL.INSTITUTIONAL.RECREATIONAL.SOCIALCLUB",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "Public Libraries",
+      "code": "NONRESIDENTIAL.INSTITUTIONAL.PUBLICFACILITY.LIBRARIES",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "Religious Institution",
+      "code": "NONRESIDENTIAL.INSTITUTIONAL.RELIGIOUSINSTITUTION",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "Statutory Organisation",
+      "code": "NONRESIDENTIAL.COMMERCIAL.STATUTORY.STATUTORYORGANISATION",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "Old Age Homes",
+      "code": "NONRESIDENTIAL.INSTITUTIONAL.HOMESFORSPECIALCARE.OLDAGEHOMES",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "Other Commercial Usage",
+      "code": "RESIDENTIAL.COMMERCIAL.OTHERCOMMERCIALSUBMINOR.OTHERCOMMERCIAL",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "Movie Theatre",
+      "code": "NONRESIDENTIAL.COMMERCIAL.ENTERTAINMENT.MOVIETHEATRE",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "Community Hall",
+      "code": "NONRESIDENTIAL.INSTITUTIONAL.PUBLICFACILITY.COMMUNITYHALL",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "Private Dispensary",
+      "code": "NONRESIDENTIAL.COMMERCIAL.MEDICALFACILITY.PVTDISPENSARY",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "Multiplex",
+      "code": "NONRESIDENTIAL.COMMERCIAL.ENTERTAINMENT.MULTIPLEX",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "Polytechnic",
+      "code": "NONRESIDENTIAL.INSTITUTIONAL.EDUCATIONAL.POLYTECHNICS",
+      "active": true,
+      "fromFY": "2015-16"
     }
   ]
 }
