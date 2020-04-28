@@ -234,6 +234,25 @@ serviceMaps:
 
        - jsonPath: $.WaterConnection.processInstance.action 
 
-       - jsonPath: $.WaterConnection.id     
+       - jsonPath: $.WaterConnection.id   
+       
+ - version: 1.0
+   name: WaterConnection
+   description: save filestore ids
+   fromTopic: save-ws-filestoreids
+   isTransaction: true
+   queryMaps: 
+    - query: UPDATE water_service_connection SET estimationfileStoreId = ?, sanctionfileStoreId = ? WHERE connection_id=?;
+      basePath: $.WaterConnection
+      jsonMaps:
+
+      - jsonPath: $.WaterConnection.additionalDetails.estimationFileStoreId
+
+      - jsonPath: $.WaterConnection.additionalDetails.sanctionFileStoreId
+
+      - jsonPath: $.WaterConnection.id   
+   
+
+
 
 
