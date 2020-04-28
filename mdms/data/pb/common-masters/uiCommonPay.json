@@ -109,8 +109,8 @@
     {
       "code": "WS",
       "headerBandLabel": "PAYMENT_COMMON_CONSUMER_CODE",
-      "receiptKey": "consolidatedreceipt",
-      "billKey": "consolidatedbill",
+      "receiptKey": "ws-onetime-receipt",
+      "billKey": "ws-bill",
       "buttons": [
         {
           "label": "COMMON_BUTTON_HOME",
@@ -122,8 +122,8 @@
     {
       "code": "SW",
       "headerBandLabel": "PAYMENT_COMMON_CONSUMER_CODE",
-      "receiptKey": "consolidatedreceipt",
-      "billKey": "consolidatedbill",
+      "receiptKey": "ws-onetime-receipt",
+      "billKey": "ws-bill",
       "buttons": [
         {
           "label": "COMMON_BUTTON_HOME",
@@ -135,8 +135,8 @@
     {
       "code": "WS.ONE_TIME_FEE",
       "headerBandLabel": "PAYMENT_COMMON_APPLICATION_CODE",
-      "receiptKey": "consolidatedreceipt",
-      "billKey": "consolidatedbill",
+      "receiptKey": "ws-onetime-receipt",
+      "billKey": "ws-bill",
       "buttons": [
         {
           "label": "COMMON_BUTTON_HOME",
@@ -148,8 +148,8 @@
     {
       "code": "SW.ONE_TIME_FEE",
       "headerBandLabel": "PAYMENT_COMMON_APPLICATION_CODE",
-      "receiptKey": "consolidatedreceipt",
-      "billKey": "consolidatedbill",
+      "receiptKey": "ws-onetime-receipt",
+      "billKey": "ws-bill",
       "buttons": [
         {
           "label": "COMMON_BUTTON_HOME",
