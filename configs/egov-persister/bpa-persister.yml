@@ -429,7 +429,7 @@ serviceMaps:
 
           - jsonPath: $.BPA.id
 
-          - jsonPath: $.BPA.units.*.blockindex
+          - jsonPath: $.BPA.units.*.blockIndex
           
           - jsonPath: $.BPA.units.*.usageCategory
           
@@ -660,7 +660,7 @@ serviceMaps:
 
           - jsonPath: $.BPA.id
 
-          - jsonPath: $.BPA.units.*.blockindex
+          - jsonPath: $.BPA.units.*.blockIndex
           
           - jsonPath: $.BPA.units.*.usageCategory
           
