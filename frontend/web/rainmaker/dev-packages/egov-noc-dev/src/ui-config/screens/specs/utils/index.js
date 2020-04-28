@@ -1,24 +1,12 @@
+import { getCommonCaption, getCommonCard, getPattern } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
-import { getUserInfo, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getLocaleLabels, getQueryArg, getTransformedLocalStorgaeLabels } from "egov-ui-framework/ui-utils/commons";
+import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
-import {
-  getQueryArg,
-  getTransformedLocalStorgaeLabels,
-  getLocaleLabels
-} from "egov-ui-framework/ui-utils/commons";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { httpRequest } from "../../../../ui-utils/api";
 import isUndefined from "lodash/isUndefined";
-import {
-  getCommonCard,
-  getCommonValue,
-  getCommonCaption,
-  getPattern
-} from "egov-ui-framework/ui-config/screens/specs/utils";
-import { sampleGetBill } from "../../../../ui-utils/sampleResponses";
+import { httpRequest } from "../../../../ui-utils/api";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -484,6 +472,25 @@ export const getMdmsData = async queryObject => {
   }
 };
 
+export const searchMdmsData = async mdmsBody => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+    return response;
+  } catch (error) {
+    console.log(error);
+    return {};
+  }
+};
+
+
+
+
 export const getBill = async queryObject => {
   try {
     const response = await httpRequest(
@@ -567,7 +574,7 @@ export const createEstimateData = billObject => {
 };
 
 
-export const createBill = async (queryObject,dispatch) => {
+export const createBill = async (queryObject, dispatch) => {
   try {
     const response = await httpRequest(
       "post",
@@ -584,7 +591,7 @@ export const createBill = async (queryObject,dispatch) => {
         "error"
       )
     );
-    console.log(error,'fetxh');
+    console.log(error, 'fetxh');
   }
 };
 
@@ -602,7 +609,7 @@ export const generateBill = async (dispatch, applicationNumber, tenantId) => {
         },
         { key: "businessService", value: "FIRENOC" }
       ];
-      const payload = await createBill(queryObj,dispatch);
+      const payload = await createBill(queryObj, dispatch);
       // let payload = sampleGetBill();
       if (payload && payload.Bill[0]) {
         dispatch(prepareFinalObject("ReceiptTemp[0].Bill", payload.Bill));
