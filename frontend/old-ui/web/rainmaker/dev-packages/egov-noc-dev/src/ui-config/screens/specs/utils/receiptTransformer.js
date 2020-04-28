@@ -1,19 +1,10 @@
-import get from "lodash/get";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getTransformedLocale, getTranslatedLabel, getUlbGradeLabel, getUserDataFromUuid, transformById } from "egov-ui-framework/ui-utils/commons";
+import { getLocale, getLocalization } from "egov-ui-kit/utils/localStorageUtils";
+import get from "lodash/get";
 import store from "../../../../ui-redux/store";
-import { getMdmsData, getReceiptData, getFinancialYearDates } from "../utils";
-import {
-  getLocalization,
-  getLocale
-} from "egov-ui-kit/utils/localStorageUtils";
-import {
-  getUlbGradeLabel,
-  getTranslatedLabel,
-  transformById,
-  getTransformedLocale,
-  getUserDataFromUuid
-} from "egov-ui-framework/ui-utils/commons";
 import { getSearchResults } from "../../../../ui-utils/commons";
+import { getReceiptData, searchMdmsData } from "../utils";
 
 const ifNotNull = value => {
   return !["", "NA", "null", null].includes(value);
@@ -53,7 +44,7 @@ export const getMessageFromLocalization = code => {
 export const loadUlbLogo = tenantid => {
   var img = new Image();
   img.crossOrigin = "Anonymous";
-  img.onload = function() {
+  img.onload = function () {
     var canvas = document.createElement("CANVAS");
     var ctx = canvas.getContext("2d");
     canvas.height = this.height;
@@ -352,27 +343,21 @@ export const loadReceiptData = async (consumerCode, tenant) => {
   store.dispatch(prepareFinalObject("receiptDataForPdf", data));
 };
 
-export const loadMdmsData = async tenantid => {
+export const loadMdmsData = async tenantId => {
   let localStorageLabels = JSON.parse(
     window.localStorage.getItem(`localization_${getLocale()}`)
   );
   let localizationLabels = transformById(localStorageLabels, "code");
   let data = {};
-  let queryObject = [
-    {
-      key: "tenantId",
-      value: `${tenantid}`
-    },
-    {
-      key: "moduleName",
-      value: "tenant"
-    },
-    {
-      key: "masterName",
-      value: "tenants"
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: tenantId,
+      moduleDetails: [
+        { moduleName: "tenant", masterDetails: [{ name: "tenants" }] }
+      ]
     }
-  ];
-  let response = await getMdmsData(queryObject);
+  };
+  let response = await searchMdmsData(mdmsBody);
 
   if (
     response &&
@@ -380,7 +365,7 @@ export const loadMdmsData = async tenantid => {
     response.MdmsRes.tenant.tenants.length > 0
   ) {
     let ulbData = response.MdmsRes.tenant.tenants.find(item => {
-      return item.code == tenantid;
+      return item.code == tenantId;
     });
     /** START Corporation name generation logic */
     const ulbGrade = get(ulbData, "city.ulbGrade", "NA")

@@ -1,9 +1,9 @@
+import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import QRCode from "qrcode";
-import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { getMessageFromLocalization } from "./receiptTransformer";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -231,8 +231,8 @@ const getBuildings = data => {
             valuerow.length == 0
               ? [true, false, false, false]
               : valuerow.length == 3
-              ? [false, false, true, false]
-              : [false, false, false, false]
+                ? [false, false, true, false]
+                : [false, false, false, false]
         });
         valuerow.push({
           text: uomvalue,
@@ -241,8 +241,8 @@ const getBuildings = data => {
             valuerow.length == 0
               ? [true, false, false, false]
               : valuerow.length == 3
-              ? [false, false, true, false]
-              : [false, false, false, false]
+                ? [false, false, true, false]
+                : [false, false, false, false]
           // left, top ,right ,down
         });
         // draw when elements in one row are four
@@ -291,16 +291,16 @@ const getBuildings = data => {
 };
 const getApplicationData = async (transformedData, ulbLogo, type) => {
   let borderLayout = {
-    hLineWidth: function(i, node) {
+    hLineWidth: function (i, node) {
       return i === 0 || i === node.table.body.length ? 0.1 : 0.1;
     },
-    vLineWidth: function(i, node) {
+    vLineWidth: function (i, node) {
       return i === 0 || i === node.table.widths.length ? 0.1 : 0.1;
     },
-    hLineColor: function(i, node) {
+    hLineColor: function (i, node) {
       return i === 0 || i === node.table.body.length ? "#979797" : "#979797";
     },
-    vLineColor: function(i, node) {
+    vLineColor: function (i, node) {
       return i === 0 || i === node.table.widths.length ? "#979797" : "#979797";
     }
     // paddingLeft: function(i, node) {
@@ -797,9 +797,9 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
   ];
   let qrText = `Application: ${transformedData.applicationNumber}, Date: ${
     transformedData.applicationDate
-  }, Buildings: ${transformedData.propertyType}, Applicant: ${
+    }, Buildings: ${transformedData.propertyType}, Applicant: ${
     transformedData.owners[0].name
-  }, Address: ${transformedData.address}`;
+    }, Address: ${transformedData.address}`;
 
   if (transformedData.ownershipType.startsWith("INSTITUTION")) {
     applicantDetails = [];
@@ -867,11 +867,11 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
       documents = [];
       qrText = `Application: ${
         transformedData.applicationNumber
-      }, Receipt number: ${transformedData.receiptNumber}, Date of payment: ${
+        }, Receipt number: ${transformedData.receiptNumber}, Date of payment: ${
         transformedData.paymentDate
-      }, Fees Paid: ${transformedData.amountPaid}, Payment mode: ${
+        }, Fees Paid: ${transformedData.amountPaid}, Payment mode: ${
         transformedData.paymentMode
-      }, Transaction ID: ${transformedData.transactionNumber}`;
+        }, Transaction ID: ${transformedData.transactionNumber}`;
       break;
     case "certificate":
       headerText = "Certificate";
@@ -964,11 +964,11 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
       ];
       qrText = `Application: ${
         transformedData.applicationNumber
-      }, NOC Number: ${transformedData.fireNOCNumber}, Date of Issue: ${
+        }, NOC Number: ${transformedData.fireNOCNumber}, Date of Issue: ${
         transformedData.issuedDate
-      }, Valid Till: ${transformedData.validTo}, Buildings: ${
+        }, Valid Till: ${transformedData.validTo}, Buildings: ${
         transformedData.propertyType
-      }, Applicant: ${transformedData.owners[0].name}`;
+        }, Applicant: ${transformedData.owners[0].name}`;
       break;
   }
 
