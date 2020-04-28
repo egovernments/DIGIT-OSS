@@ -16484,6 +16484,20 @@
     "leftIcon": "places:business-center",
     "rightIcon": "",
     "queryParams": ""
-   }
+   },
+   {
+      "id": 1981,
+      "name": "Dishonored Cheque Report ",
+      "url": "url",
+      "parentModule": "",
+      "displayName": "Dishonored Cheque Report ",
+      "orderNumber": 7,
+      "enabled": true,
+      "serviceCode": "FinanceReport",
+      "code": "null",
+      "leftIcon": "editor:insert-chart",
+      "path": "Finance.Reports.MIS Reports.Dishonored Cheque Report",
+      "navigationURL": "services/collection/report/dishonouredcheque/searchform"
+    }
   ]
 }
