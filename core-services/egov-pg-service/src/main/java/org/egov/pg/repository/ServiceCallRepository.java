@@ -32,12 +32,12 @@ public class ServiceCallRepository {
 	 * @return Object
 	 * @author vishal
 	 */
-	public Optional<Object> fetchResult(StringBuilder uri, Object request) {
+	public Optional<Object> fetchResult(String uri, Object request) {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 		Object response = null;
 		try {
-			response = restTemplate.postForObject(uri.toString(), request, JsonNode.class);
+			response = restTemplate.postForObject(uri, request, JsonNode.class);
 		} catch (HttpClientErrorException e) {
 			log.error("External Service threw an Exception: ", e);
 			throw new ServiceCallException(e.getResponseBodyAsString());

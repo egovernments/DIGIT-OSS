@@ -6,6 +6,7 @@ import org.egov.pg.models.Bill;
 import org.egov.pg.models.BillDetail;
 import org.egov.pg.models.Receipt;
 import org.egov.pg.models.Transaction;
+import org.egov.pg.models.Transaction.TxnStatusEnum;
 import org.egov.pg.producer.Producer;
 import org.egov.pg.repository.TransactionRepository;
 import org.egov.pg.validator.TransactionValidator;
@@ -22,6 +23,8 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.dao.TransientDataAccessResourceException;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collections;
@@ -34,6 +37,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
+@Slf4j
 public class TransactionServiceTest {
 
     private TransactionService transactionService;
@@ -130,9 +134,7 @@ public class TransactionServiceTest {
      * Test for invalid or inactive gateway
      */
     @Test
-    @Ignore
     public void initiateTransactionSkipGatewayTest(){
-        String receiptNumber = "XYZ";
         Transaction txn = Transaction.builder().txnAmount("100")
                 .billId("ORDER0012")
                 .productInfo("Property Tax Payment")
@@ -141,22 +143,13 @@ public class TransactionServiceTest {
                 .build();
         TransactionRequest transactionRequest = new TransactionRequest(requestInfo, txn);
 
-        BillDetail billDetail = BillDetail.builder().build();
-
-        Bill bill = Bill.builder().billDetails(Collections.singletonList(billDetail)).build();
-
-        Receipt receipt = Receipt.builder()
-                .transactionId("DEFA15273")
-                .bill(Collections.singletonList(bill))
-                .build();
-
         Mockito.doNothing().when(validator).validateCreateTxn(any(TransactionRequest.class));
 
         when(gatewayService.initiateTxn(any(Transaction.class))).thenThrow(new CustomException());
         when(validator.skipGateway(txn)).thenReturn(true);
         Transaction resp = transactionService.initiateTransaction(transactionRequest);
-
-        assertTrue(resp.getReceipt().equalsIgnoreCase(receiptNumber));
+                
+        assertTrue(resp.getTxnStatus().equals(TxnStatusEnum.SUCCESS));
 
     }
 
@@ -210,16 +203,6 @@ public class TransactionServiceTest {
                 .txnStatus(Transaction.TxnStatusEnum.SUCCESS)
                 .productInfo("Property Tax Payment")
                 .gateway("PAYTM")
-                .build();
-
-
-        BillDetail billDetail = BillDetail.builder().build();
-
-        Bill bill = Bill.builder().billDetails(Collections.singletonList(billDetail)).build();
-
-        Receipt receipt = Receipt.builder()
-                .transactionId("DEFA15273")
-                .bill(Collections.singletonList(bill))
                 .build();
 
         when(validator.validateUpdateTxn(any(Map.class))).thenReturn(txnStatus);

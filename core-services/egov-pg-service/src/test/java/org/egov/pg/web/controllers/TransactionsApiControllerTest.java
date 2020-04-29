@@ -116,7 +116,6 @@ public class TransactionsApiControllerTest {
     }
 
     @Test
-    @Ignore
     public void transactionsV1SearchPostSuccess() throws Exception {
         when(transactionService.getTransactions(any(TransactionCriteria.class))).thenReturn(Collections.singletonList
                 (new Transaction()));
@@ -138,7 +137,6 @@ public class TransactionsApiControllerTest {
     }
 
     @Test
-    @Ignore
     public void transactionsV1UpdatePostSuccess() throws Exception {
         when(transactionService.updateTransaction(any(RequestInfo.class), any(Map.class)))
                 .thenReturn
