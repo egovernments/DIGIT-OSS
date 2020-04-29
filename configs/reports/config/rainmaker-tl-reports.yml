@@ -38,12 +38,12 @@ ReportDefinitions:
     total: false
   - name: name
     label: report.tl.user.name
-    type: string
+    type: stringarray
     source: tl
     total: false
   - name: mobilenumber
     label: report.tl.user.mobilenumber
-    type: string
+    type: stringarray
     source: tl
     total: false
   - name: bankid
