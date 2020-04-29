@@ -48,6 +48,11 @@
       "name": "ULB Government",
       "code": "INSTITUTIONALGOVERNMENT.ULBGOVERNMENT",
       "active": true
+    },
+    {
+      "name": "State Government",
+      "code": "INSTITUTIONALGOVERNMENT.STATEGOVERNMENT",
+      "active": true
     }
   
   ]
