@@ -59,6 +59,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.egov.billsaccounting.services.CreateVoucher;
 import org.egov.billsaccounting.services.VoucherConstant;
@@ -690,6 +691,72 @@ public class DishonorChequeService implements FinancialIntegrationService {
         });
         microserviceUtils.updateInstruments(instruments, null, finStatus );
     }
+    
+    private void prepareDishonouredSearchCriteria(DishonoredChequeBean model, InstrumentSearchContract criteria) {
+        criteria.setFinancialStatuses("Dishonored");
+        
+        if(StringUtils.isNotBlank(model.getAccountNumber())){
+            criteria.setBankAccountNumber(model.getAccountNumber());
+        }
+        if(StringUtils.isNotBlank(model.getInstrumentMode())){
+            criteria.setInstrumentTypes(model.getInstrumentMode());
+        }
+        if(StringUtils.isNotBlank(model.getInstrumentNumber())){
+            criteria.setTransactionNumber(model.getInstrumentNumber());
+        }
+       
+        criteria.setTransactionFromDate(model.getFromDate());
+        criteria.setTransactionToDate(model.getToDate());
+        
+    }
+    public List<DishonoredChequeBean> getDishonouredChequeReport(DishonoredChequeBean model) {
+        try {
+            InstrumentSearchContract insSearchContra = new InstrumentSearchContract();
+            this.prepareDishonouredSearchCriteria(model, insSearchContra);
+            List<Instrument> instList = microserviceUtils.getInstrumentsBySearchCriteria(insSearchContra );
+            Map<String, String> receiptInstMap = instList.stream().map(Instrument::getInstrumentVouchers).flatMap(x -> x.stream()).collect(Collectors.toMap(InstrumentVoucher::getReceiptHeaderId, InstrumentVoucher::getInstrument));
+            Set<String> receiptIds = receiptInstMap.keySet();
+            ReceiptSearchCriteria rSearchcriteria = ReceiptSearchCriteria.builder().receiptNumbers(receiptIds).build();
+            List<Receipt> receipt = microserviceUtils.getReceipt(rSearchcriteria  );
+            Map<String, Receipt> receiptIdToReceiptMap= null;
+            switch (ApplicationThreadLocals.getCollectionVersion().toUpperCase()) {
+            case "V2":
+                receiptIdToReceiptMap = receipt.stream().collect(Collectors.toMap(Receipt::getPaymentId, Function.identity()));
+                break;
+
+            default:
+                receiptIdToReceiptMap = receipt.stream().collect(Collectors.toMap(Receipt::getReceiptNumber, Function.identity()));
+                break;
+            }
+            final Map<String, Receipt> receiptIdToReceiptMapTemp = receiptIdToReceiptMap;
+            List<DishonoredChequeBean> dishonoredChequeList = new ArrayList<>();
+            instList.stream().filter(ins -> receiptIdToReceiptMapTemp.containsKey(ins.getInstrumentVouchers().get(0).getReceiptHeaderId())).forEach(ins -> {
+                DishonoredChequeBean chequeBean = new DishonoredChequeBean();
+                String voucherNumber = ins.getInstrumentVouchers().get(0).getVoucherHeaderId();
+                CVoucherHeader receiptVoucherHeader = getVoucherByNumber(voucherNumber);
+                CVoucherHeader payInSlipVoucher = getVoucherById(Long.parseLong(ins.getPayinSlipId()));
+                chequeBean.setReceiptNumber(receiptIdToReceiptMapTemp.get(ins.getInstrumentVouchers().get(0).getReceiptHeaderId()).getReceiptNumber());
+                chequeBean.setVoucherNumber(receiptVoucherHeader.getVoucherNumber());
+                chequeBean.setVoucherHeaderId(receiptVoucherHeader.getId());
+                chequeBean.setReceiptSourceUrl(receiptVoucherHeader.getVouchermis().getSourcePath());
+                chequeBean.setInstrumentNumber(ins.getTransactionNumber());
+                chequeBean.setTransactionDate(ins.getTransactionDate());
+                chequeBean.setInstHeaderIds(ins.getId());
+                chequeBean.setInstrumentDate(ins.getTransactionDate().toString());
+                chequeBean.setInstrumentAmount(ins.getAmount());
+                chequeBean.setBankName(getBankName(ins));
+                chequeBean.setAccountNumber(ins.getBankAccount().getAccountNumber());
+                Long dateVal=ins.getDishonor().getDishonorDate();
+                Date date=new Date(dateVal); 
+                chequeBean.setDishonorDate(date);
+                dishonoredChequeList.add(chequeBean);
+            });
+            return dishonoredChequeList;
+        } catch (Exception e) {
+            LOGGER.error("Error in report Cheques Dishonoring Listing :: ",e);
+            throw e;
+        }
+    }
+
+  
 }
-
-

@@ -92,6 +92,34 @@ public class DishonoredChequeBean {
     private List<AccountCode> payInSlipVoucherGLDetails;
     private Date dishonorDate;
     private String bankBranch;
+    
+    private Date fromDate;
+    private Date toDate;
+    private String service;
+
+    public Date getFromDate() {
+        return fromDate;
+    }
+
+    public void setFromDate(Date fromDate) {
+        this.fromDate = fromDate;
+    }
+
+    public Date getToDate() {
+        return toDate;
+    }
+
+    public void setToDate(Date toDate) {
+        this.toDate = toDate;
+    }
+
+    public String getService() {
+        return service;
+    }
+
+    public void setService(String service) {
+        this.service = service;
+    }
 
     public String getReceiptNumber() {
         return receiptNumber;

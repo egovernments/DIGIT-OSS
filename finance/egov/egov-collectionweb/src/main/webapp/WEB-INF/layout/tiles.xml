@@ -83,4 +83,8 @@
         <put-attribute name="page-title" value="title.dishonour.surrender.cheque" cascade="true"/>
         <put-attribute name="body" value="/WEB-INF/jsp/dishonor-cheque/dishonor_cheque_success.jsp"/>
     </definition>
+    <definition name="dishonouredchequesearchreport" extends="base_layout">
+        <put-attribute name="page-title" value="title.dishonoured.report" cascade="true"/>
+        <put-attribute name="body" value="/WEB-INF/jsp/dishonor-cheque/dishonouredchequesearchreport.jsp"/>
+    </definition>
 </tiles-definitions>
