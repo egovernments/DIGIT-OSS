@@ -35,6 +35,18 @@
                   "module": "rainmaker-common"
                 }
               },
+               {
+                "variable": "door_no",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_DOOR_NO_LABEL"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
               {
                 "variable": "sanctionLetter",
                 "value": {
