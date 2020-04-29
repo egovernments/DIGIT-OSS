@@ -36,8 +36,14 @@ public class StorageService {
 	@Value("${isS3Enabled}")
 	private Boolean isS3Enabled;
 	
+	@Value("${isNfsStorageEnabled}")
+	private Boolean isNfsStorageEnabled;
+	
 	@Value("${isAzureStorageEnabled}")
 	private Boolean isAzureStorageEnabled;
+
+	@Value("${source.disk}")
+	private String diskStorage;
 	
 	@Value("${source.s3}")
 	private String awsS3Source;
@@ -108,6 +114,8 @@ public class StorageService {
 			src = azureBlobSource;
 		if(isS3Enabled)
 			src = awsS3Source;
+		if(isNfsStorageEnabled)
+			src = diskStorage;
 		final String source = src;
 		
 		Map<String, String> mapOfIdAndFile = artifactList.stream()

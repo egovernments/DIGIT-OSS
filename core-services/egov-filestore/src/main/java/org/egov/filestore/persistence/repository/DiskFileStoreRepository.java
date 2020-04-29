@@ -3,6 +3,7 @@ package org.egov.filestore.persistence.repository;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -52,8 +53,17 @@ public class DiskFileStoreRepository  implements CloudFilesManager {
 	
 	@Override
 	public Map<String, String> getFiles(Map<String, String> mapOfIdAndFilePath) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		
+		Map<String, String> mapOfIdAndSASUrls = new HashMap<>();
+		for(String s:mapOfIdAndFilePath.keySet())
+		{
+			StringBuilder url=new StringBuilder("/filestore/v1/files/id?fileStoreId=");
+			url.append(s);
+			mapOfIdAndSASUrls.put(s, url.toString());
+		}
+		
+		return mapOfIdAndSASUrls;
 	}
 
 	public Resource read(FileLocation fileLocation) {
