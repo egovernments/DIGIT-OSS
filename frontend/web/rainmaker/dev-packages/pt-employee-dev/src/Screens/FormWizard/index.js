@@ -1722,9 +1722,9 @@ class FormWizard extends Component {
     img.src = url;
   };
   downloadAcknowledgementForm = () => {
-    const { assessedPropertyDetails, imageUrl } = this.state;
-    const { common, app = {} } = this.props;
-    const { Properties } = assessedPropertyDetails;
+    const {  imageUrl } = this.state;
+    const { common, app = {} ,prepareFormData} = this.props;
+    const { Properties=[] } = prepareFormData;
     const { address, propertyDetails, propertyId } = Properties[0];
     const { owners } = propertyDetails[0];
     const { localizationLabels } = app;

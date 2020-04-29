@@ -96,7 +96,6 @@ class ReviewForm extends Component {
                   label={'PT_APPLICATION_SUMMARY'}
                   fontSize="20px"
                 />
-
               </div>
               {formWizardConstants[purpose].isEstimateDetails && <PropertyTaxDetailsCard
                 estimationDetails={estimationDetails}
