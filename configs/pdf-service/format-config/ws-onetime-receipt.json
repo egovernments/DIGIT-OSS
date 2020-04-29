@@ -252,7 +252,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "{{fromPeriod}} {{to}} {{toPeriod}}",
+                "text": "{{fromPeriod}} {{-}} {{toPeriod}}",
                 "border": [
                   false,
                   true,
