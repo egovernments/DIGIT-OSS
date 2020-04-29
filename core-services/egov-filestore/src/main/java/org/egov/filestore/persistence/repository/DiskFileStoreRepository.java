@@ -10,6 +10,7 @@ import java.util.Map;
 import org.egov.filestore.domain.model.FileLocation;
 import org.egov.filestore.persistence.entity.Artifact;
 import org.egov.filestore.repository.CloudFilesManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.core.io.Resource;
@@ -21,11 +22,15 @@ import static org.apache.commons.io.FileUtils.getUserDirectoryPath;
 @ConditionalOnProperty(value = "isNfsStorageEnabled", havingValue = "true")
 public class DiskFileStoreRepository  implements CloudFilesManager {
 
+	@Value("${disk.storage.host.url}")
+	private String hostUrl;
+	
 	@Value("${source.disk}")
 	private String diskFileStorage;
 
 	private FileRepository fileRepository;
-
+	
+	 
 	private String fileMountPath;
 
 	public DiskFileStoreRepository(FileRepository fileRepository,
@@ -58,7 +63,9 @@ public class DiskFileStoreRepository  implements CloudFilesManager {
 		Map<String, String> mapOfIdAndSASUrls = new HashMap<>();
 		for(String s:mapOfIdAndFilePath.keySet())
 		{
-			StringBuilder url=new StringBuilder("/filestore/v1/files/id?fileStoreId=");
+			 
+			StringBuilder url=new StringBuilder(hostUrl);
+			url.append("/filestore/v1/files/id?fileStoreId=");
 			url.append(s);
 			mapOfIdAndSASUrls.put(s, url.toString());
 		}
