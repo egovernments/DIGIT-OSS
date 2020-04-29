@@ -1,11 +1,11 @@
-import React from "react";
-import { Button } from "components";
-import Label from "egov-ui-kit/utils/translationNode";
-import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
+import Stepper from "@material-ui/core/Stepper";
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+import { Button } from "components";
+import Label from "egov-ui-kit/utils/translationNode";
+import React from "react";
 import "./index.css";
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
 
 
@@ -52,11 +52,7 @@ const WizardComponent = ({
     : (backLabel))
   return (
     <div className={`wizard-cont active-step-${selected}`}>
-      {/*<BreadCrumbsForm onTabClick={onTabClick} selected={selected} formValidIndexArray={formValidIndexArray} />*/}
-
       {selected < 5 && <div>
-
-
         <MuiThemeProvider theme={theme}>
           <Stepper
             activeStep={selected}
@@ -77,7 +73,6 @@ const WizardComponent = ({
             })}
           </Stepper>
         </MuiThemeProvider>
-
       </div>}
       {selected < 4 && <div>{header}</div>}
       <div className="wizard-content clearfix">{content}</div>
@@ -94,7 +89,7 @@ const WizardComponent = ({
             buttonStyle={{ border: "1px solid #fe7a51" }}
             style={{ marginRight: 45, width: "30%" }}
           />}
-          {selected == 5 && <Button
+          {/* {selected == 5 && <Button
             label={<Label buttonLabel={true} label={backLabel} color="#fe7a51" />}
             onClick={() => {
               downloadAcknowledgementForm();
@@ -102,7 +97,7 @@ const WizardComponent = ({
             labelStyle={{ letterSpacing: 0.7, padding: 0, color: "#fe7a51" }}
             buttonStyle={{ border: "1px solid #fe7a51" }}
             style={{ marginRight: 45, width: "30%" }}
-          />}
+          />} */}
           <Button
             label={<Label buttonLabel={true} label={nextLabel} color="#fff" />}
             style={{ width: "30%" }}
