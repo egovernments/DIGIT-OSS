@@ -1,17 +1,18 @@
-import React from "react";
-import { Image, Card } from "components";
+import { Card } from "components";
 import Label from "egov-ui-kit/utils/translationNode";
+import get from "lodash/get";
+import React from "react";
 import { connect } from "react-redux";
 import AssessmentInfo from "../../../Property/components/AssessmentInfo";
-import PropertyAddressInfo from "../../../Property/components/PropertyAddressInfo";
+import DocumentsInfo from "../../../Property/components/DocumentsInfo";
 import OwnerInfo from "../../../Property/components/OwnerInfo";
+import PdfHeader from "../../../Property/components/PdfHeader";
+import PropertyAddressInfo from "../../../Property/components/PropertyAddressInfo";
 import TotalDues from "../../../Property/components/TotalDues";
+import ApplicationHistory from "./components/ApplicationHistory";
 import AssessmentHistory from "./components/AssessmentHistory";
 import PaymentHistory from "./components/PaymentHistory";
-import ApplicationHistory from "./components/ApplicationHistory";
-import DocumentsInfo from "../../../Property/components/DocumentsInfo";
-import get from "lodash/get";
-import "./index.css"
+import "./index.css";
 
 const logoStyle = {
   height: "61px",
@@ -24,23 +25,23 @@ class PTInformation extends React.Component {
       propertiesAudit,
       properties
     } = this.props;
-    if(propertiesAudit.length===0) propertiesAudit.push(properties);
+    if (propertiesAudit.length === 0) propertiesAudit.push(properties);
     let Owners = [];
-    let Institution=null;
-    let ownershipCategory='';
+    let Institution = null;
+    let ownershipCategory = '';
     propertiesAudit.reverse().map(property => {
       if (property.status == "ACTIVE") {
         Owners = property.owners.filter(owner => owner.status == "ACTIVE");
-        Institution=property.institution;
-        ownershipCategory=property.ownershipCategory;
+        Institution = property.institution;
+        ownershipCategory = property.ownershipCategory;
       }
     })
     if (Owners.length == 0) {
       Owners = propertiesAudit[0].owners.filter(owner => owner.status == "ACTIVE");
-      Institution=propertiesAudit[0].institution;
-      ownershipCategory=propertiesAudit[0].ownershipCategory;
+      Institution = propertiesAudit[0].institution;
+      ownershipCategory = propertiesAudit[0].ownershipCategory;
     }
-    return {owners:Owners,institution:Institution,ownershipCategory};
+    return { owners: Owners, institution: Institution, ownershipCategory };
 
 
   }
@@ -65,15 +66,15 @@ class PTInformation extends React.Component {
     let corpCity = "";
     let ulbGrade = "";
     if (get(properties, "tenantId")) {
-      let tenantid=get(properties, "tenantId");
-     // logoUrl = get(properties, "tenantId") ? this.getLogoUrl(get(properties, "tenantId")) : "";
-     logoUrl = window.location.origin + `/pb-egov-assets/${tenantid}/logo.png`;
+      let tenantid = get(properties, "tenantId");
+      // logoUrl = get(properties, "tenantId") ? this.getLogoUrl(get(properties, "tenantId")) : "";
+      logoUrl = window.location.origin + `/pb-egov-assets/${tenantid}/logo.png`;
       corpCity = `TENANT_TENANTS_${get(properties, "tenantId").toUpperCase().replace(/[.:-\s\/]/g, "_")}`;
       const selectedCityObject = cities && cities.length > 0 && cities.filter(item => item.code === get(properties, "tenantId"));
       ulbGrade = selectedCityObject ? `ULBGRADE_${get(selectedCityObject[0], "city.ulbGrade")}` : "MUNICIPAL CORPORATION";
     }
     if (properties.status == "INWORKFLOW") {
-      const updatedOnwerInfo=this.updateProperty();
+      const updatedOnwerInfo = this.updateProperty();
       properties.propertyDetails[0].owners = updatedOnwerInfo.owners;
       properties.propertyDetails[0].institution = updatedOnwerInfo.institution;
       properties.propertyDetails[0].ownershipCategory = updatedOnwerInfo.ownershipCategory;
@@ -107,38 +108,15 @@ class PTInformation extends React.Component {
                     style={{ backgroundColor: "rgb(242,242,242)", boxShadow: "none" }}
                   />
                 )}
-                <div className="pdf-header" id="pdf-header">
-                  <Card
-                    style={{ display: "flex", backgroundColor: "rgb(242, 242, 242)", minHeight: "120px", alignItems: "center", paddingLeft: "10px" }}
-                    textChildren={
-                      <div style={{ display: "flex" }}>
-                        <Image  id="image-id" style={logoStyle} source={logoUrl} />
-                        <div style={{ marginLeft: 30 }}>
-                          <div style={{ display: "flex", marginBottom: 5 }}>
-                            <Label label={corpCity} fontSize="20px" fontWeight="500" color="rgba(0, 0, 0, 0.87)" containerStyle={{ marginRight: 10, textTransform: "uppercase" }} />
-                            <Label label={ulbGrade} fontSize="20px" fontWeight="500" color="rgba(0, 0, 0, 0.87)" />
-                          </div>
-                          <Label label={"PT_PDF_SUBHEADER"} fontSize="16px" fontWeight="500" />
-                        </div>
-                      </div>
-                    }
-                  />
-                  <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <div style={{ display: "flex" }}>
-                      <Label label="PT_PROPERTY_ID" color="rgba(0, 0, 0, 0.87)" fontSize="20px" containerStyle={{ marginRight: 10 }} />
-                      <Label label={`: ${get(properties, "propertyId")}`} fontSize="20px" />
-                    </div>
-                    {/* <div style={{display : "flex"}}>
-                      <Label label="Property ID :" color="rgba(0, 0, 0, 0.87)" fontSize="20px"/>
-                      <Label label="PT-JLD-2018-09-145323" fontSize="20px"/>
-                    </div> */}
-                    {/* <div style={{display : "flex"}}>
-                      <Label label="PDF_STATIC_LABEL_CONSOLIDATED_BILL_DATE" color="rgba(0, 0, 0, 0.87)" fontSize="20px"/>
-                      <Label label="PT-JLD-2018-09-145323" fontSize="20px"/>
-                    </div> */}
-                  </div>
-                </div>
-
+                <PdfHeader header={{
+                  logoUrl: logoUrl, corpCity: corpCity, ulbGrade: ulbGrade,
+                  label: "PT_PDF_SUBHEADER"
+                }}
+                  subHeader={{
+                    label: "PT_PROPERTY_ID",
+                    value: `: ${get(properties, "propertyId")}`
+                  }}>
+                </PdfHeader>
                 <PropertyAddressInfo properties={properties} generalMDMSDataById={generalMDMSDataById}></PropertyAddressInfo>
                 <AssessmentInfo properties={properties} generalMDMSDataById={generalMDMSDataById}></AssessmentInfo>
                 <OwnerInfo

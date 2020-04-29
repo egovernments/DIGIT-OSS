@@ -458,8 +458,9 @@ const modifyEndOfJsonPath = (jsonpath, toReplaceWith) => {
 
 export const generatePdfFromDiv = (action, applicationNumber, divIdName) => {
   let target = document.querySelector(divIdName);
-
+  
   html2canvas(target, {
+    
     onclone: function (clonedDoc) {
       if (clonedDoc.getElementById("pdf-header")) {
         clonedDoc.getElementById("pdf-header").style.display = "block";
@@ -476,25 +477,17 @@ export const generatePdfFromDiv = (action, applicationNumber, divIdName) => {
       if (clonedDoc.getElementById("pt-header-due-amount")) {
         clonedDoc.getElementById("pt-header-due-amount").style.display = "none";
       }
-      
+
     }
   }).then(canvas => {
-    // var data = canvas.toDataURL();
-    // var imgWidth = 200;
-    // var pageHeight = 295;
-    // var imgHeight = pageHeight - 80;
-    // var doc = new jsPDF("p", "mm");
-    // var position = 0;
-
-    // doc.addImage(data, "PNG", 5, 10 + position, imgWidth, imgHeight);
-    var data = canvas.toDataURL("image/jpeg", 1);
+   
+    var data = canvas.toDataURL("image/png", 1);
     var imgWidth = 200;
     var pageHeight = 295;
     var imgHeight = (canvas.height * imgWidth) / canvas.width;
     var heightLeft = imgHeight;
     var doc = new jsPDF("p", "mm");
     var position = 0;
-
     doc.addImage(data, "PNG", 5, 5 + position, imgWidth, imgHeight);
     heightLeft -= pageHeight;
 
