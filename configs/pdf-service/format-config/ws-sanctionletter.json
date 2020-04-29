@@ -189,7 +189,7 @@
                 "columns": [
                   {
                     "width": "100%",
-                    "text": "{{in_ref_label}} {{applicationNumber}} {{dated}} {{date}} {{order_meassage2}} {{applicationType}} {{order_meassage3}} {{doorNo}} {{locality_label}} {{locality}}{{order_meassage4}} {{totalAmount}} {{order_meassage5}} {{applicationType}} {{order_meassage6}} {{totalAmount}} {{dated}} {{date}} {{order_meassage7}}",
+                    "text": "{{in_ref_label}} {{applicationNumber}} {{dated}} {{date}} {{order_meassage2}} {{applicationType}} {{order_meassage3}} {{door_no}} {{doorNo}} {{locality_label}} {{locality}}{{order_meassage4}} {{totalAmount}} {{order_meassage5}} {{applicationType}} {{order_meassage6}} {{totalAmount}} {{dated}} {{date}} {{order_meassage7}}",
                     "style": "receipt-value-down"
                   }
                 ],
@@ -212,7 +212,7 @@
                 "columns": [
                   {
                     "width": "100%",
-                    "text": "{{order_meassage8}} {{applicationType}} {{order_meassage9}} {{applicationNumber}} {{order_meassage12}} {{plumberName}}{{order_meassage13}} {{licenceNo}}{{order_meassage14}} {{contactNo}}{{order_meassage10}} {{date}}{{order_meassage11}}",
+                    "text": "{{order_meassage12}} {{plumberName}}{{order_meassage13}} {{licenceNo}}{{order_meassage14}} {{contactNo}}{{order_meassage10}} {{date}}{{order_meassage11}}",
                     "style": "receipt-value-down"
                   }
                 ],
@@ -442,7 +442,7 @@
         "fontSize": 10,
         "fontWeight": 500,
         "margin": [
-          360,
+          380,
           10,
           10,
           10
