@@ -53,9 +53,9 @@ public class PropertyMigrationValidator {
      * Validate the masterData and ctizenInfo of the given propertyRequest
      * @param request PropertyRequest for create
      */
-	public void validatePropertyCreateRequest(PropertyRequest request,Map<String, List<String>> masters) {
+	public void validatePropertyCreateRequest(PropertyRequest request,Map<String, List<String>> masters,Map<String, String> errorMap) {
 
-		Map<String, String> errorMap = new HashMap<>();
+		//Map<String, String> errorMap = new HashMap<>();
 		
 		List<Unit> units 		=	request.getProperty().getUnits();
 		List<OwnerInfo> owners 	=	request.getProperty().getOwners();
@@ -67,18 +67,18 @@ public class PropertyMigrationValidator {
 		if(CollectionUtils.isEmpty(request.getProperty().getOwners()))
 			throw new CustomException("OWNER INFO ERROR","Owners cannot be empty, please provide at least one owner information");
 		
-		if (!errorMap.isEmpty())
-			throw new CustomException(errorMap);
+		/*if (!errorMap.isEmpty())
+			throw new CustomException(errorMap);*/
 
 		validateMasterData(request, masters, errorMap);
-		validateMobileNumber(request, errorMap);
+		//validateMobileNumber(request, errorMap);
 		validateFields(request, errorMap);
 		if (!CollectionUtils.isEmpty(units))
 			validateUnits(request, errorMap);
 
-		if (!errorMap.isEmpty()){
+		/*if (!errorMap.isEmpty()){
 			throw new CustomException(errorMap);
-		}
+		}*/
 	}
 
 	private void validateUnits(PropertyRequest request, Map<String, String> errorMap) {
@@ -115,9 +115,9 @@ public class PropertyMigrationValidator {
 			errorMap.put("MASTER_FETCH_FAILED", "Couldn't fetch master data for validation");
 		}
 
-        if (!errorMap.isEmpty()){
-			throw new CustomException(errorMap);
-		}
+//        if (!errorMap.isEmpty()){
+//			throw new CustomException(errorMap);
+//		}
 
     }
 
@@ -147,7 +147,7 @@ public class PropertyMigrationValidator {
 			} else if (property.getLandArea().compareTo(configs.getMinumumLandArea()) < 0) {
 
 				errorMap.put("EG_PT_ERROR", "Land Area cannot be lesser than minimum value : "
-						+ configs.getMinumumLandArea() + " " + configs.getLandAreaUnit());
+						+ configs.getMinumumLandArea() + " " + configs.getLandAreaUnit()+ "Current "+property.getLandArea());
 			}
 		}
 		
@@ -216,9 +216,9 @@ public class PropertyMigrationValidator {
 
 			}
 
-		if (!CollectionUtils.isEmpty(errorMap)){
-			throw new CustomException(errorMap);
-		}
+//		if (!CollectionUtils.isEmpty(errorMap)){
+//			throw new CustomException(errorMap);
+//		}
 
 		for (OwnerInfo owner : property.getOwners()) {
 
@@ -311,8 +311,8 @@ public class PropertyMigrationValidator {
 			});
 		}
 
-		if (!errorMap.isEmpty())
-			throw new CustomException(errorMap);
+//		if (!errorMap.isEmpty())
+//			throw new CustomException(errorMap);
 
 	}
 
@@ -336,15 +336,15 @@ public class PropertyMigrationValidator {
 
 
 
-	public void ValidateAssessmentMigrationData(AssessmentRequest assessmentRequest, Property property, Map<String, List<String>> masters) {
-		Map<String, String> errorMap = new HashMap<>();
+	public void ValidateAssessmentMigrationData(AssessmentRequest assessmentRequest, Property property, Map<String, List<String>> masters,Map<String, String> errorMap) {
+		//Map<String, String> errorMap = new HashMap<>();
 		validateRI(assessmentRequest.getRequestInfo(), errorMap);
-		validateUnitIds(assessmentRequest.getAssessment(),property);
+		validateUnitIds(assessmentRequest.getAssessment(),property,errorMap);
 		//validateCreateRequest(assessmentRequest.getAssessment(),property);
 		commonValidations(assessmentRequest, errorMap, false);
 		validateAsmtMDMSData(assessmentRequest.getRequestInfo(), assessmentRequest.getAssessment(), errorMap,masters);
 		if(configs.getIsAssessmentWorkflowEnabled())
-			validateWorkflowOfOtherAssessments(assessmentRequest.getAssessment());
+			validateWorkflowOfOtherAssessments(assessmentRequest.getAssessment(),errorMap);
 	}
 
 	public void validateRI(RequestInfo requestInfo, Map<String, String> errorMap) {
@@ -362,13 +362,13 @@ public class PropertyMigrationValidator {
 		} else {
 			errorMap.put(ErrorConstants.MISSING_REQ_INFO_CODE, ErrorConstants.MISSING_REQ_INFO_MSG);
 		}
-		if (!CollectionUtils.isEmpty(errorMap.keySet())) {
-			throw new CustomException(errorMap);
-		}
+//		if (!CollectionUtils.isEmpty(errorMap.keySet())) {
+//			throw new CustomException(errorMap);
+//		}
 
 	}
 
-	private void validateUnitIds(Assessment assessment, Property property){
+	private void validateUnitIds(Assessment assessment, Property property,Map<String, String> errorMap){
 
 		List<String> activeUnitIdsInAssessment = new LinkedList<>();
 		List<String> activeUnitIdsInProperty = new LinkedList<>();
@@ -386,8 +386,11 @@ public class PropertyMigrationValidator {
 			});
 		}
 
-		if(!CollectionUtils.isEmpty(assessment.getUnitUsageList()) && !listEqualsIgnoreOrder(activeUnitIdsInAssessment, activeUnitIdsInProperty))
-			throw new CustomException("INVALID_UNITIDS","The unitIds are not matching in property and assessment");
+		if(!CollectionUtils.isEmpty(assessment.getUnitUsageList()) && !listEqualsIgnoreOrder(activeUnitIdsInAssessment, activeUnitIdsInProperty)){
+			//throw new CustomException("INVALID_UNITIDS","The unitIds are not matching in property and assessment");
+			errorMap.put("INVALID_UNITIDS","The unitIds are not matching in property and assessment");
+		}
+
 
 
 	}
@@ -426,9 +429,9 @@ public class PropertyMigrationValidator {
 
 		}
 
-		if (!CollectionUtils.isEmpty(errorMap.keySet())) {
-			throw new CustomException(errorMap);
-		}
+//		if (!CollectionUtils.isEmpty(errorMap.keySet())) {
+//			throw new CustomException(errorMap);
+//		}
 
 	}
 
@@ -439,7 +442,7 @@ public class PropertyMigrationValidator {
 
 				if (!CollectionUtils.isEmpty(masters.get(PTConstants.MDMS_PT_USAGECATEGORY))) {
 					if (!masters.get(PTConstants.MDMS_PT_USAGECATEGORY).contains(unitUsage.getUsageCategory()))
-						errorMap.put("USAGE_CATEGORY_INVALID", "The usage category provided is invalid");
+						errorMap.put("USAGE_CATEGORY_INVALID", "The usage category provided is invalid="+unitUsage.getUsageCategory());
 				}
 
 				if (CollectionUtils.isEmpty(masters.get(PTConstants.MDMS_PT_OCCUPANCYTYPE))) {
@@ -448,9 +451,9 @@ public class PropertyMigrationValidator {
 				}
 			}
 		}
-		if (!CollectionUtils.isEmpty(errorMap.keySet())) {
-			throw new CustomException(errorMap);
-		}
+//		if (!CollectionUtils.isEmpty(errorMap.keySet())) {
+//			throw new CustomException(errorMap);
+//		}
 
 	}
 
@@ -458,7 +461,7 @@ public class PropertyMigrationValidator {
 	 * Validates if any other assessments are in workflow for the given property
 	 * @param assessment
 	 */
-	private void validateWorkflowOfOtherAssessments(Assessment assessment){
+	private void validateWorkflowOfOtherAssessments(Assessment assessment,Map<String, String> errorMap){
 
 		AssessmentSearchCriteria criteria = AssessmentSearchCriteria.builder()
 				.tenantId(assessment.getTenantId())
@@ -468,8 +471,11 @@ public class PropertyMigrationValidator {
 
 		List<Assessment> assessments = assessmentRepository.getAssessments(criteria);
 
-		if(!CollectionUtils.isEmpty(assessments))
-			throw new CustomException("INVALID_REQUEST","The property has other assessment in workflow");
+		if(!CollectionUtils.isEmpty(assessments)){
+			//throw new CustomException("INVALID_REQUEST","The property has other assessment in workflow");
+			errorMap.put("INVALID_REQUEST","The property has other assessment in workflow");
+		}
+
 
 	}
 
