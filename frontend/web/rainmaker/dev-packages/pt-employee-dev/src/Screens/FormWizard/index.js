@@ -385,8 +385,14 @@ class FormWizard extends Component {
         const {
           tenantId: id
         } = this.state.assessedPropertyDetails.Properties[0].propertyDetails[0];
+        let ulbLogo;
+        cities.forEach((city)=>{
+          if (city.key===id) {
+            ulbLogo=city.logoId;
+          }
+        })
 
-        let receiptImageUrl = `https://s3.ap-south-1.amazonaws.com/pb-egov-assets/${id}/logo.png`;
+        let receiptImageUrl = ulbLogo;
         this.convertImgToDataURLviaCanvas(
           receiptImageUrl,
           function(data) {
@@ -1973,13 +1979,15 @@ const mapStateToProps = state => {
     (propertyAddress && propertyAddress.fields && propertyAddress.fields) || {};
   const currentTenantId = (city && city.value) || commonConfig.tenantId;
   const { generalMDMSDataById } = common;
+    const {cities}=common;
   return {
     form,
     currentTenantId,
     prepareFormData: common.prepareFormData,
-    common,    
+    common,
     app,
-    generalMDMSDataById
+    generalMDMSDataById,
+    cities
   };
 };
 

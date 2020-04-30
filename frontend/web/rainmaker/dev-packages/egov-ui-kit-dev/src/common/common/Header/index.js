@@ -31,16 +31,6 @@ class Header extends Component {
     updateActiveRoute(menupath, menuName);
   };
 
-  // componentWillReceiveProps = (nextProps) => {
-  //   const { role, userInfo } = this.props;
-  //   const permanentCity = get(nextProps, "userInfo.permanentCity");
-  //   if (get(userInfo ,"permanentCity") !== get(nextProps, "userInfo.permanentCity")) {
-  //     const tenantId = role.toLowerCase() === "citizen" ? permanentCity : getTenantId();
-  //     const ulbLogo = `https://s3.ap-south-1.amazonaws.com/pb-egov-assets/${tenantId}/logo.png`;
-  //     this.setState({ ulbLogo });
-  //   }
-  //
-  // }
 
   _handleToggleMenu = () => {
     const { toggleMenu } = this.state;
@@ -163,7 +153,6 @@ class Header extends Component {
     const currentCity = cities.filter((item) => item.code === tenantId);
     const ulbLogo =
       currentCity.length > 0 ? get(currentCity[0], "logoId") : "";
-      // "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.amritsar/logo.png";
     return (
       <div>
         <AppBar

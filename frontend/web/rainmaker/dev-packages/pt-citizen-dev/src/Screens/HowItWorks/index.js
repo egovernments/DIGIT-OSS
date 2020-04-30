@@ -106,7 +106,7 @@ class HowItWorks extends Component {
     title && addBreadCrumbs({ title: title, path: window.location.pathname });
   }
 
-  renderList = items => {
+  renderList = (items,userManual) => {
     return (
       <div>
         <div className="row">
@@ -314,10 +314,10 @@ class HowItWorks extends Component {
           </div>
         </div>
 
-        <div className="col-sm-12" style={{ padding: "15px 0px 30px 0px" }}>
+        {userManual && <div className="col-sm-12" style={{ padding: "15px 0px 30px 0px" }}>
           <a
             href={
-              "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb/PT_User_Manual_Citizen.pdf"
+              userManual
             }
             target="_blank"
           >
@@ -333,7 +333,7 @@ class HowItWorks extends Component {
               style={{ height: 30, lineHeight: "auto", minWidth: "inherit" }}
             />
           </a>
-        </div>
+        </div>}
 
         <div>
           <Label label="PT_FAQ" color="#484848" fontSize="20px" />
@@ -380,14 +380,14 @@ class HowItWorks extends Component {
 
   render() {
     const { renderList, listItems } = this;
-    const { urls, history } = this.props;
+    const { urls, history ,userManual} = this.props;
     return (
       <Screen className="screen-with-bredcrumb">
         <BreadCrumbs url={urls} history={history} />
         <div className="form-without-button-cont-generic">
           <Card
             className="how-it-works-card"
-            textChildren={renderList(listItems)}
+            textChildren={renderList(listItems,userManual)}
           />
         </div>
       </Screen>
@@ -397,8 +397,21 @@ class HowItWorks extends Component {
 
 const mapStateToProps = state => {
   const { common, app } = state;
+  const {stateInfoById=[]}=common;
+  let userManual;
+  stateInfoById.forEach((stateInfo)=>{
+    if (stateInfo.userManuals && stateInfo.userManuals.length>0) {
+      stateInfo.userManuals.forEach((manual)=>{
+        if (manual.module==="PT") {
+          if (manual.manuals && manual.manuals.length>0) {
+            userManual=manual.manuals[0].url;
+          }
+        }
+      })
+    }
+  })
   const { urls } = app;
-  return { urls };
+  return { urls,userManual };
 };
 
 const mapDispatchToProps = dispatch => {

@@ -16,6 +16,36 @@ const appCardHeaderStyle = (colorOne = "#ec407a", colorTwo = "#d81b60") => {
   };
 };
 
+export const loadUlbLogo = logoURL => {
+  var img = new Image();
+  img.crossOrigin = "Anonymous";
+  img.onload = function() {
+    var canvas = document.createElement("CANVAS");
+    var ctx = canvas.getContext("2d");
+    canvas.height = this.height;
+    canvas.width = this.width;
+    ctx.drawImage(this, 0, 0);
+    store.dispatch(prepareFinalObject("base64UlbLogo", canvas.toDataURL()));
+    canvas = null;
+  };
+  img.src = logoURL;
+};
+
+export const getULBURL=(state)=>{
+  const cities = get(
+    state.common,
+    "cities",
+    []
+  );
+  let ulbLogo;
+  cities.forEach((city)=>{
+    if (city.key==tenant) {
+      ulbLogo=logoId;
+    }
+  })
+  return ulbLogo;
+}
+
 export const getStepperObject = (
   stpperProps,
   stepsData,

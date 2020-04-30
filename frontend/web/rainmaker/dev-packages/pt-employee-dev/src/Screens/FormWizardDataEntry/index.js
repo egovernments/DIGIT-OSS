@@ -451,7 +451,8 @@ class FormWizardDataEntry extends Component {
       showSpinner,
       hideSpinner,
       fetchGeneralMDMSData,
-      history
+      history,
+      cities
     } = this.props;
     let { search } = location;
     let { resetForm } = this;
@@ -518,8 +519,15 @@ class FormWizardDataEntry extends Component {
         const {
           tenantId: id
         } = this.state.assessedPropertyDetails.Properties[0].propertyDetails[0];
+        let ulbLogo;
+        cities.forEach((city)=>{
+          if (city.key===id) {
+            ulbLogo=city.logoId;
+          }
+        })
 
-        let receiptImageUrl = `https://s3.ap-south-1.amazonaws.com/pb-egov-assets/${id}/logo.png`;
+
+        let receiptImageUrl = ulbLogo;
         this.convertImgToDataURLviaCanvas(
           receiptImageUrl,
           function(data) {
@@ -2681,6 +2689,7 @@ const mapStateToProps = state => {
   preparedFinalObject = { ...preparedFinalObject };
   const { DemandProperties, DemandPropertiesResponse } =
     preparedFinalObject || {};
+    const {cities}=common;
   return {
     form,
     currentTenantId,
@@ -2690,7 +2699,8 @@ const mapStateToProps = state => {
     app,
     generalMDMSDataById,
     DemandProperties,
-    DemandPropertiesResponse
+    DemandPropertiesResponse,
+    cities
   };
 };
 

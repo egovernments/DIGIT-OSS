@@ -8,12 +8,13 @@ import {
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import {
   loadPtBillData,
-  loadUlbLogo,
   loadMdmsData
 } from "./receiptTransformer";
 import isEmpty from "lodash/isEmpty";
 import get from "lodash/get";
 import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { loadUlbLogo,getULBURL } from "egov-ui-framework/ui-config/screens/specs/utils";
+
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -162,7 +163,7 @@ const stylesForBills = {
 const getMutlipleBillsData = transformedDataArray => {
   let multipleBillData = transformedDataArray.map((transformedData,index) => {
     return getPdfContent(transformedData,transformedDataArray.length,index);
-   
+
   });
   let finalMultipleBillData = {
     content: multipleBillData,
@@ -179,7 +180,8 @@ export const generateMultipleBill = async (state, dispatch, type) => {
     []
   );
   const tenant = getTenantId();
-  loadUlbLogo(tenant);
+  const ulbLogo=getULBURL(state,tenant)
+  loadUlbLogo(getULBURL);
   await loadMdmsData(tenant);
   // data1 is for ULB logo from loadUlbLogo
   let data1 = get(
@@ -219,6 +221,7 @@ const getSingleBillData = transformedData => {
   return singleBillData;
 };
 
+
 export const generateSingleBill = async billNo => {
   const state = store.getState();
   const allBills = get(
@@ -235,7 +238,8 @@ export const generateSingleBill = async billNo => {
     return;
   }
   const tenant = get(data, "tenantId");
-  loadUlbLogo(tenant);
+  const ulbLogo=getULBURL(state,tenant);
+  loadUlbLogo(ulbLogo);
   let transformedData = await loadPtBillData(data);
   await loadMdmsData(tenant);
 
@@ -512,7 +516,7 @@ const getPdfContent = (transformedData,length,index) =>{
               style: "receipt-table"
             }
           ],
-          [         
+          [
             {
               text: "Property ID",
               border: [true, false, false, true],
@@ -561,7 +565,7 @@ const getPdfContent = (transformedData,length,index) =>{
                 widths: ["10%", "14%", "13%", "14%", "10%", "9%", "9%", "10%","12%"],
                 body: [
                     getTaxHeadHeaders(transformedData.taxHeads),
-                    getTaxHeadValues(transformedData.taxHeads)                 
+                    getTaxHeadValues(transformedData.taxHeads)
                 ]
               },
               border: [true, false, true, true]
@@ -693,7 +697,7 @@ const getPdfContent = (transformedData,length,index) =>{
             // }
           ],
           [
-        
+
             {
               text: "Bill No.",
               border: [false, false, false, false],
@@ -718,7 +722,7 @@ const getPdfContent = (transformedData,length,index) =>{
 
               style: "receipt-table"
             }
-          ],   
+          ],
         ]
       }
     },
@@ -740,7 +744,7 @@ const getPdfContent = (transformedData,length,index) =>{
 
           style: "receipt-table"
         }
-        ]  
+        ]
       ]
     }
     },
@@ -748,7 +752,7 @@ const getPdfContent = (transformedData,length,index) =>{
       text: "Receiver’s Signature & Mobile No. ",
       style: "footer",
       pageBreak: index === length - 1 ? "" : "after",
-    
+
     }
   ]
 }

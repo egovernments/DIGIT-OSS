@@ -325,7 +325,8 @@ class FormWizard extends Component {
       renderCustomTitleForPt,
       fetchGeneralMDMSData,
       fetchMDMDDocumentTypeSuccess,
-      toggleSpinner
+      toggleSpinner,
+      cities
     } = this.props;
     toggleSpinner();
     try {
@@ -409,9 +410,13 @@ class FormWizard extends Component {
     if (selected > 2) {
 
       const { tenantId: id } = this.state.assessedPropertyDetails.Properties[0].propertyDetails[0];
-
-
-      let receiptImageUrl = `https://s3.ap-south-1.amazonaws.com/pb-egov-assets/${id}/logo.png`;
+      let ulbLogo;
+      cities.forEach((city)=>{
+        if (city.key===id) {
+          ulbLogo=city.logoId;
+        }
+      })
+      let receiptImageUrl = ulbLogo;
       this.convertImgToDataURLviaCanvas(
         receiptImageUrl,
         function (data) {
@@ -1745,12 +1750,14 @@ const mapStateToProps = state => {
   const { city } =
     (propertyAddress && propertyAddress.fields && propertyAddress.fields) || {};
   const currentTenantId = (city && city.value) || commonConfig.tenantId;
+  const {cities}=common;
   return {
     form,
     prepareFormData: common.prepareFormData,
     currentTenantId,
     common,
-    app
+    app,
+    cities
   };
 };
 

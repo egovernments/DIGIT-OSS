@@ -210,8 +210,16 @@ class PaymentSuccess extends Component {
     img.src = url;
   };
 
-  createImageUrl = tenantId => {
-    return `https://s3.ap-south-1.amazonaws.com/pb-egov-assets/${tenantId}/logo.png`;
+
+  createImageUrl = (tenantId) => {
+    const {cities}=this.props;
+    let logUrl;
+    cities.forEach((city)=>{
+      if (city.key===tenantId) {
+        logUrl=city.logoId
+      }
+    })
+    return logUrl;
   };
 
   render() {

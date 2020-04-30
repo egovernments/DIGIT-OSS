@@ -25,37 +25,23 @@ const epochToDate = et => {
   return formattedDate;
 };
 
-export const loadUlbLogo = tenantid => {
-  var img = new Image();
-  img.crossOrigin = "Anonymous";
-  img.onload = function() {
-    var canvas = document.createElement("CANVAS");
-    var ctx = canvas.getContext("2d");
-    canvas.height = this.height;
-    canvas.width = this.width;
-    ctx.drawImage(this, 0, 0);
-    store.dispatch(prepareFinalObject("base64UlbLogo", canvas.toDataURL()));
-    canvas = null;
-  };
-  img.src = `https://s3.ap-south-1.amazonaws.com/pb-egov-assets/${tenantid}/logo.png`;
-};
 
 export const loadPtBillData = response => {
   // const ulbData = loadMdmsData(getTenantId())
-  let data = {};  
+  let data = {};
   let orderedResponse = orderBy(
     response.billDetails,
     "fromPeriod",
     "desc");
-    
+
   let taxHeads = orderedResponse[0].billAccountDetails.reduce((acc,item,index) =>{
     if(index<9){
       acc[getLocaleLabels(
         "",
         item.taxHeadCode,
         getTransformedLocalStorgaeLabels()
-      )] = item.amount 
-    }     
+      )] = item.amount
+    }
     return acc
   },[])
   const fromDate = epochToDate(get(response, "billDetails[0].fromPeriod"));
@@ -107,7 +93,7 @@ export const loadMdmsData = async tenantid => {
     let ulbData = response.MdmsRes.tenant.tenants.find(item => {
       return item.code == tenantid;
     });
-  
+
     /** START Corporation name generation logic */
     let ulbGrade = get(ulbData, "city.ulbGrade", "NA");
     let name = get(ulbData, "city.name", "NA");
