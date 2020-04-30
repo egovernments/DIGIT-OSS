@@ -208,7 +208,7 @@ var toDateAlertMsg = '<spring:message code="msg.please.select.toDate"/>';
 												<th><spring:message code="lbl.deposited.bank.name"
 														text="Deposited in Bank Name" /></th>
 												<th><spring:message code="lbl.dishonoured.on.date" text="Dishonored On Date" /></th>
-												<th><spring:message code="lbl.cheque.number"
+												<th><spring:message code="lbl.cheque.amount"
 														text="Cheque Number" /></th>
 											</tr>
 										</thead>
