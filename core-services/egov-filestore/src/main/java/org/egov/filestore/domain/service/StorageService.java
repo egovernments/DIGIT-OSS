@@ -85,7 +85,8 @@ public class StorageService {
 
 		final String folderName = getFolderName(module, tenantId);
 		return files.stream().map(file -> {
-			String fileName = folderName + System.currentTimeMillis() + file.getOriginalFilename();
+			//String fileName = folderName + System.currentTimeMillis() + file.getOriginalFilename();
+			String fileName = file.getOriginalFilename();
 			String id = this.idGeneratorService.getId();
 			FileLocation fileLocation = new FileLocation(id, module, tag, tenantId, fileName, null);
 			return new Artifact(inputStreamAsString, file, fileLocation);
