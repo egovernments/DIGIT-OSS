@@ -460,7 +460,7 @@ export const generatePdfFromDiv = (action, applicationNumber, divIdName) => {
   let target = document.querySelector(divIdName);
   
   html2canvas(target, {
-    
+    scale: 0.8,
     onclone: function (clonedDoc) {
       if (clonedDoc.getElementById("pdf-header")) {
         clonedDoc.getElementById("pdf-header").style.display = "block";
