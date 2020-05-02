@@ -76,7 +76,7 @@ serviceMaps:
 
       - jsonPath: $.Property.*.address.id
 
-      - jsonPath: $.Property.*.address.id
+      - jsonPath: $.Property.*.id
 
       - jsonPath: $.Property.*.address.doorNo
 
