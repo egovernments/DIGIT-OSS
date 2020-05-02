@@ -18,7 +18,7 @@ serviceMaps:
         type: JSON
         dbType: JSONB
 
-    - query: INSERT INTO eg_pt_property (id, propertyid, tenantid, surveyid, accountid, oldpropertyid, status, acknowldgementnumber, propertytype, ownershipcategory, usagecategory, creationreason, nooffloors, landarea, superbuiltuparea, linkedproperties, source,  channel, createdby, createdtime, lastmodifiedby, lastmodifiedtime, additionaldetails) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(id) DO NOTHING;
+    - query: INSERT INTO eg_pt_property (id, propertyid, tenantid, surveyid, accountid, oldpropertyid, status, acknowldgementnumber, propertytype, ownershipcategory, usagecategory, creationreason, nooffloors, landarea, superbuiltuparea, source,  channel, createdby, createdtime, lastmodifiedby, lastmodifiedtime, additionaldetails) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(id) DO NOTHING;
       basePath: Property.*
       jsonMaps:
 
@@ -51,10 +51,6 @@ serviceMaps:
       - jsonPath: $.Property.*.landArea
 
       - jsonPath: $.Property.*.superBuiltUpArea
-
-      - jsonPath: $.Property.*.linkedProperties
-        type: ARRAY
-        dbType: STRING
 
       - jsonPath: $.Property.*.source
 
@@ -171,7 +167,7 @@ serviceMaps:
 
       - jsonPath: $.Property[*][?({id} in @.property.*.units[*].id)].auditDetails.lastModifiedTime
 
-    - query: UPDATE eg_pt_property SET propertyid=?,  surveyid=?, accountid=?, oldpropertyid=?, status=?, propertytype=?, ownershipcategory=?, usagecategory=?, nooffloors=?, landarea=?,   superbuiltuparea=?, linkedproperties=?, lastmodifiedby=?, lastmodifiedtime=?, additionaldetails=? WHERE Id=? AND tenantId=?;
+    - query: UPDATE eg_pt_property SET propertyid=?,  surveyid=?, accountid=?, oldpropertyid=?, status=?, propertytype=?, ownershipcategory=?, usagecategory=?, nooffloors=?, landarea=?,   superbuiltuparea=?, lastmodifiedby=?, lastmodifiedtime=?, additionaldetails=? WHERE Id=? AND tenantId=?;
       basePath: Property.*
       jsonMaps:
 
@@ -196,8 +192,6 @@ serviceMaps:
       - jsonPath: $.Property.*.landArea
 
       - jsonPath: $.Property.*.superBuiltUpArea
-
-      - jsonPath: $.Property.*.linkedProperties
 
       - jsonPath: $.Property.*.auditDetails.lastModifiedBy
 
@@ -404,4 +398,3 @@ serviceMaps:
       - jsonPath: $.Property[*][?({id} in @.property.*.units[*].id)].auditDetails.lastModifiedTime
 
       - jsonPath: $.Property.*.units.*.id
-
