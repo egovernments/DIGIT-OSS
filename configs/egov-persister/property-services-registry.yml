@@ -348,7 +348,7 @@ serviceMaps:
       basePath: Property.owners.*
       jsonMaps:
 
-      - jsonPath: $.Property.*.ownerInfoUuid
+      - jsonPath: $.Property.owners.*.ownerInfoUuid
 
       - jsonPath: $.Property.tenantId
 
