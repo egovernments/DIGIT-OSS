@@ -248,13 +248,13 @@ serviceMaps:
 
       - jsonPath: $.Property[*][?({id} in @.documents[*].id)].id
 
-      - jsonPath: $.Property.documents.*.documentType
+      - jsonPath: $.Property.*.documents.*.documentType
 
-      - jsonPath: $.Property.documents.*.fileStoreId
+      - jsonPath: $.Property.*.documents.*.fileStoreId
 
-      - jsonPath: $.Property.documents.*.documentUid
+      - jsonPath: $.Property.*.documents.*.documentUid
 
-      - jsonPath: $.Property.documents.*.status
+      - jsonPath: $.Property.*.documents.*.status
 
       - jsonPath: $.Property[*][?({id} in @.documents[*].id)].auditDetails.createdBy
 
@@ -272,15 +272,15 @@ serviceMaps:
 
       - jsonPath: $.Property[*][?({id} in @.owners.*.documents[*].id)].tenantId
 
-      - jsonPath: $.Property.owners[*][?({id} in @.documents[*].id)].ownerInfoUuid
+      - jsonPath: $.Property.*.owners[*][?({id} in @.documents[*].id)].ownerInfoUuid
 
-      - jsonPath: $.Property.owners.*.documents.*.documentType
+      - jsonPath: $.Property.*.owners.*.documents.*.documentType
 
-      - jsonPath: $.Property.owners.*.documents.*.fileStoreId
+      - jsonPath: $.Property.*.owners.*.documents.*.fileStoreId
 
-      - jsonPath: $.Property.owners.*.documents.*.documentUid
+      - jsonPath: $.Property.*.owners.*.documents.*.documentUid
 
-      - jsonPath: $.Property.owners.*.documents.*.status
+      - jsonPath: $.Property.*.owners.*.documents.*.status
 
       - jsonPath: $.Property[*][?({id} in @.owners.*.documents[*].id)].auditDetails.createdBy
 
