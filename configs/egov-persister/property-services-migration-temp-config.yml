@@ -210,7 +210,7 @@ serviceMaps:
       basePath: Property.*.owners.*
       jsonMaps:
 
-      - jsonPath: $.Property.owners.*.ownerInfoUuid
+      - jsonPath: $.Property.*.owners.*.ownerInfoUuid
 
       - jsonPath: $.Property[*][?({id} in @.owners[*].id)].tenantId
 
