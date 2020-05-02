@@ -108,11 +108,11 @@ serviceMaps:
 
       - jsonPath: $.Property.*.address.auditDetails.createdBy
 
-      - jsonPath: $.Property.*.address.auditDetails.createdTime
+      - jsonPath: $.Property.*.auditDetails.createdTime
 
-      - jsonPath: $.Property.*.address.auditDetails.lastModifiedBy
+      - jsonPath: $.Property.*.auditDetails.lastModifiedBy
 
-      - jsonPath: $.Property.*.address.auditDetails.lastModifiedTime
+      - jsonPath: $.Property.*.auditDetails.lastModifiedTime
 
       - jsonPath: $.Property.*.address.additionalDetails
         type: JSON
@@ -322,9 +322,9 @@ serviceMaps:
 
       - jsonPath: $.Property.*.address.geoLocation.longitude
 
-      - jsonPath: $.Property.*.address.auditDetails.lastModifiedBy
+      - jsonPath: $.Property.*.auditDetails.lastModifiedBy
 
-      - jsonPath: $.Property.*.address.auditDetails.lastModifiedTime
+      - jsonPath: $.Property.*.auditDetails.lastModifiedTime
 
       - jsonPath: $.Property.*.address.additionalDetails
         type: JSON
