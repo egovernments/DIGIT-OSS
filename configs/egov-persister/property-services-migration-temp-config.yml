@@ -322,9 +322,9 @@ serviceMaps:
 
       - jsonPath: $.Property.*.address.geoLocation.longitude
 
-      - jsonPath: $.Property.*.auditDetails.lastModifiedBy
+      - jsonPath: $.Property.*.address.auditDetails.lastModifiedBy
 
-      - jsonPath: $.Property.*.auditDetails.lastModifiedTime
+      - jsonPath: $.Property.*.address.auditDetails.lastModifiedTime
 
       - jsonPath: $.Property.*.address.additionalDetails
         type: JSON
