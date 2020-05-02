@@ -1,8 +1,6 @@
 package org.egov.pt.web.controllers;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.validation.Valid;
 
@@ -79,9 +77,19 @@ public class PropertyController {
 	public ResponseEntity<?> propertyMigration(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
 															  @Valid @ModelAttribute OldPropertyCriteria propertyCriteria) {
 		long startTime = System.nanoTime();
+		String resultMap = null;
+		Map<String, String> errorMap = new HashMap<>();
+		Map<String, List<String>> masters = migrationService.getMDMSData(requestInfoWrapper.getRequestInfo(),"pb");
+		List<String> tenantList = migrationService.getTenantList();
+		/*for(int i= 0;i<tenantList.size();i++){
+			propertyCriteria.setTenantId(tenantList.get(i));
+			resultMap = migrationService.initiatemigration(requestInfoWrapper, propertyCriteria,masters,errorMap);
+		}*/
+		resultMap = migrationService.initiatemigration(requestInfoWrapper, propertyCriteria,masters,errorMap);
 
-		Map<String, String> resultMap = migrationService.initiatemigration(requestInfoWrapper, propertyCriteria);
-
+		/*List<OldProperty> prop = migrationService.searchPropertyPlainSearch(propertyCriteria,requestInfoWrapper.getRequestInfo());
+		System.out.println("\n\nproperty--->"+prop.toString()+"\n\n");
+		resultMap = migrationService.migrateProperty(requestInfoWrapper.getRequestInfo(),prop,propertyCriteria.getTenantId(),masters);*/
 		long endtime = System.nanoTime();
 		long elapsetime = endtime - startTime;
 		System.out.println("Elapsed time--->"+elapsetime);
