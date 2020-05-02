@@ -212,9 +212,9 @@ serviceMaps:
 
       - jsonPath: $.Property.*.owners.*.ownerInfoUuid
 
-      - jsonPath: $.Property[*][?({id} in @.owners[*].id)].tenantId
+      - jsonPath: $.Property[*][?({ownerInfoUuid} in @.owners[*].ownerInfoUuid)].tenantId
 
-      - jsonPath: $.Property[*][?({id} in @.owners[*].id)].id
+      - jsonPath: $.Property[*][?({ownerInfoUuid} in @.owners[*].ownerInfoUuid)].id
 
       - jsonPath: $.Property.*.owners.*.uuid
 
@@ -230,13 +230,13 @@ serviceMaps:
 
       - jsonPath: $.Property.*.owners.*.relationship
 
-      - jsonPath: $.Property[*][?({id} in @.owners[*].id)].auditDetails.createdBy
+      - jsonPath: $.Property[*][?({ownerInfoUuid} in @.owners[*].ownerInfoUuid)].auditDetails.createdBy
 
-      - jsonPath: $.Property[*][?({id} in @.owners[*].id)].auditDetails.createdTime
+      - jsonPath: $.Property[*][?({ownerInfoUuid} in @.owners[*].ownerInfoUuid)].auditDetails.createdTime
 
-      - jsonPath: $.Property[*][?({id} in @.owners[*].id)].auditDetails.lastModifiedBy
+      - jsonPath: $.Property[*][?({ownerInfoUuid} in @.owners[*].ownerInfoUuid)].auditDetails.lastModifiedBy
 
-      - jsonPath: $.Property[*][?({id} in @.owners[*].id)].auditDetails.lastModifiedTime
+      - jsonPath: $.Property[*][?({ownerInfoUuid} in @.owners[*].ownerInfoUuid)].auditDetails.lastModifiedTime
 
     - query: INSERT INTO eg_pt_document (id, tenantid, entityid, documenttype, filestoreid, documentuid, status, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET documenttype = EXCLUDED.documenttype,fileStoreid = EXCLUDED.filestoreid, documentuid=EXCLUDED.documentuid, status=EXCLUDED.status, lastmodifiedby = EXCLUDED.lastModifiedby, lastmodifiedtime = EXCLUDED.lastmodifiedtime;
       basePath: $.Property.*.documents.*
