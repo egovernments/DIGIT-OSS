@@ -14,6 +14,7 @@ import org.egov.pt.models.oldProperty.OldPropertyRequest;
 import org.egov.pt.service.MigrationService;
 import org.egov.pt.service.PropertyService;
 import org.egov.pt.util.ResponseInfoFactory;
+import org.egov.pt.web.contracts.AssessmentRequest;
 import org.egov.pt.web.contracts.PropertyRequest;
 import org.egov.pt.web.contracts.PropertyResponse;
 import org.egov.pt.web.contracts.RequestInfoWrapper;
@@ -77,19 +78,16 @@ public class PropertyController {
 	public ResponseEntity<?> propertyMigration(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
 															  @Valid @ModelAttribute OldPropertyCriteria propertyCriteria) {
 		long startTime = System.nanoTime();
-		String resultMap = null;
+		Map<String, String> resultMap = null;
 		Map<String, String> errorMap = new HashMap<>();
+		List<AssessmentRequest> assessmentRequestList = new ArrayList<>();
 		Map<String, List<String>> masters = migrationService.getMDMSData(requestInfoWrapper.getRequestInfo(),"pb");
 		List<String> tenantList = migrationService.getTenantList();
-		/*for(int i= 0;i<tenantList.size();i++){
+		for(int i= 0;i<tenantList.size();i++){
 			propertyCriteria.setTenantId(tenantList.get(i));
-			resultMap = migrationService.initiatemigration(requestInfoWrapper, propertyCriteria,masters,errorMap);
-		}*/
-		resultMap = migrationService.initiatemigration(requestInfoWrapper, propertyCriteria,masters,errorMap);
-
-		/*List<OldProperty> prop = migrationService.searchPropertyPlainSearch(propertyCriteria,requestInfoWrapper.getRequestInfo());
-		System.out.println("\n\nproperty--->"+prop.toString()+"\n\n");
-		resultMap = migrationService.migrateProperty(requestInfoWrapper.getRequestInfo(),prop,propertyCriteria.getTenantId(),masters);*/
+			resultMap = migrationService.initiatemigration(requestInfoWrapper, propertyCriteria,masters,errorMap,assessmentRequestList);
+		}
+		//migrationService.sendDataToAssessmentCreateTopic(assessmentRequestList);
 		long endtime = System.nanoTime();
 		long elapsetime = endtime - startTime;
 		System.out.println("Elapsed time--->"+elapsetime);

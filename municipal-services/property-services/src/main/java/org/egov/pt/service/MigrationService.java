@@ -34,9 +34,7 @@ import org.egov.pt.util.PTConstants;
 import org.egov.pt.validator.AssessmentValidator;
 import org.egov.pt.validator.PropertyMigrationValidator;
 import org.egov.pt.validator.PropertyValidator;
-import org.egov.pt.web.contracts.AssessmentRequest;
-import org.egov.pt.web.contracts.PropertyRequest;
-import org.egov.pt.web.contracts.PropertyRequestList;
+import org.egov.pt.web.contracts.*;
 import org.egov.pt.web.contracts.RequestInfoWrapper;
 import org.egov.tracer.model.CustomException;
 import org.egov.tracer.model.ServiceCallException;
@@ -126,14 +124,15 @@ public class MigrationService {
 
 
 
+
+
    public List<String> getTenantList(){
        List<String> tenantList =jdbcTemplate.queryForList(TENANT_QUERY,String.class);
        return tenantList;
    }
-    public String initiatemigration(RequestInfoWrapper requestInfoWrapper,OldPropertyCriteria propertyCriteria,Map<String, List<String>> masters,Map<String, String> errorMap) {
+    public Map<String, String> initiatemigration(RequestInfoWrapper requestInfoWrapper,OldPropertyCriteria propertyCriteria,Map<String, List<String>> masters,Map<String, String> errorMap,List<AssessmentRequest> assessmentRequestList) {
 
         Map<String, String> responseMap = new HashMap<>();
-        String JSON = null;
 
         Integer startBatch = Math.toIntExact(propertyCriteria.getOffset());
         Integer batchSizeInput = Math.toIntExact(propertyCriteria.getLimit());
@@ -158,12 +157,12 @@ public class MigrationService {
                 long startTime = System.nanoTime();
                 List<OldProperty> oldProperties = searchPropertyPlainSearch(propertyCriteria,requestInfoWrapper.getRequestInfo(),i) ;
                 try {
-                    JSON= migrateProperty(requestInfo,oldProperties,tenantId,masters,errorMap);
+                    migrateProperty(requestInfo,oldProperties,masters,errorMap,assessmentRequestList);
                 } catch (Exception e) {
 
                     log.error("Migration failed at batch count of : " + i+"for tenantId"+tenantId);
                     responseMap.put( "Migration failed at batch count : " + i+"for tenantId"+tenantId, e.getMessage());
-                    return JSON;
+                    return errorMap;
                 }
                 addResponseToMap(properties,responseMap,"SUCCESS");
                 log.info(" count completed : " + i);
@@ -173,7 +172,7 @@ public class MigrationService {
                 i = i+batchSize;
             }
 
-        return JSON;
+        return errorMap;
 
     }
 
@@ -384,21 +383,16 @@ public class MigrationService {
         return  d.getTime();
     }
 
-    public String migrateProperty(RequestInfo requestInfo, List<OldProperty> oldProperties,String tenantId,Map<String, List<String>> masters,Map<String, String> errorMap) {
+    public Map<String, String> migrateProperty(RequestInfo requestInfo, List<OldProperty> oldProperties,Map<String, List<String>> masters,Map<String, String> errorMap,List<AssessmentRequest> assessmentRequestList) {
         List<Property> properties = new ArrayList<>();
         for(OldProperty oldProperty : oldProperties){
-            Property property = new Property();
-            property.setId(UUID.randomUUID().toString());
-            property.setPropertyId(oldProperty.getPropertyId());
-            property.setTenantId(oldProperty.getTenantId());
-            property.setAccountId(requestInfo.getUserInfo().getUuid());
-            property.setOldPropertyId(oldProperty.getOldPropertyId());
-            property.setStatus(Status.fromValue(oldProperty.getStatus().toString()));
-            if(oldProperty.getAddress()!=null)
-                property.setAddress(migrateAddress(oldProperty.getAddress()));
-            else
-                property.setAddress(null);
-            property.setAcknowldgementNumber(oldProperty.getAcknowldgementNumber());
+
+            String Id = UUID.randomUUID().toString();
+            String propertyId = oldProperty.getPropertyId();
+            String tenantId= oldProperty.getTenantId();
+            String accountId = requestInfo.getUserInfo().getUuid();
+            String oldPropertyId = oldProperty.getOldPropertyId();
+            Status status = Status.fromValue(oldProperty.getStatus().toString());
 
             Collections.sort(oldProperty.getPropertyDetails(), new Comparator<PropertyDetail>() {
                 @Override
@@ -408,6 +402,19 @@ public class MigrationService {
             });
 
             for(int i=0;i< oldProperty.getPropertyDetails().size();i++){
+                Property property = new Property();
+                property.setId(Id);
+                property.setPropertyId(propertyId);
+                property.setTenantId(tenantId);
+                property.setAccountId(accountId);
+                property.setOldPropertyId(oldPropertyId);
+                property.setStatus(status);
+
+                if(oldProperty.getAddress()!=null)
+                    property.setAddress(migrateAddress(oldProperty.getAddress()));
+                else
+                    property.setAddress(null);
+                property.setAcknowldgementNumber(oldProperty.getAcknowldgementNumber());
 
                 if(oldProperty.getPropertyDetails().get(i) != null){
                     property.setPropertyType(migratePropertyType(oldProperty.getPropertyDetails().get(i)));
@@ -490,16 +497,13 @@ public class MigrationService {
                     errorMap.put(property.getPropertyId(), String.valueOf(e));
                    //throw new CustomException(errorMap);
                 }
-                
-                //producer.push(config.getSavePropertyTopic(), request);
 
                 properties.add(property);
                 
 
                 if(oldProperty.getPropertyDetails().get(i)!=null)
-                    migrateAssesment(oldProperty.getPropertyDetails().get(i),property,requestInfo,errorMap,masters,units);
+                    migrateAssesment(oldProperty.getPropertyDetails().get(i),property,requestInfo,errorMap,masters,units,assessmentRequestList);
             }
-            //properties.add(property);
         }
         PropertyRequestList requestList = PropertyRequestList.builder().requestInfo(requestInfo).property(properties).build();
         ObjectMapper mapper = new ObjectMapper();
@@ -512,7 +516,7 @@ public class MigrationService {
         }
 
         producer.push(config.getSavePropertyTopic(), requestList);
-        return json;
+        return errorMap;
     }
 
     public Address migrateAddress(org.egov.pt.models.oldProperty.Address oldAddress){
@@ -778,7 +782,7 @@ public class MigrationService {
     }
 
 
-    public void migrateAssesment(PropertyDetail propertyDetail, Property property, RequestInfo requestInfo,Map<String,String> errorMap,Map<String, List<String>> masters, List<Unit> units){
+    public void migrateAssesment(PropertyDetail propertyDetail, Property property, RequestInfo requestInfo,Map<String,String> errorMap,Map<String, List<String>> masters, List<Unit> units,List<AssessmentRequest> assessmentRequestList){
         Assessment assessment = new Assessment();
         assessment.setId(String.valueOf(UUID.randomUUID()));
         assessment.setTenantId(propertyDetail.getTenantId());
@@ -858,7 +862,8 @@ public class MigrationService {
             errorMap.put(assessment.getAssessmentNumber(), String.valueOf(e));
             //throw new CustomException(errorMap);
         }
-        //producer.push(config.getCreateAssessmentTopic(), request);
+        //assessmentRequestList.add(request);
+        producer.push(config.getCreateAssessmentTopic(), request);
     }
 
     public Map<String,String> addAssessmentPenaltyandRebate(Map<String,String> assessmentAdditionalDetail,PropertyDetail propertyDetail){
@@ -1014,9 +1019,9 @@ public class MigrationService {
             throw new CustomException(errorMap);
     }
 
-    public void sendDataToUpdateTopic(List<PropertyRequest> updateProperty){
-        for(PropertyRequest propertyRequest: updateProperty)
-            producer.push(config.getUpdatePropertyTopic(), propertyRequest);
+    public void sendDataToAssessmentCreateTopic(List<AssessmentRequest> assessmentRequestList){
+        for(AssessmentRequest assessmentRequest: assessmentRequestList)
+            producer.push(config.getCreateAssessmentTopic(), assessmentRequest);
     }
 
 }
