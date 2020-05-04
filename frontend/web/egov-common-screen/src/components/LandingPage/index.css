@@ -32,7 +32,47 @@
         width:120px !important;
 
     }
+    .rlink
+    {
+        text-align: left !important;
+      margin-left: 33px !important;
+      margin-right: 20px !important;
+    }
 }
+
+@media only screen and (max-width: 600px) {
+    .header-logo 
+    {
+        width : 80% !important;
+    } 
+    .common-background {
+        background-size: cover!important;
+        height: 1300px !important;
+    }
+    .firstcard
+    {
+        border-radius: 0px;
+    height: 450px !important;
+    }
+    #buttonlink
+    {
+        margin-top : 34px;
+        width:120px !important;
+
+    }
+    #buttonlink2
+    {
+        width:120px !important;
+
+    }
+    .rlink
+    {
+        text-align: left !important;
+      margin-left: 33px !important;
+      margin-right: 20px !important;
+    }
+}
+
 
 .common-grid
 {

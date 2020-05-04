@@ -106,7 +106,7 @@ class LandingPage extends React.Component {
                     <Grid container spacing={4}>
                         <Grid item md={1}></Grid>
                         <Grid item md={5} className = "common-grid" >
-                            <Card style={{ borderRadius: 0, height:420,    }}>
+                            <Card className="firstcard" style={{ borderRadius: 0, height:420,    }}>
                                 <CardContent   style={{height:300}}   > 
                                     <Grid container  alignItems="center" >
                                         <Grid item md={1} >
@@ -175,7 +175,7 @@ class LandingPage extends React.Component {
                             </Card>
                         </Grid>
                         <Grid container style={{ marginBottom: "10px" }}>
-                        <Grid item md={12} style={{ textAlign: "center" }}>
+                        <Grid item md={12} className = "rlink" style={{ textAlign: "center" }}>
                             <p style={{color:"#fff",fontSize:"20px"}}>For Right of Way/Road Cutting/Road Digging Service <a style={{color:"#EA784E"}} href="http://enagarsewa.uk.gov.in/" target="_blank" >APPLY HERE
                              </a></p>
                         </Grid>
