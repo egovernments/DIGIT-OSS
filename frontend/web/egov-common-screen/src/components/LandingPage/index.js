@@ -30,6 +30,7 @@ const styles = theme => ({
     listStyle: {
 
     }
+
 });
 
 class LandingPage extends React.Component {
@@ -92,19 +93,19 @@ class LandingPage extends React.Component {
         return (
             <div className="common-background" style={{
                 height: '100%',
-                background: `url(https://s3.ap-south-1.amazonaws.com/ukd-egov-assets/Stateimages/banner.png) no-repeat center`,
+                background: `url(https://s3.ap-south-1.amazonaws.com/ukd-egov-assets/Stateimages/banner.png) no-repeat `,
             }}>
                 <Grid container className={classes.root}>
 
                     <Grid container style={{ marginBottom: "10px" }}>
                         <Grid item md={12} style={{ textAlign: "center", backgroundColor:"#FFF", paddingTop:"20px", height:"80px", marginBottom:"50px"}}>
-                            <img src={logoUrl} alt="company-logo" width="20%" />
+                            <img  className = "header-logo" src={logoUrl} alt="company-logo" width="20%" />
                         </Grid>
                     </Grid>
 
                     <Grid container spacing={4}>
                         <Grid item md={1}></Grid>
-                        <Grid item md={5}>
+                        <Grid item md={5} className = "common-grid" >
                             <Card style={{ borderRadius: 0, height:420,    }}>
                                 <CardContent   style={{height:300}}   > 
                                     <Grid container  alignItems="center" >
@@ -134,13 +135,13 @@ class LandingPage extends React.Component {
                                     </List>
                                 </CardContent>
                                 <CardActions  style={{ padding: "16px"}}>
-                                    <a href="/citizen" className={classes.btn}>
+                                    <a href="/citizen" id='buttonlink' className={classes.btn}>
                                         लॉग इन / LOGIN
                                       </a>
                                 </CardActions>
                             </Card>
                         </Grid>
-                        <Grid item md={5}>
+                        <Grid item md={5} className = "common-grid">
                             <Card style={{  borderRadius: 0, height:420  }}>
                                 <CardContent   style={{height:300}}   >
                                     <Grid container alignItems="center" >
@@ -168,7 +169,7 @@ class LandingPage extends React.Component {
                                     </List>
                                 </CardContent>
                                 <CardActions style={{ padding: "16px"}} >
-                                    <a href="/employee" className={classes.btn} >लॉग इन / LOGIN
+                                    <a href="/employee" id='buttonlink2' className={classes.btn} >लॉग इन / LOGIN
                              </a>
                                 </CardActions>
                             </Card>

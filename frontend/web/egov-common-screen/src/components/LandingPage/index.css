@@ -12,3 +12,30 @@
 .common-background{
     background-size: cover!important;
 }
+@media only screen and (max-width: 750px) {
+    .header-logo 
+    {
+        width : 80% !important;
+    } 
+    .common-background {
+        background-size: cover!important;
+        height: 1300px !important;
+    }
+    #buttonlink
+    {
+        margin-top : 15px;
+        width:120px !important;
+
+    }
+    #buttonlink2
+    {
+        width:120px !important;
+
+    }
+}
+
+.common-grid
+{
+    padding: 16px 30px !important;
+}
+
