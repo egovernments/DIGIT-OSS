@@ -14,7 +14,7 @@ serviceMaps:
 
       - jsonPath: $.Property.*.propertyId
 
-      - jsonPath: $.Property[*]
+      - jsonPath: $.Property[*][?({id} in @.Property[*].id)]
         type: JSON
         dbType: JSONB
 
