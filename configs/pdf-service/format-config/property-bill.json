@@ -59,12 +59,72 @@
                   {
                     "text": "{{Rs}} {{totalAmountDue}}",
                     "style": "amount-due"
+                  },
+                  {
+                    "style": "noc-table",
+                    "table": {
+                      "widths": [
+                        35,
+                        "*"
+                      ],
+                      "body": [
+                        [
+                          {
+                            "image": "{{qrcodeimage}}",
+                            "width": 64,
+                            "height": 64
+                          },
+                          {
+                            "stack": [
+                              {
+                                "text": "{{scanpay_label}}",
+                                "style": "receipt-table-value2",
+                                "margin": [
+                                  0,
+                                  -10,
+                                  0,
+                                  0
+                                ]
+                              },
+                              {
+                                "text": "{{bankupi_label}}",
+                                "style": "bill-message-value",
+                                "margin": [
+                                  0,
+                                  4,
+                                  0,
+                                  0
+                                ]
+                              },
+                              {
+                                "text": "{{app_label}}",
+                                "style": "bill-message-value",
+                                "margin": [
+                                  0,
+                                  4,
+                                  0,
+                                  0
+                                ]
+                              }
+                            ],
+                            "alignment": "left",
+                            "margin": [
+                              0,
+                              10,
+                              0,
+                              0
+                            ]
+                          }
+                      ]
+                      ]
+                    },
+                    "layout": "noBorders"
                   }
                 ],
                 "alignment": "right",
                 "color": "#484848",
                 "margin": [
-                  -150,
+                  30,
                   2,
                   -20,
                   0

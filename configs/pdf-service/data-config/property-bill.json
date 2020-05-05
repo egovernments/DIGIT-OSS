@@ -39,6 +39,42 @@
                }
               },
               {
+                "variable": "scanpay_label",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_SCAN_PAY"
+                },
+                "type": "label",
+                "localisation":{
+                  "required":true,
+                  "prefix": null,
+                  "module":"rainmaker-common"
+               }
+              },
+              {
+                "variable": "bankupi_label",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_BANK_UPI"
+                },
+                "type": "label",
+                "localisation":{
+                  "required":true,
+                  "prefix": null,
+                  "module":"rainmaker-common"
+               }
+              },
+              {
+                "variable": "app_label",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_APP"
+                },
+                "type": "label",
+                "localisation":{
+                  "required":true,
+                  "prefix": null,
+                  "module":"rainmaker-common"
+               }
+              },
+              {
                 "variable": "Municipal_Corporation",
                 "value": {
                   "path": "PDF_STATIC_LABEL_MDMS_MUNICIPAL_CORPORATION"
@@ -445,6 +481,18 @@
                 }
               },
               {
+                "variable": "tenantId",
+                "value": {
+                  "path": "$.tenantId"
+                }
+              },
+              {
+                "variable": "businessServiceCode",
+                "value": {
+                  "path": "$.businessService"
+                }
+              },
+              {
                 "variable": "fromPeriod",
                 "value": {
                   "path": "$.billDetails[0].fromPeriod"
@@ -481,7 +529,10 @@
                 },
                 "type": "date"
               },
-              
+              {
+                "variable":"hostname",
+                "type": "external_host"
+              },
           {
                 "variable": "propertyID",
                 "value": {
@@ -880,7 +931,15 @@
                 ]
             }
             ]
-          }
+          },
+          {
+            "qrcodeConfig": [
+               {
+                  "variable": "qrcodeimage",
+                  "value":"{{hostname}}citizen/egov-common/pay?consumerCode={{propertyID}}&tenantId={{tenantId}}&businessService={{businessServiceCode}}"
+               }
+            ]
+         }
         ]
       }
     ]
