@@ -617,7 +617,9 @@ export const getBusinessServiceMdmsData = async (dispatch,  tenantId) => {
     console.log(e);
   }
 };
-export const generateBill = async (dispatch, consumerCode, tenantId, businessService) => {
+
+export const generateBill = async (dispatch, consumerCode, tenantId) => {
+
   try {
     if (consumerCode && tenantId) {
       const queryObj = [
@@ -629,13 +631,7 @@ export const generateBill = async (dispatch, consumerCode, tenantId, businessSer
           key: "consumerCode",
           value: consumerCode
         },
-      ];  
-        if(businessService){
-          queryObj.push({
-            key: "businessService",
-            value: businessService
-          });
-        }
+      ];        
          
         
       const payload = await getBill(queryObj,dispatch);
