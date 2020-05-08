@@ -16498,6 +16498,28 @@
       "leftIcon": "editor:insert-chart",
       "path": "Finance.Reports.MIS Reports.Dishonored Cheque Report",
       "navigationURL": "services/collection/report/dishonouredcheque/searchform"
+    },
+    {
+      "id": 1982,
+      "name": "Locality searcher endpoint for PT service",
+      "url": "/egov-searcher/locality/pt-services/_get",
+      "displayName": "PT service locality searcher",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "egov-searcher",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1983,
+      "name": "Locality searcher endpoint for PT module",
+      "url": "/egov-searcher/locality/PT/_get",
+      "displayName": "PT locality searcher",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "egov-searcher",
+      "code": "null",
+      "path": ""
     }
   ]
 }
