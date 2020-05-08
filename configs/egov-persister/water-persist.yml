@@ -33,17 +33,12 @@ serviceMaps:
        - jsonPath: $.WaterConnection.roadType
 
        
-    - query: INSERT INTO water_service_connection(connection_id,connectionCategory,rainWaterHarvesting,connectionType,waterSource,meterId,meterInstallationDate,pipeSize,noOfTaps,connectionexecutiondate,proposedPipeSize,proposedTaps, appCreatedDate) VALUES(?,?,?,?,?,?,?,?,?,?,?,?, ?);
+    - query: INSERT INTO water_service_connection(connection_id,connectionCategory,connectionType,waterSource,meterId,meterInstallationDate,pipeSize,noOfTaps,connectionexecutiondate,proposedPipeSize,proposedTaps, appCreatedDate) VALUES(?,?,?,?,?,?,?,?,?,?,?, ?);
       basePath: $.WaterConnection
       jsonMaps:
 
        - jsonPath: $.WaterConnection.id
        - jsonPath: $.WaterConnection.connectionCategory
-         
-
-       - jsonPath: $.WaterConnection.rainWaterHarvesting
-         type: BOOLEAN 
-         dbType: BOOLEAN
          
        - jsonPath: $.WaterConnection.connectionType
          
@@ -106,15 +101,11 @@ serviceMaps:
        
        - jsonPath: $.WaterConnection.id 
 
-    - query: UPDATE water_service_connection SET connectionCategory=?,rainWaterHarvesting=?,connectionType=?,waterSource=?,meterId=?,meterInstallationDate=?,pipeSize=?,noOfTaps=?,proposedPipeSize=?,proposedTaps=?, initialmeterreading = ?, connectionexecutiondate = ?, detailsprovidedby = ?, estimationfileStoreId = ?, sanctionfileStoreId = ? WHERE connection_id=?;
+    - query: UPDATE water_service_connection SET connectionCategory=?,connectionType=?,waterSource=?,meterId=?,meterInstallationDate=?,pipeSize=?,noOfTaps=?,proposedPipeSize=?,proposedTaps=?, initialmeterreading = ?, connectionexecutiondate = ?, detailsprovidedby = ?, estimationfileStoreId = ?, sanctionfileStoreId = ? WHERE connection_id=?;
       basePath: $.WaterConnection
       jsonMaps:
        
        - jsonPath: $.WaterConnection.connectionCategory
-         
-       - jsonPath: $.WaterConnection.rainWaterHarvesting
-         type: BOOLEAN 
-         dbType: BOOLEAN
          
        - jsonPath: $.WaterConnection.connectionType
          
