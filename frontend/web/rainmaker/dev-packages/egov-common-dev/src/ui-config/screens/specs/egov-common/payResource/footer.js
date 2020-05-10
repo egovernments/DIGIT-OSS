@@ -135,7 +135,7 @@ const postPGReqeust = (redirectionUrl) => {
   let form = document.createElement("form");
   form.setAttribute("method", "post");
   //get this from redirectUrl
-  form.setAttribute("action", `${redirectionUrl.origin}/transaction/transaction.do?command=initiateTransaction`);
+  form.setAttribute("action", `${(new URL(redirectionUrl)).origin}/transaction/transaction.do?command=initiateTransaction`);
   
   let accessCode = document.createElement("input");
   accessCode.setAttribute("type", "hidden");
