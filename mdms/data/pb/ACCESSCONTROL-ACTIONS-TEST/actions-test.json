@@ -15638,7 +15638,7 @@
     },
     {
       "id": 1916,
-      "name": "Locality searcher endpoint for PT",
+      "name": "Locality searcher endpoint for firenoc",
       "url": "/egov-searcher/locality/fireNoc/_get",
       "displayName": "FIRENOC locality searcher",
       "orderNumber": 0,
@@ -16515,6 +16515,28 @@
       "name": "Locality searcher endpoint for PT module",
       "url": "/egov-searcher/locality/PT/_get",
       "displayName": "PT locality searcher",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "egov-searcher",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1984,
+      "name": "Locality searcher endpoint for SW",
+      "url": "/egov-searcher/locality/sw-services/_get",
+      "displayName": "SW-Service locality searcher",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "egov-searcher",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1985,
+      "name": "Locality searcher endpoint for WS",
+      "url": "/egov-searcher/locality/ws-services/_get",
+      "displayName": "WS-Service locality searcher",
       "orderNumber": 0,
       "enabled": false,
       "serviceCode": "egov-searcher",
