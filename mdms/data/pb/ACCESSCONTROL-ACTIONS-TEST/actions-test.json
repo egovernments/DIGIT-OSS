@@ -16542,6 +16542,17 @@
       "serviceCode": "egov-searcher",
       "code": "null",
       "path": ""
+    },
+    {
+      "id": 1986,
+      "name": "Locality searcher endpoint for BPA-Stakeholder registration service",
+      "url": "egov-searcher/locality/bpa-stakeholder-reg-service/_get",
+      "displayName": "BPA-Stakeholder registration Service locality searcher",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "egov-searcher",
+      "code": "null",
+      "path": ""
     }
   ]
 }
