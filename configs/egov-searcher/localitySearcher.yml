@@ -144,4 +144,47 @@ SearchDefinitions:
     output:
       jsonFormat: {"ResponseInfo": {}}
       outJsonPath: $.Localities
-      responseInfoPath: $.ResponseInfo        
+      responseInfoPath: $.ResponseInfo    
+      
+  - name: ws-services
+    query:
+      baseQuery: |
+        Select row_to_json(result) from
+        (
+          select conn.applicationno as referenceNumber, conn.property_id as locality from connection conn
+        ) result  $where
+      groupBy:
+      orderBy:
+    searchParams:
+      condition: AND
+      params:
+      - name: result.referenceNumber
+        isMandatory: true
+        jsonPath: $.searchCriteria.referenceNumber
+        operator: 
+
+    output:
+      jsonFormat: {"ResponseInfo": {}}
+      outJsonPath: $.Localities
+      responseInfoPath: $.ResponseInfo  
+  - name: sw-services
+    query:
+      baseQuery: |
+        Select row_to_json(result) from
+        (
+          select conn.applicationno as referenceNumber, conn.property_id as locality from eg_sw_connection conn
+        ) result  $where
+      groupBy:
+      orderBy:
+    searchParams:
+      condition: AND
+      params:
+      - name: result.referenceNumber
+        isMandatory: true
+        jsonPath: $.searchCriteria.referenceNumber
+        operator: 
+
+    output:
+      jsonFormat: {"ResponseInfo": {}}
+      outJsonPath: $.Localities
+      responseInfoPath: $.ResponseInfo  
