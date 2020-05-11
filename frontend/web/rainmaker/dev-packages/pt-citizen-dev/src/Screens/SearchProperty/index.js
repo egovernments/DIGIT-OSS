@@ -35,7 +35,10 @@ class SearchProperty extends Component {
       urlToAppend: ""
     };
   }
-
+  componentWillMount = () => {
+    const { history } = this.props;
+    history.push('/pt-mutation/propertySearch');
+  }
   componentDidMount = () => {
     const { location, addBreadCrumbs, title, resetForm } = this.props;
     const { pathname } = location;
