@@ -96,8 +96,8 @@ export const getUsageCategory = (dataKey, tempObj, MDMSdata, keys) => {
 
 export const getTransformedDropdown = (MDMSdata, dataKeys) => {
   dataKeys.forEach(dataKey => {
-    if (MDMSdata.hasOwnProperty(dataKey)) {
-      let keys = Object.keys(MDMSdata[dataKey]);
+    if (MDMSdata && MDMSdata.hasOwnProperty(dataKey)) {
+      let keys = MDMSdata[dataKey] && Object.keys(MDMSdata[dataKey]);
       let tempObj = {};
       if (keys && keys.length > 0) {
         if (dataKey !== "UsageCategory") {
