@@ -105,7 +105,7 @@ SearchDefinitions:
       baseQuery: |
         Select row_to_json(result) from
         (
-          select propertyid as referenceNumber,locality from eg_pt_property property
+          select property.propertyid as referenceNumber,locality from eg_pt_property property
           INNER JOIN eg_pt_address ptadd ON ptadd.propertyid = property.id
         ) result  $where
       groupBy:
