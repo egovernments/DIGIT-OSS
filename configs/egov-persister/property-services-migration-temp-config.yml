@@ -9,392 +9,392 @@ serviceMaps:
 
 
     - query: INSERT INTO eg_pt_property_audit (audituuid, propertyid, property, auditcreatedtime) VALUES ((select nextval('seq_eg_pt_registry_audit')), ?, ?, (SELECT extract(epoch from now())));
-      basePath: Property.*
+      basePath: Property
       jsonMaps:
 
-      - jsonPath: $.Property.*.propertyId
+      - jsonPath: $.Property.propertyId
 
-      - jsonPath: $.Property[*][?({id} in @.Property[*].id)]
+      - jsonPath: $.Property
         type: JSON
         dbType: JSONB
 
     - query: INSERT INTO eg_pt_property (id, propertyid, tenantid, surveyid, accountid, oldpropertyid, status, acknowldgementnumber, propertytype, ownershipcategory, usagecategory, creationreason, nooffloors, landarea, superbuiltuparea, source,  channel, createdby, createdtime, lastmodifiedby, lastmodifiedtime, additionaldetails) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(id) DO NOTHING;
-      basePath: Property.*
+      basePath: Property.
       jsonMaps:
 
-      - jsonPath: $.Property.*.id
+      - jsonPath: $.Property.id
 
-      - jsonPath: $.Property.*.propertyId
+      - jsonPath: $.Property.propertyId
 
-      - jsonPath: $.Property.*.tenantId
+      - jsonPath: $.Property.tenantId
 
-      - jsonPath: $.Property.*.surveyId
+      - jsonPath: $.Property.surveyId
 
-      - jsonPath: $.Property.*.accountId
+      - jsonPath: $.Property.accountId
 
-      - jsonPath: $.Property.*.oldPropertyId
+      - jsonPath: $.Property.oldPropertyId
 
-      - jsonPath: $.Property.*.status
+      - jsonPath: $.Property.status
 
-      - jsonPath: $.Property.*.acknowldgementNumber
+      - jsonPath: $.Property.acknowldgementNumber
 
-      - jsonPath: $.Property.*.propertyType
+      - jsonPath: $.Property.propertyType
 
-      - jsonPath: $.Property.*.ownershipCategory
+      - jsonPath: $.Property.ownershipCategory
 
-      - jsonPath: $.Property.*.usageCategory
+      - jsonPath: $.Property.usageCategory
 
-      - jsonPath: $.Property.*.creationReason
+      - jsonPath: $.Property.creationReason
 
-      - jsonPath: $.Property.*.noOfFloors
+      - jsonPath: $.Property.noOfFloors
 
-      - jsonPath: $.Property.*.landArea
+      - jsonPath: $.Property.landArea
 
-      - jsonPath: $.Property.*.superBuiltUpArea
+      - jsonPath: $.Property.superBuiltUpArea
 
-      - jsonPath: $.Property.*.source
+      - jsonPath: $.Property.source
 
-      - jsonPath: $.Property.*.channel
+      - jsonPath: $.Property.channel
 
-      - jsonPath: $.Property.*.auditDetails.createdBy
+      - jsonPath: $.Property.auditDetails.createdBy
 
-      - jsonPath: $.Property.*.auditDetails.createdTime
+      - jsonPath: $.Property.auditDetails.createdTime
 
-      - jsonPath: $.Property.*.auditDetails.lastModifiedBy
+      - jsonPath: $.Property.auditDetails.lastModifiedBy
 
-      - jsonPath: $.Property.*.auditDetails.lastModifiedTime
+      - jsonPath: $.Property.auditDetails.lastModifiedTime
 
-      - jsonPath: $.Property.*.additionalDetails
+      - jsonPath: $.Property.additionalDetails
         type: JSON
         dbType: JSONB
 
     - query: INSERT INTO eg_pt_address(tenantid, id, propertyid, doorno, plotno, buildingname, street, landmark, city, pincode, locality, district, region, state, country, latitude, longitude, createdby, createdtime, lastmodifiedby, lastmodifiedtime, additionaldetails) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(id) DO NOTHING;
-      basePath: Property.*.address
+      basePath: Property.address
       jsonMaps:
 
-      - jsonPath: $.Property.*.address.tenantId
+      - jsonPath: $.Property.address.tenantId
 
-      - jsonPath: $.Property.*.address.id
+      - jsonPath: $.Property.address.id
 
-      - jsonPath: $.Property.*.id
+      - jsonPath: $.Property.id
 
-      - jsonPath: $.Property.*.address.doorNo
+      - jsonPath: $.Property.address.doorNo
 
-      - jsonPath: $.Property.*.address.plotNo
+      - jsonPath: $.Property.address.plotNo
 
-      - jsonPath: $.Property.*.address.buildingName
+      - jsonPath: $.Property.address.buildingName
 
-      - jsonPath: $.Property.*.address.street
+      - jsonPath: $.Property.address.street
 
-      - jsonPath: $.Property.*.address.landmark
+      - jsonPath: $.Property.address.landmark
 
-      - jsonPath: $.Property.*.address.city
+      - jsonPath: $.Property.address.city
 
-      - jsonPath: $.Property.*.address.pincode
+      - jsonPath: $.Property.address.pincode
 
-      - jsonPath: $.Property.*.address.locality.code
+      - jsonPath: $.Property.address.locality.code
 
-      - jsonPath: $.Property.*.address.district
+      - jsonPath: $.Property.address.district
 
-      - jsonPath: $.Property.*.address.region
+      - jsonPath: $.Property.address.region
 
-      - jsonPath: $.Property.*.address.state
+      - jsonPath: $.Property.address.state
 
-      - jsonPath: $.Property.*.address.country
+      - jsonPath: $.Property.address.country
 
-      - jsonPath: $.Property.*.address.geoLocation.latitude
+      - jsonPath: $.Property.address.geoLocation.latitude
 
-      - jsonPath: $.Property.*.address.geoLocation.longitude
+      - jsonPath: $.Property.address.geoLocation.longitude
 
-      - jsonPath: $.Property.*.address.auditDetails.createdBy
+      - jsonPath: $.Property.address.auditDetails.createdBy
 
-      - jsonPath: $.Property.*.auditDetails.createdTime
+      - jsonPath: $.Property.auditDetails.createdTime
 
-      - jsonPath: $.Property.*.auditDetails.lastModifiedBy
+      - jsonPath: $.Property.auditDetails.lastModifiedBy
 
-      - jsonPath: $.Property.*.auditDetails.lastModifiedTime
+      - jsonPath: $.Property.auditDetails.lastModifiedTime
 
-      - jsonPath: $.Property.*.address.additionalDetails
+      - jsonPath: $.Property.address.additionalDetails
         type: JSON
         dbType: JSONB
 
 
     - query: INSERT INTO eg_pt_unit(id, tenantid, propertyid, floorno, unittype, usagecategory, occupancytype, occupancydate, carpetarea, builtuparea, plintharea, superbuiltuparea, arv, constructiontype, constructiondate, dimensions, active, createdby, createdtime, lastmodifiedby, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)  ON CONFLICT(id) DO NOTHING;
-      basePath: Property.*.units.*
+      basePath: Property.units.*
       jsonMaps:
 
-      - jsonPath: $.Property.*.units.*.id
+      - jsonPath: $.Property.units.*.id
 
-      - jsonPath: $.Property[*][?({id} in @.units[*].id)].tenantId
+      - jsonPath: $.Property.tenantId
 
-      - jsonPath: $.Property[*][?({id} in @.units[*].id)].id
+      - jsonPath: $.Property.id
 
-      - jsonPath: $.Property.*.units.*.floorNo
+      - jsonPath: $.Property.units.*.floorNo
 
-      - jsonPath: $.Property.*.units.*.unitType
+      - jsonPath: $.Property.units.*.unitType
 
-      - jsonPath: $.Property.*.units.*.usageCategory
+      - jsonPath: $.Property.units.*.usageCategory
 
-      - jsonPath: $.Property.*.units.*.occupancyType
+      - jsonPath: $.Property.units.*.occupancyType
 
-      - jsonPath: $.Property.*.units.*.occupancyDate
+      - jsonPath: $.Property.units.*.occupancyDate
 
-      - jsonPath: $.Property.*.units.*.constructionDetail.carpetArea
+      - jsonPath: $.Property.units.*.constructionDetail.carpetArea
 
-      - jsonPath: $.Property.*.units.*.constructionDetail.builtUpArea
+      - jsonPath: $.Property.units.*.constructionDetail.builtUpArea
 
-      - jsonPath: $.Property.*.units.*.constructionDetail.plinthArea
+      - jsonPath: $.Property.units.*.constructionDetail.plinthArea
 
-      - jsonPath: $.Property.*.units.*.constructionDetail.superBuiltUpArea
+      - jsonPath: $.Property.units.*.constructionDetail.superBuiltUpArea
 
-      - jsonPath: $.Property.*.units.*.arv
+      - jsonPath: $.Property.units.*.arv
 
-      - jsonPath: $.Property.*.units.*.constructionDetail.constructionType
+      - jsonPath: $.Property.units.*.constructionDetail.constructionType
 
-      - jsonPath: $.Property.*.units.*.constructionDetail.constructionDate
+      - jsonPath: $.Property.units.*.constructionDetail.constructionDate
 
-      - jsonPath: $.Property.*.units.*.constructionDetail.dimensions
+      - jsonPath: $.Property.units.*.constructionDetail.dimensions
         type: JSON
         dbType: JSONB
 
-      - jsonPath: $.Property.*.units.*.active
+      - jsonPath: $.Property.units.*.active
 
-      - jsonPath: $.Property[*][?({id} in @.units[*].id)].auditDetails.createdBy
+      - jsonPath: $.Property.auditDetails.createdBy
 
-      - jsonPath: $.Property[*][?({id} in @.units[*].id)].auditDetails.createdTime
+      - jsonPath: $.Property.auditDetails.createdTime
 
-      - jsonPath: $.Property[*][?({id} in @.units[*].id)].auditDetails.lastModifiedBy
+      - jsonPath: $.Property.auditDetails.lastModifiedBy
 
-      - jsonPath: $.Property[*][?({id} in @.units[*].id)].auditDetails.lastModifiedTime
+      - jsonPath: $.Property..auditDetails.lastModifiedTime
 
     - query: UPDATE eg_pt_property SET propertyid=?,  surveyid=?, accountid=?, oldpropertyid=?, status=?, propertytype=?, ownershipcategory=?, usagecategory=?, nooffloors=?, landarea=?,   superbuiltuparea=?, lastmodifiedby=?, lastmodifiedtime=?, additionaldetails=? WHERE Id=? AND tenantId=?;
       basePath: Property.*
       jsonMaps:
 
-      - jsonPath: $.Property.*.propertyId
+      - jsonPath: $.Property.propertyId
 
-      - jsonPath: $.Property.*.surveyId
+      - jsonPath: $.Property.surveyId
 
-      - jsonPath: $.Property.*.accountId
+      - jsonPath: $.Property.accountId
 
-      - jsonPath: $.Property.*.oldPropertyId
+      - jsonPath: $.Property.oldPropertyId
 
-      - jsonPath: $.Property.*.status
+      - jsonPath: $.Property.status
 
-      - jsonPath: $.Property.*.propertyType
+      - jsonPath: $.Property.propertyType
 
-      - jsonPath: $.Property.*.ownershipCategory
+      - jsonPath: $.Property.ownershipCategory
 
-      - jsonPath: $.Property.*.usageCategory
+      - jsonPath: $.Property.usageCategory
 
-      - jsonPath: $.Property.*.noOfFloors
+      - jsonPath: $.Property.noOfFloors
 
-      - jsonPath: $.Property.*.landArea
+      - jsonPath: $.Property.landArea
 
-      - jsonPath: $.Property.*.superBuiltUpArea
+      - jsonPath: $.Property.superBuiltUpArea
 
-      - jsonPath: $.Property.*.auditDetails.lastModifiedBy
+      - jsonPath: $.Property.auditDetails.lastModifiedBy
 
-      - jsonPath: $.Property.*.auditDetails.lastModifiedTime
+      - jsonPath: $.Property.auditDetails.lastModifiedTime
 
-      - jsonPath: $.Property.*.additionalDetails
+      - jsonPath: $.Property.additionalDetails
         type: JSON
         dbType: JSONB
 
-      - jsonPath: $.Property.*.id
+      - jsonPath: $.Property.id
 
-      - jsonPath: $.Property.*.tenantId
+      - jsonPath: $.Property.tenantId
 
 
     - query: INSERT INTO eg_pt_owner (ownerinfouuid, tenantid, propertyid, userid, status, isprimaryowner, ownertype, ownershippercentage, institutionid, relationship, createdby, createdtime, lastmodifiedby, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (userid, propertyid) DO UPDATE SET status=EXCLUDED.status, isprimaryowner=EXCLUDED.isprimaryowner, ownertype=EXCLUDED.ownertype, ownershippercentage=EXCLUDED.ownershippercentage, institutionid=EXCLUDED.institutionid, relationship=EXCLUDED.relationship, lastmodifiedby=EXCLUDED.lastModifiedby, lastmodifiedtime=EXCLUDED.lastmodifiedtime;
-      basePath: Property.*.owners.*
+      basePath: Property.owners.*
       jsonMaps:
 
-      - jsonPath: $.Property.*.owners.*.ownerInfoUuid
+      - jsonPath: $.Property.owners.*.ownerInfoUuid
 
-      - jsonPath: $.Property[*][?({ownerInfoUuid} in @.owners[*].ownerInfoUuid)].tenantId
+      - jsonPath: $.Property.tenantId
 
-      - jsonPath: $.Property[*][?({ownerInfoUuid} in @.owners[*].ownerInfoUuid)].id
+      - jsonPath: $.Property.id
 
-      - jsonPath: $.Property.*.owners.*.uuid
+      - jsonPath: $.Property.owners.*.uuid
 
-      - jsonPath: $.Property.*.owners.*.status
+      - jsonPath: $.Property.owners.*.status
 
-      - jsonPath: $.Property.*.owners.*.isPrimaryOwner
+      - jsonPath: $.Property.owners.*.isPrimaryOwner
 
-      - jsonPath: $.Property.*.owners.*.ownerType
+      - jsonPath: $.Property.owners.*.ownerType
 
-      - jsonPath: $.Property.*.owners.*.ownerShipPercentage
+      - jsonPath: $.Property.owners.*.ownerShipPercentage
 
-      - jsonPath: $.Property.*.owners.*.institutionId
+      - jsonPath: $.Property.owners.*.institutionId
 
-      - jsonPath: $.Property.*.owners.*.relationship
+      - jsonPath: $.Property.owners.*.relationship
 
-      - jsonPath: $.Property[*][?({ownerInfoUuid} in @.owners[*].ownerInfoUuid)].auditDetails.createdBy
+      - jsonPath: $.Property.auditDetails.createdBy
 
-      - jsonPath: $.Property[*][?({ownerInfoUuid} in @.owners[*].ownerInfoUuid)].auditDetails.createdTime
+      - jsonPath: $.Property.auditDetails.createdTime
 
-      - jsonPath: $.Property[*][?({ownerInfoUuid} in @.owners[*].ownerInfoUuid)].auditDetails.lastModifiedBy
+      - jsonPath: $.Property.auditDetails.lastModifiedBy
 
-      - jsonPath: $.Property[*][?({ownerInfoUuid} in @.owners[*].ownerInfoUuid)].auditDetails.lastModifiedTime
+      - jsonPath: $.Property.auditDetails.lastModifiedTime
 
     - query: INSERT INTO eg_pt_document (id, tenantid, entityid, documenttype, filestoreid, documentuid, status, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET documenttype = EXCLUDED.documenttype,fileStoreid = EXCLUDED.filestoreid, documentuid=EXCLUDED.documentuid, status=EXCLUDED.status, lastmodifiedby = EXCLUDED.lastModifiedby, lastmodifiedtime = EXCLUDED.lastmodifiedtime;
-      basePath: $.Property.*.documents.*
+      basePath: $.Property.documents.*
       jsonMaps:
 
-      - jsonPath: $.Property.*.documents.*.id
+      - jsonPath: $.Property.documents.*.id
 
-      - jsonPath: $.Property[*][?({id} in @.documents[*].id)].tenantId
+      - jsonPath: $.Property.tenantId
 
-      - jsonPath: $.Property[*][?({id} in @.documents[*].id)].id
+      - jsonPath: $.Property.id
 
-      - jsonPath: $.Property.*.documents.*.documentType
+      - jsonPath: $.Property.documents.*.documentType
 
-      - jsonPath: $.Property.*.documents.*.fileStoreId
+      - jsonPath: $.Property.documents.*.fileStoreId
 
-      - jsonPath: $.Property.*.documents.*.documentUid
+      - jsonPath: $.Property.documents.*.documentUid
 
-      - jsonPath: $.Property.*.documents.*.status
+      - jsonPath: $.Property.documents.*.status
 
-      - jsonPath: $.Property[*][?({id} in @.documents[*].id)].auditDetails.createdBy
+      - jsonPath: $.Property.auditDetails.createdBy
 
-      - jsonPath: $.Property[*][?({id} in @.documents[*].id)].auditDetails.lastModifiedBy
+      - jsonPath: $.Property.auditDetails.lastModifiedBy
 
-      - jsonPath: $.Property[*][?({id} in @.documents[*].id)].auditDetails.createdTime
+      - jsonPath: $.Property.auditDetails.createdTime
 
-      - jsonPath: $.Property[*][?({id} in @.documents[*].id)].auditDetails.lastModifiedTime
+      - jsonPath: $.Property.auditDetails.lastModifiedTime
 
     - query: INSERT INTO eg_pt_document (id, tenantid, entityid, documenttype, filestoreid, documentuid, status, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET documenttype = EXCLUDED.documenttype,fileStoreid = EXCLUDED.filestoreid, documentuid=EXCLUDED.documentuid, status=EXCLUDED.status, lastmodifiedby = EXCLUDED.lastModifiedby, lastmodifiedtime = EXCLUDED.lastmodifiedtime;
-      basePath: $.Property.*.owners.*.documents.*
+      basePath: $.Property.owners.*.documents.*
       jsonMaps:
 
-      - jsonPath: $.Property.*.owners.*.documents.*.id
+      - jsonPath: $.Property.owners.*.documents.*.id
 
-      - jsonPath: $.Property[*][?({id} in @.owners.*.documents[*].id)].tenantId
+      - jsonPath: $.Property.tenantId
 
-      - jsonPath: $.Property.*.owners[*][?({id} in @.documents[*].id)].ownerInfoUuid
+      - jsonPath: $.Property.owners[*][?({id} in @.documents[*].id)].ownerInfoUuid
 
-      - jsonPath: $.Property.*.owners.*.documents.*.documentType
+      - jsonPath: $.Property.owners.*.documents.*.documentType
 
-      - jsonPath: $.Property.*.owners.*.documents.*.fileStoreId
+      - jsonPath: $.Property.owners.*.documents.*.fileStoreId
 
-      - jsonPath: $.Property.*.owners.*.documents.*.documentUid
+      - jsonPath: $.Property.owners.*.documents.*.documentUid
 
-      - jsonPath: $.Property.*.owners.*.documents.*.status
+      - jsonPath: $.Property.owners.*.documents.*.status
 
-      - jsonPath: $.Property[*][?({id} in @.owners.*.documents[*].id)].auditDetails.createdBy
+      - jsonPath: $.Property.auditDetails.createdBy
 
-      - jsonPath: $.Property[*][?({id} in @.owners.*.documents[*].id)].auditDetails.lastModifiedBy
+      - jsonPath: $.Property.auditDetails.lastModifiedBy
 
-      - jsonPath: $.Property[*][?({id} in @.owners.*.documents[*].id)].auditDetails.createdTime
+      - jsonPath: $.Property.auditDetails.createdTime
 
-      - jsonPath: $.Property[*][?({id} in @.owners.*.documents[*].id)].auditDetails.lastModifiedTime
+      - jsonPath: $.Property.auditDetails.lastModifiedTime
 
     - query: UPDATE eg_pt_address SET doorno=?, plotno=?, buildingname=?, street=?, landmark=?, city=?, pincode=?, locality=?, district=?, region=?, state=?, country=?, latitude=?, longitude=?, lastmodifiedby=?, lastmodifiedtime=?, additionaldetails=? WHERE id=?;
-      basePath: Property.*.address
+      basePath: Property.address
       jsonMaps:
 
-      - jsonPath: $.Property.*.address.doorNo
+      - jsonPath: $.Property.address.doorNo
 
-      - jsonPath: $.Property.*.address.plotNo
+      - jsonPath: $.Property.address.plotNo
 
-      - jsonPath: $.Property.*.address.buildingName
+      - jsonPath: $.Property.address.buildingName
 
-      - jsonPath: $.Property.*.address.street
+      - jsonPath: $.Property.address.street
 
-      - jsonPath: $.Property.*.address.landmark
+      - jsonPath: $.Property.address.landmark
 
-      - jsonPath: $.Property.*.address.city
+      - jsonPath: $.Property.address.city
 
-      - jsonPath: $.Property.*.address.pincode
+      - jsonPath: $.Property.address.pincode
 
-      - jsonPath: $.Property.*.address.locality.code
+      - jsonPath: $.Property.address.locality.code
 
-      - jsonPath: $.Property.*.address.district
+      - jsonPath: $.Property.address.district
 
-      - jsonPath: $.Property.*.address.region
+      - jsonPath: $.Property.address.region
 
-      - jsonPath: $.Property.*.address.state
+      - jsonPath: $.Property.address.state
 
-      - jsonPath: $.Property.*.address.country
+      - jsonPath: $.Property.address.country
 
-      - jsonPath: $.Property.*.address.geoLocation.latitude
+      - jsonPath: $.Property.address.geoLocation.latitude
 
-      - jsonPath: $.Property.*.address.geoLocation.longitude
+      - jsonPath: $.Property.address.geoLocation.longitude
 
-      - jsonPath: $.Property.*.auditDetails.lastModifiedBy
+      - jsonPath: $.Property.auditDetails.lastModifiedBy
 
-      - jsonPath: $.Property.*.auditDetails.lastModifiedTime
+      - jsonPath: $.Property.auditDetails.lastModifiedTime
 
-      - jsonPath: $.Property.*.address.additionalDetails
+      - jsonPath: $.Property.address.additionalDetails
         type: JSON
         dbType: JSONB
 
-      - jsonPath: $.Property.*.address.id
+      - jsonPath: $.Property.address.id
 
     - query: INSERT INTO eg_pt_institution (id, propertyid, tenantid, name, nameofauthorizedperson, type, designation, createdby, createdtime, lastmodifiedby, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET name=EXCLUDED.name, type=EXCLUDED.type, designation=EXCLUDED.designation, lastmodifiedby=EXCLUDED.lastModifiedby, lastmodifiedtime=EXCLUDED.lastmodifiedtime;
-      basePath: $.Property.*.institution
+      basePath: $.Property.institution
       jsonMaps:
 
-      - jsonPath: $.Property.*.institution.id
+      - jsonPath: $.Property.institution.id
 
-      - jsonPath: $.Property.*.id
+      - jsonPath: $.Property.id
 
-      - jsonPath: $.Property.*.tenantId
+      - jsonPath: $.Property.tenantId
 
-      - jsonPath: $.Property.*.institution.name
+      - jsonPath: $.Property.institution.name
 
-      - jsonPath: $.Property.*.institution.nameOfAuthorizedPerson
+      - jsonPath: $.Property.institution.nameOfAuthorizedPerson
 
-      - jsonPath: $.Property.*.institution.type
+      - jsonPath: $.Property.institution.type
 
-      - jsonPath: $.Property.*.institution.designation
+      - jsonPath: $.Property.institution.designation
 
-      - jsonPath: $.Property.*.auditDetails.createdBy
+      - jsonPath: $.Property.auditDetails.createdBy
 
-      - jsonPath: $.Property.*.auditDetails.createdTime
+      - jsonPath: $.Property.auditDetails.createdTime
 
-      - jsonPath: $.Property.*.auditDetails.lastModifiedBy
+      - jsonPath: $.Property.auditDetails.lastModifiedBy
 
-      - jsonPath: $.Property.*.auditDetails.lastModifiedTime
+      - jsonPath: $.Property.auditDetails.lastModifiedTime
 
 
     - query: UPDATE eg_pt_unit SET floorno=?, unittype=?, usagecategory=?, occupancytype=?, occupancydate=?, carpetarea=?, builtuparea=?, plintharea=?, superbuiltuparea=?, arv=?, constructiontype=?, constructiondate=?, dimensions=?, active=?, lastmodifiedby=?, lastmodifiedtime=? WHERE id=?;
-      basePath: Property.*.units.*
+      basePath: Property.units.*
       jsonMaps:
 
-      - jsonPath: $.Property.*.units.*.floorNo
+      - jsonPath: $.Property.units.*.floorNo
 
-      - jsonPath: $.Property.*.units.*.unitType
+      - jsonPath: $.Property.units.*.unitType
 
-      - jsonPath: $.Property.*.units.*.usageCategory
+      - jsonPath: $.Property.units.*.usageCategory
 
-      - jsonPath: $.Property.*.units.*.occupancyType
+      - jsonPath: $.Property.units.*.occupancyType
 
-      - jsonPath: $.Property.*.units.*.occupancyDate
+      - jsonPath: $.Property.units.*.occupancyDate
 
-      - jsonPath: $.Property.*.units.*.constructionDetail.carpetArea
+      - jsonPath: $.Property.units.*.constructionDetail.carpetArea
 
-      - jsonPath: $.Property.*.units.*.constructionDetail.builtUpArea
+      - jsonPath: $.Property.units.*.constructionDetail.builtUpArea
 
-      - jsonPath: $.Property.*.units.*.constructionDetail.plinthArea
+      - jsonPath: $.Property.units.*.constructionDetail.plinthArea
 
-      - jsonPath: $.Property.*.units.*.constructionDetail.superBuiltUpArea
+      - jsonPath: $.Property.units.*.constructionDetail.superBuiltUpArea
 
-      - jsonPath: $.Property.*.units.*.arv
+      - jsonPath: $.Property.units.*.arv
 
-      - jsonPath: $.Property.*.units.*.constructionDetail.constructionType
+      - jsonPath: $.Property.units.*.constructionDetail.constructionType
 
-      - jsonPath: $.Property.*.units.*.constructionDetail.constructionDate
+      - jsonPath: $.Property.units.*.constructionDetail.constructionDate
 
-      - jsonPath: $.Property.*.units.*.constructionDetail.dimensions
+      - jsonPath: $.Property.units.*.constructionDetail.dimensions
         type: JSON
         dbType: JSONB
 
-      - jsonPath: $.Property.*.units.*.active
+      - jsonPath: $.Property.units.*.active
 
-      - jsonPath: $.Property[*][?({id} in @.units[*].id)].auditDetails.lastModifiedBy
+      - jsonPath: $.Property.auditDetails.lastModifiedBy
 
-      - jsonPath: $.Property[*][?({id} in @.units[*].id)].auditDetails.lastModifiedTime
+      - jsonPath: $.Property.auditDetails.lastModifiedTime
 
-      - jsonPath: $.Property.*.units.*.id
+      - jsonPath: $.Property.units.*.id
