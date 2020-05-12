@@ -168,7 +168,7 @@ serviceMaps:
       - jsonPath: $.Property.auditDetails.lastModifiedTime
 
     - query: UPDATE eg_pt_property SET propertyid=?,  surveyid=?, accountid=?, oldpropertyid=?, status=?, propertytype=?, ownershipcategory=?, usagecategory=?, nooffloors=?, landarea=?,   superbuiltuparea=?, lastmodifiedby=?, lastmodifiedtime=?, additionaldetails=? WHERE Id=? AND tenantId=?;
-      basePath: Property.*
+      basePath: Property
       jsonMaps:
 
       - jsonPath: $.Property.propertyId
