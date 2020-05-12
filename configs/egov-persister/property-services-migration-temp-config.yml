@@ -106,7 +106,7 @@ serviceMaps:
 
       - jsonPath: $.Property.address.geoLocation.longitude
 
-      - jsonPath: $.Property.address.auditDetails.createdBy
+      - jsonPath: $.Property.auditDetails.createdBy
 
       - jsonPath: $.Property.auditDetails.createdTime
 
@@ -165,7 +165,7 @@ serviceMaps:
 
       - jsonPath: $.Property.auditDetails.lastModifiedBy
 
-      - jsonPath: $.Property..auditDetails.lastModifiedTime
+      - jsonPath: $.Property.auditDetails.lastModifiedTime
 
     - query: UPDATE eg_pt_property SET propertyid=?,  surveyid=?, accountid=?, oldpropertyid=?, status=?, propertytype=?, ownershipcategory=?, usagecategory=?, nooffloors=?, landarea=?,   superbuiltuparea=?, lastmodifiedby=?, lastmodifiedtime=?, additionaldetails=? WHERE Id=? AND tenantId=?;
       basePath: Property.*
