@@ -219,6 +219,18 @@
                }
               },
               {
+                "variable": "adjustment_label",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_ADJUSTMENT"
+                },
+                "type": "label",
+                "localisation":{
+                  "required":true,
+                  "prefix": null,
+                  "module":"rainmaker-common"
+               }
+              },
+              {
                 "variable": "others_label",
                 "value": {
                   "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_OTHERS"
@@ -526,6 +538,12 @@
                 }
               },
               {
+                "variable": "adjustment",
+                "value": {
+                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'PT_ADJUSTMENT' || @.taxHeadCode == 'WS_ADJUSTMENT' || @.taxHeadCode == 'SW_ADJUSTMENT')].amount"
+                }
+              },
+              {
                 "variable": "adhocPenalty",
                 "value": {
                   "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'PT_ADHOC_PENALTY' || @.taxHeadCode == 'TL_ADHOC_PENALTY' || @.taxHeadCode == 'FIRENOC_ADHOC_PENALTY')].amount"
@@ -651,6 +669,10 @@
               {
                 "variable": "arrears",
                 "formula": "{{WS_arrears}}"
+              },
+              {
+                "variable": "adjustments/paid",
+                "formula": "{{adjustment}}"
               }
             ]
           },
