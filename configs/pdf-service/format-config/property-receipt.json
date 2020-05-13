@@ -264,7 +264,7 @@
             ],
             [
               {
-                "text": "{{paid_amount}}",
+                "text": "{{total_bill_amount}}",
                 "border": [
                   true,
                   false,
@@ -274,7 +274,49 @@
                 "style": "receipt-table-value"
               },
               {
+                "text": "₹ {{dueAmount}}",
+                "border": [
+                  false,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table"
+              },
+              {
+                "text": "{{paid_amount}}",
+                "border": [
+                  false,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table-value"
+              },
+              {
                 "text": "₹ {{paidAmount}}",
+                "border": [
+                  false,
+                  false,
+                  true,
+                  false
+                ],
+                "style": "receipt-table"
+              }
+            ],
+            [
+              {
+                "text": "{{excess_amount_paid}}",
+                "border": [
+                  true,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "₹ {{excessAmountPaid}}",
                 "border": [
                   false,
                   false,
