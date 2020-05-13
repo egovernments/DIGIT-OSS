@@ -264,9 +264,29 @@
             ],
             [
               {
-                "text": "{{paid_amount}}",
+                "text": "{{total_bill_amount}}",
                 "border": [
                   true,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "₹ {{dueAmount}}",
+                "border": [
+                  false,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table"
+              },
+              {
+                "text": "{{paid_amount}}",
+                "border": [
+                  false,
                   false,
                   false,
                   false
@@ -278,13 +298,35 @@
                 "border": [
                   false,
                   false,
+                  true,
+                  false
+                ],
+                "style": "receipt-table"
+              }
+            ],
+            [
+              {
+                "text": "{{pending_amount}}",
+                "border": [
+                  true,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "₹ {{pendingAmount}}",
+                "border": [
+                  false,
+                  false,
                   false,
                   false
                 ],
                 "style": "receipt-table"
               },
               {
-                "text": "{{pending_amount}}",
+                "text": "{{excess_amount_paid}}",
                 "border": [
                   false,
                   false,
@@ -294,7 +336,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "₹ {{pendingAmount}}",
+                "text": "₹ {{excessAmountPaid}}",
                 "border": [
                   false,
                   false,
@@ -539,7 +581,7 @@
       "fontSize": 12,
       "margin": [
         -27,
-        35,
+        10,
         -10,
         0
       ],
@@ -549,7 +591,7 @@
       "fontSize": 12,
       "margin": [
         -27,
-        30,
+        10,
         -10,
         0
       ],
