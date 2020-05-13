@@ -246,7 +246,7 @@
               {
                 "variable": "excess_amount_paid",
                 "value": {
-                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_Excess_Amount_Paid"
+                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_EXCESS_AMOUNT_PAID"
                 },
                 "type": "label",
                 "localisation":{
@@ -258,7 +258,7 @@
               {
                 "variable": "total_bill_amount",
                 "value": {
-                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_Total_Bill_Amount"
+                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_TOTAL_BILL_AMOUNT"
                 },
                 "type": "label",
                 "localisation":{
