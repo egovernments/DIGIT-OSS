@@ -25,6 +25,10 @@
             {
               "disclaimer": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_DISCLAIMER_FIFTH_LINE",
               "order": "5."
+            },
+            {
+              "disclaimer": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_DISCLAIMER_SIXTH_LINE",
+              "order": "6."
             }
           ],
           "billFooterContent":[
@@ -125,7 +129,11 @@
                {
                  "disclaimer": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_DISCLAIMER_3",
                  "order": "3."
-               }
+               },
+               {
+                "disclaimer": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_DISCLAIMER_4",
+                "order": "4."
+              }
              ],
              "billFooterContent":[
               {
