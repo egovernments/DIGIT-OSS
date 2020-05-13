@@ -304,27 +304,7 @@
                 "style": "receipt-table"
               }
             ],
-            [
-              {
-                "text": "{{excess_amount_paid}}",
-                "border": [
-                  true,
-                  false,
-                  false,
-                  false
-                ],
-                "style": "receipt-table-value"
-              },
-              {
-                "text": "₹ {{excessAmountPaid}}",
-                "border": [
-                  false,
-                  false,
-                  false,
-                  false
-                ],
-                "style": "receipt-table"
-              },
+            [              
               {
                 "text": "{{pending_amount}}",
                 "border": [
@@ -341,6 +321,26 @@
                   false,
                   false,
                   true,
+                  false
+                ],
+                "style": "receipt-table"
+              },
+              {
+                "text": "{{excess_amount_paid}}",
+                "border": [
+                  true,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "₹ {{excessAmountPaid}}",
+                "border": [
+                  false,
+                  false,
+                  false,
                   false
                 ],
                 "style": "receipt-table"
