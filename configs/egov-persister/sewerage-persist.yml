@@ -218,7 +218,7 @@ serviceMaps:
 
        - jsonPath: $.SewerageConnection.processInstance.action
        
-        - jsonPath: $.SewerageConnection.auditDetails.lastModifiedBy
+       - jsonPath: $.SewerageConnection.auditDetails.lastModifiedBy
 
        - jsonPath: $.SewerageConnection.auditDetails.lastModifiedTime
        
