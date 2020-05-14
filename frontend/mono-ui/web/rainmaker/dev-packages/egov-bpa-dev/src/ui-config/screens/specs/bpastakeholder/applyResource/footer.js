@@ -32,7 +32,7 @@ import jp from "jsonpath";
 
 const moveToSuccess = (LicenseData, dispatch) => {
   const applicationNo = get(LicenseData, "applicationNumber");
-  const tenantId = process.env.REACT_APP_DEFAULT_TENANT_ID;
+  const tenantId = getTenantId();//process.env.REACT_APP_DEFAULT_TENANT_ID;
   const financialYear = get(LicenseData, "financialYear");
   const purpose = "apply";
   const status = "success";
@@ -265,7 +265,7 @@ export const callBackForNext = async (state, dispatch) => {
       }
       let tenantIdInLocastorage = getTenantId();
       if (!tenantIdInLocastorage)
-        setTenantId(process.env.REACT_APP_DEFAULT_TENANT_ID);
+        setTenantId(getTenantId());
         const appNumber = get(state.screenConfiguration.preparedFinalObject, "Licenses[0].applicationNumber", {});
         const LicenseData = get(
           state.screenConfiguration.preparedFinalObject,

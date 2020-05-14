@@ -8,7 +8,7 @@ import {
 } from "../../utils/index";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validateFields } from "../../utils";
-import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getUserInfo, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 
@@ -17,10 +17,11 @@ const convertMillisecondsToDays = (milliseconds) => {
 }
 export const searchApiCall = async (state, dispatch) => {
   showHideTable(false, dispatch);
+  
   let queryObject = [
     {
       key: "tenantId",
-      value: process.env.REACT_APP_DEFAULT_TENANT_ID
+      value: (getTenantId().lastIndexOf(".") >0 ? getTenantId().substr(0,getTenantId().lastIndexOf(".")) : getTenantId())
     },
     { key: "offset", value: "0" },
     { key: "limit", value: "100" }
@@ -172,7 +173,7 @@ export const getWorkFlowData = async Licenses => {
   const queryObject = [
     {
       key: "tenantId",
-      value: process.env.REACT_APP_DEFAULT_TENANT_ID
+      value: (getTenantId().lastIndexOf(".") >0 ? getTenantId().substr(0,getTenantId().lastIndexOf(".")) : getTenantId())
     },
     {
       key: "businessIds",
@@ -210,7 +211,7 @@ export const getWorkFlowDataForBPA = async Licenses => {
   const queryObject = [
     {
       key: "tenantId",
-      value: process.env.REACT_APP_DEFAULT_TENANT_ID
+      value: getTenantId()//process.env.REACT_APP_DEFAULT_TENANT_ID
     },
     {
       key: "businessIds",
