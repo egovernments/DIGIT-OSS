@@ -3,6 +3,7 @@ import { getCommonCard, getCommonContainer, getCommonHeader, getStepperObject } 
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getCommonTenant } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
 import cloneDeep from "lodash/cloneDeep";
 import get from "lodash/get";
 import set from "lodash/set";
@@ -21,7 +22,6 @@ import { registrationSummary } from "./summaryResource/registrationSummary";
 import { transfereeInstitutionSummary, transfereeSummary } from "./summaryResource/transfereeSummary";
 import { transferorInstitutionSummary, transferorSummary } from "./summaryResource/transferorSummary";
 import { transferorInstitutionSummary as ti1, transferorSummary as ts1 } from "./summaryResource/transferorSummary1";
-
 
 export const stepsData = [
   { labelName: "Transfer Details", labelKey: "PT_MUTATION_TRANSFER_DETAILS" },
@@ -274,7 +274,7 @@ const getPropertyData = async (action, state, dispatch) => {
 };
 
 const getSpecialCategoryDocumentTypeMDMSData = async (action, state, dispatch) => {
-  let tenantId = 'pb'
+  let tenantId = getCommonTenant();
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: tenantId,
@@ -381,7 +381,7 @@ const getMdmsData = async (action, state, dispatch) => {
 };
 
 const getMdmsTransferReasonData = async (action, state, dispatch) => {
-  let tenantId = 'pb'
+  let tenantId = getCommonTenant()
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: tenantId,
@@ -545,8 +545,7 @@ const screenConfig = {
       let ownershipCategory = get(
         state,
         "screenConfiguration.preparedFinalObject.applyScreenMdmsData.common-masters.OwnerShipCategory",
-        []
-      );
+        []);
       //  ownershipCategory = getFirstListFromDotSeparated(ownershipCategory);
       dispatch(
         prepareFinalObject(
