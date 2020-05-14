@@ -63,6 +63,8 @@ public class OldPropertyCriteria {
 	@JsonProperty("financialYear")
 	private String financialYear;
 
+	private String propertyId;
+
 
 
 	public Boolean isNull(){

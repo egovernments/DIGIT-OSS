@@ -87,7 +87,7 @@ public class PropertyController {
 			propertyCriteria.setTenantId(tenantList.get(i));
 			resultMap = migrationService.initiatemigration(requestInfoWrapper, propertyCriteria,masters,errorMap,assessmentRequestList);
 		}
-		//migrationService.sendDataToAssessmentCreateTopic(assessmentRequestList);
+		//resultMap = migrationService.initiatemigration(requestInfoWrapper, propertyCriteria,masters,errorMap,assessmentRequestList);
 		long endtime = System.nanoTime();
 		long elapsetime = endtime - startTime;
 		System.out.println("Elapsed time--->"+elapsetime);
