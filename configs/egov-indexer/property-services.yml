@@ -7,7 +7,7 @@ ServiceMaps:
     indexes:
       - name: property-services
         type: general
-        id: $.propertyId,$.tenantId,$.auditDetails.lastModifiedTime
+        id: $.propertyId,$.tenantId
         jsonPath: $.Property
         timeStampField: $.auditDetails.lastModifiedTime
         customJsonMapping:
@@ -89,7 +89,7 @@ ServiceMaps:
     indexes:
       - name: property-services
         type: general
-        id: $.propertyId,$.tenantId,$.auditDetails.lastModifiedTime
+        id: $.propertyId,$.tenantId
         jsonPath: $.Property
         timeStampField: $.auditDetails.lastModifiedTime
         customJsonMapping:
@@ -171,7 +171,7 @@ ServiceMaps:
     indexes:
       - name: property-services
         type: general
-        id: $.propertyId,$.tenantId,$.auditDetails.lastModifiedTime
+        id: $.propertyId,$.tenantId
         jsonPath: $.Property
         timeStampField: $.auditDetails.lastModifiedTime 
         customJsonMapping:
@@ -254,7 +254,7 @@ ServiceMaps:
       - name: property-services
         type: general
         isBulk: true
-        id: $.propertyId,$.tenantId,$.auditDetails.lastModifiedTime
+        id: $.propertyId,$.tenantId
         jsonPath: $.Properties.*
         timeStampField: $.auditDetails.lastModifiedTime        
         customJsonMapping:
