@@ -830,7 +830,7 @@ export const footerReviewTop = (
     label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
     link: () => {
       const { Licenses } = state.screenConfiguration.preparedFinalObject;
-      downloadCertificateForm(Licenses,applicationNumber,tenantId,);
+      downloadCertificateForm(Licenses);
     },
     leftIcon: "book"
   };
@@ -838,7 +838,7 @@ export const footerReviewTop = (
     label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
     link: () => {
       const { Licenses } = state.screenConfiguration.preparedFinalObject;
-      downloadCertificateForm(Licenses,applicationNumber,tenantId,'print');
+      downloadCertificateForm(Licenses,'print');
     },
     leftIcon: "book"
   };
@@ -997,7 +997,7 @@ export const downloadPrintContainer = (
     label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
     link: () => {
       const { Licenses } = state.screenConfiguration.preparedFinalObject;
-      downloadCertificateForm(Licenses,applicationNumber,tenantId);
+      downloadCertificateForm(Licenses);
     },
     leftIcon: "book"
   };
@@ -1005,7 +1005,7 @@ export const downloadPrintContainer = (
     label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
     link: () => {
       const { Licenses } = state.screenConfiguration.preparedFinalObject;
-      downloadCertificateForm(Licenses,applicationNumber,tenantId,'print');
+      downloadCertificateForm(Licenses,'print');
     },
     leftIcon: "book"
   };
