@@ -932,9 +932,10 @@ const getStatementForDocType = docType => {
 
 
 export const downloadAcknowledgementForm = (Licenses,mode="download") => {
+  const tenantId = get(Licenses[0] , "tenantId");
   const queryStr = [
     { key: "key", value: "tlapplication" },
-    { key: "tenantId", value: "pb" }
+    { key: "tenantId", value: tenantId }
   ]
   const DOWNLOADRECEIPT = {
     GET: {
@@ -959,11 +960,13 @@ export const downloadAcknowledgementForm = (Licenses,mode="download") => {
   }
 }
 
-export const downloadCertificateForm = async(LicensesOld,applicationNumber,tenantId,mode='download') => {
+export const downloadCertificateForm = async(Licenses,mode='download') => {
+  let tenantId = get(Licenses[0], "tenantId");
+  let applicationNumber = get(Licenses[0], "applicationNumber")
  const applicationType= Licenses &&  Licenses.length >0 ? get(Licenses[0],"applicationType") : "NEW";
   const queryStr = [
     { key: "key", value:applicationType==="RENEWAL"?"tlrenewalcertificate": "tlcertificate" },
-    { key: "tenantId", value: "pb" }
+    { key: "tenantId", value: tenantId }
   ]
   const DOWNLOADRECEIPT = {
     GET: {
@@ -979,8 +982,8 @@ export const downloadCertificateForm = async(LicensesOld,applicationNumber,tenan
     }
   ];
   const LicensesPayload = await getSearchResults(queryObject);
-  const Licenses=get(LicensesPayload,"Licenses");
-  const oldFileStoreId=get(Licenses[0],"fileStoreId")
+  const updatedLicenses=get(LicensesPayload,"Licenses");
+  const oldFileStoreId=get(updatedLicenses[0],"fileStoreId")
   if(oldFileStoreId){
     downloadReceiptFromFilestoreID(oldFileStoreId,mode)
   }
