@@ -311,7 +311,7 @@ const getSpecialCategoryDocumentTypeMDMSData = async (action, state, dispatch) =
 
 };
 const getMdmsData = async (action, state, dispatch) => {
-  let tenantId = process.env.REACT_APP_NAME === "Employee" ? getTenantId() : JSON.parse(getUserInfo()).permanentCity;
+  let tenantId = getCommonTenant();
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: tenantId,
