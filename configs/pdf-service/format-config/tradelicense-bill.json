@@ -190,7 +190,7 @@
             ],
             [
               {
-                "text": "{{payer_address}}",
+                "text": "{{tl_application_no}}",
                 "border": [
                   true,
                   false,
@@ -200,7 +200,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "{{payerAddress}}",
+                "text": "{{propertyID}}",
                 "border": [
                   false,
                   false,
@@ -241,7 +241,7 @@
             ],
             [
               {
-                "text": " ",
+                "text": "{{payer_address}}",
                 "border": [
                   true,
                   false,
@@ -251,7 +251,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": " ",
+                "text": "{{payerAddress}}",
                 "border": [
                   false,
                   false,
@@ -317,37 +317,14 @@
               {
                 "table": {
                   "widths": [
-                    "30%",
-                    "26%",
-                    "10%",
-                    "11%",
-                    "10%",
-                    "9%",
-                    "10%",
-                    "9%"
+                    "15%",
+                    "15%",
+                    "15%",
+                    "20%",
+                    "15%"
                   ],
                   "body": [
                     [
-                      {
-                        "text": "{{tl_application_no}}",
-                        "border": [
-                          false,
-                          false,
-                          false,
-                          false
-                        ],
-                        "style": "receipt-table-value2"
-                      },
-                      {
-                        "text": "{{bill_period}}",
-                        "border": [
-                          false,
-                          false,
-                          false,
-                          false
-                        ],
-                        "style": "receipt-table-value2"
-                      },
                       {
                         "text": "{{charge_label}}",
                         "border": [
@@ -379,7 +356,7 @@
                         "style": "receipt-table-value2"
                       },
                       {
-                        "text": "{{others_label}}",
+                        "text": "{{adjustment_label}}",
                         "border": [
                           false,
                           false,
@@ -400,26 +377,6 @@
                       }
                     ],
                     [
-                      {
-                        "text": "{{propertyID}}",
-                        "border": [
-                          false,
-                          false,
-                          false,
-                          false
-                        ],
-                        "style": "receipt-table2"
-                      },
-                      {
-                        "text": "{{fromPeriod}}-{{toPeriod}}",
-                        "border": [
-                          false,
-                          false,
-                          false,
-                          false
-                        ],
-                        "style": "receipt-table2"
-                      },
                       {
                         "text": "{{charge}}",
                         "border": [
@@ -451,7 +408,7 @@
                         "style": "receipt-table2"
                       },
                       {
-                        "text": "{{others}}",
+                        "text": "{{adjustments/paid}}",
                         "border": [
                           false,
                           false,
