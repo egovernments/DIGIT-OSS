@@ -630,6 +630,12 @@
                 }
               },
               {
+                "variable": "adjustment",
+                "value": {
+                  "path": "$.billDetails[(@.length-1)].billAccountDetails[?(@.taxHeadCode == 'PT_ADJUSTMENT')].amount"
+                }
+              },
+              {
                 "variable": "consumerID",
                 "value": {
                   "path": "$.consumerCode"
@@ -797,6 +803,18 @@
                   "prefix": null,
                   "module":"rainmaker-common"
                }
+              },
+              {
+                "variable": "adjustment_label",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_ADJUSTMENT"
+                },
+                "type": "label",
+                "localisation":{
+                  "required":true,
+                  "prefix": null,
+                  "module":"rainmaker-common"
+               }
               }
             ]
           },
@@ -861,6 +879,10 @@
               {
                 "variable": "arrearrs",
                 "formula": "{{totalAmountDue}} - {{pt_arrearrs}}"
+              },
+              {
+                "variable": "adjustments/paid",
+                "formula": "{{adjustment}}"
               }
             ]
           },

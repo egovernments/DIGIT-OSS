@@ -386,6 +386,18 @@
                }
               },
               {
+                "variable": "adjustment_label",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_ADJUSTMENT"
+                },
+                "type": "label",
+                "localisation":{
+                  "required":true,
+                  "prefix": null,
+                  "module":"rainmaker-common"
+               }
+              },
+              {
                 "variable": "receivers_signature",
                 "value": {
                   "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_RECEIVERS_SIGNATURE"
@@ -524,6 +536,12 @@
                 }
               },
               {
+                "variable": "adjustment",
+                "value": {
+                  "path": "$.billDetails[(@.length-1)].billAccountDetails[?(@.taxHeadCode == 'TL_ADJUSTMENT')].amount"
+                }
+              },
+              {
                 "variable": "consumerID",
                 "value": {
                   "path": "$.consumerCode"
@@ -566,6 +584,10 @@
               {
                 "variable": "others",
                 "formula": "{{tl_roundoff}}"
+              },
+              {
+                "variable": "adjustments/paid",
+                "formula": "{{adjustment}}"
               }
             ]
           },
