@@ -5,6 +5,7 @@ import { httpRequest } from "egov-ui-kit/utils/api";
 import { transformById } from "egov-ui-kit/utils/commons";
 import { BOUNDARY, DOWNLOADRECEIPT, DRAFT, FETCHASSESSMENTS, FETCHBILL, FETCHRECEIPT, PGService, PROPERTY, RECEIPT } from "egov-ui-kit/utils/endPoints";
 import { getLatestPropertyDetails } from "egov-ui-kit/utils/PTCommon";
+import { getCommonTenant } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
 import cloneDeep from "lodash/cloneDeep";
 import get from "lodash/get";
 import orderby from "lodash/orderBy";
@@ -657,7 +658,7 @@ export const fetchAssessments = (fetchAssessmentsQueryObject) => {
 }
 export const getFileUrlFromAPI = async fileStoreId => {
   const queryObject = [
-    { key: "tenantId", value: "pb" },
+    { key: "tenantId", value: getCommonTenant() },
     { key: "fileStoreIds", value: fileStoreId }
   ];
   try {
