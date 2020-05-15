@@ -1,3 +1,4 @@
+import commonConfig from "config/common.js";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { setRoute } from "egov-ui-kit/redux/app/actions";
 import store from "ui-redux/store";
@@ -295,5 +296,5 @@ export const getPurpose = () => {
 
 
 export const getCommonTenant = () => {
-  return process.env.REACT_APP_DEFAULT_TENANT_ID;
+  return commonConfig.tenantId;
 }
