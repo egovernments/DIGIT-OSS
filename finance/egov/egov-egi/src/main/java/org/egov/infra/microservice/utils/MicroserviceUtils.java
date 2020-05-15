@@ -117,6 +117,7 @@ import org.egov.infra.microservice.models.Department;
 import org.egov.infra.microservice.models.Designation;
 import org.egov.infra.microservice.models.EmployeeInfo;
 import org.egov.infra.microservice.models.EmployeeInfoResponse;
+import org.egov.infra.microservice.models.EmployeeSearchCriteria;
 import org.egov.infra.microservice.models.FinancialStatus;
 import org.egov.infra.microservice.models.FinancialStatusResponse;
 import org.egov.infra.microservice.models.GlCodeMaster;
@@ -566,34 +567,64 @@ public class MicroserviceUtils {
     }
 
     public List<EmployeeInfo> getApprovers(String departmentId, String designationId) {
+        return this.getEmployeeBySearchCriteria(new EmployeeSearchCriteria().builder().departments(Collections.singletonList(departmentId)).designations(Collections.singletonList(designationId)).build());
+    }
+    
+    public List<EmployeeInfo> getEmployeeBySearchCriteria(EmployeeSearchCriteria criteria){
         final RestTemplate restTemplate = createRestTemplate();
-        final String approver_url = appConfigManager.getEgovHrmsSerHost() + approverSrvcUrl + "?tenantId=" + getTenentId() + "&departments="
-                + departmentId + "&designations="+designationId;
+        StringBuilder url = new StringBuilder(appConfigManager.getEgovHrmsSerHost()).append(approverSrvcUrl).append("?tenantId=").append(getTenentId());
+        this.prepareEmplyeeSearchQueryString(criteria, url );
         RequestInfo requestInfo = new RequestInfo();
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
         requestInfo.setAuthToken(getUserToken());
         requestInfo.setTs(getEpochDate(new Date()));
         reqWrapper.setRequestInfo(requestInfo);
-        EmployeeInfoResponse empResponse = restTemplate.postForObject(approver_url, reqWrapper, EmployeeInfoResponse.class);
-         return empResponse.getEmployees();
+        EmployeeInfoResponse empResponse = restTemplate.postForObject(url.toString(), reqWrapper, EmployeeInfoResponse.class);
+        return empResponse.getEmployees();
+    }
+
+    private void prepareEmplyeeSearchQueryString(EmployeeSearchCriteria criteria, StringBuilder url) {
+        if(criteria.getAsOnDate() != null && criteria.getAsOnDate() != 0){
+            url.append("&asOnDate=").append(criteria.getAsOnDate());
+        }
+        if(CollectionUtils.isNotEmpty(criteria.getCodes())){
+            url.append("&codes=").append(StringUtils.join(criteria.getCodes(), ","));
+        }
+        if(CollectionUtils.isNotEmpty(criteria.getNames())){
+            url.append("&names=").append(StringUtils.join(criteria.getNames(), ","));
+        }
+        if(CollectionUtils.isNotEmpty(criteria.getDepartments())){
+            url.append("&departments=").append(StringUtils.join(criteria.getDepartments(), ","));
+        }
+        if(CollectionUtils.isNotEmpty(criteria.getDesignations())){
+            url.append("&designations=").append(StringUtils.join(criteria.getDesignations(), ","));
+        }
+        if(CollectionUtils.isNotEmpty(criteria.getRoles())){
+            url.append("&roles=").append(StringUtils.join(criteria.getRoles(), ","));
+        }
+        if(CollectionUtils.isNotEmpty(criteria.getIds())){
+            url.append("&ids=").append(StringUtils.join(criteria.getIds(), ","));
+        }
+        if(CollectionUtils.isNotEmpty(criteria.getEmployeestatuses())){
+            url.append("&employeestatuses=").append(StringUtils.join(criteria.getEmployeestatuses(), ","));
+        }
+        if(CollectionUtils.isNotEmpty(criteria.getEmployeetypes())){
+            url.append("&employeetypes=").append(StringUtils.join(criteria.getEmployeetypes(), ","));
+        }
+        if(CollectionUtils.isNotEmpty(criteria.getPositions())){
+            url.append("&positions=").append(StringUtils.join(criteria.getPositions(), ","));
+        }
+        if(StringUtils.isNotBlank(criteria.getPhone())){
+            url.append("&phone=").append(criteria.getPhone());
+        }
+       if(criteria.getLimit() != null && criteria.getLimit() != 0){
+            url.append("&limit=").append(criteria.getLimit());
+        }
     }
 
     public EmployeeInfo getEmployeeByPositionId(Long positionId) {
-        final RestTemplate restTemplate = createRestTemplate();
-        final String employee_by_position_url = appConfigManager.getEgovHrmsSerHost() +  approverSrvcUrl + "?tenantId=" + getTenentId() + "&positionId="
-                + positionId;
-        RequestInfo requestInfo = new RequestInfo();
-        RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
-        requestInfo.setAuthToken(getUserToken());
-        requestInfo.setTs(getEpochDate(new Date()));
-        reqWrapper.setRequestInfo(requestInfo);
-        LOGGER.info("call:" + employee_by_position_url);
-        EmployeeInfoResponse empResponse = restTemplate.postForObject(employee_by_position_url, reqWrapper,
-                EmployeeInfoResponse.class);
-        if (empResponse.getEmployees() != null && !empResponse.getEmployees().isEmpty())
-            return empResponse.getEmployees().get(0);
-        else
-            return null;
+        List<EmployeeInfo> list = this.getEmployeeBySearchCriteria(new EmployeeSearchCriteria().builder().positions(Collections.singletonList(positionId)).build());
+        return list.isEmpty() ? null : list.get(0);
     }
 
     public CustomUserDetails getUserDetails(String user_token, String admin_token) {
@@ -692,64 +723,20 @@ public class MicroserviceUtils {
     }
 
     public List<EmployeeInfo> getEmployee(Long empId, Date toDay, String departmentId, String designationId) {
-
-        final RestTemplate restTemplate = createRestTemplate();
-
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        StringBuilder empUrl = new StringBuilder(appConfigManager.getEgovHrmsSerHost()).append(approverSrvcUrl);
-        empUrl.append("?tenantId=" + getTenentId());
-
-        if (empId != 0)
-            empUrl.append("&ids=" + empId);
-        if (toDay != null)
-            empUrl.append("&asOnDate=" + getEpochDate(toDay));
-        if (departmentId != null)
-            empUrl.append("&departments=" + departmentId);
-        if (designationId != null)
-            empUrl.append("&designations=" + designationId);
-
-        RequestInfo requestInfo = new RequestInfo();
-        RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
-
-        requestInfo.setAuthToken(getUserToken());
-        requestInfo.setTs(getEpochDate(new Date()));
-        reqWrapper.setRequestInfo(requestInfo);
-
-        EmployeeInfoResponse empResponse = restTemplate.postForObject(empUrl.toString(), reqWrapper, EmployeeInfoResponse.class);
-        return empResponse.getEmployees();
+        return this.getEmployeeBySearchCriteria(new EmployeeSearchCriteria().builder().asOnDate(getEpochDate(toDay))
+                .ids(Collections.singletonList(empId))
+                .departments(Collections.singletonList(departmentId))
+                .designations(Collections.singletonList(designationId))
+                .build());
     }
 
     public EmployeeInfo getEmployeeById(Long empId) {
-        final RestTemplate restTemplate = createRestTemplate();
-        StringBuilder empUrl = new StringBuilder(appConfigManager.getEgovHrmsSerHost()).append(approverSrvcUrl);
-        empUrl.append("?tenantId=" + getTenentId());
-        if (empId != 0)
-            empUrl.append("&ids=" + empId);
-        RequestInfo requestInfo = new RequestInfo();
-        RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
-        requestInfo.setAuthToken(getUserToken());
-        requestInfo.setTs(getEpochDate(new Date()));
-        reqWrapper.setRequestInfo(requestInfo);
-        EmployeeInfoResponse empResponse = restTemplate.postForObject(empUrl.toString(), reqWrapper, EmployeeInfoResponse.class);
-        if (empResponse.getEmployees() != null && !empResponse.getEmployees().isEmpty())
-            return empResponse.getEmployees().get(0);
-        else
-            return null;
+        List<EmployeeInfo> list = this.getEmployeeBySearchCriteria(new EmployeeSearchCriteria().builder().ids(Collections.singletonList(empId)).build());
+        return list.isEmpty() ? null : list.get(0);
     }
     
     public List<EmployeeInfo> getEmployeeByIds(Set<Long> ids){
-        final RestTemplate restTemplate = createRestTemplate();
-        StringBuilder empUrl = new StringBuilder(appConfigManager.getEgovHrmsSerHost()).append(approverSrvcUrl);
-        empUrl.append("?tenantId=" + getTenentId());
-        if (!ids.isEmpty())
-            empUrl.append("&ids=" + StringUtils.join(ids, ","));
-        RequestInfo requestInfo = new RequestInfo();
-        RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
-        requestInfo.setAuthToken(getUserToken());
-        requestInfo.setTs(getEpochDate(new Date()));
-        reqWrapper.setRequestInfo(requestInfo);
-        EmployeeInfoResponse empResponse = restTemplate.postForObject(empUrl.toString(), reqWrapper, EmployeeInfoResponse.class);
-        return empResponse != null ? empResponse.getEmployees() : null;
+        return this.getEmployeeBySearchCriteria(new EmployeeSearchCriteria().builder().ids(ids.stream().collect(Collectors.toList())).build());
     }
 
     public List<Assignment> getAssignments(String department, String designation) {
@@ -1176,6 +1163,23 @@ public class MicroserviceUtils {
         instrumentStatusReconciled.setName("Reconciled");
         return this.updateInstruments(instruments, depositedBankAccountNum, instrumentStatusReconciled);
     }
+    
+    public InstrumentResponse reconcileInstruments(List<Instrument> instruments, String depositedBankAccountNum, String bankId) {
+        FinancialStatus instrumentStatusReconciled = new FinancialStatus();
+        instrumentStatusReconciled.setCode("Reconciled");
+        instrumentStatusReconciled.setName("Reconciled");
+        for (Instrument i : instruments) {
+            i.setFinancialStatus(instrumentStatusReconciled);
+            if (depositedBankAccountNum != null) {
+                i.setBankAccount(new BankAccount());
+                i.getBankAccount().setAccountNumber(depositedBankAccountNum);
+            }
+            i.getBank().setTenantId(getTenentId());
+            if(StringUtils.isNotBlank(bankId))
+                i.getBank().setId(Long.parseLong(bankId));
+        }
+        return this.updateInstruments(instruments);
+    }
 
     public InstrumentResponse depositeInstruments(List<Instrument> instruments, String depositedBankAccountNum) {
         FinancialStatus finStatus = new FinancialStatus();
@@ -1183,16 +1187,39 @@ public class MicroserviceUtils {
         finStatus.setName("Deposited");
         return this.updateInstruments(instruments, depositedBankAccountNum, finStatus);
     }
+    
+    public InstrumentResponse depositeInstruments(List<Instrument> instruments, String depositedBankAccountNum, String bankId) {
+        FinancialStatus finStatus = new FinancialStatus();
+        finStatus.setCode("Deposited");
+        finStatus.setName("Deposited");
+        for (Instrument i : instruments) {
+            i.setFinancialStatus(finStatus);
+            if (depositedBankAccountNum != null) {
+                i.setBankAccount(new BankAccount());
+                i.getBankAccount().setAccountNumber(depositedBankAccountNum);
+            }
+            i.getBank().setTenantId(getTenentId());
+            if(StringUtils.isNotBlank(bankId))
+                i.getBank().setId(Long.parseLong(bankId));
+        }
+        return this.updateInstruments(instruments);
+    }
 
     public InstrumentResponse reconcileInstrumentsWithPayinSlipId(List<Instrument> instruments, String depositedBankAccountNum,
-            Long payInSlipId) {
+            Long payInSlipId, String bankId) {
         FinancialStatus instrumentStatusReconciled = new FinancialStatus();
         instrumentStatusReconciled.setCode("Reconciled");
         for (Instrument i : instruments) {
-            i.setPayinSlipId(payInSlipId.toString());
-            i.setReconciledOn(new Date());
+            i.setFinancialStatus(instrumentStatusReconciled);
+            if (depositedBankAccountNum != null) {
+                i.setBankAccount(new BankAccount());
+                i.getBankAccount().setAccountNumber(depositedBankAccountNum);
+            }
+            i.getBank().setTenantId(getTenentId());
+            if(StringUtils.isNotBlank(bankId))
+                i.getBank().setId(Long.parseLong(bankId));
         }
-        return this.updateInstruments(instruments, depositedBankAccountNum, instrumentStatusReconciled);
+        return this.updateInstruments(instruments);
     }
 
     public RemittanceResponse createRemittance(List<Remittance> remittanceList) {
@@ -1483,7 +1510,7 @@ public class MicroserviceUtils {
     public String getBusinessServiceNameByCode(String code){
         String serviceName = "";
         try {
-            List<BusinessService> serviceByCodes = this.getBusinessServiceByCodes(code);
+            List<BusinessService> serviceByCodes = this.getBusinessServiceByCodes(Collections.singleton(code));
             if(serviceByCodes!=null && !serviceByCodes.isEmpty()){
                 serviceName = serviceByCodes.get(0).getBusinessService();
             }
@@ -1493,11 +1520,16 @@ public class MicroserviceUtils {
         return serviceName.isEmpty() ? code : serviceName;
     }
     
-    public List<BusinessService> getBusinessServiceByCodes(String codes){
+    public List<BusinessService> getBusinessServiceByCodes(Set<String> codes){
         List<BusinessService> list = null;
         List<ModuleDetail> moduleDetailsList = new ArrayList<>();
         try {
-            this.prepareModuleDetails(moduleDetailsList , "BillingService", "BusinessService", "code", codes, String.class);
+            if(codes != null && !codes.isEmpty()){
+                for(String code : codes)
+                    this.prepareModuleDetails(moduleDetailsList , "BillingService", "BusinessService", "code", code, String.class);
+            }else{
+                this.prepareModuleDetails(moduleDetailsList , "BillingService", "BusinessService", "code", null, String.class);
+            }
             Map postForObject = mapper.convertValue(this.getMdmsData(moduleDetailsList, true, null, null), Map.class);
             if(postForObject != null){
                 return list = mapper.convertValue(JsonPath.read(postForObject, "$.MdmsRes.BillingService.BusinessService"),new TypeReference<List<BusinessService>>(){});
@@ -1512,6 +1544,18 @@ public class MicroserviceUtils {
         List<BusinessService> list = null;
         List<ModuleDetail> moduleDetailsList = new ArrayList<>();
         this.prepareModuleDetails(moduleDetailsList, "BillingService", "BusinessService", "type", type, String.class);
+        Map postForObject = mapper.convertValue(this.getMdmsData(moduleDetailsList, true, null, null), Map.class);
+        if(postForObject != null){
+             list = mapper.convertValue(JsonPath.read(postForObject, "$.MdmsRes.BillingService.BusinessService"),new TypeReference<List<BusinessService>>(){});
+        }
+        return list;
+    }
+    
+    public List<BusinessService> getBusinessServices(List<String> types) {
+        List<BusinessService> list = null;
+        List<ModuleDetail> moduleDetailsList = new ArrayList<>();
+        for(String type : types)
+            this.prepareModuleDetails(moduleDetailsList, "BillingService", "BusinessService", "type", type, String.class);
         Map postForObject = mapper.convertValue(this.getMdmsData(moduleDetailsList, true, null, null), Map.class);
         if(postForObject != null){
              list = mapper.convertValue(JsonPath.read(postForObject, "$.MdmsRes.BillingService.BusinessService"),new TypeReference<List<BusinessService>>(){});
@@ -1566,7 +1610,6 @@ public class MicroserviceUtils {
     }
     
     public InstrumentResponse updateInstruments(List<Instrument> instruments, String depositedBankAccountNum, FinancialStatus finStatus) {
-        final StringBuilder url = new StringBuilder(appConfigManager.getEgovEgfInstSerHost()).append(instrumentUpdateUrl);
         for (Instrument i : instruments) {
             i.setFinancialStatus(finStatus);
             if (depositedBankAccountNum != null) {
@@ -1575,6 +1618,11 @@ public class MicroserviceUtils {
             }
             i.getBank().setTenantId(getTenentId());
         }
+        return updateInstruments(instruments);
+    }
+    
+    public InstrumentResponse updateInstruments(List<Instrument> instruments) {
+        final StringBuilder url = new StringBuilder(appConfigManager.getEgovEgfInstSerHost()).append(instrumentUpdateUrl);
         InstrumentRequest request = new InstrumentRequest();
         request.setInstruments(instruments);
         final RequestInfo requestinfo = new RequestInfo();

@@ -2,6 +2,7 @@ package org.egov.model.remittance;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 public class RemittanceReportModel {
     private Long id;
@@ -34,6 +35,11 @@ public class RemittanceReportModel {
     private String transactionNumber;
     private String payee;
     private String drawer;
+    private String createdBy;
+    private int totalCount;
+    private List linkedRemittedList;
+    private String receiptSourceUrl;
+    private String ifscCode;
     public Boolean getSelected() {
         return selected;
     }
@@ -213,5 +219,35 @@ public class RemittanceReportModel {
     }
     public void setRemittedBy(String remittedBy) {
         this.remittedBy = remittedBy;
+    }
+    public String getCreatedBy() {
+        return createdBy;
+    }
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+    public int getTotalCount() {
+        return totalCount;
+    }
+    public void setTotalCount(int totalCount) {
+        this.totalCount = totalCount;
+    }
+    public List getLinkedRemittedList() {
+        return linkedRemittedList;
+    }
+    public void setLinkedRemittedList(List linkedRemittedList) {
+        this.linkedRemittedList = linkedRemittedList;
+    }
+    public String getReceiptSourceUrl() {
+        return receiptSourceUrl;
+    }
+    public void setReceiptSourceUrl(String receiptSourceUrl) {
+        this.receiptSourceUrl = receiptSourceUrl;
+    }
+    public String getIfscCode() {
+        return ifscCode;
+    }
+    public void setIfscCode(String ifscCode) {
+        this.ifscCode = ifscCode;
     }
 }

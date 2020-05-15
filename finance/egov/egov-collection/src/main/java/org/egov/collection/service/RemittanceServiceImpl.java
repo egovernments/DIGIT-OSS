@@ -266,7 +266,7 @@ public class RemittanceServiceImpl extends RemittanceService {
                             totalCashVoucherAmt = totalCashVoucherAmt.add(receipt.getInstrumentAmount());
                         } else {
                             instrumentResponse = microserviceUtils.reconcileInstruments(instrumentsList,
-                                    accountNumberId);
+                                    accountNumberId, depositedBankAccount.getBankbranch().getBank().getId().toString());
                         }
                         for (Instrument i : instrumentsList) {
                             for (InstrumentVoucher iv : i.getInstrumentVouchers()) {
@@ -330,7 +330,7 @@ public class RemittanceServiceImpl extends RemittanceService {
         
         List<Instrument> instrumentList = receiptInstrumentMap.values().stream().flatMap(Set::stream).collect(Collectors.toList());
         if(!instrumentList.isEmpty()){
-            microserviceUtils.reconcileInstrumentsWithPayinSlipId(instrumentList, accountNumberId,remittance.getVoucherHeader().getId());            
+            microserviceUtils.reconcileInstrumentsWithPayinSlipId(instrumentList, accountNumberId,remittance.getVoucherHeader().getId(), depositedBankAccount.getBankbranch().getBank().getId().toString());
         }
         receiptList.stream().forEach(receipt -> {
             receipt.setRemittanceReferenceNumber(remittance.getReferenceNumber());
@@ -1018,7 +1018,7 @@ public class RemittanceServiceImpl extends RemittanceService {
                         createVoucher = "Y";
                         totalChequeVoucherAmt = totalChequeVoucherAmt.add(receipt.getInstrumentAmount());
                     } else {
-                        microserviceUtils.depositeInstruments(instruments, depositedBankAccount.getAccountnumber());
+                        microserviceUtils.depositeInstruments(instruments, depositedBankAccount.getAccountnumber(), depositedBankAccount.getBankbranch().getBank().getId().toString());
                     }
                 }
 

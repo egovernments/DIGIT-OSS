@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class EmployeeInfo {
     @JsonProperty("user")
     User UserObject;
-    private float id;
+    private Long id;
     private String uuid;
     private String code;
     private String employeeStatus;
@@ -24,7 +24,7 @@ public class EmployeeInfo {
      return UserObject;
     }
 
-    public float getId() {
+    public Long getId() {
      return id;
     }
 
@@ -55,7 +55,7 @@ public class EmployeeInfo {
      this.UserObject = userObject;
     }
 
-    public void setId(float id) {
+    public void setId(Long id) {
      this.id = id;
     }
 

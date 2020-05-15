@@ -53,7 +53,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.ParentPackage;
@@ -239,16 +241,9 @@ public class ServiceTypeToBankAccountMappingAction extends BaseFormAction {
 
     private void populateNames(List<BankAccountServiceMapping> mappings2) {
 
-        StringBuilder businessDetails = new StringBuilder();
+        Set<String> businessDetails = mappings2.stream().map(BankAccountServiceMapping::getBusinessDetails).collect(Collectors.toSet());
 
-        for (BankAccountServiceMapping bd : mappings2) {
-            if (businessDetails.length() > 0) {
-                businessDetails.append(",");
-            }
-            businessDetails.append(bd.getBusinessDetails());
-        }
-
-        List<BusinessService> businessDetailsList = microserviceUtils.getBusinessServiceByCodes(businessDetails.toString());
+        List<BusinessService> businessDetailsList = microserviceUtils.getBusinessServiceByCodes(businessDetails);
         Map<String, String> businessDetailsCodeNameMap = new HashMap<>();
 
         if (businessDetailsList != null)

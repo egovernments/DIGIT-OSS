@@ -195,6 +195,7 @@ public class PaymentUtils {
         instrument.setTenantId(payment.getTenantId());
         instrument.setTransactionDate(new Date(payment.getTransactionDate()));
         instrument.setTransactionNumber(payment.getTransactionNumber());
+        instrument.setIfscCode(payment.getIfscCode());
     }
     
     private void setFinanceSpecificData(List<Receipt> receipts){

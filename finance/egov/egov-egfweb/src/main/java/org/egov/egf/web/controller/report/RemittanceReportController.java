@@ -48,22 +48,26 @@
 package org.egov.egf.web.controller.report;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.StringUtils;
 import org.egov.commons.dao.FinancialYearDAO;
 import org.egov.egf.web.service.report.RemittanceServiceImpl;
 import org.egov.infra.microservice.models.BankAccountServiceMapping;
+import org.egov.infra.microservice.models.EmployeeSearchCriteria;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infstr.services.PersistenceService;
 import org.egov.infstr.utils.EgovMasterDataCaching;
 import org.egov.model.remittance.RemittanceReportModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -73,9 +77,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 @Controller
 @RequestMapping("/report/remittance")
@@ -93,10 +94,22 @@ public class RemittanceReportController {
     @Autowired
     private RemittanceServiceImpl remittanceService;
     
+    @Value("${collection.remittance.roles:COLL_REMIT_TO_BANK,SUPERUSER,COLL_RECEIPT_CREATOR}")
+    private String rolesToRemit;
+    @Value("${billing.service.type:Finance}")
+    private String ServiceType;
+    private static final Logger LOGGER = LoggerFactory.getLogger(RemittanceReportController.class);
+    
     @RequestMapping(method = {RequestMethod.POST,RequestMethod.GET}, value = "/collection/form")
     public String getRemittanceReportForm(final Model model){
         prepareModel(model);
         return "remittance_collection_search";
+    }
+    
+    @RequestMapping(method = {RequestMethod.POST,RequestMethod.GET}, value = "/pending/form")
+    public String getRemittancePendingReportForm(final Model model){
+        preparePendingModel(model);
+        return "remittance_pending_search";
     }
     
     @RequestMapping(method = {RequestMethod.GET}, value = "/collection/_search")
@@ -104,10 +117,21 @@ public class RemittanceReportController {
         try {
             return new ResponseEntity<>(getRemittenceCollections(remittanceReportModel), HttpStatus.OK);            
         } catch (Exception e) {
+            LOGGER.error(e.getMessage());
             return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
     
+    @RequestMapping(method = {RequestMethod.GET}, value = "/pending/_search")
+    public @ResponseBody ResponseEntity getRemittancePendingSearch(@ModelAttribute RemittanceReportModel remittanceReportModel){
+        try {
+            return new ResponseEntity<>(remittanceService.getPendingRemittance(remittanceReportModel), HttpStatus.OK);
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @RequestMapping(method = {RequestMethod.GET}, value = "/service/{accountNumber}")
     public @ResponseBody ResponseEntity getServiceByAccountNumber(@PathVariable(name="accountNumber",required=true) String accountNumber){
         try {
@@ -130,7 +154,14 @@ public class RemittanceReportController {
         model.addAttribute("bankAccServiceMapp", getBankAccountServiceMapping());
         model.addAttribute("financialYearList", financialYearDAO.getAllActivePostingAndNotClosedFinancialYears());
         model.addAttribute("instrumentTypes", getInstrumentMap());
-        model.addAttribute("businessServices", microserviceUtils.getBusinessService("Finance"));
+        model.addAttribute("businessServices", microserviceUtils.getBusinessServices(Arrays.asList(ServiceType.split(","))));
+    }
+    
+    private void preparePendingModel(Model model) {
+        model.addAttribute("remittanceReportModel",new RemittanceReportModel());
+        model.addAttribute("instrumentTypes", getInstrumentMap());
+        model.addAttribute("businessServices", microserviceUtils.getBusinessServices(Arrays.asList(ServiceType.split(","))));
+        model.addAttribute("userList", microserviceUtils.getEmployeeBySearchCriteria(new EmployeeSearchCriteria().builder().roles(Arrays.asList(rolesToRemit.split(","))).build()));
     }
 
     private Object getBankAccountServiceMapping() {

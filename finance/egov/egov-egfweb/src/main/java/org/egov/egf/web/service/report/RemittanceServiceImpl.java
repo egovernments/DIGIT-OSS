@@ -2,14 +2,17 @@ package org.egov.egf.web.service.report;
 
 import java.math.BigDecimal;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -18,6 +21,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.commons.Bankaccount;
 import org.egov.commons.CFinancialYear;
+import org.egov.commons.CVoucherHeader;
 import org.egov.commons.Fund;
 import org.egov.commons.dao.BankaccountHibernateDAO;
 import org.egov.commons.dao.FinancialYearDAO;
@@ -43,6 +47,8 @@ import org.egov.infra.microservice.models.TransactionType;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.utils.DateUtils;
 import org.egov.model.remittance.RemittanceReportModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -62,6 +68,8 @@ public class RemittanceServiceImpl implements RemittanceService{
     @Autowired
     private transient FinancialYearDAO financialYearDAO;
     DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger(RemittanceServiceImpl.class);
     
     @Override
     public List<RemittanceReportModel> getRemittanceColectionsReports(RemittanceReportModel model) {
@@ -477,5 +485,175 @@ public class RemittanceServiceImpl implements RemittanceService{
     
     private List<Bankaccount> getBankAccounts(Set accNos){
         return bankaccountHibernateDAO.getBankAccountByAccountNumbers(accNos);
+    }
+
+    public List<RemittanceReportModel> getPendingRemittance(RemittanceReportModel remittanceReportModel) throws Exception{
+        // search instruments with status New based on criteria
+        List<RemittanceReportModel> reportModelList = new ArrayList<>();
+        InstrumentSearchContract contract = new InstrumentSearchContract();
+        contract.setTransactionFromDate(remittanceReportModel.getFromDate());
+        contract.setTransactionToDate(remittanceReportModel.getToDate());
+        contract.setInstrumentTypes(remittanceReportModel.getInstrumentType());
+        contract.setFinancialStatuses("New");
+        List<Instrument> instrumentList = microserviceUtils.getInstrumentsBySearchCriteria(contract);
+        if (instrumentList == null || instrumentList.isEmpty())
+            return reportModelList;
+
+        Map<String, Instrument> recInstrumentMap = new HashMap();
+        Map<String, String> receiptVoucherMap = new HashMap();
+        Set<String> validReceiptIdSet = new HashSet();
+        for (Instrument i : instrumentList) {
+            if (i.getInstrumentVouchers() != null) {
+                for (InstrumentVoucher iv : i.getInstrumentVouchers()) {
+                    validReceiptIdSet.add(iv.getReceiptHeaderId());
+                    recInstrumentMap.put(iv.getReceiptHeaderId(), i);
+                    receiptVoucherMap.put(iv.getReceiptHeaderId(), iv.getVoucherHeaderId());
+                }
+            }
+        }
+        if(validReceiptIdSet == null || validReceiptIdSet.isEmpty())
+            return reportModelList;
+            
+        ReceiptSearchCriteria rSearchcriteria = new ReceiptSearchCriteria().builder().receiptNumbers(validReceiptIdSet)
+                .businessCodes(Collections.singleton(remittanceReportModel.getService())).build();
+        List<Receipt> receipts = microserviceUtils.getReceipt(rSearchcriteria);
+        
+        
+        // Filter receipts based by userid
+        if (StringUtils.isNotBlank(remittanceReportModel.getCreatedBy())) {
+            receipts = receipts.stream()
+                    .filter(rec -> rec.getAuditDetails().getCreatedBy().equals(remittanceReportModel.getCreatedBy()))
+                    .collect(Collectors.toList());
+        }
+        if(receipts == null || receipts.isEmpty())
+            return reportModelList;
+        List<CVoucherHeader> voucherHeaderList = voucherHibDAO
+                .getVoucherHeaderByNumber(receiptVoucherMap.values().stream().collect(Collectors.toSet()));
+        Map<String, CVoucherHeader> voucherHeaderMap = voucherHeaderList.stream()
+                .collect(Collectors.toMap(CVoucherHeader::getVoucherNumber, Function.identity()));
+
+        // preparing report model
+        List<RemittanceReportModel> tempReportModelList = new ArrayList<>();
+        
+        prepareReportModel(recInstrumentMap, receiptVoucherMap, receipts, voucherHeaderMap, tempReportModelList);
+        populateMasterData(tempReportModelList);
+        // group by receiptDate, instrumentType, service
+        prepareConslidatedPendingRemittance(tempReportModelList, reportModelList);
+        sortListByReceiptDate(reportModelList);
+        return reportModelList;
+    }
+
+    private void prepareReportModel(Map<String, Instrument> recInstrumentMap, Map<String, String> receiptVoucherMap,
+            List<Receipt> receipts, Map<String, CVoucherHeader> voucherHeaderMap, List<RemittanceReportModel> tempReportModelList) throws Exception{
+        String collectionVersion = ApplicationThreadLocals.getCollectionVersion().toUpperCase();
+        try {
+            for(Receipt rec : receipts){
+                BillDetail billDetail = rec.getBill().get(0).getBillDetails().get(0);
+                Instrument instrument = collectionVersion.equalsIgnoreCase("V2") || collectionVersion.equalsIgnoreCase("VERSION2") ? recInstrumentMap.get(rec.getPaymentId()) : recInstrumentMap.get(billDetail.getReceiptNumber());
+                RemittanceReportModel tempReportModel = new RemittanceReportModel();
+                tempReportModel.setReceiptDate(dateFormat.format(rec.getReceiptDate()));
+                tempReportModel.setService(billDetail.getBusinessService());
+                tempReportModel.setInstrumentType(instrument.getInstrumentType().getName());
+                tempReportModel.setInstrumentAmount(instrument.getAmount());
+                tempReportModel.setCreatedBy(rec.getAuditDetails().getCreatedBy());
+                tempReportModel.setReceiptNumber(rec.getReceiptNumber());
+                tempReportModel.setReceiptSourceUrl(getReceiptSourceUrl(rec.getPaymentId(), receiptVoucherMap, voucherHeaderMap));
+                tempReportModel.setInstrumentNumber(instrument.getTransactionNumber());
+                tempReportModel.setDepartment(billDetail.getDepartment());
+                tempReportModel.setReceiptId(rec.getPaymentId());
+                tempReportModel.setIfscCode(rec.getInstrument().getIfscCode());
+                tempReportModel.setBankBranch(instrument.getBranchName());
+                tempReportModelList.add(tempReportModel);
+            }
+        } catch (Exception e) {
+            LOGGER.error("Error while preparing report model ", e);
+            throw new Exception("Error while preparing report model");
+        }
+    }
+
+    private void prepareConslidatedPendingRemittance(List<RemittanceReportModel> tempReportModelList,
+            List<RemittanceReportModel> reportModelList) throws Exception{
+        try {
+            Map<String, Map<String, Map<String, List<RemittanceReportModel>>>> groupedMap = tempReportModelList.stream().collect(
+                    Collectors.groupingBy(RemittanceReportModel::getReceiptDate,
+                            Collectors.groupingBy(RemittanceReportModel::getInstrumentType,
+                                    Collectors.groupingBy(RemittanceReportModel::getService))));
+            
+            Iterator<String> iterator = groupedMap.keySet().iterator();
+            while (iterator.hasNext()) {
+                String receiptDate = iterator.next();
+                Map<String, Map<String, List<RemittanceReportModel>>> groupByReceiptDate = groupedMap.get(receiptDate);
+                for (String instrumentType : groupByReceiptDate.keySet()) {
+                    Map<String, List<RemittanceReportModel>> groupByInstrumentType = groupByReceiptDate.get(instrumentType);
+                    for (String service : groupByInstrumentType.keySet()) {
+                        List<RemittanceReportModel> list = groupByInstrumentType.get(service);
+                        BigDecimal totalAmount = new BigDecimal(0);
+                        String serviceName = "";
+                        String deptName = "";
+                        for (RemittanceReportModel rm : list) {
+                            totalAmount = totalAmount.add(rm.getInstrumentAmount());
+                            serviceName = rm.getServiceName();
+                            deptName = rm.getDepartmentName();
+                        }
+                        RemittanceReportModel model = new RemittanceReportModel();
+                        model.setReceiptDate(receiptDate);
+                        model.setInstrumentType(instrumentType);
+                        model.setService(service);
+                        model.setInstrumentAmount(totalAmount);
+                        model.setTotalCount(list.size());
+                        model.setServiceName(serviceName);
+                        model.setDepartmentName(deptName);
+                        model.setLinkedRemittedList(list);
+                        reportModelList.add(model);
+                    }
+                }
+            }
+            
+        } catch (Exception e) {
+            LOGGER.error("Error while preparing conslidated pending remittance report model ", e);
+            throw new Exception("Error while preparing conslidated pending remittance report model ");
+        }
+        
+    }
+
+    private void sortListByReceiptDate(List<RemittanceReportModel> reportModelList) {
+        Collections.sort(reportModelList, new Comparator<RemittanceReportModel>() {
+            @Override
+            public int compare(RemittanceReportModel model1, RemittanceReportModel model2) {
+                try {
+                    Date date1 = dateFormat.parse(model1.getReceiptDate());
+                    Date date2 = dateFormat.parse(model2.getReceiptDate());
+                    return date1.equals(date2) ? 0 : date1.after(date2) ? 1 : -1;
+                } catch (ParseException e) {
+                    LOGGER.error("Error while sorting pending remittance report model ", e);
+                }
+                return 0;
+            }
+        });
+    }
+
+    private void populateMasterData(List<RemittanceReportModel> tempReportModelList) throws Exception{
+        try {
+            Set<String> serviceSet = tempReportModelList.stream().map(RemittanceReportModel::getService).collect(Collectors.toSet());
+            Set<String> deptSet = tempReportModelList.stream().map(RemittanceReportModel::getDepartment).collect(Collectors.toSet());
+            List<BusinessService> serviceByCodes = microserviceUtils.getBusinessServiceByCodes(serviceSet);
+            Map<String, BusinessService> businessCodeMap = serviceByCodes.stream().collect(Collectors.toMap(BusinessService::getCode, Function.identity()));
+            List<Department> departments = microserviceUtils.getDepartments(StringUtils.join(deptSet, ","));
+            Map<String, Department> deptCodeMap = departments.stream().collect(Collectors.toMap(Department::getCode, Function.identity()));
+            
+            tempReportModelList.stream().forEach(model -> {
+                model.setServiceName(businessCodeMap.get(model.getService()).getBusinessService());
+                model.setDepartmentName(deptCodeMap.get(model.getDepartment()).getName());
+            });
+        } catch (Exception e) {
+            LOGGER.error("Error while populating master data for report model", e);
+            throw new Exception("Error while populating master data for report model");
+        }
+    }
+
+    private String getReceiptSourceUrl(String receiptNumber, Map<String, String> receiptVoucherMap,
+            Map<String, CVoucherHeader> voucherHeaderMap) {
+        String voucherNum = receiptVoucherMap.get(receiptNumber);
+        return voucherNum != null ? (voucherHeaderMap.get(voucherNum) != null ? voucherHeaderMap.get(voucherNum).getVouchermis().getSourcePath() : null) : null;
     }
 }

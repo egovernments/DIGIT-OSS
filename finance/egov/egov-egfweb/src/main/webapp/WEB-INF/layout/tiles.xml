@@ -835,4 +835,9 @@
         <put-attribute name="body" value="/WEB-INF/views/remittance/remittance_collection_search.jsp"/>
     </definition>
     
+     <definition name="remittance_pending_search" extends="base_layout">
+        <put-attribute name="page-title" value="title.remittance.pending.search.form" cascade="true"/>
+        <put-attribute name="body" value="/WEB-INF/views/remittance/remittance_pending_search.jsp"/>
+    </definition>
+    
 </tiles-definitions>
