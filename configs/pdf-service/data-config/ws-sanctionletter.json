@@ -280,7 +280,8 @@
                 "variable": "slaDate",
                 "value": {
                   "path": "$.slaDate"
-                }
+                },
+                "type": "date"
               },
               {
                 "variable": "order_message14",
