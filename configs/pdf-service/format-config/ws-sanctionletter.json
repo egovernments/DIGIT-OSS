@@ -189,7 +189,7 @@
                 "columns": [
                   {
                     "width": "100%",
-                    "text": "{{in_ref_label}} {{applicationNumber}} {{dated}} {{date}} {{order_meassage2}} {{applicationType}} {{order_meassage3}} {{door_no}} {{doorNo}} {{locality_label}} {{locality}}{{order_meassage4}} {{totalAmount}} {{order_meassage5}} {{applicationType}} {{order_meassage6}} {{totalAmount}} {{dated}} {{date}} {{order_meassage7}}",
+                    "text": "{{in_ref_label}} {{applicationNumber}} {{dated}} {{date}} {{order_message2}} {{applicationType}} {{order_message3}} {{door_no}} {{doorNo}} {{locality_label}} {{locality}}{{order_message4}} {{totalAmount}} {{order_message5}} {{applicationType}} {{order_message6}} {{totalAmount}} {{dated}} {{date}} {{order_message7}}",
                     "style": "receipt-value-down"
                   }
                 ],
@@ -212,7 +212,7 @@
                 "columns": [
                   {
                     "width": "100%",
-                    "text": "{{order_meassage12}} {{plumberName}}{{order_meassage13}} {{licenceNo}}{{order_meassage14}} {{contactNo}}{{order_meassage10}} {{date}}{{order_meassage11}}",
+                    "text": "{{order_message12}} {{plumberName}}{{order_message13}} {{licenceNo}}{{order_message14}} {{contactNo}}{{order_message10}} {{sla}} {{order_message15}} {{slaDdate}} {{order_message11}}",
                     "style": "receipt-value-down"
                   }
                 ],
