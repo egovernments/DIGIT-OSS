@@ -7,6 +7,7 @@ import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import isUndefined from "lodash/isUndefined";
 import { httpRequest } from "../../../../ui-utils/api";
+import commonConfig from "config/common.js";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -375,11 +376,11 @@ export const getDetailsForOwner = async (state, dispatch, fieldInfo) => {
       //New number search only
       let payload = await httpRequest(
         "post",
-        "/user/_search?tenantId=pb",
+        `/user/_search?tenantId=${commonConfig.tenantId}`,
         "_search",
         [],
         {
-          tenantId: "pb",
+          tenantId: commonConfig.tenantId,
           userName: `${ownerNo}`
         }
       );
