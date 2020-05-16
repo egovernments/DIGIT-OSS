@@ -211,6 +211,12 @@
       "fromFY": "2015-16"
     },
     {
+      "name": "Other Industrial Subminor Usage ",
+      "code": "NONRESIDENTIAL.INDUSTRIAL.OTHERINDUSTRIALSUBMINOR.OTHERINDUSTRIAL",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
       "name": "Private Hospital",
       "code": "NONRESIDENTIAL.COMMERCIAL.MEDICALFACILITY.PVTHOSPITAL",
       "active": true,
