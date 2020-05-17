@@ -204,7 +204,6 @@ class FormWizardDataEntry extends Component {
         let newkey = "";
         let mdmsYears = getYearList.filter(year => year.code.startsWith("PTAN"));
 
-        console.log("Prasad MDMS years", mdmsYears);
               
         const demands =
           (demandPropertyResponse &&
@@ -213,7 +212,6 @@ class FormWizardDataEntry extends Component {
             })) ||
           [];
         
-        console.log ("prasad demands", demands);
 
         demands.forEach((demand, yearKey) => {
           //add order for the taxt head and do the oerdering
@@ -241,7 +239,6 @@ class FormWizardDataEntry extends Component {
             demand.demandDetails = [];
           }
           
-          console.log("prasad demand.demandDetails", demand.demandDetails);
 
           return demand.demandDetails.forEach((demandData, demandKey) => {
             if (demandData.order > -1 && demandData.isLegacy) {
@@ -260,36 +257,18 @@ class FormWizardDataEntry extends Component {
                 }
               );  
                          
-            // let newkeys = mdmsYears.forEach((item, i) => { 
               
             
                                      
                    if (mdmsYears[0].fromDate > demand.taxPeriodFrom  && yearKey==0) { 
 
                     
-                   //  debugger;                 
                                                         
                   /*  prepareFinalObject(
                       `DemandProperties[0].propertyDetails[0].demand[${yearKey}]`, 
                        null
                      );   */
-                     /* prepareFinalObject(
-                      `DemandProperties[0].propertyDetails[0].demand[${yearKey}].demand[${finalYear}][${demandData.order}].PT_TAXHEAD`, 
-                      null
-                     ),
-                       prepareFinalObject(
-                         `DemandProperties[0].propertyDetails[0].demand[${yearKey}].demand[${finalYear}][${demandData.order}].PT_DEMAND`,
-                         null
-                       ),
-                       prepareFinalObject(
-                         `DemandProperties[0].propertyDetails[0].demand[${yearKey}].demand[${finalYear}][${demandData.order}].PT_COLLECTED`,
-                         null
-                       );
-                     prepareFinalObject(
-                       `DemandProperties[0].propertyDetails[0].demand[${yearKey}].demand[${finalYear}][${demandData.order}].ID`,
-                       null
-                     ); */
-                    
+                                      
                      
                  
                      newkey = yearKey +1
