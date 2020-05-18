@@ -3,7 +3,7 @@ serviceMaps:
   mappings:
   - version: 1.0
     description: Persists property details in EG_PT_PROPERTY  table
-    fromTopic: save-property-registry
+    fromTopic: save-property-registry-batch
     isTransaction: true
     queryMaps:
 
