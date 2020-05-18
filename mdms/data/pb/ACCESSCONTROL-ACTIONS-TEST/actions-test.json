@@ -16553,6 +16553,20 @@
       "serviceCode": "egov-searcher",
       "code": "null",
       "path": ""
+    },
+    {
+      "id": 1987,
+      "name": "Remittance Pending Report",
+      "url": "url",
+      "parentModule": "",
+      "displayName": "Remittance Pending Report",
+      "orderNumber": 6,
+      "enabled": true,
+      "serviceCode": "FinanceReport",
+      "code": "null",
+      "leftIcon": "editor:insert-chart",
+      "path": "Finance.Reports.Revenue Reports.Remittance Pending Report",
+      "navigationURL": "services/EGF/report/remittance/pending/form"
     }
   ]
 }

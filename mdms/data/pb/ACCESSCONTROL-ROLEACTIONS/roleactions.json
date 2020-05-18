@@ -20623,6 +20623,18 @@
       "actionid": 1976,
       "actioncode": "",
       "tenantId": "pb"
+    },
+    {
+      "rolecode": "EGF_REPORT_VIEW",
+      "actionid": 1987,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 1987,
+      "actioncode": "",
+      "tenantId": "pb"
     }
   ]
 }
