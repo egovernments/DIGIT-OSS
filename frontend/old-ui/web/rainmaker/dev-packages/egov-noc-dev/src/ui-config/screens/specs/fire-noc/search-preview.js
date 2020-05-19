@@ -34,6 +34,7 @@ import { documentsSummary } from "./summaryResource/documentsSummary";
 import { estimateSummary } from "./summaryResource/estimateSummary";
 import { nocSummary } from "./summaryResource/nocSummary";
 import { propertySummary } from "./summaryResource/propertySummary";
+import { download } from "egov-common/ui-utils/commons";
 
 const titlebar = getCommonContainer({
   header: getCommonHeader({
@@ -209,14 +210,22 @@ const setDownloadMenu = (state, dispatch) => {
   let receiptDownloadObject = {
     label: { labelName: "Receipt", labelKey: "NOC_RECEIPT" },
     link: () => {
-      generatePdf(state, dispatch, "receipt_download");
+      const receiptQueryString = [
+        { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails, "applicationNumber") },
+        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.FireNOCs[0], "tenantId") }
+      ]
+      download(receiptQueryString , "download" ,"consolidatedreceipt" );
     },
     leftIcon: "receipt"
   };
   let receiptPrintObject = {
     label: { labelName: "Receipt", labelKey: "NOC_RECEIPT" },
     link: () => {
-      generatePdf(state, dispatch, "receipt_print");
+      const receiptQueryString = [
+        { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails, "applicationNumber") },
+        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.FireNOCs[0], "tenantId") }
+      ]
+      download(receiptQueryString , "print" ,"consolidatedreceipt" );
     },
     leftIcon: "receipt"
   };
