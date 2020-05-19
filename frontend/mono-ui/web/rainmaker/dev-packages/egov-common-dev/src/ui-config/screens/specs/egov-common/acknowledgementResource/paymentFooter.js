@@ -1,7 +1,7 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { ifUserRoleExists } from "../../utils";
 import get from "lodash/get";
-import './acknowledgementUtils.css'
+import { ifUserRoleExists } from "../../utils";
+import './acknowledgementUtils.css';
 
 const getCommonApplyFooter = children => {
     return {
@@ -20,21 +20,21 @@ const defaultValues = {
     "receiptKey": "consolidatedreceipt",
     "billKey": "consolidatedbill",
     "buttons": [
-      {
-        "label": "COMMON_BUTTON_HOME",
-        "citizenUrl": "/",
-        "employeeUrl": "/inbox"
-      }
+        {
+            "label": "COMMON_BUTTON_HOME",
+            "citizenUrl": "/",
+            "employeeUrl": "/inbox"
+        }
     ]
-  }
+}
 
-export const paymentFooter = (state,consumerCode, tenant,status) => {
+export const paymentFooter = (state, consumerCode, tenant, status, businessService) => {
 
-    const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject , "commonPayInfo" , defaultValues);
-    const  buttons  = get(uiCommonPayConfig,"buttons");
+    const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject, "commonPayInfo", defaultValues);
+    const buttons = get(uiCommonPayConfig, "buttons");
     const redirectionURL = "/egov-common/pay";
-    const path = `${redirectionURL}?consumerCode=${consumerCode}&tenantId=${tenant}`
-    
+    const path = `${redirectionURL}?consumerCode=${consumerCode}&tenantId=${tenant}&businessService=${businessService}`
+
     // gotoHome: {
     //     componentPath: "Button",
     //     props: {
@@ -64,13 +64,13 @@ export const paymentFooter = (state,consumerCode, tenant,status) => {
 
 
 
-    const footer =buttons&& buttons.map((item,index) => {
-        return{
+    const footer = buttons && buttons.map((item, index) => {
+        return {
             componentPath: "Button",
             props: {
                 variant: "contained",
                 color: "primary",
-                className:"common-footer-mobile",
+                className: "common-footer-mobile",
                 style: {
                     minWidth: "200px",
                     height: "48px",
@@ -80,12 +80,12 @@ export const paymentFooter = (state,consumerCode, tenant,status) => {
             },
             children: {
                 downloadReceiptButtonLabel: getLabel({
-                    labelKey : get(item , "label" , "GO_TO_HOME")
+                    labelKey: get(item, "label", "GO_TO_HOME")
                 })
             },
             onClickDefination: {
                 action: "page_change",
-                path: ifUserRoleExists("CITIZEN") ? get(item,"citizenUrl", "/") : get(item,"employeeUrl", "/inbox")
+                path: ifUserRoleExists("CITIZEN") ? get(item, "citizenUrl", "/") : get(item, "employeeUrl", "/inbox")
             },
         }
     })
@@ -96,7 +96,7 @@ export const paymentFooter = (state,consumerCode, tenant,status) => {
             props: {
                 variant: "contained",
                 color: "primary",
-                className:"common-footer-mobile",
+                className: "common-footer-mobile",
                 style: {
                     minWidth: "200px",
                     height: "48px",

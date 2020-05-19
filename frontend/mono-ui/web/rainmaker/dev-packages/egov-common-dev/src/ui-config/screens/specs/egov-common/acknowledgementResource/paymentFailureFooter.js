@@ -1,5 +1,4 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { ifUserRoleExists } from "../../utils";
 
 const getCommonApplyFooter = children => {
     return {
@@ -12,9 +11,9 @@ const getCommonApplyFooter = children => {
     };
 };
 
-export const paymentFailureFooter = (consumerCode, tenant) => {
+export const paymentFailureFooter = (consumerCode, tenant, businessService) => {
     const redirectionURL = "/egov-common/pay";
-    const path = `${redirectionURL}?consumerCode=${consumerCode}&tenantId=${tenant}`
+    const path = `${redirectionURL}?consumerCode=${consumerCode}&tenantId=${tenant}&businessService=${businessService}`
     return getCommonApplyFooter({
         gotoHome: {
             componentPath: "Button",
