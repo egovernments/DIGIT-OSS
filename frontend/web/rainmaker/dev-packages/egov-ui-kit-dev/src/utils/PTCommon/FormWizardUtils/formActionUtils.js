@@ -32,12 +32,7 @@ export const assessProperty = async (action, props) => {
     }
     const adhocExemptionPenalty = get(props, 'adhocExemptionPenalty', {});
     assessment.additionalDetails = {}
-    if (Object.keys(adhocExemptionPenalty).length > 1) {
-        assessment.additionalDetails.adhocPenalty = Number(adhocExemptionPenalty.adhocPenalty);
-        assessment.additionalDetails.adhocPenaltyReason = adhocExemptionPenalty.adhocPenaltyReason == 'Others' ? adhocExemptionPenalty.adhocOtherPenaltyReason : adhocExemptionPenalty.adhocPenaltyReason;
-        assessment.additionalDetails.adhocExemption = Number(adhocExemptionPenalty.adhocExemption);
-        assessment.additionalDetails.adhocExemptionReason = adhocExemptionPenalty.adhocExemptionReason == 'Others' ? adhocExemptionPenalty.adhocOtherExemptionReason : adhocExemptionPenalty.adhocExemptionReason;
-    }
+
     if (purpose == PROPERTY_FORM_PURPOSE.REASSESS) {
         let assessments = await getAssessmentDetails();
         if (assessments.Assessments.length > 0) {
@@ -45,6 +40,12 @@ export const assessProperty = async (action, props) => {
             assessment = assessmentResponse;
             assessment.assessmentDate = new Date().getTime() - 60000;
         }
+    }
+    if (Object.keys(adhocExemptionPenalty).length > 1) {
+        assessment.additionalDetails.adhocPenalty = Number(adhocExemptionPenalty.adhocPenalty);
+        assessment.additionalDetails.adhocPenaltyReason = adhocExemptionPenalty.adhocPenaltyReason == 'Others' ? adhocExemptionPenalty.adhocOtherPenaltyReason : adhocExemptionPenalty.adhocPenaltyReason;
+        assessment.additionalDetails.adhocExemption = Number(adhocExemptionPenalty.adhocExemption);
+        assessment.additionalDetails.adhocExemptionReason = adhocExemptionPenalty.adhocExemptionReason == 'Others' ? adhocExemptionPenalty.adhocOtherExemptionReason : adhocExemptionPenalty.adhocExemptionReason;
     }
     try {
         let assessPropertyResponse = await httpRequest(
