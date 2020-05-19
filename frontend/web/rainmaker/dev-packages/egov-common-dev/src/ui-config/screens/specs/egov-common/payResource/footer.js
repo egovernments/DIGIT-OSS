@@ -6,12 +6,11 @@ import cloneDeep from "lodash/cloneDeep";
 import get from "lodash/get";
 import set from "lodash/set";
 import { httpRequest } from "../../../../../ui-utils/api";
-import { convertDateToEpoch, validateFields } from "../../utils";
-import { ifUserRoleExists } from "../../utils";
+import { convertDateToEpoch, ifUserRoleExists, validateFields } from "../../utils";
 import "./index.css";
 
 export const callPGService = async (state, dispatch) => {
-  const isAdvancePaymentAllowed =get(state, "screenConfiguration.preparedFinalObject.businessServiceInfo.isAdvanceAllowed");
+  const isAdvancePaymentAllowed = get(state, "screenConfiguration.preparedFinalObject.businessServiceInfo.isAdvanceAllowed");
   const tenantId = getQueryArg(window.location.href, "tenantId");
   const consumerCode = getQueryArg(window.location.href, "consumerCode");
   const businessService = get(
@@ -23,7 +22,7 @@ export const callPGService = async (state, dispatch) => {
     process.env.NODE_ENV === "production"
       ? `${window.origin}/citizen`
       : window.origin
-  }/egov-common/paymentRedirectPage`;
+    }/egov-common/paymentRedirectPage`;
 
   const { screenConfiguration = {} } = state;
   const { preparedFinalObject = {} } = screenConfiguration;
@@ -32,12 +31,12 @@ export const callPGService = async (state, dispatch) => {
   const taxAmount = Number(get(billPayload, "Bill[0].totalAmount"));
   let amtToPay =
     state.screenConfiguration.preparedFinalObject.AmountType ===
-    "partial_amount"
+      "partial_amount"
       ? state.screenConfiguration.preparedFinalObject.AmountPaid
       : taxAmount;
   amtToPay = amtToPay ? Number(amtToPay) : taxAmount;
 
-  if(amtToPay>taxAmount&&!isAdvancePaymentAllowed){
+  if (amtToPay > taxAmount && !isAdvancePaymentAllowed) {
     alert("Advance Payment is not allowed");
     return;
   }
@@ -108,18 +107,18 @@ export const callPGService = async (state, dispatch) => {
       window.location = redirectionUrl;
     }
   } catch (e) {
-    console.log(e);
-    if (e.message === "A transaction for this bill has been abruptly discarded, please retry after 15 mins"){
-      dispatch(
-        toggleSnackbar(
-          true,
-          { labelName: e.message, labelKey: e.message },
-          "error"
-        )
-      );
-    }else{
-      moveToFailure(dispatch);
-    }
+
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: e.message, labelKey: e.message },
+        "error"
+      )
+    );
+    /*     // }else{
+          moveToFailure(dispatch);
+        }
+     */
   }
 };
 
@@ -225,13 +224,13 @@ const updatePayAction = async (
 
 const callBackForPay = async (state, dispatch) => {
   let isFormValid = true;
-  const isAdvancePaymentAllowed =get(state, "screenConfiguration.preparedFinalObject.businessServiceInfo.isAdvanceAllowed");
+  const isAdvancePaymentAllowed = get(state, "screenConfiguration.preparedFinalObject.businessServiceInfo.isAdvanceAllowed");
   const roleExists = ifUserRoleExists("CITIZEN");
   if (roleExists) {
     alert("You are not Authorized!");
     return;
   }
- 
+
   // --- Validation related -----//
 
   const selectedPaymentType = get(
@@ -354,28 +353,28 @@ const callBackForPay = async (state, dispatch) => {
   ReceiptBodyNew.Payment["mobileNumber"] =
     finalReceiptData.Bill[0].payerMobileNumber;
   ReceiptBodyNew.Payment["payerName"] = finalReceiptData.Bill[0].payerName;
-  if(finalReceiptData.instrument.transactionNumber){
+  if (finalReceiptData.instrument.transactionNumber) {
     ReceiptBodyNew.Payment["transactionNumber"] =
       finalReceiptData.instrument.transactionNumber;
   }
-  if(finalReceiptData.instrument.instrumentNumber){
+  if (finalReceiptData.instrument.instrumentNumber) {
     ReceiptBodyNew.Payment["instrumentNumber"] =
       finalReceiptData.instrument.instrumentNumber;
   }
-  if( finalReceiptData.instrument.instrumentDate){
+  if (finalReceiptData.instrument.instrumentDate) {
     ReceiptBodyNew.Payment["instrumentDate"] =
-        finalReceiptData.instrument.instrumentDate;
+      finalReceiptData.instrument.instrumentDate;
   }
 
   let amtPaid =
     state.screenConfiguration.preparedFinalObject.AmountType ===
-    "partial_amount"
+      "partial_amount"
       ? state.screenConfiguration.preparedFinalObject.AmountPaid
       : finalReceiptData.Bill[0].totalAmount;
   amtPaid = amtPaid ? Number(amtPaid) : totalAmount;
 
 
-  if(amtPaid>totalAmount&&!isAdvancePaymentAllowed){
+  if (amtPaid > totalAmount && !isAdvancePaymentAllowed) {
     alert("Advance Payment is not allowed");
     return;
   }
@@ -461,7 +460,7 @@ export const footer = getCommonApplyFooter({
     props: {
       variant: "contained",
       color: "primary",
-      className:"gen-receipt-com",
+      className: "gen-receipt-com",
       // style: {
       //   width: "379px",
       //   height: "48px ",
@@ -499,7 +498,7 @@ export const footer = getCommonApplyFooter({
     props: {
       variant: "contained",
       color: "primary",
-      className:"make-payment-com",
+      className: "make-payment-com",
       // style: {
       //   width: "363px",
       //   height: "48px ",
