@@ -16567,6 +16567,39 @@
       "leftIcon": "editor:insert-chart",
       "path": "Finance.Reports.Revenue Reports.Remittance Pending Report",
       "navigationURL": "services/EGF/report/remittance/pending/form"
+    },
+    {
+      "id": 1988,
+      "name": "BPA-Land-Create",
+      "url": "/bpa-services/v1/land/_create",
+      "displayName": "Land Create",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "BPA",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1989,
+      "name": "BPA-Land-Update",
+      "url": "/bpa-services/v1/land/_update",
+      "displayName": "Land Update",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "BPA",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1990,
+      "name": "BPA-Land-Search",
+      "url": "/bpa-services/v1/land/_search",
+      "displayName": "Land Search",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "BPA",
+      "code": "null",
+      "path": ""
     }
   ]
 }
