@@ -14,7 +14,7 @@ serviceMaps:
 
        - jsonPath: $.WaterConnection.property.tenantId
         
-       - jsonPath: $.WaterConnection.property.propertyId
+       - jsonPath: $.WaterConnection.propertyId
 
        - jsonPath: $.WaterConnection.applicationNo
         
