@@ -25,7 +25,7 @@
                             {
                                 "variable": "planPermissionNo",
                                 "value": {
-                                    "path": "$.permitOrderNo"
+                                    "path": "$.approvalNo"
                                 }
                             },
                             {
@@ -49,7 +49,7 @@
                             {
                                 "variable": "ownerName",
                                 "value": {
-                                    "path": "$.owners.*.name"
+                                    "path": "$.landInfo.owners.*.name"
                                 }
                             },
                             {

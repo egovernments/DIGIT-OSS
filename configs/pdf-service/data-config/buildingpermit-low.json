@@ -25,7 +25,7 @@
               {
                 "variable": "planPermissionNo",
                 "value": {
-                  "path": "$.permitOrderNo"
+                  "path": "$.approvalNo"
                 }
               },
               {
@@ -44,19 +44,19 @@
               {
                 "variable": "favourOf",
                 "value": {
-                  "path": "$.owners.*.name"
+                  "path": "$.landInfo.owners.*.name"
                 }
               },
               {
                 "variable": "holdingNo",
                 "value": {
-                  "path": "$.holdingNo"
+                  "path": "$.additionalDetails.holdingNo"
                 }
               },
               {
                 "variable": "validityDate",
                 "value": {
-                  "path": "$.validityDate"
+                  "path": "$.additionalDetails.validityDate"
                 },
                 "type": "date"
               },
@@ -131,7 +131,7 @@
               {
                 "variable": "orderGeneratedOn",
                 "value": {
-                  "path": "$.orderGeneratedDate"
+                  "path": "$.approvalDate"
                 },
                 "type": "date"
               },
