@@ -7,7 +7,7 @@ serviceMaps:
    fromTopic: save-sw-connection
    isTransaction: true
    queryMaps: 
-    - query: INSERT INTO eg_sw_connection (id, tenantid, property_id, applicationno, applicationstatus, status, connectionno, oldconnectionno,roadcuttingarea,action,roadtype) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,?,?);
+    - query: INSERT INTO eg_sw_connection (id, tenantid, property_id, applicationno, applicationstatus, status, connectionno, oldconnectionno,roadcuttingarea,action,roadtype, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?);
       basePath: $.SewerageConnection
       jsonMaps:
        - jsonPath: $.SewerageConnection.id 
@@ -30,7 +30,15 @@ serviceMaps:
 
        - jsonPath: $.SewerageConnection.processInstance.action
 
-       - jsonPath: $.SewerageConnection.roadType     
+       - jsonPath: $.SewerageConnection.roadType 
+       
+       - jsonPath: $.SewerageConnection.auditDetails.createdBy
+
+       - jsonPath: $.SewerageConnection.auditDetails.lastModifiedBy
+
+       - jsonPath: $.SewerageConnection.auditDetails.createdTime
+
+       - jsonPath: $.SewerageConnection.auditDetails.lastModifiedTime
 
     - query: INSERT INTO eg_sw_service(connection_id,connectionExecutionDate,noOfWaterClosets,noOfToilets,connectiontype,proposedWaterClosets,proposedToilets, appCreatedDate) VALUES(?,?,?,?,?,?,?, ?);
       basePath: $.SewerageConnection
@@ -59,7 +67,7 @@ serviceMaps:
    fromTopic: update-sw-connection
    isTransaction: true
    queryMaps: 
-    - query: UPDATE eg_sw_connection SET applicationstatus=?, status=?, connectionno=?, oldconnectionno=?, action=?, roadCuttingArea=?, roadType=?, adhocpenalty=?, adhocrebate=?, adhocpenaltyreason=?, adhocpenaltycomment=?, adhocrebatereason=?, adhocrebatecomment=? WHERE id=?;
+    - query: UPDATE eg_sw_connection SET applicationstatus=?, status=?, connectionno=?, oldconnectionno=?, action=?, roadCuttingArea=?, roadType=?, adhocpenalty=?, adhocrebate=?, adhocpenaltyreason=?, adhocpenaltycomment=?, adhocrebatereason=?, adhocrebatecomment=?, lastmodifiedby=?, lastmodifiedtime=? WHERE id=?;
       basePath: $.SewerageConnection
       jsonMaps:
         
@@ -87,7 +95,11 @@ serviceMaps:
        
        - jsonPath: $.SewerageConnection.additionalDetails.adhocRebateReason 
 
-       - jsonPath: $.SewerageConnection.additionalDetails.adhocRebateComment      
+       - jsonPath: $.SewerageConnection.additionalDetails.adhocRebateComment
+      
+       - jsonPath: $.SewerageConnection.auditDetails.lastModifiedBy
+
+       - jsonPath: $.SewerageConnection.auditDetails.lastModifiedTime
 
        - jsonPath: $.SewerageConnection.id       
 
@@ -194,7 +206,7 @@ serviceMaps:
    fromTopic: update-sw-workflow
    isTransaction: true
    queryMaps:
-    - query: UPDATE eg_sw_connection SET applicationstatus=?, status=?, connectionno=?, action=? WHERE id=?;
+    - query: UPDATE eg_sw_connection SET applicationstatus=?, status=?, connectionno=?, action=?, lastModifiedBy=?, lastModifiedTime=? WHERE id=?;
       basePath: $.SewerageConnection
       jsonMaps:
         
@@ -205,7 +217,11 @@ serviceMaps:
        - jsonPath: $.SewerageConnection.connectionNo
 
        - jsonPath: $.SewerageConnection.processInstance.action
+       
+       - jsonPath: $.SewerageConnection.auditDetails.lastModifiedBy
 
+       - jsonPath: $.SewerageConnection.auditDetails.lastModifiedTime
+       
        - jsonPath: $.SewerageConnection.id
        
  - version: 1.0
