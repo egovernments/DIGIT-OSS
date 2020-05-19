@@ -15738,7 +15738,7 @@
     {
       "id": 1924,
       "name": "BPA-Applyforservice",
-      "url": "/bpa-services/_create",
+      "url": "/bpa-services/v1/bpa/_create",
       "displayName": "Apply",
       "orderNumber": 0,
       "enabled": false,
@@ -15832,7 +15832,7 @@
     {
       "id": 1930,
       "name": "BPA-applicationsearch",
-      "url": "/bpa-services/_search",
+      "url": "/bpa-services/v1/bpa/_search",
       "displayName": "Search",
       "orderNumber": 0,
       "enabled": false,
@@ -15843,7 +15843,7 @@
     {
       "id": 1931,
       "name": "BPA-updateapplicationservice",
-      "url": "/bpa-services/_update",
+      "url": "/bpa-services/v1/bpa/_update",
       "displayName": "Apply",
       "orderNumber": 0,
       "enabled": false,
@@ -16363,7 +16363,7 @@
     {
       "id": 1971,
       "name": "BPA-PermitOrderEDCR Report",
-      "url": "/bpa-services/_permitorderedcr",
+      "url": "/bpa-services/v1/bpa/_permitorderedcr",
       "displayName": "Apply",
       "orderNumber": 0,
       "enabled": false,
