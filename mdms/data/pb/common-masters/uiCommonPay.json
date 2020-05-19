@@ -157,6 +157,19 @@
           "employeeUrl": "/wns/search"
         }
       ]
+    },
+    {
+      "code": "FIRENOC",
+      "headerBandLabel": "PAYMENT_COMMON_CONSUMER_CODE",
+      "receiptKey": "consolidatedreceipt",
+      "billKey": "consolidatedbill",
+      "buttons": [
+        {
+          "label": "COMMON_BUTTON_HOME",
+          "citizenUrl": "/fire-noc/home",
+          "employeeUrl": "/fire-noc/search"
+        }
+      ]
     }
   ]
 }
