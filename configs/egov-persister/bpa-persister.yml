@@ -7,46 +7,28 @@ serviceMaps:
    isTransaction: true
    queryMaps:
 
-       - query: INSERT INTO eg_bpa_buildingplan(id, applicationno,permitorderno,remarks, edcrnumber, tenantid, holdingNo, registrationDetails, govtOrQuasi, applicationtype, action, servicetype, occupancytype, suboccupancytype, usages, risktype, status, ownershipcategory, tradetype, additionaldetails, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?,  ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?); 
+       - query: INSERT INTO eg_bpa_buildingplan(id, applicationNo, approvalNo, landId, accountId, edcrNumber, tenantId, status, approvalDate, businessService, additionalDetails, createdBy, lastmodifiedBy, createdTime, lastmodifiedTime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?); 
          basePath: BPA
          jsonMaps:
           - jsonPath: $.BPA.id
 
           - jsonPath: $.BPA.applicationNo
           
-          - jsonPath: $.BPA.permitOrderNo
+          - jsonPath: $.BPA.approvalNo
           
-          - jsonPath: $.BPA.remarks
+          - jsonPath: $.BPA.landId
+          
+          - jsonPath: $.BPA.accountId
 
           - jsonPath: $.BPA.edcrNumber
-
+          
           - jsonPath: $.BPA.tenantId
           
-          - jsonPath: $.BPA.holdingNo
-          
-          - jsonPath: $.BPA.registrationDetails
-          
-          - jsonPath: $.BPA.govtOrQuasi
-
-          - jsonPath: $.BPA.applicationType
-
-          - jsonPath: $.BPA.action
-
-          - jsonPath: $.BPA.serviceType
-
-          - jsonPath: $.BPA.occupancyType
-
-          - jsonPath: $.BPA.subOccupancyType
-
-          - jsonPath: $.BPA.usages
-
-          - jsonPath: $.BPA.riskType
-
           - jsonPath: $.BPA.status
-
-          - jsonPath: $.BPA.ownershipCategory
-
-          - jsonPath: $.BPA.tradeType
+          
+          - jsonPath: $.BPA.approvalDate
+          
+          - jsonPath: $.BPA.businessService
 
           - jsonPath: $.BPA.additionalDetails
             type: JSON
@@ -60,156 +42,24 @@ serviceMaps:
 
           - jsonPath: $.BPA.auditDetails.lastModifiedTime
 
-       - query: INSERT INTO eg_bpa_document( id, documenttype, filestoreId, buildingplanid, documentuid, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+       - query: INSERT INTO eg_bpa_document( id, documenttype, filestore, buildingplanid, documentuid, additionalDetails, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
          basePath: BPA.documents.*
          jsonMaps:
           - jsonPath: $.BPA.documents.*.id
 
           - jsonPath: $.BPA.documents.*.documentType
 
-          - jsonPath: $.BPA.documents.*.fileStoreId
+          - jsonPath: $.BPA.documents.*.fileStore
 
           - jsonPath: $.BPA.id
 
-          - jsonPath: $.BPA.documents.*.documentuid
+          - jsonPath: $.BPA.documents.*.documentUid
 
-          - jsonPath: $.BPA.auditDetails.createdBy
-
-          - jsonPath: $.BPA.auditDetails.lastModifiedBy
-
-          - jsonPath: $.BPA.auditDetails.createdTime
-
-          - jsonPath: $.BPA.auditDetails.lastModifiedTime
-
-
-       - query: INSERT INTO eg_bpa_address( id, tenantid, doorno, plotno, district, street, region, state, country, pincode, additiondetails, buildingname, locality, landmark, city, buildingplanid, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
-         basePath: BPA.address
-         jsonMaps:
-          - jsonPath: $.BPA.address.id
-
-          - jsonPath: $.BPA.address.tenantId
-
-          - jsonPath: $.BPA.address.doorNo
-
-          - jsonPath: $.BPA.address.plotNo
-
-          - jsonPath: $.BPA.address.district
-
-          - jsonPath: $.BPA.address.street
-
-          - jsonPath: $.BPA.address.region
-
-          - jsonPath: $.BPA.address.state
-
-          - jsonPath: $.BPA.address.country
-          
-          - jsonPath: $.BPA.address.pincode
-
-          - jsonPath: $.BPA.address.additionDetails
-          
-          - jsonPath: $.BPA.address.buildingName
-          
-          - jsonPath: $.BPA.address.locality.code
-
-          - jsonPath: $.BPA.address.landmark
-
-          - jsonPath: $.BPA.address.city
-
-          - jsonPath: $.BPA.id
-
-          - jsonPath: $.BPA.auditDetails.createdBy
-
-          - jsonPath: $.BPA.auditDetails.lastModifiedBy
-
-          - jsonPath: $.BPA.auditDetails.createdTime
-
-          - jsonPath: $.BPA.auditDetails.lastModifiedTime
-
-
-
-       - query: INSERT INTO eg_bpa_owner( id, name, tenantid, mobilenumber, gender, fatherorhusbandname, correspondenceaddress, institutionid, isprimaryowner, ownertype, ownershippercentage, relationship, buildingplanid, active, createdby,lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
-         basePath: BPA.owners.*
-         jsonMaps:
-          - jsonPath: $.BPA.owners.*.uuid
-
-          - jsonPath: $.BPA.owners.*.name
-
-          - jsonPath: $.BPA.owners.*.tenantId
-
-          - jsonPath: $.BPA.owners.*.mobileNumber
-
-          - jsonPath: $.BPA.owners.*.gender
-
-          - jsonPath: $.BPA.owners.*.fatherOrHusbandName
-
-          - jsonPath: $.BPA.owners.*.correspondenceAddress
-
-          - jsonPath: $.BPA.owners.*.institutionId
-
-          - jsonPath: $.BPA.owners.*.isPrimaryOwner
-
-          - jsonPath: $.BPA.owners.*.ownerType
-
-          - jsonPath: $.BPA.owners.*.ownerShipPercentage
-
-          - jsonPath: $.BPA.owners.*.relationship
-
-          - jsonPath: $.BPA.id
-          
-          - jsonPath: $.BPA.owners.*.active
-
-          - jsonPath: $.BPA.owners.*.auditDetails.createdBy
-
-          - jsonPath: $.BPA.owners.*.auditDetails.lastModifiedBy
-
-          - jsonPath: $.BPA.owners.*.auditDetails.createdTime
-
-          - jsonPath: $.BPA.owners.*.auditDetails.lastModifiedTime
-
-
-       - query: INSERT INTO eg_bpa_unit( id,tenantid, usageCategory, blockIndex, buildingplanid, additionaldetails, createdby,lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
-         basePath: BPA.units.*
-         jsonMaps:
-          - jsonPath: $.BPA.units.*.id
-
-          - jsonPath: $.BPA.tenantId
-
-          - jsonPath: $.BPA.units.*.usageCategory
-
-          - jsonPath: $.BPA.units.*.blockIndex
-
-          - jsonPath: $.BPA.id
-
-          - jsonPath: $.BPA.units.*.additionalDetails
+          - jsonPath: $.BPA.additionalDetails
             type: JSON
             dbType: JSONB
 
-          - jsonPath: $.BPA.units.*.auditDetails.createdBy
-
-          - jsonPath: $.BPA.units.*.auditDetails.lastModifiedBy
-
-          - jsonPath: $.BPA.units.*.auditDetails.createdTime
-
-          - jsonPath: $.BPA.units.*.auditDetails.lastModifiedTime
-  
-
-       - query: INSERT INTO eg_bpa_geolocation( latitude, longitude, additionaldetails, addressid, createdby,lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?);
-         basePath: BPA.address.geoLocation
-         jsonMaps:
-          - jsonPath: $.BPA.address.geoLocation.latitude
-            type: DOUBLE
-            dbType: DOUBLE
-
-          - jsonPath: $.BPA.address.geoLocation.longitude
-            type: DOUBLE
-            dbType: DOUBLE
-
-          - jsonPath: $.BPA.address.geoLocation.additionalDetails
-            type: JSON
-            dbType: JSONB
-
-          - jsonPath: $.BPA.address.id
-
           - jsonPath: $.BPA.auditDetails.createdBy
 
           - jsonPath: $.BPA.auditDetails.lastModifiedBy
@@ -217,7 +67,7 @@ serviceMaps:
           - jsonPath: $.BPA.auditDetails.createdTime
 
           - jsonPath: $.BPA.auditDetails.lastModifiedTime
-  
+
 
 
        - query: INSERT INTO eg_bpa_auditdetails SELECT * FROM eg_bpa_buildingplan WHERE id =?;
@@ -226,38 +76,6 @@ serviceMaps:
 
           - jsonPath: $.BPA.id
   
-
-
-
-
-       - query: INSERT INTO eg_bpa_document_owner(id,tenantId,owner,active, buildingplanid, documenttype, fileStoreid,documentuid, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ? ,? ,?, ?, ?, ?, ?, ?, ?, ?);
-         basePath: BPA.owners.*.documents.*
-         jsonMaps:
-           - jsonPath: $.BPA.owners.*.documents.*.id
-
-           - jsonPath: $.BPA.owners.*.documents.*.tenantId
-
-           - jsonPath: $.BPA.owners.*.uuid
-
-           - jsonPath: $.BPA.owners.*.documents.*.active
-
-           - jsonPath: $.BPA.owners.*.buildingplanId
-
-           - jsonPath: $.BPA.owners.*.documents.*.documentType
-
-           - jsonPath: $.BPA.owners.*.documents.*.fileStoreId
-
-           - jsonPath: $.BPA.owners.*.documents.*.documentUid
-
-           - jsonPath: $.BPA.owners.*.documents.*.auditDetails.createdBy
-
-           - jsonPath: $.BPA.owners.*.documents.*.auditDetails.lastModifiedBy
-
-           - jsonPath: $.BPA.owners.*.documents.*.auditDetails.createdTime
-
-           - jsonPath: $.BPA.owners.*.documents.*.auditDetails.lastModifiedTime
-
-
 
 
 
@@ -267,34 +85,14 @@ serviceMaps:
    isTransaction: true
    queryMaps:
 
-       - query: UPDATE eg_bpa_buildingplan SET applicationno=?, remarks=?, holdingNo=?, subOccupancyType=?, permitOrderNo=?, edcrnumber=?,  action=?, registrationdetails=?, govtorquasi=?, servicetype=?, riskType=?, status=?, ownershipcategory=?, additionaldetails=?, lastmodifiedby=?, lastmodifiedtime=?, validityDate=?, orderGeneratedDate=?, applicationDate=? WHERE id=?;
+       - query: UPDATE eg_bpa_buildingplan SET applicationno=?, approvalNo=?, status=?, additionaldetails=?, lastmodifiedby=?, lastmodifiedtime=?, approvalDate=? WHERE id=?;
          basePath: BPA
          jsonMaps:
           - jsonPath: $.BPA.applicationNo
           
-          - jsonPath: $.BPA.remarks
-          
-          - jsonPath: $.BPA.holdingNo
-          
-          - jsonPath: $.BPA.subOccupancyType
-          
-          - jsonPath: $.BPA.permitOrderNo
-
-          - jsonPath: $.BPA.edcrNumber
-
-          - jsonPath: $.BPA.action
-
-          - jsonPath: $.BPA.registrationDetails
-
-          - jsonPath: $.BPA.govtOrQuasi
-
-          - jsonPath: $.BPA.serviceType
-
-          - jsonPath: $.BPA.riskType
+          - jsonPath: $.BPA.approvalNo
 
           - jsonPath: $.BPA.status
-
-          - jsonPath: $.BPA.ownershipCategory
 
           - jsonPath: $.BPA.additionalDetails
             type: JSON
@@ -304,13 +102,10 @@ serviceMaps:
 
           - jsonPath: $.BPA.auditDetails.lastModifiedTime
 
-          - jsonPath: $.BPA.validityDate
-
-          - jsonPath: $.BPA.orderGeneratedDate
-          
-          - jsonPath: $.BPA.applicationDate
+          - jsonPath: $.BPA.approvalDate
 
           - jsonPath: $.BPA.id
+
 
        - query: INSERT INTO eg_bpa_auditdetails SELECT * FROM eg_bpa_buildingplan WHERE id =?;
          basePath: BPA
@@ -318,172 +113,8 @@ serviceMaps:
 
            - jsonPath: $.BPA.id
 
-       - query: UPDATE eg_bpa_address SET  doorno=?, plotno=?, district=?, region=?, state=?, country=?, pincode=?, additiondetails=?, buildingname=?, street=?, locality=?, landmark=?, city=?, lastmodifiedby=?, lastmodifiedtime=? WHERE id=?;
-         basePath: BPA.address
-         jsonMaps:
-
-          - jsonPath: $.BPA.address.doorNo
-
-          - jsonPath: $.BPA.address.plotNo
-
-          - jsonPath: $.BPA.address.district
-
-          - jsonPath: $.BPA.address.region
-
-          - jsonPath: $.BPA.address.state
-
-          - jsonPath: $.BPA.address.country
-
-          - jsonPath: $.BPA.address.pincode
-
-          - jsonPath: $.BPA.address.additionDetails
-
-          - jsonPath: $.BPA.address.buildingName
-
-          - jsonPath: $.BPA.address.street
-
-          - jsonPath: $.BPA.address.locality.code
-
-          - jsonPath: $.BPA.address.landmark
-
-          - jsonPath: $.BPA.address.city
-
-          - jsonPath: $.BPA.auditDetails.lastModifiedBy
-
-          - jsonPath: $.BPA.auditDetails.lastModifiedTime
-
-          - jsonPath: $.BPA.address.id
-
-       - query: INSERT INTO eg_bpa_owner( id, name, tenantid, mobilenumber, gender, fatherorhusbandname, correspondenceaddress, institutionid, isprimaryowner, ownertype, ownershippercentage, relationship, buildingplanid, active, createdby,lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id, buildingplanid) WHERE id IS NOT NULL DO UPDATE SET name=?, mobilenumber=?, gender=?, fatherorhusbandname=?, correspondenceaddress=?, institutionid=?, isprimaryowner=?, ownertype=?, ownershippercentage=?, relationship=?, active=?, lastmodifiedby=?, lastmodifiedtime=?;
-         basePath: BPA.owners.*
-         jsonMaps:
-          - jsonPath: $.BPA.owners.*.uuid
-
-          - jsonPath: $.BPA.owners.*.name
-
-          - jsonPath: $.BPA.owners.*.tenantId
-
-          - jsonPath: $.BPA.owners.*.mobileNumber
-
-          - jsonPath: $.BPA.owners.*.gender
-
-          - jsonPath: $.BPA.owners.*.fatherOrHusbandName
-
-          - jsonPath: $.BPA.owners.*.correspondenceAddress
-
-          - jsonPath: $.BPA.owners.*.institutionId
-
-          - jsonPath: $.BPA.owners.*.isPrimaryOwner
-
-          - jsonPath: $.BPA.owners.*.ownerType
-
-          - jsonPath: $.BPA.owners.*.ownerShipPercentage
-
-          - jsonPath: $.BPA.owners.*.relationship
-
-          - jsonPath: $.BPA.id
-          
-          - jsonPath: $.BPA.owners.*.active
-
-          - jsonPath: $.BPA.owners.*.auditDetails.createdBy
-
-          - jsonPath: $.BPA.owners.*.auditDetails.lastModifiedBy
-
-          - jsonPath: $.BPA.owners.*.auditDetails.createdTime
-
-          - jsonPath: $.BPA.owners.*.auditDetails.lastModifiedTime
-          
-          - jsonPath: $.BPA.owners.*.name
-
-          - jsonPath: $.BPA.owners.*.mobileNumber
-
-          - jsonPath: $.BPA.owners.*.gender
-
-          - jsonPath: $.BPA.owners.*.fatherOrHusbandName
-
-          - jsonPath: $.BPA.owners.*.correspondenceAddress
-
-          - jsonPath: $.BPA.owners.*.institutionId
-
-          - jsonPath: $.BPA.owners.*.isPrimaryOwner
-
-          - jsonPath: $.BPA.owners.*.ownerType
-
-          - jsonPath: $.BPA.owners.*.ownerShipPercentage
-
-          - jsonPath: $.BPA.owners.*.relationship
-          
-          - jsonPath: $.BPA.owners.*.active
-
-          - jsonPath: $.BPA.owners.*.auditDetails.lastModifiedBy
-
-          - jsonPath: $.BPA.owners.*.auditDetails.lastModifiedTime
-
-
-       - query: INSERT INTO eg_bpa_unit(id, tenantId, buildingplanid, blockindex,  usageCategory ,additionalDetails ,createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id, buildingplanid, blockIndex) WHERE id IS NOT NULL DO UPDATE SET usageCategory=?, blockIndex=?, additionaldetails=?, lastmodifiedby=?, lastmodifiedtime=?;
-         basePath: BPA.units.*
-         jsonMaps: 
-          - jsonPath: $.BPA.units.*.id
-
-          - jsonPath: $.BPA.tenantId
-
-          - jsonPath: $.BPA.id
-
-          - jsonPath: $.BPA.units.*.blockIndex
-          
-          - jsonPath: $.BPA.units.*.usageCategory
-          
-          - jsonPath: $.BPA.units.*.additionalDetails
-            type: JSON
-            dbType: JSONB
-
-          - jsonPath: $.BPA.units.*.auditDetails.createdBy
-
-          - jsonPath: $.BPA.units.*.auditDetails.lastModifiedBy
-
-          - jsonPath: $.BPA.units.*.auditDetails.createdTime
-
-          - jsonPath: $.BPA.units.*.auditDetails.lastModifiedTime
-
-          - jsonPath: $.BPA.units.*.usageCategory
-
-          - jsonPath: $.BPA.units.*.blockIndex
-
-          - jsonPath: $.BPA.units.*.additionalDetails
-            type: JSON
-            dbType: JSONB
-
-          - jsonPath: $.BPA.units.*.auditDetails.lastModifiedBy
-
-          - jsonPath: $.BPA.units.*.auditDetails.lastModifiedTime
-
-
-
-       - query: UPDATE eg_bpa_document_owner SET tenantId=?,owner=?,active=?, buildingplanid=?, documenttype=?, fileStoreid=?,documentuid=?, lastmodifiedby=?, lastmodifiedtime=? WHERE id=?;
-         basePath: BPA.owners.*.documents.*
-         jsonMaps:
-
-           - jsonPath: $.BPA.owners.*.documents.*.tenantId
-
-           - jsonPath: $.BPA.owners.*.uuid
-
-           - jsonPath: $.BPA.owners.*.documents.*.active
-
-           - jsonPath: $.BPA.owners.*.buildingplanid
-
-           - jsonPath: $.BPA.owners.*.documents.*.documentType
-
-           - jsonPath: $.BPA.owners.*.documents.*.fileStoreId
-
-           - jsonPath: $.BPA.owners.*.documents.*.documentUid
-
-           - jsonPath: $.BPA.owners.*.documents.*.auditDetails.lastModifiedBy
-
-           - jsonPath: $.BPA.owners.*.documents.*.auditDetails.lastModifiedTime
-
-           - jsonPath: $.BPA.owners.*.documents.*.id
-           
-       - query: INSERT INTO eg_bpa_document( id, documenttype, fileStoreid, buildingplanid, documentuid, createdby, lastmodifiedby, createdtime, lastmodifiedtime, wfstate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET documenttype =?,  filestoreid =?,lastmodifiedby =?, lastmodifiedtime =?;
+        
+       - query: INSERT INTO eg_bpa_document(id, documenttype, filestore, buildingplanid, documentuid, additionalDetails, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET documenttype =?,  filestore =?, additionalDetails=?, lastmodifiedby =?, lastmodifiedtime =?;
          basePath: BPA.documents.*
          jsonMaps:
           
@@ -491,11 +122,13 @@ serviceMaps:
   
            - jsonPath: $.BPA.documents.*.documentType
   
-           - jsonPath: $.BPA.documents.*.fileStoreId
+           - jsonPath: $.BPA.documents.*.fileStore
   
            - jsonPath: $.BPA.id
   
-           - jsonPath: $.BPA.documents.*.documentuid
+           - jsonPath: $.BPA.documents.*.documentUid
+  
+           - jsonPath: $.BPA.documents.*.additionalDetails
   
            - jsonPath: $.BPA.auditDetails.createdBy
   
@@ -504,12 +137,12 @@ serviceMaps:
            - jsonPath: $.BPA.auditDetails.createdTime
 
            - jsonPath: $.BPA.auditDetails.lastModifiedTime
-           
-           - jsonPath: $.BPA.documents.*.wfState
 
            - jsonPath: $.BPA.documents.*.documentType
 
-           - jsonPath: $.BPA.documents.*.fileStoreId
+           - jsonPath: $.BPA.documents.*.fileStore
+  
+           - jsonPath: $.BPA.documents.*.additionalDetails
 
            - jsonPath: $.BPA.auditDetails.lastModifiedBy
 
@@ -521,7 +154,8 @@ serviceMaps:
    isTransaction: true
    queryMaps:
    
-       - query: INSERT INTO eg_bpa_document( id, documenttype, filestoreid, buildingplanid, documentuid, createdby, lastmodifiedby, createdtime, lastmodifiedtime, wfstate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET documenttype =?,  filestoreid =?,lastmodifiedby =?, lastmodifiedtime =?;
+          
+       - query: INSERT INTO eg_bpa_document(id, documentType, fileStore, buildingplanid, documentUid, additionalDetails, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET documenttype =?,  filestore =?, additionalDetails=?, lastmodifiedby =?, lastmodifiedtime =?;
          basePath: BPA.documents.*
          jsonMaps:
           
@@ -529,11 +163,13 @@ serviceMaps:
   
            - jsonPath: $.BPA.documents.*.documentType
   
-           - jsonPath: $.BPA.documents.*.fileStoreId
+           - jsonPath: $.BPA.documents.*.fileStore
   
            - jsonPath: $.BPA.id
   
-           - jsonPath: $.BPA.documents.*.documentuid
+           - jsonPath: $.BPA.documents.*.documentUid
+  
+           - jsonPath: $.BPA.documents.*.additionalDetails
   
            - jsonPath: $.BPA.auditDetails.createdBy
   
@@ -542,150 +178,514 @@ serviceMaps:
            - jsonPath: $.BPA.auditDetails.createdTime
 
            - jsonPath: $.BPA.auditDetails.lastModifiedTime
-           
-           - jsonPath: $.BPA.documents.*.wfState
 
            - jsonPath: $.BPA.documents.*.documentType
 
-           - jsonPath: $.BPA.documents.*.fileStoreId
+           - jsonPath: $.BPA.documents.*.fileStore
+  
+           - jsonPath: $.BPA.documents.*.additionalDetails
 
            - jsonPath: $.BPA.auditDetails.lastModifiedBy
 
            - jsonPath: $.BPA.auditDetails.lastModifiedTime
-          
+           
+           
        - query: INSERT INTO eg_bpa_auditdetails SELECT * FROM eg_bpa_buildingplan WHERE id =?;
          basePath: BPA
          jsonMaps:
 
            - jsonPath: $.BPA.id
 
-       - query: UPDATE eg_bpa_buildingplan SET status =?, permitOrderNo=?, validityDate=?, orderGeneratedDate=?, holdingno=?, registrationdetails=?, govtorquasi=?, additionaldetails=?, applicationDate =?  WHERE id =?;
+
+       - query: UPDATE eg_bpa_buildingplan SET applicationno=?, approvalNo=?, status=?, additionaldetails=?, lastmodifiedby=?, lastmodifiedtime=?, approvalDate=? WHERE id=?;
          basePath: BPA
          jsonMaps:
-           - jsonPath: $.BPA.status
-           
-           - jsonPath: $.BPA.permitOrderNo
-           
-           - jsonPath: $.BPA.validityDate
-           
-           - jsonPath: $.BPA.orderGeneratedDate
-           
-           - jsonPath: $.BPA.holdingNo
-           
-           - jsonPath: $.BPA.registrationDetails
-           
-           - jsonPath: $.BPA.govtOrQuasi
-           
-           - jsonPath: $.BPA.additionalDetails
-             type: JSON
-             dbType: JSONB
-             
-           - jsonPath: $.BPA.applicationDate
-              
-           - jsonPath: $.BPA.id
-           
-       - query: INSERT INTO eg_bpa_owner( id, name, tenantid, mobilenumber, gender, fatherorhusbandname, correspondenceaddress, institutionid, isprimaryowner, ownertype, ownershippercentage, relationship, buildingplanid, active, createdby,lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id, buildingplanid) WHERE id IS NOT NULL DO UPDATE SET name=?, mobilenumber=?, gender=?, fatherorhusbandname=?, correspondenceaddress=?, institutionid=?, isprimaryowner=?, ownertype=?, ownershippercentage=?, relationship=?, active=?, lastmodifiedby=?, lastmodifiedtime=?;
-         basePath: BPA.owners.*
+          - jsonPath: $.BPA.applicationNo
+          
+          - jsonPath: $.BPA.approvalNo
+
+          - jsonPath: $.BPA.status
+
+          - jsonPath: $.BPA.additionalDetails
+            type: JSON
+            dbType: JSONB
+
+          - jsonPath: $.BPA.auditDetails.lastModifiedBy
+
+          - jsonPath: $.BPA.auditDetails.lastModifiedTime
+
+          - jsonPath: $.BPA.approvalDate
+
+          - jsonPath: $.BPA.id
+
+ - version: 1.0
+   description: Persists landinfo details in EG_LandInfo_BuildingPlan  table
+   fromTopic: save-landinfo
+   isTransaction: true
+   queryMaps:
+
+       - query: INSERT INTO eg_land_landInfo(id, landUid,landUniqueRegNo,tenantId, status, ownershipCategory, source, channel, additionalDetails, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?,  ?, ?, ?, ?, ?, ?, ?, ?, ?); 
+         basePath: landInfo
          jsonMaps:
-          - jsonPath: $.BPA.owners.*.uuid
+          - jsonPath: $.landInfo.id
 
-          - jsonPath: $.BPA.owners.*.name
-
-          - jsonPath: $.BPA.owners.*.tenantId
-
-          - jsonPath: $.BPA.owners.*.mobileNumber
-
-          - jsonPath: $.BPA.owners.*.gender
-
-          - jsonPath: $.BPA.owners.*.fatherOrHusbandName
-
-          - jsonPath: $.BPA.owners.*.correspondenceAddress
-
-          - jsonPath: $.BPA.owners.*.institutionId
-
-          - jsonPath: $.BPA.owners.*.isPrimaryOwner
-
-          - jsonPath: $.BPA.owners.*.ownerType
-
-          - jsonPath: $.BPA.owners.*.ownerShipPercentage
-
-          - jsonPath: $.BPA.owners.*.relationship
-
-          - jsonPath: $.BPA.id
+          - jsonPath: $.landInfo.landUid
           
-          - jsonPath: $.BPA.owners.*.active
-
-          - jsonPath: $.BPA.owners.*.auditDetails.createdBy
-
-          - jsonPath: $.BPA.owners.*.auditDetails.lastModifiedBy
-
-          - jsonPath: $.BPA.owners.*.auditDetails.createdTime
-
-          - jsonPath: $.BPA.owners.*.auditDetails.lastModifiedTime
+          - jsonPath: $.landInfo.landUniqueRegNo
           
-          - jsonPath: $.BPA.owners.*.name
+          - jsonPath: $.landInfo.tenantId
 
-          - jsonPath: $.BPA.owners.*.mobileNumber
+          - jsonPath: $.landInfo.status
 
-          - jsonPath: $.BPA.owners.*.gender
-
-          - jsonPath: $.BPA.owners.*.fatherOrHusbandName
-
-          - jsonPath: $.BPA.owners.*.correspondenceAddress
-
-          - jsonPath: $.BPA.owners.*.institutionId
-
-          - jsonPath: $.BPA.owners.*.isPrimaryOwner
-
-          - jsonPath: $.BPA.owners.*.ownerType
-
-          - jsonPath: $.BPA.owners.*.ownerShipPercentage
-
-          - jsonPath: $.BPA.owners.*.relationship
+          - jsonPath: $.landInfo.ownershipCategory
           
-          - jsonPath: $.BPA.owners.*.active
-
-          - jsonPath: $.BPA.owners.*.auditDetails.lastModifiedBy
-
-          - jsonPath: $.BPA.owners.*.auditDetails.lastModifiedTime
+          - jsonPath: $.landInfo.source
           
-          
-          
-       - query: INSERT INTO eg_bpa_unit(id, tenantId, buildingplanid, blockindex, usageCategory,additionalDetails , createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id, buildingplanid, blockIndex) WHERE id IS NOT NULL DO UPDATE SET usageCategory=?, blockIndex=?, additionaldetails=?, lastmodifiedby=?, lastmodifiedtime=?;
-         basePath: BPA.units.*
-         jsonMaps: 
-          - jsonPath: $.BPA.units.*.id
+          - jsonPath: $.landInfo.channel
 
-          - jsonPath: $.BPA.tenantId
-
-          - jsonPath: $.BPA.id
-
-          - jsonPath: $.BPA.units.*.blockIndex
-          
-          - jsonPath: $.BPA.units.*.usageCategory
-          
-          - jsonPath: $.BPA.units.*.additionalDetails
+          - jsonPath: $.landInfo.additionalDetails
             type: JSON
             dbType: JSONB
 
-          - jsonPath: $.BPA.units.*.auditDetails.createdBy
+          - jsonPath: $.landInfo.auditDetails.createdBy
 
-          - jsonPath: $.BPA.units.*.auditDetails.lastModifiedBy
+          - jsonPath: $.landInfo.auditDetails.lastModifiedBy
 
-          - jsonPath: $.BPA.units.*.auditDetails.createdTime
+          - jsonPath: $.landInfo.auditDetails.createdTime
 
-          - jsonPath: $.BPA.units.*.auditDetails.lastModifiedTime
+          - jsonPath: $.landInfo.auditDetails.lastModifiedTime
 
-          - jsonPath: $.BPA.units.*.usageCategory
 
-          - jsonPath: $.BPA.units.*.blockIndex
+       - query: INSERT INTO eg_land_Address( id, tenantid, doorno, plotno,landmark, city, district, region, state, country, pincode, additiondetails, buildingname, street, locality, landInfoId, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) 
+         basePath: landInfo.address
+         jsonMaps:
+          - jsonPath: $.landInfo.address.id
 
-          - jsonPath: $.BPA.units.*.additionalDetails
+          - jsonPath: $.landInfo.address.tenantId
+
+          - jsonPath: $.landInfo.address.doorNo
+
+          - jsonPath: $.landInfo.address.plotNo
+
+          - jsonPath: $.landInfo.address.landmark
+
+          - jsonPath: $.landInfo.address.city
+
+          - jsonPath: $.landInfo.address.district
+
+          - jsonPath: $.landInfo.address.region
+
+          - jsonPath: $.landInfo.address.state
+
+          - jsonPath: $.landInfo.address.country
+          
+          - jsonPath: $.landInfo.address.pincode
+
+          - jsonPath: $.landInfo.address.additionDetails
+          
+          - jsonPath: $.landInfo.address.buildingName
+
+          - jsonPath: $.landInfo.address.street
+
+          - jsonPath: $.landInfo.address.locality.code
+
+          - jsonPath: $.landInfo.id
+
+          - jsonPath: $.landInfo.address.auditDetails.createdBy
+
+          - jsonPath: $.landInfo.address.auditDetails.lastModifiedBy
+
+          - jsonPath: $.landInfo.address.auditDetails.createdTime
+
+          - jsonPath: $.landInfo.address.auditDetails.lastModifiedTime
+
+
+       - query: INSERT INTO eg_land_ownerInfo( id, uuid, mobilenumber,isprimaryowner, ownershippercentage, institutionId, relationship, additionalDetails, landInfoId, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+         basePath: landInfo.owners.*
+         jsonMaps:
+          - jsonPath: $.landInfo.owners.*.ownerId
+          
+          - jsonPath: $.landInfo.owners.*.uuid
+
+          - jsonPath: $.landInfo.owners.*.mobileNumber
+
+          - jsonPath: $.landInfo.owners.*.isPrimaryOwner
+
+          - jsonPath: $.landInfo.owners.*.ownerShipPercentage
+
+          - jsonPath: $.landInfo.owners.*.institutionId
+
+          - jsonPath: $.landInfo.owners.*.relationship
+
+          - jsonPath: $.landInfo.owners.*.additionalDetails
             type: JSON
             dbType: JSONB
 
-          - jsonPath: $.BPA.units.*.auditDetails.lastModifiedBy
+          - jsonPath: $.landInfo.id
 
-          - jsonPath: $.BPA.units.*.auditDetails.lastModifiedTime
+          - jsonPath: $.landInfo.owners.*.auditDetails.createdBy
 
+          - jsonPath: $.landInfo.owners.*.auditDetails.lastModifiedBy
+
+          - jsonPath: $.landInfo.owners.*.auditDetails.createdTime
+
+          - jsonPath: $.landInfo.owners.*.auditDetails.lastModifiedTime
+
+
+       - query: INSERT INTO eg_land_institution( id, tenantId, type, designation, nameOfAuthorizedPerson, additionalDetails, landInfoId) VALUES (?, ?, ?, ?, ?, ?, ?);
+         basePath: landInfo.institution
+         jsonMaps:
+          - jsonPath: $.landInfo.institution.id
+
+          - jsonPath: $.landInfo.institution.tenantId
+
+          - jsonPath: $.landInfo.institution.type
+
+          - jsonPath: $.landInfo.institution.designation
+
+          - jsonPath: $.landInfo.institution.nameOfAuthorizedPerson
+
+          - jsonPath: $.landInfo.institution.additionalDetails
+            type: JSON
+            dbType: JSONB
+
+          - jsonPath: $.landInfo.id
+
+
+       - query: INSERT INTO eg_land_document( id, documenttype, filestore, documentUid, additionalDetails, landInfoId, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+         basePath: landInfo.documents.*
+         jsonMaps:
+          - jsonPath: $.landInfo.documents.*.id
+
+          - jsonPath: $.landInfo.documents.*.documentType
+
+          - jsonPath: $.landInfo.documents.*.filestore
+
+          - jsonPath: $.landInfo.documents.*.documentuid
+
+          - jsonPath: $.landInfo.documents.*.additionalDetails
+            type: JSON
+            dbType: JSONB
+
+          - jsonPath: $.landInfo.id
+
+          - jsonPath: $.landInfo.documents.*.auditDetails.createdBy
+
+          - jsonPath: $.landInfo.documents.*.auditDetails.lastModifiedBy
+
+          - jsonPath: $.landInfo.documents.*.auditDetails.createdTime
+
+          - jsonPath: $.landInfo.documents.*.auditDetails.lastModifiedTime
+
+
+       - query: INSERT INTO eg_land_unit( id,tenantid, floorNo, unitType, usageCategory,occupancyType, occupancyDate,additionaldetails, landInfoId, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+         basePath: landInfo.unit.*
+         jsonMaps:
+          - jsonPath: $.landInfo.unit.*.id
+
+          - jsonPath: $.landInfo.unit.*.tenantId
+
+          - jsonPath: $.landInfo.unit.*.floorNo
+
+          - jsonPath: $.landInfo.unit.*.unitType
+
+          - jsonPath: $.landInfo.unit.*.usageCategory
+
+          - jsonPath: $.landInfo.unit.*.occupancyType
+
+          - jsonPath: $.landInfo.unit.*.occupancyDate
+
+          - jsonPath: $.landInfo.unit.*.additionalDetails
+            type: JSON
+            dbType: JSONB
+
+          - jsonPath: $.landInfo.id
+
+          - jsonPath: $.landInfo.unit.*.auditDetails.createdBy
+
+          - jsonPath: $.landInfo.unit.*.auditDetails.lastModifiedBy
+
+          - jsonPath: $.landInfo.unit.*.auditDetails.createdTime
+
+          - jsonPath: $.landInfo.unit.*.auditDetails.lastModifiedTime
+
+
+       - query: INSERT INTO eg_land_geolocation( id, latitude, longitude, additionaldetails, addressid) VALUES (?, ?, ?, ?, ?);
+         basePath: landInfo.address.geoLocation
+         jsonMaps:
+          - jsonPath: $.landInfo.address.geoLocation.id
+         
+          - jsonPath: $.landInfo.address.geoLocation.latitude
+            type: DOUBLE
+            dbType: DOUBLE
+
+          - jsonPath: $.landInfo.address.geoLocation.longitude
+            type: DOUBLE
+            dbType: DOUBLE
+
+          - jsonPath: $.landInfo.address.geoLocation.additionalDetails
+            type: JSON
+            dbType: JSONB
+
+          - jsonPath: $.landInfo.address.id
+  
+
+       - query: INSERT INTO eg_land_auditdetails SELECT * FROM eg_land_landInfo WHERE id =?;
+         basePath: landInfo
+         jsonMaps:
+
+          - jsonPath: $.landInfo.id
+
+
+
+ - version: 1.0
+   description: update landInfo details in eg_land_landinfo table
+   fromTopic: update-landinfo
+   isTransaction: true
+   queryMaps:
+       - query: UPDATE eg_land_landInfo SET landUid =? ,landUniqueRegNo =?,tenantId =?, status =?, ownershipCategory =?, source =? , channel =?, additionalDetails =?, lastmodifiedby =?, lastmodifiedtime =? WHERE id=?;
+         basePath: landInfo
+         jsonMaps:
+          - jsonPath: $.landInfo.landUid
           
+          - jsonPath: $.landInfo.landUniqueRegNo
+          
+          - jsonPath: $.landInfo.tenantId
+
+          - jsonPath: $.landInfo.status
+
+          - jsonPath: $.landInfo.ownershipCategory
+          
+          - jsonPath: $.landInfo.source
+          
+          - jsonPath: $.landInfo.channel
+
+          - jsonPath: $.landInfo.additionalDetails
+            type: JSON
+            dbType: JSONB
+
+          - jsonPath: $.landInfo.auditDetails.lastModifiedBy
+
+          - jsonPath: $.landInfo.auditDetails.lastModifiedTime
+          
+          - jsonPath: $.landInfo.id          
+
+
+       - query: INSERT INTO eg_land_auditdetails SELECT * FROM eg_land_landInfo WHERE id =?;
+         basePath: landInfo
+         jsonMaps:
+
+           - jsonPath: $.landInfo.id
+
+
+       - query: UPDATE eg_land_address SET  doorno=?, plotno=?, district=?, region=?, state=?, country=?, pincode=?, additiondetails=?, buildingname=?, street=?, landmark=?, city=?, locality=?, lastmodifiedby=?, lastmodifiedtime=? WHERE id=?;
+         basePath: landInfo.address
+         jsonMaps:
+
+          - jsonPath: $.landInfo.address.doorNo
+
+          - jsonPath: $.landInfo.address.plotNo
+
+          - jsonPath: $.landInfo.address.district
+
+          - jsonPath: $.landInfo.address.region
+
+          - jsonPath: $.landInfo.address.state
+
+          - jsonPath: $.landInfo.address.country
+
+          - jsonPath: $.landInfo.address.pincode
+
+          - jsonPath: $.landInfo.address.additionDetails
+
+          - jsonPath: $.landInfo.address.buildingName
+
+          - jsonPath: $.landInfo.address.street
+
+          - jsonPath: $.landInfo.address.landmark
+
+          - jsonPath: $.landInfo.address.city
+
+          - jsonPath: $.landInfo.address.locality.code
+
+          - jsonPath: $.landInfo.auditDetails.lastModifiedBy
+
+          - jsonPath: $.landInfo.auditDetails.lastModifiedTime
+
+          - jsonPath: $.landInfo.address.id
+
+       - query: UPDATE eg_land_geolocation SET latitude =?, longitude=?, additionaldetails=?, addressid=? WHERE id = ?;
+         basePath: landInfo.address.geoLocation
+         jsonMaps:         
+          - jsonPath: $.landInfo.address.geoLocation.latitude
+            type: DOUBLE
+            dbType: DOUBLE
+
+          - jsonPath: $.landInfo.address.geoLocation.longitude
+            type: DOUBLE
+            dbType: DOUBLE
+
+          - jsonPath: $.landInfo.address.geoLocation.additionalDetails
+            type: JSON
+            dbType: JSONB
+
+          - jsonPath: $.landInfo.address.id
+
+          - jsonPath: $.landInfo.address.geoLocation.id
+
+
+       - query: INSERT INTO eg_land_ownerInfo( id, uuid, mobilenumber,isprimaryowner, ownershippercentage, institutionId, relationship, additionalDetails, landInfoId, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id, landInfoId) WHERE id IS NOT NULL DO UPDATE SET mobilenumber=?, isPrimaryOwner=?, ownerShipPercentage=?, institutionId=?, relationship=?, additionalDetails=?, lastModifiedBy=?, lastModifiedTime=?;
+         basePath: landInfo.owners.*
+         jsonMaps:
+          - jsonPath: $.landInfo.owners.*.ownerId
+          
+          - jsonPath: $.landInfo.owners.*.uuid
+
+          - jsonPath: $.landInfo.owners.*.mobileNumber
+
+          - jsonPath: $.landInfo.owners.*.isPrimaryOwner
+
+          - jsonPath: $.landInfo.owners.*.ownerShipPercentage
+
+          - jsonPath: $.landInfo.owners.*.institutionId
+
+          - jsonPath: $.landInfo.owners.*.relationship
+
+          - jsonPath: $.landInfo.owners.*.additionalDetails
+            type: JSON
+            dbType: JSONB
+
+          - jsonPath: $.landInfo.id
+
+          - jsonPath: $.landInfo.owners.*.auditDetails.createdBy
+
+          - jsonPath: $.landInfo.owners.*.auditDetails.lastModifiedBy
+
+          - jsonPath: $.landInfo.owners.*.auditDetails.createdTime
+
+          - jsonPath: $.landInfo.owners.*.auditDetails.lastModifiedTime
+
+          - jsonPath: $.landInfo.owners.*.mobileNumber
+
+          - jsonPath: $.landInfo.owners.*.isPrimaryOwner
+
+          - jsonPath: $.landInfo.owners.*.ownerShipPercentage
+          
+          - jsonPath: $.landInfo.owners.*.institutionId
+
+          - jsonPath: $.landInfo.owners.*.relationship
+
+          - jsonPath: $.landInfo.owners.*.additionalDetails
+            type: JSON
+            dbType: JSONB
+
+          - jsonPath: $.landInfo.owners.*.auditDetails.lastModifiedBy
+
+          - jsonPath: $.landInfo.owners.*.auditDetails.lastModifiedTime
+
+       - query: UPDATE eg_land_institution SET type=?, designation=?, nameOfAuthorizedPerson=?, additionalDetails=? WHERE id=?;
+         basePath: landInfo.institution
+         jsonMaps:
+
+          - jsonPath: $.landInfo.institution.type
+
+          - jsonPath: $.landInfo.institution.designation
+
+          - jsonPath: $.landInfo.institution.nameOfAuthorizedPerson
+
+          - jsonPath: $.landInfo.institution.additionalDetails
+            type: JSON
+            dbType: JSONB
+
+          - jsonPath: $.landInfo.institution.id
+
+
+       - query: INSERT INTO eg_land_document( id, documenttype, filestore, documentUid, additionalDetails, landInfoId, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id, landinfoid) WHERE id IS NOT NULL DO UPDATE SET documentType=?, filestore=?, documentuid=?, additionalDetails=?, lastModifiedBy=?, lastModifiedTime=?;
+         basePath: landInfo.documents.*
+         jsonMaps:
+          - jsonPath: $.landInfo.documents.*.id
+
+          - jsonPath: $.landInfo.documents.*.documentType
+
+          - jsonPath: $.landInfo.documents.*.filestore
+
+          - jsonPath: $.landInfo.documents.*.documentuid
+
+          - jsonPath: $.landInfo.documents.*.additionalDetails
+            type: JSON
+            dbType: JSONB
+
+          - jsonPath: $.landInfo.id
+
+          - jsonPath: $.landInfo.documents.*.auditDetails.createdBy
+
+          - jsonPath: $.landInfo.documents.*.auditDetails.lastModifiedBy
+
+          - jsonPath: $.landInfo.documents.*.auditDetails.createdTime
+
+          - jsonPath: $.landInfo.documents.*.auditDetails.lastModifiedTime
+
+          - jsonPath: $.landInfo.documents.*.documentType
+
+          - jsonPath: $.landInfo.documents.*.filestore
+
+          - jsonPath: $.landInfo.documents.*.documentuid
+
+          - jsonPath: $.landInfo.documents.*.additionalDetails
+            type: JSON
+            dbType: JSONB
+
+          - jsonPath: $.landInfo.documents.*.auditDetails.lastModifiedBy
+
+          - jsonPath: $.landInfo.documents.*.auditDetails.lastModifiedTime
+
+
+
+       - query: INSERT INTO eg_land_unit( id,tenantid, floorNo, unitType, usageCategory,occupancyType, occupancyDate,additionaldetails, landInfoId, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id, landinfoid, tenantid) WHERE id IS NOT NULL DO UPDATE SET floorNo=?, unitType=?, usageCategory=?, occupancyType=?, occupancyDate=?, additionalDetails=?,lastModifiedBy=?, lastModifiedTime=?;
+         basePath: landInfo.unit.*
+         jsonMaps:
+          - jsonPath: $.landInfo.unit.*.id
+
+          - jsonPath: $.landInfo.unit.*.tenantId
+
+          - jsonPath: $.landInfo.unit.*.floorNo
+
+          - jsonPath: $.landInfo.unit.*.unitType
+
+          - jsonPath: $.landInfo.unit.*.usageCategory
+
+          - jsonPath: $.landInfo.unit.*.occupancyType
+
+          - jsonPath: $.landInfo.unit.*.occupancyDate
+
+          - jsonPath: $.landInfo.unit.*.additionalDetails
+            type: JSON
+            dbType: JSONB
+
+          - jsonPath: $.landInfo.id
+
+          - jsonPath: $.landInfo.unit.*.auditDetails.createdBy
+
+          - jsonPath: $.landInfo.unit.*.auditDetails.lastModifiedBy
+
+          - jsonPath: $.landInfo.unit.*.auditDetails.createdTime
+
+          - jsonPath: $.landInfo.unit.*.auditDetails.lastModifiedTime
+
+          - jsonPath: $.landInfo.unit.*.floorNo
+
+          - jsonPath: $.landInfo.unit.*.unitType
+
+          - jsonPath: $.landInfo.unit.*.usageCategory
+
+          - jsonPath: $.landInfo.unit.*.occupancyType
+
+          - jsonPath: $.landInfo.unit.*.occupancyDate
+
+          - jsonPath: $.landInfo.unit.*.additionalDetails
+            type: JSON
+            dbType: JSONB
+
+          - jsonPath: $.landInfo.unit.*.auditDetails.lastModifiedBy
+
+          - jsonPath: $.landInfo.unit.*.auditDetails.lastModifiedTime
