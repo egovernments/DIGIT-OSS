@@ -11,6 +11,7 @@ import { setRoute, toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/action
 import { fetchGeneralMDMSData, generalMDMSFetchSuccess, hideSpinner, prepareFormData as prepareFormDataAction, showSpinner, toggleSpinner, updatePrepareFormDataFromDraft } from "egov-ui-kit/redux/common/actions";
 import { deleteForm, displayFormErrors, handleFieldChange, removeForm, updateForms } from "egov-ui-kit/redux/form/actions";
 import { validateForm } from "egov-ui-kit/redux/form/utils";
+import { fetchAssessments } from "egov-ui-kit/redux/properties/actions";
 import { httpRequest } from "egov-ui-kit/utils/api";
 import { fetchFromLocalStorage, isDocumentValid } from "egov-ui-kit/utils/commons";
 import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
@@ -302,6 +303,14 @@ class FormWizard extends Component {
     this.unlisten = history.listen((location, action) => {
       resetForm();
     });
+    if (isReasses) {
+
+      this.props.fetchAssessments([
+        { key: "assessmentNumbers", value: getQueryValue(search, "assessmentId") },
+        { key: "tenantId", value: tenantId },
+      ]);
+    }
+
     if (assessmentId) {
       // fetchGeneralMDMSData(null, "PropertyTax", ["Floor", "OccupancyType", "OwnerShipCategory", "OwnerType", "PropertySubType", "PropertyType", "SubOwnerShipCategory", "UsageCategory", "Rebate", "Penalty", "Interest", "FireCess"], "", tenantId);
       await this.fetchDraftDetails(assessmentId, isReassesment, draftUuid);
@@ -1209,28 +1218,32 @@ class FormWizard extends Component {
     let { search } = this.props.location;
     let isAssesment = getQueryValue(search, "purpose") == 'assess';
     let isReassesment = getQueryValue(search, "purpose") == 'reassess';
-
-
+    const { Assessments } = this.props;
     if (isAssesment || isReassesment) {
       this.estimate().then(estimateResponse => {
         if (estimateResponse) {
-
           window.scrollTo(0, 0);
-
           let { taxHeadEstimates, totalAmount } = estimateResponse.Calculation[0];
           let adhocPenaltyAmt = 0;
           let adhocExemptionAmt = 0;
+          if (isReassesment && Assessments && Assessments.length > 0) {
+            adhocExemptionAmt = get(Assessments[0], 'additionalDetails.adhocExemption', 0);
+            adhocPenaltyAmt = get(Assessments[0], 'additionalDetails.adhocPenalty', 0);
+          }
+          estimateResponse.Calculation[0].initialAmount = totalAmount;
+          estimateResponse.Calculation[0].totalAmount = totalAmount + adhocPenaltyAmt - adhocExemptionAmt;
           taxHeadEstimates.map(taxHead => {
             if (taxHead.taxHeadCode == "PT_TIME_PENALTY") {
+              estimateResponse.Calculation[0].adhocPenaltyAmt = taxHead.estimateAmount;
               adhocPenaltyAmt = taxHead.estimateAmount + adhocPenaltyAmt;
+              taxHead.estimateAmount = adhocPenaltyAmt;
             }
             if (taxHead.taxHeadCode == "PT_TIME_REBATE") {
+              estimateResponse.Calculation[0].adhocExemptionAmt = taxHead.estimateAmount;
               adhocExemptionAmt = taxHead.estimateAmount + adhocExemptionAmt;
+              taxHead.estimateAmount = adhocExemptionAmt;
             }
           })
-          estimateResponse.Calculation[0].initialAmount = totalAmount;
-          estimateResponse.Calculation[0].adhocPenaltyAmt = adhocPenaltyAmt;
-          estimateResponse.Calculation[0].adhocExemptionAmt = adhocExemptionAmt;
           this.props.prepareFinalObject("estimateResponse", estimateResponse.Calculation);
           this.setState({
             estimation: estimateResponse && estimateResponse.Calculation,
@@ -1241,7 +1254,6 @@ class FormWizard extends Component {
       });
     }
   }
-
   estimate = async () => {
     let { hideSpinner, location, showSpinner } = this.props;
     let { search } = location;
@@ -1722,9 +1734,9 @@ class FormWizard extends Component {
     img.src = url;
   };
   downloadAcknowledgementForm = () => {
-    const {  imageUrl } = this.state;
-    const { common, app = {} ,prepareFormData} = this.props;
-    const { Properties=[] } = prepareFormData;
+    const { imageUrl } = this.state;
+    const { common, app = {}, prepareFormData } = this.props;
+    const { Properties = [] } = prepareFormData;
     const { address, propertyDetails, propertyId } = Properties[0];
     const { owners } = propertyDetails[0];
     const { localizationLabels } = app;
@@ -1794,7 +1806,8 @@ class FormWizard extends Component {
 }
 
 const mapStateToProps = state => {
-  const { form, common, app, screenConfiguration } = state || {};
+  const { form, common, app, screenConfiguration, properties } = state || {};
+  const { Assessments = [] } = properties;
   const { propertyAddress } = form;
   const { city } =
     (propertyAddress && propertyAddress.fields && propertyAddress.fields) || {};
@@ -1813,7 +1826,7 @@ const mapStateToProps = state => {
     newProperties,
     propertiesEdited,
     adhocExemptionPenalty,
-    requiredDocCount
+    requiredDocCount, Assessments
   };
 };
 
@@ -1850,7 +1863,8 @@ const mapDispatchToProps = dispatch => {
     removeForm: formkey => dispatch(removeForm(formkey)),
     prepareFinalObject: (jsonPath, value) =>
       dispatch(prepareFinalObject(jsonPath, value)),
-    toggleSpinner: () => dispatch(toggleSpinner())
+    toggleSpinner: () => dispatch(toggleSpinner()),
+    fetchAssessments: (fetchAssessmentsQueryObject) => dispatch(fetchAssessments(fetchAssessmentsQueryObject)),
   };
 };
 
