@@ -501,7 +501,7 @@ export const downloadReceiptFromFilestoreID = (fileStoreId, mode, tenantId) => {
 export const download = (receiptQueryString, mode = "download", configKey = "consolidatedreceipt", state) => {
   if (state && process.env.REACT_APP_NAME === "Citizen" && configKey === "consolidatedreceipt") {
     const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject, "commonPayInfo");
-    configKey = get(uiCommonPayConfig, "receiptKey")
+    configKey = get(uiCommonPayConfig, "receiptKey","consolidatedreceipt")
   }
   const FETCHRECEIPT = {
     GET: {
