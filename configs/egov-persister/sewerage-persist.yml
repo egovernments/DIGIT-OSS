@@ -14,7 +14,7 @@ serviceMaps:
        
        - jsonPath: $.SewerageConnection.property.tenantId
        
-       - jsonPath: $.SewerageConnection.property.propertyId
+       - jsonPath: $.SewerageConnection.propertyId
 
        - jsonPath: $.SewerageConnection.applicationNo
         
