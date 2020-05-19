@@ -1,25 +1,9 @@
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getTransformedLocale, transformById } from "egov-ui-framework/ui-utils/commons";
+import { getLocalization, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
-import {
-  handleScreenConfigurationFieldChange as handleField,
-  prepareFinalObject,
-  toggleSnackbar
-} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSearchResults } from "../../../../../ui-utils/commons";
-import {
-  validateFields,
-  getTextToLocalMapping,
-  convertEpochToDate,
-  convertDateToEpoch
-} from "../../utils";
-import {
-  getTenantId,
-  getLocalization
-} from "egov-ui-kit/utils/localStorageUtils";
-import {
-  getLocaleLabels,
-  transformById,
-  getTransformedLocale
-} from "egov-ui-framework/ui-utils/commons";
+import { convertDateToEpoch, convertEpochToDate, getTextToLocalMapping, validateFields } from "../../utils";
 
 const localizationLabels = JSON.parse(getLocalization("localization_en_IN"));
 const transfomedKeys = transformById(localizationLabels, "code");
@@ -60,7 +44,7 @@ export const searchApiCall = async (state, dispatch) => {
   }
   else if (
     Object.keys(searchScreenObject).length == 0 ||
-    Object.values(searchScreenObject).every(x => x === "")
+    checkEmptyFields(searchScreenObject)
   ) {
     dispatch(
       toggleSnackbar(
@@ -72,7 +56,7 @@ export const searchApiCall = async (state, dispatch) => {
         "warning"
       )
     );
-  }   
+  }
   else {
     for (var key in searchScreenObject) {
       if (searchScreenObject.hasOwnProperty(key) && key === "businessServices") {
@@ -96,15 +80,15 @@ export const searchApiCall = async (state, dispatch) => {
         }
       }
     }
-      const responseFromAPI = await getSearchResults(queryObject);
-      dispatch(prepareFinalObject("receiptSearchResponse", responseFromAPI));
-      const Payments = (responseFromAPI && responseFromAPI.Payments) || [];
-      const response = [];
-      for (let i = 0; i < Payments.length; i++) {
-        const serviceTypeLabel = getTransformedLocale(
-          get(Payments[i], `paymentDetails[0].bill.businessService`)
-        );
-        response[i] = {
+    const responseFromAPI = await getSearchResults(queryObject);
+    dispatch(prepareFinalObject("receiptSearchResponse", responseFromAPI));
+    const Payments = (responseFromAPI && responseFromAPI.Payments) || [];
+    const response = [];
+    for (let i = 0; i < Payments.length; i++) {
+      const serviceTypeLabel = getTransformedLocale(
+        get(Payments[i], `paymentDetails[0].bill.businessService`)
+      );
+      response[i] = {
         receiptNumber: get(Payments[i], `paymentDetails[0].receiptNumber`),
         payeeName: get(Payments[i], `payerName`),
         serviceType: serviceTypeLabel,
@@ -143,14 +127,14 @@ export const searchApiCall = async (state, dispatch) => {
           )
         );
 
-        dispatch(
-          handleField("search", "components.div.children.searchResults")
-        );
-        showHideTable(true, dispatch);
-      } catch (error) {
-        dispatch(toggleSnackbar(true, error.message, "error"));
-        console.log(error);
-      }
+      dispatch(
+        handleField("search", "components.div.children.searchResults")
+      );
+      showHideTable(true, dispatch);
+    } catch (error) {
+      dispatch(toggleSnackbar(true, error.message, "error"));
+      console.log(error);
+    }
     // } else {
     //   dispatch(
     //     toggleSnackbar(
@@ -166,6 +150,21 @@ export const searchApiCall = async (state, dispatch) => {
     // }
   }
 };
+
+const checkEmptyFields = (searchScreenObject) => {
+  const businessServices = get(searchScreenObject, 'businessServices', null)
+  const mobileNo = get(searchScreenObject, 'mobileNo', null)
+  const receiptNumbers = get(searchScreenObject, 'receiptNumbers', null)
+  if (checkEmpty(businessServices) && checkEmpty(mobileNo) && checkEmpty(receiptNumbers)) { return true; }
+  return false;
+}
+const checkEmpty = (value) => {
+  value=typeof (value) == "string" ? value.trim(): value;
+  if (value && value != null && value.length > 0 ) {
+    return false;
+  }
+  return true;
+}
 
 const showHideTable = (booleanHideOrShow, dispatch) => {
   dispatch(
