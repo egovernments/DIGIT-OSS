@@ -228,22 +228,27 @@ public class CronService {
 		List<Map<String, Object>> data = externalAPIService.getRainmakerData(CronConstants.SEARCHER_TL);
 		List<Map<String, Object>> ulbCovered = new ArrayList<>();
 		List<Map<String, Object>> licenseIssued = new ArrayList<>();
+		List<Map<String, Object>> revenueCollected= new ArrayList<>();
 		for (Map<String, Object> record : data) {
 			Map<String, Object> ulbCoveredPerWeek = new HashMap<>();
 			Map<String, Object> licenseIssuedPerWeek = new HashMap<>();
+			Map<String,Object> revenueCollectedPerWeek=new HashMap<> ();
 			String prefix = "Week";
 			Integer noOfWeeks = 6;
 			for (int week = 0; week < noOfWeeks; week++) {
 				if (record.get("day").equals(prefix + week)) {
 					ulbCoveredPerWeek.put("w" + week + "tlulbc", record.get("ulbcovered"));
 					licenseIssuedPerWeek.put("w" + week + "tllicissued", record.get("licenseissued"));
+					revenueCollectedPerWeek.put("w" + week + "tlrevcoll", record.get("revenuecollected"));
+					
 				}
 			}
 			ulbCovered.add(ulbCoveredPerWeek);
 			licenseIssued.add(licenseIssuedPerWeek);
+			revenueCollected.add(revenueCollectedPerWeek);
 		}
 
-		TL tl = TL.builder().ulbCovered(ulbCovered).licenseIssued(licenseIssued).build();
+		TL tl = TL.builder().ulbCovered(ulbCovered).licenseIssued(licenseIssued).revenueCollected(revenueCollected).build();
 		body.setTl(tl);
 	}
 	

@@ -81,6 +81,7 @@ public class EmailService {
 	private void enrichTLData(TL tl, VelocityContext context) {
 		fillData(tl.getLicenseIssued(), context);
 		fillData(tl.getUlbCovered(), context);
+		fillData(tl.getRevenueCollected(), context);
 	}
 
 	private void enrichWSData(WaterAndSewerage ws, VelocityContext context) {
