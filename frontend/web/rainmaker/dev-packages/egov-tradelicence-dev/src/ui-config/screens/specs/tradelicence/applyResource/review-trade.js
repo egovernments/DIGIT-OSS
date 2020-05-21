@@ -8,6 +8,10 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { changeStep } from "./footer";
 
+import {
+  getQueryArg
+} from "egov-ui-framework/ui-utils/commons";
+
 import { convertEpochToDate, checkValueForNA } from "../../utils";
 
 const accessoriesCard = {
@@ -387,13 +391,12 @@ export const getReviewTrade = (isEditable = true) => {
           labelKey: "TL_NEW_TRADE_DETAILS_MOHALLA_LABEL"
         },
         {
-          jsonPath: "Licenses[0].tradeLicenseDetail.address.locality.name",
+          jsonPath: "Licenses[0].tradeLicenseDetail.address.locality.code",
           callBack: checkValueForNA,
-        /*localePrefix:{
-          isJsonPath:true,
-          moduleName: "Licenses[0].tradeLicenseDetail.address.city",
-          masterName: "REVENUE"
-        }*/
+          localePrefix: {
+            moduleName: getQueryArg(window.location.href, "tenantId") ? getQueryArg(window.location.href, "tenantId").replace('.','_').toUpperCase():"",
+            masterName: "REVENUE"
+          }, callBack: checkValueForNA
       }
       ),
       reviewPincode: getLabelWithValue(
