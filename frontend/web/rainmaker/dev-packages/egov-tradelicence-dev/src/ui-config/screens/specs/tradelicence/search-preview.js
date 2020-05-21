@@ -27,7 +27,7 @@ import {
   showHideAdhocPopup
 } from "../utils";
 
-import { footerReview, downloadPrintContainer } from "./applyResource/footer";
+import { footerReview, footerReviewTop, downloadPrintContainer } from "./applyResource/footer";
 import {
   getFeesEstimateCard,
   getHeaderSideText,
@@ -274,8 +274,17 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
       tenantId
     );
 
+    const CitizenprintCont=footerReviewTop(
+      action,
+      state,
+      dispatch,
+      status,
+      applicationNumber,
+      tenantId,      
+    );
+
     process.env.REACT_APP_NAME === "Citizen"
-      ? set(action, "screenConfig.components.div.children.headerDiv.children.helpSection.children", statusCont)
+      ? set(action, "screenConfig.components.div.children.headerDiv.children.helpSection.children", CitizenprintCont)
       : set(action, "screenConfig.components.div.children.headerDiv.children.helpSection.children", printCont);
 
     // Get approval details based on status and set it in screenconfig
@@ -628,8 +637,8 @@ const screenConfig = {
                    data = set(data, "[0].tradeLicenseDetail.adhocExemption", -rebateAmount);
                  }
                  return data; 
-              }
-            
+              }          
+
           }
         },
         tradeReviewDetails

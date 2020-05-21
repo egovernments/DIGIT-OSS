@@ -580,18 +580,24 @@ export const footer = getCommonApplyFooter({
     visible: false
   }
 });
-
-export const footerReview = (
+export const footerReviewTop = (
   action,
   state,
   dispatch,
   status,
   applicationNumber,
-  tenantId
+  tenantId,
+  financialYear
 ) => {
   /** MenuButton data based on status */
   let downloadMenu = [];
   let printMenu = [];
+  let licenseNumber= get(state.screenConfiguration.preparedFinalObject.Licenses[0], "licenseNumber")
+  const responseLength = get(
+    state.screenConfiguration.preparedFinalObject,
+    `licenseCount`,
+    1
+  );
   let tlCertificateDownloadObject = {
     label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
     link: () => {
@@ -636,7 +642,7 @@ export const footerReview = (
     leftIcon: "receipt"
   };
   let challanDownloadObject = {
-    label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
+    label: { labelName: "CHALLAN", labelKey: "TL_CHALLAN" },
     link: () => {
       const receiptQueryString = [
         { key: "consumerCode", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
@@ -718,12 +724,100 @@ export const footerReview = (
   }
   /** END */
 
+  return {
+    rightdiv: {
+      uiFramework: "custom-atoms",
+      componentPath: "Div",
+      props: {
+        style: { textAlign: "right", display: "flex" }
+      },
+      children: {
+        downloadMenu: {
+          uiFramework: "custom-atoms-local",
+          moduleName: "egov-tradelicence",
+          componentPath: "MenuButton",
+          props: {
+            data: {
+              label: {labelName : "DOWNLOAD" , labelKey :"TL_DOWNLOAD"},
+               leftIcon: "cloud_download",
+              rightIcon: "arrow_drop_down",
+              props: { variant: "outlined", style: { height: "60px", color : "#FE7A51" }, className: "tl-download-button" },
+              menu: downloadMenu
+            }
+          }
+        },    
+      rightdiv: {
+          uiFramework: "custom-atoms",
+          componentPath: "Div",
+          children: {
+
+            // resubmitButton: {
+            //   componentPath: "Button",
+            //   props: {
+            //     variant: "contained",
+            //     color: "primary",
+            //     style: {
+            //       minWidth: "180px",
+            //       height: "48px",
+            //       marginRight: "45px"
+            //     }
+            //   },
+            //   children: {
+            //     nextButtonLabel: getLabel({
+            //       labelName: "RESUBMIT",
+            //       labelKey: "TL_RESUBMIT"
+            //     })
+            //   },
+            //   onClickDefination: {
+            //     action: "condition",
+            //     callBack: openPopup
+            //   },
+            //   visible:getButtonVisibility(status, "RESUBMIT"),
+            //   roleDefination: {
+            //     rolePath: "user-info.roles",
+            //     roles: ["TL_CEMP", "CITIZEN"]
+            //   }
+            // },
+
+          },
+          gridDefination: {
+            xs: 12,
+            sm: 6
+          }
+        }
+
+      },
+      // gridDefination: {
+      //   xs: 12,
+      //   sm: 6
+      // }
+    } 
+  }
+  
+};
+
+export const footerReview = (
+  action,
+  state,
+  dispatch,
+  status,
+  applicationNumber,
+  tenantId,
+) => {
+  /** MenuButton data based on status */
+  let licenseNumber= get(state.screenConfiguration.preparedFinalObject.Licenses[0], "licenseNumber")
+  const responseLength = get(
+    state.screenConfiguration.preparedFinalObject,
+    `licenseCount`,
+    1
+  );
+
   return getCommonApplyFooter({
     container: {
       uiFramework: "custom-atoms",
       componentPath: "Container",
       children: {
-        leftdiv: {
+    /*     leftdiv: {
           uiFramework: "custom-atoms",
           componentPath: "Div",
           props: {
@@ -750,13 +844,20 @@ export const footerReview = (
             xs: 12,
             sm: 6
           }
-        },
+        }, */
         rightdiv: {
           uiFramework: "custom-atoms",
           componentPath: "Div",
+          props: {
+           
+            style: {
+            float:"right",
+            display:"flex"
+            }
+          },
           children: {
-
-            resubmitButton: {
+           
+          resubmitButton: {
               componentPath: "Button",
               props: {
                 variant: "contained",
@@ -783,17 +884,122 @@ export const footerReview = (
                 roles: ["TL_CEMP", "CITIZEN"]
               }
             },
+         /*    editButton: {
+              componentPath: "Button",
+              props: {
+                variant: "outlined",
+                color: "primary",
+                style: {
+                  minWidth: "180px",
+                  height: "48px",
+                  marginRight: "16px",
+                  borderRadius: "inherit"
+                }
+              },
+              children: {
+                previousButtonIcon: {
+                  uiFramework: "custom-atoms",
+                  componentPath: "Icon",
+                  props: {
+                    iconName: "keyboard_arrow_left"
+                  }
+                },
+                previousButtonLabel: getLabel({
+                  labelName: "Edit for Renewal",
+                  labelKey: "TL_RENEWAL_BUTTON_EDIT"
+                })
+              },
+              onClickDefination: {
+                action: "condition",
+                callBack: () => {
+                  dispatch(
+                    setRoute(
+                     // `/tradelicence/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&FY=${financialYear}&tenantId=${tenantId}`
+                     `/tradelicense-citizen/apply?applicationNumber=${applicationNumber}&licenseNumber=${licenseNumber}&tenantId=${tenantId}&action=EDITRENEWAL`
+                    )
+                  );
+                },
 
+              },
+              visible:(getButtonVisibility(status, "APPROVED")||getButtonVisibility(status, "EXPIRED"))&&(responseLength === 1 ),
+            },
+            submitButton: {
+              componentPath: "Button",
+              props: {
+                variant: "contained",
+                color: "primary",
+                style: {
+                  minWidth: "180px",
+                  height: "48px",
+                  marginRight: "45px",
+                  borderRadius: "inherit"
+                }
+              },
+              children: {
+                nextButtonLabel: getLabel({
+                  labelName: "Submit for Renewal",
+                  labelKey: "TL_RENEWAL_BUTTON_SUBMIT"
+                }),
+                nextButtonIcon: {
+                  uiFramework: "custom-atoms",
+                  componentPath: "Icon",
+                  props: {
+                    iconName: "keyboard_arrow_right"
+                  }
+                }
+              },
+              onClickDefination: {
+                action: "condition",
+                callBack: () => {
+                  renewTradelicence(financialYear, state,dispatch);
+                },
+
+              },
+              visible:(getButtonVisibility(status, "APPROVED")||getButtonVisibility(status, "EXPIRED"))&&(responseLength === 1 ),
+            },  */   
+            makePayment: {
+              componentPath: "Button",
+              props: {
+                variant: "contained",
+                color: "primary",
+                style: {
+                  minWidth: "180px",
+                  height: "48px",
+                  marginRight: "45px",
+                  borderRadius: "inherit"
+                }
+              },
+              children: {
+                submitButtonLabel: getLabel({
+                  labelName: "MAKE PAYMENT",
+                  labelKey: "TL_COMMON_BUTTON_CITIZEN_MAKE_PAYMENT"
+                })
+              },
+              onClickDefination: {
+                action: "condition",
+                callBack: () => {
+                  dispatch(
+                    setRoute(
+                     `/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenantId}`
+                    )
+                  );
+                },
+
+              },              
+            visible: process.env.REACT_APP_NAME === "Citizen" && getButtonVisibility(status, "PENDINGPAYMENT") ? true : false
+       
+           }
           },
           gridDefination: {
             xs: 12,
-            sm: 6
+            sm: 12
           }
-        }
+        },     
       }
     }
   });
 };
+
 export const openPopup = (state, dispatch) => {
   dispatch(
     prepareFinalObject("ResubmitAction", true)
