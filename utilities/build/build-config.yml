@@ -40,3 +40,9 @@ config:
       - work-dir: "epass-chatbot"
         image-name: "epass-chatbot"
         dockerfile: "build/maven/Dockerfile"
+
+  - name: "builds/utilities/demo"
+    build:
+      - work-dir: "demo"
+        image-name: "demo"
+        dockerfile: "build/maven/Dockerfile"
