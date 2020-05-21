@@ -64,7 +64,7 @@ public class CronUtils {
 				.replace(SEARCH_NAME, defName);
 		uri.append(endPoint);
 		HashMap<String, Object> param = new HashMap<>();
-		if(defName.equals(CronConstants.SEARCHER_MC)) {
+		if(defName.equals(CronConstants.SEARCHER_MC) || defName.equals(CronConstants.SEARCHER_SW)) {
 			List<String> adhocTaxHeads = service.fetchAdhocTaxheads(new RequestInfo(), "pb");
 			if(!CollectionUtils.isEmpty(adhocTaxHeads)) {
 				param.put("taxHeads", adhocTaxHeads);

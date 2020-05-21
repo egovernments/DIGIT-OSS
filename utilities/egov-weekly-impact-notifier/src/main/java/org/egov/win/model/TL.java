@@ -22,5 +22,7 @@ public class TL {
 	private List<Map<String, Object>> ulbCovered;
 	
 	private List<Map<String, Object>> licenseIssued;
+	
+	private List<Map<String, Object>> revenueCollected;
 
 }
