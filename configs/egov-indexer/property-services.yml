@@ -489,7 +489,10 @@ ServiceMaps:
             uriResponseMapping:
             - inJsonPath: $.MdmsRes.tenant.tenants
               outJsonPath: $.Data.tenantData      
-              
+           
+  - topic: property-application-legacyIndex
+    configKey: LEGACYINDEX
+    indexes:
       - name: property-application
         type: general
         id: $.propertyId,$.acknowldgementNumber,$.tenantId
