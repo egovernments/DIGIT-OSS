@@ -3,6 +3,7 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { setRoute } from "egov-ui-kit/redux/app/actions";
 import store from "ui-redux/store";
 import { assessProperty, createProperty } from "./formActionUtils";
+import cloneDeep from "lodash/cloneDeep";
 
 const extractFromString = (str, index) => {
   if (!str) {
@@ -298,3 +299,42 @@ export const getPurpose = () => {
 export const getCommonTenant = () => {
   return commonConfig.tenantId;
 }
+
+/* Get Estimate with rebate and penalty */
+export const getFormattedEstimate = (estimateResponse = [{}], adhocPenaltyAmt = 0, adhocExemptionAmt = 0) => {
+
+  let { taxHeadEstimates, totalAmount, initialAmount, isAdhocAvailable = false } = estimateResponse[0];
+  totalAmount = initialAmount + adhocPenaltyAmt - adhocExemptionAmt;
+
+  estimateResponse[0].totalAmount = totalAmount.toFixed(2);
+  if (adhocPenaltyAmt > 0 || adhocExemptionAmt > 0) {
+    if (!isAdhocAvailable) {
+      taxHeadEstimates.splice(3, 0, {
+        category: "TAX",
+        estimateAmount: adhocExemptionAmt && adhocExemptionAmt > 0 ? `-${adhocExemptionAmt.toFixed(2)}` : '0',
+        taxHeadCode: "PT_ADHOC_REBATE"
+      })
+      taxHeadEstimates.splice(5, 0, {
+        category: "TAX",
+        estimateAmount: adhocPenaltyAmt.toFixed(2),
+        taxHeadCode: "PT_ADHOC_PENALTY"
+      })
+      estimateResponse[0].isAdhocAvailable = true;
+    } else {
+      taxHeadEstimates.map(taxHead => {
+        if (taxHead.taxHeadCode == "PT_ADHOC_REBATE") {
+          taxHead.estimateAmount = adhocExemptionAmt && adhocExemptionAmt > 0 ? `-${adhocExemptionAmt.toFixed(2)}` : '0';
+        }
+        if (taxHead.taxHeadCode == "PT_ADHOC_PENALTY") {
+          taxHead.estimateAmount = adhocPenaltyAmt.toFixed(2);
+        }
+      })
+    }
+  }
+  /* sort the tax heads based on amount */
+  estimateResponse[0].taxHeadEstimates = taxHeadEstimates.sort((x, y) => Number(y.estimateAmount) - Number(x.estimateAmount))
+  const clonnedEstimate = cloneDeep(estimateResponse[0]);
+  return [{ ...clonnedEstimate }];
+}
+
+

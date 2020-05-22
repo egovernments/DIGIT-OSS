@@ -1,13 +1,10 @@
+import { Button, DropDown, TextField } from "components";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { displayFormErrors, setFieldProperty } from "egov-ui-kit/redux/form/actions";
+import { getFormattedEstimate } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
+import Label from "egov-ui-kit/utils/translationNode";
 import React from "react";
 import { connect } from "react-redux";
-import Label from "egov-ui-kit/utils/translationNode";
-import { TextField, Button, DropDown } from "components";
-import {
-  setFieldProperty,
-  displayFormErrors
-} from "egov-ui-kit/redux/form/actions";
-import { validateForm } from "egov-ui-kit/redux/form/utils";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 const labelStyle = {
   fontFamily: "Roboto",
@@ -97,25 +94,29 @@ class AddRebateExemption extends React.Component {
   };
 
   updateValueToEstimate = () => {
-    const {
+    let {
 
       adhocPenalty,
       adhocExemption, estimateResponse, prepareFinalObject
     } = this.props;
-    let { taxHeadEstimates, initialAmount: totalAmount, adhocPenaltyAmt: initialAdhocPenaltyAmt, adhocExemptionAmt: initialAdhocExemptionAmt } = estimateResponse[0] || {};
 
-    let adhocPenaltyAmt = adhocPenalty && adhocPenalty != '' ? Number.parseInt(adhocPenalty) : 0
-    let adhocExemptionAmt = adhocExemption && adhocExemption != '' ? Number.parseInt(adhocExemption) : 0
-    taxHeadEstimates.map(taxHead => {
-      if (taxHead.taxHeadCode == "PT_TIME_PENALTY") {
-        taxHead.estimateAmount = initialAdhocPenaltyAmt + adhocPenaltyAmt;
-      }
-      if (taxHead.taxHeadCode == "PT_TIME_REBATE") {
-        taxHead.estimateAmount = initialAdhocExemptionAmt + adhocExemptionAmt;
-      }
-    }
-    );
-    estimateResponse[0].totalAmount = totalAmount + adhocPenaltyAmt - adhocExemptionAmt;
+    adhocPenalty = adhocPenalty && adhocPenalty != '' ? Number.parseInt(adhocPenalty) : 0
+    adhocExemption = adhocExemption && adhocExemption != '' ? Number.parseInt(adhocExemption) : 0
+    estimateResponse = getFormattedEstimate(estimateResponse, adhocPenalty, adhocExemption)
+    /*  let { taxHeadEstimates, initialAmount: totalAmount, adhocPenaltyAmt: initialAdhocPenaltyAmt, adhocExemptionAmt: initialAdhocExemptionAmt } = estimateResponse[0] || {};
+ 
+     let adhocPenaltyAmt = adhocPenalty && adhocPenalty != '' ? Number.parseInt(adhocPenalty) : 0
+     let adhocExemptionAmt = adhocExemption && adhocExemption != '' ? Number.parseInt(adhocExemption) : 0
+     taxHeadEstimates.map(taxHead => {
+       if (taxHead.taxHeadCode == "PT_TIME_PENALTY") {
+         taxHead.estimateAmount = initialAdhocPenaltyAmt + adhocPenaltyAmt;
+       }
+       if (taxHead.taxHeadCode == "PT_TIME_REBATE") {
+         taxHead.estimateAmount = initialAdhocExemptionAmt + adhocExemptionAmt;
+       }
+     }
+     );
+     estimateResponse[0].totalAmount = totalAmount + adhocPenaltyAmt - adhocExemptionAmt; */
     prepareFinalObject('estimateResponse', [...estimateResponse]);
   }
 
