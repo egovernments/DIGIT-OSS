@@ -373,6 +373,8 @@ ServiceMaps:
             uriResponseMapping:
             - inJsonPath: $.TenantBoundary[0].boundary[0]
               outJsonPath: $.Data.ward
+            - inJsonPath: $.TenantBoundary[0].boundary[0].children[?(@.code == $.address.locality.code)]
+              outJsonPath: $.Data.ward.children
           mdmsMapping:
           - path: http://egov-mdms-service.egov:8080/egov-mdms-service/v1/_search
             moduleName: tenant
