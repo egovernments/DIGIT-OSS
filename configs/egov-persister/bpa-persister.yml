@@ -85,12 +85,14 @@ serviceMaps:
    isTransaction: true
    queryMaps:
 
-       - query: UPDATE eg_bpa_buildingplan SET applicationno=?, approvalNo=?, status=?, additionaldetails=?, lastmodifiedby=?, lastmodifiedtime=?, approvalDate=? WHERE id=?;
+       - query: UPDATE eg_bpa_buildingplan SET applicationno=?, approvalNo=?, applicationDate=?, status=?, additionaldetails=?, lastmodifiedby=?, lastmodifiedtime=?, approvalDate=? WHERE id=?;
          basePath: BPA
          jsonMaps:
           - jsonPath: $.BPA.applicationNo
           
           - jsonPath: $.BPA.approvalNo
+          
+          - jsonPath: $.BPA.applicationDate
 
           - jsonPath: $.BPA.status
 
@@ -197,12 +199,14 @@ serviceMaps:
            - jsonPath: $.BPA.id
 
 
-       - query: UPDATE eg_bpa_buildingplan SET applicationno=?, approvalNo=?, status=?, additionaldetails=?, lastmodifiedby=?, lastmodifiedtime=?, approvalDate=? WHERE id=?;
+       - query: UPDATE eg_bpa_buildingplan SET applicationno=?, approvalNo=?, applicationDate=?, status=?, additionaldetails=?, lastmodifiedby=?, lastmodifiedtime=?, approvalDate=? WHERE id=?;
          basePath: BPA
          jsonMaps:
           - jsonPath: $.BPA.applicationNo
           
           - jsonPath: $.BPA.approvalNo
+          
+          - jsonPath: $.BPA.applicationDate
 
           - jsonPath: $.BPA.status
 
