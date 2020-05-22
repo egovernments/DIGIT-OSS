@@ -56,7 +56,7 @@ serviceMaps:
 
           - jsonPath: $.BPA.documents.*.documentUid
 
-          - jsonPath: $.BPA.additionalDetails
+          - jsonPath: $.BPA.documents.*.additionalDetails
             type: JSON
             dbType: JSONB
 
