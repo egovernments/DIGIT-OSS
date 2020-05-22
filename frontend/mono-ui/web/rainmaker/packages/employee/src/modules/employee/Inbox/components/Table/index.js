@@ -8,6 +8,7 @@ import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
 import ImportExportIcon from "@material-ui/icons/ImportExport";
 import { Card } from "components";
+import commonConfig from "config/common.js";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { addWflowFileUrl, orderWfProcessInstances } from "egov-ui-framework/ui-utils/commons";
 import { setRoute, toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
@@ -20,7 +21,6 @@ import React from "react";
 import { connect } from "react-redux";
 import "./index.css";
 import { getWFConfig } from "./workflowRedirectionConfig";
-
 class InboxData extends React.Component {
   state = {
     dialogOpen: false,
@@ -33,7 +33,7 @@ class InboxData extends React.Component {
   componentDidMount = async () => {
     let mdmsBody = {
       MdmsCriteria: {
-        tenantId: process.env.REACT_APP_DEFAULT_TENANT_ID,
+        tenantId: commonConfig.tenantId,
         moduleDetails: [
           {
             moduleName: "common-masters",
