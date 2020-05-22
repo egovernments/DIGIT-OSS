@@ -19,11 +19,10 @@ class HowItWorks extends React.Component {
 
     handleClick = () => {
 
-    //window.location.href =   "https://s3.ap-south-1.amazonaws.com/ukd-egov-assets/TL_English_UserManual_Citizen.pdf";     
-    window.open(
-      'https://s3.ap-south-1.amazonaws.com/ukd-egov-assets/TL_English_UserManual_Citizen.pdf',
-      '_blank' 
-    );
+    let url = window.location.href;
+    let fUrl = url.replace ("tradelicense-citizen/home" ,"trade-license/how-it-works");
+    window.location.href = fUrl;     
+
   }; 
    
   render() {
@@ -57,5 +56,7 @@ class HowItWorks extends React.Component {
     );
   }
 }
+
+
 
 export default withStyles(styles)(HowItWorks);
