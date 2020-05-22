@@ -16,13 +16,25 @@ const styles = theme => ({
 });
 
 class HowItWorks extends React.Component {
+
+    handleClick = () => {
+
+    //window.location.href =   "https://s3.ap-south-1.amazonaws.com/ukd-egov-assets/TL_English_UserManual_Citizen.pdf";     
+    window.open(
+      'https://s3.ap-south-1.amazonaws.com/ukd-egov-assets/TL_English_UserManual_Citizen.pdf',
+      '_blank' 
+    );
+  }; 
+   
   render() {
     const { classes } = this.props;
+
     return (
       <div className={classes.root}>
-        <List component="nav">
-          <ListItem button>
-            <ListItemText
+        <List component="nav">   
+
+          <ListItem button  >
+           <ListItemText onClick={this.handleClick}            
               primary={
                 <LabelContainer
                   labelKey="COMMON_HOW_IT_WORKS"
