@@ -131,6 +131,8 @@ serviceMaps:
            - jsonPath: $.BPA.documents.*.documentUid
   
            - jsonPath: $.BPA.documents.*.additionalDetails
+             type: JSON
+             dbType: JSONB
   
            - jsonPath: $.BPA.auditDetails.createdBy
   
@@ -145,6 +147,8 @@ serviceMaps:
            - jsonPath: $.BPA.documents.*.fileStoreId
   
            - jsonPath: $.BPA.documents.*.additionalDetails
+             type: JSON
+             dbType: JSONB
 
            - jsonPath: $.BPA.auditDetails.lastModifiedBy
 
@@ -172,6 +176,8 @@ serviceMaps:
            - jsonPath: $.BPA.documents.*.documentUid
   
            - jsonPath: $.BPA.documents.*.additionalDetails
+             type: JSON
+             dbType: JSONB
   
            - jsonPath: $.BPA.auditDetails.createdBy
   
@@ -186,6 +192,8 @@ serviceMaps:
            - jsonPath: $.BPA.documents.*.fileStoreId
   
            - jsonPath: $.BPA.documents.*.additionalDetails
+             type: JSON
+             dbType: JSONB
 
            - jsonPath: $.BPA.auditDetails.lastModifiedBy
 
