@@ -341,7 +341,7 @@ ServiceMaps:
         jsonPath: $.Property
         timeStampField: $.auditDetails.lastModifiedTime
         customJsonMapping:
-          indexMapping: {"Data":{"workflow":{"state":{},"action":"","assignes":[]},"acknowldgementNumber":"","creationReason":"","auditDetails":{},"propertyId":"","tenantId":"","accountId":"","status":"","@timestamp":"timestamp"}}
+          indexMapping: {"Data":{"workflow":{"state":{},"action":"","assignes":[]},"acknowldgementNumber":"","creationReason":"","auditDetails":{},"propertyId":"","tenantId":"","accountId":"","status":"","@timestamp":""}}
           fieldMapping:
           - inJsonPath: $.workflow.state
             outJsonPath: $.Data.workflow.state
@@ -360,7 +360,7 @@ ServiceMaps:
           - inJsonPath: $.tenantId
             outJsonPath: $.Data.tenantId
           - inJsonPath: $.accountId
-            outJsonPath: $.Data.accountI
+            outJsonPath: $.Data.accountId
           - inJsonPath: $.status
             outJsonPath: $.Data.status
           - inJsonPath: $.@timestamp
@@ -389,16 +389,14 @@ ServiceMaps:
   - topic: update-property-registry
     configKey: INDEX
     indexes:
-      - name: property-services
+      - name: property-application
         type: general
         id: $.propertyId,$.acknowldgementNumber,$.tenantId
         jsonPath: $.Property
         timeStampField: $.auditDetails.lastModifiedTime
         customJsonMapping:
-          indexMapping: {"Data":{"workflow":{"state":{},"action":"","assignes":[]},"owners":[],"acknowldgementNumber":"","propertyType":"","ownershipCategory":"","creationReason":"","usageCategory":"","noOfFloors":"","landArea":"","superBuiltUpArea":"","source":"","channel":"","units":{},"auditDetails":{},"id":"","propertyId":"","surveyId":"","linkedProperties":{},"tenantId":"","accountId":"","oldPropertyId":"","status":"","@timestamp":"timestamp"}}
+          indexMapping: {"Data":{"workflow":{"state":{},"action":"","assignes":[]},"acknowldgementNumber":"","creationReason":"","auditDetails":{},"propertyId":"","tenantId":"","accountId":"","status":"","@timestamp":""}}
           fieldMapping:
-          - inJsonPath: $.owners.*.uuid
-            outJsonPath: $.Data.owners
           - inJsonPath: $.workflow.state
             outJsonPath: $.Data.workflow.state
           - inJsonPath: $.workflow.action
@@ -407,42 +405,16 @@ ServiceMaps:
             outJsonPath: $.Data.workflow.assignes
           - inJsonPath: $.acknowldgementNumber
             outJsonPath: $.Data.acknowldgementNumber
-          - inJsonPath: $.propertyType
-            outJsonPath: $.Data.propertyType
-          - inJsonPath: $.ownershipCategory
-            outJsonPath: $.Data.ownershipCategory
           - inJsonPath: $.creationReason
             outJsonPath: $.Data.creationReason
-          - inJsonPath: $.usageCategory
-            outJsonPath: $.Data.usageCategory
-          - inJsonPath: $.noOfFloors
-            outJsonPath: $.Data.noOfFloors
-          - inJsonPath: $.landArea
-            outJsonPath: $.Data.landArea
-          - inJsonPath: $.superBuiltUpArea
-            outJsonPath: $.Data.superBuiltUpArea
-          - inJsonPath: $.source
-            outJsonPath: $.Data.source
-          - inJsonPath: $.channel
-            outJsonPath: $.Data.channel
-          - inJsonPath: $.units
-            outJsonPath: $.Data.units
           - inJsonPath: $.auditDetails
             outJsonPath: $.Data.auditDetails
-          - inJsonPath: $.id
-            outJsonPath: $.Data.id
           - inJsonPath: $.propertyId
             outJsonPath: $.Data.propertyId
-          - inJsonPath: $.surveyId
-            outJsonPath: $.Data.surveyId
-          - inJsonPath: $.linkedProperties
-            outJsonPath: $.Data.linkedProperties
           - inJsonPath: $.tenantId
             outJsonPath: $.Data.tenantId
           - inJsonPath: $.accountId
             outJsonPath: $.Data.accountId
-          - inJsonPath: $.oldPropertyId
-            outJsonPath: $.Data.oldPropertyId
           - inJsonPath: $.status
             outJsonPath: $.Data.status
           - inJsonPath: $.@timestamp
@@ -471,16 +443,14 @@ ServiceMaps:
   - topic: cancel-property-registry
     configKey: INDEX
     indexes:
-      - name: property-services
+      - name: property-application
         type: general
         id: $.propertyId,$.acknowldgementNumber,$.tenantId
         jsonPath: $.Property
         timeStampField: $.auditDetails.lastModifiedTime 
         customJsonMapping:
-          indexMapping: {"Data":{"workflow":{"state":{},"action":"","assignes":[]},"owners":[],"acknowldgementNumber":"","propertyType":"","ownershipCategory":"","creationReason":"","usageCategory":"","noOfFloors":"","landArea":"","superBuiltUpArea":"","source":"","channel":"","units":{},"auditDetails":{},"id":"","propertyId":"","surveyId":"","linkedProperties":{},"tenantId":"","accountId":"","oldPropertyId":"","status":"","@timestamp":"timestamp"}}
+          indexMapping: {"Data":{"workflow":{"state":{},"action":"","assignes":[]},"acknowldgementNumber":"","creationReason":"","auditDetails":{},"propertyId":"","tenantId":"","accountId":"","status":"","@timestamp":""}}
           fieldMapping:
-          - inJsonPath: $.owners.*.uuid
-            outJsonPath: $.Data.owners
           - inJsonPath: $.workflow.state
             outJsonPath: $.Data.workflow.state
           - inJsonPath: $.workflow.action
@@ -489,42 +459,16 @@ ServiceMaps:
             outJsonPath: $.Data.workflow.assignes
           - inJsonPath: $.acknowldgementNumber
             outJsonPath: $.Data.acknowldgementNumber
-          - inJsonPath: $.propertyType
-            outJsonPath: $.Data.propertyType
-          - inJsonPath: $.ownershipCategory
-            outJsonPath: $.Data.ownershipCategory
           - inJsonPath: $.creationReason
             outJsonPath: $.Data.creationReason
-          - inJsonPath: $.usageCategory
-            outJsonPath: $.Data.usageCategory
-          - inJsonPath: $.noOfFloors
-            outJsonPath: $.Data.noOfFloors
-          - inJsonPath: $.landArea
-            outJsonPath: $.Data.landArea
-          - inJsonPath: $.superBuiltUpArea
-            outJsonPath: $.Data.superBuiltUpArea
-          - inJsonPath: $.source
-            outJsonPath: $.Data.source
-          - inJsonPath: $.channel
-            outJsonPath: $.Data.channel
-          - inJsonPath: $.units
-            outJsonPath: $.Data.units
           - inJsonPath: $.auditDetails
             outJsonPath: $.Data.auditDetails
-          - inJsonPath: $.id
-            outJsonPath: $.Data.id
           - inJsonPath: $.propertyId
             outJsonPath: $.Data.propertyId
-          - inJsonPath: $.surveyId
-            outJsonPath: $.Data.surveyId
-          - inJsonPath: $.linkedProperties
-            outJsonPath: $.Data.linkedProperties
           - inJsonPath: $.tenantId
             outJsonPath: $.Data.tenantId
           - inJsonPath: $.accountId
             outJsonPath: $.Data.accountId
-          - inJsonPath: $.oldPropertyId
-            outJsonPath: $.Data.oldPropertyId
           - inJsonPath: $.status
             outJsonPath: $.Data.status
           - inJsonPath: $.@timestamp
@@ -548,22 +492,20 @@ ServiceMaps:
               valueJsonpath: $.tenantId
             uriResponseMapping:
             - inJsonPath: $.MdmsRes.tenant.tenants
-              outJsonPath: $.Data.tenantData        
+              outJsonPath: $.Data.tenantData     
         
-  - topic: property-registry-legacyIndex
+  - topic: property-application-legacyIndex
     configKey: LEGACYINDEX
     indexes:
-      - name: property-services
+      - name: property-application
         type: general
         isBulk: true
         id: $.propertyId,$.acknowldgementNumber,$.tenantId
         jsonPath: $.Properties.*
         timeStampField: $.auditDetails.lastModifiedTime        
         customJsonMapping:
-          indexMapping: {"Data":{"workflow":{"state":{},"action":"","assignes":[]},"owners":[],"acknowldgementNumber":"","propertyType":"","ownershipCategory":"","creationReason":"","usageCategory":"","noOfFloors":"","landArea":"","superBuiltUpArea":"","source":"","channel":"","units":{},"auditDetails":{},"id":"","propertyId":"","surveyId":"","linkedProperties":{},"tenantId":"","accountId":"","oldPropertyId":"","status":"","@timestamp":"timestamp"}}
+          indexMapping: {"Data":{"workflow":{"state":{},"action":"","assignes":[]},"acknowldgementNumber":"","creationReason":"","auditDetails":{},"propertyId":"","tenantId":"","accountId":"","status":"","@timestamp":""}}
           fieldMapping:
-          - inJsonPath: $.owners.*.uuid
-            outJsonPath: $.Data.owners
           - inJsonPath: $.workflow.state
             outJsonPath: $.Data.workflow.state
           - inJsonPath: $.workflow.action
@@ -572,42 +514,16 @@ ServiceMaps:
             outJsonPath: $.Data.workflow.assignes
           - inJsonPath: $.acknowldgementNumber
             outJsonPath: $.Data.acknowldgementNumber
-          - inJsonPath: $.propertyType
-            outJsonPath: $.Data.propertyType
-          - inJsonPath: $.ownershipCategory
-            outJsonPath: $.Data.ownershipCategory
           - inJsonPath: $.creationReason
             outJsonPath: $.Data.creationReason
-          - inJsonPath: $.usageCategory
-            outJsonPath: $.Data.usageCategory
-          - inJsonPath: $.noOfFloors
-            outJsonPath: $.Data.noOfFloors
-          - inJsonPath: $.landArea
-            outJsonPath: $.Data.landArea
-          - inJsonPath: $.superBuiltUpArea
-            outJsonPath: $.Data.superBuiltUpArea
-          - inJsonPath: $.source
-            outJsonPath: $.Data.source
-          - inJsonPath: $.channel
-            outJsonPath: $.Data.channel
-          - inJsonPath: $.units
-            outJsonPath: $.Data.units
           - inJsonPath: $.auditDetails
             outJsonPath: $.Data.auditDetails
-          - inJsonPath: $.id
-            outJsonPath: $.Data.id
           - inJsonPath: $.propertyId
             outJsonPath: $.Data.propertyId
-          - inJsonPath: $.surveyId
-            outJsonPath: $.Data.surveyId
-          - inJsonPath: $.linkedProperties
-            outJsonPath: $.Data.linkedProperties
           - inJsonPath: $.tenantId
             outJsonPath: $.Data.tenantId
           - inJsonPath: $.accountId
             outJsonPath: $.Data.accountId
-          - inJsonPath: $.oldPropertyId
-            outJsonPath: $.Data.oldPropertyId
           - inJsonPath: $.status
             outJsonPath: $.Data.status
           - inJsonPath: $.@timestamp
