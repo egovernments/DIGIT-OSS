@@ -3,22 +3,63 @@
   "moduleName": "ws-services-masters",
   "waterSource": [
     {
-      "name": "Ground",
-      "code": "Ground",
+      "name": "Ground-Well",
+      "code": "GROUND.WELL",
       "active": true
     },
     {
-      "name": "Surface",
-      "code": "Surface",
+      "name": "Ground-Handpump",
+      "code": "GROUND.HANDPUMP",
       "active": true
     },
     {
-      "name": "Bulk-Supply",
-      "code": "Bulk-Supply",
+      "name": "Ground-Borewell",
+      "code": "GROUND.BOREWELL",
+      "active": true
+    },
+    {
+      "name": "Surface-River",
+      "code": "SURFACE.RIVER",
+      "active": true
+    },
+    {
+      "name": "Surface-Canal",
+      "code": "SURFACE.CANAL",
+      "active": true
+    },
+    {
+      "name": "Surface-Lake",
+      "code": "SURFACE.LAKE",
+      "active": true
+    },
+     {
+      "name": "Surface-Pond",
+      "code": "SURFACE.POND",
+      "active": true
+    },
+    {
+      "name": "Surface-Rainwater",
+      "code": "SURFACE.RAINWATER",
+      "active": true
+    },
+    {
+      "name": "Surface-Recycledwater",
+      "code": "SURFACE.RECYCLEDWATER",
+      "active": true
+    },
+    {
+      "name": "Bulksupply-Raw",
+      "code": "BULKSUPPLY.RAW",
+      "active": true
+    },
+    {
+      "name": "Bulksupply-Treated",
+      "code": "BULKSUPPLY.TREATED",
       "active": true
     }
   ]
 }
+
 
 
 
