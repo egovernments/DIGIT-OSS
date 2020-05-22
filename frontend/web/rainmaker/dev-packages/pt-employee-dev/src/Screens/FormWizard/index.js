@@ -17,7 +17,7 @@ import { fetchFromLocalStorage, isDocumentValid } from "egov-ui-kit/utils/common
 import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { getEstimateFromBill, getFinancialYearFromQuery, getQueryValue, resetFormWizard } from "egov-ui-kit/utils/PTCommon";
 import { addOwner, callDraft, configOwnersDetailsFromDraft, getCalculationScreenData, getHeaderLabel, getImportantDates, getInstituteInfo, getMultipleOwnerInfo, getSelectedCombination, getSingleOwnerInfo, getSortedTaxSlab, getTargetPropertiesDetails, normalizePropertyDetails, removeAdhocIfDifferentFY, renderPlotAndFloorDetails, validateUnitandPlotSize } from "egov-ui-kit/utils/PTCommon/FormWizardUtils";
-import { formWizardConstants, getPurpose, propertySubmitAction, PROPERTY_FORM_PURPOSE } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
+import { formWizardConstants, getFormattedEstimate, getPurpose, propertySubmitAction, PROPERTY_FORM_PURPOSE } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
 import { convertRawDataToFormConfig } from "egov-ui-kit/utils/PTCommon/propertyToFormTransformer";
 import Label from "egov-ui-kit/utils/translationNode";
 import { get, isEqual, set } from "lodash";
@@ -36,6 +36,7 @@ import ReviewForm from "./components/ReviewForm";
 import WizardComponent from "./components/WizardComponent";
 import "./index.css";
 import { getDocumentTypes } from "./utils/mdmsCalls";
+
 class FormWizard extends Component {
   state = {
     dialogueOpen: false,
@@ -1223,27 +1224,14 @@ class FormWizard extends Component {
       this.estimate().then(estimateResponse => {
         if (estimateResponse) {
           window.scrollTo(0, 0);
-          let { taxHeadEstimates, totalAmount } = estimateResponse.Calculation[0];
           let adhocPenaltyAmt = 0;
           let adhocExemptionAmt = 0;
           if (isReassesment && Assessments && Assessments.length > 0) {
-            adhocExemptionAmt = get(Assessments[0], 'additionalDetails.adhocExemption', 0);
-            adhocPenaltyAmt = get(Assessments[0], 'additionalDetails.adhocPenalty', 0);
+            adhocExemptionAmt = get(Assessments[0], 'additionalDetails.adhocExemption', 0) || 0;
+            adhocPenaltyAmt = get(Assessments[0], 'additionalDetails.adhocPenalty', 0) || 0;
           }
-          estimateResponse.Calculation[0].initialAmount = totalAmount;
-          estimateResponse.Calculation[0].totalAmount = totalAmount + adhocPenaltyAmt - adhocExemptionAmt;
-          taxHeadEstimates.map(taxHead => {
-            if (taxHead.taxHeadCode == "PT_TIME_PENALTY") {
-              estimateResponse.Calculation[0].adhocPenaltyAmt = taxHead.estimateAmount;
-              adhocPenaltyAmt = taxHead.estimateAmount + adhocPenaltyAmt;
-              taxHead.estimateAmount = adhocPenaltyAmt;
-            }
-            if (taxHead.taxHeadCode == "PT_TIME_REBATE") {
-              estimateResponse.Calculation[0].adhocExemptionAmt = taxHead.estimateAmount;
-              adhocExemptionAmt = taxHead.estimateAmount + adhocExemptionAmt;
-              taxHead.estimateAmount = adhocExemptionAmt;
-            }
-          })
+          estimateResponse.Calculation[0].initialAmount = estimateResponse.Calculation[0].totalAmount;
+          estimateResponse.Calculation = getFormattedEstimate(estimateResponse.Calculation, adhocPenaltyAmt, adhocExemptionAmt)
           this.props.prepareFinalObject("estimateResponse", estimateResponse.Calculation);
           this.setState({
             estimation: estimateResponse && estimateResponse.Calculation,
