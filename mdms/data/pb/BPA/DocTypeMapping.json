@@ -292,6 +292,297 @@
                     "required": true
                 }
             ]
+        },
+        {
+            "applicationType": "BUILDING_OC_PLAN_SCRUTINY",
+            "ServiceType": "NEW_CONSTRUCTION",
+            "RiskType": "LOW",
+            "WFState": "INITIATED",
+            "docTypes": [
+                {
+                    "code": "APPL.IDENTITYPROOF",
+                    "required": true
+                },
+                {
+                    "code": "APPL.ADDRESSPROOF",
+                    "required": true
+                },
+                {
+                    "code": "APPL.LTR",
+                    "required": true
+                },
+                {
+                    "code": "APPL.TDP",
+                    "required": true
+                }, 
+                {
+                    "code": "APPL.LAC",
+                    "required": false
+                },
+                {
+                    "code": "APPL.SSC",
+                    "required": false
+                },
+                {
+                    "code": "APPL.LSVS",
+                    "required": false
+                },{
+                    "code": "BPD.SP",
+                    "required": true
+                },{
+                    "code": "BPD.FP",
+                    "required": false
+                },{
+                    "code": "BPD.SCP",
+                    "required": false
+                },{
+                    "code": "BPD.EP",
+                    "required": false
+                },{
+                    "code": "BPD.SECP",
+                    "required": false
+                },{
+                    "code": "BPD.PP",
+                    "required": false
+                },{
+                    "code": "BPD.RP",
+                    "required": false
+                }, 
+                {
+                    "code": "NOC.FIRE",
+                    "required": false
+                },
+                {
+                    "code": "NOC.AIRPORT",
+                    "required": false
+                }
+            ]
+        },
+        {
+            "applicationType": "BUILDING_OC_PLAN_SCRUTINY",
+            "ServiceType": "NEW_CONSTRUCTION",
+            "RiskType": "HIGH",
+            "WFState": "INITIATED",
+            "docTypes": [
+                {
+                    "code": "APPL.IDENTITYPROOF",
+                    "required": true
+                },
+                {
+                    "code": "APPL.ADDRESSPROOF",
+                    "required": true
+                },
+                {
+                    "code": "APPL.LTR",
+                    "required": true
+                },
+                {
+                    "code": "APPL.TDP",
+                    "required": true
+                }, 
+                {
+                    "code": "APPL.LAC",
+                    "required": false
+                },
+                {
+                    "code": "APPL.SSC",
+                    "required": false
+                },
+                {
+                    "code": "APPL.LSVS",
+                    "required": false
+                },{
+                    "code": "BPD.SP",
+                    "required": true
+                },{
+                    "code": "BPD.FP",
+                    "required": false
+                },{
+                    "code": "BPD.SCP",
+                    "required": false
+                },{
+                    "code": "BPD.EP",
+                    "required": false
+                },{
+                    "code": "BPD.SECP",
+                    "required": false
+                },{
+                    "code": "BPD.PP",
+                    "required": false
+                },{
+                    "code": "BPD.RP",
+                    "required": false
+                }, 
+                {
+                    "code": "NOC.FIRE",
+                    "required": false
+                },
+                {
+                    "code": "NOC.AIRPORT",
+                    "required": false
+                }
+            ]
+        },
+        {
+            "applicationType": "BUILDING_OC_PLAN_SCRUTINY",
+            "ServiceType": "NEW_CONSTRUCTION",
+            "RiskType": "MEDIUM",
+            "WFState": "INITIATED",
+            "docTypes": [
+                {
+                    "code": "APPL.IDENTITYPROOF",
+                    "required": true
+                },
+                {
+                    "code": "APPL.ADDRESSPROOF",
+                    "required": true
+                },
+                {
+                    "code": "APPL.LTR",
+                    "required": true
+                },
+                {
+                    "code": "APPL.TDP",
+                    "required": true
+                }, 
+                {
+                    "code": "APPL.LAC",
+                    "required": false
+                },
+                {
+                    "code": "APPL.SSC",
+                    "required": false
+                },
+                {
+                    "code": "APPL.LSVS",
+                    "required": false
+                },{
+                    "code": "BPD.SP",
+                    "required": true
+                },{
+                    "code": "BPD.FP",
+                    "required": false
+                },{
+                    "code": "BPD.SCP",
+                    "required": false
+                },{
+                    "code": "BPD.EP",
+                    "required": false
+                },{
+                    "code": "BPD.SECP",
+                    "required": false
+                },{
+                    "code": "BPD.PP",
+                    "required": false
+                },{
+                    "code": "BPD.RP",
+                    "required": false
+                }, 
+                {
+                    "code": "NOC.FIRE",
+                    "required": false
+                },
+                {
+                    "code": "NOC.AIRPORT",
+                    "required": false
+                }
+            ]
+        },
+        {
+            "applicationType": "BUILDING_OC_PLAN_SCRUTINY",
+            "ServiceType": "NEW_CONSTRUCTION",
+            "RiskType": "LOW",
+            "WFState": "DOC_VERIFICATION_PENDING",
+            "docTypes": [
+                {
+                    "code": "APPL.BUILDING_DIAGRAM",
+                    "required": false
+                },
+                {
+                    "code": "APPL.LOCALBODY",
+                    "required": false
+                }
+            ]
+        },
+        {
+            "applicationType": "BUILDING_OC_PLAN_SCRUTINY",
+            "ServiceType": "NEW_CONSTRUCTION",
+            "RiskType": "LOW",
+            "WFState": "NOC_VERIFICATION_PENDING",
+            "docTypes": [
+                {
+                    "code": "NOC.FIRE",
+                    "required": true
+                },
+                {
+                    "code": "NOC.AIRPORT",
+                    "required": true
+                }
+            ]
+        },
+        {
+            "applicationType": "BUILDING_OC_PLAN_SCRUTINY",
+            "ServiceType": "NEW_CONSTRUCTION",
+            "RiskType": "HIGH",
+            "WFState": "DOC_VERIFICATION_PENDING",
+            "docTypes": [
+                {
+                    "code": "APPL.BUILDING_DIAGRAM",
+                    "required": false
+                },
+                {
+                    "code": "APPL.LOCALBODY",
+                    "required": false
+                }
+            ]
+        },
+        {
+            "applicationType": "BUILDING_OC_PLAN_SCRUTINY",
+            "ServiceType": "NEW_CONSTRUCTION",
+            "RiskType": "HIGH",
+            "WFState": "NOC_VERIFICATION_PENDING",
+            "docTypes": [
+                {
+                    "code": "NOC.FIRE",
+                    "required": true
+                },
+                {
+                    "code": "NOC.AIRPORT",
+                    "required": true
+                }
+            ]
+        },
+        {
+            "applicationType": "BUILDING_OC_PLAN_SCRUTINY",
+            "ServiceType": "NEW_CONSTRUCTION",
+            "RiskType": "MEDIUM",
+            "WFState": "DOC_VERIFICATION_PENDING",
+            "docTypes": [
+                {
+                    "code": "APPL.BUILDING_DIAGRAM",
+                    "required": false
+                },
+                {
+                    "code": "APPL.LOCALBODY",
+                    "required": false
+                }
+            ]
+        },
+        {
+            "applicationType": "BUILDING_OC_PLAN_SCRUTINY",
+            "ServiceType": "NEW_CONSTRUCTION",
+            "RiskType": "MEDIUM",
+            "WFState": "NOC_VERIFICATION_PENDING",
+            "docTypes": [
+                {
+                    "code": "NOC.FIRE",
+                    "required": true
+                },
+                {
+                    "code": "NOC.AIRPORT",
+                    "required": true
+                }
+            ]
         }
     ]
 }
