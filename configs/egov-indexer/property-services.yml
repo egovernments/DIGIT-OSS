@@ -122,8 +122,12 @@ ServiceMaps:
             uriResponseMapping:
             - inJsonPath: $.TenantBoundary[0].boundary[0]
               outJsonPath: $.Data.ward
-            - inJsonPath: $.TenantBoundary[0].boundary[0].children[?(@.code == '$.address.locality.code')]
+            - inJsonPath: $.TenantBoundary[0].boundary[0].children
               outJsonPath: $.Data.ward.children
+              filter: "[?(@.code == $locality)]"
+              filterMapping:
+              - variable: $locality
+                valueJsonpath: $.address.locality.code
           mdmsMapping:
           - path: http://egov-mdms-service.egov:8080/egov-mdms-service/v1/_search
             moduleName: tenant
@@ -257,8 +261,12 @@ ServiceMaps:
             uriResponseMapping:
             - inJsonPath: $.TenantBoundary[0].boundary[0]
               outJsonPath: $.Data.ward
-            - inJsonPath: $.TenantBoundary[0].boundary[0].children[?(@.code == '$.address.locality.code')]
+            - inJsonPath: $.TenantBoundary[0].boundary[0].children
               outJsonPath: $.Data.ward.children
+              filter: "[?(@.code == $locality)]"
+              filterMapping:
+              - variable: $locality
+                valueJsonpath: $.address.locality.code
           mdmsMapping:
           - path: http://egov-mdms-service.egov:8080/egov-mdms-service/v1/_search
             moduleName: tenant
@@ -392,8 +400,12 @@ ServiceMaps:
             uriResponseMapping:
             - inJsonPath: $.TenantBoundary[0].boundary[0]
               outJsonPath: $.Data.ward
-            - inJsonPath: $.TenantBoundary[0].boundary[0].children[?(@.code == '$.address.locality.code')]
+            - inJsonPath: $.TenantBoundary[0].boundary[0].children
               outJsonPath: $.Data.ward.children
+              filter: "[?(@.code == $locality)]"
+              filterMapping:
+              - variable: $locality
+                valueJsonpath: $.address.locality.code
           mdmsMapping:
           - path: http://egov-mdms-service.egov:8080/egov-mdms-service/v1/_search
             moduleName: tenant
@@ -532,8 +544,12 @@ ServiceMaps:
             uriResponseMapping:
             - inJsonPath: $.TenantBoundary[0].boundary[0]
               outJsonPath: $.Data.ward
-            - inJsonPath: $.TenantBoundary[0].boundary[0].children[?(@.code == '$.address.locality.code')]
+            - inJsonPath: $.TenantBoundary[0].boundary[0].children
               outJsonPath: $.Data.ward.children
+              filter: "[?(@.code == $locality)]"
+              filterMapping:
+              - variable: $locality
+                valueJsonpath: $.address.locality.code
           mdmsMapping:
           - path: http://egov-mdms-service.egov:8080/egov-mdms-service/v1/_search
             moduleName: tenant
