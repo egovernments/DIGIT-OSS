@@ -85,6 +85,7 @@
       "documentType": "PLUMBER_REPORT_DRAWING",
       "active": true,
       "required": true,
+       "hasDropdown": true,
       "dropdownData": [
         {
           "code": "PLUMBER_REPORT_DRAWING",
@@ -98,6 +99,7 @@
       "documentType": "BUILDING_PLAN_OR_COMPLETION_CERTIFICATE",
       "active": true,
       "required": false,
+       "hasDropdown": true,
       "dropdownData": [
         {
           "code": "BUILDING_PLAN_OR_COMPLETION_CERTIFICATE",
@@ -111,6 +113,7 @@
       "documentType": "PROPERTY_TAX_RECIEPT",
       "active": true,
       "required": false,
+       "hasDropdown": true,
       "dropdownData": [
         {
           "code": "PROPERTY_TAX_RECIEPT",
