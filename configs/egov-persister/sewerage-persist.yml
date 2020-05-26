@@ -12,7 +12,7 @@ serviceMaps:
       jsonMaps:
        - jsonPath: $.SewerageConnection.id 
        
-       - jsonPath: $.SewerageConnection.property.tenantId
+       - jsonPath: $.SewerageConnection.tenantId
        
        - jsonPath: $.SewerageConnection.propertyId
 
@@ -134,7 +134,7 @@ serviceMaps:
          
           - jsonPath: $.SewerageConnection.documents.*.id
 
-          - jsonPath: $.SewerageConnection.property.tenantId
+          - jsonPath: $.SewerageConnection.tenantId
 
           - jsonPath: $.SewerageConnection.documents.*.documentType
 
