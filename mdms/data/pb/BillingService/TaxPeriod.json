@@ -409,6 +409,22 @@
       "service": "SW.ONE_TIME_FEE",
       "code": "SW10YRS2019",
       "financialYear": "2019-29"
+    },
+    {
+      "fromDate": 1522540801000,
+      "toDate": 1838159999000,
+      "periodCycle": "FORTENYEARS",
+      "service": "BPA.NC_OC_APP_FEE",
+      "code": "BPAOCAPP10YRS2018",
+      "financialYear": "2018-28"
+    },
+    {
+      "fromDate": 1522540801000,
+      "toDate": 1838159999000,
+      "periodCycle": "FORTENYEARS",
+      "service": "BPA.NC_OC_SAN_FEE",
+      "code": "BPAOCSAN10YRS2018",
+      "financialYear": "2018-28"
     }
   ]
 }
