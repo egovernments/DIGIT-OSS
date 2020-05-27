@@ -79,3 +79,14 @@
     padding: 16px 30px !important;
 }
 
+
+@media only screen and (max-width:1280px){
+
+    .common-background
+    {       
+        background-size: cover!important;
+        height: 110% !important;
+
+    }
+
+}
