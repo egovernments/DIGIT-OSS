@@ -1,0 +1,27 @@
+serviceMaps:
+  serviceName: property-services
+  mappings:
+  - version: 1.0
+    description: Persists property details in EG_PT_PROPERTY  table
+    fromTopic: migartion-batch-count
+    isTransaction: true
+    queryMaps:
+
+
+    - query: INSERT INTO eg_pt_property_migration (id,batch,batchsize,createdtime,tenantid,recordCount) VALUES (?,?,?,?,?,?);
+      basePath: MigrationCount
+      jsonMaps:
+
+      - jsonPath: $.MigrationCount.id
+
+      - jsonPath: $.MigrationCount.offset
+
+      - jsonPath: $.MigrationCount.limit
+
+      - jsonPath: $.MigrationCount.createdTime
+
+      - jsonPath: $.MigrationCount.tenantid
+
+      - jsonPath: $.MigrationCount.recordCount
+
+   
