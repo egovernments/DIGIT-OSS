@@ -57,6 +57,9 @@ public class PropertyConfiguration {
     @Value("${persister.update.document.topic}")
     private String updateDocumentTopic;
 
+    @Value("${persister.migration.batch.count.topic}")
+    private String migartionBatchCountTopic;
+
 
     //USER
     @Value("${egov.user.host}")

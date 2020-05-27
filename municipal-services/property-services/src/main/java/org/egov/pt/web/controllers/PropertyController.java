@@ -8,6 +8,7 @@ import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.response.ResponseInfo;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.PropertyCriteria;
+import org.egov.pt.models.oldProperty.MigrationCount;
 import org.egov.pt.models.oldProperty.OldProperty;
 import org.egov.pt.models.oldProperty.OldPropertyCriteria;
 import org.egov.pt.models.oldProperty.OldPropertyRequest;
@@ -23,7 +24,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
+
+import static org.egov.pt.service.MigrationService.COUNT_QUERY;
 
 @Controller
 @RequestMapping("/property")
@@ -80,14 +84,9 @@ public class PropertyController {
 		long startTime = System.nanoTime();
 		Map<String, String> resultMap = null;
 		Map<String, String> errorMap = new HashMap<>();
-		List<AssessmentRequest> assessmentRequestList = new ArrayList<>();
-		Map<String, List<String>> masters = migrationService.getMDMSData(requestInfoWrapper.getRequestInfo(),"pb");
-		List<String> tenantList = migrationService.getTenantList();
-		for(int i= 0;i<tenantList.size();i++){
-			propertyCriteria.setTenantId(tenantList.get(i));
-			resultMap = migrationService.initiatemigration(requestInfoWrapper, propertyCriteria,masters,errorMap,assessmentRequestList);
-		}
-		//resultMap = migrationService.initiatemigration(requestInfoWrapper, propertyCriteria,masters,errorMap,assessmentRequestList);
+
+		resultMap = migrationService.initiateProcess(requestInfoWrapper,propertyCriteria,errorMap);
+
 		long endtime = System.nanoTime();
 		long elapsetime = endtime - startTime;
 		System.out.println("Elapsed time--->"+elapsetime);

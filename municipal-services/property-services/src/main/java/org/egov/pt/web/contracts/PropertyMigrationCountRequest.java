@@ -3,7 +3,8 @@ package org.egov.pt.web.contracts;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import org.egov.common.contract.request.RequestInfo;
-import org.egov.pt.models.Property;
+import org.egov.pt.models.oldProperty.MigrationCount;
+
 
 import javax.validation.Valid;
 import java.util.List;
@@ -18,12 +19,12 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PropertyRequestList {
+public class PropertyMigrationCountRequest {
 	
   @JsonProperty("RequestInfo")
   private RequestInfo requestInfo;
 
-  @JsonProperty("Property")
+  @JsonProperty("MigrationCount")
   @Valid
-  private List<Property> property;
+  private MigrationCount migrationCount;
 }
