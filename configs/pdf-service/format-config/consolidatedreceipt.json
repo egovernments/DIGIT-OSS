@@ -481,24 +481,17 @@
             "style": "pt-disclaimer-value"
           },
           {
-            "text": "{{disclamer_1}}",
-            "bold": false,
-            "style": "pt-disclaimer-value"
-          },
-          {
-            "text": "{{disclamer_2}}",
-            "bold": false,
-            "style": "pt-disclaimer-value"
-          },
-          {
-            "text": "{{disclamer_3}}",
-            "bold": false,
-            "style": "pt-disclaimer-value"
-          },
-          {
-            "text": "{{disclamer_4}}",
-            "bold": false,
-            "style": "pt-disclaimer-value"
+            "style": "pt-disclaimer-value",
+            "table": {
+              "widths": [
+                "120%",
+                "*",
+                "*",
+                "*"
+              ],
+              "body": ["{{#variable11}}[{\"text\":\"{{disclaimerContent}}\",\"border\":[false,false,false,false],\"style\":\"pt-disclaimer-value\"}]{{/variable11}}"]
+            },
+            "layout": {}
           }
         ]
       }
