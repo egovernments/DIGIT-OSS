@@ -14,7 +14,7 @@ const formConfig = {
     city: {
       id: "city",
       numcols: 4,
-      // localePrefix: { moduleName: "tenant", masterName: "tenants" },
+     // localePrefix: { moduleName: "tenant", masterName: "tenants" },
       dontReset: (process.env.REACT_APP_NAME !== "Citizen" ? true : false),
       fullWidth: true,
       className: "search-property-form-pt",
@@ -25,7 +25,7 @@ const formConfig = {
       required: true,
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       type: "autoSuggestDropdown",
-      // labelsFromLocalisation:true,
+      labelsFromLocalisation:true,
       dataFetchConfig: {
         dependants: [
           {
@@ -150,7 +150,9 @@ const formConfig = {
           let selected = cities.find((city) => {
             return city.code === tenant.code;
           });
-          dd.push({ label: selected.name, value: selected.code });
+          dd.push({ label: `TENANT_TENANTS_${selected.code.toUpperCase().replace(/[.:-\s\/]/g, "_")}` , value: selected.code });
+         // dd.push({ label: selected.name, value: selected.code });
+
           return dd;
         }, []);
         if (tenantId !== city.value)
