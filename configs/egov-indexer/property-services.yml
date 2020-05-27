@@ -11,16 +11,10 @@ ServiceMaps:
         jsonPath: $.Property
         timeStampField: $.auditDetails.lastModifiedTime
         customJsonMapping:
-          indexMapping: {"Data":{"workflow":{"state":{},"action":"","assignes":[]},"owners":[],"acknowldgementNumber":"","propertyType":"","ownershipCategory":"","creationReason":"","usageCategory":"","noOfFloors":"","landArea":"","superBuiltUpArea":"","source":"","channel":"","units":{},"auditDetails":{},"id":"","propertyId":"","surveyId":"","linkedProperties":{},"tenantId":"","accountId":"","oldPropertyId":"","status":"","@timestamp":"timestamp"}}
+          indexMapping: {"Data":{"owners":[],"acknowldgementNumber":"","propertyType":"","ownershipCategory":"","creationReason":"","usageCategory":"","noOfFloors":"","landArea":"","superBuiltUpArea":"","source":"","channel":"","units":{},"auditDetails":{},"id":"","propertyId":"","surveyId":"","linkedProperties":{},"tenantId":"","accountId":"","oldPropertyId":"","status":"","@timestamp":"timestamp"}}
           fieldMapping:
           - inJsonPath: $.owners.*.uuid
             outJsonPath: $.Data.owners
-          - inJsonPath: $.workflow.state
-            outJsonPath: $.Data.workflow.state
-          - inJsonPath: $.workflow.action
-            outJsonPath: $.Data.workflow.action
-          - inJsonPath: $.workflow.assignes.*.uuid
-            outJsonPath: $.Data.workflow.assignes
           - inJsonPath: $.acknowldgementNumber
             outJsonPath: $.Data.acknowldgementNumber
           - inJsonPath: $.propertyType
@@ -90,14 +84,8 @@ ServiceMaps:
         jsonPath: $.Property
         timeStampField: $.auditDetails.lastModifiedTime
         customJsonMapping:
-          indexMapping: {"Data":{"workflow":{"state":{},"action":"","assignes":[]},"acknowldgementNumber":"","creationReason":"","auditDetails":{},"propertyId":"","tenantId":"","accountId":"","status":"","@timestamp":""}}
+          indexMapping: {"Data":{"acknowldgementNumber":"","creationReason":"","auditDetails":{},"propertyId":"","tenantId":"","accountId":"","status":"","@timestamp":""}}
           fieldMapping:
-          - inJsonPath: $.workflow.state
-            outJsonPath: $.Data.workflow.state
-          - inJsonPath: $.workflow.action
-            outJsonPath: $.Data.workflow.action
-          - inJsonPath: $.workflow.assignes.*.uuid
-            outJsonPath: $.Data.workflow.assignes
           - inJsonPath: $.acknowldgementNumber
             outJsonPath: $.Data.acknowldgementNumber
           - inJsonPath: $.creationReason
@@ -150,16 +138,10 @@ ServiceMaps:
         jsonPath: $.Property
         timeStampField: $.auditDetails.lastModifiedTime
         customJsonMapping:
-          indexMapping: {"Data":{"workflow":{"state":{},"action":"","assignes":[]},"owners":[],"acknowldgementNumber":"","propertyType":"","ownershipCategory":"","creationReason":"","usageCategory":"","noOfFloors":"","landArea":"","superBuiltUpArea":"","source":"","channel":"","units":{},"auditDetails":{},"id":"","propertyId":"","surveyId":"","linkedProperties":{},"tenantId":"","accountId":"","oldPropertyId":"","status":"","@timestamp":"timestamp"}}
+          indexMapping: {"Data":{"owners":[],"acknowldgementNumber":"","propertyType":"","ownershipCategory":"","creationReason":"","usageCategory":"","noOfFloors":"","landArea":"","superBuiltUpArea":"","source":"","channel":"","units":{},"auditDetails":{},"id":"","propertyId":"","surveyId":"","linkedProperties":{},"tenantId":"","accountId":"","oldPropertyId":"","status":"","@timestamp":"timestamp"}}
           fieldMapping:
           - inJsonPath: $.owners.*.uuid
             outJsonPath: $.Data.owners
-          - inJsonPath: $.workflow.state
-            outJsonPath: $.Data.workflow.state
-          - inJsonPath: $.workflow.action
-            outJsonPath: $.Data.workflow.action
-          - inJsonPath: $.workflow.assignes.*.uuid
-            outJsonPath: $.Data.workflow.assignes
           - inJsonPath: $.acknowldgementNumber
             outJsonPath: $.Data.acknowldgementNumber
           - inJsonPath: $.propertyType
@@ -229,14 +211,8 @@ ServiceMaps:
         jsonPath: $.Property
         timeStampField: $.auditDetails.lastModifiedTime
         customJsonMapping:
-          indexMapping: {"Data":{"workflow":{"state":{},"action":"","assignes":[]},"acknowldgementNumber":"","creationReason":"","auditDetails":{},"propertyId":"","tenantId":"","accountId":"","status":"","@timestamp":""}}
+          indexMapping: {"Data":{"acknowldgementNumber":"","creationReason":"","auditDetails":{},"propertyId":"","tenantId":"","accountId":"","status":"","@timestamp":""}}
           fieldMapping:
-          - inJsonPath: $.workflow.state
-            outJsonPath: $.Data.workflow.state
-          - inJsonPath: $.workflow.action
-            outJsonPath: $.Data.workflow.action
-          - inJsonPath: $.workflow.assignes.*.uuid
-            outJsonPath: $.Data.workflow.assignes
           - inJsonPath: $.acknowldgementNumber
             outJsonPath: $.Data.acknowldgementNumber
           - inJsonPath: $.creationReason
@@ -289,16 +265,10 @@ ServiceMaps:
         jsonPath: $.Property
         timeStampField: $.auditDetails.lastModifiedTime 
         customJsonMapping:
-          indexMapping: {"Data":{"workflow":{"state":{},"action":"","assignes":[]},"owners":[],"acknowldgementNumber":"","propertyType":"","ownershipCategory":"","creationReason":"","usageCategory":"","noOfFloors":"","landArea":"","superBuiltUpArea":"","source":"","channel":"","units":{},"auditDetails":{},"id":"","propertyId":"","surveyId":"","linkedProperties":{},"tenantId":"","accountId":"","oldPropertyId":"","status":"","@timestamp":"timestamp"}}
+          indexMapping: {"Data":{"owners":[],"acknowldgementNumber":"","propertyType":"","ownershipCategory":"","creationReason":"","usageCategory":"","noOfFloors":"","landArea":"","superBuiltUpArea":"","source":"","channel":"","units":{},"auditDetails":{},"id":"","propertyId":"","surveyId":"","linkedProperties":{},"tenantId":"","accountId":"","oldPropertyId":"","status":"","@timestamp":"timestamp"}}
           fieldMapping:
           - inJsonPath: $.owners.*.uuid
             outJsonPath: $.Data.owners
-          - inJsonPath: $.workflow.state
-            outJsonPath: $.Data.workflow.state
-          - inJsonPath: $.workflow.action
-            outJsonPath: $.Data.workflow.action
-          - inJsonPath: $.workflow.assignes.*.uuid
-            outJsonPath: $.Data.workflow.assignes
           - inJsonPath: $.acknowldgementNumber
             outJsonPath: $.Data.acknowldgementNumber
           - inJsonPath: $.propertyType
@@ -368,14 +338,8 @@ ServiceMaps:
         jsonPath: $.Property
         timeStampField: $.auditDetails.lastModifiedTime
         customJsonMapping:
-          indexMapping: {"Data":{"workflow":{"state":{},"action":"","assignes":[]},"acknowldgementNumber":"","creationReason":"","auditDetails":{},"propertyId":"","tenantId":"","accountId":"","status":"","@timestamp":""}}
+          indexMapping: {"Data":{"acknowldgementNumber":"","creationReason":"","auditDetails":{},"propertyId":"","tenantId":"","accountId":"","status":"","@timestamp":""}}
           fieldMapping:
-          - inJsonPath: $.workflow.state
-            outJsonPath: $.Data.workflow.state
-          - inJsonPath: $.workflow.action
-            outJsonPath: $.Data.workflow.action
-          - inJsonPath: $.workflow.assignes.*.uuid
-            outJsonPath: $.Data.workflow.assignes
           - inJsonPath: $.acknowldgementNumber
             outJsonPath: $.Data.acknowldgementNumber
           - inJsonPath: $.creationReason
@@ -429,16 +393,10 @@ ServiceMaps:
         jsonPath: $.Properties.*
         timeStampField: $.auditDetails.lastModifiedTime        
         customJsonMapping:
-          indexMapping: {"Data":{"workflow":{"state":{},"action":"","assignes":[]},"owners":[],"acknowldgementNumber":"","propertyType":"","ownershipCategory":"","creationReason":"","usageCategory":"","noOfFloors":"","landArea":"","superBuiltUpArea":"","source":"","channel":"","units":{},"auditDetails":{},"id":"","propertyId":"","surveyId":"","linkedProperties":{},"tenantId":"","accountId":"","oldPropertyId":"","status":"","@timestamp":"timestamp"}}
+          indexMapping: {"Data":{"owners":[],"acknowldgementNumber":"","propertyType":"","ownershipCategory":"","creationReason":"","usageCategory":"","noOfFloors":"","landArea":"","superBuiltUpArea":"","source":"","channel":"","units":{},"auditDetails":{},"id":"","propertyId":"","surveyId":"","linkedProperties":{},"tenantId":"","accountId":"","oldPropertyId":"","status":"","@timestamp":"timestamp"}}
           fieldMapping:
           - inJsonPath: $.owners.*.uuid
             outJsonPath: $.Data.owners
-          - inJsonPath: $.workflow.state
-            outJsonPath: $.Data.workflow.state
-          - inJsonPath: $.workflow.action
-            outJsonPath: $.Data.workflow.action
-          - inJsonPath: $.workflow.assignes.*.uuid
-            outJsonPath: $.Data.workflow.assignes
           - inJsonPath: $.acknowldgementNumber
             outJsonPath: $.Data.acknowldgementNumber
           - inJsonPath: $.propertyType
@@ -512,14 +470,8 @@ ServiceMaps:
         jsonPath: $.Properties.*
         timeStampField: $.auditDetails.lastModifiedTime    
         customJsonMapping:
-          indexMapping: {"Data":{"workflow":{"state":{},"action":"","assignes":[]},"acknowldgementNumber":"","creationReason":"","auditDetails":{},"propertyId":"","tenantId":"","accountId":"","status":"","@timestamp":""}}
+          indexMapping: {"Data":{"acknowldgementNumber":"","creationReason":"","auditDetails":{},"propertyId":"","tenantId":"","accountId":"","status":"","@timestamp":""}}
           fieldMapping:
-          - inJsonPath: $.workflow.state
-            outJsonPath: $.Data.workflow.state
-          - inJsonPath: $.workflow.action
-            outJsonPath: $.Data.workflow.action
-          - inJsonPath: $.workflow.assignes.*.uuid
-            outJsonPath: $.Data.workflow.assignes
           - inJsonPath: $.acknowldgementNumber
             outJsonPath: $.Data.acknowldgementNumber
           - inJsonPath: $.creationReason
@@ -572,14 +524,8 @@ ServiceMaps:
         jsonPath: $.Assessment
         timeStampField: $.auditDetails.createdTime
         customJsonMapping:
-          indexMapping: {"Data":{"workflow":{"state":{},"action":"","assignes":[]},"id":"","tenantId":"","additionalDetails":"","assessmentNumber":"","financialYear":"","propertyId":"","assessmentDate":"","status":"","source":"","unitUsageList":{},"channel":"","auditDetails":{},"@timestamp":"timestamp"}}
+          indexMapping: {"Data":{"id":"","tenantId":"","additionalDetails":"","assessmentNumber":"","financialYear":"","propertyId":"","assessmentDate":"","status":"","source":"","unitUsageList":{},"channel":"","auditDetails":{},"@timestamp":"timestamp"}}
           fieldMapping:
-          - inJsonPath: $.workflow.state
-            outJsonPath: $.Data.workflow.state
-          - inJsonPath: $.workflow.action
-            outJsonPath: $.Data.workflow.action
-          - inJsonPath: $.workflow.assignes.*.uuid
-            outJsonPath: $.Data.workflow.assignes
           - inJsonPath: $.id
             outJsonPath: $.Data.id
           - inJsonPath: $.tenantId
@@ -617,14 +563,8 @@ ServiceMaps:
         jsonPath: $.Assessment
         timeStampField: $.auditDetails.createdTime
         customJsonMapping:
-          indexMapping: {"Data":{"workflow":{"state":{},"action":"","assignes":[]},"id":"","tenantId":"","additionalDetails":"","assessmentNumber":"","financialYear":"","propertyId":"","assessmentDate":"","status":"","source":"","unitUsageList":{},"channel":"","auditDetails":{},"@timestamp":"timestamp"}}
+          indexMapping: {"Data":{"id":"","tenantId":"","additionalDetails":"","assessmentNumber":"","financialYear":"","propertyId":"","assessmentDate":"","status":"","source":"","unitUsageList":{},"channel":"","auditDetails":{},"@timestamp":"timestamp"}}
           fieldMapping:
-          - inJsonPath: $.workflow.state
-            outJsonPath: $.Data.workflow.state
-          - inJsonPath: $.workflow.action
-            outJsonPath: $.Data.workflow.action
-          - inJsonPath: $.workflow.assignes.*.uuid
-            outJsonPath: $.Data.workflow.assignes
           - inJsonPath: $.id
             outJsonPath: $.Data.id
           - inJsonPath: $.tenantId
@@ -661,14 +601,8 @@ ServiceMaps:
         jsonPath: $.Assessment
         timeStampField: $.auditDetails.createdTime
         customJsonMapping:
-          indexMapping: {"Data":{"workflow":{"state":{},"action":"","assignes":[]},"id":"","tenantId":"","additionalDetails":"","assessmentNumber":"","financialYear":"","propertyId":"","assessmentDate":"","status":"","source":"","unitUsageList":{},"channel":"","auditDetails":{},"@timestamp":"timestamp"}}
+          indexMapping: {"Data":{"id":"","tenantId":"","additionalDetails":"","assessmentNumber":"","financialYear":"","propertyId":"","assessmentDate":"","status":"","source":"","unitUsageList":{},"channel":"","auditDetails":{},"@timestamp":"timestamp"}}
           fieldMapping:
-          - inJsonPath: $.workflow.state
-            outJsonPath: $.Data.workflow.state
-          - inJsonPath: $.workflow.action
-            outJsonPath: $.Data.workflow.action
-          - inJsonPath: $.workflow.assignes.*.uuid
-            outJsonPath: $.Data.workflow.assignes
           - inJsonPath: $.id
             outJsonPath: $.Data.id
           - inJsonPath: $.tenantId
@@ -706,14 +640,8 @@ ServiceMaps:
         isBulk: true
         timeStampField: $.auditDetails.createdTime 
         customJsonMapping:
-          indexMapping: {"Data":{"workflow":{"state":{},"action":"","assignes":[]},"id":"","tenantId":"","additionalDetails":"","assessmentNumber":"","financialYear":"","propertyId":"","assessmentDate":"","status":"","source":"","unitUsageList":{},"channel":"","auditDetails":{},"@timestamp":"timestamp"}}
+          indexMapping: {"Data":{"id":"","tenantId":"","additionalDetails":"","assessmentNumber":"","financialYear":"","propertyId":"","assessmentDate":"","status":"","source":"","unitUsageList":{},"channel":"","auditDetails":{},"@timestamp":"timestamp"}}
           fieldMapping:
-          - inJsonPath: $.workflow.state
-            outJsonPath: $.Data.workflow.state
-          - inJsonPath: $.workflow.action
-            outJsonPath: $.Data.workflow.action
-          - inJsonPath: $.workflow.assignes.*.uuid
-            outJsonPath: $.Data.workflow.assignes
           - inJsonPath: $.id
             outJsonPath: $.Data.id
           - inJsonPath: $.tenantId
