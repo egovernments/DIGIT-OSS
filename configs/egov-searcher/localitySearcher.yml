@@ -151,7 +151,7 @@ SearchDefinitions:
       baseQuery: |
         Select row_to_json(result) from
         (
-          select conn.applicationno as referenceNumber, conn.property_id as locality from connection conn
+          select conn.applicationno as referenceNumber, conn.property_id as locality from eg_ws_connection conn
         ) result  $where
       groupBy:
       orderBy:
