@@ -508,7 +508,7 @@ ServiceMaps:
       - name: property-application
         type: general
         isBulk: true
-        id: $.propertyId,$.tenantId
+        id: $.propertyId,$.acknowldgementNumber,$.tenantId
         jsonPath: $.Properties.*
         timeStampField: $.auditDetails.lastModifiedTime    
         customJsonMapping:
