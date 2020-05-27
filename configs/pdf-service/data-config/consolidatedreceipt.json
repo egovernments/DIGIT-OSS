@@ -461,8 +461,8 @@
           {
             "externalAPI": [     
               { 
-                  "path": "http://egov-mdms-service:8080/egov-mdms-service/v1/_get",
-                  "queryParam": "moduleName=tenant&masterName=tenants&tenantId=pb&filter=%5B?(@.code=='{$.tenantId}')%5D",
+                "path": "http://egov-mdms-service:8080/egov-mdms-service/v1/_get",
+                "queryParam": "moduleName=tenant&masterName=tenants&tenantId=pb&filter=%5B?(@.code=='{$.tenantId}')%5D",
                   "apiRequest": null,
                   "responseMapping":[
                     {             
@@ -496,7 +496,34 @@
                         }
                     }
                   ]
-              }
+              },
+              { 
+                "path": "http://egov-mdms-service:8080/egov-mdms-service/v1/_get",
+                "queryParam": "moduleName=tenant&masterName=footer&tenantId=pb&filter=%5B?(@.code=='{$.tenantId}' %26%26 @.service=='{$.paymentDetails[0].businessService}')%5D",
+                "apiRequest": null,
+                "responseMapping":[
+                  {
+                    "variable": "variable11",                        
+                    "value": "$.MdmsRes.tenant.footer[0].receiptFooterContent.*",
+                     "type":"array",
+                     "format":{                            
+                        "type":"string",
+                        "scema":[
+                           {
+                            "variable":"disclaimerContent",
+                            "value":"disclaimer",
+                            "type":"string",
+                            "localisation":{
+                              "required":true,
+                              "prefix": null,
+                              "module": "rainmaker-common"
+                           }
+                         }
+                        ]
+                    } 
+                 }
+                ]
+            }
             ]
           }
         ]
