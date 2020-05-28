@@ -3,7 +3,7 @@
   margin-right:0px !important;
 }
 
-@media only screen and (min-width: 331px) {
+@media only screen and (max-width: 551px) {
   .profileSection{
     width: 100% !important;
     height: auto !important;
@@ -15,36 +15,16 @@
     padding-bottom: 30px !important;
     background-color: rgb(224, 224, 224) !important;
   }
- 
-}
-
-@media only screen and (min-width: 375px) {
-  .profileSection{
-    width: 100% !important;
-    height: auto !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    margin: 0px auto !important;
-    padding-top: 83px !important;
-    padding-bottom: 30px !important;
-    background-color: rgb(224, 224, 224) !important;
+    .EmpProfileIcon
+    {
+      background: rgb(0, 187, 211);
+      position: absolute;
+      right: -5%;
+      bottom: 83px;
+      color: rgb(255, 255, 255);
+      border-radius: 50%;
+      padding: 12px;
+      height: 48px;
+      width: 48px;
+    }
   }
- 
-}
-
-@media only screen and (min-width: 411px) {
-  .profileSection{
-    width: 100% !important;
-    height: auto !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    margin: 0px auto !important;
-    padding-top: 83px !important;
-    padding-bottom: 30px !important;
-    background-color: rgb(224, 224, 224) !important;
-  }
- 
-}
-
