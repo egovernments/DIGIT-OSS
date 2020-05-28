@@ -21,7 +21,7 @@
                             {
                                 "variable": "appDate",
                                 "value": {
-                                    "path": "$.connectionExecutionDate"
+                                    "path": "$.additionalDetails.appCreatedDate"
                                 },
                                 "type":"date"
                             },
@@ -41,7 +41,12 @@
                                 "variable": "usageType",
                                 "value": {
                                     "path": "$.property.usageCategory"
-                                }
+                                },
+                                "localisation": {
+                                    "required": true,
+                                    "prefix": "WS_PROPUSGTYPE",
+                                    "module": "rainmaker-ws"
+                                  }
                             },
                             {
                                 "variable": "houseNo",
@@ -70,43 +75,49 @@
                             {
                                 "variable": "formFee",
                                 "value": {
-                                    "path": "$.pdfTaxhead[?(@.taxHeadCode == 'FORM_FEE')].estimateAmount"
+                                    "path": "$.pdfTaxhead[?(@.taxHeadCode == 'WS_FORM_FEE')].estimateAmount"
                                 }
                             },
                             {
                                 "variable": "ScrutinyFee",
                                 "value": {
-                                    "path": "$.pdfTaxhead[?(@.taxHeadCode == 'SCRUTINY_FEE')].estimateAmount"
+                                    "path": "$.pdfTaxhead[?(@.taxHeadCode == 'WS_SCRUTINY_FEE')].estimateAmount"
                                 }
                             },
                             {
                                 "variable": "otherCharge",
                                 "value": {
-                                    "path": "$.pdfTaxhead[?(@.taxHeadCode == 'OTHER_CHARGE')].estimateAmount"
+                                    "path": "$.pdfTaxhead[?(@.taxHeadCode == 'WS_OTHER_CHARGE')].estimateAmount"
                                 }
                             },
                             {
                                 "variable": "securityCharge",
                                 "value": {
-                                    "path": "$.pdfTaxhead[?(@.taxHeadCode == 'SECURITY_CHARGE')].estimateAmount"
+                                    "path": "$.pdfTaxhead[?(@.taxHeadCode == 'WS_SECURITY_CHARGE')].estimateAmount"
                                 }
                             },
                             {
                                 "variable": "taxCess",
                                 "value": {
-                                    "path": "$.pdfTaxhead[?(@.taxHeadCode == 'TAX_AND_CESS')].estimateAmount"
+                                    "path": "$.pdfTaxhead[?(@.taxHeadCode == 'WS_TAX_AND_CESS')].estimateAmount"
                                 }
                             },
                             {
                                 "variable": "roadCharge",
                                 "value": {
-                                    "path": "$.pdfTaxhead[?(@.taxHeadCode == 'ROAD_CUTTING_CHARGE')].estimateAmount"
+                                    "path": "$.pdfTaxhead[?(@.taxHeadCode == 'WS_ROAD_CUTTING_CHARGE')].estimateAmount"
                                 }
                             },
                             {
                                 "variable": "oneTimeFee",
                                 "value": {
-                                    "path": "$.pdfTaxhead[?(@.taxHeadCode == 'ONE_TIME_FEE')].estimateAmount"
+                                    "path": "$.pdfTaxhead[?(@.taxHeadCode == 'WS_ONE_TIME_FEE')].estimateAmount"
+                                }
+                            },
+                            {
+                                "variable": "roundOffAmount",
+                                "value": {
+                                    "path": "$.pdfTaxhead[?(@.taxHeadCode == 'WS_FEE_ROUND_OFF')].estimateAmount"
                                 }
                             },
                             {
@@ -406,6 +417,18 @@
                                 "variable": "rebate",
                                 "value": {
                                     "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_REBATE"
+                                },
+                                "type": "label",
+                                "localisation": {
+                                    "required": true,
+                                    "prefix": null,
+                                    "module": "rainmaker-common"
+                                }
+                            },
+                            {
+                                "variable": "roundOff",
+                                "value": {
+                                    "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_ROUNDOFF"
                                 },
                                 "type": "label",
                                 "localisation": {

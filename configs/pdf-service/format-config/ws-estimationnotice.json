@@ -451,6 +451,19 @@
                                         ],
                                         [
                                             {
+                                                "text": "10.",
+                                                "alignment": "center"
+                                            },
+                                            {
+                                                "text": "{{roundOff}}"
+                                            },
+                                            {
+                                                "text": "{{roundOffAmount}}",
+                                                "alignment": "right"
+                                            }
+                                        ],
+                                        [
+                                            {
                                                 "text": "(+)",
                                                 "alignment": "center"
                                             },
