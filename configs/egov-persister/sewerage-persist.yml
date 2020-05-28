@@ -111,7 +111,7 @@ serviceMaps:
 
        - jsonPath: $.SewerageConnection.id       
 
-    - query: UPDATE eg_sw_service SET connectionexecutiondate=?, noOfWaterClosets=?, noOfToilets=?, connectiontype=?, proposedWaterClosets=?, proposedToilets=?, detailsprovidedby = ?, estimationfileStoreId = ?, sanctionfileStoreId = ?, lastmodifiedby=?, lastmodifiedtime=? WHERE connection_id=?;
+    - query: UPDATE eg_sw_service SET connectionexecutiondate=?, noOfWaterClosets=?, noOfToilets=?, connectiontype=?, proposedWaterClosets=?, proposedToilets=?, detailsprovidedby = ?, estimationfileStoreId = ?, sanctionfileStoreId = ?, estimationLetterDate = ?, lastmodifiedby=?, lastmodifiedtime=? WHERE connection_id=?;
       basePath: $.SewerageConnection
       jsonMaps:
 
@@ -132,6 +132,8 @@ serviceMaps:
        - jsonPath: $.SewerageConnection.additionalDetails.estimationFileStoreId
        
        - jsonPath: $.SewerageConnection.additionalDetails.sanctionFileStoreId
+       
+       - jsonPath: $.SewerageConnection.estimationLetterDate
        
        - jsonPath: $.SewerageConnection.auditDetails.lastModifiedBy
 
@@ -174,12 +176,14 @@ serviceMaps:
 
           - jsonPath: $.SewerageConnection.documents.*.auditDetails.lastModifiedTime
           
-    - query: INSERT INTO eg_sw_plumberinfo(id, name, licenseno, mobilenumber, gender, fatherorhusbandname, correspondenceaddress, relationship, createdBy, lastModifiedBy, createdTime, lastModifiedTime, swid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET name =?, licenseno =?,mobilenumber =?, gender =?, fatherorhusbandname =?, correspondenceaddress =?, relationship=?,lastmodifiedby =?, lastmodifiedtime =?;
+    - query: INSERT INTO eg_sw_plumberinfo(id,tenantId, name, licenseno, mobilenumber, gender, fatherorhusbandname, correspondenceaddress, relationship, createdBy, lastModifiedBy, createdTime, lastModifiedTime, swid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET name =?, licenseno =?,mobilenumber =?, gender =?, fatherorhusbandname =?, correspondenceaddress =?, relationship=?,lastmodifiedby =?, lastmodifiedtime =?;
       basePath: $.SewerageConnection.plumberInfo.*
       jsonMaps:
          
           - jsonPath: $.SewerageConnection.plumberInfo.*.id
-
+          
+          - jsonPath: $.WaterConnection.tenantId
+          
           - jsonPath: $.SewerageConnection.plumberInfo.*.name
 
           - jsonPath: $.SewerageConnection.plumberInfo.*.licenseNo
