@@ -40,7 +40,7 @@ serviceMaps:
 
        - jsonPath: $.SewerageConnection.auditDetails.lastModifiedTime
 
-    - query: INSERT INTO eg_sw_service(connection_id,connectionExecutionDate,noOfWaterClosets,noOfToilets,connectiontype,proposedWaterClosets,proposedToilets, appCreatedDate) VALUES(?,?,?,?,?,?,?, ?);
+    - query: INSERT INTO eg_sw_service(connection_id,connectionExecutionDate,noOfWaterClosets,noOfToilets,connectiontype,proposedWaterClosets,proposedToilets, appCreatedDate, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES(?,?,?,?,?,?,?,?,?,?,?,?);
       basePath: $.SewerageConnection
       jsonMaps:
 
@@ -59,6 +59,14 @@ serviceMaps:
        - jsonPath: $.SewerageConnection.proposedToilets
        
        - jsonPath: $.SewerageConnection.additionalDetails.appCreatedDate
+       
+       - jsonPath: $.SewerageConnection.auditDetails.createdBy
+
+       - jsonPath: $.SewerageConnection.auditDetails.lastModifiedBy
+
+       - jsonPath: $.SewerageConnection.auditDetails.createdTime
+
+       - jsonPath: $.SewerageConnection.auditDetails.lastModifiedTime
          
 
  - version: 1.0
@@ -103,7 +111,7 @@ serviceMaps:
 
        - jsonPath: $.SewerageConnection.id       
 
-    - query: UPDATE eg_sw_service SET connectionexecutiondate=?, noOfWaterClosets=?, noOfToilets=?, connectiontype=?, proposedWaterClosets=?, proposedToilets=?, detailsprovidedby = ?, estimationfileStoreId = ?, sanctionfileStoreId = ?  WHERE connection_id=?;
+    - query: UPDATE eg_sw_service SET connectionexecutiondate=?, noOfWaterClosets=?, noOfToilets=?, connectiontype=?, proposedWaterClosets=?, proposedToilets=?, detailsprovidedby = ?, estimationfileStoreId = ?, sanctionfileStoreId = ?, lastmodifiedby=?, lastmodifiedtime=? WHERE connection_id=?;
       basePath: $.SewerageConnection
       jsonMaps:
 
@@ -124,6 +132,10 @@ serviceMaps:
        - jsonPath: $.SewerageConnection.additionalDetails.estimationFileStoreId
        
        - jsonPath: $.SewerageConnection.additionalDetails.sanctionFileStoreId
+       
+       - jsonPath: $.SewerageConnection.auditDetails.lastModifiedBy
+
+       - jsonPath: $.SewerageConnection.auditDetails.lastModifiedTime
          
        - jsonPath: $.SewerageConnection.id
 
@@ -162,7 +174,7 @@ serviceMaps:
 
           - jsonPath: $.SewerageConnection.documents.*.auditDetails.lastModifiedTime
           
-    - query: INSERT INTO eg_sw_plumberinfo(id, name, licenseno, mobilenumber, gender, fatherorhusbandname, correspondenceaddress, relationship, swid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET name =?, licenseno =?,mobilenumber =?, gender =?, fatherorhusbandname =?, correspondenceaddress =?, relationship=?;
+    - query: INSERT INTO eg_sw_plumberinfo(id, name, licenseno, mobilenumber, gender, fatherorhusbandname, correspondenceaddress, relationship, createdBy, lastModifiedBy, createdTime, lastModifiedTime, swid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET name =?, licenseno =?,mobilenumber =?, gender =?, fatherorhusbandname =?, correspondenceaddress =?, relationship=?,lastmodifiedby =?, lastmodifiedtime =?;
       basePath: $.SewerageConnection.plumberInfo.*
       jsonMaps:
          
@@ -182,6 +194,14 @@ serviceMaps:
 
           - jsonPath: $.SewerageConnection.plumberInfo.*.relationship
           
+          - jsonPath: $.SewerageConnection.plumberInfo.*.auditDetails.createdBy
+
+          - jsonPath: $.SewerageConnection.plumberInfo.*.auditDetails.lastModifiedBy
+
+          - jsonPath: $.SewerageConnection.plumberInfo.*.auditDetails.createdTime
+
+          - jsonPath: $.SewerageConnection.plumberInfo.*.auditDetails.lastModifiedTime
+          
           - jsonPath: $.SewerageConnection.id           
           
           - jsonPath: $.SewerageConnection.plumberInfo.*.name
@@ -196,7 +216,11 @@ serviceMaps:
 
           - jsonPath: $.SewerageConnection.plumberInfo.*.correspondenceAddress
 
-          - jsonPath: $.SewerageConnection.plumberInfo.*.relationship         
+          - jsonPath: $.SewerageConnection.plumberInfo.*.relationship
+          
+          - jsonPath: $.SewerageConnection.plumberInfo.*.auditDetails.lastModifiedBy
+
+          - jsonPath: $.SewerageConnection.plumberInfo.*.auditDetails.lastModifiedTime
           
           
 
