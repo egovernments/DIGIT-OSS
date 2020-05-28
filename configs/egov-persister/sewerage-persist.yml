@@ -133,7 +133,7 @@ serviceMaps:
        
        - jsonPath: $.SewerageConnection.additionalDetails.sanctionFileStoreId
        
-       - jsonPath: $.SewerageConnection.estimationLetterDate
+       - jsonPath: $.SewerageConnection.additionalDetails.estimationLetterDate
        
        - jsonPath: $.SewerageConnection.auditDetails.lastModifiedBy
 
