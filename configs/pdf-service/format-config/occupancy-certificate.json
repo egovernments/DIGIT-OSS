@@ -1,0 +1,203 @@
+{
+  "key": "occupancy-certificate",
+  "config": {
+    "defaultStyle": {
+      "font": "Cambay"
+    },
+    "content": [      
+      {
+        "columns": [
+          {
+            "image": "{{logoImage}}",
+            "width": 70,
+            "height": 70,
+            "alignment": "left"
+          },
+          {
+            "stack": [
+              {
+                "text": "{{appendix}}"
+              },
+              {
+                "text": "{{seeRule}}"
+              },
+              {
+                "text": "{{ocName}}"
+              },
+              {
+                "text": "{{or}}"
+              },
+              {
+                "text": "{{certificateUse}}"
+              },
+              {
+                "text": "{{tenantName}} {{Muncipal_Council}}"
+              }
+            ],
+            "style": "header"
+          },
+          {
+            "image": "{{logoImage}}",
+            "width": 70,
+            "height": 70,
+            "alignment": "right"
+          }
+        ]
+      },
+      {
+        "columns": [
+          {
+            "text": [
+              {
+                "text": "{{PLAN_PERMISION_NO}} : ",
+                "bold": true
+              },
+              {
+                "text": "{{planPermissionNo}}",
+                "bold": true,
+                "font": "Roboto"
+              }
+            ],
+            "alignment": "left",
+            "width": "*"
+          },
+          {
+            "text": [
+              {
+                "text": "{{Dated}} : ",
+                "bold": true
+              },
+              {
+                "text": "{{applicationDate}}",
+                "bold": true,
+                "font": "Roboto"
+              }
+            ],
+            "alignment": "right",
+            "width": "auto"
+          }
+        ],
+        "style": "top-margin",
+        "bold" : true,
+        "font" : "Roboto"
+      },
+      {
+        "text": [
+          {
+            "text": "{{ref}} :-"
+          },
+          {
+            "text": " {{applicationNumber}}"
+          },
+          {
+            "text" : " {{applicationNo}}"
+          },
+          {
+            "text" : " {{dated}}"
+          },
+          {
+            "text" : " {{applicationDate}}"
+          },
+          {
+            "text" : " {{from}}"
+          },
+          {
+            "text" : " {{SALUTATION}} {{ownerName}}"
+          }
+        ],
+        "style": "top-margin",
+        "bold" : true,
+        "font" : "Roboto"
+      },
+      {
+        "text": [
+          {
+            "text": "{{certifiedText}}"
+          },
+          {
+            "text": " {{planPermissionNo}}"
+          },
+          {
+            "text": " {{dated}} "
+          },
+          {
+            "text": " {{applicationDate}}"
+          },
+          {
+            "text": " {{issuedTo}}"
+          },
+          {
+            "text": " {{ownerName}}"
+          },
+          {
+            "text": " {{supervisedBy}}"
+          },
+          {
+            "text": " {{approvedBy}}"
+          },
+          {
+            "text" : " {{ocSummaryText}}"
+          }
+        ],
+        "style": "top-margin"
+      },
+      {
+        "columns": [
+          {
+            "stack": [
+              {
+                "text": "{{place}} : {{tenantName}}"
+              },
+              {
+                "text": "{{Dated}} : {{applicationDate}}"
+              }
+            ],
+            "alignment": "left",
+            "width": "*"
+          },
+          {
+            "text": [
+              {
+                "text": "{{approvedByName}} {{approvedBy}}, {{assistantEngineer}}",
+                "bold": true
+              }
+            ],
+            "alignment": "right",
+            "width": "auto"
+          }
+        ],
+        "style": "top-high-margin",
+        "bold" : true,
+        "font" : "Roboto"
+      },
+      {
+        "image": "{{qrCode}}",
+        "alignment": "right",
+        "width": 100,
+        "height": 100
+      }
+    ],
+    "styles": {
+      "header": {
+        "bold": true,
+        "alignment": "center"
+      },
+      "top-margin": {
+        "margin": [
+          0,
+          10,
+          0,
+          0
+        ]
+      },
+      "top-high-margin": {
+        "margin": [
+          0,
+          50,
+          0,
+          0
+        ]
+      }
+    }
+  }
+}
