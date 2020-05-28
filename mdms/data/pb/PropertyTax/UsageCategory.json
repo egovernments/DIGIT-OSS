@@ -341,6 +341,12 @@
       "code": "NONRESIDENTIAL.INSTITUTIONAL.EDUCATIONAL.POLYTECHNICS",
       "active": true,
       "fromFY": "2015-16"
+    },
+    {
+      "name": "Residential Other Commercial",
+      "code": "RESIDENTIAL.OTHERCOMMERCIALSUBMINOR.OTHERCOMMERCIAL",
+      "active": true,
+      "fromFY": "2015-16"
     }
   ]
 }
