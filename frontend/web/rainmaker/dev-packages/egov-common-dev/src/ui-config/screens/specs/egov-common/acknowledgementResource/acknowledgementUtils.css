@@ -4,3 +4,13 @@
     text-align: -webkit-center; }
     #material-ui-applicationSuccessContainer #custom-atoms-tail {
       text-align: center !important; } }
+
+     
+      @media only screen and (max-width: 551px) {
+        .DCButton {
+         /*  background-color: #FE7A51 !important;  
+          color: white !important;  */ 
+          width: 100% !important;      
+          }      
+       }
+  
