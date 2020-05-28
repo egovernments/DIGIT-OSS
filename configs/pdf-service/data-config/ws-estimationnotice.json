@@ -75,49 +75,49 @@
                             {
                                 "variable": "formFee",
                                 "value": {
-                                    "path": "$.pdfTaxhead[?(@.taxHeadCode == 'WS_FORM_FEE')].estimateAmount"
+                                    "path": "$.pdfTaxhead[?(@.taxHeadCode == 'FORM_FEE')].estimateAmount"
                                 }
                             },
                             {
                                 "variable": "ScrutinyFee",
                                 "value": {
-                                    "path": "$.pdfTaxhead[?(@.taxHeadCode == 'WS_SCRUTINY_FEE')].estimateAmount"
+                                    "path": "$.pdfTaxhead[?(@.taxHeadCode == 'SCRUTINY_FEE')].estimateAmount"
                                 }
                             },
                             {
                                 "variable": "otherCharge",
                                 "value": {
-                                    "path": "$.pdfTaxhead[?(@.taxHeadCode == 'WS_OTHER_CHARGE')].estimateAmount"
+                                    "path": "$.pdfTaxhead[?(@.taxHeadCode == 'OTHER_CHARGE')].estimateAmount"
                                 }
                             },
                             {
                                 "variable": "securityCharge",
                                 "value": {
-                                    "path": "$.pdfTaxhead[?(@.taxHeadCode == 'WS_SECURITY_CHARGE')].estimateAmount"
+                                    "path": "$.pdfTaxhead[?(@.taxHeadCode == 'SECURITY_CHARGE')].estimateAmount"
                                 }
                             },
                             {
                                 "variable": "taxCess",
                                 "value": {
-                                    "path": "$.pdfTaxhead[?(@.taxHeadCode == 'WS_TAX_AND_CESS')].estimateAmount"
+                                    "path": "$.pdfTaxhead[?(@.taxHeadCode == 'TAX_AND_CESS')].estimateAmount"
                                 }
                             },
                             {
                                 "variable": "roadCharge",
                                 "value": {
-                                    "path": "$.pdfTaxhead[?(@.taxHeadCode == 'WS_ROAD_CUTTING_CHARGE')].estimateAmount"
+                                    "path": "$.pdfTaxhead[?(@.taxHeadCode == 'ROAD_CUTTING_CHARGE')].estimateAmount"
                                 }
                             },
                             {
                                 "variable": "oneTimeFee",
                                 "value": {
-                                    "path": "$.pdfTaxhead[?(@.taxHeadCode == 'WS_ONE_TIME_FEE')].estimateAmount"
+                                    "path": "$.pdfTaxhead[?(@.taxHeadCode == 'ONE_TIME_FEE')].estimateAmount"
                                 }
                             },
                             {
                                 "variable": "roundOffAmount",
                                 "value": {
-                                    "path": "$.pdfTaxhead[?(@.taxHeadCode == 'WS_FEE_ROUND_OFF')].estimateAmount"
+                                    "path": "$.pdfTaxhead[?(@.taxHeadCode == 'FEE_ROUND_OFF')].estimateAmount"
                                 }
                             },
                             {
