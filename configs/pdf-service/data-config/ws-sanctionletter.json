@@ -405,6 +405,27 @@
                 "type": "date"
               },
               {
+                "variable": "appCreatedDate",
+                "value": {
+                  "path": "$.additionalDetails.appCreatedDate"
+                },
+                "type": "date"
+              },
+              {
+                "variable": "sanctionLetterDate",
+                "value": {
+                  "path": "$.sanctionLetterDate"
+                },
+                "type": "date"
+              },
+              {
+                "variable": "estimationLetterDate",
+                "value": {
+                  "path": "$.additionalDetails.estimationLetterDate"
+                },
+                "type": "date"
+              },
+              {
                 "variable": "total",
                 "value": {
                   "path": "PDF_STATIC_LABELWS_CONSOLIDATED_ACKNOWELDGMENT_TOTAL"

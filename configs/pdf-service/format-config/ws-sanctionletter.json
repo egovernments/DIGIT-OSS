@@ -84,7 +84,7 @@
                   },
                   {
                     "width": "auto",
-                    "text": "{{connectionExecutionDate}}",
+                    "text": "{{sanctionLetterDate}}",
                     "alignment": "right",
                     "style": "ws-sub-data"
                   }
@@ -137,11 +137,11 @@
                     "width": "80%",
                     "ol": [
                       {
-                        "text": "{{ref_message1}} {{ownerName}} {{doorNo}} {{locality_label}} {{locality}} {{dated_label}} {{date}}",
+                        "text": "{{ref_message1}} {{ownerName}} {{doorNo}} {{locality_label}} {{locality}} {{dated_label}} {{appCreatedDate}}",
                         "style": "receipt-value-down"
                       },
                       {
-                        "text": "{{ref_message2}}{{applicationNumber}} {{dated_label}} {{date}}",
+                        "text": "{{ref_message2}}{{applicationNumber}} {{dated_label}} {{estimationLetterDate}}",
                         "style": "receipt-value-down"
                       }
                     ]
@@ -189,7 +189,7 @@
                 "columns": [
                   {
                     "width": "100%",
-                    "text": "{{in_ref_label}} {{applicationNumber}} {{dated}} {{date}} {{order_message2}} {{applicationType}} {{order_message3}} {{door_no}} {{doorNo}} {{locality_label}} {{locality}}{{order_message4}} {{totalAmount}} {{order_message5}} {{applicationType}} {{order_message6}} {{totalAmount}} {{dated}} {{date}} {{order_message7}}",
+                    "text": "{{in_ref_label}} {{applicationNumber}} {{dated}} {{appCreatedDate}} {{order_message2}} {{applicationType}} {{order_message3}} {{door_no}} {{doorNo}} {{locality_label}} {{locality}}{{order_message4}} {{totalAmount}} {{order_message5}} {{applicationType}} {{order_message6}} {{totalAmount}} {{dated}} {{sanctionLetterDate}} {{order_message7}}",
                     "style": "receipt-value-down"
                   }
                 ],
