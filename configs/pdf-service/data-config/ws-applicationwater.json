@@ -62,6 +62,11 @@
                 "variable": "propertyUsageSubType",
                 "value": {
                   "path": "$.property.propertySubUsageType"
+                },
+                "localisation": {
+                  "required": true,
+                  "prefix": "WS_PROPSUBUSGTYPE",
+                  "module": "rainmaker-ws"
                 }
               },
               {
