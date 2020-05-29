@@ -129,12 +129,12 @@
                 }
               },
               {
-                "variable": "variable13",                        
+                "variable": "variable13",
                 "value":{
-                     "path":"$.property.owners.*"                          
+                     "path":"$.property.owners.*"
                  },
                  "type":"array",
-                 "format":{                            
+                 "format":{
                   "type":"string",
                   "scema":[
                     {
@@ -142,7 +142,7 @@
                       "value": "name"
                     },
                     {
-                      "variable": "emailLabel",
+                      "variable": "ownerEmailId",
                       "value":"emailId"
                     },
                     {
@@ -150,7 +150,7 @@
                       "value": "gender"
                     },
                     {
-                      "variable": "dob",
+                      "variable": "ownerDob",
                       "value": "dob",
                       "type": "date"
                     },
