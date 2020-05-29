@@ -182,7 +182,7 @@ serviceMaps:
          
           - jsonPath: $.SewerageConnection.plumberInfo.*.id
           
-          - jsonPath: $.WaterConnection.tenantId
+          - jsonPath: $.SewerageConnection.tenantId
           
           - jsonPath: $.SewerageConnection.plumberInfo.*.name
 
