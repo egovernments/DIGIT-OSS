@@ -151,7 +151,9 @@ SearchDefinitions:
       baseQuery: |
         Select row_to_json(result) from
         (
-          select conn.applicationno as referenceNumber, conn.property_id as locality from eg_ws_connection conn
+          select applicationno as referenceNumber,locality from eg_ws_connection conn
+          INNER JOIN eg_pt_property property ON property.id = conn.property_id
+          INNER JOIN eg_pt_address ptadd ON ptadd.propertyid = property.id
         ) result  $where
       groupBy:
       orderBy:
@@ -172,7 +174,9 @@ SearchDefinitions:
       baseQuery: |
         Select row_to_json(result) from
         (
-          select conn.applicationno as referenceNumber, conn.property_id as locality from eg_sw_connection conn
+         select applicationno as referenceNumber,locality from eg_sw_connection conn
+          INNER JOIN eg_pt_property property ON property.id = conn.property_id
+          INNER JOIN eg_pt_address ptadd ON ptadd.propertyid = property.id
         ) result  $where
       groupBy:
       orderBy:
