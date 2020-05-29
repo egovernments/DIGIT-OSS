@@ -83,7 +83,7 @@ SearchDefinitions:
     
  - name: count
    query: 
-    baseQuery: select array_to_json(array_agg(row_to_json(services))) from (select (row_to_json(services)) from ( select count(*) from eg_pgr_service $where) as services) services
+    baseQuery: select (row_to_json(services)) from ( select count(*) from eg_pgr_service $where) as services
     groupBy:    
     orderBy: 
    searchParams:
