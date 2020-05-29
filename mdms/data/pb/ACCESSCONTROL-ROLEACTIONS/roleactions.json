@@ -20832,6 +20832,18 @@
       "actionid": 1999,
       "actioncode": "",
       "tenantId": "pb"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 1984,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 1985,
+      "actioncode": "",
+      "tenantId": "pb"
     }
   ]
 }
