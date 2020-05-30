@@ -41,8 +41,16 @@ config:
         image-name: "epass-chatbot"
         dockerfile: "build/maven/Dockerfile"
 
-  - name: "builds/utilities/demo"
+  - name: "builds/utilities/case-management"
     build:
-      - work-dir: "demo"
-        image-name: "demo"
+      - work-dir: "case-management"
+        image-name: "case-management"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "case-management/src/main/resources/db"
+        image-name: "case-management-db"
+
+  - name: "builds/utilities/data-upload"
+    build:
+      - work-dir: "data-upload"
+        image-name: "data-upload"
         dockerfile: "build/maven/Dockerfile"
