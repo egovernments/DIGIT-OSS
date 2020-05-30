@@ -35,6 +35,12 @@ hs_err_pid*
 *.iml
 *.ipr
 
+# Java / Maven
+.classpath
+.project
+.settings/
+.mvnw/
+target/
 
 # Logs
 logs
