@@ -151,7 +151,8 @@
                     },
                     {
                       "variable": "ownerDob",
-                      "value": "dob"
+                      "value": "dob",
+                      "type":"date"
                     },
                     {
                       "variable": "guardianName",
