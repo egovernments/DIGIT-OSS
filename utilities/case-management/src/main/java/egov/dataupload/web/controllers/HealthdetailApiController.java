@@ -13,6 +13,7 @@ import egov.dataupload.web.models.HealthdetailCreateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 @javax.annotation.Generated(value = "org.egov.codegen.SpringBootCodegen", date = "2020-05-27T12:33:33.069+05:30")
 
@@ -32,8 +34,11 @@ public class HealthdetailApiController {
     private final ObjectMapper objectMapper;
     private CaseService caseService;
 
-    @Value("classpath:healthDetailsSchema.json")
-    private Resource resourceFile;
+    @Value("${health.detail.schema}")
+    private String healthDetailSchemaFile;
+
+    @Autowired
+    private ResourceLoader resourceLoader;
 
     @Autowired
     public HealthdetailApiController(ObjectMapper objectMapper, CaseService caseService) {
@@ -43,9 +48,10 @@ public class HealthdetailApiController {
 
     @RequestMapping(value = "/_create", method = RequestMethod.POST)
     public ResponseEntity<Void> activity( @Valid @RequestBody HealthdetailCreateRequest body) throws IOException, ProcessingException {
+        Resource resource = resourceLoader.getResource(healthDetailSchemaFile);
         final JsonSchemaFactory factory = JsonSchemaFactory.byDefault();
 
-        JsonNode schema = JsonLoader.fromFile(resourceFile.getFile());
+        JsonNode schema = JsonLoader.fromReader(new InputStreamReader(resource.getInputStream()));
         final JsonSchema jsonSchema = factory.getJsonSchema(schema);
         ProcessingReport report = jsonSchema.validate(body.getHealthDetails());
         System.out.println(report.isSuccess());

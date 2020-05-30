@@ -1,0 +1,43 @@
+service: case-management
+mappings:
+  - id: create-case
+    version: 1.0
+    description: Persists case details into case table
+    steps:
+#      - id: user-search
+#        url: http://localhost:8081/user/v1/_search
+#        body: |
+#          {
+#            "RequestInfo": {
+#              "apiId": "apiId",
+#              "ver": "version",
+#              "action": "action",
+#              "did": "did",
+#              "key": "key",
+#              "msgId": "msgId",
+#              "requesterId": "requestId",
+#              "authToken": "5f4e603a-823c-4ae4-ab79-9a0cf1d6c4b6"
+#            },
+#            "tenantId": "pb",
+#            "uuid": ["a23f73c1-fb76-4864-8dec-d7fa3ec7b707"]
+#          }
+      - id: create-case
+        url: http://localhost:8080/case/v1/_create
+        body: |
+          {
+            "RequestInfo": {
+              "userInfo": {
+                "uuid": "{{#user-search}}{{user[0].id}}{{/user-search}}"
+              }
+            },
+            "case": {
+              "tenantId": "{{Tenant}}",
+              "name": "{{Name}}",
+              "mobileNumber": {{Mobile Number}},
+              "age": {{Age}},
+              "startDate": {{#toEpoch}}{{Start Date}}{{/toEpoch}},
+              "endDate": {{#toEpoch}}{{End Date}}{{/toEpoch}},
+              "reason": "{{Reason}}",
+              "medicalHistory": "{{Medical History}}"
+            }
+          }
