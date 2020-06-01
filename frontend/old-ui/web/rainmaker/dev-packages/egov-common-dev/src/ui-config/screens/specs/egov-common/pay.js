@@ -72,7 +72,7 @@ const fetchBill = async (action, state, dispatch, consumerCode, tenantId, billBu
     if(index > -1){
         dispatch(prepareFinalObject("commonPayInfo" , commonPayDetails[index]));
     }else{
-        const details = commonPayDetails.filter(item => item.code === "DEFAULT");
+        const details = commonPayDetails && commonPayDetails.filter(item => item.code === "DEFAULT");
         dispatch(prepareFinalObject("commonPayInfo" , details));
     }
 
@@ -175,8 +175,8 @@ const screenConfig = {
                                 ...AmountToBePaid,
                                 visible: false
                             },
-                            capturePaymentDetails : ifUserRoleExists("CITIZEN") ? {} : capturePaymentDetails,
-                            g8Details : ifUserRoleExists("CITIZEN") ? {} : g8Details
+                            capturePaymentDetails : process.env.REACT_APP_NAME === "Citizen" ? {} : capturePaymentDetails,
+                            g8Details : process.env.REACT_APP_NAME === "Citizen" ? {} : g8Details
                         })
                     }
                 },

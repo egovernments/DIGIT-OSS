@@ -40,8 +40,10 @@ import {
   getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import jp from "jsonpath";
-import { download } from "egov-common/ui-utils/commons";
 import axios from "axios";
+import { getBpaSearchResults } from "../../../../ui-utils/commons";
+import _ from "lodash";
+import groupBy from "lodash/groupBy";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -2153,14 +2155,29 @@ export const setFilteredTradeTypes = (
 };
 
 export const showCityPicker = (state, dispatch) => {
-  let toggle = get(
-    state.screenConfiguration.screenConfig["home"],
-    "components.cityPickerDialog.props.open",
-    false
+  const ocCityPicker = get(
+    state.screenConfiguration.screenConfig,
+    "home.components.cityPickerDialogForOC.props.open", false
   );
-  dispatch(
-    handleField("home", "components.cityPickerDialog", "props.open", !toggle)
-  );
+  if(ocCityPicker) {
+    let toggle = get(
+      state.screenConfiguration.screenConfig["home"],
+      "components.cityPickerDialogForOC.props.open",
+      false
+    );
+    dispatch(
+      handleField("home", "components.cityPickerDialogForOC", "props.open", !toggle)
+    );
+  } else {
+    let toggle = get(
+      state.screenConfiguration.screenConfig["home"],
+      "components.cityPickerDialog.props.open",
+      false
+    );
+    dispatch(
+      handleField("home", "components.cityPickerDialog", "props.open", !toggle)
+    );
+  }
 };
 /*
 export const applyForm = (state, dispatch) => {
@@ -2338,7 +2355,7 @@ export const getTextToLocalMapping = label => {
     case "Application No":
       return getLocaleLabels(
         "Application No",
-        "TL_COMMON_TABLE_COL_APP_NO",
+        "BPA_COMMON_TABLE_COL_APP_NO",
         localisationLabels
       );
 
@@ -2595,16 +2612,16 @@ export const gotoApplyWithStep = (state, dispatch, step) => {
   const tenantId = getQueryArg(window.location.href, "tenantId") ||
   get(
     state.screenConfiguration.preparedFinalObject,
-    "BPA.address.city"
+    "BPA.landInfo.address.city"
   );
   const ownershipCategory = get(
     state.screenConfiguration.preparedFinalObject,
-    "BPA.ownershipCategory"
+    "BPA.landInfo.ownershipCategory"
   );
   if(ownershipCategory) {
     let ownerShipMajorType =  dispatch(
       prepareFinalObject(
-        "BPA.ownerShipMajorType",
+        "BPA.landInfo.ownerShipMajorType",
         ownershipCategory.split('.')[0]
       )
     );
@@ -2682,7 +2699,7 @@ export const getBpaDetailsForOwner = async (state, dispatch, fieldInfo) => {
     const cardIndex = fieldInfo && fieldInfo.index ? fieldInfo.index : "0";
     const ownerNo = get(
       state.screenConfiguration.preparedFinalObject,
-      `BPA.owners[${cardIndex}].mobileNumber`,
+      `BPA.landInfo.owners[${cardIndex}].mobileNumber`,
       ""
     );
     if (!ownerNo.match(getPattern("MobileNo"))) {
@@ -2700,18 +2717,18 @@ export const getBpaDetailsForOwner = async (state, dispatch, fieldInfo) => {
     }
     const owners = get(
       state.screenConfiguration.preparedFinalObject,
-      `BPA.owners`,
+      `BPA.landInfo.owners`,
       []
     );
     let tenantId =
     get(
       state.screenConfiguration.preparedFinalObject,
-      "BPA.address.city"
+      "BPA.landInfo.address.city"
     ) || getQueryArg(window.location.href, "tenantId") || getTenantId();
     //owners from search call before modification.
     const oldOwnersArr = get(
       state.screenConfiguration.preparedFinalObject,
-      "BPA.owners",
+      "BPA.landInfo.owners",
       []
     );
     //Same no search on Same index
@@ -2741,12 +2758,12 @@ export const getBpaDetailsForOwner = async (state, dispatch, fieldInfo) => {
         //rearrange
         dispatch(
           prepareFinalObject(
-            `BPA.owners[${matchingOwnerIndex}].userActive`,
+            `BPA.landInfo.owners[${matchingOwnerIndex}].userActive`,
             true
           )
         );
         dispatch(
-          prepareFinalObject(`BPA.owners[${cardIndex}].userActive`, false)
+          prepareFinalObject(`BPA.landInfo.owners[${cardIndex}].userActive`, false)
         );
         //Delete if current card was not part of oldOwners array - no need to save.
         if (
@@ -2755,7 +2772,7 @@ export const getBpaDetailsForOwner = async (state, dispatch, fieldInfo) => {
           ) == -1
         ) {
           owners.splice(cardIndex, 1);
-          dispatch(prepareFinalObject(`BPA.owners`, owners));
+          dispatch(prepareFinalObject(`BPA.landInfo.owners`, owners));
         }
       } else {
         dispatch(
@@ -2810,26 +2827,26 @@ export const getBpaDetailsForOwner = async (state, dispatch, fieldInfo) => {
           }
           let currOwnersArr = get(
             state.screenConfiguration.preparedFinalObject,
-            "BPA.owners",
+            "BPA.landInfo.owners",
             []
           );
           let ownershipCategory = get(
             state.screenConfiguration.preparedFinalObject,
-            "BPA.ownershipCategory"
+            "BPA.landInfo.ownershipCategory"
           );
           if(ownershipCategory && ownershipCategory == "INDIVIDUAL.SINGLEOWNER") {
             userInfo.isPrimaryOwner = true;
           }
           let relationship = get(
             state.screenConfiguration.preparedFinalObject,
-            `BPA.owners[${cardIndex}].relationship`
+            `BPA.landInfo.owners[${cardIndex}].relationship`
           );
           if(relationship) {
             userInfo.relationship = relationship;
           }
 
           currOwnersArr[cardIndex] = userInfo;
-          dispatch(prepareFinalObject(`BPA.owners`, currOwnersArr));
+          dispatch(prepareFinalObject(`BPA.landInfo.owners`, currOwnersArr));
         }
       }
     }
@@ -2844,18 +2861,43 @@ export const getBpaDetailsForOwner = async (state, dispatch, fieldInfo) => {
   }
 };
 
-const riskType = (state, dispatch) => {
+export const edcrDetailsToBpaDetails = (state, dispatch) => {
+
+  getRiskType(state, dispatch);
+  let path = window.location.href.includes("oc-bpa")
+  let scrutinytype = path ? "ocScrutinyDetails" : "scrutinyDetails";
+  
+  let applicationType = get (
+    state.screenConfiguration.preparedFinalObject,
+    `${scrutinytype}.appliactionType`
+  ) || "BUILDING_PLAN_SCRUTINY";
+
+  let serviceType = get(
+    state.screenConfiguration.preparedFinalObject,
+    `${scrutinytype}.applicationSubType`
+  ) || "NEW_CONSTRUCTION";
+
+  dispatch(prepareFinalObject("BPA.applicationType", applicationType));
+  dispatch(prepareFinalObject("BPA.serviceType", serviceType));
+}
+
+export const getRiskType = (state, dispatch, forBPA) => {
+  let path = window.location.href.includes("oc-bpa");
+  if(forBPA){
+    path = false;
+  }
+  let scrutinytype = path ? "ocScrutinyDetails" : "scrutinyDetails";
   let occupancyType = get(
     state.screenConfiguration.preparedFinalObject,
-    "scrutinyDetails.planDetail.virtualBuilding.occupancyTypes[0].type.name"
+    `${scrutinytype}.planDetail.virtualBuilding.occupancyTypes[0].type.name`
   );
   let plotArea = get(
     state.screenConfiguration.preparedFinalObject,
-    "scrutinyDetails.planDetail.plot.area"
+    `${scrutinytype}.planDetail.plot.area`
   );
   let buildingBlocks = get(
     state.screenConfiguration.preparedFinalObject,
-    "scrutinyDetails.planDetail.blocks"
+    `${scrutinytype}.planDetail.blocks`
   );
   let blocks = buildingBlocks.map(item => {
     return item && item.building && item.building.buildingHeight;
@@ -2867,9 +2909,9 @@ const riskType = (state, dispatch) => {
   );
   let block = get(
     state.screenConfiguration.preparedFinalObject,
-    "scrutinyDetails.planDetail.blocks[0].building.occupancies[0].typeHelper.type", []
+    `${scrutinytype}.planDetail.blocks[0].building.occupancies[0].typeHelper.type`, []
   );
-  dispatch(prepareFinalObject("BPA.blocks", [block]));
+  // dispatch(prepareFinalObject("BPA.blocks", [block]));
   let scrutinyRiskType;
     if (
       plotArea < riskType[2].toPlotArea &&
@@ -2894,6 +2936,7 @@ const riskType = (state, dispatch) => {
   //   setBusinessServiceDataToLocalStorage(queryObject, dispatch);
   // }
   dispatch(prepareFinalObject("BPA.riskType", scrutinyRiskType));
+  return scrutinyRiskType;
 };
 
 export const residentialType = (state, dispatch) => {
@@ -2951,7 +2994,7 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
       getQueryArg(window.location.href, "tenantId") ||
       get(
         state.screenConfiguration.preparedFinalObject,
-        "BPA.address.city"
+        "BPA.landInfo.address.city"
       );
     if (!scrutinyNo || !scrutinyNo.match(getPattern("^[a-zA-Z0-9]*$"))) {
       dispatch(
@@ -2985,7 +3028,7 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
     ];
     const bpaSearch = await httpRequest(
       "post",
-      "bpa-services/_search",
+      "bpa-services/v1/bpa/_search",
       "",
       queryObject
     );
@@ -3040,7 +3083,7 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
 
         const tenantId = get(
           state.screenConfiguration.preparedFinalObject,
-          "BPA.address.city"
+          "BPA.landInfo.address.city"
         );
         let id = tenantId.split('.')[1];
         const city = scrutinyData[0].tenantId;
@@ -3053,7 +3096,8 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
           );
           currOwnersArr = scrutinyData[0];
           dispatch(prepareFinalObject(`scrutinyDetails`, currOwnersArr));
-          await riskType(state, dispatch);
+          // await riskType(state, dispatch);
+          await edcrDetailsToBpaDetails(state, dispatch);
           await residentialType(state, dispatch);
           await licenceType(state, dispatch);
         } else {
@@ -3370,28 +3414,28 @@ export const getBpaTextToLocalMapping = label => {
     case "Application No":
       return getLocaleLabels(
         "Application No",
-        "TL_COMMON_TABLE_COL_APP_NO",
+        "BPA_COMMON_TABLE_COL_APP_NO",
         localisationLabels
       );
 
     case "Owner Name":
       return getLocaleLabels(
         "Owner Name",
-        "NOC_COMMON_TABLE_COL_OWN_NAME_LABEL",
+        "BPA_COMMON_TABLE_COL_OWN_NAME_LABEL",
         localisationLabels
       );
 
     case "Application Date":
       return getLocaleLabels(
         "Application Date",
-        "NOC_COMMON_TABLE_COL_APP_DATE_LABEL",
+        "BPA_COMMON_TABLE_COL_APP_DATE_LABEL",
         localisationLabels
       );
 
     case "Status":
       return getLocaleLabels(
         "Status",
-        "NOC_COMMON_TABLE_COL_STATUS_LABEL",
+        "BPA_COMMON_TABLE_COL_STATUS_LABEL",
         localisationLabels
       );
 
@@ -3532,7 +3576,43 @@ export const getBpaTextToLocalMapping = label => {
         "WF_BPA_CITIZEN_ACTION_PENDING_AT_NOC_VERIF",
         localisationLabels
     );
-    }
+    case "BPA_COL_APP_STATUS" :
+      return getLocaleLabels(
+        "Application Status",
+        "BPA_COL_APP_STATUS",
+        localisationLabels
+      );
+    case "BPA_COL_MODULE_SERVICE" : 
+      return getLocaleLabels(
+        "Module/Service",
+        "BPA_COL_MODULE_SERVICE",
+        localisationLabels
+      );
+    case "BPA_COMMON_SLA" : 
+      return getLocaleLabels(
+        "SLA(Days Remaining)",
+        "BPA_COMMON_SLA",
+        localisationLabels
+      );
+    case "BPA_COL_ASSIGNEDTO" : 
+      return getLocaleLabels(
+        "Assigned To",
+        "BPA_COL_ASSIGNEDTO",
+        localisationLabels
+      );
+    case "BPAREG_SERVICE" :
+      return getLocaleLabels(
+        "Stake Holder",
+        "BPAREG_SERVICE",
+        localisationLabels
+      );
+    case "BPA_APPLY_SERVICE" :
+      return getLocaleLabels(
+        "BPA Apply",
+        "BPA_APPLY_SERVICE",
+        localisationLabels
+      );
+  }
 };
 
 export const showApplyCityPicker = (state, dispatch) => {
@@ -3568,6 +3648,14 @@ const city = (state, dispatch, tenantId) => {
     );
   }
 };
+export const gotoHome = (state, dispatch) => {
+  showComparisonDialog(state, dispatch);
+  dispatch(
+    setRoute(
+      `/`
+    )
+    )
+};
 
 export const applyForm = (state, dispatch) => {
   const tenantId = get(
@@ -3575,21 +3663,44 @@ export const applyForm = (state, dispatch) => {
     "citiesByModule.citizenTenantId"
   );
 
-  const isTradeDetailsValid = validateFields(
-    "components.cityPickerDialog.children.dialogContent.children.popup.children.cityPicker.children",
-    state,
-    dispatch,
-    "home"
+  const ocCityPicker = get(
+    state.screenConfiguration.screenConfig,
+    "home.components.cityPickerDialogForOC.props.open", false
   );
-
-  if (isTradeDetailsValid) {
-    window.location.href =
-      process.env.NODE_ENV === "production"
-        ? `/citizen/egov-bpa/apply?tenantId=${tenantId}`
-        : process.env.REACT_APP_SELF_RUNNING === true
-          ? `/egov-ui-framework/egov-bpa/apply?tenantId=${tenantId}`
-          : `/egov-bpa/apply?tenantId=${tenantId}`;
-  };
+  if(ocCityPicker) {
+    const isOcCityValid = validateFields(
+      "components.cityPickerDialogForOC.children.dialogContent.children.popup.children.cityPicker.children",
+      state,
+      dispatch,
+      "home"
+    );
+  
+    if (isOcCityValid) {
+      window.location.href =
+        process.env.NODE_ENV === "production"
+          ? `/citizen/oc-bpa/apply?tenantId=${tenantId}`
+          : process.env.REACT_APP_SELF_RUNNING === true
+            ? `/egov-ui-framework/oc-bpa/apply?tenantId=${tenantId}`
+            : `/oc-bpa/apply?tenantId=${tenantId}`;
+    };
+  } else {
+    const isTradeDetailsValid = validateFields(
+      "components.cityPickerDialog.children.dialogContent.children.popup.children.cityPicker.children",
+      state,
+      dispatch,
+      "home"
+    );
+  
+    if (isTradeDetailsValid) {
+      window.location.href =
+        process.env.NODE_ENV === "production"
+          ? `/citizen/egov-bpa/apply?tenantId=${tenantId}`
+          : process.env.REACT_APP_SELF_RUNNING === true
+            ? `/egov-ui-framework/egov-bpa/apply?tenantId=${tenantId}`
+            : `/egov-bpa/apply?tenantId=${tenantId}`;
+    };
+  }
+  
   city(state, dispatch, tenantId);
 };
 
@@ -3631,15 +3742,14 @@ export const setNameOfUser = (action, state, dispatch) => {
 
 export const getBpaMdmsData = async (action, state, dispatch, mdmsBody) => {
   try {
-    let payload = null;
-    payload = await httpRequest(
+    let payload = await httpRequest(
       "post",
       "/egov-mdms-service/v1/_search",
       "_search",
       [],
       mdmsBody
     );
-    dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
+    return payload;
   } catch (e) {
     console.log(e);
   }
@@ -3822,44 +3932,11 @@ export const getMdmsDataForBpa = async queryObject => {
 };
 
 export const requiredDocumentsData = async (state, dispatch, action) => {
-  let mdmsBody = {
-    MdmsCriteria: {
-      tenantId: getTenantId(),
-      moduleDetails: [
-        {
-          moduleName: "common-masters",
-          masterDetails: [
-            {
-              name: "DocumentType"
-            }
-          ]
-        },
-        {
-          moduleName: "BPA",
-          masterDetails: [
-            {
-              name: "DocTypeMapping"
-            },
-            {
-              name: "CheckList"
-            }
-          ]
-        }
-      ]
-    }
-  };
   try {
-    let payload = null;
-    payload = await httpRequest(
-      "post",
-      "/egov-mdms-service/v1/_search",
-      "_search",
-      [],
-      mdmsBody
+    let mdmsData =  get(
+      state.screenConfiguration.preparedFinalObject,
+      "applyScreenMdmsData"
     );
-    dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
-    let commonDocTypes = payload.MdmsRes["common-masters"].DocumentType;
-
     const applicationNumber = getQueryArg(
       window.location.href,
       "applicationNumber"
@@ -3881,8 +3958,8 @@ export const requiredDocumentsData = async (state, dispatch, action) => {
     dispatch(prepareFinalObject("applicationProcessInstances", get(wfPayload, "ProcessInstances[0]")));
 
      let requiredDocuments, appDocuments = [];
-    if(payload && payload.MdmsRes && payload.MdmsRes.BPA && wfState ) {
-      let documents = payload.MdmsRes.BPA.DocTypeMapping;
+    if(mdmsData && mdmsData.BPA && wfState ) {
+      let documents = mdmsData.BPA.DocTypeMapping;
       let requiredDocTypes;
       documents.forEach( doc => {
         if(doc.WFState === wfState.state.state){
@@ -3910,17 +3987,17 @@ export const requiredDocumentsData = async (state, dispatch, action) => {
         dispatch(prepareFinalObject("permitList", permitList));
       }
     }
-    if( isVisibleTrue && wfState.state.state == "FIELDINSPECTION_PENDING" && payload && payload.MdmsRes && payload.MdmsRes.BPA && payload.MdmsRes.BPA.CheckList) {
-      let fieldInfoDocs = payload.MdmsRes.BPA.CheckList;
+    if( isVisibleTrue && wfState.state.state == "FIELDINSPECTION_PENDING" && mdmsData && mdmsData.BPA && mdmsData.BPA.CheckList) {
+      let fieldInfoDocs = mdmsData.BPA.CheckList;
       prepareFieldDocumentsUploadData(state, dispatch, action, fieldInfoDocs, appWfState);
     }
     let riskType = get(
       state,
       "screenConfiguration.preparedFinalObject.BPA.riskType", ""
     );
-    if( isVisibleTrue && wfState.state.state == "PENDINGAPPROVAL" && payload && payload.MdmsRes && payload.MdmsRes.BPA && payload.MdmsRes.BPA.CheckList) {
+    if( isVisibleTrue && wfState.state.state == "PENDINGAPPROVAL" && mdmsData && mdmsData.BPA && mdmsData.BPA.CheckList) {
       if(riskType && riskType !== "LOW") {
-        let checkListConditions = payload.MdmsRes.BPA.CheckList;
+        let checkListConditions = mdmsData.BPA.CheckList;
         prepareapprovalQstns(state, dispatch, action, checkListConditions, appWfState);
       }
     }
@@ -4112,7 +4189,6 @@ const prepareDocumentsView = async (state, dispatch, action, appState, isVisible
     ...applicantDocuments,
     ...otherDocuments
   ];
-
     let additionalDetail = BPA.additionalDetails, 
     fieldInspectionDetails, fieldInspectionDocs = [], fieldInspectionsQstions = [];
     if(additionalDetail && additionalDetail["fieldinspection_pending"] && additionalDetail["fieldinspection_pending"].length > 0) {
@@ -4150,6 +4226,10 @@ const prepareDocumentsView = async (state, dispatch, action, appState, isVisible
     obj.fileStoreId = doc.fileStoreId;
     obj.linkText = "View";
     obj.wfState = doc.wfState;
+    if(doc.auditDetails){
+      obj["createdTime"] = doc.auditDetails.createdTime;
+    }
+    
     obj["link"] =
       (fileUrls &&
         fileUrls[doc.fileStoreId] &&
@@ -4165,33 +4245,184 @@ const prepareDocumentsView = async (state, dispatch, action, appState, isVisible
             .slice(13)
         )) ||
       `Document - ${index + 1}`;
-    if (doc.wfState === "SEND_TO_CITIZEN") {
-      obj.createdBy = "BPA Architect"
-    }
-    else if(doc.wfState === "DOC_VERIFICATION_PENDING") {
-      obj.createdBy = "BPA Document Verifier"
-    }
-    else if (doc.wfState === "FIELDINSPECTION_PENDING") {
-      obj.createdBy = "BPA Field Inspector"   
-    }
-    else if (doc.wfState === "NOC_VERIFICATION_PENDING") {
-      obj.createdBy = "BPA Noc Verifier"    
-    } else {
-      obj.createdBy = "BPA Architect"
-    }   
+      obj.createdBy = getLoggedinUserRole(doc.wfState);
+      obj.additionalDetails = doc.additionalDetails;
+      // if(!doc.createdBy){
+      //   if (doc.wfState === "SEND_TO_CITIZEN") {
+      //     obj.createdBy = "BPA Architect"
+      //   }
+      //   else if(doc.wfState === "DOC_VERIFICATION_PENDING") {
+      //     obj.createdBy = "BPA Document Verifier"
+      //   }
+      //   else if (doc.wfState === "FIELDINSPECTION_PENDING") {
+      //     obj.createdBy = "BPA Field Inspector"   
+      //   }
+      //   else if (doc.wfState === "NOC_VERIFICATION_PENDING") {
+      //     obj.createdBy = "BPA Noc Verifier"    
+      //   } else {
+      //     obj.createdBy = "BPA Architect"
+      //   }
+      // } else {
+      //   obj.createdBy = doc.createdBy
+      // }
+  
+    obj['auditDetails'] = doc.auditDetails; 
     documentsPreview.push(obj);
     return obj;
   });
   dispatch(prepareFinalObject("documentDetailsPreview", documentsPreview));
   let previewDocuments = [];
-  
-  let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
+   let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
   if((isEmployee && isVisibleTrue) || (!isEmployee && isVisibleTrue)) {
-    prepareDocsInEmployee(state, dispatch, action, appState, uploadedAppDocuments);
+    prepareDocsInEmployee(state, dispatch, action, appState, uploadedAppDocuments, documentsPreview);
+  } else {
+    prepareFinalCards(state, dispatch, documentsPreview, [] )
   }
+ 
+
+};
+const getRequiredMdmsCards = (state, dispatch) => {
+  const bpaDetails = get(
+    state.screenConfiguration.preparedFinalObject,
+    "BPA",
+    {}
+  );
+
+  let documentMapping = get(
+    state,
+    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.DocTypeMapping",
+    []
+  );
+
+  let documentType = get(
+    state,
+    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.common-masters.DocumentType",
+    []
+  );
 };
 
-export const prepareDocsInEmployee = (state, dispatch, action, appState, uploadedAppDocuments) => {
+/**
+ * This method will be called to get the current role of logged-in user
+ * @param {String} wfState 
+ * @returns {String} currentRole
+ */
+export const getLoggedinUserRole = (wfState) =>{
+  let userInfo = JSON.parse(getUserInfo()), 
+  roles = get(userInfo, "roles"),
+  currentRole,
+  isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
+
+  if (roles && roles.length == 1) {
+    currentRole = roles[0].name;
+
+  } else if (roles && roles.length > 1){
+    if(isEmployee){
+      if(wfState){
+        wfState = wfState.state;
+        if (wfState === "SEND_TO_CITIZEN") {
+          currentRole = "BPA Architect"
+        }
+        else if(wfState === "DOC_VERIFICATION_PENDING") {
+          currentRole = "BPA Document Verifier"
+        }
+        else if (wfState === "FIELDINSPECTION_PENDING") {
+          currentRole = "BPA Field Inspector"   
+        }
+        else if (wfState === "NOC_VERIFICATION_PENDING") {
+          currentRole = "BPA Noc Verifier"    
+        } else {
+          currentRole = "BPA Architect"
+        }
+      }
+      
+    }else{
+      currentRole = roles.find((code)=>code=="BPA_ARCHITECT")
+      if(!currentRole){
+        currentRole = roles[0].name;
+      } else {
+        currentRole = currentRole.name;
+      }
+    }
+  }
+  
+  return currentRole;
+}; 
+
+const prepareFinalCards = (state, dispatch, documentsPreview, requiredDocsFromMdms) =>{
+ // let mdmsCards = getRequiredMdmsCards(state, dispatch);
+let cards = [];
+documentsPreview.forEach((item)=>{
+  item.documentCode = getDocumentCode(item.title)
+}
+)
+let documentCards = groupBy(documentsPreview, 'documentCode');
+let bpaDetails = get(
+  state.screenConfiguration.preparedFinalObject,
+  "BPA",
+  {}
+);
+let cardReadOnly = false;
+if(bpaDetails.status == "INPROGRESS"){
+  cardReadOnly = true;
+}
+
+documentCards && Object.keys(documentCards).map((doc)=>{
+ let card ={
+    documentCode:doc,
+    documents:documentCards[doc],
+    wfState:documentCards[doc].wfState,
+    readOnly:true
+ }
+ cards.push(card);
+});
+if(requiredDocsFromMdms.length > 0){
+  const allCards = [].concat(...requiredDocsFromMdms.map(({cards}) => cards || []));
+
+  allCards && allCards.map((mdmsCard)=>{
+    let found = false;
+    mdmsCard.documentCode = getTransformedLocale(mdmsCard.code);
+    for(var i=0; i<cards.length; i++){
+      if(mdmsCard.documentCode == cards[i].documentCode){
+        cards[i].readOnly = cardReadOnly;
+        let mergedCard = {...cards[i], ...mdmsCard};
+        cards[i] = {...mergedCard};
+        found = true;
+      }
+    }
+    
+    if(!found){
+      mdmsCard.readOnly = cardReadOnly;
+      cards.push(mdmsCard)
+    }
+  });
+}
+/**
+ * @Todo should be handled at component level
+ */
+cards.map(card=>{
+  if(card.documents){
+    card.documents.map(item=>{
+      if(!item.fileName){
+        item.fileName = item.name;
+      }
+    })
+  }
+});
+dispatch(prepareFinalObject("finalCardsforPreview", cards));
+
+}
+/**
+ * 
+ * @param {String} documentType 
+ * Eg: APPL_ADDRESSPROOF_ELECTRICITYBILL 
+ * retrun APPL_ADDRESSPROOF
+ */
+const getDocumentCode = (documentType) =>{
+  var code = getTransformedLocale(documentType);
+  code = code.substring(0,code.lastIndexOf("_"));
+     return code;
+}
+export const prepareDocsInEmployee = (state, dispatch, action, appState, uploadedAppDocuments, documentsPreview) => {
   let applicationDocuments = get(
     state,
     "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.DocTypeMapping",
@@ -4209,12 +4440,13 @@ export const prepareDocsInEmployee = (state, dispatch, action, appState, uploade
   );
 
   let documents = [];
-  let bpaStatusAction = get(bpaAppDetails, "status").includes("CITIZEN_ACTION_PENDING");
+  let bpaStatus = get(bpaAppDetails, "status");
+  let bpaStatusAction = bpaStatus && get(bpaAppDetails, "status").includes("CITIZEN_ACTION_PENDING");
   if(bpaStatusAction) {
     appState = "INITIATED";
     set(
       action,
-      "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.documentDetailsCard.visible",
+      "screenConfig.components.div.children.body.children.cardContent.children.applyDocSummary.children.cardContent.children.documentDetailsCard.visible",
       false
     );
   }
@@ -4277,8 +4509,7 @@ if(tempDoc) {
     documentsContract.push(tempDoc[key]);
   });
 }
-
-
+let finalDocuments = [];
   if (documentsContract && documentsContract.length > 0) {
 
     let documentsCodes = [], nocBpaDocuments = [];
@@ -4341,7 +4572,7 @@ if(tempDoc) {
       });
     });
 
-    let finalDocuments = [];
+    
     if(finalDocs && finalDocs.length > 0) {
       finalDocs.forEach(fDoc => {
         if(fDoc && fDoc.cards && fDoc.cards.length > 0) {
@@ -4360,17 +4591,18 @@ if(tempDoc) {
         }
       })
     }
-
     let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
     if (finalDocuments && finalDocuments.length > 0 && (isEmployee || bpaStatusAction) ) {
-      set(
-        action,
-        "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.uploadedDocumentDetailsCard.visible",
-        true
-      );
+      // set(
+      //   action,
+      //   "screenConfig.components.div.children.body.children.cardContent.children.applyDocSummary.children.cardContent.children.uploadedDocumentDetailsCard.visible",
+      //   true
+      // );
       dispatch(prepareFinalObject("documentsContract", finalDocuments));
     }
   }
+  console.log('requiredDocsFromMdms', finalDocuments)
+  prepareFinalCards(state, dispatch, documentsPreview, finalDocuments);
 };
 
 export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
@@ -4504,8 +4736,10 @@ export const permitOrderNoDownload = async(action, state, dispatch) => {
   bpaDetails.edcrDetail = payload.edcrDetail;
   let Bpa = bpaDetails;
   let permitPfKey = "buildingpermit";
-  if(bpaDetails && bpaDetails.riskType === "LOW") {
-    permitPfKey = "buildingpermit-low"
+  if(!window.location.href.includes("oc-bpa")) {
+    if(bpaDetails && bpaDetails.riskType === "LOW") {
+      permitPfKey = "buildingpermit-low"
+    }
   }
   let res = await httpRequest(
     "post",
@@ -4550,19 +4784,32 @@ export const downloadFeeReceipt = async(state, dispatch, status, serviceCode) =>
   );
 
   let payments = [];
-
-  if (paymentPayload.Payments && (paymentPayload.Payments).length > 1) {
-    if ( serviceCode === "BPA.NC_APP_FEE") {
-      payments.push(paymentPayload.Payments[1]);
-    }
-
-    if (serviceCode === "BPA.NC_SAN_FEE" ) {
+  if(window.location.href.includes("oc-bpa")) { 
+    if (paymentPayload.Payments && (paymentPayload.Payments).length > 1) {
+      if ( serviceCode === "BPA.NC_OC_APP_FEE") {
+        payments.push(paymentPayload.Payments[1]);
+      }
+  
+      if (serviceCode === "BPA.NC_OC_SAN_FEE" ) {
+        payments.push(paymentPayload.Payments[0]);
+      }
+    } else {
       payments.push(paymentPayload.Payments[0]);
     }
   } else {
-    payments.push(paymentPayload.Payments[0]);
+    if (paymentPayload.Payments && (paymentPayload.Payments).length > 1) {
+      if ( serviceCode === "BPA.NC_APP_FEE") {
+        payments.push(paymentPayload.Payments[1]);
+      }
+  
+      if (serviceCode === "BPA.NC_SAN_FEE" ) {
+        payments.push(paymentPayload.Payments[0]);
+      }
+    } else {
+      payments.push(paymentPayload.Payments[0]);
+    }
   }
-
+  
 
   let res = await httpRequest(
     "post",
@@ -4587,22 +4834,44 @@ const getFloorDetails = (index) => {
   }
 };
 
-export const setProposedBuildingData = async (state, dispatch, action) => {
-  const response = get(
-    state,
-    "screenConfiguration.preparedFinalObject.scrutinyDetails.planDetail.blocks",
-    []
-  );
-  let occupancyType = get(
-    state,
-    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.SubOccupancyType",
-    []
-  );
-  const BPA = get (
-    state,
-    "screenConfiguration.preparedFinalObject.BPA",
-    {}
-  );
+export const setProposedBuildingData = async (state, dispatch, action, value) => {
+  
+  let response, occupancyType, BPA;
+  let getLocalLabels = get( state, "app.localizationLabels");
+
+  if(value == "ocApply") {
+    response = get(
+      state,
+      "screenConfiguration.preparedFinalObject.ocScrutinyDetails.planDetail.blocks",
+      []
+    );
+    occupancyType = get(
+      state,
+      "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.SubOccupancyType",
+      []
+    );
+    BPA = get (
+      state,
+      "screenConfiguration.preparedFinalObject.BPA",
+      {}
+    );
+  } else {
+    response = get(
+      state,
+      "screenConfiguration.preparedFinalObject.scrutinyDetails.planDetail.blocks",
+      []
+    );
+    occupancyType = get(
+      state,
+      "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.SubOccupancyType",
+      []
+    );
+    BPA = get (
+      state,
+      "screenConfiguration.preparedFinalObject.BPA",
+      {}
+    );
+  }
   
   let subOccupancyType = occupancyType.filter(item => {
     return item.active;
@@ -4617,26 +4886,27 @@ export const setProposedBuildingData = async (state, dispatch, action) => {
         {
           [getBpaTextToLocalMapping("Floor Description")]: getFloorDetails((item.number).toString()) || '-',
           [getBpaTextToLocalMapping("Level")]: item.number,
-          [getBpaTextToLocalMapping("Occupancy/Sub Occupancy")]: item.occupancies[0].type || "-",
+          [getBpaTextToLocalMapping("Occupancy/Sub Occupancy")]: getLocaleLabels("-", item.occupancies[0].type, getLocalLabels),
           [getBpaTextToLocalMapping("Buildup Area")]: item.occupancies[0].builtUpArea || "0",
           [getBpaTextToLocalMapping("Floor Area")]: item.occupancies[0].floorArea || "0",
-          [getBpaTextToLocalMapping("Carpet Area")]: item.occupancies[0].carpetArea || "0"
+          [getBpaTextToLocalMapping("Carpet Area")]: item.occupancies[0].carpetArea || "0",
         }));
-      let occupancyTypeCheck = [], formatedSubOccupancyType = "";
-      if(BPA && BPA.blocks && BPA.blocks[j] && BPA.blocks[j].subOccupancyType) {
-        let sOccupancyType = (BPA.blocks[j].subOccupancyType).split(",");
+      let occupancyTypeCheck = [], 
+      floorNo = response[j].number
+      if(BPA && BPA.landInfo && BPA.landInfo.unit && BPA.landInfo.unit[j] && BPA.landInfo.unit[j].usageCategory) {
+        let sOccupancyType = (BPA.landInfo.unit[j].usageCategory).split(",");
         sOccupancyType.forEach(subOcData => {
           occupancyTypeCheck.push({
             value : subOcData,
-            label : getTransformedLocale(`BPA_SUBOCCUPANCYTYPE_${subOcData}`)
+            label : getLocaleLabels("NA", `BPA_SUBOCCUPANCYTYPE_${getTransformedLocale(subOcData)}`, getLocalLabels )
           });
         });
       }
       
       if(occupancyTypeCheck && occupancyTypeCheck.length) {
-        tableData.push({ blocks: block, suboccupancyData: subOccupancyType, titleData: title, occupancyType: occupancyTypeCheck });
+        tableData.push({ blocks: block, suboccupancyData: subOccupancyType, titleData: title, occupancyType: occupancyTypeCheck, floorNo: floorNo });
       } else {
-        tableData.push({ blocks: block, suboccupancyData: subOccupancyType, titleData: title });
+        tableData.push({ blocks: block, suboccupancyData: subOccupancyType, titleData: title, floorNo: floorNo });
       }
 
     };
@@ -4683,4 +4953,413 @@ export const getConditionsInPermitList = async (action, state, dispatch) => {
   }
   
   dispatch(prepareFinalObject( "BPA.additionalDetails.pendingapproval" ,finalPermitList));
+}
+
+export const getLicenseDetails = async (state, dispatch) => {
+
+  let tenantId = getTenantId();
+  let userInfo = JSON.parse(getUserInfo());
+  const id = get(userInfo, "id");
+  const queryObject = [
+    {
+      key: "tenantId",
+      value: tenantId.split('.')[0]
+    },
+    {
+      key: "id",
+      value: id
+    }
+  ];
+
+  try {
+    const License = await httpRequest(
+      "post",
+      "/tl-services/v1/BPAREG/_search",
+      "", [],
+      queryObject
+    );
+    for (let i = 0; i <= License.Licenses.length; i++) {
+      if (License.Licenses[i].status === "APPROVED") {
+        let name = License.Licenses[i].tradeLicenseDetail.owners[0].name;
+        let tradeType = License.Licenses[i].tradeLicenseDetail.tradeUnits[0].tradeType;
+        let licenseNumber = License.Licenses[i].licenseNumber;
+        let tradeTypeWithLocalization = getTextToLocalMapping(`TRADELICENSE_TRADETYPE_${tradeType.split('.')[0].toUpperCase()}`);
+        return `${name}/${tradeTypeWithLocalization}/${licenseNumber}`;
+        // return `${License.Licenses[i].tradeLicenseDetail.owners[0].name}/${License.Licenses[i].tradeLicenseDetail.tradeUnits[0].tradeType}/${License.Licenses[i].licenseNumber}`;
+      }
+    }
+  } catch (error) {
+    console.log(error);
+    return {};
+  }
+};
+
+export const ocuupancyType = (state, dispatch) => {
+  let occupancyDataObj = get(
+    state.screenConfiguration.preparedFinalObject,
+    "ocScrutinyDetails.planDetail.occupancies[0].typeHelper.type", []
+  );
+  let occupancyData = [];
+  occupancyData.push({code: occupancyDataObj.code});
+  dispatch(prepareFinalObject("applyScreenMdmsData.BPA.occupancyData", occupancyData));
+}
+
+export const deviationValidation = (action, state, dispatch) => {
+  const APPROVED = "Approved";
+  const ALLOW = "Validate and allow";
+  const REJECT = "Validate and restrict";
+  const INCOMPLETEINFO = "Not enough details";
+
+  let ocScrutinyDetails = get(
+    state.screenConfiguration.preparedFinalObject,
+    "ocScrutinyDetails", {}
+  );
+  let scrutinyDetails = get(
+    state.screenConfiguration.preparedFinalObject,
+    "scrutinyDetails", {}
+  );
+  let ocEDCRDetails = {};
+  ocEDCRDetails.edcrDetail = [];
+  ocEDCRDetails.edcrDetail[0] = ocScrutinyDetails;
+
+  let eDCRDetails = {};
+  eDCRDetails.edcrDetail = [];
+  eDCRDetails.edcrDetail[0] = scrutinyDetails;
+
+  let validationParams = get(
+    state.screenConfiguration.preparedFinalObject,
+    "applyScreenMdmsData.BPA.DeviationParams"
+  )
+
+  let validationResponse = APPROVED;
+  let planParam = [],
+    ocParam = [];
+debugger
+  for (let paramRecord of validationParams) {
+
+    let firstIndex = paramRecord.paramPath.indexOf("[");
+    let lastIndex = paramRecord.paramPath.lastIndexOf("[");
+
+    if (firstIndex !== lastIndex) {// To check if the record has multiple sub records like blocks
+      let firstpath = paramRecord.paramPath.substring(0, lastIndex);
+      let secondpath = paramRecord.paramPath.substring(lastIndex + 4);
+      let planRecs = _.get(eDCRDetails, firstpath, []);
+      let ocRecs = _.get(ocEDCRDetails, firstpath, []);
+      planRecs.forEach((element, i) => {
+        planParam.push(_.get(planRecs[i], secondpath, null));
+        ocParam.push(_.get(ocRecs[i], secondpath, null));
+      });
+    } else {
+      planParam.push(_.get(eDCRDetails, paramRecord.paramPath, null));
+      ocParam.push(_.get(ocEDCRDetails, paramRecord.paramPath, null));
+    }
+    if (planParam && ocParam && planParam.length === ocParam.length) {
+      for (let i = 0; i < planParam.length; i++) {
+        let diff = 0;
+        if (paramRecord.calculationType === "number") {
+          diff = Math.abs(ocParam[i] - planParam[i]);
+        } else {
+          //(paramRecord.calculationType==="percentage"){
+          diff = (Math.abs(ocParam[i] - planParam[i]) / planParam[i]) * 100;
+        }
+
+        if (diff > paramRecord.tolerancelimit) {
+          if (paramRecord.restrictionType === REJECT) {
+           
+            dispatch(
+              toggleSnackbar(
+                true,
+                {
+                  labelName: "System has to validate and restrict the user from creating the application.",
+                  labelKey: "BPA_TOLERANCE_LIMIT_ERROR"
+                },
+                "error"
+              )
+            );
+          } else {
+            validationResponse = ALLOW;
+          }
+        }
+      }
+    } else {
+      validationResponse = INCOMPLETEINFO;
+      break;
+    }
+  }
+  return validationResponse;
+};
+
+export const showComparisonDialog = (state, dispatch) => {
+  let toggle = get(
+    state.screenConfiguration.screenConfig["apply"],
+    "components.cityPickerDialogofComparison.props.open",
+    false
+  );
+  dispatch(
+    handleField("apply", "components.cityPickerDialogofComparison", "props.open", !toggle)
+  );
+  dispatch(
+    handleField("apply", "components.cityPickerDialogofComparison.popup", "props.open", !toggle)
+  );
+  
+};
+export const getPermitDetails = async (permitNumber, tenantId) => {
+  let queryObject = [
+    { key: "tenantId", value: tenantId },
+    { key: "approvalNo", value: permitNumber }
+  ];
+
+  const response = await getBpaSearchResults(queryObject);
+
+  if (response.Bpa.length > 0)
+    return response.Bpa[0];
+  else
+    return 'NOPERMIT';
+
+};
+
+const permitNumberLink = async (state, dispatch) => {
+
+  let tenantId = getQueryArg(window.location.href, "tenantId");
+  let appNumber = get(state.screenConfiguration.preparedFinalObject, "bpaDetails.applicationNo", "");
+  let checkingApp = getTenantId().split('.')[1] ? "employee" : "citizen";
+  let url = `${window.location.origin}/egov-bpa/search-preview?applicationNumber=${appNumber}&tenantId=${tenantId}`;
+  let  linkDetail = {
+    labelName: "",
+    labelKey: ""
+  }
+  if(process.env.NODE_ENV === "production") {
+    if(checkingApp){
+      url = `${window.location.origin}/${checkingApp}/egov-bpa/search-preview?applicationNumber=${appNumber}&tenantId=${tenantId}`;
+    }
+  }
+  if(appNumber) {
+    linkDetail = {
+      labelName: appNumber,
+      labelKey: appNumber
+    }
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardFirstStep.children.basicDetails.children.cardContent.children.basicDetailsContainer.children.buildingPermitNum",
+        "props.linkDetail",
+        linkDetail
+      )
+    );
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardThirdStep.children.summaryDetails.children.cardContent.children.scrutinySummary.children.cardContent.children.basicDetailsContainer.children.buildingPermitNum",
+        "props.linkDetail",
+        linkDetail
+      )
+    );
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.body.children.cardContent.children.scrutinySummary.children.cardContent.children.basicDetailsContainer.children.buildingPermitNum",
+        "props.linkDetail",
+        linkDetail
+      )
+    );
+    dispatch(prepareFinalObject("BPA.permitNumberLink", url));
+  } else {
+    dispatch(prepareFinalObject("BPA.permitNumberLink", ""));
+  }
+}
+
+export const getOcEdcrDetails = async (state, dispatch, action) => {
+  try {
+    const scrutinyNo = get(
+      state.screenConfiguration.preparedFinalObject,
+      `BPA.edcrNumber`,
+      ""
+    ) || getQueryArg(window.location.href, "edcrNumber");
+
+    let tenantId = getQueryArg(window.location.href, "tenantId");
+
+    //check format
+    if (!scrutinyNo || !scrutinyNo.match(getPattern("^[a-zA-Z0-9]*$"))) {
+      dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "Incorrect Scrutiny Number!",
+            labelKey: "BPA_INCORRECT_SCRUTINY_NUMBER"
+          },
+          "error"
+        )
+      );
+      return;
+    }
+
+    //get oc edcr details
+    let ocpayload = await edcrHttpRequest(
+      "post",
+      "/edcr/rest/dcr/scrutinydetails?edcrNumber=" +
+      scrutinyNo +
+      "&tenantId=" + tenantId,
+      {}
+    );
+
+    //get permit details for oc edcr using permitNumber
+    const bpaDetails = await getPermitDetails(get(ocpayload, "edcrDetail[0].permitNumber"), tenantId);
+    if (bpaDetails === 'NOPERMIT') {
+      dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "Incorrect Permit Number!",
+            labelKey: "BPA_INCORRECT_PERMIT_NUMBER"
+          },
+          "error"
+        )
+      );
+      return;
+    }
+
+    //Check oc edcr date validity less than today
+    const todayDate = new Date();
+    if (get(ocpayload, "edcrDetail[0].permitDate") > todayDate) {  //to be checked for the date comparison
+      dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "Invalid Permit Date!",
+            labelKey: "BPA_INVALID_PERMIT"
+          },
+          "error"
+        )
+      );
+      return;
+    }
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.footer.children.nextButton",
+        "props.disabled",
+        true
+      )
+    );
+    /**
+     * Getting comparison report and validating it
+     */
+    let comparisionRes = await edcrHttpRequest(
+      "post",
+      "/edcr/rest/dcr/occomparison?tenantId="+ tenantId+"&ocdcrNumber="+scrutinyNo+"&edcrNumber="+bpaDetails.edcrNumber,
+      "search", []
+    );  
+    let comparisionSuccess = false;
+    if(comparisionRes){
+      comparisionSuccess = comparisionRes.comparisonDetail.status == "Accepted" ? true : false;
+      dispatch(prepareFinalObject("comparisonDetails", comparisionRes.comparisonDetail));
+
+      if(!comparisionSuccess){
+        showComparisonDialog(state, dispatch)
+        dispatch(prepareFinalObject("comparisonDetails.report", comparisionRes.comparisonDetail.comparisonReport));
+        return 
+      }
+    }
+    
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.footer.children.nextButton",
+        "props.disabled",
+        false
+      )
+    );
+    //get permit edcr details
+    let edcrPayload = await edcrHttpRequest(
+      "post",
+      "/edcr/rest/dcr/scrutinydetails?edcrNumber=" +
+      bpaDetails.edcrNumber +
+      "&tenantId=" + tenantId,
+      {}
+    );
+
+    if (get(ocpayload, "edcrDetail[0].tenantId") !== get(edcrPayload, "edcrDetail[0].tenantId")) {//check city using tenantId- is this correct
+      dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "Invalid City!",
+            labelKey: "BPA_INVALID_PERMIT_CITY"
+          },
+          "error"
+        )
+      );
+      return;
+    }
+    
+    //check duplicates
+    let queryObject = [
+      {
+        key: "tenantId",
+        value: tenantId,
+      },
+      {
+        key: "edcrNumbers",
+        value: scrutinyNo,
+      }
+    ];
+    const bpaSearch = await httpRequest(
+      "post",
+      "bpa-services/v1/bpa/_search",
+      "",
+      queryObject
+    );
+
+    let data = bpaSearch.Bpa.map((data, index) => {
+      if (data.edcrNumber === scrutinyNo && data.status !== 'REJECTED' && index > 0) {
+        dispatch(
+          toggleSnackbar(
+            true,
+            {
+              labelName: "Application Number already exists",
+              labelKey: "APPLICATION_NUMBER_ALREADY_EXISTS"
+            },
+            "error"
+          )
+        );
+        return;
+      }
+    });
+
+    let primaryOwnerArray = get(bpaDetails, "landInfo.owners").filter(owr => owr && owr.isPrimaryOwner && owr.isPrimaryOwner == true );
+    // set(bpaDetails, "applicantName", primaryOwnerArray[0].name);
+
+    dispatch(prepareFinalObject("ocScrutinyDetails", get(ocpayload, "edcrDetail[0]")));
+    dispatch(prepareFinalObject("scrutinyDetails", get(edcrPayload, "edcrDetail[0]")));
+    deviationValidation(action, state, dispatch);
+    dispatch(prepareFinalObject("bpaDetails", bpaDetails));
+    setProposedBuildingData(state, dispatch, action, "ocApply");
+    let SHLicenseDetails = await getLicenseDetails(state,dispatch);
+    dispatch(prepareFinalObject(`BPA.appliedBy`, SHLicenseDetails));
+    dispatch(prepareFinalObject(`BPA.applicantName`, primaryOwnerArray[0].name));
+    edcrDetailsToBpaDetails(state, dispatch);
+    ocuupancyType(state, dispatch);
+    await permitNumberLink(state, dispatch, action)
+  } catch (e) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: e.message, labelKey: e.message },
+        "info"
+      )
+    );
+  }
+};
+
+export const applicantNameAppliedByMaping = async (state, dispatch, bpaDetails, ocDetails) => {
+  const primaryOwnerArray = bpaDetails && get(bpaDetails, "landInfo.owners").filter(owr => owr && owr.isPrimaryOwner && owr.isPrimaryOwner == true );
+  const tenantId = getQueryArg(window.location.href, "tenantId");
+  const permitDetails = await getPermitDetails(get(ocDetails, "permitNumber"), tenantId);
+  let SHLicenseDetails = await getLicenseDetails(state,dispatch);
+  dispatch(prepareFinalObject(`bpaDetails`, permitDetails));
+  if(!SHLicenseDetails) {SHLicenseDetails = "NA"}
+  dispatch(prepareFinalObject(`BPA.appliedBy`, SHLicenseDetails));
+  dispatch(prepareFinalObject(`BPA.applicantName`, primaryOwnerArray[0].name));
+  await permitNumberLink(state, dispatch);
+  await ocuupancyType(state, dispatch);
 }

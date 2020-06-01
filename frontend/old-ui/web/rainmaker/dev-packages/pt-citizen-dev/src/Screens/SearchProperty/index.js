@@ -60,7 +60,7 @@ class SearchProperty extends Component {
     const { propertiesFound, fetchLocalizationLabel } = this.props;
     const { city, ids, oldpropertyids, mobileNumber, applicationNumber } = form.fields || {};
     const tableData = this.extractTableData(propertiesFound);
-    fetchLocalizationLabel(getLocale(), city.value, city.value);
+    // fetchLocalizationLabel(getLocale(), city.value, city.value);
 
     if (!validateForm(form)) {
       this.props.displayFormErrors(formKey);

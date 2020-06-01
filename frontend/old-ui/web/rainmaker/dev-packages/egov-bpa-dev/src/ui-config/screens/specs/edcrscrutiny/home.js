@@ -4,6 +4,7 @@ import { fetchData } from "./functions";
 import FormIcon from "../../../../ui-atoms-local/Icons/FormIcon";
 import EDCRIcon from "../../../../ui-atoms-local/Icons/EDCRIcon";
 import "../utils/index.css";
+
 const header = getCommonHeader(
   {
     labelName: "eDCR Scrutiny",
@@ -27,7 +28,15 @@ const cardItems = [
   },
   {
     label: {
-      labelKey: "TL_MY_APPLICATIONS",
+      labelKey: "EDCR_COMMON_APPL_NEW_OC",
+      labelName: "Occupancy Certificate eDCR Scrutiny For New Building"
+    },
+    icon: <EDCRIcon />,
+    route: "ocapply"
+  },
+  {
+    label: {
+      labelKey: "BPA_MY_APPLICATIONS",
       labelName: "My Applications"
     },
     icon: <FormIcon />,

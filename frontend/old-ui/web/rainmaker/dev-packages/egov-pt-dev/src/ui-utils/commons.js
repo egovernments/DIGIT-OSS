@@ -1,22 +1,15 @@
 import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/utils";
-import {
-  handleScreenConfigurationFieldChange as handleField,
-  prepareFinalObject,
-  toggleSnackbar,
-  toggleSpinner
-} from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
-import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons";
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import html2canvas from "html2canvas";
 import jp from "jsonpath";
+import jsPDF from "jspdf";
 import get from "lodash/get";
 import set from "lodash/set";
 import store from "ui-redux/store";
 import { getTranslatedLabel } from "../ui-config/screens/specs/utils";
-import DATA from "./documents";
 
 const handleDeletedCards = (jsonObject, jsonPath, key) => {
   let originalArray = get(jsonObject, jsonPath, []);
@@ -53,16 +46,15 @@ export const findItemInArrayOfObject = (arr, conditionCheckerFn) => {
   }
 };
 
-export const getSearchResults = async (queryObject, dispatch) => {
+export const getSearchResults = async (queryObject, requestBody) => {
   try {
-
-
     store.dispatch(toggleSpinner());
     const response = await httpRequest(
       "post",
       "/property-services/property/_search",
       "",
-      queryObject
+      queryObject,
+      requestBody
     );
     response && response.Properties && response.Properties.map(property => {
       if (property.status == "INWORKFLOW") {
@@ -82,6 +74,7 @@ export const getSearchResults = async (queryObject, dispatch) => {
     store.dispatch(toggleSpinner());
     return response;
   } catch (error) {
+    store.dispatch(toggleSpinner());
     store.dispatch(
       toggleSnackbar(
         true,
@@ -545,4 +538,102 @@ export const generatePdfFromDiv = (action, applicationNumber, divID) => {
       window.open(doc.output("bloburl"), "_blank");
     }
   });
+};
+
+export const getBoundaryData = async (
+  action,
+  state,
+  dispatch,
+  queryObject,
+  code,
+  componentPath
+) => {
+  try {
+    let payload = await httpRequest(
+      "post",
+      "/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
+      "_search",
+      queryObject,
+      {}
+    );
+    const tenantId =
+      process.env.REACT_APP_NAME === "Employee"
+        ? get(
+          state.screenConfiguration.preparedFinalObject,
+          "Property.address.city"
+        )
+        : getQueryArg(window.location.href, "tenantId");
+
+    const mohallaData =
+      payload &&
+      payload.TenantBoundary[0] &&
+      payload.TenantBoundary[0].boundary &&
+      payload.TenantBoundary[0].boundary.reduce((result, item) => {
+        result.push({
+          ...item,
+          name: `${tenantId
+            .toUpperCase()
+            .replace(/[.]/g, "_")}_REVENUE_${item.code
+              .toUpperCase()
+              .replace(/[._:-\s\/]/g, "_")}`
+        });
+        return result;
+      }, []);
+
+    dispatch(
+      prepareFinalObject(
+        "applyScreenMdmsData.tenant.localities",
+        // payload.TenantBoundary && payload.TenantBoundary[0].boundary,
+        mohallaData
+      )
+    );
+
+    dispatch(
+      handleField(
+        "register-property",
+        "components.div.children.formwizardFirstStep.children.propertyLocationDetails.children.cardContent.children.propertyLocationDetailsContainer.children.localityOrMohalla",
+        "props.suggestions",
+        mohallaData
+      )
+    );
+    if (code) {
+
+      let data = payload.TenantBoundary[0].boundary;
+      let messageObject =
+        data &&
+        data.find(item => {
+          return item.code == code;
+        });
+      if (messageObject)
+        dispatch(
+          prepareFinalObject(
+            "Property.address.locality.name",
+            messageObject.name
+          )
+        );
+    }
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const getSearchBillResult = async (queryObject, dispatch) => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/billing-service/bill/v2/_search",
+      "",
+      queryObject
+    );
+    return response;
+  } catch (error) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+    console.log(error, "fetxh");
+  }
 };

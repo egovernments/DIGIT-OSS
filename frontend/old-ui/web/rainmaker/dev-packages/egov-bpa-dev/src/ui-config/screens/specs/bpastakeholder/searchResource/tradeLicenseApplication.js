@@ -24,11 +24,11 @@ export const tradeLicenseApplication = getCommonCard({
     applicationNo: getTextField({
       label: {
         labelName: "Application No.",
-        labelKey: "TL_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+        labelKey: "BPA_HOME_SEARCH_RESULTS_APP_NO_LABEL"
       },
       placeholder: {
         labelName: "Enter Application No.",
-        labelKey: "TL_HOME_SEARCH_RESULTS_APP_NO_PLACEHOLDER"
+        labelKey: "BPA_HOME_SEARCH_RESULTS_APP_NO_PLACEHOLDER"
       },
       gridDefination: {
         xs: 12,
@@ -83,11 +83,11 @@ export const tradeLicenseApplication = getCommonCard({
     applicationSts: getSelectField({
       label: {
         labelName: "Application status",
-        labelKey: "TL_HOME_SEARCH_RESULTS_APP_STATUS_LABEL"
+        labelKey: "BPA_HOME_SEARCH_RESULTS_APP_STATUS_LABEL"
       },
       placeholder: {
         labelName: "Select Application Status",
-        labelKey: "TL_HOME_SEARCH_RESULTS_APP_STATUS_PLACEHOLDER"
+        labelKey: "BPA_HOME_SEARCH_RESULTS_APP_STATUS_PLACEHOLDER"
       },
       required: false,
       localePrefix: {
@@ -104,10 +104,10 @@ export const tradeLicenseApplication = getCommonCard({
   }),
   appStatusAndToFromDateContainer: getCommonContainer({
     fromDate: getDateField({
-      label: { labelName: "From Date", labelKey: "TL_COMMON_FROM_DATE_LABEL" },
+      label: { labelName: "From Date", labelKey: "BPA_FROM_DATE_LABEL" },
       placeholder: {
         labelName: "Select From Date",
-        labelKey: "TL_FROM_DATE_PLACEHOLDER"
+        labelKey: "BPA_FROM_DATE_PLACEHOLDER"
       },
       jsonPath: "searchScreen.fromDate",
       gridDefination: {
@@ -120,10 +120,10 @@ export const tradeLicenseApplication = getCommonCard({
     }),
 
     toDate: getDateField({
-      label: { labelName: "To Date", labelKey: "TL_COMMON_TO_DATE_LABEL" },
+      label: { labelName: "To Date", labelKey: "BPA_TO_DATE_LABEL" },
       placeholder: {
         labelName: "Select to Date",
-        labelKey: "TL_COMMON_TO_DATE_PLACEHOLDER"
+        labelKey: "BPA_TO_DATE_PLACEHOLDER"
       },
       jsonPath: "searchScreen.toDate",
       gridDefination: {
@@ -168,7 +168,7 @@ export const tradeLicenseApplication = getCommonCard({
         children: {
           buttonLabel: getLabel({
             labelName: "Search",
-            labelKey: "TL_HOME_SEARCH_RESULTS_BUTTON_SEARCH"
+            labelKey: "BPA_HOME_SEARCH_RESULTS_BUTTON_SEARCH"
           })
         },
         onClickDefination: {

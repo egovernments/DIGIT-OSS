@@ -41,12 +41,12 @@ const getApproveCard = queryValuePurpose => {
       queryValuePurpose === "cancel"
         ? getCommonSubHeader({
             labelName: "Cancellation Remarks",
-            labelKey: "TL_CANCEL_CHECKLIST_HEAD"
+            labelKey: "BPA_CANCEL_CHECKLIST_HEAD"
           })
         : getCommonSubHeader(
             {
               labelName: "Verification Details",
-              labelKey: "TL_APPROVAL_CHECKLIST_HEAD"
+              labelKey: "BPA_APPROVAL_CHECKLIST_HEAD"
             },
             {
               style: {
@@ -80,7 +80,7 @@ const getApproveCard = queryValuePurpose => {
     uploadFileHeader: getCommonSubHeader(
       {
         labelName: "Supporting Documents",
-        labelKey: "TL_APPROVAL_UPLOAD_HEAD"
+        labelKey: "BPA_APPROVAL_UPLOAD_HEAD"
       },
       {
         style: { marginTop: 15 }
@@ -89,7 +89,7 @@ const getApproveCard = queryValuePurpose => {
     uploadFileInfo: getCommonParagraph(
       {
         labelName: "Only .jpg and .pdf files. 5MB max file size.",
-        labelKey: "TL_APPROVAL_UPLOAD_SUBHEAD"
+        labelKey: "BPA_APPROVAL_UPLOAD_SUBHEAD"
       },
       {
         style: {

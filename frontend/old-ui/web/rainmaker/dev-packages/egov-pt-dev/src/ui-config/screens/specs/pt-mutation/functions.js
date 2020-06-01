@@ -1,4 +1,5 @@
-
+import React from "react";
+import { LabelContainer } from "egov-ui-framework/ui-containers";
 import { handleScreenConfigurationFieldChange as handleField, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 import { getSearchResults } from "../../../../ui-utils/commons";
@@ -139,7 +140,7 @@ const searchApiCall = async (state, dispatch, index) => {
         true,
         {
           labelName: "Please fill valid fields to search",
-          labelKey: "ERR_FIRENOC_FILL_VALID_FIELDS"
+          labelKey: "ERR_PT_FILL_VALID_FIELDS"
         },
         "error"
       )
@@ -174,7 +175,7 @@ const searchApiCall = async (state, dispatch, index) => {
         true,
         {
           labelName: "Please fill valid fields to search",
-          labelKey: "ERR_FIRENOC_FILL_VALID_FIELDS"
+          labelKey: "ERR_PT_FILL_VALID_FIELDS"
         },
         "error"
       )
@@ -249,7 +250,7 @@ const searchApiCall = async (state, dispatch, index) => {
         true,
         {
           labelName: "Please fill valid fields to search",
-          labelKey: "ERR_FIRENOC_FILL_VALID_FIELDS"
+          labelKey: "ERR_PT_FILL_VALID_FIELDS"
         },
         "error"
       )
@@ -364,33 +365,31 @@ const searchApiCall = async (state, dispatch, index) => {
       // const response = searchSampleResponse();
 
       let propertyData = response.Properties.map(item => ({
-        [getTextToLocalMapping("Property Tax Unique Id")]:
+        ["PT_COMMON_TABLE_COL_PT_ID"]:
           item.propertyId || "-",
-        [getTextToLocalMapping("Owner Name")]: item.owners[0].name || "-",
-        [getTextToLocalMapping("Guardian Name")]:
+        ["PT_COMMON_TABLE_COL_OWNER_NAME"]: item.owners[0].name || "-",
+        ["PT_GUARDIAN_NAME"]:
           item.owners[0].fatherOrHusbandName || "-",
-        [getTextToLocalMapping("Existing Property Id")]:
+        ["PT_COMMON_COL_EXISTING_PROP_ID"]:
           item.oldPropertyId || "-",
-        [getTextToLocalMapping("Address")]:
+        ["PT_COMMON_COL_ADDRESS"]:
           getAddress(item) || "-",
-        tenantId: item.tenantId,
-        [getTextToLocalMapping("Status")]: item.status || "-"
+        ["TENANT_ID"]: item.tenantId,
+        ["PT_COMMON_TABLE_COL_STATUS_LABEL"]: item.status || "-"
       }));
 
       let applicationData = response.Properties.map(item => ({
-        // [getTextToLocalMapping("Application No")]:
-        //   item.applicationNo || "-",
-        [getTextToLocalMapping("Application No")]:
+        ["PT_COMMON_TABLE_COL_APP_NO"]:
           item || "-",
-        [getTextToLocalMapping("Property Tax Unique Id")]: item || "-",
-        [getTextToLocalMapping("Application Type")]:
-          item.creationReason ? getTextToLocalMapping("PT." + item.creationReason) : "NA",
-        [getTextToLocalMapping("Owner Name")]:
+        ["PT_COMMON_TABLE_COL_PT_ID"]: item || "-",
+        ["PT_COMMON_TABLE_COL_APP_TYPE"]:
+          item.creationReason ? <LabelContainer labelName={"PT." + item.creationReason} labelKey={"PT." + item.creationReason} /> : "NA",
+        ["PT_COMMON_TABLE_COL_OWNER_NAME"]:
           item.owners[0].name || "-",
-        [getTextToLocalMapping("Address")]:
+        ["PT_COMMON_COL_ADDRESS"]:
           getAddress(item) || "-",
-        tenantId: item.tenantId,
-        [getTextToLocalMapping("Status")]: item.status || "-",
+        ["TENANT_ID"]: item.tenantId,
+        ["PT_COMMON_TABLE_COL_STATUS_LABEL"]: item.status || "-",
         temporary: item
       }));
 
@@ -406,10 +405,8 @@ const searchApiCall = async (state, dispatch, index) => {
         handleField(
           "propertySearch",
           "components.div.children.searchPropertyTable",
-          "props.title",
-          `${getTextToLocalMapping(
-            "Search Results for Properties"
-          )} (${response.Properties.length})`
+          "props.rows",
+          response.Properties.length
         )
       );
       dispatch(
@@ -424,10 +421,8 @@ const searchApiCall = async (state, dispatch, index) => {
         handleField(
           "propertySearch",
           "components.div.children.searchApplicationTable",
-          "props.title",
-          `${getTextToLocalMapping(
-            "Search Results for Property Application"
-          )} (${response.Properties.length})`
+          "props.rows",
+          response.Properties.length
         )
       );
       //showHideProgress(false, dispatch);
@@ -577,7 +572,7 @@ export const downloadPrintContainer = (
               label: { labelName: "DOWNLOAD", labelKey: "MT_DOWNLOAD" },
               leftIcon: "cloud_download",
               rightIcon: "arrow_drop_down",
-              props: { variant: "outlined", style: { height: "60px", color: "#FE7A51" }, className: "pt-download-button" },
+              props: { variant: "outlined", style: { height: "60px", color: "#FE7A51",marginRight:"5px" }, className: "pt-download-button" },
               menu: downloadMenu
             }
           }

@@ -46,7 +46,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
       const long = payloadData.SewerageConnections[0].property.address.locality.longitude ? payloadData.SewerageConnections[0].property.address.locality.longitude : 'NA'
       payloadData.SewerageConnections[0].property.address.locality.locationOnMap = `${lat} ${long}`
 
-      if (payloadData.SewerageConnections[0].property.usageCategory !== undefined) {
+      /*if (payloadData.SewerageConnections[0].property.usageCategory !== undefined) {
         const propertyUsageType = "[?(@.code  == " + JSON.stringify(payloadData.SewerageConnections[0].property.usageCategory) + ")]"
         let propertyUsageTypeParams = { MdmsCriteria: { tenantId: "pb", moduleDetails: [{ moduleName: "PropertyTax", masterDetails: [{ name: "UsageCategoryMajor", filter: `${propertyUsageType}` }] }] } }
         const mdmsPropertyUsageType = await getDescriptionFromMDMS(propertyUsageTypeParams, dispatch)
@@ -55,7 +55,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
         } else {
           payloadData.SewerageConnections[0].property.propertyTypeData = "NA"
         }
-      }
+      }*/
 
       dispatch(prepareFinalObject("WaterConnection[0]", payloadData.SewerageConnections[0]))
     }
@@ -81,7 +81,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
       const long = payloadData.WaterConnection[0].property.address.locality.longitude;
       payloadData.WaterConnection[0].property.address.locality.locationOnMap = `${lat} ${long}`
 
-      if (payloadData.WaterConnection[0].property.usageCategory !== undefined) {
+      /*if (payloadData.WaterConnection[0].property.usageCategory !== undefined) {
         const propertyUsageType = "[?(@.code  == " + JSON.stringify(payloadData.WaterConnection[0].property.usageCategory) + ")]"
         let propertyUsageTypeParams = { MdmsCriteria: { tenantId: "pb", moduleDetails: [{ moduleName: "PropertyTax", masterDetails: [{ name: "UsageCategoryMajor", filter: `${propertyUsageType}` }] }] } }
         const mdmsPropertyUsageType = await getDescriptionFromMDMS(propertyUsageTypeParams, dispatch)
@@ -90,7 +90,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
         } else {
           payloadData.WaterConnection[0].property.propertyTypeData = "NA"
         }
-      }
+      }*/
 
       dispatch(prepareFinalObject("WaterConnection[0]", payloadData.WaterConnection[0]));
     }

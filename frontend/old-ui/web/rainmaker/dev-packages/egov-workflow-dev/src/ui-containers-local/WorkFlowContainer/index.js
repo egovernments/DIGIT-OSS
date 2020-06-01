@@ -165,18 +165,21 @@ class WorkFlowContainer extends React.Component {
       }
     }
     if (dataPath === "BPA") {
-      data.assignees = [];
-      if (data.assignee) {
-        data.assignee.forEach(assigne => {
-          data.assignees.push({
+      data.workflow.assignees = [];
+      if (data.workflow.assignee) {
+        data.workflow.assignee.forEach(assigne => {
+          data.workflow.assignees.push({
             uuid: assigne
           });
         });
       }
-      if (data.wfDocuments) {
-        for (let i = 0; i < data.wfDocuments.length; i++) {
-          data.wfDocuments[i].fileStore = data.wfDocuments[i].fileStoreId
+      if (data.workflow && data.workflow.varificationDocuments) {
+        for (let i = 0; i < data.workflow.varificationDocuments.length; i++) {
+          data.workflow.varificationDocuments[i].fileStore = data.workflow.varificationDocuments[i].fileStoreId
         }
+      }
+      if(get(data, "workflow.comment")) {
+        data.workflow.comments = get(data, "workflow.comment");
       }
     }
     if (dataPath == 'Property') {
@@ -291,7 +294,7 @@ class WorkFlowContainer extends React.Component {
     let appendToPath = ""
     if (dataPath === "FireNOCs") {
       appendToPath = "fireNOCDetails."
-    } else if (dataPath === "Assessment" || dataPath === "Property") {
+    } else if (dataPath === "Assessment" || dataPath === "Property" || dataPath === "BPA") {
       appendToPath = "workflow."
     } else {
       appendToPath = ""
@@ -301,7 +304,10 @@ class WorkFlowContainer extends React.Component {
     set(data, `${appendToPath}action`, label);
 
     if (isDocRequired) {
-      const documents = get(data, "wfDocuments");
+      let documents = get(data, "wfDocuments");
+      if( dataPath === "BPA") {
+        documents = get(data, "workflow.varificationDocuments");
+      }
       if (documents && documents.length > 0) {
         this.wfUpdate(label);
       } else {
@@ -525,13 +531,13 @@ class WorkFlowContainer extends React.Component {
     // } else {
     //   showFooter = process.env.REACT_APP_NAME === "Citizen" ? true : true;
     // }
-    if (moduleName === 'BPA' || moduleName === 'BPA_LOW') {
+    if (moduleName === 'BPA' || moduleName === 'BPA_LOW' || moduleName === 'BPA_OC') {
       showFooter = process.env.REACT_APP_NAME === "Citizen" ? false : true;
     }
     return (
       <div>
         {ProcessInstances && ProcessInstances.length > 0 && (
-          <TaskStatusContainer ProcessInstances={ProcessInstances} />
+          <TaskStatusContainer ProcessInstances={ProcessInstances} moduleName={moduleName}/>
         )}
         {showFooter &&
           <Footer

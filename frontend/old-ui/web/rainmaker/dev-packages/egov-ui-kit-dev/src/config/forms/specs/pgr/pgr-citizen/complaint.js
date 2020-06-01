@@ -143,7 +143,7 @@ const formConfig = {
       let city = get(state, "form.complaint.fields.city.value");
       let mohalla = get(state, "form.complaint.fields.mohalla.value");
       if (!city) {
-        dispatch(handleFieldChange("complaint", "city", tenantId));
+        // dispatch(handleFieldChange("complaint", "city", tenantId));
       } else {
         if (city) {
           dispatch(handleFieldChange("complaint", "city", city));

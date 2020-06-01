@@ -48,7 +48,7 @@ export const getPermanentDetails = (isEditable = true) => {
             },
             buttonLabel: getLabel({
               labelName: "Edit",
-              labelKey: "TL_SUMMARY_EDIT"
+              labelKey: "BPA_SUMMARY_EDIT"
             })
           },
           onClickDefination: {
@@ -64,7 +64,7 @@ export const getPermanentDetails = (isEditable = true) => {
       reviewDoorHouseNo: getLabelWithValue(
         {
           labelName: "Door/House No.",
-          labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
+          labelKey: "BPA_DETAILS_DOOR_NO_LABEL"
         },
         {
           jsonPath: "LicensesTemp[0].userData.address.doorNo",
@@ -74,7 +74,7 @@ export const getPermanentDetails = (isEditable = true) => {
       reviewBuilidingName: getLabelWithValue(
         {
           labelName: "Building/Colony Name",
-          labelKey: "TL_NEW_TRADE_DETAILS_BLDG_NAME_LABEL"
+          labelKey: "BPA_DETAILS_BLDG_NAME_LABEL"
         },
         {
           jsonPath: "LicensesTemp[0].userData.address.buildingName",
@@ -84,7 +84,7 @@ export const getPermanentDetails = (isEditable = true) => {
       reviewStreetName: getLabelWithValue(
         {
           labelName: "Enter Street Name",
-          labelKey: "TL_NEW_TRADE_DETAILS_SRT_NAME_PLACEHOLDER"
+          labelKey: "BPA_DETAILS_SRT_NAME_PLACEHOLDER"
         },
         {
           jsonPath: "LicensesTemp[0].userData.address.street",
@@ -104,7 +104,7 @@ export const getPermanentDetails = (isEditable = true) => {
       reviewCity: getLabelWithValue(
         {
           labelName: "City",
-          labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
+          labelKey: "BPA_CITY_LABEL"
         },
         {
           jsonPath: "LicensesTemp[0].userData.address.city",
@@ -114,7 +114,7 @@ export const getPermanentDetails = (isEditable = true) => {
       reviewPincode: getLabelWithValue(
         {
           labelName: "Pincode",
-          labelKey: "TL_NEW_TRADE_DETAILS_PIN_LABEL"
+          labelKey: "BPA_DETAILS_PIN_LABEL"
         },
         {
           jsonPath: "LicensesTemp[0].userData.address.pincode",
@@ -165,7 +165,7 @@ export const getCommunicactionDetails = (isEditable = true) => {
             },
             buttonLabel: getLabel({
               labelName: "Edit",
-              labelKey: "TL_SUMMARY_EDIT"
+              labelKey: "BPA_SUMMARY_EDIT"
             })
           },
           onClickDefination: {
@@ -181,7 +181,7 @@ export const getCommunicactionDetails = (isEditable = true) => {
       reviewDoorHouseNo: getLabelWithValue(
         {
           labelName: "Door/House No.",
-          labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
+          labelKey: "BPA_DETAILS_DOOR_NO_LABEL"
         },
         {
           jsonPath: "Licenses[0].tradeLicenseDetail.address.doorNo",
@@ -191,7 +191,7 @@ export const getCommunicactionDetails = (isEditable = true) => {
       reviewBuilidingName: getLabelWithValue(
         {
           labelName: "Building/Colony Name",
-          labelKey: "TL_NEW_TRADE_DETAILS_BLDG_NAME_LABEL"
+          labelKey: "BPA_DETAILS_BLDG_NAME_LABEL"
         },
         {
           jsonPath: "Licenses[0].tradeLicenseDetail.address.buildingName",
@@ -201,7 +201,7 @@ export const getCommunicactionDetails = (isEditable = true) => {
       reviewStreetName: getLabelWithValue(
         {
           labelName: "Enter Street Name",
-          labelKey: "TL_NEW_TRADE_DETAILS_SRT_NAME_PLACEHOLDER"
+          labelKey: "BPA_DETAILS_SRT_NAME_PLACEHOLDER"
         },
         {
           jsonPath: "Licenses[0].tradeLicenseDetail.address.street",
@@ -221,7 +221,7 @@ export const getCommunicactionDetails = (isEditable = true) => {
       reviewCity: getLabelWithValue(
         {
           labelName: "City",
-          labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
+          labelKey: "BPA_CITY_LABEL"
         },
         {
           jsonPath: "Licenses[0].tradeLicenseDetail.address.city",
@@ -231,7 +231,7 @@ export const getCommunicactionDetails = (isEditable = true) => {
       reviewPincode: getLabelWithValue(
         {
           labelName: "Pincode",
-          labelKey: "TL_NEW_TRADE_DETAILS_PIN_LABEL"
+          labelKey: "BPA_DETAILS_PIN_LABEL"
         },
         {
           jsonPath: "Licenses[0].tradeLicenseDetail.address.pincode",

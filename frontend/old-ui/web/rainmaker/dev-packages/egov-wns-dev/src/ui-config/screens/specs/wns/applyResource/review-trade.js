@@ -7,8 +7,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getConnectionDetails } from './../applyResource/task-connectiondetails';
 import { propertyOwnerDetails } from "../applyResource/task-owner-details";
-import { convertEpochToDate } from "../../utils";
-import { handleNA } from '../../utils';
+import { convertEpochToDateAndHandleNA, handlePropertySubUsageType, handleNA } from '../../utils';
 
 const getHeader = label => {
   return {
@@ -222,8 +221,13 @@ const getPropertyDetails = {
             labelName: "Property Sub usage type",
             labelKey: "WS_PROPERTY_SUB_USAGE_TYPE_LABEL"
           },
-          { jsonPath: "WaterConnection[0].property.propertySubUsageType",
-          callBack: handleNA}
+          { jsonPath: "WaterConnection[0].property.units[0].usageCategory",
+            callBack: handlePropertySubUsageType,
+            localePrefix: {
+              moduleName: "WS",
+              masterName: "PROPSUBUSGTYPE"
+            }
+          }
         ),
         reviewPlotSize: getLabelWithValue(
           {
@@ -312,12 +316,12 @@ const ownerDetails = {
             ),
             dateOfBirth: getLabelWithValue(
               {
+                labelName: "Date Of Birth",
                 labelKey: "WS_OWN_DETAIL_DOB_LABEL"
               },
               {
                 jsonPath: "WaterConnection[0].property.owners[0].dob",
-                callBack: convertEpochToDate,
-                callBack: handleNA
+                callBack: convertEpochToDateAndHandleNA
               }
             ),
             fatherName: getLabelWithValue(

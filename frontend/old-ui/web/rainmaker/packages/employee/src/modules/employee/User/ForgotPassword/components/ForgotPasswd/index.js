@@ -1,5 +1,6 @@
 import React from "react";
-import { Button, Card, TextField, Image } from "components";
+import { Card, TextField, Image } from "components";
+import { Button} from "egov-ui-framework/ui-atoms";
 import Label from "egov-ui-kit/utils/translationNode";
 import logo from "egov-ui-kit/assets/images/logo_black.png";
 import "./index.css";
@@ -40,8 +41,19 @@ const ForgotPasswd = ({ form, handleFieldChange }) => {
             {...fields.username}
           />
           <CityPicker onChange={handleFieldChange} fieldKey="tenantId" field={fields.tenantId} />
-
-          <Button id="login-submit-action" primary={true} label="CONTINUE" fullWidth={true} {...submit} />
+          <Button
+           id="login-submit-action"
+                {...submit}
+            style={{
+              height: "48px",     
+              width:"100%"        
+            }}
+            variant={"contained"}
+            color={"primary"}
+          >
+            <Label buttonLabel={true}   labelStyle={{fontWeight:500 }}  label="CORE_COMMON_CONTINUE" />
+          </Button>
+          {/* <Button id="login-submit-action" primary={true} label="CONTINUE" fullWidth={true} {...submit} /> */}
         </div>
       }
     />

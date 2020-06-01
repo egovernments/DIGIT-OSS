@@ -72,6 +72,8 @@ class SingleApplication extends React.Component {
           setRoute(`/fire-noc/search-preview?applicationNumber=${item.fireNOCDetails.applicationNumber}&tenantId=${item.tenantId}`);
       }
     } else if (moduleName === "BPAREG") {
+      const userInfo = JSON.parse(getUserInfo());
+      const roles = get(userInfo, "roles");
       if (item.serviceType === "BPAREG") {
         switch (item.status) {
           case "INITIATED":
@@ -80,9 +82,19 @@ class SingleApplication extends React.Component {
           default:
             setRoute(`/bpastakeholder/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
         }
+      } else if(item.serviceType === "BPA_OC") {
+        switch (item.status) {
+          case "Initiated":
+            if(roles && roles.length == 1 && roles[0].code == "CITIZEN") {
+              setRoute(`/oc-bpa/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}&type=${item.type}`);
+            } else {
+              setRoute(`/oc-bpa/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
+            }
+            break;
+          default:
+            setRoute(`/oc-bpa/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}&type=${item.type}`);
+        }
       } else {
-        const userInfo = JSON.parse(getUserInfo());
-        const roles = get(userInfo, "roles");
         switch (item.status) {
           case "Initiated":
             if(roles && roles.length == 1 && roles[0].code == "CITIZEN") {

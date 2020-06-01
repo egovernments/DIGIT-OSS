@@ -5,12 +5,12 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 import {
-  getSearchResults,
   getPayload,
   getTenantName
 } from "./publicSearchUtils";
-import { getTextToLocalMapping, validateFields } from "../../utils/index";
-import { ComponentJsonPath } from "./publicSearchUtils";
+import { validateFields } from "../../utils/index";
+import { getSearchResults } from "../../../../../ui-utils/commons";
+import { ComponentJsonPath, fetchBill, getPropertyWithBillAmount } from "./publicSearchUtils";
 
 export const propertySearch = async (state, dispatch) => {
   searchApiCall(state, dispatch);
@@ -82,7 +82,7 @@ const searchApiCall = async (state, dispatch) => {
         true,
         {
           labelName: "Please fill valid fields to search",
-          labelKey: "ERR_FIRENOC_FILL_VALID_FIELDS"
+          labelKey: "ERR_PT_FILL_VALID_FIELDS"
         },
         "error"
       )
@@ -107,18 +107,21 @@ const searchApiCall = async (state, dispatch) => {
     removeValidation(state, dispatch);
 
     //  showHideProgress(true, dispatch);
-    const requestPayload = getPayload(searchScreenObject);
+    const querryObject = getPayload(searchScreenObject);
     try {
-      const response = await getSearchResults(requestPayload);
+      const response = await getSearchResults(querryObject);
       // const response = searchResponse;
-
-      let propertyData = response.Properties.map(item => ({
-        [getTextToLocalMapping("Property ID")]: item.propertyId || "-",
-        [getTextToLocalMapping("Owner Name")]: item.ownersName || "-",
-        [getTextToLocalMapping("Address")]: getAddress(item) || "-",
-        [getTextToLocalMapping("Property Status")]: item.status || "-",
-        [getTextToLocalMapping("Amount Dues")]: item.pendingDues || "-",
-        [getTextToLocalMapping("Action")]: item.pendingDues || "-"
+      const billResponse = await fetchBill(dispatch, response, searchScreenObject.tenantId, "PT");
+      const finalResponse = getPropertyWithBillAmount(response, billResponse);
+      console.log("finalResponse-------", finalResponse);
+      let propertyData = finalResponse.Properties.map(item => ({
+        ["PT_MUTATION_PID"]: item.propertyId || "-",
+        ["PT_COMMON_TABLE_COL_OWNER_NAME"]: item.owners[0].name || "-",
+        ["PT_COMMON_COL_ADDRESS"]: getAddress(item) || "-",
+        ["PT_COMMON_TABLE_PROPERTY_STATUS"]: item.status || "-",
+        ["PT_AMOUNT_DUE"]: (item.totalAmount || item.totalAmount===0) ? item.totalAmount : "-",
+        ["PT_COMMON_TABLE_COL_ACTION_LABEL"]: item.totalAmount || "-",
+        ["TENANT_ID"]: item.tenantId || "-"
       }));
 
       dispatch(
@@ -133,10 +136,8 @@ const searchApiCall = async (state, dispatch) => {
         handleField(
           "public-search",
           "components.div.children.searchPropertyTable",
-          "props.title",
-          `${getTextToLocalMapping("Search Results for Properties")} (${
-            response.Properties.length
-          })`
+          "props.rows",
+          response.Properties.length
         )
       );
 

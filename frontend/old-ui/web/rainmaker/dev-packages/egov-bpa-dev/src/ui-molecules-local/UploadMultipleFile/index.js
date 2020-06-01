@@ -1,5 +1,7 @@
 import React from "react";
-import { UploadFile, UploadedDocument } from "egov-ui-framework/ui-atoms";
+import { UploadFile } from "egov-ui-framework/ui-atoms";
+import UploadedDocument from "../../ui-atoms-local/UploadedDocument"
+import "./index.scss";
 
 const UploadMultipleFile = ({
   uploaded,
@@ -22,11 +24,12 @@ const UploadMultipleFile = ({
           {documents &&
             documents.map((document, documentIndex) => {
               return (
-                <div key={documentIndex}>
+                <div className="divellip" key={documentIndex}>
                   {document && (
                     <UploadedDocument
                       document={document}
                       removeDocument={()=>removeDocument(documentIndex)}
+                      disabled={!document.isClickable}
                     />
                   )}
                 </div>

@@ -78,7 +78,10 @@ const NoteAtom = Loadable({
   loader: () => import("./NoteAtom"),
   loading: () => <Loading />
 });
-
+const UploadedDocument = Loadable({
+  loader: () => import("./UploadedDocument"),
+  loading: () => <Loading />
+});
 export {
   TestAtoms,
   AutoSuggest,
@@ -94,5 +97,6 @@ export {
   PermitNumber,
   MenuListCompositionForBpa,
   PermitListCondition,
-  NoteAtom
+  NoteAtom,
+  UploadedDocument
 };

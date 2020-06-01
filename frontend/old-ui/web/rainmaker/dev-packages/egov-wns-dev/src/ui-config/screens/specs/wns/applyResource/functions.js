@@ -16,6 +16,12 @@ export const propertySearchApiCall = async (state, dispatch) => {
       []
     )
   );
+  dispatch(
+    prepareFinalObject(
+      "applyScreen.property",
+      {}
+    )
+  );
   if (
     Object.keys(searchScreenObject).length == 0 ||
     Object.values(searchScreenObject).every(x => x === "")
@@ -28,16 +34,48 @@ export const propertySearchApiCall = async (state, dispatch) => {
       }
     }
     try {
-      if (process.env.REACT_APP_NAME === "Citizen") {
+      let allowCitizenToSearchOtherProperties = get(
+        state
+          .screenConfiguration
+          .preparedFinalObject
+          .applyScreenMdmsData["ws-services-masters"],
+        "PropertySearch", []
+      )
+        .map(a => a.code === "allowCitizenToUseAnyProperty")[0];
+      if (
+        process.env.REACT_APP_NAME === "Citizen" &&
+        !allowCitizenToSearchOtherProperties
+      ) {
         queryObject.push({ key: "mobileNumber", value: JSON.parse(getUserInfo()).mobileNumber })
       }
       let response = await getPropertyResults(queryObject, dispatch);
       if (response && response.Properties.length > 0) {
-        if (!_.isEmpty(get(state, "screenConfiguration.preparedFinalObject.applyScreen.property", {}))) {
-          dispatch(prepareFinalObject("applyScreen.property", {}))
+        if(response.Properties[0].status === 'INACTIVE'){
+          dispatch(toggleSnackbar(true, { labelKey: "ERR_WS_PROP_STATUS_INACTIVE", labelName: "Property Status is INACTIVE" }, "warning"));
+        }else{
+          let propertyData = response.Properties[0];
+          let contractedCorAddress = "";
+
+          if(propertyData.address.doorNo !== null && propertyData.address.doorNo !== ""){
+            contractedCorAddress += propertyData.address.doorNo + ", ";
+          }
+          if(propertyData.address.buildingName !== null && propertyData.address.buildingName !== ""){
+            contractedCorAddress += propertyData.address.buildingName + ", ";
+          }        
+          contractedCorAddress += propertyData.address.locality.name + ", " + propertyData.address.city;
+
+          for(var i=0; i<propertyData.owners.length;i++){ 
+            if(propertyData.owners[i].correspondenceAddress == 'NA' || propertyData.owners[i].correspondenceAddress == null || propertyData.owners[i].correspondenceAddress == ""){
+              if(propertyData.owners[i].permanentAddress == 'NA' || propertyData.owners[i].permanentAddress == null || propertyData.owners[i].permanentAddress == ""){
+                propertyData.owners[i].correspondenceAddress = contractedCorAddress;
+              }else{
+                propertyData.owners[i].correspondenceAddress = propertyData.owners[i].permanentAddress;
+              }
+            }    
+          }
+          dispatch(prepareFinalObject("applyScreen.property", propertyData))
+          showHideFields(dispatch, true);
         }
-        dispatch(prepareFinalObject("applyScreen.property", response.Properties[0]))
-        showHideFields(dispatch, true);
       } else {
         showHideFields(dispatch, false);
         dispatch(toggleSnackbar(true, { labelKey: "ERR_WS_PROP_NOT_FOUND", labelName: "No Property records found" }, "warning"));

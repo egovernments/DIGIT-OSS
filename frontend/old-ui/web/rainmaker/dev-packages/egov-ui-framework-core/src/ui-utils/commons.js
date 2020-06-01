@@ -5,15 +5,19 @@ import {
   localStorageSet,
   localStorageGet,
   getLocalization,
-  getLocale
+  getLocale,
+  getTenantId,
+  getUserInfo
 } from "egov-ui-kit/utils/localStorageUtils";
-import { toggleSnackbar,toggleSpinner,prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { toggleSnackbar, toggleSpinner, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import orderBy from "lodash/orderBy";
 import get from "lodash/get";
 import set from "lodash/set";
 import commonConfig from "config/common.js";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { getRequiredDocuments } from "egov-ui-framework/ui-containers/RequiredDocuments/reqDocs";
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 export const addComponentJsonpath = (components, jsonPath = "components") => {
   for (var componentKey in components) {
@@ -207,9 +211,9 @@ export const replaceStrInPath = (inputString, search, replacement) => {
   return inputString.replaceAll(search, replacement);
 };
 
-export const getFileUrlFromAPI = async (fileStoreId,tenantId) => {
+export const getFileUrlFromAPI = async (fileStoreId, tenantId) => {
   const queryObject = [
-    { key: "tenantId", value: tenantId||commonConfig.tenantId },
+    { key: "tenantId", value: tenantId || commonConfig.tenantId },
     { key: "fileStoreIds", value: fileStoreId }
   ];
   try {
@@ -241,10 +245,10 @@ const getAllFileStoreIds = async ProcessInstances => {
 };
 
 
-export const getFileUrl = (linkText="") => {
+export const getFileUrl = (linkText = "") => {
   const linkList = linkText.split(",");
   let fileURL = '';
-  linkList&&linkList.map(link => {
+  linkList && linkList.map(link => {
     if (!link.includes('large') && !link.includes('medium') && !link.includes('small')) {
       fileURL = link;
     }
@@ -618,7 +622,7 @@ export const getUserDataFromUuid = async bodyObject => {
   }
 };
 
-export const getCommonPayUrl = (dispatch, applicationNo, tenantId ,businessService) => {
+export const getCommonPayUrl = (dispatch, applicationNo, tenantId, businessService) => {
   const url = `/egov-common/pay?consumerCode=${applicationNo}&tenantId=${tenantId}&businessService=${businessService}`;
   dispatch(setRoute(url));
 };
@@ -629,4 +633,140 @@ export const getTodaysDateInYMD = () => {
   let day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
   date = `${date.getFullYear()}-${month}-${day}`;
   return date;
+};
+
+export const isPublicSearch = () => {
+  return location && location.pathname && location.pathname.includes("/withoutAuth");
+}
+
+export const getStatusKey = (status) => {
+  switch (status) {
+    case "ACTIVE":
+      return { labelName: "Active", labelKey: "ACTIVE" };
+    case "INACTIVE":
+      return { labelName: "Inactive", labelKey: "INACTIVE" };
+    case "INITIATED":
+      return { labelName: "Initiated", labelKey: "INITIATED" };
+    case "APPLIED":
+      return { labelName: "Applied", labelKey: "APPLIED" };
+    case "PAID":
+      return { labelName: "Paid", labelKey: "PAID" };
+
+    case "APPROVED":
+      return { labelName: "Approved", labelKey: "APPROVED" };
+    case "REJECTED":
+      return { labelName: "Rejected", labelKey: "REJECTED" };
+    case "CANCELLED":
+      return { labelName: "Cancelled", labelKey: "CANCELLED" };
+    case "PENDINGAPPROVAL ":
+      return {
+        labelName:
+          "Pending for Approval",
+        labelKey:
+          "PENDINGAPPROVAL"
+      };
+    case "PENDINGPAYMENT":
+      return {
+        labelName:
+          "Pending payment",
+        labelKey:
+          "PENDINGPAYMENT"
+      };
+    case "DOCUMENTVERIFY":
+      return {
+        labelName:
+          "Pending for Document Verification",
+        labelKey: "DOCUMENTVERIFY"
+      };
+    case "FIELDINSPECTION":
+      return {
+        labelKey:
+          "FIELDINSPECTION", labelName:
+          "Pending for Field Inspection"
+      };
+    default:
+      return {
+        labelName: status, labelKey: status
+      }
+
+  }
+}
+
+export const getRequiredDocData = async (action, dispatch, moduleDetails) => {
+  let tenantId =
+    process.env.REACT_APP_NAME === "Citizen" ? JSON.parse(getUserInfo()).permanentCity : getTenantId();
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: moduleDetails[0].moduleName === "ws-services-masters" ? commonConfig.tenantId : tenantId,
+      moduleDetails: moduleDetails
+    }
+  };
+  try {
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+    const moduleName = moduleDetails[0].moduleName;
+    let documents = get(
+      payload.MdmsRes,
+      `${moduleName}.Documents`,
+      []
+    );
+
+    if (moduleName === "PropertyTax") {
+      payload.MdmsRes.tenant.tenants = payload.MdmsRes.tenant.citymodule[1].tenants;
+    }
+    const reqDocuments = getRequiredDocuments(documents, moduleName, footerCallBackForRequiredDataModal(moduleName));
+    set(
+      action,
+      "screenConfig.components.adhocDialog.children.popup",
+      reqDocuments
+    );
+    dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
+    return payload;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+const footerCallBackForRequiredDataModal = (moduleName) => {
+  switch (moduleName) {
+    case "FireNoc":
+      return (state, dispatch) => {
+        dispatch(prepareFinalObject("FireNOCs", []));
+        dispatch(prepareFinalObject("documentsUploadRedux", {}));
+        const applyUrl =
+          process.env.REACT_APP_SELF_RUNNING === "true" ? `/egov-ui-framework/fire-noc/apply` : `/fire-noc/apply`;
+        dispatch(setRoute(applyUrl));
+      };
+    case "PropertyTax":
+      return (state, dispatch) => {
+        dispatch(prepareFinalObject("documentsUploadRedux", {}));
+        const applyUrl = `/property-tax/assessment-form`;
+        dispatch(setRoute(applyUrl));
+      };
+    case "ws-services-masters":
+      return (state, dispatch) => {
+        dispatch(prepareFinalObject("WaterConnection", []));
+        dispatch(prepareFinalObject("SewerageConnection", []));
+        dispatch(prepareFinalObject("applyScreen", {}));
+        dispatch(prepareFinalObject("searchScreen", {}));
+        const applyUrl = process.env.REACT_APP_NAME === "Citizen" ? `/wns/apply` : `/wns/apply`
+        dispatch(setRoute(applyUrl));
+      };
+  }
+}
+export const showHideAdhocPopup = (state, dispatch, screenKey) => {
+  let toggle = get(
+    state.screenConfiguration.screenConfig[screenKey],
+    "components.adhocDialog.props.open",
+    false
+  );
+  dispatch(
+    handleField(screenKey, "components.adhocDialog", "props.open", !toggle)
+  );
 };

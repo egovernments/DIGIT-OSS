@@ -2,8 +2,6 @@ import {
   getCommonHeader,
   getCommonContainer
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import {CloudDownloadIcon} from '@material-ui/icons/CloudDownload';
-import {PrintIcon} from '@material-ui/icons/Print';
 import {
   applicationSuccessFooter,
   paymentSuccessFooter,
@@ -13,16 +11,8 @@ import {
 } from "./acknowledgementResource/footers";
 import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { getAppSearchResults } from "../../../../ui-utils/commons";
-import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
-import generatePdf from "../utils/generatePdfForBpa";
-import { Icon } from "egov-ui-framework/ui-atoms";
-// import { loadReceiptGenerationData } from "../utils/receiptTransformer";
 import set from "lodash/set";
-import get from "lodash/get";
 import { getCurrentFinancialYear } from "../utils";
-import { loadPdfGenerationDataForBpa } from "../utils/receiptTrasformerForBpa";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 export const header = getCommonContainer({
   header: getCommonHeader({
     labelName: `Application for BPA (${getCurrentFinancialYear()})`, //later use getFinancialYearDates
@@ -69,7 +59,6 @@ const getAcknowledgementCard = (
   tenant
 ) => {
   if (purpose === "APPLY" && status === "success") {
-    loadPdfGenerationDataForBpa(applicationNumber, tenant);
     return {
       header:getHeader(applicationNumber),
       applicationSuccessCard: {
@@ -81,105 +70,19 @@ const getAcknowledgementCard = (
             backgroundColor: "#39CB74",
             header: {
               labelName: "Application Submitted Successfully",
-              labelKey: "NOC_APPLICATION_SUCCESS_MESSAGE_MAIN"
+              labelKey: "BPA_APPLICATION_SUCCESS_MESSAGE_MAIN"
             },
             body: {
               labelName:
                 "A notification regarding Application Submission has been sent to building owner at registered Mobile No.",
-              labelKey: "NOC_APPLICATION_SUCCESS_MESSAGE_SUB"
+              labelKey: "BPA_APPLICATION_SUCCESS_MESSAGE_SUB"
             },
             tailText: {
               labelName: "Application No.",
-              labelKey: "NOC_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+              labelKey: "BPA_HOME_SEARCH_RESULTS_APP_NO_LABEL"
             },
             number: applicationNumber
-          }),
-          abc: {
-            uiFramework: "custom-atoms",
-            componentPath: "Div",
-            children: {
-              downloadFormButton: {
-                uiFramework: "custom-atoms",
-                componentPath: "Div",
-                children: {
-
-                  div1: {
-                    uiFramework: "custom-atoms",
-                    componentPath: "Icon",
-                 
-                    props:{
-                      iconName: "cloud_download",
-                    style:{
-                      marginTop: "7px",
-                      marginRight: "8px",
-                    }
-                  },
-                    onClick: {
-                      action: "condition",
-                      callBack: () => {
-                        generatePdf(state, dispatch, "application_download");
-                      },
-                    },
-                  },
-                  div2: getLabel({
-                    labelName: "DOWNLOAD CONFIRMATION FORM",
-                    labelKey: "NOC_APPLICATION_BUTTON_DOWN_CONF"
-                  })
-
-                },
-                onClickDefination: {
-                  action: "condition",
-                  callBack: () => {
-                    generatePdf(state, dispatch, "application_download");
-                  }
-                },
-              },
-              PrintFormButton: {
-                uiFramework: "custom-atoms",
-                componentPath: "Div",
-                children: {
-                  div1: {
-                    uiFramework: "custom-atoms",
-                    componentPath: "Icon",
-                 
-                    props:{
-                      iconName: "local_printshop",
-                      style:{
-                        marginTop: "7px",
-                        marginRight: "8px",
-                        marginLeft:"10px",
-                      }
-                  },
-                   onClick: {
-                    action: "condition",
-                    callBack: () => {
-                      generatePdf(state, dispatch, "application_print");
-                    }
-                  },
-
-                  },
-                  div2: getLabel({
-                    labelName: "PRINT CONFIRMATION FORM",
-                    labelKey: "NOC_APPLICATION_BUTTON_PRINT_CONF"
-                  })
-
-                },
-                onClickDefination: {
-                  action: "condition",
-                  callBack: () => {
-                    generatePdf(state, dispatch, "application_print");
-                  }
-                },
-              }
-
-            },
-            props: {
-              style: {
-                display: "flex",
-
-              }
-            },
-          }
+          })
         }
       },
       iframeForPdf: {
@@ -194,7 +97,6 @@ const getAcknowledgementCard = (
       )
     };
   } else if (purpose === "SEND_TO_CITIZEN" && status === "success") {
-    loadPdfGenerationDataForBpa(applicationNumber, tenant);
     return {
       header:getHeader(applicationNumber),
       applicationSuccessCard: {
@@ -215,7 +117,7 @@ const getAcknowledgementCard = (
             },
             tailText: {
               labelName: "Application No.",
-              labelKey: "NOC_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+              labelKey: "BPA_HOME_SEARCH_RESULTS_APP_NO_LABEL"
             },
             number: applicationNumber
           })
@@ -233,7 +135,6 @@ const getAcknowledgementCard = (
       )
     };
   } else if (purpose === "APPROVE" && status === "success") {
-    loadPdfGenerationDataForBpa(applicationNumber, tenant);
     return {
       header:getHeader(applicationNumber),
       applicationSuccessCard: {
@@ -253,7 +154,7 @@ const getAcknowledgementCard = (
             },
             tailText: {
               labelName: "Application No.",
-              labelKey: "NOC_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+              labelKey: "BPA_HOME_SEARCH_RESULTS_APP_NO_LABEL"
             },
             number: applicationNumber
           })
@@ -271,7 +172,6 @@ const getAcknowledgementCard = (
       )
     };
   } else if (purpose === "SEND_TO_ARCHITECT" && status === "success") {
-    loadPdfGenerationDataForBpa(applicationNumber, tenant);
     return {
       header:getHeader(applicationNumber),
       applicationSuccessCard: {
@@ -292,7 +192,7 @@ const getAcknowledgementCard = (
             },
             tailText: {
               labelName: "Application No.",
-              labelKey: "NOC_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+              labelKey: "BPA_HOME_SEARCH_RESULTS_APP_NO_LABEL"
             },
             number: applicationNumber
           })
@@ -310,7 +210,6 @@ const getAcknowledgementCard = (
       )
     };
   }  else if (purpose === "pay" && status === "success") {
-    loadPdfGenerationDataForBpa(applicationNumber, tenant);
     return {
       header,
       applicationSuccessCard: {
@@ -322,12 +221,12 @@ const getAcknowledgementCard = (
             backgroundColor: "#39CB74",
             header: {
               labelName: "Payment has been collected successfully!",
-              labelKey: "NOC_PAYMENT_COLLECTION_SUCCESS_MESSAGE_MAIN"
+              labelKey: "BPA_CONFIRMATION_MESSAGE_MAIN"
             },
             body: {
               labelName:
                 "A notification regarding Payment Collection has been sent to building owner at registered Mobile No.",
-              labelKey: "NOC_PAYMENT_SUCCESS_MESSAGE_SUB"
+              labelKey: "BPA_PAYMENT_SUCCESS_MESSAGE_SUB"
             },
             tailText: {
               labelName: "Payment Receipt No.",
@@ -345,7 +244,6 @@ const getAcknowledgementCard = (
       paymentSuccessFooter: paymentSuccessFooter()
     };
   } else if (purpose === "approve" && status === "success") {
-    loadPdfGenerationDataForBpa(applicationNumber, tenant);
     return {
       header,
       applicationSuccessCard: {
@@ -463,12 +361,12 @@ const getAcknowledgementCard = (
             backgroundColor: "#E54D42",
             header: {
               labelName: "Payment has failed!",
-              labelKey: "NOC_PAYMENT_FAILURE_MESSAGE_MAIN"
+              labelKey: "BPA_PAYMENT_FAILED"
             },
             body: {
               labelName:
                 "A notification regarding payment failure has been sent to the building owner and applicant.",
-              labelKey: "NOC_PAYMENT_FAILURE_MESSAGE_SUB"
+              labelKey: "BPA_PAYMENT_FAILURE_MESSAGE_SUB"
             }
           })
         }
@@ -487,15 +385,15 @@ const getAcknowledgementCard = (
             backgroundColor: "#39CB74",
             header: {
               labelName: "Application Marked Successfully",
-              labelKey: "NOC_MARK_SUCCESS_MESSAGE_MAIN"
+              labelKey: "BPA_MARK_SUCCESS_MESSAGE_MAIN"
             },
             body: {
               labelName: "Application has been marked successfully",
-              labelKey: "NOC_APPLICATION_MARKED_SUCCESS"
+              labelKey: "BPA_APPLICATION_MARKED_SUCCESS"
             },
             tailText: {
               labelName: "Application No.",
-              labelKey: "NOC_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+              labelKey: "BPA_HOME_SEARCH_RESULTS_APP_NO_LABEL"
             },
             number: applicationNumber
           })
@@ -515,7 +413,7 @@ const getAcknowledgementCard = (
             backgroundColor: "#39CB74",
             header: {
               labelName: "Application Forwarded Successfully",
-              labelKey: "NOC_FORWARD_SUCCESS_MESSAGE_MAIN"
+              labelKey: "BPA_FORWARD_SUCCESS_MESSAGE_MAIN"
             },
             body: {
               labelName: "Application has been forward successfully",
@@ -523,7 +421,7 @@ const getAcknowledgementCard = (
             },
             tailText: {
               labelName: "Application No.",
-              labelKey: "NOC_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+              labelKey: "BPA_HOME_SEARCH_RESULTS_APP_NO_LABEL"
             },
             number: applicationNumber
           })
@@ -590,21 +488,6 @@ const getAcknowledgementCard = (
   }
 };
 
-const setApplicationData = async (dispatch, applicationNumber, tenant) => {
-  const queryObject = [
-    {
-      key: "tenantId",
-      value: tenant
-    },
-    {
-      key: "applicationNos",
-      value: applicationNumber
-    }
-  ];
-  const response = await getAppSearchResults(queryObject);
-  dispatch(prepareFinalObject("BPA", get(response, "Bpa", [])));
-};
-
 const screenConfig = {
   uiFramework: "material-ui",
   name: "acknowledgement",
@@ -635,7 +518,6 @@ const screenConfig = {
       secondNumber,
       tenant
     );
-    setApplicationData(dispatch, applicationNumber, tenant);
     set(action, "screenConfig.components.div.children", data);
     return action;
   }

@@ -105,7 +105,7 @@ export const getReviewLicenseDetails = (isEditable = true) => {
             },
             buttonLabel: getLabel({
               labelName: "Edit",
-              labelKey: "TL_SUMMARY_EDIT"
+              labelKey: "BPA_SUMMARY_EDIT"
             })
           },
           onClickDefination: {

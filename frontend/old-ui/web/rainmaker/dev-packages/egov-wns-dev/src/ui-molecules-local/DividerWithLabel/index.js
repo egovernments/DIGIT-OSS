@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
 import { connect } from "react-redux";
+import get from "lodash/get";
 
 const labelStyle = {
   position: "relative",
@@ -31,6 +32,11 @@ class DividerWithLabel extends Component {
       label.labelKey,
       localizationLabels
     );
+   
+    if(label.labelKey === "WS_TASK_PROP_OWN_HEADER" && this.props.propertyOwners &&  this.props.propertyOwners.length > 1){
+      let componentJsonpath = this.props.componentJsonpath;
+      translatedLabel = translatedLabel + " "+ (parseInt(componentJsonpath.split('items[')[1][0])+1)
+    }
     return (
       <div style={dividerStyle}>
         <div style={{ ...labelStyle, ...labelProps.style }}>
@@ -42,10 +48,19 @@ class DividerWithLabel extends Component {
   }
 }
 
-const mapSateToProps = state => {
-  const { app } = state;
+const mapSateToProps = (state, ownprops) => {
+  const { app, screenConfiguration } = state;
   const { localizationLabels } = app;
-  return { localizationLabels };
+  const { componentJsonpath } = ownprops;
+  let propertyOwners = [];
+  if(ownprops.label.labelKey === "WS_TASK_PROP_OWN_HEADER"){
+    propertyOwners = get(
+      screenConfiguration.preparedFinalObject,
+      "WaterConnection[0].property.owners"
+    );
+  }
+  
+  return { localizationLabels, componentJsonpath, propertyOwners};
 };
 
 export default connect(

@@ -17,111 +17,74 @@ import { Icon } from "egov-ui-framework/ui-atoms";
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {generatePdfAndDownload} from "./acknowledgementResource/applicationSuccessFooter";
 import {downloadAcknowledgementForm} from "../utils"
+import "./index.css"
 
-const abc=(  state,
-  dispatch,
- applicationNumber,
-  tenant)=>{
-  return {
-    uiFramework: "custom-atoms",
-    componentPath: "Div",
-    children: {
-      downloadFormButton: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        children: {
-
-          div1: {
-            uiFramework: "custom-atoms",
-            componentPath: "Icon",
-
-            props:{
-              iconName: "cloud_download",
-            style:{
-              marginTop: "7px",
-              marginRight: "8px",
-            }
-          },
-            onClick: {
-              action: "condition",
-              callBack: () => {
-                const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
-                const documents = LicensesTemp[0].reviewDocData;
-                set(Licenses[0],"additionalDetails.documents", documents)
-                downloadAcknowledgementForm(Licenses);
-              }
-            },
-          },
-          div2: getLabel({
-            labelName: "DOWNLOAD CONFIRMATION FORM",
-            labelKey: "TL_APPLICATION_BUTTON_DOWN_CONF"
-          })
-
-        },
-        onClickDefination: {
-          action: "condition",
-          callBack: () => {
-            const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
-            const documents = LicensesTemp[0].reviewDocData;
-            set(Licenses[0],"additionalDetails.documents", documents)
-            downloadAcknowledgementForm(Licenses,"");
-          }
-        },
-      },
-      PrintFormButton: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        children: {
-          div1: {
-            uiFramework: "custom-atoms",
-            componentPath: "Icon",
-
-            props:{
-              iconName: "local_printshop",
-              style:{
-                marginTop: "7px",
-                marginRight: "8px",
-                marginLeft:"10px",
-              }
-          },
-           onClick: {
-            action: "condition",
-            callBack: () => {
-              const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
-              const documents = LicensesTemp[0].reviewDocData;
-              set(Licenses[0],"additionalDetails.documents", documents)
-              downloadAcknowledgementForm(Licenses,'print');
-            }
-          },
-
-          },
-          div2: getLabel({
-            labelName: "PRINT CONFIRMATION FORM",
-            labelKey: "TL_APPLICATION_BUTTON_PRINT_CONF"
-          })
-
-        },
-        onClickDefination: {
-          action: "condition",
-          callBack: () => {
-            const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
-            const documents = LicensesTemp[0].reviewDocData;
-            set(Licenses[0],"additionalDetails.documents", documents)
-            downloadAcknowledgementForm(Licenses,'print');
-          }
-        },
-      }
-
+const downloadprintMenu = (state, dispatch) => {
+  let applicationDownloadObject = {
+    label: { labelName: "Application", labelKey: "TL_APPLICATION" },
+    link: () => {
+      const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
+      const documents = LicensesTemp&&LicensesTemp[0].reviewDocData;
+      set(Licenses[0],"additionalDetails.documents",documents)
+      downloadAcknowledgementForm(Licenses);
     },
-    props: {
-      style: {
-        display: "flex",
-
-      }
+    leftIcon: "assignment"
+  };
+  let applicationPrintObject = {
+    label: { labelName: "Application", labelKey: "TL_APPLICATION" },
+    link: () => {
+      const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
+      const documents =LicensesTemp&& LicensesTemp[0].reviewDocData;
+      set(Licenses[0],"additionalDetails.documents",documents)
+      downloadAcknowledgementForm(Licenses,'print');
     },
-  }
+    leftIcon: "assignment"
+  };
+   let downloadMenu = [];
+   let printMenu = [];
+   downloadMenu = [ applicationDownloadObject];
+   printMenu = [applicationPrintObject];
+
+
+   return {
+       uiFramework: "custom-atoms",
+       componentPath: "Div",
+       props: {
+           className: "downloadprint-commonmenu",
+           style: { textAlign: "right", display: "flex" }
+       },
+       children: {
+           downloadMenu: {
+               uiFramework: "custom-molecules",
+               componentPath: "DownloadPrintButton",
+               props: {
+                   data: {
+                       label: { labelName: "DOWNLOAD", labelKey: "TL_DOWNLOAD" },
+                       leftIcon: "cloud_download",
+                       rightIcon: "arrow_drop_down",
+                       props: { variant: "outlined", style: { height: "60px", color: "#FE7A51",marginRight:"5px" }, className: "tl-download-button" },
+                       menu: downloadMenu
+                   }
+               }
+           },
+           printMenu: {
+               uiFramework: "custom-molecules",
+               componentPath: "DownloadPrintButton",
+               props: {
+                   data: {
+                       label: { labelName: "PRINT", labelKey: "TL_PRINT" },
+                       leftIcon: "print",
+                       rightIcon: "arrow_drop_down",
+                       props: { variant: "outlined", style: { height: "60px", color: "#FE7A51" }, className: "tl-print-button" },
+                       menu: printMenu
+                   }
+               }
+           }
+
+       },
+   }
+
 }
-
 const getAcknowledgementCard = (
   state,
   dispatch,
@@ -140,6 +103,7 @@ const getAcknowledgementCard = (
         labelKey: "TL_COMMON_APPLICATION_NEW_LICENSE",
         dynamicArray: [financialYearText]
       }),
+      headerdownloadprint: downloadprintMenu(state, dispatch),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -169,107 +133,7 @@ const getAcknowledgementCard = (
             number: applicationNumber
           })
         }
-      },
-      abc: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        children: {
-          downloadFormButton: {
-            uiFramework: "custom-atoms",
-            componentPath: "Div",
-            children: {
-
-              div1: {
-                uiFramework: "custom-atoms",
-                componentPath: "Icon",
-
-                props:{
-                  iconName: "cloud_download",
-                style:{
-                  marginTop: "7px",
-                  marginRight: "8px",
-                }
-              },
-                onClick: {
-                  action: "condition",
-                  callBack: () => {
-                    const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
-                    const documents = LicensesTemp[0].reviewDocData;
-                    set(Licenses[0],"additionalDetails.documents",documents)
-                    downloadAcknowledgementForm(Licenses);
-                  }
-                },
-              },
-              div2: getLabel({
-                labelName: "DOWNLOAD CONFIRMATION FORM",
-                labelKey: "TL_APPLICATION_BUTTON_DOWN_CONF"
-              })
-
-            },
-            onClickDefination: {
-              action: "condition",
-              callBack: () => {
-                const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
-                const documents = LicensesTemp[0].reviewDocData;
-                set(Licenses[0],"additionalDetails.documents",documents)
-                downloadAcknowledgementForm(Licenses);
-              }
-            },
-          },
-          PrintFormButton: {
-            uiFramework: "custom-atoms",
-            componentPath: "Div",
-            children: {
-              div1: {
-                uiFramework: "custom-atoms",
-                componentPath: "Icon",
-
-                props:{
-                  iconName: "local_printshop",
-                  style:{
-                    marginTop: "7px",
-                    marginRight: "8px",
-                    marginLeft:"10px",
-                  }
-              },
-               onClick: {
-                action: "condition",
-                callBack: () => {
-                  const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
-                  const documents = LicensesTemp[0].reviewDocData;
-                  set(Licenses[0],"additionalDetails.documents",documents)
-                  downloadAcknowledgementForm(Licenses,'print');
-                }
-              },
-
-              },
-              div2: getLabel({
-                labelName: "PRINT CONFIRMATION FORM",
-                labelKey: "TL_APPLICATION_BUTTON_PRINT_CONF"
-              })
-
-            },
-            onClickDefination: {
-              action: "condition",
-              callBack: () => {
-                const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
-                const documents = LicensesTemp[0].reviewDocData;
-                set(Licenses[0],"additionalDetails.documents",documents)
-                downloadAcknowledgementForm(Licenses,'print');
-              }
-            },
-          }
-
-        },
-        props: {
-          style: {
-            display: "flex",
-
-          }
-        },
-      },
-    
-  
+      }, 
       iframeForPdf: {
         uiFramework: "custom-atoms",
         componentPath: "Div"

@@ -137,7 +137,7 @@ const prepareNocDocumentsView = async (state, dispatch) => {
         getQueryArg(window.location.href, "tenantId") ||
         get(
           state.screenConfiguration.preparedFinalObject,
-          "BPA.address.city"
+          "BPA.landInfo.address.city"
         );
       set(
         action,

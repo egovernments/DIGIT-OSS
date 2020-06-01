@@ -109,24 +109,15 @@ export const searchApiCall = async (state, dispatch) => {
     try {
       response.Licenses.sort((item1, item2) => item1.applicationDate > item2.applicationDate ? -1 : 1)
       let data = response.Licenses.map(item => ({
-        [getTextToLocalMapping("Application No")]:
-          item.applicationNumber || "-",
-        [getTextToLocalMapping("Applicant Name")]:
-          item.tradeLicenseDetail.owners[0].name || "-",
-        [getTextToLocalMapping("Licensee Type")]:
-          getTextToLocalMapping(
-            `TRADELICENSE_TRADETYPE_${item.tradeLicenseDetail.tradeUnits[0].tradeType
-              .toUpperCase()
-              .replace(/[._:-\s\/]/g, "_")}_VIEW`
-          ) || "-",
-        [getTextToLocalMapping("Status")]: item.status || "-",
-        [getTextToLocalMapping("Owner Name")]:
-          get(businessIdToOwnerMapping[item.applicationNumber], "assignee") ||
-          "-",
-        [getTextToLocalMapping("Application Date")]:
-          convertEpochToDate(item.applicationDate) || "-",
-        [getTextToLocalMapping("Status")]: item.status || "-",
-        ["tenantId"]: item.tenantId
+        ["BPA_COMMON_TABLE_COL_APP_NO"]: item.applicationNumber || "-",
+        ["BPA_COMMON_TABLE_COL_OWN_NAME_LABEL"]: item.tradeLicenseDetail.owners[0].name || "-",
+        ["BPA_COMMON_TABLE_COL_LICENSEE_TYPE"]: getTextToLocalMapping(
+          `TRADELICENSE_TRADETYPE_${item.tradeLicenseDetail.tradeUnits[0].tradeType.split('.')[0].toUpperCase()}`
+        ) || "-",
+        ["BPA_COMMON_TABLE_COL_STATUS_LABEL"]: item.status || "-",
+        ["BPA_COMMON_TABLE_COL_ASSIGN_TO"]: get(businessIdToOwnerMapping[item.applicationNumber], "assignee") || "-",
+        ["BPA_COMMON_TABLE_COL_APP_DATE_LABEL"]:  convertEpochToDate(item.applicationDate) || "-",        
+        ["TENANT_ID"]: item.tenantId
       }));
 
       dispatch(
@@ -141,10 +132,8 @@ export const searchApiCall = async (state, dispatch) => {
         handleField(
           "search",
           "components.div.children.searchResults",
-          "props.title",
-          `${getTextToLocalMapping(
-            "Search Results for Stakeholder Registration Applications"
-          )} (${response.Licenses.length})`
+          "props.rows",
+          response.Licenses.length
         )
       );
       showHideTable(true, dispatch);
@@ -205,29 +194,42 @@ export const getWorkFlowData = async Licenses => {
 
 export const getWorkFlowDataForBPA = async Licenses => {
   var businessIds = [];
+  let tenantMap = {};
+  let processInstanceArray = [];
   Licenses.forEach(item => {
-    businessIds.push(item.applicationNo);
+    var appNums = tenantMap[item.tenantId] || [];
+    appNums.push(item.applicationNo);
+    tenantMap[item.tenantId] = appNums;
   });
-  const queryObject = [
-    {
-      key: "tenantId",
-      value: getTenantId()//process.env.REACT_APP_DEFAULT_TENANT_ID
-    },
-    {
-      key: "businessIds",
-      value: businessIds
+
+  for(var key in tenantMap) {
+    const queryObject = [
+      {
+        key: "tenantId",
+        value: key
+      },
+      {
+        key: "businessIds",
+        value: tenantMap[key]
+      }
+    ];
+    try {
+      const payload = await httpRequest(
+        "post",
+        "egov-workflow-v2/egov-wf/process/_search",
+        "",
+        queryObject
+      );
+      processInstanceArray = processInstanceArray.concat(payload.ProcessInstances)
+     
+    } catch (error) {
+      console.log(error);
+      return [];
     }
-  ];
-  try {
-    const payload = await httpRequest(
-      "post",
-      "egov-workflow-v2/egov-wf/process/_search",
-      "",
-      queryObject
-    );
+    
     var businessIdToOwnerMapping = {};
-    payload.ProcessInstances.filter(
-      record => record.moduleName.includes("BPA.")
+    processInstanceArray.filter(
+      record => record.moduleName.includes("bpa-services")
     ).forEach(item => {
       businessIdToOwnerMapping[item.businessId] = {
         assignee: item.assignes && item.assignes.name,
@@ -235,8 +237,5 @@ export const getWorkFlowDataForBPA = async Licenses => {
       };
     });
     return businessIdToOwnerMapping;
-  } catch (error) {
-    console.log(error);
-    return [];
   }
 };

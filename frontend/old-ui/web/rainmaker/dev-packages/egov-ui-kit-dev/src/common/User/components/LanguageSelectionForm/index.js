@@ -1,5 +1,6 @@
 import React from "react";
-import { ButtonGroup, Button, Card, Image } from "components";
+import { ButtonGroup, Card, Image } from "components";
+import { Button} from "egov-ui-framework/ui-atoms";
 import Label from "egov-ui-kit/utils/translationNode";
 import logo from "egov-ui-kit/assets/images/logo_black.png";
 import "./index.css";
@@ -73,13 +74,26 @@ const LanguageSelectionForm = ({ items, onLanguageSelect, value, onClick }) => {
               />
             </div>
             <div className="button-container">
-              <Button
+            <Button
+            id="continue-action"
+            className="lang-continue-button"
+            style={{
+              height: "48px",     
+              width:"100%"        
+            }}
+            variant={"contained"}
+            color={"primary"}
+            onClick={onLanguageSelect}
+          >
+            <Label buttonLabel={true}   labelStyle={{fontWeight:500 }}  label="CORE_COMMON_CONTINUE" />
+          </Button>
+              {/* <Button
                 id="continue-action"
-                onClick={onLanguageSelect}
-                primary={true}
-                label={<Label buttonLabel={true}   labelStyle={{fontWeight:500 }}  label="CORE_COMMON_CONTINUE" />}
+                className="lang-continue-button"
+              
+                label={}
                 fullWidth={true}
-              />
+              /> */}
             </div>
           </form>
         </div>

@@ -1,0 +1,25 @@
+.upload_btn{
+  width:100% !important;
+  display:inline-block;
+}
+
+.divellip > button > span > div {
+  display: inline-block;
+  width:98px !important;
+  text-overflow: ellipsis !important;  
+  white-space: nowrap;
+  overflow: hidden;
+}
+.divellip{
+  position: relative;
+}
+.upload_btn > div > div > div > button {
+  min-width: 61% !important;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.divellip > button > span > div:hover {
+overflow: visible;
+width: auto;
+}

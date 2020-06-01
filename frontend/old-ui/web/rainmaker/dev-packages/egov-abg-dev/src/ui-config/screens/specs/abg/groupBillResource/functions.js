@@ -99,13 +99,13 @@ export const searchApiCall = async (state, dispatch) => {
     }
     try {
       let data = response.map(item => ({
-        [getTextToLocalMapping("Bill No.")]: item.billNo || "-",
-        [getTextToLocalMapping("Consumer ID")]: item.consumerId || "-",
-        [getTextToLocalMapping("Owner Name")]: item.ownerName || "-",
-        [getTextToLocalMapping("Bill Date")]:
+        ["ABG_COMMON_TABLE_COL_BILL_NO"]: item.billNo || "-",
+        ["ABG_COMMON_TABLE_COL_CONSUMER_ID"]: item.consumerId || "-",
+        ["ABG_COMMON_TABLE_COL_OWN_NAME"]: item.ownerName || "-",
+        ["ABG_COMMON_TABLE_COL_BILL_DATE"]:
           convertEpochToDate(item.billDate) || "-",
-        [getTextToLocalMapping("Status")]: item.status && getTextToLocalMapping(item.status.toUpperCase())  || "-",
-        tenantId: item.tenantId
+        ["ABG_COMMON_TABLE_COL_STATUS"]: item.status && getTextToLocalMapping(item.status.toUpperCase())  || "-",
+        ["TENANT_ID"]: item.tenantId
       }));
 
       dispatch(
@@ -120,10 +120,8 @@ export const searchApiCall = async (state, dispatch) => {
         handleField(
           "groupBills",
           "components.div.children.searchResults",
-          "props.title",
-          `${getTextToLocalMapping(
-            "BILL_GENIE_GROUP_SEARCH_HEADER"
-          )} (${data.length})`
+          "props.rows",
+          data.length
         )
       );      
       showHideTable(true, dispatch);

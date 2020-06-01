@@ -93,7 +93,7 @@ function FeesEstimateCard(props) {
         labelKey: "COMMON_ARREARS",
         labelName: "Arrears"
       },
-      value: arrears
+      value: parseInt(arrears)
     });
   }
 

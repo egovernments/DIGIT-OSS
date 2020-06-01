@@ -4,6 +4,8 @@ import get from "lodash/get";
 import PropTypes from "prop-types";
 import cloneDeep from "lodash/cloneDeep";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
+import { LabelContainer } from "../../ui-containers";
+import { getLocaleLabels, isPublicSearch } from "../../ui-utils/commons";
 import "./index.css";
 
 class Table extends React.Component {
@@ -13,14 +15,33 @@ class Table extends React.Component {
     customSortOrder: "asc"
   };
 
+  getExtraTableStyle = () => {
+    const tableStyle = {
+      MUIDataTableToolbar: {
+        titleRoot: {
+          fontSize: "18px",
+          fontWeight: 600,
+          color: "rgba(0, 0, 0, 0.87)"
+        }
+      },
+      MUIDataTableHeadCell: {
+        data: {
+          fontSize: "14px !important",
+          fontWeight: "600 !important",
+          color: "rgba(0, 0, 0, 0.87) !important"
+        }
+      }
+    }
+    return isPublicSearch() ? tableStyle : {}
+  }
   getMuiTheme = () =>
     createMuiTheme({
       overrides: {
         MUIDataTableBodyCell: {
           root: {
             "&:nth-child(2)": {
-              color: "#2196F3",
-              cursor: "pointer"
+              color: isPublicSearch() ? "rgba(0, 0, 0, 0.87)": "#2196F3",
+              cursor: isPublicSearch() ? "auto":"pointer"
             }
           }
         },
@@ -38,7 +59,8 @@ class Table extends React.Component {
           body: {
             fontSize: 14
           }
-        }
+        },
+        ...this.getExtraTableStyle()
       }
     });
 
@@ -50,7 +72,7 @@ class Table extends React.Component {
         // Object.keys(columns).forEach(column => {
         columns.forEach(column => {
           // Handling the case where column name is an object with options
-          column = typeof column === "object" ? get(column, "name") : column;
+          column = typeof column === "object" ? get(column, "labelKey") : column;
           let columnValue = get(curr, `${column}`, "");
           if (get(columns, `${column}.format`, "")) {
             columnValue = columns[column].format(curr);
@@ -74,6 +96,15 @@ class Table extends React.Component {
     this.updateTable(data, columns);
   }
 
+  getTranslatedHeader = (columns) => {
+    if(columns) {
+      columns.map((item,key)=>{
+        columns[key].name = <LabelContainer labelKey={item.labelKey} labelName={item.labelKey} />
+      })
+      return columns;
+    }
+  }
+
   updateTable = (data, columns) => {
     // const updatedData = this.formatData(data, columns);
     // Column names should be array not keys of an object!
@@ -83,7 +114,7 @@ class Table extends React.Component {
     this.setState({
       data: updatedData,
       // columns: Object.keys(columns)
-      columns: fixedColumns
+      columns: this.getTranslatedHeader(fixedColumns)
     });
   };
 
@@ -100,13 +131,57 @@ class Table extends React.Component {
     }
   };
 
+  getLabelContainer = (labelKey, labelName) => {
+    return <LabelContainer labelKey={labelKey} labelName={labelName} />
+  }
+
+  getTableTextLabel = () => {
+    const textLabels = {
+      body: {
+        noMatch: this.getLabelContainer("COMMON_TABLE_NO_RECORD_FOUND", "Sorry, no matching records found"),
+        toolTip: this.getLabelContainer("COMMON_TABLE_SORT", "Sort"),
+      },
+      pagination: {
+        next: this.getLabelContainer("COMMON_TABLE_NEXT_PAGE", "Next Page"),
+        previous: this.getLabelContainer("COMMON_TABLE_PREVIOUS_PAGE", "Previous Page"),
+        rowsPerPage: this.getLabelContainer("COMMON_TABLE_ROWS_PER_PAGE", "Rows per page:"),
+        // displayRows: this.getLabelContainer("COMMON_TABLE_OF", "of")
+      },
+      toolbar: {
+        search: this.getLabelContainer("COMMON_TABLE_SEARCH", "Search"),
+        downloadCsv: this.getLabelContainer("COMMON_TABLE_DOWNLOAD_CSV", "Download CSV"),
+        print: this.getLabelContainer("COMMON_TABLE_PRINT", "Print"),
+        viewColumns: this.getLabelContainer("COMMON_TABLE_VIEW_COLUMNS", "View Columns"),
+        filterTable: this.getLabelContainer("COMMON_TABLE_FILTER", "Filter Table")
+      },
+      filter: {
+        all: this.getLabelContainer("COMMON_TABLE_ALL", "All"),
+        title: this.getLabelContainer("COMMON_TABLE_FILTERS", "FILTERS"),
+        reset: this.getLabelContainer("COMMON_TABLE_RESET", "RESET")
+      },
+      viewColumns: {
+        title: this.getLabelContainer("COMMON_TABLE_SHOW_COLUMNS", "Show Columns"),
+        titleAria: this.getLabelContainer("COMMON_TABLE_SHOW_HIDE_TABLE", "Show/Hide Table Columns")
+      }
+    }
+    return textLabels;
+  }
+
+  getTabelTitle = (title) => {
+    return getLocaleLabels(
+      title.labelName,
+      title.labelKey
+    );
+  }
+
   render() {
     const { data, columns } = this.state;
-    const { options, title, customSortDate } = this.props;
+    const { options, title, rows, customSortDate } = this.props;
+    options.textLabels = this.getTableTextLabel();
     return (
       <MuiThemeProvider theme={this.getMuiTheme()}>
         <MUIDataTable
-          title={title}
+          title={this.getTabelTitle(title) + " ("+rows+")"}
           data={data}
           columns={columns}
           options={{

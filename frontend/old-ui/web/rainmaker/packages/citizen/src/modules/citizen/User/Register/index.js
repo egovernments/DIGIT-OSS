@@ -11,7 +11,7 @@ class Register extends Component {
   render() {
     const { bannerUrl, logoUrl,qrCodeURL,enableWhatsApp } = this.props;
     return (
-      <Banner hideBackButton={true} bannerUrl={bannerUrl} logoUrl={logoUrl}>
+      <Banner hideBackButton={false} bannerUrl={bannerUrl} logoUrl={logoUrl}>
         <RegisterFormHOC logoUrl={logoUrl} qrCodeURL={qrCodeURL} enableWhatsApp={enableWhatsApp}/>
       </Banner>
     );

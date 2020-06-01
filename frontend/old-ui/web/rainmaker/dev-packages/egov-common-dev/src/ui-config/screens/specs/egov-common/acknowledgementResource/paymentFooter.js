@@ -1,7 +1,12 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { isPublicSearch } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 import { ifUserRoleExists } from "../../utils";
 import './acknowledgementUtils.css';
+
+const getHomeButtonPath = (item) => {
+    return isPublicSearch() ? "/withoutAuth/pt-mutation/public-search" : (ifUserRoleExists("CITIZEN") ? get(item, "citizenUrl", "/") : get(item, "employeeUrl", "/inbox"));
+}
 
 const getCommonApplyFooter = children => {
     return {
@@ -32,7 +37,7 @@ export const paymentFooter = (state, consumerCode, tenant, status, businessServi
 
     const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject, "commonPayInfo", defaultValues);
     const buttons = get(uiCommonPayConfig, "buttons");
-    const redirectionURL = "/egov-common/pay";
+    const redirectionURL = isPublicSearch() ? "/withoutAuth/egov-common/pay" : "/egov-common/pay";
     const path = `${redirectionURL}?consumerCode=${consumerCode}&tenantId=${tenant}&businessService=${businessService}`
 
     // gotoHome: {
@@ -85,7 +90,7 @@ export const paymentFooter = (state, consumerCode, tenant, status, businessServi
             },
             onClickDefination: {
                 action: "page_change",
-                path: ifUserRoleExists("CITIZEN") ? get(item, "citizenUrl", "/") : get(item, "employeeUrl", "/inbox")
+                path: getHomeButtonPath(item)
             },
         }
     })

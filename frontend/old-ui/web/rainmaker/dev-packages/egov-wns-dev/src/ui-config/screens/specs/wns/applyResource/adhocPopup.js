@@ -71,7 +71,7 @@ const getEstimateDataAfterAdhoc = async (state, dispatch) => {
     "dataCalculation",
     dispatch,
     window.location.href,
-    showHideAdhocPopup(state, dispatch),
+    showHideAdhocPopup(state, dispatch, "search-preview"),
   );
 
 };
@@ -188,7 +188,9 @@ export const adhocPopup = getCommonContainer({
             },
             onClickDefination: {
               action: "condition",
-              callBack: showHideAdhocPopup
+              callBack: (state, dispatch) => {
+                showHideAdhocPopup(state, dispatch, "search-preview");
+              }
             }
           }
         }
@@ -387,7 +389,9 @@ export const adhocPopup = getCommonContainer({
         },
         onClickDefination: {
           action: "condition",
-          callBack: showHideAdhocPopup
+          callBack: (state, dispatch) => {
+            showHideAdhocPopup(state, dispatch, "search-preview");
+          }
         }
       },
       addButton: {

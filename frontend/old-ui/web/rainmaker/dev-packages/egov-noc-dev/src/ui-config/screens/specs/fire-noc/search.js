@@ -4,11 +4,11 @@ import {
   getBreak
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { NOCApplication } from "./searchResource/fireNocApplication";
-import { showHideAdhocPopup, resetFields, getRequiredDocData } from "../utils";
+import { resetFields } from "../utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { pendingApprovals } from "./searchResource/pendingApprovals";
 import { searchResults } from "./searchResource/searchResults";
-import { setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
+import { setBusinessServiceDataToLocalStorage, getRequiredDocData, showHideAdhocPopup } from "egov-ui-framework/ui-utils/commons";
 import {
   getTenantId,
   localStorageGet
@@ -20,7 +20,7 @@ import {
   prepareFinalObject,
   handleScreenConfigurationFieldChange as handleField
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getRequiredDocuments } from "./requiredDocuments/reqDocs";
+// import { getRequiredDocuments } from "./requiredDocuments/reqDocs";
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
@@ -67,18 +67,18 @@ const NOCSearchAndResult = {
         )
       );
     }
-    getRequiredDocData(action, state, dispatch).then(() => {
-      let documents = get(
-        state,
-        "screenConfiguration.preparedFinalObject.searchScreenMdmsData.FireNoc.Documents",
-        []
-      );
-      set(
-        action,
-        "screenConfig.components.adhocDialog.children.popup",
-        getRequiredDocuments(documents)
-      );
-    });
+    const moduleDetails= [
+      {
+        moduleName: "FireNoc",
+        masterDetails: [{ name: "Documents" }]
+      }
+    ];
+
+    getRequiredDocData( action, dispatch, moduleDetails );
+    set(state,
+      "screenConfiguration.preparedFinalObject.searchScreen",
+      {}
+    );
     return action;
   },
   components: {
@@ -160,8 +160,7 @@ const NOCSearchAndResult = {
       }
     },
     adhocDialog: {
-      uiFramework: "custom-containers-local",
-      moduleName: "egov-noc",
+      uiFramework: "custom-containers",
       componentPath: "DialogContainer",
       props: {
         open: false,

@@ -5,6 +5,7 @@ import { getCurrentAddress, getTransformedNotifications } from "egov-ui-kit/util
 import commonConfig from "config/common";
 import { debug } from "util";
 import { setLocale, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
+import { getModule } from "../../utils/localStorageUtils";
 
 export const updateActiveRoute = (routePath, menuName) => {
   localStorageSet("menuPath", routePath);
@@ -41,11 +42,13 @@ export const toggleSnackbarAndSetText = (open, message = {}, variant) => {
 
 export const fetchLocalizationLabel = (locale, module, tenantId) => {
   return async (dispatch) => {
-    const commonModules =
-      "rainmaker-pgr,rainmaker-pt,rainmaker-tl,finance-erp,rainmaker-common,rainmaker-hr,rainmaker-uc,rainmaker-noc,rainmaker-abg,rainmaker-bpareg,rainmaker-ws,rainmaker-dss,rainmaker-bpa";
+    // const commonModules =
+    //   "rainmaker-pgr,rainmaker-pt,rainmaker-tl,finance-erp,rainmaker-common,rainmaker-hr,rainmaker-uc,rainmaker-noc,rainmaker-abg,rainmaker-bpareg,rainmaker-ws,rainmaker-dss,rainmaker-bpa";
+    const moduleName = getModule();
+    const localeModule = moduleName === 'rainmaker-common' ? 'rainmaker-common' : `rainmaker-common,${moduleName}`;
     try {
       const payload1 = await httpRequest(LOCALATION.GET.URL, LOCALATION.GET.ACTION, [
-        { key: "module", value: commonModules },
+        { key: "module", value: localeModule },
         { key: "locale", value: locale },
         { key: "tenantId", value: commonConfig.tenantId },
       ]);

@@ -1,0 +1,21 @@
+@media only screen and (max-width: 768px) {
+  .review-documents {
+    display: block;
+  }
+}
+.upload_btn {
+  width: 100%; }
+
+.upload_btn > div > div > div {
+  width: 28%;
+  float: left; }
+
+.upload_btn > div > div > div > button {
+  min-width: 33% !important;
+  margin-bottom: 10px; }
+
+.upload_btn > div label {
+  position: absolute;
+  right: 0px;
+  top: 0px; 
+}

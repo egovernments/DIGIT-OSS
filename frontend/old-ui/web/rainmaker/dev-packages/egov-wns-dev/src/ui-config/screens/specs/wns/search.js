@@ -7,18 +7,29 @@ import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 import find from "lodash/find";
 import { setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
 import { resetFieldsForConnection, resetFieldsForApplication } from '../utils';
+import "./index.css";
+import { getRequiredDocData, showHideAdhocPopup } from "egov-ui-framework/ui-utils/commons";
+
+
+const getMDMSData = (action, dispatch) => {
+  const moduleDetails = [
+    {
+      moduleName: "ws-services-masters",
+      masterDetails: [
+        { name: "Documents" }
+      ]
+    }
+  ]
+  try {
+    getRequiredDocData(action, dispatch, moduleDetails)
+  } catch (e) {
+    console.log(e);
+  }
+};
 
 const header = getCommonHeader({
   labelKey: "WS_SEARCH_CONNECTION_HEADER"
 });
-
-const pageResetAndChange = (state, dispatch) => {
-  dispatch(prepareFinalObject("WaterConnection", []));
-  dispatch(prepareFinalObject("SewerageConnection", []));
-  dispatch(prepareFinalObject("applyScreen", {}));
-  dispatch(prepareFinalObject("searchScreen", {}));
-  window.location.href = "/employee/wns/apply";
-};
 
 const queryObject = [
   { key: "tenantId", value: 'pb.amritsar' },
@@ -28,16 +39,17 @@ const queryObject = [
 const employeeSearchResults = {
   uiFramework: "material-ui",
   name: "search",
-  beforeInitScreen:  (action, state, dispatch) => {
+  beforeInitScreen: (action, state, dispatch) => {
+    getMDMSData(action, dispatch);
     resetFieldsForConnection(state, dispatch);
     resetFieldsForApplication(state, dispatch);
-    setBusinessServiceDataToLocalStorage(queryObject,dispatch);
+    setBusinessServiceDataToLocalStorage(queryObject, dispatch);
     const businessServiceData = JSON.parse(
       localStorageGet("businessServiceData")
     );
-    if(businessServiceData[0].businessService==="NewWS1"||businessServiceData[0].businessService==="NewSW1" ){
+    if (businessServiceData[0].businessService === "NewWS1" || businessServiceData[0].businessService === "NewSW1") {
       const data = find(businessServiceData, { businessService: businessServiceData[0].businessService });
-      const { states } = data || [];  
+      const { states } = data || [];
       if (states && states.length > 0) {
         const status = states.map((item) => { return { code: item.state } });
         const applicationStatus = status.filter(item => item.code != null);
@@ -107,9 +119,16 @@ const employeeSearchResults = {
               onClickDefination: {
                 action: "condition",
                 callBack: (state, dispatch) => {
-                  pageResetAndChange(state, dispatch);
+                  showHideAdhocPopup(state, dispatch, "search");
+
                 }
-              }
+              },
+              // onClickDefination: {
+              //   action: "condition",
+              //   callBack: (state, dispatch) => {
+              //     pageResetAndChange(state, dispatch);
+              //   }
+              // }
             }
           }
         },
@@ -117,6 +136,19 @@ const employeeSearchResults = {
         breakAfterSearch: getBreak(),
         searchResults,
         searchApplicationResults
+      }
+    },
+    adhocDialog: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-wns",
+      componentPath: "DialogContainer",
+      props: {
+        open: false,
+        maxWidth: false,
+        screenKey: "search"
+      },
+      children: {
+        popup: {}
       }
     }
   }

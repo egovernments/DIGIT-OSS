@@ -210,7 +210,7 @@ export const tradeOwnerDetails = getCommonCard({
   header: getCommonTitle(
     {
       labelName: "Trade Owner Details",
-      labelKey: "TL_NEW_OWNER_DETAILS_HEADER"
+      labelKey: "BPA_NEW_OWNER_DETAILS_HEADER"
     },
     {
       style: {

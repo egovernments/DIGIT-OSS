@@ -233,22 +233,22 @@ export const gotoApplyWithStep = (state, dispatch, step) => {
 export const showHideAdhocPopup = (state, dispatch, screenKey) => {
 
 
-  let link = `/property-tax/assessment-form`;
-  let moduleName = process.env.REACT_APP_NAME === "Citizen" ? '/citizen' : '/employee';
-  window.location.href = process.env.NODE_ENV === "production" ? moduleName + link : link;
+  // let link = `/property-tax/assessment-form`;
+  // let moduleName = process.env.REACT_APP_NAME === "Citizen" ? '/citizen' : '/employee';
+  // window.location.href = process.env.NODE_ENV === "production" ? moduleName + link : link;
 
 
   // dispatch(setRoute(`/property-tax/assessment-form`));
 
 
-  // let toggle = get(
-  //   state.screenConfiguration.screenConfig[screenKey],
-  //   "components.adhocDialog.props.open",
-  //   false
-  // );
-  // dispatch(
-  //   handleField(screenKey, "components.adhocDialog", "props.open", !toggle)
-  // );
+  let toggle = get(
+    state.screenConfiguration.screenConfig[screenKey],
+    "components.adhocDialog.props.open",
+    false
+  );
+  dispatch(
+    handleField(screenKey, "components.adhocDialog", "props.open", !toggle)
+  );
 };
 
 export const getCommonGrayCard = children => {
@@ -733,10 +733,22 @@ export const getRequiredDocData = async (action, state, dispatch) => {
 export const getTextToLocalMapping = label => {
   const localisationLabels = getTransformedLocalStorgaeLabels();
   switch (label) {
-    case "Property Tax Unique Id":
+    case "Unique Property ID":
       return getLocaleLabels(
-        "Property Tax Unique Id",
+        "Unique Property ID",
         "PT_COMMON_TABLE_COL_PT_ID",
+        localisationLabels
+      );
+      case "Unique Property Id":
+      return getLocaleLabels(
+        "Unique Property Id",
+        "PT_COMMON_TABLE_COL_UNIQ_PT_ID",
+        localisationLabels
+      );
+      case "Action":
+      return getLocaleLabels(
+        "Action",
+        "PT_COMMON_TABLE_COL_ACTION_LABEL",
         localisationLabels
       );
 

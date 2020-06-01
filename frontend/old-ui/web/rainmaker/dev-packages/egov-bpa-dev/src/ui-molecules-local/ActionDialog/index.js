@@ -79,7 +79,13 @@ class ActionDialog extends React.Component {
 
     handleFieldChange  = (jsonPath, value) => {
       const { prepareFinalObject, bpaDetails } = this.props;
-      bpaDetails.comment = value
+      if(bpaDetails &&  bpaDetails.workflow) {
+        bpaDetails.workflow.comments = value
+      } else {
+        bpaDetails.workflow = {};
+        bpaDetails.workflow.comments = value
+      }
+      
       prepareFinalObject(`BPA`, bpaDetails);
     };
 
@@ -87,8 +93,8 @@ class ActionDialog extends React.Component {
       let { bpaDetails, applicationAction, toggleSnackbar, prepareFinalObject, applicationProcessInstances } = this.props;
       let applicationNumber = get(bpaDetails, "applicationNo");
       let tenantId = getQueryArg(window.location.href, "tenantId");
-      let comment = get(bpaDetails, "comment");
-      set(bpaDetails, "action", applicationAction);
+      let comment = get(bpaDetails, "workflow.comments");
+      set(bpaDetails, "workflow.action", applicationAction);
       if( get(bpaDetails,"status").includes("CITIZEN_ACTION_PENDING")) {
         let getId = get(applicationProcessInstances, "assigner.uuid");
         let uuids = { uuid: getId };
@@ -98,7 +104,7 @@ class ActionDialog extends React.Component {
       if((comment && applicationAction === "SEND_TO_ARCHITECT") || (applicationAction === "APPROVE") || (applicationAction === "FORWARD")) {
         let response = await httpRequest(
           "post",
-          "bpa-services/_update",
+          "bpa-services/v1/bpa/_update",
           "",
           [],
           { BPA: bpaDetails }
@@ -164,9 +170,9 @@ class ActionDialog extends React.Component {
               error={error}
               helperText={errorMessage}
               onChange={e =>
-                handleFieldChange(`BPA.comment`, e.target.value)
+                handleFieldChange(`BPA.workflow.comments`, e.target.value)
               }
-              jsonPath={`BPA.comment`}
+              jsonPath={`BPA.workflow.comments`}
               placeholder={fieldConfig.comments.placeholder}
             />
           </Grid>
@@ -212,8 +218,8 @@ class ActionDialog extends React.Component {
               inputProps={{
                 accept: "image/*, .pdf, .png, .jpeg"
               }}
-              buttonLabel={{ labelName: "UPLOAD FILES", labelKey: "TL_UPLOAD_FILES_BUTTON" }}
-              jsonPath={`BPA.wfDocuments`}
+              buttonLabel={{ labelName: "UPLOAD FILES", labelKey: "BPA_UPLOAD_FILES_BUTTON" }}
+              jsonPath={`BPA.workflow.varificationDocuments`}
               maxFileSize={5000}
             />
             <Grid sm={12} style={{ textAlign: "right" }} className="bottom-button-container">
@@ -278,3 +284,4 @@ export default withStyles(styles)(
     mapDispatchToProps
   )(ActionDialog)
 );
+

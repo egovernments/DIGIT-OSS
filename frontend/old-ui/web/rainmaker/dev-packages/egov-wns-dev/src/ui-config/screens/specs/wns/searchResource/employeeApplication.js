@@ -62,7 +62,7 @@ export const wnsApplication = getCommonCard({
       resetButton: {
         componentPath: "Button",
         gridDefination: {
-          xs: 6,
+          xs: 12,
           sm: 6
           // align: "center"
         },
@@ -71,7 +71,7 @@ export const wnsApplication = getCommonCard({
           style: {
             color: "rgba(0, 0, 0, 0.6000000238418579)",
             borderColor: "rgba(0, 0, 0, 0.6000000238418579)",
-            width: "70%",
+            width: "220px",
             height: "48px",
             margin: "8px",
             float: "right"
@@ -90,7 +90,7 @@ export const wnsApplication = getCommonCard({
       searchButton: {
         componentPath: "Button",
         gridDefination: {
-          xs: 6,
+          xs: 12,
           sm: 6,
           // align: "center"
         },
@@ -101,7 +101,7 @@ export const wnsApplication = getCommonCard({
             margin: "8px",
             backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
             borderRadius: "2px",
-            width: "70%",
+            width: "220px",
             height: "48px"
           }
         },

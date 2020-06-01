@@ -1,21 +1,12 @@
-import {
-  getCommonCard,
-  getTextField,
-  getSelectField,
-  getCommonContainer,
-  getPattern,
-  getLabel,
-  getCommonHeader,
-  getCommonSubHeader
-} from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getCommonCard, getCommonContainer, getCommonHeader, getCommonSubHeader, getLabel, getPattern, getSelectField, getTextField } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { searchApiCall } from "./function";
-import { handleScreenConfigurationFieldChange as handleField,prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getTenantId,getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
 // const tenantId = process.env.REACT_APP_NAME === "Employee" ?  getTenantId() : JSON.parse(getUserInfo()).permanentCity;
 // console.log("tenantId--- ", tenantId);
 const resetFields = (state, dispatch) => {
-  const tenantId = process.env.REACT_APP_NAME === "Employee" ?  getTenantId() : JSON.parse(getUserInfo()).permanentCity;
+  const tenantId = process.env.REACT_APP_NAME === "Employee" ? getTenantId() : JSON.parse(getUserInfo()).permanentCity;
   dispatch(
     handleField(
       "billSearch",
@@ -40,7 +31,7 @@ const resetFields = (state, dispatch) => {
       ""
     )
   );
-  dispatch(prepareFinalObject("searchScreen" , {tenantId: tenantId}))
+  dispatch(prepareFinalObject("searchScreen", { tenantId: tenantId }))
 };
 
 export const billSearchCard = getCommonCard({
@@ -91,19 +82,19 @@ export const billSearchCard = getCommonCard({
         xs: 12,
         sm: 4
       },
-      localePrefix : {
-        moduleName : "BillingService",
-        masterName : "BusinessService"
+      localePrefix: {
+        moduleName: "BillingService",
+        masterName: "BusinessService"
       },
       sourceJsonPath: "searchScreenMdmsData.BillingService.BusinessService",
-      beforeFieldChange :(action, state, dispatch) => {
+      beforeFieldChange: (action, state, dispatch) => {
         const labelName = {
-          labelKey : `ABG_${action.value}_CONSUMER_CODE_LABEL`,
-          labelName : "Consumer Code"
+          labelKey: `ABG_${action.value}_CONSUMER_CODE_LABEL`,
+          labelName: "Consumer Code"
         }
         const placeHolder = {
-          labelKey : `ABG_${action.value}_CONSUMER_CODE_PLACEHOLDER`,
-          labelName : "Enter Consumer Code"
+          labelKey: `ABG_${action.value}_CONSUMER_CODE_PLACEHOLDER`,
+          labelName: "Enter Consumer Code"
         }
         dispatch(
           handleField(

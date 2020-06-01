@@ -61,6 +61,8 @@ const date = (from, to) => {
 function FeesEstimateOverviewCard(props) {
     const { classes, estimate } = props;
     const totalHeadClassName = "tl-total-amount-value " + classes.bigheader;
+    const isPaid = (estimate.fees.appStatus === 'CONNECTION_ACTIVATED' || estimate.fees.appStatus === 'PENDING_FOR_CONNECTION_ACTIVATION')?true:false;
+
     // if (estimate !== null && estimate !== undefined && estimate.fees !== undefined && estimate.fees !== null && estimate.fees.length > 0) {
     //     if (estimate.fees[0].data !== null && estimate.fees[0].data !== undefined && estimate.fees[0].data.length > 0) {
     //         totalAmount = estimate.fees[0].data[0].total;
@@ -81,6 +83,22 @@ function FeesEstimateOverviewCard(props) {
                     <LabelContainer labelName="Total Amount" labelKey="WS_COMMON_TOTAL_AMT" />
                 </Typography>
                 <Typography className={totalHeadClassName} align="right" >Rs {estimate.fees.totalAmount}</Typography>
+                { isPaid? (
+                    <Typography variant="body2" align="right"  style={{ color: 'green' }}>
+                      <LabelContainer
+                        labelName="Paid Successfully"
+                        labelKey="WS_COMMON_PAID_SUCCESS"
+                      />
+                    </Typography>
+                    ):(
+                    <Typography variant="body2" align="right" style={{ color: 'red' }}>
+                      <LabelContainer
+                        labelName="Not Paid"
+                        labelKey="WS_COMMON_NOT_PAID"
+                      />
+                      </Typography> 
+                    )
+                }
             </Grid>
             <Grid xs={12} sm={7}>
                 <div style={{ maxWidth: 600 }}>

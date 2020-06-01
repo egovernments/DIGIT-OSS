@@ -11,19 +11,43 @@ export const searchResult = {
   visible: false,
   props: {
     columns: [
-      getTextToLocalMapping("Receipt No."),
-      getTextToLocalMapping("Payee Name"),
-      getTextToLocalMapping("Service Type"),
-      getTextToLocalMapping("Date"),
-      getTextToLocalMapping("Amount[INR]"),
-      getTextToLocalMapping("Status"),
       {
-        name: "tenantId",
+        labelName: "Receipt No.",
+        labelKey: "UC_COMMON_TABLE_COL_RECEIPT_NO"
+      },
+      {
+        labelName: "Payee Name",
+        labelKey: "UC_COMMON_TABLE_COL_PAYEE_NAME"
+      },
+      {
+        labelName: "Service Type",
+        labelKey: "UC_SERVICE_TYPE_LABEL"
+      },
+      {
+        labelName: "Date",
+        labelKey: "UC_COMMON_TABLE_COL_DATE"
+      },
+      {
+        labelName: "Amount[INR]",
+        labelKey: "UC_COMMON_TABLE_COL_AMOUNT"
+      },
+      {
+        labelName: "Status",
+        labelKey: "UC_COMMON_TABLE_COL_STATUS"
+      },
+      {
+        labelName: "Tenant Id",
+        labelKey: "TENANT_ID",
         options: {
           display: false
         }
       }
     ],
+    title: {
+      labelName: "Search Results for Payments",
+      labelKey: "COMMON_TABLE_SEARCH_RESULT_PAYMENTS"
+    },
+    rows:"",
     options: {
       filter: false,
       download: false,

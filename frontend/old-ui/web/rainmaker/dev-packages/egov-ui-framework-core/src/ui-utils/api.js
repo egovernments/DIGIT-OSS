@@ -1,5 +1,5 @@
 import axios from "axios";
-import { fetchFromLocalStorage, addQueryArg, getDateInEpoch } from "./commons";
+import { fetchFromLocalStorage, addQueryArg, getDateInEpoch, isPublicSearch } from "./commons";
 import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import store from "../ui-redux/store";
 import {
@@ -26,8 +26,9 @@ const wrapRequestBody = (requestBody, action) => {
     key: "",
     msgId: `20170310130900|${getLocale()}`,
     requesterId: "",
-    authToken
+    authToken: authToken
   };
+  if(isPublicSearch()) delete RequestInfo.authToken;
   return Object.assign(
     {},
     {
