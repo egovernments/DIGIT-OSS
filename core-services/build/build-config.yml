@@ -225,3 +225,9 @@ config:
       - work-dir: "egov-user"
         image-name: "egov-user-chatbot"
         dockerfile: "build/maven/Dockerfile"
+
+  - name: "builds/core-services/mailbot"
+    build:
+      - work-dir: "mailbot"
+        image-name: "mailbot"
+        dockerfile: "build/maven/Dockerfile"        
