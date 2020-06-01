@@ -3,7 +3,7 @@ import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import { getGroupBillSearch } from "../../../../../ui-utils/commons";
 import { validateFields } from "../../utils";
-import { convertEpochToDate, getTextToLocalMapping } from "../../utils/index";
+import { convertEpochToDate } from "../../utils/index";
 
 
 export const searchApiCall = async (state, dispatch) => {
@@ -70,9 +70,9 @@ export const searchApiCall = async (state, dispatch) => {
       ) {
         queryObject.push({ key: key, value: searchScreenObject[key].trim() });
       }
-      if (searchScreenObject.hasOwnProperty(key) && searchScreenObject[key] &&
-        searchScreenObject[key].trim() === "") {
-        delete searchScreenObject[key];
+      if (searchScreenObject.hasOwnProperty(key) &&
+        searchScreenObject[key] =="") {
+          delete searchScreenObject[key];
       }
     }
     let serviceObject = get(
@@ -118,20 +118,20 @@ export const searchApiCall = async (state, dispatch) => {
 
     try {
       let data = billTableData.map(item => ({
-        [getTextToLocalMapping("Bill No.")]: item.billNumber || "-",
-        "Consumer Code": item.consumerCode || "-",
-        [getTextToLocalMapping("Consumer Name")]: item.consumerName || "-",
-        [getTextToLocalMapping("Bill Date")]:
+        ['ABG_COMMON_TABLE_COL_BILL_NO']: item.billNumber || "-",
+        ["PAYMENT_COMMON_CONSUMER_CODE"]: item.consumerCode || "-",
+        ['ABG_COMMON_TABLE_COL_CONSUMER_NAME']: item.consumerName || "-",
+        ['ABG_COMMON_TABLE_COL_BILL_DATE']:
           convertEpochToDate(item.billDate) || "-",
-        [getTextToLocalMapping("Bill Amount(Rs)")]: item.billAmount || "-",
-        [getTextToLocalMapping("Status")]: item.status || "-",
-        [getTextToLocalMapping("Action")]: item.action || "-",
-        businessService: searchScreenObject.businesService,
-        receiptKey: get(configObject[0], "receiptKey"),
-        billKey: get(configObject[0], "billKey"),
-        tenantId: item.tenantId,
-        "Bill Id": item.billId,
-        "billSearchUrl": searchScreenObject.url,
+        ['ABG_COMMON_TABLE_COL_BILL_AMOUNT']: item.billAmount || "-",
+        ['ABG_COMMON_TABLE_COL_STATUS']: item.status || "-",
+        ['ABG_COMMON_TABLE_COL_ACTION']: item.action || "-",
+        ["BUSINESS_SERVICE"]: searchScreenObject.businesService,
+        ["RECEIPT_KEY"]: get(configObject[0], "receiptKey"),
+        ["BILL_KEY"]: get(configObject[0], "billKey"),
+        ["TENANT_ID"]: item.tenantId,
+        ["BILL_ID"]: item.billId,
+        ["BILL_SEARCH_URL"]: searchScreenObject.url,
       }));
       dispatch(
         handleField(
@@ -153,10 +153,8 @@ export const searchApiCall = async (state, dispatch) => {
         handleField(
           "search",
           "components.div.children.searchResults",
-          "props.title",
-          `${getTextToLocalMapping(
-            "Search Results for Bill"
-          )} (${data.length})`
+          "props.rows",
+          billTableData.length
         )
       );
 

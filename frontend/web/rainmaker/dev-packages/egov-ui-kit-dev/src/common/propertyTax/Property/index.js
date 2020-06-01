@@ -21,6 +21,7 @@ import AssessmentList from "../AssessmentList";
 import YearDialogue from "../YearDialogue";
 import PropertyInformation from "./components/PropertyInformation";
 import "./index.css";
+import get from "lodash/get";
 
 const innerDivStyle = {
   padding: "0",
@@ -452,13 +453,10 @@ const getAssessmentInfo = (propertyDetails, keys, generalMDMSDataById) => {
             key: getTranslatedLabel("PT_ASSESMENT_INFO_TYPE_OF_BUILDING", localizationLabelsData),
             value: generalMDMSDataById
               ? propertyDetails.propertySubType
-                ? generalMDMSDataById["PropertySubType"]
-                  ? generalMDMSDataById["PropertySubType"][propertyDetails.propertySubType].name
-                  : "NA"
-                : generalMDMSDataById["PropertyType"]
-                  ? generalMDMSDataById["PropertyType"][propertyDetails.propertyType].name
-                  : "NA"
-              : "NA",
+                ? generalMDMSDataById["PropertySubType"] && generalMDMSDataById["PropertySubType"][propertyDetails.propertySubType]
+                  ?  get(generalMDMSDataById,`PropertySubType.${propertyDetails.propertySubType}.name`,"NA"):'NA'
+                : generalMDMSDataById["PropertyType"]&& generalMDMSDataById["PropertyType"][propertyDetails.propertyType]
+                  ?  get(generalMDMSDataById,`PropertyType.${propertyDetails.propertyType}.name`,"NA"):"NA":"NA"
           },
           {
             key: getTranslatedLabel("PT_ASSESMENT_INFO_PLOT_SIZE", localizationLabelsData),

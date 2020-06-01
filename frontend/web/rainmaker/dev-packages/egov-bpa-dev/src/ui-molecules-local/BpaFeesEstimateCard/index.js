@@ -83,7 +83,7 @@ function BpaFeesEstimateCard(props) {
   const totalHeadClassName = "tl-total-amount-value " + classes.bigheader;
   return (
     <Grid container>
-      <Grid xs={12} sm={7}>
+      <Grid item={true} xs={12} sm={7}>
         <LabelContainer
           labelName={estimate.header.labelName}
           labelKey={estimate.header.labelKey}
@@ -140,7 +140,7 @@ function BpaFeesEstimateCard(props) {
               <Typography variant="body2">
                 <LabelContainer
                   labelName="Total Amount"
-                  labelKey="TL_COMMON_TOTAL_AMT"
+                  labelKey="BPA_COMMON_TOTAL_AMT"
                 />
               </Typography>
             </Grid>
@@ -164,7 +164,7 @@ function BpaFeesEstimateCard(props) {
         >
           <LabelContainer
             labelName="Total Amount"
-            labelKey="TL_COMMON_TOTAL_AMT"
+            labelKey="BPA_COMMON_TOTAL_AMT"
           />
         </Typography>
         <Typography className={totalHeadClassName} align="right">

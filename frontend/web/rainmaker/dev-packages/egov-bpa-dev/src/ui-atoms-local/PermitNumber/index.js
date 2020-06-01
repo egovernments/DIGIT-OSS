@@ -1,4 +1,5 @@
 import React from "react";
+import LabelContainer from "egov-ui-framework/ui-containers/LabelContainer";
 
 const styles = {
   backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
@@ -14,7 +15,7 @@ const styles = {
 
 function PermitNumber(props) {
   const { number } = props;
-  return <div style={styles}>PermitNumber No. {number}</div>;
+  return <div style={styles}><LabelContainer labelName="PermitNumber No." labelKey ={"BPA_APPLICATION_PERMIT_NO_CODE"} dynamicArray={[number]}/></div>;
 }
 
 export default PermitNumber;

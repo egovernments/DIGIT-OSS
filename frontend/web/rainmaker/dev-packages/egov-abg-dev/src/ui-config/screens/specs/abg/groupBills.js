@@ -11,7 +11,6 @@ import { resetFields } from "./groupBillResource/groupBillSearch";
 import { searchResults } from "./groupBillResource/searchResults";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "../../../../ui-utils";
-import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { getTenantId, getLocale } from "egov-ui-kit/utils/localStorageUtils";
 
 const tenantId = getTenantId();
@@ -84,7 +83,6 @@ const abgSearchAndResult = {
     resetFields(state,dispatch);
     getData(action, state, dispatch).then(responseAction => {
       const queryObj = [{ key: "tenantId", value: tenantId }];
-      dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
       getBoundaryData(action, state, dispatch, queryObj, tenantId);
     });
     return action;

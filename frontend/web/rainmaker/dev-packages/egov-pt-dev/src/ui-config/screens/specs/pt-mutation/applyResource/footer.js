@@ -287,11 +287,6 @@ const validateMobileNumber = (state) => {
         return owner.mobileNumber;
       }
     })
-    // newOwners.map(owner => {
-    //   if (names.includes(owner.name)) {
-    //     err = "OWNER_NAME_SAME";
-    //   }
-    // })
     newOwners.map(owner => {
       if (mobileNumbers.includes(owner.mobileNumber)) {
         err = "OWNER_NUMBER_SAME";
@@ -299,7 +294,11 @@ const validateMobileNumber = (state) => {
     })
   } else {
 
-    const newOwners = get(state, 'screenConfiguration.preparedFinalObject.Property.ownersTemp');
+    let newOwners = get(state, 'screenConfiguration.preparedFinalObject.Property.ownersTemp');
+    if(newOwners&&newOwners.length&&newOwners.length>1){
+      newOwners=newOwners.filter(object=>{
+        return !(object.isDeleted===false)})
+        }
     const owners = get(state, 'screenConfiguration.preparedFinalObject.Property.owners');
     const names = owners.map(owner => {
       return owner.name
@@ -314,9 +313,10 @@ const validateMobileNumber = (state) => {
         err = "OWNER_NUMBER_SAME";
       }
     })
+    if(!err&&ownershipCategoryTemp.includes('MULTIPLEOWNERS')&&newOwners.length==1){
+      err = "OWNERSHIPTYPE_CANNOT_BE_MULTIPLE";
+    }
   }
-
-
 
   return err;
 }
@@ -386,14 +386,9 @@ const callBackForNext = async (state, dispatch) => {
       isFormValid = false;
       hasFieldToaster = true;
     }
-    // dispatch(
-    //   prepareFinalObject(
-    //     "documentsUploadRedux.3.dropdown.value",
-    //     `${get(state,'screenConfiguration.preparedFinalObject.documentsUploadRedux.3.documentCode','')}.${get(state,'screenConfiguration.preparedFinalObject.Property.additionalDetails.reasonForTransfer','')}`
-    //   )
-    // );
     if (isFormValid) {
       errorMsg = validateMobileNumber(state);
+
       errorMsg ? isFormValid = false : {};
     }
 
@@ -682,7 +677,7 @@ export const footer = getCommonApplyFooter({
       },
       previousButtonLabel: getLabel({
         labelName: "Previous Step",
-        labelKey: "NOC_COMMON_BUTTON_PREV_STEP"
+        labelKey: "PT_COMMON_BUTTON_PREV_STEP"
       })
     },
     onClickDefination: {

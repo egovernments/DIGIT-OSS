@@ -1,18 +1,22 @@
-import React from "react";
-import { connect } from "react-redux";
-import get from "lodash/get";
 import { Dialog, DialogContent } from "@material-ui/core";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { setRoute } from "egov-ui-kit/redux/app/actions";
+import get from "lodash/get";
+import React from "react";
+import { connect } from "react-redux";
 
 class DialogContainer extends React.Component {
   handleClose = () => {
-    const { screenKey } = this.props;
-    this.props.handleField(
+    const { screenKey, handleField, setRoute, redirectUrl } = this.props;
+    handleField(
       screenKey,
       `components.adhocDialog`,
       "props.open",
       false
     );
+    if (redirectUrl) {
+      setRoute(redirectUrl);
+    }
   };
 
   render() {
@@ -42,7 +46,7 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const mapDispatchToProps = dispatch => {
-  return { handleField: (a, b, c, d) => dispatch(handleField(a, b, c, d)) };
+  return { handleField: (a, b, c, d) => dispatch(handleField(a, b, c, d)), setRoute: (route) => dispatch(setRoute(route)), };
 };
 
 export default connect(

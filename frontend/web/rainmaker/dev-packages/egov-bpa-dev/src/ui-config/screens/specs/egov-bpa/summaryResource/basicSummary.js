@@ -210,10 +210,10 @@ export const basicSummary = getCommonGrayCard({
           reviewCity: getLabelWithValue(
             {
               labelName: "City",
-              labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
+              labelKey: "BPA_CITY_LABEL"
             },
             {
-              jsonPath: "BPA.address.city",
+              jsonPath: "BPA.landInfo.address.city",
               callBack: value => {
                 return getQueryArg(window.location.href, "tenantId");
               },
@@ -222,24 +222,24 @@ export const basicSummary = getCommonGrayCard({
           reviewBuildingName: getLabelWithValue(
             {
               labelName: "Building/Company Name",
-              labelKey: "TL_NEW_TRADE_DETAILS_BLDG_NAME_LABEL"
+              labelKey: "BPA_DETAILS_BLDG_NAME_LABEL"
             },
-            { jsonPath: "BPA.address.buildingName", callBack: checkValueForNA }
+            { jsonPath: "BPA.landInfo.address.buildingName", callBack: checkValueForNA }
           ),
           reviewStreetName: getLabelWithValue(
             {
               labelName: "Street Name",
-              labelKey: "TL_NEW_TRADE_DETAILS_SRT_NAME_LABEL"
+              labelKey: "BPA_DETAILS_SRT_NAME_LABEL"
             },
-            { jsonPath: "BPA.address.street", callBack: checkValueForNA }
+            { jsonPath: "BPA.landInfo.address.street", callBack: checkValueForNA }
           ),
           reviewMohalla: getLabelWithValue(
             {
               labelName: "Mohalla",
-              labelKey: "TL_NEW_TRADE_DETAILS_MOHALLA_LABEL"
+              labelKey: "BPA_DETAILS_MOHALLA_LABEL"
             },
             {
-              jsonPath:"BPA.address.locality.code",
+              jsonPath:"BPA.landInfo.address.locality.code",
               localePrefix: {
                 moduleName: getQueryArg(window.location.href, "tenantId") ? getQueryArg(window.location.href, "tenantId").replace('.','_').toUpperCase():"",
                 masterName: "REVENUE"
@@ -249,9 +249,9 @@ export const basicSummary = getCommonGrayCard({
           reviewPincode: getLabelWithValue(
             {
               labelName: "Pincode",
-              labelKey: "TL_NEW_TRADE_DETAILS_PIN_LABEL"
+              labelKey: "BPA_DETAILS_PIN_LABEL"
             },
-            { jsonPath: "BPA.address.pincode", callBack: checkValueForNA }
+            { jsonPath: "BPA.landInfo.address.pincode", callBack: checkValueForNA }
           )
         })
       }),
@@ -304,7 +304,7 @@ export const basicSummary = getCommonGrayCard({
                         labelKey: "BPA_BOUNDARY_HOLDING_NO_LABEL"
                     },
                     {
-                        jsonPath: "BPA.holdingNo",
+                        jsonPath: "BPA.additionalDetails.holdingNo",
                         callBack: checkValueForNA
                     }
                 ),
@@ -324,7 +324,7 @@ export const basicSummary = getCommonGrayCard({
                         labelKey: "BPA_BOUNDARY_LAND_REG_DETAIL_LABEL"
                     },
                     {
-                        jsonPath: "BPA.registrationDetails",
+                        jsonPath: "BPA.additionalDetails.registrationDetails",
                         callBack: checkValueForNA
                     }
                 )

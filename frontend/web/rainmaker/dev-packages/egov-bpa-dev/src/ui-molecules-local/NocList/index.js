@@ -344,7 +344,7 @@ class NocList extends Component {
           {card.required && requiredIcon}
           <Typography variant="caption">
             <LabelContainer
-              labelKey={getTransformedLocale("TL_UPLOAD_RESTRICTIONS")}
+              labelKey={getTransformedLocale("BPA_UPLOAD_RESTRICTIONS")}
             />
           </Typography>
         </Grid>

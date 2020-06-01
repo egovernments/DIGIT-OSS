@@ -2,7 +2,6 @@ import {
   getStepperObject,
   getCommonHeader,
   getCommonCard,
-  getCommonGrayCard,
   getCommonContainer,
   getCommonTitle,
   getCommonParagraph,
@@ -22,12 +21,11 @@ import {
   prepareDocumentsUploadData,
   getSearchResultsForSewerage,
   getSearchResults,
+  getPropertyResults,
   handleApplicationNumberDisplay,
   findAndReplace,
   prefillDocuments
 } from "../../../../ui-utils/commons";
-import { getTenantId, getLocale } from "egov-ui-kit/utils/localStorageUtils";
-import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import commonConfig from "config/common.js";
 import { reviewDocuments } from "./applyResource/reviewDocuments";
 import { reviewOwner } from "./applyResource/reviewOwner";
@@ -83,7 +81,7 @@ const summaryScreenEMP = getCommonCard({
   reviewDocumentDetails,
   reviewOwnerDetails
 })
-let summaryScreen=process.env.REACT_APP_NAME === "Citizen"?summaryScreenCitizen:summaryScreenEMP;
+let summaryScreen = process.env.REACT_APP_NAME === "Citizen" ? summaryScreenCitizen : summaryScreenEMP;
 export const documentDetails = getCommonCard({
   header: getCommonTitle(
     { labelName: "Required Documents", labelKey: "WS_DOCUMENT_DETAILS_HEADER" },
@@ -126,10 +124,9 @@ export const getMdmsData = async dispatch => {
         {
           moduleName: "ws-services-masters", masterDetails: [
             { name: "Documents" },
-            { name: "waterSubSource" },
             { name: "waterSource" },
-            { name: "waterSourceWithSubSource" },
-            { name: "connectionType" }
+            { name: "connectionType" },
+            { name: "PropertySearch" }
           ]
         }
       ]
@@ -143,7 +140,7 @@ export const getMdmsData = async dispatch => {
       payload.MdmsRes['ws-services-calculation'].PipeSize.forEach(obj => pipeSize.push({ code: obj.size, name: obj.id, isActive: obj.isActive }));
       payload.MdmsRes['ws-services-calculation'].pipeSize = pipeSize;
       let waterSource = [], GROUND = [], SURFACE = [], BULKSUPPLY = [];
-      payload.MdmsRes['ws-services-masters'].waterSourceWithSubSource.forEach(obj => {
+      payload.MdmsRes['ws-services-masters'].waterSource.forEach(obj => {
         waterSource.push({
           code: obj.code.split(".")[0],
           name: obj.name,
@@ -186,6 +183,7 @@ export const getMdmsData = async dispatch => {
 export const getData = async (action, state, dispatch) => {
   const applicationNo = getQueryArg(window.location.href, "applicationNumber");
   const tenantId = getQueryArg(window.location.href, "tenantId");
+  const propertyID = getQueryArg(window.location.href, "propertyId");
   await getMdmsData(dispatch);
   if (applicationNo) {
     //Edit/Update Flow ----
@@ -297,6 +295,12 @@ export const getData = async (action, state, dispatch) => {
         dispatch
       );
     }
+  } else if (propertyID) {
+    let queryObject = [{ key: "tenantId", value: tenantId }, { key: "propertyIds", value: propertyID }];
+    let payload = await getPropertyResults(queryObject, dispatch);
+    let propertyObj = payload.Properties[0];
+    dispatch(prepareFinalObject("applyScreen.property", findAndReplace(propertyObj, null, "NA")));
+    dispatch(prepareFinalObject("searchScreen.propertyIds", propertyID));
   }
 };
 
@@ -356,8 +360,23 @@ const screenConfig = {
     getData(action, state, dispatch).then(() => { });
     dispatch(prepareFinalObject("applyScreen.water", true));
     dispatch(prepareFinalObject("applyScreen.sewerage", false));
+    const propertyId = getQueryArg(window.location.href, "propertyId");
+
     const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
-    if (applicationNumber && getQueryArg(window.location.href, "action") === "edit") {
+
+    if (propertyId) {
+      togglePropertyFeilds(action, true);
+      if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.water") && get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage")) {
+        toggleWaterFeilds(action, true);
+        toggleSewerageFeilds(action, true);
+      } else if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage")) {
+        toggleWaterFeilds(action, false);
+        toggleSewerageFeilds(action, true);
+      } else {
+        toggleWaterFeilds(action, true);
+        toggleSewerageFeilds(action, false);
+      }
+    } else if (applicationNumber && getQueryArg(window.location.href, "action") === "edit") {
       togglePropertyFeilds(action, true);
       if (applicationNumber.includes("SW")) {
         dispatch(prepareFinalObject("applyScreen.water", false));
@@ -384,8 +403,8 @@ const screenConfig = {
       }
     }
 
-    const tenantId = getTenantId();
-    dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
+    // const tenantId = getTenantId();
+    // dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     prepareDocumentsUploadData(state, dispatch);
     return action;
   },

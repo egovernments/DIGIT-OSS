@@ -98,6 +98,23 @@ const MultiDownloadCard = Loadable({
   loader: () => import("./MultiDownloadCard"),
   loading: () => <Loading />
  });
+ const SingleDocDetailCard = Loadable({
+  loader: () => import("./SingleDocDetailCard"),
+  loading: () => <Loading />
+ });
+ const MultiDocDetailCard = Loadable({
+  loader: () => import("./MultiDocDetailCard"),
+  loading: () => <Loading />
+ });
+ const UploadCard = Loadable({
+  loader: () => import("./UploadCard"),
+  loading: () => <Loading />
+ });
+ const ComparisionLink = Loadable({
+  loader: () => import("./ComparisionLink"),
+  loading: () => <Loading />
+ });
+ 
 
 export {
   TestMolecules,
@@ -118,5 +135,9 @@ export {
   BpaFeesEstimateCard,
   CheckList,
   ActionDialog,
-  MultiDownloadCard
+  MultiDownloadCard,
+  SingleDocDetailCard,
+  MultiDocDetailCard,
+  UploadCard,
+  ComparisionLink
 };

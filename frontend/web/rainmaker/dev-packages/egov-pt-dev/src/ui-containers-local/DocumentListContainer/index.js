@@ -51,7 +51,12 @@ const filterFunction = (rowObject, preparedFinalObject, filterConditon) => {
   } else {
     if (filterConditon.onArray) {
       let returnValue = false;
-      const objectArray = get(preparedFinalObject, filterConditon.jsonPath, []);
+      let objectArray = get(preparedFinalObject, filterConditon.jsonPath, []);
+      if(filterConditon.arrayAttribute=="ownerType"){
+        objectArray=objectArray.filter(object=>{
+          return !(object.isDeleted===false)})
+      }
+      
       objectArray.map(object => {
         if (!filterConditon.filterValue.includes(object[filterConditon.arrayAttribute])) {
           returnValue = true;

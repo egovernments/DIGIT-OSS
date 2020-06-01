@@ -7,9 +7,12 @@ import { Header } from "modules/common";
 import { ActionMenu } from "modules/common";
 import IconButton from "material-ui/IconButton";
 import Label from "egov-ui-kit/utils/translationNode";
-import { getQueryArg } from "egov-ui-kit/utils/commons";
+import { getQueryArg, getModuleName } from "egov-ui-kit/utils/commons";
 import { logout } from "egov-ui-kit/redux/auth/actions";
+import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import SortDialog from "../common/common/Header/components/SortDialog";
+import { setModule, getTenantId, getLocale, getUserInfo } from "../utils/localStorageUtils";
+import "./index.css";
 
 const withAuthorization = (options = {}) => (Component) => {
   class Wrapper extends React.Component {
@@ -24,6 +27,7 @@ const withAuthorization = (options = {}) => (Component) => {
       titleObject: [],
       sortPopOpen: false,
       menuDrawerOpen: true,
+      localeFetched: false
     };
     style = {
       iconStyle: {
@@ -39,6 +43,25 @@ const withAuthorization = (options = {}) => (Component) => {
         const baseUrl = hasLocalisation ? "/language-selection" : process.env.REACT_APP_NAME === "Citizen" ? defaultUrl.citizen : defaultUrl.employee;
         this.props.history.replace(redirectionUrl || baseUrl);
       }
+    }
+
+    citizenTenantId = () => {
+      const userInfo = JSON.parse(getUserInfo());
+      return userInfo.permanentCity || userInfo.tenantId;
+    }
+
+    fetchLocale = () => {
+      const { localeFetched } = this.state;
+      if (!localeFetched) {
+        setModule(getModuleName());
+        const tenantId = process.env.REACT_APP_NAME === "Citizen" ? this.citizenTenantId(): getTenantId();
+        this.props.fetchLocalizationLabel(getLocale(), tenantId, tenantId);
+        this.setState({localeFetched:true});
+      }
+    }
+
+    componentWillReceiveProps() {
+      this.fetchLocale();
     }
 
     roleFromUserInfo = (userInfo, role) => {
@@ -266,6 +289,7 @@ const withAuthorization = (options = {}) => (Component) => {
   const mapDispatchToProps = (dispatch) => {
     return {
       logout: () => dispatch(logout()),
+      fetchLocalizationLabel: (locale, moduleName, tenantId)=> dispatch(fetchLocalizationLabel(locale, moduleName, tenantId))
     };
   };
   return compose(

@@ -169,14 +169,14 @@ class InboxData extends React.Component {
                         <div className="rainmaker-displayInline">
                           {sortOrder === "desc" && (
                             <div className="arrow-icon-style" onClick={() => this.sortingTable("asc")}>
-                              <Label label={item} labelStyle={{ fontWeight: "500" }} color="#000000" />
-                              <ArrowDropUpIcon />
+                              <Label label={item} labelStyle={{ fontWeight: "500", marginTop:"-5px",minWidth:"150px"}} color="#000000"/>
+                              <ArrowDropUpIcon style={{marginTop:"-3px"  }}/>
                             </div>
                           )}
                           {sortOrder === "asc" && (
                             <div className="arrow-icon-style" onClick={() => this.sortingTable("desc")}>
-                              <Label label={item} labelStyle={{ fontWeight: "500" }} color="#000000" />
-                              <ArrowDropDownIcon />
+                              <Label label={item} labelStyle={{ fontWeight: "500" , marginTop:"-5px",minWidth:"150px"}} color="#000000" />
+                              <ArrowDropDownIcon style={{marginTop:"-3px"  }}/>
                             </div>
                           )}
                         </div>

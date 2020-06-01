@@ -64,13 +64,13 @@ export const searchApiCall = async (state, dispatch) => {
       let combinedSearchResults = searchWaterConnectionResults || searcSewerageConnectionResults ? sewerageConnections.concat(waterConnections) : []
       for (let i = 0; i < combinedSearchResults.length; i++) {
         let element = combinedSearchResults[i];
-        let queryObjectForWaterFetchBill;
-        if (element.service === "WATER") {
-          queryObjectForWaterFetchBill = [{ key: "tenantId", value: tenantId }, { key: "consumerCode", value: element.connectionNo }, { key: "businessService", value: "WS" }];
-        } else {
-          queryObjectForWaterFetchBill = [{ key: "tenantId", value: tenantId }, { key: "consumerCode", value: element.connectionNo }, { key: "businessService", value: "SW" }];
-        }
-        if(element.connectionNo!=='NA'){
+        if(element.property && element.property !== "NA" && element.connectionNo !== null && element.connectionNo!=='NA') {
+	  let queryObjectForWaterFetchBill;
+          if (element.service === "WATER") {
+            queryObjectForWaterFetchBill = [{ key: "tenantId", value: tenantId }, { key: "consumerCode", value: element.connectionNo }, { key: "businessService", value: "WS" }];
+          } else {
+            queryObjectForWaterFetchBill = [{ key: "tenantId", value: tenantId }, { key: "consumerCode", value: element.connectionNo }, { key: "businessService", value: "SW" }];
+          }
           let billResults = await fetchBill(queryObjectForWaterFetchBill, dispatch)
           billResults ? billResults.Bill.map(bill => {
             let obj = {
@@ -78,9 +78,9 @@ export const searchApiCall = async (state, dispatch) => {
               dueDate: bill.billDetails[0].expiryDate,
               service: element.service,
               connectionNo: element.connectionNo,
-              name: element.property.owners[0].name,
+              name: (element.property && element.property !== "NA" && element.property.owners)?element.property.owners[0].name:'',
               status: element.status,
-              address: element.property.address.street,
+              address: (element.property && element.property !== "NA" && element.property.address)?element.property.address.street:'',
               tenantId: tenantId,
               connectionType: element.connectionType
             }
@@ -90,9 +90,9 @@ export const searchApiCall = async (state, dispatch) => {
             dueDate: 'NA',
             service: element.service,
             connectionNo: element.connectionNo,
-            name: element.property.owners[0].name,
+            name: (element.property && element.property !== "NA" && element.property.owners)?element.property.owners[0].name:'',
             status: element.status,
-            address: element.property.address.street,
+            address: (element.property && element.property !== "NA" && element.property.address)?element.property.address.street:'',
             tenantId: tenantId,
             connectionType: element.connectionType
           })
@@ -115,27 +115,18 @@ const showHideTable = (booleanHideOrShow, dispatch) => {
 
 const showResults = (connections, dispatch, tenantId) => {
   let data = connections.map(item => ({
-    [getTextToLocalMapping("Service")]: item.service,
-    [getTextToLocalMapping("Consumer No")]: item.connectionNo,
-    [getTextToLocalMapping("Owner Name")]: item.name,
-    [getTextToLocalMapping("Status")]: item.status,
-    [getTextToLocalMapping("Due")]: item.due,
-    [getTextToLocalMapping("Address")]: item.address,
-    [getTextToLocalMapping("Due Date")]: (item.dueDate !== undefined && item.dueDate !== "NA") ? convertEpochToDate(item.dueDate) : item.dueDate,
-    ["tenantId"]: tenantId,
-    ["connectionType"]: item.connectionType
+    ["WS_COMMON_TABLE_COL_SERVICE_LABEL"]: item.service,
+    ["WS_COMMON_TABLE_COL_CONSUMER_NO_LABEL"]: item.connectionNo,
+    ["WS_COMMON_TABLE_COL_OWN_NAME_LABEL"]: item.name,
+    ["WS_COMMON_TABLE_COL_STATUS_LABEL"]: item.status,
+    ["WS_COMMON_TABLE_COL_DUE_LABEL"]: item.due,
+    ["WS_COMMON_TABLE_COL_ADDRESS"]: item.address,
+    ["WS_COMMON_TABLE_COL_DUE_DATE_LABEL"]: (item.dueDate !== undefined && item.dueDate !== "NA") ? convertEpochToDate(item.dueDate) : item.dueDate,
+    ["WS_COMMON_TABLE_COL_TENANTID_LABEL"]: tenantId,
+    ["WS_COMMON_TABLE_COL_CONNECTIONTYPE_LABEL"]: item.connectionType
   }))
 
   dispatch(handleField("search", "components.div.children.searchResults", "props.data", data));
-  dispatch(
-    handleField(
-      "search",
-      "components.div.children.searchResults",
-      "props.title",
-      `${getTextToLocalMapping(
-        "Search Results for Water & Sewerage Connections"
-      )} (${connections.length})`
-    )
-  );
+  dispatch(handleField("search", "components.div.children.searchResults", "props.rows", connections.length));
   showHideTable(true, dispatch);
 }

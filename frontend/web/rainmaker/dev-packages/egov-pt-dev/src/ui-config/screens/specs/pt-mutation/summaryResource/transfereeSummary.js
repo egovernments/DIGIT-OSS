@@ -12,6 +12,7 @@ import get from "lodash/get";
 import { gotoApplyWithStep, getLabelIfNotNull } from "../../utils/index";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { checkValueForNA } from "../../utils";
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 
 const showComponent = (dispatch, componentJsonPath, display) => {
@@ -188,13 +189,13 @@ export const transfereeSummary = getCommonGrayCard({
     const categoryDocumentTypeJsonPath="components.div.children.body.children.cardContent.children.transfereeSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerSpecialDocumentType.props.style";
     
     
-    if(categoryType === "NONE"){
+    // if(categoryType === "NONE"){
     
-       dispatch(handleField("search-preview", categoryDocumentIDJsonPath, "display","none"));
-       dispatch(handleField("search-preview", categoryDocumentTypeJsonPath, "display","none"));
+    //    dispatch(handleField("search-preview", categoryDocumentIDJsonPath, "display","none"));
+    //    dispatch(handleField("search-preview", categoryDocumentTypeJsonPath, "display","none"));
 
       
-    }
+    // }
   },
 });
 

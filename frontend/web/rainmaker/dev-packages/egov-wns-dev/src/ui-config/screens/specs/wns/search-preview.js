@@ -33,13 +33,13 @@ import { getReviewOwner } from "./applyResource/review-owner";
 import { getReviewDocuments } from "./applyResource/review-documents";
 import { loadReceiptGenerationData } from "../utils/receiptTransformer";
 import { adhocPopup } from "./applyResource/adhocPopup";
+import { getWorkFlowData } from "../../../../ui-utils/commons";
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 let service = getQueryArg(window.location.href, "service");
 const serviceModuleName = service === "WATER" ? "NewWS1" : "NewSW1";
 const serviceUrl = serviceModuleName === "NewWS1" ? "/ws-services/wc/_update" : "/sw-services/swc/_update";
-
 const headerrow = getCommonContainer({
   header: getCommonHeader({
     labelKey: "WS_TASK_DETAILS"
@@ -53,21 +53,55 @@ const headerrow = getCommonContainer({
         number: applicationNumber
       }
     }
-  })
+  }),
+  connection: getCommonContainer({
+  connectionNumber: {
+    uiFramework: "custom-atoms-local",
+    moduleName: "egov-wns",
+    componentPath: "ConsumerNoContainer",
+    props: {
+      number: ""
+    }
+  }
+
+})
 });
 
 const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
+  const queryObj = [
+    { key: "businessIds", value: applicationNumber },
+    { key: "history", value: true },
+    { key: "tenantId", value: tenantId }
+  ];
+
+  let Response =await getWorkFlowData(queryObj);
+  let processInstanceAppStatus=Response.ProcessInstances[0].state.applicationStatus;
   //Search details for given application Number
   if (applicationNumber) {
+    
+    // hiding the Additional details for citizen. ,,
+    if(process.env.REACT_APP_NAME === "Citizen" && processInstanceAppStatus && (processInstanceAppStatus === 'INITIATED' || processInstanceAppStatus ==="PENDING_FOR_CITIZEN_ACTION" || processInstanceAppStatus === 'PENDING_FOR_DOCUMENT_VERIFICATION')){
+      set(
+        action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.props.style",
+        { display: "none" }
+      ); 
+    }
+
     if (!getQueryArg(window.location.href, "edited")) {
-      (await searchResults(action, state, dispatch, applicationNumber));
+      (await searchResults(action, state, dispatch, applicationNumber,processInstanceAppStatus));
     } else {
       let applyScreenObject = get(state.screenConfiguration.preparedFinalObject, "applyScreen");
       applyScreenObject.applicationNo.includes("WS")?applyScreenObject.service="WATER":applyScreenObject.service="SEWERAGE";
       let parsedObject = parserFunction(findAndReplace(applyScreenObject, "NA", null));
       dispatch(prepareFinalObject("WaterConnection[0]", parsedObject));
        let estimate;
-      if(parsedObject.applicationStatus==="PENDING_FOR_FIELD_INSPECTION"){
+       if(processInstanceAppStatus==="CONNECTION_ACTIVATED"){
+        let connectionNumber= parsedObject.connectionNo;
+        set(action.screenConfig, "components.div.children.headerDiv.children.header1.children.connection.children.connectionNumber.props.number",connectionNumber );
+      }else{
+        set(action.screenConfig, "components.div.children.headerDiv.children.header1.children.connection.children.connectionNumber.visible",false ); 
+      }
+      if(processInstanceAppStatus==="PENDING_FOR_FIELD_INSPECTION"){
         let queryObjectForEst = [{
           applicationNo: applicationNumber,
           tenantId: tenantId,
@@ -81,6 +115,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
               await processBills(estimate, viewBillTooltip, dispatch);
               // viewBreakUp 
               estimate.Calculation[0].billSlabData = _.groupBy(estimate.Calculation[0].taxHeadEstimates, 'category')
+              estimate.Calculation[0].appStatus = processInstanceAppStatus; 
               dispatch(prepareFinalObject("dataCalculation", estimate.Calculation[0]));
             }
           } 
@@ -97,6 +132,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
               await processBills(estimate, viewBillTooltip, dispatch);
               // viewBreakUp 
               estimate.Calculation[0].billSlabData = _.groupBy(estimate.Calculation[0].taxHeadEstimates, 'category')
+              estimate.Calculation[0].appStatus = processInstanceAppStatus; 
               dispatch(prepareFinalObject("dataCalculation", estimate.Calculation[0]));
             }
           }
@@ -146,16 +182,27 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].applicationStatus")
     );
 
-    const appStatus = get(
-      state,
-      "screenConfiguration.preparedFinalObject.WaterConnection[0].applicationStatus"
-    );
-
+    // const appStatus = get(
+    //   state,
+    //   "screenConfiguration.preparedFinalObject.WaterConnection[0].applicationStatus"
+    // );
+    // for showing addPenaltyRebateButton
+    if(process.env.REACT_APP_NAME !== "Citizen" && (processInstanceAppStatus !== 'PENDING_FOR_PAYMENT' && processInstanceAppStatus !=="PENDING_FOR_CONNECTION_ACTIVATION" && processInstanceAppStatus !== 'CONNECTION_ACTIVATED')){
+      
+      dispatch(
+          handleField(
+            "search-preview",
+            "components.div.children.taskDetails.children.cardContent.children.estimate.children.cardContent.children.addPenaltyRebateButton",
+            "visible",
+            true
+          )
+        );
+    }
     const printCont = downloadPrintContainer(
       action,
       state,
       dispatch,
-      appStatus,
+      processInstanceAppStatus,
       applicationNumber,
       tenantId
     );
@@ -301,9 +348,11 @@ const estimate = getCommonGrayCard({
     },
     onClickDefination: {
       action: "condition",
-      callBack: showHideAdhocPopup
+      callBack: (state, dispatch) => {
+        showHideAdhocPopup(state, dispatch, "search-preview");
+      }
     },
-    visible: process.env.REACT_APP_NAME !== "Citizen"
+    visible: false
   },
 });
 
@@ -358,18 +407,22 @@ const screenConfig = {
     const status = getQueryArg(window.location.href, "status");
     const tenantId = getQueryArg(window.location.href, "tenantId");
     const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+
     //To set the application no. at the  top
     set(action.screenConfig, "components.div.children.headerDiv.children.header1.children.application.children.applicationNumber.props.number", applicationNumber);
     // if (status !== "pending_payment") {
     //   set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.viewBreakupButton.visible", false);
     // }
+   
     const queryObject = [
       { key: "tenantId", value: tenantId },
       { key: "businessServices", value: serviceModuleName }
     ];
 
-    setBusinessServiceDataToLocalStorage(queryObject, dispatch)
+    setBusinessServiceDataToLocalStorage(queryObject, dispatch);
+    set(action,"screenConfig.components.adhocDialog.children.popup",adhocPopup);
     beforeInitFn(action, state, dispatch, applicationNumber);
+
     return action;
   },
 
@@ -463,17 +516,17 @@ const screenConfig = {
       props: {
         open: false,
         maxWidth: "sm",
-        screenKey: "pay"
+        screenKey: "search-preview"
       },
       children: {
-        popup: adhocPopup
+        popup: {}
       }
     },
   }
 };
 
 //----------------- search code (feb17)---------------------- //
-const searchResults = async (action, state, dispatch, applicationNumber) => {
+const searchResults = async (action, state, dispatch, applicationNumber,processInstanceAppStatus) => {
   let queryObjForSearch = [{ key: "tenantId", value: tenantId }, { key: "applicationNumber", value: applicationNumber }]
   let viewBillTooltip = [], estimate, payload = [];
   if (service === "WATER") {
@@ -490,6 +543,13 @@ const searchResults = async (action, state, dispatch, applicationNumber) => {
     if (payload !== undefined && payload !== null) {
       dispatch(prepareFinalObject("WaterConnection[0]", payload.WaterConnection[0]));
     }
+    if(processInstanceAppStatus==="CONNECTION_ACTIVATED"){
+      let connectionNumber= payload.WaterConnection[0].connectionNo;
+      set(action.screenConfig, "components.div.children.headerDiv.children.header1.children.connection.children.connectionNumber.props.number",connectionNumber );
+    }else{
+      set(action.screenConfig, "components.div.children.headerDiv.children.header1.children.connection.children.connectionNumber.visible",false ); 
+    }
+
     // to set documents 
     if (payload.WaterConnection[0].documents !== null && payload.WaterConnection[0].documents !== "NA") {
       await setDocuments(
@@ -507,7 +567,7 @@ const searchResults = async (action, state, dispatch, applicationNumber) => {
 
         // viewBreakUp 
         estimate.Calculation[0].billSlabData = _.groupBy(estimate.Calculation[0].taxHeadEstimates, 'category')
-
+        estimate.Calculation[0].appStatus = processInstanceAppStatus; 
         dispatch(prepareFinalObject("dataCalculation", estimate.Calculation[0]));
       }
     }
@@ -517,6 +577,13 @@ const searchResults = async (action, state, dispatch, applicationNumber) => {
     payload.SewerageConnections[0].service = service;
     if (payload !== undefined && payload !== null) {
       dispatch(prepareFinalObject("WaterConnection[0]", payload.SewerageConnections[0]));
+    }
+    //connection number display
+    if(processInstanceAppStatus==="CONNECTION_ACTIVATED"){
+      let connectionNumber= payload.SewerageConnections[0].connectionNo;
+      set(action.screenConfig, "components.div.children.headerDiv.children.header1.children.connection.children.connectionNumber.props.number",connectionNumber );
+    }else{
+      set(action.screenConfig, "components.div.children.headerDiv.children.header1.children.connection.children.connectionNumber.visible",false ); 
     }
 
     // to set documents 
@@ -543,6 +610,7 @@ const searchResults = async (action, state, dispatch, applicationNumber) => {
         await processBills(estimate, viewBillTooltip, dispatch);
         // viewBreakUp 
         estimate.Calculation[0].billSlabData = _.groupBy(estimate.Calculation[0].taxHeadEstimates, 'category')
+        estimate.Calculation[0].appStatus = processInstanceAppStatus; 
         dispatch(prepareFinalObject("dataCalculation", estimate.Calculation[0]));
       }
     }

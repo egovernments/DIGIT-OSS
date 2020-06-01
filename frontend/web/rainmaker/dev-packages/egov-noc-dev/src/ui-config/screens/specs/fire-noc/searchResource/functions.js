@@ -4,7 +4,7 @@ import { getSearchResults } from "../../../../../ui-utils/commons";
 import { convertEpochToDate, convertDateToEpoch } from "../../utils/index";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { textToLocalMapping } from "./searchResults";
-import { validateFields, getTextToLocalMapping } from "../../utils";
+import { validateFields } from "../../utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
 export const searchApiCall = async (state, dispatch) => {
@@ -108,18 +108,18 @@ export const searchApiCall = async (state, dispatch) => {
       // const response = searchSampleResponse();
 
       let data = response.FireNOCs.map(item => ({
-        [getTextToLocalMapping("Application No")]:
+        ['TL_COMMON_TABLE_COL_APP_NO']:
           item.fireNOCDetails.applicationNumber || "-",
-        [getTextToLocalMapping("NOC No")]: item.fireNOCNumber || "-",
-        [getTextToLocalMapping("NOC Type")]:
+        ['NOC_COMMON_TABLE_COL_NOC_NO_LABEL']: item.fireNOCNumber || "-",
+        ['NOC_TYPE_LABEL']:
           item.fireNOCDetails.fireNOCType || "-",
-        [getTextToLocalMapping("Owner Name")]:
+        ['NOC_COMMON_TABLE_COL_OWN_NAME_LABEL']:
           get(item, "fireNOCDetails.applicantDetails.owners[0].name") || "-",
-        [getTextToLocalMapping("Application Date")]:
+        ['NOC_COMMON_TABLE_COL_APP_DATE_LABEL']:
           convertEpochToDate(parseInt(item.fireNOCDetails.applicationDate)) ||
           "-",
-        tenantId: item.tenantId,
-        [getTextToLocalMapping("Status")]: item.fireNOCDetails.status || "-"
+        ["TENANT_ID"]: item.tenantId,
+        ['NOC_COMMON_TABLE_COL_STATUS_LABEL']: item.fireNOCDetails.status || "-"
       }));
 
       dispatch(
@@ -134,10 +134,8 @@ export const searchApiCall = async (state, dispatch) => {
         handleField(
           "search",
           "components.div.children.searchResults",
-          "props.title",
-          `${getTextToLocalMapping(
-            "Search Results for Fire-NOC Applications"
-          )} (${response.FireNOCs.length})`
+          "props.rows",
+          response.FireNOCs.length
         )
       );
       //showHideProgress(false, dispatch);

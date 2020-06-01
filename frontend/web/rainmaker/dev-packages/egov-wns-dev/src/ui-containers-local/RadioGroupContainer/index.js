@@ -14,7 +14,8 @@ import { togglePlumberFeilds } from '../CheckboxContainer/toggleFeilds';
 
 const styles = theme => ({
   root: {
-    display: "flex"
+    display: "flex",
+    marginBottom:0
   },
   formControl: {
     marginTop: 0,
@@ -30,7 +31,8 @@ const styles = theme => ({
   formLabel: {
     fontSize: 12,
     fontWeight: 400,
-    letterSpacing: 0.56
+    letterSpacing: 0.56,
+    marginTop:14
   }
 });
 

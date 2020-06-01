@@ -21,10 +21,17 @@ export const getWFConfig = (module, businessService) => {
         DEFAULT: "/fire-noc/search-preview",
       };
     case "BPA-SERVICES":
-      return {
-        INITIATED: "/egov-bpa/search-preview",
-        DEFAULT: "/egov-bpa/search-preview",
-      };
+      if (businessService === "BPA_OC") {
+        return {
+          INITIATED: "/oc-bpa/search-preview",
+          DEFAULT: "/oc-bpa/search-preview",
+        };
+      } else {
+        return {
+          INITIATED: "/egov-bpa/search-preview",
+          DEFAULT: "/egov-bpa/search-preview",
+        };
+      }
     case "BPAREG":
       return {
         DEFAULT: "/bpastakeholder/search-preview",

@@ -132,6 +132,34 @@ const getSummaryRequiredDetails = async (state, dispatch) => {
       getLicenceValidData
     )
   );
+  const tradeType = get(LicenseData, "tradeLicenseDetail.tradeUnits[0].tradeType");
+  if (tradeType.split('.')[0] == "ARCHITECT") {
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardFourthStep.children.tradeReviewDetails.children.cardContent.children.reviewLicenseDetails.children.cardContent.children.multiOwner.children.viewFive.children.reviewcounsilForArchNo",
+        "visible",
+        true
+      )
+    );
+  } else {
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardFourthStep.children.tradeReviewDetails.children.cardContent.children.reviewLicenseDetails.children.cardContent.children.multiOwner.children.viewFive.children.reviewcounsilForArchNo",
+        "visible",
+        false
+      )
+    );
+  }
+  dispatch(
+    handleField(
+      "apply",
+      "components.div.children.formwizardFourthStep.children.tradeReviewDetails.children.cardContent.children.reviewLicenseDetails.children.cardContent.children.multiOwner.children.viewFive.children.reviewValidityPeriod",
+      "visible",
+      false
+    )
+  );
  
   prepareDocumentsDetailsView(state, dispatch);
 }
@@ -548,7 +576,7 @@ export const footer = getCommonApplyFooter({
       },
       previousButtonLabel: getLabel({
         labelName: "Previous Step",
-        labelKey: "TL_COMMON_BUTTON_PREV_STEP"
+        labelKey: "BPA_COMMON_BUTTON_PREV_STEP"
       })
     },
     onClickDefination: {
@@ -571,7 +599,7 @@ export const footer = getCommonApplyFooter({
     children: {
       nextButtonLabel: getLabel({
         labelName: "Next Step",
-        labelKey: "TL_COMMON_BUTTON_NXT_STEP"
+        labelKey: "BPA_COMMON_BUTTON_NXT_STEP"
       }),
       nextButtonIcon: {
         uiFramework: "custom-atoms",
@@ -600,7 +628,7 @@ export const footer = getCommonApplyFooter({
     children: {
       submitButtonLabel: getLabel({
         labelName: "Submit",
-        labelKey: "TL_COMMON_BUTTON_SUBMIT"
+        labelKey: "BPA_COMMON_BUTTON_SUBMIT"
       }),
       submitButtonIcon: {
         uiFramework: "custom-atoms",

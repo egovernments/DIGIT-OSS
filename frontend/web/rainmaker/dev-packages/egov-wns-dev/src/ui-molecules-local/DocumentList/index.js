@@ -265,7 +265,7 @@ class DocumentList extends Component {
               data={card.dropdown.menu}
               optionValue="code"
               optionLabel="label"
-              required={true}
+              required={(card.required)?true:false}
               onChange={event => this.handleChange(key, event)}
               jsonPath={jsonPath}
             />

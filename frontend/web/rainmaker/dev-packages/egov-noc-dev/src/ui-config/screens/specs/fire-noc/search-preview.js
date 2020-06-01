@@ -1,40 +1,21 @@
-import {
-  getCommonCard,
-  getCommonContainer,
-  getCommonHeader,
-  getLabelWithValue
-} from "egov-ui-framework/ui-config/screens/specs/utils";
-import {
-  handleScreenConfigurationFieldChange as handleField,
-  prepareFinalObject
-} from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import {
-  getFileUrlFromAPI,
-  getQueryArg,
-  getTransformedLocale,
-  setBusinessServiceDataToLocalStorage,
-  getFileUrl
-} from "egov-ui-framework/ui-utils/commons";
-import { checkValueForNA } from "../utils/index";
-import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
-import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import { getCommonCard, getCommonContainer, getCommonHeader, getLabelWithValue } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getFileUrl, getFileUrlFromAPI, getQueryArg, getTransformedLocale, setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
 import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
 import { getSearchResults } from "../../../../ui-utils/commons";
-import { searchBill, generateBill ,createBill} from "../utils/index";
+import { checkValueForNA, generateBill } from "../utils/index";
 import generatePdf from "../utils/receiptPdf";
 import { loadPdfGenerationData } from "../utils/receiptTransformer";
 import { citizenFooter } from "./searchResource/citizenFooter";
-import {
-  applicantSummary,
-  institutionSummary
-} from "./summaryResource/applicantSummary";
+import { applicantSummary, institutionSummary } from "./summaryResource/applicantSummary";
 import { documentsSummary } from "./summaryResource/documentsSummary";
 import { estimateSummary } from "./summaryResource/estimateSummary";
 import { nocSummary } from "./summaryResource/nocSummary";
 import { propertySummary } from "./summaryResource/propertySummary";
 import { download } from "egov-common/ui-utils/commons";
+import "./index.css";
 
 const titlebar = getCommonContainer({
   header: getCommonHeader({
@@ -49,34 +30,141 @@ const titlebar = getCommonContainer({
       number: getQueryArg(window.location.href, "applicationNumber")
     }
   },
-  downloadMenu: {
-    uiFramework: "custom-atoms",
-    componentPath: "MenuButton",
-    props: {
-      data: {
-        label: "Download",
-        leftIcon: "cloud_download",
-        rightIcon: "arrow_drop_down",
-        props: { variant: "outlined", style: { marginLeft: 10 } },
-        menu: []
-      }
-    }
-  },
-  printMenu: {
-    uiFramework: "custom-atoms",
-    componentPath: "MenuButton",
-    props: {
-      data: {
-        label: "Print",
-        leftIcon: "print",
-        rightIcon: "arrow_drop_down",
-        props: { variant: "outlined", style: { marginLeft: 10 } },
-        menu: []
-      }
+});
+export const downloadPrintContainer = (
+  state,
+  dispatch
+) => {
+  /** MenuButton data based on status */
+  let status = get(
+    state,
+    "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.status"
+  );
+  let downloadMenu = [];
+  let printMenu = [];
+  let certificateDownloadObject = {
+    label: { labelName: "NOC Certificate", labelKey: "NOC_CERTIFICATE" },
+    link: () => {
+      generatePdf(state, dispatch, "certificate_download");
+    },
+    leftIcon: "book"
+  };
+  let certificatePrintObject = {
+    label: { labelName: "NOC Certificate", labelKey: "NOC_CERTIFICATE" },
+    link: () => {
+      generatePdf(state, dispatch, "certificate_print");
+    },
+    leftIcon: "book"
+  };
+  let receiptDownloadObject = {
+    label: { labelName: "Receipt", labelKey: "NOC_RECEIPT" },
+    link: () => {
+      const receiptQueryString = [
+        { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails, "applicationNumber") },
+        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.FireNOCs[0], "tenantId") }
+      ]
+      download(receiptQueryString , "download" ,"consolidatedreceipt" );
+    },
+    leftIcon: "receipt"
+  };
+  let receiptPrintObject = {
+    label: { labelName: "Receipt", labelKey: "NOC_RECEIPT" },
+    link: () => {
+      const receiptQueryString = [
+        { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails, "applicationNumber") },
+        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.FireNOCs[0], "tenantId") }
+      ]
+      download(receiptQueryString , "print" ,"consolidatedreceipt" );
+    },
+    leftIcon: "receipt"
+  };
+  let applicationDownloadObject = {
+    label: { labelName: "Application", labelKey: "NOC_APPLICATION" },
+    link: () => {
+      generatePdf(state, dispatch, "application_download");
+    },
+    leftIcon: "assignment"
+  };
+  let applicationPrintObject = {
+    label: { labelName: "Application", labelKey: "NOC_APPLICATION" },
+    link: () => {
+      generatePdf(state, dispatch, "application_print");
+    },
+    leftIcon: "assignment"
+  };
+  switch (status) {
+    case "APPROVED":
+      downloadMenu = [
+        certificateDownloadObject,
+        receiptDownloadObject,
+        applicationDownloadObject
+      ];
+      printMenu = [
+        certificatePrintObject,
+        receiptPrintObject,
+        applicationPrintObject
+      ];
+      break;
+    case "DOCUMENTVERIFY":
+    case "FIELDINSPECTION":
+    case "PENDINGAPPROVAL":
+    case "REJECTED":
+      downloadMenu = [receiptDownloadObject, applicationDownloadObject];
+      printMenu = [receiptPrintObject, applicationPrintObject];
+      break;
+    case "CANCELLED":
+    case "PENDINGPAYMENT":
+      downloadMenu = [applicationDownloadObject];
+      printMenu = [applicationPrintObject];
+      break;
+    default:
+      break;
+  }
+  /** END */
+
+  return {
+    rightdiv: {
+      uiFramework: "custom-atoms",
+      componentPath: "Div",
+      props: {
+          style: { textAlign: "right", display: "flex" }
+      },
+      children: {
+          downloadMenu: {
+              uiFramework: "custom-molecules",
+              componentPath: "DownloadPrintButton",
+              props: {
+                  data: {
+                      label: { labelName: "DOWNLOAD", labelKey: "TL_DOWNLOAD" },
+                      leftIcon: "cloud_download",
+                      rightIcon: "arrow_drop_down",
+                      props: { variant: "outlined", style: { height: "60px", color: "#FE7A51",marginRight:"5px" }, className: "tl-download-button" },
+                      menu: downloadMenu
+                  }
+              }
+          },
+          printMenu: {
+              uiFramework: "custom-molecules",
+              componentPath: "DownloadPrintButton",
+              props: {
+                  data: {
+                      label: { labelName: "PRINT", labelKey: "TL_PRINT" },
+                      leftIcon: "print",
+                      rightIcon: "arrow_drop_down",
+                      props: { variant: "outlined", style: { height: "60px", color: "#FE7A51" }, className: "tl-print-button" },
+                      menu: printMenu
+                  }
+              }
+          }
+
+      },
+      // gridDefination: {
+      //   xs: 12,
+      //   sm: 6
+      // }
     }
   }
-});
-
+};
 const prepareDocumentsView = async (state, dispatch) => {
   let documentsPreview = [];
 
@@ -164,7 +252,7 @@ const prepareUoms = (state, dispatch) => {
         {
           jsonPath: `FireNOCs[0].fireNOCDetails.buildings[0].uomsMap.${
             item.code
-          }`,
+            }`,
           callBack: checkValueForNA,
         }
       );
@@ -185,112 +273,8 @@ const prepareUoms = (state, dispatch) => {
 //   dispatch(prepareFinalObject("documentsUploadRedux", documentsUploadRedux));
 // };
 
-const setDownloadMenu = (state, dispatch) => {
-  /** MenuButton data based on status */
-  let status = get(
-    state,
-    "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.status"
-  );
-  let downloadMenu = [];
-  let printMenu = [];
-  let certificateDownloadObject = {
-    label: { labelName: "NOC Certificate", labelKey: "NOC_CERTIFICATE" },
-    link: () => {
-      generatePdf(state, dispatch, "certificate_download");
-    },
-    leftIcon: "book"
-  };
-  let certificatePrintObject = {
-    label: { labelName: "NOC Certificate", labelKey: "NOC_CERTIFICATE" },
-    link: () => {
-      generatePdf(state, dispatch, "certificate_print");
-    },
-    leftIcon: "book"
-  };
-  let receiptDownloadObject = {
-    label: { labelName: "Receipt", labelKey: "NOC_RECEIPT" },
-    link: () => {
-      const receiptQueryString = [
-        { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails, "applicationNumber") },
-        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.FireNOCs[0], "tenantId") }
-      ]
-      download(receiptQueryString , "download" ,"consolidatedreceipt" );
-    },
-    leftIcon: "receipt"
-  };
-  let receiptPrintObject = {
-    label: { labelName: "Receipt", labelKey: "NOC_RECEIPT" },
-    link: () => {
-      const receiptQueryString = [
-        { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails, "applicationNumber") },
-        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.FireNOCs[0], "tenantId") }
-      ]
-      download(receiptQueryString , "print" ,"consolidatedreceipt" );
-    },
-    leftIcon: "receipt"
-  };
-  let applicationDownloadObject = {
-    label: { labelName: "Application", labelKey: "NOC_APPLICATION" },
-    link: () => {
-      generatePdf(state, dispatch, "application_download");
-    },
-    leftIcon: "assignment"
-  };
-  let applicationPrintObject = {
-    label: { labelName: "Application", labelKey: "NOC_APPLICATION" },
-    link: () => {
-      generatePdf(state, dispatch, "application_print");
-    },
-    leftIcon: "assignment"
-  };
-  switch (status) {
-    case "APPROVED":
-      downloadMenu = [
-        certificateDownloadObject,
-        receiptDownloadObject,
-        applicationDownloadObject
-      ];
-      printMenu = [
-        certificatePrintObject,
-        receiptPrintObject,
-        applicationPrintObject
-      ];
-      break;
-    case "DOCUMENTVERIFY":
-    case "FIELDINSPECTION":
-    case "PENDINGAPPROVAL":
-    case "REJECTED":
-      downloadMenu = [receiptDownloadObject, applicationDownloadObject];
-      printMenu = [receiptPrintObject, applicationPrintObject];
-      break;
-    case "CANCELLED":
-    case "PENDINGPAYMENT":
-      downloadMenu = [applicationDownloadObject];
-      printMenu = [applicationPrintObject];
-      break;
-    default:
-      break;
-  }
-  dispatch(
-    handleField(
-      "search-preview",
-      "components.div.children.headerDiv.children.header.children.downloadMenu",
-      "props.data.menu",
-      downloadMenu
-    )
-  );
-  dispatch(
-    handleField(
-      "search-preview",
-      "components.div.children.headerDiv.children.header.children.printMenu",
-      "props.data.menu",
-      printMenu
-    )
-  );
-  /** END */
-};
-
 const setSearchResponse = async (
+  action,
   state,
   dispatch,
   applicationNumber,
@@ -336,19 +320,35 @@ const setSearchResponse = async (
   prepareDocumentsView(state, dispatch);
   prepareUoms(state, dispatch);
   await loadPdfGenerationData(applicationNumber, tenantId);
-  setDownloadMenu(state, dispatch);
+  let status = get(
+    state,
+    "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.status"
+  );
+  const printCont = downloadPrintContainer(
+    state,
+    dispatch
+  );
+  if(status !== "INITIATED"){
+    
+     set(
+        action,
+        "screenConfig.components.div.children.headerDiv.children.helpSection.children",
+        printCont
+      )
+  }  
+
 };
 
 const screenConfig = {
   uiFramework: "material-ui",
   name: "search-preview",
-  beforeInitScreen:  (action, state, dispatch) => {
+  beforeInitScreen: (action, state, dispatch) => {
     let applicationNumber =
-    getQueryArg(window.location.href, "applicationNumber") ||
-    get(
-      state.screenConfiguration.preparedFinalObject,
-      "FireNOCs[0].fireNOCDetails.applicationNumber"
-    );
+      getQueryArg(window.location.href, "applicationNumber") ||
+      get(
+        state.screenConfiguration.preparedFinalObject,
+        "FireNOCs[0].fireNOCDetails.applicationNumber"
+      );
     const tenantId = getQueryArg(window.location.href, "tenantId");
     generateBill(dispatch, applicationNumber, tenantId);
     // const queryObject1 = [
@@ -356,31 +356,31 @@ const screenConfig = {
     //   { key: "consumerCode", value: applicationNumber },
     //   { key: "services", value: "FIRENOC" }
     // ];
- 
-    dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
+
     // searchBill(dispatch, applicationNumber, tenantId);
-  //  createBill(queryObject1,dispatch)
-  //  .then(payload=>{
-  //   console.log("2323232>>>....billData",payload);
-  //   let billData = get(payload, "Bill[0]") ;
-  //   console.log("2323232>>>....billData",billData);
-  //   if (billData) {
-  //     const estimateData = 
-  //     (billData);
-  //     estimateData &&
-  //       estimateData.length &&
-  //       dispatch(
-  //         prepareFinalObject(
-  //           "applyScreenMdmsData.estimateCardData",
-  //           estimateData
-  //         )
-  //       );
-  //       console.log("asdsasd",estimateData);
-  //   }
+    //  createBill(queryObject1,dispatch)
+    //  .then(payload=>{
+    //   console.log("2323232>>>....billData",payload);
+    //   let billData = get(payload, "Bill[0]") ;
+    //   console.log("2323232>>>....billData",billData);
+    //   if (billData) {
+    //     const estimateData = 
+    //     (billData);
+    //     estimateData &&
+    //       estimateData.length &&
+    //       dispatch(
+    //         prepareFinalObject(
+    //           "applyScreenMdmsData.estimateCardData",
+    //           estimateData
+    //         )
+    //       );
+    //       console.log("asdsasd",estimateData);
+    //   }
 
-  // })
-
-    setSearchResponse(state, dispatch, applicationNumber, tenantId);
+    // })
+    
+    setSearchResponse(action,state, dispatch, applicationNumber, tenantId);
+ 
 
     const queryObject = [
       { key: "tenantId", value: tenantId },
@@ -431,10 +431,24 @@ const screenConfig = {
             header: {
               gridDefination: {
                 xs: 12,
-                sm: 10
+                sm: 8
               },
               ...titlebar
+            },
+            helpSection: {
+              uiFramework: "custom-atoms",
+              componentPath: "Container",
+              props: {
+                color: "primary",
+                style: { justifyContent: "flex-end" }
+              },
+              gridDefination: {
+                xs: 12,
+                sm: 4,
+                align: "right"
+              }
             }
+            
           }
         },
         taskStatus: {

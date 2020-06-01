@@ -24,9 +24,15 @@ const hideBPACard = () => {
     "BPA_ARCHITECT",
     "BPA_ENGINEER",
     "BPA_BUILDER",
-    "BPA_STRUCTURALENGINEER"
+    "BPA_STRUCTURALENGINEER",
+    "BPA_SUPERVISOR",
+    "BPA_TOWNPLANNER"
   ]);
 };
+
+const displayView = () => {
+  return hideBPACard() ? "my-applications" : "my-applications-stakeholder";
+}
 
 const cardItems = [
   {
@@ -46,16 +52,28 @@ const cardItems = [
     icon: <BPANewPermitIcon />,
     route: {
       screenKey: "home",
-      jsonPath: "components.cityPickerDialog"
+      jsonPath: "components.cityPickerDialog",
+      value: "apply"
     }
   },
   {
     label: {
-      labelKey: "TL_MY_APPLICATIONS",
+      labelKey: "BPA_OC_COMMON_APPL_NEW_CONSTRUCTION",
+      labelName: "Occupancy Certificate New Building Construction"
+    },
+    icon: <BPANewPermitIcon />,
+    route: {
+      screenKey: "home",
+      jsonPath: "components.cityPickerDialogForOC"
+    }
+  },
+  {
+    label: {
+      labelKey: "BPA_MY_APPLICATIONS",
       labelName: "My Applications"
     },
     icon: <FormIcon />,
-    route: "my-applications"
+    route: displayView()
   }
 ];
 
@@ -179,6 +197,26 @@ const tradeLicenseSearchAndResult = {
               root: "city-picker-dialog-style"
             }
             // style: { minHeight: "180px", minWidth: "365px" }
+          },
+          children: {
+            popup: cityPicker
+          }
+        }
+      }
+    },
+    cityPickerDialogForOC: {
+      componentPath: "Dialog",
+      props: {
+        open: false,
+        maxWidth: "md"
+      },
+      children: {
+        dialogContent: {
+          componentPath: "DialogContent",
+          props: {
+            classes: {
+              root: "city-picker-dialog-style"
+            }
           },
           children: {
             popup: cityPicker

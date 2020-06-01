@@ -30,7 +30,7 @@ body {
   position: fixed !important;
   bottom: 0;
   right: 0;
-  width: 83.33vw;
+  width: 100%;
   text-align: right;
 }
 .common-div-css {
@@ -91,7 +91,9 @@ span[class^="MuiFormLabel-asterisk"] {
 .common-header-cont {
   display: none;
 }
-
+div[class^="MuiTooltip-tooltip"] {
+  font-size: 14px;
+}
 /* div[class^="MuiGrid-item"]   {
     padding-right: 80px
 } */

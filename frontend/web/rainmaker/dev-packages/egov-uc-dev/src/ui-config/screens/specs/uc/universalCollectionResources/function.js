@@ -102,14 +102,14 @@ export const searchApiCall = async (state, dispatch) => {
     const uiConfigs = get(state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.uiCommonConfig");
     try {
       let data = response.map(item => ({
-        [getTextToLocalMapping("Receipt No.")]: item.receiptNumber || "-",
-        [getTextToLocalMapping("Payee Name")]: item.payeeName || "-",
-        [getTextToLocalMapping("Service Type")]: getTextToLocalMapping(`BILLINGSERVICE_BUSINESSSERVICE_${item.serviceType}`) || "-",
-        [getTextToLocalMapping("Date")]: convertEpochToDate(item.receiptdate) || "-",
-        [getTextToLocalMapping("Amount[INR]")]: item.amount || "-",
-        [getTextToLocalMapping("Status")]: item.status || "-",
-        ["receiptKey"]: get(uiConfigs.filter(item => item.code === item.businessService), "0.receiptKey", "consolidatedreceipt"),
-        ["tenantId"]: item.tenantId || "-"
+        ['UC_COMMON_TABLE_COL_RECEIPT_NO']: item.receiptNumber || "-",
+        ['UC_COMMON_TABLE_COL_PAYEE_NAME']: item.payeeName || "-",
+        ['UC_SERVICE_TYPE_LABEL']: getTextToLocalMapping(`BILLINGSERVICE_BUSINESSSERVICE_${item.serviceType}`) || "-",
+        ['UC_COMMON_TABLE_COL_DATE']: convertEpochToDate(item.receiptdate) || "-",
+        ['UC_COMMON_TABLE_COL_AMOUNT']: item.amount || "-",
+        ['UC_COMMON_TABLE_COL_STATUS']: item.status || "-",
+        ["RECEIPT_KEY"]: get(uiConfigs.filter(item => item.code === item.businessService), "0.receiptKey", "consolidatedreceipt"),
+        ["TENANT_ID"]: item.tenantId || "-"
       }));
       dispatch(
         handleField(
@@ -123,8 +123,8 @@ export const searchApiCall = async (state, dispatch) => {
         handleField(
           "search",
           "components.div.children.searchResults",
-          "props.title",
-          "Search Results for Receipt (" + data.length + ")"
+          "props.rows",
+          data.length
         )
       );
 
@@ -154,9 +154,9 @@ export const searchApiCall = async (state, dispatch) => {
 
 const checkEmptyFields = (searchScreenObject) => {
   const businessServices = get(searchScreenObject, 'businessServices', null)
-  const mobileNo = get(searchScreenObject, 'mobileNo', null)
+  const mobileNumber = get(searchScreenObject, 'mobileNumber', null)
   const receiptNumbers = get(searchScreenObject, 'receiptNumbers', null)
-  if (checkEmpty(businessServices) && checkEmpty(mobileNo) && checkEmpty(receiptNumbers)) { return true; }
+  if (checkEmpty(businessServices) && checkEmpty(mobileNumber) && checkEmpty(receiptNumbers)) { return true; }
   return false;
 }
 const checkEmpty = (value) => {

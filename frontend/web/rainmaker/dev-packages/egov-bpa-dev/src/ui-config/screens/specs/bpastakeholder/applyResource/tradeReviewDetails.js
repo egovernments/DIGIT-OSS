@@ -35,8 +35,8 @@ const reviewDocumentDetails = getReviewDocuments();
 
 export const tradeReviewDetails = getCommonCard({
   header: getCommonTitle({
-    labelName: "Please review your Application and Submit",
-    labelKey: "TL_SUMMARY_HEADER"
+    labelName: "Application Summary",
+    labelKey: "BPA_SUMMARY_HEADER"
   }),
   estimate,
   reviewLicenseDetails,

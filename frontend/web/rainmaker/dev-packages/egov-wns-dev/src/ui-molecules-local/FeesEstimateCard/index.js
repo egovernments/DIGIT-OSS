@@ -54,7 +54,7 @@ const styles = {
 };
 
 const date = (from, to) => {
-    if (from !== undefined && to !== 'NA') { return convertEpochToDate(from) + " - " + convertEpochToDate(to); }
+    if (from !== undefined && to !== 'NA') { return convertEpochToDate(from) + " to " + convertEpochToDate(to); }
     else { return "NA" }
 }
 

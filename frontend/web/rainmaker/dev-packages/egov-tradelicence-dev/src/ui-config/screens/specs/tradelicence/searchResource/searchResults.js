@@ -1,10 +1,11 @@
 import React from "react";
+import { LabelContainer } from "egov-ui-framework/ui-containers";
 import {
   sortByEpoch,
   getEpochForDate,
   getTextToLocalMapping
 } from "../../utils";
-import {  getLocaleLabels} from "egov-ui-framework/ui-utils/commons";
+import { getLocaleLabels, getStatusKey} from "egov-ui-framework/ui-utils/commons";
 
 export const searchResults = {
   uiFramework: "custom-molecules",
@@ -13,14 +14,33 @@ export const searchResults = {
   visible: false,
   props: {
     columns: [
-      getTextToLocalMapping("Application No"),
-      getTextToLocalMapping("License No"),
-      getTextToLocalMapping("Trade Name"),
-      getTextToLocalMapping("Owner Name"),
-      getTextToLocalMapping("Application Date"),
-      getTextToLocalMapping("Financial Year"),
       {
-        name: getTextToLocalMapping("Application Type"),
+        labelName: "Application No",
+        labelKey: "TL_COMMON_TABLE_COL_APP_NO"
+      },
+      {
+        labelName: "License No",
+        labelKey: "TL_COMMON_TABLE_COL_LIC_NO"
+      },
+      {
+        labelName: "Trade Name",
+        labelKey: "TL_COMMON_TABLE_COL_TRD_NAME"
+      },
+      {
+        labelName: "Owner Name",
+        labelKey: "TL_COMMON_TABLE_COL_OWN_NAME"
+      },
+      {
+        labelName: "Application Date",
+        labelKey: "TL_COMMON_TABLE_COL_APP_DATE"
+      },
+      {
+        labelName: "Financial Year",
+        labelKey: "TL_COMMON_TABLE_COL_FIN_YEAR"
+      },
+      {
+        labelName: "Application Type",
+        labelKey: "TL_COMMON_TABLE_COL_APP_TYPE",
         options: {
           filter: false,
           customBodyRender: value => (
@@ -31,35 +51,42 @@ export const searchResults = {
         }
       },
       {
-        name: getTextToLocalMapping("Status"),
+        labelName: "Status",
+        labelKey: "TL_COMMON_TABLE_COL_STATUS",
         options: {
           filter: false,
           customBodyRender: value => (
-            <span
-              style={value.includes("APPROVED") ? { color: "green" } : { color: "red" }}
-            >
-              {getLocaleLabels(value,value)}
-            </span>
+            <LabelContainer
+              style={
+                value.includes("APPROVED") ? { color: "green" } : { color: "red" }
+              }
+              labelKey={getStatusKey(value).labelKey}
+              labelName={getStatusKey(value).labelName}
+            />
           )
         }
       },
       {
-        name: "tenantId",
+        labelName: "Tenant Id",
+        labelKey: "TENANT_ID",
         options: {
           display: false
         }
       },
       {
-        name:"status1",
+        labelName: "Status",
+        labelKey: "TL_COMMON_TABLE_COL_STATUS",
         options: {
           display: false
         }
       },
 
     ],
-    title: getTextToLocalMapping(
-      "Search Results for Trade License Applications"
-    ),
+    title: {
+      labelName: "Search Results for Trade License Applications",
+      labelKey: "TL_HOME_SEARCH_RESULTS_TABLE_HEADING"
+    },
+    rows : "",
     options: {
       filter: false,
       download: false,

@@ -14,6 +14,7 @@ import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 import find from "lodash/find";
 import commonConfig from "config/common.js";
 import { httpRequest } from "../../../../ui-utils";
+import "./index.css"
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = hasButton && hasButton === "false" ? false : true;

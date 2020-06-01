@@ -78,7 +78,7 @@ class SearchProperty extends Component {
       this.props.fetchProperties(queryParams);
       this.setState({ showTable: true });
     }
-    fetchLocalizationLabel(getLocale(), city.value, city.value);
+    // fetchLocalizationLabel(getLocale(), city.value, city.value);
   };
 
 

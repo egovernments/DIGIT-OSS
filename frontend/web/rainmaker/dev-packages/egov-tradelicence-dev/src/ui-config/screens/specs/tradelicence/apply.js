@@ -330,7 +330,7 @@ const screenConfig = {
     if(URLsplit[URLsplit.length-1]=="apply"){
       pageResetAndChange(state,dispatch,tenantId)
     }
-    dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
+    // dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     getData(action, state, dispatch).then(responseAction => {
       const queryObj = [{ key: "tenantId", value: tenantId }];
       getBoundaryData(action, state, dispatch, queryObj);

@@ -1,39 +1,21 @@
 import React from "react";
 import LabelContainer from "egov-ui-framework/ui-containers/LabelContainer";
-import {
-  getTranslatedLabel,
-  transformById
-} from "../../ui-config/screens/specs/utils";
-import { getLocalization } from "egov-ui-kit/utils/localStorageUtils";
 
-
-const localizationLabels = JSON.parse(getLocalization("localization_en_IN"));
-
-const getLocaleLabelsforTL = (label, labelKey, localizationLabels) => {
-  let translatedLabel = "", keyValues;
-  if(labelKey && Array.isArray(labelKey) && labelKey.length > 0) {
-      labelKey.forEach(key => {
-        if(typeof key == "number"){
-          keyValues = key
-        } else {
-          keyValues = getTranslatedLabel(key, localizationLabels);
-        }
-        translatedLabel += keyValues + " ";
-      })
-  } else {
-    translatedLabel = getTranslatedLabel(labelKey, localizationLabels);
-  }
-  return translatedLabel;
-};
+// const styles = {
+//   backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
+//   color: "rgba(255, 255, 255, 0.8700000047683716)",
+//   marginLeft: "8px",
+//   paddingLeft: "19px",
+//   paddingRight: "19px",
+//   textAlign: "center",
+//   verticalAlign: "middle",
+//   lineHeight: "35px",
+//   fontSize: "16px"
+// };
 
 function NoteAtom(props) {
-  let { labelKey, labelName, dynamicArray } = props;
-  let transfomedKeys = transformById(localizationLabels, "code");
-  let translatedLabel = getLocaleLabelsforTL(
-    labelName,
-    labelKey,
-    transfomedKeys
-  );
-  return <div>{translatedLabel} </div>
+  const { number } = props;
+  return <div><LabelContainer labelName="Permit valid up to" labelKey ={"BPA_LICENSE_VALID_LABEL"} dynamicArray={[number]}/></div>;
 }
+
 export default NoteAtom;

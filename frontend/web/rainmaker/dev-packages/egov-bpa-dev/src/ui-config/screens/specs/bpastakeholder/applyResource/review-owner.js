@@ -27,7 +27,7 @@ export const reviewOwnerGender = getLabelWithValue(
 export const reviewOwnerDOB = getLabelWithValue(
   {
     labelName: "Date of Birth",
-    labelKey: "TL_EMP_APPLICATION_DOB"
+    labelKey: "BPA_APPLICANT_DOB_LABEL"
   },
   {
     jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].dob",
@@ -38,7 +38,7 @@ export const reviewOwnerDOB = getLabelWithValue(
 export const reviewOwnerPhoneNo = getLabelWithValue(
   {
     labelName: "Mobile No.",
-    labelKey: "TL_NEW_OWNER_DETAILS_MOB_NO_LABEL"
+    labelKey: "BPA_APPLICANT_DOB_LABEL"
   },
   {
     jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].mobileNumber",
@@ -48,7 +48,7 @@ export const reviewOwnerPhoneNo = getLabelWithValue(
 export const reviewOwnerEmail = getLabelWithValue(
   {
     labelName: "Email",
-    labelKey: "TL_NEW_OWNER_DETAILS_EMAIL_LABEL"
+    labelKey: "BPA_APPLICANT_EMAIL_LABEL"
   },
   {
     jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].emailId",
@@ -58,7 +58,7 @@ export const reviewOwnerEmail = getLabelWithValue(
 export const reviewOwnerPAN = getLabelWithValue(
   {
     labelName: "PAN No.",
-    labelKey: "TL_NEW_OWNER_DETAILS_PAN_LABEL"
+    labelKey: "BPA_APPLICANT_PAN_LABEL"
   },
   {
     jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].pan",
@@ -106,7 +106,7 @@ export const getReviewOwner = (isEditable = true) => {
             },
             buttonLabel: getLabel({
               labelName: "Edit",
-              labelKey: "TL_SUMMARY_EDIT"
+              labelKey: "BPA_SUMMARY_EDIT"
             })
           },
           onClickDefination: {

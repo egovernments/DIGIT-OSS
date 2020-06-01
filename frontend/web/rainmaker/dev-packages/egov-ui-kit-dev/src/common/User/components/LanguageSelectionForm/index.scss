@@ -9,6 +9,12 @@
   font-weight: normal;
 }
 
+.lang-continue-button>button{
+  background-color: #FE7A51 !important;
+} 
+.lang-continue-button:hover>button>div{
+      background-color: #D86845 !important;
+}
 .language-label {
   display: inline-block;
   padding: 0px 5px;
@@ -29,3 +35,4 @@
     font-size: 13px !important;
   }
 }
+

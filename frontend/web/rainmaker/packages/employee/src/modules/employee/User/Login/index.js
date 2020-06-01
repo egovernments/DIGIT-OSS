@@ -11,7 +11,7 @@ const LoginFormHOC = formHoc({ formKey: "employeeLogin" })(LoginForm);
 const Login = ({ bannerUrl, logoUrl }) => {
   // className="col-lg-offset-2 col-md-offset-2 col-md-8 col-lg-8"
   return (
-    <Banner hideBackButton={true} bannerUrl={bannerUrl} logoUrl={logoUrl}>
+    <Banner hideBackButton={false} bannerUrl={bannerUrl} logoUrl={logoUrl}>
       <LoginFormHOC logoUrl={logoUrl} />
     </Banner>
   );

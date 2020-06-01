@@ -1,6 +1,7 @@
 import { getCommonContainer, getCommonGrayCard, getCommonSubHeader, getLabelWithValue } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { checkValueForNA } from "../../utils";
 import { getLabelIfNotNull } from "../../utils/index";
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 
 export const transfereeSummary = getCommonGrayCard({

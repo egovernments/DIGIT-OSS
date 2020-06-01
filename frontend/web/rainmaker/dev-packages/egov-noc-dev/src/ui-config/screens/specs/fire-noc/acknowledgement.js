@@ -23,6 +23,7 @@ import get from "lodash/get";
 import { getCurrentFinancialYear } from "../utils";
 import { loadPdfGenerationData } from "../utils/receiptTransformer";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import "./index.css";
 export const header = getCommonContainer({
   header: getCommonHeader({
     labelName: `Application for Fire NOC (${getCurrentFinancialYear()})`, //later use getFinancialYearDates
@@ -38,6 +39,67 @@ export const header = getCommonContainer({
     visible: true
   }
 });
+
+const downloadprintMenu = (state, dispatch) => {
+  let applicationDownloadObject = {
+    label: { labelName: "Application", labelKey: "NOC_APPLICATION" },
+    link: () => {
+      generatePdf(state, dispatch, "application_download");
+    },
+    leftIcon: "assignment"
+  };
+  let applicationPrintObject = {
+    label: { labelName: "Application", labelKey: "NOC_APPLICATION" },
+    link: () => {
+      generatePdf(state, dispatch, "application_print");
+    },
+    leftIcon: "assignment"
+  };
+   let downloadMenu = [];
+   let printMenu = [];
+   downloadMenu = [ applicationDownloadObject];
+   printMenu = [applicationPrintObject];
+
+
+   return {
+       uiFramework: "custom-atoms",
+       componentPath: "Div",
+       props: {
+           className: "downloadprint-commonmenu",
+           style: { textAlign: "right", display: "flex" }
+       },
+       children: {
+           downloadMenu: {
+               uiFramework: "custom-molecules",
+               componentPath: "DownloadPrintButton",
+               props: {
+                   data: {
+                       label: { labelName: "DOWNLOAD", labelKey: "TL_DOWNLOAD" },
+                       leftIcon: "cloud_download",
+                       rightIcon: "arrow_drop_down",
+                       props: { variant: "outlined", style: { height: "60px", color: "#FE7A51",marginRight:"5px"}, className: "tl-download-button" },
+                       menu: downloadMenu
+                   }
+               }
+           },
+           printMenu: {
+               uiFramework: "custom-molecules",
+               componentPath: "DownloadPrintButton",
+               props: {
+                   data: {
+                       label: { labelName: "PRINT", labelKey: "TL_PRINT" },
+                       leftIcon: "print",
+                       rightIcon: "arrow_drop_down",
+                       props: { variant: "outlined", style: { height: "60px", color: "#FE7A51" }, className: "tl-print-button" },
+                       menu: printMenu
+                   }
+               }
+           }
+
+       },
+   }
+
+}
 
 
 const getHeader=(applicationNumber)=>{
@@ -72,6 +134,7 @@ const getAcknowledgementCard = (
     loadPdfGenerationData(applicationNumber, tenant);
     return {
       header:getHeader(applicationNumber),
+      headerdownloadprint: downloadprintMenu(state, dispatch),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -94,92 +157,6 @@ const getAcknowledgementCard = (
             },
             number: applicationNumber
           }),
-          abc: {
-            uiFramework: "custom-atoms",
-            componentPath: "Div",
-            children: {
-              downloadFormButton: {
-                uiFramework: "custom-atoms",
-                componentPath: "Div",
-                children: {
-
-                  div1: {
-                    uiFramework: "custom-atoms",
-                    componentPath: "Icon",
-                 
-                    props:{
-                      iconName: "cloud_download",
-                    style:{
-                      marginTop: "7px",
-                      marginRight: "8px",
-                    }
-                  },
-                    onClick: {
-                      action: "condition",
-                      callBack: () => {
-                        generatePdf(state, dispatch, "application_download");
-                      },
-                    },
-                  },
-                  div2: getLabel({
-                    labelName: "DOWNLOAD CONFIRMATION FORM",
-                    labelKey: "NOC_APPLICATION_BUTTON_DOWN_CONF"
-                  })
-
-                },
-                onClickDefination: {
-                  action: "condition",
-                  callBack: () => {
-                    generatePdf(state, dispatch, "application_download");
-                  }
-                },
-              },
-              PrintFormButton: {
-                uiFramework: "custom-atoms",
-                componentPath: "Div",
-                children: {
-                  div1: {
-                    uiFramework: "custom-atoms",
-                    componentPath: "Icon",
-                 
-                    props:{
-                      iconName: "local_printshop",
-                      style:{
-                        marginTop: "7px",
-                        marginRight: "8px",
-                        marginLeft:"10px",
-                      }
-                  },
-                   onClick: {
-                    action: "condition",
-                    callBack: () => {
-                      generatePdf(state, dispatch, "application_print");
-                    }
-                  },
-
-                  },
-                  div2: getLabel({
-                    labelName: "PRINT CONFIRMATION FORM",
-                    labelKey: "NOC_APPLICATION_BUTTON_PRINT_CONF"
-                  })
-
-                },
-                onClickDefination: {
-                  action: "condition",
-                  callBack: () => {
-                    generatePdf(state, dispatch, "application_print");
-                  }
-                },
-              }
-
-            },
-            props: {
-              style: {
-                display: "flex",
-
-              }
-            },
-          }
         }
       },
       iframeForPdf: {

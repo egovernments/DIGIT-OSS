@@ -113,11 +113,15 @@ class MyConnections extends React.Component {
                           />
                         </Grid>
                         <Grid item md={8} xs={6}>
-                          <LabelContainer
-                            labelName={item.property.owners.map(owner =>owner.name).join(",")}
-                            fontSize={14}
-                            style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
-                          />
+                          { (item.property && item.property.owners && item.property.owners !== "NA") ?                            
+                            (<div><LabelContainer
+                              labelName={item.property.owners.map(owner =>owner.name).join(",")}
+                              fontSize={14}
+                              style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
+                            /></div>) :
+                            (<div></div>)
+                          }
+
                         </Grid>
                       </Grid>
                       <Grid container style={{ marginBottom: 12 }}>
@@ -129,11 +133,15 @@ class MyConnections extends React.Component {
                           />
                         </Grid>
                         <Grid item md={8} xs={6}>
-                          <Label
+                        { (item.property && item.property.address && item.property.address.street) ?
+                            (<Label
                             labelName={item.property.address.street}
                             fontSize={14}
                             style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
-                          />
+                          />) :
+                          (<div></div>)
+                        }
+                          
                         </Grid>
                       </Grid>
                       <Grid container style={{ marginBottom: 12 }}>

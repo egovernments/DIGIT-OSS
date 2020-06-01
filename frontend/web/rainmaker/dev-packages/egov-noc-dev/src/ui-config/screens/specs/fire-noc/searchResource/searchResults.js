@@ -1,4 +1,5 @@
 import React from "react";
+import { LabelContainer } from "egov-ui-framework/ui-containers";
 import { Link } from "react-router-dom";
 import get from "lodash/get";
 import {
@@ -12,7 +13,8 @@ import {
 } from "egov-ui-kit/utils/localStorageUtils";
 import {
   getLocaleLabels,
-  getTransformedLocalStorgaeLabels
+  getTransformedLocalStorgaeLabels,
+  getStatusKey
 } from "egov-ui-framework/ui-utils/commons";
 
 const getLocalTextFromCode = localCode => {
@@ -112,34 +114,55 @@ export const searchResults = {
   props: {
     // data: [],
     columns: [
-      getTextToLocalMapping("Application No"),
-      getTextToLocalMapping("NOC No"),
-      getTextToLocalMapping("NOC Type"),
-      getTextToLocalMapping("Owner Name"),
-      getTextToLocalMapping("Application Date"),
       {
-        name: getTextToLocalMapping("Status"),
+        labelName: "Application No",
+        labelKey: "TL_COMMON_TABLE_COL_APP_NO"
+      },
+      {
+        labelName: "NOC No",
+        labelKey: "NOC_COMMON_TABLE_COL_NOC_NO_LABEL"
+      },
+      {
+        labelName: "NOC Type",
+        labelKey: "NOC_TYPE_LABEL"
+      },
+      {
+        labelName: "Owner Name",
+        labelKey: "NOC_COMMON_TABLE_COL_OWN_NAME_LABEL"
+      },
+      {
+        labelName: "Application Date",
+        labelKey: "NOC_COMMON_TABLE_COL_APP_DATE_LABEL"
+      },
+      {
+        labelName: "Status",
+        labelKey: "NOC_COMMON_TABLE_COL_STATUS_LABEL",
         options: {
           filter: false,
           customBodyRender: value => (
-            <span
+            <LabelContainer
               style={
                 value === "APPROVED" ? { color: "green" } : { color: "red" }
               }
-            >
-              {getTextToLocalMapping(value)}
-            </span>
+              labelKey={getStatusKey(value).labelKey}
+              labelName={getStatusKey(value).labelName}
+            />
           )
         }
       },
       {
-        name: "tenantId",
+        labelName: "Tenant Id",
+        labelKey: "TENANT_ID",
         options: {
           display: false
         }
       }
     ],
-    title: getTextToLocalMapping("Search Results for Fire-NOC Applications"),
+    title: {
+      labelName: "Search Results for Fire-NOC Applications",
+      labelKey: "NOC_HOME_SEARCH_RESULTS_TABLE_HEADING"
+    },
+    rows : "",
     options: {
       filter: false,
       download: false,

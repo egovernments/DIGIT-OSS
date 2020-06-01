@@ -113,7 +113,7 @@ class CityPickerDialog extends Component {
             dataSource={cities}
             searchInputText={<Label label="ACTION_TEST_SEARCH"  color="#727272" labelStyle={{ display:"flex", justifyContent:"left" }}/>}
             searchKey="text"
-            autoFocus={false}
+            autoFocus={true}
             callback={autoSuggestCallback}
           />
           <List

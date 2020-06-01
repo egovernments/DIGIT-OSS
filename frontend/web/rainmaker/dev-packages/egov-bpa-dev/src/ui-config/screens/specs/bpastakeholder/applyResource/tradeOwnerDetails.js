@@ -25,11 +25,11 @@ import { getRadioButton } from "egov-ui-framework/ui-config/screens/specs/utils"
 export const getOwnerMobNoField = getTextField({
   label: {
     labelName: "Mobile No.",
-    labelKey: "TL_NEW_OWNER_DETAILS_MOB_NO_LABEL"
+    labelKey: "BPA_APPLICANT_MOBILE_NO_LABEL"
   },
   placeholder: {
     labelName: "Enter Mobile No.",
-    labelKey: "TL_NEW_OWNER_DETAILS_MOB_NO_PLACEHOLDER"
+    labelKey: "BPA_ENTER_APPLICANT_MOBILE_NO_PLACEHOLDER"
   },
   iconObj: {
     label: "+91 |",
@@ -89,10 +89,10 @@ export const getGenderRadioButton = {
 };
 
 export const getOwnerDOBField = getDateField({
-  label: { labelName: "Date of Birth", labelKey: "TL_EMP_APPLICATION_DOB" },
+  label: { labelName: "Date of Birth", labelKey: "BPA_APPLICANT_DOB_LABEL" },
   placeholder: {
     labelName: "Enter Date of Birth",
-    labelKey: "TL_NEW_OWNER_DETAILS_DOB_PLACEHOLDER"
+    labelKey: "BPA_NEW_OWNER_DETAILS_DOB_PLACEHOLDER"
   },
   required: true,
   pattern: getPattern("Date"),
@@ -107,11 +107,11 @@ export const getOwnerDOBField = getDateField({
 export const getOwnerEmailField = getTextField({
   label: {
     labelName: "Email",
-    labelKey: "TL_NEW_OWNER_DETAILS_EMAIL_LABEL"
+    labelKey: "BPA_APPLICANT_EMAIL_LABEL"
   },
   placeholder: {
     labelName: "Enter Email",
-    labelKey: "TL_NEW_OWNER_DETAILS_EMAIL_PLACEHOLDER"
+    labelKey: "BPA_ENTER_APPLICANT_EMAIL_PLACEHOLDER"
   },
   pattern: getPattern("Email"),
   jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].emailId",
@@ -174,11 +174,11 @@ export const OwnerInfoCard = getCommonCard({
     ownerPAN: getTextField({
       label: {
         labelName: "PAN No.",
-        labelKey: "TL_NEW_OWNER_DETAILS_PAN_LABEL"
+        labelKey: "BPA_APPLICANT_PAN_LABEL"
       },
       placeholder: {
         labelName: "Enter Owner's PAN No.",
-        labelKey: "TL_NEW_OWNER_DETAILS_PAN_PLACEHOLDER"
+        labelKey: "BPA_ENTER_APPLICANT_PAN_PLACEHOLDER"
       },
       pattern: getPattern("PAN"),
       jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].pan"
@@ -190,7 +190,7 @@ export const tradeOwnerDetails = getCommonCard({
   header: getCommonTitle(
     {
       labelName: "Trade Owner Details",
-      labelKey: "TL_NEW_OWNER_DETAILS_HEADER"
+      labelKey: "BPA_NEW_OWNER_DETAILS_HEADER"
     },
     {
       style: {

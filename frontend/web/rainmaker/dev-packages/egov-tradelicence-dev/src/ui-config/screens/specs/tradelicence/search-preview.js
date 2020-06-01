@@ -487,7 +487,7 @@ const screenConfig = {
   beforeInitScreen: (action, state, dispatch) => {
     applicationNumber = getQueryArg(window.location.href, "applicationNumber");
     const tenantId = getQueryArg(window.location.href, "tenantId");
-    dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
+    // dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     //To set the application no. at the  top
     set(
       action.screenConfig,

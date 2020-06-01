@@ -161,13 +161,14 @@ class Footer extends React.Component {
     } = this.props;
     const { open, data, employeeList } = this.state;
     const { isDocRequired } = data;
+    const appName = process.env.REACT_APP_NAME;
     const downloadMenu =
       contractData &&
       contractData.map(item => {
         const { buttonLabel, moduleName } = item;
         return {
           labelName: { buttonLabel },
-          labelKey: `WF_${moduleName.toUpperCase()}_${buttonLabel}`,
+          labelKey: `WF_${appName.toUpperCase()}_${moduleName.toUpperCase()}_${buttonLabel}`,
           link: () => {
             (moduleName === "NewTL" || moduleName === "EDITRENEWAL" ) && buttonLabel==="APPLY" ? onDialogButtonClick(buttonLabel, isDocRequired) : 
             this.openActionDialog(item);

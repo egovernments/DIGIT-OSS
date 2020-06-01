@@ -57,9 +57,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-left: 4%;
+    margin-left: 7%;
     margin-right: 2%;
-    border-left: 1px solid white;
+    border-left: 1px solid #F2F2F2;
     //height: 500px;
     margin-top:16px;
     margin-bottom: 16px;
@@ -74,11 +74,11 @@
     border-radius: 50%;
     height: 69px;
     width: 69px;
-    background-color: white;
+    background-color:#F2F2F2;
 
   }
   .login-qrscan{
-    width: 25%;
+    width: 46%;
     background-color: white;
     margin-top:16px;
     margin-bottom: 16px;
@@ -86,11 +86,11 @@
     justify-content: center;
     align-items: center;
   }
-  .login-qrlogo{
-    height: 90% !important;
-    margin-top: 20px;
+  // .login-qrlogo{
+  //   height: 90% !important;
+   // margin-top: 20px;
 
-  }
+  // }
   .login-qrtext{
   display: flex;
   justify-content: center;
@@ -99,9 +99,19 @@
   .login-qrscan > div{
     display: flex;
     justify-content: center;
-    min-height: 90%;
+   // min-height: 90%;
+ //  margin-top: 10%;
+  }
+  .wha-user-screen-card{
+    padding: 24px 16px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  margin-left: 25%;
+  width: 50%;
+  
   }
 }
+
 
 
 // @media only screen and (min-width: 768px) {

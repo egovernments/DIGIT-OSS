@@ -53,7 +53,7 @@ class UserSettings extends Component {
       background: "#ffffff",
       height: "65px",
       marginRight: "30px",
-      width: "120px",
+      width: "102px",
       marginBottom: "24px",
     },
   };

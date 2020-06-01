@@ -3,7 +3,7 @@ import {
     getCommonContainer,
     getLabelWithValue,
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { convertEpochToDate } from "../../utils";
+import { convertEpochToDateAndHandleNA } from "../../utils";
 
 const getHeader = label => {
     return {
@@ -69,7 +69,7 @@ export const dateOfBirth = getLabelWithValue(
     },
     {
         jsonPath: "WaterConnection[0].property.owners[0].dob",
-        callBack: convertEpochToDate
+        callBack: convertEpochToDateAndHandleNA
     }
 )
 

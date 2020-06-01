@@ -11,6 +11,8 @@ import {
   getTranslatedLabel,
   transformById
 } from "../../ui-config/screens/specs/utils";
+import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
+
 import get from "lodash/get";
 import "./index.scss";
 
@@ -24,21 +26,6 @@ const styles = {
     }
   },
   checked: {}
-};
-
-const localizationLabels = JSON.parse(getLocalization("localization_en_IN"));
-
-const getLocaleLabelsforTL = (label, labelKey, localizationLabels) => {
-  if (labelKey) {
-    let translatedLabel = getTranslatedLabel(labelKey, localizationLabels);
-    if (!translatedLabel || labelKey === translatedLabel) {
-      return label;
-    } else {
-      return translatedLabel;
-    }
-  } else {
-    return label;
-  }
 };
 
 class BpaCheckboxContainer extends React.Component {
@@ -73,15 +60,23 @@ class BpaCheckboxContainer extends React.Component {
       classes,
       componentJsonpath,
       fieldValue,
+      localizationLabels,
       ...rest
     } = this.props;
 
-    let transfomedKeys = transformById(localizationLabels, "code");
-    let translatedLabel = getLocaleLabelsforTL(
-      label.labelName,
-      label.labelKey,
-      transfomedKeys
-    );
+    let translatedLabel = "";
+    if (label && label.labelKey && Array.isArray(label.labelKey)) {
+      label.labelKey.forEach(key => {
+        translatedLabel += getLocaleLabels(key, key, localizationLabels) + " ";
+      })
+    } else {
+      translatedLabel = getLocaleLabels(
+        label.labelName,
+        label.labelKey,
+        localizationLabels
+      );
+    }
+    
 
     return (
       <FormGroup row>
@@ -108,11 +103,12 @@ class BpaCheckboxContainer extends React.Component {
 
 const mapStateToProps = (state, ownprops) => {
   let fieldValue = false;
-  const { screenConfiguration } = state;
+  const { screenConfiguration, app } = state;
+  const { localizationLabels } = app;
   const { jsonPath } = ownprops;
   const { preparedFinalObject } = screenConfiguration;
   if (jsonPath) fieldValue = get(preparedFinalObject, jsonPath);
-  return { preparedFinalObject, jsonPath, fieldValue };
+  return { preparedFinalObject, jsonPath, fieldValue, localizationLabels };
 };
 
 const mapDispatchToProps = dispatch => {

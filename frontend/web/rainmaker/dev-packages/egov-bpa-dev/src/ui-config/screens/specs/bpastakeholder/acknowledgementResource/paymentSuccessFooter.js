@@ -29,42 +29,42 @@ export const paymentSuccessFooter = (
   let downloadMenu = [];
   let printMenu = [];
   let tlCertificateDownloadObject = {
-    label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
+    label: { labelName: "TL Certificate", labelKey: "BPA_CERTIFICATE" },
     link: () => {
       generateReceipt(state, dispatch, "certificate_download");
     },
     leftIcon: "book"
   };
   let tlCertificatePrintObject = {
-    label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
+    label: { labelName: "TL Certificate", labelKey: "BPA_CERTIFICATE" },
     link: () => {
       generateReceipt(state, dispatch, "certificate_print");
     },
     leftIcon: "book"
   };
   let receiptDownloadObject = {
-    label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
+    label: { labelName: "Receipt", labelKey: "BPA_RECEIPT" },
     link: () => {
       generateReceipt(state, dispatch, "receipt_download");
     },
     leftIcon: "receipt"
   };
   let receiptPrintObject = {
-    label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
+    label: { labelName: "Receipt", labelKey: "BPA_RECEIPT" },
     link: () => {
       generateReceipt(state, dispatch, "receipt_print");
     },
     leftIcon: "receipt"
   };
   let applicationDownloadObject = {
-    label: { labelName: "Application", labelKey: "TL_APPLICATION" },
+    label: { labelName: "Application", labelKey: "BPA_APPLICATION" },
     link: () => {
       generatePdfFromDiv("download", applicationNumber);
     },
     leftIcon: "assignment"
   };
   let applicationPrintObject = {
-    label: { labelName: "Application", labelKey: "TL_APPLICATION" },
+    label: { labelName: "Application", labelKey: "BPA_APPLICATION" },
     link: () => {
       generatePdfFromDiv("print", applicationNumber);
     },
@@ -165,7 +165,7 @@ export const paymentSuccessFooter = (
               children: {
                 downloadReceiptButtonLabel: getLabel({
                   labelName: "GO TO HOME",
-                  labelKey: "TL_COMMON_BUTTON_HOME"
+                  labelKey: "BPA_HOME_BUTTON"
                 })
               },
               onClickDefination: {

@@ -28,7 +28,7 @@ const commonApplicantInformation = () => {
     header: getCommonSubHeader(
       {
         labelName: "Owner Information",
-        labelKey: "NOC_OWNER_INFORMATION"
+        labelKey: "BPA_OWNER_INFORMATION"
       },
       {
         style: {
@@ -40,15 +40,15 @@ const commonApplicantInformation = () => {
       mobileNumber: getTextField({
         label: {
           labelName: "Mobile No.",
-          labelKey: "NOC_APPLICANT_MOBILE_NO_LABEL"
+          labelKey: "BPA_APPLICANT_MOBILE_NO_LABEL"
         },
         placeholder: {
           labelName: "Enter Mobile No.",
-          labelKey: "NOC_ENTER_APPLICANT_MOBILE_NO_PLACEHOLDER"
+          labelKey: "BPA_ENTER_APPLICANT_MOBILE_NO_PLACEHOLDER"
         },
         required: true,
         props: {
-          className: "applicant-details-error textfield-enterable-selection"
+          className: "applicant-details-error"
         },
         title: {
           value: "Please search profile linked to the mobile no.",
@@ -57,7 +57,7 @@ const commonApplicantInformation = () => {
         infoIcon: "info_circle",
         pattern: getPattern("MobileNo"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-        jsonPath: "BPA.owners[0].mobileNumber",
+        jsonPath: "BPA.landInfo.owners[0].mobileNumber",
         iconObj: {
           iconName: "search",
           position: "end",
@@ -90,18 +90,18 @@ const commonApplicantInformation = () => {
       applicantName: getTextField({
         label: {
           labelName: "Name",
-          labelKey: "NOC_APPLICANT_NAME_LABEL"
+          labelKey: "BPA_APPLICANT_NAME_LABEL"
         },
         placeholder: {
           labelName: "Enter Name",
-          labelKey: "NOC_ENTER_APPLICANT_NAME_PLACEHOLDER"
+          labelKey: "BPA_ENTER_APPLICANT_NAME_PLACEHOLDER"
         },
         required: true,
         pattern: getPattern("Name"),
         errorMessage: "Invalid Name",
-        jsonPath: "BPA.owners[0].name",
+        jsonPath: "BPA.landInfo.owners[0].name",
         props: {
-          className: "applicant-details-error textfield-enterable-selection"
+          className: "applicant-details-error"
         },
         gridDefination: {
           xs: 12,
@@ -112,16 +112,16 @@ const commonApplicantInformation = () => {
       genderRadioGroup: getSelectField({
         label: {
           labelName: "Gender",
-          labelKey: "TL_NEW_OWNER_DETAILS_GENDER_LABEL"
+          labelKey: "BPA_APPLICANT_GENDER_LABEL"
         },
         placeholder: {
           labelName: "Select Gender",
-          labelKey: "TL_NEW_OWNER_DETAILS_GENDER_PLACEHOLDER"
+          labelKey: "BPA_APPLICANT_GENDER_PLACEHOLDER"
         },
         required: true,
         optionValue: "code",
         optionLabel: "label",
-        jsonPath: "BPA.owners[0].gender",
+        jsonPath: "BPA.landInfo.owners[0].gender",
         data: [
           {
             code: "MALE",
@@ -146,19 +146,19 @@ const commonApplicantInformation = () => {
         ...getDateField({
           label: {
             labelName: "Date Of Birth",
-            labelKey: "NOC_APPLICANT_DOB_LABEL"
+            labelKey: "BPA_APPLICANT_DOB_LABEL"
           },
           placeholder: {
             labelName: "DD/MM/YYYY",
-            labelKey: "NOC_ENTER_APPLICANT_DOB_PLACEHOLDER"
+            labelKey: "BPA_ENTER_APPLICANT_DOB_PLACEHOLDER"
           },
           required: true,
           pattern: getPattern("Date"),
           isDOB: true,
-          errorMessage: "TL_DOB_ERROR_MESSAGE",
-          jsonPath: "BPA.owners[0].dob",
+          errorMessage: "BPA_DOB_ERROR_MESSAGE",
+          jsonPath: "BPA.landInfo.owners[0].dob",
           props: {
-            className: "applicant-details-error textfield-enterable-selection",
+            className: "applicant-details-error",
             inputProps: {
               max: getTodaysDateInYMD()
             }
@@ -173,22 +173,22 @@ const commonApplicantInformation = () => {
       applicantEmail: getTextField({
         label: {
           labelName: "Email",
-          labelKey: "NOC_APPLICANT_EMAIL_LABEL"
+          labelKey: "BPA_APPLICANT_EMAIL_LABEL"
         },
         placeholder: {
           labelName: "Enter Email",
-          labelKey: "NOC_ENTER_APPLICANT_EMAIL_PLACEHOLDER"
+          labelKey: "BPA_ENTER_APPLICANT_EMAIL_PLACEHOLDER"
         },
         pattern: getPattern("Email"),
-        errorMessage: "Invalid Email",
-        jsonPath: "BPA.owners[0].emailId",
+        errorMessage: "BPA_INVALID_EMIAL",
+        jsonPath: "BPA.landInfo.owners[0].emailId",
         gridDefination: {
           xs: 12,
           sm: 12,
           md: 6
         },
         props: {
-          className: "applicant-details-error textfield-enterable-selection"
+          className: "applicant-details-error"
         }
       }),
       fatherHusbandName: getTextField({
@@ -204,14 +204,14 @@ const commonApplicantInformation = () => {
         pattern: getPattern("Name"),
         errorMessage: "Invalid Name",
         jsonPath:
-          "BPA.owners[0].fatherOrHusbandName",
+          "BPA.landInfo.owners[0].fatherOrHusbandName",
         gridDefination: {
           xs: 12,
           sm: 12,
           md: 6
         },
         props: {
-          className: "applicant-details-error textfield-enterable-selection"
+          className: "applicant-details-error"
         }
       }),
       relationshipRadioGroup: {
@@ -222,27 +222,27 @@ const commonApplicantInformation = () => {
           sm: 12,
           md: 6
         },
-        jsonPath: "BPA.owners[0].relationship",
+        jsonPath: "BPA.landInfo.owners[0].relationship",
         props: {
           label: {
             name: "Relationship",
-            key: "NOC_APPLICANT_RELATIONSHIP_LABEL",
-            className: "applicant-details-error textfield-enterable-selection"
+            key: "BPA_APPLICANT_RELATIONSHIP_LABEL",
+            className: "applicant-details-error"
           },
           buttons: [
             {
               labelName: "Father",
-              labelKey: "NOC_APPLICANT_RELATIONSHIP_FATHER_RADIOBUTTON",
+              labelKey: "BPA_APPLICANT_RELATIONSHIP_FATHER_RADIOBUTTON",
               value: "FATHER"
             },
             {
               label: "Husband",
-              labelKey: "NOC_APPLICANT_RELATIONSHIP_HUSBAND_RADIOBUTTON",
+              labelKey: "BPA_APPLICANT_RELATIONSHIP_HUSBAND_RADIOBUTTON",
               value: "HUSBAND"
             }
           ],
           jsonPath:
-            "BPA.owners[0].relationship",
+            "BPA.landInfo.owners[0].relationship",
           required: true
         },
         required: true,
@@ -251,83 +251,58 @@ const commonApplicantInformation = () => {
       applicantPan: getTextField({
         label: {
           labelName: "PAN No.",
-          labelKey: "NOC_APPLICANT_PAN_LABEL"
+          labelKey: "BPA_APPLICANT_PAN_LABEL"
         },
         placeholder: {
           labelName: "Enter Applicant's PAN No.",
-          labelKey: "NOC_ENTER_APPLICANT_PAN_PLACEHOLDER"
+          labelKey: "BPA_ENTER_APPLICANT_PAN_PLACEHOLDER"
         },
         pattern: getPattern("PAN"),
         errorMessage: "Invalid PAN",
-        jsonPath: "BPA.owners[0].pan",
+        jsonPath: "BPA.landInfo.owners[0].pan",
         gridDefination: {
           xs: 12,
           sm: 12,
           md: 6
         },
         props: {
-          className: "applicant-details-error textfield-enterable-selection"
+          className: "applicant-details-error"
         }
       }),
       applicantAddress: getTextField({
         label: {
           labelName: "Correspondence Address",
-          labelKey: "NOC_APPLICANT_CORRESPONDENCE_ADDRESS_LABEL"
+          labelKey: "BPA_APPLICANT_CORRESPONDENCE_ADDRESS_LABEL"
         },
         placeholder: {
           labelName: "Enter Correspondence Address",
-          labelKey: "NOC_ENTER_APPLICANT_CORRESPONDENCE_ADDRESS_PLACEHOLDER"
+          labelKey: "BPA_ENTER_APPLICANT_CORRESPONDENCE_ADDRESS_PLACEHOLDER"
         },
         required: true,
         pattern: getPattern("Address"),
-        errorMessage: "Invalid Address",
+        errorMessage: "BPA_INVALID_ADDRESS",
         jsonPath:
-          "BPA.owners[0].correspondenceAddress",
+          "BPA.landInfo.owners[0].correspondenceAddress",
         gridDefination: {
           xs: 12,
           sm: 12,
           md: 6
         },
         props: {
-          className: "applicant-details-error textfield-enterable-selection"
+          className: "applicant-details-error"
         }
       }),
-      // specialApplicantCategory: getSelectField({
-      //   label: {
-      //     labelName: "Special Applicant Category",
-      //     labelKey: "NOC_SPECIAL_APPLICANT_CATEGORY_LABEL"
-      //   },
-      //   placeholder: {
-      //     labelName: "Select Special Applicant Category",
-      //     labelKey: "NOC_SPECIAL_APPLICANT_CATEGORY_PLACEHOLDER"
-      //   },
-      //   props: {
-      //     className: "textfield-enterable-selection"
-      //   },
-      //   required: true,
-      //   jsonPath: "BPA.owners[0].ownerType",
-      //   localePrefix: {
-      //     moduleName: "common-masters",
-      //     masterName: "OwnerType"
-      //   },
-      //   sourceJsonPath: "applyScreenMdmsData.common-masters.OwnerType",
-      //   gridDefination: {
-      //     xs: 12,
-      //     sm: 12,
-      //     md: 6
-      //   }
-      // }),
       primaryOwner: {
         uiFramework: "custom-containers-local",
         moduleName: "egov-bpa",
         componentPath: "BpaCheckboxContainer",
-        jsonPath: "BPA.owners[0].isPrimaryOwner",
+        jsonPath: "BPA.landInfo.owners[0].isPrimaryOwner",
         props: {
           label: {
             labelName: "Is Primary Owner ?",
             labelKey: "BPA_IS_PRIMARY_OWNER_LABEL"
           },
-          jsonPath: "BPA.owners[0].isPrimaryOwner"
+          jsonPath: "BPA.landInfo.owners[0].isPrimaryOwner"
         },
         type: "array"
       }
@@ -362,7 +337,7 @@ const institutionInformation = () => {
         errorMessage: "Invalid Name",
         required: true,
         jsonPath:
-          "BPA.additionalDetail.institutionName",
+          "BPA.landInfo.additionalDetail.institutionName",
         gridDefination: {
           xs: 12,
           sm: 12,
@@ -382,7 +357,7 @@ const institutionInformation = () => {
         pattern: getPattern("MobileNo"),
         errorMessage: "Invalid Number",
         jsonPath:
-          "BPA.additionalDetail.telephoneNumber",
+          "BPA.landInfo.additionalDetail.telephoneNumber",
         gridDefination: {
           xs: 12,
           sm: 12,
@@ -401,7 +376,7 @@ const institutionInformation = () => {
         required: true,
         pattern: getPattern("Name"),
         errorMessage: "Invalid Name",
-        jsonPath: "BPA.owners[0].name",
+        jsonPath: "BPA.landInfo.owners[0].name",
         gridDefination: {
           xs: 12,
           sm: 12,
@@ -421,7 +396,7 @@ const institutionInformation = () => {
         pattern: getPattern("Name"),
         errorMessage: "Invalid Designation Name",
         jsonPath:
-          "BPA.additionalDetail.institutionDesignation",
+          "BPA.landInfo.additionalDetail.institutionDesignation",
         gridDefination: {
           xs: 12,
           sm: 12,
@@ -441,7 +416,7 @@ const institutionInformation = () => {
         pattern: getPattern("MobileNo"),
         errorMessage: "Invalid MobileNo.",
 
-        jsonPath: "BPA.owners[0].mobileNumber",
+        jsonPath: "BPA.landInfo.owners[0].mobileNumber",
         gridDefination: {
           xs: 12,
           sm: 12,
@@ -460,7 +435,7 @@ const institutionInformation = () => {
         pattern: getPattern("Email"),
         errorMessage: "Invalid Email",
         required: true,
-        jsonPath: "BPA.owners[0].emailId",
+        jsonPath: "BPA.landInfo.owners[0].emailId",
         gridDefination: {
           xs: 12,
           sm: 12,
@@ -480,7 +455,7 @@ const institutionInformation = () => {
         pattern: getPattern("Address"),
         errorMessage: "Invalid Address",
         jsonPath:
-          "BPA.owners[0].correspondenceAddress",
+          "BPA.landInfo.owners[0].correspondenceAddress",
         gridDefination: {
           xs: 12,
           sm: 12,
@@ -495,7 +470,7 @@ export const applicantDetails = getCommonCard({
   header: getCommonTitle(
     {
       labelName: "Owner Details",
-      labelKey: "NOC_APPLICANT_DETAILS_HEADER"
+      labelKey: "BPA_APPLICANT_DETAILS_HEADER"
     },
     {
       style: {
@@ -516,7 +491,7 @@ export const applicantDetails = getCommonCard({
             labelName: "Select Owner Type",
             labelKey: "BPA_OWNER_TYPE_PLACEHOLDER"
           },
-          jsonPath: "BPA.ownerShipMajorType",
+          jsonPath: "BPA.landInfo.ownerShipMajorType",
           localePrefix: {
             moduleName: "common-masters",
             masterName: "OwnerShipCategory"
@@ -529,7 +504,7 @@ export const applicantDetails = getCommonCard({
             md: 6
           },
           props: {
-            className: "applicant-details-error textfield-enterable-selection"
+            className: "applicant-details-error"
           }
         }),
         beforeFieldChange: (action, state, dispatch) => {
@@ -558,7 +533,7 @@ export const applicantDetails = getCommonCard({
             labelName: "Select Owner Subtype",
             labelKey: "BPA_OWNER_SUB_TYPE_PLACEHOLDER"
           },
-          jsonPath: "BPA.ownershipCategory",
+          jsonPath: "BPA.landInfo.ownershipCategory",
           localePrefix: {
             moduleName: "common-masters",
             masterName: "OwnerShipCategory"
@@ -570,7 +545,7 @@ export const applicantDetails = getCommonCard({
             md: 6
           },
           props: {
-            className: "applicant-details-error textfield-enterable-selection"
+            className: "applicant-details-error"
           }
         }),
         beforeFieldChange: (action, state, dispatch) => {
@@ -586,12 +561,12 @@ export const applicantDetails = getCommonCard({
             showComponent(dispatch, singleApplicantContainerJsonPath, true);
             showComponent(dispatch, multipleApplicantContainerJsonPath, false);
             showComponent(dispatch, institutionContainerJsonPath, false);
-            dispatch(prepareFinalObject("BPA.owners[0].isPrimaryOwner", true));
+            dispatch(prepareFinalObject("BPA.landInfo.owners[0].isPrimaryOwner", true));
           } else if (action.value.includes("MULTIPLEOWNERS")) {
             showComponent(dispatch, singleApplicantContainerJsonPath, false);
             showComponent(dispatch, multipleApplicantContainerJsonPath, true);
             showComponent(dispatch, institutionContainerJsonPath, false);
-            dispatch(prepareFinalObject("BPA.owners[0].isPrimaryOwner", false));
+            dispatch(prepareFinalObject("BPA.landInfo.owners[0].isPrimaryOwner", false));
           } else if (action.value.includes("INSTITUTIONAL")) {
             showComponent(dispatch, singleApplicantContainerJsonPath, false);
             showComponent(dispatch, multipleApplicantContainerJsonPath, false);
@@ -626,7 +601,7 @@ export const applicantDetails = getCommonCard({
               labelName: "Add Owner",
               labelKey: "BPA_ADD_OWNER"
             },
-            sourceJsonPath: "BPA.owners",
+            sourceJsonPath: "BPA.landInfo.owners",
             prefixSourceJsonPath:
               "children.cardContent.children.applicantCard.children"
           },

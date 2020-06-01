@@ -109,9 +109,7 @@ class ActionDialog extends React.Component {
     }
     if (dataPath === "FireNOCs") {
       dataPath = `${dataPath}[0].fireNOCDetails`
-    } else if (dataPath === "BPA") {
-      dataPath = `${dataPath}`;
-    } else if (dataPath === "Assessment"||dataPath === "Property") {
+    } else if (dataPath === "Assessment"||dataPath === "Property" || dataPath === "BPA") {
       dataPath = `${dataPath}.workflow`;
     } else {
       dataPath = `${dataPath}[0]`;
@@ -124,6 +122,12 @@ class ActionDialog extends React.Component {
       assigneePath=`${dataPath}.assignee[0]`;
     }
 
+    let wfDocumentsPath;
+    if(dataPath === "BPA.workflow") {
+      wfDocumentsPath = `${dataPath}.varificationDocuments`
+    } else {
+      wfDocumentsPath = `${dataPath}.wfDocuments`
+    }
    
     return (
       <Dialog
@@ -251,7 +255,7 @@ class ActionDialog extends React.Component {
                         accept: "image/*, .pdf, .png, .jpeg"
                       }}
                       buttonLabel={{ labelName: "UPLOAD FILES",labelKey : "TL_UPLOAD_FILES_BUTTON" }}
-                      jsonPath={`${dataPath}.wfDocuments`}
+                      jsonPath={wfDocumentsPath}
                       maxFileSize={5000}
                     />
                     <Grid sm={12} style={{ textAlign: "right" }} className="bottom-button-container">

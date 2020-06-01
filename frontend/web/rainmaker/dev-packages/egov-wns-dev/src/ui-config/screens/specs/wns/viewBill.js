@@ -1,15 +1,19 @@
-import { getCommonHeader, getCommonCard, getCommonGrayCard, getCommonContainer, getCommonSubHeader, convertEpochToDate } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getCommonHeader, getCommonCard, getCommonGrayCard, getCommonContainer, getCommonSubHeader, convertEpochToDate, getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 // import get from "lodash/get";
 import { getSearchResults, getSearchResultsForSewerage, fetchBill, getDescriptionFromMDMS, getConsumptionDetails } from "../../../../ui-utils/commons";
 import set from "lodash/set";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { createEstimateData } from "../utils";
-import { getFeesEstimateCard } from "../utils";
+import { 
+  createEstimateData,
+  getFeesEstimateCard,
+  showHideAdhocPopup
+ } from "../utils";
 import { getProperty } from "./viewBillResource/propertyDetails";
 import { getOwner } from "./viewBillResource/ownerDetails";
 import { getService } from "./viewBillResource/serviceDetails";
 import { viewBillFooter } from "./viewBillResource/viewBillFooter";
+import { adhocPopupViewBill } from "./applyResource/adhocPopupViewBill";
 
 let consumerCode = getQueryArg(window.location.href, "connectionNumber");
 const tenantId = getQueryArg(window.location.href, "tenantId")
@@ -37,7 +41,7 @@ const processBills = async (data, viewBillTooltip, dispatch) => {
         }
         if (groupBillDetails.length >= bills.billAccountDetails.length) {
           let arrayData = groupBillDetails.sort((a, b) => parseInt(a.order) - parseInt(b.order))
-          obj = { bill: arrayData, fromPeriod: bills.fromPeriod, toPeriod: bills.toPeriod }
+          obj = { bill: arrayData, fromPeriod: bills.fromPeriod, toPeriod: bills.toPeriod,demandId: bills.demandId }
           viewBillTooltip.push(obj)
         }
         if (viewBillTooltip.length >= data.Bill[0].billDetails.length) {
@@ -83,12 +87,27 @@ const searchResults = async (action, state, dispatch, consumerCode) => {
           meterReadingsData.meterReadings[0].currentReadingDate = convertEpochToDate(meterReadingsData.meterReadings[0].currentReadingDate)
           meterReadingsData.meterReadings[0].lastReading = meterReadingsData.meterReadings[0].lastReading === 0 ? "0" : meterReadingsData.meterReadings[0].lastReading
         }
+        /*
         if (payload.WaterConnection[0].property.usageCategory !== null && payload.WaterConnection[0].property.usageCategory !== undefined) {
           const propertyUsageType = "[?(@.code  == " + JSON.stringify(payload.WaterConnection[0].property.usageCategory) + ")]"
           let propertyUsageTypeParams = { MdmsCriteria: { tenantId: "pb", moduleDetails: [{ moduleName: "PropertyTax", masterDetails: [{ name: "UsageCategoryMajor", filter: `${propertyUsageType}` }] }] } }
           const mdmsPropertyUsageType = await getDescriptionFromMDMS(propertyUsageTypeParams, dispatch)
           payload.WaterConnection[0].property.propertyUsageType = validatePropertyTaxName(mdmsPropertyUsageType);
-        }
+        }*/
+
+        if (payload.WaterConnection[0].additionalDetails.adhocPenaltyComment === 'NA' || payload.WaterConnection[0].additionalDetails.adhocPenaltyComment === null || payload.WaterConnection[0].additionalDetails.adhocPenaltyComment === undefined) {
+          payload.WaterConnection[0].additionalDetails.adhocPenaltyComment = "";
+        }
+        if (payload.WaterConnection[0].additionalDetails.adhocRebateComment === 'NA' || payload.WaterConnection[0].additionalDetails.adhocRebateComment === null || payload.WaterConnection[0].additionalDetails.adhocRebateComment === undefined) {
+          payload.WaterConnection[0].additionalDetails.adhocRebateComment = "";
+        }
+        if (payload.WaterConnection[0].additionalDetails.adhocPenaltyReason === 'NA' || payload.WaterConnection[0].additionalDetails.adhocPenaltyReason === null || payload.WaterConnection[0].additionalDetails.adhocPenaltyReason === undefined) {
+          payload.WaterConnection[0].additionalDetails.adhocPenaltyReason = "";
+        }
+        if (payload.WaterConnection[0].additionalDetails.adhocRebateReason === 'NA' || payload.WaterConnection[0].additionalDetails.adhocRebateReason === null || payload.WaterConnection[0].additionalDetails.adhocRebateReason === undefined) {
+          payload.WaterConnection[0].additionalDetails.adhocRebateReason = "";
+        }
+
         dispatch(prepareFinalObject("WaterConnection[0]", payload.WaterConnection[0]));
         dispatch(prepareFinalObject("billData", data.Bill[0]));
         dispatch(prepareFinalObject("consumptionDetails[0]", meterReadingsData.meterReadings[0]))
@@ -103,12 +122,24 @@ const searchResults = async (action, state, dispatch, consumerCode) => {
       if (payload.SewerageConnections.length > 0 && data.Bill.length > 0) {
         payload.SewerageConnections[0].service = service;
         await processBills(data, viewBillTooltip, dispatch);
-        if (payload.SewerageConnections[0].property.usageCategory !== null && payload.SewerageConnections[0].property.usageCategory !== undefined) {
+        /*if (payload.SewerageConnections[0].property.usageCategory !== null && payload.SewerageConnections[0].property.usageCategory !== undefined) {
           const propertyUsageType = "[?(@.code  == " + JSON.stringify(payload.SewerageConnections[0].property.usageCategory) + ")]"
           let propertyUsageTypeParams = { MdmsCriteria: { tenantId: "pb", moduleDetails: [{ moduleName: "PropertyTax", masterDetails: [{ name: "UsageCategoryMajor", filter: `${propertyUsageType}` }] }] } }
           const mdmsPropertyUsageType = await getDescriptionFromMDMS(propertyUsageTypeParams, dispatch)
           payload.SewerageConnections[0].property.propertyUsageType = validatePropertyTaxName(mdmsPropertyUsageType);//propertyUsageType from Mdms
-        }
+        }*/
+        if (payload.SewerageConnections[0].additionalDetails.adhocPenaltyComment === 'NA' || payload.SewerageConnections[0].additionalDetails.adhocPenaltyComment === null || payload.SewerageConnections[0].additionalDetails.adhocPenaltyComment === undefined) {
+          payload.SewerageConnections[0].additionalDetails.adhocPenaltyComment = "";
+        }
+        if (payload.SewerageConnections[0].additionalDetails.adhocRebateComment === 'NA' || payload.SewerageConnections[0].additionalDetails.adhocRebateComment === null || payload.SewerageConnections[0].additionalDetails.adhocRebateComment === undefined) {
+          payload.SewerageConnections[0].additionalDetails.adhocRebateComment = "";
+        }
+        if (payload.SewerageConnections[0].additionalDetails.adhocPenaltyReason === 'NA' || payload.SewerageConnections[0].additionalDetails.adhocPenaltyReason === null || payload.SewerageConnections[0].additionalDetails.adhocPenaltyReason === undefined) {
+          payload.SewerageConnections[0].additionalDetails.adhocPenaltyReason = "";
+        }
+        if (payload.SewerageConnections[0].additionalDetails.adhocRebateReason === 'NA' || payload.SewerageConnections[0].additionalDetails.adhocRebateReason === null || payload.SewerageConnections[0].additionalDetails.adhocRebateReason === undefined) {
+          payload.SewerageConnections[0].additionalDetails.adhocRebateReason = "";
+        }
         dispatch(prepareFinalObject("WaterConnection[0]", payload.SewerageConnections[0]));
         dispatch(prepareFinalObject("billData", data.Bill[0]));
       }
@@ -159,6 +190,25 @@ let headerrow = getCommonContainer({
 const estimate = getCommonGrayCard({
   header: getCommonSubHeader({ labelKey: "WS_VIEWBILL_DETAILS_HEADER" }),
   estimateSection: getFeesEstimateCard({ sourceJsonPath: "viewBillToolipData" }),
+  addPenaltyRebateButton: {
+    componentPath: "Button",
+    props: {
+      color: "primary",
+      style: {}
+    },
+    children: {
+      previousButtonLabel: getLabel({
+        labelKey: "WS_PAYMENT_ADD_REBATE_PENALTY"
+      })
+    },
+    onClickDefination: {
+      action: "condition",
+      callBack: (state, dispatch) => {
+        showHideAdhocPopup(state, dispatch, "viewBill");
+      }
+    },
+    visible: process.env.REACT_APP_NAME !== "Citizen"
+  }
 });
 
 const propertyDetails = getProperty();
@@ -178,6 +228,7 @@ const screenConfig = {
       "components.div.children.headerDiv.children.header1.children.consumerCode.props.number",
       consumerCode
     );
+    set(action,"screenConfig.components.adhocDialog.children.popup",adhocPopupViewBill);
     beforeInitFn(action, state, dispatch, consumerCode);
     return action;
   },
@@ -196,6 +247,20 @@ const screenConfig = {
         viewBill,
         viewBillFooter
       }
+    },
+    adhocDialog: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-wns",
+      componentPath: "DialogContainer",
+      props: {
+        open: false,
+        maxWidth: "sm",
+        screenKey: "viewBill"
+      },
+      children: {
+        popup: {}
+      },
+      visible: process.env.REACT_APP_NAME !== "Citizen"
     }
   }
 };

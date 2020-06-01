@@ -1,4 +1,5 @@
 import React from "react";
+import { LabelContainer } from "egov-ui-framework/ui-containers";
 import { handleScreenConfigurationFieldChange as handleField, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   getLocaleLabels,
@@ -6,6 +7,7 @@ import {
   epochToYmd,
   getUserDataFromUuid,
   transformById,
+  getStatusKey
 } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { getEventsByType, sortByEpoch, getEpochForDate } from "../utils";
@@ -39,25 +41,25 @@ export const searchApiCall = async (state, dispatch) => {
       events.map((item) => {
         //const status = item.eventDetails.toDate > currentDate ? item.status : "INACTIVE";
         return {
-          [getLocaleLabels("Message", "EVENTS_EVENT_NAME_LABEL", localisationLabels)]: item.name,
-          [getLocaleLabels("Event Category", "EVENTS_EVENT_CATEGORY_LABEL", localisationLabels)]: item.eventCategory
-            ? getLocaleLabels(item.eventCategory, `MSEVA_EVENTCATEGORIES_${item.eventCategory}`, localisationLabels)
+          ["EVENTS_EVENT_NAME_LABEL"]: item.name,
+          ["EVENTS_EVENT_CATEGORY_LABEL"]: item.eventCategory
+            ? (<LabelContainer
+            labelKey={`MSEVA_EVENTCATEGORIES_${item.eventCategory}`}
+            labelName={item.eventCategory}
+          />)
             : "-",
-          [getLocaleLabels("Start Date", "EVENTS_START_DATE_LABEL", localisationLabels)]: item.eventDetails
+          ["EVENTS_START_DATE_LABEL"]: item.eventDetails
             ? epochToYmd(item.eventDetails.fromDate)
             : "-",
-          [getLocaleLabels("End Date", "EVENTS_END_DATE_LABEL", localisationLabels)]: item.eventDetails ? epochToYmd(item.eventDetails.toDate) : "-",
-          [getLocaleLabels("Posted By", "EVENTS_POSTEDBY_LABEL", localisationLabels)]: get(userResponse, item.auditDetails.lastModifiedBy).name,
-          [getLocaleLabels("Status", "EVENTS_STATUS_LABEL", localisationLabels)]: getLocaleLabels(
-            item.status,
-            `EVENTS_${item.status}_LABEL`,
-            localisationLabels
-          ),
-          id: item.id,
-          tenantId: item.tenantId,
+          ["EVENTS_END_DATE_LABEL"]: item.eventDetails ? epochToYmd(item.eventDetails.toDate) : "-",
+          ["EVENTS_POSTEDBY_LABEL"]: get(userResponse, item.auditDetails.lastModifiedBy).name,
+          ["EVENTS_STATUS_LABEL"]: item.status,
+          ["ID"]: item.id,
+          ["TENANT_ID"]: item.tenantId,
         };
       });
     dispatch(handleField("search", "components.div.children.searchResults", "props.data", data));
+    dispatch(handleField("search", "components.div.children.searchResults", "props.rows", data.length));
   } catch (error) {
     dispatch(toggleSnackbar(true, error.message, "error"));
     console.log(error);
@@ -75,41 +77,44 @@ export const searchResults = () => {
     componentPath: "Table",
     props: {
       columns: [
-        getLocaleLabels("Event Name", "EVENTS_EVENT_NAME_LABEL", localisationLabels),
-        getLocaleLabels("Event Category", "EVENTS_EVENT_CATEGORY_LABEL", localisationLabels),
-        getLocaleLabels("Start Date", "EVENTS_START_DATE_LABEL", localisationLabels),
-        getLocaleLabels("End Date", "EVENTS_END_DATE_LABEL", localisationLabels),
-        getLocaleLabels("Posted By", "EVENTS_POSTEDBY_LABEL", localisationLabels),
+        {labelName: "Event Name", labelKey: "EVENTS_EVENT_NAME_LABEL"},
+        {labelName: "Event Category", labelKey: "EVENTS_EVENT_CATEGORY_LABEL"},
+        {labelName: "Start Date", labelKey: "EVENTS_START_DATE_LABEL"},
+        {labelName: "End Date", labelKey: "EVENTS_END_DATE_LABEL"},
+        {labelName: "Posted By", labelKey: "EVENTS_POSTEDBY_LABEL"},
         {
-          name: getLocaleLabels("Status", "EVENTS_STATUS_LABEL", localisationLabels),
+          labelName: "Status", 
+          labelKey: "EVENTS_STATUS_LABEL",
           options: {
             filter: false,
-            customBodyRender: (value) => <span style={value === "Active" ? { color: "#4CAF50" } : { color: "#F44336" }}> {value}</span>,
+            customBodyRender: value => (
+              <LabelContainer
+                style={
+                  value === "ACTIVE" ? { color: "green" } : { color: "red" }
+                }
+                labelKey={getStatusKey(value).labelKey}
+                labelName={getStatusKey(value).labelName}
+              />
+            ),
           },
         },
         {
-          name: "tenantId",
+          labelName: "Tenant Id",
+          labelKey: "TENANT_ID",
           options: {
             display: false,
           },
         },
         {
-          name: "id",
+          labelName: "Id",
+          labelKey: "ID",
           options: {
             display: false,
           },
         },
       ],
-      title: (
-        <span
-          style={{
-            color: "rgba(0, 0, 0, 0.87)",
-            fontWeight: 900,
-          }}
-        >
-          {getLocaleLabels("Created Events", "EVENTS_CREATED_EVENTS_HEADER", localisationLabels)}
-        </span>
-      ),
+      title: {labelName: "Created Events", labelKey: "EVENTS_CREATED_EVENTS_HEADER" },
+      rows: "",
 
       options: {
         filter: true,

@@ -108,6 +108,10 @@ const FeesEstimateOverviewCard = Loadable({
   loading: () => <Loading />
 });
 
+const OwnerHeader = Loadable({
+  loader: () => import("./OwnerHeader"),
+  loading: () => <Loading />
+});
 
 export {
   TestMolecules,
@@ -130,7 +134,8 @@ export {
   MyApplications,
   Applications,
   WnsHowItWorks,
-  FeesEstimateOverviewCard
+  FeesEstimateOverviewCard,
+  OwnerHeader
 
   // PropertyTaxDetails
 };

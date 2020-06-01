@@ -79,7 +79,7 @@ import {
   }
 
 
-  export const adhocPopup = getCommonContainer({
+  export const financialYearPopup = getCommonContainer({
 
     yearDetailsContainer: getCommonContainer({
       yearRadioGroup: {
