@@ -85,6 +85,12 @@ serviceMaps:
    fromTopic: update-ws-connection
    isTransaction: true
    queryMaps: 
+   
+    - query: INSERT INTO eg_ws_connection_audit SELECT * FROM eg_ws_connection WHERE id = ?;
+      basePath: $.WaterConnection
+      jsonMaps:
+      - jsonPath: $.WaterConnection.id
+      
     - query: UPDATE eg_ws_connection SET applicationstatus=?, status=?, connectionno=?, oldconnectionno=?, action=?, roadCuttingArea=?, roadType=?, adhocpenalty=?, adhocrebate=?, adhocpenaltyreason=?, adhocpenaltycomment=?, adhocrebatereason=?, adhocrebatecomment=?, lastModifiedBy=?, lastModifiedTime=? WHERE id=?;
       basePath: $.WaterConnection
       jsonMaps:
@@ -120,6 +126,11 @@ serviceMaps:
        - jsonPath: $.WaterConnection.auditDetails.lastModifiedTime
        
        - jsonPath: $.WaterConnection.id 
+       
+    - query: INSERT INTO eg_ws_service_audit SELECT * FROM eg_ws_service WHERE connection_id = ?;
+      basePath: $.WaterConnection
+      jsonMaps:
+      - jsonPath: $.WaterConnection.id
 
     - query: UPDATE eg_ws_service SET connectionCategory=?,connectionType=?,waterSource=?,meterId=?,meterInstallationDate=?,pipeSize=?,noOfTaps=?,proposedPipeSize=?,proposedTaps=?, initialmeterreading = ?, connectionexecutiondate = ?, detailsprovidedby = ?, estimationfileStoreId = ?, sanctionfileStoreId = ?, estimationLetterDate = ?, lastModifiedBy=?, lastModifiedTime=? WHERE connection_id=?;
       basePath: $.WaterConnection
@@ -253,6 +264,12 @@ serviceMaps:
    fromTopic: update-ws-workflow
    isTransaction: true
    queryMaps: 
+   
+    - query: INSERT INTO eg_ws_connection_audit SELECT * FROM eg_ws_connection WHERE id = ?;
+      basePath: $.WaterConnection
+      jsonMaps:
+      - jsonPath: $.WaterConnection.id
+      
     - query: UPDATE eg_ws_connection SET applicationstatus=?, status=?, connectionno=?, action=?, lastModifiedBy=?, lastModifiedTime=?  WHERE id=?;
       basePath: $.WaterConnection
       jsonMaps:
@@ -276,7 +293,13 @@ serviceMaps:
    description: save filestore ids
    fromTopic: save-ws-filestoreids
    isTransaction: true
-   queryMaps: 
+   queryMaps:
+   
+    - query: INSERT INTO eg_ws_service_audit SELECT * FROM eg_ws_service WHERE connection_id = ?;
+      basePath: $.WaterConnection
+      jsonMaps:
+      - jsonPath: $.WaterConnection.id
+      
     - query: UPDATE eg_ws_service SET estimationfileStoreId = ?, sanctionfileStoreId = ? WHERE connection_id=?;
       basePath: $.WaterConnection
       jsonMaps:
