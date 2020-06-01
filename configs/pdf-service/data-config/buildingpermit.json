@@ -567,6 +567,25 @@
                 "value": {
                   "path": "$.edcrDetail[0].planDetail.planInformation.khataNo"
                 }
+              },
+              {
+                "variable": "reportrunDate",
+                "value": {
+                  "path": "$.additionalDetails.runDate"
+                },
+                "type":"date"
+              },
+              {
+                "variable": "REPORT_RUNDATE",
+                "value": {
+                  "path": "BPA_PDF_REPORT_RUNDATE"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-bpa"
+                }
               }
             ]
           },
