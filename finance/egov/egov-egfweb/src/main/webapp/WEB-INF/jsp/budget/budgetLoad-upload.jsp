@@ -55,7 +55,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title><s:text name="budgetload" /></title>
 <script type="text/javascript">
-	function validate() {
+	function validate(event) {
+		event.preventDefault();
 		document.getElementById("msg").innerHTML = "";
 		document.getElementById("Errors").innerHTML = "";
 
@@ -179,7 +180,7 @@
 
 							<td><s:submit type="submit" cssClass="buttonsubmit"
 									key="lbl.upload.budget" name="upload" method="upload"
-									onclick="return validate();" /></td>
+									onclick="return validate(event);" /></td>
 							<td><input type="button" value="<s:text name='lbl.close'/>"
 								onclick="javascript:window.close()" class="buttonsubmit" /></td>
 						</tr>

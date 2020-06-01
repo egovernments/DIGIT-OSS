@@ -360,6 +360,7 @@ public class FinancialUtils {
             documentDetails.setObjectType(objectType);
             documentDetails.setFileStore(fileStoreService.store(doc.getInputStream(), doc.getFileName(),
                     doc.getContentType(), FinancialConstants.FILESTORE_MODULECODE));
+            documentDetails.setUploadedDate(new Date());
             documentDetailsList.add(documentDetails);
 
         }

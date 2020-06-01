@@ -48,16 +48,24 @@
 
 package org.egov.infra.filestore.service;
 
-import org.egov.infra.filestore.entity.FileStoreMapper;
-
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Set;
+
+import org.egov.infra.filestore.entity.FileStoreMapper;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface FileStoreService {
 
     FileStoreMapper store(File file, String fileName, String mimeType, String moduleName);
+
+//    FileStoreMapper store(List<MultipartFile> files, String fileName, String mimeType, String moduleName);
+//
+//    FileStoreMapper storeFiles(List<MultipartFile> files, InputStream fileStream, String fileName, String mimeType,
+//            String moduleName);
 
     FileStoreMapper store(InputStream fileStream, String fileName, String mimeType, String moduleName);
 
@@ -65,7 +73,11 @@ public interface FileStoreService {
 
     FileStoreMapper store(File file, String fileName, String mimeType, String moduleName, boolean deleteFile);
 
-    FileStoreMapper store(InputStream fileStream, String fileName, String mimeType, String moduleName, boolean closeStream);
+//    FileStoreMapper storeFiles(List<MultipartFile> files, String fileName, String mimeType, String moduleName,
+//            boolean deleteFile);
+
+    FileStoreMapper store(InputStream fileStream, String fileName, String mimeType, String moduleName,
+            boolean closeStream);
 
     File fetch(FileStoreMapper fileMappers, String moduleName);
 
@@ -73,7 +85,16 @@ public interface FileStoreService {
 
     Path fetchAsPath(String fileStoreId, String moduleName);
 
+//    Path fetchAsDigitPath(String fileStoreId,String moduleName) throws IOException;
+
     Set<File> fetchAll(Set<FileStoreMapper> fileMappers, String moduleName);
 
     void delete(String fileStoreId, String moduleName);
+
+//    FileStoreMapper storeFiles(List<MultipartFile> files, InputStream fileStream, String fileName, String mimeType,
+//            String moduleName, boolean closeStream);
+
+//    File fetchDigitFilestore(String fileStoreId) throws IOException;
+//
+//    File fetchFromDigitFileStoreApi(String fileStoreId) throws IOException;
 }
