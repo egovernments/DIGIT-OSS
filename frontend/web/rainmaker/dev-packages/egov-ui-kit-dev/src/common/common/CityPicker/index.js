@@ -55,11 +55,17 @@ class CityPickerDialog extends Component {
     }
   };
 
-  autoSuggestCallback = (results = [], searchTerm) => {
-    if (results.length === 0) {
-      results.push({ key: "", text: "No City Found" });
+  autoSuggestCallback = (results = [] ,searchTerm) => {
+    const {cities} = this.props;
+    if(searchTerm){
+      const filteredCities = cities && cities.filter(item => {
+        return item.key.includes(searchTerm.toLowerCase())
+      });
+      if (results.length === 0) {
+        results.push({ key: "", text: "No City Found" });
+      }
+    this.setState({ results : filteredCities, searchTerm });
     }
-    this.setState({ results, searchTerm });
   };
 
   render() {
