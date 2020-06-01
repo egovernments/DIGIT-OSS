@@ -1,8 +1,11 @@
 import { downloadBill } from "egov-common/ui-utils/commons";
 import { Tooltip } from "egov-ui-framework/ui-molecules";
+import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import { routeToCommonPay } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
 import Label from "egov-ui-kit/utils/translationNode";
+import get from "lodash/get";
 import React from "react";
+import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { TotalDuesButton } from "./components";
 import "./index.css";
@@ -25,9 +28,23 @@ class TotalDues extends React.Component {
       url: await downloadBill(consumerCode, tenantId, "property-bill"),
     });
   };
+  payAction = (consumerCode, tenantId) => {
+    const status = get(this.props, 'propertyDetails[0].status', '');
+    if (status != "ACTIVE") {
+      this.props.toggleSnackbarAndSetText(
+        true,
+        { labelName: "Property in Workflow", labelKey: "ERROR_PROPERTY_IN_WORKFLOW" },
+        "error"
+      );
+    } else {
+      routeToCommonPay(consumerCode, tenantId);
+    }
+  }
+
   render() {
     const { totalBillAmountDue, consumerCode, tenantId, history } = this.props;
     const envURL = "/egov-common/pay";
+    const { payAction } = this;
     const data = { value: "PT_TOTALDUES_TOOLTIP", key: "PT_TOTALDUES_TOOLTIP" };
     return (
       <div className="" id="pt-header-due-amount">
@@ -69,8 +86,7 @@ class TotalDues extends React.Component {
                 primary={true}
                 labelText="PT_TOTALDUES_PAY"
                 onClickAction={() => {
-                  routeToCommonPay(consumerCode, tenantId);
-                  // history.push(`${envURL}?consumerCode=${consumerCode}&tenantId=${tenantId}&businessService=PT`);
+                  payAction(consumerCode, tenantId);
                 }}
               />
             </div>
@@ -80,4 +96,25 @@ class TotalDues extends React.Component {
     );
   }
 }
-export default withRouter(TotalDues);
+
+const mapStateToProps = (state, ownProps) => {
+  const { propertiesById } = state.properties || {};
+  const propertyId = ownProps.consumerCode;
+  const selPropertyDetails = propertiesById[propertyId] || {};
+  const propertyDetails = selPropertyDetails.propertyDetails || [];
+  return {
+    propertyDetails,
+    propertyId
+  };
+};
+
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    toggleSnackbarAndSetText: (open, message, error) => dispatch(toggleSnackbarAndSetText(open, message, error)),
+  };
+};
+
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(TotalDues));

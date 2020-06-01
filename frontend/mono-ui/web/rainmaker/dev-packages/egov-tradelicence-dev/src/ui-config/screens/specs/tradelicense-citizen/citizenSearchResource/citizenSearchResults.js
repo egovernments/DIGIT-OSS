@@ -11,14 +11,33 @@ export const searchResults = {
   props: {
     data: [],
     columns: [
-      getTextToLocalMapping("Application No"),
-      getTextToLocalMapping("License No"),
-      getTextToLocalMapping("Trade Name"),
-      getTextToLocalMapping("Owner Name"),
-      getTextToLocalMapping("Application Date"),
-      getTextToLocalMapping("Status"),
       {
-        name: "tenantId",
+        labelName: "Application No",
+        labelKey: "TL_COMMON_TABLE_COL_APP_NO"
+      },
+      {
+        labelName: "License No",
+        labelKey: "TL_COMMON_TABLE_COL_LIC_NO"
+      },
+      {
+        labelName: "Trade Name",
+        labelKey: "TL_COMMON_TABLE_COL_TRD_NAME"
+      },
+      {
+        labelName: "Owner Name",
+        labelKey: "TL_COMMON_TABLE_COL_OWN_NAME"
+      },
+      {
+        labelName: "Application Date",
+        labelKey: "TL_COMMON_TABLE_COL_APP_DATE"
+      },
+      {
+        labelName: "Status",
+        labelKey: "TL_COMMON_TABLE_COL_STATUS"
+      },
+      {
+        labelName: "Tenant Id",
+        labelKey: "TENANT_ID",
         options: {
           display: false
         }
@@ -61,7 +80,10 @@ export const searchResults = {
     //     }
     //   }
     // },
-    title: getTextToLocalMapping("MY_APPLICATIONS"),
+    title: {
+      labelName: "MY_APPLICATIONS",
+      labelKey: "TL_MY_APPLICATIONS"
+    },
     options: {
       filter: false,
       download: false,

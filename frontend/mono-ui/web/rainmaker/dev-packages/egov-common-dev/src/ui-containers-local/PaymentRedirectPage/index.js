@@ -1,5 +1,6 @@
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
+import { isPublicSearch } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 import set from "lodash/set";
 import React, { Component } from "react";
@@ -41,12 +42,16 @@ class PaymentRedirect extends Component {
     }
   };
 
+  checkPublicSearch = () => {
+    return isPublicSearch();
+  }
 
   componentDidMount = async () => {
     let { search } = this.props.location;
     const {reduxObj , prepareFinalObject} = this.props;
     const txnQuery=search.split('&')[0].replace('eg_pg_txnid','transactionId');
     console.log(txnQuery,'txnQuery');
+    const isPublicSearch = this.checkPublicSearch();
     
     try {
       let pgUpdateResponse = await httpRequest(
@@ -59,9 +64,9 @@ class PaymentRedirect extends Component {
       let consumerCode = get(pgUpdateResponse, "Transaction[0].consumerCode");
       let tenantId = get(pgUpdateResponse, "Transaction[0].tenantId");
       if (get(pgUpdateResponse, "Transaction[0].txnStatus") === "FAILURE") {
-        this.props.setRoute(
-          `/egov-common/acknowledgement?status=${"failure"}&consumerCode=${consumerCode}&tenantId=${tenantId}`
-        );
+        const url = `/egov-common/acknowledgement?status=${"failure"}&consumerCode=${consumerCode}&tenantId=${tenantId}`;
+        const ackFailureUrl = isPublicSearch ? `/withoutAuth${url}` : url;
+        this.props.setRoute(ackFailureUrl);
       } else {
         const srcQuery=`?tenantId=${tenantId}&consumerCodes=${consumerCode}`
  
@@ -86,8 +91,9 @@ class PaymentRedirect extends Component {
             const details = commonPayDetails.filter(item => item.code === "DEFAULT");
             prepareFinalObject("commonPayInfo" , details);
           }
-          this.props.setRoute(`/egov-common/acknowledgement?status=${"success"}&consumerCode=${consumerCode}&tenantId=${tenantId}&receiptNumber=${transactionId}&businessService=${businessService}`
-          );
+          const url = `/egov-common/acknowledgement?status=${"success"}&consumerCode=${consumerCode}&tenantId=${tenantId}&receiptNumber=${transactionId}&businessService=${businessService}`;
+          const ackSuccessUrl = isPublicSearch ? `/withoutAuth${url}` : url;
+          this.props.setRoute(ackSuccessUrl);
       })
       }
     } catch (e) {

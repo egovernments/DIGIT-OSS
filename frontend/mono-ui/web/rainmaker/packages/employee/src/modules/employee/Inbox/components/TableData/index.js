@@ -27,14 +27,27 @@ const getWFstatus = (status) => {
   switch (status) {
     case "INITIATED":
       return "Initiated";
+    case "PENDING_FOR_CITIZEN_ACTION":
+      return "Pending for Citizen Action";  
     case "APPLIED":
+    case "PENDING_FOR_DOCUMENT_VERIFICATION":
       return "Pending for Document Verification";
+    case "REJECTED":
+      return "REJECTED";
     case "FIELDINSPECTION":
+    case "PENDING_FOR_FIELD_INSPECTION":
       return "Pending for Field Inspection";
+    case "PENDING_APPROVAL_FOR_CONNECTION":
+      return "Pending Approval for Connection"
     case "PENDINGPAYMENT":
+    case "PENDING_FOR_PAYMENT":
       return "Pending for Payment";
     case "PENDINGAPPROVAL":
       return "Pending for Approval";
+    case "PENDING_FOR_CONNECTION_ACTIVATION":
+      return "Pending for Connection Activation";
+    case "CONNECTION_ACTIVATED":
+      return "Connnection Activated"
     case "APPROVED":
       return "Approved";
     default:

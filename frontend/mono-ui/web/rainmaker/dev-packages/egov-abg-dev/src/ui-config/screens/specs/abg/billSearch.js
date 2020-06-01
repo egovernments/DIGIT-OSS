@@ -1,14 +1,10 @@
-import {
-  getCommonHeader,
-  getLabel,
-  getBreak
-} from "egov-ui-framework/ui-config/screens/specs/utils";
-import { billSearchCard } from "./billSearchResources/billSearchCard";
-import { searchResults } from "./billSearchResources/searchResults";
+import { getBreak, getCommonHeader, getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { httpRequest } from "../../../../ui-utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { httpRequest } from "../../../../ui-utils";
+import { billSearchCard } from "./billSearchResources/billSearchCard";
+import { searchResults } from "./billSearchResources/searchResults";
 
 const header = getCommonHeader({
   labelName: "Universal Bill",
@@ -24,7 +20,7 @@ const getMDMSData = async (action, state, dispatch) => {
     MdmsCriteria: {
       tenantId: tenantId,
       moduleDetails: [
-       {
+        {
           moduleName: "BillingService",
           masterDetails: [
             {
@@ -59,6 +55,7 @@ const getMDMSData = async (action, state, dispatch) => {
       [],
       mdmsBody
     );
+    payload.MdmsRes.BillingService.BusinessService = payload.MdmsRes.BillingService.BusinessService.filter(service => service.billGineiURL);
     dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
   } catch (e) {
     console.log(e);
@@ -74,9 +71,9 @@ const billSearchAndResult = {
   name: "billSearch",
   beforeInitScreen: (action, state, dispatch) => {
     getData(action, state, dispatch);
-    const tenantId = process.env.REACT_APP_NAME === "Employee" ?  getTenantId() : JSON.parse(getUserInfo()).permanentCity;
-    if(tenantId){
-      dispatch(prepareFinalObject("searchScreen" , {tenantId: tenantId}));
+    const tenantId = process.env.REACT_APP_NAME === "Employee" ? getTenantId() : JSON.parse(getUserInfo()).permanentCity;
+    if (tenantId) {
+      dispatch(prepareFinalObject("searchScreen", { tenantId: tenantId }));
       const ulbComponentJsonPath = "components.div.children.billSearchCard.children.cardContent.children.searchContainer.children.ulb";
       const disableUlb = process.env.REACT_APP_NAME === "Citizen" ? false : true;
       dispatch(
@@ -96,7 +93,7 @@ const billSearchAndResult = {
         )
       );
     }
-    
+
     return action;
   },
   components: {

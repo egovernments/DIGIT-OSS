@@ -2,7 +2,7 @@ import {
   getCommonHeader,
   getCommonContainer
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { applicationSuccessFooter } from "./acknowledgementResource/applicationSuccessFooter";
+import { applicationSuccessFooter, DownloadAndPrint } from "./acknowledgementResource/applicationSuccessFooter";
 import { paymentSuccessFooter } from "./acknowledgementResource/paymentSuccessFooter";
 import { approvalSuccessFooter } from "./acknowledgementResource/approvalSuccessFooter";
 import { gotoHomeFooter } from "./acknowledgementResource/gotoHomeFooter";
@@ -21,8 +21,60 @@ import {
   downloadAndPrintForNonApply
 } from "../../../../ui-utils/commons";
 import set from "lodash/set";
+import get from "lodash/get";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getMdmsData } from './apply';
+import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
+
+
+const headerrow = getCommonContainer({
+  header: getCommonHeader({
+    labelKey: "WS_APPLICATION_NEW_CONNECTION_HEADER",
+  }),
+});
+
+const commonHeader = (state,
+  dispatch,
+  applicationNumber,
+  tenant) => {
+  return getCommonContainer({
+    headerDiv: {
+      uiFramework: "custom-atoms",
+      componentPath: "Container",
+      children: {
+        header1: {
+          gridDefination: {
+            xs: 12,
+            sm: 8
+          },
+          ...headerrow
+        },
+        helpSection: {
+          uiFramework: "custom-atoms",
+          componentPath: "Container",
+          props: {
+            color: "primary",
+            style: { justifyContent: "flex-end" } //, dsplay: "block"
+          },
+          gridDefination: {
+            xs: 12,
+            sm: 4,
+            align: "right"
+          },
+          children: {
+            DownloadAndPrint: DownloadAndPrint(
+              state,
+              dispatch,
+              applicationNumber,
+              tenant
+            ),
+          }
+
+        }
+      }
+    },
+  })
+}
 
 const getAcknowledgementCard = (
   state,
@@ -33,13 +85,15 @@ const getAcknowledgementCard = (
   applicationNumberWater,
   applicationNumberSewerage,
   secondNumber,
-  tenant
+  tenant,
+  consumerNo
 ) => {
   if (purpose === "apply" && status === "success" && applicationNumberWater && applicationNumberSewerage) {
     return {
-      header: getCommonHeader({
-        labelKey: "WS_APPLICATION_NEW_CONNECTION_HEADER",
-      }),
+      commonHeader: commonHeader(state,
+        dispatch,
+        applicationNumber,
+        tenant),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -88,9 +142,10 @@ const getAcknowledgementCard = (
     };
   } else if (purpose === "apply" && status === "success") {
     return {
-      header: getCommonHeader({
-        labelKey: "WS_APPLICATION_NEW_CONNECTION_HEADER",
-      }),
+      commonHeader: commonHeader(state,
+        dispatch,
+        applicationNumber,
+        tenant),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -185,20 +240,10 @@ const getAcknowledgementCard = (
   } else if (purpose === "approve" && status === "success") {
     loadReceiptGenerationData(applicationNumber, tenant);
     return {
-      header: getCommonContainer({
-        header: getCommonHeader({
-          labelName: `Application for New Water and Sewerage Connection`,
-          labelKey: "WS_APPLICATION_NEW_CONNECTION_HEADER",
-        }),
-        applicationNumber: {
-          uiFramework: "custom-atoms-local",
-          moduleName: "egov-wns",
-          componentPath: "ApplicationNoContainer",
-          props: {
-            number: applicationNumber
-          }
-        }
-      }),
+      commonHeader: commonHeader(state,
+        dispatch,
+        applicationNumber,
+        tenant),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -233,20 +278,24 @@ const getAcknowledgementCard = (
   } else if (purpose === "sendback" && status === "success") {
     loadReceiptGenerationData(applicationNumber, tenant);
     return {
-      header: getCommonContainer({
-        header: getCommonHeader({
-          labelName: `Application for New Water and Sewerage Connection`,
-          labelKey: "WS_APPLICATION_NEW_CONNECTION_HEADER"
-        }),
-        applicationNumber: {
-          uiFramework: "custom-atoms-local",
-          moduleName: "egov-wns",
-          componentPath: "ApplicationNoContainer",
-          props: {
-            number: applicationNumber
-          }
-        }
-      }),
+      commonHeader: commonHeader(state,
+        dispatch,
+        applicationNumber,
+        tenant),
+      // header: getCommonContainer({
+      //   header: getCommonHeader({
+      //     labelName: `Application for New Water and Sewerage Connection`,
+      //     labelKey: "WS_APPLICATION_NEW_CONNECTION_HEADER"
+      //   }),
+      //   applicationNumber: {
+      //     uiFramework: "custom-atoms-local",
+      //     moduleName: "egov-wns",
+      //     componentPath: "ApplicationNoContainer",
+      //     props: {
+      //       number: applicationNumber
+      //     }
+      //   }
+      // }),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -280,20 +329,10 @@ const getAcknowledgementCard = (
     };
   } else if (purpose === "application" && status === "rejected") {
     return {
-      header: getCommonContainer({
-        header: getCommonHeader({
-          labelName: `Application for New Water and Sewerage Connection`,
-          labelKey: "WS_APPLICATION_NEW_CONNECTION_HEADER"
-        }),
-        applicationNumber: {
-          uiFramework: "custom-atoms-local",
-          moduleName: "egov-wns",
-          componentPath: "ApplicationNoContainer",
-          props: {
-            number: applicationNumber
-          }
-        }
-      }),
+      commonHeader: commonHeader(state,
+        dispatch,
+        applicationNumber,
+        tenant),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -433,10 +472,10 @@ const getAcknowledgementCard = (
     };
   } else if (purpose === "forward" && status === "success") {
     return {
-      header: getCommonHeader({
-        labelName: `Application for New Water and Sewerage Connection`,
-        labelKey: "WS_APPLICATION_NEW_CONNECTION_HEADER"
-      }),
+      commonHeader: commonHeader(state,
+        dispatch,
+        applicationNumber,
+        tenant),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -469,11 +508,13 @@ const getAcknowledgementCard = (
       )
     };
   } else if (purpose === "activate" && status === "success") {
+
     return {
-      header: getCommonHeader({
-        labelName: `Application for New Water and Sewerage Connection`,
-        labelKey: "WS_APPLICATION_NEW_CONNECTION_HEADER"
-      }),
+      commonHeader: commonHeader(state,
+        dispatch,
+        applicationNumber,
+        tenant,
+        consumerNo),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -494,7 +535,12 @@ const getAcknowledgementCard = (
               labelName: "Application No.",
               labelKey: "WS_ACK_COMMON_APP_NO_LABEL"
             },
-            number: applicationNumber
+            number: applicationNumber,
+            tailTextOne: {
+              labelName: "Consumer No",
+              labelKey: "WS_COMMON_CONSUMER_NO_LABEL"
+            },
+            newNumber: consumerNo,
           })
         }
       },
@@ -599,10 +645,10 @@ export const downloadPrintContainer = (
       printMenu = [applicationPrintObject];
       break;
     case "PENDING_APPROVAL_FOR_CONNECTION":
+    case "PENDING_FOR_PAYMENT":
       downloadMenu = [applicationDownloadObject, wsEstimateDownloadObject];
       printMenu = [applicationPrintObject, wsEstimatePrintObject];
       break;
-    case "PENDING_FOR_PAYMENT":
     case "PENDING_FOR_CONNECTION_ACTIVATION":
     case "CONNECTION_ACTIVATED":
       downloadMenu = [sanctionDownloadObject, wsEstimateDownloadObject, applicationDownloadObject];
@@ -725,36 +771,48 @@ const screenConfig = {
   beforeInitScreen: (action, state, dispatch) => {
     pageReset(dispatch);
     fetchData(dispatch)
+    .then(() => {
+        const purpose = getQueryArg(window.location.href, "purpose");
+        const status = getQueryArg(window.location.href, "status");
+        // const service = getQueryArg(window.location.href, "service");
+        const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+        const applicationNumberWater = getQueryArg(window.location.href, "applicationNumberWater");
+        const applicationNumberSewerage = getQueryArg(window.location.href, "applicationNumberSewerage");
+        const secondNumber = getQueryArg(window.location.href, "secondNumber");
+        const tenant = getQueryArg(window.location.href, "tenantId");
+        let consumerNo = ""
+        if (applicationNumber && applicationNumber.includes("WS")) {
+          consumerNo = get(state,"screenConfiguration.preparedFinalObject.WaterConnection[0].connectionNo");
+        } else if (applicationNumber && applicationNumber.includes("SW")) {
+          consumerNo = get(state,"screenConfiguration.preparedFinalObject.SewerageConnection[0].connectionNo");
+        }
+        if (applicationNumberSewerage && applicationNumberWater) {
+          const cardOne = getAcknowledgementCard(state, dispatch, purpose, status, applicationNumber, applicationNumberWater, applicationNumberSewerage, secondNumber, tenant);
+          set(action, "screenConfig.components.div.children", cardOne);
+        } else {
+          const data = getAcknowledgementCard(
+            state,
+            dispatch,
+            purpose,
+            status,
+            applicationNumber,
+            applicationNumberWater, 
+            applicationNumberSewerage,
+            secondNumber,
+            // financialYear,
+            tenant,
+            consumerNo
+          );
+          set(action, "screenConfig.components.div.children", data);
+        }
+      })
       .then(() => getMdmsData(dispatch))
       .then(() => prepareDocumentsUploadData(state, dispatch))
       .then(() => prepareDocUploadRedux(state, dispatch))
       .then(() => prepareDocumentsUploadRedux(state, dispatch))
       .then(() => downloadAndPrintForNonApply(state, dispatch))
-      .catch(error => console.log(error))
-    const purpose = getQueryArg(window.location.href, "purpose");
-    const status = getQueryArg(window.location.href, "status");
-    // const service = getQueryArg(window.location.href, "service");
-    const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
-    const applicationNumberWater = getQueryArg(window.location.href, "applicationNumberWater");
-    const applicationNumberSewerage = getQueryArg(window.location.href, "applicationNumberSewerage");
-    const secondNumber = getQueryArg(window.location.href, "secondNumber");
-    const tenant = getQueryArg(window.location.href, "tenantId");
-    if (applicationNumberSewerage && applicationNumberWater) {
-      const cardOne = getAcknowledgementCard(state, dispatch, purpose, status, applicationNumber, applicationNumberWater, applicationNumberSewerage, secondNumber, tenant);
-      set(action, "screenConfig.components.div.children", cardOne);
-    } else {
-      const data = getAcknowledgementCard(
-        state,
-        dispatch,
-        purpose,
-        status,
-        applicationNumber,
-        secondNumber,
-        // financialYear,
-        tenant
-      );
-      set(action, "screenConfig.components.div.children", data);
-    }
+      
+      .catch(error => console.log(error))    
     return action;
   }
 };

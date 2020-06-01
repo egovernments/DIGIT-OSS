@@ -58,9 +58,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-left: 4%;
+    margin-left: 7%;
     margin-right: 2%;
-    border-left: 1px solid white;
+    border-left: 1px solid #F2F2F2;
     //height: 500px;
     margin-top:16px;
     margin-bottom: 16px;
@@ -75,11 +75,11 @@
     border-radius: 50%;
     height: 69px;
     width: 69px;
-    background-color: white;
+    background-color:#F2F2F2;
 
   }
   .register-qrscan{
-    width: 25%;
+    width: 46%;
     background-color: white;
     margin-top:16px;
     margin-bottom: 16px;
@@ -100,6 +100,14 @@
   .register-qrscan > div{
     display: flex;
     justify-content: center;
-    margin-top: 80px;
+    margin-top: 10%;
+  }
+  .wha-user-screen-card{
+    padding: 24px 16px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  margin-left: 25%;
+  width: 50%;
+
   }
 }

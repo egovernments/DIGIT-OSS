@@ -23,7 +23,7 @@ export const propertyUsage = getLabelWithValue(
         labelKey: "WS_SERV_DETAIL_PROP_USE_TYPE"// TL_NEW_OWNER_DETAILS_TYPE_OF_OWNERSHIP
     },
     {
-        jsonPath: "WaterConnection[0].property.propertyUsageType"
+        jsonPath: "WaterConnection[0].property.usageCategory"
     }
 );
 

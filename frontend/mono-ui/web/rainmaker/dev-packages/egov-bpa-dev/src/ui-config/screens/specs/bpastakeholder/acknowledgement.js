@@ -58,7 +58,7 @@ const getAcknowledgementCard = (
             },
             tailText: {
               labelName: "Application No.",
-              labelKey: "TL_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+              labelKey: "BPA_HOME_SEARCH_RESULTS_APP_NO_LABEL"
             },
             number: applicationNumber
           })
@@ -101,17 +101,17 @@ const getAcknowledgementCard = (
             backgroundColor: "#39CB74",
             header: {
               labelName:
-                "Payment is collected successfully, Now you can dowload and issue Trade License Certificate to citizen",
-              labelKey: "TL_CONFIRMATION_MESSAGE_MAIN"
+                "Payment has been collected successfully!",
+              labelKey: "BPAREG_CONFIRMATION_MESSAGE_MAIN"
             },
             body: {
               labelName:
                 "A notification regarding Payment Collection has been sent to trade owner at registered Mobile No.",
-              labelKey: "TL_CONFIRMATION_MESSAGE_SUB"
+              labelKey: "BPAREG_CONFIRMATION_MESSAGE_SUB"
             },
             tailText: {
               labelName: "Payment Receipt No.",
-              labelKey: "TL_PMT_RCPT_NO"
+              labelKey: "BPAREG_PMT_RCPT_NO"
             },
             number: secondNumber
           })
@@ -193,7 +193,7 @@ const getAcknowledgementCard = (
             backgroundColor: "#39CB74",
             header: {
               labelName: "Application is sent back Successfully",
-              labelKey: "TL_SENDBACK_CHECKLIST_MESSAGE_HEAD"
+              labelKey: "BPA_SENDBACK_CHECKLIST_MESSAGE_HEAD"
             },
             // body: {
             //   labelName:
@@ -202,7 +202,7 @@ const getAcknowledgementCard = (
             // },
             tailText: {
               labelName: "Trade License No.",
-              labelKey: "TL_HOME_SEARCH_RESULTS_TL_NO_LABEL"
+              labelKey: "BPA_HOME_SEARCH_RESULTS_TL_NO_LABEL"
             },
             number: secondNumber
           })
@@ -272,16 +272,16 @@ const getAcknowledgementCard = (
             backgroundColor: "#E54D42",
             header: {
               labelName: "Trade License Cancelled",
-              labelKey: "TL_TL_CANCELLED_MESSAGE_HEAD"
+              labelKey: "BPA_TL_CANCELLED_MESSAGE_HEAD"
             },
             body: {
               labelName:
                 "A notification regarding Trade License cancellation has been sent to trade owner at registered Mobile No.",
-              labelKey: "TL_TL_CANCELLED_MESSAGE_SUBHEAD"
+              labelKey: "BPA_TL_CANCELLED_MESSAGE_SUBHEAD"
             },
             tailText: {
               labelName: "Trade License No.",
-              labelKey: "TL_HOME_SEARCH_RESULTS_TL_NO_LABEL"
+              labelKey: "BPA_HOME_SEARCH_RESULTS_TL_NO_LABEL"
             },
             number: secondNumber
           })
@@ -314,12 +314,12 @@ const getAcknowledgementCard = (
             backgroundColor: "#E54D42",
             header: {
               labelName: "Payment has failed!",
-              labelKey: "TL_PAYMENT_FAILED"
+              labelKey: "BPA_PAYMENT_FAILED"
             },
             body: {
               labelName:
                 "A notification regarding payment failure has been sent to the trade owner and applicant.",
-              labelKey: "TL_PAYMENT_NOTIFICATION"
+              labelKey: "BPA_PAYMENT_NOTIFICATION"
             }
           })
         }
@@ -341,15 +341,15 @@ const getAcknowledgementCard = (
             backgroundColor: "#39CB74",
             header: {
               labelName: "Application Marked Successfully",
-              labelKey: "TL_MARK_SUCCESS_MESSAGE_MAIN"
+              labelKey: "BPA_MARK_SUCCESS_MESSAGE_MAIN"
             },
             body: {
               labelName: "Application has been marked successfully",
-              labelKey: "TL_APPLICATION_MARKED_SUCCESS"
+              labelKey: "BPA_APPLICATION_MARKED_SUCCESS"
             },
             tailText: {
               labelName: "Application No.",
-              labelKey: "TL_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+              labelKey: "BPA_HOME_SEARCH_RESULTS_APP_NO_LABEL"
             },
             number: applicationNumber
           })
@@ -381,7 +381,7 @@ const getAcknowledgementCard = (
             },
             tailText: {
               labelName: "Application No.",
-              labelKey: "TL_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+              labelKey: "BPA_HOME_SEARCH_RESULTS_APP_NO_LABEL"
             },
             number: applicationNumber
           })

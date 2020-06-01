@@ -21,19 +21,7 @@ const routes = [
       hideBackButton: true,
       isHomeScreen: true,
     }
-  },
-  {
-    path: "withoutAuth/:path/:screenKey",
-    component: ScreenInterface,
-    needsAuthentication: false,
-    options: {
-      title: "",
-      hideFooter: true,
-      hideTitle: true,
-      hideBackButton: true,
-      isHomeScreen: true,
-    },
-  },
+  }
 ];
 
 export default routes;

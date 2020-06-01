@@ -20,7 +20,7 @@ const instance = axios.create({
 });
 
 const edcrInstance = axios.create({
-  baseURL:  window.location.origin,
+  baseURL: window.location.origin,
   headers: {
     "Content-Type": "application/json"
   }
@@ -35,7 +35,7 @@ export const wrapRequestBody = (requestBody, action, customRequestInfo) => {
     action: action,
     did: "1",
     key: "",
-    msgId: "20170310130900|en_IN",
+    msgId: `20170310130900|${getLocale()}`,
     requesterId: "",
     authToken
   };

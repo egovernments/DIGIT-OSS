@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Button, Card, TextField, Image } from "components";
+import { Card, TextField, Image } from "components";
+import { Button} from "egov-ui-framework/ui-atoms";
 import { CityPicker } from "modules/common";
 import Label from "egov-ui-kit/utils/translationNode";
 import logo from "egov-ui-kit/assets/images/logo_black.png";
@@ -40,7 +41,18 @@ const LoginForm = ({ handleFieldChange, form, onForgotPasswdCLick, logoUrl }) =>
               />
             </div>
           </Link>
-          <Button {...submit} fullWidth={true} primary={true} />
+          <Button
+                {...submit}
+            style={{
+              height: "48px",     
+              width:"100%"        
+            }}
+            variant={"contained"}
+            color={"primary"}
+          >
+            <Label buttonLabel={true}   labelStyle={{fontWeight:500 }}  label="CORE_COMMON_CONTINUE" />
+          </Button>
+          {/* <Button {...submit} fullWidth={true} primary={true} /> */}
         </div>
       }
     />

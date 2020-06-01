@@ -28,7 +28,7 @@ import {
   handleScreenConfigurationFieldChange as handleField,
   toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId, getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest, edcrHttpRequest } from "../../../../ui-utils/api";
 import set from "lodash/set";
 import get from "lodash/get";
@@ -40,10 +40,11 @@ import {
   prepareNOCUploadData,
   getAppSearchResults
 } from "../../../../ui-utils/commons";
-import { getTodaysDateInYYYMMDD, getTenantMdmsData, setProposedBuildingData } from "../utils";
+import { getTodaysDateInYYYMMDD, getTenantMdmsData, setProposedBuildingData, edcrDetailsToBpaDetails } from "../utils";
 import jp from "jsonpath";
 import { bpaSummaryDetails } from "../egov-bpa/summaryDetails";
 import { changeStep } from "./applyResource/footer";
+import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 
 export const stepsData = [
   { labelName: "Basic Details", labelKey: "BPA_STEPPER_BASIC_DETAILS_HEADER" },
@@ -60,10 +61,9 @@ export const stepper = getStepperObject(
 
 export const header = getCommonContainer({
   header: getCommonHeader({
-    labelName: `Apply for building permit`, //later use getFinancialYearDates
+    labelName: `Apply for building permit`,
     labelKey: "BPA_APPLY_FOR_BUILDING_PERMIT_HEADER"
   }),
-  //applicationNumber: applicationNumberContainer()
   applicationNumber: {
     uiFramework: "custom-atoms-local",
     moduleName: "egov-bpa",
@@ -95,8 +95,7 @@ export const formwizardSecondStep = {
     id: "apply_form2"
   },
   children: {
-    buildingPlanScrutinyDetails,
-   // blockWiseOccupancyAndUsageDetails,    
+    buildingPlanScrutinyDetails,  
     proposedBuildingDetails,
     demolitiondetails,
     abstractProposedBuildingDetails
@@ -147,7 +146,7 @@ const getMdmsData = async (action, state, dispatch) => {
   ) || getTenantId();
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: getTenantId(), //tenantId,
+      tenantId: getTenantId(),
       moduleDetails: [
         {
           moduleName: "common-masters",
@@ -247,15 +246,29 @@ const setSearchResponse = async (
       key: "tenantId",
       value: tenantId
     },
-    { key: "applicationNos", value: applicationNumber }
+    { key: "applicationNo", value: applicationNumber }
   ]);
 
-  const edcrNumber = response.Bpa["0"].edcrNumber;
-  const ownershipCategory = response.Bpa["0"].ownershipCategory;
-  const appDate = response.Bpa["0"].auditDetails.createdTime;
-  const latitude = response.Bpa["0"].address.geoLocation.latitude;
-  const longitude = response.Bpa["0"].address.geoLocation.longitude;
-  const riskType = response.Bpa["0"].riskType;
+  const edcrNumber = get(response, "Bpa[0].edcrNumber");
+  const ownershipCategory = get(response, "Bpa[0].landInfo.ownershipCategory");
+  const appDate = get(response, "Bpa[0].auditDetails.createdTime");
+  const latitude = get(response, "Bpa[0].address.geoLocation.latitude");
+  const longitude = get(response, "Bpa[0].address.geoLocation.longitude");
+
+  dispatch(prepareFinalObject("BPA", response.Bpa[0]));
+  let edcrRes = await edcrHttpRequest(
+    "post",
+    "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + edcrNumber + "&tenantId=" + tenantId,
+    "search", []
+    );
+
+  dispatch(prepareFinalObject(`scrutinyDetails`, edcrRes.edcrDetail[0] ));
+  await edcrDetailsToBpaDetails(state, dispatch);
+
+  const riskType = get (
+    state.screenConfiguration.preparedFinalObject,
+    "BPA.riskType"
+  )
   let bpaService = "BPA";
   if(riskType === "LOW") {
     bpaService = "BPA_LOW";
@@ -265,19 +278,9 @@ const setSearchResponse = async (
     { key: "businessServices", value: bpaService }
   ];
   setBusinessServiceDataToLocalStorage(queryObject, dispatch);
-  
-  dispatch(prepareFinalObject("BPA", response.Bpa[0]));
-  let edcrRes = await edcrHttpRequest(
-    "post",
-    "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + edcrNumber + "&tenantId=" + tenantId,
-    "search", []
-    );
-
-  dispatch(prepareFinalObject(`scrutinyDetails`, edcrRes.edcrDetail[0] ));
 
   if(ownershipCategory) {
-    let ownerShipMajorType =  dispatch(
-      prepareFinalObject( "BPA.ownerShipMajorType", ownershipCategory.split('.')[0] ));
+    dispatch(prepareFinalObject( "BPA.landInfo.ownerShipMajorType", ownershipCategory.split('.')[0] ));
   }
   
  if(latitude && longitude) {
@@ -290,23 +293,22 @@ const setSearchResponse = async (
     )
   );
   dispatch(prepareFinalObject(
-    "BPA.address.geoLocation.latitude",
+    "BPA.landInfo.address.geoLocation.latitude",
     latitude
   ));
   dispatch(prepareFinalObject(
-    "BPA.address.geoLocation.longitude",
+    "BPA.landInfo.address.geoLocation.longitude",
     longitude
   ));
  }
   dispatch(prepareFinalObject("BPAs.appdate", appDate));
-  const docs = await prepareDocumentsUploadData(state, dispatch);
-  const documentDetailsUploadRedux = await prepareDocumentDetailsUploadRedux(state, dispatch);
+  await prepareDocumentsUploadData(state, dispatch);
+  await prepareDocumentDetailsUploadRedux(state, dispatch);
 };
 
 export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
   let docs = get (state.screenConfiguration.preparedFinalObject, "documentsContract");
   let bpaDocs = [];
-  
   if (docs && docs.length > 0) {
     docs.forEach(section => {
       section.cards.forEach(doc => {
@@ -332,7 +334,7 @@ export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
     let fileStoreIds = jp.query(uploadedDocs, "$.*.fileStoreId");
     let fileUrls = fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
     uploadedDocs.forEach(upDoc => {
-      bpaDocs.forEach(bpaDoc => {
+      bpaDocs.forEach((bpaDoc,index) => {
         let bpaDetailsDoc;
         if(upDoc.documentType) bpaDetailsDoc = (upDoc.documentType).split('.')[0]+"."+(upDoc.documentType).split('.')[1];
         if(bpaDetailsDoc == bpaDoc.documentCode) {
@@ -349,35 +351,61 @@ export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
           `Document - ${index + 1}`;
           bpaDoc.dropDownValues = {};
           bpaDoc.dropDownValues.value =  upDoc.documentType;
-          if(bpaDoc.previewdocuments ){
-            bpaDoc.previewdocuments.push(
+          if(bpaDoc.documents ){
+            bpaDoc.documents.push(
               {
-                // title: getTransformedLocale(bpaDoc.documentCode),
-                title: getTransformedLocale(bpaDoc.dropDownValues.value),               
+                title: getTransformedLocale(bpaDoc.dropDownValues.value),
+                dropDownValues : bpaDoc.dropDownValues.value,    
                 name: name,
                 linkText: "View",
                 fileName : name,
                 fileStoreId : upDoc.fileStoreId,
                 fileUrl : url,
-                // id : upDoc.id,
-                wfState: upDoc.wfState                                
+                wfState: upDoc.wfState ,
+                isClickable:false                               
               }
             );
           }else{
-            bpaDoc.previewdocuments = [
+            bpaDoc.documents = [
               {
-                // title: getTransformedLocale(bpaDoc.documentCode),
-                title: getTransformedLocale(bpaDoc.dropDownValues.value),               
+                title: getTransformedLocale(bpaDoc.dropDownValues.value),
+                dropDownValues : bpaDoc.dropDownValues.value,             
                 name: name,
                 linkText: "View",
                 fileName : name,
                 fileStoreId : upDoc.fileStoreId,
                 fileUrl : url,
-                // id : upDoc.id,
-                wfState: upDoc.wfState                                
+                wfState: upDoc.wfState,
+                isClickable:false                                
               }
             ];
           }
+
+          // if(bpaDoc.documents ){
+          //   bpaDoc.documents.push(
+          //     {
+          //       title: getTransformedLocale(bpaDoc.dropDownValues.value),               
+          //       name: name,
+          //       linkText: "View",
+          //       fileName : name,
+          //       fileStoreId : upDoc.fileStoreId,
+          //       fileUrl : url,
+          //       wfState: upDoc.wfState                                
+          //     }
+          //   );
+          // }else{
+          //   bpaDoc.documents = [
+          //     {
+          //       title: getTransformedLocale(bpaDoc.dropDownValues.value),               
+          //       name: name,
+          //       linkText: "View",
+          //       fileName : name,
+          //       fileStoreId : upDoc.fileStoreId,
+          //       fileUrl : url,
+          //       wfState: upDoc.wfState                                
+          //     }
+          //   ];
+          // }
         }
       })
     })
@@ -386,13 +414,22 @@ export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
       
     bpaDocs.forEach(doc => {
 
-      if (doc.previewdocuments && doc.previewdocuments.length > 0) {
-          doc.previewdocuments.forEach(docDetail =>{
+      if (doc.documents && doc.documents.length > 0) {
+          doc.documents.forEach(docDetail =>{
             docDetail["link"] = fileUrls[docDetail.fileStoreId];
             return docDetail;
           });
       }
     });
+    // bpaDocs.forEach(doc => {
+
+    //   if (doc.documents && doc.documents.length > 0) {
+    //       doc.documents.forEach(docDetail =>{
+    //         docDetail["link"] = fileUrls[docDetail.fileStoreId];
+    //         return docDetail;
+    //       });
+    //   }
+    // });
     dispatch(prepareFinalObject("documentDetailsUploadRedux", bpaDocs));
   }
 }
@@ -458,7 +495,7 @@ const selectLicenceType = (state, dispatch) => {
     }
   }
 
-if(isTrue) {
+/*if(isTrue) {
   let toggle = get(
     state.screenConfiguration.screenConfig["apply"],
     "components.cityPickerDialog.props.open",
@@ -468,7 +505,7 @@ if(isTrue) {
     handleField("apply", "components.cityPickerDialog", "props.open", !toggle)
   );
   changeStep(state, dispatch, "", 1);
-}
+}*/
 }
 
 const setTaskStatus = async(state,applicationNumber,tenantId,dispatch,componentJsonpath)=>{
@@ -512,7 +549,7 @@ const screenConfig = {
     //Set Module Name
     set(state, "screenConfiguration.moduleName", "BPA");
     getTenantMdmsData(action, state, dispatch).then(response => {
-      dispatch(prepareFinalObject("BPA.address.city", tenantId));
+      dispatch(prepareFinalObject("BPA.landInfo.address.city", tenantId));
     });
 
     let isEdit = true;
@@ -546,16 +583,8 @@ const screenConfig = {
           ownershipCategory
         )
       );
-      let applicationType = get(
-        state,
-        "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.ApplicationType[0].code"
-      );
-      dispatch(prepareFinalObject("BPA.applicationType", applicationType));
-      // Set Documents Data (TEMP)
-      // prepareDocumentsUploadData(state, dispatch);
-      // prepareNOCUploadData(state, dispatch);
     });
-
+    dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     setTaskStatus(state,applicationNumber,tenantId,dispatch,componentJsonpath);
 
     // Code to goto a specific step through URL
@@ -619,7 +648,7 @@ const screenConfig = {
           props: {
             dataPath: "BPA",
             moduleName: "BPA",
-            updateUrl: "/bpa-services/_update"
+            updateUrl: "/bpa-services/v1/bpa/_update"
           }
           },
         formwizardFirstStep,
@@ -630,7 +659,7 @@ const screenConfig = {
         footer
       }
     },
-    cityPickerDialog :{
+    /*cityPickerDialog :{
       componentPath: "Dialog",
       props: {
         open: false,
@@ -687,7 +716,7 @@ const screenConfig = {
                       children: {
                         previousButtonLabel: getLabel({
                           labelName: "SELECT",
-                          labelKey: "TL_CITIZEN_SELECT"
+                          labelKey: "BPA_CITIZEN_SELECT_BUTTON"
                         })
                       },
                       onClickDefination: {
@@ -710,7 +739,7 @@ const screenConfig = {
                       children: {
                         previousButtonLabel: getLabel({
                           labelName: "CANCEL",
-                          labelKey: "TL_ADD_HOC_CHARGES_POPUP_BUTTON_CANCEL"
+                          labelKey: "BPA_CITIZEN_CANCEL_BUTTON"
                         })
                       },
                       onClickDefination: {
@@ -725,7 +754,7 @@ const screenConfig = {
           }
         }
       }
-    },
+    },*/
   }
 };
 

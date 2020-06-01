@@ -1,8 +1,7 @@
 import React from "react";
 import {
   sortByEpoch,
-  getEpochForDate,
-  getTextToLocalMapping
+  getEpochForDate
 } from "../../utils";
 import {download} from "egov-common/ui-utils/commons"
 
@@ -14,7 +13,8 @@ export const searchResults = {
     columns: [
 
       {
-        name : getTextToLocalMapping("Receipt No."),
+        labelName: "Receipt No.",
+        labelKey: "UC_COMMON_TABLE_COL_RECEIPT_NO",
         options: {
           filter: false,
           customBodyRender: (value, tableMeta, updateValue) => (
@@ -30,26 +30,46 @@ export const searchResults = {
           )
         }
       },
-
-      
-      getTextToLocalMapping("Payee Name"),
-      getTextToLocalMapping("Service Type"),
-      getTextToLocalMapping("Date"),
-      getTextToLocalMapping("Amount[INR]"),
-      getTextToLocalMapping("Status"),
       {
-        name: "receiptKey",
+        labelName: "Payee Name",
+        labelKey: "UC_COMMON_TABLE_COL_PAYEE_NAME"
+      },
+      {
+        labelName: "Service Type",
+        labelKey: "UC_SERVICE_TYPE_LABEL"
+      },
+      {
+        labelName: "Date",
+        labelKey: "UC_COMMON_TABLE_COL_DATE"
+      },
+      {
+        labelName: "Amount[INR]",
+        labelKey: "UC_COMMON_TABLE_COL_AMOUNT"
+      },
+      {
+        labelName: "Status",
+        labelKey: "UC_COMMON_TABLE_COL_STATUS"
+      },
+      {
+        labelName: "Receipt Key",
+        labelKey: "RECEIPT_KEY",
         options: {
           display: false
         }
       },
       {
-        name: "tenantId",
+        labelName: "Tenant Id",
+        labelKey: "TENANT_ID",
         options: {
           display: false
         }
       }
     ],
+    title: {
+      labelKey: "COMMON_TABLE_SEARCH_RESULT_RECIEPT",
+      labelName: "Search Results for Receipt",
+    },
+    rows: "",
     options: {
       filter: false,
       download: false,

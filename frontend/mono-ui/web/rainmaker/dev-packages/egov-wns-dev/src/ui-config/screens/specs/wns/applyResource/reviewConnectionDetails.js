@@ -6,7 +6,7 @@ import {
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { changeStep } from "./footer";
-import { handleNA } from '../../utils';
+import { convertEpochToDateAndHandleNA, handlePropertySubUsageType, handleNA } from '../../utils';
 
 const getHeader = label => {
   return {
@@ -196,11 +196,13 @@ const getPropertyDetails = {
             labelName: "Property Usage Type",
             labelKey: "WS_PROPERTY_USAGE_TYPE_LABEL"
           },
-          { jsonPath: "applyScreen.property.usageCategory", callBack: handleNA,
-          localePrefix: {
-            moduleName: "WS",
-            masterName: "PROPUSGTYPE"
-          }
+          { 
+	    jsonPath: "applyScreen.property.usageCategory", 
+	    callBack: handleNA,
+            localePrefix: {
+              moduleName: "WS",
+              masterName: "PROPUSGTYPE"
+            }
        }
         ),
 
@@ -209,7 +211,14 @@ const getPropertyDetails = {
             labelName: "Property Sub usage type",
             labelKey: "WS_PROPERTY_SUB_USAGE_TYPE_LABEL"
           },
-          { jsonPath: "applyScreen.property.propertySubUsageType", callBack: handleNA }
+          { 
+            jsonPath: "applyScreen.property.units[0].usageCategory", 
+            callBack: handlePropertySubUsageType,
+            localePrefix: {
+              moduleName: "WS",
+              masterName: "PROPSUBUSGTYPE"
+            }
+          }
         ),
         reviewPlotSize: getLabelWithValue(
           {
@@ -295,7 +304,9 @@ export const dateOfBirth = getLabelWithValue(
   {
     labelKey: "WS_OWN_DETAIL_DOB_LABEL"
   },
-  { jsonPath: "applyScreen.property.owners[0].dob", callBack: handleNA }
+  { jsonPath: "applyScreen.property.owners[0].dob",
+    callBack: convertEpochToDateAndHandleNA
+  }
 )
 
 export const fatherName = getLabelWithValue(

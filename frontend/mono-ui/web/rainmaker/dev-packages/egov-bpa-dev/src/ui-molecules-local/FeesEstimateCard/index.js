@@ -116,7 +116,7 @@ function FeesEstimateCard(props) {
               <Typography variant="body2">
                 <LabelContainer
                   labelName="Total Amount"
-                  labelKey="TL_COMMON_TOTAL_AMT"
+                  labelKey="BPA_COMMON_TOTAL_AMT"
                 />
               </Typography>
             </Grid>
@@ -140,7 +140,7 @@ function FeesEstimateCard(props) {
         >
           <LabelContainer
             labelName="Total Amount"
-            labelKey="TL_COMMON_TOTAL_AMT"
+            labelKey="BPA_COMMON_TOTAL_AMT"
           />
         </Typography>
         <Typography className={totalHeadClassName} align="right">

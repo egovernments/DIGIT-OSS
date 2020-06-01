@@ -17,7 +17,6 @@ import {
   stepper,
   getMdmsData
 } from "../bpastakeholder/apply";
-import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { addressDestruct, setMobileNoField, setNameOfUser } from "../utils";
 
@@ -112,7 +111,6 @@ const screenConfig = {
         setNameOfUser(action, state, dispatch);
       }
     }
-    dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     return action;
   },
   components: {

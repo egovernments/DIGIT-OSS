@@ -17,19 +17,18 @@ import {
   getTransformedLocale,
   setBusinessServiceDataToLocalStorage
 } from "egov-ui-framework/ui-utils/commons";
-import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
 import { getAppSearchResults } from "../../../../ui-utils/commons";
-import { searchBill , requiredDocumentsData, setNocDocuments, getCurrentFinancialYear } from "../utils/index";
+import { searchBill , requiredDocumentsData, setNocDocuments, getCurrentFinancialYear, edcrDetailsToBpaDetails } from "../utils/index";
 import generatePdf from "../utils/generatePdfForBpa";
 // import { loadPdfGenerationDataForBpa } from "../utils/receiptTransformerForBpa";
 import { citizenFooter } from "./searchResource/citizenFooter";
 import { applicantSummary } from "./summaryResource/applicantSummary";
 import { basicSummary } from "./summaryResource/basicSummary"
-import { documentsSummary } from "./summaryResource/documentsSummary";
+import { previewSummary } from "./summaryResource/previewSummary";
 import { declarationSummary } from "./summaryResource/declarationSummary";
 import { scrutinySummary } from "./summaryResource/scrutinySummary";
 import { estimateSummary } from "./summaryResource/estimateSummary";
@@ -44,6 +43,7 @@ import "../egov-bpa/applyResource/index.css";
 import "../egov-bpa/applyResource/index.scss";
 import { getUserInfo, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { fieldSummary } from "./summaryResource/fieldSummary";
+import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 
 export const ifUserRoleExists = role => {
   let userInfo = JSON.parse(getUserInfo());
@@ -60,15 +60,15 @@ const titlebar = {
   children: {
     leftContainerH:getCommonContainer({
       header: getCommonHeader({
-        labelName: "Task Details",
-        labelKey: "NOC_TASK_DETAILS_HEADER"
+        labelName: "Application details",
+        labelKey: "BPA_TASK_DETAILS_HEADER"
       }),
       applicationNumber: {
         uiFramework: "custom-atoms-local",
         moduleName: "egov-bpa",
         componentPath: "ApplicationNoContainer",
         props: {
-          number: ""
+          number: "NA"
         }
       }
     }),
@@ -78,8 +78,7 @@ const titlebar = {
         moduleName: "egov-bpa",
         componentPath: "NoteAtom",
         props: {
-          labelName: "This licensee is valid for <xx> Year(s)",
-          labelKey: ["BPA_LICENSE_VALID_LABEL"],
+          number: "NA"
         },
         visible: false
       }
@@ -100,7 +99,9 @@ const titlebar2 = {
       moduleName: "egov-bpa",
       componentPath: "PermitNumber",
       gridDefination: {},
-      props: {}
+      props: {
+        number: "NA"
+      },
     },
     rightContainer:getCommonContainer({
       downloadMenu: {
@@ -108,7 +109,7 @@ const titlebar2 = {
         componentPath: "DownloadPrintButton",
         props: {
           data: {
-            label: {labelName : "DOWNLOAD" , labelKey :"TL_DOWNLOAD"},
+            label: {labelName : "DOWNLOAD" , labelKey :"BPA_DOWNLOAD"},
             leftIcon: "cloud_download",
             rightIcon: "arrow_drop_down",
             props: { variant: "outlined", style: { height: "60px", color : "#FE7A51", marginRight : 10 }, className: "tl-download-button" },
@@ -121,7 +122,7 @@ const titlebar2 = {
         componentPath: "DownloadPrintButton",
         props: {
           data: {
-            label: {labelName : "PRINT" , labelKey :"TL_PRINT"},
+            label: {labelName : "PRINT" , labelKey :"BPA_PRINT"},
             leftIcon: "print",
             rightIcon: "arrow_drop_down",
             props: { variant: "outlined", style: { height: "60px", color : "#FE7A51" }, className: "tl-download-button" },            
@@ -353,23 +354,79 @@ const setDownloadMenu = (action, state, dispatch) => {
   /** END */
 };
 
+const getRequiredMdmsDetails = async (state, dispatch) => {
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: getTenantId(),
+      moduleDetails: [
+        {
+          moduleName: "common-masters",
+          masterDetails: [
+            {
+              name: "DocumentType"
+            }
+          ]
+        },
+        {
+          moduleName: "BPA",
+          masterDetails: [
+            {
+              name: "DocTypeMapping"
+            },
+            {
+              name: "CheckList"
+            },
+            {
+              name: "RiskTypeComputation"
+            }
+          ]
+        }
+      ]
+    }
+  };
+  let payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+    dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
+}
+
 const setSearchResponse = async (
   state,
   dispatch,
   applicationNumber,
   tenantId, action
 ) => {
+  await getRequiredMdmsDetails(state, dispatch);
   const response = await getAppSearchResults([
     {
       key: "tenantId",
       value: tenantId
     },
-    { key: "applicationNos", value: applicationNumber }
+    { key: "applicationNo", value: applicationNumber }
   ]);
 
-  const edcrNumber = response.Bpa["0"].edcrNumber;
-  const status = response.Bpa["0"].status;
-  const riskType = response.Bpa["0"].riskType;
+  const edcrNumber = get(response, "Bpa[0].edcrNumber");
+  const status = get(response, "Bpa[0].status");
+  dispatch(prepareFinalObject("BPA", response.Bpa[0]));
+
+  let edcrRes = await edcrHttpRequest(
+    "post",
+    "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + edcrNumber + "&tenantId=" + tenantId,
+    "search", []
+    );
+
+  dispatch( prepareFinalObject( `scrutinyDetails`, edcrRes.edcrDetail[0] ));
+
+  await edcrDetailsToBpaDetails(state, dispatch);
+
+  let riskType = get(
+    state.screenConfiguration.preparedFinalObject,
+    "BPA.riskType"
+  );
   let businessServicesValue = "BPA";
   if (riskType === "LOW") {
     businessServicesValue = "BPA_LOW";
@@ -413,7 +470,7 @@ const setSearchResponse = async (
   if (status && status === "CITIZEN_APPROVAL_INPROCESS") {
     let userInfo = JSON.parse(getUserInfo()),
     roles = get(userInfo, "roles"),
-    owners = get(response.Bpa["0"], "owners"),
+    owners = get(response.Bpa["0"].landInfo, "owners"),
     archtect = "BPA_ARCHITECT",
     isTrue = false, isOwner = true;
     if(roles && roles.length > 0) {
@@ -426,7 +483,7 @@ const setSearchResponse = async (
 
     if(isTrue && owners && owners.length > 0) {
       owners.forEach(owner => {
-        if(owner.uuid === userInfo.uuid) {
+        if(owner.mobileNumber === userInfo.mobileNumber) { //owner.uuid === userInfo.uuid
           if(owner.roles && owner.roles.length > 0 ) {
             owner.roles.forEach(owrRole => {
               if(owrRole.code === archtect) {
@@ -446,49 +503,38 @@ const setSearchResponse = async (
           false
         )
       )
-    }
-    dispatch(
-      handleField(
+    } else {
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.body.children.cardContent.children.declarationSummary.children.headers",
+          "visible",
+          true
+        )
+      );
+      dispatch(
+        handleField(
         "search-preview",
-        "components.div.children.body.children.cardContent.children.declarationSummary.children.headers",
+        "components.div.children.body.children.cardContent.children.declarationSummary.children.header.children.body.children.citizen",
         "visible",
         true
+        )
       )
-    );
-    dispatch(
-      handleField(
-      "search-preview",
-      "components.div.children.body.children.cardContent.children.declarationSummary.children.header.children.body.children.citizen",
-      "visible",
-      true
-    )
-  )
+    }
   }
 
-  dispatch(prepareFinalObject("BPA", response.Bpa[0]));
+  
   if(response && response.Bpa["0"] && response.Bpa["0"].documents) {
     dispatch(prepareFinalObject("documentsTemp", response.Bpa["0"].documents));
   }
-    let edcrRes = await edcrHttpRequest(
-      "post",
-      "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + edcrNumber + "&tenantId=" + tenantId,
-      "search", []
-      );
 
-  dispatch(
-    prepareFinalObject(
-      `scrutinyDetails`,
-      edcrRes.edcrDetail[0]
-    )
-  );
-
-  if ( response && response.Bpa["0"] && response.Bpa["0"].permitOrderNo ) {
+  if ( response && get(response, "Bpa[0].approvalNo") ) {
     dispatch(
       handleField(
         "search-preview",
         "components.div.children.headerDiv.children.header2.children.titlebar2.children.permitNumber",
         "props.number",
-        response.Bpa["0"].permitOrderNo
+        get(response, "Bpa[0].approvalNo")
       )
     );
   } else {
@@ -516,7 +562,7 @@ const setSearchResponse = async (
   if (
     get(
       response,
-      "BPA.ownershipCategory",
+      "BPA.landInfo.ownershipCategory",
       ""
     ).startsWith("INSTITUTION")
   ) {
@@ -532,15 +578,16 @@ const setSearchResponse = async (
 
   setProposedBuildingData(state, dispatch);
 
-  if(get(response, "Bpa[0].validityDate")) {
+  if(get(response, "Bpa[0].additionalDetails.validityDate")) {
     dispatch(
       handleField(
         "search-preview",
         "components.div.children.headerDiv.children.header.children.rightContainerH.children.footNote",
-        "props.labelKey[2]",
-        convertEpochToDate(get(response, "Bpa[0].validityDate"))
+        "props.number",
+        convertEpochToDate(get(response, "Bpa[0].additionalDetails.validityDate"))
       )
     );
+
     dispatch(
       handleField(
         "search-preview",
@@ -553,6 +600,7 @@ const setSearchResponse = async (
   dispatch(prepareFinalObject("documentDetailsPreview", {}));
   requiredDocumentsData(state, dispatch, action);
   setDownloadMenu(action, state, dispatch);
+  dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
 };
 
 const screenConfig = {
@@ -564,7 +612,6 @@ const screenConfig = {
       "applicationNumber"
     );
     const tenantId = getQueryArg(window.location.href, "tenantId");
-    dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));    
     setSearchResponse(state, dispatch, applicationNumber, tenantId, action);
 
     const queryObject = [
@@ -586,7 +633,7 @@ const screenConfig = {
     );
     set(
       action,
-      "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.header.children.editSection.visible",
+      "screenConfig.components.div.children.body.children.cardContent.children.previewSummary.children.cardContent.children.header.children.editSection.visible",
       false
     );
     set(
@@ -602,11 +649,6 @@ const screenConfig = {
     set(
       action,
       "screenConfig.components.div.children.body.children.cardContent.children.plotAndBoundaryInfoSummary.children.cardContent.children.header.children.editSection.visible",
-      false
-    );
-    set(
-      action,
-      "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.uploadedDocumentDetailsCard.visible",
       false
     );
     set(
@@ -690,7 +732,7 @@ const screenConfig = {
           props: {
             dataPath: "BPA",
             moduleName: "BPA",
-            updateUrl: "/bpa-services/_update"
+            updateUrl: "/bpa-services/v1/bpa/_update"
           }
         },
         sendToArchPickerDialog :{
@@ -738,7 +780,7 @@ const screenConfig = {
           basicSummary: basicSummary,
           scrutinySummary:scrutinySummary,
           applicantSummary: applicantSummary,
-          documentsSummary: documentsSummary,
+          previewSummary: previewSummary,
           declarationSummary: declarationSummary,
           permitConditions: permitConditions,
           permitListSummary : permitListSummary

@@ -41,7 +41,7 @@ export const gotoHomeFooter = getCommonApplyFooter({
       //downloadReceiptButtonLabel: getLabel
       goToHomeButtonLabel: getLabel({
         labelName: "GO TO HOME",
-        labelKey: "NOC_COMMON_BUTTON_HOME"
+        labelKey: "BPA_HOME_BUTTON"
       })
     },
     // Check this onClickDefinition later again
@@ -60,12 +60,14 @@ export const applicationSuccessFooter = (
   tenant
 ) => {
   let status = (get(state.screenConfiguration.preparedFinalObject, "BPA[0].status") ||  get(state.screenConfiguration.preparedFinalObject, "BPA.status"));
-  let riskType = (get(state.screenConfiguration.preparedFinalObject, "BPA[0].riskType") ||  get(state.screenConfiguration.preparedFinalObject, "BPA.riskType"));
+  let businessService = (get(state.screenConfiguration.preparedFinalObject, "BPA[0].businessService") ||  get(state.screenConfiguration.preparedFinalObject, "BPA.businessService"));
   let billbService
-  if(riskType === "LOW") {
+  if(businessService === "BPA_LOW") {
     billbService = "BPA.LOW_RISK_PERMIT_FEE"
-  } else {
+  } else if(businessService === "BPA"){
     billbService = (( status=="PENDING_APPL_FEE")?"BPA.NC_APP_FEE":"BPA.NC_SAN_FEE");
+  } else if(businessService === "BPA_OC"){
+    billbService = (( status=="PENDING_APPL_FEE")?"BPA.NC_OC_APP_FEE":"BPA.NC_OC_SAN_FEE");
   }
   let purpose = getQueryArg(window.location.href, "purpose");
   let isTrue = false;
@@ -88,7 +90,7 @@ export const applicationSuccessFooter = (
         //downloadReceiptButtonLabel: getLabel
         goToHomeButtonLabel: getLabel({
           labelName: "GO TO HOME",
-          labelKey: "NOC_COMMON_BUTTON_HOME"
+          labelKey: "BPA_HOME_BUTTON"
         })
       },
       // Check this onClickDefinition later again
@@ -112,7 +114,7 @@ export const applicationSuccessFooter = (
       children: {
         downloadFormButtonLabel: getLabel({
           labelName: "DOWNLOAD CONFIRMATION FORM",
-          labelKey: "NOC_APPLICATION_BUTTON_DOWN_CONF"
+          labelKey: "BPA_APPLICATION_BUTTON_DOWN_CONF"
         })
       },
       onClickDefination: {
@@ -137,7 +139,7 @@ export const applicationSuccessFooter = (
       children: {
         printFormButtonLabel: getLabel({
           labelName: "PRINT CONFIRMATION FORM",
-          labelKey: "NOC_APPLICATION_BUTTON_PRINT_CONF"
+          labelKey: "BPA_APPLICATION_BUTTON_PRINT_CONF"
         })
       },
       onClickDefination: {
@@ -162,7 +164,7 @@ export const applicationSuccessFooter = (
       children: {
         proceedToPaymentButtonLabel: getLabel({
           labelName: "Proceed to payment",
-          labelKey: "NOC_PROCEED_PAYMENT"
+          labelKey: "BPA_PROCEED_PAYMENT"
         })
       },
       //Add onClickDefination and RoleDefination later
@@ -195,7 +197,7 @@ export const applicationSuccessFooter = (
       children: {
         submitButtonLabel: getLabel({
           labelName: "MAKE PAYMENT",
-          labelKey: "TL_COMMON_BUTTON_CITIZEN_MAKE_PAYMENT"
+          labelKey: "BPA_CITIZEN_MAKE_PAYMENT"
         })
       },
       onClickDefination: {
@@ -233,7 +235,7 @@ export const approvalSuccessFooter = getCommonApplyFooter({
       //downloadReceiptButtonLabel: getLabel
       goToHomeButtonLabel: getLabel({
         labelName: "GO TO HOME",
-        labelKey: "TL_COMMON_BUTTON_HOME"
+        labelKey: "BPA_HOME_BUTTON"
       })
     },
     // Check this onClickDefinition later again

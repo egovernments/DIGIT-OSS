@@ -15,10 +15,10 @@ import get from "lodash/get";
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { UploadMultipleFile } from "../../ui-molecules-local";
-import Typography from "@material-ui/core/Typography";
-import MultiDownloadCard from "../MultiDownloadCard";
-
+import UploadCard from "../UploadCard"
+import "./index.css";
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import {getLoggedinUserRole} from "../../ui-config/screens/specs/utils/index.js";
 const themeStyles = theme => ({
   documentContainer: {
     backgroundColor: "#F2F2F2",
@@ -132,7 +132,7 @@ class BpaDocumentList extends Component {
     const {
       documentsList, 
       documentDetailsUploadRedux = {}, 
-      prepareFinalObject, bpaDetails
+      prepareFinalObject
     } = this.props;
     let index = 0;
     documentsList.forEach(docType => {
@@ -213,6 +213,7 @@ class BpaDocumentList extends Component {
             doc.fileStore = docs.fileStoreId;
             doc.fileName = docs.fileName;
             doc.fileUrl = docs.fileUrl;
+            doc.isClickable = true;
             if (doc.id) {
               doc.id = docs.id;
             }
@@ -247,18 +248,23 @@ class BpaDocumentList extends Component {
 
   handleDocument = async (file, fileStoreId) => {
     let { uploadedDocIndex } = this.state;
-    const { prepareFinalObject, documentDetailsUploadRedux, bpaDetails, bpaSendBackAcionStatus } = this.props;
-    // const fileUrl =  getFileUrlFromAPI(fileStoreId).then(fileUrl)
+    const { prepareFinalObject, documentDetailsUploadRedux, bpaDetails, bpaSendBackAcionStatus, wfState } = this.props;
     const fileUrl = await getFileUrlFromAPI(fileStoreId);
     let appDocumentList = {};
+    let fileObj  = {
+      fileName: file.name,
+      fileStoreId,
+      fileUrl: Object.values(fileUrl)[0],
+      isClickable:true,
+      additionalDetails:{
+        uploadedBy: getLoggedinUserRole(wfState),
+        uploadedTime: new Date().getTime()
+      }
+    };
     if (documentDetailsUploadRedux[uploadedDocIndex] &&
       documentDetailsUploadRedux[uploadedDocIndex].documents) {
 
-      documentDetailsUploadRedux[uploadedDocIndex].documents.push({
-        fileName: file.name,
-        fileStoreId,
-        fileUrl: Object.values(fileUrl)[0]
-      });
+      documentDetailsUploadRedux[uploadedDocIndex].documents.push(fileObj);
       appDocumentList = {
         ...documentDetailsUploadRedux
       };
@@ -269,11 +275,7 @@ class BpaDocumentList extends Component {
         [uploadedDocIndex]: {
           ...documentDetailsUploadRedux[uploadedDocIndex],
           documents: [
-            {
-              fileName: file.name,
-              fileStoreId,
-              fileUrl: Object.values(fileUrl)[0]
-            }
+            fileObj
           ]
         }
       }
@@ -378,109 +380,30 @@ class BpaDocumentList extends Component {
         })
       })
     }
-    
+   
+    if(documentDetailsUploadRedux[key]){
+      card.documents = documentDetailsUploadRedux[key].documents;
+      let mergedDropDownValue = {...card.dropDownValues, ...documentDetailsUploadRedux[key].dropDownValues}
+      card.dropDownValues = mergedDropDownValue;
+    }
     return (
-      <React.Fragment>      
-        <Grid>    
-          <div>     
-          {
-      data && data.length > 0 ? (
-        <div style = {{
-          display: "flex"
-        }}>
-          <MultiDownloadCard data = {data}  {...rest} />
-        </div>
-        ) : verifierData && verifierData.length > 0 && (
-          <div style = {{
-            display: "flex"
-          }}>
-            <MultiDownloadCard data = {verifierData}  {...rest} />
-          </div>
-        )
-      }
-        </div> 
-      </Grid>
-      <Grid container={true}>
-        <Grid item={true} xs={4} sm={2} md={1} className={classes.iconDiv}>
-          {documentDetailsUploadRedux[key] && documentDetailsUploadRedux[key].documents ? (
-        <div className={classes.documentSuccess}>
-              <Icon>
-                <i class="material-icons">done</i>
-              </Icon>
-            </div>
-        ) : (
-        <div className={classes.documentIcon}>
-              <span>{key + 1}</span>
-            </div>
-        )}
-        </Grid>
-        <Grid
-      item={true}
-      xs={10}
-      sm={5}
-      md={4}
-      align="left"
-      className={classes.descriptionDiv}
-      >
-          <LabelContainer
-      labelKey={getTransformedLocale(card.name)}
-      style={styles.documentName}
-      />
-          {card.required && requiredIcon}
-          <Typography variant="caption">
-            <LabelContainer
-      labelKey={getTransformedLocale("TL_UPLOAD_RESTRICTIONS")}
-      />
-          </Typography>
-        </Grid>
-        <Grid item={true} xs={12} sm={6} md={4}>
-          {card.dropDownValues && (
-      <TextFieldContainer
-      select={true}
-      label={{ labelKey: getTransformedLocale(card.dropDownValues.label) }}
-      placeholder={{ labelKey: card.dropDownValues.label }}
-      data={card.dropDownValues.menu}
-      optionValue="code"
-      optionLabel="label"
-      autoSelect={true}
-      required={card.required}
-      onChange={event => this.handleChange(key, event)}
-      jsonPath={jsonPath}
-      />
-      )}
-        </Grid>
-        <Grid
-      item={true}
-      xs={12}
-      sm={12}
-      // md={6}
-      className={classes.fileUploadDiv}
-      >
-          <UploadMultipleFile
-      classes={this.props.classes}
-      handleFileUpload={e => 
-        handleFileUpload(e, this.handleDocument, this.props)
-      }
-      uploaded={
-      documentDetailsUploadRedux[key] && documentDetailsUploadRedux[key].documents
-        ? true
-        : false
-      }
-      removeDocument={() => this.removeDocument(key)}
-      documents={
-      documentDetailsUploadRedux[key] && documentDetailsUploadRedux[key].documents
-      }
-      onButtonClick={() => this.onUploadClick(key)}
-      inputProps={this.props.inputProps}
-      buttonLabel={this.props.buttonLabel}
-      id={`doc-${key+1}`}
-      />
-        </Grid>
-      </Grid>
+      <React.Fragment>  
+         <UploadCard
+           docItem={card}
+           docIndex={key}
+           key={key.toString()}
+           handleDocument ={this.handleDocument}
+           removeDocument={this.removeDocument}
+           onUploadClick={this.onUploadClick}
+           handleFileUpload={this.handleFileUpload}
+           handleChange={this.handleChange}
+           uploadedDocIndex = {this.state.uploadedDocIndex}
+           toggleEditClick = {this.toggleEditClick}
+           {...rest}
+         />
       </React.Fragment>
       );
   };
-
   render() {
     const { classes, documentsList } = this.props;
     let index = 0;
@@ -547,8 +470,12 @@ const mapStateToProps = state => {
     "BPA",
     {}
   );
-  let bpaSendBackAcionStatus = get(bpaDetails, "status").includes("CITIZEN_ACTION_PENDING");
-  return { documentDetailsUploadRedux, documentDetailsPreview, moduleName, bpaDetails, bpaSendBackAcionStatus };
+  const wfState = get(
+    screenConfiguration.preparedFinalObject.applicationProcessInstances,
+    "state"
+  );
+  let bpaSendBackAcionStatus =  get(bpaDetails, "status") && get(bpaDetails, "status").includes("CITIZEN_ACTION_PENDING");
+  return { documentDetailsUploadRedux, documentDetailsPreview, moduleName, bpaDetails, bpaSendBackAcionStatus, wfState };
 };
 
 const mapDispatchToProps = dispatch => {

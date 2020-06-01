@@ -1,5 +1,6 @@
 import React from "react";
-import { Button, TextField, Card, Image } from "components";
+import { TextField, Card, Image } from "components";
+import { Button} from "egov-ui-framework/ui-atoms";
 import Label from "egov-ui-kit/utils/translationNode";
 import logo from "egov-ui-kit/assets/images/logo_black.png";
 import { Icon } from "egov-ui-framework/ui-atoms";
@@ -76,7 +77,18 @@ const OTP = ({ handleFieldChange, form, phoneNumber, resendOTP ,logoUrl,history,
               <Label id="otp-resendt" label="CORE_OTP_SECONDS" />
               </div>
             )}         
-          <Button {...submit} primary={true} fullWidth={true} />
+           <Button
+           {...submit}
+            style={{
+              height: "48px",     
+              width:"100%"        
+            }}
+            variant={"contained"}
+            color={"primary"}
+          >
+            <Label buttonLabel={true}   labelStyle={{fontWeight:500 }}  label="CORE_COMMON_CONTINUE" />
+          </Button>
+          {/* <Button {...submit} primary={true} fullWidth={true} /> */}
         </div>
       }
     />

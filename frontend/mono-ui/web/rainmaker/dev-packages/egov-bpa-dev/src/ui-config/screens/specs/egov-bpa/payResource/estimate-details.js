@@ -8,7 +8,7 @@ const estimate = getCommonGrayCard({
     componentPath: "BpaEstimateCardContainer",
     props: {
       estimate: {
-        header: { labelName: "Fee Estimate", labelKey: "NOC_SUMMARY_FEE_EST" },
+        header: { labelName: "Fee Estimate", labelKey: "BPA_SUMMARY_FEE_EST" },
         fees: [{ name: "ASD", value: 123 }],
         extra: [
           { textLeft: "Last Date for Rebate (20% of TL)" },

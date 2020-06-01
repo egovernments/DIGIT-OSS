@@ -43,42 +43,26 @@ const setAutopopulatedvalues = async (state, dispatch) => {
         consumptionDetails['lastReadingDate'] = convertEpochToDate(new Date().setMonth(new Date().getMonth() - 1));
     } else {
         let prevBillingPeriod = get(state, `screenConfiguration.preparedFinalObject.consumptionDetails[0].billingPeriod`);
-        let date = new Date();
+        let tempprevBillingPeriod = prevBillingPeriod.trim().split("-")[1].trim()
+        let dateStr = tempprevBillingPeriod.split('/');
+        let newDF = new Date(dateStr[1] + '-' + dateStr[0] + '-' +dateStr[2]);
+        newDF = newDF.setDate(newDF.getDate() + 1);
+        newDF = new Date(newDF)
         if (billingFrequency === "quarterly") {
-            let preValue = prevBillingPeriod[1]
-            if (preValue === "4") {
-                let presYear = date.getFullYear();
-                let prevYear = date.getFullYear() - 1;
-                consumptionDetails['billingPeriod'] = 'Q1-' + prevYear + '-' + presYear.toString().substring(2);
-                consumptionDetails['lastReading'] = 0
-                consumptionDetails['consumption'] = 0;
-                consumptionDetails['lastReadingDate'] = 0;
-            } else {
-                let newValue = parseInt(preValue) + 1
-                let finalString = newValue.toString()
-                let index = 1
-                prevBillingPeriod = prevBillingPeriod.substr(0, index) + finalString + prevBillingPeriod.substr(index + 1);
-                consumptionDetails['billingPeriod'] = prevBillingPeriod
-            }
+            let quarter = Math.floor((newDF.getMonth() / 3));
+            let firstDate = new Date(newDF.getFullYear(), quarter * 3, 1);
+            let endDate = new Date(firstDate.getFullYear(), firstDate.getMonth() + 3, 0);
+            firstDate = firstDate.getDate() + '/' + (firstDate.getMonth()+1) + '/' + firstDate.getFullYear()
+            endDate = endDate.getDate() + '/' + (endDate.getMonth()+1) + '/' + endDate.getFullYear()
+            consumptionDetails['billingPeriod'] = firstDate + " - " + endDate            
         }
         if (billingFrequency === "monthly") {
-            let yearOfLastMeter = prevBillingPeriod.trim().split("-")[1];
-            let prevDate = prevBillingPeriod.replace(/ .*/, '');
-            let getDatefromString = new Date(prevDate + '-1-01').getMonth() + 1
-            if (getDatefromString > 11) {
-                date.setMonth(0)
-                const month = date.toLocaleString('default', { month: 'short' });
-                prevBillingPeriod = month + ' - ' + (parseInt(yearOfLastMeter) + 1)
-                consumptionDetails['billingPeriod'] = prevBillingPeriod
-                consumptionDetails['lastReading'] = 0
-                consumptionDetails['consumption'] = 0;
-                consumptionDetails['lastReadingDate'] = '';
-            } else {
-                date.setMonth(getDatefromString)
-                const month = date.toLocaleString('default', { month: 'short' });
-                prevBillingPeriod = month + ' - ' + yearOfLastMeter
-                consumptionDetails['billingPeriod'] = prevBillingPeriod
-            }
+            // Added for billing Period           
+            let lastDate = new Date(newDF.getFullYear(), newDF.getMonth() + 1, 0)
+            let firstDate = newDF.getDate() + '/' + (newDF.getMonth()+1) + '/' + newDF.getFullYear()
+            lastDate = lastDate.getDate() + '/' + (lastDate.getMonth()+1) + '/' + lastDate.getFullYear()
+            console.log(firstDate + ' - ' + lastDate);
+            consumptionDetails['billingPeriod'] = firstDate + ' - ' + lastDate            
         }
         consumptionDetails['lastReading'] = get(state, `screenConfiguration.preparedFinalObject.consumptionDetails[0].currentReading`);
         consumptionDetails['consumption'] = ''

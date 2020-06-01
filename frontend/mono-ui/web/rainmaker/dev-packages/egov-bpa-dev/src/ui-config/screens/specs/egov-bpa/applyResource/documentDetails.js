@@ -9,7 +9,7 @@ export const documentDetails = getCommonCard({
   header: getCommonTitle(
     {
       labelName: "Required Documents",
-      labelKey: "NOC_DOCUMENT_DETAILS_HEADER"
+      labelKey: "BPA_DOCUMENT_DETAILS_HEADER"
     },
     {
       style: {
@@ -20,7 +20,7 @@ export const documentDetails = getCommonCard({
   subText: getCommonParagraph({
     labelName:
       "Only one file can be uploaded for one document. If multiple files need to be uploaded then please combine all files in a pdf and then upload",
-    labelKey: "NOC_DOCUMENT_DETAILS_SUBTEXT"
+    labelKey: "BPA_DOCUMENT_DETAILS_SUBTEXT"
   }),
   break: getBreak(),
   documentList: {
@@ -58,7 +58,7 @@ export const documentDetails = getCommonCard({
       ],
       buttonLabel: {
         labelName: "UPLOAD FILE",
-        labelKey: "NOC_DOCUMENT_DETAILS_BUTTON_UPLOAD_FILE"
+        labelKey: "BPA_DOC_DET_BTN_UPLOAD_FILE"
       },
       // description: "Only .jpg and .pdf files. 6MB max file size.",
       inputProps: {

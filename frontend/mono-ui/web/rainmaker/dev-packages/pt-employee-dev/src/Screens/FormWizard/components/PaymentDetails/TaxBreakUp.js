@@ -39,8 +39,8 @@ const AdditionalDetails = ({
                       totalAmount
                         ? `${
                         !(optionSelected === "Partial_Amount")
-                          ? totalAmount
-                          : totalAmount -
+                          ? parseInt(totalAmount)
+                          : parseInt(totalAmount -
                           get(
                             taxHeadEstimates[
                             taxHeadEstimates.findIndex(
@@ -52,7 +52,7 @@ const AdditionalDetails = ({
                             ],
                             "estimateAmount",
                             0
-                          )
+                          ))
                         }`
                         : totalAmount === 0
                           ? "0"
@@ -141,8 +141,8 @@ const AdditionalDetails = ({
                     totalAmount
                       ? `${
                           !(optionSelected === "Partial_Amount")
-                            ? totalAmount
-                            : totalAmount -
+                            ? parseInt(totalAmount)
+                            : parseInt(totalAmount -
                               get(
                                 taxHeadEstimates[
                                   taxHeadEstimates.findIndex(
@@ -154,7 +154,7 @@ const AdditionalDetails = ({
                                 ],
                                 "estimateAmount",
                                 0
-                              )
+                              ))
                         }`
                       : totalAmount === 0
                       ? "0"

@@ -1,5 +1,5 @@
 import React from "react";
-import { sortByEpoch, getEpochForDate, getTextToLocalMapping } from "../../utils";
+import { sortByEpoch, getEpochForDate } from "../../utils";
 import './index.css'
 
 export const searchApplicationResults = {
@@ -10,7 +10,8 @@ export const searchApplicationResults = {
   props: {
     columns: [
       {
-        name: getTextToLocalMapping("Consumer No"),
+        name: "Consumer No",
+        labelKey: "WS_COMMON_TABLE_COL_CONSUMER_NO_LABEL", 
         options: {
           filter: false,
           customBodyRender: (value, data) => {
@@ -29,7 +30,8 @@ export const searchApplicationResults = {
         }
       },
       {
-        name: getTextToLocalMapping("Application No"),
+        name: "Application No",
+        labelKey: "WS_COMMON_TABLE_COL_APP_NO_LABEL", 
         options: {
           filter: false,
           customBodyRender: (value, data) => {
@@ -48,7 +50,8 @@ export const searchApplicationResults = {
         }
       },
       {
-        name: getTextToLocalMapping("Application Type"),
+        name: "Application Type",
+        labelKey: "WS_COMMON_TABLE_COL_APP_TYPE_LABEL",
         options: {
           filter: false,
           customBodyRender: value => (
@@ -58,31 +61,32 @@ export const searchApplicationResults = {
           )
         }
       },
-      getTextToLocalMapping("Owner Name"),
-      getTextToLocalMapping("Application Status"),
-      getTextToLocalMapping("Address"),
+      {name : "Owner Name",labelKey: "WS_COMMON_TABLE_COL_OWN_NAME_LABEL" },
+      {name : "Application Status",labelKey: "WS_COMMON_TABLE_COL_APPLICATION_STATUS_LABEL" },
+      {name : "Address",labelKey: "WS_COMMON_TABLE_COL_ADDRESS" },
       {
         name: "tenantId",
+        labelKey: "WS_COMMON_TABLE_COL_TENANTID_LABEL",
         options: {
           display: false
         }
       },
       {
         name: "service",
+        labelKey: "WS_COMMON_TABLE_COL_SERVICE_LABEL", 
         options: {
           display: false
         }
       },
       {
         name: "connectionType",
+        labelKey: "WS_COMMON_TABLE_COL_CONNECTIONTYPE_LABEL",
         options: {
           display: false
         }
       }
     ],
-    title: getTextToLocalMapping(
-      "Search Results for Water & Sewerage Connections"
-    ),
+    title: {labelKey:"WS_HOME_SEARCH_APPLICATION_RESULTS_TABLE_HEADING", labelName:"Search Results for Water & Sewerage Application"},
     options: {
       filter: false,
       download: false,

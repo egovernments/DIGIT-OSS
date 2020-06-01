@@ -678,7 +678,7 @@ export const getFileUrlFromAPI = async fileStoreId => {
 export const downloadReceipt = (receiptQueryString) => {
   return async (dispatch) => {
     if (receiptQueryString) {
-      dispatch(downloadReceiptPending());
+      // dispatch(downloadReceiptPending());
       try {
         const payloadReceiptDetails = await httpRequest(FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString);
         const queryStr = [

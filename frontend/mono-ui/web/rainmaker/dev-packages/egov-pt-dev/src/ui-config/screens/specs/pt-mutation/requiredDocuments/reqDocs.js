@@ -1,13 +1,7 @@
-import {
-  getCommonHeader,
-  getBreak,
-  getCommonTitle,
-  getCommonParagraph,
-  getCommonContainer
-} from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getBreak, getCommonContainer, getCommonHeader, getCommonParagraph, getCommonTitle } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { getCommonGrayCard, getLabelOnlyValue } from "../../utils";
 import { footer } from "./footer";
-import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 
 const styles = {
   header: {
@@ -45,8 +39,8 @@ const styles = {
 
 const header = getCommonHeader(
   {
-    labelName: "Required Documents-Fire NOC",
-    labelKey: "NOC_REQ_DOCS_HEADER"
+    labelName: "Required Documents-PT",
+    labelKey: "PT_REQ_DOCS_HEADER"
   },
   {
     style: styles.header
@@ -59,7 +53,7 @@ const generateDocument = item => {
     item.code &&
     getCommonTitle(
       {
-        labelKey: getTransformedLocale(`NOC_${item.code}_HEADING`)
+        labelKey: getTransformedLocale(`PT_${item.code}_HEADING`)
       },
       {
         style: styles.subHeader
@@ -69,10 +63,13 @@ const generateDocument = item => {
   // Add documents in individual grey cards
   let docs = {};
   if (item.hasOwnProperty("dropdownData")) {
+    item.dropdownData = item.dropdownData.filter(item => {
+      return item.active;
+    });
     docs = item.dropdownData.reduce((obj, doc) => {
       obj[doc.code] = getLabelOnlyValue(
         {
-          labelKey: getTransformedLocale(`NOC_${doc.code}_LABEL`)
+          labelKey: getTransformedLocale(`PT_${doc.code}_LABEL`)
         },
         {
           style: styles.docs
@@ -81,10 +78,13 @@ const generateDocument = item => {
       return obj;
     }, {});
   } else if (item.hasOwnProperty("options")) {
+    item.options = item.options.filter(item => {
+      return item.active;
+    });
     docs = item.options.reduce((obj, doc) => {
       obj[doc.code] = getLabelOnlyValue(
         {
-          labelKey: getTransformedLocale(`NOC_${doc.code}_LABEL`)
+          labelKey: getTransformedLocale(`PT_${doc.code}_LABEL`)
         },
         {
           style: styles.docs
@@ -97,13 +97,13 @@ const generateDocument = item => {
   // Add description to individual grey cards
   let subParagraph = item.description
     ? getCommonParagraph(
-        {
-          labelKey: getTransformedLocale(`NOC_${item.description}_NOTE`)
-        },
-        {
-          style: styles.description
-        }
-      )
+      {
+        labelKey: getTransformedLocale(`PT_${item.description}_NOTE`)
+      },
+      {
+        style: styles.description
+      }
+    )
     : {};
 
   return getCommonGrayCard({
@@ -147,7 +147,7 @@ export const getRequiredDocuments = documents => {
     },
     {
       style: {
-        paddingBottom: 75
+        // paddingBottom: 75
       }
     }
   );

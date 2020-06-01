@@ -119,7 +119,7 @@ export const footerApprove = (applicationNumber, tenantId, queryPurpose) => {
       children: {
         nextButtonLabel: getLabel({
           labelName: "BACK",
-          labelKey: "TL_COMMON_BUTTON_BACK"
+          labelKey: "BPA_COMMON_BUTTON_BACK"
         })
       },
       onClickDefination: {

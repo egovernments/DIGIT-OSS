@@ -125,14 +125,14 @@ export const corrospondanceAddr = getCommonCard({
       tradeLocDoorHouseNo: getTextField({
         label: {
           labelName: "Door/House No.",
-          labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
+          labelKey: "BPA_DETAILS_DOOR_NO_LABEL"
         },
         props: {
           className: "applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Door/House No.",
-          labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_PLACEHOLDER"
+          labelKey: "BPA_DETAILS_DOOR_NO_PLACEHOLDER"
         },
         pattern: getPattern("DoorHouseNo"),
         jsonPath: "Licenses[0].tradeLicenseDetail.address.doorNo"
@@ -140,14 +140,14 @@ export const corrospondanceAddr = getCommonCard({
       tradeLocBuilidingName: getTextField({
         label: {
           labelName: "Building/Colony Name",
-          labelKey: "TL_NEW_TRADE_DETAILS_BLDG_NAME_LABEL"
+          labelKey: "BPA_DETAILS_BLDG_NAME_LABEL"
         },
         props: {
           className: "applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Building/Colony Name",
-          labelKey: "TL_NEW_TRADE_DETAILS_BLDG_NAME_PLACEHOLDER"
+          labelKey: "BPA_DETAILS_BLDG_NAME_PLACEHOLDER"
         },
         pattern: getPattern("BuildingStreet"),
         jsonPath: "Licenses[0].tradeLicenseDetail.address.buildingName"
@@ -155,14 +155,14 @@ export const corrospondanceAddr = getCommonCard({
       tradeLocStreetName: getTextField({
         label: {
           labelName: "Street Name",
-          labelKey: "TL_NEW_TRADE_DETAILS_SRT_NAME_LABEL"
+          labelKey: "BPA_DETAILS_SRT_NAME_LABEL"
         },
         props: {
           className: "applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Street Name",
-          labelKey: "TL_NEW_TRADE_DETAILS_SRT_NAME_PLACEHOLDER"
+          labelKey: "BPA_DETAILS_SRT_NAME_PLACEHOLDER"
         },
         pattern: getPattern("BuildingStreet"),
         jsonPath: "Licenses[0].tradeLicenseDetail.address.street"
@@ -187,7 +187,7 @@ export const corrospondanceAddr = getCommonCard({
       tradeLocCity: getTextField({
         label: {
           labelName: "City",
-          labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
+          labelKey: "BPA_CITY_LABEL"
         },
         props: {
           className: "applicant-details-error"
@@ -204,7 +204,7 @@ export const corrospondanceAddr = getCommonCard({
       tradeLocPincode: getTextField({
         label: {
           labelName: "Pincode",
-          labelKey: "TL_NEW_TRADE_DETAILS_PIN_LABEL"
+          labelKey: "BPA_DETAILS_PIN_LABEL"
         },
         required: true,
 
@@ -213,7 +213,7 @@ export const corrospondanceAddr = getCommonCard({
         },
         placeholder: {
           labelName: "Enter Pincode",
-          labelKey: "TL_NEW_TRADE_DETAILS_PIN_PLACEHOLDER"
+          labelKey: "BPA_DETAILS_PIN_PLACEHOLDER"
         },
         pattern: getPattern("Pincode"),
         jsonPath: "Licenses[0].tradeLicenseDetail.address.pincode"
@@ -239,14 +239,14 @@ export const permanentAddr = getCommonCard({
     tradeLocDoorHouseNo: getTextField({
       label: {
         labelName: "Door/House No.",
-        labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
+        labelKey: "BPA_DETAILS_DOOR_NO_LABEL"
       },
       props: {
         className: "applicant-details-error"
       },
       placeholder: {
         labelName: "Enter Door/House No.",
-        labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_PLACEHOLDER"
+        labelKey: "BPA_DETAILS_DOOR_NO_PLACEHOLDER"
       },
       pattern: getPattern("DoorHouseNo"),
       jsonPath: "LicensesTemp[0].userData.address.doorNo"
@@ -254,14 +254,14 @@ export const permanentAddr = getCommonCard({
     tradeLocBuilidingName: getTextField({
       label: {
         labelName: "Building/Colony Name",
-        labelKey: "TL_NEW_TRADE_DETAILS_BLDG_NAME_LABEL"
+        labelKey: "BPA_DETAILS_BLDG_NAME_LABEL"
       },
       props: {
         className: "applicant-details-error"
       },
       placeholder: {
         labelName: "Enter Building/Colony Name",
-        labelKey: "TL_NEW_TRADE_DETAILS_BLDG_NAME_PLACEHOLDER"
+        labelKey: "BPA_DETAILS_BLDG_NAME_PLACEHOLDER"
       },
       pattern: getPattern("BuildingStreet"),
       jsonPath: "LicensesTemp[0].userData.address.buildingName"
@@ -269,14 +269,14 @@ export const permanentAddr = getCommonCard({
     tradeLocStreetName: getTextField({
       label: {
         labelName: "Street Name",
-        labelKey: "TL_NEW_TRADE_DETAILS_SRT_NAME_LABEL"
+        labelKey: "BPA_DETAILS_SRT_NAME_LABEL"
       },
       props: {
         className: "applicant-details-error"
       },
       placeholder: {
         labelName: "Enter Street Name",
-        labelKey: "TL_NEW_TRADE_DETAILS_SRT_NAME_PLACEHOLDER"
+        labelKey: "BPA_DETAILS_SRT_NAME_PLACEHOLDER"
       },
       pattern: getPattern("BuildingStreet"),
       jsonPath: "LicensesTemp[0].userData.address.street"
@@ -300,7 +300,7 @@ export const permanentAddr = getCommonCard({
     tradeLocCity: getTextField({
       label: {
         labelName: "City",
-        labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
+        labelKey: "BPA_CITY_LABEL"
       },
       props: {
         className: "applicant-details-error"
@@ -317,14 +317,14 @@ export const permanentAddr = getCommonCard({
     tradeLocPincode: getTextField({
       label: {
         labelName: "Pincode",
-        labelKey: "TL_NEW_TRADE_DETAILS_PIN_LABEL"
+        labelKey: "BPA_DETAILS_PIN_LABEL"
       },
       props: {
         className: "applicant-details-error"
       },
       placeholder: {
         labelName: "Enter Pincode",
-        labelKey: "TL_NEW_TRADE_DETAILS_PIN_PLACEHOLDER"
+        labelKey: "BPA_DETAILS_PIN_PLACEHOLDER"
       },
       required: true,
 

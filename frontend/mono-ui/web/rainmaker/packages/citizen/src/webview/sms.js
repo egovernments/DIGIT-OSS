@@ -8,7 +8,7 @@ function messageReceieved(otp) {
       otp: otp,
     },
   });
-  otpElement.dispatchEvent(smsReceievedEvent);
+  otpElement&& otpElement.dispatchEvent(smsReceievedEvent);
 }
 
 window.messageReceieved = messageReceieved;

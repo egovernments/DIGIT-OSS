@@ -156,7 +156,7 @@ const updatePayAction = async (
         key: "tenantId",
         value: tenantId
       },
-      { key: "applicationNos", value: applicationNo }
+      { key: "applicationNo", value: applicationNo }
     ]);
     set(response, "BPA.action", "PAY");
     response = await httpRequest(
@@ -375,7 +375,7 @@ export const footer = getCommonApplyFooter({
     children: {
       submitButtonLabel: getLabel({
         labelName: "Submit",
-        labelKey: "NOC_COMMON_BUTTON_SUBMIT"
+        labelKey: "BPA_COMMON_BUTTON_SUBMIT"
       }),
       submitButtonIcon: {
         uiFramework: "custom-atoms",

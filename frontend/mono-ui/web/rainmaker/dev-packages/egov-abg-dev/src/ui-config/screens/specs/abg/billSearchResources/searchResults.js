@@ -14,7 +14,8 @@ export const searchResults = {
   props: {
     columns: [
       {
-        name: getTextToLocalMapping("Bill No."),
+        labelName: "Bill No.",
+        labelKey: "ABG_COMMON_TABLE_COL_BILL_NO",
         options: {
           filter: false,
           customBodyRender: (value, tableMeta, updateValue) => (
@@ -29,16 +30,27 @@ export const searchResults = {
         }
       },
       {
-        name: "Consumer Code",
+        labelName: "Consumer Code",
+        labelKey: "PAYMENT_COMMON_CONSUMER_CODE",
         options: {
           display: false
         }
       },
-      getTextToLocalMapping("Consumer Name"),
-      getTextToLocalMapping("Bill Date"),
-      getTextToLocalMapping("Bill Amount(Rs)"),
       {
-        name : getTextToLocalMapping("Status"),
+        labelName: "Consumer Name",
+        labelKey: "ABG_COMMON_TABLE_COL_CONSUMER_NAME"
+      },
+      {
+        labelName: "Bill Date",
+        labelKey: "ABG_COMMON_TABLE_COL_BILL_DATE"
+      },
+      {
+        labelName: "Bill Amount(Rs)",
+        labelKey: "ABG_COMMON_TABLE_COL_BILL_AMOUNT"
+      },
+      {
+        labelName: "Status",
+        labelKey: "ABG_COMMON_TABLE_COL_STATUS",
         options:{
           filter: false,
           customBodyRender: value => (
@@ -50,7 +62,8 @@ export const searchResults = {
         }
       },
       {
-        name: getTextToLocalMapping("Action"),
+        labelName: "Action",
+        labelKey: "ABG_COMMON_TABLE_COL_ACTION",
         options: {
           filter: false,
           customBodyRender: (value, tableMeta, updateValue) => (
@@ -93,43 +106,53 @@ export const searchResults = {
         }
       },
       {
-        name: "businessService",
+        labelKey: "BUSINESS_SERVICE",
+        labelName: "Business Service",
         options: {
           display: false
         }
       },
       {
-        name: "receiptKey",
+        labelKey: "RECEIPT_KEY",
+        labelName: "Receipt Key",
         options: {
           display: false
         }
       },
       {
-        name: "billKey",
+        labelName: "Bill Key",
+        labelKey: "BILL_KEY",
         options: {
           display: false
         }
       },
       {
-        name: "tenantId",
+        labelName: "Tenant Id",
+        labelKey: "TENANT_ID",
         options: {
           display: false
         }
       },
       {
-        name: "Bill Id",
+        labelName: "Bill Id",
+        labelKey: "BILL_ID",
         options: {
           display: false
         }
       },
       {
-        name: "billSearchUrl",
+        labelName: "Bill Search Url",
+        labelKey: "BILL_SEARCH_URL",
         options: {
           display: false
         }
       }
     ],
-    title: getTextToLocalMapping("Search Results for Bill"),
+    title: {
+      labelName: "Search Results for Bill",
+      labelKey: "BILL_GENIE_SEARCH_TABLE_HEADER"
+    },
+    rows : "",
     options: {
       filter: false,
       download: false,

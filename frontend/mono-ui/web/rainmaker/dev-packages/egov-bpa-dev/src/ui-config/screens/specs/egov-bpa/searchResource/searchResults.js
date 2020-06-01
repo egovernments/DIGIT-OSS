@@ -39,17 +39,17 @@ export const textToLocalMapping = {
   ),
   "Owner Name": getLocaleLabels(
     "Owner Name",
-    "NOC_COMMON_TABLE_COL_OWN_NAME_LABEL",
+    "BPA_COMMON_TABLE_COL_OWN_NAME_LABEL",
     getTransformedLocalStorgaeLabels()
   ),
   "Application Date": getLocaleLabels(
     "Application Date",
-    "NOC_COMMON_TABLE_COL_APP_DATE_LABEL",
+    "BPA_COMMON_TABLE_COL_APP_DATE_LABEL",
     getTransformedLocalStorgaeLabels()
   ),
   Status: getLocaleLabels(
     "Status",
-    "NOC_COMMON_TABLE_COL_STATUS_LABEL",
+    "BPA_COMMON_TABLE_COL_STATUS_LABEL",
     getTransformedLocalStorgaeLabels()
   ),
   INITIATED: getLocaleLabels(
@@ -111,11 +111,17 @@ export const searchResults = {
   visible: false,
   props: {
     columns: [
-      getBpaTextToLocalMapping("Application No"),
-      getBpaTextToLocalMapping("Owner Name"),
-      getBpaTextToLocalMapping("Application Date"),
       {
-        name: getBpaTextToLocalMapping("Status"),
+        name: "Application No", labelKey: "BPA_COMMON_TABLE_COL_APP_NO"
+      },
+      {
+        name: "Owner Name", labelKey: "BPA_COMMON_TABLE_COL_OWN_NAME_LABEL"
+      },
+      {
+        name: "Application Date", labelKey: "BPA_COMMON_TABLE_COL_APP_DATE_LABEL"
+      },
+      {
+        name: "Status", labelKey: "BPA_COMMON_TABLE_COL_STATUS_LABEL",
         options: {
           filter: false,
           customBodyRender: value => (
@@ -130,13 +136,22 @@ export const searchResults = {
         }
       },
       {
-        name: "tenantId",
+        name: "Tenant Id",
+        labelKey: "TENANT_ID",
+        options: {
+          display: false
+        }
+      },
+      {
+        name: "serviceType",
+        labelKey: "SERVICE_TYPE",
         options: {
           display: false
         }
       }
     ],
-    title: getBpaTextToLocalMapping("Search Results for BPA Applications"),
+    title: { labelKey: "BPA_HOME_SEARCH_RESULTS_TABLE_HEADING", labelName: "Search Results for BPA Applications"},
+    rows: "",
     options: {
       filter: false,
       download: false,
@@ -170,12 +185,25 @@ const onRowClick = rowData => {
   const state = rowData[3];
   const applicationNumber = rowData[0];
   const tenantId = rowData[4];
-  switch (state) {
-    case "INITIATED":
-      window.location.href = `apply?applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
-      break;
-    default:
-      window.location.href = `search-preview?applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
-      break;
+  if(rowData[5] == "BPA_OC") {
+    const environment = process.env.NODE_ENV === "production" ? "employee" : "";
+    const origin =  process.env.NODE_ENV === "production" ? window.location.origin + "/" : window.location.origin;
+    switch (state) {
+      case "INITIATED":
+        window.location.assign(`${origin}${environment}/oc-bpa/apply?applicationNumber=${applicationNumber}&tenantId=${tenantId}`);
+        break;
+      default:
+        window.location.assign(`${origin}${environment}/oc-bpa/search-preview?applicationNumber=${applicationNumber}&tenantId=${tenantId}`);
+        break;
+    }
+  } else {
+    switch (state) {
+      case "INITIATED":
+        window.location.href = `apply?applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
+        break;
+      default:
+        window.location.href = `search-preview?applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
+        break;
+    }
   }
 };

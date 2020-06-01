@@ -8,6 +8,8 @@ import {
   getCommonParagraph,
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { httpRequest } from "../../../../../ui-utils";
 import { propertySearch, resetFields } from "./search-methods";
 import { getMohallaData } from "egov-ui-kit/utils/commons";
@@ -21,8 +23,8 @@ export const searchPropertyDetails = {
     }),
     subParagraph: getCommonParagraph({
       labelName:
-        "Provide at least one non-mandatory parameter to search for an application",
-      labelKey: "PT_HOME_SEARCH_RESULTS_DESC"
+        "Provide at least one of the non-mandatory parameter to search for a property",
+      labelKey: "PT_HOME_SEARCH_PROPERTY_SUB_HEADING"
     }),
 
     searchPropertyContainer: getCommonContainer({
@@ -34,7 +36,7 @@ export const searchPropertyDetails = {
           },
           placeholder: {
             labelName: "Select ULB",
-            labelKey: "ABG_ULB_PLACEHOLDER"
+            labelKey: "PT_ULB_CITY_PLACEHOLDER"
           },
 
           localePrefix: {
@@ -64,6 +66,7 @@ export const searchPropertyDetails = {
           // );
           if (action.value) {
             try {
+              dispatch(fetchLocalizationLabel(getLocale(), action.value, action.value));
               let payload = await httpRequest(
                 "post",
                 "/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
@@ -245,11 +248,5 @@ export const searchPropertyDetails = {
         top: "60px"
       }
     }
-  }),
-  props: {
-    style: {
-      position: "relative",
-      top: "60px"
-    }
-  }
+  })
 };

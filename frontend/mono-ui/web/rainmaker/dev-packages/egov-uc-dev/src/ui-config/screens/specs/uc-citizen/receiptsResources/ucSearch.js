@@ -43,7 +43,7 @@ const resetFields = (state, dispatch) => {
   dispatch(
     handleField(
       "search",
-      "components.div.children.UCSearchCard.children.cardContent.children.searchContainer.children.mobileNo",
+      "components.div.children.UCSearchCard.children.cardContent.children.searchContainer.children.mobileNumber",
       "props.value",
       ""
     )
@@ -124,14 +124,14 @@ export const UCSearchCard = getCommonCard({
         const selectedCategory = serviceCategory.find(
           item => item.code === action.value
         );
-        const serviceTypes = selectedCategory.child.map(item => item.code);
+        const serviceTypes = selectedCategory && selectedCategory.child && selectedCategory.child.map(item => item.code);
         dispatch(
           prepareFinalObject("searchScreen.businessCodes", serviceTypes)
         );
         return action;
       }
     },
-    mobileNo: getTextField({
+    mobileNumber: getTextField({
       label: {
         labelName: "Mobile No.",
         labelKey: "UC_MOBILE_NO_LABEL"
@@ -151,7 +151,7 @@ export const UCSearchCard = getCommonCard({
       required: false,
       pattern: getPattern("MobileNo"),
       errorMessage: "Invalid Mobile No..",
-      jsonPath: "searchScreen.mobileNo"
+      jsonPath: "searchScreen.mobileNumber"
     }),
 
     fromDate: getDateField({

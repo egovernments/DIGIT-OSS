@@ -13,7 +13,7 @@ const mapStateToProps = (state, ownProps) => {
   const { screenConfiguration } = state;
   const fees = get(screenConfiguration, "preparedFinalObject.applyScreenMdmsData.estimateCardData", []);
   const estimate = {
-    header: { labelName: "Fee Estimate", labelKey: "NOC_FEE_ESTIMATE_HEADER" },
+    header: { labelName: "Fee Estimate", labelKey: "BPA_SUMMARY_FEE_EST" },
     fees
   };
   return { estimate };

@@ -111,8 +111,14 @@ export const scrutinySummary = getCommonGrayCard({
                             md: 3
                         },
                         props: {
-                            label: 'Uploaded Diagram',
-                            linkDetail: 'uploadedDiagram.dxf',
+                            label: {
+                              labelName: "Uploaded Diagram",
+                              labelKey: "BPA_BASIC_DETAILS_UPLOADED_DIAGRAM"
+                            },
+                            linkDetail: {
+                              labelName: "uploadedDiagram.dxf",
+                              labelKey: "BPA_BASIC_DETAILS_UPLOADED_DIAGRAM_DXF"
+                            },
                             jsonPath: "scrutinyDetails.updatedDxfFile",
                         },
                         type: "array"
@@ -127,10 +133,16 @@ export const scrutinySummary = getCommonGrayCard({
                             md: 3
                         },
                         props: {
-                            label: 'Scrutiny Report',
-                            linkDetail: 'ScrutinyReport.pdf',
+                            label: {
+                              labelName: "Scrutiny Report",
+                              labelKey: "BPA_BASIC_DETAILS_SCRUTINY_REPORT"
+                            },
+                            linkDetail: {
+                              labelName: "ScrutinyReport.pdf",
+                              labelKey: "BPA_BASIC_DETAILS_SCRUTINY_REPORT_PDF"
+                            },
                             jsonPath: "scrutinyDetails.planReport",
-                        },
+                          },
                         type: "array"
                     }
                 }),
@@ -225,10 +237,10 @@ export const scrutinySummary = getCommonGrayCard({
                         },
                         {
                             jsonPath: `edcr.blockDetail[0]`,
-                            localePrefix: {
-                                moduleName: "BPA",
-                                masterName: "SUBOCCUPANCYTYPE"
-                            },
+                            // localePrefix: {
+                            //     moduleName: "BPA",
+                            //     masterName: "SUBOCCUPANCYTYPE"
+                            // },
                             callBack: value => {
                                 let returnVAlue;
                                 if (value && value.occupancyType && value.occupancyType.length) {
@@ -236,9 +248,9 @@ export const scrutinySummary = getCommonGrayCard({
                                     let occupancy = value.occupancyType;
                                     for (let tp = 0; tp < occupancy.length; tp++) {
                                         if (tp === (occupancy.length - 1)) {
-                                            returnVAlue += getTransformedLocale(`BPA_SUBOCCUPANCYTYPE_${occupancy[tp].value}`)
+                                            returnVAlue += occupancy[tp].label;//getTransformedLocale(`BPA_SUBOCCUPANCYTYPE_${occupancy[tp].value}`)
                                         } else {
-                                            returnVAlue += getTransformedLocale(`BPA_SUBOCCUPANCYTYPE_${occupancy[tp].value}`) + ","
+                                            returnVAlue += occupancy[tp].label + ","; //getTransformedLocale(`BPA_SUBOCCUPANCYTYPE_${occupancy[tp].value}`) + ","
                                         }
                                     }
                                 }
@@ -313,7 +325,11 @@ export const scrutinySummary = getCommonGrayCard({
                         },
                         {
                             jsonPath: "scrutinyDetails.planDetail.planInformation.demolitionArea",
-                            callBack: checkValueForNA
+                            callBack: value => {
+                                if(value) { return value;} 
+                                else if(value == "0") { return "0"} 
+                                else { return checkValueForNA }
+                            }
                         }
                     )
                 })
@@ -372,36 +388,36 @@ export const scrutinySummary = getCommonGrayCard({
                                 callBack: checkValueForNA
                         }
                     ),
-                    isCharitableTrustBuilding: getLabelWithValue(
-                        {
-                            labelName: "Is Charitable TrustBuilding ?",
-                            labelKey: "BPA_IS_CHARITABLE_TRUSTBUILDING_LABEL"
-                        },
-                        {
-                            jsonPath: "BPA.additionalDetails.isCharitableTrustBuilding",
-                            callBack: checkValueForNA
-                        }
-                    ),
-                    isAffordableHousingScheme: getLabelWithValue(
-                        {
-                            labelName: "Is Affordable Housing Scheme ?",
-                            labelKey: "BPA_IS_AFFRORADABLE_HOUSING_LABEL"
-                        },
-                        {
-                            jsonPath: "BPA.additionalDetails.isAffordableHousingScheme",
-                            callBack: checkValueForNA
-                        }
-                    ),
-                    annualExpectedExpenditure: getLabelWithValue(
-                        {
-                            labelName: "Annual Expected Expenditure",
-                            labelKey: "BPA_ANNUAL_EXPECTED_EXPENDITURE_LABEL"
-                        },
-                        {
-                            jsonPath: "BPA.additionalDetails.annualExpectedExpenditure",
-                            callBack: checkValueForNA
-                        }
-                    ),
+                    // isCharitableTrustBuilding: getLabelWithValue(
+                    //     {
+                    //         labelName: "Is Charitable TrustBuilding ?",
+                    //         labelKey: "BPA_IS_CHARITABLE_TRUSTBUILDING_LABEL"
+                    //     },
+                    //     {
+                    //         jsonPath: "BPA.additionalDetails.isCharitableTrustBuilding",
+                    //         callBack: checkValueForNA
+                    //     }
+                    // ),
+                    // isAffordableHousingScheme: getLabelWithValue(
+                    //     {
+                    //         labelName: "Is Affordable Housing Scheme ?",
+                    //         labelKey: "BPA_IS_AFFRORADABLE_HOUSING_LABEL"
+                    //     },
+                    //     {
+                    //         jsonPath: "BPA.additionalDetails.isAffordableHousingScheme",
+                    //         callBack: checkValueForNA
+                    //     }
+                    // ),
+                    // annualExpectedExpenditure: getLabelWithValue(
+                    //     {
+                    //         labelName: "Annual Expected Expenditure",
+                    //         labelKey: "BPA_ANNUAL_EXPECTED_EXPENDITURE_LABEL"
+                    //     },
+                    //     {
+                    //         jsonPath: "BPA.additionalDetails.annualExpectedExpenditure",
+                    //         callBack: checkValueForNA
+                    //     }
+                    // ),
                 })
             }),
             items: [],

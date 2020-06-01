@@ -17,6 +17,17 @@ const getCommonApplyFooter = children => {
   };
 };
 
+const getCommonDownloadPrint = children => {
+  return {
+    uiFramework: "custom-atoms",
+    componentPath: "Div",
+    props: {
+      style: { textAlign: "right", display: "flex" }
+    },
+    children
+  };
+};
+
 const generatePdfAndDownload = (
   state,
   dispatch,
@@ -41,7 +52,7 @@ const generatePdfAndDownload = (
     `/wns/search-preview?applicationNumber=${applicationNumber}&tenantId=${tenant}`;
   var hasIframeLoaded = false,
     hasEstimateLoaded = false;
-  iframe.onload = function(e) {
+  iframe.onload = function (e) {
     hasIframeLoaded = true;
     if (hasEstimateLoaded) {
       downloadConfirmationForm();
@@ -60,7 +71,7 @@ const generatePdfAndDownload = (
     let target = iframe.contentDocument.querySelector(
       "#material-ui-tradeReviewDetails"
     );
-    html2canvas(target).then(function(canvas) {
+    html2canvas(target).then(function (canvas) {
       document.querySelector("#custom-atoms-iframeForPdf").removeChild(iframe);
       var data = canvas.toDataURL("image/jpeg", 1);
       var imgWidth = 200;
@@ -147,48 +158,20 @@ const handleAppDownloadAndPrint = (state, action) => {
   }
 }
 
-export const applicationSuccessFooter = (
-  state,
+
+
+export const DownloadAndPrint = (state,
   dispatch,
   applicationNumber,
-  tenant
-) => {
-  //const baseURL = getBaseURL();
-  const roleExists = ifUserRoleExists("CITIZEN");
-  // const redirectionURL = roleExists ? "/tradelicense-citizen/home" : "/inbox";
-  /* Mseva 2.0 changes */
-  const redirectionURL = roleExists ? "/" : "/inbox";
-  return getCommonApplyFooter({
-
-    gotoHome: {
-      componentPath: "Button",
-      props: {
-        variant: "outlined",
-        color: "primary",
-        style: {
-          minWidth: "25%",
-          height: "48px",
-          marginRight: "16px"
-        }
-      },
-      children: {
-        downloadReceiptButtonLabel: getLabel({
-          labelName: "GO TO HOME",
-          labelKey: "WS_COMMON_BUTTON_HOME"
-        })
-      },
-      onClickDefination: {
-        action: "page_change",
-        path: redirectionURL
-      }
-    },
+  tenant) => {
+  return getCommonDownloadPrint({
     downloadFormButton: {
       componentPath: "Button",
       props: {
         variant: "outlined",
         color: "primary",
         style: {
-          minWidth: "25%",
+          minWidth: "160px",
           height: "48px",
           marginRight: "16px"
         }
@@ -196,7 +179,7 @@ export const applicationSuccessFooter = (
       children: {
         downloadFormButtonLabel: getLabel({
           labelName: "DOWNLOAD CONFIRMATION FORM",
-          labelKey:"WS_COMMON_BUTTON_DOWNLOAD"
+          labelKey: "WS_COMMON_BUTTON_DOWNLOAD"
           // labelKey: "WS_APPLICATION_BUTTON_DOWN_CONF"
         })
       },
@@ -211,7 +194,7 @@ export const applicationSuccessFooter = (
         variant: "outlined",
         color: "primary",
         style: {
-          minWidth: "25%",
+          minWidth: "160px",
           height: "48px",
           marginRight: "16px"
         }
@@ -219,7 +202,7 @@ export const applicationSuccessFooter = (
       children: {
         printFormButtonLabel: getLabel({
           labelName: "PRINT CONFIRMATION FORM",
-          labelKey:"WS_COMMON_BUTTON_PRINT"
+          labelKey: "WS_COMMON_BUTTON_PRINT"
           // labelKey: "WS_APPLICATION_BUTTON_PRINT_CONF"
         })
       },
@@ -228,60 +211,43 @@ export const applicationSuccessFooter = (
         callBack: () => { handleAppDownloadAndPrint(state, "print") }
       }
     }
+  })
 
-    // collectPaymentButton: {
-    //   componentPath: "Button",
-    //   props: {
-    //     variant: "contained",
-    //     color: "primary",
-    //     style: {
-    //       minWidth: "200px",
-    //       height: "48px",
-    //       marginRight: "40px"
-    //     }
-    //   },
-    //   children: {
-    //     collectPaymentButtonLabel: getLabel({
-    //       labelName: "COLLECT PAYMENT",
-    //       labelKey: "TL_COLLECT_PAYMENT"
-    //     })
-    //   },
-    //   onClickDefination: {
-    //     action: "page_change",
-    //     path: `/egov-ui-framework/tradelicence/pay?applicationNumber=${applicationNumber}&tenantId=${tenant}&businessService=TL`
-    //   },
-    //   roleDefination: {
-    //     rolePath: "user-info.roles",
-    //     roles: ["TL_CEMP"]
-    //   }
-    // },
-    // proceedToPay: {
-    //   componentPath: "Button",
-    //   props: {
-    //     variant: "contained",
-    //     color: "primary",
-    //     style: {
-    //       minWidth: "200px",
-    //       height: "48px",
-    //       marginRight: "40px"
-    //     }
-    //   },
-    //   children: {
-    //     collectPaymentButtonLabel: getLabel({
-    //       labelName: "PROCEED TO PAYMENT",
-    //       labelKey: "TL_PROCEED_PAYMENT"
-    //     })
-    //   },
-    //   onClickDefination: {
-    //     action: "page_change",
-    //     path: `/tradelicense-citizen/pay?applicationNumber=${applicationNumber}&tenantId=${tenant}&businessService=TL`
-    //   },
-    //   roleDefination: {
-    //     rolePath: "user-info.roles",
-    //     action: "PAY",
-    //     roles: ["TL_CEMP"]
-    //   }
-    // }
+}
 
+export const applicationSuccessFooter = (
+  state,
+  dispatch,
+  applicationNumber,
+  tenant
+) => {
+  //const baseURL = getBaseURL();
+  const roleExists = ifUserRoleExists("CITIZEN");
+  // const redirectionURL = roleExists ? "/tradelicense-citizen/home" : "/inbox";
+  /* Mseva 2.0 changes */
+  const redirectionURL = roleExists ? "/" : "/inbox";
+  return getCommonApplyFooter({
+    gotoHome: {
+      componentPath: "Button",
+      props: {
+        variant: "contained",
+        color: "primary",
+        style: {
+          minWidth: "15%",
+          height: "48px",
+          marginRight: "16px"
+        }
+      },
+      children: {
+        downloadReceiptButtonLabel: getLabel({
+          labelName: "HOME",
+          labelKey: "WS_COMMON_BUTTON_HOME"
+        })
+      },
+      onClickDefination: {
+        action: "page_change",
+        path: redirectionURL
+      }
+    },
   });
 };

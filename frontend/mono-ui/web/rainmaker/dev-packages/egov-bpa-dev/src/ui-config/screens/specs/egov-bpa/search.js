@@ -4,8 +4,7 @@ import {
   getBreak,
   getCommonContainer
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { BPAApplication } from "./searchResource/bpaApplication";
-import { showHideAdhocPopup, resetFields } from "../utils";
+import { BPAApplication, resetFields } from "./searchResource/bpaApplication";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { pendingApprovals } from "./searchResource/pendingApprovals";
 import { searchResults } from "./searchResource/searchResults";
@@ -24,6 +23,7 @@ import {
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { showApplyCityPicker, applyForm } from "../utils";
 import { getBpaMdmsData, getTenantMdmsData } from "../utils";
+import { httpRequest } from "../../../../ui-utils/api";
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
@@ -49,11 +49,62 @@ const startApplyFlow = (state, dispatch) => {
   dispatch(setRoute(applyUrl));
 };
 
+const getMdmsData = async (state, dispatch) => {
+ 
+  const tenantId = get(
+    state.screenConfiguration.preparedFinalObject,
+    "citiesByModule.citizenTenantId.value"
+  );
+  console.log(tenantId,'tenantId');
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: getTenantId(),
+      moduleDetails: [
+         {
+          moduleName: "BPA",
+          masterDetails: [
+            {
+              name: "ApplicationType"
+            },
+            {
+              name: "ServiceType"
+            }
+          ],
+        
+        }
+      ]
+    }
+  };
+  console.log(mdmsBody,'mdmsBody');
+  try {
+    let payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+    dispatch(
+      prepareFinalObject(
+        "applyScreenMdmsData",
+        payload.MdmsRes
+      )
+    );
+    dispatch(prepareFinalObject(
+      "searchScreen.applicationType", 
+      get(payload, "MdmsRes.BPA.ApplicationType[0].code")
+    ));
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 const BpaSearchAndResult = {
   uiFramework: "material-ui",
   name: "search",
   beforeInitScreen: (action, state, dispatch) => {
     resetFields(state, dispatch);
+    getMdmsData(state,dispatch);
     const tenantId = getTenantId();
     const BSqueryObject = [
       { key: "tenantId", value: tenantId },
@@ -115,47 +166,47 @@ const BpaSearchAndResult = {
               },
               ...header
             },
-            newApplicationButton: {
-              componentPath: "Button",
-              gridDefination: {
-                xs: 12,
-                sm: 6,
-                align: "right"
-              },
-              visible: enableButton,
-              props: {
-                variant: "contained",
-                color: "primary",
-                style: {
-                  color: "white",
-                  borderRadius: "2px",
-                  width: "250px",
-                  height: "48px"
-                }
-              },
-              children: {
-                plusIconInsideButton: {
-                  uiFramework: "custom-atoms",
-                  componentPath: "Icon",
-                  props: {
-                    iconName: "add",
-                    style: {
-                      fontSize: "24px"
-                    }
-                  }
-                },
-                buttonLabel: getLabel({
-                  labelName: "NEW APPLICATION",
-                  labelKey: "NOC_HOME_SEARCH_RESULTS_NEW_APP_BUTTON"
-                })
-              },
-              onClickDefination: {
-                action: "condition",
-                callBack: (state, dispatch) => {
-                  showApplyCityPicker(state, dispatch)
-                }
-              }
-            }
+            // newApplicationButton: {
+            //   componentPath: "Button",
+            //   gridDefination: {
+            //     xs: 12,
+            //     sm: 6,
+            //     align: "right"
+            //   },
+            //   visible: enableButton,
+            //   props: {
+            //     variant: "contained",
+            //     color: "primary",
+            //     style: {
+            //       color: "white",
+            //       borderRadius: "2px",
+            //       width: "250px",
+            //       height: "48px"
+            //     }
+            //   },
+            //   children: {
+            //     plusIconInsideButton: {
+            //       uiFramework: "custom-atoms",
+            //       componentPath: "Icon",
+            //       props: {
+            //         iconName: "add",
+            //         style: {
+            //           fontSize: "24px"
+            //         }
+            //       }
+            //     },
+            //     buttonLabel: getLabel({
+            //       labelName: "NEW APPLICATION",
+            //       labelKey: "BPA_HOME_SEARCH_RESULTS_NEW_APP_BUTTON"
+            //     })
+            //   },
+            //   onClickDefination: {
+            //     action: "condition",
+            //     callBack: (state, dispatch) => {
+            //       showApplyCityPicker(state, dispatch)
+            //     }
+            //   }
+            // }
           }
         },
         pendingApprovals,
@@ -182,7 +233,7 @@ const BpaSearchAndResult = {
             popup: getCommonContainer({
               header: getCommonHeader({
                 labelName: "Select City",
-                labelKey: "TL_SELECT_CITY"
+                labelKey: "BPA_SELECT_CITY"
               }),
               cityPicker: getCommonContainer({
                 cityDropdown: {
@@ -207,9 +258,9 @@ const BpaSearchAndResult = {
                     className: "citizen-city-picker",
                     label: {
                       labelName: "City",
-                      labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
+                      labelKey: "BPA_CITY_LABEL"
                     },
-                    placeholder: { labelName: "Select City", labelKey: "TL_SELECT_CITY" },
+                    placeholder: { labelName: "Select City", labelKey: "BPA_SELECT_CITY" },
                     jsonPath: "BPA.address.city",
                     sourceJsonPath: "citiesByModule.TL.tenants",
                     labelsFromLocalisation: true,
@@ -239,7 +290,7 @@ const BpaSearchAndResult = {
                       children: {
                         previousButtonLabel: getLabel({
                           labelName: "SELECT",
-                          labelKey: "TL_CITIZEN_SELECT"
+                          labelKey: "BPA_CITIZEN_SELECT_BUTTON"
                         })
                       },
                       onClickDefination: {
@@ -262,7 +313,7 @@ const BpaSearchAndResult = {
                       children: {
                         previousButtonLabel: getLabel({
                           labelName: "CANCEL",
-                          labelKey: "TL_ADD_HOC_CHARGES_POPUP_BUTTON_CANCEL"
+                          labelKey: "BPA_CITIZEN_CANCEL_BUTTON"
                         })
                       },
                       onClickDefination: {

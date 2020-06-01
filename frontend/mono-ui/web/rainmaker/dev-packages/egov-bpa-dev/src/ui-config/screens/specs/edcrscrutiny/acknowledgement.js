@@ -135,6 +135,80 @@ const getAcknowledgementCard = (
       },
       gotoHomeFooter
     };
+  } else if (purpose === "ocapply" && status === "success") {
+    return {
+      headerrow,
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "Occupancy Certificate eDCR Scrutiny is Accepted",
+              labelKey: "EDCR_OC_ACKNOWLEDGEMENT_SUCCESS_MESSAGE"
+            },
+            body: {
+              labelName: "This plan can now be used for creating oc permit application",
+              labelKey: "EDCR_OC_ACKNOWLEDGEMENT_SUCCESS_COMMENT"
+            },
+            tailText: {
+              labelName: "OC Plan Number",
+              labelKey: "EDCR_OC_NUMBER_LABEL"
+            },
+            number: edcrnumber
+          })
+        }
+      },
+      gotoHomeFooter
+    };
+  } else if (purpose === "ocapply" && status === "rejected") {
+    return {
+      headerrow,
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "close",
+            backgroundColor: "#E54D42",
+            header: {
+              labelName: "Occupancy Certificate eDCR is Not Accepted",
+              labelKey: "EDCR_OC_REJECTION_MESSAGE"
+            },
+            body: {
+              labelName: "Please make corrections in the diagram and try again",
+              labelKey: "EDCR_OC_REJECTION_COMMENT"
+            }
+          })
+        }
+      },
+      gotoHomeFooter
+    };
+  } else if (purpose == "ocapply" && status == "aborted") {
+    return {
+      headerrow,
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "close",
+            backgroundColor: "#E54D42",
+            header: {
+              labelName: "Occupancy Certificate eDCR is Aborted",
+              labelKey: "EDCR_OC_ABORTED_MESSAGE"
+            },
+            body: {
+              labelName: "The uploaded plan is not drawn as per the standard's , please check the layers and colour coding standards and try again",
+              labelKey: "EDCR_OC_ABORTED_COMMENT"
+            }
+          })
+        }
+      },
+      gotoHomeFooter
+    };
   }
 };
 
@@ -176,6 +250,25 @@ const screenConfig = {
           dispatch(
             handleField("acknowledgement", "components.div", "children", data)
           );
+          if (purpose == "ocapply" && status == "success") {
+            dispatch(
+              handleField(
+                "acknowledgement",
+                "components.div.children.gotoHomeFooter.children.ocCreateApp",
+                "visible",
+                true
+              )
+            )
+          } else {
+            dispatch(
+              handleField(
+                "acknowledgement",
+                "components.div.children.gotoHomeFooter.children.ocCreateApp",
+                "visible",
+                false
+              )
+            )
+          }
         }
       })
       .catch(error => {

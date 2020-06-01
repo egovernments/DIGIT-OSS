@@ -681,34 +681,34 @@ export const resetFields = (state, dispatch) => {
   );
 };
 
-export const getRequiredDocData = async (action, state, dispatch) => {
-  let tenantId =
-    process.env.REACT_APP_NAME === "Citizen" ? JSON.parse(getUserInfo()).permanentCity : getTenantId();
-  let mdmsBody = {
-    MdmsCriteria: {
-      tenantId: tenantId,
-      moduleDetails: [
-        {
-          moduleName: "FireNoc",
-          masterDetails: [{ name: "Documents" }]
-        }
-      ]
-    }
-  };
-  try {
-    let payload = null;
-    payload = await httpRequest(
-      "post",
-      "/egov-mdms-service/v1/_search",
-      "_search",
-      [],
-      mdmsBody
-    );
-    dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
-  } catch (e) {
-    console.log(e);
-  }
-};
+// export const getRequiredDocData = async (action, state, dispatch) => {
+//   let tenantId =
+//     process.env.REACT_APP_NAME === "Citizen" ? JSON.parse(getUserInfo()).permanentCity : getTenantId();
+//   let mdmsBody = {
+//     MdmsCriteria: {
+//       tenantId: tenantId,
+//       moduleDetails: [
+//         {
+//           moduleName: "FireNoc",
+//           masterDetails: [{ name: "Documents" }]
+//         }
+//       ]
+//     }
+//   };
+//   try {
+//     let payload = null;
+//     payload = await httpRequest(
+//       "post",
+//       "/egov-mdms-service/v1/_search",
+//       "_search",
+//       [],
+//       mdmsBody
+//     );
+//     dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
+//   } catch (e) {
+//     console.log(e);
+//   }
+// };
 
 export const getTextToLocalMapping = label => {
   const localisationLabels = getTransformedLocalStorgaeLabels();
