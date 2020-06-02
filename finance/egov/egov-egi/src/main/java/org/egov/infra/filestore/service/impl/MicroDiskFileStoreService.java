@@ -208,10 +208,10 @@ public class MicroDiskFileStoreService implements FileStoreService {
 
     public Path fetchAsDigitPath(String fileStoreId,String moduleName) {
         ResponseEntity<byte[]> responseEntity = microserviceUtils.fetchFilesFromDigitService(fileStoreId);
-        Path fileDirPath = this.getFileDirectoryPath(moduleName);
+        Path fileDirPath = Paths.get(fileStoreId);
         Path path = null;
         try {
-            path = Files.write(Paths.get(fileDirPath + separator + fileStoreId), responseEntity.getBody());
+            path = Files.write(fileDirPath, responseEntity.getBody());
         } catch (IOException e) {
             e.printStackTrace();
         }

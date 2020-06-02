@@ -1798,20 +1798,6 @@ public class MicroserviceUtils {
         return response;
     }
     
-
-    public ResponseEntity<byte[]> downloadFile(String fileStoreId){
-        try {
-            HttpHeaders headers = new HttpHeaders();
-            headers.setAccept(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM));
-            HttpEntity<String> entity = new HttpEntity<>(headers);
-            ResponseEntity<byte[]> response = restTemplate.exchange("http://localhost:8080/downloadFile", HttpMethod.GET, entity, byte[].class);
-            return response;
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return null;
-    }
-    
     private void preparePaymentSearchQueryString(PaymentSearchCriteria searchCriteria, StringBuilder url) {
         if (StringUtils.isNotBlank(searchCriteria.getTenantId())) {
             url.append("&tenantId=").append(searchCriteria.getTenantId());
