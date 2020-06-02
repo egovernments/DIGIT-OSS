@@ -83,7 +83,7 @@ SearchDefinitions:
         Select row_to_json(result) from
         (
           select applicationNo as referenceNumber,locality from eg_bpa_buildingplan bpa
-          INNER JOIN eg_bpa_address ad ON ad.buildingplanid = bpa.id
+          INNER JOIN eg_land_Address ad ON ad.landInfoId = bpa.landid
         ) result  $where
       groupBy:
       orderBy:
