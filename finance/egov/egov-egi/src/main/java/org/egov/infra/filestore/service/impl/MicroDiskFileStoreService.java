@@ -154,14 +154,9 @@ public class MicroDiskFileStoreService implements FileStoreService {
     @Override
     public FileStoreMapper store(InputStream fileStream, String fileName, String mimeType, String moduleName,
             boolean closeStream) {
-        try {
-            String probeContentType = mimeType;
-            String name = fileName;
-//            int length = (int) fileStream.;
-//            File parentFile = file.getParentFile();
-    
-            DiskFileItem fileItem = new DiskFileItem("file",probeContentType, false, fileName, 5000, null);
-//            InputStream inputs =  new FileInputStream(file);
+        try {          
+            byte[] fileSize = fileName.getBytes();
+            DiskFileItem fileItem = new DiskFileItem("file",mimeType, false, fileName, fileSize.length, null);
             OutputStream os = fileItem.getOutputStream();
             int ret = fileStream.read();
             while ( ret != -1 )
@@ -172,7 +167,7 @@ public class MicroDiskFileStoreService implements FileStoreService {
             os.flush();
             MultipartFile multipartFile = new CommonsMultipartFile(fileItem);
             FileStoreMapper fileStoreMapper = storeFiles(Arrays.asList(multipartFile),
-                    name,
+                    fileName,
                     mimeType, moduleName,false);
             
             return fileStoreMapper;
