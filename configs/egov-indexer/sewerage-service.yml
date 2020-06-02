@@ -13,7 +13,7 @@ ServiceMaps:
         customJsonMapping:
           indexMapping: {"Data":{"workflow": {"state": {}, "action": "", "assignes": []},"applicationNo":"","applicationStatus":"","status":"","connectionNo":"","oldConnectionNo":"","plumberInfo":[],"roadType":"","roadCuttingArea":"","connectionExecutionDate":"","connectionCategory":"","connectionType":"","additionalDetails":{},"id":"","propertyId":"","tenantId":"","proposedWaterClosets":"","proposedToilets":"","noOfWaterClosets":"","noOfToilets":"","history":{}}}
           fieldMapping:
-          - inJsonPath: $.applicationStatus
+          - inJsonPath: $.applicationStatus.state
             outJsonPath: $.Data.workflow.state
           - inJsonPath: $.processInstance.action
             outJsonPath: $.Data.workflow.action
@@ -76,7 +76,7 @@ ServiceMaps:
         customJsonMapping:
           indexMapping: {"Data":{"workflow": {"state": {}, "action": "", "assignes": []},"applicationNo":"","applicationStatus":"","status":"","connectionNo":"","oldConnectionNo":"","plumberInfo":[],"roadType":"","roadCuttingArea":"","connectionExecutionDate":"","connectionCategory":"","connectionType":"","additionalDetails":{},"id":"","propertyId":"","tenantId":"","proposedWaterClosets":"","proposedToilets":"","noOfWaterClosets":"","noOfToilets":"","history":{}}}
           fieldMapping:
-          - inJsonPath: $.applicationStatus
+          - inJsonPath: $.applicationStatus.state
             outJsonPath: $.Data.workflow.state
           - inJsonPath: $.processInstance.action
             outJsonPath: $.Data.workflow.action
@@ -140,7 +140,7 @@ ServiceMaps:
         customJsonMapping:
           indexMapping: {"Data":{"workflow": {"state": {}, "action": "", "assignes": []},"applicationNo":"","applicationStatus":"","status":"","connectionNo":"","oldConnectionNo":"","plumberInfo":[],"roadType":"","roadCuttingArea":"","connectionExecutionDate":"","connectionCategory":"","connectionType":"","additionalDetails":{},"id":"","propertyId":"","tenantId":"","proposedWaterClosets":"","proposedToilets":"","noOfWaterClosets":"","noOfToilets":"","history":{}}}
           fieldMapping:
-          - inJsonPath: $.applicationStatus
+          - inJsonPath: $.applicationStatus.state
             outJsonPath: $.Data.workflow.state
           - inJsonPath: $.processInstance.action
             outJsonPath: $.Data.workflow.action
