@@ -1,12 +1,9 @@
-import PTHeader from "egov-ui-kit/common/common/PTHeader";
-import React from "react";
 import { Button } from "components";
+import PTHeader from "egov-ui-kit/common/common/PTHeader";
 import Label from "egov-ui-kit/utils/translationNode";
-import ActionFooter from "../../common/ActionFooter";
-import FloatingActionButton from "material-ui/FloatingActionButton";
-import generateReceipt from "./Components/receipt";
+import React from "react";
 import AcknowledgementCard from '../AcknowledgementCard';
-import { localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
+import generateReceipt from "./Components/receipt";
 import "./index.css";
 
 

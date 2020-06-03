@@ -165,13 +165,9 @@ class WorkFlowContainer extends React.Component {
       }
     }
     if (dataPath === "BPA") {
-      data.workflow.assignees = [];
+      data.workflow.assignes = [];
       if (data.workflow.assignee) {
-        data.workflow.assignee.forEach(assigne => {
-          data.workflow.assignees.push({
-            uuid: assigne
-          });
-        });
+        data.workflow.assignes = data.workflow.assignee
       }
       if (data.workflow && data.workflow.varificationDocuments) {
         for (let i = 0; i < data.workflow.varificationDocuments.length; i++) {
