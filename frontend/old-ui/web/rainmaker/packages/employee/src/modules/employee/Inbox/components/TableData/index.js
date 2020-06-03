@@ -29,11 +29,13 @@ const getWFstatus = (status) => {
       return "Initiated";
     case "PENDING_FOR_CITIZEN_ACTION":
       return "Pending for Citizen Action";  
-    case "APPLIED":
+      case "OPEN":
+      case "APPLIED":
     case "PENDING_FOR_DOCUMENT_VERIFICATION":
       return "Pending for Document Verification";
     case "REJECTED":
       return "REJECTED";
+    case "DOCVERIFIED":
     case "FIELDINSPECTION":
     case "PENDING_FOR_FIELD_INSPECTION":
       return "Pending for Field Inspection";
@@ -42,6 +44,8 @@ const getWFstatus = (status) => {
     case "PENDINGPAYMENT":
     case "PENDING_FOR_PAYMENT":
       return "Pending for Payment";
+    case "PAID":
+    case "FIELDVERIFIED":
     case "PENDINGAPPROVAL":
       return "Pending for Approval";
     case "PENDING_FOR_CONNECTION_ACTIVATION":
