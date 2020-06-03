@@ -1,7 +1,9 @@
 import React from "react";
 import { connect } from "react-redux";
 import get from "lodash/get";
-import { Dialog, DialogContent } from "@material-ui/core";
+import { Dialog } from "@material-ui/core";
+import MuiDialogContent from "@material-ui/core/DialogContent";
+import { withStyles } from "@material-ui/core/styles";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 class DialogContainer extends React.Component {
@@ -17,10 +19,22 @@ class DialogContainer extends React.Component {
 
   render() {
     const { open, maxWidth, children } = this.props;
+   const DialogContent = withStyles(theme => ({
+      root: {
+        paddingBottom: 0
+      }
+    }))(MuiDialogContent);
+
+    const DialogContainer = withStyles(theme => ({
+      root: {
+        zIndex: 13333    
+        }
+    }))(Dialog);
+    
     return (
-      <Dialog open={open} maxWidth={maxWidth} onClose={this.handleClose}>
+      <DialogContainer open={open} maxWidth={maxWidth} onClose={this.handleClose}>
         <DialogContent children={children} />
-      </Dialog>
+      </DialogContainer>
     );
   }
 }

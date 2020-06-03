@@ -139,8 +139,10 @@ function SingleDocDetailCard(props) {
           </div>
           <div style={fontStyle}>
             <span>
-            {!docItem.dropDownValues ? "" : docItem.dropDownValues.value}
-            </span>
+            <LabelContainer
+            labelKey= {!docItem.dropDownValues ? "" : getTransformedLocale(docItem.dropDownValues.value)}
+          />
+          </span>
          
           </div>
         </Grid>

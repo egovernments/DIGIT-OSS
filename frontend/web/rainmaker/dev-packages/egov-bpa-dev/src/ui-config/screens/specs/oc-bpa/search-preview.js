@@ -137,6 +137,14 @@ const setDownloadMenu = (action, state, dispatch) => {
     state,
     "screenConfiguration.preparedFinalObject.BPA.riskType"
   );
+  let comparisonDetails = get(
+    state,
+    "screenConfiguration.preparedFinalObject.comparisonDetails"
+  );
+  let comparisonReport = false;
+  if(comparisonDetails){
+    comparisonReport = get(comparisonDetails, "report");
+  }
   let downloadMenu = [];
   let printMenu = [];
   let certificateDownloadObject = {
@@ -177,6 +185,17 @@ const setDownloadMenu = (action, state, dispatch) => {
     },
     leftIcon: "assignment"
   };
+  let comparisonReportDownloadObject = {}
+  if(comparisonReport){
+    comparisonReportDownloadObject = {
+      label: { labelName: "Comparison Report", labelKey: "BPA_COMPARISON_REPORT_LABEL" },
+      link: () => {
+        window.open(comparisonReport);
+      },
+      leftIcon: "assignment"
+    }
+  }
+  
 
   // if (riskType === "LOW") {
   //   switch (status) {
@@ -217,6 +236,11 @@ const setDownloadMenu = (action, state, dispatch) => {
         break;
     }
   // }
+
+  if(comparisonReport){
+    downloadMenu.push(comparisonReportDownloadObject);
+    printMenu.push(comparisonReportDownloadObject);
+  }
   dispatch(
     handleField(
       "search-preview",

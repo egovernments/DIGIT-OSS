@@ -141,14 +141,14 @@ const transform = (floor, key, generalMDMSDataById, propertyDetails) => {
 //       ]
 //     );
 //   };
-const getAssessmentInfo = (propertyDetails, generalMDMSDataById) => {
+export const getAssessmentInfo = (propertyDetails, generalMDMSDataById) => {
   const { units = [], noOfFloors } = propertyDetails || {};
 
   return (
     propertyDetails && [
       {
         key: getTranslatedLabel("PT_ASSESMENT_INFO_USAGE_TYPE", localizationLabelsData),
-        value: propertyDetails.usageCategoryMajor ? 'PROPERTYTAX_BILLING_SLAB_' + propertyDetails.usageCategoryMajor : "NA", //noOfFloors
+        value: propertyDetails.usageCategoryMajor ? getTranslatedLabel('PROPERTYTAX_BILLING_SLAB_' + propertyDetails.usageCategoryMajor , localizationLabelsData): "NA", //noOfFloors
       },
       {
         key: getTranslatedLabel("PT_ASSESMENT_INFO_TYPE_OF_BUILDING", localizationLabelsData),
@@ -181,19 +181,19 @@ const getAssessmentInfo = (propertyDetails, generalMDMSDataById) => {
   );
 };
 
-const getUnitInfo = (units = [], propertyDetails) => {
+export const getUnitInfo = (units = [], propertyDetails) => {
   units = units || [];
   let floors = [];
   units.map((unit, index) => {
     if (unit) {
       let floor = [{
         key: getTranslatedLabel("PT_ASSESSMENT_UNIT_USAGE_TYPE", localizationLabelsData),
-        value: unit.usageCategoryMinor ? 'PROPERTYTAX_BILLING_SLAB_' + unit.usageCategoryMinor : (propertyDetails.usageCategoryMinor ? 'PROPERTYTAX_BILLING_SLAB_' + propertyDetails.usageCategoryMinor :
-          (unit.usageCategoryMajor ? 'PROPERTYTAX_BILLING_SLAB_' + unit.usageCategoryMajor : "NA")),
+        value: unit.usageCategoryMinor ? getTranslatedLabel('PROPERTYTAX_BILLING_SLAB_' + unit.usageCategoryMinor, localizationLabelsData) : (propertyDetails.usageCategoryMinor ?getTranslatedLabel( 'PROPERTYTAX_BILLING_SLAB_' + propertyDetails.usageCategoryMinor , localizationLabelsData):
+          (unit.usageCategoryMajor ? getTranslatedLabel('PROPERTYTAX_BILLING_SLAB_' + unit.usageCategoryMajor, localizationLabelsData) : "NA")),
       }, {
 
         key: getTranslatedLabel("PT_ASSESMENT_INFO_OCCUPLANCY", localizationLabelsData),
-        value: unit.occupancyType ? 'PROPERTYTAX_OCCUPANCYTYPE_' + unit.occupancyType : "NA",
+        value: unit.occupancyType ? getTranslatedLabel('PROPERTYTAX_OCCUPANCYTYPE_' + unit.occupancyType , localizationLabelsData): "NA",
       }, {
 
         key: getTranslatedLabel("PT_FORM2_BUILT_AREA", localizationLabelsData),

@@ -4,7 +4,7 @@ import { getSearchResults, fetchBill, getSearchResultsForSewerage } from "../../
 import { convertEpochToDate, getTextToLocalMapping } from "../../utils/index";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validateFields } from "../../utils";
-
+import { httpRequest } from "../../../../../ui-utils";
 export const searchApiCall = async (state, dispatch) => {
   showHideTable(false, dispatch);
   let queryObject = [
@@ -52,7 +52,26 @@ export const searchApiCall = async (state, dispatch) => {
       }
     }
     let tenantId = get(state, "screenConfiguration.preparedFinalObject.searchScreen.tenantId");
+    let waterMeteredDemandExipryDate = 0;
+    let waterNonMeteredDemandExipryDate = 0;
+    let sewerageNonMeteredDemandExpiryDate = 0;
+    let payloadbillingPeriod
     try {
+      try {
+        // Get the MDMS data for billingPeriod
+        let mdmsBody = {
+          MdmsCriteria: {
+            tenantId: tenantId,
+            moduleDetails: [
+              { moduleName: "ws-services-masters", masterDetails: [{ name: "billingPeriod" }]},
+              { moduleName: "sw-services-calculation", masterDetails: [{ name: "billingPeriod" }]}
+            ]
+          }
+        }
+        //Read metered & non-metered demand expiry date and assign value.
+        payloadbillingPeriod = await httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], mdmsBody);
+        
+      } catch (err) { console.log(err) }
       let getSearchResult = getSearchResults(queryObject)
       let getSearchResultForSewerage = getSearchResultsForSewerage(queryObject, dispatch)
       let finalArray = [];
@@ -71,11 +90,37 @@ export const searchApiCall = async (state, dispatch) => {
           } else {
             queryObjectForWaterFetchBill = [{ key: "tenantId", value: tenantId }, { key: "consumerCode", value: element.connectionNo }, { key: "businessService", value: "SW" }];
           }
+
+          if (element.service === "WATER" && payloadbillingPeriod.MdmsRes['ws-services-masters'] && payloadbillingPeriod.MdmsRes['ws-services-masters'].billingPeriod !== undefined && payloadbillingPeriod.MdmsRes['ws-services-masters'].billingPeriod  !== null) {
+            payloadbillingPeriod.MdmsRes['ws-services-masters'].billingPeriod.forEach(obj => {
+              if(obj.connectionType === 'Metered') {
+                waterMeteredDemandExipryDate = obj.demandExpiryDate;
+              } else if (obj.connectionType === 'Non Metered') {
+                waterNonMeteredDemandExipryDate = obj.demandExpiryDate;
+              }
+            }); 
+          }
+          if (element.service === "SEWERAGE" && payloadbillingPeriod.MdmsRes['sw-services-calculation'] && payloadbillingPeriod.MdmsRes['sw-services-calculation'].billingPeriod !== undefined && payloadbillingPeriod.MdmsRes['sw-services-calculation'].billingPeriod  !== null) {
+            payloadbillingPeriod.MdmsRes['sw-services-calculation'].billingPeriod.forEach(obj => {
+              if (obj.connectionType === 'Non Metered') {
+                sewerageNonMeteredDemandExpiryDate = obj.demandExpiryDate;
+              }
+            }); 
+          }
+
           let billResults = await fetchBill(queryObjectForWaterFetchBill, dispatch)
           billResults ? billResults.Bill.map(bill => {
+            let updatedDueDate = 0;
+            if(element.service === "WATER") {
+              updatedDueDate = (element.connectionType === 'Metered' ?
+              (bill.billDetails[0].toPeriod+waterMeteredDemandExipryDate) :
+              (bill.billDetails[0].toPeriod+waterNonMeteredDemandExipryDate));
+            } else if (element.service === "SEWERAGE") {
+              updatedDueDate = bill.billDetails[0].toPeriod + sewerageNonMeteredDemandExpiryDate;
+            }
             let obj = {
               due: bill.totalAmount,
-              dueDate: bill.billDetails[0].expiryDate,
+              dueDate: updatedDueDate,
               service: element.service,
               connectionNo: element.connectionNo,
               name: (element.property && element.property !== "NA" && element.property.owners)?element.property.owners[0].name:'',
