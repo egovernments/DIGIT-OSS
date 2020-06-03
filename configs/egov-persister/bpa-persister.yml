@@ -544,7 +544,7 @@ serviceMaps:
           - jsonPath: $.landInfo.address.geoLocation.id
 
 
-       - query: INSERT INTO eg_land_ownerInfo( id, uuid, mobilenumber,isprimaryowner, ownershippercentage, institutionId, relationship, additionalDetails, landInfoId, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id, landInfoId) WHERE id IS NOT NULL DO UPDATE SET mobilenumber=?, isPrimaryOwner=?, ownerShipPercentage=?, institutionId=?, relationship=?, additionalDetails=?, lastModifiedBy=?, lastModifiedTime=?;
+       - query: INSERT INTO eg_land_ownerInfo( id, uuid, mobilenumber,isprimaryowner, ownershippercentage, institutionId, relationship, additionalDetails, landInfoId, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id, landInfoId) WHERE id IS NOT NULL DO UPDATE SET uuid = ?, mobilenumber=?, isPrimaryOwner=?, ownerShipPercentage=?, institutionId=?, relationship=?, additionalDetails=?, lastModifiedBy=?, lastModifiedTime=?;
          basePath: landInfo.owners.*
          jsonMaps:
           - jsonPath: $.landInfo.owners.*.ownerId
@@ -574,6 +574,8 @@ serviceMaps:
           - jsonPath: $.landInfo.owners.*.auditDetails.createdTime
 
           - jsonPath: $.landInfo.owners.*.auditDetails.lastModifiedTime
+
+          - jsonPath: $.landInfo.owners.*.uuid
 
           - jsonPath: $.landInfo.owners.*.mobileNumber
 
