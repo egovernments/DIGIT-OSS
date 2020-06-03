@@ -2,23 +2,6 @@ import React from "react";
 import { connect } from "react-redux";
 import { withStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-const styles = {
-  root: {
-    color: 'rgba(0, 0, 0, 0.54)',
-    // fontSize: '16px',
-    fontWeight: 400,
-    lineHeight: '1.375em',
-  },
-  linkDetails : {
-    // color: 'rgba(0, 0, 0, 0.87)',
-    fontSize: '16px',
-    fontWeight: 400,
-    fontFamily: 'Roboto',
-    lineHeight: '19px',
-    letterSpacing: '0.67px',
-    textDecoration : 'none'
-  }
-};
 
 class ComparisionLink extends React.Component {
   render() {

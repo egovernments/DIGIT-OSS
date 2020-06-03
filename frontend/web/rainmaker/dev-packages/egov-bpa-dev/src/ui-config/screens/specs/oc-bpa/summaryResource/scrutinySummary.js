@@ -164,7 +164,7 @@ export const scrutinySummary = getCommonGrayCard({
             },
             {
                 jsonPath:
-                    "BPA.additionalDetails.remarks",
+                    "BPA.remarks",
                 callBack: checkValueForNA
             }
         ),

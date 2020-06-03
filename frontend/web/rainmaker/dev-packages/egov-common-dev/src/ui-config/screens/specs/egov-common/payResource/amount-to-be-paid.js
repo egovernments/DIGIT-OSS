@@ -4,8 +4,7 @@ import {
   getTextField,
   getCommonContainer,
   getPattern,
-  getRadioButton,
-  getBreak
+  getRadioButton
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import get from "lodash/get";
 import { validateAmountInput, dispatchHandleField } from "./utils";
@@ -26,8 +25,8 @@ const AmountToBePaid = getCommonGrayCard({
             value: "full_amount"
           },
           {
-            label: "Custom Amount",
-            labelKey: "PAY_CUSTOM_AMOUNT",
+            label: "Partial Amount",
+            labelKey: "PAY_PARTIAL_AMOUNT",
             value: "partial_amount"
           }
         ],
@@ -49,7 +48,7 @@ const AmountToBePaid = getCommonGrayCard({
         }
       }
     },
-    lineBreak: getBreak(),
+
     displayAmount: {
       ...getTextField({
         label: {

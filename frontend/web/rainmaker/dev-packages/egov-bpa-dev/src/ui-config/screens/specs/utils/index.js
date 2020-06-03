@@ -4726,9 +4726,6 @@ export const permitOrderNoDownload = async(action, state, dispatch) => {
     state.screenConfiguration.preparedFinalObject, "BPA"
   );
 
-  let currentDate = new Date();
-  set(bpaDetails, "additionalDetails.runDate", convertDateToEpoch(currentDate.getFullYear()+'-'+(currentDate.getMonth()+1)+'-'+currentDate.getDate()));
-
   let payload = await edcrHttpRequest(
     "post",
     "/edcr/rest/dcr/scrutinydetails?edcrNumber=" +
@@ -4762,7 +4759,7 @@ export const permitOrderNoDownload = async(action, state, dispatch) => {
   
 let data =  wrapRequestBody({ BPA : detailsOfBpa }) ;
   axios({
-    url: '/bpa-services/v1/bpa/_permitorderedcr',
+    url: '/bpa-services/_permitorderedcr',
     method: 'POST',
     responseType: 'blob',data
    // important
@@ -5171,29 +5168,6 @@ const permitNumberLink = async (state, dispatch) => {
   }
 }
 
-/**
- * This method will be called to retreive the comparison report and vlidate it
- * @return true / false
- */
-export const getComparisonResult = async (state, dispatch, tenantId, ocEdcrNumber, bpaEdcrNumber) => {
-  /**
-   * Getting comparison report and validating it
-   */
-    let comparisionRes = await edcrHttpRequest(
-      "post",
-      "/edcr/rest/dcr/occomparison?tenantId="+ tenantId+"&ocdcrNumber="+ocEdcrNumber+"&edcrNumber="+bpaEdcrNumber,
-      "search", []
-    );  
-    let comparisionSuccess = false;
-    if(comparisionRes){
-      comparisionSuccess = comparisionRes.comparisonDetail.status == "Accepted" ? true : false;
-      dispatch(prepareFinalObject("comparisonDetails", comparisionRes.comparisonDetail));
-      dispatch(prepareFinalObject("comparisonDetails.report", comparisionRes.comparisonDetail.comparisonReport));
-    }
-    return comparisionSuccess;
-   
-}
-
 export const getOcEdcrDetails = async (state, dispatch, action) => {
   try {
     const scrutinyNo = get(
@@ -5267,11 +5241,26 @@ export const getOcEdcrDetails = async (state, dispatch, action) => {
         true
       )
     );
-    let comparisionSuccess = await getComparisonResult(state, dispatch, tenantId, scrutinyNo, bpaDetails.edcrNumber);
-    if(!comparisionSuccess){
-      showComparisonDialog(state, dispatch)
-      return 
+    /**
+     * Getting comparison report and validating it
+     */
+    let comparisionRes = await edcrHttpRequest(
+      "post",
+      "/edcr/rest/dcr/occomparison?tenantId="+ tenantId+"&ocdcrNumber="+scrutinyNo+"&edcrNumber="+bpaDetails.edcrNumber,
+      "search", []
+    );  
+    let comparisionSuccess = false;
+    if(comparisionRes){
+      comparisionSuccess = comparisionRes.comparisonDetail.status == "Accepted" ? true : false;
+      dispatch(prepareFinalObject("comparisonDetails", comparisionRes.comparisonDetail));
+
+      if(!comparisionSuccess){
+        showComparisonDialog(state, dispatch)
+        dispatch(prepareFinalObject("comparisonDetails.report", comparisionRes.comparisonDetail.comparisonReport));
+        return 
+      }
     }
+    
     dispatch(
       handleField(
         "apply",
@@ -5365,9 +5354,7 @@ export const getOcEdcrDetails = async (state, dispatch, action) => {
 export const applicantNameAppliedByMaping = async (state, dispatch, bpaDetails, ocDetails) => {
   const primaryOwnerArray = bpaDetails && get(bpaDetails, "landInfo.owners").filter(owr => owr && owr.isPrimaryOwner && owr.isPrimaryOwner == true );
   const tenantId = getQueryArg(window.location.href, "tenantId");
-  
   const permitDetails = await getPermitDetails(get(ocDetails, "permitNumber"), tenantId);
-  let comparisionSuccess = await getComparisonResult(state, dispatch, tenantId, ocDetails.edcrNumber, permitDetails.edcrNumber);
   let SHLicenseDetails = await getLicenseDetails(state,dispatch);
   dispatch(prepareFinalObject(`bpaDetails`, permitDetails));
   if(!SHLicenseDetails) {SHLicenseDetails = "NA"}

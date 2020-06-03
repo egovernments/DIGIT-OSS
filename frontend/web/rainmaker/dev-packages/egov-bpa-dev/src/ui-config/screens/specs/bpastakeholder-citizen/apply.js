@@ -17,10 +17,8 @@ import {
   stepper,
   getMdmsData
 } from "../bpastakeholder/apply";
-import { getLocale, getTenantId, setModule } from "egov-ui-kit/utils/localStorageUtils";
+import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { addressDestruct, setMobileNoField, setNameOfUser } from "../utils";
-import { getModuleName } from "egov-ui-kit/utils/commons";
-import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 
 const getData = async (action, state, dispatch, tenantId) => {
   await getMdmsData(action, state, dispatch);
@@ -80,15 +78,9 @@ const screenConfig = {
   name: "apply",
   beforeInitScreen: (action, state, dispatch) => {
     if (window.location.pathname.includes("openlink")) {
-      set(state, "screenConfiguration.moduleName", "BPAREG");
       set(action.screenConfig, "components.div.children.footer.props.style", {
         width: "100vw"
       });
-      setModule(getModuleName());
-      const tenantId = getTenantId();
-      const locale = getLocale() || "en_IN";
-      dispatch(fetchLocalizationLabel(locale, tenantId, tenantId));
-
     }
     const queryValue = getQueryArg(window.location.href, "applicationNumber");
     const tenantId = getQueryArg(window.location.href, "tenantId");

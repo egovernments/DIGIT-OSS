@@ -162,23 +162,11 @@ export const fetchData = async (
           let status = getTextToLocalMapping(
             "WF_BPA_" + get(element, "status")
           );
-          let bService = get(element, "businessService");
-          let appType = "BUILDING_PLAN_SCRUTINY";
-          let serType = "NEW_CONSTRUCTION";
-          let type;
-          if(bService === "BPA_OC") {
-            appType = "BUILDING_OC_PLAN_SCRUTINY"
-          }
-          if(bService === "BPA_LOW") {
-            type = "LOW"
-          } else {
-            type = "HIGH"
-          }
           let service = getTextToLocalMapping(
-            "BPA_APPLICATIONTYPE_" + appType
+            "BPA_APPLICATIONTYPE_" + get(element, "applicationType")
           );
           service += " - "+getTextToLocalMapping(
-            "BPA_SERVICETYPE_" + serType
+            "BPA_SERVICETYPE_" + get(element, "serviceType")
           );
           let modifiedTime = element.auditDetails.lastModifiedTime;
           let primaryowner = "-";
@@ -208,8 +196,7 @@ export const fetchData = async (
               tenantId: get(element, "tenantId", null),
               modifiedTime: modifiedTime,
               sortNumber: 1,
-              type: type,
-              serviceType: get(element, "businessService", null)
+              type: element.riskType
             })
           } else {
             searchConvertedArray.push({
