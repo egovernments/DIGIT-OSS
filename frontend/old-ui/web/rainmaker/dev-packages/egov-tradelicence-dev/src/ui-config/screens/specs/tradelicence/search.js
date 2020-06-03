@@ -5,7 +5,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { tradeLicenseApplication } from "./searchResource/tradeLicenseApplication";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { getQueryArg, getRequiredDocData, showHideAdhocPopup } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { pendingApprovals } from "./searchResource/pendingApprovals";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 // import { progressStatus } from "./searchResource/progressStatus";
@@ -22,7 +22,7 @@ const tenant= getTenantId();
 const pageResetAndChange = (state, dispatch) => {
   dispatch(prepareFinalObject("Licenses", [{ licenseType: "PERMANENT" }]));
   dispatch(prepareFinalObject("LicensesTemp", []));
-  // dispatch(setRoute(`/tradelicence/apply?tenantId=${tenant}`));
+  dispatch(setRoute(`/tradelicence/apply?tenantId=${tenant}`));
 };
 
 
@@ -77,13 +77,6 @@ const tradeLicenseSearchAndResult = {
   name: "search",
   beforeInitScreen: (action, state, dispatch) => {
     getMdmsData(dispatch);
-    const moduleDetails = [
-      {
-        moduleName: 'TradeLicense',
-        masterDetails: [{ name: 'Documents' }]
-      }
-    ];
-    getRequiredDocData(action, dispatch, moduleDetails);
     return action;
   },
   components: {
@@ -147,7 +140,6 @@ const tradeLicenseSearchAndResult = {
                 action: "condition",
                 callBack: (state, dispatch) => {
                   pageResetAndChange(state, dispatch);
-                  showHideAdhocPopup(state, dispatch, 'search')
                 }
               },
               roleDefination: {
@@ -162,18 +154,6 @@ const tradeLicenseSearchAndResult = {
         tradeLicenseApplication,
         breakAfterSearch: getBreak(),
         searchResults
-      }
-    },
-    adhocDialog: {
-      uiFramework: 'custom-containers',
-      componentPath: 'DialogContainer',
-      props: {
-        open: false,
-        maxWidth: false,
-        screenKey: 'search'
-      },
-      children: {
-        popup: {}
       }
     }
   }

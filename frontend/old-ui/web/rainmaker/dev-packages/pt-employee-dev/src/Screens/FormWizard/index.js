@@ -276,24 +276,7 @@ class FormWizard extends Component {
       }
     }
   };
-  loadUlbLogo = tenantid => {
-    var img = new Image();
-    img.crossOrigin = "Anonymous";
-    img.onload = function () {
-      var canvas = document.createElement("CANVAS");
-      var ctx = canvas.getContext("2d");
-      canvas.height = this.height;
-      canvas.width = this.width;
-      ctx.drawImage(this, 0, 0);
 
-      store.dispatch(
-        prepareFinalObject("base64UlbLogoForPdf", canvas.toDataURL())
-      );
-
-      canvas = null;
-    };
-    img.src = `/${commonConfig.tenantId}-egov-assets/${tenantid}/logo.png`;
-  };
   componentDidMount = async () => {
     let {
       location,
@@ -315,7 +298,6 @@ class FormWizard extends Component {
     const propertyId = getQueryValue(search, "propertyId");
 
     const tenantId = getQueryValue(search, "tenantId");
-    this.loadUlbLogo(tenantId)
     const draftUuid = getQueryValue(search, "uuid");
     const assessmentId =
       getQueryValue(search, "assessmentId") || fetchFromLocalStorage("draftId");
@@ -1741,7 +1723,7 @@ class FormWizard extends Component {
   };
   downloadAcknowledgementForm = () => {
     const { imageUrl } = this.state;
-    const { common, app = {}, prepareFormData, base64UlbLogoForPdf } = this.props;
+    const { common, app = {}, prepareFormData } = this.props;
     const { Properties = [] } = prepareFormData;
     const { address, propertyDetails, propertyId } = Properties[0];
     const { owners } = propertyDetails[0];
@@ -1757,7 +1739,7 @@ class FormWizard extends Component {
       header,
       propertyId
     }
-    generateAcknowledgementForm("pt-reciept-citizen", receiptDetails, generalMDMSDataById, imageUrl, null, base64UlbLogoForPdf);
+    generateAcknowledgementForm("pt-reciept-citizen", receiptDetails, generalMDMSDataById, imageUrl);
   }
 
   render() {
@@ -1819,7 +1801,7 @@ const mapStateToProps = state => {
     (propertyAddress && propertyAddress.fields && propertyAddress.fields) || {};
   const currentTenantId = (city && city.value) || commonConfig.tenantId;
   const { preparedFinalObject } = screenConfiguration;
-  const { documentsUploadRedux, newProperties = [], propertiesEdited = false, adhocExemptionPenalty = {}, ptDocumentCount = 0, base64UlbLogoForPdf = '' } = preparedFinalObject;
+  const { documentsUploadRedux, newProperties = [], propertiesEdited = false, adhocExemptionPenalty = {}, ptDocumentCount = 0 } = preparedFinalObject;
   let requiredDocCount = ptDocumentCount;
 
   return {
@@ -1832,8 +1814,7 @@ const mapStateToProps = state => {
     newProperties,
     propertiesEdited,
     adhocExemptionPenalty,
-    requiredDocCount, Assessments,
-    base64UlbLogoForPdf
+    requiredDocCount, Assessments
   };
 };
 

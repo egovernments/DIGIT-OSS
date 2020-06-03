@@ -10,7 +10,7 @@ const localizationLabelsData = initLocalizationLabels(locale);
 
 
 
-export const getAddressItems = (properties) => {
+const getAddressItems = (properties) => {
   const {address} = properties;
     return  (
      address &&    [

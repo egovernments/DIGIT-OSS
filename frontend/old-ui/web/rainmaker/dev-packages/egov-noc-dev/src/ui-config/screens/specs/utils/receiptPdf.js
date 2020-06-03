@@ -980,7 +980,7 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
       {
         style: "noc-head",
         table: {
-          widths: [120, "*", 40],
+          widths: [120, "*", 120],
           body: [
             [
               {
