@@ -358,7 +358,6 @@ class NocList extends Component {
               optionValue="code"
               optionLabel="label"
               required={card.required}
-              autoSelect={true}
               onChange={event => this.handleChange(key, event)}
               value = {value}
             />

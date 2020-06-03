@@ -7,7 +7,7 @@ import React from "react";
 import { generatePdfFromDiv } from "../../../utils/PTCommon";
 import "./index.css";
 
-const PTHeader = ({ header = '', headerValue = '', subHeaderTitle = '', subHeaderValue = '', downloadPrintButton = false ,download,print}) => {
+const PTHeader = ({ header = '', headerValue = '', subHeaderTitle = '', subHeaderValue = '', downloadPrintButton = false }) => {
   const locale = getLocale() || "en_IN";
   const localizationLabelsData = initLocalizationLabels(locale);
   let downloadButton;
@@ -17,7 +17,8 @@ const PTHeader = ({ header = '', headerValue = '', subHeaderTitle = '', subHeade
     let applicationDownloadObject = {
       label: { labelName: "Application", labelKey: "PT_APPLICATION" },
       link: () => {
-download?download():generatePdfFromDiv("download", subHeaderValue, "#property-review-form");
+
+        generatePdfFromDiv("download", subHeaderValue, "#property-review-form");
       },
       leftIcon: "assignment"
     };
@@ -25,7 +26,7 @@ download?download():generatePdfFromDiv("download", subHeaderValue, "#property-re
     let tlCertificatePrintObject = {
       label: { labelName: "Application", labelKey: "PT_APPLICATION" },
       link: () => {
-        print?print():generatePdfFromDiv("print", subHeaderValue, "#property-review-form");
+        generatePdfFromDiv("print", subHeaderValue, "#property-review-form");
       },
       leftIcon: "book"
 

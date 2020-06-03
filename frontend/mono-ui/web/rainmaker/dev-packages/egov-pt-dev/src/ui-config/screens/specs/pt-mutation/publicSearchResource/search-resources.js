@@ -31,12 +31,12 @@ export const searchPropertyDetails = {
       ulbCity: {
         ...getSelectField({
           label: {
-            labelName: "ULB/City",
-            labelKey: "PT_SEARCH_ULB_CITY"
+            labelName: "ULB",
+            labelKey: "PT_ULB_CITY"
           },
           placeholder: {
-            labelName: "Select ULB/City",
-            labelKey: "PT_SEARCH_ULB_CITY_PLACEHOLDER"
+            labelName: "Select ULB",
+            labelKey: "PT_ULB_CITY_PLACEHOLDER"
           },
 
           localePrefix: {

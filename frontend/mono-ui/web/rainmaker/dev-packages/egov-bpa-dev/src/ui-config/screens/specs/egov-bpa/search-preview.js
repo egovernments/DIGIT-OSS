@@ -438,8 +438,6 @@ const setSearchResponse = async (
   ];
   setBusinessServiceDataToLocalStorage(queryObject, dispatch);
 
-  let isCitizen = process.env.REACT_APP_NAME === "Citizen" ? true : false;
-
   if (status && status == "INPROGRESS") {
     let userInfo = JSON.parse(getUserInfo()), roles = get(userInfo, "roles"), isArchitect = false;
     if (roles && roles.length > 0) {
@@ -449,7 +447,7 @@ const setSearchResponse = async (
         }
       })
     }
-    if(isArchitect && isCitizen) {
+    if(isArchitect) {
       dispatch(
         handleField(
           "search-preview",
@@ -469,7 +467,7 @@ const setSearchResponse = async (
     }
   }
 
-  if (status && status === "CITIZEN_APPROVAL_INPROCESS" && isCitizen) {
+  if (status && status === "CITIZEN_APPROVAL_INPROCESS") {
     let userInfo = JSON.parse(getUserInfo()),
     roles = get(userInfo, "roles"),
     owners = get(response.Bpa["0"].landInfo, "owners"),

@@ -232,7 +232,7 @@ export const getWorkFlowDataForBPA = async Licenses => {
       record => record.moduleName.includes("bpa-services")
     ).forEach(item => {
       businessIdToOwnerMapping[item.businessId] = {
-        assignee: get(item, "assignes[0].name"),
+        assignee: item.assignes && item.assignes.name,
         sla: item.businesssServiceSla && convertMillisecondsToDays(item.businesssServiceSla)
       };
     });
