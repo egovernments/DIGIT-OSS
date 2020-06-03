@@ -8,6 +8,7 @@ import {
 import { getCommonCaption, getCommonCard } from "egov-ui-framework/ui-config/screens/specs/utils";
 // import { getCommonGrayCard, getLabelOnlyValue } from "../../utils";
 import { footer } from "./footer";
+import "./index.css";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 
 const styles = {
@@ -194,6 +195,9 @@ export const getRequiredDocuments = ( documents, moduleName, footerCallback ) =>
       },
       footer: {
         uiFramework: "custom-atoms",
+        props:{
+          className:"footerSticky",
+        },
         componentPath: "Container",
         children: {
           footerChildElement

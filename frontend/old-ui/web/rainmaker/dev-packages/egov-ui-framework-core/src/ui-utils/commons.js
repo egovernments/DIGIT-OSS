@@ -727,13 +727,14 @@ export const getRequiredDocData = async (action, dispatch, moduleDetails) => {
       reqDocuments
     );
     dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
-    return payload;
+    return { payload, reqDocuments};
   } catch (e) {
     console.log(e);
   }
 };
 
 const footerCallBackForRequiredDataModal = (moduleName) => {
+  const tenant = getTenantId();
   switch (moduleName) {
     case "FireNoc":
       return (state, dispatch) => {
@@ -758,6 +759,12 @@ const footerCallBackForRequiredDataModal = (moduleName) => {
         const applyUrl = process.env.REACT_APP_NAME === "Citizen" ? `/wns/apply` : `/wns/apply`
         dispatch(setRoute(applyUrl));
       };
+    case 'TradeLicense':
+      return (state, dispatch) => {
+        dispatch(prepareFinalObject('documentsUploadRedux', {}))
+        const applyUrl = `/tradelicence/apply?tenantId=${tenant}`
+        dispatch(setRoute(applyUrl))
+      }
   }
 }
 export const showHideAdhocPopup = (state, dispatch, screenKey) => {

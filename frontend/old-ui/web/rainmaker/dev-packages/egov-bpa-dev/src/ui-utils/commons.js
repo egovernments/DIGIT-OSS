@@ -770,7 +770,10 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     set(queryObject[0], "licenseType", "PERMANENT");
     set(queryObject[0], "businessService", "BPAREG");
 
-    const tenantId = getTenantId();
+    let tenantId = getTenantId();
+    if(tenantId == "null") {
+      tenantId = process.env.REACT_APP_DEFAULT_TENANT_ID;
+    }
 
     set(queryObject[0], "tenantId", tenantId);
     let userAddress = get(

@@ -1,15 +1,10 @@
 import {
-  getCommonCard,
-  getCommonContainer,
-  getCommonHeader,
-  getLabelWithValue,
   getBreak
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { getMohallaData, getModuleName } from "egov-ui-kit/utils/commons";
+import { getBusinessServiceMdmsData, getModuleName } from "egov-ui-kit/utils/commons";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-// import { progressStatus } from "./searchResource/progressStatus";
 import { searchPropertyTable } from "./publicSearchResource/search-table";
 import { httpRequest } from "../../../../ui-utils";
 import { getTenantId, setModule, getLocale } from "egov-ui-kit/utils/localStorageUtils";
@@ -23,20 +18,6 @@ const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
 enableButton = hasButton && hasButton === "false" ? false : true;
 const tenant = getTenantId();
-
-//console.log(captureMutationDetails);
-
-const getLocalityData = async (tenantId, dispatch) => {
-  let payload = await httpRequest(
-    "post",
-    "/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
-    "_search",
-    [{ key: "tenantId", value: tenantId }],
-    {}
-  );
-  const mohallaData = getMohallaData(payload, tenantId);
-  applyMohallaData(mohallaData, tenantId, dispatch);
-};
 
 const getMDMSData = async dispatch => {
   const mdmsBody = {
@@ -67,10 +48,7 @@ const getMDMSData = async dispatch => {
       payload.MdmsRes.tenant.citymodule[1].tenants;
     // console.log("payload--", payload)
     dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
-    // if (process.env.REACT_APP_NAME != "Citizen") {
-    //   dispatch(prepareFinalObject("searchScreen.tenantId", tenant));
-    //   getLocalityData(tenant, dispatch);
-    // }
+    await getBusinessServiceMdmsData(dispatch, commonConfig.tenantId, "PT");
   } catch (e) {
     console.log(e);
   }
@@ -86,6 +64,7 @@ const screenConfig = {
     const tenantId = getTenantId();
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     getMDMSData(dispatch);
+    
     return action;
   },
 

@@ -7,6 +7,7 @@ import { httpRequest } from "egov-ui-kit/utils/api";
 import { TENANT } from "egov-ui-kit/utils/endPoints";
 import { getAccessToken, getTenantId, getUserInfo, localStorageGet, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 import Label from "egov-ui-kit/utils/translationNode";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
 import set from "lodash/set";
@@ -1024,3 +1025,35 @@ export const getModuleName = () => {
     return "rainmaker-common";
   }
 }
+
+export const getBusinessServiceMdmsData = async (dispatch, tenantId, businessService) => {
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: tenantId,
+      moduleDetails: [
+        {
+          moduleName: "BillingService",
+          masterDetails: [{ name: "BusinessService" }]
+        }
+      ]
+    }
+  };
+  try {
+    let payload = null;
+    payload = await httpRequest(
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+    // dispatch(prepareFinalObject("businessServiceMdmsData", payload.MdmsRes));
+    const businessServiceArray = payload.MdmsRes.BillingService.BusinessService;
+    businessServiceArray && businessServiceArray.map(item => {
+        if (item.code == businessService) {
+            dispatch(prepareFinalObject("businessServiceInfo", item));
+        }
+    })
+  } catch (e) {
+    console.log(e);
+  }
+};

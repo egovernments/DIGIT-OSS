@@ -190,7 +190,7 @@ export const basicDetails = getCommonCard({
         labelName: "Enter Remarks Here",
         labelKey: "BPA_BASIC_DETAILS_REMARKS_PLACEHOLDER"
       },
-      jsonPath: "BPA.remarks",
+      jsonPath: "BPA.additionalDetails.remarks",
       props:{
         multiline: true,
         rows: "4"
