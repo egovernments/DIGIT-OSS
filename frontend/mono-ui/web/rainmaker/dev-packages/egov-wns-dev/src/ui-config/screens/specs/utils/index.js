@@ -2296,8 +2296,7 @@ export const getLabelOnlyValue = (value, props = {}) => {
 };
 
 export const getRequiredDocData = async (action, state, dispatch) => {
-  let tenantId =
-    process.env.REACT_APP_NAME === "Citizen" ? "pb.amritsar" : getTenantId();
+  let tenantId = process.env.REACT_APP_NAME === "Citizen" ? JSON.parse(getUserInfo()).permanentCity : getTenantId();
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: tenantId,
