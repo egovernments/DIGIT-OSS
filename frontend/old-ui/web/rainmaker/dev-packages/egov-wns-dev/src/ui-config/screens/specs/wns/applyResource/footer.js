@@ -24,7 +24,7 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import set from 'lodash/set';
 
 const setReviewPageRoute = (state, dispatch) => {
-  let tenantId = "pb.amritsar";
+  let tenantId = process.env.REACT_APP_NAME === "Citizen"?JSON.parse(getUserInfo()).permanentCity:getTenantId();
   const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.applyScreen.applicationNo");
   const appendUrl =
     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";

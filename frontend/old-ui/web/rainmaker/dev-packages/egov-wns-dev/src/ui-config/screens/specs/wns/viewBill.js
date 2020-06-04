@@ -15,8 +15,9 @@ import { getOwner } from "./viewBillResource/ownerDetails";
 import { getService } from "./viewBillResource/serviceDetails";
 import { viewBillFooter } from "./viewBillResource/viewBillFooter";
 import { adhocPopupViewBill } from "./applyResource/adhocPopupViewBill";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
+let tenantId = process.env.REACT_APP_NAME === "Citizen"?JSON.parse(getUserInfo()).permanentCity:getTenantId()
 let consumerCode = getQueryArg(window.location.href, "connectionNumber");
 const tenantId = getQueryArg(window.location.href, "tenantId")
 const service = getQueryArg(window.location.href, "service")
@@ -28,9 +29,9 @@ const processBills = async (state, data, viewBillTooltip, dispatch) => {
       let cessKey = element.taxHeadCode
       let body;
       if (service === "WATER") {
-        body = { "MdmsCriteria": { "tenantId": "pb.amritsar", "moduleDetails": [{ "moduleName": "ws-services-calculation", "masterDetails": [{ "name": cessKey }] }] } }
+        body = { "MdmsCriteria": { "tenantId": tenantId, "moduleDetails": [{ "moduleName": "ws-services-calculation", "masterDetails": [{ "name": cessKey }] }] } }
       } else {
-        body = { "MdmsCriteria": { "tenantId": "pb.amritsar", "moduleDetails": [{ "moduleName": "sw-services-calculation", "masterDetails": [{ "name": cessKey }] }] } }
+        body = { "MdmsCriteria": { "tenantId": tenantId, "moduleDetails": [{ "moduleName": "sw-services-calculation", "masterDetails": [{ "name": cessKey }] }] } }
       }
       let res = await getDescriptionFromMDMS(body, dispatch)
       if (res !== null && res !== undefined && res.MdmsRes !== undefined && res.MdmsRes !== null) {
@@ -74,7 +75,7 @@ const processBills = async (state, data, viewBillTooltip, dispatch) => {
 const fetchMDMSForBillPeriod = async(action,state,dispatch) => {
   const requestBody = { 
     "MdmsCriteria": { 
-        "tenantId": getTenantId(),
+        "tenantId": tenantId,
           "moduleDetails": [            
             { "moduleName": "ws-services-masters", "masterDetails": [{ "name": "billingPeriod" }]},
             { "moduleName": "sw-services-calculation", "masterDetails": [{ "name": "billingPeriod" }]}
