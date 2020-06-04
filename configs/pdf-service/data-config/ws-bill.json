@@ -181,6 +181,18 @@
                 }
               },
               {
+                "variable": "carryforward_label",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_CARRYFORWARD"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
                 "variable": "charge_label",
                 "value": {
                   "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_CHARGE"
@@ -584,7 +596,7 @@
               {
                 "variable": "carryForward",
                 "value": {
-                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'PT_ADVANCE_CARRYFORWARD')].amount"
+                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'WS_ADVANCE_CARRYFORWARD')].amount"
                 }
               },
               {
@@ -640,6 +652,10 @@
               {
                 "variable": "arrears",
                 "formula": "{{WS_arrears}}"
+              },
+              {
+                "variable": "carryForward",
+                "formula": "{{carryForward}}"
               }
             ]
           },

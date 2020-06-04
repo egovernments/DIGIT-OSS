@@ -359,6 +359,16 @@
                         "style": "receipt-table-value2"
                       },
                       {
+                        "text": "{{carryforward_label}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "receipt-table-value2"
+                      },
+                      {
                         "text": "{{charge_label}}",
                         "border": [
                           false,
@@ -432,6 +442,16 @@
                       },
                       {
                         "text": "{{arrears}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "receipt-table2"
+                      },
+                      {
+                        "text": "{{carryForward}}",
                         "border": [
                           false,
                           false,
