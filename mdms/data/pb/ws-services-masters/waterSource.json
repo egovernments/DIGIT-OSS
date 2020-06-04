@@ -56,6 +56,12 @@
       "name": "Bulksupply-Treated",
       "code": "BULKSUPPLY.TREATED",
       "active": true
+    },
+    {
+      "name": "Test",
+      "code": "Test",
+      "active": true,
+      "description": "Test water source which doesn't have subSource"
     }
   ]
 }
