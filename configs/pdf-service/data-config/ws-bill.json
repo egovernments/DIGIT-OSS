@@ -572,7 +572,7 @@
               {
                 "variable": "waterCess",
                 "value": {
-                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'WS_WATER_CESS') || @.taxHeadCode == 'SW_SEWERAGE_CESS'].amount"
+                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'WS_WATER_CESS' || @.taxHeadCode == 'SW_SEWERAGE_CESS')].amount"
                 }
               },
               {
@@ -596,7 +596,7 @@
               {
                 "variable": "carryForward",
                 "value": {
-                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'WS_ADVANCE_CARRYFORWARD') || @.taxHeadCode == 'SW_ADVANCE_CARRYFORWARD'].amount"
+                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'WS_ADVANCE_CARRYFORWARD' || @.taxHeadCode == 'SW_ADVANCE_CARRYFORWARD')].amount"
                 }
               },
               {
