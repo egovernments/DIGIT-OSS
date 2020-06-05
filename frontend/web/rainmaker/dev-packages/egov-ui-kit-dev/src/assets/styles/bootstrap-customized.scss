@@ -3514,6 +3514,16 @@ tbody.collapse.in {
 .dropdown {
   position: relative;
 }
+
+@media only screen and (max-width: 551px) {
+
+  .dropdown {
+    width: 100% !important;   
+
+  }
+  
+}
+
 .dropdown-toggle:focus {
   outline: 0;
 }
