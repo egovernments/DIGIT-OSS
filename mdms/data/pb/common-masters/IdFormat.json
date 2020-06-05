@@ -540,6 +540,14 @@
     {
          "format": "SW.ONE_TIME_FEE/[fy:yyyy-yy]/[SEQ_EGOV_COMMON]",
          "idname": "sw.one_time_fee.receipt.id"
+    },
+    {
+      "format": "BPA/OC/[CITY.CODE]/[fy:yyyy-yy]/[SEQ_EGOV_COMMON]",
+      "idname": "bpa.nc_oc_app_fee.receipt.id"
+    },
+    {
+      "format": "BPA/OC/[CITY.CODE]/[fy:yyyy-yy]/[SEQ_EGOV_COMMON]",
+      "idname": "bpa.nc_oc_san_fee.receipt.id"
     }
   ]
 }
