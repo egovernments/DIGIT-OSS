@@ -110,6 +110,7 @@
       ],
       "description": "OWNER.IDENTITYPROOF.IDENTITYPROOF_DESCRIPTION"
     },
+
     {
       "code": "OWNER.REGISTRATIONPROOF",
       "documentType": "OWNER",
@@ -215,6 +216,7 @@
           "active": true,
           "parentValue": [
             null,
+            "OFFICESPACE",
             "OTHERS"
           ]
         },

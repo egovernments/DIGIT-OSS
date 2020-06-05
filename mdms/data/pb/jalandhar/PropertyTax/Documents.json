@@ -216,6 +216,7 @@
           "active": true,
           "parentValue": [
             null,
+            "OFFICESPACE",
             "OTHERS"
           ]
         },
