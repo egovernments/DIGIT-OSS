@@ -29,7 +29,7 @@ class DemandCollection extends React.Component {
                 textChildren={
                   <div className="pt-owner-info">
                     <div className={` col-sm-12`} key={index}>
-                      <div className={`col-sm-6`}>
+                      <div className={`col-sm-6`}  style={{ zIndex:1000  }} >
                         <div className={`col-sm-12`} style={{ textAlign: "center" }}>
                         <Label
                           labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.87)", fontWeight: "400", lineHeight: "19px" }}
