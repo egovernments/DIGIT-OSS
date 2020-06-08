@@ -12784,7 +12784,8 @@
       "code": "null",
       "navigationURL": "tradelicence/search",
       "path": "TradeLicense.Search",
-      "leftIcon": "places:business-center"
+      "leftIcon": "places:business-center",
+      "isRequiredDocument": true
     },
     {
       "id": 1691,
@@ -15813,7 +15814,8 @@
       "navigationURL": "tradelicence/search",
       "leftIcon": "places:business-center",
       "rightIcon": "",
-      "queryParams": ""
+      "queryParams": "",
+      "isRequiredDocument" : true
     },
     {
       "id": 1929,
