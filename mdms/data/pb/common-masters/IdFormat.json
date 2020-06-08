@@ -478,11 +478,11 @@
       "idname": "bpareg.receipt.id"
     },
     {
-      "format": "BPA_APPL_FEE/[fy:yyyy-yy]/[SEQ_EGOV_COMMON]",
+      "format": "BPA/[CITY.CODE]/[fy:yyyy-yy]/[SEQ_EGOV_COMMON]",
       "idname": "bpa.nc_app_fee.receipt.id"
     },
     {
-      "format": "BPA_SANC_FEE/[fy:yyyy-yy]/[SEQ_EGOV_COMMON]",
+      "format": "BPA/[CITY.CODE]/[fy:yyyy-yy]/[SEQ_EGOV_COMMON]",
       "idname": "bpa.nc_san_fee.receipt.id"
     },
     {
