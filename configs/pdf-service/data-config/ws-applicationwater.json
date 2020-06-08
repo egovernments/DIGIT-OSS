@@ -152,8 +152,7 @@
                     {
                       "variable": "dob",
                       "value": "dob",
-                      "type":"date",
-                      "key":"dob"
+                      "type":"date"
                     },
                     {
                       "variable": "guardianName",
