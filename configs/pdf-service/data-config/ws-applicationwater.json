@@ -150,9 +150,10 @@
                       "value": "gender"
                     },
                     {
-                      "variable": "ownerDob",
+                      "variable": "dob",
                       "value": "dob",
-                      "type":"date"
+                      "type":"date",
+                      "key":"dob"
                     },
                     {
                       "variable": "guardianName",
