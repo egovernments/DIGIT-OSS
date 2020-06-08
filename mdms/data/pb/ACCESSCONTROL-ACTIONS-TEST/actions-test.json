@@ -12784,8 +12784,7 @@
       "code": "null",
       "navigationURL": "tradelicence/search",
       "path": "TradeLicense.Search",
-      "leftIcon": "places:business-center",
-      "isRequiredDocument": true
+      "leftIcon": "places:business-center"
     },
     {
       "id": 1691,
@@ -14748,7 +14747,8 @@
       "code": "null",
       "navigationURL": "tradelicence/apply",
       "path": "TradeLicense.Apply",
-      "leftIcon": "places:business-center"
+      "leftIcon": "places:business-center",
+      "isRequiredDocument": true
     },
     {
       "id": 1842,
@@ -15814,8 +15814,7 @@
       "navigationURL": "tradelicence/search",
       "leftIcon": "places:business-center",
       "rightIcon": "",
-      "queryParams": "",
-      "isRequiredDocument" : true
+      "queryParams": ""
     },
     {
       "id": 1929,
@@ -15829,7 +15828,8 @@
       "code": "null",
       "navigationURL": "tradelicence/apply",
       "path": "TradeLicense.Apply",
-      "leftIcon": "places:business-center"
+      "leftIcon": "places:business-center",
+      "isRequiredDocument": true
     },
     {
       "id": 1930,
