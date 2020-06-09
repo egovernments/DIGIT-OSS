@@ -12,56 +12,26 @@ ServiceMaps:
       timeStampField: $.auditDetails.createdTime
       jsonPath: $.BPA
       customJsonMapping:
-        indexMapping: {"Data":{"serviceType":"serviceType","edcrNumber":"edcrNumber","applicationType":"applicationType","applicationNo":"applicationNo","ownerName":"ownerName","ownerEmail":"ownerEmail","ownerMobileNo":"ownerMobileNo","tradeType":"tradeType","occupancyType":"occupancyType","subOccupancyType":"subOccupancyType","riskType":"riskType","holdingNo":"holdingNo","orderGeneratedDate":"orderGeneratedDate","action":"action","govtOrQuasi":"govtOrQuasi","usages":"usages","registrationDetails":"registrationDetails","tradeType":"tradeType","permitOrderNo":"permitOrderNo","ownershipCategory":"ownershipCategory","validityDate":"validityDate","status":"status","comment":"comment","remarks":"remarks","tenantId":"tenantId","@timestamp":"timestamp"}}
+        indexMapping: {"Data":{"businessService":"businessService","edcrNumber":"edcrNumber","riskType":"riskType","applicationNo":"applicationNo","landInfo": {},"approvalNo":"approvalNo","applicationDate":"applicationDate","status":"status","approvalDate":"approvalDate","tenantId":"tenantId","@timestamp":"timestamp"}}
         fieldMapping:
-        - inJsonPath: $.serviceType
-          outJsonPath: $.Data.serviceType
+        - inJsonPath: $.businessService
+          outJsonPath: $.Data.businessService
         - inJsonPath: $.edcrNumber
           outJsonPath: $.Data.edcrNumber        
-        - inJsonPath: $.applicationType
-          outJsonPath: $.Data.applicationType
-        - inJsonPath: $.applicationNo
-          outJsonPath: $.Data.applicationNo
-        - inJsonPath: $.owners[0].name
-          outJsonPath: $.Data.ownerName  
-        - inJsonPath: $.owners[0].emailId
-          outJsonPath: $.Data.ownerEmail  
-        - inJsonPath: $.owners[0].mobileNumber
-          outJsonPath: $.Data.ownerMobileNo  
-        - inJsonPath: $.tradeType
-          outJsonPath: $.Data.tradeType 
-        - inJsonPath: $.occupancyType
-          outJsonPath: $.Data.occupancyType
-        - inJsonPath: $.subOccupancyType
-          outJsonPath: $.Data.subOccupancyType
         - inJsonPath: $.riskType
           outJsonPath: $.Data.riskType
-        - inJsonPath: $.holdingNo
-          outJsonPath: $.Data.holdingNo
-        - inJsonPath: $.orderGeneratedDate
-          outJsonPath: $.Data.orderGeneratedDate
-        - inJsonPath: $.action
-          outJsonPath: $.Data.action
-        - inJsonPath: $.govtOrQuasi
-          outJsonPath: $.Data.govtOrQuasi
-        - inJsonPath: $.usages
-          outJsonPath: $.Data.usages
-        - inJsonPath: $.registrationDetails
-          outJsonPath: $.Data.registrationDetails
-        - inJsonPath: $.tradeType
-          outJsonPath: $.Data.tradeType
-        - inJsonPath: $.permitOrderNo
-          outJsonPath: $.Data.permitOrderNo
-        - inJsonPath: $.ownershipCategory
-          outJsonPath: $.Data.ownershipCategory
-        - inJsonPath: $.validityDate
-          outJsonPath: $.Data.validityDate
+        - inJsonPath: $.applicationNo
+          outJsonPath: $.Data.applicationNo
+        - inJsonPath: $.landInfo
+          outJsonPath: $.Data.landInfo 
+        - inJsonPath: $.approvalNo
+          outJsonPath: $.Data.approvalNo
+        - inJsonPath: $.applicationDate
+          outJsonPath: $.Data.applicationDate
         - inJsonPath: $.status
           outJsonPath: $.Data.status
-        - inJsonPath: $.comment
-          outJsonPath: $.Data.comment
-        - inJsonPath: $.remarks
-          outJsonPath: $.Data.remarks
+        - inJsonPath: $.approvalDate
+          outJsonPath: $.Data.approvalDate
         - inJsonPath: $.tenantId
           outJsonPath: $.Data.tenantId
         - inJsonPath: $.@timestamp
@@ -77,57 +47,27 @@ ServiceMaps:
       jsonPath: $.BPA
       timeStampField: $.auditDetails.createdTime
       customJsonMapping:
-        indexMapping: {"Data":{"serviceType":"serviceType","edcrNumber":"edcrNumber","applicationType":"applicationType","applicationNo":"applicationNo","ownerName":"ownerName","ownerEmail":"ownerEmail","ownerMobileNo":"ownerMobileNo","occupancyType":"occupancyType","subOccupancyType":"subOccupancyType","riskType":"riskType","holdingNo":"holdingNo","orderGeneratedDate":"orderGeneratedDate","action":"action","govtOrQuasi":"govtOrQuasi","usages":"usages","registrationDetails":"registrationDetails","tradeType":"tradeType","permitOrderNo":"permitOrderNo","ownershipCategory":"ownershipCategory","validityDate":"validityDate","status":"status","comment":"comment","remarks":"remarks","tenantId":"tenantId","@timestamp":"timestamp"}}
+        indexMapping: {"Data":{"businessService":"businessService","edcrNumber":"edcrNumber","riskType":"riskType","applicationNo":"applicationNo","landInfo":  {},"approvalNo":"approvalNo","applicationDate":"applicationDate","status":"status","approvalDate":"approvalDate","tenantId":"tenantId","@timestamp":"timestamp"}}
         fieldMapping:
-        - inJsonPath: $.serviceType
-          outJsonPath: $.Data.serviceType
+        - inJsonPath: $.businessService
+          outJsonPath: $.Data.businessService
         - inJsonPath: $.edcrNumber
           outJsonPath: $.Data.edcrNumber        
-        - inJsonPath: $.applicationType
-          outJsonPath: $.Data.applicationType
-        - inJsonPath: $.applicationNo
-          outJsonPath: $.Data.applicationNo
-        - inJsonPath: $.owners[0].name
-          outJsonPath: $.Data.ownerName  
-        - inJsonPath: $.owners[0].emailId
-          outJsonPath: $.Data.ownerEmail  
-        - inJsonPath: $.owners[0].mobileNumber
-          outJsonPath: $.Data.ownerMobileNo  
-        - inJsonPath: $.occupancyType
-          outJsonPath: $.Data.occupancyType
-        - inJsonPath: $.subOccupancyType
-          outJsonPath: $.Data.subOccupancyType
         - inJsonPath: $.riskType
           outJsonPath: $.Data.riskType
-        - inJsonPath: $.holdingNo
-          outJsonPath: $.Data.holdingNo
-        - inJsonPath: $.orderGeneratedDate
-          outJsonPath: $.Data.orderGeneratedDate
-        - inJsonPath: $.action
-          outJsonPath: $.Data.action
-        - inJsonPath: $.govtOrQuasi
-          outJsonPath: $.Data.govtOrQuasi
-        - inJsonPath: $.usages
-          outJsonPath: $.Data.usages
-        - inJsonPath: $.registrationDetails
-          outJsonPath: $.Data.registrationDetails
-        - inJsonPath: $.tradeType
-          outJsonPath: $.Data.tradeType
-        - inJsonPath: $.permitOrderNo
-          outJsonPath: $.Data.permitOrderNo
-        - inJsonPath: $.ownershipCategory
-          outJsonPath: $.Data.ownershipCategory
-        - inJsonPath: $.validityDate
-          outJsonPath: $.Data.validityDate
+        - inJsonPath: $.applicationNo
+          outJsonPath: $.Data.applicationNo
+        - inJsonPath: $.landInfo
+          outJsonPath: $.Data.landInfo 
+        - inJsonPath: $.approvalNo
+          outJsonPath: $.Data.approvalNo
+        - inJsonPath: $.applicationDate
+          outJsonPath: $.Data.applicationDate
         - inJsonPath: $.status
           outJsonPath: $.Data.status
-        - inJsonPath: $.comment
-          outJsonPath: $.Data.comment
-        - inJsonPath: $.remarks
-          outJsonPath: $.Data.remarks
+        - inJsonPath: $.approvalDate
+          outJsonPath: $.Data.approvalDate
         - inJsonPath: $.tenantId
           outJsonPath: $.Data.tenantId
         - inJsonPath: $.@timestamp
-          outJsonPath: $.Data.@timestamp
-      
- 
+          outJsonPath: $.Data.@timestamp      
