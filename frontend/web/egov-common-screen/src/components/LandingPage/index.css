@@ -84,8 +84,8 @@
 
     .common-background
     {       
-        background-size: cover!important;
-        height: 110% !important;
+        background-size: cover;
+        height: 110% ;
 
     }
 
