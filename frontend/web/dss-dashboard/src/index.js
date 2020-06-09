@@ -4,7 +4,6 @@ import { Provider } from 'react-redux'
 // import configureStore from '../store';
 import { BrowserRouter } from 'react-router-dom';
 import storeFactory from './store/store';
-import './index.css';
 import App from './App';
 import 'typeface-roboto';
 //import registerServiceWorker from './registerServiceWorker';
