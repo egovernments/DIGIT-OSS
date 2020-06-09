@@ -17,9 +17,39 @@ table tbody  tr  td {
 
 @media only screen and (max-width: 960px) {
   table tbody tr td {
-    width: 50% !important;
+    width: 40% !important;
     padding:4px 8px 4px 10px !important;
     font-size: 14px !important;
     height: 27px !important;
   }
 }
+
+/*   @media only screen and (max-width: 551px) {
+  table tbody tr td {
+    width: 50% !important;
+    padding:4px 8px 4px 10px !important;
+    font-size: 14px !important;
+    height: 36px !important;,
+    line-height: 1 !important;
+
+  }
+  table tbody tr td span {
+   white-space: normal !important;
+  }
+
+}
+   */
+
+
+  @media only screen and (max-width: 551px) {
+
+  div[class^="MuiPaper-root"] {
+    overflow: scroll !important;
+  }
+}  
+
+ /*  .MuiPaper-root-579 MuiPaper-elevation4-585 MuiPaper-rounded-580
+  {
+    overflow: scroll !important;
+  } 
+} */
