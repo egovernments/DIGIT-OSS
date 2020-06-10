@@ -66,6 +66,12 @@
                 "type": "date"
               },
               {
+                "variable": "favourOf",
+                "value": {
+                  "path": "$.landInfo.owners.*.name"
+                }
+              },
+              {
                 "variable": "SALUTATION",
                 "value": {
                   "path": "BPA_PDF_SALUTATION"
