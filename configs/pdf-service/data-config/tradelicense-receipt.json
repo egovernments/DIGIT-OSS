@@ -100,12 +100,6 @@
                 "type": "date"
               },
               {
-                "variable": "excessAmountPaid", 
-                "value": {
-                  "path": "$.paymentDetails[0].excessAmountPaid"
-                }
-              },
-              {
                 "variable": "consumerID", 
                 "value": {
                   "path": "$.paymentDetails[0].bill.consumerCode"
@@ -390,10 +384,14 @@
           },
           {
             "derived": [
-               {
-                  "variable": "pendingAmount",
-                  "formula": "{{dueAmount}}-{{paidAmount}}"
-               }
+              {
+                "variable": "pendingAmount",
+                "formula": "{{dueAmount}}>{{paidAmount}}?{{dueAmount}}-{{paidAmount}}:0"
+             },
+             {
+              "variable": "excessAmountPaid",
+              "formula": "{{paidAmount}}>{{dueAmount}}?{{paidAmount}}-{{dueAmount}}:0"
+           }
             ]
          },
           {

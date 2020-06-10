@@ -502,43 +502,43 @@
               {
                 "variable": "fees",
                 "value":{
-                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'TL_TAX' || @.taxHeadCode == 'TL_RENEWAL_TAX')].amount"
+                  "path": "$.billDetails[(@.length-1)].billAccountDetails[?(@.taxHeadCode == 'TL_TAX' || @.taxHeadCode == 'TL_RENEWAL_TAX')].amount"
                 }
               },
               {
                 "variable": "tl_penalty",
                 "value":{
-                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'TL_PENALTY' || @.taxHeadCode == 'TL_RENEWAL_PENALTY')].amount"
+                  "path": "$.billDetails[(@.length-1)].billAccountDetails[?(@.taxHeadCode == 'TL_PENALTY' || @.taxHeadCode == 'TL_RENEWAL_PENALTY')].amount"
                 }
               },
               {
                 "variable": "tl_rebate",
                 "value":{
-                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'TL_REBATE' || @.taxHeadCode == 'TL_RENEWAL_REBATE')].amount"
+                  "path": "$.billDetails[(@.length-1)].billAccountDetails[?(@.taxHeadCode == 'TL_REBATE' || @.taxHeadCode == 'TL_RENEWAL_REBATE')].amount"
                 }
               },
               {
                 "variable": "tl_adhoc_penalty",
                 "value":{
-                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'TL_ADHOC_PENALTY' || @.taxHeadCode == 'TL_RENEWAL_ADHOC_PENALTY')].amount"
+                  "path": "$.billDetails[(@.length-1)].billAccountDetails[?(@.taxHeadCode == 'TL_ADHOC_PENALTY' || @.taxHeadCode == 'TL_RENEWAL_ADHOC_PENALTY')].amount"
                 }
               },
               {
                 "variable": "tl_adhoc_rebate",
                 "value":{
-                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'TL_ADHOC_REBATE' || @.taxHeadCode == 'TL_RENEWAL_ADHOC_REBATE')].amount"
+                  "path": "$.billDetails[(@.length-1)].billAccountDetails[?(@.taxHeadCode == 'TL_ADHOC_REBATE' || @.taxHeadCode == 'TL_RENEWAL_ADHOC_REBATE')].amount"
                 }
               },
               {
                 "variable": "tl_roundoff",
                 "value":{
-                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'TL_ROUNDOFF')].amount"
+                  "path": "$.billDetails[(@.length-1)].billAccountDetails[?(@.taxHeadCode == 'TL_ROUNDOFF')].amount"
                 }
               },
               {
                 "variable": "adjustment",
                 "value": {
-                  "path": "$.billDetails[(@.length-1)].billAccountDetails[?(@.taxHeadCode == 'TL_ADJUSTMENT')].amount"
+                  "path": "$.billDetails[(@.length-1)].billAccountDetails[?(@.taxHeadCode == 'TL_ADVANCE_CARRYFORWARD')].amount"
                 }
               },
               {
