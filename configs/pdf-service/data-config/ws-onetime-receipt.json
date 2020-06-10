@@ -448,7 +448,7 @@
             "derived": [
               {
                 "variable": "pendingAmount",
-                "formula": "{{dueAmount}}-{{paidAmount}}"
+                "formula": "{{dueAmount}}<={{paidAmount}}?0:{{paidAmount}}-{{dueAmount}}"
               },
               {
                 "variable": "advanceAmount",
