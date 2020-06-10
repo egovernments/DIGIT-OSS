@@ -264,6 +264,26 @@
             ],
             [
               {
+                "text": "{{bill_amount}}",
+                "border": [
+                  true,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "₹ {{dueAmount}}",
+                "border": [
+                  false,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table"
+              },
+              {
                 "text": "{{paid_amount}}",
                 "border": [
                   true,
@@ -282,7 +302,9 @@
                   false
                 ],
                 "style": "receipt-table"
-              },
+              }
+            ],
+            [ 
               {
                 "text": "{{pending_amount}}",
                 "border": [
@@ -295,6 +317,26 @@
               },
               {
                 "text": "₹ {{pendingAmount}}",
+                "border": [
+                  false,
+                  false,
+                  true,
+                  false
+                ],
+                "style": "receipt-table"
+              },
+              {
+                "text": "{{advance_amount}}",
+                "border": [
+                  false,
+                  false,
+                  false,
+                  false
+                ],
+                "style": "receipt-table-value"
+              },
+              {
+                "text": "₹ {{advanceAmount}}",
                 "border": [
                   false,
                   false,
