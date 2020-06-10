@@ -286,7 +286,7 @@
               {
                 "text": "{{paid_amount}}",
                 "border": [
-                  true,
+                  false,
                   false,
                   false,
                   false
@@ -298,7 +298,7 @@
                 "border": [
                   false,
                   false,
-                  false,
+                  true,
                   false
                 ],
                 "style": "receipt-table"
@@ -308,7 +308,7 @@
               {
                 "text": "{{pending_amount}}",
                 "border": [
-                  false,
+                  true,
                   false,
                   false,
                   false
@@ -320,7 +320,7 @@
                 "border": [
                   false,
                   false,
-                  true,
+                  false,
                   false
                 ],
                 "style": "receipt-table"
