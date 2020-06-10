@@ -56,12 +56,6 @@
                 }
               },
               {
-                "variable": "excessAmountPaid", 
-                "value": {
-                  "path": "$.paymentDetails[0].excessAmountPaid"
-                }
-              },
-              {
                 "variable": "fromPeriod", 
                 "value": {
                   "path": "$.paymentDetails[0].bill.billDetails[0].fromPeriod"
@@ -452,10 +446,14 @@
           },
           {
             "derived": [
-               {
-                  "variable": "pendingAmount",
-                  "formula": "{{dueAmount}}-{{paidAmount}}"
-               }
+              {
+                "variable": "pendingAmount",
+                "formula": "{{dueAmount}}>{{paidAmount}}?{{dueAmount}}-{{paidAmount}}:0"
+             },
+             {
+              "variable": "excessAmountPaid",
+              "formula": "{{paidAmount}}>{{dueAmount}}?{{paidAmount}}-{{dueAmount}}:0"
+           }
             ]
          },
           {

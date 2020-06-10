@@ -119,12 +119,6 @@
                 }
               },
               {
-                "variable": "excessAmountPaid", 
-                "value": {
-                  "path": "$.paymentDetails[0].excessAmountPaid"
-                }
-              },
-              {
                 "variable": "payment_receipt",
                 "value": {
                   "path": "PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_PAYMENT_RECEIPT"
@@ -390,18 +384,22 @@
             ]
           },
           {
-            "derived": [
+            "derived": [ 
                {
                   "variable": "pendingAmount",
-                  "formula": "{{dueAmount}}-{{paidAmount}}"
-               }
+                  "formula": "{{dueAmount}}>{{paidAmount}}?{{dueAmount}}-{{paidAmount}}:0"
+               },
+               {
+                "variable": "excessAmountPaid",
+                "formula": "{{paidAmount}}>{{dueAmount}}?{{paidAmount}}-{{dueAmount}}:0"
+             }
             ]
          },
           {
             "externalAPI": [     
               { 
-                  "path": "http://egov-mdms-service:8080/egov-mdms-service/v1/_get",
-                  "queryParam": "moduleName=tenant&masterName=tenants&tenantId=pb&filter=%5B?(@.code=='{$.tenantId}')%5D",
+                "path": "http://egov-mdms-service:8080/egov-mdms-service/v1/_get",
+                "queryParam": "moduleName=tenant&masterName=tenants&tenantId=pb&filter=%5B?(@.code=='{$.tenantId}')%5D",
                   "apiRequest": null,
                   "responseMapping":[
                     {             
