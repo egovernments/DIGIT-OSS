@@ -448,11 +448,11 @@
             "derived": [
               {
                 "variable": "pendingAmount",
-                "formula": "{{dueAmount}}<={{paidAmount}}?0:{{paidAmount}}-{{dueAmount}}"
+                "formula": "{{paidAmount}}>{{dueAmount}}?0:{{paidAmount}}-{{dueAmount}}"
               },
               {
                 "variable": "advanceAmount",
-                "formula": "{{paidAmount}}-{{dueAmount}}"
+                "formula": "{{paidAmount}}>{{dueAmount}}?{{paidAmount}}-{{dueAmount}}:0"
               }
             ]
           },
