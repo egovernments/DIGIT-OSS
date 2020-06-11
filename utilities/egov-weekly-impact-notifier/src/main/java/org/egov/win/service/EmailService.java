@@ -8,6 +8,7 @@ import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.egov.win.model.Body;
 import org.egov.win.model.Email;
+import org.egov.win.model.Firenoc;
 import org.egov.win.model.MiscCollections;
 import org.egov.win.model.PGR;
 import org.egov.win.model.PT;
@@ -50,6 +51,8 @@ public class EmailService {
 			enrichWSData(body.getWaterAndSewerage(), context);
 		if (null != body.getMiscCollections())
 			enrichMCData(body.getMiscCollections(), context);
+		if(null !=body.getFirenoc())
+			enrichFirenocData(body.getFirenoc(), context);
 	}
 
 	private void enrichHeaderData(List<Map<String, Object>> header, VelocityContext context) {
@@ -77,6 +80,12 @@ public class EmailService {
 		fillData(pt.getRevenueCollected(), context);
 		fillData(pt.getUlbCovered(), context);
 	}
+	
+	private void enrichFirenocData(Firenoc firenoc, VelocityContext context) {
+		fillData(firenoc.getCertificatesIssued(), context);
+		fillData(firenoc.getRevenueCollected(), context);
+		fillData(firenoc.getUlbCovered(), context);
+	}	
 
 	private void enrichTLData(TL tl, VelocityContext context) {
 		fillData(tl.getLicenseIssued(), context);

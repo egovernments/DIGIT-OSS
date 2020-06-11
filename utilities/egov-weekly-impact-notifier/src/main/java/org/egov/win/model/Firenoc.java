@@ -2,7 +2,6 @@ package org.egov.win.model;
 
 import java.util.List;
 import java.util.Map;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,22 +15,10 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-public class Body {
+public class Firenoc {
+private List<Map<String, Object>> ulbCovered;
 	
-	private List<Map<String, Object>> header;
+	private List<Map<String, Object>> certificatesIssued;
 	
-	private StateWide stateWide;
-	
-	private PGR pgr;
-	
-	private PT pt;
-	
-	private TL tl;
-	
-	private Firenoc firenoc;
-	
-	private WaterAndSewerage waterAndSewerage;
-	
-	private MiscCollections miscCollections;
-
+	private List<Map<String, Object>> revenueCollected;
 }

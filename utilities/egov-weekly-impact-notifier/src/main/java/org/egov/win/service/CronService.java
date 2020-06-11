@@ -17,6 +17,7 @@ import org.egov.tracer.model.CustomException;
 import org.egov.win.model.Body;
 import org.egov.win.model.Email;
 import org.egov.win.model.EmailRequest;
+import org.egov.win.model.Firenoc;
 import org.egov.win.model.MiscCollections;
 import org.egov.win.model.PGR;
 import org.egov.win.model.PGRChannelBreakup;
@@ -89,6 +90,7 @@ public class CronService {
 		enrichBodyWithTLData(body);
 		enrichBodyWithMiscCollData(body);
 		enrichBodyWithWSData(body, wsData);
+		enrichBodyWithFirenocData(body);
 		return Email.builder().body(body).build();
 	}
 
@@ -250,6 +252,34 @@ public class CronService {
 
 		TL tl = TL.builder().ulbCovered(ulbCovered).licenseIssued(licenseIssued).revenueCollected(revenueCollected).build();
 		body.setTl(tl);
+	}
+	
+	private void enrichBodyWithFirenocData(Body body) {
+		List<Map<String, Object>> data = externalAPIService.getRainmakerData(CronConstants.SEARCHER_FIRENOC);
+		List<Map<String, Object>> ulbCovered = new ArrayList<>();
+		List<Map<String, Object>> certificatesIssued = new ArrayList<>();
+		List<Map<String, Object>> revenueCollected= new ArrayList<>();
+		for (Map<String, Object> record : data) {
+			Map<String, Object> ulbCoveredPerWeek = new HashMap<>();
+			Map<String, Object> certificatesIssuedPerWeek = new HashMap<>();
+			Map<String,Object> revenueCollectedPerWeek=new HashMap<> ();
+			String prefix = "Week";
+			Integer noOfWeeks = 6;
+			for (int week = 0; week < noOfWeeks; week++) {
+				if (record.get("day").equals(prefix + week)) {
+					ulbCoveredPerWeek.put("w" + week + "fnulbc", record.get("ulbcovered"));
+					certificatesIssuedPerWeek.put("w" + week + "fncertissued", record.get("certificatesIssued"));
+					revenueCollectedPerWeek.put("w" + week + "fnrevcoll", record.get("revenuecollected"));
+					
+				}
+			}
+			ulbCovered.add(ulbCoveredPerWeek);
+			certificatesIssued.add(certificatesIssuedPerWeek);
+			revenueCollected.add(revenueCollectedPerWeek);
+		}
+
+		Firenoc firenoc = Firenoc.builder().ulbCovered(ulbCovered).certificatesIssued(certificatesIssued).revenueCollected(revenueCollected).build();
+		body.setFirenoc(firenoc);
 	}
 	
 	private void enrichBodyWithWSData(Body body, List<Map<String, Object>> data) {
