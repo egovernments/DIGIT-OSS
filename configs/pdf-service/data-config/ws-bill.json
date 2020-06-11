@@ -193,6 +193,18 @@
                 }
               },
               {
+                "variable": "advanceAvailable_label",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_ADVANCEAVAILABLE"
+                },
+                "type": "label",
+                "localisation": {
+                  "required": true,
+                  "prefix": null,
+                  "module": "rainmaker-common"
+                }
+              },
+              {
                 "variable": "charge_label",
                 "value": {
                   "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_CHARGE"
@@ -655,6 +667,10 @@
               },
               {
                 "variable": "advanceAdjusted",
+                "formula": ""
+              },
+              {
+                "variable": "advanceAvailable",
                 "formula": "{{total}}<0?{{total}}*-1:0"
               }
             ]
