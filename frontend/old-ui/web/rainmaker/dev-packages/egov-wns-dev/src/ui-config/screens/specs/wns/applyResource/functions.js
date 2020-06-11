@@ -1,12 +1,12 @@
 import get from "lodash/get";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getPropertyResults } from "../../../../../ui-utils/commons";
-import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getPropertyResults, getTenantIdCommon } from "../../../../../ui-utils/commons";
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
 export const propertySearchApiCall = async (state, dispatch) => {
   showHideFields(dispatch, false);
-  let tenantId = process.env.REACT_APP_NAME === "Citizen"?JSON.parse(getUserInfo()).permanentCity:getTenantId();
+  let tenantId = getTenantIdCommon();
   let queryObject = [{ key: "tenantId", value: tenantId }];
   let searchScreenObject = get(state.screenConfiguration.preparedFinalObject, "searchScreen", {});
   dispatch(
