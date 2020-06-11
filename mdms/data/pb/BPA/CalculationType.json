@@ -100,13 +100,7 @@
       "feeType": "Low_SanctionFee",
       "amount": 500
     },
-    {
-      "applicationType": "BUILDING_OC_PLAN_SCRUTINY",
-      "serviceType": "NEW_CONSTRUCTION",
-      "riskType": "LOW",
-      "feeType": "SanctionFee",
-      "amount": 500
-    },
+
     {
       "applicationType": "BUILDING_PLAN_SCRUTINY",
       "serviceType": "ALL",
