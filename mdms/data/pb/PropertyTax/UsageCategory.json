@@ -109,6 +109,115 @@
       }
     },
     {
+      "name": "Educational",
+      "code": "NONRESIDENTIAL.INSTITUTIONAL.EDUCATIONAL",
+      "active": true,
+      "fromFY": "2015-16",
+      "exemption": {
+        "rate": 0,
+        "maxAmount": 0,
+        "flatAmount": 0
+      }
+    },
+    {
+      "name": "Educational(govt. aided)",
+      "code": "NONRESIDENTIAL.INSTITUTIONAL.EDUCATIONALGOVAIDED",
+      "active": true,
+      "fromFY": "2015-16",
+      "exemption": {
+        "rate": 100,
+        "maxAmount": 0,
+        "flatAmount": 0
+      }
+    },
+    {
+      "name": "Recreational Space",
+      "code": "NONRESIDENTIAL.INSTITUTIONAL.RECREATIONAL",
+      "active": true,
+      "fromFY": "2015-16",
+      "exemption": {
+        "rate": 100,
+        "maxAmount": 0,
+        "flatAmount": 0
+      }
+    },
+    {
+      "name": "Others(care giving facilities)",
+      "code": "NONRESIDENTIAL.INSTITUTIONAL.HOMESFORSPECIALCARE",
+      "active": true,
+      "fromFY": "2015-16",
+      "exemption": {
+        "rate": 100,
+        "maxAmount": 0,
+        "flatAmount": 0
+      }
+    },
+    {
+      "name": "Other Institutional Usage ",
+      "code": "NONRESIDENTIAL.INSTITUTIONAL.OTHERINSTITUTIONALSUBMINOR",
+      "active": true,
+      "fromFY": "2015-16",
+      "exemption": {
+        "rate": 100,
+        "maxAmount": 0,
+        "flatAmount": 0
+      }
+    },
+    {
+      "name": "Public Facility",
+      "code": "NONRESIDENTIAL.INSTITUTIONAL.PUBLICFACILITY",
+      "active": true,
+      "fromFY": "2015-16",
+      "exemption": {
+        "rate": 0,
+        "maxAmount": 0,
+        "flatAmount": 0
+      }
+    },
+    {
+      "name": "Religious Instituition",
+      "code": "NONRESIDENTIAL.INSTITUTIONAL.RELIGIOUSINSTITUTION",
+      "active": true,
+      "fromFY": "2015-16",
+      "exemption": {
+        "rate": 100,
+        "maxAmount": 0,
+        "flatAmount": 0
+      }
+    },  
+    {
+      "name": "Godown/Warehouse",
+      "code": "NONRESIDENTIAL.INDUSTRIAL.WAREHOUSE",
+      "active": true,
+      "fromFY": "2015-16",
+      "exemption": {
+        "rate": 100,
+        "maxAmount": 0,
+        "flatAmount": 0
+      }
+    },  
+    {
+      "name": "Other Commercial Usage",
+      "code": "NONRESIDENTIAL.INDUSTRIAL.OTHERCOMMERCIALSUBMINOR",
+      "active": true,
+      "fromFY": "2015-16",
+      "exemption": {
+        "rate": 100,
+        "maxAmount": 0,
+        "flatAmount": 0
+      }
+    },   {
+      "name":"Manufacturing Facility",
+      "code": "NONRESIDENTIAL.INDUSTRIAL.MANUFACTURINGFACILITY",
+      "active": true,
+      "fromFY": "2015-16",
+      "exemption": {
+        "rate": 100,
+        "maxAmount": 0,
+        "flatAmount": 0
+      }
+    },    
+    {
       "name": "Showroom",
       "code": "NONRESIDENTIAL.COMMERCIAL.RETAIL.SHOWROOM",
       "active": true,
@@ -219,12 +328,6 @@
     {
       "name": "Private Hospital",
       "code": "NONRESIDENTIAL.COMMERCIAL.MEDICALFACILITY.PVTHOSPITAL",
-      "active": true,
-      "fromFY": "2015-16"
-    },
-    {
-      "name": "Residential Officespace",
-      "code": "RESIDENTIAL.OFFICESPACE",
       "active": true,
       "fromFY": "2015-16"
     },
