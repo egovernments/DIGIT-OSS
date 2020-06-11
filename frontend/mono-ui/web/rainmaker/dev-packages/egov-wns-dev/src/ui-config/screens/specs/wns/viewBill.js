@@ -17,7 +17,6 @@ import { viewBillFooter } from "./viewBillResource/viewBillFooter";
 import { adhocPopupViewBill } from "./applyResource/adhocPopupViewBill";
 import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
-let tenantId = process.env.REACT_APP_NAME === "Citizen"?JSON.parse(getUserInfo()).permanentCity:getTenantId()
 let consumerCode = getQueryArg(window.location.href, "connectionNumber");
 const tenantId = getQueryArg(window.location.href, "tenantId")
 const service = getQueryArg(window.location.href, "service")

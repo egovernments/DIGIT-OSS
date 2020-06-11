@@ -9,7 +9,7 @@ import { setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils
 import { resetFieldsForConnection, resetFieldsForApplication } from '../utils';
 import "./index.css";
 import { getRequiredDocData, showHideAdhocPopup } from "egov-ui-framework/ui-utils/commons";
-
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
 const getMDMSData = (action, dispatch) => {
   const moduleDetails = [
@@ -32,7 +32,7 @@ const header = getCommonHeader({
 });
 
 const queryObject = [
-  { key: "tenantId", value: 'pb.amritsar' },
+  { key: "tenantId", value: getTenantId() },
   { key: "businessServices", value: 'NewWS1' }
 ];
 
