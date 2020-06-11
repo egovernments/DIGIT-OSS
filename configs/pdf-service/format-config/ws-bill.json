@@ -522,47 +522,6 @@
                   true
                 ]
               }
-            ],
-            [
-              {
-                "table": {
-                  "widths": [
-                    "15%"
-                  ],
-                  "body": [
-                    [
-                      {
-                        "text": "{{advanceAvailable_label}}",
-                        "border": [
-                          false,
-                          false,
-                          false,
-                          false
-                        ],
-                        "style": "receipt-table-value2"
-                      }
-                    ],
-                    [
-                      {
-                        "text": "{{advanceAvailable}}",
-                        "border": [
-                          false,
-                          false,
-                          false,
-                          false
-                        ],
-                        "style": "receipt-table2"
-                      }
-                    ]
-                  ]
-                },
-                "border": [
-                  true,
-                  false,
-                  true,
-                  true
-                ]
-              }
             ]
           ]
         },
