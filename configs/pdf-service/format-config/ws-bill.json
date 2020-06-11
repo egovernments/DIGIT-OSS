@@ -360,7 +360,7 @@
                         "style": "receipt-table-value2"
                       },
                       {
-                        "text": "{{carryforward_label}}",
+                        "text": "{{advanceAdjusted_label}}",
                         "border": [
                           false,
                           false,
@@ -452,7 +452,7 @@
                         "style": "receipt-table2"
                       },
                       {
-                        "text": "{{carryForward}}",
+                        "text": "{{advanceAdjusted}}",
                         "border": [
                           false,
                           false,
@@ -511,6 +511,47 @@
                         ],
                         "style": "receipt-table2",
                         "bold": true
+                      }
+                    ]
+                  ]
+                },
+                "border": [
+                  true,
+                  false,
+                  true,
+                  true
+                ]
+              }
+            ],
+            [
+              {
+                "table": {
+                  "widths": [
+                    "15%"
+                  ],
+                  "body": [
+                    [
+                      {
+                        "text": "{{advanceAvailable_label}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "receipt-table-value2"
+                      }
+                    ],
+                    [
+                      {
+                        "text": "{{advanceAvailable}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "receipt-table2"
                       }
                     ]
                   ]
