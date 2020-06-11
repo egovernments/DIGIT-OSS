@@ -193,18 +193,6 @@
                 }
               },
               {
-                "variable": "advanceAvailable_label",
-                "value": {
-                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_ADVANCEAVAILABLE"
-                },
-                "type": "label",
-                "localisation": {
-                  "required": true,
-                  "prefix": null,
-                  "module": "rainmaker-common"
-                }
-              },
-              {
                 "variable": "charge_label",
                 "value": {
                   "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_CHARGE"
@@ -618,10 +606,6 @@
                 }
               },
               {
-                "variable": "advanceAdjusted",
-                "value": "NA"
-              },
-              {
                 "variable": "date",
                 "value": {
                   "path": "$.billDate"
@@ -670,7 +654,7 @@
                 "formula": "{{WS_arrears}}"
               },
               {
-                "variable": "advanceAvailable",
+                "variable": "advanceAdjusted",
                 "formula": "{{total}}<0?{{total}}*-1:0"
               }
             ]
