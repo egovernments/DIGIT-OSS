@@ -19,12 +19,13 @@ import {
   validateFeildsForBothWaterAndSewerage,
   validateFeildsForWater,
   validateFeildsForSewerage,
+  getTenantIdCommon
 } from "../../../../../ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import set from 'lodash/set';
 
 const setReviewPageRoute = (state, dispatch) => {
-  let tenantId = process.env.REACT_APP_NAME === "Citizen"?JSON.parse(getUserInfo()).permanentCity:getTenantId();
+  let tenantId = getTenantIdCommon();
   const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.applyScreen.applicationNo");
   const appendUrl =
     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";

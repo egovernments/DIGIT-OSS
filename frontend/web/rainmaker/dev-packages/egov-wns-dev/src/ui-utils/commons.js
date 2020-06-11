@@ -9,6 +9,9 @@ import store from "redux/store";
 import { convertDateToEpoch, getCheckBoxJsonpath, getHygeneLevelJson, getLocalityHarmedJson, getSafetyNormsJson, getTranslatedLabel, ifUserRoleExists, updateDropDowns } from "../ui-config/screens/specs/utils";
 import { httpRequest } from "./api";
 
+export const getTenantIdCommon = () => {
+    return process.env.REACT_APP_NAME === "Citizen"?JSON.parse(getUserInfo()).permanentCity:getTenantId();
+}
 export const pushTheDocsUploadedToRedux = async (state, dispatch) => {
     let reduxDocuments = get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux", {});
     let uploadedDocs = [];
@@ -93,7 +96,7 @@ export const getPropertyObj = async (waterConnection) => {
                if (process.env.REACT_APP_NAME === "Citizen") {
                    queryObject1 = [{ key: "uuids", value: uuids }];
                }else{
-                   queryObject1 = [{ key: "tenantId", value: getTenantId() }, { key: "uuids", value: uuids }];
+                   queryObject1 = [{ key: "tenantId", value: getTenantIdCommon() }, { key: "uuids", value: uuids }];
                }
                let payload = await getPropertyResultsWODispatch(queryObject1);
                if(payload.Properties.length > 0){                                   
@@ -443,7 +446,7 @@ export const updatePFOforSearchResults = async (
 ) => {
     let queryObject = [{
         key: "tenantId",
-        value: tenantId ? tenantId : getTenantId()
+        value: tenantId ? tenantId : getTenantIdCommon()
     },
     { key: "applicationNumber", value: queryValue }
     ];
@@ -1320,7 +1323,7 @@ export const getMeterReadingData = async (dispatch) => {
     let queryObject = [
         {
             key: "tenantId",
-            value: process.env.REACT_APP_NAME === "Citizen"?JSON.parse(getUserInfo()).permanentCity:getTenantId()
+            value: getTenantIdCommon()
         },
         {
             key: "connectionNos",
@@ -1348,7 +1351,7 @@ export const getPastPaymentsForWater = async (dispatch) => {
     let queryObject = [
         {
             key: "tenantId",
-            value: process.env.REACT_APP_NAME === "Citizen"?JSON.parse(getUserInfo()).permanentCity:getTenantId()
+            value: getTenantIdCommon()
         },
         {
             key: "businessServices",
@@ -1387,7 +1390,7 @@ export const getPastPaymentsForSewerage = async (dispatch) => {
     let queryObject = [
         {
             key: "tenantId",
-            value: process.env.REACT_APP_NAME === "Citizen"?JSON.parse(getUserInfo()).permanentCity:getTenantId()
+            value: getTenantIdCommon()
         },
         {
             key: "businessServices",
@@ -1689,7 +1692,7 @@ export const downloadBill = (receiptQueryString, mode = "download") => {
 
     const requestBody = { 
         "MdmsCriteria": { 
-            "tenantId": getTenantId(),
+            "tenantId": getTenantIdCommon(),
               "moduleDetails": [            
                 { "moduleName": "ws-services-masters", "masterDetails": [{ "name": "billingPeriod" }]},
                 { "moduleName": "sw-services-calculation", "masterDetails": [{ "name": "billingPeriod" }]}
@@ -1830,7 +1833,7 @@ export const downloadApp = async (wnsConnection, type, mode = "download") => {
     wnsConnection[0].tenantName = tenantName.toUpperCase();
     const appNo = wnsConnection[0].applicationNo;
 
-    let queryStr = [{ key: "tenantId", value: getTenantId().split('.')[0] }];
+    let queryStr = [{ key: "tenantId", value: getTenantIdCommon().split('.')[0] }];
     let apiUrl, appService, estKey, queryObjectForEst
     if (wnsConnection[0].service === "WATER") {
 
@@ -1846,7 +1849,7 @@ export const downloadApp = async (wnsConnection, type, mode = "download") => {
         appService = "ws-applicationwater";
         queryObjectForEst = [{
             applicationNo: appNo,
-            tenantId: getTenantId(),
+            tenantId: getTenantIdCommon(),
             waterConnection: wnsConnection[0]
         }]
 
@@ -1855,7 +1858,7 @@ export const downloadApp = async (wnsConnection, type, mode = "download") => {
         appService = "ws-applicationsewerage";
         queryObjectForEst = [{
             applicationNo: appNo,
-            tenantId: getTenantId(),
+            tenantId: getTenantIdCommon(),
             sewerageConnection: wnsConnection[0]
         }]
     }
