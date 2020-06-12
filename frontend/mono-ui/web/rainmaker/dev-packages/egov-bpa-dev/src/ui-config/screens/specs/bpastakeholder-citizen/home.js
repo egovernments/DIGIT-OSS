@@ -61,6 +61,7 @@ const cardItems = [
       labelKey: "BPA_OC_COMMON_APPL_NEW_CONSTRUCTION",
       labelName: "Occupancy Certificate New Building Construction"
     },
+    hide: hideBPACard(),
     icon: <BPANewPermitIcon />,
     route: {
       screenKey: "home",

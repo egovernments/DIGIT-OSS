@@ -59,6 +59,7 @@ class PreviewContainer extends Component {
                 uploadedDocIndex={this.state.uploadedDocIndex}
                 toggleEditClick={this.toggleEditClick}
                 isFromPreview={true}
+                jsonPath = {`documentDetailsUploadRedux`}
                 {...rest}
               /></div>
             ) : (
@@ -122,7 +123,7 @@ class PreviewContainer extends Component {
     let documentCode = finalCardsforPreview[uploadedDocIndex].dropDownValues.value;
     if(!documentCode){
       let documentMenu = finalCardsforPreview[uploadedDocIndex].dropDownValues.menu;
-      if(documentMenu && documentMenu.length > 0){
+      if(documentMenu && documentMenu.length > 0 && documentMenu.length == 1){
         documentCode = documentMenu[0].code;
       } else {
         documentCode = finalCardsforPreview[uploadedDocIndex].documentCode

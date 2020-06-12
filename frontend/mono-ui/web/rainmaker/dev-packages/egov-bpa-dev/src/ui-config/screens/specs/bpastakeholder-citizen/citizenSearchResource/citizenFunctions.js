@@ -10,6 +10,7 @@ import { getWorkFlowData,getWorkFlowDataForBPA } from "../../bpastakeholder/sear
 import { getTextToLocalMapping, convertEpochToDate, getBpaTextToLocalMapping} from "../../utils/index";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { changePage } from "../my-applications-stakeholder";
+import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
 export const getMdmsData = async () => {
   let mdmsBody = {
@@ -47,8 +48,16 @@ export const fetchData = async (
   fromMyApplicationPage = false,
   fromStakeHolderPage = false
 ) => {
+  let userInfo = JSON.parse(getUserInfo());
+  let mobileNumber = get(userInfo, "mobileNumber");
+  const queryObj = [
+    {
+      key: "requestor",
+      value: mobileNumber
+    }
+  ];
   const response = await getSearchResults();
-  const bpaResponse = await getBpaSearchResults();
+  const bpaResponse = await getBpaSearchResults(queryObj);
   const mdmsRes = await getMdmsData(dispatch);
   let tenants =
     mdmsRes &&
@@ -162,11 +171,23 @@ export const fetchData = async (
           let status = getTextToLocalMapping(
             "WF_BPA_" + get(element, "status")
           );
+          let bService = get(element, "businessService");
+          let appType = "BUILDING_PLAN_SCRUTINY";
+          let serType = "NEW_CONSTRUCTION";
+          let type;
+          if(bService === "BPA_OC") {
+            appType = "BUILDING_OC_PLAN_SCRUTINY"
+          }
+          if(bService === "BPA_LOW") {
+            type = "LOW"
+          } else {
+            type = "HIGH"
+          }
           let service = getTextToLocalMapping(
-            "BPA_APPLICATIONTYPE_" + get(element, "applicationType")
+            "BPA_APPLICATIONTYPE_" + appType
           );
           service += " - "+getTextToLocalMapping(
-            "BPA_SERVICETYPE_" + get(element, "serviceType")
+            "BPA_SERVICETYPE_" + serType
           );
           let modifiedTime = element.auditDetails.lastModifiedTime;
           let primaryowner = "-";
@@ -196,7 +217,8 @@ export const fetchData = async (
               tenantId: get(element, "tenantId", null),
               modifiedTime: modifiedTime,
               sortNumber: 1,
-              type: element.riskType
+              type: type,
+              serviceType: get(element, "businessService", null)
             })
           } else {
             searchConvertedArray.push({
@@ -271,13 +293,51 @@ const storeData = (data, dispatch, fromMyApplicationPage, fromStakeHolderPage) =
   }
 }
 
-export const fieldChange = (action, state, dispatch) => {
+export const fieldChange = async (action, state, dispatch) => {
   const { screenConfiguration } = state;
   var value = action.value;
+  let bService = "BPA";
+
+  /**
+  * @Todo we are not using this condition - removing the status in my applications
+  */
+
+  if (action.value === "BUILDING_PLAN_SCRUTINY" || action.value === "BUILDING_OC_PLAN_SCRUTINY" || action.value === "BPAREG_SERVICE") {
+    if (action.value === "BUILDING_PLAN_SCRUTINY") {
+      bService = "BPA_OC";
+    } else if (action.value === "BUILDING_OC_PLAN_SCRUTINY") {
+      bService = "BPA"
+    } else if (action.value === "BPAREG_SERVICE") {
+      bService = "ARCHITECT"
+    }
+    let businessServiceData = get(
+      screenConfiguration.preparedFinalObject,
+      `${bService}`,
+      []
+    );
+
+    const states = get(businessServiceData, "states");
+    if (states && states.length > 0) {
+      const status = states.map((item, index) => {
+        return {
+          code: item.state
+        };
+      });
+      dispatch(prepareFinalObject( "filterData[0].status"));
+      dispatch(
+        prepareFinalObject(
+          "applyScreenMdmsData.searchScreen.status",
+          status.filter(item => item.code != null)
+        )
+      );
+    }
+  }
+
   if (value) {
     var filterName = action.componentJsonpath.slice(action.componentJsonpath.lastIndexOf(".") + 1, action.componentJsonpath.length);
 
-    if (filterName === "applicationType" && value === "BPA_APPLY_SERVICE") {
+    if ((filterName === "applicationType" && value === "BUILDING_PLAN_SCRUTINY") || 
+       filterName === "applicationType" && value === "BUILDING_OC_PLAN_SCRUTINY") {
       dispatch(
         handleField(
           "my-applications-stakeholder",
@@ -343,7 +403,7 @@ export const clearFilter = (state, dispatch, action) => {
       "my-applications-stakeholder",
       "components.div.children.filterCard.children.applicationType",
       "props.value",
-      ""
+      "BUILDING_PLAN_SCRUTINY"
     )
   );
   dispatch(
@@ -352,14 +412,6 @@ export const clearFilter = (state, dispatch, action) => {
       "components.div.children.filterCard.children.serviceType",
       "props.value",
       ""
-    )
-  );
-  dispatch(
-    handleField(
-      "my-applications-stakeholder",
-      "components.div.children.filterCard.children.serviceType",
-      "props.disabled",
-      true
     )
   );
   dispatch(

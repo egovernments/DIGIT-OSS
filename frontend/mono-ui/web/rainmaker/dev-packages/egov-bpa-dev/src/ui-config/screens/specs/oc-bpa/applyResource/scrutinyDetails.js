@@ -204,7 +204,7 @@ export const basicDetails = getCommonCard({
         labelName: "Enter Remarks Here",
         labelKey: "BPA_BASIC_DETAILS_REMARKS_PLACEHOLDER"
       },
-      jsonPath: "BPA.remarks",
+      jsonPath: "BPA.additionalDetails.remarks",
       props: {
         multiline: true,
         rows: "4"
@@ -405,7 +405,7 @@ export const proposedBuildingDetails = getCommonCard({
         props: {
           hasAddItem: false,
           scheama: getCommonContainer({
-            applicantContainer: getCommonContainer({
+            buildingDetailsContainer: getCommonContainer({
 
               header: getLabel(
                 "Block",
@@ -495,7 +495,7 @@ export const proposedBuildingDetails = getCommonCard({
           }),
           items: [],
           isReviewPage: true,
-          prefixSourceJsonPath: "children.applicantContainer.children",
+          prefixSourceJsonPath: "children.buildingDetailsContainer.children",
           sourceJsonPath: "edcr.blockDetail",
         },
         type: "array"
@@ -531,7 +531,7 @@ export const abstractProposedBuildingDetails = getCommonCard({
               labelName: "Total Buildup Area (sq.mtrs)",
               labelKey: "BPA_APPLICATION_TOTAL_BUILDUP_AREA"
             },
-            jsonPath: "ocScrutinyDetails.planDetail.blocks[0].building.totalArea[0].builtUpArea",
+            jsonPath: "ocScrutinyDetails.planDetail.virtualBuilding.totalBuitUpArea",
             props: {
               disabled: 'true',
               className: "tl-trade-type"
@@ -549,7 +549,7 @@ export const abstractProposedBuildingDetails = getCommonCard({
               labelName: "Total Floor Area",
               labelKey: "BPA_APPLICATION_NO_OF_FLOORS"
             },
-            jsonPath: "ocScrutinyDetails.planDetail.blocks[0].building.totalArea[0].floorArea",
+            jsonPath: "ocScrutinyDetails.planDetail.blocks[0].building.totalFloors",
             props: {
               disabled: 'true',
               className: "tl-trade-type"
@@ -567,7 +567,7 @@ export const abstractProposedBuildingDetails = getCommonCard({
               labelName: "Total Carpet Area",
               labelKey: "BPA_APPLICATION_HIGH_FROM_GROUND"
             },
-            jsonPath: "ocScrutinyDetails.planDetail.blocks[0].building.totalArea[0].carpetArea",
+            jsonPath: "ocScrutinyDetails.planDetail.blocks[0].building.buildingHeight",
             props: {
               disabled: 'true',
               className: "tl-trade-type"

@@ -67,35 +67,22 @@ export const applyDocSummary = getCommonGrayCard({
         onClickDefination: {
           action: "condition",
           callBack: (state, dispatch) => {
-            changeStep(state, dispatch, "", 3);
+            changeStep(state, dispatch, "", 1);
           },
         },
       },
     },
   },
-  documentDetailsCard: {
-    uiFramework: "custom-containers",
-    componentPath: "MultiItem",
-    props: {
-      className: "applicant-summary",
-      scheama: getCommonGrayCard({
-        body: {
-          uiFramework: "custom-containers-local",
-          moduleName: "egov-bpa",
-          componentPath: "DocumentSummaryContainer",
-          props: {
-            sourceJsonPath: "documentDetailsPreview",
-            className: "noc-review-documents",
-          },
-        },
-      }),
-      items: [],
-      hasAddItem: false,
-      isReviewPage: true,
-      prefixSourceJsonPath:
-        "children.cardContent.children.totalBuildUpAreaDetailsContainer.children",
-      afterPrefixJsonPath: "children.value.children.key",
+
+  DocumentSummaryContainer: getCommonGrayCard({
+    body: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-bpa",
+      componentPath: "DocumentSummaryContainer",
+      props: {
+        sourceJsonPath: "documentDetailsPreview",
+        className: "noc-review-documents",
+      },
     },
-    type: "array",
-  },
+  })
 });

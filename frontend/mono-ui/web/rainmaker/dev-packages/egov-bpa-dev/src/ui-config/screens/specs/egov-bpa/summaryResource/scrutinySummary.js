@@ -12,6 +12,7 @@ import {
 import { gotoApplyWithStep, checkValueForNA } from "../../utils/index";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { changeStep } from "../applyResource/footer";
+import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
 
 const getHeader = label => {
     return {
@@ -194,11 +195,11 @@ export const scrutinySummary = getCommonGrayCard({
                     labelKey: "BPA_OCCUPANCY_TYPE"
                 },
                 {
-                    jsonPath: "BPA.occupancyType",
                     localePrefix: {
                         moduleName: "BPA",
                         masterName: "OCCUPANCYTYPE"
                       },
+                    jsonPath: "scrutinyDetails.planDetail.occupancies[0].typeHelper.type.code",
                     callBack: checkValueForNA
                 }
             ),
@@ -248,9 +249,9 @@ export const scrutinySummary = getCommonGrayCard({
                                     let occupancy = value.occupancyType;
                                     for (let tp = 0; tp < occupancy.length; tp++) {
                                         if (tp === (occupancy.length - 1)) {
-                                            returnVAlue += occupancy[tp].label;//getTransformedLocale(`BPA_SUBOCCUPANCYTYPE_${occupancy[tp].value}`)
+                                            returnVAlue += getLocaleLabels(getTransformedLocale(`BPA_SUBOCCUPANCYTYPE_${occupancy[tp].value}`), getTransformedLocale(`BPA_SUBOCCUPANCYTYPE_${occupancy[tp].value}`)) //occupancy[tp].label;
                                         } else {
-                                            returnVAlue += occupancy[tp].label + ","; //getTransformedLocale(`BPA_SUBOCCUPANCYTYPE_${occupancy[tp].value}`) + ","
+                                            returnVAlue += getLocaleLabels(getTransformedLocale(`BPA_SUBOCCUPANCYTYPE_${occupancy[tp].value}`), getTransformedLocale(`BPA_SUBOCCUPANCYTYPE_${occupancy[tp].value}`)) + "," //occupancy[tp].label + ",";
                                         }
                                     }
                                 }
@@ -362,7 +363,7 @@ export const scrutinySummary = getCommonGrayCard({
                             labelKey: "BPA_APPLICATION_TOTAL_BUILDUP_AREA"
                         },
                         {
-                            jsonPath: "scrutinyDetails.planDetail.blocks[0].building.totalBuitUpArea",
+                            jsonPath: "scrutinyDetails.planDetail.virtualBuilding.totalBuitUpArea",
                             callBack: checkValueForNA
                         }
                     ),

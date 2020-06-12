@@ -40,7 +40,28 @@ export const searchApiCall = async (state, dispatch) => {
   //       "error"
   //     )
   //   );
-  // } else 
+  // } else
+  let serviceType = get (
+    state.screenConfiguration.preparedFinalObject,
+    "searchScreen.serviceType", ""
+  );
+  let appType = get (
+    state.screenConfiguration.preparedFinalObject,
+    "searchScreen.applicationType", ""
+  );
+  if(!serviceType || !appType) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        {
+          labelName: "Please select applicationType and serviceType and search",
+          labelKey: "BPA_SEARCH_APP__SERVICE_TYPE_TOAST_MESSAGE"
+        },
+        "warning"
+      )
+    );
+    return 
+  }
   if (
     Object.keys(searchScreenObject).length == 0 ||
     Object.values(searchScreenObject).every(x => x === "")
@@ -97,7 +118,9 @@ export const searchApiCall = async (state, dispatch) => {
 
       let data = response.Bpa.map(item => ({
         ["BPA_COMMON_TABLE_COL_APP_NO"]: item.applicationNo || "-",
-        ["BPA_COMMON_TABLE_COL_OWN_NAME_LABEL"]: get(item, "owners[0].name") || "-",
+        ["BPA_COMMON_TABLE_COL_OWN_NAME_LABEL"]: item.landInfo && item.landInfo.owners && item.landInfo.owners.map(function( items ){
+            return items.isPrimaryOwner ? items.name : "";
+          }),
         ["BPA_COMMON_TABLE_COL_APP_DATE_LABEL"]: convertEpochToDate(parseInt(get(item,"auditDetails.createdTime"))) || "-",
         ["BPA_COMMON_TABLE_COL_STATUS_LABEL"]: item.status || "-",
         ["TENANT_ID"]: item.tenantId,

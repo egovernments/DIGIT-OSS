@@ -3,6 +3,7 @@ import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils
 import { fetchData } from "./functions";
 import FormIcon from "../../../../ui-atoms-local/Icons/FormIcon";
 import EDCRIcon from "../../../../ui-atoms-local/Icons/EDCRIcon";
+import { ifUserRoleMatches } from "../utils";
 import "../utils/index.css";
 
 const header = getCommonHeader(
@@ -16,6 +17,21 @@ const header = getCommonHeader(
     }
   }
 );
+
+const hideBPACard = () => {
+  return ifUserRoleMatches([
+    "BPA_ARCHITECT",
+    "BPA_ENGINEER",
+    "BPA_BUILDER",
+    "BPA_STRUCTURALENGINEER",
+    "BPA_SUPERVISOR",
+    "BPA_TOWNPLANNER"
+  ]);
+};
+
+const displayView = () => {
+  return hideBPACard() ? "my-applications" : "my-applications-stakeholder";
+}
 
 const cardItems = [
   {
@@ -40,7 +56,7 @@ const cardItems = [
       labelName: "My Applications"
     },
     icon: <FormIcon />,
-    route: "my-applications"
+    route: displayView()
   }
 ];
 

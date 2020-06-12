@@ -165,13 +165,9 @@ class WorkFlowContainer extends React.Component {
       }
     }
     if (dataPath === "BPA") {
-      data.workflow.assignees = [];
+      data.workflow.assignes = [];
       if (data.workflow.assignee) {
-        data.workflow.assignee.forEach(assigne => {
-          data.workflow.assignees.push({
-            uuid: assigne
-          });
-        });
+        data.workflow.assignes = data.workflow.assignee
       }
       if (data.workflow && data.workflow.varificationDocuments) {
         for (let i = 0; i < data.workflow.varificationDocuments.length; i++) {
@@ -334,10 +330,12 @@ class WorkFlowContainer extends React.Component {
     let bservice = "";
     if (moduleName === "FIRENOC") {
       baseUrl = "fire-noc";
-    } else if (moduleName === "BPA" || moduleName === "BPA_LOW") {
+    } else if (moduleName === "BPA" || moduleName === "BPA_LOW" || moduleName === "BPA_OC") {
       baseUrl = "egov-bpa";
       if (moduleName === "BPA") {
         bservice = ((applicationStatus == "PENDING_APPL_FEE") ? "BPA.NC_APP_FEE" : "BPA.NC_SAN_FEE");
+      } else if (moduleName === "BPA_OC") {
+        bservice = ((applicationStatus == "PENDING_APPL_FEE") ? "BPA.NC_OC_APP_FEE" : "BPA.NC_OC_SAN_FEE");
       } else {
         bservice = "BPA.LOW_RISK_PERMIT_FEE"
       }
