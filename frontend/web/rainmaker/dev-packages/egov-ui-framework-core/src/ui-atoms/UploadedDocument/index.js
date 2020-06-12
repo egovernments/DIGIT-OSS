@@ -10,7 +10,7 @@ const UploadedDocument = props => {
       style={{
         backgroundColor: "#FFFFFF",
         border: "1px solid rgba(5, 5, 5, 0.11999999731779099)",
-        minWidth: 300,
+        minWidth: "100%",
         justifyContent: "space-between"
       }}
     >
