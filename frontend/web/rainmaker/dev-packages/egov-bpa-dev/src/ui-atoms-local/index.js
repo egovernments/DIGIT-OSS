@@ -82,6 +82,13 @@ const UploadedDocument = Loadable({
   loader: () => import("./UploadedDocument"),
   loading: () => <Loading />
 });
+
+const ocPermitNumber = Loadable({
+  loader: () => import("./ocPermitNumber"),
+  loading: () => <Loading />
+});
+
+
 export {
   TestAtoms,
   AutoSuggest,
@@ -98,5 +105,6 @@ export {
   MenuListCompositionForBpa,
   PermitListCondition,
   NoteAtom,
-  UploadedDocument
+  UploadedDocument,
+  ocPermitNumber
 };

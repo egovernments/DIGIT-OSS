@@ -283,8 +283,8 @@ const getAcknowledgementCard = (
             icon: "close",
             backgroundColor: "#E54D42",
             header: {
-              labelName: "Application for permit order is rejected",
-              labelKey: "BPA_APPROVAL_REJECTED_MESSAGE_HEAD"
+              labelName: "Application for Occupancy Certificate is rejected",
+              labelKey: "BPA_OC_APPROVAL_REJECTED_MESSAGE_HEAD"
             },
             body: {
               labelName:

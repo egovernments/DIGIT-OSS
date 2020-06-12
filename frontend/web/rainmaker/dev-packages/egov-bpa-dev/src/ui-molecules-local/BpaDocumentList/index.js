@@ -191,7 +191,7 @@ class BpaDocumentList extends Component {
     prepareFinalObject("documentDetailsUploadRedux", documentDetailsUploadRedux);
   };
 
-  prepareDocumentsInEmployee = async (appDocumentList, bpaDetails) => {
+  prepareDocumentsInEmployee = async (appDocumentList, bpaDetails, wfState) => {
     let documnts = [];
     if (appDocumentList) {
       Object.keys(appDocumentList).forEach(function (key) {
@@ -214,6 +214,10 @@ class BpaDocumentList extends Component {
             doc.fileName = docs.fileName;
             doc.fileUrl = docs.fileUrl;
             doc.isClickable = true;
+            doc.additionalDetails = {
+              uploadedBy: getLoggedinUserRole(wfState),
+              uploadedTime: new Date().getTime()
+            }
             if (doc.id) {
               doc.id = docs.id;
             }
@@ -285,7 +289,7 @@ class BpaDocumentList extends Component {
 
     let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
     if(isEmployee || bpaSendBackAcionStatus) {
-      this.prepareDocumentsInEmployee(appDocumentList, bpaDetails);
+      this.prepareDocumentsInEmployee(appDocumentList, bpaDetails, wfState);
     }
   };
 
@@ -399,6 +403,7 @@ class BpaDocumentList extends Component {
            handleChange={this.handleChange}
            uploadedDocIndex = {this.state.uploadedDocIndex}
            toggleEditClick = {this.toggleEditClick}
+           jsonPath = {`documentDetailsUploadRedux`}
            {...rest}
          />
       </React.Fragment>
