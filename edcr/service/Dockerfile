@@ -11,7 +11,7 @@ RUN cd ${WORK_DIR} \
 
 # Create runtime image
 
-FROM egovio/wildfly:8-helm-fin-11052167
+FROM egovio/wildfly:1-helm-fin-e6312078
 
 COPY --from=build /app/egov/egov-ear/target/*.ear /opt/jboss/wildfly/standalone/deployments/
 USER jboss
