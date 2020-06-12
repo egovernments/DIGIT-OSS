@@ -631,10 +631,6 @@
                 }
               },
               {
-                "variable": "advanceAdjusted",
-                "value": "NA"
-              },
-              {
                 "variable": "WS_arrears",
                 "value": {
                   "path": "$.arrearAmount"
