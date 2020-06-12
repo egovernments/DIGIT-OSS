@@ -14745,7 +14745,7 @@
       "enabled": true,
       "serviceCode": "TradeLicense",
       "code": "null",
-      "navigationURL": "tradelicence/apply",
+      "navigationURL": "tradelicence/search?action=apply",
       "path": "TradeLicense.Apply",
       "leftIcon": "places:business-center",
       "isRequiredDocument": true
@@ -15826,7 +15826,7 @@
       "enabled": true,
       "serviceCode": "TradeLicense",
       "code": "null",
-      "navigationURL": "tradelicence/apply",
+      "navigationURL": "tradelicence/search?action=apply",
       "path": "TradeLicense.Apply",
       "leftIcon": "places:business-center",
       "isRequiredDocument": true
