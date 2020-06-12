@@ -165,6 +165,8 @@ const UploadCard = (props) => {
     docItem,
     docIndex,
     name,
+    jsonPath,
+    ids,
     ...rest
   } = props;
   return (
@@ -233,7 +235,7 @@ const UploadCard = (props) => {
             autoSelect={true}
             required={(!docItem.isDocumentRequired)?docItem.required:docItem.isDocumentRequired}
             onChange={(event) => props.handleChange(docIndex, event)}
-            jsonPath={`documentDetailsUploadRedux[${docIndex}].dropDownValues.value`}
+            jsonPath={`${jsonPath}[${docIndex}].dropDownValues.value`}
           />
         ):""}
       </Grid>
@@ -258,7 +260,7 @@ const UploadCard = (props) => {
             onButtonClick={() => props.onUploadClick(docIndex)}
             inputProps={props.inputProps}
             buttonLabel={props.buttonLabel}
-            id={`doc-${docIndex + 1}`}
+            id={ids ? ids : `doc-${docIndex + 1}`}
           />
         </div>
       </Grid>

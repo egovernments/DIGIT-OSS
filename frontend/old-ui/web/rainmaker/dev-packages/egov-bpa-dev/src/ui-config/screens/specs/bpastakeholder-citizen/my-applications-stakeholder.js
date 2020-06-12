@@ -12,7 +12,8 @@ import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject
 import { getWorkFlowData, getWorkFlowDataForBPA } from "../bpastakeholder/searchResource/functions";
 import get from "lodash/get";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { httpRequest } from "../../../../ui-utils";
 
 const header = getCommonHeader(
   {
@@ -26,15 +27,48 @@ const header = getCommonHeader(
   }
 );
 
+export const getWfBusinessData = async (action, state, dispatch, businessService) => {
+  const tenantId = getTenantId();
+  const BSqueryObject = [
+    { key: "tenantId", value: tenantId },
+    { key: "businessServices", value: businessService }
+  ];
+  const payload = await httpRequest(
+    "post",
+    "egov-workflow-v2/egov-wf/businessservice/_search",
+    "_search",
+    BSqueryObject
+  );
+  if (
+    payload &&
+    payload.BusinessServices &&
+    payload.BusinessServices.length > 0
+  ) {
+    dispatch(prepareFinalObject(businessService, get(payload, "BusinessServices[0]")))
+  }
+}
+
+const getAllBusinessServicesDataForStatus = async (action, state, dispatch) => {
+  let businessServices = ["BPA", "BPA_OC", "ARCHITECT"];
+  businessServices.forEach(service => {
+    getWfBusinessData(action, state, dispatch, service)
+  })
+}
+
 const screenConfig = {
   uiFramework: "material-ui",
   name: "my-applications-stakeholder",
   beforeInitScreen: (action, state, dispatch) => {
-    // fetchData(action, state, dispatch, false, true);
     getMdmsData(dispatch).then(data => {
       dispatch( prepareFinalObject( "applyScreenMdmsData", data.MdmsRes ));
     });
-    dispatch(prepareFinalObject("filterData[0].applicationType", "BPA_APPLY_SERVICE"));
+
+    /**
+    * @Todo set for status (commeting the code beacuase of the removing of status)
+    */
+
+    // getAllBusinessServicesDataForStatus(action, state, dispatch);
+    dispatch(prepareFinalObject("filterData[0].applicationType", "BUILDING_PLAN_SCRUTINY"));
     changePage();
     return action;
   },
@@ -59,20 +93,27 @@ const screenConfig = {
               props: {
                 style: { marginLeft: "20px" }
               },
+              localePrefix: {
+                moduleName: "WF",
+                masterName: "BPA"
+              },
               data: [
                 {
-                  // code: getBpaTextToLocalMapping("BPA_APPLY_SERVICE"),
-                  code: "BPA_APPLY_SERVICE",
+                  code: "BUILDING_PLAN_SCRUTINY",
                   label: "BPA"
                 },
                 {
-                  code: "BPAREG_SERVICE", //getBpaTextToLocalMapping("BPAREG_SERVICE"),
+                  code: "BUILDING_OC_PLAN_SCRUTINY",
+                  label: "BPA OC"
+                },
+                {
+                  code: "BPAREG_SERVICE",
                   label: "Stakeholder"
                 }
               ],
               gridDefination: {
                 xs: 12,
-                sm: 3
+                sm: 4
               }
             }),
             afterFieldChange: (action, state, dispatch) => {
@@ -97,12 +138,11 @@ const screenConfig = {
                 masterName: "BPA"
               },
               props: {
-                style: { marginLeft: "20px" },
-                // disabled: true
+                style: { marginLeft: "20px" }
               },
               gridDefination: {
                 xs: 12,
-                sm: 3
+                sm: 4
               }
             }),
             afterFieldChange: (action, state, dispatch) => {
@@ -111,6 +151,7 @@ const screenConfig = {
           },
           applicationStatus: {
             ...getSelectField({
+              visible: false,
               label: {
                 labelName: "Status",
                 labelKey: "BPA_STATUS_LABEL"
@@ -120,8 +161,12 @@ const screenConfig = {
                 labelName: "Select Status",
                 labelKey: "BPA_STATUS_PLACEHOLDER"
               },
-              jsonPath: "filterData[0].status", // + [getBpaTextToLocalMapping("BPA_COL_APP_STATUS")],
-              data: [{ code: getBpaTextToLocalMapping("PENDINGPAYMENT") }, { code: getBpaTextToLocalMapping("REJECTED") }, { code: getBpaTextToLocalMapping("APPROVED") }, { code: getBpaTextToLocalMapping("INITIATED") }, { code: getBpaTextToLocalMapping("CITIZEN_APPROVAL_INPROCESS") }, { code: getBpaTextToLocalMapping("INPROGRESS") }, { code: getBpaTextToLocalMapping("PENDING_FEE") }, { code: getBpaTextToLocalMapping("DOC_VERIFICATION_INPROGRESS") }, { code: getBpaTextToLocalMapping("FIELDINSPECTION_INPROGRESS") }, { code: getBpaTextToLocalMapping("NOC_VERIFICATION_INPROGRESS") }, { code: getBpaTextToLocalMapping("APPROVAL_INPROGRESS") }, { code: getBpaTextToLocalMapping("PENDING_APPL_FEE") }, { code: getBpaTextToLocalMapping("PENDING_SANC_FEE_PAYMENT") }, { code: getBpaTextToLocalMapping("CITIZEN_ACTION_PENDING_AT_DOC_VERIF") }, { code: getBpaTextToLocalMapping("CITIZEN_ACTION_PENDING_AT_FI_VERIF") }, { code: getBpaTextToLocalMapping("CITIZEN_ACTION_PENDING_AT_NOC_VERIF") }],
+              localePrefix: {
+                moduleName: "WF",
+                masterName: "BPA"
+              },
+              jsonPath: "filterData[0].status",
+              sourceJsonPath: "applyScreenMdmsData.searchScreen.status",
               props: {
                 style: { marginLeft: "20px" }
               },
@@ -138,8 +183,7 @@ const screenConfig = {
             componentPath: "Button",
             gridDefination: {
               xs: 12,
-              sm: 3
-              // align: "center"
+              sm: 4
             },
             props: {
               variant: "contained",
@@ -218,20 +262,20 @@ const screenConfig = {
               responsive: "stacked",
               selectableRows: false,
               hover: true,
-              rowsPerPageOptions: [10, 15, 20],
-              pagination: true,
+            //  rowsPerPageOptions: [10, 15, 20],
+             // pagination: true,
               onRowClick: (row, index) => {
                 onRowClick(row);
               },
-              serverSide: true,
-              count: 10000,
-              onTableChange: (action, tableState) => {
-                switch (action) {
-                  case 'changePage':
-                    changePage(tableState);
-                    break;
-                }
-              }
+              serverSide: false,
+              //count: 10000,
+              // onTableChange: (action, tableState) => {
+              //   switch (action) {
+              //     case 'changePage':
+              //       changePage(tableState);
+              //       break;
+              //   }
+              // }
             },
             customSortColumn: {
               column: "Application Date",
@@ -275,20 +319,24 @@ export const changePage = async (tableState) => {
   const queryObj = [
     {
       key: "limit",
-      value: get(tableState, "rowsPerPage") || 10
+      value: -1
     },
     {
       key: "offset",
-      value: get(tableState, "page") * get(tableState, "rowsPerPage") || 0
+      value: 0
     }
   ];
-  if (typeOfService == "BPA_APPLY_SERVICE") {
+  if ((typeOfService == "BUILDING_PLAN_SCRUTINY") || (typeOfService == "BUILDING_OC_PLAN_SCRUTINY")) {
     if (filterServiceType) {
       queryObj.push({
         key: "servicetype",
         value: filterServiceType
       });
     } 
+    queryObj.push({
+      key: "applicationType",
+      value: typeOfService
+    });
   }
 
   if (filterStatus) {
@@ -304,8 +352,14 @@ export const changePage = async (tableState) => {
     );
 
   }
-
-  if (typeOfService === "BPA_APPLY_SERVICE") {
+  
+  if ((typeOfService === "BUILDING_PLAN_SCRUTINY") || typeOfService === "BUILDING_OC_PLAN_SCRUTINY") {
+    let userInfo = JSON.parse(getUserInfo());
+    let mobileNumber = get(userInfo, "mobileNumber");
+    queryObj.push({
+      key: "requestor",
+      value: mobileNumber
+    });
     const bpaResponse = await getAppSearchResults(queryObj);
     if (bpaResponse && bpaResponse.Bpa && bpaResponse.Bpa.length > 0) {
       const businessIdToOwnerMappingForBPA = await getWorkFlowDataForBPA(bpaResponse.Bpa);
@@ -327,7 +381,7 @@ export const changePage = async (tableState) => {
         searchConvertedArray.push({
           ["BPA_COMMON_TABLE_COL_APP_NO"]: element.applicationNo || "-",
           ["BPA_COMMON_TABLE_COL_STATUS_LABEL"]: status || "-",
-          ["BPA_COL_MODULE_SERVICE"]: "BPA \n Building permit new construction",
+          ["BPA_COL_MODULE_SERVICE"]: businessService == "BPA_OC" ? "Occupancy Certificate New Building Construction" : "Building permit new construction",
           ["BPA_COMMON_SLA"]: get(businessIdToOwnerMappingForBPA[element.applicationNo], "sla", null) || "-",
           ["BPA_COL_ASSIGNEDTO"]: get(businessIdToOwnerMappingForBPA[element.applicationNo], "assignee", null) || "-",
           applicationType: getBpaTextToLocalMapping("BPA_APPLY_SERVICE"),
@@ -360,7 +414,7 @@ export const changePage = async (tableState) => {
           ["BPA_COL_ASSIGNEDTO"]: get(businessIdToOwnerMapping[element.applicationNumber], "assignee", null) || "-",
           applicationType: getBpaTextToLocalMapping("BPAREG_SERVICE"),
           modifiedTime: modifiedTime,
-          sortNumber: 1,
+          sortNumber: 0,
           serviceType: "BPAREG",
           tenantId: get(element, "tenantId", null)
         })

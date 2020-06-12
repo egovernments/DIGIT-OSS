@@ -60,6 +60,7 @@ const wrapEdcrRequestBody = (requestBody, action, customRequestInfo) => {
   };
 
   let Ids = process.env.REACT_APP_NAME === "Citizen" && action != "search" ? userInfos : null;
+  let usrInfo = (action == "search") ? null: Ids;
   let RequestInfo = {
     "apiId": "1",
     "ver": "1",
@@ -70,7 +71,7 @@ const wrapEdcrRequestBody = (requestBody, action, customRequestInfo) => {
     "msgId": "gfcfc",
     "correlationId": "wefiuweiuff897",
     authToken,
-    "userInfo": Ids
+    "userInfo": usrInfo
   };
 
   RequestInfo = { ...RequestInfo, ...customRequestInfo };

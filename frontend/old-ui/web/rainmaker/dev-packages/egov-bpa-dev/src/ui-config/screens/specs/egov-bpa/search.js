@@ -90,10 +90,10 @@ const getMdmsData = async (state, dispatch) => {
         payload.MdmsRes
       )
     );
-    dispatch(prepareFinalObject(
-      "searchScreen.applicationType", 
-      get(payload, "MdmsRes.BPA.ApplicationType[0].code")
-    ));
+    // dispatch(prepareFinalObject(
+    //   "searchScreen.applicationType", 
+    //   get(payload, "MdmsRes.BPA.ApplicationType[0].code")
+    // ));
   } catch (e) {
     console.log(e);
   }

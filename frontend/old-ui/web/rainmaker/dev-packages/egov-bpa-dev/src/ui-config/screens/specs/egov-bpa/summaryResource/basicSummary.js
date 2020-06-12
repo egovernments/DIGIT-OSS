@@ -179,7 +179,7 @@ export const basicSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-                "BPA.remarks",
+                "BPA.additionalDetails.remarks",
                 callBack: checkValueForNA
             }
           )

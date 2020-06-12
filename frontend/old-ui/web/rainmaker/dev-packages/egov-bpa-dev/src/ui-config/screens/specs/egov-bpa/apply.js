@@ -5,7 +5,7 @@ import {
   getSelectField,
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { getCurrentFinancialYear } from "../utils";
+import { getScrutinyDetails } from "../utils";
 import { footer, showApplyLicencePicker } from "./applyResource/footer";
 import { basicDetails } from "./applyResource/basicDetails";
 import { bpaLocationDetails } from "./applyResource/propertyLocationDetails";
@@ -539,6 +539,7 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "apply",
   beforeInitScreen: (action, state, dispatch,componentJsonpath) => {
+    dispatch(prepareFinalObject("BPA", {}));
     const applicationNumber = getQueryArg(
       window.location.href,
       "applicationNumber"
@@ -559,6 +560,11 @@ const screenConfig = {
     if (applicationNumber && isEdit) {
       setSearchResponse(state, dispatch, applicationNumber, tenantId, action);
     } else {
+      const edcrNumber = getQueryArg(window.location.href, "edcrNumber");
+      if(edcrNumber) {
+        dispatch(prepareFinalObject("BPA.edcrNumber", edcrNumber));
+        getScrutinyDetails(state, dispatch);
+      }
       setProposedBuildingData(state, dispatch);
       getTodaysDate(action, state, dispatch);
       const queryObject = [

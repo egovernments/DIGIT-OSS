@@ -23,7 +23,7 @@ export const bpaMakePayment = async (state, dispatch) => {
   let status = get(state.screenConfiguration.preparedFinalObject, "BPA.status");
   let billbService = ((status == "PENDING_APPL_FEE") ? "BPA.NC_OC_APP_FEE" : "BPA.NC_OC_SAN_FEE");
   const makePaymentUrl = process.env.REACT_APP_SELF_RUNNING === "true"
-    ? `/egov-ui-framework/egov-bpa/citizen-pay?applicationNumber=${applicationNumber}&tenantId=${tenant}&businessService=${billbService}`
+    ? `/egov-ui-framework/oc-bpa/citizen-pay?applicationNumber=${applicationNumber}&tenantId=${tenant}&businessService=${billbService}`
     : `/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenant}&businessService=${billbService}`;
   dispatch(setRoute(makePaymentUrl));
 }

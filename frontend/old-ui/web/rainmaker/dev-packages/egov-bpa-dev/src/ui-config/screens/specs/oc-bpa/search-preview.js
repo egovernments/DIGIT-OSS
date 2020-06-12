@@ -90,7 +90,7 @@ const titlebar2 = {
     permitNumber: {
       uiFramework: "custom-atoms-local",
       moduleName: "egov-bpa",
-      componentPath: "PermitNumber",
+      componentPath: "ocPermitNumber",
       gridDefination: {},
       props: {
         number: "NA"
@@ -137,6 +137,14 @@ const setDownloadMenu = (action, state, dispatch) => {
     state,
     "screenConfiguration.preparedFinalObject.BPA.riskType"
   );
+  let comparisonDetails = get(
+    state,
+    "screenConfiguration.preparedFinalObject.comparisonDetails"
+  );
+  let comparisonReport = false;
+  if(comparisonDetails){
+    comparisonReport = get(comparisonDetails, "report");
+  }
   let downloadMenu = [];
   let printMenu = [];
   let certificateDownloadObject = {
@@ -148,7 +156,7 @@ const setDownloadMenu = (action, state, dispatch) => {
   };
 
   let receiptDownloadObject = {
-    label: { labelName: "Sanction Fee Receipt", labelKey: "BPA_SAN_FEE_RECEIPT" },
+    label: { labelName: "Deviation Penality Receipt", labelKey: "BPA_OC_DEV_PEN_RECEIPT" },
     link: () => {
       downloadFeeReceipt(state, dispatch, status, "BPA.NC_OC_SAN_FEE");
     },
@@ -156,7 +164,7 @@ const setDownloadMenu = (action, state, dispatch) => {
   };
 
   let applicationDownloadObject = {
-    label: { labelName: "Permit Order Receipt", labelKey: "BPA_PERMIT_ORDER" },
+    label: { labelName: "Occupancy Certificate", labelKey: "BPA_OC_CERTIFICATE" },
     link: () => {
       permitOrderNoDownload(action, state, dispatch);
     },
@@ -177,6 +185,17 @@ const setDownloadMenu = (action, state, dispatch) => {
     },
     leftIcon: "assignment"
   };
+  let comparisonReportDownloadObject = {}
+  if(comparisonReport){
+    comparisonReportDownloadObject = {
+      label: { labelName: "Comparison Report", labelKey: "BPA_COMPARISON_REPORT_LABEL" },
+      link: () => {
+        window.open(comparisonReport);
+      },
+      leftIcon: "assignment"
+    }
+  }
+  
 
   // if (riskType === "LOW") {
   //   switch (status) {
@@ -217,6 +236,11 @@ const setDownloadMenu = (action, state, dispatch) => {
         break;
     }
   // }
+
+  if(comparisonReport){
+    downloadMenu.push(comparisonReportDownloadObject);
+    printMenu.push(comparisonReportDownloadObject);
+  }
   dispatch(
     handleField(
       "search-preview",
@@ -306,12 +330,12 @@ const setSearchResponse = async (
   await applicantNameAppliedByMaping(state, dispatch, get(response, "Bpa[0]"), get(edcrRes, "edcrDetail[0]"));
   await setProposedBuildingData(state, dispatch, "ocApply", "ocApply");
 
-  let businessServicesValue = "BPA_OC";
-  const queryObject = [
-    { key: "tenantId", value: tenantId },
-    { key: "businessServices", value: businessServicesValue }
-  ];
-  setBusinessServiceDataToLocalStorage(queryObject, dispatch);
+  // let businessServicesValue = "BPA_OC";
+  // const queryObject = [
+  //   { key: "tenantId", value: tenantId },
+  //   { key: "businessServices", value: businessServicesValue }
+  // ];
+  // setBusinessServiceDataToLocalStorage(queryObject, dispatch);
 
   if (status && status == "INPROGRESS") {
     let userInfo = JSON.parse(getUserInfo()), roles = get(userInfo, "roles"), isArchitect = false;
@@ -467,6 +491,12 @@ const screenConfig = {
       "applicationNumber"
     );
     const tenantId = getQueryArg(window.location.href, "tenantId");
+    let businessServicesValue = "BPA_OC";
+    const queryObject = [
+      { key: "tenantId", value: tenantId },
+      { key: "businessServices", value: businessServicesValue }
+    ];
+    setBusinessServiceDataToLocalStorage(queryObject, dispatch);
     setSearchResponse(state, dispatch, applicationNumber, tenantId, action);
 
     // const queryObject = [

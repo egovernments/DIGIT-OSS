@@ -4,7 +4,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import get from "lodash/get";
-import { getCommonApplyFooter, validateFields, getBpaTextToLocalMapping,setProposedBuildingData, generateBillForBPA } from "../../utils";
+import { getCommonApplyFooter, validateFields, getBpaTextToLocalMapping,setProposedBuildingData, generateBillForBPA, residentialType } from "../../utils";
 import "./index.css";
 import { getQueryArg, getFileUrlFromAPI, getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "../../../../../ui-utils";
@@ -172,6 +172,7 @@ const getSummaryRequiredDetails = async (state, dispatch) => {
   }
   generateBillForBPA(dispatch, applicationNumber, tenantId, businessService);
   prepareDocumentsDetailsView(state, dispatch);
+  await residentialType(state, dispatch);
   // dispatch(
   //   handleField(
   //     "apply",
@@ -219,6 +220,7 @@ const callBackForNext = async (state, dispatch) => {
       hasFieldToaster = true;
     }
     setProposedBuildingData(state,dispatch);
+    await residentialType(state, dispatch);
   }
 
   if (activeStep === 1) {

@@ -113,9 +113,10 @@ const riskTypeValidation = (state, dispatch, activeStep) => {
         "error"
       )
     );
-    return
+    return false;
   } else if (riskTypes[edcrRisktype] > riskTypes[ocEdcrRiskType]) {
     showRisktypeWarning(state, dispatch, activeStep);
+    return false;
   } else {
     // const riskTypeValid = get(
     //   state,
