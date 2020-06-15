@@ -70,13 +70,9 @@ public class NotificationService {
 	 */
 	public String getMessage(EmployeeRequest request) {
 		String tenantId = request.getEmployees().get(0).getTenantId().split("\\.")[0];
-		String locale = HRMSConstants.HRMS_LOCALIZATION_ENG_LOCALE_CODE;
-		if (!StringUtils.isEmpty(request.getRequestInfo().getMsgId()) && request.getRequestInfo().getMsgId().split("|").length >= 2)
-			locale = request.getRequestInfo().getMsgId().split("\\|")[1];
-
-		Map<String, Map<String, String>> localizedMessageMap = getLocalisedMessages(request.getRequestInfo(), tenantId,
-				locale, HRMSConstants.HRMS_LOCALIZATION_MODULE_CODE);
-		return localizedMessageMap.get(locale +"|"+tenantId).get(HRMSConstants.HRMS_EMP_CREATE_LOCLZN_CODE);
+		Map<String, Map<String, String>> localizedMessageMap = getLocalisedMessages(request.getRequestInfo(), tenantId, 
+				HRMSConstants.HRMS_LOCALIZATION_ENG_LOCALE_CODE, HRMSConstants.HRMS_LOCALIZATION_MODULE_CODE);
+		return localizedMessageMap.get(HRMSConstants.HRMS_LOCALIZATION_ENG_LOCALE_CODE +"|"+tenantId).get(HRMSConstants.HRMS_EMP_CREATE_LOCLZN_CODE);
 	}
 	
 	/**

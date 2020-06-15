@@ -3,13 +3,13 @@ package org.egov.hrms.model.enums;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum ReferenceType {
+public enum EmployeeDocumentReferenceType {
 	HEADER("HEADER"), ASSIGNMENT("ASSIGNMENT"), JURISDICTION("JURISDICTION"), SERVICE("SERVICE"), 
 	EDUCATION("EDUCATION"), TEST("TEST"), DEACTIVATION("DEACTIVATION");
 
 	private String value;
 
-	ReferenceType(String value) {
+	EmployeeDocumentReferenceType(String value) {
 		this.value = value;
 	}
 
@@ -20,8 +20,8 @@ public enum ReferenceType {
 	}
 
 	@JsonCreator
-	public static ReferenceType fromValue(String passedValue) {
-		for (ReferenceType obj : ReferenceType.values()) {
+	public static EmployeeDocumentReferenceType fromValue(String passedValue) {
+		for (EmployeeDocumentReferenceType obj : EmployeeDocumentReferenceType.values()) {
 			if (String.valueOf(obj.value).equals(passedValue.toUpperCase())) {
 				return obj;
 			}

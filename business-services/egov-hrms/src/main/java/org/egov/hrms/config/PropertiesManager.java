@@ -75,7 +75,7 @@ public class PropertiesManager {
 	public String localizationHost;
 	
 	@Value("${egov.localization.search.endpoint}")
-	public String localizationSearcEndpoint;
+	public String localizationSearchEndpoint;
 	
 	@Value("${egov.idgen.host}")
 	public String idGenHost;

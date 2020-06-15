@@ -135,6 +135,7 @@ public class EmployeeService {
 	 * @return
 	 */
 	public EmployeeResponse search(EmployeeSearchCriteria criteria, RequestInfo requestInfo) {
+		boolean  userChecked = false;
 		if(null == criteria.getIsActive() || criteria.getIsActive())
 			criteria.setIsActive(true);
 		else
@@ -148,6 +149,7 @@ public class EmployeeService {
             if( !CollectionUtils.isEmpty(criteria.getRoles()) )
                 userSearchCriteria.put(HRMSConstants.HRMS_USER_SEARCH_CRITERA_ROLECODES,criteria.getRoles());
             UserResponse userResponse = userService.getUser(requestInfo, userSearchCriteria);
+			userChecked =true;
             if(!CollectionUtils.isEmpty(userResponse.getUser())) {
                  mapOfUsers.putAll(userResponse.getUser().stream()
                         .collect(Collectors.toMap(User::getUuid, Function.identity())));
@@ -158,6 +160,8 @@ public class EmployeeService {
             else
                 criteria.setUuids(userUUIDs);
 		}
+		//checks if above criteria met and result is not  null will check for name search if list of names are given as user search on name is not bulk api
+
 		if(!((!CollectionUtils.isEmpty(criteria.getRoles()) || !StringUtils.isEmpty(criteria.getPhone())) && CollectionUtils.isEmpty(criteria.getUuids()))){
 			if(!CollectionUtils.isEmpty(criteria.getNames())) {
 				List<String> userUUIDs = new ArrayList<>();
@@ -166,6 +170,7 @@ public class EmployeeService {
 					userSearchCriteria.put(HRMSConstants.HRMS_USER_SEARCH_CRITERA_TENANTID,criteria.getTenantId());
 					userSearchCriteria.put(HRMSConstants.HRMS_USER_SEARCH_CRITERA_NAME,name);
 					UserResponse userResponse = userService.getUser(requestInfo, userSearchCriteria);
+					userChecked =true;
 					if(!CollectionUtils.isEmpty(userResponse.getUser())) {
 						mapOfUsers.putAll(userResponse.getUser().stream()
 								.collect(Collectors.toMap(User::getUuid, Function.identity())));
@@ -179,6 +184,8 @@ public class EmployeeService {
 					criteria.setUuids(userUUIDs);
 			}
 		}
+		if(userChecked)
+			criteria.setTenantId(null);
         List <Employee> employees = new ArrayList<>();
         if(!((!CollectionUtils.isEmpty(criteria.getRoles()) || !CollectionUtils.isEmpty(criteria.getNames()) || !StringUtils.isEmpty(criteria.getPhone())) && CollectionUtils.isEmpty(criteria.getUuids())))
             employees = repository.fetchEmployees(criteria, requestInfo);

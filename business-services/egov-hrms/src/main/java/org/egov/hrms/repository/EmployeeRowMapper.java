@@ -4,8 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.hrms.model.*;
-import org.egov.hrms.model.enums.DeactivationType;
-import org.egov.hrms.model.enums.ReferenceType;
+import org.egov.hrms.model.enums.EmployeeDocumentReferenceType;
 import org.egov.hrms.web.contract.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -252,7 +251,7 @@ public class EmployeeRowMapper implements ResultSetExtractor<List<Employee>> {
 				AuditDetails auditDetails = AuditDetails.builder().createdBy(rs.getString("docs_createdby")).createdDate(rs.getLong("docs_createddate"))
 						.lastModifiedBy(rs.getString("docs_lastmodifiedby")).lastModifiedDate(rs.getLong("docs_lastmodifieddate")).build();
 				EmployeeDocument document = EmployeeDocument.builder().id(rs.getString("docs_uuid")).documentId(rs.getString("docs_documentid"))
-						.documentName(rs.getString("docs_documentname")).referenceType(rs.getString("docs_referencetype") != null ? ReferenceType.valueOf(rs.getString("docs_referencetype")): null)
+						.documentName(rs.getString("docs_documentname")).referenceType(rs.getString("docs_referencetype") != null ? EmployeeDocumentReferenceType.valueOf(rs.getString("docs_referencetype")): null)
 						.referenceId(rs.getString("docs_referenceid")).tenantId(rs.getString("docs_tenantid")).auditDetails(auditDetails).build();
 				
 				documents.add(document);

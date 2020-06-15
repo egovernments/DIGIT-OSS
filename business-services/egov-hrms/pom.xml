@@ -5,12 +5,11 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>1.5.22.RELEASE</version>
-    <relativePath></relativePath>
+    <version>2.2.6.RELEASE</version>
   </parent>
   <groupId>org.egov</groupId>
   <artifactId>egov-hrms</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>1.1.0-SNAPSHOT</version>
   <name>egov-hrms</name>
   <description>HR Management System</description>
   <properties>
@@ -80,7 +79,7 @@
     <dependency>
       <groupId>org.egov.services</groupId>
       <artifactId>tracer</artifactId>
-      <version>1.1.5-SNAPSHOT</version>
+      <version>2.0.0-SNAPSHOT</version>
     </dependency>
   </dependencies>
   <repositories>
@@ -111,6 +110,40 @@
               <artifactId>spring-boot-devtools</artifactId>
             </exclude>
           </excludes>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>cz.habarta.typescript-generator</groupId>
+        <artifactId>typescript-generator-maven-plugin</artifactId>
+        <version>2.22.595</version>
+        <executions>
+          <execution>
+            <id>generate</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <phase>process-classes</phase>
+          </execution>
+        </executions>
+        <configuration>
+          <jsonLibrary>jackson2</jsonLibrary>
+          <classes>
+            <class>org.egov.hrms.web.contract.EmployeeRequest</class>
+            <class>org.egov.hrms.web.contract.EmployeeResponse</class>
+            <class>org.egov.hrms.web.contract.EmployeeSearchCriteria</class>
+          </classes>
+          <customTypeNaming>
+          </customTypeNaming>
+          <customTypeMappings>
+            <customTypeMapping>org.egov.hrms.web.contract.User:User</customTypeMapping>
+            <customTypeMapping>org.egov.hrms.model.AuditDetails:AuditDetails</customTypeMapping>
+            <customTypeMapping>org.egov.common.contract.request.User:User</customTypeMapping>
+            <customTypeMapping>org.egov.common.contract.request.RequestInfo:RequestInfo</customTypeMapping>
+            <customTypeMapping>org.egov.common.contract.response.ResponseInfo:ResponseInfo</customTypeMapping>
+          </customTypeMappings>
+          <namespace>Digit</namespace>
+          <debug>true</debug>
+          <outputKind>module</outputKind>
         </configuration>
       </plugin>
     </plugins>
