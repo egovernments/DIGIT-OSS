@@ -486,11 +486,11 @@
       "idname": "bpa.nc_san_fee.receipt.id"
     },
     {
-      "format": "WS/[fy:yyyy-yy]/[SEQ_WS_BILL_RCPT_[TENANT_ID]]",
+      "format": "WS/[fy:yyyy-yy]/[CITY.CODE]/[SEQ_WS_BILL_RCPT_[TENANT_ID]]",
       "idname": "ws.receipt.id"
     },
     {
-      "format": "SW/[fy:yyyy-yy]/[SEQ_SW_BILL_RCPT_[TENANT_ID]]",
+      "format": "SW/[CITY.CODE]/[fy:yyyy-yy]/[SEQ_SW_BILL_RCPT_[TENANT_ID]]",
       "idname": "sw.receipt.id"
     },
     {
@@ -534,11 +534,11 @@
       "idname": "pt.mutation.number"
     },
     {
-         "format": "WS.ONE_TIME_FEE/[fy:yyyy-yy]/[SEQ_WS_FEE_RCPT_[TENANT_ID]]",
+         "format": "WS.ONE_TIME_FEE/[CITY.CODE]/[fy:yyyy-yy]/[SEQ_WS_FEE_RCPT_[TENANT_ID]]",
          "idname": "ws.one_time_fee.receipt.id"
     },
     {
-         "format": "SW.ONE_TIME_FEE/[fy:yyyy-yy]/[SEQ_SW_FEE_RCPT_[TENANT_ID]]",
+         "format": "SW.ONE_TIME_FEE/[CITY.CODE]/[fy:yyyy-yy]/[SEQ_SW_FEE_RCPT_[TENANT_ID]]",
          "idname": "sw.one_time_fee.receipt.id"
     },
     {
