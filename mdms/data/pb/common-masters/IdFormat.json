@@ -486,7 +486,7 @@
       "idname": "bpa.nc_san_fee.receipt.id"
     },
     {
-      "format": "WS/[fy:yyyy-yy]/[CITY.CODE]/[SEQ_WS_BILL_RCPT_[TENANT_ID]]",
+      "format": "WS/[CITY.CODE]/[fy:yyyy-yy]/[SEQ_WS_BILL_RCPT_[TENANT_ID]]",
       "idname": "ws.receipt.id"
     },
     {
