@@ -20,7 +20,7 @@ const styles = theme => ({
     },
     collection: {
         display: 'flex',
-        borderBottom: '1px solid #f4f7fb'
+      //  borderBottom: '1px solid #f4f7fb'
     },
     collectionRow: {
         display: 'flex',
