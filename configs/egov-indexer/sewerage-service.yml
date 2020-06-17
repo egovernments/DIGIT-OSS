@@ -11,7 +11,7 @@ ServiceMaps:
         timeStampField: $.auditDetails.createdTime
         jsonPath: $.SewerageConnection
         customJsonMapping:
-          indexMapping: {"Data":{"workflow": {"state": {}, "action": "", "assignes": []},"applicationNo":"","applicationStatus":"","status":"","connectionNo":"","oldConnectionNo":"","plumberInfo":[],"roadType":"","roadCuttingArea":"","connectionExecutionDate":"","connectionCategory":"","connectionType":"","additionalDetails":{},"id":"","propertyId":"","tenantId":"","proposedWaterClosets":"","proposedToilets":"","noOfWaterClosets":"","noOfToilets":"","toiletsBuildCost":"","history":{}}}
+          indexMapping: {"Data":{"workflow": {"state": {}, "action": "", "assignes": []},"applicationNo":"","applicationStatus":"","status":"","connectionNo":"","oldConnectionNo":"","plumberInfo":[],"roadType":"","roadCuttingArea":"","connectionExecutionDate":"","connectionCategory":"","connectionType":"","additionalDetails":{},"id":"","propertyId":"","tenantId":"","proposedWaterClosets":"","proposedToilets":"","noOfWaterClosets":"","noOfToilets":"","history":{}}}
           fieldMapping:
           - inJsonPath: $.applicationStatus.state
             outJsonPath: $.Data.workflow.state
@@ -57,8 +57,6 @@ ServiceMaps:
             outJsonPath: $.Data.noOfWaterClosets
           - inJsonPath: $.noOfToilets
             outJsonPath: $.Data.noOfToilets
-          - inJsonPath: $.toiletsBuildCost
-            outJsonPath: $.Data.toiletsBuildCost
           externalUriMapping:
           - path: http://egov-workflow-v2.egov:8080/egov-workflow-v2/egov-wf/process/_search
             queryParam: businessIds=$.applicationNo,history=true,tenantId=$.tenantId
@@ -76,7 +74,7 @@ ServiceMaps:
         timeStampField: $.auditDetails.lastModifiedTime
         jsonPath: $.SewerageConnection
         customJsonMapping:
-          indexMapping: {"Data":{"workflow": {"state": {}, "action": "", "assignes": []},"applicationNo":"","applicationStatus":"","status":"","connectionNo":"","oldConnectionNo":"","plumberInfo":[],"roadType":"","roadCuttingArea":"","connectionExecutionDate":"","connectionCategory":"","connectionType":"","additionalDetails":{},"id":"","propertyId":"","tenantId":"","proposedWaterClosets":"","proposedToilets":"","noOfWaterClosets":"","noOfToilets":"","toiletsBuildCost":"","history":{}}}
+          indexMapping: {"Data":{"workflow": {"state": {}, "action": "", "assignes": []},"applicationNo":"","applicationStatus":"","status":"","connectionNo":"","oldConnectionNo":"","plumberInfo":[],"roadType":"","roadCuttingArea":"","connectionExecutionDate":"","connectionCategory":"","connectionType":"","additionalDetails":{},"id":"","propertyId":"","tenantId":"","proposedWaterClosets":"","proposedToilets":"","noOfWaterClosets":"","noOfToilets":"","history":{}}}
           fieldMapping:
           - inJsonPath: $.applicationStatus.state
             outJsonPath: $.Data.workflow.state
@@ -122,8 +120,6 @@ ServiceMaps:
             outJsonPath: $.Data.noOfWaterClosets
           - inJsonPath: $.noOfToilets
             outJsonPath: $.Data.noOfToilets
-          - inJsonPath: $.toiletsBuildCost
-            outJsonPath: $.Data.toiletsBuildCost            
           externalUriMapping:
           - path: http://egov-workflow-v2.egov:8080/egov-workflow-v2/egov-wf/process/_search
             queryParam: businessIds=$.applicationNo,history=true,tenantId=$.tenantId
@@ -142,7 +138,7 @@ ServiceMaps:
         timeStampField: $.auditDetails.lastModifiedTime
         jsonPath: $.SewerageConnection
         customJsonMapping:
-          indexMapping: {"Data":{"workflow": {"state": {}, "action": "", "assignes": []},"applicationNo":"","applicationStatus":"","status":"","connectionNo":"","oldConnectionNo":"","plumberInfo":[],"roadType":"","roadCuttingArea":"","connectionExecutionDate":"","connectionCategory":"","connectionType":"","additionalDetails":{},"id":"","propertyId":"","tenantId":"","proposedWaterClosets":"","proposedToilets":"","noOfWaterClosets":"","noOfToilets":"","toiletsBuildCost":"","history":{}}}
+          indexMapping: {"Data":{"workflow": {"state": {}, "action": "", "assignes": []},"applicationNo":"","applicationStatus":"","status":"","connectionNo":"","oldConnectionNo":"","plumberInfo":[],"roadType":"","roadCuttingArea":"","connectionExecutionDate":"","connectionCategory":"","connectionType":"","additionalDetails":{},"id":"","propertyId":"","tenantId":"","proposedWaterClosets":"","proposedToilets":"","noOfWaterClosets":"","noOfToilets":"","history":{}}}
           fieldMapping:
           - inJsonPath: $.applicationStatus.state
             outJsonPath: $.Data.workflow.state
@@ -188,8 +184,6 @@ ServiceMaps:
             outJsonPath: $.Data.noOfWaterClosets
           - inJsonPath: $.noOfToilets
             outJsonPath: $.Data.noOfToilets
-          - inJsonPath: $.toiletsBuildCost
-            outJsonPath: $.Data.toiletsBuildCost
           externalUriMapping:
           - path: http://egov-workflow-v2.egov:8080/egov-workflow-v2/egov-wf/process/_search
             queryParam: businessIds=$.applicationNo,history=true,tenantId=$.tenantId
