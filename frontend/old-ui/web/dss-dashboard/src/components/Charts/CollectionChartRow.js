@@ -97,10 +97,10 @@ class CollectionChartRow extends React.Component {
 							{/* <NFormatter value={data.value} nType={data.valueSymbol} /> */}
 						</div>
 						{data.insight_data &&
-						<div>
+						<div style={{ marginTop:"-8px",whiteSpace:"nowrap"}}>
 							<React.Fragment>
 								<span style={{ marginLeft: "2vh",fontSize:'initial',paddingRight: "8px" }}>
-									<img src={insightIcon} style={{ height: "15px", color: insightColor }} />
+									<img src={insightIcon} style={{ height: "12px", color: insightColor }} />
 								</span>
 								<span style={{ color: insightColor, fontSize: '14px'  }}>{value}</span>
 							</React.Fragment>
