@@ -4,7 +4,7 @@ serviceMaps:
     - version: 1.0
       name: collection migration
       description: Inserting payment details into egcl_payment
-      fromTopic: egov.collection.migration-batch
+      fromTopic: egov-collection-migration-batch
       queryMaps:
 
         - query: INSERT into egcl_payment (id, tenantid, totaldue, totalamountpaid, transactionnumber, transactiondate, paymentmode, instrumentdate, instrumentnumber, instrumentstatus, ifsccode, additionaldetails, paidby, mobilenumber, payername, payeraddress, payeremail, payerid, paymentstatus, createdby, createdtime, lastmodifiedby, lastmodifiedtime) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
