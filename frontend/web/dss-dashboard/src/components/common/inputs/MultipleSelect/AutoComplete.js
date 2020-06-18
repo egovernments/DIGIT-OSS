@@ -133,11 +133,11 @@ class CheckboxesTags extends React.Component {
                     <FormControl className={classes.formControl} style={isMobile?{width:"100%"}:{}} >
                         {/* <InputLabel htmlFor="select-multiple-checkbox">{label || 'Select'}</InputLabel> */}
                         <div className={classes.list}>
-                            <div>
+                            {/* <div>
                                 <SVG src={svgicon} className={classes.CloseButton} >
 
                                 </SVG>
-                            </div>
+                            </div> */}
 
                             {
                                 this.props.type === 'Wards' ? <Autocomplete
