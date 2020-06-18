@@ -135,9 +135,9 @@ class MultipleSelects extends React.Component {
         <FormControl className={classes.formControl} >
           {/* <InputLabel htmlFor="select-multiple-checkbox">{label || 'Select'}</InputLabel> */}
           <div className={classes.list}>
-            <SVG src={svgicon} className={classes.CloseButton} >
+            {/* <SVG src={svgicon} className={classes.CloseButton} >
 
-            </SVG>
+            </SVG> */}
              <Select
              multiple
              disableUnderline={true}

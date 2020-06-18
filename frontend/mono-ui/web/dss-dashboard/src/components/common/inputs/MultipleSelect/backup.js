@@ -266,8 +266,8 @@ class MultipleSelects extends Component {
       <div className={classes.root}>
         <FormControl className={classes.formControl} >
           <div className={classes.list}>
-            <SVG src={svgicon} className={classes.CloseButton} >
-            </SVG>
+            {/* <SVG src={svgicon} className={classes.CloseButton} >
+            </SVG> */}
             <Autocomplete
               // fullWidth
               ref={`autocomplete`}

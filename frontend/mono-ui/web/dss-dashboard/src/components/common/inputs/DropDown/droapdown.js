@@ -89,9 +89,9 @@ class SimpleSelect extends Component {
 
                     <FormControl className={classes.formControl} style={isMobile ? { width: "100%" } : {}} >
                         <div className={classes.list} style={{ display: "inline-flex" }}>
-                            {<SVG src={department_icon} className={classes.CloseButton} >
+                            {/* {<SVG src={department_icon} className={classes.CloseButton} >
                                 Close
-                            </SVG>}
+                            </SVG>} */}
                             <Select
                                 // disableUnderline={true}
                                 value={value || selected}
