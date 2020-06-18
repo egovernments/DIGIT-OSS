@@ -69,6 +69,9 @@ const styles = theme => ({
             margin: '0 5px 0 5px'
         }
     },
+    buttonWidth: {
+        minWidth:"180px"
+    },
     clearbtn: {
         backgroundColor: variables.white,
         marginTop: 12,
@@ -81,6 +84,21 @@ const styles = theme => ({
         lineHeight: 'normal',
         letterSpacing: 'normal',
         textAlign: 'right',
+        color: '#96989a'
+    },
+    applybtn: {
+        backgroundColor: variables.white,
+        marginTop: 12,
+        // opacity: 0.2,
+        fontFamily: 'Roboto',
+        fontSize: 12,
+        fontWeight: 500,
+        fontStretch: 'normal',
+        fontStyle: 'normal',
+        lineHeight: 'normal',
+        letterSpacing: 'normal',
+        textAlign: 'right',
+        minWidth:'180px',
         color: '#96989a'
     },
     dateFilter: {

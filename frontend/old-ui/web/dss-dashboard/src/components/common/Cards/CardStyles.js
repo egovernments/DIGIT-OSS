@@ -17,7 +17,7 @@ export const CardStyle = {
         textAlign: 'left',
         '& div': {
             '& span': {
-                fontSize: variables.fs_14,
+                fontSize: variables.fs_16,
             }
         }
     },
