@@ -211,7 +211,7 @@ serviceMaps:
             - jsonPath: $.Payments.*.paymentDetails.*.bill.billDetails.*.cancellationRemarks
 
 
-        - query: INSERT into egcl_billaccountdetail (id, tenantid, billdetailid, demanddetailid, "order", amount, isactualdemand, taxheadcode, additionaldetails) values(?,?,?,?,?,?,?,?,?)
+        - query: INSERT into egcl_billaccountdetail (id, tenantid, billdetailid, demanddetailid, "order", amount, adjustedamount, isactualdemand, taxheadcode, additionaldetails) values(?,?,?,?,?,?,?,?,?,?)
           basePath: $.Payments.*.paymentDetails.*.bill.billDetails.*.billAccountDetails.*
           jsonMaps:
             - jsonPath: $.Payments.*.paymentDetails.*.bill.billDetails.*.billAccountDetails.*.id
@@ -226,6 +226,9 @@ serviceMaps:
 
             - jsonPath: $.Payments.*.paymentDetails.*.bill.billDetails.*.billAccountDetails.*.amount
               type: DOUBLE
+              
+            - jsonPath: $.Payments.*.paymentDetails.*.bill.billDetails.*.billAccountDetails.*.adjustedAmount
+              type: DOUBLE              
 
             - jsonPath: $.Payments.*.paymentDetails.*.bill.billDetails.*.billAccountDetails.*.isActualDemand
               type: BOOLEAN
