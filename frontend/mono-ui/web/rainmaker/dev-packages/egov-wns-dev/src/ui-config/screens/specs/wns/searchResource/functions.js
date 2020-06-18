@@ -1,10 +1,9 @@
 import { handleScreenConfigurationFieldChange as handleField, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getUserInfo, getTenantIdCommon } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import { fetchBill, findAndReplace, getSearchResults, getSearchResultsForSewerage, getWorkFlowData } from "../../../../../ui-utils/commons";
 import { validateFields } from "../../utils";
 import { convertDateToEpoch, convertEpochToDate, resetFieldsForApplication, resetFieldsForConnection } from "../../utils/index";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "../../../../../ui-utils";
 export const searchApiCall = async (state, dispatch) => {
   showHideApplicationTable(false, dispatch);
@@ -21,7 +20,7 @@ export const searchApiCall = async (state, dispatch) => {
 }
 
 const renderSearchConnectionTable = async (state, dispatch) => {
-  let queryObject = [{ key: "tenantId", value: JSON.parse(getUserInfo()).tenantId }];
+  let queryObject = [{ key: "tenantId", value: getTenantIdCommon() }];
   let searchScreenObject = get(state.screenConfiguration.preparedFinalObject, "searchConnection", {});
   const isSearchBoxFirstRowValid = validateFields(
     "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.wnsApplication.children.cardContent.children.wnsApplicationContainer.children",
@@ -68,7 +67,7 @@ const renderSearchConnectionTable = async (state, dispatch) => {
         // Get the MDMS data for billingPeriod
         let mdmsBody = {
           MdmsCriteria: {
-            tenantId: getTenantId(),
+            tenantId: getTenantIdCommon(),
             moduleDetails: [
               { moduleName: "ws-services-masters", masterDetails: [{ name: "billingPeriod" }]},
               { moduleName: "sw-services-calculation", masterDetails: [{ name: "billingPeriod" }]}
@@ -93,9 +92,9 @@ const renderSearchConnectionTable = async (state, dispatch) => {
         if (element.connectionNo !== "NA" && element.connectionNo !== null) {
           let queryObjectForWaterFetchBill;
           if (element.service === "WATER") {
-            queryObjectForWaterFetchBill = [{ key: "tenantId", value: JSON.parse(getUserInfo()).tenantId }, { key: "consumerCode", value: element.connectionNo }, { key: "businessService", value: "WS" }];
+            queryObjectForWaterFetchBill = [{ key: "tenantId", value: getTenantIdCommon() }, { key: "consumerCode", value: element.connectionNo }, { key: "businessService", value: "WS" }];
           } else {
-            queryObjectForWaterFetchBill = [{ key: "tenantId", value: JSON.parse(getUserInfo()).tenantId }, { key: "consumerCode", value: element.connectionNo }, { key: "businessService", value: "SW" }];
+            queryObjectForWaterFetchBill = [{ key: "tenantId", value: getTenantIdCommon() }, { key: "consumerCode", value: element.connectionNo }, { key: "businessService", value: "SW" }];
           }
 
           if (element.service === "WATER" && 
@@ -141,7 +140,8 @@ const renderSearchConnectionTable = async (state, dispatch) => {
               name: (element.property)?element.property.owners[0].name:'',
               status: element.status,
               address: handleAddress(element),
-              connectionType: element.connectionType
+              connectionType: element.connectionType,
+              tenantId:element.tenantId
             })
           }) : finalArray.push({
             due: 'NA',
@@ -151,7 +151,8 @@ const renderSearchConnectionTable = async (state, dispatch) => {
             name: (element.property)?element.property.owners[0].name:'',
             status: element.status,
             address: handleAddress(element),
-            connectionType: element.connectionType
+            connectionType: element.connectionType,
+            tenantId:element.tenantId
           })
         }
 
@@ -162,7 +163,7 @@ const renderSearchConnectionTable = async (state, dispatch) => {
 }
 
 const renderSearchApplicationTable = async (state, dispatch) => {
-  let queryObject = [{ key: "tenantId", value: JSON.parse(getUserInfo()).tenantId }];
+  let queryObject = [{ key: "tenantId", value: getTenantIdCommon() }];
   let searchScreenObject = get(state.screenConfiguration.preparedFinalObject, "searchScreen", {});
   const isSearchBoxFirstRowValid = validateFields(
     "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.wnsApplication.children.cardContent.children.wnsApplicationContainer.children",
@@ -231,7 +232,7 @@ const renderSearchApplicationTable = async (state, dispatch) => {
           const queryObj = [
             { key: "businessIds", value: appNo },
             { key: "history", value: true },
-            { key: "tenantId", value: JSON.parse(getUserInfo()).tenantId }
+            { key: "tenantId", value: getTenantIdCommon() }
           ];
           let wfResponse = await getWorkFlowData(queryObj);
           if(wfResponse !== null && wfResponse.ProcessInstances !== null) {
@@ -243,7 +244,7 @@ const renderSearchApplicationTable = async (state, dispatch) => {
       /*const queryObj = [
         { key: "businessIds", value: appNo },
         { key: "history", value: true },
-        { key: "tenantId", value: JSON.parse(getUserInfo()).tenantId }
+        { key: "tenantId", value: getTenantIdCommon() }
       ];
       let Response = await getWorkFlowData(queryObj);*/
       for (let i = 0; i < combinedSearchResults.length; i++) {
@@ -270,7 +271,8 @@ const renderSearchApplicationTable = async (state, dispatch) => {
               applicationStatus: appStatus,
               address: handleAddress(element),
               service: element.service,
-              connectionType: element.connectionType
+              connectionType: element.connectionType,
+              tenantId: element.tenantId
             })
           } else {
             finalArray.push({
@@ -280,7 +282,8 @@ const renderSearchApplicationTable = async (state, dispatch) => {
               applicationStatus: appStatus,
               address: handleAddress(element),
               service: element.service,
-              connectionType: element.connectionType
+              connectionType: element.connectionType,
+              tenantId: element.tenantId
             })
           }
         }
@@ -326,7 +329,7 @@ const showConnectionResults = (connections, dispatch) => {
     ["WS_COMMON_TABLE_COL_DUE_LABEL"]: item.due,
     ["WS_COMMON_TABLE_COL_ADDRESS"]: item.address,
     ["WS_COMMON_TABLE_COL_DUE_DATE_LABEL"]: (item.dueDate !== undefined && item.dueDate !== "NA") ? convertEpochToDate(item.dueDate) : item.dueDate,
-    ["WS_COMMON_TABLE_COL_TENANTID_LABEL"]: JSON.parse(getUserInfo()).tenantId,
+    ["WS_COMMON_TABLE_COL_TENANTID_LABEL"]: item.tenantId,
     ["WS_COMMON_TABLE_COL_CONNECTIONTYPE_LABEL"]: item.connectionType
   }));
   dispatch(handleField("search", "components.div.children.searchResults", "props.data", data));
@@ -344,7 +347,7 @@ const showApplicationResults = (connections, dispatch) => {
     ["WS_COMMON_TABLE_COL_OWN_NAME_LABEL"]: item.name,
     ["WS_COMMON_TABLE_COL_APPLICATION_STATUS_LABEL"]: item.applicationStatus.split("_").join(" "),
     ["WS_COMMON_TABLE_COL_ADDRESS"]: item.address,
-    ["WS_COMMON_TABLE_COL_TENANTID_LABEL"]: JSON.parse(getUserInfo()).tenantId,
+    ["WS_COMMON_TABLE_COL_TENANTID_LABEL"]: item.tenantId,
     ["WS_COMMON_TABLE_COL_SERVICE_LABEL"]: item.service,
     ["WS_COMMON_TABLE_COL_CONNECTIONTYPE_LABEL"]: item.connectionType,
   }));
