@@ -11,11 +11,7 @@ export const fetchData = async (action, state, dispatch) => {
         {
             key: "mobileNumber",
             value: JSON.parse(getUserInfo()).mobileNumber
-        }
-        // {
-        //     key: "tenantId",
-        //     value: JSON.parse(getUserInfo()).tenantId
-        // }
+        }        
     ]
 
     const response = await getMyConnectionResults(queryObject, dispatch);

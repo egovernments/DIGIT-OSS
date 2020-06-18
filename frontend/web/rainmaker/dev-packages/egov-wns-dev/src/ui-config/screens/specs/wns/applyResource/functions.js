@@ -1,8 +1,8 @@
 import get from "lodash/get";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getPropertyResults, getTenantIdCommon } from "../../../../../ui-utils/commons";
-import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getPropertyResults } from "../../../../../ui-utils/commons";
+import { getUserInfo, getTenantIdCommon } from "egov-ui-kit/utils/localStorageUtils";
 
 export const propertySearchApiCall = async (state, dispatch) => {
   showHideFields(dispatch, false);

@@ -126,7 +126,7 @@ export const searchApiCall = async (state, dispatch) => {
               name: (element.property && element.property !== "NA" && element.property.owners)?element.property.owners[0].name:'',
               status: element.status,
               address: (element.property && element.property !== "NA" && element.property.address)?element.property.address.street:'',
-              tenantId: tenantId,
+              tenantId: element.tenantId,
               connectionType: element.connectionType
             }
             finalArray.push(obj)
@@ -138,7 +138,7 @@ export const searchApiCall = async (state, dispatch) => {
             name: (element.property && element.property !== "NA" && element.property.owners)?element.property.owners[0].name:'',
             status: element.status,
             address: (element.property && element.property !== "NA" && element.property.address)?element.property.address.street:'',
-            tenantId: tenantId,
+            tenantId: element.tenantId,
             connectionType: element.connectionType
           })
         }
@@ -167,7 +167,7 @@ const showResults = (connections, dispatch, tenantId) => {
     ["WS_COMMON_TABLE_COL_DUE_LABEL"]: item.due,
     ["WS_COMMON_TABLE_COL_ADDRESS"]: item.address,
     ["WS_COMMON_TABLE_COL_DUE_DATE_LABEL"]: (item.dueDate !== undefined && item.dueDate !== "NA") ? convertEpochToDate(item.dueDate) : item.dueDate,
-    ["WS_COMMON_TABLE_COL_TENANTID_LABEL"]: tenantId,
+    ["WS_COMMON_TABLE_COL_TENANTID_LABEL"]: item.tenantId,
     ["WS_COMMON_TABLE_COL_CONNECTIONTYPE_LABEL"]: item.connectionType
   }))
 

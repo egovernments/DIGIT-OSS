@@ -3,13 +3,13 @@ import {
     handleScreenConfigurationFieldChange as handleField,
     prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getUserInfo, getTenantIdCommon } from "egov-ui-kit/utils/localStorageUtils";
 
 export const fetchData = async (action, state, dispatch) => {
     let queryObject = [
         {
             key: "tenantId",
-            value: JSON.parse(getUserInfo()).tenantId
+            value: getTenantIdCommon()
         }]
     const response = await getPastPaymentDetials(queryObject);
      try {
