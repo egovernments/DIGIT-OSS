@@ -38,12 +38,40 @@ const saveData = async (state, dispatch) => {
     if (!data.meterStatus) {
         data.meterStatus = get(state, "screenConfiguration.preparedFinalObject.meterMdmsData.['ws-services-calculation'].MeterStatus[0].code");
     }
-    if (!data.currentReadingDate) {
-        data.currentReadingDate = new Date().getTime()
-    }
     data.connectionNo = getQueryArg(window.location.href, "connectionNos")
     data.lastReading = get(state, "screenConfiguration.preparedFinalObject.autoPopulatedValues.lastReading");
     data.billingPeriod = get(state, "screenConfiguration.preparedFinalObject.autoPopulatedValues.billingPeriod");
+
+    // Validation for Billing Period
+    if(data.billingPeriod !== undefined){
+        if(!data.currentReadingDate){
+            data.currentReadingDate = new Date().getTime()
+        }
+        var selectedDate = new Date(new Date(data.currentReadingDate).toDateString());
+        let fromDate = new Date(data.billingPeriod.split(' - ')[0].replace(/(\d{2})\/(\d{2})\/(\d{4})/,"$2/$1/$3"));
+        let toDate = new Date(new Date().toDateString());
+        //console.log("*****************************");
+        //console.log( "CurrentReadingDate -> " + selectedDate+ ", FromDate -> " + fromDate + ", ToDate-> " + toDate);
+        if(!(selectedDate > fromDate && selectedDate <= toDate))
+        {
+            dispatch(
+                toggleSnackbar(
+                    true,
+                    {
+                        labelName: "Reading date should not be less than from date and not be greater than to date",
+                        labelKey: "ERR_CURRENT_READING_DATE_SHOULD_NOT_BE_LESS_THAN_FROM_DATE_AND_NOT_GREATER_THAN_TO_DATE"
+                    },
+                    "warning"
+                )
+            );
+            return;
+        }
+        let endDate = ("0" + selectedDate.getDate()).slice(-2) + '/' + ("0" + (selectedDate.getMonth() + 1)).slice(-2) + '/' + selectedDate.getFullYear()
+        data.billingPeriod = data.billingPeriod.split(' - ')[0] + " - " + endDate  
+    }
+
+
+
     let lastReadingDate = get(state, "screenConfiguration.preparedFinalObject.consumptionDetails[0].lastReadingDate")
     // console.log(lastReadingDate, "lastReadingDate")
     if (lastReadingDate !== undefined && lastReadingDate !== null && lastReadingDate !== '') {

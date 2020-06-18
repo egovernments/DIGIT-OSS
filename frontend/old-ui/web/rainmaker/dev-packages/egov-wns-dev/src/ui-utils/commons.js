@@ -2,16 +2,13 @@ import commonConfig from "config/common.js";
 import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getFileUrl, getFileUrlFromAPI, getQueryArg, getTransformedLocale, setDocuments } from "egov-ui-framework/ui-utils/commons";
-import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId, getUserInfo, getTenantIdCommon } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import set from "lodash/set";
 import store from "redux/store";
 import { convertDateToEpoch, getCheckBoxJsonpath, getHygeneLevelJson, getLocalityHarmedJson, getSafetyNormsJson, getTranslatedLabel, ifUserRoleExists, updateDropDowns } from "../ui-config/screens/specs/utils";
 import { httpRequest } from "./api";
 
-export const getTenantIdCommon = () => {
-    return process.env.REACT_APP_NAME === "Citizen"?JSON.parse(getUserInfo()).permanentCity:getTenantId();
-}
 export const pushTheDocsUploadedToRedux = async (state, dispatch) => {
     let reduxDocuments = get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux", {});
     let uploadedDocs = [];
@@ -1271,7 +1268,7 @@ export const getMdmsDataForAutopopulated = async (dispatch) => {
         let queryObject = [
             {
                 key: "tenantId",
-                value: JSON.parse(getUserInfo()).tenantId
+                value: getTenantIdCommon()
             },
             { key: "offset", value: "0" },
             { key: "connectionNumber", value: connectionNo }
