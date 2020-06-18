@@ -1,0 +1,26 @@
+{
+    "tenantId": "pb",
+    "moduleName": "NOC",
+    "DocumentTypeMapping": [
+        {
+            "applicationType": "BUILDING_PLAN_SCRUTINY",            
+            "nocType": "FIRE_NOC",
+            "required": true               
+        },
+        {
+            "applicationType": "BUILDING_PLAN_SCRUTINY",            
+            "nocType": "AAI_NOC",
+            "required": true
+        },
+        {
+            "applicationType": "BUILDING_OC_PLAN_SCRUTINY",            
+            "nocType": "FIRE_NOC",
+            "required": true
+        },
+        {
+            "applicationType": "BUILDING_OC_PLAN_SCRUTINY",            
+            "nocType": "AAI_NOC",
+            "required": true
+        }
+    ]
+}

@@ -1,0 +1,18 @@
+{
+  "tenantId": "pb",
+  "moduleName": "NOC",
+  "NocType": [
+     {
+      "code": "FIRE_NOC",
+      "name": "Fire Services",
+      "description": "Fire Services",
+      "active": true
+    },
+    {
+      "code":"AAI_NOC",
+      "name": "Airport Authority",
+      "description": "Airport Authority",
+      "active":true
+    }
+  ]
+}
