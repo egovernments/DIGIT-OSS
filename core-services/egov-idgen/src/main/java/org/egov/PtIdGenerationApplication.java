@@ -14,7 +14,6 @@ import org.springframework.context.annotation.Import;
 @SpringBootApplication
 @Import({TracerConfiguration.class})
 public class PtIdGenerationApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(PtIdGenerationApplication.class, args);
 	}
