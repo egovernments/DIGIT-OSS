@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.egov.domain.exception.InvalidTokenValidateRequestException;
+import org.springframework.security.crypto.bcrypt.*;
+import org.springframework.util.*;
 
 import static org.springframework.util.StringUtils.isEmpty;
 
@@ -16,6 +18,7 @@ public class ValidateRequest {
     private String tenantId;
     private String otp;
     private String identity;
+
 
     public void validate() {
         if (isTenantIdAbsent() || isOtpAbsent() || isIdentityAbsent()) {

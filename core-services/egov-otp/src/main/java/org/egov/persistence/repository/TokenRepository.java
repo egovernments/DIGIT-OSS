@@ -11,6 +11,7 @@ import org.egov.domain.model.TokenSearchCriteria;
 import org.egov.domain.model.Tokens;
 import org.egov.domain.model.ValidateRequest;
 import org.egov.persistence.repository.rowmapper.TokenRowMapper;
+import org.egov.web.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -21,12 +22,16 @@ public class TokenRepository {
     private static final int UPDATED_ROWS_COUNT = 1;
     private static final String NO = "N";
     private static final String INSERT_TOKEN = "insert into eg_token(id,tenantid,tokennumber,tokenidentity,validated,ttlsecs,createddate,createdby,version,createddatenew) values (:id,:tenantId,:tokenNumber,:tokenIdentity,:validated,:ttlSecs,:createdDate,:createdBy,:version,:createddatenew);";
-    private static final String GETTOKENS_BY_NUMBER_IDENTITY_TENANT = "select * from eg_token where tokennumber=:tokenNumber and tokenidentity=:tokenIdentity and tenantid=:tenantId";
+    private static final String GETTOKENS_BY_NUMBER_IDENTITY_TENANT = "select * from eg_token where tokenidentity=:tokenIdentity and tenantid=:tenantId and ((extract(epoch from now()) * 1000 - createddatenew)/1000)::int <= ttlsecs and validated = 'N'";
     private static final String UPDATE_TOKEN = "update eg_token set validated = 'Y' where id = :id";
     private static final String GETTOKEN_BYID = "select * from eg_token where id=:id";
+    private static final String UPDATETOKEN_TLL_BYID = "update eg_token set ttlsecs = (extract (epoch from now()) - createddatenew / 1000)::int + :ttl where id = :id";
 
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
+    @Autowired
+    private OtpConfiguration otpConfiguration;
 
     public TokenRepository(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
@@ -67,10 +72,9 @@ public class TokenRepository {
         return namedParameterJdbcTemplate.update(UPDATE_TOKEN, tokenInputs);
     }
 
-    public Tokens findByNumberAndIdentityAndTenantId(ValidateRequest request) {
+    public Tokens findByIdentityAndTenantId(ValidateRequest request) {
 
         final Map<String, Object> tokenInputs = new HashMap<String, Object>();
-        tokenInputs.put("tokenNumber", request.getOtp());
         tokenInputs.put("tokenIdentity", request.getIdentity());
         tokenInputs.put("tenantId", request.getTenantId());
         List<Token> domainTokens = namedParameterJdbcTemplate.query(GETTOKENS_BY_NUMBER_IDENTITY_TENANT, tokenInputs,
@@ -78,24 +82,6 @@ public class TokenRepository {
         return new Tokens(domainTokens);
     }
 
-    public Tokens findByNumberAndIdentityAndTenantIdLike(ValidateRequest request) {
-
-        final Map<String, Object> tokenInputs = new HashMap<String, Object>();
-        tokenInputs.put("tokenNumber", request.getOtp());
-        tokenInputs.put("tokenIdentity", request.getIdentity());
-        List<Token> domainTokens = namedParameterJdbcTemplate.query(getQuery(request.getTenantId()), tokenInputs,
-                new TokenRowMapper());
-        return new Tokens(domainTokens);
-    }
-
-    private String getQuery(String tenantId) {
-        if (tenantId != null && tenantId.contains("."))
-            tenantId = tenantId.split("\\.")[0];
-
-        String GETTOKENS_BY_NUMBER_IDENTITY_TENANT = "select * from eg_token where tokennumber=:tokenNumber and tokenidentity=:tokenIdentity and tenantid like "
-                + "'" + tenantId + "%'";
-        return GETTOKENS_BY_NUMBER_IDENTITY_TENANT;
-    }
 
     public Token findBy(TokenSearchCriteria searchCriteria) {
 
@@ -107,5 +93,12 @@ public class TokenRepository {
             token = domainTokens.get(0);
         }
         return token;
+    }
+
+    public int updateTTL(Token t) {
+        final Map<String, Object> tokenInputs = new HashMap<String, Object>();
+        tokenInputs.put("id", t.getUuid());
+        tokenInputs.put("ttl", otpConfiguration.getTtl());
+        return namedParameterJdbcTemplate.update(UPDATETOKEN_TLL_BYID, tokenInputs);
     }
 }

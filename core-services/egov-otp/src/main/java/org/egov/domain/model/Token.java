@@ -19,6 +19,7 @@ public class Token {
     @NotEmpty
     private final String tenantId;
     private String identity;
+    @Setter
     private String number;
     private String uuid;
     private LocalDateTime expiryDateTime;

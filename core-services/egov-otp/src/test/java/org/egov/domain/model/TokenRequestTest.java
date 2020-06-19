@@ -39,10 +39,4 @@ public class TokenRequestTest {
         assertEquals(5, token.generateToken().length());
     }
 
-    @Test
-    public void test_should_300_second_ttl() {
-        final TokenRequest token = new TokenRequest("identity", "tenant");
-
-        assertEquals(300, token.getTimeToLive());
-    }
 }
