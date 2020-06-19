@@ -1,0 +1,303 @@
+{
+	"info": {
+		"_postman_id": "f0767b1a-594b-4da6-bd41-a0bbe2f867f1",
+		"name": "workflow",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "loc wf search",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"RequestInfo\": {\n    \"apiId\": \"Rainmaker\",\n    \"action\": \"\",\n    \"did\": 1,\n    \"key\": \"\",\n    \"msgId\": \"20170310130900|en_IN\",\n    \"requesterId\": \"\",\n    \"ts\": \"\",\n    \"ver\": \".01\",\n    \"userInfo\": {\n                           \n                            \"uuid\": \"f169b9bc-f3b1-4488-97a8-76f800aabac4\",\n                            \"userName\": \"9686987977\",\n                            \"name\": \"One\",\n                            \"gender\": \"Male\",\n                            \"mobileNumber\": \"9686987977\",\n                            \"type\": \"EMPLOYEE\",\n                            \"roles\": [\n                            \t {\"id\":322,\"name\":\"TL Approver\",\"code\":\"TL_APPROVER\"},\n                                {\n                                    \"id\": null,\n                                    \"name\": \"tl_approver\",\n                                    \"code\": \"TL_APPROVER\"\n                                }\n                               \n                                \n                            ],\n                            \"tenantId\": \"pb\"\n                        },\n    \"authToken\":  \"c2b18504-c5d5-4edc-b6eb-a3a913c17add\"\n  }\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8089/egov-workflow-v2/egov-wf/process/_search?tenantId=pb.amritsar&businessIds=PB-TL-2019-02-20-001531&history=true",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8089",
+					"path": [
+						"egov-workflow-v2",
+						"egov-wf",
+						"process",
+						"_search"
+					],
+					"query": [
+						{
+							"key": "tenantId",
+							"value": "pb.amritsar"
+						},
+						{
+							"key": "businessIds",
+							"value": "PB-TL-2019-02-20-001531"
+						},
+						{
+							"key": "history",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "loc transition",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n \"RequestInfo\": {\n    \"apiId\": \"Rainmaker\",\n    \"action\": \"\",\n    \"did\": 1,\n    \"key\": \"\",\n    \"msgId\": \"20170310130900|en_IN\",\n    \"requesterId\": \"\",\n    \"ts\": \"\",\n    \"ver\": \".01\",\n    \"userInfo\": {\n                           \n                            \"uuid\": \"fefd3ab9-b69e-46c1-9fdd-dd22fa880ce5\",\n                            \"userName\": \"9686987977\",\n                            \"name\": \"One\",\n                            \"gender\": \"Male\",\n                            \"mobileNumber\": \"9686987977\",\n                            \"type\": \"EMPLOYEE\",\n                            \"roles\": [\n                                {\n                                    \"id\": null,\n                                    \"name\": \"Citizen\",\n                                    \"code\": \"CITIZEN\"\n                                },\n                                {\n                                    \"id\": null,\n                                    \"name\": \"TLCEMP\",\n                                    \"code\": \"TL_CEMP\"\n                                },\n                                {\n                                    \"id\": null,\n                                    \"name\": \"TL approve\",\n                                    \"code\": \"TL_APPROVER\"\n                                }\n                               \n                                \n                            ],\n                            \"tenantId\": \"pb\"\n                        },\n    \"authToken\":  \"c2b18504-c5d5-4edc-b6eb-a3a913c17add\"\n  },\n  \"ProcessInstances\": [\n    { \"moduleName\":\"tl-services\",\n      \"tenantId\": \"pb.nawanshahr\",\n      \"businessService\": \"NewTL\",\n      \"businessId\": \"TL-TEST-1\",\n      \"action\": {\"action\":\"INITIATE\"},   \n      \"comment\": null,\n      \"assignee\": null,\n      \"sla\": 0,\n      \"previousStatus\": null\n    }\n  ]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8089/egov-workflow-v2/egov-wf/process/_transition",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8089",
+					"path": [
+						"egov-workflow-v2",
+						"egov-wf",
+						"process",
+						"_transition"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "dev transition wf",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"RequestInfo\": {\n    \"apiId\": \"Rainmaker\",\n    \"action\": \"\",\n    \"did\": 1,\n    \"key\": \"\",\n    \"msgId\": \"20170310130900|en_IN\",\n    \"requesterId\": \"\",\n    \"ts\": 1513579888683,\n    \"ver\": \".01\",\n    \"authToken\": \"a0fa2bbe-416e-475d-a07a-0f32978ab5a7\"\n  },\n \"ProcessInstances\": [\n    { \"moduleName\":\"tl-services\",\n      \"tenantId\": \"pb\",\n      \"businessService\": \"NewTL\",\n      \"businessId\": \"TL-0090\",\n      \"action\": \"INITIATE\",   \n      \"comment\": \"initiating  tradeLicense\",\n      \"assignee\": null,\n      \"previousStatus\": null\n    }\n  ]\n}"
+				},
+				"url": {
+					"raw": "https://egov-micro-dev.egovernments.org/egov-workflow-v2/egov-wf/process/_transition",
+					"protocol": "https",
+					"host": [
+						"egov-micro-dev",
+						"egovernments",
+						"org"
+					],
+					"path": [
+						"egov-workflow-v2",
+						"egov-wf",
+						"process",
+						"_transition"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "dev search",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"RequestInfo\": {\n    \"apiId\": \"Rainmaker\",\n    \"action\": \"\",\n    \"did\": 1,\n    \"key\": \"\",\n    \"msgId\": \"20170310130900|en_IN\",\n    \"requesterId\": \"\",\n    \"ts\": 1513579888683,\n    \"ver\": \".01\",\n    \"authToken\": \"c2c92c6e-7cf9-42c0-8997-53fe5e6dbd4c\"\n  }\n\t\n}"
+				},
+				"url": {
+					"raw": "https://egov-micro-dev.egovernments.org/egov-workflow-v2/egov-wf/process/_search?tenantId=pb&businessIds=PB-TL-2019-11-27-003279",
+					"protocol": "https",
+					"host": [
+						"egov-micro-dev",
+						"egovernments",
+						"org"
+					],
+					"path": [
+						"egov-workflow-v2",
+						"egov-wf",
+						"process",
+						"_search"
+					],
+					"query": [
+						{
+							"key": "tenantId",
+							"value": "pb"
+						},
+						{
+							"key": "businessIds",
+							"value": "PB-TL-2019-11-27-003279"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create businessService",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"RequestInfo\": {\n    \"apiId\": \"Rainmaker\",\n    \"action\": \"\",\n    \"did\": 1,\n    \"key\": \"\",\n    \"msgId\": \"20170310130900|en_IN\",\n    \"requesterId\": \"\",\n    \"ts\": 1513579888683,\n    \"ver\": \".01\",\n    \"authToken\": \"53c7fea5-d784-41a2-91a4-2d93cd8d7f54\"\n  },\n  \"BusinessServices\": [\n    {\n      \"tenantId\": \"pb.amritsar\",\n      \"businessService\": \"ASSESSMENTFLOW\",\n      \"business\": \"pt-services\",\n      \"businessServiceSla\": 172800000,\n      \"states\": [\n        {\n          \"sla\": null,\n          \"state\": null,\n          \"applicationStatus\": null,\n          \"docUploadRequired\": false,\n          \"isStartState\": true,\n          \"isTerminateState\": false,\n          \"actions\": [\n            {\n              \"action\": \"INITIATE\",\n              \"nextState\": \"INITIATED\",\n              \"roles\": [\n                \"CITIZEN\",\n                \"TL_CEMP\"\n              ]\n            }\n          ]\n        },\n        {\n          \"sla\": null,\n          \"state\": \"INITIATED\",\n          \"applicationStatus\": \"INITIATED\",\n          \"docUploadRequired\": false,\n          \"isStartState\": true,\n          \"isTerminateState\": false,\n          \"actions\": [\n            {\n              \"action\": \"APPLY\",\n              \"nextState\": \"APPLIED\",\n              \"roles\": [\n                \"CITIZEN\",\n                \"TL_CEMP\"\n              ]\n            },\n            {\n              \"action\": \"INITIATE\",\n              \"nextState\": \"INITIATED\",\n              \"roles\": [\n                \"CITIZEN\",\n                \"TL_CEMP\"\n              ]\n            }\n          ]\n        },\n        {\n          \"sla\": null,\n          \"state\": \"APPLIED\",\n          \"applicationStatus\": \"APPLIED\",\n          \"docUploadRequired\": false,\n          \"isStartState\": false,\n          \"isTerminateState\": false,\n          \"actions\": [\n            {\n              \"action\": \"FORWARD\",\n              \"nextState\": \"FIELDINSPECTION\",\n              \"roles\": [\n                \"TL_DOC_VERIFIER\"\n              ]\n            },\n            {\n              \"action\": \"REJECT\",\n              \"nextState\": \"REJECTED\",\n              \"roles\": [\n                \"TL_DOC_VERIFIER\"\n              ]\n            }\n          ]\n        },\n        {\n          \"sla\": null,\n          \"state\": \"REJECTED\",\n          \"applicationStatus\": \"REJECTED\",\n          \"docUploadRequired\": false,\n          \"isStartState\": false,\n          \"isTerminateState\": true\n        },\n        {\n          \"sla\": 86400000,\n          \"state\": \"FIELDINSPECTION\",\n          \"applicationStatus\": \"FIELDINSPECTION\",\n          \"docUploadRequired\": false,\n          \"isStartState\": false,\n          \"isTerminateState\": false,\n          \"actions\": [\n            {\n              \"action\": \"FORWARD\",\n              \"nextState\": \"PENDINGAPPROVAL\",\n              \"roles\": [\n                \"TL_FIELD_INSPECTOR\"\n              ]\n            },\n            {\n              \"action\": \"REJECT\",\n              \"nextState\": \"REJECTED\",\n              \"roles\": [\n                \"TL_FIELD_INSPECTOR\"\n              ]\n            },\n            {\n              \"action\": \"SENDBACK\",\n              \"nextState\": \"APPLIED\",\n              \"roles\": [\n                \"TL_FIELD_INSPECTOR\"\n              ]\n            }\n          ]\n        },\n        {\n          \"sla\": 43200000,\n          \"state\": \"PENDINGAPPROVAL\",\n          \"applicationStatus\": \"PENDINGAPPROVAL\",\n          \"docUploadRequired\": false,\n          \"isStartState\": false,\n          \"isTerminateState\": false,\n          \"actions\": [\n            {\n              \"action\": \"APPROVE\",\n              \"nextState\": \"PENDINGPAYMENT\",\n              \"roles\": [\n                \"TL_APPROVER\"\n              ]\n            },\n            {\n              \"action\": \"REJECT\",\n              \"nextState\": \"REJECTED\",\n              \"roles\": [\n                \"TL_APPROVER\"\n              ]\n            },\n            {\n              \"action\": \"SENDBACK\",\n              \"nextState\": \"FIELDINSPECTION\",\n              \"roles\": [\n                \"TL_APPROVER\"\n              ]\n            }\n          ]\n        },\n        {\n          \"sla\": 43200000,\n          \"state\": \"PENDINGPAYMENT\",\n          \"applicationStatus\": \"PENDINGPAYMENT\",\n          \"docUploadRequired\": false,\n          \"isStartState\": false,\n          \"isTerminateState\": false,\n          \"actions\": [\n            {\n              \"action\": \"PAY\",\n              \"nextState\": \"APPROVED\",\n              \"roles\": [\n                \"CITIZEN\",\n                \"TL_CEMP\",\n                \"SYSTEM_PAYMENT\"\n              ]\n            },\n            {\n\t          \"action\": \"ADHOC\",\n\t          \"nextState\": \"PENDINGPAYMENT\",\n\t          \"roles\": [\n\t            \"TL_CEMP\"\n\t          ]\n\t        }\n          ]\n        },\n        {\n          \"sla\": null,\n          \"state\": \"APPROVED\",\n          \"applicationStatus\": \"APPROVED\",\n          \"docUploadRequired\": false,\n          \"isStartState\": false,\n          \"isTerminateState\": true\n        }\n      ]\n    }\n  ]\n}\t"
+				},
+				"url": {
+					"raw": "https://egov-micro-dev.egovernments.org/egov-workflow-v2/egov-wf/businessservice/_create",
+					"protocol": "https",
+					"host": [
+						"egov-micro-dev",
+						"egovernments",
+						"org"
+					],
+					"path": [
+						"egov-workflow-v2",
+						"egov-wf",
+						"businessservice",
+						"_create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update businessService Copy",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n   \"RequestInfo\": {\n    \"apiId\": \"Rainmaker\",\n    \"action\": \"\",\n    \"did\": 1,\n    \"key\": \"\",\n    \"msgId\": \"20170310130900|en_IN\",\n    \"requesterId\": \"\",\n    \"ts\": 1513579888683,\n    \"ver\": \".01\",\n    \"userInfo\": {\n                           \n                            \"uuid\": \"c2b18504-c5d5-4edc-b6eb-a3a913c17add\",\n                            \"userName\": \"9686987977\",\n                            \"name\": \"One\",\n                            \"gender\": \"Male\",\n                            \"mobileNumber\": \"9686987977\",\n                            \"type\": \"EMPLOYEE\",\n                            \"roles\": [\n                                {\n                                    \"id\": null,\n                                    \"name\": \"Citizen\",\n                                    \"code\": \"CITIZEN\"\n                                },\n                                 {\n                                    \"id\": null,\n                                    \"name\": \"TL Approver\",\n                                    \"code\": \"TL_APPROVER\"\n                                }\n                                \n                            ],\n                            \"tenantId\": \"pb\"\n                        },\n    \"authToken\": \"f93e2db5-b153-49d3-b653-014c5368791e\"\n  },\n  \"BusinessServices\": [\n       {\n            \"tenantId\": \"pb.nawanshahr\",\n            \"uuid\": \"76996f06-89e3-4d53-bca7-5b197c3832fb\",\n            \"businessService\": \"NewTL\",\n            \"business\": \"tl-services\",\n            \"businessServiceSla\": 172800000,\n            \"states\": [\n                {\n                    \"uuid\": \"7eb3488b-a5d7-4518-a28b-45d45775dd1d\",\n                    \"tenantId\": \"pb.nawanshahr\",\n                    \"businessServiceId\": \"76996f06-89e3-4d53-bca7-5b197c3832fb\",\n                    \"sla\": null,\n                    \"state\": null,\n                    \"applicationStatus\": null,\n                    \"docUploadRequired\": false,\n                    \"isStartState\": true,\n                    \"isTerminateState\": false,\n                    \"isStateUpdatable\": true,\n                    \"actions\": [\n                        {\n                            \"uuid\": \"1c8c3b9b-1165-47a3-8b1a-c945a37269b8\",\n                            \"tenantId\": \"pb.nawanshahr\",\n                            \"currentState\": \"7eb3488b-a5d7-4518-a28b-45d45775dd1d\",\n                            \"action\": \"INITIATE\",\n                            \"nextState\": \"441c7e97-c95e-4a66-b93c-6daa58d70bfc\",\n                            \"roles\": [\n                                \"CITIZEN\",\n                                \"TL_CEMP\"\n                            ],\n                            \"auditDetails\": {\n                                \"createdBy\": \"f6b0e1cf-5764-4570-9a95-5051d41ef468\",\n                                \"lastModifiedBy\": \"f6b0e1cf-5764-4570-9a95-5051d41ef468\",\n                                \"createdTime\": 1566915476696,\n                                \"lastModifiedTime\": 1566915476696\n                            }\n                        }\n                    ],\n                    \"auditDetails\": {\n                        \"createdBy\": \"f6b0e1cf-5764-4570-9a95-5051d41ef468\",\n                        \"lastModifiedBy\": \"f6b0e1cf-5764-4570-9a95-5051d41ef468\",\n                        \"createdTime\": 1566915476696,\n                        \"lastModifiedTime\": 1566915476696\n                    }\n                },\n                {\n                    \"uuid\": \"441c7e97-c95e-4a66-b93c-6daa58d70bfc\",\n                    \"tenantId\": \"pb.nawanshahr\",\n                    \"businessServiceId\": \"76996f06-89e3-4d53-bca7-5b197c3832fb\",\n                    \"sla\": null,\n                    \"state\": \"INITIATED\",\n                    \"applicationStatus\": \"INITIATED\",\n                    \"docUploadRequired\": false,\n                    \"isStartState\": true,\n                    \"isTerminateState\": false,\n                    \"isStateUpdatable\": true,\n                    \"actions\": [\n                        {\n                            \"uuid\": \"be267161-8ee7-4d0b-9341-e4fb7c9d4344\",\n                            \"tenantId\": \"pb.nawanshahr\",\n                            \"currentState\": \"441c7e97-c95e-4a66-b93c-6daa58d70bfc\",\n                            \"action\": \"INITIATE\",\n                            \"nextState\": \"441c7e97-c95e-4a66-b93c-6daa58d70bfc\",\n                            \"roles\": [\n                                \"CITIZEN\",\n                                \"TL_CEMP\"\n                            ],\n                            \"auditDetails\": {\n                                \"createdBy\": \"f6b0e1cf-5764-4570-9a95-5051d41ef468\",\n                                \"lastModifiedBy\": \"f6b0e1cf-5764-4570-9a95-5051d41ef468\",\n                                \"createdTime\": 1566915476696,\n                                \"lastModifiedTime\": 1566915476696\n                            }\n                        },\n                        {\n                            \"uuid\": \"5147ef61-9918-4c24-85eb-bac2ff66b6d5\",\n                            \"tenantId\": \"pb.nawanshahr\",\n                            \"currentState\": \"441c7e97-c95e-4a66-b93c-6daa58d70bfc\",\n                            \"action\": \"APPLY\",\n                            \"nextState\": \"8f95a18e-eb7a-4aea-9dd7-afe56ce5c405\",\n                            \"roles\": [\n                                \"CITIZEN\",\n                                \"TL_CEMP\"\n                            ],\n                            \"auditDetails\": {\n                                \"createdBy\": \"f6b0e1cf-5764-4570-9a95-5051d41ef468\",\n                                \"lastModifiedBy\": \"f6b0e1cf-5764-4570-9a95-5051d41ef468\",\n                                \"createdTime\": 1566915476696,\n                                \"lastModifiedTime\": 1566915476696\n                            }\n                        }\n                    ],\n                    \"auditDetails\": {\n                        \"createdBy\": \"f6b0e1cf-5764-4570-9a95-5051d41ef468\",\n                        \"lastModifiedBy\": \"f6b0e1cf-5764-4570-9a95-5051d41ef468\",\n                        \"createdTime\": 1566915476696,\n                        \"lastModifiedTime\": 1566915476696\n                    }\n                },\n                {\n                    \"uuid\": \"8f95a18e-eb7a-4aea-9dd7-afe56ce5c405\",\n                    \"tenantId\": \"pb.nawanshahr\",\n                    \"businessServiceId\": \"76996f06-89e3-4d53-bca7-5b197c3832fb\",\n                    \"sla\": null,\n                    \"state\": \"APPLIED\",\n                    \"applicationStatus\": \"APPLIED\",\n                    \"docUploadRequired\": false,\n                    \"isStartState\": false,\n                    \"isTerminateState\": false,\n                    \"isStateUpdatable\": true,\n                    \"actions\": [\n                        {\n                            \"uuid\": \"e0e5910c-cffc-4dc1-ae57-298e44a786c8\",\n                            \"tenantId\": \"pb.nawanshahr\",\n                            \"currentState\": \"8f95a18e-eb7a-4aea-9dd7-afe56ce5c405\",\n                            \"action\": \"FORWARD\",\n                            \"nextState\": \"e9f62f06-6d27-4eea-8ac3-8e6d273c3ad6\",\n                            \"roles\": [\n                                \"TL_DOC_VERIFIER\"\n                            ],\n                            \"auditDetails\": {\n                                \"createdBy\": \"f6b0e1cf-5764-4570-9a95-5051d41ef468\",\n                                \"lastModifiedBy\": \"f6b0e1cf-5764-4570-9a95-5051d41ef468\",\n                                \"createdTime\": 1566915476696,\n                                \"lastModifiedTime\": 1566915476696\n                            }\n                        },\n                        {\n                            \"uuid\": \"8c40b6ab-9b16-406e-8af6-4cbe9c7264a5\",\n                            \"tenantId\": \"pb.nawanshahr\",\n                            \"currentState\": \"8f95a18e-eb7a-4aea-9dd7-afe56ce5c405\",\n                            \"action\": \"REJECT\",\n                            \"nextState\": \"727a4945-8ced-436b-8bdd-d083d7ca62cd\",\n                            \"roles\": [\n                                \"TL_DOC_VERIFIER\"\n                            ],\n                            \"auditDetails\": {\n                                \"createdBy\": \"f6b0e1cf-5764-4570-9a95-5051d41ef468\",\n                                \"lastModifiedBy\": \"f6b0e1cf-5764-4570-9a95-5051d41ef468\",\n                                \"createdTime\": 1566915476696,\n                                \"lastModifiedTime\": 1566915476696\n                            }\n                        }\n                    ],\n                    \"auditDetails\": {\n                        \"createdBy\": \"f6b0e1cf-5764-4570-9a95-5051d41ef468\",\n                        \"lastModifiedBy\": \"f6b0e1cf-5764-4570-9a95-5051d41ef468\",\n                        \"createdTime\": 1566915476696,\n                        \"lastModifiedTime\": 1566915476696\n                    }\n                },\n                {\n                    \"uuid\": \"727a4945-8ced-436b-8bdd-d083d7ca62cd\",\n                    \"tenantId\": \"pb.nawanshahr\",\n                    \"businessServiceId\": \"76996f06-89e3-4d53-bca7-5b197c3832fb\",\n                    \"sla\": null,\n                    \"state\": \"REJECTED\",\n                    \"applicationStatus\": \"REJECTED\",\n                    \"docUploadRequired\": false,\n                    \"isStartState\": false,\n                    \"isTerminateState\": true,\n                    \"isStateUpdatable\": false,\n                    \"actions\": null,\n                    \"auditDetails\": {\n                        \"createdBy\": \"f6b0e1cf-5764-4570-9a95-5051d41ef468\",\n                        \"lastModifiedBy\": \"f6b0e1cf-5764-4570-9a95-5051d41ef468\",\n                        \"createdTime\": 1566915476696,\n                        \"lastModifiedTime\": 1566915476696\n                    }\n                },\n                {\n                    \"uuid\": \"e9f62f06-6d27-4eea-8ac3-8e6d273c3ad6\",\n                    \"tenantId\": \"pb.nawanshahr\",\n                    \"businessServiceId\": \"76996f06-89e3-4d53-bca7-5b197c3832fb\",\n                    \"sla\": 86400000,\n                    \"state\": \"FIELDINSPECTION\",\n                    \"applicationStatus\": \"FIELDINSPECTION\",\n                    \"docUploadRequired\": false,\n                    \"isStartState\": false,\n                    \"isTerminateState\": false,\n                    \"isStateUpdatable\": true,\n                    \"actions\": [\n                        {\n                            \"uuid\": \"ba3bb8d4-0fd1-491c-97cf-6d091518005b\",\n                            \"tenantId\": \"pb.nawanshahr\",\n                            \"currentState\": \"e9f62f06-6d27-4eea-8ac3-8e6d273c3ad6\",\n                            \"action\": \"SENDBACK\",\n                            \"nextState\": \"8f95a18e-eb7a-4aea-9dd7-afe56ce5c405\",\n                            \"roles\": [\n                                \"TL_FIELD_INSPECTOR\"\n                            ],\n                            \"auditDetails\": {\n                                \"createdBy\": \"f6b0e1cf-5764-4570-9a95-5051d41ef468\",\n                                \"lastModifiedBy\": \"f6b0e1cf-5764-4570-9a95-5051d41ef468\",\n                                \"createdTime\": 1566915476696,\n                                \"lastModifiedTime\": 1566915476696\n                            }\n                        },\n                        {\n                            \"uuid\": \"324cc269-380b-48e6-8061-15b6299b571c\",\n                            \"tenantId\": \"pb.nawanshahr\",\n                            \"currentState\": \"e9f62f06-6d27-4eea-8ac3-8e6d273c3ad6\",\n                            \"action\": \"FORWARD\",\n                            \"nextState\": \"4d77e870-9be4-4287-9749-1c9810cd128b\",\n                            \"roles\": [\n                                \"TL_FIELD_INSPECTOR\"\n                            ],\n                            \"auditDetails\": {\n                                \"createdBy\": \"f6b0e1cf-5764-4570-9a95-5051d41ef468\",\n                                \"lastModifiedBy\": \"f6b0e1cf-5764-4570-9a95-5051d41ef468\",\n                                \"createdTime\": 1566915476696,\n                                \"lastModifiedTime\": 1566915476696\n                            }\n                        },\n                        {\n                            \"uuid\": \"b394199f-add5-404e-9421-0e6c877254be\",\n                            \"tenantId\": \"pb.nawanshahr\",\n                            \"currentState\": \"e9f62f06-6d27-4eea-8ac3-8e6d273c3ad6\",\n                            \"action\": \"REJECT\",\n                            \"nextState\": \"727a4945-8ced-436b-8bdd-d083d7ca62cd\",\n                            \"roles\": [\n                                \"TL_FIELD_INSPECTOR\"\n                            ],\n                            \"auditDetails\": {\n                                \"createdBy\": \"f6b0e1cf-5764-4570-9a95-5051d41ef468\",\n                                \"lastModifiedBy\": \"f6b0e1cf-5764-4570-9a95-5051d41ef468\",\n                                \"createdTime\": 1566915476696,\n                                \"lastModifiedTime\": 1566915476696\n                            }\n                        }\n                    ],\n                    \"auditDetails\": {\n                        \"createdBy\": \"f6b0e1cf-5764-4570-9a95-5051d41ef468\",\n                        \"lastModifiedBy\": \"f6b0e1cf-5764-4570-9a95-5051d41ef468\",\n                        \"createdTime\": 1566915476696,\n                        \"lastModifiedTime\": 1566915476696\n                    }\n                },\n                {\n                    \"uuid\": \"4d77e870-9be4-4287-9749-1c9810cd128b\",\n                    \"tenantId\": \"pb.nawanshahr\",\n                    \"businessServiceId\": \"76996f06-89e3-4d53-bca7-5b197c3832fb\",\n                    \"sla\": 43200000,\n                    \"state\": \"PENDINGAPPROVAL\",\n                    \"applicationStatus\": \"PENDINGAPPROVAL\",\n                    \"docUploadRequired\": false,\n                    \"isStartState\": false,\n                    \"isTerminateState\": false,\n                    \"isStateUpdatable\": false,\n                    \"actions\": [\n                        {\n                            \"uuid\": \"3bcf840d-cf73-4c7b-9f85-3cae4b3c777d\",\n                            \"tenantId\": \"pb.nawanshahr\",\n                            \"currentState\": \"4d77e870-9be4-4287-9749-1c9810cd128b\",\n                            \"action\": \"REJECT\",\n                            \"nextState\": \"727a4945-8ced-436b-8bdd-d083d7ca62cd\",\n                            \"roles\": [\n                                \"TL_APPROVER\"\n                            ],\n                            \"auditDetails\": {\n                                \"createdBy\": \"f6b0e1cf-5764-4570-9a95-5051d41ef468\",\n                                \"lastModifiedBy\": \"f6b0e1cf-5764-4570-9a95-5051d41ef468\",\n                                \"createdTime\": 1566915476696,\n                                \"lastModifiedTime\": 1566915476696\n                            }\n                        },\n                        {\n                            \"uuid\": \"1ca72330-2beb-46b7-8970-ec4bc8ef7536\",\n                            \"tenantId\": \"pb.nawanshahr\",\n                            \"currentState\": \"4d77e870-9be4-4287-9749-1c9810cd128b\",\n                            \"action\": \"SENDBACK\",\n                            \"nextState\": \"e9f62f06-6d27-4eea-8ac3-8e6d273c3ad6\",\n                            \"roles\": [\n                                \"TL_APPROVER\"\n                            ],\n                            \"auditDetails\": {\n                                \"createdBy\": \"f6b0e1cf-5764-4570-9a95-5051d41ef468\",\n                                \"lastModifiedBy\": \"f6b0e1cf-5764-4570-9a95-5051d41ef468\",\n                                \"createdTime\": 1566915476696,\n                                \"lastModifiedTime\": 1566915476696\n                            }\n                        },\n                        {\n                            \"uuid\": \"5c3433aa-6c8e-439a-9365-185fb1362386\",\n                            \"tenantId\": \"pb.nawanshahr\",\n                            \"currentState\": \"4d77e870-9be4-4287-9749-1c9810cd128b\",\n                            \"action\": \"APPROVE\",\n                            \"nextState\": \"88d26669-8403-49ef-8158-6683c630d1e6\",\n                            \"roles\": [\n                                \"TL_APPROVER\"\n                            ],\n                            \"auditDetails\": {\n                                \"createdBy\": \"f6b0e1cf-5764-4570-9a95-5051d41ef468\",\n                                \"lastModifiedBy\": \"f6b0e1cf-5764-4570-9a95-5051d41ef468\",\n                                \"createdTime\": 1566915476696,\n                                \"lastModifiedTime\": 1566915476696\n                            }\n                        }\n                    ],\n                    \"auditDetails\": {\n                        \"createdBy\": \"f6b0e1cf-5764-4570-9a95-5051d41ef468\",\n                        \"lastModifiedBy\": \"f6b0e1cf-5764-4570-9a95-5051d41ef468\",\n                        \"createdTime\": 1566915476696,\n                        \"lastModifiedTime\": 1566915476696\n                    }\n                },\n                {\n                    \"uuid\": \"88d26669-8403-49ef-8158-6683c630d1e6\",\n                    \"tenantId\": \"pb.nawanshahr\",\n                    \"businessServiceId\": \"76996f06-89e3-4d53-bca7-5b197c3832fb\",\n                    \"sla\": 43200000,\n                    \"state\": \"PENDINGPAYMENT\",\n                    \"applicationStatus\": \"PENDINGPAYMENT\",\n                    \"docUploadRequired\": false,\n                    \"isStartState\": false,\n                    \"isTerminateState\": false,\n                    \"isStateUpdatable\": false,\n                    \"actions\": [\n                        {\n                            \"uuid\": \"1442423e-3e6d-45dd-a0d4-8e315f380f32\",\n                            \"tenantId\": \"pb.nawanshahr\",\n                            \"currentState\": \"88d26669-8403-49ef-8158-6683c630d1e6\",\n                            \"action\": \"PAY\",\n                            \"nextState\": \"a90b20da-e6df-4e69-9794-5b0861e7dcd0\",\n                            \"roles\": [\n                                \"CITIZEN\",\n                                \"TL_CEMP\",\n                                \"SYSTEM_PAYMENT\"\n                            ],\n                            \"auditDetails\": {\n                                \"createdBy\": \"f6b0e1cf-5764-4570-9a95-5051d41ef468\",\n                                \"lastModifiedBy\": \"f6b0e1cf-5764-4570-9a95-5051d41ef468\",\n                                \"createdTime\": 1566915476696,\n                                \"lastModifiedTime\": 1566915476696\n                            }\n                        },\n                        {\n                            \"uuid\": \"55a7197a-19a2-4852-bad4-8950a9c18ad8\",\n                            \"tenantId\": \"pb.nawanshahr\",\n                            \"currentState\": \"88d26669-8403-49ef-8158-6683c630d1e6\",\n                            \"action\": \"ADHOC\",\n                            \"nextState\": \"88d26669-8403-49ef-8158-6683c630d1e6\",\n                            \"roles\": [\n                                \"TL_CEMP\"\n                            ],\n                            \"auditDetails\": {\n                                \"createdBy\": \"f6b0e1cf-5764-4570-9a95-5051d41ef468\",\n                                \"lastModifiedBy\": \"f6b0e1cf-5764-4570-9a95-5051d41ef468\",\n                                \"createdTime\": 1566915476696,\n                                \"lastModifiedTime\": 1566915476696\n                            }\n                        }\n                    ],\n                    \"auditDetails\": {\n                        \"createdBy\": \"f6b0e1cf-5764-4570-9a95-5051d41ef468\",\n                        \"lastModifiedBy\": \"f6b0e1cf-5764-4570-9a95-5051d41ef468\",\n                        \"createdTime\": 1566915476696,\n                        \"lastModifiedTime\": 1566915476696\n                    }\n                },\n                {\n                    \"uuid\": \"a90b20da-e6df-4e69-9794-5b0861e7dcd0\",\n                    \"tenantId\": \"pb.nawanshahr\",\n                    \"businessServiceId\": \"76996f06-89e3-4d53-bca7-5b197c3832fb\",\n                    \"sla\": null,\n                    \"state\": \"APPROVED\",\n                    \"applicationStatus\": \"APPROVED\",\n                    \"docUploadRequired\": false,\n                    \"isStartState\": false,\n                    \"isTerminateState\": true,\n                    \"isStateUpdatable\": false,\n                    \"actions\": null,\n                    \"auditDetails\": {\n                        \"createdBy\": \"f6b0e1cf-5764-4570-9a95-5051d41ef468\",\n                        \"lastModifiedBy\": \"f6b0e1cf-5764-4570-9a95-5051d41ef468\",\n                        \"createdTime\": 1566915476696,\n                        \"lastModifiedTime\": 1566915476696\n                    }\n                }\n            ],\n            \"auditDetails\": {\n                \"createdBy\": \"f6b0e1cf-5764-4570-9a95-5051d41ef468\",\n                \"lastModifiedBy\": \"f6b0e1cf-5764-4570-9a95-5051d41ef468\",\n                \"createdTime\": 1566915476696,\n                \"lastModifiedTime\": 1566915476696\n            }\n        }\n    ]\n}"
+				},
+				"url": {
+					"raw": "https://egov-micro-qa.egovernments.org/egov-workflow-v2/egov-wf/businessservice/_update",
+					"protocol": "https",
+					"host": [
+						"egov-micro-qa",
+						"egovernments",
+						"org"
+					],
+					"path": [
+						"egov-workflow-v2",
+						"egov-wf",
+						"businessservice",
+						"_update"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "businessService Search",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"RequestInfo\": {\n    \"apiId\": \"Rainmaker\",\n    \"action\": \"\",\n    \"did\": 1,\n    \"key\": \"\",\n    \"msgId\": \"20170310130900|en_IN\",\n    \"requesterId\": \"\",\n    \"ts\": 1513579888683,\n    \"ver\": \".01\",\n    \"authToken\": \"5fba4c2b-cebc-4a83-94d8-eed2678f2951\"\n  }\n}"
+				},
+				"url": {
+					"raw": "https://egov-micro-dev.egovernments.org/egov-workflow-v2/egov-wf/businessservice/_search?tenantId=pb&businessServices=BUILDER",
+					"protocol": "https",
+					"host": [
+						"egov-micro-dev",
+						"egovernments",
+						"org"
+					],
+					"path": [
+						"egov-workflow-v2",
+						"egov-wf",
+						"businessservice",
+						"_search"
+					],
+					"query": [
+						{
+							"key": "tenantId",
+							"value": "pb"
+						},
+						{
+							"key": "businessServices",
+							"value": "BUILDER"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "locality searcher",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"RequestInfo\": {\n    \"apiId\": \"Rainmaker\",\n    \"ver\": \".01\",\n    \"ts\": 0,\n    \"action\": \"_create\",\n    \"did\": \"1\",\n    \"key\": \"\",\n    \"msgId\": \"20170310130900|en_IN\",\n    \"authToken\": \"d617f4ee-a4be-4087-ba7d-bab207ec056e\",\n    \"correlationId\": \"a2e4642e-8cb5-483b-8ea2-827cbe822c5f\"\n  },\n  \"searchCriteria\": {\n    \"referenceNumber\":[ \"PB-TL-2019-04-24-001768\",\"PB-TL-2019-04-22-001764\"]\n  }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8085/egov-searcher/locality/TLLocalitySearcher/_get",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"egov-searcher",
+						"locality",
+						"TLLocalitySearcher",
+						"_get"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

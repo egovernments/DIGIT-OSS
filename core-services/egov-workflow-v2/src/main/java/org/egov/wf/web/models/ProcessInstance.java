@@ -79,8 +79,8 @@ public class ProcessInstance   {
         @JsonProperty("assigner")
         private User assigner = null;
 
-        @JsonProperty("assignee")
-        private User assignee = null;
+        @JsonProperty("assignes")
+        private List<User> assignes = null;
 
         @JsonProperty("nextActions")
         @Valid
@@ -117,8 +117,18 @@ public class ProcessInstance   {
             if (this.nextActions == null) {
             this.nextActions = new ArrayList<>();
             }
-        this.nextActions.add(nextActionsItem);
-        return this;
+            this.nextActions.add(nextActionsItem);
+            return this;
+        }
+
+        public ProcessInstance addUsersItem(User usersItem) {
+                if (this.assignes == null) {
+                        this.assignes = new ArrayList<>();
+                }
+                if(!this.assignes.contains(usersItem))
+                        this.assignes.add(usersItem);
+
+                return this;
         }
 
 }

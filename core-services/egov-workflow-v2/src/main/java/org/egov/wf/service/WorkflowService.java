@@ -58,7 +58,7 @@ public class WorkflowService {
     public List<ProcessInstance> transition(ProcessInstanceRequest request){
         RequestInfo requestInfo = request.getRequestInfo();
 
-        List<ProcessStateAndAction> processStateAndActions = transitionService.getProcessStateAndActions(request,true);
+        List<ProcessStateAndAction> processStateAndActions = transitionService.getProcessStateAndActions(request.getProcessInstances(),true);
         enrichmentService.enrichProcessRequest(requestInfo,processStateAndActions);
         workflowValidator.validateRequest(requestInfo,processStateAndActions);
         statusUpdateService.updateStatus(requestInfo,processStateAndActions);
@@ -96,9 +96,18 @@ public class WorkflowService {
     private List<ProcessInstance> getUserBasedProcessInstances(RequestInfo requestInfo,
                                        ProcessInstanceSearchCriteria criteria){
         BusinessServiceSearchCriteria businessServiceSearchCriteria = new BusinessServiceSearchCriteria();
-        businessServiceSearchCriteria.setTenantId(criteria.getTenantId());
+
+        /*
+        * If tenantId is sent in query param processInstances only for that tenantId is returned
+        * else all tenantIds for which the user has roles are returned
+        * */
+        if(criteria.getTenantId()!=null)
+            businessServiceSearchCriteria.setTenantIds(Collections.singletonList(criteria.getTenantId()));
+        else
+            businessServiceSearchCriteria.setTenantIds(util.getTenantIds(requestInfo.getUserInfo()));
+
         List<BusinessService> businessServices = businessServiceRepository.getBusinessServices(businessServiceSearchCriteria);
-        List<String> actionableStatuses = util.getActionableStatusesForRole(requestInfo,businessServices);
+        List<String> actionableStatuses = util.getActionableStatusesForRole(requestInfo,businessServices,criteria);
         criteria.setAssignee(requestInfo.getUserInfo().getUuid());
         criteria.setStatus(actionableStatuses);
         List<ProcessInstance> processInstancesForAssignee = workflowRepository.getProcessInstancesForAssignee(criteria);

@@ -3,6 +3,7 @@ package org.egov.wf.validator;
 import org.apache.commons.lang.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
+import org.egov.common.contract.request.User;
 import org.egov.tracer.model.CustomException;
 import org.egov.wf.util.BusinessUtil;
 import org.egov.wf.util.WorkflowUtil;
@@ -11,11 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import java.util.*;
+import java.util.stream.Collectors;
+
+import static org.egov.wf.util.WorkflowConstants.CITIZEN_TYPE;
+import static org.egov.wf.util.WorkflowConstants.SENDBACKTOCITIZEN;
 
 
 @Component
 public class WorkflowValidator {
-
 
 
     private WorkflowUtil util;
@@ -50,7 +54,7 @@ public class WorkflowValidator {
      * @param requestInfo The RequestInfo of the search request
      * @param processStateAndActions The ProcessStateAndAction object of the search result
      */
-    public void validateSearch(RequestInfo requestInfo, List<ProcessStateAndAction> processStateAndActions){
+/*    public void validateSearch(RequestInfo requestInfo, List<ProcessStateAndAction> processStateAndActions){
         Map<String,String> errorMap = new HashMap<>();
         Set<String> businessIds = util.getBusinessIds(processStateAndActions);
         businessIds.forEach(businessId -> {
@@ -64,7 +68,7 @@ public class WorkflowValidator {
         });
         if(!errorMap.isEmpty())
             throw new CustomException(errorMap);
-    }
+    }*/
 
 
 
@@ -92,8 +96,24 @@ public class WorkflowValidator {
      */
     private void validateAction(RequestInfo requestInfo,List<ProcessStateAndAction> processStateAndActions
             ,BusinessService businessService){
-        List<Role> roles = requestInfo.getUserInfo().getRoles();
+
+        Map<String,List<String>> tenantIdToRoles = util.getTenantIdToUserRolesMap(requestInfo);
+
         for(ProcessStateAndAction processStateAndAction : processStateAndActions){
+            String tenantId= processStateAndAction.getProcessInstanceFromRequest().getTenantId();
+            List<String> roles = new LinkedList<>();
+
+            // Adding tenant level roles
+            if(!CollectionUtils.isEmpty(tenantIdToRoles.get(tenantId)))
+                roles.addAll(tenantIdToRoles.get(tenantId));
+
+            // Adding the state level roles
+            if(!CollectionUtils.isEmpty(tenantIdToRoles.get(tenantId.split("\\.")[0]))){
+                String stateLevelTenant = tenantId.split("\\.")[0];
+                List<String> stateLevelRoles = tenantIdToRoles.get(stateLevelTenant);
+                roles.addAll(stateLevelRoles);
+            }
+
             Action action = processStateAndAction.getAction();
             if(action==null && !processStateAndAction.getCurrentState().getIsTerminateState())
                 throw new CustomException("INVALID ACTION","Action not found for businessIds: "+
@@ -127,23 +147,43 @@ public class WorkflowValidator {
              * Checks in case of non-transition action the assigner is one having transition role in current state
              * or is the one to whom it was assigned
              * */
-            if(processStateAndAction.getProcessInstanceFromDb()!=null && processStateAndAction.getProcessInstanceFromDb().getAssignee()!=null)
-                isAssigneeUserInfo = processStateAndAction.getProcessInstanceFromDb().getAssignee().getUuid().equalsIgnoreCase(requestInfo.getUserInfo().getUuid());
+            if(processStateAndAction.getProcessInstanceFromDb()!=null && !CollectionUtils.isEmpty(processStateAndAction.getProcessInstanceFromDb().getAssignes())){
+                isAssigneeUserInfo = processStateAndAction.getProcessInstanceFromDb().getAssignes().stream().map(User::getUuid).collect(Collectors.toList())
+                        .contains(requestInfo.getUserInfo().getUuid());
+            }
             if(!isStateChanging && !isAssigneeUserInfo && !isRoleAvailableForTransition)
                 throw new CustomException("INVALID MARK ACTION","The processInstanceFromRequest cannot be marked by the user");
 
             /**
-             * Checks if in case of action causing transition the assignee has role that ca take some action
+             * Checks if in case of action causing transition the assignee has role that can take some action
              * in the resultant state
              */
             List<String> nextStateRoles = getRolesFromState(processStateAndAction.getResultantState());
-            List<Role> assigneeRoles;
-            if(isStateChanging && processStateAndAction.getProcessInstanceFromRequest().getAssignee()!=null){
-                assigneeRoles = processStateAndAction.getProcessInstanceFromRequest().getAssignee().getRoles();
-                Boolean isRoleAvailableInNextState = util.isRoleAvailable(assigneeRoles,nextStateRoles);
-                if(!isRoleAvailableInNextState)
-                    throw new CustomException("INVALID ASSIGNEE","Cannot assign to the user: "+ processStateAndAction.getProcessInstanceFromRequest().getAssignee().getUuid());
+
+            if(isStateChanging && !CollectionUtils.isEmpty(processStateAndAction.getProcessInstanceFromRequest().getAssignes())){
+                processStateAndAction.getProcessInstanceFromRequest().getAssignes().forEach(assignee -> {
+                    List<Role> assigneeRoles = assignee.getRoles();
+                    Boolean isRoleAvailableInNextState = util.isRoleAvailable(tenantId,assigneeRoles,nextStateRoles);
+                    if(!isRoleAvailableInNextState)
+                        throw new CustomException("INVALID_ASSIGNEE","Cannot assign to the user: "+ assignee.getUuid());
+
+                });
             }
+
+            /*
+            *  Validates if the application is sendback to citizen, only the citizen to whom the
+            *  application is sent back is able to take the action
+            * */
+            if(requestInfo.getUserInfo().getType().equalsIgnoreCase(CITIZEN_TYPE)){
+                ProcessInstance processInstanceFromDB = processStateAndAction.getProcessInstanceFromDb();
+                if(processInstanceFromDB!=null && processInstanceFromDB.getAction().equalsIgnoreCase(SENDBACKTOCITIZEN)){
+                    List<String> assignes = processInstanceFromDB.getAssignes().stream().map(User::getUuid).collect(Collectors.toList());
+                    if(!assignes.contains(requestInfo.getUserInfo().getUuid()))
+                        throw new CustomException("INVALID_USER","The user: "+requestInfo.getUserInfo().getUuid()+" is not authorized to take action");
+                }
+            }
+
+
         }
     }
 

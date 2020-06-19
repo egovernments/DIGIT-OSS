@@ -16,3 +16,9 @@ You can view the api documentation in swagger-ui by pointing to
 http://localhost:8080/  
 
 Change default port value in application.properties
+
+
+
+
+##Workflow 2.0 Release notes
+Added searcher to populate localites in inbox

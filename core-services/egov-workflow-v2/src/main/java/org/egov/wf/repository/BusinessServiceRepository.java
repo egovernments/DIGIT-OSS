@@ -8,12 +8,10 @@ import org.egov.wf.web.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @Repository
@@ -48,7 +46,7 @@ public class BusinessServiceRepository {
         String query;
         if(config.getIsStateLevel()){
             BusinessServiceSearchCriteria stateLevelCriteria = new BusinessServiceSearchCriteria(criteria);
-            stateLevelCriteria.setTenantId(criteria.getTenantId().split("\\.")[0]);
+            stateLevelCriteria.setTenantIds(Collections.singletonList(criteria.getTenantIds().get(0).split("\\.")[0]));
             query = queryBuilder.getBusinessServices(stateLevelCriteria, preparedStmtList);
         }
         else{

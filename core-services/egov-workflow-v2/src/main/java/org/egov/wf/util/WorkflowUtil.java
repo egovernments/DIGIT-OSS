@@ -1,20 +1,16 @@
 package org.egov.wf.util;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jayway.jsonpath.JsonPath;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
-import org.egov.tracer.model.CustomException;
+import org.egov.common.contract.request.User;
+import org.egov.wf.config.WorkflowConfig;
 import org.egov.wf.web.models.*;
-import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
-
-import static org.egov.wf.util.WorkflowConstants.*;
 
 
 @Component
@@ -22,10 +18,13 @@ public class WorkflowUtil {
 
     private ObjectMapper mapper;
 
+    private WorkflowConfig config;
+
 
     @Autowired
-    public WorkflowUtil(ObjectMapper mapper) {
+    public WorkflowUtil(ObjectMapper mapper,WorkflowConfig config) {
         this.mapper = mapper;
+        this.config = config;
     }
 
     /**
@@ -49,11 +48,37 @@ public class WorkflowUtil {
      * @param actionRoles The roles for which action is allowed
      * @return True if user can perform the action else false
      */
-    public Boolean isRoleAvailable(List<Role> userRoles, List<String> actionRoles){
+    public Boolean isRoleAvailable(String tenantId,List<Role> userRoles, List<String> actionRoles){
         Boolean flag = false;
  //       List<String> allowedRoles = Arrays.asList(actionRoles.get(0).split(","));
+        if(CollectionUtils.isEmpty(userRoles))
+            return false;
         for(Role role : userRoles) {
-            if (actionRoles.contains(role.getCode()) || actionRoles.contains("*")) {
+            if(isTenantIdValid(role.getTenantId(),tenantId)){
+                if (actionRoles.contains(role.getCode()) || actionRoles.contains("*")) {
+                    flag = true;
+                    break;
+                }
+            }
+        }
+        return flag;
+    }
+
+
+    /**
+     * Checks if the user has role allowed for the action
+     * @param userRoles The roles available with the user
+     * @param actionRoles The roles for which action is allowed
+     * @return True if user can perform the action else false
+     */
+    public Boolean isRoleAvailable(List<String> userRoles, List<String> actionRoles){
+        Boolean flag = false;
+        //       List<String> allowedRoles = Arrays.asList(actionRoles.get(0).split(","));
+        if(CollectionUtils.isEmpty(userRoles))
+            return false;
+
+        for(String role : userRoles) {
+            if (actionRoles.contains(role) || actionRoles.contains("*")) {
                 flag = true;
                 break;
             }
@@ -102,16 +127,24 @@ public class WorkflowUtil {
 
 
     /**
-     * Gets the roles the user is assigned
+     * Gets the map of tenantId to roles the user is assigned
      * @param requestInfo RequestInfo of the request
-     * @return List of roles for user in the requestInfo
+     * @return Map of tenantId to roles for user in the requestInfo
      */
-    public List<String> getUserRoles(RequestInfo requestInfo){
-        List<String> roleCodes = new LinkedList<>();
+    public Map<String,List<String>> getTenantIdToUserRolesMap(RequestInfo requestInfo){
+        Map<String,List<String>> tenantIdToUserRoles = new HashMap<>();
         requestInfo.getUserInfo().getRoles().forEach(role -> {
-            roleCodes.add(role.getCode());
+            if(tenantIdToUserRoles.containsKey(role.getTenantId())){
+                tenantIdToUserRoles.get(role.getTenantId()).add(role.getCode());
+            }
+            else {
+                List<String> roleCodes = new LinkedList<>();
+                roleCodes.add(role.getCode());
+                tenantIdToUserRoles.put(role.getTenantId(),roleCodes);
+            }
+
         });
-        return roleCodes;
+        return tenantIdToUserRoles;
     }
 
 
@@ -121,17 +154,62 @@ public class WorkflowUtil {
      * @param businessServices List of all businessServices
      * @return List of status on which user from requestInfo can take action upon
      */
-    public List<String> getActionableStatusesForRole(RequestInfo requestInfo, List<BusinessService> businessServices){
+
+    public List<String> getActionableStatusesForRole(RequestInfo requestInfo, List<BusinessService> businessServices,ProcessInstanceSearchCriteria criteria){
+
+        String tenantId;
+        List<String> userRoleCodes;
+        Map<String,List<String>> tenantIdToUserRolesMap = getTenantIdToUserRolesMap(requestInfo);
+        Map<String,List<BusinessService>> tenantIdToBuisnessSevicesMap =  getTenantIdToBuisnessSevicesMap(businessServices);
         Map<String,Set<String>> stateToRoleMap = getStateToRoleMap(businessServices);
-        List<String> userRoleCodes = getUserRoles(requestInfo);
         List<String> actionableStatuses = new LinkedList<>();
-        for(Map.Entry<String,Set<String>> entry : stateToRoleMap.entrySet()){
-            if(!Collections.disjoint(userRoleCodes,entry.getValue())){
-                actionableStatuses.add(entry.getKey());
-            }
+        
+        for(Map.Entry<String,List<String>> entry : tenantIdToUserRolesMap.entrySet()){
+            if(entry.getKey().equals(criteria.getTenantId())){
+                List<BusinessService> businessServicesByTenantId ;
+                if(config.getIsStateLevel()){
+                    businessServicesByTenantId = tenantIdToBuisnessSevicesMap.get(entry.getKey().split("\\.")[0]);
+                }else{
+                    businessServicesByTenantId = tenantIdToBuisnessSevicesMap.get(entry.getKey());
+                }
+                businessServicesByTenantId.forEach(service -> {
+                    List<State> states = service.getStates();
+                    states.forEach(state -> {
+                        Set<String> stateRoles = stateToRoleMap.get(state.getUuid());
+                        if(!CollectionUtils.isEmpty(stateRoles) && !Collections.disjoint(stateRoles,entry.getValue())){
+                            actionableStatuses.add(entry.getKey() + ':' + state.getUuid());
+                        }
+
+                    });
+                });
+            }         
         }
         return actionableStatuses;
     }
+    
+     
+     
+//    public List<String> getActionableStatusesForRole(RequestInfo requestInfo, List<BusinessService> businessServices){
+//
+//        String tenantId;
+//        List<String> userRoleCodes;
+//        Map<String,String> stateUuidToTenantIdMap = getStateUuidToTenantIdMap(businessServices);
+//        Map<String,List<String>> tenantIdToUserRolesMap = getTenantIdToUserRolesMap(requestInfo);
+//        Map<String,Set<String>> stateToRoleMap = getStateToRoleMap(businessServices);
+//        List<String> actionableStatuses = new LinkedList<>();
+//
+//        for(Map.Entry<String,Set<String>> entry : stateToRoleMap.entrySet()){
+//            tenantId = stateUuidToTenantIdMap.get(entry.getKey());
+//            userRoleCodes = tenantIdToUserRolesMap.get(tenantId);
+//            if(CollectionUtils.isEmpty(userRoleCodes)){
+//                userRoleCodes = tenantIdToUserRolesMap.get(tenantId.split("\\.")[0]);
+//            }
+//            if(!CollectionUtils.isEmpty(userRoleCodes) && !Collections.disjoint(userRoleCodes,entry.getValue())){
+//                actionableStatuses.add(entry.getKey());
+//            }
+//        }
+//        return actionableStatuses;
+//    }
 
 
     /**
@@ -185,6 +263,72 @@ public class WorkflowUtil {
         return latestProcessStateAndAction;
     }
 
+
+    /**
+     * Returns the list of tenantId for which the user has roles
+     * @param user The user whose role tenantIds are to be fetched
+     * @return
+     */
+    public List<String> getTenantIds(User user){
+        Set<String> tenantIds = new HashSet<>();
+        user.getRoles().forEach(role -> {
+            tenantIds.add(role.getTenantId());
+        });
+        return new LinkedList<>(tenantIds);
+    }
+
+
+    public Map<String,List<BusinessService>> getTenantIdToBuisnessSevicesMap(List<BusinessService> businessServices){
+        Map<String,List<BusinessService>> tenantIdToBuisnessSevicesMap = new HashMap<>();
+        businessServices.forEach(businessService -> {
+            if(tenantIdToBuisnessSevicesMap.containsKey(businessService.getTenantId())){
+                tenantIdToBuisnessSevicesMap.get(businessService.getTenantId()).add(businessService);
+            }
+            else {
+                List<BusinessService> businessServiceList = new LinkedList<>();
+                businessServiceList.add(businessService);
+                tenantIdToBuisnessSevicesMap.put(businessService.getTenantId(),businessServiceList);
+            }
+        });
+        return tenantIdToBuisnessSevicesMap;
+    }
+
+
+    public Map<String,String> getStateUuidToTenantIdMap(List<BusinessService> businessServices){
+        Map<String,String> stateUuidToTenantIdMap = new HashMap<>();
+        businessServices.forEach(businessService -> {
+            businessService.getStates().forEach(state -> {
+                stateUuidToTenantIdMap.put(state.getUuid(),state.getTenantId());
+            });
+        });
+        return stateUuidToTenantIdMap;
+    }
+
+
+    /**
+     *  Checks if the tenantId is valid to take action
+     * @param roleTenantId The tenantId of the role
+     * @param applicationTeanantId The tenantId of the application
+     * @return
+     */
+    private Boolean isTenantIdValid(String roleTenantId, String applicationTeanantId){
+
+        if(roleTenantId == null)
+            return false;
+
+        Boolean isTenantIdValid = false;
+
+        // If the tenantId are same role can take action
+        if(roleTenantId.equalsIgnoreCase(applicationTeanantId))
+            isTenantIdValid = true;
+
+        // If the role tenantId is statelevel it can take action
+        else if(roleTenantId.equalsIgnoreCase(applicationTeanantId.split("\\.")[0]))
+            isTenantIdValid = true;
+
+        return isTenantIdValid;
+
+    }
 
 
 

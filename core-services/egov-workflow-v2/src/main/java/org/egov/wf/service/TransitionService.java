@@ -1,7 +1,6 @@
 package org.egov.wf.service;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.tracer.model.CustomException;
@@ -43,20 +42,22 @@ public class TransitionService {
 
     /**
      * Creates list of ProcessStateAndAction from the list of the processInstances
-     * @param request The incoming ProcessInstanceRequest
      * @return List of ProcessStateAndAction containing the State object for status before the action and after the action and
      * the Action object for the given action
      */
-    public List<ProcessStateAndAction> getProcessStateAndActions(ProcessInstanceRequest request,Boolean isTransitionCall){
+    public List<ProcessStateAndAction> getProcessStateAndActions(List<ProcessInstance> processInstances,Boolean isTransitionCall){
         List<ProcessStateAndAction> processStateAndActions = new LinkedList<>();
 
-        BusinessService businessService = getBusinessService(request);
-        Map<String,ProcessInstance> idToProcessInstanceFromDbMap = prepareProcessStateAndAction(request.getProcessInstances(),businessService);
+        BusinessService businessService = getBusinessService(processInstances);
+        Map<String,ProcessInstance> idToProcessInstanceFromDbMap = prepareProcessStateAndAction(processInstances,businessService);
         List<String> allowedRoles = workflowUtil.rolesAllowedInService(businessService);
-        for(ProcessInstance processInstance: request.getProcessInstances()){
+        for(ProcessInstance processInstance: processInstances){
+
             ProcessStateAndAction processStateAndAction = new ProcessStateAndAction();
             processStateAndAction.setProcessInstanceFromRequest(processInstance);
-            processStateAndAction.getProcessInstanceFromRequest().setModuleName(businessService.getBusiness());
+            if(isTransitionCall){
+                processStateAndAction.getProcessInstanceFromRequest().setModuleName(businessService.getBusiness());
+            }
             processStateAndAction.setProcessInstanceFromDb(idToProcessInstanceFromDbMap.get(processInstance.getBusinessId()));
             State currentState = null;
             if(processStateAndAction.getProcessInstanceFromDb()!=null && isTransitionCall)
@@ -64,9 +65,11 @@ public class TransitionService {
             else if(!isTransitionCall)
                 currentState = processStateAndAction.getProcessInstanceFromRequest().getState();
 
+
             //Assign businessSla when creating processInstance
-            if(processStateAndAction.getProcessInstanceFromDb()==null)
+            if(processStateAndAction.getProcessInstanceFromDb()==null && isTransitionCall)
                 processInstance.setBusinesssServiceSla(businessService.getBusinessServiceSla());
+
 
             if(currentState==null){
                     for(State state : businessService.getStates()){
@@ -89,6 +92,7 @@ public class TransitionService {
                 }
             }
 
+
             if(isTransitionCall){
                 if(processStateAndAction.getAction()==null)
                     throw new CustomException("INVALID ACTION","Action "+processStateAndAction.getProcessInstanceFromRequest().getAction()
@@ -106,6 +110,8 @@ public class TransitionService {
             processStateAndActions.add(processStateAndAction);
 
         }
+
+
         return processStateAndActions;
     }
 
@@ -137,7 +143,8 @@ public class TransitionService {
          * converting the list of process instances to map of businessId and state
          * object
          */
-        Map<String, ProcessInstance> businessStateMap = repository.getProcessInstances(criteria).stream()
+        List<ProcessInstance> processInstancesFromDB = repository.getProcessInstances(criteria);
+        Map<String, ProcessInstance> businessStateMap = processInstancesFromDB.stream()
                 .collect(Collectors.toMap(ProcessInstance::getBusinessId, Function.identity()));
 
         return businessStateMap;
@@ -145,11 +152,11 @@ public class TransitionService {
 
 
 
-    private BusinessService getBusinessService(ProcessInstanceRequest request){
+    private BusinessService getBusinessService(List<ProcessInstance> processInstances){
         BusinessServiceSearchCriteria criteria = new BusinessServiceSearchCriteria();
-        String tenantId = request.getProcessInstances().get(0).getTenantId();
-        String businessService = request.getProcessInstances().get(0).getBusinessService();
-        criteria.setTenantId(tenantId);
+        String tenantId = processInstances.get(0).getTenantId();
+        String businessService = processInstances.get(0).getBusinessService();
+        criteria.setTenantIds(Collections.singletonList(tenantId));
         criteria.setBusinessServices(Collections.singletonList(businessService));
         List<BusinessService> businessServices = businessServiceRepository.getBusinessServices(criteria);
         if(CollectionUtils.isEmpty(businessServices))

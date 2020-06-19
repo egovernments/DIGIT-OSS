@@ -9,8 +9,10 @@ import org.egov.wf.web.models.ProcessInstanceSearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @Repository
@@ -51,8 +53,12 @@ public class WorKflowRepository {
      */
     public List<ProcessInstance> getProcessInstancesForAssignee(ProcessInstanceSearchCriteria criteria){
         List<Object> preparedStmtList = new ArrayList<>();
-        String query = queryBuilder.getAssigneeSearchQuery(criteria, preparedStmtList);
-        return jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
+        if(CollectionUtils.isEmpty(criteria.getStatus())){
+            return new LinkedList<>();
+        }else{
+            String query = queryBuilder.getAssigneeSearchQuery(criteria, preparedStmtList);
+            return jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
+        }
     }
 
 
@@ -66,9 +72,5 @@ public class WorKflowRepository {
         String query = queryBuilder.getStatusBasedProcessInstance(criteria, preparedStmtList);
         return jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
     }
-
-
-
-
 
 }

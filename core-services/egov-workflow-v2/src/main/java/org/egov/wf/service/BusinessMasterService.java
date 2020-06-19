@@ -52,7 +52,7 @@ public class BusinessMasterService {
      * @return Data fetched from db
      */
     public List<BusinessService> search(BusinessServiceSearchCriteria criteria){
-        String tenantId = criteria.getTenantId();
+        String tenantId = criteria.getTenantIds().get(0);
         List<BusinessService> businessServices = repository.getBusinessServices(criteria);
         if(config.getIsStateLevel()){
             enrichmentService.enrichTenantIdForStateLevel(tenantId,businessServices);

@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
-import java.util.Set;
 
 @Component
 public class BusinessServiceQueryBuilder {
@@ -34,8 +33,13 @@ public class BusinessServiceQueryBuilder {
 
     public String getBusinessServices(BusinessServiceSearchCriteria criteria, List<Object> preparedStmtList){
         StringBuilder builder = new StringBuilder(BASE_QUERY);
-        builder.append(" bs.tenantId=? ");
-        preparedStmtList.add(criteria.getTenantId());
+
+        List<String> tenantIds = criteria.getTenantIds();
+        if (!CollectionUtils.isEmpty(tenantIds)) {
+
+            builder.append(" bs.tenantId IN (").append(createQuery(tenantIds)).append(")");
+            addToPreparedStatement(preparedStmtList, tenantIds);
+        }
 
         List<String> businessServices = criteria.getBusinessServices();
         if (!CollectionUtils.isEmpty(businessServices)) {

@@ -93,6 +93,19 @@ public class MDMSService {
     }
 
 
+    /**
+     * Creates MDMS ModuleDetail object for business Service
+     * @return ModuleDetail for BS config
+     */
+    private ModuleDetail getBusinessServiceConfigDetail() {
+        List<MasterDetail> bsMasterDetails = new ArrayList<>();
+        bsMasterDetails.add(MasterDetail.builder().name(MDMS_BUSINESSSERVICE).build());
+        ModuleDetail bsConfigDtls = ModuleDetail.builder().masterDetails(bsMasterDetails)
+                .moduleName(MDMS_WORKFLOW).build();
+        return bsConfigDtls;
+    }
+
+
 
 
     /**
