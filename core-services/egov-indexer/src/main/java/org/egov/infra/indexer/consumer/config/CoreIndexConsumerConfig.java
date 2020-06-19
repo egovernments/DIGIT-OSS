@@ -25,8 +25,8 @@ import org.springframework.kafka.config.KafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
+import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.listener.KafkaMessageListenerContainer;
-import org.springframework.kafka.listener.config.ContainerProperties;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -122,7 +122,7 @@ public class CoreIndexConsumerConfig implements ApplicationRunner {
     public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>> kafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
-        factory.getContainerProperties().setErrorHandler(stoppingErrorHandler);
+        factory.setErrorHandler(stoppingErrorHandler);
         factory.setConcurrency(3);
         factory.getContainerProperties().setPollTimeout(30000);
         
@@ -135,8 +135,8 @@ public class CoreIndexConsumerConfig implements ApplicationRunner {
     public KafkaMessageListenerContainer<String, String> container() throws Exception { 
     	 setTopics();
     	 ContainerProperties properties = new ContainerProperties(this.topics); // set more properties
-    	 properties.setPauseEnabled(true);
-    	 properties.setPauseAfter(0);
+//    	 properties.setPauseEnabled(true);
+//    	 properties.setPauseAfter(0);
     	 properties.setMessageListener(indexerMessageListener);
     	 
          log.info("Custom KafkaListenerContainer built...");
