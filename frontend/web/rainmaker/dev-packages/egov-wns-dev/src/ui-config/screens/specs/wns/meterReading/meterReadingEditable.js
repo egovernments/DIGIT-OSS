@@ -132,6 +132,7 @@ const saveData = async (state, dispatch) => {
         delete data.consumption
     }
     // console.log(data)
+    data.tenantId = getQueryArg(window.location.href, "tenantId")
     createMeterReading(dispatch, data)
 
 }
