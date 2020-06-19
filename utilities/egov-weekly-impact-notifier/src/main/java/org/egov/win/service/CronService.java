@@ -268,7 +268,7 @@ public class CronService {
 			for (int week = 0; week < noOfWeeks; week++) {
 				if (record.get("day").equals(prefix + week)) {
 					ulbCoveredPerWeek.put("w" + week + "fnulbc", record.get("ulbcovered"));
-					certificatesIssuedPerWeek.put("w" + week + "fncertissued", record.get("certificatesIssued"));
+					certificatesIssuedPerWeek.put("w" + week + "fncertissued", record.get("certificatesissued"));
 					revenueCollectedPerWeek.put("w" + week + "fnrevcoll", record.get("revenuecollected"));
 					
 				}
