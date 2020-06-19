@@ -5,11 +5,11 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>1.5.22.RELEASE</version>
+    <version>2.2.6.RELEASE</version>
   </parent>
   <groupId>org.egov</groupId>
   <artifactId>egov-enc-service</artifactId>
-  <version>1.0.0</version>
+  <version>1.1.0</version>
   <name>egov-enc-service</name>
   <properties>
     <java.version>1.8</java.version>
@@ -39,7 +39,7 @@
     <dependency>
       <groupId>org.egov.services</groupId>
       <artifactId>tracer</artifactId>
-      <version>1.1.5-SNAPSHOT</version>
+      <version>2.0.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.projectlombok</groupId>
@@ -66,7 +66,7 @@
     <dependency>
       <groupId>org.flywaydb</groupId>
       <artifactId>flyway-core</artifactId>
-      <version>5.1.1</version>
+      <version>6.4.3</version>
     </dependency>
     <dependency>
       <groupId>org.bouncycastle</groupId>
@@ -115,6 +115,34 @@
               <artifactId>spring-boot-devtools</artifactId>
             </exclude>
           </excludes>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>cz.habarta.typescript-generator</groupId>
+        <artifactId>typescript-generator-maven-plugin</artifactId>
+        <version>2.22.595</version>
+        <executions>
+          <execution>
+            <id>generate</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <phase>process-classes</phase>
+          </execution>
+        </executions>
+        <configuration>
+          <jsonLibrary>jackson2</jsonLibrary>
+          <classes>
+            <class>org.egov.enc.web.models.EncryptionRequest</class>
+            <class>org.egov.enc.web.models.SignRequest</class>
+            <class>org.egov.enc.web.models.VerifyRequest</class>
+            <class>org.egov.enc.web.models.RotateKeyRequest</class>
+            <class>org.egov.enc.web.models.RotateKeyResponse</class>
+            <class>org.egov.enc.web.models.VerifyResponse</class>
+            <class>org.egov.enc.web.models.SignResponse</class>
+          </classes>
+          <namespace>Digit</namespace>
+          <outputKind>module</outputKind>
         </configuration>
       </plugin>
     </plugins>
