@@ -464,7 +464,7 @@ public class ReportQueryBuilder {
             JSONArray array = new JSONArray(json.toString());
             try {
                 Map<String, Object> map = new HashMap<>();
-                map = mapper.readValue(array.getString(0).toString(), new TypeReference<Map<String, String>>() {
+                map = mapper.readValue(array.getString(0).toString(), new TypeReference<Map<String, Object>>() {
                 });
                 StringBuilder table = new StringBuilder();
                 StringBuilder values = new StringBuilder();
@@ -475,7 +475,7 @@ public class ReportQueryBuilder {
                 }
                 for (int i = 0; i < array.length(); i++) {
                     Map<String, Object> jsonMap = new HashMap<>();
-                    jsonMap = mapper.readValue(array.getString(i).toString(), new TypeReference<Map<String, String>>() {
+                    jsonMap = mapper.readValue(array.getString(i).toString(), new TypeReference<Map<String, Object>>() {
                     });
                     values.append("(");
                     for (Map.Entry<String, Object> row : jsonMap.entrySet()) {

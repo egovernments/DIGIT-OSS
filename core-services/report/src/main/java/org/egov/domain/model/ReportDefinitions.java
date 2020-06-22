@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-@Component
 @ConfigurationProperties
 @EnableConfigurationProperties(ReportDefinitions.class)
 public class ReportDefinitions {
