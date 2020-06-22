@@ -18,6 +18,9 @@ public class CronConstants {
 	public static final String MDMS_TAXHEAD_CODE_JSONPATH = "$.MdmsRes.BillingService.BusinessService";
 
 
+	public static final String SEARCHER_FIRENOC = "firenocData";
+
+
 	
 	
 	
