@@ -109,6 +109,7 @@ public class AuthPreCheckFilterTest {
         assertFalse((Boolean) ctx.get("shouldDoAuth"));
 
         request.setRequestURI("anonymous-endpoint1");
+        request.setContent(IOUtils.toByteArray(IOUtils.toInputStream("{\"RequestInfo\": {\"fu\": \"bar\"}}")));
         ctx.setRequest(request);
         authPreCheckFilter.run();
         assertFalse((Boolean) ctx.get("shouldDoAuth"));
@@ -126,6 +127,7 @@ public class AuthPreCheckFilterTest {
         assertFalse((Boolean) ctx.get("shouldDoAuth"));
 
         request.setRequestURI("anonymous-endpoint1");
+        request.setContent(IOUtils.toByteArray(IOUtils.toInputStream("{\"ServiceRequest\": {\"fu\": \"bar\"}}")));
         ctx.setRequest(request);
         authPreCheckFilter.run();
         assertFalse((Boolean) ctx.get("shouldDoAuth"));
@@ -143,6 +145,7 @@ public class AuthPreCheckFilterTest {
         assertFalse((Boolean) ctx.get("shouldDoAuth"));
 
         request.setRequestURI("anonymous-endpoint1");
+        request.setContent(IOUtils.toByteArray(IOUtils.toInputStream("{\"RequestInfo\": {\"fu\": \"bar\"}}")));
         ctx.setRequest(request);
         authPreCheckFilter.run();
         assertFalse((Boolean) ctx.get("shouldDoAuth"));
@@ -160,6 +163,7 @@ public class AuthPreCheckFilterTest {
         assertFalse((Boolean) ctx.get("shouldDoAuth"));
 
         request.setRequestURI("anonymous-endpoint1");
+        request.setContent(IOUtils.toByteArray(IOUtils.toInputStream("{\"ServiceRequest\": {\"fu\": \"bar\"}}")));
         ctx.setRequest(request);
         authPreCheckFilter.run();
         assertFalse((Boolean) ctx.get("shouldDoAuth"));
