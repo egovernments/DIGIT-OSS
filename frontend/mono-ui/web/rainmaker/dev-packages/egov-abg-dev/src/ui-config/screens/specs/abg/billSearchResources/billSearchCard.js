@@ -31,6 +31,22 @@ const resetFields = (state, dispatch) => {
       ""
     )
   );
+  dispatch(
+    handleField(
+      "billSearch",
+      "components.div.children.billSearchCard.children.cardContent.children.searchContainer.children.ulb",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "billSearch",
+      "components.div.children.billSearchCard.children.cardContent.children.searchContainer.children.serviceCategory",
+      "props.value",
+      ""
+    )
+  );
   dispatch(prepareFinalObject("searchScreen", { tenantId: tenantId }))
 };
 
