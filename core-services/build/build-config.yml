@@ -90,7 +90,7 @@ config:
         image-name: "egov-notification-mail"
         dockerfile: "build/maven/Dockerfile"
 
-  - name: "core-services/egov-notification-sms"
+  - name: "builds/core-services/egov-notification-sms"
     build:
       - work-dir: "egov-notification-sms"
         image-name: "egov-notification-sms"
