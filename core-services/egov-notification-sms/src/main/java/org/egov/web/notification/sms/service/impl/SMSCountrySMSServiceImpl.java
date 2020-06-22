@@ -4,6 +4,7 @@ import java.net.URI;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import org.egov.web.notification.sms.config.SMSProperties;
 import org.egov.web.notification.sms.models.Sms;
@@ -38,7 +39,7 @@ public class SMSCountrySMSServiceImpl implements SMSService {
 
 	@Override
 	public void sendSMS(Sms sms) {
-		if (!sms.isValid()) {
+		if (!sms.isValid()|| Pattern.matches("^(3)(\\d){9}$", sms.getMobileNumber())) {
 			log.error(String.format("Sms %s is not valid", sms));
 			return;
 		}

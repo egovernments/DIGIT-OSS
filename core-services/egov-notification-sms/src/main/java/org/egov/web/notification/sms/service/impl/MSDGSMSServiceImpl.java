@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import org.egov.web.notification.sms.config.SMSConstants;
 import org.egov.web.notification.sms.config.SMSProperties;
@@ -39,7 +40,7 @@ public class MSDGSMSServiceImpl implements SMSService {
 
 	@Override
 	public void sendSMS(Sms sms) {
-		if (!sms.isValid()) {
+		if (!sms.isValid() || Pattern.matches("^(3)(\\d){9}$", sms.getMobileNumber())) {
 			log.error(String.format("Sms %s is not valid", sms));
 			return;
 		}
