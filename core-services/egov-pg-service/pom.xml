@@ -5,11 +5,11 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>1.5.22.RELEASE</version>
+    <version>2.2.6.RELEASE</version>
   </parent>
   <groupId>org.egov</groupId>
   <artifactId>egov-pg-service</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>1.1.0-SNAPSHOT</version>
   <properties>
     <java.version>1.8</java.version>
     <lombok.version>1.18.8</lombok.version>
@@ -40,7 +40,7 @@
     <dependency>
       <groupId>org.flywaydb</groupId>
       <artifactId>flyway-core</artifactId>
-      <version>5.1.1</version>
+      <version>5.2.3</version>
     </dependency>
     <dependency>
       <groupId>com.paytm</groupId>
@@ -64,12 +64,17 @@
     <dependency>
       <groupId>org.egov.services</groupId>
       <artifactId>tracer</artifactId>
-      <version>1.1.5-SNAPSHOT</version>
+      <version>2.0.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
       <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>jakarta.xml.bind</groupId>
+      <artifactId>jakarta.xml.bind-api</artifactId>
+      <version>2.3.3</version>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.datatype</groupId>
@@ -108,7 +113,7 @@
               <goal>repackage</goal>
             </goals>
             <configuration>
-              <excludeArtifactIds>lombok</excludeArtifactIds>
+
             </configuration>
           </execution>
         </executions>
@@ -123,6 +128,59 @@
               <artifactId>spring-boot-devtools</artifactId>
             </exclude>
           </excludes>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>cz.habarta.typescript-generator</groupId>
+        <artifactId>typescript-generator-maven-plugin</artifactId>
+        <version>2.22.595</version>
+        <executions>
+          <execution>
+            <id>generate</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <phase>process-classes</phase>
+          </execution>
+        </executions>
+        <configuration>
+          <jsonLibrary>jackson2</jsonLibrary>
+          <classes>
+            <class>org.egov.pg.models.BankAccountResponse</class>
+            <class>org.egov.pg.models.BillRequest</class>
+            <class>org.egov.pg.models.BillResponse</class>
+            <class>org.egov.pg.models.BusinessDetailsRequest</class>
+            <class>org.egov.pg.models.BusinessDetailsRequest</class>
+            <class>org.egov.pg.models.BusinessDetailsResponse</class>
+            <class>org.egov.pg.models.CollectionPaymentRequest</class>
+            <class>org.egov.pg.models.CollectionPaymentResponse</class>
+            <class>org.egov.pg.models.IdGenerationRequest</class>
+            <class>org.egov.pg.models.IdGenerationResponse</class>
+            <class>org.egov.pg.models.ReceiptReq</class>
+            <class>org.egov.pg.models.ReceiptRes</class>
+            <class>org.egov.pg.models.TransactionDumpRequest</class>
+            <class>org.egov.pg.models.TransactionRequest</class>
+            <class>org.egov.pg.models.WorkflowDetailsRequest</class>
+            <class>org.egov.pg.models.WorkFlowDetailsResponse</class>
+            <class>org.egov.pg.web.models.ErrorRes</class>
+            <class>org.egov.pg.web.models.PaymentSearchResponse</class>
+            <class>org.egov.pg.web.models.TransactionCreateResponse</class>
+            <class>org.egov.pg.web.models.TransactionRequest</class>
+            <class>org.egov.pg.web.models.TransactionResponse</class>
+            <class>org.egov.pg.web.models.TransactionSearchResponse</class>
+          </classes>
+          <customTypeNaming>
+            <customTypeNaming>org.egov.pg.models.TransactionRequest:TransactionRequestModel</customTypeNaming>
+            <customTypeNaming>org.egov.pg.models.Bill$StatusEnum:BillStatus</customTypeNaming>
+          </customTypeNaming>
+          <customTypeMappings>
+            <customTypeMapping>org.egov.common.contract.request.RequestInfo:RequestInfo</customTypeMapping>
+            <customTypeMapping>org.egov.common.contract.response.ResponseInfo:ResponseInfo</customTypeMapping>
+          </customTypeMappings>
+          <namespace>Digit</namespace>
+          <debug>true</debug>
+          <outputKind>module</outputKind>
         </configuration>
       </plugin>
     </plugins>

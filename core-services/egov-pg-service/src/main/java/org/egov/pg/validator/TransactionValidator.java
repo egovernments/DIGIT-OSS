@@ -1,18 +1,7 @@
 package org.egov.pg.validator;
 
-import lombok.extern.slf4j.Slf4j;
-import org.egov.common.contract.request.User;
-import org.egov.pg.constants.PgConstants;
-import org.egov.pg.models.TaxAndPayment;
-import org.egov.pg.models.Transaction;
-import org.egov.pg.repository.TransactionRepository;
-import org.egov.pg.service.CollectionService;
-import org.egov.pg.service.GatewayService;
-import org.egov.pg.web.models.TransactionCriteria;
-import org.egov.pg.web.models.TransactionRequest;
-import org.egov.tracer.model.CustomException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import static java.util.Objects.isNull;
+import static org.springframework.util.StringUtils.isEmpty;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -20,8 +9,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static java.util.Objects.isNull;
-import static org.springframework.util.StringUtils.isEmpty;
+import org.egov.common.contract.request.User;
+import org.egov.pg.config.AppProperties;
+import org.egov.pg.constants.PgConstants;
+import org.egov.pg.models.TaxAndPayment;
+import org.egov.pg.models.Transaction;
+import org.egov.pg.repository.TransactionRepository;
+import org.egov.pg.service.GatewayService;
+import org.egov.pg.service.PaymentsService;
+import org.egov.pg.web.models.TransactionCriteria;
+import org.egov.pg.web.models.TransactionRequest;
+import org.egov.tracer.model.CustomException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
@@ -29,14 +31,17 @@ public class TransactionValidator {
 
     private GatewayService gatewayService;
     private TransactionRepository transactionRepository;
-    private CollectionService collectionService;
+    private PaymentsService paymentsService;
+    private AppProperties props;
 
 
     @Autowired
-    public TransactionValidator(GatewayService gatewayService, TransactionRepository transactionRepository, CollectionService collectionService) {
+    public TransactionValidator(GatewayService gatewayService, TransactionRepository transactionRepository, 
+    		PaymentsService paymentsService, AppProperties props) {
         this.gatewayService = gatewayService;
         this.transactionRepository = transactionRepository;
-        this.collectionService = collectionService;
+        this.paymentsService = paymentsService;
+        this.props = props;
     }
 
     /**
@@ -57,7 +62,7 @@ public class TransactionValidator {
         if (!errorMap.isEmpty())
             throw new CustomException(errorMap);
         else
-            collectionService.validateProvisionalReceipt(transactionRequest);
+        	paymentsService.validatePayment(transactionRequest);
 
     }
 
@@ -135,8 +140,11 @@ public class TransactionValidator {
         List<Transaction> existingTxnsForBill = transactionRepository.fetchTransactions(criteria);
 
         for (Transaction curr : existingTxnsForBill) {
-            if (curr.getTxnStatus().equals(Transaction.TxnStatusEnum.PENDING) || curr
-                    .getTxnStatus().equals(Transaction.TxnStatusEnum.SUCCESS)) {
+            if (curr.getTxnStatus().equals(Transaction.TxnStatusEnum.PENDING)) {
+                errorMap.put("TXN_ABRUPTLY_DISCARDED", 
+                		"A transaction for this bill has been abruptly discarded, please retry after "+(props.getEarlyReconcileJobRunInterval() * 2)+" mins");
+            }
+            if(curr.getTxnStatus().equals(Transaction.TxnStatusEnum.SUCCESS)) {
                 errorMap.put("TXN_CREATE_BILL_ALREADY_PAID", "Bill has already been paid or is in pending state");
             }
         }

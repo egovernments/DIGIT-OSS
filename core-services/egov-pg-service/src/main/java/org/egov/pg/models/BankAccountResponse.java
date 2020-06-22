@@ -39,7 +39,9 @@
  */
 package org.egov.pg.models;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.egov.common.contract.response.ResponseInfo;
 
@@ -47,6 +49,8 @@ import java.util.List;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class BankAccountResponse {
 
     private ResponseInfo responseInfo;
