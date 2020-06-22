@@ -94,7 +94,7 @@ public class PayService {
 
 		if (cal.getTimeInMillis() > System.currentTimeMillis())
 			rebateAmt = mDService.calculateApplicables(taxAmt, rebate);
-		
+
 		return rebateAmt;
 	}
 

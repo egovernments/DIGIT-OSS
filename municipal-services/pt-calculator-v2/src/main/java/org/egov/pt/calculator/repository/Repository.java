@@ -32,7 +32,7 @@ public class Repository {
 	/**
 	 * Fetches results from external services through rest call.
 	 * 
-	 * @param requestInfo
+	 * @param request
 	 * @param uri
 	 * @return Object
 	 */

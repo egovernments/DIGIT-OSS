@@ -108,7 +108,7 @@ public class Demand   {
 	/**
 	 * Gets or Sets status
 	 */
-	public enum StatusEnum {
+	public enum DemandStatusEnum {
 
 		ACTIVE("ACTIVE"),
 
@@ -118,7 +118,7 @@ public class Demand   {
 
 		private String value;
 
-		StatusEnum(String value) {
+		DemandStatusEnum(String value) {
 			this.value = value;
 		}
 
@@ -129,8 +129,8 @@ public class Demand   {
 		}
 
 		@JsonCreator
-		public static StatusEnum fromValue(String text) {
-			for (StatusEnum b : StatusEnum.values()) {
+		public static DemandStatusEnum fromValue(String text) {
+			for (DemandStatusEnum b : DemandStatusEnum.values()) {
 				if (String.valueOf(b.value).equalsIgnoreCase(text)) {
 					return b;
 				}
@@ -140,7 +140,7 @@ public class Demand   {
 	}
 
 	@JsonProperty("status")
-	private StatusEnum status;
+	private DemandStatusEnum status;
 
 
 	public Demand addDemandDetailsItem(DemandDetail demandDetailsItem) {

@@ -82,10 +82,51 @@ public class OwnerInfo extends User  {
         @JsonProperty("relationship")
         private RelationshipEnum relationship;
 
+        /**
+         * status of the owner
+         */
+        public enum OwnerStatus {
+
+                ACTIVE ("ACTIVE"),
+
+                INACTIVE ("INACTIVE"),
+
+                INWORKFLOW ("INWORKFLOW"),
+
+                CANCELLED ("CANCELLED"),
+
+                REJECTED ("REJECTED");
+
+                private String value;
+
+                OwnerStatus(String value) {
+                        this.value = value;
+                }
+
+                @Override
+                @JsonValue
+                public String toString() {
+                        return String.valueOf(value);
+                }
+
+                @JsonCreator
+                public static OwnerStatus fromValue(String text) {
+                        for (OwnerStatus b : OwnerStatus.values()) {
+                                if (String.valueOf(b.value).equalsIgnoreCase(text)) {
+                                        return b;
+                                }
+                        }
+                        return null;
+                }
+        }
+
+        @JsonProperty("status")
+        private OwnerStatus status;
+
 
 
         @Builder
-        public OwnerInfo(Long id, String uuid, String userName, String password, String salutation, String name, String gender, String mobileNumber, String emailId, String altContactNumber, String pan, String aadhaarNumber, String permanentAddress, String permanentCity, String permanentPincode, String correspondenceCity, String correspondencePincode, String correspondenceAddress, Boolean active, Long dob, Long pwdExpiryDate, String locale, String type, String signature, Boolean accountLocked, List<Role> roles, String fatherOrHusbandName, String bloodGroup, String identificationMark, String photo, String createdBy, Long createdDate, String lastModifiedBy, Long lastModifiedDate, String otpReference, String tenantId, Boolean isPrimaryOwner, Double ownerShipPercentage, String ownerType, String institutionId, Set<Document> documents, RelationshipEnum relationship) {
+        public OwnerInfo(Long id, String uuid, String userName, String password, String salutation, String name, String gender, String mobileNumber, String emailId, String altContactNumber, String pan, String aadhaarNumber, String permanentAddress, String permanentCity, String permanentPincode, String correspondenceCity, String correspondencePincode, String correspondenceAddress, Boolean active, Long dob, Long pwdExpiryDate, String locale, String type, String signature, Boolean accountLocked, List<Role> roles, String fatherOrHusbandName, String bloodGroup, String identificationMark, String photo, String createdBy, Long createdDate, String lastModifiedBy, Long lastModifiedDate, String otpReference, String tenantId, Boolean isPrimaryOwner, Double ownerShipPercentage, String ownerType, String institutionId, Set<Document> documents, RelationshipEnum relationship,OwnerStatus status) {
                 super(id,uuid, userName, password, salutation, name, gender, mobileNumber, emailId, altContactNumber, pan, aadhaarNumber, permanentAddress, permanentCity, permanentPincode, correspondenceCity, correspondencePincode, correspondenceAddress, active, dob, pwdExpiryDate, locale, type, signature, accountLocked, roles, fatherOrHusbandName, bloodGroup, identificationMark, photo, createdBy, createdDate, lastModifiedBy, lastModifiedDate, otpReference, tenantId);
                 this.isPrimaryOwner = isPrimaryOwner;
                 this.ownerShipPercentage = ownerShipPercentage;
@@ -93,6 +134,7 @@ public class OwnerInfo extends User  {
                 this.relationship=relationship;
                 this.institutionId=institutionId;
                 this.documents=documents;
+                this.status=status;
         }
 
         public OwnerInfo addDocumentsItem(Document documentsItem) {

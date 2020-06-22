@@ -2,8 +2,9 @@ package org.egov.pt.calculator.web.models;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.egov.common.contract.request.RequestInfo;
-import org.springframework.validation.annotation.Validated;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -12,23 +13,23 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
-
-
-@Validated
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ToString
-public class MutationCalculatorReq {
-	
+public class MutationBillingSlabReq {
     @JsonProperty("RequestInfo")
-	private RequestInfo requestInfo;
-	
-    @JsonProperty("mutationCalculationCriteria")
-	private List<MutationCalculationCriteria> mutationCalculationCriteria;
+    private RequestInfo requestInfo;
 
+    @JsonProperty("MutationBillingSlab")
+    @Valid
+    private List<MutationBillingSlab> billingSlab;
+
+
+    public MutationBillingSlabReq addMutationBillingSlabItem(MutationBillingSlab billingSlabItem) {
+        this.billingSlab.add(billingSlabItem);
+        return this;
+    }
 }

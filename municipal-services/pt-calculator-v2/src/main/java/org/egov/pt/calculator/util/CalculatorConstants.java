@@ -52,6 +52,14 @@ public class CalculatorConstants {
 //	public static final String PT_DECIMAL_CEILING_DEBIT = "PT_DECIMAL_CEILING_DEBIT";
 
 	public static final String PT_ROUNDOFF = "PT_ROUNDOFF";
+
+	public static final String ADHOC_PENALTY_KEY = "adhocPenalty";
+
+	public static final String ADHOC_PENALTY_REASON_KEY = "adhocPenaltyReason";
+
+	public static final String ADHOC_REBATE_KEY = "adhocExemption";
+
+	public static final String ADHOC_REBATE_REASON_KEY = "adhocExemptionReason";
 	
 	public static final String ALLOWED_RECEIPT_STATUS = "APPROVED,REMITTED";
 
@@ -149,6 +157,8 @@ public class CalculatorConstants {
 
 	public static final String DEMAND_STATUS_ACTIVE = DemandStatus.ACTIVE.toString();
 
+	public static final String OWNER_STATUS_ACTIVE = "ACTIVE";
+
 	/*
 	 * special characters
 	 */
@@ -189,6 +199,8 @@ public class CalculatorConstants {
 	public static final String STATUS_FIELD_FOR_SEARCH_URL = "instrumentStatus=";
 
 	public static final String SERVICE_FIELD_VALUE_PT = "PT";
+
+	public static final String SERVICE_FIELD_VALUE_PT_MUTATION = "PT.MUTATION";
 
 	public static final String URL_PARAMS_SEPARATER = "?";
 
@@ -296,6 +308,29 @@ public class CalculatorConstants {
 
     public static final String BILLINGSLAB_KEY = "calculationDescription";
 
+	public static final String PT_MARKETVALUE_NULL = "PT_MARKETVALUE_NULL";
+	public static final String PT_MARKETVALUE_NULL_MSG = "Market Value is not present in additional details or set as null or not in numeric format ";
 
+	public static final String PT_DOCDATE_NULL = "PT_DOCDATE_NULL";
+	public static final String PT_DOCDATE_NULL_MSG = "Document date is not present in additional details or set as null";
 
+	public static final String PT_ADDITIONALNDETAILS_NULL = "PT_ADDITIONALNDETAILS_NULL";
+	public static final String PT_ADDITIONALNDETAILS_NULL_MSG = "Additional Details should not be null. Please add field like marketValue, documentDate, adhocRebate and adhocPenalty with their proper value in additionalDetails object";
+
+	public static final String DEMAND_UPDATE_FAILED = "DEMAND_UPDATE_FAILED";
+	public static final String DEMAND_UPDATE_FAILED_MSG = "Demand Updation Failed";
+
+	public static final String BILLING_SLAB_SEARCH_FAILED = "BILLING_SLAB_SEARCH_FAILED";
+	public static final String BILLING_SLAB_SEARCH_FAILED_MSG = "Billing slab for the provided search criteria is not present. Please add the billing slab";
+
+	public static final String DEMAND_CREATE_FAILED = "DEMAND_CREATE_FAILED";
+	public static final String DEMAND_CREATE_FAILED_MSG = "Demand Creation Failed";
+
+	public static final String MARKET_VALUE = "marketValue";
+	public static final String DOCUMENT_DATE = "documentDate";
+	public static final String NUMERIC_REGEX = "-?\\d+(\\.\\d+)?";
+	public static final String ADHOC_REBATE = "adhocRebate";
+	public static final String ADHOC_PENALTY = "adhocPenalty";
+
+	public static final String MUTATION_PAYMENT_PERIOD_IN_MONTH = "mutationPaymentPeriodInMonth";
 }

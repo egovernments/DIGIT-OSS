@@ -72,7 +72,7 @@ public class MasterDataService {
 	/**
 	 * Fetches Financial Year from Mdms Api
 	 *
-	 * @param req
+	 * @param requestInfo
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
