@@ -1,14 +1,14 @@
 import {
   getCommonCard,
-  getTextField,
-  getSelectField,
+
+
   getCommonContainer,
-  getLabel
+  getLabel, getSelectField, getTextField
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { searchApiCall } from "./functions";
-import { generateMultipleBill } from "../../utils/receiptPdf";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getTenantId ,getUserInfo} from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { generateMultipleBill } from "../../utils/receiptPdf";
+import { searchApiCall } from "./functions";
 
 // const wsBillinData = [
 //   {
@@ -25,7 +25,7 @@ import { getTenantId ,getUserInfo} from "egov-ui-kit/utils/localStorageUtils";
 //   }
 // ]
 
-const tenantId = process.env.REACT_APP_NAME === "Employee" ?  getTenantId() : JSON.parse(getUserInfo()).permanentCity;
+const tenantId = process.env.REACT_APP_NAME === "Employee" ? getTenantId() : JSON.parse(getUserInfo()).permanentCity;
 export const resetFields = (state, dispatch) => {
   // dispatch(
   //   handleField(
@@ -48,7 +48,15 @@ export const resetFields = (state, dispatch) => {
       "groupBills",
       "components.div.children.abgSearchCard.children.cardContent.children.searchContainer.children.locMohalla",
       "props.value",
-      " "
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "groupBills",
+      "components.div.children.abgSearchCard.children.cardContent.children.searchContainer.children.serviceCategory",
+      "props.value",
+      ""
     )
   );
 };
@@ -94,14 +102,14 @@ export const abgSearchCard = getCommonCard({
         },
         required: true,
         jsonPath: "searchCriteria.businesService",
-    
+
         gridDefination: {
           xs: 12,
           sm: 4
         },
-        localePrefix : {
-          moduleName : "BillingService",
-          masterName : "BusinessService"
+        localePrefix: {
+          moduleName: "BillingService",
+          masterName: "BusinessService"
         },
         sourceJsonPath: "searchScreenMdmsData.BillingService.BusinessService",
         // beforeFieldChange :(action, state, dispatch) => {
@@ -124,7 +132,7 @@ export const abgSearchCard = getCommonCard({
         //       )
         //     );
         //   }
-         
+
         // }
       }),
       // billingPeriod: getSelectField({
@@ -342,7 +350,7 @@ export const mergeDownloadButton = {
         action: "condition",
         callBack: generateMultipleBill
       },
-      visible : false
+      visible: false
     }
   }
 };
