@@ -4,7 +4,10 @@ package org.egov.user;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.apache.commons.lang3.StringUtils;
 import org.egov.tracer.config.TracerConfiguration;
+import org.egov.tracer.model.CustomException;
 import org.egov.user.security.CustomAuthenticationKeyGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,14 +22,19 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import redis.clients.jedis.JedisShardInfo;
 
 import javax.annotation.PostConstruct;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.TimeZone;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @SpringBootApplication
 @Import(TracerConfiguration.class)

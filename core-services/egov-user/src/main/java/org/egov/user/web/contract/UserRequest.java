@@ -3,6 +3,7 @@ package org.egov.user.web.contract;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.egov.user.config.*;
 import org.egov.user.domain.model.Address;
 import org.egov.user.domain.model.Role;
 import org.egov.user.domain.model.User;
@@ -10,11 +11,15 @@ import org.egov.user.domain.model.enums.AddressType;
 import org.egov.user.domain.model.enums.BloodGroup;
 import org.egov.user.domain.model.enums.Gender;
 import org.egov.user.domain.model.enums.UserType;
+import org.hibernate.validator.constraints.Email;
 
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 @Setter
 @Getter
@@ -26,14 +31,27 @@ public class UserRequest {
     private Long id;
     private String userName;
     private String salutation;
+
+    @Pattern(regexp = UserServiceConstants.PATTERN_NAME)
+    @Size(max = 50)
     private String name;
+
+    @Pattern(regexp = UserServiceConstants.PATTERN_GENDER)
+    @Size(max = 10)
     private String gender;
+
+    @Pattern(regexp = UserServiceConstants.PATTERN_MOBILE)
     private String mobileNumber;
+
+    @Email
     private String emailId;
     private String altContactNumber;
     private String pan;
     private String aadhaarNumber;
     private String permanentAddress;
+
+    @Pattern(regexp = UserServiceConstants.PATTERN_CITY)
+    @Size(max = 50)
     private String permanentCity;
     private String permanentPinCode;
     private String correspondenceAddress;
@@ -44,6 +62,9 @@ public class UserRequest {
     private UserType type;
     private Boolean accountLocked;
     private Long accountLockedDate;
+
+    @Pattern(regexp = UserServiceConstants.PATTERN_NAME)
+    @Size(max = 50)
     private String fatherOrHusbandName;
     private String signature;
     private String bloodGroup;
@@ -53,6 +74,9 @@ public class UserRequest {
     private String password;
     private String otpReference;
     private Long lastModifiedBy;
+
+    @Pattern(regexp = UserServiceConstants.PATTERN_TENANT)
+    @Size(max = 50)
     private String tenantId;
 
     private Set<RoleRequest> roles;

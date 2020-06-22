@@ -41,6 +41,7 @@ hs_err_pid*
 .settings/
 .mvnw/
 target/
+*.mvn
 
 # Logs
 logs

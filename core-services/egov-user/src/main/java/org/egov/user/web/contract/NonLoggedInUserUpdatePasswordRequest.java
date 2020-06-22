@@ -14,10 +14,12 @@ import org.egov.user.domain.model.enums.UserType;
 @NoArgsConstructor
 @Builder
 @EqualsAndHashCode
+@ToString
 public class NonLoggedInUserUpdatePasswordRequest {
 
     @JsonProperty("RequestInfo")
     private RequestInfo requestInfo;
+
     private String otpReference;
     private String userName;
     private String newPassword;

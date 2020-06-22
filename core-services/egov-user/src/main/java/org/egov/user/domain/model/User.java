@@ -4,37 +4,56 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
+
 import org.apache.commons.lang3.time.DateUtils;
+import org.egov.user.config.*;
 import org.egov.user.domain.exception.InvalidUserCreateException;
 import org.egov.user.domain.exception.InvalidUserUpdateException;
 import org.egov.user.domain.model.enums.BloodGroup;
 import org.egov.user.domain.model.enums.Gender;
 import org.egov.user.domain.model.enums.GuardianRelation;
 import org.egov.user.domain.model.enums.UserType;
+import org.hibernate.validator.constraints.Email;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
+
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 import static org.springframework.util.ObjectUtils.isEmpty;
 
 @AllArgsConstructor
 @Getter
 @Setter
+@ToString
 @Builder(toBuilder = true)
 public class User {
 
     private Long id;
     private String uuid;
+
+    @Pattern(regexp = UserServiceConstants.PATTERN_TENANT)
+    @Size(max = 50)
     private String tenantId;
     private String username;
     private String title;
     private String password;
     private String salutation;
+
+    @Pattern(regexp = UserServiceConstants.PATTERN_NAME)
     private String guardian;
+
     private GuardianRelation guardianRelation;
+
+    @Pattern(regexp = UserServiceConstants.PATTERN_NAME)
+    @Size(max = 50)
     private String name;
     private Gender gender;
     private String mobileNumber;
+
+    @Email
     private String emailId;
     private String altContactNumber;
     private String pan;
@@ -80,8 +99,12 @@ public class User {
     }
 
     public void validateNewUser() {
+        validateNewUser(true);
+    }
+
+    public void validateNewUser(boolean createUserValidateName) {
         if (isUsernameAbsent()
-                || isNameAbsent()
+                || (createUserValidateName && isNameAbsent())
                 || isMobileNumberAbsent()
                 || isActiveIndicatorAbsent()
                 || isTypeAbsent()

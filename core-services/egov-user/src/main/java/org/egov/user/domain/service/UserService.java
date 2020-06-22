@@ -3,6 +3,7 @@ package org.egov.user.domain.service;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.tracer.model.CustomException;
 import org.egov.user.domain.exception.*;
 import org.egov.user.domain.model.LoggedInUserUpdatePasswordRequest;
 import org.egov.user.domain.model.NonLoggedInUserUpdatePasswordRequest;
@@ -25,12 +26,15 @@ import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
@@ -63,6 +67,19 @@ public class UserService {
     @Value("${max.invalid.login.attempts}")
     private Long maxInvalidLoginAttempts;
 
+    @Value("${create.user.validate.name}")
+    private boolean createUserValidateName;
+
+
+    @Value("${egov.user.pwd.pattern}")
+    private String pwdRegex;
+
+    @Value("${egov.user.pwd.pattern.min.length}")
+    private Integer pwdMinLength;
+
+    @Value("${egov.user.pwd.pattern.max.length}")
+    private Integer pwdMaxLength;
+
     @Autowired
     private RestTemplate restTemplate;
 
@@ -70,7 +87,10 @@ public class UserService {
                        PasswordEncoder passwordEncoder, TokenStore tokenStore,
                        @Value("${default.password.expiry.in.days}") int defaultPasswordExpiryInDays,
                        @Value("${citizen.login.password.otp.enabled}") boolean isCitizenLoginOtpBased,
-                       @Value("${employee.login.password.otp.enabled}") boolean isEmployeeLoginOtpBased) {
+                       @Value("${employee.login.password.otp.enabled}") boolean isEmployeeLoginOtpBased,
+                       @Value("${egov.user.pwd.pattern}") String pwdRegex,
+                       @Value("${egov.user.pwd.pattern.max.length}") Integer pwdMaxLength,
+                       @Value("${egov.user.pwd.pattern.min.length}") Integer pwdMinLength) {
         this.userRepository = userRepository;
         this.otpRepository = otpRepository;
         this.passwordEncoder = passwordEncoder;
@@ -79,6 +99,10 @@ public class UserService {
         this.isEmployeeLoginOtpBased = isEmployeeLoginOtpBased;
         this.fileRepository = fileRepository;
         this.tokenStore = tokenStore;
+        this.pwdRegex = pwdRegex;
+        this.pwdMaxLength = pwdMaxLength;
+        this.pwdMinLength = pwdMinLength;
+
     }
 
     /**
@@ -155,11 +179,13 @@ public class UserService {
      */
     public User createUser(User user) {
         user.setUuid(UUID.randomUUID().toString());
-        user.validateNewUser();
+        user.validateNewUser(createUserValidateName);
         conditionallyValidateOtp(user);
         validateUserUniqueness(user);
         if (isEmpty(user.getPassword())) {
             user.setPassword(UUID.randomUUID().toString());
+        } else {
+            validatePassword(user.getPassword());
         }
         user.setPassword(encryptPwd(user.getPassword()));
         user.setDefaultPasswordExpiry(defaultPasswordExpiryInDays);
@@ -199,7 +225,8 @@ public class UserService {
             throw new UserNameNotValidException();
         else if (isCitizenLoginOtpBased)
             user.setMobileNumber(user.getUsername());
-
+        if (!isCitizenLoginOtpBased)
+            validatePassword(user.getPassword());
         user.setRoleToCitizen();
         user.setTenantId(getStateLevelTenantForCitizen(user.getTenantId(), user.getType()));
     }
@@ -285,9 +312,9 @@ public class UserService {
         user.setTenantId(getStateLevelTenantForCitizen(user.getTenantId(), user.getType()));
         validateUserRoles(user);
         user.validateUserModification();
+        validatePassword(user.getPassword());
         user.setPassword(encryptPwd(user.getPassword()));
         userRepository.update(user, existingUser);
-
 
         // If user is being unlocked via update, reset failed login attempts
         if (user.getAccountLocked() != null && !user.getAccountLocked() && existingUser.getAccountLocked())
@@ -337,6 +364,7 @@ public class UserService {
         final User existingUser = getUserByUuid(user.getUuid());
         validateProfileUpdateIsDoneByTheSameLoggedInUser(user);
         user.nullifySensitiveFields();
+        validatePassword(user.getPassword());
         userRepository.update(user, existingUser);
         User updatedUser = getUserByUuid(user.getUuid());
         setFileStoreUrlsByFileStoreIds(Collections.singletonList(updatedUser));
@@ -359,6 +387,7 @@ public class UserService {
             throw new InvalidUpdatePasswordRequestException();
 
         validateExistingPassword(user, updatePasswordRequest.getExistingPassword());
+        validatePassword(updatePasswordRequest.getNewPassword());
         user.updatePassword(encryptPwd(updatePasswordRequest.getNewPassword()));
         userRepository.update(user, user);
     }
@@ -370,7 +399,6 @@ public class UserService {
      */
     public void updatePasswordForNonLoggedInUser(NonLoggedInUserUpdatePasswordRequest request) {
         request.validate();
-        // validateOtp(request.getOtpValidationRequest());
         final User user = getUniqueUser(request.getUserName(), request.getTenantId(), request.getType());
         if (user.getType().toString().equals(UserType.CITIZEN.toString()) && isCitizenLoginOtpBased) {
             log.info("CITIZEN forgot password flow is disabled");
@@ -382,6 +410,7 @@ public class UserService {
         }
         user.setOtpReference(request.getOtpReference());
         validateOtp(user);
+        validatePassword(request.getNewPassword());
         user.updatePassword(encryptPwd(request.getNewPassword()));
         userRepository.update(user, user);
     }
@@ -536,6 +565,23 @@ public class UserService {
                     user.setPhoto(fileStoreUrlList.get(user.getPhoto()));
                 }
             }
+        }
+    }
+
+
+    public void validatePassword(String password) {
+        Map<String, String> errorMap = new HashMap<>();
+        if (!StringUtils.isEmpty(password)) {
+            if (password.length() < pwdMinLength || password.length() > pwdMaxLength)
+                errorMap.put("INVALID_PWD_LENGTH", "Password must be of minimum: " + pwdMinLength + " and maximum: " + pwdMaxLength + " characters.");
+            Pattern p = Pattern.compile(pwdRegex);
+            Matcher m = p.matcher(password);
+            if (!m.find()) {
+                errorMap.put("INVALID_PWD_PATTERN", "Password MUST HAVE: Atleast one digit, one upper case, one lower case, one special character (@#$%) and MUST NOT contain any spaces");
+            }
+        }
+        if (!CollectionUtils.isEmpty(errorMap.keySet())) {
+            throw new CustomException(errorMap);
         }
     }
 
