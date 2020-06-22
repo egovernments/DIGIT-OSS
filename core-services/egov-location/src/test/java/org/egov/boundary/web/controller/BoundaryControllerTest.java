@@ -24,6 +24,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.*;
 
 import static org.mockito.Matchers.any;
@@ -55,6 +56,8 @@ public class BoundaryControllerTest {
 	@MockBean
 	private HierarchyTypeService hierarchyTypeService;
 
+	private MediaType contentType = new MediaType("application", "json", Charset.forName("UTF-8"));
+
 	@Test
 	public void testShouldCreateBoundary() throws Exception {
 		BoundaryType boundaryType = BoundaryType.builder().build();
@@ -85,9 +88,9 @@ public class BoundaryControllerTest {
 		BoundaryType boundaryType = BoundaryType.builder().build();
 		when(boundaryService.createBoundary(any(Boundary.class))).thenReturn(getBoundaries().get(0));
 		when(boundaryTypeService.findByTenantIdAndCode(any(String.class), any(String.class))).thenReturn(boundaryType);
-		mockMvc.perform(post("/boundarys").contentType(MediaType.APPLICATION_JSON_UTF8)
+		mockMvc.perform(put("/boundarys/create").contentType(contentType)
 				.content(getFileContents("boundaryCreateRequestWithoutTenant.json"))).andExpect(status().isBadRequest())
-				.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+				.andExpect(content().contentType(contentType))
 				.andExpect(content().json(getFileContents("boundaryCreateResponseWithoutTenant.json")));
 	}
 
