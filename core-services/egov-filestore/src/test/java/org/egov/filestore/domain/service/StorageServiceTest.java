@@ -3,7 +3,7 @@ package org.egov.filestore.domain.service;
 
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.argThat;
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -25,7 +25,6 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatcher;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -131,7 +130,7 @@ public class StorageServiceTest {
         );
     }
 
-    class ArtifactMatcher extends ArgumentMatcher<List<Artifact>> {
+    class ArtifactMatcher implements ArgumentMatcher<List<Artifact>> {
 
         private List<Artifact> expectedArtifacts;
 
@@ -139,22 +138,23 @@ public class StorageServiceTest {
             this.expectedArtifacts = expectedArtifacts;
         }
 
-        @Override
-        public boolean matches(Object o) {
-            final List<Artifact> actualArtifacts = (List<Artifact>) o;
+		@Override
+		public boolean matches(List<Artifact> argument) {
 
-            if (actualArtifacts.size() != expectedArtifacts.size()) {
-                return false;
-            }
+			 final List<Artifact> actualArtifacts = argument;
 
-            return IntStream.range(0, expectedArtifacts.size()).allMatch(i -> {
-                Artifact expectedArtifact = expectedArtifacts.get(i);
-                Artifact actualArtifact = actualArtifacts.get(i);
+	            if (actualArtifacts.size() != expectedArtifacts.size()) {
+	                return false;
+	            }
 
-                return expectedArtifact.getMultipartFile().equals(actualArtifact.getMultipartFile()) &&
-                        expectedArtifact.getFileLocation().getFileStoreId()
-                                .equals(actualArtifact.getFileLocation().getFileStoreId());
-            });
-        }
+	            return IntStream.range(0, expectedArtifacts.size()).allMatch(i -> {
+	                Artifact expectedArtifact = expectedArtifacts.get(i);
+	                Artifact actualArtifact = actualArtifacts.get(i);
+
+	                return expectedArtifact.getMultipartFile().equals(actualArtifact.getMultipartFile()) &&
+	                        expectedArtifact.getFileLocation().getFileStoreId()
+	                                .equals(actualArtifact.getFileLocation().getFileStoreId());
+	            });
+		}
     }
 }
