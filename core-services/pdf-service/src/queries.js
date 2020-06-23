@@ -71,7 +71,10 @@ export const getFileStoreIds = (
             tenantid: crow.tenantid,
             createdtime: crow.createdtime,
             endtime: crow.endtime,
-            totalcount: crow.totalcount
+            totalcount: crow.totalcount,
+            key: crow.key,
+            documentType: crow.documenttype,
+            moduleName: crow.modulename
           });
         });
         logger.info(results.rows.length + " matching records found in search");
@@ -92,7 +95,10 @@ export const insertStoreIds = (
   starttime,
   successCallback,
   errorCallback,
-  totalcount
+  totalcount,
+  key,
+  documentType,
+  moduleName
 ) => {
   var payloads = [];
   var endtime = new Date().getTime();
@@ -116,7 +122,10 @@ export const insertStoreIds = (
         tenantid: tenantId,
         starttime,
         endtime,
-        totalcount
+        totalcount,
+        key,
+        documentType,
+        moduleName
       });
     }
   });

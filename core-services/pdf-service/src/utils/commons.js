@@ -2,11 +2,13 @@ import { httpRequest } from "../api/api";
 import logger from "../config/logger";
 import envVariables from "../EnvironmentVariables";
 import get from "lodash/get";
+var moment = require("moment-timezone");
 
+let datetimezone = envVariables.DATE_TIMEZONE;
 let egovLocHost = envVariables.EGOV_LOCALISATION_HOST;
 let defaultLocale = envVariables.DEFAULT_LOCALISATION_LOCALE;
 let defaultTenant = envVariables.DEFAULT_LOCALISATION_TENANT;
-export const getTransformedLocale = label => {
+export const getTransformedLocale = (label) => {
   return label.toUpperCase().replace(/[.:-\s\/]/g, "_");
 };
 
@@ -65,12 +67,12 @@ export const findAndUpdateLocalisation = async (
       `${egovLocHost}/localization/messages/v1/_search?locale=${locale}&tenantId=${statetenantid}&module=${moduleName}`,
       { RequestInfo: requestInfo }
     );
-    res.messages.map(item => {
+    res.messages.map((item) => {
       localisationMap[item.code] = item.message;
     });
     localisationModuleList.push(moduleName);
   }
-  keyArray.map(item => {
+  keyArray.map((item) => {
     let labelFromKey = "";
 
     // append main category in the beginning
@@ -127,21 +129,11 @@ const getLocalisationLabel = (key, localisationMap, prefix) => {
   }
 };
 
-export const getDateInRequiredFormat = et => {
+export const getDateInRequiredFormat = (et, dateformat = "DD/MM/YYYY") => {
   if (!et) return "NA";
-  var date = new Date(Math.round(Number(et)));
-  var formattedDate =
-    date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
-  return formattedDate;
+  // var date = new Date(Math.round(Number(et)));
+  return moment(et).tz(datetimezone).format(dateformat);
 };
-
-// export const getDateInRequiredFormat=(date)=>{
-//     return date.toLocaleDateString('en-GB', {
-//       month : '2-digit',
-//       day : '2-digit',
-//       year : 'numeric'
-//   });
-//   }
 
 /**
  *
@@ -159,4 +151,11 @@ export const getValue = (value, defaultValue, path) => {
     // logger.error(`no value found for path: ${path}`);
     return defaultValue;
   } else return value;
+};
+
+export const convertFooterStringtoFunctionIfExist = (footer) => {
+  if (footer != undefined) {
+    footer = eval(footer);
+  }
+  return footer;
 };
