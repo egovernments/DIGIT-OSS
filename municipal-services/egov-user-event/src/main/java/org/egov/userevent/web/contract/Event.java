@@ -69,6 +69,8 @@ public class Event {
 
 	private Boolean generateCounterEvent;
 	
+	private Boolean internallyUpdted;
+
 	
 
 	/**

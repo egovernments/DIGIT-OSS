@@ -297,13 +297,13 @@ public class UserEventsService {
 			if(null != event.getEventDetails()) {
 				if(event.getEventType().equals(UserEventsConstants.MEN_MDMS_BROADCAST_CODE)) {				
 					if(null != event.getEventDetails().getFromDate()) {
-						if((event.getEventDetails().getFromDate() <= utils.getTomorrowsEpoch())) {
+						if((event.getEventDetails().getFromDate() <= utils.getTomorrowsEpoch()) && event.getStatus().equals(Status.INACTIVE)) {
 							event.setStatus(Status.ACTIVE);
 							tobeAdded = true;
 						}
 					}
-					if(null != event.getEventDetails().getToDate()) {
-						if((event.getEventDetails().getToDate() < utils.getTomorrowsEpoch())) {
+					if(null != event.getEventDetails().getToDate() ) {
+						if((event.getEventDetails().getToDate() < utils.getTomorrowsEpoch() && event.getStatus().equals(Status.ACTIVE))) {
 							event.setStatus(Status.INACTIVE);
 							tobeAdded = true;
 						}
@@ -313,12 +313,14 @@ public class UserEventsService {
 						if(event.getEventDetails().getFromDate().equals(event.getEventDetails().getToDate())) {
 							Long dateInSecs = event.getEventDetails().getFromDate() / 1000;
 							Long currDateInSecs = new Date().getTime() / 1000;
-							if(((dateInSecs - 86400) < currDateInSecs) && (currDateInSecs < dateInSecs)) {
+							if((((dateInSecs - 86400) < currDateInSecs) && (currDateInSecs < dateInSecs)) && event.getStatus().equals(Status.INACTIVE)) {
 								event.setStatus(Status.ACTIVE);
 								tobeAdded = true;
 							}else {
-								event.setStatus(Status.INACTIVE);
-								tobeAdded = true;
+								if(event.getStatus().equals(Status.ACTIVE)) {
+									event.setStatus(Status.INACTIVE);
+									tobeAdded = true;
+								}
 							}
 						}// UI sends EOD epoch, which makes fromDate and toDate same incase of 1 day event, which is why the range is manually calculated. Fix at UI needed.
 					}
@@ -333,14 +335,20 @@ public class UserEventsService {
 					}
 				}
 				
-				if(tobeAdded)
+				if(tobeAdded) {
+					event.setInternallyUpdted(true);
 					eventsTobeUpdated.add(event);
+				}
 			}
 		});
 		if(!CollectionUtils.isEmpty(eventsTobeUpdated)) {
 			EventRequest request = EventRequest.builder().requestInfo(requestInfo).events(eventsTobeUpdated).build();
-			log.info("Updating events...");
-			updateEvents(request);
+			try {
+				log.info("Updating events...");
+				updateEvents(request);
+			}catch(Exception e) {
+				log.error("There was an error while lazy-updating the events: ", e);
+			}
 		}
 	}
 
@@ -462,8 +470,18 @@ public class UserEventsService {
 			event.setRecepientEventMap(recepientEventList);
 
 			AuditDetails auditDetails = event.getAuditDetails();
-			auditDetails.setLastModifiedBy(request.getRequestInfo().getUserInfo().getUuid());
-			auditDetails.setLastModifiedTime(new Date().getTime());
+			if(null != event.getInternallyUpdted()) {
+				if(event.getInternallyUpdted()) {
+					auditDetails = event.getAuditDetails();
+				}else {
+					auditDetails.setLastModifiedBy(request.getRequestInfo().getUserInfo().getUuid());
+					auditDetails.setLastModifiedTime(new Date().getTime());
+				}
+			}else {
+				auditDetails.setLastModifiedBy(request.getRequestInfo().getUserInfo().getUuid());
+				auditDetails.setLastModifiedTime(new Date().getTime());
+			}
+			
 
 			event.setAuditDetails(auditDetails);
 
@@ -486,7 +504,6 @@ public class UserEventsService {
 	 * @param criteria
 	 */
 	private void enrichSearchCriteria(RequestInfo requestInfo, EventSearchCriteria criteria) {
-		log.info("Search Criteria: " + criteria);
 		List<String> statuses = new ArrayList<>();
 		if (requestInfo.getUserInfo().getType().equals("CITIZEN")) {
 			if (!CollectionUtils.isEmpty(criteria.getUserids()))
@@ -501,17 +518,15 @@ public class UserEventsService {
 			criteria.setUserids(userIds);
 			criteria.setRoles(roles);
 			criteria.setIsCitizenSearch(true);
-			statuses.add("ACTIVE");
 		} else {
 			criteria.setIsCitizenSearch(false);
-			List<String> roles = requestInfo.getUserInfo().getRoles().stream().map(Role::getCode)
-					.collect(Collectors.toList());
-			statuses.add("ACTIVE");
-			if (roles.contains("EMPLOYEE"))
-				statuses.add("INACTIVE");
 		}
-		if (CollectionUtils.isEmpty(criteria.getStatus()))
+		if (CollectionUtils.isEmpty(criteria.getStatus())) {
+			statuses.add("ACTIVE");
+			statuses.add("INACTIVE");
 			criteria.setStatus(statuses);
+
+		}
 
 		if (criteria.getIsCitizenSearch()) {
 			if (!CollectionUtils.isEmpty(criteria.getUserids()) || !CollectionUtils.isEmpty(criteria.getRoles())
@@ -521,6 +536,7 @@ public class UserEventsService {
 		}
 
 		log.info("recepeients: " + criteria.getRecepients());
+		log.info("Search Criteria: " + criteria);
 	}
 
 }
