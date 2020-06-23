@@ -7,11 +7,13 @@ serviceMaps:
    fromTopic: save-ws-meter
    isTransaction: true
    queryMaps:
-    - query: INSERT INTO eg_ws_meterreading (id,connectionNo, billingPeriod, meterStatus, lastReading, lastReadingDate, currentReading, currentReadingDate, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?,?,?,?,?,?);
+    - query: INSERT INTO eg_ws_meterreading (id, tenantid, connectionNo, billingPeriod, meterStatus, lastReading, lastReadingDate, currentReading, currentReadingDate, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?,?,?,?,?,?, ?);
       basePath: $.meterReadings
       jsonMaps:
        - jsonPath: $.meterReadings.id
-
+       
+       - jsonPath: $.meterReadings.tenantId
+       
        - jsonPath: $.meterReadings.connectionNo
 
        - jsonPath: $.meterReadings.billingPeriod
