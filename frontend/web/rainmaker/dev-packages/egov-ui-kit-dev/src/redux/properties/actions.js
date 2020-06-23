@@ -293,13 +293,13 @@ export const fetchProperties = (queryObjectproperty, queryObjectDraft, queryObje
             propertyDetails: property.propertyDetails.map((details) => {
               return {
                 ...details,
-                buildUpArea:details.buildUpArea?Math.round(details.buildUpArea * 9):null,
+                buildUpArea:details.buildUpArea?details.buildUpArea:null,
                 units:
                   details.units &&
                   details.units.map((unit) => {
                     return {
                       ...unit,
-                      unitArea: Math.round(unit.unitArea * 9),
+                      unitArea: unit.unitArea,
                     };
                   }),
               };
