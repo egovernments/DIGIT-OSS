@@ -65,6 +65,10 @@ public class TLCalculatorConfigs {
     private String baseTaxHead;
 
     //TaxHeads
+    @Value("${egov.taxhead.renewtax}")
+    private String renewTaxHead;
+
+    //TaxHeads
     @Value("${egov.taxhead.BPAbasetax}")
     private String bpabaseTaxHead;
 
@@ -73,6 +77,13 @@ public class TLCalculatorConfigs {
 
     @Value("${egov.taxhead.adhoc.exemption}")
     private String adhocExemptionTaxHead;
+
+    @Value("${egov.taxhead.time.penalty}")
+    private String timePenaltyTaxHead;
+
+    @Value("${egov.taxhead.time.rebate}")
+    private String timeRebateTaxHead;
+
 
 
     //MDMS

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
+import org.egov.tlcalculator.utils.TLCalculatorConstants;
 import org.egov.tlcalculator.web.models.AuditDetails;
 import org.springframework.validation.annotation.Validated;
 import lombok.AllArgsConstructor;
@@ -64,11 +65,47 @@ public class  TradeLicense   {
         }
     }
 
+    //TLR Changes
+
+    public enum ApplicationTypeEnum {
+        TEMPORARY(TLCalculatorConstants.APPLICATION_TYPE_NEW),
+
+        PERMANENT(TLCalculatorConstants.APPLICATION_TYPE_RENEWAL);
+
+        private String value;
+
+        ApplicationTypeEnum(String value) {
+            this.value = value;
+        }
+
+        @Override
+        @JsonValue
+        public String toString() {
+            return String.valueOf(value);
+        }
+
+        @JsonCreator
+        public static ApplicationTypeEnum fromValue(String text) {
+            for (ApplicationTypeEnum b : ApplicationTypeEnum.values()) {
+                if (String.valueOf(b.value).equals(text)) {
+                    return b;
+                }
+            }
+            return null;
+        }
+    }
+
     @JsonProperty("licenseType")
     private LicenseTypeEnum licenseType = null;
 
     @JsonProperty("licenseNumber")
     private String licenseNumber = null;
+
+    @JsonProperty("applicationType")
+    private ApplicationTypeEnum applicationType = null;
+
+    @JsonProperty("workflowCode")
+    private String workflowCode = null;
 
     @JsonProperty("applicationNumber")
     private String applicationNumber;

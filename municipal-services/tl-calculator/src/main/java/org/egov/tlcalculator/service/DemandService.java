@@ -176,11 +176,19 @@ public class DemandService {
             if (businessService == null)
                 businessService = businessService_TL;
             switch (businessService) {
+            
+            //TLR Changes
                 case businessService_TL:
-                    Map<String, Long> taxPeriods = mdmsService.getTaxPeriods(requestInfo, license, mdmsData);
-                    taxPeriodFrom = taxPeriods.get(TLCalculatorConstants.MDMS_STARTDATE);
-                    taxPeriodTo = taxPeriods.get(TLCalculatorConstants.MDMS_ENDDATE);
-                    break;
+                    if(license.getApplicationType() != null && license.getApplicationType().toString().equals(TLCalculatorConstants.APPLICATION_TYPE_RENEWAL)){
+                        taxPeriodFrom = license.getValidFrom();
+                        taxPeriodTo = license.getValidTo();
+                        break;
+                    }else{
+                        Map<String, Long> taxPeriods = mdmsService.getTaxPeriods(requestInfo, license, mdmsData);
+                        taxPeriodFrom = taxPeriods.get(TLCalculatorConstants.MDMS_STARTDATE);
+                        taxPeriodTo = taxPeriods.get(TLCalculatorConstants.MDMS_ENDDATE);
+                        break;
+                    }
             }
             addRoundOffTaxHead(calculation.getTenantId(), demandDetails);
             List<String> combinedBillingSlabs = new LinkedList<>();
