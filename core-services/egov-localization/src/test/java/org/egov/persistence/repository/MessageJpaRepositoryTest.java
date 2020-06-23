@@ -62,7 +62,7 @@ public class MessageJpaRepositoryTest {
             .createdDate(new Date())
             .build();
 
-        messageJpaRepository.save(Arrays.asList(message1, message2));
+        messageJpaRepository.saveAll(Arrays.asList(message1, message2));
 
         assertTrue("Id generated for message1", StringUtils.isEmpty(message1.getId()));
         assertTrue("Id generated for message2", StringUtils.isEmpty(message2.getId()));

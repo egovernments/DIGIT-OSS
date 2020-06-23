@@ -1,9 +1,6 @@
 package org.egov.persistence.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.ToString;
+import lombok.*;
 import org.egov.domain.model.MessageIdentity;
 import org.egov.domain.model.Tenant;
 
@@ -14,6 +11,7 @@ import java.util.Date;
 @Data
 @Table(name = "message")
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @ToString
 @SequenceGenerator(name = Message.SEQ_MESSAGE, sequenceName = Message.SEQ_MESSAGE, allocationSize = 1)
