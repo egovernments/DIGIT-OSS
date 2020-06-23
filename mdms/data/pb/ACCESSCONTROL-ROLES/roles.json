@@ -476,6 +476,11 @@
       "code": "BPA_NOC_VERIFIER",
       "name": "BPA NOC Verifier",
       "description": "BPA Service NOC verifier"
+    },
+    {
+      "code": "NOC_DEPT_APPROVER",
+      "name": "NOC Department Approver",
+      "description": "NOC application approver"
     }
   ]
 }
