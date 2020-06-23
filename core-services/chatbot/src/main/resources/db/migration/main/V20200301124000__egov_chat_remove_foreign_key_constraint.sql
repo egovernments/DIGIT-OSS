@@ -1,0 +1,1 @@
+ALTER TABLE eg_chat_message DROP CONSTRAINT fk_eg_chat_message_conversation;

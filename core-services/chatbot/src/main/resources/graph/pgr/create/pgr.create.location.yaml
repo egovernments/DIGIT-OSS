@@ -1,0 +1,10 @@
+name : pgr.create.location
+description : "Location of the complaint"
+nodeType : step
+
+optional : false
+validationRequired: true
+
+message : chatbot.messages.pgrCreateLocation
+
+type : location

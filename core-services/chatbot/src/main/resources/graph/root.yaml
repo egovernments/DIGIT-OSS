@@ -1,0 +1,19 @@
+name : root
+nodeType : branch
+message : chatbot.messages.rootMessage
+
+validationRequired: true
+typeOfValues: FixedSetValues
+
+values : [ "File a Complaint", "Track Complaint Status"]
+displayValuesAsOptions : true
+numberPrefixLocalizationCode: chatbot.message.numberPrefixLocalizationCode
+numberPostfixLocalizationCode: chatbot.message.numberPostfixLocalizationCode
+matchAnswerThreshold : 70
+
+type : text
+
+File a Complaint : pgr.create.tenantId
+Track Complaint Status : pgr.track.end
+
+errorMessage: chatbot.messages.rootErrorMessage

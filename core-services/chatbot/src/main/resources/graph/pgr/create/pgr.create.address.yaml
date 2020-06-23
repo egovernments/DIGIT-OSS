@@ -1,0 +1,9 @@
+name : pgr.create.address
+description : "Address of the complaint"
+nodeType : step
+
+optional : true
+
+message : chatbot.messages.pgrCreateAddress
+
+type : text

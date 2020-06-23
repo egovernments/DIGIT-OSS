@@ -1,0 +1,23 @@
+name : pgr.create.locality
+description : "Locality"
+nodeType : step
+optional : false
+
+type : text
+
+validationRequired : true
+typeOfValues : FixedSetValues
+displayOptionsInExternalLink: true
+
+message : chatbot.messages.pgrCreateLocality
+
+values :
+  class : org.egov.chat.xternal.valuefetch.LocalityValueFetcher
+  params :
+    tenantId : ~pgr.create.tenantId
+    authToken : /user/authToken
+    recipient: /extraInfo/recipient
+
+matchAnswerThreshold: 70
+
+errorMessage: chatbot.messages.pgrCreateLocalityError
