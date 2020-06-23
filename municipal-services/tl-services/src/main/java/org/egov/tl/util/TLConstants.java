@@ -13,6 +13,10 @@ public class TLConstants {
 
     public static  final String businessService_TL = "TL";
 
+    public static  final String businessService_DIRECT_RENEWAL = "DIRECTRENEWAL";
+    
+    public static  final String businessService_EDIT_RENEWAL = "EDITRENEWAL";
+
     public static  final String businessService_BPA = "BPAREG";
 
     public static final String PROPERTY_JSONPATH = "$.Properties[0].propertyId";
@@ -20,6 +24,18 @@ public class TLConstants {
     public static final String MODULE = "rainmaker-tl";
 
     public static final String NOTIFICATION_LOCALE = "en_IN";
+
+    public static final String RENEWAL_NOTIFICATION_INITIATED = "tl.renew.en.counter.initiate";
+
+    public static final String RENEWAL_NOTIFICATION_APPLIED = "tl.renew.en.counter.submit";
+
+    public static final String RENEWAL_NOTIFICATION_FIELD_INSPECTION = "tl.renew.en.field.inspection";
+
+    public static final String RENEWAL_NOTIFICATION_PENDINGAPPROVAL = "tl.renew.en.pending.approval";
+
+    public static final String RENEWAL_NOTIFICATION_REJECTED = "tl.renew.en.counter.rejected";
+
+    public static final String RENEWAL_NOTIFICATION_APPROVED = "tl.renew.en.counter.approved";
 
     public static final String NOTIFICATION_INITIATED = "tl.en.counter.initiate";
 
@@ -29,7 +45,11 @@ public class TLConstants {
 
     public static final String NOTIFICATION_PAYMENT_OWNER = "tl.en.counter.payment.successful.owner";
 
+    public static final String NOTIFICATION_RENEWAL_PAYMENT_OWNER = "tl.en.counter.renewal.payment.successful.owner";
+
     public static final String NOTIFICATION_PAYMENT_PAYER = "tl.en.counter.payment.successful.payer";
+
+    public static final String NOTIFICATION_RENEWAL_PAYMENT_PAYER = "tl.en.counter.renewal.payment.successful.payer";
 
     public static final String NOTIFICATION_PAID = "tl.en.counter.pending.approval";
 
@@ -47,12 +67,27 @@ public class TLConstants {
 
     public static final String NOTIFICATION_OBJECT_MODIFIED = "tl.en.edit.object.modified";
 
+    public static final String NOTIFICATION_OBJECT_RENEW_MODIFIED = "tl.en.edit.object.renew.modified";
+
     public static final String NOTIFICATION_SENDBACK_CITIZEN= "tl.en.sendback.citizen";
 
     public static final String NOTIFICATION_FORWARD_CITIZEN = "tl.en.forward.citizen";
 
+    public static final String NOTIFICATION_TL_REMINDER = "tl.en.reminder";
+
+
+    public static final List<String> NOTIFICATION_CODES = Collections.unmodifiableList(Arrays.asList(
+            RENEWAL_NOTIFICATION_INITIATED, RENEWAL_NOTIFICATION_APPLIED, RENEWAL_NOTIFICATION_FIELD_INSPECTION, RENEWAL_NOTIFICATION_PENDINGAPPROVAL,
+            RENEWAL_NOTIFICATION_REJECTED,RENEWAL_NOTIFICATION_APPROVED,NOTIFICATION_INITIATED,NOTIFICATION_APPLIED,NOTIFICATION_FIELD_INSPECTION,
+            NOTIFICATION_PAYMENT_OWNER,NOTIFICATION_RENEWAL_PAYMENT_OWNER,NOTIFICATION_PAYMENT_PAYER,NOTIFICATION_RENEWAL_PAYMENT_PAYER,
+            NOTIFICATION_PAID,NOTIFICATION_APPROVED,NOTIFICATION_REJECTED,NOTIFICATION_CANCELLED,NOTIFICATION_FIELD_CHANGED,NOTIFICATION_OBJECT_ADDED,
+            NOTIFICATION_OBJECT_REMOVED,NOTIFICATION_OBJECT_MODIFIED,NOTIFICATION_OBJECT_RENEW_MODIFIED,NOTIFICATION_SENDBACK_CITIZEN,
+            NOTIFICATION_FORWARD_CITIZEN,NOTIFICATION_TL_REMINDER));
+
 
     public static final String DEFAULT_OBJECT_MODIFIED_MSG = "Dear <1>,Your Trade License with application number <APPLICATION_NUMBER> was modified.";
+
+    public static final String DEFAULT_OBJECT_RENEWAL_MODIFIED_MSG = "Dear <1>,Your Renewal Trade License with application number <APPLICATION_NUMBER> was modified.";
 
 
     // MDMS
@@ -99,10 +134,20 @@ public class TLConstants {
 
     public static final String MDMS_FINACIALYEAR_PATH = "$.MdmsRes.egf-master.FinancialYear[?(@.code==\"{}\")]";
 
+    public static final String MDMS_TL_FINACIALYEAR_PATH = "$.MdmsRes.egf-master.FinancialYear";
+
+    public static final String MDMS_TL_FINACIALYEAR_START_DATE = "$.MdmsRes.egf-master.FinancialYear[?(@.startingDate==\"{}\")]";
+
     public static final String MDMS_STARTDATE  = "startingDate";
 
     public static final String MDMS_ENDDATE  = "endingDate";
+    
+    //TL types
 
+    public static final String APPLICATION_TYPE_RENEWAL = "RENEWAL";
+
+    public static final String APPLICATION_TYPE_NEW = "NEW";
+    
     // error constants
 
     public static final String INVALID_TENANT_ID_MDMS_KEY = "INVALID TENANTID";
@@ -129,6 +174,8 @@ public class TLConstants {
 
     public static final String ACTION_ADHOC  = "ADHOC";
 
+    public static final String ACTION_EXPIRE  = "EXPIRE";
+
 
     public static final String STATUS_INITIATED = "INITIATED";
 
@@ -144,7 +191,7 @@ public class TLConstants {
 
     public static final String STATUS_PAID  = "PAID";
 
-    public static final String BILL_AMOUNT_JSONPATH = "$.billResponse.Bill[0].totalAmount";
+    public static final String BILL_AMOUNT_JSONPATH = "$.Bill[0].totalAmount";
 
 
     // ACTION_STATUS combinations for notification
@@ -155,9 +202,15 @@ public class TLConstants {
 
     public static final String ACTION_STATUS_APPROVED  = "APPROVE_PENDINGPAYMENT";
 
+    public static final String ACTION_STATUS_RENEWAL_APPROVED  = "APPROVE_PENDINGPAYMENT";
+
+    public static final String ACTION_STATUS_RENEWAL_INITIATE_APPROVED  = "INITIATE_PENDINGPAYMENT";
+
     public static final String ACTION_STATUS_REJECTED  = "REJECT_REJECTED";
 
     public static final String ACTION_STATUS_FIELDINSPECTION  = "FORWARD_FIELDINSPECTION";
+
+    public static final String ACTION_STATUS_PENDINGAPPROVAL  = "FORWARD_PENDINGAPPROVAL";
 
     public static final String ACTION_CANCEL_CANCELLED  = "CANCEL_CANCELLED";
 
@@ -170,6 +223,10 @@ public class TLConstants {
 
 
     public static final String VARIABLE_ACTION = "action";
+
+    public static final String VARIABLE_STATUS = "status";
+
+    public static final String VARIABLE_ISSUED_DATE = "issuedDate";
 
     public static final String VARIABLE_WFDOCUMENTS = "wfDocuments";
 
@@ -184,17 +241,45 @@ public class TLConstants {
     public static final String VARIABLE_CREATEDTIME = "createdTime";
 
     public static final String VARIABLE_LASTMODIFIEDTIME = "lastModifiedTime";
+
+    public static final String VARIABLE_LASTMODIFIEDDATE = "lastModifiedDate";
+
+    public static final String VARIABLE_COMMENT = "comment";
     
 	public static final String  USREVENTS_EVENT_TYPE = "SYSTEMGENERATED";
 	public static final String  USREVENTS_EVENT_NAME = "Trade License";
 	public static final String  USREVENTS_EVENT_POSTEDBY = "SYSTEM-TL";
 
 	public static final String CITIZEN_SENDBACK_ACTION = "SENDBACKTOCITIZEN";
+	
+	
+	public static final String TL_ACTION_INITIATE = "INITIATE";
+	
 
 
     public static final List<String> FIELDS_TO_IGNORE = Collections.unmodifiableList(Arrays.asList(VARIABLE_ACTION,VARIABLE_WFDOCUMENTS,
-            VARIABLE_CREATEDBY,VARIABLE_LASTMODIFIEDBY,VARIABLE_CREATEDTIME,VARIABLE_LASTMODIFIEDTIME));
+            VARIABLE_CREATEDBY,VARIABLE_LASTMODIFIEDBY,VARIABLE_CREATEDTIME,VARIABLE_LASTMODIFIEDTIME,VARIABLE_STATUS,VARIABLE_LASTMODIFIEDDATE,VARIABLE_ISSUED_DATE,VARIABLE_COMMENT));
 
+
+
+
+    public static final String NOTIF_OWNER_NAME_KEY = "{OWNER_NAME}";
+
+    public static final String NOTIF_TRADE_NAME_KEY = "{TRADE_NAME}";
+
+    public static final String NOTIF_TRADE_LICENSENUMBER_KEY = "{LICENSE_NUMBER}";
+
+    public static final String NOTIF_EXPIRY_DATE_KEY = "{EXPIRY_DATE}";
+
+    public static final String validityPeriodMap = "$.MdmsRes.TradeLicense.TradeType[?(@.code==\"{}\")].validityPeriod";
+
+    public static final String JOB_SMS_REMINDER = "REMINDER";
+
+    public static final String JOB_EXPIRY = "EXPIRY";
+
+    public static final String DEFAULT_WORKFLOW = "NewTL";
+
+    public static final String PAYMENT_LINK_PLACEHOLDER="{PAYMENT_LINK}";
 
     public TLConstants() {}
 

@@ -40,7 +40,7 @@ public class TLValidator {
     private TradeUtil tradeUtil;
 
     private UserService userService;
-
+   
     @Value("${egov.allowed.businessServices}")
     private String allowedBusinessService;
 
@@ -64,7 +64,11 @@ public class TLValidator {
      * @param request The input TradeLicenseRequest Object
      */
     public void validateCreate(TradeLicenseRequest request, Object mdmsData) {
+        List<TradeLicense> licenses = request.getLicenses();
         String businessService = request.getLicenses().isEmpty()?null:request.getLicenses().get(0).getBusinessService();
+        if(licenses.get(0).getApplicationType() != null && licenses.get(0).getApplicationType().toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL)){
+            validateRenewal(request);
+        }
         if (businessService == null)
             businessService = businessService_TL;
         switch (businessService) {
@@ -155,11 +159,17 @@ public class TLValidator {
      *  Validates the fromDate and toDate of the request
      * @param request The input TradeLicenseRequest Object
      */
-    private void valideDates(TradeLicenseRequest request,Object mdmsData){
+    private void valideDates(TradeLicenseRequest request ,Object mdmsData){
         request.getLicenses().forEach(license -> {
+            Map<String,Long> taxPeriods = null;
             if(license.getValidTo()==null)
                 throw new CustomException("INVALID VALIDTO DATE"," Validto cannot be null");
-            Map<String,Long> taxPeriods = tradeUtil.getTaxPeriods(license,mdmsData);
+//            if(license.getApplicationType() != null && license.getApplicationType().toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL)){
+//                taxPeriods = tradeUtil.getTaxPeriods(license,mdmsData);
+//            }else{
+//                taxPeriods = tradeUtil.getTaxPeriods(license,mdmsData);
+//            }
+            taxPeriods = tradeUtil.getTaxPeriods(license,mdmsData);
             if(license.getValidTo()!=null && license.getValidTo()>taxPeriods.get(TLConstants.MDMS_ENDDATE)){
                 Date expiry = new Date(license.getValidTo());
                 throw new CustomException("INVALID TO DATE"," Validto cannot be greater than: "+expiry);
@@ -210,6 +220,62 @@ public class TLValidator {
     }
 
 
+
+    /**
+     *  Validates the fromDate and toDate of the request
+     * @param request The input TradeLicenseRequest Object
+     */
+    public void validateRenewal(TradeLicenseRequest request){
+            
+        TradeLicenseSearchCriteria criteria = new TradeLicenseSearchCriteria();
+        List<String> licenseNumbers = new LinkedList<>();
+        request.getLicenses().forEach(license -> {
+            if(license.getLicenseNumber() != null){
+                licenseNumbers.add(license.getLicenseNumber());
+            } else{
+                throw new CustomException("INVALID LICENSE","Please select the existing licence for renewal");  
+                
+            }
+        });
+        criteria.setTenantId(request.getLicenses().get(0).getTenantId());
+        criteria.setStatus(TLConstants.STATUS_APPROVED);
+        criteria.setBusinessService(request.getLicenses().get(0).getBusinessService());
+        criteria.setLicenseNumbers(licenseNumbers);
+        List<TradeLicense> searchResult = tlRepository.getLicenses(criteria);
+        Map<String , TradeLicense> licenseMap = new HashMap<>();
+        searchResult.forEach(license -> {
+            licenseMap.put(license.getLicenseNumber() , license);
+        });
+        
+        request.getLicenses().forEach(license -> {
+            if(license.getApplicationType() != null && license.getApplicationType().toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL)){
+                if(licenseMap.containsKey(license.getLicenseNumber())){
+                    TradeLicense searchObj = licenseMap.get(license.getLicenseNumber());
+                    Long currentFromDate = license.getValidFrom();
+                    Long currentToDate = license.getValidTo();
+                    Long existingFromDate = searchObj.getValidFrom();
+                    Long existingToDate = searchObj.getValidTo();
+                    if(currentFromDate < existingToDate){
+                        throw new CustomException("INVALID FROM DATE","ValidFrom should be greater than the previous applications ValidTo Date");
+                    }
+                    if(currentFromDate  <= existingFromDate){
+                        throw new CustomException("INVALID FROM DATE","ValidFrom should be greater than the applications ValidFrom Date");
+                    }
+                    if(currentToDate <= existingToDate) {
+                        throw new CustomException("INVALID TO DATE", "ValidTo should be greater than the applications ValidTo Date");
+                    }
+                    if(currentFromDate > currentToDate){
+                        throw new CustomException("INVALID FROM DATE","ValidFrom cannot be greater than ValidTo Date");
+                    }          
+                   
+                }else{
+                    throw new CustomException("RENEWAL ERROR","The license applied for renewal is not present in the repository");
+                }
+            }
+        });
+    }
+
+
     /**
      *  Validates the update request
      * @param request The input TradeLicenseRequest Object
@@ -219,7 +285,10 @@ public class TLValidator {
         if (searchResult.size() != licenses.size())
             throw new CustomException("INVALID UPDATE", "The license to be updated is not in database");
         validateAllIds(searchResult, licenses);
-        String businessService = request.getLicenses().isEmpty()?null:request.getLicenses().get(0).getBusinessService();
+        String businessService = request.getLicenses().isEmpty()?null:licenses.get(0).getBusinessService();
+        if(licenses.get(0).getApplicationType() != null && licenses.get(0).getApplicationType().toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL)){
+            validateRenewal(request);
+        }        
         if (businessService == null)
             businessService = businessService_TL;
         switch (businessService) {
@@ -458,7 +527,7 @@ public class TLValidator {
      * @param requestInfo The requestInfo of the incoming request
      * @param criteria The TradeLicenseSearch Criteria
      */
-    public void validateSearch(RequestInfo requestInfo, TradeLicenseSearchCriteria criteria, String serviceFromPath) {
+    public void validateSearch(RequestInfo requestInfo, TradeLicenseSearchCriteria criteria, String serviceFromPath, boolean isInterServiceCall) {
         String serviceInSearchCriteria = criteria.getBusinessService();
         if ((serviceInSearchCriteria != null) && (!StringUtils.equals(serviceFromPath, serviceInSearchCriteria))) {
             throw new CustomException("INVALID SEARCH", "Business service in Path param and requestbody not matching");
@@ -499,7 +568,7 @@ public class TLValidator {
             throw new CustomException("INVALID SEARCH","No search parameters are expected");
         else {
             List<String> allowedParams = Arrays.asList(allowedParamStr.split(","));
-            validateSearchParams(criteria, allowedParams);
+            validateSearchParams(criteria, allowedParams, isInterServiceCall, requestInfo);
         }
     }
 
@@ -509,7 +578,8 @@ public class TLValidator {
      * @param criteria TradeLicense search criteria
      * @param allowedParams Allowed Params for search
      */
-    private void validateSearchParams(TradeLicenseSearchCriteria criteria,List<String> allowedParams){
+    private void validateSearchParams(TradeLicenseSearchCriteria criteria, List<String> allowedParams, boolean isInterServiceCall
+            , RequestInfo requestInfo) {
 
         if(criteria.getApplicationNumber()!=null && !allowedParams.contains("applicationNumber"))
             throw new CustomException("INVALID SEARCH","Search on applicationNumber is not allowed");
@@ -530,9 +600,12 @@ public class TLValidator {
             throw new CustomException("INVALID SEARCH","Search on ids is not allowed");
 
         if(criteria.getMobileNumber()!=null && !allowedParams.contains("mobileNumber"))
-            throw new CustomException("INVALID SEARCH","Search on mobileNumber is not allowed");
+        {
+            if(!isInterServiceCall || !requestInfo.getUserInfo().getType().equalsIgnoreCase("CITIZEN" ))
+                throw new CustomException("INVALID SEARCH","Search on mobileNumber is not allowed");
+        }
 
-        if(criteria.getLicenseNumber()!=null && !allowedParams.contains("licenseNumber"))
+        if(criteria.getLicenseNumbers()!=null && !allowedParams.contains("licenseNumbers"))
             throw new CustomException("INVALID SEARCH","Search on licenseNumber is not allowed");
 
         if(criteria.getOldLicenseNumber()!=null && !allowedParams.contains("oldLicenseNumber"))
@@ -557,9 +630,9 @@ public class TLValidator {
             if(license.getTradeLicenseDetail().getApplicationDocuments()!=null){
                 license.getTradeLicenseDetail().getApplicationDocuments().forEach(
                         document -> {
-                            if(documentFileStoreIds.contains(document.getFileStoreId()))
-                                throw new CustomException("DUPLICATE_DOCUMENT ERROR","Same document cannot be used multiple times");
-                            else documentFileStoreIds.add(document.getFileStoreId());
+                                if(documentFileStoreIds.contains(document.getFileStoreId()))
+                                    throw new CustomException("DUPLICATE_DOCUMENT ERROR","Same document cannot be used multiple times");
+                                else documentFileStoreIds.add(document.getFileStoreId());
                         }
                 );
             }

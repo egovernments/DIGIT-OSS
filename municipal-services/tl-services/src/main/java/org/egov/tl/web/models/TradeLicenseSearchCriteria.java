@@ -21,14 +21,17 @@ public class TradeLicenseSearchCriteria {
     @JsonProperty("status")
     private String status;
 
+    @JsonProperty("applicationType")
+    private String applicationType;
+
     @JsonProperty("ids")
     private List<String> ids;
 
     @JsonProperty("applicationNumber")
     private String applicationNumber;
 
-    @JsonProperty("licenseNumber")
-    private String licenseNumber;
+    @JsonProperty("licenseNumbers")
+    private List<String> licenseNumbers;
 
     @JsonProperty("oldLicenseNumber")
     private String oldLicenseNumber;
@@ -49,6 +52,9 @@ public class TradeLicenseSearchCriteria {
     @JsonProperty("businessService")
     private String businessService = null;
 
+    @JsonProperty("validTo")
+    private Long validTo = null;
+
     @JsonProperty("offset")
     private Integer offset;
 
@@ -60,15 +66,15 @@ public class TradeLicenseSearchCriteria {
 
 
     public boolean isEmpty() {
-        return (this.tenantId == null && this.status == null && this.ids == null && this.applicationNumber == null
-                && this.licenseNumber == null && this.oldLicenseNumber == null && this.mobileNumber == null &&
+        return (this.tenantId == null && this.status == null && this.applicationType == null && this.ids == null && this.applicationNumber == null
+                && this.licenseNumbers == null && this.oldLicenseNumber == null && this.mobileNumber == null &&
                 this.fromDate == null && this.toDate == null && this.ownerIds == null
         );
     }
 
     public boolean tenantIdOnly() {
-        return (this.tenantId != null && this.status == null && this.ids == null && this.applicationNumber == null
-                && this.licenseNumber == null && this.oldLicenseNumber == null && this.mobileNumber == null &&
+        return (this.tenantId != null && this.status == null && this.applicationType == null && this.ids == null && this.applicationNumber == null
+                && this.licenseNumbers == null && this.oldLicenseNumber == null && this.mobileNumber == null &&
                 this.fromDate == null && this.toDate == null && this.ownerIds == null
         );
     }

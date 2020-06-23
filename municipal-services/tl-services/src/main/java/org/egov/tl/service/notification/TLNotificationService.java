@@ -5,10 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.tl.config.TLConfiguration;
 import org.egov.tl.repository.ServiceRequestRepository;
-import org.egov.tl.util.BPAConstants;
-import org.egov.tl.util.BPANotificationUtil;
-import org.egov.tl.util.NotificationUtil;
-import org.egov.tl.util.TLConstants;
+import org.egov.tl.util.*;
 import org.egov.tl.web.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,8 +15,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.egov.tl.util.BPAConstants.NOTIFICATION_APPROVED;
-import static org.egov.tl.util.TLConstants.businessService_BPA;
-import static org.egov.tl.util.TLConstants.businessService_TL;
+import static org.egov.tl.util.TLConstants.*;
 
 
 @Slf4j
@@ -35,12 +31,15 @@ public class TLNotificationService {
 
 	private BPANotificationUtil bpaNotificationUtil;
 
+	private TLRenewalNotificationUtil tlRenewalNotificationUtil;
+
 	@Autowired
-	public TLNotificationService(TLConfiguration config, ServiceRequestRepository serviceRequestRepository, NotificationUtil util, BPANotificationUtil bpaNotificationUtil) {
+	public TLNotificationService(TLConfiguration config, ServiceRequestRepository serviceRequestRepository, NotificationUtil util, BPANotificationUtil bpaNotificationUtil,TLRenewalNotificationUtil tlRenewalNotificationUtil) {
 		this.config = config;
 		this.serviceRequestRepository = serviceRequestRepository;
 		this.util = util;
 		this.bpaNotificationUtil = bpaNotificationUtil;
+		this.tlRenewalNotificationUtil = tlRenewalNotificationUtil;
 	}
 
     /**
@@ -92,7 +91,6 @@ public class TLNotificationService {
 		}
     }
 
-
     /**
      * Enriches the smsRequest with the customized messages
      * @param request The tradeLicenseRequest from kafka topic
@@ -105,12 +103,25 @@ public class TLNotificationService {
 			if (businessService == null)
 				businessService = businessService_TL;
 			String message = null;
+			String applicationType = String.valueOf(license.getApplicationType());
 			if (businessService.equals(businessService_TL)) {
-				String localizationMessages = util.getLocalizationMessages(tenantId, request.getRequestInfo());
-				message = util.getCustomizedMsg(request.getRequestInfo(), license, localizationMessages);
-			} else {
+				if(applicationType.equals(APPLICATION_TYPE_RENEWAL)){
+					String localizationMessages = tlRenewalNotificationUtil.getLocalizationMessages(tenantId, request.getRequestInfo());
+					message = tlRenewalNotificationUtil.getCustomizedMsg(request.getRequestInfo(), license, localizationMessages);
+				}
+				else{
+					String localizationMessages = util.getLocalizationMessages(tenantId, request.getRequestInfo());
+					message = util.getCustomizedMsg(request.getRequestInfo(), license, localizationMessages);
+				}
+
+			}
+			if(businessService.equals(businessService_BPA)){
 				String localizationMessages = bpaNotificationUtil.getLocalizationMessages(tenantId, request.getRequestInfo());
 				message = bpaNotificationUtil.getCustomizedMsg(request.getRequestInfo(), license, localizationMessages);
+			}
+			if(businessService.equals(businessService_DIRECT_RENEWAL) || businessService.equals(businessService_EDIT_RENEWAL)){
+				String localizationMessages = tlRenewalNotificationUtil.getLocalizationMessages(tenantId, request.getRequestInfo());
+				message = tlRenewalNotificationUtil.getCustomizedMsg(request.getRequestInfo(), license, localizationMessages);
 			}
             if(message==null) continue;
 
@@ -135,10 +146,18 @@ public class TLNotificationService {
     private EventRequest getEventsForTL(TradeLicenseRequest request) {
     	List<Event> events = new ArrayList<>();
         String tenantId = request.getLicenses().get(0).getTenantId();
-        String localizationMessages = util.getLocalizationMessages(tenantId,request.getRequestInfo());
+		String localizationMessages = util.getLocalizationMessages(tenantId,request.getRequestInfo());
         for(TradeLicense license : request.getLicenses()){
-
-            String message = util.getCustomizedMsg(request.getRequestInfo(), license, localizationMessages);
+			String message = null;
+			String applicationType = String.valueOf(license.getApplicationType());
+			String businessService = license.getBusinessService();
+			if(businessService.equals(businessService_TL)){
+				if(applicationType.equals(APPLICATION_TYPE_RENEWAL))
+					message = tlRenewalNotificationUtil.getCustomizedMsg(request.getRequestInfo(), license, localizationMessages);
+				else
+					message = util.getCustomizedMsg(request.getRequestInfo(), license, localizationMessages);
+			}
+			
             if(message == null) continue;
             Map<String,String > mobileNumberToOwner = new HashMap<>();
             license.getTradeLicenseDetail().getOwners().forEach(owner -> {
@@ -167,7 +186,8 @@ public class TLNotificationService {
                     List<ActionItem> items = new ArrayList<>();
         			String actionLink = config.getPayLink().replace("$mobile", mobile)
         						.replace("$applicationNo", license.getApplicationNumber())
-        						.replace("$tenantId", license.getTenantId());
+        						.replace("$tenantId", license.getTenantId())
+        						.replace("$businessService", license.getBusinessService());
         			actionLink = config.getUiAppHost() + actionLink;
         			ActionItem item = ActionItem.builder().actionUrl(actionLink).code(config.getPayCode()).build();
         			items.add(item);
@@ -231,7 +251,8 @@ public class TLNotificationService {
 					List<ActionItem> items = new ArrayList<>();
 					String actionLink = config.getPayLink().replace("$mobile", mobile)
 							.replace("$applicationNo", license.getApplicationNumber())
-							.replace("$tenantId", license.getTenantId());
+							.replace("$tenantId", license.getTenantId())
+					        .replace("$businessService", license.getBusinessService());;
 					actionLink = config.getUiAppHost() + actionLink;
 					ActionItem item = ActionItem.builder().actionUrl(actionLink).code(config.getPayCode()).build();
 					items.add(item);

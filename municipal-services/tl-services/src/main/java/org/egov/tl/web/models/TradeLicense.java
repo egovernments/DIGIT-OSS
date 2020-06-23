@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import lombok.*;
+import org.egov.tl.util.TLConstants;
 import org.egov.tl.web.models.calculation.Calculation;
 import org.springframework.validation.annotation.Validated;
 
@@ -69,11 +70,46 @@ public class  TradeLicense   {
     }
   }
 
+
+    public enum ApplicationTypeEnum {
+        NEW(TLConstants.APPLICATION_TYPE_NEW),
+
+        RENEWAL(TLConstants.APPLICATION_TYPE_RENEWAL);
+
+        private String value;
+
+        ApplicationTypeEnum(String value) {
+            this.value = value;
+        }
+
+        @Override
+        @JsonValue
+        public String toString() {
+            return String.valueOf(value);
+        }
+
+        @JsonCreator
+        public static ApplicationTypeEnum fromValue(String text) {
+            for (ApplicationTypeEnum b : ApplicationTypeEnum.values()) {
+                if (String.valueOf(b.value).equals(text)) {
+                    return b;
+                }
+            }
+            return null;
+        }
+    }
+
         @JsonProperty("businessService")
         private String businessService = "TL";
 
         @JsonProperty("licenseType")
         private LicenseTypeEnum licenseType = null;
+
+        @JsonProperty("applicationType")
+        private ApplicationTypeEnum applicationType = null;
+
+        @JsonProperty("workflowCode")
+        private String workflowCode = null;
 
         @Size(max=64)
         @JsonProperty("licenseNumber")
@@ -156,6 +192,9 @@ public class  TradeLicense   {
 
         @Size(max=128)
         private String comment;
+
+        @JsonProperty("fileStoreId")
+        private String fileStoreId = null;
 
 }
 

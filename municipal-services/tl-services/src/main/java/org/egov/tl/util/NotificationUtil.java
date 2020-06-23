@@ -3,6 +3,7 @@ package org.egov.tl.util;
 import com.jayway.jsonpath.JsonPath;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.client.utils.URIBuilder;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.tl.config.TLConfiguration;
 import org.egov.tl.producer.Producer;
@@ -13,8 +14,10 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static org.egov.tl.util.TLConstants.*;
@@ -29,13 +32,16 @@ public class NotificationUtil {
 
 	private Producer producer;
 
+	private RestTemplate restTemplate;
+
 	@Autowired
-	public NotificationUtil(TLConfiguration config, ServiceRequestRepository serviceRequestRepository,
-			Producer producer) {
+	public NotificationUtil(TLConfiguration config, ServiceRequestRepository serviceRequestRepository, Producer producer, RestTemplate restTemplate) {
 		this.config = config;
 		this.serviceRequestRepository = serviceRequestRepository;
 		this.producer = producer;
+		this.restTemplate = restTemplate;
 	}
+
 
 	final String receiptNumberKey = "receiptNumber";
 
@@ -147,7 +153,8 @@ public class NotificationUtil {
 		StringBuilder uri = new StringBuilder();
 		uri.append(config.getLocalizationHost()).append(config.getLocalizationContextPath())
 				.append(config.getLocalizationSearchEndpoint()).append("?").append("locale=").append(locale)
-				.append("&tenantId=").append(tenantId).append("&module=").append(TLConstants.MODULE);
+				.append("&tenantId=").append(tenantId).append("&module=").append(TLConstants.MODULE)
+				.append("&codes=").append(StringUtils.join(NOTIFICATION_CODES,','));
 
 		return uri;
 	}
@@ -230,6 +237,18 @@ public class NotificationUtil {
 	private String getApprovedMsg(TradeLicense license, BigDecimal amountToBePaid, String message) {
 		message = message.replace("<2>", license.getTradeName());
 		message = message.replace("<3>", amountToBePaid.toString());
+
+
+		String UIHost = config.getUiAppHost();
+
+		String paymentPath = config.getPayLinkSMS();
+		paymentPath = paymentPath.replace("$consumercode",license.getApplicationNumber());
+		paymentPath = paymentPath.replace("$tenantId",license.getTenantId());
+		paymentPath = paymentPath.replace("$businessservice",businessService_TL);
+
+		String finalPath = UIHost + paymentPath;
+
+		message = message.replace(PAYMENT_LINK_PLACEHOLDER,getShortenedUrl(finalPath));
 		return message;
 	}
 
@@ -345,6 +364,24 @@ public class NotificationUtil {
 		return messageTemplate;
 	}
 
+
+	/**
+	 *
+	 * @param license
+	 * @param localizationMessages
+	 * @return
+	 */
+	public String getReminderMsg(TradeLicense license, String localizationMessages) {
+
+		String messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_TL_REMINDER, localizationMessages);
+		String expiryDate = new SimpleDateFormat("dd/MM/yyyy").format(license.getValidTo());
+		messageTemplate = messageTemplate.replace(NOTIF_TRADE_NAME_KEY, license.getTradeName());
+		messageTemplate = messageTemplate.replace(NOTIF_EXPIRY_DATE_KEY, expiryDate);
+		messageTemplate = messageTemplate.replace(NOTIF_TRADE_LICENSENUMBER_KEY, license.getLicenseNumber());
+		return messageTemplate;
+	}
+
+
 	/**
 	 * Send the SMSRequest on the SMSNotification kafka topic
 	 * 
@@ -396,11 +433,8 @@ public class NotificationUtil {
 	 * @return The uri for the getBill
 	 */
 	private StringBuilder getBillUri(TradeLicense license) {
-		StringBuilder builder = new StringBuilder();
-
-
-		builder.append(config.getCalculatorHost());
-		builder.append(config.getGetBillEndpoint());
+		StringBuilder builder = new StringBuilder(config.getBillingHost());
+		builder.append(config.getFetchBillEndpoint());
 		builder.append("?tenantId=");
 		builder.append(license.getTenantId());
 		builder.append("&consumerCode=");
@@ -423,6 +457,7 @@ public class NotificationUtil {
 		List<SMSRequest> smsRequest = new LinkedList<>();
 		for (Map.Entry<String, String> entryset : mobileNumberToOwnerName.entrySet()) {
 			String customizedMsg = message.replace("<1>", entryset.getValue());
+			customizedMsg = customizedMsg.replace(NOTIF_OWNER_NAME_KEY, entryset.getValue());
 			smsRequest.add(new SMSRequest(entryset.getKey(), customizedMsg));
 		}
 		return smsRequest;
@@ -449,14 +484,28 @@ public class NotificationUtil {
 		 * getEditMsg(license,diff.getClassesRemoved(),messageTemplate);
 		 * finalMessage.append(message); }
 		 */
+		String applicationType = String.valueOf(license.getApplicationType());
+		if(applicationType.equals(APPLICATION_TYPE_RENEWAL)){
+			if (!CollectionUtils.isEmpty(diff.getFieldsChanged()) || !CollectionUtils.isEmpty(diff.getClassesAdded())
+					|| !CollectionUtils.isEmpty(diff.getClassesRemoved())) {
+				messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_OBJECT_RENEW_MODIFIED, localizationMessage);
+				if (messageTemplate == null)
+					messageTemplate = DEFAULT_OBJECT_RENEWAL_MODIFIED_MSG;
+				message = getEditMsg(license, messageTemplate);
+			}
 
-		if (!CollectionUtils.isEmpty(diff.getFieldsChanged()) || !CollectionUtils.isEmpty(diff.getClassesAdded())
-				|| !CollectionUtils.isEmpty(diff.getClassesRemoved())) {
-			messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_OBJECT_MODIFIED, localizationMessage);
-			if (messageTemplate == null)
-				messageTemplate = DEFAULT_OBJECT_MODIFIED_MSG;
-			message = getEditMsg(license, messageTemplate);
 		}
+		else{
+			if (!CollectionUtils.isEmpty(diff.getFieldsChanged()) || !CollectionUtils.isEmpty(diff.getClassesAdded())
+					|| !CollectionUtils.isEmpty(diff.getClassesRemoved())) {
+				messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_OBJECT_MODIFIED, localizationMessage);
+				if (messageTemplate == null)
+					messageTemplate = DEFAULT_OBJECT_MODIFIED_MSG;
+				message = getEditMsg(license, messageTemplate);
+			}
+		}
+
+
 
 		return message;
 	}
@@ -486,6 +535,27 @@ public class NotificationUtil {
 	 */
 	public void sendEventNotification(EventRequest request) {
 		producer.push(config.getSaveUserEventsTopic(), request);
+	}
+
+
+	/**
+	 * Method to shortent the url
+	 * returns the same url if shortening fails
+	 * @param url
+	 */
+	public String getShortenedUrl(String url){
+
+		HashMap<String,String> body = new HashMap<>();
+		body.put("url",url);
+		StringBuilder builder = new StringBuilder(config.getUrlShortnerHost());
+		builder.append(config.getUrlShortnerEndpoint());
+		String res = restTemplate.postForObject(builder.toString(), body, String.class);
+
+		if(StringUtils.isEmpty(res)){
+			log.error("URL_SHORTENING_ERROR","Unable to shorten url: "+url); ;
+			return url;
+		}
+		else return res;
 	}
 
 }
