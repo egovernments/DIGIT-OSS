@@ -210,11 +210,7 @@ export const getData = async (action, state, dispatch) => {
           {
             licenseType: "PERMANENT",
             oldLicenseNumber: queryValue ? "" : applicationNo,
-            tradeLicenseDetail: {
-              additionalDetail: {
-                applicationType: applicationType ? applicationType : "NEW"
-              }
-            }
+            applicationType: applicationType ? applicationType : "NEW"
           }
         ])
       );
@@ -222,7 +218,7 @@ export const getData = async (action, state, dispatch) => {
     // dispatch(prepareFinalObject("LicensesTemp", []));
     await updatePFOforSearchResults(action, state, dispatch, applicationNo);
 
-    if (!queryValue) {
+    if (queryValue && isEditRenewal) {
       const oldApplicationNo = get(
         state.screenConfiguration.preparedFinalObject,
         "Licenses[0].applicationNumber",
@@ -232,11 +228,10 @@ export const getData = async (action, state, dispatch) => {
         prepareFinalObject("Licenses[0].oldLicenseNumber", oldApplicationNo)
       );
       if (oldApplicationNo !== null) {
-        dispatch(prepareFinalObject("Licenses[0].financialYear", ""));
         dispatch(
           prepareFinalObject(
-            "Licenses[0].tradeLicenseDetail.additionalDetail.applicationType",
-            "APPLICATIONTYPE.RENEWAL"
+            "Licenses[0].applicationType",
+            "RENEWAL"
           )
         );
         dispatch(
@@ -244,7 +239,7 @@ export const getData = async (action, state, dispatch) => {
             "apply",
             "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.financialYear",
             "props.value",
-            ""
+            get(state.screenConfiguration.preparedFinalObject,"Licenses[0].financialYear","")
           )
         );
         dispatch(

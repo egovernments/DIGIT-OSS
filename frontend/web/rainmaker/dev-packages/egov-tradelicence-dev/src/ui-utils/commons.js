@@ -137,7 +137,7 @@ const generateNextFinancialYear = state => {
   const currrentFYending = financialYears.filter(item => item.code === currentFY)[0]
     .endingDate;
 
-    const nectYearObject = financialYears.filter(item => item.startingDate === currrentFYending)[0];
+    const nectYearObject = financialYears.filter(item => item.startingDate === currrentFYending+1000)[0];
   return nectYearObject ? nectYearObject.code : getCurrentFinancialYear();
 
 };
@@ -362,7 +362,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     const tenantId = ifUserRoleExists("CITIZEN") ? cityId : getTenantId();
     const BSqueryObject = [
       { key: "tenantId", value: tenantId },
-      { key: "businessServices", value: "NewTL" }
+      { key: "businessServices", value: getQueryArg(window.location.href, "action") === "EDITRENEWAL" ? "EDITRENEWAL" : "NewTL" }
     ];
     if (process.env.REACT_APP_NAME === "Citizen") {
       // let currentFinancialYr = getCurrentFinancialYear();
@@ -375,9 +375,13 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     }
 
     set(queryObject[0], "tenantId", tenantId);
-    set(queryObject[0], "workflowCode", "NewTL");
-    set(queryObject[0], "applicationType", "NEW");
-
+    if (get(state.screenConfiguration.preparedFinalObject, "Licenses[0].applicationType", "") == "APPLICATIONTYPE.RENEWAL") {
+      set(queryObject[0], "workflowCode", "EDITRENEWAL");
+      set(queryObject[0], "applicationType", "RENEWAL");
+    } else {
+      set(queryObject[0], "workflowCode", "NewTL");
+      set(queryObject[0], "applicationType", "NEW");
+    }
     if (queryObject[0].applicationNumber) {
       //call update
       const isEditRenewal = getQueryArg(window.location.href, "action") === "EDITRENEWAL";
@@ -608,13 +612,13 @@ export const handleFileUpload = (event, handleDocument, props) => {
     endPoint: "filestore/v1/files"
   };
   let uploadDocument = true;
-  const { maxFileSize, formatProps, moduleName } = props;
+  const { maxFileSize, inputProps, moduleName } = props;
   const input = event.target;
   if (input.files && input.files.length > 0) {
     const files = input.files;
     Object.keys(files).forEach(async (key, index) => {
       const file = files[key];
-      const fileValid = isFileValid(file, acceptedFiles(formatProps.accept));
+      const fileValid = isFileValid(file, acceptedFiles(inputProps.accept));
       const isSizeValid = getFileSize(file) <= maxFileSize;
       if (!fileValid) {
         alert(`Only image or pdf files can be uploaded`);

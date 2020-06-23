@@ -127,7 +127,9 @@ class Footer extends React.Component {
     set(licences[0], "action", "INITIATE");
     set(licences[0], "workflowCode", wfCode);
     set(licences[0], "applicationType", "RENEWAL");
-    set(licences[0],"financialYear" ,nextFinancialYear);
+    set(licences[0],"financialYear" ,nextFinancialYear.code);
+    set(licences[0],"validFrom" ,nextFinancialYear.startingDate);
+    set(licences[0],"validTo" ,nextFinancialYear.endigDate);
 
   const response=  await httpRequest("post", "/tl-services/v1/_update", "", [], {
       Licenses: licences
@@ -141,7 +143,7 @@ class Footer extends React.Component {
       `Licenses[0].licenseNumber`
     );
     setRoute(
-      `/tradelicence/acknowledgement?purpose=DIRECTRENEWAL&status=success&applicationNumber=${renewedapplicationNo}&licenseNumber=${licenseNumber}&FY=${nextFinancialYear}&tenantId=${tenantId}&action=${wfCode}`
+      `/tradelicence/acknowledgement?purpose=DIRECTRENEWAL&status=success&applicationNumber=${renewedapplicationNo}&licenseNumber=${licenseNumber}&FY=${nextFinancialYear.code}&tenantId=${tenantId}&action=${wfCode}`
     );
   };
   render() {

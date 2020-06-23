@@ -199,9 +199,9 @@ class DocumentList extends Component {
       <div style={{ paddingTop: 10 }}>
         {documents &&
           documents.map((document, key) => {
-            const currentDocumentProps = inputProps.filter(
-              item => item.type === document.name
-            );
+            // const currentDocumentProps = inputProps.filter(
+            //   item => item.type === document.name
+            // );
             return (
               <div
                 key={key}
@@ -252,14 +252,6 @@ class DocumentList extends Component {
                         }
                       />
                     </Typography>
-                    <Typography variant="caption">
-                      <LabelContainer
-                        labelName={
-                          currentDocumentProps[0].description.labelName
-                        }
-                        labelKey={currentDocumentProps[0].description.labelKey}
-                      />
-                    </Typography>
                   </Grid>
                   <Grid item={true} xs={12} sm={5} align="right">
                     <UploadSingleFile
@@ -269,7 +261,7 @@ class DocumentList extends Component {
                         handleFileUpload(
                           e,
                           this.handleDocument,
-                          this.props.inputProps[key]
+                          this.props
                         )
                       }
                       uploaded={uploadedIndex.indexOf(key) > -1}
@@ -282,7 +274,7 @@ class DocumentList extends Component {
                           : this.props.inputProps
                       }
                       buttonLabel={this.props.buttonLabel}
-                      inputProps={currentDocumentProps[0].formatProps}
+                      //inputProps={currentDocumentProps[0].formatProps}
                     />
                   </Grid>
                 </Grid>
