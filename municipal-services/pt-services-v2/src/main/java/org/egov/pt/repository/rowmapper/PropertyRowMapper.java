@@ -64,7 +64,7 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 				Double longitude = rs.getDouble("longitude");
 				if(rs.wasNull()){longitude = null;}
 
-				PGobject addObj = (PGobject) rs.getObject("add_additionalDetails");
+				//PGobject addObj = (PGobject) rs.getObject("add_additionalDetails");
 
 				Address address = Address.builder().addressId(rs.getString("addressId"))
 						.addressLine1(rs.getString("addressLine1")).addressLine2(rs.getString("addressLine2"))
@@ -76,7 +76,7 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 						.street(rs.getString("street"))
 						.tenantId(tenanId)
 						.type(rs.getString("type"))
-						.additionalDetails(getJsonValue(addObj))
+						//.additionalDetails(getJsonValue(addObj))
 						.build();
 
 				Long lastModifiedTime = rs.getLong("propertylastModifiedTime");
@@ -135,7 +135,7 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 					.build();
 
 			Institution institution = null;
-			PGobject insti_additionalDetails = (PGobject) rs.getObject("insti_additionalDetails");
+			//PGobject insti_additionalDetails = (PGobject) rs.getObject("insti_additionalDetails");
 			if(rs.getString("instiid")!=null)
 			{ institution = Institution.builder()
 					.id(rs.getString("instiid"))
@@ -143,7 +143,7 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 					.name(rs.getString("institutionName"))
 					.type(rs.getString("institutionType"))
 					.designation(rs.getString("designation"))
-					.additionalDetails(getJsonValue(insti_additionalDetails))
+					//.additionalDetails(getJsonValue(insti_additionalDetails))
 					.build();
 			}
 
@@ -205,7 +205,7 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 			Long unitoccupancyDate = rs.getLong("unitoccupancyDate");
 			if(rs.wasNull()){unitoccupancyDate = null;}
 
-			PGobject unit_additionalDetails = (PGobject) rs.getObject("unit_additionalDetails");
+			//PGobject unit_additionalDetails = (PGobject) rs.getObject("unit_additionalDetails");
 
 			Unit unit = Unit.builder().id(rs.getString("unitid"))
 				.floorNo(rs.getString("floorNo"))
@@ -221,7 +221,7 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 				.constructionType(rs.getString("constructionType"))
 				.constructionSubType(rs.getString("constructionSubType"))
 				.arv(rs.getBigDecimal("arv"))
-				.additionalDetails(getJsonValue(unit_additionalDetails))
+				//.additionalDetails(getJsonValue(unit_additionalDetails))
 				.build();
 			detail.addUnitsItem(unit);
 		}
@@ -239,7 +239,7 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 		Boolean isPrimaryOwner = rs.getBoolean("isPrimaryOwner");
 		if(rs.wasNull()){ isPrimaryOwner = null;}
 
-		PGobject ownerInfo_additionalDetails = (PGobject) rs.getObject("ownerInfo_additionalDetails");
+		//PGobject ownerInfo_additionalDetails = (PGobject) rs.getObject("ownerInfo_additionalDetails");
 
 		OwnerInfo owner = OwnerInfo.builder().uuid(rs.getString("userid"))
 				.isPrimaryOwner(isPrimaryOwner)
@@ -247,7 +247,7 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 				.ownerShipPercentage(ownerShipPercentage)
 				.institutionId(rs.getString("institutionid"))
 				.relationship(OwnerInfo.RelationshipEnum.fromValue(rs.getString("relationship")))
-				.additionalDetails(getJsonValue(ownerInfo_additionalDetails))
+			//	.additionalDetails(getJsonValue(ownerInfo_additionalDetails))
 				.build();
 
 		/*

@@ -1,0 +1,1 @@
+CREATE INDEX IF NOT EXISTS idx_eg_pt_property_v2_createdtime ON eg_pt_property_v2(createdtime);
