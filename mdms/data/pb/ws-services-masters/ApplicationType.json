@@ -1,0 +1,16 @@
+{
+  "tenantId": "pb",
+  "moduleName": "ws-services-masters",
+  "ApplicationType": [
+    {
+      "id": 1,
+      "code": "NewWaterApplication",
+      "name": "New Water Application"
+    },
+    {
+      "id": 2,
+      "code": "NewSewerageApplication",
+      "name": "New Sewerage Application"
+    }
+  ]
+}
