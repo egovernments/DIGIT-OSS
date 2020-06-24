@@ -69,12 +69,12 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-sm-3 control-label text-right"><spring:message code="lbl.name" text="Name"/> <span class="mandatory"></span> </label>
+					<label class="col-sm-3 control-label text-right"><spring:message code="lbl.branchname" text="Branch Name/Location"/> <span class="mandatory"></span> </label>
 					<div class="col-sm-3 add-margin">
 						<form:input path="branchname" class="form-control text-left patternvalidation" data-pattern="alphanumeric" maxlength="50" required="required" />
 						<form:errors path="branchname" cssClass="error-msg" />
 					</div>
-					<label class="col-sm-2 control-label text-right"><spring:message code="lbl.code" text="Code"/> <span class="mandatory"></span> </label>
+					<label class="col-sm-2 control-label text-right"><spring:message code="lbl.code" text="Branch Code"/> <span class="mandatory"></span> </label>
 					<div class="col-sm-3 add-margin">
 						<form:input path="branchcode" class="form-control text-left patternvalidation" data-pattern="alphanumeric" maxlength="50" required="required" />
 						<form:errors path="branchcode" cssClass="error-msg" />
