@@ -29,6 +29,8 @@ import jsPDF from "jspdf";
 import get from "lodash/get";
 import set from "lodash/set";
 import some from "lodash/some";
+import { downloadBill } from "../../../../../ui-utils/commons";
+
 
 const moveToSuccess = (LicenseData, dispatch) => {
   const applicationNo = get(LicenseData, "applicationNumber");
@@ -887,7 +889,31 @@ export const footerReviewTop = (
       downloadAcknowledgementForm(Licenses,'print');
     },
     leftIcon: "assignment"
+  };let challanDownloadObject = {
+    label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
+    link: () => {
+      const receiptQueryString = [
+        { key: "consumerCode", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
+        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
+      ]
+      downloadBill(receiptQueryString);
+      // generateReceipt(state, dispatch, "receipt_download");
+    },
+    leftIcon: "receipt"
   };
+  let challanPrintObject = {
+    label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
+    link: () => {
+      const receiptQueryString =  [
+        { key: "consumerCode", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
+        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
+      ]
+      download(receiptQueryString,"print");
+     // generateReceipt(state, dispatch, "receipt_print");
+    },
+    leftIcon: "receipt"
+  };
+
 
   switch (status) {
     case "APPROVED":
@@ -906,9 +932,12 @@ export const footerReviewTop = (
     case "CITIZENACTIONREQUIRED":
     case "FIELDINSPECTION":
     case "PENDINGAPPROVAL":
-    case "PENDINGPAYMENT":
       downloadMenu = [applicationDownloadObject];
       printMenu = [applicationPrintObject];
+      break;
+    case "PENDINGPAYMENT":
+      downloadMenu = [applicationDownloadObject, challanDownloadObject];
+      printMenu = [applicationPrintObject, challanPrintObject];
       break;
     case "pending_approval":
       downloadMenu = [receiptDownloadObject, applicationDownloadObject];
@@ -1050,6 +1079,30 @@ export const downloadPrintContainer = (
     },
     leftIcon: "assignment"
   };
+  let challanDownloadObject = {
+    label: { labelName: "Challan", labelKey: "TL_CHALLAN" },
+    link: () => {
+      const receiptQueryString = [
+        { key: "consumerCode", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
+        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
+      ]
+      downloadBill(receiptQueryString);
+      // generateReceipt(state, dispatch, "receipt_download");
+    },
+    leftIcon: "receipt"
+  };
+  let challanPrintObject = {
+    label: { labelName: "Challan", labelKey: "TL_CHALLAN" },
+    link: () => {
+      const receiptQueryString =  [
+        { key: "consumerCode", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
+        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
+      ]
+      download(receiptQueryString,"print");
+     // generateReceipt(state, dispatch, "receipt_print");
+    },
+    leftIcon: "receipt"
+  };
   switch (status) {
     case "APPROVED":
       downloadMenu = [
@@ -1067,9 +1120,13 @@ export const downloadPrintContainer = (
     case "CITIZENACTIONREQUIRED":
     case "FIELDINSPECTION":
     case "PENDINGAPPROVAL":
-    case "PENDINGPAYMENT":
+    case "PENDINGAPPROVAL":
       downloadMenu = [applicationDownloadObject];
       printMenu = [applicationPrintObject];
+      break;
+    case "PENDINGPAYMENT":
+      downloadMenu = [applicationDownloadObject, challanDownloadObject];
+      printMenu = [applicationPrintObject, challanPrintObject];
       break;
     case "CANCELLED":
       downloadMenu = [applicationDownloadObject];
