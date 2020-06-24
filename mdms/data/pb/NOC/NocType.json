@@ -4,15 +4,11 @@
   "NocType": [
      {
       "code": "FIRE_NOC",
-      "name": "Fire Services",
-      "description": "Fire Services",
-      "active": true
+      "isActive": true
     },
     {
       "code":"AAI_NOC",
-      "name": "Airport Authority",
-      "description": "Airport Authority",
-      "active":true
+      "isActive": true
     }
   ]
 }
