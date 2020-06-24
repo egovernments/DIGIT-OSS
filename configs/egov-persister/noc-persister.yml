@@ -1,0 +1,56 @@
+serviceMaps:
+ serviceName: noc-services
+ mappings:
+ - version: 1.0
+   description: Persists buildingplan details in EG_NOC  table
+   fromTopic: save-noc-application
+   isTransaction: true
+   queryMaps:
+
+       - query: INSERT INTO eg_oc(id, applicationno, applicationstatus, tenantid, status, landid, Noctype, applicationtype, accountid, source, sourcerefid, additionaldetails, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?,  ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?); 
+         basePath: Noc
+         jsonMaps:
+          - jsonPath: $.Noc.id
+
+          - jsonPath: $.Noc.applicationNo
+          
+          - jsonPath: $.Noc.applicationStatus          
+          
+          - jsonPath: $.Noc.tenantId
+          
+          - jsonPath: $.Noc.status
+
+          - jsonPath: $.Noc.landId
+          
+          - jsonPath: $.Noc.nocType
+          
+          - jsonPath: $.Noc.applicationType
+          
+          - jsonPath: $.Noc.accountId
+
+          - jsonPath: $.Noc.source
+
+          - jsonPath: $.Noc.sourceRefId
+
+          - jsonPath: $.Noc.additionalDetails
+            type: JSON
+            dbType: JSONB
+
+          - jsonPath: $.Noc.auditDetails.createdBy
+
+          - jsonPath: $.Noc.auditDetails.lastModifiedBy
+
+          - jsonPath: $.Noc.auditDetails.createdTime
+
+          - jsonPath: $.Noc.auditDetails.lastModifiedTime
+
+
+       - query: INSERT INTO eg_noc_auditdetails SELECT * FROM eg_noc WHERE id =?;
+         basePath: Noc
+         jsonMaps:
+
+          - jsonPath: $.Noc.id
+
+
+
+
