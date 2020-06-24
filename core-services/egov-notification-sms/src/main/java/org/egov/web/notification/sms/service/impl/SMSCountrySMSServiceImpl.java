@@ -54,7 +54,7 @@ public class SMSCountrySMSServiceImpl implements SMSService {
 			           .fromUriString(baseURL)
 			           .queryParams(params)
 			           .build().encode().toUri();
-			String response = restTemplate.postForObject(uri, "{}", String.class);
+			String response = restTemplate.getForObject(uri, String.class);
 			log.info("response: "+response);
 		} catch (RestClientException e) {
 			log.error("Error occurred while sending SMS to " + sms.getMobileNumber(), e);
