@@ -9,6 +9,7 @@ import get from "lodash/get";
 import set from "lodash/set";
 import store from "ui-redux/store";
 import { getTranslatedLabel } from "../ui-config/screens/specs/utils";
+import commonConfig from "config/common.js";
 
 const handleDeletedCards = (jsonObject, jsonPath, key) => {
   let originalArray = get(jsonObject, jsonPath, []);
@@ -574,7 +575,7 @@ export const downloadBill = async (consumerCode, tenantId, configKey = "consolid
   else {
     const queryStr = [
       { key: "key", value: configKey },
-      { key: "tenantId", value: tenantId.split(".")[0] }
+      { key: "tenantId", value: commonConfig.tenantId }
     ]
     const pfResponse = await httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Bill: billResponse.Bills }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
     downloadReceiptFromFilestoreID(pfResponse.filestoreIds[0], 'download');
