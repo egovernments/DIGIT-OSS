@@ -251,16 +251,7 @@
             "RiskType": "LOW",
             "WFState": "DOC_VERIFICATION_PENDING",
             "docTypes": [
-                {
-                    "code": "APPL.BUILDING_DIAGRAM",
-                    "required": false,
-                    "order":49
-                },
-                {
-                    "code": "APPL.LOCALBODY",
-                    "required": false,
-                    "order":50
-                }
+              
             ]
         },
         {
@@ -287,16 +278,7 @@
             "RiskType": "HIGH",
             "WFState": "DOC_VERIFICATION_PENDING",
             "docTypes": [
-                {
-                    "code": "APPL.BUILDING_DIAGRAM",
-                    "required": false,
-                    "order":53
-                },
-                {
-                    "code": "APPL.LOCALBODY",
-                    "required": false,
-                    "order":54
-                }
+            
             ]
         },
         {
@@ -323,16 +305,7 @@
             "RiskType": "MEDIUM",
             "WFState": "DOC_VERIFICATION_PENDING",
             "docTypes": [
-                {
-                    "code": "APPL.BUILDING_DIAGRAM",
-                    "required": false,
-                    "order":57
-                },
-                {
-                    "code": "APPL.LOCALBODY",
-                    "required": false,
-                    "order":58
-                }
+           
             ]
         },
         {
@@ -602,16 +575,7 @@
             "RiskType": "LOW",
             "WFState": "DOC_VERIFICATION_PENDING",
             "docTypes": [
-                {
-                    "code": "APPL.BUILDING_DIAGRAM",
-                    "required": false,
-                    "order":109
-                },
-                {
-                    "code": "APPL.LOCALBODY",
-                    "required": false,
-                    "order":110
-                }
+                
             ]
         },
         {
@@ -638,16 +602,7 @@
             "RiskType": "HIGH",
             "WFState": "DOC_VERIFICATION_PENDING",
             "docTypes": [
-                {
-                    "code": "APPL.BUILDING_DIAGRAM",
-                    "required": false,
-                    "order":113
-                },
-                {
-                    "code": "APPL.LOCALBODY",
-                    "required": false,
-                    "order":114
-                }
+              
             ]
         },
         {
@@ -674,16 +629,7 @@
             "RiskType": "MEDIUM",
             "WFState": "DOC_VERIFICATION_PENDING",
             "docTypes": [
-                {
-                    "code": "APPL.BUILDING_DIAGRAM",
-                    "required": false,
-                    "order":117
-                },
-                {
-                    "code": "APPL.LOCALBODY",
-                    "required": false,
-                    "order":118
-                }
+             
             ]
         },
         {
