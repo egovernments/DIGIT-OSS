@@ -123,7 +123,7 @@ config:
       - work-dir: "bpa-calculator"
         image-name: "bpa-calculator"
         dockerfile: "build/maven/Dockerfile"     
-      
+
   - name: "builds/municipal-services/land-services"
     build:
       - work-dir: "land-services"
