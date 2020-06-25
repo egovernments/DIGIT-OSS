@@ -574,7 +574,7 @@ export const downloadBill = async (consumerCode, tenantId, configKey = "consolid
   else {
     const queryStr = [
       { key: "key", value: configKey },
-      { key: "tenantId", value: "pb" }
+      { key: "tenantId", value: tenantId.split(".")[0] }
     ]
     const pfResponse = await httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Bill: billResponse.Bills }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
     downloadReceiptFromFilestoreID(pfResponse.filestoreIds[0], 'download');
