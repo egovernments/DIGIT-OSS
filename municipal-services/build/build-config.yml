@@ -129,3 +129,5 @@ config:
       - work-dir: "land-services"
         image-name: "land-services"
         dockerfile: "build/maven/Dockerfile"
+      - work-dir: "land-services/src/main/resources/db"
+        image-name: "land-services-db"
