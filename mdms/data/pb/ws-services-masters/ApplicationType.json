@@ -4,12 +4,12 @@
   "ApplicationType": [
     {
       "id": 1,
-      "code": "NewWaterApplication",
+      "code": "NEW_WATER_APPLICATION",
       "name": "New Water Application"
     },
     {
       "id": 2,
-      "code": "NewSewerageApplication",
+      "code": "NEW_SEWERAGE_APPLICATION",
       "name": "New Sewerage Application"
     }
   ]
