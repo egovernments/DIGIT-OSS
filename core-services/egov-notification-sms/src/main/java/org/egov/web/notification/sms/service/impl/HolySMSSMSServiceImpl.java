@@ -21,9 +21,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
-@ConditionalOnProperty(value = "sms.gateway.to.use", havingValue = "SMS_COUNTRY")
+@ConditionalOnProperty(value = "sms.gateway.to.use", havingValue = "HOLY_SMS")
 @Slf4j
-public class SMSCountrySMSServiceImpl implements SMSService {
+public class HolySMSSMSServiceImpl implements SMSService {
 
 	@Autowired
 	private SMSProperties smsProperties;
