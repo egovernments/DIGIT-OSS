@@ -1,13 +1,10 @@
 package org.egov.web.contract;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
+import lombok.*;
 import org.egov.domain.model.OtpRequestType;
 
 @Getter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
@@ -19,16 +16,16 @@ public class OtpRequest {
         return org.egov.domain.model.OtpRequest.builder()
                 .mobileNumber(getMobileNumber())
                 .tenantId(getTenantId())
-				.type(getType())
+                .type(getType())
                 .userType(getUserType())
                 .build();
     }
 
-	private OtpRequestType getType() {
-		return otp != null ? otp.getTypeOrDefault() : null;
-	}
+    private OtpRequestType getType() {
+        return otp != null ? otp.getTypeOrDefault() : null;
+    }
 
-	private String getMobileNumber() {
+    private String getMobileNumber() {
         return otp != null ? otp.getMobileNumber() : null;
     }
 

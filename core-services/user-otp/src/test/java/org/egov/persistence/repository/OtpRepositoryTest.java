@@ -4,7 +4,6 @@ import org.egov.Resources;
 import org.egov.domain.exception.OtpNumberNotPresentException;
 import org.egov.domain.model.OtpRequest;
 import org.egov.persistence.contract.Otp;
-import org.egov.web.contract.OtpResponse;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -21,9 +20,7 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.client.ExpectedCount.once;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.*;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -73,7 +70,7 @@ public class OtpRepositoryTest {
         when(mockRestTemplate.postForObject(eq("http://host/otp/_create"),
                 any(),
                 eq(org.egov.persistence.contract.OtpResponse.class)))
-        .thenReturn(null);
+                .thenReturn(null);
 
         otpRepository.fetchOtp(domainOtpRequest);
     }
@@ -89,7 +86,7 @@ public class OtpRepositoryTest {
         when(mockRestTemplate.postForObject(eq("http://host/otp/_create"),
                 any(),
                 eq(org.egov.persistence.contract.OtpResponse.class)))
-                .thenReturn(new org.egov.persistence.contract.OtpResponse(Otp.builder().otp(null).build()));
+                .thenReturn(new org.egov.persistence.contract.OtpResponse(null, Otp.builder().otp(null).build()));
 
         otpRepository.fetchOtp(domainOtpRequest);
     }

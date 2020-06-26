@@ -1,8 +1,6 @@
 package org.egov.domain.service;
 
-import org.egov.domain.exception.UserAlreadyExistInSystemException;
-import org.egov.domain.exception.UserMobileNumberNotFoundException;
-import org.egov.domain.exception.UserNotExistingInSystemException;
+import org.egov.domain.exception.*;
 import org.egov.domain.model.OtpRequest;
 import org.egov.domain.model.OtpRequestType;
 import org.egov.domain.model.User;
@@ -14,7 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.*;
 
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
@@ -50,7 +48,7 @@ public class OtpServiceTest {
 	public void test_should_validate_otp_request_for_user_login() {
 		final OtpRequest otpRequest = mock(OtpRequest.class);
 		when(otpRequest.isLoginRequestType()).thenReturn(true);
-		when(userRepository.fetchUser(anyString(), anyString(), anyString())).thenReturn(new User(1L, "foo@bar.com", "123"));
+		when(userRepository.fetchUser(nullable(String.class), nullable(String.class), nullable(String.class))).thenReturn(new User(1L, "foo@bar.com", "123"));
 		otpService.sendOtp(otpRequest);
 
 		verify(otpRequest).validate();
@@ -60,7 +58,7 @@ public class OtpServiceTest {
 	public void test_should_throwException_when_userAlreadyExist_IncaseOfRegister() {
 		final OtpRequest otpRequest = mock(OtpRequest.class);
 		when(otpRequest.isRegistrationRequestType()).thenReturn(true);
-		when(userRepository.fetchUser(anyString(), anyString(), anyString())).thenReturn(new User(1L, "foo@bar.com", "123"));
+		when(userRepository.fetchUser(nullable(String.class), nullable(String.class), nullable(String.class))).thenReturn(new User(1L, "foo@bar.com", "123"));
 		otpService.sendOtp(otpRequest);
 
 		verify(otpRequest).validate();
@@ -70,7 +68,7 @@ public class OtpServiceTest {
 	public void test_should_throwException_when_userNotExist_IncaseOfLogin() {
 		final OtpRequest otpRequest = mock(OtpRequest.class);
 		when(otpRequest.isLoginRequestType()).thenReturn(true);
-		when(userRepository.fetchUser(anyString(), anyString(), anyString())).thenReturn(null);
+		//when(userRepository.fetchUser(anyString(), anyString(), anyString())).thenReturn(null);
 		otpService.sendOtp(otpRequest);
 
 		verify(otpRequest).validate();
@@ -80,29 +78,29 @@ public class OtpServiceTest {
 	public void test_should_validate_otp_request_for_password_reset() {
 		final OtpRequest otpRequest = mock(OtpRequest.class);
 		when(otpRequest.isRegistrationRequestType()).thenReturn(false);
-		when(userRepository.fetchUser(anyString(), anyString(), anyString())).thenReturn(new User(1L, "foo@bar.com", "123"));
+		when(userRepository.fetchUser(nullable(String.class), nullable(String.class), nullable(String.class))).thenReturn(new User(1L, "foo@bar.com", "123"));
 
 		otpService.sendOtp(otpRequest);
 
 		verify(otpRequest).validate();
 	}
 
-	@Test(expected = UserMobileNumberNotFoundException.class)
+	@Test(expected = UserNotFoundException.class)
 	public void test_should_throwException_whenmobilenumber_is_null() {
 		final OtpRequest otpRequest = mock(OtpRequest.class);
 		when(otpRequest.isRegistrationRequestType()).thenReturn(false);
-		when(userRepository.fetchUser(anyString(), anyString(), anyString())).thenReturn(new User(1L, "foo@bar.com", null));
+		//when(userRepository.fetchUser(anyString(), anyString(), anyString())).thenReturn(new User(1L, "foo@bar.com", null));
 
 		otpService.sendOtp(otpRequest);
 
 		verify(otpRequest).validate();
 	}
 
-	@Test(expected = UserMobileNumberNotFoundException.class)
+	@Test(expected = UserNotFoundException.class)
 	public void test_should_throwException_whenmobilenumber_is_empty() {
 		final OtpRequest otpRequest = mock(OtpRequest.class);
 		when(otpRequest.isRegistrationRequestType()).thenReturn(false);
-		when(userRepository.fetchUser(anyString(), anyString(), anyString())).thenReturn(new User(1L, "foo@bar.com", ""));
+		//when(userRepository.fetchUser(anyString(), anyString(), anyString())).thenReturn(new User(1L, "foo@bar.com", ""));
 
 		otpService.sendOtp(otpRequest);
 

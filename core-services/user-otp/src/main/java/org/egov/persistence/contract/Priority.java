@@ -38,13 +38,13 @@
  *  In case of any queries, you can reach eGovernments Foundation at contact@egovernments.org.
  */
 
-package org.egov.web.notification.sms.models;
+package org.egov.persistence.contract;
 
 public enum Priority {
-    HIGH, MEDIUM, LOW;
+	HIGH, MEDIUM, LOW;
 
-    @Override
-    public String toString() {
-        return this.name().toLowerCase();
-    }
+	@Override
+	public String toString() {
+		return this.name().toLowerCase();
+	}
 }
