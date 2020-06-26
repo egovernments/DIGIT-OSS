@@ -64,3 +64,17 @@
   //   line-height: 15px!important;
   // }
 }
+
+/* @media only screen and (max-width: 768px) {
+  .clearfix
+      {     
+        height: 398px !important;      
+      }
+    }
+ */
+@media only screen and (max-width: 551px) {
+  .clearfix
+  {     
+    height: auto !important      
+  }
+ }
