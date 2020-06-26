@@ -12,6 +12,7 @@ import {
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId,getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import isEmpty from "lodash/isEmpty"
+import { loadUlbLogo } from "../../utils/receiptTransformer";
 
 // const tenantId = getTenantId();
 const tenantId = getTenantId();
@@ -125,7 +126,10 @@ export const searchApiCall = async (state, dispatch) => {
         )
       );      
       showHideTable(true, dispatch);
-      if(!isEmpty(response)){showHideMergeButton(true, dispatch)};
+      if(!isEmpty(response)){
+        showHideMergeButton(true, dispatch);
+        loadUlbLogo(tenantId);
+      };
     } catch (error) {
       dispatch(toggleSnackbar(true, error.message, "error"));
       console.log(error);

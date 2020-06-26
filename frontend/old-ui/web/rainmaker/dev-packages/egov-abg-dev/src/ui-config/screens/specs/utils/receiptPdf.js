@@ -179,7 +179,6 @@ export const generateMultipleBill = async (state, dispatch, type) => {
     []
   );
   const tenant = getTenantId();
-  loadUlbLogo(tenant);
   await loadMdmsData(tenant);
   // data1 is for ULB logo from loadUlbLogo
   let data1 = get(
