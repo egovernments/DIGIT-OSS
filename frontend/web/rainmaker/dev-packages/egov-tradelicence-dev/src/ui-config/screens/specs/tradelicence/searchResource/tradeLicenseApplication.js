@@ -220,7 +220,7 @@ export const tradeLicenseApplication = getCommonCard({
 
             backgroundColor: "white",
             borderRadius: "2px",
-            width: "80%",
+            width: "60%",
             height: "48px"
           }
         },
@@ -248,7 +248,7 @@ export const tradeLicenseApplication = getCommonCard({
 
             backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
             borderRadius: "2px",
-            width: "80%",
+            width: "60%",
             height: "48px"
           }
         },
