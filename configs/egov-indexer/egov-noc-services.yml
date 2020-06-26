@@ -1,0 +1,34 @@
+ServiceMaps:
+ serviceName: Noc Service
+ version: 1.0.0
+ mappings:
+  - topic: save-noc-application
+    configKey: INDEX
+    indexes:
+    - name: noc-index
+      type: noc
+      id: $.id, $.tenantId
+      isBulk: false
+      timeStampField: $.auditDetails.createdTime
+      jsonPath: $.Noc
+      customJsonMapping:
+        indexMapping: {"Data":{"applicationNo":"applicationNo","nocNo":"nocNo","applicationType":"applicationType","status":"status","applicationStatus":"applicationStatus","nocType":"nocType","landId":"landId","tenantId":"tenantId","@timestamp":"timestamp"}}
+        fieldMapping:
+        - inJsonPath: $.applicationNo
+          outJsonPath: $.Data.applicationNo
+        - inJsonPath: $.nocNo
+          outJsonPath: $.Data.nocNo        
+        - inJsonPath: $.applicationType
+          outJsonPath: $.Data.applicationType
+        - inJsonPath: $.status
+          outJsonPath: $.Data.status 
+        - inJsonPath: $.applicationStatus
+          outJsonPath: $.Data.applicationStatus
+        - inJsonPath: $.nocType
+          outJsonPath: $.Data.nocType
+        - inJsonPath: $.landId             
+          outJsonPath: $.Data.landId
+        - inJsonPath: $.tenantId
+          outJsonPath: $.Data.tenantId
+        - inJsonPath: $.@timestamp
+          outJsonPath: $.Data.@timestamp
