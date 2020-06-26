@@ -29,7 +29,7 @@ import jsPDF from "jspdf";
 import get from "lodash/get";
 import set from "lodash/set";
 import some from "lodash/some";
-import{ generateReceipt } from "../../utils/receiptPdf";
+import generateReceipt  from "../../utils/receiptPdf";
 import { downloadBill } from "../../../../../ui-utils/commons";
 
 
@@ -890,7 +890,8 @@ export const footerReviewTop = (
       downloadAcknowledgementForm(Licenses,'print');
     },
     leftIcon: "assignment"
-  };let challanDownloadObject = {
+  };
+  let challanDownloadObject = {
     label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
     link: () => {
       const receiptQueryString = [
