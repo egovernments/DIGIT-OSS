@@ -7,7 +7,7 @@ serviceMaps:
    isTransaction: true
    queryMaps:
 
-       - query: INSERT INTO eg_oc(id, applicationno, applicationstatus, tenantid, status, landid, Noctype, applicationtype, accountid, source, sourcerefid, additionaldetails, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?,  ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?); 
+       - query: INSERT INTO eg_noc(id, applicationno, applicationstatus, tenantid, status, landid, Noctype, applicationtype, accountid, source, sourcerefid, additionaldetails, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?,  ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?); 
          basePath: Noc
          jsonMaps:
           - jsonPath: $.Noc.id
