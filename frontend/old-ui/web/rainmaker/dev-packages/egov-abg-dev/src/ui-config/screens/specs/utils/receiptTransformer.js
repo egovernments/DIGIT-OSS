@@ -7,6 +7,7 @@ import {
   getTransformedLocalStorgaeLabels,
   getLocaleLabels
 } from "egov-ui-framework/ui-utils/commons";
+import commonConfig from "config/common.js";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
 const ifNotNull = value => {
@@ -37,7 +38,7 @@ export const loadUlbLogo = tenantid => {
     store.dispatch(prepareFinalObject("base64UlbLogo", canvas.toDataURL()));
     canvas = null;
   };
-  img.src = `/pb-egov-assets/${tenantid}/logo.png`;
+  img.src = `/${commonConfig.tenantId}-egov-assets/${tenantid}/logo.png`;
 };
 
 export const loadPtBillData = response => {
