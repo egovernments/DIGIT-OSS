@@ -63,3 +63,11 @@
       width: 150px;
     }
   }
+  @media only screen and (min-width: 768px) {
+
+    .tl-renew-dialog
+    {
+      height: 228px !important;
+      width: 519px !important;
+     }
+    }
