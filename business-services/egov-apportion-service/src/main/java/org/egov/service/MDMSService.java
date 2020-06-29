@@ -34,12 +34,10 @@ public class MDMSService {
 
     /**
      * Fetches MDMS data based on the apportion request
-     * @param request The apportion request for which master data is required
+     * @param requestInfo The apportion request for which master data is required
      * @return MasterData from MDMS
      */
-    public Object mDMSCall(ApportionRequest request){
-        RequestInfo requestInfo = request.getRequestInfo();
-        String tenantId = request.getTenantId();
+    public Object mDMSCall(RequestInfo requestInfo,String tenantId){
         MdmsCriteriaReq mdmsCriteriaReq = getMDMSRequest(requestInfo,tenantId);
         Object result = serviceRequestRepository.fetchResult(getMdmsSearchUrl(), mdmsCriteriaReq);
         return result;
@@ -52,10 +50,10 @@ public class MDMSService {
      * @return MDMS search criteria
      */
     private MdmsCriteriaReq getMDMSRequest(RequestInfo requestInfo, String tenantId){
-        ModuleDetail taxHeadMasterRequest = getTaxHeadMasterRequest();
+        ModuleDetail moduleDetail = getBillingModuleDetail();
 
         List<ModuleDetail> moduleDetails = new LinkedList<>();
-        moduleDetails.add(taxHeadMasterRequest);
+        moduleDetails.add(moduleDetail);
 
         MdmsCriteria mdmsCriteria = MdmsCriteria.builder().moduleDetails(moduleDetails).tenantId(tenantId)
                 .build();
@@ -78,8 +76,8 @@ public class MDMSService {
 
 
     /**
-     * Creates request to search financialYear in mdms
-     * @return MDMS request for financialYear
+     * Creates request to search taxhead in mdms
+     * @return MDMS request for taxhead
      */
     private ModuleDetail getTaxHeadMasterRequest() {
         // filter to only get code field from master data
@@ -93,6 +91,44 @@ public class MDMSService {
         return tlModuleDtls;
     }
 
+
+    /**
+     * Creates request to search businessService in mdms
+     * @return MDMS request for businessService
+     */
+    private ModuleDetail getBusinessServiceRequest() {
+        // filter to only get code field from master data
+
+        //  final String filterCodeForUom = "$.[?(@.active==true)]";
+
+        ModuleDetail tlModuleDtls = ModuleDetail.builder()
+                .masterDetails(Collections.singletonList(MasterDetail.builder().name(MDMS_BUSINESSSERVICE).build()))
+                .moduleName(MDMS_BILLING_SERVICE).build();
+
+        return tlModuleDtls;
+    }
+
+
+    /**
+     * Creates request to search businessService in mdms
+     * @return MDMS request for businessService
+     */
+    private ModuleDetail getBillingModuleDetail() {
+
+        List<MasterDetail> masterDetails = new ArrayList<>();
+
+        MasterDetail businessServiceMasterDetail = MasterDetail.builder().name(MDMS_BUSINESSSERVICE).build();
+        MasterDetail taxHeadMasterDetail = MasterDetail.builder().name(MDMS_TAXHEAD).build();
+
+        masterDetails.add(businessServiceMasterDetail);
+        masterDetails.add(taxHeadMasterDetail);
+
+        ModuleDetail tlModuleDtls = ModuleDetail.builder()
+                .masterDetails(masterDetails)
+                .moduleName(MDMS_BILLING_SERVICE).build();
+
+        return tlModuleDtls;
+    }
 
 
 

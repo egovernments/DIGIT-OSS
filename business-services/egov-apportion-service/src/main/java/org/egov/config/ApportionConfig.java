@@ -24,10 +24,10 @@ public class ApportionConfig {
         TimeZone.setDefault(TimeZone.getTimeZone(timeZone));
     }
 
-    @Bean
+    /*@Bean
     public ObjectMapper objectMapper(){
         return new ObjectMapper().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES).setTimeZone(TimeZone.getTimeZone(timeZone));
-    }
+    }*/
 
     @Bean
     @Autowired

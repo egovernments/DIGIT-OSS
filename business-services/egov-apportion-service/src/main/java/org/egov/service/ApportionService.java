@@ -61,12 +61,12 @@ public class ApportionService {
         producer.push(config.getRequestTopic(), request);
 
         //Fetch the required MDMS data
-        Object masterData = mdmsService.mDMSCall(request);
+        Object masterData = mdmsService.mDMSCall(request.getRequestInfo(), request.getTenantId());
 
         for (Bill bill : bills) {
-        	
+
             // Create a map of businessService to list of billDetails belonging to that businessService
-         //   Map<String, List<BillDetail>> businessServiceToBillDetails = util.groupByBusinessService(billInfo.getBillDetails());
+            //   Map<String, List<BillDetail>> businessServiceToBillDetails = util.groupByBusinessService(billInfo.getBillDetails());
 
             bill.getBillDetails().sort(Comparator.comparing(BillDetail::getFromPeriod));
 
@@ -89,12 +89,12 @@ public class ApportionService {
              * Apportion the paid amount among the given list of billDetail
              */
             apportion.apportionPaidAmount(bill, masterData);
-			}
+        }
 
 
 
-
-        //Save the response through persister
+       
+      //Save the response through persister
         producer.push(config.getResponseTopic(), request);
         return bills;
     }

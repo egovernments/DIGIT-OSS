@@ -17,7 +17,7 @@ import java.util.TimeZone;
 @SpringBootApplication
 @ComponentScan(basePackages = { "org.egov", "org.egov.web.controllers" , "org.egov.config"})
 @Import({ TracerConfiguration.class })
-public class Main {
+public class ApportionApp {
 
     @Value("${app.timezone}")
     private String timeZone;
@@ -31,7 +31,7 @@ public class Main {
     }
 
     public static void main(String[] args) throws Exception {
-        SpringApplication.run(Main.class, args);
+        SpringApplication.run(ApportionApp.class, args);
     }
 
 }

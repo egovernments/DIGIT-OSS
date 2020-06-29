@@ -1,17 +1,11 @@
 package org.egov.web.controllers;
 
 
-import org.egov.service.ApportionService;
 import org.egov.service.ApportionServiceV2;
 import org.egov.util.ResponseInfoFactory;
-import org.egov.web.models.ApportionRequest;
-import org.egov.web.models.ApportionResponse;
+import org.egov.web.models.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.swagger.annotations.*;
-import org.egov.web.models.AuditDetails;
-import org.egov.web.models.Bill;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.egov.web.models.enums.DemandApportionRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,22 +21,24 @@ import javax.validation.Valid;
 @javax.annotation.Generated(value = "org.egov.codegen.SpringBootCodegen", date = "2019-02-25T15:07:36.183+05:30")
 
 @Controller
-@RequestMapping("/v1")
-public class ApportionController {
+@RequestMapping("/v2")
+public class ApportionControllerV2 {
 
     private final ObjectMapper objectMapper;
 
-    @Autowired
-    private ApportionService apportionService;
+    private ApportionServiceV2 apportionService;
 
-    @Autowired
     private ResponseInfoFactory responseInfoFactory;
 
+
     @Autowired
-    public ApportionController(ObjectMapper objectMapper, ApportionService apportionService) {
+    public ApportionControllerV2(ObjectMapper objectMapper, ApportionServiceV2 apportionService, ResponseInfoFactory responseInfoFactory) {
         this.objectMapper = objectMapper;
         this.apportionService = apportionService;
+        this.responseInfoFactory = responseInfoFactory;
     }
+
+
 
 
     /**
@@ -50,7 +46,7 @@ public class ApportionController {
      * @param apportionRequest The ApportionRequest containing the bill to be apportioned
      * @return Apportioned Bills
      */
-    @RequestMapping(value="/_apportion", method = RequestMethod.POST)
+    @RequestMapping(value="/bill/_apportion", method = RequestMethod.POST)
     public ResponseEntity<ApportionResponse> apportionPost(@Valid @RequestBody ApportionRequest apportionRequest){
         List<Bill> billInfos = apportionService.apportionBills(apportionRequest);
         ApportionResponse response = ApportionResponse.builder()
@@ -60,6 +56,18 @@ public class ApportionController {
                         true)).build();
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
+
+    @RequestMapping(value="/demand/_apportion", method = RequestMethod.POST)
+    public ResponseEntity<ApportionDemandResponse> apportionPost(@Valid @RequestBody DemandApportionRequest apportionRequest){
+        List<Demand> demands = apportionService.apportionDemands(apportionRequest);
+        ApportionDemandResponse response = ApportionDemandResponse.builder()
+                .tenantId(apportionRequest.getTenantId())
+                .demands(demands)
+                .responseInfo(responseInfoFactory.createResponseInfoFromRequestInfo(apportionRequest.getRequestInfo(),
+                        true)).build();
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
+
 
 
 
