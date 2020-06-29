@@ -40,7 +40,6 @@
 package org.egov.receipt.consumer.model;
 
 import java.util.Map;
-import org.json.JSONArray;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -50,6 +49,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import net.minidev.json.JSONArray;
 
 @Component
 @Setter

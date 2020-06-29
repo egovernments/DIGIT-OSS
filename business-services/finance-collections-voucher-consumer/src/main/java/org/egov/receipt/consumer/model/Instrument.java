@@ -190,6 +190,8 @@ public class Instrument{
     @NotNull
 	private String tenantId;
     
+    private String paymentId;
+    
     public InstrumentContract toContract() {
 
         InstrumentContract contract = new InstrumentContract();

@@ -119,4 +119,17 @@ public class ServiceRequestRepository {
 		}
 	    return null;
 	}
+
+	public Object fetchResultGet(String uri) throws VoucherCustomException {
+		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+		Object response = null;
+		
+		try {
+			response = restTemplate.getForObject(uri, Map.class);
+		}catch(Exception e) {
+			log.error("Exception while fetching from searcher: ",e);
+			throw new VoucherCustomException(ProcessStatus.FAILED,"IFSC code is invalid : url : "+uri);
+		}
+		return response;
+	}
 }

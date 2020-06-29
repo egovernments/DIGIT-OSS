@@ -48,6 +48,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.egov.mdms.service.MicroServiceUtil;
@@ -57,11 +59,14 @@ import org.egov.receipt.consumer.model.Bill;
 import org.egov.receipt.consumer.model.BillAccountDetail;
 import org.egov.receipt.consumer.model.BillDetail;
 import org.egov.receipt.consumer.model.BusinessService;
+import org.egov.receipt.consumer.model.DishonorReasonContract;
 import org.egov.receipt.consumer.model.EgModules;
 import org.egov.receipt.consumer.model.FinanceMdmsModel;
 import org.egov.receipt.consumer.model.Function;
 import org.egov.receipt.consumer.model.Functionary;
 import org.egov.receipt.consumer.model.Fund;
+import org.egov.receipt.consumer.model.InstrumentContract;
+import org.egov.receipt.consumer.model.InstrumentVoucherContract;
 import org.egov.receipt.consumer.model.ProcessStatus;
 import org.egov.receipt.consumer.model.Receipt;
 import org.egov.receipt.consumer.model.ReceiptReq;
@@ -72,6 +77,7 @@ import org.egov.receipt.consumer.model.Tenant;
 import org.egov.receipt.consumer.model.Voucher;
 import org.egov.receipt.consumer.model.VoucherRequest;
 import org.egov.receipt.consumer.model.VoucherResponse;
+import org.egov.receipt.consumer.model.VoucherSearchCriteria;
 import org.egov.receipt.consumer.model.VoucherSearchRequest;
 import org.egov.receipt.consumer.repository.ServiceRequestRepository;
 import org.egov.receipt.custom.exception.VoucherCustomException;
@@ -96,30 +102,45 @@ public class VoucherServiceImpl implements VoucherService {
 	private ObjectMapper mapper;
 
 	final SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
+	final SimpleDateFormat ddMMMyyyyFormatter = new SimpleDateFormat("dd-MMM-yyyy");
 
 	private static final String RECEIPTS_VOUCHER_TYPE = "Receipt";
 	private static final String COLLECTIONS_EG_MODULES_ID = "10";
 	private static final Logger LOGGER = LoggerFactory.getLogger(VoucherServiceImpl.class);
 	private static final String COLLECTION_MODULE_NAME = "Collections";
 	private LinkedHashMap<String, BigDecimal> amountMapwithGlcode;
+	private static final String REVERSAL_VOUCHER_NAME = "JVGeneral";
+	private static final String REVERSAL_VOUCHER_TYPE = "Journal Voucher";
 
 	@Override
 	/**
 	 * This method is use to create the voucher specifically for receipt
 	 * request.
 	 */
-	public VoucherResponse createReceiptVoucher(ReceiptReq receiptRequest, FinanceMdmsModel finSerMdms)
+	public VoucherResponse createReceiptVoucher(ReceiptReq receiptRequest, FinanceMdmsModel finSerMdms, String collectionVersion)
 			throws Exception {
 		Receipt receipt = receiptRequest.getReceipt().get(0);
 		String tenantId = receipt.getTenantId();
+//		final StringBuilder voucher_create_url = new StringBuilder(propertiesManager.getErpURLBytenantId(tenantId)
+//				+ propertiesManager.getVoucherCreateUrl());
+//		VoucherRequest voucherRequest = new VoucherRequest();
+		Voucher voucher = new Voucher();
+		voucher.setTenantId(tenantId);
+		this.setVoucherDetails(voucher, receipt, tenantId, receiptRequest.getRequestInfo(), finSerMdms, collectionVersion);
+//		voucherRequest.setVouchers(Collections.singletonList(voucher));
+//		voucherRequest.setRequestInfo(receiptRequest.getRequestInfo());
+//		voucherRequest.setTenantId(tenantId);
+		return createVoucher(Collections.singletonList(voucher), receiptRequest.getRequestInfo(), tenantId);
+//		return mapper.convertValue(serviceRequestRepository.fetchResult(voucher_create_url, voucherRequest, tenantId), VoucherResponse.class);
+	}
+	
+	@Override
+	public VoucherResponse createVoucher(List<Voucher> vouchers, RequestInfo requestInfo, String tenantId) throws VoucherCustomException{
 		final StringBuilder voucher_create_url = new StringBuilder(propertiesManager.getErpURLBytenantId(tenantId)
 				+ propertiesManager.getVoucherCreateUrl());
 		VoucherRequest voucherRequest = new VoucherRequest();
-		Voucher voucher = new Voucher();
-		voucher.setTenantId(tenantId);
-		this.setVoucherDetails(voucher, receipt, tenantId, receiptRequest.getRequestInfo(), finSerMdms);
-		voucherRequest.setVouchers(Collections.singletonList(voucher));
-		voucherRequest.setRequestInfo(receiptRequest.getRequestInfo());
+		voucherRequest.setVouchers(vouchers);
+		voucherRequest.setRequestInfo(requestInfo);
 		voucherRequest.setTenantId(tenantId);
 		return mapper.convertValue(serviceRequestRepository.fetchResult(voucher_create_url, voucherRequest, tenantId), VoucherResponse.class);
 	}
@@ -129,12 +150,12 @@ public class VoucherServiceImpl implements VoucherService {
 	 * true or false in business mapping file.
 	 */
 	@Override
-	public boolean isVoucherCreationEnabled(ReceiptReq req, FinanceMdmsModel finSerMdms) throws Exception {
-		Receipt receipt = req.getReceipt().get(0);
+	public boolean isVoucherCreationEnabled(Receipt receipt, RequestInfo req, FinanceMdmsModel finSerMdms) throws Exception {
+//		Receipt receipt = req.getReceipt().get(0);
 		String tenantId = receipt.getTenantId();
 		Bill bill = receipt.getBill().get(0);
 		String bsCode = bill.getBillDetails().get(0).getBusinessService();
-		List<BusinessService> serviceByCode = this.getBusinessServiceByCode(tenantId, bsCode, req.getRequestInfo(), finSerMdms);
+		List<BusinessService> serviceByCode = this.getBusinessServiceByCode(tenantId, bsCode, req, finSerMdms);
 		return serviceByCode != null && !serviceByCode.isEmpty() ? serviceByCode.get(0).isVoucherCreationEnabled()
 				: false;
 	}
@@ -143,13 +164,11 @@ public class VoucherServiceImpl implements VoucherService {
 	 * Function is for cancelling the voucher based on voucher number
 	 */
 	@Override
-	public VoucherResponse cancelReceiptVoucher(ReceiptReq receiptRequest) throws VoucherCustomException {
-		Receipt receipt = receiptRequest.getReceipt().get(0);
-		String tenantId = receipt.getTenantId();
+	public VoucherResponse cancelReceiptVoucher(ReceiptReq receiptRequest, String tenantId, Set<String> voucherNumbers) throws VoucherCustomException {
 		final StringBuilder voucher_cancel_url = new StringBuilder(propertiesManager.getErpURLBytenantId(tenantId)
 				+ propertiesManager.getVoucherCancelUrl());
 		try {
-			VoucherSearchRequest vSearchReq = this.getVoucherSearchReq(receiptRequest);
+			VoucherSearchRequest vSearchReq = this.getVoucherSearchReq(receiptRequest, voucherNumbers, tenantId);
 			return mapper.convertValue(serviceRequestRepository.fetchResult(voucher_cancel_url, vSearchReq, tenantId), VoucherResponse.class);
 		} catch (Exception e) {
 			throw new VoucherCustomException(ProcessStatus.FAILED, "Failed to cancel voucher");
@@ -162,16 +181,14 @@ public class VoucherServiceImpl implements VoucherService {
 	 * @return This function is use to set the voucher search params and return
 	 *         the setted request
 	 */
-	private VoucherSearchRequest getVoucherSearchReq(ReceiptReq receiptRequest) {
+	private VoucherSearchRequest getVoucherSearchReq(ReceiptReq receiptRequest, Set<String> voucherNumbers, String tenantId) {
 		VoucherSearchRequest vSearchReq = new VoucherSearchRequest();
-		Receipt receipt = receiptRequest.getReceipt().get(0);
-		String tenantId = receipt.getTenantId();
-		BillDetail billDetail = receipt.getBill().get(0).getBillDetails().get(0);
-		String voucherNumber = billDetail.getVoucherHeader();
-		vSearchReq.setVoucherNumbers(voucherNumber);
+		StringBuilder vouNumberBuilder = new StringBuilder();
+		voucherNumbers.stream().forEach(vn -> vouNumberBuilder.append(vn).append(","));
+		vSearchReq.setVoucherNumbers(vouNumberBuilder.toString());
 		vSearchReq.setTenantId(tenantId);
 		RequestInfo requestInfo = receiptRequest.getRequestInfo();
-		requestInfo.setAuthToken(propertiesManager.getSiAuthToken());
+//		requestInfo.setAuthToken(propertiesManager.getSiAuthToken());
 		vSearchReq.setRequestInfo(requestInfo);
 		return vSearchReq;
 	}
@@ -186,9 +203,9 @@ public class VoucherServiceImpl implements VoucherService {
 	 *             is mendatory to create the voucher.
 	 */
 	private void setVoucherDetails(Voucher voucher, Receipt receipt, String tenantId, RequestInfo requestInfo,
-			FinanceMdmsModel finSerMdms) throws Exception {
+			FinanceMdmsModel finSerMdms, String collectiobVersion) throws Exception {
 		BillDetail billDetail = receipt.getBill().get(0).getBillDetails().get(0);
-		String receiptNumber = billDetail.getReceiptNumber();
+		String receiptNumber = collectiobVersion != null && collectiobVersion.equalsIgnoreCase("V2") ? receipt.getPaymentId() : billDetail.getReceiptNumber();
 		String bsCode = billDetail.getBusinessService();
 		List<BusinessService> serviceByCode = this.getBusinessServiceByCode(tenantId, bsCode, requestInfo, finSerMdms);
 		List<TaxHeadMaster> taxHeadMasterByBusinessServiceCode = this.getTaxHeadMasterByBusinessServiceCode(tenantId,
@@ -277,7 +294,7 @@ public class VoucherServiceImpl implements VoucherService {
 	 * @throws VoucherCustomException 
 	 */
 	private boolean isManualReceiptDateEnabled(String tenantId, RequestInfo requestInfo) throws VoucherCustomException {
-		requestInfo.setAuthToken(propertiesManager.getSiAuthToken());
+//		requestInfo.setAuthToken(propertiesManager.getSiAuthToken());
 		VoucherRequest request = new VoucherRequest(tenantId, requestInfo, null);
 		StringBuilder url = new StringBuilder(propertiesManager.getErpURLBytenantId(tenantId)
 				+ propertiesManager.getManualReceiptDateConfigUrl());
@@ -361,9 +378,10 @@ public class VoucherServiceImpl implements VoucherService {
 	 * @throws VoucherCustomException 
 	 */
 	private EgModules getModuleIdByModuleName(String moduleName, String tenantId, RequestInfo requestInfo) throws VoucherCustomException {
-		requestInfo.setAuthToken(propertiesManager.getSiAuthToken());
+//		requestInfo.setAuthToken(propertiesManager.getSiAuthToken());
 		VoucherRequest request = new VoucherRequest(tenantId, requestInfo, null);
-		StringBuilder url = new StringBuilder(propertiesManager.getErpURLBytenantId(tenantId) + propertiesManager.getModuleIdSearchUrl() + "?moduleName=" + moduleName);
+		StringBuilder url = new StringBuilder(propertiesManager.getErpURLBytenantId(tenantId) 
+				+ propertiesManager.getModuleIdSearchUrl() + "?moduleName=" + moduleName);
 		try {
 			return mapper.convertValue(serviceRequestRepository.fetchResult(url, request, tenantId), EgModules.class);
 		} catch (Exception e) {
@@ -373,7 +391,7 @@ public class VoucherServiceImpl implements VoucherService {
 		return null;
 	}
 	
-	/*
+	/**
 	 * (non-Javadoc)
 	 * @see org.egov.receipt.consumer.service.VoucherService#isTenantEnabledInFinanceModule(org.egov.receipt.consumer.model.ReceiptReq, org.egov.receipt.consumer.model.FinanceMdmsModel)
 	 * Method which is used to check whether Tenant is enabled in Finance module or not.
@@ -383,7 +401,8 @@ public class VoucherServiceImpl implements VoucherService {
 		Receipt receipt = req.getReceipt().get(0);
 		String tenantId = receipt.getTenantId();
 		Bill bill = receipt.getBill().get(0);
-		String bsCode = bill.getBillDetails().get(0).getBusinessService();
+		String bsCode = req.getReceipt().stream().map(Receipt::getBill).flatMap(List::stream).map(Bill::getBusinessService).collect(Collectors.joining(","));
+		bsCode = bsCode != null && !bsCode.isEmpty() ? bsCode : bill.getBillDetails().get(0).getBusinessService();
 		List<Tenant> tenantList = microServiceUtil.getFinanceTenantList(tenantId, bsCode, req.getRequestInfo(), finSerMdms);
 		List<Tenant> collect = tenantList.stream().filter(tenant -> tenant.getCode().equals(tenantId)).collect(Collectors.toList());
 		if(collect.isEmpty()){
@@ -391,23 +410,116 @@ public class VoucherServiceImpl implements VoucherService {
 		}
 		return true;
 	}
-	/*
+	/**
 	 * (non-Javadoc)
 	 * @see org.egov.receipt.consumer.service.VoucherService#getVoucherByServiceAndRefDoc(org.egov.receipt.consumer.model.RequestInfo, java.lang.String, java.lang.String, java.lang.String)
 	 * Method which is used to fetch the voucher details associated with business service and reference documents.
 	 */
 	@Override
 	public VoucherResponse getVoucherByServiceAndRefDoc(RequestInfo requestInfo, String tenantId, String serviceCode, String referenceDoc) throws VoucherCustomException, UnsupportedEncodingException{
-		requestInfo.setAuthToken(propertiesManager.getSiAuthToken());
+//		requestInfo.setAuthToken(propertiesManager.getSiAuthToken());
 		VoucherRequest request = new VoucherRequest(tenantId, requestInfo, null);
-		StringBuilder url = new StringBuilder(propertiesManager.getErpURLBytenantId(tenantId)
-				+ propertiesManager.getVoucherSearchUrl()
-				+ "?servicecode=" + serviceCode +"&referencedocument="+URLEncoder.encode(referenceDoc,"UTF-8"));
+		StringBuilder url = new StringBuilder(propertiesManager.getErpURLBytenantId(tenantId))
+				.append(propertiesManager.getVoucherSearchByRefUrl()).append("?");
+		if(serviceCode != null && !serviceCode.isEmpty()){
+			url.append("servicecode=").append(serviceCode);
+		}
+		if(referenceDoc != null & !referenceDoc.isEmpty()){
+			url.append("&referencedocument=").append(URLEncoder.encode(referenceDoc,"UTF-8"));
+		}
+				
 		try {
 			return mapper.convertValue(serviceRequestRepository.fetchResult(url, request, tenantId), VoucherResponse.class);
 		} catch (Exception e) {
 				LOGGER.error("ERROR while fetching the voucher based on Service and Reference document");
 		}
 		return null;
+	}
+	
+	@Override
+	public VoucherResponse getVouchers(VoucherSearchCriteria criteria, RequestInfo requestInfo, String tenantId) throws VoucherCustomException{
+		VoucherSearchRequest request = new VoucherSearchRequest();
+		request.setRequestInfo(requestInfo);
+		request.setTenantId(tenantId);
+		StringBuilder url = new StringBuilder(propertiesManager.getErpURLBytenantId(tenantId)).append(propertiesManager.getVoucherSearchUrl()).append("?");
+		prepareQueryString(url, criteria);
+		try {
+			return mapper.convertValue(serviceRequestRepository.fetchResult(url, request, tenantId), VoucherResponse.class);
+		} catch (Exception e) {
+				LOGGER.error("ERROR while fetching the voucher based on Service and Reference document");
+		}
+		return null;
+	}
+	
+	@Override
+	public VoucherResponse processReversalVoucher(List<InstrumentContract> instruments, RequestInfo requestInfo) {
+		Set<String> receiptVoucherNumbers = instruments.stream().map(InstrumentContract::getInstrumentVouchers).flatMap(x -> x.stream()).map(InstrumentVoucherContract::getVoucherHeaderId).collect(Collectors.toSet());
+		Set<Long> payInSlipIds = instruments.stream().map(InstrumentContract::getPayinSlipId).map(Long::parseLong).collect(Collectors.toSet());
+		String tenantId = instruments.get(0).getTenantId();
+		VoucherResponse reversalVoucherResponse = null;
+		try {
+			Long dishonorDate = instruments.get(0).getDishonor().getDishonorDate();
+			VoucherResponse rvResponse = this.getVouchers(new VoucherSearchCriteria().builder().voucherNumbers(receiptVoucherNumbers).build(), requestInfo , tenantId );
+			VoucherResponse pisResponse = this.getVouchers(new VoucherSearchCriteria().builder().ids(payInSlipIds).build(), requestInfo , tenantId );
+			if(!rvResponse.getVouchers().isEmpty() && !pisResponse.getVouchers().isEmpty()){
+				Voucher reversalVoucher = rvResponse.getVouchers().get(0);
+				Map<String, AccountDetail> rvGlcodeMap = rvResponse.getVouchers().get(0).getLedgers().stream().collect(Collectors.toMap(AccountDetail::getGlcode, java.util.function.Function.identity()));
+				Map<String, AccountDetail> pisGlCodeMap = pisResponse.getVouchers().get(0).getLedgers().stream().collect(Collectors.toMap(AccountDetail::getGlcode, java.util.function.Function.identity()));
+				List<AccountDetail> ledgerForReversalVoucher = this.prepareLedgerForReversalVoucher(rvGlcodeMap, pisGlCodeMap);
+				reversalVoucher.setLedgers(ledgerForReversalVoucher);
+				this.prepareVoucherDetailsForReversalVoucher(reversalVoucher, dishonorDate);
+				reversalVoucherResponse = this.createVoucher(Collections.singletonList(reversalVoucher), requestInfo, tenantId);
+				LOGGER.error("reversalVoucherResponse :: {}", reversalVoucherResponse.getVouchers());
+			}
+			
+		} catch (VoucherCustomException e) {
+			e.printStackTrace();
+		}
+		return reversalVoucherResponse;
+	}
+
+	private void prepareQueryString(StringBuilder url, VoucherSearchCriteria criteria) {
+		if(criteria.getIds() != null && !criteria.getIds().isEmpty()){
+			String collect = criteria.getIds().stream().map(id -> id.toString()).collect(Collectors.joining(", "));
+			url.append("&ids=").append(collect);
+		}
+		if(criteria.getVoucherNumbers() != null && !criteria.getVoucherNumbers().isEmpty()){
+			url.append("&voucherNumbers=").append(String.join(", ", criteria.getVoucherNumbers()));
+		}
+	}
+	
+	private List<AccountDetail> prepareLedgerForReversalVoucher(Map<String, AccountDetail> rvGlcodeMap,
+			Map<String, AccountDetail> pisGlCodeMap) {
+		Double drMaountToBank = new Double(0);
+		Double crMaountToBank = new Double(0);
+		for(String pis : pisGlCodeMap.keySet()){
+			if(rvGlcodeMap.get(pis) != null){
+				drMaountToBank = rvGlcodeMap.get(pis).getDebitAmount();
+				crMaountToBank = rvGlcodeMap.get(pis).getCreditAmount();
+				rvGlcodeMap.remove(pis);
+			}else{
+				AccountDetail value = pisGlCodeMap.get(pis);
+				value.setCreditAmount(crMaountToBank);
+				value.setDebitAmount(drMaountToBank);
+				rvGlcodeMap.put(pis, value);
+			}
+		}
+		rvGlcodeMap.values().stream().forEach(ad -> {
+			Double creditAmount = ad.getCreditAmount();
+			Double debitAmount = ad.getDebitAmount();
+			ad.setCreditAmount(debitAmount);
+			ad.setDebitAmount(creditAmount);
+		});
+		
+		return rvGlcodeMap.values().stream().collect(Collectors.toList());
+	}
+	
+	private void prepareVoucherDetailsForReversalVoucher(Voucher reversalVoucher, Long dishonorDate) {
+		reversalVoucher.setName(REVERSAL_VOUCHER_NAME);
+		reversalVoucher.setType(REVERSAL_VOUCHER_TYPE);
+		reversalVoucher.setVoucherNumber("");
+		reversalVoucher.setVoucherDate(dateFormatter.format(new Date(dishonorDate)));
+		reversalVoucher.setReferenceDocument(null);
+		reversalVoucher.setServiceName(null);
 	}
 }

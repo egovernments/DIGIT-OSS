@@ -37,109 +37,81 @@
  *
  *   In case of any queries, you can reach eGovernments Foundation at contact@egovernments.org.
  */
-package org.egov.receipt.consumer.model;
+
+package org.egov.receipt.consumer.v2.model;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import org.egov.receipt.consumer.model.AuditDetails;
+import org.egov.receipt.consumer.model.Bill;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-@Setter
-@Getter
+
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-public class BillDetail {
-	private String id;
+@Builder
+@EqualsAndHashCode
+public class PaymentDetail {
 
-    private String bill;
+    @Size(max=64)
+    @JsonProperty("id")
+    private String id;
 
-    private Long billDate;
-
-    private String billDescription;
-
-    private String billNumber; // refNo
-
-    private String consumerCode;
-
-    private String consumerType;
-
-    private BigDecimal minimumAmount;
-
-    private BigDecimal totalAmount;
-
-    private BigDecimal collectedAmount;
-
-    private List<String> collectionModesNotAllowed = new ArrayList<>();
-
+    @Size(max=64)
+    @JsonProperty("tenantId")
     private String tenantId;
 
-    private String businessService; // buisnessDetailsCode
+    @JsonProperty("totalDue")
+    private BigDecimal totalDue;
 
-    private String displayMessage;
+    @NotNull
+    @JsonProperty("totalAmountPaid")
+    private BigDecimal totalAmountPaid;
 
-    private Boolean callBackForApportioning;
-
+    @Size(max=64)
+    @JsonProperty("receiptNumber")
     private String receiptNumber;
-
-    private Long receiptDate;
-
-    private String receiptType;
-
-    private String channel;
-
-    private String voucherHeader;
-
-    private CollectionType collectionType;
-
-    private String boundary;
-
-    private String reasonForCancellation;
-
-    private BigDecimal amountPaid;
-
-    private String cancellationRemarks;
-
-    private String status;
-
-    @JsonProperty("billAccountDetails")
-    private List<BillAccountDetail> billAccountDetails = new ArrayList<>();
-
+    
+    @Size(max=64)
+    @JsonProperty("manualReceiptNumber")
     private String manualReceiptNumber;
-
+    
+    @JsonProperty("manualReceiptDate")
     private Long manualReceiptDate;
 
-    private Long stateId;
+    @JsonProperty("receiptDate")
+    private Long receiptDate = null;
 
-    private Boolean partPaymentAllowed;
-    
+    @JsonProperty("receiptType")
+    private String receiptType = null;
+
+    @JsonProperty("businessService")
+    private String businessService;
+
+    @NotNull
+    @Size(max=64)
+    @JsonProperty("billId")
+    private String billId;
+
+    @JsonProperty("bill")
+    private BillV2 bill;
+
     @JsonProperty("additionalDetails")
-    private JsonNode additionalDetails = null;
-    
-    @NotNull
-    @JsonProperty("expiryDate")
-    private Long expiryDate;
-    
-    @JsonProperty("demandId")
-    private String demandId = null;
-    
-    @NotNull
-    @JsonProperty("fromPeriod")
-    private Long fromPeriod = null;
+    private JsonNode additionalDetails;
 
-    @NotNull
-    @JsonProperty("toPeriod")
-    private Long toPeriod = null;
-    
-    @JsonProperty("isAdvanceAllowed")
-    private Boolean isAdvanceAllowed;
+    @JsonProperty("auditDetails")
+    private AuditDetails auditDetails;
+
 }
+

@@ -37,8 +37,10 @@
  *
  *   In case of any queries, you can reach eGovernments Foundation at contact@egovernments.org.
  */
-package org.egov.receipt.consumer.model;
 
+package org.egov.receipt.consumer.v2.model;
+
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,53 +48,115 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.egov.receipt.consumer.model.AuditDetails;
+import org.egov.receipt.consumer.model.InstrumentStatusEnum;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.JsonNode;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Setter
-@Getter
-@ToString
-@EqualsAndHashCode(of = {"receiptNumber"})
-public class Receipt {
+@EqualsAndHashCode
+public class Payment {
+
+    @Size(max=64)
+    @JsonProperty("id")
+    private String id;
 
     @NotNull
+    @Size(max=64)
+    @JsonProperty("tenantId")
     private String tenantId;
 
-    private String transactionId;
-
-    // Read only, populated during search
-    private String receiptNumber;
-
-    // Read only, populated during search
-    private String consumerCode;
-
-    // Read only, populated during search
-    private Long receiptDate;
+    @JsonProperty("totalDue")
+    private BigDecimal totalDue;
 
     @NotNull
-    @Size(min = 1, max = 1)
-    @Valid
-    @JsonProperty("Bill")
-    private List<Bill> bill = new ArrayList<>();
+    @JsonProperty("totalAmountPaid")
+    private BigDecimal totalAmountPaid;
 
+    @Size(max=128)
+    @JsonProperty("transactionNumber")
+    private String transactionNumber;
+
+    @JsonProperty("transactionDate")
+    private Long transactionDate;
+
+    @NotNull
+    @JsonProperty("paymentMode")
+    private PaymentModeEnum paymentMode;
+
+    
+    @JsonProperty("instrumentDate")
+    private Long instrumentDate;
+
+    @Size(max=128)
+    @JsonProperty("instrumentNumber")
+    private String instrumentNumber;
+
+    @JsonProperty("instrumentStatus")
+    private InstrumentStatusEnum instrumentStatus;
+
+    @Size(max=64)
+    @JsonProperty("ifscCode")
+    private String ifscCode;
+
+    @JsonProperty("auditDetails")
     private AuditDetails auditDetails;
 
+    @JsonProperty("additionalDetails")
+    private JsonNode additionalDetails;
+
+    @JsonProperty("paymentDetails")
     @Valid
-    private Instrument instrument;
-    
-    @JsonIgnore
-    private String paymentId;
-    
-    @JsonIgnore
-    private String paymentDetailId;
+    private List<PaymentDetail> paymentDetails;
+
+    @Size(max=128)
+    @NotNull
+    @JsonProperty("paidBy")
+    private String paidBy = null;
+
+    @Size(max=64)
+    @NotNull
+    @JsonProperty("mobileNumber")
+    private String mobileNumber = null;
+
+    @Size(max=128)
+    @JsonProperty("payerName")
+    private String payerName = null;
+
+    @Size(max=1024)
+    @JsonProperty("payerAddress")
+    private String payerAddress = null;
+
+    @Size(max=64)
+    @JsonProperty("payerEmail")
+    private String payerEmail = null;
+
+    @Size(max=64)
+    @JsonProperty("payerId")
+    private String payerId = null;
+
+    @JsonProperty("paymentStatus")
+    private PaymentStatusEnum paymentStatus;
+
+
+    public Payment addpaymentDetailsItem(PaymentDetail paymentDetail) {
+        if (this.paymentDetails == null) {
+            this.paymentDetails = new ArrayList<>();
+        }
+        this.paymentDetails.add(paymentDetail);
+        return this;
+    }
+
+
 
 }

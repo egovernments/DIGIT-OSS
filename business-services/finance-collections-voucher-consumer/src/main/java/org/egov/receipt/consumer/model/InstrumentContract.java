@@ -175,5 +175,7 @@ public class InstrumentContract {
      * instrumentVouchers is the reference to the payment vouchers for which the instrument is attached.
      */
     private List<InstrumentVoucherContract> instrumentVouchers = new ArrayList<>();
+    
+    private DishonorReasonContract dishonor;
 
 }

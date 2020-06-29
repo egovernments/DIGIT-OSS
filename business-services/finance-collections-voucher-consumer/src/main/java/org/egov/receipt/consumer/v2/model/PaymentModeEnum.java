@@ -37,46 +37,24 @@
  *
  *   In case of any queries, you can reach eGovernments Foundation at contact@egovernments.org.
  */
-package org.egov.receipt.consumer.model;
 
-import java.util.HashSet;
-import java.util.Set;
+package org.egov.receipt.consumer.v2.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum InstrumentStatusEnum {
-	APPROVED("APPROVED", InstrumentStatusEnum.Category.OPEN),
-    APPROVAL_PENDING("APPROVAL_PENDING", InstrumentStatusEnum.Category.OPEN),
-    TO_BE_SUBMITTED("TO_BE_SUBMITTED", InstrumentStatusEnum.Category.OPEN),
-    REMITTED("REMITTED", InstrumentStatusEnum.Category.OPEN),
-    REJECTED("REJECTED", InstrumentStatusEnum.Category.CLOSED),
-    CANCELLED("CANCELLED", InstrumentStatusEnum.Category.CLOSED),
-    DISHONOURED("DISHONOURED", InstrumentStatusEnum.Category.CLOSED);
+public enum PaymentModeEnum {
+	CASH("CASH"),
+    CHEQUE("CHEQUE"),
+    DD("DD"),
+    ONLINE("ONLINE"),
+    CARD("CARD");
 
 
     private String value;
 
-    private InstrumentStatusEnum.Category category;
-
-    InstrumentStatusEnum(String value, InstrumentStatusEnum.Category category) {
+    PaymentModeEnum(String value) {
         this.value = value;
-        this.category = category;
-    }
-
-    public boolean isCategory(InstrumentStatusEnum.Category category) {
-        return this.category == category;
-    }
-
-    public static Set<String> statusesByCategory(InstrumentStatusEnum.Category category) {
-        Set<String> statuses = new HashSet<>();
-        for (InstrumentStatusEnum b : InstrumentStatusEnum.values()) {
-            if (b.category == category) {
-                statuses.add(b.value);
-            }
-        }
-
-        return statuses;
     }
 
     @Override
@@ -85,18 +63,22 @@ public enum InstrumentStatusEnum {
         return String.valueOf(value);
     }
 
+    public static boolean contains(String test) {
+        for (PaymentModeEnum val : PaymentModeEnum.values()) {
+            if (val.name().equalsIgnoreCase(test)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @JsonCreator
-    public static InstrumentStatusEnum fromValue(String text) {
-        for (InstrumentStatusEnum b : InstrumentStatusEnum.values()) {
+    public static PaymentModeEnum fromValue(String text) {
+        for (PaymentModeEnum b : PaymentModeEnum.values()) {
             if (String.valueOf(b.value).equalsIgnoreCase(text)) {
                 return b;
             }
         }
         return null;
-    }
-
-    public enum Category {
-        OPEN,
-        CLOSED;
     }
 }

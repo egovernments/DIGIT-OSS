@@ -37,109 +37,43 @@
  *
  *   In case of any queries, you can reach eGovernments Foundation at contact@egovernments.org.
  */
+
 package org.egov.receipt.consumer.model;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.validation.constraints.NotNull;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.JsonNode;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
-@Setter
 @Getter
+@Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@ToString
-public class BillDetail {
-	private String id;
-
-    private String bill;
-
-    private Long billDate;
-
-    private String billDescription;
-
-    private String billNumber; // refNo
-
-    private String consumerCode;
-
-    private String consumerType;
-
-    private BigDecimal minimumAmount;
-
-    private BigDecimal totalAmount;
-
-    private BigDecimal collectedAmount;
-
-    private List<String> collectionModesNotAllowed = new ArrayList<>();
-
-    private String tenantId;
-
-    private String businessService; // buisnessDetailsCode
-
-    private String displayMessage;
-
-    private Boolean callBackForApportioning;
-
-    private String receiptNumber;
-
-    private Long receiptDate;
-
-    private String receiptType;
-
-    private String channel;
-
-    private String voucherHeader;
-
-    private CollectionType collectionType;
-
-    private String boundary;
-
-    private String reasonForCancellation;
-
-    private BigDecimal amountPaid;
-
-    private String cancellationRemarks;
-
-    private String status;
-
-    @JsonProperty("billAccountDetails")
-    private List<BillAccountDetail> billAccountDetails = new ArrayList<>();
-
-    private String manualReceiptNumber;
-
-    private Long manualReceiptDate;
-
-    private Long stateId;
-
-    private Boolean partPaymentAllowed;
-    
-    @JsonProperty("additionalDetails")
-    private JsonNode additionalDetails = null;
-    
-    @NotNull
-    @JsonProperty("expiryDate")
-    private Long expiryDate;
-    
-    @JsonProperty("demandId")
-    private String demandId = null;
-    
-    @NotNull
-    @JsonProperty("fromPeriod")
-    private Long fromPeriod = null;
-
-    @NotNull
-    @JsonProperty("toPeriod")
-    private Long toPeriod = null;
-    
-    @JsonProperty("isAdvanceAllowed")
-    private Boolean isAdvanceAllowed;
+public class BankDetails {
+	@JsonProperty("BRANCH")
+	private String branchName;
+	@JsonProperty("ADDRESS")
+	private String address;
+	@JsonProperty("CONTACT")
+	private String contact;
+	@JsonProperty("CITY")
+	private String city;
+	@JsonProperty("DISTRICT")
+	private String district;
+	@JsonProperty("STATE")
+	private String state;
+	@JsonProperty("NEFT")
+	private boolean neft;
+	@JsonProperty("RTGS")
+	private boolean rtgs;
+	@JsonProperty("IMPS")
+	private boolean imps;
+	@JsonProperty("MICR")
+	private String micr;
+	@JsonProperty("BANK")
+	private String bankName;
+	@JsonProperty("BANKCODE")
+	private String bankCode;
+	@JsonProperty("IFSC")
+	private String ifsc;
+	
 }
