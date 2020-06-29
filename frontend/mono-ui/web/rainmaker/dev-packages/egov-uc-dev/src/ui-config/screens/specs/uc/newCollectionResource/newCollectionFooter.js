@@ -140,6 +140,7 @@ const processDemand = async (state, dispatch) => {
 };
 
 const createDemand = async (state, dispatch) => {
+  dispatch(prepareFinalObject("ReceiptTemp[0].Bill", []));
   let demands = JSON.parse(
     JSON.stringify(
       get(state.screenConfiguration.preparedFinalObject, "Demands")
