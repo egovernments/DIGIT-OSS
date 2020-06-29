@@ -1,7 +1,12 @@
 import {
   getLabel,
+  getCommonHeader,
+  getCommonContainer,
   dispatchMultipleFieldChangeAction
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import {
+  showDialogBox,
+} from "egov-tradelicence/ui-config/screens/specs/utils";
 import { download } from "egov-common/ui-utils/commons";
 import { applyTradeLicense,getNextFinancialYearForRenewal} from "../../../../../ui-utils/commons";
 import {
@@ -19,6 +24,8 @@ import {
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
+//import { dialogbox } from "./dialogbox";
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   toggleSnackbar,
   prepareFinalObject
@@ -601,7 +608,14 @@ export const footer = getCommonApplyFooter({
 
 
 
-export const renewTradelicence  = async (financialYear,state,dispatch) => {
+export const renewTradelicence  = async (state,dispatch) => {
+
+  const financialYear = get(
+    state.screenConfiguration.screenConfig["search-preview"], //hardcoded to apply screen
+    "components.div.children.footer.children.container.children.rightdiv.children.renewDialog.props.financialYear"
+  );
+
+
   const licences = get(
     state.screenConfiguration.preparedFinalObject,
     `Licenses`
@@ -634,6 +648,122 @@ const response=  await httpRequest("post", "/tl-services/v1/_update", "", [], {
     ));
 };
 
+export const dialogbox = getCommonContainer({
+  header: getCommonHeader({
+    labelName: "Pick your city.",
+    labelKey: "TL_RENEWAL_CONFIRM_MESSAGE"
+  }),
+  cityPicker: getCommonContainer({
+   /*  cityDropdown: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-tradelicence",
+      componentPath: "AutosuggestContainer",
+      jsonPath: "citiesByModule.citizenTenantId",
+      required: true,
+      gridDefination: {
+        xs: 12,
+        sm: 12
+      },
+      props: {
+        style: {
+          width: "100%",
+          cursor: "pointer"
+        },
+        localePrefix: {
+          moduleName: "TENANT",
+          masterName: "TENANTS"
+        },
+        className: "citizen-city-picker",
+        label: {
+          labelName: "City",
+          labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
+        },
+        placeholder: { labelName: "Select City", labelKey: "TL_SELECT_CITY" },
+        jsonPath: "citiesByModule.citizenTenantId",
+        sourceJsonPath:
+          "applyScreenMdmsData.common-masters.citiesByModule.TL.tenants",
+        labelsFromLocalisation: true,
+        fullwidth: true,
+        required: true,
+        inputLabelProps: {
+          shrink: true
+        }
+      }
+    }, */
+    div: {
+      uiFramework: "custom-atoms",
+      componentPath: "Div",
+      children: {
+        selectButton: {
+          componentPath: "Button",
+          props: {
+            variant: "contained",
+            color: "primary",
+            style: {
+              width: "85px",
+              height: "20px",
+              marginRight: "4px",
+              marginTop: "16px",
+              fontWeight: 'bold'
+            }
+          },
+          children: {
+            previousButtonLabel: getLabel({
+              labelName: "YES",
+              labelKey: "TL_RENEWAL_CONFIRM_MESSAGE_YES"
+            })
+          },
+          onClickDefination: {
+            action: "condition",
+            callBack:renewTradelicence
+            }
+          
+        },
+        cancelButton: {
+          componentPath: "Button",
+          props: {
+            variant: "outlined",
+            color: "primary",
+            style: {
+              width: "85px",
+              height: "20px",
+              marginRight: "4px",
+              marginTop: "16px",
+              fontWeight: 'bold'
+            }
+          },
+          children: {
+            previousButtonLabel: getLabel({
+              labelName: "NO",
+              labelKey: "TL_RENEWAL_CONFIRM_MESSAGE_NO"
+            })
+          },
+          onClickDefination: {
+            action: "condition",         
+            callBack:  showDialogBox       
+            
+          }
+        }
+      }
+    }
+  })
+});
+
+export const renewDialogBox  = async (financialYear,state,dispatch) => {
+  
+  dispatch(
+    handleField("search-preview", "components.div.children.footer.children.container.children.rightdiv.children.renewDialog", "props.open", false)
+  );
+      
+  const toggle = get(
+    state.screenConfiguration.screenConfig["search-preview"], //hardcoded to apply screen
+    "components.div.children.footer.children.container.children.rightdiv.children.renewDialog.props.open"
+  );
+
+  dispatch(
+    handleField("search-preview", "components.div.children.footer.children.container.children.rightdiv.children.renewDialog", "props.open", !toggle)
+  );
+ };
 export const footerReview = (
   action,
   state,
@@ -708,13 +838,13 @@ export const footerReview = (
                 }
               },
               children: {
-                previousButtonIcon: {
+                /* previousButtonIcon: {
                   uiFramework: "custom-atoms",
                   componentPath: "Icon",
-                  props: {
+                   props: {
                     iconName: "keyboard_arrow_left"
-                  }
-                },
+                  } 
+                }, */
                 previousButtonLabel: getLabel({
                   labelName: "Edit for Renewal",
                   labelKey: "TL_RENEWAL_BUTTON_EDIT"
@@ -762,7 +892,8 @@ export const footerReview = (
               onClickDefination: {
                 action: "condition",
                 callBack: () => {
-                  renewTradelicence(financialYear, state,dispatch);
+                  //renewTradelicence(financialYear, state,dispatch);
+                  renewDialogBox(financialYear, state,dispatch);
                 },
 
               },
@@ -798,7 +929,32 @@ export const footerReview = (
 
               },
               visible: process.env.REACT_APP_NAME === "Citizen" && getButtonVisibility(status, "PENDINGPAYMENT") ? true : false
-            }
+            },
+           renewDialog: {
+              componentPath: "Dialog",
+              props: {
+                open: false,
+                maxWidth: "md",
+                state:state,
+                financialYear:financialYear
+              },              
+              children: {
+                dialogContent: {
+                  componentPath: "DialogContent",
+                  props: {
+                    classes: {
+                      root: "city-picker-dialog-style"
+                    },               
+
+                    // style: { minHeight: "180px", minWidth: "365px" }
+                  },
+                  children: {
+                    popup: dialogbox
+                  }
+                }
+              }
+            } 
+
           },
           gridDefination: {
             xs: 12,

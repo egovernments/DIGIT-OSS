@@ -2285,6 +2285,18 @@ export const showCityPicker = (state, dispatch) => {
   );
 };
 
+export const showDialogBox = (state, dispatch) => 
+{
+
+  const toggle = get(
+    state.screenConfiguration.screenConfig["search-preview"], //hardcoded to apply screen
+    "components.div.children.footer.children.container.children.rightdiv.children.renewDialog.props.open"
+  );
+  dispatch(
+    handleField("search-preview", "components.div.children.footer.children.container.children.rightdiv.children.renewDialog", "props.open", !toggle)
+  );
+};
+
 export const applyForm = (state, dispatch) => {
   const tenantId = get(
     state.screenConfiguration.preparedFinalObject,
