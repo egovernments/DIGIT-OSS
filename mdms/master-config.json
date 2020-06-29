@@ -1014,6 +1014,11 @@
       "uniqueKeys": [
         "$.parameter"
       ]
+    },
+    "NocTypeMapping": {
+      "masterName": "NocTypeMapping",
+      "isStateLevel": true,
+      "uniqueKeys": []
     }
   },
   "sw-services-calculation": {

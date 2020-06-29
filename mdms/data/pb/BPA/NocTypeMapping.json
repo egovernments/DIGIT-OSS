@@ -1,0 +1,78 @@
+{
+  "tenantId": "pb",
+  "moduleName": "BPA",
+  "NocTypeMapping": [
+    {
+      "applicationType": "BUILDING_PLAN_SCRUTINY",
+      "serviceType": "NEW_CONTRUCTION",
+      "riskType": "ALL",
+      "nocTriggerState": "SEND_TO_CITIZEN",
+      "nocTypes": [
+        {
+          "type": "AIRPORT_AUTHORITY",
+          "required": true,
+          "documentType": "NOC.AIRPORT"
+        },
+        {
+          "type": "FIRE_NOC",
+          "required": false,
+          "documentType": "NOC.FIRE"
+        }
+      ]
+    },
+    {
+      "applicationType": "BUILDING_PLAN_SCRUTINY",
+      "serviceType": "NEW_CONTRUCTION",
+      "riskType": "LOW",
+      "nocTriggerState": "SEND_TO_CITIZEN",
+      "nocTypes": [
+        {
+          "type": "AIRPORT_AUTHORITY",
+          "required": true,
+          "documentType": "NOC.AIRPORT"
+        },
+        {
+          "type": "FIRE_NOC",
+          "required": false,
+          "documentType": "NOC.FIRE"
+        }
+      ]
+    },
+    {
+      "applicationType": "BUILDING_OC_PLAN_SCRUTINY",
+      "serviceType": "NEW_CONTRUCTION",
+      "riskType": "ALL",
+      "nocTriggerState": "SEND_TO_CITIZEN",
+      "nocTypes": [
+        {
+          "type": "AIRPORT_AUTHORITY",
+          "required": true,
+          "documentType": "NOC.AIRPORT"
+        },
+        {
+          "type": "FIRE_NOC",
+          "required": false,
+          "documentType": "NOC.FIRE"
+        }
+      ]
+    },
+    {
+      "applicationType": "BUILDING_OC_PLAN_SCRUTINY",
+      "serviceType": "NEW_CONTRUCTION",
+      "riskType": "LOW",
+      "nocTriggerState": "SEND_TO_CITIZEN",
+      "nocTypes": [
+        {
+          "type": "AIRPORT_AUTHORITY",
+          "required": true,
+          "documentType": "NOC.AIRPORT"
+        },
+        {
+          "type": "FIRE_NOC",
+          "required": false,
+          "documentType": "NOC.FIRE"
+        }
+      ]
+    }
+  ]
+}
