@@ -130,6 +130,7 @@
         <div class="tab-pane fade in active" id="expensebillheader">
             <jsp:include page="expensebill-header.jsp"/>
             <jsp:include page="expensebill-subledgerdetails.jsp"/>
+            <jsp:include page="expensebill-accountcode-template.jsp"/>
             <div class="panel panel-primary" data-collapsed="0">
                 <jsp:include page="expensebill-debitdetails.jsp"/>
                 <jsp:include page="expensebill-creditdetails.jsp"/>

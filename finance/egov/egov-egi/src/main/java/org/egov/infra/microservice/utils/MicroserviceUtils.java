@@ -89,6 +89,7 @@ import org.egov.infra.admin.master.entity.CustomUserDetails;
 import org.egov.infra.admin.master.entity.User;
 import org.egov.infra.admin.master.service.RoleService;
 import org.egov.infra.config.core.ApplicationThreadLocals;
+import org.egov.infra.microservice.contract.AccountCodeTemplate;
 import org.egov.infra.microservice.contract.ActionRequest;
 import org.egov.infra.microservice.contract.ActionResponse;
 import org.egov.infra.microservice.contract.CreateUserRequest;
@@ -1899,6 +1900,22 @@ public class MicroserviceUtils {
         if (criteria.getLimit() != null && criteria.getLimit().intValue() != 0) {
             uri.append("&limit=").append(criteria.getLimit());
         }
+    }
+
+    public List<AccountCodeTemplate> getAccountCodeTemplate(String module, String billSubType, String accountDetailType) {
+        List<ModuleDetail> moduleDetailsList = new ArrayList<>();
+        try {
+            this.prepareModuleDetails(moduleDetailsList, "FinanceModule", "AccountCodeTemplate", "module", module, String.class);
+            this.prepareModuleDetails(moduleDetailsList, "FinanceModule", "AccountCodeTemplate", "subModule", billSubType, String.class);
+            this.prepareModuleDetails(moduleDetailsList, "FinanceModule", "AccountCodeTemplate", "subledgerType", accountDetailType, String.class);
+            Map postForObject = mapper.convertValue(this.getMdmsData(moduleDetailsList, true, null, null), Map.class);
+            if (postForObject != null) {
+                return mapper.convertValue(JsonPath.read(postForObject, "$.MdmsRes.FinanceModule.AccountCodeTemplate"),new TypeReference<List<AccountCodeTemplate>>(){});
+            }
+        } catch (Exception e) {
+            LOGGER.error("ERROR occurred while fetching AccountCode Templates in getAccountCodeTemplate method: ",e);
+        }
+        return null;
     }
 
    

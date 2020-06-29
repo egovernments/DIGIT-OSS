@@ -369,5 +369,31 @@ public class ChartOfAccountsService extends PersistenceService<CChartOfAccounts,
                         " from CChartOfAccounts coa where coa.isActiveForPosting=true and coa.classification=4");
         return query.list();
     }
+    
+    public List<CChartOfAccounts> getSubledgerAccountCodesForAccountDetailTypeAndNonSubledgers(
+            final Integer accountDetailTypeId, final Set<String> glcodes) {
+        final List<AppConfigValues> configValuesByModuleAndKey = appConfigValuesService.getConfigValuesByModuleAndKey(
+                "EGF", CONTINGENCY_BILL_PURPOSE_IDS);
+        final List<Long> contingencyBillPurposeIds = new ArrayList<>();
+        for (final AppConfigValues av : configValuesByModuleAndKey)
+            contingencyBillPurposeIds.add(Long.valueOf(av.getValue()));
+
+        if (accountDetailTypeId == 0 || accountDetailTypeId == -1) {
+            final Query entitysQuery = getSession()
+                    .createQuery(
+                            " from CChartOfAccounts a where a.isActiveForPosting=true and a.classification=4 and size(a.chartOfAccountDetails) = 0 and (glcode in (:glcodes)) and (purposeId is null or purposeId not in (:ids)) order by a.id");
+            entitysQuery.setParameterList("glcodes", glcodes);
+            entitysQuery.setParameterList("ids", contingencyBillPurposeIds);
+            return entitysQuery.list();
+        } else {
+            final Query entitysQuery = getSession()
+                    .createQuery(
+                            "  from CChartOfAccounts  a LEFT OUTER JOIN  fetch a.chartOfAccountDetails  b where (size(a.chartOfAccountDetails) = 0 or b.detailTypeId.id=:accountDetailTypeId) and a.isActiveForPosting=true and a.classification=4 and a.glcode in (:glcodes) and (purposeId is null or purposeId not in (:ids)) order by a.id");
+            entitysQuery.setInteger("accountDetailTypeId", accountDetailTypeId);
+            entitysQuery.setParameterList("glcodes", glcodes);
+            entitysQuery.setParameterList("ids", contingencyBillPurposeIds);
+            return entitysQuery.list();
+        }
+    }
 
 }
