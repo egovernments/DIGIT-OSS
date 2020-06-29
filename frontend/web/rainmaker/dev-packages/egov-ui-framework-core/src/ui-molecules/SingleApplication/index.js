@@ -13,7 +13,7 @@ import "./index.css";
 import { checkValueForNA } from "../../ui-config/screens/specs/utils";
 import { localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
-import { convertEpochToDate } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { convertEpochToDate, convertEpochToDateForEndDate } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { epochToDate, navigateToApplication, getApplicationType } from "egov-ui-kit/utils/commons";
 import orderBy from "lodash/orderBy";
 const styles = {
@@ -143,7 +143,7 @@ class SingleApplication extends React.Component {
   };
   generatevalidity = (item) => {
     const validFrom=item.validFrom?convertEpochToDate( get(item, "validFrom")):"NA";
-    const validTo=item.validTo?convertEpochToDate( get(item, "validTo")):"NA";
+    const validTo=item.validTo?convertEpochToDateForEndDate( get(item, "validTo")):"NA";
     const validity = validFrom+" - "+validTo;
     return validity;
   }

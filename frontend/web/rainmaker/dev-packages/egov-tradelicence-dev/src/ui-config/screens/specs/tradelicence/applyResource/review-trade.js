@@ -10,8 +10,7 @@ import { changeStep } from "./footer";
 import {
   getQueryArg
 } from "egov-ui-framework/ui-utils/commons";
-
-import { convertEpochToDate, checkValueForNA } from "../../utils";
+import { convertEpochToDate, convertEpochToDateForEndDate, checkValueForNA } from "../../utils";
 
 const accessoriesCard = {
   uiFramework: "custom-containers",
@@ -254,7 +253,7 @@ export const getReviewTrade = (isEditable = true) => {
         { labelName: "To Date",labelKey : "TL_COMMON_TO_DATE_LABEL" },
         {
           jsonPath: "Licenses[0].validTo",
-          callBack: convertEpochToDate
+          callBack: convertEpochToDateForEndDate
         }
       ),
       reviewStructureType: getLabelWithValue(
