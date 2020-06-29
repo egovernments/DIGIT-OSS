@@ -26,3 +26,19 @@ at Receipt root for easier access.
 ### Deprecated
 - Receipt status & voucher update via update API in favour of workflow API.
 
+
+All notable changes to this module will be documented in this file.
+
+## 2.0.0 - 2020-06-25
+
+- Added Paytment API
+- Added typescript definition generation plugin
+- Upgraded to `tracer:2.0.0-SNAPSHOT`
+- Upgraded to spring boot `2.2.6-RELEASE`
+- Removed `start.sh` and `Dockerfile`
+
+## 2.0.0
+
+- Base version
+
+

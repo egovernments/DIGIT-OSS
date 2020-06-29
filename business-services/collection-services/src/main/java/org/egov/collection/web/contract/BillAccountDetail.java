@@ -2,6 +2,7 @@ package org.egov.collection.web.contract;
 
 import java.math.BigDecimal;
 
+import org.egov.collection.model.AuditDetails;
 import org.egov.collection.model.enums.Purpose;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -15,6 +16,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.Size;
+
 @Setter
 @Getter
 @ToString
@@ -23,16 +26,20 @@ import lombok.ToString;
 @AllArgsConstructor
 @EqualsAndHashCode
 public class BillAccountDetail {
-	
+
+	@Size(max=64)
 	@JsonProperty("id")
 	private String id = null;
 
+	@Size(max=64)
 	@JsonProperty("tenantId")
 	private String tenantId = null;
 
-	@JsonProperty("billDetail")
-	private String billDetail = null;
+	@Size(max=64)
+	@JsonProperty("billDetailId")
+	private String billDetailId = null;
 
+	@Size(max=64)
 	@JsonProperty("demandDetailId")
 	private String demandDetailId = null;
 
@@ -48,9 +55,7 @@ public class BillAccountDetail {
 	@JsonProperty("isActualDemand")
 	private Boolean isActualDemand = null;
 
-	@JsonProperty("glcode")
-	private String glcode = null;
-	
+	@Size(max=64)
 	@JsonProperty("taxHeadCode")
 	private String taxHeadCode = null;
 
@@ -59,4 +64,7 @@ public class BillAccountDetail {
 
 	@JsonProperty("purpose")
 	private Purpose purpose = null;
+
+	@JsonProperty("auditDetails")
+	private AuditDetails auditDetails;
 }

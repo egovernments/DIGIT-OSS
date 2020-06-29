@@ -5,6 +5,7 @@ import org.egov.config.ApportionConfig;
 import org.egov.service.Apportion;
 import org.egov.service.TaxHeadMasterService;
 import org.egov.tracer.model.CustomException;
+import org.egov.web.models.Bill;
 import org.egov.web.models.enums.Purpose;
 import org.egov.web.models.BillAccountDetail;
 import org.egov.web.models.BillDetail;
@@ -49,23 +50,33 @@ public class OrderByPriorityApportion implements Apportion {
      *    and negative adjustmentAmount for postive amounts
      * 4. If any advance amount is remaining new BillAccountDetail is created for it
      *    and assigned to last BillDetail
-     * @param billDetails The list of BillDetail to be apportioned
-     * @param amountPaid The total amount paid against the list of billDetails
      * @return
      */
     @Override
-    public List<BillDetail> apportionPaidAmount(List<BillDetail> billDetails,BigDecimal amountPaid,Object masterData) {
-        billDetails.sort(Comparator.comparing(BillDetail::getFromPeriod));
-        BigDecimal remainingAmount = amountPaid;
+    public List<BillDetail> apportionPaidAmount(Bill bill, Object masterData) {
+        bill.getBillDetails().sort(Comparator.comparing(BillDetail::getFromPeriod));
+        List<BillDetail> billDetails = bill.getBillDetails();
+        BigDecimal remainingAmount = bill.getAmountPaid();
         BigDecimal amount;
         Boolean isAmountPositive;
+
+        if(bill.getIsAdvanceAllowed()){
+            BigDecimal requiredAdvanceAmount = apportionAndGetRequiredAdvance(bill);
+            remainingAmount = remainingAmount.add(requiredAdvanceAmount);
+        }
 
         if(!config.getApportionByValueAndOrder())
             validateOrder(billDetails);
 
+        BigDecimal amountBeforeApportion = remainingAmount;
 
         for (BillDetail billDetail : billDetails){
-        	
+
+            if(remainingAmount.compareTo(BigDecimal.ZERO)==0){
+                billDetail.setAmountPaid(BigDecimal.ZERO);
+                continue;
+            }
+
             if(!config.getApportionByValueAndOrder())
                 billDetail.getBillAccountDetails().sort(Comparator.comparing(BillAccountDetail::getAmount));
             else
@@ -95,16 +106,26 @@ public class OrderByPriorityApportion implements Apportion {
                     }
                 }
                 else {
-                    billAccountDetail.setAdjustedAmount(amount);
-                    remainingAmount = remainingAmount.subtract(amount);
+                    // FIX ME
+                    // advance should be checked from purpose
+                    if(!billAccountDetail.getTaxHeadCode().contains("ADVANCE")) {
+                        billAccountDetail.setAdjustedAmount(amount);
+                        remainingAmount = remainingAmount.subtract(amount);
+                    }
                 }
             }
-            billDetail.setAmountPaid(amountPaid.subtract(remainingAmount));
+
+            if(billDetail.getAmountPaid()==null)
+                billDetail.setAmountPaid(BigDecimal.ZERO);
+
+            billDetail.setAmountPaid(billDetail.getAmountPaid().add(amountBeforeApportion.subtract(remainingAmount)));
+            amountBeforeApportion = remainingAmount;
         }
+
 
         //If advance amount is available
         if(remainingAmount.compareTo(BigDecimal.ZERO)>0){
-            addAdvanceBillAccountDetail(remainingAmount,billDetails,masterData);
+            addAdvanceBillAccountDetail(remainingAmount,bill,masterData);
         }
 
 
@@ -155,16 +176,89 @@ public class OrderByPriorityApportion implements Apportion {
     /**
      * Creates a advance BillAccountDetail and adds it to the latest billDetail
      * @param advanceAmount The advance amount paid
-     * @param billDetails The list of BillDetatils for which apportioning is done
+     * @param bill The bill for which apportioning is done
      * @param masterData The required masterData for the TaxHeads
      */
-    private void addAdvanceBillAccountDetail(BigDecimal advanceAmount,List<BillDetail> billDetails,Object masterData){
-        String taxHead = taxHeadMasterService.getAdvanceTaxHead(billDetails.get(0).getBusinessService(),masterData);
+    private void addAdvanceBillAccountDetail(BigDecimal advanceAmount,Bill bill,Object masterData){
+        List<BillDetail> billDetails = bill.getBillDetails();
+        String taxHead = taxHeadMasterService.getAdvanceTaxHead(bill.getBusinessService(),masterData);
         BillAccountDetail billAccountDetailForAdvance = new BillAccountDetail();
         billAccountDetailForAdvance.setAmount(advanceAmount.negate());
         billAccountDetailForAdvance.setPurpose(Purpose.ADVANCE_AMOUNT);
         billAccountDetailForAdvance.setTaxHeadCode(taxHead);
         billDetails.get(billDetails.size()-1).getBillAccountDetails().add(billAccountDetailForAdvance);
+    }
+
+
+    /**
+     * Apportions the advance taxhead and returns the advance amount.
+     * @param bill
+     * @return
+     */
+    private BigDecimal apportionAndGetRequiredAdvance(Bill bill){
+
+        List<BillDetail> billDetails = bill.getBillDetails();
+
+        BigDecimal totalPositiveAmount = BigDecimal.ZERO;
+
+        for (BillDetail billDetail : billDetails) {
+
+            if(billDetail.getAmount().compareTo(BigDecimal.ZERO) > 0 )
+                totalPositiveAmount = totalPositiveAmount.add(billDetail.getAmount());
+
+        }
+
+        /**
+         * If net amount to be paid is zero for all billDetails no advance payment from
+         * previous billing cycles is required for apportion
+         *
+         */
+
+        if(totalPositiveAmount.compareTo(BigDecimal.ZERO) == 0)
+            return BigDecimal.ZERO;
+
+
+        /* net = Bill Account Detail amount  - Bill Account Detail adj amount
+        *  In case when advance + net > total Positive:  200 + (100 - 20)  > 230
+        *  Bill Account Detail amount     100
+           Bill Account Detail adj amount 20
+           current advance    200
+           Total positive     230
+           final adjusted amount = 20 + (230 - 200) = 50
+        * */
+
+        BigDecimal advance = BigDecimal.ZERO;
+        for (BillDetail billDetail : billDetails) {
+
+            if(billDetail.getAmountPaid()==null)
+                billDetail.setAmountPaid(BigDecimal.ZERO);
+
+            for(BillAccountDetail billAccountDetail : billDetail.getBillAccountDetails()) {
+
+                // FIX ME
+                // advance should be checked from purpose
+                if(billAccountDetail.getTaxHeadCode().contains("ADVANCE")){
+
+                    BigDecimal net = billAccountDetail.getAmount().subtract(billAccountDetail.getAdjustedAmount());
+                    if(advance.add(net).abs().compareTo(totalPositiveAmount) > 0){
+                        BigDecimal diff = totalPositiveAmount.subtract(advance);
+                        BigDecimal adjustedAmount = billAccountDetail.getAdjustedAmount();
+                        billAccountDetail.setAdjustedAmount(adjustedAmount.add(diff).negate());
+                        advance = totalPositiveAmount.negate();
+                        billDetail.setAmountPaid(billDetail.getAmountPaid().add(diff.negate()));
+                        break;
+                    }
+                    else {
+                        advance = advance.add(net);
+                        billAccountDetail.setAdjustedAmount(billAccountDetail.getAmount());
+                        billDetail.setAmountPaid(billDetail.getAmountPaid().add(net));
+                    }
+                }
+
+            }
+
+        }
+        return advance.negate();
     }
 
 

@@ -24,9 +24,9 @@ public class RemittanceEnricher {
         remittance.setStatus(RemittanceStatus.APPROVED.name());
         AuditDetails auditDetails = AuditDetails.builder().createdBy(remittanceRequest.getRequestInfo().getUserInfo() != null
                 ? remittanceRequest.getRequestInfo().getUserInfo().getId().toString() : null)
-                .createdDate(System.currentTimeMillis()).lastModifiedBy(remittanceRequest.getRequestInfo().getUserInfo() != null
+                .createdTime(System.currentTimeMillis()).lastModifiedBy(remittanceRequest.getRequestInfo().getUserInfo() != null
                         ? remittanceRequest.getRequestInfo().getUserInfo().getId().toString() : null)
-                .lastModifiedDate(System.currentTimeMillis()).build();
+                .lastModifiedTime(System.currentTimeMillis()).build();
         remittance.setAuditDetails(auditDetails);
 
         for (RemittanceDetail rd : remittance.getRemittanceDetails()) {

@@ -1,5 +1,6 @@
 package org.egov.service;
 
+import org.egov.web.models.Bill;
 import org.egov.web.models.BillDetail;
 
 import java.math.BigDecimal;
@@ -18,11 +19,10 @@ public interface Apportion {
 
     /**
      * Distibutes the paid amount among the Bill account details
-     * @param billDetails The list of BillDetail to be apportioned
-     * @param amountPaid The total amount paid against the list of billDetails
+     * @param bill The bill to be apportioned
      * @return Apportioned BillDetails
      */
-    List<BillDetail> apportionPaidAmount(List<BillDetail> billDetails,BigDecimal amountPaid,Object masterData);
+    List<BillDetail> apportionPaidAmount(Bill bill, Object masterData);
 
 
 

@@ -57,6 +57,7 @@ import java.util.stream.Collectors;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.demand.config.ApplicationProperties;
 import org.egov.demand.model.Demand;
+import org.egov.demand.model.Demand.StatusEnum;
 import org.egov.demand.model.DemandCriteria;
 import org.egov.demand.model.DemandDetail;
 import org.egov.demand.model.TaxHeadMaster;
@@ -181,6 +182,9 @@ public class DemandValidatorV1 {
 				});
 
 			validateTaxPeriod(taxPeriodBusinessMap, demand, errorMap, businessServicesWithNoTaxPeriods);
+			
+			// by default demands are being set to active during create but validation should be done for inactive/ cancelled demand in another logic
+			if(demand.getStatus() == null) demand.setStatus(StatusEnum.ACTIVE);
 		}
 
 		/*

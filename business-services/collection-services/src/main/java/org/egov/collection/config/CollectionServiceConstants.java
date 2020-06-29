@@ -172,6 +172,9 @@ public class CollectionServiceConstants {
     public static final String RECEIPT_CHEQUE_OR_DD_DATE_FIELD = "Cheque/DD Date";
     public static final String RECEIPT_CHEQUE_OR_DD_DATE_MESSAGE = "Cheque/DD date should not be greater than Manual Receipt Date ";
 
+    public static final String RECEIPT_NEFT_OR_RTGS_DATE = "INVALID_NEFT_RTGS_DATE";
+    public static final String RECEIPT_NEFT_OR_RTGS_DATE_MESSAGE = "NEFT/RTGS date should not be greater than Manual Receipt Date ";
+
     public static final String CHEQUE_DD_DATE_WITH_MANUAL_RECEIPT_DATE_CODE = "egcl_0021";
     public static final String CHEQUE_DD_DATE_WITH_MANUAL_RECEIPT_DATE_FIELD = "Cheque/DD Date";
     public static final String CHEQUE_DD_DATE_WITH_MANUAL_RECEIPT_DATE_MESSAGE = "Cheque/DD date should be less than and within 90 days of Manual Receipt Date ";
@@ -234,5 +237,34 @@ public class CollectionServiceConstants {
     public static final String SEARCH_BANKACCOUNT_SERVICE_MAPPING_REQUEST = "Bank account service request is invalid";
 
     public static final String VOUCHER_HEADER_KEY = "voucherHeader";
+
+    public static final String BILLING_MASTER_CODE = "BusinessService";
+
+    public static final String BILLING_MODULE_NAME = "BillingService";
+
+    public static final String MDMS_BUSINESSSERVICE_PATH = "$.MdmsRes.BillingService.BusinessService";
+
+    public static final String MASTER_BUSINESSSERVICE_KEY = "code";
+
+    public static final String MASTER_ISADVANCEALLOWED_KEY = "isAdvanceAllowed";
+
+    public static final String MASTER_PARTPAYMENTALLOWED_KEY = "partPaymentAllowed";
+
+    public static final String MASTER_COLLECTIONMODESNOTALLOWED_KEY = "collectionModesNotAllowed";
+
+    public static final String KEY_ID = "id";
+
+    public static final String KEY_FILESTOREID = "filestoreid";
+
+    public static final String KEY_PDF_JOBS = "jobs";
+
+    public static final String KEY_PDF_ENTITY_ID = "entityid";
+
+    public static final String KEY_PDF_FILESTOREID = "filestoreids";
+
+
+
+
+
 
 }

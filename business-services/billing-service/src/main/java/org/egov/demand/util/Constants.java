@@ -97,7 +97,7 @@ public class Constants {
 	public static final String DEMAND_WITH_NO_ID_MSG = "Demands, must contain ids in the update payload";
 
 	public static final String URL_NOT_CONFIGURED_FOR_DEMAND_UPDATE_KEY = "URL_NOT_CONFIGURED_FOR_DEMAND_UPDATE";
-	public static final String URL_NOT_CONFIGURED_FOR_DEMAND_UPDATE_MSG = " No URL found for demand update with business code : {businesscode} ";
+	public static final String URL_NOT_CONFIGURED_FOR_DEMAND_UPDATE_MSG = " No URL found for demand update with business code : {businesscode}, Bill will be generated without demand update";
 	public static final String URL_NOT_CONFIGURED_REPLACE_TEXT = "{businesscode}";
 	/*
 	 * Mdms master data 

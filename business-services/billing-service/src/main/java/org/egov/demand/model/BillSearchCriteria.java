@@ -4,6 +4,7 @@ import java.util.Set;
 
 import javax.validation.constraints.NotNull;
 
+import org.egov.demand.model.BillV2.BillStatus;
 import org.hibernate.validator.constraints.Email;
 
 import lombok.AllArgsConstructor;
@@ -27,7 +28,7 @@ public class BillSearchCriteria {
 	
 	private Boolean isCancelled;
 	
-	private String consumerCode;
+	private Set<String> consumerCode;
 	
 	private String billNumber;
 	
@@ -42,6 +43,8 @@ public class BillSearchCriteria {
 	
 	@Email
 	private String email;
+	
+	private BillStatus status;
 	
 	private String mobileNumber;
 }

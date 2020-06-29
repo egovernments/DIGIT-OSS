@@ -67,10 +67,10 @@ public class RemittanceQueryBuilder {
         sqlParameterSource.addValue("status", remittance.getStatus());
         sqlParameterSource.addValue("bankaccount", remittance.getBankaccount());
         sqlParameterSource.addValue("tenantid", remittance.getTenantId());
-        sqlParameterSource.addValue("createdby", Integer.parseInt(remittance.getAuditDetails().getCreatedBy()));
-        sqlParameterSource.addValue("createddate", remittance.getAuditDetails().getCreatedDate());
-        sqlParameterSource.addValue("lastmodifiedby", Integer.parseInt(remittance.getAuditDetails().getLastModifiedBy()));
-        sqlParameterSource.addValue("lastmodifieddate", remittance.getAuditDetails().getLastModifiedDate());
+        sqlParameterSource.addValue("createdby", Long.parseLong(remittance.getAuditDetails().getCreatedBy()));
+        sqlParameterSource.addValue("createddate", remittance.getAuditDetails().getCreatedTime());
+        sqlParameterSource.addValue("lastmodifiedby", Long.parseLong(remittance.getAuditDetails().getLastModifiedBy()));
+        sqlParameterSource.addValue("lastmodifieddate", remittance.getAuditDetails().getLastModifiedTime());
 
         return sqlParameterSource;
 
@@ -193,7 +193,7 @@ public class RemittanceQueryBuilder {
 
         if (searchCriteria.getToDate() != null) {
             addClauseIfRequired(preparedStatementValues, selectQuery);
-            selectQuery.append(" rh.referenceDate <= :toDate");
+            selectQuery.append(" rem.referenceDate <= :toDate");
             Calendar c = Calendar.getInstance();
             c.setTime(new Date(searchCriteria.getToDate()));
             c.add(Calendar.DATE, 1);

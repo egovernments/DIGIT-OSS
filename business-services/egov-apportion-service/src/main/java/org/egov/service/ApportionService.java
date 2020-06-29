@@ -3,20 +3,11 @@ package org.egov.service;
 import static org.egov.util.ApportionConstants.DEFAULT;
 
 import java.math.BigDecimal;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 import org.egov.config.ApportionConfig;
 import org.egov.producer.Producer;
-import org.egov.util.ApportionUtil;
-import org.egov.web.models.ApportionRequest;
-import org.egov.web.models.AuditDetails;
-import org.egov.web.models.BillDetail;
-import org.egov.web.models.BillInfo;
-import org.egov.web.models.TaxAndPayment;
+import org.egov.web.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -28,17 +19,15 @@ public class ApportionService {
     private final List<Apportion> apportions;
     private Map<String, Apportion> APPORTION_MAP = new HashMap<>();
 
-    private ApportionUtil util;
     private Producer producer;
     private ApportionConfig config;
     private MDMSService mdmsService;
 
 
     @Autowired
-    public ApportionService(List<Apportion> apportions, ApportionUtil util, Producer producer,
+    public ApportionService(List<Apportion> apportions,  Producer producer,
                             ApportionConfig config, MDMSService mdmsService) {
         this.apportions = Collections.unmodifiableList(apportions);
-        this.util = util;
         this.producer = producer;
         this.config = config;
         this.mdmsService = mdmsService;
@@ -64,8 +53,8 @@ public class ApportionService {
      * @param request The apportion request
      * @return Apportioned Bills
      */
-    public List<BillInfo> apportionBills(ApportionRequest request) {
-        List<BillInfo> billInfos = request.getBills();
+    public List<Bill> apportionBills(ApportionRequest request) {
+        List<Bill> bills = request.getBills();
         Apportion apportion;
 
         //Save the request through persister
@@ -74,43 +63,40 @@ public class ApportionService {
         //Fetch the required MDMS data
         Object masterData = mdmsService.mDMSCall(request);
 
-        AuditDetails auditDetails = AuditDetails.builder().createdBy(request.getRequestInfo().getUserInfo()
-                .getUuid()).createdTime(System.currentTimeMillis()).build();
-
-        for (BillInfo billInfo : billInfos) {
+        for (Bill bill : bills) {
         	
             // Create a map of businessService to list of billDetails belonging to that businessService
-            Map<String, List<BillDetail>> businessServiceToBillDetails = util.groupByBusinessService(billInfo.getBillDetails());
+         //   Map<String, List<BillDetail>> businessServiceToBillDetails = util.groupByBusinessService(billInfo.getBillDetails());
 
-			for (TaxAndPayment taxAndPayment : billInfo.getTaxAndPayments()) {
+            bill.getBillDetails().sort(Comparator.comparing(BillDetail::getFromPeriod));
 
-				String businessKey = taxAndPayment.getBusinessService();
-				BigDecimal amountPaid = taxAndPayment.getAmountPaid();
 
-				List<BillDetail> billDetails = businessServiceToBillDetails.get(businessKey);
+            String businessKey = bill.getBusinessService();
+            BigDecimal amountPaid = bill.getAmountPaid();
 
-				if (CollectionUtils.isEmpty(billDetails))
-					continue;
+            List<BillDetail> billDetails = bill.getBillDetails();
 
-				// Get the appropriate implementation of Apportion
-				if (isApportionPresent(businessKey))
-					apportion = getApportion(businessKey);
-				else
-					apportion = getApportion(DEFAULT);
+            if (CollectionUtils.isEmpty(billDetails))
+                continue;
 
-				/*
-				 * Apportion the paid amount among the given list of billDetail
-				 */
-				apportion.apportionPaidAmount(billDetails, amountPaid, masterData);
-				billInfo.setAuditDetails(auditDetails);
+            // Get the appropriate implementation of Apportion
+            if (isApportionPresent(businessKey))
+                apportion = getApportion(businessKey);
+            else
+                apportion = getApportion(DEFAULT);
+
+            /*
+             * Apportion the paid amount among the given list of billDetail
+             */
+            apportion.apportionPaidAmount(bill, masterData);
 			}
-		}
+
 
 
 
         //Save the response through persister
         producer.push(config.getResponseTopic(), request);
-        return billInfos;
+        return bills;
     }
 
 

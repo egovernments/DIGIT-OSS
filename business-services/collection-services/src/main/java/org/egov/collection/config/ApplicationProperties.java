@@ -162,4 +162,41 @@ public class ApplicationProperties {
     @Value("${kafka.topics.payment.receiptlink.key}")
     private String paymentReceiptLinkTopicKey;
 
+
+
+    // Payment properties
+
+    @Value("${kafka.topics.payment.create.name}")
+    private String createPaymentTopicName;
+    
+    @Value("${kafka.topics.payment.create.key}")
+    private String createPaymentTopicKey;
+    
+    @Value("${collection.payments.search.paginate}")
+    private boolean paymentsSearchPaginationEnabled;
+
+    @Value("${kafka.topics.payment.cancel.name}")
+    private String cancelPaymentTopicName;
+
+
+    @Value("${kafka.topics.payment.cancel.key}")
+    private String cancelPaymentTopicKey;
+
+
+    @Value("${kafka.topics.payment.update.name}")
+    private String updatePaymentTopicName;
+
+    @Value("${kafka.topics.payment.update.key}")
+    private String updatePaymentTopicKey;
+
+
+    //MDMS
+    @Value("${egov.mdms.host}")
+    private String mdmsHost;
+
+    @Value("${egov.mdms.search.endpoint}")
+    private String mdmsSearchEndpoint;
+
+
+
 }

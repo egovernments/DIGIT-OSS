@@ -44,9 +44,6 @@ public class BillAccountDetail   {
         @JsonProperty("adjustedAmount")
         private BigDecimal adjustedAmount;
 
-        @JsonProperty("isActualDemand")
-        private Boolean isActualDemand;
-
         @JsonProperty("glcode")
         private String glcode;
 
@@ -90,9 +87,4 @@ public class BillAccountDetail   {
       return null;
     }
   }
-
-        @JsonProperty("purpose")
-        private PurposeEnum purpose;
-
-
 }

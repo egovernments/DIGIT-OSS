@@ -1,4 +1,4 @@
-package org.egov.collection.service;
+/*package org.egov.collection.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.extern.slf4j.Slf4j;
@@ -45,7 +45,7 @@ public class WorkflowService {
 
     }
 
-    /**
+    *//**
      * Processes all workflow related requests
      *  - Verify that all workflow actions in the request are same
      *  - Handover processing of actions to sub methods
@@ -53,7 +53,7 @@ public class WorkflowService {
      *
      * @param receiptWorkflowRequest multiple actions
      * @return updated receipts
-     */
+     *//*
     @Transactional
     public List<Receipt> performWorkflow(ReceiptWorkflowRequest receiptWorkflowRequest){
 
@@ -111,7 +111,7 @@ public class WorkflowService {
 
     }
 
-    /**
+    *//**
      * Performs cancellation of eligible receipts
      * Eligibility is defined by current status of the receipt
      * Latest receipt of a consumer code with status of APPROVED [or initial state] can be cancelled
@@ -126,7 +126,7 @@ public class WorkflowService {
      * @param requestInfo request info of the incoming request
      * @param tenantId
      * @return updated receipts
-     */
+     *//*
     private List<Receipt> cancel(Map<String, ReceiptWorkflow> workflowRequestByReceiptNumber, Set<String> consumerCodes,
                                  RequestInfo requestInfo, String tenantId){
         ReceiptSearchCriteria receiptSearchCriteria = ReceiptSearchCriteria
@@ -162,7 +162,7 @@ public class WorkflowService {
         return validatedReceipts;
     }
 
-    /**
+    *//**
      * Performs dishonoring of eligible receipts
      * Eligibility is defined by current status of the receipt & mode of payment
      * Latest receipt of a consumer code with status of APPROVED [or initial state], REMITTED & payment mode CHEQUE, DD can be dishonored
@@ -177,7 +177,7 @@ public class WorkflowService {
      * @param requestInfo request info of the incoming request
      * @param tenantId
      * @return updated receipts
-     */
+     *//*
     private List<Receipt> dishonour(Map<String, ReceiptWorkflow> workflowRequestByReceiptNumber, Set<String> consumerCodes,
                                     RequestInfo requestInfo, String tenantId){
         Set<String> status = new HashSet<>();
@@ -220,7 +220,7 @@ public class WorkflowService {
     }
 
 
-    /**
+    *//**
      * Performs remittance of eligible receipts
      * Eligibility is defined by current status of the receipt & mode of payment
      * Receipts with status of APPROVED [or initial state] & payment mode CHEQUE, DD, CASH can be remitted
@@ -236,7 +236,7 @@ public class WorkflowService {
      * @param requestInfo request info of the incoming request
      * @param tenantId
      * @return updated receipts
-     */
+     *//*
     private List<Receipt> remit(Map<String, ReceiptWorkflow> workflowRequestByReceiptNumber, Set<String> consumerCodes,
                                 RequestInfo requestInfo, String tenantId){
 
@@ -280,12 +280,12 @@ public class WorkflowService {
         return validatedReceipts;
     }
 
-    /**
+    *//**
      * Update audit details as per request
      *
      * @param receipt which is being modified
      * @param requestInfo info about the request
-     */
+     *//*
     public static void updateAuditDetails(Receipt receipt, RequestInfo requestInfo){
         receipt.getAuditDetails().setLastModifiedBy(requestInfo.getUserInfo().getId().toString());
         receipt.getAuditDetails().setLastModifiedDate(System.currentTimeMillis());
@@ -295,3 +295,4 @@ public class WorkflowService {
     }
 
 }
+*/

@@ -1,0 +1,1 @@
+ALTER TABLE egcl_payment ADD COLUMN filestoreid VARCHAR(1024);

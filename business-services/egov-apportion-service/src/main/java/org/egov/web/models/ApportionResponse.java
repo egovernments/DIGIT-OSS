@@ -38,10 +38,10 @@ public class ApportionResponse   {
 
         @JsonProperty("Bills")
         @Valid
-        private List<BillInfo> bills = null;
+        private List<Bill> bills = null;
 
 
-        public ApportionResponse addBillsItem(BillInfo billsItem) {
+        public ApportionResponse addBillsItem(Bill billsItem) {
             if (this.bills == null) {
             this.bills = new ArrayList<>();
             }

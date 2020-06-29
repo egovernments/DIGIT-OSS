@@ -47,22 +47,17 @@ import javax.validation.Valid;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.demand.model.Demand;
 import org.egov.demand.model.DemandCriteria;
-import org.egov.demand.model.DemandDetailCriteria;
-import org.egov.demand.model.DemandDueCriteria;
-import org.egov.demand.model.DemandUpdateMisRequest;
 import org.egov.demand.service.DemandService;
 import org.egov.demand.util.migration.DemandMigration;
 import org.egov.demand.web.contract.DemandRequest;
 import org.egov.demand.web.contract.DemandResponse;
 import org.egov.demand.web.contract.RequestInfoWrapper;
 import org.egov.demand.web.contract.factory.ResponseFactory;
-import org.egov.demand.web.validator.DemandValidator;
 import org.egov.demand.web.validator.DemandValidatorV1;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -84,10 +79,6 @@ public class DemandController {
 
 	@Autowired
 	private ResponseFactory responseFactory;
-
-	@Autowired
-	@Deprecated
-	private DemandValidator demandValidator;
 	
 	@Autowired
 	private DemandValidatorV1 demandValidatorV1;
@@ -154,58 +145,4 @@ public class DemandController {
 		return new ResponseEntity<>(resultMap, HttpStatus.OK);
 	}
     
-	/*
-	 * @Deprecated methods
-	 */
-	
-	@PostMapping("collection/_update")
-	@Deprecated
-	public ResponseEntity<?> updateCollection(@RequestBody @Valid DemandRequest demandRequest, BindingResult bindingResult) {
-
-		RequestInfo requestInfo = demandRequest.getRequestInfo();
-		if (bindingResult.hasErrors()) {
-			return new ResponseEntity<>(responseFactory.getErrorResponse(bindingResult, requestInfo), HttpStatus.BAD_REQUEST);
-		}
-
-		demandValidator.validateForUpdate(demandRequest, bindingResult);
-		return new ResponseEntity<>(demandService.updateCollection(demandRequest), HttpStatus.CREATED);
-	}
-
-	@Deprecated
-	@PostMapping("/demanddetail/_search")
-	public ResponseEntity<?> demandDetailSearch(@RequestBody RequestInfoWrapper requestInfoWrapper,
-												@ModelAttribute @Valid DemandDetailCriteria demandDetailCriteria, BindingResult bindingResult) {
-
-		RequestInfo requestInfo = requestInfoWrapper.getRequestInfo();
-		if (bindingResult.hasErrors()) {
-			return new ResponseEntity<>(responseFactory.getErrorResponse(bindingResult, requestInfo), HttpStatus.BAD_REQUEST);
-		}
-		return new ResponseEntity<>(demandService.getDemandDetails(demandDetailCriteria, requestInfo), HttpStatus.OK);
-	}
-	
-	@Deprecated
-	@PostMapping("_updatemis")
-	public ResponseEntity<?> updateMIS(@RequestBody RequestInfoWrapper requestInfoWrapper,
-			@ModelAttribute @Valid DemandUpdateMisRequest demandRequest, BindingResult bindingResult) {
-		//Validating Request
-		RequestInfo requestInfo = requestInfoWrapper.getRequestInfo();
-		demandRequest.setRequestInfo(requestInfo);
-		if (bindingResult.hasErrors()) {
-			return new ResponseEntity<>(responseFactory.getErrorResponse(bindingResult, requestInfo),
-					HttpStatus.BAD_REQUEST);
-		}
-		return new ResponseEntity<>(demandService.updateMISAsync(demandRequest), HttpStatus.CREATED);
-	}
-	
-	@Deprecated
-	@PostMapping("/_dues")
-	public ResponseEntity<?> getDemandDues(@RequestBody RequestInfoWrapper requestInfoWrapper,
-												@ModelAttribute @Valid DemandDueCriteria demandDueCriteria, BindingResult bindingResult) {
-
-		RequestInfo requestInfo = requestInfoWrapper.getRequestInfo();
-		if (bindingResult.hasErrors()) {
-			return new ResponseEntity<>(responseFactory.getErrorResponse(bindingResult, requestInfo), HttpStatus.BAD_REQUEST);
-		}
-		return new ResponseEntity<>(demandService.getDues(demandDueCriteria, requestInfo), HttpStatus.OK);
-	}
 }

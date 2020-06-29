@@ -36,7 +36,7 @@
  *         or trademarks of eGovernments Foundation.
  *
  *  In case of any queries, you can reach eGovernments Foundation at contact@egovernments.org.
- */
+ 
 package org.egov.collection.model;
 
 import lombok.*;
@@ -118,4 +118,4 @@ public class ReceiptCommonModel {
 		return receipts;
 	}
 
-}
+}*/

@@ -39,9 +39,9 @@ public class RemittanceResultSetExtractor implements ResultSetExtractor<List<Rem
 
                 AuditDetails auditDetails = AuditDetails.builder()
                         .createdBy(resultSet.getString("rem_createdBy"))
-                        .createdDate(resultSet.getLong("rem_createdDate"))
+                        .createdTime(resultSet.getLong("rem_createdDate"))
                         .lastModifiedBy(resultSet.getString("rem_lastModifiedBy"))
-                        .lastModifiedDate(resultSet.getLong("rem_lastModifiedDate"))
+                        .lastModifiedTime(resultSet.getLong("rem_lastModifiedDate"))
                         .build();
 
                 BigDecimal creditAmount = getBigDecimalValue(resultSet.getBigDecimal("remDet_creditAmount"));

@@ -50,6 +50,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.Size;
+
 @Builder
 @Setter
 @Getter
@@ -59,16 +61,18 @@ import lombok.ToString;
 @EqualsAndHashCode
 public class AuditDetails {
 
+    @Size(max=64)
     @JsonProperty("createdBy")
     private String createdBy = null;
 
-    @JsonProperty("createdDate")
-    private Long createdDate = null;
+    @JsonProperty("createdTime")
+    private Long createdTime = null;
 
+    @Size(max=64)
     @JsonProperty("lastModifiedBy")
     private String lastModifiedBy = null;
 
-    @JsonProperty("lastModifiedDate")
-    private Long lastModifiedDate = null;
+    @JsonProperty("lastModifiedTime")
+    private Long lastModifiedTime = null;
 
 }
