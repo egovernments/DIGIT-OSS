@@ -343,6 +343,7 @@ export const annualRent = {
     floatingLabelText: "PT_FORM2_TOTAL_ANNUAL_RENT",
     hintText: "PT_FORM2_TOTAL_ANNUAL_RENT_PLACEHOLDER",
     ErrorText: "PT_ANNUAL_RENT_ERROR_MESSAGE",
+    errorMessage: "PT_ANNUAL_RENT_ERROR_MESSAGE",
     errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
     toolTip: true,
     toolTipMessage: "PT_TOTAL_ANNUAL_RENT_TOOLTIP_MESSAGE",
