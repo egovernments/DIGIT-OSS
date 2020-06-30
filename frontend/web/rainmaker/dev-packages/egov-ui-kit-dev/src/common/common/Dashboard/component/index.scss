@@ -72,9 +72,17 @@
       }
     }
  */
-@media only screen and (max-width: 551px) {
-  .clearfix
-  {     
-    height: auto !important      
-  }
- }
+
+ @media only screen and (max-width: 551px) {
+  .clearfix2 {
+    height: auto !important; } }
+
+ @media only screen and (min-width: 768px) {
+      .clearfix2
+      {     
+        min-height: 200px !important;
+        position: relative !important;  
+        height: 449px !important;
+      }
+     }
+     

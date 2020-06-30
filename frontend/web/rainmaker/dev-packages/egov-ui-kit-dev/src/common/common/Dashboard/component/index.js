@@ -34,7 +34,7 @@ const ModuleCard = ({ items, onButton1Click, onPGRClick, onButton2Click, history
                 className="clearfix landingPageCard"
                 style={item.borderLeftColor}
                 textChildren={
-                  <div className="clearfix" style={{ position: "relative", minHeight: item.moduleDescription ? "200px" : "inherit", height: "398px" }}>
+                  <div className="clearfix2" style={{ position: "relative", minHeight: item.moduleDescription ? "200px" : "inherit", height: "398px" }}>
                     <div style={{ padding: "0", margin: "0", display: "flex" }}>
                       <Icon action={item.iconAction} name={item.iconName} style={item.iconStyle} />
                       <Label className="moduleCardTitle" label={item.moduleTitle} />
