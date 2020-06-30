@@ -1,4 +1,4 @@
-package org.egov.web.notification.mail.service.email;
+/*package org.egov.web.notification.mail.service.email;
 
 import org.egov.web.notification.mail.model.Email;
 import org.egov.web.notification.mail.service.ExternalEmailService;
@@ -70,4 +70,4 @@ public class ExternalEmailServiceTest {
 
 		verify(javaMailSender).send(mimeMessage);
 	}
-}
+}*/

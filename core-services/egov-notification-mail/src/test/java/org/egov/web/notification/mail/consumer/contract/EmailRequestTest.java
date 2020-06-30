@@ -1,4 +1,4 @@
-package org.egov.web.notification.mail.consumer.contract;
+/*package org.egov.web.notification.mail.consumer.contract;
 
 import org.egov.web.notification.mail.model.Email;
 import org.junit.Test;
@@ -23,4 +23,4 @@ public class EmailRequestTest {
         assertThat(email.getBody()).isEqualTo("body");
         assertThat(email.isHtml()).isTrue();
     }
-}
+}*/

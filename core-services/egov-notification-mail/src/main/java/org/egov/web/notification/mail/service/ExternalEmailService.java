@@ -1,15 +1,16 @@
 package org.egov.web.notification.mail.service;
 
-import lombok.extern.slf4j.Slf4j;
-import org.egov.web.notification.mail.model.Email;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+
+import org.egov.web.notification.mail.consumer.contract.Email;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @ConditionalOnProperty(value = "mail.enabled", havingValue = "true")
@@ -22,10 +23,10 @@ public class ExternalEmailService implements EmailService {
     public ExternalEmailService(JavaMailSenderImpl mailSender) {
         this.mailSender = mailSender;
     }
-
+    
     @Override
     public void sendEmail(Email email) {
-		if(email.isHtml()) {
+		if(email.isHTML()) {
 			sendHTMLEmail(email);
 		} else {
 			sendTextEmail(email);
@@ -34,7 +35,7 @@ public class ExternalEmailService implements EmailService {
 
 	private void sendTextEmail(Email email) {
 		final SimpleMailMessage mailMessage = new SimpleMailMessage();
-		mailMessage.setTo(email.getToAddress());
+		mailMessage.setTo(email.getEmailTo().toArray(new String[0]));
 		mailMessage.setSubject(email.getSubject());
 		mailMessage.setText(email.getBody());
 		mailSender.send(mailMessage);
@@ -45,7 +46,7 @@ public class ExternalEmailService implements EmailService {
 		MimeMessageHelper helper;
 		try {
 			helper = new MimeMessageHelper(message, true);
-			helper.setTo(email.getToAddress());
+			helper.setTo(email.getEmailTo().toArray(new String[0]));
 			helper.setSubject(email.getSubject());
 			helper.setText(email.getBody(), true);
 		} catch (MessagingException e) {
