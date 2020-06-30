@@ -20,7 +20,7 @@
     "npm-run-all": "^4.1.2",
     "pdfmake": "^0.1.36",
     "prop-types": "^15.6.0",
-    "rainmaker-employee": "^0.0.2",
+    "rainmaker-employee": "^2.0.0",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
     "react-google-maps": "^9.4.5",

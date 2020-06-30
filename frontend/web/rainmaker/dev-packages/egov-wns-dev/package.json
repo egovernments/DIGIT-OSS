@@ -14,7 +14,7 @@
 	  "axios": "^0.18.0",
 	  "babel-polyfill": "^6.26.0",
 	  "egov-ui-framework": "0.1.41",
-	  "egov-workflow": "0.0.1",
+	  "egov-workflow": "1.1.0",
 	  "html2canvas": "^1.0.0-alpha.12",
 	  "jquery": "^3.3.1",
 	  "jspdf": "^1.5.3",
