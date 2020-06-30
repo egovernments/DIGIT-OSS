@@ -3,12 +3,18 @@
   "moduleName": "NOC",
   "NocType": [
      {
-      "code": "FIRE_NOC",
-      "isActive": true
+       "code": "FIRE_NOC",
+       "isActive": true,
+       "offlineWF":"NOC_SRV_OFFLINE",
+       "onlineWF":"NOC_SRV",
+       "mode":"online"
     },
     {
-      "code":"AAI_NOC",
-      "isActive": true
+      "code":"AIRPORT_AUTHORITY",
+      "isActive": true,
+      "offlineWF":"NOC_SRV_OFFLINE",
+      "onlineWF":"NOC_SRV",
+      "mode":"offline"
     }
   ]
 }
