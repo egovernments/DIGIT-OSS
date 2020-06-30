@@ -39,11 +39,12 @@ class MultiItem extends React.Component {
   ];
 
   componentDidMount = () =>{
-    const {tabs} = this.props;
+    const { state, dispatch, tabs } = this.props;
     this.props.dispatch(handleField("pay", "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection", "props.tabs", tabs));
     this.setState({
       tabs
-    })
+    });
+    this.resetFields(dispatch, state);
   }
 
   componentWillReceiveProps = (nextProps) =>{
@@ -108,7 +109,6 @@ class MultiItem extends React.Component {
   };
 
   resetFields = (dispatch, state) => {
-    const { tabs }=this.state;
     const finalObject = get(state , "screenConfiguration.preparedFinalObject");
     const ifscCode = get(finalObject, "ReceiptTemp[0].instrument.ifscCode");
     const transactionDateInput = get(finalObject, "ReceiptTemp[0].instrument.transactionDateInput");
@@ -128,12 +128,6 @@ class MultiItem extends React.Component {
     if(transactionNumber){
       dispatch(prepareFinalObject("ReceiptTemp[0].instrument.transactionNumber", ""));
     }
-    const keyToIndexMapping = tabs.map((item,index) => {
-      return{
-              index : index,
-              key: get(this.methods, item.code)
-      }
-    })
     const objectJsonPath = "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs";
     const instrumentTypes = get(state.screenConfiguration.screenConfig["pay"] , objectJsonPath);
     
@@ -142,18 +136,6 @@ class MultiItem extends React.Component {
       const children = Object.values(tabContent)[0].children;
       this.resetAllFields(children, dispatch, state);
     })
-    
-    // keyToIndexMapping.forEach(item => {
-    //   const objectJsonPath = `components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs[${
-    //     item.index
-    //   }].tabContent[${item.key}].children`;
-    //   const children = get(
-    //     state.screenConfiguration.screenConfig["pay"],
-    //     objectJsonPath,
-    //     {}
-    //   );
-    //   this.resetAllFields(children, dispatch, state);
-    // });
   };
 
   setInstrumentType = (value, dispatch) => {
