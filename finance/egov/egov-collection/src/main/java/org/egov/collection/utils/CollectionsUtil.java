@@ -868,16 +868,6 @@ public class CollectionsUtil {
 
     public Boolean checkVoucherCreation(final ReceiptHeader receiptHeader) {
         Boolean createVoucherForBillingService = Boolean.FALSE;
-        List<BusinessDetails> servcie = microserviceUtils.getBusinessDetailsByCode(receiptHeader.getService());
-        if (servcie != null) {
-            if (servcie.get(0).getVoucherCutoffDate() != null
-                    && receiptHeader.getReceiptdate().compareTo(new Date(servcie.get(0).getVoucherCutoffDate())) > 0) {
-                if (servcie.get(0).getVoucherCreation() != null)
-                    createVoucherForBillingService = servcie.get(0).getVoucherCreation();
-            } else if (servcie.get(0).getVoucherCutoffDate() == null
-                    && servcie.get(0).getVoucherCreation() != null)
-                createVoucherForBillingService = servcie.get(0).getVoucherCreation();
-        }
         return createVoucherForBillingService;
     }
 
@@ -985,15 +975,6 @@ public class CollectionsUtil {
 
     public void emailReceiptAsAttachment(final ReceiptHeader receiptHeader, final byte[] attachment) {
         String emailBody = collectionApplicationProperties.getEmailBody();
-        List<BusinessDetails> bds = microserviceUtils.getBusinessDetailsByCode(receiptHeader.getService());
-        emailBody = String.format(emailBody, ApplicationThreadLocals.getCityName(), receiptHeader.getTotalAmount()
-                .toString(), bds.get(0).getName(), receiptHeader.getConsumerCode(), receiptHeader
-                        .getReceiptdate().toString(),
-                ApplicationThreadLocals.getCityName());
-        String emailSubject = collectionApplicationProperties.getEmailSubject();
-        emailSubject = String.format(emailSubject, bds.get(0).getName());
-        notificationService.sendEmailWithAttachment(receiptHeader.getPayeeEmail(), emailSubject, emailBody,
-                "application/pdf", "Receipt" + receiptHeader.getReceiptdate().toString(), attachment);
     }
 
     public void setUserService(final UserService userService) {

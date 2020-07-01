@@ -108,10 +108,6 @@ import org.egov.infra.microservice.models.BankAccount;
 import org.egov.infra.microservice.models.BankAccountServiceMapping;
 import org.egov.infra.microservice.models.BankAccountServiceMappingReq;
 import org.egov.infra.microservice.models.BankAccountServiceMappingResponse;
-import org.egov.infra.microservice.models.BusinessCategory;
-import org.egov.infra.microservice.models.BusinessCategoryResponse;
-import org.egov.infra.microservice.models.BusinessDetails;
-import org.egov.infra.microservice.models.BusinessDetailsResponse;
 import org.egov.infra.microservice.models.BusinessService;
 import org.egov.infra.microservice.models.BusinessServiceCriteria;
 import org.egov.infra.microservice.models.BusinessServiceMapping;
@@ -168,15 +164,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.Resource;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -191,6 +184,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 
 
+@SuppressWarnings("deprecation")
 @Service
 public class MicroserviceUtils {
 
@@ -237,9 +231,6 @@ public class MicroserviceUtils {
 
     @Value("${egov.services.user.token.url}")
     private String tokenGenUrl;
-
-    @Value("${egov.services.common.masters.businessdetails.url}")
-    private String businessDetailsServiceUrl;
 
     @Value("${egov.services.billing.service.taxheads.url}")
     private String taxheadsSearchUrl;
@@ -769,29 +760,7 @@ public class MicroserviceUtils {
         }
         return assignmentList;
     }
-
-    public List<BusinessDetails> getBusinessDetailsByCode(String code) {
-
-        final RestTemplate restTemplate = createRestTemplate();
-
-        final String bd_url = appConfigManager.getEgovCommonMasterSerHost() + businessDetailsServiceUrl + "?tenantId="
-                + getTenentId() + "&businessDetailsCodes=" + code;
-
-        RequestInfo requestInfo = new RequestInfo();
-        RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
-
-        requestInfo.setAuthToken(getUserToken());
-        requestInfo.setTs(getEpochDate(new Date()));
-        reqWrapper.setRequestInfo(requestInfo);
-
-        BusinessDetailsResponse bcResponse = restTemplate.postForObject(bd_url, reqWrapper,
-                BusinessDetailsResponse.class);
-        if (bcResponse.getBusinessDetails() != null && !bcResponse.getBusinessDetails().isEmpty())
-            return bcResponse.getBusinessDetails();
-        else
-            return null;
-    }
-
+    
     public List<TaxHeadMaster> getTaxheadsByService(String service) {
 
         final RestTemplate restTemplate = createRestTemplate();

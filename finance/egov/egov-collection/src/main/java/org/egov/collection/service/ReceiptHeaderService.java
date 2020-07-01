@@ -318,9 +318,6 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
         String fundsourceCode = null;
         String departmentCode = null;
         Boolean isVoucherApproved = Boolean.FALSE;
-        BusinessDetails bd = microserviceUtils.getBusinessDetailsByCode(receiptHeader.getService()).get(0);
-        if (bd.getIsVoucherApproved() != null)
-            isVoucherApproved = bd.getIsVoucherApproved();
 
         final ReceiptMisc receiptMisc = receiptHeader.getReceiptMisc();
         if (receiptMisc.getFund() != null)

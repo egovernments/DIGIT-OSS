@@ -73,11 +73,9 @@ import org.egov.egf.commons.EgovCommon;
 import org.egov.infra.admin.master.entity.Department;
 import org.egov.infra.admin.master.entity.User;
 import org.egov.infra.exception.ApplicationException;
-import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.microservice.models.BusinessAccountDetails;
 import org.egov.infra.microservice.models.BusinessAccountSubLedger;
 import org.egov.infra.microservice.models.BusinessDetails;
-import org.egov.infra.microservice.models.ChartOfAccounts;
 import org.egov.infra.microservice.models.GlCodeMaster;
 import org.egov.infra.microservice.models.TaxHeadMaster;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
@@ -451,60 +449,7 @@ public class AjaxReceiptCreateAction extends BaseFormAction {
         return SERVICE_LIST;
 
     }
-
-    @Action(value = "/receipts/ajaxReceiptCreate-ajaxFinMiscDtlsByService")
-    public String ajaxFinMiscDtlsByService() {
-
-        final String serviceId = parameters.get(SERVICEID)[0];
-        List<BusinessDetails> service = microserviceUtils.getBusinessDetailsByCode(serviceId);
-
-        final StringBuilder miscDetails = new StringBuilder();
-        if (null != service && !service.isEmpty())
-            miscDetails.append(null != service.get(0).getFund() ? service.get(0).getFund() : "-1").append('~') // fund
-                    .append("-1").append('~') // scheme
-                    .append("-1").append('~') // subScheme
-                    .append(null != service.get(0).getFundSource() ? service.get(0).getFundSource() : "-1").append('~') // fundsource
-                    .append(null != service.get(0).getFunctionary() ? service.get(0).getFunctionary() : "-1").append('~') // functionary
-                    .append(null != service.get(0).getFunction() ? service.get(0).getFunction() : "-1").append('~')// function
-                    .append(null != service.get(0).getDepartment() ? service.get(0).getDepartment() : "-1"); // department
-        else
-            miscDetails.append("-1").append('~') // fund
-                    .append("-1").append('~') // scheme
-                    .append("-1").append('~') // subscheme
-                    .append("-1").append('~') // fundsource
-                    .append("-1").append('~') // functionary
-                    .append("-1").append('~') // function
-                    .append("-1"); // department
-        value = miscDetails.toString();
-        return RESULT;
-
-    }
-
-    @Action(value = "/receipts/ajaxReceiptCreate-ajaxFinAccDtlsByService")
-    public String ajaxFinAccDtlsByService() {
-
-        final String serviceId = parameters.get(SERVICEID)[0];
-        List<BusinessDetails> service = microserviceUtils.getBusinessDetailsByCode(serviceId);
-        accountDetails = new ArrayList<>();
-        if (null != service && !service.isEmpty() && service.get(0).getAccountDetails() != null) {
-            accountDetails.addAll(service.get(0).getAccountDetails());
-            for (BusinessAccountDetails bad : accountDetails) {
-                if (bad.getChartOfAccounts() != null) {
-                    CChartOfAccounts coa = chartOfAccountsService.getByGlCode(bad.getChartOfAccounts().toString());
-                    bad.setGlCodeId(new ChartOfAccounts());
-                    bad.getGlCodeId().setId(coa.getId());
-                    bad.getGlCodeId().setGlcode(coa.getGlcode());
-                    bad.getGlCodeId().setName(coa.getName());
-                }
-            }
-
-        } else
-            accountDetails.addAll(Collections.emptyList());
-
-        return "serviceAccDtls";
-
-    }
-
+   
     @Action(value = "/receipts/ajaxReceiptCreate-ajaxGlcodeMasterByService")
     public String ajaxGlcodeMasterByService() {
 
@@ -534,50 +479,7 @@ public class AjaxReceiptCreateAction extends BaseFormAction {
         return "taxHeadDetails";
 
     }
-
-    @Action(value = "/receipts/ajaxReceiptCreate-ajaxFinSubledgerByService")
-    public String ajaxFinSubledgerByService() {
-        final String serviceId = parameters.get(SERVICEID)[0];
-        List<BusinessDetails> service = microserviceUtils.getBusinessDetailsByCode(serviceId);
-        subledgerDetails = new ArrayList<>();
-        BusinessAccountSubLedger servicInfo;
-        if (null != service && !service.isEmpty())
-            for (final BusinessAccountDetails account : service.get(0).getAccountDetails()) {
-                if (account.getSubledgerDetails() != null)
-                    subledgerDetails.addAll(account.getSubledgerDetails());
-                if (subledgerDetails.isEmpty()) {
-                    final CChartOfAccountDetail chartOfAccountDetail = (CChartOfAccountDetail) getPersistenceService()
-                            .find("from CChartOfAccountDetail cd where cd.glCodeId.glcode=?",
-                                    account.getChartOfAccounts().toString());
-                    servicInfo = new BusinessAccountSubLedger();
-                    if (chartOfAccountDetail != null) {
-                        servicInfo.setDetailType(chartOfAccountDetail.getDetailTypeId().getId().longValue());
-                        servicInfo.setBusinessAccountDetails(account.getId());
-                        subledgerDetails.add(servicInfo);
-                    } else
-                        subledgerDetails.addAll(Collections.emptyList());
-                } else
-                    for (final BusinessAccountSubLedger serviceSubledgerInfo : subledgerDetails)
-                        if (serviceSubledgerInfo.getDetailType() != null
-                                && serviceSubledgerInfo.getDetailKey() != null) {
-                            EntityType entityType = null;
-                            try {
-                                Accountdetailtype adt = accountdetailtypeService
-                                        .findByName(serviceSubledgerInfo.getDetailType().toString());
-                                entityType = egovCommon.getEntityType(adt, serviceSubledgerInfo.getDetailKey());
-                            } catch (final ApplicationException e) {
-                                LOGGER.error("Exception while setting subledger details", e);
-                                throw new ApplicationRuntimeException("Exception while setting subledger details", e);
-                            }
-                            if (entityType != null) {
-                                serviceSubledgerInfo.setDetailType(Long.valueOf(entityType.getCode()));
-                                serviceSubledgerInfo.setDetailKey(Long.valueOf(entityType.getName()));
-                            }
-                        }
-            }
-        return "subledger";
-    }
-
+    
     @Action(value = "/receipts/ajaxReceiptCreate-ajaxOnlineReceiptCreatedByList")
     public String ajaxOnlineReceiptCreatedByList() {
         if (paymentServiceId != null)

@@ -131,10 +131,7 @@ public class AjaxBankRemittanceAction extends BaseFormAction {
                         "Fund information not available")));
             setFundName(fund.getName());
         }
-        if (serviceName == null && serviceId != null && !serviceId.isEmpty() && !serviceId.equalsIgnoreCase("-1")) {
-            List<BusinessDetails> bds = microserviceUtils.getBusinessDetailsByCode(serviceId);
-            setServiceName(bds.get(0).getName());
-        }
+
         final String bankBranchQueryString = "select distinct(bb.id) as branchid,b.NAME||'-'||bb.BRANCHNAME as branchname from BANK b,BANKBRANCH bb, BANKACCOUNT ba,"
                 + "EGCL_BANKACCOUNTSERVICEMAPPING asm,EGCL_SERVICEDETAILS sd,FUND fd where asm.bankaccount=ba.ID and asm.servicedetails=sd.ID and "
                 + "ba.BRANCHID=bb.ID and bb.BANKID=b.ID and fd.ID=ba.FUNDID and sd.NAME='"

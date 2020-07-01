@@ -1059,9 +1059,6 @@ public class ReceiptAction extends BaseFormAction {
             setCollectionModesNotAllowed(Arrays.asList(oldReceiptHeader.getCollModesNotAllwd().split(",")));
         setOverrideAccountHeads(oldReceiptHeader.getOverrideAccountHeads());
         setPartPaymentAllowed(oldReceiptHeader.getPartPaymentAllowed());
-        List<BusinessDetails> bsList = microserviceUtils.getBusinessDetailsByCode(oldReceiptHeader.getService());
-        BusinessDetails bd = bsList != null && !bsList.isEmpty() ? bsList.get(0) : null;
-        setServiceName(bd != null ? bd.getName() : "");
 
         receiptHeader.setReceiptMisc(new ReceiptMisc(oldReceiptHeader.getReceiptMisc().getBoundary(),
                 oldReceiptHeader.getReceiptMisc().getFund(), oldReceiptHeader.getReceiptMisc().getIdFunctionary(),
@@ -1365,14 +1362,6 @@ public class ReceiptAction extends BaseFormAction {
 
             populateReceiptModelWithExistingReceiptInfo(receiptHeaderToBeCancelled);
             setFundName(receiptHeaderToBeCancelled.getReceiptMisc().getFund().getName());
-            List<BusinessDetails> bsList = microserviceUtils.getBusinessDetailsByCode(receiptHeaderToBeCancelled.getService());
-            BusinessDetails bd = bsList != null && !bsList.isEmpty() ? bsList.get(0) : null;
-            setServiceName(bd != null ? bd.getName() : "");
-            setServiceId(bd != null ? bd.getCode() : "");
-            addDropdownData("serviceList",
-                    receiptHeaderToBeCancelled.getService() != null ? getPersistenceService().findAllByNamedQuery(
-                            CollectionConstants.QUERY_SERVICE_DETAIL_BY_CATEGORY, bd.getBusinessCategory(),
-                            Boolean.TRUE) : Collections.emptyList());
             populateBankBranchList(true);
             return NEW;
         } else {
