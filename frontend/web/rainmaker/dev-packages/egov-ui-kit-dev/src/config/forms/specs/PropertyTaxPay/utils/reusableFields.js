@@ -348,7 +348,7 @@ export const annualRent = {
     toolTip: true,
     toolTipMessage: "PT_TOTAL_ANNUAL_RENT_TOOLTIP_MESSAGE",
     required: true,
-    pattern: /^([1-9]\d{0,7})(\.\d+)?$/,
+    pattern: /^([0-9]\d{0,7})(\.\d+)?$/,
     hideField: false,
     numcols: 4,
   },
