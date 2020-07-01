@@ -13,13 +13,18 @@ ReportDefinitions:
     type: string
     source: noc
     total: false
-  - name: createdTime
-    label: reports.noc.createdTime
-    type: long
+  - name: createdtime
+    label: reports.noc.createdtime
+    type: bigint
     source: noc
     total: false
-  - name: applicationStatus
-    label: reports.noc.applicationStatus
+  - name: lastmodifiedtime
+    label: reports.noc.lastmodifiedtime
+    type: bigint
+    source: noc
+    total: false
+  - name: applicationstatus
+    label: reports.noc.applicationstatus
     type: string
     source: noc
     total: false
@@ -29,13 +34,13 @@ ReportDefinitions:
     type: epoch
     source: noc
     isMandatory: true
-    searchClause: AND createdTime >= $fromDate
+    searchClause: AND createdtime >= $fromDate
   - name: toDate
     label: reports.noc.toDate
     type: epoch
     source: noc
     isMandatory: true
-    searchClause: AND lastModifiedTime <= $toDate
+    searchClause: AND createdtime <= $toDate
   - name: status
     label: reports.noc.status
     type: singlevaluelist
@@ -48,12 +53,9 @@ ReportDefinitions:
     source: noc
     isMandatory: false
     searchClause: AND applicationType = $applicationType
-  - name: nocType
-    label: reports.noc.nocType
-    type: string
-    source: noc
-    isMandatory: false
-    searchClause: AND nocType = $nocType
   query: |
-        select applicationno,applicationType,createdTime,applicationStatus,lastModifiedTime from eg_noc order by applicationno
-
+        select applicationno,applicationType,createdtime,lastmodifiedtime,applicationstatus 
+        from eg_noc 
+        WHERE tenantid = $tenantid 
+        AND status != 'INACTIVE'
+  orderby: order by applicationno
