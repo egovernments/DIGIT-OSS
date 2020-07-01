@@ -13,3 +13,4 @@ rainmaker-tl=file:///work-dir/configs/reports/config/rainmaker-tl-reports.yml
 rainmaker-noc=file:///work-dir/configs/reports/config/rainmaker-noc-reports.yml
 rainmaker-common=file:///work-dir/configs/reports/config/rainmaker-common-reports.yml
 epass=file:///work-dir/configs/reports/config/e-pass-reports.yml
+rainmaker-nocsrv=file:///work-dir/configs/reports/config/noc-services-reports.yml
