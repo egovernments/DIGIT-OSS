@@ -104,13 +104,8 @@ export const callPGService = async (state, dispatch) => {
       const redirectionUrl =
         get(goToPaymentGateway, "Transaction.redirectUrl") ||
         get(goToPaymentGateway, "Transaction.callbackUrl");
-        if(get(goToPaymentGateway, "Transaction.gateway")
-        && get(goToPaymentGateway, "Transaction.gateway") === 'CCAVENUE'){
-          //custom method to redirect user using post for ccavenue
-          postPGReqeust(redirectionUrl);
-        }else{
-          window.location = redirectionUrl;
-        }
+        window.location = redirectionUrl;
+
     }
   } catch (e) {
     console.log(e);
