@@ -156,9 +156,7 @@
 						<td class="bluebox">&nbsp;</td>
 						<td class="bluebox"><s:text name="service.master.search.category" /></td>
 						<td class="bluebox">
-						<!--<s:select headerKey="-1" headerValue="----Choose----" name="serviceCategory" id="serviceCategory" cssClass="selectwk" list="dropdownData.serviceCategoryList" listKey="code" listValue="name" value="%{serviceCategory}" onChange="populateService(this.value);" />-->
 						<s:select headerKey="-1" headerValue="----Choose----" name="serviceCategory" id="serviceCategoryid" cssClass="selectwk" list="serviceCategoryNames" value="%{serviceCategory}" onChange="populateServiceType(this.value);" /> 
-							<!--<egov:ajaxdropdown id="service" fields="['Text','Value']" dropdownId="serviceDetailsId" url="receipts/ajaxReceiptCreate-ajaxLoadServiceByCategoryForMisc.action" />-->
 						</td>
 						<td colspan="2">
 						<table width="100%" id='serviceTable'>

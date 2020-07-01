@@ -440,20 +440,6 @@ public class AjaxReceiptCreateAction extends BaseFormAction {
     }
 
     @SuppressWarnings("unchecked")
-    @Action(value = "/receipts/ajaxReceiptCreate-ajaxLoadServiceByCategoryForMisc")
-    public String ajaxLoadServiceByCategoryForMisc() {
-
-        if (null != parameters.get(SERVICECATID) && null != parameters.get(SERVICECATID)[0]
-                && !parameters.get(SERVICECATID)[0].isEmpty())
-            businessDetailsList = microserviceUtils.getBusinessDetailsByCategoryCode(parameters.get(SERVICECATID)[0]);
-        else
-            businessDetailsList = Collections.emptyList();
-
-        return SERVICE_LIST;
-
-    }
-
-    @SuppressWarnings("unchecked")
     @Action(value = "/receipts/ajaxReceiptCreate-ajaxLoadServiceByClassification")
     public String ajaxLoadServiceByClassification() {
         if (serviceClass != null && !serviceClass.equals("-1"))

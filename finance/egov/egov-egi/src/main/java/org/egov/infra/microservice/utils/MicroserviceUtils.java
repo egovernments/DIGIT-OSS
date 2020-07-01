@@ -238,9 +238,6 @@ public class MicroserviceUtils {
     @Value("${egov.services.user.token.url}")
     private String tokenGenUrl;
 
-    @Value("${egov.services.common.masters.businesscategory.url}")
-    private String businessCategoryServiceUrl;
-
     @Value("${egov.services.common.masters.businessdetails.url}")
     private String businessDetailsServiceUrl;
 
@@ -773,66 +770,6 @@ public class MicroserviceUtils {
         return assignmentList;
     }
 
-    public List<BusinessCategory> getBusinessCategories() {
-
-        final RestTemplate restTemplate = createRestTemplate();
-
-        final String bc_url = appConfigManager.getEgovCommonMasterSerHost() + businessCategoryServiceUrl + "?tenantId="
-                + getTenentId();
-
-        RequestInfo requestInfo = new RequestInfo();
-        RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
-
-        requestInfo.setAuthToken(getUserToken());
-
-        reqWrapper.setRequestInfo(requestInfo);
-        LOGGER.info("call:" + bc_url);
-        BusinessCategoryResponse bcResponse = restTemplate.postForObject(bc_url, reqWrapper,
-                BusinessCategoryResponse.class);
-        return bcResponse.getBusinessCategoryInfo();
-    }
-
-    public List<BusinessDetails> getBusinessDetailsByCategoryCode(String categoryCode) {
-
-        final RestTemplate restTemplate = createRestTemplate();
-
-        final String bd_url = appConfigManager.getEgovCommonMasterSerHost() + businessDetailsServiceUrl + "?tenantId="
-                + getTenentId() + "&businessType=MISCELLANEOUS&businessCategoryCode=" + categoryCode;
-
-        RequestInfo requestInfo = new RequestInfo();
-        RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
-
-        requestInfo.setAuthToken(getUserToken());
-        requestInfo.setTs(getEpochDate(new Date()));
-        reqWrapper.setRequestInfo(requestInfo);
-
-        BusinessDetailsResponse bcResponse = restTemplate.postForObject(bd_url, reqWrapper,
-                BusinessDetailsResponse.class);
-        return bcResponse.getBusinessDetails();
-    }
-
-    public List<BusinessDetails> getBusinessDetailsByType(String type) {
-
-        final RestTemplate restTemplate = createRestTemplate();
-
-        final String bd_url = appConfigManager.getEgovCommonMasterSerHost() + businessDetailsServiceUrl + "?tenantId="
-                + getTenentId() + "&businessType=" + type;
-
-        RequestInfo requestInfo = new RequestInfo();
-        RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
-
-        requestInfo.setAuthToken(getUserToken());
-        requestInfo.setTs(getEpochDate(new Date()));
-        reqWrapper.setRequestInfo(requestInfo);
-
-        BusinessDetailsResponse bcResponse = restTemplate.postForObject(bd_url, reqWrapper,
-                BusinessDetailsResponse.class);
-        if (bcResponse.getBusinessDetails() != null && !bcResponse.getBusinessDetails().isEmpty())
-            return bcResponse.getBusinessDetails();
-        else
-            return null;
-    }
-
     public List<BusinessDetails> getBusinessDetailsByCode(String code) {
 
         final RestTemplate restTemplate = createRestTemplate();
@@ -851,28 +788,6 @@ public class MicroserviceUtils {
                 BusinessDetailsResponse.class);
         if (bcResponse.getBusinessDetails() != null && !bcResponse.getBusinessDetails().isEmpty())
             return bcResponse.getBusinessDetails();
-        else
-            return null;
-    }
-
-    public BusinessDetails getBusinessDetailsById(Long id) {
-
-        final RestTemplate restTemplate = createRestTemplate();
-
-        final String bd_url = appConfigManager.getEgovCommonMasterSerHost() + businessDetailsServiceUrl + "?tenantId="
-                + getTenentId() + "&id=" + id;
-
-        RequestInfo requestInfo = new RequestInfo();
-        RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
-
-        requestInfo.setAuthToken(getUserToken());
-        requestInfo.setTs(getEpochDate(new Date()));
-        reqWrapper.setRequestInfo(requestInfo);
-
-        BusinessDetailsResponse bcResponse = restTemplate.postForObject(bd_url, reqWrapper,
-                BusinessDetailsResponse.class);
-        if (bcResponse.getBusinessDetails() != null && !bcResponse.getBusinessDetails().isEmpty())
-            return bcResponse.getBusinessDetails().get(0);
         else
             return null;
     }
