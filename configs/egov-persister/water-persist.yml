@@ -77,6 +77,33 @@ serviceMaps:
        - jsonPath: $.WaterConnection.auditDetails.lastModifiedTime
        
        
+    - query: INSERT INTO eg_ws_connectionholder(tenantid, connectionid, userid, status, isprimaryholder, connectionholdertype, holdershippercentage, relationship, createdby, createdtime, lastmodifiedby, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+      basePath: $.WaterConnection.connectionHolders.*
+      jsonMaps:      
+
+       - jsonPath: $.WaterConnection.tenantId
+         
+       - jsonPath: $.WaterConnection.id
+
+       - jsonPath: $.WaterConnection.connectionHolders.*.uuid
+
+       - jsonPath: $.WaterConnection.connectionHolders.*.status
+
+       - jsonPath: $.WaterConnection.connectionHolders.*.isPrimaryOwner
+
+       - jsonPath: $.WaterConnection.connectionHolders.*.ownerType
+
+       - jsonPath: $.WaterConnection.connectionHolders.*.ownerShipPercentage
+
+       - jsonPath: $.WaterConnection.connectionHolders.*.relationship
+
+       - jsonPath: $.WaterConnection.auditDetails.createdBy
+
+       - jsonPath: $.WaterConnection.auditDetails.createdTime
+
+       - jsonPath: $.WaterConnection.auditDetails.lastModifiedBy
+
+       - jsonPath: $.WaterConnection.auditDetails.lastModifiedTime       
        
 
  - version: 1.0
