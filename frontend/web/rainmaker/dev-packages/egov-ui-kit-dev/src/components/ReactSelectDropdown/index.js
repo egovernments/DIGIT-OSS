@@ -165,8 +165,8 @@ class ReactSelectDropdown extends React.Component {
       disabled,
       ...rest
     } = this.props;
-  
 
+  
 
     const getTransformedLocale = (label) => {
       return label&&label.toUpperCase().replace(/[.:-\s\/]/g, "_");
@@ -219,6 +219,7 @@ class ReactSelectDropdown extends React.Component {
      errorStyle={errorStyle}
      className={`dropdown ${className}`}
      id={id}
+     required ={required}
      styles={customStyles}
      options={dropDownData}
      autoWidth={autoWidth}
@@ -236,7 +237,6 @@ class ReactSelectDropdown extends React.Component {
      isDisabled={disabled}
      isSearchable = "true"
      //defaultValue ={label}
-
      /*  floatingLabelShrinkStyle={floatingLabelBaseShrinkStyle}
      floatingLabelFixed={true}      
      floatingLabelStyle={floatingLabelStyle}
@@ -246,9 +246,13 @@ class ReactSelectDropdown extends React.Component {
      /* {...rest} */
     >
     </Select>
+    
+    {errorText?<div style={{color:"red"}}> {errorText} <div style={{  borderBottom: "3px solid rgb(244, 67, 54)", marginTop: "-21px" }}> </div></div>:""} 
+    
+
     {//renderSelectMenuItems()
     }
-    </div>
+    </div> 
   );
 }
 };
