@@ -3,9 +3,7 @@ package org.egov;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.egov.infra.indexer.web.contract.Mapping;
@@ -14,8 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
+import org.springframework.boot.*;
+import org.springframework.context.*;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -27,6 +25,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 @Order(1)
 public class IndexerApplicationRunnerImpl implements ApplicationRunner {
@@ -43,8 +42,11 @@ public class IndexerApplicationRunnerImpl implements ApplicationRunner {
 
 	public static ConcurrentHashMap<String, List<String>> topicMap = new ConcurrentHashMap<>();
 
+	@Autowired
+	private ApplicationContext applicationContext;
+
 	@Override
-	public void run(final ApplicationArguments arg0) throws Exception {
+	public void run(final ApplicationArguments applicationArguments) throws Exception {
 		try {
 			logger.info("Reading yaml files......");
 			readFiles();
@@ -57,22 +59,72 @@ public class IndexerApplicationRunnerImpl implements ApplicationRunner {
 		this.resourceLoader = resourceLoader;
 	}
 
+	//file types to be resolved have to be passed as comma separated types.
+	public List<String> resolveAllConfigFolders(List<String> listOfFiles, String fileTypesToResolve) {
+		List<String> fileList = new ArrayList<String>();
+		List<String> fileTypes = Arrays.asList(fileTypesToResolve.split("[,]"));
+
+		for (String listOfFile : listOfFiles) {
+			String[] fileName = listOfFile.split("[.]");
+			if (fileTypes.contains(fileName[fileName.length - 1])) {
+				fileList.add(listOfFile);
+			} else {
+				fileList.addAll(getFilesInFolder(listOfFile, fileTypes));
+			}
+
+		}
+		return fileList;
+	}
+
+	public List<String> getFilesInFolder(String baseFolderPath,List<String> fileTypes) {
+		File folder = new File(baseFolderPath);
+
+		if (!folder.exists())
+			throw new RuntimeException("Folder doesn't exists - " + baseFolderPath);
+
+		File[] listOfFiles = folder.listFiles();
+		List<String> configFolderList = new ArrayList<String>();
+
+		for (int i = 0; i < listOfFiles.length; i++) {
+			log.info("File " + listOfFiles[i].getName());
+			File file = listOfFiles[i];
+			String name = file.getName();
+			String[] fileName = name.split("[.]");
+			if (fileTypes.contains(fileName[fileName.length - 1])) {
+				configFolderList.add(file.toURI().toString());
+			}
+
+		}
+		return configFolderList;
+	}
+
+
 	public void readFiles() {
 		ConcurrentHashMap<String, Mapping> mappingsMap = new ConcurrentHashMap<>();
 		ConcurrentHashMap<String, List<String>> topicsMap = new ConcurrentHashMap<>();
 		ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
 		Services service = null;
+		boolean failed = false;
+
 		try {
-			List<String> ymlUrlS = Arrays.asList(yamllist.split(","));
-			if (0 == ymlUrlS.size()) {
-				ymlUrlS.add(yamllist);
+			List<String> fileUrls = Arrays.asList(yamllist.split(","));
+			if (0 == fileUrls.size()) {
+				fileUrls.add(yamllist);
 			}
+			String fileTypes = "yaml,yml";
+			List<String> ymlUrlS = resolveAllConfigFolders(fileUrls, fileTypes);
+			log.info(" These are all the files " + ymlUrlS);
+
+			if (ymlUrlS.size() == 0) {
+				throw new RuntimeException("There are no config files loaded. Service cannot start");
+			}
+
 			for (String yamlLocation : ymlUrlS) {
-				if (yamlLocation.startsWith("https://") || yamlLocation.startsWith("http://")) {
-					logger.info("Reading....: " + yamlLocation);
-					URL yamlFile = new URL(yamlLocation);
-					try {
-						service = mapper.readValue(new InputStreamReader(yamlFile.openStream()), Services.class);
+				logger.info("Reading....: " + yamlLocation);
+				Resource resource = resourceLoader.getResource(yamlLocation);
+
+				try {
+						service = mapper.readValue(resource.getInputStream(), Services.class);
 						for (Mapping mapping : (service.getServiceMaps().getMappings())) {
 							 mappingsMap.put(mapping.getTopic(), mapping);
 							if (!CollectionUtils.isEmpty(topicsMap.get(mapping.getConfigKey().toString()))) {
@@ -86,41 +138,23 @@ public class IndexerApplicationRunnerImpl implements ApplicationRunner {
 							}
 						}
 					} catch (Exception e) {
-						logger.error("Exception while fetching service map for: " + yamlLocation + " = ", e);
-						continue;
+						logger.error("Exception while fetching service map for: " + yamlLocation , e);
+						failed = true;
 					}
-					logger.info("Parsed: " + service);
-
-				} else if (yamlLocation.startsWith("file://")) {
-					logger.info("Reading....: " + yamlLocation);
-					Resource resource = resourceLoader.getResource(yamlLocation);
-					File file = resource.getFile();
-					try {
-						service = mapper.readValue(file, Services.class);
-						for (Mapping mapping : (service.getServiceMaps().getMappings())) {
-							mappingsMap.put(mapping.getTopic(), mapping);
-							if (!CollectionUtils.isEmpty(topicsMap.get(mapping.getConfigKey().toString()))) {
-								List<String> topics = topicsMap.get(mapping.getConfigKey().toString());
-								topics.add(mapping.getTopic());
-								topicsMap.put(mapping.getConfigKey().toString(), topics);
-							} else {
-								List<String> topics = new ArrayList<String>();
-								topics.add(mapping.getTopic());
-								topicsMap.put(mapping.getConfigKey().toString(), topics);
-							}
-						}
-					} catch (Exception e) {
-						logger.error("Exception while fetching service map for: " + yamlLocation);
-						continue;
-					}
-					logger.info("Parsed to object: " + service);
-				}
 			}
 		} catch (Exception e) {
 			logger.error("Exception while loading yaml files: ", e);
+			failed = true;
 		}
+
 		mappingMaps = mappingsMap;
 		topicMap = topicsMap;
+
+		if (failed) {
+			log.error("Some of the config's file failed to Load. The service cannot be started");
+			SpringApplication.exit(applicationContext);
+			System.exit(1);
+		}
 	}
 
 	public ConcurrentHashMap<String, Mapping> getMappingMaps() {

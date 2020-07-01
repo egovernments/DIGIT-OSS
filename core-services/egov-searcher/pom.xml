@@ -35,11 +35,6 @@
       <version>1.0.0-RELEASE</version>
     </dependency>
     <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-devtools</artifactId>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
       <groupId>org.webjars</groupId>
       <artifactId>bootstrap</artifactId>
       <version>3.3.7</version>
@@ -91,10 +86,6 @@
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-test</artifactId>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
