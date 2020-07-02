@@ -481,6 +481,16 @@
       "code": "NOC_DEPT_APPROVER",
       "name": "NOC Department Approver",
       "description": "NOC application approver"
+    },
+    {
+      "code": "FIRE_NOC_APPROVER",
+      "name": "Fire Noc Department Approver",
+      "description": "Fire Noc application approver"
+    },
+    {
+      "code": "AIRPORT_AUTHORITY_APPROVER",
+      "name": "Airport authority Approver",
+      "description": "Airport authority application approver"
     }
   ]
 }
