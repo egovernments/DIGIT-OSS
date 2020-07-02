@@ -1,350 +1,298 @@
 package org.egov.pt.service;
 
+import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.apache.commons.lang3.StringUtils;
+import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.config.PropertyConfiguration;
-import org.egov.pt.producer.Producer;
-import org.egov.pt.repository.ServiceRequestRepository;
-import org.egov.pt.util.PropertyUtil;
+import org.egov.pt.models.Property;
+import org.egov.pt.models.enums.CreationReason;
+import org.egov.pt.models.enums.Status;
+import org.egov.pt.models.event.Event;
+import org.egov.pt.models.event.EventRequest;
+import org.egov.pt.models.workflow.Action;
+import org.egov.pt.models.workflow.ProcessInstance;
+import org.egov.pt.util.NotificationUtil;
+import org.egov.pt.web.contracts.PropertyRequest;
+import org.egov.pt.web.contracts.SMSRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
-import lombok.extern.slf4j.Slf4j;
+import static org.egov.pt.util.PTConstants.*;
 
 @Service
-@Slf4j
 public class NotificationService {
 
-    @Autowired
-    private Producer producer;
+	@Autowired
+	private NotificationUtil notifUtil;
 
-    @Autowired
-    private ServiceRequestRepository serviceRequestRepository;
+	@Autowired
+	private PropertyConfiguration configs;
 
-    @Autowired
-    private PropertyConfiguration propertyConfiguration;
+	@Value("${notification.url}")
+	private String notificationURL;
 
-    @Autowired
-    private PropertyUtil util;
+	public void sendNotificationForMutation(PropertyRequest propertyRequest) {
 
-    @Value("${notification.url}")
-    private String notificationURL;
+		String msg = null;
+		String state = null;
+		Property property = propertyRequest.getProperty();
+		ProcessInstance wf = property.getWorkflow();
+		String completeMsgs = notifUtil.getLocalizationMessages(property.getTenantId(), propertyRequest.getRequestInfo());
+		state = getStateFromWf(wf, configs.getIsMutationWorkflowEnabled());
+		String localisedState = getLocalisedState(wf.getState().getState(), completeMsgs);
 
-    /**
-     * Processes the json and send the SMSRequest
-     * @param request The propertyRequest for which notification has to be send
-     */
-//	public void process(PropertyRequest request, String topic) {
-//
-//		String tenantId = request.getProperty().getTenantId();
-//		StringBuilder uri = util.getUri(tenantId, request.getRequestInfo());
-//    
-//        try{
-//        	
-//            String citizenMobileNumber = request.getRequestInfo().getUserInfo().getMobileNumber();
-//            String path = getJsonPath(topic, request.getRequestInfo().getUserInfo().getType());
-//            Object messageObj = null;
-//            try {
-//                LinkedHashMap responseMap = (LinkedHashMap) serviceRequestRepository.fetchResult(uri, request.getRequestInfo());
-//                String jsonString = new JSONObject(responseMap).toString();
-//                messageObj = JsonPath.parse(jsonString).read(path);
-//            }catch(Exception e) {
-//            	throw new CustomException("LOCALIZATION ERROR","Unable to get message from localization");
-//            }
-//            String message = ((ArrayList<String>)messageObj).get(0);
-//            List<Event> events = new ArrayList<>();
-//            request.getProperties().forEach(property -> {
-//                String customMessage = getCustomizedMessage(property,message,path);
-//                Set<String> listOfMobileNumber = getMobileNumbers(property);
-//                if(request.getRequestInfo().getUserInfo().getType().equalsIgnoreCase("CITIZEN"))
-//                    listOfMobileNumber.add(citizenMobileNumber);
-//                List<SMSRequest> smsRequests = getSMSRequests(listOfMobileNumber,customMessage);
-//                if(null == propertyConfiguration.getIsUserEventsNotificationEnabled())
-//                	propertyConfiguration.setIsUserEventsNotificationEnabled(true);
-//                if(propertyConfiguration.getIsUserEventsNotificationEnabled()) {
-//                	List<Event> eventsForAProperty = getEvents(listOfMobileNumber, customMessage, request, false);
-//                	if(!CollectionUtils.isEmpty(eventsForAProperty)) {
-//                        events.addAll(eventsForAProperty);
-//                	}
-//                }
-//                sendSMS(smsRequests);
-//             });
-//            if(!CollectionUtils.isEmpty(events)) {
-//                EventRequest eventReq = EventRequest.builder().requestInfo(request.getRequestInfo()).events(events).build();
-//                sendEventNotification(eventReq);
-//            }
-//
-//        }
-//        catch(Exception e){
-//        	log.error("There was an error while processing notifications: ",e);
-//        	throw new CustomException("ERROR_PROCESSING_NOTIFS","There was an error while processing notifications.");
-//        }
-//    }
-//
-//    /**
-//     * Returns the message for each specific property depending the kafka topic
-//     * @param property The property for which the notification has to be sent
-//     * @param message The standard message format
-//     * @return The customized message for the given property
-//     */
-//    private String getCustomizedMessage(Property property,String message,String path){
-//        String customMessage = null;
-//        if(path.contains(PTConstants.NOTIFICATION_CREATE_CODE))
-//            customMessage = getCustomizedCreateMessage(property,message);
-//        if(path.contains(PTConstants.NOTIFICATION_UPDATE_CODE))
-//            customMessage = getCustomizedUpdateMessage(property,message);
-//        if(path.contains(PTConstants.NOTIFICATION_EMPLOYEE_UPDATE_CODE))
-//            customMessage = getCustomizedUpdateMessageEmployee(property,message);
-//        
-//        log.info("customMessage: "+customMessage);
-//
-//        return customMessage;
-//    }
-//
-//
-//    /**
-//     * @param topic The kafka topic from which the json was received
-//     * @param userType UserType in the requestInfo
-//     * @return JsonPath to fetch the message
-//     */
-//    private String getJsonPath(String topic,String userType){
-//        String path = "$..messages[?(@.code==\"{}\")].message";
-//
-//        if(topic.equalsIgnoreCase(propertyConfiguration.getSavePropertyTopic()))
-//            path = path.replace("{}",PTConstants.NOTIFICATION_CREATE_CODE);
-//
-//        if(topic.equalsIgnoreCase(propertyConfiguration.getUpdatePropertyTopic()) && userType.equalsIgnoreCase("CITIZEN"))
-//            path = path.replace("{}",PTConstants.NOTIFICATION_UPDATE_CODE);
-//
-//        if(topic.equalsIgnoreCase(propertyConfiguration.getUpdatePropertyTopic()) && !userType.equalsIgnoreCase("CITIZEN"))
-//            path = path.replace("{}",PTConstants.NOTIFICATION_EMPLOYEE_UPDATE_CODE);
-//
-//        return path;
-//    }
-//
-//    /**
-//     * Returns the message for each specific property
-//     * @param property The property for which the notification has to be sent
-//     * @param message The standard message format
-//     * @return The customized message for the given property
-//     */
-//    private String getCustomizedCreateMessage(Property property, String message){
-//        message = message.replace("<insert ID>",property.getPropertyId());
-//        if(property.getAddress().getDoorNo()!=null)
-//            message = message.replace("<House No.>",property.getAddress().getDoorNo());
-//        else
-//            message = message.replace("<House No.>,","");
-//
-//        if(property.getAddress().getBuildingName()!=null)
-//            message = message.replace("<Colony Name>",property.getAddress().getBuildingName());
-//        else
-//            message = message.replace("<Colony Name>,","");
-//
-//        if(property.getAddress().getStreet()!=null)
-//            message = message.replace("<Street No.>",property.getAddress().getStreet());
-//        else
-//            message = message.replace("<Street No.>,","");
-//
-//        if(property.getAddress().getLocality().getCode()!=null)
-//            message = message.replace("<Mohalla>",property.getAddress().getLocality().getName());
-//        else
-//            message = message.replace("<Mohalla>,","");
-//
-//        if(property.getAddress().getCity()!=null)
-//            message = message.replace("<City>",property.getAddress().getCity());
-//        else
-//            message = message.replace("<City>.","");
-//
-//        if(property.getAddress().getPincode()!=null)
-//            message = message.replace("<Pincode>",property.getAddress().getPincode());
-//        else
-//            message = message.replace("<Pincode>","");
-//
-//        return message;
-//    }
-//
-//
-//    /**
-//     *  Returns customized message for update done by citizen
-//     * @param property Property which is updated
-//     * @param message Standard message template for update by citizen
-//     * @return Customized message for update by citizen
-//     */
-//    private String getCustomizedUpdateMessage(Property property,String message){
-//        PropertyDetail propertyDetail = property.getPropertyDetails().get(0);
-//        message = message.replace("<insert ID>",property.getPropertyId());
-//        message = message.replace("<FY>",propertyDetail.getFinancialYear());
-//        message = message.replace("<insert no>",propertyDetail.getAssessmentNumber());
-//       return message;
-//    }
-//
-//
-//    /**
-//     *  Returns customized message for update done by employee
-//     * @param property Property which is updated
-//     * @param message Standard message template for update by employee
-//     * @return Customized message for update by employee
-//     */
-//    private String getCustomizedUpdateMessageEmployee(Property property,String message){
-//        PropertyDetail propertyDetail = property.getPropertyDetails().get(0);
-//        message = message.replace("<insert Property Tax Assessment ID>",property.getPropertyId());
-//        message = message.replace("<FY>",propertyDetail.getFinancialYear());
-//      //message = message.replace("<insert inactive URL for Citizen Web application>.",notificationURL);
-//        return message;
-//    }
-//
-//    /**
-//     * Get all the unique mobileNumbers of the owners of the property
-//     * @param property The property whose unique mobileNumber are to be returned
-//     * @return Unique mobileNumber of the given property
-//     */
-//    private Set<String> getMobileNumbers(Property property){
-//        Set<String> mobileNumbers = new HashSet<>();
-//        property.getPropertyDetails().forEach(propertyDetail -> {
-//            propertyDetail.getOwners().forEach(owner -> {
-//                mobileNumbers.add(owner.getMobileNumber());
-//            });
-//        });
-//        return mobileNumbers;
-//    }
-//
-//
-//    /**
-//     * Creates SMSRequest for the given mobileNumber with the given message
-//     * @param mobileNumbers The set of mobileNumber for which SMSRequest has to be created
-//     * @param customizedMessage The message to sent
-//     * @return List of SMSRequest
-//     */
-//    private List<SMSRequest> getSMSRequests(Set<String> mobileNumbers,String customizedMessage){
-//        List<SMSRequest> smsRequests = new ArrayList<>();
-//             mobileNumbers.forEach(mobileNumber-> {
-//                 if(mobileNumber!=null){
-//                     SMSRequest smsRequest = new SMSRequest(mobileNumber,customizedMessage);
-//                     smsRequests.add(smsRequest);
-//                 }
-//             });
-//         return smsRequests;
-//    }
-//    
-//    
-//    
-//    /**
-//     * Creates and registers an event at the egov-user-event service at defined trigger points as that of sms notifs.
-//     * 
-//     * Assumption - The PropertyRequest received will always contain only one Property and that Property will have only one PropertyDetail.
-//     * 
-//     * @param mobileNumbers
-//     * @param customizedMessage
-//     * @param request
-//     * @return
-//     */
-//    public List<Event> getEvents(Set<String> mobileNumbers, String customizedMessage, PropertyRequest request, Boolean isActionReq) {
-//    	Map<String, String> mapOfPhnoAndUUIDs = fetchUserUUIDs(mobileNumbers, request.getRequestInfo(), request.getProperties().get(0).getTenantId());
-//		if (CollectionUtils.isEmpty(mapOfPhnoAndUUIDs.keySet()) || StringUtils.isEmpty(customizedMessage))
-//			return null;
-//    	List<Event> events = new ArrayList<>();
-//		for(String mobile: mobileNumbers) {
-//			if(null == mapOfPhnoAndUUIDs.get(mobile)) {
-//				log.error("No UUID for mobile {} skipping event", mobile);
-//				continue;
-//			}
-//	    	Property property = request.getProperties().get(0);
-//			List<String> toUsers = new ArrayList<>();
-//			toUsers.add(mapOfPhnoAndUUIDs.get(mobile));
-//			Recepient recepient = Recepient.builder().toUsers(toUsers).toRoles(null).build();
-//			Action action = null;
-//			if(isActionReq) {
-//				List<ActionItem> items = new ArrayList<>();
-//				String actionLink = propertyConfiguration.getPayLink().replace("$mobile", mobile)
-//							.replace("$assessmentId", property.getPropertyDetails().get(0).getAssessmentNumber())
-//							.replace("$propertyId", property.getPropertyId())
-//							.replace("$tenantId", property.getTenantId())
-//							.replace("$financialYear", property.getPropertyDetails().get(0).getFinancialYear());
-//				
-//				actionLink = propertyConfiguration.getUiAppHost() + actionLink;
-//				
-//				ActionItem item = ActionItem.builder().actionUrl(actionLink).code(propertyConfiguration.getPayCode()).build();
-//				items.add(item);
-//				
-//				action = Action.builder().actionUrls(items).build();
-//				
-//			}
-//			
-//			events.add(Event.builder().tenantId(property.getTenantId()).description(customizedMessage)
-//					.eventType(PTConstants.USREVENTS_EVENT_TYPE).name(PTConstants.USREVENTS_EVENT_NAME)
-//					.postedBy(PTConstants.USREVENTS_EVENT_POSTEDBY).source(Source.WEBAPP).recepient(recepient)
-//					.eventDetails(null).actions(action).build());
-//			
-//		}
-//
-//		
-//		return events;
-//    }
-//    
-//    
-//    
-//    /**
-//     * Fetches UUIDs of CITIZENs based on the phone number.
-//     * 
-//     * @param mobileNumbers
-//     * @param requestInfo
-//     * @param tenantId
-//     * @return
-//     */
-//    private Map<String, String> fetchUserUUIDs(Set<String> mobileNumbers, RequestInfo requestInfo, String tenantId) {
-//    	Map<String, String> mapOfPhnoAndUUIDs = new HashMap<>();
-//    	StringBuilder uri = new StringBuilder();
-//    	uri.append(propertyConfiguration.getUserHost()).append(propertyConfiguration.getUserSearchEndpoint());
-//    	Map<String, Object> userSearchRequest = new HashMap<>();
-//    	userSearchRequest.put("RequestInfo", requestInfo);
-//		userSearchRequest.put("tenantId", tenantId);
-//		userSearchRequest.put("userType", "CITIZEN");
-//    	for(String mobileNo: mobileNumbers) {
-//    		userSearchRequest.put("userName", mobileNo);
-//    		try {
-//    			Object user = serviceRequestRepository.fetchResult(uri, userSearchRequest);
-//    			if(null != user) {
-//    				String uuid = JsonPath.read(user, "$.user[0].uuid");
-//    				mapOfPhnoAndUUIDs.put(mobileNo, uuid);
-//    			}else {
-//        			log.error("Service returned null while fetching user for username - "+mobileNo);
-//    			}
-//    		}catch(Exception e) {
-//    			log.error("Exception while fetching user for username - "+mobileNo);
-//    			log.error("Exception trace: ",e);
-//    			continue;
-//    		}
-//    	}
-//    	return mapOfPhnoAndUUIDs;
-//    }
-//    
-//    
-//    /**
-//     * Pushes the event request to Kafka Queue.
-//     * 
-//     * @param request
-//     */
-//    public void sendEventNotification(EventRequest request) {
-//        producer.push(propertyConfiguration.getSaveUserEventsTopic(), request);
-//    }
-//    
-//
-//    /**
-//     * Send the SMSRequest on the SMSNotification kafka topic
-//     * @param smsRequestList The list of SMSRequest to be sent
-//     */
-//    private void sendSMS(List<SMSRequest> smsRequestList){
-//    	if(null == propertyConfiguration.getIsSMSNotificationEnabled())
-//    		propertyConfiguration.setIsSMSNotificationEnabled(true);
-//        if (propertyConfiguration.getIsSMSNotificationEnabled()) {
-//            if (CollectionUtils.isEmpty(smsRequestList))
-//                log.info("Messages from localization couldn't be fetched!");
-//            for(SMSRequest smsRequest: smsRequestList) {
-//                producer.push(propertyConfiguration.getSmsNotifTopic(), smsRequest);
-//            }
-//        }
-//    }
-//
-//
+		switch (state) {
+
+		case WF_NO_WORKFLOW:
+			msg = getMsgForMutation(property, completeMsgs, MT_NO_WORKFLOW, NOTIFICATION_MUTATION_LINK);
+			break;
+			
+		case WF_STATUS_OPEN:
+			msg = getMsgForMutation(property, completeMsgs, WF_MT_STATUS_OPEN_CODE, NOTIFICATION_MUTATION_LINK);
+			break;
+
+		case WF_STATUS_APPROVED:
+			msg = getMsgForMutation(property, completeMsgs, WF_MT_STATUS_APPROVED_CODE, NOTIFICATION_MUTATION_LINK);
+			break;
+
+		case WF_STATUS_PAYMENT_PENDING:
+			msg = getMsgForMutation(property, completeMsgs, WF_MT_STATUS_PAYMENT_PENDING_CODE, NOTIFICATION_PAY_LINK);
+			break;
+
+		default:
+			msg = getMsgForMutation(property, completeMsgs, WF_MT_STATUS_CHANGE_CODE, NOTIFICATION_MUTATION_LINK);
+			
+			break;
+			
+		case WF_STATUS_PAID:
+			break;
+		}
+
+		// Ignoring paid status, since it's wired from payment consumer directly
+		if (!StringUtils.isEmpty(msg)) {
+			msg = replaceCommonValues(property, msg, localisedState);
+			prepareMsgAndSend(propertyRequest, msg);
+		}
+	}
+
+	public void sendNotificationForMtPayment(PropertyRequest propertyRequest, BigDecimal Amount) {
+
+		Property property = propertyRequest.getProperty();
+		String CompleteMsgs = notifUtil.getLocalizationMessages(property.getTenantId(), propertyRequest.getRequestInfo());
+		
+			String msg = getMsgForMutation(property, CompleteMsgs, WF_MT_STATUS_PAID_CODE, NOTIFICATION_MUTATION_LINK)
+						.replace(NOTIFICATION_AMOUNT, Amount.toPlainString());
+			msg = replaceCommonValues(property, msg, "");		
+			prepareMsgAndSend(propertyRequest, msg);
+	}
+	
+	public void sendNotificationForUpdate(PropertyRequest propertyRequest) {
+
+		Property property = propertyRequest.getProperty();
+		ProcessInstance wf = property.getWorkflow();
+		String createOrUpdate = null;
+		String msg = null;
+		
+		Boolean isCreate =  CreationReason.CREATE.equals(property.getCreationReason());
+		String state = getStateFromWf(wf, configs.getIsWorkflowEnabled());
+		String completeMsgs = notifUtil.getLocalizationMessages(property.getTenantId(), propertyRequest.getRequestInfo());
+		String localisedState = getLocalisedState(wf.getState().getState(), completeMsgs);
+		switch (state) {
+
+		case WF_NO_WORKFLOW:
+			createOrUpdate = isCreate ? CREATED_STRING : UPDATED_STRING;
+			msg = getMsgForUpdate(property, UPDATE_NO_WORKFLOW, completeMsgs, createOrUpdate);
+			break;
+
+		case WF_STATUS_OPEN:
+			createOrUpdate = isCreate ? CREATE_STRING : UPDATE_STRING;
+			msg = getMsgForUpdate(property, WF_UPDATE_STATUS_OPEN_CODE, completeMsgs, createOrUpdate);
+			break;
+
+		case WF_STATUS_APPROVED:
+			createOrUpdate = isCreate ? CREATED_STRING : UPDATED_STRING;
+			msg = getMsgForUpdate(property, WF_UPDATE_STATUS_APPROVED_CODE, completeMsgs, createOrUpdate);
+			break;
+
+		default:
+			createOrUpdate = isCreate ? CREATE_STRING : UPDATE_STRING;
+			msg = getMsgForUpdate(property, WF_UPDATE_STATUS_CHANGE_CODE, completeMsgs, createOrUpdate);
+			break;
+		}
+
+		
+		msg = replaceCommonValues(property, msg, localisedState);
+		prepareMsgAndSend(propertyRequest, msg);
+	}
 
 
+	/**
+	 * Method to prepare msg for create/update process
+	 * 
+	 * @param property
+	 * @param msgCode
+	 * @param completeMsgs
+	 * @param createUpdateReplaceString
+	 * @return
+	 */
+	private String getMsgForUpdate(Property property, String msgCode, String completeMsgs, String createUpdateReplaceString) {
+		
+		String url = notifUtil.getShortenedUrl(
+					   configs.getUiAppHost().concat(configs.getViewPropertyLink()
+					  .replace(NOTIFICATION_PROPERTYID, property.getPropertyId())
+					  .replace(NOTIFICATION_TENANTID, property.getTenantId())));
+		
+		return notifUtil.getMessageTemplate(msgCode, completeMsgs)
+				.replace(NOTIFICATION_PROPERTY_LINK, url)
+				.replace(NOTIFICATION_UPDATED_CREATED_REPLACE, createUpdateReplaceString);
+	}
+	
+	
+
+	/**
+	 * private method to prepare mutation msg for localization
+	 * 
+	 * @param property
+	 * @param CompleteMsgs
+	 * @param statusCode
+	 * @param urlCode
+	 * @return
+	 */
+	private String getMsgForMutation (Property property, String CompleteMsgs, String statusCode, String urlCode) {
+
+		String url = statusCode.equalsIgnoreCase(WF_STATUS_PAYMENT_PENDING) ? getPayUrl(property) : getMutationUrl(property);
+		return notifUtil.getMessageTemplate(statusCode, CompleteMsgs).replace(urlCode, url);
+	}
+
+	/**
+	 * Prepares and return url for mutation view screen
+	 * 
+	 * @param property
+	 * @return
+	 */
+	private String getMutationUrl(Property property) {
+		
+		return notifUtil.getShortenedUrl(
+				 configs.getUiAppHost().concat(configs.getViewMutationLink()
+				.replace(NOTIFICATION_APPID, property.getAcknowldgementNumber())
+				.replace(NOTIFICATION_TENANTID, property.getTenantId())));
+	}
+	
+	/**
+	 * Prepares and return url for property view screen
+	 * 
+	 * @param property
+	 * @return
+	 */
+	private String getPayUrl(Property property) {
+		return notifUtil.getShortenedUrl( 
+				 configs.getUiAppHost().concat(configs.getPayLink()
+				.replace(NOTIFICATION_CONSUMERCODE, property.getAcknowldgementNumber())
+				.replace(NOTIFICATION_TENANTID, property.getTenantId())));
+	}
+
+
+	/**
+	 * replaces common variable for all messages
+	 * 
+	 * @param property
+	 * @param msg
+	 * @return
+	 */
+	private String replaceCommonValues(Property property, String msg, String localisedState) {
+
+		msg = msg.replace(NOTIFICATION_PROPERTYID, property.getPropertyId()).replace(NOTIFICATION_APPID,
+				property.getAcknowldgementNumber());
+
+		if (configs.getIsWorkflowEnabled())
+			msg = msg.replace(NOTIFICATION_STATUS, localisedState);
+		return msg;
+	}
+	
+	private String getLocalisedState(String state, String completeMsgs) {
+		
+		switch (state) {
+			
+		case WF_STATUS_REJECTED :
+			return notifUtil.getMessageTemplate(WF_STATUS_REJECTED_LOCALE, completeMsgs);
+			
+		case WF_STATUS_DOCVERIFIED :
+			return notifUtil.getMessageTemplate(WF_STATUS_DOCVERIFIED_LOCALE, completeMsgs);
+			
+		case WF_STATUS_FIELDVERIFIED:
+			return notifUtil.getMessageTemplate(WF_STATUS_FIELDVERIFIED_LOCALE, completeMsgs);
+			
+		case WF_STATUS_OPEN:
+			return notifUtil.getMessageTemplate(WF_STATUS_OPEN_LOCALE, completeMsgs);
+		}
+		return state;
+	}
+
+
+	/**
+	 * Method to extract state from the workflow object
+	 * 
+	 * @param wf
+	 * @return
+	 */
+	private String getStateFromWf(ProcessInstance wf, Boolean isWorkflowEnabled) {
+		
+		String state;
+		if (isWorkflowEnabled) {
+
+			Boolean isPropertyActive = wf.getState().getApplicationStatus().equalsIgnoreCase(Status.ACTIVE.toString());
+			Boolean isTerminateState = wf.getState().getIsTerminateState();
+			Set<String> actions = null != wf.getState().getActions()
+					? actions = wf.getState().getActions().stream().map(Action::getAction).collect(Collectors.toSet())
+					: Collections.emptySet();
+
+			if (isTerminateState && CollectionUtils.isEmpty(actions)) {
+
+				state = isPropertyActive ? WF_STATUS_APPROVED : WF_STATUS_REJECTED;
+			} else if (actions.contains(ACTION_PAY)) {
+
+				state = WF_STATUS_PAYMENT_PENDING;
+			} else {
+
+				state = wf.getState().getState();
+			}
+
+		} else {
+			state = WF_NO_WORKFLOW;
+		}
+		return state;
+	}
+
+	/**
+	 * Prepares msg for each owner and send 
+	 *
+	 * @param property
+	 * @param msg
+	 */
+	private void prepareMsgAndSend(PropertyRequest request, String msg) {
+
+		Property property = request.getProperty();
+		RequestInfo requestInfo = request.getRequestInfo();
+		Map<String, String> mobileNumberToOwner = new HashMap<>();
+
+		property.getOwners().forEach(owner -> {
+			if (owner.getMobileNumber() != null)
+				mobileNumberToOwner.put(owner.getMobileNumber(), owner.getName());
+		});
+
+		List<SMSRequest> smsRequests = notifUtil.createSMSRequest(msg, mobileNumberToOwner);
+		notifUtil.sendSMS(smsRequests);
+
+		List<Event> events = notifUtil.enrichEvent(smsRequests, requestInfo, property.getTenantId());
+		notifUtil.sendEventNotification(new EventRequest(requestInfo, events));
+	}
 }

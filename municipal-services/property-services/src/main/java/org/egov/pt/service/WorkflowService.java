@@ -1,39 +1,31 @@
 package org.egov.pt.service;
 
-import static org.egov.pt.util.PTConstants.FIELDS_FOR_OWNER_MUTATION;
-import static org.egov.pt.util.PTConstants.FIELDS_FOR_PROPERTY_MUTATION;
-import static org.egov.pt.util.PTConstants.VARIABLE_OWNER;
-
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Optional;
 
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.config.PropertyConfiguration;
-import org.egov.pt.models.Difference;
+import org.egov.pt.models.Assessment;
 import org.egov.pt.models.Property;
+import org.egov.pt.models.enums.CreationReason;
+import org.egov.pt.models.enums.Status;
 import org.egov.pt.models.workflow.BusinessService;
 import org.egov.pt.models.workflow.BusinessServiceResponse;
 import org.egov.pt.models.workflow.ProcessInstanceRequest;
 import org.egov.pt.models.workflow.ProcessInstanceResponse;
+import org.egov.pt.models.workflow.State;
 import org.egov.pt.repository.ServiceRequestRepository;
+import org.egov.pt.util.PropertyUtil;
 import org.egov.pt.web.contracts.PropertyRequest;
 import org.egov.pt.web.contracts.RequestInfoWrapper;
 import org.egov.tracer.model.CustomException;
-import org.egov.tracer.model.ServiceCallException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class WorkflowService {
-
-	@Autowired
-	private RestTemplate rest;
 
 	@Autowired
 	private PropertyConfiguration configs;
@@ -43,9 +35,13 @@ public class WorkflowService {
 
 	@Autowired
 	private ObjectMapper mapper;
-
+	
 	@Autowired
-	private DiffService diffService;;
+	private PropertyUtil utils;
+	
+	@Autowired
+	ServiceRequestRepository serviceRequestRepository;
+	
 
 	/**
 	 * Method to integrate with workflow
@@ -54,28 +50,14 @@ public class WorkflowService {
 	 *
 	 * and sets the resultant status from wf-response back to trade-license object
 	 *
-	 * @param PropertyRequest
 	 */
-	public String callWorkFlow(ProcessInstanceRequest workflowReq) {
+	public State callWorkFlow(ProcessInstanceRequest workflowReq) {
 
 		ProcessInstanceResponse response = null;
-
-		try {
-
-			response = rest.postForObject(configs.getWfHost().concat(configs.getWfTransitionPath()), workflowReq, ProcessInstanceResponse.class);
-		} catch (HttpClientErrorException ex) {
-
-			throw new ServiceCallException(ex.getMessage());
-		} catch (Exception e) {
-			throw new CustomException("EG_WF_ERROR", "Exception occured while integrating with workflow : " + e.getMessage());
-		}
-
-		/*
-		 * on success result from work-flow read the data and set the status back to TL
-		 * object
-		 */
-
-		return response.getProcessInstances().get(0).getState().getApplicationStatus();
+		StringBuilder url = new StringBuilder(configs.getWfHost().concat(configs.getWfTransitionPath()));
+		Optional<Object> optional = serviceRequestRepository.fetchResult(url, workflowReq);
+		response = mapper.convertValue(optional.get(), ProcessInstanceResponse.class);
+		return response.getProcessInstances().get(0).getState();
 	}
 	
 	
@@ -89,13 +71,17 @@ public class WorkflowService {
 
 		StringBuilder url = getSearchURLWithParams(tenantId, businessService);
 		RequestInfoWrapper requestInfoWrapper = RequestInfoWrapper.builder().requestInfo(requestInfo).build();
-		Object result = restRepo.fetchResult(url, requestInfoWrapper);
+		Optional<Object> result = restRepo.fetchResult(url, requestInfoWrapper);
 		BusinessServiceResponse response = null;
 		try {
-			response = mapper.convertValue(result, BusinessServiceResponse.class);
+			response = mapper.convertValue(result.get(), BusinessServiceResponse.class);
 		} catch (IllegalArgumentException e) {
-			throw new CustomException("PARSING ERROR", "Failed to parse response of calculate");
+			throw new CustomException("PARSING ERROR", "Failed to parse response of workflow business service search");
 		}
+
+		if(CollectionUtils.isEmpty(response.getBusinessServices()))
+			throw new CustomException("BUSINESSSERVICE_NOT_FOUND","The businessService "+businessService+" is not found");
+
 		return response.getBusinessServices().get(0);
 	}
     
@@ -116,57 +102,89 @@ public class WorkflowService {
         return url;
     }
     
-    /**
-     * method to process requests for workflow
-     * @param request
-     */
-    public void processWorkflowAndPersistData(PropertyRequest request, Property propertyFromDb) {
+	/**
+	 * method to prepare process instance request 
+	 * and assign status back to property
+	 * 
+	 * @param request
+	 */
+	public State updateWorkflow(PropertyRequest request, CreationReason creationReasonForWorkflow) {
 
-        Boolean isDiffOnWorkflowFields = false;
-
-        Difference difference =  diffService.getDifference(request, propertyFromDb);
-        /*
-         *
-         * 1. is record active or not
-         *
-         * 2. if inactive get workflow information
-         *
-         * 3. check if update is possible, if yes the do update else throw error
-         *
-         * 4. if record is active and changes are there , then trigger the workflow they are asking for
-         * then persist the record
-         *
-         * 5.
-         */
-
-
-    }
-
-
-	private List<String> getSwitches(Difference difference) {
-
-		List<String> switches = new LinkedList<>();
-
-		if (!CollectionUtils.isEmpty(difference.getFieldsChanged())) {
-
-			if (Collections.disjoint(difference.getFieldsChanged(), FIELDS_FOR_OWNER_MUTATION))
-				switches.add("OWNERMUTATION");
-
-			if (Collections.disjoint(difference.getFieldsChanged(), FIELDS_FOR_PROPERTY_MUTATION))
-				switches.add("PROPERTYMUTATION");
+		Property property = request.getProperty();
+		
+		ProcessInstanceRequest workflowReq = utils.getWfForPropertyRegistry(request, creationReasonForWorkflow);
+		State state = callWorkFlow(workflowReq);
+		
+		if (state.getApplicationStatus().equalsIgnoreCase(configs.getWfStatusActive()) && property.getPropertyId() == null) {
+			
+			String pId = utils.getIdList(request.getRequestInfo(), property.getTenantId(), configs.getPropertyIdGenName(), configs.getPropertyIdGenFormat(), 1).get(0);
+			request.getProperty().setPropertyId(pId);
 		}
-
-		if (!CollectionUtils.isEmpty(difference.getClassesRemoved())) {
-			if (difference.getClassesRemoved().contains(VARIABLE_OWNER))
-				switches.add("OWNERMUTATION");
-		}
-
-		if (!CollectionUtils.isEmpty(difference.getClassesAdded())) {
-			if (difference.getClassesAdded().contains(VARIABLE_OWNER))
-				switches.add("OWNERMUTATION");
-		}
-
-		return switches;
+		
+		request.getProperty().setStatus(Status.fromValue(state.getApplicationStatus()));
+		request.getProperty().getWorkflow().setState(state);
+		return state;
 	}
+
+
+	/**
+	 * Returns boolean value to specifying if the state is updatable
+	 * @param stateCode The stateCode of the license
+	 * @param businessService The BusinessService of the application flow
+	 * @return State object to be fetched
+	 */
+	public Boolean isStateUpdatable(String stateCode, BusinessService businessService){
+		for(State state : businessService.getStates()){
+			if(state.getState()!=null && state.getState().equalsIgnoreCase(stateCode))
+				return state.getIsStateUpdatable();
+		}
+		return null;
+	}
+
+
+
+	/**
+	 * Creates url for searching processInstance
+	 *
+	 * @return The search url
+	 */
+	private StringBuilder getWorkflowSearchURLWithParams(String tenantId, String businessId) {
+
+		StringBuilder url = new StringBuilder(configs.getWfHost());
+		url.append(configs.getWfProcessInstanceSearchPath());
+		url.append("?tenantId=");
+		url.append(tenantId);
+		url.append("&businessIds=");
+		url.append(businessId);
+		return url;
+	}
+
+
+	/**
+	 * Fetches the workflow object for the given assessment
+	 * @return
+	 */
+	public State getCurrentState(RequestInfo requestInfo, Assessment assessment){
+
+		RequestInfoWrapper requestInfoWrapper = RequestInfoWrapper.builder().requestInfo(requestInfo).build();
+
+		StringBuilder url = getWorkflowSearchURLWithParams(assessment.getTenantId(), assessment.getAssessmentNumber());
+
+		Optional<Object> res = restRepo.fetchResult(url, requestInfoWrapper);
+		ProcessInstanceResponse response = null;
+
+		try{
+			response = mapper.convertValue(res.get(), ProcessInstanceResponse.class);
+		}
+		catch (Exception e){
+			throw new CustomException("PARSING_ERROR","Failed to parse workflow search response");
+		}
+
+		if(response!=null && !CollectionUtils.isEmpty(response.getProcessInstances()) && response.getProcessInstances().get(0)!=null)
+			return response.getProcessInstances().get(0).getState();
+
+		return null;
+	}
+
 
 }

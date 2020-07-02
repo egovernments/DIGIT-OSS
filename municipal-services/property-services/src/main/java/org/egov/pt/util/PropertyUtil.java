@@ -1,111 +1,117 @@
 package org.egov.pt.util;
 
-import static org.egov.pt.util.PTConstants.NOTIFICATION_LOCALE;
+import static org.egov.pt.util.PTConstants.ASMT_MODULENAME;
+import static org.egov.pt.util.PTConstants.BILL_AMOUNT_PATH;
+import static org.egov.pt.util.PTConstants.BILL_NODEMAND_ERROR_CODE;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
-import org.egov.mdms.model.MasterDetail;
-import org.egov.mdms.model.MdmsCriteria;
-import org.egov.mdms.model.MdmsCriteriaReq;
-import org.egov.mdms.model.ModuleDetail;
+import org.egov.common.contract.request.Role;
+import org.egov.common.contract.request.User;
 import org.egov.pt.config.PropertyConfiguration;
-import org.egov.pt.models.AuditDetails;
+import org.egov.pt.models.OwnerInfo;
 import org.egov.pt.models.Property;
+import org.egov.pt.models.enums.CreationReason;
+import org.egov.pt.models.user.UserDetailResponse;
 import org.egov.pt.models.workflow.ProcessInstance;
 import org.egov.pt.models.workflow.ProcessInstanceRequest;
+import org.egov.pt.repository.ServiceRequestRepository;
 import org.egov.pt.web.contracts.PropertyRequest;
+import org.egov.pt.web.contracts.RequestInfoWrapper;
+import org.egov.tracer.model.ServiceCallException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import lombok.extern.slf4j.Slf4j;
+
 @Component
-public class PropertyUtil {
-
-
-
-    @Autowired
-    private PropertyConfiguration config;
-
-
+@Slf4j
+public class PropertyUtil extends CommonUtils {
+	
+	@Autowired
+	private PropertyConfiguration configs;
+	
+	@Autowired
+	private ServiceRequestRepository restRepo;
+	
+	@Autowired
+	private ObjectMapper mapper;
+	
     /**
-     * Method to return auditDetails for create/update flows
-     *
-     * @param by
-     * @param isCreate
-     * @return AuditDetails
-     */
-    public AuditDetails getAuditDetails(String by, Boolean isCreate) {
-    	
-        Long time = System.currentTimeMillis();
-        if(isCreate)
-            return AuditDetails.builder().createdBy(by).lastModifiedBy(by).createdTime(time).lastModifiedTime(time).build();
-        else
-            return AuditDetails.builder().lastModifiedBy(by).lastModifiedTime(time).build();
-    }
+	 * Populates the owner fields inside of property objects from the response by user api
+	 * 
+	 * Ignoring if now user is not found in user response, no error will be thrown
+	 * 
+	 * @param userDetailResponse response from user api which contains list of user
+	 *                           which are used to populate owners in properties
+	 * @param properties         List of property whose owner's are to be populated
+	 *                           from userDetailResponse
+	 */
+	public void enrichOwner(UserDetailResponse userDetailResponse, List<Property> properties, Boolean isSearchOpen) {
 
-    public MdmsCriteriaReq prepareMdMsRequest(String tenantId,String moduleName, List<String> names, String filter, RequestInfo requestInfo) {
+		List<OwnerInfo> users = userDetailResponse.getUser();
+		Map<String, OwnerInfo> userIdToOwnerMap = new HashMap<>();
+		users.forEach(user -> userIdToOwnerMap.put(user.getUuid(), user));
 
-        List<MasterDetail> masterDetails = new ArrayList<>();
+		properties.forEach(property -> {
 
-        names.forEach(name -> {
-            masterDetails.add(MasterDetail.builder().name(name).filter(filter).build());
-        });
+			property.getOwners().forEach(owner -> {
 
-        ModuleDetail moduleDetail = ModuleDetail.builder()
-                .moduleName(moduleName).masterDetails(masterDetails).build();
-        List<ModuleDetail> moduleDetails = new ArrayList<>();
-        moduleDetails.add(moduleDetail);
-        MdmsCriteria mdmsCriteria = MdmsCriteria.builder().tenantId(tenantId).moduleDetails(moduleDetails).build();
-        return MdmsCriteriaReq.builder().requestInfo(requestInfo).mdmsCriteria(mdmsCriteria).build();
-    }
+				if (userIdToOwnerMap.get(owner.getUuid()) == null)
+					log.info("OWNER SEARCH ERROR",
+							"The owner with UUID : \"" + owner.getUuid() + "\" for the property with Id \""
+									+ property.getPropertyId() + "\" is not present in user search response");
+				else {
 
+					OwnerInfo info = userIdToOwnerMap.get(owner.getUuid());
+					if (isSearchOpen) {
+						owner.addUserDetail(getMaskedOwnerInfo(info));
+					} else {
+						owner.addUserDetail(info);
+					}
+				}
+			});
+		});
+	}
+	
+	/**
+	 * nullifying the PII's for open search
+	 * @param info
+	 * @return
+	 */
+	private org.egov.pt.models.user.User getMaskedOwnerInfo(OwnerInfo info) {
 
-	public void addAddressIds(List<Property> responseProperties, Property requestProperty) {
-
-		Map<String, String> propIdToAddrId = responseProperties.stream()
-				.collect(Collectors.toMap(Property::getId, prop -> prop.getAddress().getId()));
-		requestProperty.getAddress().setId(propIdToAddrId.get(requestProperty.getPropertyId()));
+		info.setMobileNumber(null);
+		info.setUuid(null);
+		info.setUserName(null);
+		info.setGender(null);
+		info.setAltContactNumber(null);
+		info.setPwdExpiryDate(null);
+		
+		return info;
 	}
 
 
-    /**
-     * Returns the uri for the localization call
-     * @param tenantId TenantId of the propertyRequest
-     * @return The uri for localization search call
-     */
-    public StringBuilder getUri(String tenantId, RequestInfo requestInfo){
-        if(config.getIsStateLevel())
-            tenantId = tenantId.split("\\.")[0];
-
-        String locale = NOTIFICATION_LOCALE;
-        if(!StringUtils.isEmpty(requestInfo.getMsgId()) && requestInfo.getMsgId().split("\\|").length>=2)
-            locale = requestInfo.getMsgId().split("\\|")[1];
-
-        StringBuilder uri = new StringBuilder();
-        uri.append(config.getLocalizationHost())
-                .append(config.getLocalizationContextPath()).append(config.getLocalizationSearchEndpoint());
-        uri.append("?").append("locale=").append(locale)
-                .append("&tenantId=").append(tenantId)
-                .append("&module=").append(PTConstants.MODULE);
-        return uri;
-    }
-
-	public ProcessInstanceRequest getProcessInstanceForPayment(PropertyRequest propertyRequest) {
+	public ProcessInstanceRequest getProcessInstanceForMutationPayment(PropertyRequest propertyRequest) {
 
 			Property property = propertyRequest.getProperty();
 			
 			ProcessInstance process = ProcessInstance.builder()
-				.businessService(config.getPropertyRegistryWf())
+				.businessService(configs.getMutationWfName())
 				.businessId(property.getAcknowldgementNumber())
 				.comment("Payment for property processed")
-				.assignee(property.getOwners().get(0))
-				.moduleName("PT")
-				.action("PAY")
+				.moduleName(PTConstants.ASMT_MODULENAME)
+				.tenantId(property.getTenantId())
+				.action(PTConstants.ACTION_PAY)
 				.build();
 			
 			return ProcessInstanceRequest.builder()
@@ -114,26 +120,120 @@ public class PropertyUtil {
 					.build();
 	}
 	
-	public ProcessInstanceRequest getWfForPropertyRegistry(PropertyRequest request, Boolean isCreate) {
+	public ProcessInstanceRequest getWfForPropertyRegistry(PropertyRequest request, CreationReason creationReasonForWorkflow) {
 		
 		Property property = request.getProperty();
 		ProcessInstance wf = null != property.getWorkflow() ? property.getWorkflow() : new ProcessInstance();
-		
+	
 		wf.setBusinessId(property.getAcknowldgementNumber());
 		wf.setTenantId(property.getTenantId());
+	
+		switch (creationReasonForWorkflow) {
 		
-		if (isCreate) {
-			
-			wf.setAssignee(property.getOwners().get(0));
-			wf.setBusinessService(config.getPropertyRegistryWf());
-			wf.setModuleName(config.getPropertyModuleName());
+		case CREATE :
+
+			wf.setBusinessService(configs.getCreatePTWfName());
+			wf.setModuleName(configs.getPropertyModuleName());
 			wf.setAction("OPEN");
+			break;
+
+		case UPDATE :
+			break;
+
+		case MUTATION :
+			break;
+			
+		default:
+			break;
 		}
 		
+		property.setWorkflow(wf);
 		return ProcessInstanceRequest.builder()
-				.processInstances(Arrays.asList(request.getProperty().getWorkflow()))
+				.processInstances(Arrays.asList(wf))
 				.requestInfo(request.getRequestInfo())
 				.build();
 	}
 
+	/**
+	 * 
+	 * @param request
+	 * @param propertyFromSearch
+	 */
+	public void mergeAdditionalDetails(PropertyRequest request, Property propertyFromSearch) {
+
+		request.getProperty().setAdditionalDetails(jsonMerge(propertyFromSearch.getAdditionalDetails(),
+				request.getProperty().getAdditionalDetails()));
+	}
+
+	/**
+	 * Setting the uuid of old peoprty record to the new record
+	 * @param request
+	 * @param uuid
+	 * @return
+	 */
+	public JsonNode saveOldUuidToRequest(PropertyRequest request, String uuid) {
+
+		ObjectNode objectNodeDetail;
+		JsonNode additionalDetails = request.getProperty().getAdditionalDetails();
+
+		if (null == additionalDetails || (null != additionalDetails && additionalDetails.isNull())) {
+			objectNodeDetail = mapper.createObjectNode();
+
+		} else {
+
+			objectNodeDetail = (ObjectNode) additionalDetails;
+		}
+		request.getProperty().setAdditionalDetails(objectNodeDetail);
+		return objectNodeDetail.put(PTConstants.PREVIOUS_PROPERTY_PREVIOUD_UUID, uuid);
+	}
+
+	public void clearSensitiveDataForPersistance(Property property) {
+		property.getOwners().forEach(owner -> owner.setMobileNumber(null));
+	}
+
+/**
+ * Utility method to fetch bill for validation of payment
+ * 
+ * @param propertyId
+ * @param tenantId
+ * @param request
+ */
+	public Boolean isBillUnpaid(String propertyId, String tenantId, RequestInfo request) {
+
+		Object res = null;
+		
+		StringBuilder uri = new StringBuilder(configs.getEgbsHost())
+				.append(configs.getEgbsFetchBill())
+				.append("?tenantId=").append(tenantId)
+				.append("&consumerCode=").append(propertyId)
+				.append("&businessService=").append(ASMT_MODULENAME);
+
+		try {
+			res = restRepo.fetchResult(uri, new RequestInfoWrapper(request)).get();
+		} catch (ServiceCallException e) {
+			
+			if(!e.getError().contains(BILL_NODEMAND_ERROR_CODE))
+				throw e;
+		}
+		
+		if (res != null) {
+			JsonNode node = mapper.convertValue(res, JsonNode.class);
+			Double amount = node.at(BILL_AMOUNT_PATH).asDouble();
+			return amount > 0;
+		}
+		return false;
+	}
+
+
+	/**
+	 * Public method to infer whether the search is for open or authenticated user
+	 * 
+	 * @param userInfo
+	 * @return
+	 */
+	public Boolean isPropertySearchOpen(User userInfo) {
+
+		return userInfo.getType().equalsIgnoreCase("SYSTEM")
+				&& userInfo.getRoles().stream().map(Role::getCode).collect(Collectors.toSet()).contains("ANONYMOUS");
+	}
 }

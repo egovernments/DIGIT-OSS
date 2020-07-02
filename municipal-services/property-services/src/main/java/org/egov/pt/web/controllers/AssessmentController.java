@@ -8,15 +8,10 @@ import javax.validation.Valid;
 import org.egov.common.contract.response.ResponseInfo;
 import org.egov.pt.models.Assessment;
 import org.egov.pt.models.AssessmentSearchCriteria;
-import org.egov.pt.models.Property;
-import org.egov.pt.models.PropertyCriteria;
 import org.egov.pt.service.AssessmentService;
-import org.egov.pt.service.PropertyService;
 import org.egov.pt.util.ResponseInfoFactory;
 import org.egov.pt.web.contracts.AssessmentRequest;
 import org.egov.pt.web.contracts.AssessmentResponse;
-import org.egov.pt.web.contracts.PropertyRequest;
-import org.egov.pt.web.contracts.PropertyResponse;
 import org.egov.pt.web.contracts.RequestInfoWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -61,11 +56,24 @@ public class AssessmentController {
 				.build();
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
+	
 
 	@PostMapping("/_search")
 	public ResponseEntity<AssessmentResponse> search(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
 			@Valid @ModelAttribute AssessmentSearchCriteria assessmentSearchCriteria) {
-		List<Assessment> assessments = assessmentService.searchAssessments(requestInfoWrapper.getRequestInfo(), assessmentSearchCriteria);
+		List<Assessment> assessments = assessmentService.searchAssessments(assessmentSearchCriteria);
+		ResponseInfo resInfo = responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true);
+		AssessmentResponse response = AssessmentResponse.builder()
+				.assessments(assessments)
+				.responseInfo(resInfo)
+				.build();
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
+	@PostMapping("/_plainsearch")
+	public ResponseEntity<AssessmentResponse> plainsearch(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
+														  @ModelAttribute AssessmentSearchCriteria assessmentSearchCriteria) {
+		List<Assessment> assessments = assessmentService.getAssessmenPlainSearch(assessmentSearchCriteria);
 		ResponseInfo resInfo = responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true);
 		AssessmentResponse response = AssessmentResponse.builder()
 				.assessments(assessments)

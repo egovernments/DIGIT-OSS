@@ -16,28 +16,27 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@EqualsAndHashCode(of= {"fileStore","documentUid","id"})
+@EqualsAndHashCode(of= {"fileStoreId","documentUid","id"})
 public class Document {
-	
-        @JsonProperty("id")
-        private String id ;
-        
-        @JsonProperty("documentType")
-        @NotNull
-        private String documentType ;
 
-        @JsonProperty("fileStore")
-        @NotNull
-        private String fileStore ;
-        
-        @JsonProperty("documentUid")
-        @NotNull
-        private String documentUid ;
-        
-        @JsonProperty("auditDetails")
-        private AuditDetails auditDetails;
+  @JsonProperty("id")
+  private String id ;
 
-        @JsonProperty("status")
-    	private Status status;
+  @JsonProperty("documentType")
+  @NotNull
+  private String documentType ;
+
+  @JsonProperty("fileStoreId")
+  @NotNull
+  private String fileStoreId ;
+
+  @JsonProperty("documentUid")
+  private String documentUid ;
+
+  @JsonProperty("auditDetails")
+  private AuditDetails auditDetails;
+
+  @JsonProperty("status")
+  private Status status;
 }
 

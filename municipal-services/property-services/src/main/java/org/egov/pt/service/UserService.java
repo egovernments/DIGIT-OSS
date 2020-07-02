@@ -63,9 +63,10 @@ public class UserService {
         Property property = request.getProperty();
 		RequestInfo requestInfo = request.getRequestInfo();
 		Role role = getCitizenRole();
+		List<OwnerInfo> owners = property.getOwners();
 		Set<String> listOfMobileNumbers = getMobileNumbers(property, requestInfo, property.getTenantId());
 
-		property.getOwners().forEach(owner -> {
+		owners.forEach(owner -> {
 
 			addUserDefaultFields(property.getTenantId(), role, owner);
 			UserDetailResponse userDetailResponse = userExists(owner, requestInfo);
@@ -110,6 +111,10 @@ public class UserService {
 			// Assigns value of fields from user got from userDetailResponse to owner object
 			setOwnerFields(owner, userDetailResponse, requestInfo);
 		});
+		
+		if (owners.size() != owners.stream().map(OwnerInfo::getUuid).collect(Collectors.toSet()).size())
+			throw new CustomException("EG_PT_DUPLICATE_OWNER",
+					"Duplicate owner found in request, please make sure owner information is not duplicate");
 	}
 
 
@@ -225,15 +230,15 @@ public class UserService {
      * @return Response from user service as parsed as userDetailResponse
      */
     @SuppressWarnings("unchecked")
-	private UserDetailResponse userCall(Object userRequest, StringBuilder uri) {
+	private UserDetailResponse userCall(Object userRequest, StringBuilder url) {
     	
-        String dobFormat = null;
-        if(uri.toString().contains(userSearchEndpoint) || uri.toString().contains(userUpdateEndpoint))
-            dobFormat="yyyy-MM-dd";
-        else if(uri.toString().contains(userCreateEndpoint))
-            dobFormat = "dd/MM/yyyy";
-        try{
-        	Optional<Object> response = serviceRequestRepository.fetchResult(uri, userRequest);
+		String dobFormat = null;
+		if (url.indexOf(userSearchEndpoint) != -1 || url.indexOf(userUpdateEndpoint) != -1)
+			dobFormat = "yyyy-MM-dd";
+		else if (url.indexOf(userCreateEndpoint) != -1)
+			dobFormat = "dd/MM/yyyy";
+		try {
+        	Optional<Object> response = serviceRequestRepository.fetchResult(url, userRequest);
         	
         	if(response.isPresent()) {
         		LinkedHashMap<String, Object> responseMap = (LinkedHashMap<String, Object>)response.get();

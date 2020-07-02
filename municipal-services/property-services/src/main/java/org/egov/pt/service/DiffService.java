@@ -1,8 +1,13 @@
 package org.egov.pt.service;
 
+import static org.egov.pt.util.PTConstants.FIELDS_TO_IGNORE;
+import static org.egov.pt.util.PTConstants.VARIABLE_ACTIVE;
+import static org.egov.pt.util.PTConstants.VARIABLE_USERACTIVE;
+
+import java.util.LinkedList;
+import java.util.List;
+
 import org.egov.pt.models.Property;
-import org.egov.pt.web.contracts.PropertyRequest;
-import org.egov.pt.models.Difference;
 import org.egov.tracer.model.CustomException;
 import org.javers.core.Javers;
 import org.javers.core.JaversBuilder;
@@ -12,34 +17,8 @@ import org.javers.core.diff.changetype.ValueChange;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.*;
-
-import static org.egov.pt.util.PTConstants.*;
-
 @Service
 public class DiffService {
-
-
-    /**
-     * Creates a list of Difference object between the update and search
-     *
-     * @param request      The tradeLicenseRequest for update
-     * @param searchResult The searched licenses corresponding to the request
-     * @return List of Difference object
-     */
-    public Difference getDifference(PropertyRequest request, Property searchResult) {
-
-        Property property = request.getProperty();
-
-        Difference diff = new Difference();
-        diff.setId(property.getId());
-        diff.setFieldsChanged(getUpdatedFields(property, searchResult));
-        diff.setClassesAdded(getObjectsAdded(property, searchResult));
-        diff.setClassesRemoved(getObjectsRemoved(property, searchResult));
-
-        return diff;
-    }
-
 
     /**
      * Gives the field names whose values are different in the two classes
@@ -48,7 +27,7 @@ public class DiffService {
      * @param propertyFromSearch License from db on which update is called
      * @return List of variable names which are changed
      */
-    private List<String> getUpdatedFields(Property propertyFromUpdate, Property propertyFromSearch) {
+    public List<String> getUpdatedFields(Object propertyFromUpdate, Object propertyFromSearch) {
 
         Javers javers = JaversBuilder.javers().build();
 
@@ -76,12 +55,11 @@ public class DiffService {
      * @param propertyFromSearch Property from db on which update is called
      * @return Names of Classes added or removed during update
      */
-    private List<String> getObjectsAdded(Property propertyFromUpdate, Property propertyFromSearch) {
+    public List<String> getObjectsAdded(Object propertyFromUpdate, Object propertyFromSearch) {
 
         Javers javers = JaversBuilder.javers().build();
         Diff diff = javers.compare(propertyFromSearch, propertyFromUpdate);
         List objectsAdded = diff.getObjectsByChangeType(NewObject.class);
-        ;
 
         List<String> classModified = new LinkedList<>();
 

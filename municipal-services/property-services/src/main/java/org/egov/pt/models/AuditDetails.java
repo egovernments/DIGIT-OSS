@@ -4,25 +4,33 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-@Data
-@AllArgsConstructor
+/**
+ * Collection of audit related fields used by most models
+ */
+
+@ToString
+@Getter
+@Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class AuditDetails {
-	
-        @JsonProperty("createdBy")
-        private String createdBy ;
 
-        @JsonProperty("lastModifiedBy")
-        private String lastModifiedBy ;
+	@JsonProperty("createdBy")
+	private String createdBy;
 
-        @JsonProperty("createdTime")
-        private Long createdTime ;
+	@JsonProperty("lastModifiedBy")
+	private String lastModifiedBy;
 
-        @JsonProperty("lastModifiedTime")
-        private Long lastModifiedTime ;
+	@JsonProperty("createdTime")
+	private Long createdTime;
+
+	@JsonProperty("lastModifiedTime")
+	private Long lastModifiedTime;
+
 }
-

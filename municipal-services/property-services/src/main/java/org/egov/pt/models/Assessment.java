@@ -1,6 +1,5 @@
 package org.egov.pt.models;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -10,6 +9,7 @@ import javax.validation.constraints.NotNull;
 
 import org.egov.pt.models.enums.Channel;
 import org.egov.pt.models.enums.Status;
+import org.egov.pt.models.workflow.ProcessInstance;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -26,104 +26,98 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class Assessment {
-	
-        @JsonProperty("financialYear")
-        @NotNull
-        private String financialYear ;
 
-        @JsonProperty("assessmentNumber")
-        private String assessmentNumber ;
 
-        @JsonProperty("id")
-        private String id ;
-        
-        @JsonProperty("tenantId")
-        @NotNull
-        private String tenantId ;
-        
-        @JsonProperty("propertyID")
-        @NotNull
-        private String propertyID;
+	@JsonProperty("id")
+	private String id ;
 
-        @JsonProperty("assessmentDate")
-        @NotNull
-        private Long assessmentDate ;
+	@JsonProperty("tenantId")
+	@NotNull
+	private String tenantId ;
 
-        @JsonProperty("status")
-        private Status status ;
+	@JsonProperty("assessmentNumber")
+	private String assessmentNumber ;
 
-        @JsonProperty("source")
-        @NotNull
-        private Source source ;
+	@JsonProperty("financialYear")
+	@NotNull
+	private String financialYear ;
 
-        @JsonProperty("buildUpArea")
-        private Double buildUpArea ;
+	@JsonProperty("propertyId")
+	@NotNull
+	private String propertyId;
 
-        @JsonProperty("auditDetails")
-        private AuditDetails auditDetails ;
+	@JsonProperty("assessmentDate")
+	@NotNull
+	private Long assessmentDate ;
 
-        @JsonProperty("units")
-        @Valid
-        private List<Unit> units ;
+	@JsonProperty("status")
+	private Status status ;
 
-        @JsonProperty("documents")
-        @Valid
-        private Set<Document> documents ;
+	@JsonProperty("source")
+	private Source source ;
 
-        @JsonProperty("additionalDetails")
-        private JsonNode additionalDetails ;
+	@JsonProperty("unitUsageList")
+	@Valid
+	private List<UnitUsage> unitUsageList ;
 
-        @JsonProperty("channel")
-        private Channel channel ;
-        
-        public enum Source {
-        	  
-        	  MUNICIPAL_RECORDS("MUNICIPAL_RECORDS"),
-        	  
-        	  WEBAPP("WEBAPP"),
+	@JsonProperty("documents")
+	@Valid
+	private Set<Document> documents ;
 
-        	  MOBILEAPP("MOBILEAPP"),
+	@JsonProperty("additionalDetails")
+	private JsonNode additionalDetails ;
 
-        	  FIELD_SURVEY("FIELD_SURVEY");
+	@JsonProperty("channel")
+	private Channel channel ;
 
-        	  private String value;
 
-        	  Source(String value) {
-        	    this.value = value;
-        	  }
+	@JsonProperty("auditDetails")
+	private AuditDetails auditDetails ;
 
-        	  @Override
-        	  @JsonValue
-        	  public String toString() {
-        	    return String.valueOf(value);
-        	  }
+	@JsonProperty("workflow")
+	private ProcessInstance workflow;
 
-        	  @JsonCreator
-        	  public static Source fromValue(String text) {
-        	    for (Source b : Source.values()) {
-        	      if (String.valueOf(b.value).equalsIgnoreCase(text)) {
-        	        return b;
-        	      }
-        	    }
-        	    return null;
-        	  }
-        	}
 
-        public Assessment addUnitsItem(Unit unitsItem) {
-            if (this.units == null) {
-            this.units = new ArrayList<>();
-            }
-        this.units.add(unitsItem);
-        return this;
-        }
+	public enum Source {
 
-        public Assessment addDocumentsItem(Document documentsItem) {
-            if (this.documents == null) {
-            this.documents = new HashSet<>();
-            }
-        this.documents.add(documentsItem);
-        return this;
-        }
+		MUNICIPAL_RECORDS("MUNICIPAL_RECORDS"),
+
+		WEBAPP("WEBAPP"),
+
+		MOBILEAPP("MOBILEAPP"),
+
+		FIELD_SURVEY("FIELD_SURVEY");
+
+		private String value;
+
+		Source(String value) {
+			this.value = value;
+		}
+
+		@Override
+		@JsonValue
+		public String toString() {
+			return String.valueOf(value);
+		}
+
+		@JsonCreator
+		public static Source fromValue(String text) {
+			for (Source b : Source.values()) {
+				if (String.valueOf(b.value).equalsIgnoreCase(text)) {
+					return b;
+				}
+			}
+			return null;
+		}
+	}
+
+	public Assessment addDocumentsItem(Document documentsItem) {
+		if (this.documents == null) {
+			this.documents = new HashSet<>();
+		}
+		this.documents.add(documentsItem);
+		return this;
+	}
 
 }
 

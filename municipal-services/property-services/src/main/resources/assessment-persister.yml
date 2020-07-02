@@ -2,32 +2,32 @@ serviceMaps:
   serviceName: property-services
   mappings:
   - version: 1.0
-    description: Persists assessment details to eg_pt_assessment table
+    description: Persists assessment details to eg_pt_asmt_assessment table
     fromTopic: save-pt-assessment
     isTransaction: true
     queryMaps:
 
-    - query: INSERT INTO eg_pt_assessment (id, financialyear, tenantid, assessmentNumber, status, propertyId, source, assessmentDate, buildUpArea, additionaldetails, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+    - query: INSERT INTO eg_pt_asmt_assessment(id, tenantid, assessmentnumber, financialyear, propertyid, status, source, channel, assessmentdate, additionaldetails, createdby, createdtime, lastmodifiedby, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
       basePath: Assessment
       jsonMaps:
 
       - jsonPath: $.Assessment.id
 
-      - jsonPath: $.Assessment.financialYear
-
       - jsonPath: $.Assessment.tenantId
 
       - jsonPath: $.Assessment.assessmentNumber
 
-      - jsonPath: $.Assessment.status
+      - jsonPath: $.Assessment.financialYear
 
-      - jsonPath: $.Assessment.propertyID
+      - jsonPath: $.Assessment.propertyId
+
+      - jsonPath: $.Assessment.status
 
       - jsonPath: $.Assessment.source
 
-      - jsonPath: $.Assessment.assessmentDate
+      - jsonPath: $.Assessment.channel
 
-      - jsonPath: $.Assessment.buildUpArea
+      - jsonPath: $.Assessment.assessmentDate
 
       - jsonPath: $.Assessment.additionalDetails
         type: JSON
@@ -35,51 +35,45 @@ serviceMaps:
 
       - jsonPath: $.Assessment.auditDetails.createdBy
 
-      - jsonPath: $.Assessment.auditDetails.lastModifiedBy
-
       - jsonPath: $.Assessment.auditDetails.createdTime
+
+      - jsonPath: $.Assessment.auditDetails.lastModifiedBy
 
       - jsonPath: $.Assessment.auditDetails.lastModifiedTime
 
 
 
-    - query: INSERT INTO eg_pt_unit (tenantid, id, assessmentId, floorNo, unitArea, usageCategory, occupancyType, occupancyDate, constructionType, arv, active, createdby, createdtime, lastmodifiedby, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
-      basePath: Assessment.units.*
+    - query: INSERT INTO eg_pt_asmt_unitusage (tenantid, id, assessmentid, unitid, usagecategory, occupancytype, occupancydate, active, createdby, createdtime, lastmodifiedby, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+      basePath: Assessment.unitUsageList.*
       jsonMaps:
 
-      - jsonPath: $.Assessment.units.*.tenantId
+      - jsonPath: $.Assessment.unitUsageList.*.tenantId
 
-      - jsonPath: $.Assessment.units.*.id
+      - jsonPath: $.Assessment.unitUsageList.*.id
 
-      - jsonPath: $.Assessment.units.*.assessmentId
+      - jsonPath: $.Assessment[?({id} in @.unitUsageList[*].id)].id
 
-      - jsonPath: $.Assessment.units.*.floorNo
+      - jsonPath: $.Assessment.unitUsageList.*.unitid
 
-      - jsonPath: $.Assessment.units.*.unitArea
+      - jsonPath: $.Assessment.unitUsageList.*.usageCategory
 
-      - jsonPath: $.Assessment.units.*.usageCategory
+      - jsonPath: $.Assessment.unitUsageList.*.occupancyType
 
-      - jsonPath: $.Assessment.units.*.occupancyType
+      - jsonPath: $.Assessment.unitUsageList.*.occupancyDate
 
-      - jsonPath: $.Assessment.units.*.occupancyDate
+      - jsonPath: $.Assessment.unitUsageList.*.active
 
-      - jsonPath: $.Assessment.units.*.constructionType
+      - jsonPath: $.Assessment.unitUsageList.*.auditDetails.createdBy
 
-      - jsonPath: $.Assessment.units.*.active
+      - jsonPath: $.Assessment.unitUsageList.*.auditDetails.createdTime
 
-      - jsonPath: $.Assessment.units.*.arv
+      - jsonPath: $.Assessment.unitUsageList.*.auditDetails.lastModifiedBy
 
-      - jsonPath: $.Assessment.units.*.auditDetails.createdBy
-
-      - jsonPath: $.Assessment.units.*.auditDetails.createdTime
-
-      - jsonPath: $.Assessment.units.*.auditDetails.lastModifiedBy
-
-      - jsonPath: $.Assessment.units.*.auditDetails.lastModifiedTime
+      - jsonPath: $.Assessment.unitUsageList.*.auditDetails.lastModifiedTime
 
 
 
-    - query: INSERT INTO eg_pt_document (id, tenantid, entityid, documenttype, filestore, documentuid, status, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+    - query: INSERT INTO eg_pt_asmt_document (id, tenantid, entityid, documenttype, filestoreid, documentuid, status, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
       basePath: $.Assessment.documents.*
       jsonMaps:
 
@@ -91,7 +85,7 @@ serviceMaps:
 
       - jsonPath: $.Assessment.documents.*.documentType
 
-      - jsonPath: $.Assessment.documents.*.fileStore
+      - jsonPath: $.Assessment.documents.*.fileStoreId
 
       - jsonPath: $.Assessment.documents.*.documentUid
 
@@ -104,30 +98,30 @@ serviceMaps:
       - jsonPath: $.Assessment.documents.*.auditDetails.createdTime
 
       - jsonPath: $.Assessment.documents.*.auditDetails.lastModifiedTime
-      
-      
-      
+
+
+
   - version: 1.0
-    description: Updates assessment details to eg_pt_assessment table
+    description: Updates assessment details to eg_pt_asmt_assessment table
     fromTopic: update-pt-assessment
     isTransaction: true
     queryMaps:
 
-    - query: INSERT INTO eg_pt_assessment_audit SELECT *, (SELECT extract(epoch from now())) FROM eg_pt_assessment WHERE id = ?;
+    - query: INSERT INTO eg_pt_asmt_assessment_audit SELECT *, (SELECT extract(epoch from now())) FROM eg_pt_asmt_assessment WHERE id = ?;
       basePath: Assessment
       jsonMaps:
 
       - jsonPath: $.Assessment.id
-      
-      
-    - query: INSERT INTO eg_pt_unit_audit SELECT *, (SELECT extract(epoch from now())) FROM eg_pt_unit WHERE id = ?;
-      basePath: Assessment.units.*
+
+
+    - query: INSERT INTO eg_pt_asmt_unitusage_audit SELECT *, (SELECT extract(epoch from now())) FROM eg_pt_asmt_unitusage WHERE id = ?;
+      basePath: Assessment.unitUsageList.*
       jsonMaps:
 
-      - jsonPath: $.Assessment.units.*.id
-      
-      
-    - query: UPDATE eg_pt_assessment SET financialyear = ?, status = ?, source = ?, assessmentDate = ?, buildUpArea = ?, additionaldetails = ?, lastmodifiedby = ?, lastmodifiedtime = ? WHERE id = ?;
+      - jsonPath: $.Assessment.unitUsageList.*.id
+
+
+    - query: UPDATE eg_pt_asmt_assessment SET financialyear = ?, status = ?, source = ?, assessmentDate = ?, additionaldetails = ?, lastmodifiedby = ?, lastmodifiedtime = ? WHERE id = ?;
       basePath: Assessment
       jsonMaps:
 
@@ -139,8 +133,6 @@ serviceMaps:
 
       - jsonPath: $.Assessment.assessmentDate
 
-      - jsonPath: $.Assessment.buildUpArea
-
       - jsonPath: $.Assessment.additionalDetails
         type: JSON
         dbType: JSONB
@@ -148,82 +140,68 @@ serviceMaps:
       - jsonPath: $.Assessment.auditDetails.lastModifiedBy
 
       - jsonPath: $.Assessment.auditDetails.lastModifiedTime
-      
+
       - jsonPath: $.Assessment.id
 
 
 
 
-    - query: INSERT INTO eg_pt_unit (tenantid, id, assessmentId, floorNo, unitArea, usageCategory, occupancyType, occupancyDate, constructionType, arv, active, createdby, createdtime, lastmodifiedby, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE floorNo = ?, unitArea = ?, usageCategory = ?, occupancyType = ?, occupancyDate = ?, constructionType = ?, arv = ?, active = ?, lastmodifiedby = ?, lastmodifiedtime = ?;
-      basePath: Assessment.units.*
+    - query: INSERT INTO eg_pt_asmt_unitusage (tenantid, id, assessmentId, unitid, usageCategory, occupancyType, occupancyDate, active, createdby, createdtime, lastmodifiedby, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET usageCategory = ?, occupancyType = ?, occupancyDate = ?, active = ?, lastmodifiedby = ?, lastmodifiedtime = ?;
+      basePath: Assessment.unitUsageList.*
       jsonMaps:
 
-      - jsonPath: $.Assessment.units.*.tenantId
+      - jsonPath: $.Assessment.unitUsageList.*.tenantId
 
-      - jsonPath: $.Assessment.units.*.id
+      - jsonPath: $.Assessment.unitUsageList.*.id
 
-      - jsonPath: $.Assessment.units.*.assessmentId
+      - jsonPath: $.Assessment[?({id} in @.unitUsageList[*].id)].id
 
-      - jsonPath: $.Assessment.units.*.floorNo
+      - jsonPath: $.Assessment.unitUsageList.*.unitId
 
-      - jsonPath: $.Assessment.units.*.unitArea
+      - jsonPath: $.Assessment.unitUsageList.*.usageCategory
 
-      - jsonPath: $.Assessment.units.*.usageCategory
+      - jsonPath: $.Assessment.unitUsageList.*.occupancyType
 
-      - jsonPath: $.Assessment.units.*.occupancyType
+      - jsonPath: $.Assessment.unitUsageList.*.occupancyDate
 
-      - jsonPath: $.Assessment.units.*.occupancyDate
+      - jsonPath: $.Assessment.unitUsageList.*.active
 
-      - jsonPath: $.Assessment.units.*.constructionType
+      - jsonPath: $.Assessment.unitUsageList.*.auditDetails.createdBy
 
-      - jsonPath: $.Assessment.units.*.active
+      - jsonPath: $.Assessment.unitUsageList.*.auditDetails.createdTime
 
-      - jsonPath: $.Assessment.units.*.arv
+      - jsonPath: $.Assessment.unitUsageList.*.auditDetails.lastModifiedBy
 
-      - jsonPath: $.Assessment.units.*.auditDetails.createdBy
+      - jsonPath: $.Assessment.unitUsageList.*.auditDetails.lastModifiedTime
 
-      - jsonPath: $.Assessment.units.*.auditDetails.createdTime
+      - jsonPath: $.Assessment.unitUsageList.*.usageCategory
 
-      - jsonPath: $.Assessment.units.*.auditDetails.lastModifiedBy
+      - jsonPath: $.Assessment.unitUsageList.*.occupancyType
 
-      - jsonPath: $.Assessment.units.*.auditDetails.lastModifiedTime
-      
-      - jsonPath: $.Assessment.units.*.floorNo
+      - jsonPath: $.Assessment.unitUsageList.*.occupancyDate
 
-      - jsonPath: $.Assessment.units.*.unitArea
+      - jsonPath: $.Assessment.unitUsageList.*.active
 
-      - jsonPath: $.Assessment.units.*.usageCategory
+      - jsonPath: $.Assessment.unitUsageList.*.auditDetails.lastModifiedBy
 
-      - jsonPath: $.Assessment.units.*.occupancyType
-
-      - jsonPath: $.Assessment.units.*.occupancyDate
-
-      - jsonPath: $.Assessment.units.*.constructionType
-
-      - jsonPath: $.Assessment.units.*.active
-
-      - jsonPath: $.Assessment.units.*.arv
-
-      - jsonPath: $.Assessment.units.*.auditDetails.lastModifiedBy
-
-      - jsonPath: $.Assessment.units.*.auditDetails.lastModifiedTime
+      - jsonPath: $.Assessment.unitUsageList.*.auditDetails.lastModifiedTime
 
 
 
 
-    - query: INSERT INTO eg_pt_document (id, tenantid, entityid, documenttype, filestore, documentuid, status, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE documenttype = ?, documentuid = ?, status = ?, lastmodifiedby = ?, lastmodifiedtime = ?;
+    - query: INSERT INTO eg_pt_asmt_document (id, tenantid, entityid, documenttype, filestoreid, documentuid, status, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE documenttype = ?, documentuid = ?, status = ?, lastmodifiedby = ?, lastmodifiedtime = ?;
       basePath: $.Assessment.documents.*
       jsonMaps:
 
       - jsonPath: $.Assessment.documents.*.id
 
-      - jsonPath: $.Assessment.documents.*.tenantId
+      - jsonPath: $.Assessment.tenantId
 
       - jsonPath: $.Assessment.id
 
       - jsonPath: $.Assessment.documents.*.documentType
 
-      - jsonPath: $.Assessment.documents.*.fileStore
+      - jsonPath: $.Assessment.documents.*.fileStoreId
 
       - jsonPath: $.Assessment.documents.*.documentUid
 
@@ -236,7 +214,7 @@ serviceMaps:
       - jsonPath: $.Assessment.documents.*.auditDetails.createdTime
 
       - jsonPath: $.Assessment.documents.*.auditDetails.lastModifiedTime
-      
+
       - jsonPath: $.Assessment.documents.*.documentType
 
       - jsonPath: $.Assessment.documents.*.documentUid
@@ -246,7 +224,6 @@ serviceMaps:
       - jsonPath: $.Assessment.documents.*.auditDetails.lastModifiedBy
 
       - jsonPath: $.Assessment.documents.*.auditDetails.lastModifiedTime
-      
-      
-      
-      
+
+
+
