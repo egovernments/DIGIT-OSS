@@ -3,62 +3,62 @@
    "moduleName":"NOC",
    "DocumentTypeMapping":[
       {
-         "applicatonType":"PROVISIONAL",
-         "nocType":"FIRE_NOC",
+         "applicationType": "PROVISIONAL",
+         "nocType": "FIRE_NOC",
          "docTypes":[
             {
-               "documentType":"NOC.FIRE",
-               "required":true
+               "documentType": "NOC.FIRE",
+               "required": true
             }
          ]
       },
       {
-         "applicatonType":"NEW",
-         "nocType":"FIRE_NOC",
+         "applicationType": "NEW",
+         "nocType": "FIRE_NOC",
          "docTypes":[
             {
-               "documentType":"NOC.FIRE",
-               "required":true
+               "documentType": "NOC.FIRE",
+               "required": true
             }
          ]
       },
       {
-         "applicatonType":"RENEW",
-         "nocType":"FIRE_NOC",
+         "applicationType": "RENEW",
+         "nocType": "FIRE_NOC",
          "docTypes":[
             {
-               "documentType":"NOC.FIRE",
-               "required":false
+               "documentType": "NOC.FIRE",
+               "required": false
             }
          ]
       },
       {
-         "applicatonType":"PROVISIONAL",
-         "nocType":"AIRPORT_AUTHORITY",
+         "applicationType": "PROVISIONAL",
+         "nocType": "AIRPORT_AUTHORITY",
          "docTypes":[
             {
-               "documentType":"NOC.AIRPORT",
-               "required":true
+               "documentType": "NOC.AIRPORT",
+               "required": true
             }
          ]
       },
       {
-         "applicatonType":"NEW",
-         "nocType":"AIRPORT_AUTHORITY",
+         "applicationType": "NEW",
+         "nocType": "AIRPORT_AUTHORITY",
          "docTypes":[
             {
-               "documentType":"NOC.AIRPORT",
-               "required":true
+               "documentType": "NOC.AIRPORT",
+               "required": true
             }
          ]
       },
       {
-         "applicatonType":"RENEW",
-         "nocType":"AIRPORT_AUTHORITY",
+         "applicationType": "RENEW",
+         "nocType": "AIRPORT_AUTHORITY",
          "docTypes":[
             {
-               "documentType":"NOC.AIRPORT",
-               "required":false
+               "documentType": "NOC.AIRPORT",
+               "required": false
             }
          ]
       }
