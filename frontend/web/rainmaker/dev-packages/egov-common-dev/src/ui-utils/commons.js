@@ -527,6 +527,7 @@ export const downloadReceiptFromFilestoreID=(fileStoreId,mode,tenantId)=>{
 }
 
 let getModifiedPayment = (payments) =>{
+  if(payments[0].paymentDetails.businessService === 'PT'){
   let tax=0;
   let arrear=0;
   let penalty=0;
@@ -601,6 +602,66 @@ let getModifiedPayment = (payments) =>{
   set(payments, `[0].paymentDetails[0].bill.additionalDetails.rebate`, rebate);
   set(payments, `[0].paymentDetails[0].bill.additionalDetails.interest`, interest);
   set(payments, `[0].paymentDetails[0].bill.additionalDetails.roundOff`, roundOff);
+}
+else if(payments[0].paymentDetails.businessService === 'TL'){
+  let tax=0;
+  let adhocPenalty=0;
+  let penalty=0;
+  let adhocRebate=0
+  let rebate=0;
+  payments[0].paymentDetails[0].bill.billDetails.forEach(billdetail =>{
+      billdetail.billAccountDetails.forEach(billAccountDetail =>{
+        switch (billAccountDetail.taxHeadCode) {
+          case "TL_TAX":
+            tax = Math.round((tax + billAccountDetail.amount) * 100) / 100;
+            break;
+          case "TL_ADHOC_REBATE":
+            adhocRebate =
+              Math.round((adhocRebate + billAccountDetail.amount) * 100) / 100;
+            break;
+          case "TL_TIME_PENALTY":
+            penalty =
+              Math.round((penalty + billAccountDetail.amount) * 100) / 100;
+            break;
+          case "TL_TIME_REBATE":
+            rebate =
+              Math.round((rebate + billAccountDetail.amount) * 100) / 100;
+            break;
+          case "TL_ADHOC_PENALTY":
+            adhocPenalty =
+              Math.round((adhocPenalty + billAccountDetail.amount) * 100) / 100;
+            break;
+          case "TL_RENEWAL_TAX":
+            tax =
+              Math.round((tax + billAccountDetail.amount) * 100) / 100;
+            break;
+          case "TL_RENEWAL_REBATE":
+            rebate =
+              Math.round((rebate + billAccountDetail.amount) * 100) / 100;
+            break;
+          case "TL_RENEWAL_PENALTY":
+            penalty =
+              Math.round((penalty + billAccountDetail.amount) * 100) / 100;
+            break;
+          case "TL_RENEWAL_ADHOC_REBATE":
+            adhocRebate =
+              Math.round((adhocRebate + billAccountDetail.amount) * 100) / 100;
+            break;
+          case "TL_RENEWAL_ADHOC_PENALTY":
+            adhocPenalty =
+              Math.round((adhocPenalty + billAccountDetail.amount) * 100) / 100;
+            break;
+          default:
+            break;
+        }
+      })
+    })
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.tax`, tax);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.adhocRebate`, adhocPenalty);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.penalty`, penalty);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.adhocPenalty`, adhocPenalty);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.rebate`, rebate);
+}
 
   return payments;
 }
@@ -621,8 +682,8 @@ export const download = (receiptQueryString, mode = "download") => {
   try {
     httpRequest("post", FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
       let queryStr = {};
+      payloadReceiptDetails.Payments = getModifiedPayment(payloadReceiptDetails.Payments);
       if (payloadReceiptDetails.Payments[0].paymentDetails[0].businessService === 'PT') {
-        payloadReceiptDetails.Payments = getModifiedPayment(payloadReceiptDetails.Payments);
         queryStr = [
           { key: "key", value: "consolidatedreceipt" },
           { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
