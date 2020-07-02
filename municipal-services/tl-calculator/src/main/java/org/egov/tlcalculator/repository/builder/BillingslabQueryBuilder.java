@@ -99,7 +99,7 @@ public class BillingslabQueryBuilder {
 		}
 		
 		if(null != billingSlabSearcCriteria.getApplicationType()){
-			queryBuilder.append(" AND (applicationTion =? OR licensetype = 'ALL')");
+			queryBuilder.append(" AND (applicationtype =? OR licensetype = 'ALL')");
 			preparedStmtList.add(billingSlabSearcCriteria.getApplicationType());
 		}
 	}
