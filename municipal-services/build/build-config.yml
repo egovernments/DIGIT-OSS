@@ -131,3 +131,11 @@ config:
         dockerfile: "build/maven/Dockerfile"
       - work-dir: "land-services/src/main/resources/db"
         image-name: "land-services-db"
+
+  - name: "builds/municipal-services/noc-services"
+    build:
+      - work-dir: "noc-services"
+        image-name: "noc-services"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "noc-services/src/main/resources/db"
+        image-name: "noc-services-db"
