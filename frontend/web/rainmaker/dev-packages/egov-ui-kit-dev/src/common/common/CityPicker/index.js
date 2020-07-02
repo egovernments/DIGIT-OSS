@@ -29,7 +29,14 @@ class CityPickerDialog extends Component {
     return results.map((result, index) => {
       const mappedResult = {};
       mappedResult.key = result.key;
-      mappedResult.primaryText = this.getLocalizedLabel(`TENANT_TENANTS_${result.key.toUpperCase().replace(/[.:-\s\/]/g, "_")}`);
+      if(result.key)
+      {
+         mappedResult.primaryText = this.getLocalizedLabel(`TENANT_TENANTS_${result.key.toUpperCase().replace(/[.:-\s\/]/g, "_")}`);
+      }      
+      else
+      {
+        mappedResult.primaryText = this.getLocalizedLabel('TENANT_TENANTS_CITY_NOT_FOUND');
+      }
       mappedResult.id = result.key;
       return mappedResult;
     });

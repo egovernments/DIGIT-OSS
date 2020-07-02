@@ -308,29 +308,51 @@ export const fetchProperties = (queryObjectproperty, queryObjectDraft, queryObje
     if (queryObjectproperty) {
       dispatch(propertyFetchPending());
       try {
-          let payloadProperty = await httpRequest(PROPERTY.GET.URL, PROPERTY.GET.ACTION,queryObjectproperty,{},[],{},true);
-        if(queryObjectDraft !== "citizen_search") {
-          if(payloadProperty&&payloadProperty.Properties&&payloadProperty.Properties.length>0){
-            payloadProperty.Properties=payloadProperty.Properties.map(property=>{
-              let properties=getCreatePropertyResponse({Properties:[property]});
-             return properties&&properties.Properties&&properties.Properties.length>0&&properties.Properties[0];
-            });
-          }
-          if(payloadProperty.Properties && payloadProperty.Properties[0] &&payloadProperty.Properties[0].documents){
-            payloadProperty.Properties[0].documentsUploaded = await setPTDocuments(
-              payloadProperty,
-              "Properties[0].documents",
-              "documentsUploaded",
-              dispatch,
-              'PT'
-            );
-            dispatch(propertyFetchComplete(payloadProperty));
-          } else {
-            dispatch(propertyFetchComplete(payloadProperty));
-          }
-        } else {
-          dispatch(propertyFetchComplete(payloadProperty));
-        }
+        //   let payloadProperty = await httpRequest(PROPERTY.GET.URL, PROPERTY.GET.ACTION,queryObjectproperty,{},[],{},true);
+        // if(queryObjectDraft !== "citizen_search") {
+        //   if(payloadProperty&&payloadProperty.Properties&&payloadProperty.Properties.length>0){
+        //     payloadProperty.Properties=payloadProperty.Properties.map(property=>{
+        //       let properties=getCreatePropertyResponse({Properties:[property]});
+        //      return properties&&properties.Properties&&properties.Properties.length>0&&properties.Properties[0];
+        //     });
+        //   }
+        //   if(payloadProperty.Properties && payloadProperty.Properties[0] &&payloadProperty.Properties[0].documents){
+        //     payloadProperty.Properties[0].documentsUploaded = await setPTDocuments(
+        //       payloadProperty,
+        //       "Properties[0].documents",
+        //       "documentsUploaded",
+        //       dispatch,
+        //       'PT'
+        //     );
+        //     dispatch(propertyFetchComplete(payloadProperty));
+        //   } else {
+        //     dispatch(propertyFetchComplete(payloadProperty));
+        //   }
+        // } else {
+        //   dispatch(propertyFetchComplete(payloadProperty));
+        // }
+
+        const payloadProperty = await httpRequest(PROPERTY.GET.URL, PROPERTY.GET.ACTION, queryObjectproperty);
+        payloadProperty.Properties = payloadProperty.Properties.map((property) => {
+          return {
+            ...property,
+            propertyDetails: property.propertyDetails.map((details) => {
+              return {
+                ...details,
+                buildUpArea:details.buildUpArea?details.buildUpArea:null,
+                units:
+                  details.units &&
+                  details.units.map((unit) => {
+                    return {
+                      ...unit,
+                      unitArea: unit.unitArea,
+                    };
+                  }),
+              };
+            }),
+          };
+        });
+        dispatch(propertyFetchComplete(payloadProperty));
       } catch (error) {
         dispatch(propertyFetchError(error.message));
       }

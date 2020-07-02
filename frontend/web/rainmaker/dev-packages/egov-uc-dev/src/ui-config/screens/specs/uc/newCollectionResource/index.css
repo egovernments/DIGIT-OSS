@@ -1,0 +1,6 @@
+ @media only screen and (max-width: 551px) {
+      .ucButton {
+        height: 48px;
+        width: 100% !important;      
+        }      
+     }

@@ -50,8 +50,8 @@ const AppCards = Loadable({
 });
 
 const AppCarosel = Loadable({
-  loader: () => import("./AppCarosel"),
-  loading: () => <Loading />
+ loader: () => import("./AppCarosel"),
+ loading: () => <Loading />
 });
 
 const AppSubOption = Loadable({
@@ -64,10 +64,10 @@ const Stepper = Loadable({
   loading: () => <Loading />
 });
 
-const Carousel = Loadable({
-  loader: () => import("./Carousel"),
-  loading: () => <Loading />
-});
+// const Carousel = Loadable({
+//   loader: () => import("./Carousel"),
+//   loading: () => <Loading />
+// });
 
 const StepperStaticVertical = Loadable({
   loader: () => import("./StepperStaticVertical"),
@@ -175,7 +175,7 @@ export {
   AppCarosel,
   AppSubOption,
   Stepper,
-  Carousel,
+  //Carousel,
   StepperStaticVertical,
   TextfieldWithIcon,
   StepperStaticVerticalWithTab,

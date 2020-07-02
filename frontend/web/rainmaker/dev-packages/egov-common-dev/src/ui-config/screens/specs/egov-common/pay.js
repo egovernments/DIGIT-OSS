@@ -108,12 +108,16 @@ const getPaymentCard = () => {
 
 
 
-const fetchBill = async (state, dispatch, consumerCode, tenantId, billBusinessService) => {
+    const fetchBill = async (state, dispatch, consumerCode, tenantId) => {
+
     await getBusinessServiceMdmsData(dispatch, tenantId);
 
-    await generateBill(dispatch, consumerCode, tenantId, billBusinessService);
+
+    await generateBill(dispatch, consumerCode, tenantId);
+
 
     let payload = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].billDetails[0]");
+
     let totalAmount = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0]");
 
     //Collection Type Added in CS v1.1
@@ -122,12 +126,15 @@ const fetchBill = async (state, dispatch, consumerCode, tenantId, billBusinessSe
         state,
         "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].businessService"
     );
+
     const businessServiceArray = get(state, "screenConfiguration.preparedFinalObject.businessServiceMdmsData.BillingService.BusinessService");
+    
     businessServiceArray && businessServiceArray.map(item => {
         if (item.code == businessService) {
             dispatch(prepareFinalObject("businessServiceInfo", item));
         }
     })
+
     const isPartialPaymentAllowed = get(state, "screenConfiguration.preparedFinalObject.businessServiceInfo.partPaymentAllowed");
     if (isPartialPaymentAllowed) {
         dispatch(handleField("pay", "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.AmountToBePaid", "visible", true));

@@ -34,9 +34,13 @@ export const plotSize = {
     updateDependentFields: ({ formKey, field, dispatch, state }) => {
       let propertyType = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].propertyType");
       let propertySubType = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].propertySubType");
-      if (propertyType === "VACANT" || propertySubType === "INDEPENDENTPROPERTY") {
+      if (propertyType === "VACANT" ) {
         dispatch(prepareFormData("Properties[0].propertyDetails[0].landArea", field.value));
         dispatch(prepareFormData("Properties[0].propertyDetails[0].buildUpArea", null));
+      }
+      if (propertySubType === "INDEPENDENTPROPERTY") {
+        dispatch(prepareFormData("Properties[0].propertyDetails[0].landArea", field.value));
+       // dispatch(prepareFormData("Properties[0].propertyDetails[0].buildUpArea", null));
       }
     },
   },

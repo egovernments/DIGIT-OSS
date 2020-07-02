@@ -48,7 +48,7 @@ class DemandCollection extends React.Component {
                 textChildren={
                   <div className="pt-owner-info">
                     <div className={` col-sm-12`} key={index}>
-                      <div className={`col-sm-6`}>
+                      <div className={`col-sm-6`}  style={{ zIndex:1000  }} >
                         <div className={`col-sm-12`} style={{ textAlign: "center" }}>
                           <Label
                             labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.87)", fontWeight: "400", lineHeight: "19px" }}
@@ -62,14 +62,17 @@ class DemandCollection extends React.Component {
                               <TextField
                                 floatingLabelText={<Label label={taxData.code} />}
                                 hintText={<Label label="PT_ENTER_AN_AMOUNT" />}
-                                min={taxData.isDebit ? -99999 : 0}
-                                max={taxData.isDebit ? -1 : 0}
+                                min={get(preparedFinalObject,`DemandProperties[0].propertyDetails[0].demand[${index}].demand[${data.financialYear}][${index1}].PT_DEMAND`)}
+                                max={get(preparedFinalObject,`DemandProperties[0].propertyDetails[0].demand[${index}].demand[${data.financialYear}][${index1}].PT_DEMAND`)}
+                                // min={taxData.isDebit?-99999:0}
+                                // max={taxData.isDebit?-1:0}
                                 type="number"
                                 value={get(
                                   preparedFinalObject,
                                   `DemandProperties[0].propertyDetails[0].demand[${index}].demand[${data.financialYear}][${index1}].PT_DEMAND`
                                 )}
                                 onChange={(e) => {
+                                  if (e.target.value.includes(".")) return
                                   let value = "";
                                   value = e.target.value;
                                   prepareFinalObject(
@@ -115,38 +118,16 @@ class DemandCollection extends React.Component {
                               <TextField
                                 key={index1}
                                 type="number"
-                                min={0}
-                                max={0}
-                                value={get(
-                                  preparedFinalObject,
-                                  `DemandProperties[0].propertyDetails[0].demand[${index}].demand[${data.financialYear}][${index1}].PT_COLLECTED`
-                                )}
-                                floatingLabelText={<Label label={taxData.code} />}
-                                hintText={<Label label="PT_ENTER_AN_AMOUNT" />}
+                                min={get(preparedFinalObject,`DemandProperties[0].propertyDetails[0].demand[${index}].demand[${data.financialYear}][${index1}].PT_COLLECTED`)}
+                                max={get(preparedFinalObject,`DemandProperties[0].propertyDetails[0].demand[${index}].demand[${data.financialYear}][${index1}].PT_COLLECTED`)}
+                                value={get(preparedFinalObject,`DemandProperties[0].propertyDetails[0].demand[${index}].demand[${data.financialYear}][${index1}].PT_COLLECTED`)}
+                                floatingLabelText={<Label label={taxData.code}/>}
+                                hintText={<Label label="PT_ENTER_AN_AMOUNT"/>}
+
                                 onChange={(e) => {
-                                  prepareFinalObject(
-                                    `DemandProperties[0].propertyDetails[0].demand[${index}].demand[${data.financialYear}][${index1}].PT_TAXHEAD`,
-                                    taxData.code
-                                  );
-                                  prepareFinalObject(
-                                    `DemandProperties[0].propertyDetails[0].demand[${index}].demand[${data.financialYear}][${index1}].PT_COLLECTED`,
-                                    e.target.value
-                                  );
-                                }}
-                                onMouseWheel={(event) => {
-                                  event.preventDefault();
-                                }}
-                                // onMouseDown={(event) => {
-                                //   event.preventDefault();
-                                // }}
-                                // onMouseUp={(event) => {
-                                //   event.preventDefault();
-                                // }}
-                                onKeyDown={(event) => {
-                                  console.log("key down triggered");
-                                  if (event.keyCode === 38 || event.keyCode === 40) {
-                                    event.preventDefault();
-                                  }
+                                  if (e.target.value.includes(".")) return
+                                  prepareFinalObject(`DemandProperties[0].propertyDetails[0].demand[${index}].demand[${data.financialYear}][${index1}].PT_TAXHEAD`,taxData.code);
+                                  prepareFinalObject(`DemandProperties[0].propertyDetails[0].demand[${index}].demand[${data.financialYear}][${index1}].PT_COLLECTED`, e.target.value);
                                 }}
                                 disabled={taxData.isDebit}
                               />

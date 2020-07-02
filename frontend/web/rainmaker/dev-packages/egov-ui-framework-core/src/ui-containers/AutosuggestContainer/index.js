@@ -7,10 +7,10 @@ import {
   transformById,
   getLocaleLabels,
   appendModulePrefix
-} from "egov-ui-framework/ui-utils/commons";
+} from "../../ui-utils/commons";
 import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
-import { getLocalization } from "egov-ui-kit/utils/localStorageUtils";
+import { getLocalization } from "../../ui-utils/localStorageUtils";
 
 // const localizationLabels = JSON.parse(getLocalization("localization_en_IN"));
 // const transfomedKeys = transformById(localizationLabels, "code");

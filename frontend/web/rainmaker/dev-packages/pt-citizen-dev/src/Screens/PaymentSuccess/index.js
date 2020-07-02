@@ -155,8 +155,15 @@ class PaymentSuccess extends Component {
     img.src = url;
   };
 
-  createImageUrl = tenantId => {
-    return `https://s3.ap-south-1.amazonaws.com/pb-egov-assets/${tenantId}/logo.png`;
+  createImageUrl = (tenantId) => {
+    const {cities}=this.props;
+    let logUrl;
+    cities.forEach((city)=>{
+      if (city.key===tenantId) {
+        logUrl=city.logoId
+      }
+    })
+    return logUrl;
   };
 
   render() {
@@ -200,7 +207,7 @@ const getLatestPropertyDetails = propertyDetailsArray => {
 const mapStateToProps = (state, ownProps) => {
   const { properties, common, app } = state || {};
   const { localizationLabels } = app;
-  const { cities } = common;
+  const { cities=[] } = common;
   const { generalMDMSDataById } = state.common || {};
   const { propertiesById, receipts, loading } = properties;
   const selProperty =

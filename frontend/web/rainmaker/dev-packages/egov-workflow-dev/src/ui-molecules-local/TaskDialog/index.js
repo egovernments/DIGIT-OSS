@@ -7,6 +7,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import { withStyles } from "@material-ui/core/styles";
 import withMobileDialog from '@material-ui/core/withMobileDialog';
 import VerticalStepper from "../Stepper";
+import "./index.css";
 
 const styles = theme => ({
   root: {
@@ -34,9 +35,15 @@ const TaskDialog = props => {
         children={
           <Container
             children={
-              <Grid container="true" sm="12" spacing={16} marginTop={16}>
+              <Grid container="true" sm="12" spacing={16} marginTop={16}
+              className = "tcontainer"
+              >
                 <Grid
-                  style={{ alignItems: "center", display: "flex" }}
+                  style={{ 
+                    alignItems: "center", 
+                  display: "flex"
+                   
+                }}
                   item
                   sm={10}
                 >

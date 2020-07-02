@@ -6,7 +6,7 @@ import {
   getAccessToken,
   getTenantId,
   getLocale
-} from "egov-ui-kit/utils/localStorageUtils";
+} from "./localStorageUtils";
 
 const instance = axios.create({
   baseURL: window.location.origin,

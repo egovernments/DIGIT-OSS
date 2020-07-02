@@ -35,6 +35,7 @@ export const applicationSuccessFooter = (
                     height: "48px",
                     marginRight: "16px"
                 },
+                className: "DCButton"
             },
             children: {
                 downloadFormButtonLabel: getLabel({

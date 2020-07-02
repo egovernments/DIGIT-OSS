@@ -76,6 +76,29 @@
     }}
   }
 
-.search-bar div div svg{
-  top:46px;
+@media only screen and (min-width: 331px) {
+  .backgroundWhite{
+    background-color: white;
+    margin-left: 5px !important;
+    margin-top: 15px !important;
+  }
+ 
+}
+
+@media only screen and (min-width: 411px) {
+  .backgroundWhite{
+    background-color: white;
+    margin-left: 5px !important;
+    margin-top: 15px !important;
+  }
+ 
+}
+
+@media only screen and (min-width: 320px) {
+  .backgroundWhite{
+    background-color: white;
+    margin-left: 5px !important;
+    margin-top: 15px !important;
+  }
+ 
 }

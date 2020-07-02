@@ -58,7 +58,14 @@ class DropDown extends Component {
   };
 
   createImageUrl = (tenantId) => {
-    return `https://s3.ap-south-1.amazonaws.com/pb-egov-assets/${tenantId}/logo.png`;
+    const {cities}=this.props;
+    let logUrl;
+    cities.forEach((city)=>{
+      if (city.key===tenantId) {
+        logUrl=city.logoId
+      }
+    })
+    return logUrl;
   };
 
   onSelectFieldChange = (event, key, payload, imageUrl) => {
@@ -181,13 +188,14 @@ class DropDown extends Component {
 
 
 const mapStateToProps = (state, ownProps) => {
-  const { properties } = state;
+  const { properties ,common} = state;
 
   const { singleAssessmentByStatus = [] } = properties || {};
-
+  const cities=get(common,"cities",[])
 
   return {
-    singleAssessmentByStatus
+    singleAssessmentByStatus,
+    cities
   };
 };
 

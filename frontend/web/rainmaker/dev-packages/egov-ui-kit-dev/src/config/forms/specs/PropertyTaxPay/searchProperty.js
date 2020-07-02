@@ -14,7 +14,7 @@ const formConfig = {
     city: {
       id: "city",
       numcols: 4,
-      // localePrefix: { moduleName: "tenant", masterName: "tenants" },
+     // localePrefix: { moduleName: "tenant", masterName: "tenants" },
       dontReset: (process.env.REACT_APP_NAME !== "Citizen" ? true : false),
       fullWidth: true,
       className: "search-property-form-pt",
@@ -25,7 +25,7 @@ const formConfig = {
       required: true,
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       type: "autoSuggestDropdown",
-      // labelsFromLocalisation:true,
+      labelsFromLocalisation:true,
       dataFetchConfig: {
         dependants: [
           {
@@ -174,7 +174,7 @@ const formConfig = {
           });
           if (found) {
             dispatch(handleFieldChange("searchProperty", "city", tenantId));
-            dispatch(setFieldProperty("searchProperty", "city", "disabled", true));
+            dispatch(setFieldProperty("searchProperty", "city", true));
           }
         }
         else {

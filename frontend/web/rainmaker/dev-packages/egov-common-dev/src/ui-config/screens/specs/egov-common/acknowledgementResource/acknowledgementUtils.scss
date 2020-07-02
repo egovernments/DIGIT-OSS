@@ -7,14 +7,12 @@
             text-align: center !important;
         }
     }
-    .footer-com-style{
-        display: flex;
-    }
 }
 
-@media only screen and (min-width: 768px) {
-    .footer-com-style{
-        float:right;
-    }
-  }
-  
+@media only screen and (max-width: 551px) {
+    .DCButton {
+     /*  background-color: #FE7A51 !important;  
+      color: white !important;  */ 
+      width: 100% !important;      
+      }      
+   }

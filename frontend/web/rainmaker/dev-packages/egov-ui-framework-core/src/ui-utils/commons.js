@@ -15,6 +15,14 @@ import commonConfig from "config/common.js";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 
+export const hasTokenExpired = (status, data) => {
+  if (status === 401) {
+    if (data && data.Errors && Array.isArray(data.Errors) && data.Errors.length > 0 && data.Errors[0].code === "InvalidAccessTokenException")
+      return true;
+  }
+  return false;
+};
+
 export const addComponentJsonpath = (components, jsonPath = "components") => {
   for (var componentKey in components) {
     if (components.hasOwnProperty(componentKey)) {

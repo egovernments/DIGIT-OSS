@@ -59,3 +59,12 @@
      width: 50% !important;
    }
 }
+@media only screen and (max-width: 551px)
+{
+.stepper-test
+  {
+    padding-left: 1px !important;
+    padding-right: 1px !important;
+    flex: auto !important;
+  }
+}

@@ -104,13 +104,8 @@ export const callPGService = async (state, dispatch) => {
       const redirectionUrl =
         get(goToPaymentGateway, "Transaction.redirectUrl") ||
         get(goToPaymentGateway, "Transaction.callbackUrl");
-        if(get(goToPaymentGateway, "Transaction.gateway")
-        && get(goToPaymentGateway, "Transaction.gateway") === 'CCAVENUE'){
-          //custom method to redirect user using post for ccavenue
-          postPGReqeust(redirectionUrl);
-        }else{
-          window.location = redirectionUrl;
-        }
+        window.location = redirectionUrl;
+
     }
   } catch (e) {
     console.log(e);
@@ -135,7 +130,7 @@ const postPGReqeust = (redirectionUrl) => {
   let form = document.createElement("form");
   form.setAttribute("method", "post");
   //get this from redirectUrl
-  form.setAttribute("action", "https://test.ccavenue.com/transaction/transaction.do?command=initiateTransaction");
+  form.setAttribute("action", `${(new URL(redirectionUrl)).origin}/transaction/transaction.do?command=initiateTransaction`);
   
   let accessCode = document.createElement("input");
   accessCode.setAttribute("type", "hidden");

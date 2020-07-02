@@ -220,8 +220,9 @@ export const tradeLicenseApplication = getCommonCard({
 
             backgroundColor: "white",
             borderRadius: "2px",
-            width: "60%",
-            height: "48px"
+            width: "80%",
+            height: "48px",
+            marginBottom:"5px"
           }
         },
         children: {

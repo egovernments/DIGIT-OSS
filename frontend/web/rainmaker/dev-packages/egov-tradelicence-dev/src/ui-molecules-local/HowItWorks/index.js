@@ -16,13 +16,24 @@ const styles = theme => ({
 });
 
 class HowItWorks extends React.Component {
+
+    handleClick = () => {
+
+    let url = window.location.href;
+    let fUrl = url.replace ("tradelicense-citizen/home" ,"trade-license/how-it-works");
+    window.location.href = fUrl;     
+
+  }; 
+   
   render() {
     const { classes } = this.props;
+
     return (
       <div className={classes.root}>
-        <List component="nav">
-          <ListItem button>
-            <ListItemText
+        <List component="nav">   
+
+          <ListItem button  >
+           <ListItemText onClick={this.handleClick}            
               primary={
                 <LabelContainer
                   labelKey="COMMON_HOW_IT_WORKS"
@@ -45,5 +56,7 @@ class HowItWorks extends React.Component {
     );
   }
 }
+
+
 
 export default withStyles(styles)(HowItWorks);

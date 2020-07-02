@@ -48,7 +48,7 @@ const WizardComponent = ({
       >
         {ptSteps.map((label) => {
           return (
-            <Step key={label}>
+            <Step key={label} className="stepper-test">
               <StepLabel>
                 <Label label={label} />
               </StepLabel>

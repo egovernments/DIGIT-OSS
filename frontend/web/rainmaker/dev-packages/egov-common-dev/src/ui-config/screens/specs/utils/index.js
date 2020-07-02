@@ -651,7 +651,8 @@ export const generateBill = async (dispatch, consumerCode, tenantId, businessSer
           );
       }
     }
-  } catch (e) {
+  } 
+catch (e) {
     dispatch(
       toggleSnackbar(
         true,

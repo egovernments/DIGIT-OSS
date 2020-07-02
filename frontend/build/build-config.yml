@@ -21,6 +21,12 @@ config:
       dockerfile: web/rainmaker/docker/employee/Dockerfile
       image-name: employee
 
+-   name: builds/frontend/localization
+    build:
+    - work-dir: web/rainmaker/
+      dockerfile: web/rainmaker/docker/localization/Dockerfile
+      image-name: ui-localisation
+
 -   name: builds/frontend/ui-uploader
     build:
     - work-dir: web/ui-uploader/

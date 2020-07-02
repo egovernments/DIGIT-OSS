@@ -627,8 +627,6 @@ export const renewTradelicence  = async (state,dispatch) => {
 
   const nextFinancialYear = await getNextFinancialYearForRenewal(financialYear);
 
-  console.log("prasad nextFinancialYear", nextFinancialYear);
-
   const wfCode = "DIRECTRENEWAL";
   set(licences[0], "action", "INITIATE");
   set(licences[0], "workflowCode", wfCode);

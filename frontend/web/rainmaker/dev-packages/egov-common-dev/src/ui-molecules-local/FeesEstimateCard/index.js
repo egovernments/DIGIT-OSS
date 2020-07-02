@@ -7,6 +7,11 @@ import Divider from "@material-ui/core/Divider";
 import Tooltip from "@material-ui/core/Tooltip";
 import Icon from "@material-ui/core/Icon";
 import { LabelContainer } from "egov-ui-framework/ui-containers";
+import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
+import { ifUserRoleExists } from "egov-common/ui-config/screens/specs/utils";
+
+
+const roleExists = ifUserRoleExists("CITIZEN");
 
 const styles = {
   card: {
@@ -68,6 +73,10 @@ const styles = {
     letterSpacing: "0.75px",
     lineHeight: "22px",
     textAlign: "left"
+  },
+  message:{
+    marginTop: "30px !important",
+    marginBottom: "20px !important",
   }
 };
 
@@ -78,11 +87,13 @@ function totalAmount(arr) {
 }
 
 function FeesEstimateCard(props) {
-  const { classes, estimate } = props;
+  const { classes, estimate, businesService } = props;
+
   const total = estimate.totalAmount;
   const arrears = estimate.arrears;
   const totalHeadClassName = "tl-total-amount-value " + classes.bigheader;
 
+ 
   if (estimate.fees&&estimate.fees.length>0&&estimate.fees[estimate.fees.length-1].info.labelName!="Arrears") {
     estimate.fees.push({
       info: {
@@ -129,8 +140,8 @@ function FeesEstimateCard(props) {
                     labelKey={fee.name.labelKey}
                     style={styles.taxStylesLeft}
                   />
-                  {/*tooltip*/}
-                </Grid>
+                  {/*tooltip*/}                 
+                </Grid> 
               ) : (
                   <Grid xs={8} />
                 );
@@ -154,20 +165,20 @@ function FeesEstimateCard(props) {
               return (
                 <Grid key={key} container>
                   {textLeft}
-                  {textRight}
+                  {textRight}                 
                 </Grid>
               );
             })}
           </Grid>
-          <Divider style={{ marginBottom: 16 }} />
+          <Divider style={{ marginBottom: 16 }} />        
           <Grid container>
-            <Grid item xs={6}>
+            <Grid item xs={6}>           
               <Typography variant="body2">
                 <LabelContainer
                   labelName="Total Amount"
                   labelKey="TL_COMMON_TOTAL_AMT"
                 />
-              </Typography>
+              </Typography>            
             </Grid>
             <Grid
               item
@@ -176,10 +187,26 @@ function FeesEstimateCard(props) {
               style={{ paddingRight: 0 }}
               className="tl-application-table-total-value"
             >
-              <Typography variant="body2">{total}</Typography>
+              <Typography variant="body2">{total}</Typography>            
+
             </Grid>
+
           </Grid>
+  
+              
         </div>
+        { roleExists && estimate.businesService === 'PT'? 
+                (  <Grid item xs={12} className={classes.message} >
+                
+              <Typography variant="body2">  <LabelContainer
+                    labelName="If the amount seems to be incorrect, please reach out to the <contact no> or <email id>"
+                    labelKey="pt.amount.message"
+                    dynamicArray={[estimate.contactNumber, estimate.email]}
+                  /></Typography>
+                 
+                
+            </Grid> ):"" }             
+
       </Grid>
       <Grid xs={12} sm={5}>
         <Typography
@@ -195,6 +222,7 @@ function FeesEstimateCard(props) {
         <Typography className={totalHeadClassName} align="right">
           &#8377; {total}
         </Typography>
+       
         {estimate.extra && estimate.extra.length !== 0 ? (
           <Card className={classes.whiteCard}>
             {estimate.extra.map((item, key) => {
@@ -204,7 +232,7 @@ function FeesEstimateCard(props) {
               if (item.textLeft) {
                 textLeft = (
                   <Grid xs={colLeft}>
-                    <Typography>{item.textLeft}</Typography>
+                    <Typography>{item.textLeft}</Typography>                   
                   </Grid>
                 );
               } else {
@@ -222,7 +250,7 @@ function FeesEstimateCard(props) {
               return (
                 <Grid container>
                   {textLeft}
-                  {textRight}
+                  {textRight}                                  
                 </Grid>
               );
             })}

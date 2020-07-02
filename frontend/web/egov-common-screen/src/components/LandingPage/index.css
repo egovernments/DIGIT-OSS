@@ -12,3 +12,81 @@
 .common-background{
     background-size: cover!important;
 }
+@media only screen and (max-width: 750px) {
+    .header-logo 
+    {
+        width : 80% !important;
+    } 
+    .common-background {
+        background-size: cover!important;
+        height: 1300px !important;
+    }
+    #buttonlink
+    {
+        margin-top : 15px;
+        width:120px !important;
+
+    }
+    #buttonlink2
+    {
+        width:120px !important;
+
+    }
+    .rlink
+    {
+        text-align: left !important;
+      margin-left: 33px !important;
+      margin-right: 20px !important;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .header-logo 
+    {
+        width : 80% !important;
+    } 
+    .common-background {
+        background-size: cover!important;
+        height: 1300px !important;
+    }
+    .firstcard
+    {
+        border-radius: 0px;
+    height: 450px !important;
+    }
+    #buttonlink
+    {
+        margin-top : 34px;
+        width:120px !important;
+
+    }
+    #buttonlink2
+    {
+        width:120px !important;
+
+    }
+    .rlink
+    {
+        text-align: left !important;
+      margin-left: 33px !important;
+      margin-right: 20px !important;
+    }
+}
+
+
+.common-grid
+{
+    padding: 16px 30px !important;
+}
+
+
+@media only screen and (max-width:1280px){
+
+    .common-background
+    {       
+        background-size: cover;
+        height: 110% ;
+
+    }
+
+}

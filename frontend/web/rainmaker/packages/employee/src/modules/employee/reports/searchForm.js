@@ -301,6 +301,17 @@ class ShowForm extends Component {
         if (searchParams[i].name !== "tenantId" && searchParams[i].isMandatory) {
           required.push(searchParams[i].name);
         }
+
+        if (searchParams[i].name==='ulb')
+        {
+
+        if (searchParams[i].defaultValue["bh.testing"] === "Testing") 
+         {
+         delete searchParams[i].defaultValue["bh.testing"];
+         }
+
+        }
+        
         if (searchParams[i].initialValue) {
           if (searchParams[i].type === "epoch") {
             this.handleChange(
