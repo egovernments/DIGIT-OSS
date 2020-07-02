@@ -1,0 +1,92 @@
+{
+  "domainConfig": [
+    {
+      "id": "1",
+      "domain": "PT",
+      "indexName": "ptindex-v1",
+      "documentType": "",
+      "query": "{\"query\":{\"bool\":{\"must\":[{\"match_phrase\":{\"Data.propertyDetails.assessmentNumber\":\"value\"}},{\"match_phrase\":{\"Data.propertyId\":\"value\"}}]}}}",
+      "targetReferences": [
+        {
+          "fieldName": "propertyId",
+          "argument": "Data.propertyId",
+          "dataType": "String",
+          "value": "$value",
+          "seperator": " ",
+          "expression": "propertyId"
+        },
+        {
+          "fieldName": "assessmentNumber",
+          "argument": "Data.propertyDetails.assessmentNumber",
+          "dataType": "String",
+          "value": "$value",
+          "seperator": " ",
+          "expression": "assessmentNumber"
+        }
+      ],
+      "sourceReferences": [
+        {
+          "fieldName": "consumerCode",
+          "argument": "Bill.billDetails.consumerCode",
+          "dataType": "String",
+          "value": "$value",
+          "seperator": ":",
+          "expression": "propertyId:assessmentNumber"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "domain": "TL",
+      "indexName": "tlindex-v1",
+      "documentType": "",
+      "query": "{\"query\":{\"bool\":{\"must\":[{\"match_phrase\":{\"Data.tradelicense.applicationnumber\":\"value\"}}]}}}",
+      "targetReferences": [
+        {
+          "fieldName": "applicationnumber",
+          "argument": "Data.tradelicense.applicationnumber",
+          "dataType": "String",
+          "value": "$value",
+          "seperator": " ",
+          "expression": "applicationnumber"
+        }
+      ],
+      "sourceReferences": [
+        {
+          "fieldName": "consumerCode",
+          "argument": "Data.tradelicense.applicationnumber",
+          "dataType": "String",
+          "value": "$value",
+          "seperator": " ",
+          "expression": "applicationnumber"
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "domain": "PGR",
+      "indexName": "pgrindex-v1",
+      "documentType": "",
+      "query": "{}",
+      "targetReferences": [
+        {
+          "fieldName": "complainNumber",
+          "argument": "Data.complainNumber",
+          "dataType": "String",
+          "value": "$value",
+          "seperator": " ",
+          "expression": "complainNumber"
+        }
+      ],
+      "sourceReferences": [
+        {
+          "fieldName": "consumerCode",
+          "argument": "Data.complainNumber",
+          "value": "$value",
+          "seperator": " ",
+          "expression": "complainNumber"
+        }
+      ]
+    }
+  ]
+}

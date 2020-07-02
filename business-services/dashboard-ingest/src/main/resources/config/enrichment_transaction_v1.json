@@ -1,0 +1,49 @@
+{
+  "dataCollectorName": "UserInformation",
+  "collectionSource": "UserService",
+  "basePath": "http://rain.idc.tarento.com/user/",
+  "collectionPoints": [
+    {
+      "name": "UserMetaInfo",
+      "extensionPath": "/getUserMetaInfo",
+      "paramsPassed": [
+        {
+          "sourceParam": "Transaction.KioskOperator.Id",
+          "pathLabel": "id",
+          "dataType": "Long",
+          "defaultValue": "0"
+        },
+        {
+          "sourceParam": null,
+          "pathLabel": "isActive",
+          "dataType": "Boolean",
+          "defaultValue": "TRUE"
+        }
+      ],
+      "responseStructure": "{}",
+      "responseMapping": [
+        {
+          
+        }
+      ]
+    },
+    {
+      "name": "UserRoleInfo",
+      "extensionPath": "/getUserRole",
+      "paramsPassed": [
+        {
+          "sourceParam": "Transaction.KioskOperator.Id",
+          "pathLabel": "userId",
+          "dataType": "Long",
+          "defaultValue": "0"
+        },
+        {
+          "sourceParam": null,
+          "pathLabel": "isActive",
+          "dataType": "Boolean",
+          "defaultValue": "TRUE"
+        }
+      ]
+    }
+  ]
+}

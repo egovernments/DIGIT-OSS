@@ -1,0 +1,51 @@
+{
+  "domainConfig": [
+    {
+      "id": "1",
+      "businessType": "PT",
+      "indexName": "ptindex-v1",
+      "documentType": "",
+      "query": "{\"query\":{\"bool\":{\"must\":[{\"match_phrase\":{\"Data.propertyDetails.assessmentNumber\":\"value\"}},{\"match_phrase\":{\"Data.propertyId\":\"value\"}}]}}}",
+      "references": [
+        {
+          "fieldName": "consumerCode",
+          "argument": "Data.propertyId",
+          "dataType": "String"
+        },
+        {
+          "fieldName": "consumerCode",
+          "argument": "Data.propertyDetails.assessmentNumber",
+          "dataType": "String"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "businessType": "TL",
+      "indexName": "tlindex-v1",
+      "documentType": "",
+      "query": "{\"query\":{\"bool\":{\"must\":[{\"match_phrase\":{\"Data.tradelicense.applicationnumber\":\"value\"}}]}}}",
+      "references": [
+        {
+          "fieldName": "consumerCode",
+          "argument": "Data.tradelicense.applicationnumber",
+          "dataType": "String"
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "businessType": "PGR",
+      "indexName": "pgrindex-v1",
+      "documentType": "",
+      "query": "{}",
+      "references": [
+        {
+          "fieldName": "consumerCode",
+          "argument": "complainNumber",
+          "dataType": "String"
+        }
+      ]
+    }
+  ]
+}
