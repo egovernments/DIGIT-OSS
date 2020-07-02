@@ -16701,6 +16701,39 @@
       "serviceCode": "egov-pdf",
       "code": "null",
       "path": ""
+    },
+    {
+      "id": 2000,
+      "name": "NOC Create",
+      "url": "/noc-services/v1/noc/_create",
+      "displayName": "Create",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "NOC",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 2001,
+      "name": "NOC Search",
+      "url": "/noc-services/v1/noc/_search",
+      "displayName": "Search",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "NOC",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 2002,
+      "name": "NOC Update",
+      "url": "/noc-services/v1/noc/_update",
+      "displayName": "Update",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "NOC",
+      "code": "null",
+      "path": ""
     }
   ]
 }
