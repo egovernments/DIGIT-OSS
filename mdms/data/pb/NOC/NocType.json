@@ -5,15 +5,15 @@
      {
        "code": "FIRE_NOC",
        "isActive": true,
-       "offlineWF":"NOC_SRV_OFFLINE",
-       "onlineWF":"NOC_SRV",
+       "offlineWF":"FIRENOC_OFFLINE",
+       "onlineWF":"FIRENOC_SRV",
        "mode":"online"
     },
     {
       "code":"AIRPORT_AUTHORITY",
       "isActive": true,
-      "offlineWF":"NOC_SRV_OFFLINE",
-      "onlineWF":"NOC_SRV",
+      "offlineWF":"AIRPORTNOC_OFFLINE",
+      "onlineWF":"AIRPORTNOC_SRV",
       "mode":"offline"
     }
   ]
