@@ -1,0 +1,24 @@
+{
+  "tenantId": "pb",
+  "moduleName": "ws-services-masters",
+  "ModifyConnectionDocuments": [
+    {
+      "code": "OWNER.AUTHORIZATION",
+      "documentType": "OWNER",
+      "required": true,
+      "active": true,
+      "hasDropdown": true,
+      "dropdownData": [
+        {
+          "code": "OWNER.AUTHORIZATION.AGREEMENT",
+          "active": true
+        },
+        {
+          "code": "OWNER.AUTHORIZATION.NOTARY",
+          "active": true
+        }
+      ],
+      "description": "Documents which is should prove that the Owner is authorized person for the Property"
+    }
+  ]
+}
