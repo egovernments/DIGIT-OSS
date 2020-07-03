@@ -550,7 +550,7 @@
       "idname": "bpa.nc_oc_san_fee.receipt.id"
     },
     {
-      "format":"PB-NOC-[cy:yyyy-MM-dd]-[SEQ_EG_NOC_APN]",
+      "format":"PB-NOCSRV-[cy:yyyy-MM-dd]-[SEQ_EG_NOC_APN]",
       "idname":"noc.application.number"
     }
   ]
