@@ -110,5 +110,4 @@ public class ServiceController {
 		return new ResponseEntity<>(countResponse, HttpStatus.OK);
 	}
 
-
 }

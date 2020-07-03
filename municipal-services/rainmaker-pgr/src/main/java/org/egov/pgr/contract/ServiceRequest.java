@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pgr.model.ActionInfo;
@@ -33,6 +34,7 @@ public class ServiceRequest   {
 
   @JsonProperty("services")
   @Valid
+  @NotNull
   private List<Service> services = new LinkedList<Service>();
 
   @JsonProperty("actionInfo")

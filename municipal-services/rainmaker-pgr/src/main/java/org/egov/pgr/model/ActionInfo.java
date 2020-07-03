@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Objects;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.springframework.validation.annotation.Validated;
@@ -31,6 +32,8 @@ public class ActionInfo   {
   private String uuid;
   
   @JsonProperty("tenantId")
+  @Size(min=2,max=25)
+  @Pattern(regexp="^[a-zA-Z.]*$")
   private String tenantId = null;
 
   @JsonProperty("by")
@@ -59,7 +62,8 @@ public class ActionInfo   {
   private List<String> media = null;
 
   @JsonProperty("comments")
-  @Size(max=2000)
+  @Pattern(regexp = "^[a-zA-Z0-9!@#.,/:; ()&']*$")
+  @Size(max=256)
   private String comment = null;
 
   public String getUuid() {
