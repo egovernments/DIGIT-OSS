@@ -4,7 +4,7 @@
   "NocTypeMapping": [
     {
       "applicationType": "BUILDING_PLAN_SCRUTINY",
-      "serviceType": "NEW_CONTRUCTION",
+      "serviceType": "NEW_CONSTRUCTION",
       "riskType": "ALL",
       "nocTriggerState": "CITIZEN_APPROVAL_PENDING",
       "nocTypes": [
@@ -22,7 +22,7 @@
     },
     {
       "applicationType": "BUILDING_PLAN_SCRUTINY",
-      "serviceType": "NEW_CONTRUCTION",
+      "serviceType": "NEW_CONSTRUCTION",
       "riskType": "LOW",
       "nocTriggerState": "CITIZEN_APPROVAL_PENDING",
       "nocTypes": [
@@ -40,7 +40,7 @@
     },
     {
       "applicationType": "BUILDING_OC_PLAN_SCRUTINY",
-      "serviceType": "NEW_CONTRUCTION",
+      "serviceType": "NEW_CONSTRUCTION",
       "riskType": "ALL",
       "nocTriggerState": "CITIZEN_APPROVAL_PENDING",
       "nocTypes": [
@@ -58,7 +58,7 @@
     },
     {
       "applicationType": "BUILDING_OC_PLAN_SCRUTINY",
-      "serviceType": "NEW_CONTRUCTION",
+      "serviceType": "NEW_CONSTRUCTION",
       "riskType": "LOW",
       "nocTriggerState": "CITIZEN_APPROVAL_PENDING",
       "nocTypes": [
