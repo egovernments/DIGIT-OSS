@@ -684,7 +684,7 @@ public class ExpenseBillService {
     
     private Assignment getCurrentUserAssignmet(Long userId){
 //    	Long userId = ApplicationThreadLocals.getUserId();
-    	List<EmployeeInfo> emplist = microServiceUtil.getEmployee(userId, null, null, null);
+    	List<EmployeeInfo> emplist = microServiceUtil.getEmployee(userId, new Date(), null, null);
     	Assignment assignment =new Assignment();
     	if(null!=emplist && emplist.size()>0 && emplist.get(0).getAssignments().size()>0){
     		Position position = new Position();
