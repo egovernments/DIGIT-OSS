@@ -68,7 +68,34 @@ serviceMaps:
 
        - jsonPath: $.SewerageConnection.auditDetails.lastModifiedTime
          
+    - query: INSERT INTO eg_sw_connectionholder(tenantid, connectionid, userid, status, isprimaryholder, connectionholdertype, holdershippercentage, relationship, createdby, createdtime, lastmodifiedby, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+      basePath: $.SewerageConnection.connectionHolders.*
+      jsonMaps: 
 
+       - jsonPath: $.SewerageConnection.tenantId
+
+       - jsonPath: $.SewerageConnection.id
+
+       - jsonPath: $.SewerageConnection.connectionHolders.*.uuid
+
+       - jsonPath: $.SewerageConnection.connectionHolders.*.status
+
+       - jsonPath: $.SewerageConnection.connectionHolders.*.isPrimaryOwner
+
+       - jsonPath: $.SewerageConnection.connectionHolders.*.ownerType
+
+       - jsonPath: $.SewerageConnection.connectionHolders.*.ownerShipPercentage
+
+       - jsonPath: $.SewerageConnection.connectionHolders.*.relationship
+
+       - jsonPath: $.SewerageConnection.auditDetails.createdBy
+
+       - jsonPath: $.SewerageConnection.auditDetails.createdTime
+
+       - jsonPath: $.SewerageConnection.auditDetails.lastModifiedBy
+
+       - jsonPath: $.SewerageConnection.auditDetails.lastModifiedTime
+       
  - version: 1.0
    name: SewerageConnection
    description: update ConnectionDetails in connection and eg_sw_service
