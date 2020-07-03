@@ -58,7 +58,7 @@ class OwnerInfo extends Component {
       let ownershipInfo = {};
       try {
         const payload = await httpRequest(
-          "property-services/property/_search",
+          "pt-services-v2/property/_search",
           "_search",
           queryObject
         );
