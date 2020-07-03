@@ -288,16 +288,7 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
       tenantId,
       financialYear
     );
-
-
-    const CitizenprintCont=footerReviewTop(
-      action,
-      state,
-      dispatch,
-      status,
-      applicationNumber,
-      tenantId,      
-    );
+    
 
     process.env.REACT_APP_NAME === "Citizen"
       ? set(
