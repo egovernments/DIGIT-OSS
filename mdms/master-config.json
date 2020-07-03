@@ -649,7 +649,11 @@
       "uniqueKeys": [
         "$.code"
       ]
-    },
+     },
+     "TradeRenewal": {
+      "masterName": "TradeRenewal",
+      "isStateLevel": true,
+     },
      "documentObj": {
       "masterName": "documentObj",
       "isStateLevel": true,
