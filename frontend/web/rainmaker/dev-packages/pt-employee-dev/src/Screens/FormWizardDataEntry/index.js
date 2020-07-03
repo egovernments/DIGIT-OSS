@@ -128,8 +128,7 @@ class FormWizardDataEntry extends Component {
       fetchMDMDDocumentTypeSuccess,
       updatePrepareFormDataFromDraft,
       location,
-      // generalMDMSDataById,
-      // loadMdmsData,
+      generalMDMSDataById,
       prepareFinalObject
     } = this.props;
     const { search } = location;
@@ -231,12 +230,6 @@ class FormWizardDataEntry extends Component {
                     `TaxHeadMaster.${demandDetail.taxHeadMasterCode}.legacy`,
                     false
                   )
-                    ? get(
-                        loadMdmsData.BillingService,
-                        `TaxHeadMaster.${demandDetail.taxHeadMasterCode}.order`,
-                        -1
-                      )
-                    : -1
                 };
               })
               .sort(function(a, b) {
@@ -254,11 +247,11 @@ class FormWizardDataEntry extends Component {
               let yearkeys = Object.keys(generalMDMSDataById.TaxPeriod).forEach(
                 (item, i) => {
                   if (
-                    loadMdmsData.BillingService.TaxPeriod[item].fromDate ===
+                    generalMDMSDataById.TaxPeriod[item].fromDate ===
                     demand.taxPeriodFrom
                   ) {
                     finalYear =
-                      loadMdmsData.BillingService.TaxPeriod[item].financialYear;
+                      generalMDMSDataById.TaxPeriod[item].financialYear;
                   }
                             
                 }
@@ -602,7 +595,7 @@ class FormWizardDataEntry extends Component {
       fetchGeneralMDMSData(
         null,
         "BillingService",
-        [{masterName:"TaxPeriod",filter:"[?(@.service=='PT')]"}, {masterName:"TaxHeadMaster",filter:"[?(@.service=='PT')]"}],
+        ["TaxPeriod", "TaxHeadMaster"],
         "",
         tenantId
       );
@@ -1335,8 +1328,7 @@ class FormWizardDataEntry extends Component {
         let {
           DemandProperties = [],
           prepareFinalObject,
-          generalMDMSDataById = {},
-          loadMdmsData={}
+          generalMDMSDataById = {}
         } = this.props;
         const demand = get(
           DemandProperties,
@@ -1367,16 +1359,16 @@ class FormWizardDataEntry extends Component {
           getTotalRebateAmount = false
         ) => {
           const rebateHeadObject = get(
-            loadMdmsData.BillingService,
+            generalMDMSDataById,
             `TaxHeadMaster.${taxHead}`,
             {}
           );
           if (rebateHeadObject.code === "PT_TAX") {
             let rebateHeads = [];
-            Object.keys(get(loadMdmsData.BillingService, `TaxHeadMaster`, {})).forEach(
+            Object.keys(get(generalMDMSDataById, `TaxHeadMaster`, {})).forEach(
               key => {
                 const object = get(
-                  loadMdmsData.BillingService,
+                  generalMDMSDataById,
                   `TaxHeadMaster.${key}`,
                   {}
                 );
@@ -1406,7 +1398,7 @@ class FormWizardDataEntry extends Component {
 
         const checkRebate = taxHead => {
           const rebateHeads = get(
-            loadMdmsData.BillingService,
+            generalMDMSDataById,
             `TaxHeadMaster.${taxHead}`,
             {}
           );
@@ -1482,7 +1474,7 @@ class FormWizardDataEntry extends Component {
                 } else {
                   if (!hasPropertyTax) {
                     errorCode = "ERR05_DEMAND_ENTER_THE_DATA";
-                  } else if (Math.abs(totalRebateAmount)>parseInt(propertyTaxAmount)) {
+                  } else if (parseInt(propertyTaxAmount) < totalRebateAmount) {
                     errorCode = "ERR06_DEMAND_ENTER_THE_DATA";
                   }
                 }
@@ -1994,8 +1986,7 @@ class FormWizardDataEntry extends Component {
       hideSpinner,
       DemandProperties,
       DemandPropertiesResponse = [],
-      generalMDMSDataById,
-      loadMdmsData
+      generalMDMSDataById
     } = this.props;
     const { search } = location;
     let { resetForm } = this;
@@ -2182,7 +2173,7 @@ class FormWizardDataEntry extends Component {
       let toDate;
       let demandResponse = DemandPropertiesResponse
         ? DemandPropertiesResponse.Demands
-          ? DemandPropertiesResponse.Demands
+          ? DemandPropertiesResponse.Demands.reverse()
           : []
         : [];
       const demandObject = {};
@@ -2192,10 +2183,10 @@ class FormWizardDataEntry extends Component {
         let generalmdms = Object.keys(generalMDMSDataById.TaxPeriod).map(
           (years, keys) => {
             if (
-              loadMdmsData.BillingService.TaxPeriod[years].fromDate ===
+              generalMDMSDataById.TaxPeriod[years].fromDate ===
               obj.taxPeriodFrom
             ) {
-              finaYr = loadMdmsData.BillingService.TaxPeriod[years].financialYear;
+              finaYr = generalMDMSDataById.TaxPeriod[years].financialYear;
             }
           }
         );
@@ -2752,7 +2743,7 @@ const mapStateToProps = state => {
   const { city } =
     (propertyAddress && propertyAddress.fields && propertyAddress.fields) || {};
   const currentTenantId = (city && city.value) || commonConfig.tenantId;
-  const { generalMDMSDataById ,loadMdmsData} = common;
+  const { generalMDMSDataById } = common;
   const yeardataInfo =
     (generalMDMSDataById && generalMDMSDataById.TaxPeriod) || {};
 
@@ -2760,7 +2751,7 @@ const mapStateToProps = state => {
   const getYearList = yeardataInfo && Object.values(yeardataInfo);
 
   const taxDataInfo =
-    (loadMdmsData && loadMdmsData.BillingService && loadMdmsData.BillingService.TaxHeadMaster) || {};
+    (generalMDMSDataById && generalMDMSDataById.TaxHeadMaster) || {};
   let yeardata = [];
   let taxData = [];
   const data = Object.keys(yeardataInfo).map((key, index) => {
@@ -2798,7 +2789,6 @@ const mapStateToProps = state => {
     getYearList,
     app,
     generalMDMSDataById,
-    loadMdmsData,
     DemandProperties,
     DemandPropertiesResponse,
     cities

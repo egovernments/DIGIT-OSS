@@ -17,7 +17,6 @@ import { fetchProperties } from "egov-ui-kit/redux/properties/actions";
 import { getLatestPropertyDetails } from "egov-ui-kit/utils/PTCommon";
 import get from "lodash/get";
 import { getUserInfo, localStorageGet,getLocale } from "egov-ui-kit/utils/localStorageUtils";
-import { getDateFromEpoch } from "egov-ui-kit/utils/commons";
 
 import "./index.css";
 
@@ -72,8 +71,8 @@ class SearchProperty extends Component {
       if (city && city.value) {
         queryParams.push({ key: "tenantId", value: city.value });
       }
-      if ( ids && ids.value) {
-        queryParams.push({ key: "propertyIds", value: ids.value });
+      if (ids && ids.value) {
+        queryParams.push({ key: "ids", value: ids.value });
       }
       if (oldpropertyids && oldpropertyids.value) {
         queryParams.push({ key: "oldpropertyids", value: oldpropertyids.value });
@@ -112,7 +111,7 @@ class SearchProperty extends Component {
             }
             : (e) => {
               // localStorageSet("draftId", "")
-              history.push(`/property-tax/property/${propertyId}/${tenantId}`);
+              history.push(`/property-tax/property/${propertyId}/${tenantId}?isMutationApplication=true`);
             }
         }
         style={{
@@ -132,31 +131,30 @@ class SearchProperty extends Component {
       let {
         propertyId,
         status,
-        applicationNo,
-        applicationType,
-        date,
+        oldPropertyId,
+        address,
         propertyDetails,
-        tenantId,
+        tenantId
       } = property;
+      const { doorNo, buildingName, street, locality } = address;
+      let displayAddress = doorNo
+        ? `${doorNo ? doorNo + "," : ""}` + `${buildingName ? buildingName + "," : ""}` + `${street ? street + "," : ""}`
+        : `${locality.name ? locality.name : ""}`;
 
-      if(!applicationNo) applicationNo = property.acknowldgementNumber;
-      if(!date) date = getDateFromEpoch(property.auditDetails.createdTime);
-      applicationType = history.location.pathname.includes('property-tax') ? 'PT' : applicationType;
       const latestAssessment = getLatestPropertyDetails(propertyDetails);
       let name = latestAssessment.owners[0].name;
-      // let guardianName = latestAssessment.owners[0].fatherOrHusbandName || "";
-      // let assessmentNo = latestAssessment.assessmentNumber;
-      // const uuid = get(latestAssessment, "citizenInfo.uuid");
-
+      let guardianName = latestAssessment.owners[0].fatherOrHusbandName ? latestAssessment.owners[0].fatherOrHusbandName : "NA";
+      let assessmentNo = latestAssessment.assessmentNumber;
+      const uuid = get(latestAssessment, "citizenInfo.uuid");
       // let button = (
-      //   <a
+      //   <Button
       //     onClick={
       //       userType === "CITIZEN"
       //         ? () => {
       //           // localStorageSet("draftId", "")
       //           this.setState({
       //             dialogueOpen: true,
-      //             urlToAppend: `/property-tax/assessment-form?assessmentId=${assessmentNo}&isReassesment=false&uuid=${uuid}&propertyId=${propertyId}&tenantId=${tenantId}`,
+      //             urlToAppend: `/property-tax/assessment-form?assessmentId=${assessmentNo}&isReassesment=true&uuid=${uuid}&propertyId=${propertyId}&tenantId=${tenantId}`,
       //           });
       //         }
       //         : (e) => {
@@ -164,27 +162,51 @@ class SearchProperty extends Component {
       //           history.push(`/property-tax/property/${propertyId}/${property.tenantId}`);
       //         }
       //     }
-      //     style={{
-      //       height: 20,
-      //       lineHeight: "auto",
-      //       minWidth: "inherit",
-      //       cursor: "pointer",
-      //       textDecoration: "underline",
-      //       fontWeight: '400',
-      //       fontSize: "14px",
-      //       color: 'rgba(0, 0, 0, 0.87)',
-      //       lineHeight: '30px'
-      //     }}>
-      //     {propertyId}
-      //   </a>);
+      //     label={
+      //       <Label buttonLabel={true} label={userType === "CITIZEN" ? "PT_PAYMENT_ASSESS_AND_PAY" : "PT_SEARCHPROPERTY_TABLE_VIEW"} fontSize="12px" />
+      //     }
+      //     value={propertyId}
+      //     primary={true}
+      //     style={{ height: 20, lineHeight: "auto", minWidth: "inherit" }}
+      //   />
+      // );
+      let button = (
+        <a
+          onClick={
+            userType === "CITIZEN"
+              ? () => {
+                // localStorageSet("draftId", "")
+                this.setState({
+                  dialogueOpen: true,
+                  urlToAppend: `/property-tax/assessment-form?assessmentId=${assessmentNo}&isReassesment=false&uuid=${uuid}&propertyId=${propertyId}&tenantId=${tenantId}`,
+                });
+              }
+              : (e) => {
+                // localStorageSet("draftId", "")
+                history.push(`/property-tax/property/${propertyId}/${property.tenantId}`);
+              }
+          }
+          style={{
+            height: 20,
+            lineHeight: "auto",
+            minWidth: "inherit",
+            cursor: "pointer",
+            textDecoration: "underline",
+            fontWeight: '400',
+            fontSize: "14px",
+            color: 'rgba(0, 0, 0, 0.87)',
+            lineHeight: '30px'
+          }}>
+          {propertyId}
+        </a>);
 
       let item = {
-        // applicationNo: this.getLink(userType, history, applicationNo, tenantId),
-        // applicationNo: <a>{applicationNo}</a>,
-        propertyId: this.getLink(userType, history, propertyId, tenantId),
+        index: index + 1,
+        propertyId: button,
         name: name,
-        applicationType: applicationType,
-        date: date,
+        guardianName: guardianName,
+        oldPropertyId: oldPropertyId,
+        address: displayAddress,
         status: status
 
       };

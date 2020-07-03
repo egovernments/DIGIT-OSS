@@ -2,19 +2,18 @@ import React from "react";
 import HistoryIcon from "@material-ui/icons/History";
 import { Button } from "components";
 import Label from "egov-ui-kit/utils/translationNode";
-import "./index.css";
 
 const labelStyle = {
   letterSpacing: 1.2,
-  fontWeight: "500",
+  fontWeight: "600",
   lineHeight: "40px",
 };
 const buttonStyle = {
   lineHeight: "35px",
-  height: "100%",
+  height: "40px",
   backgroundColor: "rgb(242, 242, 242)",
   boxShadow: "none",
-  border: "none",
+  border: "1px solid rgb(254, 122, 81)",
   borderRadius: "2px",
   outline: "none",
   alignItems: "right",
@@ -35,7 +34,7 @@ const viewHistoryLabel = {
 export const ViewHistory = ({ viewHistory, openDialog }) => {
   return (
     viewHistory && (
-      <div className="view-history-button"
+      <div
         onClick={() => {
           openDialog("viewHistory");
         }}

@@ -2,29 +2,24 @@
   background-color: transparent !important;
   margin-right: 0px !important; }
 
-  @media only screen and (max-width: 551px) {
-    .profileSection{   
-      width: 100% !important;
-      
-      height: auto !important;
-      display: flex !important;
-      flex-direction: column !important;
-      align-items: center !important;
-      margin: 0px auto !important;
-      padding-top: 83px !important;
-      padding-bottom: 30px !important;
-      background-color: rgb(224, 224, 224) !important;
-    }
-      .EmpProfileIcon
-      {
-        background: rgb(0, 187, 211)!important;
-        position: absolute !important;
-        right: -5% !important;
-        bottom: 83px !important;
-        color: rgb(255, 255, 255) !important;
-        border-radius: 50% !important;
-        padding: 12px !important;
-        height: 48px !important;
-        width: 48px !important;
-      }
-    }
+@media only screen and (max-width: 551px) {
+  .profileSection {
+    width: 100% !important;
+    height: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    margin: 0px auto !important;
+    padding-top: 83px !important;
+    padding-bottom: 30px !important;
+    background-color: #e0e0e0 !important; }
+  .EmpProfileIcon {
+    background: #00bbd3 !important;
+    position: absolute !important;
+    right: -5% !important;
+    bottom: 83px !important;
+    color: white !important;
+    border-radius: 50% !important;
+    padding: 12px !important;
+    height: 48px !important;
+    width: 48px !important; } }

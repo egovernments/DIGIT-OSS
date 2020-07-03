@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Icon, Card, Dialog } from "components";
-import Label from "egov-ui-kit/utils/translationNode";
 import AddRebateExemption from "./components/addRebateBox";
 import PropertyTaxDetailsCard from "./components/PropertyTaxDetails";
 import CalculationDetails from "./components/CalculationDetails";
@@ -8,14 +7,9 @@ import propertyAddressConfig from "./formConfigs/propertyAddress";
 import { connect } from "react-redux";
 import formHoc from "egov-ui-kit/hocs/form";
 import EditIcon from "./components/EditIcon";
-import {getQueryValue,
-  } from "egov-ui-kit/utils/PTCommon";
-import { convertToArray } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/propertyCreateUtils";
 import PropertyAddressInfo from 'egov-ui-kit/common/propertyTax/Property/components/PropertyAddressInfo';
 import AssessmentInfo from 'egov-ui-kit/common/propertyTax/Property/components/AssessmentInfo';
 import OwnerInfo from 'egov-ui-kit/common/propertyTax/Property/components/OwnerInfo';
-import DocumentsInfo from "egov-ui-kit/common/propertyTax/Property/components/DocumentsInfo";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 import "./index.css";
 const defaultIconStyle = {
@@ -37,9 +31,6 @@ class ReviewForm extends Component {
     demandProperties:[]
   };
 
-  componentDidMount() {
-    this.props.getEstimates();
-  }
   handleOptionsChange = (event, value) => {
     this.setState({ valueSelected: value });
   };
@@ -74,7 +65,6 @@ class ReviewForm extends Component {
 
   onEditButtonClick = (index) => {
     let { onTabClick } = this.props;
-    this.props.prepareFinalObject("propertiesEdited", true);
     onTabClick(index);
   };
 
@@ -82,33 +72,22 @@ class ReviewForm extends Component {
     let { addRebateBox, updateCalculation, onEditButtonClick } = this;
     let { showRebateBox,demandProperties=[] } = this.state;
     let { stepZero, stepTwo, stepOne, estimationDetails, importantDates, totalAmount } = this.props;
-    const { generalMDMSDataById = {},location={} } = this.props;
-    const { search } = location;
-    const isReassess = Boolean(getQueryValue(search, "isReassesment").replace('false', ''));
-    const isAssess = Boolean(getQueryValue(search, "isAssesment").replace('false', ''));
+    const { generalMDMSDataById = {} , loadMdmsData={}} = this.props;
+
     return (
       <div>
         <Card
           textChildren={
             <div className="col-sm-12 col-xs-12" style={{ alignItems: "center" }}>
-              <div>
-                <Label
-                  labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.87)", fontWeight: "400", lineHeight: "19px" }}
-                  label={'PT_APPLICATION_SUMMARY'}
-                  fontSize="20px"
-                />
-
-              </div>
-              {(isAssess||isReassess) && <PropertyTaxDetailsCard
+              <PropertyTaxDetailsCard
                 estimationDetails={estimationDetails}
                 importantDates={importantDates}
                 addRebateBox={addRebateBox}
                 openCalculationDetails={this.openCalculationDetails}
-              />}
-              <PropertyAddressInfo generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={<EditIcon onIconClick={() => onEditButtonClick(0)} />}></PropertyAddressInfo>
+              />
+              <PropertyAddressInfo loadMdmsData={loadMdmsData}  generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={<EditIcon onIconClick={() => onEditButtonClick(0)} />}></PropertyAddressInfo>
               <AssessmentInfo generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={<EditIcon onIconClick={() => onEditButtonClick(1)} />}></AssessmentInfo>
-              <OwnerInfo generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} ></OwnerInfo>
-              <DocumentsInfo generalMDMSDataById={generalMDMSDataById} documentsUploaded={this.props.documentsUploadRedux} editIcon={<EditIcon onIconClick={() => onEditButtonClick(3)} />}></DocumentsInfo>
+              <OwnerInfo generalMDMSDataById={generalMDMSDataById} properties={this.props.properties}  editIcon={<EditIcon onIconClick={() => onEditButtonClick(2)} />}></OwnerInfo>
             </div>
           }
         />
@@ -139,21 +118,16 @@ class ReviewForm extends Component {
   }
 }
 const mapStateToProps = (state, ownProps) => {
-  const { common = {}, screenConfiguration } = state;
-  const { generalMDMSDataById } = common || {};
-  const { preparedFinalObject} = screenConfiguration;
-  let { documentsUploadRedux } = preparedFinalObject;
-  documentsUploadRedux = convertToArray(documentsUploadRedux);
+  const { common = {},screenConfiguration } = state;
+  const { generalMDMSDataById , loadMdmsData} = common || {};
   return {
     ownProps,
     generalMDMSDataById,
-    documentsUploadRedux
+    loadMdmsData
   };
 };
 const mapDispatchToProps = (dispatch) => ({
   setRoute: (route) => dispatch({ type: "SET_ROUTE", route }),
-  prepareFinalObject: (jsonPath, value) =>
-  dispatch(prepareFinalObject(jsonPath, value)),
 });
 export default connect(
   mapStateToProps,

@@ -123,22 +123,10 @@ const formConfig = {
       hintText: "PT_PROPERTY_DETAILS_DOOR_NUMBER_PLACEHOLDER",
       numcols: 4,
       errorMessage: "PT_PROPERTY_DETAILS_DOOR_NUMBER_ERRORMSG",
-      value: "",
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
-      maxLength: 64
+      maxLength: 64,
+      value: "",
     },
-    // applicationNumber: {
-    //   id: "application-number",
-    //   jsonPath: "",
-    //   type: "textfield",
-    //   floatingLabelText: "PT_PROPERTY_APPLICATION_NUMBER",
-    //   errorMessage: "",
-    //   hintText: "PT_PROPERTY_APPLICATION_NUMBER_PLACEHOLDER",
-    //   numcols: 4,
-    //   errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
-    //   maxLength: 64,
-    //   value: "",
-    // },
   },
   submit: {
     type: "submit",
@@ -163,6 +151,8 @@ const formConfig = {
             return city.code === tenant.code;
           });
           dd.push({ label: `TENANT_TENANTS_${selected.code.toUpperCase().replace(/[.:-\s\/]/g, "_")}` , value: selected.code });
+         // dd.push({ label: selected.name, value: selected.code });
+
           return dd;
         }, []);
         if (tenantId !== city.value)

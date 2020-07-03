@@ -408,7 +408,7 @@ const mapStateToProps = state => {
   userInfoManual.forEach(moduleManual => {
     if (moduleManual.module === "PT") {
       console.log("==============cvvvcg===========" + moduleManual.manuals);
-      let ptManuals = process.env.REACT_APP_NAME === 'Citizen' ? moduleManual.manuals : moduleManual.employeeManuals;
+      let ptManuals = process.env.REACT_APP_NAME === "Citizen" ? moduleManual.manuals : moduleManual.employeeManuals
       ptManuals.forEach(localeManual => {
         if (localeManual.locale == locale) {
           console.log("================>>>", JSON.stringify(localeManual.url));

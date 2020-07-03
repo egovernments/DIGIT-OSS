@@ -347,12 +347,11 @@ export const annualRent = {
     floatingLabelText: "PT_FORM2_TOTAL_ANNUAL_RENT",
     hintText: "PT_FORM2_TOTAL_ANNUAL_RENT_PLACEHOLDER",
     ErrorText: "PT_ANNUAL_RENT_ERROR_MESSAGE",
-    errorMessage: "PT_ANNUAL_RENT_ERROR_MESSAGE",
     errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
     toolTip: true,
     toolTipMessage: "PT_TOTAL_ANNUAL_RENT_TOOLTIP_MESSAGE",
     required: true,
-    pattern: /^([0-9]\d{0,7})(\.\d+)?$/,
+    pattern: /^([1-9]\d{0,7})(\.\d+)?$/,
     hideField: false,
     numcols: 4,
   },
@@ -777,7 +776,7 @@ export const city = {
       dispatch(fetchGeneralMDMSData(
         null,
         "BillingService",
-        [{masterName:"TaxPeriod",filter:"[?(@.service=='PT')]"}, {masterName:"TaxHeadMaster",filter:"[?(@.service=='PT')]"}],
+        ["TaxPeriod", "TaxHeadMaster"],
         "",
         field.value
       ));
@@ -845,7 +844,6 @@ export const mohalla = {
     hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
     fullWidth: true,
     toolTip: true,
-    localePrefix: true,
     toolTipMessage: "PT_MOHALLA_TOOLTIP_MESSAGE",
     labelsFromLocalisation: true,
     //toolTipMessage: "Name of the area in which your property is located",

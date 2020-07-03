@@ -1,4 +1,4 @@
-import { getOwnerCategoryByYear ,getOwnerCategory} from "egov-ui-kit/utils/PTCommon";
+import { getOwnerCategoryByYear } from "egov-ui-kit/utils/PTCommon";
 import { setDependentFields } from "./utils/enableDependentFields";
 import get from "lodash/get";
 import set from "lodash/set";
@@ -106,11 +106,9 @@ const formConfig = {
             return currAcc;
           }, []);
         dispatch(setFieldProperty(formKey, "ownerCategoryIdType", "dropDownData", documentTypes));
-        dispatch(handleFieldChange(formKey, "ownerCategoryIdType", get(documentTypes, "[0].value", "")));
         dispatch(setFieldProperty(formKey, "ownerCategoryIdType", "value", get(documentTypes, "[0].value", "")));
         switch (value) {
           case "NONE":
-            dispatch(handleFieldChange(formKey, "ownerCategoryId", null));
             setDependentFields(dependentFields, dispatch, formKey, true);
             break;
           case "WIDOW":
@@ -201,7 +199,7 @@ const formConfig = {
     isSameAsPropertyAddress: {
       id: "rcpt",
       type: "checkbox",
-      jsonPath: "Properties[0].propertyDetails[0].owners[0].isCorrespondenceAddress",
+      jsonPath: "",
       errorMessage: "",
       floatingLabelText: "PT_FORM3_ADDRESS_CHECKBOX",
       value: "",
@@ -223,10 +221,8 @@ const formConfig = {
           ]
             .join(", ")
             .replace(/^(,\s)+|(,\s)+$/g, "")
-            .replace(/(,\s){2,}/g, ", ")
-            .replace(":","");
+            .replace(/(,\s){2,}/g, ", ");
           dispatch(setFieldProperty(formKey, "ownerAddress", "value", correspondingAddress));
-          dispatch(handleFieldChange(formKey, "ownerAddress", correspondingAddress));
         } else {
           dispatch(setFieldProperty(formKey, "ownerAddress", "value", ""));
         }
@@ -240,20 +236,12 @@ const formConfig = {
       const {common={}}=state;
       const {prepareFormData={}}=common;
       const OwnerTypes = get(state, `common.generalMDMSDataById.OwnerType`);
-
-      //previous code
-      // const finalData=getFinalData();
-      // const finalYear=finalData[0].financialYear;
+      const finalData=getFinalData();
+      const finalYear=finalData[0].financialYear;
 
       // let financialYearFromQuery = window.location.search.split("FY=")[1];
       // financialYearFromQuery = financialYearFromQuery.split("&")[0];
-      // const dropdownData = getOwnerCategoryByYear(Object.values(OwnerTypes),finalYear);
-      //previous code end
-
-      // let financialYearFromQuery = window.location.search.split("FY=")[1];
-      // financialYearFromQuery = financialYearFromQuery.split("&")[0];
-      // const dropdownData = getOwnerCategoryByYear(Object.values(OwnerTypes), financialYearFromQuery);
-      const dropdownData = getOwnerCategory(Object.values(OwnerTypes));
+      const dropdownData = getOwnerCategoryByYear(Object.values(OwnerTypes),finalYear);
       set(action, "form.fields.ownerCategory.dropDownData", dropdownData);
       const ownerShipType = get(state, "form.ownershipType.fields.typeOfOwnership.value", "");
       if (ownerShipType === "SINGLEOWNER") {

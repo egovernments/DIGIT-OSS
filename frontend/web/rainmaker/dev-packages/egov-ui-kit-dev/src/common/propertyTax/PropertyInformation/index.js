@@ -111,7 +111,7 @@ class Property extends Component {
     fetchGeneralMDMSData(
       null,
       "BillingService",
-      [{masterName:"TaxPeriod",filter:"[?(@.service=='PT')]"}, {masterName:"TaxHeadMaster",filter:"[?(@.service=='PT')]"}],
+      ["TaxPeriod", "TaxHeadMaster"],
       "",
       commonConfig.tenantId
     );

@@ -138,12 +138,12 @@ class Property extends Component {
     fetchGeneralMDMSData(
       null,
       "BillingService",
-      [{masterName:"TaxPeriod",filter:"[?(@.service=='PT')]"}, {masterName:"TaxHeadMaster",filter:"[?(@.service=='PT')]"}],
+      ["TaxPeriod", "TaxHeadMaster"],
       "",
       commonConfig.tenantId
     );
     fetchProperties([
-      { key: "propertyIds", value: this.props.match.params.propertyId },
+      { key: "ids", value: this.props.match.params.propertyId },
       { key: "tenantId", value: this.props.match.params.tenantId }
     ]);
     renderCustomTitleForPt(customTitle);

@@ -6,13 +6,13 @@
   }
 
 .flex-child {
- background-color: transparent !important;
+ 
 }
 
 .value {
     color: rgba(0, 0, 0, 0.87);
     font-size: 16px;
-    font-weight: 500;
+    font-weight: 400;
     letter-spacing: 0.67px;
     line-height: 19px;
     text-align: left;
@@ -20,19 +20,11 @@
 
 .left-line {
     border-left: 1px solid rgba(0, 0, 0, 0.12);
-    margin-top: -5px;
 }
 
 .bottom-line {
     background-color: rgba(0, 0, 0, 0.12);
-    width: auto;
+    width: 878px;
     height: 1px;
     margin-left: 16px;
-  }
-  .flex-container {
-    margin-top: 5px;
-    margin-bottom: 5px;
-  }
-  .flex-container > div {
-    margin: 0px !important;
   }
