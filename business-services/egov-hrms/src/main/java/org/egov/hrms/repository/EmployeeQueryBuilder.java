@@ -9,6 +9,7 @@ import org.springframework.util.CollectionUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class EmployeeQueryBuilder {
@@ -47,9 +48,9 @@ public class EmployeeQueryBuilder {
 			builder.append(" employee.tenantid NOTNULL");
 		
 		if(!CollectionUtils.isEmpty(criteria.getCodes())){
-			builder.append(" and employee.code IN (").append(createQuery(criteria.getCodes())).append(")");
-			addToPreparedStatement(preparedStmtList, criteria.getCodes());
-
+			List<String> codes = criteria.getCodes().stream().map(String::toLowerCase).collect(Collectors.toList());
+			builder.append(" and lower(employee.code) IN (").append(createQuery(codes)).append(")");
+			addToPreparedStatement(preparedStmtList, codes);
 		}
 		if(!CollectionUtils.isEmpty(criteria.getIds())){
 			builder.append(" and employee.id IN (").append(createQuery(criteria.getIds())).append(")");
