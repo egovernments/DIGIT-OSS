@@ -1,5 +1,7 @@
 package org.egov.user.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -126,50 +128,62 @@ public class User {
         }
     }
 
+    @JsonIgnore
     public boolean isCorrespondenceAddressInvalid() {
         return correspondenceAddress != null && correspondenceAddress.isInvalid();
     }
 
+    @JsonIgnore
     public boolean isPermanentAddressInvalid() {
         return permanentAddress != null && permanentAddress.isInvalid();
     }
 
+    @JsonIgnore
     public boolean isOtpReferenceAbsent() {
         return otpValidationMandatory && isEmpty(otpReference);
     }
 
+    @JsonIgnore
     public boolean isTypeAbsent() {
         return isEmpty(type);
     }
 
+    @JsonIgnore
     public boolean isActiveIndicatorAbsent() {
         return isEmpty(active);
     }
 
+    @JsonIgnore
     public boolean isMobileNumberAbsent() {
         return mobileValidationMandatory && isEmpty(mobileNumber);
     }
 
+    @JsonIgnore
     public boolean isNameAbsent() {
         return isEmpty(name);
     }
 
+    @JsonIgnore
     public boolean isUsernameAbsent() {
         return isEmpty(username);
     }
 
+    @JsonIgnore
     public boolean isTenantIdAbsent() {
         return isEmpty(tenantId);
     }
 
+    @JsonIgnore
     public boolean isPasswordAbsent() {
         return isEmpty(password);
     }
 
+    @JsonIgnore
     public boolean isRolesAbsent() {
         return CollectionUtils.isEmpty(roles) || roles.stream().anyMatch(r -> isEmpty(r.getCode()));
     }
 
+    @JsonIgnore
     public boolean isIdAbsent() {
         return id == null;
     }
@@ -185,6 +199,7 @@ public class User {
         accountLockedDate = null;
     }
 
+    @JsonIgnore
     public boolean isLoggedInUserDifferentFromUpdatedUser() {
         return !id.equals(loggedInUserId);
     }
@@ -198,6 +213,7 @@ public class User {
         password = newPassword;
     }
 
+    @JsonIgnore
     public OtpValidationRequest getOtpValidationRequest() {
         return OtpValidationRequest.builder()
                 .mobileNumber(mobileNumber)
@@ -206,6 +222,7 @@ public class User {
                 .build();
     }
 
+    @JsonIgnore
     public List<Address> getPermanentAndCorrespondenceAddresses() {
         final ArrayList<Address> addresses = new ArrayList<>();
         if (correspondenceAddress != null && correspondenceAddress.isNotEmpty()) {

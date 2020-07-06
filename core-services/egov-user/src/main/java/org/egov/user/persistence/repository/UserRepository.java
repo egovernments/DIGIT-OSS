@@ -23,6 +23,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
 import static org.egov.user.repository.builder.UserTypeQueryBuilder.SELECT_FAILED_ATTEMPTS_BY_USER_SQL;
@@ -62,13 +63,53 @@ public class UserRepository {
      */
     public List<User> findAll(UserSearchCriteria userSearch) {
         final List<Object> preparedStatementValues = new ArrayList<>();
+        boolean RoleSearchHappend = false;
+        List<Long> userIds = new ArrayList<>();
+        if (!isEmpty(userSearch.getRoleCodes()) && userSearch.getTenantId() != null) {
+            userIds = findUsersWithRole(userSearch);
+            RoleSearchHappend = true;
+        }
+        List<User> users = new ArrayList<>();
+        if (RoleSearchHappend) {
+            if (!CollectionUtils.isEmpty(userIds)) {
+                if (CollectionUtils.isEmpty(userSearch.getId()))
+                    userSearch.setId(userIds);
+                else {
+                    userSearch.setId(userSearch.getId().stream().filter(userIds::contains).collect(Collectors.toList()));
+                    if (CollectionUtils.isEmpty(userSearch.getId()))
+                        return users;
+                }
+                userSearch.setTenantId(null);
+                userSearch.setRoleCodes(null);
+            } else {
+                return users;
+            }
+        }
         String queryStr = userTypeQueryBuilder.getQuery(userSearch, preparedStatementValues);
         log.debug(queryStr);
 
-        List<User> users = jdbcTemplate.query(queryStr, preparedStatementValues.toArray(), userResultSetExtractor);
+        users = jdbcTemplate.query(queryStr, preparedStatementValues.toArray(), userResultSetExtractor);
         enrichRoles(users);
 
         return users;
+    }
+
+
+    /**
+     * get list of all userids with role in given tenant
+     *
+     * @param userSearch
+     * @return
+     */
+    public List<Long> findUsersWithRole(UserSearchCriteria userSearch) {
+        final List<Object> preparedStatementValues = new ArrayList<>();
+        List<Long> usersIds = new ArrayList<>();
+        String queryStr = userTypeQueryBuilder.getQueryUserRoleSearch(userSearch, preparedStatementValues);
+        log.debug(queryStr);
+
+        usersIds = jdbcTemplate.queryForList(queryStr, preparedStatementValues.toArray(), Long.class);
+
+        return usersIds;
     }
 
 

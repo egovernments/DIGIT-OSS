@@ -1,9 +1,6 @@
 package org.egov.user.domain.model;
 
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.user.domain.model.enums.AddressType;
 
@@ -12,6 +9,7 @@ import java.util.Date;
 @Getter
 @Setter
 @Builder
+@AllArgsConstructor
 @EqualsAndHashCode(of = {"id"})
 public class Address {
     private String pinCode;

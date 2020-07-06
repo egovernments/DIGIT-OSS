@@ -38,15 +38,28 @@ public class UserSearchCriteria {
     }
 
     private boolean validateIfEmptySearch(boolean isInterServiceCall) {
+        /*
+            for "InterServiceCall" ->
+                at least one is compulsory --> 'userName' or 'name' or 'mobileNumber' or 'emailId' or 'uuid' or 'id' or 'roleCodes'
+
+            and for calls from outside->
+                at least one is compulsory --> 'userName' or 'name' or 'mobileNumber' or 'emailId' or 'uuid'
+         */
         if (isInterServiceCall)
             return isEmpty(userName) && isEmpty(name) && isEmpty(mobileNumber) && isEmpty(emailId) &&
                     CollectionUtils.isEmpty(uuid) && CollectionUtils.isEmpty(id) && CollectionUtils.isEmpty(roleCodes);
         else
             return isEmpty(userName) && isEmpty(name) && isEmpty(mobileNumber) && isEmpty(emailId) &&
-                    CollectionUtils.isEmpty(uuid) && CollectionUtils.isEmpty(id);
+                    CollectionUtils.isEmpty(uuid);
     }
 
     private boolean validateIfTenantIdExists(boolean isInterServiceCall) {
+        /*
+            for calls from outside->
+                tenantId is compulsory if one of these is non empty--> 'userName' or 'name', 'mobileNumber'  or 'roleCodes'
+            and for "InterServiceCall" ->
+                tenantId is compulsory if one of these is non empty --> 'userName' or 'name' or 'mobileNumber'
+         */
         if (isInterServiceCall)
             return (!isEmpty(userName) || !isEmpty(name) || !isEmpty(mobileNumber) ||
                     !CollectionUtils.isEmpty(roleCodes))

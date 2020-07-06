@@ -44,6 +44,7 @@ import org.egov.user.domain.model.UserSearchCriteria;
 import org.egov.user.persistence.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Iterator;
 import java.util.List;
@@ -87,6 +88,8 @@ public class UserTypeQueryBuilder {
     public static final String UPDATE_FAILED_ATTEMPTS_SQL = " UPDATE eg_user_login_failed_attempts SET active = " +
             "'false' WHERE user_uuid = :user_uuid";
 
+    private static final String SELECT_USER_ROLE_QUERY = "SELECT distinct(user_id) from eg_userrole_v1 ur";
+
     @SuppressWarnings("rawtypes")
     public String getQuery(final UserSearchCriteria userSearchCriteria, final List preparedStatementValues) {
         final StringBuilder selectQuery = new StringBuilder(SELECT_USER_QUERY);
@@ -98,12 +101,21 @@ public class UserTypeQueryBuilder {
         return addPagingClause(selectQuery, preparedStatementValues, userSearchCriteria);
     }
 
+    @SuppressWarnings("rawtypes")
+    public String getQueryUserRoleSearch(final UserSearchCriteria userSearchCriteria, final List preparedStatementValues) {
+        final StringBuilder selectQuery = new StringBuilder(SELECT_USER_ROLE_QUERY);
+
+        addWhereClauseUserRoles(selectQuery, preparedStatementValues, userSearchCriteria);
+        return selectQuery.toString();
+
+    }
+
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     private void addWhereClause(final StringBuilder selectQuery, final List preparedStatementValues,
                                 final UserSearchCriteria userSearchCriteria) {
 
-        if (userSearchCriteria.getId() == null && userSearchCriteria.getUserName() == null
+        if (CollectionUtils.isEmpty(userSearchCriteria.getId()) && userSearchCriteria.getUserName() == null
                 && userSearchCriteria.getName() == null && userSearchCriteria.getEmailId() == null
                 && userSearchCriteria.getActive() == null && userSearchCriteria.getTenantId() == null
                 && userSearchCriteria.getType() == null && userSearchCriteria.getUuid() == null)
@@ -183,11 +195,11 @@ public class UserTypeQueryBuilder {
                     preparedStatementValues)).append(" )");
         }
 
-        if (!isEmpty(userSearchCriteria.getRoleCodes())) {
-            isAppendAndClause = addAndClauseIfRequired(isAppendAndClause, selectQuery);
-            selectQuery.append(" ur.role_code IN (").append(getQueryForCollection(userSearchCriteria.getRoleCodes(),
-                    preparedStatementValues)).append(" )");
-        }
+//        if(!isEmpty(userSearchCriteria.getRoleCodes())){
+//            isAppendAndClause = addAndClauseIfRequired(isAppendAndClause, selectQuery);
+//            selectQuery.append(" ur.role_code IN (").append(getQueryForCollection(userSearchCriteria.getRoleCodes(),
+//                    preparedStatementValues)).append(" )");
+//        }
     }
 
     private void addOrderByClause(final StringBuilder selectQuery, final UserSearchCriteria userSearchCriteria) {
@@ -211,6 +223,28 @@ public class UserTypeQueryBuilder {
             return finalQuery;
         } else
             return selectQuery.toString();
+
+    }
+
+    private void addWhereClauseUserRoles(final StringBuilder selectQuery, final List preparedStatementValues,
+                                         final UserSearchCriteria userSearchCriteria) {
+
+
+        selectQuery.append(" WHERE");
+        boolean isAppendAndClause = false;
+
+        if (userSearchCriteria.getTenantId() != null) {
+            isAppendAndClause = addAndClauseIfRequired(false, selectQuery);
+            selectQuery.append(" ur.role_tenantid = ?");
+            preparedStatementValues.add(userSearchCriteria.getTenantId().trim());
+        }
+
+
+        if (!isEmpty(userSearchCriteria.getRoleCodes())) {
+            isAppendAndClause = addAndClauseIfRequired(isAppendAndClause, selectQuery);
+            selectQuery.append(" ur.role_code IN (").append(getQueryForCollection(userSearchCriteria.getRoleCodes(),
+                    preparedStatementValues)).append(" )");
+        }
 
     }
 

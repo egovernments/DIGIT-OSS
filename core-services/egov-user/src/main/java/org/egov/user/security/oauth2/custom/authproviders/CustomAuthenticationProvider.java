@@ -1,6 +1,8 @@
 package org.egov.user.security.oauth2.custom.authproviders;
 
 import lombok.extern.slf4j.Slf4j;
+import org.egov.common.contract.request.RequestInfo;
+import org.egov.tracer.model.CustomException;
 import org.egov.tracer.model.ServiceCallException;
 import org.egov.user.domain.exception.DuplicateUserNameException;
 import org.egov.user.domain.exception.UserNotFoundException;
@@ -8,6 +10,7 @@ import org.egov.user.domain.model.SecureUser;
 import org.egov.user.domain.model.User;
 import org.egov.user.domain.model.enums.UserType;
 import org.egov.user.domain.service.UserService;
+import org.egov.user.domain.service.utils.EncryptionDecryptionUtil;
 import org.egov.user.web.contract.auth.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,6 +23,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -40,6 +44,9 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     // TODO Remove default error handling provided by TokenEndpoint.class
 
     private UserService userService;
+
+    @Autowired
+    private EncryptionDecryptionUtil encryptionDecryptionUtil;
 
     @Value("${citizen.login.password.otp.enabled}")
     private boolean citizenLoginPasswordOtpEnabled;
@@ -79,8 +86,21 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         }
 
         User user;
+        RequestInfo requestInfo;
         try {
             user = userService.getUniqueUser(userName, tenantId, UserType.fromValue(userType));
+            /* decrypt here otp service and final response need decrypted data*/
+            Set<org.egov.user.domain.model.Role> domain_roles = user.getRoles();
+            List<org.egov.common.contract.request.Role> contract_roles = new ArrayList<>();
+            for (org.egov.user.domain.model.Role role : domain_roles) {
+                contract_roles.add(org.egov.common.contract.request.Role.builder().code(role.getCode()).name(role.getName()).build());
+            }
+
+            org.egov.common.contract.request.User userInfo = org.egov.common.contract.request.User.builder().uuid(user.getUuid())
+                    .type(user.getType() != null ? user.getType().name() : null).roles(contract_roles).build();
+            requestInfo = RequestInfo.builder().userInfo(userInfo).build();
+            user = encryptionDecryptionUtil.decryptObject(user, "User", User.class, requestInfo);
+
         } catch (UserNotFoundException e) {
             log.error("User not found", e);
             throw new OAuth2Exception("Invalid login credentials");
@@ -99,7 +119,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         if (user.getAccountLocked() != null && user.getAccountLocked()) {
 
             if (userService.isAccountUnlockAble(user)) {
-                user = unlockAccount(user);
+                user = unlockAccount(user, requestInfo);
             } else
                 throw new OAuth2Exception("Account locked");
         }
@@ -137,7 +157,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         } else {
             // Handle failed login attempt
             // Fetch Real IP after being forwarded by reverse proxy
-            userService.handleFailedLogin(user, request.getHeader(IP_HEADER_NAME));
+            userService.handleFailedLogin(user, request.getHeader(IP_HEADER_NAME), requestInfo);
 
             throw new OAuth2Exception("Invalid login credentials");
         }
@@ -208,13 +228,13 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
      * @param user to be unlocked
      * @return Updated user
      */
-    private User unlockAccount(User user) {
+    private User unlockAccount(User user, RequestInfo requestInfo) {
         User userToBeUpdated = user.toBuilder()
                 .accountLocked(false)
                 .password(null)
                 .build();
 
-        User updatedUser = userService.updateWithoutOtpValidation(userToBeUpdated);
+        User updatedUser = userService.updateWithoutOtpValidation(userToBeUpdated, requestInfo);
         userService.resetFailedLoginAttempts(userToBeUpdated);
 
         return updatedUser;

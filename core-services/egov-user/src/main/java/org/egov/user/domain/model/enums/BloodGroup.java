@@ -24,7 +24,7 @@ public enum BloodGroup {
     @JsonCreator
     public static BloodGroup fromValue(String text) {
         for (BloodGroup b : BloodGroup.values()) {
-            if (String.valueOf(b.value).equalsIgnoreCase(text)) {
+            if (String.valueOf(b.value).equalsIgnoreCase(text) || String.valueOf(b.name()).equalsIgnoreCase(text)) {
                 return b;
             }
         }
