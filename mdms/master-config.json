@@ -652,7 +652,7 @@
      },
      "TradeRenewal": {
       "masterName": "TradeRenewal",
-      "isStateLevel": true,
+      "isStateLevel": true
      },
      "documentObj": {
       "masterName": "documentObj",
