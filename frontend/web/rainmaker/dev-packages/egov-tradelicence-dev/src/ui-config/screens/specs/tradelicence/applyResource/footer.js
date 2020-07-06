@@ -655,8 +655,10 @@ const response=  await httpRequest("post", "/tl-services/v1/_update", "", [], {
 export const dialogbox = getCommonContainer({
   header: getCommonHeader({
     labelName: "TL Renewal Confirm Message",
-    labelKey: "TL_RENEWAL_CONFIRM_MESSAGE"
-  }), 
+    labelKey: "TL_RENEWAL_CONFIRM_MESSAGE",
+    }, 
+    {
+    variant: "h3" ,  }), 
     div: {
       uiFramework: "custom-atoms",
       componentPath: "Div",
