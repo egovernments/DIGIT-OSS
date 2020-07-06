@@ -13,6 +13,9 @@ public class HRMSUtils {
 	
 	@Value("${egov.hrms.default.pwd.length}")
 	private Integer pwdLength;
+
+	@Value("${egov.pwd.allowed.special.characters}")
+	private String allowedPasswordSpecialCharacters;
 	
 	/**
 	 * Generates random password for the user to login. Process:
@@ -26,6 +29,7 @@ public class HRMSUtils {
 	public String generatePassword(List<String> params) {
 		StringBuilder password = new StringBuilder();
 		Random random = new Random();
+		params.add(allowedPasswordSpecialCharacters);
 		try {
 			for(int i = 0; i < params.size(); i++) {
 				String param = params.get(i);
