@@ -149,6 +149,7 @@ public class Instrument extends Auditable {
      */
     private SurrenderReason surrenderReason;
 
+    private DishonorReason dishonorReason;
     /*
      * serialNo is the series of the cheque numbers from which the instrument is assigned from. The cheque numbers in an account
      * is defined based on Year, Bank account and tagged to a department.
@@ -171,5 +172,5 @@ public class Instrument extends Auditable {
      */
     // @DrillDownTable
     private List<InstrumentVoucher> instrumentVouchers = new ArrayList<>();
-
+    
 }

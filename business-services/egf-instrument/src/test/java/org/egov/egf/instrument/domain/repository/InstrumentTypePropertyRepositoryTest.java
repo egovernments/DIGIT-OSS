@@ -13,6 +13,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -46,7 +47,7 @@ public class InstrumentTypePropertyRepositoryTest {
     public void test_find_by_id_return_null() {
         InstrumentTypePropertyEntity entity = getInstrumentTypePropertyEntity();
 
-        when(instrumentTypePropertyJdbcRepository.findById(null)).thenReturn(entity);
+        Mockito.lenient().when(instrumentTypePropertyJdbcRepository.findById(null)).thenReturn(entity);
 
         InstrumentTypeProperty actualResult = instrumentTypePropertyRepository
                 .findById(getInstrumentTypePropertyDomin());

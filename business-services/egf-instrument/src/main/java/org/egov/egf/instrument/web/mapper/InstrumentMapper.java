@@ -3,10 +3,12 @@ package org.egov.egf.instrument.web.mapper;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.egov.egf.instrument.domain.model.DishonorReason;
 import org.egov.egf.instrument.domain.model.Instrument;
 import org.egov.egf.instrument.domain.model.InstrumentSearch;
 import org.egov.egf.instrument.domain.model.InstrumentVoucher;
 import org.egov.egf.instrument.domain.model.TransactionType;
+import org.egov.egf.instrument.web.contract.DishonorReasonContract;
 import org.egov.egf.instrument.web.contract.InstrumentContract;
 import org.egov.egf.instrument.web.contract.InstrumentSearchContract;
 import org.egov.egf.instrument.web.contract.InstrumentVoucherContract;
@@ -16,6 +18,7 @@ public class InstrumentMapper {
 
     private InstrumentTypeMapper typeMapper = new InstrumentTypeMapper();
     private SurrenderReasonMapper srMapper = new SurrenderReasonMapper();
+    private DishonorReasonMapper drMapper = new DishonorReasonMapper();
 
     public Instrument toDomain(InstrumentContract contract) {
 
@@ -35,6 +38,19 @@ public class InstrumentMapper {
 
         if (contract.getSurrenderReason() != null)
             instrument.setSurrenderReason(srMapper.toDomain(contract.getSurrenderReason()));
+        
+        if (contract.getDishonor() != null){
+        	DishonorReasonContract dishonor = contract.getDishonor();
+//        	instrument.setDishonorReason(drMapper.toDomain(contract.getDishonor()));
+        	DishonorReason dishonorReason = new DishonorReason().builder().reason(dishonor.getReason())
+        			.dishonorDate(dishonor.getDishonorDate())
+        			.remarks(dishonor.getRemarks())
+        			.instrument(dishonor.getInstrument())
+        			.reversalVoucherId(dishonor.getReversalVoucherId())
+        			.build();
+        	dishonorReason.setTenantId(contract.getTenantId());
+        	instrument.setDishonorReason(dishonorReason);
+        }
 
         if (contract.getInstrumentVouchers() != null) {
 
@@ -89,6 +105,20 @@ public class InstrumentMapper {
 
         if (instrument.getSurrenderReason() != null)
             contract.setSurrenderReason(srMapper.toContract(instrument.getSurrenderReason()));
+        
+        if (instrument.getDishonorReason() != null){
+        	DishonorReason dishonorReason = instrument.getDishonorReason();
+        	DishonorReasonContract dishonorReasonContract = new DishonorReasonContract().builder()
+        	.id(dishonorReason.getId())
+        	.reason(dishonorReason.getReason())
+        	.remarks(dishonorReason.getRemarks())
+        	.instrument(dishonorReason.getInstrument())
+        	.dishonorDate(dishonorReason.getDishonorDate())
+        	.reversalVoucherId(dishonorReason.getReversalVoucherId())
+        	.build();
+        	dishonorReasonContract.setTenantId(instrument.getTenantId());
+        	contract.setDishonor(dishonorReasonContract);        	
+        }
 
         if (instrument.getInstrumentVouchers() != null) {
 

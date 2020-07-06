@@ -8,9 +8,11 @@ import org.egov.common.domain.model.Pagination;
 import org.egov.egf.instrument.domain.model.Instrument;
 import org.egov.egf.instrument.domain.model.InstrumentSearch;
 import org.egov.egf.instrument.domain.model.InstrumentVoucher;
+import org.egov.egf.instrument.persistence.entity.DishonorReasonEntity;
 import org.egov.egf.instrument.persistence.entity.InstrumentEntity;
 import org.egov.egf.instrument.persistence.entity.InstrumentVoucherEntity;
 import org.egov.egf.instrument.persistence.queue.repository.InstrumentQueueRepository;
+import org.egov.egf.instrument.persistence.repository.DishonorReasonJdbcRepository;
 import org.egov.egf.instrument.persistence.repository.InstrumentJdbcRepository;
 import org.egov.egf.instrument.persistence.repository.InstrumentVoucherJdbcRepository;
 import org.egov.egf.instrument.web.contract.InstrumentSearchContract;
@@ -36,6 +38,8 @@ public class InstrumentRepository {
     private InstrumentESRepository instrumentESRepository;
 
     private FinancialConfigurationContractRepository financialConfigurationContractRepository;
+    
+    private DishonorReasonJdbcRepository dishonorReasonJdbcRepository;
 
     @Autowired
     public InstrumentRepository(InstrumentJdbcRepository instrumentJdbcRepository,
@@ -43,13 +47,15 @@ public class InstrumentRepository {
             @Value("${persist.through.kafka}") String persistThroughKafka,
             InstrumentESRepository instrumentESRepository,
             FinancialConfigurationContractRepository financialConfigurationContractRepository,
-            InstrumentVoucherJdbcRepository instrumentVoucherJdbcRepository) {
+            InstrumentVoucherJdbcRepository instrumentVoucherJdbcRepository,
+            DishonorReasonJdbcRepository dishonorReasonJdbcRepository) {
         this.instrumentJdbcRepository = instrumentJdbcRepository;
         this.instrumentQueueRepository = instrumentQueueRepository;
         this.persistThroughKafka = persistThroughKafka;
         this.instrumentESRepository = instrumentESRepository;
         this.financialConfigurationContractRepository = financialConfigurationContractRepository;
         this.instrumentVoucherJdbcRepository = instrumentVoucherJdbcRepository;
+        this.dishonorReasonJdbcRepository = dishonorReasonJdbcRepository;
 
     }
 
@@ -185,6 +191,8 @@ public class InstrumentRepository {
         if (instrument.getInstrumentVouchers() != null)
             for (InstrumentVoucher iv : instrument.getInstrumentVouchers())
                 instrumentVoucherJdbcRepository.create(new InstrumentVoucherEntity().toEntity(iv));
+        if (instrument.getDishonorReason() != null)
+        	dishonorReasonJdbcRepository.create(new DishonorReasonEntity().toEntity(instrument.getDishonorReason()));
         return entity.toDomain();
     }
 
@@ -192,9 +200,12 @@ public class InstrumentRepository {
     public Instrument update(Instrument instrument) {
         InstrumentEntity entity = instrumentJdbcRepository.update(new InstrumentEntity().toEntity(instrument));
         instrumentVoucherJdbcRepository.delete(instrument.getTenantId(), instrument.getId());
+        dishonorReasonJdbcRepository.delete(instrument.getTenantId(), instrument.getId());
         if (instrument.getInstrumentVouchers() != null)
             for (InstrumentVoucher iv : instrument.getInstrumentVouchers())
                 instrumentVoucherJdbcRepository.create(new InstrumentVoucherEntity().toEntity(iv));
+        if (instrument.getDishonorReason() != null)
+        	dishonorReasonJdbcRepository.create(new DishonorReasonEntity().toEntity(instrument.getDishonorReason()));
         return entity.toDomain();
     }
 

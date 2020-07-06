@@ -25,6 +25,7 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -80,7 +81,7 @@ public class InstrumentAccountCodeRepositoryTest {
     public void test_find_by_id_return_null() {
         InstrumentAccountCodeEntity entity = getInstrumentAccountCodeEntity();
 
-        when(instrumentAccountCodeJdbcRepository.findById(null)).thenReturn(entity);
+        Mockito.lenient().when(instrumentAccountCodeJdbcRepository.findById(null)).thenReturn(entity);
 
         InstrumentAccountCode actualResult = instrumentAccountCodeRepositoryWithKafka
                 .findById(getInstrumentAccountCodeDomin());

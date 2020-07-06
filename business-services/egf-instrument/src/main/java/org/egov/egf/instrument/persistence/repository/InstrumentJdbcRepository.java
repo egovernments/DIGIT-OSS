@@ -6,9 +6,13 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.egov.common.domain.model.Pagination;
 import org.egov.common.persistence.repository.JdbcRepository;
+import org.egov.egf.instrument.domain.model.DishonorReason;
+import org.egov.egf.instrument.domain.model.DishonorReasonSearch;
 import org.egov.egf.instrument.domain.model.Instrument;
 import org.egov.egf.instrument.domain.model.InstrumentSearch;
 import org.egov.egf.instrument.domain.model.InstrumentVoucher;
@@ -27,6 +31,7 @@ public class InstrumentJdbcRepository extends JdbcRepository {
     private static final Logger LOG = LoggerFactory.getLogger(InstrumentJdbcRepository.class);
 
     private final InstrumentVoucherJdbcRepository instrumentVoucherJdbcRepository;
+    private final DishonorReasonJdbcRepository dishonorReasonJdbcRepository;
 
     static {
         LOG.debug("init instrument");
@@ -35,10 +40,11 @@ public class InstrumentJdbcRepository extends JdbcRepository {
     }
 
     public InstrumentJdbcRepository(NamedParameterJdbcTemplate namedParameterJdbcTemplate, JdbcTemplate jdbcTemplate,
-            InstrumentVoucherJdbcRepository instrumentVoucherJdbcRepository) {
+            InstrumentVoucherJdbcRepository instrumentVoucherJdbcRepository, DishonorReasonJdbcRepository dishonorReasonJdbcRepository) {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
         this.jdbcTemplate = jdbcTemplate;
         this.instrumentVoucherJdbcRepository = instrumentVoucherJdbcRepository;
+        this.dishonorReasonJdbcRepository = dishonorReasonJdbcRepository;
     }
 
     public InstrumentEntity create(InstrumentEntity entity) {
@@ -264,12 +270,31 @@ public class InstrumentJdbcRepository extends JdbcRepository {
             instruments.add(instrumentEntity.toDomain());
         }
         populateInstrumentVouchers(instruments, ids, domain.getTenantId());
+        populateIntrumentDishonor(instruments, ids, domain.getTenantId());
         page.setPagedData(instruments);
 
         return page;
     }
 
-    private void populateInstrumentVouchers(List<Instrument> instruments, StringBuffer ids, String tenantId) {
+    private void populateIntrumentDishonor(List<Instrument> instruments, StringBuffer ids, String tenantId) {
+		DishonorReasonSearch drs = new DishonorReasonSearch();
+		drs.setTenantId(tenantId);
+		drs.setInstrument(ids.toString());
+		Pagination<DishonorReason> dishonorList = dishonorReasonJdbcRepository.search(drs);
+		if(dishonorList != null && dishonorList.getPagedData() != null && !dishonorList.getPagedData().isEmpty()){
+			Map<String, DishonorReason> map = dishonorList.getPagedData().stream().collect(Collectors.toMap(DishonorReason::getInstrument, Function.identity()));
+			instruments.stream().forEach(ins -> {
+				if(map.get(ins.getId()) != null)
+					ins.setDishonorReason(map.get(ins.getId()));
+			});
+		}else{
+			instruments.stream().forEach(ins -> {
+				ins.setDishonorReason(null);
+			});
+		}
+	}
+
+	private void populateInstrumentVouchers(List<Instrument> instruments, StringBuffer ids, String tenantId) {
         InstrumentVoucherSearch ivs = new InstrumentVoucherSearch();
         ivs.setTenantId(tenantId);
         ivs.setInstruments(ids.toString());
@@ -278,7 +303,9 @@ public class InstrumentJdbcRepository extends JdbcRepository {
         if (instrumentVouchers != null && instrumentVouchers.getPagedData() != null) {
             for (InstrumentVoucher iv : instrumentVouchers.getPagedData()) {
                 if (instrumentVoucherMap.get(iv.getInstrument().getId()) == null) {
-                    instrumentVoucherMap.put(iv.getInstrument().getId(), Collections.singletonList(iv));
+                	ArrayList<InstrumentVoucher> list = new ArrayList<>();
+                	list.add(iv);
+                    instrumentVoucherMap.put(iv.getInstrument().getId(), list);
                 } else {
                     instrumentVoucherMap.get(iv.getInstrument().getId()).add(iv);
                 }

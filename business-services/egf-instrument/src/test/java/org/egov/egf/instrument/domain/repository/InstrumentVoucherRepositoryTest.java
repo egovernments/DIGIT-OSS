@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -40,7 +41,7 @@ public class InstrumentVoucherRepositoryTest {
     public void test_find_by_id_return_null() {
         InstrumentVoucherEntity entity = getInstrumentVoucherEntity();
 
-        when(instrumentVoucherJdbcRepository.findById(null)).thenReturn(entity);
+        Mockito.lenient().when(instrumentVoucherJdbcRepository.findById(null)).thenReturn(entity);
 
         InstrumentVoucher actualResult = instrumentVoucherRepository.findById(getInstrumentVoucherDomin());
 

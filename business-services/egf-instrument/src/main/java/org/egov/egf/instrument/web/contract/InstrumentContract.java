@@ -154,6 +154,8 @@ public class InstrumentContract extends AuditableContract {
      * the cheque can be re-used or not is decided.
      */
     private SurrenderReasonContract surrenderReason;
+    
+    private DishonorReasonContract dishonor;
 
     /*
      * serialNo is the series of the cheque numbers from which the instrument is assigned from. The cheque numbers in an account
