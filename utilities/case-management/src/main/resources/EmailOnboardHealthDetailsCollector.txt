@@ -1,0 +1,13 @@
+Greetings,
+
+You have been successfully registered as the home isolation heath details collector for <district-name> district. As a health detail collector, it is your responsibility to get in touch with the home isolated citizens who haven’t self-reported their health status on a daily basis and record your health details.
+
+Instructions:
+    1. Every day at <time> a daily defaulter excel report of the citizens in <district-name> district who have not self-reported their health status for that day will be sent as an attachment to this email id.
+    2. The defaulter excel report will contain all the details of the citizens including their mobile numbers.
+    3. Download the attached excel sheet.
+    4. Then call all the citizens in that sheet one by one and record their health details in that excel sheet itself.
+    4. Once done, please reply to this email along with the completed excel sheet to register the cases.
+    5. After the system verifies the details filled by you in the sheet and it will send back a confirmation email along with errors if there are any.
+
+Thanks.
