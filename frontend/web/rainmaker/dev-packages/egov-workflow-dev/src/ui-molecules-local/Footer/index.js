@@ -221,11 +221,14 @@ class Footer extends React.Component {
         state.screenConfiguration.preparedFinalObject,
         `Licenses[0].validTo`
       );
-      const now=Date.now();
-      const renewalPeriod=validTo-now;
-
+      const currentDate=Date.now();
+      const duration=validTo-currentDate;
+      const renewalPeriod = get(
+        state.screenConfiguration.preparedFinalObject,
+        `renewalPeriod`
+      );
       if(rolecheck && (status === "APPROVED" || status === "EXPIRED") &&
-       renewalPeriod<=7889400000 ){
+      duration<=renewalPeriod ){
         const editButton = {
           label: "Edit",
           labelKey: "WF_TL_RENEWAL_EDIT_BUTTON",
