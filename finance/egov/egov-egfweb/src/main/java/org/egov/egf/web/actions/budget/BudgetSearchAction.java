@@ -519,13 +519,13 @@ public class BudgetSearchAction extends BaseFormAction {
                             .getApprovedAmount().toString());
             if (re) {
                 if (getConsiderReAppropriationAsSeperate())
-                    view.setCurrentYearReApproved(divideAndRoundBigDecToString(approvedAmt));
+                    view.setCurrentYearReApproved(divideAndRoundBigDecToString(detail.getApprovedAmount()));
                 else {
                     view.setCurrentYearReApproved(divideAndRoundBigDecToString(calculateTotal(detail)));
                     shouldShowREAppropriations = false;
                 }
             } else
-                view.setCurrentYearBeApproved(divideAndRoundBigDecToString(approvedAmt));
+                view.setCurrentYearBeApproved(divideAndRoundBigDecToString(detail.getApprovedAmount()));
             detail.setAnticipatoryAmount(detail.getAnticipatoryAmount() == null ? BigDecimal.ZERO
                     : divideAndRoundStrToBigDec(detail.getAnticipatoryAmount().toString()));
             detail.setOriginalAmount(divideAndRoundStrToBigDec(detail.getOriginalAmount().toString()));

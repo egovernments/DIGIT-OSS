@@ -62,6 +62,7 @@
 	font-size: 12px;
 	width: 90px;
 }
+.
 </style>
 </head>
 <body>
@@ -71,6 +72,10 @@
 	<s:if test="%{not savedbudgetDetailList.empty}">
 		<%@ taglib prefix="s" uri="/WEB-INF/tags/struts-tags.tld"%>
 		<div class="yui-skin-sam">
+		<td class="bluebox">
+		<strong><s:text name="budget.amounts.rs" /></strong>
+		</td>
+		
 			<div id="budgetDetailTable"
 				style="width: 100%; overflow-x: auto; overflow-y: hidden;"></div>
 		</div>
@@ -188,7 +193,7 @@
 							<s:else>
 								"estimate_current_year":'<s:property value="budgetAmountView[#stat.index].currentYearBeApproved"/>',
 							</s:else>
-							"reappropriation_amount":'<s:property value="approvedReAppropriationsTotal.setScale(2).toString()"/>',
+							"reappropriation_amount":'<s:property value="%{(approvedReAppropriationsTotal.setScale(2).toString())/1000}"/>',
 							"approved_amount":'<s:property value="%{calculateTotal(#p)}"/>',
 							"comment":'<s:property value="comment"/>',
 							/* "document":'<input type="submit" class="buttonsubmit" value="View" onclick="'+'viewDocumentManager(<s:property value="#p.documentNumber"/>);return false;"/>' */
