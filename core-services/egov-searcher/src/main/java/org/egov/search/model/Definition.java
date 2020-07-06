@@ -22,6 +22,12 @@ public class Definition {
 	@JsonProperty("query")
 	private Query query;
 	
+	@JsonProperty("isCustomerRowMapEnabled")
+	private Boolean isCustomerRowMapEnabled;
+	
+	@JsonProperty("rowMapperKey")
+	private String rowMapperKey;
+	
 	@JsonProperty("searchParams")
 	private SearchParams searchParams;
 	

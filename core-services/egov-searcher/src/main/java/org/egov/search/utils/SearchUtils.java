@@ -72,8 +72,7 @@ public class SearchUtils {
 		}else {
 			finalQuery = queryString.toString();
 		}
-		log.info("Final Query: " + finalQuery);
-
+		
 		return finalQuery;
 	}
 	

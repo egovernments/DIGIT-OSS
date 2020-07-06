@@ -36,10 +36,6 @@ public class InfraSearchApplication
 		SpringApplication.run(InfraSearchApplication.class, args);
 	}    
 
-	@Bean
-	public RestTemplate restTemplate() {
-	    return new RestTemplate();
-	}
 	
 	private static ObjectMapper getMapperConfig() {
 		ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
