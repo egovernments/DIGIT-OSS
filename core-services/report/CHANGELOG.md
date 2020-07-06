@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.3.0 - 2020-07-02
+
+- Added functionality for decryption of encrypted user PII data
+- Upgraded services-common version to `1.0.1-SNAPSHOT`
+
 ## 1.2.0 - 2020-06-01
 
 - Added typescript definition generation plugin

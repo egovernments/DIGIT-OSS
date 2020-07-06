@@ -134,7 +134,7 @@ public class IntegrationService {
         ri.setDid(requestInfo.getDid());
         ri.setKey(requestInfo.getKey());
         ri.setMsgId(requestInfo.getMsgId());
-        ri.setRequesterId(requestInfo.getRequesterId());
+//        ri.setRequesterId(requestInfo.getRequesterId());
         riw.setRequestInfo(ri);
         return riw;
     }

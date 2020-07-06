@@ -549,7 +549,7 @@ public class ReportQueryBuilder {
         ri.setDid("did");
         ri.setKey("key");
         ri.setMsgId("msgId");
-        ri.setRequesterId("requestId");
+//        ri.setRequesterId("requestId");
         return ri;
     }
 

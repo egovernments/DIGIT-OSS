@@ -1,6 +1,7 @@
 package org.egov.report.repository;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.egov.report.repository.builder.ReportQueryBuilder;
 import org.egov.swagger.model.*;
 import org.egov.tracer.model.CustomException;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.annotation.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Repository
@@ -89,6 +91,8 @@ public class ReportRepository {
         try {
 
             maps = namedParameterJdbcTemplate.queryForList(query, params);
+            // convert 'abc, xyz' -> ['abc','xyz'] to allow decryptions of each entity
+            convertStringArraystoListForEncryption(maps, reportDefinition.getSourceColumns());
         } catch (DataAccessResourceFailureException ex) {
             log.info("Query Execution Failed Due To Timeout: ", ex);
             PSQLException cause = (PSQLException) ex.getCause();
@@ -110,4 +114,24 @@ public class ReportRepository {
         return maps;
     }
 
+
+    private void convertStringArraystoListForEncryption(List<Map<String, Object>> maps, List<SourceColumn> columns) {
+        HashSet<String> arrayColumns = new HashSet<>();
+        for (SourceColumn sourceColumn : columns) {
+            if (sourceColumn.getType().toString().equals("stringarray")) {
+                arrayColumns.add(sourceColumn.getName());
+            }
+        }
+        for (Map<String, Object> fieldValueMap : maps) {
+            for (String key : fieldValueMap.keySet()) {
+                if (arrayColumns.contains(key)) {
+                    if (fieldValueMap.get(key) == null)
+                        continue;
+                    String values[] = String.valueOf(fieldValueMap.get(key)).split(",");
+                    List<String> valueList = Arrays.asList(values).stream().map(value -> value.trim()).collect(Collectors.toList());
+                    fieldValueMap.put(key, valueList);
+                }
+            }
+        }
+    }
 }

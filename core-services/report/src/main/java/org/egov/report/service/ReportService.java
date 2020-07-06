@@ -1,12 +1,20 @@
 package org.egov.report.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.node.TextNode;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.egov.ReportApp;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.contract.request.Role;
+import org.egov.common.contract.request.User;
 import org.egov.common.contract.response.ResponseInfo;
 import org.egov.domain.model.MetaDataRequest;
 import org.egov.domain.model.ReportDefinitions;
 import org.egov.domain.model.Response;
+import org.egov.encryption.EncryptionService;
+import org.egov.encryption.audit.AuditService;
 import org.egov.report.repository.ReportRepository;
 import org.egov.swagger.model.*;
 import org.egov.swagger.model.ColumnDetail.TypeEnum;
@@ -16,10 +24,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.IOException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -35,6 +41,14 @@ public class ReportService {
     @Autowired
     private IntegrationService integrationService;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    @Autowired
+    private EncryptionService encryptionService;
+
+    @Autowired
+    private AuditService auditService;
 
     public MetadataResponse getMetaData(MetaDataRequest metaDataRequest, String moduleName) throws CustomException {
         try {
@@ -208,11 +222,24 @@ public class ReportService {
 
 
     public ReportResponse getReportData(ReportRequest reportRequest, String moduleName, String reportName, String authToken) {
-
-
         ReportDefinitions rds = ReportApp.getReportDefs();
-        ReportDefinition reportDefinition = rds.getReportDefinition(moduleName + " " + reportName);
-        List<Map<String, Object>> maps = reportRepository.getData(reportRequest, reportDefinition, authToken);
+        ReportDefinition reportDefinition = rds.getReportDefinition(moduleName+ " "+reportName);
+        List<Map<String, Object>> maps = reportRepository.getData(reportRequest, reportDefinition,authToken);
+        // Call decryption service if decryption is required for the report
+        if ((reportDefinition.getdecryptionPathId()!= null)&&(reportRequest.getRequestInfo()!=null)&&(reportRequest.getRequestInfo().getUserInfo()!=null))
+        {
+            try {
+                // handle if userInfo or requestInfo is null
+                User userInfo=getEncrichedandCopiedUserInfo(reportRequest.getRequestInfo().getUserInfo());
+                maps = encryptionService.decryptJson(maps,reportDefinition.getdecryptionPathId(),
+                        userInfo,Map.class);
+                auditDecryptRequest(maps, reportDefinition.getdecryptionPathId(),
+                        reportRequest.getRequestInfo().getUserInfo());
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw new CustomException("REPORT_DECRYPTION_ERROR", "Error while decrypting report data");
+            }
+        }
         List<SourceColumn> columns = reportDefinition.getSourceColumns();
         ReportResponse reportResponse = new ReportResponse();
         populateData(columns, maps, reportResponse);
@@ -229,9 +256,17 @@ public class ReportService {
         for (int i = 0; i < maps.size(); i++) {
             List<Object> objects = new ArrayList<>();
             Map<String, Object> map = maps.get(i);
+            Map<String, Object> newMap = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+            newMap.putAll(map);
+            // restore ['abc','xyz'] -> 'abc, xyz'  -- earlier the string had to be transformed to array to allow decryption incase of encrypted columns
             for (SourceColumn sourceColm : columns) {
-
-                objects.add(map.get(sourceColm.getName()));
+                if (sourceColm.getType().toString().equals("stringarray") && (newMap.get(sourceColm.getName()) != null)) {
+                    List<String> stringlist = (List<String>) newMap.get(sourceColm.getName());
+                    String value = StringUtils.join(stringlist, ", ");
+                    objects.add(value);
+                } else {
+                    objects.add(newMap.get(sourceColm.getName()));
+                }
             }
             lists.add(objects);
         }
@@ -266,5 +301,48 @@ public class ReportService {
         reportResponse.setViewPath(reportDefinition.getViewPath());
         reportResponse.setSelectiveDownload(reportDefinition.isSelectiveDownload());
         reportResponse.setReportHeader(columnDetails);
+    }
+
+    private void auditDecryptRequest(List<Map<String, Object>> maps, String decryptionPathId, User userInfo) {
+        String purpose = "Report";
+
+        ObjectNode abacParams = objectMapper.createObjectNode();
+        abacParams.set("key", TextNode.valueOf(decryptionPathId));
+
+        List<String> decryptedEntityUuid = new ArrayList<>();
+
+        for (Map map : maps) {
+            if(map.containsKey("uuid")) {
+                decryptedEntityUuid.add((String) map.get("uuid"));
+            }
+        }
+
+        ObjectNode auditData = objectMapper.createObjectNode();
+        auditData.set("entityType", TextNode.valueOf(User.class.getName()));
+        auditData.set("decryptedEntityIds", objectMapper.valueToTree(decryptedEntityUuid));
+        auditService.audit(userInfo.getUuid(), System.currentTimeMillis(), purpose, abacParams, auditData);
+    }
+    private User getEncrichedandCopiedUserInfo(User userInfo)
+    {
+        List<org.egov.common.contract.request.Role>newRoleList=new ArrayList<>();
+        if(userInfo.getRoles()!=null)
+        {
+            for(org.egov.common.contract.request.Role role:userInfo.getRoles())
+            {
+                org.egov.common.contract.request.Role newRole= org.egov.common.contract.request.Role.builder().code(role.getCode()).name(role.getName()).id(role.getId()).build();
+                newRoleList.add(newRole);
+            }
+        }
+
+        if(newRoleList.stream().filter(role -> (role.getCode()!=null)&&(userInfo.getType()!=null) && role.getCode().equalsIgnoreCase(userInfo.getType())).count()==0)
+        {
+            org.egov.common.contract.request.Role roleFromtype= Role.builder().code(userInfo.getType()).name(userInfo.getType()).build();
+            newRoleList.add(roleFromtype);
+        }
+
+        User newuserInfo=User.builder().id(userInfo.getId()).userName(userInfo.getUserName()).name(userInfo.getName())
+                .type(userInfo.getType()).mobileNumber(userInfo.getMobileNumber()).emailId(userInfo.getEmailId())
+                .roles(newRoleList).tenantId(userInfo.getTenantId()).uuid(userInfo.getUuid()).build();
+        return  newuserInfo;
     }
 }

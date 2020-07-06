@@ -182,6 +182,13 @@ public class ReportApp implements EnvironmentAware {
         return mapper;
     }
 
+    @Bean
+    public ObjectMapper objectMapper() {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+        return mapper;
+    }
 
     public static ReportDefinitions getReportDefs() {
         return reportDefinitions;

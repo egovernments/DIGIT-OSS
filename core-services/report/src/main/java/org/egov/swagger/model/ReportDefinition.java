@@ -94,6 +94,9 @@ public class ReportDefinition {
     @JsonProperty("viewPath")
     private String viewPath = null;
 
+    @JsonProperty("decryptionPathId")
+    private String decryptionPathId = null;
+
     @JsonProperty("selectiveDownload")
     private boolean selectiveDownload = false;
 
@@ -347,6 +350,10 @@ public class ReportDefinition {
      * Convert the given object to string with each line indented by 4 spaces
      * (except the first line).
      */
+    public String getdecryptionPathId(){
+        return decryptionPathId;
+    }
+
     private String toIndentedString(java.lang.Object o) {
         if (o == null) {
             return "null";

@@ -95,7 +95,9 @@ public class ColumnDetail extends ColumnDef {
         SINGLEVALUELISTAC("singlevaluelistac"),
         MULTIVALUELIST("multivaluelist"),
         MULTIVALUELISTAC("multivaluelistac"),
-        BOUNDARYLIST("boundarylist");
+        BOUNDARYLIST("boundarylist"),
+
+        STRINGARRAY("stringarray");
 
         private String value;
 
