@@ -159,7 +159,7 @@ public class FunctionRepositoryTest {
 
 	@Test
 	public void testAddToSearchQueue() {
-		Mockito.doNothing().when(functionQueueRepository).add(Mockito.any());
+		Mockito.lenient().doNothing().when(functionQueueRepository).add(Mockito.any());
 		FunctionRequest request = new FunctionRequest();
 		request.setRequestInfo(getRequestInfo());
 		request.setFunctions(new ArrayList<FunctionContract>());

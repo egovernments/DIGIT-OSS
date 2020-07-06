@@ -162,7 +162,7 @@ public class FinancialMastersListener {
 	@Autowired
 	private RecoveryService recoveryService;
 
-	@KafkaListener(id = "${kafka.topics.egf.masters.validated.id}", topics = "${kafka.topics.egf.masters.validated.topic}", group = "${kafka.topics.egf.masters.validated.group}")
+	@KafkaListener(id = "${kafka.topics.egf.masters.validated.id}", topics = "${kafka.topics.egf.masters.validated.topic}", groupId = "${kafka.topics.egf.masters.validated.group}")
 	public void process(Map<String, Object> mastersMap) {
 		// implement the details here
 

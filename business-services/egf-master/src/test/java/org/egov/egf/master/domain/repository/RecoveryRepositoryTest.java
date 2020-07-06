@@ -152,7 +152,7 @@ public class RecoveryRepositoryTest {
 
     @Test
     public void test_addtosearchqueue() {
-        Mockito.doNothing().when(recoveryQueueRepository).add(Mockito.any());
+        Mockito.lenient().doNothing().when(recoveryQueueRepository).add(Mockito.any());
         RecoveryRequest request = new RecoveryRequest();
         request.setRequestInfo(getRequestInfo());
         request.setRecoverys(new ArrayList<RecoveryContract>());

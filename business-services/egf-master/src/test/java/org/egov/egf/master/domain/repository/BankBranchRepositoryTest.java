@@ -158,7 +158,7 @@ public class BankBranchRepositoryTest {
 
 	@Test
 	public void testAddToSearchQueue() {
-		Mockito.doNothing().when(bankBranchQueueRepository).add(Mockito.any());
+		Mockito.lenient().doNothing().when(bankBranchQueueRepository).add(Mockito.any());
 		BankBranchRequest request = new BankBranchRequest();
 		request.setRequestInfo(getRequestInfo());
 		request.setBankBranches(new ArrayList<BankBranchContract>());

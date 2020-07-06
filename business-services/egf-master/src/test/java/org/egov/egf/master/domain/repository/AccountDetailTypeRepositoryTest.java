@@ -162,7 +162,7 @@ public class AccountDetailTypeRepositoryTest {
 
 	@Test
 	public void testAddToSearchQueue() {
-		Mockito.doNothing().when(accountDetailTypeQueueRepository).add(Mockito.any());
+		Mockito.lenient().doNothing().when(accountDetailTypeQueueRepository).add(Mockito.any());
 		AccountDetailTypeRequest request = new AccountDetailTypeRequest();
 		request.setRequestInfo(getRequestInfo());
 		request.setAccountDetailTypes(new ArrayList<AccountDetailTypeContract>());
