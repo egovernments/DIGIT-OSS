@@ -20,6 +20,7 @@ public class OldPropertyCriteria {
 
 	private String tenantId;
 
+	@JsonProperty("ids")
 	private Set<String> ids;
 
 	private Set<String> oldpropertyids;
@@ -61,6 +62,8 @@ public class OldPropertyCriteria {
 
 	@JsonProperty("financialYear")
 	private String financialYear;
+
+	private String propertyId;
 
 
 
