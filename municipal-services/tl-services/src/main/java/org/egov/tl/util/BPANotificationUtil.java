@@ -31,7 +31,7 @@ public class BPANotificationUtil {
 
     private Producer producer;
 
-    @Value("${egov.host.domain.name}")
+    @Value("${egov.ui.app.host}")
     private String egovhost;
 
     @Value("${egov.common.pay.endpoint}")
