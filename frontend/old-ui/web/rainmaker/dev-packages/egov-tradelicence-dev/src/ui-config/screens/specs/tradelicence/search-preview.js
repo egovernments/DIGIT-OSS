@@ -191,6 +191,10 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
           {
             moduleName: "common-masters",
             masterDetails: [{ name: "uiCommonPay",filter: `[?(@.code=="${businessService}")]` }]
+          },
+          {
+            moduleName: "TradeLicense",
+            masterDetails: [{ name: "TradeRenewal"}]
           }
         ]
       }
@@ -204,7 +208,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         [],
         mdmsBody
       );
-      console.log("payload...",payload)
+      dispatch(prepareFinalObject("renewalPeriod", get(payload.MdmsRes , "TradeLicense.TradeRenewal[0].renewalPeriod")));
       dispatch(prepareFinalObject("uiCommonConfig", get(payload.MdmsRes , "common-masters.uiCommonPay[0]")));
     } catch (e) {
       console.log(e);
@@ -346,21 +350,6 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       "components.div.children.headerDiv.children.header1.children.headertop",
       headerrow
     );
-
- 
-    // const footer = footerReview(
-    //   action,
-    //   state,
-    //   dispatch,
-    //   status,
-    //   applicationNumber,
-    //   tenantId,
-    //   financialYear
-    // );
-
-    // process.env.REACT_APP_NAME === "Citizen"
-    //   ? set(action, "screenConfig.components.div.children.footer", footer)
-    //   : set(action, "screenConfig.components.div.children.footer", {});
 
     if (status === "cancelled")
       set(
