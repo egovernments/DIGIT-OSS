@@ -145,8 +145,7 @@ const transform = (floor, key, generalMDMSDataById, propertyDetails) => {
 //     );
 //   };
 const getAssessmentInfo = (propertyDetails, generalMDMSDataById) => {
-  console.log("prasad inside propertyDetails", propertyDetails);
-  console.log("prasad propertyDetails.uom",propertyDetails.uom);
+
 
   const { units = [], noOfFloors,additionalDetails={} } = propertyDetails || {};
   var construction_date =(additionalDetails && additionalDetails.constructionYear)? moment(additionalDetails.constructionYear).format('DD-MM-YYYY'):null;
@@ -181,7 +180,6 @@ const getAssessmentInfo = (propertyDetails, generalMDMSDataById) => {
               : `${Math.round(propertyDetails.landArea * 100) / 100}  ${getTranslatedLabel("PT_LABEL_SQFT", localizationLabelsData)}`,
       }
     ]
-    console.log("prasad after propertyDetails", properties);
 
     if (propertyDetails.propertyType != "VACANT") {
   properties.push(
@@ -204,7 +202,6 @@ properties.push({
   return properties;
 };
 
-console.log("prasad getAssessmentInfo, ",getAssessmentInfo);
 
 const getUnitInfo = (units = [],usageCategoryMajor="",buildUpArea) => {
   units = units || [];
