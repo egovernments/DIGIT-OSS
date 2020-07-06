@@ -17,11 +17,12 @@ public class Mapping {
 
     @JsonProperty("version")
     private String version = null;
-
-
+    
     @JsonProperty("description")
     private String description = null;
 
+    @JsonProperty("headers")
+    private List<String> headers = null;
 
     @JsonProperty("steps")
     private List<Step> steps = null;

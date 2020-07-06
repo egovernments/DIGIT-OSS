@@ -34,7 +34,6 @@ public class ServiceRequestRepository {
 		JsonNode response = null;
 		log.info("URI: "+uri);
 		try {
-			log.info("Request: "+requestJson);
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_JSON);
 

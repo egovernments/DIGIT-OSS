@@ -23,5 +23,5 @@ public class Step {
     private String body = null;
 
     @JsonIgnore
-    private Mustache bodyTemplate = null;
+    private Mustache mustacheTemplate = null;
 }

@@ -56,7 +56,7 @@ public class DatauploadConfiguration {
                 for(Mapping mapping : config.getMappings()){
                     for(Step step : mapping.getSteps()){
                         Mustache mustache = mf.compile(new StringReader(step.getBody()), step.getId());
-                        step.setBodyTemplate(mustache);
+                        step.setMustacheTemplate(mustache);
                     }
                 }
                 dataUploadConfigs.put(config.getService(), config);

@@ -3,41 +3,79 @@ mappings:
   - id: create-case
     version: 1.0
     description: Persists case details into case table
+    headers: ["Name", "Mobile Number", "Age", "Start Date", "End Date", "Reason", "Medical History"]
     steps:
-#      - id: user-search
-#        url: http://localhost:8081/user/v1/_search
-#        body: |
-#          {
-#            "RequestInfo": {
-#              "apiId": "apiId",
-#              "ver": "version",
-#              "action": "action",
-#              "did": "did",
-#              "key": "key",
-#              "msgId": "msgId",
-#              "requesterId": "requestId",
-#              "authToken": "5f4e603a-823c-4ae4-ab79-9a0cf1d6c4b6"
-#            },
-#            "tenantId": "pb",
-#            "uuid": ["a23f73c1-fb76-4864-8dec-d7fa3ec7b707"]
-#          }
       - id: create-case
-        url: http://localhost:8080/case/v1/_create
+        url: http://localhost:8080/case-management/case/v1/_create
         body: |
           {
-            "RequestInfo": {
-              "userInfo": {
-                "uuid": "{{#user-search}}{{user[0].id}}{{/user-search}}"
-              }
-            },
+            "RequestInfo": {{{RequestInfo}}},
             "case": {
-              "tenantId": "{{Tenant}}",
+              "tenantId": "{{tenantId}}",
               "name": "{{Name}}",
-              "mobileNumber": {{Mobile Number}},
+              "mobileNumber": "{{Mobile Number}}",
               "age": {{Age}},
-              "startDate": {{#toEpoch}}{{Start Date}}{{/toEpoch}},
-              "endDate": {{#toEpoch}}{{End Date}}{{/toEpoch}},
+              "startDate": "{{#toEpoch}}{{Start Date}}{{/toEpoch}}",
+              "endDate": "{{#toEpoch}}{{End Date}}{{/toEpoch}}",
               "reason": "{{Reason}}",
               "medicalHistory": "{{Medical History}}"
             }
+          }
+
+  - id: health-details-collect
+    version: 1.0
+    description: Collects health details related to case management
+    headers: ["Name", "Mobile Number", "Age", "Last Reported On", "Current body temperature (in °F)", "Dry Cough? (Yes or No)", "Fever? (Yes or No)", "Difficulty in breathing ? (Yes or No)"]
+    steps:
+      - id: health-details-collect
+        url: http://localhost:8080/case-management/healthdetail/v1/_create
+        body: |
+          {
+            "RequestInfo": {{{RequestInfo}}},
+            "tenantId": "{{tenantId}}",
+            "mobileNumber": "{{Mobile Number}}",
+            "healthDetails": [
+              {
+                "temperature": "{{Current body temperature (in �F)}}",
+                "fever": "{{#toBool}}{{Fever? (Yes or No)}}{{/toBool}}",
+                "breathingIssues": "{{#toBool}}{{Difficulty in breathing ? (Yes or No)}}{{/toBool}}",
+                "dryCough": "{{#toBool}}{{Dry Cough? (Yes or No)}}{{/toBool}}"
+              }
+            ]
+          }
+
+  - id: create-case-manager
+    version: 1.0
+    description: Add case manager admins
+    headers: ["Email ID", "Name", "Tenant"]
+    steps:
+      - id: create-case-manager
+        url: http://localhost:8080/case-management/employee/v1/_create
+        body: |
+          {
+            "RequestInfo": {{{RequestInfo}}},
+            "employee": {
+                "emailId": "{{Email ID}}",
+                "name": "{{Name}}",
+                "tenantId": "{{Tenant}}",
+                "roles": [ "ISOLATION_CASE_ADMIN" ]
+              }
+          }
+
+  - id: create-health-details-collector
+    version: 1.0
+    description: Add case manager health details collectors
+    headers: ["Email ID", "Name"]
+    steps:
+      - id: create-health-details-collector
+        url: http://localhost:8080/case-management/employee/v1/_create
+        body: |
+          {
+            "RequestInfo": {{{RequestInfo}}},
+            "employee": {
+                "emailId": "{{Email ID}}",
+                "name": "{{Name}}",
+                "tenantId": "{{tenantId}}",
+                "roles": [ "ISOLATION_HEALTH_DETAILS_COLLECTOR" ]
+              }
           }

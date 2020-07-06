@@ -1,14 +1,15 @@
 package egov.dataupload.utils;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.JsonPath;
 import egov.dataupload.models.AuditDetails;
+import org.apache.logging.log4j.util.Strings;
+import org.egov.common.contract.request.RequestInfo;
 
 import java.time.Instant;
-import java.util.Iterator;
-
-import static java.util.Objects.isNull;
+import java.util.Base64;
+import java.util.List;
 
 public class Utils {
 
@@ -20,37 +21,25 @@ public class Utils {
             return AuditDetails.builder().lastModifiedBy(by).lastModifiedTime(time).build();
     }
 
-    public static JsonNode jsonMerge(JsonNode mainNode, JsonNode updateNode) {
+    public static RequestInfo getRequestInfo(ObjectMapper mapper, String requestInfoBase64) {
+        try {
+            String decoded = new String(Base64.getDecoder().decode(requestInfoBase64));
+            return mapper.readValue(decoded, RequestInfo.class);
 
-        if(isNull(mainNode) || mainNode.isNull())
-            return updateNode;
-        if (isNull(updateNode) || updateNode.isNull())
-            return mainNode;
+        } catch (JsonProcessingException e) {
 
-        if(mainNode.isArray() && updateNode.isArray()){
-            ((ArrayNode)mainNode).addAll( (ArrayNode)updateNode);
+            return new RequestInfo();
         }
+    }
 
-        Iterator<String> fieldNames = updateNode.fieldNames();
-        while (fieldNames.hasNext()) {
-
-            String fieldName = fieldNames.next();
-            JsonNode jsonNode = mainNode.get(fieldName);
-            // if field exists and is an embedded object
-            if (jsonNode != null && jsonNode.isObject()) {
-                jsonMerge(jsonNode, updateNode.get(fieldName));
-            }
-            else {
-                if (mainNode instanceof ObjectNode) {
-                    // Overwrite field
-                    JsonNode value = updateNode.get(fieldName);
-                    ((ObjectNode) mainNode).put(fieldName, value);
-                }
-            }
-
-        }
-
-        return mainNode;
+    public static String getErrorMessages(String json){
+        if(json == null)
+            return "";
+       List<String> messages = JsonPath.read(json, "$.Errors[*].message");
+       if(!messages.isEmpty()){
+           return Strings.join(messages, ';');
+       } else
+           return "";
     }
 
 }
