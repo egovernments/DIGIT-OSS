@@ -741,8 +741,8 @@ export const normalizePropertyDetails = (properties, self) => {
       // if (unit.constructionYear) {
       //   unit.constructionYear=new Date(unit.constructionYear).getTime();
       // }
-      let unitAreaInSqYd = parseFloat(unit.unitArea) / 9;
-      unit.unitArea = Math.round(unitAreaInSqYd * 100) / 100;
+      // let unitAreaInSqYd = parseFloat(unit.unitArea) / 9;
+      // unit.unitArea = Math.round(unitAreaInSqYd * 100) / 100;
       sumOfUnitArea += unit.unitArea;
     });
   if (propertyDetails[0].propertySubType === "SHAREDPROPERTY") {
