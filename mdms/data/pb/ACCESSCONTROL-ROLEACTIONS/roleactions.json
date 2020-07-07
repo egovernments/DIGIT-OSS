@@ -20922,6 +20922,12 @@
       "actionid": 706,
       "actioncode": "",
       "tenantId": "pb"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 2003,
+      "actioncode": "",
+      "tenantId": "pb"
     }
   ]
 }
