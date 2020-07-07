@@ -100,7 +100,7 @@ export const tradeDocumentDetails = getCommonCard({
 export const getMdmsData = async (action, state, dispatch) => {
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: process.env.REACT_APP_NAME === "Citizen"? window.document.location.search.split('=')[1] : state.auth.userInfo.tenantId,
+      tenantId: process.env.REACT_APP_NAME === "Citizen"? getQueryArg(window.location.href, "tenantId") : state.auth.userInfo.tenantId,
       moduleDetails: [
         {
           moduleName: "TradeLicense",
@@ -229,12 +229,6 @@ export const getData = async (action, state, dispatch) => {
       );
       if (oldApplicationNo !== null) {
         dispatch(
-          prepareFinalObject(
-            "Licenses[0].applicationType",
-            "RENEWAL"
-          )
-        );
-        dispatch(
           handleField(
             "apply",
             "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.financialYear",
@@ -248,6 +242,12 @@ export const getData = async (action, state, dispatch) => {
             "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.applicationType",
             "props.value",
             "APPLICATIONTYPE.RENEWAL"
+          )
+        );
+        dispatch(
+          prepareFinalObject(
+            "Licenses[0].applicationType",
+            "RENEWAL"
           )
         );
       }
