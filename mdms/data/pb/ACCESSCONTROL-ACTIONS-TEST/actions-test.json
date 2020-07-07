@@ -16734,6 +16734,26 @@
       "serviceCode": "NOC",
       "code": "null",
       "path": ""
+    },
+    {
+      "id": 2003,
+      "name": "New W&S Application",
+      "url": "quickAction",
+      "displayName": "New W&S Application",
+      "orderNumber": 2,
+      "queryParams": "",
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "",
+      "tenantId": "pb",
+      "createdDate": null,
+      "createdBy": null,
+      "lastModifiedDate": null,
+      "lastModifiedBy": null,
+      "path": "wns.apply",
+      "navigationURL": "wns/apply",
+      "quickAction": true,
+      "rightIcon": ""
     }
   ]
 }
