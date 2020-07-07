@@ -161,7 +161,7 @@ public class PropertyQueryBuilder {
 			if(appendAndQuery)
 				builder.append(AND_QUERY);
 			builder.append("property.propertyid IN (").append(createQuery(propertyIds)).append(")");
-			addToPreparedStatement(preparedStmtList, propertyIds);
+			addToPreparedStatementWithUpperCase(preparedStmtList, propertyIds);
 			appendAndQuery= true;
 		}
 		
