@@ -463,7 +463,7 @@
                         "style": "receipt-table2"
                       },
                       {
-                        "text": "0",
+                        "text":"{{advanceAdjusted}}",
                         "border": [
                           false,
                           false,
