@@ -1,6 +1,7 @@
 package org.egov.pt.web.controllers;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -82,15 +83,17 @@ public class PropertyController {
 
 	@PostMapping("/_migration")
 	public ResponseEntity<?> propertyMigration(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
-															  @Valid @ModelAttribute OldPropertyCriteria propertyCriteria) {
+											   @Valid @ModelAttribute OldPropertyCriteria propertyCriteria) {
 		long startTime = System.nanoTime();
+		Map<String, String> resultMap = null;
+		Map<String, String> errorMap = new HashMap<>();
 
-		Map<String, String> resultMap = migrationService.initiatemigration(requestInfoWrapper, propertyCriteria);
+		resultMap = migrationService.initiateProcess(requestInfoWrapper,propertyCriteria,errorMap);
 
 		long endtime = System.nanoTime();
 		long elapsetime = endtime - startTime;
 		System.out.println("Elapsed time--->"+elapsetime);
-		
+
 		return new ResponseEntity<>(resultMap, HttpStatus.OK);
 	}
 
