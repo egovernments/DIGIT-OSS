@@ -637,6 +637,12 @@
                 }
               },
               {
+                "variable": "WS_AdvanceAdjusted",
+                "value": {
+                  "path": "$.AdvanceAdjustedValue"
+                }
+              },
+              {
                 "variable": "scissorImage",
                 "url": "http://www.pngall.com/wp-content/uploads/2016/03/Scissor-PNG-Clipart.png",
                 "type": "image"
@@ -665,6 +671,11 @@
                 "variable": "arrears",
                 "formula": "{{WS_arrears}}"
               },
+              {
+                "variable": "advanceAdjusted",
+                "formula": "{{WS_AdvanceAdjusted}}"
+              },
+
               {
                 "variable": "advanceAvailable",
                 "formula": "{{total}}<0?{{total}}*-1:0"
