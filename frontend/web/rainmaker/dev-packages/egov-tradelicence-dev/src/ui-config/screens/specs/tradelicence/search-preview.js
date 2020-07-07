@@ -288,7 +288,6 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
       tenantId,
       financialYear
     );
-    
 
     process.env.REACT_APP_NAME === "Citizen"
       ? set(

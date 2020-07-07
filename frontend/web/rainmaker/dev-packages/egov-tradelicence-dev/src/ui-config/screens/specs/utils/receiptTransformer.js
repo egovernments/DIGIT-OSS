@@ -112,7 +112,7 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
       nullToNa(
         get(
           response,
-          "Licenses[0].tradeLicenseDetail.additionalDetail.applicationType",
+          "Licenses[0].applicationType",
           "NA"
         )
       )
