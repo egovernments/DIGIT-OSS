@@ -130,6 +130,7 @@ class Footer extends React.Component {
     set(licences[0],"financialYear" ,nextFinancialYear.code);
     set(licences[0],"validFrom" ,nextFinancialYear.startingDate);
     set(licences[0],"validTo" ,nextFinancialYear.endigDate);
+    set(licences[0],"oldLicenseNumber" ,licences[0].applicationNumber);
 
   const response=  await httpRequest("post", "/tl-services/v1/_update", "", [], {
       Licenses: licences
