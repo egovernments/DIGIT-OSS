@@ -446,12 +446,15 @@ export const getTargetPropertiesDetails = (propertyDetails, self) => {
   if (selectedPropertyDetails && selectedPropertyDetails[lastIndex].propertySubType === "SHAREDPROPERTY") {
     selectedPropertyDetails[lastIndex].buildUpArea =
       selectedPropertyDetails[lastIndex] &&
-      selectedPropertyDetails[lastIndex].buildUpArea &&
-      convertBuiltUpAreaToSqFt(selectedPropertyDetails[lastIndex].buildUpArea);
-  }
+      //selectedPropertyDetails[lastIndex].buildUpArea && convertBuiltUpAreaToSqFt(selectedPropertyDetails[lastIndex].buildUpArea);
+      selectedPropertyDetails[lastIndex].buildUpArea;
+
+    }
   selectedPropertyDetails[lastIndex].units =
-    selectedPropertyDetails[lastIndex] && selectedPropertyDetails[lastIndex].units && convertUnitsToSqFt(selectedPropertyDetails[lastIndex].units);
-  return [selectedPropertyDetails[lastIndex]];
+    //selectedPropertyDetails[lastIndex] && selectedPropertyDetails[lastIndex].units && convertUnitsToSqFt(selectedPropertyDetails[lastIndex].units);
+    selectedPropertyDetails[lastIndex] && selectedPropertyDetails[lastIndex].units && selectedPropertyDetails[lastIndex].units;
+
+    return [selectedPropertyDetails[lastIndex]];
 };
 
 export const getImportantDates = async (self) => {
