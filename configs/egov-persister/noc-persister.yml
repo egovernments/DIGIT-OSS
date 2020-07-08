@@ -59,7 +59,7 @@ serviceMaps:
   
           - jsonPath: $.Noc.documents.*.documentType
   
-          - jsonPath: $.Noc.documents.*.fileStore
+          - jsonPath: $.Noc.documents.*.fileStoreId
   
           - jsonPath: $.Noc.id
   
@@ -79,7 +79,7 @@ serviceMaps:
 
           - jsonPath: $.Noc.documents.*.documentType
 
-          - jsonPath: $.Noc.documents.*.fileStore
+          - jsonPath: $.Noc.documents.*.fileStoreId
   
           - jsonPath: $.Noc.documents.*.additionalDetails
             type: JSON
@@ -127,7 +127,7 @@ serviceMaps:
   
           - jsonPath: $.Noc.documents.*.documentType
   
-          - jsonPath: $.Noc.documents.*.fileStore
+          - jsonPath: $.Noc.documents.*.fileStoreId
   
           - jsonPath: $.Noc.id
   
@@ -147,7 +147,7 @@ serviceMaps:
 
           - jsonPath: $.Noc.documents.*.documentType
 
-          - jsonPath: $.Noc.documents.*.fileStore
+          - jsonPath: $.Noc.documents.*.fileStoreId
   
           - jsonPath: $.Noc.documents.*.additionalDetails
             type: JSON
@@ -173,7 +173,7 @@ serviceMaps:
   
            - jsonPath: $.Noc.documents.*.documentType
   
-           - jsonPath: $.Noc.documents.*.fileStore
+           - jsonPath: $.Noc.documents.*.fileStoreId
   
            - jsonPath: $.Noc.id
   
@@ -193,7 +193,7 @@ serviceMaps:
 
            - jsonPath: $.Noc.documents.*.documentType
 
-           - jsonPath: $.Noc.documents.*.fileStore
+           - jsonPath: $.Noc.documents.*.fileStoreId
   
            - jsonPath: $.Noc.documents.*.additionalDetails
              type: JSON
