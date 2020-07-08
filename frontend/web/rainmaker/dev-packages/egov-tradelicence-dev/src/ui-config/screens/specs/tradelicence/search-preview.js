@@ -35,6 +35,7 @@ import {
 import { getReviewTrade } from "./applyResource/review-trade";
 import { getReviewOwner } from "./applyResource/review-owner";
 import { getReviewDocuments } from "./applyResource/review-documents";
+import { getDeclaration }from "./applyResource/declaration";
 import { loadReceiptGenerationData, getOwnerPhoto } from "../utils/receiptTransformer";
 import { adhocPopup } from "./applyResource/adhocPopup";
 
@@ -191,6 +192,20 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
       state,
       "screenConfiguration.preparedFinalObject.Licenses[0].status"
     );
+
+
+    if(status !=="APPROVED" )
+    {
+    
+      dispatch(handleField(
+        "search-preview",
+        "components.div.children.tradeReviewDetails.children.cardContent.children.reviewDeclaration",
+        "visible",
+        false
+      ))
+
+    }
+
     if (status === "REJECTED"|| status ==="PENDINGPAYMENT") {
       console.log("=====status=123======" + status + "============");
       // set(
@@ -301,6 +316,14 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
           printCont
         );
 
+        let dvalue =  get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tradeLicenseDetail.additionalDetail.declaration")
+
+        if(dvalue === undefined )
+        {
+         dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.additionalDetail.declaration",false));
+        }
+  
+
     // Get approval details based on status and set it in screenconfig
 
     if (
@@ -400,6 +423,73 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
     // loadReceiptGenerationData(applicationNumber, tenantId);
   }
 
+  //let declaration_value =  get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tradeLicenseDetail.additionalDetail.declaration")
+    
+ /*  set(
+    action,
+    "screenConfig.search-preview.components.div.children.footer.children.container.children.rightdiv.children.editButton.visible",
+    false
+  ); */
+  
+
+ /*  dispatch(
+    handleField(
+      "search-preview",
+      "components.div.children.footer.children.container.children.rightdiv.children.submitButton",
+      "visible",
+      false
+    )
+  );  */ 
+ 
+/*  if (declaration_value) {
+  dispatch(
+    handleField(
+      "search-preview",
+      "components.div.children.footer.children.container.children.rightdiv.children.editButton",
+      "visible",
+      false
+    )
+  ); 
+}
+else
+{
+  dispatch(
+    handleField(
+      "search-preview",
+      "components.div.children.footer.children.container.children.rightdiv.children.submitButton",
+      "visible",
+      false
+    )
+  ); 
+}    */   
+/* const licenseCount = get(
+  state,
+  "screenConfiguration.preparedFinalObject.licenseCount"
+);
+console.log("Before Filed in licenseCount", licenseCount);
+if(licenseCount>0)
+{
+dispatch(
+  handleField(
+    "search-preview",
+    "components.div.children.declaration",
+    "visible",
+    true
+  )
+); 
+}
+else
+{
+  dispatch(
+    handleField(
+      "search-preview",
+      "components.div.children.declaration",
+      "visible",
+      true
+    )
+  );  
+} */
+
 };
 
 let titleText = "";
@@ -492,6 +582,7 @@ const ulbCard = getULBCard();
 const reviewOwnerDetails = getReviewOwner(false);
 
 const reviewDocumentDetails = getReviewDocuments(false, false);
+const reviewDeclaration = getDeclaration(false);
 
 // let approvalDetails = getApprovalDetails(status);
 let title = getCommonTitle({ labelName: titleText });
@@ -548,7 +639,9 @@ export const tradeReviewDetails = getCommonCard({
   },
   reviewTradeDetails,
   reviewOwnerDetails,
-  reviewDocumentDetails
+  reviewDocumentDetails,
+  reviewDeclaration
+
 });
 
 const screenConfig = {
@@ -690,7 +783,7 @@ const screenConfig = {
             }
           }
         },
-        tradeReviewDetails
+        tradeReviewDetails   
       }
     },
     breakUpDialog: {

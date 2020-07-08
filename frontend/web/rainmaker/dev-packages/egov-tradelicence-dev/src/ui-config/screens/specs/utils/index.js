@@ -73,10 +73,23 @@ export const getTooltip = (children, toolTipProps) => {
 };
 
 export const getCheckbox = (content, jsonPath, props = {}) => {
-  return {
+   return {
     uiFramework: "custom-containers-local",
     moduleName: "egov-tradelicence",
     componentPath: "CheckboxContainer",
+    props: {
+      content,
+      jsonPath,
+      ...props
+    }
+  };
+};
+
+export const ReGetCheckbox = (content, jsonPath, props = {}) => {
+    return {
+    uiFramework: "custom-containers-local",
+    moduleName: "egov-tradelicence",
+    componentPath: "ReCheckboxContainer",
     props: {
       content,
       jsonPath,
