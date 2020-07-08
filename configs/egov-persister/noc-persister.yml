@@ -211,10 +211,12 @@ serviceMaps:
            - jsonPath: $.Noc.id
 
 
-       - query: UPDATE eg_noc SET nocNo=?, applicationStatus=?, additionaldetails=?, lastmodifiedby=?, lastmodifiedtime=? WHERE id=?;
+       - query: UPDATE eg_noc SET nocNo=?, status=?, applicationStatus=?, additionaldetails=?, lastmodifiedby=?, lastmodifiedtime=? WHERE id=?;
          basePath: Noc
          jsonMaps:          
           - jsonPath: $.Noc.nocNo
+          
+          - jsonPath: $.Noc.status
           
           - jsonPath: $.Noc.applicationStatus
 
