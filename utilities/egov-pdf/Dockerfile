@@ -4,7 +4,7 @@ ARG WORK_DIR
 ENV npm_config_cache=/tmp
 WORKDIR /app
 
-COPY ${WORK_DIR}/src/package.json ${WORK_DIR}/src/yarn.lock .
+COPY ${WORK_DIR}/package.json ${WORK_DIR}/yarn.lock .
 
 RUN yarn
 
