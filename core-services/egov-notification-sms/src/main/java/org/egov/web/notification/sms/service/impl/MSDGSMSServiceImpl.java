@@ -23,7 +23,7 @@ import java.util.Map;
 
 @Service
 @Slf4j
-@ConditionalOnProperty(value = "sms.gateway.to.use", havingValue = "MSDG")
+@ConditionalOnProperty(value = "sms.provider.class", matchIfMissing = true, havingValue = "MSDG")
 public class MSDGSMSServiceImpl extends BaseSMSService {
 
     @Autowired
