@@ -17,6 +17,10 @@ const CheckboxContainer = Loadable({
   loader: () => import("./CheckboxContainer"),
   loading: () => <Loading />
 });
+const ReCheckboxContainer = Loadable({
+  loader: () => import("./ReCheckboxContainer"),
+  loading: () => <Loading />
+});
 const DownloadFileContainer = Loadable({
   loader: () => import("./DownloadFileContainer"),
   loading: () => <Loading />
@@ -62,6 +66,7 @@ export {
   CustomTabContainer,
   LabelContainer,
   CheckboxContainer,
+  ReCheckboxContainer,
   DownloadFileContainer,
   EstimateCardContainer,
   AutosuggestContainer,

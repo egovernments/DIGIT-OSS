@@ -49,3 +49,8 @@
   .tl-print-button {
     margin-left: 10px;
     width: 150px; } }
+
+@media only screen and (min-width: 768px) {
+  .tl-renew-dialog {
+    height: 166px !important;
+    width: 498px !important; } }

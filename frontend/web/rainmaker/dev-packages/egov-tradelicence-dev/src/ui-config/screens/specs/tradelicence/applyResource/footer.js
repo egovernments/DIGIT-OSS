@@ -5,6 +5,10 @@ import {
   dispatchMultipleFieldChangeAction
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
+  getCheckbox,
+  getCheckBoxJsonpath,
+ } from "../../utils";
+import {
   showDialogBox,
 } from "egov-tradelicence/ui-config/screens/specs/utils";
 import { download } from "egov-common/ui-utils/commons";
@@ -610,12 +614,12 @@ export const footer = getCommonApplyFooter({
 
 
 
-export const renewTradelicence  = async (state,dispatch) => {
+export const renewTradelicence  = async (financialYear, state,dispatch) => {
 
-  const financialYear = get(
+/*   const financialYear = get(
     state.screenConfiguration.screenConfig["search-preview"], //hardcoded to apply screen
     "components.div.children.footer.children.container.children.rightdiv.children.renewDialog.props.financialYear"
-  );
+  ); */
 
 
   const licences = get(
@@ -652,19 +656,27 @@ const response=  await httpRequest("post", "/tl-services/v1/_update", "", [], {
 
 
 
-export const dialogbox = getCommonContainer({
-  header: getCommonHeader({
+/*export const dialogbox = getCommonContainer({
+  
+   header: getCommonHeader({
     labelName: "TL Renewal Confirm Message",
     labelKey: "TL_RENEWAL_CONFIRM_MESSAGE",
     }, 
     {
-    variant: "h3" ,  }), 
-    div: {
+    variant: "h3" ,
+  }),  */
+    /* div: {
       uiFramework: "custom-atoms",
       componentPath: "Div",
       children: {
-        yesButton: {
-          componentPath: "Button",
+        checkBoxContainer: getCheckbox(
+          "", 
+          'Licenses[0].tradeLicenseDetail.additionalDetail.popup.check'
+        ),
+        message,
+        
+         yesButton: {
+         componentPath: "Button",
           props: {
             variant: "contained",
             color: "primary",
@@ -675,20 +687,24 @@ export const dialogbox = getCommonContainer({
               marginTop: "16px",
               fontWeight: 'bold'
             }
-          },
-          children: {
+          }, */
+          /* children: {
             previousButtonLabel: getLabel({
               labelName: "YES",
               labelKey: "TL_RENEWAL_CONFIRM_MESSAGE_YES"
-            })
+            }), */
+            /* checkBoxContainer: getCheckbox(
+              "Self declaration provided by the applicant has been found correct and the trade running on the premises is same as given in the application form.",
+              getCheckBoxJsonpath("cancel")
+            ) 
           },
           onClickDefination: {
             action: "condition",
             callBack:renewTradelicence
             }
           
-        },
-        noButton: {
+        },*/
+      /*   noButton: {
           componentPath: "Button",
           props: {
             variant: "outlined",
@@ -712,10 +728,10 @@ export const dialogbox = getCommonContainer({
             callBack:  showDialogBox       
             
           }
-        }
+        } 
       }
     },
-});
+});*/
 
 export const renewDialogBox  = async (financialYear,state,dispatch) => {
   
@@ -725,13 +741,14 @@ export const renewDialogBox  = async (financialYear,state,dispatch) => {
       
   const toggle = get(
     state.screenConfiguration.screenConfig["search-preview"], //hardcoded to apply screen
-    "components.div.children.footer.children.container.children.rightdiv.children.renewDialog.props.open"
+    "components.div.children.footer.children.container.children.rightdiv.children.editButton.props.open"
   );
 
   dispatch(
-    handleField("search-preview", "components.div.children.footer.children.container.children.rightdiv.children.renewDialog", "props.open", !toggle)
+    handleField("search-preview", "components.div.children.footer.children.container.children.rightdiv.children.editButton", "props.open", !toggle)
   );
  };
+
 export const footerReview = (
   action,
   state,
@@ -748,6 +765,10 @@ export const footerReview = (
     `licenseCount`,
     1
   );
+  let declaration =  get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tradeLicenseDetail.additionalDetail.declaration")
+
+
+
 
   return getCommonApplyFooter({
     container: {
@@ -814,7 +835,7 @@ export const footerReview = (
                   } 
                 }, */
                 previousButtonLabel: getLabel({
-                  labelName: "Edit for Renewal",
+                  labelName: "Modify Renewal",
                   labelKey: "TL_RENEWAL_BUTTON_EDIT"
                 })
               },
@@ -830,7 +851,7 @@ export const footerReview = (
                 },
 
               },
-              visible:(getButtonVisibility(status, "APPROVED")||getButtonVisibility(status, "EXPIRED"))&&(responseLength === 1 ),
+              visible:(getButtonVisibility(status, "APPROVED")||getButtonVisibility(status, "EXPIRED"))&&(responseLength === 1 ) && (!declaration),
             },
             submitButton: {
               componentPath: "Button",
@@ -846,7 +867,7 @@ export const footerReview = (
               },
               children: {
                 nextButtonLabel: getLabel({
-                  labelName: "Submit for Renewal",
+                  labelName: "One Click Renewal",
                   labelKey: "TL_RENEWAL_BUTTON_SUBMIT"
                 }),
                 nextButtonIcon: {
@@ -860,12 +881,13 @@ export const footerReview = (
               onClickDefination: {
                 action: "condition",
                 callBack: () => {
-                  //renewTradelicence(financialYear, state,dispatch);
-                  renewDialogBox(financialYear, state,dispatch);
+                 renewTradelicence(financialYear, state,dispatch);
+                 // renewDialogBox(financialYear, state,dispatch);
+                 
                 },
 
               },
-              visible:(getButtonVisibility(status, "APPROVED")||getButtonVisibility(status, "EXPIRED"))&&(responseLength === 1 ),
+              visible:(getButtonVisibility(status, "APPROVED")||getButtonVisibility(status, "EXPIRED"))&&(responseLength === 1 ) && (declaration),
             },
             makePayment: {
               componentPath: "Button",
@@ -898,7 +920,7 @@ export const footerReview = (
               },
               visible: process.env.REACT_APP_NAME === "Citizen" && getButtonVisibility(status, "PENDINGPAYMENT") ? true : false
             },
-           renewDialog: {
+         /*   renewDialog: {
               componentPath: "Dialog",
               props: {
                 open: false,
@@ -917,14 +939,14 @@ export const footerReview = (
                     /*  style: {
                       height: "228px",
                       width: "519px",
-                     } */
+                     } 
                   },
                   children: {
                     popup: dialogbox
                   }
                 }
               }
-            } 
+            }  */
 
           },
           gridDefination: {
