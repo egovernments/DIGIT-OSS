@@ -208,7 +208,7 @@ export const getReviewTrade = (isEditable = true) => {
         },
         {
           jsonPath:
-            "Licenses[0].tradeLicenseDetail.additionalDetail.applicationType",
+            "Licenses[0].applicationType",
           localePrefix: {
             moduleName: "TradeLicense",
             masterName: "ApplicationType"
