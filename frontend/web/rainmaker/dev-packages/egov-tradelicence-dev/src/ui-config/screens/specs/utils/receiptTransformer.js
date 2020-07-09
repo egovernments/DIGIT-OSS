@@ -262,11 +262,11 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
     } else {
       data.accessoriesList = "";
     }
-    // loadUserNameData(response.Licenses[0].auditDetails.lastModifiedBy);
-    loadEmployeeData(
-      response.Licenses[0].auditDetails.lastModifiedBy,
-      licenseIssueDate
-    );
+    loadUserNameData(response.Licenses[0].auditDetails.lastModifiedBy);
+    // loadEmployeeData(
+    //   response.Licenses[0].auditDetails.lastModifiedBy,
+    //   licenseIssueDate
+    // );
   }
 
   store.dispatch(prepareFinalObject("applicationDataForReceipt", data));

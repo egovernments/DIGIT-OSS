@@ -687,7 +687,7 @@ export const getFileUrlFromAPI = async fileStoreId => {
 };
 
 let getModifiedPayment = (payments) =>{
-  if(payments[0].paymentDetails.businessService === 'PT'){
+  if(payments[0].paymentDetails[0].businessService === 'PT'){
   let tax=0;
   let arrear=0;
   let penalty=0;
@@ -763,7 +763,7 @@ let getModifiedPayment = (payments) =>{
   set(payments, `[0].paymentDetails[0].bill.additionalDetails.interest`, interest);
   set(payments, `[0].paymentDetails[0].bill.additionalDetails.roundOff`, roundOff);
 }
-else if(payments[0].paymentDetails.businessService === 'TL'){
+else if(payments[0].paymentDetails[0].businessService === 'TL'){
   let tax=0;
   let adhocPenalty=0;
   let penalty=0;
