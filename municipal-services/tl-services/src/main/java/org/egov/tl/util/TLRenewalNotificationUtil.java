@@ -371,7 +371,8 @@ public class TLRenewalNotificationUtil {
     public String getOwnerPaymentMsg(TradeLicense license, Map<String, String> valMap, String localizationMessages) {
         String messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_RENEWAL_PAYMENT_OWNER, localizationMessages);
         messageTemplate = messageTemplate.replace("<2>", valMap.get(amountPaidKey));
-        messageTemplate = messageTemplate.replace("<3>", valMap.get(receiptNumberKey));
+        messageTemplate = messageTemplate.replace("<3>", license.getTradeName());
+        messageTemplate = messageTemplate.replace("<4>", valMap.get(receiptNumberKey));
         return messageTemplate;
     }
 
@@ -387,7 +388,8 @@ public class TLRenewalNotificationUtil {
     public String getPayerPaymentMsg(TradeLicense license, Map<String, String> valMap, String localizationMessages) {
         String messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_RENEWAL_PAYMENT_PAYER, localizationMessages);
         messageTemplate = messageTemplate.replace("<2>", valMap.get(amountPaidKey));
-        messageTemplate = messageTemplate.replace("<3>", valMap.get(receiptNumberKey));
+        messageTemplate = messageTemplate.replace("<3>", license.getTradeName());
+        messageTemplate = messageTemplate.replace("<4>", valMap.get(receiptNumberKey));
         return messageTemplate;
     }
 
