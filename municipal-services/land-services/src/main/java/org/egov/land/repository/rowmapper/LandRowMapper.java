@@ -121,8 +121,8 @@ public class LandRowMapper implements ResultSetExtractor<List<LandInfo>> {
 					.ownerShipPercentage(ownerShipPercentage)
 					.institutionId(rs.getString("institutionid"))
 					.auditDetails(auditdetails)
-//					.relationship(rs.getString("relationship") != null
-//							? Relationship.fromValue(rs.getString("relationship")) : null)
+					.relationship(rs.getString("relationship") != null
+							? Relationship.fromValue(rs.getString("relationship")) : null)
 					.build();
 			landInfo.addOwnersItem(owner);
 		}
