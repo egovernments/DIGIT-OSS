@@ -6,6 +6,534 @@
       "applicationType": "BUILDING_PLAN_SCRUTINY",
       "ServiceType": "NEW_CONSTRUCTION",
       "RiskType": "LOW",
+      "WFState": "INPROGRESS",
+      "docTypes": [
+        {
+          "code": "APPL.IDENTITYPROOF",
+          "required": true,
+          "order": 1
+        },
+        {
+          "code": "APPL.ADDRESSPROOF",
+          "required": true,
+          "order": 2
+        },
+        {
+          "code": "APPL.LTR",
+          "required": true,
+          "order": 3
+        },
+        {
+          "code": "APPL.TDP",
+          "required": true,
+          "order": 4
+        },
+        {
+          "code": "APPL.LAC",
+          "required": false,
+          "order": 5
+        },
+        {
+          "code": "APPL.SSC",
+          "required": false,
+          "order": 6
+        },
+        {
+          "code": "APPL.LSVS",
+          "required": false,
+          "order": 7
+        },
+        {
+          "code": "BPD.SP",
+          "required": true,
+          "order": 8
+        },
+        {
+          "code": "BPD.FP",
+          "required": false,
+          "order": 9
+        },
+        {
+          "code": "BPD.SCP",
+          "required": false,
+          "order": 10
+        },
+        {
+          "code": "BPD.EP",
+          "required": false,
+          "order": 11
+        },
+        {
+          "code": "BPD.SECP",
+          "required": false,
+          "order": 12
+        },
+        {
+          "code": "BPD.PP",
+          "required": false,
+          "order": 13
+        },
+        {
+          "code": "BPD.RP",
+          "required": false,
+          "order": 14
+        },
+        {
+          "code": "NOC.FIRE",
+          "required": false,
+          "order": 15
+        },
+        {
+          "code": "NOC.AIRPORT",
+          "required": false,
+          "order": 16
+        }
+      ]
+    },
+    {
+      "applicationType": "BUILDING_PLAN_SCRUTINY",
+      "ServiceType": "NEW_CONSTRUCTION",
+      "RiskType": "HIGH",
+      "WFState": "INPROGRESS",
+      "docTypes": [
+        {
+          "code": "APPL.IDENTITYPROOF",
+          "required": true,
+          "order": 17
+        },
+        {
+          "code": "APPL.ADDRESSPROOF",
+          "required": true,
+          "order": 18
+        },
+        {
+          "code": "APPL.LTR",
+          "required": true,
+          "order": 19
+        },
+        {
+          "code": "APPL.TDP",
+          "required": true,
+          "order": 20
+        },
+        {
+          "code": "APPL.LAC",
+          "required": false,
+          "order": 21
+        },
+        {
+          "code": "APPL.SSC",
+          "required": false,
+          "order": 22
+        },
+        {
+          "code": "APPL.LSVS",
+          "required": false,
+          "order": 23
+        },
+        {
+          "code": "BPD.SP",
+          "required": true,
+          "order": 24
+        },
+        {
+          "code": "BPD.FP",
+          "required": false,
+          "order": 25
+        },
+        {
+          "code": "BPD.SCP",
+          "required": false,
+          "order": 26
+        },
+        {
+          "code": "BPD.EP",
+          "required": false,
+          "order": 27
+        },
+        {
+          "code": "BPD.SECP",
+          "required": false,
+          "order": 28
+        },
+        {
+          "code": "BPD.PP",
+          "required": false,
+          "order": 29
+        },
+        {
+          "code": "BPD.RP",
+          "required": false,
+          "order": 30
+        },
+        {
+          "code": "NOC.FIRE",
+          "required": false,
+          "order": 31
+        },
+        {
+          "code": "NOC.AIRPORT",
+          "required": false,
+          "order": 32
+        }
+      ]
+    },
+    {
+      "applicationType": "BUILDING_PLAN_SCRUTINY",
+      "ServiceType": "NEW_CONSTRUCTION",
+      "RiskType": "MEDIUM",
+      "WFState": "INPROGRESS",
+      "docTypes": [
+        {
+          "code": "APPL.IDENTITYPROOF",
+          "required": true,
+          "order": 33
+        },
+        {
+          "code": "APPL.ADDRESSPROOF",
+          "required": true,
+          "order": 34
+        },
+        {
+          "code": "APPL.LTR",
+          "required": true,
+          "order": 35
+        },
+        {
+          "code": "APPL.TDP",
+          "required": true,
+          "order": 36
+        },
+        {
+          "code": "APPL.LAC",
+          "required": false,
+          "order": 37
+        },
+        {
+          "code": "APPL.SSC",
+          "required": false,
+          "order": 38
+        },
+        {
+          "code": "APPL.LSVS",
+          "required": false,
+          "order": 39
+        },
+        {
+          "code": "BPD.SP",
+          "required": true,
+          "order": 40
+        },
+        {
+          "code": "BPD.FP",
+          "required": false,
+          "order": 41
+        },
+        {
+          "code": "BPD.SCP",
+          "required": false,
+          "order": 42
+        },
+        {
+          "code": "BPD.EP",
+          "required": false,
+          "order": 43
+        },
+        {
+          "code": "BPD.SECP",
+          "required": false,
+          "order": 44
+        },
+        {
+          "code": "BPD.PP",
+          "required": false,
+          "order": 45
+        },
+        {
+          "code": "BPD.RP",
+          "required": false,
+          "order": 46
+        },
+        {
+          "code": "NOC.FIRE",
+          "required": false,
+          "order": 47
+        },
+        {
+          "code": "NOC.AIRPORT",
+          "required": false,
+          "order": 48
+        }
+      ]
+    },
+    {
+      "applicationType": "BUILDING_OC_PLAN_SCRUTINY",
+      "ServiceType": "NEW_CONSTRUCTION",
+      "RiskType": "MEDIUM",
+      "WFState": "INPROGRESS",
+      "docTypes": [
+        {
+          "code": "APPL.IDENTITYPROOF",
+          "required": true,
+          "order": 191
+        },
+        {
+          "code": "APPL.ADDRESSPROOF",
+          "required": true,
+          "order": 192
+        },
+        {
+          "code": "APPL.LTR",
+          "required": true,
+          "order": 193
+        },
+        {
+          "code": "APPL.TDP",
+          "required": true,
+          "order": 194
+        },
+        {
+          "code": "APPL.LAC",
+          "required": false,
+          "order": 195
+        },
+        {
+          "code": "APPL.SSC",
+          "required": false,
+          "order": 196
+        },
+        {
+          "code": "APPL.LSVS",
+          "required": false,
+          "order": 197
+        },
+        {
+          "code": "BPD.SP",
+          "required": true,
+          "order": 198
+        },
+        {
+          "code": "BPD.FP",
+          "required": false,
+          "order": 199
+        },
+        {
+          "code": "BPD.SCP",
+          "required": false,
+          "order": 210
+        },
+        {
+          "code": "BPD.EP",
+          "required": false,
+          "order": 211
+        },
+        {
+          "code": "BPD.SECP",
+          "required": false,
+          "order": 212
+        },
+        {
+          "code": "BPD.PP",
+          "required": false,
+          "order": 213
+        },
+        {
+          "code": "BPD.RP",
+          "required": false,
+          "order": 214
+        },
+        {
+          "code": "NOC.FIRE",
+          "required": false,
+          "order": 215
+        },
+        {
+          "code": "NOC.AIRPORT",
+          "required": false,
+          "order": 216
+        }
+      ]
+    },
+    {
+      "applicationType": "BUILDING_OC_PLAN_SCRUTINY",
+      "ServiceType": "NEW_CONSTRUCTION",
+      "RiskType": "LOW",
+      "WFState": "INPROGRESS",
+      "docTypes": [
+        {
+          "code": "APPL.IDENTITYPROOF",
+          "required": true,
+          "order": 151
+        },
+        {
+          "code": "APPL.ADDRESSPROOF",
+          "required": true,
+          "order": 152
+        },
+        {
+          "code": "APPL.LTR",
+          "required": true,
+          "order": 153
+        },
+        {
+          "code": "APPL.TDP",
+          "required": true,
+          "order": 154
+        },
+        {
+          "code": "APPL.LAC",
+          "required": false,
+          "order": 155
+        },
+        {
+          "code": "APPL.SSC",
+          "required": false,
+          "order": 156
+        },
+        {
+          "code": "APPL.LSVS",
+          "required": false,
+          "order": 157
+        },
+        {
+          "code": "BPD.SP",
+          "required": true,
+          "order": 158
+        },
+        {
+          "code": "BPD.FP",
+          "required": false,
+          "order": 159
+        },
+        {
+          "code": "BPD.SCP",
+          "required": false,
+          "order": 160
+        },
+        {
+          "code": "BPD.EP",
+          "required": false,
+          "order": 161
+        },
+        {
+          "code": "BPD.SECP",
+          "required": false,
+          "order": 162
+        },
+        {
+          "code": "BPD.PP",
+          "required": false,
+          "order": 163
+        },
+        {
+          "code": "BPD.RP",
+          "required": false,
+          "order": 164
+        },
+        {
+          "code": "NOC.FIRE",
+          "required": false,
+          "order": 165
+        },
+        {
+          "code": "NOC.AIRPORT",
+          "required": false,
+          "order": 166
+        }
+      ]
+    },
+    {
+      "applicationType": "BUILDING_OC_PLAN_SCRUTINY",
+      "ServiceType": "NEW_CONSTRUCTION",
+      "RiskType": "HIGH",
+      "WFState": "INPROGRESS",
+      "docTypes": [
+        {
+          "code": "APPL.IDENTITYPROOF",
+          "required": true,
+          "order": 167
+        },
+        {
+          "code": "APPL.ADDRESSPROOF",
+          "required": true,
+          "order": 168
+        },
+        {
+          "code": "APPL.LTR",
+          "required": true,
+          "order": 173
+        },
+        {
+          "code": "APPL.TDP",
+          "required": true,
+          "order": 174
+        },
+        {
+          "code": "APPL.LAC",
+          "required": false,
+          "order": 175
+        },
+        {
+          "code": "APPL.SSC",
+          "required": false,
+          "order": 176
+        },
+        {
+          "code": "APPL.LSVS",
+          "required": false,
+          "order": 177
+        },
+        {
+          "code": "BPD.SP",
+          "required": true,
+          "order": 178
+        },
+        {
+          "code": "BPD.FP",
+          "required": false,
+          "order": 179
+        },
+        {
+          "code": "BPD.SCP",
+          "required": false,
+          "order": 180
+        },
+        {
+          "code": "BPD.EP",
+          "required": false,
+          "order": 181
+        },
+        {
+          "code": "BPD.SECP",
+          "required": false,
+          "order": 182
+        },
+        {
+          "code": "BPD.PP",
+          "required": false,
+          "order": 183
+        },
+        {
+          "code": "BPD.RP",
+          "required": false,
+          "order": 184
+        },
+        {
+          "code": "NOC.FIRE",
+          "required": false,
+          "order": 185
+        },
+        {
+          "code": "NOC.AIRPORT",
+          "required": false,
+          "order": 186
+        }
+      ]
+    },
+     {
+      "applicationType": "BUILDING_PLAN_SCRUTINY",
+      "ServiceType": "NEW_CONSTRUCTION",
+      "RiskType": "LOW",
       "WFState": "INITIATED",
       "docTypes": [
         {
