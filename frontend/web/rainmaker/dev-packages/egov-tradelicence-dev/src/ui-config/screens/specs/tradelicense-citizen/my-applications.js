@@ -54,7 +54,8 @@ const screenConfig = {
               },
               {
                 label: "TL_COMMON_TABLE_COL_ULB_CODE",
-                jsonPath: "tradeLicenseDetail.address.city"
+                jsonPath: "tradeLicenseDetail.address.city",
+                prefix: "TENANT_TENANTS_"
               },
               {
                 label: "TL_COMMON_TABLE_COL_STATUS",

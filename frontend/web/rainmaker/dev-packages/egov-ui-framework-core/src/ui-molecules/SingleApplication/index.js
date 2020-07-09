@@ -150,38 +150,17 @@ class SingleApplication extends React.Component {
   generateLabelKey = (content, item) => {
     let LabelKey = "";
     if (content.prefix && content.suffix) {
-      LabelKey = `${content.prefix}${get(item, content.jsonPath,"").replace(
-        /[._:-\s\/]/g,
-        "_"
-      )}${content.suffix}`;
-    } else if (content.prefix) {
-      LabelKey = `${content.prefix}${get(item, content.jsonPath,"").replace(
-        /[._:-\s\/]/g,
-        "_"
-      )}`;
-    } else if (content.suffix) {
-      LabelKey = `${get(item, content.jsonPath,"").replace(/[._:-\s\/]/g, "_")}${
-        content.suffix
-      }`;
-    } else {
-      LabelKey = content.label === "PT_MUTATION_CREATION_DATE" ? `${epochToDate(get(item, content.jsonPath,""))}` : `${get(item, content.jsonPath,"")}`;
-    }
-    return LabelKey;
-  };
-  generateLabelKey = (content, item) => {
-    let LabelKey = "";
-    if (content.prefix && content.suffix) {
       LabelKey = `${content.prefix}${get(item, content.jsonPath).replace(
         /[._:-\s\/]/g,
         "_"
-      )}${content.suffix}`;
+      ).toUpperCase()}${content.suffix}`;
     } else if (content.prefix) {
       LabelKey = `${content.prefix}${get(item, content.jsonPath).replace(
         /[._:-\s\/]/g,
         "_"
-      )}`;
+      ).toUpperCase()}`;
     } else if (content.suffix) {
-      LabelKey = `${get(item, content.jsonPath).replace(/[._:-\s\/]/g, "_")}${
+      LabelKey = `${get(item, content.jsonPath).replace(/[._:-\s\/]/g, "_").toUpperCase()}${
         content.suffix
       }`;
     } else {
