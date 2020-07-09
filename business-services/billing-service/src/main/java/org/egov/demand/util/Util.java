@@ -1,5 +1,6 @@
 package org.egov.demand.util;
 
+import static org.egov.demand.util.Constants.ADVANCE_BUSINESSSERVICE_JSONPATH_CODE;
 import static org.egov.demand.util.Constants.INVALID_TENANT_ID_MDMS_KEY;
 import static org.egov.demand.util.Constants.INVALID_TENANT_ID_MDMS_MSG;
 
@@ -29,6 +30,7 @@ import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.CollectionUtils;
 
 @Component
 @Slf4j
@@ -58,10 +60,6 @@ public class Util {
 
 		List<MasterDetail> masterDetails = new ArrayList<>();
 		names.forEach(name -> {
-
-			if (name.equalsIgnoreCase(Constants.BUSINESSSERVICE_MASTERNAME))
-				masterDetails.add(MasterDetail.builder().name(name).filter(filter).build());
-			else
 				masterDetails.add(MasterDetail.builder().name(name).build());
 		});
 
@@ -155,5 +153,30 @@ public class Util {
         	throw new CustomException(Constants.EG_BS_JSON_EXCEPTION_KEY, Constants.EG_BS_JSON_EXCEPTION_MSG);
         }
     }
+
+
+    public String getApportionURL(){
+		StringBuilder builder = new StringBuilder(appProps.getApportionHost());
+		builder.append(appProps.getApportionEndpoint());
+		return builder.toString();
+	}
+
+	/**
+	 * Fetches the isAdvanceAllowed flag for the given businessService
+	 * @param businessService
+	 * @param mdmsData
+	 * @return
+	 */
+	public Boolean getIsAdvanceAllowed(String businessService, DocumentContext mdmsData){
+		String jsonpath = ADVANCE_BUSINESSSERVICE_JSONPATH_CODE;
+		jsonpath = jsonpath.replace("{}",businessService);
+
+		List<Boolean> isAdvanceAllowed = mdmsData.read(jsonpath);
+
+		if(CollectionUtils.isEmpty(isAdvanceAllowed))
+			throw new CustomException("BUSINESSSERVICE_ERROR","Failed to fetch isAdvanceAllowed for businessService: "+businessService);
+
+		return isAdvanceAllowed.get(0);
+	}
 	
 }

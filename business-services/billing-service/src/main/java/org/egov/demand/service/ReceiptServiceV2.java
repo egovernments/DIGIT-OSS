@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import com.jayway.jsonpath.DocumentContext;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.demand.model.BillAccountDetailV2;
 import org.egov.demand.model.BillDetailV2;
@@ -19,13 +20,18 @@ import org.egov.demand.model.Demand;
 import org.egov.demand.model.DemandCriteria;
 import org.egov.demand.model.DemandDetail;
 import org.egov.demand.repository.BillRepositoryV2;
+import org.egov.demand.util.Util;
 import org.egov.demand.web.contract.BillRequestV2;
 import org.egov.demand.web.contract.DemandRequest;
+import org.egov.mdms.model.MdmsCriteriaReq;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import lombok.extern.slf4j.Slf4j;
+
+import static org.egov.demand.util.Constants.*;
 
 @Service
 @Slf4j
@@ -36,7 +42,10 @@ public class ReceiptServiceV2 {
 	
 	@Autowired
 	private BillRepositoryV2 billRepository;
-	
+
+	@Autowired
+	private Util util;
+
 
 	public void updateDemandFromReceipt(BillRequestV2 billReq, Boolean isReceiptCancellation) {
 
@@ -76,12 +85,13 @@ public class ReceiptServiceV2 {
 		DemandCriteria demandCriteria = DemandCriteria.builder().demandId(demandIds).tenantId(tenantId).build();
 		List<Demand> demandsToBeUpdated = demandService.getDemands(demandCriteria, requestInfo);
 		Map<String, Demand> demandIdMap = demandsToBeUpdated.stream().collect(Collectors.toMap(Demand::getId, Function.identity()));
+		DocumentContext mdmsData = getTaxHeadMaster(tenantId,billRequest.getRequestInfo());
 
 		for (BillV2 bill : bills) {
-
+			String advanceTaxhead = getAdvanceTaxhead(bill.getBusinessService(), mdmsData);
 			mapOfBillIdAndStatus.put(bill.getId(), bill.getStatus().toString());
 			for (BillDetailV2 billDetail : bill.getBillDetails())
-				updateDemandFromBillDetail(billDetail, demandIdMap.get(billDetail.getDemandId()), isReceiptCancellation);
+				updateDemandFromBillDetail(billDetail, demandIdMap.get(billDetail.getDemandId()), isReceiptCancellation,advanceTaxhead);
 
 		}
 
@@ -92,10 +102,9 @@ public class ReceiptServiceV2 {
 	/**
 	 * Updates the collection amount in the incoming demand object based on the billDetail object
 	 * 
-	 * @param demandIdMap
 	 * @param billDetail
 	 */
-	private void updateDemandFromBillDetail(BillDetailV2 billDetail, Demand demand, Boolean isRecieptCancellation) {
+	private void updateDemandFromBillDetail(BillDetailV2 billDetail, Demand demand, Boolean isRecieptCancellation, String advanceTaxHead) {
 
 		Map<String, List<DemandDetail>> taxHeadCodeDemandDetailgroup = demand.getDemandDetails().stream()
 				.collect(Collectors.groupingBy(DemandDetail::getTaxHeadMasterCode));
@@ -121,7 +130,7 @@ public class ReceiptServiceV2 {
 			 */
 			if (length == 1) {
 
-				updateSingleDemandDetail(currentDetails.get(0), billAccDetail, isRecieptCancellation);
+				updateSingleDemandDetail(currentDetails.get(0), billAccDetail, isRecieptCancellation, advanceTaxHead);
 			}
 			/*
 			 * if multiple demandDetails point to one BillAccountDetial
@@ -160,10 +169,13 @@ public class ReceiptServiceV2 {
 	 * @param isRecieptCancellation if the call is made for payment or cancellation
 	 */
 	private void updateSingleDemandDetail(DemandDetail currentDetail, BillAccountDetailV2 billAccDetail,
-			Boolean isRecieptCancellation) {
+			Boolean isRecieptCancellation, String advanceTaxHead) {
 		
 		BigDecimal oldCollectedAmount = currentDetail.getCollectionAmount();
 		BigDecimal newAmount = billAccDetail.getAdjustedAmount();
+
+		if(advanceTaxHead!=null && billAccDetail.getTaxHeadCode().equalsIgnoreCase(advanceTaxHead))
+			currentDetail.setTaxAmount(billAccDetail.getAmount());
 
 		if (isRecieptCancellation)
 			currentDetail.setCollectionAmount(oldCollectedAmount.subtract(newAmount));
@@ -274,6 +286,38 @@ public class ReceiptServiceV2 {
 
 			detail.setCollectionAmount(resultantCollectionAmt);
 		}
+	}
+
+
+	/**
+	 * Fetches the required master data from MDMS service
+	 * @return
+	 */
+	private DocumentContext getTaxHeadMaster(String tenantId, RequestInfo requestInfo){
+		/*
+		 * Preparing the mdms request with billing service master and calling the mdms search API
+		 */
+		MdmsCriteriaReq mdmsReq = util.prepareMdMsRequest(tenantId, MODULE_NAME, Collections.singletonList(TAXHEAD_MASTERNAME), MDMS_CODE_FILTER,
+				requestInfo);
+		DocumentContext mdmsData = util.getAttributeValues(mdmsReq);
+
+		return mdmsData;
+	}
+
+
+	private String getAdvanceTaxhead(String businessService, DocumentContext mdmsData){
+		// Create the jsonPath to fetch the advance taxhead for the given businessService
+		String jsonpath = ADVANCE_TAXHEAD_JSONPATH_CODE;
+		jsonpath = jsonpath.replace("{}",businessService);
+
+		List<String> taxHeads = mdmsData.read(jsonpath);
+
+		if(CollectionUtils.isEmpty(taxHeads))
+			return null;
+
+		String advanceTaxHeadCode =  taxHeads.get(0);
+
+		return advanceTaxHeadCode;
 	}
 
 }

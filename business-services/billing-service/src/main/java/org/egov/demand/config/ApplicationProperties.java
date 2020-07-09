@@ -151,4 +151,12 @@ public class ApplicationProperties {
     @Value("${search.pagesize.default}")
     private String commonSearchDefaultLimit;
 
+
+    // Apportioning
+	@Value("${egov.apportion.host}")
+	private String apportionHost;
+
+	@Value("${egov.apportion.endpoint}")
+	private String apportionEndpoint;
+
 }
