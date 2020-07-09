@@ -765,7 +765,7 @@ export const footerReview = (
     `licenseCount`,
     1
   );
-  let declaration =  get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tradeLicenseDetail.additionalDetail.declaration")
+  //let declaration =  get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tradeLicenseDetail.additionalDetail.declaration")
 
 
 
@@ -851,13 +851,14 @@ export const footerReview = (
                 },
 
               },
-              visible:(getButtonVisibility(status, "APPROVED")||getButtonVisibility(status, "EXPIRED"))&&(responseLength === 1 ) && (!declaration),
+              visible:(getButtonVisibility(status, "APPROVED")||getButtonVisibility(status, "EXPIRED"))&&(responseLength === 1 ),
             },
             submitButton: {
               componentPath: "Button",
               props: {
                 variant: "contained",
                 color: "primary",
+                disabled:"true",
                 style: {
                   minWidth: "180px",
                   height: "48px",
@@ -887,7 +888,7 @@ export const footerReview = (
                 },
 
               },
-              visible:(getButtonVisibility(status, "APPROVED")||getButtonVisibility(status, "EXPIRED"))&&(responseLength === 1 ) && (declaration),
+              visible:(getButtonVisibility(status, "APPROVED")||getButtonVisibility(status, "EXPIRED"))&&(responseLength === 1 ),
             },
             makePayment: {
               componentPath: "Button",

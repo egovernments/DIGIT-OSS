@@ -197,9 +197,28 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
       "Licenses[0].applicationType"
     );
 
-    if(status !=="APPROVED" && applicationType ==="RENEWAL")
+    if(status ==="APPROVED" )
     {
     
+      dispatch(handleField(
+        "search-preview",
+        "components.div.children.tradeReviewDetails.children.cardContent.children.reviewDeclaration",
+        "visible",
+        true
+      ))
+
+    }
+    else if(applicationType ==="RENEWAL")
+    {
+      dispatch(handleField(
+        "search-preview",
+        "components.div.children.tradeReviewDetails.children.cardContent.children.reviewDeclaration",
+        "visible",
+        false
+      ))
+
+    }
+    else    {
       dispatch(handleField(
         "search-preview",
         "components.div.children.tradeReviewDetails.children.cardContent.children.reviewDeclaration",

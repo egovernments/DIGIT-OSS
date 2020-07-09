@@ -103,13 +103,13 @@ const mapDispatchToProps = dispatch => {
   return {
     approveCheck: (jsonPath, value) => {
       dispatch(prepareFinalObject(jsonPath, value));   
-      if(value) 
+      if(!value) 
       {
         dispatch(
           handleField(
             "search-preview",
             "components.div.children.footer.children.container.children.rightdiv.children.editButton",
-            "visible",
+            "props.disabled",
             false
           )
         ); 
@@ -117,25 +117,25 @@ const mapDispatchToProps = dispatch => {
           handleField(
             "search-preview",
             "components.div.children.footer.children.container.children.rightdiv.children.submitButton",
-            "visible",
+            "props.disabled",
             true
           )
-        );
+        ); 
     }
     else{
-      dispatch(
+       dispatch(
         handleField(
           "search-preview",
           "components.div.children.footer.children.container.children.rightdiv.children.submitButton",
-          "visible",
+          "props.disabled",
           false
         )
-      );
-      dispatch(
+      ); 
+     dispatch(
         handleField(
           "search-preview",
           "components.div.children.footer.children.container.children.rightdiv.children.editButton",
-          "visible",
+          "props.disabled",
           true
         )
       ); 
