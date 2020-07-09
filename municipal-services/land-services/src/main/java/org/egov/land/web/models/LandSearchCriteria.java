@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
@@ -37,6 +38,9 @@ public class LandSearchCriteria {
 
     @JsonProperty("limit")
     private Integer limit;
+    
+    @JsonIgnore
+    private List<String> userIds; 
 
 	public boolean isEmpty() {
 		return (this.tenantId == null && this.ids == null && this.landUId == null && this.mobileNumber == null);
