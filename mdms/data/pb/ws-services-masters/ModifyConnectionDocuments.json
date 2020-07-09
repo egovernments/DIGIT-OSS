@@ -3,32 +3,6 @@
   "moduleName": "ws-services-masters",
   "ModifyConnectionDocuments": [
     {
-      "code": "OWNER.AUTHORIZATION",
-      "documentType": "OWNER",
-      "required": false,
-      "active": true,
-      "hasDropdown": true,
-      "dropdownData": [
-        {
-          "code": "OWNER.AUTHORIZATION.AGREEMENT",
-          "active": true
-        },
-        {
-          "code": "OWNER.AUTHORIZATION.NOTARY",
-          "active": true
-        },
-        {
-          "code": "OWNER.AUTHORIZATION.AFFIDAVIT",
-          "active": true
-        },
-        {
-          "code": "OWNER.AUTHORIZATION.TENANCY",
-          "active": true
-        }
-      ],
-      "description": "Documents which is should prove that the Owner is authorized person for the Property"
-    },
-    {
       "code": "OWNER.IDENTITYPROOF",
       "documentType": "OWNER",
       "required": false,
@@ -107,34 +81,6 @@
       "description": "ELECTRICITY_BILL_DESCRIPTION"
     },
     {
-      "code": "PLUMBER_REPORT_DRAWING",
-      "documentType": "PLUMBER_REPORT_DRAWING",
-      "active": true,
-      "required": false,
-      "hasDropdown": true,
-      "dropdownData": [
-        {
-          "code": "PLUMBER_REPORT_DRAWING",
-          "active": true
-        }
-      ],
-      "description": "PLUMBER_REPORT_DRAWING_DESCRIPTION"
-    },
-    {
-      "code": "BUILDING_PLAN_OR_COMPLETION_CERTIFICATE",
-      "documentType": "BUILDING_PLAN_OR_COMPLETION_CERTIFICATE",
-      "active": true,
-      "required": false,
-       "hasDropdown": true,
-      "dropdownData": [
-        {
-          "code": "BUILDING_PLAN_OR_COMPLETION_CERTIFICATE",
-          "active": true
-        }
-      ],
-      "description": "BUILDING_PLAN_OR_COMPLETION_CERTIFICATE_DESCRIPTION"
-    },
-    {
       "code": "PROPERTY_TAX_RECIEPT",
       "documentType": "PROPERTY_TAX_RECIEPT",
       "active": true,
@@ -147,6 +93,46 @@
         }
       ],
       "description": "PROPERTY_TAX_RECIEPT_DESCRIPTION"
+    },
+    {
+      "code": "APPLICANT.SELF_DECLARATION",
+      "documentType": "APPLICANT.SELF_DECLARATION",
+      "active": true,
+      "required": false,
+      "hasDropdown": true,
+      "dropdownData": [
+        {
+          "code": "APPLICANT.SELF_DECLARATION",
+          "active": true
+        }
+       ],
+      "description":"APPLICANT.SELF_DECLARATION"
+    },
+    {
+      "code": "OWNER.AUTHORIZATION",
+      "documentType": "OWNER",
+      "required": false,
+      "active": true,
+      "hasDropdown": true,
+      "dropdownData": [
+        {
+          "code": "OWNER.AUTHORIZATION.AGREEMENT",
+          "active": true
+        },
+        {
+          "code": "OWNER.AUTHORIZATION.NOTARY",
+          "active": true
+        },
+        {
+          "code": "OWNER.AUTHORIZATION.AFFIDAVIT",
+          "active": true
+        },
+        {
+          "code": "OWNER.AUTHORIZATION.TENANCY",
+          "active": true
+        }
+      ],
+      "description": "Documents which is should prove that the Owner is authorized person for the Property"
     },
     {
       "code": "OWNER.NOC",
