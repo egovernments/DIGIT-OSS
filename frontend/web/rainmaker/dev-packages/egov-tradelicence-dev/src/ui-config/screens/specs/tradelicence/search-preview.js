@@ -192,9 +192,12 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
       state,
       "screenConfiguration.preparedFinalObject.Licenses[0].status"
     );
+    const applicationType = get(
+      state.screenConfiguration.preparedFinalObject,
+      "Licenses[0].applicationType"
+    );
 
-
-    if(status !=="APPROVED" )
+    if(status !=="APPROVED" && applicationType ==="RENEWAL")
     {
     
       dispatch(handleField(
@@ -362,10 +365,7 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
       );
     }
 
-    const applicationType = get(
-      state.screenConfiguration.preparedFinalObject,
-      "Licenses[0].applicationType"
-    );
+   
 
     const headerrow = getCommonContainer({
       header: getCommonHeader({
