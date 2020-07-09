@@ -171,7 +171,7 @@ public class PropertyQueryBuilder {
 			if(appendAndQuery)
 				builder.append(AND_QUERY);
 			builder.append("property.acknowldgementnumber IN (").append(createQuery(acknowledgementIds)).append(")");
-			addToPreparedStatement(preparedStmtList, acknowledgementIds);
+			addToPreparedStatementWithUpperCase(preparedStmtList, acknowledgementIds);
 			appendAndQuery= true;
 		}
 		
