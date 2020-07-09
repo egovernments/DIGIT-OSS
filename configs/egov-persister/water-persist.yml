@@ -7,7 +7,7 @@ serviceMaps:
    fromTopic: save-ws-connection
    isTransaction: true
    queryMaps: 
-    - query: INSERT INTO eg_ws_connection (id, tenantid, property_id, applicationno, applicationstatus, status, connectionno, oldconnectionno,roadcuttingarea,action,roadtype, createdby, lastmodifiedby, createdtime, lastmodifiedtime, applicationtype, dateEffectiveFrom) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?);
+    - query: INSERT INTO eg_ws_connection (id, tenantid, property_id, applicationno, applicationstatus, status, connectionno, oldconnectionno,roadcuttingarea,action,roadtype, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?);
       basePath: $.WaterConnection
       jsonMaps:
        - jsonPath: $.WaterConnection.id 
@@ -39,10 +39,6 @@ serviceMaps:
        - jsonPath: $.WaterConnection.auditDetails.createdTime
 
        - jsonPath: $.WaterConnection.auditDetails.lastModifiedTime
-       
-       - jsonPath: $.WaterConnection.applicationType
-       
-       - jsonPath: $.WaterConnection.dateEffectiveFrom
 
        
     - query: INSERT INTO eg_ws_service(connection_id,connectionCategory,connectionType,waterSource,meterId,meterInstallationDate,pipeSize,noOfTaps,connectionexecutiondate,proposedPipeSize,proposedTaps, appCreatedDate, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
@@ -80,35 +76,8 @@ serviceMaps:
 
        - jsonPath: $.WaterConnection.auditDetails.lastModifiedTime
        
-   
-    - query: INSERT INTO eg_ws_connectionholder(tenantid, connectionid, userid, status, isprimaryholder, connectionholdertype, holdershippercentage, relationship, createdby, createdtime, lastmodifiedby, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
-      basePath: $.WaterConnection.connectionHolders.*
-      jsonMaps:      
-
-       - jsonPath: $.WaterConnection.tenantId
-
-       - jsonPath: $.WaterConnection.id
-
-       - jsonPath: $.WaterConnection.connectionHolders.*.uuid
-
-       - jsonPath: $.WaterConnection.connectionHolders.*.status
-
-       - jsonPath: $.WaterConnection.connectionHolders.*.isPrimaryOwner
-
-       - jsonPath: $.WaterConnection.connectionHolders.*.ownerType
-
-       - jsonPath: $.WaterConnection.connectionHolders.*.ownerShipPercentage
-
-       - jsonPath: $.WaterConnection.connectionHolders.*.relationship
-
-       - jsonPath: $.WaterConnection.auditDetails.createdBy
-
-       - jsonPath: $.WaterConnection.auditDetails.createdTime
-
-       - jsonPath: $.WaterConnection.auditDetails.lastModifiedBy
-
-       - jsonPath: $.WaterConnection.auditDetails.lastModifiedTime   
-
+       
+       
 
  - version: 1.0
    name: WaterConnection
@@ -341,7 +310,3 @@ serviceMaps:
 
       - jsonPath: $.WaterConnection.id   
    
-
-
-
-
