@@ -1977,8 +1977,12 @@ public class CreateVoucher {
 
 			query.setString(VoucherConstant.GLCODE, glcode);
 			query.setCacheable(true);
-			if (null == query.list() || query.list().size() == 0)
-				throw new ApplicationRuntimeException("This code is not a control code" + glcode);
+			/**
+			 * Commented to fix the validation issue, if glcode is control code while creating voucher and 
+			 * if the same code is non control code while doing payment
+			 */
+			/*if (null == query.list() || query.list().size() == 0)
+				throw new ApplicationRuntimeException("This code is not a control code" + glcode);*/
 
 			// validate subledger Detailtypeid
 
@@ -1990,9 +1994,13 @@ public class CreateVoucher {
 				qry.setString(VoucherConstant.GLCODE, glcode);
 				qry.setInteger("detailTypeId", Integer.valueOf(detailtypeid));
 				qry.setCacheable(true);
-				if (null == qry.list() || qry.list().size() == 0)
+				/**
+				 * Commented to fix the validation issue, if glcode is control code while creating voucher and 
+				 * if the same code is non control code while doing payment
+				 */
+				/*if (null == qry.list() || qry.list().size() == 0)
 					throw new ApplicationRuntimeException(
-							"The subledger type mapped to this account code is not correct " + glcode);
+							"The subledger type mapped to this account code is not correct " + glcode);*/
 			} else
 				throw new ApplicationRuntimeException("Subledger type value is missing for account code " + glcode);
 
