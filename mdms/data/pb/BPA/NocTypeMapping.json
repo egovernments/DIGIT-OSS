@@ -6,7 +6,7 @@
       "applicationType": "BUILDING_PLAN_SCRUTINY",
       "serviceType": "NEW_CONSTRUCTION",
       "riskType": "ALL",
-      "nocTriggerState": "CITIZEN_APPROVAL_PENDING",
+      "nocTriggerState": "CITIZEN_APPROVAL_INPROCESS",
       "nocTypes": [
         {
           "type": "AIRPORT_AUTHORITY",
@@ -24,7 +24,7 @@
       "applicationType": "BUILDING_PLAN_SCRUTINY",
       "serviceType": "NEW_CONSTRUCTION",
       "riskType": "LOW",
-      "nocTriggerState": "CITIZEN_APPROVAL_PENDING",
+      "nocTriggerState": "CITIZEN_APPROVAL_INPROCESS",
       "nocTypes": [
         {
           "type": "AIRPORT_AUTHORITY",
@@ -42,7 +42,7 @@
       "applicationType": "BUILDING_OC_PLAN_SCRUTINY",
       "serviceType": "NEW_CONSTRUCTION",
       "riskType": "ALL",
-      "nocTriggerState": "CITIZEN_APPROVAL_PENDING",
+      "nocTriggerState": "CITIZEN_APPROVAL_INPROCESS",
       "nocTypes": [
         {
           "type": "AIRPORT_AUTHORITY",
@@ -60,7 +60,7 @@
       "applicationType": "BUILDING_OC_PLAN_SCRUTINY",
       "serviceType": "NEW_CONSTRUCTION",
       "riskType": "LOW",
-      "nocTriggerState": "CITIZEN_APPROVAL_PENDING",
+      "nocTriggerState": "CITIZEN_APPROVAL_INPROCESS",
       "nocTypes": [
         {
           "type": "AIRPORT_AUTHORITY",
