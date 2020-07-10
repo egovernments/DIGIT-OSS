@@ -69,6 +69,7 @@ CREATE TABLE IF NOT EXISTS eg_land_ownerInfo(
 	institutionId character varying(64),
 	additionalDetails JSONB,
 	landInfoId character varying(64),
+	relationship character varying(64),
 	
 	createdby character varying(64),
     lastmodifiedby character varying(64),
@@ -168,6 +169,7 @@ CREATE TABLE IF NOT EXISTS eg_land_owner_auditdetails
 	institutionId character varying(64),
 	additionalDetails JSONB,
 	landInfoId character varying(64),
+	relationship character varying(64),
 	
 	createdby character varying(64),
     lastmodifiedby character varying(64),
