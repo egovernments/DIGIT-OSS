@@ -217,6 +217,40 @@ serviceMaps:
 
           - jsonPath: $.LandInfo.id
 
+       - query: INSERT INTO eg_land_owner_auditdetails SELECT * FROM eg_land_ownerInfo WHERE id =?;
+         basePath: LandInfo.owners.*
+         jsonMaps:
+
+          - jsonPath: $.LandInfo.owners.*.ownerId
+
+
+       - query: INSERT INTO eg_land_institution_auditdetails SELECT * FROM eg_land_institution WHERE id =?;
+         basePath: LandInfo.institution
+         jsonMaps:
+
+          - jsonPath: $.LandInfo.institution.id
+
+
+       - query: INSERT INTO eg_land_unit_auditdetails SELECT * FROM eg_land_unit WHERE id =?;
+         basePath: LandInfo.unit.*
+         jsonMaps:
+
+          - jsonPath: $.LandInfo.unit.*.id
+
+
+       - query: INSERT INTO eg_land_address_auditdetails SELECT * FROM eg_land_address WHERE id =?;
+         basePath: LandInfo.address
+         jsonMaps:
+
+          - jsonPath: $.LandInfo.address.id
+
+
+       - query: INSERT INTO eg_land_geolocation_auditdetails SELECT * FROM eg_land_geolocation WHERE id =?;
+         basePath: LandInfo.address.geoLocation
+         jsonMaps:
+
+          - jsonPath: $.LandInfo.address.geoLocation.id
+
 
  - version: 1.0
    description: update LandInfo details in eg_land_landinfo table
@@ -467,4 +501,40 @@ serviceMaps:
           - jsonPath: $.LandInfo.unit.*.auditDetails.lastModifiedBy
 
           - jsonPath: $.LandInfo.unit.*.auditDetails.lastModifiedTime
+
           
+       - query: INSERT INTO eg_land_owner_auditdetails SELECT * FROM eg_land_ownerInfo WHERE id =?;
+         basePath: LandInfo.owners.*
+         jsonMaps:
+
+          - jsonPath: $.LandInfo.owners.*.ownerId
+
+
+       - query: INSERT INTO eg_land_institution_auditdetails SELECT * FROM eg_land_institution WHERE id =?;
+         basePath: LandInfo.institution
+         jsonMaps:
+
+          - jsonPath: $.LandInfo.institution.id
+
+
+       - query: INSERT INTO eg_land_unit_auditdetails SELECT * FROM eg_land_unit WHERE id =?;
+         basePath: LandInfo.unit.*
+         jsonMaps:
+
+          - jsonPath: $.LandInfo.unit.*.id
+
+
+       - query: INSERT INTO eg_land_address_auditdetails SELECT * FROM eg_land_address WHERE id =?;
+         basePath: LandInfo.address
+         jsonMaps:
+
+          - jsonPath: $.LandInfo.address.id
+
+
+       - query: INSERT INTO eg_land_geolocation_auditdetails SELECT * FROM eg_land_geolocation WHERE id =?;
+         basePath: LandInfo.address.geoLocation
+         jsonMaps:
+
+          - jsonPath: $.LandInfo.address.geoLocation.id
+
+
