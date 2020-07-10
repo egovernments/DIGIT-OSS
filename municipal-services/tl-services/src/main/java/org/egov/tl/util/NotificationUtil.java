@@ -107,8 +107,13 @@ public class NotificationUtil {
 			messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_SENDBACK_TO_INSPECTION, localizationMessage);
 			message = getSendBackToInspcetionMsg(license, messageTemplate);
 			break;
+			
+		  case ACTION_STATUS_PENDINGAPPROVAL:
+	          messageTemplate = getMessageTemplate(NOTIFICATION_PENDINGAPPROVAL, localizationMessage);
+	          message = getPendingApprovalMsg(license, messageTemplate);
+	          break;
 		}
-
+	
 		return message;
 	}
 
@@ -236,6 +241,8 @@ public class NotificationUtil {
 	private String getApprovedMsg(TradeLicense license, BigDecimal amountToBePaid, String message) {
 		message = message.replace("<2>", license.getTradeName());
 		message = message.replace("<3>", amountToBePaid.toString());
+		message = message.replace("<applicationNumber>", license.getApplicationNumber());
+		message = message.replace("<tenantId>",license.getTenantId());
 		return message;
 	}
 
@@ -331,6 +338,8 @@ public class NotificationUtil {
 		messageTemplate = messageTemplate.replace("<2>", valMap.get(amountPaidKey));
 		messageTemplate = messageTemplate.replace("<3>", license.getTradeName());
 		messageTemplate = messageTemplate.replace("<4>", valMap.get(receiptNumberKey));
+		messageTemplate = messageTemplate.replace("<applicationNumber>", license.getApplicationNumber());
+		messageTemplate = messageTemplate.replace("<tenantId>",license.getTenantId());
 		return messageTemplate;
 	}
 
@@ -348,6 +357,8 @@ public class NotificationUtil {
 		messageTemplate = messageTemplate.replace("<2>", valMap.get(amountPaidKey));
 		messageTemplate = messageTemplate.replace("<3>", license.getTradeName());
 		messageTemplate = messageTemplate.replace("<4>", valMap.get(receiptNumberKey));
+		messageTemplate = messageTemplate.replace("<applicationNumber>", license.getApplicationNumber());
+		messageTemplate = messageTemplate.replace("<tenantId>",license.getTenantId());
 		return messageTemplate;
 	}
 
@@ -530,4 +541,10 @@ public class NotificationUtil {
 
 		return message;
 	}
+	
+	 private String getPendingApprovalMsg(TradeLicense license, String message) {
+	        message = message.replace("<APPLICATION_NUMBER>", license.getApplicationNumber());
+	        return message;
+	    }
+	 
 }

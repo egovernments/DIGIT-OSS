@@ -76,6 +76,8 @@ public class TLConstants {
     public static final String NOTIFICATION_TL_REMINDER = "tl.en.reminder";
     
     public static final String NOTIFICATION_SENDBACK_TO_INSPECTION= "tl.en.sendback.to.inspection";
+    
+    public static final String NOTIFICATION_PENDINGAPPROVAL= "tl.en.send.to.approver";
 
 
     public static final String DEFAULT_OBJECT_MODIFIED_MSG = "Dear <1>,Your Trade License with application number <APPLICATION_NUMBER> was modified.";

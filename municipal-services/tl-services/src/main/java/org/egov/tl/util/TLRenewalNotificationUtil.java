@@ -241,8 +241,9 @@ public class TLRenewalNotificationUtil {
     private String getApprovedMsg(TradeLicense license, BigDecimal amountToBePaid, String message) {
         message = message.replace("<2>", license.getTradeName());
         message = message.replace("<3>", license.getApplicationNumber());
+        message = message.replace("<4>", amountToBePaid.toString());
         String date = epochToDate(license.getValidTo());
-        message = message.replace("<4>", date);
+        message = message.replace("<5>", date);
         return message;
     }
 
