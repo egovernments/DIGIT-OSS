@@ -93,8 +93,8 @@ public class ApportionService {
 
 
 
-       
-      //Save the response through persister
+
+        //Save the response through persister
         producer.push(config.getResponseTopic(), request);
         return bills;
     }

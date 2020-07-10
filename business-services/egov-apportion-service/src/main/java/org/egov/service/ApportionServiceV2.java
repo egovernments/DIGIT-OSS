@@ -202,20 +202,24 @@ public class ApportionServiceV2 {
      */
     private void updateAdjustedAmountInBills(Bill bill,List<TaxDetail> taxDetails){
 
-        Map<String,BigDecimal> idToAdjustedAmount = new HashMap<>();
+        Map<String,Bucket> idToBucket = new HashMap<>();
         Map<String,BigDecimal> idToAmountPaid = new HashMap<>();
 
         taxDetails.forEach(taxDetail -> {
             idToAmountPaid.put(taxDetail.getEntityId(),taxDetail.getAmountPaid());
             taxDetail.getBuckets().forEach(bucket -> {
-                idToAdjustedAmount.put(bucket.getEntityId(),bucket.getAdjustedAmount());
+                idToBucket.put(bucket.getEntityId(),bucket);
             });
         });
 
         bill.getBillDetails().forEach(billDetail -> {
             billDetail.setAmountPaid(idToAmountPaid.get(billDetail.getId()));
             billDetail.getBillAccountDetails().forEach(billAccountDetail -> {
-                billAccountDetail.setAdjustedAmount(idToAdjustedAmount.get(billAccountDetail.getId()));
+                billAccountDetail.setAdjustedAmount(idToBucket.get(billAccountDetail.getId()).getAdjustedAmount());
+                if(billAccountDetail.getTaxHeadCode().contains("ADVANCE")){
+                    billAccountDetail.setAmount(idToBucket.get(billAccountDetail.getId()).getAmount());
+                }
+
             });
         });
     }

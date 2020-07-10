@@ -131,11 +131,39 @@ public class OrderByPriority implements ApportionV2 {
     private void addAdvanceBillAccountDetail(BigDecimal advanceAmount, ApportionRequestV2 apportionRequestV2, Object masterData){
         List<TaxDetail> taxDetails = apportionRequestV2.getTaxDetails();
         String taxHead = taxHeadMasterService.getAdvanceTaxHead(apportionRequestV2.getBusinessService(),masterData);
-        Bucket bucketForAdvance = new Bucket();
-        bucketForAdvance.setAmount(advanceAmount.negate());
-        bucketForAdvance.setPurpose(Purpose.ADVANCE_AMOUNT);
-        bucketForAdvance.setTaxHeadCode(taxHead);
-        taxDetails.get(taxDetails.size()-1).getBuckets().add(bucketForAdvance);
+
+        TaxDetail latestTaxDetail = taxDetails.get(taxDetails.size()-1);
+        Bucket bucketForAdvance = null;
+
+
+        // Search if advance bucket already exist
+        for(Bucket bucket : latestTaxDetail.getBuckets()){
+            if(bucket.getTaxHeadCode().contains("ADVANCE")){
+                bucketForAdvance = bucket;
+                break;
+            }
+        }
+
+        // If advance bucket is not present add new one else update existing one
+        if(bucketForAdvance == null){
+            // Creating the advance bucket
+            bucketForAdvance = new Bucket();
+            bucketForAdvance.setAmount(advanceAmount.negate());
+            bucketForAdvance.setPurpose(Purpose.ADVANCE_AMOUNT);
+            bucketForAdvance.setTaxHeadCode(taxHead);
+
+            // Setting the advance bucket in the latest taxDetail
+            taxDetails.get(taxDetails.size()-1).getBuckets().add(bucketForAdvance);
+        }
+
+        else {
+            bucketForAdvance.setAmount(bucketForAdvance.getAmount().add(advanceAmount.negate()));
+        }
+
+
+        // Updating the amountPaid in the taxDetail
+        BigDecimal amountPaid = taxDetails.get(taxDetails.size()-1).getAmountPaid();
+        taxDetails.get(taxDetails.size()-1).setAmountPaid(amountPaid.add(advanceAmount));
     }
 
 

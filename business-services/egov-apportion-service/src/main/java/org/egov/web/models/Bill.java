@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -81,6 +82,7 @@ public class Bill {
     @JsonProperty("partPaymentAllowed")
     private Boolean partPaymentAllowed = null;
 
+    @NotNull
     @JsonProperty("isAdvanceAllowed")
     private Boolean isAdvanceAllowed;
 
@@ -102,6 +104,7 @@ public class Bill {
     @JsonProperty("billDate")
     private Long billDate = null;
 
+    @NotNull
     @JsonProperty("amountPaid")
     private BigDecimal amountPaid = null;
 
