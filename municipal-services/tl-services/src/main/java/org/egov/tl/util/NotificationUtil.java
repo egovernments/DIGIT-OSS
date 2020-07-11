@@ -112,6 +112,11 @@ public class NotificationUtil {
 	          messageTemplate = getMessageTemplate(NOTIFICATION_PENDINGAPPROVAL, localizationMessage);
 	          message = getPendingApprovalMsg(license, messageTemplate);
 	          break;
+	          
+		  case ACTION_STATUS_FORWARD_APPLIED:
+              messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_STATUS_FORWARD_APPLIED, localizationMessage);
+  			message = getResubmitAppMsg(license, messageTemplate);
+  			break; 
 		}
 	
 		return message;
@@ -547,4 +552,10 @@ public class NotificationUtil {
 	        return message;
 	    }
 	 
+	  private String getResubmitAppMsg(TradeLicense license, String message) {
+			message = message.replace("<2>", license.getTradeName());
+			message = message.replace("<3>", license.getApplicationNumber());
+
+			return message;
+		}
 }

@@ -112,6 +112,16 @@ public class TLRenewalNotificationUtil {
                 messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_CANCELLED, localizationMessage);
                 message = getCancelledMsg(license, messageTemplate);
                 break;
+                
+            case ACTION_STATUS_SENDBACK:
+    			messageTemplate = getMessageTemplate(TLConstants.RENEWAL_NOTIFICATION_SENDBACK_TO_INSPECTION, localizationMessage);
+    			message = getSendBackToInspcetionMsg(license, messageTemplate);
+    			break; 
+
+            case ACTION_STATUS_FORWARD_APPLIED:
+                messageTemplate = getMessageTemplate(TLConstants.RENEWAL_NOTIFICATION_STATUS_FORWARD_APPLIED, localizationMessage);
+    			message = getResubmitAppMsg(license, messageTemplate);
+    			break; 
         }
 
         return message;
@@ -242,8 +252,9 @@ public class TLRenewalNotificationUtil {
         message = message.replace("<2>", license.getTradeName());
         message = message.replace("<3>", license.getApplicationNumber());
         message = message.replace("<4>", amountToBePaid.toString());
+        message = message.replace("<tenantId>", license.getTenantId());
         String date = epochToDate(license.getValidTo());
-        message = message.replace("<5>", date);
+        message = message.replace("<6>", date);
         return message;
     }
 
@@ -373,6 +384,8 @@ public class TLRenewalNotificationUtil {
         String messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_RENEWAL_PAYMENT_OWNER, localizationMessages);
         messageTemplate = messageTemplate.replace("<2>", valMap.get(amountPaidKey));
         messageTemplate = messageTemplate.replace("<3>", license.getTradeName());
+        messageTemplate = messageTemplate.replace("<applicationNumber>", license.getApplicationNumber());
+        messageTemplate = messageTemplate.replace("<tenantId>",license.getTenantId());
         messageTemplate = messageTemplate.replace("<4>", valMap.get(receiptNumberKey));
         return messageTemplate;
     }
@@ -533,5 +546,19 @@ public class TLRenewalNotificationUtil {
     public void sendEventNotification(EventRequest request) {
         producer.push(config.getSaveUserEventsTopic(), request);
     }
+    
+    private String getSendBackToInspcetionMsg(TradeLicense license, String message) {
+		message = message.replace("<2>", license.getTradeName());
+		message = message.replace("<3>", license.getApplicationNumber());
+
+		return message;
+	}
+    
+    private String getResubmitAppMsg(TradeLicense license, String message) {
+		message = message.replace("<2>", license.getTradeName());
+		message = message.replace("<3>", license.getApplicationNumber());
+
+		return message;
+	}
 
 }
