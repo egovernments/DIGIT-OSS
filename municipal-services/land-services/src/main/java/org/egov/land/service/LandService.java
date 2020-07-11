@@ -106,6 +106,13 @@ public class LandService {
 		// If user not found with given user fields return empty list
 		if (userDetailResponse.getUser().size() == 0) {
 			return Collections.emptyList();
+		}else{
+			List<String> ids = new ArrayList<String>();
+			for(int i=0; i<userDetailResponse.getUser().size();i++){
+				ids.add(userDetailResponse.getUser().get(i).getUuid());
+			}
+			System.out.println(ids);
+			criteria.setUserIds(ids);
 		}
 
 		landInfo = repository.getLandInfoData(criteria);

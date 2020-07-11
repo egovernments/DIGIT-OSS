@@ -1,4 +1,4 @@
-CREATE TABLE eg_bpa_buildingplan(
+CREATE TABLE IF NOT EXISTS  eg_bpa_buildingplan(
     id character varying(256) NOT NULL,
     applicationno character varying(64),
     tenantid character varying(256),
@@ -19,7 +19,7 @@ CREATE TABLE eg_bpa_buildingplan(
 );
 
 
-CREATE TABLE public.eg_bpa_auditdetails(
+CREATE TABLE IF NOT EXISTS  public.eg_bpa_auditdetails(
     id character varying(256)  NOT NULL,
     applicationno character varying(64),
     tenantid character varying(256),
@@ -38,7 +38,7 @@ CREATE TABLE public.eg_bpa_auditdetails(
     accountid character varying(256) DEFAULT NULL::character varying
 );
 
-CREATE TABLE public.eg_bpa_document(
+CREATE TABLE IF NOT EXISTS  public.eg_bpa_document(
     id character varying(64)  NOT NULL,
     documenttype character varying(64),
     filestoreid character varying(64),
