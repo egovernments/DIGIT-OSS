@@ -286,52 +286,33 @@ serviceMaps:
           - jsonPath: $.WaterConnection.plumberInfo.*.auditDetails.lastModifiedBy
 
           - jsonPath: $.WaterConnection.plumberInfo.*.auditDetails.lastModifiedTime
-          
-    - query: INSERT INTO eg_ws_connectionholder(tenantid, connectionid, userid, status, isprimaryholder, connectionholdertype, holdershippercentage, relationship, createdby, createdtime, lastmodifiedby, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (connectionid) DO UPDATE SET tenantid =?, connectionid =?,status =?, isprimaryholder =?, connectionholdertype =?, holdershippercentage =?, relationship=?, lastmodifiedby =?, lastmodifiedtime =?;
+
+ - query: UPDATE eg_ws_connectionholder SET tenantid=?, userid=?, status=?, isprimaryholder=?, connectionholdertype=?, holdershippercentage=?, relationship=?, createdby=?, createdtime=?, lastmodifiedby=?, lastmodifiedtime=? WHERE connectionid=?;
       basePath: $.WaterConnection.connectionHolders.*
-      jsonMaps:      
-
+	  jsonMaps:      
        - jsonPath: $.WaterConnection.tenantId
-
-       - jsonPath: $.WaterConnection.id
-
-       - jsonPath: $.WaterConnection.connectionHolders.*.uuid
-
-       - jsonPath: $.WaterConnection.connectionHolders.*.status
-
-       - jsonPath: $.WaterConnection.connectionHolders.*.isPrimaryOwner
-
-       - jsonPath: $.WaterConnection.connectionHolders.*.ownerType
-
-       - jsonPath: $.WaterConnection.connectionHolders.*.ownerShipPercentage
-
-       - jsonPath: $.WaterConnection.connectionHolders.*.relationship
-
-       - jsonPath: $.WaterConnection.auditDetails.createdBy
-
-       - jsonPath: $.WaterConnection.auditDetails.createdTime
-
-       - jsonPath: $.WaterConnection.auditDetails.lastModifiedBy
-
-       - jsonPath: $.WaterConnection.auditDetails.lastModifiedTime
        
-       - jsonPath: $.WaterConnection.tenantId
-
-       - jsonPath: $.WaterConnection.id
-
+	      - jsonPath: $.WaterConnection.connectionHolders.*.uuid
+       
        - jsonPath: $.WaterConnection.connectionHolders.*.status
-
+       
        - jsonPath: $.WaterConnection.connectionHolders.*.isPrimaryOwner
-
+       
        - jsonPath: $.WaterConnection.connectionHolders.*.ownerType
-
+       
        - jsonPath: $.WaterConnection.connectionHolders.*.ownerShipPercentage
-
+       
        - jsonPath: $.WaterConnection.connectionHolders.*.relationship
-
+       
+       - jsonPath: $.WaterConnection.auditDetails.createdBy
+       
+       - jsonPath: $.WaterConnection.auditDetails.createdTime
+       
        - jsonPath: $.WaterConnection.auditDetails.lastModifiedBy
-
+       
        - jsonPath: $.WaterConnection.auditDetails.lastModifiedTime
+	      
+       - jsonPath: $.WaterConnection.id
 
  - version: 1.0
    name: WaterConnection
