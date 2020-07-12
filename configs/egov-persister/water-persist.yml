@@ -289,10 +289,10 @@ serviceMaps:
 
  - query: UPDATE eg_ws_connectionholder SET tenantid=?, userid=?, status=?, isprimaryholder=?, connectionholdertype=?, holdershippercentage=?, relationship=?, createdby=?, createdtime=?, lastmodifiedby=?, lastmodifiedtime=? WHERE connectionid=?;
       basePath: $.WaterConnection.connectionHolders.*
-	  jsonMaps:      
+      jsonMaps:      
        - jsonPath: $.WaterConnection.tenantId
        
-	      - jsonPath: $.WaterConnection.connectionHolders.*.uuid
+       - jsonPath: $.WaterConnection.connectionHolders.*.uuid
        
        - jsonPath: $.WaterConnection.connectionHolders.*.status
        
