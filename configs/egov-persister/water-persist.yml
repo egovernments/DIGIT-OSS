@@ -287,7 +287,7 @@ serviceMaps:
 
           - jsonPath: $.WaterConnection.plumberInfo.*.auditDetails.lastModifiedTime
 
- - query: UPDATE eg_ws_connectionholder SET tenantid=?, userid=?, status=?, isprimaryholder=?, connectionholdertype=?, holdershippercentage=?, relationship=?, createdby=?, createdtime=?, lastmodifiedby=?, lastmodifiedtime=? WHERE connectionid=?;
+    - query: UPDATE eg_ws_connectionholder SET tenantid=?, userid=?, status=?, isprimaryholder=?, connectionholdertype=?, holdershippercentage=?, relationship=?, createdby=?, createdtime=?, lastmodifiedby=?, lastmodifiedtime=? WHERE connectionid=?;
       basePath: $.WaterConnection.connectionHolders.*
       jsonMaps:      
        - jsonPath: $.WaterConnection.tenantId
@@ -311,7 +311,7 @@ serviceMaps:
        - jsonPath: $.WaterConnection.auditDetails.lastModifiedBy
        
        - jsonPath: $.WaterConnection.auditDetails.lastModifiedTime
-	      
+
        - jsonPath: $.WaterConnection.id
 
  - version: 1.0
