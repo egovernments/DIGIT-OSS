@@ -16759,7 +16759,7 @@
       "id": 2004,
       "name": "search NOC application",
       "url": "quickAction",
-      "displayName": "Search Application",
+      "displayName": "Search NOC Application",
       "orderNumber": 1,
       "queryParams": "",
       "parentModule": "",
