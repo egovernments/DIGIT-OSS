@@ -197,7 +197,7 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
       "Licenses[0].applicationType"
     );
 
-    if(status ==="APPROVED" )
+    if(status ==="APPROVED" && applicationType ==="NEW" )
     {
     
       dispatch(handleField(
