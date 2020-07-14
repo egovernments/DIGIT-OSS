@@ -226,7 +226,7 @@ class IntegrationReactSelect extends React.Component {
           }}
           options={getSuggestions(suggestions) || []}
           components={components}
-          value={value ? value : this.state.single}
+          value={value}
           placeholder={placeholder}
           {...rest}
           onChange={this.handleChange("single")}

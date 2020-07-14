@@ -26,6 +26,7 @@ const serviceDetailsCard = {
               xs: 12,
               sm: 4
             },
+            required:false,
             props: {
               className: "hr-generic-selectfield autocomplete-dropdown",
               jsonPath: "Employee[0].serviceHistory[0].serviceStatus",
@@ -46,6 +47,7 @@ const serviceDetailsCard = {
               },
               labelsFromLocalisation: true,
               isClearable:true,
+              required:false,
             },
           },
           serviceFromDate: {
