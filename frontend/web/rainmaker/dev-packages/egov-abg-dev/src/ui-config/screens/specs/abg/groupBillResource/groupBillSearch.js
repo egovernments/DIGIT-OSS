@@ -38,6 +38,14 @@ export const resetFields = (state, dispatch) => {
   dispatch(
     handleField(
       "groupBills",
+      "components.div.children.abgSearchCard.children.cardContent.children.searchContainer.children.ulb",
+      "props.value",
+      tenantId
+    )
+  );
+  dispatch(
+    handleField(
+      "groupBills",
       "components.div.children.abgSearchCard.children.cardContent.children.searchContainer.children.consumerId",
       "props.value",
       ""
@@ -54,8 +62,40 @@ export const resetFields = (state, dispatch) => {
   dispatch(
     handleField(
       "groupBills",
+      "components.div.children.abgSearchCard.children.cardContent.children.searchContainer.children.locMohalla",
+      "props.error",
+      false
+    )
+  );
+  dispatch(
+    handleField(
+      "groupBills",
+      "components.div.children.abgSearchCard.children.cardContent.children.searchContainer.children.locMohalla",
+      "props.helperText",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "groupBills",
       "components.div.children.abgSearchCard.children.cardContent.children.searchContainer.children.serviceCategory",
       "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "groupBills",
+      "components.div.children.abgSearchCard.children.cardContent.children.searchContainer.children.serviceCategory",
+      "props.error",
+      false
+    )
+  );
+  dispatch(
+    handleField(
+      "groupBills",
+      "components.div.children.abgSearchCard.children.cardContent.children.searchContainer.children.serviceCategory",
+      "props.helperText",
       ""
     )
   );
@@ -86,10 +126,11 @@ export const abgSearchCard = getCommonCard({
           value: tenantId,
           disabled: true,
           labelsFromLocalisation: true,
-          className: "autocomplete-dropdown",
+          className:"autocomplete-dropdown",
           jsonPath: "searchCriteria.tenantId",
           sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
         },
+        required: true,
         jsonPath: "searchCriteria.tenantId",
         disabled: false,
         gridDefination: {
@@ -111,13 +152,13 @@ export const abgSearchCard = getCommonCard({
             labelKey: "ABG_SERVICE_CATEGORY_PLACEHOLDER"
           },
           required: true,
-          localePrefix: {
-            moduleName: "BillingService",
-            masterName: "BusinessService"
+          localePrefix : {
+            moduleName : "BillingService",
+            masterName : "BusinessService"
           },
           labelsFromLocalisation: true,
-          isClearable: true,
-          className: "autocomplete-dropdown",
+          // isClearable: true,
+          className:"autocomplete-dropdown",
           jsonPath: "searchCriteria.businesService",
           sourceJsonPath: "searchScreenMdmsData.BillingService.BusinessService",
         },
@@ -170,7 +211,7 @@ export const abgSearchCard = getCommonCard({
       //   visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
       // }),
       locMohalla: {
-        uiFramework: "custom-containers",
+        uiFramework: "custom-containers-local",
         moduleName: "egov-abg",
         componentPath: "AutosuggestContainer",
         gridDefination: {
@@ -178,6 +219,7 @@ export const abgSearchCard = getCommonCard({
           sm: 4
         },
         jsonPath: "searchCriteria.locality",
+        required: true,
         props: {
           className: "autocomplete-dropdown",
           label: {
@@ -191,12 +233,8 @@ export const abgSearchCard = getCommonCard({
           jsonPath: "searchCriteria.locality",
           sourceJsonPath: "searchScreenMdmsData.localities",
           labelsFromLocalisation: true,
-          suggestions: [],
-          visible: true,
-          required: false,
-          inputLabelProps: {
-            shrink: true
-          }
+          required: true,
+          // isClearable:true,
         }
       },
       consumerId: getTextField({
