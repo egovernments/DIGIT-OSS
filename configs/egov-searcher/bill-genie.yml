@@ -55,6 +55,7 @@ SearchDefinitions:
     - name: bd.consumercode
       isMandatory: false
       jsonPath: $.searchCriteria.consumerCode
+      operator: ILIKE
     - name: bd.businessservice
       isMandatory: false
       jsonPath: $.searchCriteria.businesService
@@ -139,6 +140,7 @@ SearchDefinitions:
     - name: bd.consumercode
       isMandatory: false
       jsonPath: $.searchCriteria.consumerCode
+      operator: ILIKE
     - name: bd.businessservice
       isMandatory: false
       jsonPath: $.searchCriteria.businesService
@@ -222,6 +224,7 @@ SearchDefinitions:
     - name: bd.consumercode
       isMandatory: false
       jsonPath: $.searchCriteria.consumerCode
+      operator: ILIKE
     - name: bd.businessservice
       isMandatory: false
       jsonPath: $.searchCriteria.businesService
