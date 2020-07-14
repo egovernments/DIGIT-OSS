@@ -8,7 +8,6 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.egov.common.contract.request.RequestInfo;
-import org.egov.common.contract.request.Role;
 import org.egov.land.repository.LandRepository;
 import org.egov.land.util.LandConstants;
 import org.egov.land.util.LandUtil;
@@ -80,23 +79,24 @@ public class LandService {
 	}
 	
 	public List<LandInfo> search(LandSearchCriteria criteria, RequestInfo requestInfo) {
-		List<LandInfo> landInfo;
+		List<LandInfo> landInfos;
 		landValidator.validateSearch(requestInfo, criteria);
 		if (criteria.getMobileNumber() != null) {
-			landInfo = getLandFromMobileNumber(criteria, requestInfo);
-		} else {
-			List<String> roles = new ArrayList<>();
-			for (Role role : requestInfo.getUserInfo().getRoles()) {
-				roles.add(role.getCode());
+			landInfos = getLandFromMobileNumber(criteria, requestInfo);
+			List<String> landIds = new ArrayList<String>();
+			for (LandInfo li : landInfos) {
+				landIds.add(li.getId());
 			}
-			
-			landInfo = getLandWithOwnerInfo(criteria, requestInfo);
+			criteria.setMobileNumber(null);
+			criteria.setIds(landIds);
 		}
 
-		if(!CollectionUtils.isEmpty(landInfo)){
-			log.debug("Received final landInfo response in service call..");			
+		landInfos = fetchLandInfoData(criteria, requestInfo);
+
+		if (!CollectionUtils.isEmpty(landInfos)) {
+			log.debug("Received final landInfo response in service call..");
 		}
-		return landInfo;
+		return landInfos;
 	}
 	
 	private List<LandInfo> getLandFromMobileNumber(LandSearchCriteria criteria, RequestInfo requestInfo) {
@@ -134,7 +134,7 @@ public class LandService {
 	 *            The search request's requestInfo
 	 * @return List of landInfo for the given criteria
 	 */
-	public List<LandInfo> getLandWithOwnerInfo(LandSearchCriteria criteria, RequestInfo requestInfo) {
+	public List<LandInfo> fetchLandInfoData(LandSearchCriteria criteria, RequestInfo requestInfo) {
 		List<LandInfo> landInfos = repository.getLandInfoData(criteria);
 		if (landInfos.isEmpty())
 			return Collections.emptyList();
