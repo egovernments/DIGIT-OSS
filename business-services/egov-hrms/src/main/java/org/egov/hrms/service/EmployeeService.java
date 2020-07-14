@@ -243,7 +243,7 @@ public class EmployeeService {
 		pwdParams.add(employee.getCode());
 		pwdParams.add(employee.getUser().getMobileNumber());
 		pwdParams.add(employee.getTenantId());
-		pwdParams.add(employee.getUser().getName());
+		pwdParams.add(employee.getUser().getName().toUpperCase());
 		employee.getUser().setPassword(hrmsUtils.generatePassword(pwdParams));
 		employee.getUser().setUserName(employee.getCode());
 		employee.getUser().setActive(true);
