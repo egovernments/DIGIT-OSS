@@ -115,7 +115,7 @@ public class SearchUtils {
 						operator = " IN "; 
 					whereClause.append(param.getName()).append(operator).append("(").append(":"+param.getName()).append(")");
 				} else {
-					String[] validOperators = {"=", "GE", "LE", "NE", "LIKE"};
+					String[] validOperators = {"=", "GE", "LE", "NE", "LIKE", "ILIKE"};
 					String operator = (!StringUtils.isEmpty(param.getOperator())) ? param.getOperator(): "=";
 					if(!Arrays.asList(validOperators).contains(operator))
 						operator = "="; 
@@ -125,7 +125,7 @@ public class SearchUtils {
 						operator = "<=";
 					else if (operator.equals("NE"))
 						operator = "!=";
-					else if (operator.equals("LIKE")) {
+					else if (operator.equals("LIKE") || operator.equals("ILIKE")) {
 						preparedStatementValues.put(param.getName(), "%" + paramValue + "%");
 					}								
 					whereClause.append(param.getName()).append(" " + operator + " ").append(":"+param.getName());
