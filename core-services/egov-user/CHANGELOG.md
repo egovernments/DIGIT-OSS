@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.2.1 - 2020-07-14
+
+- Upgraded to kafka 1.3.11.RELEASE
+
 ## 1.2.0 - 2020-07-02
 
 - Added support for encrypting user PII data
