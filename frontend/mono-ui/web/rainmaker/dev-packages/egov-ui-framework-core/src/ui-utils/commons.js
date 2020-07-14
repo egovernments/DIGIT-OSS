@@ -1,23 +1,15 @@
-import isEmpty from "lodash/isEmpty";
-import { httpRequest, uploadFile } from "./api.js";
-import cloneDeep from "lodash/cloneDeep";
-import {
-  localStorageSet,
-  localStorageGet,
-  getLocalization,
-  getLocale,
-  getTenantId,
-  getUserInfo
-} from "egov-ui-kit/utils/localStorageUtils";
-import { toggleSnackbar, toggleSpinner, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import orderBy from "lodash/orderBy";
-import get from "lodash/get";
-import set from "lodash/set";
 import commonConfig from "config/common.js";
-import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
-import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getRequiredDocuments } from "egov-ui-framework/ui-containers/RequiredDocuments/reqDocs";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
+import { getLocale, getLocalization, getTenantId, getUserInfo, localStorageGet, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
+import cloneDeep from "lodash/cloneDeep";
+import get from "lodash/get";
+import isEmpty from "lodash/isEmpty";
+import orderBy from "lodash/orderBy";
+import set from "lodash/set";
+import { httpRequest, uploadFile } from "./api.js";
 
 export const addComponentJsonpath = (components, jsonPath = "components") => {
   for (var componentKey in components) {
@@ -692,7 +684,7 @@ export const getStatusKey = (status) => {
   }
 }
 
-export const getRequiredDocData = async (action, dispatch, moduleDetails) => {
+export const getRequiredDocData = async (action, dispatch, moduleDetails, closePopUp) => {
   let tenantId =
     process.env.REACT_APP_NAME === "Citizen" ? JSON.parse(getUserInfo()).permanentCity : getTenantId();
   let mdmsBody = {
@@ -720,20 +712,21 @@ export const getRequiredDocData = async (action, dispatch, moduleDetails) => {
     if (moduleName === "PropertyTax") {
       payload.MdmsRes.tenant.tenants = payload.MdmsRes.tenant.citymodule[1].tenants;
     }
-    const reqDocuments = getRequiredDocuments(documents, moduleName, footerCallBackForRequiredDataModal(moduleName));
+    const reqDocuments = getRequiredDocuments(documents, moduleName, footerCallBackForRequiredDataModal(moduleName, closePopUp));
     set(
       action,
       "screenConfig.components.adhocDialog.children.popup",
       reqDocuments
     );
     dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
-    return payload;
+    return { payload, reqDocuments };
   } catch (e) {
     console.log(e);
   }
 };
 
-const footerCallBackForRequiredDataModal = (moduleName) => {
+const footerCallBackForRequiredDataModal = (moduleName, closePopUp) => {
+  const tenant = getTenantId();
   switch (moduleName) {
     case "FireNoc":
       return (state, dispatch) => {
@@ -758,6 +751,19 @@ const footerCallBackForRequiredDataModal = (moduleName) => {
         const applyUrl = process.env.REACT_APP_NAME === "Citizen" ? `/wns/apply` : `/wns/apply`
         dispatch(setRoute(applyUrl));
       };
+    case 'TradeLicense':
+      if (closePopUp) {
+        return (state, dispatch) => {
+          dispatch(prepareFinalObject("Licenses", []));
+          dispatch(prepareFinalObject("LicensesTemp", []));
+          dispatch(prepareFinalObject("DynamicMdms", []));
+          const applyUrl = `/tradelicence/apply?tenantId=${tenant}`;
+          dispatch(
+            handleField("search", "components.adhocDialog", "props.open", false)
+          );
+          dispatch(setRoute(applyUrl));
+        };
+      }
   }
 }
 export const showHideAdhocPopup = (state, dispatch, screenKey) => {
@@ -769,4 +775,75 @@ export const showHideAdhocPopup = (state, dispatch, screenKey) => {
   dispatch(
     handleField(screenKey, "components.adhocDialog", "props.open", !toggle)
   );
+};
+export const getObjectValues = objData => {
+  return (
+    objData &&
+    Object.values(objData).map(item => {
+      return item;
+    })
+  );
+};
+export const getObjectKeys = objData => {
+  return (
+    objData &&
+    Object.keys(objData).map(item => {
+      return { code: item, active: true };
+    })
+  );
+};
+export const getMdmsJson = async (state, dispatch, reqObj) => {
+  let { setPath, setTransformPath, dispatchPath, moduleName, name, type } = reqObj;
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: commonConfig.tenantId,
+      moduleDetails: [
+        {
+          moduleName,
+          masterDetails: [
+            { name }
+          ]
+        }
+      ]
+    }
+  };
+  try {
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+    let result = get(payload, `MdmsRes.${moduleName}.${name}`, []);
+    let filterResult = type ? result.filter(item => item.type == type) : result;
+    set(
+      payload,
+      setPath,
+      filterResult
+    );
+    payload = getTransformData(payload, setPath, setTransformPath);
+    dispatch(prepareFinalObject(dispatchPath, get(payload, dispatchPath, [])));
+    //dispatch(prepareFinalObject(dispatchPath, payload.DynamicMdms));
+    dispatch(prepareFinalObject(`DynamicMdms.apiTriggered`, false));
+  } catch (e) {
+    console.log(e);
+    dispatch(prepareFinalObject(`DynamicMdms.apiTriggered`, false));
+  }
+};
+export const getTransformData = (object, getPath, transerPath) => {
+  let data = get(object, getPath);
+  let transformedData = {};
+  var formTreeBase = (transformedData, row) => {
+    const splitList = row.code.split(".");
+    splitList.map(function (value, i) {
+      transformedData = (i == splitList.length - 1) ? transformedData[value] = row : transformedData[value] || (transformedData[value] = {});
+    });
+  }
+  data.map(a => {
+    formTreeBase(transformedData, a);
+  });
+  set(object, transerPath, transformedData);
+  return object;
 };

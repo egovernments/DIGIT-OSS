@@ -114,19 +114,19 @@ export const searchApiCall = async (state, dispatch) => {
           });
 
         return {
-          [getTextToLocalMapping("Employee ID")]: get(item, "code", "-") || "-",
-          [getTextToLocalMapping("Name")]: get(item, "user.name", "-") || "-",
-          [getTextToLocalMapping("Role")]:
+          ["HR_COMMON_TABLE_COL_EMP_ID"]: get(item, "code", "-") || "-",
+          ["HR_COMMON_TABLE_COL_NAME"]: get(item, "user.name", "-") || "-",
+          ["HR_COMMON_TABLE_COL_ROLE"]:
             get(item, "user.roles", [])
               .map(role => {
                 return ` ${role.name}`;
               })
               .join() || "-",
-          [getTextToLocalMapping("Designation")]:
+          ["HR_COMMON_TABLE_COL_DESG"]:
             getDesigName(state, currentDesignations) || "-",
-          [getTextToLocalMapping("Department")]:
+          ["HR_COMMON_TABLE_COL_DEPT"]:
             getDeptName(state, currentDepartments) || "-",
-          ["tenantId"]: get(item, "tenantId", "-")
+          ["HR_COMMON_TABLE_COL_TENANT_ID"]: get(item, "tenantId", "-")
         };
       });
 
@@ -142,10 +142,8 @@ export const searchApiCall = async (state, dispatch) => {
         handleField(
           "search",
           "components.div.children.searchResults",
-          "props.title",
-          `${getTextToLocalMapping("Search Results for Employee")} (${
-            response.Employees.length
-          })`
+          "props.rows",
+          response.Employees.length
         )
       );
       showHideTable(true, dispatch);

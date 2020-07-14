@@ -1,6 +1,7 @@
 import { Card } from "components";
 import commonConfig from "config/common.js";
 import Label from "egov-ui-kit/utils/translationNode";
+import { businessServiceInfo } from "egov-ui-kit/utils/commons";
 import get from "lodash/get";
 import React from "react";
 import { connect } from "react-redux";
@@ -21,6 +22,24 @@ const logoStyle = {
 };
 
 class PTInformation extends React.Component {
+  state = {
+    businessServiceInfoItem: {}
+  }
+  componentDidMount = () => {
+    const mdmsBody = {
+      MdmsCriteria: {
+        tenantId: commonConfig.tenantId,
+        moduleDetails: [
+          {
+            moduleName: "BillingService",
+            masterDetails: [{ name: "BusinessService" }]
+          }
+        ]
+      }
+    };
+    const businessServiceInfoItem = businessServiceInfo(mdmsBody, "PT");
+    this.setState({businessServiceInfoItem});
+  }
   updateProperty = () => {
     let {
       propertiesAudit,
@@ -63,6 +82,7 @@ class PTInformation extends React.Component {
       cities,
       propertiesAudit
     } = this.props;
+    const { businessServiceInfoItem } = this.state;
     let logoUrl = "";
     let corpCity = "";
     let ulbGrade = "";
@@ -96,7 +116,7 @@ class PTInformation extends React.Component {
           <Card
             textChildren={
               <div id="property-review-form" className="col-sm-12 col-xs-12" style={{ alignItems: "center" }}>
-                {totalBillAmountDue > 0 && (
+                {(totalBillAmountDue > 0 || (totalBillAmountDue === 0 && businessServiceInfoItem.isAdvanceAllowed)) && (
                   <Card
                     textChildren={
                       <TotalDues
@@ -104,6 +124,7 @@ class PTInformation extends React.Component {
                         tenantId={properties.tenantId}
                         consumerCode={properties.propertyId}
                         totalBillAmountDue={totalBillAmountDue}
+                        isAdvanceAllowed={businessServiceInfoItem.isAdvanceAllowed}
                       />
                     }
                     style={{ backgroundColor: "rgb(242,242,242)", boxShadow: "none" }}

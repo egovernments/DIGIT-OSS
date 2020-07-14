@@ -296,36 +296,37 @@ const commonApplicantInformation = () => {
           className:"applicant-details-error"
         }
       }),
-      specialApplicantCategory: getSelectField({
-        label: {
-          labelName: "Special Applicant Category",
-          labelKey: "NOC_SPECIAL_APPLICANT_CATEGORY_LABEL"
-        },
-        placeholder: {
-          labelName: "Select Special Applicant Category",
-          labelKey: "NOC_SPECIAL_APPLICANT_CATEGORY_PLACEHOLDER"
-        },
-        jsonPath:
-          "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].ownerType",
-        // data: [
-        //   {
-        //     code: "A"
-        //   },
-        //   {
-        //     code: "B"
-        //   }
-        // ],
-        localePrefix: {
-          moduleName: "common-masters",
-          masterName: "OwnerType"
-        },
-        sourceJsonPath: "applyScreenMdmsData.common-masters.OwnerType",
+      specialApplicantCategory: {
+          uiFramework: "custom-containers-local",
+          moduleName: "egov-noc",
+          componentPath: "AutosuggestContainer",
+          props: {
+            label: {
+              labelName: "Special Applicant Category",
+              labelKey: "NOC_SPECIAL_APPLICANT_CATEGORY_LABEL"
+            },
+            placeholder: {
+              labelName: "Select Special Applicant Category",
+              labelKey: "NOC_SPECIAL_APPLICANT_CATEGORY_PLACEHOLDER"
+            },
+            localePrefix: {
+              moduleName: "common-masters",
+              masterName: "OwnerType"
+            },
+            sourceJsonPath: "applyScreenMdmsData.common-masters.OwnerType",
+            jsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].ownerType",
+            required: true,
+            labelsFromLocalisation: true,
+            className: "autocomplete-dropdown",
+          },
+          required: true,
+        jsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].ownerType",
         gridDefination: {
           xs: 12,
           sm: 12,
           md: 6
         }
-      })
+      }
     })
   });
 };
@@ -504,43 +505,35 @@ export const applicantDetails = getCommonCard({
   applicantTypeContainer: getCommonContainer({
     applicantTypeSelection: getCommonContainer({
       applicantType: {
-        ...getSelectField({
-          label: {
-            labelName: "Applicant Type",
-            labelKey: "NOC_APPLICANT_TYPE_LABEL"
+          uiFramework: "custom-containers-local",
+          moduleName: "egov-noc",
+          componentPath: "AutosuggestContainer",
+          props: {
+            label: {
+              labelName: "Applicant Type",
+              labelKey: "NOC_APPLICANT_TYPE_LABEL"
+            },
+            placeholder: {
+              labelName: "Select Applicant Type",
+              labelKey: "NOC_APPLICANT_TYPE_PLACEHOLDER"
+            },
+            localePrefix: {
+              moduleName: "common-masters",
+              masterName: "OwnerShipCategory"
+            },
+            className:"applicant-details-error autocomplete-dropdown",
+            required: true,
+            labelsFromLocalisation: true,
+            sourceJsonPath: "applyScreenMdmsData.DropdownsData.OwnershipCategory",
+            jsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipMajorType",
           },
-          placeholder: {
-            labelName: "Select Applicant Type",
-            labelKey: "NOC_APPLICANT_TYPE_PLACEHOLDER"
-          },
-          jsonPath:
-            "FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipMajorType",
-          localePrefix: {
-            moduleName: "common-masters",
-            masterName: "OwnerShipCategory"
-          },
-          // data: [
-          //   {
-          //     code: "Individual"
-          //   },
-          //   {
-          //     code: "Multiple"
-          //   },
-          //   {
-          //     code: "Institutional-Private"
-          //   }
-          // ],
           required: true,
-          sourceJsonPath: "applyScreenMdmsData.DropdownsData.OwnershipCategory",
+          jsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipMajorType",
           gridDefination: {
             xs: 12,
             sm: 12,
             md: 6
           },
-          props:{
-            className:"applicant-details-error"
-          }
-        }),
         beforeFieldChange: (action, state, dispatch) => {
           let path = action.componentJsonpath.replace(
             /.applicantType$/,
@@ -558,7 +551,10 @@ export const applicantDetails = getCommonCard({
         }
       },
       applicantSubType: {
-        ...getSelectField({
+        uiFramework: "custom-containers-local",
+        moduleName: "egov-noc",
+        componentPath: "AutosuggestContainer",
+        props: {
           label: {
             labelName: "Type of Applicant - Subtype",
             labelKey: "NOC_APPLICANT_SUBTYPE_LABEL"
@@ -567,31 +563,22 @@ export const applicantDetails = getCommonCard({
             labelName: "Select Applicant Subtype",
             labelKey: "NOC_APPLICANT_SUBTYPE_PLACEHOLDER"
           },
-          jsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType",
           localePrefix: {
             moduleName: "common-masters",
             masterName: "OwnerShipCategory"
           },
-          // data: [
-          //   {
-          //     code: "Private Company"
-          //   }
-          // ],
-          // props: {
-          //   style: {
-          //     display: "none"
-          //   }
-          // },
           required: true,
-          gridDefination: {
-            xs: 12,
-            sm: 12,
-            md: 6
-          },
-          props:{
-            className:"applicant-details-error"
-          }
-        }),
+          labelsFromLocalisation: true,
+          className:"applicant-details-error autocomplete-dropdown",
+          jsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType",
+        },
+        required: true,
+        jsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType",
+        gridDefination: {
+          xs: 12,
+          sm: 12,
+          md: 6
+        },
         beforeFieldChange: (action, state, dispatch) => {
           let singleApplicantContainerJsonPath =
             "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer";

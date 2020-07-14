@@ -1,7 +1,6 @@
 import {
   getCommonCard,
   getTextField,
-  getSelectField,
   getCommonContainer,
   getPattern,
   getLabel,
@@ -95,7 +94,10 @@ export const UCSearchCard = getCommonCard({
       }
     }),
     serviceType: {
-      ...getSelectField({
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-uc",
+      componentPath: "AutosuggestContainer",
+      props: {
         label: {
           labelName: "Service Category",
           labelKey: "UC_SERVICE_CATEGORY_LABEL"
@@ -108,14 +110,18 @@ export const UCSearchCard = getCommonCard({
           masterName: "BusinessService",
           moduleName: "BillingService"
         },
+        className: "autocomplete-dropdown",
         required: false,
+        isClearable: true,
+        labelsFromLocalisation: true,
+        sourceJsonPath: "applyScreenMdmsData.serviceCategories",
         jsonPath: "searchScreenMdmsData.businessServiceSelected",
-        gridDefination: {
-          xs: 12,
-          sm: 4
-        },
-        sourceJsonPath: "applyScreenMdmsData.serviceCategories"
-      }),
+      },
+      jsonPath: "searchScreenMdmsData.businessServiceSelected",
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      },
       beforeFieldChange: async (action, state, dispatch) => {
         const serviceCategory = get(
           state.screenConfiguration,
@@ -126,7 +132,7 @@ export const UCSearchCard = getCommonCard({
         );
         const serviceTypes = selectedCategory && selectedCategory.child && selectedCategory.child.map(item => item.code);
         dispatch(
-          prepareFinalObject("searchScreen.businessCodes", serviceTypes)
+          prepareFinalObject("searchScreen.businessServices", serviceTypes)
         );
         return action;
       }
@@ -273,4 +279,6 @@ export const UCSearchCard = getCommonCard({
       }
     }
   })
+}, {
+  style: { overflow: "visible" }
 });

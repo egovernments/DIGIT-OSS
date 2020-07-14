@@ -56,33 +56,41 @@ export const searchForm = getCommonCard({
     labelKey: "HR_HOME_SEARCH_RESULTS_DESC"
   }),
   searchFormContainer: getCommonContainer({
-    ulb: getSelectField({
-      label: { labelName: "ULB", labelKey: "HR_ULB_LABEL" },
-      placeholder: {
-        labelName: "Select ULB",
-        labelKey: "HR_SELECT_ULB_PLACEHOLDER"
-      },
-      required: true,
+    ulb: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-hrms",
+      componentPath: "AutosuggestContainer",
       jsonPath: "searchScreen.ulb",
       gridDefination: {
         xs: 12,
         sm: 4
       },
-      sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
       props: {
         optionLabel: "name",
-        optionValue: "code"
-        // hasLocalization: false
+        optionValue: "code",
+        label: { 
+          labelName: "ULB", 
+          labelKey: "HR_ULB_LABEL" 
+        },
+        placeholder: {
+          labelName: "Select ULB",
+          labelKey: "HR_SELECT_ULB_PLACEHOLDER"
+        },
+        localePrefix: {
+          moduleName: "TENANT",
+          masterName: "TENANTS"
+        },
+        roleDefination: {
+          rolePath: "user-info.roles",
+          roles: []
+        },
+        className:"autocomplete-dropdown",
+        sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
+        labelsFromLocalisation: true,
+        required: true,
       },
-      localePrefix: {
-        moduleName: "TENANT",
-        masterName: "TENANTS"
-      },
-      roleDefination: {
-        rolePath: "user-info.roles",
-        roles: []
-      }
-    }),
+      required: true,
+    },
 
     employeeName: getTextField({
       label: {
@@ -122,11 +130,30 @@ export const searchForm = getCommonCard({
       jsonPath: "searchScreen.codes"
     }),
 
-    department: getSelectField({
-      label: { labelName: "Department", labelKey: "HR_DEPT_LABEL" },
-      placeholder: {
-        labelName: "Select Department",
-        labelKey: "HR_DEPT_PLACEHOLDER"
+    department: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-hrms",
+      componentPath: "AutosuggestContainer",
+      props: {
+        optionLabel: "name",
+        optionValue: "code",
+        label: { 
+          labelName: "Department", 
+          labelKey: "HR_DEPT_LABEL" 
+        },
+        placeholder: {
+          labelName: "Select Department",
+          labelKey: "HR_DEPT_PLACEHOLDER"
+        },
+        required: false,
+        isClearable:true,
+        labelsFromLocalisation: true,
+        className:"autocomplete-dropdown",
+        sourceJsonPath: "searchScreenMdmsData.common-masters.Department",
+        localePrefix: {
+          moduleName: "common-masters",
+          masterName: "Department"
+        }
       },
       required: false,
       jsonPath: "searchScreen.departments",
@@ -134,40 +161,35 @@ export const searchForm = getCommonCard({
         xs: 12,
         sm: 4
       },
-      sourceJsonPath: "searchScreenMdmsData.common-masters.Department",
+    },
+    designation: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-hrms",
+      componentPath: "AutosuggestContainer",
       props: {
+        label: { labelName: "Designation", labelKey: "HR_DESG_LABEL" },
+        optionValue: "code",
         optionLabel: "name",
-        optionValue: "code"
-        // hasLocalization: false
+        placeholder: {
+          labelName: "Select Designation",
+          labelKey: "HR_DESIGNATION_PLACEHOLDER"
+        },
+        required: false,
+        isClearable:true,
+        labelsFromLocalisation: true,
+        className:"autocomplete-dropdown",
+        sourceJsonPath: "searchScreenMdmsData.common-masters.Designation",
+        localePrefix: {
+          moduleName: "common-masters",
+          masterName: "Designation"
+        }
       },
-      localePrefix: {
-        moduleName: "common-masters",
-        masterName: "Department"
-      }
-    }),
-    designation: getSelectField({
-      label: { labelName: "Designation", labelKey: "HR_DESG_LABEL" },
-      placeholder: {
-        labelName: "Select Designation",
-        labelKey: "HR_DESIGNATION_PLACEHOLDER"
-      },
-      required: false,
       jsonPath: "searchScreen.designations",
       gridDefination: {
         xs: 12,
         sm: 4
       },
-      sourceJsonPath: "searchScreenMdmsData.common-masters.Designation",
-      props: {
-        optionValue: "code",
-        optionLabel: "name"
-        // hasLocalization: false
-      },
-      localePrefix: {
-        moduleName: "common-masters",
-        masterName: "Designation"
-      }
-    })
+    },
   }),
 
   button: getCommonContainer({
@@ -233,4 +255,8 @@ export const searchForm = getCommonCard({
       }
     })
   })
+},{
+  style:{
+    overflow: "visible"
+  }
 });

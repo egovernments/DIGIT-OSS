@@ -1,19 +1,12 @@
+import { getCommonCaption, getCommonCard } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
+import { httpRequest } from "egov-ui-framework/ui-utils/api";
+import { getLocaleLabels, getQueryArg, getTransformedLocalStorgaeLabels } from "egov-ui-framework/ui-utils/commons";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
-import { httpRequest } from "egov-ui-framework/ui-utils/api";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { handleScreenConfigurationFieldChange as handleField,prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import set from "lodash/set";
-import {
-  getCommonCard,
-  getCommonCaption
-} from "egov-ui-framework/ui-config/screens/specs/utils";
-import {
-  getLocaleLabels,
-  getTransformedLocalStorgaeLabels
-} from "egov-ui-framework/ui-utils/commons";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -391,11 +384,11 @@ export const getTextToLocalMapping = label => {
         "BILLINGSERVICE_BUSINESSSERVICE_PT",
         localisationLabels
       );
-    default : 
-    return getLocaleLabels(
-      label,
-      label,
-      localisationLabels
-    );
+    default:
+      return getLocaleLabels(
+        label,
+        label,
+        localisationLabels
+      );
   }
 };

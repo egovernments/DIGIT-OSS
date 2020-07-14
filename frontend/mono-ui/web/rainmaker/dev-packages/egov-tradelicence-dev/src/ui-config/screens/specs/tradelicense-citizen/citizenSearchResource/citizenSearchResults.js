@@ -13,7 +13,13 @@ export const searchResults = {
     columns: [
       {
         labelName: "Application No",
-        labelKey: "TL_COMMON_TABLE_COL_APP_NO"
+        labelKey: "TL_COMMON_TABLE_COL_APP_NO",
+        options: {
+          filter: false,
+          customBodyRender: (value, tableMeta) => (
+              <a href="javascript:void(0)" onClick={() => onRowClick(tableMeta.rowData)}>{value}</a>
+          )
+        }
       },
       {
         labelName: "License No",
@@ -90,10 +96,7 @@ export const searchResults = {
       responsive: "scroll",
       selectableRows: false,
       hover: true,
-      rowsPerPageOptions: [10, 15, 20],
-      onRowClick: (row, index) => {
-        onRowClick(row);
-      }
+      rowsPerPageOptions: [10, 15, 20]
     },
     customSortColumn: {
       column: "Application Date",

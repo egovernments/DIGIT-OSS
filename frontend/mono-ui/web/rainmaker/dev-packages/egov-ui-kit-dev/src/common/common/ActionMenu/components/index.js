@@ -13,6 +13,7 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import Tooltip from "@material-ui/core/Tooltip";
 import Label from "egov-ui-kit/utils/translationNode";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions"
 import { getModuleName } from "egov-ui-kit/utils/commons";
 import { localStorageSet, localStorageGet, setModule, getTenantId, getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
@@ -332,6 +333,9 @@ class ActionMenuComp extends Component {
                       id={item.name.toUpperCase().replace(/[\s]/g, "-") + "-" + index}
                       onClick={() => {
                         //  localStorageSet("menuPath", item.path);
+                        if ( item.navigationURL === "tradelicence/apply" ){
+                          this.props.setRequiredDocumentFlag()
+                        }
                         updateActiveRoute(item.path, item.name);
                         document.title = item.name;
                         toggleDrawer && toggleDrawer();
@@ -562,7 +566,8 @@ class ActionMenuComp extends Component {
 const mapDispatchToProps = (dispatch) => ({
   handleToggle: (showMenu) => dispatch({ type: "MENU_TOGGLE", showMenu }),
   setRoute: (route) => dispatch({ type: "SET_ROUTE", route }),
-  fetchLocalizationLabel: (locale, moduleName, tenantId)=> dispatch(fetchLocalizationLabel(locale, moduleName, tenantId))
+  fetchLocalizationLabel: (locale, moduleName, tenantId)=> dispatch(fetchLocalizationLabel(locale, moduleName, tenantId)),
+  setRequiredDocumentFlag: () => dispatch(prepareFinalObject("isRequiredDocuments",true))
 });
 export default connect(
   null,

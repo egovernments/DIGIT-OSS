@@ -76,7 +76,6 @@ const filterFunction = (rowObject, preparedFinalObject, filterConditon) => {
 }
 const mapStateToProps = state => {
   let preparedFinalObject = get(state, 'common.prepareFormData', {})
-
   let uploadedDocuments = get(preparedFinalObject, 'Properties[0].documents', []) || [];
   let uploadedDocumentTypes = uploadedDocuments.map(document => {
     let documentTypes = document.documentType && document.documentType.split('.');
@@ -95,10 +94,6 @@ const mapStateToProps = state => {
   );
   ptDocumentsList.map(documentList => {
     documentList.cards.map(document => {
-      if (document.code.includes("TRANSFERREASONDOCUMENT")) {
-        document.dropdown.value = reasonForTransfer;
-        document.dropdown.disabled = true;
-      }
       if (document.enabledActions) {
         const purpose = getPurpose();
         let documentCode = document.code.split('.');
@@ -107,6 +102,9 @@ const mapStateToProps = state => {
       }
 
       document.dropdown.menu = document.dropdown.menu.filter(menu => filterDropdownFunction(menu, preparedFinalObject, document.dropdownFilter));
+      document.dropdown.menu.map((item,key)=>{
+        document.dropdown.menu[key].name = item.label;
+      })
       if (document.dropdown.menu.length == 1) {
         document.dropdown.value = get(document, 'dropdown.menu[0].code', '');
       }

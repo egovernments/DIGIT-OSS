@@ -91,7 +91,11 @@ class PaymentRedirect extends Component {
             const details = commonPayDetails.filter(item => item.code === "DEFAULT");
             prepareFinalObject("commonPayInfo" , details);
           }
-          const url = `/egov-common/acknowledgement?status=${"success"}&consumerCode=${consumerCode}&tenantId=${tenantId}&receiptNumber=${transactionId}&businessService=${businessService}`;
+          let moduleName = "egov-common";
+          if (businessService && businessService.indexOf("BPA") > -1) {
+            moduleName = "egov-bpa"	
+          }
+          const url = `/${moduleName}/acknowledgement?status=${"success"}&consumerCode=${consumerCode}&tenantId=${tenantId}&receiptNumber=${transactionId}&businessService=${businessService}&purpose=${"pay"}`;
           const ackSuccessUrl = isPublicSearch ? `/withoutAuth${url}` : url;
           this.props.setRoute(ackSuccessUrl);
       })

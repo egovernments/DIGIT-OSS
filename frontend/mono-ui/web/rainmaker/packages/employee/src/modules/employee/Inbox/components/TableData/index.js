@@ -28,9 +28,9 @@ const getWFstatus = (status) => {
     case "INITIATED":
       return "Initiated";
     case "PENDING_FOR_CITIZEN_ACTION":
-      return "Pending for Citizen Action";  
-      case "OPEN":
-      case "APPLIED":
+      return "Pending for Citizen Action";
+    case "OPEN":
+    case "APPLIED":
     case "PENDING_FOR_DOCUMENT_VERIFICATION":
       return "Pending for Document Verification";
     case "REJECTED":
@@ -45,6 +45,7 @@ const getWFstatus = (status) => {
     case "PENDING_FOR_PAYMENT":
       return "Pending for Payment";
     case "PAID":
+    case "VERIFIED":
     case "FIELDVERIFIED":
     case "PENDINGAPPROVAL":
       return "Pending for Approval";
@@ -304,13 +305,34 @@ class TableData extends Component {
     try {
       for (var i = 0; i < uniqueModules.length; i++) {
         try {
-          const requestBody = {
-            searchCriteria: {
-              "referenceNumber": businessIds
+          if (uniqueModules[i] != 'PT') {
+            const requestBody = {
+              searchCriteria: {
+                "referenceNumber": businessIds
+              }
+            }
+            const moduleWiseLocality = await httpRequest(`egov-searcher/locality/${uniqueModules[i]}/_get`, "search", [], requestBody);
+            localitymap = [...localitymap, ...moduleWiseLocality.Localities];
+          } else {
+            const acknowledgementIds = [...businessIds];
+            for (let i = 0; i <= businessIds.length + 200; i += 200) {
+              let acknowledgementId = acknowledgementIds.splice(0, 200);
+              if (acknowledgementId && acknowledgementId.length > 0) {
+                const query = [{ key: "tenantId", value: getTenantId() },
+                { key: "acknowledgementIds", value: acknowledgementId.join(',') }]
+                const propertyResponse = await httpRequest("property-services/property/_search", "_search", query);
+
+                const localities = propertyResponse.Properties && propertyResponse.Properties.map(property => {
+                  return {
+                    "referencenumber": property.acknowldgementNumber,
+                    "locality": property.address.locality.code
+                  }
+                })
+                localitymap = [...localitymap, ...localities];
+              }
             }
           }
-          const moduleWiseLocality = await httpRequest(`egov-searcher/locality/${uniqueModules[i]}/_get`, "search", [], requestBody);
-          localitymap = [...localitymap, ...moduleWiseLocality.Localities];
+
         } catch (e) {
           console.log("error");
         }

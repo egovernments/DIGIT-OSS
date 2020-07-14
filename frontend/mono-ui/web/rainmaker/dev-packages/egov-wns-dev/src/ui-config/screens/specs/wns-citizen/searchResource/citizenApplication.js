@@ -147,23 +147,7 @@ export const citizenApplication = getCommonCard({
             pattern: /^[a-zA-Z0-9-]*$/i,
             errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
             jsonPath: "searchScreen.oldConnectionNumber"
-        }),
-        //   applicationNo: getTextField({
-        //     label: {
-        //       labelKey: "WS_MYCONNECTIONS_APPLICATION_NO"
-        //     },
-        //     placeholder: {
-        //       labelKey: "WS_SEARCH_CONNECTIONS_APPLICATION_NO_PLACEHOLDER"
-        //     },
-        //     gridDefination: {
-        //       xs: 12,
-        //       sm: 4
-        //     },
-        //     required: false,
-        //     pattern: /^[a-zA-Z0-9-]*$/i,
-        //     errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-        //     jsonPath: "searchScreen.fireNOCNumber"
-        //   }),
+        }),        
     }),
     button: getCommonContainer({
         buttonContainer: getCommonContainer({
@@ -172,7 +156,6 @@ export const citizenApplication = getCommonCard({
                 gridDefination: {
                     xs: 12,
                     sm: 6
-                    // align: "center"
                 },
                 props: {
                     variant: "outlined",
@@ -200,7 +183,6 @@ export const citizenApplication = getCommonCard({
                 gridDefination: {
                     xs: 12,
                     sm: 6,
-                    // align: "center"
                 },
                 props: {
                     variant: "contained",

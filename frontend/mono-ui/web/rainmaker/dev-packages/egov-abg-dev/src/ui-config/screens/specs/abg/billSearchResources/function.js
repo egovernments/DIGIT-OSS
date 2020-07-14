@@ -81,6 +81,7 @@ export const searchApiCall = async (state, dispatch) => {
     ).filter(item => item.code === searchScreenObject.businesService);
 
     searchScreenObject.url = serviceObject && serviceObject[0] && serviceObject[0].billGineiURL;
+    const isAdvancePayment = serviceObject && serviceObject[0] && serviceObject[0].isAdvanceAllowed;
     if (!searchScreenObject.url) {
       dispatch(
         toggleSnackbar(
@@ -115,7 +116,7 @@ export const searchApiCall = async (state, dispatch) => {
     );
     const uiConfigs = get(state.screenConfiguration.preparedFinalObject, "searchScreenMdmsData.common-masters.uiCommonPay");
     const configObject = uiConfigs.filter(item => item.code === searchScreenObject.businesService);
-
+    
     try {
       let data = billTableData.map(item => ({
         ['ABG_COMMON_TABLE_COL_BILL_NO']: item.billNumber || "-",
@@ -123,7 +124,7 @@ export const searchApiCall = async (state, dispatch) => {
         ['ABG_COMMON_TABLE_COL_CONSUMER_NAME']: item.consumerName || "-",
         ['ABG_COMMON_TABLE_COL_BILL_DATE']:
           convertEpochToDate(item.billDate) || "-",
-        ['ABG_COMMON_TABLE_COL_BILL_AMOUNT']: item.billAmount || "-",
+        ['ABG_COMMON_TABLE_COL_BILL_AMOUNT']: (item.billAmount || item.billAmount===0) ? item.billAmount : "-",
         ['ABG_COMMON_TABLE_COL_STATUS']: item.status || "-",
         ['ABG_COMMON_TABLE_COL_ACTION']: item.action || "-",
         ["BUSINESS_SERVICE"]: searchScreenObject.businesService,
@@ -132,6 +133,7 @@ export const searchApiCall = async (state, dispatch) => {
         ["TENANT_ID"]: item.tenantId,
         ["BILL_ID"]: item.billId,
         ["BILL_SEARCH_URL"]: searchScreenObject.url,
+        ["ADVANCE_PAYMENT"]: isAdvancePayment
       }));
       dispatch(
         handleField(
@@ -151,7 +153,7 @@ export const searchApiCall = async (state, dispatch) => {
       );
       dispatch(
         handleField(
-          "search",
+          "billSearch",
           "components.div.children.searchResults",
           "props.rows",
           billTableData.length

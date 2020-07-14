@@ -109,7 +109,7 @@ class ActionDialog extends React.Component {
     }
     if (dataPath === "FireNOCs") {
       dataPath = `${dataPath}[0].fireNOCDetails`
-    } else if (dataPath === "Assessment"||dataPath === "Property" || dataPath === "BPA") {
+    } else if (dataPath === "Assessment"||dataPath === "Property" || dataPath === "BPA" || dataPath === "Noc") {
       dataPath = `${dataPath}.workflow`;
     } else {
       dataPath = `${dataPath}[0]`;
@@ -125,6 +125,8 @@ class ActionDialog extends React.Component {
     let wfDocumentsPath;
     if(dataPath === "BPA.workflow") {
       wfDocumentsPath = `${dataPath}.varificationDocuments`
+    } else if (dataPath === "Noc.workflow") {
+      wfDocumentsPath = `${dataPath}.documents`
     } else {
       wfDocumentsPath = `${dataPath}.wfDocuments`
     }

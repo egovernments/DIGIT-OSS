@@ -1,7 +1,7 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { submitOCBpaApplication } from "../../../../../ui-utils/commons";
 import get from "lodash/get";
 
@@ -30,16 +30,20 @@ export const bpaMakePayment = async (state, dispatch) => {
 
 export const updateBpaApplication = async (state, dispatch, action) => {
   let bpaStatus = get(state, "screenConfiguration.preparedFinalObject.BPA.status");
-  let bpaAction;
-  if (action && action.componentJsonpath === "components.div.children.citizenFooter.children.sendToArch") {
+  let isDeclared = get(state, "screenConfiguration.preparedFinalObject.BPA.isDeclared");
+  let bpaAction, isArchitect = false, isCitizen = false, isCitizenBack = false;
+  if (action && action === "SEND_TO_ARCHITECT") {
     bpaAction = "SEND_TO_ARCHITECT";
+    isArchitect = true;
   }
-  if (action && action.componentJsonpath === "components.div.children.citizenFooter.children.approve") {
+  if (action && action === "APPROVE"){
     bpaAction = "APPROVE";
+    isCitizen = true;
   }
   let bpaStatusAction = bpaStatus.includes("CITIZEN_ACTION_PENDING")
   if (bpaStatusAction) {
     bpaAction = "FORWARD";
+    isCitizenBack = true;
   }
 
   let toggle = get(
@@ -47,14 +51,47 @@ export const updateBpaApplication = async (state, dispatch, action) => {
     "components.div.children.sendToArchPickerDialog.props.open",
     false
   );
-
-  dispatch(
-    handleField("search-preview", "components.div.children.sendToArchPickerDialog", "props.open", !toggle)
-  );
-  dispatch(
-    handleField("search-preview", "components.div.children.sendToArchPickerDialog.children.dialogContent.children.popup.children.cityPicker.children.cityDropdown", "props.applicationAction", bpaAction)
-  );
+  if((isDeclared && isCitizen ) || (isArchitect) || (isCitizenBack)){
+    dispatch(
+      handleField("search-preview", "components.div.children.sendToArchPickerDialog", "props.open", !toggle)
+    );
+    dispatch(
+      handleField("search-preview", "components.div.children.sendToArchPickerDialog.children.dialogContent.children.popup.children.cityPicker.children.cityDropdown", "props.applicationAction", bpaAction)
+    );
+  } else {
+    let errorMessage = {
+      labelName: "Please confirm the declaration!",
+      labelKey: "BPA_DECLARATION_COMMON_LABEL"
+    };
+    dispatch(toggleSnackbar(true, errorMessage, "warning")); 
+  }
+  
 };
+export const sendToArchContainer = () => {
+  return {
+    uiFramework: "custom-atoms",
+    componentPath: "Div",
+    props: {
+      style: { textAlign: "right", display: "flex" }
+    },
+    children: {
+      downloadMenu: {
+        uiFramework: "custom-atoms-local",
+        moduleName: "egov-bpa",
+        componentPath: "MenuButton",
+        props: {
+          data: {
+            label: {labelName : "Take Action" , labelKey :"WF_TAKE_ACTION"},
+            rightIcon: "arrow_drop_down",
+            props: { variant: "contained", style: { height: "60px", color : "#fff", backgroundColor: "#FE7A51", } },
+            menu: {}
+          }
+        }
+      },
+    },
+  }
+};
+
 export const citizenFooter = getCommonApplyFooter({
   makePayment: {
     componentPath: "Button",
@@ -82,70 +119,16 @@ export const citizenFooter = getCommonApplyFooter({
     }
   },
   sendToArch: {
-    componentPath: "Button",
-    props: {
-      variant: "contained",
-      color: "primary",
-      style: {
-        minWidth: "200px",
-        height: "48px",
-        marginRight: "40px"
-      }
-    },
-    children: {
-      submitButtonLabel: getLabel({
-        labelName: "SEND TO ARCHITECT",
-        labelKey: "BPA_SEND_TO_ARCHITECT_BUTTON"
-      }),
-      nextButtonIcon: {
-        uiFramework: "custom-atoms",
-        componentPath: "Icon",
-        props: {
-          iconName: "keyboard_arrow_right"
-        }
-      }
-    },
-    onClickDefination: {
-      action: "condition",
-      callBack: updateBpaApplication
-    },
-    roleDefination: {
-      rolePath: "user-info.roles",
-      action: "SEND_TO_ARCHITECT"
-    }
-  },
-  approve: {
-    componentPath: "Button",
-    props: {
-      variant: "contained",
-      color: "primary",
-      style: {
-        minWidth: "200px",
-        height: "48px",
-        marginRight: "40px"
-      }
-    },
-    children: {
-      submitButtonLabel: getLabel({
-        labelName: "Approve",
-        labelKey: "BPA_APPROVE_BUTTON"
-      }),
-      nextButtonIcon: {
-        uiFramework: "custom-atoms",
-        componentPath: "Icon",
-        props: {
-          iconName: "keyboard_arrow_right"
-        }
-      }
-    },
-    onClickDefination: {
-      action: "condition",
-      callBack: updateBpaApplication
-    },
-    roleDefination: {
-      rolePath: "user-info.roles",
-      action: "APPROVE"
-    }
+    uiFramework: "custom-atoms",
+              componentPath: "Container",
+              props: {
+                color: "primary",
+                style: { justifyContent: "flex-end" }
+              },
+              children: {
+                buttons : sendToArchContainer()
+              },
+              visible: false
   },
   submitButton: {
     componentPath: "Button",

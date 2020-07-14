@@ -1,19 +1,15 @@
-import React from "react";
-import { withStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import Icon from "@material-ui/core/Icon";
-import Button from "@material-ui/core/Button";
-import { UploadMultipleFile } from "../../ui-molecules-local";
+import { withStyles } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
 import {
   LabelContainer,
-  TextFieldContainer,
+  TextFieldContainer
 } from "egov-ui-framework/ui-containers";
-import {
-  getFileUrlFromAPI,
-  handleFileUpload,
-  getTransformedLocale,
-} from "egov-ui-framework/ui-utils/commons";
+import { getTransformedLocale, handleFileUpload } from "egov-ui-framework/ui-utils/commons";
+import React from "react";
+import { UploadMultipleFile } from "../../ui-molecules-local";
 
 const requiredIcon = (
   <sup style={{ color: "#5b5b5b", fontSize: "12px", paddingLeft: "5px" }}>
@@ -83,6 +79,7 @@ const themeStyles = (theme) => ({
     fontWeight: 400,
     letterSpacing: "0.83px",
     lineHeight: "24px",
+    marginTop: "20px",
   },
   documentSuccess: {
     borderRadius: "100%",
@@ -93,6 +90,7 @@ const themeStyles = (theme) => ({
     alignItems: "center",
     backgroundColor: "#39CB74",
     color: "white",
+    marginTop: "20px",
   },
   button: {
     margin: theme.spacing.unit,
@@ -167,25 +165,27 @@ const UploadCard = (props) => {
     name,
     jsonPath,
     ids,
+    specificStyles,
     ...rest
   } = props;
+  let forUpBtn = specificStyles ? specificStyles : "upload_btn";
   return (
     <Grid container={true} style={relpos}>
-       {(!props.isFromPreview)?
-          <Grid item={true} xs={4} sm={2} md={1} className={cellstyle}>
-            {docItem && docItem.documents && docItem.documents.length > 0 ?
+      {(!props.isFromPreview) ?
+        <Grid item={true} xs={4} sm={2} md={1} className={cellstyle}>
+          {docItem && docItem.documents && docItem.documents.length > 0 ?
             <div className={classes.documentSuccess}>
-            <Icon>
-              <i class="material-icons">done</i>
-            </Icon>
-          </div>
+              <Icon>
+                <i class="material-icons">done</i>
+              </Icon>
+            </div>
             :
             <div className={classes.documentIcon}>
-            <span>{docIndex + 1}</span>
-          </div>
-            }
-          </Grid>:""
-        } 
+              <span>{docIndex + 1}</span>
+            </div>
+          }
+        </Grid> : ""
+      }
       {/* <Grid item={true} xs={4} sm={2} md={1} className={cellstyle}>
         {(!props.isFromPreview)?<div>
           {docItem && docItem.documents && docItem.documents.length > 0 ? (
@@ -233,11 +233,11 @@ const UploadCard = (props) => {
             optionValue="code"
             optionLabel="label"
             autoSelect={true}
-            required={(!docItem.isDocumentRequired)?docItem.required:docItem.isDocumentRequired}
+            required={(!docItem.isDocumentRequired) ? docItem.required : docItem.isDocumentRequired}
             onChange={(event) => props.handleChange(docIndex, event)}
             jsonPath={`${jsonPath}[${docIndex}].dropDownValues.value`}
           />
-        ):""}
+        ) : ""}
       </Grid>
       <Grid
         item={true}
@@ -247,8 +247,8 @@ const UploadCard = (props) => {
         className={classes.fileUploadDiv}
         style={{ display: "inline-block !important;" }}
       >
-        <div className="upload_btn">
-         
+        <div className={forUpBtn}>
+
           <UploadMultipleFile
             classes={props.classes}
             handleFileUpload={(e) =>
@@ -264,15 +264,15 @@ const UploadCard = (props) => {
           />
         </div>
       </Grid>
-      {(props.isFromPreview)?
-          <Grid item xs={12}>
-           <Button
-              color="primary"
-              style={{ float: "right" }}
-              onClick={() => props.toggleEditClick(docIndex)}
-            >Upload</Button>
-        </Grid>:""
-        }
+      {(props.isFromPreview) ?
+        <Grid item xs={12}>
+          <Button
+            color="primary"
+            style={{ float: "right" }}
+            onClick={() => props.toggleEditClick(docIndex)}
+          >ADD FILES</Button>
+        </Grid> : ""
+      }
     </Grid>
   );
 };

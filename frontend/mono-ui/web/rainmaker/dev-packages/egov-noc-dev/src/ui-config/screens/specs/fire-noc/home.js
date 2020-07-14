@@ -1,13 +1,8 @@
-import React from "react";
 import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getRequiredDocData } from "egov-ui-framework/ui-utils/commons";
+import React from "react";
 import FireNocIcon from "../../../../ui-atoms-local/Icons/FireNocIcon";
 import MyApplicationIcon from "../../../../ui-atoms-local/Icons/MyApplicationIcon";
-// import { getRequiredDocData } from "../utils";
-import get from "lodash/get";
-import set from "lodash/set";
-import { getRequiredDocuments } from "./requiredDocuments/reqDocs";
-import { pbkdf2 } from "crypto";
-import { getRequiredDocData } from "egov-ui-framework/ui-utils/commons";
 
 const header = getCommonHeader(
   {
@@ -47,7 +42,7 @@ const tradeLicenseSearchAndResult = {
   uiFramework: "material-ui",
   name: "home",
   beforeInitScreen: (action, state, dispatch) => {
-    const moduleDetails= [
+    const moduleDetails = [
       {
         moduleName: "FireNoc",
         masterDetails: [{ name: "Documents" }]

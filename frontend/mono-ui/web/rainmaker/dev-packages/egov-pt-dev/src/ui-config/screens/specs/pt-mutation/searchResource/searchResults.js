@@ -109,27 +109,20 @@ export const textToLocalMapping = {
 
 export const searchPropertyTable = {
   uiFramework: "custom-molecules",
-  // moduleName: "egov-tradelicence",
   componentPath: "Table",
   visible: false,
   props: {
     className: "propertyTab",
-    // data: [],
     columns: [
       {
         labelName: "Unique Property ID",
         labelKey: "PT_COMMON_TABLE_COL_PT_ID",
         options: {
           filter: false,
-          customBodyRender: value => (
-            <span
-              style={
-                { color: "#337ab7", cursor: "pointer", textDecoration: "underline" }
-              }
-
-            >
-              {value}
-            </span>
+          customBodyRender: (value, tableMeta) => (
+            <div>
+              <a href="javascript:void(0)" onClick={() => onPropertyTabClick(tableMeta)}>{value}</a>
+            </div>
           )
         }
       },
@@ -169,10 +162,7 @@ export const searchPropertyTable = {
       responsive: "stacked",
       selectableRows: false,
       hover: true,
-      rowsPerPageOptions: [10, 15, 20],
-      onRowClick: (row, index, dispatch) => {
-        onPropertyTabClick(row, dispatch);
-      }
+      rowsPerPageOptions: [10, 15, 20]
     },
     customSortColumn: {
       column: "Application Date",
@@ -194,12 +184,10 @@ export const searchPropertyTable = {
 
 export const searchApplicationTable = {
   uiFramework: "custom-molecules",
-  // moduleName: "egov-tradelicence",
   componentPath: "Table",
   visible: false,
   props: {
     className: "appTab",
-    // data: [],
     columns: [
       {
         labelName: "Application No",
@@ -207,17 +195,11 @@ export const searchApplicationTable = {
         options: {
           filter: false,
           customBodyRender: value => (
-            <span
-              onClick={() => {
-                applicationNumberClick(value)
-              }
-              }
-              style={
-                { color: "#337ab7", cursor: "pointer", textDecoration: "underline" }
-              }
+            <a href="javascript:void(0)"
+              onClick={() => applicationNumberClick(value) }
             >
               {value.acknowldgementNumber}
-            </span>
+            </a>
           )
         }
       },
@@ -227,16 +209,11 @@ export const searchApplicationTable = {
         options: {
           filter: false,
           customBodyRender: value => (
-            <span
-              style={
-                { color: "#337ab7", cursor: "pointer", textDecoration: "underline" }
-              }
-              onClick={() => {
-                propertyIdClick(value)
-              }}
+            <a href="javascript:void(0)"
+              onClick={() => propertyIdClick(value) }
             >
               {value.propertyId}
-            </span>
+            </a>
           )
         }
       },
@@ -308,19 +285,13 @@ export const searchApplicationTable = {
 
 
 
-const onPropertyTabClick = (rowData, dispatch) => {
-  switch (rowData[5]) {
+const onPropertyTabClick = (tableMeta) => {
+  switch (tableMeta.rowData[5]) {
     case "INITIATED":
-      window.location.href = `apply?applicationNumber=${rowData[0]}&tenantId=${
-        rowData[6]
-        }`;
+      window.location.href = `apply?applicationNumber=${tableMeta.rowData[0]}&tenantId=${tableMeta.rowData[6]}`;
       break;
     default:
-      // window.location.href = `search-preview?applicationNumber=${
-      // window.location.pathname=`property-tax/property/${rowData[0]}/${rowData[6]}`;
-      navigate(propertyInformationScreenLink(rowData[0].props.children,rowData[6]));
-      //   rowData[0]
-      // }&tenantId=${rowData[6]}`; 
+      navigate(propertyInformationScreenLink(tableMeta.rowData[0], tableMeta.rowData[6]));
       break;
   }
 };

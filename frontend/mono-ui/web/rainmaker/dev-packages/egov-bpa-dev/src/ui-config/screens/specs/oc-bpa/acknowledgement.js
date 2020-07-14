@@ -15,8 +15,8 @@ import set from "lodash/set";
 import { getCurrentFinancialYear } from "../utils";
 export const header = getCommonContainer({
   header: getCommonHeader({
-    labelName: `Application for BPA (${getCurrentFinancialYear()})`, //later use getFinancialYearDates
-    labelKey: "BPA_COMMON_APPLY_BPA_HEADER_LABEL"
+    labelName: `Application for Occupancy certificate`,
+    labelKey: "BPA_COMMON_APPLY_BPA_OC_HEADER_LABEL"
   }),
   applicationNumber: {
     uiFramework: "custom-atoms-local",
@@ -33,8 +33,8 @@ export const header = getCommonContainer({
 const getHeader=(applicationNumber)=>{
 return getCommonContainer({
   header: getCommonHeader({
-    labelName: `Application for BPA (${getCurrentFinancialYear()})`, //later use getFinancialYearDates
-    labelKey: "BPA_COMMON_APPLY_BPA_HEADER_LABEL"
+    labelName: `Application for Occupancy certificate`,
+    labelKey: "BPA_COMMON_APPLY_BPA_OC_HEADER_LABEL"
   }),
   applicationNumber: {
     uiFramework: "custom-atoms-local",
@@ -58,7 +58,7 @@ const getAcknowledgementCard = (
   secondNumber,
   tenant
 ) => {
-  if (purpose === "APPLY" && status === "success") {
+  if (purpose === "apply" && status === "success") {
     return {
       header:getHeader(applicationNumber),
       applicationSuccessCard: {
@@ -96,6 +96,39 @@ const getAcknowledgementCard = (
         tenant
       )
     };
+  } else if (purpose === "apply_skip" && status === "success") {
+    return {
+      header:getHeader(applicationNumber),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "Application Submitted Successfully",
+              labelKey: "BPA_APPLICATION_SUCCESS_MESSAGE_MAIN"
+            },
+            body: {
+              labelName:
+                "A notification regarding Application Submission has been sent to building owner at registered Mobile No.",
+              labelKey: "BPA_APPLICATION_SUCCESS_MESSAGE_SUB"
+            },
+            tailText: {
+              labelName: "Application No.",
+              labelKey: "BPA_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+            },
+            number: applicationNumber
+          })
+        }
+      },
+      iframeForPdf: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div"
+      },
+      gotoHomeFooter
+    };
   } else if (purpose === "SEND_TO_CITIZEN" && status === "success") {
     return {
       header:getHeader(applicationNumber),
@@ -127,12 +160,7 @@ const getAcknowledgementCard = (
         uiFramework: "custom-atoms",
         componentPath: "Div"
       },
-      applicationSuccessFooter: applicationSuccessFooter(
-        state,
-        dispatch,
-        applicationNumber,
-        tenant
-      )
+      gotoHomeFooter
     };
   } else if (purpose === "APPROVE" && status === "success") {
     return {
@@ -164,12 +192,13 @@ const getAcknowledgementCard = (
         uiFramework: "custom-atoms",
         componentPath: "Div"
       },
-      applicationSuccessFooter: applicationSuccessFooter(
-        state,
-        dispatch,
-        applicationNumber,
-        tenant
-      )
+      gotoHomeFooter
+      // applicationSuccessFooter: applicationSuccessFooter(
+      //   state,
+      //   dispatch,
+      //   applicationNumber,
+      //   tenant
+      // )
     };
   } else if (purpose === "SEND_TO_ARCHITECT" && status === "success") {
     return {
@@ -202,12 +231,13 @@ const getAcknowledgementCard = (
         uiFramework: "custom-atoms",
         componentPath: "Div"
       },
-      applicationSuccessFooter: applicationSuccessFooter(
-        state,
-        dispatch,
-        applicationNumber,
-        tenant
-      )
+      gotoHomeFooter
+      // applicationSuccessFooter: applicationSuccessFooter(
+      //   state,
+      //   dispatch,
+      //   applicationNumber,
+      //   tenant
+      // )
     };
   }  else if (purpose === "pay" && status === "success") {
     return {
@@ -245,7 +275,7 @@ const getAcknowledgementCard = (
     };
   } else if (purpose === "approve" && status === "success") {
     return {
-      header,
+      header: getHeader(applicationNumber),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -274,7 +304,7 @@ const getAcknowledgementCard = (
     };
   } else if (purpose === "application" && status === "rejected") {
     return {
-      header,
+      header:getHeader(applicationNumber),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -290,7 +320,12 @@ const getAcknowledgementCard = (
               labelName:
                 "A notification regarding BPA Rejection has been sent to building owner at registered Mobile No.",
               labelKey: "BPA_APPROVAL_REJE_MESSAGE_SUBHEAD"
-            }
+            },
+            tailText: {
+              labelName: "Application No.",
+              labelKey: "BPA_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+            },
+            number: applicationNumber
           })
         }
       },
@@ -298,7 +333,7 @@ const getAcknowledgementCard = (
     };
   } else if (purpose === "application" && status === "revocated") {
     return {
-      header,
+      header:getHeader(applicationNumber),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -307,14 +342,19 @@ const getAcknowledgementCard = (
             icon: "close",
             backgroundColor: "#E54D42",
             header: {
-              labelName: "Application for permit order is revocated",
-              labelKey: "BPA_APPROVAL_REVOCATED_MESSAGE_HEAD"
+              labelName: "Application for Occupancy Certificate is revocated",
+              labelKey: "BPA_APPROVAL_OC_REVOCATED_MESSAGE_HEAD"
             },
             body: {
               labelName:
                 "A notification regarding Building Permit application revocation has been sent to applicant at registered Mobile No.",
               labelKey: "BPA_APPROVAL_REV_MESSAGE_SUBHEAD"
-            }
+            },
+            tailText: {
+              labelName: "Application No.",
+              labelKey: "BPA_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+            },
+            number: applicationNumber
           })
         }
       },
@@ -403,7 +443,7 @@ const getAcknowledgementCard = (
     };
   } else if ((purpose === "forward" || purpose === "FORWARD") && status === "success") {
     return {
-      header,
+      header:getHeader(applicationNumber),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -431,7 +471,7 @@ const getAcknowledgementCard = (
     };
   } else if (purpose === "sendback" && status === "success") {
     return {
-      header,
+      header:getHeader(applicationNumber),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",

@@ -1,27 +1,22 @@
-import {
-  getStepperObject,
-  getCommonHeader,
-  getCommonContainer
-} from "egov-ui-framework/ui-config/screens/specs/utils";
-
-import { footer } from "./createResource/footer";
+import { getCommonContainer, getCommonHeader, getStepperObject } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import get from "lodash/get";
+import map from "lodash/map";
+import "../../../../index.css";
+import { httpRequest } from "../../../../ui-utils";
+import { assignmentDetails } from "./createResource/assignment-details";
 import {
   employeeDetails,
   professionalDetails
 } from "./createResource/employee-details";
+import { footer } from "./createResource/footer";
 import { jurisdictionDetails } from "./createResource/jurisdiction-details";
-import { assignmentDetails } from "./createResource/assignment-details";
-import { serviceDetails } from "./createResource/service-details";
 import { otherDetails } from "./createResource/other-details";
-import set from "lodash/set";
-import get from "lodash/get";
-import map from "lodash/map";
-import { httpRequest } from "../../../../ui-utils";
-import { commonTransform, objectArrayToDropdown } from "../utils";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { serviceDetails } from "./createResource/service-details";
 import { getEmployeeData } from "./viewResource/functions";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+
 
 export const stepsData = [
   { labelName: "Employee Details", labelKey: "HR_NEW_EMPLOYEE_FORM_HEADER" },
@@ -202,7 +197,7 @@ const getYearsList = (startYear, state, dispatch) => {
   startYear = startYear || 1980;
 
   while (startYear <= currentYear) {
-    years.push({ value: (startYear++).toString() });
+    years.push({ code: (startYear++).toString(), name: (startYear++).toString() });
   }
 
   dispatch(prepareFinalObject("yearsList", years));

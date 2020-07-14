@@ -1,7 +1,7 @@
 import { handleScreenConfigurationFieldChange as handleField, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getUserInfo, getTenantIdCommon } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
-import { fetchBill, findAndReplace, getSearchResults, getSearchResultsForSewerage, getWorkFlowData } from "../../../../../ui-utils/commons";
+import { fetchBill, findAndReplace, getSearchResults, getSearchResultsForSewerage, getWorkFlowData, serviceConst } from "../../../../../ui-utils/commons";
 import { validateFields } from "../../utils";
 import { convertDateToEpoch, convertEpochToDate, resetFieldsForApplication, resetFieldsForConnection } from "../../utils/index";
 import { httpRequest } from "../../../../../ui-utils";
@@ -84,20 +84,20 @@ const renderSearchConnectionTable = async (state, dispatch) => {
       let searchWaterConnectionResults, searcSewerageConnectionResults;
       try { searchWaterConnectionResults = await getSearchResult } catch (error) { finalArray = []; console.log(error) }
       try { searcSewerageConnectionResults = await getSearchResultForSewerage } catch (error) { finalArray = []; console.log(error) }
-      const waterConnections = searchWaterConnectionResults ? searchWaterConnectionResults.WaterConnection.map(e => { e.service = 'WATER'; return e }) : []
-      const sewerageConnections = searcSewerageConnectionResults ? searcSewerageConnectionResults.SewerageConnections.map(e => { e.service = 'SEWERAGE'; return e }) : [];
+      const waterConnections = searchWaterConnectionResults ? searchWaterConnectionResults.WaterConnection.map(e => { e.service = serviceConst.WATER; return e }) : []
+      const sewerageConnections = searcSewerageConnectionResults ? searcSewerageConnectionResults.SewerageConnections.map(e => { e.service = serviceConst.SEWERAGE; return e }) : [];
       let combinedSearchResults = searchWaterConnectionResults || searcSewerageConnectionResults ? sewerageConnections.concat(waterConnections) : []
       for (let i = 0; i < combinedSearchResults.length; i++) {
         let element = combinedSearchResults[i];
         if (element.connectionNo !== "NA" && element.connectionNo !== null) {
           let queryObjectForWaterFetchBill;
-          if (element.service === "WATER") {
+          if (element.service === serviceConst.WATER) {
             queryObjectForWaterFetchBill = [{ key: "tenantId", value: getTenantIdCommon() }, { key: "consumerCode", value: element.connectionNo }, { key: "businessService", value: "WS" }];
           } else {
             queryObjectForWaterFetchBill = [{ key: "tenantId", value: getTenantIdCommon() }, { key: "consumerCode", value: element.connectionNo }, { key: "businessService", value: "SW" }];
           }
 
-          if (element.service === "WATER" && 
+          if (element.service === serviceConst.WATER && 
               payloadbillingPeriod && 
               payloadbillingPeriod.MdmsRes['ws-services-masters'] && 
               payloadbillingPeriod.MdmsRes['ws-services-masters'].billingPeriod !== undefined && 
@@ -110,7 +110,7 @@ const renderSearchConnectionTable = async (state, dispatch) => {
                 }
               }); 
           }
-          if (element.service === "SEWERAGE" && 
+          if (element.service === serviceConst.SEWERAGE && 
               payloadbillingPeriod && 
               payloadbillingPeriod.MdmsRes['sw-services-calculation'] && 
               payloadbillingPeriod.MdmsRes['sw-services-calculation'].billingPeriod !== undefined && 
@@ -125,11 +125,11 @@ const renderSearchConnectionTable = async (state, dispatch) => {
           let billResults = await fetchBill(queryObjectForWaterFetchBill, dispatch)
           billResults ? billResults.Bill.map(bill => {
             let updatedDueDate = 0;
-            if(element.service === "WATER") {
+            if(element.service === serviceConst.WATER) {
               updatedDueDate = (element.connectionType === 'Metered' ?
               (bill.billDetails[0].toPeriod+waterMeteredDemandExipryDate) :
               (bill.billDetails[0].toPeriod+waterNonMeteredDemandExipryDate));
-            } else if (element.service === "SEWERAGE") {
+            } else if (element.service === serviceConst.SEWERAGE) {
               updatedDueDate = bill.billDetails[0].toPeriod + sewerageNonMeteredDemandExpiryDate;
             }
             finalArray.push({
@@ -203,20 +203,20 @@ const renderSearchApplicationTable = async (state, dispatch) => {
     }
     try {
       let getSearchResult, getSearchResultForSewerage;
-      if (searchScreenObject.applicationType === "New Water connection") {
+      if (searchScreenObject.applicationType && (searchScreenObject.applicationType.toLowerCase().includes('new water') || searchScreenObject.applicationType.toLowerCase().includes('newwater'))) {
         getSearchResult = getSearchResults(queryObject)
-      } else if (searchScreenObject.applicationType === "New Sewerage Connection") {
+      } else if (searchScreenObject.applicationType && (searchScreenObject.applicationType.toLowerCase().includes('new sewerage') || searchScreenObject.applicationType.toLowerCase().includes('newsewerage'))) {
         getSearchResultForSewerage = getSearchResultsForSewerage(queryObject, dispatch)
       } else {
         getSearchResult = getSearchResults(queryObject),
-          getSearchResultForSewerage = getSearchResultsForSewerage(queryObject, dispatch)
+        getSearchResultForSewerage = getSearchResultsForSewerage(queryObject, dispatch)
       }
       let finalArray = [];
       let searchWaterConnectionResults, searcSewerageConnectionResults;
       try { searchWaterConnectionResults = await getSearchResult } catch (error) { finalArray = []; console.log(error) }
       try { searcSewerageConnectionResults = await getSearchResultForSewerage } catch (error) { finalArray = []; console.log(error) }
-      const waterConnections = searchWaterConnectionResults ? searchWaterConnectionResults.WaterConnection.map(e => { e.service = 'WATER'; return e }) : []
-      const sewerageConnections = searcSewerageConnectionResults ? searcSewerageConnectionResults.SewerageConnections.map(e => { e.service = 'SEWERAGE'; return e }) : [];
+      const waterConnections = searchWaterConnectionResults ? searchWaterConnectionResults.WaterConnection.map(e => { e.service = serviceConst.WATER; return e }) : []
+      const sewerageConnections = searcSewerageConnectionResults ? searcSewerageConnectionResults.SewerageConnections.map(e => { e.service = serviceConst.SEWERAGE; return e }) : [];
       let combinedSearchResults = searchWaterConnectionResults || searcSewerageConnectionResults ? sewerageConnections.concat(waterConnections) : []
 
       let appNo = "";
@@ -343,7 +343,7 @@ const showApplicationResults = (connections, dispatch) => {
   let data = connections.map(item => ({
     ["WS_COMMON_TABLE_COL_CONSUMER_NO_LABEL"]: item.connectionNo,
     ["WS_COMMON_TABLE_COL_APP_NO_LABEL"]: item.applicationNo,
-    ["WS_COMMON_TABLE_COL_APP_TYPE_LABEL"]: item.service === "WATER" ? "New Water Connection" : "New Sewerage Connection",
+    ["WS_COMMON_TABLE_COL_APP_TYPE_LABEL"]: item.service === serviceConst.WATER ? "New Water Connection" : "New Sewerage Connection",
     ["WS_COMMON_TABLE_COL_OWN_NAME_LABEL"]: item.name,
     ["WS_COMMON_TABLE_COL_APPLICATION_STATUS_LABEL"]: item.applicationStatus.split("_").join(" "),
     ["WS_COMMON_TABLE_COL_ADDRESS"]: item.address,

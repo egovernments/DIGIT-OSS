@@ -14,7 +14,7 @@ import { setFieldProperty } from "egov-ui-kit/redux/form/actions";
 let floorDropDownData = [];
 
 for (var i = 1; i <= 25; i++) {
-  floorDropDownData.push({ label: i, value: i });
+  floorDropDownData.push({ label: i.toString(), value: i });
 }
 
 export const plotSize = {
@@ -29,6 +29,7 @@ export const plotSize = {
     fullWidth: true,
     pattern: /^([1-9]\d{0,7})(\.\d+)?$/,
     numcols: 6,
+    formName: "plotDetails",
     updateDependentFields: ({ formKey, field, dispatch, state }) => {
       let propertyType = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].propertyType");
       let propertySubType = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].propertySubType");
@@ -44,7 +45,7 @@ export const floorCount = {
   floorCount: {
     id: "assessment-number-of-floors",
     jsonPath: "Properties[0].propertyDetails[0].noOfFloors",
-    type: "singleValueList",
+    type: "AutocompleteDropdown",
     floatingLabelText: "PT_FORM2_NUMBER_OF_FLOORS",
     hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
     toolTip: true,
@@ -52,7 +53,12 @@ export const floorCount = {
     toolTipMessage: "PT_NUMBER_OF_FLOORS_TOOLTIP_MESSAGE",
     required: true,
     numcols: 6,
+    gridDefination: {
+      xs: 12,
+      sm: 6
+    },
     dropDownData: floorDropDownData,
+    formName: "plotDetails",
     updateDependentFields: ({ formKey, field, dispatch, state }) => {
       // removeFormKey(formKey, field, dispatch, state);
       var previousFloorNo = localStorageGet("previousFloorNo") || -1;
@@ -78,7 +84,7 @@ export const subUsageType = {
   subUsageType: {
     id: "assessment-subUsageType",
     jsonPath: "Properties[0].propertyDetails[0].units[0].usageCategoryDetail",
-    type: "singleValueList",
+    type: "AutocompleteDropdown",
     localePrefix: "PROPERTYTAX_BILLING_SLAB",
     floatingLabelText: "PT_FORM2_SUB_USAGE_TYPE",
     hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
@@ -86,6 +92,11 @@ export const subUsageType = {
     dropDownData: [],
     required: true,
     numcols: 4,
+    gridDefination: {
+      xs: 12,
+      sm: 4
+    },
+    formName: "plotDetails",
     updateDependentFields: ({ formKey, field, dispatch, state }) => {
       let subUsageMinor = get(state, `common.generalMDMSDataById.UsageCategoryDetail[${field.value}]`);
       if (!isEmpty(subUsageMinor)) {
@@ -102,13 +113,18 @@ export const occupancy = {
   occupancy: {
     id: "assessment-occupancy",
     jsonPath: "Properties[0].propertyDetails[0].units[0].occupancyType",
-    type: "singleValueList",
+    type: "AutocompleteDropdown",
     localePrefix: { moduleName: "PropertyTax", masterName: "OccupancyType" },
     floatingLabelText: "PT_FORM2_OCCUPANCY",
     hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
     required: true,
     numcols: 4,
+    gridDefination: {
+      xs: 12,
+      sm: 4
+    },
     dropDownData: [],
+    formName: "plotDetails",
     updateDependentFields: ({ formKey, field: sourceField, dispatch }) => {
       const { value } = sourceField;
       const dependentFields1 = ["annualRent"];
@@ -138,6 +154,7 @@ export const builtArea = {
     hideField: false,
     numcols: 4,
     pattern: /^([1-9]\d{0,7})(\.\d+)?$/,
+    formName: "plotDetails",
   },
 };
 
@@ -160,6 +177,7 @@ export const superArea = {
     },
     pattern: /^([1-9]\d{0,7})(\.\d+)?$/,
     errorMessage: "PT_SUPER_AREA_ERROR_MESSAGE",
+    formName: "plotDetails",
   },
 };
 
@@ -178,6 +196,7 @@ export const annualRent = {
     pattern: /^([1-9]\d{0,7})(\.\d+)?$/,
     hideField: true,
     numcols: 4,
+    formName: "plotDetails",
   },
 };
 
@@ -197,15 +216,20 @@ export const measuringUnit = {
 export const floorName = {
   floorName: {
     id: "floorName",
-    type: "singleValueList",
+    type: "AutocompleteDropdown",
     floatingLabelText: "PT_FORM2_SELECT_FLOOR",
     localePrefix: { moduleName: "PropertyTax", masterName: "Floor" },
     hintText: "PT_FORM2_SELECT_FLOOR",
     numcols: 4,
+    gridDefination: {
+      xs: 12,
+      sm: 4
+    },
     errorMessage: "",
     required: true,
     jsonPath: "Properties[0].propertyDetails[0].units[0].floorNo",
     hideField: true,
+    formName: "plotDetails",
   },
 };
 
@@ -239,6 +263,13 @@ export const beforeInitForm = {
       } else {
         unitsCount = property && property.units && property.units.length;
         form.unitsIndex = unitsCount;
+      }
+      // Adding formName prop to each field item to display required Error message.
+      let fieldsArray = Object.keys(form.fields);
+      if(fieldsArray && fieldsArray.length > 0){
+        fieldsArray.map(key=>{
+          form.fields[key].formName = form.name;
+        });
       }
       if (floorIndex === 0 && unitIndex === 0) {
         form.unitsIndex = 0;
@@ -433,14 +464,17 @@ export const city = {
     id: "city",
     jsonPath: "Properties[0].address.city",
     required: true,
-    type: "singleValueList",
+    localePrefix: { moduleName: "tenant", masterName: "tenants" },
+    type: "AutocompleteDropdown",
     floatingLabelText: "CORE_COMMON_CITY",
-    className: "pt-emp-property-address-city",
-    disabled: true,
     errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
     fullWidth: true,
     hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
     numcols: 6,
+    gridDefination: {
+      xs: 12,
+      sm: 6
+    },
     dataFetchConfig: {
       dependants: [
         {
@@ -450,13 +484,24 @@ export const city = {
     },
     updateDependentFields: ({ formKey, field, dispatch, state }) => {
       dispatch(prepareFormData("Properties[0].tenantId", field.value));
+      dispatch(
+        prepareFormData(
+          "Properties[0].address.city",
+          filter(get(state, "common.cities"), (city) => {
+            return city.code === field.value;
+          })[0].name
+        )
+      );
+      dispatch(setFieldProperty("propertyAddress", "mohalla", "value", ""));
+      const moduleValue = field.value;
+      dispatch(fetchLocalizationLabel(getLocale(), moduleValue, moduleValue));
       let requestBody = generalMDMSDataRequestObj(field.value);
 
       dispatch(
         fetchGeneralMDMSData(requestBody, "PropertyTax", getGeneralMDMSDataDropdownName())
       );
     },
-  },
+  }
 };
 
 export const dummy = {
@@ -512,7 +557,7 @@ export const mohalla = {
   mohalla: {
     id: "mohalla",
     jsonPath: "Properties[0].address.locality.code",
-    type: "singleValueList",
+    type: "AutocompleteDropdown",
     floatingLabelText: "PT_PROPERTY_DETAILS_MOHALLA",
     hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
     fullWidth: true,
@@ -523,6 +568,10 @@ export const mohalla = {
     //toolTipMessage: "Name of the area in which your property is located",
     boundary: true,
     numcols: 6,
+    gridDefination: {
+      xs: 12,
+      sm: 6
+    },
     errorMessage: "PT_PROPERTY_DETAILS_MOHALLA_ERRORMSG",
     dataFetchConfig: {
       url: "egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
@@ -534,6 +583,7 @@ export const mohalla = {
     },
     errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
     required: true,
+    formName: "propertyAddress",
     updateDependentFields: ({ formKey, field, dispatch }) => {
       if (field.value && field.value.length > 0) {
         const mohalla = field.dropDownData.find((option) => {

@@ -2,7 +2,7 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 import set from "lodash/set";
 import { download } from "../../../../ui-utils/commons";
-import { ifUserRoleExists } from "../utils";
+import { ifUserRoleExists, generateBill } from "../utils";
 import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils";
 import { paymentFooter } from "./acknowledgementResource/paymentFooter";
 import './index.css';
@@ -161,6 +161,10 @@ const screenConfig = {
         const receiptNumber = getQueryArg(window.location.href, "receiptNumber");
         const tenant = getQueryArg(window.location.href, "tenantId");
         const businessService = getQueryArg(window.location.href, "businessService");
+        // Calling the Bill so that payer information can be set in the PDF for Citizen application
+        if(process.env.REACT_APP_NAME === "Citizen") {
+            generateBill(dispatch, consumerCode, tenant, businessService);
+        }
         const data = getAcknowledgementCard(
             state,
             dispatch,

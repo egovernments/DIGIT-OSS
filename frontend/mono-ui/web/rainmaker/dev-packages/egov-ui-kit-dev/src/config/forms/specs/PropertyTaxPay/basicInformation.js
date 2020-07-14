@@ -6,20 +6,33 @@ import { prepareDropDownData } from "./utils/reusableFields";
 import set from "lodash/set";
 import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
+import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons.js";
 import { localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 
+
+const options = [
+  
+  { value: "Yes", label: getLocaleLabels("Yes", "PT_COMMON_YES") },
+  { value: "No", label: getLocaleLabels("No", "PT_COMMON_NO") },
+];
 const formConfig = {
   name: "basicInformation",
   fields: {
     typeOfUsage: {
       id: "typeOfUsage",
       jsonPath: "Properties[0].propertyDetails[0].usageCategoryMinor",
-      type: "singleValueList",
+      type: "AutocompleteDropdown",
       localePrefix: "PROPERTYTAX_BILLING_SLAB",
       floatingLabelText: "PT_COMMONS_PROPERTY_USAGE_TYPE",
       hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
       required: true,
+      formName: "basicInformation",
       fullWidth: true,
+      labelsFromLocalisation:false,
+      gridDefination: {
+        xs: 12,
+        sm: 6
+      },
       updateDependentFields: ({ formKey, field, dispatch, state }) => {
         removeFormKey(formKey, field, dispatch, state);
         dispatch(prepareFormData(`Properties[0].propertyDetails[0].units`, []));
@@ -36,12 +49,18 @@ const formConfig = {
     typeOfBuilding: {
       id: "typeOfBuilding",
       jsonPath: "Properties[0].propertyDetails[0].propertySubType",
-      type: "singleValueList",
+      type: "AutocompleteDropdown",
       localePrefix: "PROPERTYTAX_BILLING_SLAB",
       floatingLabelText: "PT_COMMONS_PROPERTY_TYPE",
       hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
       required: true,
+      formName: "basicInformation",
       fullWidth: true,
+      labelsFromLocalisation:false,
+      gridDefination: {
+        xs: 12,
+        sm: 6
+      },
       updateDependentFields: ({ formKey, field, dispatch, state }) => {
         dispatch(prepareFormData(`Properties[0].propertyDetails[0].units`, []));
         dispatch(prepareFormData(`Properties[0].propertyDetails[0].landArea`, null));
@@ -55,6 +74,23 @@ const formConfig = {
           dispatch(prepareFormData("Properties[0].propertyDetails[0].propertyType", field.value));
           dispatch(prepareFormData("Properties[0].propertyDetails[0].propertySubType", null));
         }
+      },
+      dropDownData: [],
+    },
+    rainwaterHarvesting: {
+      id: "rainwaterHarvesting",
+      jsonPath: "Properties[0].additionalDetails.isRainwaterHarvesting",
+      type: "radioButton",
+      localePrefix: "PROPERTYTAX_BILLING_SLAB",
+      floatingLabelText: "PT_COMMONS_IS_RAINWATER_HARVESTING",
+      hintText: "PT_COMMONS_IS_RAINWATER_HARVESTING",
+      required: false,
+      fullWidth: true,
+      showFloatingLabelText:true,
+      labelsFromLocalisation:false,
+      gridDefination: {
+        xs: 12,
+        sm: 6
       },
       dropDownData: [],
     },
@@ -75,6 +111,7 @@ const formConfig = {
       masterOne = Object.values(get(state, "common.generalMDMSDataById.PropertyType")).filter(item=> item.propertyType !== "BUILTUP");
       masterTwo = get(state, "common.generalMDMSDataById.PropertySubType");
       set(action, "form.fields.typeOfBuilding.dropDownData", mergeMaster(masterOne, masterTwo, "propertyType"));
+      set(action, "form.fields.rainwaterHarvesting.options",options);
       return action;
     } catch (e) {
       console.log(e);

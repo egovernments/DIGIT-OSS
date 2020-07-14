@@ -1,88 +1,83 @@
-import {
-  getCommonHeader,
-  getCommonContainer
-} from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getCommonContainer, getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { loadUlbLogo } from "egov-ui-kit/utils/pdfUtils/generatePDF";
+import { generateTLAcknowledgement } from "egov-ui-kit/utils/pdfUtils/generateTLAcknowledgement";
+import set from "lodash/set";
+import { loadReceiptGenerationData } from "../utils/receiptTransformer";
+import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils";
 import { applicationSuccessFooter } from "./acknowledgementResource/applicationSuccessFooter";
-import { paymentSuccessFooter } from "./acknowledgementResource/paymentSuccessFooter";
 import { approvalSuccessFooter } from "./acknowledgementResource/approvalSuccessFooter";
 import { gotoHomeFooter } from "./acknowledgementResource/gotoHomeFooter";
 import { paymentFailureFooter } from "./acknowledgementResource/paymentFailureFooter";
-import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { loadReceiptGenerationData } from "../utils/receiptTransformer";
-import get from "lodash/get";
-import set from "lodash/set";
-import generatePdf from "../utils/receiptPdf";
-import { Icon } from "egov-ui-framework/ui-atoms";
-import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
-import {generatePdfAndDownload} from "./acknowledgementResource/applicationSuccessFooter";
-import {downloadAcknowledgementForm} from "../utils"
-import "./index.css"
+import { paymentSuccessFooter } from "./acknowledgementResource/paymentSuccessFooter";
+import "./index.css";
 
 const downloadprintMenu = (state, dispatch) => {
   let applicationDownloadObject = {
     label: { labelName: "Application", labelKey: "TL_APPLICATION" },
     link: () => {
-      const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
-      const documents = LicensesTemp&&LicensesTemp[0].reviewDocData;
-      set(Licenses[0],"additionalDetails.documents",documents)
-      downloadAcknowledgementForm(Licenses);
+      const { Licenses, LicensesTemp } = state.screenConfiguration.preparedFinalObject;
+      const documents = LicensesTemp && LicensesTemp[0].reviewDocData;
+      set(Licenses[0], "additionalDetails.documents", documents)
+      // downloadAcknowledgementForm(Licenses);
+      generateTLAcknowledgement(state.screenConfiguration.preparedFinalObject, `tl-acknowledgement-${Licenses[0].applicationNumber}`);
     },
     leftIcon: "assignment"
   };
   let applicationPrintObject = {
     label: { labelName: "Application", labelKey: "TL_APPLICATION" },
     link: () => {
-      const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
-      const documents =LicensesTemp&& LicensesTemp[0].reviewDocData;
-      set(Licenses[0],"additionalDetails.documents",documents)
-      downloadAcknowledgementForm(Licenses,'print');
+      const { Licenses, LicensesTemp } = state.screenConfiguration.preparedFinalObject;
+      const documents = LicensesTemp && LicensesTemp[0].reviewDocData;
+      set(Licenses[0], "additionalDetails.documents", documents)
+      // downloadAcknowledgementForm(Licenses,'print');
+      generateTLAcknowledgement(state.screenConfiguration.preparedFinalObject, 'print');
     },
     leftIcon: "assignment"
   };
-   let downloadMenu = [];
-   let printMenu = [];
-   downloadMenu = [ applicationDownloadObject];
-   printMenu = [applicationPrintObject];
+  let downloadMenu = [];
+  let printMenu = [];
+  downloadMenu = [applicationDownloadObject];
+  printMenu = [applicationPrintObject];
 
 
-   return {
-       uiFramework: "custom-atoms",
-       componentPath: "Div",
-       props: {
-           className: "downloadprint-commonmenu",
-           style: { textAlign: "right", display: "flex" }
-       },
-       children: {
-           downloadMenu: {
-               uiFramework: "custom-molecules",
-               componentPath: "DownloadPrintButton",
-               props: {
-                   data: {
-                       label: { labelName: "DOWNLOAD", labelKey: "TL_DOWNLOAD" },
-                       leftIcon: "cloud_download",
-                       rightIcon: "arrow_drop_down",
-                       props: { variant: "outlined", style: { height: "60px", color: "#FE7A51",marginRight:"5px" }, className: "tl-download-button" },
-                       menu: downloadMenu
-                   }
-               }
-           },
-           printMenu: {
-               uiFramework: "custom-molecules",
-               componentPath: "DownloadPrintButton",
-               props: {
-                   data: {
-                       label: { labelName: "PRINT", labelKey: "TL_PRINT" },
-                       leftIcon: "print",
-                       rightIcon: "arrow_drop_down",
-                       props: { variant: "outlined", style: { height: "60px", color: "#FE7A51" }, className: "tl-print-button" },
-                       menu: printMenu
-                   }
-               }
-           }
+  return {
+    uiFramework: "custom-atoms",
+    componentPath: "Div",
+    props: {
+      className: "downloadprint-commonmenu",
+      style: { textAlign: "right", display: "flex" }
+    },
+    children: {
+      downloadMenu: {
+        uiFramework: "custom-molecules",
+        componentPath: "DownloadPrintButton",
+        props: {
+          data: {
+            label: { labelName: "DOWNLOAD", labelKey: "TL_DOWNLOAD" },
+            leftIcon: "cloud_download",
+            rightIcon: "arrow_drop_down",
+            props: { variant: "outlined", style: { height: "60px", color: "#FE7A51", marginRight: "5px" }, className: "tl-download-button" },
+            menu: downloadMenu
+          }
+        }
+      },
+      printMenu: {
+        uiFramework: "custom-molecules",
+        componentPath: "DownloadPrintButton",
+        props: {
+          data: {
+            label: { labelName: "PRINT", labelKey: "TL_PRINT" },
+            leftIcon: "print",
+            rightIcon: "arrow_drop_down",
+            props: { variant: "outlined", style: { height: "60px", color: "#FE7A51" }, className: "tl-print-button" },
+            menu: printMenu
+          }
+        }
+      }
 
-       },
-   }
+    },
+  }
 
 }
 const getAcknowledgementCard = (
@@ -133,7 +128,7 @@ const getAcknowledgementCard = (
             number: applicationNumber
           })
         }
-      }, 
+      },
       iframeForPdf: {
         uiFramework: "custom-atoms",
         componentPath: "Div"
@@ -182,7 +177,7 @@ const getAcknowledgementCard = (
           })
         }
       },
-     
+
       applicationSuccessFooter: applicationSuccessFooter(
         state,
         dispatch,
@@ -328,7 +323,7 @@ const getAcknowledgementCard = (
       },
       approvalSuccessFooter
     };
-  }else if (purpose === "sendbacktocitizen" && status === "success") {
+  } else if (purpose === "sendbacktocitizen" && status === "success") {
     loadReceiptGenerationData(applicationNumber, tenant);
     return {
       header: getCommonContainer({
@@ -372,7 +367,7 @@ const getAcknowledgementCard = (
       },
       approvalSuccessFooter
     };
-  }  else if (purpose === "application" && status === "rejected") {
+  } else if (purpose === "application" && status === "rejected") {
     return {
       header: getCommonContainer({
         header: getCommonHeader({
@@ -556,25 +551,25 @@ const getAcknowledgementCard = (
       },
       gotoHomeFooter
     };
-  }else if ((purpose === "EDITRENEWAL" || purpose === "DIRECTRENEWAL") && status === "success") {
+  } else if ((purpose === "EDITRENEWAL" || purpose === "DIRECTRENEWAL") && status === "success") {
     return {
 
       header: getCommonContainer({
-       Commonheader: getCommonHeader({
-        labelName: `Application for Trade License Renewal ${financialYearText}`,
-        labelKey: "TL_APPLICATION_TRADE_LICENSE_RENEWAL",
-        dynamicArray: [financialYearText]
+        Commonheader: getCommonHeader({
+          labelName: `Application for Trade License Renewal ${financialYearText}`,
+          labelKey: "TL_APPLICATION_TRADE_LICENSE_RENEWAL",
+          dynamicArray: [financialYearText]
+        }),
+        licenseNumber: {
+          uiFramework: "custom-atoms-local",
+          moduleName: "egov-tradelicence",
+          componentPath: "ApplicationNoContainer",
+          props: {
+            number: "NA"
+          },
+          visible: true
+        }
       }),
-      licenseNumber: {
-        uiFramework: "custom-atoms-local",
-        moduleName: "egov-tradelicence",
-        componentPath: "ApplicationNoContainer",
-        props: {
-          number: "NA"
-        },
-        visible: true 
-      }
-    }),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -626,6 +621,7 @@ const screenConfig = {
     );
     const secondNumber = getQueryArg(window.location.href, "secondNumber");
     const tenant = getQueryArg(window.location.href, "tenantId");
+    loadUlbLogo(tenant);
     const data = getAcknowledgementCard(
       state,
       dispatch,

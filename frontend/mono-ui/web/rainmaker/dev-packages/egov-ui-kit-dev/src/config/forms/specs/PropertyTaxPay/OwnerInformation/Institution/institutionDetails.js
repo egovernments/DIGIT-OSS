@@ -19,12 +19,17 @@ const formConfig = {
     type: {
       id: "institution-type",
       jsonPath: "Properties[0].propertyDetails[0].institution.type",
-      type: "singleValueList",
+      type: "AutocompleteDropdown",
       localePrefix: "PROPERTYTAX_BILLING_SLAB",
       floatingLabelText: "PT_INSTITUTION_TYPE",
       numcols: 6,
       hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
       required: true,
+      labelsFromLocalisation:false,
+      gridDefination: {
+        xs: 12,
+        sm: 6
+      },
     },
   },
   beforeInitForm: (action, store) => {

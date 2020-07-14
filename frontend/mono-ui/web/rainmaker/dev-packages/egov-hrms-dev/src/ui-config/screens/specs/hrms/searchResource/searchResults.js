@@ -57,19 +57,40 @@ export const searchResults = {
   visible: false,
   props: {
     columns: [
-      getTextToLocalMapping("Employee ID"),
-      getTextToLocalMapping("Name"),
-      getTextToLocalMapping("Role"),
-      getTextToLocalMapping("Designation"),
-      getTextToLocalMapping("Department"),
       {
+        labelName:"Employee ID",
+        labelKey: "HR_COMMON_TABLE_COL_EMP_ID"
+      },
+      {
+        labelName:"Name",
+        labelKey: "HR_COMMON_TABLE_COL_NAME"
+      },
+      {
+        labelName:"Role",
+        labelKey: "HR_COMMON_TABLE_COL_ROLE"
+      },
+      {
+        labelName:"Designation",
+        labelKey: "HR_COMMON_TABLE_COL_DESG"
+      },
+      {
+        labelName: "Department", 
+        labelKey: "HR_COMMON_TABLE_COL_DEPT"
+      },
+      {
+        labelName: "Tenant ID",
+        labelKey: "HR_COMMON_TABLE_COL_TENANT_ID",
         name: "tenantId",
         options: {
           display: false
         }
       }
     ],
-    title: getTextToLocalMapping("Search Results for Employee"),
+    title: {
+      labelName: "Search Results for Employee",
+      labelKey: "HR_HOME_SEARCH_RESULTS_TABLE_HEADING"
+      } ,
+    rows: "",
     options: {
       filter: false,
       download: false,

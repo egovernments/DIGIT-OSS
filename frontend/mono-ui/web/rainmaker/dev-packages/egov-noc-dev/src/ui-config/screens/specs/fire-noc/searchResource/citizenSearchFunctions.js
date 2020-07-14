@@ -1,8 +1,14 @@
 import { getSearchResults } from "../../../../../ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import {getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import get from "lodash/get";
 
 export const fetchData = async (action, state, dispatch) => {
-  const response = await getSearchResults();
+  let tenantId = process.env.REACT_APP_NAME === "Employee" ? getTenantId() : get(state,"auth.userInfo.permanentCity","pb");
+  let queryObject = [
+    { key: "tenantId", value: tenantId }
+  ];
+  const response = await getSearchResults(queryObject);
   //const mdmsRes = await getMdmsData(dispatch);
   //   let tenants =
   //     mdmsRes &&

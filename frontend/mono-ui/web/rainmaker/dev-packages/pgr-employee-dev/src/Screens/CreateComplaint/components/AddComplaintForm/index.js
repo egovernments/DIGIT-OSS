@@ -6,6 +6,7 @@ import {
   AutoSuggestDropdown,
   Button
 } from "components";
+import { AutosuggestContainer } from "egov-ui-framework/ui-containers";
 import AdditionalDetailsCard from "../AdditionalDetails";
 import ComplaintTypeCard from "../ComplaintType";
 import MohallaDropdown from "../MohallaDropdown";
@@ -21,6 +22,18 @@ const AddComplaintForm = ({
   const fields = form.fields || {};
   const { name, phone, mohalla, city, address, landmark, houseNo } = fields;
   const submit = form.submit;
+  if(city && city.dropDownData && city.dropDownData.length > 0) {
+    city.dropDownData.map((item, key)=>{
+      city.dropDownData[key].code = item.value;
+      city.dropDownData[key].name = item.label;
+    })
+  }
+  if(mohalla && mohalla.dropDownData && mohalla.dropDownData.length > 0) {
+    mohalla.dropDownData.map((item, key)=>{
+      mohalla.dropDownData[key].code = item.value;
+      mohalla.dropDownData[key].name = item.label;
+    })
+  }
   return (
     <div className="create-complaint-main-cont">
       {/* <Label label="Complaint Submission" fontSize={20} dark={true} bold={true} containerStyle={{ padding: "24px 0 8px 17px" }} /> */}
@@ -62,21 +75,53 @@ const AddComplaintForm = ({
                 />
               </div>
               <div className="col-sm-6 col-xs-12">
-                <AutoSuggestDropdown
-                  className="fix-for-layout-break"
+                {city && <AutosuggestContainer
+                  className="fix-for-layout-break autocomplete-dropdown"
                   fullWidth={true}
-                  dataSource={city && city.dropDownData}
+                  data={city && city.dropDownData}
                   onChange={(chosenCity, index) => {
-                    handleFieldChange("city", chosenCity.value);
+                    handleFieldChange("city", chosenCity.target.value, city.jsonPath);
                   }}
-                  {...city}
-                />
+                  label={{labelKey: city.floatingLabelText }}
+                  placeholder={{labelKey: city.hintText}}
+                  id={city.id}
+                  type={city.type}
+                  required={city.required}
+                  jsonPath={city.jsonPath}
+                  localePrefix={city.localePrefix}
+                  labelsFromLocalisation={city.labelsFromLocalisation}
+                  toolTip={city.toolTip}
+                  toolTipMessage={city.toolTipMessage}
+                  boundary={city.boundary}
+                  errorMessage={city.errorMessage}
+                  errorStyle={city.errorStyle}
+                  pattern={city.pattern}
+
+                />}
               </div>
               <div className="col-sm-6 col-xs-12">
-                <MohallaDropdown
-                  handleFieldChange={handleFieldChange}
-                  mohalla={mohalla}
-                />
+                {mohalla && <AutosuggestContainer
+                  className="fix-for-layout-break autocomplete-dropdown"
+                  fullWidth={true}
+                  data={mohalla && mohalla.dropDownData}
+                  onChange={(chosenCity, index) => {
+                    handleFieldChange("mohalla", chosenCity.target.value, mohalla.jsonPath);
+                  }}
+                  label={{labelKey: mohalla.floatingLabelText }}
+                  placeholder={{labelKey: mohalla.hintText}}
+                  id={mohalla.id}
+                  type={mohalla.type}
+                  required={mohalla.required}
+                  jsonPath={mohalla.jsonPath}
+                  localePrefix={mohalla.localePrefix}
+                  labelsFromLocalisation={mohalla.labelsFromLocalisation}
+                  toolTip={mohalla.toolTip}
+                  toolTipMessage={mohalla.toolTipMessage}
+                  boundary={mohalla.boundary}
+                  errorMessage={mohalla.errorMessage}
+                  errorStyle={mohalla.errorStyle}
+                  pattern={mohalla.pattern}
+                />}
               </div>
               <div className="col-sm-6 col-xs-12">
                 <TextField

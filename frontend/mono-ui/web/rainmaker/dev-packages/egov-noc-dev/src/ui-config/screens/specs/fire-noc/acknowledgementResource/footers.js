@@ -225,55 +225,55 @@ export const approvalSuccessFooter = getCommonApplyFooter({
       action: "page_change",
       path: `${getRedirectionURL()}`
     }
-  },
-  downloadLicenseButton: {
-    componentPath: "Button",
-    props: {
-      variant: "outlined",
-      color: "primary",
-      style: {
-        width: "250px",
-        height: "48px",
-        marginRight: "16px"
-      }
-    },
-    children: {
-      downloadLicenseButtonLabel: getLabel({
-        labelName: "DOWNLOAD FIRE-NOC",
-        labelKey: "NOC_APPROVAL_CHECKLIST_BUTTON_DOWN_LIC"
-      })
-    },
-    onClickDefination: {
-      action: "condition",
-      callBack: (state, dispatch) => {
-        generatePdf(state, dispatch, "certificate_download");
-      }
-    }
-  },
-  printNOCButton: {
-    componentPath: "Button",
-    props: {
-      variant: "contained",
-      color: "primary",
-      style: {
-        width: "250px",
-        height: "48px",
-        marginRight: "40px"
-      }
-    },
-    children: {
-      printLicenseButtonLabel: getLabel({
-        labelName: "PRINT FIRE-NOC",
-        labelKey: "NOC_APPROVAL_CHECKLIST_PRINT_LIC"
-      })
-    },
-    onClickDefination: {
-      action: "condition",
-      callBack: (state, dispatch) => {
-        generatePdf(state, dispatch, "certificate_print");
-      }
-    }
   }
+  // downloadLicenseButton: {
+  //   componentPath: "Button",
+  //   props: {
+  //     variant: "outlined",
+  //     color: "primary",
+  //     style: {
+  //       width: "250px",
+  //       height: "48px",
+  //       marginRight: "16px"
+  //     }
+  //   },
+  //   children: {
+  //     downloadLicenseButtonLabel: getLabel({
+  //       labelName: "DOWNLOAD FIRE-NOC",
+  //       labelKey: "NOC_APPROVAL_CHECKLIST_BUTTON_DOWN_LIC"
+  //     })
+  //   },
+  //   onClickDefination: {
+  //     action: "condition",
+  //     callBack: (state, dispatch) => {
+  //       generatePdf(state, dispatch, "certificate_download");
+  //     }
+  //   }
+  // },
+  // printNOCButton: {
+  //   componentPath: "Button",
+  //   props: {
+  //     variant: "contained",
+  //     color: "primary",
+  //     style: {
+  //       width: "250px",
+  //       height: "48px",
+  //       marginRight: "40px"
+  //     }
+  //   },
+  //   children: {
+  //     printLicenseButtonLabel: getLabel({
+  //       labelName: "PRINT FIRE-NOC",
+  //       labelKey: "NOC_APPROVAL_CHECKLIST_PRINT_LIC"
+  //     })
+  //   },
+  //   onClickDefination: {
+  //     action: "condition",
+  //     callBack: (state, dispatch) => {
+  //       generatePdf(state, dispatch, "certificate_print");
+  //     }
+  //   }
+  // }
 });
 
 //Function for payment failure(retry button)

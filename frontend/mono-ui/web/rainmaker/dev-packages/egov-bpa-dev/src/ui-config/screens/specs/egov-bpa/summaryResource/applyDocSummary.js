@@ -1,25 +1,9 @@
 import {
   getCommonGrayCard,
   getCommonSubHeader,
-  getLabel,
+  getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { gotoApplyWithStep } from "../../utils/index";
 import { changeStep } from "../applyResource/footer";
-
-const getHeader = (label) => {
-  return {
-    uiFramework: "custom-molecules-local",
-    moduleName: "egov-bpa",
-    componentPath: "DividerWithLabel",
-    props: {
-      className: "hr-generic-divider-label",
-      labelProps: {},
-      dividerProps: {},
-      label,
-    },
-    type: "array",
-  };
-};
 
 export const applyDocSummary = getCommonGrayCard({
   header: {
@@ -74,28 +58,12 @@ export const applyDocSummary = getCommonGrayCard({
     },
   },
   documentDetailsCard: {
-    uiFramework: "custom-containers",
-    componentPath: "MultiItem",
+    uiFramework: "custom-containers-local",
+    moduleName: "egov-bpa",
+    componentPath: "DocumentSummaryContainer",
     props: {
-      className: "applicant-summary",
-      scheama: getCommonGrayCard({
-        body: {
-          uiFramework: "custom-containers-local",
-          moduleName: "egov-bpa",
-          componentPath: "DocumentSummaryContainer",
-          props: {
-            sourceJsonPath: "documentDetailsPreview",
-            className: "noc-review-documents",
-          },
-        },
-      }),
-      items: [],
-      hasAddItem: false,
-      isReviewPage: true,
-      prefixSourceJsonPath:
-        "children.cardContent.children.totalBuildUpAreaDetailsContainer.children",
-      afterPrefixJsonPath: "children.value.children.key",
+      sourceJsonPath: "documentDetailsPreview",
+      className: "noc-review-documents",
     },
-    type: "array",
-  },
+  }
 });

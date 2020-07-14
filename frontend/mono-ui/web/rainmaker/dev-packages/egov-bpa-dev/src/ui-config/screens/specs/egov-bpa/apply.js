@@ -249,13 +249,13 @@ const setSearchResponse = async (
     { key: "applicationNo", value: applicationNumber }
   ]);
 
-  const edcrNumber = get(response, "Bpa[0].edcrNumber");
-  const ownershipCategory = get(response, "Bpa[0].landInfo.ownershipCategory");
-  const appDate = get(response, "Bpa[0].auditDetails.createdTime");
-  const latitude = get(response, "Bpa[0].address.geoLocation.latitude");
-  const longitude = get(response, "Bpa[0].address.geoLocation.longitude");
+  const edcrNumber = get(response, "BPA[0].edcrNumber");
+  const ownershipCategory = get(response, "BPA[0].landInfo.ownershipCategory");
+  const appDate = get(response, "BPA[0].auditDetails.createdTime");
+  const latitude = get(response, "BPA[0].address.geoLocation.latitude");
+  const longitude = get(response, "BPA[0].address.geoLocation.longitude");
 
-  dispatch(prepareFinalObject("BPA", response.Bpa[0]));
+  dispatch(prepareFinalObject("BPA", response.BPA[0]));
   let edcrRes = await edcrHttpRequest(
     "post",
     "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + edcrNumber + "&tenantId=" + tenantId,
@@ -362,7 +362,8 @@ export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
                 fileStoreId : upDoc.fileStoreId,
                 fileUrl : url,
                 wfState: upDoc.wfState ,
-                isClickable:false                               
+                isClickable:false,
+                additionalDetails: upDoc.additionalDetails                                
               }
             );
           }else{
@@ -376,7 +377,8 @@ export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
                 fileStoreId : upDoc.fileStoreId,
                 fileUrl : url,
                 wfState: upDoc.wfState,
-                isClickable:false                                
+                isClickable:false,
+                additionalDetails: upDoc.additionalDetails                                 
               }
             ];
           }

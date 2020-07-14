@@ -14,6 +14,7 @@ const formConfig = {
       required: true,
       numcols: 4,
       disabled: true,
+      formName: "plotDetails",
     },
     ...subUsageType,
     ...occupancy,

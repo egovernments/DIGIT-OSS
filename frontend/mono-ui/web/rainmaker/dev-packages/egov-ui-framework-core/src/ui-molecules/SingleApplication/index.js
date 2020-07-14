@@ -83,8 +83,8 @@ class SingleApplication extends React.Component {
             setRoute(`/bpastakeholder/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
         }
       } else if(item.serviceType === "BPA_OC") {
-        switch (item.status) {
-          case "Initiated":
+        switch (item.appStatus) {
+          case "INITIATED":
             if(roles && roles.length == 1 && roles[0].code == "CITIZEN") {
               setRoute(`/oc-bpa/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}&type=${item.type}`);
             } else {
@@ -95,8 +95,8 @@ class SingleApplication extends React.Component {
             setRoute(`/oc-bpa/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}&type=${item.type}`);
         }
       } else {
-        switch (item.status) {
-          case "Initiated":
+        switch (item.appStatus) {
+          case "INITIATED":
             if(roles && roles.length == 1 && roles[0].code == "CITIZEN") {
               setRoute(`/egov-bpa/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}&type=${item.type}`);
             } else {

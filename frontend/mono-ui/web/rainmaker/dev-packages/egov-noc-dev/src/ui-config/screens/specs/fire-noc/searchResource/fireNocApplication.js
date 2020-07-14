@@ -6,7 +6,6 @@ import {
   getDateField,
   getLabel,
   getPattern,
-  getSelectField,
   getTextField
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -133,48 +132,36 @@ export const NOCApplication = getCommonCard({
     })
   }),
   appStatusAndToFromDateContainer: getCommonContainer({
-    applicationNo: getSelectField({
-      label: {
-        labelName: "Application status",
-        labelKey: "NOC_APPLICATION_NOC_LABEL"
-      },
-      placeholder: {
-        labelName: "Select Application Status",
-        labelKey: "NOC_APPLICATION_PLACEHOLDER"
-      },
-
-      localePrefix: {
-        moduleName: "WF",
-        masterName: "FIRENOC"
+    applicationNo: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-noc",
+      componentPath: "AutosuggestContainer",
+      props: {
+        label: {
+          labelName: "Application status",
+          labelKey: "NOC_APPLICATION_NOC_LABEL"
+        },
+        placeholder: {
+          labelName: "Select Application Status",
+          labelKey: "NOC_APPLICATION_PLACEHOLDER"
+        },
+        localePrefix: {
+          moduleName: "WF",
+          masterName: "FIRENOC"
+        },
+        jsonPath: "searchScreen.status",
+        sourceJsonPath: "applyScreenMdmsData.searchScreen.status",
+        required: false,
+        isClearable: true,
+        labelsFromLocalisation: true,
+        className:"autocomplete-dropdown",
       },
       jsonPath: "searchScreen.status",
-      sourceJsonPath: "applyScreenMdmsData.searchScreen.status",
-      required: false,
       gridDefination: {
         xs: 12,
         sm: 4
       }
-      // data: [
-      //   {
-      //     code: "INITIATED"
-      //   },
-      //   {
-      //     code: "APPLIED"
-      //   },
-      //   {
-      //     code: "PAID"
-      //   },
-      //   {
-      //     code: "APPROVED"
-      //   },
-      //   {
-      //     code: "REJECTED"
-      //   },
-      //   {
-      //     code: "CANCELLED"
-      //   }
-      // ]
-    }),
+    },
 
     fromDate: getDateField({
       label: { labelName: "From Date", labelKey: "NOC_FROM_DATE_LABEL" },
@@ -271,4 +258,6 @@ export const NOCApplication = getCommonCard({
       }
     })
   })
+}, {
+  style: { overflow: "visible" }
 });

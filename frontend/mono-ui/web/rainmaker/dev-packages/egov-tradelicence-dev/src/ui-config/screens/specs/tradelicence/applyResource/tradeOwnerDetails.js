@@ -12,12 +12,11 @@ import {
 import { getQueryArg,getTodaysDateInYMD } from "egov-ui-framework/ui-utils/commons";
 import {
   getDetailsForOwner,
-  getRadioGroupWithLabel
+  updateOwnerShipEdit
 } from "../../utils";
 import { prepareFinalObject as pFO } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getRadioButton } from "egov-ui-framework/ui-config/screens/specs/utils";
 import "./index.css";
 
 export const getOwnerMobNoField = getTextField({
@@ -179,7 +178,7 @@ export const OwnerInfoCard = {
           }
         }
       ),
-      tradeUnitCardContainerOwnerInfo: getCommonContainer({
+      tradeUnitCardContainer: getCommonContainer({
         getOwnerMobNoField: getTextField({
           label: {
             labelName: "Mobile No.",
@@ -278,34 +277,44 @@ export const OwnerInfoCard = {
           required: true,
           type: "array"
         },
-        getOwnerGenderField: getSelectField({
-          label: {
-            labelName: "Gender",
-            labelKey: "TL_NEW_OWNER_DETAILS_GENDER_LABEL"
+        getOwnerGenderField: {
+          uiFramework: "custom-containers",
+          componentPath: "RadioGroupContainer",
+          gridDefination: {
+            xs: 12,
+            sm: 12,
+            md: 6
           },
-          placeholder: {
-            labelName: "Select Gender",
-            labelKey: "TL_NEW_OWNER_DETAILS_GENDER_PLACEHOLDER"
+          jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].gender",
+          props: {
+            label: {
+              name: "Gender",
+              key: "TL_NEW_OWNER_DETAILS_GENDER_LABEL"
+            },
+            buttons: [
+              {
+                labelName: "Male",
+                labelKey: "COMMON_GENDER_MALE",
+                value: "MALE"
+              },
+              {
+                label: "Female",
+                labelKey: "COMMON_GENDER_FEMALE",
+                value: "FEMALE"
+              },
+              {
+                label: "Others",
+                labelKey: "COMMON_GENDER_TRANSGENDER",
+                value: "OTHERS"
+              }
+            ],
+            jsonPath:
+              "Licenses[0].tradeLicenseDetail.owners[0].gender",
+            required: true
           },
           required: true,
-          optionValue: "code",
-          optionLabel: "label",
-          jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].gender",
-          data: [
-            {
-              code: "MALE",
-              label: "COMMON_GENDER_MALE"
-            },
-            {
-              code: "FEMALE",
-              label: "COMMON_GENDER_FEMALE"
-            },
-            {
-              code: "OTHERS",
-              label: "COMMON_GENDER_TRANSGENDER"
-            }
-          ]
-        }),
+          type: "array"
+        },
         ownerDOB: {
           ...getDateField({
             label: {
@@ -639,6 +648,110 @@ export const ownerInfoInstitutional = {
   visible: false
 };
 
+const ownerShipChange = (reqObj) => {
+  try {
+    let { value, dispatch, state } = reqObj;
+      if (value === "INDIVIDUAL") {
+        if (get( state.screenConfiguration.preparedFinalObject, "Licenses[0].tradeLicenseDetail.institution")) {
+          dispatch(pFO("Licenses[0].tradeLicenseDetail.institution", null));
+        }
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard",
+            "visible",
+            true
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.ownerInfoInstitutional",
+            "visible",
+            false
+          )
+        );
+      } else {
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard",
+            "visible",
+            false
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.ownerInfoInstitutional",
+            "visible",
+            true
+          )
+        );
+      }
+      dispatch(
+        pFO("Licenses[0].tradeLicenseDetail.subOwnerShipCategory", "")
+      );
+  } catch (e){
+    console.log(e);
+  }
+}
+
+const subOwnerShipChange = (reqObj) => {
+  try {
+    let { value, dispatch, state } = reqObj;
+    if (value === "INDIVIDUAL.SINGLEOWNER") {
+      const ownerInfoCards = get(
+        state.screenConfiguration.screenConfig.apply, //hardcoded to apply screen
+        "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard.props.items"
+      );
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard",
+          "props.hasAddItem",
+          false
+        )
+      );
+      if (ownerInfoCards && ownerInfoCards.length > 1) {
+        const singleCard = ownerInfoCards.slice(0, 1); //get the first element if multiple cards present
+
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard",
+            "props.items",
+            singleCard
+          )
+        );
+        dispatch(
+          pFO(
+            "Licenses[0].tradeLicenseDetail.owners",
+            get(
+              state.screenConfiguration.preparedFinalObject,
+              "Licenses[0].tradeLicenseDetail.owners"
+            ).slice(0, 1)
+          )
+        );
+      }
+    }
+
+    if (value === "INDIVIDUAL.MULTIPLEOWNERS") {
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard",
+          "props.hasAddItem",
+          true
+        )
+      );
+    }
+    dispatch(pFO("Licenses[0].tradeLicenseDetail.subOwnerShipCategory", value));
+  } catch (e){
+    console.log(e);
+  }
+}
+
 export const tradeOwnerDetails = getCommonCard({
   header: getCommonTitle(
     {
@@ -652,157 +765,32 @@ export const tradeOwnerDetails = getCommonCard({
     }
   ),
   ownershipType: getCommonContainer({
-    ownership: {
-      ...getSelectField({
-        label: {
-          labelName: "Type of ownership",
-          labelKey: "TL_NEW_OWNER_DETAILS_OWNERSHIP_TYPE_LABEL"
-        },
-        placeholder: {
-          labelName: "Select Type of Ownership",
-          labelKey: "TL_NEW_OWNER_DETAILS_OWNERSHIP_TYPE_PLACEHOLDER"
-        },
-        jsonPath: "LicensesTemp[0].tradeLicenseDetail.ownerShipCategory",
-        required: true,
-        localePrefix: {
-          moduleName: "common-masters",
-          masterName: "OwnerShipCategory"
-        },
-        sourceJsonPath:
-          "applyScreenMdmsData.common-masters.OwnerShipCategoryTransformed"
-      }),
-      beforeFieldChange: (action, state, dispatch) => {
-        try {
-          dispatch(
-            pFO(
-              "applyScreenMdmsData.common-masters.subOwnerShipCategoryTransformed",
-              get(
-                state.screenConfiguration.preparedFinalObject,
-                `applyScreenMdmsData.common-masters.OwnerShipCategory.${action.value}`,
-                []
-              )
-            )
-          );
-          if (action.value === "INDIVIDUAL") {
-            if (
-              get(
-                state.screenConfiguration.preparedFinalObject,
-                "Licenses[0].tradeLicenseDetail.institution"
-              )
-            ) {
-              dispatch(pFO("Licenses[0].tradeLicenseDetail.institution", null));
-            }
-            dispatch(
-              handleField(
-                "apply",
-                "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard",
-                "visible",
-                true
-              )
-            );
-            dispatch(
-              handleField(
-                "apply",
-                "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.ownerInfoInstitutional",
-                "visible",
-                false
-              )
-            );
-          } else {
-            dispatch(
-              handleField(
-                "apply",
-                "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard",
-                "visible",
-                false
-              )
-            );
-            dispatch(
-              handleField(
-                "apply",
-                "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.ownerInfoInstitutional",
-                "visible",
-                true
-              )
-            );
-            dispatch(
-              pFO("Licenses[0].tradeLicenseDetail.subOwnerShipCategory", "")
-            );
+    dynamicMdmsOwnerShip : {
+      uiFramework: "custom-containers",
+      componentPath: "DynamicMdmsContainer",
+      props: {
+        dropdownFields: [
+          {
+            key : 'ownership',
+            callBack: ownerShipChange,
+            fieldType : "autosuggest",
+            defaultValue : "INDIVIDUAL",
+            className:"applicant-details-error autocomplete-dropdown",
+          },
+          {
+            key : 'subOwnership',
+            callBack: subOwnerShipChange,
+            defaultValue : "INDIVIDUAL.SINGLEOWNER",
+            fieldType : "autosuggest",
+            className:"applicant-details-error autocomplete-dropdown",
           }
-        } catch (e) {
-          console.log(e);
-        }
+        ],
+        moduleName: "common-masters",
+        masterName: "OwnerShipCategory",
+        rootBlockSub : 'tradeOwner',
+        callBackEdit: updateOwnerShipEdit
       }
-    },
-    subOwnership: {
-      ...getSelectField({
-        label: {
-          labelName: "Type of sub-ownership",
-          labelKey: "TL_TYPE_OF_SUB_OWNERSHIP"
-        },
-        placeholder: {
-          labelName: "Select Type of sub ownership",
-          labelKey: "TL_TYPE_OF_SUB_OWNERSHIP_PLACEHOLDER"
-        },
-        jsonPath: "Licenses[0].tradeLicenseDetail.subOwnerShipCategory",
-        required: true,
-        localePrefix: {
-          moduleName: "common-masters",
-          masterName: "OwnerShipCategory"
-        },
-        sourceJsonPath:
-          "applyScreenMdmsData.common-masters.subOwnerShipCategoryTransformed"
-      }),
-      beforeFieldChange: (action, state, dispatch) => {
-        if (action.value === "INDIVIDUAL.SINGLEOWNER") {
-          const ownerInfoCards = get(
-            state.screenConfiguration.screenConfig.apply, //hardcoded to apply screen
-            "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard.props.items"
-          );
-          dispatch(
-            handleField(
-              "apply",
-              "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard",
-              "props.hasAddItem",
-              false
-            )
-          );
-          if (ownerInfoCards && ownerInfoCards.length > 1) {
-            const singleCard = ownerInfoCards.slice(0, 1); //get the first element if multiple cards present
-
-            dispatch(
-              handleField(
-                "apply",
-                "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard",
-                "props.items",
-                singleCard
-              )
-            );
-            dispatch(
-              pFO(
-                "Licenses[0].tradeLicenseDetail.owners",
-                get(
-                  state.screenConfiguration.preparedFinalObject,
-                  "Licenses[0].tradeLicenseDetail.owners"
-                ).slice(0, 1)
-              )
-            );
-          }
-        }
-
-        if (action.value === "INDIVIDUAL.MULTIPLEOWNERS") {
-          dispatch(
-            handleField(
-              "apply",
-              "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard",
-              "props.hasAddItem",
-              true
-            )
-          );
-        }
-      }
-    },
-    
+    }
   },
   {style:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? {"pointer-events":"none"}:{}}
   ),

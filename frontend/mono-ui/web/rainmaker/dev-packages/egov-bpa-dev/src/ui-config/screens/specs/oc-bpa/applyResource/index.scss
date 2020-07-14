@@ -42,11 +42,11 @@
      .mymuicontainer #material-ui-cardContent #material-ui-applicantContainer div:nth-child(3) > div:nth-child(1) {
        display:none;
      }
-     #material-ui-buildingDetailsContainer div:nth-child(2),
-     #material-ui-blocksContainer div:nth-child(2) {
+     #material-ui-buildingDetailsContainer div:nth-child(3),
+     #material-ui-blocksContainer div:nth-child(3) {
       width: 100% !important;
     }
     #material-ui-buildingDetailsContainer {
-      background: rgb(242, 242, 242) !important;
+      // background: rgb(242, 242, 242) !important;
       padding: 10px !important; 
     }

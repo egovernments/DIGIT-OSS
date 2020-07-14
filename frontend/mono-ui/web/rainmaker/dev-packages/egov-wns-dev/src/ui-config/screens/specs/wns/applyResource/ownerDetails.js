@@ -6,7 +6,6 @@ import {
   getCommonHeader,
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { changeStep } from "../viewBillResource/footer";
 import { convertEpochToDateAndHandleNA, handleNA } from '../../utils';
 
 const getHeader = label => {

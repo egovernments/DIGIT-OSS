@@ -65,7 +65,7 @@ export const documentsSummary = getCommonGrayCard({
     moduleName: "egov-noc",
     componentPath: "DownloadFileContainer",
     props: {
-      sourceJsonPath: "documentsPreview",
+      sourceJsonPath: "FireNOCs[0].fireNOCDetails.additionalDetail.documents",
       className: "noc-review-documents"
     }
   }

@@ -147,10 +147,8 @@ const transformer = (formKey, form = {}, state = {}) => {
       const userInfo = getUserInfo();
       const isNative = JSON.parse(localStorageGet("isNative"));
       let userPhone = null;
-      let userRole = null;
       try {
         userPhone = JSON.parse(userInfo).mobileNumber;
-        userRole = JSON.parse(userInfo).roles[0].code;
         const index = JSON.parse(userInfo).roles.findIndex((role) => {
           return role.code === "CITIZEN";
         });

@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { commonApiPost } from "egov-ui-kit/utils/api";
 import SearchForm from "./searchForm";
 import ReportResult from "./reportResult";
-import { getMetaDataUrl, options } from "./commons/url";
+import { getMetaDataUrl } from "./commons/url";
 import commonConfig from "config/common.js";
 import { Screen } from "modules/common";
 import { getTenantId, setReturnUrl, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
@@ -36,8 +36,7 @@ class Report extends Component {
   }
 
   initData = (moduleName, reportName) => {
-    var _this = this;
-    let { setMetaData, setFlag, showTable, setForm, setReportResult } = this.props;
+    let { setMetaData, setFlag, showTable, setReportResult } = this.props;
     var tenantId = getTenantId() ? getTenantId() : commonConfig.tenantId;
     let urlBase = getMetaDataUrl(moduleName,reportName);
     urlBase &&

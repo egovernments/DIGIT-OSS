@@ -243,8 +243,8 @@ export const basicDetails = getCommonCard({
 export const buildingPlanScrutinyDetails = getCommonCard({
   header: getCommonTitle(
     {
-      labelName: "OC Building Plan Scrutiny Application Details",
-      labelKey: "BPA_OC_APPLICATION_SCRUNITY_DETAILS_TITLE"
+      labelName: "Occupancy certificate scrutiny details",
+      labelKey: "BPA_OC_CER_SCRUNITY_DETAILS_TITLE"
     },
     {
       style: {
@@ -335,8 +335,8 @@ export const proposedBuildingDetails = getCommonCard({
         },
       children: {
         proposedLabel: getLabel({
-          labelName: "Proposed Building Details",
-          labelKey: "BPA_APPLICATION_PROPOSED_BUILDING_LABEL"
+          labelName: "Actual Building details",
+          labelKey: "BPA_ACTUAL_BUILDING_DETAILS_LABEL"
         })
       },
       gridDefination: {
@@ -419,7 +419,6 @@ export const proposedBuildingDetails = getCommonCard({
                 }
               ),
               subOccupancyType: {
-                visible: false,
                 uiFramework: "custom-containers-local",
                 moduleName: "egov-bpa",
                 componentPath: "AutosuggestContainer",
@@ -450,7 +449,8 @@ export const proposedBuildingDetails = getCommonCard({
                   isMulti: true,
                   inputLabelProps: {
                     shrink: true
-                  }
+                  },
+                  isDisabled: true
                 },
                 gridDefination: {
                   xs: 12,
@@ -488,6 +488,7 @@ export const proposedBuildingDetails = getCommonCard({
                     print: false,
                     download: false,
                     viewColumns: false,
+                    rowHover: false
                   }
                 }
               },
@@ -509,8 +510,8 @@ export const proposedBuildingDetails = getCommonCard({
 export const abstractProposedBuildingDetails = getCommonCard({
   header: getCommonTitle(
     {
-      labelName: "Proposed Building Abstract",
-      labelKey: "BPA_PROPOSED_BUILDING_ABSTRACT_HEADER"
+      labelName: "Actual building abstract",
+      labelKey: "BPA_ACTUAL_BUILDING_ABSTRACT_HEADER"
     },
     {
       style: {

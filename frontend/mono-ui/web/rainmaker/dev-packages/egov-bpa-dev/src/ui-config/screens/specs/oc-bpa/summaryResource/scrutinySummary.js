@@ -11,7 +11,7 @@ import {
 import { gotoApplyWithStep, checkValueForNA } from "../../utils/index";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { changeStep } from "../applyResource/footer";
-
+import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
 const getHeader = label => {
     return {
         uiFramework: "custom-molecules-local",
@@ -101,6 +101,10 @@ export const scrutinySummary = getCommonGrayCard({
                 labelKey: "BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL"
             },
             {
+                localePrefix: {
+                    moduleName: "WF",
+                    masterName: "BPA"
+                  },
                 jsonPath: "BPA.applicationType",
                 callBack: checkValueForNA
             }
@@ -173,9 +177,9 @@ export const scrutinySummary = getCommonGrayCard({
             moduleName: "egov-bpa",
             componentPath: "downloadFile",
             gridDefination: {
-                xs: 12,
-                sm: 12,
-                md: 6
+                xs: 3,
+                sm: 3,
+                md: 3
             },
             props: {
                 label: {
@@ -193,8 +197,8 @@ export const scrutinySummary = getCommonGrayCard({
     }),
     break2: getBreak(),
     buildingPlanScrutinyHeaderDetails: getHeader({
-        labelName: "OC Building Plan Scrutiny Application Details",
-        labelKey: "BPA_OC_APPLICATION_SCRUNITY_DETAILS_TITLE"
+        labelName: "Occupancy certificate scrutiny details",
+        labelKey: "BPA_OC_CER_SCRUNITY_DETAILS_TITLE"
     }),
     breake3: getBreak(),
     buildingPlanScrutinyDetailsContainer: getCommonContainer({
@@ -254,11 +258,11 @@ export const scrutinySummary = getCommonGrayCard({
     }),
     breake4: getBreak(),
     proposedBuildingDetails: getHeader({
-        labelName: "Proposed Building Details",
-        labelKey: "BPA_APPLICATION_PROPOSED_BUILDING_LABEL"
+        labelName: "Actual Building details",
+        labelKey: "BPA_ACTUAL_BUILDING_DETAILS_LABEL"
     }),
     break5: getBreak(),
-    proposedBuildingDetailsConatiner: getCommonCard({
+    proposedBuildingDetailsSummary: getCommonCard({
         header: {
             uiFramework: "custom-atoms",
             componentPath: "Container",
@@ -272,8 +276,8 @@ export const scrutinySummary = getCommonGrayCard({
             },
             children: {
                 proposedLabel: getLabel({
-                    labelName: "Proposed Building Details",
-                    labelKey: "BPA_APPLICATION_PROPOSED_BUILDING_LABEL"
+                    labelName: "Actual Building details",
+                    labelKey: "BPA_ACTUAL_BUILDING_DETAILS_LABEL"
                 })
             }
         },
@@ -313,7 +317,7 @@ export const scrutinySummary = getCommonGrayCard({
                     componentPath: "MultiItem",
                     props: {
                         hasAddItem: false,
-                        scheama: getCommonGrayCard({
+                        scheama: getCommonContainer({
                             blocksContainer: getCommonContainer({
                                 header: getLabel(
                                     "Block",
@@ -322,34 +326,38 @@ export const scrutinySummary = getCommonGrayCard({
                                         jsonPath: "edcr.blockDetail[0].titleData",
                                         style: {
                                             width: "50%",
-                                            marginTop: "5px"
+                                            marginTop: "5px",
+                                            marginLeft: "7px"                                            
                                         }
                                     }
                                 ),
-                                // subOccupancyType: getLabelWithValue(
-                                //     {
-                                //         labelName: "Sub Occupancy Type",
-                                //         labelKey: "BPA_SUB_OCCUP_TYPE_LABEL"
-                                //     },
-                                //     {
-                                //         jsonPath: `edcr.blockDetail[0]`,
-                                //         callBack: value => {
-                                //             let returnVAlue;
-                                //             if (value && value.occupancyType && value.occupancyType.length) {
-                                //                 returnVAlue = "";
-                                //                 let occupancy = value.occupancyType;
-                                //                 for (let tp = 0; tp < occupancy.length; tp++) {
-                                //                     if (tp === (occupancy.length - 1)) {
-                                //                         returnVAlue += occupancy[tp].label;//getTransformedLocale(`BPA_SUBOCCUPANCYTYPE_${occupancy[tp].value}`)
-                                //                     } else {
-                                //                         returnVAlue += occupancy[tp].label + ","; //getTransformedLocale(`BPA_SUBOCCUPANCYTYPE_${occupancy[tp].value}`) + ","
-                                //                     }
-                                //                 }
-                                //             }
-                                //             return returnVAlue || checkValueForNA;
-                                //         },
-                                //     }
-                                // ),
+                                subOccupancyType: getLabelWithValue(
+                                    {
+                                        labelName: "Sub Occupancy Type",
+                                        labelKey: "BPA_SUB_OCCUP_TYPE_LABEL"
+                                    },
+                                    {
+                                        jsonPath: `edcr.blockDetail[0]`,
+                                        callBack: value => {
+                                            let returnVAlue;
+                                            if (value && value.occupancyType && value.occupancyType.length) {
+                                                returnVAlue = "";
+                                                let occupancy = value.occupancyType;
+                                                for (let tp = 0; tp < occupancy.length; tp++) {
+    
+                                                    if (tp === (occupancy.length - 1)) {
+                                                        returnVAlue += getLocaleLabels(getTransformedLocale(`BPA_SUBOCCUPANCYTYPE_${occupancy[tp].value}`),
+                                                         getTransformedLocale(`BPA_SUBOCCUPANCYTYPE_${occupancy[tp].value}`)) //occupancy[tp].label;
+                                                    } else {
+                                                        returnVAlue += getLocaleLabels(getTransformedLocale(`BPA_SUBOCCUPANCYTYPE_${occupancy[tp].value}`),
+                                                         getTransformedLocale(`BPA_SUBOCCUPANCYTYPE_${occupancy[tp].value}`)) + "," //occupancy[tp].label + ",";
+                                                    }
+                                                }
+                                            }
+                                            return returnVAlue || "NA";
+                                        },
+                                    }
+                                ),
                                 proposedBuildingDetailsContainer: {
                                     uiFramework: "custom-molecules-local",
                                     moduleName: "egov-bpa",
@@ -380,28 +388,31 @@ export const scrutinySummary = getCommonGrayCard({
                                             print: false,
                                             download: false,
                                             viewColumns: false,
+                                            rowHover: false                                            
                                         }
                                     }
                                 },
+                                breakP: getBreak(),                              
+                                breakP1: getBreak(),
                             }),
                         }),
                         items: [],
                         isReviewPage: true,
-                        prefixSourceJsonPath: "children.cardContent.children.blocksContainer.children",
+                        prefixSourceJsonPath: "children.blocksContainer.children",
                         sourceJsonPath: "edcr.blockDetail",
                         afterPrefixJsonPath: "children.value.children.key"
                     },
                     type: "array"
                 },
-                breakP: getBreak(),
+                breakP2: getBreak(),
                 breakq: getBreak()
             }
         }
     }),
     break6: getBreak(),
     proposedBuildingAbstractDetails: getHeader({
-        labelName: "Proposed Building Abstract",
-        labelKey: "BPA_PROPOSED_BUILDING_ABSTRACT_HEADER"
+        labelName: "Actual building abstract",
+        labelKey: "BPA_ACTUAL_BUILDING_ABSTRACT_HEADER"
     }),
     break7: getBreak(),
     proposedBuildingAbstractContainer : getCommonContainer({

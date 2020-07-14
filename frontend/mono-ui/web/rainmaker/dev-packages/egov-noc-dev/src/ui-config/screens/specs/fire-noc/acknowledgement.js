@@ -1,428 +1,74 @@
-import {
-  getCommonHeader,
-  getCommonContainer
-} from "egov-ui-framework/ui-config/screens/specs/utils";
-import {CloudDownloadIcon} from '@material-ui/icons/CloudDownload';
-import {PrintIcon} from '@material-ui/icons/Print';
-import {
-  applicationSuccessFooter,
-  paymentSuccessFooter,
-  gotoHomeFooter,
-  approvalSuccessFooter,
-  paymentFailureFooter
-} from "./acknowledgementResource/footers";
-import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { getSearchResults } from "../../../../ui-utils/commons";
-import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
-import generatePdf from "../utils/receiptPdf";
-import { Icon } from "egov-ui-framework/ui-atoms";
-// import { loadReceiptGenerationData } from "../utils/receiptTransformer";
-import set from "lodash/set";
-import get from "lodash/get";
-import { getCurrentFinancialYear } from "../utils";
-import { loadPdfGenerationData } from "../utils/receiptTransformer";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import "./index.css";
-export const header = getCommonContainer({
-  header: getCommonHeader({
-    labelName: `Application for Fire NOC (${getCurrentFinancialYear()})`, //later use getFinancialYearDates
-    labelKey: "NOC_COMMON_APPLY_FIRE_NOC_HEADER_LABEL"
-  }),
-  applicationNumber: {
-    uiFramework: "custom-atoms-local",
-    moduleName: "egov-noc",
-    componentPath: "ApplicationNoContainer",
-    props: {
-      number: getQueryArg(window.location.href, "applicationNumber")
-    },
-    visible: true
-  }
-});
 
-const downloadprintMenu = (state, dispatch) => {
+import { getAcknowledgementCard } from "egov-ui-framework/ui-containers/acknowledgementResource/acknowledgementUtils";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getQueryArg, ifUserRoleExists } from "egov-ui-framework/ui-utils/commons";
+import { generateNOCAcknowledgement } from "egov-ui-kit/utils/pdfUtils/generateNOCAcknowledgement";
+import get from "lodash/get";
+import set from "lodash/set";
+import { getSearchResults } from "../../../../ui-utils/commons";
+import generatePdf from "../utils/receiptPdf";
+import { loadPdfGenerationData } from "../utils/receiptTransformer";
+import "./index.css";
+import { prepareDocumentsView } from "./search-preview";
+
+const downloadprintMenuConfig = (state, dispatch, purpose) => {
+
+  let preparedFinalObject = get(
+    state,
+    "screenConfiguration.preparedFinalObject", {});
   let applicationDownloadObject = {
     label: { labelName: "Application", labelKey: "NOC_APPLICATION" },
     link: () => {
-      generatePdf(state, dispatch, "application_download");
+      generateNOCAcknowledgement(preparedFinalObject, `noc-acknowledgement-${get(preparedFinalObject, 'FireNOCs[0].fireNOCDetails.applicationNumber', '')}`);
     },
     leftIcon: "assignment"
   };
   let applicationPrintObject = {
     label: { labelName: "Application", labelKey: "NOC_APPLICATION" },
     link: () => {
-      generatePdf(state, dispatch, "application_print");
+      generateNOCAcknowledgement(preparedFinalObject, 'print');
     },
     leftIcon: "assignment"
   };
-   let downloadMenu = [];
-   let printMenu = [];
-   downloadMenu = [ applicationDownloadObject];
-   printMenu = [applicationPrintObject];
-
-
-   return {
-       uiFramework: "custom-atoms",
-       componentPath: "Div",
-       props: {
-           className: "downloadprint-commonmenu",
-           style: { textAlign: "right", display: "flex" }
-       },
-       children: {
-           downloadMenu: {
-               uiFramework: "custom-molecules",
-               componentPath: "DownloadPrintButton",
-               props: {
-                   data: {
-                       label: { labelName: "DOWNLOAD", labelKey: "TL_DOWNLOAD" },
-                       leftIcon: "cloud_download",
-                       rightIcon: "arrow_drop_down",
-                       props: { variant: "outlined", style: { height: "60px", color: "#FE7A51",marginRight:"5px"}, className: "tl-download-button" },
-                       menu: downloadMenu
-                   }
-               }
-           },
-           printMenu: {
-               uiFramework: "custom-molecules",
-               componentPath: "DownloadPrintButton",
-               props: {
-                   data: {
-                       label: { labelName: "PRINT", labelKey: "TL_PRINT" },
-                       leftIcon: "print",
-                       rightIcon: "arrow_drop_down",
-                       props: { variant: "outlined", style: { height: "60px", color: "#FE7A51" }, className: "tl-print-button" },
-                       menu: printMenu
-                   }
-               }
-           }
-
-       },
-   }
-
-}
-
-
-const getHeader=(applicationNumber)=>{
-return getCommonContainer({
-  header: getCommonHeader({
-    labelName: `Application for Fire NOC (${getCurrentFinancialYear()})`, //later use getFinancialYearDates
-    labelKey: "NOC_COMMON_APPLY_FIRE_NOC_HEADER_LABEL"
-  }),
-  applicationNumber: {
-    uiFramework: "custom-atoms-local",
-    moduleName: "egov-noc",
-    componentPath: "ApplicationNoContainer",
-    props: {
-      number:applicationNumber
+  let certificateDownloadObject = {
+    label: { labelName: "Certificate", labelKey: "NOC_CERTIFICATE" },
+    link: () => {
+      generatePdf(state, dispatch, "certificate_download");
     },
-    visible: true
+    leftIcon: "assignment"
+  };
+  let certificatePrintObject = {
+    label: { labelName: "Certificate", labelKey: "NOC_CERTIFICATE" },
+    link: () => {
+      generatePdf(state, dispatch, "certificate_print");
+    },
+    leftIcon: "assignment"
+  };
+
+  let downloadMenu = [];
+  let printMenu = [];
+  switch (purpose) {
+    case "apply":
+      downloadMenu = [applicationDownloadObject];
+      printMenu = [applicationPrintObject];
+      break;
+    case "approve":
+      downloadMenu = [certificateDownloadObject];
+      printMenu = [certificatePrintObject];
+      break;
+    default:
+      downloadMenu = false;
+      printMenu = false;
+      break;
+
   }
-})
+
+  return { downloadMenu, printMenu }
+
 }
 
 
-const getAcknowledgementCard = (
-  state,
-  dispatch,
-  purpose,
-  status,
-  applicationNumber,
-  secondNumber,
-  tenant
-) => {
-  if (purpose === "apply" && status === "success") {
-    loadPdfGenerationData(applicationNumber, tenant);
-    return {
-      header:getHeader(applicationNumber),
-      headerdownloadprint: downloadprintMenu(state, dispatch),
-      applicationSuccessCard: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        children: {
-          card: acknowledgementCard({
-            icon: "done",
-            backgroundColor: "#39CB74",
-            header: {
-              labelName: "Application Submitted Successfully",
-              labelKey: "NOC_APPLICATION_SUCCESS_MESSAGE_MAIN"
-            },
-            body: {
-              labelName:
-                "A notification regarding Application Submission has been sent to building owner at registered Mobile No.",
-              labelKey: "NOC_APPLICATION_SUCCESS_MESSAGE_SUB"
-            },
-            tailText: {
-              labelName: "Application No.",
-              labelKey: "NOC_HOME_SEARCH_RESULTS_APP_NO_LABEL"
-            },
-            number: applicationNumber
-          }),
-        }
-      },
-      iframeForPdf: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div"
-      },
-      applicationSuccessFooter: applicationSuccessFooter(
-        state,
-        dispatch,
-        applicationNumber,
-        tenant
-      )
-    };
-  } else if (purpose === "pay" && status === "success") {
-    loadPdfGenerationData(applicationNumber, tenant);
-    return {
-      header,
-      applicationSuccessCard: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        children: {
-          card: acknowledgementCard({
-            icon: "done",
-            backgroundColor: "#39CB74",
-            header: {
-              labelName: "Payment has been collected successfully!",
-              labelKey: "NOC_PAYMENT_COLLECTION_SUCCESS_MESSAGE_MAIN"
-            },
-            body: {
-              labelName:
-                "A notification regarding Payment Collection has been sent to building owner at registered Mobile No.",
-              labelKey: "NOC_PAYMENT_SUCCESS_MESSAGE_SUB"
-            },
-            tailText: {
-              labelName: "Payment Receipt No.",
-              labelKey: "NOC_PMT_RCPT_NO"
-            },
-            number: secondNumber
-          })
-        }
-      },
-      paymentSuccessFooter: paymentSuccessFooter()
-    };
-  } else if (purpose === "approve" && status === "success") {
-    loadPdfGenerationData(applicationNumber, tenant);
-    return {
-      header,
-      applicationSuccessCard: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        children: {
-          card: acknowledgementCard({
-            icon: "done",
-            backgroundColor: "#39CB74",
-            header: {
-              labelName: "Fire NOC Approved Successfully",
-              labelKey: "NOC_APPROVAL_CHECKLIST_MESSAGE_HEAD"
-            },
-            body: {
-              labelName:
-                "A notification regarding Fire NOC Approval has been sent to building owner at registered Mobile No.",
-              labelKey: "NOC_APPROVAL_CHECKLIST_MESSAGE_SUB"
-            },
-            tailText: {
-              labelName: "Fire NOC No.",
-              labelKey: "NOC_HOME_SEARCH_RESULTS_NOC_NO_LABEL"
-            },
-            number: secondNumber
-          })
-        }
-      },
-      approvalSuccessFooter
-    };
-  } else if (purpose === "application" && status === "rejected") {
-    return {
-      header,
-      applicationSuccessCard: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        children: {
-          card: acknowledgementCard({
-            icon: "close",
-            backgroundColor: "#E54D42",
-            header: {
-              labelName: "Fire NOC Application Rejected",
-              labelKey: "NOC_APPROVAL_REJ_MESSAGE_HEAD"
-            },
-            body: {
-              labelName:
-                "A notification regarding Fire NOC Rejection has been sent to building owner at registered Mobile No.",
-              labelKey: "NOC_APPROVAL_REJ_MESSAGE_SUBHEAD"
-            }
-          })
-        }
-      },
-      gotoHomeFooter
-    };
-  } else if (purpose === "application" && status === "cancelled") {
-    return {
-      header,
-      applicationSuccessCard: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        children: {
-          card: acknowledgementCard({
-            icon: "close",
-            backgroundColor: "#E54D42",
-            header: {
-              labelName: "Fire NOC Cancelled",
-              labelKey: "Fire_NOC_CANCELLED_MESSAGE_HEAD"
-            },
-            body: {
-              labelName:
-                "A notification regarding Fire NOC cancellation has been sent to building owner at registered Mobile No.",
-              labelKey: "Fire_NOC_CANCELLED_MESSAGE_SUBHEAD"
-            },
-            tailText: {
-              labelName: "Fire NOC No.",
-              labelKey: "NOC_HOME_SEARCH_RESULTS_NOC_NO_LABEL"
-            },
-            number: secondNumber
-          })
-        }
-      },
-      gotoHomeFooter
-    };
-  } else if (purpose === "pay" && status === "failure") {
-    return {
-      header,
-      applicationSuccessCard: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        children: {
-          card: acknowledgementCard({
-            icon: "close",
-            backgroundColor: "#E54D42",
-            header: {
-              labelName: "Payment has failed!",
-              labelKey: "NOC_PAYMENT_FAILURE_MESSAGE_MAIN"
-            },
-            body: {
-              labelName:
-                "A notification regarding payment failure has been sent to the building owner and applicant.",
-              labelKey: "NOC_PAYMENT_FAILURE_MESSAGE_SUB"
-            }
-          })
-        }
-      },
-      paymentFailureFooter: paymentFailureFooter(applicationNumber, tenant)
-    };
-  } else if (purpose === "mark" && status === "success") {
-    return {
-      header,
-      applicationSuccessCard: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        children: {
-          card: acknowledgementCard({
-            icon: "done",
-            backgroundColor: "#39CB74",
-            header: {
-              labelName: "Application Marked Successfully",
-              labelKey: "NOC_MARK_SUCCESS_MESSAGE_MAIN"
-            },
-            body: {
-              labelName: "Application has been marked successfully",
-              labelKey: "NOC_APPLICATION_MARKED_SUCCESS"
-            },
-            tailText: {
-              labelName: "Application No.",
-              labelKey: "NOC_HOME_SEARCH_RESULTS_APP_NO_LABEL"
-            },
-            number: applicationNumber
-          })
-        }
-      },
-      gotoHomeFooter
-    };
-  } else if (purpose === "forward" && status === "success") {
-    return {
-      header,
-      applicationSuccessCard: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        children: {
-          card: acknowledgementCard({
-            icon: "done",
-            backgroundColor: "#39CB74",
-            header: {
-              labelName: "Application Forwarded Successfully",
-              labelKey: "NOC_FORWARD_SUCCESS_MESSAGE_MAIN"
-            },
-            body: {
-              labelName: "Application has been marked successfully",
-              labelKey: "NOC_APPLICATION_FORWARD_SUCCESS"
-            },
-            tailText: {
-              labelName: "Application No.",
-              labelKey: "NOC_HOME_SEARCH_RESULTS_APP_NO_LABEL"
-            },
-            number: applicationNumber
-          })
-        }
-      },
-      gotoHomeFooter
-    };
-  } else if (purpose === "sendback" && status === "success") {
-    return {
-      header,
-      applicationSuccessCard: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        children: {
-          card: acknowledgementCard({
-            icon: "done",
-            backgroundColor: "#39CB74",
-            header: {
-              labelName: "Application sent back Successfully",
-              labelKey: "NOC_SENDBACK_SUCCESS_MESSAGE_MAIN"
-            },
-            body: {
-              labelName: "Application has been sent back successfully",
-              labelKey: "NOC_APPLICATION_SENDBACK_SUCCESS"
-            },
-            tailText: {
-              labelName: "Application No.",
-              labelKey: "NOC_HOME_SEARCH_RESULTS_APP_NO_LABEL"
-            },
-            number: applicationNumber
-          })
-        }
-      },
-      gotoHomeFooter
-    };
-  } else if (purpose === "refer" && status === "success") {
-    return {
-      header,
-      applicationSuccessCard: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        children: {
-          card: acknowledgementCard({
-            icon: "done",
-            backgroundColor: "#39CB74",
-            header: {
-              labelName: "Application referred Successfully",
-              labelKey: "NOC_REFER_SUCCESS_MESSAGE_MAIN"
-            },
-            body: {
-              labelName: "Application has been referred successfully",
-              labelKey: "NOC_APPLICATION_REFER_SUCCESS"
-            },
-            tailText: {
-              labelName: "Application No.",
-              labelKey: "NOC_HOME_SEARCH_RESULTS_APP_NO_LABEL"
-            },
-            number: applicationNumber
-          })
-        }
-      },
-      gotoHomeFooter
-    };
-  }
-};
-
-const setApplicationData = async (dispatch, applicationNumber, tenant) => {
+const setApplicationData = async (dispatch, applicationNumber, tenant,state) => {
   const queryObject = [
     {
       key: "tenantId",
@@ -435,20 +81,29 @@ const setApplicationData = async (dispatch, applicationNumber, tenant) => {
   ];
   const response = await getSearchResults(queryObject);
   dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", [])));
+  prepareDocumentsView(state, dispatch);
 };
+
+const getRedirectionURL = () => {
+  const redirectionURL = ifUserRoleExists("CITIZEN")
+    ? "/fire-noc/home"
+    : "/inbox";
+  return redirectionURL;
+}
 
 const screenConfig = {
   uiFramework: "material-ui",
   name: "acknowledgement",
   components: {
     div: {
-      uiFramework: "custom-atoms",
-      componentPath: "Div",
+      uiFramework: "custom-containers",
+      componentPath: "AcknowledgementContainer",
       props: {
-        className: "common-div-css"
+        className: "common-div-css",
       }
     }
   },
+
   beforeInitScreen: (action, state, dispatch) => {
     const purpose = getQueryArg(window.location.href, "purpose");
     const status = getQueryArg(window.location.href, "status");
@@ -458,17 +113,63 @@ const screenConfig = {
     );
     const secondNumber = getQueryArg(window.location.href, "secondNumber");
     const tenant = getQueryArg(window.location.href, "tenantId");
-    const data = getAcknowledgementCard(
+    const { downloadMenu, printMenu } = downloadprintMenuConfig(state, dispatch, purpose);
+
+    const footerUrlConfig = [{
+
+      url: getRedirectionURL(),
+      labelName: "GO TO HOME",
+      labelKey: "NOC_COMMON_BUTTON_HOME",
+      style: {
+        minWidth: "180px",
+        height: "48px"
+      }
+    }]
+
+    if (purpose === "apply" && status === "success") {
+      footerUrlConfig.push({
+        url: `/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenant}&businessService=FIRENOC`,
+        labelName: "Proceed to payment",
+        labelKey: "NOC_PROCEED_PAYMENT",
+        style: {
+          minWidth: "180px",
+          height: "48px",
+          color: "#fff",
+          backgroundColor: " #FE7A51"
+        }
+      })
+    }
+    if (purpose === "pay" && status === "failure") {
+      footerUrlConfig.push({
+        url: `/fire-noc/citizen-pay?applicationNumber=${applicationNumber}&tenantId=${tenant}`,
+        labelName: "RETRY",
+        labelKey: "NOC_PAYMENT_RETRY",
+        style: {
+          minWidth: "180px",
+          height: "48px",
+          color: "#fff",
+          backgroundColor: " #FE7A51"
+        }
+      })
+    }
+
+    loadPdfGenerationData(applicationNumber, tenant);
+    const config = {
       state,
       dispatch,
       purpose,
       status,
       applicationNumber,
       secondNumber,
-      tenant
-    );
-    setApplicationData(dispatch, applicationNumber, tenant);
-    set(action, "screenConfig.components.div.children", data);
+      tenant,
+      moduleName: "Fire Noc",
+      footerUrlConfig,
+      downloadMenu,
+      printMenu
+    }
+    const data = getAcknowledgementCard(config);
+    setApplicationData(dispatch, applicationNumber, tenant,state);
+    set(action, "screenConfig.components.div.props", data);
     return action;
   }
 };

@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Button, TextField, Card } from "components";
+import { Button, TextField } from "components";
 import Label from "egov-ui-kit/utils/translationNode";
 import { ProfileSection } from "modules/common";
 import "./index.css";

@@ -8,14 +8,6 @@ import { connect } from "react-redux";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { fetchUiCommonConstants } from "egov-ui-kit/redux/app/actions";
 const theme = createMuiTheme(themeObject);
-
-// const headerStyle = {
-//   color: "rgb(72, 72, 72)",
-//   fontWeight: 500,
-//   fontSize: "20px",
-//   margin: "16px",
-// };
-
 class IFrameInterface extends React.Component {
   constructor(props) {
     super(props);
@@ -29,17 +21,6 @@ class IFrameInterface extends React.Component {
     const { match } = props;
     const { params } = match;
     const { moduleName, pageName } = params;
-    // const routesData = {
-    //   tradelicense: {
-    //     routes: {
-    //       search: {
-    //         routePath: "/employee-tradelicence/mihy-ui-framework/tradelicence/search",
-    //         isOrigin: false,
-    //         domain: "https://egov-micro-dev.egovernments.org",
-    //       },
-    //     },
-    //   },
-    // };
     let { uiCommonConstants, fetchUiCommonConstants } = props;
     if (!uiCommonConstants) fetchUiCommonConstants();
     const isOrign = get(uiCommonConstants, `${moduleName}.iframe-routes.${pageName}.isOrigin`, false);
@@ -62,18 +43,7 @@ class IFrameInterface extends React.Component {
   };
 
   componentWillReceiveProps(nextProps) {
-    const { match: nextMatch } = nextProps;
-    const { match: currentMatch } = this.props;
-    const { params: nextParams } = nextMatch;
-    const { params: currentParams } = currentMatch;
-    // const { moduleName: nextmoduleName, pageName: nextpageName } = nextParams;
-    // const { moduleName: currentmoduleName, pageName: currentpageName } = currentParams;
-    // const { uiCommonConstants: nextUiCommonConstants } = nextProps;
-    // const { uiCommonConstants: currentUiCommonConstants } = this.props;
     this.buildURL(nextProps);
-
-    // if (nextmoduleName !== currentmoduleName || nextpageName !== currentpageName || nextRoutesData !== currentRoutesData) {
-    // }
   }
 
   render() {

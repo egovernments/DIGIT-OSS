@@ -1,4 +1,4 @@
-import { removeForm, setFieldProperty } from "egov-ui-kit/redux/form/actions";
+import { removeForm } from "egov-ui-kit/redux/form/actions";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 
 const formConfig = {
@@ -23,7 +23,6 @@ const formConfig = {
       ],
       value: "Cash",
       beforeFieldChange: ({ dispatch, state, action }) => {
-        const allFormkeys = ["demandInfo", "chequeInfo", "cardInfo", "cashInfo"];
         const formKeysInRedux = state && state.form && Object.keys(state.form);
         let formsToRemove = [];
         switch (action.value) {

@@ -1,8 +1,5 @@
-.owner-gender-selection div {
-  // display: inline !important;
-}
-@media only screen and (max-width: 768px) {
-  .owner-relationship{div{
-     
-  }}
-}
+div.ownerCategoryIdType div:nth-child(1) {width: 100%;}
+div#ownerCategoryIdType div[class^="MuiFormControl-root"] {width: 100% !important;}
+div#ownerCategory div[class^="MuiFormControl-root"] {width: 100% !important;}
+div#ownerRelationship div[class^="MuiFormControl-root"] {width: 100% !important;}
+div#typeOfOwnership div[class^="MuiFormControl-root"] {width: 100% !important;}

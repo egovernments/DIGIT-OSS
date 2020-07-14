@@ -1,7 +1,8 @@
 import React from "react";
 import RenderScreen from "egov-ui-framework/ui-molecules/RenderScreen";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import CustomTab from "../../ui-molecules-local/CustomTab";
+// import CustomTab from "../../ui-molecules-local/CustomTab";
+import CustomTab from "egov-ui-framework/ui-molecules/CustomTab";
 import { connect } from "react-redux";
 import { addComponentJsonpath } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -11,6 +12,12 @@ import { resetFieldsForApplication, resetFieldsForConnection } from '../../ui-co
 class MultiItem extends React.Component {
   state = { tabIndex: 0 };
 
+  componentWillMount = () => {
+    const { tabIndex } = this.props;
+    if (tabIndex != "" && typeof tabIndex === 'number') {      
+      this.onTabClick(tabIndex);
+    }
+  };
   setInstrumentType = (value, dispatch) => {
     dispatch(prepareFinalObject("currentTab", value));
     if (value === "SEARCH_CONNECTION") {
@@ -55,13 +62,14 @@ class MultiItem extends React.Component {
 
     const transFormedProps = {
       ...this.props,
+      active: this.state.tabIndex,
       tabs: this.props.tabs.map((tab, key) => {
         return {
           ...tab,
           tabContent: (
             <RenderScreen
               key={key}
-              screenKey={screenKey}
+              screenKey={screenKey}  
               components={cloneDeep(
                 addComponentJsonpath(
                   tab.tabContent,

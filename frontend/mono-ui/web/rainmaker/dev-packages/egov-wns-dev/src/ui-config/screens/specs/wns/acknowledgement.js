@@ -18,8 +18,10 @@ import {
   prepareDocumentsUploadRedux,
   prepareDocumentsUploadData,
   prepareDocUploadRedux,
-  downloadAndPrintForNonApply
+  downloadAndPrintForNonApply,
+  serviceConst
 } from "../../../../ui-utils/commons";
+import { generateWSAcknowledgement } from "egov-ui-kit/utils/pdfUtils/generateWSAcknowledgement";
 import set from "lodash/set";
 import get from "lodash/get";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -606,34 +608,36 @@ export const downloadPrintContainer = (
   let applicationDownloadObject = {
     label: { labelKey: "WS_APPLICATION" },
     link: () => {
-      const { WaterConnection, DocumentsData } = state.screenConfiguration.preparedFinalObject;
-      let filteredDocs = DocumentsData;
-      filteredDocs.map((val) => {
-        if (val.title.includes("WS_OWNER.IDENTITYPROOF.")) {
-          val.title = "WS_OWNER.IDENTITYPROOF";
-        } else if (val.title.includes("WS_OWNER.ADDRESSPROOF.")) {
-          val.title = "WS_OWNER.ADDRESSPROOF";
-        }
-      });
-      WaterConnection[0].pdfDocuments = filteredDocs;
-      downloadApp(WaterConnection, 'application');
+      const { WaterConnection } = state.screenConfiguration.preparedFinalObject;
+      let conneType=WaterConnection[0].connectionType;
+      if(applicationNumber.includes("WS")){
+        let connType=conneType===null?"Metered":conneType;
+        generateWSAcknowledgement(get(
+          state,
+          "screenConfiguration.preparedFinalObject", {}), `application.pdf`,"WATER",connType);
+      }else{
+        generateWSAcknowledgement(get(
+          state,
+          "screenConfiguration.preparedFinalObject", {}), `application.pdf`,"SEWERAGE",conneType);
+      }
     },
     leftIcon: "assignment"
   };
   let applicationPrintObject = {
     label: { labelName: "Application", labelKey: "WS_APPLICATION" },
     link: () => {
-      const { WaterConnection, DocumentsData } = state.screenConfiguration.preparedFinalObject;
-      let filteredDocs = DocumentsData;
-      filteredDocs.map((val) => {
-        if (val.title.includes("WS_OWNER.IDENTITYPROOF.")) {
-          val.title = "WS_OWNER.IDENTITYPROOF";
-        } else if (val.title.includes("WS_OWNER.ADDRESSPROOF.")) {
-          val.title = "WS_OWNER.ADDRESSPROOF";
-        }
-      });
-      WaterConnection[0].pdfDocuments = filteredDocs;
-      downloadApp(WaterConnection, 'application', 'print');
+      const { WaterConnection } = state.screenConfiguration.preparedFinalObject;
+      let conneType=WaterConnection[0].connectionType;
+      if(applicationNumber.includes("WS")){
+        let connType=conneType===null?"Metered":conneType;
+        generateWSAcknowledgement(get(
+          state,
+          "screenConfiguration.preparedFinalObject", {}), "print","WATER",connType);
+      }else{
+        generateWSAcknowledgement(get(
+          state,
+          "screenConfiguration.preparedFinalObject", {}), "print","SEWERAGE",conneType);
+      }
     },
     leftIcon: "assignment"
   };
@@ -732,7 +736,7 @@ const getWaterData = async (dispatch, applicationNumber, tenantId) => {
   let queryObject = [{ key: "tenantId", value: tenantId }, { key: "applicationNumber", value: applicationNumber }];
   try { waterResponse = await getSearchResults(queryObject); } catch (error) { console.log(error); waterResponse = [] };
   if (waterResponse && waterResponse.WaterConnection !== undefined && waterResponse.WaterConnection.length > 0) {
-    waterResponse.WaterConnection[0].service = "WATER";
+    waterResponse.WaterConnection[0].service = serviceConst.WATER;
     dispatch(prepareFinalObject("WaterConnection", findAndReplace(waterResponse.WaterConnection, "NA", null)));
   } else { dispatch(prepareFinalObject("WaterConnection", [])); }
 }
@@ -742,7 +746,7 @@ const getSewerageData = async (dispatch, applicationNumber, tenantId) => {
   let queryObject = [{ key: "tenantId", value: tenantId }, { key: "applicationNumber", value: applicationNumber }];
   try { sewerResponse = await getSearchResultsForSewerage(queryObject, dispatch) } catch (error) { console.log(error); sewerResponse = [] };
   if (sewerResponse && sewerResponse.SewerageConnections !== undefined && sewerResponse.SewerageConnections.length > 0) {
-    sewerResponse.SewerageConnections[0].service = "SEWERAGE";
+    sewerResponse.SewerageConnections[0].service = serviceConst.SEWERAGE;
     dispatch(prepareFinalObject("SewerageConnection", findAndReplace(sewerResponse.SewerageConnections, "NA", null)));
   } else { dispatch(prepareFinalObject("SewerageConnection", [])); }
 }

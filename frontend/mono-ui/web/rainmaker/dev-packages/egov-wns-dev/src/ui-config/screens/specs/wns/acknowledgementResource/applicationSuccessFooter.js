@@ -6,6 +6,9 @@ import { ifUserRoleExists } from "../../utils";
 import { downloadApp } from '../../../../../ui-utils/commons';
 import get from 'lodash/get';
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { generateWSAcknowledgement } from "egov-ui-kit/utils/pdfUtils/generateWSAcknowledgement";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import cloneDeep from "lodash/cloneDeep";
 const getCommonApplyFooter = children => {
   return {
     uiFramework: "custom-atoms",
@@ -132,11 +135,12 @@ const generatePdfAndDownload = (
   // });
 };
 
-const handleAppDownloadAndPrint = (state, action) => {
+const handleAppDownloadAndPrint = async(state, dispatch, action) => {
   const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
   const applicationNumberWater = getQueryArg(window.location.href, "applicationNumberWater");
   const applicationNumberSewerage = getQueryArg(window.location.href, "applicationNumberSewerage");
-  const { WaterConnection, DocumentsData, SewerageConnection } = state.screenConfiguration.preparedFinalObject;
+  const { WaterConnection, DocumentsData,SewerageConnection} = state.screenConfiguration.preparedFinalObject;
+
   let filteredDocs = DocumentsData;
   filteredDocs.map(val => {
     if (val.title.includes("WS_OWNER.IDENTITYPROOF.")) { val.title = "WS_OWNER.IDENTITYPROOF"; }
@@ -145,15 +149,48 @@ const handleAppDownloadAndPrint = (state, action) => {
   if (applicationNumberWater && applicationNumberSewerage) {
     WaterConnection[0].pdfDocuments = filteredDocs;
     SewerageConnection[0].pdfDocuments = filteredDocs;
-    downloadApp(WaterConnection, "application", action);
-    downloadApp(SewerageConnection, "application", action);
+    let WSstoreData=cloneDeep(WaterConnection);
+    let connTypeSewerage=SewerageConnection[0].connectionType;
+    let connTypeWater=WaterConnection[0].connectionType;
+    const WSRequestBody = cloneDeep(get(
+      state,
+      "screenConfiguration.preparedFinalObject", {}));
+      let fileName=action==="print"?"print":"application.pdf";
+      dispatch(prepareFinalObject("WaterConnection[0]", WSstoreData[0]));
+      let connType=connTypeWater===null?"Metered":connTypeWater;
+    var cc = await generateWSAcknowledgement(WSRequestBody, fileName,"WATER",connType);
+   
+    if(cc){
+      const { SewerageConnection } = state.screenConfiguration.preparedFinalObject;
+      dispatch(prepareFinalObject("WaterConnection[0]", SewerageConnection[0]));
+      let SWRequestBody=cloneDeep(get(
+        state,
+        "screenConfiguration.preparedFinalObject", {}));
+         fileName=action==="print"?"print":"sewerage-application.pdf";
+      cc = await generateWSAcknowledgement(SWRequestBody, fileName,"SEWERAGE",connTypeSewerage);
+      if(cc){
+        dispatch(prepareFinalObject("WaterConnection[0]", WSstoreData[0]));        
+      }
+    }
   } else if (applicationNumber) {
+ 
     if (applicationNumber.includes("WS")) {
-      WaterConnection[0].pdfDocuments = filteredDocs;
-      downloadApp(WaterConnection, "application", action);
+      let connTypeWater=WaterConnection[0].connectionType;
+      let water=cloneDeep(get(
+        state,
+        "screenConfiguration.preparedFinalObject", {}))
+         let fileName=action==="print"?"print":"application.pdf";
+         let connType=connTypeWater===null?"Metered":connTypeWater;
+      cc=generateWSAcknowledgement(water, fileName,"WATER",connType);
     } else if (applicationNumber.includes("SW")) {
-      SewerageConnection[0].pdfDocuments = filteredDocs;
-      downloadApp(SewerageConnection, "application", action);
+      let connTypeSewerage=SewerageConnection[0].connectionType;
+      let SWstoreData=cloneDeep(SewerageConnection);
+      dispatch(prepareFinalObject("WaterConnection[0]", SWstoreData[0]));
+      let SWRequestBody=cloneDeep(get(
+        state,
+        "screenConfiguration.preparedFinalObject", {}));
+        let fileName=action==="print"?"print":"sewerage-application.pdf";
+      cc = generateWSAcknowledgement(SWRequestBody, fileName,"SEWERAGE",connTypeSewerage);
     }
   }
 }
@@ -185,7 +222,7 @@ export const DownloadAndPrint = (state,
       },
       onClickDefination: {
         action: "condition",
-        callBack: () => { handleAppDownloadAndPrint(state, "download") }
+        callBack: () => { handleAppDownloadAndPrint(state, dispatch, "download") }
       }
     },
     printFormButton: {
@@ -208,7 +245,7 @@ export const DownloadAndPrint = (state,
       },
       onClickDefination: {
         action: "condition",
-        callBack: () => { handleAppDownloadAndPrint(state, "print") }
+        callBack: () => { handleAppDownloadAndPrint(state, dispatch, "print") }
       }
     }
   })

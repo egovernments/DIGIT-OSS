@@ -64,6 +64,10 @@ const withoutAuthorization = (redirectionUrl) => (Component) => {
         marginBottom: "24px",
       },
       titleStyle: { fontSize: "20px", fontWeight: 500 },
+      headerStyle: {
+        position: "absolute",
+        width: "100%"
+      }
     };
 
     componentDidMount() {
@@ -100,7 +104,7 @@ const withoutAuthorization = (redirectionUrl) => (Component) => {
         <div>
           {/* FIXME need to move appbar as new component */}
           {isOpenLink ? (
-            <div className="rainmaker-header-cont" style={{ position: "relative" }}>
+            <div className="rainmaker-header-cont" style={isPublicSearch ? style.headerStyle : { position: "relative" }}>
               <div style={{ lineHeight: "64px" }}>
                 <AppBar
                   className="rainmaker-header"

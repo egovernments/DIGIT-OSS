@@ -1,7 +1,9 @@
 import { getCommonCard, getCommonContainer, getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg, setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
-import { generatePdfFromDiv } from "egov-ui-kit/utils/PTCommon";
+import { loadUlbLogo } from "egov-ui-kit/utils/pdfUtils/generatePDF";
+import { generatePTMAcknowledgement } from "egov-ui-kit/utils/pdfUtils/generatePTMAcknowledgement";
+import { getCommonTenant } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
 import get from "lodash/get";
 import set from "lodash/set";
 import { httpRequest } from "../../../../ui-utils";
@@ -15,7 +17,6 @@ import { transferorInstitutionSummary, transferorSummary } from "./searchPreview
 import { documentsSummary } from "./summaryResource/documentsSummary";
 import { propertySummary } from "./summaryResource/propertySummary";
 import { registrationSummary } from './summaryResource/registrationSummary';
-import { getCommonTenant } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
 
 const titlebar = getCommonContainer({
   header: getCommonHeader({
@@ -76,14 +77,20 @@ const setDownloadMenu = (state, dispatch, tenantId, applicationNumber) => {
   let applicationDownloadObject = {
     label: { labelName: "Application", labelKey: "MT_APPLICATION" },
     link: () => {
-      generatePdfFromDiv("download", applicationNumber, "#material-ui-cardContent")
+      generatePTMAcknowledgement(get(
+        state,
+        "screenConfiguration.preparedFinalObject", {}), `mutation-acknowledgement-${applicationNumber}.pdf`);
+      // generatePdfFromDiv("download", applicationNumber, "#material-ui-cardContent")
     },
     leftIcon: "assignment"
   };
   let applicationPrintObject = {
     label: { labelName: "Application", labelKey: "MT_APPLICATION" },
     link: () => {
-      generatePdfFromDiv("print", applicationNumber, "#material-ui-cardContent")
+      generatePTMAcknowledgement(get(
+        state,
+        "screenConfiguration.preparedFinalObject", {}), 'print');
+      // generatePdfFromDiv("print", applicationNumber, "#material-ui-cardContent")
     },
     leftIcon: "assignment"
   };
@@ -287,7 +294,7 @@ const setSearchResponse = async (
 
 
     const previousActiveProperty = propertiesAudit.filter(property => property.status == 'ACTIVE').sort((x, y) => y.auditDetails.lastModifiedTime - x.auditDetails.lastModifiedTime)[0];
-    previousActiveProperty
+
 
     property.ownershipCategoryInit = previousActiveProperty.ownershipCategory;
     if (property.ownershipCategoryInit.startsWith("INSTITUTION")) {
@@ -397,6 +404,7 @@ const screenConfig = {
       })
     }
     setSearchResponse(state, dispatch, applicationNumber, tenantId);
+    loadUlbLogo(tenantId);
     const queryObject = [
       { key: "tenantId", value: tenantId },
       // { key: "businessServices", value: "PT.MUTATION" }
