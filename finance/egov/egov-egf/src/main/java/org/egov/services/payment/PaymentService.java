@@ -79,6 +79,7 @@ import org.egov.commons.EgwStatus;
 import org.egov.commons.dao.ChartOfAccountsHibernateDAO;
 import org.egov.commons.dao.EgwStatusHibernateDAO;
 import org.egov.commons.dao.FinancialYearDAO;
+import org.egov.commons.service.ChartOfAccountDetailService;
 import org.egov.commons.service.ObjectTypeService;
 import org.egov.commons.utils.EntityType;
 import org.egov.egf.commons.EgovCommon;
@@ -213,6 +214,9 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
     @Autowired
     @Qualifier("workflowService")
     private SimpleWorkflowService<Paymentheader> paymentHeaderWorkflowService;
+    
+    @Autowired
+	private ChartOfAccountDetailService chartOfAccountDetailService;
 
     public PaymentService(Class<Paymentheader> type) {
         super(type);
@@ -628,7 +632,12 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
             }
             sublegDetailMap.put(VoucherConstant.DEBITAMOUNT, tmpsublegDetailMap.get(key));
             sublegDetailMap.put(VoucherConstant.CREDITAMOUNT, BigDecimal.valueOf(0));
-            subledgerdetails.add(sublegDetailMap);
+            
+			if (chartOfAccountDetailService.getByGlcodeAndDetailTypeId(
+					sublegDetailMap.get(VoucherConstant.GLCODE).toString(),
+					Integer.valueOf(sublegDetailMap.get(VoucherConstant.DETAILTYPEID).toString())) != null) {
+				subledgerdetails.add(sublegDetailMap);
+			}
         }
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("Completed prepareVoucherdetails.");

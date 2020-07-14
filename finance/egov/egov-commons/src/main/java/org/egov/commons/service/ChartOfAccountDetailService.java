@@ -71,4 +71,8 @@ public class ChartOfAccountDetailService extends PersistenceService<CChartOfAcco
     public CChartOfAccountDetail getByGlcodeIdAndDetailTypeId(Long glcodeId,Integer accountDetailTypeId) {
         return find("from CChartOfAccountDetail where glCodeId.id=? and detailTypeId.id=?", glcodeId,accountDetailTypeId);
     }
+    
+    public CChartOfAccountDetail getByGlcodeAndDetailTypeId(String glcode, Integer accountDetailTypeId) {
+        return find("from CChartOfAccountDetail where glCodeId.glcode=? and detailTypeId.id=?", glcode, accountDetailTypeId);
+    }
 }

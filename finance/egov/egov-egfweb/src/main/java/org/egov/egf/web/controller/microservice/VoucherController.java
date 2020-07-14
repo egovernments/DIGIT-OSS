@@ -4,7 +4,6 @@ import java.net.URLDecoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -16,6 +15,7 @@ import org.egov.billsaccounting.services.CreateVoucher;
 import org.egov.billsaccounting.services.VoucherConstant;
 import org.egov.commons.CVoucherHeader;
 import org.egov.commons.EgModules;
+import org.egov.commons.service.ChartOfAccountDetailService;
 import org.egov.egf.contract.model.AccountDetailContract;
 import org.egov.egf.contract.model.SubledgerDetailContract;
 import org.egov.egf.contract.model.Voucher;
@@ -45,6 +45,8 @@ public class VoucherController {
 	private CreateVoucher createVoucher;
 	@Autowired
 	private VoucherService voucherService;
+	@Autowired
+	private ChartOfAccountDetailService chartOfAccountDetailService;
 
 	@PostMapping(value = "/rest/voucher/_search")
 	@ResponseBody
@@ -147,7 +149,10 @@ public class VoucherController {
 						subledgertDetailMap.put(VoucherConstant.DETAILAMOUNT, sl.getAmount());
 						subledgertDetailMap.put(VoucherConstant.DETAIL_TYPE_ID, sl.getAccountDetailType().getId());
 						subledgertDetailMap.put(VoucherConstant.DETAIL_KEY_ID, sl.getAccountDetailKey().getId());
-						subledgerDetails.add(subledgertDetailMap);
+						if (chartOfAccountDetailService.getByGlcodeAndDetailTypeId(ac.getGlcode().toString(),
+								Integer.valueOf(sl.getAccountDetailType().getId().intValue())) != null) {
+							subledgerDetails.add(subledgertDetailMap);
+						}
 					}
 				}
 				CVoucherHeader voucherHeader = createVoucher.createVoucher(headerDetails, accountdetails,
