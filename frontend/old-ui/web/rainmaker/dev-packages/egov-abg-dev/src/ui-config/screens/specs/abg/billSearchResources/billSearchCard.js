@@ -10,6 +10,14 @@ const resetFields = (state, dispatch) => {
   dispatch(
     handleField(
       "billSearch",
+      "components.div.children.billSearchCard.children.cardContent.children.searchContainer.children.ulb",
+      "props.value",
+      tenantId
+    )
+  );
+  dispatch(
+    handleField(
+      "billSearch",
       "components.div.children.billSearchCard.children.cardContent.children.searchContainer.children.consumerCode",
       "props.value",
       ""
@@ -34,7 +42,7 @@ const resetFields = (state, dispatch) => {
   dispatch(
     handleField(
       "billSearch",
-      "components.div.children.billSearchCard.children.cardContent.children.searchContainer.children.ulb",
+      "components.div.children.billSearchCard.children.cardContent.children.searchContainer.children.serviceCategory",
       "props.value",
       ""
     )
@@ -43,11 +51,19 @@ const resetFields = (state, dispatch) => {
     handleField(
       "billSearch",
       "components.div.children.billSearchCard.children.cardContent.children.searchContainer.children.serviceCategory",
-      "props.value",
+      "props.error",
+      false
+    )
+  );
+  dispatch(
+    handleField(
+      "billSearch",
+      "components.div.children.billSearchCard.children.cardContent.children.searchContainer.children.serviceCategory",
+      "props.helperText",
       ""
     )
   );
-  dispatch(prepareFinalObject("searchScreen", { tenantId: "", businesService: "" }))
+  dispatch(prepareFinalObject("searchScreen", { tenantId: tenantId ,businesService:""}));
 };
 
 export const billSearchCard = getCommonCard({
@@ -80,7 +96,7 @@ export const billSearchCard = getCommonCard({
         },
         required: true,
         labelsFromLocalisation: true,
-        isClearable: true,
+        // isClearable: true,
         className: "autocomplete-dropdown",
         sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
         jsonPath: "searchScreen.tenantId",
@@ -109,7 +125,7 @@ export const billSearchCard = getCommonCard({
         required: true,
         labelsFromLocalisation: true,
         className: "autocomplete-dropdown",
-        isClearable: true,
+        // isClearable: true,
         jsonPath: "searchScreen.businesService",
         localePrefix: {
           moduleName: "BillingService",
@@ -117,6 +133,7 @@ export const billSearchCard = getCommonCard({
         },
         sourceJsonPath: "searchScreenMdmsData.BillingService.BusinessService",
       },
+      required: true,
       jsonPath: "searchScreen.businesService",
       gridDefination: {
         xs: 12,
