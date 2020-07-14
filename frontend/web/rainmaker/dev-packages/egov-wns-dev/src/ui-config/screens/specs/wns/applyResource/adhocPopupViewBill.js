@@ -9,6 +9,7 @@ import {
 import { showHideAdhocPopup } from "../../utils";
 import get from "lodash/get";
 import { httpRequest } from "../../../../../ui-utils/api";
+import { serviceConst } from "../../../../../ui-utils/commons";
 import cloneDeep from "lodash/cloneDeep";
 import { createEstimateData } from "../../utils";
 import {
@@ -41,7 +42,7 @@ const getEstimateDataAfterAdhoc = async (state, dispatch) => {
     );
 
   let serviceUrl,httpmethod;
-  if (WSRequestBody[0].service === "WATER") {
+  if (WSRequestBody[0].service === serviceConst.WATER) {
     serviceUrl = "ws-calculator/waterCalculator/_applyAdhocTax";
     httpmethod = "post";
   } else {

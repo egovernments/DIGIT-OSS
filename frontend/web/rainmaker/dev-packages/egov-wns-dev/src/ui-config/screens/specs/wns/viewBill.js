@@ -1,6 +1,6 @@
 import { getCommonHeader, getCommonCard, getCommonGrayCard, getCommonContainer, getCommonSubHeader, convertEpochToDate, getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 // import get from "lodash/get";
-import { getSearchResults, getSearchResultsForSewerage, fetchBill, getDescriptionFromMDMS, getConsumptionDetails, billingPeriodMDMS } from "../../../../ui-utils/commons";
+import { getSearchResults, getSearchResultsForSewerage, fetchBill, getDescriptionFromMDMS, getConsumptionDetails, billingPeriodMDMS, serviceConst } from "../../../../ui-utils/commons";
 import set from "lodash/set";
 import get from "lodash/get";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
@@ -15,7 +15,7 @@ import { getOwner } from "./viewBillResource/ownerDetails";
 import { getService } from "./viewBillResource/serviceDetails";
 import { viewBillFooter } from "./viewBillResource/viewBillFooter";
 import { adhocPopupViewBill } from "./applyResource/adhocPopupViewBill";
-import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
 let consumerCode = getQueryArg(window.location.href, "connectionNumber");
 const tenantId = getQueryArg(window.location.href, "tenantId")
@@ -27,14 +27,14 @@ const processBills = async (state, data, viewBillTooltip, dispatch) => {
     bills.billAccountDetails.forEach(async element => {
       let cessKey = element.taxHeadCode
       let body;
-      if (service === "WATER") {
-        body = { "MdmsCriteria": { "tenantId": tenantId, "moduleDetails": [{ "moduleName": "ws-services-calculation", "masterDetails": [{ "name": cessKey }] }] } }
+      if (service === serviceConst.WATER) {
+        body = { "MdmsCriteria": { "tenantId": getTenantId(), "moduleDetails": [{ "moduleName": "ws-services-calculation", "masterDetails": [{ "name": cessKey }] }] } }
       } else {
-        body = { "MdmsCriteria": { "tenantId": tenantId, "moduleDetails": [{ "moduleName": "sw-services-calculation", "masterDetails": [{ "name": cessKey }] }] } }
+        body = { "MdmsCriteria": { "tenantId": getTenantId(), "moduleDetails": [{ "moduleName": "sw-services-calculation", "masterDetails": [{ "name": cessKey }] }] } }
       }
       let res = await getDescriptionFromMDMS(body, dispatch)
       if (res !== null && res !== undefined && res.MdmsRes !== undefined && res.MdmsRes !== null) {
-        if (service === "WATER") { des = res.MdmsRes["ws-services-calculation"]; }
+        if (service === serviceConst.WATER) { des = res.MdmsRes["ws-services-calculation"]; }
         else { des = res.MdmsRes["sw-services-calculation"]; }
         if (des !== null && des !== undefined && des[cessKey] !== undefined && des[cessKey][0] !== undefined && des[cessKey][0] !== null) {
           groupBillDetails.push({ key: cessKey, value: des[cessKey][0].description, amount: element.amount, order: element.order })
@@ -57,7 +57,9 @@ const processBills = async (state, data, viewBillTooltip, dispatch) => {
           let currentDemand = sortedBills[0];
           sortedBills.shift();
           let totalArrears = 0;
-          sortedBills.forEach(e => { e.bill.forEach(o => { totalArrears = totalArrears + o.amount }); })
+          if(data.Bill[0].totalAmount > 0) {
+            sortedBills.forEach(e => { e.bill.forEach(o => { totalArrears = totalArrears + o.amount }); })
+          }
           let finalArray = [{
             arrears: totalArrears,
             arrearsDescription: "Total outstanding payment of previous billing cycles.",
@@ -92,7 +94,7 @@ const searchResults = async (action, state, dispatch, consumerCode) => {
   let queryObjForSearch = [{ key: "tenantId", value: tenantId }, { key: "connectionNumber", value: consumerCode }]
   let queryObjectForConsumptionDetails = [{ key: "tenantId", value: tenantId }, { key: "connectionNos", value: consumerCode }]
   let viewBillTooltip = [], data;
-  if (service === "WATER") {
+  if (service === serviceConst.WATER) {
     let meterReadingsData = await getConsumptionDetails(queryObjectForConsumptionDetails, dispatch);
     let payload = await getSearchResults(queryObjForSearch);
     let queryObjectForFetchBill = [{ key: "tenantId", value: tenantId }, { key: "consumerCode", value: consumerCode }, { key: "businessService", value: "WS" }];
@@ -134,7 +136,7 @@ const searchResults = async (action, state, dispatch, consumerCode) => {
         dispatch(prepareFinalObject("consumptionDetails[0]", meterReadingsData.meterReadings[0]))
       }
     }
-  } else if (service === "SEWERAGE") {
+  } else if (service === serviceConst.SEWERAGE) {
     let queryObjectForFetchBill = [{ key: "tenantId", value: tenantId }, { key: "consumerCode", value: consumerCode }, { key: "businessService", value: "SW" }];
     let payload = await getSearchResultsForSewerage(queryObjForSearch, dispatch);
     data = await fetchBill(queryObjectForFetchBill, dispatch)
@@ -192,9 +194,9 @@ const beforeInitFn = async (action, state, dispatch, consumerCode) => {
 };
 
 const billHeader = () => {
-  if (service === "WATER") {
+  if (service === serviceConst.WATER) {
     return getCommonHeader({ labelKey: "WS_COMMON_WATER_BILL_HEADER" })
-  } else if (service === "SEWERAGE") {
+  } else if (service === serviceConst.SEWERAGE) {
     return getCommonHeader({ labelKey: "WS_COMMON_SEWERAGE_BILL_HEADER" })
   }
 }

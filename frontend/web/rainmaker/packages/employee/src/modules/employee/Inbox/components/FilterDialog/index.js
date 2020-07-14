@@ -3,10 +3,6 @@ import { Dialog, DropDown } from "components";
 import Label from "egov-ui-kit/utils/translationNode";
 import "./index.css";
 
-const styles = {
-  logoutContentStyle: { textAlign: "center", padding: "24px 20px" },
-};
-
 const LogoutDialog = ({ popupClose, popupOpen }) => {
   return (
     <Dialog
@@ -77,7 +73,6 @@ const LogoutDialog = ({ popupClose, popupOpen }) => {
       handleClose={popupClose}
       contentClassName={"logout-popup"}
       contentStyle={{ width: "90%" }}
-      isClose={true}
     />
   );
 };

@@ -185,8 +185,7 @@ const screenConfig = {
       }
     },
     adhocDialog: {
-      uiFramework: "custom-containers-local",
-      moduleName: "egov-pt",
+      uiFramework: "custom-containers",
       componentPath: "DialogContainer",
       props: {
         open: false,

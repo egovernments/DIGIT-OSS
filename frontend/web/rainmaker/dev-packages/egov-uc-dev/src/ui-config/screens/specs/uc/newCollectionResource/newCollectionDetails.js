@@ -1,22 +1,19 @@
 import {
   getCommonCard,
-  getTextField,
-  getSelectField,
+
   getCommonContainer,
-  getPattern,
-  getDateField
+
+  getDateField, getPattern, getTextField
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import {
-  getTransformedLocale
-} from "egov-ui-framework/ui-utils/commons";
-import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import {
   handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { httpRequest } from "egov-ui-framework/ui-utils/api";
+import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import {setServiceCategory} from "../../utils"
 import get from "lodash/get";
+import { setServiceCategory } from "../../utils";
 
 const tenantId = getTenantId();
 
@@ -25,7 +22,10 @@ export const newCollectionDetailsCard = getCommonCard(
     searchContainer: getCommonContainer(
       {
         City: {
-          ...getSelectField({
+          uiFramework: "custom-containers-local",
+          moduleName: "egov-uc",
+          componentPath: "AutosuggestContainer",
+          props: {
             label: {
               labelName: "City",
               labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
@@ -39,16 +39,18 @@ export const newCollectionDetailsCard = getCommonCard(
               labelName: "Select City",
               labelKey: "TL_SELECT_CITY"
             },
-            sourceJsonPath: "applyScreenMdmsData.tenant.citiesByModule",
-            // "applyScreenMdmsData.common-masters.citiesByModule.UC.tenants",
-            jsonPath: "Demands[0].tenantId",
             required: true,
-            props: {
-              required: true,
-              value: tenantId,
-              disabled: true
-            }
-          }),
+            value: tenantId,
+            disabled: true,
+            labelsFromLocalisation: true,
+            className: "autocomplete-dropdown",
+            sourceJsonPath: "applyScreenMdmsData.tenant.citiesByModule",
+          },
+          jsonPath: "Demands[0].tenantId",
+          gridDefination: {
+            xs: 12,
+            sm: 6
+          },
           beforeFieldChange: async (action, state, dispatch) => {
             const citiesByModule = get(
               state,
@@ -153,18 +155,17 @@ export const newCollectionDetailsCard = getCommonCard(
           jsonPath: "Demands[0].consumerName"
         }),
         serviceCategory: {
-          uiFramework: "custom-containers",
+          uiFramework: "custom-containers-local",
+          moduleName: "egov-uc",
           componentPath: "AutosuggestContainer",
           jsonPath: "Demands[0].businessService",
           gridDefination: {
             xs: 12,
             sm: 6
           },
+          required: true,
           props: {
-            style: {
-              width: "100%",
-              cursor: "pointer"
-            },
+            className: "autocomplete-dropdown",
             label: {
               labelName: "Service Category",
               labelKey: "UC_SERVICE_CATEGORY_LABEL"
@@ -182,24 +183,19 @@ export const newCollectionDetailsCard = getCommonCard(
             jsonPath: "Demands[0].businessService",
             sourceJsonPath: "applyScreenMdmsData.serviceCategories",
             labelsFromLocalisation: true,
-            suggestions: [],
-            fullwidth: true,
-            inputLabelProps: {
-              shrink: true
-            }
           },
           beforeFieldChange: async (action, state, dispatch) => {
             //Reset service type value, if any
-            if(state.screenConfiguration.preparedFinalObject.Demands[0].serviceType){
-            dispatch(
-              handleField(
-                "newCollection",
-                "components.div.children.newCollectionDetailsCard.children.cardContent.children.searchContainer.children.serviceType",
-               "props.value",
+            if (get(state, 'screenConfiguration.preparedFinalObject.Demands[0].serviceType', null)) {
+              dispatch(
+                handleField(
+                  "newCollection",
+                  "components.div.children.newCollectionDetailsCard.children.cardContent.children.searchContainer.children.serviceType",
+                  "props.value",
                   null
-              )
-            );
-              }
+                )
+              );
+            }
             //Set service type data and field if available.
             const serviceData = get(
               state.screenConfiguration,
@@ -249,7 +245,10 @@ export const newCollectionDetailsCard = getCommonCard(
           }
         },
         serviceType: {
-          ...getSelectField({
+          uiFramework: "custom-containers-local",
+          moduleName: "egov-uc",
+          componentPath: "AutosuggestContainer",
+          props: {
             label: {
               labelName: "Service Type",
               labelKey: "UC_SERVICE_TYPE_LABEL"
@@ -264,13 +263,16 @@ export const newCollectionDetailsCard = getCommonCard(
             },
             required: true,
             visible: false,
+            labelsFromLocalisation: true,
+            className: "autocomplete-dropdown",
             sourceJsonPath: "applyScreenMdmsData.serviceTypes",
-            jsonPath: "Demands[0].serviceType",
-            gridDefination: {
-              xs: 12,
-              sm: 6
-            }
-          }),
+          },
+          required: true,
+          jsonPath: "Demands[0].serviceType",
+          gridDefination: {
+            xs: 12,
+            sm: 6
+          },
           beforeFieldChange: async (action, state, dispatch) => {
             const demandId = get(
               state.screenConfiguration.preparedFinalObject,

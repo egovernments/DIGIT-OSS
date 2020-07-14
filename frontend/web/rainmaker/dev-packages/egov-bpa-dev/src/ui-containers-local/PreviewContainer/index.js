@@ -1,16 +1,12 @@
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
+import get from "lodash/get";
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import get from "lodash/get";
-import "./index.css";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import {
-  getFileUrlFromAPI,
-  handleFileUpload,
-  getTransformedLocale,
-} from "egov-ui-framework/ui-utils/commons";
+import { getLoggedinUserRole } from "../../ui-config/screens/specs/utils/index.js";
 import MultiDocDetailCard from "../../ui-molecules-local/MultiDocDetailCard";
 import UploadCard from "../../ui-molecules-local/UploadCard";
-import {getLoggedinUserRole} from "../../ui-config/screens/specs/utils/index.js";
+import "./index.css";
 
 
 class PreviewContainer extends Component {
@@ -29,9 +25,9 @@ class PreviewContainer extends Component {
   static getDerivedStateFromProps(props, state) {
     if (
       (state.editableDocuments == null &&
-      props.finalCardsforPreview &&
-      props.finalCardsforPreview.length > 0)||
-      (state.editableDocuments !=null && state.editableDocuments.length >0 && props.finalCardsforPreview.length>0 && 
+        props.finalCardsforPreview &&
+        props.finalCardsforPreview.length > 0) ||
+      (state.editableDocuments != null && state.editableDocuments.length > 0 && props.finalCardsforPreview.length > 0 &&
         (state.editableDocuments.length != props.finalCardsforPreview.length))
     ) {
       state.editableDocuments = Array(props.finalCardsforPreview.length).fill({
@@ -47,7 +43,7 @@ class PreviewContainer extends Component {
           {this.state.editableDocuments &&
             this.state.editableDocuments.length > 0 &&
             (this.state.editableDocuments[key].editable ? (
-              <div style={{backgroundColor:"rgb(255,255,255)", padding:"10px"}}><UploadCard
+              <div style={{ backgroundColor: "rgb(255,255,255)", padding: "10px", marginTop: "16px" }}><UploadCard
                 docItem={card}
                 docIndex={key}
                 key={key.toString()}
@@ -59,24 +55,25 @@ class PreviewContainer extends Component {
                 uploadedDocIndex={this.state.uploadedDocIndex}
                 toggleEditClick={this.toggleEditClick}
                 isFromPreview={true}
-                jsonPath = {`documentDetailsUploadRedux`}
+                jsonPath={`documentDetailsUploadRedux`}
+                specificStyles="preview_upload_btn"
                 {...rest}
               /></div>
             ) : (
-              <MultiDocDetailCard
-                docItem={card}
-                docIndex={key}
-                key={key.toString()}
-                handleDocument={this.handleDocument}
-                removeDocument={this.removeDocument}
-                onUploadClick={this.onUploadClick}
-                handleFileUpload={this.handleFileUpload}
-                handleChange={this.handleChange}
-                uploadedDocIndex={this.state.uploadedDocIndex}
-                toggleEditClick={this.toggleEditClick}
-                {...rest}
-              />
-            ))}
+                <MultiDocDetailCard
+                  docItem={card}
+                  docIndex={key}
+                  key={key.toString()}
+                  handleDocument={this.handleDocument}
+                  removeDocument={this.removeDocument}
+                  onUploadClick={this.onUploadClick}
+                  handleFileUpload={this.handleFileUpload}
+                  handleChange={this.handleChange}
+                  uploadedDocIndex={this.state.uploadedDocIndex}
+                  toggleEditClick={this.toggleEditClick}
+                  {...rest}
+                />
+              ))}
         </React.Fragment>
       );
   };
@@ -109,7 +106,7 @@ class PreviewContainer extends Component {
     items[itemIndex] = item;
     this.setState({ editableDocuments: items });
   };
-  
+
   handleDocument = async (file, fileStoreId) => {
     let { uploadedDocIndex } = this.state;
     const {
@@ -121,9 +118,9 @@ class PreviewContainer extends Component {
     } = this.props;
     const fileUrl = await getFileUrlFromAPI(fileStoreId);
     let documentCode = finalCardsforPreview[uploadedDocIndex].dropDownValues.value;
-    if(!documentCode){
+    if (!documentCode) {
       let documentMenu = finalCardsforPreview[uploadedDocIndex].dropDownValues.menu;
-      if(documentMenu && documentMenu.length > 0 && documentMenu.length == 1){
+      if (documentMenu && documentMenu.length > 0 && documentMenu.length == 1) {
         documentCode = documentMenu[0].code;
       } else {
         documentCode = finalCardsforPreview[uploadedDocIndex].documentCode
@@ -140,11 +137,11 @@ class PreviewContainer extends Component {
       link: Object.values(fileUrl)[0],
       title: documentCode,
       documentType: documentCode,
-      additionalDetails:{
+      additionalDetails: {
         uploadedBy: getLoggedinUserRole(wfState),
         uploadedTime: new Date().getTime()
       }
-      
+
     };
     if (
       finalCardsforPreview[uploadedDocIndex] &&
@@ -171,7 +168,12 @@ class PreviewContainer extends Component {
         bpaDetails.documents = [fileObj];
       }
     }
-    prepareFinalObject("BPA", bpaDetails);
+    if (window.location.href.includes("noc-search-preview")) {
+      prepareFinalObject("Noc", bpaDetails);
+    } else {
+      prepareFinalObject("BPA", bpaDetails);
+    }
+
 
     prepareFinalObject("finalCardsforPreview", appDocumentList);
 
@@ -200,7 +202,11 @@ class PreviewContainer extends Component {
     }
 
     finalCardsforPreview[cardIndex].documents.splice(uploadedDocIndex, 1);
-    prepareFinalObject("BPA", bpaDetails);
+    if (window.location.href.includes("noc-search-preview")) {
+      prepareFinalObject("Noc", bpaDetails);
+    } else {
+      prepareFinalObject("BPA", bpaDetails);
+    }
     //uploadedDocs.map()
     prepareFinalObject("finalCardsforPreview", finalCardsforPreview);
     prepareFinalObject("documentDetailsUploadRedux", finalCardsforPreview);
@@ -243,7 +249,11 @@ const mapStateToProps = (state, ownProps) => {
     "finalCardsforPreview",
     []
   );
-  const bpaDetails = get(screenConfiguration.preparedFinalObject, "BPA", {});
+  let modulePath = "BPA";
+  if (window.location.href.includes("noc-search-preview")) {
+    modulePath = "Noc"
+  }
+  const bpaDetails = get(screenConfiguration.preparedFinalObject, modulePath, {});
   const wfState = get(
     screenConfiguration.preparedFinalObject.applicationProcessInstances,
     "state"

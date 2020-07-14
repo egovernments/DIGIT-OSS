@@ -30,6 +30,7 @@ import {
   furnishNocResponse,
   setApplicationNumberBox
 } from "../../../../ui-utils/commons";
+import "./index.css";
 
 export const stepsData = [
   { labelName: "NOC Details", labelKey: "NOC_COMMON_NOC_DETAILS" },

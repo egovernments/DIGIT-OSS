@@ -42,7 +42,6 @@ const formConfig = {
     },
   },
   beforeInitForm: (action, store) => {
-    let state = store.getState();
     set(action, "form.fields.city.required", false);
     set(action, "form.fields.pincode.disabled", true);
     return action;

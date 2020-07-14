@@ -4,7 +4,8 @@ import {
   getCommonSubHeader,
   getBreak,
   getDateField,
-  getTimeField
+  getTimeField,
+  getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 
 import { getTranslatedLabel, transformById, getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
@@ -38,29 +39,10 @@ const fieldInspectionMultiItem = () => {
           style: { marginBottom: "10px" }
         },
         children: {
-          header: {
-            gridDefination: {
-              xs: 8
-            },
-            ...getCommonSubHeader({
-              labelName: "Field Inspection",
-              labelKey: "BPA_FIELD_INSPECTION_DETAILS_TITLE"
-            })
-          },
-          // editSection1: {
-          //   componentPath: "Button",
-          //   props: {
-          //     color: "primary",
-          //     style: {
-          //       marginTop: "-10px",
-          //       marginRight: "-18px"
-          //     }
-          //   },
-          //   gridDefination: {
-          //     xs: 4,
-          //     align: "right"
-          //   }
-          // }
+          header:   getCommonContainer({
+            statictitle: getLabel("Field Inspection","BPA_FI_REPORT",{labelKey:"BPA_FI_REPORT"}),
+            dynamicTitle: getLabel("Test","abc",{labelName:"UYT"})
+        })
         }
       },
       applicationdate: getDateField({
@@ -88,9 +70,12 @@ const fieldInspectionMultiItem = () => {
         props: {
           className: "tl-trade-type",
           jsonPathUpdatePrefix: "BPA.additionalDetails.fieldinspection_pending",
-          jsonPath: "BPA.additionalDetails.fieldinspection_pending[0].time"
+          jsonPath: "BPA.additionalDetails.fieldinspection_pending[0].time",
+          defaultValue: "00:00",
+          style: { marginBottom: 10, paddingRight: 80 },
         },
         required : true,
+        defaultValue: "00:00",
         gridDefination: {
           xs: 12,
           sm: 12,
@@ -177,8 +162,8 @@ export const fieldinspectionSummary = getCommonContainer({
       },
       prefixSourceJsonPath: "children.cardContent.children.fiCard.children",
       sourceJsonPath: "BPA.additionalDetails.fieldinspection_pending",
-      headerJsonPath : "children.cardContent.children.fiCard.children.header.children.header.children.key.props.label",
-      headerName : getLocaleLabels( "FI Report", "BPA_FI_REPORT") //getTranslatedLabel("BPA_FI_REPORT", transfomedKeys),
+      headerJsonPath : "children.cardContent.children.fiCard.children.header.children.header.children.dynamicTitle.props.labelName",
+      headerName : " "
     },
     gridDefination: {
       xs: 12,

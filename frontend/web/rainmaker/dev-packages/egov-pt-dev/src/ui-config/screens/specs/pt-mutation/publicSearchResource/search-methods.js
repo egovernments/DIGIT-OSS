@@ -25,6 +25,10 @@ const removeValidation = (state, dispatch) => {
     dispatch(
       handleField("public-search", ComponentJsonPath[key], "isFieldValid", true)
     );
+
+    dispatch(
+      handleField("public-search", ComponentJsonPath[key], "props.helperText", "")
+    );
     return true;
   });
 };
@@ -105,23 +109,21 @@ const searchApiCall = async (state, dispatch) => {
     return;
   } else {
     removeValidation(state, dispatch);
-
-    //  showHideProgress(true, dispatch);
+    const isAdvancePaymentAllowed = get(state, "screenConfiguration.preparedFinalObject.businessServiceInfo.isAdvanceAllowed");
     const querryObject = getPayload(searchScreenObject);
     try {
       const response = await getSearchResults(querryObject);
-      // const response = searchResponse;
       const billResponse = await fetchBill(dispatch, response, searchScreenObject.tenantId, "PT");
       const finalResponse = getPropertyWithBillAmount(response, billResponse);
-      console.log("finalResponse-------", finalResponse);
       let propertyData = finalResponse.Properties.map(item => ({
         ["PT_MUTATION_PID"]: item.propertyId || "-",
         ["PT_COMMON_TABLE_COL_OWNER_NAME"]: item.owners[0].name || "-",
         ["PT_COMMON_COL_ADDRESS"]: getAddress(item) || "-",
         ["PT_COMMON_TABLE_PROPERTY_STATUS"]: item.status || "-",
         ["PT_AMOUNT_DUE"]: (item.totalAmount || item.totalAmount===0) ? item.totalAmount : "-",
-        ["PT_COMMON_TABLE_COL_ACTION_LABEL"]: item.totalAmount || "-",
-        ["TENANT_ID"]: item.tenantId || "-"
+        ["PT_COMMON_TABLE_COL_ACTION_LABEL"]: { status: item.status, totalAmount: item.totalAmount, isAdvancePaymentAllowed },
+        ["TENANT_ID"]: item.tenantId || "-",
+        ["ADVANCE_PAYMENT"]: isAdvancePaymentAllowed
       }));
 
       dispatch(

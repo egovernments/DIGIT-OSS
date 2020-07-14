@@ -14,7 +14,7 @@ import { convertEpochToDate } from "../../ui-config/screens/specs/utils";
 
 const LightTooltip = withStyles((theme) => ({
   tooltip: {
-    fontSize: 13
+    fontSize: 12
   }
 }))(Tooltip);
 //import "./index.css";
@@ -26,10 +26,12 @@ const styles = {
     backgroundColor: "#FFFFFF",
     paddingLeft: 8,
     paddingRight: 0,
-    paddingTop: 11,
+    paddingTop: 3,
     paddingBottom: 10,
     marginRight: 16,
     marginTop: 16,
+    marginBottom:16,
+    // marginBottom:4,
     display: "inline-flex",
   },
   // subtext: {
@@ -106,14 +108,17 @@ const fontStyle = {
   width:150,
   overflow: "hidden", 
   whiteSpace: "nowrap",
-  textOverflow: "ellipsis"
+  textOverflow: "ellipsis",
+  marginLeft:"7px",
 };
 
 const titleStyle = {
-  fontSize: "10px",
+  fontSize: "12px",
   fontWeight: "500",
   color: "rgba(120,110,110,0.64)",
   fontFamily: "Roboto",
+  marginLeft:"7px",
+  
 };
 
 const marginStyle = {
@@ -161,10 +166,10 @@ function MultiDocDetailCard(props) {
             <LabelContainer
               labelKey={getTransformedLocale(docItem.documentCode)}
             />
-              {/* {getTransformedLocale(docItem.documentCode)} */}
-              {docItem.required}
-              <span>{requiredIcon}</span>
-
+              {/* {getTransformedLocale(docItem.documentCode)} */}            
+              {(!docItem.documents || docItem.documents == null || docItem.documents.length == 0) && (docItem.required) ? (
+              <span>{requiredIcon}</span>) : (null)}
+              
             </Typography>
             
           </Grid>

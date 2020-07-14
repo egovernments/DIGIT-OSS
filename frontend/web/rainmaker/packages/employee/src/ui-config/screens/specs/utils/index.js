@@ -4,11 +4,10 @@ import { getLabel, getSelectField, getCommonContainer, getCommonCard, convertDat
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { localStorageGet, getAccessToken } from "egov-ui-kit/utils/localStorageUtils";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getQueryArg, validateFields, getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg, validateFields } from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { toggleSpinner } from "egov-ui-kit/redux/common/actions";
 import store from "../../../../redux/store";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import commonConfig from "config/common.js";
 import cloneDeep from "lodash/cloneDeep";
@@ -37,6 +36,7 @@ export const getFinancialYearDates = (format, et) => {
         financialDates.startDate = `${date.getFullYear().toString()}-04-01`;
         financialDates.endDate = `${(date.getFullYear() + 1).toString()}-03-31`;
         break;
+      default: 
     }
   } else {
     switch (format) {
@@ -48,6 +48,7 @@ export const getFinancialYearDates = (format, et) => {
         financialDates.startDate = `${(date.getFullYear() - 1).toString()}-04-01`;
         financialDates.endDate = `${date.getFullYear().toString()}-03-31`;
         break;
+      default:  
     }
   }
   return financialDates;

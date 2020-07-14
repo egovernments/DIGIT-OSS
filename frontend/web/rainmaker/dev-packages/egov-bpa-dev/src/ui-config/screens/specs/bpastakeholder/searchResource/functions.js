@@ -1,27 +1,26 @@
+import { handleScreenConfigurationFieldChange as handleField, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { httpRequest } from "egov-ui-framework/ui-utils/api";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSearchResults } from "../../../../..//ui-utils/commons";
+import { validateFields } from "../../utils";
 import {
-  convertEpochToDate,
-  convertDateToEpoch,
+  convertDateToEpoch, convertEpochToDate,
+
   getTextToLocalMapping
 } from "../../utils/index";
-import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { validateFields } from "../../utils";
-import { getUserInfo, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
-import { httpRequest } from "egov-ui-framework/ui-utils/api";
 
 const convertMillisecondsToDays = (milliseconds) => {
-  return  Math.round(milliseconds / (1000 * 60 * 60 * 24));
+  return Math.round(milliseconds / (1000 * 60 * 60 * 24));
 }
 export const searchApiCall = async (state, dispatch) => {
   showHideTable(false, dispatch);
-  
+
   let queryObject = [
     {
       key: "tenantId",
-      value: (getTenantId().lastIndexOf(".") >0 ? getTenantId().substr(0,getTenantId().lastIndexOf(".")) : getTenantId())
+      value: (getTenantId().lastIndexOf(".") > 0 ? getTenantId().substr(0, getTenantId().lastIndexOf(".")) : getTenantId())
     },
     { key: "offset", value: "0" },
     { key: "limit", value: "100" }
@@ -116,7 +115,7 @@ export const searchApiCall = async (state, dispatch) => {
         ) || "-",
         ["BPA_COMMON_TABLE_COL_STATUS_LABEL"]: item.status || "-",
         ["BPA_COMMON_TABLE_COL_ASSIGN_TO"]: get(businessIdToOwnerMapping[item.applicationNumber], "assignee") || "-",
-        ["BPA_COMMON_TABLE_COL_APP_DATE_LABEL"]:  convertEpochToDate(item.applicationDate) || "-",        
+        ["BPA_COMMON_TABLE_COL_APP_DATE_LABEL"]: convertEpochToDate(item.applicationDate) || "-",
         ["TENANT_ID"]: item.tenantId
       }));
 
@@ -162,7 +161,7 @@ export const getWorkFlowData = async Licenses => {
   const queryObject = [
     {
       key: "tenantId",
-      value: (getTenantId().lastIndexOf(".") >0 ? getTenantId().substr(0,getTenantId().lastIndexOf(".")) : getTenantId())
+      value: (getTenantId().lastIndexOf(".") > 0 ? getTenantId().substr(0, getTenantId().lastIndexOf(".")) : getTenantId())
     },
     {
       key: "businessIds",
@@ -181,7 +180,7 @@ export const getWorkFlowData = async Licenses => {
       record => record.moduleName === "BPAREG"
     ).forEach(item => {
       businessIdToOwnerMapping[item.businessId] = {
-        assignee: get(item,"assignes[0].name"),
+        assignee: get(item, "assignes[0].name"),
         sla: item.businesssServiceSla && convertMillisecondsToDays(item.businesssServiceSla)
       };
     });
@@ -196,44 +195,49 @@ export const getWorkFlowDataForBPA = async Licenses => {
   var businessIds = [];
   let tenantMap = {};
   let processInstanceArray = [];
+  var appNumbers = [];
   Licenses.forEach(item => {
     var appNums = tenantMap[item.tenantId] || [];
+    appNumbers = appNums;
     appNums.push(item.applicationNo);
     tenantMap[item.tenantId] = appNums;
   });
 
-  for(var key in tenantMap) {
-    const queryObject = [
-      {
-        key: "tenantId",
-        value: key
-      },
-      {
-        key: "businessIds",
-        value: tenantMap[key]
+  for (var key in tenantMap) {
+    for (let i = 0; i < appNumbers.length / 100; i++) {
+      let queryObject = [
+        {
+          key: "tenantId",
+          value: key
+        },
+        {
+          key: "businessIds",
+          value: tenantMap[key].slice(i * 100, (i * 100) + 100)
+        }
+      ];
+      try {
+        let payload = await httpRequest(
+          "post",
+          "egov-workflow-v2/egov-wf/process/_search",
+          "",
+          queryObject
+        );
+        processInstanceArray = processInstanceArray.concat(payload.ProcessInstances)
+
+      } catch (error) {
+        console.log(error);
+        return [];
       }
-    ];
-    try {
-      const payload = await httpRequest(
-        "post",
-        "egov-workflow-v2/egov-wf/process/_search",
-        "",
-        queryObject
-      );
-      processInstanceArray = processInstanceArray.concat(payload.ProcessInstances)
-     
-    } catch (error) {
-      console.log(error);
-      return [];
     }
-    
+
     var businessIdToOwnerMapping = {};
     processInstanceArray.filter(
       record => record.moduleName.includes("bpa-services")
     ).forEach(item => {
       businessIdToOwnerMapping[item.businessId] = {
         assignee: get(item, "assignes[0].name"),
-        sla: item.businesssServiceSla && convertMillisecondsToDays(item.businesssServiceSla)
+        sla: item.businesssServiceSla && convertMillisecondsToDays(item.businesssServiceSla),
+        state: item.state.state
       };
     });
     return businessIdToOwnerMapping;

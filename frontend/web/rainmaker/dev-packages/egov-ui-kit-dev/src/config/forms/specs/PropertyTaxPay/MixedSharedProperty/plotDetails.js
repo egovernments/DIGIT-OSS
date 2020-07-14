@@ -34,6 +34,7 @@ const formConfig = {
       required: true,
       numcols: 4,
       dropDownData: [],
+      formName: "plotDetails",
       updateDependentFields: ({ formKey, field, dispatch, state }) => {
         let minorObject = get(state, `common.generalMDMSDataById.UsageCategoryMinor[${field.value}]`);
         if (!isEmpty(minorObject)) {

@@ -266,7 +266,8 @@ class FormWizard extends Component {
       fetchGeneralMDMSData,
       fetchMDMDDocumentTypeSuccess,
       toggleSpinner,
-      history
+      history,
+      prepareFinalObject
     } = this.props;
     toggleSpinner();
     try {
@@ -351,6 +352,12 @@ class FormWizard extends Component {
         titleObject
       });
       toggleSpinner();
+      if(!getQueryValue(search, "purpose")){
+        prepareFinalObject('Properties', []);
+        prepareFinalObject('PropertiesTemp', []);
+      } else if(getQueryValue(search, "purpose") == "update" || getQueryValue(search, "purpose") == "assess" || getQueryValue(search, "purpose") == "reassess") {
+        prepareFinalObject('Properties', this.props.common.prepareFormData.Properties);
+      }
     } catch (e) {
       console.log("e");
       toggleSpinner();
@@ -365,6 +372,7 @@ class FormWizard extends Component {
         }.bind(this)
       );
     }
+    prepareFinalObject('propertiesEdited', false);
   };
 
   handleRemoveOwner = (index, formKey) => {
@@ -440,13 +448,15 @@ class FormWizard extends Component {
       financialYearFromQuery,
       termsAccepted,
       termsError, propertyUUID,
-      assessedPropertyDetails
+      assessedPropertyDetails,
+      purpose
     } = this.state;
     const { form, currentTenantId, search, propertiesEdited } = this.props;
     let { search: searchQuery } = this.props.location;
     let isAssesment = getQueryValue(searchQuery, "purpose") == 'assess';
     let isReassesment = getQueryValue(searchQuery, "purpose") == 'reassess';
     const isCompletePayment = getQueryValue(search, "isCompletePayment");
+    const disableOwner = !formWizardConstants[purpose].canEditOwner;
     switch (selected) {
       case 0:
         return (
@@ -474,7 +484,7 @@ class FormWizard extends Component {
         );
         return (
           <div>
-            <OwnershipTypeHOC disabled={propertiesEdited} />
+            <OwnershipTypeHOC disabled={disableOwner} />
             {getOwnerDetails(ownerType)}
           </div>
         );
@@ -920,6 +930,8 @@ class FormWizard extends Component {
 
         break;
       case 3:
+        window.scrollTo(0, 0);
+        const newDocs = {};
         const uploadedDocs = get(this.props, "documentsUploadRedux");
         if (!isDocumentValid(uploadedDocs, requiredDocCount)) {
           alert("Please upload all the required documents and documents type.")

@@ -3,7 +3,7 @@ import {
 
 
   getCommonContainer,
-  getLabel, getSelectField, getTextField
+  getLabel, getTextField
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
@@ -64,54 +64,70 @@ export const resetFields = (state, dispatch) => {
 export const abgSearchCard = getCommonCard({
   searchContainer: getCommonContainer(
     {
-      ulb: getSelectField({
-        label: {
-          labelName: "ULB",
-          labelKey: "ABG_ULB_LABEL"
-        },
-        labelPrefix: {
-          moduleName: "TENANT",
-          masterName: "TENANTS"
-        },
-        optionLabel: "name",
-        placeholder: {
-          labelName: "Select ULB",
-          labelKey: "ABG_ULB_PLACEHOLDER"
-        },
-        sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
-        jsonPath: "searchCriteria.tenantId",
-        required: true,
-        disabled: false,
+      ulb: {
+        uiFramework: "custom-containers-local",
+        moduleName: "egov-abg",
+        componentPath: "AutosuggestContainer",
         props: {
+          label: {
+            labelName: "ULB",
+            labelKey: "ABG_ULB_LABEL"
+          },
+          localePrefix: {
+            moduleName: "TENANT",
+            masterName: "TENANTS"
+          },
+          optionLabel: "name",
+          placeholder: {
+            labelName: "Select ULB",
+            labelKey: "ABG_ULB_PLACEHOLDER"
+          },
+          required: true,
           value: tenantId,
-          disabled: true
+          disabled: true,
+          labelsFromLocalisation: true,
+          className: "autocomplete-dropdown",
+          jsonPath: "searchCriteria.tenantId",
+          sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
         },
+        jsonPath: "searchCriteria.tenantId",
+        disabled: false,
         gridDefination: {
           xs: 12,
           sm: 4
         }
-      }),
-      serviceCategory: getSelectField({
-        label: {
-          labelName: "Service Category",
-          labelKey: "ABG_SERVICE_CATEGORY_LABEL"
-        },
-        placeholder: {
-          labelName: "Select Service Category",
-          labelKey: "ABG_SERVICE_CATEGORY_PLACEHOLDER"
+      },
+      serviceCategory: {
+        uiFramework: "custom-containers-local",
+        moduleName: "egov-abg",
+        componentPath: "AutosuggestContainer",
+        props: {
+          label: {
+            labelName: "Service Category",
+            labelKey: "ABG_SERVICE_CATEGORY_LABEL"
+          },
+          placeholder: {
+            labelName: "Select Service Category",
+            labelKey: "ABG_SERVICE_CATEGORY_PLACEHOLDER"
+          },
+          required: true,
+          localePrefix: {
+            moduleName: "BillingService",
+            masterName: "BusinessService"
+          },
+          labelsFromLocalisation: true,
+          isClearable: true,
+          className: "autocomplete-dropdown",
+          jsonPath: "searchCriteria.businesService",
+          sourceJsonPath: "searchScreenMdmsData.BillingService.BusinessService",
         },
         required: true,
         jsonPath: "searchCriteria.businesService",
-
         gridDefination: {
           xs: 12,
           sm: 4
         },
-        localePrefix: {
-          moduleName: "BillingService",
-          masterName: "BusinessService"
-        },
-        sourceJsonPath: "searchScreenMdmsData.BillingService.BusinessService",
+
         // beforeFieldChange :(action, state, dispatch) => {
         //   if(action.value === "WS"){
         //     dispatch(
@@ -134,7 +150,7 @@ export const abgSearchCard = getCommonCard({
         //   }
 
         // }
-      }),
+      },
       // billingPeriod: getSelectField({
       //   label: {
       //     labelName: "Financial Year",
@@ -155,6 +171,7 @@ export const abgSearchCard = getCommonCard({
       // }),
       locMohalla: {
         uiFramework: "custom-containers",
+        moduleName: "egov-abg",
         componentPath: "AutosuggestContainer",
         gridDefination: {
           xs: 12,
@@ -162,10 +179,7 @@ export const abgSearchCard = getCommonCard({
         },
         jsonPath: "searchCriteria.locality",
         props: {
-          style: {
-            width: "100%",
-            cursor: "pointer"
-          },
+          className: "autocomplete-dropdown",
           label: {
             labelName: "Location/Mohalla",
             labelKey: "ABG_LOCMOHALLA_LABEL"
@@ -179,7 +193,6 @@ export const abgSearchCard = getCommonCard({
           labelsFromLocalisation: true,
           suggestions: [],
           visible: true,
-          fullwidth: true,
           required: false,
           inputLabelProps: {
             shrink: true

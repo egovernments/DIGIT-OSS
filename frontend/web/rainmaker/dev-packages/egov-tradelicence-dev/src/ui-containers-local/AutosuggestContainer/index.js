@@ -18,7 +18,7 @@ class AutoSuggestor extends Component {
   onSelect = value => {
     const { onChange } = this.props;
     //Storing multiSelect values not handled yet
-    onChange({ target: { value: value.value } });
+    onChange({ target: { value: value ? value.value: null } });
   };
 
   render() {

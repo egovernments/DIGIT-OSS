@@ -1,4 +1,4 @@
-import { getMyApplicationResults,getSWMyApplicationResults } from "../../../../../ui-utils/commons";
+import { getWSMyResults,getSWMyResults } from "../../../../../ui-utils/commons";
 import {
     handleScreenConfigurationFieldChange as handleField,
     prepareFinalObject
@@ -14,8 +14,8 @@ export const fetchData = async (action, state, dispatch) => {
         }
     ]
 
-    const response = await getMyApplicationResults(queryObject,dispatch);
-    const swResponse = await getSWMyApplicationResults(queryObject, dispatch);
+    const response = await getWSMyResults(queryObject, 'APPLICATION', dispatch);
+    const swResponse = await getSWMyResults(queryObject, 'APPLICATION',dispatch);
 
     if ((response && response.WaterConnection && response.WaterConnection.length > 0) && (swResponse && swResponse.SewerageConnections && swResponse.SewerageConnections.length > 0)) {
         finalResponse = [...response.WaterConnection, ...swResponse.SewerageConnections];

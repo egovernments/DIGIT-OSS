@@ -14,7 +14,7 @@ class CommonShareContainer extends React.Component {
   shareCallBack = () => {
     const { actionComponentMapping, componentId, complaints } = this.props;
 
-    const { visible, matchedURL, currentRole, indexMenu } = this;
+    const { matchedURL, currentRole, indexMenu } = this;
     if (currentRole !== null && indexMenu !== -1 && matchedURL) {
       const metaData = actionComponentMapping[componentId][matchedURL][currentRole]["metaData"];
       let { jsonPaths } = metaData;
@@ -79,18 +79,11 @@ class CommonShareContainer extends React.Component {
     if (this.currentRole !== null && this.indexMenu !== -1 && this.matchedURL && !isEmpty(complaints)) {
       this.visible = true;
     }
-    // console.log("visible", this.visible);
-    // console.log("path", location.pathname, this.visible, this.currentRole, this.indexMenu, this.matchedURL);
-
     return (
       <div className="share-btn">{navigator.share && <CommonShare variant="fab" visible={this.visible} shareCallback={this.shareCallBack} />}</div>
     );
   }
 }
-
-CommonShareContainer.propTypes = {
-  // classes: PropTypes.object.isRequired,
-};
 
 const mapStateToProps = (state) => {
   const menu = state.app.menu || [];

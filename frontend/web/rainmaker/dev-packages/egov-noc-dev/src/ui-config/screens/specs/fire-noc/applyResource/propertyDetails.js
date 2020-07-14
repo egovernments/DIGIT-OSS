@@ -43,30 +43,31 @@ const dynamic = (uom, path, buildingIndex) => {
 const prepareSelectField = (uom, start, end) => {
   let data = [];
   for (let i = start; i <= end; i++) {
-    data.push({ code: `${i}` });
+    data.push({ code: `${i}`, name: `${i}`});
   }
   return {
-    ...getSelectField({
+    uiFramework: "custom-containers-local",
+    moduleName: "egov-noc",
+    componentPath: "AutosuggestContainer",
+    props: {
       label: {
         labelKey: `NOC_PROPERTY_DETAILS_${uom}_LABEL`
       },
       placeholder: {
         labelKey: `NOC_PROPERTY_DETAILS_${uom}_PLACEHOLDER`
       },
-      pattern: /^[0-9]*$/i,
-      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       required: true,
-      jsonPath: `FireNOCs[0].fireNOCDetails.buildings[0].uomsMap.${uom}`,
       data: data,
-      gridDefination: {
-        xs: 12,
-        sm: 12,
-        md: 6
-      },
-      props:{
-        className:"applicant-details-error"
-      }
-    })
+      className:"applicant-details-error autocomplete-dropdown",
+      jsonPath: `FireNOCs[0].fireNOCDetails.buildings[0].uomsMap.${uom}`,
+    },
+    required: true,
+    jsonPath: `FireNOCs[0].fireNOCDetails.buildings[0].uomsMap.${uom}`,
+    gridDefination: {
+      xs: 12,
+      sm: 12,
+      md: 6
+    },
   };
 };
 
@@ -189,7 +190,11 @@ const commonBuildingData = buildingType => {
       }
     },
     buildingUsageType: {
-      ...getSelectField({
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-noc",
+      componentPath: "AutosuggestContainer",
+      props:{
+        className:"applicant-details-error autocomplete-dropdown",
         label: {
           labelName: "Building Usage Type as per NBC",
           labelKey: "NOC_PROPERTY_DETAILS_BUILDING_USAGE_TYPE_LABEL"
@@ -199,21 +204,21 @@ const commonBuildingData = buildingType => {
           labelKey: "NOC_PROPERTY_DETAILS_BUILDING_USAGE_TYPE_PLACEHOLDER"
         },
         required: true,
+        labelsFromLocalisation: true,
         localePrefix: {
           moduleName: "firenoc",
           masterName: "BuildingType"
         },
         jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].usageTypeMajor",
         sourceJsonPath: "applyScreenMdmsData.DropdownsData.BuildingUsageType",
-        gridDefination: {
-          xs: 12,
-          sm: 12,
-          md: 6
-        },
-        props:{
-          className:"applicant-details-error"
-        }
-      }),
+      },
+      required: true,
+      jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].usageTypeMajor",
+      gridDefination: {
+        xs: 12,
+        sm: 12,
+        md: 6
+      },
       beforeFieldChange: (action, state, dispatch) => {
         let path = action.componentJsonpath.replace(
           /.buildingUsageType$/,
@@ -233,7 +238,11 @@ const commonBuildingData = buildingType => {
       }
     },
     buildingSubUsageType: {
-      ...getSelectField({
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-noc",
+      componentPath: "AutosuggestContainer",
+      props:{
+        className:"applicant-details-error autocomplete-dropdown",
         label: {
           labelName: "Building Usage Subtype as per NBC",
           labelKey: "NOC_PROPERTY_DETAILS_BUILDING_USAGE_SUBTYPE_LABEL"
@@ -243,20 +252,20 @@ const commonBuildingData = buildingType => {
           labelKey: "NOC_PROPERTY_DETAILS_BUILDING_USAGE_SUBTYPE_PLACEHOLDER"
         },
         required: true,
+        labelsFromLocalisation: true,
         localePrefix: {
           moduleName: "firenoc",
           masterName: "BuildingType"
         },
         jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].usageType",
-        gridDefination: {
-          xs: 12,
-          sm: 12,
-          md: 6
-        },
-        props:{
-          className:"applicant-details-error"
-        }
-      }),
+      },
+      required: true,
+      jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].usageType",
+      gridDefination: {
+        xs: 12,
+        sm: 12,
+        md: 6
+      },
       beforeFieldChange: (action, state, dispatch) => {
         // Get the list of uom for selected building subtype
         let uomsList = get(

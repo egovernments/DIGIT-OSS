@@ -1,11 +1,10 @@
 import React, { Component } from "react";
-import { TextField, DropDown, DatePicker } from "components";
+import { TextField, DatePicker } from "components";
 import SelectField from "material-ui/SelectField";
 import MenuItem from "material-ui/MenuItem";
 import Checkbox from "material-ui/Checkbox";
 import { translate } from "./commons/common";
 import Grid from '@material-ui/core/Grid';
-import AutoComplete from "material-ui/AutoComplete";
 import Label from "egov-ui-kit/utils/translationNode";
 import UiBoundary from "./components/boundary";
 import boundaryConfig from "./commons/config";
@@ -91,7 +90,6 @@ export default class ShowField extends Component {
           <Grid item xs={12} sm={4} md={4} lg={4}>
             <DatePicker
               autoOk={true}
-              // className="custom-form-control-for-textfield"
               id={obj.label.split(".").join("-")}
               fullWidth={true}
               floatingLabelFixed={true}
@@ -114,13 +112,10 @@ export default class ShowField extends Component {
         return (
           <Grid item xs={12} sm={4} md={4} lg={4}>
             <DatePicker
-              // className="custom-form-control-for-textfield"
               id={obj.label.split(".").join("-")}
               autoOk={true}
               fullWidth={true}
               floatingLabelFixed={true}
-              maxDate={maxDate}
-              // required={obj.isMandatory ? true : false}
               floatingLabelText={
                 <div className="rainmaker-displayInline">
                   <Label className="show-field-label" label={description} containerStyle={{ marginRight: "5px" }} />
@@ -148,36 +143,8 @@ export default class ShowField extends Component {
             />
           </Grid>
         );
-      // case "singlevaluelist":
-      //   return (
-      //     <Col xs={12} sm={4} md={4} lg={4}>
-      //       <DropDown
-      //         // className="custom-form-control-for-select"
-      //         hintText={<Label label="PT_COMMONS_SELECT_PLACEHOLDER" />}
-      //         disabled={obj.disabled ? true : false}
-      //         id={obj.label.split(".").join("-")}
-      //         fullWidth={true}
-      //         dropDownMenuProps={{ targetOrigin: { horizontal: "left", vertical: "bottom" } }}
-      //         floatingLabelFixed={true}
-      //         floatingLabelText={
-      //           <div className="rainmaker-displayInline">
-      //             <Label className="show-field-label" label={description} containerStyle={{ marginRight: "5px" }} />
-      //             <span style={{ color: "#FF0000" }}>{obj.isMandatory ? " *" : ""}</span>
-      //           </div>
-      //         }
-      //         value={typeof obj.value == "undefined" ? "" : obj.value}
-      //         onChange={(event, key, value) => {
-      //           let e = { target: { value } };
-      //           this.props.handler(e, obj.name, obj.isMandatory ? true : false, "");
-      //         }}
-      //         maxHeight={200}
-      //         dropDownData={dropDownData}
-      //       />
-      //     </Col>
-      //   );
 
       case "singlevaluelist":
-        const dataSourceConfig = { text: "label", value: "value" };
         return (
           <Grid item xs={12} sm={4} md={4} lg={4}>
             <AutoSuggestDropdown
@@ -201,44 +168,6 @@ export default class ShowField extends Component {
               this.props.handler(e, obj.name, obj.isMandatory ? true : false, "");
             }}
           />
-            {/* <AutoComplete
-              // className="custom-form-control-for-textfield"
-
-              // floatingLabelStyle={{ fontSize: "20px"}}
-              floatingLabelText={
-                <div className="rainmaker-displayInline">
-                  <Label
-                    className="show-field-label"
-                    label={description}
-                    containerStyle={{ marginRight: "5px" }}
-                    style={{ fontSize: "16px !important" }}
-                  />
-                  <span style={{ color: "#FF0000" }}>{obj.isMandatory ? " *" : ""}</span>
-                </div>
-              }
-              // inputStyle={{ color: "#5F5C57" }}
-              floatingLabelFixed={true}
-              fullWidth={true}
-              // style={{ display: "inline-block" }}
-              filter={(searchText, key) => {
-                return key.toLowerCase().indexOf(searchText.toLowerCase()) !== -1;
-              }}
-              // listStyle={{ maxHeight: 100, overflow: "auto" }}
-              onNewRequest={(value) => {
-                const e = { target: { value: value.value } };
-                this.props.handler(e, obj.name, obj.isMandatory ? true : false, "");
-              }}
-              onUpdateInput={(searchText, dataSource, params) => {
-                const e = { target: { value: searchText } };
-                this.props.handler(e, obj.name, obj.isMandatory ? true : false, "");
-              }}
-              dataSource={dropDownData}
-              dataSourceConfig={dataSourceConfig}
-              openOnFocus={true}
-              listStyle={{ maxHeight: 200, overflow: 'auto' }}
-              maxSearchResults={200}
-              searchText={obj.searchText}
-            /> */}
           </Grid>
         );
 
@@ -284,11 +213,6 @@ export default class ShowField extends Component {
               multiple={true}
               dropDownMenuProps={{ targetOrigin: { horizontal: "left", vertical: "top" } }}
               floatingLabelFixed={true}
-              // floatingLabelText={
-              //   <span>
-              //     {description} <span style={{ color: "#FF0000" }}>{obj.isMandatory ? " *" : ""}</span>
-              //   </span>
-              // }
               floatingLabelText={
                 <div className="rainmaker-displayInline">
                   <Label

@@ -1,24 +1,13 @@
-import Grid from "@material-ui/core/Grid";
-import Icon from "@material-ui/core/Icon";
 import { withStyles } from "@material-ui/core/styles";
-import {
-  LabelContainer,
-  TextFieldContainer
-} from "egov-ui-framework/ui-containers";
+import { LabelContainer } from "egov-ui-framework/ui-containers";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import {
-  getFileUrlFromAPI,
-  handleFileUpload,
-  getTransformedLocale
-} from "egov-ui-framework/ui-utils/commons";
+import { getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { UploadSingleFile } from "../../ui-molecules-local";
-import Typography from "@material-ui/core/Typography";
-import UploadCard from "../UploadCard"
-import {getLoggedinUserRole} from "../../ui-config/screens/specs/utils/index.js";
+import { getLoggedinUserRole } from "../../ui-config/screens/specs/utils/index.js";
+import UploadCard from "../UploadCard";
 
 const themeStyles = theme => ({
   documentContainer: {
@@ -184,7 +173,7 @@ class NocList extends Component {
                   ? card.dropDownValues.required
                   : false
               };
-              if(card && card.dropDownValues && card.dropDownValues.menu && card.dropDownValues.menu.length == 1) {
+              if (card && card.dropDownValues && card.dropDownValues.menu && card.dropDownValues.menu.length == 1) {
                 nocDocumentsUploadRedux[index].dropDownValues = {};
                 nocDocumentsUploadRedux[index].dropDownValues.value = card.dropDownValues.menu[0].code
               }
@@ -193,7 +182,7 @@ class NocList extends Component {
           }
         });
     });
-    this.setState({ ...this.state, "nocDocumentsUploadRedux": nocDocumentsUploadRedux});
+    this.setState({ ...this.state, "nocDocumentsUploadRedux": nocDocumentsUploadRedux });
   };
 
   prepareDocumentsInEmployee = async (nocDocuments, bpaDetails) => {
@@ -210,32 +199,32 @@ class NocList extends Component {
     if (documnts && documnts.length > 0) {
       documnts.forEach(documents => {
         if (documents && documents.documents && documents.dropDownValues && documents.dropDownValues.value) {
-          documents.documents.map(docs => { 
-          let doc = {};
-          doc.documentType = documents.dropDownValues.value;
-          doc.fileStoreId = docs.fileStoreId;
-          doc.fileStore = docs.fileStoreId;
-          doc.fileName = docs.fileName;
-          doc.fileUrl = docs.fileUrl;
-          doc.isClickable = true;
-          doc.additionalDetails = docs.additionalDetails;
-          if (doc.id) {
-            doc.id = docs.id;
-          }
-          if(bpaDetails.additionalDetails) {
-           
-            finalDocs.push(doc);
-          }
+          documents.documents.map(docs => {
+            let doc = {};
+            doc.documentType = documents.dropDownValues.value;
+            doc.fileStoreId = docs.fileStoreId;
+            doc.fileStore = docs.fileStoreId;
+            doc.fileName = docs.fileName;
+            doc.fileUrl = docs.fileUrl;
+            doc.isClickable = true;
+            doc.additionalDetails = docs.additionalDetails;
+            if (doc.id) {
+              doc.id = docs.id;
+            }
+            if (bpaDetails.additionalDetails) {
+
+              finalDocs.push(doc);
+            }
           })
         }
       });
-        this.props.dispatch(prepareFinalObject(this.props.jsonPath, finalDocs));
+      this.props.dispatch(prepareFinalObject(this.props.jsonPath, finalDocs));
     }
   }
 
   distinct = (value, index, self) => {
     return self.indexOf(value) === index
- };
+  };
 
   onUploadClick = uploadedDocIndex => {
     this.setState({ uploadedDocIndex });
@@ -251,8 +240,8 @@ class NocList extends Component {
         fileName: file.name,
         fileStoreId,
         fileUrl: Object.values(fileUrl)[0],
-        isClickable:true,
-        additionalDetails:{
+        isClickable: true,
+        additionalDetails: {
           uploadedBy: getLoggedinUserRole(wfState),
           uploadedTime: new Date().getTime()
         }
@@ -271,7 +260,7 @@ class NocList extends Component {
               fileStoreId,
               fileUrl: Object.values(fileUrl)[0],
               isClickable: true,
-              additionalDetails:{
+              additionalDetails: {
                 uploadedBy: getLoggedinUserRole(wfState),
                 uploadedTime: new Date().getTime()
               }
@@ -281,11 +270,11 @@ class NocList extends Component {
       }
     }
 
-    this.setState({ ...this.state, "nocDocumentsUploadRedux": nocDocuments});
-  
+    this.setState({ ...this.state, "nocDocumentsUploadRedux": nocDocuments });
+
     let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true
 
-    if(isEmployee) {
+    if (isEmployee) {
       this.prepareDocumentsInEmployee(nocDocuments, bpaDetails);
     }
 
@@ -293,16 +282,16 @@ class NocList extends Component {
 
   removeDocument = (remDocIndex, docIndex) => {
     const { prepareFinalObject, bpaDetails } = this.props;
-    const { nocDocumentsUploadRedux } =  this.state;
+    const { nocDocumentsUploadRedux } = this.state;
     for (let key in nocDocumentsUploadRedux) {
       if (key === `${remDocIndex}`) {
         nocDocumentsUploadRedux[key].documents.splice(docIndex, 1);
       }
     }
-    this.setState({ ...this.state, "nocDocumentsUploadRedux": nocDocumentsUploadRedux});
+    this.setState({ ...this.state, "nocDocumentsUploadRedux": nocDocumentsUploadRedux });
     this.forceUpdate();
-    let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true    
-    if(isEmployee) {
+    let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true
+    if (isEmployee) {
       this.prepareDocumentsInEmployee(nocDocumentsUploadRedux, bpaDetails);
     }
   };
@@ -317,45 +306,46 @@ class NocList extends Component {
         dropDownValues: { value: event.target.value }
       }
     };
-    this.setState({ ...this.state, "nocDocumentsUploadRedux": nocDocuments});
+    this.setState({ ...this.state, "nocDocumentsUploadRedux": nocDocuments });
 
     let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true
 
-    if(isEmployee) {
+    if (isEmployee) {
       this.prepareDocumentsInEmployee(nocDocuments, bpaDetails);
     }
-       
+
   };
 
   getUploadCard = (card, key) => {
     const { classes, ...rest } = this.props;
-    const { nocDocumentsUploadRedux } =  this.state;
+    const { nocDocumentsUploadRedux } = this.state;
     let value = (nocDocumentsUploadRedux[key] && nocDocumentsUploadRedux[key].dropDownValues) ? nocDocumentsUploadRedux[key].dropDownValues.value : "";
-    let jsonPath = `${this.props.jsonPath}-${key+1}`;
-    if(nocDocumentsUploadRedux[key]){
+    let jsonPath = `${this.props.jsonPath}-${key + 1}`;
+    if (nocDocumentsUploadRedux[key]) {
       card.documents = nocDocumentsUploadRedux[key].documents;
-      let mergedDropDownValue = {...card.dropDownValues, ...nocDocumentsUploadRedux[key].dropDownValues}
+      let mergedDropDownValue = { ...card.dropDownValues, ...nocDocumentsUploadRedux[key].dropDownValues }
       card.dropDownValues = mergedDropDownValue;
     }
     return (
-      <React.Fragment>  
-         <UploadCard
-           docItem={card}
-           docIndex={key}
-           key={key.toString()}
-           handleDocument ={this.handleDocument}
-           removeDocument={this.removeDocument}
-           onUploadClick={this.onUploadClick}
-           handleFileUpload={this.handleFileUpload}
-           handleChange={this.handleChange}
-           uploadedDocIndex = {this.state.uploadedDocIndex}
-           toggleEditClick = {this.toggleEditClick}
-           ids = {jsonPath}
-           jsonPath = {`nocDocumentsUploadRedux`}
-           {...rest}
-         />
+      <React.Fragment>
+        <UploadCard
+          docItem={card}
+          docIndex={key}
+          key={key.toString()}
+          handleDocument={this.handleDocument}
+          removeDocument={this.removeDocument}
+          onUploadClick={this.onUploadClick}
+          handleFileUpload={this.handleFileUpload}
+          handleChange={this.handleChange}
+          uploadedDocIndex={this.state.uploadedDocIndex}
+          toggleEditClick={this.toggleEditClick}
+          ids={jsonPath}
+          jsonPath={`nocDocumentsUploadRedux`}
+          specificStyles="bpa_doc_upload_btn"
+          {...rest}
+        />
       </React.Fragment>
-      );
+    );
   };
 
   render() {

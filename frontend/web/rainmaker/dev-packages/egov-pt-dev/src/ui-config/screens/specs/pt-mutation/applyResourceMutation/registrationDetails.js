@@ -38,46 +38,41 @@ export const registrationDetails = getCommonCard(
           }
         }
       ),
-      registrationDetailsContainer: getCommonContainer({ 
-        transferReason: getSelectField({
-          label: {
-            labelName: "Reason for Transfer",
-            labelKey: "PT_MUTATION_TRANSFER_REASON"
+      registrationDetailsContainer: getCommonContainer({
+          transferReason: {
+            uiFramework: "custom-containers-local",
+            moduleName: "egov-pt",
+            componentPath: "AutosuggestContainer",
+            props: {
+              className: "autocomplete-dropdown",
+              label: {
+                labelName: "Reason for Transfer",
+                labelKey: "PT_MUTATION_TRANSFER_REASON"
+              },
+              placeholder: {
+                labelName: "Select Reason for Transfer",
+                labelKey: "PT_MUTATION_TRANSFER_REASON_PLACEHOLDER"
+              },
+              required:true,
+              labelsFromLocalisation: true,
+              localePrefix: {
+                moduleName: "PropertyTax",
+                masterName: "ReasonForTransfer"
+              },
+              sourceJsonPath: "ReasonForTransfer.PropertyTax.ReasonForTransfer",
+              inputLabelProps: {
+                shrink: true
+              }
+            },
+            required:true,
+            jsonPath:
+            "Property.additionalDetails.reasonForTransfer",
+            gridDefination: {
+              xs: 12,
+              sm: 12,
+              md: 6
+            }
           },
-          placeholder: {
-            labelName: "Select Reason for Transfer",
-            labelKey: "PT_MUTATION_TRANSFER_REASON_PLACEHOLDER"
-          },
-          required:true,
-          jsonPath:
-          "Property.additionalDetails.reasonForTransfer",
-          localePrefix: {
-            moduleName: "PropertyTax",
-            masterName: "ReasonForTransfer"
-          },
-          sourceJsonPath: "ReasonForTransfer.PropertyTax.ReasonForTransfer",
-          gridDefination: {
-            xs: 12,
-            sm: 12,
-            md: 6
-          }
-        }),
-        // transferReason: getTextField({
-        //   label: {
-        //     labelName: "Reason for Transfer",
-        //     labelKey: "PT_MUTATION_TRANSFER_REASON"
-        //   },
-        //   props:{
-        //     className:"applicant-details-error"
-        //   },
-        //   placeholder: {
-        //     labelName: "Select Reason for Transfer",
-        //     labelKey: "PT_MUTATION_TRANSFER_REASON_PLACEHOLDER"
-        //   },
-        //   required:true,
-        //   pattern: getPattern("Address"),
-        //   jsonPath: "Property.additionalDetails.reasonForTransfer"
-        // }),
 
         marketValue: getTextField({
           label: {

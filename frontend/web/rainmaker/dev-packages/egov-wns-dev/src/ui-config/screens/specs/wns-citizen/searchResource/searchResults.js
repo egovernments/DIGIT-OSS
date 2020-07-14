@@ -35,7 +35,7 @@ export const searchResults = {
 	options: {
           filter: false,
           customBodyRender: (value, data) => {
-            if (data.rowData[4] > 0 && data.rowData[4] !== 0) {
+            if (data.rowData[4] !== undefined && typeof data.rowData[4] === 'number') {
               return (
                 // <Link
                 //   to={`/wns/viewBill?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[8]}&service=${data.rowData[0]}`}
@@ -52,13 +52,7 @@ export const searchResults = {
                   />
                 </div>
               )
-            } else if (data.rowData[5] === 0) {
-              return (
-                <div style={{ color: '#008000', textTransform: 'uppercase', fontWeight: 400 }}>
-                  Paid
-                </div>
-              )
-            }
+            } 
             else {
               return ("NA")
             }

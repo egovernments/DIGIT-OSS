@@ -8,10 +8,6 @@ const CustomTabContainer = Loadable({
   loader: () => import("./CustomTabContainer"),
   loading: () => <Loading />
 });
-const LabelContainer = Loadable({
-  loader: () => import("./LabelContainer"),
-  loading: () => <Loading />
-});
 
 const CheckboxContainer = Loadable({
   loader: () => import("./CheckboxContainer"),
@@ -25,20 +21,8 @@ const EstimateCardContainer = Loadable({
   loader: () => import("./EstimateCardContainer"),
   loading: () => <Loading />
 });
-const AutosuggestContainer = Loadable({
-  loader: () => import("./AutosuggestContainer"),
-  loading: () => <Loading />
-});
 const DocumentListContainer = Loadable({
   loader: () => import("./DocumentListContainer"),
-  loading: () => <Loading />
-});
-const PaymentRedirectPage = Loadable({
-  loader: () => import("./PaymentRedirectPage"),
-  loading: () => <Loading />
-});
-const ResubmitActionContainer = Loadable({
-  loader: () => import("./ResubmitActionContainer"),
   loading: () => <Loading />
 });
 
@@ -61,6 +45,10 @@ const EstimateOverviewCardContainer = Loadable({
   loader: () => import("./EstimateOverviewCardContainer"),
   loading: () => <Loading />
 });
+const LabelContainer = Loadable({
+  loader: () => import("./LabelContainer"),
+  loading: () => <Loading />
+});
 
 
 export {
@@ -69,10 +57,7 @@ export {
   CheckboxContainer,
   DownloadFileContainer,
   EstimateCardContainer,
-  AutosuggestContainer,
   DocumentListContainer,
-  PaymentRedirectPage,
-  ResubmitActionContainer,
   ViewBreakupContainer,
   DialogContainer,
   RadioGroupContainer,

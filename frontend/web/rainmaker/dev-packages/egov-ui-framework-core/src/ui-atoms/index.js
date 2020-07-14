@@ -132,6 +132,26 @@ const CountdownTimer = Loadable({
   loading: () => <Loading />
 });
 
+const AckHeader = Loadable({
+  loader: () => import("./AckHeader"),
+  loading: () => <Loading />
+});
+
+const AckBody = Loadable({
+  loader: () => import("./AckBody"),
+  loading: () => <Loading />
+});
+
+const AckFooter = Loadable({
+  loader: () => import("./AckFooter"),
+  loading: () => <Loading />
+});
+
+const ApplicationNumber = Loadable({
+  loader: () => import("./ApplicationNumber"),
+  loading: () => <Loading />
+});
+
 export {
   Div,
   Form,
@@ -164,5 +184,9 @@ export {
   MenuButton,
   AutoSuggest,
   MapLocation,
-  CountdownTimer
+  CountdownTimer,
+  AckHeader,
+  AckBody,
+  AckFooter,
+  ApplicationNumber
 };

@@ -109,7 +109,6 @@ class UiBoundary extends Component {
   };
 
   getLabelName = (obj) => {
-    var label;
     for (var i = 0; i < obj.length - 1; i++) {
       if (obj[i].code && obj[i].name && obj[i].label && obj[i].code != "" && obj[i].name != "" && obj[i].label != "") {
         return obj[i].label;
@@ -119,13 +118,10 @@ class UiBoundary extends Component {
   };
 
   fetchLabels = (cityBdry) => {
-    var depth;
     var labelArr = [];
-    var str = "";
     var bdryArr = [];
 
     if (cityBdry != null) {
-      depth = this.getDepth(cityBdry);
       bdryArr = jp.query(cityBdry, `$.children..label`);
       for (var i = 0; i < bdryArr.length - 1; i++) {
         if (bdryArr[i] !== "") {
@@ -141,7 +137,7 @@ class UiBoundary extends Component {
   };
 
   handler = (key, property, text) => {
-    let { dropDownDataVal, dropDownData, labelArr } = this.state;
+    let { dropDownDataVal, labelArr } = this.state;
     const { boundaryFieldsText, handleFieldChange } = this.props;
     let newDropDownDataVal = {};
 

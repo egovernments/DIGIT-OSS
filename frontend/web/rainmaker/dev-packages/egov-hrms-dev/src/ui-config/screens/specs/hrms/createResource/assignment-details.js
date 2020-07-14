@@ -4,7 +4,6 @@ import {
   getCommonTitle,
   getTextField,
   getDateField,
-  getSelectField,
   getCommonContainer,
   getPattern,
   getCommonSubHeader
@@ -135,7 +134,18 @@ const assignmentDetailsCard = {
             }
           },
           department: {
-            ...getSelectField({
+            uiFramework: "custom-containers-local",
+            moduleName: "egov-hrms",
+            componentPath: "AutosuggestContainer",
+            jsonPath: "Employee[0].assignments[0].department",
+            props: {
+              className: "hr-generic-selectfield autocomplete-dropdown",
+              optionValue: "code",
+              optionLabel: "name",
+              localePrefix: {
+                moduleName: "common-masters",
+                masterName: "Department"
+              },
               label: {
                 labelName: "Department",
                 labelKey: "HR_DEPT_LABEL"
@@ -145,41 +155,44 @@ const assignmentDetailsCard = {
                 labelKey: "HR_DEPT_PLACEHOLDER"
               },
               required: true,
-              jsonPath: "Employee[0].assignments[0].department",
+              labelsFromLocalisation: true,
               sourceJsonPath: "createScreenMdmsData.common-masters.Department",
-              props: {
-                className: "hr-generic-selectfield",
-                optionValue: "code",
-                optionLabel: "name"
-                // hasLocalization: false
-              },
-              localePrefix: {
-                moduleName: "common-masters",
-                masterName: "Department"
-              }
-            })
+            },
+            required: true,
+            gridDefination: {
+              xs: 12,
+              sm: 12,
+              md: 6
+            },
           },
           designation: {
-            ...getSelectField({
+            uiFramework: "custom-containers-local",
+            moduleName: "egov-hrms",
+            componentPath: "AutosuggestContainer",
+            jsonPath: "Employee[0].assignments[0].designation",
+            props: {
+              className: "hr-generic-selectfield autocomplete-dropdown",
+              optionValue: "code",
+              optionLabel: "name",
+              localePrefix: {
+                moduleName: "common-masters",
+                masterName: "Designation"
+              },
               label: { labelName: "Designation", labelKey: "HR_DESG_LABEL" },
               placeholder: {
                 labelName: "Select Designation",
                 labelKey: "HR_DESIGNATION_PLACEHOLDER"
               },
               required: true,
-              jsonPath: "Employee[0].assignments[0].designation",
+              labelsFromLocalisation: true,
               sourceJsonPath: "createScreenMdmsData.common-masters.Designation",
-              props: {
-                className: "hr-generic-selectfield",
-                optionValue: "code",
-                optionLabel: "name"
-                // hasLocalization: false
-              },
-              localePrefix: {
-                moduleName: "common-masters",
-                masterName: "Designation"
-              }
-            })
+            },
+            required: true,
+            gridDefination: {
+              xs: 12,
+              sm: 12,
+              md: 6
+            },
           },
           reportingTo: {
             ...getTextField({
@@ -290,4 +303,8 @@ export const assignmentDetails = getCommonCard({
     labelKey: "HR_ASSIGN_DET_SUB_HEADER"
   }),
   assignmentDetailsCard
+},{
+  style:{
+    overflow: "visible"
+  }
 });

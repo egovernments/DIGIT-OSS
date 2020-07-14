@@ -29,7 +29,7 @@ export const gotoHomeFooter = getCommonApplyFooter({
   gotoHome: {
     componentPath: "Button",
     props: {
-      variant: "outlined",
+      variant: "contained",
       color: "primary",
       style: {
        // minWidth: "200px",
@@ -71,7 +71,7 @@ export const applicationSuccessFooter = (
   }
   let purpose = getQueryArg(window.location.href, "purpose");
   let isTrue = false;
-  if(purpose == "APPLY") {
+  if(purpose == "apply") {
     isTrue = true;
   }
   return getCommonApplyFooter({
@@ -223,7 +223,7 @@ export const approvalSuccessFooter = getCommonApplyFooter({
   gotoHome: {
     componentPath: "Button",
     props: {
-      variant: "outlined",
+      variant: "contained",
       color: "primary",
       style: {
        // minWidth: "200px",
@@ -349,7 +349,8 @@ export const paymentSuccessFooter = () => {
         callBack: (state, dispatch) => {
           generatePdf(state, dispatch, "receipt_download");
         }
-      }
+      },
+      visible: false            
     },
     printReceiptButton: {
       componentPath: "Button",
@@ -373,7 +374,8 @@ export const paymentSuccessFooter = () => {
         callBack: (state, dispatch) => {
           generatePdf(state, dispatch, "receipt_print");
         }
-      }
+      },
+      visible: false      
     },
     gotoHome: {
       componentPath: "Button",
@@ -399,7 +401,7 @@ export const paymentSuccessFooter = () => {
             ? `/egov-ui-framework/BPA/search`
             : `/`
       },
-       visible: false
+       visible: true
     }
   });
 };

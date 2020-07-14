@@ -9,7 +9,7 @@ import { getConditionsInPermitList } from "../../utils/index";
 
 const commonApplicantInformation = () => {
   return getCommonGrayCard({
-    applicantCard: getCommonContainer({
+    permitCard: getCommonContainer({
       mobileNumber: getTextField({
         placeholder: {
           labelName: "Enter question here",
@@ -62,7 +62,7 @@ export const permitConditions = getCommonGrayCard({
     },
     type: "array"
   },
-  multipleApplicantContainer: {
+  multiCheckListContainers: {
     uiFramework: "custom-atoms",
     componentPath: "Div",
     children: {
@@ -78,7 +78,7 @@ export const permitConditions = getCommonGrayCard({
           },
           sourceJsonPath: "BPA.tempAdded",
           prefixSourceJsonPath:
-            "children.cardContent.children.applicantCard.children"
+            "children.cardContent.children.permitCard.children"
         },
         type: "array"
       }

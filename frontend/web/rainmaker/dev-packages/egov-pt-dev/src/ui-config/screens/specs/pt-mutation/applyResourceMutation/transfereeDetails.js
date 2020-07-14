@@ -13,6 +13,12 @@ const showComponent = (dispatch, componentJsonPath, display, oldStyle = {}) => {
   );
 };
 
+const showDocumentType = (dispatch, componentJsonPath, display) => {
+  dispatch(
+    handleField("apply", componentJsonPath, "visible", display)
+  );
+}
+
 const commonApplicantInformation = () => {
   return getCommonGrayCard({
 
@@ -199,29 +205,37 @@ const commonApplicantInformation = () => {
       }),
 
       specialApplicantCategory: {
-        ...getSelectField({
-          label: {
-            labelName: "Special Applicant Category",
-            labelKey: "PT_MUTATION_TRANSFEREE_SPECIAL_APPLICANT_CATEGORY_LABEL"
-          },
-          placeholder: {
-            labelName: "Select Special Applicant Category",
-            labelKey: "PT_MUTATION_TRANSFEREE_SPECIAL_APPLICANT_CATEGORY_PLACEHOLDER"
-          },
-          jsonPath:
-            "Property.ownersTemp[0].ownerType",
-          required: true,
+          uiFramework: "custom-containers-local",
+          moduleName: "egov-pt",
+          componentPath: "AutosuggestContainer",
+          props: {
+            label: {
+              labelName: "Special Applicant Category",
+              labelKey: "PT_MUTATION_TRANSFEREE_SPECIAL_APPLICANT_CATEGORY_LABEL"
+            },
+            placeholder: {
+              labelName: "Select Special Applicant Category",
+              labelKey: "PT_MUTATION_TRANSFEREE_SPECIAL_APPLICANT_CATEGORY_PLACEHOLDER"
+            },
+            required: true,
           localePrefix: {
             moduleName: "common-masters",
             masterName: "OwnerType"
           },
+          labelsFromLocalisation: true,
+          className: "autocomplete-dropdown",
+          jsonPath: "Property.ownersTemp[0].ownerType",
+          sourceJsonPath: "applyScreenMdmsData.common-masters.OwnerType",
+          },
+          required: true,
+          jsonPath:
+            "Property.ownersTemp[0].ownerType",
           sourceJsonPath: "applyScreenMdmsData.common-masters.OwnerType",
           gridDefination: {
             xs: 12,
             sm: 12,
             md: 6
-          }
-        }),
+          },
         beforeFieldChange: (action, state, dispatch) => {
 
 
@@ -246,7 +260,7 @@ const commonApplicantInformation = () => {
             showComponent(dispatch, categoryDocumentJsonPath, false);
             dispatch(handleField("apply", categoryDocumentJsonPath, "required", false));
             dispatch(handleField("apply", categoryDocumentJsonPath, "props.value", ""));
-            showComponent(dispatch, specialCategoryDocumentTypeJsonPath, false);
+            showDocumentType(dispatch, specialCategoryDocumentTypeJsonPath, false);
             dispatch(handleField("apply", specialCategoryDocumentTypeJsonPath, "required", false));
             dispatch(handleField("apply", specialCategoryDocumentTypeJsonPath, "props.value", ""));
             //showComponent(dispatch, categoryDocumentThirdStepJsonPath, false);
@@ -268,7 +282,7 @@ const commonApplicantInformation = () => {
               dispatch(handleField("apply", specialCategoryDocumentTypeJsonPath, "props.value", documentType[0].code));
             }
             showComponent(dispatch, categoryDocumentJsonPath, true);
-            showComponent(dispatch, specialCategoryDocumentTypeJsonPath, true);
+            showDocumentType(dispatch, specialCategoryDocumentTypeJsonPath, true);
             
             dispatch(handleField("apply",  specialCategoryDocumentTypeJsonPath, "props.disabled", true));
             dispatch(handleField("apply", categoryDocumentTypeThirdStepJsonPath, "display", "block"));
@@ -301,36 +315,39 @@ const commonApplicantInformation = () => {
           className: "applicant-details-error"
         }
       }),
-      specialCategoryDocumentType: getSelectField({
-        label: {
-          labelName: "Document Type",
-          labelKey: "PT_MUTATION_TRANSFEREE_SPECIAL_CATEGORY_DOCUMENT_TYPE_LABEL"
-        },
-        placeholder: {
-          labelName: "Enter Document Type.",
-          labelKey: "PT_MUTATION_TRANSFEREE_SPECIAL_CATEGORY_DOCUMENT_TYPE_PLACEHOLDER"
-        },
-        required: true,
-        jsonPath:
-          "Property.ownersTemp[0].documentType",
-        localePrefix: {
-          moduleName: "PropertyTax",
-          masterName: "ReasonForTransfer"
-        },
-        sourceJsonPath: "applyScreenMdmsData.OwnerTypeDocument",
-        props: {
-          className: "applicant-details-error",
-          style: {
-            display: "none"
+      specialCategoryDocumentType: {
+          uiFramework: "custom-containers-local",
+          moduleName: "egov-pt",
+          componentPath: "AutosuggestContainer",
+          props: {
+            label: {
+              labelName: "Document Type",
+              labelKey: "PT_MUTATION_TRANSFEREE_SPECIAL_CATEGORY_DOCUMENT_TYPE_LABEL"
+            },
+            placeholder: {
+              labelName: "Enter Document Type.",
+              labelKey: "PT_MUTATION_TRANSFEREE_SPECIAL_CATEGORY_DOCUMENT_TYPE_PLACEHOLDER"
+            },
+            localePrefix: {
+              moduleName: "PropertyTax",
+              masterName: "ReasonForTransfer"
+            },
+            className: "applicant-details-error autocomplete-dropdown",
+            required: true,
+            labelsFromLocalisation: true,
+            jsonPath: "Property.ownersTemp[0].documentType",
+            sourceJsonPath: "applyScreenMdmsData.OwnerTypeDocument",
           },
-
-        },
+          required: true,
+          visible:false,
+        jsonPath: "Property.ownersTemp[0].documentType",
+        sourceJsonPath: "applyScreenMdmsData.OwnerTypeDocument",
         gridDefination: {
           xs: 12,
           sm: 12,
           md: 6
         }
-      }),
+      },
       specialCategoryDocument: getTextField({
         label: {
           labelName: "Document Id No.",
@@ -386,30 +403,38 @@ const institutionTypeInformation = () => {
           jsonPath: "Property.institutionTemp.institutionName"
         }),
 
-        privateInstitutionTypeDetails: getSelectField({
-          label: {
-            labelName: "Institution Type",
-            labelKey: "PT_MUTATION_INSTITUTION_TYPE"
-          },
-          placeholder: {
-            labelName: "Enter Institution Type",
-            labelKey: "PT_MUTATION_INSTITUTION_TYPE_PLACEHOLDER"
+        privateInstitutionTypeDetails: {
+          uiFramework: "custom-containers-local",
+          moduleName: "egov-pt",
+          componentPath: "AutosuggestContainer",
+          props: {
+            label: {
+              labelName: "Institution Type",
+              labelKey: "PT_MUTATION_INSTITUTION_TYPE"
+            },
+            placeholder: {
+              labelName: "Enter Institution Type",
+              labelKey: "PT_MUTATION_INSTITUTION_TYPE_PLACEHOLDER"
+            },
+            localePrefix: {
+              moduleName: "common-masters",
+              masterName: "OwnerShipCategory"
+            },
+            required: true,
+            labelsFromLocalisation: true,
+            className: "autocomplete-dropdown",
+            jsonPath: "Property.institutionTemp.institutionType",
+            sourceJsonPath: "applyScreenMdmsData.common-masters.Institutions",
           },
           required: true,
-          jsonPath:
-            "Property.institutionTemp.institutionType",
-          localePrefix: {
-            moduleName: "common-masters",
-            masterName: "OwnerShipCategory"
-          },
-          required: true,
+          jsonPath: "Property.institutionTemp.institutionType",
           sourceJsonPath: "applyScreenMdmsData.common-masters.Institutions",
           gridDefination: {
             xs: 12,
             sm: 12,
             md: 6
           }
-        }),
+        },
 
       }),
     })
@@ -551,43 +576,36 @@ export const transfereeDetails = getCommonCard({
   applicantTypeContainer: getCommonContainer({
     applicantTypeSelection: getCommonContainer({
       applicantType: {
-        ...getSelectField({
-          label: {
-            labelName: "Ownership Type",
-            labelKey: "PT_MUTATION_APPLICANT_TYPE_LABEL"
+          uiFramework: "custom-containers-local",
+          moduleName: "egov-pt",
+          componentPath: "AutosuggestContainer",
+          props: {
+            label: {
+              labelName: "Ownership Type",
+              labelKey: "PT_MUTATION_APPLICANT_TYPE_LABEL"
+            },
+            placeholder: {
+              labelName: "Select Ownership Type",
+              labelKey: "PT_MUTATION_APPLICANT_TYPE_LABEL_PLACEHOLDER"
+            },
+            localePrefix: {
+              moduleName: "common-masters",
+              masterName: "OwnerShipCategory"
+            },
+            required: true,
+            labelsFromLocalisation: true,
+            className: "applicant-details-error autocomplete-dropdown",
+            jsonPath: "Property.ownershipCategoryTemp",
+            sourceJsonPath: "applyScreenMdmsData.DropdownsData.OwnershipCategory",
           },
-          placeholder: {
-            labelName: "Select Ownership Type",
-            labelKey: "PT_MUTATION_APPLICANT_TYPE_LABEL_PLACEHOLDER"
-          },
-          jsonPath:
-            "Property.ownershipCategoryTemp",
-          localePrefix: {
-            moduleName: "common-masters",
-            masterName: "OwnerShipCategory"
-          },
-          // data: [
-          //   {
-          //     code: "Individual"
-          //   },
-          //   {
-          //     code: "Multiple"
-          //   },
-          //   {
-          //     code: "Institutional-Private"
-          //   }
-          // ],
           required: true,
+          jsonPath: "Property.ownershipCategoryTemp",
           sourceJsonPath: "applyScreenMdmsData.DropdownsData.OwnershipCategory",
           gridDefination: {
             xs: 12,
             sm: 12,
             md: 6
           },
-          props: {
-            className: "applicant-details-error"
-          }
-        }),
         beforeFieldChange: (action, state, dispatch) => {
 
           let path = "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer.children.institutionType.children.cardContent.children.institutionTypeDetailsContainer.children.privateInstitutionTypeDetails";

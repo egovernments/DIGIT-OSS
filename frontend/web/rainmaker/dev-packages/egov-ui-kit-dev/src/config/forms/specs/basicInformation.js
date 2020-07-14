@@ -4,14 +4,14 @@ const formConfig = {
     typeOfUsage: {
       id: "typeOfUsage",
       jsonPath: "",
-      type: "singleValueList",
+      type: "autoSuggestDropdown",
       floatingLabelText: "PT_TYPE_OF_USAGE",
       hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
     },
     typeOfBuilding: {
       id: "typeOfBuilding",
       jsonPath: "",
-      type: "singleValueList",
+      type: "autoSuggestDropdown",
       floatingLabelText: "PT_TYPE_OF_BUILDING",
       hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
     },

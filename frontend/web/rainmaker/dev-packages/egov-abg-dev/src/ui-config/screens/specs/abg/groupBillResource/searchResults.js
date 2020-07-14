@@ -4,6 +4,8 @@ import { sortByEpoch, getEpochForDate } from "../../utils";
 import { generateSingleBill } from "../../utils/receiptPdf";
 import { httpRequest } from "egov-ui-framework/ui-utils/api.js";
 import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
+import { download, downloadBill } from "egov-common/ui-utils/commons";
+
 
 const getConsumerDetail = propertyResponse => {
   return {
@@ -95,10 +97,8 @@ export const searchResults = {
         labelName:"Bill No.",
         options: {
           filter: false,
-          customBodyRender: value => (
-            <div onClick={() => generateSingleBill(value)}>
-              <a>{value}</a>
-            </div>
+          customBodyRender: (value, tableMeta) => (
+              <a href="javascript:void(0)" onClick={() => downloadBill(tableMeta.rowData[1], tableMeta.rowData[5])}>{value}</a>
           )
         }
       },  

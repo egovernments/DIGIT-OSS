@@ -16,12 +16,17 @@ const formConfig = {
       jsonPath: "PropertiesTemp[0].address.city",
       required: true,
       localePrefix: { moduleName: "tenant", masterName: "tenants" },
-      type: "singleValueList",
+      labelsFromLocalisation: true,
+      type: "AutocompleteDropdown",
       floatingLabelText: "CORE_COMMON_CITY",
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       fullWidth: true,
       hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
       numcols: 6,
+      gridDefination: {
+        xs: 12,
+        sm: 6
+      },
       dataFetchConfig: {
         dependants: [
           {

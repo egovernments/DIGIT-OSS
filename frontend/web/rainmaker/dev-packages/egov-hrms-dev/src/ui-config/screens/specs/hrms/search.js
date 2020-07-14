@@ -5,13 +5,14 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import set from "lodash/set";
+import "../../../../index.css";
 import { httpRequest } from "../../../../ui-utils";
+import { createEmployee, getAdminRole, showCityPicker } from "../utils";
+import { cityPicker } from "./createResource/cityPicker";
 import { searchForm } from "./searchResource/searchForm";
 import { searchResults } from "./searchResource/searchResults";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import { showCityPicker, getAdminRole, createEmployee } from "../utils";
-import { cityPicker } from "./createResource/cityPicker";
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;

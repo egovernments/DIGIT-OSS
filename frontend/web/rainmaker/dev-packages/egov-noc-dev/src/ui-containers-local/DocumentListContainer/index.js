@@ -27,6 +27,17 @@ const mapStateToProps = state => {
     "screenConfiguration.preparedFinalObject.documentsContract",
     []
   );
+  if(documentsList.length > 0) {
+    documentsList.map(docList => {
+      docList.cards.map(document => {
+        if(document && document.dropdown && document.dropdown.menu){
+          document.dropdown.menu.map((item,key)=>{
+            document.dropdown.menu[key].name = item.label;
+          })
+        }
+      })
+    })
+  }
   return { documentsList };
 };
 

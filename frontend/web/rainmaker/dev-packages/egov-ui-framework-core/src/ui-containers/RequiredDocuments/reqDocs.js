@@ -8,6 +8,7 @@ import {
 import { getCommonCaption, getCommonCard } from "egov-ui-framework/ui-config/screens/specs/utils";
 // import { getCommonGrayCard, getLabelOnlyValue } from "../../utils";
 import { footer } from "./footer";
+import "./index.css";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 
 const styles = {
@@ -159,9 +160,20 @@ const generateDocument = ( item, modulePrifx ) => {
       )
     : {};
 
+  let subParagraph1 = getCommonParagraph(
+    {
+      labelKey: getTransformedLocale('ONE_OF_THESE_DOC_NEEDED')
+    },
+    {
+      style: styles.description
+    }
+  )
+
   return getCommonGrayCard({
     subHeader: subHeader,
     break: getBreak(),
+    subParagraph1: modulePrifx === "TradeLicense" ? {} : subParagraph1,
+    break1: modulePrifx === "TradeLicense" ? {} : getBreak(),
     docs: getCommonContainer({ ...docs }),
     subParagraph: subParagraph
   });
@@ -178,6 +190,9 @@ export const getRequiredDocuments = ( documents, moduleName, footerCallback ) =>
       header: {
         uiFramework: "custom-atoms",
         componentPath: "Container",
+        props: {
+          className: "fixedHeader"
+        },
         children: {
           header
         }
@@ -194,6 +209,9 @@ export const getRequiredDocuments = ( documents, moduleName, footerCallback ) =>
       },
       footer: {
         uiFramework: "custom-atoms",
+        props:{
+          className:"footerSticky",
+        },
         componentPath: "Container",
         children: {
           footerChildElement
