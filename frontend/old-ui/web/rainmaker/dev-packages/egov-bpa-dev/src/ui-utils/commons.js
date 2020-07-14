@@ -31,6 +31,69 @@ import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import jp from "jsonpath";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { edcrDetailsToBpaDetails } from "../ui-config/screens/specs/utils"
+import { downloadPdf, printPdf } from "egov-ui-kit/utils/commons";
+
+
+export const downloadReceiptFromFilestoreID = (fileStoreId, mode, tenantId) => {
+  getFileUrlFromAPI(fileStoreId, tenantId).then(async (fileRes) => {
+    if (mode === 'download') {
+      downloadPdf(fileRes[fileStoreId]);
+    }
+    else {
+      printPdf(fileRes[fileStoreId]);
+    }
+  });
+}
+
+export const download = (receiptQueryString, mode = "download", configKey = "consolidatedreceipt", state) => {
+  if (state && process.env.REACT_APP_NAME === "Citizen" && configKey === "consolidatedreceipt") {
+    const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject, "commonPayInfo");
+    configKey = get(uiCommonPayConfig, "receiptKey","consolidatedreceipt")
+  }
+  const FETCHRECEIPT = {
+    GET: {
+      URL: "/collection-services/payments/_search",
+      ACTION: "_get",
+    },
+  };
+  const DOWNLOADRECEIPT = {
+    GET: {
+      URL: "/pdf-service/v1/_create",
+      ACTION: "_get",
+    },
+  };
+  try {
+    httpRequest("post", FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
+      const queryStr = [
+        { key: "key", value: configKey },
+        { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
+      ]
+      if (payloadReceiptDetails && payloadReceiptDetails.Payments && payloadReceiptDetails.Payments.length == 0) {
+        console.log("Could not find any receipts");
+        return;
+      }
+      const oldFileStoreId = get(payloadReceiptDetails.Payments[0], "fileStoreId")
+      if (oldFileStoreId) {
+        downloadReceiptFromFilestoreID(oldFileStoreId, mode)
+      }
+      else {
+        httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments: payloadReceiptDetails.Payments }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+          .then(res => {
+            res.filestoreIds[0]
+            if (res && res.filestoreIds && res.filestoreIds.length > 0) {
+              res.filestoreIds.map(fileStoreId => {
+                downloadReceiptFromFilestoreID(fileStoreId, mode)
+              })
+            } else {
+              console.log("Error In Receipt Download");
+            }
+          });
+      }
+    })
+  } catch (exception) {
+    alert('Some Error Occured while downloading Receipt!');
+  }
+}
 
 const handleDeletedCards = (jsonObject, jsonPath, key) => {
   let originalArray = get(jsonObject, jsonPath, []);
@@ -359,7 +422,7 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
         { BPA: payload }
       );
       // response = prepareOwnershipType(response);
-      dispatch(prepareFinalObject("BPA", response.Bpa[0]));
+      dispatch(prepareFinalObject("BPA", response.BPA[0]));
       setApplicationNumberBox(state, dispatch);
       await edcrDetailsToBpaDetails(state, dispatch);
     } else if (method === "UPDATE") {
@@ -371,7 +434,7 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
         { BPA: payload }
       );
       // response = prepareOwnershipType(response);
-      dispatch(prepareFinalObject("BPA", response.Bpa[0]));
+      dispatch(prepareFinalObject("BPA", response.BPA[0]));
     }
     return { status: "success", message: response };
   } catch (error) {
@@ -1077,25 +1140,35 @@ export const handleFileUpload = (event, handleDocument, props) => {
 export const submitBpaApplication = async (state, dispatch) => {
   const bpaAction = "APPLY";
   let isDeclared = get(state, "screenConfiguration.preparedFinalObject.BPA.isDeclared");
-   
-  if(isDeclared) {
+
+  if (isDeclared) {
     let response = await createUpdateBpaApplication(state, dispatch, bpaAction);
-  const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.BPA.applicationNo");
-  const tenantId = getQueryArg(window.location.href, "tenantId");
-  if (get(response, "status", "") === "success") {
-    const acknowledgementUrl =
-      process.env.REACT_APP_SELF_RUNNING === "true"
-        ? `/egov-ui-framework/egov-bpa/acknowledgement?purpose=${bpaAction}&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`
-        : `/egov-bpa/acknowledgement?purpose=${bpaAction}&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
-    dispatch(setRoute(acknowledgementUrl));
+    const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.BPA.applicationNo");
+    const tenantId = getQueryArg(window.location.href, "tenantId");
+    if (get(response, "status", "") === "success") {
+      let status = get(state, "screenConfiguration.preparedFinalObject.BPA.status");
+      if (status === "DOC_VERIFICATION_INPROGRESS") {
+        const acknowledgementUrl =
+          process.env.REACT_APP_SELF_RUNNING === "true"
+            ? `/egov-ui-framework/egov-bpa/acknowledgement?purpose=apply_skip&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`
+            : `/egov-bpa/acknowledgement?purpose=apply_skip&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
+        dispatch(setRoute(acknowledgementUrl));
+      } else {
+        const acknowledgementUrl =
+          process.env.REACT_APP_SELF_RUNNING === "true"
+            ? `/egov-ui-framework/egov-bpa/acknowledgement?purpose=apply&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`
+            : `/egov-bpa/acknowledgement?purpose=apply&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
+        dispatch(setRoute(acknowledgementUrl));
+      }
+
+    }
   }
-  }  
   else {
     let errorMessage = {
       labelName: "Please confirm the declaration!",
       labelKey: "BPA_DECLARATION_COMMON_LABEL"
     };
-    dispatch(toggleSnackbar(true, errorMessage, "warning"));      
+    dispatch(toggleSnackbar(true, errorMessage, "warning"));
   }
 };
 
@@ -1285,7 +1358,7 @@ export const createUpdateOCBpaApplication = async (state, dispatch, status) => {
         [],
         { BPA: payload }
       );
-      dispatch(prepareFinalObject("BPA", response.Bpa[0]));
+      dispatch(prepareFinalObject("BPA", response.BPA[0]));
       setApplicationNumberBox(state, dispatch);
       await edcrDetailsToBpaDetails(state, dispatch);
     } else if (method === "UPDATE") {
@@ -1296,7 +1369,7 @@ export const createUpdateOCBpaApplication = async (state, dispatch, status) => {
         [],
         { BPA: payload }
       );
-      dispatch(prepareFinalObject("BPA", response.Bpa[0]));
+      dispatch(prepareFinalObject("BPA", response.BPA[0]));
       await edcrDetailsToBpaDetails(state, dispatch);
     }
     return true;
@@ -1312,10 +1385,38 @@ export const submitOCBpaApplication = async (state, dispatch) => {
   const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.BPA.applicationNo");
   const tenantId = getQueryArg(window.location.href, "tenantId");
   if (response) {
-    const acknowledgementUrl =
+    if(get(response, "BPA[0].status" === "DOC_VERIFICATION_INPROGRESS")) {
+      const acknowledgementUrl =
       process.env.REACT_APP_SELF_RUNNING === "true"
-        ? `/egov-ui-framework/oc-bpa/acknowledgement?purpose=${bpaAction}&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`
-        : `/oc-bpa/acknowledgement?purpose=${bpaAction}&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
+        ? `/egov-ui-framework/oc-bpa/acknowledgement?purpose=apply_skip&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`
+        : `/oc-bpa/acknowledgement?purpose=apply_skip&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
     dispatch(setRoute(acknowledgementUrl));
+    } else {
+      const acknowledgementUrl =
+      process.env.REACT_APP_SELF_RUNNING === "true"
+        ? `/egov-ui-framework/oc-bpa/acknowledgement?purpose=apply&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`
+        : `/oc-bpa/acknowledgement?purpose=apply&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
+    dispatch(setRoute(acknowledgementUrl));
+    }
+  }
+};
+export const getNocSearchResults = async (queryObject, dispatch) => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/noc-services/v1/noc/_search",
+      "",
+      queryObject
+    );
+    return response;
+  } catch (error) {
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+    throw error;
   }
 };

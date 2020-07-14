@@ -9,77 +9,77 @@ import {
 import { gotoApplyWithStep } from "../../utils/index";
 import { checkValueForNA } from "../../utils";
 import { convertEpochToDate, convertDateToEpoch } from "../../utils/index";
-
+export const registrationSummaryDetails={
+  transferReason: getLabelWithValue(
+    {
+      labelName: "Reason for Transfer",
+      labelKey: "PT_MUTATION_TRANSFER_REASON"
+    },
+    {
+      jsonPath:
+        "Property.additionalDetails.reasonForTransfer",
+        callBack: checkValueForNA
+    }
+  ),
+  marketValue: getLabelWithValue(
+    {
+     
+      labelName: "Market Value",
+          labelKey: "PT_MUTATION_MARKET_VALUE"
+    },
+    {
+      jsonPath:
+        "Property.additionalDetails.marketValue",
+        callBack: checkValueForNA
+    }
+  ),
+   documentNo: getLabelWithValue(
+    {
+      labelName: "Document No.",
+      labelKey: "PT_MUTATION_DOCUMENT_NO"
+    },
+    {
+      jsonPath:
+        "Property.additionalDetails.documentNumber",
+        callBack: checkValueForNA
+    }
+  ), documentDate: getLabelWithValue(
+    {
+      labelName: "Document Issue Date",
+      labelKey: "PT_MUTATION_DOCUMENT_DATE"
+    },
+    {
+      jsonPath:
+        "Property.additionalDetails.documentDate",
+        callBack: value => {
+          return convertEpochToDate(value);
+        }
+    }
+  ), documentValue: getLabelWithValue(
+    {
+      labelName: "Document Value",
+      labelKey: "PT_MUTATION_DOCUMENT_VALUE"
+    },
+    {
+      jsonPath:
+        "Property.additionalDetails.documentValue",
+        callBack: checkValueForNA
+    }
+  ),
+  remarks: getLabelWithValue(
+    {
+      labelName: "Remarks",
+      labelKey: "PT_MUTATION_REMARKS"
+    },
+    {
+      jsonPath:
+        "Property.additionalDetails.remarks",
+        callBack: checkValueForNA
+    }
+  )
+}
 const registrationDetails =  getCommonGrayCard({
-  propertyLocationContainer:getCommonContainer({
-    transferReason: getLabelWithValue(
-      {
-        labelName: "Reason for Transfer",
-        labelKey: "PT_MUTATION_TRANSFER_REASON"
-      },
-      {
-        jsonPath:
-          "Property.additionalDetails.reasonForTransfer",
-          callBack: checkValueForNA
-      }
-    ),
-    marketValue: getLabelWithValue(
-      {
-       
-        labelName: "Market Value",
-            labelKey: "PT_MUTATION_MARKET_VALUE"
-      },
-      {
-        jsonPath:
-          "Property.additionalDetails.marketValue",
-          callBack: checkValueForNA
-      }
-    ),
-     documentNo: getLabelWithValue(
-      {
-        labelName: "Document No.",
-        labelKey: "PT_MUTATION_DOCUMENT_NO"
-      },
-      {
-        jsonPath:
-          "Property.additionalDetails.documentNumber",
-          callBack: checkValueForNA
-      }
-    ), documentDate: getLabelWithValue(
-      {
-        labelName: "Document Issue Date",
-        labelKey: "PT_MUTATION_DOCUMENT_DATE"
-      },
-      {
-        jsonPath:
-          "Property.additionalDetails.documentDate",
-          callBack: value => {
-            return convertEpochToDate(value);
-          }
-      }
-    ), documentValue: getLabelWithValue(
-      {
-        labelName: "Document Value",
-        labelKey: "PT_MUTATION_DOCUMENT_VALUE"
-      },
-      {
-        jsonPath:
-          "Property.additionalDetails.documentValue",
-          callBack: checkValueForNA
-      }
-    ),
-    remarks: getLabelWithValue(
-      {
-        labelName: "Remarks",
-        labelKey: "PT_MUTATION_REMARKS"
-      },
-      {
-        jsonPath:
-          "Property.additionalDetails.remarks",
-          callBack: checkValueForNA
-      }
-    )
-  })
+  propertyLocationContainer:getCommonContainer(registrationSummaryDetails)
 });
 
 

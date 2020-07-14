@@ -29,6 +29,7 @@ import jsPDF from "jspdf";
 import get from "lodash/get";
 import some from "lodash/some";
 import jp from "jsonpath";
+import commonConfig from "config/common.js";
 
 const moveToSuccess = (LicenseData, dispatch) => {
   const applicationNo = get(LicenseData, "applicationNumber");
@@ -100,7 +101,7 @@ const prepareDocumentsDetailsView = async (state, dispatch) => {
         name: doc.documents[0].fileName,
         fileStoreId: doc.documents[0].fileStoreId,
         linkText: "View",
-        link: doc.documents[0].fileUrl && doc.documents[0].fileUrl.split(",")[0]
+        link: doc.documents[0].fileUrl && doc.documents[0].fileUrl.length > 0 && doc.documents[0].fileUrl.split(",")[0]
       });
     }
   });
@@ -292,23 +293,11 @@ export const callBackForNext = async (state, dispatch) => {
         hasFieldToaster = false;
       }
       let tenantIdInLocastorage = getTenantId();
-      if (!tenantIdInLocastorage)
-        setTenantId(getTenantId());
-        const appNumber = get(state.screenConfiguration.preparedFinalObject, "Licenses[0].applicationNumber", {});
-        const LicenseData = get(
-          state.screenConfiguration.preparedFinalObject,
-          "Licenses[0]",
-          {}
-        );
-        if (appNumber && LicenseData){
-          createEstimateData(
-            LicenseData,
-            "LicensesTemp[0].estimateCardData",
-            dispatch,
-            {},
-            true
-          ); //get bill and populate estimate card
-        }
+      if (!tenantIdInLocastorage || tenantIdInLocastorage == "null"){
+        let tenantId = window.globalConfigs.getConfig("STATE_LEVEL_TENANT_ID")  || process.env.REACT_APP_DEFAULT_TENANT_ID;
+        setTenantId(tenantId)
+        localStorage.setItem("Citizen.tenant-id", tenantId);
+      }
     }
   }
 

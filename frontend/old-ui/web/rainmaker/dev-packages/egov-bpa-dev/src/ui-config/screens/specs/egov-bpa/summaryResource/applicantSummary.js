@@ -4,7 +4,8 @@ import {
   getCommonSubHeader,
   getLabel,
   getLabelWithValue,
-  convertEpochToDate
+  convertEpochToDate,
+  getBreak
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { gotoApplyWithStep, checkValueForNA } from "../../utils/index";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
@@ -67,8 +68,8 @@ export const applicantSummary = getCommonGrayCard({
     componentPath: "MultiItem",
     props: {
       className: "applicant-summary",
-      scheama: getCommonGrayCard({
-        applicantContainer: getCommonContainer({
+      scheama: getCommonContainer({
+        // applicantContainer: getCommonContainer({
           mobileNo: getLabelWithValue(
             {
               labelName: "Mobile No.",
@@ -164,15 +165,16 @@ export const applicantSummary = getCommonGrayCard({
                 "BPA.landInfo.owners[0].correspondenceAddress",
                 callBack: checkValueForNA
             }
-          )
-        })
+          ),
+          break: getBreak()
+        // })
       }),
       items: [],
       hasAddItem: false,
       isReviewPage: true,
       sourceJsonPath: "BPA.landInfo.owners",
       prefixSourceJsonPath:
-        "children.cardContent.children.applicantContainer.children",
+        "children",
       afterPrefixJsonPath: "children.value.children.key"
     },
     type: "array"

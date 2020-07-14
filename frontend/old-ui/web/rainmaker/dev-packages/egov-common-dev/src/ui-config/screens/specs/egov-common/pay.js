@@ -94,7 +94,8 @@ const fetchBill = async (action, state, dispatch, consumerCode, tenantId, billBu
     if (get(totalAmount, "totalAmount") != undefined) {
         const componentJsonpath = "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.AmountToBePaid.children.cardContent.children.amountDetailsCardContainer.children.displayAmount";
         dispatch(handleField("pay", componentJsonpath, "props.value", totalAmount.totalAmount));
-        if (totalAmount.totalAmount === 0 || totalAmount.totalAmount <= 100) {
+        const isAdvancePaymentAllowed = get(state, "screenConfiguration.preparedFinalObject.businessServiceInfo.isAdvanceAllowed");
+        if ((totalAmount.totalAmount === 0 || totalAmount.totalAmount <= 100) && !isAdvancePaymentAllowed) {
             dispatch(handleField("pay", radioButtonJsonPath, "props.buttons[1].disabled", true));
         }
     }

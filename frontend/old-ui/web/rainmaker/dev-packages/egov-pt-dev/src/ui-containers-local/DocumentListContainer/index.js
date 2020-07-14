@@ -87,9 +87,12 @@ const mapStateToProps = state => {
         document.dropdown.disabled = true;
       }
       document.dropdown.menu = document.dropdown.menu.filter(menu => filterDropdownFunction(menu, preparedFinalObject, document.dropdownFilter));
-    })
-    documentList.cards = documentList.cards.filter(document => filterFunction(document, preparedFinalObject, document.filterCondition))
-  })
+      document.dropdown.menu.map((item,key)=>{
+        document.dropdown.menu[key].name = item.label;
+      });
+    });
+    documentList.cards = documentList.cards.filter(document => filterFunction(document, preparedFinalObject, document.filterCondition));
+  });
   return { documentsList, preparedFinalObject };
 };
 const mapDispatchToProps = dispatch => {

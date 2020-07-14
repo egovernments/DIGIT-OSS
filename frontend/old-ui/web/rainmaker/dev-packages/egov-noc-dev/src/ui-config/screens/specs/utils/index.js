@@ -3,8 +3,10 @@ import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
 import { getLocaleLabels, getQueryArg, getTransformedLocalStorgaeLabels } from "egov-ui-framework/ui-utils/commons";
-import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId, getUserInfo, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
+import set from "lodash/set";
+import isEmpty from "lodash/isEmpty";
 import isUndefined from "lodash/isUndefined";
 import { httpRequest } from "../../../../ui-utils/api";
 import commonConfig from "config/common.js";
@@ -559,7 +561,37 @@ export const searchBill = async (dispatch, applicationNumber, tenantId) => {
   }
 };
 
-export const createEstimateData = billObject => {
+const isApplicationPaid = (currentStatus, workflowCode) => {
+  let isPAID = false;
+  if (currentStatus === "CITIZENACTIONREQUIRED") {
+    return isPAID;
+  }
+  const businessServiceData = JSON.parse(localStorageGet("businessServiceData"));
+
+  if (!isEmpty(businessServiceData)) {
+    const tlBusinessService = JSON.parse(localStorageGet("businessServiceData")).filter(item => item.businessService === workflowCode)
+    const states = tlBusinessService && tlBusinessService.length > 0 && tlBusinessService[0].states;
+    for (var i = 0; i < states.length; i++) {
+      if (states[i].state === currentStatus) {
+        break;
+      }
+      if (
+        states[i].actions &&
+        states[i].actions.filter(item => item.action === "PAY").length > 0
+      ) {
+        isPAID = true;
+        break;
+      }
+    }
+  } else {
+    isPAID = false;
+  }
+
+  return isPAID;
+};
+
+export const createEstimateData = (billObject, dispatch) => {
+  dispatch(prepareFinalObject("ReceiptTemp[0].Bill", [billObject]));
   const billDetails = billObject && billObject.billDetails;
   let fees =
     billDetails &&
@@ -596,7 +628,7 @@ export const createBill = async (queryObject, dispatch) => {
   }
 };
 
-export const generateBill = async (dispatch, applicationNumber, tenantId) => {
+export const generateBill = async (dispatch, applicationNumber, tenantId, status) => {
   try {
     if (applicationNumber && tenantId) {
       const queryObj = [
@@ -610,20 +642,34 @@ export const generateBill = async (dispatch, applicationNumber, tenantId) => {
         },
         { key: "businessService", value: "FIRENOC" }
       ];
-      const payload = await createBill(queryObj, dispatch);
-      // let payload = sampleGetBill();
-      if (payload && payload.Bill[0]) {
-        dispatch(prepareFinalObject("ReceiptTemp[0].Bill", payload.Bill));
-        const estimateData = createEstimateData(payload.Bill[0]);
-        estimateData &&
-          estimateData.length &&
-          dispatch(
-            prepareFinalObject(
-              "applyScreenMdmsData.estimateCardData",
-              estimateData
-            )
-          );
-      }
+      const billQueryObj = [
+        {
+          key: "tenantId",
+          value: tenantId
+        },
+        {
+          key: "consumerCodes",
+          value: applicationNumber
+        }
+      ];
+      const isPAID = isApplicationPaid(status, "FIRENOC");
+      const payload = isPAID ? await getReceiptData(billQueryObj) : await createBill(queryObj, dispatch);
+      let estimateData = payload ? isPAID ? payload && payload.Payments && payload.Payments.length > 0 && createEstimateData(payload.Payments[0].paymentDetails[0].bill, dispatch) : payload && createEstimateData(payload.Bill[0], dispatch) : [];
+      estimateData = estimateData || [];
+      set(estimateData, "payStatus", isPAID);
+      dispatch(prepareFinalObject("applyScreenMdmsData.estimateCardData", estimateData));
+      // if (payload && payload.Bill[0]) {
+      //   dispatch(prepareFinalObject("ReceiptTemp[0].Bill", payload.Bill));
+      //   const estimateData = createEstimateData(payload.Bill[0]);
+      //   estimateData &&
+      //     estimateData.length &&
+      //     dispatch(
+      //       prepareFinalObject(
+      //         "applyScreenMdmsData.estimateCardData",
+      //         estimateData
+      //       )
+      //     );
+      // }
     }
   } catch (e) {
     console.log(e);

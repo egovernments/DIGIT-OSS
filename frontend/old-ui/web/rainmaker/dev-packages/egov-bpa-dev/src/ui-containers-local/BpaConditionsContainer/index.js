@@ -19,7 +19,10 @@ const styles = {
       color: "#FE7A51"
     }
   },
-  checked: {}
+  checked: {},
+  conditionNum: {
+    width: "30px !important",
+  }
 };
 
 
@@ -61,7 +64,7 @@ class BpaConditionsContainer extends Component {
           permitConditions.map(conditions => {
             return (
                 <Grid container={true}>
-                    <Grid item={true} xs={2} sm={1} md={1}>
+                    <Grid item={true} className={classes.conditionNum}>
                         <div >
                             <span>{index + 1}</span>
                         </div>

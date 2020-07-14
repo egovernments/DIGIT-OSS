@@ -1,9 +1,10 @@
 import {
-  getCommonHeader,
   getCommonCard,
-  getCommonTitle,
-  getCommonGrayCard,
-  getCommonContainer
+
+
+  getCommonContainer, getCommonGrayCard, getCommonHeader,
+
+  getCommonTitle
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
   handleScreenConfigurationFieldChange as handleField,
@@ -11,30 +12,27 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   getQueryArg,
-  setBusinessServiceDataToLocalStorage,setDocuments
+  setBusinessServiceDataToLocalStorage, setDocuments
 } from "egov-ui-framework/ui-utils/commons";
+import { loadUlbLogo } from "egov-ui-kit/utils/pdfUtils/generatePDF";
+import get from "lodash/get";
+import set from "lodash/set";
+import { httpRequest } from "../../../../ui-utils";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import {
   createEstimateData,
-  setMultiOwnerForSV,
-  setValidToFromVisibilityForSV,
-  getDialogButton
-} from "../utils";
-import { downloadPrintContainer,footerReviewTop  } from "./applyResource/footer";
-import {
-  getFeesEstimateCard,
+
+
+  getDialogButton, getFeesEstimateCard,
   getHeaderSideText,
-  getTransformedStatus
+  getTransformedStatus, setMultiOwnerForSV,
+  setValidToFromVisibilityForSV
 } from "../utils";
-import { getReviewTrade } from "./applyResource/review-trade";
-import { getReviewOwner } from "./applyResource/review-owner";
-import { getReviewDocuments } from "./applyResource/review-documents";
 import { loadReceiptGenerationData } from "../utils/receiptTransformer";
-import get from "lodash/get";
-import set from "lodash/set";
-import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
-import { getLocale} from "egov-ui-kit/utils/localStorageUtils";
-import { httpRequest } from "../../../../ui-utils";
+import { downloadPrintContainer, footerReviewTop } from "./applyResource/footer";
+import { getReviewDocuments } from "./applyResource/review-documents";
+import { getReviewOwner } from "./applyResource/review-owner";
+import { getReviewTrade } from "./applyResource/review-trade";
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -74,9 +72,9 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
   set(payload, "Licenses[0].headerSideText", headerSideText);
   set(payload, "Licenses[0].assignee", []);
   get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory") &&
-  get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory").split(
-    "."
-  )[0] === "INDIVIDUAL"
+    get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory").split(
+      "."
+    )[0] === "INDIVIDUAL"
     ? setMultiOwnerForSV(action, true)
     : setMultiOwnerForSV(action, false);
 
@@ -91,14 +89,14 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
     payload,
     "Licenses[0].tradeLicenseDetail.applicationDocuments",
     "LicensesTemp[0].reviewDocData",
-    dispatch,'TL'
+    dispatch, 'TL'
   );
 
   let sts = getTransformedStatus(get(payload, "Licenses[0].status"));
   payload && dispatch(prepareFinalObject("Licenses[0]", payload.Licenses[0]));
 
   //set business service data
-    
+
   const businessService = get(
     state.screenConfiguration.preparedFinalObject,
     "Licenses[0].workflowCode"
@@ -125,7 +123,7 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
   const LicenseData = payload.Licenses[0];
   const fetchFromReceipt = sts !== "pending_payment";
 
-    
+
   // generate estimate data
   createEstimateData(
     LicenseData,
@@ -137,12 +135,15 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
 };
 
 const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
+
+  loadUlbLogo(tenantId);
+
   //Search details for given application Number
   if (applicationNumber) {
     !getQueryArg(window.location.href, "edited") &&
       (await searchResults(action, state, dispatch, applicationNumber));
 
-   //check for renewal flow
+    //check for renewal flow
     const licenseNumber = get(
       state.screenConfiguration.preparedFinalObject,
       `Licenses[0].licenseNumber`
@@ -150,14 +151,14 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     let queryObjectSearch = [
       {
         key: "tenantId",
-        value: tenantId 
+        value: tenantId
       },
       { key: "offset", value: "0" },
-      { key: "licenseNumbers", value: licenseNumber}
+      { key: "licenseNumbers", value: licenseNumber }
     ];
     const payload = await getSearchResults(queryObjectSearch);
-    const length = payload && payload.Licenses.length > 0 ? get(payload,`Licenses`,[]).length : 0;
-    dispatch(prepareFinalObject("licenseCount" ,length));
+    const length = payload && payload.Licenses.length > 0 ? get(payload, `Licenses`, []).length : 0;
+    dispatch(prepareFinalObject("licenseCount", length));
     const status = get(
       state,
       "screenConfiguration.preparedFinalObject.Licenses[0].status"
@@ -176,7 +177,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         data,
         "Licenses[0].tradeLicenseDetail.applicationDocuments",
         "LicensesTemp[0].reviewDocData",
-        dispatch,'TL'
+        dispatch, 'TL'
       );
     }
 
@@ -190,11 +191,11 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         moduleDetails: [
           {
             moduleName: "common-masters",
-            masterDetails: [{ name: "uiCommonPay",filter: `[?(@.code=="${businessService}")]` }]
+            masterDetails: [{ name: "uiCommonPay", filter: `[?(@.code=="${businessService}")]` }]
           },
           {
             moduleName: "TradeLicense",
-            masterDetails: [{ name: "TradeRenewal"}]
+            masterDetails: [{ name: "TradeRenewal" }]
           }
         ]
       }
@@ -208,8 +209,8 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         [],
         mdmsBody
       );
-      dispatch(prepareFinalObject("renewalPeriod", get(payload.MdmsRes , "TradeLicense.TradeRenewal[0].renewalPeriod")));
-      dispatch(prepareFinalObject("uiCommonConfig", get(payload.MdmsRes , "common-masters.uiCommonPay[0]")));
+      dispatch(prepareFinalObject("renewalPeriod", get(payload.MdmsRes, "TradeLicense.TradeRenewal[0].renewalPeriod")));
+      dispatch(prepareFinalObject("uiCommonConfig", get(payload.MdmsRes, "common-masters.uiCommonPay[0]")));
     } catch (e) {
       console.log(e);
     }
@@ -253,7 +254,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       applicationNumber,
       tenantId
     );
-    const CitizenprintCont=footerReviewTop(
+    const CitizenprintCont = footerReviewTop(
       action,
       state,
       dispatch,
@@ -263,19 +264,19 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       financialYear
     );
 
-    if(status !== "INITIATED"){
+    if (status !== "INITIATED") {
       process.env.REACT_APP_NAME === "Citizen"
-      ? set(
+        ? set(
           action,
           "screenConfig.components.div.children.headerDiv.children.helpSection.children",
           CitizenprintCont
         )
-      : set(
+        : set(
           action,
           "screenConfig.components.div.children.headerDiv.children.helpSection.children",
           printCont
         );
-    }   
+    }
 
     // Get approval details based on status and set it in screenconfig
 
@@ -295,7 +296,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
           data,
           "Licenses[0].tradeLicenseDetail.verificationDocuments",
           "LicensesTemp[0].verifyDocData",
-          dispatch,'TL'
+          dispatch, 'TL'
         );
       } else {
         dispatch(
@@ -314,36 +315,36 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         false
       );
     }
-    
+
     const applicationType = get(
       state.screenConfiguration.preparedFinalObject,
       "Licenses[0].applicationType"
     );
-   
+
     const headerrow = getCommonContainer({
       header: getCommonHeader({
         labelName: "Trade License Application (2018-2019)",
-        labelKey: applicationType === "RENEWAL"? "TL_TRADE_RENEW_APPLICATION":"TL_TRADE_APPLICATION"
+        labelKey: applicationType === "RENEWAL" ? "TL_TRADE_RENEW_APPLICATION" : "TL_TRADE_APPLICATION"
       }),
-    applicationLicence:getCommonContainer({
-      applicationNumber: {
-        uiFramework: "custom-atoms-local",
-        moduleName: "egov-tradelicence",
-        componentPath: "ApplicationNoContainer",
-        props: {
-          number: applicationNumber
+      applicationLicence: getCommonContainer({
+        applicationNumber: {
+          uiFramework: "custom-atoms-local",
+          moduleName: "egov-tradelicence",
+          componentPath: "ApplicationNoContainer",
+          props: {
+            number: applicationNumber
+          }
+        },
+        licenceNumber: {
+          uiFramework: "custom-atoms-local",
+          moduleName: "egov-tradelicence",
+          componentPath: "licenceNoContainer",
+          visible: licenseNumber ? true : false,
+          props: {
+            number: licenseNumber,
+          }
         }
-      },
-      licenceNumber: {
-        uiFramework: "custom-atoms-local",
-        moduleName: "egov-tradelicence",
-        componentPath: "licenceNoContainer",
-        visible: licenseNumber? true : false,
-        props: {
-          number: licenseNumber,
-        }
-      }
-    })
+      })
     });
     set(
       action.screenConfig,
@@ -356,7 +357,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         action,
         "screenConfig.components.div.children.headerDiv.children.helpSection.children.cancelledLabel.visible",
         true
-      );       
+      );
     setActionItems(action, obj);
     loadReceiptGenerationData(applicationNumber, tenantId);
   }
@@ -504,8 +505,8 @@ const screenConfig = {
                 xs: 12,
                 sm: 8
               },
-          
-             ...headerrow
+
+              ...headerrow
 
             },
             helpSection: {

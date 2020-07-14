@@ -263,6 +263,7 @@ export const proposedBuildingDetails = getCommonCard({
                     print: false,
                     download: false,
                     viewColumns: false,
+                    rowHover: false
                   }
                 }
               },

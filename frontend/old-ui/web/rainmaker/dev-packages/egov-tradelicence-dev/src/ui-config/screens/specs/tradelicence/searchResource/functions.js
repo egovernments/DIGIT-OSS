@@ -94,7 +94,7 @@ export const searchApiCall = async (state, dispatch) => {
             value: convertDateToEpoch(searchScreenObject[key], "dayend")
           });
         } else {
-          queryObject.push({ key: key, value: searchScreenObject[key].trim() });
+          queryObject.push({ key: key, value: searchScreenObject[key].trim().toUpperCase() });
         }
       }
     }

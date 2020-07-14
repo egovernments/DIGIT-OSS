@@ -45,6 +45,18 @@ export const applyMohallaData = (mohallaData, tenantId, dispatch) => {
   dispatch(
     handleField("public-search", ComponentJsonPath.locality, "props.errorMessage", "")
   );
+  dispatch(
+    handleField("public-search", ComponentJsonPath.locality, "props.helperText", "")
+  );
+  dispatch(
+    handleField("public-search", ComponentJsonPath.ulbCity, "props.helperText", "")
+  );
+  dispatch(
+    handleField("public-search", ComponentJsonPath.ulbCity, "props.error", false)
+  );
+  dispatch(
+    handleField("public-search", ComponentJsonPath.ulbCity, "props.isFieldValid", true)
+  );
   dispatch(prepareFinalObject("searchScreen.locality.code", ""));
   const mohallaLocalePrefix = {
     moduleName: tenantId,

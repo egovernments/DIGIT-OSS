@@ -204,3 +204,9 @@ div[class^="MuiTooltip-tooltip"] {
       margin: 32px 0 0 0;
   }
 }
+
+a:focus, a:active {
+  outline-style: solid;
+  outline-width: 3px;
+  outline-offset: 4px;
+  text-decoration: none; }

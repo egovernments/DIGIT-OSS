@@ -164,18 +164,26 @@ const formConfig = {
         }, []);
         dispatch(setFieldProperty("complaint", "city", "dropDownData", dd));
       }
-      let city = get(state, "form.complaint.fields.city.value");
-      let mohalla = get(state, "form.complaint.fields.mohalla.value");
-      if (!city) {
-        // dispatch(handleFieldChange("complaint", "city", tenantId));
-      } else {
-        if (city) {
-          dispatch(handleFieldChange("complaint", "city", city));
-        }
-        if (mohalla) {
-          dispatch(handleFieldChange("complaint", "mohalla", mohalla));
-        }
+      // let city = get(state, "form.complaint.fields.city.value");
+      // let mohalla = get(state, "form.complaint.fields.mohalla.value");
+      const cityFormData = get(state, "common.prepareFormData.services[0].addressDetail.city", "");
+      const mohallaFormData = get(state, "common.prepareFormData.services[0].addressDetail.mohalla", "");
+      if(cityFormData) {
+        dispatch(handleFieldChange("complaint", "city", cityFormData));
       }
+      if(mohallaFormData) {
+        dispatch(handleFieldChange("complaint", "mohalla", mohallaFormData));
+      }
+      // if (!city) {
+      //   // dispatch(handleFieldChange("complaint", "city", tenantId));
+      // } else {
+      //   if (city) {
+      //     dispatch(handleFieldChange("complaint", "city", city));
+      //   }
+      //   if (mohalla) {
+      //     dispatch(handleFieldChange("complaint", "mohalla", mohalla));
+      //   }
+      // }
       return action;
     } catch (e) {
       console.log(e);

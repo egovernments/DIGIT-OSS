@@ -50,7 +50,7 @@ export const gotoHomeFooter = getCommonApplyFooter({
   gotoHome: {
     componentPath: "Button",
     props: {
-      variant: "contained",
+      variant: "outlined",
       color: "primary",
       style: {
         minWidth: "200px",

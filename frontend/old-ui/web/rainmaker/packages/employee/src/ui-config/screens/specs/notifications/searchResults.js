@@ -2,8 +2,6 @@ import React from "react";
 import { LabelContainer } from "egov-ui-framework/ui-containers";
 import { handleScreenConfigurationFieldChange as handleField, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
-  getLocaleLabels,
-  getTransformedLocalStorgaeLabels,
   epochToYmd,
   getUserDataFromUuid,
   transformById,
@@ -12,10 +10,6 @@ import {
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { getEventsByType, sortByEpoch, getEpochForDate } from "../utils";
 import get from "lodash/get";
-
-// function sleep(ms) {
-//   return new Promise((resolve) => setTimeout(resolve, ms));
-// }
 
 export const searchApiCall = async (state, dispatch) => {
   const queryObject = [
@@ -28,8 +22,6 @@ export const searchApiCall = async (state, dispatch) => {
   ];
   const events = await getEventsByType(queryObject);
 
-  const localisationLabels = getTransformedLocalStorgaeLabels();
-  //var currentDate = new Date().getTime();
   const uuidArray = [];
   events &&
     events.forEach((element) => {
@@ -72,7 +64,6 @@ const onRowClick = (rowData) => {
 };
 
 export const searchResults = () => {
-  const localisationLabels = getTransformedLocalStorgaeLabels();
   return {
     uiFramework: "custom-molecules",
     componentPath: "Table",

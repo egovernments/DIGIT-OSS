@@ -1,6 +1,9 @@
+import { download } from "egov-common/ui-utils/commons";
 import { getCommonCard, getCommonContainer, getCommonHeader, getLabelWithValue } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getFileUrl, getFileUrlFromAPI, getQueryArg, getTransformedLocale, setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
+import { generateNOCAcknowledgement } from "egov-ui-kit/utils/pdfUtils/generateNOCAcknowledgement";
+import { loadUlbLogo } from "egov-ui-kit/utils/pdfUtils/generatePDF";
 import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
@@ -8,14 +11,13 @@ import { getSearchResults } from "../../../../ui-utils/commons";
 import { checkValueForNA, generateBill } from "../utils/index";
 import generatePdf from "../utils/receiptPdf";
 import { loadPdfGenerationData } from "../utils/receiptTransformer";
+import "./index.css";
 import { citizenFooter } from "./searchResource/citizenFooter";
 import { applicantSummary, institutionSummary } from "./summaryResource/applicantSummary";
 import { documentsSummary } from "./summaryResource/documentsSummary";
 import { estimateSummary } from "./summaryResource/estimateSummary";
 import { nocSummary } from "./summaryResource/nocSummary";
 import { propertySummary } from "./summaryResource/propertySummary";
-import { download } from "egov-common/ui-utils/commons";
-import "./index.css";
 
 const titlebar = getCommonContainer({
   header: getCommonHeader({
@@ -36,6 +38,10 @@ export const downloadPrintContainer = (
   dispatch
 ) => {
   /** MenuButton data based on status */
+
+  let preparedFinalObject = get(
+    state,
+    "screenConfiguration.preparedFinalObject", {});
   let status = get(
     state,
     "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.status"
@@ -63,7 +69,7 @@ export const downloadPrintContainer = (
         { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails, "applicationNumber") },
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.FireNOCs[0], "tenantId") }
       ]
-      download(receiptQueryString , "download" ,"consolidatedreceipt" );
+      download(receiptQueryString, "download", "consolidatedreceipt");
     },
     leftIcon: "receipt"
   };
@@ -74,21 +80,23 @@ export const downloadPrintContainer = (
         { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails, "applicationNumber") },
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.FireNOCs[0], "tenantId") }
       ]
-      download(receiptQueryString , "print" ,"consolidatedreceipt" );
+      download(receiptQueryString, "print", "consolidatedreceipt");
     },
     leftIcon: "receipt"
   };
   let applicationDownloadObject = {
     label: { labelName: "Application", labelKey: "NOC_APPLICATION" },
     link: () => {
-      generatePdf(state, dispatch, "application_download");
+      generateNOCAcknowledgement(preparedFinalObject, `noc-acknowledgement-${get(preparedFinalObject, 'FireNOCs[0].fireNOCDetails.applicationNumber', '')}`);
+      // generatePdf(state, dispatch, "application_download");
     },
     leftIcon: "assignment"
   };
   let applicationPrintObject = {
     label: { labelName: "Application", labelKey: "NOC_APPLICATION" },
     link: () => {
-      generatePdf(state, dispatch, "application_print");
+      generateNOCAcknowledgement(preparedFinalObject, 'print');
+      // generatePdf(state, dispatch, "application_print");
     },
     leftIcon: "assignment"
   };
@@ -127,35 +135,35 @@ export const downloadPrintContainer = (
       uiFramework: "custom-atoms",
       componentPath: "Div",
       props: {
-          style: { textAlign: "right", display: "flex" }
+        style: { textAlign: "right", display: "flex" }
       },
       children: {
-          downloadMenu: {
-              uiFramework: "custom-molecules",
-              componentPath: "DownloadPrintButton",
-              props: {
-                  data: {
-                      label: { labelName: "DOWNLOAD", labelKey: "TL_DOWNLOAD" },
-                      leftIcon: "cloud_download",
-                      rightIcon: "arrow_drop_down",
-                      props: { variant: "outlined", style: { height: "60px", color: "#FE7A51",marginRight:"5px" }, className: "tl-download-button" },
-                      menu: downloadMenu
-                  }
-              }
-          },
-          printMenu: {
-              uiFramework: "custom-molecules",
-              componentPath: "DownloadPrintButton",
-              props: {
-                  data: {
-                      label: { labelName: "PRINT", labelKey: "TL_PRINT" },
-                      leftIcon: "print",
-                      rightIcon: "arrow_drop_down",
-                      props: { variant: "outlined", style: { height: "60px", color: "#FE7A51" }, className: "tl-print-button" },
-                      menu: printMenu
-                  }
-              }
+        downloadMenu: {
+          uiFramework: "custom-molecules",
+          componentPath: "DownloadPrintButton",
+          props: {
+            data: {
+              label: { labelName: "DOWNLOAD", labelKey: "TL_DOWNLOAD" },
+              leftIcon: "cloud_download",
+              rightIcon: "arrow_drop_down",
+              props: { variant: "outlined", style: { height: "60px", color: "#FE7A51", marginRight: "5px" }, className: "tl-download-button" },
+              menu: downloadMenu
+            }
           }
+        },
+        printMenu: {
+          uiFramework: "custom-molecules",
+          componentPath: "DownloadPrintButton",
+          props: {
+            data: {
+              label: { labelName: "PRINT", labelKey: "TL_PRINT" },
+              leftIcon: "print",
+              rightIcon: "arrow_drop_down",
+              props: { variant: "outlined", style: { height: "60px", color: "#FE7A51" }, className: "tl-print-button" },
+              menu: printMenu
+            }
+          }
+        }
 
       },
       // gridDefination: {
@@ -165,7 +173,7 @@ export const downloadPrintContainer = (
     }
   }
 };
-const prepareDocumentsView = async (state, dispatch) => {
+export const prepareDocumentsView = async (state, dispatch) => {
   let documentsPreview = [];
 
   // Get all documents from response
@@ -221,6 +229,8 @@ const prepareDocumentsView = async (state, dispatch) => {
     return doc;
   });
   dispatch(prepareFinalObject("documentsPreview", documentsPreview));
+  dispatch(prepareFinalObject("FireNOCs[0].fireNOCDetails.additionalDetail.documents", documentsPreview));
+
 };
 
 const prepareUoms = (state, dispatch) => {
@@ -328,15 +338,15 @@ const setSearchResponse = async (
     state,
     dispatch
   );
-  if(status !== "INITIATED"){
-    
-     set(
-        action,
-        "screenConfig.components.div.children.headerDiv.children.helpSection.children",
-        printCont
-      )
-  }  
+  if (status !== "INITIATED") {
 
+    set(
+      action,
+      "screenConfig.components.div.children.headerDiv.children.helpSection.children",
+      printCont
+    )
+  }
+  generateBill(dispatch, applicationNumber, tenantId, status);
 };
 
 const screenConfig = {
@@ -350,44 +360,15 @@ const screenConfig = {
         "FireNOCs[0].fireNOCDetails.applicationNumber"
       );
     const tenantId = getQueryArg(window.location.href, "tenantId");
+    loadUlbLogo(tenantId);
     generateBill(dispatch, applicationNumber, tenantId);
-    // const queryObject1 = [
-    //   { key: "tenantId", value: tenantId },
-    //   { key: "consumerCode", value: applicationNumber },
-    //   { key: "services", value: "FIRENOC" }
-    // ];
-
-    // searchBill(dispatch, applicationNumber, tenantId);
-    //  createBill(queryObject1,dispatch)
-    //  .then(payload=>{
-    //   console.log("2323232>>>....billData",payload);
-    //   let billData = get(payload, "Bill[0]") ;
-    //   console.log("2323232>>>....billData",billData);
-    //   if (billData) {
-    //     const estimateData = 
-    //     (billData);
-    //     estimateData &&
-    //       estimateData.length &&
-    //       dispatch(
-    //         prepareFinalObject(
-    //           "applyScreenMdmsData.estimateCardData",
-    //           estimateData
-    //         )
-    //       );
-    //       console.log("asdsasd",estimateData);
-    //   }
-
-    // })
-    
-    setSearchResponse(action,state, dispatch, applicationNumber, tenantId);
- 
-
     const queryObject = [
       { key: "tenantId", value: tenantId },
       { key: "businessServices", value: "FIRENOC" }
     ];
     setBusinessServiceDataToLocalStorage(queryObject, dispatch);
 
+    setSearchResponse(action, state, dispatch, applicationNumber, tenantId);
     // Hide edit buttons
     set(
       action,
@@ -448,7 +429,7 @@ const screenConfig = {
                 align: "right"
               }
             }
-            
+
           }
         },
         taskStatus: {

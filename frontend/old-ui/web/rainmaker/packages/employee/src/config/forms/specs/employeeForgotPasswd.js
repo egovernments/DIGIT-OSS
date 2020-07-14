@@ -1,5 +1,3 @@
-import commonConfig from "config/common.js";
-
 const formConfig = {
   name: "employeeForgotPasswd",
   fields: {

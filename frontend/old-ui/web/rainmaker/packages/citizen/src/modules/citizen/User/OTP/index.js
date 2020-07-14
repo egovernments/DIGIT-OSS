@@ -12,7 +12,6 @@ import commonConfig from "config/common";
 import { getQueryArg } from "egov-ui-kit/utils/commons";
 import get from "lodash/get";
 import { localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
-import { TimeLine } from "egov-ui-kit/components";
 
 const OTPFormHOC = formHoc({ formKey: "otp" })(OTPForm);
 

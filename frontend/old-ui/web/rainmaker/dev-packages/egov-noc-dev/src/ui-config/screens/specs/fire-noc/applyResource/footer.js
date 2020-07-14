@@ -124,6 +124,7 @@ const callBackForNext = async (state, dispatch) => {
   // console.log(activeStep);
   let isFormValid = true;
   let hasFieldToaster = false;
+  let isMultiownerSelected=false;
 
   if (activeStep === 1) {
     let isPropertyLocationCardValid = validateFields(
@@ -232,6 +233,16 @@ const callBackForNext = async (state, dispatch) => {
     } else if (selectedApplicantType.includes("MULTIPLEOWNERS")) {
       isSingleApplicantCardValid = true;
       isInstitutionCardValid = true;
+      let ownersArray = get(
+        state,
+        "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.applicantDetails.owners",
+        []
+      );
+      let ownersArraylength=ownersArray&&ownersArray.length;
+      if(ownersArraylength<2){
+        isMultiownerSelected=true;
+        isFormValid=false;
+      }
     } else {
       isMultipleApplicantCardValid = true;
       isInstitutionCardValid = true;
@@ -268,7 +279,16 @@ const callBackForNext = async (state, dispatch) => {
         responseStatus = get(response, "status", "");
       }
       responseStatus === "success" && changeStep(state, dispatch);
-    } else if (hasFieldToaster) {
+    }
+    else if(isMultiownerSelected){
+      let errorMessage = {
+        labelName: "Please add all the owner details!",
+        labelKey: "ERR_FILL_MULTIPLE_OWNER"
+      };
+      dispatch(toggleSnackbar(true, errorMessage, "warning"));
+
+    }
+    else if (hasFieldToaster) {
       let errorMessage = {
         labelName: "Please fill all mandatory fields and upload the documents!",
         labelKey: "ERR_UPLOAD_MANDATORY_DOCUMENTS_TOAST"

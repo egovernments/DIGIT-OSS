@@ -11,6 +11,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { propertySearch, applicationSearch } from "./functions";
+// import "./index.css";
 
 
 export const resetFields = (state, dispatch) => {
@@ -109,32 +110,42 @@ export const searchPropertyDetails = getCommonCard({
     labelKey: "PT_HOME_SEARCH_RESULTS_DESC"
   }),
   ulbCityContainer: getCommonContainer({
-    ulbCity: getSelectField({
-      label: {
-        labelName: "ULB",
-        labelKey: "PT_ULB_CITY"
-      },
-      placeholder: {
-        labelName: "Select ULB",
-        labelKey: "PT_ULB_CITY_PLACEHOLDER"
-      },
-
-      localePrefix: {
-        moduleName: "TENANT",
-        masterName: "TENANTS"
-      },
-      jsonPath: "searchScreen.tenantId",
-      sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
-      required: true,
+    ulbCity: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-pt",
+      componentPath: "AutosuggestContainer",
       props: {
+        className: "autocomplete-dropdown",
+        suggestions: [],
+        label: {
+          labelName: "ULB",
+          labelKey: "PT_ULB_CITY"
+        },
+        placeholder: {
+          labelName: "Select ULB",
+          labelKey: "PT_ULB_CITY_PLACEHOLDER"
+        },
+        localePrefix: {
+          moduleName: "TENANT",
+          masterName: "TENANTS"
+        },
+        jsonPath: "searchScreen.tenantId",
+        sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
+        labelsFromLocalisation: true,
         required: true,
         disabled: process.env.REACT_APP_NAME === "Citizen" ? false : true,
+        inputLabelProps: {
+          shrink: true
+        }
       },
+      required: true,
+      jsonPath: "searchScreen.tenantId",
+      sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
       gridDefination: {
         xs: 12,
         sm: 4
       }
-    }),
+    },
     ownerMobNo: getTextField({
       label: {
         labelName: "Owner Mobile No.",

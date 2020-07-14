@@ -5,9 +5,6 @@ import PropTypes from "prop-types";
 import cloneDeep from "lodash/cloneDeep";
 import { connect } from "react-redux";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
-import { getLocaleLabels, appendModulePrefix } from "egov-ui-framework/ui-utils/commons";
-import { getLocalization } from "egov-ui-kit/utils/localStorageUtils";
-// import "./index.css";
 
 class Table extends React.Component {
   state = {
@@ -21,10 +18,11 @@ class Table extends React.Component {
       overrides: {
         MUIDataTableBodyCell: {
           root: {
-            "&:nth-child(2)": {
-              color: "#2196F3"
-              //fontSize: 14
-            }
+            // "&:nth-child(2)": {
+            //   color: "#2196F3"
+            //   //fontSize: 14
+            // }
+            boxShadow: "none"
           }
         },
         MuiTableCell: {
@@ -36,8 +34,14 @@ class Table extends React.Component {
             color: "rgba(0, 0, 0, 0.8700000048)",
             fontWeight: 700
           }
-        }
-      }
+        },
+        MuiToolbar: { 
+          root: { 
+            display: "none" 
+          } 
+        } 
+      },
+      shadows: ["none"]
     });
 
   formatData = (data, columns) => {

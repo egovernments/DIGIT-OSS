@@ -1,16 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Row, Col, Table } from "react-bootstrap";
+import { Row } from "react-bootstrap";
 import Grid from '@material-ui/core/Grid';
-import { Card, Button } from "components";
-import { CardHeader, CardText } from "material-ui/Card";
-import { brown500, red500, white, orange800 } from "material-ui/styles/colors";
+import { Card } from "components";
 import RaisedButton from "material-ui/RaisedButton";
 import { commonApiPost } from "egov-ui-kit/utils/api";
 import ShowField from "./showField";
 import get from "lodash/get";
-//import { translate } from "../../common/common";
-import { translate } from "./commons/common";
 import Label from "egov-ui-kit/utils/translationNode";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import jp from "jsonpath";
@@ -63,7 +59,7 @@ class ShowForm extends Component {
   };
 
   checkForDependentSource = async (fieldIndex, field, selectedValue) => {
-    const { pattern: fieldPattern, mapping, type: fieldType, name: targetProperty, isMandatory, displayOnly } = field;
+    const { pattern: fieldPattern, type: fieldType, name: targetProperty, isMandatory, displayOnly } = field;
     const { metaData, setMetaData, handleChange } = this.props;
     let splitArray = fieldPattern.split("?");
     let url = splitArray[0];
@@ -134,7 +130,7 @@ class ShowForm extends Component {
     }
   };
   handleChange = (e, property, isRequired, pattern) => {
-    const { metaData, setMetaData, handleChange, searchForm } = this.props;
+    const { metaData, setMetaData, handleChange } = this.props;
     const selectedValue = e.target.value;
     if (property === "fromDate" || property === "toDate") {
       this.handleDateSelect(metaData, e, property);
@@ -155,7 +151,6 @@ class ShowForm extends Component {
         for (var i = 0; i < metaData.reportDetails.searchParams.length; i++) {
           const field = metaData.reportDetails.searchParams[i];
           const defaultValue = field.defaultValue;
-          const fieldType = field.type;
           const dependantProperty = field.name;
 
           if (dependantProperty === property) {
@@ -277,7 +272,6 @@ class ShowForm extends Component {
 
   componentWillReceiveProps(nextProps) {
     let { changeButtonText, clearReportHistory, needDefaultSearch } = this.props;
-    let { dateError } = this.state;
 
     if (!_.isEqual(this.props.searchForm, nextProps.searchForm)) {
       if (this.state.getResults) {
@@ -290,8 +284,6 @@ class ShowForm extends Component {
       this.setState({
         reportName: nextProps.metaData.reportDetails.reportName,
       });
-      let { reportName } = this.state;
-
       this.setState({ moduleName: this.props.match.params.moduleName });
 
       let { setForm } = this.props;
@@ -365,15 +357,9 @@ class ShowForm extends Component {
       showTable,
       changeButtonText,
       setReportResult,
-      searchForm,
-      metaData, 
       setFlag,
-      setSearchParams,
-      reportHistory,
-      reportIndex,
       pushReportHistory,
-      clearReportHistory,
-      decreaseReportIndex,
+      clearReportHistory
     } = this.props;
     let today = new Date();
     let date = today.getDate() + "/" + (today.getMonth() + 1) + "/" + today.getFullYear();
@@ -383,13 +369,9 @@ class ShowForm extends Component {
     var tenantId = getTenantId() ? getTenantId() : commonConfig.tenantId;
     let self = this;
     if (!isDrilldown) {
-      const displayOnlyFields = this.getDisplayOnlyFields(metaData);
-
       let searchParams = [];
-
       clearReportHistory();
       let resulturl = getResultUrl(moduleName,rptName);
-      let response =
         resulturl &&
         commonApiPost(resulturl, {}, { tenantId: tenantId, reportName: rptName || this.state.reportName, searchParams }).then(
           function(response) {
@@ -508,7 +490,6 @@ class ShowForm extends Component {
 
       clearReportHistory();
       let resulturl = getResultUrl(this.state.moduleName,this.state.reportName);
-      let response =
         resulturl &&
         commonApiPost(resulturl, {}, { tenantId: tenantId, reportName: this.state.reportName, searchParams }).then(
           function(response) {
@@ -526,7 +507,6 @@ class ShowForm extends Component {
       if (_.isEmpty(JSON.parse(localStorageGet("searchCriteria")))) {
         let reportData = reportHistory[reportIndex - 1 - 1];
         let resulturl = getResultUrl(this.state.moduleName,this.state.reportName);
-        let response =
           resulturl &&
           commonApiPost(resulturl, {}, { ...reportData }).then(
             function(response) {
@@ -544,7 +524,6 @@ class ShowForm extends Component {
       } else {
         var reportData = JSON.parse(localStorageGet("searchCriteria"));
         let resulturl = getResultUrl(localStorageGet("moduleName"));
-        let response =
           resulturl &&
           commonApiPost(resulturl, {}, { ...reportData }).then(
             function(response) {

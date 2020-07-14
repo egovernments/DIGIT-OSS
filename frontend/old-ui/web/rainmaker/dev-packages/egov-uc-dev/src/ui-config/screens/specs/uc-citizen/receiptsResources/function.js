@@ -60,7 +60,7 @@ export const searchApiCall = async (state, dispatch) => {
     );
   } else if (
     Object.keys(searchScreenObject).length == 0 ||
-    Object.values(searchScreenObject).every(x => x === "")
+    checkEmptyFields(searchScreenObject)
   ) {
     dispatch(
       toggleSnackbar(
@@ -82,10 +82,10 @@ export const searchApiCall = async (state, dispatch) => {
   } else {
     //  showHideProgress(true, dispatch);
     for (var key in searchScreenObject) {
-      if (searchScreenObject.hasOwnProperty(key) && key === "businessCodes") {
+      if (searchScreenObject.hasOwnProperty(key) && key === "businessServices" && searchScreenObject['businessServices']) {
         queryObject.push({ key: key, value: searchScreenObject[key] });
       } else if (
-        searchScreenObject.hasOwnProperty(key) &&
+        searchScreenObject.hasOwnProperty(key) && searchScreenObject[key] &&
         searchScreenObject[key].trim() !== ""
       ) {
         if (key === "fromDate") {
@@ -170,3 +170,18 @@ const showHideTable = (booleanHideOrShow, dispatch) => {
     )
   );
 };
+
+const checkEmptyFields = (searchScreenObject) => {
+  const businessServices = get(searchScreenObject, 'businessServices', null)
+  const mobileNumber = get(searchScreenObject, 'mobileNumber', null)
+  const receiptNumbers = get(searchScreenObject, 'receiptNumbers', null)
+  if (checkEmpty(businessServices) && checkEmpty(mobileNumber) && checkEmpty(receiptNumbers)) { return true; }
+  return false;
+}
+const checkEmpty = (value) => {
+  value = typeof (value) == "string" ? value.trim() : value;
+  if (value && value != null && value.length > 0) {
+    return false;
+  }
+  return true;
+}

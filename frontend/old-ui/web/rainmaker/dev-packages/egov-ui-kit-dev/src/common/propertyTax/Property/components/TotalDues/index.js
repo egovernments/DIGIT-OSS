@@ -42,7 +42,7 @@ class TotalDues extends React.Component {
   }
 
   render() {
-    const { totalBillAmountDue, consumerCode, tenantId, history } = this.props;
+    const { totalBillAmountDue, consumerCode, tenantId, isAdvanceAllowed, history } = this.props;
     const envURL = "/egov-common/pay";
     const { payAction } = this;
     const data = { value: "PT_TOTALDUES_TOOLTIP", key: "PT_TOTALDUES_TOOLTIP" };
@@ -68,7 +68,6 @@ class TotalDues extends React.Component {
         />
         <div className="col-xs-6 col-sm-3 flex-child" style={{ minHeight: "60px" }}>
         </div>
-        {totalBillAmountDue > 0 && (
           <div className="col-xs-6 col-sm-3 flex-child-button">
             {/* <TotalDuesButton
               labelText="PT_TOTALDUES_VIEW"
@@ -78,8 +77,7 @@ class TotalDues extends React.Component {
               }}
             /> */}
           </div>
-        )}
-        {totalBillAmountDue > 0 && (
+        {(totalBillAmountDue > 0 || (totalBillAmountDue === 0 && isAdvanceAllowed)) && (
           <div id="pt-flex-child-button" className="col-xs-12 col-sm-3 flex-child-button">
             <div style={{ float: "right" }}>
               <TotalDuesButton

@@ -6,7 +6,6 @@ import { UploadDrawer } from "modules/common";
 import ProfileForm from "./components/ProfileForm";
 import { Screen } from "modules/common";
 import img from "egov-ui-kit/assets/images/download.png";
-import { isImage } from "egov-ui-kit/utils/commons";
 import "./index.css";
 
 const formKey = "profileEmployee";

@@ -17,7 +17,11 @@ const clickHereStyles = {
 
 function AddLinkForProperty(props) {
   const { url } = props;
-  let link = window.location.origin+"/"+process.env.REACT_APP_NAME.toLowerCase()+`/pt-common-screens/propertySearch?redirectUrl=${url}`
+  let link = window.location.origin;
+  if(process.env.NODE_ENV !== "development"){
+    link += "/"+process.env.REACT_APP_NAME.toLowerCase()
+  }
+  link += `/pt-common-screens/propertySearch?redirectUrl=${url}`
   return (
     <div style={styles}>
       <LabelContainer

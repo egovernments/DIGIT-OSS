@@ -8,7 +8,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getSearchResults, getSearchResultsForSewerage, getDescriptionFromMDMS } from "../../../../ui-utils/commons";
+import { getSearchResults, getSearchResultsForSewerage, getDescriptionFromMDMS, serviceConst } from "../../../../ui-utils/commons";
 
 import { connectionDetailsFooter } from "./connectionDetailsResource/connectionDetailsFooter";
 import { getServiceDetails } from "./connectionDetailsResource/service-details";
@@ -23,7 +23,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
    * This methods holds the api calls and the responses of fetch bill and search connection for both water and sewerage service
    */
   let queryObject = [{ key: "tenantId", value: tenantId }, { key: "connectionNumber", value: connectionNumber }];
-  if (service === "SEWERAGE") {
+  if (service === serviceConst.SEWERAGE) {
     let payloadData = await getSearchResultsForSewerage(queryObject, dispatch);
     if (payloadData !== null && payloadData !== undefined && payloadData.SewerageConnections.length > 0) {
       let propTenantId = payloadData.SewerageConnections[0].property.tenantId.split(".")[0];
@@ -60,7 +60,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
 
       dispatch(prepareFinalObject("WaterConnection[0]", payloadData.SewerageConnections[0]))
     }
-  } else if (service === "WATER") {
+  } else if (service === serviceConst.WATER) {
     let payloadData = await getSearchResults(queryObject);
     if (payloadData !== null && payloadData !== undefined && payloadData.WaterConnection.length > 0) {
       payloadData.WaterConnection[0].service = service;

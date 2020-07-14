@@ -1,25 +1,9 @@
 import {
   getCommonGrayCard,
   getCommonSubHeader,
-  getLabel,
+  getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { gotoApplyWithStep } from "../../utils/index";
 import { changeStep } from "../applyResource/footer";
-
-const getHeader = (label) => {
-  return {
-    uiFramework: "custom-molecules-local",
-    moduleName: "egov-bpa",
-    componentPath: "DividerWithLabel",
-    props: {
-      className: "hr-generic-divider-label",
-      labelProps: {},
-      dividerProps: {},
-      label,
-    },
-    type: "array",
-  };
-};
 
 export const applyDocSummary = getCommonGrayCard({
   header: {
@@ -73,16 +57,13 @@ export const applyDocSummary = getCommonGrayCard({
       },
     },
   },
-
-  DocumentSummaryContainer: getCommonGrayCard({
-    body: {
-      uiFramework: "custom-containers-local",
-      moduleName: "egov-bpa",
-      componentPath: "DocumentSummaryContainer",
-      props: {
-        sourceJsonPath: "documentDetailsPreview",
-        className: "noc-review-documents",
-      },
+  DocumentSummaryContainer: {
+    uiFramework: "custom-containers-local",
+    moduleName: "egov-bpa",
+    componentPath: "DocumentSummaryContainer",
+    props: {
+      sourceJsonPath: "documentDetailsPreview",
+      className: "noc-review-documents",
     },
-  })
+  }
 });

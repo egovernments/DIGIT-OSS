@@ -1,7 +1,8 @@
 import { getCommonCard, getCommonContainer, getCommonHeader, getLabelWithValue } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { generatePdfFromDiv } from "egov-ui-kit/utils/PTCommon";
+import { loadUlbLogo } from "egov-ui-kit/utils/pdfUtils/generatePDF";
+import { generatePTMAcknowledgement } from "egov-ui-kit/utils/pdfUtils/generatePTMAcknowledgement";
 import get from "lodash/get";
 import set from "lodash/set";
 import { getSearchResults } from "../../../../ui-utils/commons";
@@ -56,7 +57,10 @@ const downloadprintMenu = (state, applicationNumber, tenantId, purpose, moduleNa
   const applicationDownloadObject = {
     label: { labelName: "PT Application", labelKey: "PT_APPLICATION" },
     link: () => {
-      generatePdfFromDiv("download", applicationNumber, ".print-mutation-application-pdf")
+      generatePTMAcknowledgement(get(
+        state,
+        "screenConfiguration.preparedFinalObject", {}), `mutation-acknowledgement-${applicationNumber}.pdf`);
+      // generatePdfFromDiv("download", applicationNumber, ".print-mutation-application-pdf")
 
     },
     leftIcon: "assignment"
@@ -68,7 +72,10 @@ const downloadprintMenu = (state, applicationNumber, tenantId, purpose, moduleNa
       // const documents = LicensesTemp[0].reviewDocData;
       // set(Licenses[0],"additionalDetails.documents",documents)
       // downloadAcknowledgementForm(Licenses,'print');
-      generatePdfFromDiv("print", applicationNumber, ".print-mutation-application-pdf")
+      generatePTMAcknowledgement(get(
+        state,
+        "screenConfiguration.preparedFinalObject", {}), 'print');
+      // generatePdfFromDiv("print", applicationNumber, ".print-mutation-application-pdf")
 
     },
     leftIcon: "assignment"
@@ -110,7 +117,7 @@ const downloadprintMenu = (state, applicationNumber, tenantId, purpose, moduleNa
             label: { labelName: "DOWNLOAD", labelKey: "TL_DOWNLOAD" },
             leftIcon: "cloud_download",
             rightIcon: "arrow_drop_down",
-            props: { variant: "outlined", style: { height: "60px", color: "#FE7A51", visibility,marginRight:"5px" }, className: "pt-download-button" },
+            props: { variant: "outlined", style: { height: "60px", color: "#FE7A51", visibility, marginRight: "5px" }, className: "pt-download-button" },
             menu: downloadMenu
           }
         }
@@ -777,15 +784,15 @@ const setApplicationData = async (state, dispatch, applicationNumber, tenant) =>
   }
 
   dispatch(prepareFinalObject("Property", property));
-  dispatch(prepareFinalObject("documentsUploadRedux", property.documents));
+  // dispatch(prepareFinalObject("documentsUploadRedux", property.documents));
   prepareDocumentsView(state, dispatch);
-
   // prepareUoms(state, dispatch);
   // await loadPdfGenerationData(applicationNumber, tenantId);
   // setDownloadMenu(state, dispatch, tenantId, applicationNumber);
   dispatch(prepareFinalObject("Properties", get(response, "Properties", [])));
 };
 export const setData = async (state, dispatch, applicationNumber, tenantId) => {
+
   const response = await getSearchResults([
     {
       key: "tenantId",
@@ -793,9 +800,77 @@ export const setData = async (state, dispatch, applicationNumber, tenantId) => {
     },
     { key: "acknowledgementIds", value: applicationNumber }
   ]);
+  const properties = get(response, "Properties", []);
+  const propertyId = get(response, "Properties[0].propertyId", []);
 
+  const auditResponse = await getSearchResults([
+    {
+      key: "tenantId",
+      value: tenantId
+    },
+    { key: "propertyIds", value: propertyId }, {
+      key: "audit",
+      value: true
+    }
+  ]);
+  let property = (properties && properties.length > 0 && properties[0]) || {};
+
+
+  if (property && property.owners && property.owners.length > 0) {
+    let ownersTemp = [];
+    let owners = [];
+    property.owners.map(owner => {
+      owner.documentUid = owner.documents ? owner.documents[0].documentUid : "NA";
+      owner.documentType = owner.documents ? owner.documents[0].documentType : "NA";
+      if (owner.status == "ACTIVE") {
+        ownersTemp.push(owner);
+      } else {
+        owners.push(owner);
+      }
+    });
+    property.ownersInit = owners;
+    property.ownersTemp = ownersTemp;
+  }
+  property.ownershipCategoryTemp = property.ownershipCategory;
+  property.ownershipCategoryInit = 'NA';
+  // Set Institution/Applicant info card visibility
+  if (
+    get(
+      response,
+      "Properties[0].ownershipCategory",
+      ""
+    ).startsWith("INSTITUTION")
+  ) {
+    property.institutionTemp = property.institution;
+
+
+  }
+
+
+  let transfereeOwners = get(
+    property,
+    "ownersTemp", []
+  );
+  let transferorOwners = get(
+    property,
+    "ownersInit", []
+  );
+
+  if (auditResponse && Array.isArray(get(auditResponse, "Properties", [])) && get(auditResponse, "Properties", []).length > 0) {
+    const propertiesAudit = get(auditResponse, "Properties", []);
+    const previousActiveProperty = propertiesAudit.filter(property => property.status == 'ACTIVE').sort((x, y) => y.auditDetails.lastModifiedTime - x.auditDetails.lastModifiedTime)[0];
+
+    property.ownershipCategoryInit = previousActiveProperty ? previousActiveProperty.ownershipCategory : "";
+    if (previousActiveProperty && property.ownershipCategoryInit && property.ownershipCategoryInit.startsWith("INSTITUTION")) {
+      property.institutionInit = previousActiveProperty.institution;
+    }
+  }
+
+
+  // auditResponse
+  dispatch(prepareFinalObject("Property", property));
+  dispatch(prepareFinalObject("documentsUploadRedux", property.documents));
   dispatch(prepareFinalObject("Properties", get(response, "Properties", [])));
-
 }
 const screenConfig = {
   uiFramework: "material-ui",
@@ -819,6 +894,7 @@ const screenConfig = {
     const moduleName = getQueryArg(window.location.href, "moduleName");
     const secondNumber = getQueryArg(window.location.href, "secondNumber");
     const tenant = getQueryArg(window.location.href, "tenantId");
+    loadUlbLogo(tenant);
     setData(state, dispatch, applicationNumber, tenant);
     setApplicationData(state, dispatch, applicationNumber, tenant);
     const data = getAcknowledgementCard(

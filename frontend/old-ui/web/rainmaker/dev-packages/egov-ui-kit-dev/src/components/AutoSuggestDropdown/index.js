@@ -95,7 +95,7 @@ class AutoSuggestDropdown extends React.Component {
     } else {
       list = dataSource;
     }
-    const items = sortBy(list, ["label"]);
+    const items = list && list.length > 0 && list.sort((a,b)=>a.label - b.label);
     return (
       <div style={{ display: "flex", position: "relative", width: "100%" }}>
         <AutoComplete
@@ -109,7 +109,7 @@ class AutoSuggestDropdown extends React.Component {
           searchText={searchText}
           underlineDisabledStyle={underlineDisabledStyle}
           dataSource={(items && [...items]) || []}
-          menuStyle={{ maxHeight: "150px", overflowY: "hidden" }}
+          menuStyle={{ maxHeight: "150px", overflowY: "auto", overflowX: "auto"}}
           dataSourceConfig={{ text: "label", value: "value" }}
           onNewRequest={onChange}
           onUpdateInput={onChangeText}

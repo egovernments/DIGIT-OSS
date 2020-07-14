@@ -69,7 +69,7 @@ export const searchApiCall = async (state, dispatch) => {
         searchScreenObject.hasOwnProperty(key) &&
         searchScreenObject[key] === ""
       ) {
-        searchScreenObject[key];
+        delete searchScreenObject[key];
       }
     }
     let serviceObject = get(
@@ -78,7 +78,6 @@ export const searchApiCall = async (state, dispatch) => {
     ).filter(item => item.code === searchScreenObject.businesService);
 
     searchScreenObject.url = serviceObject&&serviceObject[0]&&serviceObject[0].billGineiURL;
-    searchScreenObject.billActive="ACTIVE";
     searchScreenObject.tenantId = process.env.REACT_APP_NAME === "Employee" ?  getTenantId() : JSON.parse(getUserInfo()).permanentCity;
     const responseFromAPI = await getGroupBillSearch(dispatch,searchScreenObject);
     const bills = (responseFromAPI && responseFromAPI.Bills) || [];

@@ -128,7 +128,11 @@ const moveToSuccess = (dispatch, receiptNumber) => {
   const status = "success";
   const appendUrl =
     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
-  const url = `${appendUrl}/egov-common/acknowledgement?status=${status}&consumerCode=${consumerCode}&tenantId=${tenantId}&receiptNumber=${receiptNumber}&businessService=${businessService}`;
+  let moduleName = "egov-common";
+  if (businessService && businessService.indexOf("BPA") > -1) {
+    moduleName = "egov-bpa"	
+  }
+  const url = `${appendUrl}/${moduleName}/acknowledgement?status=${status}&consumerCode=${consumerCode}&tenantId=${tenantId}&receiptNumber=${receiptNumber}&businessService=${businessService}&purpose=${"pay"}`;
   const ackSuccessUrl = isPublicSearch() ? `/withoutAuth${url}` : url;
   dispatch(
     setRoute(ackSuccessUrl)

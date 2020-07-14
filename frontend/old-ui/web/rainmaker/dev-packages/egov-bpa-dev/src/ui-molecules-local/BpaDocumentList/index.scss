@@ -1,18 +1,47 @@
 
-.upload_btn  {
-    width: 100%;    
-  }
-.upload_btn > div > div > div {
-    width: 28%;
+.bpa_doc_upload_btn,
+.preview_upload_btn {
+  width: 100%; 
+}
+.bpa_doc_upload_btn > div > div > div {
     float: left;
+    margin-right: 20px;
+  }
+  .bpa_doc_upload_btn > div > div {
+    padding-left: 8% !important;
+  }
+  // @media only screen and (max-width: 1400px) {
+  //   .bpa_doc_upload_btn > div > div > div {
+  //   width: 19%;
+  //   }
+  //   .preview_upload_btn > div > div > div {
+  //     width: 19%;
+  //   }
+  // }
+  // @media only screen and (min-width: 1401px) {
+  //   .bpa_doc_upload_btn > div > div > div {
+  //   width: 15%;
+  //   }
+  //   .preview_upload_btn > div > div > div {
+  //     width: 15%;
+  //   }
+  // }
+  .preview_upload_btn > div > div > div {
+    float: left;
+    margin-right: 20px;
+  }
+  .preview_upload_btn > div > div {
+    padding-left: 0% !important;
   }
 
-  .upload_btn > div > div > div > button{
+  .bpa_doc_upload_btn > div > div > div > button,
+  .preview_upload_btn > div > div > div > button{
     min-width: 33% !important;
     margin-bottom:10px;
   }
  
-  .upload_btn>div label {
+  .bpa_doc_upload_btn>div label,
+  .preview_upload_btn>div label {
     position: absolute;
     right: 0px;
     top: 0px;

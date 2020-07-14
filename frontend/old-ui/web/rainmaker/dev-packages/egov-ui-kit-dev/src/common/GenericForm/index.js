@@ -32,7 +32,7 @@ const GenericForm = ({ form, handleFieldChange, cardTitle, formKey, containerSty
                       : { height: 80 }
                   }
                   className={
-                    fields[fieldKey].numcols ? (fields[fieldKey].hideField ? "hidden-field" : `col-sm-${fields[fieldKey].numcols}`) : `col-sm-6`
+                    fields[fieldKey].numcols ? (fields[fieldKey].hideField ? "hidden-field" : `col-sm-${fields[fieldKey].numcols} ${fields[fieldKey].id}`) : `col-sm-6 ${fields[fieldKey].id}`
                   }
                 >
                   <Field

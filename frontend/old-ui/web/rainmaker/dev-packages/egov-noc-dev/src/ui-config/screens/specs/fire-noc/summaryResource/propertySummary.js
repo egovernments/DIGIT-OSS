@@ -33,63 +33,63 @@ const getHeader = label => {
     type: "array"
   };
 };
-
+export const propertySummaryDetails={
+  propertyType: getLabelWithValue(
+    {
+      labelName: "Property Type",
+      labelKey: "NOC_PROPERTY_TYPE_LABEL"
+    },
+    {
+      jsonPath: "FireNOCs[0].fireNOCDetails.noOfBuildings",
+      callBack: checkValueForNA
+    }
+  ),
+  buildingName: getLabelWithValue(
+    {
+      labelName: "Name Of Building",
+      labelKey: "NOC_NAME_OF_BUILDING_LABEL"
+    },
+    {
+      jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].name",
+      callBack: checkValueForNA
+    }
+  ),
+  buildingUsageType: getLabelWithValue(
+    {
+      labelName: "Building Usage Type",
+      labelKey: "NOC_PROPERTY_DETAILS_BUILDING_USAGE_TYPE_LABEL"
+    },
+    {
+      jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].usageType",
+      callBack: test,
+      localePrefix: {
+        moduleName: "firenoc",
+        masterName: "BuildingType"
+      }
+    }
+  ),
+  buildingUsageSubType: getLabelWithValue(
+    {
+      labelName: "Building Usage Subtype",
+      labelKey: "NOC_PROPERTY_DETAILS_BUILDING_USAGE_SUBTYPE_LABEL"
+    },
+    {
+      jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].usageType",
+      callBack: checkValueForNA,
+      localePrefix: {
+        moduleName: "firenoc",
+        masterName: "BuildingType"
+      }
+    }
+  )
+}
 const propertyDetails = {
   uiFramework: "custom-containers",
   componentPath: "MultiItem",
   props: {
     className: "noc-summary",
     scheama: getCommonGrayCard({
-      propertyContainer: getCommonContainer({
-        propertyType: getLabelWithValue(
-          {
-            labelName: "Property Type",
-            labelKey: "NOC_PROPERTY_TYPE_LABEL"
-          },
-          {
-            jsonPath: "FireNOCs[0].fireNOCDetails.noOfBuildings",
-            callBack: checkValueForNA
-          }
-        ),
-        buildingName: getLabelWithValue(
-          {
-            labelName: "Name Of Building",
-            labelKey: "NOC_NAME_OF_BUILDING_LABEL"
-          },
-          {
-            jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].name",
-            callBack: checkValueForNA
-          }
-        ),
-        buildingUsageType: getLabelWithValue(
-          {
-            labelName: "Building Usage Type",
-            labelKey: "NOC_PROPERTY_DETAILS_BUILDING_USAGE_TYPE_LABEL"
-          },
-          {
-            jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].usageType",
-            callBack: test,
-            localePrefix: {
-              moduleName: "firenoc",
-              masterName: "BuildingType"
-            }
-          }
-        ),
-        buildingUsageSubType: getLabelWithValue(
-          {
-            labelName: "Building Usage Subtype",
-            labelKey: "NOC_PROPERTY_DETAILS_BUILDING_USAGE_SUBTYPE_LABEL"
-          },
-          {
-            jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].usageType",
-            callBack: checkValueForNA,
-            localePrefix: {
-              moduleName: "firenoc",
-              masterName: "BuildingType"
-            }
-          }
-        )
-      })
+      propertyContainer: getCommonContainer(propertySummaryDetails)
     }),
     items: [],
     hasAddItem: false,
@@ -101,100 +101,100 @@ const propertyDetails = {
   },
   type: "array"
 };
-
+export const propertyLocationSummaryDetail={
+  propertyId: getLabelWithValue(
+    {
+      labelName: "Property ID",
+      labelKey: "NOC_PROPERTY_ID_LABEL"
+    },
+    { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.propertyId", callBack: checkValueForNA }
+  ),
+  city: getLabelWithValue(
+    {
+      labelName: "City",
+      labelKey: "NOC_PROPERTY_CITY_LABEL"
+    },
+    {
+      jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",
+      callBack: checkValueForNA,
+      localePrefix: {
+        moduleName: "TENANT",
+        masterName: "TENANTS"
+      }
+    }
+  ),
+  doorHouseNo: getLabelWithValue(
+    {
+      labelName: "Door/House No.",
+      labelKey: "NOC_SUMMARY_PROPERTY__LOCATION_DOOR_HOUSE_NO_LABEL"
+    },
+    { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.doorNo", callBack: checkValueForNA }
+  ),
+  buildingCompanyName: getLabelWithValue(
+    {
+      labelName: "Building/Company Name",
+      labelKey: "NOC_PROPERTY_DETAILS_BLDG_NAME_LABEL"
+    },
+    {
+      jsonPath:
+        "FireNOCs[0].fireNOCDetails.propertyDetails.address.buildingName", callBack: checkValueForNA
+    }
+  ),
+  streetName: getLabelWithValue(
+    {
+      labelName: "Street Name",
+      labelKey: "NOC_PROPERTY_DETAILS_SRT_NAME_LABEL"
+    },
+    { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.street", callBack: checkValueForNA }
+  ),
+  mohalla: getLabelWithValue(
+    {
+      labelName: "Mohalla",
+      labelKey: "NOC_PROPERTY_DETAILS_MOHALLA_LABEL"
+    },
+    {
+      jsonPath:
+        "FireNOCs[0].fireNOCDetails.propertyDetails.address.locality.code",
+      callBack: value => {
+        return `${getTransformedLocale(tenantId)}_REVENUE_${value}`;
+      }
+    }
+  ),
+  pincode: getLabelWithValue(
+    {
+      labelName: "Pincode",
+      labelKey: "NOC_PROPERTY_DETAILS_PIN_LABEL"
+    },
+    { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.pincode", callBack: checkValueForNA }
+  ),
+  locationOnMap: getLabelWithValue(
+    {
+      labelName: "Location On Map",
+      labelKey: "NOC_PROPERTY_DETAILS_GIS_CORD_LABEL"
+    },
+    {
+      jsonPath:
+        "FireNOCs[0].fireNOCDetails.propertyDetails.address.locality.latitude",
+        callBack: checkValueForNA
+    }
+  ),
+  applicableFireStation: getLabelWithValue(
+    {
+      labelName: "Applicable Fire Station",
+      labelKey: "NOC_PROPERTY_DETAILS_FIRESTATION_LABEL"
+    },
+    {
+      jsonPath: "FireNOCs[0].fireNOCDetails.firestationId",
+      callBack: checkValueForNA,
+      localePrefix: {
+        moduleName: "firenoc",
+        masterName: "FireStations"
+      }
+    }
+  )
+}
 const propertyLocationDetails = getCommonGrayCard({
-  propertyLocationContainer: getCommonContainer({
-    propertyId: getLabelWithValue(
-      {
-        labelName: "Property ID",
-        labelKey: "NOC_PROPERTY_ID_LABEL"
-      },
-      { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.propertyId", callBack: checkValueForNA }
-    ),
-    city: getLabelWithValue(
-      {
-        labelName: "City",
-        labelKey: "NOC_PROPERTY_CITY_LABEL"
-      },
-      {
-        jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",
-        callBack: checkValueForNA,
-        localePrefix: {
-          moduleName: "TENANT",
-          masterName: "TENANTS"
-        }
-      }
-    ),
-    doorHouseNo: getLabelWithValue(
-      {
-        labelName: "Door/House No.",
-        labelKey: "NOC_SUMMARY_PROPERTY__LOCATION_DOOR_HOUSE_NO_LABEL"
-      },
-      { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.doorNo", callBack: checkValueForNA }
-    ),
-    buildingCompanyName: getLabelWithValue(
-      {
-        labelName: "Building/Company Name",
-        labelKey: "NOC_PROPERTY_DETAILS_BLDG_NAME_LABEL"
-      },
-      {
-        jsonPath:
-          "FireNOCs[0].fireNOCDetails.propertyDetails.address.buildingName", callBack: checkValueForNA
-      }
-    ),
-    streetName: getLabelWithValue(
-      {
-        labelName: "Street Name",
-        labelKey: "NOC_PROPERTY_DETAILS_SRT_NAME_LABEL"
-      },
-      { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.street", callBack: checkValueForNA }
-    ),
-    mohalla: getLabelWithValue(
-      {
-        labelName: "Mohalla",
-        labelKey: "NOC_PROPERTY_DETAILS_MOHALLA_LABEL"
-      },
-      {
-        jsonPath:
-          "FireNOCs[0].fireNOCDetails.propertyDetails.address.locality.code",
-        callBack: value => {
-          return `${getTransformedLocale(tenantId)}_REVENUE_${value}`;
-        }
-      }
-    ),
-    pincode: getLabelWithValue(
-      {
-        labelName: "Pincode",
-        labelKey: "NOC_PROPERTY_DETAILS_PIN_LABEL"
-      },
-      { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.pincode", callBack: checkValueForNA }
-    ),
-    locationOnMap: getLabelWithValue(
-      {
-        labelName: "Location On Map",
-        labelKey: "NOC_PROPERTY_DETAILS_GIS_CORD_LABEL"
-      },
-      {
-        jsonPath:
-          "FireNOCs[0].fireNOCDetails.propertyDetails.address.locality.latitude",
-          callBack: checkValueForNA
-      }
-    ),
-    applicableFireStation: getLabelWithValue(
-      {
-        labelName: "Applicable Fire Station",
-        labelKey: "NOC_PROPERTY_DETAILS_FIRESTATION_LABEL"
-      },
-      {
-        jsonPath: "FireNOCs[0].fireNOCDetails.firestationId",
-        callBack: checkValueForNA,
-        localePrefix: {
-          moduleName: "firenoc",
-          masterName: "FireStations"
-        }
-      }
-    )
-  })
+  propertyLocationContainer: getCommonContainer(propertyLocationSummaryDetail)
 });
 
 export const propertySummary = getCommonGrayCard({

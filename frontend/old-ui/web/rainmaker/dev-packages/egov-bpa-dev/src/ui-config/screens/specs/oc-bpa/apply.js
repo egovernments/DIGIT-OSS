@@ -198,18 +198,18 @@ const setSearchResponse = async (
     { key: "applicationNo", value: applicationNumber }
   ]);
   
-  dispatch(prepareFinalObject("BPA", response.Bpa[0]));
+  dispatch(prepareFinalObject("BPA", response.BPA[0]));
   let edcrRes = await edcrHttpRequest(
     "post",
-    "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + get(response, "Bpa[0].edcrNumber") + "&tenantId=" + tenantId,
+    "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + get(response, "BPA[0].edcrNumber") + "&tenantId=" + tenantId,
     "search", []
     );
 
   dispatch(prepareFinalObject(`ocScrutinyDetails`, edcrRes.edcrDetail[0] ));
-  dispatch(prepareFinalObject("BPAs.appdate", get(response, "Bpa[0].auditDetails.createdTime")));
+  dispatch(prepareFinalObject("BPAs.appdate", get(response, "BPA[0].auditDetails.createdTime")));
   await setProposedBuildingData(state, dispatch, "ocApply", "ocApply");
   await edcrDetailsToBpaDetails(state, dispatch);
-  await applicantNameAppliedByMaping(state, dispatch, get(response, "Bpa[0]"), get(edcrRes, "edcrDetail[0]"));
+  await applicantNameAppliedByMaping(state, dispatch, get(response, "BPA[0]"), get(edcrRes, "edcrDetail[0]"));
   await prepareDocumentsUploadData(state, dispatch);
   await prepareDocumentDetailsUploadRedux(state, dispatch);
 };
@@ -270,7 +270,8 @@ export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
                 fileStoreId : upDoc.fileStoreId,
                 fileUrl : url,
                 wfState: upDoc.wfState ,
-                isClickable:false                               
+                isClickable:false,
+                additionalDetails: upDoc.additionalDetails                                
               }
             );
           }else{
@@ -284,7 +285,8 @@ export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
                 fileStoreId : upDoc.fileStoreId,
                 fileUrl : url,
                 wfState: upDoc.wfState,
-                isClickable:false                                
+                isClickable:false,
+                additionalDetails: upDoc.additionalDetails                                 
               }
             ];
           }

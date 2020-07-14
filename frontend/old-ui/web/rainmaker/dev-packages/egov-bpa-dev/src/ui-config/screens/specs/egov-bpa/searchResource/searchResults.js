@@ -127,10 +127,10 @@ export const searchResults = {
           customBodyRender: value => (
             <span
               style={
-                value === "APPROVED" ? { color: "green" } : { color: "red" }
+                value === "Approved" ? { color: "green" } : { color: "red" }
               }
             >
-              {getBpaTextToLocalMapping(value)}
+              {value}
             </span>
           )
         }
@@ -158,6 +158,7 @@ export const searchResults = {
       responsive: "stacked",
       selectableRows: false,
       hover: true,
+      viewColumns: false,
       rowsPerPageOptions: [10, 15, 20],
       onRowClick: (row, index) => {
         onRowClick(row);
@@ -197,12 +198,16 @@ const onRowClick = rowData => {
         break;
     }
   } else {
+    let type = "HIGH";
+    if(rowData[5] == "BPA_LOW") {
+      type = "LOW"
+    }
     switch (state) {
       case "INITIATED":
-        window.location.href = `apply?applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
+        window.location.href = `apply?applicationNumber=${applicationNumber}&tenantId=${tenantId}&type=${type}`;
         break;
       default:
-        window.location.href = `search-preview?applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
+        window.location.href = `search-preview?applicationNumber=${applicationNumber}&tenantId=${tenantId}&type=${type}`;
         break;
     }
   }

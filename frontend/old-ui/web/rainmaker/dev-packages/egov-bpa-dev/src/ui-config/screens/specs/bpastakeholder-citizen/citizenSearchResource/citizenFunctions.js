@@ -1,16 +1,15 @@
-import { getSearchResults,getBpaSearchResults } from "../../../../../ui-utils/commons";
-import { httpRequest } from "../../../../../ui-utils";
+import commonConfig from "config/common.js";
 import {
   handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import commonConfig from "config/common.js";
-import get from "lodash/get";
-import { getWorkFlowData,getWorkFlowDataForBPA } from "../../bpastakeholder/searchResource/functions";
-import { getTextToLocalMapping, convertEpochToDate, getBpaTextToLocalMapping} from "../../utils/index";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
-import { changePage } from "../my-applications-stakeholder";
-import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import get from "lodash/get";
+import { httpRequest } from "../../../../../ui-utils";
+import { getBpaSearchResults, getSearchResults } from "../../../../../ui-utils/commons";
+import { getWorkFlowData, getWorkFlowDataForBPA } from "../../bpastakeholder/searchResource/functions";
+import { getTextToLocalMapping } from "../../utils/index";
 
 export const getMdmsData = async () => {
   let mdmsBody = {
@@ -77,13 +76,13 @@ export const fetchData = async (
     )
   );
   try {
-    if(window.location.href.includes("bpastakeholder-citizen/home")) {
+    if (window.location.href.includes("bpastakeholder-citizen/home")) {
       let myApplicationsCount = 0;
-      if(response && response.Licenses) {
+      if (response && response.Licenses) {
         myApplicationsCount += response.Licenses.length
       }
-      if(bpaResponse && bpaResponse.Bpa) {
-        myApplicationsCount += bpaResponse.Bpa.length
+      if (bpaResponse && bpaResponse.BPA) {
+        myApplicationsCount += bpaResponse.BPA.length
       }
       dispatch(
         handleField(
@@ -103,10 +102,7 @@ export const fetchData = async (
           let service = getTextToLocalMapping(
             "MODULE_" + get(element, "businessService")
           );
-
-          let status = getTextToLocalMapping(
-            "WF_ARCHITECT_" + get(element, "status")
-          );
+          let status = getTextToLocalMapping("WF_ARCHITECT_" + get(element, "status"));
           let modifiedTime = element.auditDetails.lastModifiedTime;
           let licensetypeFull =
             element.tradeLicenseDetail.tradeUnits[0].tradeType;
@@ -119,7 +115,7 @@ export const fetchData = async (
                 )}`
               );
           }
-          if(!fromStakeHolderPage) {
+          if (!fromStakeHolderPage) {
             searchConvertedArray.push({
               applicationNumber: get(element, "applicationNumber", null),
               ownername: get(element, "tradeLicenseDetail.owners[0].name", null),
@@ -140,45 +136,23 @@ export const fetchData = async (
               modifiedTime: modifiedTime,
               sortNumber: 0
             });
-          } else {
-            searchConvertedArray.push({
-              [getBpaTextToLocalMapping("Application No")]: element.applicationNumber || "-",
-              [getBpaTextToLocalMapping("BPA_COL_APP_STATUS")]: status || "-",
-              applicationType: getBpaTextToLocalMapping("BPAREG_SERVICE"),
-              [getBpaTextToLocalMapping("BPA_COL_MODULE_SERVICE")]: "Registration \n Stakeholder Registration",
-              [getBpaTextToLocalMapping("BPA_COMMON_SLA")]: get(
-                businessIdToOwnerMapping[element.applicationNumber],
-                "sla",
-                null
-              ) || "-",
-              [getBpaTextToLocalMapping("BPA_COL_ASSIGNEDTO")]: get(
-                businessIdToOwnerMapping[element.applicationNumber],
-                "assignee",
-                null
-              ) || "-",
-              modifiedTime: modifiedTime,
-              sortNumber: 1,
-              serviceType: "BPAREG",
-              tenantId: get(element, "tenantId", null)
-            })
           }
         });
       }
-      
-      if(bpaResponse && bpaResponse.Bpa && bpaResponse.Bpa.length > 0){
-        const businessIdToOwnerMappingForBPA = await getWorkFlowDataForBPA(bpaResponse.Bpa);
-        bpaResponse.Bpa.forEach(element => {
-          let status = getTextToLocalMapping(
-            "WF_BPA_" + get(element, "status")
-          );
+
+      if (bpaResponse && bpaResponse.BPA && bpaResponse.BPA.length > 0) {
+        const businessIdToOwnerMappingForBPA = await getWorkFlowDataForBPA(bpaResponse.BPA);
+        bpaResponse.BPA.forEach(element => {
+          let status = getTextToLocalMapping("WF_BPA_" + get(businessIdToOwnerMappingForBPA[element.applicationNo], "state", null));
+          let applicationStatus = get(element, "status");
           let bService = get(element, "businessService");
           let appType = "BUILDING_PLAN_SCRUTINY";
           let serType = "NEW_CONSTRUCTION";
           let type;
-          if(bService === "BPA_OC") {
+          if (bService === "BPA_OC") {
             appType = "BUILDING_OC_PLAN_SCRUTINY"
           }
-          if(bService === "BPA_LOW") {
+          if (bService === "BPA_LOW") {
             type = "LOW"
           } else {
             type = "HIGH"
@@ -186,19 +160,18 @@ export const fetchData = async (
           let service = getTextToLocalMapping(
             "BPA_APPLICATIONTYPE_" + appType
           );
-          service += " - "+getTextToLocalMapping(
+          service += " - " + getTextToLocalMapping(
             "BPA_SERVICETYPE_" + serType
           );
           let modifiedTime = element.auditDetails.lastModifiedTime;
           let primaryowner = "-";
           let owners = get(element, "landInfo.owners", [])
-          owners.map(item=>{
-            if(item.isPrimaryOwner)
-            {
+          owners.map(item => {
+            if (item.isPrimaryOwner) {
               primaryowner = item.name;
             }
           });
-          if(!fromStakeHolderPage){
+          if (!fromStakeHolderPage) {
             searchConvertedArray.push({
               applicationNumber: get(element, "applicationNo", null),
               ownername: primaryowner,
@@ -218,44 +191,23 @@ export const fetchData = async (
               modifiedTime: modifiedTime,
               sortNumber: 1,
               type: type,
-              serviceType: get(element, "businessService", null)
-            })
-          } else {
-            searchConvertedArray.push({
-              [getBpaTextToLocalMapping("Application No")]: element.applicationNo || "-",
-              [getBpaTextToLocalMapping("BPA_COL_APP_STATUS")]: status || "-",
-              applicationType: getBpaTextToLocalMapping("BPA_APPLY_SERVICE"),
-              [getBpaTextToLocalMapping("BPA_COL_MODULE_SERVICE")] : "BPA \n Building permit new construction",
-              [getBpaTextToLocalMapping("BPA_COMMON_SLA")]: get(
-                businessIdToOwnerMappingForBPA[element.applicationNo],
-                "sla",
-                null
-              ) || "-",
-              [getBpaTextToLocalMapping("BPA_COL_ASSIGNEDTO")]: get(
-                businessIdToOwnerMappingForBPA[element.applicationNo],
-                "assignee",
-                null
-              ) || "-",
-              modifiedTime: modifiedTime,
-              sortNumber: 1,
-              serviceType : element.serviceType,
-              tenantId: get(element, "tenantId", null),
-              type: element.riskType
+              serviceType: get(element, "businessService", null),
+              appStatus: applicationStatus
             })
           }
         });
       }
 
-      sortConvertedArray = [].slice.call(searchConvertedArray).sort(function(a,b){ 
+      sortConvertedArray = [].slice.call(searchConvertedArray).sort(function (a, b) {
         return new Date(b.modifiedTime) - new Date(a.modifiedTime) || a.sortNumber - b.sortNumber;
       });
 
       dispatch(prepareFinalObject("searchResults", sortConvertedArray));
-      storeData(sortConvertedArray, dispatch, fromMyApplicationPage, fromStakeHolderPage); 
-    }   
-    } catch (error) {
-      console.log(error);
+      storeData(sortConvertedArray, dispatch, fromMyApplicationPage, fromStakeHolderPage);
     }
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const storeData = (data, dispatch, fromMyApplicationPage, fromStakeHolderPage) => {
@@ -280,7 +232,7 @@ const storeData = (data, dispatch, fromMyApplicationPage, fromStakeHolderPage) =
         myApplicationsCount ? [myApplicationsCount] : [0]
       )
     );
-  } else if(fromMyApplicationPage){
+  } else if (fromMyApplicationPage) {
 
     dispatch(
       handleField(
@@ -293,136 +245,3 @@ const storeData = (data, dispatch, fromMyApplicationPage, fromStakeHolderPage) =
   }
 }
 
-export const fieldChange = async (action, state, dispatch) => {
-  const { screenConfiguration } = state;
-  var value = action.value;
-  let bService = "BPA";
-
-  /**
-  * @Todo we are not using this condition - removing the status in my applications
-  */
-
-  if (action.value === "BUILDING_PLAN_SCRUTINY" || action.value === "BUILDING_OC_PLAN_SCRUTINY" || action.value === "BPAREG_SERVICE") {
-    if (action.value === "BUILDING_PLAN_SCRUTINY") {
-      bService = "BPA_OC";
-    } else if (action.value === "BUILDING_OC_PLAN_SCRUTINY") {
-      bService = "BPA"
-    } else if (action.value === "BPAREG_SERVICE") {
-      bService = "ARCHITECT"
-    }
-    let businessServiceData = get(
-      screenConfiguration.preparedFinalObject,
-      `${bService}`,
-      []
-    );
-
-    const states = get(businessServiceData, "states");
-    if (states && states.length > 0) {
-      const status = states.map((item, index) => {
-        return {
-          code: item.state
-        };
-      });
-      dispatch(prepareFinalObject( "filterData[0].status"));
-      dispatch(
-        prepareFinalObject(
-          "applyScreenMdmsData.searchScreen.status",
-          status.filter(item => item.code != null)
-        )
-      );
-    }
-  }
-
-  if (value) {
-    var filterName = action.componentJsonpath.slice(action.componentJsonpath.lastIndexOf(".") + 1, action.componentJsonpath.length);
-
-    if ((filterName === "applicationType" && value === "BUILDING_PLAN_SCRUTINY") || 
-       filterName === "applicationType" && value === "BUILDING_OC_PLAN_SCRUTINY") {
-      dispatch(
-        handleField(
-          "my-applications-stakeholder",
-          "components.div.children.filterCard.children.serviceType",
-          "props.disabled",
-          false
-        )
-      );
-    }
-    if (filterName === "applicationType" && value === "BPAREG_SERVICE") {
-      dispatch(
-        handleField(
-          "my-applications-stakeholder",
-          "components.div.children.filterCard.children.serviceType",
-          "props.value",
-          ""
-        )
-      );
-      dispatch(
-        handleField(
-          "my-applications-stakeholder",
-          "components.div.children.filterCard.children.serviceType",
-          "props.disabled",
-          true
-        )
-      );
-    }
-    let filterData = get(
-      screenConfiguration.preparedFinalObject,
-      "filterData",
-      []
-    );
-    let bpaDetails = get(
-      screenConfiguration.preparedFinalObject,
-      "searchResults", []
-    );
-    for (const dataFilter in filterData[0]) {
-      var filterValue = filterData[0][`${dataFilter}`]
-      if (filterValue)
-        bpaDetails = bpaDetails && bpaDetails.filter(details => details[`${dataFilter}`] === filterValue);
-    }
-    let tableState = {};
-    changePage(tableState, bpaDetails);
-  }
-};
-
-export const clearFilter = (state, dispatch, action) => {
-  const { screenConfiguration } = state;
-
-  let bpaDetails = get(
-    screenConfiguration.preparedFinalObject,
-    "searchResults",
-    {}
-  );
-
-  storeData(bpaDetails, dispatch, false, true);
-  dispatch(
-    prepareFinalObject("filterData", [])
-  );
-
-  dispatch(
-    handleField(
-      "my-applications-stakeholder",
-      "components.div.children.filterCard.children.applicationType",
-      "props.value",
-      "BUILDING_PLAN_SCRUTINY"
-    )
-  );
-  dispatch(
-    handleField(
-      "my-applications-stakeholder",
-      "components.div.children.filterCard.children.serviceType",
-      "props.value",
-      ""
-    )
-  );
-  dispatch(
-    handleField(
-      "my-applications-stakeholder",
-      "components.div.children.filterCard.children.applicationStatus",
-      "props.value",
-      ""
-    )
-  );
-  dispatch(
-    prepareFinalObject("filterData", [])
-  );
-};
