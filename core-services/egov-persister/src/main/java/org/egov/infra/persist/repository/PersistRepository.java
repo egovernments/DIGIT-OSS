@@ -6,11 +6,7 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 
 import org.apache.commons.lang3.StringUtils;
 import org.egov.infra.persist.web.contract.JsonMap;
@@ -41,7 +37,38 @@ public class PersistRepository {
     private ObjectMapper objectMapper;
 
 
+    public void persist(String query, List<Object[]> rows) {
+
+        try {
+            if( ! rows.isEmpty()) {
+                log.info("Executing query : "+ query);
+                jdbcTemplate.batchUpdate(query, rows);
+                log.info("Persisted {} row(s) to DB!", rows.size());
+            }
+        } catch (Exception ex) {
+            log.error("Failed to persist {} row(s) using query: {}", rows.size(), query, ex);
+            throw ex;
+        }
+    }
+
     public void persist(String query, List<JsonMap> jsonMaps, String jsonData, String baseJsonPath) {
+
+        List<Object[]> rows = getRows(jsonMaps,jsonData,baseJsonPath);
+
+        try {
+            if( ! rows.isEmpty()) {
+                log.info("Executing query : "+ query);
+                jdbcTemplate.batchUpdate(query, rows);
+                log.info("Persisted {} row(s) to DB!", rows.size(), baseJsonPath);
+            }
+        } catch (Exception ex) {
+            log.error("Failed to persist {} row(s) using query: {}", rows.size(), query, ex);
+            throw ex;
+        }
+    }
+
+
+    public List<Object[]> getRows(List<JsonMap> jsonMaps, String jsonData, String baseJsonPath) {
         Object document = Configuration.defaultConfiguration().jsonProvider().parse(jsonData);
 
         List<LinkedHashMap<String, Object>> dataSource = extractData(baseJsonPath, document);
@@ -163,17 +190,7 @@ public class PersistRepository {
             }
             rows.add(row.toArray());
         }
-
-        try {
-            if( ! rows.isEmpty()) {
-                log.info("Executing query : "+ query);
-			    jdbcTemplate.batchUpdate(query, rows);
-                log.info("Persisted {} row(s) to DB!", rows.size(), baseJsonPath);
-            }
-        } catch (Exception ex) {
-            log.error("Failed to persist {} row(s) using query: {}", rows.size(), query, ex);
-            throw ex;
-        }
+        return rows;
 
     }
 

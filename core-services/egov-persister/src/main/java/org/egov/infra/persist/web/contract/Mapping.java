@@ -27,6 +27,9 @@ public class Mapping   {
   @JsonProperty("isTransaction")
   private Boolean isTransaction = true;
 
+  @JsonProperty("isBatch")
+  private Boolean isBatch = false;
+
   @JsonProperty("queryMaps")
   private List<QueryMap> queryMaps = null;
 

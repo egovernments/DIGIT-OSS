@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -36,6 +37,31 @@ public class PersistService {
 				List<JsonMap> jsonMaps = queryMap.getJsonMaps();
 				String basePath = queryMap.getBasePath();
 				persistRepository.persist(query, jsonMaps, json, basePath);
+
+			}
+
+		}
+	}
+
+	@Transactional
+	public void persist(String topic, List<String> jsons) {
+
+		Map<String, List<Mapping>> map = topicMap.getTopicMap();
+
+		for (Mapping mapping : map.get(topic)) {
+
+			List<QueryMap> queryMaps = mapping.getQueryMaps();
+			for (QueryMap queryMap : queryMaps) {
+				List<Object[]> rows = new LinkedList<>();
+				String query = queryMap.getQuery();
+				List<JsonMap> jsonMaps = queryMap.getJsonMaps();
+				String basePath = queryMap.getBasePath();
+
+				jsons.forEach(json -> {
+					rows.addAll(persistRepository.getRows(jsonMaps,json,basePath));
+				});
+
+				persistRepository.persist(query, rows);
 
 			}
 
