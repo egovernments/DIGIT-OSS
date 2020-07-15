@@ -1,8 +1,10 @@
 package org.egov.filestore.repository.impl;
 
 import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -18,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.microsoft.azure.storage.OperationContext;
 import com.microsoft.azure.storage.blob.BlobContainerPublicAccessType;
@@ -88,20 +89,24 @@ public class AzureBlobStorageImpl implements CloudFilesManager {
 					container = azureBlobClient.getContainerReference(fixedContainerName);
 				else
 					container = azureBlobClient.getContainerReference(containerName);
-				container.createIfNotExists(BlobContainerPublicAccessType.CONTAINER, new BlobRequestOptions(), new OperationContext());	
+				container.createIfNotExists(BlobContainerPublicAccessType.CONTAINER, new BlobRequestOptions(), new OperationContext());
+				
+				Long contentLength = artifact.getMultipartFile().getSize();
+				BufferedInputStream inputStream = new BufferedInputStream(artifact.getMultipartFile().getInputStream());
+				
 				if(artifact.getMultipartFile().getContentType().startsWith("image/")) {
 					String extension = FilenameUtils.getExtension(artifact.getMultipartFile().getOriginalFilename());
-					Map<String, BufferedImage> mapOfImagesAndPaths = util.createVersionsOfImage(artifact.getMultipartFile(), fileNameWithPath);
+					Map<String, BufferedImage> mapOfImagesAndPaths = util.createVersionsOfImage(inputStream, fileNameWithPath);
 					for(String key: mapOfImagesAndPaths.keySet()) {
-						upload(container, key, null, mapOfImagesAndPaths.get(key), extension);
+						upload(container, key, null, null, mapOfImagesAndPaths.get(key), extension);
 						mapOfImagesAndPaths.get(key).flush();
 					}
-				}else {
-					upload(container, fileNameWithPath, artifact.getMultipartFile(), null, null);
 				}
+				upload(container, fileNameWithPath, inputStream, contentLength, null, null);
+				
 				for (ListBlobItem blobItem : container.listBlobs())
 					log.info("URI of blob is: " + blobItem.getStorageUri().getPrimaryUri());
-			}catch(Exception e) {
+			} catch (Exception e) {
 				log.error("Exceptione while creating the container: ", e);
 			}
 			
@@ -118,7 +123,7 @@ public class AzureBlobStorageImpl implements CloudFilesManager {
 	 * list of strings. We aren't taking this up because this will cause high impact on UI.
 	 * TODO: Change comma separated string to list of strings and test it with UI once their changes are done.
 	 */
-	@Override
+	
 	public Map<String, String> getFiles(Map<String, String> mapOfIdAndFilePath) {
 		if(null == azureBlobClient)
 			azureBlobClient = azureFacade.getAzureClient();
@@ -171,21 +176,27 @@ public class AzureBlobStorageImpl implements CloudFilesManager {
 	 * @param image
 	 * @param extension
 	 */
-	public void upload(CloudBlobContainer container, String completePath, MultipartFile file, BufferedImage image, String extension) {
+	public void upload(CloudBlobContainer container, String completePath, InputStream inputStream, Long contentLength, BufferedImage image, String extension) {
 		try{
-			if(null == file && null != image) {
+			if(null == inputStream && null != image) {
 				ByteArrayOutputStream os = new ByteArrayOutputStream();
 				ImageIO.write(image, extension, os);
 				CloudBlockBlob blob = container.getBlockBlobReference(completePath);
 				blob.upload(new ByteArrayInputStream(os.toByteArray()), 8*1024*1024);
 			}else {
 				CloudBlockBlob blob = container.getBlockBlobReference(completePath);
-				blob.upload(file.getInputStream(), file.getSize());
+				blob.upload(inputStream, contentLength);
 			}
 
 		}catch(Exception e) {
 			log.error("Exception while uploading the file: ",e);
 		}
+	}
+
+	@Override
+	public Map<String, String> getFiles(List<org.egov.filestore.persistence.entity.Artifact> artifacts) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	

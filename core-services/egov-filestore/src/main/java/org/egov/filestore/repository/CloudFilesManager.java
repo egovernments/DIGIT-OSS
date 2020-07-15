@@ -26,6 +26,6 @@ public interface CloudFilesManager {
 	 * @param mapOfIdAndFilePath
 	 * @return
 	 */
-	public Map<String, String> getFiles(Map<String, String> mapOfIdAndFilePath);
+	public Map<String, String> getFiles(List<org.egov.filestore.persistence.entity.Artifact> artifacts);
 
 }

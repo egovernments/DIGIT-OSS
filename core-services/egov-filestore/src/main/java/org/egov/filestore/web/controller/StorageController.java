@@ -9,13 +9,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.egov.common.contract.request.RequestInfo;
 import org.egov.filestore.domain.model.FileInfo;
 import org.egov.filestore.domain.service.StorageService;
+import org.egov.filestore.utils.StorageUtil;
 import org.egov.filestore.web.contract.File;
 import org.egov.filestore.web.contract.FileStoreResponse;
 import org.egov.filestore.web.contract.GetFilesByTagResponse;
 import org.egov.filestore.web.contract.ResponseFactory;
 import org.egov.filestore.web.contract.StorageResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -35,10 +38,15 @@ public class StorageController {
 
 	private StorageService storageService;
 	private ResponseFactory responseFactory;
-
-	public StorageController(StorageService storageService, ResponseFactory responseFactory) {
+	private StorageUtil storageUtil;
+	
+	@Autowired
+	public StorageController(StorageService storageService, ResponseFactory responseFactory,
+			StorageUtil storageUtil) {
 		this.storageService = storageService;
 		this.responseFactory = responseFactory;
+		this.storageUtil = storageUtil;
+		//this.fileStoreConfig = fileStoreConfig;
 	}
 
 	@GetMapping("/id")
@@ -52,8 +60,9 @@ public class StorageController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		String fileName=resource.getFileName().substring(resource.getFileName().lastIndexOf('/')+1,resource.getFileName().length());
 		return ResponseEntity.ok()
-				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFileName() + "\"")
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" +fileName  + "\"")
 				.header(HttpHeaders.CONTENT_TYPE, resource.getContentType()).body(resource.getResource());
 	}
 
@@ -86,9 +95,11 @@ public class StorageController {
 	public StorageResponse storeFiles(@RequestParam("file") List<MultipartFile> files,
 			@RequestParam(value = "tenantId") String tenantId,
 			@RequestParam(value = "module", required = true) String module,
-			@RequestParam(value = "tag", required = false) String tag) {
-		
-		final List<String> fileStoreIds = storageService.save(files, module, tag, tenantId);
+			@RequestParam(value = "tag", required = false) String tag,
+			@RequestParam(value = "requestInfo", required = false) String requestInfo
+			) {
+		RequestInfo reqInfo = storageUtil.getRequestInfo(requestInfo);
+		final List<String> fileStoreIds = storageService.save(files, module, tag, tenantId, reqInfo);
 		return getStorageResponse(fileStoreIds, tenantId);
 	}
 
