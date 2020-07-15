@@ -5,22 +5,26 @@
     {
       "id": 1,
       "code": "NEW_WATER_CONNECTION",
-      "name": "New Water Connection"
+      "name": "New Water Connection",
+      "businessService": "NewWS1"
     },
     {
       "id": 2,
       "code": "NEW_SEWERAGE_CONNECTION",
-      "name": "New Sewerage Connection"
+      "name": "New Sewerage Connection",
+      "businessService": "NewSW1"
     },
     {
       "id": 3,
       "code": "MODIFY_WATER_CONNECTION",
-      "name": "Modify Water Connection"
+      "name": "Modify Water Connection",
+      "businessService":"ModifyWSConnection"
     },
     {
       "id": 4,
       "code": "MODIFY_SEWERAGE_CONNECTION",
-      "name": "Modify Sewerage Connection"
+      "name": "Modify Sewerage Connection",
+      "businessService":"ModifySWConnection"
     }
   ]
 }
