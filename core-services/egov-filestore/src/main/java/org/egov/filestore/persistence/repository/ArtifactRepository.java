@@ -44,7 +44,7 @@ public class ArtifactRepository {
 		artifacts.forEach(artifact -> {
 			artifactEntities.add(mapToEntity(artifact, requestInfo));
 		});
-		return fileStoreJpaRepository.save(artifactEntities).stream().map(Artifact::getFileStoreId)
+		return fileStoreJpaRepository.saveAll(artifactEntities).stream().map(Artifact::getFileStoreId)
 				.collect(Collectors.toList());
 	}
 
