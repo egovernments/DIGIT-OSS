@@ -90,7 +90,6 @@ public class NotificationUtil {
 				}
 			}
 		}
-		log.info("Messages Received: " + message );
 		return message;
 	}
 
@@ -268,7 +267,6 @@ public class NotificationUtil {
 		LinkedHashMap responseMap = (LinkedHashMap) serviceRequestRepository.fetchResult(getUri(tenantId, requestInfo),
 				requestInfo);
 		String jsonString = new JSONObject(responseMap).toString();
-		log.info("LocalizationMessages Received: " + jsonString );
 		return jsonString;
 	}
 
@@ -300,12 +298,10 @@ public class NotificationUtil {
 			if (CollectionUtils.isEmpty(smsRequestList))
 				log.debug("Messages from localization couldn't be fetched!");
 			for (SMSRequest smsRequest : smsRequestList) {
-				log.info("sendSMS : " + smsRequest + config.getSmsNotifTopic());
 				producer.push(config.getSmsNotifTopic(), smsRequest);
 				log.debug("MobileNumber: " + smsRequest.getMobileNumber() + " Messages: " + smsRequest.getMessage());
 			}
 		}
-		log.info("PRODUCER : ");
 	}
 
 	/**
@@ -324,7 +320,6 @@ public class NotificationUtil {
 			String customizedMsg = message.replace("<1>", entryset.getValue());
 			smsRequest.add(new SMSRequest(entryset.getKey(), customizedMsg));
 		}
-		log.info("SMS Received: " + smsRequest );
 		return smsRequest;
 	}
 	
