@@ -7,14 +7,16 @@
        "isActive": true,
        "offlineWF":"FIRENOC_OFFLINE",
        "onlineWF":"FIRENOC_SRV",
-       "mode":"online"
+       "mode":"online",
+       "NocUserRole":"FIRE_NOC_APPROVER"
     },
     {
       "code":"AIRPORT_AUTHORITY",
       "isActive": true,
       "offlineWF":"AIRPORTNOC_OFFLINE",
       "onlineWF":"AIRPORTNOC_SRV",
-      "mode":"offline"
+      "mode":"offline",
+       "NocUserRole":"AIRPORT_AUTHORITY_APPROVER"
     }
   ]
 }
