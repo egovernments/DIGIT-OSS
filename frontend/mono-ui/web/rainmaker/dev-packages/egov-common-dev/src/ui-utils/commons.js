@@ -532,7 +532,13 @@ export const download = (receiptQueryString, mode = "download", configKey = "con
       }
       // Setting the Payer and mobile from Bill to reflect it in PDF
       state = state ? state : {};
-      const billDetails = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0]", null);
+      let billDetails = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0]", null);
+      if((billDetails && !billDetails.payerName) || !billDetails){
+        billDetails = {
+          payerName: get(state, "screenConfiguration.preparedFinalObject.applicationDataForReceipt.owners[0].name", null) || get(state, "screenConfiguration.preparedFinalObject.applicationDataForPdf.owners[0].name", null),
+          mobileNumber: get(state, "screenConfiguration.preparedFinalObject.applicationDataForReceipt.owners[0].mobile", null) || get(state, "screenConfiguration.preparedFinalObject.applicationDataForPdf.owners[0].mobile", null),
+        };
+      }
       if (!payloadReceiptDetails.Payments[0].payerName && process.env.REACT_APP_NAME === "Citizen" && billDetails) {
         payloadReceiptDetails.Payments[0].payerName = billDetails.payerName;
         // payloadReceiptDetails.Payments[0].paidBy = billDetails.payer;

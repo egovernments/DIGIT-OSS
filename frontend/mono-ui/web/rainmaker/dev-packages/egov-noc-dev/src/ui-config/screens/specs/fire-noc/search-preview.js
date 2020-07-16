@@ -69,7 +69,7 @@ export const downloadPrintContainer = (
         { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails, "applicationNumber") },
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.FireNOCs[0], "tenantId") }
       ]
-      download(receiptQueryString, "download", "consolidatedreceipt");
+      download(receiptQueryString, "download", "consolidatedreceipt", state);
     },
     leftIcon: "receipt"
   };
@@ -80,7 +80,7 @@ export const downloadPrintContainer = (
         { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails, "applicationNumber") },
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.FireNOCs[0], "tenantId") }
       ]
-      download(receiptQueryString, "print", "consolidatedreceipt");
+      download(receiptQueryString, "print", "consolidatedreceipt", state);
     },
     leftIcon: "receipt"
   };
