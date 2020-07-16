@@ -334,5 +334,32 @@ public class CalculatorConstants {
 	public static final String BUILTUP = "BUILTUP";
 
 	public static final String RENTED = "RENTED";
+	
+	public static final String SERVICE_FIELD_VALUE_PT_MUTATION = "PT.MUTATION";
+	
+	public static final String DOCUMENT_DATE = "documentDate";
+
+	public static final String MUTATION_PAYMENT_PERIOD_IN_MONTH = "mutationPaymentPeriodInMonth";
+	
+	public static final String PT_ADDITIONALNDETAILS_NULL = "PT_ADDITIONALNDETAILS_NULL";
+	public static final String PT_ADDITIONALNDETAILS_NULL_MSG = "Additional Details should not be null. Please add field like marketValue, documentDate, adhocRebate and adhocPenalty with their proper value in additionalDetails object";
+
+	public static final String MARKET_VALUE = "marketValue";
+	public static final String PT_MARKETVALUE_NULL = "PT_MARKETVALUE_NULL";
+	public static final String PT_MARKETVALUE_NULL_MSG = "Market Value is not present in additional details or set as null or not in numeric format ";
+
+
+	public static final String PT_DOCDATE_NULL = "PT_DOCDATE_NULL";
+	public static final String PT_DOCDATE_NULL_MSG = "Document date is not present in additional details or set as null";
+
+	public static final String NUMERIC_REGEX = "-?\\d+(\\.\\d+)?";
+	
+	public static final String DEMAND_CREATE_FAILED = "DEMAND_CREATE_FAILED";
+	public static final String DEMAND_CREATE_FAILED_MSG = "Demand Creation Failed";
+	
+	public static final String OWNER_STATUS_ACTIVE = "ACTIVE";
+	
+	public static final String DEMAND_UPDATE_FAILED = "DEMAND_UPDATE_FAILED";
+	public static final String DEMAND_UPDATE_FAILED_MSG = "Demand Updation Failed";
 
 }
