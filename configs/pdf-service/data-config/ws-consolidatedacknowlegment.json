@@ -58,7 +58,7 @@
               {
                 "variable": "rainwaterHarvestingFacility",
                 "value": {
-                  "path": "$.rainWaterHarvesting"
+                  "path": "$.property.additionalDetails.isRainwaterHarvesting"
                 },
                 "localisation": {
                   "required": true,
