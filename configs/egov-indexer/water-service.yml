@@ -11,7 +11,7 @@ ServiceMaps:
         jsonPath: $.WaterConnection
         timeStampField: $.auditDetails.createdTime
         customJsonMapping:
-          indexMapping: {"Data":{"workflow": {"state": {}, "action": "", "assignes": []},"applicationNo":"","applicationStatus":"","status":"","connectionNo":"","oldConnectionNo":"","plumberInfo":[],"roadType":"","roadCuttingArea":"","connectionExecutionDate":"","connectionCategory":"","connectionType":"","additionalDetails":{},"id":"","propertyId":"","rainWaterHarvesting":"","waterSource":"","tenantId":"","meterId":"","meterInstallationDate":"","proposedPipeSize":"","proposedTaps":"","pipeSize":"","noOfTaps":"","history":{}}}
+          indexMapping: {"Data":{"workflow": {"state": {}, "action": "", "assignes": []},"applicationNo":"","applicationStatus":"","status":"","connectionNo":"","oldConnectionNo":"","plumberInfo":[],"connectionHolders":[],"roadType":"","roadCuttingArea":"","connectionExecutionDate":"","connectionCategory":"","connectionType":"","additionalDetails":{},"id":"","propertyId":"","rainWaterHarvesting":"","waterSource":"","tenantId":"","meterId":"","meterInstallationDate":"","proposedPipeSize":"","proposedTaps":"","pipeSize":"","noOfTaps":"","applicationType":"","dateEffectiveFrom":"","history":{}}}
           fieldMapping:
           - inJsonPath: $.applicationStatus.state
             outJsonPath: $.Data.workflow.state
@@ -31,6 +31,8 @@ ServiceMaps:
             outJsonPath: $.Data.oldConnectionNo
           - inJsonPath: $.plumberInfo
             outJsonPath: $.Data.plumberInfo
+          - inJsonPath: $.connectionHolders
+            outJsonPath: $.Data.connectionHolders
           - inJsonPath: $.roadType
             outJsonPath: $.Data.roadType
           - inJsonPath: $.roadCuttingArea
@@ -65,6 +67,10 @@ ServiceMaps:
             outJsonPath: $.Data.pipeSize
           - inJsonPath: $.noOfTaps
             outJsonPath: $.Data.noOfTaps
+          - inJsonPath: $.applicationType
+            outJsonPath: $.Data.applicationType
+          - inJsonPath: $.dateEffectiveFrom
+            outJsonPath: $.Data.dateEffectiveFrom
           externalUriMapping:
           - path: http://egov-workflow-v2.egov:8080/egov-workflow-v2/egov-wf/process/_search
             queryParam: businessIds=$.applicationNo,history=true,tenantId=$.tenantId
@@ -83,7 +89,7 @@ ServiceMaps:
         jsonPath: $.WaterConnection
         timeStampField: $.auditDetails.lastModifiedTime
         customJsonMapping:
-          indexMapping: {"Data":{"workflow": {"state": {}, "action": "", "assignes": []},"applicationNo":"","applicationStatus":"","status":"","connectionNo":"","oldConnectionNo":"","plumberInfo":[],"roadType":"","roadCuttingArea":"","connectionExecutionDate":"","connectionCategory":"","connectionType":"","additionalDetails":{},"id":"","propertyId":"","rainWaterHarvesting":"","waterSource":"","tenantId":"","meterId":"","meterInstallationDate":"","proposedPipeSize":"","proposedTaps":"","pipeSize":"","noOfTaps":"","history":{}}}
+          indexMapping: {"Data":{"workflow": {"state": {}, "action": "", "assignes": []},"applicationNo":"","applicationStatus":"","status":"","connectionNo":"","oldConnectionNo":"","plumberInfo":[],"connectionHolders":[],"roadType":"","roadCuttingArea":"","connectionExecutionDate":"","connectionCategory":"","connectionType":"","additionalDetails":{},"id":"","propertyId":"","rainWaterHarvesting":"","waterSource":"","tenantId":"","meterId":"","meterInstallationDate":"","proposedPipeSize":"","proposedTaps":"","pipeSize":"","noOfTaps":"","applicationType":"","dateEffectiveFrom":"","history":{}}}
           fieldMapping:
           - inJsonPath: $.applicationStatus.state
             outJsonPath: $.Data.workflow.state
@@ -103,6 +109,8 @@ ServiceMaps:
             outJsonPath: $.Data.oldConnectionNo
           - inJsonPath: $.plumberInfo
             outJsonPath: $.Data.plumberInfo
+          - inJsonPath: $.connectionHolders
+            outJsonPath: $.Data.connectionHolders
           - inJsonPath: $.roadType
             outJsonPath: $.Data.roadType
           - inJsonPath: $.roadCuttingArea
@@ -137,6 +145,10 @@ ServiceMaps:
             outJsonPath: $.Data.pipeSize
           - inJsonPath: $.noOfTaps
             outJsonPath: $.Data.noOfTaps
+          - inJsonPath: $.applicationType
+            outJsonPath: $.Data.applicationType
+          - inJsonPath: $.dateEffectiveFrom
+            outJsonPath: $.Data.dateEffectiveFrom
           externalUriMapping:
           - path: http://egov-workflow-v2.egov:8080/egov-workflow-v2/egov-wf/process/_search
             queryParam: businessIds=$.applicationNo,history=true,tenantId=$.tenantId
@@ -154,7 +166,7 @@ ServiceMaps:
         jsonPath: $.WaterConnection
         timeStampField: $.auditDetails.lastModifiedTime
         customJsonMapping:
-          indexMapping: {"Data":{"workflow": {"state": {}, "action": "", "assignes": []},"applicationNo":"","applicationStatus":"","status":"","connectionNo":"","oldConnectionNo":"","plumberInfo":[],"roadType":"","roadCuttingArea":"","connectionExecutionDate":"","connectionCategory":"","connectionType":"","additionalDetails":{},"id":"","propertyId":"","rainWaterHarvesting":"","waterSource":"","tenantId":"","meterId":"","meterInstallationDate":"","proposedPipeSize":"","proposedTaps":"","pipeSize":"","noOfTaps":"","history":{}}}
+          indexMapping: {"Data":{"workflow": {"state": {}, "action": "", "assignes": []},"applicationNo":"","applicationStatus":"","status":"","connectionNo":"","oldConnectionNo":"","plumberInfo":[],"connectionHolders":[],"roadType":"","roadCuttingArea":"","connectionExecutionDate":"","connectionCategory":"","connectionType":"","additionalDetails":{},"id":"","propertyId":"","rainWaterHarvesting":"","waterSource":"","tenantId":"","meterId":"","meterInstallationDate":"","proposedPipeSize":"","proposedTaps":"","pipeSize":"","noOfTaps":"","applicationType":"","dateEffectiveFrom":"","history":{}}}
           fieldMapping:
           - inJsonPath: $.applicationStatus.state
             outJsonPath: $.Data.workflow.state
@@ -174,6 +186,8 @@ ServiceMaps:
             outJsonPath: $.Data.oldConnectionNo
           - inJsonPath: $.plumberInfo
             outJsonPath: $.Data.plumberInfo
+          - inJsonPath: $.connectionHolders
+            outJsonPath: $.Data.connectionHolders
           - inJsonPath: $.roadType
             outJsonPath: $.Data.roadType
           - inJsonPath: $.roadCuttingArea
@@ -208,6 +222,10 @@ ServiceMaps:
             outJsonPath: $.Data.pipeSize
           - inJsonPath: $.noOfTaps
             outJsonPath: $.Data.noOfTaps
+          - inJsonPath: $.applicationType
+            outJsonPath: $.Data.applicationType
+          - inJsonPath: $.dateEffectiveFrom
+            outJsonPath: $.Data.dateEffectiveFrom
           externalUriMapping:
           - path: http://egov-workflow-v2.egov:8080/egov-workflow-v2/egov-wf/process/_search
             queryParam: businessIds=$.applicationNo,history=true,tenantId=$.tenantId
