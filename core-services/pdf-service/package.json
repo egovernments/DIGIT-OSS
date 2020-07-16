@@ -40,7 +40,7 @@
     "express-async-handler": "^1.1.4",
     "form-data": "^2.5.0",
     "jsonpath": "^1.0.2",
-    "kafka-node": "^4.1.3",
+    "kafka-node": "^5.0.0",
     "lodash.get": "^4.4.2",
     "lodash.set": "^4.3.2",
     "moment-timezone": "^0.5.28",
