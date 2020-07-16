@@ -191,4 +191,26 @@ SearchDefinitions:
     output:
       jsonFormat: {"ResponseInfo": {}}
       outJsonPath: $.Localities
-      responseInfoPath: $.ResponseInfo  
+      responseInfoPath: $.ResponseInfo
+- name: noc-services
+    query:
+      baseQuery: |
+        Select row_to_json(result) from
+        (
+         select noc.applicationNo as referenceNumber,ad.locality from eg_bpa_buildingplan bpa
+          INNER JOIN eg_land_Address ad ON ad.landInfoId = bpa.landid JOIN eg_noc noc ON noc.sourceRefId = bpa.applicationNo
+        ) result  $where
+      groupBy:
+      orderBy:
+    searchParams:
+      condition: AND
+      params:
+      - name: result.referenceNumber
+        isMandatory: true
+        jsonPath: $.searchCriteria.referenceNumber
+        operator: 
+
+    output:
+      jsonFormat: {"ResponseInfo": {}}
+      outJsonPath: $.Localities
+      responseInfoPath: $.ResponseInfo
