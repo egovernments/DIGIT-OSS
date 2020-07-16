@@ -16775,6 +16775,17 @@
       "quickAction": true,
       "leftIcon": "communication:business",
       "rightIcon": ""
+    },
+    {
+      "id": 2005,
+      "name": "Locality searcher endpoint for Noc Servcies",
+      "url": "/egov-searcher/locality/noc-services/_get",
+      "displayName": "Noc locality searcher",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "egov-searcher",
+      "code": "null",
+      "path": ""
     }
   ]
 }
