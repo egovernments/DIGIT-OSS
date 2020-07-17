@@ -1788,6 +1788,10 @@ const generateReceipt = async (state, dispatch, type) => {
        // pdfMakeCustom.createPdf(ack_data).open();
        downloadPDFFileUsingBase64(pdfMakeCustom.createPdf(ack_data), `tl_application.pdf`);
       break;
+    case "ack_print":
+      ack_data = getACKData(transformedData, ulbLogo);
+      ack_data && pdfMakeCustom.createPdf(ack_data).print();
+      break;
     default:
       break;
   }

@@ -990,8 +990,10 @@ export const footerReviewTop = (
   let tlCertificatePrintObject = {
     label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
     link: () => {
-      const { Licenses } = state.screenConfiguration.preparedFinalObject;
-      downloadCertificateForm(Licenses,'print');
+     /*  const { Licenses } = state.screenConfiguration.preparedFinalObject;
+      downloadCertificateForm(Licenses,'print'); */
+      generateReceipt(state, dispatch, "certificate_print");
+
     },
     leftIcon: "book"
   };
@@ -1009,7 +1011,7 @@ export const footerReviewTop = (
     },
     leftIcon: "receipt"
   };
-  let receiptPrintObject = {
+   let receiptPrintObject = {
     label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
     link: () => {
       const receiptQueryString =  [
@@ -1020,7 +1022,7 @@ export const footerReviewTop = (
      // generateReceipt(state, dispatch, "receipt_print");
     },
     leftIcon: "receipt"
-  };
+  }; 
   let applicationDownloadObject = {
     label: { labelName: "Application", labelKey: "TL_APPLICATION" },
     link: () => {
@@ -1034,15 +1036,17 @@ export const footerReviewTop = (
   let applicationPrintObject = {
     label: { labelName: "Application", labelKey: "TL_APPLICATION" },
     link: () => {
-      const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
+      /* const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
       const documents = LicensesTemp[0].reviewDocData;
       set(Licenses[0],"additionalDetails.documents",documents)
-      downloadAcknowledgementForm(Licenses,'print');
+      downloadAcknowledgementForm(Licenses,'print'); */
+      generateReceipt(state, dispatch, "ack_print");
+
     },
     leftIcon: "assignment"
   };
   let challanDownloadObject = {
-    label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
+    label: { labelName: "Receipt", labelKey: "TL_CHALLAN" },
     link: () => {
       const receiptQueryString = [
         { key: "consumerCode", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
@@ -1054,13 +1058,13 @@ export const footerReviewTop = (
     leftIcon: "receipt"
   };
   let challanPrintObject = {
-    label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
+    label: { labelName: "Receipt", labelKey: "TL_CHALLAN" },
     link: () => {
       const receiptQueryString =  [
         { key: "consumerCode", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
       ]
-      download(receiptQueryString,"print");
+      downloadBill(receiptQueryString,"print");
      // generateReceipt(state, dispatch, "receipt_print");
     },
     leftIcon: "receipt"
@@ -1074,9 +1078,9 @@ export const footerReviewTop = (
         receiptDownloadObject,
         applicationDownloadObject
       ];
-      printMenu = [
-        tlCertificatePrintObject,
-        receiptPrintObject,
+    printMenu = [
+      tlCertificatePrintObject,
+       receiptPrintObject,
         applicationPrintObject
       ];
       break;
@@ -1090,18 +1094,18 @@ export const footerReviewTop = (
     case "PENDINGPAYMENT":
       downloadMenu = [applicationDownloadObject, challanDownloadObject];
       printMenu = [applicationPrintObject, challanPrintObject];
-      break;
+       break;
     case "pending_approval":
       downloadMenu = [receiptDownloadObject, applicationDownloadObject];
-      printMenu = [receiptPrintObject, applicationPrintObject];
+     printMenu = [receiptPrintObject, applicationPrintObject];    
       break;
     case "CANCELLED":
       downloadMenu = [applicationDownloadObject];
-      printMenu = [applicationPrintObject];
+      printMenu = [applicationPrintObject];   
       break;
     case "REJECTED":
       downloadMenu = [applicationDownloadObject];
-      printMenu = [applicationPrintObject];
+      printMenu = [applicationPrintObject];  
       break;
     default:
       break;
@@ -1130,7 +1134,7 @@ export const footerReviewTop = (
             }
           }
         },
-        printMenu: {
+      /*   printMenu: {
           uiFramework: "custom-atoms-local",
           moduleName: "egov-tradelicence",
           componentPath: "MenuButton",
@@ -1143,7 +1147,7 @@ export const footerReviewTop = (
               menu: printMenu
             }
           }
-        }
+        } */
 
       },
       // gridDefination: {
@@ -1184,11 +1188,13 @@ export const downloadPrintContainer = (
   let tlCertificatePrintObject = {
     label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
     link: () => {
-      const { Licenses } = state.screenConfiguration.preparedFinalObject;
-      downloadCertificateForm(Licenses,'print');
+     // const { Licenses } = state.screenConfiguration.preparedFinalObject;
+      generateReceipt(state, dispatch, "certificate_print");
+
+      //downloadCertificateForm(Licenses,'print');
     },
     leftIcon: "book"
-  };
+  }; 
   let receiptDownloadObject = {
     label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
     link: () => {
@@ -1210,7 +1216,7 @@ export const downloadPrintContainer = (
       download(receiptQueryString,"print");
     },
     leftIcon: "receipt"
-  };
+  }; 
   let applicationDownloadObject = {
     label: { labelName: "Application", labelKey: "TL_APPLICATION" },
     link: () => {
@@ -1224,13 +1230,15 @@ export const downloadPrintContainer = (
   let applicationPrintObject = {
     label: { labelName: "Application", labelKey: "TL_APPLICATION" },
     link: () => {
-      const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
+      /* const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
       const documents = LicensesTemp[0].reviewDocData;
       set(Licenses[0],"additionalDetails.documents",documents)
-      downloadAcknowledgementForm(Licenses,'print');
+      downloadAcknowledgementForm(Licenses,'print'); */
+      generateReceipt(state, dispatch, "ack_print");
+
     },
     leftIcon: "assignment"
-  };
+  }; 
   let challanDownloadObject = {
     label: { labelName: "Challan", labelKey: "TL_CHALLAN" },
     link: () => {
@@ -1262,11 +1270,11 @@ export const downloadPrintContainer = (
         receiptDownloadObject,
         applicationDownloadObject
       ];
-      printMenu = [
+       printMenu = [
         tlCertificatePrintObject,
         receiptPrintObject,
         applicationPrintObject
-      ];
+      ]; 
       break;
     case "APPLIED":
     case "CITIZENACTIONREQUIRED":
@@ -1275,7 +1283,7 @@ export const downloadPrintContainer = (
     case "PENDINGAPPROVAL":
       downloadMenu = [applicationDownloadObject];
       printMenu = [applicationPrintObject];
-      break;
+       break;
     case "PENDINGPAYMENT":
       downloadMenu = [applicationDownloadObject, challanDownloadObject];
       printMenu = [applicationPrintObject, challanPrintObject];
@@ -1315,7 +1323,7 @@ export const downloadPrintContainer = (
             }
           }
         },
-        printMenu: {
+     /*    printMenu: {
           uiFramework: "custom-atoms-local",
           moduleName: "egov-tradelicence",
           componentPath: "MenuButton",
@@ -1328,7 +1336,7 @@ export const downloadPrintContainer = (
               menu: printMenu
             }
           }
-        }
+        } */
 
       },
       // gridDefination: {
