@@ -1,0 +1,2 @@
+INSERT INTO egdcr_sub_feature_colorcode(id, feature, subfeature, colorcode,ordernumber) VALUES (nextval('seq_egdcr_sub_feature_colorcode'), 'Basement', 'HEIGHT_FROM_THE_FLOOR_TO_CEILING_COLOUR_CODE', 1, 8);
+INSERT INTO egdcr_sub_feature_colorcode(id, feature, subfeature, colorcode,ordernumber) VALUES (nextval('seq_egdcr_sub_feature_colorcode'), 'Basement', 'HEIGHT_OF_THE_CEILING_OF_UPPER_BASEMENT_COLOUR_CODE', 2, 8);

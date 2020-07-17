@@ -72,6 +72,13 @@
     </pluginRepositories>
 
     <modules>
+    	<module>egov-config</module>
+    	<module>egov-egi</module>
+        <module>egov-commons</module>
+        <module>egov-ear</module>
+        <module>egov-edcr</module>
+        <module>egov-egiweb</module>
+        <module>egov-edcrweb</module>
         <module>egov-ear</module>
     </modules>
 
@@ -83,7 +90,7 @@
         <app.version>${project.version}</app.version>
 
         <!-- Application core dependency versions -->
-        <erp-version>BPA-3.0.0-SNAPSHOT</erp-version>
+        <erp-version>1.0.0-SNAPSHOT</erp-version>
 
         <!-- Application server provided dependency versions -->
         <hibernate-version>5.1.10.Final</hibernate-version>

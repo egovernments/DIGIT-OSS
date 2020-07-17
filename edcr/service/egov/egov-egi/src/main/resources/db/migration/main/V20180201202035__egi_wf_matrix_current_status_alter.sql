@@ -1,0 +1,1 @@
+ALTER TABLE eg_wf_matrix ALTER COLUMN currentstatus TYPE character varying(128);

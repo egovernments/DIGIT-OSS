@@ -1,0 +1,3 @@
+INSERT INTO eg_citypreferences(id, municipalitylogo, createdby, createddate, lastmodifiedby, lastmodifieddate, version, municipalityname) values (nextval('seq_eg_citypreferences') , null, 1,now(),1,now(),0, 'Ranchi Municipal Corporation');
+update eg_city set preferences  =(select id from eg_citypreferences where municipalityname= 'Ranchi Municipal Corporation');
+update eg_citypreferences set googleApiKey='AIzaSyA1otT5_xEGe0qMrh2lemKKYH7Vo-pGOlA';

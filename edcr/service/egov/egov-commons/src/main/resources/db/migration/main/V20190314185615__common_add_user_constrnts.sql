@@ -1,0 +1,2 @@
+ALTER TABLE accountentitymaster ADD CONSTRAINT fk_aem_modified_user FOREIGN KEY (createdby) REFERENCES state.eg_user(id);
+ALTER TABLE accountentitymaster ADD CONSTRAINT fk_aem_user FOREIGN KEY (lastmodifiedby) REFERENCES state.eg_user(id);

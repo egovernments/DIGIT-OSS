@@ -1,0 +1,1 @@
+ALTER TABLE eg_checklist ALTER COLUMN description TYPE varchar(1024);

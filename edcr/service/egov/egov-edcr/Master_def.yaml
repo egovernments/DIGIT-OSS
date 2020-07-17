@@ -1,0 +1,134 @@
+
+    UploadPlan:
+      type: object
+      description: |
+          
+      properties:
+        transactionNumber:
+          type: string
+          description:     UploadPlanRequest:
+      description: Contract class for web request. Array of UploadPlan items  are used in case of create or update
+      properties:
+        requestInfo:
+          $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+        uploadPlans:
+          description: Used for search result and create only
+          type:  array
+          items:
+            $ref: '#/definitions/UploadPlan'
+    UploadPlanResponse:
+      description: Contract class for web response. Array of UploadPlan items  are used in case of search ,create or update request. 
+      properties:
+        responseInfo:
+          $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
+        uploadPlans:
+          description: Used for search result and create only
+          type:  array
+          items:
+            $ref: '#/definitions/UploadPlan'
+        page:
+          $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/financials/contracts/egf-master/v1-0-0.yml#/definitions/Page'
+
+    UploadPlan:
+      type: object
+      description: |
+          
+      properties:
+        transactionNumber:
+          type: string
+          description: |
+            transaction number of the UploadPlan
+        planFile:
+          type: 
+          description: |
+            plan file of the UploadPlan
+        planReport:
+          type: 
+          description: |
+            plan report of the UploadPlan
+        status:
+          type: string
+          description: |
+            status of the UploadPlan
+        planDetail:
+          type: string
+          description: |
+            plan detail of the UploadPlan
+        edcrNumber:
+          type: string
+          description: |
+            edcr number of the UploadPlan
+    UploadPlanRequest:
+      description: Contract class for web request. Array of UploadPlan items  are used in case of create or update
+      properties:
+        requestInfo:
+          $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+        uploadPlans:
+          description: Used for search result and create only
+          type:  array
+          items:
+            $ref: '#/definitions/UploadPlan'
+    UploadPlanResponse:
+      description: Contract class for web response. Array of UploadPlan items  are used in case of search ,create or update request. 
+      properties:
+        responseInfo:
+          $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
+        uploadPlans:
+          description: Used for search result and create only
+          type:  array
+          items:
+            $ref: '#/definitions/UploadPlan'
+        page:
+          $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/financials/contracts/egf-master/v1-0-0.yml#/definitions/Page'
+
+    UploadPlan:
+      type: object
+      description: |
+          
+      properties:
+        transactionNumber:
+          type: string
+          description: |
+            transaction number of the UploadPlan
+        planFile:
+          type: 
+          description: |
+            plan file of the UploadPlan
+        planReport:
+          type: 
+          description: |
+            plan report of the UploadPlan
+        status:
+          type: string
+          description: |
+            status of the UploadPlan
+        planDetail:
+          type: string
+          description: |
+            plan detail of the UploadPlan
+        edcrNumber:
+          type: string
+          description: |
+            edcr number of the UploadPlan
+    UploadPlanRequest:
+      description: Contract class for web request. Array of UploadPlan items  are used in case of create or update
+      properties:
+        requestInfo:
+          $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+        uploadPlans:
+          description: Used for search result and create only
+          type:  array
+          items:
+            $ref: '#/definitions/UploadPlan'
+    UploadPlanResponse:
+      description: Contract class for web response. Array of UploadPlan items  are used in case of search ,create or update request. 
+      properties:
+        responseInfo:
+          $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
+        uploadPlans:
+          description: Used for search result and create only
+          type:  array
+          items:
+            $ref: '#/definitions/UploadPlan'
+        page:
+          $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/financials/contracts/egf-master/v1-0-0.yml#/definitions/Page'
