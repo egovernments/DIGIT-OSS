@@ -101,7 +101,7 @@ const fieldInspectionMultiItem = () => {
           inputProps: {
             accept: "image/*, .pdf, .png, .jpeg"
           },
-          maxFileSize: 6000,
+          maxFileSize: 5000,
           jsonPath: "BPA.additionalDetails.fieldinspection_pending[0].questions",
           jsonPathUpdatePrefix: "BPA.additionalDetails.fieldinspection_pending",
         },
@@ -133,7 +133,7 @@ const fieldInspectionMultiItem = () => {
             accept: "image/*, .pdf, .png, .jpeg",
             multiple: false
           },
-          maxFileSize: 6000
+          maxFileSize: 5000
         },
         gridDefination: {
           xs: 12,

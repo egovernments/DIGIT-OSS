@@ -17,7 +17,7 @@ export const documentList = {
         formatProps :{
           accept : "image/*, .pdf, .png, .jpeg",
         }, 
-        maxFileSize: 6000
+        maxFileSize: 5000
       },
       {
         type : "OWNERSHIPPROOF",
@@ -28,7 +28,7 @@ export const documentList = {
         formatProps :{
           accept : "image/*, .pdf, .png, .jpeg",
         },        
-        maxFileSize: 6000
+        maxFileSize: 5000
       },
       {
         type : "OWNERPHOTO",
@@ -50,7 +50,7 @@ export const documentList = {
         formatProps :{
           accept : "image/*, .pdf, .png, .jpeg",
         },        
-        maxFileSize: 6000
+        maxFileSize: 5000
       }
     ],
     documentTypePrefix: "TL_",

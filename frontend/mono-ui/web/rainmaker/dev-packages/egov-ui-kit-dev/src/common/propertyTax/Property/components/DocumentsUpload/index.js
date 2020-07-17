@@ -103,7 +103,7 @@ class DocumentsUpload extends Component {
       inputProps: {
         accept: "image/*, .pdf, .png, .jpeg",
       },
-      maxFileSize: 6000,
+      maxFileSize: 5000,
     };
 
     return <DocumentListContainer {...listProps}></DocumentListContainer>;

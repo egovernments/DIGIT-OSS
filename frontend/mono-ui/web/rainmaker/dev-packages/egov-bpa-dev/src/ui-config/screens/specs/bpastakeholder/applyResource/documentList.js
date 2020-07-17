@@ -15,6 +15,6 @@ export const documentList = {
       accept: "image/*, .pdf, .png, .jpeg"
     },
     documentTypePrefix: "BPA_",
-    maxFileSize: 6000
+    maxFileSize: 5000
   }
 };
