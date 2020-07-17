@@ -61,7 +61,7 @@ class InboxData extends React.Component {
       }
     } catch (e) {
       console.log(e);
-    }
+    }    
   }
 
   getProcessIntanceData = async (pid) => {
@@ -108,13 +108,18 @@ class InboxData extends React.Component {
     // }
     let contextPath = status === "Initiated" ? getWFConfig(row[0].hiddenText,row[0].subtext).INITIATED : getWFConfig(row[0].hiddenText,row[0].subtext).DEFAULT;
     let queryParams = `applicationNumber=${taskId}&tenantId=${tenantId}`;
-
+  
     if(row[0].subtext=="PT.CREATE"){
       queryParams+='&type=property';
     }
     else  if(row[0].subtext=="ASMT"){
       queryParams+='&type=assessment';
     }
+    else if(row[0].subtext=="EDITRENEWAL")
+    {
+      queryParams+= `&action=EDITRENEWAL`;
+    }
+    
     this.props.setRoute(`${contextPath}?${queryParams}`);
   };
 
@@ -146,7 +151,7 @@ class InboxData extends React.Component {
   render() {
     const { data, ProcessInstances } = this.props;
     const { onHistoryClick, onDialogClose, getModuleLink } = this;
-    const { isSorting, sortOrder } = this.state;
+    const { isSorting, sortOrder } = this.state;   
     if (isSorting) {
       data.rows.reverse();
     }
