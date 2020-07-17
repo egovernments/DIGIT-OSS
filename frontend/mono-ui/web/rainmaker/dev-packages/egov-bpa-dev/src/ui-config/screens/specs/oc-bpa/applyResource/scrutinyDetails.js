@@ -14,6 +14,7 @@ import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject
 import get from "lodash/get";
 import "./index.css";
 import { getOcEdcrDetails } from "../../utils";
+import { getLocaleLabels, getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 
 export const basicDetails = getCommonCard({
   header: getCommonTitle(
@@ -345,51 +346,19 @@ export const proposedBuildingDetails = getCommonCard({
         md: 6
       },
     },
-    occupancyType: {
-      ...getSelectField({
-        label: {
-          labelName: "Occupancy Type",
-          labelKey: "BPA_OCCUPANCY_TYPE"
-        },
-        placeholder: {
-          labelName: "Select Occupancy Type",
-          labelKey: "BPA_OCCUPANCY_TYPE_PLACEHOLDER"
-        },
+    occupancyTypeLabel: getLabelWithValue(
+      {
+        labelName: "Occupancy Type",
+        labelKey: "BPA_OCCUPANCY_TYPE"
+      },
+      {
         localePrefix: {
           moduleName: "BPA",
           masterName: "OCCUPANCYTYPE"
         },
-        jsonPath: "ocScrutinyDetails.planDetail.occupancies[0].typeHelper.type.code",
-        sourceJsonPath: "applyScreenMdmsData.BPA.occupancyData",
-        required: true,
-        gridDefination: {
-          xs: 12,
-          sm: 12,
-          md: 6
-        },
-        props: {
-          disabled: true,
-          className: "tl-trade-type"
-        }
-      }),
-      beforeFieldChange: (action, state, dispatch) => {
-        let path = action.componentJsonpath.replace(
-          /.occupancyType/,
-          //".proposedContainer.children.component.props.scheama.children.cardContent.children.children.subOccupancyType"
-          ".subOccupancyType"
-        );
-        let occupancyType = get(
-          state,
-          "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.SubOccupancyType",
-          []
-        );
-        let subOccupancyType = occupancyType.filter(item => {
-          return item.active && (item.occupancyType).toUpperCase() === (action.value).toUpperCase();
-        });
-        dispatch(handleField("apply", path, "props.data", subOccupancyType));
-        dispatch(prepareFinalObject("BPA.additionalDetails.isCharitableTrustBuilding", false));
+        jsonPath: "scrutinyDetails.planDetail.occupancies[0].typeHelper.type.code",
       }
-    },
+    ),
   }),
   proposedContainer: {
     uiFramework: "custom-atoms",
@@ -418,46 +387,30 @@ export const proposedBuildingDetails = getCommonCard({
                   }
                 }
               ),
-              subOccupancyType: {
-                uiFramework: "custom-containers-local",
-                moduleName: "egov-bpa",
-                componentPath: "AutosuggestContainer",
-                required: true,
-                props: {
-                  style: {
-                    width: "100%",
-                    cursor: "pointer"
-                  },
-                  label: {
-                    labelName: "Sub Occupancy Type",
-                    labelKey: "BPA_SUB_OCCUP_TYPE_LABEL"
-                  },
-                  placeholder: {
-                    labelName: "Select Sub Occupancy Type",
-                    labelKey: "BPA_SUB_OCCUP_TYPE_PLACEHOLDER"
-                  },
-                  localePrefix: {
-                    moduleName: "BPA",
-                    masterName: "SUBOCCUPANCYTYPE"
-                  },
-                  jsonPath: "edcr.blockDetail[0].occupancyType",
-                  sourceJsonPath: "edcr.blockDetail[0].suboccupancyData",
-                  labelsFromLocalisation: true,
-                  suggestions: [],
-                  fullwidth: true,
-                  required: true,
-                  isMulti: true,
-                  inputLabelProps: {
-                    shrink: true
-                  },
-                  isDisabled: true
+              subOccupancyTypeLabel: getLabelWithValue(
+                {
+                  labelName: "Sub Occupancy Type",
+                  labelKey: "BPA_SUB_OCCUP_TYPE_LABEL"
                 },
-                gridDefination: {
-                  xs: 12,
-                  sm: 12,
-                  md: 6
+                {
+                  jsonPath: `edcr.blockDetail[0]`,
+                  callBack: value => {
+                      let returnVAlue;
+                      if (value && value.occupancyType && value.occupancyType.length) {
+                          returnVAlue = "";
+                          let occupancy = value.occupancyType;
+                          for (let tp = 0; tp < occupancy.length; tp++) {
+                              if (tp === (occupancy.length - 1)) {
+                                  returnVAlue += getLocaleLabels(getTransformedLocale(`BPA_SUBOCCUPANCYTYPE_${occupancy[tp].value}`), getTransformedLocale(`BPA_SUBOCCUPANCYTYPE_${occupancy[tp].value}`)) //occupancy[tp].label;
+                              } else {
+                                  returnVAlue += getLocaleLabels(getTransformedLocale(`BPA_SUBOCCUPANCYTYPE_${occupancy[tp].value}`), getTransformedLocale(`BPA_SUBOCCUPANCYTYPE_${occupancy[tp].value}`)) + "," //occupancy[tp].label + ",";
+                              }
+                          }
+                      }
+                      return returnVAlue || "NA";
+                  },
                 }
-              },
+              ),
               proposedBuildingDetailsContainer: {
                 uiFramework: "custom-molecules-local",
                 moduleName: "egov-bpa",
