@@ -1,0 +1,10 @@
+{
+  "tenantId": "pb",
+  "moduleName": "sw-services-calculation",
+  "dateEffectiveConfig": [
+   {
+      "applicableDays": 19,
+      "isActive": true
+    }
+  ]
+}
