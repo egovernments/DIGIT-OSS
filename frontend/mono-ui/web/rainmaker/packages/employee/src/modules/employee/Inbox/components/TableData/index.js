@@ -55,6 +55,8 @@ const getWFstatus = (status) => {
       return "Connnection Activated"
     case "APPROVED":
       return "Approved";
+    case "FIELDINSPECTION_PENDING":
+      return "Field Inspection Pending"
     default:
       return 'NA';
   }
