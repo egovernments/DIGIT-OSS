@@ -950,6 +950,11 @@
       "masterName": "CalculationAttribute",
       "isStateLevel": true,
       "uniqueKeys": []
+    },
+    "dateEffectiveConfig":{
+       "masterName": "dateEffectiveConfig",
+      "isStateLevel": true,
+      "uniqueKeys": []
     }
   },
   "BPA": {
@@ -1110,6 +1115,11 @@
     },
     "CalculationAttribute": {
       "masterName": "CalculationAttribute",
+      "isStateLevel": true,
+      "uniqueKeys": []
+    },
+    "dateEffectiveConfig":{
+       "masterName": "dateEffectiveConfig",
       "isStateLevel": true,
       "uniqueKeys": []
     }
