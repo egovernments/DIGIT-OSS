@@ -72,7 +72,7 @@ export const previewSummary = getCommonGrayCard({
         accept: "image/*, .pdf, .png, .jpeg",
         multiple: false
       },
-      maxFileSize: 6000
+      maxFileSize: 5000
     }
   }
 });
