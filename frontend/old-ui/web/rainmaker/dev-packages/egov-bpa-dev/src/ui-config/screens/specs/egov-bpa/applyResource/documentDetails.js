@@ -65,7 +65,7 @@ export const documentDetails = getCommonCard({
         accept: "image/*, .pdf, .png, .jpeg",
         multiple: false
       },
-      maxFileSize: 6000
+      maxFileSize: 5000
     },
     type: "array"
   }
