@@ -75,7 +75,6 @@
     	<module>egov-config</module>
     	<module>egov-egi</module>
         <module>egov-commons</module>
-        <module>egov-ear</module>
         <module>egov-edcr</module>
         <module>egov-egiweb</module>
         <module>egov-edcrweb</module>
