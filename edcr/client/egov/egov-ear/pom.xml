@@ -3,12 +3,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>org.egov</groupId>
-        <artifactId>egov-erp-edcr</artifactId>
-        <version>BPA-3.0.0-SNAPSHOT</version>
+        <artifactId>egov-erp-edcr-impl</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>egov-ear-edcr</artifactId>
+    <artifactId>egov-erp-edcr-impl-ear</artifactId>
     <packaging>ear</packaging>
 
     <name>e-governments edcr erp ear</name>
@@ -21,30 +21,14 @@
             <version>${erp-version}</version>
             <type>war</type>
         </dependency>
-        <dependency>
-            <groupId>org.egov</groupId>
-            <artifactId>egov-commonsweb</artifactId>
-            <version>${erp-version}</version>
-            <type>war</type>
-        </dependency>
-        <dependency>
-            <groupId>org.egov</groupId>
-            <artifactId>egov-eisweb</artifactId>
-            <version>${erp-version}</version>
-            <type>war</type>
-        </dependency>
+      
         <dependency>
             <groupId>org.egov</groupId>
             <artifactId>egov-edcrweb</artifactId>
             <version>${erp-version}</version>
             <type>war</type>
         </dependency>
-        <dependency>
-            <groupId>org.egov</groupId>
-            <artifactId>egov-portalweb</artifactId>
-            <version>${erp-version}</version>
-            <type>war</type>
-        </dependency>
+      
         <!-- EAR Web Dependencies Ends -->
 
         <!-- EAR Java Dependencies Starts -->
@@ -66,18 +50,12 @@
             <groupId>org.egov</groupId>
             <artifactId>egov-commons</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.egov</groupId>
-            <artifactId>egov-eis</artifactId>
-        </dependency>
+        
         <dependency>
             <groupId>org.egov</groupId>
             <artifactId>egov-edcr</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.egov</groupId>
-            <artifactId>egov-portal</artifactId>
-        </dependency>
+        
 	<dependency>
             <groupId>org.egov</groupId>
             <artifactId>egov-client-impl</artifactId>
@@ -125,26 +103,13 @@
                             <artifactId>egov-egiweb</artifactId>
                             <contextRoot>/egi</contextRoot>
                         </webModule>
-                        <webModule>
-                            <groupId>org.egov</groupId>
-                            <artifactId>egov-commonsweb</artifactId>
-                            <contextRoot>/common</contextRoot>
-                        </webModule>
-                        <webModule>
-                            <groupId>org.egov</groupId>
-                            <artifactId>egov-eisweb</artifactId>
-                            <contextRoot>/eis</contextRoot>
-                        </webModule>
+                        
                         <webModule>
                             <groupId>org.egov</groupId>
                             <artifactId>egov-edcrweb</artifactId>
                             <contextRoot>/edcr</contextRoot>
                         </webModule>
-                        <webModule>
-                            <groupId>org.egov</groupId>
-                            <artifactId>egov-portalweb</artifactId>
-                            <contextRoot>/portal</contextRoot>
-                        </webModule>
+                        
                     </modules>
                     <defaultLibBundleDir>lib</defaultLibBundleDir>
                     <skinnyWars>true</skinnyWars>
