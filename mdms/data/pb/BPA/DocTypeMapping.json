@@ -82,16 +82,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -175,16 +165,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 30
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 31
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 32
         }
       ]
     },
@@ -268,16 +248,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 46
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 47
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 48
         }
       ]
     },
@@ -361,16 +331,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 214
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 215
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 216
         }
       ]
     },
@@ -454,16 +414,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 164
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 165
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 166
         }
       ]
     },
@@ -547,16 +497,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 184
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 185
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 186
         }
       ]
     },
@@ -640,16 +580,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -733,16 +663,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 30
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 31
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 32
         }
       ]
     },
@@ -826,16 +746,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 46
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 47
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 48
         }
       ]
     },
@@ -919,16 +829,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 214
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 215
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 216
         }
       ]
     },
@@ -1012,16 +912,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 164
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 165
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 166
         }
       ]
     },
@@ -1105,16 +995,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 184
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 185
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 186
         }
       ]
     },
@@ -1198,16 +1078,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 63
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 64
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 65
         }
       ]
     },
@@ -1291,16 +1161,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 95
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 96
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 97
         }
       ]
     },
@@ -1384,16 +1244,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 130
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 131
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 132
         }
       ]
     },
@@ -1477,16 +1327,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 234
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 235
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 236
         }
       ]
     },
@@ -1570,16 +1410,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 274
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 275
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 276
         }
       ]
     },
@@ -1663,16 +1493,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -1756,16 +1576,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -1849,16 +1659,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -1942,16 +1742,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -2035,16 +1825,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -2128,16 +1908,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -2221,16 +1991,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -2314,18 +2074,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 79
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": true,
-          "allow": "true",
-          "order": 80
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": true,
-          "allow": "true",
-          "order": 81
         }
       ]
     },
@@ -2409,18 +2157,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 114
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": true,
-          "allow": "true",
-          "order": 115
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": true,
-          "allow": "true",
-          "order": 116
         }
       ]
     },
@@ -2504,18 +2240,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 146
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": true,
-          "allow": "true",
-          "order": 147
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": true,
-          "allow": "true",
-          "order": 148
         }
       ]
     },
@@ -2599,18 +2323,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 254
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": true,
-          "allow": "true",
-          "order": 255
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": true,
-          "allow": "true",
-          "order": 256
         }
       ]
     },
@@ -2694,18 +2406,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": true,
-          "allow": "true",
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": true,
-          "allow": "true",
-          "order": 16
         }
       ]
     },
@@ -2789,18 +2489,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": true,
-          "allow": "true",
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": true,
-          "allow": "true",
-          "order": 16
         }
       ]
     },
@@ -2884,16 +2572,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -2977,16 +2655,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -3070,16 +2738,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -3163,16 +2821,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -3256,16 +2904,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -3349,16 +2987,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -3442,16 +3070,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -3535,16 +3153,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -3628,16 +3236,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -3721,16 +3319,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -3814,16 +3402,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -3907,16 +3485,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -4000,16 +3568,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -4093,16 +3651,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -4186,16 +3734,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -4279,16 +3817,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -4372,16 +3900,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -4465,16 +3983,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -4558,16 +4066,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -4651,16 +4149,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 30
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 31
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 32
         }
       ]
     },
@@ -4744,16 +4232,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 46
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 47
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 48
         }
       ]
     },
@@ -4837,16 +4315,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -4930,16 +4398,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 30
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 31
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 32
         }
       ]
     },
@@ -5023,16 +4481,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 46
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 47
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 48
         }
       ]
     },
@@ -5116,16 +4564,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -5209,16 +4647,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 30
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 31
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 32
         }
       ]
     },
@@ -5302,16 +4730,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 46
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 47
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 48
         }
       ]
     },
@@ -5395,16 +4813,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -5488,16 +4896,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 30
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 31
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 32
         }
       ]
     },
@@ -5581,16 +4979,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 46
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 47
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 48
         }
       ]
     },
@@ -5674,16 +5062,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -5767,16 +5145,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -5860,16 +5228,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -5953,16 +5311,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -6046,16 +5394,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -6139,16 +5477,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -6232,16 +5560,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -6325,16 +5643,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -6418,16 +5726,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -6511,16 +5809,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -6604,16 +5892,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -6697,16 +5975,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -6790,16 +6058,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -6883,16 +6141,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -6976,16 +6224,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -7069,16 +6307,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -7162,16 +6390,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -7255,16 +6473,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -7348,16 +6556,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -7441,16 +6639,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -7534,16 +6722,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -7627,16 +6805,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -7720,16 +6888,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -7813,16 +6971,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -7906,16 +7054,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -7999,16 +7137,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -8092,16 +7220,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -8185,16 +7303,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -8278,16 +7386,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     },
@@ -8371,16 +7469,6 @@
           "code": "BPD.RP",
           "required": false,
           "order": 14
-        },
-        {
-          "code": "NOC.FIRE",
-          "required": false,
-          "order": 15
-        },
-        {
-          "code": "NOC.AIRPORT",
-          "required": false,
-          "order": 16
         }
       ]
     }
