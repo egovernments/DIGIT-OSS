@@ -40,6 +40,14 @@ config:
       - work-dir: "rainmaker-pgr/src/main/resources/db"
         image-name: "rainmaker-pgr-db"
 
+  - name: "builds/municipal-services/pgr-services"
+    build:
+      - work-dir: "pgr-services"
+        image-name: "pgr-services"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "pgr-services/src/main/resources/db"
+        image-name: "pgr-services-db"
+
   - name: "builds/municipal-services/tl-calculator"
     build:
       - work-dir: "tl-calculator"
