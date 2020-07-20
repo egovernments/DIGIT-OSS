@@ -5,7 +5,8 @@ import FormGroup from "@material-ui/core/FormGroup";
 import { connect } from "react-redux";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { prepareFinalObject,toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+
 //import "./index.css";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getLocalization, getLocale } from "egov-ui-kit/utils/localStorageUtils";
@@ -44,7 +45,6 @@ class CheckboxLabels extends React.Component {
 
   render() {
     const { classes, content } = this.props;
-console.log("checkbox container props", this.props);
 
     
     const localizationLabels = JSON.parse(getLocalization(`localization_${getLocale()}`));
@@ -103,14 +103,14 @@ const mapDispatchToProps = dispatch => {
   return {
     approveCheck: (jsonPath, value) => {
       dispatch(prepareFinalObject(jsonPath, value));   
-      if(!value) 
+    if(value) 
       {
         dispatch(
           handleField(
             "search-preview",
             "components.div.children.footer.children.container.children.rightdiv.children.editButton",
             "props.disabled",
-            false
+            true
           )
         ); 
         dispatch(
@@ -118,12 +118,12 @@ const mapDispatchToProps = dispatch => {
             "search-preview",
             "components.div.children.footer.children.container.children.rightdiv.children.submitButton",
             "props.disabled",
-            true
+            false
           )
         ); 
-    }
+    } 
     else{
-       dispatch(
+      /*  dispatch(
         handleField(
           "search-preview",
           "components.div.children.footer.children.container.children.rightdiv.children.submitButton",
@@ -136,12 +136,22 @@ const mapDispatchToProps = dispatch => {
           "search-preview",
           "components.div.children.footer.children.container.children.rightdiv.children.editButton",
           "props.disabled",
-          true
+          false
         )
-      ); 
+      );  */
+      dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "Please check the declaration box to proceed further with One Click Renewal option!",
+            labelKey: "TL_RENEWAL_DECLARATION_ALTERT_MESSAGE"
+          },
+          "error"
+        )
+      );
 
-    }
-
+   }
+       
     }
   };
 };

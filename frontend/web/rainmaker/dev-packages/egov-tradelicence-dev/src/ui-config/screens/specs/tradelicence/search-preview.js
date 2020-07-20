@@ -23,8 +23,11 @@ import {
   setMultiOwnerForSV,
   setValidToFromVisibilityForSV,
   getDialogButton,
-  showHideAdhocPopup
+  showHideAdhocPopup,
+  getEpochForDate,
+  convertEpochToDateForEndDateYMD
 } from "../utils";
+
 
 import { footerReview, downloadPrintContainer,footerReviewTop  } from "./applyResource/footer";
 import {
@@ -197,16 +200,28 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
       "Licenses[0].applicationType"
     );
 
-    if(status ==="APPROVED" && applicationType ==="NEW" )
-    {
-    
+    const LicensevalidToDate = get(
+      state.screenConfiguration.preparedFinalObject,
+      "Licenses[0].validTo"
+    ); 
+
+   let m_value = LicensevalidToDate-1000;
+
+   let LicensevalidToDateConverted = convertEpochToDateForEndDateYMD(m_value)
+
+   const licene_expiry_date = new Date(LicensevalidToDateConverted);
+
+   const limit_date = new Date('2021','00','01');
+
+
+   if(status ==="APPROVED" && applicationType ==="NEW" && licene_expiry_date>=limit_date)
+   {   
       dispatch(handleField(
         "search-preview",
         "components.div.children.tradeReviewDetails.children.cardContent.children.reviewDeclaration",
         "visible",
         true
-      ))
-
+      ));     
     }
     else if(applicationType ==="RENEWAL")
     {
@@ -216,6 +231,22 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
         "visible",
         false
       ))
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.footer.children.container.children.rightdiv.children.submitButton",
+          "props.visible",
+          false
+        )
+      ); 
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.footer.children.container.children.rightdiv.children.editButton",
+          "props.visible",
+          false
+        )
+      ); 
 
     }
     else    {
@@ -224,7 +255,23 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
         "components.div.children.tradeReviewDetails.children.cardContent.children.reviewDeclaration",
         "visible",
         false
-      ))
+      ));
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.footer.children.container.children.rightdiv.children.submitButton",
+          "props.visible",
+          false
+        )
+      ); 
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.footer.children.container.children.rightdiv.children.editButton",
+          "props.visible",
+          false
+        )
+      ); 
 
     }
 
@@ -440,6 +487,24 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
       );
     setActionItems(action, obj);
     // loadReceiptGenerationData(applicationNumber, tenantId);
+   
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.footer.children.container.children.rightdiv.children.editButton",
+          "props.disabled",
+          false
+        )
+      ); 
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.footer.children.container.children.rightdiv.children.submitButton",
+          "props.disabled",
+          false
+        )
+      ); 
+   
   }
 
   //let declaration_value =  get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tradeLicenseDetail.additionalDetail.declaration")
@@ -658,8 +723,7 @@ export const tradeReviewDetails = getCommonCard({
   },
   reviewTradeDetails,
   reviewOwnerDetails,
-  reviewDocumentDetails,
-  reviewDeclaration
+  reviewDocumentDetails,  
 
 });
 
@@ -802,7 +866,8 @@ const screenConfig = {
             }
           }
         },
-        tradeReviewDetails   
+        tradeReviewDetails,
+        reviewDeclaration   
       }
     },
     breakUpDialog: {

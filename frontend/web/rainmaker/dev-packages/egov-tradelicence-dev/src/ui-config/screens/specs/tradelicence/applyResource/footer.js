@@ -621,37 +621,55 @@ export const renewTradelicence  = async (financialYear, state,dispatch) => {
     "components.div.children.footer.children.container.children.rightdiv.children.renewDialog.props.financialYear"
   ); */
 
+const declaration_value = get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tradeLicenseDetail.additionalDetail.declaration")
 
-  const licences = get(
-    state.screenConfiguration.preparedFinalObject,
-    `Licenses`
-  );
+  if(!declaration_value)
+  {
+    dispatch(
+      toggleSnackbar(
+        true,
+        {
+          labelName: "Please check the declaration box to proceed further with One Click Renewal option!",
+          labelKey: "TL_RENEWAL_DECLARATION_ALTERT_MESSAGE"
+        },
+        "error"
+      )
+    );
 
-  const tenantId= get(licences[0] , "tenantId");
-
-  const nextFinancialYear = await getNextFinancialYearForRenewal(financialYear);
-
-  const wfCode = "DIRECTRENEWAL";
-  set(licences[0], "action", "INITIATE");
-  set(licences[0], "workflowCode", wfCode);
-  set(licences[0], "applicationType", "RENEWAL");
-  set(licences[0],"financialYear" ,nextFinancialYear);
-
-const response=  await httpRequest("post", "/tl-services/v1/_update", "", [], {
-    Licenses: licences
-  })
-   const renewedapplicationNo = get(
-    response,
-    `Licenses[0].applicationNumber`
-  );
-  const licenseNumber = get(
-    response,
-    `Licenses[0].licenseNumber`
-  );
-  dispatch(
-    setRoute(
-      `/tradelicence/acknowledgement?purpose=EDITRENEWAL&status=success&applicationNumber=${renewedapplicationNo}&licenseNumber=${licenseNumber}&FY=${nextFinancialYear}&tenantId=${tenantId}&action=${wfCode}`
-    ));
+  }
+  else
+  {
+   const licences = get(
+      state.screenConfiguration.preparedFinalObject,
+      `Licenses`
+    );
+  
+    const tenantId= get(licences[0] , "tenantId");
+  
+    const nextFinancialYear = await getNextFinancialYearForRenewal(financialYear);
+  
+    const wfCode = "DIRECTRENEWAL";
+    set(licences[0], "action", "INITIATE");
+    set(licences[0], "workflowCode", wfCode);
+    set(licences[0], "applicationType", "RENEWAL");
+    set(licences[0],"financialYear" ,nextFinancialYear);
+  
+  const response=  await httpRequest("post", "/tl-services/v1/_update", "", [], {
+      Licenses: licences
+    })
+     const renewedapplicationNo = get(
+      response,
+      `Licenses[0].applicationNumber`
+    );
+    const licenseNumber = get(
+      response,
+      `Licenses[0].licenseNumber`
+    );
+    dispatch(
+      setRoute(
+        `/tradelicence/acknowledgement?purpose=EDITRENEWAL&status=success&applicationNumber=${renewedapplicationNo}&licenseNumber=${licenseNumber}&FY=${nextFinancialYear}&tenantId=${tenantId}&action=${wfCode}`
+      )); 
+  }  
 };
 
 
@@ -733,7 +751,7 @@ const response=  await httpRequest("post", "/tl-services/v1/_update", "", [], {
     },
 });*/
 
-export const renewDialogBox  = async (financialYear,state,dispatch) => {
+/* export const renewDialogBox  = async (financialYear,state,dispatch) => {
   
   dispatch(
     handleField("search-preview", "components.div.children.footer.children.container.children.rightdiv.children.renewDialog", "props.open", false)
@@ -747,7 +765,7 @@ export const renewDialogBox  = async (financialYear,state,dispatch) => {
   dispatch(
     handleField("search-preview", "components.div.children.footer.children.container.children.rightdiv.children.editButton", "props.open", !toggle)
   );
- };
+ }; */
 
 export const footerReview = (
   action,

@@ -228,14 +228,14 @@ export const getData = async (action, state, dispatch) => {
         prepareFinalObject("Licenses[0].oldLicenseNumber", oldApplicationNo)
       );
       if (oldApplicationNo !== null) {
-        dispatch(
+         dispatch(
           handleField(
             "apply",
             "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.financialYear",
             "props.value",
             get(state.screenConfiguration.preparedFinalObject,"Licenses[0].financialYear","")
           )
-        );
+        );   
         dispatch(
           handleField(
             "apply",
@@ -243,7 +243,7 @@ export const getData = async (action, state, dispatch) => {
             "props.value",
             "APPLICATIONTYPE.RENEWAL"
           )
-        );
+        );  
         dispatch(
           prepareFinalObject(
             "Licenses[0].applicationType",

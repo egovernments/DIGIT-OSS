@@ -580,6 +580,17 @@ export const convertEpochToDateForEndDate = dateEpoch => {
   return `${day}/${month}/${year}`;
 };
 
+export const convertEpochToDateForEndDateYMD = dateEpoch => {
+  const dateFromApi = new Date(dateEpoch);
+  dateFromApi.setDate(dateFromApi.getDate()-1);
+  let month = dateFromApi.getMonth() + 1;
+  let day = dateFromApi.getDate();
+  let year = dateFromApi.getFullYear();
+  month = (month > 9 ? "" : "0") + month;
+  day = (day > 9 ? "" : "0") + day;
+  return `${year}/${month}/${day}`;
+};
+
 export const convertDateToEpoch = (dateString, dayStartOrEnd = "dayend") => {
   //example input format : "2018-10-02"
   try {
