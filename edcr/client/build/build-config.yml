@@ -9,7 +9,7 @@
 # - 
 
 config:
--   name: builds/eGov-dcrclient-implementation/egov-edcr
+-   name: builds/dcr-client/egov-dcr-client/egov-edcr
     build:
     - work-dir: egov
       image-name: egov-edcr
