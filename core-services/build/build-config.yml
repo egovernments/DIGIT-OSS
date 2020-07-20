@@ -231,9 +231,3 @@ config:
       - work-dir: "mailbot"
         image-name: "mailbot"
         dockerfile: "build/maven/Dockerfile"
-
-  - name: "builds/core-services/egov-custom-consumer"
-    build:
-      - work-dir: "egov-custom-consumer"
-        image-name: "egov-custom-consumer"
-        dockerfile: "build/maven/Dockerfile"        
