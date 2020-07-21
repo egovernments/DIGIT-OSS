@@ -885,6 +885,9 @@ export const tradeDetails = getCommonCard({
           value: "Fill the form by searching your old approved trade license",
           key: "TL_OLD_TL_NO"
         },
+        props:{
+          disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+        },
         infoIcon: "info_circle",
         jsonPath: "Licenses[0].oldLicenseNumber"
       }),
