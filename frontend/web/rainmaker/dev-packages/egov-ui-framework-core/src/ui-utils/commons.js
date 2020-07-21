@@ -9,7 +9,15 @@ import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
 import orderBy from "lodash/orderBy";
 import set from "lodash/set";
-import { httpRequest, uploadFile } from "./api.js";
+import { getOwnerPhoto } from "egov-tradelicence/ui-config/screens/specs/utils/receiptTransformer";
+
+export const hasTokenExpired = (status, data) => {
+  if (status === 401) {
+    if (data && data.Errors && Array.isArray(data.Errors) && data.Errors.length > 0 && data.Errors[0].code === "InvalidAccessTokenException")
+      return true;
+  }
+  return false;
+};
 
 export const addComponentJsonpath = (components, jsonPath = "components") => {
   for (var componentKey in components) {
@@ -269,6 +277,9 @@ export const setDocuments = async (
   const reviewDocData =
     uploadedDocData &&
     uploadedDocData.map((item, index) => {
+      if(item.documentType == "OWNERPHOTO"){
+        getOwnerPhoto(fileUrlPayload[item.fileStoreId].split(",")[0])
+      }
       return {
         title: `${businessService}_${item.documentType}` || "",
         link:
