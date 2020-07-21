@@ -59,7 +59,9 @@ const updateSearchResults = async (
       window.location.href,
       "applicationNumber"
     );
-    if (!queryValueFromUrl) {
+    const isEditRenewal = getQueryArg(window.location.href,"action") === "EDITRENEWAL";
+
+    if (queryValueFromUrl && isEditRenewal) {
       dispatch(
         prepareFinalObject(
           "Licenses[0].oldLicenseNumber",

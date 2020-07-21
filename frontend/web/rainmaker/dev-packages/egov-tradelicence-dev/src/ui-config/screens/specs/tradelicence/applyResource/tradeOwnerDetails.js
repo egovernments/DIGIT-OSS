@@ -278,6 +278,9 @@ export const ownerInfoInstitutional = {
           labelKey: "TL_NEW_OWNER_AUTH_PER_PLACEHOLDER"
         },
         pattern: getPattern("Name"),
+        props:{
+          disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+        },
         required: true,
         jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].name"
       }),
@@ -366,6 +369,9 @@ const OwnerInfoCard = {
           placeholder: {
             labelName: "Enter Name",
             labelKey: "TL_NEW_OWNER_DETAILS_NAME_PLACEHOLDER"
+          },
+          props:{
+            disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
           },
           required: true,
           pattern: getPattern("Name"),

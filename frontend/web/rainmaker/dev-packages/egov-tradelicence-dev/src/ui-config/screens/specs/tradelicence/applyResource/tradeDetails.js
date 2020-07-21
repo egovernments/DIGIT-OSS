@@ -67,9 +67,9 @@ const tradeUnitCard = {
               },
               props: {
                 jsonPathUpdatePrefix: "LicensesTemp.tradeUnits",
-                setDataInField: true
-              },
-              sourceJsonPath:
+                setDataInField: true,
+                disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,               },
+               sourceJsonPath:
                 "applyScreenMdmsData.TradeLicense.TradeTypeTransformed",
               gridDefination: {
                 xs: 12,
@@ -156,7 +156,8 @@ const tradeUnitCard = {
               },
               jsonPath: "LicensesTemp.tradeUnits[0].tradeSubType",
               props: {
-                jsonPathUpdatePrefix: "LicensesTemp.tradeUnits"
+                jsonPathUpdatePrefix: "LicensesTemp.tradeUnits",
+                disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,             
               },
               sourceJsonPath:
                 "applyScreenMdmsData.TradeLicense.TradeCategoryTransformed",
@@ -207,7 +208,7 @@ const tradeUnitCard = {
             }
           },
           tradeSubType: {
-            uiFramework: "custom-containers-local",
+           /*  uiFramework: "custom-containers-local",
             moduleName: "egov-tradelicence",
             componentPath: "AutosuggestContainer",
             jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType",
@@ -244,7 +245,33 @@ const tradeUnitCard = {
               inputLabelProps: {
                 shrink: true
               }
-            },
+            }, */
+            ...getSelectField({
+              label: {
+                labelName: "Trade Sub-Type",
+                labelKey: "TL_NEW_TRADE_DETAILS_TRADE_SUBTYPE_LABEL"
+              },
+              placeholder: {
+                labelName: "Select Trade Sub-Type",
+                labelKey: "TL_NEW_TRADE_DETAILS_TRADE_SUBTYPE_PLACEHOLDER"
+              },
+              localePrefix: {
+                moduleName: "TRADELICENSE",
+                masterName: "TRADETYPE"
+              },         
+              sourceJsonPath: "applyScreenMdmsData.TradeLicense.TradeSubCategoryTransformed",
+              jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType",
+              required: true,
+              setDataInField: true,
+              labelsFromLocalisation: true,
+              props: {
+                disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,             
+              },
+              gridDefination: {
+                xs: 12,
+                sm: 4
+              }
+            }),
             beforeFieldChange: (action, state, dispatch) => {
               try {
                 let cardIndex = action.componentJsonpath
@@ -754,6 +781,9 @@ export const tradeDetails = getCommonCard({
             labelName: "Select Financial Year",
             labelKey: "TL_FINANCIAL_YEAR_PLACEHOLDER"
           },
+          props:{
+            disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+          },
           required: true,
           jsonPath: "Licenses[0].financialYear",
           sourceJsonPath: "applyScreenMdmsData.egf-master.FinancialYear",
@@ -781,6 +811,9 @@ export const tradeDetails = getCommonCard({
           localePrefix: {
             moduleName: "TradeLicense",
             masterName: "ApplicationType"
+          },
+          props:{
+            disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
           },
           jsonPath:
             "Licenses[0].applicationType",
@@ -927,6 +960,9 @@ export const tradeDetails = getCommonCard({
           labelName: "Example Diljit Da Dhaba",
           labelKey: "TL_NEW_TRADE_DETAILS_TRADE_NAME_PLACEHOLDER"
         },
+        props:{
+          disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+        },
         required: true,
         pattern: getPattern("TradeName"),
         jsonPath: "Licenses[0].tradeName"
@@ -986,6 +1022,9 @@ export const tradeDetails = getCommonCard({
             moduleName: "common-masters",
             masterName: "STRUCTURETYPE"
           },
+          props:{
+            disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+          },
           required: true,
           jsonPath: "LicensesTemp[0].tradeLicenseDetail.structureType",
           sourceJsonPath:
@@ -1019,6 +1058,9 @@ export const tradeDetails = getCommonCard({
           placeholder: {
             labelName: "Select Structure Sub Type",
             labelKey: "TL_NEW_TRADE_DETAILS_STRUCT_SUB_TYPE_PLACEHOLDER"
+          },
+          props:{
+            disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
           },
           required: true,
           localePrefix: {
@@ -1059,6 +1101,9 @@ export const tradeDetails = getCommonCard({
           labelName: "Enter Trade Commencement Date",
           labelKey: "TL_NEW_TRADE_DETAILS_TRADE_COMM_DATE_PLACEHOLDER"
         },
+        props:{
+          disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+        },
         required: true,
         pattern: getPattern("Date"),
         jsonPath: "Licenses[0].commencementDate",
@@ -1073,6 +1118,9 @@ export const tradeDetails = getCommonCard({
           labelName: "Enter Trade GST No.",
           labelKey: "TL_NEW_TRADE_DETAILS_TRADE_GST_NO_PLACEHOLDER"
         },
+        props:{
+         // disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+        },
         pattern: getPattern("GSTNo"),
         jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.gstNo"
       }),
@@ -1085,6 +1133,9 @@ export const tradeDetails = getCommonCard({
           labelName: "Enter Operatonal Area in Sq.ft",
           labelKey: "TL_NEW_TRADE_DETAILS_OPR_AREA_PLACEHOLDER"
         },
+        props:{
+          //disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+        },
         pattern: getPattern("OperationalArea"),
         jsonPath: "Licenses[0].tradeLicenseDetail.operationalArea"
       }),
@@ -1096,6 +1147,9 @@ export const tradeDetails = getCommonCard({
         placeholder: {
           labelName: "Enter No. Of Employee",
           labelKey: "TL_NEW_TRADE_DETAILS_NO_EMPLOYEES_PLACEHOLDER"
+        },
+        props:{
+          //disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
         },
         pattern: getPattern("NoOfEmp"),
         jsonPath: "Licenses[0].tradeLicenseDetail.noOfEmployees"
@@ -1114,6 +1168,9 @@ export const tradeDetails = getCommonCard({
             moduleName: "TradeLicense",
             masterName: "OccupancyType"
           },
+          props:{
+           // disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+          },
           required: true,
           jsonPath:
             "Licenses[0].tradeLicenseDetail.additionalDetail.occupancyType",
@@ -1131,7 +1188,7 @@ export const tradeDetails = getCommonCard({
         },
         props: {
           className: "applicant-details-error"
-        },
+         },
         placeholder: {
           labelName: "Enter No. Of Employee",
           labelKey: "TL_NEW_TRADE_DETAILS_NO_EMPLOYEES_PLACEHOLDER"
@@ -1179,10 +1236,10 @@ export const tradeDetails = getCommonCard({
       // }),
     },
     {
-      style:
+      /* style:
         getQueryArg(window.location.href, "action") === "EDITRENEWAL"
           ? { "pointer-events": "none" }
-          : {}
+          : {} */
     }
   ),
   tradeUnitCard

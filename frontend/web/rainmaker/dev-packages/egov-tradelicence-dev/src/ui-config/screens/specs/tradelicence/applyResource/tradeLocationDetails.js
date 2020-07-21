@@ -124,7 +124,7 @@ export const tradeLocationDetails = getCommonCard(
         placeholder: {
           labelName: "Enter Property ID",
           labelKey: "TL_NEW_TRADE_DETAILS_PT_ID_PLACEHOLDER"
-        },
+        },              
         iconObj: {
           iconName: "search",
           position: "end",
@@ -190,16 +190,21 @@ export const tradeLocationDetails = getCommonCard(
         jsonPath: "Licenses[0].tradeLicenseDetail.address.street"
       }),
       tradeLocMohalla: {
-        uiFramework: "custom-containers-local",
+        /* uiFramework: "custom-containers-local",
         moduleName: "egov-tradelicence",
         componentPath: "AutosuggestContainer",
         jsonPath: "Licenses[0].tradeLicenseDetail.address.locality.code",
         required: true,
         props: {
-          style: {
-            width: "100%",
-            cursor: "pointer"
-          },
+          //className: "trademohalla",
+         /* style:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? 
+               {"cursor":"not-allowed",overflow:"visible"}:
+               { width: "100%",
+            cursor: "pointer" ,overflow: "visible" }, 
+            style:{
+              "pointer-events": "none",
+              "cursor":"not-allowed"              
+            },          
           label: {
             labelName: "Mohalla",
             labelKey: "TL_NEW_TRADE_DETAILS_MOHALLA_LABEL"
@@ -218,7 +223,29 @@ export const tradeLocationDetails = getCommonCard(
             shrink: true
           }
           // className: "tradelicense-mohalla-apply"
-        },
+        }, */
+        ...getSelectField({
+          label: {
+            labelName: "Mohalla",
+            labelKey: "TL_NEW_TRADE_DETAILS_MOHALLA_LABEL"
+          },
+         /*  localePrefix: {
+            moduleName: "TENANT",
+            masterName: "TENANTS"
+          }, */
+          optionLabel: "name",
+          placeholder: {
+            labelName: "Select Mohalla",
+            labelKey: "TL_NEW_TRADE_DETAILS_MOHALLA_PLACEHOLDER"
+          },          sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
+          jsonPath: "Licenses[0].tradeLicenseDetail.address.locality.code",
+          sourceJsonPath: "applyScreenMdmsData.tenant.localities",
+          required: true,
+          props: {
+            required: true,
+            disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+                  },
+        }),
         beforeFieldChange: async (action, state, dispatch) => {
           // dispatch(
           //   prepareFinalObject(
@@ -324,7 +351,7 @@ export const tradeLocationDetails = getCommonCard(
     }
   },
   {
-    style:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? {"pointer-events":"none",overflow:"visible"}:{overflow: "visible"}
-
+    /* style:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? {"pointer-events":"none",overflow:"visible"}:{overflow: "visible"}
+ */
   }
 );
