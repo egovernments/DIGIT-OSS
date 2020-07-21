@@ -39,7 +39,7 @@ import { getReviewTrade } from "./applyResource/review-trade";
 import { getReviewOwner } from "./applyResource/review-owner";
 import { getReviewDocuments } from "./applyResource/review-documents";
 import { getDeclaration }from "./applyResource/declaration";
-import { loadReceiptGenerationData, getOwnerPhoto } from "../utils/receiptTransformer";
+import { loadReceiptGenerationData } from "../utils/receiptTransformer";
 import { adhocPopup } from "./applyResource/adhocPopup";
 
 
