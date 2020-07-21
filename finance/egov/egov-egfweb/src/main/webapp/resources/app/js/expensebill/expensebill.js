@@ -494,10 +494,12 @@ function deleteDebitDetailsRow(obj) {
     if(rowcount<=1) {
 		bootbox.alert($.i18n.prop('msg.this.row.can.not.be.deleted'));
 		return false;
-	} else {
+	} else if (confirm("Are you sure you want to Delete")) {
 		deleteRow(obj,'tbldebitdetails');
 		--debitAmountrowcount;
 		return true;
+	}else{
+		return false
 	}
     
     resetDebitCodes();
@@ -530,12 +532,15 @@ function deleteCreditDetailsRow(obj) {
     if(rowcount<=1) {
     	bootbox.alert($.i18n.prop('msg.this.row.can.not.be.deleted'));
 		return false;
-	} else {
+	} else if (confirm("Are you sure you want to Delete")) {
 		deleteRow(obj,'tblcreditdetails');
 		--creditAmoutrowcount;
 		return true;
-	}	
+	} else{
+    	return false;
+	}
 }
+
 
 function deleteAccountDetails(obj) {
 	var index = obj.id.split('_')[1];
