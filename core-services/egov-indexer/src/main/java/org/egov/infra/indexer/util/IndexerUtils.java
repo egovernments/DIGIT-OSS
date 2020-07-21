@@ -56,13 +56,16 @@ public class IndexerUtils {
 
 	@Value("${egov.service.host}")
 	private String serviceHost;
-	
+
 	@Value("${egov.indexer.dss.collectionindex.topic}")
 	private String dssTopicForCollection;
-	
+
+	@Value("${dss.collectionindex.topic.push.enabled}")
+	private Boolean dssTopicPushEnabled;
+
 	@Value("${topic.push.enabled}")
 	private Boolean topicPushEnable;
-	
+
 	@Autowired
 	private IndexerProducer producer;
 
@@ -74,7 +77,7 @@ public class IndexerUtils {
 	 * A Poll thread that polls es for its status and keeps the kafka container
 	 * paused until ES is back up. Once ES is up, container is resumed and all the
 	 * stacked up records in the queue are processed.
-	 * 
+	 *
 	 */
 	public void orchestrateListenerOnESHealth() {
 		kafkaConsumerConfig.pauseContainer();
@@ -105,7 +108,7 @@ public class IndexerUtils {
 
 	/**
 	 * Helper method in data transformation
-	 * 
+	 *
 	 * @param jsonString
 	 * @return
 	 */
@@ -124,7 +127,7 @@ public class IndexerUtils {
 
 	/**
 	 * Helper method in data transformation
-	 * 
+	 *
 	 * @param object
 	 * @return
 	 */
@@ -144,7 +147,7 @@ public class IndexerUtils {
 	/**
 	 * A part of use-case where custom object it to be indexed. This method builds
 	 * the uri for external service call based on config.
-	 * 
+	 *
 	 * @param uriMapping
 	 * @param kafkaJson
 	 * @return
@@ -253,7 +256,7 @@ public class IndexerUtils {
 
 	/**
 	 * Helper method that builds id for the index while bulk indexing.
-	 * 
+	 *
 	 * @param index
 	 * @param stringifiedObject
 	 * @return
@@ -284,7 +287,7 @@ public class IndexerUtils {
 
 	/**
 	 * Helper method for data transformation.
-	 * 
+	 *
 	 * @param kafkaJson
 	 * @param index
 	 * @param isBulk
@@ -415,7 +418,7 @@ public class IndexerUtils {
 
 	/**
 	 * Helper method in transforming data to es readable form.
-	 * 
+	 *
 	 * @param index
 	 * @param kafkaJsonArray
 	 * @return
@@ -458,7 +461,7 @@ public class IndexerUtils {
 
 	/**
 	 * Method to mask fields as mentioned in the config
-	 * 
+	 *
 	 * @param index
 	 * @param context
 	 * @return
@@ -483,7 +486,7 @@ public class IndexerUtils {
 
 	/**
 	 * Method to add timestamp at the root level as mentioned in the config.
-	 * 
+	 *
 	 * @param index
 	 * @param context
 	 * @return
@@ -508,7 +511,7 @@ public class IndexerUtils {
 		return context;
 
 	}
-	
+
 	/**
 	 * Method to encode non ascii characters.
 	 *
@@ -529,7 +532,7 @@ public class IndexerUtils {
 	/**
 	 * Returns mapper with all the appropriate properties reqd in our
 	 * functionalities.
-	 * 
+	 *
 	 * @return ObjectMapper
 	 */
 	public ObjectMapper getObjectMapper() {
@@ -544,7 +547,7 @@ public class IndexerUtils {
 
 	/**
 	 * Util method to return Auditdetails for create and update processes
-	 * 
+	 *
 	 * @param by
 	 * @param isCreate
 	 * @return
@@ -559,7 +562,7 @@ public class IndexerUtils {
 
 	/**
 	 * Method to fetch estimated time for the indexing to finish
-	 * 
+	 *
 	 * @param totalRecords
 	 * @return
 	 */
@@ -580,7 +583,7 @@ public class IndexerUtils {
 
 	/**
 	 * Helper method to build uri for paged search
-	 * 
+	 *
 	 * @param apiDetails
 	 * @param offset
 	 * @param size
@@ -606,7 +609,7 @@ public class IndexerUtils {
 					.append("&" + offsetKey + "=" + offset).append("&" + sizeKey + "=" + size);
 		else
 			url.append("?" + offsetKey + "=" + offset).append("&" + sizeKey + "=" + size);
-		
+
 		if(!StringUtils.isEmpty(apiDetails.getCustomQueryParam())) {
 			url.append("&").append(apiDetails.getCustomQueryParam());
 		}
@@ -616,7 +619,7 @@ public class IndexerUtils {
 
 	/**
 	 * Helper method in transformation
-	 * 
+	 *
 	 * @param s
 	 * @return
 	 */
@@ -624,7 +627,7 @@ public class IndexerUtils {
 		return s.replaceAll(String.format("%s|%s|%s", "(?<=[A-Z])(?=[A-Z][a-z])", "(?<=[^A-Z])(?=[A-Z])",
 				"(?<=[A-Za-z])(?=[^A-Za-z])"), " ");
 	}
-	
+
 	/**
 	 * Method to convert double with scientific precision to plain long
 	 * ex:- 1.5534533434E10-->15534533434
@@ -637,27 +640,31 @@ public class IndexerUtils {
 		df.setMaximumFractionDigits(0);
 		return df.format(Double.valueOf(value));
 	}
-	
-	
+
+
 	/**
 	 * For the sake of DSS, collections data is being used from a different index.
 	 * This method pushes only the collections data to a different topic, for the dss ingest to pick.
-	 * 
+	 *
 	 * @param enrichedObject
 	 * @param index
 	 */
-	public void pushToKafka(String key, String enrichedObject, Index index) {
-		if(topicPushEnable) {
-			String topicName = index.getName() + "-" + "enriched";
-			try{
-				JsonNode enrichedObjectNode = getObjectMapper().readTree(enrichedObject);
-				producer.producer(topicName, key, enrichedObjectNode);
-			} catch (IOException e){
-				log.error("Failed pushing data to the ES topic: "+topicName);
+	public void pushCollectionToDSSTopic(String enrichedObject, Index index) {
+		if(dssTopicPushEnabled) {
+			if(index.getName().contains("collection") || index.getName().contains("payment")) {
+				log.info("Index name: "+ index.getName());
+				log.info("Pushing collections data to the DSS topic: "+dssTopicForCollection);
+				try{
+					JsonNode enrichedObjectNode = new ObjectMapper().readTree(enrichedObject);
+					producer.producer(dssTopicForCollection, enrichedObjectNode);
+					producer.producer(index + "-" + "enriched", enrichedObjectNode);
+				} catch (IOException e){
+					log.error("Failed pushing collections data to the DSS topic: "+dssTopicForCollection);
 
+				}
 			}
 		}
 	}
-	
+
 
 }

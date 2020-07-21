@@ -69,6 +69,7 @@ public class DataTransformationService {
 
     private ObjectMapper mapper = new ObjectMapper();
 
+
     /**
      * Tranformation method that transforms the input data to match the es index as
      * per config
@@ -90,15 +91,13 @@ public class DataTransformationService {
                     String stringifiedObject = indexerUtils.buildString(kafkaJsonArray.get(i));
                     if (isCustom) {
                         String customIndexJson = buildCustomJsonForIndex(index.getCustomJsonMapping(), stringifiedObject);
-                        String id = indexerUtils.buildIndexId(index, stringifiedObject);
-                        indexerUtils.pushToKafka(id, customIndexJson, index);
-                        StringBuilder builder = appendIdToJson(id, jsonTobeIndexed, stringifiedObject, customIndexJson);
+                        indexerUtils.pushCollectionToDSSTopic(customIndexJson, index);
+                        StringBuilder builder = appendIdToJson(index, jsonTobeIndexed, stringifiedObject, customIndexJson);
                         if (null != builder)
                             jsonTobeIndexed = builder;
                     } else {
-                        String id = indexerUtils.buildIndexId(index, stringifiedObject);
-                        indexerUtils.pushToKafka(id, stringifiedObject, index);
-                        StringBuilder builder = appendIdToJson(id, jsonTobeIndexed, stringifiedObject, null);
+                        indexerUtils.pushCollectionToDSSTopic(stringifiedObject, index);
+                        StringBuilder builder = appendIdToJson(index, jsonTobeIndexed, stringifiedObject, null);
                         if (null != builder)
                             jsonTobeIndexed = builder;
                     }
@@ -118,28 +117,27 @@ public class DataTransformationService {
     /**
      * Attaches Index Id to the json to be indexed on es.
      *
-     * @param id
+     * @param index
      * @param jsonTobeIndexed
      * @param stringifiedObject
      * @param customIndexJson
      * @return
      */
-    public StringBuilder appendIdToJson(String id, StringBuilder jsonTobeIndexed, String stringifiedObject,
-                                        String customIndexJson) {
+    public StringBuilder appendIdToJson(Index index, StringBuilder jsonTobeIndexed, String stringifiedObject, String customIndexJson) {
+        String id = indexerUtils.buildIndexId(index, stringifiedObject);
         if (StringUtils.isEmpty(id)) {
             return null;
         } else {
             final String actionMetaData = String.format(IndexerConstants.ES_INDEX_HEADER_FORMAT, "" + id);
             if (null != customIndexJson) {
                 jsonTobeIndexed.append(actionMetaData).append(customIndexJson).append("\n");
-            } else {
+            }else {
                 jsonTobeIndexed.append(actionMetaData).append(stringifiedObject).append("\n");
             }
         }
 
         return jsonTobeIndexed;
     }
-
     /**
      * Helper method that builds the custom object for index. It performs following
      * actions: 1. Takes fields from the record received on the queue and maps it to

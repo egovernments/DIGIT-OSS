@@ -52,7 +52,7 @@ public class IndexerService {
 
 	/**
 	 * Method that processes data according to the config and posts them to es.
-	 * 
+	 *
 	 * @param topic
 	 * @param kafkaJson
 	 * @throws Exception
@@ -72,7 +72,7 @@ public class IndexerService {
 			log.error("No mappings found for the service to which the following topic belongs: " + topic);
 		}
 	}
-	
+
 
 	/**
 	 * This method deals with 3 types of uses cases that indexer supports: 1. Index
@@ -80,7 +80,7 @@ public class IndexerService {
 	 * record you receive on the queue and index only that 3. Build an entirely
 	 * different object and index it Data transformation as mentioned above is
 	 * performed and the passed on to a method that posts it to es.
-	 * 
+	 *
 	 * @param index
 	 * @param kafkaJson
 	 * @param isBulk
@@ -98,8 +98,10 @@ public class IndexerService {
 		} else {
 			jsonToBeIndexed = dataTransformationService.buildJsonForIndex(index, kafkaJson, isBulk, false);
 		}
-		//If index contains any of below, skipping to push to ES index. As we have huge data this will be processed using Kafka connect
-		if (!configkey.equals(Mapping.ConfigKeyEnum.LEGACYINDEX) && !index.getName().contains("payment")) {
+
+		if(index.getName().contains("collection") || index.getName().contains("payment") || configkey.equals(Mapping.ConfigKeyEnum.LEGACYINDEX)) {
+			// this is already sent
+		} else {
 			validateAndIndex(jsonToBeIndexed, url.toString(), index);
 		}
 
@@ -108,7 +110,7 @@ public class IndexerService {
 
 	/**
 	 * Method to index
-	 * 
+	 *
 	 * @param finalJson
 	 * @param url
 	 * @param index
@@ -118,7 +120,7 @@ public class IndexerService {
 		if (!StringUtils.isEmpty(finalJson)) {
 			if (finalJson.startsWith("{ \"index\""))
 				bulkIndexer.indexJsonOntoES(url.toString(), finalJson, index);
-			else 
+			else
 				indexWithESId(index, finalJson);
 		} else {
 			log.error("Indexing will not be done, please modify the data and retry.");
@@ -128,7 +130,7 @@ public class IndexerService {
 
 	/**
 	 * Method to index
-	 * 
+	 *
 	 * @param finalJson
 	 * @param url
 	 * @param index
