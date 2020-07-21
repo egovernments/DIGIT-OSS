@@ -211,8 +211,23 @@ class FormWizardDataEntry extends Component {
               return b.taxPeriodFrom - a.taxPeriodFrom;
             })) ||
           [];
-        
 
+
+       const finantial_year = [];
+
+
+            for(let i=0;i<mdmsYears.length; i++)
+            {
+              for(let j=0;j<demands.length; j++)
+              {
+                if(mdmsYears[i].fromDate===demands[j].taxPeriodFrom)
+                {
+                  finantial_year[j] = mdmsYears[i].financialYear;
+                } 
+              }
+
+            }       
+          
         demands.forEach((demand, yearKey) => {
           //add order for the taxt head and do the oerdering
           if (demand.demandDetails) {
@@ -238,7 +253,7 @@ class FormWizardDataEntry extends Component {
           } else {
             demand.demandDetails = [];
           }
-          
+
 
           return demand.demandDetails.forEach((demandData, demandKey) => {
             if (demandData.order > -1 && demandData.isLegacy) {
@@ -250,46 +265,50 @@ class FormWizardDataEntry extends Component {
                     generalMDMSDataById.TaxPeriod[item].fromDate ===
                     demand.taxPeriodFrom
                   ) {
-                    finalYear =
-                      generalMDMSDataById.TaxPeriod[item].financialYear;
+                    finalYear = 
+                    generalMDMSDataById.TaxPeriod[item].financialYear;
                   }
                             
                 }
               );  
-                         
+                     
               
-            
-                                     
-                   if (mdmsYears[0].fromDate > demand.taxPeriodFrom  && yearKey==0) { 
 
+
+                   if (mdmsYears[0].fromDate > demand.taxPeriodFrom  && yearKey==0) {                     
+                        
                     
-                                                        
+
                   /*  prepareFinalObject(
                       `DemandProperties[0].propertyDetails[0].demand[${yearKey}]`, 
                        null
-                     );   */
-                                      
-                     
-                 
+                     );   */                                    
                      newkey = yearKey +1
 
-                  prepareFinalObject(
-                    `DemandProperties[0].propertyDetails[0].demand[${newkey}].demand[${finalYear}][${demandData.order}].PT_TAXHEAD`, 
+
+                     for(let i=0;i<finantial_year.length; i++)              
+                     {      
+                       newkey=newkey+i;
+                     
+                   prepareFinalObject(
+                    `DemandProperties[0].propertyDetails[0].demand[${newkey}].demand[${finantial_year[i]}][${demandData.order}].PT_TAXHEAD`, 
                      demandData.taxHeadMasterCode
                    ),
                      prepareFinalObject(
-                       `DemandProperties[0].propertyDetails[0].demand[${newkey}].demand[${finalYear}][${demandData.order}].PT_DEMAND`,
+                       `DemandProperties[0].propertyDetails[0].demand[${newkey}].demand[${finantial_year[i]}][${demandData.order}].PT_DEMAND`,
                        `${Math.trunc(demandData.taxAmount)}`
                      ),
                      prepareFinalObject(
-                       `DemandProperties[0].propertyDetails[0].demand[${newkey}].demand[${finalYear}][${demandData.order}].PT_COLLECTED`,
+                       `DemandProperties[0].propertyDetails[0].demand[${newkey}].demand[${finantial_year[i]}][${demandData.order}].PT_COLLECTED`,
                        `${Math.trunc(demandData.collectionAmount)}`
                      );
                    prepareFinalObject(
-                     `DemandProperties[0].propertyDetails[0].demand[${newkey}].demand[${finalYear}][${demandData.order}].ID`,
+                     `DemandProperties[0].propertyDetails[0].demand[${newkey}].demand[${finantial_year[i]}][${demandData.order}].ID`,
                      demandData.id
-                   );                   
-          
+                   );  
+                 }               
+               
+                  
                    
                   }
                
