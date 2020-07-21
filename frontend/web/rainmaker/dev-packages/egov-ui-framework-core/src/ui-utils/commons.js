@@ -14,6 +14,7 @@ import set from "lodash/set";
 import commonConfig from "config/common.js";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { getOwnerPhoto } from "egov-tradelicence/ui-config/screens/specs/utils/receiptTransformer";
 
 export const hasTokenExpired = (status, data) => {
   if (status === 401) {
@@ -281,6 +282,9 @@ export const setDocuments = async (
   const reviewDocData =
     uploadedDocData &&
     uploadedDocData.map((item, index) => {
+      if(item.documentType == "OWNERPHOTO"){
+        getOwnerPhoto(fileUrlPayload[item.fileStoreId].split(",")[0])
+      }
       return {
         title: `${businessService}_${item.documentType}` || "",
         link:

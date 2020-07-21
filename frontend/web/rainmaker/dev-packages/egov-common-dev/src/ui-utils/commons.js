@@ -657,7 +657,7 @@ else if(payments[0].paymentDetails[0].businessService === 'TL'){
       })
     })
   set(payments, `[0].paymentDetails[0].bill.additionalDetails.tax`, tax);
-  set(payments, `[0].paymentDetails[0].bill.additionalDetails.adhocRebate`, adhocPenalty);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.adhocRebate`, adhocRebate);
   set(payments, `[0].paymentDetails[0].bill.additionalDetails.penalty`, penalty);
   set(payments, `[0].paymentDetails[0].bill.additionalDetails.adhocPenalty`, adhocPenalty);
   set(payments, `[0].paymentDetails[0].bill.additionalDetails.rebate`, rebate);

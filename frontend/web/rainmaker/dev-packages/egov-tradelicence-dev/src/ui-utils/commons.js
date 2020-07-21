@@ -684,7 +684,67 @@ export const getNextFinancialYearForRenewal = async (currentFinancialYear) => {
     console.log(e.message)
   }
 }
+let getModifiedBill = (bill) =>{
+  let tax=0;
+  let adhocPenalty=0;
+  let penalty=0;
+  let adhocRebate=0
+  let rebate=0;
+  bill.billDetails.forEach(billdetail =>{
+      billdetail.billAccountDetails.forEach(billAccountDetail =>{
+        switch (billAccountDetail.taxHeadCode) {
+          case "TL_TAX":
+            tax = Math.round((tax + billAccountDetail.amount) * 100) / 100;
+            break;
+          case "TL_ADHOC_REBATE":
+            adhocRebate =
+              Math.round((adhocRebate + billAccountDetail.amount) * 100) / 100;
+            break;
+          case "TL_TIME_PENALTY":
+            penalty =
+              Math.round((penalty + billAccountDetail.amount) * 100) / 100;
+            break;
+          case "TL_TIME_REBATE":
+            rebate =
+              Math.round((rebate + billAccountDetail.amount) * 100) / 100;
+            break;
+          case "TL_ADHOC_PENALTY":
+            adhocPenalty =
+              Math.round((adhocPenalty + billAccountDetail.amount) * 100) / 100;
+            break;
+          case "TL_RENEWAL_TAX":
+            tax =
+              Math.round((tax + billAccountDetail.amount) * 100) / 100;
+            break;
+          case "TL_RENEWAL_REBATE":
+            rebate =
+              Math.round((rebate + billAccountDetail.amount) * 100) / 100;
+            break;
+          case "TL_RENEWAL_PENALTY":
+            penalty =
+              Math.round((penalty + billAccountDetail.amount) * 100) / 100;
+            break;
+          case "TL_RENEWAL_ADHOC_REBATE":
+            adhocRebate =
+              Math.round((adhocRebate + billAccountDetail.amount) * 100) / 100;
+            break;
+          case "TL_RENEWAL_ADHOC_PENALTY":
+            adhocPenalty =
+              Math.round((adhocPenalty + billAccountDetail.amount) * 100) / 100;
+            break;
+          default:
+            break;
+        }
+      })
+    })
+  set(bill, `additionalDetails.tax`, tax);
+  set(bill, `additionalDetails.adhocRebate`, adhocRebate);
+  set(bill, `additionalDetails.penalty`, penalty);
+  set(bill, `additionalDetails.adhocPenalty`, adhocPenalty);
+  set(bill, `additionalDetails.rebate`, rebate);
 
+  return bill;
+}
 export const downloadBill = (receiptQueryString, mode = "download") => {
   const FETCHBILL = {
       GET: {
@@ -705,6 +765,7 @@ export const downloadBill = (receiptQueryString, mode = "download") => {
               { key: "key", value: "consolidatedbill" },
               { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
           ]
+          payloadReceiptDetails.Bill[0] = getModifiedBill(payloadReceiptDetails.Bill[0]);
           httpRequest("post", DOWNLOADBILL.GET.URL, DOWNLOADBILL.GET.ACTION, queryStr, { Bill: [payloadReceiptDetails.Bill[0]] }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
               .then(res => {
                   getFileUrlFromAPI(res.filestoreIds[0]).then((fileRes) => {
