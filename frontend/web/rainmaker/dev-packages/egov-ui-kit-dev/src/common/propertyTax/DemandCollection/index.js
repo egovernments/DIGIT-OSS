@@ -17,8 +17,10 @@ import Label from "egov-ui-kit/utils/translationNode";
 class DemandCollection extends React.Component {
   render() {
     const { prepareFinalObject, preparedFinalObject,Properties = [] } = this.props;
+    const finalData=getFinalData();
+
    let firstdisplay_year = [];
-   firstdisplay_year = get(preparedFinalObject, `DemandProperties[0].propertyDetails[0].demand[0].demand[2020-21]`, '');
+   firstdisplay_year = get(preparedFinalObject, `DemandProperties[0].propertyDetails[0].demand[0].demand[${finalData[0].financialYear}]`, '');
    let demands_data = get(preparedFinalObject, `DemandProperties[0].propertyDetails[0].demand`, '');
    let dummyarray = [];
 
@@ -46,7 +48,6 @@ class DemandCollection extends React.Component {
 
    //console.log("prasad after preparedFinalObjec ", preparedFinalObject); 
 
-    const finalData=getFinalData();
     const getYear =
       finalData && finalData.length ? (
         finalData.map((data, index) => {
