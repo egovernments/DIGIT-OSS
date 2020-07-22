@@ -212,8 +212,27 @@ class FormWizardDataEntry extends Component {
             })) ||
           [];
 
+            let ptdemands = 0;
 
-   
+          
+          demands.forEach((demand, yearKey) => {
+            if (demand.demandDetails)
+            {
+              demand.demandDetails.forEach((demandData, demandKey) => {
+              if (demandData.taxHeadMasterCode==="PT_TAX") {
+                ptdemands= ptdemands+1;
+            }
+              });                  
+           };
+          });
+
+          if(demands.length !==ptdemands)
+          {
+            alert("This Property has duplicate demands, please contact Administrator ");
+          }
+
+
+
         demands.forEach((demand, yearKey) => {
           //add order for the taxt head and do the oerdering
           if (demand.demandDetails) {

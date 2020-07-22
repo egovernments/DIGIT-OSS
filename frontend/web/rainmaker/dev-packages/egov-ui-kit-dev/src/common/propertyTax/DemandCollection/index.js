@@ -19,7 +19,7 @@ class DemandCollection extends React.Component {
     const { prepareFinalObject, preparedFinalObject,Properties = [] } = this.props;
     const finalData=getFinalData();
 
-   let firstdisplay_year = [];
+  let firstdisplay_year = [];
    firstdisplay_year = get(preparedFinalObject, `DemandProperties[0].propertyDetails[0].demand[0].demand[${finalData[0].financialYear}]`, '');
    let demands_data = get(preparedFinalObject, `DemandProperties[0].propertyDetails[0].demand`, '');
    let dummyarray = [];
@@ -46,7 +46,6 @@ class DemandCollection extends React.Component {
 
    set(preparedFinalObject, `DemandProperties[0].propertyDetails[0].demand`, dummyarray);
 
-   //console.log("prasad after preparedFinalObjec ", preparedFinalObject); 
 
     const getYear =
       finalData && finalData.length ? (

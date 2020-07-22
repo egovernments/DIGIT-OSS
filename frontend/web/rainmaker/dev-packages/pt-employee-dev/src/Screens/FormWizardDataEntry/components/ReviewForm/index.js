@@ -73,8 +73,7 @@ class ReviewForm extends Component {
     let { addRebateBox, updateCalculation, onEditButtonClick } = this;
     let { showRebateBox,demandProperties=[] } = this.state;
     let { stepZero, stepTwo, stepOne, estimationDetails, importantDates, totalAmount } = this.props;
-    const { generalMDMSDataById = {} , loadMdmsData={} ,DemandProperties=[]} = this.props;
-    console.log("this.props:",this.props);
+       const { generalMDMSDataById = {} , loadMdmsData={} ,DemandProperties=[]} = this.props;
     return (
       <div>
         <Card
