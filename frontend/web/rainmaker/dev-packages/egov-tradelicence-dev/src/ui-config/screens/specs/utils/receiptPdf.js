@@ -1414,7 +1414,23 @@ const getACKData = (transformedData, ulbLogo) => {
             text: transformedData.applicationNumber
           }
         ]
-      },
+      },      
+      transformedData.applicationType === "RENEWAL"?{
+        style: "tl-certificate-data-2",
+        columns: [
+          {
+            width: 160,
+            text: getLocaleLabels(
+              "Trade License Number",
+              "TL_LOCALIZATION_OLD_LICENSE_NO"
+            )+":"
+          },
+          {
+            width: "*",
+            text: transformedData.oldLicenseNumber
+          }
+        ]
+      }:null,
       {
         style: "tl-certificate-data-2",
         columns: [
