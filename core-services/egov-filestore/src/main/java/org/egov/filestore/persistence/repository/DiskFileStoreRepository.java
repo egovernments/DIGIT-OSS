@@ -24,7 +24,10 @@ public class DiskFileStoreRepository  implements CloudFilesManager {
 
 	@Value("${disk.storage.host.url}")
 	private String hostUrl;
-	
+
+	@Value("${disk.storage.host.endpoint}")
+	private String hostEndpoint;
+
 	@Value("${source.disk}")
 	private String diskFileStorage;
 
@@ -65,7 +68,7 @@ public class DiskFileStoreRepository  implements CloudFilesManager {
 		{
 			 
 			StringBuilder url=new StringBuilder(hostUrl);
-			url.append("/filestore/v1/files/id?fileStoreId=");
+			url.append(hostEndpoint);
 			url.append(s);
 			mapOfIdAndSASUrls.put(s, url.toString());
 		}
