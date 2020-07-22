@@ -1,7 +1,7 @@
 ---
 swagger: "2.0"
 info:
-  description: The api's which are exposed from finance erp system to search, create and update the voucher
+  description: The api's which are exposed from finance erp system to search, create and cancel voucher
   version: 1.0.0
   title: Exposed APIs for voucher in Finance ERP
   contact:
@@ -11,7 +11,7 @@ host: "HOSTNAME"
 basePath: /services/EGF
 tags:
 - name: voucher
-  description: APIs to search, create and update the voucher
+  description: APIs to search, create and cancel voucher
   externalDocs:
     description: Find out more
     url: http://swagger.io
