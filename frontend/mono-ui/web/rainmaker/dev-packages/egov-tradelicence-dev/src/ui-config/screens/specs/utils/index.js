@@ -1684,7 +1684,8 @@ export const getDocList = (state, dispatch) => {
   const documentObj = get(state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.TradeLicense.documentObj");
   const documentTypes = get(state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.common-masters.DocumentType");
 
-  const applicationType = getQueryArg(window.location.href, "action") === "EDITRENEWAL" ? "RENEWAL" : "NEW";
+  const applicationType = getQueryArg(window.location.href , "action") === "EDITRENEWAL" ? "RENEWAL" :
+  get( state.screenConfiguration.preparedFinalObject, "Licenses[0].applicationType", "NEW");
   const documentObjArray = documentObj && documentObj.filter(item => item.tradeType === tradeUnits.tradeType.split(".")[0]);
 
   const filteredDocTypes = documentObjArray[0].allowedDocs.reduce((acc, item, index) => {
