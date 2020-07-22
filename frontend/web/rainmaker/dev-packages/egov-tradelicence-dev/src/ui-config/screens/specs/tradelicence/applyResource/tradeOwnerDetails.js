@@ -59,6 +59,9 @@ export const getOwnerGenderField = getSelectField({
     labelName: "Select Gender",
     labelKey: "TL_NEW_OWNER_DETAILS_GENDER_PLACEHOLDER"
   },
+  props:{
+    disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+    },
   required: true,
   optionValue: "code",
   optionLabel: "label",
@@ -91,7 +94,9 @@ export const getOwnerDOBField = getDateField({
   props: {
     inputProps: {
       max: getTodaysDateInYMD()
-    }
+    },
+    disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+
   }
 });
 
@@ -104,6 +109,9 @@ export const getOwnerEmailField = getTextField({
     labelName: "Enter Email",
     labelKey: "TL_NEW_OWNER_DETAILS_EMAIL_PLACEHOLDER"
   },
+  props:{
+    disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+    },
   pattern: getPattern("Email"),
   jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].emailId"
 });
@@ -119,7 +127,10 @@ export const getFatherNameField = getTextField({
   },
   required: true,
   pattern: getPattern("Name"),
-  jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].fatherOrHusbandName"
+  jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].fatherOrHusbandName",
+  props:{
+  disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+  }
 });
 // export const getRadioButtonGroup = (buttons, jsonPath, defaultValue) => {
 //   return {
@@ -142,6 +153,7 @@ export const getRelationshipRadioButton = {
   },
   jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].relationship",
   props: {
+    disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
     label: {
       name: "Relationship",
       key: "TL_COMMON_RELATIONSHIP_LABEL"
@@ -176,6 +188,7 @@ export const getRelationshipRadioButtonInstitutionalOwner = {
   },
   jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].relationship",
   props: {
+    disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
     label: {
       name: "Relationship",
       key: "TL_COMMON_RELATIONSHIP_LABEL"
@@ -230,6 +243,9 @@ export const relationType = {
     localePrefix: {
       moduleName: "TradeLicense",
       masterName: "RelationType"
+    },
+    props:{
+      disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
     },
     jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.relationType",
     sourceJsonPath: "applyScreenMdmsData.TradeLicense.RelationType",
@@ -294,6 +310,9 @@ export const ownerInfoInstitutional = {
           labelName: "Enter Designation",
           labelKey: "TL_NEW_OWNER_DESIG_PLACEHOLDER"
         },
+        props:{
+          disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+        },
         pattern: getPattern("Name"),
         required: true,
         jsonPath: "Licenses[0].tradeLicenseDetail.institution.designation"
@@ -319,7 +338,8 @@ export const ownerInfoInstitutional = {
           props: {
             inputProps: {
               max: getTodaysDateInYMD()
-            }
+            },
+            disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
           }
         })
       },
@@ -398,7 +418,8 @@ const OwnerInfoCard = {
             props: {
               inputProps: {
                 max: getTodaysDateInYMD()
-              }
+              },
+                disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
             }
           })
         },
@@ -413,7 +434,10 @@ const OwnerInfoCard = {
             labelKey: "TL_NEW_OWNER_DETAILS_PAN_PLACEHOLDER"
           },
           pattern: getPattern("PAN"),
-          jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].pan"
+          jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].pan",
+          props:{
+            disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+          },
         }),
         ownerAddress: getTextField({
           label: {
