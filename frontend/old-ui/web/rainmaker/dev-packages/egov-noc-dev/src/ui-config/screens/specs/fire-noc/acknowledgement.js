@@ -115,6 +115,13 @@ const screenConfig = {
     const tenant = getQueryArg(window.location.href, "tenantId");
     const { downloadMenu, printMenu } = downloadprintMenuConfig(state, dispatch, purpose);
 
+    const appName =
+      process.env.REACT_APP_NAME === "Citizen"
+        ? "citizen"
+        : "employee";
+
+    
+
     const footerUrlConfig = [{
 
       url: getRedirectionURL(),
@@ -128,7 +135,7 @@ const screenConfig = {
 
     if (purpose === "apply" && status === "success") {
       footerUrlConfig.push({
-        url: `/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenant}&businessService=FIRENOC`,
+        url: process.env.NODE_ENV === "development" ? `/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenant}&businessService=FIRENOC` : `/${appName}/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenant}&businessService=FIRENOC`,
         labelName: "Proceed to payment",
         labelKey: "NOC_PROCEED_PAYMENT",
         style: {
