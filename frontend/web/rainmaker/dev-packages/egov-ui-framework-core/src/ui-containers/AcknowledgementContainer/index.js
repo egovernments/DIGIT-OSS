@@ -5,7 +5,7 @@ import "./index.css";
 class AcknowledgementContainer extends React.Component {
 
 	onclickFooter = (path)=>{
-		window.location.href = path
+		window.location.href = `${document.location.origin}${path}`;
 	}
 
 	render() {
