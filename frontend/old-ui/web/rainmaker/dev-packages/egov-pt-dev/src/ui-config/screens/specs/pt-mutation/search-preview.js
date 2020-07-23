@@ -394,22 +394,12 @@ const screenConfig = {
     const tenantId = getQueryArg(window.location.href, "tenantId");
 
     searchBill(dispatch, applicationNumber, tenantId);
-    let businessServicesData = JSON.parse(localStorage.getItem('businessServiceData'));
-    let loadBusinessServiceData = true;
-    if (businessServicesData && businessServicesData.length > 0) {
-      businessServicesData.map(businessService => {
-        if (businessService.businessService == "PT.MUTATION") {
-          loadBusinessServiceData = false;
-        }
-      })
-    }
     setSearchResponse(state, dispatch, applicationNumber, tenantId);
     loadUlbLogo(tenantId);
     const queryObject = [
       { key: "tenantId", value: tenantId },
-      // { key: "businessServices", value: "PT.MUTATION" }
     ];
-    loadBusinessServiceData && setBusinessServiceDataToLocalStorage(queryObject, dispatch);
+   setBusinessServiceDataToLocalStorage(queryObject, dispatch);
     // Hide edit buttons
     setData(state, dispatch, applicationNumber, tenantId);
     set(
