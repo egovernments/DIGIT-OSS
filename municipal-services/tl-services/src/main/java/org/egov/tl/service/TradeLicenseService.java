@@ -260,7 +260,8 @@ public class TradeLicenseService {
         TradeLicense licence = tradeLicenseRequest.getLicenses().get(0);
         TradeLicense.ApplicationTypeEnum applicationType = licence.getApplicationType();
         List<TradeLicense> licenceResponse = null;
-        if(applicationType != null && (applicationType).toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL )&& licence.getAction().equalsIgnoreCase(TLConstants.TL_ACTION_INITIATE)){
+        if(applicationType != null && (applicationType).toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL ) &&
+                licence.getAction().equalsIgnoreCase(TLConstants.TL_ACTION_INITIATE) && licence.getStatus().equals(TLConstants.STATUS_APPROVED)){
             List<TradeLicense> createResponse = create(tradeLicenseRequest, businessServicefromPath);
             licenceResponse =  createResponse;
         }
