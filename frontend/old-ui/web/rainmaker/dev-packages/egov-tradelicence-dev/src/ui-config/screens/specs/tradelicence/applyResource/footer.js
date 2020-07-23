@@ -11,20 +11,7 @@ import get from "lodash/get";
 import set from "lodash/set";
 import some from "lodash/some";
 import { applyTradeLicense, getNextFinancialYearForRenewal } from "../../../../../ui-utils/commons";
-import {
-  createEstimateData,
-
-
-  downloadCertificateForm, getButtonVisibility,
-  getCommonApplyFooter,
-
-
-  getDocList, setMultiOwnerForApply,
-  setValidToFromVisibilityForApply,
-
-
-  validateFields
-} from "../../utils";
+import {createEstimateData,downloadCertificateForm, getButtonVisibility,getCommonApplyFooter,getDocList, setMultiOwnerForApply,setValidToFromVisibilityForApply,validateFields} from "../../utils";
 import "./index.css";
 
 const moveToSuccess = (LicenseData, dispatch) => {
