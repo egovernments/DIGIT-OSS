@@ -70,7 +70,8 @@ import org.hibernate.validator.constraints.Length;
 
 @Entity
 @Table(name = "EGF_CONTRACTOR")
-@Unique(fields = { "code", "registrationNumber" }, id = "id", tableName = "EGF_CONTRACTOR", enableDfltMsg = true)
+@Unique(id = "id", tableName = "EGF_CONTRACTOR", columnName = { "code", "tinNumber" }, fields = { "code",
+"tinNumber" }, enableDfltMsg = true)
 @SequenceGenerator(name = Contractor.SEQ_EGF_CONTRACTOR, sequenceName = Contractor.SEQ_EGF_CONTRACTOR, allocationSize = 1)
 public class Contractor extends AbstractAuditable implements EntityType {
 
