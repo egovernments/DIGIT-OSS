@@ -192,7 +192,7 @@ SearchDefinitions:
       jsonFormat: {"ResponseInfo": {}}
       outJsonPath: $.Localities
       responseInfoPath: $.ResponseInfo
-- name: noc-services
+  - name: noc-services
     query:
       baseQuery: |
         Select row_to_json(result) from
