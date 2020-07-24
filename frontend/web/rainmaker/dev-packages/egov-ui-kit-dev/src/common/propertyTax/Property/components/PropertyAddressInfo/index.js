@@ -10,11 +10,11 @@ const localizationLabelsData = initLocalizationLabels(locale);
 
 
 export const getAddressItems = (properties) => {
-  const { address ={} } = properties;
-  const tenantInfo = address.tenantId && address.tenantId.split('.') || [];
+  const { address ={} ,tenantId='' } = properties;
+  const tenantInfo =  tenantId.split('.') || [];
   const stateId = tenantInfo && tenantInfo.length === 2 && tenantInfo[0] ? tenantInfo[0].toUpperCase()  : 'NA';
   const cityId = tenantInfo && tenantInfo.length === 2 && tenantInfo[1] ? tenantInfo[1].toUpperCase() : 'NA';
-  const localityCode = address.locality&&address.locality.code?address.locality.code:'NA';
+  const localityCode = address.locality && address.locality.code ? address.locality.code : 'NA';
 
 
   return (
