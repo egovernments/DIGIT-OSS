@@ -1,8 +1,12 @@
 import { getCommonContainer, getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getQueryArg, setDocuments } from "egov-ui-framework/ui-utils/commons";
 import { loadUlbLogo } from "egov-ui-kit/utils/pdfUtils/generatePDF";
 import { generateTLAcknowledgement } from "egov-ui-kit/utils/pdfUtils/generateTLAcknowledgement";
+import get from "lodash/get";
 import set from "lodash/set";
+import { getSearchResults } from "../../../../ui-utils/commons";
+import { createEstimateData, getTransformedStatus } from "../utils";
 import { loadReceiptGenerationData } from "../utils/receiptTransformer";
 import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils";
 import { applicationSuccessFooter } from "./acknowledgementResource/applicationSuccessFooter";
@@ -11,6 +15,73 @@ import { gotoHomeFooter } from "./acknowledgementResource/gotoHomeFooter";
 import { paymentFailureFooter } from "./acknowledgementResource/paymentFailureFooter";
 import { paymentSuccessFooter } from "./acknowledgementResource/paymentSuccessFooter";
 import "./index.css";
+
+
+
+const getTradeTypeSubtypeDetails = payload => {
+  const tradeUnitsFromApi = get(
+    payload,
+    "Licenses[0].tradeLicenseDetail.tradeUnits",
+    []
+  );
+  const tradeUnitDetails = [];
+  tradeUnitsFromApi.forEach(tradeUnit => {
+    const { tradeType } = tradeUnit;
+    const tradeDetails = tradeType.split(".");
+    tradeUnitDetails.push({
+      trade: get(tradeDetails, "[0]", ""),
+      tradeType: get(tradeDetails, "[1]", ""),
+      tradeSubType: get(tradeDetails, "[2]", "")
+    });
+  });
+  return tradeUnitDetails;
+};
+
+const searchResults = async (dispatch, applicationNo, tenantId) => {
+  let queryObject = [
+    { key: "tenantId", value: tenantId },
+    { key: "applicationNumber", value: applicationNo }
+  ];
+  let payload = await getSearchResults(queryObject);
+
+  set(payload, "Licenses[0].assignee", []);
+
+  await setDocuments(
+    payload,
+    "Licenses[0].tradeLicenseDetail.applicationDocuments",
+    "LicensesTemp[0].reviewDocData",
+    dispatch, 'TL'
+  );
+  //set Trade Types
+
+  payload && dispatch(
+    prepareFinalObject(
+      "Licenses", get(
+        payload,
+        "Licenses",
+        []
+      )))
+  payload &&
+    dispatch(
+      prepareFinalObject(
+        "LicensesTemp[0].tradeDetailsResponse",
+        getTradeTypeSubtypeDetails(payload)
+      )
+    );
+  let sts = getTransformedStatus(get(payload, "Licenses[0].status"));
+  const LicenseData = payload.Licenses[0];
+  const fetchFromReceipt = sts !== "pending_payment";
+
+
+  // generate estimate data
+  createEstimateData(
+    LicenseData,
+    "LicensesTemp[0].estimateCardData",
+    dispatch,
+    {},
+    fetchFromReceipt
+  );
+};
 
 const downloadprintMenu = (state, dispatch) => {
   let applicationDownloadObject = {
@@ -92,6 +163,7 @@ const getAcknowledgementCard = (
 ) => {
   const financialYearText = financialYear ? financialYear : "";
   if (purpose === "apply" && status === "success") {
+    searchResults(dispatch, applicationNumber, tenant);
     return {
       header: getCommonHeader({
         labelName: `Application for New Trade License (${financialYearText})`,
