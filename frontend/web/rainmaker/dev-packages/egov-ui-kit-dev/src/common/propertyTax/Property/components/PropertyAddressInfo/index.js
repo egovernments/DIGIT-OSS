@@ -1,7 +1,6 @@
 import React from "react";
-import { getTranslatedLabel } from "egov-ui-kit/utils/commons";
-// import { connect } from "react-redux";
 import { initLocalizationLabels } from "egov-ui-kit/redux/app/utils";
+import { getTranslatedLabel } from "egov-ui-kit/utils/commons";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import PropertyInfoCard from "../PropertyInfoCard";
 
@@ -11,9 +10,15 @@ const localizationLabelsData = initLocalizationLabels(locale);
 
 
 export const getAddressItems = (properties) => {
-  const {address} = properties;
-    return  (
-     address &&    [
+  const { address ={} } = properties;
+  const tenantInfo = address.tenantId && address.tenantId.split('.') || [];
+  const stateId = tenantInfo && tenantInfo.length === 2 && tenantInfo[0] ? tenantInfo[0].toUpperCase()  : 'NA';
+  const cityId = tenantInfo && tenantInfo.length === 2 && tenantInfo[1] ? tenantInfo[1].toUpperCase() : 'NA';
+  const localityCode = address.locality&&address.locality.code?address.locality.code:'NA';
+
+
+  return (
+    address && [
       // [
 
       {
@@ -34,7 +39,7 @@ export const getAddressItems = (properties) => {
       },
       {
         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_MOHALLA", localizationLabelsData),
-        value: (getTranslatedLabel(('PB_AMRITSAR_REVENUE_'+address.locality.code), localizationLabelsData)) || "NA",
+        value: (getTranslatedLabel((`${stateId}_${cityId}_REVENUE_${localityCode}` ), localizationLabelsData)) || "NA",
       },
       {
         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_PINCODE", localizationLabelsData),
@@ -48,14 +53,14 @@ export const getAddressItems = (properties) => {
   );
 }
 
-const PropertyAddressInfo= ({properties ,editIcon}) => {
-  
+const PropertyAddressInfo = ({ properties, editIcon }) => {
+
   let addressItems = [];
   const header = 'PT_PROPERTY_ADDRESS_SUB_HEADER';
-  if(properties){
+  if (properties) {
     addressItems = getAddressItems(properties);
   }
-  
+
   return (
     <PropertyInfoCard editIcon={editIcon} items={addressItems} header={header}></PropertyInfoCard>
   );
