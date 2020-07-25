@@ -105,7 +105,8 @@ export const directMapping = async (
         // var x = 1;
         let ownerObject = {};
         for (let k = 0; k < scema.length; k++) {
-          let fieldValue = getValue(jp.query(val[j], scema[k].value), "NA", scema[k].value);
+          let fieldValue = get(val[j], scema[k].value, "NA");
+          fieldValue = fieldValue == null ? "NA" : fieldValue;
           if (scema[k].type == "date") {
             let myDate = new Date(fieldValue);
             if (isNaN(myDate) || fieldValue === 0) {
@@ -159,7 +160,8 @@ export const directMapping = async (
       for (let j = 0; j < val.length; j++) {
         let arrayOfItems = [];
         for (let k = 0; k < scema.length; k++) {
-          let fieldValue = getValue(jp.query(val[j], scema[k].value), "NA", scema[k].value);
+          let fieldValue = get(val[j], scema[k].value, "NA");
+          fieldValue = fieldValue == null ? "NA" : fieldValue;
           if (scema[k].type == "date") {
             let myDate = new Date(fieldValue);
             if (isNaN(myDate) || fieldValue === 0) {
