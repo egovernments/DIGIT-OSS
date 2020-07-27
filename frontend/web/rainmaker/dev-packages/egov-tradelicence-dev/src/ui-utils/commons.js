@@ -1,3 +1,5 @@
+common.js
+
 import { httpRequest } from "./api";
 import {
   convertDateToEpoch,
@@ -446,15 +448,23 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       }
       set(queryObject[0], "action", action);
       const isEditFlow = getQueryArg(window.location.href, "action") === "edit";
+      const isRenewal = getQueryArg(window.location.href, "action") === "EDITRENEWAL";
+
+      if (isRenewal && !isEditFlow ) {
+
+      if(get(queryObject[0],"applicationType", "") != "Renewal" && get(queryObject[0], "status", "") != "INITIATED" && action !="INITIATE")
+      {
+        updateResponse = await httpRequest("post", "/tl-services/v1/_update", "", [], {
+        Licenses: queryObject
+      })
+     }
+    }   
       let updateResponse = [];
-      if (!isEditFlow) {
-        if(get(queryObject[0],"applicationType", "") != "Renewal" && get(queryObject[0], "status", "") != "INITIATED" && action !="INITIATE")
-        {
+         if (!isEditFlow && !isRenewal) {       
           updateResponse = await httpRequest("post", "/tl-services/v1/_update", "", [], {
           Licenses: queryObject
         })
-       }
-      }
+      }         
       //Renewal flow
 
       let updatedApplicationNo = "";
