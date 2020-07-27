@@ -232,7 +232,7 @@ public class Floor extends Measurement {
             occupancies.add(occupancy);
         } else {
             List<Occupancy> collect = occupancies.stream().filter(o -> o.getTypeHelper() != null
-                    && (o.getTypeHelper().getType().getCode()
+                    && (occupancy.getTypeHelper()!=null && o.getTypeHelper().getType()!=null && o.getTypeHelper().getType().getCode()
                             .equalsIgnoreCase(occupancy.getTypeHelper().getType().getCode())))
                     .collect(Collectors.toList());
             if (!collect.isEmpty()) {

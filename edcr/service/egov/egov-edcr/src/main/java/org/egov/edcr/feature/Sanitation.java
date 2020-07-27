@@ -151,6 +151,7 @@ public class Sanitation extends FeatureProcess {
                     OccupancyHelperDetail o = occupancy.getTypeHelper().getSubtype() != null
                             ? occupancy.getTypeHelper().getSubtype()
                             : occupancy.getTypeHelper().getType();
+                  if(o!=null){          
                     switch (o.getCode()) {
                     case DxfFileConstants.A:
                     case DxfFileConstants.A_SR:
@@ -209,6 +210,7 @@ public class Sanitation extends FeatureProcess {
                         }
                         break;
                     }
+                  }
                 }
             }
         }
