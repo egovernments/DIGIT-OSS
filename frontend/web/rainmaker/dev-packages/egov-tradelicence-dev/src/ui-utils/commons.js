@@ -1,5 +1,3 @@
-common.js
-
 import { httpRequest } from "./api";
 import {
   convertDateToEpoch,
