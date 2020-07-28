@@ -579,7 +579,7 @@ public class EstimationService {
 		List<Object> mutationFee = attributeValues.get("MutationFee");
 		String usageCategory = property.getUsageCategory();
 		String usage = "";
-		if (usageCategory.contains("\\.")) {
+		if (usageCategory.contains(".")) {
 			String[] usageSplit = usageCategory.split("\\.");
 			usage = usageSplit[0];
 		} else {
