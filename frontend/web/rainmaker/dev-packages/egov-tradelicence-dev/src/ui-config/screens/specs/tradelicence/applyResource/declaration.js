@@ -32,7 +32,7 @@ import { getLocalization } from "egov-ui-framework/ui-utils/localStorageUtils";
             },
             ...getCommonSubHeader({
               labelName: "Declaration",
-              //labelKey: "TL_COMMON_DOCS"
+              labelKey: "Declaration"
             })
           },
          
