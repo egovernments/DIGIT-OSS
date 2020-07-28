@@ -213,7 +213,8 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
 
    const limit_date = new Date('2021','00','01');
 
-
+  if(process.env.REACT_APP_NAME === "Citizen" )
+  {
    if(status ==="APPROVED" && applicationType ==="NEW" && licene_expiry_date>=limit_date)
    {   
       dispatch(handleField(
@@ -274,6 +275,7 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
       ); 
 
     }
+  }
 
     if (status === "REJECTED"|| status ==="PENDINGPAYMENT") {
       console.log("=====status=123======" + status + "============");
