@@ -317,16 +317,11 @@
               {
                 "table": {
                   "widths": [
-                    "13%",
-                    "13%",
-                    "10%",
-                    "11%",
-                    "11%",
-                    "9%",
-                    "10%",
-                    "9%",
-                    "9%",
-                    "9%"
+                    "26%",
+                    "25%",
+                    "15%",
+                    "17%",
+                    "17%"
                   ],
                   "body": [
                     [
@@ -372,56 +367,6 @@
                       },
                       {
                         "text": "{{advanceAvailable_label}}",
-                        "border": [
-                          false,
-                          false,
-                          false,
-                          false
-                        ],
-                        "style": "receipt-table-value2"
-                      },
-                      {
-                        "text": "{{charge_label}}",
-                        "border": [
-                          false,
-                          false,
-                          false,
-                          false
-                        ],
-                        "style": "receipt-table-value2"
-                      },
-                      {
-                        "text": "{{penalty_label}}",
-                        "border": [
-                          false,
-                          false,
-                          false,
-                          false
-                        ],
-                        "style": "receipt-table-value2"
-                      },
-                      {
-                        "text": "{{rebate_label}}",
-                        "border": [
-                          false,
-                          false,
-                          false,
-                          false
-                        ],
-                        "style": "receipt-table-value2"
-                      },
-                      {
-                        "text": "{{others_label}}",
-                        "border": [
-                          false,
-                          false,
-                          false,
-                          false
-                        ],
-                        "style": "receipt-table-value2"
-                      },
-                      {
-                        "text": "{{total_label}}",
                         "border": [
                           false,
                           false,
@@ -481,7 +426,82 @@
                           false
                         ],
                         "style": "receipt-table2"
+                      }
+                    ]
+                  ]
+                },
+                "border": [
+                  true,
+                  true,
+                  true,
+                  true
+                ]
+              }
+            ],
+            [
+              {
+                "table": {
+                  "widths": [
+                    "26%",
+                    "25%",
+                    "15%",
+                    "17%",
+                    "17%"
+                  ],
+                  "body": [
+                    [
+                      {
+                        "text": "{{charge_label}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "receipt-table-value2"
                       },
+                      {
+                        "text": "{{penalty_label}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "receipt-table-value2"
+                      },
+                      {
+                        "text": "{{rebate_label}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "receipt-table-value2"
+                      },
+                      {
+                        "text": "{{others_label}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "receipt-table-value2"
+                      },
+                      {
+                        "text": "{{total_label}}",
+                        "border": [
+                          false,
+                          false,
+                          false,
+                          false
+                        ],
+                        "style": "receipt-table-value2"
+                      }
+                    ],
+                    [
                       {
                         "text": "{{charge}}",
                         "border": [
@@ -538,7 +558,7 @@
                 },
                 "border": [
                   true,
-                  false,
+                  true,
                   true,
                   true
                 ]
