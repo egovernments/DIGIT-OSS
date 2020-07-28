@@ -203,7 +203,7 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
     const LicensevalidToDate = get(
       state.screenConfiguration.preparedFinalObject,
       "Licenses[0].validTo"
-    ); 
+    );
 
    let m_value = LicensevalidToDate-1000;
 
@@ -212,17 +212,33 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
    const licene_expiry_date = new Date(LicensevalidToDateConverted);
 
    const limit_date = new Date('2021','00','01');
-
+   const financialYear = get(
+     state,
+     "screenConfiguration.preparedFinalObject.Licenses[0].financialYear"
+   );
+  set(action, "screenConfig.components.footer", {})
   if(process.env.REACT_APP_NAME === "Citizen" )
   {
+    const footer = footerReview(
+      action,
+      state,
+      dispatch,
+      status,
+      applicationNumber,
+      tenantId,
+      financialYear
+    );
+
+  set(action, "screenConfig.components.footer", footer)
+
    if(status ==="APPROVED" && applicationType ==="NEW" && licene_expiry_date>=limit_date)
-   {   
+   {
       dispatch(handleField(
         "search-preview",
         "components.div.children.reviewDeclaration.children.cardContent.children.headerDiv",
         "visible",
         true
-      ));     
+      ));
     }
     else if(applicationType ==="RENEWAL")
     {
@@ -232,22 +248,25 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
         "visible",
         false
       ))
-      dispatch(
-        handleField(
-          "search-preview",
-          "components.div.children.footer.children.container.children.rightdiv.children.submitButton",
-          "props.visible",
-          false
-        )
-      ); 
-      dispatch(
-        handleField(
-          "search-preview",
-          "components.div.children.footer.children.container.children.rightdiv.children.editButton",
-          "props.visible",
-          false
-        )
-      ); 
+      set(action, "screenConfig.components.footer.children.container.children.rightdiv.children.submitButton.props.visible", false)
+      // dispatch(
+      //   handleField(
+      //     "search-preview",
+      //     "components.div.children.footer.children.container.children.rightdiv.children.submitButton",
+      //     "props.visible",
+      //     false
+      //   )
+      // );
+      set(action, "screenConfig.components.footer.children.container.children.rightdiv.children.editButton.props.visible", false)
+
+      // dispatch(
+      //   handleField(
+      //     "search-preview",
+      //     "components.div.children.footer.children.container.children.rightdiv.children.editButton",
+      //     "props.visible",
+      //     false
+      //   )
+      // );
 
     }
     else    {
@@ -257,25 +276,30 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
         "visible",
         false
       ));
-      dispatch(
-        handleField(
-          "search-preview",
-          "components.div.children.footer.children.container.children.rightdiv.children.submitButton",
-          "props.visible",
-          false
-        )
-      ); 
-      dispatch(
-        handleField(
-          "search-preview",
-          "components.div.children.footer.children.container.children.rightdiv.children.editButton",
-          "props.visible",
-          false
-        )
-      ); 
+      set(action, "screenConfig.components.footer.children.container.children.rightdiv.children.submitButton.props.visible", false)
+
+      // dispatch(
+      //   handleField(
+      //     "search-preview",
+      //     "components.div.children.footer.children.container.children.rightdiv.children.submitButton",
+      //     "props.visible",
+      //     false
+      //   )
+      // );
+      set(action, "screenConfig.components.footer.children.container.children.rightdiv.children.editButton.props.visible", false)
+
+      // dispatch(
+      //   handleField(
+      //     "search-preview",
+      //     "components.div.children.footer.children.container.children.rightdiv.children.editButton",
+      //     "props.visible",
+      //     false
+      //   )
+      // );
 
     }
   }
+
 
     if (status === "REJECTED"|| status ==="PENDINGPAYMENT") {
       console.log("=====status=123======" + status + "============");
@@ -295,10 +319,10 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
       );
     }
 
-    const financialYear = get(
-      state,
-      "screenConfiguration.preparedFinalObject.Licenses[0].financialYear"
-    );
+    // const financialYear = get(
+    //   state,
+    //   "screenConfiguration.preparedFinalObject.Licenses[0].financialYear"
+    // );
 
     let data = get(state, "screenConfiguration.preparedFinalObject");
 
@@ -393,7 +417,7 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
         {
          dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.additionalDetail.declaration",false));
         }
-  
+
 
     // Get approval details based on status and set it in screenconfig
 
@@ -433,7 +457,7 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
       );
     }
 
-   
+
 
     const headerrow = getCommonContainer({
       header: getCommonHeader({
@@ -467,19 +491,7 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
     );
 
 
-    const footer = footerReview(
-      action,
-      state,
-      dispatch,
-      status,
-      applicationNumber,
-      tenantId,
-      financialYear
-    );
 
-    process.env.REACT_APP_NAME === "Citizen"
-      ? set(action, "screenConfig.components.div.children.footer", footer)
-      : set(action, "screenConfig.components.div.children.footer", {});
 
     if (status === "cancelled")
       set(
@@ -489,34 +501,38 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
       );
     setActionItems(action, obj);
     // loadReceiptGenerationData(applicationNumber, tenantId);
-   
-      dispatch(
-        handleField(
-          "search-preview",
-          "components.div.children.footer.children.container.children.rightdiv.children.editButton",
-          "props.disabled",
-          false
-        )
-      ); 
-      dispatch(
-        handleField(
-          "search-preview",
-          "components.div.children.footer.children.container.children.rightdiv.children.submitButton",
-          "props.disabled",
-          false
-        )
-      ); 
-   
+      set(action, "screenConfig.components.footer.children.container.children.rightdiv.children.editButton.props.visible", false)
+
+      //
+      // dispatch(
+      //   handleField(
+      //     "search-preview",
+      //     "components.div.children.footer.children.container.children.rightdiv.children.editButton",
+      //     "props.disabled",
+      //     false
+      //   )
+      // );
+      set(action, "screenConfig.components.footer.children.container.children.rightdiv.children.submitButton.props.visible", false)
+
+      // dispatch(
+      //   handleField(
+      //     "search-preview",
+      //     "components.div.children.footer.children.container.children.rightdiv.children.submitButton",
+      //     "props.disabled",
+      //     false
+      //   )
+      // );
+
   }
 
   //let declaration_value =  get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tradeLicenseDetail.additionalDetail.declaration")
-    
+
  /*  set(
     action,
     "screenConfig.search-preview.components.div.children.footer.children.container.children.rightdiv.children.editButton.visible",
     false
   ); */
-  
+
 
  /*  dispatch(
     handleField(
@@ -525,8 +541,8 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
       "visible",
       false
     )
-  );  */ 
- 
+  );  */
+
 /*  if (declaration_value) {
   dispatch(
     handleField(
@@ -535,7 +551,7 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
       "visible",
       false
     )
-  ); 
+  );
 }
 else
 {
@@ -546,8 +562,8 @@ else
       "visible",
       false
     )
-  ); 
-}    */   
+  );
+}    */
 /* const licenseCount = get(
   state,
   "screenConfiguration.preparedFinalObject.licenseCount"
@@ -562,7 +578,7 @@ dispatch(
     "visible",
     true
   )
-); 
+);
 }
 else
 {
@@ -573,7 +589,7 @@ else
       "visible",
       true
     )
-  );  
+  );
 } */
 
 };
@@ -725,7 +741,7 @@ export const tradeReviewDetails = getCommonCard({
   },
   reviewTradeDetails,
   reviewOwnerDetails,
-  reviewDocumentDetails,  
+  reviewDocumentDetails,
 
 });
 
@@ -869,7 +885,7 @@ const screenConfig = {
           }
         },
         tradeReviewDetails,
-        reviewDeclaration   
+        reviewDeclaration
       }
     },
     breakUpDialog: {
