@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 import javax.imageio.ImageIO;
-
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.FileUtils;
 import org.imgscalr.Scalr;
 import org.imgscalr.Scalr.Method;
@@ -65,7 +65,7 @@ public class FileRepository {
 			String originalPath = path.toFile().toString();
 			int lastIndex = originalPath.length();
 			String replaceString = originalPath.substring(originalPath.lastIndexOf('.'), lastIndex);
-			String extension = originalPath.substring(lastIndex-3,lastIndex);
+			String extension = FilenameUtils.getExtension(file.getOriginalFilename());
 			String mediumPath = path.toFile().toString().replace(replaceString, "_medium"+replaceString);
 			String smallPath = path.toFile().toString().replace(replaceString, "_small"+replaceString);
 
