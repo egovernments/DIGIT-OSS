@@ -175,7 +175,7 @@ public class ReceiptServiceV2 {
 		BigDecimal newAmount = billAccDetail.getAdjustedAmount();
 
 		if(advanceTaxHead!=null && billAccDetail.getTaxHeadCode().equalsIgnoreCase(advanceTaxHead))
-			currentDetail.setTaxAmount(billAccDetail.getAmount());
+			currentDetail.setTaxAmount(billAccDetail.getAmount().add(oldCollectedAmount));
 
 		if (isRecieptCancellation)
 			currentDetail.setCollectionAmount(oldCollectedAmount.subtract(newAmount));

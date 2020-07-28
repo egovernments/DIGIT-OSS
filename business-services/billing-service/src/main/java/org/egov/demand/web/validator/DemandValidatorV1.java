@@ -485,6 +485,9 @@ public class DemandValidatorV1 {
 		olddemandDetails.addAll(newDemandDetails);
 		validateDemandDetails(olddemandDetails, errorMap);
 
+		if(!errorMap.isEmpty())
+			throw new CustomException(errorMap);
+
 		/*
 		 * validate demand for Create is called to validate the new demand details which is part of update
 		 * 
