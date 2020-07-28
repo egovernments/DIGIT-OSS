@@ -125,6 +125,16 @@ const fetchBill = async (action, state, dispatch, consumerCode, tenantId, billBu
 
     //set tenantId in instrument
     dispatch(prepareFinalObject("ReceiptTemp[0].instrument.tenantId", tenantId));   
+    
+    // Handling Negative amount
+    if (get(totalAmount, "totalAmount") != undefined) {
+        const componentJsonpath = "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.AmountToBePaid.children.cardContent.children.amountDetailsCardContainer.children.displayAmount";
+        if (totalAmount.totalAmount < 0 ) {
+            dispatch(handleField("pay", radioButtonJsonPath, "props.buttons[0].disabled", true));
+            dispatch(handleField("pay", componentJsonpath, "props.value", 0));
+            dispatch(handleField("pay", raidButtonComponentPath, "props.value", "partial_amount"));
+        }
+    }
 };
 
 
