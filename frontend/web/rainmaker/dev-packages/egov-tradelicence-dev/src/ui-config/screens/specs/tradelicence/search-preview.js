@@ -218,7 +218,7 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
    {   
       dispatch(handleField(
         "search-preview",
-        "components.div.children.tradeReviewDetails.children.cardContent.children.reviewDeclaration",
+        "components.div.children.reviewDeclaration.children.cardContent.children.headerDiv",
         "visible",
         true
       ));     
@@ -227,7 +227,7 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
     {
       dispatch(handleField(
         "search-preview",
-        "components.div.children.tradeReviewDetails.children.cardContent.children.reviewDeclaration",
+        "components.div.children.reviewDeclaration.children.cardContent.children.headerDiv",
         "visible",
         false
       ))
@@ -252,7 +252,7 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
     else    {
       dispatch(handleField(
         "search-preview",
-        "components.div.children.tradeReviewDetails.children.cardContent.children.reviewDeclaration",
+        "components.div.children.reviewDeclaration.children.cardContent.children.headerDiv",
         "visible",
         false
       ));
