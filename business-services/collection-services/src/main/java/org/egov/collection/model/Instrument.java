@@ -43,6 +43,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.*;
 import org.egov.collection.model.enums.InstrumentStatusEnum;
+import org.egov.collection.model.v1.AuditDetails_v1;
 import org.egov.collection.web.contract.BankAccountContract;
 import org.egov.collection.web.contract.BankContract;
 
@@ -177,7 +178,7 @@ public class Instrument{
 	// @DrillDownTable
 	private Set<InstrumentVoucher> instrumentVouchers = new HashSet<InstrumentVoucher>(0);
 
-    private AuditDetails auditDetails;
+    private AuditDetails_v1 auditDetails;
 
     private JsonNode additionalDetails;
 
