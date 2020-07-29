@@ -39,6 +39,17 @@ export const callPGService = async (state, dispatch) => {
     return;
   }
 
+  if (taxAmount < 0 && isAdvancePaymentAllowed && state.screenConfiguration.preparedFinalObject.AmountPaid <= 0) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: "Please enter an amount greater than zero!", labelKey: "Please enter an amount greater than zero!" },
+        "error"
+      )
+    );
+    return;
+  }
+
   const user = {
     name: get(billPayload, "Bill[0].payerName"),
     mobileNumber: get(billPayload, "Bill[0].mobileNumber"),
@@ -381,6 +392,17 @@ const callBackForPay = async (state, dispatch) => {
 
   if (amtPaid > totalAmount && !isAdvancePaymentAllowed) {
     alert("Advance Payment is not allowed");
+    return;
+  }
+
+  if (totalAmount < 0 && isAdvancePaymentAllowed && state.screenConfiguration.preparedFinalObject.AmountPaid <= 0) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: "Please enter an amount greater than zero!", labelKey: "Please enter an amount greater than zero!" },
+        "error"
+      )
+    );
     return;
   }
 
