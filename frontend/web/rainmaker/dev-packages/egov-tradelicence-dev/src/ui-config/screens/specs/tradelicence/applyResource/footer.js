@@ -876,7 +876,7 @@ export const footerReview = (
               props: {
                 variant: "contained",
                 color: "primary",
-               // disabled:"true",
+                disabled:"true",
                 style: {
                   minWidth: "180px",
                   height: "48px",

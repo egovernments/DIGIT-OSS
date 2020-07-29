@@ -231,7 +231,9 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
 
   set(action, "screenConfig.components.footer", footer)
 
-   if(status ==="APPROVED" && applicationType ==="NEW" && licene_expiry_date>=limit_date)
+   //if(status ==="APPROVED" && applicationType ==="NEW" && licene_expiry_date>=limit_date)
+    if(status ==="APPROVED" && applicationType ==="NEW" )
+
    {
       dispatch(handleField(
         "search-preview",
