@@ -54,12 +54,38 @@ const processBills = async (state, data, viewBillTooltip, dispatch) => {
             expiryDate: expiryDemandDate
           }]
           let sortedBills = viewBillTooltip.sort((a, b) => b.toPeriod - a.toPeriod);
-          let currentDemand = sortedBills[0];
-          sortedBills.shift();
+          let forward = 0;
+          let currentDemand=sortedBills[0];
+          if (data.Bill[0].totalAmount < 0) {
+            sortedBills.forEach(e => {
+              e.bill.forEach(cur => {
+                if (cur.key === "WS_ADVANCE_CARRYFORWARD"||cur.key === "SW_ADVANCE_CARRYFORWARD") {
+                  forward = forward + cur.amount
+                }
+              });
+            }); 
+            let keyExist = false;
+            currentDemand.bill.forEach(cur => {
+              if (cur.key === "WS_ADVANCE_CARRYFORWARD"|| cur.key === "SW_ADVANCE_CARRYFORWARD") {
+                cur.amount = forward;
+                keyExist = true;
+              }
+            });
+            if (!keyExist) {
+              currentDemand.bill.push({
+                amount: forward,
+                key: "ADVANCE_CARRYFORWARD",
+                order: 2,
+                value: "Please put some description in mdms for this key"
+              })
+            }
+          }
           let totalArrears = 0;
-          if(data.Bill[0].totalAmount > 0) {
+          if (data.Bill[0].totalAmount > 0) {
+            sortedBills.shift();
             sortedBills.forEach(e => { e.bill.forEach(o => { totalArrears = totalArrears + o.amount }); })
           }
+
           let finalArray = [{
             arrears: totalArrears,
             arrearsDescription: "Total outstanding payment of previous billing cycles.",
