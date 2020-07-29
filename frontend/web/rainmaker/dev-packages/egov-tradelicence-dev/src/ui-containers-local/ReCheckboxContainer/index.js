@@ -21,7 +21,8 @@ const styles = {
     color: "#FE7A51",
     "&$checked": {
       color: "#FE7A51"
-    }
+    },
+    marginTop:"-48px",
   },
   checked: {}
 };
@@ -105,7 +106,7 @@ const mapDispatchToProps = dispatch => {
       dispatch(prepareFinalObject(jsonPath, value));   
     if(value) 
       {
-        dispatch(
+      dispatch(
           handleField(
             "search-preview",
             "components.div.children.footer.children.container.children.rightdiv.children.editButton",
@@ -120,7 +121,7 @@ const mapDispatchToProps = dispatch => {
             "props.disabled",
             false
           )
-        ); 
+        );         
     } 
     else{
       /*  dispatch(
