@@ -561,7 +561,7 @@ export const searchBill = async (dispatch, applicationNumber, tenantId) => {
 
     if (billData) {
       dispatch(prepareFinalObject("ReceiptTemp[0].Bill", billData));
-      const estimateData = createEstimateData(billData[0]);
+      const estimateData = createEstimateData(billData[0], billData[0].totalAmount);
       estimateData &&
         estimateData.length &&
         dispatch(
@@ -576,8 +576,27 @@ export const searchBill = async (dispatch, applicationNumber, tenantId) => {
   }
 };
 
-export const createEstimateData = billObject => {
-  const billDetails = billObject && billObject.billDetails;
+export const createEstimateData = (billObject, totalAmount) => {
+  let billDetails = billObject && billObject.billDetails;
+
+  let forward = 0;
+  if (totalAmount < 0) {
+    billDetails.forEach(e => {
+      e.billAccountDetails.forEach(cur => {
+        if (cur.taxHeadCode.indexOf("ADVANCE_CARRYFORWARD") > -1) {
+          forward = forward + cur.amount
+        }
+      });
+    }); 
+    
+  billDetails[0].billAccountDetails.push({
+      amount: forward,
+      taxHeadCode: "ADVANCE_CARRYFORWARD",
+      order: 2,
+      value: "Please put some description in mdms for this key"
+    })
+  }
+
   let fees =
     billDetails &&
     billDetails[0].billAccountDetails &&
@@ -644,7 +663,7 @@ export const generateBill = async (dispatch, consumerCode, tenantId, businessSer
       // let payload = sampleGetBill();
       if (payload && payload.Bill[0]) {
         dispatch(prepareFinalObject("ReceiptTemp[0].Bill", payload.Bill));
-        const estimateData = createEstimateData(payload.Bill[0]);
+        const estimateData = createEstimateData(payload.Bill[0], payload.Bill[0].totalAmount);
         estimateData &&
           estimateData.length &&
           dispatch(
