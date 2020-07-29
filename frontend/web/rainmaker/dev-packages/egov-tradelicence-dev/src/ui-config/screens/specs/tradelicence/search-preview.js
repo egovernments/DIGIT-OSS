@@ -499,9 +499,9 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
         "screenConfig.components.div.children.headerDiv.children.helpSection.children.cancelledLabel.visible",
         true
       );
-    setActionItems(action, obj);
+      setActionItems(action, obj);
     // loadReceiptGenerationData(applicationNumber, tenantId);
-      set(action, "screenConfig.components.footer.children.container.children.rightdiv.children.editButton.props.visible", false)
+      set(action, "screenConfig.components.footer.children.container.children.rightdiv.children.editButton.props.disabled", false)
 
       //
       // dispatch(
@@ -512,7 +512,7 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
       //     false
       //   )
       // );
-      set(action, "screenConfig.components.footer.children.container.children.rightdiv.children.submitButton.props.visible", false)
+      set(action, "screenConfig.components.footer.children.container.children.rightdiv.children.submitButton.props.disabled", false)
 
       // dispatch(
       //   handleField(
