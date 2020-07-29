@@ -434,11 +434,15 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
           { key: "applicationNumber", value: queryObject[0].applicationNumber }
         ];
         const renewalResponse = await getSearchResults(renewalSearchQueryObject);
-        const renewalDocuments = get(renewalResponse, "Licenses[0].tradeLicenseDetail.applicationDocuments");
-        for (let i = 1; i <= documents.length; i++) {
+        const renewalDocuments = get(renewalResponse, "Licenses[0].tradeLicenseDetail.applicationDocuments",[]);
+             
+        /* for (let i = 1; i <= renewalDocuments.length; i++) {
           if (i > renewalDocuments.length) {
             renewalDocuments.push(documents[i-1])
           }
+        } */
+        if (renewalDocuments && renewalDocuments.length>1) {
+          renewalDocuments.splice(0, 1);
         }
         dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.applicationDocuments", renewalDocuments));
         set(queryObject[0], "tradeLicenseDetail.applicationDocuments", renewalDocuments);
