@@ -83,7 +83,7 @@ const updateSearchResults = async (
       dispatch(prepareFinalObject("Licenses[0].applicationType", "RENEWAL"));
       dispatch(prepareFinalObject("Licenses[0].workflowCode", "EDITRENEWAL"));
       dispatch(prepareFinalObject("Licenses[0].action", "INITIATE"));
-      dispatch(prepareFinalObject("Licenses[0].applicationNumber", ""));
+     // dispatch(prepareFinalObject("Licenses[0].applicationNumber", ""));
       dispatch(
         handleField(
           "apply",

@@ -330,7 +330,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         get(state.screenConfiguration.preparedFinalObject, "Licenses", [])
       )
     );
-    let documents = get(
+     let documents = get(
       queryObject[0],
       "tradeLicenseDetail.applicationDocuments"
     );
@@ -415,17 +415,17 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       let action = "INITIATE";
       //Code for edit flow
 
-      if (
-        queryObject[0].tradeLicenseDetail &&
-        queryObject[0].tradeLicenseDetail.applicationDocuments
-      ) {
-
-
-        if (getQueryArg(window.location.href, "action") === "edit" || isEditRenewal) {
-        } else if (activeIndex === 1) {
-          set(queryObject[0], "tradeLicenseDetail.applicationDocuments", null);
-        } else action = "APPLY";
-      }
+       if (
+          queryObject[0].tradeLicenseDetail &&
+          queryObject[0].tradeLicenseDetail.applicationDocuments
+        ) {
+  
+  
+          if (getQueryArg(window.location.href, "action") === "edit" || isEditRenewal) {
+          } else if (activeIndex === 1) {
+            set(queryObject[0], "tradeLicenseDetail.applicationDocuments", null);
+          } else action = "APPLY";
+        }
 
       if (activeIndex === 3 && isEditRenewal) {
         action = "APPLY";
@@ -441,9 +441,9 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
             renewalDocuments.push(documents[i-1])
           }
         } */
-        if (renewalDocuments && renewalDocuments.length>1) {
+        /* if (renewalDocuments && renewalDocuments.length>1) {
           renewalDocuments.splice(0, 1);
-        }
+        } */
         dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.applicationDocuments", renewalDocuments));
         set(queryObject[0], "tradeLicenseDetail.applicationDocuments", renewalDocuments);
 
@@ -454,7 +454,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
 
       let updateResponse = [];
       
-         if (!isEditFlow && !isRenewal) {       
+         if (!isEditFlow) {       
           updateResponse = await httpRequest("post", "/tl-services/v1/_update", "", [], {
           Licenses: queryObject
         })
