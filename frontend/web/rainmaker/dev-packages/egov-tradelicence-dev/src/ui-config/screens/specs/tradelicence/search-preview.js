@@ -194,12 +194,14 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
     const status = get(
       state,
       "screenConfiguration.preparedFinalObject.Licenses[0].status"
-    );
+    );    
     const applicationType = get(
       state.screenConfiguration.preparedFinalObject,
       "Licenses[0].applicationType"
     );
 
+    const payloadStatus = get(payload,`Licenses[0].status`,null);
+    const payloadType = get(payload,`Licenses[0].applicationType`,null);
     const LicensevalidToDate = get(
       state.screenConfiguration.preparedFinalObject,
       "Licenses[0].validTo"
@@ -232,7 +234,7 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
   set(action, "screenConfig.components.footer", footer)
 
    //if(status ==="APPROVED" && applicationType ==="NEW" && licene_expiry_date>=limit_date)
-    if(status ==="APPROVED" && applicationType ==="NEW" )
+    if(payloadStatus ==="APPROVED" && payloadType ==="NEW" )
 
    {
       dispatch(handleField(
@@ -242,7 +244,17 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
         true
       ));
     }
-    else if(applicationType ==="RENEWAL")
+    else if (payloadStatus ==="EXPIRED")
+    {
+      dispatch(handleField(
+        "search-preview",
+        "components.div.children.reviewDeclaration.children.cardContent.children.headerDiv",
+        "visible",
+        true
+      ));
+
+    }
+    else if(payloadType ==="RENEWAL")
     {
       dispatch(handleField(
         "search-preview",
