@@ -589,40 +589,52 @@ export const tradeDetails = getCommonCard({
           sm: 6
         }
     },
-    oldLicenseNo: getTextField({
-      label: {
-        labelName: "Old License No",
-        labelKey: "TL_OLD_LICENSE_NO"
-      },
-      placeholder: {
-        labelName: "Enter Old License No",
-        labelKey: "TL_OLD_LICENSE_NO_PLACEHOLDER"
-      },
+    // oldLicenseNo: getTextField({
+    //   label: {
+    //     labelName: "Old License No",
+    //     labelKey: "TL_OLD_LICENSE_NO"
+    //   },
+    //   placeholder: {
+    //     labelName: "Enter Old License No",
+    //     labelKey: "TL_OLD_LICENSE_NO_PLACEHOLDER"
+    //   },
+    //   gridDefination: {
+    //     xs: 12,
+    //     sm: 6
+    //   },
+    //   props:{
+    //     disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false 
+    //   },
+    //   iconObj: {
+    //     iconName: "search",
+    //     position: "end",
+    //     color: "#FE7A51",
+    //     onClickDefination: {
+    //       action: "condition",
+    //       callBack: (state, dispatch) => {
+    //         fillOldLicenseData(state, dispatch);
+    //       }
+    //     }
+    //   },
+    //   title: {
+    //     value: "Fill the form by searching your old approved trade license",
+    //     key: "TL_OLD_TL_NO"
+    //   },
+    //   infoIcon: "info_circle",
+    //   jsonPath: "Licenses[0].oldLicenseNumber"
+    // }),
+    dummyDiv: {
+      uiFramework: "custom-atoms",
+      componentPath: "Div",
       gridDefination: {
         xs: 12,
         sm: 6
       },
-      props:{
-        disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false 
-      },
-      iconObj: {
-        iconName: "search",
-        position: "end",
-        color: "#FE7A51",
-        onClickDefination: {
-          action: "condition",
-          callBack: (state, dispatch) => {
-            fillOldLicenseData(state, dispatch);
-          }
-        }
-      },
-      title: {
-        value: "Fill the form by searching your old approved trade license",
-        key: "TL_OLD_TL_NO"
-      },
-      infoIcon: "info_circle",
-      jsonPath: "Licenses[0].oldLicenseNumber"
-    }),
+      visible: true,
+      props: {
+        disabled: true
+      }
+    },
     tradeLicenseType: {
       ...getSelectField({
         label: {
