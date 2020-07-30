@@ -1181,7 +1181,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
       {
         style: "tl-certificate-footer",
         columns: [
-          {
+          transformedData.workflowcode !== "DIRECTRENEWAL" ? {
             text: [
               {
                 text: getLocaleLabels(
@@ -1194,7 +1194,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
               }
             ],
             alignment: "left"
-          },
+          } : {},
           {
             text: [
               {

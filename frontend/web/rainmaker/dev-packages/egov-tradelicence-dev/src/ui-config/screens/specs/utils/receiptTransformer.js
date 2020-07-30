@@ -133,6 +133,9 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
     data.financialYear = nullToNa(
       get(response, "Licenses[0].financialYear", "NA")
     );
+    data.workflowcode = nullToNa(
+      get(response, "Licenses[0].workflowCode", "NA")
+    );
     data.tradeName = nullToNa(get(response, "Licenses[0].tradeName", "NA"));
     data.doorNo = nullToNa(
       get(response, "Licenses[0].tradeLicenseDetail.address.doorNo", "NA")
