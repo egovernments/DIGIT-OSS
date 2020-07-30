@@ -16,6 +16,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.egov.filestore.domain.model.Artifact;
 import org.egov.filestore.repository.AzureClientFacade;
 import org.egov.filestore.repository.CloudFilesManager;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -189,7 +190,7 @@ public class AzureBlobStorageImpl implements CloudFilesManager {
 			}
 
 		}catch(Exception e) {
-			log.error("Exception while uploading the file: ",e);
+			throw new CustomException("WG_WF_UPLOAD_ERROR",e.getMessage());
 		}
 	}
 

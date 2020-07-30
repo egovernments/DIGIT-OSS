@@ -1,5 +1,6 @@
 package org.egov.filestore.repository;
 
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -52,7 +53,7 @@ public class AzureClientFacade implements ApplicationRunner{
 				blobClient = storageAccount.createCloudBlobClient();
 			}
 		}catch(Exception e) {
-			log.error("Exception while intializing client: ", e);
+			throw new CustomException("WG_WF_CLIENT_INITIALIZE_ERROR",e.getMessage());
 		}	
 		cloudBlobClient = blobClient;
 	}
