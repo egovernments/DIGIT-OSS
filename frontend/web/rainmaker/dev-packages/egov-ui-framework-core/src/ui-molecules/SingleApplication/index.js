@@ -6,6 +6,7 @@ import CardContent from "@material-ui/core/CardContent";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import get from "lodash/get";
+import set from "lodash/set";
 import { withStyles } from "@material-ui/core/styles";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import {toggleSnackbar} from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -171,6 +172,18 @@ class SingleApplication extends React.Component {
 
   render() {
     const { searchResults, classes, contents, moduleName,setRoute } = this.props;
+    const renewalResults = searchResults.filter(item=>item.applicationType==="RENEWAL");
+    for(let i=0; i<searchResults.length;i++)
+    {
+      for(let j=0; j<renewalResults.length;j++)
+      {
+        if(searchResults[i].licenseNumber===renewalResults[j].licenseNumber)
+        {
+          set(searchResults[i],'renewed', "true")
+        }
+
+      }
+    }    
     return (
       <div className="application-card">
         {searchResults && searchResults.length > 0 ? (
@@ -240,7 +253,7 @@ class SingleApplication extends React.Component {
                         // setRoute(url);
                         }}>
                         <Label
-                          labelKey={ (item.status==="APPROVED"||item.status==="EXPIRED" ) &&moduleName === "TL" && item.applicationType==="NEW" ? "TL_VIEW_DETAILS_RENEWAL":"TL_VIEW_DETAILS"}
+                          labelKey={ (item.status==="APPROVED"||item.status==="EXPIRED" ) &&moduleName === "TL" && item.applicationType==="NEW" ? (item.renewed==="true")?"TL_VIEW_DETAILS":"TL_VIEW_DETAILS_RENEWAL":"TL_VIEW_DETAILS"}
                           textTransform={"uppercase"}
                           style={{
                             color: "#fe7a51",
