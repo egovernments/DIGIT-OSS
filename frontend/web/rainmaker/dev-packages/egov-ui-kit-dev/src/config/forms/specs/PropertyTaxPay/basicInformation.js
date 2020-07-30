@@ -87,6 +87,7 @@ const formConfig = {
       className:"constructionYearLabel",
       floatingLabelText: "PT_ASSESMENT_INFO_CONSTRUCTION_DATE",
       localePrefix: { moduleName: "PropertyTax", masterName: "datePicker" },
+      errorMessage:"PT_CONST_DATE_WARNING",
       numcols: 6,
       fullWidth:true,
       required:true,
