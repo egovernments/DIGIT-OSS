@@ -588,13 +588,22 @@ export const createEstimateData = (billObject, totalAmount) => {
         }
       });
     }); 
-    
-  billDetails[0].billAccountDetails.push({
-      amount: forward,
-      taxHeadCode: "ADVANCE_CARRYFORWARD",
-      order: 2,
-      value: "Please put some description in mdms for this key"
-    })
+
+    let keyExist = false;
+    billDetails[0].billAccountDetails.forEach(cur => {
+      if (cur.taxHeadCode.indexOf("ADVANCE_CARRYFORWARD") > -1) {
+        cur.amount = forward;
+        keyExist = true;
+      }
+    });
+    if(!keyExist){
+      billDetails[0].billAccountDetails.push({
+        amount: forward,
+        taxHeadCode: "ADVANCE_CARRYFORWARD",
+        order: 2,
+        value: "Please put some description in mdms for this key"
+      })
+    }
   }
 
   let fees =
