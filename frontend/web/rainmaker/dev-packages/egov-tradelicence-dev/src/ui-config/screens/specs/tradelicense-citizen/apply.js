@@ -81,6 +81,12 @@ const updateSearchResults = async (
         )
       );
       dispatch(prepareFinalObject("Licenses[0].applicationType", "RENEWAL"));
+
+      dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.adhocPenalty", null));
+      dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.adhocExemption", null));
+      dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.adhocPenaltyReason", null));
+      dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.adhocExemptionReason", null));
+
       dispatch(prepareFinalObject("Licenses[0].workflowCode", "EDITRENEWAL"));
       dispatch(prepareFinalObject("Licenses[0].action", "INITIATE"));
      // dispatch(prepareFinalObject("Licenses[0].applicationNumber", ""));
