@@ -25,7 +25,9 @@ import {
   getDialogButton,
   showHideAdhocPopup,
   getEpochForDate,
-  convertEpochToDateForEndDateYMD
+  convertEpochToDateForEndDateYMD,
+  convertDateToEpoch,
+  convertDateTimeToEpoch
 } from "../utils";
 
 
@@ -207,13 +209,19 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
       "Licenses[0].validTo"
     );
 
-   let m_value = LicensevalidToDate-1000;
+   let LicenseExpiryDate = LicensevalidToDate-1000;
 
-   let LicensevalidToDateConverted = convertEpochToDateForEndDateYMD(m_value)
 
-   const licene_expiry_date = new Date(LicensevalidToDateConverted);
+   let date = new Date();
 
-   const limit_date = new Date('2021','00','01');
+   //let date = new Date().toISOString().slice(0,10);
+
+   let currentDate = date.getFullYear()+'-'+date.getMonth()+'-'+date.getDay();
+       
+   let limitEpochDate = convertDateTimeToEpoch("01-01-2021 00:00:00");
+
+   let currentDatetoEpoch = convertDateToEpoch(currentDate);
+
    const financialYear = get(
      state,
      "screenConfiguration.preparedFinalObject.Licenses[0].financialYear"
@@ -234,15 +242,15 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
   set(action, "screenConfig.components.footer", footer)
 
    //if(status ==="APPROVED" && applicationType ==="NEW" && licene_expiry_date>=limit_date)
-    if(payloadStatus ==="APPROVED" && payloadType ==="NEW" )
+    if(payloadStatus ==="APPROVED" && payloadType ==="NEW" && ((currentDatetoEpoch<LicenseExpiryDate && currentDatetoEpoch>=limitEpochDate )||(currentDatetoEpoch>LicenseExpiryDate)))
 
-   {
+    {
       dispatch(handleField(
         "search-preview",
         "components.div.children.reviewDeclaration.children.cardContent.children.headerDiv",
         "visible",
         true
-      ));
+      ));      
     }
     else if (payloadStatus ==="EXPIRED")
     {
@@ -290,6 +298,7 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
         "visible",
         false
       ));
+      set(action, "screenConfig.components.footer", {})
       set(action, "screenConfig.components.footer.children.container.children.rightdiv.children.submitButton.props.visible", false)
 
       // dispatch(
