@@ -22,7 +22,8 @@ const styles = {
     "&$checked": {
       color: "#FE7A51"
     },
-    marginTop:"-48px",
+    marginTop:"-31px",
+    marginRight: "-10px",
   },
   checked: {}
 };
