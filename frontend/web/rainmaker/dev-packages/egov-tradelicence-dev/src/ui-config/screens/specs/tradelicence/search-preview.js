@@ -298,7 +298,7 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
         "visible",
         false
       ));
-      set(action, "screenConfig.components.footer", {})
+     //set(action, "screenConfig.components.footer", {})
       set(action, "screenConfig.components.footer.children.container.children.rightdiv.children.submitButton.props.visible", false)
 
       // dispatch(
