@@ -9,8 +9,10 @@ import { httpRequest } from "../../../../../ui-utils/api";
 import { convertDateToEpoch, ifUserRoleExists, validateFields } from "../../utils";
 import "./index.css";
 
-const checkAmount = (totalAmount, customAmount) => {
+const checkAmount = (totalAmount, customAmount, businessService) => {
   if(totalAmount !== 0 && customAmount === 0){
+    return true;
+  } else if(totalAmount === 0 && customAmount === 0 && (businessService === "WS" || businessService === "SW")) {
     return true;
   } else {
     return false;
@@ -47,7 +49,7 @@ export const callPGService = async (state, dispatch) => {
     return;
   }
 
-  if (checkAmount(taxAmount, Number(state.screenConfiguration.preparedFinalObject.AmountPaid))) {
+  if (checkAmount(taxAmount, Number(state.screenConfiguration.preparedFinalObject.AmountPaid), businessService)) {
     dispatch(
       toggleSnackbar(
         true,
@@ -403,7 +405,7 @@ const callBackForPay = async (state, dispatch) => {
     return;
   }
 
-  if (checkAmount(totalAmount, Number(state.screenConfiguration.preparedFinalObject.AmountPaid))) {
+  if (checkAmount(totalAmount, Number(state.screenConfiguration.preparedFinalObject.AmountPaid), finalReceiptData.Bill[0].businessService)) {
     dispatch(
       toggleSnackbar(
         true,
