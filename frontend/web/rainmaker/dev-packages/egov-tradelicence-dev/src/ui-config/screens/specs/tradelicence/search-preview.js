@@ -328,7 +328,7 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
   }
 
 
-    if (status === "REJECTED"|| status ==="PENDINGPAYMENT") {
+  if (status === "REJECTED"|| status ==="PENDINGPAYMENT" || status ==="APPROVED") {
       console.log("=====status=123======" + status + "============");
       // set(
       //   action.screenConfgig,
