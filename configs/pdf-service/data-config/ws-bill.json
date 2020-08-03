@@ -653,7 +653,7 @@
             "derived": [
               {
                 "variable": "charge",
-                "formula": "{{taxCharge}}+{{fees}}"
+                "formula": "{{ws_charge}}"
               },
               {
                 "variable": "penalty",
@@ -664,21 +664,36 @@
                 "formula": "{{timeRebate}}+{{adhocRebate}}"
               },
               {
-                "variable": "others",
+                "variable": "billOthers",
                 "formula": "{{cancerCess}}+{{roundoff}}+{{timeInterest}}+{{ceilingDebit}}+{{ceilingCredit}}+{{firecess}}+{{waterCess}}"
               },
               {
+                "variable": "demandTotalAmount",
+                "formula": "{{ws_advanceAmount}}+{{ws_roundoff}}+{{ws_charge}}+{{ws_water_cess}}+{{ws_time_interest}}+{{ws_time_penalty}}"
+              },
+              {
+                "variable": "billTotalAmount",
+                "formula": "{{total}}"
+              },
+              {
                 "variable": "arrears",
-                "formula": "{{WS_arrears}}"
+                "formula": "{{billTotalAmount}}>{{demandTotalAmount}}?{{billTotalAmount}}-{{demandTotalAmount}}:0"
               },
               {
                 "variable": "advanceAdjusted",
-                "formula": "{{WS_AdvanceAdjusted}}"
+                "formula": "{{billTotalAmount}}>=0?({{billTotalAmount}}<{{demandTotalAmount}}?{{billTotalAmount}}-{{demandTotalAmount}}:0):{{demandTotalAmount}} * -1"
               },
-
               {
                 "variable": "advanceAvailable",
-                "formula": "{{total}}<0?{{total}}*-1:0"
+                "formula": "{{billTotalAmount}}<0?{{billTotalAmount}}*-1:0"
+              },
+              {
+                "variable": "others",
+                "formula": "{{ws_water_cess}}+{{ws_roundoff}}+{{ws_time_interest}}"
+              },
+              {
+                "variable": "calculatedTotal",
+                "formula": "{{billTotalAmount}}>0?{{billTotalAmount}}:0"
               }
             ]
           },
@@ -718,6 +733,37 @@
                       "prefix": "TENANT_TENANTS",
                       "module": "rainmaker-common"
                     }
+                  }
+                ]
+              },
+              {
+                "path": "http://billing-service.egov:8080/billing-service/demand/_search",
+                "queryParam": "tenantId=$.tenantId,consumerCode=$.consumerCode,businessService=WS",
+                "apiRequest": null,
+                "responseMapping": [
+                  {
+                    "variable": "ws_advanceAmount",
+                    "value": "$.Demands[(@.length-1)].demandDetails[?(@.taxHeadMasterCode == 'WS_ADVANCE_CARRYFORWARD')].taxAmount"
+                  },
+                  {
+                    "variable": "ws_roundoff",
+                    "value": "$.Demands[(@.length-1)].demandDetails[?(@.taxHeadMasterCode == 'WS_Round_Off')].taxAmount"
+                  },
+                  {
+                    "variable": "ws_charge",
+                    "value": "$.Demands[(@.length-1)].demandDetails[?(@.taxHeadMasterCode == 'WS_CHARGE')].taxAmount"
+                  },
+                  {
+                    "variable": "ws_water_cess",
+                    "value": "$.Demands[(@.length-1)].demandDetails[?(@.taxHeadMasterCode == 'WS_WATER_CESS')].taxAmount"
+                  },
+                  {
+                    "variable": "ws_time_interest",
+                    "value": "$.Demands[(@.length-1)].demandDetails[?(@.taxHeadMasterCode == 'WS_TIME_INTEREST')].taxAmount"
+                  },
+                  {
+                    "variable": "ws_time_penalty",
+                    "value": "$.Demands[(@.length-1)].demandDetails[?(@.taxHeadMasterCode == 'WS_TIME_PENALTY')].taxAmount"
                   }
                 ]
               }

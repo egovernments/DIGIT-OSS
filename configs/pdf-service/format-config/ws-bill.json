@@ -543,7 +543,7 @@
                         "style": "receipt-table2"
                       },
                       {
-                        "text": "{{total}}",
+                        "text": "{{calculatedTotal}}",
                         "border": [
                           false,
                           false,
