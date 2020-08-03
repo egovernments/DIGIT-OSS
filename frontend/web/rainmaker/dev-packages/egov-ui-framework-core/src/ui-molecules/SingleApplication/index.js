@@ -14,7 +14,7 @@ import "./index.css";
 import { checkValueForNA } from "../../ui-config/screens/specs/utils";
 import { localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
-import { convertEpochToDate, convertEpochToDateForEndDate } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { convertEpochToDate, convertDateToEpoch, convertDateTimeToEpoch, convertEpochToDateForEndDate } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { epochToDate, navigateToApplication, getApplicationType } from "egov-ui-kit/utils/commons";
 import orderBy from "lodash/orderBy";
 const styles = {
@@ -183,7 +183,32 @@ class SingleApplication extends React.Component {
         }
 
       }
-    }    
+    }  
+  
+    for(let i=0; i<searchResults.length;i++)
+    {
+      const LicensevalidToDate = get(searchResults[i], "validTo", null);
+      
+      let LicenseExpiryDate = LicensevalidToDate-1000;
+   
+      let date = new Date();
+
+      let currentDate = date.getFullYear()+'-'+date.getMonth()+'-'+date.getDay();
+          
+      let limitEpochDate = convertDateTimeToEpoch("01-01-2021 00:00:00");
+
+      let currentDatetoEpoch = convertDateToEpoch(currentDate);
+        
+        if((currentDatetoEpoch<LicenseExpiryDate && currentDatetoEpoch>=limitEpochDate)||(currentDatetoEpoch>LicenseExpiryDate))
+        {
+          set(searchResults[i],'threeMonths', "true");
+        }
+        else
+        {
+          set(searchResults[i],'threeMonths', "false");
+        }
+    }
+   
     return (
       <div className="application-card">
         {searchResults && searchResults.length > 0 ? (
@@ -253,7 +278,7 @@ class SingleApplication extends React.Component {
                         // setRoute(url);
                         }}>
                         <Label
-                          labelKey={ (item.status==="APPROVED"||item.status==="EXPIRED" ) &&moduleName === "TL" && item.applicationType==="NEW" ? (item.renewed==="true")?"TL_VIEW_DETAILS":"TL_VIEW_DETAILS_RENEWAL":"TL_VIEW_DETAILS"}
+                          labelKey={ (item.status==="APPROVED"||item.status==="EXPIRED" ) &&moduleName === "TL" && item.applicationType==="NEW"  && item.threeMonths ==="true"? (item.renewed==="true")?"TL_VIEW_DETAILS":"TL_VIEW_DETAILS_RENEWAL":"TL_VIEW_DETAILS"}
                           textTransform={"uppercase"}
                           style={{
                             color: "#fe7a51",
