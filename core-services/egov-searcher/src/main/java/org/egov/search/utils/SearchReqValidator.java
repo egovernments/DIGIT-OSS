@@ -46,7 +46,7 @@ public class SearchReqValidator {
 		SearchParams searchParams = searchDefinition.getSearchParams();
 		Map<String, String> errorMap = new HashMap<>();
 		if(null == searchParams) {
-			errorMap.put("MISSING_PARAM_CONFIGS", "Missiing Parameter Configurations for: "+searchDefinition.getName());
+			errorMap.put("MISSING_PARAM_CONFIGS", "Missing Parameter Configurations for: "+searchDefinition.getName());
 			throw new CustomException(errorMap);
 		}
 		if(!CollectionUtils.isEmpty(searchParams.getParams())) {
@@ -58,10 +58,10 @@ public class SearchReqValidator {
 					try {
 						paramValue = JsonPath.read(request, entry.getJsonPath());
 					}catch(Exception e) {
-						errorMap.put("MISSING_MANDATORY_EXCEPTION", "Missiing Mandatory Property: "+entry.getJsonPath());
+						log.error("KEY_PATH_NOT_FOUND {}" , "Missing Mandatory Property: "+entry.getJsonPath());
 					}
 					if(null == paramValue) {
-						errorMap.put("MISSING_MANDATORY_VALUE", "Missiing Mandatory Property: "+entry.getJsonPath());
+						errorMap.put("MISSING_MANDATORY_VALUE" + "_" + entry.getName(), "Missing Mandatory Property: "+entry.getJsonPath());
 					}
 				});
 			}catch(Exception e) {

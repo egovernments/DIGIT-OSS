@@ -40,6 +40,9 @@ public class SearchUtils {
 	@Autowired
 	private ObjectMapper mapper;
 	
+	@Value("${operaters.list}")
+	private List<String> operators;
+	
 	/**
 	 * Builds the query reqd for search
 	 * 
@@ -88,55 +91,92 @@ public class SearchUtils {
 		StringBuilder whereClause = new StringBuilder();
 		String condition = searchParam.getCondition();
 		try {
+			
 			String request = mapper.writeValueAsString(searchRequest);
-			for(Params param : searchParam.getParams()) {
+			List<Params> paramsList = searchParam.getParams();
+			
+			for (int i =0; i < paramsList.size(); i++) {
+				
+				
+				Params param = paramsList.get(i);
+				Boolean isParamOffsetOrLimit = param.getName().equalsIgnoreCase("offset") || param.getName().equalsIgnoreCase("limit");
 				Object paramValue = null;
+			
 				try {
-					if(null != param.getIsConstant()) {
-						if(param.getIsConstant()) 
+
+					if (null != param.getIsConstant()) {
+						if (param.getIsConstant())
 							paramValue = param.getValue();
-						else 
+						else
 							paramValue = JsonPath.read(request, param.getJsonPath());
-					}else
+					} else
 						paramValue = JsonPath.read(request, param.getJsonPath());
-					
+
 					if (null == paramValue)
 						continue;
-					else 
-						preparedStatementValues.put(param.getName(), paramValue);
-					
+
 				} catch (Exception e) {
 					continue;
 				}
+				
+				/**
+				 * Add and clause if necessary
+				 */
+				if (isParamOffsetOrLimit) {
+					whereClause.append(" ");
+				} else if (i > 0) {
+					whereClause.append(" " + condition + " ");
+				}
+				
+				/**
+				 * Array operators
+				 */
 				if (paramValue instanceof net.minidev.json.JSONArray) {
 					String[] validListOperators = {"NOT IN", "IN"};
 					String operator = (!StringUtils.isEmpty(param.getOperator())) ? " " + param.getOperator() + " " : " IN ";
 					if(!Arrays.asList(validListOperators).contains(operator))
 						operator = " IN "; 
 					whereClause.append(param.getName()).append(operator).append("(").append(":"+param.getName()).append(")");
-				} else {
-					String[] validOperators = {"=", "GE", "LE", "NE", "LIKE", "ILIKE"};
-					String operator = (!StringUtils.isEmpty(param.getOperator())) ? param.getOperator(): "=";
-					if(!Arrays.asList(validOperators).contains(operator))
-						operator = "="; 
-					if (operator.equals("GE"))
+				} 
+				/**
+				 * single operators
+				 */
+				else {
+					List<String> validOperators = operators;
+					String operator = (!StringUtils.isEmpty(param.getOperator())) ? param.getOperator() : "=";
+
+					if (!validOperators.contains(operator)) {
+						operator = "=";
+					} else if (isParamOffsetOrLimit) {
+						operator = "";
+					}
+					if (operator.equals("GE")) {
 						operator = ">=";
-					else if (operator.equals("LE"))
+					} else if (operator.equals("LE")) {
 						operator = "<=";
-					else if (operator.equals("NE"))
+					} else if (operator.equals("NE")) {
 						operator = "!=";
-					else if (operator.equals("LIKE") || operator.equals("ILIKE")) {
+					} else if (operator.equals("LIKE") || operator.equals("ILIKE")) {
+
 						preparedStatementValues.put(param.getName(), "%" + paramValue + "%");
-					}								
-					whereClause.append(param.getName()).append(" " + operator + " ").append(":"+param.getName());
+					} else if (operator.equals("TOUPPERCASE")) {
+
+						paramValue = ((String) paramValue).toUpperCase();
+					} else if (operator.equals("TOLOWERCASE")) {
+
+						paramValue = ((String) paramValue).toLowerCase();
+					}
+					
+					whereClause.append(param.getName()).append(" " + operator + " ").append(":" + param.getName());
 				}
-				whereClause.append(" " + condition + " ");
+
+				preparedStatementValues.put(param.getName(), paramValue);
 			}
-		}catch(Exception e) {
+		} catch (Exception e) {
 			log.error("Exception while bulding query: ", e);
 			throw new CustomException("QUERY_BUILD_ERROR", "Exception while bulding query");
 		}
-		return whereClause.toString().substring(0, whereClause.toString().lastIndexOf(searchParam.getCondition()));
+		return whereClause.toString();
 	}
 
 	

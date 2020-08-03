@@ -1,26 +1,35 @@
 package org.egov;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import lombok.extern.slf4j.Slf4j;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
+
+import org.egov.search.model.Params;
 import org.egov.search.model.SearchDefinition;
 import org.egov.search.model.SearchDefinitions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.*;
-import org.springframework.context.*;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.context.ApplicationContext;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 
-import java.io.*;
-import java.net.URL;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Order(1)
@@ -35,6 +44,8 @@ public class SearchApplicationRunnerImpl implements ApplicationRunner {
 
     @Value("${search.yaml.path}")
     private String yamllist;
+    
+    private List<String> OffsetAndLimit = Arrays.asList("OFFSET","LIMIT");
 
     @Autowired
     ApplicationContext applicationContext;
@@ -125,6 +136,15 @@ public class SearchApplicationRunnerImpl implements ApplicationRunner {
                 try {
                     searchDefinitions = mapper.readValue(resource.getInputStream(), SearchDefinitions.class);
                     logger.info("Parsed search definition : " + searchDefinitions.getSearchDefinition().getModuleName());
+                    
+                    searchDefinitions.getSearchDefinition().getDefinitions().forEach(definition -> {
+                    	
+                    	List<Params> params  = definition.getSearchParams().getParams();
+                    	List<String> keyNames = params.stream().map(Params::getName).collect(Collectors.toList());
+                    	if(!keyNames.containsAll(OffsetAndLimit)){
+                    		addOffsetAndLimit(params);
+                    	}
+                    });
                     map.put(searchDefinitions.getSearchDefinition().getModuleName(),
                             searchDefinitions.getSearchDefinition());
                 } catch (IOException e) {
@@ -147,8 +167,32 @@ public class SearchApplicationRunnerImpl implements ApplicationRunner {
         searchDefinitionMap = map;
     }
 
+    /**
+     *  Adds offset and limit with defalult value to query
+     * @param params
+     */
+    private void addOffsetAndLimit(List<Params> params) {
 
-    public ConcurrentHashMap<String, SearchDefinition> getSearchDefinitionMap() {
+    	Params paramOffset = Params.builder()
+    			.name("OFFSET")
+    			.isMandatory(true)
+    			.jsonPath("$.searchCriteria.offset")
+    			.operator("=")
+    			.build();
+    	
+    	Params paramLimit = Params.builder()
+    			.name("LIMIT")
+    			.isMandatory(true)
+    			.jsonPath("$.searchCriteria.limit")
+    			.operator("=")
+    			.build();
+    	
+    	params.add(paramOffset);
+    	params.add(paramLimit);
+    	
+	}
+
+	public ConcurrentHashMap<String, SearchDefinition> getSearchDefinitionMap() {
         return searchDefinitionMap;
     }
 }
