@@ -299,7 +299,11 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
         false
       ));
      //set(action, "screenConfig.components.footer", {})
-      set(action, "screenConfig.components.footer.children.container.children.rightdiv.children.submitButton.props.visible", false)
+
+         set(action, "screenConfig.components.footer.children.container.children.rightdiv.children.submitButton", {})
+         set(action, "screenConfig.components.footer.children.container.children.rightdiv.children.editButton", {})
+
+    //  set(action, "screenConfig.components.footer.children.container.children.rightdiv.children.submitButton.props.visible", false)
 
       // dispatch(
       //   handleField(
@@ -309,7 +313,7 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
       //     false
       //   )
       // );
-      set(action, "screenConfig.components.footer.children.container.children.rightdiv.children.editButton.props.visible", false)
+     // set(action, "screenConfig.components.footer.children.container.children.rightdiv.children.editButton.props.visible", false)
 
       // dispatch(
       //   handleField(

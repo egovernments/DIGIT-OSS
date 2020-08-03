@@ -745,10 +745,10 @@ const getAcknowledgementCard = (
         moduleName: "egov-tradelicence",
         componentPath: "ApplicationNoContainer",
         props: {
-          number: "NA"
+          number: applicationNumber
         },
         visible: true
-      }
+      } 
     }),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
