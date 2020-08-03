@@ -78,8 +78,15 @@ public class PropertyService {
 		propertyValidator.validateCreateRequest(request);
 		enrichmentService.enrichCreateRequest(request);
 		userService.createUser(request);
-		if (config.getIsWorkflowEnabled())
-			wfService.updateWorkflow(request, CreationReason.CREATE);
+		if (config.getIsWorkflowEnabled()
+				&& !request.getProperty().getCreationReason().equals(CreationReason.DATA_ENTRY)) {
+			wfService.updateWorkflow(request, request.getProperty().getCreationReason());
+
+		} else {
+
+			request.getProperty().setStatus(Status.ACTIVE);
+		}
+
 		producer.push(config.getSavePropertyTopic(), request);
 		request.getProperty().setWorkflow(null);
 		return request.getProperty();

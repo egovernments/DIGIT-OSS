@@ -15,11 +15,15 @@ public enum CreationReason {
   
   MUTATION ("MUTATION"),
   
+  LEGACY ("LEGACY"),
+  
   BIFURCATION ("BIFURCATION"),
   
   AMALGAMATION ("AMALGAMATION"),
   
-  SUBDIVISION("SUBDIVISION");
+  SUBDIVISION("SUBDIVISION"), 
+  
+  DATA_ENTRY ("DATA_ENTRY");
 
   private String value;
 
