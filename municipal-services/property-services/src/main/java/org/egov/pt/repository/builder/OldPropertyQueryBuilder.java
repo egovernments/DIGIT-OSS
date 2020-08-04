@@ -71,18 +71,18 @@ public class OldPropertyQueryBuilder {
 
 	public String getPropertyLikeQuery(OldPropertyCriteria criteria, List<Object> preparedStmtList,long initialPoint) {
 		StringBuilder builder = new StringBuilder(LIKE_QUERY);	
-		
+		String tenatId = config.getStateLevelTenantId();
 		if(!StringUtils.isEmpty(criteria.getTenantId())) {
-			if(criteria.getTenantId().equals("pb")) {
+			if(criteria.getTenantId().equals(tenatId)) {
 				builder.append("pt.tenantid LIKE ? ");
-				preparedStmtList.add("pb%");
+				preparedStmtList.add(tenatId+"%");
 			}else {
 				builder.append("pt.tenantid = ? ");
 				preparedStmtList.add(criteria.getTenantId());
 			}
 		}else {
 			builder.append("pt.tenantid LIKE ? ");
-			preparedStmtList.add("pb%");
+			preparedStmtList.add(tenatId+"%");
 		}
 		/*String id = criteria.getIds().stream().findFirst().get();
 		builder.append("AND pt.propertyid LIKE ?");

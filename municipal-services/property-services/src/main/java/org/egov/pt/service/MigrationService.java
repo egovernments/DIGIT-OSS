@@ -156,7 +156,7 @@ public class MigrationService {
     public Map<String, String> initiateProcess(RequestInfoWrapper requestInfoWrapper,OldPropertyCriteria propertyCriteria,Map<String, String> errorMap){
 
         Map<String, String> resultMap = null;
-        Map<String, List<String>> masters = getMDMSData(requestInfoWrapper.getRequestInfo(),"pb");
+        Map<String, List<String>> masters = getMDMSData(requestInfoWrapper.getRequestInfo(),config.getStateLevelTenantId());
         List<String> tenantList = getTenantList();
 
         if(StringUtils.isEmpty(propertyCriteria.getLimit()))

@@ -296,4 +296,6 @@ public class PropertyConfiguration {
     @Value("${egov.url.shortner.endpoint}")
     private String urlShortnerEndpoint;
 
+    @Value("${state.level.tenant.id}")
+    private String stateLevelTenantId;
 }
