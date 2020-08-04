@@ -99,13 +99,13 @@ let totalAmount = (estimateCardData) => {
   let adhocPenalty=0;
   estimateCardData.forEach(data => {
    
-    if(data.name.labelKey === 'TL_TAX'){
+    if(data.name.labelKey === 'TL_TAX' || data.name.labelKey === 'TL_RENEWAL_TAX'){
       tlTax = data.value ? data.value : 0;
     }
-    if(data.name.labelKey === 'TL_COMMON_REBATE'){
+    if(data.name.labelKey === 'TL_COMMON_REBATE'|| data.name.labelKey === 'TL_RENEWAL_REBATE'){
       commonRebate = data.value ? data.value : 0;
     }
-    if(data.name.labelKey === 'TL_COMMON_PEN'){
+    if(data.name.labelKey === 'TL_COMMON_PEN' || data.name.labelKey === 'TL_RENEWAL_PENALTY'){
       commonPenalty = data.value ? data.value : 0;
     }
     if(data.name.labelKey === 'TL_ADHOC_PENALTY'){
@@ -113,7 +113,7 @@ let totalAmount = (estimateCardData) => {
     }
   });
     
-  return tlTax+adhocPenalty+commonPenalty-commonRebate;
+  return tlTax+adhocPenalty+commonPenalty-Math.abs(commonRebate);
 }
 
 const updateAdhoc = (state, dispatch) => {
