@@ -1,0 +1,162 @@
+serviceMaps:
+  serviceName: pgr-services
+  mappings:
+  - version: 1.0
+    description: Persists pgr service request in tables
+    fromTopic: save-pgr-request
+    isTransaction: true
+    queryMaps:
+
+    - query: INSERT INTO eg_pgr_service_v2(id, tenantid, servicecode, servicerequestid, description, accountid, additionaldetails, applicationstatus, source, createdby, createdtime, lastmodifiedby, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+      basePath: PGREntity.service
+      jsonMaps:
+      - jsonPath: $.PGREntity.service.id
+
+      - jsonPath: $.PGREntity.service.tenantId
+
+      - jsonPath: $.PGREntity.service.serviceCode
+
+      - jsonPath: $.PGREntity.service.serviceRequestId
+
+      - jsonPath: $.PGREntity.service.description
+
+      - jsonPath: $.PGREntity.service.accountId
+
+      - jsonPath: $.PGREntity.service.additionalDetail
+        type: JSON
+        dbType: JSONB
+
+      - jsonPath: $.PGREntity.service.applicationStatus
+
+      - jsonPath: $.PGREntity.service.source
+
+      - jsonPath: $.PGREntity.service.auditDetails.createdBy
+
+      - jsonPath: $.PGREntity.service.auditDetails.createdTime
+
+      - jsonPath: $.PGREntity.service.auditDetails.lastModifiedBy
+
+      - jsonPath: $.PGREntity.service.auditDetails.lastModifiedTime
+
+    - query: INSERT INTO eg_pgr_address_v2(id, tenantid, parentid, doorno, plotno, buildingname, street, landmark, city, pincode, locality, district, region, state, country, latitude, longitude, additionaldetails, createdby, createdtime, lastmodifiedby, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+      basePath: PGREntity.service.address
+      jsonMaps:
+      - jsonPath: $.PGREntity.service.address.id
+
+      - jsonPath: $.PGREntity.service.address.tenantId
+
+      - jsonPath: $.PGREntity.service.id
+
+      - jsonPath: $.PGREntity.service.address.doorNo
+
+      - jsonPath: $.PGREntity.service.address.plotNo
+
+      - jsonPath: $.PGREntity.service.address.buildingName
+
+      - jsonPath: $.PGREntity.service.address.street
+
+      - jsonPath: $.PGREntity.service.address.landmark
+
+      - jsonPath: $.PGREntity.service.address.city
+
+      - jsonPath: $.PGREntity.service.address.pincode
+
+      - jsonPath: $.PGREntity.service.address.locality.code
+
+      - jsonPath: $.PGREntity.service.address.district
+
+      - jsonPath: $.PGREntity.service.address.region
+
+      - jsonPath: $.PGREntity.service.address.state
+
+      - jsonPath: $.PGREntity.service.address.country
+
+      - jsonPath: $.PGREntity.service.address.geoLocation.latitude
+
+      - jsonPath: $.PGREntity.service.address.geoLocation.longitude
+
+      - jsonPath: $.PGREntity.service.address.additionDetails
+        type: JSON
+        dbType: JSONB
+
+      - jsonPath: $.PGREntity.service.auditDetails.createdBy
+
+      - jsonPath: $.PGREntity.service.auditDetails.createdTime
+
+      - jsonPath: $.PGREntity.service.auditDetails.lastModifiedBy
+
+      - jsonPath: $.PGREntity.service.auditDetails.lastModifiedTime
+
+
+
+  - version: 1.0
+    description: Updates pgr service request in tables
+    fromTopic: update-pgr-request
+    isTransaction: true
+    queryMaps:
+
+    - query: UPDATE eg_pgr_service_v2 SET servicecode=?, servicerequestid=?, description=?, accountid=?, additionaldetails=?, applicationstatus=?, lastmodifiedby=?, lastmodifiedtime=? WHERE id=?;
+      basePath: PGREntity.service
+      jsonMaps:
+      - jsonPath: $.PGREntity.service.serviceCode
+
+      - jsonPath: $.PGREntity.service.serviceRequestId
+
+      - jsonPath: $.PGREntity.service.description
+
+      - jsonPath: $.PGREntity.service.accountId
+
+      - jsonPath: $.PGREntity.service.additionalDetail
+        type: JSON
+        dbType: JSONB
+
+      - jsonPath: $.PGREntity.service.applicationStatus
+
+      - jsonPath: $.PGREntity.service.auditDetails.lastModifiedBy
+
+      - jsonPath: $.PGREntity.service.auditDetails.lastModifiedTime
+
+      - jsonPath: $.PGREntity.service.id
+
+
+    - query: UPDATE eg_pgr_address_v2 SET doorno=?, plotno=?, buildingname=?, street=?, landmark=?, city=?, pincode=?, locality=?, district=?, region=?, state=?, country=?, latitude=?, longitude=?,additionaldetails=?, lastmodifiedby=?, lastmodifiedtime=? WHERE id=?;
+      basePath: PGREntity.service.address
+      jsonMaps:
+
+      - jsonPath: $.PGREntity.service.address.doorNo
+
+      - jsonPath: $.PGREntity.service.address.plotNo
+
+      - jsonPath: $.PGREntity.service.address.buildingName
+
+      - jsonPath: $.PGREntity.service.address.street
+
+      - jsonPath: $.PGREntity.service.address.landmark
+
+      - jsonPath: $.PGREntity.service.address.city
+
+      - jsonPath: $.PGREntity.service.address.pincode
+
+      - jsonPath: $.PGREntity.service.address.locality.code
+
+      - jsonPath: $.PGREntity.service.address.district
+
+      - jsonPath: $.PGREntity.service.address.region
+
+      - jsonPath: $.PGREntity.service.address.state
+
+      - jsonPath: $.PGREntity.service.address.country
+
+      - jsonPath: $.PGREntity.service.address.geoLocation.latitude
+
+      - jsonPath: $.PGREntity.service.address.geoLocation.longitude
+
+      - jsonPath: $.PGREntity.service.address.additionDetails
+        type: JSON
+        dbType: JSONB
+
+      - jsonPath: $.PGREntity.service.auditDetails.lastModifiedBy
+
+      - jsonPath: $.PGREntity.service.auditDetails.lastModifiedTime
+
+      - jsonPath: $.PGREntity.service.address.id
