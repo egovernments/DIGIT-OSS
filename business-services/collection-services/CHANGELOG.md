@@ -3,6 +3,11 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.1.1 - 2020-08-04
+- Migration status mapping fix receipt to payment
+
+## 1.1.1
+
 ## 1.1.0 - 2020-06-25
 
 - Added Paytment API

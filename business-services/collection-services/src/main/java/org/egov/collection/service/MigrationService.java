@@ -24,6 +24,7 @@ import org.egov.collection.model.PaymentResponse;
 import org.egov.collection.model.RequestInfoWrapper;
 import org.egov.collection.model.enums.PaymentModeEnum;
 import org.egov.collection.model.enums.PaymentStatusEnum;
+import org.egov.collection.model.enums.ReceiptStatus;
 import org.egov.collection.model.v1.AuditDetails_v1;
 import org.egov.collection.model.v1.BillAccountDetail_v1;
 import org.egov.collection.model.v1.BillDetail_v1;
@@ -295,13 +296,20 @@ public class MigrationService {
         }else{
             payment.setMobileNumber(receipt.getBill().get(0).getMobileNumber());
         }
-        
-        if ((payment.getPaymentMode().toString()).equalsIgnoreCase(ONLINE.name()) ||
-                payment.getPaymentMode().toString().equalsIgnoreCase(CARD.name()))
-            payment.setPaymentStatus(PaymentStatusEnum.DEPOSITED);
-        else
-            payment.setPaymentStatus(PaymentStatusEnum.NEW);
 
+		String receiptHeaderStatus = receipt.getBill().get(0).getBillDetails().get(0).getStatus();
+		
+		if (!receiptHeaderStatus.equalsIgnoreCase(PaymentStatusEnum.CANCELLED.toString())) {
+
+			if ((payment.getPaymentMode().toString()).equalsIgnoreCase(ONLINE.name())
+					|| payment.getPaymentMode().toString().equalsIgnoreCase(CARD.name())
+					|| (receiptHeaderStatus.equalsIgnoreCase(ReceiptStatus.REMITTED.toString()))) {
+				
+				payment.setPaymentStatus(PaymentStatusEnum.DEPOSITED);
+			} else {
+				payment.setPaymentStatus(PaymentStatusEnum.NEW);
+			}
+		}
 
         AuditDetails auditDetails = getAuditDetail(receipt.getAuditDetails());
         payment.setAuditDetails(auditDetails);
