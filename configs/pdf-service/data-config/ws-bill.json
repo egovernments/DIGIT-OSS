@@ -669,7 +669,7 @@
               },
               {
                 "variable": "demandTotalAmount",
-                "formula": "{{ws_advanceAmount}}+{{ws_roundoff}}+{{ws_charge}}+{{ws_water_cess}}+{{ws_time_interest}}+{{ws_time_penalty}}"
+                "formula": "{{ws_roundoff}}+{{ws_charge}}+{{ws_water_cess}}+{{ws_time_interest}}+{{ws_time_penalty}}"
               },
               {
                 "variable": "billTotalAmount",
