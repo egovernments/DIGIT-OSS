@@ -154,6 +154,7 @@ const getAcknowledgementCard = (
   purpose,
   status,
   applicationNumber,
+  licenseNumber,
   secondNumber,
   financialYear,
   tenant
@@ -743,9 +744,9 @@ const getAcknowledgementCard = (
       licenseNumber: {
         uiFramework: "custom-atoms-local",
         moduleName: "egov-tradelicence",
-        componentPath: "ApplicationNoContainer",
+        componentPath: "licenceNoContainer",
         props: {
-          number: applicationNumber
+          number: licenseNumber
         },
         visible: true
       } 
@@ -774,6 +775,48 @@ const getAcknowledgementCard = (
           })
         }
       },
+      abc: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          downloadFormButton: {
+            uiFramework: "custom-atoms",
+            componentPath: "Div",
+            children: {
+              div1: {
+                uiFramework: "custom-atoms",
+                componentPath: "Icon",
+
+                props:{
+                  iconName: "cloud_download",
+                style:{
+                  marginTop: "7px",
+                  marginRight: "8px",
+                }
+              }                
+              },
+              div2: getLabel({
+                labelName: "DOWNLOAD CONFIRMATION FORM",
+                labelKey: "TL_APPLICATION_BUTTON_DOWN_CONF"
+              })
+
+            },
+            onClickDefination: {
+              action: "condition",
+              callBack: () => {
+                generateReceipt(state, dispatch, "ack_download");
+              }
+            },
+          },
+        },
+        props: {
+          style: {
+            display: "flex",
+            cursor: "pointer"
+
+          }
+        },
+      },
       gotoHomeFooter
     };
   }
@@ -799,6 +842,7 @@ const screenConfig = {
       window.location.href,
       "applicationNumber"
     );
+    const licenseNumber = get(state.screenConfiguration.preparedFinalObject,"Licenses[0].licenseNumber");
     const secondNumber = getQueryArg(window.location.href, "secondNumber");
     const tenant = getQueryArg(window.location.href, "tenantId");
     const data = getAcknowledgementCard(
@@ -807,6 +851,7 @@ const screenConfig = {
       purpose,
       status,
       applicationNumber,
+      licenseNumber,
       secondNumber,
       financialYear,
       tenant
