@@ -253,14 +253,16 @@ public class OrderByPriority implements ApportionV2 {
 
                     BigDecimal net = bucket.getAmount().subtract(bucket.getAdjustedAmount());
                     if(advance.add(net).abs().compareTo(totalPositiveAmount) > 0){
-                        BigDecimal diff = totalPositiveAmount.subtract(advance);
+                        // Advance heads whose amount is partially getting used
+                        BigDecimal diff = totalPositiveAmount.subtract(advance.abs());
                         BigDecimal adjustedAmount = bucket.getAdjustedAmount();
-                        bucket.setAdjustedAmount(adjustedAmount.add(diff).negate());
+                        bucket.setAdjustedAmount(adjustedAmount.add(diff.negate()));
                         advance = totalPositiveAmount.negate();
                         taxDetail.setAmountPaid(taxDetail.getAmountPaid().add(diff.negate()));
                         break;
                     }
                     else {
+                        // Advance heads whose amount is completely getting used
                         advance = advance.add(net);
                         bucket.setAdjustedAmount(bucket.getAmount());
                         taxDetail.setAmountPaid(taxDetail.getAmountPaid().add(net));
