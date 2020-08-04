@@ -419,8 +419,8 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
           queryObject[0].tradeLicenseDetail &&
           queryObject[0].tradeLicenseDetail.applicationDocuments
         ) {
-  
-  
+          
+          
           if (getQueryArg(window.location.href, "action") === "edit" || isEditRenewal) {
           } else if (activeIndex === 1) {
             set(queryObject[0], "tradeLicenseDetail.applicationDocuments", null);
@@ -435,8 +435,8 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         ];
         const renewalResponse = await getSearchResults(renewalSearchQueryObject);
         const renewalDocuments = get(renewalResponse, "Licenses[0].tradeLicenseDetail.applicationDocuments",[]);
-             
-        /* for (let i = 1; i <= renewalDocuments.length; i++) {
+
+      /* for (let i = 1; i <= renewalDocuments.length; i++) {
           if (i > renewalDocuments.length) {
             renewalDocuments.push(documents[i-1])
           }
@@ -444,6 +444,19 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         /* if (renewalDocuments && renewalDocuments.length>1) {
           renewalDocuments.splice(0, 1);
         } */
+
+        for (let i = 1; i <= documents.length; i++) {
+          if (i > renewalDocuments.length) {
+            renewalDocuments.push(documents[i-1])
+          }
+          else{
+             if(!documents[i-1].hasOwnProperty("id")){
+             renewalDocuments[i-1].active=false;
+             renewalDocuments.push(documents[i-1])
+             }
+          }
+        }
+
         dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.applicationDocuments", renewalDocuments));
         set(queryObject[0], "tradeLicenseDetail.applicationDocuments", renewalDocuments);
 
