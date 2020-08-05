@@ -669,7 +669,7 @@
               },
               {
                 "variable": "demandTotalAmount",
-                "formula": "{{roundoff}}+{{ws_charge}}+{{ws_water_cess}}+{{ws_time_interest}}+{{ws_time_penalty}}"
+                "formula": "{{ws_roundoff}}+{{ws_charge}}+{{ws_water_cess}}+{{ws_time_interest}}+{{ws_time_penalty}}"
               },
               {
                 "variable": "billTotalAmount",
@@ -689,7 +689,7 @@
               },
               {
                 "variable": "others",
-                "formula": "({{ws_water_cess}}+{{roundoff}}+{{ws_time_interest}}).toFixed(2)"
+                "formula": "({{ws_roundoff}}+{{ws_water_cess}}+{{ws_time_interest}}).toFixed(2)"
               },
               {
                 "variable": "calculatedTotal",

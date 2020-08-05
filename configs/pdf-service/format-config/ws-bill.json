@@ -597,6 +597,12 @@
             [
               {
                 "text": "{{payment_received}}",
+                "border": [
+                  true,
+                  false,
+                  true,
+                  false
+                ],
                 "margin": [
                   8,
                   0,
@@ -608,6 +614,12 @@
             [
               {
                 "text": "{{this_document}}",
+                "border": [
+                  true,
+                  false,
+                  true,
+                  false
+                ],
                 "margin": [
                   8,
                   0,
@@ -619,6 +631,12 @@
             [
               {
                 "text": "{{this_is_a}}",
+                "border": [
+                  true,
+                  false,
+                  true,
+                  false
+                ],
                 "margin": [
                   8,
                   0,
@@ -630,6 +648,12 @@
             [
               {
                 "text": "{{assessment_payment}}",
+                "border": [
+                  true,
+                  false,
+                  true,
+                  false
+                ],
                 "margin": [
                   8,
                   0,
@@ -641,6 +665,12 @@
             [
               {
                 "text": "{{please_deposit}}",
+                "border": [
+                  true,
+                  false,
+                  true,
+                  false
+                ],
                 "margin": [
                   8,
                   0,
@@ -652,6 +682,12 @@
             [
               {
                 "text": "{{if_the_tax}}",
+                "border": [
+                  true,
+                  false,
+                  true,
+                  true
+                ],
                 "margin": [
                   8,
                   0,
@@ -662,7 +698,8 @@
             ]
           ]
         },
-        "layout": {}
+        "layout": {},
+        "pageBreak": "after"
       },
       {
         "canvas": [
@@ -692,8 +729,7 @@
       },
       {
         "text": "{{acknowledgement_for}}",
-        "style": "footer-header",
-        "pageBreak": "before"
+        "style": "footer-header"
       },
       {
         "style": "noc-table4",
