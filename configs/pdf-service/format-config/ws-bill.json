@@ -596,69 +596,68 @@
             ],
             [
               {
-                "ol": [
-                  {
-                    "text": "{{payment_received}}",
-                    "margin": [
-                      8,
-                      0,
-                      0,
-                      3
-                    ]
-                  },
-                  {
-                    "text": "{{this_document}}",
-                    "margin": [
-                      8,
-                      0,
-                      0,
-                      3
-                    ]
-                  },
-                  {
-                    "text": "{{this_is_a}}",
-                    "margin": [
-                      8,
-                      0,
-                      0,
-                      3
-                    ]
-                  },
-                  {
-                    "text": "{{assessment_payment}}",
-                    "margin": [
-                      8,
-                      0,
-                      0,
-                      3
-                    ]
-                  },
-                  {
-                    "text": "{{please_deposit}}",
-                    "margin": [
-                      8,
-                      0,
-                      0,
-                      3
-                    ]
-                  },
-                  {
-                    "text": "{{if_the_tax}}",
-                    "margin": [
-                      8,
-                      0,
-                      0,
-                      5
-                    ]
-                  }
-                ],
-                "border": [
-                  true,
-                  false,
-                  true,
-                  true
-                ],
-                "alignment": "left"
+                "text": "{{payment_received}}",
+                "margin": [
+                  8,
+                  0,
+                  0,
+                  3
+                ]
+              }
+            ],
+            [
+              {
+                "text": "{{this_document}}",
+                "margin": [
+                  8,
+                  0,
+                  0,
+                  3
+                ]
+              }
+            ],
+            [
+              {
+                "text": "{{this_is_a}}",
+                "margin": [
+                  8,
+                  0,
+                  0,
+                  3
+                ]
+              }
+            ],
+            [
+              {
+                "text": "{{assessment_payment}}",
+                "margin": [
+                  8,
+                  0,
+                  0,
+                  3
+                ]
+              } 
+            ],
+            [
+              {
+                "text": "{{please_deposit}}",
+                "margin": [
+                  8,
+                  0,
+                  0,
+                  3
+                ]
+              }
+            ],
+            [
+              {
+                "text": "{{if_the_tax}}",
+                "margin": [
+                  8,
+                  0,
+                  0,
+                  5
+                ]
               }
             ]
           ]
