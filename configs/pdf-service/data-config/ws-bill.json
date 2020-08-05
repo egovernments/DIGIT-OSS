@@ -677,10 +677,10 @@
               },
               {
                 "variable": "arrears",
-                "formula": "{{billTotalAmount}}>{{demandTotalAmount}}?{{billTotalAmount}}-{{demandTotalAmount}}:0"
+                "formula": "{{billTotalAmount}}>{{demandTotalAmount}}?({{billTotalAmount}}-{{demandTotalAmount}}).toFixed(2):0"
               },
               {
-                "variable": "advanceAdjusted",
+                "variable": "calculatedAdvanceAdjusted",
                 "formula": "{{billTotalAmount}}>=0?({{billTotalAmount}}<{{demandTotalAmount}}?{{billTotalAmount}}-{{demandTotalAmount}}:0):{{demandTotalAmount}} * -1"
               },
               {
@@ -688,8 +688,16 @@
                 "formula": "{{billTotalAmount}}<0?{{billTotalAmount}}*-1:0"
               },
               {
-                "variable": "others",
+                "variable": "demandOthers",
                 "formula": "{{ws_water_cess}}+{{ws_roundoff}}+{{ws_time_interest}}"
+              },
+              {
+                "variable": "others",
+                "formula": "{{demandOthers}}.toFixed(2)"
+              },
+              {
+                "variable": "advanceAdjusted",
+                "formula": "{{calculatedAdvanceAdjusted}}.toFixed(2)"
               },
               {
                 "variable": "calculatedTotal",

@@ -792,7 +792,7 @@
             ],
             [
               {
-                "text": "{{name_address}}",
+                "text": "{{name_address}} ",
                 "border": [
                   false,
                   false,
@@ -802,7 +802,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "{{nameAddress}}",
+                "text": "{{payerName}}, {{nameAddress}}",
                 "border": [
                   false,
                   false,
@@ -899,7 +899,7 @@
         ]
       },
       "noc-table3": {
-        "fontSize": 12,
+        "fontSize": 11,
         "color": "#484848",
         "margin": [
           -25,
