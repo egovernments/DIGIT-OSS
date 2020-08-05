@@ -532,19 +532,19 @@ export const getBill = async queryObject => {
     console.log(error);
   }
 };
-export const calculateBill = async queryObject => {
-  try {
-    const response = await httpRequest(
-      "post",
-      "/tl-calculator/v1/_getbill",
-      "",
-      queryObject
-    );
-    return response;
-  } catch (error) {
-    console.log(error);
-  }
-};
+// export const calculateBill = async queryObject => {
+//   try {
+//     const response = await httpRequest(
+//       "post",
+//       "/tl-calculator/v1/_getbill",
+//       "",
+//       queryObject
+//     );
+//     return response;
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
 export const getReceipt = async queryObject => {
   try {
     const response = await httpRequest(
@@ -1383,17 +1383,17 @@ export const createEstimateData = async (
   );
   dispatch(prepareFinalObject(jsonPath, estimateData));
   const accessories = get(LicenseData, "tradeLicenseDetail.accessories", []);
-  if (payload) {
-    const getBillResponse = await calculateBill(getBillQueryObj);
-    getBillResponse &&
-      getBillResponse.billingSlabIds &&
-      getBillingSlabData(
-        dispatch,
-        getBillResponse.billingSlabIds,
-        tenantId,
-        accessories
-      );
-  }
+  // if (payload) {
+  //   const getBillResponse = await calculateBill(getBillQueryObj);
+  //   getBillResponse &&
+  //     getBillResponse.billingSlabIds &&
+  //     getBillingSlabData(
+  //       dispatch,
+  //       getBillResponse.billingSlabIds,
+  //       tenantId,
+  //       accessories
+  //     );
+  // }
 
   /** Waiting for estimate to load while downloading confirmation form */
   var event = new CustomEvent("estimateLoaded", { detail: true });
