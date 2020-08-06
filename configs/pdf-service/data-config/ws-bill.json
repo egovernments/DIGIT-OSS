@@ -279,73 +279,73 @@
               {
                 "variable": "payment_received",
                 "value": {
-                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_PAYMENT_RECEIVED"
+                  "path": "PDF_STATIC_LABEL_WS_BILL_PAYMENT_RECEIVED"
                 },
                 "type": "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
-                  "module": "rainmaker-common"
+                  "module": "rainmaker-ws"
                 }
               },
               {
                 "variable": "this_document",
                 "value": {
-                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_THIS_DOCUMENT"
+                  "path": "PDF_STATIC_LABEL_WS_BILL_THIS_DOCUMENT"
                 },
                 "type": "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
-                  "module": "rainmaker-common"
+                  "module": "rainmaker-ws"
                 }
               },
               {
                 "variable": "this_is_a",
                 "value": {
-                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_THIS_IS"
+                  "path": "PDF_STATIC_LABEL_WS_BILL_THIS_IS"
                 },
                 "type": "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
-                  "module": "rainmaker-common"
+                  "module": "rainmaker-ws"
                 }
               },
               {
                 "variable": "assessment_payment",
                 "value": {
-                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_ASSESSSMENT_PAYMENT"
+                  "path": "PDF_STATIC_LABEL_WS_BILL_ASSESSSMENT_PAYMENT"
                 },
                 "type": "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
-                  "module": "rainmaker-common"
+                  "module": "rainmaker-ws"
                 }
               },
               {
                 "variable": "please_deposit",
                 "value": {
-                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_PLEASE_DEPOSIT"
+                  "path": "PDF_STATIC_LABEL_WS_BILL_PLEASE_DEPOSIT"
                 },
                 "type": "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
-                  "module": "rainmaker-common"
+                  "module": "rainmaker-ws"
                 }
               },
               {
                 "variable": "if_the_tax",
                 "value": {
-                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_IF_THE_TAX"
+                  "path": "PDF_STATIC_LABEL_WS_BILL_IF_THE_TAX"
                 },
                 "type": "label",
                 "localisation": {
                   "required": true,
                   "prefix": null,
-                  "module": "rainmaker-common"
+                  "module": "rainmaker-ws"
                 }
               },
               {

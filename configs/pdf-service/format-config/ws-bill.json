@@ -698,8 +698,7 @@
             ]
           ]
         },
-        "layout": {},
-        "pageBreak": "after"
+        "layout": {}
       },
       {
         "canvas": [
@@ -729,7 +728,8 @@
       },
       {
         "text": "{{acknowledgement_for}}",
-        "style": "footer-header"
+        "style": "footer-header",
+        "pageBreak": "before"
       },
       {
         "style": "noc-table4",
@@ -934,7 +934,7 @@
         ]
       },
       "noc-table3": {
-        "fontSize": 11,
+        "fontSize": 12,
         "color": "#484848",
         "margin": [
           -25,
