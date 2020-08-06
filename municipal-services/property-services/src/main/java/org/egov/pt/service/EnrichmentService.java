@@ -57,7 +57,6 @@ public class EnrichmentService {
 		AuditDetails propertyAuditDetails = propertyutil.getAuditDetails(requestInfo.getUserInfo().getUuid(), true);
 		
 		property.setId(UUID.randomUUID().toString());
-		property.setCreationReason(CreationReason.CREATE);
 		
 		if (!CollectionUtils.isEmpty(property.getDocuments()))
 			property.getDocuments().forEach(doc -> {
