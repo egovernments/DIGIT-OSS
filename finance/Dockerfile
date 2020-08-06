@@ -3,13 +3,12 @@ ARG WORK_DIR
 WORKDIR /app
 
 # copy the project files
-
 COPY ${WORK_DIR} ./${WORK_DIR}
-RUN cd ${WORK_DIR} \
-    && mvn clean package -DskipTests
+#RUN cd ${WORK_DIR} \
+#    && mvn clean package -DskipTests
+RUN chmod +x /app/entrypoint.sh && /app/entrypoint.sh
 
 # Create runtime image
-
 FROM egovio/wildfly:1-helm-fin-e6312078
 
 COPY --from=build /app/egov/egov-ear/target/*.ear /opt/jboss/wildfly/standalone/deployments/
