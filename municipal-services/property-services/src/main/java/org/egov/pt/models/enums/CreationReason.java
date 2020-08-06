@@ -15,7 +15,7 @@ public enum CreationReason {
   
   MUTATION ("MUTATION"),
   
-  LEGACY ("LEGACY"),
+  LEGACY_ENTRY ("LEGACY_ENTRY"),
   
   BIFURCATION ("BIFURCATION"),
   
@@ -23,7 +23,7 @@ public enum CreationReason {
   
   SUBDIVISION("SUBDIVISION"), 
   
-  DATA_ENTRY ("DATA_ENTRY");
+  DATA_UPLOAD ("DATA_UPLOAD");
 
   private String value;
 
