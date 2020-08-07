@@ -144,10 +144,41 @@ const commonReducer = (state = intialState, action) => {
       return {
         ...state,
         loading: false,
-        generalMDMSDataById,
+        generalMDMSDataById:{
+          ...state.generalMDMSDataById,
+          ...generalMDMSDataById
+        }
       };
 
     case commonTypes.GENERAL_MDMS_FETCH_ERROR:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMessage: action.error,
+      };
+
+    case commonTypes.LOAD_MDMS_FETCH_SUCCESS:
+      const { moduleDetails } = action.requestBody.MdmsCriteria;
+      const loadMdmsData =
+        moduleDetails &&
+        moduleDetails.reduce((result, moduleItem) => {
+          result[moduleItem.moduleName] = moduleItem.masterDetails.reduce((acc, masterItem) => {
+            acc[masterItem.name] = transformById(action.payload.MdmsRes[moduleItem.moduleName][masterItem.name], key ? key : "code");
+            return acc;
+          }, {});
+          return result;
+        }, {});
+      return {
+        ...state,
+        loading: false,
+        loadMdmsData:{
+          ...state.loadMdmsData,
+          ...loadMdmsData
+        }
+      };
+
+    case commonTypes.LOAD_MDMS_FETCH_ERROR:
       return {
         ...state,
         loading: false,
