@@ -121,7 +121,7 @@ export const ACTIONMENU = {
 
 export const PROPERTY = {
   GET: {
-    URL: "/pt-services-v2/property/_search",
+    URL: "/property-services/property/_search",
     ACTION: "_get",
   },
 };

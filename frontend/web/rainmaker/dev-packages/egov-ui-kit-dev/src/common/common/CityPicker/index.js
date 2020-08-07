@@ -29,14 +29,7 @@ class CityPickerDialog extends Component {
     return results.map((result, index) => {
       const mappedResult = {};
       mappedResult.key = result.key;
-      if(result.key)
-      {
-         mappedResult.primaryText = this.getLocalizedLabel(`TENANT_TENANTS_${result.key.toUpperCase().replace(/[.:-\s\/]/g, "_")}`);
-      }      
-      else
-      {
-        mappedResult.primaryText = this.getLocalizedLabel('TENANT_TENANTS_CITY_NOT_FOUND');
-      }
+      mappedResult.primaryText = this.getLocalizedLabel(`TENANT_TENANTS_${result.key.toUpperCase().replace(/[.:-\s\/]/g, "_")}`);
       mappedResult.id = result.key;
       return mappedResult;
     });
@@ -80,8 +73,7 @@ class CityPickerDialog extends Component {
           <TextFieldIcon
             {...field}
             errorStyle={{ bottom: "0px" }}
-            // hemanth please do the proper fix for this, we should not module specific code.
-            value={getCityNameByCode((field || {}).value != 'uk' ? (field || {}).value : "", localizationLabels)}
+            value={getCityNameByCode((field || {}).value, localizationLabels)}
             id="person-city"
             iconPosition="after"
             Icon={DownArrow}
@@ -129,8 +121,8 @@ class CityPickerDialog extends Component {
             innerDivStyle={{ paddingLeft: "50px",color:"#484848"  }}
             listItemStyle={{ borderBottom: "1px solid #eee",color:"#484848"}}
             items={displayInitialList ? prepareResultsForDisplay(cities) : prepareResultsForDisplay(results)}
-
-
+            
+            
           />
         </Dialog>
       </div>

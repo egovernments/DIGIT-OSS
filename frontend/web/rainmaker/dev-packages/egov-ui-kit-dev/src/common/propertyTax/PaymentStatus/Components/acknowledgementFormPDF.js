@@ -56,7 +56,7 @@ const generateAcknowledgementForm = (role, details, generalMDMSDataById, receipt
         let { units, propertySubType } = propertyDetails[0];
         let dataRow = [];
         if (units && units.length) {
-
+          
           dataRow.push({ text: getLocaleLabels("Floor","PT_ACK_LOCALIZATION_FLOOR"), style: "receipt-assess-table-header" });
           dataRow.push({ text: getLocaleLabels("Usage Type","PT_ACK_LOCALIZATION_USAGE_TYPE"), style: "receipt-assess-table-header" });
           dataRow.push({ text: getLocaleLabels("Sub Usage Type","PT_ACK_LOCALIZATION_SUB_USAGE_TYPE"), style: "receipt-assess-table-header" });
@@ -110,8 +110,7 @@ const generateAcknowledgementForm = (role, details, generalMDMSDataById, receipt
         const { institution } = propertyDetails[0] || {};
         const isInstitution =
           propertyDetails && propertyDetails.length
-            ? propertyDetails[0].ownershipCategory && !propertyDetails[0].ownershipCategory.includes("INDIVIDUAL")
-            // propertyDetails[0].ownershipCategory === "INSTITUTIONALPRIVATE" || propertyDetails[0].ownershipCategory === "INSTITUTIONALGOVERNMENT"
+            ? propertyDetails[0].ownershipCategory === "INSTITUTIONALPRIVATE" || propertyDetails[0].ownershipCategory === "INSTITUTIONALGOVERNMENT"
             : false;
         const transformedArray = ownerArray.map((item, index) => {
           return [
@@ -200,9 +199,9 @@ const generateAcknowledgementForm = (role, details, generalMDMSDataById, receipt
                   {
                     //stack is used here to give multiple sections one after another in same body
                     stack: [
-                      {
+                      { 
                       text:  getLocaleLabels(("TENANT_TENANTS_"+address.tenantId.replace('.','_')).toUpperCase(),("TENANT_TENANTS_"+address.tenantId.replace('.','_')).toUpperCase()) +" "+ getLocaleLabels(("CORPORATION","PT_ACK_CORPORATION_HEADER").toUpperCase(),("CORPORATION","PT_ACK_CORPORATION_HEADER").toUpperCase()),
-                       style: "receipt-logo-header"
+                       style: "receipt-logo-header" 
                       },
                       {
                         text: getLocaleLabels("PT_ACK_PROPERTY_TAX_ASSESS_ACKNOWLEDGEMENT","PT_ACK_PROPERTY_TAX_ASSESS_ACKNOWLEDGEMENT")|| "",
@@ -282,7 +281,7 @@ const generateAcknowledgementForm = (role, details, generalMDMSDataById, receipt
           {
             style: "pt-reciept-citizen-table",
             table: {
-                widths: ['12.5%','12.5%','25%','25%','12.5%','12.5%'],
+                widths: ['12.5%','12.5%','27%','18%','17.5%','12.5%'],
               body: [
                 [
                   { text: getLocaleLabels("Existing Property ID:","PT_ACK_LOCALIZATION_EXISTING_PROPERTY_ID"), border: borderKey, style: "receipt-table-key" },
@@ -312,10 +311,10 @@ const generateAcknowledgementForm = (role, details, generalMDMSDataById, receipt
                   { text: getLocaleLabels("Street Name:","PT_ACK_LOCALIZATION_STREET_NAME"), border: borderKey, style: "receipt-table-key" },
                   { text: address.street || getLocaleLabels("PT_LOCALIZATION_NOT_AVAILABLE","PT_LOCALIZATION_NOT_AVAILABLE"), border: borderValue },
                   { text: getLocaleLabels("Locality/Mohalla:","PT_ACK_LOCALIZATION_LOCALITY_MOHALLA"), border: borderKey, style: "receipt-table-key" },
-                  { text: getLocaleLabels((address.tenantId.replace('.','_')+'_REVENUE_'+address.locality.code).toUpperCase(),(address.tenantId.replace('.','_')+'_REVENUE_'+address.locality.code).toUpperCase()),
+                  { text: getLocaleLabels((address.tenantId.replace('.','_')+'_REVENUE_'+address.locality.code).toUpperCase(),(address.tenantId.replace('.','_')+'_REVENUE_'+address.locality.code).toUpperCase()), 
                   border: borderValue
                  },
-
+                  
                 ],
               ],
             },
@@ -334,7 +333,7 @@ const generateAcknowledgementForm = (role, details, generalMDMSDataById, receipt
                   {
                     text: propertyDetails[0].propertySubType
                       ? getLocaleLabels("PROPERTYTAX_BILLING_SLAB_"+transform(propertyDetails[0].propertySubType, "PropertySubType"),"PROPERTYTAX_BILLING_SLAB_"+transform(propertyDetails[0].propertySubType, "PropertySubType"))
-
+                      
                       : getLocaleLabels("PROPERTYTAX_BILLING_SLAB_"+transform(propertyDetails[0].propertyType, "PropertyType"),"PROPERTYTAX_BILLING_SLAB_"+transform(propertyDetails[0].propertyType, "PropertyType")),
                     border: borderValue,
                   },
@@ -374,7 +373,7 @@ const generateAcknowledgementForm = (role, details, generalMDMSDataById, receipt
             color: "#484848",
           },
           "pt-reciept-citizen-table": {
-            fontSize: 12,
+            fontSize: 10,
             color: "#484848",
           },
           "receipt-assess-table": {
@@ -430,3 +429,5 @@ const generateAcknowledgementForm = (role, details, generalMDMSDataById, receipt
 };
 
 export default generateAcknowledgementForm;
+
+

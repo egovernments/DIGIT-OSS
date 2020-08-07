@@ -94,7 +94,7 @@ class ProfileSection extends React.Component {
         <div className="profileContainer" style={{ textAlign: "center" }}>
           <Image id="profile-photo" className="img-Profile" circular={true} style={imgStyle} source={imgSrc} />
           {addIconName && (
-            <div style={addIconStyle} className="EmpProfileIcon">
+            <div style={addIconStyle}>
               <Icon id="profile-upload-icon" action="image" name={addIconName} onClick={onClickAddPic} color={"#ffffff"} />
             </div>
           )}
@@ -109,7 +109,6 @@ class ProfileSection extends React.Component {
               bold={true}
             />
           )}
-          
           {process.env.REACT_APP_NAME === "Employee" && (
             <DropDown
               className="tenant-dropdown"
@@ -123,7 +122,6 @@ class ProfileSection extends React.Component {
               underlineStyle={{ borderBottom: "none" }}
             />
           )}
-          
           {process.env.REACT_APP_NAME === "Citizen" && location && <Label id="profile-location" className="loc-Profile" labelPosition="after" label={location} style={locationStyle} />}
           {emailId && <Label id="profile-emailid" className="loc-Profile" label={emailId} style={emailIdStyle} />}
           <LogoutDialog

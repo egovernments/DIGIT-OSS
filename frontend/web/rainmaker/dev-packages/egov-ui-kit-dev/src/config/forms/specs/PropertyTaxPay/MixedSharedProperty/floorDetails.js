@@ -5,13 +5,13 @@ import {
   subUsageType,
   occupancy,
   builtArea,
+  annualRent,
   beforeInitForm,
   mergeMaster,
   prepareDropDownData,
   getPresentMasterObj,
   getAbsentMasterObj,
-  floorName,annualRent,
-  constructionType
+  floorName,
 } from "../utils/reusableFields";
 import filter from "lodash/filter";
 import get from "lodash/get";
@@ -61,10 +61,9 @@ const formConfig = {
     },
     ...subUsageType,
     ...occupancy,
-    ...constructionType,
     ...builtArea,
     ...floorName,
-    ...annualRent
+    ...annualRent,
   },
   isFormValid: false,
   ...beforeInitForm,

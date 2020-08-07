@@ -28,13 +28,13 @@ const ModuleCard = ({ items, onButton1Click, onPGRClick, onButton2Click, history
       {items &&
         items.map((item, key) => {
           return (
-            <div key={key} className={`col-sm-6 ${item.className}` }>
+            <div key={key} className={`col-sm-6 ${item.className}`}>
               <Card
                 id="home-complaint-card"
                 className="clearfix landingPageCard"
                 style={item.borderLeftColor}
                 textChildren={
-                  <div className="clearfix2" style={{ position: "relative", minHeight: item.moduleDescription ? "200px" : "inherit", height: "398px" }}>
+                  <div className="clearfix" style={{ position: "relative", minHeight: item.moduleDescription ? "200px" : "inherit" }}>
                     <div style={{ padding: "0", margin: "0", display: "flex" }}>
                       <Icon action={item.iconAction} name={item.iconName} style={item.iconStyle} />
                       <Label className="moduleCardTitle" label={item.moduleTitle} />

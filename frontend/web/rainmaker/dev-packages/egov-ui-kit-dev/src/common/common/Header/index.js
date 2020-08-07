@@ -31,16 +31,16 @@ class Header extends Component {
     updateActiveRoute(menupath, menuName);
   };
 
-  // componentWillReceiveProps = (nextProps) => {
-  //   const { role, userInfo } = this.props;
-  //   const permanentCity = get(nextProps, "userInfo.permanentCity");
-  //   if (get(userInfo ,"permanentCity") !== get(nextProps, "userInfo.permanentCity")) {
-  //     const tenantId = role.toLowerCase() === "citizen" ? permanentCity : getTenantId();
-  //     const ulbLogo = `https://s3.ap-south-1.amazonaws.com/pb-egov-assets/${tenantId}/logo.png`;
-  //     this.setState({ ulbLogo });
-  //   }
-  //
-  // }
+  componentWillReceiveProps = (nextProps) => {
+    const { role, userInfo } = this.props;
+    const permanentCity = get(nextProps, "userInfo.permanentCity");
+    if (get(userInfo ,"permanentCity") !== get(nextProps, "userInfo.permanentCity")) {
+      const tenantId = role.toLowerCase() === "citizen" ? permanentCity : getTenantId();
+      const ulbLogo = `https://s3.ap-south-1.amazonaws.com/pb-egov-assets/${tenantId}/logo.png`;
+      this.setState({ ulbLogo });
+    }
+   
+  }
 
   _handleToggleMenu = () => {
     const { toggleMenu } = this.state;
@@ -157,13 +157,12 @@ class Header extends Component {
       notificationButton,
       activeRoutePath,
       hasLocalisation,
-      hideDigitLogo,
+      notificationsCount,
     } = this.props;
     const tenantId = role.toLowerCase() === "citizen" ? userInfo.permanentCity : getTenantId();
     const currentCity = cities.filter((item) => item.code === tenantId);
     const ulbLogo =
-      currentCity.length > 0 ? get(currentCity[0], "logoId") : "";
-      // "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.amritsar/logo.png";
+      currentCity.length > 0 ? get(currentCity[0], "logoId") : "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.amritsar/logo.png";
     return (
       <div>
         <AppBar
@@ -187,7 +186,7 @@ class Header extends Component {
           handleItemClick={_handleItemClick}
           activeRoutePath={activeRoutePath}
           hasLocalisation={hasLocalisation}
-          hideDigitLogo={hideDigitLogo}
+          notificationsCount={notificationsCount}
         />
         <NavigationDrawer
           handleItemClick={_handleItemClick}
@@ -231,14 +230,16 @@ const getUlbGradeLabel = (ulbGrade) => {
 
 const mapStateToProps = (state, ownProps) => {
   const cities = state.common.cities || [];
-  const { hideDigitLogo } = (state.common.stateInfoById && state.common.stateInfoById.length > 0 && state.common.stateInfoById[0]) || false;
+  const notificationsCount = get(state.app, "notificationsCount");
   const { role } = ownProps;
   const tenantId = role && role.toLowerCase() === "citizen" ? JSON.parse(getUserInfo()).permanentCity : getTenantId();
   const userTenant = cities.filter((item) => item.code === tenantId);
   const ulbGrade = userTenant && get(userTenant[0], "city.ulbGrade");
   const name = userTenant && get(userTenant[0], "code");
   const defaultTitle = ulbGrade && getUlbGradeLabel(ulbGrade);
-  return { cities, defaultTitle, name, hideDigitLogo };
+  const screenKey = window.location.pathname.split("/").pop();
+  const headerTitle = get(state.screenConfiguration.screenConfig, `${screenKey}.components.div.children.header.children.key.props.labelKey`);
+  return { cities, defaultTitle, name, headerTitle, notificationsCount };
 };
 
 const mapDispatchToProps = (dispatch) => {

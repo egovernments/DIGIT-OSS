@@ -8,7 +8,8 @@ import { getPlotAndFloorFormConfigPath } from "../../../config/forms/specs/Prope
 import { get, set, isEmpty } from "lodash";
 import { trimObj } from "../../../utils/commons";
 import { MDMS } from "../../../utils/endPoints";
-import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
+import {  localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
+
 
 const extractFromString = (str, index) => {
   if (!str) {
@@ -66,10 +67,12 @@ export const updateDraftinLocalStorage = async (draftInfo, assessmentNumber, sel
   );
 };
 export const getBusinessServiceNextAction = (businessServiceName, currentAction) => {
-  const businessServiceData = JSON.parse(localStorageGet("businessServiceData"));
-
-  const data = businessServiceData && businessServiceData.filter((businessService) => businessService.businessService == "PT.CREATE");
-  let { states } = (data && data.length > 0 && data[0]) || [];
+  const businessServiceData = JSON.parse(
+    localStorageGet("businessServiceData")
+  );
+  
+  const data =businessServiceData&&businessServiceData.filter(businessService=>businessService.businessService=="PT.CREATE");
+  let { states } = data&&data.length>0&&data[0] || [];
 
   if (states && states.length > 0) {
     states = states.filter((item, index) => {
@@ -80,7 +83,7 @@ export const getBusinessServiceNextAction = (businessServiceName, currentAction)
     const actions = states && states.length > 0 && states[0].actions;
     return actions && actions.length > 0 && actions[0].action;
   }
-};
+}
 
 export const convertToOldPTObject = (newObject) => {
   let Properties = [
@@ -204,7 +207,10 @@ export const convertToOldPTObject = (newObject) => {
   propertyDetails.noOfFloors = newProperty.noOfFloors;
   propertyDetails.landArea = newProperty.landArea;
   propertyDetails.buildUpArea = newProperty.superBuiltUpArea;
-  propertyDetails.units = newProperty.units;
+  propertyDetails.units = newProperty.units&&newProperty.units.map(unit=>{
+    unit.floorNo = unit.floorNo || unit.floorNo === 0 ? unit.floorNo.toString() : unit.floorNo
+    return {...unit}
+  });
 
   propertyDetails.documents = newProperty.documents;
   propertyDetails.additionalDetails = newProperty.additionalDetails;
@@ -222,7 +228,7 @@ export const convertToOldPTObject = (newObject) => {
   propertyDetails.adhocExemptionReason = null;
   propertyDetails.adhocPenaltyReason = null;
   propertyDetails.owners = newProperty.owners;
-  propertyDetails.owners = propertyDetails.owners.filter((owner) => owner.status == "ACTIVE");
+  propertyDetails.owners=propertyDetails.owners.filter((owner)=>owner.status=='ACTIVE')
 
   // propertyDetails.owners[0].persisterRefId = null;
   // propertyDetails.owners[0].id = newProperty.id;
@@ -271,22 +277,20 @@ export const convertToOldPTObject = (newObject) => {
   propertyDetails.auditDetails = newProperty.auditDetails;
   propertyDetails.calculation = null;
   propertyDetails.channel = newProperty.channel;
-  propertyDetails.units =
-    propertyDetails.units &&
-    propertyDetails.units.map((unit) => {
-      // unit.usageCategory;
-      // propertyDetails.propertyType = extractFromString(newProperty.propertyType, 0);
-      // propertyDetails.propertySubType = extractFromString(newProperty.propertyType, 1);
-      unit.usageCategoryMajor = extractFromString(unit.usageCategory, 0);
-      unit.usageCategoryMinor = extractFromString(unit.usageCategory, 1);
-      unit.usageCategorySubMinor = extractFromString(unit.usageCategory, 2);
-      unit.usageCategoryDetail = extractFromString(unit.usageCategory, 3);
-      // unit.constructionDetail = {
-      //   builtUpArea: unit.unitArea,
-      // };
-      unit.unitArea = unit.constructionDetail.builtUpArea;
-      return { ...unit };
-    });
+  propertyDetails.units = propertyDetails.units && propertyDetails.units.map(unit => {
+    // unit.usageCategory;
+    // propertyDetails.propertyType = extractFromString(newProperty.propertyType, 0);
+    // propertyDetails.propertySubType = extractFromString(newProperty.propertyType, 1);
+    unit.usageCategoryMajor = extractFromString(unit.usageCategory, 0)
+    unit.usageCategoryMinor = extractFromString(unit.usageCategory, 1)
+    unit.usageCategorySubMinor = extractFromString(unit.usageCategory, 2)
+    unit.usageCategoryDetail = extractFromString(unit.usageCategory, 3)
+    // unit.constructionDetail = {
+    //   builtUpArea: unit.unitArea,
+    // };
+    unit.unitArea = unit.constructionDetail.builtUpArea;
+    return { ...unit }
+  })
   property["propertyDetails"] = [propertyDetails];
   Properties[0] = { ...newProperty, ...property };
 
@@ -310,7 +314,7 @@ export const callDraft = async (self, formArray = [], assessmentNumber = "") => 
     if (financialYearFromQuery) {
       set(prepareFormData, "Properties[0].propertyDetails[0].financialYear", financialYearFromQuery);
     }
-    if (selectedownerShipCategoryType === "SINGLEOWNER") {
+    if (selectedownerShipCategoryType === "INDIVIDUAL.SINGLEOWNER") {
       set(prepareFormData, "Properties[0].propertyDetails[0].owners", getSingleOwnerInfo(self));
       set(
         prepareFormData,
@@ -336,53 +340,58 @@ export const callDraft = async (self, formArray = [], assessmentNumber = "") => 
   } catch (e) {
     alert(e);
   }
-
+  if(process.env.REACT_APP_NAME === "Citizen")
+  {
+  /*  
+  Draft Removed from PT2.2
+  
   if (!draftRequest.draft.id) {
-    draftRequest.draft.tenantId = getQueryValue(search, "tenantId") || prepareFormData.Properties[0].tenantId;
-    draftRequest.draft.draftRecord = {
-      selectedTabIndex: selected + 1,
-      prepareFormData,
-    };
-    try {
-      let draftResponse = await httpRequest("pt-services-v2/drafts/_create", "_cretae", [], draftRequest);
-      const draftInfo = draftResponse.drafts[0];
-
-      updateDraftinLocalStorage(draftInfo, assessmentNumber, self);
-    } catch (e) {
-      alert(e);
-    }
-  } else {
-    const assessmentNo = assessmentNumber || draftRequest.draft.assessmentNumber;
-    draftRequest.draft = {
-      ...draftRequest.draft,
-      assessmentNumber: assessmentNo,
-      tenantId: getQueryValue(search, "tenantId") || prepareFormData.Properties[0].tenantId,
-      draftRecord: {
-        ...draftRequest.draft.draftRecord,
-        selectedTabIndex: assessmentNumber ? selected : selected + 1,
-        assessmentNumber: assessmentNo,
-        prepareFormData,
-      },
-      prepareFormData,
-    };
-    try {
-      if (selected === 3) {
-        draftRequest = {
-          ...draftRequest,
-          draft: {
-            ...draftRequest.draft,
-            isActive: false,
-          },
+        draftRequest.draft.tenantId = getQueryValue(search, "tenantId") || prepareFormData.Properties[0].tenantId;
+        draftRequest.draft.draftRecord = {
+          selectedTabIndex: selected + 1,
+          prepareFormData,
         };
-      }
-      let draftResponse = await httpRequest("pt-services-v2/drafts/_update", "_update", [], draftRequest);
-      const draftInfo = draftResponse.drafts[0];
+        try {
+          let draftResponse = await httpRequest("pt-services-v2/drafts/_create", "_cretae", [], draftRequest);
+          const draftInfo = draftResponse.drafts[0];  
+          updateDraftinLocalStorage(draftInfo, assessmentNumber, self);
+        } catch (e) {
+          alert(e);
+        }
+      } else {
+        const assessmentNo = assessmentNumber || draftRequest.draft.assessmentNumber;
+        draftRequest.draft = {
+          ...draftRequest.draft,
+          assessmentNumber: assessmentNo,
+          tenantId: getQueryValue(search, "tenantId") || prepareFormData.Properties[0].tenantId,
+          draftRecord: {
+            ...draftRequest.draft.draftRecord,
+            selectedTabIndex: assessmentNumber ? selected : selected + 1,
+            assessmentNumber: assessmentNo,
+            prepareFormData,
+          },
+          prepareFormData,
+        };
+        try {
+          if (selected === 3) {
+            draftRequest = {
+              ...draftRequest,
+              draft: {
+                ...draftRequest.draft,
+                isActive: false,
+              },
+            };
+          }
+          let draftResponse = await httpRequest("pt-services-v2/drafts/_update", "_update", [], draftRequest);
+          const draftInfo = draftResponse.drafts[0];  
+          updateDraftinLocalStorage(draftInfo, "", self);
+        } catch (e) {
+          alert(e);
+        }
+      } */
+  } 
 
-      updateDraftinLocalStorage(draftInfo, "", self);
-    } catch (e) {
-      alert(e);
-    }
-  }
+  
 };
 
 export const updateTotalAmount = (value, isFullPayment, errorText) => {
@@ -443,18 +452,15 @@ export const getTargetPropertiesDetails = (propertyDetails, self) => {
   const selectedPropertyDetails = propertyDetails;
   // return the latest proeprty details of the selected year
   const lastIndex = 0;
-  if (selectedPropertyDetails && selectedPropertyDetails[lastIndex].propertySubType === "SHAREDPROPERTY") {
+  if (selectedPropertyDetails[lastIndex].propertySubType === "SHAREDPROPERTY") {
     selectedPropertyDetails[lastIndex].buildUpArea =
       selectedPropertyDetails[lastIndex] &&
-      //selectedPropertyDetails[lastIndex].buildUpArea && convertBuiltUpAreaToSqFt(selectedPropertyDetails[lastIndex].buildUpArea);
-      selectedPropertyDetails[lastIndex].buildUpArea;
-
-    }
+      selectedPropertyDetails[lastIndex].buildUpArea &&
+      convertBuiltUpAreaToSqFt(selectedPropertyDetails[lastIndex].buildUpArea);
+  }
   selectedPropertyDetails[lastIndex].units =
-    //selectedPropertyDetails[lastIndex] && selectedPropertyDetails[lastIndex].units && convertUnitsToSqFt(selectedPropertyDetails[lastIndex].units);
-    selectedPropertyDetails[lastIndex] && selectedPropertyDetails[lastIndex].units && selectedPropertyDetails[lastIndex].units;
-
-    return [selectedPropertyDetails[lastIndex]];
+    selectedPropertyDetails[lastIndex] && selectedPropertyDetails[lastIndex].units && convertUnitsToSqFt(selectedPropertyDetails[lastIndex].units);
+  return [selectedPropertyDetails[lastIndex]];
 };
 
 export const getImportantDates = async (self) => {
@@ -526,23 +532,21 @@ export const getSelectedCombination = (form, formKey, fieldKeys) => {
 };
 
 export const getSingleOwnerInfo = (self) => {
-  const { ownerInfo = {} } = self.props.form;
+  const { ownerInfo } = self.props.form;
   const ownerObj = {
     documents: [{}],
   };
-  ownerInfo &&
-    ownerInfo.fields &&
-    Object.keys(ownerInfo.fields).map((field) => {
-      const jsonPath = ownerInfo.fields[field].jsonPath;
-      if (jsonPath.toLowerCase().indexOf("document") !== -1) {
-        ownerObj.documents[0][jsonPath.substring(jsonPath.lastIndexOf(".") + 1, jsonPath.length)] =
-          get(ownerInfo, `fields.${field}.value`, undefined) || null;
-      } else if (jsonPath.toLowerCase().indexOf("gender") !== -1) {
-        ownerObj[jsonPath.substring(jsonPath.lastIndexOf(".") + 1, jsonPath.length)] = get(ownerInfo, `fields.${field}.value`, undefined) || "Male";
-      } else {
-        ownerObj[jsonPath.substring(jsonPath.lastIndexOf(".") + 1, jsonPath.length)] = get(ownerInfo, `fields.${field}.value`, undefined) || null;
-      }
-    });
+  Object.keys(ownerInfo.fields).map((field) => {
+    const jsonPath = ownerInfo.fields[field].jsonPath;
+    if (jsonPath.toLowerCase().indexOf("document") !== -1) {
+      ownerObj.documents[0][jsonPath.substring(jsonPath.lastIndexOf(".") + 1, jsonPath.length)] =
+        get(ownerInfo, `fields.${field}.value`, undefined) || null;
+    } else if (jsonPath.toLowerCase().indexOf("gender") !== -1) {
+      ownerObj[jsonPath.substring(jsonPath.lastIndexOf(".") + 1, jsonPath.length)] = get(ownerInfo, `fields.${field}.value`, undefined) || "Male";
+    } else {
+      ownerObj[jsonPath.substring(jsonPath.lastIndexOf(".") + 1, jsonPath.length)] = get(ownerInfo, `fields.${field}.value`, undefined) || null;
+    }
+  });
   const ownerArray = [ownerObj];
   return ownerArray;
 };
@@ -718,33 +722,20 @@ export const normalizePropertyDetails = (properties, self) => {
   const isReassesment = !!getQueryValue(search, "isReassesment");
   const propertyId = getQueryValue(search, "propertyId");
   const units =
-    propertyDetails[0] && propertyDetails[0].propertyType === "VACANT"
-      ? null
-      : propertyDetails[0].units
+    propertyDetails[0] && propertyDetails[0].units
       ? propertyDetails[0].units.filter((item, ind) => {
-          return item !== null;
-        })
+        return item !== null;
+      })
       : [];
   if (isReassesment && propertyId) {
     property.propertyId = propertyId;
   }
   var sumOfUnitArea = 0;
-  units &&
-    units.forEach((unit) => {
-      if (unit.additionalDetails && unit.additionalDetails.innerDimensionsKnown == "true") {
-        unit.unitArea =
-          parseInt(unit.additionalDetails.roomsArea) +
-          parseInt(unit.additionalDetails.commonArea) +
-          parseInt(unit.additionalDetails.garageArea) +
-          parseInt(unit.additionalDetails.bathroomArea);
-      }
-      // if (unit.constructionYear) {
-      //   unit.constructionYear=new Date(unit.constructionYear).getTime();
-      // }
-      // let unitAreaInSqYd = parseFloat(unit.unitArea) / 9;
-      // unit.unitArea = Math.round(unitAreaInSqYd * 100) / 100;
-      sumOfUnitArea += unit.unitArea;
-    });
+  units.forEach((unit) => {
+    let unitAreaInSqYd = parseFloat(unit.unitArea) / 9;
+    unit.unitArea = Math.round(unitAreaInSqYd * 100) / 100;
+    sumOfUnitArea += unit.unitArea;
+  });
   if (propertyDetails[0].propertySubType === "SHAREDPROPERTY") {
     propertyDetails[0].buildUpArea = sumOfUnitArea;
   }
@@ -776,7 +767,7 @@ export const validateUnitandPlotSize = (plotDetails, form) => {
       }, 0);
       const plotSizeInFt = parseFloat(plotDetails.fields.plotSize.value) * 9;
       if (unitTotal > plotSizeInFt) {
-        alert(`Total area/Covered area of floor ${floorNo} has exceeded the plot size`);
+        alert(`Total area of floor ${floorNo} has exceeded the plot size`);
         isValid = false;
       }
     }
@@ -785,31 +776,12 @@ export const validateUnitandPlotSize = (plotDetails, form) => {
 };
 
 export const renderPlotAndFloorDetails = (fromReviewPage, PlotComp, FloorComp, self) => {
-  let { basicInformation, plotDetails, floorDetails_0, prepareFormData = {} } = self.props.form;
+  let { basicInformation, plotDetails, floorDetails_0 } = self.props.form;
   if (plotDetails && floorDetails_0 && floorDetails_0.fields.builtArea) {
     let uom = plotDetails.fields && plotDetails.fields.measuringUnit && plotDetails.fields.measuringUnit.value;
     floorDetails_0.fields.builtArea.floatingLabelText = `Built Area(${uom})`;
   }
-  if (basicInformation && !basicInformation.fields.datePicker.value) {
-    if (
-      prepareFormData.Properties &&
-      prepareFormData.Properties.length > 0 &&
-      get(prepareFormData, "Properties[0].propertyDetails[0].additionalDetails.constructionYear", null)
-    ) {
-      basicInformation.fields.datePicker.value = prepareFormData.Properties[0].propertyDetails[0].additionalDetails.constructionYear;
-    }
-  }
-  if (plotDetails) {
-    for (let i = 0; i < get(plotDetails, "fields.floorCount.value", 0); i++) {
-      for (let j = 0; j < get(self.props.prepareFormData, `Properties[0].propertyDetails[0].units.length`, 0); j++) {
-        let floorDetails_0_unit_0 = get(self.props, `form.floorDetails_${i}_unit_${j}.fields.constructionType`, null);
-        if (floorDetails_0_unit_0 && !floorDetails_0_unit_0.value) {
-          let val = get(self.props.prepareFormData, `Properties[0].propertyDetails[0].units[${j}].constructionType`, "");
-          set(self.props.form, `floorDetails_${i}_unit_${j}.fields.constructionType.value`, val);
-        }
-      }
-    }
-  }
+
   if (basicInformation && basicInformation.fields.typeOfUsage.value && basicInformation.fields.typeOfBuilding.value) {
     let pathFormKeyObject = getPlotAndFloorFormConfigPath(basicInformation.fields.typeOfUsage.value, basicInformation.fields.typeOfBuilding.value);
     return !isEmpty(pathFormKeyObject) ? (

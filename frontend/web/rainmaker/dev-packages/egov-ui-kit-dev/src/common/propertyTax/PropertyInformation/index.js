@@ -70,24 +70,6 @@ class Property extends Component {
               {
                 name: "PropertyType",
               },
-              {
-                name: "ConstructionType",
-              },
-              {
-                name: "Rebate",
-              },
-              {
-                name: "Interest",
-              },
-              {
-                name: "FireCess",
-              },
-              {
-                name: "RoadType",
-              },
-              {
-                name: "Thana",
-              }
             ],
           },
         ],
@@ -100,21 +82,7 @@ class Property extends Component {
       "UsageCategorySubMinor",
       "OccupancyType",
       "PropertyType",
-      "ConstructionType",
-      "Rebate",
-      "Penalty",
-      "Interest",
-      "FireCess",
-      "RoadType",
-      "Thana"
     ]);
-    fetchGeneralMDMSData(
-      null,
-      "BillingService",
-      ["TaxPeriod", "TaxHeadMaster"],
-      "",
-      commonConfig.tenantId
-    );
     const { pathname } = location;
     if (!(localStorageGet("path") === pathname)) {
       customTitle && addBreadCrumbs({ title: customTitle, path: window.location.pathname });
@@ -378,16 +346,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     addBreadCrumbs: (url) => dispatch(addBreadCrumbs(url)),
-    fetchGeneralMDMSData: (
-      requestBody,
-      moduleName,
-      masterName,
-      key,
-      tenantId
-    ) =>
-      dispatch(
-        fetchGeneralMDMSData(requestBody, moduleName, masterName, key, tenantId)
-      )
+    fetchGeneralMDMSData: (requestBody, moduleName, masterName) => dispatch(fetchGeneralMDMSData(requestBody, moduleName, masterName)),
   };
 };
 

@@ -3,7 +3,6 @@ import Field from "egov-ui-kit/utils/field";
 import { Button, Card } from "components";
 import Label from "egov-ui-kit/utils/translationNode";
 import "./index.css";
-import { red } from "@material-ui/core/colors";
 
 const SearchPropertyForm = ({
   handleFieldChange,
@@ -80,7 +79,7 @@ const SearchPropertyForm = ({
 
                     style={{
                       backgroundColor: "white"
-                    
+
                     }}
 
                   />
@@ -108,16 +107,6 @@ const SearchPropertyForm = ({
                     }}
                   />
                 </div>
-                
-              </div>
-              <div className="col-sm-12">
-              <Label
-                label="PT_SEARCH_DOORNO_NOTE"
-                dark={false}
-                fontSize={14}
-                bold={false}
-                color="red"
-              />
               </div>
             </div>
           </div>}

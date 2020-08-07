@@ -1,17 +1,15 @@
-import get from "lodash/get";
-import React from "react";
-import set from "lodash/set";
-import uniqBy from "lodash/uniqBy";
-import sortBy from "lodash/sortBy";
-import isUndefined from "lodash/isUndefined";
-import cloneDeep from "lodash/cloneDeep";
+import { getPlotAndFloorFormConfigPath } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/utils/assessInfoFormManager";
+import { getApplicationType, getDateFromEpoch, navigateToApplication } from "egov-ui-kit/utils/commons";
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
-import { getDateFromEpoch,navigateToApplication,  getApplicationType } from "egov-ui-kit/utils/commons";
-import {
-  getUserInfo
-} from "egov-ui-kit/utils/localStorageUtils";
-import { getPlotAndFloorFormConfigPath } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/utils/assessInfoFormManager";
+import cloneDeep from "lodash/cloneDeep";
+import get from "lodash/get";
+import isUndefined from "lodash/isUndefined";
+import set from "lodash/set";
+import sortBy from "lodash/sortBy";
+import uniqBy from "lodash/uniqBy";
+import React from "react";
 
 export const resetFormWizard = (form, removeForm) => {
   const formKeys = form && Object.keys(form);
@@ -39,9 +37,9 @@ export const resetFormWizard = (form, removeForm) => {
   });
 };
 
-const onApplicationClick = async (applicationNo, tenantId, propertyId,history) => {
-  const businessService = await getApplicationType(applicationNo, tenantId);
-  navigateToApplication(businessService,history, applicationNo, tenantId, propertyId);
+const onApplicationClick = async (applicationNo, tenantId, propertyId, history, creationReason) => {
+  const businessService = await getApplicationType(applicationNo, tenantId, creationReason);
+  navigateToApplication(businessService, history, applicationNo, tenantId, propertyId);
 }
 const linkStyle = {
   height: 20,
@@ -51,11 +49,11 @@ const linkStyle = {
   textDecoration: "underline"
 };
 
-const getApplicationLink = (applicationNo, tenantId, propertyId,history) => {
+const getApplicationLink = (applicationNo, tenantId, propertyId, history, creationReason) => {
   return (
     <a
       style={linkStyle}
-      onClick={() => onApplicationClick(applicationNo, tenantId, propertyId,history)}
+      onClick={() => onApplicationClick(applicationNo, tenantId, propertyId, history, creationReason)}
     >
       {applicationNo}
     </a>
@@ -96,29 +94,29 @@ const getStatusColor = (status) => {
   }
 }
 
-export const getRowData=(property,history)=>{
+export const getRowData = (property, history) => {
   let date = getDateFromEpoch(property.auditDetails.createdTime);
-      const userType = JSON.parse(getUserInfo()).type;
+  const userType = JSON.parse(getUserInfo()).type;
   return {
 
-    applicationNo: getApplicationLink(property.acknowldgementNumber, property.tenantId, property.propertyId,history),
+    applicationNo: getApplicationLink(property.acknowldgementNumber, property.tenantId, property.propertyId, history, property.creationReason),
     propertyId: getLink(userType, history, property.propertyId, property.tenantId),
     applicationType: property.creationReason,
     name: property.owners[0].name,
     date: date,
     status: getStatusColor(property.status)
 
-}
+  }
 }
 
-export const getFormattedDate = (date)=>{
-  const dateArray=new Date(date).toString().split(' ');
-  if(dateArray.length>0){
-    return dateArray[2]+'-'+dateArray[1]+'-'+dateArray[3];
+export const getFormattedDate = (date) => {
+  const dateArray = new Date(date).toString().split(' ');
+  if (dateArray.length > 0) {
+    return dateArray[2] + '-' + dateArray[1] + '-' + dateArray[3];
   }
- else{
-   return 'dd-mmm-yyyy';
- }
+  else {
+    return 'dd-mmm-yyyy';
+  }
 }
 
 
@@ -159,7 +157,7 @@ export const getQueryValue = (query, key) =>
     query.replace(new RegExp("^(?:.*[&\\?]" + encodeURIComponent(key).replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"), "$1")
   );
 
-export const findCorrectDateObj = (financialYear, category=[]) => {
+export const findCorrectDateObj = (financialYear, category) => {
   category.sort((a, b) => {
     let yearOne = a.fromFY && a.fromFY.slice(0, 4);
     let yearTwo = b.fromFY && b.fromFY.slice(0, 4);
@@ -204,7 +202,7 @@ export const findCorrectDateObj = (financialYear, category=[]) => {
   return chosenDateObj;
 };
 
-export const findCorrectDateObjPenaltyIntrest = (financialYear, category=[]) => {
+export const findCorrectDateObjPenaltyIntrest = (financialYear, category) => {
   category.sort((a, b) => {
     let yearOne = a.fromFY && a.fromFY.slice(0, 4);
     let yearTwo = b.fromFY && b.fromFY.slice(0, 4);
@@ -246,7 +244,7 @@ const getMonth = (date) => {
   return parseInt(date.split("/")[1]);
 };
 
-export const sortDropdown = (data=[], sortBy, isAscending) => {
+export const sortDropdown = (data, sortBy, isAscending) => {
   const sortedData = data.slice().sort((a, b) => {
     var textA = a[sortBy].toUpperCase();
     var textB = b[sortBy].toUpperCase();
@@ -254,8 +252,8 @@ export const sortDropdown = (data=[], sortBy, isAscending) => {
   });
   return sortedData;
 };
-export const getOwnerCategory = (data=[]) => {
-  const OwnerCatArray = data.map((item,index) => {
+export const getOwnerCategory = (data = []) => {
+  const OwnerCatArray = data.map((item, index) => {
     return { label: item.name, value: item.code };
   });
   return OwnerCatArray;
@@ -396,7 +394,7 @@ export const transformPropertyDataToAssessInfo = (data) => {
       configFloor = cloneDeep(configFloor);
       Object.keys(configFloor["fields"]).forEach((item) => {
         let jsonPath = configFloor["fields"][item]["jsonPath"];
-        jsonPath =jsonPath && jsonPath.replace(/units\[[0-9]\]/g, "units[" + unitIndex + "]");
+        jsonPath = jsonPath.replace(/units\[[0-9]\]/g, "units[" + unitIndex + "]");
         configFloor["fields"][item].jsonPath = jsonPath;
         let valueInJSON = get(data, jsonPath);
         if (valueInJSON === null) {
@@ -431,8 +429,8 @@ export const transformPropertyDataToAssessInfo = (data) => {
 };
 
 const prepareUniqueFloorIndexObj = (units) => {
-  units = units && sortBy(uniqBy(units, "floorNo"), (unit) => parseInt(unit.floorNo) || -99999);
-  let floorIndexObj = units && units.reduce((floorIndexObj, item, index) => {
+  units = sortBy(uniqBy(units, "floorNo"), (unit) => parseInt(unit.floorNo) || -99999);
+  let floorIndexObj = units.reduce((floorIndexObj, item, index) => {
     if (isUndefined(floorIndexObj[item.floorNo])) {
       floorIndexObj[item.floorNo] = index;
     }
@@ -458,21 +456,21 @@ const modifyEndOfJsonPath = (jsonpath, toReplaceWith) => {
 };
 
 
-export const generatePdfFromDiv = (action, applicationNumber,divIdName) => {
+export const generatePdfFromDiv = (action, applicationNumber, divIdName) => {
   let target = document.querySelector(divIdName);
 
   html2canvas(target, {
     onclone: function (clonedDoc) {
-      if(clonedDoc.getElementById("pdf-header")){
+      if (clonedDoc.getElementById("pdf-header")) {
         clonedDoc.getElementById("pdf-header").style.display = "block";
       }
-      if(clonedDoc.getElementById("property-assess-form")){
+      if (clonedDoc.getElementById("property-assess-form")) {
         clonedDoc.getElementById("property-assess-form").style.display = "none";
       }
-      if(clonedDoc.getElementById("pt-header-button-container")){
+      if (clonedDoc.getElementById("pt-header-button-container")) {
         clonedDoc.getElementById("pt-header-button-container").style.display = "none";
       }
-      if(clonedDoc.getElementById("pt-flex-child-button")){
+      if (clonedDoc.getElementById("pt-flex-child-button")) {
         clonedDoc.getElementById("pt-flex-child-button").style.display = "none";
       }
 
@@ -481,11 +479,11 @@ export const generatePdfFromDiv = (action, applicationNumber,divIdName) => {
     var data = canvas.toDataURL();
     var imgWidth = 200;
     var pageHeight = 295;
-    var imgHeight =  pageHeight-80;
+    var imgHeight = pageHeight - 80;
     var doc = new jsPDF("p", "mm");
     var position = 0;
 
-    doc.addImage(data, "PNG", 5, 10+position, imgWidth, imgHeight);
+    doc.addImage(data, "PNG", 5, 10 + position, imgWidth, imgHeight);
 
     if (action === "download") {
       doc.save(`preview-${applicationNumber}.pdf`);

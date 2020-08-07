@@ -43,10 +43,11 @@ class PaymentHistory extends Component {
         };
         const { Payments = [] ,downloadReceipt} = this.props;
         const paymentHistoryItems = Payments.map((payment, index) => {
+            const amount=payment.totalAmountPaid==0?'0':payment.totalAmountPaid;
             return (
                 <div>
                     {getFullRow("PT_HISTORY_RECEIPT_NO", payment.paymentDetails[0].receiptNumber ? '' + payment.paymentDetails[0].receiptNumber : "NA", 12)}
-                    {getFullRow("PT_HISTORY_AMOUNT_PAID", payment.totalAmountPaid ? 'Rs ' + payment.totalAmountPaid : "NA", 12)}
+                    {getFullRow("PT_HISTORY_AMOUNT_PAID", amount ? 'Rs ' + amount : "NA", 12)}
                     {getFullRow("PT_HISTORY_PAYMENT_DATE", payment.transactionDate ? getFormattedDate(payment.transactionDate) : "NA", 12)}
                     {getFullRow("PT_HISTORY_BILL_NO", payment.paymentDetails[0].bill.billNumber ? '' + payment.paymentDetails[0].bill.billNumber : "NA", 12)}
                     {getFullRow("PT_HISTORY_BILL_PERIOD", this.getBillPeriod(payment.paymentDetails[0].bill.billDetails), 6)}

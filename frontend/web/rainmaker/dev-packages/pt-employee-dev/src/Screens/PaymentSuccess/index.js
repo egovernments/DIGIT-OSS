@@ -119,24 +119,6 @@ class PaymentSuccess extends Component {
               },
               {
                 name: "UsageCategoryDetail"
-              },
-              {
-                name: "ConstructionType",
-              },
-              {
-                name: "Rebate",
-              },
-              {
-                name: "Interest",
-              },
-              {
-                name: "FireCess",
-              },
-              {
-                name: "RoadType",
-              },
-              {
-                name: "Thana",
               }
             ]
           }
@@ -151,24 +133,10 @@ class PaymentSuccess extends Component {
       "OccupancyType",
       "PropertyType",
       "PropertySubType",
-      "UsageCategoryDetail",
-      "ConstructionType",
-      "Rebate",
-      "Penalty",
-      "Interest",
-      "FireCess",
-      "RoadType",
-      "Thana"
+      "UsageCategoryDetail"
     ]);
-    fetchGeneralMDMSData(
-      null,
-      "BillingService",
-      ["TaxPeriod", "TaxHeadMaster"],
-      "",
-      commonConfig.tenantId
-    );
     fetchProperties([
-      { key: "ids", value: match.params.propertyId },
+      { key: "propertyIds", value: match.params.propertyId },
       { key: "tenantId", value: match.params.tenantId }
     ]);
     fetchReceipts([
@@ -210,16 +178,8 @@ class PaymentSuccess extends Component {
     img.src = url;
   };
 
-
-  createImageUrl = (tenantId) => {
-    const {cities}=this.props;
-    let logUrl;
-    cities.forEach((city)=>{
-      if (city.key===tenantId) {
-        logUrl=city.logoId
-      }
-    })
-    return logUrl;
+  createImageUrl = tenantId => {
+    return `https://s3.ap-south-1.amazonaws.com/pb-egov-assets/${tenantId}/logo.png`;
   };
 
   render() {
@@ -334,16 +294,8 @@ const mapDispatchToProps = dispatch => {
   return {
     fetchProperties: queryObject => dispatch(fetchProperties(queryObject)),
     fetchReceipts: queryObject => dispatch(fetchReceipts(queryObject)),
-    fetchGeneralMDMSData: (
-      requestBody,
-      moduleName,
-      masterName,
-      key,
-      tenantId
-    ) =>
-      dispatch(
-        fetchGeneralMDMSData(requestBody, moduleName, masterName, key, tenantId)
-      ),
+    fetchGeneralMDMSData: (requestBody, moduleName, masterName, key) =>
+      dispatch(fetchGeneralMDMSData(requestBody, moduleName, masterName, key)),
     updatePrepareFormDataFromDraft: prepareFormData =>
       dispatch(updatePrepareFormDataFromDraft(prepareFormData)),
     clearForms: () => dispatch(clearForms())

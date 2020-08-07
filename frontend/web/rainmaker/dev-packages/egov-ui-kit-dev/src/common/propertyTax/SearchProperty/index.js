@@ -17,6 +17,7 @@ import { fetchProperties } from "egov-ui-kit/redux/properties/actions";
 import { getLatestPropertyDetails } from "egov-ui-kit/utils/PTCommon";
 import get from "lodash/get";
 import { getUserInfo, localStorageGet,getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import { getDateFromEpoch } from "egov-ui-kit/utils/commons";
 
 import "./index.css";
 
@@ -49,45 +50,32 @@ class SearchProperty extends Component {
 
   };
   onSearchClick = (form, formKey) => {
-    const { city, ids, oldpropertyids, mobileNumber, applicationNumber, mohalla, houseNumber } = form.fields || {};
-    const { fetchLocalizationLabel } = this.props;
+    const {fetchLocalizationLabel} = this.props
+    const { city, ids, oldpropertyids, mobileNumber, applicationNumber } = form.fields || {};
     if (!validateForm(form)) {
       this.props.displayFormErrors(formKey);
-    } else if (!oldpropertyids.value && !ids.value && !mobileNumber.value && !mohalla.value) {
+    } else if (!oldpropertyids.value && !ids.value && !mobileNumber.value) {
       this.props.toggleSnackbarAndSetText(
         true,
         { labelName: "Please fill atleast one field along with city", labelKey: "ERR_FILL_ATLEAST_ONE_FIELD_WITH_CITY" },
         "error"
       );
-    } else if (mohalla.value && !houseNumber.value) {
-      this.props.toggleSnackbarAndSetText(
-        true,
-        { labelName: "Please fill House/Shop No. along with Locality/Mohalla", labelKey: "ERR_FILL_DOORNO_WITH_LOCALITY" },
-        "error"
-      );
-    }
-    else {
+    } else {
       const queryParams = [];
       if (city && city.value) {
         queryParams.push({ key: "tenantId", value: city.value });
       }
-      if (ids && ids.value) {
-        queryParams.push({ key: "ids", value: ids.value });
+      if ( ids && ids.value) {
+        queryParams.push({ key: "propertyIds", value: ids.value });
       }
       if (oldpropertyids && oldpropertyids.value) {
         queryParams.push({ key: "oldpropertyids", value: oldpropertyids.value });
       }
-      if (mobileNumber && mobileNumber.value) {
+      if ( mobileNumber && mobileNumber.value) {
         queryParams.push({ key: "mobileNumber", value: mobileNumber.value });
       }
       if (applicationNumber && applicationNumber.value) {
         queryParams.push({ key: "applicationNumber", value: applicationNumber.value });
-      }
-      if (mohalla && mohalla.value) {
-        queryParams.push({ key: "locality", value: mohalla.value });
-      }
-      if (houseNumber && houseNumber.value) {
-        queryParams.push({ key: "doorNo", value: houseNumber.value });
       }
       this.props.fetchProperties(queryParams);
       this.setState({ showTable: true });
@@ -95,7 +83,7 @@ class SearchProperty extends Component {
     fetchLocalizationLabel(getLocale(), city.value, city.value);
   };
 
-
+  
 
   getLink = (userType, history, propertyId, tenantId) => {
     return (
@@ -111,7 +99,7 @@ class SearchProperty extends Component {
             }
             : (e) => {
               // localStorageSet("draftId", "")
-              history.push(`/property-tax/property/${propertyId}/${tenantId}?isMutationApplication=true`);
+              history.push(`/property-tax/property/${propertyId}/${tenantId}`);
             }
         }
         style={{
@@ -131,30 +119,31 @@ class SearchProperty extends Component {
       let {
         propertyId,
         status,
-        oldPropertyId,
-        address,
+        applicationNo,
+        applicationType,
+        date,
         propertyDetails,
-        tenantId
+        tenantId,
       } = property;
-      const { doorNo, buildingName, street, locality } = address;
-      let displayAddress = doorNo
-        ? `${doorNo ? doorNo + "," : ""}` + `${buildingName ? buildingName + "," : ""}` + `${street ? street + "," : ""}`
-        : `${locality.name ? locality.name : ""}`;
-
+      
+      if(!applicationNo) applicationNo = property.acknowldgementNumber;
+      if(!date) date = getDateFromEpoch(property.auditDetails.createdTime);
+      applicationType = history.location.pathname.includes('property-tax') ? 'PT' : applicationType;
       const latestAssessment = getLatestPropertyDetails(propertyDetails);
       let name = latestAssessment.owners[0].name;
-      let guardianName = latestAssessment.owners[0].fatherOrHusbandName ? latestAssessment.owners[0].fatherOrHusbandName : "NA";
-      let assessmentNo = latestAssessment.assessmentNumber;
-      const uuid = get(latestAssessment, "citizenInfo.uuid");
+      // let guardianName = latestAssessment.owners[0].fatherOrHusbandName || "";
+      // let assessmentNo = latestAssessment.assessmentNumber;
+      // const uuid = get(latestAssessment, "citizenInfo.uuid");
+
       // let button = (
-      //   <Button
+      //   <a
       //     onClick={
       //       userType === "CITIZEN"
       //         ? () => {
       //           // localStorageSet("draftId", "")
       //           this.setState({
       //             dialogueOpen: true,
-      //             urlToAppend: `/property-tax/assessment-form?assessmentId=${assessmentNo}&isReassesment=true&uuid=${uuid}&propertyId=${propertyId}&tenantId=${tenantId}`,
+      //             urlToAppend: `/property-tax/assessment-form?assessmentId=${assessmentNo}&isReassesment=false&uuid=${uuid}&propertyId=${propertyId}&tenantId=${tenantId}`,
       //           });
       //         }
       //         : (e) => {
@@ -162,51 +151,27 @@ class SearchProperty extends Component {
       //           history.push(`/property-tax/property/${propertyId}/${property.tenantId}`);
       //         }
       //     }
-      //     label={
-      //       <Label buttonLabel={true} label={userType === "CITIZEN" ? "PT_PAYMENT_ASSESS_AND_PAY" : "PT_SEARCHPROPERTY_TABLE_VIEW"} fontSize="12px" />
-      //     }
-      //     value={propertyId}
-      //     primary={true}
-      //     style={{ height: 20, lineHeight: "auto", minWidth: "inherit" }}
-      //   />
-      // );
-      let button = (
-        <a
-          onClick={
-            userType === "CITIZEN"
-              ? () => {
-                // localStorageSet("draftId", "")
-                this.setState({
-                  dialogueOpen: true,
-                  urlToAppend: `/property-tax/assessment-form?assessmentId=${assessmentNo}&isReassesment=false&uuid=${uuid}&propertyId=${propertyId}&tenantId=${tenantId}`,
-                });
-              }
-              : (e) => {
-                // localStorageSet("draftId", "")
-                history.push(`/property-tax/property/${propertyId}/${property.tenantId}`);
-              }
-          }
-          style={{
-            height: 20,
-            lineHeight: "auto",
-            minWidth: "inherit",
-            cursor: "pointer",
-            textDecoration: "underline",
-            fontWeight: '400',
-            fontSize: "14px",
-            color: 'rgba(0, 0, 0, 0.87)',
-            lineHeight: '30px'
-          }}>
-          {propertyId}
-        </a>);
+      //     style={{
+      //       height: 20,
+      //       lineHeight: "auto",
+      //       minWidth: "inherit",
+      //       cursor: "pointer",
+      //       textDecoration: "underline",
+      //       fontWeight: '400',
+      //       fontSize: "14px",
+      //       color: 'rgba(0, 0, 0, 0.87)',
+      //       lineHeight: '30px'
+      //     }}>
+      //     {propertyId}
+      //   </a>);
 
       let item = {
-        index: index + 1,
-        propertyId: button,
+        // applicationNo: this.getLink(userType, history, applicationNo, tenantId),
+        applicationNo: <a>{applicationNo}</a>,
+        propertyId: this.getLink(userType, history, propertyId, tenantId),
         name: name,
-        guardianName: guardianName,
-        oldPropertyId: oldPropertyId,
-        address: displayAddress,
+        applicationType: applicationType,
+        date: date,
         status: status
 
       };
@@ -257,7 +222,7 @@ class SearchProperty extends Component {
             bold={true}
             labelStyle={{ marginTop: "20px" }}
           />
-          {/* <div
+          <div
             className="rainmaker-displayInline"  >
             <Button
               Icon={
@@ -282,12 +247,12 @@ class SearchProperty extends Component {
               primary={true}
               fullWidth={true}
             />
-          </div> */}
+          </div>
         </div>
         <PropertySearchFormHOC history={this.props.history} onSearchClick={this.onSearchClick} onResetClick={this.onResetClick} />
         <Hidden xsDown>
-          {!loading && showTable && tableData.length > 0 ?
-            <PropertyTable tableData={tableData} sortOnObject="propertyId" onActionClick={this.onActionClick} /> : null}
+        {!loading && showTable && tableData.length > 0  ? 
+        <PropertyTable tableData={tableData} sortOnObject="propertyId" onActionClick={this.onActionClick} /> : null}
         </Hidden>
         <Hidden smUp>
           {tableData && tableData.length > 0 && showTable && (
@@ -318,8 +283,7 @@ class SearchProperty extends Component {
             <div className="no-search-text">
               <Label label="PT_NO_PROPERTY_RECORD" />
             </div>
-
-          {/*  <div className="new-assess-btn">
+            <div className="new-assess-btn">
               <Button
                 label={<Label label="PT_ADD_ASSESS_PROPERTY" buttonLabel={true} />}
                 labelStyle={{ fontSize: 12 }}
@@ -328,10 +292,10 @@ class SearchProperty extends Component {
                 primary={true}
                 fullWidth={true}
               />
-            </div>*/}
+            </div>
           </div>
         )}
-        {/*<YearDialogue open={this.state.dialogueOpen} history={history} urlToAppend={urlToAppend} closeDialogue={closeYearRangeDialogue} />*/}
+        <YearDialogue open={this.state.dialogueOpen} history={history} urlToAppend={urlToAppend} closeDialogue={closeYearRangeDialogue} />
       </Screen>
     );
   }

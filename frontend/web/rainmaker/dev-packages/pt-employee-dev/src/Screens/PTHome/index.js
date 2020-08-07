@@ -83,7 +83,6 @@ class PTHome extends Component {
           </div>
         )
       },
-      /* Commenting for 10 dec release
       {
         primaryText: <Label label="PT_EXAMPLE" labelStyle={labelStyle} />,
         route: "/property-tax/pt-examples",
@@ -92,7 +91,7 @@ class PTHome extends Component {
             <Icon action="hardware" name="keyboard-arrow-right" />
           </div>
         )
-      } */
+      }
     ];
   };
 

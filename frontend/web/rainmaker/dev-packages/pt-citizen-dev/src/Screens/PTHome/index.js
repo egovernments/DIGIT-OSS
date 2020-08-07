@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { List, Icon, Card } from "components";
+import store from "ui-redux/store";
 import Label from "egov-ui-kit/utils/translationNode";
 import { Link } from "react-router-dom";
 import { Screen, ModuleLandingPage } from "modules/common";
@@ -9,6 +10,7 @@ import { addBreadCrumbs } from "egov-ui-kit/redux/app/actions";
 import { getFinalAssessments } from "../common/TransformedAssessments";
 import MyPropertyIcon from "@material-ui/icons/Home";
 import PropertyIcon from "@material-ui/icons/CreditCard";
+import { fetchData } from "egov-pt/ui-config/screens/specs/pt-mutation/searchResource/citizenSearchFunctions";
 import get from "lodash/get";
 import "./index.css";
 
@@ -59,21 +61,25 @@ class PTHome extends Component {
     overflow: "visible"
   };
   getCardItems = () => {
-    const { numProperties, numDrafts } = this.props;
+    const { numProperties, numDrafts, myApplicationsCount } = this.props;
     return [
       {
         label: "PT_PAYMENT_PAY_PROPERTY_TAX",
         icon: (
           <Icon style={iconStyle} action="custom" name="home-city-outline" />
         ),
-
-        route: "/property-tax/assess-pay/search-property"
+        route: "/pt-mutation/propertySearch"
       },
       {
         label: "PT_MY_PROPERTY_SCREEN_HEADER",
         icon: <Icon style={iconStyle} action="custom" name="home-account" />,
         dynamicArray: [numProperties],
         route: "/property-tax/my-properties"
+      },{
+        label: "PT_MUTATION_MY_APPLICATIONS",
+        icon: <Icon style={iconStyle} action="custom" name="home-account" />,
+        dynamicArray: [myApplicationsCount],
+        route: "/pt-mutation/my-applications"
       }
     ];
   };
@@ -81,39 +87,42 @@ class PTHome extends Component {
   getlistItems = () => {
     const { numDrafts } = this.props;
     return [
-      // {
-      //   primaryText: (
-      //     <Label label="PT_COMPLETED_ASSESSMENTS" labelStyle={labelStyle} />
-      //   ),
-      //   route: "/property-tax/completed-assessments",
-      //   // leftIcon: (
-      //   //   <div style={listIconStyle}>
-      //   //     <Icon action="action" name="done" />
-      //   //   </div>
-      //   // ),
-      //   rightIcon: (
-      //     <div style={listIconStyle}>
-      //       <Icon action="hardware" name="keyboard-arrow-right" />
-      //     </div>
-      //   )
-      // },
-      /*  Commenting for 10 dec release
-     {
-       
-       primaryText: (
-         <Label
-           label="PT_INCOMPLETE_ASSESSMENT"
-           dynamicArray={[numDrafts]}
-           labelStyle={labelStyle}
-         />
-       ),
-       route: "/property-tax/incomplete-assessments",
-       rightIcon: (
-         <div style={listIconStyle}>
-           <Icon action="hardware" name="keyboard-arrow-right" />
-         </div>
-       )
-     }, */
+      /*
+      Assessment IS REMOVED FROM PT2.0
+      {
+        primaryText: (
+          <Label label="PT_COMPLETED_ASSESSMENTS" labelStyle={labelStyle} />
+        ),
+        route: "/property-tax/completed-assessments",
+        // leftIcon: (
+        //   <div style={listIconStyle}>
+        //     <Icon action="action" name="done" />
+        //   </div>
+        // ),
+        rightIcon: (
+          <div style={listIconStyle}>
+            <Icon action="hardware" name="keyboard-arrow-right" />
+          </div>
+        )
+      }, */
+   /*  
+   DRAFTS IS REMOVED FROM PT2.2
+   
+   {
+        primaryText: (
+          <Label
+            label="PT_INCOMPLETE_ASSESSMENT"
+            dynamicArray={[numDrafts]}
+            labelStyle={labelStyle}
+          />
+        ),
+        route: "/property-tax/incomplete-assessments",
+        rightIcon: (
+          <div style={listIconStyle}>
+            <Icon action="hardware" name="keyboard-arrow-right" />
+          </div>
+        )
+      }, */
       {
         primaryText: <Label label="PT_HOW_IT_WORKS" labelStyle={labelStyle} />,
         route: "/property-tax/how-it-works",
@@ -123,7 +132,6 @@ class PTHome extends Component {
           </div>
         )
       },
-      /*  Commenting for 10 dec release
       {
         primaryText: <Label label="PT_EXAMPLE" labelStyle={labelStyle} />,
         route: "/property-tax/pt-examples",
@@ -132,7 +140,7 @@ class PTHome extends Component {
             <Icon action="hardware" name="keyboard-arrow-right" />
           </div>
         )
-      }*/
+      }
     ];
   };
 
@@ -150,17 +158,9 @@ class PTHome extends Component {
       url === "property-tax" &&
       addBreadCrumbs({ title: "", path: "" });
     fetchProperties(
-      [{ key: "accountId", value: userInfo.uuid }],
-      [
-        { key: "userId", value: userInfo.uuid },
-        { key: "isActive", value: true },
-        { key: "limit", value: 100 }
-      ],
-      [
-        { key: "userUuid", value: userInfo.uuid },
-        { key: "txnStatus", value: "FAILURE" }
-      ]
+      []
     );
+    fetchData(null, null, store.dispatch);
   };
 
   handleItemClick = (item, index) => {
@@ -287,33 +287,13 @@ const getTransformedItems = propertiesById => {
 };
 
 const mapStateToProps = state => {
-  const { properties } = state;
-  const { propertiesById, draftsById, loading, failedPayments } =
+  const { properties, screenConfiguration} = state;
+  const {preparedFinalObject} = screenConfiguration;
+  const {myApplicationsCount=0} = preparedFinalObject;
+  const { propertiesById,  loading } =
     properties || {};
   const numProperties = propertiesById && Object.keys(propertiesById).length;
-  const mergedData =
-    failedPayments &&
-    propertiesById &&
-    getFinalAssessments(failedPayments, propertiesById);
-  let finalFailedTransactions = mergedData && getTransformedItems(mergedData);
-  const numFailedPayments = finalFailedTransactions
-    ? Object.keys(finalFailedTransactions).length
-    : 0;
-  const transformedDrafts = Object.values(draftsById).reduce(
-    (result, draft) => {
-      const { prepareFormData, assessmentNumber } = draft.draftRecord || {};
-      if (
-        !assessmentNumber &&
-        get(prepareFormData, "Properties[0].propertyDetails[0].financialYear")
-      ) {
-        result.push(draft);
-      }
-      return result;
-    },
-    []
-  );
-  const numDrafts = transformedDrafts.length + numFailedPayments;
-  return { numProperties, numDrafts, loading };
+  return { numProperties,  loading, myApplicationsCount };
 };
 
 const mapDispatchToProps = dispatch => {
@@ -321,14 +301,12 @@ const mapDispatchToProps = dispatch => {
     addBreadCrumbs: url => dispatch(addBreadCrumbs(url)),
     fetchProperties: (
       queryObjectProperty,
-      queryObjectDraft,
-      queryObjectFailedPayments
+    
     ) =>
       dispatch(
         fetchProperties(
           queryObjectProperty,
-          queryObjectDraft,
-          queryObjectFailedPayments
+        
         )
       )
   };

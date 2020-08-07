@@ -10,17 +10,15 @@ const localizationLabelsData = initLocalizationLabels(locale);
 
 
 
-const getAddressItems = (properties, loadMdmsData) => {
-
-  const { address, propertyDetails,tenantId } = properties;
-
-  const { additionalDetails } = Boolean(propertyDetails) && propertyDetails[0]
-  return (
-    address && [
+const getAddressItems = (properties) => {
+  const {address} = properties;
+    return  (
+     address &&    [
+      // [
 
       {
         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_CITY", localizationLabelsData),
-        value: tenantId && getTranslatedLabel(("TENANT_TENANTS_" + tenantId.replace('.', '_')).toUpperCase(), localizationLabelsData) || "NA",
+        value: address.city || "NA",
       },
       {
         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_HOUSE_NO", localizationLabelsData),
@@ -31,45 +29,33 @@ const getAddressItems = (properties, loadMdmsData) => {
         value: address.buildingName || "NA",
       },
       {
-        key: getTranslatedLabel("PT_PROPERTY_ADDRESS_EXISTING_PID", localizationLabelsData),
-        value: properties.oldPropertyId || "NA",
-      },
-      {
         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_STREET_NAME", localizationLabelsData),
         value: address.street || "NA",
+      },
+      {
+        key: getTranslatedLabel("PT_PROPERTY_ADDRESS_MOHALLA", localizationLabelsData),
+        value: (getTranslatedLabel(('revenue.locality.'+address.locality.code), localizationLabelsData)) + (address.locality.area ? ` - ${address.locality.area}`:"") || "NA",
       },
       {
         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_PINCODE", localizationLabelsData),
         value: address.pincode || "NA",
       },
       {
-        key: getTranslatedLabel("PT_PROPERTY_ADDRESS_ROAD_TYPE", localizationLabelsData),
-        value: additionalDetails && additionalDetails.roadType && getTranslatedLabel(('PROPERTYTAX_ROADTYPE_' + additionalDetails.roadType).toUpperCase(), localizationLabelsData) || "NA",
-      },
-      {
-        key: getTranslatedLabel("PT_PROPERTY_ADDRESS_THANA", localizationLabelsData),
-        value: additionalDetails && additionalDetails.thana && getTranslatedLabel(('PROPERTYTAX_THANA_' + additionalDetails.thana.replace('-', '_')).toUpperCase(), localizationLabelsData) || "NA",
-      },
-      {
-        key: getTranslatedLabel("PT_PROPERTY_ADDRESS_MOHALLA", localizationLabelsData),
-        value: getTranslatedLabel((
-          tenantId.replace(".", "_") +
-          "_REVENUE_" +
-          address.locality.code
-        ).toUpperCase(), localizationLabelsData) || "NA",
+        key: getTranslatedLabel("PT_PROPERTY_ADDRESS_EXISTING_PID", localizationLabelsData),
+        value: properties.oldPropertyId || "NA",
       }
     ]
   );
 }
 
-const PropertyAddressInfo = ({ properties, editIcon, loadMdmsData }) => {
-
+const PropertyAddressInfo= ({properties ,editIcon}) => {
+  
   let addressItems = [];
   const header = 'PT_PROPERTY_ADDRESS_SUB_HEADER';
-  if (properties) {
-    addressItems = getAddressItems(properties, loadMdmsData);
+  if(properties){
+    addressItems = getAddressItems(properties);
   }
-
+  
   return (
     <PropertyInfoCard editIcon={editIcon} items={addressItems} header={header}></PropertyInfoCard>
   );

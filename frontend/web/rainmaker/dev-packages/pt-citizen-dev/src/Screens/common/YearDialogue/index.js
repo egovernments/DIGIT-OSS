@@ -6,12 +6,11 @@ import Label from "egov-ui-kit/utils/translationNode";
 import formHoc from "egov-ui-kit/hocs/form";
 import { resetFormWizard } from "egov-ui-kit/utils/PTCommon";
 import { connect } from "react-redux";
+import { fetchGeneralMDMSData } from "egov-ui-kit/redux/common/actions";
 import { removeForm } from "egov-ui-kit/redux/form/actions";
 import commonConfig from "config/common.js";
-import get from "lodash/get"
-import { prepareFormData,fetchGeneralMDMSData,toggleSpinner,loadMDMSData } from "egov-ui-kit/redux/common/actions";
-
-
+import { prepareFormData } from "egov-ui-kit/redux/common/actions";
+import { toggleSpinner } from "egov-ui-kit/redux/common/actions";
 import "./index.css";
 
 const YearDialogueHOC = formHoc({
@@ -30,7 +29,7 @@ class YearDialog extends Component {
     })
   }
   componentDidMount = () => {
-    const { loadMDMSData,toggleSpinner } = this.props;
+    const { fetchGeneralMDMSData, toggleSpinner } = this.props;
     const requestBody = {
       MdmsCriteria: {
         tenantId: commonConfig.tenantId,
@@ -43,35 +42,17 @@ class YearDialog extends Component {
                 filter: "[?(@.module == 'PT')]"
               }
             ]
-          },
-           {
-            moduleName: "PropertyTax",
-            masterDetails: [
-              {
-                name: "RoadType"
-              },
-              {
-                name: "ConstructionType"
-              },
-              {
-                name:"Thana"
-              },
-            ]
           }
         ]
       }
     };
     toggleSpinner();
-    loadMDMSData(requestBody);
+    fetchGeneralMDMSData(requestBody, "egf-master", ["FinancialYear"]);
     toggleSpinner();
   };
 
   resetForm = () => {
-    const {
-      form,
-      removeForm,
-      prepareFormData
-    } = this.props;
+    const { form, removeForm, prepareFormData } = this.props;
     resetFormWizard(form, removeForm);
     prepareFormData("Properties", []);
   };
@@ -136,9 +117,10 @@ class YearDialog extends Component {
 
 const mapStateToProps = state => {
   const { common, form } = state;
-  const { loadMdmsData } = common;
-  const FinancialYear = loadMdmsData && get(loadMdmsData , "egf-master.FinancialYear");
-   const getYearList = FinancialYear && Object.keys(FinancialYear);
+  const { generalMDMSDataById } = common;
+  const FinancialYear =
+    generalMDMSDataById && generalMDMSDataById.FinancialYear;
+  const getYearList = FinancialYear && Object.keys(FinancialYear);
   return { getYearList, form };
 };
 
@@ -148,9 +130,7 @@ const mapDispatchToProps = dispatch => {
       dispatch(fetchGeneralMDMSData(requestBody, moduleName, masterName)),
     removeForm: formkey => dispatch(removeForm(formkey)),
     toggleSpinner: () => dispatch(toggleSpinner()),
-    prepareFormData: (path, value) => dispatch(prepareFormData(path, value)),
-    loadMDMSData: (requestBody, moduleName, masterName) =>
-      dispatch(loadMDMSData(requestBody, moduleName, masterName)),
+    prepareFormData: (path, value) => dispatch(prepareFormData(path, value))
   };
 };
 

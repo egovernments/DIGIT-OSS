@@ -1210,7 +1210,7 @@ class FormWizardDataEntry extends Component {
               ownershipType,
               "fields.typeOfOwnership.value"
             );
-            if (ownershipTypeSelected.includes("SINGLEOWNER")) {
+            if (ownershipTypeSelected.includes("INDIVIDUAL.SINGLEOWNER")) {
               const { ownerInfo } = form;
               const isOwnerInfoFormValid = validateForm(ownerInfo);
               if (isOwnerInfoFormValid) {
@@ -1990,7 +1990,7 @@ class FormWizardDataEntry extends Component {
         assessmentId
       );
     }
-    if (selectedownerShipCategoryType.includes("SINGLEOWNER")) {
+    if (selectedownerShipCategoryType.includes("INDIVIDUAL.SINGLEOWNER")) {
       set(
         prepareFormData,
         "Properties[0].propertyDetails[0].owners",
@@ -2360,7 +2360,7 @@ class FormWizardDataEntry extends Component {
         assessmentId
       );
     }
-    if (selectedownerShipCategoryType === "SINGLEOWNER") {
+    if (selectedownerShipCategoryType === "INDIVIDUAL.SINGLEOWNER") {
       set(
         prepareFormData,
         "Properties[0].propertyDetails[0].owners",

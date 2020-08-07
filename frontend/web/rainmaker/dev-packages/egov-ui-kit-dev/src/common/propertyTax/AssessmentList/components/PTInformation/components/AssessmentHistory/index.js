@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import Label from "egov-ui-kit/utils/translationNode";
 import HistoryCard from "../../../../../Property/components/HistoryCard";
 import { getFormattedDate } from "../../../../../../../utils/PTCommon";
-
+import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 export const getFullRow = (labelKey, labelValue, rowGrid = 12) => {
     let subRowGrid = 1;
     if (rowGrid == 6) {
@@ -15,14 +15,14 @@ export const getFullRow = (labelKey, labelValue, rowGrid = 12) => {
     return (<div className={`col-sm-${rowGrid} col-xs-12`} style={{ marginBottom: 1, marginTop: 1 }}>
         <div className={`col-sm-${2 * subRowGrid} col-xs-4`} style={{ padding: "3px 0px 0px 0px" }}>
             <Label
-                labelStyle={{ letterSpacing: 0, color: "rgba(0, 0, 0, 0.54)", fontWeight: "400", lineHeight: "19px" }}
+                labelStyle={{ letterSpacing: 0, color: "rgba(0, 0, 0, 0.54)", fontWeight: "400", lineHeight: "19px !important" }}
                 label={labelKey}
                 fontSize="14px"
             />
         </div>
         <div className={`col-sm-${4 * subRowGrid} col-xs-8`} style={{ padding: "3px 0px 0px 0px", paddingLeft: rowGrid == 12 ? '10px' : '15px' }}>
             <Label
-                labelStyle={{ letterSpacing: "0.47px", color: "rgba(0, 0, 0, 1.87)", fontWeight: "400", lineHeight: "19px" }}
+                labelStyle={{ letterSpacing: "0.47px", color: "rgba(0, 0, 0, 1.87)", fontWeight: "400", lineHeight: "19px !important" }}
                 label={labelValue}
                 fontSize="14px"
             />
@@ -45,82 +45,21 @@ class AssessmentHistory extends Component {
         };
     }
 
-    getTotalBillAmount(bills, financialAssmntYr) {
-        let totalBillAmount = 0;
-        if (bills.length > 0) {
-            for (let bill of bills) {
+    getLatestAssessments(Assessments = []) {
+        let latestAssessments = [];
+        let financialYears = [];
+        Assessments.sort((a1, a2) => a2.assessmentDate - a1.assessmentDate);
 
-                if (bill && bill.billDetails && financialAssmntYr) {
-
-                    for (let billDetail of bill.billDetails) {
-                        const { fromPeriod, toPeriod, amount } = billDetail;
-
-                        const fromYearOfBill = new Date(fromPeriod).getFullYear();
-                        const toYear = new Date(toPeriod).getFullYear();
-                        const toYearOfBill = parseInt(String(toYear).substr(2, 3));
-                        const assmntStrtYr = parseInt(String(financialAssmntYr).substring(0, 4))
-                        const assmntEndYr = parseInt(String(financialAssmntYr).substr(5, 6))
-
-
-                        if (fromYearOfBill === assmntStrtYr && toYearOfBill === assmntEndYr)
-                            totalBillAmount += amount;
-                    }
-                }
+        Assessments.map(Assessment => {
+            if (!financialYears.includes(Assessment.financialYear)) {
+                latestAssessments.push(Assessment);
+                financialYears.push(Assessment.financialYear);
             }
-        }
-        return totalBillAmount;
+
+        })
+        return latestAssessments;
     }
-
-
-    getTotalPaymentAmount(bills, financialAssmntYr) {
-        let totalBillAmount = 0;
-        if (bills) {
-
-            const { billDetails } = bills;
-            if (billDetails && financialAssmntYr) {
-
-                for (let billDetail of billDetails) {
-                    const { fromPeriod, toPeriod, amount } = billDetail;
-
-                    const fromYearOfBill = new Date(fromPeriod).getFullYear();
-                    const toYear = new Date(toPeriod).getFullYear();
-                    const toYearOfBill = parseInt(String(toYear).substr(2, 3));
-                    const assmntStrtYr = parseInt(String(financialAssmntYr).substring(0, 4))
-                    const assmntEndYr = parseInt(String(financialAssmntYr).substr(5, 6))
-
-
-                    if (fromYearOfBill === assmntStrtYr && toYearOfBill === assmntEndYr)
-                        totalBillAmount += amount;
-                }
-            }
-        }
-        return totalBillAmount;
-    }
-
-    getTotalTaxAmntForAssessmntYr(bills, payments, financialAssmntYr) {
-
-        let totalTaxAmount = 0;
-        let totalPaymentAmount = 0;
-        let totalBillAmount = this.getTotalBillAmount(bills, financialAssmntYr);
-
-        if (payments.length > 0) {
-
-            const { paymentDetails } = payments[0];
-
-            for (let paymentdetail of paymentDetails) {
-                let { bill } = paymentdetail;
-                totalPaymentAmount += this.getTotalPaymentAmount(bill, financialAssmntYr);
-
-            }
-        }
-
-        totalTaxAmount = totalBillAmount + totalPaymentAmount;
-
-        return totalTaxAmount + "";
-
-    }
-
-    getTransformedPaymentHistory() {
+    getTransformedAssessmentHistory() {
         const labelStyle = {
             letterSpacing: 1.2,
             fontWeight: "600",
@@ -137,73 +76,84 @@ class AssessmentHistory extends Component {
             outline: "none",
             alignItems: "right",
         };
+        const { Assessments = [], history, propertyId } = this.props;
 
-
-        const { propertyDetails = [], history, propertyId, Bill: bill, Payments: payments } = this.props;
-
-        const paymentHistoryItems = propertyDetails.map((propertyDetail) => {
-            // const taxAmount = this.getTotalTaxAmntForAssessmntYr(bill, payments, propertyDetail.financialYear);
+        const assessmentHistoryItems = this.getLatestAssessments(Assessments).map((Assessment) => {
             return (
                 <div>
-                    {getFullRow("PT_HISTORY_ASSESSMENT_DATE", propertyDetail.assessmentDate ? getFormattedDate(propertyDetail.assessmentDate) : "NA", 12)}
-                    {getFullRow("PT_ASSESSMENT_NO", propertyDetail.assessmentNumber ? propertyDetail.assessmentNumber : "NA", 12)}
-                    {getFullRow("PT_ASSESSMENT_YEAR", propertyDetail.financialYear ? propertyDetail.financialYear : "NA", 12)}
-                    {/*getFullRow("PT_ASSESSMENT_AMOUNT", taxAmount, 6) */}
-                    {/* <div className="col-sm-6 col-xs-12" style={{ marginBottom: 1, marginTop: 1 }}>
+                    {getFullRow("PT_HISTORY_ASSESSMENT_DATE", Assessment.assessmentDate ? getFormattedDate(Assessment.assessmentDate) : "NA", 12)}
+                    {getFullRow("PT_ASSESSMENT_NO", Assessment.assessmentNumber ? Assessment.assessmentNumber : "NA", 12)}
+                    {getFullRow("PT_ASSESSMENT_YEAR", Assessment.financialYear ? Assessment.financialYear : "NA", 6)}
+
+                    <div className="col-sm-6 col-xs-12" style={{ marginBottom: 1, marginTop: 1 }}>
                         <div className="assess-history" style={{ float: "right" }}>
                             <Button
                                 label={<Label buttonLabel={true} label='PT_RE_ASSESS' color="rgb(254, 122, 81)" fontSize="16px" height="40px" labelStyle={labelStyle} />}
                                 buttonStyle={buttonStyle}
                                 onClick={() => {
-                                    history &&
-                                        history.push(
-                                            `/property-tax/assessment-form?FY=${propertyDetail.financialYear}&assessmentId=${propertyDetail.assessmentNumber}&isAssesment=false&isReassesment=true&propertyId=${
-                                            propertyId
-                                            }&tenantId=${propertyDetail.tenantId}`
+                                    if (this.props.selPropertyDetails.status != "ACTIVE") {
+                                        this.props.toggleSnackbarAndSetText(
+                                            true,
+                                            { labelName: "Property in Workflow", labelKey: "ERROR_PROPERTY_IN_WORKFLOW" },
+                                            "error"
                                         );
+                                    } else {
+                                        history &&
+                                            history.push(
+                                                `/property-tax/assessment-form?FY=${Assessment.financialYear}&assessmentId=${Assessment.assessmentNumber}&isAssesment=false&isReassesment=true&propertyId=${
+                                                propertyId
+                                                }&tenantId=${Assessment.tenantId}`
+                                            );
+                                    }
                                     // lastElement.onClick();
                                 }}
                             ></Button>
-                        </div> 
+                        </div>
 
-                     </div > */}
+                    </div >
 
                 </div>)
 
         })
-        return paymentHistoryItems;
+        return assessmentHistoryItems;
     }
 
     render() {
-        const { propertyDetails = [], propertyId } = this.props;
-        let paymentHistoryItems = [];
-        if (propertyDetails.length > 0) {
-            paymentHistoryItems = this.getTransformedPaymentHistory();
+        let { propertyDetails = [], propertyId, Assessments = [] } = this.props;
+        if (Assessments.length > 0) {
+            Assessments = this.getTransformedAssessmentHistory();
         }
-        // console.log(this.props,'props');
         const items = this.state.showItems ? this.state.items : [];
         const errorMessage = this.state.showItems && items.length == 0 ? this.state.errorMessage : '';
         return (<HistoryCard header={'PT_ASSESMENT_HISTORY'} items={items} errorMessage={errorMessage} onHeaderClick={() => {
-            console.log("clicked");
-            this.setState({ showItems: !this.state.showItems, items: paymentHistoryItems })
+            this.setState({ showItems: !this.state.showItems, items: Assessments })
         }}></HistoryCard>)
     }
 
 }
 
+
+
 const mapStateToProps = (state, ownProps) => {
-    const { propertiesById, Bill = [], Payments = [] } = state.properties || {};
+    const { propertiesById, Assessments = [] } = state.properties || {};
     const propertyId = decodeURIComponent(ownProps.match.params.propertyId);
     const selPropertyDetails = propertiesById[propertyId] || {};
     const propertyDetails = selPropertyDetails.propertyDetails || [];
-
     return {
+        selPropertyDetails,
         propertyDetails,
         propertyId,
-        Bill,
-        Payments
+        Assessments
     };
 };
+
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        toggleSnackbarAndSetText: (open, message, error) => dispatch(toggleSnackbarAndSetText(open, message, error)),
+    };
+};
+
 
 
 
@@ -211,6 +161,6 @@ export default compose(
     withRouter,
     connect(
         mapStateToProps,
-        null
+        mapDispatchToProps
     )
 )(AssessmentHistory);

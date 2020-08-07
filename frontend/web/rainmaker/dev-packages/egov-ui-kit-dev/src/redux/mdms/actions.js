@@ -213,7 +213,7 @@ export const fetchSpecs = (queryObject, moduleName, masterName, tenantId, reques
 export const fetchDocuments = (tenantId) => {
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: tenantId,
+      tenantId: "uk",
       moduleDetails: [{ moduleName: "PropertyTax", masterDetails: [{ name: "Documents" }] }],
     },
   };

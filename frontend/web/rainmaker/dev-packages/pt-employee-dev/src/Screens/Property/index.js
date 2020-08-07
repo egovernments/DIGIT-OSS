@@ -92,24 +92,6 @@ class Property extends Component {
               },
               {
                 name: "SubOwnerShipCategory"
-              },
-              {
-                name: "ConstructionType",
-              },
-              {
-                name: "Rebate",
-              },
-              {
-                name: "Interest",
-              },
-              {
-                name: "FireCess",
-              },
-              {
-                name: "RoadType",
-              },
-              {
-                name: "Thana",
               }
             ]
           }
@@ -126,24 +108,10 @@ class Property extends Component {
       "PropertySubType",
       "OwnerType",
       "UsageCategoryDetail",
-      "SubOwnerShipCategory",
-      "ConstructionType",
-      "Rebate",
-      "Penalty",
-      "Interest",
-      "FireCess",
-      "RoadType",
-      "Thana"
+      "SubOwnerShipCategory"
     ]);
-    fetchGeneralMDMSData(
-      null,
-      "BillingService",
-      ["TaxPeriod", "TaxHeadMaster"],
-      "",
-      commonConfig.tenantId
-    );
     fetchProperties([
-      { key: "ids", value: this.props.match.params.propertyId },
+      { key: "propertyIds", value: this.props.match.params.propertyId },
       { key: "tenantId", value: this.props.match.params.tenantId }
     ]);
     renderCustomTitleForPt(customTitle);
@@ -419,9 +387,9 @@ const getAssessmentInfo = (propertyDetails, keys, generalMDMSDataById) => {
 };
 
 const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
-  const isInstitution =latestPropertyDetails.ownershipCategory!="INDIVIDUAL";
-    // latestPropertyDetails.ownershipCategory != "INSTITUTIONALPRIVATE" ||
-    // latestPropertyDetails.ownershipCategory === "INSTITUTIONALGOVERNMENT";
+  const isInstitution =
+    latestPropertyDetails.ownershipCategory === "INSTITUTIONALPRIVATE" ||
+    latestPropertyDetails.ownershipCategory === "INSTITUTIONALGOVERNMENT";
   const { institution, owners: ownerDetails } = latestPropertyDetails || {};
   return (
     ownerDetails && [
@@ -602,16 +570,8 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = dispatch => {
   return {
     // addBreadCrumbs: (url) => dispatch(addBreadCrumbs(url)),
-    fetchGeneralMDMSData: (
-      requestBody,
-      moduleName,
-      masterName,
-      key,
-      tenantId
-    ) =>
-      dispatch(
-        fetchGeneralMDMSData(requestBody, moduleName, masterName, key, tenantId)
-      ),
+    fetchGeneralMDMSData: (requestBody, moduleName, masterName) =>
+      dispatch(fetchGeneralMDMSData(requestBody, moduleName, masterName)),
     fetchProperties: queryObjectProperty =>
       dispatch(fetchProperties(queryObjectProperty)),
     getSingleAssesmentandStatus: queryObj =>

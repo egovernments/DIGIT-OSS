@@ -1,20 +1,25 @@
-import React from "react";
-import { TableUi } from "components";
-import { Card, Button } from "components";
+import { Button, Card, TableUi } from "components";
 import Label from "egov-ui-kit/utils/translationNode";
+import React from "react";
 
 const columnData = [
   {
-    id: "index",
-    numeric: true,
+    id: "applicationNo",
+    numeric: false,
     disablePadding: false,
-    label: "PT_SEARCHPROPERTY_TABEL_SNO"
+    label: "PT_PROPERTY_APPLICATION_NUMBER"
   },
   {
     id: "propertyId",
     numeric: false,
     disablePadding: false,
-    label: "PT_SEARCHPROPERTY_TABEL_PTUID"
+    label: "PT_SEARCHPROPERTY_TABEL_PID"
+  },
+  {
+    id: "applicationType",
+    numeric: false,
+    disablePadding: true,
+    label: "PT_SEARCHPROPERTY_TABEL_APPLICATIONTYPE"
   },
   {
     id: "name",
@@ -22,23 +27,17 @@ const columnData = [
     disablePadding: true,
     label: "PT_SEARCHPROPERTY_TABEL_OWNERNAME"
   },
+  // {
+  //   id: "guardianName",
+  //   numeric: false,
+  //   disablePadding: true,
+  //   label: "PT_SEARCHPROPERTY_TABEL_GUARDIANNAME"
+  // },
   {
-    id: "guardianName",
-    numeric: false,
-    disablePadding: true,
-    label: "PT_SEARCHPROPERTY_TABEL_GUARDIANNAME"
-  },
-  {
-    id: "oldPropertyId",
-    numeric: false,
-    disablePadding: false,
-    label: "PT_SEARCHPROPERTY_TABEL_EPID"
-  },
-  {
-    id: "address",
+    id: "date",
     numeric: false,
     disablePadding: false,
-    label: "PT_SEARCHPROPERTY_TABEL_ADDRESS"
+    label: "PT_SEARCHPROPERTY_TABEL_APPLICATIONDATE"
   },
   {
     id: "status",
@@ -55,7 +54,7 @@ const PropertyTable = ({ tableData, onActionClick, sortOnObject }) => {
         textChildren={
           <div>
             <Label
-            secondaryText={'('+tableData.length+')'}
+              secondaryText={'(' + tableData.length + ')'}
               label="PT_SEARCH_PROPERTY_TABLE_HEADERS"
               className="property-search-table-heading"
               fontSize={16}

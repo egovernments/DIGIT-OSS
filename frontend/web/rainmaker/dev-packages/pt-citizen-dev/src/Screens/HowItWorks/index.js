@@ -75,7 +75,7 @@ class HowItWorks extends Component {
       answer: [{ text: "CS_HOWITWORKS_ANSWER9" }]
     },
     {
-      question: "CS_HOWITWORKS_QUESTION10",
+      question: "CS_HOWITWORKS_QUESTION20",
       answer: [
         {
           text: "CS_HOWITWORKS_ANSWER10"
@@ -93,12 +93,7 @@ class HowItWorks extends Component {
     {
       question: "CS_HOWITWORKS_QUESTION12",
       answer: [{ text: "CS_HOWITWORKS_ANSWER12" }]
-    },
-    {
-      question: "CS_HOWITWORKS_QUESTION13",
-      answer: [{ text: "CS_HOWITWORKS_ANSWER13" }]
-    },
-
+    }
   ];
 
   componentDidMount() {
@@ -106,7 +101,7 @@ class HowItWorks extends Component {
     title && addBreadCrumbs({ title: title, path: window.location.pathname });
   }
 
-  renderList = (items,userManual) => {
+  renderList = items => {
     return (
       <div>
         <div className="row">
@@ -314,10 +309,10 @@ class HowItWorks extends Component {
           </div>
         </div>
 
-        {userManual && <div className="col-sm-12" style={{ padding: "15px 0px 30px 0px" }}>
+        <div className="col-sm-12" style={{ padding: "15px 0px 30px 0px" }}>
           <a
             href={
-              userManual
+              "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb/PT_User_Manual_Citizen.pdf"
             }
             target="_blank"
           >
@@ -333,7 +328,7 @@ class HowItWorks extends Component {
               style={{ height: 30, lineHeight: "auto", minWidth: "inherit" }}
             />
           </a>
-        </div>}
+        </div>
 
         <div>
           <Label label="PT_FAQ" color="#484848" fontSize="20px" />
@@ -348,9 +343,9 @@ class HowItWorks extends Component {
                 innerDivStyle={
                   index !== 0
                     ? {
-                      ...genericInnerdivStyle,
-                      borderTop: "solid 1px #e0e0e0"
-                    }
+                        ...genericInnerdivStyle,
+                        borderTop: "solid 1px #e0e0e0"
+                      }
                     : genericInnerdivStyle
                 }
                 nestedListStyle={{ padding: "0 0 16px 0" }}
@@ -380,14 +375,14 @@ class HowItWorks extends Component {
 
   render() {
     const { renderList, listItems } = this;
-    const { urls, history ,userManual} = this.props;
+    const { urls, history } = this.props;
     return (
       <Screen className="screen-with-bredcrumb">
         <BreadCrumbs url={urls} history={history} />
         <div className="form-without-button-cont-generic">
           <Card
             className="how-it-works-card"
-            textChildren={renderList(listItems,userManual)}
+            textChildren={renderList(listItems)}
           />
         </div>
       </Screen>
@@ -397,21 +392,8 @@ class HowItWorks extends Component {
 
 const mapStateToProps = state => {
   const { common, app } = state;
-  const {stateInfoById=[]}=common;
-  let userManual;
-  stateInfoById.forEach((stateInfo)=>{
-    if (stateInfo.userManuals && stateInfo.userManuals.length>0) {
-      stateInfo.userManuals.forEach((manual)=>{
-        if (manual.module==="PT") {
-          if (manual.manuals && manual.manuals.length>0) {
-            userManual=manual.manuals[0].url;
-          }
-        }
-      })
-    }
-  })
   const { urls } = app;
-  return { urls,userManual };
+  return { urls };
 };
 
 const mapDispatchToProps = dispatch => {

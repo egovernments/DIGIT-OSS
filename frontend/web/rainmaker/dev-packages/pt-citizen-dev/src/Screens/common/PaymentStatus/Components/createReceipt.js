@@ -49,6 +49,7 @@ const getTaxInfo = (billAccountDetails, totalAmount, localizationLabels) => {
 
 //   return dataURL;
 // };
+// const url = `https://s3.ap-south-1.amazonaws.com/pb-egov-assets/${property.tenantId}/logo.png`;
 const getHeaderDetails = (property, cities) => {
   const propertyTenant = cities.filter((item) => item.code === property.tenantId);
   return {

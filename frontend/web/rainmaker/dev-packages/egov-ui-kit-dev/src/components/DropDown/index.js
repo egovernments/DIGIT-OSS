@@ -73,7 +73,7 @@ const DropDownUi = ({
   const { moduleName, masterName } = localePrefix || "";
 
   const getTransformedLocale = (label) => {
-    return label&&label.toUpperCase().replace(/[.:-\s\/]/g, "_");
+    return label.toUpperCase().replace(/[.:-\s\/]/g, "_");
   };
 
   const getDropdownLabel = (value,label) => {

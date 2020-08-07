@@ -9,8 +9,6 @@ import sortBy from "lodash/sortBy";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 
-var constructiontype =[{value : "road1" , label :"rd1" }]
-
 const formConfig = {
   name: "propertyAddress",
   fields: {
@@ -85,24 +83,6 @@ const formConfig = {
                   {
                     name: "UsageCategorySubMinor",
                   },
-                  {
-                    name: "ConstructionType",
-                  },
-                  {
-                    name: "Rebate",
-                  },
-                  {
-                    name: "Interest",
-                  },
-                  {
-                    name: "FireCess",
-                  },
-                  {
-                    name: "RoadType",
-                  },
-                  {
-                    name: "Thana",
-                  }
                 ],
               },
             ],
@@ -122,23 +102,8 @@ const formConfig = {
             "UsageCategoryMajor",
             "UsageCategoryMinor",
             "UsageCategorySubMinor",
-            "ConstructionType",
-            "Rebate",
-            "Penalty",
-            "Interest",
-            "FireCess",
-            "RoadType",
-            "Thana"
           ])
         );
-
-        dispatch(fetchGeneralMDMSData(
-          null,
-          "BillingService",
-          ["TaxPeriod", "TaxHeadMaster"],
-          "",
-          field.value
-        ));
       },
     },
     dummy: {
@@ -193,10 +158,10 @@ const formConfig = {
     },
     oldPID: {
       id: "oldpid",
-      type: "textfield",
+      type: "textFieldIcon",
       className: "pt-old-pid-text-field",
       text: "PT_SEARCH_BUTTON",
-      // iconRedirectionURL: "https://pmidc.punjab.gov.in/propertymis/search.php",
+      iconRedirectionURL: "https://pmidc.punjab.gov.in/propertymis/search.php",
       jsonPath: "Properties[0].oldPropertyId",
       floatingLabelText: "PT_PROPERTY_ADDRESS_EXISTING_PID",
       hintText: "PT_PROPERTY_ADDRESS_EXISTING_PID_PLACEHOLDER",
@@ -208,52 +173,12 @@ const formConfig = {
       toolTipMessage: "PT_OLDPID_TOOLTIP_MESSAGE",
       maxLength: 64,
     },
-    roadType: {
-      id: "roadType",
-      jsonPath: "Properties[0].propertyDetails[0].additionalDetails.roadType",
-      localePrefix: { moduleName: "PropertyTax", masterName: "RoadType" },
-      type: "singleValueList",
-      floatingLabelText: "PT_PROPERTY_ADDRESS_ROAD_TYPE",
-      errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
-      fullWidth: true,
-      hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
-      numcols: 6,
-    },
-    thanaType: {
-      id: "Thana",
-      jsonPath: "Properties[0].propertyDetails[0].additionalDetails.thana",
-      localePrefix: { moduleName: "PropertyTax", masterName: "Thana" },
-      type: "singleValueList",
-      floatingLabelText: "PT_PROPERTY_ADDRESS_THANA",
-      errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
-      fullWidth: true,
-      hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
-      numcols: 6,
-    },
   },
   afterInitForm: (action, store, dispatch) => {
     try {
       let state = store.getState();
       const { localizationLabels } = state.app;
-      const { cities, citiesByModule, loadMdmsData } = state.common;
-      const roadTypeData =
-        get(loadMdmsData, "PropertyTax.RoadType") &&
-        Object.values(get(loadMdmsData, "PropertyTax.RoadType")).map((item, index) => {
-          return { value: item.code, label: item.name };
-        });
-
-      dispatch(setFieldProperty("propertyAddress", "roadType", "dropDownData", roadTypeData));
-
-     const thanaData =
-      get(loadMdmsData, "PropertyTax.Thana") &&
-      Object.values(get(loadMdmsData, "PropertyTax.Thana")).map((item, index) => {
-      return { value: item.code, label: item.name };
-      });
-      console.log("thanaData------->>>",thanaData)
-      dispatch(setFieldProperty("propertyAddress", "thanaType", "dropDownData", thanaData));
-      dispatch(setFieldProperty("propertyAddress", "thanaType", "value", get(state.form.prepareFormData,'Properties[0].propertyDetails[0].additionalDetails.thana','')));
-      dispatch(setFieldProperty("propertyAddress", "roadType", "value", get(state.form.prepareFormData,'Properties[0].propertyDetails[0].additionalDetails.roadType','')));
-
+      const { cities, citiesByModule } = state.common;
       const PT = citiesByModule && citiesByModule.PT;
       if (PT) {
         const tenants = PT.tenants;

@@ -68,6 +68,7 @@ export const fetchLocalizationLabel = (locale, module, tenantId) => {
     }
   };
 };
+
 const setActionItems = (payload) => {
   return {
     type: actionTypes.FETCH_ACTIONMENU,
