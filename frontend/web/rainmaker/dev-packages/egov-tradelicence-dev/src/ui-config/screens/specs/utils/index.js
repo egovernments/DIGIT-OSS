@@ -1067,13 +1067,25 @@ export const prepareDocumentTypeObj = documents => {
   let documentsArr =
     documents.length > 0
       ? documents.reduce((documentsArr, item, ind) => {
+        if(item==="OLDLICENSENO"){
         documentsArr.push({
           name: item,
-          required: true,
+          required: false,
           jsonPath: `Licenses[0].tradeLicenseDetail.applicationDocuments[${ind}]`,
           statement: getStatementForDocType(item)
         });
         return documentsArr;
+        }
+        else
+        {
+          documentsArr.push({
+            name: item,
+            required: true,
+            jsonPath: `Licenses[0].tradeLicenseDetail.applicationDocuments[${ind}]`,
+            statement: getStatementForDocType(item)
+          });
+          return documentsArr;
+        }
       }, [])
       : [];
   return documentsArr;
