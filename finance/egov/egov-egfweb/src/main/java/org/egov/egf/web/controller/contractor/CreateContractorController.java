@@ -121,7 +121,10 @@ public class CreateContractorController {
             prepareNewForm(model);
             return NEW;
         }
-
+        String GSTState=contractor.getGstRegisteredState().toUpperCase();
+        contractor.setGstRegisteredState(GSTState);
+        String GST=contractor.getTinNumber().toUpperCase();
+        contractor.setTinNumber(GST);
         contractorService.create(contractor);
 
         redirectAttrs.addFlashAttribute("message", messageSource.getMessage("msg.contractor.success", null, null));
