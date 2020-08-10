@@ -45,6 +45,14 @@ const getMDMSData = async (action, state, dispatch) => {
           ]
         },
         {
+          moduleName: "common-masters",
+          masterDetails: [
+            {
+              name: "uiCommonPay"
+            }
+          ]
+        },
+        {
           moduleName: "tenant",
           masterDetails: [
             {
