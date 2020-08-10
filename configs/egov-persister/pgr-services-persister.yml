@@ -95,10 +95,12 @@ serviceMaps:
     isTransaction: true
     queryMaps:
 
-    - query: UPDATE eg_pgr_service_v2 SET servicecode=?, servicerequestid=?, description=?, accountid=?, additionaldetails=?, applicationstatus=?, lastmodifiedby=?, lastmodifiedtime=? WHERE id=?;
+    - query: UPDATE eg_pgr_service_v2 SET servicecode=?, rating = ?,servicerequestid=?, description=?, accountid=?, additionaldetails=?, applicationstatus=?, lastmodifiedby=?, lastmodifiedtime=? WHERE id=?;
       basePath: PGREntity.service
       jsonMaps:
       - jsonPath: $.PGREntity.service.serviceCode
+
+      - jsonPath: $.PGREntity.service.rating
 
       - jsonPath: $.PGREntity.service.serviceRequestId
 
