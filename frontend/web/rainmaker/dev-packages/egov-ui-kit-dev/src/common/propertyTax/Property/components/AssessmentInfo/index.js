@@ -64,7 +64,7 @@ const transform = (floor, key, generalMDMSDataById, propertyDetails) => {
             ? generalMDMSDataById["UsageCategorySubMinor"][floor["usageCategorySubMinor"]].name
             : "NA";
       }
-      // if (usageCategoryMajor === "RESIDENTIAL" && propertySubType === "SHAREDPROPERTY" && dataKey === "floorNo") {
+      // if (usageCategoryMajor === "RESIDENTIAL" && propertySubType === "BUILTUP.SHAREDPROPERTY" && dataKey === "floorNo") {
       //   return "NA";
       // }
       if (floor[dataKey] === "NONRESIDENTIAL") {
@@ -107,7 +107,7 @@ const transform = (floor, key, generalMDMSDataById, propertyDetails) => {
 //             {
 //               key: getTranslatedLabel("PT_ASSESMENT_INFO_PLOT_SIZE", localizationLabelsData),
 //               value:
-//                 propertyDetails.propertySubType === "SHAREDPROPERTY"
+//                 propertyDetails.propertySubType === "BUILTUP.SHAREDPROPERTY"
 //                   ? "NA"
 //                   : propertyDetails.uom
 //                     ? `${propertyDetails.landArea} ${propertyDetails.uom}`
@@ -166,13 +166,13 @@ const getAssessmentInfo = (propertyDetails, generalMDMSDataById) => {
       {
         key: getTranslatedLabel("PT_ASSESMENT_INFO_PLOT_SIZE", localizationLabelsData),
         value:
-          propertyDetails.propertySubType === "SHAREDPROPERTY"
+          propertyDetails.propertySubType === "BUILTUP.SHAREDPROPERTY"
             ? "NA"
             : propertyDetails.uom
               ? `${propertyDetails.landArea} ${propertyDetails.uom}`
               : `${Math.round(propertyDetails.landArea * 100) / 100} sq yards`,
       },
-      propertyDetails.propertySubType === "SHAREDPROPERTY"
+      propertyDetails.propertySubType === "BUILTUP.SHAREDPROPERTY"
         ? {
           key: getTranslatedLabel("PT_FLOOR_NO", localizationLabelsData),
           value: units.length>0? `${units[0].floorNo}` : "NA",
@@ -234,7 +234,7 @@ let hideSubsectionLabel=false;
     if (propertyDetails && propertyDetails.length > 0) {
       subUnitItems = getUnitInfo(propertyDetails[0]['units']);
       assessmentItems = getAssessmentInfo(propertyDetails[0], generalMDMSDataById);
-      if(propertyDetails[0].propertySubType === "SHAREDPROPERTY"){
+      if(propertyDetails[0].propertySubType === "BUILTUP.SHAREDPROPERTY"){
         hideSubsectionLabel=true;
       }
     }

@@ -1640,6 +1640,10 @@ class FormWizard extends Component {
     {
       set(propertyPayload, "usageCategory",'RESIDENTIAL');
     }
+    if(usageCategory==="NONRESIDENTIAL.NONRESIDENTIAL")
+    {
+      set(propertyPayload, "usageCategory",'NONRESIDENTIAL');
+    }
 
 
     if ((action === "assess" || action === "re-assess") && !propertiesEdited) {

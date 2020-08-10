@@ -476,7 +476,7 @@ const transform = (floor, key, generalMDMSDataById, propertyDetails) => {
             ? generalMDMSDataById["UsageCategorySubMinor"][floor["usageCategorySubMinor"]].name
             : "NA";
       }
-      // if (usageCategoryMajor === "RESIDENTIAL" && propertySubType === "SHAREDPROPERTY" && dataKey === "floorNo") {
+      // if (usageCategoryMajor === "RESIDENTIAL" && propertySubType === "BUILTUP.SHAREDPROPERTY" && dataKey === "floorNo") {
       //   return "NA";
       // }
       if (floor[dataKey] === "NONRESIDENTIAL") {
@@ -519,7 +519,7 @@ const getAssessmentInfo = (propertyDetails, keys, generalMDMSDataById) => {
           {
             key: getTranslatedLabel("PT_ASSESMENT_INFO_PLOT_SIZE", localizationLabelsData),
             value:
-              propertyDetails.propertySubType === "SHAREDPROPERTY"
+              propertyDetails.propertySubType === "BUILTUP.SHAREDPROPERTY"
                 ? "NA"
                 : propertyDetails.uom
                   ? `${propertyDetails.landArea} ${propertyDetails.uom}`

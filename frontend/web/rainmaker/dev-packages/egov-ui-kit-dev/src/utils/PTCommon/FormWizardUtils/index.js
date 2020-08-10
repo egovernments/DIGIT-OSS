@@ -452,7 +452,7 @@ export const getTargetPropertiesDetails = (propertyDetails, self) => {
   const selectedPropertyDetails = propertyDetails;
   // return the latest proeprty details of the selected year
   const lastIndex = 0;
-  if (selectedPropertyDetails[lastIndex].propertySubType === "SHAREDPROPERTY") {
+  if (selectedPropertyDetails[lastIndex].propertySubType === "BUILTUP.SHAREDPROPERTY") {
     selectedPropertyDetails[lastIndex].buildUpArea =
       selectedPropertyDetails[lastIndex] &&
       selectedPropertyDetails[lastIndex].buildUpArea &&
@@ -736,7 +736,7 @@ export const normalizePropertyDetails = (properties, self) => {
     unit.unitArea = Math.round(unitAreaInSqYd * 100) / 100;
     sumOfUnitArea += unit.unitArea;
   });
-  if (propertyDetails[0].propertySubType === "SHAREDPROPERTY") {
+  if (propertyDetails[0].propertySubType === "BUILTUP.SHAREDPROPERTY") {
     propertyDetails[0].buildUpArea = sumOfUnitArea;
   }
   propertyDetails[0].units = units;

@@ -359,10 +359,10 @@ export const transformPropertyDataToAssessInfo = (data) => {
   basicInfoConfig = cloneDeep(basicInfoConfig);
   set(basicInfoConfig, "fields.typeOfUsage.value", propUsageType);
   set(basicInfoConfig, "fields.typeOfBuilding.value", propType);
-  if (propType === "SHAREDPROPERTY") {
+  if (propType === "BUILTUP.SHAREDPROPERTY") {
     configPlot = { fields: { floorCount: { value: 1 } } };
   }
-
+  
   if (formConfigPath["hasPlot"]) {
     configPlot = require(`egov-ui-kit/config/forms/specs/${path}/plotDetails.js`).default;
     configPlot = cloneDeep(configPlot);
@@ -388,7 +388,7 @@ export const transformPropertyDataToAssessInfo = (data) => {
       const floorNo = units[unitIndex]["floorNo"];
       const floorIndex = floorIndexObj[floorNo];
       let formKey =
-        propUsageType !== "RESIDENTIAL" && propType === "SHAREDPROPERTY"
+        propUsageType !== "RESIDENTIAL" && propType === "BUILTUP.SHAREDPROPERTY"
           ? `floorDetails_0_unit_${unitIndex}`
           : `floorDetails_${floorIndex}_unit_${unitIndex}`;
       configFloor = cloneDeep(configFloor);

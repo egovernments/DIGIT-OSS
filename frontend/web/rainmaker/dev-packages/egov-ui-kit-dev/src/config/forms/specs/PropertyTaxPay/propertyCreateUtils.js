@@ -35,8 +35,8 @@ export const createPropertyPayload = (properties, documentsUploadRedux, newPrope
     };
     unit.tenantId = properties[0].tenantId;
     unit.usageCategory =
-      unit.usageCategoryMajor +
-      (unit.usageCategoryMinor ? "." + unit.usageCategoryMinor : "") +
+    unit.usageCategoryMajor +
+     // (unit.usageCategoryMinor ? "." + unit.usageCategoryMinor : "") +
       (unit.usageCategorySubMinor ? "." + unit.usageCategorySubMinor : "") +
       (unit.usageCategoryDetail ? "." + unit.usageCategoryDetail : "");
 
@@ -69,7 +69,7 @@ export const createPropertyPayload = (properties, documentsUploadRedux, newPrope
   properties[0].superBuiltUpArea = properties[0].buildUpArea;
 
   properties[0].propertyType =
-    properties[0].propertySubType === "SHAREDPROPERTY" || properties[0].propertySubType === "INDEPENDENTPROPERTY"
+    properties[0].propertySubType === "BUILTUP.SHAREDPROPERTY" || properties[0].propertySubType === "INDEPENDENTPROPERTY"
       ? properties[0].propertyType + "." + properties[0].propertySubType
       : properties[0].propertyType;
   // Changing usageCategoryMajor to usageCategory

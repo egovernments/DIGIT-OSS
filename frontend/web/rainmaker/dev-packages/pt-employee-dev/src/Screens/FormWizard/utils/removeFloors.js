@@ -28,11 +28,11 @@ export const removeFormKey = (formKey, field, dispatch, state) => {
       }
     }
 
-    if (field.id==="typeOfBuilding" && field.value==="SHAREDPROPERTY") {
+    if (field.id==="typeOfBuilding" && field.value==="BUILTUP.SHAREDPROPERTY") {
       updateFloorCount();
     }
 
-    else if(field.id==="typeOfUsage" && get(state,"common.prepareFormData.Properties[0].propertyDetails[0].propertySubType")==="SHAREDPROPERTY") {
+    else if(field.id==="typeOfUsage" && get(state,"common.prepareFormData.Properties[0].propertyDetails[0].propertySubType")==="BUILTUP.SHAREDPROPERTY") {
       updateFloorCount();
     }
 
