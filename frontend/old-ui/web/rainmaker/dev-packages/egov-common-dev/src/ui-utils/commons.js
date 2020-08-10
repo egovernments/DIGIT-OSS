@@ -533,7 +533,7 @@ export const download = (receiptQueryString, mode = "download", configKey = "con
       // Setting the Payer and mobile from Bill to reflect it in PDF
       state = state ? state : {};
       let billDetails = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0]", null);
-      if((billDetails && !billDetails.payerName) || !billDetails){
+      if ((billDetails && !billDetails.payerName) || !billDetails) {
         billDetails = {
           payerName: get(state, "screenConfiguration.preparedFinalObject.applicationDataForReceipt.owners[0].name", null) || get(state, "screenConfiguration.preparedFinalObject.applicationDataForPdf.owners[0].name", null),
           mobileNumber: get(state, "screenConfiguration.preparedFinalObject.applicationDataForReceipt.owners[0].mobile", null) || get(state, "screenConfiguration.preparedFinalObject.applicationDataForPdf.owners[0].mobile", null),
@@ -611,3 +611,39 @@ export const downloadBill = async (consumerCode, tenantId, configKey = "consolid
 
 }
 
+export const downloadMultipleBill = async (bills = [], configKey) => {
+  try {
+    const DOWNLOADRECEIPT = {
+      GET: {
+        URL: "/pdf-service/v1/_create",
+        ACTION: "_get",
+      },
+    };
+    const queryStr = [
+      { key: "key", value: configKey },
+      { key: "tenantId", value: commonConfig.tenantId }
+    ]
+    const pfResponse = await httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Bill: bills }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
+    downloadReceiptFromFilestoreID(pfResponse.filestoreIds[0], 'download');
+  } catch (error) {
+    console.log(error);
+
+  }
+
+}
+
+
+export const downloadMultipleFileFromFilestoreIds = (fileStoreIds = [], mode, tenantId) => {
+  getFileUrlFromAPI(fileStoreIds.join(','), tenantId).then(async (fileRes) => {
+    fileStoreIds.map(fileStoreId => {
+      if (mode === 'download') {
+        downloadPdf(fileRes[fileStoreId]);
+      } else if (mode === 'open') {
+        openPdf(fileRes[fileStoreId], '_self')
+      }
+      else {
+        printPdf(fileRes[fileStoreId]);
+      }
+    })
+  });
+}
