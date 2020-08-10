@@ -53,13 +53,18 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
+import org.egov.commons.Accountdetailtype;
 import org.egov.commons.CChartOfAccountDetail;
 import org.egov.commons.CChartOfAccounts;
 import org.egov.infra.admin.master.entity.AppConfigValues;
 import org.egov.infra.admin.master.service.AppConfigValueService;
 import org.egov.infra.exception.ApplicationException;
 import org.egov.infra.exception.ApplicationRuntimeException;
+import org.egov.infra.microservice.contract.AccountCodeTemplate;
+import org.egov.infra.microservice.models.ChartOfAccounts;
 import org.egov.infstr.services.PersistenceService;
 import org.hibernate.Query;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,8 +76,13 @@ public class ChartOfAccountsService extends PersistenceService<CChartOfAccounts,
     private static final String PURPOSE_ID = "purposeId";
     private static final String CONTINGENCY_BILL_PURPOSE_IDS = "contingencyBillPurposeIds";
     private static final String GLCODE = "glcode";
+    private static final String CONTRACTOR = "Contractor";
+
     @Autowired
     protected AppConfigValueService appConfigValuesService;
+    
+    @Autowired
+    private AccountdetailtypeService accountdetailtypeService;
 
     public ChartOfAccountsService(final Class<CChartOfAccounts> type) {
         super(type);
@@ -91,6 +101,15 @@ public class ChartOfAccountsService extends PersistenceService<CChartOfAccounts,
                         " from CChartOfAccounts a where a.isActiveForPosting=true and a.classification=4 and (a.glcode like :glcode or lower(a.name) like :name) order by a.glcode");
         entitysQuery.setString(GLCODE, glcode + "%");
         entitysQuery.setString("name", glcode.toLowerCase() + "%");
+        return entitysQuery.list();
+
+    }
+    public List<CChartOfAccounts> getGlCodes( final Set<String> glcodes) {
+
+        final Query entitysQuery = getSession()
+                .createQuery(
+                        " from CChartOfAccounts a where a.isActiveForPosting=true and a.classification=4 and (glcode in (:glcodes)) order by a.id");
+        entitysQuery.setParameterList("glcodes", glcodes);
         return entitysQuery.list();
 
     }
@@ -207,7 +226,7 @@ public class ChartOfAccountsService extends PersistenceService<CChartOfAccounts,
             return entitysQuery.list();
         }
     }
-
+    
     public List<CChartOfAccounts> getAccountCodeByPurpose(final Integer purposeId) {
         final List<CChartOfAccounts> accountCodeList = new ArrayList<CChartOfAccounts>();
         try {
@@ -309,6 +328,7 @@ public class ChartOfAccountsService extends PersistenceService<CChartOfAccounts,
         return new ArrayList<>(netPayList);
     }
 
+
     public List<CChartOfAccounts> getNetPayableCodes() {
         final List<AppConfigValues> configValuesByModuleAndKey = appConfigValuesService.getConfigValuesByModuleAndKey(
                 "EGF", CONTINGENCY_BILL_PURPOSE_IDS);
@@ -394,6 +414,48 @@ public class ChartOfAccountsService extends PersistenceService<CChartOfAccounts,
             entitysQuery.setParameterList("ids", contingencyBillPurposeIds);
             return entitysQuery.list();
         }
+    }
+    
+    public List<CChartOfAccounts> getSubledgerAccountCodesForAccountDetailTypeAndNonSubledgersWithContractors(
+            final Set<String> glcodes) {
+        final List<AppConfigValues> configValuesByModuleAndKey = appConfigValuesService
+                .getConfigValuesByModuleAndKey("EGF", CONTINGENCY_BILL_PURPOSE_IDS);
+        final List<Long> contingencyBillPurposeIds = new ArrayList<>();
+        for (final AppConfigValues av : configValuesByModuleAndKey)
+            contingencyBillPurposeIds.add(Long.valueOf(av.getValue()));
+        final List<CChartOfAccounts> glcodesList = getGlCodes(glcodes);
+        final List<CChartOfAccounts> nonContarctorList = new ArrayList<CChartOfAccounts>();
+        Integer contractorAccountDetailTypeId = null;
+        Accountdetailtype contractorAccountdetailtype = accountdetailtypeService.findByName(CONTRACTOR);
+        contractorAccountDetailTypeId = contractorAccountdetailtype.getId();
+        for (CChartOfAccounts coa : glcodesList) {
+            Boolean contractorExist = false;
+            Boolean check = false;
+            for (CChartOfAccountDetail cad : coa.getChartOfAccountDetails()) {
+                if (cad.getDetailTypeId() != null && cad.getDetailTypeId().getName().equalsIgnoreCase(CONTRACTOR)) {
+                    contractorExist = true;
+                }
+                if (!cad.getDetailTypeId().getName().equalsIgnoreCase(CONTRACTOR)) {
+                    check = true;
+                }
+
+            }
+            if (check && !contractorExist) {
+                nonContarctorList.add(coa);
+
+            }
+
+        }
+        glcodesList.removeAll(nonContarctorList);
+        Map<String, CChartOfAccounts> glcodeSet = glcodesList.stream()
+                .collect(Collectors.toMap(CChartOfAccounts::getGlcode, Function.identity()));
+
+        final Query entitysQuery = getSession().createQuery(
+                "  from CChartOfAccounts  a LEFT OUTER JOIN  fetch a.chartOfAccountDetails  b where (size(a.chartOfAccountDetails) = 0 or b.detailTypeId.id=:accountDetailTypeId) and a.isActiveForPosting=true and a.classification=4 and a.glcode in (:glcodes) and (purposeId is null or purposeId not in (:ids)) order by a.id");
+        entitysQuery.setInteger("accountDetailTypeId", contractorAccountDetailTypeId);
+        entitysQuery.setParameterList("glcodes", glcodeSet.keySet());
+        entitysQuery.setParameterList("ids", contingencyBillPurposeIds);
+        return entitysQuery.list();
     }
 
 }

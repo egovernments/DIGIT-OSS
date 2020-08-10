@@ -20,21 +20,30 @@ import org.springframework.web.context.request.WebRequest;
 @RestController
 @RequestMapping("/accountCodeTemplate")
 public class AccountCodeTemplateController {
-    
+
     @Autowired
     private AccountCodeTemplateService accCodeTempSer;
 
-    @GetMapping(value="/list")
-    public ResponseEntity<List<AccountCodeTemplate>> getTemplateList(@RequestParam("module") String module, @RequestParam("billSubType") String billSubType,
-            @RequestParam("detailTypeName") String detailTypeName, @RequestParam("detailTypeId") int detailTypeId){
-        List<AccountCodeTemplate> list = accCodeTempSer.getAccountTemplate(module, billSubType,  detailTypeName, detailTypeId);
+    @GetMapping(value = "/list")
+    public ResponseEntity<List<AccountCodeTemplate>> getTemplateList(@RequestParam("module") String module,
+            @RequestParam("billSubType") String billSubType, @RequestParam("detailTypeName") String detailTypeName,
+            @RequestParam("detailTypeId") int detailTypeId) {
+        List<AccountCodeTemplate> list = accCodeTempSer.getAccountTemplate(module, billSubType, detailTypeName,
+                detailTypeId);
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
-    
-    @ExceptionHandler(value={ApplicationRuntimeException.class})
-    public final ResponseEntity<Object> accountCodeTemplateException(ApplicationRuntimeException ex, WebRequest request) {
-            GenericExceptionResponse exceptionResponse = new GenericExceptionResponse(new Date(), ex.getMessage(),
-                            request.getDescription(false));
-            return new ResponseEntity(exceptionResponse, HttpStatus.NOT_FOUND);
+
+    @GetMapping(value = "/contarctorlist")
+    public ResponseEntity<List<AccountCodeTemplate>> getContarctorTemplateList(@RequestParam("module") String module) {
+        List<AccountCodeTemplate> list = accCodeTempSer.getAccountTemplate(module, null, null, 0);
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    @ExceptionHandler(value = { ApplicationRuntimeException.class })
+    public final ResponseEntity<Object> accountCodeTemplateException(ApplicationRuntimeException ex,
+            WebRequest request) {
+        GenericExceptionResponse exceptionResponse = new GenericExceptionResponse(new Date(), ex.getMessage(),
+                request.getDescription(false));
+        return new ResponseEntity(exceptionResponse, HttpStatus.NOT_FOUND);
     }
 }

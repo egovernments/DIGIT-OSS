@@ -29,6 +29,7 @@ public class AccountCodeTemplateService {
     
     private static final Logger LOGGER = Logger.getLogger(AccountCodeTemplateService.class);
 
+
     @Autowired
     private MicroserviceUtils microserviceUtils;
 
@@ -44,7 +45,11 @@ public class AccountCodeTemplateService {
             if(accountDetailType == null){
                 accountCodeTemplate = accountCodeTemplate.stream().filter(act -> act.getSubledgerType() == null || act.getSubledgerType().isEmpty()).collect(Collectors.toList());
             }
-            prepareAccountCodeDetails(accountCodeTemplate, detailTypeId);
+            if(module.equalsIgnoreCase("ExpenseBill")&&billSubType!=null) {
+                prepareAccountCodeDetails(accountCodeTemplate, detailTypeId);
+            } else 
+                prepareAccountCodeDetailsWithContractor(accountCodeTemplate);
+                
         } catch (Exception e) {
             LOGGER.error(e);
             throw new ApplicationRuntimeException("Error occurred while fetching AccountCode Template : "+e.getMessage());
@@ -88,6 +93,44 @@ public class AccountCodeTemplateService {
                 }
             }
     }
+    
+    
+    private void prepareAccountCodeDetailsWithContractor(List<AccountCodeTemplate> accountCodeTemplate) {
+        Set<String> debitGlcodeSet = accountCodeTemplate.stream().map(AccountCodeTemplate::getDebitCodeDetails)
+                .flatMap(Collection::stream).map(ChartOfAccounts::getGlcode).collect(Collectors.toSet());
+        Set<String> creditGlcodeSet = accountCodeTemplate.stream().map(AccountCodeTemplate::getCreditCodeDetails)
+                .flatMap(Collection::stream).map(ChartOfAccounts::getGlcode).collect(Collectors.toSet());
+        Set<String> netPayableGlcode = accountCodeTemplate.stream().map(AccountCodeTemplate::getNetPayable)
+                .map(ChartOfAccounts::getGlcode).collect(Collectors.toSet());
+        HashSet<String> allGlCodeSet = new HashSet<>(debitGlcodeSet);
+        allGlCodeSet.addAll(creditGlcodeSet);
+        if (allGlCodeSet != null && !allGlCodeSet.isEmpty()) {
+            
+            List<CChartOfAccounts> coaList = chartOfAccountsService.getSubledgerAccountCodesForAccountDetailTypeAndNonSubledgersWithContractors(allGlCodeSet);
+            List<CChartOfAccounts> netPayableCodesByAccountDetailType = chartOfAccountsService.getContractorNetPayableAccountCodes();
+            Map<String, CChartOfAccounts> glcodeMap = coaList.stream()
+                    .collect(Collectors.toMap(CChartOfAccounts::getGlcode, Function.identity()));
+            Map<String, CChartOfAccounts> netPayableAccCodeMap = netPayableCodesByAccountDetailType.stream().collect(Collectors.toMap(CChartOfAccounts::getGlcode, Function.identity()));
+            for (AccountCodeTemplate temp : accountCodeTemplate) {
+                if (temp.getNetPayable() != null && temp.getNetPayable().getGlcode() != null) {
+                    CChartOfAccounts cChartOfAccounts = netPayableAccCodeMap.get(temp.getNetPayable().getGlcode());
+                    if(cChartOfAccounts != null){
+                        temp.getNetPayable().setId(cChartOfAccounts.getId());
+                        temp.getNetPayable().setIsSubLedger(!cChartOfAccounts.getChartOfAccountDetails().isEmpty());
+                        temp.getNetPayable().setName(cChartOfAccounts.getName());                            
+                    }else{
+                        temp.setNetPayable(null);
+                    }
+                }
+                if (temp.getDebitCodeDetails() != null && !temp.getDebitCodeDetails().isEmpty()) {
+                    populateCoaDetails(glcodeMap, temp.getDebitCodeDetails());
+                }
+                if (temp.getCreditCodeDetails() != null && !temp.getCreditCodeDetails().isEmpty()) {
+                    populateCoaDetails(glcodeMap, temp.getCreditCodeDetails());
+                }
+            }
+        }
+}
 
     private void populateCoaDetails(Map<String, CChartOfAccounts> glcodeMap, List<ChartOfAccounts> accCodeDetails) {
         List<ChartOfAccounts> tempCoa = new ArrayList();

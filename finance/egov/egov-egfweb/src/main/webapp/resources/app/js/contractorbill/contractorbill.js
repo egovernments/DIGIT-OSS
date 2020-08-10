@@ -54,6 +54,7 @@ var debitAmountrowcount=0;
 var creditAmoutrowcount=0;
 var $workOrderId = 0;
 var $contractorId = 0;
+var accountCodeTemplateMap = {};
 $(document).ready(function(){
 	console.log("Browser Language ",navigator.language);
 	$.i18n.properties({ 
@@ -67,7 +68,8 @@ $(document).ready(function(){
 			console.log('File loaded successfully');
 		}
 	});
-	
+	loadAccountCodeTemplate();
+
 	$workOrderId = $('#workOrderId').val();
 	$contractorId = $('#contractorId').val();
 	patternvalidation(); 
@@ -290,14 +292,16 @@ function addDebitDetailsRow() {
 
 function deleteDebitDetailsRow(obj) {
 	var rowcount=$("#tbldebitdetails tbody tr").length;
-    if(rowcount<=1) {
+   if(rowcount<=1) {
 		bootbox.alert($.i18n.prop('msg.this.row.can.not.be.deleted'));
 		return false;
-	} else {
+	} else if (confirm("Are you sure you want to Delete")) {
 		deleteRow(obj,'tbldebitdetails');
 		--debitAmountrowcount;
 		calcualteNetpaybleAmount();
 		return true;
+	}else{
+		return false
 	}
 }
 
@@ -323,14 +327,16 @@ function addCreditDetailsRow() {
 
 function deleteCreditDetailsRow(obj) {
 	var rowcount=$("#tblcreditdetails tbody tr").length;
-    if(rowcount<=1) {
+   if(rowcount<=1) {
 		bootbox.alert($.i18n.prop('msg.this.row.can.not.be.deleted'));
 		return false;
-	} else {
+	} else if (confirm("Are you sure you want to Delete")) {
 		deleteRow(obj,'tblcreditdetails');
 		--creditAmoutrowcount;
 		calcualteNetpaybleAmount();
 		return true;
+	} else{
+    	return false;
 	}	
 }
 
@@ -545,3 +551,148 @@ function loadMisAttributes(orderNumber){
 
 	}
 }
+
+function loadAccountCodeTemplate(){
+		$.ajax({
+			method : "GET",
+			url : "/services/EGF/accountCodeTemplate/contarctorlist",
+			data : {
+						module: 'ContractorBill',
+			},
+			async : true
+		}).done(
+				function(response) {
+					accountCodeTemplateMap = {}
+					var output = '<option value>Select</option>';
+					$('#accountCodeTemplateId').empty();
+					$.each(response, function(index, value) {
+						accountCodeTemplateMap[value.code] = value; 
+						output = output + '<option value="'+value.code+'">'+value.code +' - '+value.name+'</option>'
+				});
+					$('#accountCodeTemplateId').append(output);
+		});
+}
+
+$('#accountCodeTemplateId').change(function () {
+	var selectedTemp = $(this).val();
+	console.log("current1 : ",$.data(this, 'current'));
+	if($(this).val()){
+		populateAccountCodeTemplateDetails(selectedTemp);
+	}
+});
+function reset(){
+	var debitDetailsCount = $("#tbldebitdetails > tbody > tr:visible[id='debitdetailsrow']").length;
+	for (var i = debitDetailsCount; i >= 1; i--) {
+		if(1 == i){
+			document.getElementById('debitDetails[0].debitGlcode').value = "";
+			document.getElementById('debitDetails[0].debitAccountHead').value = "";
+			document.getElementById('debitDetails[0].glcodeid').value = "";
+			document.getElementById('debitDetails[0].debitamount').value = "";
+		}else{
+			var objects = $('.debit-delete-row');
+			deleteRow(objects[i-1],'tbldebitdetails');
+		}
+	}
+	var creditDetailsCount = $("#tblcreditdetails > tbody > tr:visible[id='creditdetailsrow']").length;
+	for (var i = creditDetailsCount; i >= 1; i--) {
+		if(1 == i){
+			document.getElementById('creditDetails[0].creditGlcode').value = "";
+			document.getElementById('creditDetails[0].glcodeid').value = "";
+			document.getElementById('creditDetails[0].creditAccountHead').value = "";
+			document.getElementById('creditDetails[0].creditamount').value = "";
+		}else{
+			var objects = $('.credit-delete-row');
+			deleteRow(objects[i-1],'tblcreditdetails');
+		}
+	}
+
+	$("#netPayableAccountId").val("");
+	$("#netPayableAccountCodeId").val("");
+	$("#netPayableDetailTypeId").val("");
+	$("#netPayableDetailKeyId").val("");
+	$("#netPayableAccountCode").val("");
+	$("#contractor-netPayableAmount").val("");
+	$("#expense-netPayableAmount").val("");
+	$("#contractorNetPayableAmount").val("");
+}
+
+function clearAllDetails() {
+	var debitamount = $("#contractorBillTotalDebitAmount")["0"].innerHTML;
+	var creditamount = $("#contractorBillTotalCreditAmount")["0"].innerHTML;
+	if((debitamount || creditamount) > 0.00){
+		if (confirm("Changing the template would reset the account details that are already captured. Do you want to proceed?")){
+			reset();
+			return true;
+
+		} else {
+			return false;
+		}
+	}else {
+		reset();
+		return true;
+	}	
+	
+}
+
+function populateAccountCodeTemplateDetails(selectedTemp){
+  if(clearAllDetails()){
+	  var accTempDet = accountCodeTemplateMap[selectedTemp];
+		$.each(accTempDet.debitCodeDetails, function(index, value) {
+			$('.debitGlcode').typeahead('destroy');
+			$('.debitGlcode').unbind();
+			$('#tbldebitdetails tbody tr:eq('+index+')').find('.debitDetailGlcode').val(value.glcode+' ~ '+value.name);
+			$('#tbldebitdetails tbody tr:eq('+index+')').find('.debitdetailname').val(value.name);
+			$('#tbldebitdetails tbody tr:eq('+index+')').find('.debitaccountcode').val(value.glcode);
+			$('#tbldebitdetails tbody tr:eq('+index+')').find('.debitdetailid').val(value.id);
+			$('#tbldebitdetails tbody tr:eq('+index+')').find('.debitAmount').val("0");
+			$('#tbldebitdetails tbody tr:eq('+index+')').find('.debitDetailTypeName').val(detailTypeName);
+			$('#tbldebitdetails tbody tr:eq('+index+')').find('.debitDetailKeyName').val(detailKeyName);
+			$('#tbldebitdetails tbody tr:eq('+index+')').find('.debitIsSubLedger').val(value.isSubledger ? true : false);
+			$('#tbldebitdetails tbody tr:eq('+index+')').find('.debitDetailTypeId').val($('#subLedgerType').val());
+			$('#tbldebitdetails tbody tr:eq('+index+')').find('.debitDetailKeyId').val($('#detailkeyId').val());
+			debitGlcode_initialize();
+			if(++index < accTempDet.debitCodeDetails.length)
+				addDebitDetailsRow();
+		});
+		$.each(accTempDet.creditCodeDetails, function(index, value) {
+			$('.creditGlcode').typeahead('destroy');
+			$('.creditGlcode').unbind();
+			$('#tblcreditdetails tbody tr:eq('+index+')').find('.creditDetailGlcode').val(value.glcode+' ~ '+value.name);
+			$('#tblcreditdetails tbody tr:eq('+index+')').find('.creditdetailname').val(value.name);
+			$('#tblcreditdetails tbody tr:eq('+index+')').find('.creditaccountcode').val(value.glcode);
+			$('#tblcreditdetails tbody tr:eq('+index+')').find('.creditdetailid').val(value.id);
+			$('#tblcreditdetails tbody tr:eq('+index+')').find('.creditAmount').val("0");
+			$('#tblcreditdetails tbody tr:eq('+index+')').find('.creditDetailTypeName').val(detailTypeName);
+			$('#tblcreditdetails tbody tr:eq('+index+')').find('.creditDetailKeyName').val(detailKeyName);
+			$('#tblcreditdetails tbody tr:eq('+index+')').find('.creditIsSubLedger').val(value.isSubLedger);
+			$('#tblcreditdetails tbody tr:eq('+index+')').find('.creditDetailTypeId').val($('#subLedgerType').val());
+			$('#tblcreditdetails tbody tr:eq('+index+')').find('.creditDetailKeyId').val($('#detailkeyId').val());
+			creditGlcode_initialize();
+			if(++index < accTempDet.creditCodeDetails.length)
+				addCreditDetailsRow();
+		});
+		if($("#netPayableAccountCode option[value="+accTempDet.netPayable.id+"]").length==1){
+			$('#netPayableAccountCode').val(accTempDet.netPayable.id);
+			$('#netPayableDetailTypeId').val($('#subLedgerType').val());
+			$('#netPayableIsSubLedger').val(accTempDet.netPayable.isSubLedger);
+			$('#netPayableDetailKeyId').val($('#detailkeyId').val());
+			$('#netPayableDetailTypeName').val(detailTypeName);
+			$('#netPayableDetailKeyName').val(detailKeyName);
+			$('#netPayableGlcode').val(accTempDet.netPayable.glcode);
+			$('#netPayableAccountHead').val(accTempDet.netPayable.name+'~'+(accTempDet.netPayable.isSubledger? 'true':'false'));
+		}
+  }
+	
+}
+
+/*$("#accountCodeTemplateId").focus(function() {
+	if( $("#accountCodeTemplateId > option").length <= 1 ) {
+		$("#accountCodeTempEmptyMessage").css("display", "block");
+	}
+});
+
+$("#accountCodeTemplateId").blur(function() {
+	if( $("#accountCodeTemplateId > option").length <= 1 ) {
+		$("#accountCodeTempEmptyMessage").css("display", "none");
+	}
+});*/
