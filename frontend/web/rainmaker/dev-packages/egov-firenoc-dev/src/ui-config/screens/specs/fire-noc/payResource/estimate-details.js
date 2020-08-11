@@ -1,14 +1,7 @@
-import {
-  getBreak,
-  getCommonContainer,
-  getCommonGrayCard,
-  getCommonSubHeader,
-  getLabel,
-  getLabelWithValue
-} from "egov-ui-framework/ui-config/screens/specs/utils";
-import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { getCommonGrayCard } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getFeesEstimateCard } from "../../utils";
 
-export const estimateSummary = getCommonGrayCard({
+const estimate = getCommonGrayCard({
   estimateCard: {
     uiFramework: "custom-containers-local",
     moduleName: "egov-firenoc",
@@ -28,3 +21,5 @@ export const estimateSummary = getCommonGrayCard({
     }
   }
 });
+
+export default estimate;

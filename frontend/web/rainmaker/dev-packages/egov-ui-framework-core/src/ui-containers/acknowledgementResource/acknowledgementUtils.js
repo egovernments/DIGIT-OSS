@@ -149,7 +149,7 @@ const getHeader = (applicationNumber, moduleName) => {
     }),
     applicationNumber: {
       uiFramework: "custom-atoms-local",
-      moduleName: "egov-noc",
+      moduleName: "egov-firenoc",
       componentPath: "ApplicationNoContainer",
       props: {
         number: applicationNumber
