@@ -65,6 +65,7 @@ import org.egov.common.entity.edcr.Measurement;
 import org.egov.common.entity.edcr.OccupancyTypeHelper;
 import org.egov.common.entity.edcr.Plan;
 import org.egov.common.entity.edcr.Result;
+import org.egov.common.entity.edcr.Room;
 import org.egov.common.entity.edcr.RoomHeight;
 import org.egov.common.entity.edcr.ScrutinyDetail;
 import org.egov.edcr.constants.DxfFileConstants;
@@ -141,11 +142,20 @@ public class HeightOfRoom extends FeatureProcess {
                             else if(G.equalsIgnoreCase(mostRestrictiveOccupancy.getType().getCode()))
                                 color = DxfFileConstants.COLOR_INDUSTRIAL_ROOM;
 
-                            if (floor.getAcRoom() != null) {
+                            if (floor.getAcRooms() != null && floor.getAcRooms().size()>0) {
                                 List<BigDecimal> residentialAcRoomHeights = new ArrayList<>();
-                                List<RoomHeight> acHeights = floor.getAcRoom().getHeights();
-                                List<Measurement> acRooms = floor.getAcRoom().getRooms();
+                                
+                                List<RoomHeight> acHeights  = new ArrayList<>();
+                                List<Measurement> acRooms = new ArrayList<>();
 
+                            	 for( Room  room: floor.getAcRooms())
+								{
+									if (room.getHeights() != null)
+										acHeights.addAll(room.getHeights());
+									if (room.getRooms() != null)
+										acRooms.addAll(room.getRooms());
+								}
+                            	
                                 for (RoomHeight roomHeight : acHeights) {
                                     if (heightOfRoomFeaturesColor.get(color) == roomHeight.getColorCode()) {
                                         residentialAcRoomHeights.add(roomHeight.getHeight());
@@ -186,23 +196,32 @@ public class HeightOfRoom extends FeatureProcess {
 
                             }
 
-                            if (floor.getRegularRoom() != null) {
-                                List<BigDecimal> residentialRoomHeights = new ArrayList<>();
-                                List<RoomHeight> heights = floor.getRegularRoom().getHeights();
-                                List<Measurement> rooms = floor.getRegularRoom().getRooms();
+                            if (floor.getRegularRooms() != null  && floor.getRegularRooms().size()>0) {
+                            	
+								List<BigDecimal> residentialRoomHeights = new ArrayList<>();
 
-                                for (RoomHeight roomHeight : heights) {
-                                    if (heightOfRoomFeaturesColor.get(color) == roomHeight.getColorCode()) {
-                                        residentialRoomHeights.add(roomHeight.getHeight());
-                                    }
-                                }
+								List<RoomHeight> heights = new ArrayList<>();
+								List<Measurement> rooms = new ArrayList<>();
 
-                                for (Measurement room : rooms) {
-                                    if (heightOfRoomFeaturesColor.get(color) == room.getColorCode()) {
-                                        roomAreas.add(room.getArea());
-                                        roomWidths.add(room.getWidth());
-                                    }
-                                }
+								for (Room room : floor.getRegularRooms()) {
+									if (room.getHeights() != null)
+										heights.addAll(room.getHeights());
+									if (room.getRooms() != null)
+										rooms.addAll(room.getRooms());
+								}
+
+								for (RoomHeight roomHeight : heights) {
+									if (heightOfRoomFeaturesColor.get(color) == roomHeight.getColorCode()) {
+										residentialRoomHeights.add(roomHeight.getHeight());
+									}
+								}
+
+								for (Measurement room : rooms) {
+									if (heightOfRoomFeaturesColor.get(color) == room.getColorCode()) {
+										roomAreas.add(room.getArea());
+										roomWidths.add(room.getWidth());
+									}
+								}
 
                                 if (!residentialRoomHeights.isEmpty()) {
                                     BigDecimal minHeight = residentialRoomHeights.stream().reduce(BigDecimal::min).get();
