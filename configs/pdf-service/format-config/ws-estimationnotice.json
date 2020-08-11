@@ -503,7 +503,13 @@
             },
             {
                 "text": "{{approved_by}}",
-                "alignment": "center"
+                "alignment": "center",
+                "margin": [
+                    -39,
+                    -30,
+                    -38,
+                    0
+                ]
             }
         ],
         "styles": {
