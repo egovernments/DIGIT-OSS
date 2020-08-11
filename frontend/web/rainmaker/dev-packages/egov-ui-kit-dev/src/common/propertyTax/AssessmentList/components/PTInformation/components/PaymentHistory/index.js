@@ -42,32 +42,36 @@ class PaymentHistory extends Component {
             alignItems: "right",
         };
         const { Payments = [] ,downloadReceipt} = this.props;
-        const paymentHistoryItems = Payments.map((payment, index) => {
-            return (
-                <div>
-                    {getFullRow("PT_HISTORY_RECEIPT_NO", payment.paymentDetails[0].receiptNumber ? '' + payment.paymentDetails[0].receiptNumber : "NA", 12)}
-                    {getFullRow("PT_HISTORY_AMOUNT_PAID", payment.totalAmountPaid ? 'Rs ' + payment.totalAmountPaid : "NA", 12)}
-                    {getFullRow("PT_HISTORY_PAYMENT_DATE", payment.transactionDate ? getFormattedDate(payment.transactionDate) : "NA", 12)}
-                    {getFullRow("PT_HISTORY_BILL_NO", payment.paymentDetails[0].bill.billNumber ? '' + payment.paymentDetails[0].bill.billNumber : "NA", 12)}
-                    {getFullRow("PT_HISTORY_BILL_PERIOD", this.getBillPeriod(payment.paymentDetails[0].bill.billDetails), 6)}
-                    <div className="col-sm-6 col-xs-12" style={{ marginBottom: 10, marginTop: 5 }}>
-                        <div className="assess-history" style={{ float: "right" }}>
-                            <Button
-                                label={<Label buttonLabel={true} label="PT_DOWNLOAD_RECEIPT" color="rgb(254, 122, 81)" fontSize="16px" height="35px" labelStyle={labelStyle} />}
-                                buttonStyle={buttonStyle}
-                                onClick={() => {
-                                    const receiptQueryString= [
-                                            { key: "receiptNumbers", value: payment.paymentDetails[0].receiptNumber },
-                                            { key: "tenantId", value: payment.paymentDetails[0].tenantId }
-                                          ]
-                                    downloadReceipt(receiptQueryString)
-                                    // lastElement.onClick();
-                                }}
-                            ></Button>
-                        </div>
-                    </div >
-                </div>)
+        console.log("prasad this.props", this.props);
+        console.log("prasad Payments Object", Payments);
 
+        const paymentHistoryItems = Payments.map((payment, index) => {
+           
+                return (
+                    <div>
+                        {getFullRow("PT_HISTORY_RECEIPT_NO", payment.paymentDetails[0].receiptNumber ? '' + payment.paymentDetails[0].receiptNumber : "NA", 12)}
+                        {getFullRow("PT_HISTORY_AMOUNT_PAID", payment.totalAmountPaid ? 'Rs ' + payment.totalAmountPaid : "NA", 12)}
+                        {getFullRow("PT_HISTORY_PAYMENT_DATE", payment.transactionDate ? getFormattedDate(payment.transactionDate) : "NA", 12)}
+                        {getFullRow("PT_HISTORY_BILL_NO", payment.paymentDetails[0].bill.billNumber ? '' + payment.paymentDetails[0].bill.billNumber : "NA", 12)}
+                        {getFullRow("PT_HISTORY_BILL_PERIOD", this.getBillPeriod(payment.paymentDetails[0].bill.billDetails), 6)}
+                        <div className="col-sm-6 col-xs-12" style={{ marginBottom: 10, marginTop: 5 }}>
+                            <div className="assess-history" style={{ float: "right" }}>
+                            {payment.instrumentStatus!=="CANCELLED"? <Button
+                                    label={<Label buttonLabel={true} label="PT_DOWNLOAD_RECEIPT" color="rgb(254, 122, 81)" fontSize="16px" height="35px" labelStyle={labelStyle} />}
+                                    buttonStyle={buttonStyle}
+                                    onClick={() => {
+                                        const receiptQueryString= [
+                                                { key: "receiptNumbers", value: payment.paymentDetails[0].receiptNumber },
+                                                { key: "tenantId", value: payment.paymentDetails[0].tenantId }
+                                              ]
+                                        downloadReceipt(receiptQueryString)
+                                        // lastElement.onClick();
+                                    }}
+                                ></Button>:""}
+                            </div>
+                        </div >
+                    </div>)               
+            
         })
         return paymentHistoryItems;
     }
