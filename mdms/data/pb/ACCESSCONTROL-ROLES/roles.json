@@ -491,6 +491,11 @@
       "code": "AIRPORT_AUTHORITY_APPROVER",
       "name": "Airport authority Approver",
       "description": "Airport authority application approver"
+    },
+    {
+      "code": "CFC",
+      "name": "Citizen Feedback Centre",
+      "description": "Citizen Feedback Centre"
     }
   ]
 }

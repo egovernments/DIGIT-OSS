@@ -16822,6 +16822,18 @@
       "serviceCode": "pgr-services",
       "code": "null",
       "path": ""
+    },
+    {
+      "id": 2009,
+      "name": "Search PGR Request",
+      "url": "/pgr-services/v2/requests/_count",
+      "parentModule": "",
+      "displayName": "Count PGR Request",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "pgr-services",
+      "code": "null",
+      "path": ""
     }
   ]
 }
