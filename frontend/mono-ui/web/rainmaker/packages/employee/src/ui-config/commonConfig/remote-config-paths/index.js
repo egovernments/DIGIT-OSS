@@ -23,7 +23,7 @@ const remoteConfigPath = (path, screenKey) => {
       config = require(`egov-bpa/ui-config/screens/specs/${path}/${screenKey}`).default;
       break;
     case "fire-noc":
-      config = require(`egov-noc/ui-config/screens/specs/${path}/${screenKey}`).default;
+      config = require(`egov-firenoc/ui-config/screens/specs/${path}/${screenKey}`).default;
       break;
     case "abg":
       config = require(`egov-abg/ui-config/screens/specs/${path}/${screenKey}`).default;
