@@ -705,9 +705,9 @@
           {
             "type": "line",
             "x1": -40,
-            "y1": 30,
+            "y1": 28,
             "x2": 700,
-            "y2": 30,
+            "y2": 28,
             "dash": {
               "length": 10,
               "space": 5
@@ -717,19 +717,18 @@
       },
       {
         "image": "{{scissorImage}}",
-        "width": 24,
-        "height": 24,
+        "width": 19,
+        "height": 19,
         "margin": [
           -30,
-          -11.2,
+          -9.8,
           0,
           0
         ]
       },
       {
         "text": "{{acknowledgement_for}}",
-        "style": "footer-header",
-        "pageBreak": "before"
+        "style": "footer-header"
       },
       {
         "style": "noc-table4",
