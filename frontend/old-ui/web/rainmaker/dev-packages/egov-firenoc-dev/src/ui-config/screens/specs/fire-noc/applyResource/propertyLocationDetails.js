@@ -14,8 +14,9 @@ import {
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import { httpRequest } from "../../../../../ui-utils/api";
-import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
+import "./index.css";
 
 const showHideMapPopup = (state, dispatch) => {
   let toggle = get(
@@ -174,8 +175,15 @@ export const propertyLocationDetails = getCommonCard(
         jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.propertyId"
       }),
       propertyCity: {
-        ...getSelectField({
-          label: { labelName: "City", labelKey: "NOC_PROPERTY_CITY_LABEL" },
+        uiFramework: "custom-containers-local",
+        moduleName: "egov-firenoc",
+        componentPath: "AutosuggestContainer",
+        jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",
+        props: {
+          label: { 
+            labelName: "City", 
+            labelKey: "NOC_PROPERTY_CITY_LABEL" 
+          },
           localePrefix: {
             moduleName: "TENANT",
             masterName: "TENANTS"
@@ -185,14 +193,17 @@ export const propertyLocationDetails = getCommonCard(
             labelName: "Select City",
             labelKey: "NOC_PROPERTY_CITY_PLACEHOLDER"
           },
-          sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
           jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",
-          required: true,
-          props: {
-            required: true
-            // disabled: true
-          }
-        }),
+          sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
+          className:"applicant-details-error autocomplete-dropdown",
+          required: true
+        },
+        required: true,
+        gridDefination: {
+          xs: 12,
+          sm: 12,
+          md: 6
+        },
         beforeFieldChange: async (action, state, dispatch) => {
           //Below only runs for citizen - not required here in employee
           dispatch(
@@ -202,6 +213,7 @@ export const propertyLocationDetails = getCommonCard(
             )
           );
           try {
+            dispatch(fetchLocalizationLabel(getLocale(), action.value, action.value));
             let payload = await httpRequest(
               "post",
               "/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
@@ -255,13 +267,10 @@ export const propertyLocationDetails = getCommonCard(
               )
             );
 
-            dispatch(
-              fetchLocalizationLabel(getLocale(), action.value, action.value)
-            );
           } catch (e) {
             console.log(e);
           }
-          // Set Firestation based on ULB
+          // Set Firestation based on ULBl
           let fireStationsList = get(
             state,
             "screenConfiguration.preparedFinalObject.applyScreenMdmsData.firenoc.FireStations",
@@ -285,6 +294,9 @@ export const propertyLocationDetails = getCommonCard(
           labelName: "Plot/Survey No.",
           labelKey: "NOC_PROPERTY_PLOT_NO_LABEL"
         },
+        props:{
+          className:"applicant-details-error"
+        },
         placeholder: {
           labelName: "Enter Plot/Survey No.",
           labelKey: "NOC_PROPERTY_PLOT_NO_PLACEHOLDER"
@@ -297,6 +309,9 @@ export const propertyLocationDetails = getCommonCard(
         label: {
           labelName: "Building/Colony Name",
           labelKey: "NOC_PROPERTY_DETAILS_BLDG_NAME_LABEL"
+        },
+        props:{
+          className:"applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Building/Colony Name",
@@ -313,6 +328,9 @@ export const propertyLocationDetails = getCommonCard(
           labelName: "Street Name",
           labelKey: "NOC_PROPERTY_DETAILS_SRT_NAME_LABEL"
         },
+        props:{
+          className:"applicant-details-error"
+        },
         placeholder: {
           labelName: "Enter Street Name",
           labelKey: "NOC_PROPERTY_DETAILS_SRT_NAME_PLACEHOLDER"
@@ -324,10 +342,9 @@ export const propertyLocationDetails = getCommonCard(
       propertyMohalla: {
         uiFramework: "custom-containers",
         componentPath: "AutosuggestContainer",
-        jsonPath:
-          "FireNOCs[0].fireNOCDetails.propertyDetails.address.locality.code",
+        jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.locality.code",
         required: true,
-        props: {
+        props: { 
           style: {
             width: "100%",
             cursor: "pointer"
@@ -370,6 +387,9 @@ export const propertyLocationDetails = getCommonCard(
         label: {
           labelName: "Pincode",
           labelKey: "NOC_PROPERTY_DETAILS_PIN_LABEL"
+        },
+        props:{
+          className:"applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Pincode",
@@ -432,22 +452,36 @@ export const propertyLocationDetails = getCommonCard(
           }
         }
       },
-      propertyFirestation: getSelectField({
-        label: {
-          labelName: "Applicable Fire Station",
-          labelKey: "NOC_PROPERTY_DETAILS_FIRESTATION_LABEL"
+      propertyFirestation: {
+        uiFramework: "custom-containers-local",
+        moduleName: "egov-firenoc",
+        componentPath: "AutosuggestContainer",
+        props:{
+          className:"applicant-details-error autocomplete-dropdown",
+          label: {
+            labelName: "Applicable Fire Station",
+            labelKey: "NOC_PROPERTY_DETAILS_FIRESTATION_LABEL"
+          },
+          placeholder: {
+            labelName: "Select Applicable Fire Station",
+            labelKey: "NOC_PROPERTY_DETAILS_FIRESTATION_PLACEHOLDER"
+          },
+          required: true,
+          labelsFromLocalisation: true,
+          localePrefix: {
+            moduleName: "firenoc",
+            masterName: "FireStations"
+          },
+          jsonPath: "FireNOCs[0].fireNOCDetails.firestationId",
         },
-        placeholder: {
-          labelName: "Select Applicable Fire Station",
-          labelKey: "NOC_PROPERTY_DETAILS_FIRESTATION_PLACEHOLDER"
-        },
-        jsonPath: "FireNOCs[0].fireNOCDetails.firestationId",
         required: true,
-        localePrefix: {
-          moduleName: "firenoc",
-          masterName: "FireStations"
-        }
-      })
+        jsonPath: "FireNOCs[0].fireNOCDetails.firestationId",
+        gridDefination: {
+          xs: 12,
+          sm: 12,
+          md: 6
+        },
+      },
     }),
     mapsDialog: {
       componentPath: "Dialog",

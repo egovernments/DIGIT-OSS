@@ -1,6 +1,6 @@
-import { applicantSummaryDetails, institutionSummaryDetail } from "egov-noc/ui-config/screens/specs/fire-noc/summaryResource/applicantSummary";
-import { nocSummaryDetail } from "egov-noc/ui-config/screens/specs/fire-noc/summaryResource/nocSummary";
-import { propertyLocationSummaryDetail, propertySummaryDetails } from "egov-noc/ui-config/screens/specs/fire-noc/summaryResource/propertySummary";
+import { applicantSummaryDetails, institutionSummaryDetail } from "egov-firenoc/ui-config/screens/specs/fire-noc/summaryResource/applicantSummary";
+import { nocSummaryDetail } from "egov-firenoc/ui-config/screens/specs/fire-noc/summaryResource/nocSummary";
+import { propertyLocationSummaryDetail, propertySummaryDetails } from "egov-firenoc/ui-config/screens/specs/fire-noc/summaryResource/propertySummary";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { getLocale, getLocalization } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
