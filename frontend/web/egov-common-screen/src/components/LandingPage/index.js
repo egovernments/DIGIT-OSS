@@ -217,7 +217,9 @@ class LandingPage extends React.Component {
                     </ListItem>
                   </List>
                 </CardContent>
-                <CardActions style={{ padding: "16px" }}>
+                <CardActions 
+                className="csButton"
+                style={{ padding: "16px" }}>
                   <a href="/citizen" id="buttonlink" className={classes.btn}>
                     लॉग इन / LOGIN
                   </a>
@@ -225,7 +227,9 @@ class LandingPage extends React.Component {
               </Card>
             </Grid>
             <Grid item md={5} className="common-grid">
-              <Card style={{ borderRadius: 0, height: 420 }}>
+              <Card
+                className="firstcard" 
+              style={{ borderRadius: 0, height: 420 }}>
                 <CardContent style={{ height: 300 }}>
                   <Grid container alignItems="center">
                     <Grid item md={1}>
@@ -295,7 +299,9 @@ class LandingPage extends React.Component {
                     </ListItem>
                   </List>
                 </CardContent>
-                <CardActions style={{ padding: "16px" }}>
+                <CardActions 
+                className="csButton" 
+                style={{ padding: "16px" }}>
                   <a href="/employee" id="buttonlink2" className={classes.btn}>
                     लॉग इन / LOGIN
                   </a>

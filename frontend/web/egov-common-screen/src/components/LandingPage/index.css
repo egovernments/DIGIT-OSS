@@ -34,7 +34,7 @@
     }
     .rlink
     {
-        text-align: left !important;
+      text-align: left !important;
       margin-left: 33px !important;
       margin-right: 20px !important;
     }
@@ -58,7 +58,7 @@
     {
         margin-top : 34px;
         width:120px !important;
-
+    
     }
     #buttonlink2
     {
@@ -67,7 +67,7 @@
     }
     .rlink
     {
-        text-align: left !important;
+      text-align: left !important;
       margin-left: 33px !important;
       margin-right: 20px !important;
     }
@@ -88,5 +88,22 @@
         height: 110% ;
 
     }
+
+}
+
+@media only screen and (min-width: 320px) and (max-width: 330px)
+
+{
+
+    .firstcard
+    {
+        border-radius: 0px;
+    height: 487px !important;
+    }
+    .csButton
+    {
+        margin-top: 63px;
+    }
+
 
 }
