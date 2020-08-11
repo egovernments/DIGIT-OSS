@@ -16771,7 +16771,7 @@
       "lastModifiedDate": null,
       "lastModifiedBy": null,
       "path": "Noc.Search NOC Application",
-      "navigationURL": "egov-common-noc/search",
+      "navigationURL": "noc/search",
       "quickAction": true,
       "leftIcon": "communication:business",
       "rightIcon": ""
