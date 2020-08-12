@@ -5,13 +5,14 @@ import {
   subUsageType,
   occupancy,
   builtArea,
-  annualRent,
   beforeInitForm,
   mergeMaster,
   prepareDropDownData,
   getPresentMasterObj,
   getAbsentMasterObj,
   floorName,
+  annualRent,
+  constructionType
 } from "../utils/reusableFields";
 import filter from "lodash/filter";
 import get from "lodash/get";
@@ -32,7 +33,10 @@ const formConfig = {
       numcols: 4,
       dropDownData: [],
       updateDependentFields: ({ formKey, field, dispatch, state }) => {
-        let minorObject = get(state, `common.generalMDMSDataById.UsageCategoryMinor[${field.value}]`);
+        let minorObject={};
+        if(window.location.href.includes('dataentry') && field.value !="RESIDENTIAL" || !window.location.href.includes('dataentry')){
+         minorObject = get(state, `common.generalMDMSDataById.UsageCategoryMinor[${field.value}]`);
+       }
         if (!isEmpty(minorObject)) {
           dispatch(prepareFormData(`${field.jsonPath.split("usageCategoryMinor")[0]}usageCategoryMajor`, minorObject.usageCategoryMajor));
           var filteredSubUsageMinor = filter(
@@ -61,9 +65,10 @@ const formConfig = {
     },
     ...subUsageType,
     ...occupancy,
+    ...constructionType,
     ...builtArea,
     ...floorName,
-    ...annualRent,
+    ...annualRent
   },
   isFormValid: false,
   ...beforeInitForm,

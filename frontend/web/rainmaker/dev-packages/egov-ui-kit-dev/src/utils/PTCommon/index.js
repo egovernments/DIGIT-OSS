@@ -368,7 +368,7 @@ export const transformPropertyDataToAssessInfo = (data) => {
     configPlot = cloneDeep(configPlot);
     Object.keys(configPlot["fields"]).map((item) => {
       let jsonPath = configPlot["fields"][item]["jsonPath"];
-      if (item === "plotSize" && (propType === "VACANT" || propType === "INDEPENDENTPROPERTY")) {
+      if (item === "plotSize" && (propType === "VACANT" || propType === "BUILTUP.INDEPENDENTPROPERTY")) {
         let value = get(data, modifyEndOfJsonPath(jsonPath, "landArea"));
         configPlot["fields"][item]["value"] = value;
       } else {

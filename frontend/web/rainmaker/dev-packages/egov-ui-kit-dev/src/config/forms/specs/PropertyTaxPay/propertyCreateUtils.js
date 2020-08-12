@@ -69,7 +69,7 @@ export const createPropertyPayload = (properties, documentsUploadRedux, newPrope
   properties[0].superBuiltUpArea = properties[0].buildUpArea;
 
   properties[0].propertyType =
-    properties[0].propertySubType === "BUILTUP.SHAREDPROPERTY" || properties[0].propertySubType === "INDEPENDENTPROPERTY"
+    properties[0].propertySubType === "BUILTUP.SHAREDPROPERTY" || properties[0].propertySubType === "BUILTUP.INDEPENDENTPROPERTY"
       ? properties[0].propertyType + "." + properties[0].propertySubType
       : properties[0].propertyType;
   // Changing usageCategoryMajor to usageCategory

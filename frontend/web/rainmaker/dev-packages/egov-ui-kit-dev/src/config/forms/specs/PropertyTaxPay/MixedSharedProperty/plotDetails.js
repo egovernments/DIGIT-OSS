@@ -5,7 +5,6 @@ import {
   subUsageType,
   occupancy,
   builtArea,
-  annualRent,
   beforeInitForm,
   mergeMaster,
   prepareDropDownData,
@@ -15,6 +14,7 @@ import {
   beforeInitFormForPlot,
   superArea,
   floorName,
+  annualRent
 } from "../utils/reusableFields";
 import filter from "lodash/filter";
 import get from "lodash/get";
@@ -67,7 +67,7 @@ const formConfig = {
     ...superArea,
     ...measuringUnit,
     ...annualRent,
-    ...floorName,
+    ...floorName
   },
   isFormValid: false,
   ...beforeInitFormForPlot,
