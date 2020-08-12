@@ -41,7 +41,7 @@ const combinationToFormkeyMapping = {
     hasPlot: true,
     hasFloor: false,
   },
-  "MIXED-INDEPENDENTPROPERTY": {
+  "MIXED-BUILTUP.INDEPENDENTPROPERTY": {
     path: "PropertyTaxPay/MixedIndependantProperty",
     plotForm: formHoc({
       formKey: "plotDetails",
@@ -78,7 +78,7 @@ const combinationToFormkeyMapping = {
     hasPlot: false,
     hasFloor: true,
   },
-  "NONRESIDENTIAL-INDEPENDENTPROPERTY": {
+  "NONRESIDENTIAL-BUILTUP.INDEPENDENTPROPERTY": {
     path: "PropertyTaxPay/CommercialIndependantProperty",
     plotForm: formHoc({
       formKey: "plotDetails",

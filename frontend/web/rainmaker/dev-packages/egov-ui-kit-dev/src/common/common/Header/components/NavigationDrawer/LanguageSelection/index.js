@@ -54,7 +54,7 @@ class LanguageSelection extends Component {
           <Label
             className="menuStyle with-childs"
             containerStyle={{ marginLeft: 0, marginBottom: 10, marginRight: 80 }}
-            label={"ACTION_TEST_LANGUAGE"}
+            label="ACTION_TEST_LANGUAGE"
             color="rgba(0, 0, 0, 0.87)"
           />
 

@@ -143,7 +143,8 @@ const createReceiptUIInfo = (property, receiptDetails, cities, totalAmountToPay,
   const amountDue = receiptDetails && (success ? totalAmountToPay - totalAmountPaid : amountToPay).toString();
   const { owners: ownerDetails, institution, ownershipCategory } = property.propertyDetails[0];
   const { financialYear } = latestPropertyDetails;
-  const isInstitution = ownershipCategory === "INSTITUTIONALPRIVATE" || ownershipCategory === "INSTITUTIONALGOVERNMENT";
+  const isInstitution =ownershipCategory && !ownershipCategory.includes("INDIVIDUAL");
+  // ownershipCategory === "INSTITUTIONALPRIVATE" || ownershipCategory === "INSTITUTIONALGOVERNMENT";
   const ownerInfo = isInstitution
     ? [{ key: "PT_INSTITUTION_NAME", value: institution.name }, { key: "PT_AUTHORISED_PERSON_NAME", value: ownerDetails[0].name }]
     : ownerDetails.map((item, index) => {

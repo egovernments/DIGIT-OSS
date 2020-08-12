@@ -18,6 +18,9 @@ export const getLocalization = (key) => {
 export const getLocale = () => {
   return localStorage.getItem("locale");
 };
+export const getFinalData = () => {
+  return JSON.parse(localStorage.getItem("finalData"));
+};
 
 //SET methods
 export const setUserInfo = (userInfo) => {
@@ -46,6 +49,7 @@ export const clearUserDetails = () => {
       window.localStorage.removeItem(key);
     }
   });
+  window.localStorage.removeItem("user-info");
 };
 //Role specific get-set Methods
 export const localStorageGet = (key, path) => {

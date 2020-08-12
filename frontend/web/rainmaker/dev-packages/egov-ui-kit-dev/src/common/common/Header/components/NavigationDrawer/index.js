@@ -12,7 +12,7 @@ import LanguageSelection from "./LanguageSelection";
 // import menuItems from "./menuItems";
 import { ActionMenu } from "modules/common";
 import logoMseva from "egov-ui-kit/assets/images/logo_black.png";
-import logo from "egov-ui-kit/assets/images/logo_black.png";
+import logo from "egov-ui-kit/assets/images/uttarakhandlogo.png";
 
 const styles = {
   // listInnerDivStyle: {
@@ -107,15 +107,9 @@ const NavigationDrawer = ({
 
         <div className="rainmaker-displayInline" style={{ justifyContent: "left" ,marginLeft:"10px"}}>
           <div style={{ marginTop: "42px" }}>
-            <img  src={logo} height="14px !important"/>
+            <img  src={logo} height="21px !important"/>
           </div >
-          <div style={{ marginLeft: "2px", marginTop: "44px"  }}>
-            <Label bold={true} fontSize="13px" bold={true} label="|" />
-          </div>
-          <div style={{ marginLeft: "2px" ,marginTop: "44px"  }}>
-            <Label bold={true} color="black" bold={true} fontSize="13px" label="STATE_LABEL" />
-          </div >
-          <div style={{ marginTop: "42px" ,marginLeft:"65px" }}>
+          <div style={{ marginTop: "42px" ,marginLeft:"19px" }}>
           <img src={digitLogo} height="14px !important" />
           </div>
         </div>
@@ -123,5 +117,6 @@ const NavigationDrawer = ({
     </Drawer>
   );
 };
+
 
 export default NavigationDrawer;

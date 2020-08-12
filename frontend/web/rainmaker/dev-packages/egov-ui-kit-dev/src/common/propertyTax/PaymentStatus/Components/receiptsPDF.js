@@ -11,16 +11,16 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 const generateReceipt = (role, details, generalMDMSDataById, receiptImageUrl, isEmployeeReceipt, extraData) => {
   const state = store.getState();
   if (extraData) 
-      {
-        var stateCopy = JSON.parse(JSON.stringify(state));
-        if (stateCopy.app)
-          delete stateCopy.app;
-        if (stateCopy.common)
-          delete stateCopy.common;
+  {
+    var stateCopy = JSON.parse(JSON.stringify(state));
+    if (stateCopy.app) 
+    delete stateCopy.app;
+    if (stateCopy.common) 
+    delete stateCopy.common;
 
-        extraData.state = stateCopy;
-
-      }
+    extraData.state = stateCopy;
+    
+  }
   let data;
   let { owners, address, propertyDetails, tax, taxNew, receipts, header } = details;
   let tableborder = {
@@ -104,7 +104,8 @@ const generateReceipt = (role, details, generalMDMSDataById, receiptImageUrl, is
         const { institution } = propertyDetails[0] || {};
         const isInstitution =
           propertyDetails && propertyDetails.length
-            ? propertyDetails[0].ownershipCategory === "INSTITUTIONALPRIVATE" || propertyDetails[0].ownershipCategory === "INSTITUTIONALGOVERNMENT"
+            ? propertyDetails[0].ownershipCategory && !propertyDetails[0].ownershipCategory.includes("INDIVIDUAL")  
+            // propertyDetails[0].ownershipCategory === "INSTITUTIONALPRIVATE" || propertyDetails[0].ownershipCategory === "INSTITUTIONALGOVERNMENT"
             : false;
         const transformedArray = ownerArray.map((item, index) => {
           return [
@@ -470,15 +471,14 @@ const generateReceipt = (role, details, generalMDMSDataById, receiptImageUrl, is
     default:
   }
   if (data) {
-    if (window.appOverrides.validateForm)
-      {
-        window.appOverrides.validateForm("PTReceipt", {pdf: data, details: details, role:role, extraData: extraData})
-      }
+    if (window.appOverrides && window.appOverrides.validateForm) {
+      window.appOverrides.validateForm("PTReceipt", { pdf: data, details: details, role: role, extraData: extraData });
+    }
 
-    var receiptPDF = pdfMake.createPdf(data)
+    var receiptPDF = pdfMake.createPdf(data);
     var doNotDownloadReceipt = false;
-    if (window.appOverrides.submitForm) {
-      doNotDownloadReceipt = window.appOverrides.submitForm("PTReceipt", {pdf: receiptPDF});
+    if (window.appOverrides && window.appOverrides.submitForm) {
+      doNotDownloadReceipt = window.appOverrides.submitForm("PTReceipt", { pdf: receiptPDF });
     }
 
     if (doNotDownloadReceipt !== true)
