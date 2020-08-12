@@ -32,7 +32,7 @@ const capturePaymentDetails = getCommonGrayCard({
           tabButton: "COMMON_CHEQUE",
           tabIcon: "Schedule",
           tabContent: { cheque }
-        },
+        }/* ,
         {
           tabButton: "COMMON_DD",
           tabIcon: "Schedule",
@@ -42,7 +42,7 @@ const capturePaymentDetails = getCommonGrayCard({
           tabButton: "COMMON_CREDIT_DEBIT_CARD",
           tabIcon: "Schedule",
           tabContent: { card }
-        }
+        } */
       ]
     },
     type: "array"
