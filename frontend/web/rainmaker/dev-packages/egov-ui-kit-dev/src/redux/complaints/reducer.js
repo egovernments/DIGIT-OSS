@@ -60,8 +60,8 @@ const complaintsReducer = (state = intialState, action) => {
         error: true,
         errorMessage: action.error,
       };
-  /*   case actionTypes.COMPLAINTS_CATEGORIES_FETCH_SUCCESS:
-      let categoriesById = transformById(action.payload.MdmsRes["RAINMAKER-PGR"].ServiceDefs, "serviceCode");
+    case actionTypes.COMPLAINTS_CATEGORIES_FETCH_SUCCESS:
+      let categoriesById = !isEmpty(action.payload.MdmsRes) && transformById(action.payload.MdmsRes["RAINMAKER-PGR"].ServiceDefs, "serviceCode");
       return {
         ...state,
         loading: false,
@@ -69,7 +69,7 @@ const complaintsReducer = (state = intialState, action) => {
           ...state.categoriesById,
           ...categoriesById,
         },
-      }; */
+      };
     case actionTypes.COMPLAINTS_SORT_ORDER:
       return {
         ...state,

@@ -2,7 +2,7 @@
     color: rgba(0, 0, 0, 0.87);
     font-family: Roboto;
     font-size: 20px;
-    font-weight: 500;
+    font-weight: 600;
     line-height: 28px;
     text-align: left;
   }
@@ -16,18 +16,17 @@
     text-align: left;
   }
 
-  .footer-amount {
+.footer-amount {
     color: rgba(0, 0, 0, 0.87);
     font-family: Roboto;
     font-size: 24px;
     font-weight: 500;
     line-height: 29px;
     text-align: left;
+    padding: 12px;
+    top: 5px;
     position: relative;
-    display: inline-block;
-    top: 0.07em;
   }
-
   .footer-amount-no {
     font-size: 24px;
     color: rgba(0, 0, 0, 0.87);

@@ -7,7 +7,7 @@ import { convertEpochToDate } from "egov-ui-framework/ui-config/screens/specs/ut
 import Label from "egov-ui-kit/utils/translationNode";
 import HistoryCard from "../../../../../Property/components/HistoryCard";
 import { getFullRow } from "../AssessmentHistory";
-import { navigateToApplication } from "egov-ui-kit/utils/commons";
+import { getApplicationType, getDateFromEpoch, navigateToApplication } from "egov-ui-kit/utils/commons";
 
 const labelStyle = {
     letterSpacing: 1.2,

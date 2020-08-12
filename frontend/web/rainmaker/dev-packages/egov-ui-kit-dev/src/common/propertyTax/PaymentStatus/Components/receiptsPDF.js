@@ -10,16 +10,12 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const generateReceipt = (role, details, generalMDMSDataById, receiptImageUrl, isEmployeeReceipt, extraData) => {
   const state = store.getState();
-  if (extraData) 
-  {
+  if (extraData) {
     var stateCopy = JSON.parse(JSON.stringify(state));
-    if (stateCopy.app) 
-    delete stateCopy.app;
-    if (stateCopy.common) 
-    delete stateCopy.common;
+    if (stateCopy.app) delete stateCopy.app;
+    if (stateCopy.common) delete stateCopy.common;
 
     extraData.state = stateCopy;
-    
   }
   let data;
   let { owners, address, propertyDetails, tax, taxNew, receipts, header } = details;

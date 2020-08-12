@@ -46,8 +46,17 @@
 width: fit-content;
  }}
 .inner-header-style {
-padding: 10px 0px 0px 0px !important; } }
+padding: 10px 0px 0px 0px !important;
+flex-direction: column !important;
+} }
 
 .new-property-assessment {
   height: 48px;
+}
+
+.inner-button-style{
+    flex: inherit !important;
+  }
+.button-style{
+  margin-right: 8px !important;
 }
