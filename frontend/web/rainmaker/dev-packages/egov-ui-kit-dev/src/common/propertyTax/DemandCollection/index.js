@@ -18,14 +18,17 @@ class DemandCollection extends React.Component {
   render() {
     const { prepareFinalObject, preparedFinalObject,Properties = [] } = this.props;
     const finalData=getFinalData();
-
-  let firstdisplay_year = [];
+ 
+   let firstdisplay_year = [];
    firstdisplay_year = get(preparedFinalObject, `DemandProperties[0].propertyDetails[0].demand[0].demand[${finalData[0].financialYear}]`, '');
+   let secondYear = get(preparedFinalObject, `DemandProperties[0].propertyDetails[0].demand[0].demand[${finalData[1].financialYear}]`, '');
+   let thirdYear = get(preparedFinalObject, `DemandProperties[0].propertyDetails[0].demand[0].demand[${finalData[2].financialYear}]`, '');
+   let fourthYear = get(preparedFinalObject, `DemandProperties[0].propertyDetails[0].demand[0].demand[${finalData[3].financialYear}]`, '');
    let demands_data = get(preparedFinalObject, `DemandProperties[0].propertyDetails[0].demand`, '');
    let dummyarray = [];
 
-   if (firstdisplay_year.length === 0) {
-    dummyarray[0] = null;
+   if (firstdisplay_year.length === 0 && secondYear.length !==0 && thirdYear.length !==0 && fourthYear.length !==0) {
+    dummyarray[0] = null;    
 
     if (demands_data[0] != null) {
      for (let i = 0; i < demands_data.length; i++) {
@@ -37,7 +40,58 @@ class DemandCollection extends React.Component {
      dummyarray = demands_data;
 
     }
-   } else {
+  }
+  
+  else if(firstdisplay_year.length === 0 && secondYear.length ===0 && thirdYear.length !==0 && fourthYear.length !==0)
+  {
+    dummyarray[0] = null;    
+    dummyarray[1] = null;    
+    if(demands_data[0] != null) {
+      for (let i = 0; i < demands_data.length; i++) {
+       if (demands_data[i] != null) {
+        dummyarray[i + 2] = demands_data[i];
+       }
+      }
+     } else {
+      dummyarray = demands_data; 
+     }
+  }
+
+  else if(firstdisplay_year.length === 0 && secondYear.length ===0 && thirdYear.length ===0 && fourthYear.length !==0)
+  {
+    dummyarray[0] = null;    
+    dummyarray[1] = null;    
+    dummyarray[2] = null;    
+    if(demands_data[0] != null) {
+      for (let i = 0; i < demands_data.length; i++) {
+       if (demands_data[i] != null) {
+        dummyarray[i + 3] = demands_data[i];
+       }
+      }
+     } else {
+      dummyarray = demands_data;
+ 
+     }
+  }
+  else if(firstdisplay_year.length === 0 && secondYear.length ===0 && thirdYear.length ===0 && fourthYear.length ===0)
+  {
+    dummyarray[0] = null;    
+    dummyarray[1] = null;    
+    dummyarray[2] = null; 
+    dummyarray[3] = null;       
+    if(demands_data[0] != null) {
+      for (let i = 0; i < demands_data.length; i++) {
+       if (demands_data[i] != null) {
+        dummyarray[i + 4] = demands_data[i];
+       }
+      }
+     } else {
+      dummyarray = demands_data;
+ 
+     }
+  }
+  
+   else {
     dummyarray = demands_data;
    }
 
