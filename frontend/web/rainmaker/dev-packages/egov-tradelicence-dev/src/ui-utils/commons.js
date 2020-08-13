@@ -503,7 +503,8 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         { key: "tenantId", value: updatedTenant },
         { key: "applicationNumber", value: updatedApplicationNo }
       ];
-      let searchResponse = await getSearchResults(searchQueryObject);
+      // let searchResponse = await getSearchResults(searchQueryObject);
+      let searchResponse = updateResponse;
       if (isEditFlow) {
         searchResponse = { Licenses: queryObject };
       } else {
