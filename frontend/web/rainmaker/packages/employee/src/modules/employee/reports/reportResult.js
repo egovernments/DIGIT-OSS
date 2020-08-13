@@ -16,7 +16,7 @@ import "datatables.net-responsive-dt";
 import JSZip from "jszip/dist/jszip";
 import get from "lodash/get";
 import pdfMake from "pdfmake/build/pdfmake";
-import pdfFonts from "pdfmake/build/vfs_fonts";
+import pdfFonts from "./vfs_fonts";
 import "datatables.net-buttons/js/buttons.html5.js"; // HTML 5 file export
 import "datatables.net-buttons/js/buttons.flash.js"; // Flash file export
 import "datatables.net-buttons/js/buttons.colVis.min.js";
@@ -27,6 +27,14 @@ import { getTenantId, setReturnUrl, localStorageSet } from "egov-ui-kit/utils/lo
 import "./index.css";
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
+pdfMake.fonts = {
+  Hind: {
+		normal: 'Hind-Regular.ttf',
+		bold: 'Hind-Regular.ttf',
+		italics: 'Hind-Regular.ttf',
+		bolditalics: 'Hind-Regular.ttf',
+	}
+}; 
 window.JSZip = JSZip;
 
 var sumColumn = [];
@@ -47,7 +55,7 @@ class ShowField extends Component {
       .DataTable()
       .destroy(true);
   }
-
+ 
   componentWillUpdate() {
     let { flag } = this.props;
     if (flag == 1) {
@@ -112,7 +120,7 @@ class ShowField extends Component {
         orientation: orientation,
         pageSize: pageSize,
         footer: true,
-        customize: function(doc) {
+        customize: function(doc) {        
           doc.content[0].text = [];
           doc.content[0].text.push({ text: "NagarSewa System Reports\n\n", bold: true, fontSize: 20 });
           doc.content[0].text.push({ text: reportTitle, fontSize: 18 });
