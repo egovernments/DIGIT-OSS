@@ -89,14 +89,17 @@ public class DataTransformationService {
             for (int i = 0; i < kafkaJsonArray.length(); i++) {
                 if (null != kafkaJsonArray.get(i)) {
                     String stringifiedObject = indexerUtils.buildString(kafkaJsonArray.get(i));
+                    String id = indexerUtils.buildIndexId(index, stringifiedObject);
                     if (isCustom) {
                         String customIndexJson = buildCustomJsonForIndex(index.getCustomJsonMapping(), stringifiedObject);
-                        indexerUtils.pushCollectionToDSSTopic(customIndexJson, index);
+                        indexerUtils.pushCollectionToDSSTopic(id, customIndexJson, index);
+                        indexerUtils.pushToKafka(id, customIndexJson, index);
                         StringBuilder builder = appendIdToJson(index, jsonTobeIndexed, stringifiedObject, customIndexJson);
                         if (null != builder)
                             jsonTobeIndexed = builder;
                     } else {
-                        indexerUtils.pushCollectionToDSSTopic(stringifiedObject, index);
+                        indexerUtils.pushCollectionToDSSTopic(id, stringifiedObject, index);
+                        indexerUtils.pushToKafka(id, stringifiedObject, index);
                         StringBuilder builder = appendIdToJson(index, jsonTobeIndexed, stringifiedObject, null);
                         if (null != builder)
                             jsonTobeIndexed = builder;

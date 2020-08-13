@@ -649,7 +649,7 @@ public class IndexerUtils {
 	 * @param enrichedObject
 	 * @param index
 	 */
-	public void pushCollectionToDSSTopic(String enrichedObject, Index index) {
+	public void pushCollectionToDSSTopic(String key, String enrichedObject, Index index) {
 		if(dssTopicPushEnabled) {
 			if(index.getName().contains("collection") || index.getName().contains("payment")) {
 				log.info("Index name: "+ index.getName());
@@ -657,7 +657,7 @@ public class IndexerUtils {
 				try{
 					JsonNode enrichedObjectNode = new ObjectMapper().readTree(enrichedObject);
 					producer.producer(dssTopicForCollection, enrichedObjectNode);
-					producer.producer(index + "-" + "enriched", enrichedObjectNode);
+					producer.producer(index.getName() + "-" + "enriched", key, enrichedObjectNode);
 				} catch (IOException e){
 					log.error("Failed pushing collections data to the DSS topic: "+dssTopicForCollection);
 
@@ -666,5 +666,16 @@ public class IndexerUtils {
 		}
 	}
 
-
+	public void pushToKafka(String key, String enrichedObject, Index index) {
+		// skip collection and payment since already handled in pushCollectionToDSSTopic()
+		if (topicPushEnable && !index.getName().contains("collection") && !index.getName().contains("payment")) {
+			String topicName = index.getName() + "-" + "enriched";
+			try {
+				JsonNode enrichedObjectNode = getObjectMapper().readTree(enrichedObject);
+				producer.producer(topicName, key, enrichedObjectNode);
+			} catch (IOException e) {
+				log.error("Failed pushing data to the ES topic: " + topicName);
+			}
+		}
+	}
 }
