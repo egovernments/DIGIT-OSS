@@ -398,3 +398,21 @@ serviceMaps:
       - jsonPath: $.Property.auditDetails.lastModifiedTime
 
       - jsonPath: $.Property.units.*.id
+
+
+    - query: UPDATE eg_pt_unit SET active=false WHERE propertyid=? AND createdtime < (SELECT MAXTIME FROM (SELECT propertyid,MAX(createdtime) AS MAXTIME FROM eg_pt_unit GROUP BY propertyid) AS UNIT WHERE propertyid=?);
+      basePath: Property
+      jsonMaps:
+
+      - jsonPath: $.Property.id
+
+      - jsonPath: $.Property.id
+      
+
+    - query: UPDATE eg_pt_owner SET status='INACTIVE' WHERE propertyid=? AND createdtime < (SELECT MAXTIME FROM (SELECT propertyid,MAX(createdtime) AS MAXTIME FROM eg_pt_owner GROUP BY propertyid) AS OWNER WHERE propertyid=?);
+      basePath: Property
+      jsonMaps:
+
+      - jsonPath: $.Property.id
+
+      - jsonPath: $.Property.id
