@@ -511,7 +511,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       ];
       // let searchResponse = await getSearchResults(searchQueryObject);
       let searchResponse = updateResponse;
-      if (isEditFlow || (isRenewal && queryObject[0].status === "INITIATED" && queryObject[0].action === "INITIATE")) {
+      if (isEditFlow) {
         searchResponse = { Licenses: queryObject };
       } else {
         dispatch(prepareFinalObject("Licenses", searchResponse.Licenses));
