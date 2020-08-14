@@ -258,8 +258,6 @@ class FormWizardDataEntry extends Component {
           } else {
             demand.demandDetails = [];
           }
-
-
           return demand.demandDetails.forEach((demandData, demandKey) => {
             if (demandData.order > -1 && demandData.isLegacy) {
               //year is greater, till get equarl to i have to null 
@@ -615,6 +613,7 @@ class FormWizardDataEntry extends Component {
 
   componentWillUnmount() {
     this.unlisten();
+    this.props.prepareFinalObject("DemandPropertiesResponse",{});
   }
 
   handleRemoveOwner = (index, formKey) => {
@@ -1968,7 +1967,6 @@ class FormWizardDataEntry extends Component {
       "ownershipType.fields.typeOfOwnership.value",
       ""
     );
-
     if(propertyMethodAction ==="_update")
         {
           set(prepareFormData, "Properties[0].additionalDetails.updatedByULB","true");
@@ -1981,6 +1979,7 @@ class FormWizardDataEntry extends Component {
         financialYearFromQuery
       );
     }
+
 
     if (!!propertyId) {
       set(prepareFormData, "Properties[0].propertyId", propertyId);
@@ -2639,6 +2638,7 @@ class FormWizardDataEntry extends Component {
     resetFormWizard(form, removeForm);
     prepareFormDataAction("Properties", []);
     prepareFinalObject("DemandProperties", []);
+    prepareFinalObject("DemandPropertiesResponse", []);
     this.onTabClick(0);
   };
 
