@@ -14,6 +14,13 @@ const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
     // latestPropertyDetails.ownershipCategory === "INSTITUTIONALPRIVATE" || latestPropertyDetails.ownershipCategory === "INSTITUTIONALGOVERNMENT";
   const { institution = {}, owners: ownerDetails = [] } = latestPropertyDetails || {};
 
+  for(let i=0; i<ownerDetails.length;i++)
+  {
+    if (ownerDetails[i].gender===null)
+    {
+      ownerDetails[i].gender ='Male';
+    }
+  }
   let owner = [];
   if (ownerDetails && ownerDetails.length > 0) {
     owner = ownerDetails[0];
