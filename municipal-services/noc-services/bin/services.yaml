@@ -1,0 +1,301 @@
+openapi: 3.0.0
+info:
+  version: "1.0.0-oas3"
+  title: eGov Noc(No objection certificate) application registry
+  description: >
+    Noc registry store and serve the NOC related information using rest APIs
+
+    Mainly it has below functionalities
+
+    1. Apply for new NOC
+
+    2. Allow user to search the existing NOC information based on roles
+
+    3. Allow user to take action on the application based on the user role
+
+    4. Update the NOC information for an existing application based state and
+    role configuration
+  contact:
+    name: Egovernments Foundation
+    email: contact@egovernments.org
+x-module: NOC
+x-common-path: >-
+  https://raw.githubusercontent.com/egovernments/egov-services/PT_APPLY_PAY/docs/common/contracts/v1-1-1.yml
+paths:
+  /v1/noc/_create:
+    post:
+      summary: Apply for an NOC.
+      description: 'Citizen or Employee, can apply for new build plan approval'
+      x-roles: 'BPA_ARCHITECT,CITIZEN,EMPLOYEE'
+      responses:
+        '202':
+          description: Application submitted successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/NocResponse'
+        '400':
+          description: Failed to process the application
+          content:
+            '*/*':
+              schema:
+                $ref: >-
+                  https://raw.githubusercontent.com/egovernments/egov-services/PT_APPLY_PAY/docs/common/contracts/v1-1-1.yml#/components/schemas/ErrorRes
+      tags:
+        - Noc Apply
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NocRequest'
+        description: Fill Bpa application details and submit the request.
+        required: true
+  /v1/noc/_update:
+    post:
+      summary: Update existing application.
+      description: Updates a given `application` with newer details.
+      x-roles: 'BPA_ARCHITECT,CITIZEN,EMPLOYEE'
+      tags:
+        - Noc Apply
+      responses:
+        '202':
+          description: Application updated successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/NocResponse'
+        '400':
+          description: Failed to update
+          content:
+            '*/*':
+              schema:
+                $ref: >-
+                  https://raw.githubusercontent.com/egovernments/egov-services/PT_APPLY_PAY/docs/common/contracts/v1-1-1.yml#/components/schemas/ErrorRes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NocRequest'
+        description: Request to update existing application details.
+        required: true
+  /v1/noc/_search:
+    post:
+      summary: Get the list of application by passing the diffrent search criteria.
+      description: |
+        Get the properties list based on the input parameters.
+      x-roles: 'CITIZEN,EMPLOYEE'
+      parameters:
+        - $ref: >-
+            https://raw.githubusercontent.com/egovernments/egov-services/PT_APPLY_PAY/docs/common/contracts/v1-1-1.yml#/components/parameters/tenantId
+        - name: ids
+          in: query
+          description: List of system generated ids of Noc applications.
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: applicationNo
+          in: query
+          description: application numbers
+          required: false
+          schema:
+            type: string
+        - name: nocNo
+          in: query
+          description: approval no
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/NocResponse'
+        '400':
+          description: Invalid input.
+          content:
+            '*/*':
+              schema:
+                $ref: >-
+                  https://raw.githubusercontent.com/egovernments/egov-services/PT_APPLY_PAY/docs/common/contracts/v1-1-1.yml#/components/schemas/ErrorRes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: >-
+                https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/RequestInfo
+        required: true
+      tags:
+        - Noc Apply
+servers:
+  - url: 'https://egov-micro-dev.egovernments.org'
+components:
+  schemas:
+    Noc:
+      type: object
+      description: >-
+        NOC application object to capture the details of noc related
+        information, landid and related documents.
+      properties:
+        id:
+          type: string
+          description: >-
+            Unique Identifier(UUID) of the bpa application for internal
+            reference.
+          readOnly: true
+          minLength: 1
+          maxLength: 64
+        tenantId:
+          type: string
+          description: Unique ULB identifier.
+          maxLength: 256
+          minLength: 2
+          nullable: false
+        applicationNo:
+          type: string
+          description: >-
+            Generate formatted Unique Identifier of the Noc. Keep the format in
+            mdms
+          readOnly: true
+          minLength: 1
+          maxLength: 64
+        nocNo:
+          type: string
+          description: >-
+            Generate Noc number based on wf status. When to generate Nocno will
+            be depends on wf state so make it configurable at application level
+          readOnly: true
+          minLength: 1
+          maxLength: 64
+        applicationType:
+          type: string
+          description: noc application type.
+          enum:
+            - PROVISIONAL
+            - NEW
+            - RENEW
+          nullable: false
+        nocType:
+          maxLength: 64
+          minLength: 1
+          type: string
+          description: >
+            Mdms master data to configure types of noc(ex:fire noc, airport
+            authority etc)
+          nullable: false
+        accountId:
+          maxLength: 64
+          minLength: 1
+          type: string
+          description: Initiator User UUID
+        source:
+          type: string
+          description: 'Who is creating the record in the system(ex:BPA,Property etc)'
+          minLength: 1
+          maxLength: 64
+          nullable: false
+        sourceRefId:
+          type: string
+          description: >-
+            Unique Identifier of integrator(Source system) to link the noc
+            application.
+          minLength: 1
+          maxLength: 64
+        landId:
+          maxLength: 64
+          minLength: 1
+          type: string
+          description: Unique Identifier(UUID) of the land for internal reference.
+        status:
+          type: string
+          description: state of the record.
+          enum:
+            - ACTIVE
+            - INACTIVE
+        applicationStatus:
+          type: string
+          description: Application status should get populate from wf engine
+          maxLength: 64
+          minLength: 1
+          readOnly: true
+        documents:
+          description: The documents attached by owner for exemption.
+          type: array
+          items:
+            $ref: >-
+              https://raw.githubusercontent.com/egovernments/egov-services/PT_APPLY_PAY/docs/common/contracts/v1-1-1.yml#/components/schemas/Document
+        workflow:
+          $ref: '#/components/schemas/Workflow'
+        auditDetails:
+          $ref: >-
+            https://raw.githubusercontent.com/egovernments/egov-services/PT_APPLY_PAY/docs/common/contracts/v1-1-1.yml#/components/schemas/AuditDetails
+        additionalDetails:
+          type: object
+          description: The json to capturing the custom fields
+    Workflow:
+      type: object
+      description: >-
+        BPA application object to capture the details of land, land owners, and
+        address of the land.
+      properties:
+        action:
+          type: string
+          description: Action on the application in certain
+          minLength: 1
+          maxLength: 64
+          nullable: false
+        assignes:
+          type: array
+          items:
+            type: string
+        comment:
+          type: string
+          description: Comment by actor.
+          minLength: 1
+          maxLength: 64
+        documents:
+          description: Attach the workflow varification documents.
+          type: array
+          items:
+            $ref: >-
+              https://raw.githubusercontent.com/egovernments/egov-services/PT_APPLY_PAY/docs/common/contracts/v1-1-1.yml#/components/schemas/Document
+    NocType:
+      type: object
+      description: NOC type is the master data.
+      properties:
+        code:
+          type: string
+          description: Action on the application in certain
+          minLength: 1
+          maxLength: 64
+          nullable: false
+        isActive:
+          type: boolean
+          description: >-
+            If true then new application can not be created for the perticular
+            noc type.
+          minLength: 1
+          maxLength: 64
+          nullable: false
+          default: false
+    NocRequest:
+      description: A object to bind the metadata contract and main application contract
+      properties:
+        RequestInfo:
+          $ref: >-
+            https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/RequestInfo
+        Noc:
+          $ref: '#/components/schemas/Noc'
+    NocResponse:
+      description: Contains the ResponseMetadate and the main application contract
+      properties:
+        ResponseInfo:
+          $ref: >-
+            https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/ResponseInfo
+        Noc:
+          type: array
+          items:
+            $ref: '#/components/schemas/Noc'
