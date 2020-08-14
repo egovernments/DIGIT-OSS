@@ -16,7 +16,7 @@ export const resetFields = (state, dispatch) => {
   dispatch(
     handleField(
       "noc-search",
-      "components.div.children.nocApplication.children.cardContent.children.appBPAHomeSearchResultsContainer.children.fromDate",
+      "components.div.children.nocApplication.children.cardContent.children.appBPAHomeSearchResultsContainer.children.appNo",
       "props.value",
       ""
     )
@@ -24,7 +24,7 @@ export const resetFields = (state, dispatch) => {
   dispatch(
     handleField(
       "noc-search",
-      "components.div.children.nocApplication.children.cardContent.children.appBPAHomeSearchResultsContainer.children.toDate",
+      "components.div.children.nocApplication.children.cardContent.children.appBPAHomeSearchResultsContainer.children.sourceAppNo",
       "props.value",
       ""
     )
@@ -33,22 +33,6 @@ export const resetFields = (state, dispatch) => {
     handleField(
       "noc-search",
       "components.div.children.nocApplication.children.cardContent.children.appBPAHomeSearchResultsContainer.children.nocNo",
-      "props.value",
-      ""
-    )
-  );
-  dispatch(
-    handleField(
-      "noc-search",
-      "components.div.children.nocApplication.children.cardContent.children.appBPAHomeSearchResultsContainer.children.applicationType",
-      "props.value",
-      ""
-    )
-  );
-  dispatch(
-    handleField(
-      "noc-search",
-      "components.div.children.nocApplication.children.cardContent.children.appBPAHomeSearchResultsContainer.children.nocType",
       "props.value",
       ""
     )
@@ -65,10 +49,10 @@ export const nocApplication = getCommonCard({
     labelKey: "BPA_HOME_SEARCH_RESULTS_DESC"
   }),
   appBPAHomeSearchResultsContainer: getCommonContainer({
-    nocNo: getTextField({
+    appNo: getTextField({
       label: {
         labelName: "Application number",
-        labelKey: "BPA_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+        labelKey: "BPA_NOC_APP_NO_LABEL"
       },
       placeholder: {
         labelName: "Enter Application number",
@@ -83,88 +67,63 @@ export const nocApplication = getCommonCard({
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       jsonPath: "searchScreen.applicationNo"
     }),
-    fromDate: getDateField({
-      label: { labelName: "From Date", labelKey: "BPA_FROM_DATE_LABEL" },
-      placeholder: {
-        labelName: "From Date",
-        labelKey: "BPA_FROM_DATE_PLACEHOLDER"
-      },
-      jsonPath: "searchScreen.fromDate",
-      gridDefination: {
-        xs: 12,
-        sm: 4
-      },
-      pattern: getPattern("Date"),
-      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      required: false
-    }),
-    toDate: getDateField({
-      label: { labelName: "To Date", labelKey: "BPA_TO_DATE_LABEL" },
-      placeholder: {
-        labelName: "To Date",
-        labelKey: "BPA_TO_DATE_PLACEHOLDER"
-      },
-      jsonPath: "searchScreen.toDate",
-      gridDefination: {
-        xs: 12,
-        sm: 4
-      },
-      pattern: getPattern("Date"),
-      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      required: false
-    }),
-    applicationType: getSelectField({
+    sourceAppNo: getTextField({
       label: {
-        labelName: "Application Type",
-        labelKey: "BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL"
+        labelName: "Sourde module Application number",
+        labelKey: "SOURCE_MODULE_NUMBER"
       },
       placeholder: {
-        labelName: "Select Application Type",
-        labelKey: "BPA_BASIC_DETAILS_APPLICATION_TYPE_PLACEHOLDER"
+        labelName: "Enter Source Application number",
+        labelKey: "ENTER_SOURCE_MODULE_NUMBER"
       },
-      jsonPath: "searchScreen.applicationType",
-      required: false,
       gridDefination: {
         xs: 12,
         sm: 4
       },
-      localePrefix: {
-        moduleName: "NOC",
-        masterName: "APP_TYPE"
+      required: false,
+      pattern: /^[a-zA-Z0-9-]*$/i,
+      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      jsonPath: "searchScreen.sourceRefId"
+    }),
+    nocNo: getTextField({
+      label: {
+        labelName: "NOC number",
+        labelKey: "NOC_NUMBER"
       },
-      data: [
-        {
-          code: "PROVISIONAL"
-        },
-        {
-          code: "NEW"
-        },
-        {
-          code: "RENEW"
-        }
-      ],
+      placeholder: {
+        labelName: "Enter noc number",
+        labelKey: "ENTER_NOC_NUMBER"
+      },
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      },
+      required: false,
+      pattern: /^[a-zA-Z0-9-]*$/i,
+      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      jsonPath: "searchScreen.nocNo"
     }),
     nocType: getSelectField({
       label: {
         labelName: "NOC Type",
-        labelKey: "NOC_SEARCH_TYPE_LABEL"
-      },
-      placeholder: {
-        labelName: "Select NOC Type",
-        labelKey: "NOC_SEARCH_TYPE_PLACEHOLDER"
+        labelKey: "NOC_TYPE"
       },
       localePrefix: {
         moduleName: "NOC",
         masterName: "NOC_TYPE"
       },
-      jsonPath: "searchScreen.nocType",
+      props: {
+        disabled: true,
+        className : "tl-trade-type"
+      },
+      jsonPath: "nocType",
       sourceJsonPath: "applyScreenMdmsData.NOC.NocType",
       required: false,
       gridDefination: {
         xs: 12,
         sm: 4
       }
-    })
+    }),
   }),
   button: getCommonContainer({
     buttonContainer: getCommonContainer({

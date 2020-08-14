@@ -45,6 +45,7 @@ import jp from "jsonpath";
 import { bpaSummaryDetails } from "../egov-bpa/summaryDetails";
 import { changeStep } from "./applyResource/footer";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
+import { nocDetailsApply } from "./noc";
 
 export const stepsData = [
   { labelName: "Basic Details", labelKey: "BPA_STEPPER_BASIC_DETAILS_HEADER" },
@@ -122,7 +123,8 @@ export const formwizardFourthStep = {
     id: "apply_form4"
   },
   children: {
-    documentDetails
+    documentDetails,
+    nocDetailsApply
   },
   visible: false
 };
@@ -199,6 +201,14 @@ const getMdmsData = async (action, state, dispatch) => {
           masterDetails: [
             { name: "TradeType", filter: `[?(@.type == "BPA")]` }
           ]
+        },
+        {
+          moduleName: "NOC",
+          masterDetails: [
+            {
+              name: "DocumentTypeMapping"
+            },
+          ]
         }
       ]
     }
@@ -248,7 +258,7 @@ const setSearchResponse = async (
     },
     { key: "applicationNo", value: applicationNumber }
   ]);
-
+  
   const edcrNumber = get(response, "BPA[0].edcrNumber");
   const ownershipCategory = get(response, "BPA[0].landInfo.ownershipCategory");
   const appDate = get(response, "BPA[0].auditDetails.createdTime");
@@ -594,7 +604,6 @@ const screenConfig = {
     });
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     setTaskStatus(state,applicationNumber,tenantId,dispatch,componentJsonpath);
-
     // Code to goto a specific step through URL
     if (step && step.match(/^\d+$/)) {
       let intStep = parseInt(step);

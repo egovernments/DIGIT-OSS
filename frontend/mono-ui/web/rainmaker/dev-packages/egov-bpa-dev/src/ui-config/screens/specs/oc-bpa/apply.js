@@ -8,7 +8,9 @@ import {
 import {
   prepareDocumentsUploadData,
   getAppSearchResults,
-  createUpdateOCBpaApplication
+  createUpdateOCBpaApplication,
+  prepareNOCUploadData,
+  getNocSearchResults
 } from "../../../../ui-utils/commons";
 
 import {
@@ -46,6 +48,8 @@ import {
 import { changeStep } from "./applyResource/footer";
 import { edcrHttpRequest, httpRequest } from "../../../../ui-utils/api";
 import { comparisondialog } from "./comparisondialog";
+import { nocDetailsApply } from "../egov-bpa/noc";
+import { prepareNocFinalCards } from "../utils";
 
 export const stepsData = [
   { labelName: "Scrutiny Details", labelKey: "BPA_STEPPER_SCRUTINY_DETAILS_HEADER" },
@@ -95,7 +99,8 @@ export const formwizardSecondStep = {
     id: "apply_form2"
   },
   children: {
-    documentAndNocDetails
+    documentAndNocDetails,
+    nocDetailsApply
   },
   visible: false
 };
@@ -107,7 +112,8 @@ export const formwizardThirdStep = {
     id: "apply_form3"
   },
   children: {
-    summaryDetails
+    summaryDetails,
+    nocDetailsApply
   },
   visible: false
 };
@@ -153,6 +159,14 @@ const getMdmsData = async (action, state, dispatch) => {
               name: "DeviationParams"
             }
           ]
+        },
+        {
+          moduleName: "NOC",
+          masterDetails: [
+            {
+              name: "DocumentTypeMapping"
+            },
+          ]
         }
       ]
     }
@@ -182,6 +196,24 @@ const procedToNextStep = async (state, dispatch) => {
     prepareDocumentsUploadData(state, dispatch);
     changeStep(state, dispatch, "", 1);
   }
+  let applicationNumber = get(
+    state.screenConfiguration.preparedFinalObject,
+    "BPA.applicationNo"
+  );
+  let tenantId = get(
+    state.screenConfiguration.preparedFinalObject,
+    "BPA.tenantId"
+  );
+  const payload = await getNocSearchResults([
+    {
+      key: "tenantId",
+      value: tenantId
+    },
+    { key: "sourceRefId", value: applicationNumber }
+  ], state);
+  dispatch(prepareFinalObject("Noc", payload.Noc)); 
+  await prepareNOCUploadData(state, dispatch);
+  prepareNocFinalCards(state, dispatch);
 }
 
 const setSearchResponse = async (

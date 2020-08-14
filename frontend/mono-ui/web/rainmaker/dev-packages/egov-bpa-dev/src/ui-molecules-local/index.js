@@ -114,8 +114,18 @@ const MultiDownloadCard = Loadable({
   loader: () => import("./ComparisionLink"),
   loading: () => <Loading />
  });
- 
-
+ const NocDetailCard = Loadable({
+  loader: () => import("./NocDetailCard"),
+  loading: () => <Loading />
+ });
+ const NocDocDetailCard = Loadable({
+  loader: () => import("./NocDocDetailCard"),
+  loading: () => <Loading />
+ });
+ const NocData = Loadable({
+  loader: () => import("./NocData"),
+  loading: () => <Loading />
+ });
 export {
   TestMolecules,
   RadioButtonsGroup,
@@ -139,5 +149,8 @@ export {
   SingleDocDetailCard,
   MultiDocDetailCard,
   UploadCard,
-  ComparisionLink
+  ComparisionLink,
+  NocDetailCard,
+  NocDocDetailCard,
+  NocData
 };

@@ -9,8 +9,9 @@ import {
   getLabel,
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
+import set from "lodash/set";
 import {
   getQueryArg,
   setBusinessServiceDataToLocalStorage
@@ -18,7 +19,7 @@ import {
 import { httpRequest } from "../../../../ui-utils/api";
 import { getNocSearchResults } from "../../../../ui-utils/commons";
 import { checkValueForNA, ifUserRoleExists } from "../utils/index";
-import { requiredDocumentsData } from "../utils/noc-functions"
+import { requiredDocumentsData } from "../utils/noc-functions";
 
 export const getRedirectionURL = () => {
   const redirectionURL = ifUserRoleExists("CITIZEN")
@@ -39,22 +40,30 @@ const titlebar = {
   }
 }
 
-const titlebar2 = getCommonTitle(
-  {
-    labelName: "NOC Details",
-    labelKey: "BPA_ACTUAL_BUILDING_ABSTRACT_HEADER"
+const titlebar2 = {
+  uiFramework: "custom-atoms",
+  componentPath: "Div",
+  // visible: false,
+  props: {
+    style: { textAlign: "right", display: "flex" }
   },
-  {
-    style: {
-      marginBottom: 18
+  children: {
+    nocApprovalNumber: {
+      uiFramework: "custom-atoms-local",
+      moduleName: "egov-bpa",
+      componentPath: "NocNumber",
+      gridDefination: {},
+      props: {
+        number: "NA"
+      },
     }
   }
-);
+}
 const applicationOverview = getCommonContainer({
   header: getCommonTitle(
     {
       labelName: "Application Overview",
-      // labelKey: "BPA_NOC_APP_OVER_VIEW_HEADER"
+      labelKey: "NOC_APP_OVER_VIEW_HEADER"
     },
     {
       style: {
@@ -66,7 +75,7 @@ const applicationOverview = getCommonContainer({
     applicationNo: getLabelWithValue(
       {
         labelName: "Application No",
-        // labelKey: "BPA_NOC_APP_NO_LABEL"
+        labelKey: "BPA_NOC_APP_NO_LABEL"
       },
       {
         jsonPath: "Noc.applicationNo",
@@ -75,8 +84,8 @@ const applicationOverview = getCommonContainer({
     ),
     module: getLabelWithValue(
       {
-        labelName: "Module",
-        // labelKey: "BPA_NOC_MODULE_LABEL"
+        labelName: "Module/Source",
+        labelKey: "BPA_NOC_MODULE_SOURCE_LABEL"
       },
       {
         jsonPath: "Noc.source",
@@ -118,10 +127,18 @@ const applicationOverview = getCommonContainer({
         action: "condition",
         callBack: (state, dispatch) => {
           let nocData = get( state.screenConfiguration.preparedFinalObject, "Noc", "");
-          if(nocData){
-            let bpaAppurl = window.location.origin+'/egov-bpa/search-preview?applicationNumber='+nocData.sourceRefId+'&tenantId='+nocData.tenantId;
+          let checkingApp = getTenantId().split('.')[1] ? "employee" : "citizen";
+          let appendUrl = window.location.origin;
+          if (process.env.NODE_ENV === "production") {
+            appendUrl = `${window.location.origin}/${checkingApp}`
+          }
+          if(nocData && nocData.source === "BPA"){
+            let bpaAppurl = appendUrl +'/egov-bpa/search-preview?applicationNumber='+nocData.sourceRefId+'&tenantId='+nocData.tenantId;
             window.open(bpaAppurl, '_blank');
 
+          }else if(nocData && nocData.source === "BPA_OC") {
+            let bpaAppurl = appendUrl +'/oc-bpa/search-preview?applicationNumber='+nocData.sourceRefId+'&tenantId='+nocData.tenantId;
+            window.open(bpaAppurl, '_blank');
           }
         }
       }
@@ -190,6 +207,33 @@ const setSearchResponse = async (
     { key: "businessServices", value: get(response, "Noc[0].additionalDetails.workflowCode") }
   ];
   setBusinessServiceDataToLocalStorage(queryObject, dispatch);
+
+  if (response && get(response, "Noc[0].nocNo")) {
+    dispatch(
+      handleField(
+        "noc-search-preview",
+        "components.div.children.headerDiv.children.header2.children.titlebar2.children.nocApprovalNumber",
+        "props.number",
+        get(response, "Noc[0].nocNo")
+      )
+    );
+  } else {
+
+    dispatch(
+      handleField(
+        "noc-search-preview",
+        "components.div.children.headerDiv.children.header2.children.titlebar2.children.nocApprovalNumber",
+        "visible",
+        false
+      )
+    )
+  }
+  set(
+    action,
+    "screenConfig.components.div.children.body.children.cardContent.children.nocDetails.children.cardContent.children.header.children.header.children.key.props.labelKey",
+    `NOC_NOC_TYPE_${get(response, "Noc[0].nocType")}`
+  );
+
   requiredDocumentsData(state, dispatch, action);
 };
 
@@ -351,7 +395,7 @@ const screenConfig = {
                 align: "right"
               },
               children: {
-                // titlebar2
+                titlebar2
               }
             }
           }

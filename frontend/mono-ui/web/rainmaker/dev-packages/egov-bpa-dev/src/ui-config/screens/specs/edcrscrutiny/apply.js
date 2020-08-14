@@ -46,6 +46,7 @@ export const dropdown = {
     suggestions: [],
     fullwidth: true,
     required: true,
+    isClearable: true,
     inputLabelProps: {
       shrink: true
     }

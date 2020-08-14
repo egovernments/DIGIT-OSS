@@ -8,14 +8,17 @@ import {
   getCommonApplyFooter, 
   validateFields, 
   generateBillForBPA,
-  applicantNameAppliedByMaping
+  applicantNameAppliedByMaping,
+  prepareNocFinalCards
 } from "../../utils";
 import "./index.css";
 import {
   submitBpaApplication,
   updateOcBpaApplication,
   createUpdateOCBpaApplication,
-  prepareDocumentsUploadData
+  prepareDocumentsUploadData,
+  prepareNOCUploadData,
+  getNocSearchResults
 } from "../../../../../ui-utils/commons";
 import { 
   toggleSnackbar, 
@@ -25,7 +28,7 @@ import {
 import _ from "lodash";
 import jp from "jsonpath";
 import { getQueryArg, getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
-
+import { compare } from "../../utils/index";
 
 export const showRisktypeWarning = (state, dispatch) => {
   let toggle = get(
@@ -211,6 +214,25 @@ const callBackForNext = async (state, dispatch) => {
         }
         prepareDocumentsUploadData(state, dispatch);
       }
+      let applicationNumber = get(
+        state.screenConfiguration.preparedFinalObject,
+        "BPA.applicationNo"
+      );
+      let tenantId = get(
+        state.screenConfiguration.preparedFinalObject,
+        "BPA.tenantId"
+      );
+      const payload = await getNocSearchResults([
+        {
+          key: "tenantId",
+          value: tenantId
+        },
+        { key: "sourceRefId", value: applicationNumber }
+      ], state);
+      payload.Noc.sort(compare);      
+      dispatch(prepareFinalObject("Noc", payload.Noc)); 
+      await prepareNOCUploadData(state, dispatch);
+      prepareNocFinalCards(state, dispatch);
     }
   } else if (activeStep === 1) {
     const documentsFormat = Object.values(
@@ -275,6 +297,15 @@ const callBackForNext = async (state, dispatch) => {
 
   if (activeStep !== 4) {
     if (isFormValid) {
+      if (activeStep === 1) {
+        let nocData = get(state.screenConfiguration.preparedFinalObject, "nocForPreview", []);
+        if(nocData && nocData.length > 0) { 
+          nocData.map(items => {
+            if(!items.readOnly) items.readOnly = items.readOnly ? false : true;
+          })
+          dispatch(prepareFinalObject("nocForPreview", nocData));
+        }
+      }
       // createUpdateOCBpaApplication(state, dispatch, "INITIATE")
      changeStep(state, dispatch);
     } else if (hasFieldToaster) { 
@@ -419,6 +450,20 @@ export const getActionDefinationForStepper = path => {
 };
 
 export const callBackForPrevious = (state, dispatch) => {
+  let activeStep = get(
+    state.screenConfiguration.screenConfig["apply"],
+    "components.div.children.stepper.props.activeStep",
+    0
+  );
+  if (activeStep === 2) {
+    let nocData = get(state.screenConfiguration.preparedFinalObject, "nocForPreview", []);
+    if(nocData && nocData.length > 0) { 
+      nocData.map(items => {
+        if(items.readOnly) items.readOnly = items.readOnly ? false : true;
+      })
+      dispatch(prepareFinalObject("nocForPreview", nocData));
+    }
+  }
   changeStep(state, dispatch, "previous");
 };
 

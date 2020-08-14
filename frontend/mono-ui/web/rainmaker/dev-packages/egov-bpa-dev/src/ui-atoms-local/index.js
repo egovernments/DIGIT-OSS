@@ -88,6 +88,15 @@ const ocPermitNumber = Loadable({
   loading: () => <Loading />
 });
 
+const LinkAtom = Loadable({
+  loader: () => import("./LinkAtom"),
+  loading: () => <Loading />
+});
+
+const NocNumber = Loadable({
+  loader: () => import("./NocNumber"),
+  loading: () => <Loading />
+});
 
 export {
   TestAtoms,
@@ -106,5 +115,7 @@ export {
   PermitListCondition,
   NoteAtom,
   UploadedDocument,
-  ocPermitNumber
+  ocPermitNumber,
+  LinkAtom,
+  NocNumber
 };

@@ -14,6 +14,7 @@
     "dev-packages/egov-abg-dev",
     "dev-packages/egov-firenoc-dev",
     "dev-packages/egov-bpa-dev",
+    "dev-packages/egov-noc-dev",
     "dev-packages/egov-common-dev",
     "packages/citizen",
     "packages/employee",
