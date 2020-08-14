@@ -3,6 +3,8 @@ package org.egov.bpa.util;
 import static org.egov.bpa.util.BPAConstants.BILL_AMOUNT;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -40,14 +42,17 @@ public class NotificationUtil {
 	private Producer producer;
 	
 	private EDCRService edcrService;
+	
+	private BPAUtil bpaUtil;
 
 	@Autowired
 	public NotificationUtil(BPAConfiguration config, ServiceRequestRepository serviceRequestRepository,
-			Producer producer, EDCRService edcrService) {
+			Producer producer, EDCRService edcrService, BPAUtil bpaUtil) {
 		this.config = config;
 		this.serviceRequestRepository = serviceRequestRepository;
 		this.producer = producer;
 		this.edcrService = edcrService;
+		this.bpaUtil = bpaUtil;
 	}
 
 	final String receiptNumberKey = "receiptNumber";
@@ -159,7 +164,7 @@ public class NotificationUtil {
 	 */
 	private BigDecimal getAmountToBePaid(RequestInfo requestInfo, BPA bpa) {
 
-		LinkedHashMap responseMap = (LinkedHashMap) serviceRequestRepository.fetchResult(getBillUri(bpa),
+		LinkedHashMap responseMap = (LinkedHashMap) serviceRequestRepository.fetchResult(bpaUtil.getBillUri(bpa),
 				new RequestInfoWrapper(requestInfo));
 		JSONObject jsonObject = new JSONObject(responseMap);
 		BigDecimal amountToBePaid;
@@ -188,46 +193,7 @@ public class NotificationUtil {
 		return amountToBePaid;
 	}
 
-	/**
-	 * Creates the uri for getBill by adding query params from the license
-	 * 
-	 * @param license
-	 *            The TradeLicense for which getBill has to be called
-	 * @return The uri for the getBill
-	 */
-	private StringBuilder getBillUri(BPA bpa) {
-		String status = bpa.getStatus().toString();
-		String code = null;
-		if (bpa.getBusinessService().equalsIgnoreCase(BPAConstants.BPA_MODULE)) {
-			if (status.equalsIgnoreCase("PENDING_APPL_FEE")) {
-				code = "BPA.NC_APP_FEE";
-			} else {
-				code = "BPA.NC_SAN_FEE";
-			}
-		} else if (bpa.getBusinessService().equalsIgnoreCase(BPAConstants.BPA_LOW_MODULE_CODE)) {
-			if (status.equalsIgnoreCase("PENDING_FEE"))
-				code = "BPA.LOW_RISK_PERMIT_FEE";
-		} else if (bpa.getBusinessService().equalsIgnoreCase(BPAConstants.BPA_OC_MODULE_CODE)) {
-			if (status.equalsIgnoreCase("PENDING_APPL_FEE")) {
-				code = "BPA.NC_OC_APP_FEE";
-			} else {
-				code = "BPA.NC_OC_SAN_FEE";
-			}
-		}		
-		
-		if(status.equalsIgnoreCase("PENDING_FEE")){
-			code= "BPA.LOW_RISK_PERMIT_FEE";
-		}
-		StringBuilder builder = new StringBuilder(config.getBillingHost());
-		builder.append(config.getDemandSearchEndpoint());
-		builder.append("?tenantId=");
-		builder.append(bpa.getTenantId());
-		builder.append("&consumerCode=");
-		builder.append(bpa.getApplicationNo());
-		builder.append("&businessService=");
-		builder.append(code);
-		return builder;
-	}
+	
 
 	/**
 	 * Returns the uri for the localization call
@@ -334,6 +300,8 @@ public class NotificationUtil {
 
 		log.debug("STAKEHOLDER:: " + request.getEvents().get(0).getDescription());
 	}
+	
+	
 
 
 }

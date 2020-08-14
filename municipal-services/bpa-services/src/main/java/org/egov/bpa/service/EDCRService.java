@@ -114,7 +114,7 @@ public class EDCRService {
 		additionalDetails.put(BPAConstants.SERVICETYPE, serviceType.get(0));
 		additionalDetails.put(BPAConstants.APPLICATIONTYPE, applicationType.get(0));
 		if(permitNumber.size()>0){
-		additionalDetails.put(BPAConstants.PERMIT_NO, permitNumber.get(0));
+			additionalDetails.put(BPAConstants.PERMIT_NO, permitNumber.get(0));
 		}
 		List<Double> plotAreas = context.read("edcrDetail.*.planDetail.plot.area", typeRef);
 		List<Double> buildingHeights = context.read("edcrDetail.*.planDetail.blocks.*.building.buildingHeight",
@@ -123,7 +123,22 @@ public class EDCRService {
 		if (CollectionUtils.isEmpty(edcrStatus) || !edcrStatus.get(0).equalsIgnoreCase("Accepted")) {
 			throw new CustomException(BPAErrorConstants.INVALID_EDCR_NUMBER, "The EDCR Number is not Accepted " + edcrNo);
 		}
-		String expectedRiskType;
+		this.validateOCEdcr(OccupancyTypes, plotAreas, buildingHeights, applicationType, masterData, riskType);
+		
+		return additionalDetails;
+	}
+	
+	/**
+	 * validate the ocEDCR values
+	 * @param OccupancyTypes
+	 * @param plotAreas
+	 * @param buildingHeights
+	 * @param applicationType
+	 * @param masterData
+	 * @param riskType
+	 */
+	private void validateOCEdcr(List<String> OccupancyTypes, List<Double> plotAreas,List<Double> buildingHeights, 
+			LinkedList<String> applicationType,Map<String, List<String>> masterData, String riskType) {
 		if (!CollectionUtils.isEmpty(OccupancyTypes) && !CollectionUtils.isEmpty(plotAreas)
 				&& !CollectionUtils.isEmpty(buildingHeights) && !applicationType.get(0).equalsIgnoreCase(BPAConstants.BUILDING_PLAN_OC)) {
 			Double buildingHeight = Collections.max(buildingHeights);
@@ -140,7 +155,7 @@ public class EDCRService {
 			List<String> riskTypes = JsonPath.read(jsonOutput, filterExp);
 
 			if (!CollectionUtils.isEmpty(riskTypes) && OccupancyType.equals(BPAConstants.RESIDENTIAL_OCCUPANCY)) {
-				expectedRiskType = riskTypes.get(0);
+				String expectedRiskType  = riskTypes.get(0);
 
 				if (expectedRiskType == null || !expectedRiskType.equals(riskType)) {
 					throw new CustomException(BPAErrorConstants.INVALID_RISK_TYPE, "The Risk Type is not valid " + riskType);
@@ -150,10 +165,13 @@ public class EDCRService {
 						"The OccupancyType " + OccupancyType + " is not supported! ");
 			}
 		}
-		
-		return additionalDetails;
 	}
 
+	/**
+	 * fetch the edcrPdfUrl fron the bpa data
+	 * @param bpaRequest
+	 * @return
+	 */
 	@SuppressWarnings("rawtypes")
 	public String getEDCRPdfUrl(BPARequest bpaRequest) {
 
@@ -179,6 +197,12 @@ public class EDCRService {
 		return CollectionUtils.isEmpty(planReports) ? null : planReports.get(0);
 	}
 	
+	/**
+	 * fetch the edcr details from the bpa
+	 * @param requestInfo
+	 * @param bpa
+	 * @return
+	 */
 	@SuppressWarnings("rawtypes")
 	public Map<String, String> getEDCRDetails(org.egov.common.contract.request.RequestInfo requestInfo, BPA bpa) {
 
@@ -216,11 +240,17 @@ public class EDCRService {
 		edcrDetails.put(BPAConstants.SERVICETYPE, serviceType.get(0).toString());
 		edcrDetails.put(BPAConstants.APPLICATIONTYPE, applicationType.get(0).toString());
 		if(approvalNo.size()>0 && approvalNo!=null){
-		edcrDetails.put(BPAConstants.PERMIT_NO, approvalNo.get(0).toString());
+			edcrDetails.put(BPAConstants.PERMIT_NO, approvalNo.get(0).toString());
 		}
 		return edcrDetails;
 	}
 
+	/**
+	 * get edcrNumbers from the bpa search criteria
+	 * @param searchCriteria
+	 * @param requestInfo
+	 * @return
+	 */
 	@SuppressWarnings("rawtypes")
 	public List<String> getEDCRNos(BPASearchCriteria searchCriteria, org.egov.common.contract.request.RequestInfo requestInfo) {
 

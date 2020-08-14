@@ -14,7 +14,9 @@ import org.egov.bpa.repository.ServiceRequestRepository;
 import org.egov.bpa.service.BPALandService;
 import org.egov.bpa.service.UserService;
 import org.egov.bpa.util.BPAConstants;
+import org.egov.bpa.util.BPAUtil;
 import org.egov.bpa.util.NotificationUtil;
+import org.egov.bpa.web.model.Action;
 import org.egov.bpa.web.model.ActionItem;
 import org.egov.bpa.web.model.BPA;
 import org.egov.bpa.web.model.BPARequest;
@@ -27,7 +29,6 @@ import org.egov.bpa.web.model.landInfo.LandInfo;
 import org.egov.bpa.web.model.landInfo.LandSearchCriteria;
 import org.egov.bpa.web.model.landInfo.Source;
 import org.egov.bpa.web.model.user.UserDetailResponse;
-import org.egov.bpa.web.model.workflow.Action;
 import org.egov.common.contract.request.RequestInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,6 +47,8 @@ public class BPANotificationService {
 	private ServiceRequestRepository serviceRequestRepository;
 
 	private NotificationUtil util;
+	
+	private BPAUtil bpaUtil;
 
 	@Autowired
 	private UserService userService;
@@ -55,10 +58,11 @@ public class BPANotificationService {
 
 	@Autowired
 	public BPANotificationService(BPAConfiguration config, ServiceRequestRepository serviceRequestRepository,
-			NotificationUtil util) {
+			NotificationUtil util, BPAUtil bpaUtil) {
 		this.config = config;
 		this.serviceRequestRepository = serviceRequestRepository;
 		this.util = util;
+		this.bpaUtil = bpaUtil;
 	}
 
 	/**
@@ -126,19 +130,14 @@ public class BPANotificationService {
 			Action action = null;
 			if (payTriggerList.contains(bpaApplication.getStatus())) {
 				List<ActionItem> items = new ArrayList<>();
-				String busineService = null;
-				if (bpaApplication.getStatus().toString().equalsIgnoreCase(config.getStatuspendingapplfee())) {
-					busineService = "BPA.NC_APP_FEE";
-				} else {
-					busineService = "BPA.NC_SAN_FEE";
-				}
+				String busineService = bpaUtil.getFeeBusinessSrvCode(bpaApplication);
 				String actionLink = config.getPayLink().replace("$mobile", mobile)
 						.replace("$applicationNo", bpaApplication.getApplicationNo())
 						.replace("$tenantId", bpaApplication.getTenantId()).replace("$businessService", busineService);
 				actionLink = config.getUiAppHost() + actionLink;
 				ActionItem item = ActionItem.builder().actionUrl(actionLink).code(config.getPayCode()).build();
 				items.add(item);
-//				action = Action.builder().actionUrls(items).build();
+				action = Action.builder().actionUrls(items).build();
 			}
 
 			events.add(Event.builder().tenantId(bpaApplication.getTenantId()).description(mobileNumberToMsg.get(mobile))

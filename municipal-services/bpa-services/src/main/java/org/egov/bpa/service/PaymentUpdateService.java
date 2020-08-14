@@ -95,6 +95,8 @@ public class PaymentUpdateService {
 
 					Role role = Role.builder().code("SYSTEM_PAYMENT").tenantId(bpas.get(0).getTenantId()).build();
 					requestInfo.getUserInfo().getRoles().add(role);
+					role = Role.builder().code("CITIZEN").tenantId(bpas.get(0).getTenantId()).build();
+					requestInfo.getUserInfo().getRoles().add(role);
 					BPARequest updateRequest = BPARequest.builder().requestInfo(requestInfo).BPA(bpas.get(0)).build();
 
 					/*

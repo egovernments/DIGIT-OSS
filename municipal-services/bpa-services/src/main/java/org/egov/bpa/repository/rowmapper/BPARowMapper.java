@@ -27,6 +27,10 @@ public class BPARowMapper implements ResultSetExtractor<List<BPA>> {
 	@Autowired
 	private ObjectMapper mapper;
 
+	/**
+	 * extract the data from the resultset and prepare the BPA Object
+	 * @see org.springframework.jdbc.core.ResultSetExtractor#extractData(java.sql.ResultSet)
+	 */
 	@SuppressWarnings("rawtypes")
 	@Override
 	public List<BPA> extractData(ResultSet rs) throws SQLException, DataAccessException {
@@ -80,6 +84,12 @@ public class BPARowMapper implements ResultSetExtractor<List<BPA>> {
 
 	}
 
+	/**
+	 * add child objects to the BPA fro the results set
+	 * @param rs
+	 * @param bpa
+	 * @throws SQLException
+	 */
 	@SuppressWarnings("unused")
 	private void addChildrenToProperty(ResultSet rs, BPA bpa) throws SQLException {
 

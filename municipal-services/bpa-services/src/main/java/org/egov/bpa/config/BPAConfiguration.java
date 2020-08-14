@@ -259,9 +259,40 @@ public class BPAConfiguration {
 	@Value("${egov.bpa.skippayment.status}")
 	private String skipPaymentStatuses;
 	
-//	action and status constants
+	@Value("${egov.noc.service.host}")
+	private String nocServiceHost;
 	
-
+	@Value("${egov.noc.create.endpoint}")
+	private String nocCreateEndpoint;
+	
+	@Value("${egov.noc.update.endpoint}")
+	private String nocUpdateEndpoint;
+	
+	@Value("${egov.noc.search.endpoint}")
+	private String nocSearchEndpoint;
+	
+	@Value("${validate.required.nocs}")
+	private Boolean validateRequiredNoc;
+	
+	@Value("${validate.required.nocs.statuses}")
+	private String nocValidationCheckStatuses;
+	
+	@Value("${egov.noc.initiate.action}")
+	private String nocInitiateAction;
+	
+	@Value("${egov.noc.void.action}")
+	private String nocVoidAction;
+	
+	@Value("${egov.noc.autoapprove.action}")
+	private String nocAutoApproveAction;
+	
+	@Value("${egov.noc.autoapproved.state}")
+	private String nocAutoApprovedState;
+	
+	@Value("${egov.noc.approved.state}")
+	private String nocApprovedState;
+  
+//	action and status constants
 	@Value("${egov.sendtocitizen.action}")
 	private String actionsendtocitizen;
 	
@@ -276,4 +307,11 @@ public class BPAConfiguration {
 	
 	@Value("${egov.inprogress.stsus}")
 	private String statusinprogress;
+	
+
+	@Value("#{${nocSourceConfig}}")
+	private Map<String,String> nocSourceConfig;
+
+	@Value("#{${workflowStatusFeeBusinessSrvMap}}")
+	private Map<String,Map<String,String>> workflowStatusFeeBusinessSrvMap;
 }

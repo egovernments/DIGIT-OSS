@@ -24,6 +24,11 @@ public class CalculationService {
 		this.config = config;
 	}
 
+	/**
+	 * add calculation for the bpa object based on the FeeType
+	 * @param bpaRequest
+	 * @param feeType
+	 */
 	public void addCalculation(BPARequest bpaRequest, String feeType) {
 
 		CalculationReq calulcationRequest = new CalculationReq();

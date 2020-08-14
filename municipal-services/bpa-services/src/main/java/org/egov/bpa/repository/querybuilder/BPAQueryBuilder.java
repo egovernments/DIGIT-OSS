@@ -191,6 +191,11 @@ public class BPAQueryBuilder {
 
 	}
 
+	/**
+	 * add if clause to the Statement if required or elese AND
+	 * @param values
+	 * @param queryString
+	 */
 	private void addClauseIfRequired(List<Object> values, StringBuilder queryString) {
 		if (values.isEmpty())
 			queryString.append(" WHERE ");
@@ -199,6 +204,11 @@ public class BPAQueryBuilder {
 		}
 	}
 
+	/**
+	 * add values to the preparedStatment List
+	 * @param preparedStmtList
+	 * @param ids
+	 */
 	private void addToPreparedStatement(List<Object> preparedStmtList, List<String> ids) {
 		ids.forEach(id -> {
 			preparedStmtList.add(id);
@@ -206,6 +216,11 @@ public class BPAQueryBuilder {
 
 	}
 
+	/**
+	 * produce a query input for the multiple values
+	 * @param ids
+	 * @return
+	 */
 	private Object createQuery(List<String> ids) {
 		StringBuilder builder = new StringBuilder();
 		int length = ids.size();

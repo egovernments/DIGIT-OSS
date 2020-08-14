@@ -43,6 +43,11 @@ public class BPARepository {
 		producer.push(config.getSaveTopic(), bpaRequest);
 	}
 
+	/**
+	 * pushes the request on update or workflow update topic through kafaka based on th isStateUpdatable 
+	 * @param bpaRequest
+	 * @param isStateUpdatable
+	 */
 	public void update(BPARequest bpaRequest, boolean isStateUpdatable) {
 		RequestInfo requestInfo = bpaRequest.getRequestInfo();
 

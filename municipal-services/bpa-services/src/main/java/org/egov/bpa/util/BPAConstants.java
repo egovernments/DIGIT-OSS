@@ -91,6 +91,8 @@ public class BPAConstants {
 
 	public static final String CHECKLIST_NAME = "CheckList";
 
+	public static final String NOC_TYPE_MAPPING = "NocTypeMapping";
+
 	// FINANCIAL YEAR
 
 	public static final String MDMS_EGF_MASTER = "egf-master";
@@ -223,6 +225,7 @@ public class BPAConstants {
 	public static final String BPA_LOW_APPL_FEE_STATE = "PENDING_FEE";
 	public static final String APPROVED_STATE = "APPROVED";
 	public static final String DOCVERIFICATION_STATE = "DOC_VERIFICATION_PENDING";
+	public static final String NOCVERIFICATION_STATUS = "NOC_VERIFICATION_INPROGRESS";
 
 	public static final String PENDING_APPROVAL_STATE = "PENDINGAPPROVAL";
 
@@ -248,6 +251,10 @@ public class BPAConstants {
 	public static final String CODE = "documentType";
 	public static final String QUESTIONS_PATH = "$.[?(@.active==true)].question";
 	public static final String DOCTYPESS_PATH = "$.[?(@.required==true)].code";
+	public static final String NOCTYPE_MAP = "$.MdmsRes.BPA.NocTypeMapping[?(@.applicationType==\"{1}\" && @.serviceType==\"{2}\" && @.riskType==\"{3}\" && @.nocTriggerState==\"{4}\")].nocTypes";
+	public static final String NOCTYPE_REQUIRED_MAP = "$.MdmsRes.BPA.NocTypeMapping[?(@.applicationType==\"{1}\" && @.serviceType==\"{2}\" && @.riskType==\"{3}\")].nocTypes";
+	public static final String NOCTYPE_OFFLINE_MAP = "$.MdmsRes.NOC.NocType[?(@.mode==\"offline\")].code";	
+	public static final String NOC_TRIGGER_STATE_MAP = "$.MdmsRes.BPA.NocTypeMapping[?(@.applicationType==\"{1}\" && @.serviceType==\"{2}\" && @.riskType==\"{3}\")].nocTriggerState";
 
 	// SMS Notification messages
 	public static final String APP_CREATE = "APPLICATION_CREATE_MSG";
@@ -343,4 +350,12 @@ public class BPAConstants {
 	public static final String APPLICATIONTYPE = "applicationType";
 	
 	public static final String PERMIT_NO = "permitNumber";
+
+	public static final String NOC_MODULE = "NOC";
+
+	public static final String NOC_TYPE = "NocType";
+
+	public static final String NOC_APPLICATIONTYPE = "NEW";
+
+	public static final String NOC_SOURCE = "BPA";
 }

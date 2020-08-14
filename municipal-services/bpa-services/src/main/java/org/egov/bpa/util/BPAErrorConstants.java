@@ -35,6 +35,8 @@ public class BPAErrorConstants {
 	public static final String UNABLE_TO_DOWNLOAD = "UNABLE TO DOWNLOAD";
 
 	public static final String INVALID_FILE = "INVALID FILE";
+	
+	public static final String INVALID_EDCR_REPORT = "INVALID EDCR REPORT URL";
 
 	public static final String INVALID_SEARCH = "INVALID SEARCH";
 
@@ -75,5 +77,7 @@ public class BPAErrorConstants {
 	public static final String PARSING_ERROR = "PARSING ERROR";
 
 	public static final String EG_WF_ERROR = "EG WF ERROR";
+
+	public static final String NOC_SERVICE_EXCEPTION = "NOC_SERVICE_EXCEPTION";
 
 }

@@ -102,6 +102,7 @@ public class BPAUtil {
 		bpaMasterDtls.add(MasterDetail.builder().name(BPAConstants.USAGES).filter(filterCode).build());
 		bpaMasterDtls.add(MasterDetail.builder().name(BPAConstants.CalculationType).build());
 		bpaMasterDtls.add(MasterDetail.builder().name(BPAConstants.CHECKLIST_NAME).build());
+		bpaMasterDtls.add(MasterDetail.builder().name(BPAConstants.NOC_TYPE_MAPPING).build());
 		ModuleDetail bpaModuleDtls = ModuleDetail.builder().masterDetails(bpaMasterDtls)
 				.moduleName(BPAConstants.BPA_MODULE).build();
 
@@ -113,11 +114,24 @@ public class BPAUtil {
 		commonMasterDetails.add(MasterDetail.builder().name(BPAConstants.DOCUMENT_TYPE).filter(filterCode).build());
 		ModuleDetail commonMasterMDtl = ModuleDetail.builder().masterDetails(commonMasterDetails)
 				.moduleName(BPAConstants.COMMON_MASTERS_MODULE).build();
+		
+		// master details for NOC module
+		List<MasterDetail> nocMasterDetails = new ArrayList<>();
+		nocMasterDetails
+				.add(MasterDetail.builder().name(BPAConstants.NOC_TYPE).build());
+		ModuleDetail nocMDtl = ModuleDetail.builder().masterDetails(nocMasterDetails)
+				.moduleName(BPAConstants.NOC_MODULE).build();
 
-		return Arrays.asList(bpaModuleDtls, commonMasterMDtl);
+		return Arrays.asList(bpaModuleDtls, commonMasterMDtl, nocMDtl);
 
 	}
 
+	/**
+	 * prepares the mdms request object
+	 * @param requestInfo
+	 * @param tenantId
+	 * @return
+	 */
 	public MdmsCriteriaReq getMDMSRequest(RequestInfo requestInfo, String tenantId) {
 		List<ModuleDetail> moduleRequest = getBPAModuleRequest();
 
@@ -131,13 +145,21 @@ public class BPAUtil {
 		return mdmsCriteriaReq;
 	}
 
+	/**
+	 * makes mdms call with the given criteria and reutrn mdms data
+	 * @param requestInfo
+	 * @param tenantId
+	 * @return
+	 */
 	public Object mDMSCall(RequestInfo requestInfo, String tenantId) {
 		MdmsCriteriaReq mdmsCriteriaReq = getMDMSRequest(requestInfo, tenantId);
 		Object result = serviceRequestRepository.fetchResult(getMdmsSearchUrl(), mdmsCriteriaReq);
 		return result;
 	}
 	
-	
+	/**
+	 * json path's defuault cofig to read/parse the json
+	 */
 	public void defaultJsonPathConfig() {
 		Configuration.setDefaults(new Configuration.Defaults() {
 
@@ -161,6 +183,12 @@ public class BPAUtil {
 		});
 	}
 
+	/**
+	 * fetch the busniess servce of the current record
+	 * @param applicationType
+	 * @param serviceType
+	 * @return
+	 */
 	public ArrayList<String> getBusinessService(String applicationType, String serviceType) {
 		Map<String, Map<String, String>> appSrvTypeBussSrvCode = config.getAppSrvTypeBussSrvCode();
 		String[] codes = null;
@@ -179,6 +207,11 @@ public class BPAUtil {
 		return  new ArrayList<String>(Arrays.asList(codes));
 	}
 
+	/**
+	 * Fetch the demand amount of the BPA
+	 * @param bpaRequest
+	 * @return
+	 */
 	public BigDecimal getDemandAmount(BPARequest bpaRequest) {
 		BPA bpa = bpaRequest.getBPA();
 		RequestInfo requestInfo = bpaRequest.getRequestInfo();
@@ -207,26 +240,13 @@ public class BPAUtil {
 		}
 	}
 
-	private StringBuilder getBillUri(BPA bpa) {
-		String status = bpa.getStatus().toString();
-		String code = null;
-
-		if (bpa.getBusinessService().equalsIgnoreCase(BPAConstants.BPA_MODULE)) {
-			if (status.equalsIgnoreCase(BPAConstants.APPL_FEE_STATE)) {
-				code = "BPA.NC_APP_FEE";
-			} else {
-				code = "BPA.NC_SAN_FEE";
-			}
-		} else if (bpa.getBusinessService().equalsIgnoreCase(BPAConstants.BPA_LOW_MODULE_CODE)) {
-			if (status.equalsIgnoreCase(BPAConstants.BPA_LOW_APPL_FEE_STATE))
-				code = "BPA.LOW_RISK_PERMIT_FEE";
-		} else if (bpa.getBusinessService().equalsIgnoreCase(BPAConstants.BPA_OC_MODULE_CODE)) {
-			if (status.equalsIgnoreCase(BPAConstants.APPL_FEE_STATE)) {
-				code = "BPA.NC_OC_APP_FEE";
-			} else {
-				code = "BPA.NC_OC_SAN_FEE";
-			}
-		}
+	/**
+	 * gererate bill url with the query params
+	 * @param bpa
+	 * @return
+	 */
+	public StringBuilder getBillUri(BPA bpa) {
+		String code = getFeeBusinessSrvCode(bpa);
 
 		StringBuilder builder = new StringBuilder(config.getBillingHost());
 		builder.append(config.getDemandSearchEndpoint());
@@ -237,6 +257,24 @@ public class BPAUtil {
 		builder.append("&businessService=");
 		builder.append(code);
 		return builder;
+	}
+	
+	/**
+	 * return the FeeBusiness Service code based on the BPA workflowCode, BPA Status
+	 * @param bpa
+	 * @return
+	 */
+	public String getFeeBusinessSrvCode(BPA bpa) {
+		Map<String, Map<String, String>> wfStBSrvMap = config.getWorkflowStatusFeeBusinessSrvMap();
+		String businessSrvCode = null;
+		Map<String, String> statusBusSrvMap = wfStBSrvMap.get(bpa.getBusinessService());
+		if (!CollectionUtils.isEmpty(statusBusSrvMap)) {
+			if (bpa.getStatus() != null) {
+				businessSrvCode = statusBusSrvMap.get(bpa.getStatus());
+			} 
+		}
+		return businessSrvCode;
+		
 	}
 
 }

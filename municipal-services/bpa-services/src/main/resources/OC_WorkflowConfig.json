@@ -96,7 +96,7 @@
               "tenantId": "pb",
               "currentState": "CITIZEN_APPROVAL_PENDING",
               "action": "APPROVE",
-              "nextState": "INITIATED",
+              "nextState": "INPROGRESS",
               "roles": [
                 "CITIZEN"
               ]
@@ -124,9 +124,9 @@
           "actions": [
             {
               "tenantId": "pb",
-              "currentState": "INITIATED",
+              "currentState": "INPROGRESS",
               "action": "INITIATE",
-              "nextState": "INITIATED",
+              "nextState": "INPROGRESS",
               "roles": [
                 "BPA_ARCHITECT",
                 "BPA_ENGINEER",
@@ -138,7 +138,7 @@
             },
             {
               "tenantId": "pb",
-              "currentState": "INITIATED",
+              "currentState": "INPROGRESS",
               "action": "APPLY",
               "nextState": "PENDING_APPL_FEE_PAYMENT",
               "roles": [
@@ -166,6 +166,23 @@
               "tenantId": "pb",
               "currentState": "PENDING_APPL_FEE_PAYMENT",
               "action": "PAY",
+              "nextState": "DOC_VERIFICATION_PENDING",
+              "roles": [
+                "CITIZEN",
+                "BPA_ARCHITECT",
+                "BPA_ENGINEER",
+                "BPA_BUILDER",
+                "BPA_STRUCTURALENGINEER",
+                "BPA_TOWNPLANNER",
+                "BPA_SUPERVISOR",
+                "SYSTEM_PAYMENT",
+                "CEMP"
+              ]
+            },
+            {
+              "tenantId": "pb",
+              "currentState": "PENDING_APPL_FEE_PAYMENT",
+              "action": "SKIP_PAYMENT",
               "nextState": "DOC_VERIFICATION_PENDING",
               "roles": [
                 "CITIZEN",
@@ -386,6 +403,24 @@
                 "BPA_TOWNPLANNER",
                 "BPA_SUPERVISOR",
                 "SYSTEM_PAYMENT",
+                "CEMP"
+              ]
+            },
+            {
+              "tenantId": "pb",
+              "currentState": "PENDING_SANC_FEE_PAYMENT",
+              "action": "SKIP_PAYMENT",
+              "nextState": "APPROVED",
+              "roles": [
+                "CITIZEN",
+                "BPA_ARCHITECT",
+                "BPA_ENGINEER",
+                "BPA_BUILDER",
+                "BPA_STRUCTURALENGINEER",
+                "BPA_TOWNPLANNER",
+                "BPA_SUPERVISOR",
+                "SYSTEM_PAYMENT",
+                "BPA_APPROVER",
                 "CEMP"
               ]
             }
