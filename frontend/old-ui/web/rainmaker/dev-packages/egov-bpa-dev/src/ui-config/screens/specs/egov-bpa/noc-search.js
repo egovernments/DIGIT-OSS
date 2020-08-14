@@ -11,6 +11,8 @@ import {
   handleScreenConfigurationFieldChange as handleField
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "../../../../ui-utils/api";
+import get from "lodash/get";
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
 const header = getCommonHeader({
   labelName: "NOC_APPLICATION_HEADER",
@@ -51,7 +53,21 @@ const getMdmsData = async (action, state, dispatch) => {
 
   let payload = await getNOCMdmsData(action, state, dispatch, mdmsBody);
   dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
+  setNocTypeResponse(action, state, dispatch)  
 };
+
+const setNocTypeResponse = (action, state, dispatch) => {
+  let userInfo = JSON.parse(getUserInfo());
+  let nocData = get( state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.NOC.NocType", []);  
+  userInfo.roles && userInfo.roles.map(role =>{
+    nocData.map(nocType => {
+      if(role.code === nocType.NocUserRole){
+        // let NocType = nocType.code.split("_").join(" ");
+        dispatch(prepareFinalObject("nocType", nocType.code));        
+      }
+    })
+  })
+}
 
 const BpaSearchAndResult = {
   uiFramework: "material-ui",

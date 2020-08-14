@@ -4,6 +4,7 @@ import {
   getEpochForDate,
   getTextToLocalMapping
 } from "../../utils";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
 export const searchResults = {
   uiFramework: "custom-molecules",
@@ -15,11 +16,14 @@ export const searchResults = {
         name: "Application No", labelKey: "BPA_COMMON_TABLE_COL_APP_NO"
       },
       {
-        name: "ApplicationType", labelKey: "BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL"
+        name: "Source model application number", labelKey: "SOURCE_MODULE_NUMBER"
       },
       {
-        name: "NocType", labelKey: "NOC_SEARCH_TYPE_LABEL"
+        name: "Source Module", labelKey: "BPA_NOC_MODULE_SOURCE_LABEL"
       },
+      // {
+      //   name: "Current Owner", labelKey: "WF_INBOX_HEADER_CURRENT_OWNER"
+      // },
       {
         name: "Status", labelKey: "BPA_COMMON_TABLE_COL_STATUS_LABEL",
         options: {
@@ -35,13 +39,6 @@ export const searchResults = {
           )
         }
       },
-      {
-        name: "Tenant Id",
-        labelKey: "TENANT_ID",
-        options: {
-          display: false
-        }
-      }
     ],
     title: { labelKey: "NOC_HOME_SEARCH_RESULTS_TABLE_HEADING", labelName: "Search Results for NOC Applications" },
     rows: "",
@@ -78,7 +75,7 @@ export const searchResults = {
 const onRowClick = rowData => {
   const state = rowData[3];
   const applicationNumber = rowData[0];
-  const tenantId = rowData[4];
+  const tenantId = getTenantId();;
     const environment = process.env.NODE_ENV === "production" ? "employee" : "";
     const origin = process.env.NODE_ENV === "production" ? window.location.origin + "/" : window.location.origin;
     switch (state) {

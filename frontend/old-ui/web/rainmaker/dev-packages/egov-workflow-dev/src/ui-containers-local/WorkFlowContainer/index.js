@@ -114,6 +114,8 @@ class WorkFlowContainer extends React.Component {
         return "purpose=activate&status=success";
       case "REVOCATE":
         return "purpose=application&status=revocated"
+      case "VOID":
+        return "purpose=application&status=voided"
     }
   };
 
@@ -213,7 +215,11 @@ class WorkFlowContainer extends React.Component {
 
     try {
       if (beforeSubmitHook) {
-        data = beforeSubmitHook(data);
+        if (moduleName === "BPA" || moduleName === "BPA_OC" || moduleName === "BPA_LOW") {
+          data = await beforeSubmitHook(data);
+        } else {
+          data = beforeSubmitHook(data);
+        }
       }
       const payload = await httpRequest("post", updateUrl, "", [], {
         [dataPath]: data
@@ -533,6 +539,10 @@ class WorkFlowContainer extends React.Component {
     if (moduleName === 'BPA' || moduleName === 'BPA_LOW' || moduleName === 'BPA_OC') {
       showFooter = process.env.REACT_APP_NAME === "Citizen" ? false : true;
     }
+    if ((moduleName === 'Noc') && window.location.href.includes("isFromBPA=true")) {
+      showFooter = false
+    }
+
     return (
       <div>
         {ProcessInstances && ProcessInstances.length > 0 && (
