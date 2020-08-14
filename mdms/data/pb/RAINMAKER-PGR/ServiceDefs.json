@@ -23,7 +23,7 @@
     {
       "serviceCode": "GarbageNeedsTobeCleared",
       "keywords": "garbage, collect, litter, clean, door, waste, remove, sweeper, sanitation, dump, health, debris, throw",
-      "department": "DEPT_3",
+      "department": "DEPT_25",
       "slaHours": 336,
       "menuPath": "Garbage",
       "active": true,
@@ -32,7 +32,7 @@
     {
       "serviceCode": "DamagedGarbageBin",
       "keywords": "garbage, waste, bin, dustbin, clean, remove, sanitation, overflow, smell, health, throw, dispose",
-      "department": "DEPT_3",
+      "department": "DEPT_25",
       "slaHours": 336,
       "menuPath": "Garbage",
       "active": true,
@@ -41,7 +41,7 @@
     {
       "serviceCode": "BurningOfGarbage",
       "keywords": "garbage, remove, burn, fire, health, waste, smoke, plastic, illegal",
-      "department": "DEPT_3",
+      "department": "DEPT_25",
       "slaHours": 336,
       "menuPath": "Garbage",
       "active": true,
@@ -50,7 +50,7 @@
     {
       "serviceCode": "OverflowingOrBlockedDrain",
       "keywords": "drain, block, clean, debris, silt, drainage, water, clean, roadside, flow, remove, waste, garbage, clear, overflow, canal, fill, stagnate, rain, sanitation, sand, pipe, clog, stuck",
-      "department": "DEPT_4",
+      "department": "ENG",
       "slaHours": 336,
       "menuPath": "Drains",
       "active": true
@@ -58,7 +58,7 @@
     {
       "serviceCode": "illegalDischargeOfSewage",
       "keywords": "water, supply, connection, damage, repair, broken, pipe, piping, tap",
-      "department": "DEPT_4",
+      "department": "ENG",
       "slaHours": 336,
       "menuPath": "WaterandSewage",
       "active": true
@@ -66,7 +66,7 @@
     {
       "serviceCode": "BlockOrOverflowingSewage",
       "keywords": "water, supply, connection, damage, repair, broken, pipe, piping, tap",
-      "department": "DEPT_4",
+      "department": "ENG",
       "slaHours": 336,
       "menuPath": "WaterandSewage",
       "active": true
