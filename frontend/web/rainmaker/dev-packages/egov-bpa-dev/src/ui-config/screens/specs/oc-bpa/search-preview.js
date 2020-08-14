@@ -18,14 +18,25 @@ import { getLocale, getTenantId, getUserInfo } from "egov-ui-kit/utils/localStor
 import get from "lodash/get";
 import set from "lodash/set";
 import { edcrHttpRequest, httpRequest } from "../../../../ui-utils/api";
-import { getAppSearchResults } from "../../../../ui-utils/commons";
+import { 
+  getAppSearchResults,
+  getNocSearchResults,
+  prepareNOCUploadData,
+  nocapplicationUpdate
+} from "../../../../ui-utils/commons";
 import "../egov-bpa/applyResource/index.css";
 import "../egov-bpa/applyResource/index.scss";
 import { estimateSummary } from "../egov-bpa/summaryResource/estimateSummary";
 import {
-  applicantNameAppliedByMaping, downloadFeeReceipt, edcrDetailsToBpaDetails,
-
-  generateBillForBPA, permitOrderNoDownload, requiredDocumentsData, setProposedBuildingData
+  applicantNameAppliedByMaping, 
+  downloadFeeReceipt, 
+  edcrDetailsToBpaDetails,
+  generateBillForBPA, 
+  permitOrderNoDownload, 
+  requiredDocumentsData, 
+  setProposedBuildingData,
+  prepareNocFinalCards,
+  compare
 } from "../utils/index";
 import { citizenFooter, updateBpaApplication } from "./searchResource/citizenFooter";
 import { declarations } from "./summaryResource/declarations";
@@ -35,6 +46,10 @@ import { fieldSummary } from "./summaryResource/fieldSummary";
 import { permitConditions } from "./summaryResource/permitConditions";
 import { permitListSummary } from "./summaryResource/permitListSummary";
 import { scrutinySummary } from "./summaryResource/scrutinySummary";
+import { nocDetailsSearch } from "../egov-bpa/noc";
+import store from "ui-redux/store";
+import commonConfig from "config/common.js";
+
 
 export const ifUserRoleExists = role => {
   let userInfo = JSON.parse(getUserInfo());
@@ -209,21 +224,10 @@ const setDownloadMenu = async (action, state, dispatch, applicationNumber, tenan
     },
     leftIcon: "receipt"
   };
-  let comparisonReportDownloadObject = {}
-  if (comparisonReport) {
-    comparisonReportDownloadObject = {
-      label: { labelName: "Comparison Report", labelKey: "BPA_COMPARISON_REPORT_LABEL" },
-      link: () => {
-        window.open(comparisonReport);
-      },
-      leftIcon: "assignment"
-    }
-  }
 
-
-  
+  let comparisonReportDownloadObject = {};
   let comparisonReportPrintObject = {};
-  if (comparisonReport) {
+  if(comparisonReport){
     comparisonReportDownloadObject = {
       label: { labelName: "Comparison Report", labelKey: "BPA_COMPARISON_REPORT_LABEL" },
       link: () => {
@@ -308,7 +312,7 @@ const setDownloadMenu = async (action, state, dispatch, applicationNumber, tenan
 const getRequiredMdmsDetails = async (state, dispatch) => {
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: getTenantId(),
+      tenantId: commonConfig.tenantId,
       moduleDetails: [
         {
           moduleName: "common-masters",
@@ -330,6 +334,14 @@ const getRequiredMdmsDetails = async (state, dispatch) => {
             {
               name: "RiskTypeComputation"
             }
+          ]
+        },
+        {
+          moduleName: "NOC",
+          masterDetails: [
+            {
+              name: "DocumentTypeMapping"
+            },
           ]
         }
       ]
@@ -360,6 +372,18 @@ const setSearchResponse = async (
     },
     { key: "applicationNo", value: applicationNumber }
   ]);
+
+  const payload = await getNocSearchResults([
+    {
+      key: "tenantId",
+      value: tenantId
+    },
+    { key: "sourceRefId", value: applicationNumber }
+  ], state);
+  dispatch(prepareFinalObject("Noc", payload.Noc));
+  payload.Noc.sort(compare);
+  // await prepareNOCUploadData(state, dispatch);
+  // prepareNocFinalCards(state, dispatch);
 
   const edcrNumber = get(response, "BPA[0].edcrNumber");
   const status = get(response, "BPA[0].status");
@@ -555,6 +579,39 @@ const setSearchResponse = async (
   dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
 };
 
+export const beforeSubmitHook = async () => {
+  let state = store.getState();
+  let bpaDetails = get(state, "screenConfiguration.preparedFinalObject.BPA", {});
+  let isNocTrue = get(state, "screenConfiguration.preparedFinalObject.BPA.isNocTrue", false);
+  if(!isNocTrue) {
+    const Noc = get(state, "screenConfiguration.preparedFinalObject.Noc", []);
+    let nocDocuments = get(state, "screenConfiguration.preparedFinalObject.nocFinalCardsforPreview", []);
+    if (Noc.length > 0) {
+      let count = 0;
+      for (let data = 0; data < Noc.length; data++) {
+        let documents = get(nocDocuments[data], "documents", null);
+        set(Noc[data], "documents", documents);
+        let response = await httpRequest(
+          "post",
+          "/noc-services/v1/noc/_update",
+          "",
+          [],
+          { Noc: Noc[data] }
+        );
+        if(get(response, "ResponseInfo.status") == "successful") {
+          count++;
+          if(Noc.length == count) {
+            store.dispatch(prepareFinalObject("BPA.isNocTrue", true));
+            return bpaDetails;
+          }
+        }
+      }
+    }
+  } else {
+    return bpaDetails;
+  }
+}
+
 const screenConfig = {
   uiFramework: "material-ui",
   name: "search-preview",
@@ -659,7 +716,8 @@ const screenConfig = {
           props: {
             dataPath: "BPA",
             moduleName: "BPA_OC",
-            updateUrl: "/bpa-services/v1/bpa/_update"
+            updateUrl: "/bpa-services/v1/bpa/_update",
+            beforeSubmitHook: beforeSubmitHook
           }
         },
         sendToArchPickerDialog: {
@@ -706,6 +764,7 @@ const screenConfig = {
           fieldSummary: fieldSummary,
           scrutinySummary: scrutinySummary,
           documentAndNocSummary: documentAndNocSummary,
+          nocDetailsApply: nocDetailsSearch,
           permitConditions: permitConditions,
           permitListSummary: permitListSummary,
           declarations: declarations

@@ -206,6 +206,7 @@ const BpaSearchAndResult = {
                     labelsFromLocalisation: true,
                     fullwidth: true,
                     required: true,
+                    isClearable: true,
                     inputLabelProps: {
                       shrink: true
                     }

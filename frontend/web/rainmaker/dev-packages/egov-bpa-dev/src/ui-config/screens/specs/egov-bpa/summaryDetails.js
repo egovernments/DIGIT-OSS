@@ -8,6 +8,7 @@ import { scrutinySummary } from './summaryResource/scrutinySummary';
 import { applicantSummary } from "./summaryResource/applicantSummary";
 import { applyDocSummary } from "./summaryResource/applyDocSummary";
 import { estimateSummary } from "./summaryResource/estimateSummary";
+import { nocDetailsApply } from "./noc";
 
 export const bpaSummaryDetails = getCommonCard({
   header: getCommonTitle({
@@ -18,6 +19,7 @@ export const bpaSummaryDetails = getCommonCard({
   basicSummary: basicSummary,
   scrutinySummary: scrutinySummary,
   applicantSummary: applicantSummary,
-  applyDocSummary: applyDocSummary
+  applyDocSummary: applyDocSummary,
+  nocDetailsApply: nocDetailsApply
 });
   

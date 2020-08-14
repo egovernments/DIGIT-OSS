@@ -234,6 +234,40 @@ export const getAppSearchResults = async (queryObject, dispatch) => {
   }
 };
 
+// export const getNocSearchResults = async (queryObject, dispatch) => {
+//   try {
+//     if(queryObject && queryObject.length) {
+//       let isTenantId = true;
+//       queryObject.forEach(obj => {
+//         if(obj.key === "tenantId"){
+//           isTenantId = false
+//         }
+//       })
+//       if(isTenantId) {
+//         queryObject.push({key : "tenantId", value: getTenantId()})
+//       }
+//     } else {
+//       queryObject = [{key : "tenantId", value: getTenantId()}];
+//     }
+//     const payload = await httpRequest(
+//       "post",
+//       "/noc-services/v1/noc/_search",
+//       "",
+//       queryObject
+//     );
+//     return payload;
+//   } catch (error) {
+//     store.dispatch(
+//       toggleSnackbar(
+//         true,
+//         { labelName: error.message, labelKey: error.message },
+//         "error"
+//       )
+//     );
+//     throw error;
+//   }
+// };
+
 export const createUpdateBpaApplication = async (state, dispatch, status) => {
   let applicationId = get(
     state,
@@ -528,92 +562,200 @@ export const prepareDocumentsUploadData = (state, dispatch, isOC) => {
   }
 };
 
-export const prepareNOCUploadData = (state, dispatch) => {
-  return;
-  let documents = get(
-    state,
-    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.NOC",
-    []
-  );
-  documents = documents.filter(item => {
-    return item.active;
-  });
+export const prepareNOCUploadData = async (state, dispatch) => {
+  
+  
+  let documents = await getNocDocuments(state);  
+  let documentsList = await mapDropdownValues(documents, state);
+
+  // nocData.forEach(nocDoc => {
+  //   applicationDocuments && applicationDocuments.length > 0 && 
+  //   applicationDocuments.forEach(doc =>{
+  //     if(doc.applicationType === nocDoc.applicationType && doc.nocType === nocDoc.nocType) {
+  //       doc.docTypes[0].nocType = doc.nocType;
+  //       documents.push(doc.docTypes[0]);    
+  //     }
+  //   });
+  // });
+  const nocDocuments = documentsList;
   let documentsContract = [];
   let tempDoc = {};
-  documents.forEach(doc => {
-    let card = {};
-    card["code"] = doc.documentType;
-    card["title"] = doc.documentType;
-    card["cards"] = [];
-    tempDoc[doc.documentType] = card;
-  });
-
-  documents.forEach(doc => {
-    // Handle the case for multiple muildings
-    if (
-      doc.code === "BUILDING.BUILDING_PLAN" &&
-      doc.hasMultipleRows &&
-      doc.options
-    ) {
-      let buildingsData = get(
-        state,
-        "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.buildings",
-        []
-      );
-
-      buildingsData.forEach(building => {
-        let card = {};
-        card["name"] = building.name;
-        card["code"] = doc.code;
-        card["hasSubCards"] = true;
-        card["subCards"] = [];
-        doc.options.forEach(subDoc => {
-          let subCard = {};
-          subCard["name"] = subDoc.code;
-          subCard["required"] = subDoc.required ? true : false;
-          card.subCards.push(subCard);
-        });
-        tempDoc[doc.documentType].cards.push(card);
-      });
-    } else {
+  if ( nocDocuments && nocDocuments.length > 0) {
+    nocDocuments.forEach(doc => {
       let card = {};
-      card["name"] = doc.code;
-      card["code"] = doc.code;
+      // card["code"] = doc.documentType;
+      // card["title"] = doc.documentType;
+      card["code"] = doc.documentType.split(".")[0];
+      card["title"] = doc.documentType.split(".")[0];
+      card["cards"] = [];
+      tempDoc[doc.documentType.split(".")[0]] = card;
+    });
+    nocDocuments.forEach(doc => {
+      let card = {};
+      card["name"] = doc.documentType;
+      card["code"] = doc.documentType;
+      card["nocType"] = doc.nocType;
+      card["additionalDetails"] = doc.additionalDetails;
       card["required"] = doc.required ? true : false;
-      if (doc.hasDropdown && doc.natureOfNoc) {
-        let natureOfNoc = {};
-        natureOfNoc.label = "Nature Of Noc";
-        natureOfNoc.required = true;
-        natureOfNoc.menu = doc.natureOfNoc.filter(item => {
+      if (doc.hasDropdown && doc.dropDownValues) {
+        let dropDownValues = {};
+        dropDownValues.label = "Select Documents";
+        dropDownValues.required = doc.required;
+        dropDownValues.menu = doc.dropDownValues.filter(item => {
           return item.active;
         });
-        natureOfNoc.menu = natureOfNoc.menu.map(item => {
-          return { code: item.code, label: getTransformedLocale(item.code) };
+        dropDownValues.menu = dropDownValues.menu.map(item => {
+          return { code: item.code, label: item.code };
         });
-        card["natureOfNoc"] = natureOfNoc;
+        card["dropDownValues"] = dropDownValues;
       }
-      if (doc.hasDropdown && doc.remarks) {
-        let remarks = {};
-        remarks.label = "Remarks";
-        remarks.required = true;
-        remarks.menu = doc.remarks.filter(item => {
-          return item.active;
-        });
-        remarks.menu = remarks.menu.map(item => {
-          return { code: item.code, label: getTransformedLocale(item.code) };
-        });
-        card["remarks"] = remarks;
+      tempDoc[doc.documentType.split(".")[0]].cards.push(card);
+    });
+  }
+
+  if(tempDoc) {
+    Object.keys(tempDoc).forEach(key => {
+      documentsContract.push(tempDoc[key]);
+    });
+  }
+  dispatch(prepareFinalObject("nocBPADocumentsContract", documentsContract));
+  let Noc = fetchFileDetails(get(
+    state.screenConfiguration.preparedFinalObject,
+    "Noc",
+    []
+  )) 
+
+  let finalCards = [];  
+  documentsContract.length>0 && documentsContract[0].cards && documentsContract[0].cards.map(docs => {
+    Noc && Noc.map(upDocs => {
+      if(docs.nocType === upDocs.nocType) {
+        docs.documents =  upDocs.documents;
+        let card ={
+          code: docs.code,
+          name: docs.code,
+          nocType: docs.nocType,
+          dropDownValues: docs.dropDownValues,
+          documentCode: docs.code,
+          documents: upDocs.documents,
+          additionalDetails: docs.additionalDetails,
+          readOnly: false
+        };
+        finalCards.push(card);       
       }
-      tempDoc[doc.documentType].cards.push(card);
+    })
+  })
+  dispatch(prepareFinalObject("nocFinalCardsforPreview", finalCards));
+  dispatch(prepareFinalObject("nocBPADocumentsContract", documentsContract));
+
+};
+
+/**
+ * This method will be called to get teh noc documents matched with noctyps and applicationType
+ */
+const getNocDocuments = (state) =>{
+  let applicationDocuments = get(
+    state,
+    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.NOC.DocumentTypeMapping",
+    []
+  );
+ 
+  let Noc = get(
+    state,
+    "screenConfiguration.preparedFinalObject.Noc",
+    []
+  );
+  let documents = [];
+  Noc.forEach(nocDoc => {
+    
+    applicationDocuments && applicationDocuments.length > 0 && 
+    applicationDocuments.forEach(doc =>{
+      if(doc.applicationType === nocDoc.applicationType && doc.nocType === nocDoc.nocType) {
+        let linkDetails = {};
+        let checkingApp = getTenantId().split('.')[1] ? "employee" : "citizen";
+        let url = `${window.location.origin}/noc/search-preview?applicationNumber=${nocDoc.applicationNo}&tenantId=${nocDoc.tenantId}&isFromBPA=true`;
+        if (process.env.NODE_ENV === "production") {
+          if (checkingApp) {
+            url = `${window.location.origin}/${checkingApp}/noc/search-preview?applicationNumber=${nocDoc.applicationNo}&tenantId=${nocDoc.tenantId}&isFromBPA=true`;
+          }
+        }
+        if(nocDoc.applicationStatus === "CREATED" || nocDoc.applicationStatus === null) {
+          url = "";
+        }
+        linkDetails.labelName = "Application Number"
+        linkDetails.value = url;
+        linkDetails.valueName = nocDoc.applicationNo;
+        doc.docTypes[0].nocType = doc.nocType;
+        doc.docTypes[0].additionalDetails = {
+          submissionDetails: nocDoc.additionalDetails,
+          applicationStatus: nocDoc.applicationStatus,
+          linkDetails: linkDetails,
+          appNumberLink: nocDoc.applicationNo,
+          nocNo: nocDoc.nocNo,
+          approvedRejectedOn: get(nocDoc,"auditDetails.lastModifiedTime", "")
+        }
+        documents.push(doc.docTypes[0]);    
+      }
+    });
+  });
+ return documents;
+}
+
+/**
+ * This method will be called to map mdms dropdown values
+ * @param {*} documents 
+ */
+const mapDropdownValues = (documents, state) =>{
+  let documentsDropDownValues = get(
+    state,
+    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.common-masters.DocumentType",
+    []
+  );
+  let documentsList = [];  
+  if (documents && documents.length > 0) {
+    documents.map(doc => {
+      let code = doc.documentType; 
+      let nocType = doc.nocType;    
+      doc.dropDownValues = [];
+      documentsDropDownValues.forEach(value => {
+      let values = value.code.slice(0, code.length);
+      if (code === values) {
+        doc.hasDropdown = true;
+        doc.dropDownValues.push(value);
+      }
+    });
+    documentsList.push(doc);    
+    })
+  }  
+  return documentsList;
+
+}
+
+/**
+ * This method will be called to update filestore
+ * @param {*} fileData 
+ */
+const fetchFileDetails = fileData =>{
+  fileData && fileData.length>0 && fileData.forEach( async (items) => {
+    if(items.documents && items.documents.length>0){
+      let fileStoreIds = jp.query(items.documents, "$.*.fileStoreId");
+      let fileUrls =
+        fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
+        items.documents.map((docs, index) => {
+          docs["fileName"] =
+          (fileUrls[docs.fileStoreId] &&
+            decodeURIComponent(
+              getFileUrl(fileUrls[docs.fileStoreId])
+                .split("?")[0]
+                .split("/")
+                .pop()
+                .slice(13)
+            )) ||
+            `Document - ${index + 1}`;
+        })
     }
   });
-
-  Object.keys(tempDoc).forEach(key => {
-    documentsContract.push(tempDoc[key]);
-  });
-
-  dispatch(prepareFinalObject("nocDocumentsContract", documentsContract));
-};
+  return fileData;
+}
 
 export const prepareOwnershipType = response => {
   console.log(response);
@@ -1137,11 +1279,38 @@ export const handleFileUpload = (event, handleDocument, props) => {
   }
 };
 
+const updateNocApplication = async (state, dispatch, bpaAction) => {
+  const Noc = get(state, "screenConfiguration.preparedFinalObject.Noc", []);
+  let nocDocuments = get(state, "screenConfiguration.preparedFinalObject.nocForPreview", []);
+  if (Noc.length > 0) {
+    let count = 0;
+    for (let data = 0; data < Noc.length; data++) {
+      let documents = nocDocuments[data].documents;
+      set(Noc[data], "documents", documents);
+      // set(NOCData[data], "workflow.action", bpaAction)
+      let response = await httpRequest(
+        "post",
+        "/noc-services/v1/noc/_update",
+        "",
+        [],
+        { Noc: Noc[data] }
+      );
+      if(get(response, "ResponseInfo.status") == "successful") {
+        count++;
+        if(Noc.length == count) {
+          return "successful"
+        }
+      }
+    }
+  }
+};
+
 export const submitBpaApplication = async (state, dispatch) => {
   const bpaAction = "APPLY";
   let isDeclared = get(state, "screenConfiguration.preparedFinalObject.BPA.isDeclared");
 
   if (isDeclared) {
+    let nocRespose = await nocapplicationUpdate(state);
     let response = await createUpdateBpaApplication(state, dispatch, bpaAction);
     const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.BPA.applicationNo");
     const tenantId = getQueryArg(window.location.href, "tenantId");
@@ -1174,10 +1343,11 @@ export const submitBpaApplication = async (state, dispatch) => {
 
 export const updateBpaApplication = async (state, dispatch) => {
   const bpaAction = "SEND_TO_CITIZEN";
+  let nocRespose = await updateNocApplication(state, dispatch, "INITIATE");
   let response = await createUpdateBpaApplication(state, dispatch, bpaAction);
   const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.BPA.applicationNo");
   const tenantId = getQueryArg(window.location.href, "tenantId");
-  if (get(response, "status", "") === "success") {
+  if (get(response, "status", "") === "success" && nocRespose == "successful") {
     const acknowledgementUrl =
       process.env.REACT_APP_SELF_RUNNING === "true"
         ? `/egov-ui-framework/egov-bpa/acknowledgement?purpose=${bpaAction}&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`
@@ -1187,10 +1357,11 @@ export const updateBpaApplication = async (state, dispatch) => {
 };
 export const updateOcBpaApplication = async (state, dispatch) => {
   const bpaAction = "SEND_TO_CITIZEN";
+  let nocRespose = await updateNocApplication(state, dispatch, "INITIATE");
   let response = await createUpdateOCBpaApplication(state, dispatch, bpaAction);
   const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.BPA.applicationNo");
   const tenantId = getQueryArg(window.location.href, "tenantId");
-  if (response) {
+  if (response && nocRespose == "successful") {
     const acknowledgementUrl =
       process.env.REACT_APP_SELF_RUNNING === "true"
         ? `/egov-ui-framework/oc-bpa/acknowledgement?purpose=${bpaAction}&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`
@@ -1381,6 +1552,7 @@ export const createUpdateOCBpaApplication = async (state, dispatch, status) => {
 
 export const submitOCBpaApplication = async (state, dispatch) => {
   const bpaAction = "APPLY";
+  let nocRespose = await nocapplicationUpdate(state);
   let response = await createUpdateOCBpaApplication(state, dispatch, bpaAction);
   const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.BPA.applicationNo");
   const tenantId = getQueryArg(window.location.href, "tenantId");
@@ -1420,3 +1592,27 @@ export const getNocSearchResults = async (queryObject, dispatch) => {
     throw error;
   }
 };
+export const nocapplicationUpdate = (state) => {
+  const Noc = get(state, "screenConfiguration.preparedFinalObject.Noc", []);
+  let nocDocuments = get(state, "screenConfiguration.preparedFinalObject.nocFinalCardsforPreview", []);
+  if (Noc.length > 0) {
+    let count = 0;
+    for (let data = 0; data < Noc.length; data++) {
+      let documents = nocDocuments[data].documents;
+      set(Noc[data], "documents", documents);
+      let response = httpRequest(
+        "post",
+        "/noc-services/v1/noc/_update",
+        "",
+        [],
+        { Noc: Noc[data] }
+      );
+      if(get(response, "ResponseInfo.status") == "successful") {
+        count++;
+        if(Noc.length == count) {
+          return "successful"
+        }
+      }
+    }
+  }
+}

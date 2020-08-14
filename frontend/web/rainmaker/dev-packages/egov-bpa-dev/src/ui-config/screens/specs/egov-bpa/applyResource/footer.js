@@ -11,9 +11,12 @@ import { httpRequest } from "../../../../../ui-utils";
 import {
   createUpdateBpaApplication,
   prepareDocumentsUploadData,
+  prepareNOCUploadData,
   submitBpaApplication,
-  updateBpaApplication
+  updateBpaApplication,
+  getNocSearchResults  
 } from "../../../../../ui-utils/commons";
+import { prepareNocFinalCards, compare } from "../../../specs/utils/index";
 import { toggleSnackbar, prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
@@ -405,8 +408,13 @@ const callBackForNext = async (state, dispatch) => {
         // dispatch(prepareFinalObject("BPA.owners[0].ownerType", "NONE"));
       }
       if (activeStep === 3) {
-        // getMdmsData(state, dispatch);
-        // prepareDocumentsUploadData(state, dispatch); 
+        let nocData = get(state.screenConfiguration.preparedFinalObject, "nocForPreview", []);
+        if(nocData && nocData.length > 0) { 
+          nocData.map(items => {
+            if(!items.readOnly) items.readOnly = items.readOnly ? false : true;
+          })
+          dispatch(prepareFinalObject("nocForPreview", nocData));
+        }
       }
       if (activeStep === 2) {
         let checkingOwner = get(
@@ -487,6 +495,25 @@ const callBackForNext = async (state, dispatch) => {
             dispatch(toggleSnackbar(true, errorMessage, "warning"));
           }
         }
+        let applicationNumber = get(
+          state.screenConfiguration.preparedFinalObject,
+          "BPA.applicationNo"
+        );
+        let tenantId = get(
+          state.screenConfiguration.preparedFinalObject,
+          "BPA.tenantId"
+        );
+        const payload = await getNocSearchResults([
+          {
+            key: "tenantId",
+            value: tenantId
+          },
+          { key: "sourceRefId", value: applicationNumber }
+        ], state);
+        payload.Noc.sort(compare);
+        dispatch(prepareFinalObject("Noc", payload.Noc)); 
+        await prepareNOCUploadData(state, dispatch);
+        prepareNocFinalCards(state, dispatch);   
       } else {
         if(activeStep === 0){
           const occupancytypeValid = get(
@@ -704,6 +731,20 @@ export const getActionDefinationForStepper = path => {
 };
 
 export const callBackForPrevious = (state, dispatch) => {
+  let activeStep = get(
+    state.screenConfiguration.screenConfig["apply"],
+    "components.div.children.stepper.props.activeStep",
+    0
+  );
+  if (activeStep === 4) {
+    let nocData = get(state.screenConfiguration.preparedFinalObject, "nocForPreview", []);
+    if(nocData && nocData.length > 0) { 
+      nocData.map(items => {
+        if(items.readOnly) items.readOnly = items.readOnly ? false : true;
+      })
+      dispatch(prepareFinalObject("nocForPreview", nocData));
+    }
+  }
   changeStep(state, dispatch, "previous");
 };
 

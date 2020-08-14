@@ -1044,6 +1044,7 @@ export const getModuleName = () => {
   else if (pathName.indexOf("pgr-home") > -1 || pathName.indexOf("rainmaker-pgr") > -1) { return "rainmaker-pgr"; }
   else if (pathName.indexOf("bpastakeholder") > -1 || pathName.indexOf("edcrscrutiny") > -1 ||
     pathName.indexOf("egov-bpa") > -1 || pathName.indexOf("oc-bpa") > -1) { return "rainmaker-bpa,rainmaker-bpareg"; }
+  else if (pathName.indexOf("noc") > -1) { return "rainmaker-common-noc"; }
   else {
     return "rainmaker-common";
   }
