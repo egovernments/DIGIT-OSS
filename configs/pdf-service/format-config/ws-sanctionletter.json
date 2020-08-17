@@ -345,7 +345,7 @@
                           "text": ":"
                         },
                         {
-                          "width": "auto",
+                          "width": "40%",
                           "text": "{{applicationNumber}}",
                           "style": "receipt-value-down-sub"
                         }
