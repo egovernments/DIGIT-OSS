@@ -12,7 +12,11 @@
       "scheme":"",
       "subscheme":"",
       "validFrom":1234567890,
-      "validTo":2345678901
+      "validTo":2345678901,
+      "serviceAttributeMappingEnabled":true,
+      "serviceAttributeUrl":"/property-services/property/_search?propertyIds=",
+      "serviceAttributeKey":"Properties.usageCategory",
+      "serviceAttributeTaxHead" : "PT_TAX"
     },
     {
       "code":"FIRENOC",
