@@ -35,6 +35,9 @@ public class TLRenewalNotificationUtil {
 
     @Autowired
     private ShortUrlUtil shortUrlUtil;
+    
+	@Value("${egov.common.pay}")
+	private String tlCommonPayUrl;
 
     @Autowired
     public TLRenewalNotificationUtil(TLConfiguration config, ServiceRequestRepository serviceRequestRepository,
@@ -261,7 +264,7 @@ public class TLRenewalNotificationUtil {
 		message = message.replace("<3>", applicationNumber);
         message = message.replace("<4>", amountToBePaid.toString());
         
-        String shortUrl = shortUrlUtil.getShortUrl(tlCitizenSearchUrl, applicationNumber,
+        String shortUrl = shortUrlUtil.getShortUrl(tlCommonPayUrl, applicationNumber,
 				license.getTenantId(),TLConstants.TL_BUSINESS_SERVICE);
 
 		message = message.replace("<5>", shortUrl);
