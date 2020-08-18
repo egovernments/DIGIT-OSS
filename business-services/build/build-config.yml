@@ -17,7 +17,7 @@
 # -
 # -
 config:
-  - name: "business-services/billing-service"
+  - name: "builds/business-services/billing-service"
     build:
       - work-dir: "billing-service"
         image-name: "billing-service"
@@ -25,7 +25,7 @@ config:
       - work-dir: "billing-service/src/main/resources/db"
         image-name: "billing-service-db"
 
-  - name: "business-services/collection-services"
+  - name: "builds/business-services/collection-services"
     build:
       - work-dir: "collection-services"
         image-name: "collection-services"
@@ -33,7 +33,7 @@ config:
       - work-dir: "collection-services/src/main/resources/db"
         image-name: "collection-services-db"
 
-  - name: "business-services/egf-instrument"
+  - name: "builds/business-services/egf-instrument"
     build:
       - work-dir: "egf-instrument"
         image-name: "egf-instrument"
@@ -41,7 +41,7 @@ config:
       - work-dir: "egf-instrument/src/main/resources/db"
         image-name: "egf-instrument-db"
 
-  - name: "business-services/egf-master"
+  - name: "builds/business-services/egf-master"
     build:
       - work-dir: "egf-master"
         image-name: "egf-master"
@@ -49,7 +49,7 @@ config:
       - work-dir: "egf-master/src/main/resources/db"
         image-name: "egf-master-db"
 
-  - name: "business-services/egov-apportion-service"
+  - name: "builds/business-services/egov-apportion-service"
     build:
       - work-dir: "egov-apportion-service"
         image-name: "egov-apportion-service"
@@ -57,7 +57,7 @@ config:
       - work-dir: "egov-apportion-service/src/main/resources/db"
         image-name: "egov-apportion-service-db"
         
-  - name: "business-services/egov-hrms"
+  - name: "builds/business-services/egov-hrms"
     build:
       - work-dir: "egov-hrms"
         image-name: "egov-hrms"
@@ -65,7 +65,7 @@ config:
       - work-dir: "egov-hrms/src/main/resources/db"
         image-name: "egov-hrms-db"
 
-  - name: "business-services/finance-collections-voucher-consumer"
+  - name: "builds/business-services/finance-collections-voucher-consumer"
     build:
       - work-dir: "finance-collections-voucher-consumer"
         image-name: "finance-collections-voucher-consumer"
@@ -73,13 +73,13 @@ config:
       - work-dir: "finance-collections-voucher-consumer/src/main/resources/db"
         image-name: "finance-collections-voucher-consumer-db"
 
-  - name: "business-services/dashboard-analytics"
+  - name: "builds/business-services/dashboard-analytics"
     build:
       - work-dir: "dashboard-analytics"
         image-name: "dashboard-analytics"
         dockerfile: "build/maven/Dockerfile"
 
-  - name: "business-services/dashboard-ingest"
+  - name: "builds/business-services/dashboard-ingest"
     build:
       - work-dir: "dashboard-ingest"
         image-name: "dashboard-ingest"
