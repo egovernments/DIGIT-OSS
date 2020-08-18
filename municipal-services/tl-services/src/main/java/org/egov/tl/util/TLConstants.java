@@ -284,6 +284,8 @@ public class TLConstants {
     public static final String DEFAULT_WORKFLOW = "NewTL";
 
     public TLConstants() {}
+    
+    public static final String TL_BUSINESS_SERVICE= "NewTL";
 
 
 

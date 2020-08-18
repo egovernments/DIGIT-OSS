@@ -11,6 +11,7 @@ import org.egov.tl.web.models.*;
 import org.egov.tracer.model.CustomException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -28,6 +29,15 @@ public class TLRenewalNotificationUtil {
     private ServiceRequestRepository serviceRequestRepository;
 
     private Producer producer;
+    
+	@Value("${egov.tl.citizen.search}")
+	private String tlCitizenSearchUrl;
+
+    @Autowired
+    private ShortUrlUtil shortUrlUtil;
+    
+	@Value("${egov.common.pay}")
+	private String tlCommonPayUrl;
 
     @Autowired
     public TLRenewalNotificationUtil(TLConfiguration config, ServiceRequestRepository serviceRequestRepository,
@@ -250,9 +260,15 @@ public class TLRenewalNotificationUtil {
      */
     private String getApprovedMsg(TradeLicense license, BigDecimal amountToBePaid, String message) {
         message = message.replace("<2>", license.getTradeName());
-        message = message.replace("<3>", license.getApplicationNumber());
+        String applicationNumber = license.getApplicationNumber();
+		message = message.replace("<3>", applicationNumber);
         message = message.replace("<4>", amountToBePaid.toString());
-        message = message.replace("<tenantId>", license.getTenantId());
+        
+        String shortUrl = shortUrlUtil.getShortUrl(tlCommonPayUrl, applicationNumber,
+				license.getTenantId(),TLConstants.TL_BUSINESS_SERVICE);
+
+		message = message.replace("<5>", shortUrl);
+		
         String date = epochToDate(license.getValidTo());
         message = message.replace("<6>", date);
         return message;
@@ -384,9 +400,13 @@ public class TLRenewalNotificationUtil {
         String messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_RENEWAL_PAYMENT_OWNER, localizationMessages);
         messageTemplate = messageTemplate.replace("<2>", valMap.get(amountPaidKey));
         messageTemplate = messageTemplate.replace("<3>", license.getTradeName());
-        messageTemplate = messageTemplate.replace("<applicationNumber>", license.getApplicationNumber());
-        messageTemplate = messageTemplate.replace("<tenantId>",license.getTenantId());
         messageTemplate = messageTemplate.replace("<4>", valMap.get(receiptNumberKey));
+		String applicationNumber = license.getApplicationNumber();
+		messageTemplate= messageTemplate.replace("<applicationNumber>", applicationNumber);
+        String shortUrl = shortUrlUtil.getShortUrl(tlCitizenSearchUrl, applicationNumber,
+				license.getTenantId());
+
+		messageTemplate = messageTemplate.replace("<5>", shortUrl);
         return messageTemplate;
     }
 
@@ -399,13 +419,21 @@ public class TLRenewalNotificationUtil {
      *            Message from localization
      * @return message for completed payment for payer
      */
-    public String getPayerPaymentMsg(TradeLicense license, Map<String, String> valMap, String localizationMessages) {
-        String messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_RENEWAL_PAYMENT_PAYER, localizationMessages);
-        messageTemplate = messageTemplate.replace("<2>", valMap.get(amountPaidKey));
-        messageTemplate = messageTemplate.replace("<3>", license.getTradeName());
-        messageTemplate = messageTemplate.replace("<4>", valMap.get(receiptNumberKey));
-        return messageTemplate;
-    }
+	public String getPayerPaymentMsg(TradeLicense license, Map<String, String> valMap, String localizationMessages) {
+		String messageTemplate = getMessageTemplate(TLConstants.NOTIFICATION_RENEWAL_PAYMENT_PAYER,
+				localizationMessages);
+		messageTemplate = messageTemplate.replace("<2>", valMap.get(amountPaidKey));
+		messageTemplate = messageTemplate.replace("<3>", license.getTradeName());
+		messageTemplate = messageTemplate.replace("<4>", valMap.get(receiptNumberKey));
+		String applicationNumber = license.getApplicationNumber();
+		messageTemplate= messageTemplate.replace("<applicationNumber>", applicationNumber);
+		String shortUrl = shortUrlUtil.getShortUrl(tlCitizenSearchUrl, applicationNumber,
+				license.getTenantId());
+
+		messageTemplate = messageTemplate.replace("<5>", shortUrl);
+
+		return messageTemplate;
+	}
 
     /**
      * Send the SMSRequest on the SMSNotification kafka topic
