@@ -638,7 +638,7 @@ class FormWizardDataEntry extends Component {
   getOwnerDetails = ownerType => {
     const { selected } = this.state;
     const isReviewPage = selected === 4;
-    if (ownerType && ownerType.includes("SINGLEOWNER")) {
+    if (ownerType && ownerType.includes("INDIVIDUAL.SINGLEOWNER")) {
       return <OwnerInfoHOC disabled={isReviewPage} />;
     } else if (ownerType && ownerType.includes("MULTIPLEOWNERS")) {
       return (

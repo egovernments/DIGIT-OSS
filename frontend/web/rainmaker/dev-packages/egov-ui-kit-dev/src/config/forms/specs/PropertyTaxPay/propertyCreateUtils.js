@@ -10,7 +10,7 @@ export const createPropertyPayload = (properties, documentsUploadRedux, newPrope
     ...properties[0].propertyDetails[0],
     source: "MUNICIPAL_RECORDS",
     channel: "CFC_COUNTER",
-  };
+  }; 
   if (properties[0].owners && properties[0].owners.length) {
     properties[0].owners.map((obj) => {
       if (obj.documents && Array.isArray(obj.documents) && obj.documents.length) {
@@ -34,9 +34,9 @@ export const createPropertyPayload = (properties, documentsUploadRedux, newPrope
       builtUpArea: unit.unitArea,
     };
     unit.tenantId = properties[0].tenantId;
-    unit.usageCategory =
-    unit.usageCategoryMajor +
-     // (unit.usageCategoryMinor ? "." + unit.usageCategoryMinor : "") +
+     unit.usageCategory =
+      unit.usageCategoryMajor +
+      (unit.usageCategoryMinor ? "." + unit.usageCategoryMinor : "") +
       (unit.usageCategorySubMinor ? "." + unit.usageCategorySubMinor : "") +
       (unit.usageCategoryDetail ? "." + unit.usageCategoryDetail : "");
 
@@ -69,8 +69,8 @@ export const createPropertyPayload = (properties, documentsUploadRedux, newPrope
   properties[0].superBuiltUpArea = properties[0].buildUpArea;
 
   properties[0].propertyType =
-    properties[0].propertySubType === "BUILTUP.SHAREDPROPERTY" || properties[0].propertySubType === "BUILTUP.INDEPENDENTPROPERTY"
-      ? properties[0].propertyType + "." + properties[0].propertySubType
+  properties[0].propertySubType === "BUILTUP.SHAREDPROPERTY" || properties[0].propertySubType === "BUILTUP.INDEPENDENTPROPERTY"
+  ? properties[0].propertyType + "." + properties[0].propertySubType
       : properties[0].propertyType;
   // Changing usageCategoryMajor to usageCategory
   properties[0].usageCategory = properties[0].usageCategoryMajor + (properties[0].usageCategoryMinor ? "." + properties[0].usageCategoryMinor : "");
@@ -105,12 +105,12 @@ export const getCreatePropertyResponse = (createPropertyResponse) => {
   // Documents array coming in reverse order from API
   // createPropertyResponse.Properties[0] && createPropertyResponse.Properties[0].documents && createPropertyResponse.Properties[0].documents.length && createPropertyResponse.Properties[0].documents.reverse();
   try{
-  return { Properties: convertToOldPTObject(createPropertyResponse), newProperties: createPropertyResponse.Properties };
-  }catch(e){
-    console.error(e);
-    return { Properties: [], newProperties: [] };
-  }
-};
+    return { Properties: convertToOldPTObject(createPropertyResponse), newProperties: createPropertyResponse.Properties };
+    }catch(e){
+      console.error(e);
+      return { Properties: [], newProperties: [] };
+    }
+  };
 
 export const convertToArray = (documentsUploadRedux) => {
   if (documentsUploadRedux && typeof documentsUploadRedux === "object") {

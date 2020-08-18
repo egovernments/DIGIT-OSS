@@ -31,6 +31,10 @@ const FormWizard = Loadable({
   loader: () => import("../Screens/FormWizard"),
   loading: Loading
 });
+const FormWizardDataEntry = Loadable({
+  loader: () => import("../Screens/FormWizardDataEntry"),
+  loading: Loading
+});
 const PaymentSuccess = Loadable({
   loader: () => import("../Screens/PaymentSuccess"),
   loading: Loading
@@ -107,6 +111,17 @@ const routes = [
       hideTitle:true
       // hideBackButton: true,
     }
+  },
+  {
+    path: "property-tax/assessment-form-dataentry",
+    component:FormWizardDataEntry,
+    needsAuthentication: true,
+    options: {
+      hideFooter: true,
+      hideTitle:true
+      // hideBackButton: true,
+    }
+
   },
   {
     path:

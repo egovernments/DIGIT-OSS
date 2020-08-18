@@ -2,6 +2,10 @@
   padding: 12px 0px 0px 0px;
   position: relative;
 }
+.constructionYearLabel div label {
+  color: rgb(95, 92, 98)!important;
+}
+
 
 .owner-gender-selection {
   display: flex;
@@ -460,13 +464,13 @@ div[class^="MuiPaper-root"],
     }
 
   }
-  [class*="MuiStepIcon-active"] {
+  [class*="MuiStepIcon-active"] ,[class*="MuiStep-completed"]{
     circle,
     path {
       color: #fe7a51;
     }
   }
- 
+  
   [class*="MuiStepLabel"] {
     color: rgba(0, 0, 0, 0.87);
   }

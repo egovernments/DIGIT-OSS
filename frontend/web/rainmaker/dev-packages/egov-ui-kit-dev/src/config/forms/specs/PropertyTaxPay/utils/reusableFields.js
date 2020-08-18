@@ -627,7 +627,7 @@ export const beforeInitFormForPlot = {
     if (propertyType == "VACANT") {
       dispatch(prepareFormData(`Properties[0].propertyDetails[0].noOfFloors`, 1));
     }
-    if (propertyType == "SHAREDPROPERTY") {
+    if (propertyType == "BUILTUP.SHAREDPROPERTY") {
       dispatch(prepareFormData(`Properties[0].propertyDetails[0].noOfFloors`, 2));
       // dispatch(prepareFormData(`Properties[0].propertyDetails[0].units[0].floorNo`, -1));
     }

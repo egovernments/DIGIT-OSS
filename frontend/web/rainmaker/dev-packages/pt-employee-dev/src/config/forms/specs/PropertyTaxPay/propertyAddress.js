@@ -3,7 +3,10 @@ import {
   mohalla,
   street,
   colony,
+  roadType,
   houseNumber,
+  constructionType,
+  thana,
   dummy
 } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/utils/reusableFields";
 import {
@@ -103,6 +106,24 @@ const formConfig = {
                   },
                   {
                     name: "UsageCategorySubMinor"
+                  },
+                  {
+                    name: "ConstructionType",
+                  },
+                  {
+                    name: "Rebate",
+                  },
+                  {
+                    name: "Interest",
+                  },
+                  {
+                    name: "FireCess",
+                  },
+                  {
+                    name: "RoadType",
+                  },
+                  {
+                    name: "Thana",
                   }
                 ]
               }
@@ -122,23 +143,40 @@ const formConfig = {
             "UsageCategoryDetail",
             "UsageCategoryMajor",
             "UsageCategoryMinor",
-            "UsageCategorySubMinor"
+            "UsageCategorySubMinor",
+            "ConstructionType",
+            "Rebate",
+            "Penalty",
+            "Interest",
+            "FireCess",
+            "RoadType",
+            "Thana"
           ])
         );
+        dispatch(fetchGeneralMDMSData(
+          null,
+          "BillingService",
+          ["TaxPeriod", "TaxHeadMaster"],
+          "",
+          field.value
+        ));
       }
     },
     ...dummy,
+    ...roadType,
     ...houseNumber,
     ...colony,
     ...street,
     ...mohalla,
     ...pincode,
+    ...constructionType,
+    ...thana,
     oldPID: {
       id: "oldpid",
-      type: "textFieldIcon",
+      type: "textfield",
       className: "pt-old-pid-text-field",
       text: "PT_SEARCH_BUTTON",
-      iconRedirectionURL: "https://pmidc.punjab.gov.in/propertymis/search.php",
+      // iconRedirectionURL: "https://pmidc.punjab.gov.in/propertymis/search.php",
       jsonPath: "Properties[0].oldPropertyId",
       floatingLabelText: "PT_PROPERTY_ADDRESS_EXISTING_PID",
       hintText: "PT_PROPERTY_ADDRESS_EXISTING_PID_PLACEHOLDER",
