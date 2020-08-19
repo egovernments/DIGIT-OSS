@@ -86,7 +86,7 @@ serviceMaps:
     isTransaction: true
     queryMaps:
 
-    - query: INSERT INTO eg_appr_bills_request(billId,tenantid,payerAddress,payerEmail,paidBy,taxAndPayments,isActive,isCancelled,billDetails,createdBy,createdTime) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)
+    - query: INSERT INTO eg_appr_bills_request(billId,tenantid,mobileNumber,payerName,payerAddress,payerEmail,paidBy,taxAndPayments,isActive,isCancelled,billDetails,createdBy,createdTime) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)
       basePath: Bills.*
       jsonMaps:
       - jsonPath: $.Bills.*.id
@@ -218,4 +218,3 @@ serviceMaps:
       - jsonPath: $.Demands.*.auditDetails.createdBy
 
       - jsonPath: $.Demands.*.auditDetails.createdTime
-
