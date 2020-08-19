@@ -109,7 +109,7 @@ public class StorageController {
 		String inputFormat = null;
 		for(MultipartFile file : files) {
 			
-			String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+			String extension = FilenameUtils.getExtension(file.getOriginalFilename()).toLowerCase();
 			if(!allowedFormatsMap.containsKey(extension)) {
 				throw new CustomException("EG_FILESTORE_INVALID_INPUT","Inalvid input provided for file : " + extension + ", please upload any of the allowed formats : " + keySet);
 			}
