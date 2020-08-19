@@ -38,7 +38,7 @@ export const plotSize = {
         dispatch(prepareFormData("Properties[0].propertyDetails[0].landArea", field.value));
         dispatch(prepareFormData("Properties[0].propertyDetails[0].buildUpArea", null));
       }
-      if (propertySubType === "INDEPENDENTPROPERTY") {
+      if (propertyType === "BUILTUP.INDEPENDENTPROPERTY") {
         dispatch(prepareFormData("Properties[0].propertyDetails[0].landArea", field.value));
        // dispatch(prepareFormData("Properties[0].propertyDetails[0].buildUpArea", null));
       }

@@ -69,7 +69,7 @@ const formConfig = {
         else {
           dispatch(setFieldProperty("basicInformation", "datePicker", "hideField", false));
         }
-        if (field.value==="INDEPENDENTPROPERTY") {
+        if (field.value==="BUILTUP.INDEPENDENTPROPERTY") {
           dispatch(prepareFormData("Properties[0].propertyDetails[0].units[0].floorNo", 1));
           floorUtilFunction({field:{value:1}, dispatch, state});
         }

@@ -36,7 +36,7 @@ export const createPropertyPayload = (properties, documentsUploadRedux, newPrope
     unit.tenantId = properties[0].tenantId;
      unit.usageCategory =
       unit.usageCategoryMajor +
-      (unit.usageCategoryMinor ? "." + unit.usageCategoryMinor : "") +
+     // (unit.usageCategoryMinor ? "." + unit.usageCategoryMinor : "") +
       (unit.usageCategorySubMinor ? "." + unit.usageCategorySubMinor : "") +
       (unit.usageCategoryDetail ? "." + unit.usageCategoryDetail : "");
 
