@@ -721,17 +721,25 @@ export const normalizePropertyDetails = (properties, self) => {
   const { propertyDetails } = property;
   const isReassesment = !!getQueryValue(search, "isReassesment");
   const propertyId = getQueryValue(search, "propertyId");
-  const units =
+  /* const units =
     propertyDetails[0] && propertyDetails[0].units
       ? propertyDetails[0].units.filter((item, ind) => {
         return item !== null;
       })
-      : [];
+      : []; */
+   const units =
+      propertyDetails[0] && propertyDetails[0].propertyType === "VACANT"
+        ? null
+        : propertyDetails[0].units
+        ? propertyDetails[0].units.filter((item, ind) => {
+            return item !== null;
+          })
+        : [];        
   if (isReassesment && propertyId) {
     property.propertyId = propertyId;
   }
   var sumOfUnitArea = 0;
-  units.forEach((unit) => {
+  units &&  units.forEach((unit) => {
     let unitAreaInSqYd = parseFloat(unit.unitArea) / 9;
     unit.unitArea = Math.round(unitAreaInSqYd * 100) / 100;
     sumOfUnitArea += unit.unitArea;

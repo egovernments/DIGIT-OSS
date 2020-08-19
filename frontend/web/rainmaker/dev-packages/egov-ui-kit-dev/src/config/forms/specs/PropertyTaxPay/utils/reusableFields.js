@@ -395,7 +395,7 @@ export const beforeInitForm = {
     const propertyType = get(state, "form.basicInformation.fields.typeOfBuilding.value");
     const { Floor } = state.common && state.common.generalMDMSDataById;
     if (get(action, "form.fields.floorName")) {
-      if (propertyType === "SHAREDPROPERTY") {
+      if (propertyType === "BUILTUP.SHAREDPROPERTY") {
         set(action, "form.fields.floorName.hideField", false);
         set(action, "form.fields.floorName.dropDownData", prepareDropDownData(Floor));
       } else {
@@ -419,7 +419,7 @@ export const beforeInitForm = {
       }
       if (floorIndex === 0 && unitIndex === 0) {
         form.unitsIndex = 0;
-        propertyType !== "SHAREDPROPERTY" && dispatch(prepareFormData(`Properties[0].propertyDetails[0].units[0].floorNo`, "0"));
+        propertyType !== "BUILTUP.SHAREDPROPERTY" && dispatch(prepareFormData(`Properties[0].propertyDetails[0].units[0].floorNo`, "0"));
       } else {
         const updatedFields = Object.keys(fields).reduce((updatedFields, fieldKey) => {
           const jsonPath = fields[fieldKey].jsonPath;
@@ -553,7 +553,7 @@ export const beforeInitFormForPlot = {
     const propertyType = get(state, "form.basicInformation.fields.typeOfBuilding.value");
     const { Floor } = state.common && state.common.generalMDMSDataById;
     if (get(action, "form.fields.floorName")) {
-      if (propertyType === "SHAREDPROPERTY") {
+      if (propertyType === "BUILTUP.SHAREDPROPERTY") {
         set(action, "form.fields.floorName.hideField", false);
         set(action, "form.fields.floorName.dropDownData", prepareDropDownData(Floor));
       } else {
@@ -626,6 +626,7 @@ export const beforeInitFormForPlot = {
     }
     if (propertyType == "VACANT") {
       dispatch(prepareFormData(`Properties[0].propertyDetails[0].noOfFloors`, 1));
+     // dispatch(prepareFormData(`Properties[0].propertyDetails[0].units`,[]));
     }
     if (propertyType == "BUILTUP.SHAREDPROPERTY") {
       dispatch(prepareFormData(`Properties[0].propertyDetails[0].noOfFloors`, 2));

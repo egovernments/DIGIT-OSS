@@ -29,7 +29,7 @@ export const createPropertyPayload = (properties, documentsUploadRedux, newPrope
   if (newProperties && newProperties.length > 0) {
     properties[0].owners = newProperties[0].owners;
   }
-  properties[0].units.map((unit) => {
+  properties[0].units && properties[0].units.map((unit) => {
     unit.constructionDetail = {
       builtUpArea: unit.unitArea,
     };
