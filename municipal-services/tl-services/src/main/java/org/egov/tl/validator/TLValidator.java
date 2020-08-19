@@ -286,7 +286,7 @@ public class TLValidator {
             throw new CustomException("INVALID UPDATE", "The license to be updated is not in database");
         validateAllIds(searchResult, licenses);
         String businessService = request.getLicenses().isEmpty()?null:licenses.get(0).getBusinessService();
-        if(licenses.get(0).getApplicationType() != null && licenses.get(0).getApplicationType().toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL)){
+        if(licenses.get(0).getApplicationType() != null && licenses.get(0).getLicenseNumber() != null && licenses.get(0).getApplicationType().toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL)){
             validateRenewal(request);
         }        
         if (businessService == null)
