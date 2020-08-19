@@ -1462,13 +1462,43 @@
     "valueType": "amount",
     "action": "",
     "documentType": "_doc",
-    "drillChart": "none",
-    "aggregationPaths": [
+    "drillChart": "collectionBySelectedType",
+    "drillFields": [
+      "selectedType",
+      ""
+    ],    "aggregationPaths": [
       "Usage Type"
     ],
     "insight": {
     },
     "_comment": " collection/amount per usage type"
+  },
+  
+  "collectionBySelectedType": {
+    "chartName": "DSS_COLLECTION_BY_SELECTED_TYPE",
+    "queries": [
+      {
+        "module": "COMMON",
+        "requestQueryMap": "{\"module\" : \"dataObject.paymentDetails.businessService.keyword\", \"tenantId\" : \"dataObject.tenantData.code\", \"district\" : \"dataObject.tenantData.city.districtCode\", \"selectedType\" : \"domainObject.units.usageCategory.keyword\"}",
+        "dateRefField": "dataObject.paymentDetails.receiptDate",
+        "indexName": "dss-collection_v2",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"dataObject.tenantId.keyword\":\"tenant\"}},{\"terms\":{\"dataObject.paymentDetails.bill.status.keyword\":[\"Cancelled\"]}}]}},\"aggs\":{\"Payment Mode\":{\"terms\":{\"field\":\"dataObject.paymentMode.keyword\"},\"aggs\":{\"Amount Paid\":{\"sum\":{\"field\":\"dataObject.paymentDetails.totalAmountPaid\"}}}}}}}}"     
+      }
+    ],
+    "chartType": "pie",
+    "valueType": "amount",
+    "action": "",
+    "documentType": "_doc",
+     "filterKeys": [
+      {"key": "selectedType", "column": "UsageCategory"}
+    ],
+    "drillChart": "none",
+    "aggregationPaths": [
+      "Payment Mode"
+    ],
+    "insight": {
+    },
+    "_comment": " "
   },
 
   "_comment": "PT NON-COLLECTION CHARTS",
