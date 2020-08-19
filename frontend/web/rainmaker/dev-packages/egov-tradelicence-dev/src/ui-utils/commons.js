@@ -375,7 +375,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     }
 
     set(queryObject[0], "tenantId", tenantId);
-    if (get(state.screenConfiguration.preparedFinalObject, "Licenses[0].applicationType", "") == "APPLICATIONTYPE.RENEWAL") {
+    if (get(state.screenConfiguration.preparedFinalObject, "Licenses[0].applicationType", "") == "APPLICATIONTYPE.RENEWAL" || get(state.screenConfiguration.preparedFinalObject, "Licenses[0].applicationType", "") == "RENEWAL") {
       set(queryObject[0], "workflowCode", "EDITRENEWAL");
       set(queryObject[0], "applicationType", "RENEWAL");
     } else {
