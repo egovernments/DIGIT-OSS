@@ -44,7 +44,7 @@ serviceMaps:
        
        - jsonPath: $.WaterConnection.dateEffectiveFrom
 
-       - jsonPath: $.WaterConnection.auditDetails.locality
+       - jsonPath: $.WaterConnection.additionalDetails.locality
 
        
     - query: INSERT INTO eg_ws_service(connection_id,connectionCategory,connectionType,waterSource,meterId,meterInstallationDate,pipeSize,noOfTaps,connectionexecutiondate,proposedPipeSize,proposedTaps, appCreatedDate, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
@@ -160,7 +160,7 @@ serviceMaps:
        
        - jsonPath: $.WaterConnection.dateEffectiveFrom
 
-       - jsonPath: $.WaterConnection.auditDetails.locality
+       - jsonPath: $.WaterConnection.additionalDetails.locality
        
        - jsonPath: $.WaterConnection.id 
        
