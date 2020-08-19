@@ -479,8 +479,13 @@ const transform = (floor, key, generalMDMSDataById, propertyDetails) => {
       // if (usageCategoryMajor === "RESIDENTIAL" && propertySubType === "BUILTUP.SHAREDPROPERTY" && dataKey === "floorNo") {
       //   return "NA";
       // }
-      if (floor[dataKey] === "NONRESIDENTIAL") {
+     /*  if (floor[dataKey] === "NONRESIDENTIAL") {
         return generalMDMSDataById["UsageCategoryMinor"] ? generalMDMSDataById["UsageCategoryMinor"][floor["usageCategoryMinor"]].name : "NA";
+      } else {
+        return generalMDMSDataById[masterName] ? generalMDMSDataById[masterName][floor[dataKey]].name : "NA";
+      } */
+      if (floor[dataKey] === "NONRESIDENTIAL") {
+        return generalMDMSDataById["UsageCategoryMinor"]&& generalMDMSDataById["UsageCategoryMinor"][floor["usageCategoryMinor"]]&& generalMDMSDataById["UsageCategoryMinor"][floor["usageCategoryMinor"]].name ? generalMDMSDataById["UsageCategoryMinor"][floor["usageCategoryMinor"]].name : "NA";
       } else {
         return generalMDMSDataById[masterName] ? generalMDMSDataById[masterName][floor[dataKey]].name : "NA";
       }
@@ -507,11 +512,7 @@ const getAssessmentInfo = (propertyDetails, keys, generalMDMSDataById) => {
           {
             key: getTranslatedLabel("PT_ASSESMENT_INFO_TYPE_OF_BUILDING", localizationLabelsData),
             value: generalMDMSDataById
-              ? propertyDetails.propertySubType
-                ? generalMDMSDataById["PropertySubType"]
-                  ? generalMDMSDataById["PropertySubType"][propertyDetails.propertySubType].name
-                  : "NA"
-                : generalMDMSDataById["PropertyType"]
+                ? generalMDMSDataById["PropertyType"]
                   ? generalMDMSDataById["PropertyType"][propertyDetails.propertyType].name
                   : "NA"
               : "NA",

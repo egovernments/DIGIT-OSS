@@ -154,14 +154,10 @@ const getAssessmentInfo = (propertyDetails, generalMDMSDataById) => {
       {
         key: getTranslatedLabel("PT_ASSESMENT_INFO_TYPE_OF_BUILDING", localizationLabelsData),
         value: generalMDMSDataById
-          ? propertyDetails.propertySubType
-            ? generalMDMSDataById["PropertySubType"]
-              ? generalMDMSDataById["PropertySubType"][propertyDetails.propertySubType].name
-              : "NA"
-            : generalMDMSDataById["PropertyType"]
-              ? generalMDMSDataById["PropertyType"][propertyDetails.propertyType].name
-              : "NA"
-          : "NA",
+                ? generalMDMSDataById["PropertyType"]
+                  ? generalMDMSDataById["PropertyType"][propertyDetails.propertyType].name
+                  : "NA"
+              : "NA",
       },
       {
         key: getTranslatedLabel("PT_ASSESMENT_INFO_PLOT_SIZE", localizationLabelsData),
