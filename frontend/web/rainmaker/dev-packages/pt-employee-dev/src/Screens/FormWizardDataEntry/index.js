@@ -6,11 +6,13 @@ import {
   updateForms,
   handleFieldChange
 } from "egov-ui-kit/redux/form/actions";
+import store from "ui-redux/store";
 import PTHeader from "egov-ui-kit/common/common/PTHeader";
 import Label from "egov-ui-kit/utils/translationNode";
 import { getTranslatedLabel } from "egov-ui-kit/utils/commons";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { initLocalizationLabels } from "egov-ui-kit/redux/app/utils";
+import { createPropertyPayload, createAssessmentPayload, getCreatePropertyResponse, prefillPTDocuments } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/propertyCreateUtils";
 import {
   UsageInformationHOC,
   PropertyAddressHOC,
@@ -1789,7 +1791,7 @@ class FormWizardDataEntry extends Component {
     } finally {
     }
   };
-  //
+  // 
   // estimate = async () => {
   //   let { form, common, showSpinner, hideSpinner } = this.props;
   //   let prepareFormData = { ...this.props.prepareFormData };
@@ -1934,7 +1936,7 @@ class FormWizardDataEntry extends Component {
   //   } finally {
   //     hideSpinner();
   //   }
-  // };
+  // }; 
   createAndUpdate = async index => {
     const { selected, formValidIndexArray, demands = [] } = this.state;
     const financialYearFromQuery = getFinancialYearFromQuery();
@@ -2123,14 +2125,109 @@ class FormWizardDataEntry extends Component {
       });
       properties[0].propertyDetails = finalPropertyData;
 
-      let createPropertyResponse = await httpRequest(
-        `pt-services-v2/property/${propertyMethodAction}`,
+     // this.createProperty(properties, propertyMethodAction);
+
+      const { documentsUploadRedux, newProperties, propertiesEdited } = this.props;
+      const propertyPayload = createPropertyPayload(properties, documentsUploadRedux, newProperties);
+    
+      let action = propertyMethodAction;
+        
+      const pMA = (action === "assess" || action === "re-assess") ? "_update" : "_create";
+      
+      let  ownershipCategory = get(propertyPayload, "ownershipCategory",'');
+  
+      let  usageCategory = get(propertyPayload, "usageCategory",'');
+      
+  
+  
+      if(ownershipCategory==="INDIVIDUAL.INDIVIDUAL.SINGLEOWNER")
+      {
+        set(propertyPayload, "ownershipCategory",'INDIVIDUAL.SINGLEOWNER');
+      }
+      if(usageCategory==="RESIDENTIAL.RESIDENTIAL")
+      {
+        set(propertyPayload, "usageCategory",'RESIDENTIAL');
+      }
+      if(usageCategory==="NONRESIDENTIAL.NONRESIDENTIAL")
+      {
+        set(propertyPayload, "usageCategory",'NONRESIDENTIAL');
+      }
+      let createPropertyResponse;
+
+  
+      if ((action === "assess" || action === "re-assess") && !propertiesEdited) {
+        this.assessProperty(action, propertyPayload);
+      } else {
+        if (action === "assess" || action === "re-assess") {
+  
+          const workflow = {
+            "businessService": "PT.CREATE",
+            "action": getBusinessServiceNextAction('PT.CREATE', null),
+            "moduleName": "PT"
+          }
+          if (propertyPayload.workflow) {
+            propertyPayload.workflow = { ...propertyPayload.workflow, ...workflow }
+          } else {
+            propertyPayload.workflow = workflow
+          }
+        }
+        try {
+          propertyPayload.creationReason=action=='create'?'CREATE':'UPDATE';
+           createPropertyResponse = await httpRequest(
+            `property-services/property/${pMA}`,
+            `${pMA}`,
+            [],
+            {
+              Property: propertyPayload
+            },
+            [],
+            {},
+            true
+          );
+      /*     if (propertyResponse && propertyResponse.Properties && propertyResponse.Properties.length) {
+            if (propertyResponse.Properties[0].propertyId) {
+              const propertyId = get(propertyResponse, "Properties[0].propertyId",'');
+              const tenantId =  get(propertyResponse, "Properties[0].tenantId",'');
+              const acknowldgementNumber= get(propertyResponse, "Properties[0].acknowldgementNumber",'');
+              // Navigate to success page
+              if(action=='create'){
+                this.props.history.push(`pt-acknowledgment?purpose=apply&propertyId=${propertyId}&status=success&tenantId=${tenantId}&secondNumber=${acknowldgementNumber}`);
+              }else{
+                this.props.history.push(`pt-acknowledgment?purpose=update&propertyId=${propertyId}&status=success&tenantId=${tenantId}&secondNumber=${acknowldgementNumber}`);
+              }
+              
+              // if ((action === "assess") || (action === "re-assess")) {
+              //   this.assessProperty(action, propertyResponse.Properties);
+              // } else {
+              //   this.props.history.push(`pt-acknowledgment?purpose=apply&propertyId=${propertyId}&status=success&tenantId=${tenantId}`);
+              // }
+            }
+          } */
+        } catch (e) {
+         // hideSpinner();
+           this.setState({ nextButtonEnabled: true });
+          // alert(e);
+  
+         /*  store.dispatch(
+            setRoute(
+              `/property-tax/pt-acknowledgment?purpose=apply&status=failure`
+            )
+          ); */
+  
+        }
+      }
+
+
+    /*   let createPropertyResponse = await httpRequest(
+        `property-services/property/${propertyMethodAction}`,
         `${propertyMethodAction}`,
         [],
         {
-          Properties: properties
+          Property: properties
         }
-      );
+      ); */
+
+
       const demandData = [];
       const demandDetails = [];
       let datas = getFinalData() || [];
@@ -2224,7 +2321,7 @@ class FormWizardDataEntry extends Component {
               ),
               consumerType: get(
                 createPropertyResponse,
-                "Properties[0].propertyDetails[0].propertyType"
+                "Properties[0].propertyType"
               ),
               businessService: "PT",
               taxPeriodFrom: fromDate,
@@ -2233,7 +2330,7 @@ class FormWizardDataEntry extends Component {
                 ...get(dR, "payer", {}),
                 uuid: get(
                   createPropertyResponse,
-                  "Properties[0].propertyDetails[0].owners[0].uuid"
+                  "Properties[0].owners[0].uuid"
                 )
               },
               demandDetails: demandDetails1
