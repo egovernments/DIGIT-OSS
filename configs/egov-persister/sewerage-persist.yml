@@ -44,7 +44,7 @@ serviceMaps:
        
        - jsonPath: $.SewerageConnection.dateEffectiveFrom
 
-      - jsonPath: $.SewerageConnection.additionalDetails.locality
+       - jsonPath: $.SewerageConnection.additionalDetails.locality
 
 
     - query: INSERT INTO eg_sw_service(connection_id,connectionExecutionDate,noOfWaterClosets,noOfToilets,connectiontype,proposedWaterClosets,proposedToilets, appCreatedDate, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES(?,?,?,?,?,?,?,?,?,?,?,?);
@@ -151,7 +151,7 @@ serviceMaps:
        
        - jsonPath: $.SewerageConnection.dateEffectiveFrom
 
-      - jsonPath: $.SewerageConnection.additionalDetails.locality
+       - jsonPath: $.SewerageConnection.additionalDetails.locality
 
        - jsonPath: $.SewerageConnection.id   
        
