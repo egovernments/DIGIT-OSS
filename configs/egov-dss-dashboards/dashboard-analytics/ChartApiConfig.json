@@ -2989,7 +2989,7 @@
     ],
     "chartType": "xtable",
     "valueType": "number",
-    "drillChart": "none",
+    "drillChart": "xpgrStatusByComplaintCategory",
 
     "documentType": "_doc",
     "action": "",
@@ -3015,6 +3015,50 @@
     },
     "_comment": ""
   },
+  
+  "xpgrStatusByComplaintCategory": {
+    "chartName": "DSS_PGR_STATUS_BY_COMPLAINT_CATEGORY",
+    "queries": [
+      {
+        "module": "PGR",
+        "requestQueryMap": "{\"wardId\" : \"Data.complaintWard.code.keyword\", \"tenantId\" : \"Data.tenantId.keyword\" , \"departmentId\" : \"Data.department.keyword\"}",
+        "dateRefField": "Data.dateOfComplaint",
+        "indexName": "pgrindex-v1",
+        "aggrQuery": "{\"aggs\":{\"AGGR\":{\"filter\":{\"bool\":{\"must_not\":[{\"term\":{\"Data.tenantId.keyword\":\"pb.testing\"}}]}},\"aggs\":{\"Category \":{\"terms\":{\"field\":\"Data.complainCategory.keyword\",\"size\":1000},\"aggs\":{\"withinSLA\":{\"range\":{\"script\":{\"lang\":\"painless\",\"source\":\"doc['Data.slaHours'].value\"},\"ranges\":[{\"key\":\"withinSLA\",\"from\":0,\"to\":360}]}},\"Total Complaints\":{\"value_count\":{\"field\":\"Data.dateOfComplaint\"}},\"Closed_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"closed\",\"rejected\",\"resolved\"]}},\"aggs\":{\"Closed Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}},\"Open_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"open\"]}},\"aggs\":{\"Open Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}},\"Reopened_Complaints\":{\"filter\":{\"terms\":{\"Data.status.keyword\":[\"reopen\"]}},\"aggs\":{\"Reopened Complaints\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}}}}}}}}"
+      }
+    ],
+    "filterKeys": [
+      {"key": "wardId", "column": "Ward"}
+    ],
+    "chartType": "xtable",
+    "valueType": "number",
+    "drillChart": "none",
+
+    "documentType": "_doc",
+    "action": "",
+    "plotLabel": "Complaint Category",
+    "excludedColumns": ["withinSLA"],
+    "computedFields": [
+      {
+        "postAggregationTheory" : "",
+        "actionName": "PercentageComputedField",
+        "fields" : ["Closed Complaints", "Total Complaints"],
+        "newField" : "Completion Rate",
+        "_comments": "fields are field names picked from its aggregation query to use post aggregation newField value with given new field name  "
+      },
+      {
+        "postAggregationTheory" : "",
+        "actionName": "PercentageComputedField",
+        "fields" : ["Total Complaints", "withinSLA"],
+        "newField" : "Sla Achieved",
+        "_comments": "fields are field names picked from its aggregation query to use post aggregation newField value with given new field name  "
+      }
+    ],
+    "insight": {
+    },
+    "_comment": ""
+  },
+  
   "xpgrStatusByDept": {
     "chartName": "DSS_PGR_STATUS_BY_TENANT",
     "queries": [
