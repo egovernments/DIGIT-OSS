@@ -377,7 +377,7 @@ const callBackForPay = async (state, dispatch) => {
   ReceiptBodyNew.Payment["paidBy"] = finalReceiptData.Bill[0].payer;
   ReceiptBodyNew.Payment["mobileNumber"] =
     finalReceiptData.Bill[0].payerMobileNumber;
-  ReceiptBodyNew.Payment["payerName"] = finalReceiptData.Bill[0].payerName;
+  ReceiptBodyNew.Payment["payerName"] = finalReceiptData.Bill[0].paidBy;
   if (ReceiptBodyNew.Payment.paymentMode !== "Cash") {
     ReceiptBodyNew.Payment["transactionNumber"] =
       finalReceiptData.instrument.transactionNumber;
