@@ -11,6 +11,7 @@ import org.egov.collection.model.Payment;
 import org.egov.collection.model.PaymentDetail;
 import org.egov.collection.model.PaymentRequest;
 import org.egov.collection.producer.CollectionProducer;
+import org.egov.collection.service.ShortUrlUtil;
 import org.egov.collection.web.contract.Bill;
 import org.egov.collection.web.contract.BillDetail;
 //import org.egov.collection.web.contract.Receipt;
@@ -86,6 +87,9 @@ public class NotificationConsumer {
 
 	@Autowired
 	private RestTemplate restTemplate;
+	
+	@Autowired
+	private ShortUrlUtil shortUrlUtil;
 
 	private static final String COLLECTION_LOCALIZATION_MODULE = "collection-services";
 	public static final String PAYMENT_MSG_LOCALIZATION_CODE = "coll.notif.payment.receipt.link";
@@ -169,7 +173,9 @@ public class NotificationConsumer {
 			link.append(uiHost + "/citizen").append("/otpLogin?mobileNo=").append(bill.getMobileNumber()).append("&redirectTo=")
 					.append(uiRedirectUrl).append("&params=").append(paymentdetail.getTenantId() + "," + paymentdetail.getReceiptNumber());
 
-			content = content.replaceAll("<rcpt_link>", link.toString());
+			String shortUrl = shortUrlUtil.getShortUrl(link.toString());
+			content = content.replaceAll("<rcpt_link>", shortUrl);
+			
 			String taxName = fetchContentFromLocalization(requestInfo, paymentdetail.getTenantId(),
 					BUSINESSSERVICE_LOCALIZATION_MODULE, formatCodes(paymentdetail.getBusinessService()));
 			if(StringUtils.isEmpty(taxName))
