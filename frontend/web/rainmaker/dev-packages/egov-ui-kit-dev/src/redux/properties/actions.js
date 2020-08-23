@@ -11,6 +11,8 @@ import { getLatestPropertyDetails } from "egov-ui-kit/utils/PTCommon";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import {  getCreatePropertyResponse, setPTDocuments } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/propertyCreateUtils";
 import { getFileUrl } from "egov-ui-framework/ui-utils/commons";
+import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/utils";
+import commonConfig from "config/common.js";
 
 const FileDownload = require('js-file-download');
 const reset_property_reset = () => {
@@ -673,9 +675,9 @@ export const fetchAssessments = (fetchAssessmentsQueryObject) => {
     }
   }
 }
-export const getFileUrlFromAPI = async fileStoreId => {
+export const getFileUrlFromAPI = async (fileStoreId,tenantId) => {
   const queryObject = [
-    { key: "tenantId", value: "pb" },
+    { key: "tenantId", value: tenantId || commonConfig.tenantId },
     { key: "fileStoreIds", value: fileStoreId }
   ];
   try {
@@ -685,6 +687,39 @@ export const getFileUrlFromAPI = async fileStoreId => {
     console.log(e);
   }
 };
+
+export const downloadReceiptFromFilestoreID=(fileStoreId,mode,tenantId)=>{
+  getFileUrlFromAPI(fileStoreId,tenantId).then(async(fileRes) => {
+    if (mode === 'download') {
+      var win = window.open(fileRes[fileStoreId], '_blank');
+      if(win){
+        win.focus();
+      }
+    }
+    else {
+     // printJS(fileRes[fileStoreId])
+      var response =await axios.get(fileRes[fileStoreId], {
+        //responseType: "blob",
+        responseType: "arraybuffer",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/pdf"
+        }
+      });
+      console.log("responseData---",response);
+      const file = new Blob([response.data], { type: "application/pdf" });
+      const fileURL = URL.createObjectURL(file);
+      var myWindow = window.open(fileURL);
+      if (myWindow != undefined) {
+        myWindow.addEventListener("load", event => {
+          myWindow.focus();
+          myWindow.print();
+        });
+      }
+
+    }
+  });
+}
 
 let getModifiedPayment = (payments) =>{
   if(payments[0].paymentDetails[0].businessService === 'PT'){
@@ -826,7 +861,7 @@ else if(payments[0].paymentDetails[0].businessService === 'TL'){
   return payments;
 }
 
-export const downloadReceipt = (receiptQueryString) => {
+export const downloadReceipt = (receiptQueryString, mode = "download") => {
   return async (dispatch) => {
     if (receiptQueryString) {
       dispatch(downloadReceiptPending());
@@ -857,12 +892,14 @@ export const downloadReceipt = (receiptQueryString) => {
           { Payments: payloadReceiptDetails.Payments },
           { Accept: "application/json" },
           { responseType: "arraybuffer" }
-        ).then((res) => {
-          getFileUrlFromAPI(res.filestoreIds[0], receiptQueryString[1].value.split(".")[0]).then((fileRes) => {
-            var win = window.open(fileRes[res.filestoreIds[0]], "_blank");
-            win.focus();
+        ).then(res => {
+          res.filestoreIds[0]
+          if(res&&res.filestoreIds&&res.filestoreIds.length>0){
+            res.filestoreIds.map(fileStoreId=>{
+              downloadReceiptFromFilestoreID(fileStoreId,mode)
+            })
+          }
           });
-        });
       } catch (error) {
         dispatch(downloadReceiptError(error.message));
       }
