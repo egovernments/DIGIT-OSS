@@ -111,6 +111,16 @@ export const getRowData=(property,history)=>{
 }
 }
 
+export const convertEpochToDate = dateEpoch => {
+  const dateFromApi = new Date(dateEpoch);
+  let month = dateFromApi.getMonth() + 1;
+  let day = dateFromApi.getDate();
+  let year = dateFromApi.getFullYear();
+  month = (month > 9 ? "" : "0") + month;
+  day = (day > 9 ? "" : "0") + day;
+  return `${day}-${month}-${year}`;
+};
+
 export const getFormattedDate = (date)=>{
   const dateArray=new Date(date).toString().split(' ');
   if(dateArray.length>0){
