@@ -5,7 +5,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import Label from "egov-ui-kit/utils/translationNode";
 import HistoryCard from "../../../../../Property/components/HistoryCard";
-import { getFormattedDate } from "../../../../../../../utils/PTCommon";
+import { convertEpochToDate, getFormattedDate } from "../../../../../../../utils/PTCommon";
 import { getFullRow } from "../AssessmentHistory";
 import { downloadReceipt } from "egov-ui-kit/redux/properties/actions";
 
@@ -20,7 +20,7 @@ class PaymentHistory extends Component {
     }
     getBillPeriod(billDetails = []) {
         let latest = billDetails.sort((x, y) => y.fromPeriod - x.fromPeriod);
-        const billPeriod = getFormattedDate(latest[latest.length - 1].fromPeriod) + ' to ' + getFormattedDate(latest[0].toPeriod);
+        const billPeriod = convertEpochToDate(latest[latest.length - 1].fromPeriod) + ' to ' + convertEpochToDate(latest[0].toPeriod - 20000000);
         return billPeriod;
 
     }
