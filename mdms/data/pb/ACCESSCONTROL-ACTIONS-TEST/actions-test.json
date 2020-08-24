@@ -16834,6 +16834,28 @@
       "serviceCode": "pgr-services",
       "code": "null",
       "path": ""
+    },
+    {
+      "id": 2010,
+      "name": "Water service searcher endpoint",
+      "url": "/egov-searcher/water-services/wateropensearch/_get",
+      "displayName": "WS application searcher",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "egov-searcher",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 2011,
+      "name": "Sewerage service searcher endpoint",
+      "url": "/egov-searcher/sewerage-services/sewerageopensearch/_get",
+      "displayName": "SW application searcher",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "egov-searcher",
+      "code": "null",
+      "path": ""
     }
   ]
 }
