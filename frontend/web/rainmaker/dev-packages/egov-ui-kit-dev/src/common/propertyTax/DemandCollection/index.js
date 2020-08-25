@@ -39,23 +39,23 @@ class DemandCollection extends React.Component {
 
     //making null of no demand years data
 
-    let newarray = [];
+        let newarray = [];
 
-    for(let i=0; i<finalData.length;i++)
-    {
-      let YearExist = get(dummyarray, `[${i}].demand[${finalData[i].financialYear}]`, null);
-      if(YearExist===null)
-      {
-          set(newarray, `[${i}]`, null);
-      }  
-      else
-      {
-        set(newarray, `[${i}]`, dummyarray[i]);
-      }
-     }   
+        for(let i=0; i<finalData.length;i++)
+        {
+          let YearExist = get(dummyarray, `[${i}].demand[${finalData[i].financialYear}]`);
+          if(YearExist)
+          {
+            set(newarray, `[${i}]`, dummyarray[i]);
+          }  
+          else
+          {
+            set(newarray, `[${i}]`, undefined);        
+          }
+        }   
 
 
-    set(preparedFinalObject, `DemandProperties[0].propertyDetails[0].demand`, newarray);
+        set(preparedFinalObject, `DemandProperties[0].propertyDetails[0].demand`, newarray);
 
 
     const getYear =
