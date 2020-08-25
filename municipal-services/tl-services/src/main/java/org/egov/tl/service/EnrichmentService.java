@@ -443,7 +443,7 @@ public class EnrichmentService {
         int count=0;
         
         
-        if (licenses.get(0).getApplicationType() != null && licenses.get(0).getApplicationType().toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL)) {
+        if (licenses.get(0).getApplicationType() != null && licenses.get(0).getLicenseNumber() != null && licenses.get(0).getApplicationType().toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL)) {
             for(int i=0;i<licenses.size();i++){
                 TradeLicense license = licenses.get(i);
                 Long time = System.currentTimeMillis();
