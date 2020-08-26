@@ -237,11 +237,20 @@ const formConfig = {
       const {prepareFormData={}}=common;
       const OwnerTypes = get(state, `common.generalMDMSDataById.OwnerType`);
       const finalData=getFinalData();
+
+      console.log("To test Owner Type issue - finalData",finalData);
+
       const finalYear=finalData[0].financialYear;
+
+      console.log("To test Owner Type issue - finalYear", finalYear);
 
       // let financialYearFromQuery = window.location.search.split("FY=")[1];
       // financialYearFromQuery = financialYearFromQuery.split("&")[0];
       const dropdownData = getOwnerCategoryByYear(Object.values(OwnerTypes),finalYear);
+
+      console.log("To test Owner Type issue - dropdownData ", dropdownData);
+
+      
       set(action, "form.fields.ownerCategory.dropDownData", dropdownData);
       const ownerShipType = get(state, "form.ownershipType.fields.typeOfOwnership.value", "");
       if (ownerShipType === "SINGLEOWNER") {
