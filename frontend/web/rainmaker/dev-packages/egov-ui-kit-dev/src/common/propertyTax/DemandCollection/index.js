@@ -19,15 +19,16 @@ class DemandCollection extends React.Component {
     const { prepareFinalObject, preparedFinalObject,Properties = [] } = this.props;
     const finalData=getFinalData();
      
-    let demands_data = get(preparedFinalObject, `DemandProperties[0].propertyDetails[0].demand`, '');
+    let demands_data = get(preparedFinalObject, `DemandProperties[0].propertyDetails[0].demand`);
+    
     let dummyarray = [];
 
 
     //changing index of yearly data
 
-    for(let i=0; i< demands_data.length;i++)
+    for(let i=0; demands_data && i< demands_data.length;i++)
         {
-              for(let j=0; j<finalData.length;j++)
+              for(let j=0; finalData && j<finalData.length;j++)
               {
                   if(demands_data[i] && demands_data[i].demand[finalData[j].financialYear]!== undefined)
                   {
@@ -41,7 +42,7 @@ class DemandCollection extends React.Component {
 
         let newarray = [];
 
-        for(let i=0; i<finalData.length;i++)
+        for(let i=0; finalData && i<finalData.length;i++)
         {
           let YearExist = get(dummyarray, `[${i}].demand[${finalData[i].financialYear}]`);
           if(YearExist)
