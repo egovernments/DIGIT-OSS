@@ -391,7 +391,10 @@ const callBackForPay = async (state, dispatch) => {
     ReceiptBodyNew.Payment["instrumentDate"] =
       finalReceiptData.instrument.instrumentDate;
   }
-
+  if (finalReceiptData.instrument.ifscCode) {
+    ReceiptBodyNew.Payment["ifscCode"] =
+      finalReceiptData.instrument.ifscCode;
+  }
   let amtPaid =
     state.screenConfiguration.preparedFinalObject.AmountType ===
       "partial_amount"
