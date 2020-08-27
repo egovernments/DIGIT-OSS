@@ -51,7 +51,7 @@ public class CalculationReqConsumer {
             if(!CollectionUtils.isEmpty(propertiesForDemandGen))
             {
                 CalculationReq calculationReq = utils.createCalculationReq(propertyRequest);
-                demandService.generateDemands(calculationReq);
+                demandService.calculateAndGenerateDemands(calculationReq, true);
             }
         } catch (final Exception e) {
             log.error("Error while listening to value: " + record + " on topic: " + topic + ": " + e);
