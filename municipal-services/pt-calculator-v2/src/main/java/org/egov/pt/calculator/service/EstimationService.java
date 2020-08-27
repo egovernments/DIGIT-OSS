@@ -133,7 +133,7 @@ public class EstimationService {
 	 *                       calculation criteria
 	 * @return Map of assessment number to Calculation
 	 */
-	public Map<String, Calculation> calculateAndCreateDemand(CalculationReq calculationReq) {
+	public Map<String, Calculation> calculateAndCreateDemand(CalculationReq calculationReq, boolean generateDemand) {
 		// assessmentService.enrichAssessment(calculationReq);
 		// We are assuming all property details should be from same source in a property
 		List<CalculationCriteria> criterias = calculationReq.getCalculationCriteria().stream()
@@ -144,7 +144,7 @@ public class EstimationService {
 		calculationReq.setCalculationCriteria(criterias);
 		// criterias
 		if (!CollectionUtils.isEmpty(calculationReq.getCalculationCriteria())) {
-			Map<String, Calculation> res = demandService.generateDemands(calculationReq);
+			Map<String, Calculation> res = demandService.calculateAndGenerateDemands(calculationReq, generateDemand);
 			return res;
 		} else {
 			Map<String, Calculation> estimateMap = new HashMap<String, Calculation>();

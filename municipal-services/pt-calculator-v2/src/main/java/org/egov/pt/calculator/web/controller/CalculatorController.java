@@ -1,5 +1,6 @@
 package org.egov.pt.calculator.web.controller;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -39,12 +40,15 @@ public class CalculatorController {
 
 	@PostMapping("/_estimate")
 	public ResponseEntity<CalculationRes> getTaxEstimation(@RequestBody @Valid CalculationReq calculationReq) {
-		return new ResponseEntity<>(calculatorService.getTaxCalculation(calculationReq), HttpStatus.OK);
+		Map<String, Calculation> calMap = calculatorService.calculateAndCreateDemand(calculationReq, false);
+		return new ResponseEntity<>(
+				CalculationRes.builder().calculation(new ArrayList<Calculation>(calMap.values())).build(),
+				HttpStatus.OK);
 	}
 
 	@PostMapping("/_calculate")
 	public ResponseEntity<Map<String, Calculation>> generateDemands(@RequestBody @Valid CalculationReq calculationReq) {
-		return new ResponseEntity<>(calculatorService.calculateAndCreateDemand(calculationReq), HttpStatus.OK);
+		return new ResponseEntity<>(calculatorService.calculateAndCreateDemand(calculationReq, true), HttpStatus.OK);
 	}
 	
 	@PostMapping("/_getbill")

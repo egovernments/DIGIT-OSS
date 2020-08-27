@@ -82,7 +82,7 @@ public class DemandService {
 	 * @param request
 	 * @return
 	 */
-	public Map<String, Calculation> generateDemands(CalculationReq request) {
+	public Map<String, Calculation> calculateAndGenerateDemands(CalculationReq request, boolean generateDemand) {
 
 		List<CalculationCriteria> criterias = request.getCalculationCriteria();
 		List<Demand> demands = new ArrayList<>();
@@ -135,20 +135,19 @@ public class DemandService {
 			throw new CustomException(CalculatorConstants.EG_PT_DEPRECIATING_ASSESSMENT_ERROR,
 					CalculatorConstants.EG_PT_DEPRECIATING_ASSESSMENT_ERROR_MSG + lesserAssessments);
 		}
-		
-		DemandRequest dmReq = DemandRequest.builder().demands(demands).requestInfo(request.getRequestInfo()).build();
-		String url = new StringBuilder().append(configs.getBillingServiceHost())
-				.append(configs.getDemandCreateEndPoint()).toString();
-		DemandResponse res = new DemandResponse();
-
-		try {
-			res = restTemplate.postForObject(url, dmReq, DemandResponse.class);
-
-		} catch (HttpClientErrorException e) {
-			throw new ServiceCallException(e.getResponseBodyAsString());
+		if (generateDemand) {
+			DemandRequest dmReq = DemandRequest.builder().demands(demands).requestInfo(request.getRequestInfo()).build();
+			String url = new StringBuilder().append(configs.getBillingServiceHost())
+					.append(configs.getDemandCreateEndPoint()).toString();
+			DemandResponse res = new DemandResponse();
+			
+			try {
+				res = restTemplate.postForObject(url, dmReq, DemandResponse.class);
+			} catch (HttpClientErrorException e) {
+				throw new ServiceCallException(e.getResponseBodyAsString());
+			}
+			log.info(" The demand Response is : " + res);
 		}
-		log.info(" The demand Response is : " + res);
-	//	assessmentService.saveAssessments(res.getDemands(), consumerCodeFinYearMap, request.getRequestInfo());
 		return propertyCalculationMap;
 	}
 
