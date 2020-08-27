@@ -202,6 +202,37 @@ export const getData = async (action, state, dispatch) => {
       "Licenses[0].applicationType",
       null
     );
+    if(applicationType === 'RENEWAL'){
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.applicationType",
+          "props.value",
+          "APPLICATIONTYPE.RENEWAL"
+        )
+      );  
+      dispatch(
+        prepareFinalObject(
+          "Licenses[0].applicationType",
+          "RENEWAL"
+        )
+      );
+    }else{
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.applicationType",
+          "props.value",
+          "APPLICATIONTYPE.NEW"
+        )
+      );  
+      dispatch(
+        prepareFinalObject(
+          "Licenses[0].applicationType",
+          "NEW"
+        )
+      );
+    }
     const isEditRenewal = getQueryArg(window.location.href,"action") === "EDITRENEWAL";
 
     if(getQueryArg(window.location.href, "action") !== "edit" && !isEditRenewal ){
