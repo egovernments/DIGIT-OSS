@@ -86,7 +86,9 @@ export const searchApiCall = async (state, dispatch) => {
     for (var key in searchScreenObject) {
       if (searchScreenObject.hasOwnProperty(key) && key === "businessServices") {
         queryObject.push({ key: key, value: searchScreenObject[key] });
-      } else if (
+      }else if(searchScreenObject.hasOwnProperty(key) && key === "mobileNo"){
+        queryObject.push({ key: "mobileNumber", value: searchScreenObject[key] });
+      }else if (
         searchScreenObject.hasOwnProperty(key) &&
         searchScreenObject[key].trim() !== ""
       ) {
@@ -105,7 +107,10 @@ export const searchApiCall = async (state, dispatch) => {
         }
       }
     }
+       
       const responseFromAPI = await getSearchResults(queryObject);
+
+
       dispatch(prepareFinalObject("receiptSearchResponse", responseFromAPI));
       const Payments = (responseFromAPI && responseFromAPI.Payments) || [];
       const response = [];

@@ -18,207 +18,45 @@ class DemandCollection extends React.Component {
   render() {
     const { prepareFinalObject, preparedFinalObject,Properties = [] } = this.props;
     const finalData=getFinalData();
- 
-   let firstdisplay_year = [];
-   firstdisplay_year = get(preparedFinalObject, `DemandProperties[0].propertyDetails[0].demand[0].demand[${finalData[0].financialYear}]`, '');
-   let secondYear = get(preparedFinalObject, `DemandProperties[0].propertyDetails[0].demand[0].demand[${finalData[1].financialYear}]`, '');
-   let thirdYear = get(preparedFinalObject, `DemandProperties[0].propertyDetails[0].demand[0].demand[${finalData[2].financialYear}]`, '');
-   let fourthYear = get(preparedFinalObject, `DemandProperties[0].propertyDetails[0].demand[0].demand[${finalData[3].financialYear}]`, '');
-   let fifthYear = get(preparedFinalObject, `DemandProperties[0].propertyDetails[0].demand[0].demand[${finalData[4].financialYear}]`, '');
-   let sixthYear = get(preparedFinalObject, `DemandProperties[0].propertyDetails[0].demand[0].demand[${finalData[5].financialYear}]`, '');
-   let seventhYear = get(preparedFinalObject, `DemandProperties[0].propertyDetails[0].demand[0].demand[${finalData[6].financialYear}]`, '');
-
-   let demands_data = get(preparedFinalObject, `DemandProperties[0].propertyDetails[0].demand`, '');
-   let dummyarray = [];
+     
+    let demands_data = get(preparedFinalObject, `DemandProperties[0].propertyDetails[0].demand`);
+    
+    let dummyarray = [];
 
 
+    //changing index of yearly data
+
+    for(let i=0; demands_data && i< demands_data.length;i++)
+        {
+              for(let j=0; finalData && j<finalData.length;j++)
+              {
+                  if(demands_data[i] && demands_data[i].demand[finalData[j].financialYear]!== undefined)
+                  {
+                    dummyarray[j] = demands_data[i];
+                  }
+              }
+        }
 
 
-   if (firstdisplay_year.length !== 0 
-    && secondYear.length ===0 
-    && thirdYear.length ===0 
-    && fourthYear.length ===0
-    && fifthYear.length ===0 
-    && sixthYear.length ===0  
-    && seventhYear.length ===0
-  
-  ) {
-    dummyarray[0] = null;    
+    //making null of no demand years data
 
-    if (demands_data[0] != null) {
-     for (let i = 0; i < demands_data.length; i++) {
-      if (demands_data[i] != null) {
-       dummyarray[i + 0] = demands_data[i];
-      }
-     }
-    } else {
-     dummyarray = demands_data;
+        let newarray = [];
 
-    }
-  }
-  
-  else if(
-    firstdisplay_year.length === 0 
-    && secondYear.length !==0 
-    && thirdYear.length ===0 
-    && fourthYear.length ===0
-    && fifthYear.length ===0 
-    && sixthYear.length ===0 
-    && seventhYear.length ===0)
-  {
-    dummyarray[0] = null;    
-    dummyarray[1] = null;    
-    if(demands_data[0] != null) {
-      for (let i = 0; i < demands_data.length; i++) {
-       if (demands_data[i] != null) {
-        dummyarray[i + 1] = demands_data[i];
-       }
-      }
-     } else {
-      dummyarray = demands_data; 
-     }
-  }
-
-  else if(
-    firstdisplay_year.length === 0 
-    && secondYear.length ===0 
-    && thirdYear.length !==0 
-    && fourthYear.length ===0
-    && fifthYear.length ===0 
-    && sixthYear.length ===0 
-    && seventhYear.length ===0)
-
-  {
-    dummyarray[0] = null;    
-    dummyarray[1] = null;    
-    dummyarray[2] = null;    
-    if(demands_data[0] != null) {
-      for (let i = 0; i < demands_data.length; i++) {
-       if (demands_data[i] != null) {
-        dummyarray[i + 2] = demands_data[i];
-       }
-      }
-     } else {
-      dummyarray = demands_data;
- 
-     }
-  }
-  else if(
-    firstdisplay_year.length === 0 
-    && secondYear.length ===0 
-    && thirdYear.length ===0 
-    && fourthYear.length !==0
-    && fifthYear.length ===0 
-    && sixthYear.length ===0 
-    && seventhYear.length ===0)
-
-  {
-    dummyarray[0] = null;    
-    dummyarray[1] = null;    
-    dummyarray[2] = null;    
-    dummyarray[3] = null;    
-
-    if(demands_data[0] != null) {
-      for (let i = 0; i < demands_data.length; i++) {
-       if (demands_data[i] != null) {
-        dummyarray[i + 3] = demands_data[i];
-       }
-      }
-     } else {
-      dummyarray = demands_data;
- 
-     }
-  }
-  else if(
-    firstdisplay_year.length === 0 
-    && secondYear.length ===0 
-    && thirdYear.length ===0 
-    && fourthYear.length ===0
-    && fifthYear.length !==0 
-    && sixthYear.length ===0 
-    && seventhYear.length ===0)
-
-  {
-    dummyarray[0] = null;    
-    dummyarray[1] = null;    
-    dummyarray[2] = null;
-    dummyarray[3] = null;    
-    dummyarray[4] = null;    
-
-    if(demands_data[0] != null) {
-      for (let i = 0; i < demands_data.length; i++) {
-       if (demands_data[i] != null) {
-        dummyarray[i + 4] = demands_data[i];
-       }
-      }
-     } else {
-      dummyarray = demands_data;
- 
-     }
-  }
-  else if(
-    firstdisplay_year.length === 0 
-    && secondYear.length ===0 
-    && thirdYear.length ===0 
-    && fourthYear.length ===0
-    && fifthYear.length ===0 
-    && sixthYear.length !==0 
-    && seventhYear.length ===0)
-
-   {
-    dummyarray[0] = null;    
-    dummyarray[1] = null;    
-    dummyarray[2] = null;
-    dummyarray[3] = null;    
-    dummyarray[4] = null; 
-    dummyarray[5] = null;     
-
-    if(demands_data[0] != null) {
-      for (let i = 0; i < demands_data.length; i++) {
-       if (demands_data[i] != null) {
-        dummyarray[i + 5] = demands_data[i];
-       }
-      }
-     } else {
-      dummyarray = demands_data;
- 
-     }
-  }
-  else if(
-    firstdisplay_year.length === 0 
-    && secondYear.length ===0 
-    && thirdYear.length ===0 
-    && fourthYear.length ===0
-    && fifthYear.length ===0 
-    && sixthYear.length ===0 
-    && seventhYear.length !==0)
-
-   {
-    dummyarray[0] = null;    
-    dummyarray[1] = null;    
-    dummyarray[2] = null;
-    dummyarray[3] = null;    
-    dummyarray[4] = null; 
-    dummyarray[5] = null;     
-    dummyarray[6] = null;     
-
-    if(demands_data[0] != null) {
-      for (let i = 0; i < demands_data.length; i++) {
-       if (demands_data[i] != null) {
-        dummyarray[i + 6] = demands_data[i];
-       }
-      }
-     } else {
-      dummyarray = demands_data;
- 
-     }
-  }
-   else {
-    dummyarray = demands_data;
-   } 
+        for(let i=0; finalData && i<finalData.length;i++)
+        {
+          let YearExist = get(dummyarray, `[${i}].demand[${finalData[i].financialYear}]`);
+          if(YearExist)
+          {
+            set(newarray, `[${i}]`, dummyarray[i]);
+          }  
+          else
+          {
+            set(newarray, `[${i}]`, undefined);        
+          }
+        }   
 
 
-   set(preparedFinalObject, `DemandProperties[0].propertyDetails[0].demand`, dummyarray);
+        set(preparedFinalObject, `DemandProperties[0].propertyDetails[0].demand`, newarray);
 
 
     const getYear =
