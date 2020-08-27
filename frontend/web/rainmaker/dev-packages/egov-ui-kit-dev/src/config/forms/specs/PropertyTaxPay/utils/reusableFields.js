@@ -75,7 +75,7 @@ export const floorUtilFunction=({ formKey, field, dispatch, state }) => {
       }
       for (var variable in state.form) {
         if (state.form.hasOwnProperty(variable) && variable.startsWith(`floorDetails_${i}`)) {
-          dispatch(removeForm(variable));
+          dispatch(removeForm(variable));       
         }
       }
     }
@@ -516,7 +516,7 @@ export const beforeInitForm = {
       // set(action, "form.fields.annualRent.hideField", true);
     }
 
-    if (get(state, `common.prepareFormData.Properties[0].propertyDetails[0].usageCategoryMajor`)==="RESIDENTIAL") {
+  if (get(state, `common.prepareFormData.Properties[0].propertyDetails[0].usageCategoryMajor`)==="RESIDENTIAL") {
       if (!get(state, `common.prepareFormData.${get(action, "form.fields.innerDimensions.jsonPath")}`)) {
         set(action, "form.fields.innerDimensions.value", "false");
         set(action, "form.fields.builtArea.hideField", false);
@@ -524,8 +524,8 @@ export const beforeInitForm = {
         set(action, "form.fields.balconyArea.hideField", true);
         set(action, "form.fields.garageArea.hideField", true);
         set(action, "form.fields.bathroomArea.hideField", true);
-      }
-      else if (get(state, `common.prepareFormData.${get(action, "form.fields.innerDimensions.jsonPath")}`=="false")) {
+      }    
+         else if (get(state, `common.prepareFormData.${get(action, "form.fields.innerDimensions.jsonPath")}`=="false")) {
         set(action, "form.fields.innerDimensions.value", "false");
         set(action, "form.fields.builtArea.hideField", false);
         set(action, "form.fields.roomArea.hideField", true);
@@ -533,15 +533,15 @@ export const beforeInitForm = {
         set(action, "form.fields.garageArea.hideField", true);
         set(action, "form.fields.bathroomArea.hideField", true);
       }
-      else {
+     /*  else {
         set(action, "form.fields.innerDimensions.value", "false");
         set(action, "form.fields.builtArea.hideField", true);
         set(action, "form.fields.roomArea.hideField", false);
         set(action, "form.fields.balconyArea.hideField", false);
         set(action, "form.fields.garageArea.hideField", false);
         set(action, "form.fields.bathroomArea.hideField", false);
-      }
-    }
+      } */
+    } 
     return action;
   },
 };
@@ -653,14 +653,14 @@ export const beforeInitFormForPlot = {
         set(action, "form.fields.garageArea.hideField", true);
         set(action, "form.fields.bathroomArea.hideField", true);
       }
-      else {
+   /*    else {
         set(action, "form.fields.innerDimensions.value", "false");
         set(action, "form.fields.builtArea.hideField", true);
         set(action, "form.fields.roomArea.hideField", false);
         set(action, "form.fields.balconyArea.hideField", false);
         set(action, "form.fields.garageArea.hideField", false);
         set(action, "form.fields.bathroomArea.hideField", false);
-      }
+      } */
     }
     return action;
   },
