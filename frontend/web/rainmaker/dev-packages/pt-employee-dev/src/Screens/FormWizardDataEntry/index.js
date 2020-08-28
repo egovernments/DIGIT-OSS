@@ -204,7 +204,7 @@ class FormWizardDataEntry extends Component {
         let newkey = "";
         let mdmsYears = getYearList.filter(year => year.code.startsWith("PTAN"));
 
-              
+        
         const demands =
           (demandPropertyResponse &&
             demandPropertyResponse.Demands.sort(function(a, b) {
@@ -213,9 +213,9 @@ class FormWizardDataEntry extends Component {
           [];
 
             let ptdemands = 0;
+                    
 
-          
-          demands.forEach((demand, yearKey) => {
+            demands.forEach((demand, yearKey) => {
             if (demand.demandDetails)
             {
               demand.demandDetails.forEach((demandData, demandKey) => {
@@ -1427,7 +1427,7 @@ class FormWizardDataEntry extends Component {
 
                     // }
                   }
-                });
+                });                
                 if (!currentYearEnteredValueLength) {
                   arrayOfEmptyYears.push(key);
                 } else {
@@ -1440,12 +1440,21 @@ class FormWizardDataEntry extends Component {
               });
           });
         }
-
-        arrayOfEmptyYears.forEach((item, i) => {
+       
+       /*  arrayOfEmptyYears.forEach((item, i) => {
           set(DemandProperties, `[0].propertyDetails[0].demand[${item}]`, null);
-        });
+        });  */
 
-        if (arrayOfEmptyYears.length === demand.length) {
+        let emptyDemands =0;
+
+        DemandProperties[0].propertyDetails[0].demand && DemandProperties[0].propertyDetails[0].demand.forEach((item, i)=>
+        {
+          if(item===undefined)
+          emptyDemands++           
+        });        
+
+
+        if (emptyDemands === demand.length) {
           errorCode = "ERR01_DEMAND_ENTER_THE_DATA";
         }
 
@@ -2248,8 +2257,8 @@ class FormWizardDataEntry extends Component {
       //     }
       //   })
       // }
-
-      let createDemandResponse = await httpRequest(
+    
+        let createDemandResponse = await httpRequest(
         `billing-service/demand/${propertyMethodAction}`,
         `${propertyMethodAction}`,
         propertyMethodAction == "create"
