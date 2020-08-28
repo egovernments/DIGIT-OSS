@@ -115,7 +115,7 @@ serviceMaps:
       jsonMaps:
       - jsonPath: $.SewerageConnection.id
 
-    - query: UPDATE eg_sw_connection SET applicationstatus=?, status=?, connectionno=?, oldconnectionno=?, action=?, roadCuttingArea=?, roadType=?, adhocpenalty=?, adhocrebate=?, adhocpenaltyreason=?, adhocpenaltycomment=?, adhocrebatereason=?, adhocrebatecomment=?, lastmodifiedby=?, lastmodifiedtime=?, dateEffectiveFrom=?, locality=? WHERE id=?;
+    - query: UPDATE eg_sw_connection SET applicationstatus=?, status=?, connectionno=?, oldconnectionno=?, action=?, roadCuttingArea=?, roadType=?, adhocpenalty=?, adhocrebate=?, adhocpenaltyreason=?, adhocpenaltycomment=?, adhocrebatereason=?, adhocrebatecomment=?, lastmodifiedby=?, lastmodifiedtime=?, dateEffectiveFrom=?, locality=?, property_id=? WHERE id=?;
       basePath: $.SewerageConnection
       jsonMaps:
         
@@ -152,6 +152,8 @@ serviceMaps:
        - jsonPath: $.SewerageConnection.dateEffectiveFrom
 
        - jsonPath: $.SewerageConnection.additionalDetails.locality
+
+       - jsonPath: $.SewerageConnection.propertyId
 
        - jsonPath: $.SewerageConnection.id   
        

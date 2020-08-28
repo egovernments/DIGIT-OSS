@@ -124,7 +124,7 @@ serviceMaps:
       jsonMaps:
       - jsonPath: $.WaterConnection.id
       
-    - query: UPDATE eg_ws_connection SET applicationstatus=?, status=?, connectionno=?, oldconnectionno=?, action=?, roadCuttingArea=?, roadType=?, adhocpenalty=?, adhocrebate=?, adhocpenaltyreason=?, adhocpenaltycomment=?, adhocrebatereason=?, adhocrebatecomment=?, lastModifiedBy=?, lastModifiedTime=?, dateEffectiveFrom=?, locality=? WHERE id=?;
+    - query: UPDATE eg_ws_connection SET applicationstatus=?, status=?, connectionno=?, oldconnectionno=?, action=?, roadCuttingArea=?, roadType=?, adhocpenalty=?, adhocrebate=?, adhocpenaltyreason=?, adhocpenaltycomment=?, adhocrebatereason=?, adhocrebatecomment=?, lastModifiedBy=?, lastModifiedTime=?, dateEffectiveFrom=?, locality=?, property_id=? WHERE id=?;
       basePath: $.WaterConnection
       jsonMaps:
 
@@ -161,7 +161,9 @@ serviceMaps:
        - jsonPath: $.WaterConnection.dateEffectiveFrom
 
        - jsonPath: $.WaterConnection.additionalDetails.locality
-       
+
+       - jsonPath: $.WaterConnection.propertyId
+     
        - jsonPath: $.WaterConnection.id 
        
     - query: INSERT INTO eg_ws_service_audit SELECT * FROM eg_ws_service WHERE connection_id = ?;
