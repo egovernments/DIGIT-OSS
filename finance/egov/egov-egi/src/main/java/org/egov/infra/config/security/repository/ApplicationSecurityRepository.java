@@ -140,7 +140,7 @@ public class ApplicationSecurityRepository implements SecurityContextRepository 
             throw new Exception("Invalid Token");
         session.setAttribute(MS_TENANTID_KEY, user.getTenantId());
         session.setAttribute(USERID_KEY,user.getId());
-        UserSearchResponse response = this.microserviceUtils.getUserInfo(user_token, user.getTenantId(), user.getUserName());
+        UserSearchResponse response = this.microserviceUtils.getUserInfo(user_token, user.getTenantId(), user.getUuid());
         
         this.microserviceUtils.removeSessionFromRedis(user_token, session.getId());
         this.microserviceUtils.savetoRedis(session.getId(), "auth_token", user_token);

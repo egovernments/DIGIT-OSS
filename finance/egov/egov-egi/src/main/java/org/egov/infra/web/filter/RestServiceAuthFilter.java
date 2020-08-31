@@ -181,7 +181,7 @@ public class RestServiceAuthFilter implements Filter {
         session.setAttribute(MS_USER_TOKEN, user_token);
         CustomUserDetails user = this.microserviceUtils.getUserDetails(user_token, admin_token);
         session.setAttribute(MS_TENANTID_KEY, user.getTenantId());
-        UserSearchResponse response = this.microserviceUtils.getUserInfo(user_token, user.getTenantId(), user.getUserName());
+        UserSearchResponse response = this.microserviceUtils.getUserInfo(user_token, user.getTenantId(), user.getUuid());
        
         return parepareCurrentUser(response.getUserSearchResponseContent().get(0));
     }

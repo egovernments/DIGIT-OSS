@@ -654,8 +654,6 @@ public class MicroserviceUtils {
         CustomUserDetails user = restT.postForObject(authurl, reqWrapper, CustomUserDetails.class);
         if (user_token.equals(admin_token)) {
             user.setUserName(this.siUser);
-        } else if (user.getUserName().equals(this.siWaterEncrypted)) {
-        	user.setUserName(this.siWater);
         }
         return user;
     }
@@ -686,7 +684,7 @@ public class MicroserviceUtils {
         return null;
     }
 
-    public UserSearchResponse getUserInfo(String auth_token, String tenantId, String userName) {
+    public UserSearchResponse getUserInfo(String auth_token, String tenantId, String uuid) {
         final RestTemplate restT = createRestTemplate();
 
         RequestInfo req_header = new RequestInfo();
@@ -694,7 +692,7 @@ public class MicroserviceUtils {
 
         req_header.setAuthToken(auth_token);
         request.setRequestInfo(req_header);
-        request.setUserName(userName);
+        request.setUuid(Arrays.asList(uuid));
         request.setTenantId(tenantId);
         String url = appConfigManager.getEgovUserSerHost() + userSrcUrl;
         LOGGER.info("call:" + url);
