@@ -289,6 +289,12 @@ public class MicroserviceUtils {
 
     @Value("${egov.services.egov-indexer.url}")
     private String egovIndexerUrl;
+    
+    @Value("${siwater.user.encrypted}")
+    private String siWaterEncrypted;
+
+    @Value("${siwater.user}")
+    private String siWater;
 
     private ObjectMapper mapper;
     SimpleDateFormat ddMMMyyyyFormat = new SimpleDateFormat("dd-MMM-yyyy");
@@ -648,6 +654,8 @@ public class MicroserviceUtils {
         CustomUserDetails user = restT.postForObject(authurl, reqWrapper, CustomUserDetails.class);
         if (user_token.equals(admin_token)) {
             user.setUserName(this.siUser);
+        } else if (user.getUserName().equals(this.siWaterEncrypted)) {
+        	user.setUserName(this.siWater);
         }
         return user;
     }
