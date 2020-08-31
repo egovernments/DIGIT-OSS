@@ -11,7 +11,7 @@ import { getQueryArg, getModuleName } from "egov-ui-kit/utils/commons";
 import { logout } from "egov-ui-kit/redux/auth/actions";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import SortDialog from "../common/common/Header/components/SortDialog";
-import { setModule, getTenantId, getLocale, getUserInfo } from "../utils/localStorageUtils";
+import { setModule, getTenantId, getLocale, getUserInfo, getModule } from "../utils/localStorageUtils";
 import "./index.css";
 
 const withAuthorization = (options = {}) => (Component) => {
@@ -51,8 +51,8 @@ const withAuthorization = (options = {}) => (Component) => {
     }
 
     fetchLocale = () => {
-      const { localeFetched } = this.state;
-      if (!localeFetched) {
+      const storedModule = getModule();
+      if (storedModule !== getModuleName()) {
         setModule(getModuleName());
         const tenantId = process.env.REACT_APP_NAME === "Citizen" ? this.citizenTenantId(): getTenantId();
         this.props.fetchLocalizationLabel(getLocale(), tenantId, tenantId);
