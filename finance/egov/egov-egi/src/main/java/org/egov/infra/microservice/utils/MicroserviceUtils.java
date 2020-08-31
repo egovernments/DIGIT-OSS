@@ -290,12 +290,6 @@ public class MicroserviceUtils {
     @Value("${egov.services.egov-indexer.url}")
     private String egovIndexerUrl;
     
-    @Value("${siwater.user.encrypted}")
-    private String siWaterEncrypted;
-
-    @Value("${siwater.user}")
-    private String siWater;
-
     private ObjectMapper mapper;
     SimpleDateFormat ddMMMyyyyFormat = new SimpleDateFormat("dd-MMM-yyyy");
 
