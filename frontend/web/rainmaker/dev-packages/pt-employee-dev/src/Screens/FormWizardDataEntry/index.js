@@ -214,6 +214,8 @@ class FormWizardDataEntry extends Component {
           
           
           //hardcoded only 5 finantial years of data
+        
+          let duplicatedYears=0;
 
           demands.forEach((demand, yearKey) => {           
             if (demand.demandDetails)
@@ -246,10 +248,16 @@ class FormWizardDataEntry extends Component {
              }
                 if(ptTax>1 || ptPenalty> 1 || ptInterest>1 ||ptPromotionRebate>1 || ptRebate>1)
                   {
-                    alert("This Property has duplicate demands for  please contact Administrator ");
+                    duplicatedYears = duplicatedYears+1
                   }   
            };
-          });     
+          });  
+          
+          if(duplicatedYears>0)
+                  {
+                    alert("This Property has duplicate demands for  please contact Administrator ");
+                    duplicatedYears = duplicatedYears+1                    
+                  } 
 
 
         demands.forEach((demand, yearKey) => {
