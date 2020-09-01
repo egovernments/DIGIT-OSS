@@ -113,7 +113,7 @@ class LandingPage extends React.Component {
         className="common-background"
         style={{
           height: "100%",
-          background: `url(https://s3.ap-south-1.amazonaws.com/ukd-egov-assets/Stateimages/banner.png) no-repeat `,
+          background: `url(https://nagarsewa.uk.gov.in/ukd-assets/Stateimages/banner.png) no-repeat `,
         }}
       >
         <Grid container className={classes.root}>
