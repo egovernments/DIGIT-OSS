@@ -211,26 +211,45 @@ class FormWizardDataEntry extends Component {
               return b.taxPeriodFrom - a.taxPeriodFrom;
             })) ||
           [];
+          
+          
+          //hardcoded only 5 finantial years of data
 
-            let ptdemands = 0;
-                    
-
-            demands.forEach((demand, yearKey) => {
+          demands.forEach((demand, yearKey) => {           
             if (demand.demandDetails)
             {
-              demand.demandDetails.forEach((demandData, demandKey) => {
-              if (demandData.taxHeadMasterCode==="PT_TAX") {
-                ptdemands= ptdemands+1;
-            }
-              });                  
+              let ptTax =0,ptPenalty=0, ptInterest =0, ptRebate =0, ptPromotionRebate = 0;
+              for (let i=0; i<demand.demandDetails.length;i++)
+              {             
+
+                  if (demand.demandDetails[i].taxHeadMasterCode==="PT_TAX")  
+                  {
+                    ptTax = ptTax+1
+                  }
+                  else if(demand.demandDetails[i].taxHeadMasterCode==="PT_LATE_ASSESSMENT_PENALTY")
+                  {
+                    ptPenalty =  ptPenalty+1
+                  }
+                  else if(demand.demandDetails[i].taxHeadMasterCode==="PT_TIME_INTEREST")
+                  {
+                    ptInterest =  ptInterest+1
+                  }
+                  else if(demand.demandDetails[i].taxHeadMasterCode==="PT_PROMOTIONAL_REBATE")
+                  {
+                    ptPromotionRebate =  ptPromotionRebate+1
+                  }
+                  else if(demand.demandDetails[i].taxHeadMasterCode==="PT_TIME_REBATE")
+                  {
+                    ptRebate =  ptRebate+1
+                  }
+              
+             }
+                if(ptTax>1 || ptPenalty> 1 || ptInterest>1 ||ptPromotionRebate>1 || ptRebate>1)
+                  {
+                    alert("This Property has duplicate demands for  please contact Administrator ");
+                  }   
            };
-          });
-
-          if(demands.length !==ptdemands)
-          {
-            alert("This Property has duplicate demands, please contact Administrator ");
-          }
-
+          });     
 
 
         demands.forEach((demand, yearKey) => {
