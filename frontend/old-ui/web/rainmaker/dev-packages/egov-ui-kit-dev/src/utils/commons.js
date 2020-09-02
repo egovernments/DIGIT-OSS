@@ -1028,6 +1028,7 @@ export const openPdf = async (link, openIn = '_blank') => {
 export const getModuleName = () => {
   const pathName = window.location.pathname;
   if (pathName.indexOf("inbox") > -1) { return "rainmaker-common"; }
+  else if (pathName.indexOf("dss") > -1) { return "rainmaker-dss"; }
   else if (pathName.indexOf("property-tax") > -1 || pathName.indexOf("pt-mutation") > -1) { return "rainmaker-pt,rainmaker-pgr"; }
   else if (pathName.indexOf("pt-common-screens") > -1 || pathName.indexOf("public-search") > -1) { return "rainmaker-pt"; }
   else if (pathName.indexOf("complaint") > -1 || pathName.indexOf("request-reassign") > -1 || pathName.indexOf("reassign-success") > -1) { return "rainmaker-pgr"; }
