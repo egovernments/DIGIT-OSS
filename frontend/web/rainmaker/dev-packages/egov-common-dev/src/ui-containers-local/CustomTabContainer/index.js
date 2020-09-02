@@ -77,25 +77,30 @@ class MultiItem extends React.Component {
   };
 
   resetFields = (dispatch, state) => {
-    // dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0].payer", ""));
-    // dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0].paidBy", ""));
-    // dispatch(
-    //   prepareFinalObject("ReceiptTemp[0].Bill[0].payerMobileNumber", "")
-    // );
+    // 
     // dispatch(prepareFinalObject("ReceiptTemp[0].instrument", {}));
-    if (
-      get(
-        state.screenConfiguration.preparedFinalObject,
-        "ReceiptTemp[0].instrument.bank.name"
-      ) &&
-      get(
-        state.screenConfiguration.preparedFinalObject,
-        "ReceiptTemp[0].instrument.branchName"
-      )
-    ) {
+    const finalObject = get(state , "screenConfiguration.preparedFinalObject");
+    const ifscCode = get(finalObject, "ReceiptTemp[0].instrument.ifscCode");
+    const transactionDateInput = get(finalObject, "ReceiptTemp[0].instrument.transactionDateInput");
+    const transactionNumber = get(finalObject, "ReceiptTemp[0].instrument.transactionNumber");
+    const bankName = get(finalObject,"ReceiptTemp[0].instrument.bank.name");
+    const branchName  = get(state.screenConfiguration.preparedFinalObject,"ReceiptTemp[0].instrument.branchName");
+    dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0].paidBy", get(finalObject,"ReceiptTemp[0].Bill[0].payerName")));
+    dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0].payerMobileNumber", get(finalObject,"ReceiptTemp[0].Bill[0].mobilenumber")));
+    if (bankName && branchName) {
       dispatch(prepareFinalObject("ReceiptTemp[0].instrument.bank.name", ""));
       dispatch(prepareFinalObject("ReceiptTemp[0].instrument.branchName", ""));
-    } // Has to manually clear bank name and branch
+    }
+    if(ifscCode){
+      dispatch(prepareFinalObject("ReceiptTemp[0].instrument.ifscCode", ""));
+    }
+    if(transactionDateInput){
+      dispatch(prepareFinalObject("ReceiptTemp[0].instrument.transactionDateInput", ""));
+    }
+    if(transactionNumber){
+      dispatch(prepareFinalObject("ReceiptTemp[0].instrument.transactionNumber", ""));
+    }
+    // Has to manually clear bank name and branch
     const keyToIndexMapping = [
       {
         index: 0,
