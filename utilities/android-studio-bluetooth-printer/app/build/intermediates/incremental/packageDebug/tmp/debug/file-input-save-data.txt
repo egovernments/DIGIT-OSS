@@ -1,0 +1,7 @@
+#Internal package file, do not edit.
+#Wed Nov 28 11:04:54 IST 2018
+0.baseType=DIRECTORY
+0.base=/home/kiranmayi/Desktop/mobile/android/Android-studio-bluetooth-printer/app/build/intermediates/transforms/dexMerger/debug/0
+0.path=classes.dex
+0.set=DEX
+count=1

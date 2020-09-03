@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_gravity="center"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="@drawable/grey_background">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="75dp"
+            android:layout_weight="1"
+            android:src="@drawable/pmidc_logo"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center"
+            android:text="Water/Sewerage Receipt Print"
+            android:textStyle="bold"
+            android:textSize="24px"
+            android:layout_weight="10"
+            android:clickable="false"
+            android:focusable="false"/>
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="75dp"
+            android:layout_weight="1"
+            android:src="@drawable/egov_logo" />
+    </LinearLayout>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:gravity="top"
+        android:editable="false"
+        android:id="@+id/printerText"/>
+
+           <Button
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:layout_height="52dp"
+            android:layout_margin="3dp"
+            android:background="@drawable/green_btn"
+            android:text="Print Receipt"
+            android:textSize="20dp"
+            android:id="@+id/mPrint" />
+
+
+</LinearLayout>
