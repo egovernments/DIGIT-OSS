@@ -35,7 +35,7 @@ const TotalDues = ({ totalBillAmountDue, consumerCode, tenantId, history }) => {
           {/* <TotalDuesButton labelText="PT_TOTALDUES_VIEW" /> */}
         </div>
       )}
-      {totalBillAmountDue > 0 && (
+      {totalBillAmountDue > 0 && process.env.REACT_APP_NAME !== "Citizen" && (
         <div className="col-xs-6 col-sm-3 flex-child " >
           <div style={{ float: "right" }}>
           <TotalDuesButton labelText="PT_TOTALDUES_PAY" onClickAction={() => {
