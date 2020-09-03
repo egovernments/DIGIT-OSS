@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import org.egov.pt.calculator.service.DemandService;
 import org.egov.pt.calculator.service.EstimationService;
 import org.egov.pt.calculator.service.PayService;
+import org.egov.pt.calculator.service.TranslationService;
 import org.egov.pt.calculator.web.models.Calculation;
 import org.egov.pt.calculator.web.models.CalculationReq;
 import org.egov.pt.calculator.web.models.CalculationRes;
@@ -15,6 +16,7 @@ import org.egov.pt.calculator.web.models.GetBillCriteria;
 import org.egov.pt.calculator.web.models.demand.BillResponse;
 import org.egov.pt.calculator.web.models.demand.DemandResponse;
 import org.egov.pt.calculator.web.models.property.RequestInfoWrapper;
+import org.egov.pt.calculator.web.models.propertyV2.AssessmentRequestV2;
 import org.egov.pt.calculator.web.models.propertyV2.PropertyRequestV2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,10 +38,13 @@ public class CalculatorController {
 	private EstimationService calculatorService;
 	
 	@Autowired
-	private PayService payService;
+	private TranslationService translationService;
+
 
 	@PostMapping("/_estimate")
-	public ResponseEntity<CalculationRes> getTaxEstimation(@RequestBody @Valid CalculationReq calculationReq) {
+	public ResponseEntity<CalculationRes> getTaxEstimation(@RequestBody @Valid AssessmentRequestV2 assessmentRequestV2) {
+		CalculationReq calculationReq = translationService.translate(assessmentRequestV2);
+
 		Map<String, Calculation> calMap = calculatorService.calculateAndCreateDemand(calculationReq, false);
 		return new ResponseEntity<>(
 				CalculationRes.builder().calculation(new ArrayList<Calculation>(calMap.values())).build(),
