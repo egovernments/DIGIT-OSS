@@ -139,6 +139,10 @@ const getPaymentCard = () => {
     if (isPartialPaymentAllowed) {
         dispatch(handleField("pay", "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.AmountToBePaid", "visible", true));
     }
+    const hasOnlinePayment = get(state, "screenConfiguration.preparedFinalObject.businessServiceInfo.hasOnlinePayment");
+    if (!hasOnlinePayment) {
+    dispatch(handleField("pay", "components.div.children.footer.children.makePayment", "visible", false));
+    }
     if (get(payload, "amount") != undefined) {
         //set amount paid as total amount from bill - destination changed in CS v1.1
         dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0].taxAndPayments[0].amountPaid", payload.amount));

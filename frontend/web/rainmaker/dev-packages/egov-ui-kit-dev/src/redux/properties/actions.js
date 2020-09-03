@@ -861,6 +861,25 @@ else if(payments[0].paymentDetails[0].businessService === 'TL'){
   return payments;
 }
 
+const getBankname = async(payment) =>{
+  const ifscCode = payment[0].ifscCode;
+  let payload;
+  if (ifscCode) {
+    payload = await axios.get(`https://ifsc.razorpay.com/${ifscCode}`);
+    console.log("===================>",payload);
+    if (payload.data === "Not Found") {
+      set(payment, `[0].bankName`, "");
+      set(payment, `[0].branchName`, "");
+    } else {
+      const bankName = get(payload.data, "BANK");
+      const bankBranch = get(payload.data, "BRANCH");
+      set(payment, `[0].bankName`, bankName);
+      set(payment, `[0].branchName`, bankBranch);
+    }
+  }
+  return payment;
+}
+
 export const downloadReceipt = (receiptQueryString, mode = "download") => {
   return async (dispatch) => {
     if (receiptQueryString) {
@@ -868,6 +887,7 @@ export const downloadReceipt = (receiptQueryString, mode = "download") => {
       try {
         const payloadReceiptDetails = await httpRequest(FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString);
         let queryStr = {};
+        payloadReceiptDetails.Payments = await getBankname(payloadReceiptDetails.Payments);
         payloadReceiptDetails.Payments = getModifiedPayment(payloadReceiptDetails.Payments);
         if (payloadReceiptDetails.Payments[0].paymentDetails[0].businessService === "PT") {
           queryStr = [{ key: "key", value: "consolidatedreceipt" }, { key: "tenantId", value: receiptQueryString[1].value.split(".")[0] }];
