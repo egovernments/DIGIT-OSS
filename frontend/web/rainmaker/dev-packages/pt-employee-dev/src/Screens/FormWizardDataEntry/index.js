@@ -50,6 +50,7 @@ import { fetchMDMDDocumentTypeSuccess } from "redux/store/actions";
 import "./index.css";
 import {
   addOwner,
+  callDraft,
   configOwnersDetailsFromDraft,
   getTargetPropertiesDetails,
   getSelectedCombination,
@@ -206,21 +207,21 @@ class FormWizardDataEntry extends Component {
 
         
         const demands =
-          (demandPropertyResponse &&
-            demandPropertyResponse.Demands.sort(function(a, b) {
-              return b.taxPeriodFrom - a.taxPeriodFrom;
-            })) ||
-          [];
-          
-          
-          //hardcoded only 5 finantial years of data
+        (demandPropertyResponse &&
+          demandPropertyResponse.Demands.sort(function(a, b) {
+            return b.taxPeriodFrom - a.taxPeriodFrom;
+          })) ||
+        [];
         
+      
+        //hardcoded only 5 finantial years of data
+
           let duplicatedYears=0;
 
           demands.forEach((demand, yearKey) => {           
             if (demand.demandDetails)
             {
-              let ptTax =0,ptPenalty=0, ptInterest =0, ptRebate =0, ptPromotionRebate = 0;
+              let ptTax =0,ptSwatchatha=0, ptInterest =0, ptRebate =0, ptPromotionRebate = 0;
               for (let i=0; i<demand.demandDetails.length;i++)
               {             
 
@@ -228,9 +229,9 @@ class FormWizardDataEntry extends Component {
                   {
                     ptTax = ptTax+1
                   }
-                  else if(demand.demandDetails[i].taxHeadMasterCode==="PT_LATE_ASSESSMENT_PENALTY")
+                  else if(demand.demandDetails[i].taxHeadMasterCode==="SWATCHATHA_TAX")
                   {
-                    ptPenalty =  ptPenalty+1
+                    ptSwatchatha =  ptSwatchatha+1
                   }
                   else if(demand.demandDetails[i].taxHeadMasterCode==="PT_TIME_INTEREST")
                   {
@@ -246,7 +247,7 @@ class FormWizardDataEntry extends Component {
                   }
               
              }
-                if(ptTax>1 || ptPenalty> 1 || ptInterest>1 ||ptPromotionRebate>1 || ptRebate>1)
+                if(ptTax>1 || ptSwatchatha> 1 || ptInterest>1 ||ptPromotionRebate>1 || ptRebate>1)
                   {
                     duplicatedYears = duplicatedYears+1
                   }   
@@ -1113,7 +1114,7 @@ class FormWizardDataEntry extends Component {
         }
         const isProperyAddressFormValid = validateForm(form.propertyAddress);
         if (isProperyAddressFormValid) {
-          //callDraft();
+          //callDraft(this);
           window.scrollTo(0, 0);
           this.setState({
             selected: index,
@@ -1166,7 +1167,7 @@ class FormWizardDataEntry extends Component {
                       }
                     }
                     if (floorValidation) {
-                      //callDraft();
+                      //callDraft(this);
                       window.scrollTo(0, 0);
                       this.setState({
                         selected: index,
@@ -1174,7 +1175,7 @@ class FormWizardDataEntry extends Component {
                       });
                     }
                   } else {
-                    //callDraft();
+                   // callDraft(this);
                     window.scrollTo(0, 0);
                     this.setState({
                       selected: index,
@@ -1240,7 +1241,7 @@ class FormWizardDataEntry extends Component {
               const { ownerInfo } = form;
               const isOwnerInfoFormValid = validateForm(ownerInfo);
               if (isOwnerInfoFormValid) {
-                //callDraft();
+                callDraft(this);
                 window.scrollTo(0, 0);
                 this.setState(
                   {
@@ -1264,7 +1265,7 @@ class FormWizardDataEntry extends Component {
                 }
               }
               if (ownerValidation) {
-                //callDraft();
+                callDraft(this);
                 window.scrollTo(0, 0);
                 this.setState(
                   {
@@ -1294,7 +1295,7 @@ class FormWizardDataEntry extends Component {
                 institutionFormValid = false;
               }
               if (institutionFormValid) {
-                //callDraft();
+                callDraft(this);
                 window.scrollTo(0, 0);
                 this.setState(
                   {
