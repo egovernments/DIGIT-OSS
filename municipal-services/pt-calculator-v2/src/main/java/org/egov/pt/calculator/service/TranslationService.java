@@ -23,8 +23,6 @@ import java.util.stream.Collectors;
 @Service
 public class TranslationService {
 
-
-
     @Value("${egov.pt.registry.host}")
     String ptRegistryHost;
 
@@ -50,13 +48,11 @@ public class TranslationService {
         AssessmentV2 assessment = assessmentRequestV2.getAssessment();
 
         PropertyV2 property = getProperty(assessmentRequestV2);
+        if(property==null)
+            throw new CustomException("INVALID_PROPERTYID","No property found for the given assessment");
 
         if(!CollectionUtils.isEmpty(assessment.getUnitUsageList()))
             enrichPropertyFromAssessment(property, assessment);
-
-
-        if(property==null)
-            throw new CustomException("INVALID_PROPERTYID","No property found for the given assessment");
 
         Map<String, Object> propertyMap = new HashMap();
         Map<String, Object> propertyDetail = new HashMap<>();
@@ -107,6 +103,7 @@ public class TranslationService {
         propertyDetail.put("usageCategoryMinor", usageCategoryMinor);
         propertyDetail.put("ownershipCategory", ownershipCategory);
         propertyDetail.put("subOwnershipCategory", subOwnershipCategory);
+        propertyDetail.put("source", assessment.getSource().toString());
 
         // propertyDetail.put("adhocExemption", );
         // propertyDetail.put("adhocPenalty",);
