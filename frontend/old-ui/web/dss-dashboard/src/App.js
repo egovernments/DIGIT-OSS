@@ -1,13 +1,15 @@
 import React from 'react';
-import './App.css';
-import { connect } from 'react-redux';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import { changeTheName } from '../src/actions/firstAction';
-import { bindActionCreators } from 'redux';
-import { updateLanguage } from './actions/languageChange';
-import variables from './styles/variables';
-import Layout from './utils/Layout';
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+import axios from 'axios';
 import _ from 'lodash';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { changeTheName } from '../src/actions/firstAction';
+import { updateLanguage } from './actions/languageChange';
+import './App.css';
+import variables from './styles/variables';
+import { fetchLocalisationRequest } from './utils/commons';
+import Layout from './utils/Layout';
 
 const theme = createMuiTheme({
   overrides: {
@@ -125,17 +127,32 @@ class App extends React.Component {
       language: 'en'
     }
   }
-  componentWillMount() {
+ 
+  loadLocalisation = () => {
     let language = localStorage.getItem("Employee.locale");
-    let data = _.chain(JSON.parse(localStorage.getItem(`localization_${language}`)))
+    let localisationLabels = JSON.parse(localStorage.getItem(`localization_${language}`)) || [];
+    if (localisationLabels.length == 0 || localisationLabels.filter(localisation => localisation.module == "rainmaker-dss").length == 0) {
+      let localisationRequest = fetchLocalisationRequest(language);
+      axios.post(localisationRequest.reqUrl, localisationRequest.reqBody, localisationRequest.reqHeaders)
+        .then(response => {
+          this.setLocalisation(response.data.messages);
+        })
+        .catch(error => {
+          console.log(error.response)
+        });
+    } else {
+      this.setLocalisation(localisationLabels);
+    }
+  }
+
+  setLocalisation = (localisationLabels = []) => {
+    let data = _.chain(localisationLabels)
       .map(i => { return { key: i.code, value: i.message } })
       .flatten().value();
     let newIndex = _.chain(data)
       .keyBy('key')
       .mapValues('value')
       .value();
-
-
     let dataL = {
       'en': newIndex,
       'hi': {}
@@ -145,7 +162,9 @@ class App extends React.Component {
 
   componentDidMount() {
     document.title = "DSS Dashboard";
+    this.loadLocalisation();
   }
+
   changeTheName = (e) => {
     this.props.changeTheName();
   }
