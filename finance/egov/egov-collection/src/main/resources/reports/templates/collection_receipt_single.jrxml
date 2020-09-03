@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
+<!-- Created with Jaspersoft Studio version 6.12.0.final using JasperReports Library version 6.12.1-ac0eebdb29e4c0985457bab279a6db744d661530  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="collection_receipt" language="groovy" pageWidth="595" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="30" bottomMargin="30" resourceBundle="custom" uuid="4b290c7e-638d-4115-b638-21eedae5185f">
 	<import value="org.egov.collection.constants.*"/>
 	<import value="org.egov.infra.reporting.util.*"/>
@@ -68,7 +68,7 @@
 				</textElement>
 				<text><![CDATA[RECEIPT]]></text>
 			</staticText>
-			<textField isStretchWithOverflow="true">
+			<textField textAdjust="StretchHeight">
 				<reportElement stretchType="RelativeToTallestObject" x="469" y="3" width="97" height="17" uuid="cbbecbc4-3320-4efe-af74-54832fa32032"/>
 				<box leftPadding="5" rightPadding="5">
 					<pen lineWidth="0.5"/>
@@ -111,7 +111,7 @@
 				</textElement>
 				<text><![CDATA[Receipt No:]]></text>
 			</staticText>
-			<textField isStretchWithOverflow="true">
+			<textField textAdjust="StretchHeight">
 				<reportElement stretchType="RelativeToTallestObject" x="140" y="0" width="150" height="15" uuid="4ebe1ac2-acdf-4dad-abc6-9c4344a0f78a"/>
 				<box leftPadding="5" rightPadding="5">
 					<pen lineWidth="0.5"/>
@@ -139,7 +139,7 @@
 				</textElement>
 				<text><![CDATA[Receipt Date:]]></text>
 			</staticText>
-			<textField isStretchWithOverflow="true" pattern="dd-MM-yyyy">
+			<textField textAdjust="StretchHeight" pattern="dd-MM-yyyy">
 				<reportElement stretchType="RelativeToTallestObject" x="394" y="0" width="172" height="15" uuid="3587ef74-f352-4fb7-aeae-08ff60f03037"/>
 				<box leftPadding="5" rightPadding="5">
 					<pen lineWidth="0.5"/>
@@ -153,7 +153,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{receiptDate}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToTallestObject" x="140" y="15" width="426" height="15" uuid="1d5ad99d-b618-4e54-a412-90b973fcbc23"/>
 				<box leftPadding="5" rightPadding="5">
 					<pen lineWidth="0.5"/>
@@ -165,7 +165,7 @@
 				<textElement verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="10" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{paidBy}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{payeeName}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement stretchType="RelativeToTallestObject" x="20" y="15" width="120" height="15" uuid="dd610602-d4e9-43ac-a935-940c3b1bf462"/>
@@ -187,7 +187,7 @@
 		</band>
 		<band height="15">
 			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
-			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+			<textField textAdjust="StretchHeight" pattern="" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToTallestObject" x="140" y="-15" width="426" height="15" uuid="5a23bdb1-ab29-45d4-83b3-0515d0e123c8">
 					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
 				</reportElement>
@@ -233,7 +233,7 @@
 				</textElement>
 				<text><![CDATA[Receipt amount (Rs):]]></text>
 			</staticText>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToTallestObject" x="140" y="0" width="426" height="15" uuid="370460c9-09a2-4eba-baf3-95c03ec07df2"/>
 				<box leftPadding="5" rightPadding="5">
 					<pen lineWidth="0.5"/>
@@ -247,7 +247,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{totalAmount}.setScale(2, BigDecimal.ROUND_UP)]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="240" y="-15" width="326" height="15" uuid="f22db335-66d7-4162-8ba3-f69929989b37">
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 				</reportElement>
@@ -304,7 +304,7 @@
 				</textElement>
 				<text><![CDATA[Amount in words :]]></text>
 			</staticText>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToTallestObject" x="140" y="-15" width="426" height="15" uuid="0d23473a-2f27-41c9-9917-b4a7bdcb844b">
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
@@ -337,7 +337,7 @@
 		</band>
 		<band height="57">
 			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToTallestObject" x="140" y="-15" width="426" height="20" uuid="8f6f110b-2792-4006-a4b6-648c25ae8b59"/>
 				<box leftPadding="5" rightPadding="5">
 					<pen lineWidth="0.5"/>
@@ -379,7 +379,7 @@
 				</textElement>
 				<text><![CDATA[G8 Date:]]></text>
 			</staticText>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 				<reportElement x="140" y="5" width="150" height="20" uuid="e1061c5e-61a1-4b62-b5b1-4ec3d100e1a0"/>
 				<box leftPadding="5" rightPadding="5">
 					<pen lineWidth="0.5"/>
@@ -407,7 +407,7 @@
 				</textElement>
 				<text><![CDATA[G8 Receipt No:]]></text>
 			</staticText>
-			<textField isStretchWithOverflow="true" pattern="dd-MM-yyyy" isBlankWhenNull="true">
+			<textField textAdjust="StretchHeight" pattern="dd-MM-yyyy" isBlankWhenNull="true">
 				<reportElement x="394" y="5" width="172" height="20" uuid="06087648-a047-4231-83d0-7838ea7f60ef"/>
 				<box topPadding="0" leftPadding="5" rightPadding="5">
 					<pen lineWidth="0.5"/>
