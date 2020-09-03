@@ -122,7 +122,7 @@ public class PaymentUtils {
         bill.setPayerAddress(billv2.getPayerAddress());
         bill.setPayerEmail(billv2.getPayerEmail());
         bill.setPayerId(billv2.getPayerId());
-        bill.setPayerName(billv2.getPayerName());
+        bill.setPayerName(StringUtils.defaultIfBlank(billv2.getPayerName(), payment.getPayerName()));
 //        bill.setTaxAndPayments(taxAndPayments);
         bill.setTenantId(billv2.getTenantId());
         bill.setBillDetails(new ArrayList<BillDetail>());
