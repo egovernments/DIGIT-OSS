@@ -2019,3 +2019,343 @@ ReportDefinitions:
     isMandatory: true
   query: SELECT cs.crn, cs.createddate,cs.name as complainantname, requesteraddress as address, cs.details,cs.status, (select code from submission_attribute sa where sa.key='feedback' and sa.crn=cs.crn) as feedback, CASE WHEN (now() - cs.createddate::timestamp with time zone) < ('01:00:00'::interval * ctype.slahours::double precision) THEN 'Yes'::text ELSE 'No'::text END AS issla FROM submission cs,submission_attribute sa, eg_boundary boundary, egpgr_complainttype ctype ,servicetype_keyword sk WHERE cs.crn = sa.crn and boundary.id = sa.code::integer and cs.createddate >= $fromDate and cs.createddate <= $toDate and cs.servicecode = ctype.code and sa.key = 'systemLocationId' and ctype.code = sk.servicecode and upper(sk.keyword) = upper('complaint') and sk.tenantid = $tenantid and ctype.tenantid  = $tenantid and boundary.tenantid = $tenantid and sa.tenantid = $tenantid and cs.tenantid = $tenantid
     and ctype.code = (select code from egpgr_complainttype where name = $complaintcode and tenantid = $tenantid) and sa.code::bigint = (select id from eg_boundary where name = $wardname and tenantid = $tenantid) and cs.status IN ($status);
+
+- reportName: ULBReport
+  summary: Fetches complaint stats based on department types for a ULB
+  version: 1.0.0
+  moduleName: pgr
+  externalService:
+  - entity: $.MdmsRes.RAINMAKER-PGR.ServiceDefs
+    apiURL: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=RAINMAKER-PGR&masterName=ServiceDefs&tenantId=$tenantId
+    keyOrder: serviceCode,department,slaHours
+    tableName: tbl_dept
+  - entity: $.MdmsRes.common-masters.Department
+    apiURL: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=common-masters&masterName=Department&tenantId=$tenantId
+    keyOrder: name,code
+    tableName: tbl_def_dept
+  sourceColumns:    
+  - name: tenantid
+    label: reports.pgr.tenantid
+    type: string
+    source: eg_pgr_service
+    total: false
+  - name: assigned
+    label: reports.pgr.assigned
+    type: string
+    source: eg_pgr_service
+    total: true
+  - name: received
+    label: reports.pgr.received
+    type: string
+    source: eg_pgr_service
+    total: true
+  - name: rating
+    label: reports.pgr.rating
+    type: number
+    source: eg_pgr_service
+    total: true
+  - name: resolvedwithinsla
+    label: reports.pgr.resolvedwithinsla
+    type: string
+    source: eg_pgr_service
+    total: true
+  - name: resolvedoutsidesla
+    label: reports.pgr.resolvedoutsidesla
+    type: string
+    source: eg_pgr_service
+    total: true
+  - name: opencomplaintswithinsla
+    label: reports.pgr.opencomplaintswithinsla
+    type: string
+    source: eg_pgr_service
+    total: true
+  - name: opencomplaintsoutsidesla
+    label: reports.pgr.opencomplaintsoutsidesla
+    type: string
+    source: eg_pgr_service
+    total: true
+  searchParams:
+  - name: ulb
+    label: ULB
+    type: singlevaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.code|$.MdmsRes.tenant.tenants.*.name
+    source: pt
+    wrapper: true
+    isMandatory: false
+    searchClause: AND pgr_data.tenantid = $ulb
+  - name: fromDate
+    label: reports.pgr.datefrom
+    type: epoch
+    source: eg_pgr_service
+    isMandatory: true
+    searchClause: AND pgr_data.createdtime >= $fromDate
+  - name: toDate
+    label: reports.pgr.dateto
+    type: epoch
+    source: eg_pgr_service
+    isMandatory: true
+    searchClause: AND pgr_data.createdtime <= $toDate
+  - name: status
+    label: reports.pgr.status
+    type: singlevaluelist
+    pattern: 'list://open:open,assigned:assigned,closed:closed,rejected:rejected,reassignrequested:reassignrequested'
+    source: seva
+    isMandatory: false
+    searchClause: AND pgr_data.status = $status
+  - name: deptname
+    label: reports.pgr.dept.name
+    type: singlevaluelist
+    source: eg_pgr_service
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=common-masters&masterName=Department|$.MdmsRes.common-masters.Department[*].code|$.MdmsRes.common-masters.Department[*].name   
+    isMandatory: false
+    searchClause: AND deptmap_def.name = $deptname
+  query: |  
+    with pgr_data as (select  
+      servicerequestid, 
+      servicecode,
+      createdtime, 
+      status,
+      tenantid,
+      rating,
+      (select max("when") from eg_pgr_action where action='resolve' and businesskey = servicerequestid) as resolvedtime,
+      (select min("when") from eg_pgr_action where action='open' and businesskey = servicerequestid) as opentime
+      from eg_pgr_service as ps
+      where 
+      tenantid = $tenantid)
+    select 
+      initcap(split_part(tenantid, '.', 2)) as tenantid,      
+      deptmap_def.name as department,    
+      SUM (CASE WHEN status in ('assigned', 'reassignrequested') THEN 1 ELSE 0 END) as assigned,
+      count(status) as received,
+      rating,
+      SUM (CASE WHEN status in ('closed', 'resolved') and (resolvedtime - opentime) < 14 * 86400 * 1000 THEN 1 ELSE 0 END) as resolvedwithinsla,
+      SUM (CASE WHEN status in ('closed', 'resolved') and (resolvedtime - opentime) >= 14 * 86400 * 1000 THEN 1 ELSE 0 END) as resolvedoutsidesla,
+      SUM (CASE WHEN status in ('open') and (extract(epoch from now()) * 1000 - opentime) < 14 * 86400 * 1000 THEN 1 ELSE 0 END)  as opencomplaintswithinsla,
+      SUM (CASE WHEN status in ('open') and (extract(epoch from now()) * 1000 - opentime) >= 14 * 86400 * 1000 THEN 1 ELSE 0 END) as opencomplaintsoutsidesla
+      from pgr_data
+      INNER JOIN (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) ON deptmap.serviceCode = pgr_data.servicecode
+      INNER JOIN (VALUES tbl_def_dept) AS deptmap_def(name,code) ON deptmap.department = deptmap_def.code
+      WHERE 1=1
+  groupby: GROUP BY tenantid,deptmap_def.name,rating
+  orderby: ORDER BY tenantid,deptmap_def.name,rating
+
+
+- reportName: LMEPerformanceReport
+  summary: Fetches employee performance report
+  version: 1.0.0
+  moduleName: pgr
+  externalService:
+  - entity: $.MdmsRes.RAINMAKER-PGR.ServiceDefs
+    apiURL: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=RAINMAKER-PGR&masterName=ServiceDefs&tenantId=$tenantId
+    keyOrder: serviceCode,department,slaHours
+    tableName: tbl_dept
+  - entity: $.MdmsRes.common-masters.Department
+    apiURL: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=common-masters&masterName=Department&tenantId=$tenantId
+    keyOrder: name,code
+    tableName: tbl_def_dept
+  sourceColumns:
+  - name: employee
+    label: reports.pgr.employee
+    type: string
+    source: pgr_data
+    total: false
+  - name: department
+    label: reports.pgr.department
+    type: string
+    source: pgr_data
+    total: false
+  - name: designation
+    label: reports.pgr.designation
+    type: string
+    source: pgr_data
+    total: false
+  - name: resolvedwithinsla
+    label: reports.pgr.resolvedwithinsla
+    type: string
+    source: pgr_data
+    total: true
+  - name: resolvedoutsidesla
+    label: reports.pgr.resolvedoutsidesla
+    type: string
+    source: pgr_data
+    total: true
+  - name: assigned
+    label: reports.pgr.assigned
+    type: string
+    source: pgr_data
+    total: true
+  - name: open
+    label: reports.pgr.open
+    type: string
+    source: pgr_data
+    total: true
+  - name: reopen
+    label: reports.pgr.reopen
+    type: string
+    source: pgr_data
+    total: true
+  - name: rating
+    label: reports.pgr.rating
+    type: number
+    source: eg_pgr_service
+    total: true
+  searchParams:
+  - name: ulb
+    label: ULB
+    type: singlevaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.code|$.MdmsRes.tenant.tenants.*.name
+    source: pt
+    wrapper: true
+    isMandatory: false
+    searchClause: AND pgr_data.tenantid = $ulb
+  - name: fromDate
+    label: reports.pgr.datefrom
+    type: epoch
+    source: eg_pgr_service
+    isMandatory: false
+    searchClause: AND pgr_data.createdtime >= $fromDate
+  - name: toDate
+    label: reports.pgr.dateto
+    type: epoch
+    source: eg_pgr_service
+    isMandatory: false
+    searchClause: AND pgr_data.createdtime <= $toDate
+  - name: deptname
+    label: reports.pgr.dept.name
+    type: singlevaluelist
+    source: eg_pgr_service
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=common-masters&masterName=Department|$.MdmsRes.common-masters.Department[*].code|$.MdmsRes.common-masters.Department[*].name   
+    isMandatory: false
+    searchClause: AND pgr_data.deptmap_def.name = $deptname
+  query: |
+    with pgr_data as (select  
+      (select assignee from eg_pgr_action as pa where 
+      pa.businesskey = ps.servicerequestid 
+      and pa."action" in ('assign', 'reassign')
+      order by "when" desc
+      fetch first 1 rows only
+      ) as assignee, 
+      servicerequestid, 
+      createdtime, 
+      servicecode,
+      status,
+      rating,
+      (select max("when") from eg_pgr_action where action='resolve' and businesskey = servicerequestid) as resolvedtime,
+      (select min("when") from eg_pgr_action where action='open' and businesskey = servicerequestid) as opentime
+    from eg_pgr_service as ps
+    where 
+    tenantid = $tenantid)
+    select 
+      coalesce((select name from eg_user where id::varchar = assignee),'-- Unassigned --') as employee, 
+      deptmap_def.name as department,    
+      (select desig.name from egeis_assignment assign, egeis_designation desig 
+       where assign.employeeid::varchar = assignee and desig.id = assign.designationid and assign.isprimary= true and desig.tenantid=$tenantid) as designation,      
+      SUM (CASE WHEN status in ('closed', 'resolved') and (resolvedtime - opentime) < 14 * 86400 * 1000 THEN 1 ELSE 0 END) as resolvedwithinsla,
+      SUM (CASE WHEN status in ('closed', 'resolved') and (resolvedtime - opentime) >= 14 * 86400 * 1000 THEN 1 ELSE 0 END) as resolvedoutsidesla,
+      SUM (CASE WHEN status in ('assigned', 'reassignrequested') THEN 1 ELSE 0 END) as assigned,
+      SUM (CASE WHEN status in ('open') THEN 1 ELSE 0 END) as open,
+      SUM (CASE WHEN status in ('reopen') THEN 1 ELSE 0 END) as reopen,
+      rating    
+      from pgr_data
+      INNER JOIN (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) ON deptmap.serviceCode = pgr_data.servicecode
+      INNER JOIN (VALUES tbl_def_dept) AS deptmap_def(name,code) ON deptmap.department = deptmap_def.code
+      WHERE 1=1
+  orderby: ORDER BY assignee NULLS FIRST,deptmap_def.name,rating
+  groupby: GROUP BY assignee,deptmap_def.name,rating
+  
+- reportName: GROPerformanceReport
+  summary: Fetches GRO performance report
+  version: 1.0.0
+  moduleName: pgr
+  externalService:
+  - entity: $.MdmsRes.RAINMAKER-PGR.ServiceDefs
+    apiURL: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=RAINMAKER-PGR&masterName=ServiceDefs&tenantId=$tenantId
+    keyOrder: serviceCode,department,slaHours
+    tableName: tbl_dept
+  - entity: $.MdmsRes.common-masters.Department
+    apiURL: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=common-masters&masterName=Department&tenantId=$tenantId
+    keyOrder: name,code
+    tableName: tbl_def_dept
+  sourceColumns:
+  - name: employee
+    label: reports.pgr.employee
+    type: string
+    source: pgr_data
+    total: false
+  - name: department
+    label: reports.pgr.department
+    type: string
+    source: pgr_data
+    total: false
+  - name: designation
+    label: reports.pgr.designation
+    type: string
+    source: pgr_data
+    total: false
+  - name: assigned
+    label: reports.pgr.assigned
+    type: string
+    source: pgr_data
+    total: true
+  - name: reopen
+    label: reports.pgr.reopen
+    type: string
+    source: eg_pgr_service
+    total: true
+  searchParams:
+  - name: ulb
+    label: ULB
+    type: singlevaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=tenant&masterName=tenants|$.MdmsRes.tenant.tenants.*.code|$.MdmsRes.tenant.tenants.*.name
+    source: pt
+    wrapper: true
+    isMandatory: false
+    searchClause: AND pgr_data.tenantid = $ulb
+  - name: fromDate
+    label: reports.pgr.datefrom
+    type: epoch
+    source: eg_pgr_service
+    isMandatory: false
+    searchClause: AND pgr_data.createdtime >= $fromDate
+  - name: toDate
+    label: reports.pgr.dateto
+    type: epoch
+    source: eg_pgr_service
+    isMandatory: false
+    searchClause: AND pgr_data.createdtime <= $toDate
+  - name: deptname
+    label: reports.pgr.dept.name
+    type: singlevaluelist
+    source: eg_pgr_service
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=common-masters&masterName=Department|$.MdmsRes.common-masters.Department[*].code|$.MdmsRes.common-masters.Department[*].name   
+    isMandatory: false
+    searchClause: AND pgr_data.deptmap_def.name = $deptname
+  query: |
+    with pgr_data as (select  
+      (select assignee from eg_pgr_action as pa where 
+      pa.businesskey = ps.servicerequestid 
+      and pa."action" in ('assign', 'reassign')
+      and pa.by like '%Grievance Routing Officer'
+      order by "when" desc
+      fetch first 1 rows only
+      ) as assignee, 
+      servicerequestid, 
+      createdtime, 
+      servicecode,
+      status
+    from eg_pgr_service as ps
+    where 
+    tenantid = $tenantid)
+    select 
+      coalesce((select name from eg_user where id::varchar = assignee),'-- Unassigned --') as employee, 
+      deptmap_def.name as department,    
+      (select desig.name from egeis_assignment assign, egeis_designation desig 
+       where assign.employeeid::varchar = assignee and desig.id = assign.designationid and assign.isprimary= true and desig.tenantid=$tenantid) as designation,      
+      SUM (CASE WHEN status in ('assigned', 'reassignrequested') THEN 1 ELSE 0 END) as assigned,
+      SUM (CASE WHEN status in ('reopen') THEN 1 ELSE 0 END) as reopen      
+      from pgr_data
+      INNER JOIN (VALUES tbl_dept) AS deptmap(serviceCode, department, slaHours) ON deptmap.serviceCode = pgr_data.servicecode
+      INNER JOIN (VALUES tbl_def_dept) AS deptmap_def(name,code) ON deptmap.department = deptmap_def.code
+      WHERE 1=1
+  orderby: ORDER BY assignee NULLS FIRST,deptmap_def.name
+  groupby: GROUP BY assignee,deptmap_def.name
