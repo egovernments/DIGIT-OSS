@@ -1429,12 +1429,24 @@ class FormWizardDataEntry extends Component {
                     if (data.demand[data1][data2].PT_TAXHEAD === "PT_TAX") {
                       hasPropertyTax = true;
                       propertyTaxAmount = data.demand[data1][data2].PT_DEMAND;
+                      let collectedAmount = parseInt(data.demand[data1][data2].PT_COLLECTED);
                       totalRebateAmount = checkPtTaxWithRebate(
                         data.demand[data1][data2].PT_TAXHEAD,
                         parseInt(data.demand[data1][data2].PT_DEMAND),
                         data.demand[data1],
                         true
                       );
+
+                      if(!(propertyTaxAmount>=Math.abs(totalRebateAmount)))
+                      {
+                        errorCode = "ERR07_DEMAND_ENTER_THE_DATA";
+                      }
+
+                      if(collectedAmount<=0)
+                      {
+                        errorCode = "ERR08_DEMAND_ENTER_THE_DATA";
+                      }
+                     
                     }
                     if (
                       checkRebate(data.demand[data1][data2].PT_TAXHEAD) &&
@@ -1446,7 +1458,10 @@ class FormWizardDataEntry extends Component {
                         data.demand[data1]
                       ) !== parseInt(data.demand[data1][data2].PT_COLLECTED)
                     ) {
+                      if(errorCode === "FINE")
+                      {
                       errorCode = "ERR03_DEMAND_ENTER_THE_DATA";
+                      }
                     }
                     // if (!previousYear ||previousYear!=data1) {
                     if (key2 == 0) {
@@ -1527,6 +1542,19 @@ class FormWizardDataEntry extends Component {
               "The entered rebate should not greater than property tax amount for any year !"
             );
             break;
+          case "ERR07_DEMAND_ENTER_THE_DATA":
+            callToggleSnackbar(
+              "ERR07_DEMAND_ENTER_THE_DATA",
+              "The property amount is greater than rebate and promotional rebate"
+            );
+            break;
+          case "ERR08_DEMAND_ENTER_THE_DATA":
+            callToggleSnackbar(
+              "ERR08_DEMAND_ENTER_THE_DATA",
+              "The Collection amount is greater than zero value "
+            );
+            break;  
+            
           default:
             if (arrayOfEmptyYears.length > 0) {
               prepareFinalObject("DemandProperties", DemandProperties);
