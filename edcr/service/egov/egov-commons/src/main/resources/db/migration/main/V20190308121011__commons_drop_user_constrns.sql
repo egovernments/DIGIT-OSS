@@ -1,11 +1,7 @@
-ALTER TABLE eg_checklist DROP CONSTRAINT fk_eg_checklist_crtby;
-ALTER TABLE eg_checklist DROP CONSTRAINT fk_eg_checklist_mdfdby;
-ALTER TABLE eg_checklist_type DROP CONSTRAINT fk_eg_mstr_checklist_type_crtby;
-ALTER TABLE eg_checklist_type DROP CONSTRAINT fk_eg_mstr_checklist_type_mdfdby;
-ALTER TABLE eg_object_history DROP CONSTRAINT fk_modified_by;
-ALTER TABLE egbpa_occupancy DROP CONSTRAINT fk_eg_occupancy_mdfdby;
-ALTER TABLE egbpa_occupancy DROP CONSTRAINT fk_eg_occupancy_crtby;
-ALTER TABLE egbpa_sub_occupancy DROP CONSTRAINT fk_eg_sub_occupancy_crtby;
-ALTER TABLE egbpa_sub_occupancy DROP CONSTRAINT fk_eg_sub_occupancy_mdfdby;
-ALTER TABLE egbpa_usage DROP CONSTRAINT fk_egbpa_usage_mdfdby;
-ALTER TABLE egbpa_usage DROP CONSTRAINT fk_egbpa_usage_crtby;
+--- DROP CONSTRAINT--------
+ALTER TABLE egbpa_occupancy DROP CONSTRAINT IF EXISTS fk_eg_occupancy_mdfdby;
+ALTER TABLE egbpa_occupancy DROP CONSTRAINT IF EXISTS fk_eg_occupancy_crtby;
+ALTER TABLE egbpa_sub_occupancy DROP CONSTRAINT IF EXISTS fk_eg_sub_occupancy_crtby;
+ALTER TABLE egbpa_sub_occupancy DROP CONSTRAINT IF EXISTS fk_eg_sub_occupancy_mdfdby;
+ALTER TABLE egbpa_usage DROP CONSTRAINT IF EXISTS fk_egbpa_usage_mdfdby;
+ALTER TABLE egbpa_usage DROP CONSTRAINT IF EXISTS fk_egbpa_usage_crtby;

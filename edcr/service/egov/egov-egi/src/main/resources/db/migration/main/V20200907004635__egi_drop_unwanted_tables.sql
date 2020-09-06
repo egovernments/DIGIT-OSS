@@ -1,0 +1,13 @@
+DROP TABLE IF EXISTS eg_boundary cascade;
+DROP TABLE IF EXISTS eg_boundary_type cascade;
+DROP TABLE IF EXISTS eg_crosshierarchy cascade;
+DROP TABLE IF EXISTS eg_feature cascade;
+DROP TABLE IF EXISTS eg_feature_action cascade;
+DROP TABLE IF EXISTS eg_feature_aud cascade;
+DROP TABLE IF EXISTS eg_feature_role cascade;
+DROP TABLE IF EXISTS eg_feature_role_aud cascade;
+DROP TABLE IF EXISTS eg_hierarchy_type cascade;
+DROP TABLE IF EXISTS eg_numbers cascade;
+DROP TABLE IF EXISTS eg_script cascade;
+DROP TABLE IF EXISTS eg_wf_action,eg_wf_additionalrule,eg_wf_amountrule,eg_wf_matrix,eg_wf_state_history,eg_wf_states,eg_wf_types cascade;
+DROP TABLE IF EXISTS qrtz_blob_triggers,qrtz_calendars,qrtz_cron_triggers,qrtz_fired_triggers,qrtz_job_details,qrtz_locks,qrtz_paused_trigger_grps,qrtz_scheduler_state,qrtz_simple_triggers,qrtz_simprop_triggers,qrtz_triggers cascade;

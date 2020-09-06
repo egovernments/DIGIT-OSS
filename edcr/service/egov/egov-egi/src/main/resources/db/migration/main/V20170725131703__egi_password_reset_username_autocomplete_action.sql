@@ -6,6 +6,3 @@
 
 insert into EG_ROLEACTION (ROLEID, ACTIONID) values ((select id from eg_role where name='SYSTEM'),
 (select id from eg_action where name='User By Name'));
-
-insert into eg_feature_action(feature,action)  values ((select id from eg_feature where name='Reset Password' and module = (select id from eg_module where name ='Administration')), (select id from eg_action where name='User By Name' and application=(select id from eg_module where name='Administration')));
-

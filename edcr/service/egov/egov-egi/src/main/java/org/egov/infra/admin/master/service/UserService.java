@@ -56,7 +56,6 @@ import org.egov.infra.admin.master.entity.Role;
 import org.egov.infra.admin.master.entity.User;
 import org.egov.infra.admin.master.repository.UserRepository;
 import org.egov.infra.config.core.ApplicationThreadLocals;
-import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.persistence.entity.enums.Gender;
 import org.egov.infra.persistence.entity.enums.UserType;
 import org.egov.infra.utils.ApplicationConstant;
@@ -71,9 +70,6 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private MicroserviceUtils microserviceUtils;
-
     @Transactional
     public User updateUser(User user) {
         return userRepository.saveAndFlush(user);
@@ -83,7 +79,6 @@ public class UserService {
     public User createUser(User user) {
         user.setTenantId(ApplicationThreadLocals.getTenantID());
         User savedUser = userRepository.save(user);
-        microserviceUtils.createUserMicroservice(user);
         return savedUser;
     }
 

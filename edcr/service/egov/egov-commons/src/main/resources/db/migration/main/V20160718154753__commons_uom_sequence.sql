@@ -1,1 +1,0 @@
-SELECT setval('"seq_eg_uom"',(SELECT MAX(ID) FROM eg_uom ));

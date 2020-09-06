@@ -79,9 +79,9 @@
 	
 	<!-- NEW WORKFLOW ADDITIONS -->
 	
-	<bean id="stateAwarePersistenceService" parent="abstractPersistenceService">
+	<!-- <bean id="stateAwarePersistenceService" parent="abstractPersistenceService">
 		<constructor-arg name="type" value="org.egov.infra.workflow.entity.StateAware" />
-	</bean>
+	</bean> -->
 	
 	<!--
 		This is a generic bean so do not use this to do transition of your own StateAware objects
@@ -91,8 +91,8 @@
 			<constructor-arg index="0" ref="myStateAwarePersistenceService"/>
 		</bean>
 	-->
-	<bean id="workflowService" class="org.egov.infra.workflow.service.SimpleWorkflowService">
-		<constructor-arg index="0" ref="stateAwarePersistenceService" />
-	</bean>
+	<!-- <bean id="workflowService" class="org.egov.infra.workflow.service.SimpleWorkflowService">
+		<constructor-arg index="0" ref="stateAwarePersistenceService" / 
+	</bean> -->
 	
 </beans>

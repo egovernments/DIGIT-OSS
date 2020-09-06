@@ -1,4 +1,3 @@
-delete from eg_feature_action where action in (select id from eg_action where url in ('/appConfig/modules', '/appConfig/viewList/'));
 delete from eg_roleaction where actionid in (select id from eg_action where url in ('/appConfig/modules', '/appConfig/viewList/'));
 delete from eg_action where url = '/appConfig/modules';
 delete from eg_action where url = '/appConfig/viewList/';

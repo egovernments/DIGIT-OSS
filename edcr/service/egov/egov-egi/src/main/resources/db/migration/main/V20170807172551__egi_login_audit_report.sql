@@ -12,21 +12,3 @@ Insert into EG_ACTION (id, name, url, queryparams, parentmodule, ordernumber, di
 
 Insert into EG_ROLEACTION (ROLEID, ACTIONID) values ((select id from eg_role where name='SYSTEM'),
 (select id from eg_action where name='Login Audit Report'));
-
-
-INSERT INTO eg_feature(ID,NAME,DESCRIPTION,MODULE,VERSION) VALUES (NEXTVAL('seq_eg_feature'),'Login Audit Report','Systemwide User Login Audit Report',(select id from eg_module  where name = 'Administration'),0);
-
-INSERT INTO eg_feature_action (ACTION, FEATURE) 
-VALUES 
-((select id FROM eg_action  WHERE name = 'Login Audit Report') ,(select id FROM eg_feature WHERE name = 'Login Audit Report'));
-INSERT INTO eg_feature_action (ACTION, FEATURE) 
-VALUES 
-((select id FROM eg_action  WHERE name = 'User By Username') ,(select id FROM eg_feature WHERE name = 'Login Audit Report'));
-
-INSERT INTO eg_feature_role (ROLE, FEATURE) 
-VALUES 
-((select id from eg_role where name = 'SYSTEM') ,(select id FROM eg_feature WHERE name = 'Login Audit Report'));
-
-
-
-

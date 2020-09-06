@@ -69,7 +69,6 @@ import javax.annotation.Resource;
 
 import org.egov.infra.admin.master.entity.City;
 import org.egov.infra.admin.master.repository.CityRepository;
-import org.egov.infra.notification.service.NotificationService;
 import org.egov.infra.utils.FileStoreUtils;
 import org.egov.infra.utils.TenantUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,9 +86,6 @@ public class CityService {
     private static final String CITY_LOGO_HASH_KEY = "city-logo";
 
     private final CityRepository cityRepository;
-
-    @Autowired
-    private NotificationService notificationService;
 
     @Autowired
     private TenantUtils tenantUtils;
@@ -137,10 +133,6 @@ public class CityService {
 
     public City fetchStateCityDetails() {
         return cityRepository.findStateCityDetails();
-    }
-
-    public void sentFeedBackMail(String email, String subject, String message) {
-        notificationService.sendEmail(email, subject, message);
     }
 
     public Map<String, Object> cityDataAsMap() {

@@ -48,29 +48,26 @@
 
 package org.egov.infra.web.controller;
 
-import org.egov.infra.admin.common.service.IdentityRecoveryService;
+import java.util.List;
+
 import org.egov.infra.admin.master.entity.Location;
 import org.egov.infra.admin.master.service.LocationService;
 import org.egov.infra.validation.ValidatorUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.util.List;
 
 @Controller
 @RequestMapping(value = "/login")
 public class LoginController {
 
-    @Autowired
-    private IdentityRecoveryService identityRecoveryService;
+    /*
+     * @Autowired private IdentityRecoveryService identityRecoveryService;
+     */
 
     @Autowired
     private LocationService locationService;
@@ -81,38 +78,22 @@ public class LoginController {
     @Value("${user.pwd.strength}")
     private String passwordStrength;
 
-    @PostMapping("password/recover")
-    public String sendPasswordRecoveryURL(@RequestParam String identity,
-                                          @RequestParam String originURL,
-                                          @RequestParam boolean byOTP,
-                                          final RedirectAttributes redirectAttrib) {
-        redirectAttrib.addAttribute("recovered", identityRecoveryService.generateAndSendUserPasswordRecovery(identity,
-                originURL + "/egi/login/password/reset?token=", byOTP));
-        redirectAttrib.addAttribute("byOTP", byOTP);
-        return "redirect:/login/secure";
-    }
-
-    @GetMapping(value = "password/reset", params = "token")
-    public String viewPasswordReset(@RequestParam final String token, Model model) {
-        model.addAttribute("valid", identityRecoveryService.tokenValid(token));
-        return "password/reset";
-    }
-
-    @PostMapping(value = "password/reset")
-    public String validateAndSendNewPassword(@RequestParam final String token, @RequestParam final String newPassword,
-                                             @RequestParam final String confirmPwd, final RedirectAttributes redirectAttrib) {
-        if (!newPassword.equals(confirmPwd)) {
-            redirectAttrib.addAttribute("error", "err.login.pwd.mismatch");
-            return "redirect:/login/password/reset?token=" + token;
-        }
-
-        if (!validatorUtils.isValidPassword(newPassword)) {
-            redirectAttrib.addAttribute("error", "usr.pwd.strength.msg." + passwordStrength);
-            return "redirect:/login/password/reset?token=" + token;
-        }
-
-        return "redirect:/login/secure?reset=" + identityRecoveryService.validateAndResetPassword(token, newPassword);
-    }
+    /*
+     * @PostMapping("password/recover") public String sendPasswordRecoveryURL(@RequestParam String identity,
+     * @RequestParam String originURL,
+     * @RequestParam boolean byOTP, final RedirectAttributes redirectAttrib) { redirectAttrib.addAttribute("recovered",
+     * identityRecoveryService.generateAndSendUserPasswordRecovery(identity, originURL + "/egi/login/password/reset?token=",
+     * byOTP)); redirectAttrib.addAttribute("byOTP", byOTP); return "redirect:/login/secure"; }
+     * @GetMapping(value = "password/reset", params = "token") public String viewPasswordReset(@RequestParam final String token,
+     * Model model) { model.addAttribute("valid", identityRecoveryService.tokenValid(token)); return "password/reset"; }
+     * @PostMapping(value = "password/reset") public String validateAndSendNewPassword(@RequestParam final String
+     * token, @RequestParam final String newPassword,
+     * @RequestParam final String confirmPwd, final RedirectAttributes redirectAttrib) { if (!newPassword.equals(confirmPwd)) {
+     * redirectAttrib.addAttribute("error", "err.login.pwd.mismatch"); return "redirect:/login/password/reset?token=" + token; }
+     * if (!validatorUtils.isValidPassword(newPassword)) { redirectAttrib.addAttribute("error", "usr.pwd.strength.msg." +
+     * passwordStrength); return "redirect:/login/password/reset?token=" + token; } return "redirect:/login/secure?reset=" +
+     * identityRecoveryService.validateAndResetPassword(token, newPassword); }
+     */
 
     @GetMapping("requiredlocations")
     @ResponseBody

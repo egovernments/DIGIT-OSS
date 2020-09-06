@@ -191,8 +191,6 @@ public class HomeController {
     @ResponseBody
     @GetMapping("feedback/sent")
     public boolean sendFeedback(@RequestParam String subject, @RequestParam String message) {
-        cityService.sentFeedBackMail(cityService.getContactEmail(), subject,
-                format(FEEDBACK_MSG_FORMAT, message, "Regards", user().getName()));
         return true;
     }
 
