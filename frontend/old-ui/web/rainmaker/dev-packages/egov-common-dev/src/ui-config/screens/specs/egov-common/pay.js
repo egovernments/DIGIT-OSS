@@ -116,7 +116,10 @@ const fetchBill = async (action, state, dispatch, consumerCode, tenantId, billBu
     dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0].payer", "COMMON_OWNER"));
     dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0].paidBy", get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].payerName")));
     dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0].payerMobileNumber", get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].mobileNumber")));
-
+    dispatch(handleField("pay",`components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs[0].tabContent.cash.children.payeeDetails.children.payerName`,
+          "props.value",get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].payerName", '')));
+    dispatch(handleField("pay",`components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs[0].tabContent.cash.children.payeeDetails.children.payerMobileNo`,
+          "props.value", get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].mobileNumber", '')));
     //Initially select instrument type as Cash
     dispatch(prepareFinalObject("ReceiptTemp[0].instrument.instrumentType.name", "Cash"));
 
