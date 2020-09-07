@@ -167,6 +167,8 @@ if(Object.keys(demands[0].payer).length === 0) {
   set(demands[0], "taxPeriodTo", convertDateToEpoch(demands[0].taxPeriodTo));
   const mobileNumber = demands[0].mobileNumber;
   const consumerName = demands[0].consumerName;
+  set(demands[0], "payer.mobileNumber", mobileNumber);
+  set(demands[0], "payer.name", consumerName);
   //Check if tax period fall between the tax periods coming from MDMS -- Not required as of now
   const taxPeriodValid = isTaxPeriodValid(dispatch, demands[0], state);
 
