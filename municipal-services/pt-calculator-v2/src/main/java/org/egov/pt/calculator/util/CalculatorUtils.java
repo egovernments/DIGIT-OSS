@@ -663,8 +663,8 @@ public class CalculatorUtils {
     public Demand getLatestDemandForCurrentFinancialYear(RequestInfo requestInfo, CalculationCriteria calculationCriteria) {
 
         DemandSearchCriteria criteria = new DemandSearchCriteria();
-        criteria.setFromDate(calculationCriteria.getFromDate());
-        criteria.setToDate(calculationCriteria.getToDate());
+        criteria.setFromDate(calculationCriteria.getFromDate() == null ? 0 : calculationCriteria.getFromDate());
+        criteria.setToDate(calculationCriteria.getToDate()== null ? 0 : calculationCriteria.getToDate());
         criteria.setTenantId(calculationCriteria.getTenantId());
         criteria.setPropertyId(calculationCriteria.getProperty().getPropertyId());
 

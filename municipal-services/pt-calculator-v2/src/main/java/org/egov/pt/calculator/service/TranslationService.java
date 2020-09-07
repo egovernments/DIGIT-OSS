@@ -1,6 +1,7 @@
 package org.egov.pt.calculator.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.calculator.repository.Repository;
@@ -13,6 +14,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import lombok.extern.slf4j.Slf4j;
+
 // import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.Function;
@@ -21,6 +24,7 @@ import java.util.stream.Collectors;
 // import static org.egov.pt.calculator.util.CalculatorConstants.*;
 
 @Service
+@Slf4j
 public class TranslationService {
 
     @Value("${egov.pt.registry.host}")
@@ -33,14 +37,11 @@ public class TranslationService {
 
     private Repository repository;
 
-
     @Autowired
     public TranslationService(ObjectMapper mapper, Repository repository) {
         this.mapper = mapper;
         this.repository = repository;
     }
-
-
 
     public CalculationReq translate(AssessmentRequestV2 assessmentRequestV2){
 
@@ -104,6 +105,7 @@ public class TranslationService {
         propertyDetail.put("ownershipCategory", ownershipCategory);
         propertyDetail.put("subOwnershipCategory", subOwnershipCategory);
         propertyDetail.put("source", assessment.getSource().toString());
+        propertyDetail.put("additionalDetails", property.getAdditionalDetails());
 
         // propertyDetail.put("adhocExemption", );
         // propertyDetail.put("adhocPenalty",);
@@ -125,22 +127,34 @@ public class TranslationService {
                 unitMap.put("unitArea", unit.getConstructionDetail().getBuiltUpArea());
                 unitMap.put("arv", unit.getArv());
                 unitMap.put("occupancyType", unit.getOccupancyType());
+                unitMap.put("constructionType", unit.getConstructionDetail().getConstructionType());
+                //unitMap.put("constructionType", );
 
                 String[] masterData = unit.getUsageCategory().split("\\.");
 
                 if(masterData.length >= 1)
                     unitMap.put("usageCategoryMajor", masterData[0]);
 
-                if(masterData.length >= 2)
+                if(masterData.length >= 2) {
                     unitMap.put("usageCategoryMinor", masterData[1]);
-
-                if(masterData.length >= 3)
-                    unitMap.put("usageCategorySubMinor", masterData[2]);
-
+                    unitMap.put("usageCategorySubMinor", masterData[1]);
+                }
+                    
                 if(masterData.length >= 4)
                     unitMap.put("usageCategoryDetail",masterData[3]);
 
-                unitMap.put("additionalDetails", unit.getAdditionalDetails());
+            
+                    Map<String, Object> unitAdditionalMap = new HashMap<>();
+                    unitAdditionalMap.put("innerDimensionsKnown", unit.getConstructionDetail().getDimensions()==null? false:true);
+                    //if unit.getConstructionDetail().getDimensions() not null convert it to innerdimensions
+                    // unitAdditionalMap.put("roomsArea",unit.getConstructionDetail().get);
+                    // unitAdditionalMap.put("commonArea",);
+                    // unitAdditionalMap.put("garageArea",);
+                    // unitAdditionalMap.put("bathroomArea",);
+                    // unitAdditionalMap.put("constructionDate",);
+
+
+                unitMap.put("additionalDetails", unitAdditionalMap);
                 units.add(unitMap);
 
             });

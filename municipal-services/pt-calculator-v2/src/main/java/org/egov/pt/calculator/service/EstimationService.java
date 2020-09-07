@@ -253,13 +253,14 @@ public class EstimationService {
 	 * @return
 	 */
 	private TaxHeadEstimate getAdHocPenaltyTaxhead(Property property) {
-		return TaxHeadEstimate.builder().taxHeadCode(PT_ADHOC_PENALTY)
-				.estimateAmount(property.getPropertyDetails().get(0).getAdhocPenalty()).build();
+		BigDecimal tax = property.getPropertyDetails().get(0).getAdhocPenalty()==null ? 
+				BigDecimal.ZERO : property.getPropertyDetails().get(0).getAdhocPenalty();
+		return TaxHeadEstimate.builder().taxHeadCode(PT_ADHOC_PENALTY).estimateAmount(tax).build();
 	}
 
 	private TaxHeadEstimate getLateAssessmentPenaltyTaxhead(Property property) {
 		Map details = (Map) property.getPropertyDetails().get(0).getAdditionalDetails();
-		BigDecimal amount = BigDecimal.valueOf((double) details.get(ONE_TIME_PENALTY_JSON_STRING));
+		BigDecimal amount = details.get(ONE_TIME_PENALTY_JSON_STRING)==null ? BigDecimal.ZERO : BigDecimal.valueOf((double) details.get(ONE_TIME_PENALTY_JSON_STRING));
 		return TaxHeadEstimate.builder().taxHeadCode(PT_LATE_ASSESSMENT_PENALTY).estimateAmount(amount).build();
 	}
 
@@ -267,11 +268,10 @@ public class EstimationService {
 			Map<String, JSONArray> masterMap, BigDecimal exemption) {
 
 		Property property = criteria.getProperty();
-		Long fromDate = criteria.getFromDate();
-		Long toDate = criteria.getToDate();
 		List<BillingSlab> usedSlabs = new ArrayList<BillingSlab>();
 		List<Unit> units = property.getPropertyDetails().get(0).getUnits();
 		PropertyDetail propertyDetail = property.getPropertyDetails().get(0);
+		String fromDate = propertyDetail.getFinancialYear();
 		BigDecimal monthMultiplier = BigDecimal.valueOf(12);
 		// only one billing slab
 		// vacant Land AV = Carpet Area * residential unit rate * multiplier
@@ -343,8 +343,7 @@ public class EstimationService {
 						BigDecimal exemptionRate = getExemptionRate(masterMap, unit);
 						// 26-12 TODO: add todate and fromdat instead of
 						// assessment year.
-						BigDecimal appreciationDepreciation = getAppreciationDepreciation(masterMap, unit, fromDate,
-								toDate);
+						BigDecimal appreciationDepreciation = getAppreciationDepreciation(masterMap, unit, fromDate);
 						BigDecimal appreDepreAmount = carpetArea.multiply(unitRate).multiply(appreciationDepreciation)
 								.multiply(monthMultiplier);
 						BigDecimal landAV = carpetArea.multiply(unitRate).multiply(appreciationDepreciation)
@@ -375,19 +374,22 @@ public class EstimationService {
 		return null;
 	}
 
-	private BigDecimal getAppreciationDepreciation(Map<String, JSONArray> masterMap, Unit unit, long fromDate,
-			long toDate) {
+	private BigDecimal getAppreciationDepreciation(Map<String, JSONArray> masterMap, Unit unit, String fromDate) {
 
 		List<Object> depreciationAppreciation = masterMap.get(DEPRECIATION_APPRECIATION);
-		LocalDate assessmentYear = LocalDate.ofEpochDay(fromDate);
+		int assessmentYear = Integer.parseInt(fromDate.split("-")[0]);
 		LocalDate constructionYear = LocalDate.ofEpochDay(unit.getAdditionalDetails().getConstructionDate());
-		int age = assessmentYear.getYear() - constructionYear.getYear();
+		int age = assessmentYear - constructionYear.getYear();
 
 		for (Object val : depreciationAppreciation) {
-			JSONObject deprAppr = (JSONObject) val;
-			JSONObject ageOfBuilding;
+			LinkedHashMap deprAppr = (LinkedHashMap)val;
+			LinkedHashMap ageOfBuilding;
 			try {
-				ageOfBuilding = (JSONObject) deprAppr.get("ageOfBuilding");
+				ageOfBuilding = (LinkedHashMap) deprAppr.get("ageOfBuilding");
+
+				if(ageOfBuilding.get("yearTo") == null){
+					return BigDecimal.valueOf(Long.valueOf((int) deprAppr.get("depreciationAppreciation")));
+				}
 
 				if (((int) ageOfBuilding.get("yearFrom")) <= age && ((int) ageOfBuilding.get("yearTo")) >= age) {
 					return BigDecimal.valueOf(Long.valueOf((int) deprAppr.get("depreciationAppreciation")));
