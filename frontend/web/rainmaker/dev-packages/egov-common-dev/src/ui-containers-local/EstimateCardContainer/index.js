@@ -37,7 +37,37 @@ const formatTaxHeaders = (billDetail = {},businesService) => {
   return formattedFees;
 }
 
-
+var addInterestToFee = (fees, billDetails) => {
+  var totalInterest = 0;
+  var feeContainsPtInterest = false;
+  billDetails.forEach( (billDetail) => {
+    billDetail.billAccountDetails.forEach( (billAccountDetail)=> {
+      if (billAccountDetail.taxHeadCode === "PT_TIME_INTEREST") {
+        totalInterest = totalInterest + billAccountDetail.amount;
+      }
+    });
+  });
+  fees.forEach( (fee)=> {
+    if (fee.name.labelKey === "PT_TIME_INTEREST") {
+      feeContainsPtInterest = true;
+      fee.value = totalInterest;
+    }
+  });
+  if (!feeContainsPtInterest) {
+    fees.push({
+      info: {
+        labelKey: "PT_TIME_INTEREST",
+        labelName: "PT_TIME_INTEREST"
+      },
+      name: {
+        labelKey: "PT_TIME_INTEREST",
+        labelName: "PT_TIME_INTEREST"
+      },
+      value: totalInterest
+    });
+  }
+  return totalInterest;
+};
 const mapStateToProps = (state, ownProps) => {
 
   const { screenConfiguration } = state;
@@ -69,6 +99,7 @@ if(totalAmount>0){
   if(businesService=="PT")
   {
    arrears=totalAmount-current;
+   arrears = arrears - addInterestToFee(fees, billDetails);
   }
 }
 
