@@ -41,17 +41,12 @@ const formatTaxHeaders = (billDetail = {},businesService) => {
  const addInterestToFee = (fees, billDetails) => {
   let totalInterest = 0;
   let feeContainsPtInterest = false;
-  let currentYearInterest =billDetails[0].billAccountDetails && billDetails[0].billAccountDetails.filter(item => item.taxHeadCode === "PT_TIME_INTEREST");
-  
   billDetails.forEach( (billDetail) => {
-    if(billDetail.amount!==0)
-    {
     billDetail.billAccountDetails.forEach( (billAccountDetail)=> {
       if (billAccountDetail.taxHeadCode === "PT_TIME_INTEREST") {
         totalInterest = totalInterest + billAccountDetail.amount;
       }
     });
-  }
   });
   fees.forEach( (fee)=> {
     if (fee.name.labelKey === "PT_TIME_INTEREST") {
@@ -289,21 +284,6 @@ const mapStateToProps = (state, ownProps) => {
   const latestYear = finalData[0].fromDate;
   if(businesService=="PT")
   {
-
-  /* for (let i = 0; billDetails && i<billDetails.length;i++) {
-      for (let j = 0; billDetails[i].billAccountDetails && j<billDetails[i].billAccountDetails.length;j++)
-      {
-        if(billDetails[i].billAccountDetails[j].taxHeadCode=== "PT_TAX")
-        {      
-          if(billDetails[i].fromPeriod!==latestYear)
-            {
-              arrears = arrears+ billDetails[i].billAccountDetails[j].amount;  
-            }
-        } 
-    }  
-   
-    
-  } */
   for (let i = 0; billDetails && i<billDetails.length;i++) {
     totalAmount = totalAmount + billDetails[i].amount;   
   }
