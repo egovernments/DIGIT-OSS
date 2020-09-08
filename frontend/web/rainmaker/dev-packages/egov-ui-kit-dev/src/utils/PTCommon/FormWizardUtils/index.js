@@ -442,7 +442,12 @@ export const getTargetPropertiesDetails = (propertyDetails, self) => {
   const assessmentNumber = getQueryValue(search, "assessmentId");
   const selectedPropertyDetails = propertyDetails;
   // return the latest proeprty details of the selected year
-  const lastIndex = 0;
+  let lastIndex = 0;
+  selectedPropertyDetails.forEach((ptd, index) => {
+    if(ptd.assessmentNumber === assessmentNumber){
+    lastIndex = index;
+    }
+    });
   if (selectedPropertyDetails && selectedPropertyDetails[lastIndex].propertySubType === "SHAREDPROPERTY") {
     selectedPropertyDetails[lastIndex].buildUpArea =
       selectedPropertyDetails[lastIndex] &&
