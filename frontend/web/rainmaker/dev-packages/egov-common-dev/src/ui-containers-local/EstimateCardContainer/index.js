@@ -169,10 +169,8 @@ const mapStateToProps = (state, ownProps) => {
   const latestYear = finalData[0].fromDate;
   if(businesService=="PT")
   {
-  for (let i = 0; billDetails && i<billDetails.length;i++) {
-    totalAmount = totalAmount + billDetails[i].amount;   
-  }
-
+   arrears=totalAmount-current;
+   arrears = arrears - addInterestToFee(fees, billDetails);
    
   
   for (let i = 0; billDetails && i<billDetails.length;i++) {
