@@ -38,9 +38,9 @@ const formatTaxHeaders = (billDetail = {},businesService) => {
   return formattedFees;
 }
 
- const addInterestToFee = (fees, billDetails) => {
-  let totalInterest = 0;
-  let feeContainsPtInterest = false;
+var addInterestToFee = (fees, billDetails) => {
+  var totalInterest = 0;
+  var feeContainsPtInterest = false;
   billDetails.forEach( (billDetail) => {
     billDetail.billAccountDetails.forEach( (billAccountDetail)=> {
       if (billAccountDetail.taxHeadCode === "PT_TIME_INTEREST") {
@@ -67,78 +67,7 @@ const formatTaxHeaders = (billDetail = {},businesService) => {
       value: totalInterest
     });
   }
-  return totalInterest -currentYearInterest.length === 0 ? 0 :  currentYearInterest[0] && currentYearInterest[0].amount;
-}; 
-
-const addRoundOffToFee = (fees, billDetails) => {
-  let totalRoundOff = 0;
-  let feeContainsRoundOff = false;
-  
-  billDetails.forEach( (billDetail) => {
-    if(billDetail.amount!==0)
-    {
-    billDetail.billAccountDetails.forEach( (billAccountDetail)=> {
-      if (billAccountDetail.taxHeadCode === "PT_ROUNDOFF") {
-        totalRoundOff = totalRoundOff + billAccountDetail.amount;
-      }
-    });
-  }
-  });
-  fees.forEach( (fee)=> {
-    if (fee.name.labelKey === "PT_ROUNDOFF") {
-      feeContainsRoundOff = true;
-      fee.value = totalRoundOff;
-    }
-  });
-  if (!feeContainsRoundOff) {
-    fees.push({
-      info: {
-        labelKey: "PT_ROUNDOFF",
-        labelName: "PT_ROUNDOFF"
-      },
-      name: {
-        labelKey: "PT_ROUNDOFF",
-        labelName: "PT_ROUNDOFF"
-      },
-      value: totalRoundOff
-    });
-  }
-};
-
-
-var addRebateToFee = (fees, billDetails) => {
-  var totalRebate = 0;
-  
-  var feeContainsPtRebate = false;
-  var currentYearRebate =billDetails[0].billAccountDetails && billDetails[0].billAccountDetails.filter(item => item.taxHeadCode === "PT_TIME_REBATE");
-   billDetails.forEach( (billDetail) => {
-    billDetail.billAccountDetails.forEach( (billAccountDetail)=> {
-      if (billAccountDetail.taxHeadCode === "PT_TIME_REBATE") {
-        totalRebate = totalRebate + billAccountDetail.amount;
-      }
-    });
-  });
-  fees.forEach( (fee)=> {
-    if (fee.name.labelKey === "PT_TIME_REBATE") {
-      feeContainsPtRebate = true;
-      fee.value = totalRebate;
-    }
-  });
-  if (!feeContainsPtRebate) {
-    fees.push({
-      info: {
-        labelKey: "PT_TIME_REBATE",
-        labelName: "PT_TIME_REBATE"
-      },
-      name: {
-        labelKey: "PT_TIME_REBATE",
-        labelName: "PT_TIME_REBATE"
-      },
-      value: totalRebate
-    });
-  }
-
-  return totalRebate-currentYearRebate[0].amount;
+  return totalInterest;
 };
 const mapStateToProps = (state, ownProps) => {
 
