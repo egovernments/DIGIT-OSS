@@ -68,13 +68,49 @@ var addInterestToFee = (fees, billDetails) => {
   }
   return totalInterest;
 };
+
+
+var addRebateToFee = (fees, billDetails) => {
+  var totalRebate = 0;
+  
+  var feeContainsPtRebate = false;
+  var currentYearRebate =billDetails[0].billAccountDetails && billDetails[0].billAccountDetails.filter(item => item.taxHeadCode === "PT_TIME_REBATE");
+   billDetails.forEach( (billDetail) => {
+    billDetail.billAccountDetails.forEach( (billAccountDetail)=> {
+      if (billAccountDetail.taxHeadCode === "PT_TIME_REBATE") {
+        totalRebate = totalRebate + billAccountDetail.amount;
+      }
+    });
+  });
+  fees.forEach( (fee)=> {
+    if (fee.name.labelKey === "PT_TIME_REBATE") {
+      feeContainsPtRebate = true;
+      fee.value = totalRebate;
+    }
+  });
+  if (!feeContainsPtRebate) {
+    fees.push({
+      info: {
+        labelKey: "PT_TIME_REBATE",
+        labelName: "PT_TIME_REBATE"
+      },
+      name: {
+        labelKey: "PT_TIME_REBATE",
+        labelName: "PT_TIME_REBATE"
+      },
+      value: totalRebate
+    });
+  }
+
+  return totalRebate-currentYearRebate[0].amount;
+};
 const mapStateToProps = (state, ownProps) => {
 
   const { screenConfiguration } = state;
   const { cities } = state.common;
   const tenantId = get(screenConfiguration, "preparedFinalObject.ReceiptTemp[0].instrument.tenantId")
 
-  let tenantInfo = cities.filter(e => e.key === tenantId );  
+  let tenantInfo = cities && cities.filter(e => e.key === tenantId );  
 
 
   let contactNumber = get(tenantInfo[0], "contactNumber");  
@@ -100,6 +136,7 @@ if(totalAmount>0){
   {
    arrears=totalAmount-current;
    arrears = arrears - addInterestToFee(fees, billDetails);
+   arrears = arrears -addRebateToFee(fees, billDetails);
   }
 }
 
