@@ -105,19 +105,18 @@ const addRoundOffToFee = (fees, billDetails) => {
   }
 };
 
- const addRebateToFee = (fees, billDetails) => {
-  let totalRebate = 0;
-  let feeContainsPtRebate = false;
-  let currentYearRebate =billDetails[0].billAccountDetails && billDetails[0].billAccountDetails.filter(item => item.taxHeadCode === "PT_TIME_REBATE");
-  billDetails.forEach( (billDetail) => {
-    if(billDetail.amount!==0)
-    {
+
+var addRebateToFee = (fees, billDetails) => {
+  var totalRebate = 0;
+  
+  var feeContainsPtRebate = false;
+  var currentYearRebate =billDetails[0].billAccountDetails && billDetails[0].billAccountDetails.filter(item => item.taxHeadCode === "PT_TIME_REBATE");
+   billDetails.forEach( (billDetail) => {
     billDetail.billAccountDetails.forEach( (billAccountDetail)=> {
       if (billAccountDetail.taxHeadCode === "PT_TIME_REBATE") {
         totalRebate = totalRebate + billAccountDetail.amount;
       }
     });
-   }
   });
   fees.forEach( (fee)=> {
     if (fee.name.labelKey === "PT_TIME_REBATE") {
@@ -138,123 +137,9 @@ const addRoundOffToFee = (fees, billDetails) => {
       value: totalRebate
     });
   }
-  
-  return totalRebate-currentYearRebate.length === 0 ? 0 : currentYearRebate[0] && currentYearRebate[0].amount;
-}; 
- const addProRebateToFee = (fees, billDetails) => {
-  let totalProRebate = 0;
-  let feeContainsPtProRebate = false;
-  let currentYearProRebate =billDetails[0].billAccountDetails && billDetails[0].billAccountDetails.filter(item => item.taxHeadCode === "PT_PROMOTIONAL_REBATE");
-   billDetails.forEach( (billDetail) => {
-    if(billDetail.amount!==0)
-    {
-    billDetail.billAccountDetails.forEach( (billAccountDetail)=> {
-      if (billAccountDetail.taxHeadCode === "PT_PROMOTIONAL_REBATE") {
-        totalProRebate = totalProRebate + billAccountDetail.amount;
-      }
-    });
-   }
-  });
-  fees.forEach( (fee)=> {
-    if (fee.name.labelKey === "PT_PROMOTIONAL_REBATE") {
-      feeContainsPtProRebate = true;
-      fee.value = totalProRebate;
-    }
-  });
-  if (!feeContainsPtProRebate) {
-    fees.push({
-      info: {
-        labelKey: "PT_PROMOTIONAL_REBATE",
-        labelName: "PT_PROMOTIONAL_REBATE"
-      },
-      name: {
-        labelKey: "PT_PROMOTIONAL_REBATE",
-        labelName: "PT_PROMOTIONAL_REBATE"
-      },
-      value: totalProRebate
-    });
-  }
 
-   return totalProRebate-currentYearProRebate.length === 0 ? 0 : currentYearProRebate[0] && currentYearProRebate[0].amount;
-} 
- const addSwatToFee = (fees, billDetails) => {
-  let totalSwat = 0;
-  let feeContainsPtSwat= false;
-  let currentYearSwat =billDetails[0].billAccountDetails && billDetails[0].billAccountDetails.filter(item => item.taxHeadCode === "SWATCHATHA_TAX");
-   billDetails.forEach( (billDetail) => {
-    if(billDetail.amount!==0)
-    {
-    billDetail.billAccountDetails.forEach( (billAccountDetail)=> {
-      if (billAccountDetail.taxHeadCode === "SWATCHATHA_TAX") {
-        totalSwat = totalSwat + billAccountDetail.amount;
-      }
-    });
-   }
-  });
-  fees.forEach( (fee)=> {
-    if (fee.name.labelKey === "SWATCHATHA_TAX") {
-      feeContainsPtSwat = true;
-      fee.value = totalSwat;
-    }
-  });
-  if (!feeContainsPtSwat) {
-    fees.push({
-      info: {
-        labelKey: "SWATCHATHA_TAX",
-        labelName: "SWATCHATHA_TAX"
-      },
-      name: {
-        labelKey: "SWATCHATHA_TAX",
-        labelName: "SWATCHATHA_TAX"
-      },
-      value: totalSwat
-    });
-  }
-
-  return totalSwat-currentYearSwat.length === 0 ? 0 :currentYearSwat[0] && currentYearSwat[0].amount;
-} 
-
-const calcTax = (fees, billDetails) => {
-  let finalTaxamount = 0;
-  let curretYearTax = 0
-  let curretYearRebate = 0
-  let curretYearPromotionalRebate = 0  
-
-    if(billDetails[0] && billDetails[0].amount!==0)
-    {
-      billDetails[0].billAccountDetails.forEach( (billAccountDetail)=> {
-   
-        if (billAccountDetail.taxHeadCode === "PT_PROMOTIONAL_REBATE") {
-          curretYearRebate = billAccountDetail.amount;
-        }
-        if (billAccountDetail.taxHeadCode === "PT_TIME_REBATE") {
-          curretYearPromotionalRebate = billAccountDetail.amount;
-        }
-        if (billAccountDetail.taxHeadCode === "PT_TAX") {
-          curretYearTax = billAccountDetail.amount;
-        }
-      });
-    }
-
-  
-  finalTaxamount = curretYearTax+curretYearRebate+curretYearPromotionalRebate;
-
-  fees.forEach( (fee)=> {
-
-    if (fee.name.labelKey === "PT_TAX" && finalTaxamount===0 ) {
-      fee.value = 0;
-    }
-    if (fee.name.labelKey === "PT_TIME_REBATE" && finalTaxamount===0 ) {
-      fee.value = 0;
-    }
-    if (fee.name.labelKey === "PT_PROMOTIONAL_REBATE" && finalTaxamount===0 ) {
-      fee.value = 0;
-    }
-  });
-
-  return fees;
-}; 
-
+  return totalRebate-currentYearRebate[0].amount;
+};
 const mapStateToProps = (state, ownProps) => {
 
   const { screenConfiguration } = state;
