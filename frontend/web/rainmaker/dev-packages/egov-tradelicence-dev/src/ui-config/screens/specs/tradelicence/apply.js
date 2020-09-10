@@ -252,6 +252,14 @@ export const getData = async (action, state, dispatch) => {
     if (queryValue && isEditRenewal) {
       const oldApplicationNo = get(
         state.screenConfiguration.preparedFinalObject,
+        "Licenses[0].oldLicenseNumber",
+        null
+      )? get(
+        state.screenConfiguration.preparedFinalObject,
+        "Licenses[0].oldLicenseNumber",
+        null
+      ):get(
+        state.screenConfiguration.preparedFinalObject,
         "Licenses[0].applicationNumber",
         null
       );

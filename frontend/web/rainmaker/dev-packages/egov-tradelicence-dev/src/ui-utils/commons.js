@@ -467,11 +467,17 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
 
       let updateResponse = [];
       
-         if (!isEditFlow || !(isRenewal && get(queryObject[0],"status") === "INITIATED")) {       
+      if (!isEditFlow) {
+         if(queryObject[0].applicationType === "RENEWAL" && queryObject[0].status === "INITIATED" && queryObject[0].action === "INITIATE")
+         {
+         }
+        else{
           updateResponse = await httpRequest("post", "/tl-services/v1/_update", "", [], {
-          Licenses: queryObject
-        })
-      }         
+            Licenses: queryObject
+           })
+         }
+
+      }       
       //Renewal flow
 /* 
       if (isRenewal  ) {
@@ -505,7 +511,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       ];
       // let searchResponse = await getSearchResults(searchQueryObject);
       let searchResponse = updateResponse;
-      if (isEditFlow) {
+      if (isEditFlow || (isRenewal && queryObject[0].status === "INITIATED" && queryObject[0].action === "INITIATE")) {
         searchResponse = { Licenses: queryObject };
       } else {
         dispatch(prepareFinalObject("Licenses", searchResponse.Licenses));
