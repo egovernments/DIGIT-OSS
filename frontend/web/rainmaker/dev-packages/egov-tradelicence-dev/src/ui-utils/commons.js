@@ -467,7 +467,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
 
       let updateResponse = [];
       
-         if (!isEditFlow) {       
+         if (!isEditFlow || !(isRenewal && get(queryObject[0],"status") === "INITIATED")) {       
           updateResponse = await httpRequest("post", "/tl-services/v1/_update", "", [], {
           Licenses: queryObject
         })
