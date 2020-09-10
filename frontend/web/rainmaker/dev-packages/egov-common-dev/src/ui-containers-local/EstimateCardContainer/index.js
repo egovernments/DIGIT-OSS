@@ -51,7 +51,7 @@ var addInterestToFee = (fees, billDetails) => {
   fees.forEach( (fee)=> {
     if (fee.name.labelKey === "PT_TIME_INTEREST") {
       feeContainsPtInterest = true;
-      fee.value = totalInterest;
+      fee.value = totalInterest.toFixed(2);
     }
   });
   if (!feeContainsPtInterest) {
@@ -64,20 +64,148 @@ var addInterestToFee = (fees, billDetails) => {
         labelKey: "PT_TIME_INTEREST",
         labelName: "PT_TIME_INTEREST"
       },
-      value: totalInterest
+      value: totalInterest,
     });
   }
   return totalInterest;
+};
+
+
+var addRebateToFee = (fees, billDetails) => {
+  var totalRebate = 0;
+  
+  var feeContainsPtRebate = false;
+  var currentYearRebate =billDetails[0].billAccountDetails && billDetails[0].billAccountDetails.filter(item => item.taxHeadCode === "PT_TIME_REBATE");
+  var currentYearInterest =billDetails[0].billAccountDetails && billDetails[0].billAccountDetails.filter(item => item.taxHeadCode === "PT_TIME_INTEREST")
+  var curretFinancialRebate = currentYearRebate[0].amount;
+  var curretFinancialInterest = currentYearInterest[0].amount;
+  var finalCurrentFinancialCal= curretFinancialRebate+curretFinancialInterest;
+  console.log("====currentYearInterest=====",billDetails );
+  billDetails.forEach( (billDetail) => {
+    billDetail.billAccountDetails.forEach( (billAccountDetail)=> {
+      if (billAccountDetail.taxHeadCode === "PT_TIME_REBATE") {
+        totalRebate = totalRebate + billAccountDetail.amount;
+      }
+    });
+  });
+  
+  fees.forEach( (fee)=> {
+    if (fee.name.labelKey === "PT_TIME_REBATE") {
+      feeContainsPtRebate = true;
+      fee.value = totalRebate;
+    }
+  });
+  if (!feeContainsPtRebate) {
+    fees.push({
+      info: {
+        labelKey: "PT_TIME_REBATE",
+        labelName: "PT_TIME_REBATE"
+      },
+      name: {
+        labelKey: "PT_TIME_REBATE",
+        labelName: "PT_TIME_REBATE"
+      },
+      value: totalRebate 
+    });
+  }
+
+  return totalRebate-finalCurrentFinancialCal;
+};
+
+var addProRebateToFee = (fees, billDetails) => {
+  var totalProRebate = 0;
+  
+  var feeContainsPtProRebate = false;
+  var currentYearRebate =billDetails[0].billAccountDetails && billDetails[0].billAccountDetails.filter(item => item.taxHeadCode === "PT_TIME_REBATE");
+  var currentYearInterest =billDetails[0].billAccountDetails && billDetails[0].billAccountDetails.filter(item => item.taxHeadCode === "PT_TIME_INTEREST")
+  var currentYearProRebate =billDetails[0].billAccountDetails && billDetails[0].billAccountDetails.filter(item => item.taxHeadCode === "PT_PROMOTIONAL_REBATE")
+  
+  var curretFinancialRebate = currentYearRebate[0].amount;
+  var curretFinancialInterest = currentYearInterest[0].amount;
+  var curretFinancialProRebate = currentYearProRebate[0].amount;
+  var finalCurrentFinancialCal= curretFinancialInterest+curretFinancialProRebate;
+  console.log("====currentYearInterest=====",billDetails );
+  billDetails.forEach( (billDetail) => {
+    billDetail.billAccountDetails.forEach( (billAccountDetail)=> {
+      if (billAccountDetail.taxHeadCode === "PT_PROMOTIONAL_REBATE") {
+        totalProRebate= totalProRebate + billAccountDetail.amount;
+      }
+    });
+  });
+  
+  fees.forEach( (fee)=> {
+    if (fee.name.labelKey === "PT_PROMOTIONAL_REBATE") {
+      feeContainsPtProRebate = true;
+      fee.value = totalProRebate;
+    }
+  });
+  if (!feeContainsPtProRebate) {
+    fees.push({
+      info: {
+        labelKey: "PT_PROMOTIONAL_REBATE",
+        labelName: "PT_PROMOTIONAL_REBATE"
+      },
+      name: {
+        labelKey: "PT_PROMOTIONAL_REBATE",
+        labelName: "PT_PROMOTIONAL_REBATE"
+      },
+      value: totalProRebate
+    });
+  }
+
+  return totalProRebate-finalCurrentFinancialCal;
+};
+
+var addSwatchathaToFee = (fees, billDetails) => {
+  var totalSwatchatha = 0;
+  
+  var feeContainsPtSwatchatha = false;
+  var currentYearRebate =billDetails[0].billAccountDetails && billDetails[0].billAccountDetails.filter(item => item.taxHeadCode === "PT_TIME_REBATE");
+  var currentYearInterest =billDetails[0].billAccountDetails && billDetails[0].billAccountDetails.filter(item => item.taxHeadCode === "PT_TIME_INTEREST");
+  var currentYearProRebate =billDetails[0].billAccountDetails && billDetails[0].billAccountDetails.filter(item => item.taxHeadCode === "PT_PROMOTIONAL_REBATE");
+  var currentYearSwatchatha =billDetails[0].billAccountDetails && billDetails[0].billAccountDetails.filter(item => item.taxHeadCode === "SWATCHATHA_TAX");
+  var curretFinancialRebate = currentYearRebate[0].amount;
+  var curretFinancialInterest = currentYearInterest[0].amount;
+  var curretFinancialProRebate = currentYearProRebate[0].amount;
+  var curretFinancialSwatchatha = currentYearSwatchatha[0].amount;
+  var finalCurrentFinancialCal= curretFinancialRebate+curretFinancialInterest+curretFinancialProRebate+curretFinancialSwatchatha;
+  console.log("====currentYearInterest=====",billDetails );
+  billDetails.forEach( (billDetail) => {
+    billDetail.billAccountDetails.forEach( (billAccountDetail)=> {
+      if (billAccountDetail.taxHeadCode === "SWATCHATHA_TAX") {
+        totalSwatchatha = totalSwatchatha + billAccountDetail.amount;
+      }
+    });
+  });
+  
+  fees.forEach( (fee)=> {
+    if (fee.name.labelKey === "SWATCHATHA_TAX") {
+      feeContainsPtSwatchatha = true;
+      fee.value = totalSwatchatha;
+    }
+  });
+  if (!feeContainsPtSwatchatha) {
+    fees.push({
+      info: {
+        labelKey: "SWATCHATHA_TAX",
+        labelName: "SWATCHATHA_TAX"
+      },
+      name: {
+        labelKey: "SWATCHATHA_TAX",
+        labelName: "SWATCHATHA_TAX"
+      },
+      value: totalSwatchatha 
+    });
+  }
+
+  return totalSwatchatha - finalCurrentFinancialCal;
 };
 const mapStateToProps = (state, ownProps) => {
 
   const { screenConfiguration } = state;
   const { cities } = state.common;
   const tenantId = get(screenConfiguration, "preparedFinalObject.ReceiptTemp[0].instrument.tenantId")
-
   let tenantInfo = cities && cities.filter(e => e.key === tenantId );  
-
-
   let contactNumber = get(tenantInfo[0], "contactNumber");  
  
   let email =  get(tenantInfo[0], "emailId");  
@@ -89,9 +217,12 @@ const mapStateToProps = (state, ownProps) => {
   let totalAmount = 0;
   let current = 0;
   let arrears=0;
-  let Rebate = 0
-  let PromotionalRebate = 0  
-  let finalarrears = 0
+  for (let billDetail of billDetails) {
+    if(billDetail.fromPeriod < Date.now() && Date.now() < billDetail.toPeriod) {
+      current = billDetail.amount;
+    }
+    totalAmount += billDetail.amount;
+    totalAmount = totalAmount;
 
   const finalData=getFinalData();
 
@@ -100,76 +231,12 @@ const mapStateToProps = (state, ownProps) => {
   {
    arrears=totalAmount-current;
    arrears = arrears - addInterestToFee(fees, billDetails);
-   
-  
-  for (let i = 0; billDetails && i<billDetails.length;i++) {
-
-    let totalAmountBill = billDetails[i].amount;
-    if(totalAmountBill===0)
-    {
-      arrears = 0
-    }
-    else 
-    {
-    for (let j = 0; billDetails[i].billAccountDetails && j<billDetails[i].billAccountDetails.length;j++)
-    {
-      if(billDetails[i].billAccountDetails[j].taxHeadCode=== "PT_TAX" )   {     
-        if(billDetails[i].fromPeriod!==latestYear)
-            {        
-            arrears = arrears+ billDetails[i].billAccountDetails[j].amount; 
-            }
-        }
-   /*      if(billDetails[i].billAccountDetails[j].taxHeadCode=== "PT_TIME_REBATE" )   {     
-          if(billDetails[i].fromPeriod!==latestYear)
-              {        
-                Rebate = Rebate+ billDetails[i].billAccountDetails[j].amount; 
-              }
-          }
-          if(billDetails[i].billAccountDetails[j].taxHeadCode=== "PT_PROMOTIONAL_REBATE" )   {     
-            if(billDetails[i].fromPeriod!==latestYear)
-                {        
-                  PromotionalRebate = PromotionalRebate+ billDetails[i].billAccountDetails[j].amount; 
-                }
-            
-              } */
-              finalarrears = arrears;
-
-      } 
-    }
-  }  
-
-  
-   addInterestToFee(fees, billDetails);
-   addRoundOffToFee(fees, billDetails);
-   addRebateToFee(fees, billDetails);
-   addProRebateToFee(fees, billDetails);
-   addSwatToFee(fees, billDetails);
-   calcTax(fees, billDetails);
-
-  if (fees&&fees.length>0) {
-
-    for(let i=0;i<fees.length;i++)
-    {
-      if (fees[i].info.labelKey !== "COMMON_ARREARS") 
-      {
-        fees[i].value = fees[i].value.toFixed(2)
-      }      
-    }
+   arrears = arrears - addRebateToFee(fees, billDetails);
+   arrears = arrears - addProRebateToFee(fees, billDetails);
+   arrears = arrears - addSwatchathaToFee(fees, billDetails);
   }
-   
+
 }
-else
-{ 
- for (let billDetail of billDetails) {
-  if(billDetail.fromPeriod < Date.now() && Date.now() < billDetail.toPeriod) {
-    current = billDetail.amount; 
-    }
-    totalAmount += billDetail.amount;
-  }
-} 
-
-
-
 
 const estimate = {
     header: { labelName: "Fee Estimate", labelKey: "NOC_FEE_ESTIMATE_HEADER" },
