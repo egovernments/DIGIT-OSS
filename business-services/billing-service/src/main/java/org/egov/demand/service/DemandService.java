@@ -39,20 +39,30 @@
  */
 package org.egov.demand.service;
 
+import static org.egov.demand.util.Constants.ADVANCE_TAXHEAD_JSONPATH_CODE;
+import static org.egov.demand.util.Constants.MDMS_CODE_FILTER;
+import static org.egov.demand.util.Constants.MDMS_MASTER_NAMES;
+import static org.egov.demand.util.Constants.MODULE_NAME;
+
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
-import com.jayway.jsonpath.DocumentContext;
-import com.jayway.jsonpath.JsonPath;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.demand.config.ApplicationProperties;
+import org.egov.demand.model.ApportionDemandResponse;
 import org.egov.demand.model.AuditDetails;
 import org.egov.demand.model.BillV2.BillStatus;
 import org.egov.demand.model.Demand;
+import org.egov.demand.model.DemandApportionRequest;
 import org.egov.demand.model.DemandCriteria;
 import org.egov.demand.model.DemandDetail;
-import org.egov.demand.model.*;
 import org.egov.demand.repository.BillRepositoryV2;
 import org.egov.demand.repository.DemandRepository;
 import org.egov.demand.repository.ServiceRequestRepository;
@@ -74,10 +84,9 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.DocumentContext;
 
 import lombok.extern.slf4j.Slf4j;
-
-import static org.egov.demand.util.Constants.*;
 
 @Service
 @Slf4j
