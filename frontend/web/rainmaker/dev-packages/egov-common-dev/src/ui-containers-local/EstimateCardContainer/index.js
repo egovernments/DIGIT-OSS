@@ -89,7 +89,7 @@ var addRebateToFee = (fees, billDetails) => {
   });
   
   fees.forEach( (fee)=> {
-    if (fee.name.labelKey === "PT_TIME_REBATE") {
+    if (fee.name.labelKey ==="PT_TIME_REBATE") {
       feeContainsPtRebate = true;
       fee.value = totalRebate;
     }
