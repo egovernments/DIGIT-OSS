@@ -488,7 +488,7 @@ class WorkFlowContainer extends React.Component {
       if(moduleName==='NewWS1'||moduleName==='NewSW1'){
          showFooter=true;
       }
-      else if(moduleName==='NewTL'||moduleName==='EDITRENEWAL'|| moduleName==='DIRECTRENEWAL'){
+      else if(moduleName==='NewTL'||moduleName==='NewTL'){
         showFooter=true;
       }else{
          showFooter=process.env.REACT_APP_NAME === "Citizen" ? false : true;
