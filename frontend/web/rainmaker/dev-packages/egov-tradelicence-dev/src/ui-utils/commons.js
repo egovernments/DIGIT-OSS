@@ -172,7 +172,7 @@ export const updatePFOforSearchResults = async (
   }
 
   const isEditRenewal = getQueryArg(window.location.href, "action") === "EDITRENEWAL";
-  if (isEditRenewal) {
+  if (isEditRenewal && !(get(state.screenConfiguration.preparedFinalObject, "Licenses[0].status") === "INITIATED")) {
     const nextYear = generateNextFinancialYear(state);
     dispatch(
       prepareFinalObject("Licenses[0].financialYear", nextYear));

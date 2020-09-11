@@ -229,17 +229,17 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
   set(action, "screenConfig.components.footer", {})
   if(process.env.REACT_APP_NAME === "Citizen" )
   {
-    const footer = footerReview(
-      action,
-      state,
-      dispatch,
-      status,
-      applicationNumber,
-      tenantId,
-      financialYear
-    );
+  //   const footer = footerReview(
+  //     action,
+  //     state,
+  //     dispatch,
+  //     status,
+  //     applicationNumber,
+  //     tenantId,
+  //     financialYear
+  //   );
 
-  set(action, "screenConfig.components.footer", footer)
+  // set(action, "screenConfig.components.footer", footer)
 
    //if(status ==="APPROVED" && applicationType ==="NEW" && licene_expiry_date>=limit_date)
     if(payloadStatus ==="APPROVED" && payloadType ==="NEW" && ((currentDatetoEpoch<LicenseExpiryDate && currentDatetoEpoch>=limitEpochDate )||(currentDatetoEpoch>LicenseExpiryDate)))
