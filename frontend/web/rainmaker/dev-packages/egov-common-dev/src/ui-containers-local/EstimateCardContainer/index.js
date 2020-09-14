@@ -191,8 +191,8 @@ const mapStateToProps = (state, ownProps) => {
   let arrears=0;
   if(businesService=="PT")
   {
-  for (let i = 1; i<billDetails.length;i++) {
-      for (let j = 0; j<billDetails[i].billAccountDetails.length;j++)
+  for (let i = 1; billDetails && i<billDetails.length;i++) {
+      for (let j = 0; billDetails[i].billAccountDetails && j<billDetails[i].billAccountDetails.length;j++)
       {
         if(billDetails[i].billAccountDetails[j].taxHeadCode=== "PT_TAX")
         {      
@@ -201,7 +201,7 @@ const mapStateToProps = (state, ownProps) => {
     }
     
   }
-  for (let i = 0; i<billDetails.length;i++) {
+  for (let i = 0; billDetails && i<billDetails.length;i++) {
     totalAmount = totalAmount + billDetails[i].amount;   
   }
    addInterestToFee(fees, billDetails);
