@@ -78,7 +78,7 @@
 			</div>
 		</div>
 		
-		<div class="form-group" style="display:none" id="paytoDiv">
+		<div class="form-group">
 			<label class="col-sm-3 control-label text-right">
 				<spring:message code="lbl.payto" text="Pay To"/> <span class="mandatory"></span>
 			</label>
