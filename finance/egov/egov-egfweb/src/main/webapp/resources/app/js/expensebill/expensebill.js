@@ -130,7 +130,6 @@ $('#subLedgerCode').typeahead({
 		source : entityName.ttAdapter()
 	}).on('typeahead:selected', function (event, data) {
 		$("#subLedgerCode").val(data.code);
-		$("#paytoDiv").display='block';
 		detailKeyName = data.name;
 		$("#payTo").val(data.name);
 		$("#detailkeyId").val(data.id);
@@ -351,7 +350,7 @@ function creditGlcode_initialize() {
 
 $('#subLedgerType').change(function () {
 	$('#subLedgerCode').val("");
-	$("#payTo").val("");
+	//$("#payTo").val("");
 	$("#detailkeyId").val("");
 	if($('#subLedgerType').val() != ""){
 		subLedgerDisplayName=$('#subLedgerType').find(":selected").text() + " Code";
