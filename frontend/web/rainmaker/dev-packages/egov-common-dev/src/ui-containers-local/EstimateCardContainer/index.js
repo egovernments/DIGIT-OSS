@@ -68,7 +68,7 @@ const formatTaxHeaders = (billDetail = {},businesService) => {
       value: totalInterest
     });
   }
-  return totalInterest -currentYearInterest.length === 0 ? 0 : currentYearInterest[0].amount;
+  return totalInterest -currentYearInterest.length === 0 ? 0 :  currentYearInterest[0] && currentYearInterest[0].amount;
 }; 
 
  const addRebateToFee = (fees, billDetails) => {
@@ -102,7 +102,7 @@ const formatTaxHeaders = (billDetail = {},businesService) => {
     });
   }
   
-  return totalRebate-currentYearRebate.length === 0 ? 0 :currentYearRebate[0].amount;
+  return totalRebate-currentYearRebate.length === 0 ? 0 : currentYearRebate[0] && currentYearRebate[0].amount;
 }; 
  const addProRebateToFee = (fees, billDetails) => {
   let totalProRebate = 0;
@@ -135,7 +135,7 @@ const formatTaxHeaders = (billDetail = {},businesService) => {
     });
   }
 
-  return totalProRebate-currentYearProRebate.length === 0 ? 0 :currentYearProRebate[0].amount;
+   return totalProRebate-currentYearProRebate.length === 0 ? 0 : currentYearProRebate[0] && currentYearProRebate[0].amount;
 } 
  const addSwatToFee = (fees, billDetails) => {
   let totalSwat = 0;
@@ -168,7 +168,7 @@ const formatTaxHeaders = (billDetail = {},businesService) => {
     });
   }
 
-  return totalSwat-currentYearSwat.length === 0 ? 0 :currentYearSwat[0].amount;
+  return totalSwat-currentYearSwat.length === 0 ? 0 :currentYearSwat[0] && currentYearSwat[0].amount;
 } 
 const mapStateToProps = (state, ownProps) => {
 
