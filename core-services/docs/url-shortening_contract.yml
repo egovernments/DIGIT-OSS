@@ -1,0 +1,88 @@
+openapi: 3.0.1
+info:
+  title: Egov URL shortening service
+  description: APIs available in egov-url-shortening to shorten urls and get original
+    urls from shortened urls
+  contact:
+    name: Abhishek Jain
+  version: 1.0.0
+servers:
+- url: /egov-url-shortening
+paths:
+  /shortener:
+    post:
+      tags:
+      - egov-url-shortening service endpoints
+      summary: shorten given url
+      operationId: shortenUrlUsingPOST
+      requestBody:
+        description: shortenRequest
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShortenRequest'
+        required: true
+      responses:
+        200:
+          description: shortened url returned
+          content:
+            '*/*':
+              schema:
+                type: string
+        201:
+          description: Created
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Not Found
+          content: {}
+      x-codegen-request-body-name: shortenRequest
+  /{id}:
+    get:
+      tags:
+      - egov-url-shortening service endpoints
+      summary: redirects user to orignal url identified by id
+      parameters:
+      - name: id
+        in: path
+        description: The uniqueue id field to find original url
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: user redirected to original url
+          content: {}
+        201:
+          description: Created
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Not Found
+          content: {}
+components:
+  schemas:
+    ShortenRequest:
+      type: object
+      properties:
+        id:
+          type: string
+        url:
+          type: string
+          description: url to be shortened
+        validFrom:
+          type: integer
+          format: int64
+        validTill:
+          type: integer
+          format: int64
