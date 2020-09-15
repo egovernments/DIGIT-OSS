@@ -574,7 +574,7 @@ let getModifiedPayment = (payments) =>{
             penalty = Math.round((penalty+(billAccountDetail.amount))*100)/100;
             break;
           case "PT_TIME_REBATE":
-            arrear = Math.round((arrear+(billAccountDetail.amount))*100)/100;
+            rebate = Math.round((rebate+(billAccountDetail.amount))*100)/100;
             break;
           case "PT_ROUNDOFF":
             roundOff = Math.round((roundOff+(billAccountDetail.amount))*100)/100;
@@ -583,7 +583,7 @@ let getModifiedPayment = (payments) =>{
             interest = Math.round((interest+(billAccountDetail.amount))*100)/100;
             break;
           case "PT_PROMOTIONAL_REBATE":
-            arrear = Math.round((arrear+(billAccountDetail.amount))*100)/100;
+            rebate = Math.round((rebate+(billAccountDetail.amount))*100)/100;
             break;
           case "SWATCHATHA_TAX":
             swatchatha = Math.round((swatchatha+(billAccountDetail.amount))*100)/100;
