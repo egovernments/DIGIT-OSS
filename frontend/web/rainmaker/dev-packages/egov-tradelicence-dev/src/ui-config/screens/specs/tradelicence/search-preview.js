@@ -262,35 +262,35 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
       ));
 
     }
-    // else if(payloadType ==="RENEWAL")
-    // {
-    //   dispatch(handleField(
-    //     "search-preview",
-    //     "components.div.children.reviewDeclaration.children.cardContent.children.headerDiv",
-    //     "visible",
-    //     true
-    //   ))
-    //   set(action, "screenConfig.components.div.children.footer.children.container.children.rightdiv.children.submitButton.props.visible", true)
-    //   // dispatch(
-    //   //   handleField(
-    //   //     "search-preview",
-    //   //     "components.div.children.footer.children.container.children.rightdiv.children.submitButton",
-    //   //     "props.visible",
-    //   //     false
-    //   //   )
-    //   // );
-    //   set(action, "screenConfig.components.div.children.footer.children.container.children.rightdiv.children.editButton.props.visible", true)
+    else if(payloadType ==="RENEWAL")
+    {
+      dispatch(handleField(
+        "search-preview",
+        "components.div.children.reviewDeclaration.children.cardContent.children.headerDiv",
+        "visible",
+        false
+      ))
+      set(action, "screenConfig.components.div.children.footer.children.container.children.rightdiv.children.submitButton.props.visible", false)
+      // dispatch(
+      //   handleField(
+      //     "search-preview",
+      //     "components.div.children.footer.children.container.children.rightdiv.children.submitButton",
+      //     "props.visible",
+      //     false
+      //   )
+      // );
+      set(action, "screenConfig.components.div.children.footer.children.container.children.rightdiv.children.editButton.props.visible", false)
 
-    //   // dispatch(
-    //   //   handleField(
-    //   //     "search-preview",
-    //   //     "components.div.children.footer.children.container.children.rightdiv.children.editButton",
-    //   //     "props.visible",
-    //   //     false
-    //   //   )
-    //   // );
+      // dispatch(
+      //   handleField(
+      //     "search-preview",
+      //     "components.div.children.footer.children.container.children.rightdiv.children.editButton",
+      //     "props.visible",
+      //     false
+      //   )
+      // );
 
-    // }
+    }
     else    {
       dispatch(handleField(
         "search-preview",
