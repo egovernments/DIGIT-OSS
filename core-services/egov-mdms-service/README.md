@@ -1,18 +1,33 @@
-## Master Data Management service
+# Master Data Management service
+
+Master Data Management Service is a core service that is made available on the DIGIT platform.  It encapsulates the functionality surrounding Master Data Management.  The service fetches Master Data pertaining to different modules. The functionality is exposed via REST API.
+
+### DB UML Diagram
+
+- NA
+
+### Service Dependencies
+- NA
+
+### Swagger API Contract
+
+Please refer to the  below Swagger API contarct for MDMS service to understand the structure of APIs and to have visualization of all internal APIs.
+http://editor.swagger.io/?url=https://raw.githubusercontent.com/egovernments/egov-services/master/docs/mdms/contract/v1-0-0.yml#!/
+
+
+## Service Details
+
+The MDM service reads the data from a set of JSON files from a pre-specified location. It can either be an online location (readable JSON files from online) or offline (JSON files stored in local memory). The JSON files should conform to a  prescribed format. The data is stored in a map and tenantID of the file serves as a key. 
+Once the data is stored in the map the same can be retrieved by making an API request to the MDM service. Filters can be applied in the request to retrieve data based on the existing fields of JSON.
 
 #### Master data management files check in location and details -
 
 1. Data folder parallel to docs (https://github.com/egovernments/egov-mdms-data/tree/master/data/pb). 
 2. Under data folder there will be a folder `<state>` which is a state specific master folder.
 3. Under `<state>` folder there will `<tenant>` folders where ulb specific master data will be checked in. for example `pb.testing`
-4. Each module will have one file each for statewide and ulb wise master data. Keep the file name as module name itself.
+4. Each module will have one file each for statewise and ulb wise master data. Keep the file name as module name itself.
 
-#### Local Setup
-
-To setup the service, clone the service. Update the `application.properties` and change
-
-- Update `egov.mdms.conf.path` to point to the folder where the master data is stored. [Sample](https://github.com/egovernments/egov-mdms-data/blob/master/data/pb/)
-- Update the `masters.config.url` to point to the file which has the masters configuration. [Sample](https://github.com/egovernments/egov-mdms-data/blob/master/master-config.json)
+### Sample Config
 
 Each master has three key parameters `tenantId`, `moduleName`, `masterName`. A sample master would look like below
 
@@ -36,17 +51,37 @@ Each master has three key parameters `tenantId`, `moduleName`, `masterName`. A s
   ]
 }
 ```
+Suppose there are huge data to be store in one config file, the data can be store in seperate files. And these seperated config file data can be use under one master name, if `isMergeAllowed`
+flag is `true` in [mdms-masters-config.json](https://raw.githubusercontent.com/egovernments/punjab-mdms-data/UAT/mdms-masters-config.json)
+### API Details
 
-Here `tenantId=pb`, `moduleName=common-masters`, `masterName=OwnerType`
+`BasePath` /mdms/v1/[API endpoint]
 
-#### Query Construction
+##### Method
+a) `POST /_search`
 
-##### _get, method type post (Send requestInfo in Body)
-Sample Query: 
-If we have filter like this 
-[?(@.id==1||@.id==2)]
-Query will be like following and parameter should be url-encoded.
-http://localhost:8093/egov-mdms-service/v1/_get?moduleName=SWM&masterName=CollectionPoint&tenantId=mh&filter=%5B%3F%28%40.id%3D%3D1%7C%7C%40.id%3D%3D2%29%5D
+This method fetches a list of masters for a specified module and tenantId.
+- `MDMSCriteriaReq (mdms request)` : Request Info + MdmsCriteria — Details of module and master which need to be searched using MDMS.
 
-##### _search, method type post (Send requestInfo in Body)
-Please refer contract : https://raw.githubusercontent.com/egovernments/egov-services/master/docs/mdms/contract/v1-0-0.yml
+- `MdmsCriteria`
+
+    | Input Field                               | Description                                                       | Mandatory  |   Data Type      |
+    | ----------------------------------------- | ------------------------------------------------------------------| -----------|------------------|
+    | `tenantId`                                | Unique id for a tenant.                                           | Yes        | String           |
+    | `moduleDetails`                           | module for which master data is required                          | Yes        | String           |
+
+- `MdmsResponse`  Response Info + Mdms
+
+- `Mdms`
+
+    | Input Field                               | Description                                                       | Mandatory  |   Data Type      |
+    | ----------------------------------------- | ------------------------------------------------------------------| -----------|------------------|
+    | `mdms`                                    | Array of modules                                                  | Yes        | String           |
+
+### Kafka Consumers
+
+- NA
+
+### Kafka Producers
+
+- NA
