@@ -206,7 +206,7 @@ class Footer extends React.Component {
           1
         );
       const rolearray=  getUserInfo() && JSON.parse(getUserInfo()).roles.filter((item)=>{
-          if(item.code=="TL_CEMP"&&item.tenantId===tenantId)
+          if((item.code=="TL_CEMP"&&item.tenantId===tenantId) || item.code == "CITIZEN")
           return true;
         })
        const rolecheck= rolearray.length>0? true: false;
