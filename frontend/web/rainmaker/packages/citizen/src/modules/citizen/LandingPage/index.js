@@ -49,7 +49,7 @@ class LandingPage extends Component {
       iconStyle: { width: "50px", height: "50px", marginTop: "10px", fill: "rgba(0, 0, 0, 0.60)" },
       className: "pgr-landing-card",
     },
-    PT: {
+/*     PT: {
       moduleTitle: "PT_PAYMENT_STEP_HEADER1",
       moduleDescription: "CS_LANDING_PAGE_PROPERTY_TAX_DESCRIPTION",
       button1: "PT_PAYMENT_STEP_HEADER1",
@@ -61,7 +61,7 @@ class LandingPage extends Component {
       iconName: "dashboard-complaint",
       iconStyle: { width: "60px", height: "60px", marginTop: "10px", fill: "rgba(0, 0, 0, 0.60)" },
       className: "pt-landing-card",
-    },
+    }, */
     TL: {
       moduleTitle: "TL_COMMON_TL",
       moduleDescription: "CS_LANDING_PAGE_TRADE_LICENSE_DESCRIPTION",

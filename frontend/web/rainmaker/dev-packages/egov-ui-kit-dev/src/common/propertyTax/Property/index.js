@@ -9,6 +9,8 @@ import Screen from "egov-ui-kit/common/common/Screen";
 import { Icon, BreadCrumbs } from "egov-ui-kit/components";
 import { fetchGeneralMDMSData } from "egov-ui-kit/redux/common/actions";
 import { addBreadCrumbs, toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
+import { formWizardConstants, getPropertyLink, PROPERTY_FORM_PURPOSE } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
+
 import PropertyInformation from "./components/PropertyInformation";
 import {
   fetchProperties,
@@ -181,6 +183,36 @@ class Property extends Component {
       });
     }
   };
+  editDemand= () =>{
+
+     const { latestPropertyDetails, propertyId,setRoute, tenantId } = this.props;
+    const assessmentNo = latestPropertyDetails && latestPropertyDetails.assessmentNumber;
+    if(process.env.REACT_APP_NAME !='citizen'){
+    setRoute(`/property-tax/assessment-form-dataentry?assessmentId=${assessmentNo}&isReassesment=true&isAssesment=false&mode=editDemand&propertyId=${propertyId}&tenantId=${tenantId}`);
+  }
+    // this.setState({
+    //   dialogueOpen: true,
+    //   urlToAppend: `/property-tax/assessment-form?assessmentId=${assessmentNo}&isReassesment=true&isAssesment=true&propertyId=${propertyId}&tenantId=${tenantId}`,
+    // }); 
+  }
+  onEditPropertyClick = () => {
+    const { latestPropertyDetails, propertyId, tenantId, selPropertyDetails } = this.props;
+    const assessmentNo = latestPropertyDetails && latestPropertyDetails.assessmentNumber;
+    if (selPropertyDetails.status != "ACTIVE") {
+      this.props.toggleSnackbarAndSetText(
+        true,
+        { labelName: "Property in Workflow", labelKey: "ERROR_PROPERTY_IN_WORKFLOW" },
+        "error"
+      );
+    } else {
+      console.log("prasad navigating to edit screen");
+      this.props.history.push(getPropertyLink(propertyId, tenantId, PROPERTY_FORM_PURPOSE.UPDATE, -1, assessmentNo));
+      // this.setState({
+      //   dialogueOpen: true,
+      //   urlToAppend: getPropertyLink(propertyId, tenantId, "assess", -1, assessmentNo),
+      // });
+    }
+  };
 
   getAssessmentHistory = (selPropertyDetails, receiptsByYr = []) => {
     let assessmentList = [];
@@ -332,6 +364,16 @@ class Property extends Component {
     if (receiptsByYr) {
       assessmentHistory = this.getAssessmentHistory(selPropertyDetails, receiptsByYr.receiptDetailsArray);
     }
+ /*    let button;
+    if(process.env.REACT_APP_NAME !='Citizen' && propertyDetails && propertyDetails[0] && propertyDetails[0].source ==='LEGACY_RECORD' && Payments.length <= 0){
+    button =
+    <Button
+      onClick={() => this.editDemand()}
+      label={<Label buttonLabel={true} label="PT_EDIT_DEMAND" fontSize="16px" />}
+      primary={true}
+      style={{ lineHeight: "auto", minWidth: "inherit" }}
+    />
+    } */
     return (
       <Screen className={clsName}>
         <PTHeader header="PT_PROPERTY_INFORMATION" subHeaderTitle="PT_PROPERTY_PTUID" subHeaderValue={propertyId} downloadPrintButton={true} />
@@ -352,6 +394,17 @@ class Property extends Component {
         }
         <div id="tax-wizard-buttons" className="wizard-footer col-sm-12" style={{ textAlign: "right" }}>
           <div className="button-container col-xs-6 property-info-access-btn" style={{ float: "right" }}>
+          <Button
+              label={
+                <Label buttonLabel={true}
+                  label={formWizardConstants[PROPERTY_FORM_PURPOSE.UPDATE].parentButton} fontSize="16px"
+                  color="#fe7a51" />
+              }
+              onClick={() => this.onEditPropertyClick()}
+              labelStyle={{ letterSpacing: 0.7, padding: 0, color: "#fe7a51" }}
+              buttonStyle={{ border: "1px solid #fe7a51" }}
+              style={{ lineHeight: "auto", minWidth: "45%", marginRight: "10%" }}
+            />
             <Button
               onClick={() => this.onAssessPayClick()}
               label={<Label buttonLabel={true} label="PT_ASSESS_PROPERTY" fontSize="16px" />}

@@ -752,6 +752,7 @@ class FormWizard extends Component {
       estimation
     } = this.state;
     const { setRoute, displayFormErrorsAction, form } = this.props;
+
     switch (selected) {
       //validating property address is validated
       case 0:
@@ -905,7 +906,7 @@ class FormWizard extends Component {
               } else {
                 displayFormErrorsAction("ownerInfo");
               }
-            } else if (ownershipTypeSelected === "MULTIPLEOWNERS") {
+            } else if (ownershipTypeSelected === "INDIVIDUAL.MULTIPLEOWNERS") {
               let ownerValidation = true;
               for (const variable in form) {
                 if (variable.search("ownerInfo_") !== -1) {
@@ -1336,7 +1337,7 @@ class FormWizard extends Component {
         const financeYear = { financialYear: financialYearFromQuery };
         const assessmentPayload = createAssessmentPayload(prepareFormData.Properties[0], financeYear);
         let estimateResponse = await httpRequest(
-          "pt-calculator-v2/propertytax/v2/_estimate",
+          "pt-calculator-v2/propertytax/_estimate",
           "_estimate",
           [],
           {
@@ -1437,7 +1438,7 @@ class FormWizard extends Component {
       );
     }
 
-    if (selectedownerShipCategoryType === "MULTIPLEOWNERS") {
+    if (selectedownerShipCategoryType === "INDIVIDUAL.MULTIPLEOWNERS") {
       set(
         prepareFormData,
         "Properties[0].propertyDetails[0].owners",
@@ -1627,9 +1628,9 @@ class FormWizard extends Component {
     const propertyPayload = createPropertyPayload(Properties, documentsUploadRedux, newProperties);
     const propertyMethodAction = (action === "assess" || action === "re-assess") ? "_update" : "_create";
     let  ownershipCategory = get(propertyPayload, "ownershipCategory",'');
-
-    let  usageCategory = get(propertyPayload, "usageCategory",'');
     
+    let  usageCategory = get(propertyPayload, "usageCategory",'');
+
 
 
     if(ownershipCategory==="INDIVIDUAL.INDIVIDUAL.SINGLEOWNER")
