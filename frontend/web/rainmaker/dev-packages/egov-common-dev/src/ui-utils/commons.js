@@ -594,12 +594,14 @@ let getModifiedPayment = (payments) =>{
       })
     }
   })
-  set(payments, `[0].paymentDetails[0].bill.additionalDetails.tax`, tax);
-  set(payments, `[0].paymentDetails[0].bill.additionalDetails.arrear`, arrear);
+  let totalAmount =   get(payments, `[0].paymentDetails[0].bill.totalAmount`,null);
+  set(payments, `[0].paymentDetails[0].bill.totalAmount`, totalAmount.toFixed(2));
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.tax`, tax.toFixed(2));
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.arrear`, arrear.toFixed(2));
   set(payments, `[0].paymentDetails[0].bill.additionalDetails.penalty`, penalty);
-  set(payments, `[0].paymentDetails[0].bill.additionalDetails.swatchatha`, swatchatha);
-  set(payments, `[0].paymentDetails[0].bill.additionalDetails.rebate`, rebate);
-  set(payments, `[0].paymentDetails[0].bill.additionalDetails.interest`, interest);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.swatchatha`, swatchatha.toFixed(2));
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.rebate`, -rebate.toFixed(2));
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.interest`, interest.toFixed(2));
   set(payments, `[0].paymentDetails[0].bill.additionalDetails.roundOff`, roundOff);
 }
 else if(payments[0].paymentDetails[0].businessService === 'TL'){

@@ -208,6 +208,16 @@ const mapStateToProps = (state, ownProps) => {
    addRebateToFee(fees, billDetails);
    addProRebateToFee(fees, billDetails);
    addSwatToFee(fees, billDetails);
+   if (fees&&fees.length>0) {
+
+    for(let i=0;i<fees.length;i++)
+    {
+      if (fees[i].info.labelKey !== "COMMON_ARREARS") 
+      {
+        fees[i].value = fees[i].value.toFixed(2)
+      }      
+    }
+  }
    
 }
 else
