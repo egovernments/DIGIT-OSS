@@ -44,6 +44,8 @@ import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -59,7 +61,6 @@ import org.egov.receipt.consumer.model.Bill;
 import org.egov.receipt.consumer.model.BillAccountDetail;
 import org.egov.receipt.consumer.model.BillDetail;
 import org.egov.receipt.consumer.model.BusinessService;
-import org.egov.receipt.consumer.model.DishonorReasonContract;
 import org.egov.receipt.consumer.model.EgModules;
 import org.egov.receipt.consumer.model.FinanceMdmsModel;
 import org.egov.receipt.consumer.model.Function;
@@ -245,16 +246,27 @@ public class VoucherServiceImpl implements VoucherService {
 				propertiesManager.getReceiptViewSourceUrl() + "?selectedReceipts=" + receiptNumber);
 
 		voucher.setLedgers(new ArrayList<>());
+		final String serviceAttribute = getServiceAttributeByBusinessService(tenantId, requestInfo, businessService, receipt.getConsumerCode());
+		LOGGER.info("Service Attribute  ::: {}", serviceAttribute);
 		amountMapwithGlcode = new LinkedHashMap<>();
 		// Setting glcode and amount in Map as key value pair.
 		for (BillAccountDetail bad : billDetail.getBillAccountDetails()) {
 			if (bad.getAdjustedAmount().compareTo(new BigDecimal(0)) != 0) {
 				String taxHeadCode = bad.getTaxHeadCode();
 				List<TaxHeadMaster> findFirst = taxHeadMasterByBusinessServiceCode.stream()
-						.filter(tx -> tx.getTaxhead().equals(taxHeadCode)).collect(Collectors.toList());
-				if (findFirst != null && findFirst.isEmpty())
-					throw new VoucherCustomException(ProcessStatus.FAILED,
-							"Taxhead code " + taxHeadCode + " is not mapped with BusinessServiceCode " + bsCode);
+						.filter(tx -> serviceAttribute != null
+								&& businessService.getServiceAttributeTaxHead().equals(taxHeadCode)
+										? tx.getTaxhead().equals(taxHeadCode)
+												&& serviceAttribute.equals(tx.getServiceAttribute())
+										: tx.getTaxhead().equals(taxHeadCode))
+						.collect(Collectors.toList());
+				if (findFirst != null && findFirst.isEmpty()) {
+					StringBuilder exception = new StringBuilder("Taxhead code ").append(taxHeadCode)
+							.append(" is not mapped with BusinessServiceCode ").append(bsCode);
+					if (serviceAttribute != null)
+						exception.append("and Service Attribute ").append(serviceAttribute);
+					throw new VoucherCustomException(ProcessStatus.FAILED, exception.toString());
+				}
 				String glcode = findFirst.get(0).getGlcode();
 				if (amountMapwithGlcode.get(glcode) != null) {
 					amountMapwithGlcode.put(glcode, amountMapwithGlcode.get(glcode).add(bad.getAdjustedAmount()));
@@ -284,6 +296,38 @@ public class VoucherServiceImpl implements VoucherService {
 				accountDetail.getFunction().setCode(businessService.getFunction());
 				voucher.getLedgers().add(accountDetail);
 		});
+	}
+
+	private String getServiceAttributeByBusinessService(String tenantId, RequestInfo requestInfo,
+			BusinessService businessService, String consumerCode) throws VoucherCustomException {
+		if (businessService.isServiceAttributeMappingEnabled()) {
+			try {
+
+				final StringBuilder businessServiceUrl = new StringBuilder(
+						propertiesManager.getBusinessServiceHostUrl()).append(businessService.getServiceAttributeUrl())
+								.append(consumerCode).append("&tenantId=").append(tenantId);
+				VoucherRequest request = new VoucherRequest();
+				request.setRequestInfo(requestInfo);
+				request.setTenantId(tenantId);
+				LOGGER.info("Business service :: {}, Consumercode :: {}", businessService, consumerCode);
+				Map<?, ?> apiResponse = (Map<?, ?>) serviceRequestRepository.fetchResult(businessServiceUrl, request,
+						tenantId);
+				LOGGER.info("Business service api response :: {}", apiResponse);
+				Map<?, ?> responseSource = apiResponse;
+				Object response = null;
+				for (String str : Arrays.asList(businessService.getServiceAttributeKey().split("\\."))) {
+					response = responseSource.get(str);
+					if (response instanceof Collection) {
+						response = ((ArrayList<?>) response).get(0);
+						responseSource = (Map<?, ?>) response;
+					}
+				}
+				return (String) response;
+			} catch (Exception e) {
+				throw new VoucherCustomException(ProcessStatus.FAILED, "Failed to featch service attribute");
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -343,12 +387,12 @@ public class VoucherServiceImpl implements VoucherService {
 	 */
 	private List<BusinessService> getBusinessServiceByCode(String tenantId, String bsCode, RequestInfo requestInfo,
 			FinanceMdmsModel finSerMdms) throws Exception {
-		List<BusinessService> propertyTaxBusinessService = microServiceUtil.getBusinessService(tenantId, bsCode,
+		List<BusinessService> businessServices = microServiceUtil.getBusinessService(tenantId, bsCode,
 				requestInfo, finSerMdms);
-		if (propertyTaxBusinessService.isEmpty()) {
+		if (businessServices.isEmpty()) {
 			throw new VoucherCustomException(ProcessStatus.FAILED, "Business service is not mapped with business code : " + bsCode);
 		}
-		List<BusinessService> collect = propertyTaxBusinessService.stream().filter(bs -> bs.getCode().equals(bsCode))
+		List<BusinessService> collect = businessServices.stream().filter(bs -> bs.getCode().equals(bsCode))
 				.collect(Collectors.toList());
 		return collect;
 	}

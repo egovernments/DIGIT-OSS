@@ -56,4 +56,5 @@ public class TaxHeadMaster {
 	private String glcode;
 	private Long validFrom;
 	private Long validTo;
+	private String serviceAttribute;
 }

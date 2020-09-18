@@ -143,6 +143,9 @@ public class PropertiesManager {
     @Value("${egov.services.collections.hostname}")
     private String collectionsHostUrl;
     
+    @Value("${egov.services.businessservice.hostname}")
+    private String businessServiceHostUrl;
+    
     @Value("${egov.services.egfmaster.hostname}")
     private String egfMasterHostUrl;
     

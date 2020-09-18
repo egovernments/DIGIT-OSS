@@ -62,4 +62,8 @@ public class BusinessService {
 	private Long validFrom;
 	private Long validTo;
 	private String businessService;
+	private boolean serviceAttributeMappingEnabled;
+	private String serviceAttributeUrl;
+	private String serviceAttributeKey;
+	private String serviceAttributeTaxHead;
 }
