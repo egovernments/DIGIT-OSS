@@ -1051,6 +1051,7 @@ public class ChequeAssignmentAction extends BaseVoucherAction {
                 return "searchRtgsResult";
             }
             createRtgsAssignment(resultMap);
+            selectedRows = paymentService.selectedRows;
         } catch (final ValidationException e) {
             searchRTGS();
             LOGGER.error(e.getMessage());
@@ -1172,6 +1173,39 @@ public class ChequeAssignmentAction extends BaseVoucherAction {
         return chequeAssignmentList;
     }
 
+    public List<ChequeAssignment> prepareRtgsAssignmentList() {
+        String[] selectedRowsIdArray;
+        if (selectedRowsId != null)
+            selectedRowsIdArray = selectedRowsId.split(";,");
+        else
+            selectedRowsIdArray = new String[0];
+        int length = selectedRowsIdArray.length;
+        for (int i = 0; i < length; i++) {
+            ChequeAssignment chequeAssignment = new ChequeAssignment();
+            String[] items = selectedRowsIdArray[i].split("\\~");
+            chequeAssignment.setVoucherHeaderId(Long.valueOf(items[0]));
+            chequeAssignment.setPaidTo(items[1]);
+            chequeAssignment.setVoucherNumber(items[2]);
+            try {
+                chequeAssignment.setVoucherDate(formatter.parse(items[3]));
+                chequeAssignment.setChequeDate(formatter.parse(items[9]));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            String item = items[11];
+            if (item.contains(";"))
+                item = items[11].replace(";", "");
+            chequeAssignment.setBankAccountId(Long.valueOf(items[4]));
+            chequeAssignment.setBillNumber(items[5]);
+            chequeAssignment.setDepartmentName(items[6]);
+            chequeAssignment.setBillId(Long.valueOf(items[7]));
+            chequeAssignment.setExpenditureType(items[8]);
+            chequeAssignment.setPaidAmount(BigDecimal.valueOf(Double.valueOf(item)));
+            chequeAssignment.setIsSelected(true);
+            rtgsList.add(chequeAssignment);
+        }
+        return rtgsList;
+    }
     private void createRtgsAssignment(final Map<String, List<ChequeAssignment>> resultMap) throws Exception {
         instVoucherList = new ArrayList<InstrumentVoucher>();
         // InstrumentHeader instHeaderObj=new InstrumentHeader();
@@ -1243,8 +1277,10 @@ public class ChequeAssignmentAction extends BaseVoucherAction {
         new ArrayList<InstrumentHeader>();
         // if(expType==null || expType.equals("-1") || expType.equals("Purchase")) Works
         // FinancialConstants.STANDARD_EXPENDITURETYPE_CONTINGENT
-        for (final ChequeAssignment chqAssgn : rtgsList)
-            if (resultMap.isEmpty()) {
+        rtgsList=new ArrayList<ChequeAssignment>();
+        rtgsList = prepareRtgsAssignmentList();
+            for (final ChequeAssignment chqAssgn : rtgsList) 
+                if (resultMap.isEmpty()) {
                 rtgsEntry = new ArrayList<ChequeAssignment>();
                 rtgsEntry.add(chqAssgn);
                 if (chqAssgn.getBankAccountId() != null && !"".equals(chqAssgn.getBankAccountId()))

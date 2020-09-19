@@ -73,12 +73,15 @@
 			<s:actionmessage />
 		</span>
 		<div class="formmainbox">
-			<div class="subheadnew"><s:text name="chq.rtgs.assignment.search.heading" /></div>
+			<div class="subheadnew">
+				<s:text name="chq.rtgs.assignment.search.heading" />
+			</div>
 			<table align="center" width="100%" cellpadding="0" cellspacing="0"
 				id="paymentTable">
 				<tr>
 					<th class="bluebgheadtdnew"><s:text
-							name="chq.assignment.select" /> <s:checkbox id="selectall"
+							name="chq.assignment.select" /> 
+							<s:checkbox id="selectall"
 							name="selectall" onclick="checkAll(this)" /></th>
 					<th class="bluebgheadtdnew"><s:text name="Sl No" /></th>
 
@@ -111,15 +114,19 @@
 
 						<s:iterator value="value" status="s">
 
-							<td style="text-align: center" class="blueborderfortdnew"><s:hidden
-									id="voucherHeaderId"
+							<td style="text-align: center" class="blueborderfortdnew">
+							<s:hidden id="voucherHeaderId"
 									name="rtgsList[%{#counter}].voucherHeaderId"
-									value="%{voucherHeaderId}" /> <s:hidden id="billId"
-									name="rtgsList[%{#counter}].billId" value="%{billId}" /> <s:hidden
+									value="%{voucherHeaderId}" /> 
+							<s:hidden id="billId"
+									name="rtgsList[%{#counter}].billId" value="%{billId}" /> 
+							<s:hidden
 									id="billNumber" name="rtgsList[%{#counter}].billNumber"
-									value="%{billNumber}" /> <s:hidden id="expenditureType"
+									value="%{billNumber}" /> 
+							<s:hidden id="expenditureType"
 									name="rtgsList[%{#counter}].expenditureType"
-									value="%{expenditureType}" /> <s:checkbox
+									value="%{expenditureType}" />
+							 <s:checkbox
 									name="rtgsList[%{#counter}].isSelected"
 									id="isSelected%{#counter}" onclick="update(this)" /></td>
 							<td align="left" style="text-align: center"
@@ -139,7 +146,8 @@
 									id="voucherDate" name="rtgsList[%{#counter}].voucherDate"
 									value="%{voucherDate}" /> <s:date name="%{voucherDate}"
 									var="tempPaymentDate" format="dd/MM/yyyy" /> <s:date
-									name="%{voucherDate}" format="dd/MM/yyyy" /> <s:hidden
+									name="%{voucherDate}" format="dd/MM/yyyy" />
+									 <s:hidden
 									name="rtgsList[%{#counter}].tempPaymentDate"
 									value="%{tempPaymentDate}"></s:hidden></td>
 							<td style="text-align: center" class="blueborderfortdnew"><s:hidden
@@ -170,7 +178,8 @@
 						</td>         -->
 						<td class="greybox"><s:text name="chq.assignment.rtgs.date" /><span
 							class="mandatory1">*</span> <s:date name="rtgsdateMap[%{#count}]"
-								var="rtgsdateMap[%{#count}]" format="dd/MM/yyyy" /> <s:textfield
+								var="rtgsdateMap[%{#count}]" format="dd/MM/yyyy" /> 
+								<s:textfield
 								id="rtgsdateMapId" name="rtgsdateMap[%{#count}]"
 								value="%{rtgsdateMap[%{#count}]}" data-date-end-date="0d"
 								onkeyup="DateFormat(this,this.value,event,false,'3')"
@@ -181,10 +190,14 @@
 				</s:iterator>
 			</table>
 			<div class="subheadsmallnew" id="noRecordsDiv"
-				style="visibility: hidden"><s:text name="msg.no.record.found"/> </div>
+				style="visibility: hidden">
+				<s:text name="msg.no.record.found" />
+			</div>
 			<br />
 
 			<div class="buttonbottom">
+			<s:hidden id="selectedRowsId" name="selectedRowsId"
+					value="%{selectedRowsId}" />
 				<s:hidden id="selectedRows" name="selectedRows"
 					value="%{selectedRows}" />
 				<s:hidden id="rtgsContractorAssignment"
@@ -196,29 +209,35 @@
 					key="lbl.assign.rtgs.number" cssClass="buttonsubmit"
 					onclick="return validate();" />
 				<input type="button" value='<s:text name="lbl.close"/>'
-					onclick="javascript:window.close();window.parent.postMessage('close','*');" class="button" />
+					onclick="javascript:window.close();window.parent.postMessage('close','*');"
+					class="button" />
 			</div>
 		</div>
 		<s:token />
 	</s:form>
 	<script>
+	var selectedRowsId=new Array();
+
 			function update(obj)
 			{
+				console.log(obj);
 				if(obj.checked){
-					document.getElementById('selectedRows').value=parseInt(document.getElementById('selectedRows').value)+1;
+					document.getElementById('selectedRows').value = parseInt(document.getElementById('selectedRows').value)+1;
 				}
 				else{
 					document.getElementById('selectedRows').value=parseInt(document.getElementById('selectedRows').value)-1;
 				}
 			}
+			
 			function updateDate(obj)
 			{
-				document.getElementById(obj).value=obj.value;         
+				document.getElementById(obj).value = obj.value;         
 			}
 			function validate()
 			{
+			
+				resetSelectedRowsId();
 				var result=true;
-				
 				if(document.getElementById('selectedRows').value=='' || document.getElementById('selectedRows').value==0)
 				{
 					bootbox.alert('<s:text name="msg.please.select.the.payment.voucher"/> ');
@@ -233,8 +252,9 @@
 				<s:if test="%{paymentMode=='rtgs'}">
 					//result= validateForRtgsMode();  
 				</s:if>    
-				document.chequeAssignment.action='/services/EGF/payment/chequeAssignment-update.action';
-	    		document.chequeAssignment.submit();
+				//disableAll(); 
+				document.chequeAssignment.action ='/services/EGF/payment/chequeAssignment-update.action';
+	    		//document.chequeAssignment.submit();
 								 
 				return true;                   
 			}
@@ -254,6 +274,7 @@
 					chequeDate='<s:property value="%{rtgsdateMap[#accountId]}"/>';     
 					var paymentDate= document.getElementsByName("value["+index+"].tempPaymentDate")[0].value; 
 						if(document.getElementById('isSelected'+index).checked){
+							console.log("chkCount",chkCount);
 							chkCount++;                 
 							if( compareDate(paymentDate,chequeDate) == -1){     
 								bootbox.alert('<s:text name="msg.cheque.date.cant.be.less.than.payment.date"/>');
@@ -268,6 +289,55 @@
 				return true;           
 			}
 		
+		function resetSelectedRowsId(){
+			/* var checkboxes = document.querySelectorAll('input:checked'); */
+			var checkboxes = document.querySelectorAll("input[type='checkbox']");
+			 var temp =[];
+			for(var i =0 ; i<checkboxes.length;i++){
+				if(checkboxes[i].id != 'selectall'){
+					temp.push(checkboxes[i]);
+				}else {
+					checkboxes[i].disabled = true;
+				}
+			}
+			var chequeSize ='<s:property value ="%{accountNoAndRtgsEntryMap}"/>';	
+			   selectedRowsId = new Array();
+			   
+			  for(var index = 0; index<temp.length; index++){
+				  var obj = document.getElementById('isSelected'+index);
+				  if(obj.checked == true){
+					  selectedRowsId.push(document.getElementsByName("rtgsList["+index+"].voucherHeaderId")[0].value+"~"+
+								document.getElementsByName("rtgsList["+index+"].paidTo")[0].value+"~"+
+								document.getElementsByName("rtgsList["+index+"].voucherNumber")[0].value+"~"+
+								document.getElementsByName("rtgsList["+index+"].voucherDate")[0].value+"~"+
+								document.getElementsByName("rtgsList["+index+"].bankAccountId")[0].value+"~"+
+								document.getElementsByName("rtgsList["+index+"].billNumber")[0].value+"~"+
+								document.getElementsByName("rtgsList["+index+"].departmentName")[0].value+"~"+
+								document.getElementsByName("rtgsList["+index+"].billId")[0].value+"~"+
+								document.getElementsByName("rtgsList["+index+"].expenditureType")[0].value+"~"+
+								document.getElementsByName("rtgsList["+index+"].tempPaymentDate")[0].value+"~"+
+								document.getElementsByName("rtgsList["+index+"].isSelected")[0].value+"~"+
+								document.getElementsByName("rtgsList["+index+"].paidAmount")[0].value+";");
+						
+				  }
+				  	document.getElementsByName("rtgsList["+index+"].voucherHeaderId")[0].disabled =true;
+					document.getElementsByName("rtgsList["+index+"].paidTo")[0].disabled =true;
+					document.getElementsByName("rtgsList["+index+"].voucherNumber")[0].disabled =true;
+					document.getElementsByName("rtgsList["+index+"].voucherDate")[0].disabled =true;
+					document.getElementsByName("rtgsList["+index+"].bankAccountId")[0].disabled =true;
+					document.getElementsByName("rtgsList["+index+"].billNumber")[0].disabled =true;
+					document.getElementsByName("rtgsList["+index+"].departmentName")[0].disabled =true;
+					document.getElementsByName("rtgsList["+index+"].billId")[0].disabled =true;
+					document.getElementsByName("rtgsList["+index+"].expenditureType")[0].disabled =true;
+					document.getElementsByName("rtgsList["+index+"].tempPaymentDate")[0].disabled =true;
+					document.getElementsByName("__checkbox_rtgsList["+index+"].isSelected")[0].remove();	
+					document.getElementsByName("rtgsList["+index+"].paidAmount")[0].disabled =true;
+					document.getElementById('selectall').disabled = true;
+					
+			  } 
+				document.getElementById('selectedRowsId').value = selectedRowsId;
+	
+		}
 			                
 			function checkAll(obj)
 			{        
@@ -289,6 +359,29 @@
 				var url = '../voucher/preApprovedVoucher-loadvoucherview.action?vhid='+vid;
 				window.open(url,'Search','resizable=yes,scrollbars=yes,left=300,top=40, width=900, height=700');
 		}
+			
+			function disableAll()
+			{
+				var frmIndex=0;
+				for(var i=0;i<document.forms[frmIndex].length;i++)
+					{
+						for(var i=0;i<document.forms[0].length;i++)
+							{
+								if(document.forms[0].elements[i].name != 'bankAccountId'  
+								&& document.forms[0].elements[i].name != 'rtgsContractorAssignment' 
+								   && document.forms[0].elements[i].name != 'billId' 
+									&& document.forms[0].elements[i].name != 'paymentMode' 
+									&& document.forms[0].elements[i].name != 'billNumber'
+									&& document.forms[0].elements[i].name != 'billSubType' 
+									&& document.forms[0].elements[i].name != 'departmentName' 
+									&& document.forms[0].elements[i].name != 'expenditureType'
+									&& document.forms[0].elements[i].name != 'rtgsdateMap'
+									&& document.forms[0].elements[i].name != 'selectedRowsId'){
+									document.forms[frmIndex].elements[i].disabled =true;
+								}						
+							}	
+					}
+			}		
 			                
 		</script>
 
