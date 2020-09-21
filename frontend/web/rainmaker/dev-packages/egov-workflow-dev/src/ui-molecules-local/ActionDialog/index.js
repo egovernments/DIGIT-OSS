@@ -135,7 +135,7 @@ class ActionDialog extends React.Component {
                   marginTop={16}
                   className="action-container"
                 >
-                  <Grid
+                <Grid
                     style={{
                       alignItems: "center",
                       display: "flex"
@@ -161,7 +161,7 @@ class ActionDialog extends React.Component {
                   >
                     <CloseIcon />
                   </Grid>
-                  {showEmployeeList && (
+                  {process.env.REACT_APP_NAME !== "Citizen" ? showEmployeeList && (
                     <Grid
                       item
                       sm="12"
@@ -188,7 +188,7 @@ class ActionDialog extends React.Component {
                         jsonPath={`${dataPath}.assignee[0]`}
                       />
                     </Grid>
-                  )}
+                  ) : ""}                  
                   <Grid item sm="12">
                     <TextFieldContainer
                       InputLabelProps={{ shrink: true }}
