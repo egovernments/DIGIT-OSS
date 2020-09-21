@@ -92,9 +92,15 @@ class DemandCollection extends React.Component {
                                 type="number"
                                 value={get(preparedFinalObject,`DemandProperties[0].propertyDetails[0].demand[${index}].demand[${data.financialYear}][${index1}].PT_DEMAND`)}
                                 onChange={(e) => {
-                                  if (e.target.value.includes(".")) return
-                                  let value = "";
-                                  value = e.target.value;
+                                  let value;
+                                  if (e.target.value.includes(".")) {
+                                    alert( "Integer numbers are only allowed.");     
+                                    value = '';
+                                    
+                                  } else {
+                                    value = e.target.value;
+                                  }
+                                  return value;
                                   prepareFinalObject(`DemandProperties[0].propertyDetails[0].demand[${index}].demand[${data.financialYear}][${index1}].PT_TAXHEAD`,taxData.code)
                                   prepareFinalObject(`DemandProperties[0].propertyDetails[0].demand[${index}].demand[${data.financialYear}][${index1}].PT_DEMAND`, taxData.isDebit?(Math.sign(value)===-1?value:-value):value)
                                 }}
