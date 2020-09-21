@@ -394,7 +394,7 @@ public class EstimationService {
 				if (((int) ageOfBuilding.get("yearFrom")) <= age && ((int) ageOfBuilding.get("yearTo")) >= age) {
 					return BigDecimal.valueOf(Long.valueOf((int) deprAppr.get("depreciationAppreciation")));
 				}
-			} catch (JSONException e) {
+			} catch (Exception e) {
 				log.error("Error while retriving Depreciation Appreciation", e);
 			}
 
@@ -561,7 +561,7 @@ public class EstimationService {
 		String roadType = (String) additionalDetails.get(ROAD_TYPE_JSON_STRING);
 		// TODO ward
 		BillingSlabSearchCriteria slabSearchCriteria = BillingSlabSearchCriteria.builder().tenantId(tenantId).ward("")
-				.propertyType(detail.getPropertyType()).roadType(roadType)
+				.propertyType(detail.getPropertyType().split(".")[0]).roadType(roadType)
 				.mohalla(property.getAddress().getLocality().getArea()).build();
 
 		List<BillingSlab> billingSlabs = billingSlabService.searchBillingSlabs(requestInfo, slabSearchCriteria)
