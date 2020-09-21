@@ -202,18 +202,18 @@ class WorkFlowContainer extends React.Component {
 
       if (payload) {
         let path = "";
-
         if (moduleName == "PT.CREATE" || moduleName == "ASMT") {
           this.props.setRoute(`/pt-mutation/acknowledgement?${this.getPurposeString(
             label
           )}&moduleName=${moduleName}&applicationNumber=${get(payload, 'Properties[0].acknowldgementNumber', "")}&tenantId=${get(payload, 'Properties[0].tenantId', "")}`);
           return;
         }
-
+        moduleName = moduleName === "NewTL" ? get(payload, "Licenses[0].workflowCode", "") : moduleName;
         if (moduleName === "NewTL") path = "Licenses[0].licenseNumber";
         else if (moduleName === "FIRENOC") path = "FireNOCs[0].fireNOCNumber";
         else path = "Licenses[0].licenseNumber";
         const licenseNumber = get(payload, path, "");
+        const nextFinancialYear = get(payload, "Licenses[0].financialYear", "");
         window.location.href = `acknowledgement?${this.getPurposeString(
           label
         )}&applicationNumber=${applicationNumber}&tenantId=${tenant}&secondNumber=${licenseNumber}`;
@@ -221,7 +221,9 @@ class WorkFlowContainer extends React.Component {
         if (moduleName === "NewWS1" || moduleName === "NewSW1") {
           window.location.href = `acknowledgement?${this.getPurposeString(label)}&applicationNumber=${applicationNumber}&tenantId=${tenant}`;
         }
-
+        if(moduleName === "EDITRENEWAL"){
+          window.location.href = `acknowledgement?purpose=EDITRENEWAL&status=success&applicationNumber=${applicationNumber}&licenseNumber=${licenseNumber}&FY=${nextFinancialYear}&tenantId=${tenant}&action=${moduleName}`;
+        }
       }
     } catch (e) {
       if (moduleName === "BPA") {
@@ -469,7 +471,7 @@ class WorkFlowContainer extends React.Component {
       ProcessInstances,
       prepareFinalObject,
       dataPath,
-      moduleName
+      moduleName      
     } = this.props;
     const workflowContract =
       ProcessInstances &&
@@ -479,7 +481,7 @@ class WorkFlowContainer extends React.Component {
       if(moduleName==='NewWS1'||moduleName==='NewSW1'){
          showFooter=true;
       }
-      else if(moduleName==='NewTL'||moduleName==='NewTL'){
+      else if(moduleName==='NewTL'||moduleName==='EDITRENEWAL'|| moduleName==='DIRECTRENEWAL'){
         showFooter=true;
       }else{
          showFooter=process.env.REACT_APP_NAME === "Citizen" ? false : true;
