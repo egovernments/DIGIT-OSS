@@ -59,29 +59,29 @@ export const floorCount = {
     required: true,
     numcols: 6,
     dropDownData: floorDropDownData,
-    updateDependentFields: floorUtilFunction,
+    updateDependentFields: ({ formKey, field, dispatch, state }) => {
+       //removeFormKey(formKey, field, dispatch, state);
+       var previousFloorNo = localStorageGet("previousFloorNo") || -1;
+    localStorageSet("previousFloorNo", field.value);
+    // dispatch(toggleSpinner());
+    if (previousFloorNo > field.value) {
+      for (var i = field.value; i < previousFloorNo; i++) {
+        if (state.form.hasOwnProperty(`customSelect_${i}`)) {
+          dispatch(removeForm(`customSelect_${i}`));
+        }
+        for (var variable in state.form) {
+          if (state.form.hasOwnProperty(variable) && variable.startsWith(`floorDetails_${i}`)) {
+            dispatch(removeForm(variable));    
+          }
+        }
+      }
+    } 
+    
+  
+    },
   },
 };
 
-export const floorUtilFunction=({ formKey, field, dispatch, state }) => {
-  // removeFormKey(formKey, field, dispatch, state);
-  var previousFloorNo = localStorageGet("previousFloorNo") || -1;
-  localStorageSet("previousFloorNo", field.value);
-  // dispatch(toggleSpinner());
-  if (previousFloorNo > field.value) {
-    for (var i = field.value; i < previousFloorNo; i++) {
-      if (state.form.hasOwnProperty(`customSelect_${i}`)) {
-        dispatch(removeForm(`customSelect_${i}`));
-      }
-      for (var variable in state.form) {
-        if (state.form.hasOwnProperty(variable) && variable.startsWith(`floorDetails_${i}`)) {
-          dispatch(removeForm(variable));       
-        }
-      }
-    }
-  }
-
-}
 
 export const subUsageType = {
   subUsageType: {
@@ -393,7 +393,8 @@ export const beforeInitForm = {
     const { form } = action;
     const { name: formKey, fields } = form;
     const propertyType = get(state, "form.basicInformation.fields.typeOfBuilding.value");
-    const { Floor } = state.common && state.common.generalMDMSDataById;
+    
+   const { Floor } = state.common && state.common.generalMDMSDataById;
     if (get(action, "form.fields.floorName")) {
       if (propertyType === "SHAREDPROPERTY") {
         set(action, "form.fields.floorName.hideField", false);
@@ -434,6 +435,9 @@ export const beforeInitForm = {
         set(action, "form.fields", { ...updatedFields });
         if (!state.form[formKey]) {
           const customSelectObj = state.form[`customSelect_${floorIndex}`];
+
+          console.log("prasad customSelectObj", customSelectObj);
+
           const floorNo = customSelectObj.fields && customSelectObj.fields.floorName && customSelectObj.fields.floorName.value;
           dispatch(prepareFormData(`Properties[0].propertyDetails[0].units[${unitsCount}].floorNo`, `${floorNo}`));
         }
@@ -662,7 +666,7 @@ export const beforeInitFormForPlot = {
         set(action, "form.fields.bathroomArea.hideField", false);
       } */
     }
-    return action;
+       return action;
   },
 };
 
