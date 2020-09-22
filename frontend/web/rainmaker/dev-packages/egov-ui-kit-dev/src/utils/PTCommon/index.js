@@ -340,11 +340,12 @@ export const getEstimateFromBill = (bill) => {
 };
 
 export const transformPropertyDataToAssessInfo = (data) => {
+
   const propertyType = data["Properties"][0]["propertyDetails"][0]["propertyType"];
   const propertySubType = data["Properties"][0]["propertyDetails"][0]["propertySubType"];
   const usageCategoryMajor = data["Properties"][0]["propertyDetails"][0]["usageCategoryMajor"];
   const usageCategoryMinor = data["Properties"][0]["propertyDetails"][0]["usageCategoryMinor"];
-  const propType = propertySubType === null ? propertyType : propertySubType;
+  const propType = propertyType;
   const propUsageType = usageCategoryMinor == null ? usageCategoryMajor : usageCategoryMinor;
   const formConfigPath = getPlotAndFloorFormConfigPath(propUsageType, propType);
   const path = formConfigPath["path"];

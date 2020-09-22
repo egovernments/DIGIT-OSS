@@ -205,7 +205,6 @@ class Property extends Component {
         "error"
       );
     } else {
-      console.log("prasad navigating to edit screen");
       this.props.history.push(getPropertyLink(propertyId, tenantId, PROPERTY_FORM_PURPOSE.UPDATE, -1, assessmentNo));
       // this.setState({
       //   dialogueOpen: true,

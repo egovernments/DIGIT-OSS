@@ -111,7 +111,16 @@ const formConfig = {
       masterOne = Object.values(get(state, "common.generalMDMSDataById.PropertyType")).filter(item=> item.code !== "BUILTUP");
       masterTwo = get(state, "common.generalMDMSDataById.PropertySubType");
       set(action, "form.fields.typeOfBuilding.dropDownData", mergeMaster(masterOne, masterTwo, "propertyType"));
-      const propertyType=get(state,"common.prepareFormData.Properties[0].propertyDetails[0].propertySubType");
+      const propertyType=get(state,"common.prepareFormData.Properties[0].propertyDetails[0].propertyType");
+      const cDate=get(state,"common.prepareFormData.Properties[0].additionalDetails.constructionYear");
+     
+      if (propertyType ) {
+        set(action, "form.fields.typeOfBuilding.value", propertyType)
+      }      
+      if (cDate) {
+        set(action, "form.fields.datePicker.value", cDate);
+      }    
+
       if (propertyType && propertyType==="VACANT") {
         set(action, "form.fields.datePicker.hideField", true);
       }
