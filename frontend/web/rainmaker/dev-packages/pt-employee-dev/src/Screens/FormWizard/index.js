@@ -432,7 +432,7 @@ class FormWizard extends Component {
     switch (ownerType) {
       case "INDIVIDUAL.SINGLEOWNER":
         return <OwnerInfoHOC disabled={propertiesEdited} />;
-      case "MULTIPLEOWNERS":
+      case "INDIVIDUAL.MULTIPLEOWNERS":
         return (
           <MultipleOwnerInfoHOC
             addOwner={() => {
@@ -1637,6 +1637,12 @@ class FormWizard extends Component {
     {
       set(propertyPayload, "ownershipCategory",'INDIVIDUAL.SINGLEOWNER');
     }
+
+    if(ownershipCategory==="INDIVIDUAL.INDIVIDUAL.MULTIPLEOWNERS")
+    {
+      set(propertyPayload, "ownershipCategory",'INDIVIDUAL.MULTIPLEOWNERS');
+    }
+
     if(usageCategory==="RESIDENTIAL.RESIDENTIAL")
     {
       set(propertyPayload, "usageCategory",'RESIDENTIAL');
@@ -1780,7 +1786,7 @@ class FormWizard extends Component {
       );
     }
 
-    if (selectedownerShipCategoryType === "MULTIPLEOWNERS") {
+    if (selectedownerShipCategoryType === "INDIVIDUAL.MULTIPLEOWNERS") {
       set(
         prepareFormData,
         "Properties[0].propertyDetails[0].owners",

@@ -326,7 +326,7 @@ export const callDraft = async (self, formArray = [], assessmentNumber = "") => 
         get(common, `generalMDMSDataById.SubOwnerShipCategory[${selectedownerShipCategoryType}].ownerShipCategory`, "INDIVIDUAL")
       );
       set(prepareFormData, "Properties[0].propertyDetails[0].subOwnershipCategory", selectedownerShipCategoryType);
-    } else if (selectedownerShipCategoryType === "MULTIPLEOWNERS") {
+    } else if (selectedownerShipCategoryType === "INDIVIDUAL.MULTIPLEOWNERS") {
       set(prepareFormData, "Properties[0].propertyDetails[0].owners", getMultipleOwnerInfo(self));
       set(
         prepareFormData,

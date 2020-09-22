@@ -2144,6 +2144,10 @@ class FormWizardDataEntry extends Component {
       {
         set(propertyPayload, "ownershipCategory",'INDIVIDUAL.SINGLEOWNER');
       }
+      if(ownershipCategory==="INDIVIDUAL.INDIVIDUAL.MULTIPLEOWNERS")
+      {
+        set(propertyPayload, "ownershipCategory",'INDIVIDUAL.MULTIPLEOWNERS');
+      }
       if(usageCategory==="RESIDENTIAL.RESIDENTIAL")
       {
         set(propertyPayload, "usageCategory",'RESIDENTIAL');
