@@ -561,8 +561,8 @@ public class EstimationService {
 		String roadType = (String) additionalDetails.get(ROAD_TYPE_JSON_STRING);
 		// TODO ward
 		BillingSlabSearchCriteria slabSearchCriteria = BillingSlabSearchCriteria.builder().tenantId(tenantId).ward("")
-				.propertyType(detail.getPropertyType().split(".")[0]).roadType(roadType)
-				.mohalla(property.getAddress().getLocality().getArea()).build();
+				.propertyType(detail.getPropertyType()).roadType(roadType)
+				.mohalla(property.getAddress().getLocality().getCode()).build();
 
 		List<BillingSlab> billingSlabs = billingSlabService.searchBillingSlabs(requestInfo, slabSearchCriteria)
 				.getBillingSlab();
