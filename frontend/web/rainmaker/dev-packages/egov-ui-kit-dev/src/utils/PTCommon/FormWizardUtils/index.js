@@ -292,6 +292,8 @@ export const convertToOldPTObject = (newObject) => {
     //   builtUpArea: unit.unitArea,
     // };
     unit.unitArea = unit.constructionDetail.builtUpArea;
+    unit.ConstructionType = unit.constructionDetail.constructionType;
+
     return { ...unit }
   })
   property["propertyDetails"] = [propertyDetails];
@@ -462,7 +464,9 @@ export const getTargetPropertiesDetails = (propertyDetails, self) => {
     selectedPropertyDetails[lastIndex].buildUpArea =
       selectedPropertyDetails[lastIndex] &&
       selectedPropertyDetails[lastIndex].buildUpArea &&
-      convertBuiltUpAreaToSqFt(selectedPropertyDetails[lastIndex].buildUpArea);
+      //convertBuiltUpAreaToSqFt(selectedPropertyDetails[lastIndex].buildUpArea);
+      selectedPropertyDetails[lastIndex].buildUpArea;
+
   }
   selectedPropertyDetails[lastIndex].units =
     //selectedPropertyDetails[lastIndex] && selectedPropertyDetails[lastIndex].units && convertUnitsToSqFt(selectedPropertyDetails[lastIndex].units);
