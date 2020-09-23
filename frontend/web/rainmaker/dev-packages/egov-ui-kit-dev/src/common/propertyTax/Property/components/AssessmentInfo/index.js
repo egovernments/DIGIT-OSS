@@ -198,7 +198,13 @@ const getUnitInfo = (units = []) => {
   
         key: getTranslatedLabel("PT_FORM2_BUILT_AREA", localizationLabelsData),
         value: unit.unitArea ? unit.unitArea + '' : "NA",
-      }];
+      },
+      {
+        key: getTranslatedLabel("PT_ASSESMENT_INFO_CONSTRUCTION_TYPE", localizationLabelsData),
+        value: (unit.constructionType||unit.ConstructionType) ? 'PROPERTYTAX_CONSTRUCTIONTYPE_' + (unit.constructionType||unit.ConstructionType) : "NA",
+      },
+    
+    ];
       if (unit.occupancyType === "RENTED") {
         floor.push({
           key: getTranslatedLabel("PT_FORM2_TOTAL_ANNUAL_RENT", localizationLabelsData),
