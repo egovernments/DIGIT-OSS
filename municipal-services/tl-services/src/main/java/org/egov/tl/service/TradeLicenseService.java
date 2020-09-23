@@ -325,6 +325,23 @@ public class TradeLicenseService {
         
     }
 
+    public List<TradeLicense> plainSearch(TradeLicenseSearchCriteria criteria, RequestInfo requestInfo){
+
+        if(criteria.getLimit() == null)
+            criteria.setLimit(config.getDefaultLimit());
+
+        if (criteria.getLimit() != null && criteria.getLimit() > config.getMaxSearchLimit())
+            criteria.setLimit(config.getMaxSearchLimit());
+
+        List<String> ids = repository.fetchTradeLicenseIds(criteria);
+        if (ids.isEmpty())
+            return Collections.emptyList();
+
+        TradeLicenseSearchCriteria newCriteria = TradeLicenseSearchCriteria.builder().ids(ids).build();
+        List<TradeLicense> licenses = repository.getPlainLicenseSearch(newCriteria);
+        licenses = enrichmentService.enrichTradeLicenseSearch(licenses,newCriteria,requestInfo);
+        return licenses;
+    }
 
     /**
      *

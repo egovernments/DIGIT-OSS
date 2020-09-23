@@ -250,6 +250,19 @@ public class TLQueryBuilder {
         }
     }
 
+    public String getTLPlainSearchQuery(TradeLicenseSearchCriteria criteria, List<Object> preparedStmtList) {
+		StringBuilder builder = new StringBuilder(QUERY);	
+
+        List<String> ids = criteria.getIds();
+		if (!CollectionUtils.isEmpty(ids)) {
+            addClauseIfRequired(preparedStmtList,builder);
+			builder.append(" tl.id IN (").append(createQuery(ids)).append(")");
+			addToPreparedStatement(preparedStmtList, ids);
+		}
+		
+        return builder.toString();
+
+    }
 
 
 
