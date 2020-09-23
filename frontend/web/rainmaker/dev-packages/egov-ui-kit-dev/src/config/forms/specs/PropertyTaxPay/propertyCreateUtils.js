@@ -34,6 +34,7 @@ export const createPropertyPayload = (properties, documentsUploadRedux, newPrope
   properties[0].units && properties[0].units.map((unit) => {
     unit.constructionDetail = {
       builtUpArea: unit.unitArea,
+     constructionType:unit.ConstructionType
     };
     unit.tenantId = properties[0].tenantId;
      unit.usageCategory =
