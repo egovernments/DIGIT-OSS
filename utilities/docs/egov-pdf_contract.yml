@@ -1,0 +1,246 @@
+openapi: 3.0.1
+info:
+  title: Egov-pdf service
+  description: APIs available in Egov-pdf service to get different pdfs
+  contact:
+    name: Abhishek Jain
+  version: 1.0.0
+servers:
+- url: /egov-pdf/download
+paths:
+  /PT/ptreceipt:
+    post:
+      tags:
+      - egov-pdf endpoints
+      summary: get property payment receipt pdf
+      parameters:
+      - name: uuid
+        in: query
+        description: The uuid of property
+        required: true
+        schema:
+          type: string
+      - name: tenantId
+        in: query
+        description: The tenantId for property
+        required: true
+        schema:
+          type: string
+      responses:
+        201:
+          description: pdf binary in response
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        400:
+          description: if incorrect request
+          content: {}
+        404:
+          description: records not found
+          content: {}
+        500:
+          description: error occurred on server
+          content: {}
+  /PT/ptbill:
+    post:
+      tags:
+      - egov-pdf endpoints
+      summary: get property bill pdf
+      parameters:
+      - name: uuid
+        in: query
+        description: The uuid of property
+        required: true
+        schema:
+          type: string
+      - name: tenantId
+        in: query
+        description: The tenantId for property
+        required: true
+        schema:
+          type: string
+      responses:
+        201:
+          description: pdf binary in response
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        400:
+          description: if incorrect request
+          content: {}
+        404:
+          description: records not found
+          content: {}
+        500:
+          description: error occurred on server
+          content: {}
+  /PT/ptmutationcertificate:
+    post:
+      tags:
+      - egov-pdf endpoints
+      summary: get property mutation certificate pdf
+      parameters:
+      - name: uuid
+        in: query
+        description: The uuid of property
+        required: true
+        schema:
+          type: string
+      - name: tenantId
+        in: query
+        description: The tenantId for property
+        required: true
+        schema:
+          type: string
+      responses:
+        201:
+          description: pdf binary in response
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        400:
+          description: if incorrect request
+          content: {}
+        404:
+          description: records not found
+          content: {}
+        500:
+          description: error occurred on server
+          content: {}
+  /TL/tlrenewalcertificate:
+    post:
+      tags:
+      - egov-pdf endpoints
+      summary: get tradeicense renewal certificate pdf
+      parameters:
+      - name: applicationNumber
+        in: query
+        description: The applicationNumber of tradelicense
+        required: true
+        schema:
+          type: string
+      - name: tenantId
+        in: query
+        description: The tenantId for tradelicense
+        required: true
+        schema:
+          type: string
+      responses:
+        201:
+          description: pdf binary in response
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        400:
+          description: if incorrect request
+          content: {}
+        404:
+          description: records not found
+          content: {}
+        500:
+          description: error occurred on server
+          content: {}
+  /TL/tlcertificate:
+    post:
+      tags:
+      - egov-pdf endpoints
+      summary: get tradelicense certificate pdf
+      parameters:
+      - name: applicationNumber
+        in: query
+        description: The applicationNumber of tradelicense
+        required: true
+        schema:
+          type: string
+      - name: tenantId
+        in: query
+        description: The tenantId for tradelicense
+        required: true
+        schema:
+          type: string
+      responses:
+        201:
+          description: pdf binary in response
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        400:
+          description: if incorrect request
+          content: {}
+        404:
+          description: records not found
+          content: {}
+        500:
+          description: error occurred on server
+          content: {}
+  /TL/tlreceipt:
+    post:
+      tags:
+      - egov-pdf endpoints
+      summary: get tradelicense payment receipt pdf
+      parameters:
+      - name: applicationNumber
+        in: query
+        description: The applicationNumber of tradelicense
+        required: true
+        schema:
+          type: string
+      - name: tenantId
+        in: query
+        description: The tenantId for tradelicense
+        required: true
+        schema:
+          type: string
+      responses:
+        201:
+          description: message forwarded to chatbot sucessfully.
+          content: {}
+        400:
+          description: Error
+          content: {}
+  /PAYMENT/consolidatedreceipt:
+    post:
+      tags:
+      - egov-pdf endpoints
+      summary: get consolidated payment receipt pdf
+      parameters:
+      - name: consumerCode
+        in: query
+        description: The consumer code for payment
+        required: true
+        schema:
+          type: string
+      - name: tenantId
+        in: query
+        description: The tenantId for payment
+        required: true
+        schema:
+          type: string
+      responses:
+        201:
+          description: pdf binary in response
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        400:
+          description: if incorrect request
+          content: {}
+        404:
+          description: records not found
+          content: {}
+        500:
+          description: error occurred on server
+          content: {}
+components: {}
