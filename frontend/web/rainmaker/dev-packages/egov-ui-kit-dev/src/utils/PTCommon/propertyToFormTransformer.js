@@ -53,7 +53,6 @@ export const getOwnerShipDetails = (property) => {
 // }
 
 export const getAllOwnerDetails = (property, isSingleOwner = false) => {
-  debugger;
   const ownerDataFromApi = get(property, "propertyDetails[0].owners", []);
   let ownerForms = {};
   ownerDataFromApi.forEach((ownerDetails, index) => {
@@ -116,7 +115,6 @@ export const getAssesmentDetails = (propertyResponse) => {
 };
 
 export const convertRawDataToFormConfig = (propertyResponse) => {
-  debugger;
   const { Properties } = propertyResponse;
   let properties = Properties;
 
