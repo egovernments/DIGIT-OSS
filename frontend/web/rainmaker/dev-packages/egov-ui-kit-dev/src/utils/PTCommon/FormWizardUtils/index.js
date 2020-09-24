@@ -825,8 +825,8 @@ export const validateUnitandPlotSize = (plotDetails, form) => {
       prepareFormData.Properties.length > 0 &&
       get(prepareFormData, "Properties[0].propertyDetails[0].additionalDetails.constructionYear", null)
     ) {
-      basicInformation.fields.datePicker.value = prepareFormData.Properties[0].propertyDetails[0].additionalDetails.constructionYear;
-    }
+      basicInformation.fields.datePicker.value = new Date(prepareFormData.Properties[0].propertyDetails[0].additionalDetails.constructionYear);
+      }
   }
   if (plotDetails) {
     for (let i = 0; i < get(plotDetails, "fields.floorCount.value", 0); i++) {
