@@ -71,6 +71,38 @@ const formatTaxHeaders = (billDetail = {},businesService) => {
   return totalInterest -currentYearInterest.length === 0 ? 0 :  currentYearInterest[0] && currentYearInterest[0].amount;
 }; 
 
+const addRoundOffToFee = (fees, billDetails) => {
+  let totalRoundOff = 0;
+  let feeContainsRoundOff = false;
+  
+  billDetails.forEach( (billDetail) => {
+    billDetail.billAccountDetails.forEach( (billAccountDetail)=> {
+      if (billAccountDetail.taxHeadCode === "PT_ROUNDOFF") {
+        totalRoundOff = totalRoundOff + billAccountDetail.amount;
+      }
+    });
+  });
+  fees.forEach( (fee)=> {
+    if (fee.name.labelKey === "PT_ROUNDOFF") {
+      feeContainsRoundOff = true;
+      fee.value = totalRoundOff;
+    }
+  });
+  if (!feeContainsRoundOff) {
+    fees.push({
+      info: {
+        labelKey: "PT_ROUNDOFF",
+        labelName: "PT_ROUNDOFF"
+      },
+      name: {
+        labelKey: "PT_ROUNDOFF",
+        labelName: "PT_ROUNDOFF"
+      },
+      value: totalRoundOff
+    });
+  }
+};
+
  const addRebateToFee = (fees, billDetails) => {
   let totalRebate = 0;
   let feeContainsPtRebate = false;
@@ -205,6 +237,7 @@ const mapStateToProps = (state, ownProps) => {
     totalAmount = totalAmount + billDetails[i].amount;   
   }
    addInterestToFee(fees, billDetails);
+   addRoundOffToFee(fees, billDetails);
    addRebateToFee(fees, billDetails);
    addProRebateToFee(fees, billDetails);
    addSwatToFee(fees, billDetails);
