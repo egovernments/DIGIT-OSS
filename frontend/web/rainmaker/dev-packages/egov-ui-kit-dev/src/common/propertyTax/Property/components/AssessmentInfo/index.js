@@ -6,6 +6,7 @@ import Label from "egov-ui-kit/utils/translationNode";
 import { initLocalizationLabels } from "egov-ui-kit/redux/app/utils";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import PropertyInfoCard from "../PropertyInfoCard";
+import moment from "moment";
 
 const locale = getLocale() || "en_IN";
 const localizationLabelsData = initLocalizationLabels(locale);
@@ -143,7 +144,10 @@ const transform = (floor, key, generalMDMSDataById, propertyDetails) => {
 //     );
 //   };
 const getAssessmentInfo = (propertyDetails, generalMDMSDataById) => {
-  const { units=[], noOfFloors } = propertyDetails || {};
+  //const { units=[], noOfFloors } = propertyDetails || {};
+
+  const { units = [], noOfFloors,additionalDetails={} } = propertyDetails || {};
+  var construction_date =(additionalDetails && additionalDetails.constructionYear)? moment(additionalDetails.constructionYear).format('DD-MM-YYYY'):null;
 
   return (
     propertyDetails && [
@@ -176,9 +180,15 @@ const getAssessmentInfo = (propertyDetails, generalMDMSDataById) => {
         {
           key: getTranslatedLabel("PT_ASSESMENT_INFO_NO_OF_FLOOR", localizationLabelsData),
           value: noOfFloors ? `${noOfFloors}` : "NA", //noOfFloors
-        },
-    ]
-  );
+        }, 
+        {
+          key: getTranslatedLabel("PT_ASSESMENT_INFO_CONSTRUCTION_DATE", localizationLabelsData),
+        value: construction_date ? `${construction_date}` : "NA",
+        }
+        
+    ]);
+    
+  
 };
 
 const getUnitInfo = (units = []) => {
