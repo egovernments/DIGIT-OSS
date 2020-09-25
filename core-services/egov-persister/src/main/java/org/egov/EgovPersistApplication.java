@@ -75,7 +75,7 @@ public class EgovPersistApplication {
             String[] fileName = name.split("[.]");
             if (fileTypes.contains(fileName[fileName.length - 1])) {
                 log.debug(" Resolving folder....:- " + name);
-                configFolderList.add(file.getAbsolutePath());
+                configFolderList.add(file.toURI().toString());
             }
 
         }
