@@ -626,9 +626,10 @@ export const getCalculationScreenData = async (billingSlabs, tenantId, self) => 
   const filteredUnitsArray = unitsArray && unitsArray.filter((item) => item !== null);
   const mapIdWithIndex = billingSlabs.reduce(
     (res, curr) => {
+      let i =0;
       const obj = {
         id: curr.split("|")[0],
-        index: curr.split("|")[1],
+        index: curr.split("|")[1]? curr.split("|")[1] :i++,
       };
       res["mappedIds"].push(obj);
       res["idsArray"].push(curr.split("|")[0]);
