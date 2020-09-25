@@ -97,7 +97,9 @@ public class TranslationService {
         propertyDetail.put("propertyType", propertyType);
         propertyDetail.put("propertySubType", propertySubType);
         propertyDetail.put("assessmentNumber", assessment.getAssessmentNumber());
-        propertyDetail.put("assessmentDate", assessment.getAssessmentDate());
+        propertyDetail.put("assessmentDate", assessment.getAssessmentDate());        
+        propertyDetail.put("source", assessment.getSource().toString());
+        propertyDetail.put("additionalDetails", property.getAdditionalDetails());
 
         if(assessment.getAdditionalDetails()!=null){
 
