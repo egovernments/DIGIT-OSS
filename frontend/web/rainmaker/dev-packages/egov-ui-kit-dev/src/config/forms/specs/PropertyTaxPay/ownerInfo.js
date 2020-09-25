@@ -235,7 +235,27 @@ const formConfig = {
       const {common={}}=state;
       const {prepareFormData={}}=common;
       const OwnerTypes = get(state, `common.generalMDMSDataById.OwnerType`);
-      const finalData=getFinalData();
+      //const finalData=getFinalData();
+      
+      const TaxPeriod = get(common, `loadMdmsData.BillingService.TaxPeriod`);
+    
+      let yeardata = [];
+      let taxData = [];
+      const data = Object.keys(TaxPeriod).map((key, index) => {
+        yeardata.push(TaxPeriod[key]);
+      });
+      
+      let yeardata1 = yeardata.filter(yearKey => yearKey.service === "PT");
+      let taxdata1 =
+        taxData.filter(tax => tax.service === "PT" && tax.legacy == true) || [];
+      taxdata1.length > 0 &&
+        taxdata1.sort(function(a, b) {
+          return a.order - b.order;
+        });
+      const finalData = Object.keys(yeardata1).map((data, key) => {
+        yeardata1[data]["taxHead"] = [...taxdata1];
+        return yeardata[data];
+      });      
       const finalYear=finalData[0].financialYear;
 
       // let financialYearFromQuery = window.location.search.split("FY=")[1];
