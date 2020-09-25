@@ -1928,6 +1928,20 @@ public class CreateVoucher {
 				} else
 					accDetAmtMap.put(VoucherConstant.CREDIT + glcode, creditAmount);
 		}
+		String creditglcode=null;
+                String debitglcode=null;
+                Set<String> creditAndDebitGlcodesList=accDetAmtMap.keySet();
+                for(String glcodes:creditAndDebitGlcodesList)
+                if (glcodes.contains(VoucherConstant.DEBIT)) {
+                    String[] debitGlcodes=glcodes.split("-");
+                    debitglcode=debitGlcodes[1];
+                } else  if (glcodes.contains(VoucherConstant.CREDIT)) {
+                            String[] creditGlcodes=glcodes.split("-");
+                            creditglcode=creditGlcodes[1];
+                }
+                if (debitglcode.equalsIgnoreCase(creditglcode)) {
+                    throw new ApplicationRuntimeException("One account can have only credit or debit for the account code" ); 
+                }
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("Total Debit  amount   :" + totaldebitAmount);
 		if (LOGGER.isDebugEnabled())
