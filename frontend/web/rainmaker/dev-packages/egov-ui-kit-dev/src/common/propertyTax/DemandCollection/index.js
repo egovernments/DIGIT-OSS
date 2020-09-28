@@ -91,13 +91,29 @@ class DemandCollection extends React.Component {
                                 // max={taxData.isDebit?-1:0}
                                 type="number"
                                 value={get(preparedFinalObject,`DemandProperties[0].propertyDetails[0].demand[${index}].demand[${data.financialYear}][${index1}].PT_DEMAND`)}
-                                onChange={(e) => {
-                                  if (e.target.value.includes(".")) return
-                                  let value = "";
-                                  value = e.target.value;
+                                onChange={(e) => {  
+                                 
+                                   let value = "";
+                                  /*value = e.target.value;
+                                  if(e.target.value.includes("."))
+                                  {
+                                     
+                                    value = '';
+                                    alert( "Integer numbers are only allowed.");  
+                                        
+                                  } */
+                                  if (e.target.value.includes(".")) 
+                                  {  
+                                   alert( "Integer numbers are only allowed.");
+                                   return value = "" ;
+                                  }
+                                  value = e.target.value;                                
                                   prepareFinalObject(`DemandProperties[0].propertyDetails[0].demand[${index}].demand[${data.financialYear}][${index1}].PT_TAXHEAD`,taxData.code)
                                   prepareFinalObject(`DemandProperties[0].propertyDetails[0].demand[${index}].demand[${data.financialYear}][${index1}].PT_DEMAND`, taxData.isDebit?(Math.sign(value)===-1?value:-value):value)
-                                }}
+                                                            	
+                                   }
+
+                                  }
                                 onWheel={event => { event.preventDefault(); }}
                               />
                             </div>
