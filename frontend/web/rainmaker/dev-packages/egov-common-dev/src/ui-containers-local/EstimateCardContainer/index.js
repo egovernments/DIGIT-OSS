@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { FeesEstimateCard } from "../../ui-molecules-local";
 import { connect } from "react-redux";
+import {getFinalData} from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 
 class EstimateCardContainer extends Component {
@@ -189,16 +190,24 @@ const mapStateToProps = (state, ownProps) => {
   let totalAmount = 0;
   let current = 0;
   let arrears=0;
+
+  const finalData=getFinalData();
+
+  const latestYear = finalData[0].fromDate;
   if(businesService=="PT")
-  {
-  for (let i = 1; billDetails && i<billDetails.length;i++) {
+  {  
+  for (let i = 0; billDetails && i<billDetails.length;i++) {
       for (let j = 0; billDetails[i].billAccountDetails && j<billDetails[i].billAccountDetails.length;j++)
       {
         if(billDetails[i].billAccountDetails[j].taxHeadCode=== "PT_TAX")
         {      
-          arrears = arrears+ billDetails[i].billAccountDetails[j].amount;                  
+          if(billDetails[i].fromPeriod!==latestYear)
+            {
+              arrears = arrears+ billDetails[i].billAccountDetails[j].amount;  
+            }
         } 
-    }
+    }  
+   
     
   }
   for (let i = 0; billDetails && i<billDetails.length;i++) {
