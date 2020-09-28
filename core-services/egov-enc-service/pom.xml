@@ -73,6 +73,12 @@
       <artifactId>bcprov-jdk15on</artifactId>
       <version>1.60</version>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-kms -->
+    <dependency>
+      <groupId>com.amazonaws</groupId>
+      <artifactId>aws-java-sdk-kms</artifactId>
+      <version>1.11.762</version>
+    </dependency>
   </dependencies>
   <repositories>
     <repository>

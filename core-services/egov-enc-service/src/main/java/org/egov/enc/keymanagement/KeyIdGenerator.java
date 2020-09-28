@@ -13,7 +13,7 @@ import java.security.Security;
 import java.util.ArrayList;
 
 @Component
-@Order(2)
+@Order(3)
 public class KeyIdGenerator implements ApplicationRunner {
 
     private SecureRandom secureRandom;

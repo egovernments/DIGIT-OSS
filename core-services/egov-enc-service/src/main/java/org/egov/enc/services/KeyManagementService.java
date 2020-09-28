@@ -64,7 +64,7 @@ public class KeyManagementService implements ApplicationRunner {
     }
 
     //Check if a given tenantId exists
-    public boolean checkIfTenantExists(String tenant) throws BadPaddingException, InvalidKeyException, NoSuchAlgorithmException, IllegalBlockSizeException, NoSuchPaddingException, InvalidAlgorithmParameterException {
+    public boolean checkIfTenantExists(String tenant) throws Exception {
         if(keyStore.getTenantIds().contains(tenant)) {
             return true;
         }
@@ -73,7 +73,7 @@ public class KeyManagementService implements ApplicationRunner {
     }
 
     //Generate Symmetric and Asymmetric Keys for each of the TenantId in the given input list
-    private void generateKeys(ArrayList<String> tenantIds) throws BadPaddingException, InvalidKeyException, NoSuchAlgorithmException, IllegalBlockSizeException, NoSuchPaddingException, InvalidAlgorithmParameterException {
+    private void generateKeys(ArrayList<String> tenantIds) throws Exception {
 
         int status;
         ArrayList<SymmetricKey> symmetricKeys = keyGenerator.generateSymmetricKeys(tenantIds);
@@ -95,7 +95,7 @@ public class KeyManagementService implements ApplicationRunner {
 
     //Generate keys if there are any new tenants
     //Returns the number of tenants for which the keys have been generated
-    private int generateKeyForNewTenants() throws JSONException, BadPaddingException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, IllegalBlockSizeException, NoSuchPaddingException, InvalidKeyException {
+    private int generateKeyForNewTenants() throws Exception {
         Collection<String> tenantIdsFromMdms = makeComprehensiveListOfTenantIds();
         tenantIdsFromMdms.removeAll(keyStore.getTenantIds());
 
@@ -131,16 +131,13 @@ public class KeyManagementService implements ApplicationRunner {
     }
 
     //Deactivate old keys and generate new keys for every tenantId
-    public RotateKeyResponse rotateAllKeys() throws JSONException, BadPaddingException, InvalidKeyException,
-            NoSuchAlgorithmException, IllegalBlockSizeException, NoSuchPaddingException, InvalidAlgorithmParameterException {
+    public RotateKeyResponse rotateAllKeys() throws Exception {
         deactivateOldKeys();
         generateKeyForNewTenants();
         return new RotateKeyResponse(true);
     }
 
-    public RotateKeyResponse rotateKey(RotateKeyRequest rotateKeyRequest) throws BadPaddingException,
-            InvalidKeyException, NoSuchAlgorithmException, IllegalBlockSizeException, NoSuchPaddingException,
-            InvalidAlgorithmParameterException {
+    public RotateKeyResponse rotateKey(RotateKeyRequest rotateKeyRequest) throws Exception {
         int status;
         status = keyRepository.deactivateSymmetricKeyForGivenTenant(rotateKeyRequest.getTenantId());
         log.info("Key Rotate SYM Return Status: " + status);

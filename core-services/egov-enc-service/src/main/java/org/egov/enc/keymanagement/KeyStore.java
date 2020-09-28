@@ -3,11 +3,11 @@ package org.egov.enc.keymanagement;
 import lombok.Getter;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.egov.enc.config.AppProperties;
+import org.egov.enc.keymanagement.masterkey.MasterKeyProvider;
 import org.egov.enc.models.AsymmetricKey;
 import org.egov.enc.models.MethodEnum;
 import org.egov.enc.models.SymmetricKey;
 import org.egov.enc.repository.KeyRepository;
-import org.egov.enc.utils.SymmetricEncryptionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -15,12 +15,9 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.*;
-import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
-import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;
-import java.security.spec.KeySpec;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
@@ -38,7 +35,7 @@ import java.util.HashMap;
 
 
 @Component
-@Order(1)
+@Order(2)
 public class KeyStore implements ApplicationRunner {
 
     @Autowired
@@ -47,6 +44,9 @@ public class KeyStore implements ApplicationRunner {
     private KeyRepository keyRepository;
     @Getter
     private ArrayList<String> tenantIds;
+
+    @Autowired
+    private MasterKeyProvider masterKeyProvider;
 
     private static ArrayList<SymmetricKey> symmetricKeys;
     private static ArrayList<AsymmetricKey> asymmetricKeys;
@@ -57,39 +57,13 @@ public class KeyStore implements ApplicationRunner {
     private static HashMap<String, Integer> activeSymmetricKeys;
     private static HashMap<String, Integer> activeAsymmetricKeys;
 
-    private SecretKey masterKey;
-    private byte[] masterInitialVector;
-
-
     @Autowired
     public KeyStore()  {
         Security.addProvider(new BouncyCastleProvider());
     }
 
-    //Master Key will be used to decrypt the keys read from the database
-    private void initializeMasterKey() throws NoSuchAlgorithmException, InvalidKeySpecException {
-        String masterPassword = appProperties.getMasterPassword();
-
-        char[] masterSalt = appProperties.getMasterSalt().toCharArray();
-        byte[] salt = new byte[8];
-        for(int i = 0; i < salt.length; i++) {
-            salt[i] = (byte) masterSalt[i];
-        }
-
-        char[] masterIV = appProperties.getMasterInitialVector().toCharArray();
-        masterInitialVector = new byte[appProperties.getInitialVectorSize()];
-        for(int i = 0; i < masterInitialVector.length; i++) {
-            masterInitialVector[i] = (byte) masterIV[i];
-        }
-
-        SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
-        KeySpec spec = new PBEKeySpec(masterPassword.toCharArray(), salt, 65536, 256);
-        SecretKey tmp = factory.generateSecret(spec);
-        masterKey = new SecretKeySpec(tmp.getEncoded(), "AES");
-    }
-
     //Reset and Initialize all the keys and HashMaps from the database
-    public void refreshKeys() throws BadPaddingException, InvalidKeyException, NoSuchAlgorithmException, IllegalBlockSizeException, NoSuchPaddingException, InvalidAlgorithmParameterException {
+    public void refreshKeys() throws Exception {
         tenantIds = (ArrayList<String>) keyRepository.fetchDistinctTenantIds();
 
         symmetricKeys = (ArrayList<SymmetricKey>) this.keyRepository.fetchSymmetricKeys();
@@ -202,21 +176,15 @@ public class KeyStore implements ApplicationRunner {
         return Base64.getDecoder().decode(symmetricKey.getInitialVector());
     }
 
-    //Decrypt the key read from the database with the use of master password
-    private String decryptWithMasterPassword(String encryptedKey) throws NoSuchAlgorithmException, IllegalBlockSizeException, InvalidKeyException, BadPaddingException, InvalidAlgorithmParameterException, NoSuchPaddingException {
-        byte[] decryptedKey = SymmetricEncryptionUtil.decrypt(Base64.getDecoder().decode(encryptedKey), masterKey, masterInitialVector);
-        return new String(decryptedKey, StandardCharsets.UTF_8);
-    }
-
     //Decrypt all keys
-    private void decryptAllKeys() throws BadPaddingException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, IllegalBlockSizeException, NoSuchPaddingException, InvalidKeyException {
+    private void decryptAllKeys() throws Exception {
         for (SymmetricKey symmetricKey : symmetricKeys) {
-            symmetricKey.setSecretKey(decryptWithMasterPassword(symmetricKey.getSecretKey()));
-            symmetricKey.setInitialVector(decryptWithMasterPassword(symmetricKey.getInitialVector()));
+            symmetricKey.setSecretKey(masterKeyProvider.decryptWithMasterPassword(symmetricKey.getSecretKey()));
+            symmetricKey.setInitialVector(masterKeyProvider.decryptWithMasterPassword(symmetricKey.getInitialVector()));
         }
         for (AsymmetricKey asymmetricKey : asymmetricKeys) {
-            asymmetricKey.setPublicKey(decryptWithMasterPassword(asymmetricKey.getPublicKey()));
-            asymmetricKey.setPrivateKey(decryptWithMasterPassword(asymmetricKey.getPrivateKey()));
+            asymmetricKey.setPublicKey(masterKeyProvider.decryptWithMasterPassword(asymmetricKey.getPublicKey()));
+            asymmetricKey.setPrivateKey(masterKeyProvider.decryptWithMasterPassword(asymmetricKey.getPrivateKey()));
         }
     }
 
@@ -224,7 +192,6 @@ public class KeyStore implements ApplicationRunner {
     //Initialize keys after application has finished loading
     @Override
     public void run(ApplicationArguments applicationArguments) throws Exception {
-        initializeMasterKey();
         refreshKeys();
     }
 
