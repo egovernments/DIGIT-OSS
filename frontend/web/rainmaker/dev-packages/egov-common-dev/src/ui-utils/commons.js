@@ -536,6 +536,8 @@ let getModifiedPayment = (payments) =>{
   let swatchatha=0;
   let currentDate=convertDateToEpoch(new Date());
   payments[0].paymentDetails[0].bill.billDetails.forEach(billdetail =>{
+    if(billDetail.amount!==0)
+    {
     if(billdetail.fromPeriod<= currentDate && billdetail.toPeriod >= currentDate){
       billdetail.billAccountDetails.forEach(billAccountDetail =>{
         switch (billAccountDetail.taxHeadCode) {
@@ -593,6 +595,7 @@ let getModifiedPayment = (payments) =>{
         }
       })
     }
+  }
   })
   let totalAmount =   get(payments, `[0].paymentDetails[0].bill.totalAmount`,null);
   set(payments, `[0].paymentDetails[0].bill.totalAmount`, totalAmount.toFixed(2));
