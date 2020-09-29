@@ -497,9 +497,15 @@ serviceMaps:
       - jsonPath: $.Property.auditDetails.lastModifiedTime
 
 
-    - query: UPDATE eg_pt_unit SET floorno=?, unittype=?, usagecategory=?, occupancytype=?, occupancydate=?, carpetarea=?, builtuparea=?, plintharea=?, superbuiltuparea=?, arv=?, constructiontype=?, constructiondate=?, dimensions=?, active=?, lastmodifiedby=?, lastmodifiedtime=? WHERE id=?;
+    - query: INSERT INTO eg_pt_unit(id, tenantid, propertyid, floorno, unittype, usagecategory, occupancytype, occupancydate, carpetarea, builtuparea, plintharea, superbuiltuparea, arv, constructiontype, constructiondate, dimensions, active, createdby, createdtime, lastmodifiedby, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET floorno=EXCLUDED.floorno, unittype=EXCLUDED.unittype, usagecategory=EXCLUDED.usagecategory, occupancytype=EXCLUDED.occupancytype, occupancydate=EXCLUDED.occupancydate, carpetarea=EXCLUDED.carpetarea, builtuparea=EXCLUDED.builtuparea, plintharea=EXCLUDED.plintharea, superbuiltuparea=EXCLUDED.superbuiltuparea, arv=EXCLUDED.arv, constructiontype=EXCLUDED.constructiontype, constructiondate=EXCLUDED.constructiondate, dimensions=excluded.dimensions, active=EXCLUDED.active, lastmodifiedby=EXCLUDED.lastmodifiedby, lastmodifiedtime=EXCLUDED.lastmodifiedtime;
       basePath: Property.units.*
       jsonMaps:
+
+      - jsonPath: $.Property.units.*.id
+
+      - jsonPath: $.Property.tenantId
+
+      - jsonPath: $.Property.id
 
       - jsonPath: $.Property.units.*.floorNo
 
@@ -531,12 +537,13 @@ serviceMaps:
 
       - jsonPath: $.Property.units.*.active
 
+      - jsonPath: $.Property.auditDetails.createdBy
+
+      - jsonPath: $.Property.auditDetails.createdTime
+
       - jsonPath: $.Property.auditDetails.lastModifiedBy
 
       - jsonPath: $.Property.auditDetails.lastModifiedTime
-
-      - jsonPath: $.Property.units.*.id
-
 
   - version: 1.0
     description: Update documents in  EG_PT_PROPERTY ltable
