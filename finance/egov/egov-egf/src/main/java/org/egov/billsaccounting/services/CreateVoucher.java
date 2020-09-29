@@ -55,6 +55,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -1913,33 +1914,32 @@ public class CreateVoucher {
 					throw new ApplicationRuntimeException("not a valid function code");
 			}
 			if (debitAmount.compareTo(BigDecimal.ZERO) != 0) {
-				if (null != accDetAmtMap.get(VoucherConstant.DEBIT + "-"+ glcode)) {
-					final BigDecimal accountCodeTotDbAmt = accDetAmtMap.get(VoucherConstant.DEBIT + "-"+ glcode)
+				if (null != accDetAmtMap.get(VoucherConstant.DEBIT + glcode)) {
+					final BigDecimal accountCodeTotDbAmt = accDetAmtMap.get(VoucherConstant.DEBIT + glcode)
 							.add(debitAmount);
-					accDetAmtMap.put(VoucherConstant.DEBIT + "-"+ glcode, accountCodeTotDbAmt);
+					accDetAmtMap.put(VoucherConstant.DEBIT + glcode, accountCodeTotDbAmt);
 				} else
-					accDetAmtMap.put(VoucherConstant.DEBIT + "-"+ glcode, debitAmount);
+					accDetAmtMap.put(VoucherConstant.DEBIT + glcode, debitAmount);
 
 			} else if (creditAmount.compareTo(BigDecimal.ZERO) != 0)
-				if (null != accDetAmtMap.get(VoucherConstant.CREDIT + "-"+ glcode)) {
-					final BigDecimal accountCodeTotCrAmt = accDetAmtMap.get(VoucherConstant.CREDIT + "-"+ glcode)
+				if (null != accDetAmtMap.get(VoucherConstant.CREDIT + glcode)) {
+					final BigDecimal accountCodeTotCrAmt = accDetAmtMap.get(VoucherConstant.CREDIT + glcode)
 							.add(creditAmount);
-					accDetAmtMap.put(VoucherConstant.CREDIT + "-"+ glcode, accountCodeTotCrAmt);
+					accDetAmtMap.put(VoucherConstant.CREDIT + glcode, accountCodeTotCrAmt);
 				} else
-					accDetAmtMap.put(VoucherConstant.CREDIT + "-"+ glcode, creditAmount);
+					accDetAmtMap.put(VoucherConstant.CREDIT + glcode, creditAmount);
 		}
-		String creditglcode=null;
-                String debitglcode=null;
+		List<String> glcodesList=new ArrayList<>();
                 Set<String> creditAndDebitGlcodesList=accDetAmtMap.keySet();
                 for(String glcodes:creditAndDebitGlcodesList)
                 if (glcodes.contains(VoucherConstant.DEBIT)) {
-                    String[] debitGlcodes=glcodes.split("-");
-                    debitglcode=debitGlcodes[1];
+                     glcodesList.add(glcodes.substring(5));
                 } else  if (glcodes.contains(VoucherConstant.CREDIT)) {
-                            String[] creditGlcodes=glcodes.split("-");
-                            creditglcode=creditGlcodes[1];
+                            glcodesList.add(glcodes.substring(6));
                 }
-                if (debitglcode.equalsIgnoreCase(creditglcode)) {
+                Set<String> duplicated =glcodesList.stream().filter(i -> Collections.frequency(glcodesList, i) > 1).collect(Collectors.toSet());
+                LOGGER.debug("duplicated glcodes  :" + duplicated);
+                if (!duplicated.isEmpty() && duplicated!=null) {
                     throw new ApplicationRuntimeException("One account can have only credit or debit for the account code" ); 
                 }
 		if (LOGGER.isDebugEnabled())

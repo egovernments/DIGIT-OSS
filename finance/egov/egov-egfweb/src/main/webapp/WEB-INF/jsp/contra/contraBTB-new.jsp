@@ -166,11 +166,11 @@ function	onLoadTask_new()
 			document.forms[0].action = "${pageContext.request.contextPath}/voucher/preApprovedVoucher-loadvoucherview.action?vhid="+vhId;
 			document.forms[0].submit();
 	}
-	else if(button=="Save_New")
+	/* else if(button=="Save_New")
 	{      	document.forms[0].button.value='';
 	        document.forms[0].action = "contraBTB-newform.action";
-	 		document.forms[0].submit();
-	}
+	 		//document.forms[0].submit();
+	} */
 	}
  }
  
