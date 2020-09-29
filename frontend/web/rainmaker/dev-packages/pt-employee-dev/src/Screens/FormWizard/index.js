@@ -432,7 +432,7 @@ class FormWizard extends Component {
     switch (ownerType) {
       case "INDIVIDUAL.SINGLEOWNER":
         return <OwnerInfoHOC disabled={propertiesEdited} />;
-      case "MULTIPLEOWNERS":
+      case "INDIVIDUAL.MULTIPLEOWNERS":
         return (
           <MultipleOwnerInfoHOC
             addOwner={() => {
@@ -752,6 +752,7 @@ class FormWizard extends Component {
       estimation
     } = this.state;
     const { setRoute, displayFormErrorsAction, form } = this.props;
+
     switch (selected) {
       //validating property address is validated
       case 0:
@@ -905,7 +906,7 @@ class FormWizard extends Component {
               } else {
                 displayFormErrorsAction("ownerInfo");
               }
-            } else if (ownershipTypeSelected === "MULTIPLEOWNERS") {
+            } else if (ownershipTypeSelected === "INDIVIDUAL.MULTIPLEOWNERS") {
               let ownerValidation = true;
               for (const variable in form) {
                 if (variable.search("ownerInfo_") !== -1) {
@@ -1437,7 +1438,7 @@ class FormWizard extends Component {
       );
     }
 
-    if (selectedownerShipCategoryType === "MULTIPLEOWNERS") {
+    if (selectedownerShipCategoryType === "INDIVIDUAL.MULTIPLEOWNERS") {
       set(
         prepareFormData,
         "Properties[0].propertyDetails[0].owners",
@@ -1627,15 +1628,21 @@ class FormWizard extends Component {
     const propertyPayload = createPropertyPayload(Properties, documentsUploadRedux, newProperties);
     const propertyMethodAction = (action === "assess" || action === "re-assess") ? "_update" : "_create";
     let  ownershipCategory = get(propertyPayload, "ownershipCategory",'');
-
-    let  usageCategory = get(propertyPayload, "usageCategory",'');
     
+    let  usageCategory = get(propertyPayload, "usageCategory",'');
+
 
 
     if(ownershipCategory==="INDIVIDUAL.INDIVIDUAL.SINGLEOWNER")
     {
       set(propertyPayload, "ownershipCategory",'INDIVIDUAL.SINGLEOWNER');
     }
+
+    if(ownershipCategory==="INDIVIDUAL.INDIVIDUAL.MULTIPLEOWNERS")
+    {
+      set(propertyPayload, "ownershipCategory",'INDIVIDUAL.MULTIPLEOWNERS');
+    }
+
     if(usageCategory==="RESIDENTIAL.RESIDENTIAL")
     {
       set(propertyPayload, "usageCategory",'RESIDENTIAL');
@@ -1779,7 +1786,7 @@ class FormWizard extends Component {
       );
     }
 
-    if (selectedownerShipCategoryType === "MULTIPLEOWNERS") {
+    if (selectedownerShipCategoryType === "INDIVIDUAL.MULTIPLEOWNERS") {
       set(
         prepareFormData,
         "Properties[0].propertyDetails[0].owners",

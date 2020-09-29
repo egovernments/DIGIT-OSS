@@ -212,11 +212,14 @@ export const convertToOldPTObject = (newObject) => {
     return {...unit}
   });
 
+
+
   propertyDetails.documents = newProperty.documents;
   propertyDetails.additionalDetails = newProperty.additionalDetails;
   propertyDetails.financialYear = null;
-  propertyDetails.propertyType = extractFromString(newProperty.propertyType, 0);
-  propertyDetails.propertySubType = extractFromString(newProperty.propertyType, 1);
+  propertyDetails.propertyType = newProperty.propertyType;
+  //propertyDetails.propertyType = extractFromString(newProperty.propertyType, 0);
+  //propertyDetails.propertySubType = extractFromString(newProperty.propertyType, 1);
   propertyDetails.assessmentNumber = 0;
   propertyDetails.assessmentDate = null;
   propertyDetails.usageCategoryMajor = extractFromString(newProperty.usageCategory, 0);
@@ -289,10 +292,13 @@ export const convertToOldPTObject = (newObject) => {
     //   builtUpArea: unit.unitArea,
     // };
     unit.unitArea = unit.constructionDetail.builtUpArea;
+    unit.ConstructionType = unit.constructionDetail.constructionType;
+
     return { ...unit }
   })
   property["propertyDetails"] = [propertyDetails];
   Properties[0] = { ...newProperty, ...property };
+
 
   return Properties;
 };
@@ -322,7 +328,7 @@ export const callDraft = async (self, formArray = [], assessmentNumber = "") => 
         get(common, `generalMDMSDataById.SubOwnerShipCategory[${selectedownerShipCategoryType}].ownerShipCategory`, "INDIVIDUAL")
       );
       set(prepareFormData, "Properties[0].propertyDetails[0].subOwnershipCategory", selectedownerShipCategoryType);
-    } else if (selectedownerShipCategoryType === "MULTIPLEOWNERS") {
+    } else if (selectedownerShipCategoryType === "INDIVIDUAL.MULTIPLEOWNERS") {
       set(prepareFormData, "Properties[0].propertyDetails[0].owners", getMultipleOwnerInfo(self));
       set(
         prepareFormData,
@@ -447,6 +453,8 @@ const convertBuiltUpAreaToSqFt = (builtUpArea) => {
 };
 
 export const getTargetPropertiesDetails = (propertyDetails, self) => {
+  
+
   const { search } = self.props.location;
   const assessmentNumber = getQueryValue(search, "assessmentId");
   const selectedPropertyDetails = propertyDetails;
@@ -456,11 +464,15 @@ export const getTargetPropertiesDetails = (propertyDetails, self) => {
     selectedPropertyDetails[lastIndex].buildUpArea =
       selectedPropertyDetails[lastIndex] &&
       selectedPropertyDetails[lastIndex].buildUpArea &&
-      convertBuiltUpAreaToSqFt(selectedPropertyDetails[lastIndex].buildUpArea);
+      //convertBuiltUpAreaToSqFt(selectedPropertyDetails[lastIndex].buildUpArea);
+      selectedPropertyDetails[lastIndex].buildUpArea;
+
   }
   selectedPropertyDetails[lastIndex].units =
-    selectedPropertyDetails[lastIndex] && selectedPropertyDetails[lastIndex].units && convertUnitsToSqFt(selectedPropertyDetails[lastIndex].units);
-  return [selectedPropertyDetails[lastIndex]];
+    //selectedPropertyDetails[lastIndex] && selectedPropertyDetails[lastIndex].units && convertUnitsToSqFt(selectedPropertyDetails[lastIndex].units);
+   selectedPropertyDetails[lastIndex] && selectedPropertyDetails[lastIndex].units && selectedPropertyDetails[lastIndex].units;
+
+    return [selectedPropertyDetails[lastIndex]];
 };
 
 export const getImportantDates = async (self) => {
@@ -614,9 +626,10 @@ export const getCalculationScreenData = async (billingSlabs, tenantId, self) => 
   const filteredUnitsArray = unitsArray && unitsArray.filter((item) => item !== null);
   const mapIdWithIndex = billingSlabs.reduce(
     (res, curr) => {
+      let i =0;
       const obj = {
         id: curr.split("|")[0],
-        index: curr.split("|")[1],
+        index: curr.split("|")[1]? curr.split("|")[1] :i++,
       };
       res["mappedIds"].push(obj);
       res["idsArray"].push(curr.split("|")[0]);
@@ -783,13 +796,50 @@ export const validateUnitandPlotSize = (plotDetails, form) => {
   return isValid;
 };
 
-export const renderPlotAndFloorDetails = (fromReviewPage, PlotComp, FloorComp, self) => {
+/* export const renderPlotAndFloorDetails = (fromReviewPage, PlotComp, FloorComp, self) => {
   let { basicInformation, plotDetails, floorDetails_0 } = self.props.form;
   if (plotDetails && floorDetails_0 && floorDetails_0.fields.builtArea) {
     let uom = plotDetails.fields && plotDetails.fields.measuringUnit && plotDetails.fields.measuringUnit.value;
     floorDetails_0.fields.builtArea.floatingLabelText = `Built Area(${uom})`;
   }
-
+  if (basicInformation && basicInformation.fields.typeOfUsage.value && basicInformation.fields.typeOfBuilding.value) {
+    let pathFormKeyObject = getPlotAndFloorFormConfigPath(basicInformation.fields.typeOfUsage.value, basicInformation.fields.typeOfBuilding.value);
+    return !isEmpty(pathFormKeyObject) ? (
+      <div>
+        {pathFormKeyObject.hasPlot && <PlotComp component={pathFormKeyObject.plotForm} disabled={fromReviewPage} />}
+        {pathFormKeyObject.hasFloor && <FloorComp componentDetails={pathFormKeyObject.floorObject} disabled={fromReviewPage} />}
+      </div>
+    ) : null;
+  } else {
+    return null;
+  }
+};  */ 
+ export const renderPlotAndFloorDetails = (fromReviewPage, PlotComp, FloorComp, self) => {
+  let { basicInformation, plotDetails, floorDetails_0, prepareFormData = {} } = self.props.form;
+  if (plotDetails && floorDetails_0 && floorDetails_0.fields.builtArea) {
+    let uom = plotDetails.fields && plotDetails.fields.measuringUnit && plotDetails.fields.measuringUnit.value;
+    floorDetails_0.fields.builtArea.floatingLabelText = `Built Area(${uom})`;
+  }
+  if (basicInformation && !basicInformation.fields.datePicker.value) {
+    if (
+      prepareFormData.Properties &&
+      prepareFormData.Properties.length > 0 &&
+      get(prepareFormData, "Properties[0].propertyDetails[0].additionalDetails.constructionYear", null)
+    ) {
+      basicInformation.fields.datePicker.value = new Date(prepareFormData.Properties[0].propertyDetails[0].additionalDetails.constructionYear);
+      }
+  }
+  if (plotDetails) {
+    for (let i = 0; i < get(plotDetails, "fields.floorCount.value", 0); i++) {
+      for (let j = 0; j < get(self.props.prepareFormData, `Properties[0].propertyDetails[0].units.length`, 0); j++) {
+        let floorDetails_0_unit_0 = get(self.props, `form.floorDetails_${i}_unit_${j}.fields.constructionType`, null);
+        if (floorDetails_0_unit_0 && !floorDetails_0_unit_0.value) {
+          let val = get(self.props.prepareFormData, `Properties[0].propertyDetails[0].units[${j}].constructionType`, "");
+          set(self.props.form, `floorDetails_${i}_unit_${j}.fields.constructionType.value`, val);
+        }
+      }
+    }
+  } 
   if (basicInformation && basicInformation.fields.typeOfUsage.value && basicInformation.fields.typeOfBuilding.value) {
     let pathFormKeyObject = getPlotAndFloorFormConfigPath(basicInformation.fields.typeOfUsage.value, basicInformation.fields.typeOfBuilding.value);
     return !isEmpty(pathFormKeyObject) ? (

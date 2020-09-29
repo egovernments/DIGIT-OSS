@@ -1,7 +1,9 @@
-// import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
+
+
 import get from "lodash/get";
 import { getFileUrlFromAPI, getFileUrl } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+//import { convertToOldPTObject } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
 import { convertToOldPTObject } from "egov-ui-kit/utils/PTCommon/FormWizardUtils";
 
 export const createPropertyPayload = (properties, documentsUploadRedux, newProperties = []) => {
@@ -16,10 +18,10 @@ export const createPropertyPayload = (properties, documentsUploadRedux, newPrope
       if (obj.documents && Array.isArray(obj.documents) && obj.documents.length) {
         if (!obj.documents[0].documentType || !obj.documents[0].documentUid) {
           delete obj.documents;
-        }else{
-          obj.documents=obj.documents.map(document=>{
-            document.fileStoreId=document.documentUid
-            return {...document}
+        } else {
+          obj.documents = obj.documents.map(document => {
+            document.fileStoreId = document.documentUid
+            return { ...document }
           })
         }
       }
@@ -32,6 +34,7 @@ export const createPropertyPayload = (properties, documentsUploadRedux, newPrope
   properties[0].units && properties[0].units.map((unit) => {
     unit.constructionDetail = {
       builtUpArea: unit.unitArea,
+     constructionType:unit.ConstructionType
     };
     unit.tenantId = properties[0].tenantId;
      unit.usageCategory =
@@ -53,11 +56,14 @@ export const createPropertyPayload = (properties, documentsUploadRedux, newPrope
   if (documentsUploadRedux && Object.keys(documentsUploadRedux) && Object.keys(documentsUploadRedux).length) {
     properties[0].documents = [];
     Object.keys(documentsUploadRedux).map((key) => {
+      if(documentsUploadRedux[key].documents)
+      {
       properties[0].documents.push({
-        documentType: documentsUploadRedux[key].dropdown.value,
-        fileStoreId: documentsUploadRedux[key].documents[0].fileStoreId,
-        documentUid: documentsUploadRedux[key].documents[0].fileStoreId,
+        documentType:documentsUploadRedux[key].dropdown && documentsUploadRedux[key].dropdown.value,
+        fileStoreId: documentsUploadRedux[key].documents && documentsUploadRedux[key].documents[0].fileStoreId,
+        documentUid: documentsUploadRedux[key].documents && documentsUploadRedux[key].documents[0].fileStoreId,
       });
+    }
     });
   }
 
@@ -67,6 +73,7 @@ export const createPropertyPayload = (properties, documentsUploadRedux, newPrope
   }
   properties[0].creationReason = "NEWPROPERTY";
   properties[0].superBuiltUpArea = properties[0].buildUpArea;
+  //properties[0].superBuiltUpArea = properties[0].superBuiltUpArea && Number(properties[0].superBuiltUpArea.toFixed(2));
 
   properties[0].propertyType =
   properties[0].propertySubType === "BUILTUP.SHAREDPROPERTY" || properties[0].propertySubType === "BUILTUP.INDEPENDENTPROPERTY"
@@ -104,20 +111,24 @@ export const getCreatePropertyResponse = (createPropertyResponse) => {
   // createPropertyResponse.Properties[0].propertyDetails = createPropertyResponse.Properties;
   // Documents array coming in reverse order from API
   // createPropertyResponse.Properties[0] && createPropertyResponse.Properties[0].documents && createPropertyResponse.Properties[0].documents.length && createPropertyResponse.Properties[0].documents.reverse();
-  try{
+  try {
     return { Properties: convertToOldPTObject(createPropertyResponse), newProperties: createPropertyResponse.Properties };
-    }catch(e){
-      console.error(e);
-      return { Properties: [], newProperties: [] };
-    }
-  };
+  } catch (e) {
+    console.error(e);
+    return { Properties: [], newProperties: [] };
+  }
+};
 
 export const convertToArray = (documentsUploadRedux) => {
   if (documentsUploadRedux && typeof documentsUploadRedux === "object") {
     if (Object.keys(documentsUploadRedux) && Object.keys(documentsUploadRedux).length) {
       let documentsData = [];
       Object.keys(documentsUploadRedux).map((key) => {
-        let docTitleArray = documentsUploadRedux[key].dropdown.value.split(".");
+        const dropdownValue = documentsUploadRedux[key] && documentsUploadRedux[key].dropdown && documentsUploadRedux[key].dropdown.value || '';
+        let docTitleArray = dropdownValue.split(".");
+        if (dropdownValue == '' && docTitleArray.length == 1) {
+          return;
+        }
         return documentsData.push({
           title: docTitleArray[docTitleArray.length - 1],
           link: getFileUrl(documentsUploadRedux[key].documents[0].fileUrl),
@@ -186,11 +197,12 @@ export const prefillPTDocuments = async (payload, sourceJsonPath, destJsonPath, 
       docUploadRedux[key].isDocumentTypeRequired = true;
       return docUploadRedux;
     });
-    // documentsUploadRedux && documentsUploadRedux.length && documentsUploadRedux.reverse();
+  // documentsUploadRedux && documentsUploadRedux.length && documentsUploadRedux.reverse();
   let docs = {};
-  for (let i = 0; i < documentsUploadRedux.length; i++) {
-    docs[i] = documentsUploadRedux[i][i];
+  if (documentsUploadRedux) {
+    for (let i = 0; i < documentsUploadRedux.length; i++) {
+      docs[i] = documentsUploadRedux[i][i];
+    }
   }
-  console.log("documentsUploadRedux-----:   ", docs);
   dispatch(prepareFinalObject(destJsonPath, docs));
 };
