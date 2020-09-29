@@ -536,7 +536,7 @@ let getModifiedPayment = (payments) =>{
   let swatchatha=0;
   let currentDate=convertDateToEpoch(new Date());
   payments[0].paymentDetails[0].bill.billDetails.forEach(billdetail =>{
-    if(billDetail.amount!==0)
+    if(billdetail.amount!==0)
     {
     if(billdetail.fromPeriod<= currentDate && billdetail.toPeriod >= currentDate){
       billdetail.billAccountDetails.forEach(billAccountDetail =>{
