@@ -1336,7 +1336,7 @@ class FormWizard extends Component {
         const financeYear = { financialYear: financialYearFromQuery };
         const assessmentPayload = createAssessmentPayload(prepareFormData.Properties[0], financeYear);
         let estimateResponse = await httpRequest(
-          "pt-calculator-v2/propertytax/v2/_estimate",
+          "pt-calculator-v2/propertytax/_estimate",
           "_estimate",
           [],
           {
