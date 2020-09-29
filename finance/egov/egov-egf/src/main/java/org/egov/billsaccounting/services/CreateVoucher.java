@@ -1913,20 +1913,20 @@ public class CreateVoucher {
 					throw new ApplicationRuntimeException("not a valid function code");
 			}
 			if (debitAmount.compareTo(BigDecimal.ZERO) != 0) {
-				if (null != accDetAmtMap.get(VoucherConstant.DEBIT + glcode)) {
-					final BigDecimal accountCodeTotDbAmt = accDetAmtMap.get(VoucherConstant.DEBIT + glcode)
+				if (null != accDetAmtMap.get(VoucherConstant.DEBIT + "-"+ glcode)) {
+					final BigDecimal accountCodeTotDbAmt = accDetAmtMap.get(VoucherConstant.DEBIT + "-"+ glcode)
 							.add(debitAmount);
-					accDetAmtMap.put(VoucherConstant.DEBIT + glcode, accountCodeTotDbAmt);
+					accDetAmtMap.put(VoucherConstant.DEBIT + "-"+ glcode, accountCodeTotDbAmt);
 				} else
-					accDetAmtMap.put(VoucherConstant.DEBIT + glcode, debitAmount);
+					accDetAmtMap.put(VoucherConstant.DEBIT + "-"+ glcode, debitAmount);
 
 			} else if (creditAmount.compareTo(BigDecimal.ZERO) != 0)
-				if (null != accDetAmtMap.get(VoucherConstant.CREDIT + glcode)) {
-					final BigDecimal accountCodeTotCrAmt = accDetAmtMap.get(VoucherConstant.CREDIT + glcode)
+				if (null != accDetAmtMap.get(VoucherConstant.CREDIT + "-"+ glcode)) {
+					final BigDecimal accountCodeTotCrAmt = accDetAmtMap.get(VoucherConstant.CREDIT + "-"+ glcode)
 							.add(creditAmount);
-					accDetAmtMap.put(VoucherConstant.CREDIT + glcode, accountCodeTotCrAmt);
+					accDetAmtMap.put(VoucherConstant.CREDIT + "-"+ glcode, accountCodeTotCrAmt);
 				} else
-					accDetAmtMap.put(VoucherConstant.CREDIT + glcode, creditAmount);
+					accDetAmtMap.put(VoucherConstant.CREDIT + "-"+ glcode, creditAmount);
 		}
 		String creditglcode=null;
                 String debitglcode=null;
