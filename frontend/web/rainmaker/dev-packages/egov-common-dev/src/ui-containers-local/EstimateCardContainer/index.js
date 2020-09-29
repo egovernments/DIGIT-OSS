@@ -31,7 +31,7 @@ const formatTaxHeaders = (billDetail = {},businesService) => {
         labelKey: taxHead.taxHeadCode,
         labelName: taxHead.taxHeadCode
       },
-      value: ((fromPeriod < Date.now() && Date.now() < toPeriod) || businesService!="PT") ? taxHead.amount : 0
+      value: ((fromPeriod < Date.now() && Date.now() < toPeriod) || businesService!="PT") ? billDetail.amount!==0 ? taxHead.amount : 0 :0
     }
   })
   formattedFees.reverse();
