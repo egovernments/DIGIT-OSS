@@ -82,6 +82,7 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { resetFormWizard } from "egov-ui-kit/utils/PTCommon";
 import { removeForm } from "egov-ui-kit/redux/form/actions";
 import { prepareFormData as prepareFormDataAction } from "egov-ui-kit/redux/common/actions";
+import { formWizardConstants, getPurpose, propertySubmitAction, PROPERTY_FORM_PURPOSE } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
 
 class FormWizard extends Component {
   state = {
@@ -1514,7 +1515,9 @@ class FormWizard extends Component {
       this
     );
     // Create/Update property call, action will be either create or update
-    this.createProperty(properties, action);
+    //this.createProperty(properties, propertySubmitAction);
+    propertySubmitAction(properties, action, this.props);
+
   };
 
   getAssessmentDetails = async () => {
