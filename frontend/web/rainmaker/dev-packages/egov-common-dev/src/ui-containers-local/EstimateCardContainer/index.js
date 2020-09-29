@@ -275,9 +275,7 @@ const mapStateToProps = (state, ownProps) => {
     {
     for (let j = 0; billDetails[i].billAccountDetails && j<billDetails[i].billAccountDetails.length;j++)
     {
-      if(billDetails[i].billAccountDetails[j].taxHeadCode=== "PT_TAX" && 
-      billDetails[i].billAccountDetails[j].taxHeadCode>0)
-        {             
+      if(billDetails[i].billAccountDetails[j].taxHeadCode=== "PT_TAX" )   {             
             arrears = arrears+ billDetails[i].billAccountDetails[j].amount; 
         }
       } 
