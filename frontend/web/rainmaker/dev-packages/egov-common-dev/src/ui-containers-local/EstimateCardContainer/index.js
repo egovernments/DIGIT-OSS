@@ -44,11 +44,14 @@ const formatTaxHeaders = (billDetail = {},businesService) => {
   let currentYearInterest =billDetails[0].billAccountDetails && billDetails[0].billAccountDetails.filter(item => item.taxHeadCode === "PT_TIME_INTEREST");
   
   billDetails.forEach( (billDetail) => {
+    if(billDetail.amount!==0)
+    {
     billDetail.billAccountDetails.forEach( (billAccountDetail)=> {
       if (billAccountDetail.taxHeadCode === "PT_TIME_INTEREST") {
         totalInterest = totalInterest + billAccountDetail.amount;
       }
     });
+  }
   });
   fees.forEach( (fee)=> {
     if (fee.name.labelKey === "PT_TIME_INTEREST") {
@@ -77,11 +80,14 @@ const addRoundOffToFee = (fees, billDetails) => {
   let feeContainsRoundOff = false;
   
   billDetails.forEach( (billDetail) => {
+    if(billDetail.amount!==0)
+    {
     billDetail.billAccountDetails.forEach( (billAccountDetail)=> {
       if (billAccountDetail.taxHeadCode === "PT_ROUNDOFF") {
         totalRoundOff = totalRoundOff + billAccountDetail.amount;
       }
     });
+  }
   });
   fees.forEach( (fee)=> {
     if (fee.name.labelKey === "PT_ROUNDOFF") {
@@ -109,11 +115,14 @@ const addRoundOffToFee = (fees, billDetails) => {
   let feeContainsPtRebate = false;
   let currentYearRebate =billDetails[0].billAccountDetails && billDetails[0].billAccountDetails.filter(item => item.taxHeadCode === "PT_TIME_REBATE");
   billDetails.forEach( (billDetail) => {
+    if(billDetail.amount!==0)
+    {
     billDetail.billAccountDetails.forEach( (billAccountDetail)=> {
       if (billAccountDetail.taxHeadCode === "PT_TIME_REBATE") {
         totalRebate = totalRebate + billAccountDetail.amount;
       }
     });
+   }
   });
   fees.forEach( (fee)=> {
     if (fee.name.labelKey === "PT_TIME_REBATE") {
@@ -142,11 +151,14 @@ const addRoundOffToFee = (fees, billDetails) => {
   let feeContainsPtProRebate = false;
   let currentYearProRebate =billDetails[0].billAccountDetails && billDetails[0].billAccountDetails.filter(item => item.taxHeadCode === "PT_PROMOTIONAL_REBATE");
    billDetails.forEach( (billDetail) => {
+    if(billDetail.amount!==0)
+    {
     billDetail.billAccountDetails.forEach( (billAccountDetail)=> {
       if (billAccountDetail.taxHeadCode === "PT_PROMOTIONAL_REBATE") {
         totalProRebate = totalProRebate + billAccountDetail.amount;
       }
     });
+   }
   });
   fees.forEach( (fee)=> {
     if (fee.name.labelKey === "PT_PROMOTIONAL_REBATE") {
@@ -175,11 +187,14 @@ const addRoundOffToFee = (fees, billDetails) => {
   let feeContainsPtSwat= false;
   let currentYearSwat =billDetails[0].billAccountDetails && billDetails[0].billAccountDetails.filter(item => item.taxHeadCode === "SWATCHATHA_TAX");
    billDetails.forEach( (billDetail) => {
+    if(billDetail.amount!==0)
+    {
     billDetail.billAccountDetails.forEach( (billAccountDetail)=> {
       if (billAccountDetail.taxHeadCode === "SWATCHATHA_TAX") {
         totalSwat = totalSwat + billAccountDetail.amount;
       }
     });
+   }
   });
   fees.forEach( (fee)=> {
     if (fee.name.labelKey === "SWATCHATHA_TAX") {
@@ -227,8 +242,9 @@ const mapStateToProps = (state, ownProps) => {
 
   const latestYear = finalData[0].fromDate;
   if(businesService=="PT")
-  {  
-  for (let i = 0; billDetails && i<billDetails.length;i++) {
+  {
+
+  /* for (let i = 0; billDetails && i<billDetails.length;i++) {
       for (let j = 0; billDetails[i].billAccountDetails && j<billDetails[i].billAccountDetails.length;j++)
       {
         if(billDetails[i].billAccountDetails[j].taxHeadCode=== "PT_TAX")
@@ -241,10 +257,33 @@ const mapStateToProps = (state, ownProps) => {
     }  
    
     
-  }
+  } */
   for (let i = 0; billDetails && i<billDetails.length;i++) {
     totalAmount = totalAmount + billDetails[i].amount;   
   }
+
+   
+  
+  for (let i = 0; billDetails && i<billDetails.length;i++) {
+
+    let totalAmountBill = billDetails[i].amount;
+    if(totalAmountBill===0)
+    {
+      arrears = 0
+    }
+    else 
+    {
+    for (let j = 0; billDetails[i].billAccountDetails && j<billDetails[i].billAccountDetails.length;j++)
+    {
+      if(billDetails[i].billAccountDetails[j].taxHeadCode=== "PT_TAX" && 
+      billDetails[i].billAccountDetails[j].taxHeadCode>0)
+        {             
+            arrears = arrears+ billDetails[i].billAccountDetails[j].amount; 
+        }
+      } 
+    }
+  }  
+
    addInterestToFee(fees, billDetails);
    addRoundOffToFee(fees, billDetails);
    addRebateToFee(fees, billDetails);
