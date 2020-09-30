@@ -284,9 +284,8 @@ public class EstimationService {
 
 			BigDecimal carpetArea = propertyDetail.getLandArea();
 			BigDecimal unitRate = BigDecimal.valueOf(filteredBillingSlabs.get(0).getUnitRate());
-			Unit unit = propertyDetail.getUnits().get(0);
-			BigDecimal taxRate = getTaxRate(masterMap, unit);
-			BigDecimal multipleFactor = getMultipleFactor(masterMap, unit);
+			BigDecimal taxRate = getVacantTaxRate(masterMap, propertyDetail.getUsageCategoryMajor());
+			BigDecimal multipleFactor = BigDecimal.ONE;
 			BigDecimal landAV = carpetArea.multiply(unitRate).multiply(multipleFactor).multiply(monthMultiplier);
 			BigDecimal taxAmount = landAV.multiply(taxRate).divide(HUNDRED);
 
@@ -437,6 +436,22 @@ public class EstimationService {
 		List<Object> taxRates = masterMap.get(TAX_RATE);
 
 		String matchString = unit.getUsageCategoryMajor().equalsIgnoreCase("RESIDENTIAL") ? "General Tax (Residential)"
+				: "General Tax (Non-residential)";
+
+		for (Object val : taxRates) {
+			LinkedHashMap<String, Object> map = (LinkedHashMap<String, Object>) val;
+			if (((String) map.get("taxhead")).equalsIgnoreCase(matchString)) {
+				return BigDecimal.valueOf(Long.valueOf((int) map.get("rate")));
+			}
+		}
+
+		return null;
+	}
+	
+	private BigDecimal getVacantTaxRate(Map<String, JSONArray> masterMap, String usageCategory) {
+		List<Object> taxRates = masterMap.get(TAX_RATE);
+
+		String matchString = usageCategory.equalsIgnoreCase("RESIDENTIAL") ? "General Tax (Residential)"
 				: "General Tax (Non-residential)";
 
 		for (Object val : taxRates) {
