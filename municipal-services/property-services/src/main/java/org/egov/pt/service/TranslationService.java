@@ -144,6 +144,8 @@ public class TranslationService {
                 unitMap.put("unitArea", unit.getConstructionDetail().getBuiltUpArea());
                 unitMap.put("arv", unit.getArv());
                 unitMap.put("occupancyType", unit.getOccupancyType());
+                unitMap.put("constructionType", unit.getConstructionDetail().getConstructionType());
+
 
                 String[] masterData = unit.getUsageCategory().split("\\.");
 
@@ -158,6 +160,9 @@ public class TranslationService {
 
                 if(masterData.length >= 4)
                     unitMap.put("usageCategoryDetail",masterData[3]);
+                
+                Map<String, Object> unitAdditionalMap = new HashMap<>();
+                unitAdditionalMap.put("innerDimensionsKnown", unit.getConstructionDetail().getDimensions()==null? false:true);
 
                 unitMap.put("additionalDetails", unit.getAdditionalDetails());
                 units.add(unitMap);
