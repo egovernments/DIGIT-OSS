@@ -291,7 +291,6 @@ function enableAll() {
 }
 
 function validate() {
-	//event.preventDefault();
 	var insuffientAlert = 'There is no sufficient bank balance. ';
 	var continueAlert = 'Do you want to continue ? ';
 	var fundFlowNotGeneratedAlert = '';
@@ -343,7 +342,6 @@ function validate() {
 	document.cbtbform.action='/services/EGF/contra/contraBTB-create.action';
 	//document.cbtbform.submit();
 	return true;
-	event.preventDefault();
 }
 
 function validateReverse() {

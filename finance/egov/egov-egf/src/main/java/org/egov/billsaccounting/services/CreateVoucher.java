@@ -1939,8 +1939,8 @@ public class CreateVoucher {
                 }
                 Set<String> duplicated =glcodesList.stream().filter(i -> Collections.frequency(glcodesList, i) > 1).collect(Collectors.toSet());
                 LOGGER.debug("duplicated glcodes  :" + duplicated);
-                if (!duplicated.isEmpty() && duplicated!=null) {
-                    throw new ApplicationRuntimeException("One account can have only credit or debit for the account code" ); 
+                if (!duplicated.isEmpty()) {
+                    throw new ApplicationRuntimeException("An account code can be used only one time in a voucher : " +  duplicated); 
                 }
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("Total Debit  amount   :" + totaldebitAmount);
