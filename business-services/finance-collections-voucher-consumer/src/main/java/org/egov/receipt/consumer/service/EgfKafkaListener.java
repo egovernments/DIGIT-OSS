@@ -120,7 +120,6 @@ public class EgfKafkaListener {
         	}
         	LOGGER.info("topic : {} ,  request : {}", topic, recRequest);
         	if(voucherService.isTenantEnabledInFinanceModule(recRequest, finSerMdms)){
-        		LOGGER.info("Fiance mdms data : {}", finSerMdms);
         		Receipt receipt = recRequest.getReceipt().get(0);
         		BillDetail billDetail = receipt.getBill().get(0).getBillDetails().get(0);
         		String description = "";

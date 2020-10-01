@@ -51,6 +51,7 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -92,7 +93,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class VoucherServiceImpl implements VoucherService {
-
+	
 	@Autowired
 	private PropertiesManager propertiesManager;
 	@Autowired
@@ -445,9 +446,9 @@ public class VoucherServiceImpl implements VoucherService {
 		Receipt receipt = req.getReceipt().get(0);
 		String tenantId = receipt.getTenantId();
 		Bill bill = receipt.getBill().get(0);
-		String bsCode = req.getReceipt().stream().map(Receipt::getBill).flatMap(List::stream).map(Bill::getBusinessService).collect(Collectors.joining(","));
+		String bsCode = req.getReceipt().stream().map(Receipt::getBill).flatMap(List::stream)
+				.map(Bill::getBusinessService).filter(Objects::nonNull).collect(Collectors.joining(","));
 		bsCode = bsCode != null && !bsCode.isEmpty() ? bsCode : bill.getBillDetails().get(0).getBusinessService();
-		LOGGER.info("TenantId : {}, Business servce: {}", tenantId, bsCode);
 		List<Tenant> tenantList = microServiceUtil.getFinanceTenantList(tenantId, bsCode, req.getRequestInfo(), finSerMdms);
 		List<Tenant> collect = tenantList.stream().filter(tenant -> tenant.getCode().equals(tenantId)).collect(Collectors.toList());
 		if(collect.isEmpty()){
