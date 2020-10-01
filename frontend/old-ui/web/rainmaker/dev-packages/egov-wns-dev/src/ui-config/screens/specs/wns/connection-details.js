@@ -1,22 +1,89 @@
 import {
-  getCommonHeader,
-  getCommonCard,
-  getCommonTitle,
-  getCommonGrayCard,
-  getCommonContainer,
-  convertEpochToDate
-} from "egov-ui-framework/ui-config/screens/specs/utils";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getSearchResults, getSearchResultsForSewerage, getDescriptionFromMDMS, serviceConst } from "../../../../ui-utils/commons";
+  convertEpochToDate, getCommonCard,
 
+
+  getCommonContainer, getCommonHeader
+} from "egov-ui-framework/ui-config/screens/specs/utils";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import set from "lodash/set";
+import { getDescriptionFromMDMS, getSearchResults, getSearchResultsForSewerage, serviceConst } from "../../../../ui-utils/commons";
+import { ifUserRoleExists } from "../utils";
+import { connectionDetailsDownload } from "./connectionDetailsResource/connectionDetailsDownload";
 import { connectionDetailsFooter } from "./connectionDetailsResource/connectionDetailsFooter";
-import { getServiceDetails } from "./connectionDetailsResource/service-details";
+import { connHolderDetailsSameAsOwnerSummary, connHolderDetailsSummary, getOwnerDetails } from "./connectionDetailsResource/owner-deatils";
 import { getPropertyDetails } from "./connectionDetailsResource/property-details";
-import { getOwnerDetails } from "./connectionDetailsResource/owner-deatils";
+import { getServiceDetails } from "./connectionDetailsResource/service-details";
+
 const tenantId = getQueryArg(window.location.href, "tenantId")
 let connectionNumber = getQueryArg(window.location.href, "connectionNumber");
 const service = getQueryArg(window.location.href, "service")
+
+const getApplicationNumber = (dispatch, connectionsObj) => {
+  let appNos = "";
+  if (connectionsObj.length > 1) {
+    for (var i = 0; i < connectionsObj.length; i++) {
+      appNos += connectionsObj[i].applicationNo + ",";
+    }
+    appNos = appNos.slice(0, -1);
+  } else {
+    appNos = connectionsObj[0].applicationNo;
+  }
+  dispatch(prepareFinalObject("applicationNos", appNos));
+}
+const showHideConnectionHolder = (dispatch, connectionHolders) => {
+  if (connectionHolders != 'NA' && connectionHolders.length > 0) {
+    dispatch(
+      handleField(
+        "connection-details",
+        "components.div.children.connectionDetails.children.cardContent.children.connectionHolders",
+        "visible",
+        true
+      )
+    );
+    dispatch(
+      handleField(
+        "connection-details",
+        "components.div.children.connectionDetails.children.cardContent.children.connectionHoldersSameAsOwner",
+        "visible",
+        false
+      )
+    );
+  } else {
+    dispatch(
+      handleField(
+        "connection-details",
+        "components.div.children.connectionDetails.children.cardContent.children.connectionHolders",
+        "visible",
+        false
+      )
+    );
+    dispatch(
+      handleField(
+        "connection-details",
+        "components.div.children.connectionDetails.children.cardContent.children.connectionHoldersSameAsOwner",
+        "visible",
+        true
+      )
+    );
+  }
+}
+export const sortpayloadDataObj = (connectionObj) => {
+  return connectionObj.sort((a, b) => (a.additionalDetails.appCreatedDate < b.additionalDetails.appCreatedDate) ? 1 : -1)
+}
+
+const getActiveConnectionObj = (connectionsObj) => {
+  let getActiveConnectionObj = "";
+  for (var i = 0; i < connectionsObj.length; i++) {
+    if (connectionsObj[i] &&
+      connectionsObj[i].applicationStatus === 'CONNECTION_ACTIVATED' ||
+      connectionsObj[i].applicationStatus === 'APPROVED') {
+      getActiveConnectionObj = connectionsObj[i];
+      break;
+    }
+  }
+  return getActiveConnectionObj;
+}
 
 const searchResults = async (action, state, dispatch, connectionNumber) => {
   /**
@@ -26,75 +93,84 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
   if (service === serviceConst.SEWERAGE) {
     let payloadData = await getSearchResultsForSewerage(queryObject, dispatch);
     if (payloadData !== null && payloadData !== undefined && payloadData.SewerageConnections.length > 0) {
-      let propTenantId = payloadData.SewerageConnections[0].property.tenantId.split(".")[0];
-      payloadData.SewerageConnections[0].service = service
+      payloadData.SewerageConnections = sortpayloadDataObj(payloadData.SewerageConnections);
 
-      if (payloadData.SewerageConnections[0].property.propertyType !== undefined) {
-        const propertyTpe = "[?(@.code  == " + JSON.stringify(payloadData.SewerageConnections[0].property.propertyType) + ")]"
+
+
+      let sewerageConnection = getActiveConnectionObj(payloadData.SewerageConnections);
+      let propTenantId = sewerageConnection.property.tenantId.split(".")[0];
+      sewerageConnection.service = service
+
+      if (sewerageConnection.property.propertyType !== undefined) {
+        const propertyTpe = "[?(@.code  == " + JSON.stringify(sewerageConnection.property.propertyType) + ")]"
         let propertyTypeParams = { MdmsCriteria: { tenantId: propTenantId, moduleDetails: [{ moduleName: "PropertyTax", masterDetails: [{ name: "PropertyType", filter: `${propertyTpe}` }] }] } }
         const mdmsPropertyType = await getDescriptionFromMDMS(propertyTypeParams, dispatch)
         if (mdmsPropertyType !== undefined && mdmsPropertyType !== null && mdmsPropertyType.MdmsRes.PropertyTax.PropertyType[0].name !== undefined && mdmsPropertyType.MdmsRes.PropertyTax.PropertyType[0].name !== null) {
-          payloadData.SewerageConnections[0].property.propertyTypeData = mdmsPropertyType.MdmsRes.PropertyTax.PropertyType[0].name;//propertyType from Mdms
+          sewerageConnection.property.propertyTypeData = mdmsPropertyType.MdmsRes.PropertyTax.PropertyType[0].name;//propertyType from Mdms
         } else {
-          payloadData.SewerageConnections[0].property.propertyTypeData = "NA"
+          sewerageConnection.property.propertyTypeData = "NA"
         }
       }
 
-      if (payloadData.SewerageConnections[0].noOfToilets === undefined) { payloadData.SewerageConnections[0].noOfToilets = "NA" }
-      if (payloadData.SewerageConnections[0].noOfToilets === 0) { payloadData.SewerageConnections[0].noOfToilets = "0" }
-      payloadData.SewerageConnections[0].connectionExecutionDate = convertEpochToDate(payloadData.SewerageConnections[0].connectionExecutionDate)
-      const lat = payloadData.SewerageConnections[0].property.address.locality.latitude ? payloadData.SewerageConnections[0].property.address.locality.latitude : 'NA'
-      const long = payloadData.SewerageConnections[0].property.address.locality.longitude ? payloadData.SewerageConnections[0].property.address.locality.longitude : 'NA'
-      payloadData.SewerageConnections[0].property.address.locality.locationOnMap = `${lat} ${long}`
+      if (sewerageConnection.noOfToilets === undefined) { sewerageConnection.noOfToilets = "NA" }
+      if (sewerageConnection.noOfToilets === 0) { sewerageConnection.noOfToilets = "0" }
+      sewerageConnection.connectionExecutionDate = convertEpochToDate(sewerageConnection.connectionExecutionDate)
+      const lat = sewerageConnection.property.address.locality.latitude ? sewerageConnection.property.address.locality.latitude : 'NA'
+      const long = sewerageConnection.property.address.locality.longitude ? sewerageConnection.property.address.locality.longitude : 'NA'
+      sewerageConnection.property.address.locality.locationOnMap = `${lat} ${long}`
 
-      /*if (payloadData.SewerageConnections[0].property.usageCategory !== undefined) {
-        const propertyUsageType = "[?(@.code  == " + JSON.stringify(payloadData.SewerageConnections[0].property.usageCategory) + ")]"
+      /*if (sewerageConnection.property.usageCategory !== undefined) {
+        const propertyUsageType = "[?(@.code  == " + JSON.stringify(sewerageConnection.property.usageCategory) + ")]"
         let propertyUsageTypeParams = { MdmsCriteria: { tenantId: "pb", moduleDetails: [{ moduleName: "PropertyTax", masterDetails: [{ name: "UsageCategoryMajor", filter: `${propertyUsageType}` }] }] } }
         const mdmsPropertyUsageType = await getDescriptionFromMDMS(propertyUsageTypeParams, dispatch)
         if (mdmsPropertyUsageType !== undefined && mdmsPropertyUsageType !== null && mdmsPropertyUsageType.MdmsRes.PropertyTax.PropertyType !== undefined && mdmsPropertyUsageType.MdmsRes.PropertyTax.PropertyType[0].name !== null) {
-          payloadData.SewerageConnections[0].property.propertyUsageType = mdmsPropertyUsageType.MdmsRes.PropertyTax.UsageCategoryMajor[0].name;//propertyUsageType from Mdms
+          sewerageConnection.property.propertyUsageType = mdmsPropertyUsageType.MdmsRes.PropertyTax.UsageCategoryMajor[0].name;//propertyUsageType from Mdms
         } else {
-          payloadData.SewerageConnections[0].property.propertyTypeData = "NA"
+          sewerageConnection.property.propertyTypeData = "NA"
         }
       }*/
-
-      dispatch(prepareFinalObject("WaterConnection[0]", payloadData.SewerageConnections[0]))
+      showHideConnectionHolder(dispatch, sewerageConnection.connectionHolders);
+      dispatch(prepareFinalObject("WaterConnection[0]", sewerageConnection))
+      getApplicationNumber(dispatch, payloadData.SewerageConnections);
     }
   } else if (service === serviceConst.WATER) {
     let payloadData = await getSearchResults(queryObject);
     if (payloadData !== null && payloadData !== undefined && payloadData.WaterConnection.length > 0) {
-      payloadData.WaterConnection[0].service = service;
-      let propTenantId = payloadData.WaterConnection[0].property.tenantId.split(".")[0];
-      if (payloadData.WaterConnection[0].connectionExecutionDate !== undefined) {
-        payloadData.WaterConnection[0].connectionExecutionDate = convertEpochToDate(payloadData.WaterConnection[0].connectionExecutionDate)
+      payloadData.WaterConnection = sortpayloadDataObj(payloadData.WaterConnection);
+      let waterConnection = getActiveConnectionObj(payloadData.WaterConnection);
+      waterConnection.service = service;
+      let propTenantId = waterConnection.property.tenantId.split(".")[0];
+      if (waterConnection.connectionExecutionDate !== undefined) {
+        waterConnection.connectionExecutionDate = convertEpochToDate(waterConnection.connectionExecutionDate)
       } else {
-        payloadData.WaterConnection[0].connectionExecutionDate = 'NA'
+        waterConnection.connectionExecutionDate = 'NA'
       }
-      if (payloadData.WaterConnection[0].noOfTaps === undefined) { payloadData.WaterConnection[0].noOfTaps = "NA" }
-      if (payloadData.WaterConnection[0].noOfTaps === 0) { payloadData.WaterConnection[0].noOfTaps = "0" }
-      if (payloadData.WaterConnection[0].pipeSize === 0) { payloadData.WaterConnection[0].pipeSize = "0" }
-      if (payloadData.WaterConnection[0].property.propertyType !== undefined) {
-        const propertyTpe = "[?(@.code  == " + JSON.stringify(payloadData.WaterConnection[0].property.propertyType) + ")]"
+      if (waterConnection.noOfTaps === undefined) { waterConnection.noOfTaps = "NA" }
+      if (waterConnection.noOfTaps === 0) { waterConnection.noOfTaps = "0" }
+      if (waterConnection.pipeSize === 0) { waterConnection.pipeSize = "0" }
+      if (waterConnection.property.propertyType !== undefined) {
+        const propertyTpe = "[?(@.code  == " + JSON.stringify(waterConnection.property.propertyType) + ")]"
         let propertyTypeParams = { MdmsCriteria: { tenantId: propTenantId, moduleDetails: [{ moduleName: "PropertyTax", masterDetails: [{ name: "PropertyType", filter: `${propertyTpe}` }] }] } }
         const mdmsPropertyType = await getDescriptionFromMDMS(propertyTypeParams, dispatch)
-        payloadData.WaterConnection[0].property.propertyTypeData = mdmsPropertyType.MdmsRes.PropertyTax.PropertyType[0].name !== undefined ? mdmsPropertyType.MdmsRes.PropertyTax.PropertyType[0].name : "NA";//propertyType from Mdms
+        waterConnection.property.propertyTypeData = mdmsPropertyType.MdmsRes.PropertyTax.PropertyType[0].name !== undefined ? mdmsPropertyType.MdmsRes.PropertyTax.PropertyType[0].name : "NA";//propertyType from Mdms
       }
-      const lat = payloadData.WaterConnection[0].property.address.locality.latitude;
-      const long = payloadData.WaterConnection[0].property.address.locality.longitude;
-      payloadData.WaterConnection[0].property.address.locality.locationOnMap = `${lat} ${long}`
+      const lat = waterConnection.property.address.locality.latitude;
+      const long = waterConnection.property.address.locality.longitude;
+      waterConnection.property.address.locality.locationOnMap = `${lat} ${long}`
 
-      /*if (payloadData.WaterConnection[0].property.usageCategory !== undefined) {
-        const propertyUsageType = "[?(@.code  == " + JSON.stringify(payloadData.WaterConnection[0].property.usageCategory) + ")]"
+      /*if (waterConnection.property.usageCategory !== undefined) {
+        const propertyUsageType = "[?(@.code  == " + JSON.stringify(waterConnection.property.usageCategory) + ")]"
         let propertyUsageTypeParams = { MdmsCriteria: { tenantId: "pb", moduleDetails: [{ moduleName: "PropertyTax", masterDetails: [{ name: "UsageCategoryMajor", filter: `${propertyUsageType}` }] }] } }
         const mdmsPropertyUsageType = await getDescriptionFromMDMS(propertyUsageTypeParams, dispatch)
         if (mdmsPropertyUsageType !== undefined && mdmsPropertyUsageType !== null && mdmsPropertyUsageType.MdmsRes.PropertyTax.PropertyType !== undefined && mdmsPropertyUsageType.MdmsRes.PropertyTax.PropertyType[0].name !== null) {
-          payloadData.WaterConnection[0].property.propertyUsageType = mdmsPropertyUsageType.MdmsRes.PropertyTax.UsageCategoryMajor[0].name;//propertyUsageType from Mdms
+          waterConnection.property.propertyUsageType = mdmsPropertyUsageType.MdmsRes.PropertyTax.UsageCategoryMajor[0].name;//propertyUsageType from Mdms
         } else {
-          payloadData.WaterConnection[0].property.propertyTypeData = "NA"
+          waterConnection.property.propertyTypeData = "NA"
         }
       }*/
-
-      dispatch(prepareFinalObject("WaterConnection[0]", payloadData.WaterConnection[0]));
+      showHideConnectionHolder(dispatch, waterConnection.connectionHolders);
+      dispatch(prepareFinalObject("WaterConnection[0]", waterConnection));
+      getApplicationNumber(dispatch, payloadData.WaterConnection);
     }
   }
 };
@@ -113,7 +189,7 @@ const headerrow = getCommonContainer({
     moduleName: "egov-wns",
     componentPath: "ConsumerNoContainer",
     props: {
-      number: connectionNumber
+      number: getQueryArg(window.location.href, "connectionNumber")
     }
   }
 });
@@ -124,13 +200,26 @@ const propertyDetails = getPropertyDetails(false);
 
 const ownerDetails = getOwnerDetails(false);
 
-export const connectionDetails = getCommonCard({ serviceDetails, propertyDetails, ownerDetails });
+const connectionHolders = connHolderDetailsSummary();
+
+const connectionHoldersSameAsOwner = connHolderDetailsSameAsOwnerSummary();
+
+const getConnectionDetailsFooterAction = (ifUserRoleExists('WS_CEMP')) ? connectionDetailsFooter : {};
+
+export const connectionDetails = getCommonCard({ serviceDetails, propertyDetails, ownerDetails, connectionHolders, connectionHoldersSameAsOwner });
 
 const screenConfig = {
   uiFramework: "material-ui",
   name: "connection-details",
   beforeInitScreen: (action, state, dispatch) => {
-    beforeInitFn(action, state, dispatch, connectionNumber);
+    let connectionNo = getQueryArg(window.location.href, "connectionNumber")
+    beforeInitFn(action, state, dispatch, connectionNo);
+    set(
+      action,
+      "screenConfig.components.div.children.headerDiv.children.header1.children.connectionNumber.props.number",
+      connectionNo
+    );
+    set(action, "components.div.children.getConnectionDetailsFooterAction.children.takeAction.props.connectionNumber", connectionNo)
     return action;
   },
 
@@ -150,7 +239,7 @@ const screenConfig = {
             header1: {
               gridDefination: {
                 xs: 12,
-                sm: 8
+                sm: 7
               },
               ...headerrow
             },
@@ -159,46 +248,21 @@ const screenConfig = {
               componentPath: "Container",
               props: {
                 color: "primary",
-                style: { justifyContent: "flex-end", display: "block" }
+                style: { justifyContent: "flex-end" } //, dsplay: "block"
               },
               gridDefination: {
                 xs: 12,
-                sm: 4,
+                sm: 5,
                 align: "right"
               },
               children: {
-                word1: {
-                  ...getCommonTitle(
-                    {
-                      labelKey: "WS_CONNECTION_DETAILS_CONNECTION_STATUS_HEADER"
-                    },
-                    {
-                      style: {
-                        marginRight: "10px",
-                        // color: "rgba(0, 0, 0, 0.6000000238418579)"
-                      }
-                    }
-                  )
-                },
-                word2: {
-                  ...getCommonTitle({
-                    labelName: "Active",
-                    // jsonPath: "WaterConnection[0].headerSideText.word2"
-                  }
-                    ,
-                    {
-                      style: {
-                        marginRight: "10px",
-                        color: "rgba(0, 0, 0, 0.6000000238418579)"
-                      }
-                    })
-                },
+                connectionDetailsDownload
               }
             }
           }
         },
         connectionDetails,
-        connectionDetailsFooter
+        getConnectionDetailsFooterAction
       }
     }
   }

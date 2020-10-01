@@ -7,9 +7,53 @@ import {
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { propertySearchApiCall } from './functions';
-import { handlePropertySubUsageType, handleNA } from '../../utils';
+import { handlePropertySubUsageType, handleNA, resetFieldsForApplication } from '../../utils';
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
+let isMode = getQueryArg(window.location.href, "mode");
+isMode = (isMode) ? isMode.toUpperCase() : "";
+let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+let connectionNumber = getQueryArg(window.location.href, "connectionNumber");
+let tenantId = getQueryArg(window.location.href, "tenantId");
+let action = getQueryArg(window.location.href, "action");
+let modeaction = getQueryArg(window.location.href, "modeaction");
+
+let mode = getQueryArg(window.location.href, "mode");
+
+let modifyLink;
+if(isMode==="MODIFY"){
+  modifyLink=`/wns/apply?`;
+  modifyLink = applicationNumber ? modifyLink + `applicationNumber=${applicationNumber}` : modifyLink;
+  modifyLink = connectionNumber ? modifyLink + `&connectionNumber=${connectionNumber}` : modifyLink;
+  modifyLink = action ? modifyLink + `&action=${action}` : modifyLink;
+  modifyLink = modeaction ? modifyLink + `&modeaction=${modeaction}` : modifyLink;
+  modifyLink = mode ? modifyLink + `&mode=${mode}` : modifyLink;
+
+}else{
+  modifyLink="/wns/apply"
+}
+
+const resetScreen =()=>{
+   isMode = getQueryArg(window.location.href, "mode");
+isMode = (isMode) ? isMode.toUpperCase() : "";
+ applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+ connectionNumber = getQueryArg(window.location.href, "connectionNumber");
+ tenantId = getQueryArg(window.location.href, "tenantId");
+ action = getQueryArg(window.location.href, "action");
+
+if(isMode==="MODIFY"){
+  modifyLink=`/wns/apply?`;
+  modifyLink = applicationNumber ? modifyLink + `applicationNumber=${applicationNumber}` : modifyLink;
+  modifyLink = connectionNumber ? modifyLink + `&connectionNumber=${connectionNumber}` : modifyLink;
+  modifyLink = action ? modifyLink + `&action=${action}` : modifyLink;
+  modifyLink = modeaction ? modifyLink + `&modeaction=${modeaction}` : modifyLink;
+  modifyLink = mode ? modifyLink + `&mode=${mode}` : modifyLink;
+}else{
+  modifyLink="/wns/apply"
+}
+}
 export const propertyHeader = getCommonSubHeader({
+  lKey:resetScreen(),
   labelKey: "WS_COMMON_PROP_DETAIL",
   labelName: "Property Details"
 })
@@ -34,7 +78,7 @@ export const propertyID = getCommonContainer({
     errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
     jsonPath: "searchScreen.propertyIds",
   }),
-  searchButton: {
+  wnsPtySearchButton: {
     componentPath: "Button",
     gridDefination: { xs: 12, sm: 1, md: 1 },
     props: {
@@ -65,7 +109,7 @@ export const propertyID = getCommonContainer({
     uiFramework: "custom-atoms-local",
     moduleName: "egov-wns",
     componentPath: "AddLinkForProperty",
-    props: { url: "/wns/apply" },
+    props: { url: modifyLink, isMode },
     gridDefination: { xs: 12, sm: 4, md: 4 }
   }
 })
@@ -139,7 +183,7 @@ const propertyDetails = getCommonContainer({
       labelName: "Rainwater Harvesting Facility"
     },
     {
-      jsonPath: "applyScreen.property.rainWaterHarvesting",
+      jsonPath: "applyScreen.property.additionalDetails.isRainwaterHarvesting",
       callBack: handleNA
     }
   )

@@ -2,7 +2,7 @@ import {
     getCommonGrayCard,
     getCommonSubHeader,
     getCommonContainer,
-    getLabelWithValue,
+    getLabelWithValueForModifiedLabel,
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { serviceConst } from "../../../../../ui-utils/commons";
@@ -53,53 +53,71 @@ export const getConnectionDetails = () => {
 }
 
  export const connectionDetailsWater={
-    taskApplicationType : getLabelWithValue(
+    taskApplicationType : getLabelWithValueForModifiedLabel(
         {
             labelName:"Apply For",
             labelKey: "WS_APPLY_FOR"
         },
         {
             jsonPath: "WaterConnection[0].service",
-        }),
+        },  {
+            labelKey: "WS_OLD_LABEL_NAME"
+          },
+          { jsonPath: "WaterConnectionOld[0].service" }),
     
-     taskNumberOfTapsPropsed : getLabelWithValue(
+     taskNumberOfTapsPropsed : getLabelWithValueForModifiedLabel(
         {
             labelName:"No of Taps Proposed",
             labelKey: "WS_TASK_DETAILS_CONN_DETAIL_NO_OF_TAPS_PROPOSED"
         },
         {
             jsonPath: "WaterConnection[0].proposedTaps",
-        }),
-     taskPipeSizeProposed : getLabelWithValue(
+        },  {
+            labelKey: "WS_OLD_LABEL_NAME"
+          },
+          { jsonPath: "WaterConnectionOld[0].proposedTaps" }),
+     taskPipeSizeProposed : getLabelWithValueForModifiedLabel(
         {
             labelName:"No of pipe size proposed",
             labelKey: "WS_TASK_DETAILS_CONN_DETAIL_PIPE_SIZE_PROPOSED"
         },
-        { jsonPath: "WaterConnection[0].proposedPipeSize" })
+        { jsonPath: "WaterConnection[0].proposedPipeSize" },  {
+            labelKey: "WS_OLD_LABEL_NAME"
+          },
+          { jsonPath: "WaterConnectionOld[0].proposedPipeSize" })
 
 }
  export const connectionDetailsSewerage={
-    taskApplicationType : getLabelWithValue(
+    taskApplicationType : getLabelWithValueForModifiedLabel(
         {
             labelName:"Apply For",
             labelKey: "WS_APPLY_FOR"
         },
         {
             jsonPath: "WaterConnection[0].service",
-        }),
-    taskNoOfClosets : getLabelWithValue(
+        },  {
+            labelKey: "WS_OLD_LABEL_NAME"
+          },
+          { jsonPath: "WaterConnectionOld[0].service" }),
+    taskNoOfClosets : getLabelWithValueForModifiedLabel(
         {
             labelName:"No of closets proposed",
             labelKey: "WS_TASK_DETAILS_CONN_DETAIL_NO_OF_CLOSETS_PROPOSED"
         },
-        { jsonPath: "WaterConnection[0].proposedWaterClosets" }
+        { jsonPath: "WaterConnection[0].proposedWaterClosets" },  {
+            labelKey: "WS_OLD_LABEL_NAME"
+          },
+          { jsonPath: "WaterConnectionOld[0].proposedWaterClosets" }
     ),
-     taskNoOfToilets : getLabelWithValue(
+     taskNoOfToilets : getLabelWithValueForModifiedLabel(
         {
             labelName:"No of toilets proposed",
             labelKey: "WS_TASK_DETAILS_CONN_DETAIL_NO_OF_TOILETS_PROPOSED"
         },
-        { jsonPath: "WaterConnection[0].proposedToilets" }
+        { jsonPath: "WaterConnection[0].proposedToilets" },  {
+            labelKey: "WS_OLD_LABEL_NAME"
+          },
+          { jsonPath: "WaterConnectionOld[0].proposedToilets" }
     )
 
 }

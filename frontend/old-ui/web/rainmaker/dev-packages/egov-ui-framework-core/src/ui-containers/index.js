@@ -58,6 +58,11 @@ const AcknowledgementContainer = Loadable({
   loading: () => <Loading />
 });
 
+const ModifyLabelConatiner = Loadable({
+  loader: () => import("./ModifyLabelConatiner"),
+  loading: () => <Loading />
+});
+
 export {
   TextFieldContainer,
   RadioGroupContainer,
@@ -69,5 +74,6 @@ export {
   AutosuggestContainer,
   DialogContainer,
   DynamicMdmsContainer,
-  AcknowledgementContainer
+  AcknowledgementContainer,
+  ModifyLabelConatiner
 };

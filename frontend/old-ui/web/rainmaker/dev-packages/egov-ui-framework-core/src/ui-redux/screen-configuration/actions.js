@@ -1,17 +1,24 @@
+import { httpRequest, loginRequest } from "../../ui-utils";
+import { setRoute } from "../app/actions";
 import * as screenActionTypes from "./actionTypes";
 import {
   prepareFinalBodyData,
   prepareFinalQueryData,
   validateForm
 } from "./utils";
-import { httpRequest, loginRequest } from "../../ui-utils";
-import { setRoute } from "../app/actions";
 
 export const initScreen = (screenKey, screenConfig) => {
   return {
     type: screenActionTypes.INIT_SCREEN,
     screenKey,
     screenConfig
+  };
+};
+
+export const unMountScreen = (screenKey) => {
+  return {
+    type: screenActionTypes.UNMOUNT_SCREEN,
+    screenKey
   };
 };
 
@@ -27,6 +34,16 @@ export const toggleSnackbar = (open, message, error) => {
 export const toggleSpinner = () => {
   return {
     type: screenActionTypes.TOGGLE_LOADER
+  };
+};
+export const showSpinner = () => {
+  return {
+    type: screenActionTypes.SHOW_LOADER
+  };
+};
+export const hideSpinner = () => {
+  return {
+    type: screenActionTypes.HIDE_LOADER
   };
 };
 
@@ -67,7 +84,7 @@ export const submitForm = (
     const { screenConfiguration } = state;
     const { screenConfig, preparedFinalObject } = screenConfiguration;
     const { [screenKey]: currentScreenConfig } = screenConfig;
-    dispatch(toggleSpinner());
+    dispatch(showSpinner());
     if (validateForm(screenKey, currentScreenConfig.components, dispatch)) {
       try {
         let screenConfigResponse = {};
@@ -105,13 +122,13 @@ export const submitForm = (
           dispatch(setRoute(redirectionUrl));
         }
       } catch (error) {
-        dispatch(toggleSpinner());
+        dispatch(hideSpinner());
         // const { message } = error;
         console.log(error);
         // throw new Error(error);
       }
     } else {
-      dispatch(toggleSpinner());
+      dispatch(hideSpinner());
     }
   };
 };

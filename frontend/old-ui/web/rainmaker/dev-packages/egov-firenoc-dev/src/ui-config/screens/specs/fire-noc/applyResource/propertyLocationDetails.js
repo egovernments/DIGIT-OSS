@@ -196,7 +196,8 @@ export const propertyLocationDetails = getCommonCard(
           jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",
           sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
           className:"applicant-details-error autocomplete-dropdown",
-          required: true
+          required: true,
+          isClearable: true,
         },
         required: true,
         gridDefination: {
@@ -365,6 +366,7 @@ export const propertyLocationDetails = getCommonCard(
           suggestions: [],
           fullwidth: true,
           required: true,
+          isClearable: true,
           inputLabelProps: {
             shrink: true
           }
@@ -467,6 +469,7 @@ export const propertyLocationDetails = getCommonCard(
             labelKey: "NOC_PROPERTY_DETAILS_FIRESTATION_PLACEHOLDER"
           },
           required: true,
+          isClearable: true,
           labelsFromLocalisation: true,
           localePrefix: {
             moduleName: "firenoc",

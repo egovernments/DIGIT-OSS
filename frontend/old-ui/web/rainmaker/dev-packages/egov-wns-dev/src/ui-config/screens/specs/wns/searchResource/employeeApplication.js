@@ -2,6 +2,7 @@ import {
   getCommonCard,
   getCommonTitle,
   getTextField,
+  getSelectField,
   getCommonContainer,
   getCommonParagraph,
   getPattern,
@@ -18,42 +19,104 @@ export const wnsApplication = getCommonCard({
     labelKey: "WS_HOME_SEARCH_CONN_RESULTS_DESC"
   }),
   wnsApplicationContainer: getCommonContainer({
-    consumerNo: getTextField({
-      label: {
-        labelKey: "WS_HOME_SEARCH_RESULTS_CONSUMER_NO_LABEL"
-      },
-      placeholder: {
-        labelKey: "WS_HOME_SEARCH_RESULTS_CONSUMER_NO_PLACEHOLDER"
-      },
-      gridDefination: {
-        xs: 12,
-        sm: 4
-      },
-      required: false,
-      pattern: getPattern("consumerNo"),
-      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      jsonPath: "searchConnection.connectionNumber"
+      city: getSelectField({
+        label: {
+            labelKey: "WS_PROP_DETAIL_CITY"
+        },
+        props: {
+          label: {
+            labelKey: "WS_PROP_DETAIL_CITY"
+          },
+          placeholder: {
+            labelKey: "WS_PROP_DETAIL_CITY_PLACEHOLDER"
+          },
+          localePrefix: {
+            moduleName: "TENANT",
+            masterName: "TENANTS"
+          }
+        },  
+        placeholder: {
+            labelKey: "WS_PROP_DETAIL_CITY_PLACEHOLDER"
+        },
+        labelPrefix: {
+            moduleName: "TENANT",
+            masterName: "TENANTS"
+        },
+        sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
+        jsonPath: "searchConnection.tenantId",//db sake
+        required: true,
+        gridDefination: {
+            xs: 12,
+            sm: 4
+        },
     }),
-
+    propertyid: getTextField({
+        label: {
+            labelKey: "WS_PROPERTY_ID_LABEL"
+        },
+        placeholder: {
+            labelKey: "WS_PROPERTY_ID_PLACEHOLDER"
+        },
+        gridDefination: {
+            xs: 12,
+            sm: 4
+        },
+        required: false,
+        pattern: /^[a-zA-Z0-9-]*$/i,
+        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        jsonPath: "searchConnection.propertyId"
+    }),
     ownerMobNo: getTextField({
-      label: {
-        labelKey: "WS_HOME_SEARCH_RESULTS_OWN_MOB_LABEL"
-      },
-      placeholder: {
-        labelKey: "WS_HOME_SEARCH_RESULTS_OWN_MOB_PLACEHOLDER"
-      },
-      gridDefination: {
-        xs: 12,
-        sm: 4
-      },
-      iconObj: {
-        label: "+91 |",
-        position: "start"
-      },
-      required: false,
-      pattern: getPattern("MobileNo"),
-      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      jsonPath: "searchConnection.mobileNumber"
+        label: {
+            labelKey: "WS_HOME_SEARCH_RESULTS_OWN_MOB_LABEL"
+        },
+        placeholder: {
+            labelKey: "WS_OWN_DETAIL_MOBILE_NO_PLACEHOLDER"
+        },
+        gridDefination: {
+            xs: 12,
+            sm: 4
+        },
+        iconObj: {
+            label: "+91 |",
+            position: "start"
+        },
+        required: false,
+        pattern: getPattern("MobileNo"),
+        jsonPath: "searchConnection.mobileNumber",
+        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG"
+    }),
+    consumerid: getTextField({
+        label: {
+            labelKey: "WS_MYCONNECTIONS_CONSUMER_NO"
+        },
+        placeholder: {
+            labelKey: "WS_SEARCH_CONNNECTION_CONSUMER_PLACEHOLDER"
+        },
+        gridDefination: {
+            xs: 12,
+            sm: 4
+        },
+        required: false,
+        pattern: getPattern("consumerNo"),
+        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        jsonPath: "searchConnection.connectionNumber"
+    }),
+    oldConsumerid: getTextField({
+        label: {
+            labelKey: "WS_SEARCH_CONNNECTION_OLD_CONSUMER_LABEL"
+        },
+        placeholder: {
+            labelKey: "WS_SEARCH_CONNNECTION_OLD_CONSUMER_PLACEHOLDER"
+        },
+        gridDefination: {
+            xs: 12,
+            sm: 4
+        },
+        required: false,
+        pattern: /^[a-zA-Z0-9-]*$/i,
+        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        jsonPath: "searchConnection.oldConnectionNumber"
     })
   }),
 

@@ -49,7 +49,14 @@ const LabelContainer = Loadable({
   loader: () => import("./LabelContainer"),
   loading: () => <Loading />
 });
-
+const ModificationDocumentListContainer = Loadable({
+  loader: () => import("./ModificationDocumentListContainer"),
+  loading: () => <Loading />
+});
+const CheckboxContainerConnHolder = Loadable({
+   loader: () => import("./CheckboxContainerConnHolder"),
+    loading: () => <Loading />
+  });
 
 export {
   CustomTabContainer,
@@ -61,5 +68,7 @@ export {
   ViewBreakupContainer,
   DialogContainer,
   RadioGroupContainer,
-  EstimateOverviewCardContainer
+  EstimateOverviewCardContainer,
+  ModificationDocumentListContainer,
+  CheckboxContainerConnHolder
 };

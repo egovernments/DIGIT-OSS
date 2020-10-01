@@ -12,6 +12,7 @@ import ChartsAPI from '../../../actions/charts/chartsAPI';
 import Arrow_Downward from "../../../images/arrows/Arrow_Downward.svg";
 import Arrow_Upward from '../../../images/arrows/Arrow_Upward.svg';
 import NFormatter from '../numberFormater';
+import { removeSignFromInsightData } from "../../../utils/commons";
 
 class CustomCard extends React.Component {
     constructor(props) {
@@ -63,7 +64,8 @@ class CustomCard extends React.Component {
 					value = data.insight_data.value.replace("last year" , "LY");
 				}else if(data.insight_data.value.includes("last month")){
 					value = data.insight_data.value.replace("last month" , "LM");
-				}
+                }
+                value=removeSignFromInsightData(value);
             }
                    
             let label = data.label ? (strings[data.label] ? strings[data.label] : data.label) : '';

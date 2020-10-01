@@ -62,6 +62,10 @@ const AddLinkForProperty = Loadable({
   loader: () => import("./PropertyLink"),
   loading: () => <Loading />
 });
+const SnackbarWarning = Loadable({
+  loader: () => import("./SnackbarWarning"),
+  loading: () => <Loading />
+});
 
 export {
   TestAtoms,
@@ -75,5 +79,6 @@ export {
   PayWnsBillIcon,
   ConsumerNoContainer,
   BreadCrumbs,
-  AddLinkForProperty
+  AddLinkForProperty,
+  SnackbarWarning
 };

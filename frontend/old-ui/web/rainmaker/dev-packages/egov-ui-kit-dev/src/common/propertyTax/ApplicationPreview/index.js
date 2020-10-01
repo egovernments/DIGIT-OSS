@@ -3,7 +3,7 @@ import commonConfig from "config/common.js";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import Screen from "egov-ui-kit/common/common/Screen";
-import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
+import { toggleSnackbarAndSetText, fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { initLocalizationLabels } from "egov-ui-kit/redux/app/utils";
 import { fetchGeneralMDMSData } from "egov-ui-kit/redux/common/actions";
 import { fetchProperties } from "egov-ui-kit/redux/properties/actions";
@@ -64,7 +64,9 @@ class ApplicationPreview extends Component {
 
   componentDidMount = () => {
     this.setPropertyId();
-    const { location, fetchGeneralMDMSData, fetchProperties } = this.props;
+    const { location, fetchGeneralMDMSData, fetchProperties, fetchLocalizationLabel } = this.props;
+    const tenantId = getQueryValue(window.location.href, "tenantId");
+    fetchLocalizationLabel(locale, tenantId, tenantId);
     const requestBody = {
       MdmsCriteria: {
         tenantId: commonConfig.tenantId,
@@ -119,7 +121,7 @@ class ApplicationPreview extends Component {
       "UsageCategoryDetail",
       "SubOwnerShipCategory",
     ]);
-    const tenantId = getQueryValue(window.location.href, "tenantId");
+    
     const queryObject = [
       { key: "tenantId", value: tenantId },
       { key: "businessServices", value: this.getApplicationType().moduleName }
@@ -390,6 +392,7 @@ const mapDispatchToProps = (dispatch) => {
     fetchProperties: (queryObjectProperty) => dispatch(fetchProperties(queryObjectProperty)),
     toggleSnackbarAndSetText: (open, message, error) => dispatch(toggleSnackbarAndSetText(open, message, error)),
     prepareFinalObject: (jsonPath, value) => dispatch(prepareFinalObject(jsonPath, value)),
+    fetchLocalizationLabel: (locale, moduleName, tenantId)=> dispatch(fetchLocalizationLabel(locale, moduleName, tenantId))
   };
 };
 

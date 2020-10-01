@@ -156,6 +156,10 @@ const newCollection = {
       state.screenConfiguration,
       "screenConfig.newCollection"
     );
+
+    dispatch(prepareFinalObject('DynamicMdms.BillingService.selectedValues',[]));
+    dispatch(prepareFinalObject('DynamicMdms.BillingService.serviceCategories.selectedValues',[]));
+
     if (demandId) {
 
       set(

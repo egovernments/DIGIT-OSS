@@ -9,7 +9,7 @@ import {
   getDateField,
   getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { getQueryArg,getTodaysDateInYMD } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg,getTodaysDateInYMD, getMaxDate } from "egov-ui-framework/ui-utils/commons";
 import {
   getDetailsForOwner,
   updateOwnerShipEdit
@@ -328,6 +328,7 @@ export const OwnerInfoCard = {
             required: true,
             pattern: getPattern("Date"),
             isDOB: true,
+            maxDate: getMaxDate(14),
             errorMessage: "TL_DOB_ERROR_MESSAGE",
             jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].dob",
             props: {
@@ -603,6 +604,7 @@ export const ownerInfoInstitutional = {
           required: true,
           pattern: getPattern("Date"),
           isDOB: true,
+          maxDate: getMaxDate(14),
           errorMessage: "TL_DOB_ERROR_MESSAGE",
           jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].dob",
           props: {

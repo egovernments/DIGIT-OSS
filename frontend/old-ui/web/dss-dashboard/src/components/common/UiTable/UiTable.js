@@ -1,18 +1,21 @@
-import React from 'react'
-import _ from 'lodash'
-import { withStyles } from '@material-ui/core/styles'
-import { withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
-import Table from '@material-ui/core/Table'
-import TableBody from '@material-ui/core/TableBody'
-import TableCell from '@material-ui/core/TableCell'
+import { Tooltip } from '@material-ui/core';
+import Paper from '@material-ui/core/Paper';
+import { withStyles } from '@material-ui/core/styles';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
 import TablePagination from '@material-ui/core/TablePagination';
-import TableRow from '@material-ui/core/TableRow'
-import Paper from '@material-ui/core/Paper'
-import UiTableHead from './UiTableHead'
-import styles from './UiTableStyles'
-import TableSearch from '../TableSearch/TableSearch'
-import ExportToExcel from '../ExportToExel'
+import TableRow from '@material-ui/core/TableRow';
+import _ from 'lodash';
+import React from 'react';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import Arrow_Downward from '../../../images/arrows/Arrow_Downward.svg';
+import Arrow_Upward from '../../../images/arrows/Arrow_Upward.svg';
+import ExportToExcel from '../ExportToExel';
+import TableSearch from '../TableSearch/TableSearch';
+import UiTableHead from './UiTableHead';
+import styles from './UiTableStyles';
 
 class EnhancedTable extends React.Component {
   constructor(props) {
@@ -28,7 +31,8 @@ class EnhancedTable extends React.Component {
       rowsPerPage: 10,
       showExpand: -1,
       fieldTableData: {},
-      tableData: this.props.data
+      tableData: this.props.data,
+      initialLoad: false
     }
     this.openSideDrawer = this.openSideDrawer.bind(this)
     this.handleRequestSort = this.handleRequestSort.bind(this)
@@ -59,10 +63,12 @@ class EnhancedTable extends React.Component {
     if (this.state.orderBy === property && this.state.order === 'desc') {
       order = 'asc'
     }
-
-    this.setState({ order, orderBy })
+    if (order == 'asc' && !this.state.initialLoad) {
+      this.setState({ order, orderBy, initialLoad: true })
+    } else {
+      this.setState({ order, orderBy })
+    }
   }
-
   handleSelectAllClick = (event, checked) => {
     const { tableType } = this.props
     const { tableData } = this.state
@@ -117,6 +123,7 @@ class EnhancedTable extends React.Component {
   cellClick(row, event) {
     if (typeof this.props.cellClick === 'function') {
       this.props.cellClick(row);
+     
     }
   }
   renderALLULBTable(n, idx) {
@@ -133,7 +140,7 @@ class EnhancedTable extends React.Component {
         selected={isSelected}
         className={classes.tBodyStyle}
       >
-         {needHash ?
+        {needHash ?
           <TableCell component="td" scope="row" className={classes.hashcolumn} data-title={"SN: "}>
             {this.state.page * this.state.rowsPerPage + idx + 1}
           </TableCell>
@@ -158,9 +165,66 @@ class EnhancedTable extends React.Component {
       </TableRow>
     )
   }
+
+
+  renderLastYearRowData(n, idx) {
+    let items = [];
+
+    {
+      _.keys(n).map(d => {
+        let value = Math.floor(Math.random() * Math.floor(89)) + 1;
+        this.props.lyData.map((ly, i) => {
+          _.keys(ly).map(dt => {
+            if (typeof ly[dt] === 'object' && typeof n[d] === 'object') {
+              if (ly[dt][0] === n[d][0]) {
+                items = ly;
+              }
+
+            }
+          })
+        }
+        )
+      }
+      )
+    }
+    return items;
+  }
+
+
+  getFilter(value) {
+    switch (_.toUpper(value)) {
+      case 'TODAY':
+        return "yesterday";
+      case 'WEEK':
+        return "week";
+      case 'MONTH':
+        return "month";
+      case 'QUARTER':
+        return "quarter";
+
+      default:
+        return "year";
+    }
+  }
+
   renderCenterTable(n, idx) {
-    const { classes, columnData , needHash} = this.props
-    const isSelected = this.isSelected(n.Email)
+    const { classes, columnData, needHash } = this.props
+    const isSelected = this.isSelected(n.Email);
+    let lydata = this.renderLastYearRowData(n, idx);
+    var existingFilters = this.props.filters;
+    var title = existingFilters.duration.title;
+    if (title.includes(',')) {
+      title = 'CUSTOM';
+    }
+    var filterValue = this.getFilter(title);
+    // let insightColor = data.insight_data ? data.insight_data.colorCode === "lower_red" ? "#e54d42" : "#259b24" : '';
+    // 	let insightIcon = data.insight_data ? data.insight_data.colorCode === "lower_red" ? Arrow_Downward : Arrow_Upward : '';
+    // 	let value = "";
+
+    let colorCode = Math.floor(Math.random() * Math.floor(2))
+    let insightColor = colorCode === 0 ? "#db534a" : "#2ba129";
+    let insightIcon = colorCode === 0 ? Arrow_Downward : Arrow_Upward;
+    let sign = colorCode === 0 ? '-' : '+';
     return (
       <TableRow
         hover
@@ -172,25 +236,118 @@ class EnhancedTable extends React.Component {
         selected={isSelected}
         className={classes.tBodyStyle}
       >
-         {needHash ?
+        {needHash ?
           <TableCell component="td" scope="row" className={classes.hashcolumn} data-title={"SN: "}>
             {this.state.page * this.state.rowsPerPage + idx + 1}
           </TableCell>
           : null
         }
         {_.keys(n).map(d => {
+
+          /* console.log(n,d,n[d],n[d]&&n[d][1],'table'); */
+          let value = Math.round(n[d].toString().replace(/[&\/\\#,%]/g, ''));
+          if (value > 100) {
+            value = 100;
+          }
+          insightColor = "#2ba129";
+          insightIcon = Arrow_Upward;
+          sign = '+';
+
+          {
+            _.keys(lydata).map(dt => {
+              if (typeof n[d] !== 'object' && typeof lydata[dt] !== 'object' && (d === dt)) {
+                var lyData = Math.round(lydata[dt].toString().replace(/[&\/\\#,%]/g, ''));
+                var cyData = Math.round(n[d].toString().replace(/[&\/\\#,%]/g, ''));
+                if (cyData === 0 && lyData === 0) {
+                  value = 0;
+                }
+                else if (cyData == 0) {
+                  value = lyData;
+                  if (value > 100)
+                    value = 100;
+
+                  insightColor = "#db534a";
+                  insightIcon = Arrow_Downward;
+                  sign = '-';
+
+                }
+                else if (lyData == 0) {
+                  value = cyData;
+                  if (value > 100)
+                    value = 100;
+
+                  insightColor = "#2ba129";
+                  insightIcon = Arrow_Upward;
+                  sign = '+';
+                }
+                else {
+                  value = Math.round(((cyData - lyData) / lyData) * 100);
+                  if (value > 100)
+                    value = 100;
+                  if (value <= 0) {
+                    insightColor = "#db534a";
+                    insightIcon = Arrow_Downward;
+                    sign = '-';
+                  } else {
+                    insightColor = "#2ba129";
+                    insightIcon = Arrow_Upward;
+                    sign = '+';
+                  }
+
+                }
+              }
+              value = value.toString().replace(/[-]/, '');
+            }
+            )
+          }
           return (
             <TableCell key={d}
               align={((_.get(_.find(columnData, c => c.id === d), 'numeric') || false))
+                /*    ? 'right' : 'left'}  to  make numbers to right align if needed */
                 ? 'right' : 'left'}
-              component='td' scope='row' data-title={d}>
-              {
-                d === this.props.column ? <span onClick={this.cellClick.bind(this, n)} className={classes.link}>{n[d][1]}</span> : (typeof n[d] === 'object')?n[d][1]:n[d]
+              component='td' scope='row' data-title={d} >
+              {title === 'CUSTOM' ?
+                d === this.props.column ?
+                  <span onClick={this.cellClick.bind(this, n)} className={classes.link}>{n[d][1]}</span>
+                  : (typeof n[d] === 'object') ?
+                    n[d][1]
+                    :
+                    <div style={{ marginTop: "-8px", whiteSpace: "nowrap" }}>
+                      <React.Fragment>
+                        <span style={{ cursor: 'pointer' }}>
+                          <span className={"table-value"}>{n[d]}</span>
+                          <span style={{ marginLeft: "2vh", fontSize: 'initial', paddingRight: "8px" }}>
+                          </span>
+                        </span>
 
+                      </React.Fragment>
+                    </div>
+                :
+                d === this.props.column ?
+                  <span onClick={this.cellClick.bind(this, n)} className={classes.link}>{n[d][1]}</span>
+                  : (typeof n[d] === 'object') ?
+                    n[d][1]
+                    :
+                    <div style={{ marginTop: "-8px", whiteSpace: "nowrap" }}>
+                      <React.Fragment>
+                        <Tooltip title={`${sign}${value}% from last ${filterValue}`} placement="top" arrow classes={{ tooltip: classes.lightTooltip }}>
+                          <span style={{ cursor: 'pointer' }}>
+                            <span className={"table-value"}>{n[d]}</span>
+                            <span style={{ marginLeft: "2vh", fontSize: 'initial', paddingRight: "8px" }}>
+                              <img src={insightIcon} style={{ height: "12px", color: insightColor }} />
+                            </span>
+                            <span style={{ color: insightColor, fontSize: '14px' }}>{value < 10 ? ' ' : ''}{value}%</span>
+                          </span>
+                        </Tooltip>
+
+                      </React.Fragment>
+                    </div>
               }
-
             </TableCell>)
-        })}
+
+
+        }
+        )}
       </TableRow>
     )
   }
@@ -229,22 +386,27 @@ class EnhancedTable extends React.Component {
   render() {
     const { data, columnData, Gfilter, noPage, classes, tableType, needCheckBox, needHash, needSearch, needExport, excelName } = this.props
     // const { tableData, order, orderBy, selected } = this.state
-
     // const { data, columnData, totalCount, classes, tableType, needCheckBox, needHash, needSearch } = this.props;
     const { tableData, order, orderBy, totalCount = data.length, selected, rowsPerPage, page } = this.state;
     var columnType = _.chain(columnData).find(i => i.id === orderBy).get('numeric').value() || false;
+
+    if (this.props.column && !this.state.initialLoad) {
+      this.handleRequestSort(null, this.props.column);
+      this.handleRequestSort(null, this.props.column);
+    }
+
     let { strings } = this.props;
     let expData = _.cloneDeep(tableData);
     // iterate here for Excel download
-    for(var i=0; i < expData.length; i++){
-      if(typeof expData[i] === 'object'){
-        for(var key in expData[i]){
-          if(typeof expData[i][key] === 'object'){
+    for (var i = 0; i < expData.length; i++) {
+      if (typeof expData[i] === 'object') {
+        for (var key in expData[i]) {
+          if (typeof expData[i][key] === 'object') {
             expData[i][key] = expData[i][key][1]
           }
           //console.log(expData[i][key]);     
         }
-      }   
+      }
     }
     return (
       <Paper className={classes.root}>
@@ -266,7 +428,7 @@ class EnhancedTable extends React.Component {
         </div>
         <div className={classes.tableDiv}>
           {
-            <Table  className={[classes.table, 'responsiveTable'].join(' ')} aria-labelledby='tableTitle'>
+            <Table className={[classes.table, 'responsiveTable'].join(' ')} aria-labelledby='tableTitle'>
               <UiTableHead
                 className={classes.thead}
                 columnData={columnData}
@@ -287,7 +449,6 @@ class EnhancedTable extends React.Component {
                   {/* "maintain orderby lodash" */}
 
                   {
-
                     _.orderBy(tableData, item => columnType ? parseFloat(_.get(item, orderBy) || 0) : (_.get(item, orderBy)), [order])
                       .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                       .map((n, idx) => {

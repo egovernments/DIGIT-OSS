@@ -33,12 +33,12 @@ class CollectionChart extends React.Component {
 							return <div className={classes.collection} key={`collection-${i}`}>
 								<div className={classes.collectionRow}>
 									<Grid container direction="row" alignItems="center">
-										<Grid item xs={7} sm={8}>
+										<Grid item xs={7} sm={7}>
 											<div className={classes.CollectionLabel}>
 												<span> {strings[d.label] || d.label}</span>
 											</div>
 										</Grid>
-										<Grid item xs={5} sm={4}>
+										<Grid item xs={5} sm={5}>
 											<CollectionChartRow randomnum={randomnum} key={d.id} chartData={d.charts} filters={this.props.filters} page={page}/>
 										</Grid>
 									</Grid>

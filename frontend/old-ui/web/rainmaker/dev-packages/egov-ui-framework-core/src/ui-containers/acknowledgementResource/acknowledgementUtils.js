@@ -189,7 +189,7 @@ export const getAcknowledgementCard = ({
   printMenu
 }) => {
     return {
-      ackHeader: {
+      header: {
         labelName: `Application for ${moduleName} (${getCurrentFinancialYear()})`, //later use getFinancialYearDates
         labelKey: getTransformedLocale(`${moduleName}_COMMON_APPLY_HEADER_LABEL`),
         downloadButton: downloadMenu ? true : false,
@@ -214,10 +214,10 @@ export const getAcknowledgementCard = ({
             menu: printMenu
         }
       },
-      ackBody: {
+      body: {
         ...acknowledgementCard(getAcknowledgementCardContent(purpose, status, applicationNumber, moduleName))
       },
-      ackFooter: [...footerUrlConfig]
+      footer: [...footerUrlConfig]
     };
   }
 

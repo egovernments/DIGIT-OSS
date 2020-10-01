@@ -100,13 +100,14 @@ const mapStateToProps = state => {
         document.disabled = document.enabledActions[purpose].disableUpload && uploadedDocumentTypes.includes(documentCode && documentCode.length > 1 && documentCode[1]) ? true : false;
         document.dropdown.disabled = document.enabledActions[purpose].disableDropdown && uploadedDocumentTypes.includes(documentCode && documentCode.length > 1 && documentCode[1]) ? true : false;
       }
-
-      document.dropdown.menu = document.dropdown.menu.filter(menu => filterDropdownFunction(menu, preparedFinalObject, document.dropdownFilter));
-      document.dropdown.menu.map((item,key)=>{
-        document.dropdown.menu[key].name = item.label;
-      })
-      if (document.dropdown.menu.length == 1) {
-        document.dropdown.value = get(document, 'dropdown.menu[0].code', '');
+      if(document.dropdown && document.dropdown.menu){
+        document.dropdown.menu = document.dropdown.menu.filter(menu => filterDropdownFunction(menu, preparedFinalObject, document.dropdownFilter));
+        document.dropdown.menu.map((item,key)=>{
+          document.dropdown.menu[key].name = item.label;
+        })
+        if (document.dropdown.menu.length == 1) {
+          document.dropdown.value = get(document, 'dropdown.menu[0].code', '');
+        }
       }
     })
     documentList.cards = documentList.cards.filter(document => filterFunction(document, preparedFinalObject, document.filterCondition))

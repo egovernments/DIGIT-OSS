@@ -9,46 +9,6 @@ import PropertyInfoCard from "../PropertyInfoCard";
 const locale = getLocale() || "en_IN";
 const localizationLabelsData = initLocalizationLabels(locale);
 
-
-
-// const getAddressItems = (addressObj) => {
-//   return (
-//     addressObj && [
-//       // {
-//       //   // heading: getTranslatedLabel("PT_PROPERTY_ADDRESS_SUB_HEADER", localizationLabelsData),
-//       //   // // iconAction: "action",
-//       //   // iconName: "home",
-//       //   items: [
-//       {
-//         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_CITY", localizationLabelsData),
-//         value: addressObj.city || "NA",
-//       },
-//       {
-//         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_HOUSE_NO", localizationLabelsData),
-//         value: addressObj.doorNo || "NA",
-//       },
-//       {
-//         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_COLONY_NAME", localizationLabelsData),
-//         value: addressObj.buildingName || "NA",
-//       },
-//       {
-//         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_STREET_NAME", localizationLabelsData),
-//         value: addressObj.street || "NA",
-//       },
-//       {
-//         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_MOHALLA", localizationLabelsData),
-//         value: addressObj.locality.name || "NA",
-//       },
-//       {
-//         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_PINCODE", localizationLabelsData),
-//         value: addressObj.pincode || "NA",
-//       },
-
-//       //   ],
-//       // },
-//     ]
-//   );
-// };
 const transform = (floor, key, generalMDMSDataById, propertyDetails) => {
   const { propertySubType, usageCategoryMajor } = propertyDetails;
   const { masterName, dataKey } = key;
@@ -76,137 +36,103 @@ const transform = (floor, key, generalMDMSDataById, propertyDetails) => {
     }
   }
 };
-// const getAssessmentInfo = (propertyDetails, keys=[], generalMDMSDataById) => {
-//     const { units } = propertyDetails || {};
 
-//     return (
-//       propertyDetails && [
-//         {
-//           heading: getTranslatedLabel("PT_ASSESMENT_INFO_SUB_HEADER", localizationLabelsData),
-//           iconAction: "action",
-//           iconName: "assignment",
-//           showTable: true,
-//           tableHeaderItems: [
-//             {
-//               key: getTranslatedLabel("PT_ASSESMENT_INFO_USAGE_TYPE", localizationLabelsData),
-//               value: propertyDetails.usageCategoryMajor ? propertyDetails.usageCategoryMajor : "NA", //noOfFloors
-//             },
-//             {
-//               key: getTranslatedLabel("PT_ASSESMENT_INFO_TYPE_OF_BUILDING", localizationLabelsData),
-//               value: generalMDMSDataById
-//                 ? propertyDetails.propertySubType
-//                   ? generalMDMSDataById["PropertySubType"]
-//                     ? generalMDMSDataById["PropertySubType"][propertyDetails.propertySubType].name
-//                     : "NA"
-//                   : generalMDMSDataById["PropertyType"]
-//                     ? generalMDMSDataById["PropertyType"][propertyDetails.propertyType].name
-//                     : "NA"
-//                 : "NA",
-//             },
-//             {
-//               key: getTranslatedLabel("PT_ASSESMENT_INFO_PLOT_SIZE", localizationLabelsData),
-//               value:
-//                 propertyDetails.propertySubType === "SHAREDPROPERTY"
-//                   ? "NA"
-//                   : propertyDetails.uom
-//                     ? `${propertyDetails.landArea} ${propertyDetails.uom}`
-//                     : `${Math.round(propertyDetails.landArea * 100) / 100} sq yards`,
-//             },
-//             {
-//               key: getTranslatedLabel("PT_ASSESMENT_INFO_NO_OF_FLOOR", localizationLabelsData),
-//               value: propertyDetails.noOfFloors ? `${propertyDetails.noOfFloors}` : "NA", //noOfFloors
-//             },
-//           ],
-//           items: {
-//             header: units
-//               ? [
-//                 getTranslatedLabel("PT_ASSESMENT_INFO_FLOOR", localizationLabelsData),
-//                 getTranslatedLabel("PT_ASSESMENT_INFO_USAGE_TYPE", localizationLabelsData),
-//                 // getTranslatedLabel("PT_ASSESMENT_INFO_SUB_USAGE_TYPE", localizationLabelsData),
-//                 getTranslatedLabel("PT_ASSESMENT_INFO_OCCUPLANCY", localizationLabelsData),
-//                 getTranslatedLabel("PT_ASSESMENT_INFO_AREA_RENT", localizationLabelsData),
-//               ]
-//               : [],
-//             values: units
-//               ? units.map((floor) => {
-//                 return {
-//                   value: keys.map((key) => {
-//                     return transform(floor, key, generalMDMSDataById, propertyDetails);
-//                   }),
-//                 };
-//               })
-//               : [],
-//           },
-//         },
-//       ]
-//     );
-//   };
-export const getAssessmentInfo = (propertyDetails, generalMDMSDataById,properties) => {
+export const getBuildingTypeInfo = (generalMDMSDataById, propertyDetails) => {
+  if (!generalMDMSDataById) {
+    return propertyDetails.propertySubType ? propertyDetails.propertySubType : propertyDetails.propertyType ? propertyDetails.propertyType : 'NA';
+  } else {
+    return get(generalMDMSDataById, `PropertySubType.${propertyDetails.propertySubType}.name`, get(generalMDMSDataById, `PropertyType.${propertyDetails.propertyType}.name`, "NA"))
+  }
+}
+
+export const getUsageTypeInfo = (propertyDetails) => {
+  return propertyDetails.usageCategoryMajor ? getTranslatedLabel('PROPERTYTAX_BILLING_SLAB_' + propertyDetails.usageCategoryMajor, localizationLabelsData) : "NA";
+}
+
+export const getPlotSizeInfo = (propertyDetails) => {
+  return propertyDetails.propertySubType === "SHAREDPROPERTY"
+    ? "NA" : propertyDetails.uom ? `${propertyDetails.landArea} ${propertyDetails.uom}` : `${Math.round(propertyDetails.landArea * 100) / 100} sq yards`;
+}
+
+export const getRainWaterHarvestingInfo = (properties) => {
+  return get(properties, 'additionalDetails.isRainwaterHarvesting', false) ? getTranslatedLabel("PT_COMMON_YES", localizationLabelsData) : getTranslatedLabel("PT_COMMON_NO", localizationLabelsData)
+}
+
+export const getUnitUsageTypeInfo = (unit, propertyDetails) => {
+  return unit && unit.usageCategoryMinor ? getTranslatedLabel('PROPERTYTAX_BILLING_SLAB_' + unit && unit.usageCategoryMinor, localizationLabelsData) : (propertyDetails && propertyDetails.usageCategoryMinor ? getTranslatedLabel('PROPERTYTAX_BILLING_SLAB_' + propertyDetails && propertyDetails.usageCategoryMinor, localizationLabelsData) :
+    (unit && unit.usageCategoryMajor ? getTranslatedLabel('PROPERTYTAX_BILLING_SLAB_' + unit && unit.usageCategoryMajor, localizationLabelsData) : "NA"));
+}
+
+export const getOccupancyInfo = (unit) => {
+  return unit && unit.occupancyType ? getTranslatedLabel('PROPERTYTAX_OCCUPANCYTYPE_' + unit && unit.occupancyType, localizationLabelsData) : "NA";
+}
+
+export const getAssessmentInfo = (propertyDetails, generalMDMSDataById, properties, oldPropertydetails, OldProperty) => {
   const { units = [], noOfFloors } = propertyDetails || {};
 
   return (
     propertyDetails && [
       {
         key: getTranslatedLabel("PT_ASSESMENT_INFO_USAGE_TYPE", localizationLabelsData),
-        value: propertyDetails.usageCategoryMajor ? getTranslatedLabel('PROPERTYTAX_BILLING_SLAB_' + propertyDetails.usageCategoryMajor , localizationLabelsData): "NA", //noOfFloors
+        value: getUsageTypeInfo(propertyDetails), //noOfFloors
+        oldValue: oldPropertydetails && getUsageTypeInfo(oldPropertydetails)
       },
       {
         key: getTranslatedLabel("PT_ASSESMENT_INFO_TYPE_OF_BUILDING", localizationLabelsData),
-        value: generalMDMSDataById
-          ? propertyDetails.propertySubType
-            ? generalMDMSDataById["PropertySubType"] && generalMDMSDataById["PropertySubType"][propertyDetails.propertySubType]
-              ? get(generalMDMSDataById, `PropertySubType.${propertyDetails.propertySubType}.name`, "NA") : 'NA'
-            : generalMDMSDataById["PropertyType"] && generalMDMSDataById["PropertyType"][propertyDetails.propertyType]
-              ? get(generalMDMSDataById, `PropertyType.${propertyDetails.propertyType}.name`, "NA") : "NA" : "NA"
+        value: getBuildingTypeInfo(generalMDMSDataById, propertyDetails),
+        oldValue: oldPropertydetails && getBuildingTypeInfo(generalMDMSDataById, oldPropertydetails)
       },
       {
         key: getTranslatedLabel("PT_ASSESMENT_INFO_PLOT_SIZE", localizationLabelsData),
-        value:
-          propertyDetails.propertySubType === "SHAREDPROPERTY"
-            ? "NA"
-            : propertyDetails.uom
-              ? `${propertyDetails.landArea} ${propertyDetails.uom}`
-              : `${Math.round(propertyDetails.landArea * 100) / 100} sq yards`,
+        value: getPlotSizeInfo(propertyDetails),
+        oldValue: oldPropertydetails && getPlotSizeInfo(oldPropertydetails),
       },
       propertyDetails.propertySubType === "SHAREDPROPERTY"
         ? {
           key: getTranslatedLabel("PT_FLOOR_NO", localizationLabelsData),
           value: units.length > 0 ? `${units[0].floorNo}` : "NA",
+          oldValue: oldPropertydetails && oldPropertydetails.units && oldPropertydetails.units.length > 0 ? `${oldPropertydetails.units[0].floorNo}` : "NA"
         } :
         {
           key: getTranslatedLabel("PT_ASSESMENT_INFO_NO_OF_FLOOR", localizationLabelsData),
           value: noOfFloors ? `${noOfFloors}` : "NA", //noOfFloors
+          oldValue: oldPropertydetails && oldPropertydetails.noOfFloors ? `${noOfFloors}` : "NA"
         },
-        {
-          key: getTranslatedLabel("PT_COMMONS_IS_RAINWATER_HARVESTING", localizationLabelsData),
-          value: get(properties,'additionalDetails.isRainwaterHarvesting', getTranslatedLabel("PT_COMMON_NO", localizationLabelsData))
-        },  
+      {
+        key: getTranslatedLabel("PT_COMMONS_IS_RAINWATER_HARVESTING", localizationLabelsData),
+        value: getRainWaterHarvestingInfo(properties),
+        oldValue: OldProperty && getRainWaterHarvestingInfo(OldProperty),
+      },
     ]
   );
 };
 
-export const getUnitInfo = (units = [], propertyDetails) => {
+export const getUnitInfo = (units = [], propertyDetails, oldPropertydetails) => {
   units = units || [];
+  units = units && units.filter(unit => unit && (unit.active || unit.id == undefined));
   let floors = [];
   units.map((unit, index) => {
     if (unit) {
       let floor = [{
         key: getTranslatedLabel("PT_ASSESSMENT_UNIT_USAGE_TYPE", localizationLabelsData),
-        value: unit.usageCategoryMinor ? getTranslatedLabel('PROPERTYTAX_BILLING_SLAB_' + unit.usageCategoryMinor, localizationLabelsData) : (propertyDetails.usageCategoryMinor ?getTranslatedLabel( 'PROPERTYTAX_BILLING_SLAB_' + propertyDetails.usageCategoryMinor , localizationLabelsData):
-          (unit.usageCategoryMajor ? getTranslatedLabel('PROPERTYTAX_BILLING_SLAB_' + unit.usageCategoryMajor, localizationLabelsData) : "NA")),
+        value: getUnitUsageTypeInfo(unit, propertyDetails),
+        oldValue: oldPropertydetails && oldPropertydetails.units && oldPropertydetails.units[index] && getUnitUsageTypeInfo(oldPropertydetails.units[index], oldPropertydetails) || "NA",
       }, {
 
         key: getTranslatedLabel("PT_ASSESMENT_INFO_OCCUPLANCY", localizationLabelsData),
-        value: unit.occupancyType ? getTranslatedLabel('PROPERTYTAX_OCCUPANCYTYPE_' + unit.occupancyType , localizationLabelsData): "NA",
+        value: getOccupancyInfo(unit),
+        oldValue: oldPropertydetails && oldPropertydetails.units && oldPropertydetails.units[index] && getOccupancyInfo(oldPropertydetails.units[index]) || "NA",
       }, {
 
         key: getTranslatedLabel("PT_FORM2_BUILT_AREA", localizationLabelsData),
         value: unit.unitArea ? unit.unitArea + '' : "NA",
+        oldValue: oldPropertydetails && oldPropertydetails.units && oldPropertydetails.units[index] && (`${Math.round(oldPropertydetails.units[index].unitArea * 9 * 100) / 100}`) || "NA",
       }];
       if (unit.occupancyType === "RENTED") {
         floor.push({
           key: getTranslatedLabel("PT_FORM2_TOTAL_ANNUAL_RENT", localizationLabelsData),
           value: unit.arv ? unit.arv + '' : "NA",
+          oldValue: oldPropertydetails && oldPropertydetails.units && oldPropertydetails.units[index] && (oldPropertydetails.units[index].arv + '') || "NA",
         })
       }
       if (!floors[unit['floorNo']]) {
@@ -220,20 +146,20 @@ export const getUnitInfo = (units = [], propertyDetails) => {
   return floors;
 }
 
-
-
-
-
-const AssessmentInfo = ({ properties, editIcon, generalMDMSDataById }) => {
+const AssessmentInfo = ({ properties, editIcon, generalMDMSDataById, OldProperty }) => {
   let hideSubsectionLabel = false;
   let assessmentItems = [];
   let subUnitItems = [];
+  let oldPropertydetails = '';
   const header = 'PT_ASSESMENT_INFO_SUB_HEADER';
+  if (OldProperty && Object.keys(OldProperty).length > 0) {
+    oldPropertydetails = OldProperty.propertyDetails[0];
+  }
   if (properties) {
     const { propertyDetails } = properties;
     if (propertyDetails && propertyDetails.length > 0) {
-      subUnitItems = getUnitInfo(propertyDetails[0]['units'], propertyDetails[0]);
-      assessmentItems = getAssessmentInfo(propertyDetails[0], generalMDMSDataById,properties);
+      subUnitItems = getUnitInfo(propertyDetails[0]['units'], propertyDetails[0], oldPropertydetails);
+      assessmentItems = getAssessmentInfo(propertyDetails[0], generalMDMSDataById, properties, oldPropertydetails, OldProperty);
       if (propertyDetails[0].propertySubType === "SHAREDPROPERTY") {
         hideSubsectionLabel = true;
       }

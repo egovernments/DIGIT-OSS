@@ -49,7 +49,8 @@ const WizardComponent = ({
   updateIndex,
   backLabel,
   nextLabel,
-  history
+  history,
+  nextButtonEnabled
 }) => {
   ((selected == 5 || selected == 7)
     ? ((selected == 5) ? (backLabel = 'PT_APPLICATION_BUTTON_DOWN_CONF') : (backLabel = 'PT_ASSESS_PAY_FOR_NEW_YEAR'))
@@ -136,6 +137,7 @@ const WizardComponent = ({
                   updateIndex(selected + 1);
                 }
             }
+            disabled={!nextButtonEnabled}
           />
         </div>
       </div>

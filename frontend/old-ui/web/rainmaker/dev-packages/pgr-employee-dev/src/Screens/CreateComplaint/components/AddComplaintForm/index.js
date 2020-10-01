@@ -96,7 +96,7 @@ const AddComplaintForm = ({
                   errorMessage={city.errorMessage}
                   errorStyle={city.errorStyle}
                   pattern={city.pattern}
-
+                  isClearable={true}
                 />}
               </div>
               <div className="col-sm-6 col-xs-12">
@@ -121,6 +121,7 @@ const AddComplaintForm = ({
                   errorMessage={mohalla.errorMessage}
                   errorStyle={mohalla.errorStyle}
                   pattern={mohalla.pattern}
+                  isClearable={true}
                 />}
               </div>
               <div className="col-sm-6 col-xs-12">

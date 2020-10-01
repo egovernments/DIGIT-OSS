@@ -1,6 +1,6 @@
 import commonConfig from "config/common.js";
 import { getCommonCard, getCommonContainer, getCommonHeader, getCommonParagraph, getCommonTitle, getStepperObject } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, unMountScreen } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
@@ -280,6 +280,8 @@ const screenConfig = {
   // hasBeforeInitAsync:true,
   beforeInitScreen: (action, state, dispatch) => {
     // let { isRequiredDocuments } = state.screenConfiguration.preparedFinalObject;
+    dispatch(unMountScreen("search"));
+    dispatch(unMountScreen("search-preview"));
     const tenantId = getTenantId();
     const URL = window.location.href
     const URLsplit = URL.split("/")

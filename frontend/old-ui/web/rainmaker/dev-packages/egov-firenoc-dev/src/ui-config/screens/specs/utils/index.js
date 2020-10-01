@@ -64,7 +64,7 @@ export const validateFields = (
   for (var variable in fields) {
     if (fields.hasOwnProperty(variable)) {
       if (
-        fields[variable] &&
+        fields[variable] && fields[variable].componentPath != "DynamicMdmsContainer" &&
         fields[variable].props &&
         (fields[variable].props.disabled === undefined ||
           !fields[variable].props.disabled) &&
@@ -82,6 +82,28 @@ export const validateFields = (
         )
       ) {
         isFormValid = false;
+      } else if(fields[variable] && fields[variable].componentPath == "DynamicMdmsContainer" && fields[variable].props){
+        let {masterName, moduleName, rootBlockSub, dropdownFields} = fields[variable].props;
+        let isIndex = fields[variable].index || 0;
+        dropdownFields.forEach((item, i) => {
+          let isValid = get(
+            state.screenConfiguration.preparedFinalObject ,
+            `DynamicMdms.${moduleName}.${rootBlockSub}.selectedValues[${isIndex}].${item.key}`,
+            ''
+          );
+          if(isValid == '' || isValid == 'none') {
+            isFormValid = false;
+            dispatch(
+              handleField(
+                "apply",
+                `${fields[variable].componentJsonpath}.props.dropdownFields[${i}]`,
+                "isRequired",
+                true
+              )
+            );
+          }
+        });
+        
       }
     }
   }
@@ -311,7 +333,7 @@ export const getDetailsForOwner = async (state, dispatch, fieldInfo) => {
       []
     );
     //Same no search on Same index
-    if (ownerNo === owners[cardIndex].userName) {
+    if (owners[cardIndex] && ownerNo === owners[cardIndex].userName) {
       dispatch(
         toggleSnackbar(
           true,
@@ -327,7 +349,7 @@ export const getDetailsForOwner = async (state, dispatch, fieldInfo) => {
 
     //Same no search in whole array
     const matchingOwnerIndex = owners.findIndex(
-      item => item.userName === ownerNo
+      item => item && item.userName === ownerNo
     );
     if (matchingOwnerIndex > -1) {
       if (
@@ -350,7 +372,7 @@ export const getDetailsForOwner = async (state, dispatch, fieldInfo) => {
         //Delete if current card was not part of oldOwners array - no need to save.
         if (
           oldOwnersArr.findIndex(
-            item => owners[cardIndex].userName === item.userName
+            item => item && owners[cardIndex] && owners[cardIndex].userName === item.userName
           ) == -1
         ) {
           owners.splice(cardIndex, 1);
@@ -431,6 +453,7 @@ export const getDetailsForOwner = async (state, dispatch, fieldInfo) => {
               currOwnersArr
             )
           );
+          validateOwners(state, dispatch);
         }
       }
     }
@@ -444,6 +467,80 @@ export const getDetailsForOwner = async (state, dispatch, fieldInfo) => {
     );
   }
 };
+
+export const validateOwners = (state, dispatch)=>{
+  let ownersJsonPath = "";
+  let owners = [];
+  let ownership = get(
+    state.screenConfiguration.preparedFinalObject,
+    "FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType",
+    "INDIVIDUAL.SINGLEOWNER"
+  );
+  if(ownership==="INDIVIDUAL.SINGLEOWNER"){
+    ownersJsonPath = "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.children.individualApplicantInfo.children.cardContent.children.applicantCard.children";
+    owners = get(
+      state.screenConfiguration.screenConfig.apply,
+      ownersJsonPath,
+      []
+    );
+    applyRequiredValidation(owners, state, dispatch);
+  } else if(ownership==="INDIVIDUAL.MULTIPLEOWNERS"){
+    ownersJsonPath = "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer.children.multipleApplicantInfo.props.items";
+
+    owners = get(
+      state.screenConfiguration.screenConfig.apply,
+      ownersJsonPath,
+      []
+    );
+    for(let i =0;i<owners.length;i++){
+      let obj = owners[i]["item"+i].children.cardContent.children.applicantCard.children;
+      applyRequiredValidation(obj, state, dispatch);
+    }
+  } else {
+    ownersJsonPath = "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer.children.institutionInfo.children.cardContent.children.applicantCard.children";
+    owners = get(
+      state.screenConfiguration.screenConfig.apply,
+      ownersJsonPath,
+      []
+    );
+    applyRequiredValidation(owners, state, dispatch);
+  }
+}
+
+export const applyRequiredValidation = (obj, state, dispatch) => {
+  Object.keys(obj).map((item)=>{
+    let jsonPath = obj[item].jsonPath;
+    let componentJsonpath = obj[item].componentJsonpath;
+    let isFieldValid = obj[item].isFieldValid;
+    let value = get(state.screenConfiguration.preparedFinalObject, jsonPath, null);
+    if(value && !isFieldValid){
+      dispatch(
+        handleField(
+          "apply",
+          componentJsonpath,
+          "props.error",
+          false
+        )
+      );
+      dispatch(
+        handleField(
+          "apply",
+          componentJsonpath,
+          "props.helperText",
+          ""
+        )
+      );
+      dispatch(
+        handleField(
+          "apply",
+          componentJsonpath,
+          "isFieldValid",
+          true
+        )
+      );
+    }
+  })
+}
 
 export const getReceiptData = async queryObject => {
   try {

@@ -219,7 +219,7 @@ class ReviewForm extends Component {
       toggleTerms
     } = this.props;
     let { totalAmount } = estimationDetails[0] || {};
-    const { generalMDMSDataById = {}, location = {} } = this.props;
+    const { generalMDMSDataById = {}, location = {}, OldProperty } = this.props;
 
     const { search } = location;
 
@@ -244,9 +244,9 @@ class ReviewForm extends Component {
                 openCalculationDetails={this.openCalculationDetails}
                 optionSelected={valueSelected}
               />}
-              <PropertyAddressInfo generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={formWizardConstants[purpose].isEditButton ? <EditIcon onIconClick={() => onEditButtonClick(0)} /> : null}></PropertyAddressInfo>
-              <AssessmentInfo generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={formWizardConstants[purpose].isEditButton ? <EditIcon onIconClick={() => onEditButtonClick(1)} /> : null}></AssessmentInfo>
-              <OwnerInfo generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={formWizardConstants[purpose].canEditOwner ? <EditIcon onIconClick={() => onEditButtonClick(2)} /> : null}></OwnerInfo>
+              <PropertyAddressInfo OldProperty={OldProperty} generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={formWizardConstants[purpose].isEditButton ? <EditIcon onIconClick={() => onEditButtonClick(0)} /> : null}></PropertyAddressInfo>
+              <AssessmentInfo OldProperty={OldProperty} generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={formWizardConstants[purpose].isEditButton ? <EditIcon onIconClick={() => onEditButtonClick(1)} /> : null}></AssessmentInfo>
+              <OwnerInfo OldProperty={OldProperty} generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={formWizardConstants[purpose].canEditOwner ? <EditIcon onIconClick={() => onEditButtonClick(2)} /> : null}></OwnerInfo>
               <DocumentsInfo generalMDMSDataById={generalMDMSDataById} documentsUploaded={this.props.documentsUploadRedux} editIcon={formWizardConstants[purpose].isEditButton ? <EditIcon onIconClick={() => onEditButtonClick(3)} /> : null}></DocumentsInfo>
               <div>
                 {!this.props.isCompletePayment && (
@@ -293,12 +293,13 @@ const mapStateToProps = (state, ownProps) => {
   const { common = {}, screenConfiguration } = state;
   const { generalMDMSDataById } = common || {};
   const { preparedFinalObject } = screenConfiguration;
-  let { documentsUploadRedux } = preparedFinalObject;
+  let { documentsUploadRedux, OldProperty } = preparedFinalObject;
   documentsUploadRedux = convertToArray(documentsUploadRedux);
   return {
     ownProps,
     generalMDMSDataById,
-    documentsUploadRedux
+    documentsUploadRedux,
+    OldProperty
   };
 };
 const mapDispatchToProps = dispatch => ({

@@ -8,6 +8,9 @@ import { LabelContainer } from "egov-ui-framework/ui-containers";
 import { connect } from "react-redux";
 import get from "lodash/get";
 import "./index.css"
+import { getDomainLink } from "../../ui-utils/commons";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import store from "ui-redux/store";
 
 const styles = {
   card: {
@@ -17,14 +20,34 @@ const styles = {
   }
 };
 
+
+
 class MyConnections extends React.Component {
+  
   getConnectionDetails = data => {
-    window.location.href = `/citizen/wns/connection-details?connectionNumber=${data.connectionNo}&tenantId=${data.property.tenantId}&service=${data.service.toUpperCase()}&connectionType=${data.connectionType}`
+    store.dispatch(
+      setRoute(
+        `/wns/connection-details?connectionNumber=${data.connectionNo}&tenantId=${data.property.tenantId}&service=${data.service.toUpperCase()}&connectionType=${data.connectionType}`
+      )
+    );
   }
 
   getViewBillDetails = data => {
-    window.location.href = `/citizen/wns/viewBill?connectionNumber=${data.connectionNo}&tenantId=${data.property.tenantId}&service=${data.service.toUpperCase()}&connectionType=${data.connectionType}`
+    store.dispatch(
+      setRoute(
+        `/wns/viewBill?connectionNumber=${data.connectionNo}&tenantId=${data.property.tenantId}&service=${data.service.toUpperCase()}&connectionType=${data.connectionType}`
+      )
+    );
   }
+
+  // getConnectionDetails = data => {
+  //   window.location.href = `${getDomainLink()}/wns/connection-details?connectionNumber=${data.connectionNo}&tenantId=${data.property.tenantId}&service=${data.service.toUpperCase()}&connectionType=${data.connectionType}`
+  // }
+
+  // getViewBillDetails = data => {
+  //   window.location.href = `${getDomainLink()}/wns/viewBill?connectionNumber=${data.connectionNo}&tenantId=${data.property.tenantId}&service=${data.service.toUpperCase()}&connectionType=${data.connectionType}`
+  // }
+
 
   render() {
     const { myConnectionResults, classes } = this.props;
@@ -113,9 +136,9 @@ class MyConnections extends React.Component {
                           />
                         </Grid>
                         <Grid item md={8} xs={6}>
-                          { (item.property && item.property.owners && item.property.owners !== "NA") ?                            
+                          {(item.property && item.property.owners && item.property.owners !== "NA") ?
                             (<div><LabelContainer
-                              labelName={item.property.owners.map(owner =>owner.name).join(",")}
+                              labelName={item.property.owners.map(owner => owner.name).join(",")}
                               fontSize={14}
                               style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
                             /></div>) :
@@ -133,15 +156,15 @@ class MyConnections extends React.Component {
                           />
                         </Grid>
                         <Grid item md={8} xs={6}>
-                        { (item.property && item.property.address && item.property.address.street) ?
+                          {(item.property && item.property.address && item.property.address.street) ?
                             (<Label
-                            labelName={item.property.address.street}
-                            fontSize={14}
-                            style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
-                          />) :
-                          (<div></div>)
-                        }
-                          
+                              labelName={item.property.address.street}
+                              fontSize={14}
+                              style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
+                            />) :
+                            (<div></div>)
+                          }
+
                         </Grid>
                       </Grid>
                       <Grid container style={{ marginBottom: 12 }}>

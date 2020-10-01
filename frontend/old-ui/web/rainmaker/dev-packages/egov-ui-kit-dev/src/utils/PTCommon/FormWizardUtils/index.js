@@ -53,7 +53,7 @@ export const getBusinessServiceNextAction = (businessServiceName, currentAction)
 
   if (states && states.length > 0) {
     states = states.filter((item, index) => {
-      if (item.state == null && item.actions && item.actions.length > 0) {
+      if (item.state == currentAction && item.actions && item.actions.length > 0) {
         return item.actions;
       }
     });

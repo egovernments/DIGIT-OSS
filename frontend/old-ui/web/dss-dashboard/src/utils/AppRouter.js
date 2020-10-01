@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { Route, Router, Switch } from 'react-router-dom';
 import Dashboard from '../components/Dashboard/dashboard';
 import history from "./web.history";
-import Home from '../components/Home/Home'
+import Home from '../components/Home/Home';
+import Breadcrumbs from '../Breadcrumbs';
+
 
 class AppRouter extends Component {
     authenticateUser = () => {
@@ -15,6 +17,7 @@ class AppRouter extends Component {
         return (
             <Router history={history}>
                 <div style={{ width: '100%' }}>
+                    <Breadcrumbs/>
                     <Switch>
                         <Route exact path={`${process.env.PUBLIC_URL}/home`} component={Home} />
                         <Route exact path={`${process.env.PUBLIC_URL}/ulb-home`} component={Home} />

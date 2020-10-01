@@ -11,6 +11,7 @@ import style from './styles';
 import Arrow_Downward from '../../images/arrows/Arrow_Downward.svg'
 import Arrow_Upward from '../../images/arrows/Arrow_Upward.svg'
 import moment from 'moment';
+import { removeSignFromInsightData } from '../../utils/commons';
 
 class CollectionChartRow extends React.Component {
 	constructor(props) {
@@ -75,6 +76,7 @@ class CollectionChartRow extends React.Component {
 				}else if(data.insight_data.value.includes("last month")){
 					value = data.insight_data.value.replace("last month" , "LM");
 				}
+				value=removeSignFromInsightData(value);
 			}
 			
 			return (
@@ -91,7 +93,7 @@ class CollectionChartRow extends React.Component {
 							</React.Fragment>
 						}
 					</span> */}
-					<div style={{ textAlign: "right" }}>
+					<div style={{ textAlign: "right",whiteSpace: "nowrap" }}>
 						<div>
 							<span><NFormatter value={data.value} nType={data.valueSymbol} /></span>
 							{/* <NFormatter value={data.value} nType={data.valueSymbol} /> */}

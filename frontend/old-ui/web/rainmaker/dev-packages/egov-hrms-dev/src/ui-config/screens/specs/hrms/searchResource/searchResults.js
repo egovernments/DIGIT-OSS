@@ -2,6 +2,7 @@ import {
   getLocaleLabels,
   getTransformedLocalStorgaeLabels
 } from "egov-ui-framework/ui-utils/commons";
+import { routeTo } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formActionUtils";
 
 export const getTextToLocalMapping = label => {
   const localisationLabels = getTransformedLocalStorgaeLabels();
@@ -58,23 +59,23 @@ export const searchResults = {
   props: {
     columns: [
       {
-        labelName:"Employee ID",
+        labelName: "Employee ID",
         labelKey: "HR_COMMON_TABLE_COL_EMP_ID"
       },
       {
-        labelName:"Name",
+        labelName: "Name",
         labelKey: "HR_COMMON_TABLE_COL_NAME"
       },
       {
-        labelName:"Role",
+        labelName: "Role",
         labelKey: "HR_COMMON_TABLE_COL_ROLE"
       },
       {
-        labelName:"Designation",
+        labelName: "Designation",
         labelKey: "HR_COMMON_TABLE_COL_DESG"
       },
       {
-        labelName: "Department", 
+        labelName: "Department",
         labelKey: "HR_COMMON_TABLE_COL_DEPT"
       },
       {
@@ -89,7 +90,7 @@ export const searchResults = {
     title: {
       labelName: "Search Results for Employee",
       labelKey: "HR_HOME_SEARCH_RESULTS_TABLE_HEADING"
-      } ,
+    },
     rows: "",
     options: {
       filter: false,
@@ -106,15 +107,5 @@ export const searchResults = {
 };
 
 const onRowClick = rowData => {
-  window.location.href = `view?employeeID=${rowData[0]}&tenantId=${rowData[5]}`;
+  routeTo(`view?employeeID=${rowData[0]}&tenantId=${rowData[5]}`);
 };
-
-// const onRowClick = rowData => {
-//   let viewEmployeeUrl =
-//     process.env.REACT_APP_SELF_RUNNING === "true"
-//       ? "/egov-ui-framework/hrms/view"
-//       : "/hrms/view";
-//   return `${viewEmployeeUrl}?employeeID=${
-//     rowData[get(textToLocalMapping, "Employee ID")]
-//   }&tenantId=${rowData[get(textToLocalMapping, "Tenant ID")]}`;
-// };

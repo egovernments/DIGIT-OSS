@@ -1,16 +1,11 @@
 import {
-  getTextField,
-  getSelectField,
   getCommonContainer,
   getDateField,
-  getPattern
+  getPattern, getSelectField, getTextField
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTodaysDateInYMD } from "egov-ui-framework/ui-utils/commons";
-
 import get from "lodash/get";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 const onIconClick = (state, dispatch, index) => {
   const ifscCode = get(
@@ -54,6 +49,12 @@ const onIconClick = (state, dispatch, index) => {
               bankBranch
             )
           );
+          dispatch(
+            prepareFinalObject(
+              "validIfscCode",
+              ifscCode
+            )
+          );
           dispatch(toggleSpinner());
         }
       })
@@ -84,7 +85,65 @@ export const payeeDetails = getCommonContainer({
       }
     ],
     jsonPath: "ReceiptTemp[0].Bill[0].payer",
-    required: true
+    required: true,
+    beforeFieldChange: (action, state, dispatch) => {
+      let tabIndex = 0;
+      let tabs = get(state.screenConfiguration.screenConfig, "pay.components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs", []);
+      let tabValue = get(tabs[tabIndex], "code", '').toLowerCase();
+      let componentPath = process.env.REACT_APP_NAME === "Citizen" ? "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePayerDetails.children.cardContent.children.payerDetailsCardContainer" : `components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs[${tabIndex}].tabContent.${tabValue}.children.payeeDetails`;
+      if (action.value === "COMMON_OTHER") {
+        dispatch(
+          handleField(
+            "pay",
+            `${componentPath}.children.payerName`,
+            "props.value",
+            ""
+          )
+        );
+        dispatch(
+          handleField(
+            "pay",
+            `${componentPath}.children.payerMobileNo`,
+            "props.value",
+            ""
+          )
+        );
+        dispatch(
+          handleField(
+            "pay",
+            `${componentPath}.children.payerName`,
+            "props.error",
+            false
+          )
+        );
+        dispatch(
+          handleField(
+            "pay",
+            `${componentPath}.children.payerMobileNo`,
+            "props.error",
+            false
+          )
+        );
+      } else {
+        dispatch(
+          handleField(
+            "pay",
+            `${componentPath}.children.payerName`,
+            "props.value",
+            get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].payerName", '')
+          )
+        );
+        dispatch(
+          handleField(
+            "pay",
+            `${componentPath}.children.payerMobileNo`,
+            "props.value",
+            get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].mobileNumber", '')
+          )
+        );
+      }
+    }
+
   }),
   payerName: getTextField({
     label: {
@@ -189,6 +248,21 @@ export const onlineDetails = getCommonContainer({
       disabled: true
     },
     jsonPath: "ReceiptTemp[0].instrument.bank.name"
+  }),
+  chequeBranch: getTextField({
+    label: {
+      labelName: "Bank Branch",
+      labelKey: "NOC_PAYMENT_BANK_BRANCH_LABEL"
+    },
+    placeholder: {
+      labelName: "Enter bank branch",
+      labelKey: "NOC_PAYMENT_BANK_BRANCH_PLACEHOLDER"
+    },
+    required: true,
+    props: {
+      disabled: true
+    },
+    jsonPath: "ReceiptTemp[0].instrument.branchName"
   })
 });
 
@@ -314,14 +388,23 @@ export const cheque = getCommonContainer({
   chequeDetails
 });
 
+export const offline_neft = getCommonContainer({
+  payeeDetails,
+  onlineDetails: { ...onlineDetails }
+});
+export const offline_rtgs = getCommonContainer({
+  payeeDetails,
+  onlineDetails: { ...onlineDetails }
+});
+
 export const neftRtgs = getCommonContainer({
   payeeDetails,
   onlineDetails
 });
 
-export const postalOrder = getCommonContainer({
+export const postal_order = getCommonContainer({
   payeeDetails,
-  poDetails
+  poDetails: { ...poDetails }
 });
 
 export const demandDraftDetails = getCommonContainer({
@@ -460,48 +543,48 @@ export const cash = getCommonContainer({
 });
 
 
-export const paymentMethods= [
+export const paymentMethods = [
   {
-    code : "CASH",
-    tabButton: "COMMON_CASH",    
+    code: "CASH",
+    tabButton: "COMMON_CASH",
     tabIcon: "Dashboard",
     tabContent: { cash }
   },
   {
-    code : "CHEQUE",
+    code: "CHEQUE",
     tabButton: "COMMON_CHEQUE",
     tabIcon: "Schedule",
     tabContent: { cheque }
   },
   {
-    code : "DD",
+    code: "DD",
     tabButton: "COMMON_DD",
     tabIcon: "Schedule",
     tabContent: { demandDraft }
   },
   {
-    code : "CARD",
+    code: "CARD",
     tabButton: "COMMON_CREDIT_DEBIT_CARD",
     tabIcon: "Schedule",
     tabContent: { card }
   },
   {
-    code : "OFFLINE_NEFT",
+    code: "OFFLINE_NEFT",
     tabButton: "COMMON_NEFT",
     tabIcon: "Schedule",
-    tabContent: { neftRtgs }
+    tabContent: { offline_neft }
   },
   {
-    code : "OFFLINE_RTGS",
+    code: "OFFLINE_RTGS",
     tabButton: "COMMON_RTGS",
     tabIcon: "Schedule",
-    tabContent: { neftRtgs }
+    tabContent: { offline_rtgs }
   },
   {
-    code : "POSTAL_ORDER",
+    code: "POSTAL_ORDER",
     tabButton: "COMMON_POSTAL_ORDER",
     tabIcon: "Schedule",
-    tabContent: { postalOrder }
+    tabContent: { postal_order }
   }
 ]
 

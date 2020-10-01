@@ -40,11 +40,12 @@ class UiTableHead extends Component {
           } 
 
           {columnData.map((column, idx) => {
+
             return (
               <TableCell
                 key={column.id}
                 // stickyHeader={column.stickyHeader}
-                align={(column.numeric === 'amount' || column.numeric === 'number' || column.numeric === 'percentage') ? 'left' : 'left'}
+                align={(column.numeric === true) ? 'right' : 'left'}
                 padding={column.disablePadding ? 'none' : 'default'}
                 sortDirection={orderBy === column.id ? order : false}
                 style={{ width: this.props.width ? this.props.width : 'auto' }}

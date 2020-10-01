@@ -1,12 +1,15 @@
 import React, { Component } from "react";
 import { Card } from "components";
 import Label from "egov-ui-kit/utils/translationNode";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import OldValueLabelContainer from "../../../../../common/common/OldValueLabelContainer";
 import "./index.css";
 
 class PropertyInfoCard extends Component {
   render() {
     const { ownerInfo, header, editIcon, backgroundColor = "rgb(242, 242, 242)", items = [], subSection = [], hideSubsectionLabel = false } = this.props;
 
+    const isModify = getQueryArg(window.location.href, "mode") == 'WORKFLOWEDIT';
     return (
       <div>
         {items && (
@@ -46,6 +49,9 @@ class PropertyInfoCard extends Component {
                                 fontSize="16px"
                               />
                             </div>
+                            {isModify && <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>
+                              <OldValueLabelContainer value={item.value} jsonPath={item.jsonPath} oldValue={item.oldValue} />
+                            </div>}
                           </div>
                         </div>
                       );

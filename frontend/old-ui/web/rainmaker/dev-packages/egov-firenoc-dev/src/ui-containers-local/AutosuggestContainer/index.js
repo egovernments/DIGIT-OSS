@@ -48,6 +48,7 @@ class AutoSuggestor extends Component {
           className={className}
           label={translatedLabel}
           placeholder={translatedPlaceholder}
+          isClearable={true}
           {...rest}
         />
       </div>

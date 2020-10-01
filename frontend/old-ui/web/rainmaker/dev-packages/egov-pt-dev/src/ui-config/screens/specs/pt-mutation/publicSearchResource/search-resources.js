@@ -51,7 +51,7 @@ export const searchPropertyDetails = {
           labelsFromLocalisation: true,
           required: true,
           disabled: false,
-          isClearable: false
+          isClearable: true
         },
         required: true,
         jsonPath: "searchScreen.tenantId",
@@ -96,7 +96,7 @@ export const searchPropertyDetails = {
             masterName: "TENANTS"
           },
           required: true,
-          isClearable: false,
+          isClearable: true,
           labelsFromLocalisation: true,
           jsonPath: "searchScreen.locality.code",
           sourceJsonPath: "applyScreenMdmsData.tenant.localities",

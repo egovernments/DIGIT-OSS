@@ -62,6 +62,7 @@ class AutoSuggestor extends Component {
 const getLocalisedSuggestions = (suggestions, localePrefix, transfomedKeys) => {
   return (
     suggestions &&
+    Array.isArray(suggestions) &&
     suggestions.length > 0 &&
     suggestions.map((option, key) => {
       option.name = getLocaleLabels(

@@ -1,6 +1,6 @@
 
 import { getCommonCard, getCommonContainer, getCommonHeader, getStepperObject } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, unMountScreen } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getCommonTenant } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
 import cloneDeep from "lodash/cloneDeep";
@@ -8,7 +8,7 @@ import get from "lodash/get";
 import set from "lodash/set";
 import { httpRequest } from "../../../../ui-utils";
 import { furnishNocResponse, getSearchResults, prepareDocumentsUploadData, setApplicationNumberBox } from "../../../../ui-utils/commons";
-import { getCurrentFinancialYear, showHideMutationDetailsCard } from "../utils";
+import { getCurrentFinancialYear, setCardVisibility, showHideMutationDetailsCard } from "../utils";
 import { footer } from "./applyResource/footer";
 import { mutationDetails } from "./applyResourceMutation/mutationDetails";
 import { documentDetails } from "./applyResourceMutation/mutationDocuments";
@@ -155,7 +155,7 @@ const getPropertyData = async (action, state, dispatch) => {
 
     );
 
-    if (payload && payload.Properties && payload.Properties[0].owners && payload.Properties[0].owners.length > 0) {
+    if (payload && payload.Properties && payload.Properties[0] && payload.Properties[0].owners && payload.Properties[0].owners.length > 0) {
 
       let owners = [];
       payload.Properties[0].owners.map(owner => {
@@ -175,102 +175,133 @@ const getPropertyData = async (action, state, dispatch) => {
     payload.Properties[0].additionalDetails = { previousPropertyUuid };
     dispatch(prepareFinalObject("Property", payload.Properties[0]));
 
-    let owners = get(state, "screenConfiguration.preparedFinalObject.Property.owners");
-    if (owners && owners.length > 0) {
-      owners.map(owner => {
-        if (owner.ownerType != 'NONE' && owner.status == "ACTIVE") {
-
-          set(
-            action.screenConfig,
-            "components.div.children.formwizardFirstStep.children.transferorDetails.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerSpecialDocumentID.props.style.display",
-            'block'
-          );
-          set(
-            action.screenConfig,
-            "components.div.children.formwizardFirstStep.children.transferorDetails.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerSpecialDocumentType.props.style.display",
-            'block'
-          );
-          set(
-            action.screenConfig,
-            "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerSpecialDocumentID.props.style.display",
-            'block'
-          );
-          set(
-            action.screenConfig,
-            "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerSpecialDocumentType.props.style.display",
-            'block'
-          );
-        }
-      })
-    }
-
-    if (
-      get(
-        state,
-        "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType",
-        ""
-      ).includes("MULTIPLEOWNERS")
-    ) {
-      set(
-        action.screenConfig,
-        "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.props.style",
-        { display: "none" }
-      );
-      set(
-        action.screenConfig,
-        "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer.props.style",
-        {}
-      );
-    } else if (
-      get(
-        state,
-        "screenConfiguration.preparedFinalObject.Property.ownershipCategory",
-        ""
-      ).includes("INSTITUTIONAL")
-    ) {
-      set(
-        action.screenConfig,
-        "components.div.children.formwizardFirstStep.children.transferorDetails.props.style",
-        { display: "none" }
-      );
-      set(
-        action.screenConfig,
-        "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorSummary.props.style",
-        { display: "none" }
-      );
-      // set(
-      //   action.screenConfig,
-      //  "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorInstitutionSummary.props.style",
-      //   {background:'grey'}
-      // );
-
-    } else {
-      // set(
-      //   action.screenConfig,
-      //   "components.div.children.formwizardFirstStep.children.transferorDetails.props.style",
-      //   { display: "none" }
-      // );
-      // set(
-      //   action.screenConfig,
-      //   "components.div.children.formwizardFirstStep.children.transferorDetails.props.style",
-      //   {background:'white'}
-      // );
-      set(
-        action.screenConfig,
-        "components.div.children.formwizardFirstStep.children.transferorInstitutionDetails.props.style",
-        { display: "none" }
-      );
-      set(
-        action.screenConfig, "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorInstitutionSummary.props.style",
-        { display: "none" }
-      );
-    }
+    setCardVisibility(state, action, dispatch);
 
     dispatch(prepareFinalObject("PropertiesTemp", cloneDeep(payload.Properties)));
   } catch (e) {
     console.log(e);
   }
 };
+
+const getApplicationData = async (action, state, dispatch) => {
+  let tenantId = getQueryArg(window.location.href, "tenantId");
+  let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+  try {
+    let queryObject = [
+      {
+        key: "tenantId",
+        value: tenantId
+      },
+      {
+        key: "acknowledgementIds",
+        value: applicationNumber
+      }
+    ];
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/property-services/property/_search",
+      "_search",
+      queryObject,
+    );
+
+    if (payload && payload.Properties && payload.Properties[0] && payload.Properties[0].owners && payload.Properties[0].owners.length > 0) {
+      let auditResponse = await getSearchResults([
+        {
+          key: "tenantId",
+          value: tenantId
+        },
+        { key: "propertyIds", value: payload.Properties[0].propertyId }, {
+          key: "audit",
+          value: true
+        }
+      ]);
+      let inActiveOwners = [];
+      let activeOwners = [];
+      payload.Properties[0].owners.map(owner => {
+        owner.documentUid = owner.documents ? owner.documents[0].documentUid : "NA";
+        owner.documentType = owner.documents ? owner.documents[0].documentType : "NA";
+
+        if (owner.status == "ACTIVE") {
+          activeOwners.push({ ...owner, status: "INACTIVE" });
+        } else {
+          inActiveOwners.push({ ...owner, status: "ACTIVE" });
+        }
+      });
+
+      payload.Properties[0].owners = inActiveOwners;
+      payload.Properties[0].ownersInit = inActiveOwners;
+      payload.Properties[0].ownersTemp = activeOwners;
+      payload.Properties[0].ownershipCategoryInit = payload.Properties[0].ownershipCategory;
+      payload.Properties[0].ownershipCategoryTemp = payload.Properties[0].ownershipCategory;
+
+      payload.Properties[0].institutionTemp = payload.Properties[0].institution;
+      payload.Properties[0].institutionInit = null;
+      payload.Properties[0].institution = null;
+
+      if (auditResponse && Array.isArray(get(auditResponse, "Properties", [])) && get(auditResponse, "Properties", []).length > 0) {
+        const propertiesAudit = get(auditResponse, "Properties", []);
+
+
+        const previousActiveProperty = propertiesAudit.filter(property => property.status == 'ACTIVE').sort((x, y) => y.auditDetails.lastModifiedTime - x.auditDetails.lastModifiedTime)[0];
+
+        payload.Properties[0].ownershipCategoryInit = previousActiveProperty.ownershipCategory;
+        payload.Properties[0].ownershipCategory = previousActiveProperty.ownershipCategory;
+        if (payload.Properties[0].ownershipCategoryInit.startsWith("INSTITUTION")) {
+          payload.Properties[0].institutionInit = previousActiveProperty.institution;
+          payload.Properties[0].institution = previousActiveProperty.institution;
+        }
+        inActiveOwners = previousActiveProperty.owners.filter(owner => owner.status == "ACTIVE");
+        payload.Properties[0].owners = inActiveOwners;
+        payload.Properties[0].ownersInit = inActiveOwners;
+      }
+
+    }
+
+
+    // const previousPropertyUuid = payload.Properties[0].additionalDetails && payload.Properties[0].additionalDetails.previousPropertyUuid;
+    // payload.Properties[0].additionalDetails = { previousPropertyUuid };
+
+
+    let documents = get(payload, 'Properties[0].documents', []);
+    documents = documents.map(document => {
+      return { ...document, documentType: document.documentType.includes('OWNER') ? document.documentType : `OWNER.TRANSFERREASONDOCUMENT.${document.documentType}` }
+    })
+    set(payload, 'Properties[0].documents', documents)
+    dispatch(prepareFinalObject("DocumentsPrefill", documents && Array.isArray(documents) && documents.length > 0 ? true : false));
+    dispatch(prepareFinalObject("Property", payload.Properties[0]));
+    setCardVisibility(state, action, dispatch);
+    dispatch(prepareFinalObject("PropertiesTemp", cloneDeep(payload.Properties)));
+    // Prefilling radio buttons
+    set(
+      action.screenConfig,
+        "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.children.individualApplicantInfo.children.cardContent.children.applicantCard.children.genderRadioGroup.props.value",
+        payload.Properties[0].ownersTemp[0].gender
+      )
+    
+      set(
+        action.screenConfig,
+        "components.div.children.formwizardFirstStep.children.mutationDetails.children.cardContent.children.mutationDetailsContainer.children.getMutationPendingRadioButton.props.value",
+        payload.Properties[0].additionalDetails.isMutationInCourt
+      )
+    
+      set(
+        action.screenConfig,
+        "components.div.children.formwizardFirstStep.children.mutationDetails.children.cardContent.children.mutationDetailsContainer.children.getMutationStateAcquisitionRadioButton.props.value",
+        payload.Properties[0].additionalDetails.isPropertyUnderGovtPossession
+      )
+      set(
+        action.screenConfig,
+        "components.div.children.formwizardFirstStep.children.registrationDetails.children.cardContent.children.registrationDetailsContainer.children.transferReason.props.value",
+        payload.Properties[0].additionalDetails.reasonForTransfer
+      )
+    
+
+  } catch (error) {
+    console.log("mutation edit flow error ", error);
+  }
+
+}
 
 const getSpecialCategoryDocumentTypeMDMSData = async (action, state, dispatch) => {
   let tenantId = getCommonTenant();
@@ -486,12 +517,15 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "apply",
   beforeInitScreen: (action, state, dispatch) => {
+    dispatch(unMountScreen("propertySearch"));
+    dispatch(unMountScreen("search-preview"));
     const applicationNumber = getQueryArg(
       window.location.href,
       "applicationNumber"
     );
     const tenantId = getQueryArg(window.location.href, "tenantId");
     const step = getQueryArg(window.location.href, "step");
+    const isEdit = getQueryArg(window.location.href, "action") === "edit";
     dispatch(
       prepareFinalObject(
         "Property.additionalDetails",
@@ -519,7 +553,8 @@ const screenConfig = {
       "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerSpecialDocumentType.props.style.display",
       'none'
     );
-    getPropertyData(action, state, dispatch);
+
+    isEdit ? getApplicationData(action, state, dispatch) : getPropertyData(action, state, dispatch);
 
     //Set Module Name
     set(state, "screenConfiguration.moduleName", "pt-mutation");

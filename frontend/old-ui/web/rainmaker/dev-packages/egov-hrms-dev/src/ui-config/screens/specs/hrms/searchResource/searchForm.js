@@ -100,6 +100,7 @@ export const searchForm = getCommonCard({
         sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
         labelsFromLocalisation: true,
         required: true,
+        isClearable: true,
       },
       required: true,
     },

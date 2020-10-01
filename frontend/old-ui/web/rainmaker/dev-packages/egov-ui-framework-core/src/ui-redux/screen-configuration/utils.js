@@ -16,7 +16,8 @@ export const validateField = field => {
     minValue,
     maxValue,
     visible,
-    isDOB
+    isDOB,
+    maxDate
   } = field;
 
   if (visible !== undefined && !visible) {
@@ -70,7 +71,7 @@ export const validateField = field => {
 
   if (isDOB) {
     if (value) {
-      let currentDate = new Date().getTime();
+      let currentDate = maxDate ? new Date(maxDate).getTime() : new Date().getTime();
       let ownerDOB = new Date(value).getTime();
       if (ownerDOB > currentDate) {
         isFieldValid = false;
