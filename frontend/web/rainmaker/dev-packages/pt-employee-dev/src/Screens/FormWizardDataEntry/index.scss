@@ -541,3 +541,8 @@ div[class^="MuiPaper-root"],
    overflow: auto !important;
  }
 }
+
+
+.ownershipType .dropdown, #constructiontype { 
+  z-index:1000;
+}
