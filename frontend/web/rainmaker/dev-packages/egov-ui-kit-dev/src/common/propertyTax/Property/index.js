@@ -179,7 +179,7 @@ class Property extends Component {
 
       this.setState({
         dialogueOpen: true,
-        urlToAppend: `/property-tax/assessment-form?assessmentId=${assessmentNo}&isReassesment=true&isAssesment=true&propertyId=${propertyId}&tenantId=${tenantId}`,
+        urlToAppend: getPropertyLink(propertyId, tenantId, PROPERTY_FORM_PURPOSE.ASSESS, -1, assessmentNo),
       });
     }
   };
