@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.models.Assessment;
 import org.egov.pt.models.Property;
@@ -18,6 +17,7 @@ import org.springframework.util.CollectionUtils;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.NullNode;
 
 import static org.egov.pt.util.PTConstants.*;
 
@@ -162,7 +162,8 @@ public class TranslationService {
                     unitMap.put("usageCategoryDetail",masterData[3]);
                 
                 Map<String, Object> unitAdditionalMap = new HashMap<>();
-                unitAdditionalMap.put("innerDimensionsKnown", unit.getConstructionDetail().getDimensions()==null? false:true);
+                
+                unitAdditionalMap.put("innerDimensionsKnown", unit.getConstructionDetail().getDimensions() instanceof NullNode ? false:true);
 
                 unitMap.put("additionalDetails", unitAdditionalMap);
                 units.add(unitMap);
