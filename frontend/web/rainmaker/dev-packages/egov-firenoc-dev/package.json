@@ -15,7 +15,7 @@
    "babel-polyfill": "^6.26.0",
    "egov-ui-framework": "0.1.41",
    "egov-ui-kit": "^0.0.1",
-   "egov-workflow": "1.1.0",
+   "egov-workflow":"1.2.0",
    "html2canvas": "^1.0.0-alpha.12",
    "jquery": "^3.3.1",
    "jsonpath": "^1.0.2",
