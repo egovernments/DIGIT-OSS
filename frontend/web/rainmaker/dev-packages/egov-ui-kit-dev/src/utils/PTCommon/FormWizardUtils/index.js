@@ -649,7 +649,18 @@ export const getCalculationScreenData = async (billingSlabs, tenantId, self) => 
 
   let finalData = mapIdWithIndex.mappedIds.reduce(
     (res, curr) => {
-      const { floorNo } = filteredUnitsArray[curr.index];
+      const PropertyType = get(prepareFormData, "Properties[0].propertyDetails[0].propertyType"); 
+
+      let floorNo = 0;
+
+      if(PropertyType === "VACANT" )
+      {
+      floorNo = 0;
+      }
+      else
+      {
+        const { floorNo } =  filteredUnitsArray && filteredUnitsArray[curr.index];
+      }    
       if (res.floorObj.hasOwnProperty(floorNo)) {
         res.floorObj[floorNo]++;
       } else {
