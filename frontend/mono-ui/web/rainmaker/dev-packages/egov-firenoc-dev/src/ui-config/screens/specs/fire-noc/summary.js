@@ -8,7 +8,8 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import {
   getFileUrlFromAPI,
   getQueryArg,
-  getTransformedLocale
+  getTransformedLocale,
+  getFileUrl
 } from "egov-ui-framework/ui-utils/commons";
 import jp from "jsonpath";
 import get from "lodash/get";
@@ -50,7 +51,7 @@ const prepareDocumentsView = async (state, dispatch) => {
   let fileUrls =
     fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : [];
   documentsPreview = documentsPreview.map(doc => {
-    doc["link"] = fileUrls[doc.fileStoreId];
+    doc["link"] = getFileUrl(fileUrls[doc.fileStoreId]);
     return doc;
   });
   dispatch(prepareFinalObject("documentsPreview", documentsPreview));

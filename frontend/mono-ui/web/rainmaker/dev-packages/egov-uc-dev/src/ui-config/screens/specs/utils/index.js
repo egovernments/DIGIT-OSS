@@ -61,7 +61,7 @@ export const validateFields = (
   for (var variable in fields) {
     if (fields.hasOwnProperty(variable)) {
       if (
-        fields[variable] &&
+        fields[variable] && fields[variable].componentPath != "DynamicMdmsContainer" && 
         fields[variable].props &&
         (fields[variable].props.disabled === undefined ||
           !fields[variable].props.disabled) &&
@@ -79,6 +79,28 @@ export const validateFields = (
         )
       ) {
         isFormValid = false;
+      } else if(fields[variable] && fields[variable].componentPath == "DynamicMdmsContainer" && fields[variable].props){
+        let {masterName, moduleName, rootBlockSub, dropdownFields} = fields[variable].props;
+        let isIndex = fields[variable].index || 0;
+        dropdownFields.forEach((item, i) => {
+          let isValid = get(
+            state.screenConfiguration.preparedFinalObject ,
+            `DynamicMdms.${moduleName}.${rootBlockSub}.selectedValues[${isIndex}].${item.key}`,
+            ''
+          );
+          if(!isValid || isValid == '' || isValid == 'none') {
+            isFormValid = false;
+            dispatch(
+              handleField(
+                screen,
+                `${fields[variable].componentJsonpath}.props.dropdownFields[${i}]`,
+                "isRequired",
+                true
+              )
+            );
+          }
+        });
+        
       }
     }
   }

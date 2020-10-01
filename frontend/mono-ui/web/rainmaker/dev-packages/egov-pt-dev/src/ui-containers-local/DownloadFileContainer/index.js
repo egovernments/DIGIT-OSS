@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { MultiDownloadCard } from "egov-ui-framework/ui-molecules";
 import { connect } from "react-redux";
 import get from "lodash/get";
+import compact from "lodash/compact";
 import "./index.scss";
 
 class DownloadFileContainer extends Component {
@@ -23,7 +24,7 @@ const mapStateToProps = (state, ownProps) => {
 
   uploadedDocData = keys.map(key => uploadedDocData[key])
 
-  const documentData =
+  let documentData =
     uploadedDocData &&
     uploadedDocData.map(item => {
       if (item.title && item.fileStoreId && item.name && item.link && item.linkText) {
@@ -32,18 +33,18 @@ const mapStateToProps = (state, ownProps) => {
         }
       }
       else {
-        return {
-          title: item.documentCode,
-          //   title: `PT_${item.title}`,
-          link: item.documents && item.documents[0].fileUrl && item.documents[0].fileUrl.split(",")[0],
-          //   link: item.link,
-          linkText: "View",
-          name: item.documents && item.documents[0] && item.documents[0].fileName,
-          //name: item.name
-        };
+        if(item.documents && Array.isArray(item.documents) && item.documents[0].fileUrl){
+          return {
+            title: item.documentCode,
+            link: item.documents[0].fileUrl.split(",")[0],
+            linkText: "View",
+            name: item.documents[0].fileName,
+          };
+        }
       }
     });
- 
+
+    documentData = compact(documentData);
 
   const data = ownProps.data
     ? ownProps.data

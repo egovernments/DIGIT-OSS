@@ -14,10 +14,16 @@ const styles = {
 };
 
 function ApplicationNoContainer(props) {
-  const { number } = props;
+  const { number,mode } = props;
   if(number.includes("WS")){
+    if(mode){
+      return <div style={styles}><LabelContainer labelKey={"WS_ACKNO_CONNECTION_NO_LABEL"}/> {number}</div>;
+    }
     return <div style={styles}><LabelContainer labelKey={"WS_ACKNO_APP_NO_LABEL"}/> {number}</div>;
   }else{
+    if(mode){
+      return <div style={styles}><LabelContainer labelKey={"WS_ACKNO_CONNECTION_NO_LABEL"}/> {number}</div>;
+    }
     return <div style={styles}><LabelContainer labelKey={"WS_ACKNO_SEW_APP_NO_LABEL"}/> {number}</div>;
   }
   

@@ -34,8 +34,8 @@ import "./index.css";
 
 const tradeCategoryChange = (reqObj) => {
   try {
-      let { dispatch } = reqObj;
-      dispatch(pFO("Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType", ''));
+      let { dispatch, index } = reqObj;
+      dispatch(pFO(`Licenses[0].tradeLicenseDetail.tradeUnits[${index}].tradeType`, ''));
   } catch (e) {
     console.log(e);
   }
@@ -43,8 +43,8 @@ const tradeCategoryChange = (reqObj) => {
 
 const tradeTypeChange = (reqObj) => {
   try {
-      let { dispatch } = reqObj;
-      dispatch(pFO("Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType", ''));
+      let { dispatch, index } = reqObj;
+      dispatch(pFO(`Licenses[0].tradeLicenseDetail.tradeUnits[${index}].tradeType`, ''));
   } catch (e) {
     console.log(e);
   }
@@ -52,7 +52,7 @@ const tradeTypeChange = (reqObj) => {
 
 const tradeSubTypeChange = (reqObj) => {
   try {
-      let { moduleName, rootBlockSub, keyValue, value, state, dispatch } = reqObj;
+      let { moduleName, rootBlockSub, keyValue, value, state, dispatch, index } = reqObj;
       let keyValueRow = keyValue.replace(`.${value}`, ``);
       let tradeSubTypes = get(
         state.screenConfiguration.preparedFinalObject,
@@ -62,7 +62,7 @@ const tradeSubTypeChange = (reqObj) => {
       let currentObject = filter(tradeSubTypes, {
         code: value
       });
-      if (currentObject[0].uom !== null) {
+      if (currentObject[0] && currentObject[0].uom !== null) {
         dispatch(
           handleField(
             "apply",
@@ -144,7 +144,7 @@ const tradeSubTypeChange = (reqObj) => {
           )
         );
      }
-     dispatch(pFO("Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType", value));
+     dispatch(pFO(`Licenses[0].tradeLicenseDetail.tradeUnits[${index}].tradeType`, value));
   } catch (e) {
     console.log(e);
   }
@@ -188,27 +188,33 @@ const tradeUnitCard = {
                   key : 'tradeCategory',
                   fieldType : "autosuggest",
                   className:"applicant-details-error autocomplete-dropdown",
-                  callBack: tradeCategoryChange
+                  callBack: tradeCategoryChange,
+                  isRequired : false,
+                  requiredValue : true
                 },
                 {
                   key : 'tradeType',
                   fieldType : "autosuggest",
                   className:"applicant-details-error autocomplete-dropdown",
-                  callBack: tradeTypeChange
+                  callBack: tradeTypeChange,
+                  isRequired : false,
+                  requiredValue : true
                 },
                 {
                   key : 'tradeSubType',
                   callBack: tradeSubTypeChange,
                   className:"applicant-details-error autocomplete-dropdown",
-                  fieldType : "autosuggest"
+                  fieldType : "autosuggest",
+                  isRequired : false,
+                  requiredValue : true
                 }
               ],
               moduleName: "TradeLicense",
               masterName: "TradeType",
               rootBlockSub : 'tradeUnits',
-              type : 'TL',
+              filter: "[?(@.type=='TL')]",
               callBackEdit: updateMdmsDropDowns,
-              isDependency : "DynamicMdms.common-masters.structureTypes.structureSubType"
+              isDependency : "DynamicMdms.common-masters.structureTypes.selectedValues[0].structureSubType"
             }
           },
           tradeUOM: getTextField({
@@ -333,6 +339,7 @@ const accessoriesCard = {
             },
             labelsFromLocalisation: true,
             required: false,
+            isClearable: true,
             inputLabelProps: {
               shrink: true
             },
@@ -578,6 +585,7 @@ export const tradeDetails = getCommonCard({
             labelKey: "TL_FINANCIAL_YEAR_PLACEHOLDER"
           },
           required: true,
+          isClearable: true,
           jsonPath: "Licenses[0].financialYear",
           sourceJsonPath: "applyScreenMdmsData.egf-master.FinancialYear",
           inputLabelProps: {
@@ -587,7 +595,8 @@ export const tradeDetails = getCommonCard({
         gridDefination: {
           xs: 12,
           sm: 6
-        }
+        },
+        required: true
     },
     // oldLicenseNo: getTextField({
     //   label: {
@@ -769,12 +778,16 @@ export const tradeDetails = getCommonCard({
             isDisabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
             fieldType : "autosuggest",
             className:"applicant-details-error autocomplete-dropdown",
+            isRequired : false,
+            requiredValue : true
           },
           {
             key : 'structureSubType',
             callBack : structureSubTypeChange,
             fieldType : "autosuggest",
             className:"applicant-details-error autocomplete-dropdown",
+            isRequired : false,
+            requiredValue : true
           }
         ],
         moduleName: "common-masters",

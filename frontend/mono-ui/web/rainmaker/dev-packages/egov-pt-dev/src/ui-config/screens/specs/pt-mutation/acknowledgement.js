@@ -487,6 +487,31 @@ const getAcknowledgementCard = (
       },
       gotoHomeFooter
     };
+  } else if (purpose === "reopen" && status === "success") {
+    // loadReceiptGenerationData(applicationNumber, tenant);
+    return {
+      header: getHeader(applicationNumber, moduleName),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "Application is Reopend Successfully",
+              labelKey: "PT_REOPEN_MESSAGE_HEAD"
+            },
+            tailText: {
+              labelName: "Trade License No.",
+              labelKey: "PT_MUTATION_APPLICATION_NO"
+            },
+            number: applicationNumber
+          })
+        }
+      },
+      gotoHomeFooter
+    };
   } else if (purpose === "application" && status === "rejected") {
     return {
       header: getHeader(applicationNumber, moduleName),

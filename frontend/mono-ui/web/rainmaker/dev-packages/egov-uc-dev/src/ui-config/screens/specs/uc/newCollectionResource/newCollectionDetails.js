@@ -17,6 +17,45 @@ import { setServiceCategory } from "../../utils";
 
 const tenantId = getTenantId();
 
+
+const serviceTypeChange = (reqObj) => {
+  let { state, value, dispatch } = reqObj;
+  dispatch(prepareFinalObject('Demands[0].businessService', value));
+  const demandId = get(
+    state.screenConfiguration.preparedFinalObject,
+    "Demands[0].id",
+    null
+  );
+
+
+  if (!demandId && value) {
+    const taxHeads = setTaxHeadFields(value, state, dispatch);
+    console.log(taxHeads);
+  }
+
+}
+
+const serviceCategoryChange = (reqObj) => {
+  let { state, value, dispatch } = reqObj;
+  dispatch(prepareFinalObject('Demands[0].consumerType', value));
+  const demandId = get(
+    state.screenConfiguration.preparedFinalObject,
+    "Demands[0].id",
+    null
+  );
+  resetTaxAmountFields(state, dispatch);
+  const serviceData = get(
+    state.screenConfiguration,
+    "preparedFinalObject.applyScreenMdmsData.nestedServiceData",
+    {}
+  );
+  //Set tax head fields if there is no service type available
+  if (!demandId && serviceData[value]) {
+    const taxHeads = setTaxHeadFields(value, state, dispatch);
+  }
+
+}
+
 export const newCollectionDetailsCard = getCommonCard(
   {
     searchContainer: getCommonContainer(
@@ -43,6 +82,7 @@ export const newCollectionDetailsCard = getCommonCard(
             value: tenantId,
             disabled: true,
             labelsFromLocalisation: true,
+            isClearable: true,
             className: "autocomplete-dropdown",
             sourceJsonPath: "applyScreenMdmsData.tenant.citiesByModule",
           },
@@ -154,135 +194,164 @@ export const newCollectionDetailsCard = getCommonCard(
           errorMessage: "Invalid Name.",
           jsonPath: "Demands[0].consumerName"
         }),
-        serviceCategory: {
-          uiFramework: "custom-containers-local",
-          moduleName: "egov-uc",
-          componentPath: "AutosuggestContainer",
-          jsonPath: "Demands[0].businessService",
-          gridDefination: {
-            xs: 12,
-            sm: 6
-          },
-          required: true,
+        // serviceCategory: {
+        //   uiFramework: "custom-containers-local",
+        //   moduleName: "egov-uc",
+        //   componentPath: "AutosuggestContainer",
+        //   jsonPath: "Demands[0].businessService",
+        //   gridDefination: {
+        //     xs: 12,
+        //     sm: 6
+        //   },
+        //   required: true,
+        //   props: {
+        //     className: "autocomplete-dropdown",
+        //     label: {
+        //       labelName: "Service Category",
+        //       labelKey: "UC_SERVICE_CATEGORY_LABEL"
+        //     },
+        //     placeholder: {
+        //       labelName: "Select service Category",
+        //       labelKey: "UC_SERVICE_CATEGORY_PLACEHOLDER"
+        //     },
+        //     localePrefix: {
+        //       masterName: "BusinessService",
+        //       moduleName: "BillingService"
+        //     },
+        //     required: true,
+        //     visible: true,
+        //     jsonPath: "Demands[0].businessService",
+        //     sourceJsonPath: "applyScreenMdmsData.serviceCategories",
+        //     labelsFromLocalisation: true,
+        //   },
+        //   beforeFieldChange: async (action, state, dispatch) => {
+        //     //Reset service type value, if any
+        //     if (get(state, 'screenConfiguration.preparedFinalObject.Demands[0].serviceType', null)) {
+        //       dispatch(
+        //         handleField(
+        //           "newCollection",
+        //           "components.div.children.newCollectionDetailsCard.children.cardContent.children.searchContainer.children.serviceType",
+        //           "props.value",
+        //           null
+        //         )
+        //       );
+        //     }
+        //     //Set service type data and field if available.
+        //     const serviceData = get(
+        //       state.screenConfiguration,
+        //       "preparedFinalObject.applyScreenMdmsData.nestedServiceData",
+        //       {}
+        //     );
+        //     if (action.value) {
+        //       if (
+        //         serviceData[action.value] &&
+        //         serviceData[action.value].child &&
+        //         serviceData[action.value].child.length > 0
+        //       ) {
+        //         dispatch(
+        //           prepareFinalObject(
+        //             "applyScreenMdmsData.serviceTypes",
+        //             serviceData[action.value].child
+        //           )
+        //         );
+        //         dispatch(
+        //           handleField(
+        //             "newCollection",
+        //             "components.div.children.newCollectionDetailsCard.children.cardContent.children.searchContainer.children.serviceType",
+        //             "visible",
+        //             true
+        //           )
+        //         );
+        //       } else {
+        //         dispatch(
+        //           handleField(
+        //             "newCollection",
+        //             "components.div.children.newCollectionDetailsCard.children.cardContent.children.searchContainer.children.serviceType",
+        //             "visible",
+        //             false
+        //           )
+        //         );
+        //         const demandId = get(
+        //           state.screenConfiguration.preparedFinalObject,
+        //           "Demands[0].id",
+        //           null
+        //         );
+        //         //Set tax head fields if there is no service type available
+        //         if (!demandId && serviceData[action.value]) {
+        //           const taxHeads = setTaxHeadFields(action, state, dispatch);
+        //         }
+        //       }
+        //     }
+        //   }
+        // },
+        // serviceType: {
+        //   uiFramework: "custom-containers-local",
+        //   moduleName: "egov-uc",
+        //   componentPath: "AutosuggestContainer",
+        //   props: {
+        //     label: {
+        //       labelName: "Service Type",
+        //       labelKey: "UC_SERVICE_TYPE_LABEL"
+        //     },
+        //     localePrefix: {
+        //       masterName: "BusinessService",
+        //       moduleName: "BillingService"
+        //     },
+        //     placeholder: {
+        //       labelName: "Select Service Type",
+        //       labelKey: "UC_SERVICE_TYPE_PLACEHOLDER"
+        //     },
+        //     required: true,
+        //     visible: false,
+        //     labelsFromLocalisation: true,
+        //     className: "autocomplete-dropdown",
+        //     sourceJsonPath: "applyScreenMdmsData.serviceTypes",
+        //   },
+        //   required: true,
+        //   jsonPath: "Demands[0].serviceType",
+        //   gridDefination: {
+        //     xs: 12,
+        //     sm: 6
+        //   },
+        //   beforeFieldChange: async (action, state, dispatch) => {
+        //     const demandId = get(
+        //       state.screenConfiguration.preparedFinalObject,
+        //       "Demands[0].id",
+        //       null
+        //     );
+        //     if (!demandId && action.value) {
+        //       const taxHeads = setTaxHeadFields(action, state, dispatch);
+        //       console.log(taxHeads);
+        //     }
+        //   }
+        // },
+
+        dynamicMdmsServiceCategory: {
+          uiFramework: "custom-containers",
+          componentPath: "DynamicMdmsContainer",
           props: {
-            className: "autocomplete-dropdown",
-            label: {
-              labelName: "Service Category",
-              labelKey: "UC_SERVICE_CATEGORY_LABEL"
-            },
-            placeholder: {
-              labelName: "Select service Category",
-              labelKey: "UC_SERVICE_CATEGORY_PLACEHOLDER"
-            },
-            localePrefix: {
-              masterName: "BusinessService",
-              moduleName: "BillingService"
-            },
-            required: true,
-            visible: true,
-            jsonPath: "Demands[0].businessService",
-            sourceJsonPath: "applyScreenMdmsData.serviceCategories",
-            labelsFromLocalisation: true,
-          },
-          beforeFieldChange: async (action, state, dispatch) => {
-            //Reset service type value, if any
-            if (get(state, 'screenConfiguration.preparedFinalObject.Demands[0].serviceType', null)) {
-              dispatch(
-                handleField(
-                  "newCollection",
-                  "components.div.children.newCollectionDetailsCard.children.cardContent.children.searchContainer.children.serviceType",
-                  "props.value",
-                  null
-                )
-              );
-            }
-            //Set service type data and field if available.
-            const serviceData = get(
-              state.screenConfiguration,
-              "preparedFinalObject.applyScreenMdmsData.nestedServiceData",
-              {}
-            );
-            if (action.value) {
-              if (
-                serviceData[action.value] &&
-                serviceData[action.value].child &&
-                serviceData[action.value].child.length > 0
-              ) {
-                dispatch(
-                  prepareFinalObject(
-                    "applyScreenMdmsData.serviceTypes",
-                    serviceData[action.value].child
-                  )
-                );
-                dispatch(
-                  handleField(
-                    "newCollection",
-                    "components.div.children.newCollectionDetailsCard.children.cardContent.children.searchContainer.children.serviceType",
-                    "visible",
-                    true
-                  )
-                );
-              } else {
-                dispatch(
-                  handleField(
-                    "newCollection",
-                    "components.div.children.newCollectionDetailsCard.children.cardContent.children.searchContainer.children.serviceType",
-                    "visible",
-                    false
-                  )
-                );
-                const demandId = get(
-                  state.screenConfiguration.preparedFinalObject,
-                  "Demands[0].id",
-                  null
-                );
-                //Set tax head fields if there is no service type available
-                if (!demandId && serviceData[action.value]) {
-                  const taxHeads = setTaxHeadFields(action, state, dispatch);
-                }
+            dropdownFields: [
+              {
+                key: 'serviceCategory',
+                fieldType: "autosuggest",
+                callBack: serviceCategoryChange,
+                className: "applicant-details-error autocomplete-dropdown",
+                isRequired: false,
+                requiredValue: true
+              },
+              {
+                key: 'serviceType',
+                callBack: serviceTypeChange,
+                fieldType: "autosuggest",
+                className: "applicant-details-error autocomplete-dropdown",
+                isRequired: false,
+                requiredValue: true
               }
-            }
-          }
-        },
-        serviceType: {
-          uiFramework: "custom-containers-local",
-          moduleName: "egov-uc",
-          componentPath: "AutosuggestContainer",
-          props: {
-            label: {
-              labelName: "Service Type",
-              labelKey: "UC_SERVICE_TYPE_LABEL"
-            },
-            localePrefix: {
-              masterName: "BusinessService",
-              moduleName: "BillingService"
-            },
-            placeholder: {
-              labelName: "Select Service Type",
-              labelKey: "UC_SERVICE_TYPE_PLACEHOLDER"
-            },
-            required: true,
-            visible: false,
-            labelsFromLocalisation: true,
-            className: "autocomplete-dropdown",
-            sourceJsonPath: "applyScreenMdmsData.serviceTypes",
-          },
-          required: true,
-          jsonPath: "Demands[0].serviceType",
-          gridDefination: {
-            xs: 12,
-            sm: 6
-          },
-          beforeFieldChange: async (action, state, dispatch) => {
-            const demandId = get(
-              state.screenConfiguration.preparedFinalObject,
-              "Demands[0].id",
-              null
-            );
-            if (!demandId && action.value) {
-              const taxHeads = setTaxHeadFields(action, state, dispatch);
-              console.log(taxHeads);
-            }
+            ],
+            moduleName: "BillingService",
+            masterName: "BusinessService",
+            rootBlockSub: 'serviceCategories',
+            filter: "[?(@.type=='Adhoc')]"
           }
         },
         fromDate: getDateField({
@@ -360,7 +429,44 @@ export const newCollectionDetailsCard = getCommonCard(
   }
 );
 
-const setTaxHeadFields = (action, state, dispatch) => {
+const resetTaxAmountFields = (state, dispatch) => {
+  const noOfPreviousTaxHeads = get(
+    state.screenConfiguration,
+    "preparedFinalObject.Demands[0].demandDetails",
+    []
+  ).length;
+  const taxFields = get(
+    state.screenConfiguration,
+    "screenConfig.newCollection.components.div.children.newCollectionDetailsCard.children.cardContent.children.searchContainer.children",
+    {}
+  );
+  const taxFieldKeys = Object.keys(taxFields).filter(item =>
+    item.startsWith("taxheadField_")
+  );
+  if (noOfPreviousTaxHeads > 0) {
+    for (let i = 0; i < taxFieldKeys.length; i++) {
+      dispatch(
+        handleField(
+          "newCollection",
+          "components.div.children.newCollectionDetailsCard.children.cardContent.children.searchContainer.children",
+          `${taxFieldKeys[i]}.props.value`,
+          ""
+        )
+      );
+      dispatch(
+        handleField(
+          "newCollection",
+          "components.div.children.newCollectionDetailsCard.children.cardContent.children.searchContainer.children",
+          `${taxFieldKeys[i]}.visible`,
+          false
+        )
+      );
+    }
+    dispatch(prepareFinalObject(`Demands[0].demandDetails`, []));
+  }
+}
+
+const setTaxHeadFields = (value, state, dispatch) => {
   const serviceData = get(
     state.screenConfiguration,
     "preparedFinalObject.applyScreenMdmsData.nestedServiceData",
@@ -372,7 +478,7 @@ const setTaxHeadFields = (action, state, dispatch) => {
     {}
   );
   const matchingTaxHeads = taxHeadMasters.filter(
-    item => item.service === action.value
+    item => item.service === value
   );
   if (matchingTaxHeads && matchingTaxHeads.length > 0) {
     //Delete previous Tax Head fields

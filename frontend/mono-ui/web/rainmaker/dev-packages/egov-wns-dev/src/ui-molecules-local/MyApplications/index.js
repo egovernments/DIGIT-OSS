@@ -7,6 +7,8 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import IconButton from "@material-ui/core/IconButton";
 import KeyboardRightIcon from "@material-ui/icons/KeyboardArrowRight";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import store from "ui-redux/store";
 
 const styles = theme => ({
   root: {
@@ -16,15 +18,15 @@ const styles = theme => ({
 });
 
 class MyApplications extends React.Component {
-  clickHandler = () => {
-    window.location.href = "my-applications"
+  clickHandler = (route) => {
+    store.dispatch(setRoute(route));
   }
   render() {
-    const { classes,Count } = this.props;
+    const { classes,Count,route} = this.props;
     let myApplicationCount= Count?[Count]:[0]
     return (
       <div className={classes.root}>
-        <List component="nav" onClick={this.clickHandler}>
+        <List component="nav" onClick={() => this.clickHandler(route)}>
           <ListItem button>
             <ListItemText
               primary={

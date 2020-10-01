@@ -79,6 +79,8 @@ class DocumentList extends Component {
     } = this.props;
     if (uploadedDocuments && Object.keys(uploadedDocuments).length) {
       let simplified = Object.values(uploadedDocuments).map(item => item[0]);
+      simplified=simplified.filter(document=>document&&document.fileUrl&&document.fileName);
+      documents=documents.filter(document=>document);
       let uploadedDocumentsArranged = documents.reduce((acc, item, ind) => {
         const index = simplified.findIndex(i => i.documentType === item.code);
         index > -1 && (acc[ind] = [simplified[index]]);
@@ -94,18 +96,20 @@ class DocumentList extends Component {
         },
         []
       );
+
+      getQueryArg(window.location.href, "action") !== "edit" &&
+      Object.values(uploadedDocuments).forEach((item, index) => {
+        prepareFinalObject(
+          `Licenses[0].tradeLicenseDetail.applicationDocuments[${uploadedIndex[index]}]`,
+          { ...item[0] }
+        );
+      });
+      
       this.setState({
         uploadedDocuments: uploadedDocumentsArranged,
         uploadedIndex
       });
     }
-    getQueryArg(window.location.href, "action") !== "edit" &&
-      Object.values(uploadedDocuments).forEach((item, index) => {
-        prepareFinalObject(
-          `Licenses[0].tradeLicenseDetail.applicationDocuments[${index}]`,
-          { ...item[0] }
-        );
-      });
   };
 
   onUploadClick = uploadedDocIndex => {

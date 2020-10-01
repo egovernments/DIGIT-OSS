@@ -1,7 +1,7 @@
 import { download } from "egov-common/ui-utils/commons";
 import { dispatchMultipleFieldChangeAction, getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { prepareFinalObject, toggleSnackbar, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { generateTLAcknowledgement } from "egov-ui-kit/utils/pdfUtils/generateTLAcknowledgement";
@@ -145,6 +145,32 @@ export const callBackForNext = async (state, dispatch) => {
     ) {
       isFormValid = false;
     }
+    let ownership = get(
+      state.screenConfiguration.preparedFinalObject,
+      "Licenses[0].tradeLicenseDetail.subOwnerShipCategory",
+      "INDIVIDUAL"
+    );
+    // ownership = ownership.split(".")[0];
+    let subOwnerShipCategoryType = ownership.split(".")[1];
+      if (subOwnerShipCategoryType === "MULTIPLEOWNERS") {
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard",
+            "props.hasAddItem",
+            true
+          )
+        );
+      }else {
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard",
+            "props.hasAddItem",
+            false
+          )
+        );
+      }
   }
 
   if (activeStep === 1) {
@@ -157,9 +183,10 @@ export const callBackForNext = async (state, dispatch) => {
     );
     let ownership = get(
       state.screenConfiguration.preparedFinalObject,
-      "LicensesTemp[0].tradeLicenseDetail.ownerShipCategory",
+      "Licenses[0].tradeLicenseDetail.subOwnerShipCategory",
       "INDIVIDUAL"
     );
+    ownership = ownership.split(".")[0];
     if (ownership === "INDIVIDUAL") {
       let ownersJsonPath =
         "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard.props.items";
@@ -182,7 +209,7 @@ export const callBackForNext = async (state, dispatch) => {
       }
     } else {
       let ownersJsonPath =
-        "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.ownerInfoInstitutional.children.cardContent.children.tradeUnitCardContainer.children";
+        "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.ownerInfoInstitutional.children.cardContent.children.tradeUnitCardContainerInstitutional.children";
       if (!validateFields(ownersJsonPath, state, dispatch)) isFormValid = false;
     }
 
@@ -191,7 +218,13 @@ export const callBackForNext = async (state, dispatch) => {
       get(
         state.screenConfiguration.preparedFinalObject,
         "Licenses[0].tradeLicenseDetail.subOwnerShipCategory"
-      ) === "INDIVIDUAL.MULTIPLEOWNERS" &&
+      ) === "INDIVIDUAL.MULTIPLEOWNERS" 
+      &&
+      get(
+        state.screenConfiguration.preparedFinalObject,
+        "Licenses[0].tradeLicenseDetail.owners"
+      )
+      &&
       get(
         state.screenConfiguration.preparedFinalObject,
         "Licenses[0].tradeLicenseDetail.owners"
@@ -236,7 +269,7 @@ export const callBackForNext = async (state, dispatch) => {
       setValidToFromVisibilityForApply(state, get(LicenseData, "licenseType"));
     }
 
-    const uploadedDocData = get(
+    let uploadedDocData = get(
       state.screenConfiguration.preparedFinalObject,
       "Licenses[0].tradeLicenseDetail.applicationDocuments",
       []
@@ -275,6 +308,7 @@ export const callBackForNext = async (state, dispatch) => {
         };
         dispatch(toggleSnackbar(true, updateMessage, "info"));
       }
+      uploadedDocData=uploadedDocData.filter(item=> item.fileUrl&&item.fileName)
       const reviewDocData =
         uploadedDocData &&
         uploadedDocData.map(item => {

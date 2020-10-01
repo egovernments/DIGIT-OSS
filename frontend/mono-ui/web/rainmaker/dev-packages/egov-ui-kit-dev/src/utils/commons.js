@@ -944,17 +944,23 @@ export const getApplicationType = async (applicationNumber, tenantId, creationRe
 
 export const isDocumentValid = (docUploaded, requiredDocCount) => {
   const totalDocsKeys = Object.keys(docUploaded) || [];
-  let temp = 0;
-  if (totalDocsKeys.length >= requiredDocCount) {
+  let isValid = true;
     for (let key = 0; key < totalDocsKeys.length; key++) {
-      if (docUploaded[key].documents && docUploaded[key].dropdown && docUploaded[key].dropdown.value) {
-        temp++;
+      if(docUploaded[key].isDocumentRequired) {
+        if (docUploaded[key].documents && docUploaded[key].dropdown && docUploaded[key].dropdown.value) {
+          isValid = true;
+        } else {
+          isValid = false;
+          break;
+        }
+      }else{
+        if (docUploaded[key].documents && (!docUploaded[key].dropdown || !docUploaded[key].dropdown.value)) {
+          isValid = false;
+          break;
+        }
       }
     }
-    return temp >= requiredDocCount ? true : false;
-  } else {
-    return false;
-  }
+    return isValid;
 }
 
 export const getMohallaData = (payload, tenantId) => {
@@ -1029,11 +1035,11 @@ export const getModuleName = () => {
   const pathName = window.location.pathname;
   if (pathName.indexOf("inbox") > -1) { return "rainmaker-common"; }
   else if (pathName.indexOf("dss") > -1) { return "rainmaker-dss"; }
-  else if (pathName.indexOf("property-tax") > -1 || pathName.indexOf("pt-mutation") > -1) { return "rainmaker-pt,rainmaker-pgr"; }
+  else if (pathName.indexOf("property-tax") > -1 || pathName.indexOf("rainmaker-pt") > -1 || pathName.indexOf("pt-mutation") > -1) { return "rainmaker-pt,rainmaker-pgr"; }
   else if (pathName.indexOf("pt-common-screens") > -1 || pathName.indexOf("public-search") > -1) { return "rainmaker-pt"; }
-  else if (pathName.indexOf("complaint") > -1 || pathName.indexOf("request-reassign") > -1 || pathName.indexOf("reassign-success") > -1) { return "rainmaker-pgr"; }
+  else if (pathName.indexOf("complaint") > -1  || pathName.indexOf("pgr") > -1  || pathName.indexOf("request-reassign") > -1 || pathName.indexOf("reassign-success") > -1) { return "rainmaker-pgr"; }
   else if (pathName.indexOf("wns") > -1) { return "rainmaker-ws"; }
-  else if (pathName.indexOf("tradelicense") > -1 || pathName.indexOf("tradelicence") > -1 || pathName.indexOf("tradelicense-citizen") > -1) { return "rainmaker-tl"; }
+  else if (pathName.indexOf("tradelicense") > -1 || pathName.indexOf("rainmaker-tl") > -1 || pathName.indexOf("tradelicence") > -1 || pathName.indexOf("tradelicense-citizen") > -1) { return "rainmaker-tl"; }
   else if (pathName.indexOf("hrms") > -1) { return "rainmaker-hr"; }
   else if (pathName.indexOf("fire-noc") > -1) { return "rainmaker-noc,rainmaker-pgr"; }
   else if (pathName.indexOf("dss/home") > -1) { return "rainmaker-dss"; }

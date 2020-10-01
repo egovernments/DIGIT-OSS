@@ -209,7 +209,7 @@ export const getMultiItems = (preparedFinalObject, cardInfo, sourceArrayJsonPath
     return multiItem;
 }
 export const getMultipleItemCard = (itemsInfo, itemHeader = "COMMON_OWNER", hideHeader = false) => {
-    let multipleItems = itemsInfo[0].items.filter(item => item);
+    let multipleItems = (itemsInfo && itemsInfo.length && itemsInfo[0].items.filter(item => item)) || [];
     if (itemsInfo.length > 1) {
         let items = [];
         itemsInfo.map((item, index) => {
@@ -244,6 +244,20 @@ export const generateKeyValue = (preparedFinalObject, containerObject) => {
     })
     return keyValue;
 }
+export const generateKeyValueForModify = (preparedFinalObject, containerObject) => {
+    let keyValue = []
+    Object.keys(containerObject).map(keys => {
+        const labelObject = containerObject[keys].children.label1.children.key.props;
+        const key = getLocaleLabels(labelObject.labelName, labelObject.labelKey)
+        const valueObject = containerObject[keys].children.value1.children.key.props;
+        let value = valueObject.callBack && typeof valueObject.callBack == "function" ? valueObject.callBack(get(preparedFinalObject, valueObject.jsonPath, '')) : get(preparedFinalObject, valueObject.jsonPath, '');
+        value = value !== 'NA' && valueObject.localePrefix ? appendModulePrefix(value, valueObject.localePrefix) : value;
+        value = containerObject[keys].localiseValue ? getLocaleLabels(value, value) : value;
+        keyValue.push({ key, value });
+    })
+    return keyValue;
+}
+
 let tableborder = {
     hLineColor: function (i, node) {
         return "#979797";
@@ -413,7 +427,7 @@ export const generatePDF = (logo, applicationData = {}, fileName) => {
                     {
                         "text": [
                             {
-                                "text": applicationData.applicationNoHeader ? getLocaleLabels(applicationData.applicationNoHeader, applicationData.applicationNoHeader) : '',
+                                "text": applicationData.applicationNoHeader ? getLocaleLabels(applicationData.applicationNoHeader, applicationData.applicationNoHeader) + ' ' : '',
                                 bold: true
                             },
                             {
@@ -427,7 +441,7 @@ export const generatePDF = (logo, applicationData = {}, fileName) => {
                     {
                         "text": [
                             {
-                                "text": applicationData.additionalHeader ? getLocaleLabels(applicationData.additionalHeader, applicationData.additionalHeader) : '',
+                                "text": applicationData.additionalHeader ? getLocaleLabels(applicationData.additionalHeader, applicationData.additionalHeader) + ' ' : '',
                                 bold: true
                             },
                             {
@@ -588,22 +602,22 @@ export const generatePDF = (logo, applicationData = {}, fileName) => {
     applicationData.cards.map(card => {
         switch (card.type) {
             case "singleItem":
-                if (!card.hide) {
+                if (!card.hide && card.items && card.items.length) {
                     data.content.push(...getCardWithHeader(card.header, card.items, card.color));
                 }
                 break;
             case "multiItem":
-                if (!card.hide) {
+                if (!card.hide && card.items && card.items.length) {
                     data.content.push(...getMultiItemCard(card.header, card.items, card.color));
                 }
                 break;
             case "estimate":
-                if (!card.hide) {
+                if (!card.hide && card.items && card.items.length) {
                     data.content.push({ ...card.items });
                 }
                 break;
             default:
-                if (!card.hide) {
+                if (!card.hide && card.items && card.items.length) {
                     data.content.push(...getCardWithHeader(card.header, card.items, card.color));
                 }
         }

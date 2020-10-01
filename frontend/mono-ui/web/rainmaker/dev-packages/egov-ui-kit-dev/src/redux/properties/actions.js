@@ -314,6 +314,7 @@ export const fetchProperties = (queryObjectproperty, queryObjectDraft, queryObje
         if (queryObjectDraft !== "citizen_search") {
           if (payloadProperty && payloadProperty.Properties && payloadProperty.Properties.length > 0) {
             let convertedProperties = payloadProperty.Properties.map(property => {
+              // property.owners.reverse(); // Owner is coming in reverse order from the API
               let properties = getCreatePropertyResponse({ Properties: [property] });
               return properties && properties.Properties && properties.Properties.length > 0 && properties.Properties[0];
             });

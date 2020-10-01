@@ -142,7 +142,7 @@ const handleAppDownloadAndPrint = async(state, dispatch, action) => {
   const { WaterConnection, DocumentsData,SewerageConnection} = state.screenConfiguration.preparedFinalObject;
 
   let filteredDocs = DocumentsData;
-  filteredDocs.map(val => {
+  filteredDocs && filteredDocs.map(val => {
     if (val.title.includes("WS_OWNER.IDENTITYPROOF.")) { val.title = "WS_OWNER.IDENTITYPROOF"; }
     else if (val.title.includes("WS_OWNER.ADDRESSPROOF.")) { val.title = "WS_OWNER.ADDRESSPROOF"; }
   });

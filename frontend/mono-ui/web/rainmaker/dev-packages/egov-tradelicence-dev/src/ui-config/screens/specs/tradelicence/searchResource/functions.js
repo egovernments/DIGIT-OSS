@@ -6,6 +6,9 @@ import {
   convertDateToEpoch,
   getTextToLocalMapping
 } from "../../utils/index";
+import {
+ enableFieldAndHideSpinner,disableFieldAndShowSpinner
+} from "egov-ui-framework/ui-utils/commons";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validateFields } from "../../utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
@@ -98,8 +101,10 @@ export const searchApiCall = async (state, dispatch) => {
         }
       }
     }
-
+    disableFieldAndShowSpinner('search',"components.div.children.tradeLicenseApplication.children.cardContent.children.button.children.buttonContainer.children.searchButton",dispatch);   
     const response = await getSearchResults(queryObject);
+    
+    
     try {
       
       let data = response.Licenses.map(item => ({
@@ -119,6 +124,7 @@ export const searchApiCall = async (state, dispatch) => {
         ["TENANT_ID"]: item.tenantId,
         ["TL_COMMON_TABLE_COL_STATUS"]: item.status || "-"
       }));
+      enableFieldAndHideSpinner('search',"components.div.children.tradeLicenseApplication.children.cardContent.children.button.children.buttonContainer.children.searchButton",dispatch);
       dispatch(
         handleField(
           "search",

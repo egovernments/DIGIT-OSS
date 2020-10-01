@@ -62,7 +62,11 @@ class Footer extends React.Component {
   openActionDialog = async item => {
     const { handleFieldChange, setRoute, dataPath } = this.props;
     let employeeList = [];
-
+    if(item.buttonLabel === "ACTIVATE_CONNECTION"){
+      if(item.moduleName === "NewWS1" || item.moduleName === "NewSW1"){
+        item.showEmployeeList = false;
+      }
+    }
     if (dataPath === "BPA") {
       handleFieldChange(`${dataPath}.comment`, "");
       handleFieldChange(`${dataPath}.assignees`, "");
@@ -76,6 +80,13 @@ class Footer extends React.Component {
         process.env.NODE_ENV === "development"
           ? item.buttonUrl
           : item.buttonUrl;
+
+          /* Quick fix for edit mutation application */
+      if(url.includes('pt-mutation/apply')){     
+        window.location.href=url.replace("/pt-mutation/",'');
+        return;
+      }
+      
       setRoute(url);
       return;
     }

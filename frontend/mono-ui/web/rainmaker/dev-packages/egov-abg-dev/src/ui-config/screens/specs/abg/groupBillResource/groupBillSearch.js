@@ -125,6 +125,7 @@ export const abgSearchCard = getCommonCard({
           required: true,
           value: tenantId,
           disabled: true,
+          isClearable: true,
           labelsFromLocalisation: true,
           className:"autocomplete-dropdown",
           jsonPath: "searchCriteria.tenantId",
@@ -157,7 +158,7 @@ export const abgSearchCard = getCommonCard({
             masterName : "BusinessService"
           },
           labelsFromLocalisation: true,
-          // isClearable: true,
+          isClearable: true,
           className:"autocomplete-dropdown",
           jsonPath: "searchCriteria.businesService",
           sourceJsonPath: "searchScreenMdmsData.BillingService.BusinessService",
@@ -234,7 +235,7 @@ export const abgSearchCard = getCommonCard({
           sourceJsonPath: "searchScreenMdmsData.localities",
           labelsFromLocalisation: true,
           required: true,
-          // isClearable:true,
+          isClearable:true,
         }
       },
       consumerId: getTextField({

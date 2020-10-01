@@ -64,7 +64,7 @@ const LocationDetails = ({ formKey, locationDetails, landmark, city, mohalla, ho
               errorMessage={city.errorMessage}
               errorStyle={city.errorStyle}
               pattern={city.pattern}
-
+              isClearable={true}
             />}
             {mohalla && <AutosuggestContainer
               className="fix-for-layout-break autocomplete-dropdown"
@@ -91,6 +91,7 @@ const LocationDetails = ({ formKey, locationDetails, landmark, city, mohalla, ho
               errorMessage={mohalla.errorMessage}
               errorStyle={mohalla.errorStyle}
               pattern={mohalla.pattern}
+              isClearable={true}
             />}
             <TextField id="addComplaint-house-no" {...houseNo} onChange={(e, value) => handleFieldChange("houseNo", value)} name="house-no" />
             <TextField

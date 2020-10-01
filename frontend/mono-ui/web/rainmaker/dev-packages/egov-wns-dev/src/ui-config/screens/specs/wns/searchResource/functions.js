@@ -20,28 +20,14 @@ export const searchApiCall = async (state, dispatch) => {
 }
 
 const renderSearchConnectionTable = async (state, dispatch) => {
-  let queryObject = [{ key: "tenantId", value: getTenantIdCommon() }];
+  let queryObject = [];
+  queryObject.push({ key: "searchType", value: "CONNECTION" });
   let searchScreenObject = get(state.screenConfiguration.preparedFinalObject, "searchConnection", {});
-  const isSearchBoxFirstRowValid = validateFields(
-    "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.wnsApplication.children.cardContent.children.wnsApplicationContainer.children",
-    state,
-    dispatch,
-    "search"
-  );
-
-  const isSearchBoxSecondRowValid = validateFields(
-    "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.wnsApplication.children.cardContent.children.wnsApplicationContainer.children",
-    state,
-    dispatch,
-    "search"
-  );
-  if (!(isSearchBoxFirstRowValid && isSearchBoxSecondRowValid)) {
-    dispatch(toggleSnackbar(true, { labelKey: "ERR_WS_FILL_ATLEAST_ONE_FIELD" }, "warning"));
-  } else if (
-    Object.keys(searchScreenObject).length == 0 ||
-    Object.values(searchScreenObject).every(x => x === "")
+  Object.keys(searchScreenObject).forEach((key) => (searchScreenObject[key] == "") && delete searchScreenObject[key]);
+  if (
+    Object.values(searchScreenObject).length <= 1
   ) {
-    dispatch(toggleSnackbar(true, { labelKey: "ERR_WS_FILL_ATLEAST_ONE_FIELD" }, "warning"));
+    dispatch(toggleSnackbar(true, {labelName:"Please provide the city and any one other field information to search for property.", labelKey: "ERR_PT_COMMON_FILL_MANDATORY_FIELDS" }, "warning"));
   } else if (
     (searchScreenObject["fromDate"] === undefined || searchScreenObject["fromDate"].length === 0) &&
     searchScreenObject["toDate"] !== undefined && searchScreenObject["toDate"].length !== 0) {
@@ -164,16 +150,17 @@ const renderSearchConnectionTable = async (state, dispatch) => {
 
 const renderSearchApplicationTable = async (state, dispatch) => {
   let queryObject = [{ key: "tenantId", value: getTenantIdCommon() }];
+  queryObject.push({ key: "isConnectionSearch", value: true });
   let searchScreenObject = get(state.screenConfiguration.preparedFinalObject, "searchScreen", {});
   const isSearchBoxFirstRowValid = validateFields(
-    "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.wnsApplication.children.cardContent.children.wnsApplicationContainer.children",
+    "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.searchApplications.children.cardContent.children.wnsApplicationSearch",
     state,
     dispatch,
     "search"
   );
 
   const isSearchBoxSecondRowValid = validateFields(
-    "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.wnsApplication.children.cardContent.children.wnsApplicationContainer.children",
+    "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.searchApplications.children.cardContent.children.wnsApplicationSearch",
     state,
     dispatch,
     "search"
@@ -196,16 +183,18 @@ const renderSearchApplicationTable = async (state, dispatch) => {
           queryObject.push({ key: key, value: convertDateToEpoch(searchScreenObject[key], "daystart") });
         } else if (key === "toDate") {
           queryObject.push({ key: key, value: convertDateToEpoch(searchScreenObject[key], "dayend") });
+        } else if (key === "applicationType") {
+          queryObject.push({ key: key, value: searchScreenObject[key].replace(/ /g,'_')});
         } else {
           queryObject.push({ key: key, value: searchScreenObject[key].trim() });
         }
       }
     }
-    try {
+    try { 
       let getSearchResult, getSearchResultForSewerage;
-      if (searchScreenObject.applicationType && (searchScreenObject.applicationType.toLowerCase().includes('new water') || searchScreenObject.applicationType.toLowerCase().includes('newwater'))) {
+      if (searchScreenObject.applicationType && searchScreenObject.applicationType.toLowerCase().includes('water')) {
         getSearchResult = getSearchResults(queryObject)
-      } else if (searchScreenObject.applicationType && (searchScreenObject.applicationType.toLowerCase().includes('new sewerage') || searchScreenObject.applicationType.toLowerCase().includes('newsewerage'))) {
+      } else if (searchScreenObject.applicationType && searchScreenObject.applicationType.toLowerCase().includes('sewerage')) {
         getSearchResultForSewerage = getSearchResultsForSewerage(queryObject, dispatch)
       } else {
         getSearchResult = getSearchResults(queryObject),
@@ -267,6 +256,7 @@ const renderSearchApplicationTable = async (state, dispatch) => {
             finalArray.push({
               connectionNo: element.connectionNo,
               applicationNo: element.applicationNo,
+              applicationType: element.applicationType,
               name: ownerName.slice(2),
               applicationStatus: appStatus,
               address: handleAddress(element),
@@ -278,6 +268,7 @@ const renderSearchApplicationTable = async (state, dispatch) => {
             finalArray.push({
               connectionNo: element.connectionNo,
               applicationNo: element.applicationNo,
+              applicationType: element.applicationType,
               name: (element.property && element.property !== "NA" && element.property.owners)?element.property.owners[0].name:"",
               applicationStatus: appStatus,
               address: handleAddress(element),
@@ -339,11 +330,14 @@ const showConnectionResults = (connections, dispatch) => {
   showHideConnectionTable(true, dispatch);
 }
 
+const getApplicationType = (applicationType) => {
+  return (applicationType)?applicationType.split("_").join(" "):applicationType;
+}
 const showApplicationResults = (connections, dispatch) => {
   let data = connections.map(item => ({
     ["WS_COMMON_TABLE_COL_CONSUMER_NO_LABEL"]: item.connectionNo,
     ["WS_COMMON_TABLE_COL_APP_NO_LABEL"]: item.applicationNo,
-    ["WS_COMMON_TABLE_COL_APP_TYPE_LABEL"]: item.service === serviceConst.WATER ? "New Water Connection" : "New Sewerage Connection",
+    ["WS_COMMON_TABLE_COL_APP_TYPE_LABEL"]: getApplicationType(item.applicationType),
     ["WS_COMMON_TABLE_COL_OWN_NAME_LABEL"]: item.name,
     ["WS_COMMON_TABLE_COL_APPLICATION_STATUS_LABEL"]: item.applicationStatus.split("_").join(" "),
     ["WS_COMMON_TABLE_COL_ADDRESS"]: item.address,

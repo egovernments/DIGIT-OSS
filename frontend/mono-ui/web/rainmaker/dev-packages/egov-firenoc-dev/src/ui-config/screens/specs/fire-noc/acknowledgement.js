@@ -135,7 +135,7 @@ const screenConfig = {
 
     if (purpose === "apply" && status === "success") {
       footerUrlConfig.push({
-        url: process.env.NODE_ENV === "development" ? `/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenant}&businessService=FIRENOC` : `/${appName}/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenant}&businessService=FIRENOC`,
+        url:  `/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenant}&businessService=FIRENOC` ,
         labelName: "Proceed to payment",
         labelKey: "NOC_PROCEED_PAYMENT",
         style: {

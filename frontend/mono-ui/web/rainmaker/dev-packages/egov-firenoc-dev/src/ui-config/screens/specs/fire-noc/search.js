@@ -18,6 +18,7 @@ import set from "lodash/set";
 import get from "lodash/get";
 import {
   prepareFinalObject,
+  unMountScreen,
   handleScreenConfigurationFieldChange as handleField
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 // import { getRequiredDocuments } from "./requiredDocuments/reqDocs";
@@ -43,6 +44,10 @@ const NOCSearchAndResult = {
   name: "search",
   beforeInitScreen: (action, state, dispatch) => {
   //  resetFields(state, dispatch);
+  dispatch(unMountScreen("acknowledgement"));
+  dispatch(unMountScreen("apply"));
+  dispatch(unMountScreen("pay"));
+  dispatch(unMountScreen("summary"));
     const tenantId = getTenantId();
     const BSqueryObject = [
       { key: "tenantId", value: tenantId },
@@ -78,6 +83,12 @@ const NOCSearchAndResult = {
     set(state,
       "screenConfiguration.preparedFinalObject.searchScreen",
       {}
+    );
+    dispatch(
+      prepareFinalObject(
+        "DynamicMdms",
+        {}
+      )
     );
     return action;
   },

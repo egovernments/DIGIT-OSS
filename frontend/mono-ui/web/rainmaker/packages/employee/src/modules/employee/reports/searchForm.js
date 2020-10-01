@@ -440,7 +440,7 @@ class ShowForm extends Component {
       for (var variable in searchForm) {
         let input;
         
-        if (this.state.moduleName == "pgr") {
+        if (this.state.moduleName == "oldPGR") {
           if (variable == "fromDate") {
             input =
               searchForm[variable].getFullYear() +

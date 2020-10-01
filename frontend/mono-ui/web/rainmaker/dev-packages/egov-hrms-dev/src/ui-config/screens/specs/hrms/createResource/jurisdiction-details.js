@@ -46,6 +46,7 @@ const jurisdictionDetailsCard = {
               },
               labelsFromLocalisation: true,
               required: true,
+              isClearable: true,
             },
             required: true,
             gridDefination: {
@@ -120,6 +121,7 @@ const jurisdictionDetailsCard = {
                 masterName : "BOUNDARYTYPE"
               },
               required: true,
+              isClearable: true,
               labelsFromLocalisation: true,
             },
             required: true,
@@ -233,6 +235,7 @@ const jurisdictionDetailsCard = {
                 masterName:"TENANTS"
               },
               required: true,
+              isClearable: true,
               labelsFromLocalisation: true,
             },
             required: true,

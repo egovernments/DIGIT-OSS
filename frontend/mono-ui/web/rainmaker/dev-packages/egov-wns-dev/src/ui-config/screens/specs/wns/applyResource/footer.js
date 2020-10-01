@@ -3,8 +3,8 @@ import {
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getQueryArg, validateFields } from "egov-ui-framework/ui-utils/commons";
 import { getTenantIdCommon } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import set from 'lodash/set';
@@ -13,7 +13,19 @@ import {
   applyForSewerage,
   applyForWater, applyForWaterOrSewerage,
 
-  findAndReplace, prepareDocumentsUploadData,
+  findAndReplace,
+
+
+
+
+
+
+
+
+  isActiveProperty,
+
+  isModifyMode,
+  isModifyModeAction, prepareDocumentsUploadData,
 
   pushTheDocsUploadedToRedux,
 
@@ -22,19 +34,30 @@ import {
 
 
 
-  serviceConst, validateFeildsForBothWaterAndSewerage,
+  serviceConst,
 
-  validateFeildsForSewerage, validateFeildsForWater
+
+
+  showHideFieldsFirstStep, validateConnHolderDetails, validateFeildsForBothWaterAndSewerage,
+
+  validateFeildsForSewerage, validateFeildsForWater, isEditAction
 } from "../../../../../ui-utils/commons";
 import { getCommonApplyFooter } from "../../utils";
 import "./index.css";
-
+const isMode = isModifyMode();
+const isModeAction = isModifyModeAction();
 const setReviewPageRoute = (state, dispatch) => {
   let tenantId = getTenantIdCommon();
   const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.applyScreen.applicationNo");
   const appendUrl =
     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
-  const reviewUrl = `${appendUrl}/wns/search-preview?applicationNumber=${applicationNumber}&tenantId=${tenantId}&edited="true"`;
+  let reviewUrl = `${appendUrl}/wns/search-preview?applicationNumber=${applicationNumber}&tenantId=${tenantId}&edited="true"`;
+  if (isModifyMode() && isModifyModeAction()) {
+    reviewUrl += "&mode=MODIFY"
+  }
+  if (get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].additionalDetails.locality", null) === null) {
+    dispatch(prepareFinalObject("WaterConnection[0].additionalDetails.locality", get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].property.address.locality.code")));
+  }
   dispatch(setRoute(reviewUrl));
 };
 const moveToReview = (state, dispatch) => {
@@ -70,7 +93,7 @@ const moveToReview = (state, dispatch) => {
         } else {
           validateDocumentField = true;
         }
-      } else {
+      } else if (!isModifyMode()) {
         dispatch(
           toggleSnackbar(
             true,
@@ -80,6 +103,8 @@ const moveToReview = (state, dispatch) => {
         );
         validateDocumentField = false;
         break;
+      } else {
+        validateDocumentField = true;
       }
     } else {
       validateDocumentField = true;
@@ -117,11 +142,18 @@ const callBackForNext = async (state, dispatch) => {
   let activeStep = get(state.screenConfiguration.screenConfig["apply"], "components.div.children.stepper.props.activeStep", 0);
   let isFormValid = true;
   let hasFieldToaster = false;
+  /* validations for property details screen */
   if (activeStep === 0) {
     // if (validatePropertyLocationDetails && validatePropertyDetails && validateForm) {
     //   isFormValid = await appl;
     // }
-    if (getQueryArg(window.location.href, "action") === "edit") {
+
+    validateFields("components.div.children.formwizardFirstStep.children.IDDetails.children.cardContent.children.propertyID.children", state, dispatch)
+    validateFields("components.div.children.formwizardFirstStep.children.connectionHolderDetails.children.cardContent.children.holderDetails.children.holderDetails.children", state, dispatch)
+
+    validateFields("components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children", state, dispatch)
+
+    if (getQueryArg(window.location.href, "action") === "edit" && !isModifyMode()) {
       let application = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), "NA", null);
       const uploadedDocData = application.documents;
       const reviewDocData = uploadedDocData && uploadedDocData.map(item => {
@@ -135,7 +167,29 @@ const callBackForNext = async (state, dispatch) => {
       dispatch(prepareFinalObject("applyScreen.reviewDocData", reviewDocData));
       let applyScreenObject = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), "NA", null);
       let applyScreenObj = findAndReplace(applyScreenObject, 0, null);
-      dispatch(prepareFinalObject("applyScreen", applyScreenObj));
+      //connectionholdercode
+      let connectionHolderObj = get(state.screenConfiguration.preparedFinalObject, "connectionHolders");
+      let holderData = connectionHolderObj[0];
+      if (holderData !== null && holderData !== undefined) {
+        if (holderData.sameAsPropertyAddress === true) {
+          holderData = null
+        }
+      }
+      if (holderData == null) {
+        applyScreenObject.connectionHolders = holderData;
+      } else {
+        let arrayHolderData = [];
+        arrayHolderData.push(holderData);
+        applyScreenObj.connectionHolders = arrayHolderData;
+      }
+
+      if (!isActiveProperty(applyScreenObj.property)) {
+        dispatch(toggleSnackbar(true, { labelKey: `ERR_WS_PROP_STATUS_${applyScreenObj.property.status}`, labelName: `Property Status is ${applyScreenObj.property.status}` }, "warning"));
+        showHideFieldsFirstStep(dispatch, "", false);
+        dispatch(prepareFinalObject("applyScreen", applyScreenObj));
+        return false;
+      }
+
     } else {
       const water = get(
         state.screenConfiguration.preparedFinalObject,
@@ -150,131 +204,172 @@ const callBackForNext = async (state, dispatch) => {
         "searchScreen.propertyIds"
       )
       let applyScreenObject = get(state.screenConfiguration.preparedFinalObject, "applyScreen");
+
+      //connectionholdercode
+
+      let connectionHolderObj = get(state.screenConfiguration.preparedFinalObject, "connectionHolders");
+      let holderData = connectionHolderObj[0];
+      if (holderData !== null && holderData !== undefined) {
+        if (holderData.sameAsPropertyAddress === true) {
+          holderData = null
+        }
+      }
+      if (holderData == null) {
+        applyScreenObject.connectionHolders = holderData;
+      } else {
+        let arrayHolderData = [];
+        arrayHolderData.push(holderData);
+        applyScreenObject.connectionHolders = arrayHolderData;
+      }
       if (searchPropertyId !== undefined && searchPropertyId !== "") {
-        if (applyScreenObject.water || applyScreenObject.sewerage) {
-          if (
-            applyScreenObject.hasOwnProperty("property") &&
-            !_.isUndefined(applyScreenObject["property"]) &&
-            !_.isNull(applyScreenObject["property"]) &&
-            !_.isEmpty(applyScreenObject["property"])
-          ) {
-            if (water && sewerage) {
-              if (validateFeildsForBothWaterAndSewerage(applyScreenObject)) {
-                isFormValid = true;
-                hasFieldToaster = false;
-              } else {
-                isFormValid = false;
-                dispatch(
-                  toggleSnackbar(
-                    true, {
-                    labelKey: "WS_FILL_REQUIRED_FIELDS",
-                    labelName: "Please fill Required details"
-                  },
-                    "warning"
+
+        if (!isActiveProperty(applyScreenObject.property)) {
+          dispatch(toggleSnackbar(true, { labelKey: `ERR_WS_PROP_STATUS_${applyScreenObject.property.status}`, labelName: `Property Status is ${applyScreenObject.property.status}` }, "warning"));
+          showHideFieldsFirstStep(dispatch, "", false);
+          return false;
+        }
+        // TODO else part update propertyId.
+
+        if (validateConnHolderDetails(applyScreenObject)) {
+          isFormValid = true;
+          hasFieldToaster = false;
+          if (applyScreenObject.water || applyScreenObject.sewerage) {
+            if (
+              applyScreenObject.hasOwnProperty("property") &&
+              !_.isUndefined(applyScreenObject["property"]) &&
+              !_.isNull(applyScreenObject["property"]) &&
+              !_.isEmpty(applyScreenObject["property"])
+            ) {
+              if (water && sewerage) {
+                if (validateFeildsForBothWaterAndSewerage(applyScreenObject)) {
+                  isFormValid = true;
+                  hasFieldToaster = false;
+                } else {
+                  isFormValid = false;
+                  dispatch(
+                    toggleSnackbar(
+                      true, {
+                      labelKey: "WS_FILL_REQUIRED_FIELDS",
+                      labelName: "Please fill Required details"
+                    },
+                      "warning"
+                    )
                   )
-                )
-              }
-            } else if (water) {
-              if (validateFeildsForWater(applyScreenObject)) {
-                isFormValid = true;
-                hasFieldToaster = false;
-              } else {
-                isFormValid = false;
-                dispatch(
-                  toggleSnackbar(
-                    true, {
-                    labelKey: "WS_FILL_REQUIRED_FIELDS",
-                    labelName: "Please fill Required details"
-                  },
-                    "warning"
+                }
+              } else if (water) {
+                if (validateFeildsForWater(applyScreenObject)) {
+                  isFormValid = true;
+                  hasFieldToaster = false;
+                } else {
+                  isFormValid = false;
+                  dispatch(
+                    toggleSnackbar(
+                      true, {
+                      labelKey: "WS_FILL_REQUIRED_FIELDS",
+                      labelName: "Please fill Required details"
+                    },
+                      "warning"
+                    )
                   )
-                )
-              }
-            } else if (sewerage) {
-              if (validateFeildsForSewerage(applyScreenObject)) {
-                isFormValid = true;
-                hasFieldToaster = false;
-              } else {
-                isFormValid = false;
-                dispatch(
-                  toggleSnackbar(
-                    true, {
-                    labelKey: "WS_FILL_REQUIRED_FIELDS",
-                    labelName: "Please fill Required details"
-                  },
-                    "warning"
+                }
+              } else if (sewerage) {
+                if (validateFeildsForSewerage(applyScreenObject)) {
+                  isFormValid = true;
+                  hasFieldToaster = false;
+                } else {
+                  isFormValid = false;
+                  dispatch(
+                    toggleSnackbar(
+                      true, {
+                      labelKey: "WS_FILL_REQUIRED_FIELDS",
+                      labelName: "Please fill Required details"
+                    },
+                      "warning"
+                    )
                   )
-                )
+                }
               }
+            } else {
+              isFormValid = false;
+              dispatch(
+                toggleSnackbar(
+                  true, {
+                  labelKey: "ERR_WS_PROP_NOT_FOUND",
+                  labelName: "No Property records found, please search or create a new property"
+                },
+                  "warning"
+                )
+              );
             }
-          } else {
-            isFormValid = false;
-            dispatch(
-              toggleSnackbar(
-                true, {
-                labelKey: "ERR_WS_PROP_NOT_FOUND",
-                labelName: "No Property records found, please search or create a new property"
-              },
-                "warning"
-              )
-            );
-          }
-          let waterData = get(state, "screenConfiguration.preparedFinalObject.WaterConnection");
-          let sewerData = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection")
-          let waterChecked = get(state, "screenConfiguration.preparedFinalObject.applyScreen.water");
-          let sewerChecked = get(state, "screenConfiguration.preparedFinalObject.applyScreen.sewerage")
-          if (isFormValid) {
-            if ((waterData && waterData.length > 0) || (sewerData && sewerData.length > 0)) {
-              if (waterChecked && sewerChecked) {
+            let waterData = get(state, "screenConfiguration.preparedFinalObject.WaterConnection");
+            let sewerData = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection")
+            let waterChecked = get(state, "screenConfiguration.preparedFinalObject.applyScreen.water");
+            let sewerChecked = get(state, "screenConfiguration.preparedFinalObject.applyScreen.sewerage")
+            let modifyAppCreated = get(state, "screenConfiguration.preparedFinalObject.modifyAppCreated")
+            if (isFormValid) {
+              if ((waterData && waterData.length > 0) || (sewerData && sewerData.length > 0)) {
+                if (waterChecked && sewerChecked) {
+                  dispatch(
+                    prepareFinalObject(
+                      "applyScreen.service",
+                      "Water And Sewerage"
+                    )
+                  );
+                  if (sewerData && sewerData.length > 0 && waterData.length === 0) { await applyForWater(state, dispatch); }
+                  else if (waterData && waterData.length > 0 && sewerData.length === 0) { await applyForSewerage(state, dispatch); }
+                } else if ((sewerChecked && sewerData.length === 0) || (isModifyMode() && sewerData.length === 1 && !modifyAppCreated)) {
+                  dispatch(
+                    prepareFinalObject(
+                      "applyScreen.service",
+                      _.capitalize(serviceConst.SEWERAGE)
+                    )
+                  );
+                  await applyForSewerage(state, dispatch);
+                } else if ((waterChecked && waterData.length === 0) || (isModifyMode() && waterData.length === 1 && !modifyAppCreated)) {
+                  dispatch(
+                    prepareFinalObject(
+                      "applyScreen.service",
+                      _.capitalize(serviceConst.WATER)
+                    )
+                  );
+                  await applyForWater(state, dispatch);
+                }
+              } else if (waterChecked && sewerChecked) {
                 dispatch(
                   prepareFinalObject(
                     "applyScreen.service",
                     "Water And Sewerage"
                   )
                 );
-                if (sewerData && sewerData.length > 0 && waterData.length === 0) { await applyForWater(state, dispatch); }
-                else if (waterData && waterData.length > 0 && sewerData.length === 0) { await applyForSewerage(state, dispatch); }
-              } else if (sewerChecked && sewerData.length === 0) {
-                dispatch(
-                  prepareFinalObject(
-                    "applyScreen.service",
-                    _.capitalize(serviceConst.SEWERAGE)
-                  )
-                );
-                await applyForSewerage(state, dispatch);
-              } else if (waterChecked && waterData.length === 0) {
+                if (waterData.length === 0 && sewerData.length === 0) { isFormValid = await applyForWaterOrSewerage(state, dispatch); }
+              } else if (waterChecked) {
                 dispatch(
                   prepareFinalObject(
                     "applyScreen.service",
                     _.capitalize(serviceConst.WATER)
                   )
                 );
-                await applyForWater(state, dispatch);
+                if (waterData.length === 0) { isFormValid = await applyForWaterOrSewerage(state, dispatch); }
+              } else if (sewerChecked) {
+                dispatch(prepareFinalObject("applyScreen.service", _.capitalize(serviceConst.SEWERAGE)))
+                if (sewerData.length === 0) { isFormValid = await applyForWaterOrSewerage(state, dispatch); }
               }
-            } else if (waterChecked && sewerChecked) {
-              dispatch(
-                prepareFinalObject(
-                  "applyScreen.service",
-                  "Water And Sewerage"
-                )
-              );
-              if (waterData.length === 0 && sewerData.length === 0) { isFormValid = await applyForWaterOrSewerage(state, dispatch); }
-            } else if (waterChecked) {
-              dispatch(
-                prepareFinalObject(
-                  "applyScreen.service",
-                  _.capitalize(serviceConst.WATER)
-                )
-              );
-              if (waterData.length === 0) { isFormValid = await applyForWaterOrSewerage(state, dispatch); }
-            } else if (sewerChecked) {
-              dispatch(prepareFinalObject("applyScreen.service", _.capitalize(serviceConst.SEWERAGE)))
-              if (sewerData.length === 0) { isFormValid = await applyForWaterOrSewerage(state, dispatch); }
             }
+          } else {
+            isFormValid = false;
+            hasFieldToaster = true;
           }
         } else {
           isFormValid = false;
-          hasFieldToaster = true;
+          dispatch(
+            toggleSnackbar(
+              true, {
+              labelKey: "WS_FILL_REQUIRED_HOLDER_FIELDS",
+              labelName: "Please fill Required details"
+            },
+              "warning"
+            )
+          )
         }
       } else {
         isFormValid = false;
@@ -291,29 +386,54 @@ const callBackForNext = async (state, dispatch) => {
     }
     prepareDocumentsUploadData(state, dispatch);
   }
-  // console.log(activeStep);
 
+  /* validations for Additional /Docuemnts details screen */
   if (activeStep === 1) {
-    if (moveToReview(state, dispatch)) {
-      await pushTheDocsUploadedToRedux(state, dispatch);
-      isFormValid = true; hasFieldToaster = false;
-      if (process.env.REACT_APP_NAME === "Citizen" && getQueryArg(window.location.href, "action") === "edit") {
-        setReviewPageRoute(state, dispatch);
+    if (isModifyMode()) {
+      isFormValid = true;
+      hasFieldToaster = false;
+    } else {
+      if (moveToReview(state, dispatch)) {
+        await pushTheDocsUploadedToRedux(state, dispatch);
+        isFormValid = true; hasFieldToaster = false;
+        if (process.env.REACT_APP_NAME === "Citizen" && getQueryArg(window.location.href, "action") === "edit") {
+          setReviewPageRoute(state, dispatch);
+        }
+      }
+      else {
+        isFormValid = false;
+        hasFieldToaster = true;
       }
     }
-    else { isFormValid = false; hasFieldToaster = true; }
   }
-
+  /* validations for Additional /Docuemnts details screen */
   if (activeStep === 2 && process.env.REACT_APP_NAME !== "Citizen") {
-    if (getQueryArg(window.location.href, "action") === "edit") {
-      setReviewPageRoute(state, dispatch);
+    if (isModifyMode()) {
+      if (moveToReview(state, dispatch)) {
+        await pushTheDocsUploadedToRedux(state, dispatch);
+        isFormValid = true; hasFieldToaster = false;
+        // if (process.env.REACT_APP_NAME === "Citizen" && getQueryArg(window.location.href, "action") === "edit") {
+        //   setReviewPageRoute(state, dispatch);
+        // }
+      }
+      else {
+        isFormValid = true;
+        hasFieldToaster = false;
+      }
+    } else {
+      if (getQueryArg(window.location.href, "action") === "edit" && (!isModifyMode() || (isModifyMode() && isModifyModeAction()))) {
+        setReviewPageRoute(state, dispatch);
+      }
+      isFormValid = true;
+    }
+    let applyScreenObject = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), "NA", null);
+    let applyScreenObj = findAndReplace(applyScreenObject, 0, null);
+    dispatch(handleField("apply", "components.div.children.formwizardFourthStep.children.snackbarWarningMessage", "props.propertyId", get(applyScreenObj, "property.propertyId", '')));
+    if (isActiveProperty(applyScreenObj.property)) {
+      dispatch(handleField("apply", "components.div.children.formwizardFourthStep.children.snackbarWarningMessage", "visible", false));
     }
 
-    // if (!isApplicantTypeCardValid || !isSingleApplicantCardValid || !isInstitutionCardValid) {
-    //   isFormValid = false;
-    //   hasFieldToaster = true;
-    // }
-    isFormValid = true;
+
   }
   if (activeStep === 3) {
     let waterId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].id");
@@ -362,22 +482,23 @@ const moveToSuccess = (combinedArray, dispatch) => {
   const status = "success";
   const applicationNoWater = get(combinedArray[0], "applicationNo");
   const applicationNoSewerage = get(combinedArray[1], "applicationNo");
+  let mode = (isModifyMode()) ? "&mode=MODIFY" : ""
   if (applicationNoWater && applicationNoSewerage) {
     dispatch(
       setRoute(
-        `/wns/acknowledgement?purpose=${purpose}&status=${status}&applicationNumberWater=${applicationNoWater}&applicationNumberSewerage=${applicationNoSewerage}&tenantId=${tenantId}`
+        `/wns/acknowledgement?purpose=${purpose}&status=${status}&applicationNumberWater=${applicationNoWater}&applicationNumberSewerage=${applicationNoSewerage}&tenantId=${tenantId}${mode}`
       )
     );
   } else if (applicationNoWater) {
     dispatch(
       setRoute(
-        `/wns/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNoWater}&tenantId=${tenantId}`
+        `/wns/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNoWater}&tenantId=${tenantId}${mode}`
       )
     );
   } else {
     dispatch(
       setRoute(
-        `/wns/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNoSewerage}&tenantId=${tenantId}`
+        `/wns/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNoSewerage}&tenantId=${tenantId}${mode}`
       )
     );
   }
@@ -522,6 +643,8 @@ export const changeStep = (
       );
       if (isDocsUploaded) {
         activeStep = process.env.REACT_APP_NAME === "Citizen" ? 3 : 2;
+      } else if (isModifyMode()) {
+        activeStep = 2;
       }
     } else if (process.env.REACT_APP_NAME === "Citizen" && activeStep === 3) {
       activeStep = mode === "next" ? activeStep + 1 : activeStep - 2;
@@ -531,6 +654,19 @@ export const changeStep = (
   } else {
     activeStep = defaultActiveStep;
   }
+  if (activeStep === 0) {
+    let conHolders = get(state, "screenConfiguration.preparedFinalObject.applyScreen.connectionHolders");
+    let isCheckedSameAsProperty = (conHolders && conHolders.length > 0 && !conHolders[0].sameAsPropertyAddress) ? false : true;
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardFirstStep.children.connectionHolderDetails.children.cardContent.children.sameAsOwner.children.sameAsOwnerDetails",
+        "props.isChecked",
+        isCheckedSameAsProperty
+      )
+    )
+  }
+
   const isPreviousButtonVisible = activeStep > 0 ? true : false;
   const isNextButtonVisible = isNextButton(activeStep);
   const isPayButtonVisible = activeStep === 3 ? true : false;
@@ -579,19 +715,21 @@ export const renderSteps = (activeStep, dispatch) => {
       );
       break;
     case 1:
+      let mStepSecond = (isModifyMode()) ? 'formwizardThirdStep' : 'formwizardSecondStep';
       dispatchMultipleFieldChangeAction(
         "apply",
         getActionDefinationForStepper(
-          "components.div.children.formwizardSecondStep"
+          `components.div.children.${mStepSecond}`
         ),
         dispatch
       );
       break;
     case 2:
+      let mStep = (isModifyMode()) ? 'formwizardSecondStep' : 'formwizardThirdStep';
       dispatchMultipleFieldChangeAction(
         "apply",
         getActionDefinationForStepper(
-          "components.div.children.formwizardThirdStep"
+          `components.div.children.${mStep}`
         ),
         dispatch
       );
@@ -604,6 +742,7 @@ export const renderSteps = (activeStep, dispatch) => {
         ),
         dispatch
       );
+
   }
 };
 
@@ -619,10 +758,11 @@ export const renderStepsCitizen = (activeStep, dispatch) => {
       );
       break;
     case 1:
+      let mStepSecond = (isModifyMode()) ? 'formwizardThirdStep' : 'formwizardSecondStep';
       dispatchMultipleFieldChangeAction(
         "apply",
         getActionDefinationForStepper(
-          "components.div.children.formwizardSecondStep"
+          `components.div.children.${mStepSecond}`
         ),
         dispatch
       );
@@ -668,6 +808,14 @@ export const getActionDefinationForStepper = path => {
       }
     ];
   } else {
+    let mStep1 = "formwizardThirdStep";
+    let mStep2 = "formwizardSecondStep";
+
+    if (isModifyMode()) {
+      mStep1 = "formwizardSecondStep";
+      mStep2 = "formwizardThirdStep";
+    }
+
     actionDefination = [
       {
         path: "components.div.children.formwizardFirstStep",
@@ -675,12 +823,12 @@ export const getActionDefinationForStepper = path => {
         value: true
       },
       {
-        path: "components.div.children.formwizardSecondStep",
+        path: `components.div.children.${mStep2}`,
         property: "visible",
         value: false
       },
       {
-        path: "components.div.children.formwizardThirdStep",
+        path: `components.div.children.${mStep1}`,
         property: "visible",
         value: false
       },
@@ -705,7 +853,7 @@ export const callBackForPrevious = (state, dispatch) => {
   changeStep(state, dispatch, "previous");
 };
 
-export const footer = getCommonApplyFooter({
+export const footer = getCommonApplyFooter("BOTTOM", {
   previousButton: {
     componentPath: "Button",
     props: {

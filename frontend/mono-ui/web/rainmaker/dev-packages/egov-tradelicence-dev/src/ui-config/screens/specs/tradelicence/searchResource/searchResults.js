@@ -1,11 +1,8 @@
-import React from "react";
 import { LabelContainer } from "egov-ui-framework/ui-containers";
-import {
-  sortByEpoch,
-  getEpochForDate,
-  getTextToLocalMapping
-} from "../../utils";
-import { getLocaleLabels, getStatusKey} from "egov-ui-framework/ui-utils/commons";
+import { getLocaleLabels, getStatusKey } from "egov-ui-framework/ui-utils/commons";
+import { routeTo } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formActionUtils";
+import React from "react";
+import { getEpochForDate, sortByEpoch } from "../../utils";
 
 export const searchResults = {
   uiFramework: "custom-molecules",
@@ -19,7 +16,7 @@ export const searchResults = {
         options: {
           filter: false,
           customBodyRender: (value, tableMeta) => (
-              <a href="javascript:void(0)" onClick={() => onRowClick(tableMeta.rowData)}>{value}</a>
+            <a href="javascript:void(0)" onClick={() => onRowClick(tableMeta.rowData)}>{value}</a>
           )
         }
       },
@@ -50,7 +47,7 @@ export const searchResults = {
           filter: false,
           customBodyRender: value => (
             <span>
-              {getLocaleLabels(value,value)}
+              {getLocaleLabels(value, value)}
             </span>
           )
         }
@@ -91,7 +88,7 @@ export const searchResults = {
       labelName: "Search Results for Trade License Applications",
       labelKey: "TL_HOME_SEARCH_RESULTS_TABLE_HEADING"
     },
-    rows : "",
+    rows: "",
     options: {
       filter: false,
       download: false,
@@ -121,14 +118,14 @@ export const searchResults = {
 const onRowClick = rowData => {
   switch (rowData[7]) {
     case "INITIATED":
-      window.location.href = `apply?applicationNumber=${rowData[0]}&tenantId=${
+      routeTo(`apply?applicationNumber=${rowData[0]}&tenantId=${
         rowData[8]
-      }`;
+        }`);
       break;
     default:
-      window.location.href = `search-preview?applicationNumber=${
+      routeTo(`search-preview?applicationNumber=${
         rowData[0]
-      }&tenantId=${rowData[8]}`;
+        }&tenantId=${rowData[8]}`);
       break;
   }
 };

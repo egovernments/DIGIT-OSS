@@ -52,11 +52,12 @@ const filterFunction = (rowObject, preparedFinalObject, filterConditon) => {
     if (filterConditon.onArray) {
       let returnValue = false;
       let objectArray = get(preparedFinalObject, filterConditon.jsonPath, []);
-      if(filterConditon.arrayAttribute=="ownerType"){
-        objectArray=objectArray.filter(object=>{
-          return !(object.isDeleted===false)})
+      if (filterConditon.arrayAttribute == "ownerType") {
+        objectArray = objectArray.filter(object => {
+          return !(object.isDeleted === false)
+        })
       }
-      
+
       objectArray.map(object => {
         if (!filterConditon.filterValue.includes(object[filterConditon.arrayAttribute])) {
           returnValue = true;
@@ -87,7 +88,7 @@ const mapStateToProps = state => {
         document.dropdown.disabled = true;
       }
       document.dropdown.menu = document.dropdown.menu.filter(menu => filterDropdownFunction(menu, preparedFinalObject, document.dropdownFilter));
-      document.dropdown.menu.map((item,key)=>{
+      document.dropdown.menu.map((item, key) => {
         document.dropdown.menu[key].name = item.label;
       });
     });

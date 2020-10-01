@@ -40,6 +40,7 @@ export const cityPicker = getCommonContainer({
         sourceJsonPath:
           "applyScreenMdmsData.common-masters.citiesByModule.TL.tenants",
         labelsFromLocalisation: true,
+        isClearable: true,
         fullwidth: true,
         required: true,
         inputLabelProps: {

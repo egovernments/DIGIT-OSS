@@ -54,6 +54,7 @@ export const registrationDetails = getCommonCard(
                 labelKey: "PT_MUTATION_TRANSFER_REASON_PLACEHOLDER"
               },
               required:true,
+              isClearable: true,
               labelsFromLocalisation: true,
               localePrefix: {
                 moduleName: "PropertyTax",

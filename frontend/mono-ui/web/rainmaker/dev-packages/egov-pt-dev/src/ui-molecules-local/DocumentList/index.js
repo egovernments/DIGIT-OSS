@@ -1,22 +1,16 @@
 import Grid from "@material-ui/core/Grid";
 import Icon from "@material-ui/core/Icon";
 import { withStyles } from "@material-ui/core/styles";
-import {
-  LabelContainer,
-  TextFieldContainer
-} from "egov-ui-framework/ui-containers";
+import { LabelContainer } from "egov-ui-framework/ui-containers";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import {
-  getFileUrlFromAPI,
-  handleFileUpload,
-  getTransformedLocale
-} from "egov-ui-framework/ui-utils/commons";
+import { getFileUrl, getFileUrlFromAPI, getQueryArg, getTransformedLocale, handleFileUpload } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { UploadSingleFile } from "../../ui-molecules-local";
 import { AutosuggestContainer } from "../../ui-containers-local";
+import { UploadSingleFile } from "../../ui-molecules-local";
+
 
 const themeStyles = theme => ({
   documentContainer: {
@@ -132,6 +126,7 @@ class DocumentList extends Component {
       documentsUploadRedux = {},
       prepareFinalObject
     } = this.props;
+    const isEdit = getQueryArg(window.location.href, "action") === "edit";
     let index = 0;
     documentsList.forEach(docType => {
       docType.cards &&
@@ -186,13 +181,52 @@ class DocumentList extends Component {
           }
         });
     });
-    
     prepareFinalObject("documentsUploadRedux", documentsUploadRedux);
     prepareFinalObject(
       "documentsUploadRedux.2.dropdown.value",
-      `${get(preparedFinalObject,'documentsUploadRedux.2.documentCode','')}.${get(preparedFinalObject,'Property.additionalDetails.reasonForTransfer','')}`
-    )  
+      `${get(preparedFinalObject, 'documentsUploadRedux.2.documentCode', '')}.${get(preparedFinalObject, 'Property.additionalDetails.reasonForTransfer', '')}`
+    )
+    if (isEdit && get(preparedFinalObject, 'DocumentsPrefill', false)) {
+      this.prefillDocuments();
+    }
   };
+
+  prefillDocuments = async () => {
+    let { preparedFinalObject, documentsUploadRedux, prepareFinalObject } = this.props;
+    const propertyDocs = get(preparedFinalObject, 'Property.documents', []);
+    let fileStoreIds = propertyDocs.map(document => document.fileStoreId);
+    let fileUrls = fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
+    Object.keys(documentsUploadRedux).map(keys => {
+      propertyDocs.map(doc => {
+        if (doc.documentType.includes(documentsUploadRedux[keys].documentCode)) {
+          documentsUploadRedux[keys].documents = [{
+            fileStoreId: doc.fileStoreId,
+            fileUrl: (fileUrls &&
+              fileUrls[doc.fileStoreId] &&
+              getFileUrl(fileUrls[doc.fileStoreId])) ||
+              "",
+            fileName:
+              (fileUrls[doc.fileStoreId] &&
+                decodeURIComponent(
+                  getFileUrl(fileUrls[doc.fileStoreId])
+                    .split("?")[0]
+                    .split("/")
+                    .pop()
+                    .slice(13)
+                )) ||
+              `Document - ${index + 1}`
+          }]
+          if (get(documentsUploadRedux[keys], 'dropdown.value', null) == null) {
+            documentsUploadRedux[keys] = { ...documentsUploadRedux[keys], dropdown: { value: doc.documentType } };
+          } else if (get(documentsUploadRedux[keys], 'dropdown.value', null) !== doc.documentType) {
+            delete documentsUploadRedux[keys].documents;
+          }
+        }
+      })
+    })
+    prepareFinalObject("documentsUploadRedux", documentsUploadRedux);
+    prepareFinalObject("DocumentsPrefill", false);
+  }
 
   onUploadClick = uploadedDocIndex => {
     this.setState({ uploadedDocIndex });
@@ -251,10 +285,10 @@ class DocumentList extends Component {
               </Icon>
             </div>
           ) : (
-            <div className={classes.documentIcon}>
-              <span>{key + 1}</span>
-            </div>
-          )}
+              <div className={classes.documentIcon}>
+                <span>{key + 1}</span>
+              </div>
+            )}
         </Grid>
         <Grid
           item={true}
@@ -280,11 +314,11 @@ class DocumentList extends Component {
               disabled={card.dropdown.disabled}
               optionValue="code"
               optionLabel="label"
-              required={true}
+              required={card.required}
               onChange={event => this.handleChange(key, event)}
               jsonPath={jsonPath}
-              className= "autocomplete-dropdown"
-              labelsFromLocalisation= {true}
+              className="autocomplete-dropdown"
+              labelsFromLocalisation={true}
             />
           )}
         </Grid>
@@ -319,10 +353,11 @@ class DocumentList extends Component {
   };
 
   render() {
-    const { classes, documentsList } = this.props;
+    const { classes, documentsList, DocumentsPrefill } = this.props;
     let index = 0;
     return (
       <div>
+        {DocumentsPrefill && <div></div>}
         {documentsList &&
           documentsList.map(container => {
             return (
@@ -368,14 +403,10 @@ DocumentList.propTypes = {
 
 const mapStateToProps = state => {
   const { screenConfiguration } = state;
-  const { moduleName } = screenConfiguration;
-  const documentsUploadRedux = get(
-    screenConfiguration.preparedFinalObject,
-    "documentsUploadRedux",
-    {}
-  );
-  let   preparedFinalObject=get(state,'screenConfiguration.preparedFinalObject',{})
-  return { documentsUploadRedux,preparedFinalObject, moduleName };
+  const { moduleName, preparedFinalObject } = screenConfiguration;
+  const { DocumentsPrefill = false, documentsUploadRedux = {} } = preparedFinalObject;
+
+  return { documentsUploadRedux, preparedFinalObject, moduleName, DocumentsPrefill };
 };
 
 const mapDispatchToProps = dispatch => {
