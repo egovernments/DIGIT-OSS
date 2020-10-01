@@ -14,6 +14,7 @@ import org.egov.pt.models.enums.CreationReason;
 import org.egov.pt.models.enums.Source;
 import org.egov.pt.models.enums.Status;
 import org.egov.pt.models.workflow.ProcessInstance;
+import org.javers.core.metamodel.annotation.DiffIgnore;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -85,6 +86,7 @@ public class Property extends PropertyInfo {
 	@Valid
 	private List<Unit> units;
 
+	@DiffIgnore
 	@JsonProperty("additionalDetails")
 	private JsonNode additionalDetails;
 	

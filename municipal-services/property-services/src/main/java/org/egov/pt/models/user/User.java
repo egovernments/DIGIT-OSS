@@ -10,6 +10,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.egov.common.contract.request.Role;
+import org.javers.core.metamodel.annotation.DiffIgnore;
 import org.springframework.validation.annotation.Validated;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -60,6 +61,8 @@ public class User   {
         @JsonProperty("gender")
         private String gender;
 
+        @Pattern(regexp = "(^[6-9][0-9]{9}$)", message = "Inavlid mobile number, should start with 6-9 and contain ten digits of 0-9")
+        @NotNull
         @JsonProperty("mobileNumber")
         private String mobileNumber;
 
@@ -148,16 +151,20 @@ public class User   {
         private String photo;
 
         @Size(max=64)
+        @DiffIgnore
         @JsonProperty("createdBy")
         private String createdBy;
 
+        @DiffIgnore
         @JsonProperty("createdDate")
         private Long createdDate;
 
         @Size(max=64)
+        @DiffIgnore
         @JsonProperty("lastModifiedBy")
         private String lastModifiedBy;
 
+        @DiffIgnore
         @JsonProperty("lastModifiedDate")
         private Long lastModifiedDate;
 

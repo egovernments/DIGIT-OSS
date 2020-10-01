@@ -1,11 +1,7 @@
 package org.egov.pt.service;
 
 import java.math.BigDecimal;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
@@ -80,7 +76,7 @@ public class NotificationService {
 		// Ignoring paid status, since it's wired from payment consumer directly
 		if (!StringUtils.isEmpty(msg)) {
 			msg = replaceCommonValues(property, msg, localisedState);
-			prepareMsgAndSend(propertyRequest, msg);
+			prepareMsgAndSend(propertyRequest, msg, state);
 		}
 	}
 
@@ -92,7 +88,7 @@ public class NotificationService {
 			String msg = getMsgForMutation(property, CompleteMsgs, WF_MT_STATUS_PAID_CODE, NOTIFICATION_MUTATION_LINK)
 						.replace(NOTIFICATION_AMOUNT, Amount.toPlainString());
 			msg = replaceCommonValues(property, msg, "");		
-			prepareMsgAndSend(propertyRequest, msg);
+			prepareMsgAndSend(propertyRequest, msg,"");
 	}
 	
 	public void sendNotificationForUpdate(PropertyRequest propertyRequest) {
@@ -131,7 +127,7 @@ public class NotificationService {
 
 		
 		msg = replaceCommonValues(property, msg, localisedState);
-		prepareMsgAndSend(propertyRequest, msg);
+		prepareMsgAndSend(propertyRequest, msg,state);
 	}
 
 
@@ -278,7 +274,7 @@ public class NotificationService {
 	 * @param property
 	 * @param msg
 	 */
-	private void prepareMsgAndSend(PropertyRequest request, String msg) {
+	private void prepareMsgAndSend(PropertyRequest request, String msg, String state) {
 
 		Property property = request.getProperty();
 		RequestInfo requestInfo = request.getRequestInfo();
@@ -292,7 +288,11 @@ public class NotificationService {
 		List<SMSRequest> smsRequests = notifUtil.createSMSRequest(msg, mobileNumberToOwner);
 		notifUtil.sendSMS(smsRequests);
 
-		List<Event> events = notifUtil.enrichEvent(smsRequests, requestInfo, property.getTenantId());
+		Boolean isActionReq = false;
+		if(state.equalsIgnoreCase(PT_CORRECTION_PENDING))
+			isActionReq = true;
+
+		List<Event> events = notifUtil.enrichEvent(smsRequests, requestInfo, property.getTenantId(), property, isActionReq);
 		notifUtil.sendEventNotification(new EventRequest(requestInfo, events));
 	}
 }

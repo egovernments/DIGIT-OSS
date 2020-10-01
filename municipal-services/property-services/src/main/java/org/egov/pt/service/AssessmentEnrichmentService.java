@@ -1,9 +1,9 @@
 package org.egov.pt.service;
 
 
-import static org.egov.pt.util.PTConstants.WORKFLOW_SENDBACK_CITIZEN;
 import static org.egov.pt.util.PTConstants.ASMT_MODULENAME;
 import static org.egov.pt.util.PTConstants.ASMT_WORKFLOW_CODE;
+import static org.egov.pt.util.PTConstants.WORKFLOW_SENDBACK_CITIZEN;
 import static org.egov.pt.util.PTConstants.WORKFLOW_START_ACTION;
 
 import java.util.List;
@@ -12,7 +12,6 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import org.egov.common.contract.request.User;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.Assessment;
 import org.egov.pt.models.AuditDetails;
@@ -21,6 +20,7 @@ import org.egov.pt.models.Property;
 import org.egov.pt.models.Unit;
 import org.egov.pt.models.UnitUsage;
 import org.egov.pt.models.enums.Status;
+import org.egov.pt.models.user.User;
 import org.egov.pt.models.workflow.BusinessService;
 import org.egov.pt.models.workflow.ProcessInstance;
 import org.egov.pt.models.workflow.State;
@@ -132,6 +132,8 @@ public class AssessmentEnrichmentService {
      */
     public void enrichAssessmentProcessInstance(AssessmentRequest request, Property property){
 
+    	Assessment assessment = request.getAssessment();
+    	
         if(request.getAssessment().getWorkflow().getAction().equalsIgnoreCase(WORKFLOW_SENDBACK_CITIZEN)){
 
            List<User> owners = assessmentUtils.getUserForWorkflow(property);
@@ -139,7 +141,7 @@ public class AssessmentEnrichmentService {
            request.getAssessment().getWorkflow().setAssignes(owners);
         }
 
-        State state = workflowService.getCurrentState(request.getRequestInfo(), request.getAssessment());
+        State state = workflowService.getCurrentState(request.getRequestInfo(), assessment.getTenantId(), assessment.getAssessmentNumber());
 
         ProcessInstance processInstance = request.getAssessment().getWorkflow();
         processInstance.setBusinessId(request.getAssessment().getAssessmentNumber());

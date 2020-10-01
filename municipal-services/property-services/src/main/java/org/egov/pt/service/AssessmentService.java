@@ -2,15 +2,18 @@ package org.egov.pt.service;
 
 import static org.egov.pt.util.PTConstants.ASSESSMENT_BUSINESSSERVICE;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.config.PropertyConfiguration;
-import org.egov.pt.models.*;
+import org.egov.pt.models.Assessment;
+import org.egov.pt.models.AssessmentSearchCriteria;
+import org.egov.pt.models.Property;
 import org.egov.pt.models.enums.Status;
-import org.egov.pt.models.user.UserDetailResponse;
-import org.egov.pt.models.user.UserSearchRequest;
 import org.egov.pt.models.workflow.BusinessService;
 import org.egov.pt.models.workflow.ProcessInstanceRequest;
 import org.egov.pt.models.workflow.State;
@@ -196,13 +199,13 @@ public class AssessmentService {
 	private Boolean isWorkflowTriggered(Assessment assessment, Assessment assessmentFromSearch){
 
 		Boolean isWorkflowTriggeredByFieldChange = false;
-		List<String> fieldsUpdated = diffService.getUpdatedFields(assessment, assessmentFromSearch);
+		List<String> fieldsUpdated = diffService.getUpdatedFields(assessment, assessmentFromSearch, "");
 
 		if(!CollectionUtils.isEmpty(fieldsUpdated))
 			isWorkflowTriggeredByFieldChange = intersection(new LinkedList<>(Arrays.asList(config.getAssessmentWorkflowTriggerParams().split(","))), fieldsUpdated);
 
-
-		List<String> objectsAdded = diffService.getObjectsAdded(assessment, assessmentFromSearch);
+		// third variable is needed only for mutation
+		List<String> objectsAdded = diffService.getObjectsAdded(assessment, assessmentFromSearch, "");
 
 		Boolean isWorkflowTriggeredByObjectAddition = false;
 		if(!CollectionUtils.isEmpty(objectsAdded))

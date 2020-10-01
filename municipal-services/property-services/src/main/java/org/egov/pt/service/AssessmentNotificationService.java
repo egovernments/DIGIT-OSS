@@ -65,7 +65,11 @@ public class AssessmentNotificationService {
         List<SMSRequest> smsRequests = enrichSMSRequest(topicName, assessmentRequest, property);
         util.sendSMS(smsRequests);
 
-        List<Event> events = util.enrichEvent(smsRequests, requestInfo, tenantId);
+        Boolean isActionReq = false;
+        if(topicName.equalsIgnoreCase(config.getCreateAssessmentTopic()) && assessment.getWorkflow() == null)
+            isActionReq=true;
+
+        List<Event> events = util.enrichEvent(smsRequests, requestInfo, tenantId, property, isActionReq);
         util.sendEventNotification(new EventRequest(requestInfo, events));
     }
 

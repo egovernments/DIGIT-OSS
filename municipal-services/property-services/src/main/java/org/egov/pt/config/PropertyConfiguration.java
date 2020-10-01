@@ -128,6 +128,13 @@ public class PropertyConfiguration {
     @Value("${egov.notif.view.mutation}")
     private String viewMutationLink;
     
+
+    @Value("${egov.usr.events.view.history.link}")
+    private String userEventViewPropertyLink;
+    
+    @Value("${egov.usr.events.view.mutation.history.link}")
+    private String userEventViewMutationLink;    
+    
     //Property Search Params
     @Value("${citizen.allowed.search.params}")
     private String citizenSearchParams;
@@ -304,4 +311,6 @@ public class PropertyConfiguration {
     @Value("${egov.url.shortner.endpoint}")
     private String urlShortnerEndpoint;
 
+    @Value("${state.level.tenant.id}")
+    private String stateLevelTenantId;
 }

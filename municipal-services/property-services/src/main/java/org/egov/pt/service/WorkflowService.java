@@ -164,11 +164,11 @@ public class WorkflowService {
 	 * Fetches the workflow object for the given assessment
 	 * @return
 	 */
-	public State getCurrentState(RequestInfo requestInfo, Assessment assessment){
+	public State getCurrentState(RequestInfo requestInfo, String tenantId, String businessId) {
 
 		RequestInfoWrapper requestInfoWrapper = RequestInfoWrapper.builder().requestInfo(requestInfo).build();
 
-		StringBuilder url = getWorkflowSearchURLWithParams(assessment.getTenantId(), assessment.getAssessmentNumber());
+		StringBuilder url = getWorkflowSearchURLWithParams(tenantId, businessId);
 
 		Optional<Object> res = restRepo.fetchResult(url, requestInfoWrapper);
 		ProcessInstanceResponse response = null;

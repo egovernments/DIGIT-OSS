@@ -2,6 +2,7 @@ package org.egov.pt.repository.rowmapper;
 
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -167,7 +168,10 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 				.build();
 				
 				
-				
+		BigDecimal arv = rs.getBigDecimal("arv");
+		if (null != arv)
+			arv = arv.stripTrailingZeros();
+
 		Unit unit = Unit.builder()
 				.occupancyType(rs.getString("occupancyType"))
 				.usageCategory(rs.getString("unitusageCategory"))
@@ -176,7 +180,7 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 				.unitType(rs.getString("unitType"))
 				.constructionDetail(consDetail)
 				.floorNo(rs.getInt("floorno"))
-				.arv(rs.getBigDecimal("arv"))
+				.arv(arv)
 				.id(unitId)
 				.build();
 		
@@ -392,6 +396,9 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 			throw new CustomException("PARSING ERROR", "The propertyAdditionalDetail json cannot be parsed");
 		}
 
+		if(propertyAdditionalDetails.isEmpty())
+			propertyAdditionalDetails = null;
+		
 		return propertyAdditionalDetails;
 
 	}
