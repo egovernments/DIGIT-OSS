@@ -1,7 +1,7 @@
 import get from "lodash/get";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getPropertyResults } from "../../../../../ui-utils/commons";
+import { getPropertyResults, isActiveProperty, showHideFieldsFirstStep } from "../../../../../ui-utils/commons";
 import { getUserInfo, getTenantIdCommon } from "egov-ui-kit/utils/localStorageUtils";
 
 export const propertySearchApiCall = async (state, dispatch) => {
@@ -13,6 +13,14 @@ export const propertySearchApiCall = async (state, dispatch) => {
     handleField(
       "apply",
       "components.div.children.formwizardFirstStep.children.ownerDetails.children.cardContent.children.ownerDetail.children.cardContent.children.headerDiv",
+      "props.items",
+      []
+    )
+  );
+  dispatch(
+    handleField(
+      "apply",
+      "components.div.children.formwizardFirstStep.children.connectionHolderDetails.children.cardContent.children.holderDetails.children.headerDiv",
       "props.items",
       []
     )
@@ -51,10 +59,12 @@ export const propertySearchApiCall = async (state, dispatch) => {
       }
       let response = await getPropertyResults(queryObject, dispatch);
       if (response && response.Properties.length > 0) {
-        if(response.Properties[0].status === 'INACTIVE'){
-          dispatch(toggleSnackbar(true, { labelKey: "ERR_WS_PROP_STATUS_INACTIVE", labelName: "Property Status is INACTIVE" }, "warning"));
-        }else{
-          let propertyData = response.Properties[0];
+        let propertyData = response.Properties[0];
+        if(!isActiveProperty(propertyData)){
+          dispatch(toggleSnackbar(true, { labelKey: `ERR_WS_PROP_STATUS_${propertyData.status}`, labelName: `Property Status is ${propertyData.status}` }, "warning"));     
+          showHideFieldsFirstStep(dispatch,propertyData.propertyId,false); 
+          dispatch(prepareFinalObject("applyScreen.property", propertyData))         
+        }else{          
           let contractedCorAddress = "";
 
           if(propertyData.address.doorNo !== null && propertyData.address.doorNo !== ""){
@@ -109,6 +119,14 @@ const showHideFields = (dispatch, value) => {
     handleField(
       "apply",
       "components.div.children.formwizardFirstStep.children.ownerDetails",
+      "visible",
+      value
+    )
+  );
+  dispatch(
+    handleField(
+      "apply",
+      "components.div.children.formwizardFirstStep.children.connectionHolderDetails",
       "visible",
       value
     )

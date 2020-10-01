@@ -5,6 +5,9 @@ import get from "lodash/get";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import { convertDateToEpoch, getTextToLocalMapping, validateFields } from "../utils/index";
 
+import {
+  enableField,disableField
+ } from "egov-ui-framework/ui-utils/commons";
 export const propertySearch = async (state, dispatch) => {
   searchApiCall(state, dispatch, 0)
 }
@@ -361,7 +364,10 @@ const searchApiCall = async (state, dispatch, index) => {
       }
     }
     try {
-      const response = await getSearchResults(queryObject);
+      disableField('propertySearch',"components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton",dispatch);
+      disableField('propertySearch', "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton",dispatch);
+     const response = await getSearchResults(queryObject);
+
       // const response = searchSampleResponse();
 
       let propertyData = response.Properties.map(item => ({
@@ -392,7 +398,8 @@ const searchApiCall = async (state, dispatch, index) => {
         ["PT_COMMON_TABLE_COL_STATUS_LABEL"]: item.status || "-",
         temporary: item
       }));
-
+      enableField('propertySearch',"components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton",dispatch);
+      enableField('propertySearch', "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton",dispatch);
       dispatch(
         handleField(
           "propertySearch",
@@ -429,6 +436,8 @@ const searchApiCall = async (state, dispatch, index) => {
       showHideTable(true, dispatch, index);
     } catch (error) {
       //showHideProgress(false, dispatch);
+      enableField('propertySearch',"components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton",dispatch);
+      enableField('propertySearch', "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton",dispatch);
       dispatch(
         toggleSnackbar(
           true,

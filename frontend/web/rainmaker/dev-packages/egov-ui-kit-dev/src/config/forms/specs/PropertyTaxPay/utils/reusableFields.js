@@ -74,6 +74,9 @@ export const floorCount = {
               dispatch(removeForm(variable));
             }
           }
+          let units=get(state,'form.prepareFormData.Properties[0].propertyDetails[0].units',[])
+          units=units&&units.filter(unit=>unit&&unit.floorNo&&unit.floorNo!="undefined"&&unit.floorNo!=i)
+          dispatch(prepareFormData(`Properties[0].propertyDetails[0].units`, units));
         }
       }
     },

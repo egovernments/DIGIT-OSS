@@ -1,21 +1,13 @@
-import React from "react";
 import { LabelContainer } from "egov-ui-framework/ui-containers";
-import { Link } from "react-router-dom";
-import get from "lodash/get";
-import {
-  sortByEpoch,
-  getEpochForDate,
-  getTextToLocalMapping
-} from "../../utils";
-import {
-  getLocalization,
-  getTenantId
-} from "egov-ui-kit/utils/localStorageUtils";
 import {
   getLocaleLabels,
-  getTransformedLocalStorgaeLabels,
-  getStatusKey
+
+  getStatusKey, getTransformedLocalStorgaeLabels
 } from "egov-ui-framework/ui-utils/commons";
+import { getLocalization } from "egov-ui-kit/utils/localStorageUtils";
+import { routeTo } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formActionUtils";
+import React from "react";
+import { getEpochForDate, sortByEpoch } from "../../utils";
 
 const getLocalTextFromCode = localCode => {
   return JSON.parse(getLocalization("localization_en_IN")).find(
@@ -118,7 +110,7 @@ export const searchResults = {
         options: {
           filter: false,
           customBodyRender: (value, tableMeta) => (
-              <a href="javascript:void(0)" onClick={() => onRowClick(tableMeta.rowData)}>{value}</a>
+            <a href="javascript:void(0)" onClick={() => onRowClick(tableMeta.rowData)}>{value}</a>
           )
         }
       },
@@ -166,7 +158,7 @@ export const searchResults = {
       labelName: "Search Results for Fire-NOC Applications",
       labelKey: "NOC_HOME_SEARCH_RESULTS_TABLE_HEADING"
     },
-    rows : "",
+    rows: "",
     options: {
       filter: false,
       download: false,
@@ -196,14 +188,14 @@ export const searchResults = {
 const onRowClick = rowData => {
   switch (rowData[5]) {
     case "INITIATED":
-      window.location.href = `apply?applicationNumber=${rowData[0]}&tenantId=${
+      routeTo(`apply?applicationNumber=${rowData[0]}&tenantId=${
         rowData[6]
-      }`;
+        }`)
       break;
     default:
-      window.location.href = `search-preview?applicationNumber=${
+      routeTo(`search-preview?applicationNumber=${
         rowData[0]
-      }&tenantId=${rowData[6]}`;
+        }&tenantId=${rowData[6]}`);
       break;
   }
 };

@@ -95,6 +95,11 @@ const OwnerHeader = Loadable({
   loading: () => <Loading />
 });
 
+const ActionFooter = Loadable({
+  loader: () => import("./ActionFooter"),
+  loading: () => <Loading />
+});
+
 export {
   TestMolecules,
   Tooltip,
@@ -114,5 +119,6 @@ export {
   Applications,
   WnsHowItWorks,
   FeesEstimateOverviewCard,
-  OwnerHeader
+  OwnerHeader,
+  ActionFooter
 };

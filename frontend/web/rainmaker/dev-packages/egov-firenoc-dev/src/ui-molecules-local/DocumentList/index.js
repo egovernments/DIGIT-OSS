@@ -9,7 +9,8 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import {
   getFileUrlFromAPI,
   handleFileUpload,
-  getTransformedLocale
+  getTransformedLocale,
+  getFileUrl
 } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 import PropTypes from "prop-types";
@@ -205,7 +206,7 @@ class DocumentList extends Component {
           {
             fileName: file.name,
             fileStoreId,
-            fileUrl: Object.values(fileUrl)[0]
+            fileUrl: getFileUrl(Object.values(fileUrl)[0])
           }
         ]
       }

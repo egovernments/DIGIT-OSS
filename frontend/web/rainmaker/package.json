@@ -1,6 +1,6 @@
 {
   "name": "rainmaker",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "main": "",
   "repository": "",
   "license": "egov",
@@ -45,8 +45,8 @@
     "build-css-egov-uc": "node-sass-chokidar dev-packages/egov-uc-dev/src -o dev-packages/egov-uc-dev/src",
     "build-css-egov-common": "node-sass-chokidar dev-packages/egov-common-dev/src -o dev-packages/egov-common-dev/src",
     "build-css-egov-abg": "node-sass-chokidar dev-packages/egov-abg-dev/src -o dev-packages/egov-abg-dev/src",
-    "build-css-egov-wns": "node-sass-chokidar dev-packages/egov-wns-dev/src -o dev-packages/egov-wns-dev/src",  
-    "build-css-egov-noc": "node-sass-chokidar dev-packages/egov-noc-dev/src -o dev-packages/egov-noc-dev/src",
+    "build-css-egov-wns": "node-sass-chokidar dev-packages/egov-wns-dev/src -o dev-packages/egov-wns-dev/src",
+    "build-css-egov-noc": "node-sass-chokidar dev-packages/egov-noc-dev/src -o dev-packages/egov-noc-dev/src", 
     "egov-ui-framework-redux": "babel dev-packages/egov-ui-framework-core/src/ui-redux --out-dir packages/lib/egov-ui-framework/ui-redux --copy-files",
     "egov-ui-framework-utils": "babel dev-packages/egov-ui-framework-core/src/ui-utils --out-dir packages/lib/egov-ui-framework/ui-utils --copy-files",
     "egov-ui-framework-config": "babel dev-packages/egov-ui-framework-core/src/ui-config/screens/specs --out-dir packages/lib/egov-ui-framework/ui-config/screens/specs --copy-files",
@@ -83,7 +83,7 @@
   },
   "dependencies": {
     "@material-ui/icons": "^3.0.2",
-      "node-sass": "^4.11.0",
+    "node-sass": "^4.11.0",
     "node-sass-chokidar": "^1.3.4",
     "npm-run-all": "^4.1.5"
   }

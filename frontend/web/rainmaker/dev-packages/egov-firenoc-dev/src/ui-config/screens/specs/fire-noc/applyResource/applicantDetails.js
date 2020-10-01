@@ -10,7 +10,8 @@ import {
   getDateField,
   getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getTodaysDateInYMD } from "egov-ui-framework/ui-utils/commons";
 import { getDetailsForOwner } from "../../utils";
 import get from "lodash/get";
 import "./index.css";
@@ -160,6 +161,7 @@ const commonApplicantInformation = () => {
           labelKey: "NOC_ENTER_APPLICANT_DOB_PLACEHOLDER"
         },
         required: true,
+        isDOB: true,
         pattern: getPattern("Date"),
         errorMessage: "Invalid Date",
         jsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].dob",
@@ -169,7 +171,10 @@ const commonApplicantInformation = () => {
           md: 6
         },
         props:{
-          className:"applicant-details-error"
+          className:"applicant-details-error",
+          inputProps: {
+            max: getTodaysDateInYMD()
+          }
         }
       }),
       applicantEmail: getTextField({
@@ -316,6 +321,7 @@ const commonApplicantInformation = () => {
             sourceJsonPath: "applyScreenMdmsData.common-masters.OwnerType",
             jsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].ownerType",
             required: true,
+            isClearable: true,
             labelsFromLocalisation: true,
             className: "autocomplete-dropdown",
           },
@@ -489,6 +495,38 @@ const institutionInformation = () => {
   });
 };
 
+const beforeFieldChangeApplicantType = (reqObj) => {
+  const {dispatch, state, value} = reqObj;
+  dispatch(prepareFinalObject("FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipMajorType", value));
+}
+
+const beforeFieldChangeApplicantSubType = (reqObj) => {
+  const {dispatch, state, value} = reqObj;
+  dispatch(prepareFinalObject("FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType", value));
+  let singleApplicantContainerJsonPath =
+  "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer";
+  let multipleApplicantContainerJsonPath =
+    "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer";
+  let institutionContainerJsonPath =
+    "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer";
+  if (value.includes("SINGLEOWNER")) {
+    showComponent(dispatch, singleApplicantContainerJsonPath, true);
+    showComponent(dispatch, multipleApplicantContainerJsonPath, false);
+    showComponent(dispatch, institutionContainerJsonPath, false);
+    // showComponent(dispatch, applicantSubtypeJsonPath, false);
+  } else if (value.includes("MULTIPLEOWNERS")) {
+    showComponent(dispatch, singleApplicantContainerJsonPath, false);
+    showComponent(dispatch, multipleApplicantContainerJsonPath, true);
+    showComponent(dispatch, institutionContainerJsonPath, false);
+    // showComponent(dispatch, applicantSubtypeJsonPath, false);
+  } else if (value.includes("INSTITUTIONAL")) {
+    showComponent(dispatch, singleApplicantContainerJsonPath, false);
+    showComponent(dispatch, multipleApplicantContainerJsonPath, false);
+    showComponent(dispatch, institutionContainerJsonPath, true);
+    // showComponent(dispatch, applicantSubtypeJsonPath, true);
+  }
+}
+
 export const applicantDetails = getCommonCard({
   header: getCommonTitle(
     {
@@ -504,108 +542,32 @@ export const applicantDetails = getCommonCard({
   break: getBreak(),
   applicantTypeContainer: getCommonContainer({
     applicantTypeSelection: getCommonContainer({
-      applicantType: {
-          uiFramework: "custom-containers-local",
-          moduleName: "egov-firenoc",
-          componentPath: "AutosuggestContainer",
-          props: {
-            label: {
-              labelName: "Applicant Type",
-              labelKey: "NOC_APPLICANT_TYPE_LABEL"
+      dynamicMdms : {
+        uiFramework: "custom-containers",
+        componentPath: "DynamicMdmsContainer",
+        props: {
+          dropdownFields: [
+            {
+              key : 'applicantType',
+              required: true,
+              fieldType : "autosuggest",
+              className:"applicant-details-error autocomplete-dropdown",
+              callBack: beforeFieldChangeApplicantType
             },
-            placeholder: {
-              labelName: "Select Applicant Type",
-              labelKey: "NOC_APPLICANT_TYPE_PLACEHOLDER"
-            },
-            localePrefix: {
-              moduleName: "common-masters",
-              masterName: "OwnerShipCategory"
-            },
-            className:"applicant-details-error autocomplete-dropdown",
-            required: true,
-            labelsFromLocalisation: true,
-            sourceJsonPath: "applyScreenMdmsData.DropdownsData.OwnershipCategory",
-            jsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipMajorType",
-          },
+            {
+              key : 'applicantSubType',
+              required: true,
+              fieldType : "autosuggest",
+              className:"applicant-details-error autocomplete-dropdown",
+              callBack: beforeFieldChangeApplicantSubType
+            }
+          ],
           required: true,
-          jsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipMajorType",
-          gridDefination: {
-            xs: 12,
-            sm: 12,
-            md: 6
-          },
-        beforeFieldChange: (action, state, dispatch) => {
-          let path = action.componentJsonpath.replace(
-            /.applicantType$/,
-            ".applicantSubType"
-          );
-          let applicantType = get(
-            state,
-            "screenConfiguration.preparedFinalObject.applyScreenMdmsData.common-masters.OwnerShipCategory",
-            []
-          );
-          let applicantSubType = applicantType.filter(item => {
-            return item.active && item.code.startsWith(action.value);
-          });
-          dispatch(handleField("apply", path, "props.data", applicantSubType));
+          moduleName: "common-masters",
+          masterName: "OwnerShipCategory",
+          rootBlockSub : 'applicantDetails',
         }
       },
-      applicantSubType: {
-        uiFramework: "custom-containers-local",
-        moduleName: "egov-firenoc",
-        componentPath: "AutosuggestContainer",
-        props: {
-          label: {
-            labelName: "Type of Applicant - Subtype",
-            labelKey: "NOC_APPLICANT_SUBTYPE_LABEL"
-          },
-          placeholder: {
-            labelName: "Select Applicant Subtype",
-            labelKey: "NOC_APPLICANT_SUBTYPE_PLACEHOLDER"
-          },
-          localePrefix: {
-            moduleName: "common-masters",
-            masterName: "OwnerShipCategory"
-          },
-          required: true,
-          labelsFromLocalisation: true,
-          className:"applicant-details-error autocomplete-dropdown",
-          jsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType",
-        },
-        required: true,
-        jsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType",
-        gridDefination: {
-          xs: 12,
-          sm: 12,
-          md: 6
-        },
-        beforeFieldChange: (action, state, dispatch) => {
-          let singleApplicantContainerJsonPath =
-            "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer";
-          let multipleApplicantContainerJsonPath =
-            "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer";
-          let institutionContainerJsonPath =
-            "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer";
-          // let applicantSubtypeJsonPath =
-          //   "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.applicantSubType";
-          if (action.value.includes("SINGLEOWNER")) {
-            showComponent(dispatch, singleApplicantContainerJsonPath, true);
-            showComponent(dispatch, multipleApplicantContainerJsonPath, false);
-            showComponent(dispatch, institutionContainerJsonPath, false);
-            // showComponent(dispatch, applicantSubtypeJsonPath, false);
-          } else if (action.value.includes("MULTIPLEOWNERS")) {
-            showComponent(dispatch, singleApplicantContainerJsonPath, false);
-            showComponent(dispatch, multipleApplicantContainerJsonPath, true);
-            showComponent(dispatch, institutionContainerJsonPath, false);
-            // showComponent(dispatch, applicantSubtypeJsonPath, false);
-          } else if (action.value.includes("INSTITUTIONAL")) {
-            showComponent(dispatch, singleApplicantContainerJsonPath, false);
-            showComponent(dispatch, multipleApplicantContainerJsonPath, false);
-            showComponent(dispatch, institutionContainerJsonPath, true);
-            // showComponent(dispatch, applicantSubtypeJsonPath, true);
-          }
-        }
-      }
     }),
     singleApplicantContainer: {
       uiFramework: "custom-atoms",

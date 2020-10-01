@@ -1,7 +1,6 @@
 import React from 'react';
-import { withStyles } from '@material-ui/core/styles';
-import Avatar from '@material-ui/core/Avatar';
 import Chip from '@material-ui/core/Chip';
+import { withStyles } from '@material-ui/core/styles';
 
 const useStyles = {
 	root: {
@@ -23,7 +22,7 @@ class Chips extends React.Component {
 		};
 	}
 	handleClick = () => {
-		this.props.handleClick(this.props.index, this.props.label, this.props.value[0]);
+		this.props.handleClick(this.props.index, this.props.tabName, this.props.value[0]);
 	};
 
 	render() {
@@ -36,23 +35,25 @@ class Chips extends React.Component {
 						className={classes.root}
 						variant="outlined"
 						size="small"
-						avatar={<Avatar>{label ? label : ''}</Avatar>}
-						label={value[4]}
+						// avatar={<Avatar>{label ? label : ''}</Avatar>}
+						label={` ${label&&label!="" ? label +' : ' : ''}${value[4]}`}
 						style={{ width: 'max-content' }}
 						clickable
 						onDelete={this.handleClick}
+						onClick={this.handleClick}
 					/>
 				) : (
-					<Chip
-						className={classes.root}
-						variant="outlined"
-						size="small"
-						avatar={<Avatar>{label ? label : ''}</Avatar>}
-						label={value[4]}
-						clickable
-						onDelete={this.handleClick}
-					/>
-				)}
+						<Chip
+							className={classes.root}
+							variant="outlined"
+							size="small"
+							// avatar={<Avatar>{label ? label : ''}</Avatar>}
+							label={` ${label&&label!="" ? label +' : ' : ''}${value[4]}`}
+							clickable
+							onDelete={this.handleClick}
+							onClick={this.handleClick}
+						/>
+					)}
 			</div>
 		);
 	}

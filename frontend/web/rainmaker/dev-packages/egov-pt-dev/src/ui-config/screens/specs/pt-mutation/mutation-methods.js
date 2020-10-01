@@ -133,6 +133,7 @@ export const searchPropertyDetails = getCommonCard({
         sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
         labelsFromLocalisation: true,
         required: true,
+        isClearable: true,
         disabled: process.env.REACT_APP_NAME === "Citizen" ? false : true,
         inputLabelProps: {
           shrink: true

@@ -1,3 +1,4 @@
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { set } from "lodash";
 import get from "lodash/get";
@@ -5,12 +6,23 @@ import { download } from "../../../../ui-utils/commons";
 import { getBusinessServiceMdmsData } from "../utils";
 import { getHeader } from "./pay";
 
-const loadMdms = async (action, state, dispatch, consumerCode, tenantId, billBusinessService, receiptNumber) => {
+const loadMdms = async (action, state, dispatch, consumerCode, tenantId, businessService, receiptNumber) => {
+    await getBusinessServiceMdmsData(dispatch, tenantId);
+    //commonPay configuration 
+    const commonPayDetails = get(state, "screenConfiguration.preparedFinalObject.businessServiceMdmsData.common-masters.uiCommonPay");
+    const index = commonPayDetails && commonPayDetails.findIndex((item) => {
+        return item.code == businessService;
+    });
+    if (index > -1) {
+        dispatch(prepareFinalObject("commonPayInfo", commonPayDetails[index]));
+    } else {
+        const details = commonPayDetails && commonPayDetails.filter(item => item.code === "DEFAULT");
+        dispatch(prepareFinalObject("commonPayInfo", details));
+    }
 
     const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject, "commonPayInfo");
     const receiptKey = get(uiCommonPayConfig, "receiptKey", "consolidatedreceipt")
     await getBusinessServiceMdmsData(dispatch, tenantId);
-    console.log('loaded mdms');
     const receiptQueryString = [
         { key: "receiptNumbers", value: receiptNumber },
         { key: "tenantId", value: tenantId }

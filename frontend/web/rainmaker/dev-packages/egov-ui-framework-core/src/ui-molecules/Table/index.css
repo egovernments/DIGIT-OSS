@@ -19,8 +19,19 @@ table tbody  tr  td {
   table tbody tr td {
     width: 50% !important;
     padding:4px 8px 4px 10px !important;
-    font-size: 14px !important;
+    font-size: 13px !important;
     height: auto !important;
-    white-space: pre-wrap !important;
+    text-overflow: ellipsis!important;
+    white-space: nowrap!important;
+    overflow: hidden!important;
+  }
+  table tbody tr td p{
+   
+    margin: 0px !important;
+  }
+  table tbody tr td div a{
+  
+    font-size: 11px !important;
+ 
   }
 }

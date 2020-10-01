@@ -1,13 +1,16 @@
 import { convertDateToEpoch, dispatchMultipleFieldChangeAction, getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { prepareFinalObject,handleScreenConfigurationFieldChange as handleField, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { disableField, enableField, getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import compact from "lodash/compact";
 import get from "lodash/get";
 import store from "ui-redux/store";
 import { httpRequest } from "../../../../../ui-utils";
 import { prepareDocumentsUploadData } from "../../../../../ui-utils/commons";
 import { getCommonApplyFooter, validateFields } from "../../utils";
+import { onChangeTypeOfOwnership } from "../applyResourceMutation/transfereeDetails";
 import "./index.css";
+
 
 const setReviewPageRoute = (state, dispatch) => {
   let tenantId = get(
@@ -119,6 +122,7 @@ const callBackForApply = async (state, dispatch) => {
   let consumerCode = getQueryArg(window.location.href, "consumerCode");
   let propertyPayload = get(
     state, "screenConfiguration.preparedFinalObject.Property");
+    consumerCode=consumerCode==null?propertyPayload.propertyId:consumerCode;
 
   if (process.env.REACT_APP_NAME === "Citizen" && propertyPayload && !propertyPayload.declaration) {
     const errorMessage = {
@@ -133,10 +137,24 @@ const callBackForApply = async (state, dispatch) => {
 
   let documentsUploadRedux = get(
     state, "screenConfiguration.preparedFinalObject.documentsUploadRedux");
+
+  let isDocumentValid = true;
+  Object.keys(documentsUploadRedux).map((key) => {
+    if (documentsUploadRedux[key].documents && documentsUploadRedux[key].documents.length > 0 && !(documentsUploadRedux[key].dropdown && documentsUploadRedux[key].dropdown.value)) {
+      isDocumentValid = false;
+    }
+  });
+  if (!isDocumentValid) {
+    dispatch(toggleSnackbar(true, { labelName: "Please select document type for uploaded document", labelKey: "ERR_DOCUMENT_TYPE_MISSING" }, "error"));
+    return;
+  }
+  disableField('apply', "components.div.children.footer.children.payButton", dispatch);
+
+
   propertyPayload.workflow = {
     "businessService": "PT.MUTATION",
     tenantId,
-    "action": "OPEN",
+    "action": getQueryArg(window.location.href, "action") === "edit"?"REOPEN":"OPEN",
     "moduleName": "PT"
   },
     propertyPayload.owners.map(owner => {
@@ -205,15 +223,18 @@ const callBackForApply = async (state, dispatch) => {
   propertyPayload.ownershipCategory = propertyPayload.ownershipCategoryTemp;
   delete propertyPayload.ownershipCategoryTemp;
   let newDocuments = Object.values(documentsUploadRedux).map(document => {
-    let documentValue = document.dropdown.value.includes('TRANSFERREASONDOCUMENT') ? document.dropdown.value.split('.')[2] : document.dropdown.value;
-    return {
-      documentType: documentValue,
-      fileStoreId: document.documents[0].fileStoreId,
-      documentUid: document.documents[0].fileStoreId,
-      auditDetails: null,
-      status: "ACTIVE"
+    if (document.dropdown && document.dropdown.value && document.documents && document.documents[0] && document.documents[0].fileStoreId) {
+      let documentValue = document.dropdown.value.includes('TRANSFERREASONDOCUMENT') ? document.dropdown.value.split('.')[2] : document.dropdown.value;
+      return {
+        documentType: documentValue,
+        fileStoreId: document.documents[0].fileStoreId,
+        documentUid: document.documents[0].fileStoreId,
+        auditDetails: null,
+        status: "ACTIVE"
+      }
     }
-  })
+  });
+  newDocuments = compact(newDocuments);
   let oldDocuments = [];
   oldDocuments = propertyPayload.documents && Array.isArray(propertyPayload.documents) && propertyPayload.documents.filter(document => {
     return (document.documentType.includes('USAGEPROOF') || document.documentType.includes('OCCUPANCYPROOF') || document.documentType.includes('CONSTRUCTIONPROOF'))
@@ -245,6 +266,7 @@ const callBackForApply = async (state, dispatch) => {
     // dispatch(prepareFinalObject("Properties", payload.Properties));
     // dispatch(prepareFinalObject("PropertiesTemp",cloneDeep(payload.Properties)));
     if (payload) {
+      enableField('apply', "components.div.children.footer.children.payButton", dispatch);
       store.dispatch(
         setRoute(
           `acknowledgement?purpose=apply&status=success&applicationNumber=${payload.Properties[0].acknowldgementNumber}&moduleName=PT.MUTATION&tenantId=${tenantId}
@@ -253,6 +275,7 @@ const callBackForApply = async (state, dispatch) => {
       );
     }
     else {
+      enableField('apply', "components.div.children.footer.children.payButton", dispatch);
       store.dispatch(
         setRoute(
           `acknowledgement?purpose=apply&status=failure&applicationNumber=${consumerCode}&tenantId=${tenantId}
@@ -261,6 +284,7 @@ const callBackForApply = async (state, dispatch) => {
       );
     }
   } catch (e) {
+    enableField('apply', "components.div.children.footer.children.payButton", dispatch);
     console.log(e);
     store.dispatch(
       setRoute(
@@ -295,10 +319,11 @@ const validateMobileNumber = (state) => {
   } else {
 
     let newOwners = get(state, 'screenConfiguration.preparedFinalObject.Property.ownersTemp');
-    if(newOwners&&newOwners.length&&newOwners.length>1){
-      newOwners=newOwners.filter(object=>{
-        return !(object.isDeleted===false)})
-        }
+    if (newOwners && newOwners.length && newOwners.length > 1) {
+      newOwners = newOwners.filter(object => {
+        return !(object.isDeleted === false)
+      })
+    }
     const owners = get(state, 'screenConfiguration.preparedFinalObject.Property.owners');
     const names = owners.map(owner => {
       return owner.name
@@ -313,7 +338,7 @@ const validateMobileNumber = (state) => {
         err = "OWNER_NUMBER_SAME";
       }
     })
-    if(!err&&ownershipCategoryTemp.includes('MULTIPLEOWNERS')&&newOwners.length==1){
+    if (!err && ownershipCategoryTemp.includes('MULTIPLEOWNERS') && newOwners.length == 1) {
       err = "OWNERSHIPTYPE_CANNOT_BE_MULTIPLE";
     }
   }
@@ -391,9 +416,12 @@ const callBackForNext = async (state, dispatch) => {
 
       errorMsg ? isFormValid = false : {};
     }
-
-
-
+    if (getQueryArg(window.location.href, "action") === "edit") {
+      dispatch(handleField('apply', "components.div.children.footer.children.payButton.children.submitButtonLabel",'props.labelKey',"PT_COMMON_BUTTON_RESUBMIT"))
+      onChangeTypeOfOwnership({ value: get(state.screenConfiguration.preparedFinalObject, 'Property.ownershipCategoryTemp', '') }, state, dispatch)
+    }else{
+      dispatch(handleField('apply', "components.div.children.footer.children.payButton.children.submitButtonLabel",'props.labelKey',"PT_COMMON_BUTTON_SUBMIT"))
+    }
   }
 
   if (activeStep === 1) {

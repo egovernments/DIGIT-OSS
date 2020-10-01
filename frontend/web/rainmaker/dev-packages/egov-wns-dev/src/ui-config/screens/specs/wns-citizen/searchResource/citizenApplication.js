@@ -65,6 +65,18 @@ export const citizenApplication = getCommonCard({
             label: {
                 labelKey: "WS_PROP_DETAIL_CITY"
             },
+            props: {
+                label: {
+                  labelKey: "WS_PROP_DETAIL_CITY"
+                },
+                placeholder: {
+                  labelKey: "WS_PROP_DETAIL_CITY_PLACEHOLDER"
+                },
+                localePrefix: {
+                  moduleName: "TENANT",
+                  masterName: "TENANTS"
+                }
+            },
             placeholder: {
                 labelKey: "WS_PROP_DETAIL_CITY_PLACEHOLDER"
             },

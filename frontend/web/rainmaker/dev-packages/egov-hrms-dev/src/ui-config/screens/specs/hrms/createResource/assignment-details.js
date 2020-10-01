@@ -155,6 +155,7 @@ const assignmentDetailsCard = {
                 labelKey: "HR_DEPT_PLACEHOLDER"
               },
               required: true,
+              isClearable: true,
               labelsFromLocalisation: true,
               jsonPath: "Employee[0].assignments[0].department",
               sourceJsonPath: "createScreenMdmsData.common-masters.Department",
@@ -185,6 +186,7 @@ const assignmentDetailsCard = {
                 labelKey: "HR_DESIGNATION_PLACEHOLDER"
               },
               required: true,
+              isClearable: true,
               labelsFromLocalisation: true,
               jsonPath: "Employee[0].assignments[0].designation",
               sourceJsonPath: "createScreenMdmsData.common-masters.Designation",

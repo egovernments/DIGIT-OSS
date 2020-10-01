@@ -6,17 +6,47 @@ import { prepareFinalObject, toggleSpinner } from "egov-ui-framework/ui-redux/sc
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { meterReadingEditable } from "./meterReading/meterReadingEditable";
 import { getMdmsDataForMeterStatus } from "../../../../ui-utils/commons"
-import { getMdmsDataForAutopopulated } from "../../../../ui-utils/commons"
+import { getSearchResults, getMdmsDataForAutopopulated, isWorkflowExists } from "../../../../ui-utils/commons"
 import get from "lodash/get";
 import { convertEpochToDate } from "../utils";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-
+import { sortpayloadDataObj } from './connection-details'
 const addMeterReading = async (state, dispatch) => {
     dispatch(toggleSpinner());
-    await getMdmsDataForAutopopulated(dispatch)
-    await getMdmsDataForMeterStatus(dispatch)
-    await setAutopopulatedvalues(state, dispatch)
-    showHideCard(true, dispatch);
+    const tenantId = getQueryArg(window.location.href, "tenantId");
+    const connectionNos = getQueryArg(window.location.href, "connectionNos");
+    let queryObject = [{ key: "tenantId", value: tenantId }, { key: "connectionNumber", value: connectionNos }];
+    let payloadData = await getSearchResults(queryObject);
+    if (payloadData !== null && payloadData !== undefined && payloadData.WaterConnection.length > 0) {
+        payloadData.WaterConnection = sortpayloadDataObj(payloadData.WaterConnection);
+        let applicationNos = getApplicationNo(payloadData.WaterConnection);
+        const queryObj = [
+            { key: "businessIds", value: applicationNos },
+            { key: "tenantId", value: tenantId }
+        ];        
+        
+        let isApplicationApproved = await isWorkflowExists(queryObj);
+        if(!isApplicationApproved){
+            dispatch(toggleSpinner());
+            dispatch(
+                toggleSnackbar(
+                    true,
+                    {
+                        labelName: "WorkFlow already Initiated",
+                        labelKey: "WS_WORKFLOW_ALREADY_INITIATED"
+                    },
+                    "error"
+                )
+            );
+            return;
+        } else {
+            await getMdmsDataForAutopopulated(dispatch)
+            await getMdmsDataForMeterStatus(dispatch)
+            await setAutopopulatedvalues(state, dispatch)
+            showHideCard(true, dispatch); 
+        }
+
+    }  
     dispatch(toggleSpinner());
 };
 
@@ -211,5 +241,18 @@ const demo = getCommonCard({
         labelKey: "HR_HOME_SEARCH_RESULTS_HEADING"
     }),
 });
+
+const getApplicationNo = (connectionsObj) => {
+    let appNos = "";
+    if(connectionsObj.length > 1){
+      for(var i=0; i< connectionsObj.length; i++){
+        appNos += connectionsObj[i].applicationNo +",";
+      }
+      appNos = appNos.slice(0,-1);
+    }else{
+      appNos = connectionsObj[0].applicationNo;
+    }
+    return appNos;
+}
 
 export default screenConfig;

@@ -109,6 +109,7 @@ export const cityPicker = getCommonContainer({
         labelsFromLocalisation: true,
         fullwidth: true,
         required: true,
+        isClearable: true,
         inputLabelProps: {
           shrink: true
         }

@@ -2,8 +2,13 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { getFileUrl, getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
 import { convertToOldPTObject } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
 import get from "lodash/get";
+import uniqBy from "lodash/uniqBy";
+import { getQueryValue } from "egov-ui-kit/utils/PTCommon";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { httpRequest } from "egov-ui-kit/utils/api";
 
-export const createPropertyPayload = (properties, documentsUploadRedux, newProperties = []) => {
+export const createPropertyPayload = (properties, documentsUploadRedux) => {
+  let oldUnits=properties&&properties[0]&&properties[0].units||[];
   properties[0] = {
     ...properties[0],
     ...properties[0].propertyDetails[0],
@@ -25,9 +30,7 @@ export const createPropertyPayload = (properties, documentsUploadRedux, newPrope
       obj.ownerType = obj.ownerType || "NONE";
     });
   }
-  if (newProperties && newProperties.length > 0) {
-    properties[0].owners = newProperties[0].owners;
-  }
+  
   properties[0].units.map((unit) => {
     unit.constructionDetail = {
       builtUpArea: unit.unitArea,
@@ -48,15 +51,33 @@ export const createPropertyPayload = (properties, documentsUploadRedux, newPrope
     delete unit.usageCategorySubMinor;
     delete unit.unitArea;
   });
-
+  
+  if(getQueryArg(window.location.href,  "mode") == 'WORKFLOWEDIT'){
+    let oldUnit={};
+    oldUnits&&oldUnits.map(unit=>{
+      oldUnit[unit.id]=unit;
+    })
+    let newUnit={};
+    properties[0].units&&properties[0].units.map(unit=>{
+      newUnit[unit.id]=unit;
+    })
+    let newUnitKeys=Object.keys(newUnit);
+    Object.keys(oldUnit).map(unitId=>{
+       if(!newUnitKeys.includes(unitId)){
+        properties[0].units.push({...oldUnit[unitId],active:false});
+       }
+    })
+  }
   if (documentsUploadRedux && Object.keys(documentsUploadRedux) && Object.keys(documentsUploadRedux).length) {
     properties[0].documents = [];
     Object.keys(documentsUploadRedux).map((key) => {
-      properties[0].documents.push({
-        documentType: documentsUploadRedux[key].dropdown.value,
-        fileStoreId: documentsUploadRedux[key].documents[0].fileStoreId,
-        documentUid: documentsUploadRedux[key].documents[0].fileStoreId,
-      });
+      if(documentsUploadRedux[key].dropdown && documentsUploadRedux[key].dropdown.value && documentsUploadRedux[key].documents && documentsUploadRedux[key].documents[0].fileStoreId) {
+        properties[0].documents.push({
+          documentType: documentsUploadRedux[key].dropdown.value,
+          fileStoreId: documentsUploadRedux[key].documents[0].fileStoreId,
+          documentUid: documentsUploadRedux[key].documents[0].fileStoreId,
+        });
+      }
     });
   }
 
@@ -64,7 +85,6 @@ export const createPropertyPayload = (properties, documentsUploadRedux, newPrope
     properties[0].institution.nameOfAuthorizedPerson = properties[0].owners[0].name;
     properties[0].institution.tenantId = properties[0].tenantId;
   }
-  properties[0].creationReason = "NEWPROPERTY";
   properties[0].superBuiltUpArea = properties[0].buildUpArea && Number(properties[0].buildUpArea);
   properties[0].superBuiltUpArea = properties[0].superBuiltUpArea && Number(properties[0].superBuiltUpArea.toFixed(2));
 
@@ -118,16 +138,19 @@ export const convertToArray = (documentsUploadRedux) => {
       let documentsData = [];
       Object.keys(documentsUploadRedux).map((key) => {
         const dropdownValue = documentsUploadRedux[key] && documentsUploadRedux[key].dropdown && documentsUploadRedux[key].dropdown.value || '';
-        let docTitleArray = dropdownValue.split(".");
-        if (dropdownValue == '' && docTitleArray.length == 1) {
-          return;
+        let docTitleArray = dropdownValue && dropdownValue.split(".");
+        // if (dropdownValue == '' && docTitleArray.length == 1) {
+        //   return;
+        // }
+        if(documentsUploadRedux[key].documents && documentsUploadRedux[key].documents[0].fileUrl && documentsUploadRedux[key].documents[0].fileName) {
+          documentsData.push({
+            title: docTitleArray && docTitleArray.length > 0 && docTitleArray[docTitleArray.length - 1],
+            link: getFileUrl(documentsUploadRedux[key].documents[0].fileUrl),
+            linkText: "View",
+            name: documentsUploadRedux[key].documents[0].fileName,
+          });
         }
-        return documentsData.push({
-          title: docTitleArray[docTitleArray.length - 1],
-          link: getFileUrl(documentsUploadRedux[key].documents[0].fileUrl),
-          linkText: "View",
-          name: documentsUploadRedux[key].documents[0].fileName,
-        });
+        return documentsData;
       });
       return documentsData;
     }
@@ -135,7 +158,8 @@ export const convertToArray = (documentsUploadRedux) => {
 };
 
 export const setPTDocuments = async (payload, sourceJsonPath, destJsonPath, dispatch, businessService) => {
-  const uploadedDocData = get(payload, sourceJsonPath);
+  let uploadedDocData = get(payload, sourceJsonPath);
+  uploadedDocData = uniqBy(uploadedDocData, 'fileStoreId');
   const fileStoreIds =
     uploadedDocData &&
     uploadedDocData
@@ -199,3 +223,26 @@ export const prefillPTDocuments = async (payload, sourceJsonPath, destJsonPath, 
   }
   dispatch(prepareFinalObject(destJsonPath, docs));
 };
+
+export const setOldPropertyData = async (search, prepareFinalObject) => {
+  const propertyId = getQueryValue(search, "propertyId");
+  const tenantId = getQueryValue(search, "tenantId");
+  let searchPropertyResponse = await httpRequest(
+    "property-services/property/_search",
+    "_search",
+    [
+      {
+        key: "tenantId",
+        value: tenantId
+      },
+      {
+        key: "propertyIds",
+        value: propertyId //"PT-107-001278",
+      }
+    ]
+  );
+  // searchPropertyResponse.Properties[0].owners.reverse(); // Owners are coming in reverse order
+  const Property = convertToOldPTObject(searchPropertyResponse);
+  const oldProperty = Object.create(Property);
+  prepareFinalObject("OldProperty", oldProperty[0], null);
+} 

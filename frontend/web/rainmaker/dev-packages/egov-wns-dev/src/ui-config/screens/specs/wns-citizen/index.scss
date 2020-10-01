@@ -33,9 +33,9 @@
   @media only screen and (max-width: 768px) {
     #material-ui-resetButton {
       float: none !important;
-      margin-left: 38px !important; }
+      margin: 0px 20px 10px!important; }
     #material-ui-searchButton {
-      margin-left: 38px !important; }
+      margin: 0px 20px!important;}
     .ack-body, .ack-tail {
       display: contents;
       text-align: center; } }

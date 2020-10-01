@@ -1,6 +1,6 @@
 {
   "name": "egov-ui-framework",
-  "version": "0.1.41",
+  "version": "1.2.0",
   "license": "egov",
   "description": "",
   "main": "index.js",
@@ -8,7 +8,6 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "murali",
-  "license": "ISC",
   "repository": {
     "type": "git",
     "url": "https://github.com/muralim4242/egov-ui-framework-boilerplate.git"

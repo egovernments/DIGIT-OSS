@@ -11,6 +11,11 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { searchApiCall } from "./functions";
 import { resetFieldsForApplication } from '../../utils';
+import {
+  handleScreenConfigurationFieldChange as handleField,
+  prepareFinalObject
+} from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import get from 'lodash/get';
 
 export const searchApplications = getCommonCard({
   subHeader: getCommonTitle({
@@ -77,9 +82,32 @@ export const searchApplications = getCommonCard({
       label: { labelName: "To Date", labelKey: "WS_APPLICATION_TYPE_LABEL" },
       placeholder: { labelName: "Select to Date", labelKey: "WS_COMMON_APPLICATION_TYPE_PLACEHOLDER" },
       sourceJsonPath: "applyScreenMdmsData.searchScreen.applicationType",
-      jsonPath: "searchScreen.appType",
+      jsonPath: "searchScreen.applicationType",
       gridDefination: { xs: 12, sm: 4 },
-      required: false
+      required: false,
+      beforeFieldChange: async (action, state, dispatch) => {
+        if (action.value === "NEW WATER CONNECTION" || action.value ==="NEW SEWERAGE CONNECTION") {
+          dispatch(
+            prepareFinalObject(
+              "appTypewithAppStatus",
+              get(
+                state.screenConfiguration.preparedFinalObject,
+                "applyScreenMdmsData.searchScreen.applicationStatusNew"
+              )
+            )
+          )
+        } else if (action.value === "MODIFY WATER CONNECTION" || action.value ==="MODIFY SEWERAGE CONNECTION") {
+          dispatch(
+            prepareFinalObject(
+              "appTypewithAppStatus",
+              get(
+                state.screenConfiguration.preparedFinalObject,
+                "applyScreenMdmsData.searchScreen.applicationStatusModify"
+              )
+            )
+          )
+        }
+      }
     }),
     applicationstatus: getSelectField({
       label: {
@@ -89,7 +117,7 @@ export const searchApplications = getCommonCard({
         labelKey: "WS_HOME_SEARCH_RESULTS_APP_STATUS_PLACEHOLDER"
       },
       required: false,
-      sourceJsonPath: "applyScreenMdmsData.searchScreen.applicationStatus",
+      sourceJsonPath: "appTypewithAppStatus",
       gridDefination: {
         xs: 12,
         sm: 4
@@ -128,14 +156,6 @@ export const searchApplications = getCommonCard({
       },
       pattern: getPattern("Date"),
       errorMessage: "ERR_INVALID_DATE",
-      required: false
-    }),
-    applicationType: getSelectField({
-      label: { labelName: "To Date", labelKey: "WS_APPLICATION_TYPE_LABEL" },
-      placeholder: { labelName: "Select to Date", labelKey: "WS_COMMON_APPLICATION_TYPE_PLACEHOLDER" },
-      sourceJsonPath: "applyScreenMdmsData.searchScreen.applicationType",
-      jsonPath: "searchScreen.applicationType",
-      gridDefination: { xs: 12, sm: 4 },
       required: false
     })
   }),

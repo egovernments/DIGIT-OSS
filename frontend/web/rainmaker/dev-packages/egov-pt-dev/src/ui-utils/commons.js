@@ -637,3 +637,11 @@ export const getSearchBillResult = async (queryObject, dispatch) => {
     console.log(error, "fetxh");
   }
 };
+
+export const getDomainLink = () =>{
+    let link = "";
+    if(process.env.NODE_ENV !== "development"){
+       link += "/"+process.env.REACT_APP_NAME.toLowerCase()
+    }
+    return link
+};

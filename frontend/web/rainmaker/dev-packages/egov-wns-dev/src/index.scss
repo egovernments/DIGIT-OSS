@@ -126,6 +126,11 @@ body {
   } */
   
   @media only screen and (max-width: 768px) {
+    .wns-stepper{
+      div{
+        padding: 15px 0px 0px;
+      }
+    }
     #custom-atoms-applicationSuccessFooter,
     #custom-atoms-paymentSuccessFooter {
       display: block;
