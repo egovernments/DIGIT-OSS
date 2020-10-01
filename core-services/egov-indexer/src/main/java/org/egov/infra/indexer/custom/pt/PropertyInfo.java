@@ -87,7 +87,9 @@ import com.fasterxml.jackson.annotation.JsonValue;
     public Address address;
 
 
-
+    @Size(max=256)
+    @JsonProperty("usageCategory")
+    public String usageCategory;
 
    /* protected PropertyInfo(String propertyId, String tenantId, String acknowldgementNumber, String oldPropertyId, StatusEnum status, Address address) {
         this.propertyId = propertyId;

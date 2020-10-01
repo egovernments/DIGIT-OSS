@@ -3,6 +3,10 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.1.1
+
+- Changes in custom PT indexing to support property-registry
+
 ## 1.1.0 - 2020-06-04
 
 - Added typescript definition generation plugin
@@ -14,3 +18,4 @@ All notable changes to this module will be documented in this file.
 ## 1.0.0
 
 - Base version
+

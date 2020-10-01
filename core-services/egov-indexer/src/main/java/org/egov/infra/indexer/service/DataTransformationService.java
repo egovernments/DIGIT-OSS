@@ -260,7 +260,7 @@ public class DataTransformationService {
                         continue;
                 } catch (Exception e) {
                     log.error("Exception while trying to hit: " + uri);
-                    log.info("MDMS Request: " + request);
+					log.info("MDMS Request failure: " + e);
                     continue;
                 }
                 log.debug("Response: " + response + " from the URI: " + uriMapping.getPath());
