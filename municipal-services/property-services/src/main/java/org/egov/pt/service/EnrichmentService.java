@@ -128,6 +128,7 @@ public class EnrichmentService {
 				}
 			});
 				
+	    	if (!CollectionUtils.isEmpty(property.getUnits()))
 			property.getUnits().forEach(unit -> {
 
 				if (unit.getId() == null) {
