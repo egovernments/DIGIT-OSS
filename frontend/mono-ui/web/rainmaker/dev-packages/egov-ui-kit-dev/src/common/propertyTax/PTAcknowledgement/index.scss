@@ -65,6 +65,22 @@
     padding-right: 16px;
     padding-bottom: 16px; }
     @media only screen and (max-width: 768px) {
+      search-preview-header{
+      text-align: left!important;
+      }
+      .button-container {
+div{
+  button{
+    div{
+      div{
+        span{
+          padding-left:0px!important ;
+        }
+      }
+    }
+  }
+}
+      }
       .ack-body {
         margin-left: 16px !important;
         width: fit-content !important;
@@ -74,6 +90,19 @@
         text-align: left !important;
         justify-content: center !important;
         flex: none !important; }
+        .ack-text {
+
+          h1{
+span{
+  div{
+    div{
+      overflow:none!important;
+      line-height:20px!important;
+    }
+  }
+}
+          }
+        }
     }
     .mainContainer{
       display: inline-flex;
@@ -121,7 +150,8 @@
      div{
        div{
          button{
-          width: 165px !important;
+          margin-left: 6px!important;
+          width: 163px !important;
   
           height: 42px;
          }

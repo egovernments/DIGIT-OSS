@@ -100,12 +100,34 @@ div[class^="NavPills-root"] {
   }
 
   @media only screen and (max-width: 768px) {
+
+    #custom-containers-genderRadioGroup {
+      div {
+          display: inline-flex !important;
+      }
+  }
+    #custom-atoms-rightdiv {div{ div{ button{
+      padding: 4px 6px!important;
+      height: 45px !important;
+      width: 175px;
+        }
+      .pt-print-button{
+        width: 150px!important;
+      }
+      
+      
+      }}}
+        
     .pt-download-button {
-      margin-left: 5px;
+      margin-left: 3px;
       margin-right: 1px;
+      padding: 4px 3px;
+      height : 50px !important;
     }
     .pt-print-button {
-      margin-left: 4px;
+      margin-left: 3px;
+      padding: 4px 3px;
+      height : 50px !important;
     }
     div#custom-atoms-rightdiv {
       width: 100%;
