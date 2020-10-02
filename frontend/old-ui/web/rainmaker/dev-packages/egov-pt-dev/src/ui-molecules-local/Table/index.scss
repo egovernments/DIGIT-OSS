@@ -26,16 +26,30 @@ table {
     tbody {
       tr {
         td {
-          width: 50% !important;
+          width: 45% !important;
           padding: 4px 8px 4px 10px !important;
-          font-size: 14px !important;
+          font-size: 13px !important;
           height: auto !important;
-          white-space: pre-wrap !important;
-          border-bottom: none !important;
+          text-overflow: ellipsis!important;
+          white-space: nowrap!important;
+          overflow: hidden!important;
+          p{
+   
+            margin: 0px !important;
+          }
+          div 
+          {
+            a{
+  
+            font-size: 11px !important;
+            }
+          }
         }
+
       }
     }
   }
+
 }
 @media only screen and (max-width: 960px) {
   table {

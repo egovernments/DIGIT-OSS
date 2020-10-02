@@ -21,6 +21,7 @@ import { registrationSummary } from "./summaryResource/registrationSummary";
 import { transfereeInstitutionSummary, transfereeSummary } from "./summaryResource/transfereeSummary";
 import { transferorInstitutionSummary, transferorSummary } from "./summaryResource/transferorSummary";
 import { transferorInstitutionSummary as ti1, transferorSummary as ts1 } from "./summaryResource/transferorSummary1";
+import "./index.css";
 
 export const stepsData = [
   { labelName: "Transfer Details", labelKey: "PT_MUTATION_TRANSFER_DETAILS" },

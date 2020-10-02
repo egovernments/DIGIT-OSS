@@ -21,7 +21,8 @@ const styles = {
     color: "#fe7a51"
   },
   radioButtonLabelStyle: {
-    lineHeight: 1
+    lineHeight: 1,
+    marginTop: "3px"
   }
 };
 const inputBaseStyle = {

@@ -17,6 +17,7 @@ import { transferorInstitutionSummary, transferorSummary } from "./searchPreview
 import { documentsSummary } from "./summaryResource/documentsSummary";
 import { propertySummary } from "./summaryResource/propertySummary";
 import { registrationSummary } from './summaryResource/registrationSummary';
+import "./index.css";
 
 const titlebar = getCommonContainer({
   header: getCommonHeader({
