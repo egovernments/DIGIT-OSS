@@ -3,6 +3,12 @@
 All notable changes to this module will be documented in this file.
 
 
+## 1.1.1 - 2020-10-1
+
+- Added Index to achieve performance benefits.
+- Added plain license search.
+- Fix notification issues. 
+
 ## 1.1.0 - 2020-06-17
 
 - Added typescript definition generation plugin
