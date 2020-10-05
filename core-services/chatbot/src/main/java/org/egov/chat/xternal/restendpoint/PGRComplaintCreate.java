@@ -20,6 +20,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URLEncoder;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 @PropertySource("classpath:xternal.properties")
 @Slf4j
@@ -46,15 +49,13 @@ public class PGRComplaintCreate implements RestEndpoint {
 
     private String localizationTemplateCode = "chatbot.template.pgrCreateComplaintEndMessage";
 
-    String pgrCreateRequestBody = "{\"RequestInfo\":{\"authToken\":\"\", \"userInfo\": {}}," +
-            "\"actionInfo\":[{\"media\":[]}],\"services\":[{\"addressDetail\":{\"city\":\"\",\"landmark\":\"\",\"mohalla\": \"\"," +
-            "\"latitude\" : \"\",\"longitude\" : \"\"},\"city\":\"\",\"phone\":\"\",\"serviceCode\":\"\"," +
-            "\"source\":\"whatsapp\",\"tenantId\":\"\",\"description\":\"\"}]}";
+    String pgrCreateRequestBody = "{\"RequestInfo\":{\"authToken\":\"\",\"userInfo\":{}},\"PGREntity\":{\"service\":{\"tenantId\":\"\",\"serviceCode\":\"\",\"description\":\"\",\"accountId\":\"\",\"source\":\"whatsapp\",\"address\":{\"landmark\":\"\",\"city\":\"\",\"geoLocation\":{},\"locality\":{\"code\":\"\"}}},\"workflow\":{\"action\":\"APPLY\",\"verificationDocuments\":[]}}}";
 
     @Override
     public ObjectNode getMessageForRestCall(ObjectNode params) throws Exception {
         String authToken = params.get("authToken").asText();
         String mobileNumber = params.get("mobileNumber").asText();
+        String userId = params.get("userId").asText();
         String complaintType = params.get("pgr.create.complaintType").asText();
         String city = params.get("pgr.create.tenantId").asText();
         String locality = params.get("pgr.create.locality").asText();
@@ -65,20 +66,24 @@ public class PGRComplaintCreate implements RestEndpoint {
         WriteContext request = JsonPath.parse(pgrCreateRequestBody);
         request.set("$.RequestInfo.authToken", authToken);
         request.set("$.RequestInfo.userInfo", userInfo.json());
-        request.set("$.services.[0].city", city);
-        request.set("$.services.[0].tenantId", city);
-        request.set("$.services.[0].addressDetail.city", city);
-        request.set("$.services.[0].addressDetail.mohalla", locality);
-        request.set("$.services.[0].serviceCode", complaintType);
-        request.set("$.services.[0].phone", mobileNumber);
+        request.set("$.PGREntity.service.tenantId", city);
+        request.set("$.PGREntity.service.address.city", city);
+        request.set("$.PGREntity.service.address.locality.code", locality);
+        request.set("$.PGREntity.service.serviceCode", complaintType);
+        request.set("$.PGREntity.service.accountId", userId);
         if (!complaintDetails.equalsIgnoreCase("No"))
-            request.set("$.services.[0].description", complaintDetails);
+            request.set("$.PGREntity.service.description", complaintDetails);
         if (!landmark.equalsIgnoreCase("No"))
-            request.set("$.services.[0].addressDetail.landmark", landmark);
+            request.set("$.PGREntity.service.address.landmark", landmark);
 
         if (!photo.equalsIgnoreCase("null"))
-            request.add("$.actionInfo.[0].media", photo);
+        {
+            Map<String,String> docs=new HashMap<>();
+            docs.put("documentType","COMPLAINTIMAGE");
+            docs.put("fileStore",photo);
+            request.add("$.PGREntity.workflow.verificationDocuments", docs);
 
+        }
         log.info("PGR Create complaint request : " + request.jsonString());
         JsonNode requestObject = null;
         requestObject = objectMapper.readTree(request.jsonString());
@@ -101,7 +106,7 @@ public class PGRComplaintCreate implements RestEndpoint {
 //        }
         if (responseEntity.getStatusCode().is2xxSuccessful()) {
             ObjectNode pgrResponse = responseEntity.getBody();
-            String complaintNumber = pgrResponse.get("services").get(0).get("serviceRequestId").asText();
+            String complaintNumber = pgrResponse.at("/PGREntities/0/service/serviceRequestId").asText();
             String encodedPath = URLEncoder.encode(complaintNumber, "UTF-8");
             String url = egovExternalHost + "citizen/otpLogin?mobileNo=" + mobileNumber + "&redirectTo=complaint-details/" + encodedPath + "?source=whatsapp";
             String shortenedURL = urlShorteningService.shortenURL(url);

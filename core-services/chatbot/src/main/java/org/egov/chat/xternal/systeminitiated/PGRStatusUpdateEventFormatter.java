@@ -69,7 +69,7 @@ public class PGRStatusUpdateEventFormatter implements SystemInitiatedEventFormat
     @Value("${pgr.service.search.path}")
     private String pgrServiceSearchPath;
 
-    private String userServiceSearchRequest = "{\"RequestInfo\":{},\"tenantId\":\"\",\"id\":[\"\"]}";
+    private String userServiceSearchRequest = "{\"RequestInfo\":{},\"tenantId\":\"\",\"uuid\":[\"\"]}";
 
     @Value("${valuefirst.notification.rejected.templateid}")
     private String rejectTemplateId;
@@ -115,33 +115,37 @@ public class PGRStatusUpdateEventFormatter implements SystemInitiatedEventFormat
     @Override
     public List<JsonNode> createChatNodes(JsonNode event) throws Exception {
         List<JsonNode> chatNodes = new ArrayList<>();
-        ArrayNode actionInfoArray = (ArrayNode) event.at("/actionInfo");
-        for (int index = 0; index < actionInfoArray.size(); index++) {
-            String source = event.at("/services/" + index + "/source").asText();
+            String source = event.at("/PGREntity/service/source").asText();
             if ((source != null) && source.equals("whatsapp")) {
-                String status = event.at("/actionInfo/" + index + "/status").asText();
-                String action = event.at("/actionInfo/" + index + "/action").asText();
-                String comments = event.at("/actionInfo/" + index + "/comments").asText();
-                String citizenName = event.at("/services/" + index + "/citizen/name").asText();
-                String mobileNumber = event.at("/services/" + index + "/citizen/mobileNumber").asText();
+                String status = event.at("/PGREntity/service/applicationStatus").asText();
+                String action = event.at("/PGREntity/workflow/action").asText();
+                String comments = event.at("/PGREntity/workflow/comments").asText();
+                String citizenName = event.at("/PGREntity/service/citizen/name").asText();
+                String mobileNumber = event.at("/PGREntity/service/citizen/mobileNumber").asText();
                 if (StringUtils.isEmpty(citizenName) || StringUtils.equalsIgnoreCase(citizenName,"null"))
                     citizenName = localizationService.getMessageForCode(citizenKeywordLocalization);
-                ObjectNode userChatNodeForStatusUpdate = createChatNodeForUser(event, index);
+                ObjectNode userChatNodeForStatusUpdate = createChatNodeForUser(event);
                 if(StringUtils.isEmpty(status) && StringUtils.isEmpty(action) && !StringUtils.isEmpty(comments)) {
                     ObjectNode userChatNodeForComment = userChatNodeForStatusUpdate.deepCopy();
-                    userChatNodeForComment.set("extraInfo", createResponseForComment(event, comments, citizenName, index));
+                    userChatNodeForComment.set("extraInfo", createResponseForComment(event, comments, citizenName));
                     chatNodes.add(userChatNodeForComment);
                 }
                 JsonNode extraInfo = null;
                 if (status != null) {
                     if (status.equalsIgnoreCase("rejected")) {
-                        extraInfo = responseForRejectedStatus(event, comments, citizenName, index);
+                        extraInfo = responseForRejectedStatus(event, comments, citizenName);
                     } else if ((action + "-" + status).equalsIgnoreCase("reassign-assigned")) {
-                        extraInfo = responseForReassignedtatus(event, citizenName, mobileNumber, index);
-                    } else if (status.equalsIgnoreCase("assigned")) {
-                        extraInfo = responseForAssignedStatus(event, citizenName, mobileNumber, index);
-                    } else if (status.equalsIgnoreCase("resolved")) {
-                        extraInfo = responseForResolvedStatus(event, citizenName, mobileNumber, index);
+                        extraInfo = responseForReassignedtatus(event, citizenName, mobileNumber);
+                    } else if (status.equalsIgnoreCase("PENDINGATLME")) {
+                        if(action.equalsIgnoreCase("REASSIGN")){
+                            extraInfo = responseForReassignedtatus(event, citizenName, mobileNumber);
+                        }
+                        else{
+                            extraInfo = responseForAssignedStatus(event, citizenName, mobileNumber);
+                        }
+
+                    } else if (status.equalsIgnoreCase("RESOLVED")) {
+                        extraInfo = responseForResolvedStatus(event, citizenName, mobileNumber);
                     }
                 }
                 if (extraInfo != null) {
@@ -149,13 +153,13 @@ public class PGRStatusUpdateEventFormatter implements SystemInitiatedEventFormat
                     chatNodes.add(userChatNodeForStatusUpdate);
                 }
             }
-        }
+
         return chatNodes;
     }
 
-    private ObjectNode createChatNodeForUser(JsonNode event, int index) throws Exception {
-        String mobileNumber = event.at("/services/" + index + "/citizen/mobileNumber").asText();
-        String uuid = event.at("/services/" + index + "/citizen/uuid").asText();
+    private ObjectNode createChatNodeForUser(JsonNode event) throws Exception {
+        String mobileNumber = event.at("/PGREntity/service/citizen/mobileNumber").asText();
+        String uuid = event.at("/PGREntity/service/citizen/uuid").asText();
         ObjectNode chatNode = objectMapper.createObjectNode();
         chatNode.put("tenantId", stateLevelTenantId);
         ObjectNode user = objectMapper.createObjectNode();
@@ -232,10 +236,10 @@ public class PGRStatusUpdateEventFormatter implements SystemInitiatedEventFormat
 //    }
 
 
-    private JsonNode createResponseForComment(JsonNode event, String comment, String citizenName, int index) throws IOException {
-        String serviceRequestId = event.at("/services/" + index + "/serviceRequestId").asText();
-        String serviceCode = event.at("/services/" + index + "/serviceCode").asText();
-        JsonNode assignee = getCommentor(event, index);
+    private JsonNode createResponseForComment(JsonNode event, String comment, String citizenName) throws IOException {
+        String serviceRequestId = event.at("/PGREntity/service/serviceRequestId").asText();
+        String serviceCode = event.at("/PGREntity/service/serviceCode").asText();
+        JsonNode assignee = getCommentor(event);
         String commentorName = assignee.at("/name").asText();
 
         ObjectNode extraInfo = objectMapper.createObjectNode();
@@ -252,10 +256,10 @@ public class PGRStatusUpdateEventFormatter implements SystemInitiatedEventFormat
         return extraInfo;
     }
 
-    private JsonNode responseForAssignedStatus(JsonNode event, String citizenName, String mobileNumber, int index) throws IOException {
-        String serviceRequestId = event.at("/services/" + index + "/serviceRequestId").asText();
-        String serviceCode = event.at("/services/" + index + "/serviceCode").asText();
-        JsonNode assignee = getAssignee(event, index);
+    private JsonNode responseForAssignedStatus(JsonNode event, String citizenName, String mobileNumber) throws IOException {
+        String serviceRequestId = event.at("/PGREntity/service/serviceRequestId").asText();
+        String serviceCode = event.at("/PGREntity/service/serviceCode").asText();
+        JsonNode assignee = getAssignee(event);
         String assigneeName = assignee.at("/name").asText();
         ObjectNode extraInfo = objectMapper.createObjectNode();
         ArrayNode params = objectMapper.createArrayNode();
@@ -272,22 +276,20 @@ public class PGRStatusUpdateEventFormatter implements SystemInitiatedEventFormat
         return extraInfo;
     }
 
-    private JsonNode getAssignee(JsonNode event, int index) throws IOException {
-        String assigneeId = event.at("/actionInfo/" + index + "/assignee").asText();
-        return searchUser(event, assigneeId, index);
+    private JsonNode getAssignee(JsonNode event) throws IOException {
+        String assigneeId = event.at("/PGREntity/workflow/assignes/0").asText();
+        return searchUser(event, assigneeId);
     }
 
-    private JsonNode getCommentor(JsonNode event, int index) throws IOException {
-        String userString = event.at("/actionInfo/" + index + "/by").asText();
-        String userId = userString.split(":")[0];
-        return searchUser(event, userId, index);
+    private JsonNode getCommentor(JsonNode event) throws IOException {
+        return getAssignee(event);
     }
 
-    private JsonNode searchUser(JsonNode event, String userId, int index) throws IOException {
+    private JsonNode searchUser(JsonNode event, String userId) throws IOException {
         DocumentContext request = JsonPath.parse(userServiceSearchRequest);
-        String tenantId = event.at("/actionInfo/" + index + "/tenantId").asText();
+        String tenantId = event.at("/PGREntity/service/tenantId").asText();
         request.set("$.tenantId", tenantId);
-        request.set("$.id.[0]", userId);
+        request.set("$.uuid.[0]", userId);
 
         JsonNode requestObject = null;
         requestObject = objectMapper.readTree(request.jsonString());
@@ -298,10 +300,10 @@ public class PGRStatusUpdateEventFormatter implements SystemInitiatedEventFormat
         return response.getBody().at("/user/0");
     }
 
-    private JsonNode responseForRejectedStatus(JsonNode event, String comments, String citizenName, int index) {
+    private JsonNode responseForRejectedStatus(JsonNode event, String comments, String citizenName) {
         String rejectReason = comments.split(";")[0];
-        String serviceRequestId = event.at("/services/" + index + "/serviceRequestId").asText();
-        String serviceCode = event.at("/services/" + index + "/serviceCode").asText();
+        String serviceRequestId = event.at("/PGREntity/service/serviceRequestId").asText();
+        String serviceCode = event.at("/PGREntity/service/serviceCode").asText();
         ObjectNode extraInfo = objectMapper.createObjectNode();
         ArrayNode params = objectMapper.createArrayNode();
         String complaintCategory = localizationService.getMessageForCode(complaintCategoryLocalizationPrefix + serviceCode);
@@ -315,9 +317,9 @@ public class PGRStatusUpdateEventFormatter implements SystemInitiatedEventFormat
         return extraInfo;
     }
 
-    private JsonNode responseForResolvedStatus(JsonNode event, String citizenName, String mobileNumber, int index) throws UnsupportedEncodingException {
-        String serviceRequestId = event.at("/services/" + index + "/serviceRequestId").asText();
-        String serviceCode = event.at("/services/" + index + "/serviceCode").asText();
+    private JsonNode responseForResolvedStatus(JsonNode event, String citizenName, String mobileNumber) throws UnsupportedEncodingException {
+        String serviceRequestId = event.at("/PGREntity/service/serviceRequestId").asText();
+        String serviceCode = event.at("/PGREntity/service/serviceCode").asText();
         ObjectNode extraInfo = objectMapper.createObjectNode();
         ArrayNode params = objectMapper.createArrayNode();
         String complaintCategory = localizationService.getMessageForCode(complaintCategoryLocalizationPrefix + serviceCode);
@@ -332,10 +334,10 @@ public class PGRStatusUpdateEventFormatter implements SystemInitiatedEventFormat
         return extraInfo;
     }
 
-    private JsonNode responseForReassignedtatus(JsonNode event, String citizenName, String mobileNumber, int index) throws IOException {
-        String serviceRequestId = event.at("/services/" + index + "/serviceRequestId").asText();
-        String serviceCode = event.at("/services/" + index + "/serviceCode").asText();
-        JsonNode assignee = getAssignee(event, index);
+    private JsonNode responseForReassignedtatus(JsonNode event, String citizenName, String mobileNumber) throws IOException {
+        String serviceRequestId = event.at("/PGREntity/service/serviceRequestId").asText();
+        String serviceCode = event.at("/PGREntity/service/serviceCode").asText();
+        JsonNode assignee = getAssignee(event);
         String assigneeName = assignee.at("/name").asText();
         ObjectNode extraInfo = objectMapper.createObjectNode();
         ArrayNode params = objectMapper.createArrayNode();

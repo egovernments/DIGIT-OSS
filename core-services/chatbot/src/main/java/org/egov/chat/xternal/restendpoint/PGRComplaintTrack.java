@@ -45,7 +45,8 @@ public class PGRComplaintTrack implements RestEndpoint {
     private String complaintSummaryTemplateLocalizationCode = "chatbot.template.pgrTrackComplaintSummary";
     private String noComplaintFoundMessage = "chatbot.message.noComplaintFoundMessage";
     private String messageWhenComplaintsExistsCode = "chatbot.message.trackend.exist";
-    private String pgrShowComplaintForStatusArray[] = {"rejected", "resolved", "assigned", "open", "reassignrequested"};
+    private String pgrShowComplaintForStatusArray[] = {"PENDINGFORASSIGNMENT","PENDINGFORREASSIGNMENT","PENDINGATLME","REJECTED","RESOLVED"};
+
     @Value("${egov.external.host}")
     private String egovExternalHost;
     @Value("${pgr.service.host}")
@@ -70,9 +71,8 @@ public class PGRComplaintTrack implements RestEndpoint {
         request.set("$.RequestInfo.userInfo", userInfo.json());
 
         UriComponentsBuilder uriComponents = UriComponentsBuilder.fromUriString(pgrHost + pgrSearchComplaintPath);
-        uriComponents.queryParam("tenantId", tenantId);
-        uriComponents.queryParam("noOfRecords", numberOfRecentComplaints);
-        uriComponents.queryParam("status", pgrShowComplaintForStatusArray);
+        uriComponents.queryParam("limit", numberOfRecentComplaints);
+        uriComponents.queryParam("applicationStatus", pgrShowComplaintForStatusArray);
         JsonNode requestObject = objectMapper.readTree(request.jsonString());
         ObjectNode responseMessage = objectMapper.createObjectNode();
         responseMessage.put("type", "text");
@@ -94,7 +94,7 @@ public class PGRComplaintTrack implements RestEndpoint {
 
             DocumentContext documentContext = JsonPath.parse(responseEntity.getBody().toString());
 
-            Integer numberOfServices = (Integer) ((JSONArray) documentContext.read("$..services.length()")).get(0);
+            Integer numberOfServices = documentContext.read("$.PGREntities.length()");
 
             if (numberOfServices > 0) {
                 ObjectNode trackComplaintHeader = objectMapper.createObjectNode();
@@ -119,24 +119,24 @@ public class PGRComplaintTrack implements RestEndpoint {
 
                     ObjectNode params = objectMapper.createObjectNode();
 
-                    String complaintNumber = documentContext.read("$.services.[" + i + "].serviceRequestId");
+                    String complaintNumber = documentContext.read("$.PGREntities.[" + i + "].service.serviceRequestId");
                     params.set("complaintNumber", objectMapper.valueToTree(numeralLocalization.getLocalizationCodesForStringContainingNumbers(complaintNumber)));
 
-                    String complaintCategory = documentContext.read("$.services.[" + i + "].serviceCode");
+                    String complaintCategory = documentContext.read("$.PGREntities.[" + i + "].service.serviceCode");
                     param = objectMapper.createObjectNode();
                     param.put("code", complaintCategoryLocalizationPrefix + complaintCategory);
                     params.set("complaintCategory", param);
 
-                    Date createdDate = new Date((long) documentContext.read("$.services.[" + i + "].auditDetails.createdTime"));
+                    Date createdDate = new Date((long) documentContext.read("$.PGREntities.[" + i + "].service.auditDetails.createdTime"));
                     String filedDate = getDateFromTimestamp(createdDate);
                     params.set("filedDate", objectMapper.valueToTree(numeralLocalization.getLocalizationCodesForStringContainingNumbers(filedDate)));
 
-                    String status = documentContext.read("$.services.[" + i + "].status");
+                    String status = documentContext.read("$.PGREntities.[" + i + "].service.applicationStatus");
                     param = objectMapper.createObjectNode();
-                    param.put("code", pgrStatusLocalisationPrefix + status);
+                    param.put("code", pgrStatusLocalisationPrefix + status.toLowerCase());
                     params.set("status", param);
 
-                    String encodedPath = URLEncoder.encode(documentContext.read("$.services.[" + i + "].serviceRequestId"), "UTF-8");
+                    String encodedPath = URLEncoder.encode(complaintNumber, "UTF-8");
                     String url = egovExternalHost + "citizen/otpLogin?mobileNo=" + mobileNumber + "&redirectTo=complaint-details/" + encodedPath + "?source=whatsapp";
                     String encodedURL = urlShorteningService.shortenURL(url);
                     param = objectMapper.createObjectNode();

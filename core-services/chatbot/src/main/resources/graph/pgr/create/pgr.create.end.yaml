@@ -10,3 +10,4 @@ params :
   authToken : /user/authToken
   refreshToken : /user/refreshToken
   userInfo : /user/userInfo
+  userId: /user/userId

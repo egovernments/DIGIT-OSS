@@ -209,15 +209,9 @@ public class FixedSetValues {
             JsonNode questionDetails = conversationState.getQuestionDetails();
 
             ArrayNode allValues = (ArrayNode) questionDetails.get("allValues");
-            Integer offset = questionDetails.get("offset").asInt();
-            Integer batchSize = questionDetails.get("batchSize").asInt();
-            Integer upperLimit = Math.min(offset + batchSize, allValues.size());
-            ArrayNode validValues = objectMapper.createArrayNode();
-            for (int i = 0; i < upperLimit; i++) {
-                validValues.add(allValues.get(i));
-            }
 
             if (multipleAnswersAllowed && checkIfInputContainsMultipleChoices(answer)) {
+                ArrayNode validValues = getValidValuesForQuestionDetails(questionDetails);
                 List<Integer> indices = getMultipleAnswerIndices(answer);
                 boolean isValid = true;
                 for (Integer index : indices) {
@@ -231,6 +225,7 @@ public class FixedSetValues {
             if (displayValuesAsOptions && (answer.equalsIgnoreCase(nextKeyword) || answer.equalsIgnoreCase(nextKeywordSymbol))) {
                 return true;
             } else if (displayValuesAsOptions && checkIfAnswerIsIndex(answer)) {
+                ArrayNode validValues = getValidValuesForQuestionDetails(questionDetails);
                 Integer answerInteger = Integer.parseInt(answer);
                 return answerInteger > 0 && answerInteger <= validValues.size();
             } else {
@@ -243,6 +238,18 @@ public class FixedSetValues {
             log.error("Error when checking validity : ", e);
             return false;
         }
+    }
+
+    ArrayNode getValidValuesForQuestionDetails(JsonNode questionDetails) {
+        ArrayNode allValues = (ArrayNode) questionDetails.get("allValues");
+        Integer offset = questionDetails.get("offset").asInt();
+        Integer batchSize = questionDetails.get("batchSize").asInt();
+        Integer upperLimit = Math.min(offset + batchSize, allValues.size());
+        ArrayNode validValues = objectMapper.createArrayNode();
+        for (int i = 0; i < upperLimit; i++) {
+            validValues.add(allValues.get(i));
+        }
+        return validValues;
     }
 
     boolean fuzzyMatchAnswerWithValidValues(String answer, List<String> validValues, JsonNode config) {
