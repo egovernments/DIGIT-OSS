@@ -1,16 +1,14 @@
 import {
-  getBreak,
   getCommonContainer,
   getCommonGrayCard,
   getCommonSubHeader,
-  getLabel,
-  getLabelWithValue
+
+  getLabelWithValueForModifiedLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { gotoApplyWithStep } from "../../utils/index";
 import { checkValueForNA } from "../../utils";
-import { convertEpochToDate, convertDateToEpoch } from "../../utils/index";
-export const registrationSummaryDetails={
-  transferReason: getLabelWithValue(
+import { convertEpochToDate } from "../../utils/index";
+export const registrationSummaryDetails = {
+  transferReason: getLabelWithValueForModifiedLabel(
     {
       labelName: "Reason for Transfer",
       labelKey: "PT_MUTATION_TRANSFER_REASON"
@@ -18,22 +16,28 @@ export const registrationSummaryDetails={
     {
       jsonPath:
         "Property.additionalDetails.reasonForTransfer",
-        callBack: checkValueForNA
-    }
+      callBack: checkValueForNA
+    }, {
+    labelKey: "PTM_OLD_LABEL_NAME"
+  },
+    { jsonPath: "PropertyOld.additionalDetails.reasonForTransfer", callBack: checkValueForNA },
   ),
-  marketValue: getLabelWithValue(
+  marketValue: getLabelWithValueForModifiedLabel(
     {
-     
+
       labelName: "Market Value",
-          labelKey: "PT_MUTATION_MARKET_VALUE"
+      labelKey: "PT_MUTATION_MARKET_VALUE"
     },
     {
       jsonPath:
         "Property.additionalDetails.marketValue",
-        callBack: checkValueForNA
-    }
+      callBack: checkValueForNA
+    }, {
+    labelKey: "PTM_OLD_LABEL_NAME"
+  },
+    { jsonPath: "PropertyOld.additionalDetails.reasonForTransfer", callBack: checkValueForNA },
   ),
-   documentNo: getLabelWithValue(
+  documentNo: getLabelWithValueForModifiedLabel(
     {
       labelName: "Document No.",
       labelKey: "PT_MUTATION_DOCUMENT_NO"
@@ -41,9 +45,12 @@ export const registrationSummaryDetails={
     {
       jsonPath:
         "Property.additionalDetails.documentNumber",
-        callBack: checkValueForNA
-    }
-  ), documentDate: getLabelWithValue(
+      callBack: checkValueForNA
+    }, {
+    labelKey: "PTM_OLD_LABEL_NAME"
+  },
+    { jsonPath: "PropertyOld.additionalDetails.documentNumber", callBack: checkValueForNA },
+  ), documentDate: getLabelWithValueForModifiedLabel(
     {
       labelName: "Document Issue Date",
       labelKey: "PT_MUTATION_DOCUMENT_DATE"
@@ -51,11 +58,18 @@ export const registrationSummaryDetails={
     {
       jsonPath:
         "Property.additionalDetails.documentDate",
-        callBack: value => {
-          return convertEpochToDate(value);
-        }
-    }
-  ), documentValue: getLabelWithValue(
+      callBack: value => {
+        return convertEpochToDate(value);
+      }
+    }, {
+    labelKey: "PTM_OLD_LABEL_NAME"
+  },
+    {
+      jsonPath: "PropertyOld.additionalDetails.documentDate", callBack: value => {
+        return convertEpochToDate(value);
+      }
+    },
+  ), documentValue: getLabelWithValueForModifiedLabel(
     {
       labelName: "Document Value",
       labelKey: "PT_MUTATION_DOCUMENT_VALUE"
@@ -63,10 +77,13 @@ export const registrationSummaryDetails={
     {
       jsonPath:
         "Property.additionalDetails.documentValue",
-        callBack: checkValueForNA
-    }
+      callBack: checkValueForNA
+    }, {
+    labelKey: "PTM_OLD_LABEL_NAME"
+  },
+    { jsonPath: "PropertyOld.additionalDetails.documentValue", callBack: checkValueForNA },
   ),
-  remarks: getLabelWithValue(
+  remarks: getLabelWithValueForModifiedLabel(
     {
       labelName: "Remarks",
       labelKey: "PT_MUTATION_REMARKS"
@@ -74,12 +91,15 @@ export const registrationSummaryDetails={
     {
       jsonPath:
         "Property.additionalDetails.remarks",
-        callBack: checkValueForNA
-    }
+      callBack: checkValueForNA
+    }, {
+    labelKey: "PTM_OLD_LABEL_NAME"
+  },
+    { jsonPath: "PropertyOld.additionalDetails.remarks", callBack: checkValueForNA },
   )
 }
-const registrationDetails =  getCommonGrayCard({
-  propertyLocationContainer:getCommonContainer(registrationSummaryDetails)
+const registrationDetails = getCommonGrayCard({
+  propertyLocationContainer: getCommonContainer(registrationSummaryDetails)
 });
 
 
@@ -121,11 +141,11 @@ export const registrationSummary = getCommonGrayCard({
         //       iconName: "edit"
         //     }
         //   },
-          // buttonLabel: getLabel({
-          //   labelName: "Edit",
-          //   labelKey: "PT_EDIT"
-          // })
-       // },
+        // buttonLabel: getLabel({
+        //   labelName: "Edit",
+        //   labelKey: "PT_EDIT"
+        // })
+        // },
         // onClickDefination: {
         //   action: "condition",
         //   callBack: (state, dispatch) => {
