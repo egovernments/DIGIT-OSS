@@ -1,33 +1,26 @@
 package org.egov.wscalculation.validator;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
+import lombok.extern.slf4j.Slf4j;
 import org.egov.tracer.model.CustomException;
 import org.egov.wscalculation.constants.WSCalculationConstant;
+import org.egov.wscalculation.repository.WSCalculationDao;
+import org.egov.wscalculation.service.MasterDataService;
+import org.egov.wscalculation.util.CalculatorUtil;
 import org.egov.wscalculation.web.models.MeterConnectionRequest;
 import org.egov.wscalculation.web.models.MeterReading;
 import org.egov.wscalculation.web.models.MeterReadingSearchCriteria;
 import org.egov.wscalculation.web.models.WaterConnection;
-import org.egov.wscalculation.repository.WSCalculationDao;
-import org.egov.wscalculation.service.MasterDataService;
-import org.egov.wscalculation.util.CalculatorUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import lombok.extern.slf4j.Slf4j;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.*;
 
 @Component
 @Slf4j
@@ -56,9 +49,15 @@ public class WSCalculationValidator {
 
 		// Future Billing Period Check
 		validateBillingPeriod(meterReading.getBillingPeriod());
-		
-		WaterConnection connection = calculationUtil.getWaterConnection(meterConnectionRequest.getRequestInfo(),
+  
+		List<WaterConnection> waterConnectionList = calculationUtil.getWaterConnection(meterConnectionRequest.getRequestInfo(),
 				meterReading.getConnectionNo(), meterConnectionRequest.getMeterReading().getTenantId());
+		WaterConnection connection = null;
+		if(waterConnectionList != null){
+			int size = waterConnectionList.size();
+			connection = waterConnectionList.get(size-1);
+		}
+
 		if (meterConnectionRequest.getMeterReading().getGenerateDemand() && connection == null) {
 			errorMap.put("INVALID_METER_READING_CONNECTION_NUMBER", "Invalid water connection number");
 		}
@@ -67,10 +66,10 @@ public class WSCalculationValidator {
 			errorMap.put("INVALID_WATER_CONNECTION_TYPE",
 					"Meter reading can not be create for : " + connection.getConnectionType() + " connection");
 		}
-		MeterReadingSearchCriteria criteria = new MeterReadingSearchCriteria();
 		Set<String> connectionNos = new HashSet<>();
 		connectionNos.add(meterReading.getConnectionNo());
-		criteria.setConnectionNos(connectionNos);
+		MeterReadingSearchCriteria criteria = MeterReadingSearchCriteria.builder().
+				connectionNos(connectionNos).tenantId(meterReading.getTenantId()).build();
 		List<MeterReading> previousMeterReading = wSCalculationDao.searchCurrentMeterReadings(criteria);
 		if (!CollectionUtils.isEmpty(previousMeterReading)) {
 			Double currentMeterReading = previousMeterReading.get(0).getCurrentReading();
@@ -142,39 +141,4 @@ public class WSCalculationValidator {
 			throw new CustomException("BILLING_PERIOD_PARSING_ISSUE", "Billing period can not parsed!!");
 		}
 	}
-
-	/**
-	 * validates for the required information needed to do the
-	 * calculation/estimation
-	 * 
-	 * @param waterConnection WaterConnection Object
-	 */
-	public void validateWaterConnectionForCalculation(WaterConnection waterConnection) {
-
-		Map<String, String> error = new HashMap<>();
-
-		// boolean isVacantLand =
-		// PT_TYPE_VACANT_LAND.equalsIgnoreCase(detail.getPropertyType());
-		//
-		// if(null == detail.getLandArea() && null == detail.getBuildUpArea())
-		// error.put(PT_ESTIMATE_AREA_NULL, PT_ESTIMATE_AREA_NULL_MSG);
-		//
-		// if (isVacantLand && null == detail.getLandArea())
-		// error.put(PT_ESTIMATE_VACANT_LAND_NULL,
-		// PT_ESTIMATE_VACANT_LAND_NULL_MSG);
-		//
-		// if (!isVacantLand && CollectionUtils.isEmpty(detail.getUnits()))
-		// error.put(PT_ESTIMATE_NON_VACANT_LAND_UNITS,
-		// PT_ESTIMATE_NON_VACANT_LAND_UNITS_MSG);
-
-		if (!CollectionUtils.isEmpty(error))
-			throw new CustomException(error);
-	}
-
-	public void validateMeterReadingSearchCriteria(MeterReadingSearchCriteria criteria) {
-		if (criteria.getConnectionNos() == null || criteria.getConnectionNos().isEmpty()) {
-			throw new CustomException("INVALID_SEARCH_CRITERIA", " Search can not be done without connection no");
-		}
-	}
-
 }

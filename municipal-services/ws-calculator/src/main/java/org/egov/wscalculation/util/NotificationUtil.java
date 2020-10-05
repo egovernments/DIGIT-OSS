@@ -176,4 +176,13 @@ public class NotificationUtil {
 	public void sendEventNotification(EventRequest request) {
 		producer.push(config.getSaveUserEventsTopic(), request);
 	}
+
+	public String getShortnerURL(String actualURL) {
+		net.minidev.json.JSONObject obj = new net.minidev.json.JSONObject();
+		obj.put("url", actualURL);
+		String url = config.getNotificationUrl() + config.getShortenerURL();
+
+		Object response = serviceRequestRepository.getShorteningURL(new StringBuilder(url), obj);
+		return response.toString();
+	}
 }

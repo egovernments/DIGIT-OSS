@@ -1,6 +1,10 @@
 # Change log
 All notable changes to this module will be documented in this file.
 
+## 1.1.0
+- Added  validtion in meter reading for modify water connection feature.
+- Added index to achieve performance benefits.
+
 ## 1.0.0
 - Added typescript definition generation plug-in
 - Upgraded to `tracer:2.0.0-SNAPSHOT`

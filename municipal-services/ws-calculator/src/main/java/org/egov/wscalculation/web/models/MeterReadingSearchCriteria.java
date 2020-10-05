@@ -1,15 +1,11 @@
 package org.egov.wscalculation.web.models;
 
-import java.util.Set;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import java.util.Set;
 
 @Data
 @Getter
@@ -19,12 +15,19 @@ import lombok.Setter;
 @Builder
 public class MeterReadingSearchCriteria {
 
-	@JsonProperty("connectionNos")
-	private Set<String> connectionNos;
+    @JsonProperty("tenantId")
+    private String tenantId;
 
-	@JsonProperty("offset")
-	private Integer offset;
+    @JsonProperty("connectionNos")
+    private Set<String> connectionNos;
 
-	@JsonProperty("limit")
-	private Integer limit;
+    @JsonProperty("offset")
+    private Integer offset;
+
+    @JsonProperty("limit")
+    private Integer limit;
+
+    public boolean isEmpty() {
+        return (StringUtils.isEmpty(this.tenantId) && CollectionUtils.isEmpty(this.connectionNos));
+    }
 }

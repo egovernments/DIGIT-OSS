@@ -72,8 +72,9 @@ public class EstimationService {
 			Map<String, Object> masterData) {
 		String tenantId = requestInfo.getUserInfo().getTenantId();
 		if (criteria.getWaterConnection() == null && !StringUtils.isEmpty(criteria.getConnectionNo())) {
-			criteria.setWaterConnection(
-					calculatorUtil.getWaterConnection(requestInfo, criteria.getConnectionNo(), tenantId));
+			List<WaterConnection> waterConnectionList = calculatorUtil.getWaterConnection(requestInfo, criteria.getConnectionNo(), tenantId);
+			WaterConnection waterConnection = calculatorUtil.getWaterConnectionObject(waterConnectionList);
+			criteria.setWaterConnection(waterConnection);
 		}
 		if (criteria.getWaterConnection() == null || StringUtils.isEmpty(criteria.getConnectionNo())) {
 			StringBuilder builder = new StringBuilder();
@@ -144,7 +145,6 @@ public class EstimationService {
 		BigDecimal waterCharge = BigDecimal.ZERO;
 		if (billingSlabMaster.get(WSCalculationConstant.WC_BILLING_SLAB_MASTER) == null)
 			throw new CustomException("BILLING_SLAB_NOT_FOUND", "Billing Slab are Empty");
-		ObjectMapper mapper = new ObjectMapper();
 		List<BillingSlab> mappingBillingSlab;
 		try {
 			mappingBillingSlab = mapper.readValue(

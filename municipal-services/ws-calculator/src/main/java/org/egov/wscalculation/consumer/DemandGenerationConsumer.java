@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.egov.wscalculation.config.WSCalculationConfiguration;
+import org.egov.wscalculation.validator.WSCalculationWorkflowValidator;
 import org.egov.wscalculation.web.models.CalculationCriteria;
 import org.egov.wscalculation.web.models.CalculationReq;
 import org.egov.wscalculation.producer.WSCalculationProducer;
@@ -41,6 +42,8 @@ public class DemandGenerationConsumer {
 	@Autowired
 	private MasterDataService mDataService;
 
+	@Autowired
+	private WSCalculationWorkflowValidator wsCalulationWorkflowValidator;
 	/**
 	 * Listen the topic for processing the batch records.
 	 * 
@@ -132,6 +135,10 @@ public class DemandGenerationConsumer {
 	 */
 	private void generateDemandInBatch(CalculationReq request, Map<String, Object> masterMap, String errorTopic) {
 		try {
+			for(CalculationCriteria criteria : request.getCalculationCriteria()){
+				Boolean genratedemand = true;
+				wsCalulationWorkflowValidator.applicationValidation(request.getRequestInfo(),criteria.getTenantId(),criteria.getConnectionNo(),genratedemand);
+			}
 			wSCalculationServiceImpl.bulkDemandGeneration(request, masterMap);
 			String connectionNoStrings = request.getCalculationCriteria().stream()
 					.map(criteria -> criteria.getConnectionNo()).collect(Collectors.toSet()).toString();
