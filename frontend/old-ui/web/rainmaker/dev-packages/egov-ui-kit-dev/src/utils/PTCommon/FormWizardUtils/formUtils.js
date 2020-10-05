@@ -173,6 +173,7 @@ export const convertToOldPTObject = (newObject) => {
   propertyDetails.adhocPenaltyReason = null;
   propertyDetails.owners = newProperty.owners;
   propertyDetails.owners = propertyDetails.owners.filter((owner) => owner.status == 'ACTIVE')
+  propertyDetails.owners= propertyDetails.owners&&Array.isArray( propertyDetails.owners)&& propertyDetails.owners.sort((owner1,owner2)=>owner1.name.localeCompare(owner2.name));
   propertyDetails.auditDetails = newProperty.auditDetails;
   propertyDetails.calculation = null;
   propertyDetails.channel = newProperty.channel;

@@ -71,6 +71,7 @@ export const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById, oldProp
   if (ownerDetails && ownerDetails.length > 0) {
     owner = ownerDetails[0];
   }
+  oldPropertydetails.owners=oldPropertydetails.owners&&Array.isArray(oldPropertydetails.owners)&&oldPropertydetails.owners.sort((owner1,owner2)=>owner1.name.localeCompare(owner2.name));
   return (
     ownerDetails &&
     ownerDetails.map((owner, index) => {
@@ -355,8 +356,8 @@ class OwnerInfo extends Component {
     const header = "PT_OWNERSHIP_INFO_SUB_HEADER";
     let oldPropertydetails = "";
     if(OldProperty && Object.keys(OldProperty).length > 0) {
-      // oldPropertydetails = OldProperty.propertyDetails[0];
-      oldPropertydetails=null;
+      oldPropertydetails = OldProperty.propertyDetails[0];
+      // oldPropertydetails=null;
     }
     if (properties) {
       const { propertyDetails } = properties;
